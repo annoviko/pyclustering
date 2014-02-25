@@ -1,1 +1,23 @@
-ReadMe
+Project: PyClustering
+
+------------------------------------------------
+
+Python 3.3 windows 64-bit
+
+------------------------------------------------
+
+Required following packages:
+
+scipy-0.13.3.win-amd64-py3.3
+matplotlib-1.3.1.win-amd64-py3.3
+Pillow-2.3.0.win-amd64-py3.3
+python-dateutil-2.2.win-amd64-py3.3
+pyparsing-2.0.1.win-amd64-py3.3
+numpy-MKL-1.8.0.win-amd64-py3.3
+six-1.5.2.win-amd64-py3.3
+
+------------------------------------------------
+
+Index of packages:
+
+http://www.lfd.uci.edu/~gohlke/pythonlibs/
