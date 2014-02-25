@@ -5,8 +5,7 @@ from support import euclidean_distance;
 from support import read_sample;
 from support import draw_clusters;
 
-# BUG: dbscan SampleSimple1.txt 0.5 4 (number of nodes in the input data is not equal to number nodes that were placed in clusters and noise.
-# Fix has been implemented in core.dbscan.
+
 def dbscan(data, eps, min_neighbors, draw = False, return_noise = False):
     "Return allocated clusters and noise that are consisted from input data."
     "This algorithm was invented in 1996."
