@@ -566,10 +566,10 @@ def draw_dynamics(t, dyn_phase):
 #network.show();
 
 
-network = net(10, 1, False, conn_type.ALL_TO_ALL);   
-network.cluster = 2;
-
-network.simulate_dynamic(collect_dynamic = True);
-clusters = network.allocate_sync_ensembles(0.1);
-
-assert len(clusters) == 2;
+# network = net(10, 1, False, conn_type.ALL_TO_ALL);   
+# network.cluster = 2;
+# 
+# network.simulate_dynamic(collect_dynamic = True);
+# clusters = network.allocate_sync_ensembles(0.1);
+# 
+# assert len(clusters) == 2;
