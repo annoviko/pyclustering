@@ -25,6 +25,7 @@ def dbscan(data, eps, min_neighbors, draw = False, return_noise = False):
                 clusters.append(cluster);
             else:
                 noise.append(i);
+                belong[i] = True;
     
     if (draw == True):
         draw_clusters(data, clusters, noise);
@@ -37,14 +38,15 @@ def dbscan(data, eps, min_neighbors, draw = False, return_noise = False):
 
 def expand_cluster(data, visited, belong, point, eps, min_neighbors):
     "Return structure (cluster, noise) or None"
+    cluster = None;
     visited[point] = True;
     neighbors = neighbor_indexes(data, point, eps);
     
     if (len(neighbors) >= min_neighbors):
         
-        cluster = list();
-        
+        cluster = [];
         cluster.append(point);
+        
         belong[point] = True;
         
         for i in neighbors:
@@ -62,9 +64,7 @@ def expand_cluster(data, visited, belong, point, eps, min_neighbors):
                 cluster.append(i);
                 belong[i] = True;
         
-        return cluster;
-    
-    return None;
+    return cluster;
             
         
 def neighbor_indexes(data, point, eps):

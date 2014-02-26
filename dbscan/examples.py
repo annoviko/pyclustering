@@ -16,8 +16,14 @@ def cluster_sample2():
     template_clustering(1, 2, '../Samples/SampleSimple2.txt');
     
 def cluster_sample3():
-    template_clustering(0.5, 3, '../Samples/SampleSimple3.txt');
+    template_clustering(0.7, 3, '../Samples/SampleSimple3.txt');
     
+def cluster_sample4():
+    template_clustering(0.7, 3, '../Samples/SampleSimple4.txt');
+
+def cluster_sample5():
+    template_clustering(0.7, 3, '../Samples/SampleSimple5.txt');
+ 
 def cluster_elongate():
     template_clustering(0.5, 3, '../Samples/SampleElongate.txt');
     
@@ -55,9 +61,12 @@ def cluster_engy_time():
     template_clustering(0.4, 3, '../Samples/SampleEngyTime.txt');
 
 def experiment_execution_time():
+    "Performance measurement"
     template_clustering(0.5, 3, '../Samples/SampleSimple1.txt', False);
     template_clustering(1, 2, '../Samples/SampleSimple2.txt', False);
-    template_clustering(0.5, 3, '../Samples/SampleSimple3.txt', False);
+    template_clustering(0.7, 3, '../Samples/SampleSimple3.txt', False);
+    template_clustering(0.7, 3, '../Samples/SampleSimple4.txt', False);
+    template_clustering(0.7, 3, '../Samples/SampleSimple5.txt', False);
     template_clustering(0.5, 3, '../Samples/SampleElongate.txt', False);
     template_clustering(0.5, 3, '../Samples/SampleLsun.txt', False);
     template_clustering(0.5, 2, '../Samples/SampleTarget.txt', False);
@@ -71,6 +80,8 @@ def experiment_execution_time():
 cluster_sample1();
 cluster_sample2();
 cluster_sample3();
+cluster_sample4();
+cluster_sample5();
 cluster_elongate();
 cluster_lsun();
 cluster_target();
@@ -78,10 +89,9 @@ cluster_two_diamonds();
 cluster_wing_nut();
 cluster_chainlink();
 cluster_hepta();
-#cluster_golf_ball();            # it is commented due to long time of processing - it's working absolutely correct!
+cluster_golf_ball();            # it is commented due to long time of processing - it's working absolutely correct!
 cluster_atom();
 cluster_tetra();
 cluster_engy_time();
-
 
 # experiment_execution_time();

@@ -82,11 +82,45 @@ class Test(unittest.TestCase):
 
 
     def testLengthProcessedSampleSimple1(self):    
-        self.templateLengthProcessData('../Samples/SampleSimple1.txt', 0.7, 0, 10);
-        
+        self.templateLengthProcessData('../Samples/SampleSimple1.txt', 0.7, 0, 10);       
+        self.templateLengthProcessData('../Samples/SampleSimple1.txt', 0.5, 0, 10); 
 
     def testLengthProcessedSampleSimple2(self):    
+        self.templateLengthProcessData('../Samples/SampleSimple2.txt', 0.3, 0, 15);
         self.templateLengthProcessData('../Samples/SampleSimple2.txt', 1, 0, 15);
+        
+    def testLengthProcessedSampleSimple3(self):
+        self.templateLengthProcessData('../Samples/SampleSimple3.txt', 0.1, 0, 20);
+        self.templateLengthProcessData('../Samples/SampleSimple3.txt', 5, 0, 20);
+        
+    def testLengthProcessedSampleSimple4(self):
+        self.templateLengthProcessData('../Samples/SampleSimple4.txt', 0.1, 0, 10);
+        self.templateLengthProcessData('../Samples/SampleSimple4.txt', 10, 65, 75);
+    
+    def testLengthProcessedSampleSimple5(self):
+        self.templateLengthProcessData('../Samples/SampleSimple5.txt', 0.1, 0, 10);
+        self.templateLengthProcessData('../Samples/SampleSimple5.txt', 0.3, 0, 10);
+        self.templateLengthProcessData('../Samples/SampleSimple5.txt', 0.6, 0, 10);
+        
+    
+    def testResultDataClusteringSample1(self):
+        sample = support.read_sample('../Samples/SampleSimple1.txt');
+        (clusters, noise) = dbscan.dbscan(sample, 0.5, 3, False, True);
+        
+        assert noise == [];
+        assert sorted(clusters[0]) == [0, 1, 2, 3, 4];
+        assert sorted(clusters[1]) == [5, 6, 7, 8, 9];
+        
+    
+    def testResultDataClusteringSample2(self):
+        sample = support.read_sample('../Samples/SampleSimple2.txt');
+        (clusters, noise) = dbscan.dbscan(sample, 0.7, 3, False, True);
+        
+        assert noise == [];
+        assert sorted(clusters[0]) == [i for i in range(0, 10)];
+        assert sorted(clusters[1]) == [i for i in range(10, 15)];
+        assert sorted(clusters[2]) == [i for i in range(15, 23)];
+        
 
 
 if __name__ == "__main__":
