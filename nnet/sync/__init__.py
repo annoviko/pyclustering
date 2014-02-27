@@ -288,10 +288,14 @@ class net:
         return self.simulate_static(steps, time, solution, collect_dynamic);
 
 
-    def simulate_dynamic(self, order = 0.998, solution = solve_type.FAST, collect_dynamic = False):
+    def simulate_dynamic(self, order = 0.998, solution = solve_type.FAST, collect_dynamic = False, step = 0.1, int_step = 0.01, threshold_changes = 0.000001):
         "Simulate network until level synchronization level (order) is not reached"
-        # For statistics
-        iter_counter = 0;
+        # For statistics and integration
+        time_counter = 0;
+        
+        # Prevent infinite loop. It's possible when required state cannot be reached.
+        previous_order = 0;
+        current_order = self.sync_local_order();
         
         # If requested input dynamics
         dyn_phase = None;
@@ -304,27 +308,29 @@ class net:
             dyn_time.append(0);
         
         # Execute until sync state will be reached
-        while (self.sync_local_order() < order):
-            iter_counter += 1;
-            
+        while (current_order < order):                
             # update states of oscillators
-            self._phases = self._calculate_phases(solution, 0, 0.1, 1);
+            self._phases = self._calculate_phases(solution, time_counter, step, int_step);
             
-            # If requested input dynamic
+            # update time
+            time_counter += step;
+            
+            # if requested input dynamic
             if (collect_dynamic == True):
                 dyn_phase.append(self._phases);
-                dyn_time.append(iter_counter);
+                dyn_time.append(time_counter);
             else:
                 dyn_phase = self._phases;
-                dyn_time = iter_counter;
-        
-#             print("Local order: ", self.sync_local_order());
-#             print("Order: ", self.sync_order());
-#             if (iter_counter % 10):
-#                 draw_dynamics(dyn_time, dyn_phase);
+                dyn_time = time_counter;
                 
-        
-        #print("Number of iteration: ", iter_counter);
+            # update orders
+            previous_order = current_order;
+            current_order = self.sync_local_order();
+            
+            # hang prevention
+            if (abs(current_order - previous_order) < threshold_changes):
+                break;
+                
         return (dyn_time, dyn_phase);
 
 
@@ -378,146 +384,6 @@ class net:
         
 
 
-class trainnet(net):
-    "This oscillatory neural network can be trained by input data and after can be used for classification problem"
-    _osc_loc = None;     # Location of each oscillator in a N-dimensional space.
-    
-    def __init__(self, source_data, conn_repr = conn_represent.MATRIX):
-        file = open(source_data, 'r');
-        sample = [[float(val) for val in line.split()] for line in file];
-        file.close();
-        
-        super().__init__(len(sample), 1, False, conn_type.NONE);
-        
-        self._osc_loc = sample;
-        self._conn_represent = conn_repr;
-
-        # Connections will be represent by lists.
-        if (conn_repr == conn_represent.MATRIX):
-            self._osc_conn = [[0] * self._num_osc for index in range(0, self._num_osc, 1)];
-            
-        elif (conn_repr == conn_represent.LIST):
-            self._osc_conn = [[] for index in range(0, self._num_osc, 1)];
-            
-        else:
-            raise NameError("Unknown type of representation of coupling between oscillators");
-    
-    
-    def train(self, radius, order = 0.995, solution = solve_type.FAST):
-        "Network is trained via achievement sync state between the oscillators using the radius of coupling"
-        # Create connections
-        for i in range(0, self._num_osc, 1):
-            for j in range(0, self._num_osc, 1):
-                dist = euclidean_distance(self._osc_loc[i], self._osc_loc[j]);
-                if (dist <= radius):
-                    if (self._conn_represent == conn_represent.LIST):
-                        self._osc_conn[i].append(j);
-                    else:
-                        self._osc_conn[i][j] = True;
-        
-        # Execute until sync state will be reached
-        while (self.sync_local_order() < order):
-            next_phases = [0] * self.num_osc;    # new oscillator _phases
-            
-            for index in range (0, self.num_osc, 1):
-                if (solution == solve_type.FAST):
-                    result = self._phases[index] + self.phase_kuramoto(self._phases[index], 0, index);
-                    next_phases[index] = phase_normalization(result);
-                    
-                elif (solution == solve_type.ODEINT):
-                    result = odeint(self.phase_kuramoto, self._phases[index], numpy.arange(0, 0.1, 1), (index , ));
-                    next_phases[index] = phase_normalization(result[len(result) - 1][0]);
-                    
-                else:
-                    "Nothing"
-            
-            # update states of oscillators
-            self._phases = next_phases;
-        
-        # Reconnect
-        self._osc_conn.clear();
-        if (self._conn_represent == conn_represent.LIST):
-            self._osc_conn = [[] for index in range(0, self._num_osc, 1)]; 
-        else:
-            self._osc_conn = [[False] * self._num_osc for index in range(self._num_osc)];
-        
-        for i in range(0, self._num_osc, 1):
-            for j in range(0, self._num_osc, 1):
-                if (abs(self._phases[i] - self._phases[j]) < 0.1):
-                    if (self._conn_represent == conn_represent.LIST):
-                        self._osc_conn[i].append(j);
-                    else:
-                        self._osc_conn[i][j] = True;
-    
-    
-    def get_neighbors(self, index):
-        "Return list of neighbors of a oscillator with sequence number 'index'"
-        if (self._conn_represent == conn_represent.LIST):
-            return self._osc_conn[index];      # connections are represented by list.
-        elif (self._conn_represent == conn_represent.MATRIX):
-            return [neigh_index for neigh_index in range(self._num_osc) if self._osc_conn[index][neigh_index] == True];
-        else:
-            raise NameError("Unknown type of representation of connections");
-    
-    
-    def phase_kuramoto(self, teta, t, argv):
-        "Overrided method for calculation of oscillator phase"
-        index = argv;   # index of oscillator
-        phase = 0;      # phase of a specified oscillator that will calculated in line with current env. states.
-        
-        neighbors = self.get_neighbors(index);
-        for k in neighbors:
-            phase += math.sin(self._cluster * (self._phases[k] - teta));
-            
-        return ( self._freq[index] + (phase * self._weight / len(neighbors)) );    
-    
-    
-    def classify(self, data):
-        "Classify input data by trained network"
-        "In this case we no need to recalculate sync states of oscillators which compose trained network - it's locked states!"
-        pass;
-    
-    
-    def classify_and_learn(self, data):
-        "Classify input data and learn changes that occur during classification"
-        pass;
-    
-    
-    def show(self):
-        "Show connections in the network. It supports only 2-d and 3-d representation."
-        if (len(self._osc_loc) > 3 and len(self._osc_loc) < 2):
-            raise NameError('Network that is located in different from 2-d and 3-d dimensions can not be represented');
-        
-        from matplotlib.font_manager import FontProperties;
-        from matplotlib import rcParams;
-    
-        rcParams['font.sans-serif'] = ['Arial'];
-        rcParams['font.size'] = 12;
-
-        fig = plt.figure();
-        axes = fig.add_subplot(111);
-
-        surface_font = FontProperties();
-        surface_font.set_name('Arial');
-        surface_font.set_size('12');
-        
-        for i in range(0, self.num_osc, 1):
-            axes.plot(self._osc_loc[i][0], self._osc_loc[i][1], 'bo');  
-            if (self._conn_represent == conn_represent.MATRIX):
-                for j in range(self._num_osc):
-                    if (self.has_connection(i, j) == True):
-                        axes.plot([self._osc_loc[i][0], self._osc_loc[j][0]], [self._osc_loc[i][1], self._osc_loc[j][1]], 'b-', linewidth=0.5);    
-                        
-            else:
-                for j in self.get_neighbors(i):
-                    if (self.has_connection(i, j) == True):
-                        axes.plot([self._osc_loc[i][0], self._osc_loc[j][0]], [self._osc_loc[i][1], self._osc_loc[j][1]], 'b-', linewidth=0.5);    
-                                            
-        plt.grid();
-        plt.show();
-
-
-
 def phase_normalization(teta):
     "Normalization of phase of oscillator that should be placed between [0; 2 * pi]"
     norm_teta = teta;
@@ -561,15 +427,12 @@ def draw_dynamics(t, dyn_phase):
 
 
 
-#network = trainnet('D:\\userdata\\annoviko\\workspace\\Clastering\\Samples\\SampleSimple1.txt');
-#network.train(0.5);
-#network.show();
-
-
 # network = net(10, 1, False, conn_type.ALL_TO_ALL);   
 # network.cluster = 2;
-# 
-# network.simulate_dynamic(collect_dynamic = True);
+#  
+# (t, d) = network.simulate_dynamic(order = 0.998, collect_dynamic = True, solution=solve_type.ODEINT);
 # clusters = network.allocate_sync_ensembles(0.1);
-# 
+#  
+# draw_dynamics(t, d);
+#  
 # assert len(clusters) == 2;

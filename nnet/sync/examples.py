@@ -39,6 +39,7 @@ def grid_four_struct_dynamic_sync():
     (t, dyn_phase) = network.simulate(50, 10, solution = sync.solve_type.ODEINT);
     sync.draw_dynamics(t, dyn_phase);
     
+    
 def time_dependence_grid_struct():
     number_oscillator = range(5, 100, 5);
     time_dependence = [];

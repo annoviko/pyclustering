@@ -239,14 +239,34 @@ class Test(unittest.TestCase):
         self.template_dynamic_simulation_connection_type_test(10, 1, sync.conn_type.LIST_BIDIR);
 
 
-    def test_dynamic_simulation_cluster_parameter(self):
-        network = sync.net(10, 1, False, sync.conn_type.ALL_TO_ALL);   
-        network.cluster = 2;
-        
-        network.simulate_dynamic();
+    def template_dynamic_simulation_cluster_parameter(self, num_osc, cluster_parameter):
+        network = sync.net(num_osc, 1, False, sync.conn_type.ALL_TO_ALL);   
+        network.cluster = cluster_parameter;
+          
+        network.simulate_dynamic(solution = sync.solve_type.ODEINT);
         clusters = network.allocate_sync_ensembles(0.1);
         
-        assert len(clusters) == 2;
+        assert len(clusters) == cluster_parameter;
+
+
+    def test_dynamic_simulation_cluster_parameter_2(self):
+        self.template_dynamic_simulation_cluster_parameter(2, 2);
+        self.template_dynamic_simulation_cluster_parameter(10, 2);
+        self.template_dynamic_simulation_cluster_parameter(20, 2);
+        
+        
+    def test_dynamic_simulation_cluster_parameter_3(self):
+        self.template_dynamic_simulation_cluster_parameter(3, 3);
+        self.template_dynamic_simulation_cluster_parameter(10, 3);
+        
+    
+    def test_dynamic_simulation_cluster_parameter_4(self):
+        self.template_dynamic_simulation_cluster_parameter(10, 4);
+    
+    
+    def test_dynamic_simulation_cluster_parameter_6(self):
+        self.template_dynamic_simulation_cluster_parameter(20, 6);
+    
 
 
 if __name__ == "__main__":
