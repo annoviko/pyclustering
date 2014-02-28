@@ -264,21 +264,24 @@ class net:
     
     
     def allocate_sync_ensembles(self, tolerance = 0.01):
-        "Return lists of synchonized ensembles of oscillators"     
-        "BUG: When we have high disorder and high tolerance then we can allocate several clusters that can have shared oscillators"   
-        clusters = list();
-        if (self.num_osc > 0):
-            clusters.append( (self._phases[0], [0]) );
+        "Allocate clusters in line with ensembles of synchronous oscillators where each" 
+        "synchronous ensemble corresponds to only one cluster"
+        clusters = [ [0] ];
         
-        for index in range(1, self.num_osc, 1):
-            allocated = False;
+        for i in range(1, self._num_osc, 1):
+            cluster_allocated = False;
             for cluster in clusters:
-                if ( abs(cluster[0] - self._phases[index]) < tolerance ):
-                    allocated = True;
-                    cluster[1].append(index);
+                for neuron_index in cluster:
+                    if ( (self._phases[i] < (self._phases[neuron_index] + tolerance)) and (self._phases[i] > (self._phases[neuron_index] - tolerance)) ):
+                        cluster_allocated = True;
+                        cluster.append(i);
+                        break;
+                
+                if (cluster_allocated == True):
+                    break;
             
-            if (allocated != True):
-                clusters.append( (self._phases[index], [index]) );
+            if (cluster_allocated == False):
+                clusters.append([i]);
         
         return clusters;
     
@@ -382,7 +385,6 @@ class net:
         
         return next_phases;
         
-
 
 def phase_normalization(teta):
     "Normalization of phase of oscillator that should be placed between [0; 2 * pi]"

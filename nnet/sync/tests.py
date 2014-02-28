@@ -247,26 +247,24 @@ class Test(unittest.TestCase):
         clusters = network.allocate_sync_ensembles(0.1);
         
         assert len(clusters) == cluster_parameter;
+        assert sum([len(cluster) for cluster in clusters]) == num_osc;
 
 
     def test_dynamic_simulation_cluster_parameter_2(self):
-        self.template_dynamic_simulation_cluster_parameter(2, 2);
-        self.template_dynamic_simulation_cluster_parameter(10, 2);
         self.template_dynamic_simulation_cluster_parameter(20, 2);
         
         
     def test_dynamic_simulation_cluster_parameter_3(self):
-        self.template_dynamic_simulation_cluster_parameter(3, 3);
-        self.template_dynamic_simulation_cluster_parameter(10, 3);
+        self.template_dynamic_simulation_cluster_parameter(20, 3);
         
     
     def test_dynamic_simulation_cluster_parameter_4(self):
-        self.template_dynamic_simulation_cluster_parameter(10, 4);
+        self.template_dynamic_simulation_cluster_parameter(20, 4);
     
     
     def test_dynamic_simulation_cluster_parameter_6(self):
         self.template_dynamic_simulation_cluster_parameter(20, 6);
-    
+        
 
 
 if __name__ == "__main__":

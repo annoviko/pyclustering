@@ -16,7 +16,6 @@ def template_clustering(file, map_size, trust_order, sync_order = 0.999, show_dy
     print("Sample: ", file, "\t\tExecution time: ", ticks, "\n");
     
     # Show dynamic of the last layer.
-    # TODO: Fix this fucking bug! It isn't displayed anymore!
     if (show_dyn == True):
         draw_dynamics(dyn_time, dyn_phase);
     

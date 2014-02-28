@@ -6,7 +6,7 @@ from support import read_sample;
 class syncnet(net):
     _loc = None;
     
-    def __init__(self, source_data, conn_repr = conn_represent.MATRIX):
+    def __init__(self, source_data, conn_repr = conn_represent.MATRIX, radius = None):
         sample = None;
         if ( isinstance(source_data, str) ):
             file = open(source_data, 'r');
@@ -29,6 +29,10 @@ class syncnet(net):
             
         else:
             raise NameError("Unknown type of representation of coupling between oscillators");
+        
+        # Create connections.
+        if (radius is not None):
+            self.__create_connections(radius);
         
         
 
@@ -57,46 +61,8 @@ class syncnet(net):
         if (radius != None):
             self.__create_connections(radius);
         
-        # For statistics
-        iter_counter = 0;
-        
-        # If requested input dynamics
-        dyn_phase = None;
-        dyn_time = None;
-        if (collect_dynamic == True):
-            dyn_phase = list();
-            dyn_time = list();
-            
-            dyn_phase.append(self._phases);
-            dyn_time.append(0);
-        
-        # Execute until sync state will be reached
-        while (self.sync_local_order() < order):
-            iter_counter += 1;
-            next_phases = [0] * self.num_osc;    # new oscillator _phases
-            
-            for index in range (0, self.num_osc, 1):
-                if (solution == solve_type.FAST):
-                    result = self._phases[index] + self.phase_kuramoto(self._phases[index], 0, index);
-                    next_phases[index] = phase_normalization(result);
-                    
-                elif (solution == solve_type.ODEINT):
-                    result = odeint(self.phase_kuramoto, self._phases[index], numpy.arange(0, 0.1, 1), (index , ));
-                    next_phases[index] = phase_normalization(result[len(result) - 1][0]);
-                    
-                else:
-                    assert 0;   # Should be implemented later.
-                    
-            # update states of oscillators
-            self._phases = next_phases;
-            
-            # If requested input dynamic
-            if (collect_dynamic == True):
-                dyn_phase.append(next_phases);
-                dyn_time.append(iter_counter);
-        
-        print("Number of iteration: ", iter_counter);
-        return (dyn_time, dyn_phase);
+        return self.simulate_dynamic(order, solution, collect_dynamic);
+    
     
     
     def get_neighbors(self, index):
@@ -122,31 +88,8 @@ class syncnet(net):
 
 
     def get_clusters(self, eps = 0.1):
-        clusters = [ [0] ];
-        
-        for i in range(1, self._num_osc, 1):
-            cluster_allocated = False;
-            for cluster in clusters:
-                for neuron_index in cluster:
-                    if ( (self._phases[i] < (self._phases[neuron_index] + eps)) and (self._phases[i] > (self._phases[neuron_index] - eps)) ):
-                        cluster_allocated = True;
-                        cluster.append(i);
-                        break;
-                
-                if (cluster_allocated == True):
-                    break;
-            
-            if (cluster_allocated == False):
-                clusters.append([i]);
-        
-        #debug assert
-        total_length = 0;
-        for cluster in clusters:
-            total_length += len(cluster);
-        print("Total length: ", total_length, ", Real: ", self._num_osc);
-        assert total_length == self._num_osc;
-        
-        return clusters;
+        "Return clusters"
+        return self.allocate_sync_ensembles(eps);
     
     
     def show_network(self):
