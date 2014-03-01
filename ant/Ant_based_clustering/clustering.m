@@ -2,13 +2,13 @@ function [ lattice, dataOnLattice, bDataOnLattice, ants, latticeFirst ] = cluste
 
     count_data = length( clusteringData );
 
-    alpha = 10;
+    alpha = 0.5;
     gamaPick = 0.1;
     gamaDrop = 0.3;
     %dropProbability = 0.5;
     
     %directionProbability = 0.5;
-    neighborSize = 2;
+    neighborSize = 1;
     
     stepSize = 1;
     directionStep = stepSize * [-1 -1; 0 -1; 1 -1; -1 1; 0 1; 1 1; -1 0; 1 0];
@@ -185,13 +185,12 @@ function [ lattice, dataOnLattice, bDataOnLattice, ants, latticeFirst ] = cluste
     end
     
     %---- end for iterNumber
+    
     for antNum = 1:numberOfAnts
-        lattice( ants( antNum ).location(1), ants( antNum ).location(2) ) = ants( antNum ).datum;
+        lattice(  dataOnLattice( ants( antNum ).datum, 1 ), dataOnLattice( ants( antNum ).datum, 2 ) ) = ants( antNum ).datum;
         bDataOnLattice( ants( antNum ).datum ) = 1;
-
-        dataOnLattice( ants( antNum ).datum, 1 ) = ants( antNum ).location(1);
-        dataOnLattice( ants( antNum ).datum, 2 ) = ants( antNum ).location(2);
     end
+    
     
 end
 
