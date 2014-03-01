@@ -2,7 +2,7 @@ function [ lattice, dataOnLattice, bDataOnLattice, ants, latticeFirst ] = cluste
 
     count_data = length( clusteringData );
 
-    alpha = 0.1;
+    alpha = 10;
     gamaPick = 0.1;
     gamaDrop = 0.3;
     %dropProbability = 0.5;
@@ -112,14 +112,15 @@ function [ lattice, dataOnLattice, bDataOnLattice, ants, latticeFirst ] = cluste
  
             % calc f(i)
             lambda(iterNumber, antNum) = max( 0, (1/count_neigh^2)*sum(1 - d./alpha) );
-            
+            llamb = lambda(iterNumber, antNum);
             %Drop stage
             dropPAnt(iterNumber, antNum) = ( lambda(iterNumber, antNum) / ( gamaDrop + lambda(iterNumber, antNum) ))^2;
+            pPAnt = dropPAnt(iterNumber, antNum);
             
             randNumber = rand;
             
             % 
-            if dropPAnt(iterNumber, antNum) < randNumber
+            if dropPAnt(iterNumber, antNum) > randNumber
                 %drop data
                 lattice( ants( antNum ).location(1), ants( antNum ).location(2) ) = ants( antNum ).datum;
                 %bDataOnLattice( ants( antNum ).datum ) = 1;
@@ -159,7 +160,8 @@ function [ lattice, dataOnLattice, bDataOnLattice, ants, latticeFirst ] = cluste
                     
                     %Pick up stage
                     pickupPAnt(iterNumber, antNum) = (gamaPick / (gamaPick + lambda_pick) )^2;
-
+                    ppick = pickupPAnt(iterNumber, antNum);
+                    
                     randNumber = rand;
                     % TODO
                     
