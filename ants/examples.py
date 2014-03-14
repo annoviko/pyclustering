@@ -8,7 +8,7 @@ def templateClustering( file, num_ants, size_lattice, count_iteration ):
 
 
 def testClusteringSampleSimple1():
-    print( templateClustering( '../Samples/SampleSimpleForAntsClustering1.txt', 10, 11, 100000 ) )
+    print( templateClustering( '../Samples/SampleSimpleForAntsClustering1.txt', 10, 11, 10000 ) )
 
 
 testClusteringSampleSimple1()
