@@ -4,7 +4,7 @@ from support import draw_clusters;
 from support import read_sample;
 
 class syncnet(net):
-    _loc = None;
+    _osc_loc = None;
     
     def __init__(self, source_data, conn_repr = conn_represent.MATRIX, radius = None):
         sample = None;
@@ -32,11 +32,11 @@ class syncnet(net):
         
         # Create connections.
         if (radius is not None):
-            self.__create_connections(radius);
+            self._create_connections(radius);
         
         
 
-    def __create_connections(self, radius):
+    def _create_connections(self, radius):
         "Create connections between oscillators"
         # Create connections
         for i in range(0, self._num_osc, 1):
@@ -59,7 +59,7 @@ class syncnet(net):
         "Network is trained via achievement sync state between the oscillators using the radius of coupling"
         # Create connections in line with input radius
         if (radius != None):
-            self.__create_connections(radius);
+            self._create_connections(radius);
         
         return self.simulate_dynamic(order, solution, collect_dynamic);
     

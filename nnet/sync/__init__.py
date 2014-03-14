@@ -95,7 +95,7 @@ class net:
                 self._freq.append(0);
                 
         self._conn_represent = conn_represent;
-        self.__create_connections(type_conn);
+        self._create_structure(type_conn);
         
     
     def __create_all_to_all_connections(self):
@@ -187,7 +187,7 @@ class net:
             self._osc_conn = [[] for index in range(0, self.num_osc, 1)];
 
     
-    def __create_connections(self, type_conn = conn_type.ALL_TO_ALL):
+    def _create_structure(self, type_conn = conn_type.ALL_TO_ALL):
         "Create connection in line with representation of matrix connections [NunOsc x NumOsc]"
         if (type_conn == conn_type.NONE):
             self.__create_none_connections();
