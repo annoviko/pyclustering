@@ -20,6 +20,12 @@ def cluster_sample2():
 def cluster_sample3():
     template_clustering(4, '../Samples/SampleSimple3.txt');
     
+def cluster_sample4():
+    template_clustering(5, '../Samples/SampleSimple4.txt');
+    
+def cluster_sample5():
+    template_clustering(4, '../Samples/SampleSimple5.txt');    
+    
 def cluster_elongate():
     "Not so applicable for this sample"
     template_clustering(2, '../Samples/SampleElongate.txt');
@@ -55,6 +61,8 @@ def cluster_engy_time():
 cluster_sample1();
 cluster_sample2();
 cluster_sample3();
+cluster_sample4();
+cluster_sample5();
 cluster_elongate();
 cluster_lsun();
 cluster_target();
