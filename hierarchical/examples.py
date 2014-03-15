@@ -1,7 +1,10 @@
 from hierarchical import hierarchical
+
 from support import read_sample;
 from support import draw_clusters;
 from support import timedcall;
+
+from samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
 
 def template_clustering(number_clusters, path):
     sample = read_sample(path);
@@ -12,50 +15,50 @@ def template_clustering(number_clusters, path):
     draw_clusters(sample, clusters);
     
 def cluster_sample1():
-    template_clustering(2, '../samples/SampleSimple1.txt');
+    template_clustering(2, SIMPLE_SAMPLES.SAMPLE_SIMPLE1);
     
 def cluster_sample2():
-    template_clustering(3, '../samples/SampleSimple2.txt');
+    template_clustering(3, SIMPLE_SAMPLES.SAMPLE_SIMPLE2);
     
 def cluster_sample3():
-    template_clustering(4, '../samples/SampleSimple3.txt');
+    template_clustering(4, SIMPLE_SAMPLES.SAMPLE_SIMPLE3);
     
 def cluster_sample4():
-    template_clustering(5, '../samples/SampleSimple4.txt');
+    template_clustering(5, SIMPLE_SAMPLES.SAMPLE_SIMPLE4);
     
 def cluster_sample5():
-    template_clustering(4, '../samples/SampleSimple5.txt');    
+    template_clustering(4, SIMPLE_SAMPLES.SAMPLE_SIMPLE5);    
     
 def cluster_elongate():
     "NOTE: Not applicable for this sample"
-    template_clustering(2, '../samples/SampleElongate.txt');
+    template_clustering(2, SIMPLE_SAMPLES.SAMPLE_ELONGATE);
 
 def cluster_lsun():
     "NOTE: Not applicable for this sample"
-    template_clustering(3, '../samples/SampleLsun.txt');  
+    template_clustering(3, FCPS_SAMPLES.SAMPLE_LSUN);  
     
 def cluster_target():
     "NOTE: Not applicable for this sample"
-    template_clustering(6, '../samples/SampleTarget.txt');     
+    template_clustering(6, FCPS_SAMPLES.SAMPLE_TARGET);     
 
 def cluster_two_diamonds():
-    template_clustering(2, '../samples/SampleTwoDiamonds.txt');  
+    template_clustering(2, FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS);  
 
 def cluster_wing_nut():
-    template_clustering(2, '../samples/SampleWingNut.txt'); 
+    template_clustering(2, FCPS_SAMPLES.SAMPLE_WING_NUT); 
     
 def cluster_chainlink():
     "NOTE: Not applicable for this sample"
-    template_clustering(2, '../samples/SampleChainlink.txt');     
+    template_clustering(2, FCPS_SAMPLES.SAMPLE_CHAINLINK);     
     
 def cluster_hepta():
-    template_clustering(7, '../samples/SampleHepta.txt'); 
+    template_clustering(7, FCPS_SAMPLES.SAMPLE_HEPTA); 
     
 def cluster_tetra():
-    template_clustering(4, '../samples/SampleTetra.txt');    
+    template_clustering(4, FCPS_SAMPLES.SAMPLE_TETRA);    
     
 def cluster_engy_time():
-    template_clustering(2, '../samples/SampleEngyTime.txt');
+    template_clustering(2, FCPS_SAMPLES.SAMPLE_ENGY_TIME);
     
     
 cluster_sample1();
