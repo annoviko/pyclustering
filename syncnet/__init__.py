@@ -77,6 +77,12 @@ class syncnet(net):
     
     def phase_kuramoto(self, teta, t, argv):
         "Overrided method for calculation of oscillator phase"
+        
+        "(in) teta     - current value of phase"
+        "(in) t        - time (can be ignored)"
+        "(in) argv     - index of oscillator whose phase represented by argument teta"
+        
+        "Return new value of phase of oscillator with index 'argv'"
         index = argv;   # index of oscillator
         phase = 0;      # phase of a specified oscillator that will calculated in line with current env. states.
         
@@ -88,7 +94,11 @@ class syncnet(net):
 
 
     def get_clusters(self, eps = 0.1):
-        "Return clusters"
+        "Return list of clusters in line with state of ocillators (phases)."
+        
+        "(in) eps     - tolerance level that define maximal difference between phases of oscillators in one cluster"
+        
+        "Return list of clusters, for example [ [cluster1], [cluster2], ... ]"
         return self.allocate_sync_ensembles(eps);
     
     

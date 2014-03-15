@@ -9,7 +9,9 @@ from scipy import pi;
 from scipy.integrate import odeint;
 from scipy.integrate import ode;
 from scipy.spatial import distance;
+
 from support import euclidean_distance;
+from hierarchical import hierarchical;
 
 
 class solve_type:
@@ -301,12 +303,9 @@ class net:
         current_order = self.sync_local_order();
         
         # If requested input dynamics
-        dyn_phase = None;
-        dyn_time = None;
+        dyn_phase = [];
+        dyn_time = [];
         if (collect_dynamic == True):
-            dyn_phase = list();
-            dyn_time = list();
-            
             dyn_phase.append(self._phases);
             dyn_time.append(0);
         
