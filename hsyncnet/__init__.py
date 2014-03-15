@@ -4,12 +4,14 @@ from syncnet import syncnet;
 from support import average_neighbor_distance, read_sample;
 
 class hsyncnet(syncnet):
-    def __init__(self, source_data):
+    def __init__(self, source_data, osc_initial_phases = initial_type.RANDOM_GAUSSIAN):
         "Costructor of the oscillatory network hSync"
         
         "(in) source_data         - input data set defines structure of the network"
+        "(in) osc_initial_phases  - type of initialization of initial values of phases of oscillators"
         
-        super().__init__(source_data);
+        super().__init__(source_data, initial_phases = osc_initial_phases);
+    
     
     def process(self, number_clusters, order = 0.998, solution = solve_type.FAST, collect_dynamic = False):
         "Perform clustering of input data set in line with input parameters"

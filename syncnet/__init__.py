@@ -6,7 +6,7 @@ from support import read_sample;
 class syncnet(net):
     _osc_loc = None;
     
-    def __init__(self, source_data, conn_repr = conn_represent.MATRIX, radius = None):
+    def __init__(self, source_data, conn_repr = conn_represent.MATRIX, radius = None, initial_phases = initial_type.RANDOM_GAUSSIAN):
         sample = None;
         if ( isinstance(source_data, str) ):
             file = open(source_data, 'r');
@@ -15,7 +15,7 @@ class syncnet(net):
         else:
             sample = source_data;
         
-        super().__init__(len(sample), 1, False, conn_type.NONE);
+        super().__init__(len(sample), 1, False, conn_type.NONE, initial_phases);
         
         self._osc_loc = sample;
         self._conn_represent = conn_repr;

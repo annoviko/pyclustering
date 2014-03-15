@@ -1,5 +1,6 @@
 import unittest
 
+from nnet.sync import initial_type;
 from syncnet import syncnet;
 from support import read_sample;
 from numpy import pi;
@@ -7,7 +8,7 @@ from numpy import pi;
 class Test(unittest.TestCase):
     def templateClustering(self, file, radius, order):
         sample = read_sample(file);
-        network = syncnet(sample);
+        network = syncnet(sample, initial_phases = initial_type.EQUIPARTITION); # EQUIPARTITION - makes test more stable.
         network.process(radius, order);
         return network.get_clusters(0.05);
     

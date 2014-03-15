@@ -1,14 +1,15 @@
 import unittest;
 
+from nnet.sync import initial_type;
 from support import read_sample;
 from hsyncnet import hsyncnet;
 
 class Test(unittest.TestCase):
     def templateClusteringResults(self, path, number_clusters, expected_length_clusters):
         sample = read_sample(path);
-        network = hsyncnet(sample);
+        network = hsyncnet(sample, initial_type.EQUIPARTITION); # EQUIPARTITION - makes test more stable.
         
-        (t, d) = network.process(number_clusters, order = 0.999, collect_dynamic = True);
+        (t, d) = network.process(number_clusters, order = 0.998, collect_dynamic = True);
         clusters = network.get_clusters();
         
         assert sum([len(cluster) for cluster in clusters]) == sum(expected_length_clusters);
