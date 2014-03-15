@@ -21,7 +21,6 @@ class Test(unittest.TestCase):
             
             assert sorted([len(cluster) for cluster in clusters]) == expected_length_clusters;
         
-    
     def testClusteringSampleSimple1(self):
         self.templateClusteringResults("../Samples/SampleSimple1.txt", 2, [5, 5]);
         self.templateClusteringResults("../Samples/SampleSimple1.txt", 1, [10]);

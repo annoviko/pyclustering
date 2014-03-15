@@ -22,13 +22,13 @@ class Test(unittest.TestCase):
     
     
     def test_sync_order_single_osc(self):
-        "Check for order parameter of network with one oscillator"
+        # Check for order parameter of network with one oscillator
         network = sync.net(1, 1);
         assert network.sync_order() == 1;
     
     
     def test_sync_order_network(self):
-        "Check for order parameter of network with several oscillators"
+        # Check for order parameter of network with several oscillators
         network = sync.net(20, 1);
         assert network.sync_order() < 0.5;
         
@@ -58,17 +58,17 @@ class Test(unittest.TestCase):
     
     
     def test_fast_solution(self):
-        "Check for convergence when solution using fast way of calculation of derivative"
+        # Check for convergence when solution using fast way of calculation of derivative
         self.template_simulate_test(10, 1, sync.solve_type.FAST);
         
     
     def test_odeint_solution(self):
-        "Check for convergence when solution using ODEINT function of calculation of derivative"
+        # Check for convergence when solution using ODEINT function of calculation of derivative
         self.template_simulate_test(10, 1, sync.solve_type.ODEINT);   
     
     
     def test_large_network(self):
-        "Check for convergence of phases in large network - network that contains large number of oscillators"
+        # Check for convergence of phases in large network - network that contains large number of oscillators
         self.template_simulate_test(128, 1, sync.solve_type.FAST);              
         
         
@@ -91,7 +91,7 @@ class Test(unittest.TestCase):
     
     
     def test_cluster_parameter(self):
-        "Check feature of oscillatory network to clustering oscillators using internal cluster parameter"
+        # Check feature of oscillatory network to clustering oscillators using internal cluster parameter
         self.template_cluster_parameter_test(10, 1, 1);
         self.template_cluster_parameter_test(10, 1, 2);
         self.template_cluster_parameter_test(10, 5, 2);
@@ -109,7 +109,7 @@ class Test(unittest.TestCase):
 
     
     def test_all_to_all_connection(self):
-        "Check creation of coupling between oscillator in all-to-all case"
+        # Check creation of coupling between oscillator in all-to-all case
         network = sync.net(10, 1, type_conn = sync.conn_type.ALL_TO_ALL);
         self.template_all_to_all_connection_test(network);
 
@@ -145,7 +145,7 @@ class Test(unittest.TestCase):
         
 
     def test_bidir_list_connection(self):
-        "Check creation of coupling between oscillator in bidirectional list case"
+        # Check creation of coupling between oscillator in bidirectional list case
         network = sync.net(10, 1, type_conn = sync.conn_type.LIST_BIDIR);
         self.template_bidir_list_connection_test(network);
     
@@ -165,13 +165,13 @@ class Test(unittest.TestCase):
     
     
     def test_grid_four_connection(self):
-        "Check creation of coupling between oscillator in grid with four neighbors case"
+        # Check creation of coupling between oscillator in grid with four neighbors case
         network = sync.net(25, 1, type_conn = sync.conn_type.GRID_FOUR);
         self.template_grid_four_connection_test(network);
     
     
     def test_grid_four_connection_list_represent(self):
-        "Check creation of coupling between oscillator in grid with four neighbors case"
+        # Check creation of coupling between oscillator in grid with four neighbors case
         network = sync.net(25, 1, type_conn = sync.conn_type.GRID_FOUR, conn_represent = sync.conn_represent.LIST);        
         self.template_grid_four_connection_test(network);
 

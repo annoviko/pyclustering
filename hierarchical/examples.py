@@ -27,25 +27,25 @@ def cluster_sample5():
     template_clustering(4, '../Samples/SampleSimple5.txt');    
     
 def cluster_elongate():
-    "Not so applicable for this sample"
+    "NOTE: Not applicable for this sample"
     template_clustering(2, '../Samples/SampleElongate.txt');
 
 def cluster_lsun():
-    "Not so applicable for this sample"
+    "NOTE: Not applicable for this sample"
     template_clustering(3, '../Samples/SampleLsun.txt');  
     
 def cluster_target():
-    "Not so applicable for this sample"
+    "NOTE: Not applicable for this sample"
     template_clustering(6, '../Samples/SampleTarget.txt');     
 
 def cluster_two_diamonds():
     template_clustering(2, '../Samples/SampleTwoDiamonds.txt');  
 
 def cluster_wing_nut():
-    "Almost good!"
     template_clustering(2, '../Samples/SampleWingNut.txt'); 
     
 def cluster_chainlink():
+    "NOTE: Not applicable for this sample"
     template_clustering(2, '../Samples/SampleChainlink.txt');     
     
 def cluster_hepta():

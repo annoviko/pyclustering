@@ -33,7 +33,7 @@ class Test(unittest.TestCase):
         
 
     def testKdTreeCreateWithoutPayload(self):
-        "Create k-d tree without any payload"
+        # Create k-d tree without any payload
         array = [ [4, 3], [3, 4], [5, 8], [3, 3], [3, 9], [6, 4], [5, 9] ];
         tree = kdtree.kdtree(array);
         
@@ -47,7 +47,7 @@ class Test(unittest.TestCase):
     
     
     def testKdTreeCreateWithPayload(self):
-        "Create k-d tree with payload"
+        # Create k-d tree with payload
         array = [ [4, 3], [3, 4], [5, 8], [3, 3], [3, 9], [6, 4], [5, 9] ];
         payload = ['q', 'w', 'e', 'r', 't', 'y', 'u'];
         
@@ -143,7 +143,7 @@ class Test(unittest.TestCase):
                 
     
     def testKdTreeInsertRemoveNode2(self):
-        "This test simulates situation when a bug (16.01.2014) with removing was occuring"
+        # This test simulates situation when a bug (16.01.2014) with removing was occuring
         array = [ [9, 9], [3, 3], [4, 4] ];
         tree = kdtree.kdtree(array);
         
@@ -158,12 +158,12 @@ class Test(unittest.TestCase):
             
     
     def testKdTreeRemoveLongBranch(self):
-        "Create only one branch - worth case and remove it"
+        # Create only one branch - worth case and remove it
         array = [ [5, 5], [6, 5], [6, 6], [7, 6], [7, 7] ];
         tree = kdtree.kdtree(array);    
         
         assert len(tree.traverse()) == len(array);
-        tree.show();
+        #tree.show();
         
         for index in range(len(array)):
             node = tree.remove(array[index]);
@@ -219,14 +219,11 @@ class Test(unittest.TestCase):
             tree = kdtree.kdtree(array);
             length = len(array);
             
-            #print("\n\nNew generation: ", perm_array);
-            
             for index in range(len(perm_array)):
                 #tree.show();
                 
                 node = tree.remove(perm_array[index]);
-                #print("Point: ", perm_array[index], ", Length: ", length - index - 1, ", Node: ", node);
-                
+
                 if ( index + 1 < length ):
                     assert node is not None;
                     
