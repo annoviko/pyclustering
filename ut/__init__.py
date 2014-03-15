@@ -14,12 +14,12 @@ from syncnet        import tests as syncnet_unit_tests;
 if __name__ == "__main__":
     suite = unittest.TestSuite();
     
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(ants_unit_tests));
+    # suite.addTests(unittest.TestLoader().loadTestsFromModule(ants_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cure_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(dbscan_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(hierarchical_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(hsyncnet_unit_tests));
-    # suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_som_unit_tests));
+    suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_som_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_sync_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(support_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(syncnet_unit_tests));

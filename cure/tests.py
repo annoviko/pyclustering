@@ -1,6 +1,6 @@
 import unittest;
 
-import numpy;
+from samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
 
 from support import read_sample;
 
@@ -23,25 +23,25 @@ class Test(unittest.TestCase):
         assert cluster_sizes == obtained_cluster_sizes;
 
     def testClusterAllocationSampleSimple1(self):
-        self.template_cluster_allocation('../Samples/SampleSimple1.txt', [5, 5], 2);
+        self.template_cluster_allocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [5, 5], 2);
     
     def testClusterAllocationSampleSimple2(self):
-        self.template_cluster_allocation('../Samples/SampleSimple2.txt', [10, 5, 8], 3);
+        self.template_cluster_allocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [10, 5, 8], 3);
         
     def testClusterAllocationSampleSimple3(self):
-        self.template_cluster_allocation('../Samples/SampleSimple3.txt', [10, 10, 10, 30], 4);
+        self.template_cluster_allocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [10, 10, 10, 30], 4);
         
     def testClusterAllocationSampleSimple4(self):
-        self.template_cluster_allocation('../Samples/SampleSimple4.txt', [15, 15, 15, 15, 15], 5);
+        self.template_cluster_allocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, [15, 15, 15, 15, 15], 5);
         
     def testClusterAllocationSampleSimple5(self):
-        self.template_cluster_allocation('../Samples/SampleSimple5.txt', [15, 15, 15, 15], 4);
+        self.template_cluster_allocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [15, 15, 15, 15], 4);
 
     def testClusterAllocationSampleTwoDiamonds(self):
-        self.template_cluster_allocation('../Samples/SampleTwoDiamonds.txt', [399, 401], 2);
+        self.template_cluster_allocation(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, [399, 401], 2);
 
     def testClusterAllocationSampleLsun(self):
-        self.template_cluster_allocation('../Samples/SampleLsun.txt', [100, 101, 202], 3);
+        self.template_cluster_allocation(FCPS_SAMPLES.SAMPLE_LSUN, [100, 101, 202], 3);
 
 
     def template_queue_creation(self, path):
@@ -63,11 +63,11 @@ class Test(unittest.TestCase):
             cursor_distance = cluster.distance;
 
     def testCreateQueue(self):
-        self.template_queue_creation('../Samples/SampleSimple1.txt');
-        self.template_queue_creation('../Samples/SampleSimple2.txt');
-        self.template_queue_creation('../Samples/SampleSimple3.txt');
-        self.template_queue_creation('../Samples/SampleSimple4.txt');
-        self.template_queue_creation('../Samples/SampleSimple5.txt');
+        self.template_queue_creation(SIMPLE_SAMPLES.SAMPLE_SIMPLE1);
+        self.template_queue_creation(SIMPLE_SAMPLES.SAMPLE_SIMPLE2);
+        self.template_queue_creation(SIMPLE_SAMPLES.SAMPLE_SIMPLE3);
+        self.template_queue_creation(SIMPLE_SAMPLES.SAMPLE_SIMPLE4);
+        self.template_queue_creation(SIMPLE_SAMPLES.SAMPLE_SIMPLE5);
         
 
 if __name__ == "__main__":

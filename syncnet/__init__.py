@@ -155,7 +155,7 @@ class syncnet(net):
     
 
 
-# sample = read_sample('../Samples/SampleLsun.txt');
+# sample = read_sample('../samples/SampleLsun.txt');
 # network = syncnet(sample);
 # (dyn_time, dyn_phase) = network.process(0.5, 0.995, collect_dynamic = True);
 # 

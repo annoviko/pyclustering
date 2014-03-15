@@ -454,7 +454,7 @@ class som:
         plt.show();
         
         
-# sample = read_sample('../../Samples/SampleTwoDiamonds.txt');
+# sample = read_sample('../../samples/SampleTwoDiamonds.txt');
 # network = som(5, 5, sample, 100, type_conn.grid_four);
 # network.show_network();
 # 

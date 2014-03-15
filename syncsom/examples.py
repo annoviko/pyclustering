@@ -36,44 +36,44 @@ def template_clustering(file, map_size, trust_order, sync_order = 0.999, show_dy
   
 
 def cluster_simple3():
-    template_clustering('../Samples/SampleSimple3.txt', [4, 4], 3, 0.999, True, True, True, True);
+    template_clustering('../samples/SampleSimple3.txt', [4, 4], 3, 0.999, True, True, True, True);
     
 def cluster_simple4():
-    template_clustering('../Samples/SampleSimple4.txt', [3, 3], 3, 0.999, True, True, True);
+    template_clustering('../samples/SampleSimple4.txt', [3, 3], 3, 0.999, True, True, True);
     
 def cluster_simple5():
-    template_clustering('../Samples/SampleSimple5.txt', [3, 3], 3, 0.999, True, True, True);
+    template_clustering('../samples/SampleSimple5.txt', [3, 3], 3, 0.999, True, True, True);
 
 def cluster_lsun():
-    template_clustering('../Samples/SampleLsun.txt', [9, 9], 10, 0.999, True, True, True);
+    template_clustering('../samples/SampleLsun.txt', [9, 9], 10, 0.999, True, True, True);
      
 def cluster_target():
-    template_clustering('../Samples/SampleTarget.txt', [9, 9], 20, 0.999, True, True, True);
+    template_clustering('../samples/SampleTarget.txt', [9, 9], 20, 0.999, True, True, True);
 
 def cluster_two_diamonds():
-    template_clustering('../Samples/SampleTwoDiamonds.txt', [10, 10], 5, 0.999, True, True, True);
+    template_clustering('../samples/SampleTwoDiamonds.txt', [10, 10], 5, 0.999, True, True, True);
 
 def cluster_wing_nut():
-    template_clustering('../Samples/SampleWingNut.txt', [10, 10], 5, 0.999, True, True, True);
+    template_clustering('../samples/SampleWingNut.txt', [10, 10], 5, 0.999, True, True, True);
 
 def cluster_chainlink():
-    template_clustering('../Samples/SampleChainlink.txt', [10, 10], 15, 0.999, True, True, True);
+    template_clustering('../samples/SampleChainlink.txt', [10, 10], 15, 0.999, True, True, True);
 
 def cluster_hepta():
-    template_clustering('../Samples/SampleHepta.txt', [7, 7], 5, 0.999, True, True, True);
+    template_clustering('../samples/SampleHepta.txt', [7, 7], 5, 0.999, True, True, True);
 
 def cluster_tetra():
     "Problem here"
-    template_clustering('../Samples/SampleTetra.txt', [7, 7], 5, 0.998, True, True, True);
+    template_clustering('../samples/SampleTetra.txt', [7, 7], 5, 0.998, True, True, True);
 
 def experiment_execution_time():
-    template_clustering('../Samples/SampleLsun.txt', [9, 9], 10, 0.998, False, False, False, False);
-    template_clustering('../Samples/SampleTarget.txt', [9, 9], 20, 0.998, False, False, False, False);
-    template_clustering('../Samples/SampleTwoDiamonds.txt', [10, 10], 10, 0.998, False, False, False, False);
-    template_clustering('../Samples/SampleWingNut.txt', [10, 10], 5, 0.998, False, False, False, False);
-    template_clustering('../Samples/SampleChainlink.txt', [10, 10], 15, 0.998, False, False, False, False);
-    template_clustering('../Samples/SampleTetra.txt', [7, 7], 5, 0.998, False, False, False, False);
-    template_clustering('../Samples/SampleHepta.txt', [7, 7], 5, 0.998, False, False, False, False);
+    template_clustering('../samples/SampleLsun.txt', [9, 9], 10, 0.998, False, False, False, False);
+    template_clustering('../samples/SampleTarget.txt', [9, 9], 20, 0.998, False, False, False, False);
+    template_clustering('../samples/SampleTwoDiamonds.txt', [10, 10], 10, 0.998, False, False, False, False);
+    template_clustering('../samples/SampleWingNut.txt', [10, 10], 5, 0.998, False, False, False, False);
+    template_clustering('../samples/SampleChainlink.txt', [10, 10], 15, 0.998, False, False, False, False);
+    template_clustering('../samples/SampleTetra.txt', [7, 7], 5, 0.998, False, False, False, False);
+    template_clustering('../samples/SampleHepta.txt', [7, 7], 5, 0.998, False, False, False, False);
 
 
 cluster_simple3();

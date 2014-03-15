@@ -63,7 +63,7 @@ def calculate_goodness(cluster1, cluster2, adjacency_matrix, degree_normalizatio
     return (number_links / devider);
 
 
-# sample = read_sample('../Samples/SampleTarget.txt');
+# sample = read_sample('../samples/SampleTarget.txt');
 # clusters = rock(sample, 1.2, 6, 0.2);
 # #print("Total time: ", ticks);
 # draw_clusters(sample, clusters);

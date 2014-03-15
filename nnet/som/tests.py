@@ -5,10 +5,12 @@ from nnet.som import type_conn;
 
 from support import read_sample;
 
+from samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
+
 class Test(unittest.TestCase):
 
     def testHoneycombStruct(self):
-        sample = read_sample('../../Samples/SampleSimple3.txt');
+        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE3);
         network = som(3, 4, sample, 200, type_conn.honeycomb);
         
         assert sorted(network.neighbors[0]) == sorted([1, 4, 5]);
@@ -31,7 +33,7 @@ class Test(unittest.TestCase):
         
         
     def testGridFourStruct(self):
-        sample = read_sample('../../Samples/SampleSimple2.txt');
+        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE2);
         network = som(4, 4, sample, 200, type_conn.grid_four);
          
         assert sorted(network.neighbors[0]) == sorted([1, 4]);
@@ -66,100 +68,100 @@ class Test(unittest.TestCase):
     
     
     def testTwoNeuronsTwoClusters(self):
-        self.templateTestAwardNeurons('../../Samples/SampleSimple1.txt', 1, 2, 100, [5, 5]);
-        self.templateTestAwardNeurons('../../Samples/SampleSimple1.txt', 2, 1, 100, [5, 5]);
+        self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, 2, 100, [5, 5]);
+        self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, 1, 100, [5, 5]);
         
     
     def testAutostopTwoNeuronsTwoClusters(self):
-        self.templateTestAwardNeurons('../../Samples/SampleSimple1.txt', 1, 2, 100, [5, 5], True);
-        self.templateTestAwardNeurons('../../Samples/SampleSimple1.txt', 2, 1, 100, [5, 5], True);        
+        self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, 2, 100, [5, 5], True);
+        self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, 1, 100, [5, 5], True);        
         
         
     def testThreeNeuronsThreeClusters(self):
-        self.templateTestAwardNeurons('../../Samples/SampleSimple2.txt', 1, 3, 100, [5, 8, 10]);
-        self.templateTestAwardNeurons('../../Samples/SampleSimple2.txt', 3, 1, 100, [5, 8, 10]);
+        self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 1, 3, 100, [5, 8, 10]);
+        self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 3, 1, 100, [5, 8, 10]);
         
     
     def testAutostopThreeNeuronsThreeClusters(self):
-        self.templateTestAwardNeurons('../../Samples/SampleSimple2.txt', 1, 3, 100, [5, 8, 10], True);
-        self.templateTestAwardNeurons('../../Samples/SampleSimple2.txt', 3, 1, 100, [5, 8, 10], True);        
+        self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 1, 3, 100, [5, 8, 10], True);
+        self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 3, 1, 100, [5, 8, 10], True);        
     
     
     def testFourNeuronsFourClusters(self):
-        self.templateTestAwardNeurons('../../Samples/SampleSimple3.txt', 1, 4, 100, [10, 10, 10, 30]);
-        self.templateTestAwardNeurons('../../Samples/SampleSimple3.txt', 2, 2, 100, [10, 10, 10, 30]);
+        self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 1, 4, 100, [10, 10, 10, 30]);
+        self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 2, 2, 100, [10, 10, 10, 30]);
     
     
     def testAutostopFourNeuronsFourClusters(self):
-        self.templateTestAwardNeurons('../../Samples/SampleSimple3.txt', 1, 4, 100, [10, 10, 10, 30], True);
-        self.templateTestAwardNeurons('../../Samples/SampleSimple3.txt', 2, 2, 100, [10, 10, 10, 30], True);
+        self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 1, 4, 100, [10, 10, 10, 30], True);
+        self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 2, 2, 100, [10, 10, 10, 30], True);
     
     
     def testTwoNeuronsFourClusters(self):
-        self.templateTestAwardNeurons('../../Samples/SampleSimple3.txt', 1, 2, 100, [30, 30]); 
+        self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 1, 2, 100, [30, 30]); 
     
     
     def testAutostopTwoNeuronsFourClusters(self):
-        self.templateTestAwardNeurons('../../Samples/SampleSimple3.txt', 1, 2, 100, [30, 30], True); 
+        self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 1, 2, 100, [30, 30], True); 
     
     
     def testSevenNeuronsHeptaClusters(self):
-        self.templateTestAwardNeurons('../../Samples/SampleHepta.txt', 1, 7, 100, [30, 30, 30, 30, 30, 30, 32]); 
+        self.templateTestAwardNeurons(FCPS_SAMPLES.SAMPLE_HEPTA, 1, 7, 100, [30, 30, 30, 30, 30, 30, 32]); 
     
     
     def testAutostopSevenNeuronsHeptaClusters(self):
-        self.templateTestAwardNeurons('../../Samples/SampleHepta.txt', 1, 7, 100, [30, 30, 30, 30, 30, 30, 32], True); 
+        self.templateTestAwardNeurons(FCPS_SAMPLES.SAMPLE_HEPTA, 1, 7, 100, [30, 30, 30, 30, 30, 30, 32], True); 
     
     
     def testFourNeuronsTetraClusters(self):
-        self.templateTestAwardNeurons('../../Samples/SampleTetra.txt', 1, 4, 100, [100, 100, 100, 100]);
+        self.templateTestAwardNeurons(FCPS_SAMPLES.SAMPLE_TETRA, 1, 4, 100, [100, 100, 100, 100]);
     
     
     def testAutostopFourNeuronsTetraClusters(self):
-        self.templateTestAwardNeurons('../../Samples/SampleTetra.txt', 1, 4, 100, [100, 100, 100, 100], True);
+        self.templateTestAwardNeurons(FCPS_SAMPLES.SAMPLE_TETRA, 1, 4, 100, [100, 100, 100, 100], True);
     
     
     def testTwoNeuronsTwoDiamondsClusters(self):
-        self.templateTestAwardNeurons('../../Samples/SampleTwoDiamonds.txt', 1, 2, 100, [400, 400]);
+        self.templateTestAwardNeurons(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, 1, 2, 100, [400, 400]);
     
     
     def testAutostopTwoNeuronsTwoDiamondsClusters(self):
-        self.templateTestAwardNeurons('../../Samples/SampleTwoDiamonds.txt', 1, 2, 100, [400, 400], True);
+        self.templateTestAwardNeurons(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, 1, 2, 100, [400, 400], True);
     
     
     def testFiveNeuronsFiveClusters(self):
-        self.templateTestAwardNeurons('../../Samples/SampleSimple4.txt', 1, 5, 100, [15, 15, 15, 15, 15]);      
+        self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 1, 5, 100, [15, 15, 15, 15, 15]);      
     
     
     def testAutostopFiveNeuronsFiveClusters(self):
-        self.templateTestAwardNeurons('../../Samples/SampleSimple4.txt', 1, 5, 100, [15, 15, 15, 15, 15], True);
+        self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 1, 5, 100, [15, 15, 15, 15, 15], True);
     
     
     def testFourNeuronsSquareClusters(self):
-        self.templateTestAwardNeurons('../../Samples/SampleSimple5.txt', 2, 2, 100, [15, 15, 15, 15]);
-        self.templateTestAwardNeurons('../../Samples/SampleSimple5.txt', 1, 4, 100, [15, 15, 15, 15]);
+        self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 2, 2, 100, [15, 15, 15, 15]);
+        self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 1, 4, 100, [15, 15, 15, 15]);
     
     
     def testAutostopFourNeuronsSquareClusters(self):
-        self.templateTestAwardNeurons('../../Samples/SampleSimple5.txt', 2, 2, 100, [15, 15, 15, 15], True);
-        self.templateTestAwardNeurons('../../Samples/SampleSimple5.txt', 1, 4, 100, [15, 15, 15, 15], True);
+        self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 2, 2, 100, [15, 15, 15, 15], True);
+        self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 1, 4, 100, [15, 15, 15, 15], True);
     
     
     def testHighEpochs(self):
-        "This test requires too much time for execution"
+        # This test requires too much time for execution
         epochs = 1000;
-        self.templateTestAwardNeurons('../../Samples/SampleSimple1.txt', 1, 2, epochs, [5, 5]);
-        self.templateTestAwardNeurons('../../Samples/SampleSimple1.txt', 2, 1, epochs, [5, 5]);
-        self.templateTestAwardNeurons('../../Samples/SampleSimple3.txt', 1, 4, epochs, [10, 10, 10, 30]);
-        self.templateTestAwardNeurons('../../Samples/SampleSimple3.txt', 2, 2, epochs, [10, 10, 10, 30]);
-        self.templateTestAwardNeurons('../../Samples/SampleSimple4.txt', 1, 5, epochs, [15, 15, 15, 15, 15]);
-        self.templateTestAwardNeurons('../../Samples/SampleSimple5.txt', 2, 2, epochs, [15, 15, 15, 15]);
-        self.templateTestAwardNeurons('../../Samples/SampleSimple5.txt', 1, 4, epochs, [15, 15, 15, 15]);
+        self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, 2, epochs, [5, 5]);
+        self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, 1, epochs, [5, 5]);
+        self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 1, 4, epochs, [10, 10, 10, 30]);
+        self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 2, 2, epochs, [10, 10, 10, 30]);
+        self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 1, 5, epochs, [15, 15, 15, 15, 15]);
+        self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 2, 2, epochs, [15, 15, 15, 15]);
+        self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 1, 4, epochs, [15, 15, 15, 15]);
     
     
     def testWinners(self):
         types = [type_conn.func_neighbor, type_conn.grid_eight, type_conn.grid_four, type_conn.honeycomb];
-        sample = read_sample('../../Samples/SampleSimple3.txt');
+        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE3);
         
         for stucture in types:
             network = som(5, 5, sample, 100, stucture);

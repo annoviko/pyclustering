@@ -22,24 +22,24 @@ class Test(unittest.TestCase):
             assert sorted([len(cluster) for cluster in clusters]) == expected_length_clusters;
         
     def testClusteringSampleSimple1(self):
-        self.templateClusteringResults("../Samples/SampleSimple1.txt", 2, [5, 5]);
-        self.templateClusteringResults("../Samples/SampleSimple1.txt", 1, [10]);
+        self.templateClusteringResults("../samples/SampleSimple1.txt", 2, [5, 5]);
+        self.templateClusteringResults("../samples/SampleSimple1.txt", 1, [10]);
 
     def testClusteringSampleSimple2(self):
-        self.templateClusteringResults("../Samples/SampleSimple2.txt", 3, [5, 8, 10]);
-        self.templateClusteringResults("../Samples/SampleSimple2.txt", 1, [23]);
+        self.templateClusteringResults("../samples/SampleSimple2.txt", 3, [5, 8, 10]);
+        self.templateClusteringResults("../samples/SampleSimple2.txt", 1, [23]);
 
     def testClusteringSampleSimple3(self):
-        self.templateClusteringResults("../Samples/SampleSimple3.txt", 4, [10, 10, 10, 30]);
-        self.templateClusteringResults("../Samples/SampleSimple3.txt", 1, [60]);
+        self.templateClusteringResults("../samples/SampleSimple3.txt", 4, [10, 10, 10, 30]);
+        self.templateClusteringResults("../samples/SampleSimple3.txt", 1, [60]);
         
     def testClusteringSampleSimple4(self):
-        self.templateClusteringResults("../Samples/SampleSimple4.txt", 5, [15, 15, 15, 15, 15]);
-        self.templateClusteringResults("../Samples/SampleSimple4.txt", 1, [75]);
+        self.templateClusteringResults("../samples/SampleSimple4.txt", 5, [15, 15, 15, 15, 15]);
+        self.templateClusteringResults("../samples/SampleSimple4.txt", 1, [75]);
         
     def testClusteringSampleSimple5(self):
-        self.templateClusteringResults("../Samples/SampleSimple5.txt", 4, [15, 15, 15, 15]);
-        self.templateClusteringResults("../Samples/SampleSimple5.txt", 1, [60]);        
+        self.templateClusteringResults("../samples/SampleSimple5.txt", 4, [15, 15, 15, 15]);
+        self.templateClusteringResults("../samples/SampleSimple5.txt", 1, [60]);        
 
 
 if __name__ == "__main__":

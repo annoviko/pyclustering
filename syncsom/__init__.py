@@ -118,7 +118,7 @@ class syncsom:
         
         
 
-# sample = read_sample('../Samples/SampleChainlink.txt');
+# sample = read_sample('../samples/SampleChainlink.txt');
 # 
 # # Create network
 # network = syncsom(sample, 9, 9);

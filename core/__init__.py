@@ -25,5 +25,5 @@ def hierarchical(path_to_file, number_clusters):
     print(stdout_result);
 
 
-dbscan('../Samples/SampleSimple1.txt', 0.5, 2);
-hierarchical('../Samples/SampleSimple1.txt', 2);
+dbscan('../samples/SampleSimple1.txt', 0.5, 2);
+hierarchical('../samples/SampleSimple1.txt', 2);

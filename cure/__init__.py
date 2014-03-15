@@ -255,7 +255,7 @@ def cluster_distance(cluster1, cluster2):
 
 
     
-# sample = read_sample('../Samples/SampleLsun.txt');
+# sample = read_sample('../samples/SampleLsun.txt');
 # cure_clusters = cure(sample, 3);
 #    
 # clusters = [ cure_cluster.points for cure_cluster in cure_clusters ];

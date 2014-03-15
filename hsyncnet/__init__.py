@@ -59,7 +59,7 @@ class hsyncnet(syncnet):
         
         return (dyn_time, dyn_phase);
 
-# sample = read_sample('../Samples/SampleSimple1.txt');
+# sample = read_sample('../samples/SampleSimple1.txt');
 # network = hsyncnet(sample);
 #  
 # (dyn_time, dyn_phase) = network.process(2, collect_dynamic = True);

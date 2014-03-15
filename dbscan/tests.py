@@ -82,29 +82,29 @@ class Test(unittest.TestCase):
 
 
     def testLengthProcessedSampleSimple1(self):    
-        self.templateLengthProcessData('../Samples/SampleSimple1.txt', 0.7, 0, 10);       
-        self.templateLengthProcessData('../Samples/SampleSimple1.txt', 0.5, 0, 10); 
+        self.templateLengthProcessData('../samples/SampleSimple1.txt', 0.7, 0, 10);       
+        self.templateLengthProcessData('../samples/SampleSimple1.txt', 0.5, 0, 10); 
 
     def testLengthProcessedSampleSimple2(self):    
-        self.templateLengthProcessData('../Samples/SampleSimple2.txt', 0.3, 0, 15);
-        self.templateLengthProcessData('../Samples/SampleSimple2.txt', 1, 0, 15);
+        self.templateLengthProcessData('../samples/SampleSimple2.txt', 0.3, 0, 15);
+        self.templateLengthProcessData('../samples/SampleSimple2.txt', 1, 0, 15);
         
     def testLengthProcessedSampleSimple3(self):
-        self.templateLengthProcessData('../Samples/SampleSimple3.txt', 0.1, 0, 20);
-        self.templateLengthProcessData('../Samples/SampleSimple3.txt', 5, 0, 20);
+        self.templateLengthProcessData('../samples/SampleSimple3.txt', 0.1, 0, 20);
+        self.templateLengthProcessData('../samples/SampleSimple3.txt', 5, 0, 20);
         
     def testLengthProcessedSampleSimple4(self):
-        self.templateLengthProcessData('../Samples/SampleSimple4.txt', 0.1, 0, 10);
-        self.templateLengthProcessData('../Samples/SampleSimple4.txt', 10, 65, 75);
+        self.templateLengthProcessData('../samples/SampleSimple4.txt', 0.1, 0, 10);
+        self.templateLengthProcessData('../samples/SampleSimple4.txt', 10, 65, 75);
     
     def testLengthProcessedSampleSimple5(self):
-        self.templateLengthProcessData('../Samples/SampleSimple5.txt', 0.1, 0, 10);
-        self.templateLengthProcessData('../Samples/SampleSimple5.txt', 0.3, 0, 10);
-        self.templateLengthProcessData('../Samples/SampleSimple5.txt', 0.6, 0, 10);
+        self.templateLengthProcessData('../samples/SampleSimple5.txt', 0.1, 0, 10);
+        self.templateLengthProcessData('../samples/SampleSimple5.txt', 0.3, 0, 10);
+        self.templateLengthProcessData('../samples/SampleSimple5.txt', 0.6, 0, 10);
         
     
     def testResultDataClusteringSample1(self):
-        sample = support.read_sample('../Samples/SampleSimple1.txt');
+        sample = support.read_sample('../samples/SampleSimple1.txt');
         (clusters, noise) = dbscan.dbscan(sample, 0.5, 3, False, True);
         
         assert noise == [];
@@ -113,7 +113,7 @@ class Test(unittest.TestCase):
         
     
     def testResultDataClusteringSample2(self):
-        sample = support.read_sample('../Samples/SampleSimple2.txt');
+        sample = support.read_sample('../samples/SampleSimple2.txt');
         (clusters, noise) = dbscan.dbscan(sample, 0.7, 3, False, True);
         
         assert noise == [];

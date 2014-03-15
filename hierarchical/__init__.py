@@ -59,7 +59,7 @@ def calculate_center(data, cluster):
             
    
    
-# sample = read_sample('../Samples/SampleTwoDiamonds.txt');
+# sample = read_sample('../samples/SampleTwoDiamonds.txt');
 # (ticks, clusters) = timedcall(hierarchical, sample, 2);
 # #print("Total time: ", ticks);
 # draw_clusters(sample, clusters);
