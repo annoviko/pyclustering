@@ -77,7 +77,7 @@ class net:
         self._cluster = value;
 
 
-    def __init__(self, num_osc, weight, frequency = False, type_conn = conn_type.ALL_TO_ALL, conn_represent = conn_represent.MATRIX, initial_phases = initial_type.RANDOM_GAUSSIAN):
+    def __init__(self, num_osc, weight = 1, frequency = False, type_conn = conn_type.ALL_TO_ALL, conn_represent = conn_represent.MATRIX, initial_phases = initial_type.RANDOM_GAUSSIAN):
         self._num_osc = num_osc;
         self._weight = weight;
         
