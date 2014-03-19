@@ -51,7 +51,7 @@ class syncgcolor(net):
             else:
                 phase += self._positive_weight * math.sin(self._phases[k] - teta);
             
-        return ( self._freq[index] + (phase / self._reduction) );        
+        return ( phase / self._reduction );        
     
     
     def process(self, order = 0.998, solution = solve_type.FAST, collect_dynamic = False):
