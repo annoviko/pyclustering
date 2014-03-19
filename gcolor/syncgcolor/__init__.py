@@ -47,9 +47,9 @@ class syncgcolor(net):
         
         for k in range(0, self.num_osc):
             if (self.has_connection(index, k) == True):
-                phase += math.sin(self._cluster * self._negative_weight * (self._phases[k] - teta));
+                phase += self._negative_weight * math.sin(self._phases[k] - teta);
             else:
-                phase += math.sin(self._cluster * self._positive_weight * (self._phases[k] - teta));
+                phase += self._positive_weight * math.sin(self._phases[k] - teta);
             
         return ( self._freq[index] + (phase / self._reduction) );        
     
