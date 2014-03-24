@@ -23,7 +23,7 @@ def template_graph_coloring(positive_weight, negative_weight, filename, reductio
 
 
 def one_circle1():
-    template_graph_coloring(0, -1, GRAPH_SIMPLE_SAMPLES.GRAPH_ONE_CIRCLE1, None, "Circle 1");    
+    template_graph_coloring(1, -1, GRAPH_SIMPLE_SAMPLES.GRAPH_ONE_CIRCLE1, None, "Circle 1");    
 
 
 def one_circle2():

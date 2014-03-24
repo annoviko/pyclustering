@@ -1,6 +1,9 @@
 from syncsom import syncsom;
 from nnet.sync import draw_dynamics;
 
+from samples.definitions import SIMPLE_SAMPLES;
+from samples.definitions import FCPS_SAMPLES;
+
 from support import read_sample, draw_clusters;
 from support import timedcall;
 
@@ -36,44 +39,44 @@ def template_clustering(file, map_size, trust_order, sync_order = 0.999, show_dy
   
 
 def cluster_simple3():
-    template_clustering('../samples/SampleSimple3.txt', [4, 4], 3, 0.999, True, True, True, True);
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [4, 4], 3, 0.999, True, True, True, True);
     
 def cluster_simple4():
-    template_clustering('../samples/SampleSimple4.txt', [3, 3], 3, 0.999, True, True, True);
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, [3, 3], 3, 0.999, True, True, True);
     
 def cluster_simple5():
-    template_clustering('../samples/SampleSimple5.txt', [3, 3], 3, 0.999, True, True, True);
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [3, 3], 3, 0.999, True, True, True);
 
 def cluster_lsun():
-    template_clustering('../samples/SampleLsun.txt', [9, 9], 10, 0.999, True, True, True);
+    template_clustering(FCPS_SAMPLES.SAMPLE_LSUN, [9, 9], 10, 0.999, True, True, True);
      
 def cluster_target():
-    template_clustering('../samples/SampleTarget.txt', [9, 9], 20, 0.999, True, True, True);
+    template_clustering(FCPS_SAMPLES.SAMPLE_TARGET, [9, 9], 20, 0.999, True, True, True);
 
 def cluster_two_diamonds():
-    template_clustering('../samples/SampleTwoDiamonds.txt', [10, 10], 5, 0.999, True, True, True);
+    template_clustering(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, [10, 10], 5, 0.999, True, True, True);
 
 def cluster_wing_nut():
-    template_clustering('../samples/SampleWingNut.txt', [10, 10], 5, 0.999, True, True, True);
+    template_clustering(FCPS_SAMPLES.SAMPLE_WING_NUT, [10, 10], 5, 0.999, True, True, True);
 
 def cluster_chainlink():
-    template_clustering('../samples/SampleChainlink.txt', [10, 10], 15, 0.999, True, True, True);
+    template_clustering(FCPS_SAMPLES.SAMPLE_CHAINLINK, [10, 10], 15, 0.999, True, True, True);
 
 def cluster_hepta():
-    template_clustering('../samples/SampleHepta.txt', [7, 7], 5, 0.999, True, True, True);
+    template_clustering(FCPS_SAMPLES.SAMPLE_HEPTA, [7, 7], 5, 0.999, True, True, True);
 
 def cluster_tetra():
     "Problem here"
-    template_clustering('../samples/SampleTetra.txt', [7, 7], 5, 0.998, True, True, True);
+    template_clustering(FCPS_SAMPLES.SAMPLE_TETRA, [7, 7], 5, 0.998, True, True, True);
 
 def experiment_execution_time():
-    template_clustering('../samples/SampleLsun.txt', [9, 9], 10, 0.998, False, False, False, False);
-    template_clustering('../samples/SampleTarget.txt', [9, 9], 20, 0.998, False, False, False, False);
-    template_clustering('../samples/SampleTwoDiamonds.txt', [10, 10], 10, 0.998, False, False, False, False);
-    template_clustering('../samples/SampleWingNut.txt', [10, 10], 5, 0.998, False, False, False, False);
-    template_clustering('../samples/SampleChainlink.txt', [10, 10], 15, 0.998, False, False, False, False);
-    template_clustering('../samples/SampleTetra.txt', [7, 7], 5, 0.998, False, False, False, False);
-    template_clustering('../samples/SampleHepta.txt', [7, 7], 5, 0.998, False, False, False, False);
+    template_clustering(FCPS_SAMPLES.SAMPLE_LSUN, [9, 9], 10, 0.998, False, False, False, False);
+    template_clustering(FCPS_SAMPLES.SAMPLE_TARGET, [9, 9], 20, 0.998, False, False, False, False);
+    template_clustering(FCPS_SAMPLES.SAMPLE_TARGET, [10, 10], 10, 0.998, False, False, False, False);
+    template_clustering(FCPS_SAMPLES.SAMPLE_WING_NUT, [10, 10], 5, 0.998, False, False, False, False);
+    template_clustering(FCPS_SAMPLES.SAMPLE_CHAINLINK, [10, 10], 15, 0.998, False, False, False, False);
+    template_clustering(FCPS_SAMPLES.SAMPLE_TETRA, [7, 7], 5, 0.998, False, False, False, False);
+    template_clustering(FCPS_SAMPLES.SAMPLE_HEPTA, [7, 7], 5, 0.998, False, False, False, False);
 
 
 cluster_simple3();

@@ -24,6 +24,14 @@ def cluster_sample3():
     start_centers = [[0.2, 0.1], [4.0, 1.0], [2.0, 2.0], [2.3, 3.9]];
     template_clustering(start_centers, SIMPLE_SAMPLES.SAMPLE_SIMPLE3);
     
+def cluster_sample4():
+    start_centers = [[1.5, 0.0], [1.5, 2.0], [1.5, 4.0], [1.5, 6.0], [1.5, 8.0]];
+    template_clustering(start_centers, SIMPLE_SAMPLES.SAMPLE_SIMPLE4);    
+    
+def cluster_sample5():
+    start_centers = [[0.0, 1.0], [0.0, 0.0], [1.0, 1.0], [1.0, 0.0]];
+    template_clustering(start_centers, SIMPLE_SAMPLES.SAMPLE_SIMPLE5);    
+        
 def cluster_elongate():
     "Not so applicable for this sample"
     start_centers = [[1.0, 4.5], [3.1, 2.7]];
@@ -68,6 +76,8 @@ def cluster_engy_time():
 cluster_sample1();
 cluster_sample2();
 cluster_sample3();
+cluster_sample4();
+cluster_sample5();
 cluster_elongate();
 cluster_lsun();
 cluster_target();

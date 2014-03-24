@@ -1,6 +1,10 @@
 from nnet.sync import draw_dynamics;
 
 from support import read_sample, draw_clusters;
+
+from samples.definitions import SIMPLE_SAMPLES;
+from samples.definitions import FCPS_SAMPLES;
+
 from hsyncnet import hsyncnet;
 
 def template_clustering(file, number_clusters, arg_collect_dynamic = True, show_network_structure = False, arg_order = 0.999, arg_eps = 0.1):
@@ -20,59 +24,60 @@ def template_clustering(file, number_clusters, arg_collect_dynamic = True, show_
         
 
 def cluster_sample1():
-    template_clustering('../samples/SampleSimple1.txt', 2);
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2);
     
 def cluster_sample2():
-    template_clustering('../samples/SampleSimple2.txt', 3);
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 3);
     
 def cluster_sample3():
-    template_clustering('../samples/SampleSimple3.txt', 4);
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 4);
     
 def cluster_simple4():
-    template_clustering('../samples/SampleSimple4.txt', 5);
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 5);
     
 def cluster_simple5():
-    template_clustering('../samples/SampleSimple5.txt', 4);
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 4);
     
 def cluster_elongate():
-    template_clustering('../samples/SampleElongate.txt', 2, arg_collect_dynamic = False);
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_ELONGATE, 2, arg_collect_dynamic = False);
 
 def cluster_lsun():
     "NOTE: Too slow"
-    template_clustering('../samples/SampleLsun.txt', 3, arg_collect_dynamic = False);
+    template_clustering(FCPS_SAMPLES.SAMPLE_LSUN, 3, arg_collect_dynamic = False);
     
 def cluster_hepta():
-    template_clustering('../samples/SampleHepta.txt', 7, arg_collect_dynamic = False);
+    template_clustering(FCPS_SAMPLES.SAMPLE_HEPTA, 7, arg_collect_dynamic = False);
     
 def cluster_tetra():
     "NOTE: Too slow"
-    template_clustering('../samples/SampleTetra.txt', 4, arg_collect_dynamic = False);
+    template_clustering(FCPS_SAMPLES.SAMPLE_TETRA, 4, arg_collect_dynamic = False);
 
 def cluster_target():
     "NOTE: Too slow"
-    template_clustering('../samples/SampleTarget.txt', 6, arg_collect_dynamic = False);
+    template_clustering(FCPS_SAMPLES.SAMPLE_TARGET, 6, arg_collect_dynamic = False);
     
 def cluster_chainlink():
     "NOTE: Too slow"
-    template_clustering('../samples/SampleChainlink.txt', 2, arg_collect_dynamic = False);
+    template_clustering(FCPS_SAMPLES.SAMPLE_CHAINLINK, 2, arg_collect_dynamic = False);
     
 def cluster_wing_nut():
     "NOTE: Too slow"
-    template_clustering('../samples/SampleWingNut.txt', 2, arg_collect_dynamic = False);
+    template_clustering(FCPS_SAMPLES.SAMPLE_WING_NUT, 2, arg_collect_dynamic = False);
     
 def cluster_two_diamonds():
     "NOTE: Too slow"
-    template_clustering('../samples/SampleTwoDiamonds.txt', 2, arg_collect_dynamic = False);    
+    template_clustering(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, 2, arg_collect_dynamic = False);    
 
-# cluster_sample1();
-# cluster_sample2();
-# cluster_sample3();
-# cluster_simple4();
-# cluster_elongate();
-# cluster_lsun();
-# cluster_hepta();
-# cluster_tetra();
-# cluster_target();
-# cluster_chainlink();
-# cluster_wing_nut();
-# cluster_two_diamonds();
+
+cluster_sample1();
+cluster_sample2();
+cluster_sample3();
+cluster_simple4();
+cluster_elongate();
+cluster_lsun();
+cluster_hepta();
+cluster_tetra();
+cluster_target();
+cluster_chainlink();
+cluster_wing_nut();
+cluster_two_diamonds();
