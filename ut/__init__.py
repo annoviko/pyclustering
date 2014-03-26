@@ -5,6 +5,7 @@ from cure           import tests as cure_unit_tests;
 from dbscan         import tests as dbscan_unit_tests;
 from hierarchical   import tests as hierarchical_unit_tests;
 from hsyncnet       import tests as hsyncnet_unit_tests;
+from kmeans         import tests as kmeans_unit_tests;
 from nnet.som       import tests as nnet_som_unit_tests;
 from nnet.sync      import tests as nnet_sync_unit_tests;
 from support        import tests as support_unit_tests;
@@ -23,6 +24,7 @@ if __name__ == "__main__":
     suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_sync_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(support_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(syncnet_unit_tests));
+    suite.addTests(unittest.TestLoader().loadTestsFromModule(kmeans_unit_tests));
     
     unittest.TextTestRunner(verbosity = 2).run(suite);
     
