@@ -62,6 +62,14 @@ def five_pointed_frame_star():
     template_graph_coloring(0, -1, GRAPH_SIMPLE_SAMPLES.GRAPH_FIVE_POINTED_FRAME_STAR, None, "Five Pointed Star With Frame");    
     
     
+def full_interconnected1():
+    template_graph_coloring(0, -1, GRAPH_SIMPLE_SAMPLES.GRAPH_FULL1, None, "Full interconneted graph 1 (all-to-all)");      
+
+
+def full_interconnected2():
+    template_graph_coloring(0, -1, GRAPH_SIMPLE_SAMPLES.GRAPH_FULL2, None, "Full interconneted graph 2 (all-to-all)"); 
+        
+        
 one_line();
 one_circle1();
 one_circle2();
@@ -72,3 +80,5 @@ one_crossroad();
 two_crossroads();
 five_pointed_star();
 five_pointed_frame_star();
+full_interconnected1();
+full_interconnected2();

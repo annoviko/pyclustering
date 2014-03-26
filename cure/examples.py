@@ -74,7 +74,7 @@ def find_best_atom():
     for represent in range(5, 20, 100):
         for compression in range(0, 10, 1):
             print("number of represent points: ", represent, ", compression: ", float(compression) / 10);
-            template_clustering(2, '../samples/SampleAtom.txt', represent, float(compression) / 10);
+            template_clustering(2, FCPS_SAMPLES.SAMPLE_ATOM, represent, float(compression) / 10);
 
 # find_best_atom();
 

@@ -31,3 +31,5 @@ class GRAPH_SIMPLE_SAMPLES:
     GRAPH_ONE_CROSSROAD             = samples.__path__[0] + "\\graphs\\GraphOneCrossroad.txt";
     GRAPH_ONE_LINE                  = samples.__path__[0] + "\\graphs\\GraphOneLine.txt";
     GRAPH_TWO_CROSSROADS            = samples.__path__[0] + "\\graphs\\GraphTwoCrossroads.txt";
+    GRAPH_FULL1                     = samples.__path__[0] + "\\graphs\\GraphFull1.txt"
+    GRAPH_FULL2                     = samples.__path__[0] + "\\graphs\\GraphFull2.txt"
