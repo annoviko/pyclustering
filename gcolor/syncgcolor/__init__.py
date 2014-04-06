@@ -1,4 +1,5 @@
-from nnet.sync import net, conn_type, solve_type, draw_dynamics;
+from nnet.sync import net, conn_type, solve_type;
+from support import draw_dynamics;
 import math;
 
 

@@ -1,6 +1,4 @@
-from nnet.sync import draw_dynamics;
-
-from support import read_sample, draw_clusters;
+from support import read_sample, draw_clusters, draw_dynamics;
 
 from samples.definitions import SIMPLE_SAMPLES;
 from samples.definitions import FCPS_SAMPLES;
@@ -18,7 +16,7 @@ def template_clustering(file, number_clusters, arg_collect_dynamic = True, show_
             network.show_network();
             
         if (arg_collect_dynamic == True):
-            draw_dynamics(time, dynamic);
+            draw_dynamics(time, dynamic, x_title = "Time", y_title = "Phase", y_lim = [0, 2 * 3.14]);
         
         draw_clusters(sample, clusters);
         

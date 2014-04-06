@@ -153,13 +153,3 @@ class syncnet(net):
         plt.grid();
         plt.show();
     
-
-
-# sample = read_sample('../samples/SampleLsun.txt');
-# network = syncnet(sample);
-# (dyn_time, dyn_phase) = network.process(0.5, 0.995, collect_dynamic = True);
-# 
-# draw_dynamics(dyn_time, dyn_phase);
-# 
-# clusters = network.get_clusters(0.05);
-# draw_clusters(sample, clusters);

@@ -1,15 +1,17 @@
 from nnet import sync;
+from support import draw_dynamics;
+import support;
 
 def trivial_dynamic_sync():
     network = sync.net(100, 1);
     (t, dyn_phase) = network.simulate(50, 10);
-    sync.draw_dynamics(t, dyn_phase);
+    draw_dynamics(t, dyn_phase, x_title = "Time", y_title = "Phase", y_lim = [0, 2 * 3.14]);
     
 
 def weight_5_dynamic_sync():
     network = sync.net(10, 10);
     (t, dyn_phase) = network.simulate(100, 10, solution = sync.solve_type.ODEINT);
-    sync.draw_dynamics(t, dyn_phase);
+    draw_dynamics(t, dyn_phase, x_title = "Time", y_title = "Phase", y_lim = [0, 2 * 3.14]);
     
 
 def cluster_2_dynamic_sync():
@@ -17,7 +19,7 @@ def cluster_2_dynamic_sync():
     network._cluster = 2;
     
     (t, dyn_phase) = network.simulate(20, 10, solution = sync.solve_type.ODEINT);
-    sync.draw_dynamics(t, dyn_phase);
+    draw_dynamics(t, dyn_phase, x_title = "Time", y_title = "Phase", y_lim = [0, 2 * 3.14]);
 
 
 def cluster_5_dynamic_sync():
@@ -25,19 +27,19 @@ def cluster_5_dynamic_sync():
     network._cluster = 5;
     
     (t, dyn_phase) = network.simulate(20, 10, solution = sync.solve_type.ODEINT);
-    sync.draw_dynamics(t, dyn_phase);
+    draw_dynamics(t, dyn_phase, x_title = "Time", y_title = "Phase", y_lim = [0, 2 * 3.14]);
 
 
 def bidir_struct_dynamic_sync():
     network = sync.net(10, 100, type_conn = sync.conn_type.LIST_BIDIR);
     (t, dyn_phase) = network.simulate(100, 10, solution = sync.solve_type.ODEINT);
-    sync.draw_dynamics(t, dyn_phase);
+    draw_dynamics(t, dyn_phase, x_title = "Time", y_title = "Phase", y_lim = [0, 2 * 3.14]);
     
     
 def grid_four_struct_dynamic_sync():
     network = sync.net(25, 50, type_conn = sync.conn_type.GRID_FOUR);
     (t, dyn_phase) = network.simulate(50, 10, solution = sync.solve_type.ODEINT);
-    sync.draw_dynamics(t, dyn_phase);
+    draw_dynamics(t, dyn_phase, x_title = "Time", y_title = "Phase", y_lim = [0, 2 * 3.14]);
     
     
 def time_dependence_grid_struct():
@@ -52,21 +54,21 @@ def time_dependence_grid_struct():
 def negative_connection_5_oscillators():
     network = sync.net(5, -1);
     (t, dyn_phase) = network.simulate_dynamic(collect_dynamic = True, solution = sync.solve_type.FAST);
-    sync.draw_dynamics(t, dyn_phase); 
+    draw_dynamics(t, dyn_phase, x_title = "Time", y_title = "Phase", y_lim = [0, 2 * 3.14]); 
        
     
 def negative_connection_10_oscillators():
     "Comment: It is not full desynchronization"
     network = sync.net(10, -5);
     (t, dyn_phase) = network.simulate_dynamic(collect_dynamic = True, solution = sync.solve_type.FAST);
-    sync.draw_dynamics(t, dyn_phase);
+    draw_dynamics(t, dyn_phase, x_title = "Time", y_title = "Phase", y_lim = [0, 2 * 3.14]);
     
     
 def negative_connection_9_grid_struct():
     "Comment: Right coloring"
     network = sync.net(9, -2, type_conn = sync.conn_type.GRID_FOUR);
     (t, dyn_phase) = network.simulate_dynamic(collect_dynamic = True, solution = sync.solve_type.FAST);
-    sync.draw_dynamics(t, dyn_phase);
+    draw_dynamics(t, dyn_phase, x_title = "Time", y_title = "Phase", y_lim = [0, 2 * 3.14]);
     
     print(network.allocate_sync_ensembles(0.1));
     
@@ -75,7 +77,7 @@ def negative_connection_16_grid_struct():
     "Comment: Wrong coloring"
     network = sync.net(16, -3, type_conn = sync.conn_type.GRID_FOUR);
     (t, dyn_phase) = network.simulate_dynamic(collect_dynamic = True, solution = sync.solve_type.FAST);
-    sync.draw_dynamics(t, dyn_phase);
+    draw_dynamics(t, dyn_phase, x_title = "Time", y_title = "Phase", y_lim = [0, 2 * 3.14]);
     
     print(network.allocate_sync_ensembles(0.1));
     

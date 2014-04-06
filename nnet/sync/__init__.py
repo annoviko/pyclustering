@@ -2,6 +2,7 @@ import numpy;
 import random;
 import math;
 import scipy.spatial;
+import support;
 
 import matplotlib.pyplot as plt;
 
@@ -395,45 +396,3 @@ def phase_normalization(teta):
             norm_teta += 2 * pi;
     
     return norm_teta;
-
-
-
-def draw_dynamics(t, dyn_phase):
-    "Draw dynamics of ocillators in the network"
-    from matplotlib.font_manager import FontProperties;
-    from matplotlib import rcParams;
-    
-    rcParams['font.sans-serif'] = ['Arial'];
-    rcParams['font.size'] = 12;
-    
-    fig = plt.figure();
-    axes = fig.add_subplot(111);
-    
-    surface_font = FontProperties();
-    surface_font.set_name('Arial');
-    surface_font.set_size('12');
-    
-    num_items = len(dyn_phase[0]);
-    
-    for index in range(0, num_items, 1):       
-        y = [item[index] for item in dyn_phase];
-        axes.plot(t, y, 'b-', linewidth=0.5);    
-
-    plt.ylabel('Phase', fontproperties=surface_font);
-    plt.xlabel('Time', fontproperties=surface_font);
-    plt.ylim(0, 2 * math.pi);
-
-    plt.grid();
-    plt.show();
-
-
-
-# network = net(10, 1, False, conn_type.ALL_TO_ALL);   
-# network.cluster = 2;
-#  
-# (t, d) = network.simulate_dynamic(order = 0.998, collect_dynamic = True, solution=solve_type.ODEINT);
-# clusters = network.allocate_sync_ensembles(0.1);
-#  
-# draw_dynamics(t, d);
-#  
-# assert len(clusters) == 2;

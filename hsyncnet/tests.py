@@ -19,11 +19,6 @@ class Test(unittest.TestCase):
         assert sum([len(cluster) for cluster in clusters]) == sum(expected_length_clusters);
         
         if (sorted([len(cluster) for cluster in clusters]) != expected_length_clusters):
-#             print("Result: ", sorted([len(cluster) for cluster in clusters]), "Expect: ", expected_length_clusters);
-#             network.show_network();
-#             draw_dynamics(t, d);
-#             draw_clusters(sample, clusters);
-            
             assert sorted([len(cluster) for cluster in clusters]) == expected_length_clusters;
         
     def testClusteringSampleSimple1(self):

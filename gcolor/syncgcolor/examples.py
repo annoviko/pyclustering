@@ -1,8 +1,9 @@
 from gcolor.syncgcolor import syncgcolor;
 
-from nnet.sync import draw_dynamics, solve_type;
+from nnet.sync import solve_type;
 
 from support import read_sample;
+from support import draw_dynamics;
 
 from samples.definitions import GRAPH_SIMPLE_SAMPLES;
 
@@ -14,7 +15,7 @@ def template_graph_coloring(positive_weight, negative_weight, filename, reductio
     network = syncgcolor(graph_matrix_repr, positive_weight, negative_weight, reduction);
     
     (t, dyn) = network.process(order = 0.999, solution = solve_type.FAST, collect_dynamic = True);
-    draw_dynamics(t, dyn);
+    draw_dynamics(t, dyn, x_title = "Time", y_title = "Phase", y_lim = [0, 2 * 3.14]);
 
     clusters = network.get_clusters();
     

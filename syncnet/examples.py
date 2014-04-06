@@ -1,14 +1,13 @@
 from syncnet import syncnet;
 from syncnet import solve_type;
 
-from nnet.sync import draw_dynamics;
-
 from samples.definitions import SIMPLE_SAMPLES;
 from samples.definitions import FCPS_SAMPLES;
 
 from support import draw_clusters;
 from support import read_sample;
 from support import timedcall;
+from support import draw_dynamics;
 
 def template_clustering(file, radius, order, show_dyn = False, show_conn = False, show_clusters = True):
     sample = read_sample(file);
@@ -18,7 +17,7 @@ def template_clustering(file, radius, order, show_dyn = False, show_conn = False
     print("Sample: ", file, "\t\tExecution time: ", ticks, "\n");
     
     if (show_dyn == True):
-        draw_dynamics(dyn_time, dyn_phase);
+        draw_dynamics(dyn_time, dyn_phase, x_title = "Time", y_title = "Phase", y_lim = [0, 2 * 3.14]);
     
     if (show_conn == True):
         network.show_network();

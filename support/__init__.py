@@ -129,6 +129,40 @@ def draw_clusters(data, clusters, noise = []):
     plt.show();
     
 
+def draw_dynamics(t, dyn, x_title = None, y_title = None, x_lim = None, y_lim = None):
+    "Draw dynamics of neurons in the network"
+    if (x_title is None): x_title = "Time";     
+    if (y_title is None): y_title = "Dynamic";
+    
+    from matplotlib.font_manager import FontProperties;
+    from matplotlib import rcParams;
+    
+    rcParams['font.sans-serif'] = ['Arial'];
+    rcParams['font.size'] = 12;
+    
+    fig = plt.figure();
+    axes = fig.add_subplot(111);
+    
+    surface_font = FontProperties();
+    surface_font.set_name('Arial');
+    surface_font.set_size('12');
+    
+    num_items = len(dyn[0]);
+    
+    for index in range(0, num_items, 1):       
+        y = [item[index] for item in dyn];
+        axes.plot(t, y, 'b-', linewidth=0.5);      
+
+    plt.ylabel(y_title, fontproperties=surface_font);
+    plt.xlabel(x_title, fontproperties=surface_font);
+    
+    if (x_lim is not None): plt.xlin(x_lim[0], x_lim[1]);
+    if (y_lim is not None): plt.ylim(y_lim[0], y_lim[1]);
+
+    plt.grid();
+    plt.show();
+
+
 def draw_image_segments(source, clusters):
     image_source = Image.open(source);
     image_size = image_source.size;

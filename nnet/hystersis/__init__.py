@@ -2,6 +2,8 @@ import numpy;
 
 from scipy.integrate import odeint;
 
+from support import draw_dynamics;
+
 import matplotlib.pyplot as plt;
 
 class solve_type:
@@ -112,36 +114,8 @@ class net:
         return next_states;
     
     
-def draw_dynamics(t, dyn_phase):
-    "Draw dynamics of neurons in the network"
-    from matplotlib.font_manager import FontProperties;
-    from matplotlib import rcParams;
-    
-    rcParams['font.sans-serif'] = ['Arial'];
-    rcParams['font.size'] = 12;
-    
-    fig = plt.figure();
-    axes = fig.add_subplot(111);
-    
-    surface_font = FontProperties();
-    surface_font.set_name('Arial');
-    surface_font.set_size('12');
-    
-    num_items = len(dyn_phase[0]);
-    
-    for index in range(0, num_items, 1):       
-        y = [item[index] for item in dyn_phase];
-        axes.plot(t, y, 'b-', linewidth=0.5);    
-
-    plt.ylabel('x(t)', fontproperties=surface_font);
-    plt.xlabel('Time', fontproperties=surface_font);
-
-    plt.grid();
-    plt.show();
-    
-    
 network = net(1);
 
 (t, x) = network.simulate(1000, 1);
 #(t, x) = network.simulate(1000, 10, solve_type.ODEINT);
-draw_dynamics(t, x);
+draw_dynamics(t, x, x_title = "Time", y_title = "x(t)");

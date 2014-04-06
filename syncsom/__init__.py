@@ -1,5 +1,5 @@
 from nnet.som import som, type_conn;
-from nnet.sync import net, draw_dynamics;
+from nnet.sync import net;
 from syncnet import syncnet;
 from support import average_neighbor_distance, read_sample, draw_clusters;
 
@@ -126,6 +126,7 @@ class syncsom:
 # # Run processing
 # (dyn_time, dyn_phase) = network.process(20, collect_dynamic = False);
 # 
+# from support import draw_dynamics;
 # # Show dynamic of the last layer.
 # draw_dynamics(dyn_time, dyn_phase);
 # 
