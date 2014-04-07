@@ -147,11 +147,13 @@ def draw_dynamics(t, dyn, x_title = None, y_title = None, x_lim = None, y_lim = 
     surface_font.set_name('Arial');
     surface_font.set_size('12');
     
-    num_items = len(dyn[0]);
-    
-    for index in range(0, num_items, 1):       
-        y = [item[index] for item in dyn];
-        axes.plot(t, y, 'b-', linewidth=0.5);      
+    if (isinstance(dyn[0], list) is True):
+        num_items = len(dyn[0]);
+        for index in range(0, num_items, 1):       
+            y = [item[index] for item in dyn];
+            axes.plot(t, y, 'b-', linewidth=0.5); 
+    else:
+        axes.plot(t, dyn, 'b-', linewidth=0.5);     
 
     plt.ylabel(y_title, fontproperties=surface_font);
     plt.xlabel(x_title, fontproperties=surface_font);
