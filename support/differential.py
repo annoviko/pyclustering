@@ -12,7 +12,7 @@ def rk4(function_pointer, inputs, a, b, steps, argv = None):
     "(in) steps                - number of steps"
     "(in) argv                 - extra arguments are required by function_pointer"
     
-    "Returns (times, values) calculated on whole specified segment of time (if ret_last == False) or (time, value) - values at time 'b'"
+    "Returns (times, values)"
     
     step = (b - a) / steps;
     
@@ -41,7 +41,7 @@ def rk4(function_pointer, inputs, a, b, steps, argv = None):
 
 
 def rkf45(function_pointer, inputs, a, b, steps = None, tolerance = None, argv = None):
-    "Runge-Kutta 4 function"
+    "Runge-Kutta-Felhberg (RKF45) function"
     
     "(in) function_pointer     - pointer to function"
     "(in) inputs               - initial values"
@@ -51,7 +51,7 @@ def rkf45(function_pointer, inputs, a, b, steps = None, tolerance = None, argv =
     "(in) tolerance            - acceptable error for solving"
     "(in) argv                 - extra arguments are required by function_pointer"
     
-    "Returns (times, values) calculated on whole specified segment of time (if ret_last == False) or (time, value) - values at time 'b'"
+    "Returns (times, values)"
     
     if (steps is None): steps = 50;
     if (tolerance is None): tolerance = 0.00001;
