@@ -1,6 +1,9 @@
-import support;
-import numpy;
-import math;
+class diffsolver:
+    DIFF_SOLVER_EULER = 0;
+    DIFF_SOLVER_RK4 = 1;
+    DIFF_SOLVER_RKF45 = 2;
+    UNDEFINED = 3;
+
 
 def rk4(function_pointer, inputs, a, b, steps, argv = None):
     "Runge-Kutta 4 function"
@@ -89,27 +92,27 @@ def rkf45(function_pointer, inputs, a, b, steps = None, tolerance = None, argv =
         if ((times[index] + h) > br):
             h = b - times[index];
         
-        k1 = h * function_pointer(times[index], values[index]);
+        k1 = h * function_pointer(times[index], values[index], argv);
         y2 = values[index] + b2 * k1;
 
         
-        k2 = h * function_pointer(times[index] + a2 * h, y2);
+        k2 = h * function_pointer(times[index] + a2 * h, y2, argv);
         y3 = values[index] + b3 * k1 + c3 * k2;
         
 
-        k3 = h * function_pointer(times[index] + a3 * h, y3);
+        k3 = h * function_pointer(times[index] + a3 * h, y3, argv);
         y4 = values[index] + b4 * k1 + c4 * k2 + d4 * k3;
 
         
-        k4 = h * function_pointer(times[index] + a4 * h, y4);
+        k4 = h * function_pointer(times[index] + a4 * h, y4, argv);
         y5 = values[index] + b5 * k1 + c5 * k2 + d5 * k3 + e5 * k4;
         
         
-        k5 = h * function_pointer(times[index] + a5 * h, y5);
+        k5 = h * function_pointer(times[index] + a5 * h, y5, argv);
         y6 = values[index] + b6 * k1 + c6 * k2 + d6 * k3 + e6 * k4 + f6 * k5;
         
         
-        k6 = h * function_pointer(times[index] + a6 * h, y6);
+        k6 = h * function_pointer(times[index] + a6 * h, y6, argv);
         
         # Calculate error (difference between Runge-Kutta 4 and Runge-Kutta 5) and new value.
         err = abs(r1 * k1 + r3 * k3 + r4 * k4 + r5 * k5 + r6 * k6);
