@@ -1,9 +1,9 @@
-from nnet.sync import net, conn_type, solve_type;
+from nnet.sync import sync_network, conn_type, solve_type;
 from support import draw_dynamics;
 import math;
 
 
-class syncgcolor(net):
+class syncgcolor(sync_network):
     _positive_weight = None;
     _negative_weight = None;
     _reduction = None;

@@ -1,5 +1,5 @@
 from nnet.som import som, type_conn;
-from nnet.sync import net;
+from nnet.sync import sync_network;
 from syncnet import syncnet;
 from support import average_neighbor_distance, read_sample, draw_clusters;
 

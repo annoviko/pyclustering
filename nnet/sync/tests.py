@@ -8,7 +8,7 @@ from nnet import sync;
 
 class Test(unittest.TestCase):
     def test_create(self):
-        network = sync.net(10, 1);
+        network = sync.sync_network(10, 1);
         assert network.num_osc == 10;
   
     
@@ -23,13 +23,13 @@ class Test(unittest.TestCase):
     
     def test_sync_order_single_osc(self):
         # Check for order parameter of network with one oscillator
-        network = sync.net(1, 1);
+        network = sync.sync_network(1, 1);
         assert network.sync_order() == 1;
     
     
     def test_sync_order_network(self):
         # Check for order parameter of network with several oscillators
-        network = sync.net(20, 1);
+        network = sync.sync_network(20, 1);
         assert network.sync_order() < 0.5;
         
         sync_state = 1;
@@ -40,12 +40,12 @@ class Test(unittest.TestCase):
     
     
     def test_sync_local_order_single_osc(self):
-        network = sync.net(1, 1);
+        network = sync.sync_network(1, 1);
         assert network.sync_local_order() == 0;   
         
         
     def test_sync_local_order_network(self):
-        network = sync.net(10, 1);
+        network = sync.sync_network(10, 1);
         network.cluster = 2;
         network.simulate(20, 10, sync.solve_type.ODEINT); 
 
@@ -77,7 +77,7 @@ class Test(unittest.TestCase):
         sim_steps = 50;
         tolerance = 0.01;
         
-        network = sync.net(nodes, weight);
+        network = sync.sync_network(nodes, weight);
               
         (t, dyn_phase) = network.simulate(sim_steps, sim_time, solution);
         
@@ -99,7 +99,7 @@ class Test(unittest.TestCase):
         
         
     def template_cluster_parameter_test(self, num_osc = 10, weight = 1, cluster_param = 2, tolerance = 0.1):
-        network = sync.net(num_osc, weight);   
+        network = sync.sync_network(num_osc, weight);   
         network.cluster = cluster_param;
         
         network.simulate(50, 20, sync.solve_type.ODEINT);
@@ -110,12 +110,12 @@ class Test(unittest.TestCase):
     
     def test_all_to_all_connection(self):
         # Check creation of coupling between oscillator in all-to-all case
-        network = sync.net(10, 1, type_conn = sync.conn_type.ALL_TO_ALL);
+        network = sync.sync_network(10, 1, type_conn = sync.conn_type.ALL_TO_ALL);
         self.template_all_to_all_connection_test(network);
 
 
     def test_all_to_all_connection_list_represent(self):
-        network = sync.net(10, 1, type_conn = sync.conn_type.ALL_TO_ALL, conn_represent = sync.conn_represent.LIST);
+        network = sync.sync_network(10, 1, type_conn = sync.conn_type.ALL_TO_ALL, conn_represent = sync.conn_represent.LIST);
         self.template_all_to_all_connection_test(network);        
 
 
@@ -129,12 +129,12 @@ class Test(unittest.TestCase):
     
 
     def test_none_connection(self):
-        network = sync.net(10, 1, type_conn = sync.conn_type.NONE);
+        network = sync.sync_network(10, 1, type_conn = sync.conn_type.NONE);
         self.template_none_connection_test(network);
 
 
     def test_none_connection_list_represent(self):
-        network = sync.net(10, 1, type_conn = sync.conn_type.NONE, conn_represent = sync.conn_represent.LIST);
+        network = sync.sync_network(10, 1, type_conn = sync.conn_type.NONE, conn_represent = sync.conn_represent.LIST);
         self.template_none_connection_test(network);
 
 
@@ -146,12 +146,12 @@ class Test(unittest.TestCase):
 
     def test_bidir_list_connection(self):
         # Check creation of coupling between oscillator in bidirectional list case
-        network = sync.net(10, 1, type_conn = sync.conn_type.LIST_BIDIR);
+        network = sync.sync_network(10, 1, type_conn = sync.conn_type.LIST_BIDIR);
         self.template_bidir_list_connection_test(network);
     
     
     def test_bidir_list_connection_list_represent(self):
-        network = sync.net(10, 1, type_conn = sync.conn_type.LIST_BIDIR, conn_represent = sync.conn_represent.LIST);
+        network = sync.sync_network(10, 1, type_conn = sync.conn_type.LIST_BIDIR, conn_represent = sync.conn_represent.LIST);
         self.template_bidir_list_connection_test(network);
     
     
@@ -166,13 +166,13 @@ class Test(unittest.TestCase):
     
     def test_grid_four_connection(self):
         # Check creation of coupling between oscillator in grid with four neighbors case
-        network = sync.net(25, 1, type_conn = sync.conn_type.GRID_FOUR);
+        network = sync.sync_network(25, 1, type_conn = sync.conn_type.GRID_FOUR);
         self.template_grid_four_connection_test(network);
     
     
     def test_grid_four_connection_list_represent(self):
         # Check creation of coupling between oscillator in grid with four neighbors case
-        network = sync.net(25, 1, type_conn = sync.conn_type.GRID_FOUR, conn_represent = sync.conn_represent.LIST);        
+        network = sync.sync_network(25, 1, type_conn = sync.conn_type.GRID_FOUR, conn_represent = sync.conn_represent.LIST);        
         self.template_grid_four_connection_test(network);
 
     
@@ -198,11 +198,11 @@ class Test(unittest.TestCase):
     
     
     def test_initial_phases_equipartition(self):
-        network = sync.net(3, 1, type_conn = sync.conn_type.ALL_TO_ALL, conn_represent = sync.conn_represent.MATRIX, initial_phases = sync.initial_type.EQUIPARTITION);
+        network = sync.sync_network(3, 1, type_conn = sync.conn_type.ALL_TO_ALL, conn_represent = sync.conn_represent.MATRIX, initial_phases = sync.initial_type.EQUIPARTITION);
         assert len(network.phases) == 3;
         assert network.phases == [0, pi, 2.0 * pi];
         
-        network = sync.net(10, 1, type_conn = sync.conn_type.ALL_TO_ALL, conn_represent = sync.conn_represent.MATRIX, initial_phases = sync.initial_type.EQUIPARTITION);
+        network = sync.sync_network(10, 1, type_conn = sync.conn_type.ALL_TO_ALL, conn_represent = sync.conn_represent.MATRIX, initial_phases = sync.initial_type.EQUIPARTITION);
         assert len(network.phases) == 10;
         assert network.phases[0] == 0;
         assert network.phases[9] == 2 * pi;
@@ -212,7 +212,7 @@ class Test(unittest.TestCase):
     
     
     def template_dynamic_simulation_connection_type_test(self, num_osc, weight, connection_type):
-        network = sync.net(num_osc, weight, type_conn = connection_type);
+        network = sync.sync_network(num_osc, weight, type_conn = connection_type);
         network.simulate_dynamic(collect_dynamic = False);  # Just current state of network is required
         
         clusters = network.allocate_sync_ensembles(0.1);
@@ -240,7 +240,7 @@ class Test(unittest.TestCase):
 
 
     def template_dynamic_simulation_cluster_parameter(self, num_osc, cluster_parameter):
-        network = sync.net(num_osc, 1, False, sync.conn_type.ALL_TO_ALL);   
+        network = sync.sync_network(num_osc, 1, False, sync.conn_type.ALL_TO_ALL);   
         network.cluster = cluster_parameter;
           
         network.simulate_dynamic(solution = sync.solve_type.ODEINT);

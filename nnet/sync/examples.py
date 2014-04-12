@@ -3,7 +3,7 @@ from support import draw_dynamics;
 import support;
 
 def template_dynamic_sync(num_osc, k = 1, q = 1, sim_arg = None, conn = sync.conn_type.ALL_TO_ALL, type_solution = sync.solve_type.FAST, collect_dyn = True):
-    network = sync.net(num_osc, k, type_conn = conn);
+    network = sync.sync_network(num_osc, k, type_conn = conn);
     network.cluster = q;
     
     if (sim_arg is not None):

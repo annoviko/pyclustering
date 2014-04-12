@@ -44,7 +44,7 @@ class order_type:
     LOCAL_SYNC = 1;
 
 
-class net:    
+class sync_network:    
     # Protected members:
     _name = 'Phase Sync Network'
     _num_osc = 0;                      # Number of oscillators in the network

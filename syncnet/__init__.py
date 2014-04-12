@@ -3,7 +3,7 @@ from nnet.sync import *;
 from support import draw_clusters;
 from support import read_sample;
 
-class syncnet(net):
+class syncnet(sync_network):
     _osc_loc = None;
     
     def __init__(self, source_data, conn_repr = conn_represent.MATRIX, radius = None, initial_phases = initial_type.RANDOM_GAUSSIAN):
