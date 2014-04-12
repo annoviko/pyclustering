@@ -8,7 +8,8 @@ from support import draw_dynamics;
 from samples.definitions import GRAPH_SIMPLE_SAMPLES;
 
 
-def template_graph_coloring(positive_weight, negative_weight, filename, reduction = None, title = "Sample"):
+def template_graph_coloring(positive_weight, negative_weight, filename, reduction = None, title = None):
+    if (title is None): title = filename;
     print("\nGraph Coloring: ", title);
     
     graph_matrix_repr = read_sample(filename);
