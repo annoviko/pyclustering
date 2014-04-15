@@ -159,7 +159,7 @@ def draw_dynamics(t, dyn, x_title = None, y_title = None, x_lim = None, y_lim = 
     plt.ylabel(y_title, fontproperties=surface_font);
     plt.xlabel(x_title, fontproperties=surface_font);
     
-    if (x_lim is not None): plt.xlin(x_lim[0], x_lim[1]);
+    if (x_lim is not None): plt.xlim(x_lim[0], x_lim[1]);
     if (y_lim is not None): plt.ylim(y_lim[0], y_lim[1]);
 
     plt.grid();
