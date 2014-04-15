@@ -10,6 +10,10 @@ def kmeans(data, centers):
     changes = 1;
     clusters = [];
     
+    # Check for dimension
+    if (len(data[0]) != len(centers[0])):
+        raise NameError('Dimension of the input data and dimension of the initial cluster centers must be equal.');
+    
     while (changes > 0.05):
         clusters = update_clusters(data, centers);
         updated_centers = update_centers(data, clusters);

@@ -32,6 +32,10 @@ class Test(unittest.TestCase):
 
     def testClusterAllocationSampleSimple5(self):
         self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [[0.0, 1.0], [0.0, 0.0], [1.0, 1.0], [1.0, 0.0]], [15, 15, 15, 15]);
+        
+    def testDifferentDimensions(self):
+        self.assertRaises(NameError, kmeans, [ [0, 1, 5], [0, 2, 3] ], [ [0, 3] ]);
+        self.assertRaises(NameError, kmeans, [ [0, 1, 5, 2], [0, 2, 3, 7] ], [ [0] ]);
 
 
 if __name__ == "__main__":
