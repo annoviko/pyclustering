@@ -51,6 +51,7 @@ def euclidean_distance_sqrt(a, b):
         return (a - b)**2.0;
         
     dimension = len(a);
+    # assert len(a) == len(b);
     
     distance = 0.0;
     for i in range(0, dimension):

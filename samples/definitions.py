@@ -34,3 +34,9 @@ class GRAPH_SIMPLE_SAMPLES:
     GRAPH_FULL1                     = samples.__path__[0] + "\\graphs\\GraphFull1.txt"
     GRAPH_FULL2                     = samples.__path__[0] + "\\graphs\\GraphFull2.txt"
     GRAPH_SIMPLE1                   = samples.__path__[0] + "\\graphs\\GraphSimple1.txt"
+    
+class IMAGE_SIMPLE_SAMPLES:
+    IMAGE_THREE_OBJECT1             = samples.__path__[0] + "\\images\\ImageSimple1.png";
+    IMAGE_THREE_OBJECT2             = samples.__path__[0] + "\\images\\ImageSimple2.png";
+    IMAGE_THREE_OBJECT3             = samples.__path__[0] + "\\images\\ImageSimple3.png";
+    
