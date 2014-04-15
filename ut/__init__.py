@@ -8,6 +8,7 @@ from hsyncnet       import tests as hsyncnet_unit_tests;
 from kmeans         import tests as kmeans_unit_tests;
 from nnet.som       import tests as nnet_som_unit_tests;
 from nnet.sync      import tests as nnet_sync_unit_tests;
+from rock           import tests as rock_unit_tests;
 from support        import tests as support_unit_tests;
 from syncnet        import tests as syncnet_unit_tests;
 
@@ -25,6 +26,7 @@ if __name__ == "__main__":
     suite.addTests(unittest.TestLoader().loadTestsFromModule(support_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(syncnet_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(kmeans_unit_tests));
+    suite.addTests(unittest.TestLoader().loadTestsFromModule(rock_unit_tests));
     
     unittest.TextTestRunner(verbosity = 2).run(suite);
     
