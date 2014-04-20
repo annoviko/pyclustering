@@ -1,10 +1,12 @@
-import unittest
+import unittest;
+
+from PIL import Image;
 
 from kmeans import kmeans;
 
 from support import read_sample;
 
-from samples.definitions import SIMPLE_SAMPLES;
+from samples.definitions import SIMPLE_SAMPLES, IMAGE_SIMPLE_SAMPLES;
 
 class Test(unittest.TestCase):
     def templateLengthProcessData(self, path_to_file, start_centers, expected_cluster_length):

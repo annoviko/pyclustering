@@ -1,5 +1,5 @@
 from nnet.som import som, type_conn;
-from nnet.sync import sync_network;
+from nnet.sync import sync_network, initial_type;
 from syncnet import syncnet;
 from support import average_neighbor_distance, read_sample, draw_clusters;
 
@@ -19,22 +19,7 @@ class syncsom:
     def __init__(self, data, rows, cols):
         self._data = data;
         self._som = som(rows, cols, data, 100, conn_type = type_conn.grid_four);
-        self._som_osc_table = list();
-    
-    def assert_capture_points(self):
-        # TODO: Should be moved to unit-test
-        capture_points = 0;
-        hiper_cluster = list();
-        for index in range(len(self._som.capture_objects)):
-            assert self._som.awards[index] == len(self._som.capture_objects[index]);
-            if (self._som.awards[index] > 0):
-                capture_points += len(self._som.capture_objects[index]);
-                hiper_cluster += self._som.capture_objects[index];
-            
-        print("[POINTS] Capture: ", capture_points, ", Real: ", len(self._data));
-        assert capture_points == len(self._data);
-        assert len(hiper_cluster) == len(self._data);
-        
+        self._som_osc_table = list();        
     
     def process(self, number_neighbors, collect_dynamic = False, order = 0.999):
         # train self-organization map.
@@ -52,7 +37,7 @@ class syncsom:
         radius = average_neighbor_distance(weights, number_neighbors);
         
         # create oscillatory neural network.
-        self._sync = syncnet(weights);
+        self._sync = syncnet(weights, initial_phases = initial_type.EQUIPARTITION);
         (dyn_time, dyn_phase) = self._sync.process(radius, order, collect_dynamic = collect_dynamic);
         
         # Draw SOM clusters.

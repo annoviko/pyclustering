@@ -36,15 +36,20 @@ def template_clustering(file, map_size, trust_order, sync_order = 0.999, show_dy
         clusters = network.get_clusters();
         draw_clusters(sample, clusters);
   
+def cluster_simple1():
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [4, 4], 3, 0.999, True, True, True, True);   
+  
+def cluster_simple2():
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [4, 4], 3, 0.999, True, True, True, True);  
 
 def cluster_simple3():
-    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [4, 4], 3, 0.999, True, True, True, True);
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [5, 5], 4, 0.999, True, True, True, True);
     
 def cluster_simple4():
-    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, [3, 3], 3, 0.999, True, True, True);
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, [5, 5], 4, 0.999, True, True, True);
     
 def cluster_simple5():
-    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [3, 3], 3, 0.999, True, True, True);
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [5, 5], 4, 0.999, True, True, True);
 
 def cluster_lsun():
     template_clustering(FCPS_SAMPLES.SAMPLE_LSUN, [9, 9], 10, 0.999, True, True, True);
@@ -78,6 +83,8 @@ def experiment_execution_time():
     template_clustering(FCPS_SAMPLES.SAMPLE_HEPTA, [7, 7], 5, 0.998, False, False, False, False);
 
 
+cluster_simple1();
+cluster_simple2();
 cluster_simple3();
 cluster_simple4();
 cluster_simple5();

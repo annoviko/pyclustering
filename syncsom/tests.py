@@ -46,12 +46,15 @@ class Test(unittest.TestCase):
         expected_cluster_length.sort();
         #print(obtained_cluster_sizes, expected_cluster_length);
         assert obtained_cluster_sizes == expected_cluster_length;
+       
+    def testClusterAllocationSampleSimple1(self):
+        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [5, 5], 4, 0.999, [5, 5]);   
+        
+    def testClusterAllocationSampleSimple2(self):
+        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [5, 5], 4, 0.999, [10, 5, 8]);
         
     def testClusterAllocationSampleSimple3(self):
         self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [5, 5], 4, 0.999, [10, 10, 10, 30]);
-        
-    def testClusterAllocationSampleSimple4(self):
-        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, [5, 5], 3, 0.999, [15, 15, 15, 15, 15]);
          
     def testClusterAllocationSampleSimple5(self):
         self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [7, 7], 5, 0.999, [15, 15, 15, 15]);
