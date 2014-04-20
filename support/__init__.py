@@ -179,7 +179,7 @@ def draw_image_segments(source, clusters):
     (fig, axarr) = plt.subplots(number_rows, number_cols);
     plt.setp([ax for ax in axarr], visible = False);
     
-    axarr[0, 0].imshow(image_source);
+    axarr[0, 0].imshow(image_source, interpolation = 'none');
     plt.setp(axarr[0, 0], visible = True);
     
     row_index = 0;
@@ -194,7 +194,7 @@ def draw_image_segments(source, clusters):
         stage = numpy.reshape(stage, image_size + ((3),)); # ((3),) it's size of RGB - third dimension.
         
         image_cluster = Image.fromarray(stage, 'RGB');
-        axarr[row_index, col_index].imshow(image_cluster);
+        axarr[row_index, col_index].imshow(image_cluster, interpolation = 'none');
         
         plt.setp(axarr[row_index, col_index], visible = True);
         

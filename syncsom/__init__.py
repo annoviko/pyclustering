@@ -105,7 +105,7 @@ class syncsom:
         capture_points = 0;
         for points in clusters:
             capture_points += len(points);
-        print("[POINTS] Capture: ", capture_points, ", Real: ", len(self._data));
+        # print("[POINTS] Capture: ", capture_points, ", Real: ", len(self._data));
         assert capture_points == len(self._data);
         
         return clusters;
