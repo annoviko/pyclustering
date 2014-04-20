@@ -169,7 +169,22 @@ def draw_dynamics(t, dyn, x_title = None, y_title = None, x_lim = None, y_lim = 
 def draw_image_segments(source, clusters):
     image_source = Image.open(source);
     image_size = image_source.size;
-  
+    
+    # Calculate edge for confortable representation.
+    number_clusters = len(clusters) + 1; # show with the source image
+    
+    number_cols = int(numpy.ceil(number_clusters ** 0.5));
+    number_rows = int(numpy.ceil(number_clusters / number_cols));
+    
+    (fig, axarr) = plt.subplots(number_rows, number_cols);
+    plt.setp([ax for ax in axarr], visible = False);
+    
+    axarr[0, 0].imshow(image_source);
+    plt.setp(axarr[0, 0], visible = True);
+    
+    row_index = 0;
+    col_index = 1;
+    
     for cluster in clusters:
         stage_cluster = [(255, 255, 255)] * (image_size[0] * image_size[1]);
         for index in cluster:
@@ -178,6 +193,16 @@ def draw_image_segments(source, clusters):
         stage = array(stage_cluster, numpy.uint8);
         stage = numpy.reshape(stage, image_size + ((3),)); # ((3),) it's size of RGB - third dimension.
         
-        image_cluster = Image.fromarray(stage, 'RGB');  
-        image_cluster.show();
+        image_cluster = Image.fromarray(stage, 'RGB');
+        axarr[row_index, col_index].imshow(image_cluster);
+        
+        plt.setp(axarr[row_index, col_index], visible = True);
+        
+        col_index += 1;
+        
+        if (col_index >= number_cols):
+            col_index = 0; 
+            row_index += 1;
+        
+    plt.show();
         
