@@ -39,4 +39,5 @@ class IMAGE_SIMPLE_SAMPLES:
     IMAGE_THREE_OBJECT1             = samples.__path__[0] + "\\images\\ImageSimple1.png";
     IMAGE_THREE_OBJECT2             = samples.__path__[0] + "\\images\\ImageSimple2.png";
     IMAGE_THREE_OBJECT3             = samples.__path__[0] + "\\images\\ImageSimple3.png";
+    IMAGE_TWO_COLOR_SET             = samples.__path__[0] + "\\images\\ImageSimple4.png";
     
