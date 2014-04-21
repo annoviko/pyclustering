@@ -22,18 +22,23 @@ def template_segmentation_image(source, map_som_size = [5, 5], average_neighbors
     
     
 def segmentation_image_simple1():
-    template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_THREE_OBJECT1);
+    template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_THREE_OBJECT1, show_dyn = True);
     
 def segmentation_image_simple2():
-    template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_THREE_OBJECT2);   
+    template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_THREE_OBJECT2, show_dyn = True);   
    
 def segmentation_image_simple3():
-    template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_THREE_OBJECT3);
+    template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_THREE_OBJECT3, show_dyn = True);
     
 def segmentation_image_simple4():
-    template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_TWO_COLOR_SET);
+    template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_TWO_COLOR_SET, show_dyn = True);
+    
+def segmentation_image_beach():
+    template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE_BEACH, show_dyn = True);
+    
     
 segmentation_image_simple1();
 segmentation_image_simple2();
 segmentation_image_simple3();
 segmentation_image_simple4();
+segmentation_image_beach();

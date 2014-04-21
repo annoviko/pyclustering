@@ -24,9 +24,14 @@ def segmentation_image_simple3():
     template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_THREE_OBJECT3, [[255, 0, 0, 128], [0, 0, 255, 128], [180, 136, 0, 128]]);    
     
 def segmentation_image_simple4():
-    template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_TWO_COLOR_SET, [[0, 128, 0, 128], [255, 0, 0, 128]]);        
+    template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_TWO_COLOR_SET, [[0, 128, 0, 128], [255, 0, 0, 128]]); 
+    
+def segmentation_image_beach():   
+    template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE_BEACH, [[153, 217, 234, 128], [0, 162, 232, 128], [34, 177, 76, 128], [255, 242, 0, 128]]);     
+    
     
 segmentation_image_simple1();
 segmentation_image_simple2();
 segmentation_image_simple3();
 segmentation_image_simple4();
+segmentation_image_beach();
