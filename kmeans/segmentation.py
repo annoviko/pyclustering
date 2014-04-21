@@ -1,21 +1,17 @@
 from PIL import Image;
 
-from support import draw_image_segments;
+from support import draw_image_segments, read_image;
 
 from samples.definitions import IMAGE_SIMPLE_SAMPLES;
 
 from kmeans import kmeans;
 
 
-def template_segmentation_image(source, start_centers):
-    image_source = Image.open(source);
-    
-    data = [pixel for pixel in image_source.getdata()];
+def template_segmentation_image(source, start_centers):    
+    data = read_image(source);
 
     (clusters, centers) = kmeans(data, start_centers);
     draw_image_segments(source, clusters);
-    
-    del image_source;
     
     
 def segmentation_image_simple1():

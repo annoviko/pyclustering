@@ -13,8 +13,12 @@ class syncsom:
     _som_osc_table = None;
     
     @property
-    def weights(self):
-        return self._som.weights;
+    def som_layer(self):
+        return self._som;
+    
+    @property
+    def sync_layer(self):
+        return self._sync;
     
     def __init__(self, data, rows, cols):
         self._data = data;
@@ -34,7 +38,11 @@ class syncsom:
                 self._som_osc_table.append(i);
         
         # calculate trusted distance between objects.
-        radius = average_neighbor_distance(weights, number_neighbors);
+        radius = 0;
+        if (len(weights) >= number_neighbors):
+            radius = average_neighbor_distance(weights, number_neighbors);
+        else:
+            radius = 0;
         
         # create oscillatory neural network.
         self._sync = syncnet(weights, initial_phases = initial_type.EQUIPARTITION);
@@ -94,7 +102,7 @@ class syncsom:
         assert capture_points == len(self._data);
         
         return clusters;
-        
+
     def show_som_layer(self):
         self._som.show_network();
     

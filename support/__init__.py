@@ -9,13 +9,23 @@ from mpl_toolkits.mplot3d import Axes3D;
 
 
 def read_sample(filename):
-    "Return sample for clusterization"
+    "Returns sample for clusterization"
     file = open(filename, 'r');
 
     sample = [[float(val) for val in line.split()] for line in file];
     
     file.close();
     return sample;
+
+def read_image(filename):
+    "Returns image as N-dimension (depends on the input image) matrix, when one element describes pixel"
+    
+    "(in) filename    - path to image"
+    image_source = Image.open(filename);
+    data = [pixel for pixel in image_source.getdata()];
+    
+    del image_source;
+    return data;
 
 def average_neighbor_distance(points, num_neigh):
     if (num_neigh > len(points) - 1):
@@ -176,14 +186,23 @@ def draw_image_segments(source, clusters):
     number_cols = int(numpy.ceil(number_clusters ** 0.5));
     number_rows = int(numpy.ceil(number_clusters / number_cols));
     
+
+    real_index = 0, 0;
+    double_indexer = True;
+    if ( (number_cols == 1) or (number_rows == 1) ):
+        real_index = 0;
+        double_indexer = False;
+    
     (fig, axarr) = plt.subplots(number_rows, number_cols);
     plt.setp([ax for ax in axarr], visible = False);
     
-    axarr[0, 0].imshow(image_source, interpolation = 'none');
-    plt.setp(axarr[0, 0], visible = True);
+    axarr[real_index].imshow(image_source, interpolation = 'none');
+    plt.setp(axarr[real_index], visible = True);
     
-    row_index = 0;
-    col_index = 1;
+    if (double_indexer is True):
+        real_index = 0, 1;
+    else:
+        real_index += 1;
     
     for cluster in clusters:
         stage_cluster = [(255, 255, 255)] * (image_size[0] * image_size[1]);
@@ -194,15 +213,16 @@ def draw_image_segments(source, clusters):
         stage = numpy.reshape(stage, image_size + ((3),)); # ((3),) it's size of RGB - third dimension.
         
         image_cluster = Image.fromarray(stage, 'RGB');
-        axarr[row_index, col_index].imshow(image_cluster, interpolation = 'none');
         
-        plt.setp(axarr[row_index, col_index], visible = True);
+        axarr[real_index].imshow(image_cluster, interpolation = 'none');
+        plt.setp(axarr[real_index], visible = True);
         
-        col_index += 1;
-        
-        if (col_index >= number_cols):
-            col_index = 0; 
-            row_index += 1;
+        if (double_indexer is True):
+            real_index = real_index[0], real_index[1] + 1;
+            if (real_index[1] >= number_cols):
+                real_index = real_index[0] + 1, 0; 
+        else:
+            real_index += 1;
         
     plt.show();
         

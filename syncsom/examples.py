@@ -23,7 +23,7 @@ def template_clustering(file, map_size, trust_order, sync_order = 0.999, show_dy
     
     if (show_clusters == True):
         clusters = network.get_som_clusters();
-        draw_clusters(network.weights, clusters);
+        draw_clusters(network.som_layer.weights, clusters);
     
     # Show network stuff.
     if (show_layer1 == True):
