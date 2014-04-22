@@ -6,7 +6,10 @@ from support import read_sample;
 class syncnet(sync_network):
     _osc_loc = None;
     
-    def __init__(self, source_data, conn_repr = conn_represent.MATRIX, radius = None, initial_phases = initial_type.RANDOM_GAUSSIAN):
+    _ena_conn_weight = False;
+    _conn_weight = None;
+    
+    def __init__(self, source_data, conn_repr = conn_represent.MATRIX, radius = None, initial_phases = initial_type.RANDOM_GAUSSIAN, enable_conn_weight = False):
         sample = None;
         if ( isinstance(source_data, str) ):
             file = open(source_data, 'r');
@@ -17,6 +20,7 @@ class syncnet(sync_network):
         
         super().__init__(len(sample), 1, False, conn_type.NONE, initial_phases);
         
+        self._ena_conn_weight = enable_conn_weight;
         self._osc_loc = sample;
         self._conn_represent = conn_repr;
 
@@ -33,30 +37,60 @@ class syncnet(sync_network):
         # Create connections.
         if (radius is not None):
             self._create_connections(radius);
-        
-        
+    
 
     def _create_connections(self, radius):
-        "Create connections between oscillators"
+        "Create connections between oscillators in line with input radius of connectivity"
+        
+        "(in) radius    - connectivity radius between oscillators"
+        if (self._ena_conn_weight is True):
+            self._conn_weight = [[0] * self._num_osc for index in range(0, self._num_osc, 1)];
+        
+        maximum_distance = 0;
+        minimum_distance = numpy.Inf;
+        
         # Create connections
         for i in range(0, self._num_osc, 1):
-            for j in range(0, self._num_osc, 1):
-                dist = euclidean_distance(self._osc_loc[i], self._osc_loc[j]);
-                if (dist <= radius):
-                    if (self._conn_represent == conn_represent.LIST):
-                        self._osc_conn[i].append(j);
-                    else:
-                        self._osc_conn[i][j] = True;
+            for j in range(i + 1, self._num_osc, 1):                 
+                    dist = euclidean_distance(self._osc_loc[i], self._osc_loc[j]);
+                    
+                    if (self._ena_conn_weight is True):
+                        self._conn_weight[i][j] = dist;
+                        
+                        if (dist > maximum_distance): maximum_distance = dist;
+                        if (dist < minimum_distance): minimum_distance = dist;
+                    
+                    if (dist <= radius):
+                        if (self._conn_represent == conn_represent.LIST):
+                            self._osc_conn[i].append(j);
+                            self._osc_conn[j].append(i);
+                        else:
+                            self._osc_conn[i][j] = True;
+                            self._osc_conn[j][i] = True;
         
-        
-    def set_connections(self, osc_conn):
-        if  ( (len(osc_conn) == len(self._osc_conn)) and (len(osc_conn[0]) == len(self._osc_conn[0])) ):
-            self._osc_conn = osc_conn;
+        if (self._ena_conn_weight is True):
+            multiplier = 1; 
+            subtractor = 0;
             
+            if (maximum_distance != minimum_distance):
+                multiplier = (maximum_distance - minimum_distance);
+                subtractor = minimum_distance;
             
+            for i in range(0, self._num_osc, 1):
+                for j in range(i + 1, self._num_osc, 1):
+                    self._conn_weight[i][j] = (self._conn_weight[i][j] - subtractor) / multiplier;
+
 
     def process(self, radius = None, order = 0.998, solution = solve_type.FAST, collect_dynamic = False):
         "Network is trained via achievement sync state between the oscillators using the radius of coupling"
+        
+        "(in) radius            - connectivity radius for simulation, if it is specified then connections will be recreated"
+        "(in) order             - order of synchronization that is used as indication for stopping processing"
+        "(in) solution          - specified type of solving diff. equation"
+        "(in) collect_dynamic   - specified requirement to collect whole dynamic of the network"
+        
+        "Return last values of simulation time and phases of oscillators as a tuple if collect_dynamic is False, and whole dynamic"
+        "if collect_dynamic is True. Format of returned value: (simulation_time, oscillator_phases)."
         # Create connections in line with input radius
         if (radius != None):
             self._create_connections(radius);
@@ -67,6 +101,10 @@ class syncnet(sync_network):
     
     def get_neighbors(self, index):
         "Return list of neighbors of a oscillator with sequence number 'index'"
+        
+        "(in) index    - index of oscillator in the network"
+        
+        "Return list of neighbors"
         if (self._conn_represent == conn_represent.LIST):
             return self._osc_conn[index];      # connections are represented by list.
         elif (self._conn_represent == conn_represent.MATRIX):
@@ -88,9 +126,17 @@ class syncnet(sync_network):
         
         neighbors = self.get_neighbors(index);
         for k in neighbors:
-            phase += math.sin(self._cluster * (self._phases[k] - teta));
+            conn_weight = 1;
+            if (self._ena_conn_weight is True):
+                conn_weight = self._conn_weight[index][k];
+                
+            phase += conn_weight * self._weight * math.sin(self._cluster * (self._phases[k] - teta));
+        
+        divider = len(neighbors);
+        if (divider == 0): 
+            divider = 1;
             
-        return ( self._freq[index] + (phase * self._weight / len(neighbors)) );   
+        return ( self._freq[index] + (phase / divider) );   
 
 
     def get_clusters(self, eps = 0.1):

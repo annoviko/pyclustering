@@ -54,7 +54,7 @@ class syncsom:
         #self._som.show_network(awards = False, belongs = True);
         
         # return dynamic if it was requested.
-        return (dyn_time, dyn_phase);
+        return (dyn_time, dyn_phase);   
     
     def get_som_clusters(self, eps = 0.1):
         sync_clusters = self._sync.get_clusters();
