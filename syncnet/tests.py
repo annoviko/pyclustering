@@ -38,7 +38,7 @@ class Test(unittest.TestCase):
         
         
     def testClusteringSampleSimple2(self):
-        self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, 0.998, conn_represent.MATRIX, [5, 8, 10]);
+        self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 1, 0.998, conn_represent.MATRIX, [5, 8, 10]);
         
     
     def testClusteringSampleSimple2ListRepr(self):
@@ -59,6 +59,7 @@ class Test(unittest.TestCase):
     
     def testClusteringSampleSimple5(self):
         self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 1, 0.998, conn_represent.MATRIX, [15, 15, 15, 15]);
+        
         
     
     def templateClusterAllocationHighTolerance(self, file, radius, order):
@@ -88,7 +89,32 @@ class Test(unittest.TestCase):
     
     def testClusterAllocationHighToleranceSampleSimple5(self):
         self.templateClusterAllocationHighTolerance(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 1, 0.998);
+
+
+
+    def templateClusterAllocationConnWeights(self, file, radius, order, expected_cluster_length):
+        sample = read_sample(file);
+        network = syncnet(sample, enable_conn_weight = True);
+        network.process(radius, order);
+        
+        clusters = network.get_clusters(0.05);
+        
+        obtained_cluster_sizes = [len(cluster) for cluster in clusters];
+        
+        assert len(obtained_cluster_sizes) == len(expected_cluster_length);
+        
+        obtained_cluster_sizes.sort();
+        expected_cluster_length.sort();
+        
+        assert obtained_cluster_sizes == expected_cluster_length;
+        
+    def testClusterAllocationConnWeightSampleSimple1(self):
+        self.templateClusterAllocationConnWeights(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, 0.998, [5, 5]);
+        self.templateClusterAllocationConnWeights(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 10, 0.998, [10]);
     
+    def testClusterAllocationConnWeightSampleSimple2(self):
+        self.templateClusterAllocationConnWeights(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 2, 0.998, [5, 8, 10]);
+        self.templateClusterAllocationConnWeights(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 10, 0.998, [23]);
     
 if __name__ == "__main__":
     unittest.main()

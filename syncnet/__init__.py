@@ -9,6 +9,10 @@ class syncnet(sync_network):
     _ena_conn_weight = False;
     _conn_weight = None;
     
+    @property
+    def connection_weights(self):
+        return self._conn_weight;
+    
     def __init__(self, source_data, conn_repr = conn_represent.MATRIX, radius = None, initial_phases = initial_type.RANDOM_GAUSSIAN, enable_conn_weight = False):
         sample = None;
         if ( isinstance(source_data, str) ):
@@ -56,6 +60,7 @@ class syncnet(sync_network):
                     
                     if (self._ena_conn_weight is True):
                         self._conn_weight[i][j] = dist;
+                        self._conn_weight[j][i] = dist;
                         
                         if (dist > maximum_distance): maximum_distance = dist;
                         if (dist < minimum_distance): minimum_distance = dist;
@@ -78,7 +83,10 @@ class syncnet(sync_network):
             
             for i in range(0, self._num_osc, 1):
                 for j in range(i + 1, self._num_osc, 1):
-                    self._conn_weight[i][j] = (self._conn_weight[i][j] - subtractor) / multiplier;
+                    value_conn_weight = (self._conn_weight[i][j] - subtractor) / multiplier;
+                    
+                    self._conn_weight[i][j] = value_conn_weight;
+                    self._conn_weight[j][i] = value_conn_weight;
 
 
     def process(self, radius = None, order = 0.998, solution = solve_type.FAST, collect_dynamic = False):
