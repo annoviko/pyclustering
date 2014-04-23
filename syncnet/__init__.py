@@ -9,10 +9,6 @@ class syncnet(sync_network):
     _ena_conn_weight = False;
     _conn_weight = None;
     
-    @property
-    def connection_weights(self):
-        return self._conn_weight;
-    
     def __init__(self, source_data, conn_repr = conn_represent.MATRIX, radius = None, initial_phases = initial_type.RANDOM_GAUSSIAN, enable_conn_weight = False):
         sample = None;
         if ( isinstance(source_data, str) ):

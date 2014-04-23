@@ -16,8 +16,6 @@ def template_clustering(file, radius, order, show_dyn = False, show_conn = False
     (ticks, (dyn_time, dyn_phase)) = timedcall(network.process, radius, order, solve_type.FAST, show_dyn);
     print("Sample: ", file, "\t\tExecution time: ", ticks, "\n");
     
-    print(network.connection_weights);
-    
     if (show_dyn == True):
         draw_dynamics(dyn_time, dyn_phase, x_title = "Time", y_title = "Phase", y_lim = [0, 2 * 3.14]);
     
