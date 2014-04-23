@@ -3,6 +3,8 @@ import random as rnd
 import matplotlib.pyplot as plt;
 import math
 
+from samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
+from support import read_sample;
 
 ro = 0.0;
 coeff = 10;
@@ -186,11 +188,21 @@ for i in range(delta): X[i+delta*2,1] = rnd.random()-1
 for i in range(delta): X[i+delta*3,0] = rnd.random()+1
 for i in range(delta): X[i+delta*3,1] = rnd.random()-1
 
+sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1);
 
-[pheromone, weights, f, mean_min ]= clustering( X, 1, 1, 0.1, len(X), 4, 2 );
+X = np.zeros( (len(sample),2) )
+for i in range( len(sample) ):
+    for j in range( 2 ):
+        X[i,j] = sample[i][j];
+
+#print( X )
+
+
+#[pheromone, weights, f, mean_min ]= clustering( X, 1, 1, 0.1, len(X), 2, 2 );
 
 #print( weights )
 
+"""
 fig = plt.figure()
 axes = fig.add_subplot(111);
 
@@ -210,7 +222,7 @@ for i in range(len(mean_min)):
 plt.grid();
 plt.show();
 
-
+"""
 
 
 
