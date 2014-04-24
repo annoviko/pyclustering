@@ -7,7 +7,7 @@ import math
 from samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
 from support import read_sample;
 
-import ant_clustering_with_mean as ant_clustering
+import antmeans as ant_clustering
 
 
 def draw( X, weights, mean_min ):
