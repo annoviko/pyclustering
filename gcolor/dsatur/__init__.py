@@ -1,9 +1,9 @@
-from support import read_sample;
-
-from samples.definitions import GRAPH_SIMPLE_SAMPLES;
-
-
 def dsatur(data):
+    "DSATUR algorithm implementation. Performs graph coloring problem."
+    
+    "(in) data        - matrix graph representation"
+    
+    "Returns vector with assigned colors where each element corresponds to node in the graph"
     if (len(data[0]) != len(data)):
         raise NameError('Only matrix graph representation is available.');
     
@@ -101,8 +101,10 @@ def get_neighbors(node_index, data):
     return [ index for index in range(len(data[node_index])) if data[node_index][index] != 0 ];
     
 
-# graph_matrix_repr = read_sample(GRAPH_SIMPLE_SAMPLES.GRAPH_FIVE_POINTED_STAR);
-# coloring = dsatur(graph_matrix_repr);
-# print(graph_matrix_repr);
-# print(coloring);
-    
+# from support import draw_graph, read_graph;
+# 
+# graph = read_graph(GRAPH_SIMPLE_SAMPLES.GRAPH_FULL1);
+# coloring = dsatur(graph.data);
+# draw_graph(graph, coloring);
+# print(graph);
+# print(coloring); 

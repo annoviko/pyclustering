@@ -2,14 +2,14 @@ import unittest;
 
 from gcolor.dsatur import dsatur;
 
-from support import read_sample;
+from support import read_sample, read_graph;
 
 from samples.definitions import GRAPH_SIMPLE_SAMPLES;
 
 class Test(unittest.TestCase):
     def templateTestColoring(self, filename):
-        graph_matrix_repr = read_sample(filename);
-        map_coloring = dsatur(graph_matrix_repr);
+        graph = read_graph(filename);
+        map_coloring = dsatur(graph.data);
         
         # Check number of colors
         assigned_colors = set(map_coloring);
@@ -19,8 +19,8 @@ class Test(unittest.TestCase):
             assert color_number in assigned_colors;
             
         # Check validity of colors
-        for index_node in range(len(graph_matrix_repr)):
-            color_neighbors = [ map_coloring[index] for index in range(len(graph_matrix_repr[index_node])) if graph_matrix_repr[index_node][index] != 0 and index_node != index];
+        for index_node in range(len(graph.data)):
+            color_neighbors = [ map_coloring[index] for index in range(len(graph.data[index_node])) if graph.data[index_node][index] != 0 and index_node != index];
             #print(index_node, map_coloring[index_node], color_neighbors, assigned_colors, map_coloring, "\n\n");
             assert map_coloring[index_node] not in color_neighbors;
     

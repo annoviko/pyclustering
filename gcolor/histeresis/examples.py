@@ -1,13 +1,13 @@
 from gcolor.histeresis import hysteresisgcolor;
 
-from support import read_sample, draw_dynamics;
+from support import draw_dynamics, read_graph;
 from samples.definitions import GRAPH_SIMPLE_SAMPLES;
 
 def template_graph_coloring(filename, alpha, eps, steps, time, title = None):
     if (title is None): title = filename;
     
-    graph_matrix_repr = read_sample(filename);
-    network = hysteresisgcolor(graph_matrix_repr, alpha, eps);
+    graph = read_graph(filename);
+    network = hysteresisgcolor(graph.data, alpha, eps);
     
     (t, dyn) = network.simulate(steps, time);
     draw_dynamics(t, dyn, x_title = "Time", y_title = "State");

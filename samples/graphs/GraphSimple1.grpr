@@ -1,0 +1,14 @@
+c DESCRIPTION: 5 Nodes, 4 Edges
+c OPTIMAL NUMBER OF COLORS: 2
+
+m 0 0 1 0 0
+m 0 0 0 1 0
+m 1 0 0 1 1
+m 0 1 1 0 0
+m 0 0 1 0 0
+
+r 1 2
+r 0 2
+r 1 1
+r 0 1
+r 1 0

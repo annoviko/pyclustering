@@ -21,19 +21,19 @@ class FCPS_SAMPLES:
     SAMPLE_WING_NUT         = samples.__path__[0] + "\\SampleWingNut.txt";
 
 class GRAPH_SIMPLE_SAMPLES:
-    GRAPH_BROKEN_CIRCLE1            = samples.__path__[0] + "\\graphs\\GraphBrokenCircle1.txt";
-    GRAPH_BROKEN_CIRCLE2            = samples.__path__[0] + "\\graphs\\GraphBrokenCircle2.txt";
-    GRAPH_FIVE_POINTED_FRAME_STAR   = samples.__path__[0] + "\\graphs\\GraphFivePointedFrameStar.txt";
-    GRAPH_FIVE_POINTED_STAR         = samples.__path__[0] + "\\graphs\\GraphFivePointedStar.txt";
-    GRAPH_ONE_CIRCLE1               = samples.__path__[0] + "\\graphs\\GraphOneCircle1.txt";
-    GRAPH_ONE_CIRCLE2               = samples.__path__[0] + "\\graphs\\GraphOneCircle2.txt";
-    GRAPH_ONE_CIRCLE3               = samples.__path__[0] + "\\graphs\\GraphOneCircle3.txt";
-    GRAPH_ONE_CROSSROAD             = samples.__path__[0] + "\\graphs\\GraphOneCrossroad.txt";
-    GRAPH_ONE_LINE                  = samples.__path__[0] + "\\graphs\\GraphOneLine.txt";
-    GRAPH_TWO_CROSSROADS            = samples.__path__[0] + "\\graphs\\GraphTwoCrossroads.txt";
-    GRAPH_FULL1                     = samples.__path__[0] + "\\graphs\\GraphFull1.txt"
-    GRAPH_FULL2                     = samples.__path__[0] + "\\graphs\\GraphFull2.txt"
-    GRAPH_SIMPLE1                   = samples.__path__[0] + "\\graphs\\GraphSimple1.txt"
+    GRAPH_BROKEN_CIRCLE1            = samples.__path__[0] + "\\graphs\\GraphBrokenCircle1.grpr";
+    GRAPH_BROKEN_CIRCLE2            = samples.__path__[0] + "\\graphs\\GraphBrokenCircle2.grpr";
+    GRAPH_FIVE_POINTED_FRAME_STAR   = samples.__path__[0] + "\\graphs\\GraphFivePointedFrameStar.grpr";
+    GRAPH_FIVE_POINTED_STAR         = samples.__path__[0] + "\\graphs\\GraphFivePointedStar.grpr";
+    GRAPH_ONE_CIRCLE1               = samples.__path__[0] + "\\graphs\\GraphOneCircle1.grpr";
+    GRAPH_ONE_CIRCLE2               = samples.__path__[0] + "\\graphs\\GraphOneCircle2.grpr";
+    GRAPH_ONE_CIRCLE3               = samples.__path__[0] + "\\graphs\\GraphOneCircle3.grpr";
+    GRAPH_ONE_CROSSROAD             = samples.__path__[0] + "\\graphs\\GraphOneCrossroad.grpr";
+    GRAPH_ONE_LINE                  = samples.__path__[0] + "\\graphs\\GraphOneLine.grpr";
+    GRAPH_TWO_CROSSROADS            = samples.__path__[0] + "\\graphs\\GraphTwoCrossroads.grpr";
+    GRAPH_FULL1                     = samples.__path__[0] + "\\graphs\\GraphFull1.grpr"
+    GRAPH_FULL2                     = samples.__path__[0] + "\\graphs\\GraphFull2.grpr"
+    GRAPH_SIMPLE1                   = samples.__path__[0] + "\\graphs\\GraphSimple1.grpr"
     
 class IMAGE_SIMPLE_SAMPLES:
     IMAGE_THREE_OBJECT1             = samples.__path__[0] + "\\images\\ImageSimple1.png";
