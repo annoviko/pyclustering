@@ -25,5 +25,5 @@ def run_all_graph_samples():
     template_graph_coloring(GRAPH_SIMPLE_SAMPLES.GRAPH_ONE_LINE);
     template_graph_coloring(GRAPH_SIMPLE_SAMPLES.GRAPH_SIMPLE1);
     template_graph_coloring(GRAPH_SIMPLE_SAMPLES.GRAPH_TWO_CROSSROADS);
-   
+
 run_all_graph_samples();    
