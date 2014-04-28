@@ -3,7 +3,7 @@ from gcolor.sync import syncgcolor;
 from nnet.sync import solve_type;
 
 from support import draw_dynamics;
-from support import read_graph;
+from support.graph import read_graph;
 
 from samples.definitions import GRAPH_SIMPLE_SAMPLES;
 

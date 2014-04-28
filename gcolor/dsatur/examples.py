@@ -1,4 +1,4 @@
-from support import read_graph, draw_graph;
+from support.graph import read_graph, draw_graph;
 
 from samples.definitions import GRAPH_SIMPLE_SAMPLES;
 

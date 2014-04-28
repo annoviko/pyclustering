@@ -2,7 +2,8 @@ import unittest;
 
 from gcolor.dsatur import dsatur;
 
-from support import read_sample, read_graph;
+from support import read_sample;
+from support.graph import read_graph;
 
 from samples.definitions import GRAPH_SIMPLE_SAMPLES;
 

@@ -1,5 +1,5 @@
 from nnet.sync import sync_network, conn_type, solve_type;
-from support import draw_dynamics;
+
 import math;
 
 

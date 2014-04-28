@@ -1,10 +1,5 @@
 from nnet.hysteresis import hysteresis_network;
 
-from support import read_sample;
-from support import draw_dynamics;
-
-from samples.definitions import GRAPH_SIMPLE_SAMPLES;
-
 class hysteresisgcolor(hysteresis_network):
     def __init__(self, graph_matrix, alpha, eps):
         self._num_osc = len(graph_matrix);
@@ -30,10 +25,3 @@ class hysteresisgcolor(hysteresis_network):
     def get_clusters(self, tolerance = 0.1):
         return self.allocate_sync_ensembles(tolerance);
     
-    
-# graph_matrix_repr = read_sample(GRAPH_SIMPLE_SAMPLES.GRAPH_SIMPLE1);
-# network = hysteresisgcolor(graph_matrix_repr, 1.2, 3.8);
-# 
-# (t, dyn) = network.simulate(10000, 20);
-# draw_dynamics(t, dyn);
-# print(network.get_clusters());

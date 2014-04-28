@@ -1,6 +1,8 @@
 from gcolor.histeresis import hysteresisgcolor;
 
-from support import draw_dynamics, read_graph;
+from support.graph import read_graph;
+from support import draw_dynamics;
+
 from samples.definitions import GRAPH_SIMPLE_SAMPLES;
 
 def template_graph_coloring(filename, alpha, eps, steps, time, title = None):
