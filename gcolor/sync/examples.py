@@ -3,7 +3,7 @@ from gcolor.sync import syncgcolor;
 from nnet.sync import solve_type;
 
 from support import draw_dynamics;
-from support.graph import read_graph;
+from support.graph import read_graph, draw_graph;
 
 from samples.definitions import GRAPH_SIMPLE_SAMPLES;
 
@@ -22,6 +22,9 @@ def template_graph_coloring(positive_weight, negative_weight, filename, reductio
     
     for index in range(0, len(clusters)):
         print("Color #", index, ": ", clusters[index]);
+        
+    coloring_map = network.get_map_coloring();
+    draw_graph(graph, coloring_map);
 
 
 def one_circle1():

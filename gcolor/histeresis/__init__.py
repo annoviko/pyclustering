@@ -25,3 +25,14 @@ class hysteresisgcolor(hysteresis_network):
     def get_clusters(self, tolerance = 0.1):
         return self.allocate_sync_ensembles(tolerance);
     
+    def get_map_coloring(self, tolerance = 0.1):
+        clusters = self.get_clusters(tolerance);
+        
+        coloring_map = [0] * self._num_osc;
+        
+        for color_index in range(len(clusters)):
+            for node_index in clusters[color_index]:
+                coloring_map[node_index] = color_index;
+                
+        return coloring_map;
+    

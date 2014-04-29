@@ -56,10 +56,3 @@ def calculate_center(data, cluster):
         center[index_dimension] /= len(cluster);
         
     return center;
-            
-   
-   
-# sample = read_sample('../samples/SampleTwoDiamonds.txt');
-# (ticks, clusters) = timedcall(hierarchical, sample, 2);
-# #print("Total time: ", ticks);
-# draw_clusters(sample, clusters);

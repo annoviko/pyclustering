@@ -1,6 +1,6 @@
 from gcolor.histeresis import hysteresisgcolor;
 
-from support.graph import read_graph;
+from support.graph import read_graph, draw_graph;
 from support import draw_dynamics;
 
 from samples.definitions import GRAPH_SIMPLE_SAMPLES;
@@ -17,6 +17,9 @@ def template_graph_coloring(filename, alpha, eps, steps, time, title = None):
     clusters = network.get_clusters(0.1);
     for index in range(0, len(clusters)):
         print("Color #", index, ": ", clusters[index]);
+    
+    coloring_map = network.get_map_coloring();
+    draw_graph(graph, coloring_map);
 
 
 def graph_simple1():
