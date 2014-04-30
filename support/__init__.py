@@ -72,6 +72,11 @@ def euclidean_distance_sqrt(a, b):
     return distance;
 
 
+def heaviside(value):
+    if (value >= 0): return 1;
+    return 0;
+
+
 def timedcall(fn, *args):
     "Call function with args; return the time in seconds and result."
     t0 = time.clock();
