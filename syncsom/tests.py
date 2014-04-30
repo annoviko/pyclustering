@@ -1,4 +1,4 @@
-import unittest
+import unittest;
 
 from syncsom import syncsom;
 

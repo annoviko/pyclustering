@@ -1,6 +1,6 @@
 import unittest;
 
-from nnet.sync import initial_type;
+from nnet import *;
 
 from support import read_sample;
 

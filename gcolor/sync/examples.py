@@ -1,6 +1,6 @@
 from gcolor.sync import syncgcolor;
 
-from nnet.sync import solve_type;
+from nnet import *;
 
 from support import draw_dynamics;
 from support.graph import read_graph, draw_graph;

@@ -1,6 +1,5 @@
-from nnet.sync import sync_network, conn_type, solve_type;
-
-import math;
+from nnet import *;
+from nnet.sync import sync_network;
 
 
 class syncgcolor(sync_network):

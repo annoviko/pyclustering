@@ -1,6 +1,6 @@
-import unittest
+import unittest;
 
-from nnet.sync import initial_type, conn_represent;
+from nnet import initial_type, conn_represent;
 
 from syncnet import syncnet;
 

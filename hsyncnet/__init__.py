@@ -1,4 +1,6 @@
-from nnet.sync import *;
+import numpy;
+
+from nnet import *;
 
 from syncnet import syncnet;
 from support import average_neighbor_distance, read_sample;

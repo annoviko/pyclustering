@@ -1,9 +1,10 @@
-from nnet import sync;
 from support import draw_dynamics;
-import support;
 
-def template_dynamic_sync(num_osc, k = 1, q = 1, sim_arg = None, conn = sync.conn_type.ALL_TO_ALL, type_solution = sync.solve_type.FAST, collect_dyn = True):
-    network = sync.sync_network(num_osc, k, type_conn = conn);
+from nnet import solve_type, conn_type;
+from nnet.sync import sync_network;
+
+def template_dynamic_sync(num_osc, k = 1, q = 1, sim_arg = None, conn = conn_type.ALL_TO_ALL, type_solution = solve_type.FAST, collect_dyn = True):
+    network = sync_network(num_osc, k, type_conn = conn);
     network.cluster = q;
     
     if (sim_arg is not None):
@@ -20,19 +21,19 @@ def trivial_dynamic_sync():
     template_dynamic_sync(100, 1, sim_arg = [50, 10]);
 
 def weight_5_dynamic_sync():
-    template_dynamic_sync(10, 10, sim_arg = [100, 10], type_solution = sync.solve_type.ODEINT);
+    template_dynamic_sync(10, 10, sim_arg = [100, 10], type_solution = solve_type.ODEINT);
     
 def cluster_2_dynamic_sync():
-    template_dynamic_sync(10, 1, q = 2, sim_arg = [20, 10], type_solution = sync.solve_type.ODEINT);
+    template_dynamic_sync(10, 1, q = 2, sim_arg = [20, 10], type_solution = solve_type.ODEINT);
 
 def cluster_5_dynamic_sync():
-    template_dynamic_sync(50, 1, q = 5, sim_arg = [20, 10], type_solution = sync.solve_type.ODEINT);
+    template_dynamic_sync(50, 1, q = 5, sim_arg = [20, 10], type_solution = solve_type.ODEINT);
 
 def bidir_struct_dynamic_sync():
-    template_dynamic_sync(10, 100, sim_arg = [100, 10], conn = sync.conn_type.LIST_BIDIR, type_solution = sync.solve_type.ODEINT);    
+    template_dynamic_sync(10, 100, sim_arg = [100, 10], conn = conn_type.LIST_BIDIR, type_solution = solve_type.ODEINT);    
     
 def grid_four_struct_dynamic_sync():
-    template_dynamic_sync(25, 50, sim_arg = [50, 10], conn = sync.conn_type.GRID_FOUR, type_solution = sync.solve_type.ODEINT);
+    template_dynamic_sync(25, 50, sim_arg = [50, 10], conn = conn_type.GRID_FOUR, type_solution = solve_type.ODEINT);
     
         
 # Negative connections        
@@ -45,13 +46,13 @@ def negative_connection_10_oscillators():
     
 def negative_connection_9_grid_struct():
     "Comment: Right coloring"
-    network = template_dynamic_sync(9, -2, conn = sync.conn_type.GRID_FOUR);      
+    network = template_dynamic_sync(9, -2, conn = conn_type.GRID_FOUR);      
     print(network.allocate_sync_ensembles(0.1));
     
     
 def negative_connection_16_grid_struct():
     "Comment: Wrong coloring"
-    network = template_dynamic_sync(16, -3, conn = sync.conn_type.GRID_FOUR);    
+    network = template_dynamic_sync(16, -3, conn = conn_type.GRID_FOUR);    
     print(network.allocate_sync_ensembles(0.1));
     
 

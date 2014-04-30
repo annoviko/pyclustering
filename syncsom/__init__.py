@@ -1,6 +1,9 @@
 from nnet.som import som, type_conn;
-from nnet.sync import sync_network, initial_type;
+from nnet.sync import sync_network;
+from nnet import initial_type;
+
 from syncnet import syncnet;
+
 from support import average_neighbor_distance, read_sample, draw_clusters;
 
 class syncsom:
@@ -109,24 +112,3 @@ class syncsom:
     def show_sync_layer(self):
         self._sync.show_network();
         
-        
-
-# sample = read_sample('../samples/SampleChainlink.txt');
-# 
-# # Create network
-# network = syncsom(sample, 9, 9);
-# 
-# # Run processing
-# (dyn_time, dyn_phase) = network.process(20, collect_dynamic = False);
-# 
-# from support import draw_dynamics;
-# # Show dynamic of the last layer.
-# draw_dynamics(dyn_time, dyn_phase);
-# 
-# clusters = network.get_som_clusters(0.1);
-# draw_clusters(network.weights, clusters);
-# 
-# 
-# clusters = network.get_clusters(0.1);
-# draw_clusters(sample, clusters);
-    

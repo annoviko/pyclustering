@@ -1,5 +1,6 @@
 from syncnet import syncnet;
-from syncnet import solve_type;
+
+from nnet import solve_type;
 
 from samples.definitions import SIMPLE_SAMPLES;
 from samples.definitions import FCPS_SAMPLES;
