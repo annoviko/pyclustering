@@ -30,6 +30,12 @@ def ten_oscillator_stimulated_list():
 def ten_oscillator_mix_stimulated_list():
     template_dynamic_legion(10, 1500, 1500, conn_type = conn_type.LIST_BIDIR, stimulus = [1, 1, 1, 0, 0, 0, 0, 1, 1, 1]);
     
+def sixteen_oscillator_mix_stimulated_grid():
+    template_dynamic_legion(16, 1500, 1500, conn_type = conn_type.GRID_FOUR, stimulus = [1, 1, 0, 0, 
+                                                                                         1, 0, 0, 0, 
+                                                                                         0, 0, 1, 1, 
+                                                                                         0, 0, 1, 1]);
+    
 one_oscillator_unstimulated();
 one_oscillator_stimulated();
 three_oscillator_unstimulated_list();
@@ -37,3 +43,4 @@ three_oscillator_stimulated_list();
 three_oscillator_mix_stimulated_list();
 ten_oscillator_stimulated_list();
 ten_oscillator_mix_stimulated_list();
+sixteen_oscillator_mix_stimulated_grid();
