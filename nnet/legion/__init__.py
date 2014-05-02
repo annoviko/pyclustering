@@ -95,9 +95,11 @@ class legion_network(network):
                     if (self._stimulus[j] > 0):
                         number_stimulated_neighbors += 1;
                 
-                dynamic_weight = self._params.Wt / number_stimulated_neighbors;
-                for j in neighbors:
-                    self._dynamic_coupling[i][j] = dynamic_weight;    
+                if (number_stimulated_neighbors > 0):
+                    dynamic_weight = self._params.Wt / number_stimulated_neighbors;
+                    
+                    for j in neighbors:
+                        self._dynamic_coupling[i][j] = dynamic_weight;    
     
     def simulate(self, steps, time, solution = solve_type.ODEINT, collect_dynamic = True):
         return self.simulate_static(steps, time, solution, collect_dynamic);
@@ -204,10 +206,3 @@ class legion_network(network):
         self._buffer_coupling_term[index] = coupling - self._params.Wz * heaviside(self._global_inhibitor - self._params.teta_xz);
         
         return [dx, dy, dp];
-    
-
-# from support import draw_dynamics;
-#  
-# net = legion_network(5, [0.2, 0.2, 0.2, 0.2, 0.2], type_conn = conn_type.LIST_BIDIR);
-# (t, x) = net.simulate(1000, 500, solution = solve_type.ODEINT, collect_dynamic = True);
-# draw_dynamics(t, x, x_title = "Time", y_title = "x(t)");
