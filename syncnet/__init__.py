@@ -102,21 +102,6 @@ class syncnet(sync_network):
         return self.simulate_dynamic(order, solution, collect_dynamic);
     
     
-    
-    def get_neighbors(self, index):
-        "Return list of neighbors of a oscillator with sequence number 'index'"
-        
-        "(in) index    - index of oscillator in the network"
-        
-        "Return list of neighbors"
-        if (self._conn_represent == conn_represent.LIST):
-            return self._osc_conn[index];      # connections are represented by list.
-        elif (self._conn_represent == conn_represent.MATRIX):
-            return [neigh_index for neigh_index in range(self._num_osc) if self._osc_conn[index][neigh_index] == True];
-        else:
-            raise NameError("Unknown type of representation of connections");
-    
-    
     def phase_kuramoto(self, teta, t, argv):
         "Overrided method for calculation of oscillator phase"
         

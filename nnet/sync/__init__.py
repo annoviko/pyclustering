@@ -23,8 +23,6 @@ class sync_network(network):
     _weight = 0;                       # Strength of connections between oscillators.
     _cluster = 1;                      # Parameter of artificial clustering during synchronization of phases of oscillators.
     
-    _conn_represent = None;
-    
     # Properties of class that represents oscillatory neural network
     @property
     def name(self):
@@ -48,7 +46,8 @@ class sync_network(network):
 
 
     def __init__(self, num_osc, weight = 1, frequency = False, type_conn = conn_type.ALL_TO_ALL, conn_represent = conn_represent.MATRIX, initial_phases = initial_type.RANDOM_GAUSSIAN):
-        self._num_osc = num_osc;
+        super().__init__(num_osc, type_conn, conn_represent);
+        
         self._weight = weight;
         
         self._phases = list();
@@ -63,10 +62,7 @@ class sync_network(network):
             if (frequency == True):
                 self._freq.append(random.random());
             else:
-                self._freq.append(0);
-                
-        self._conn_represent = conn_represent;
-        self._create_structure(type_conn);          
+                self._freq.append(0);        
     
     
     def sync_order(self):

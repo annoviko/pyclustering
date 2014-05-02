@@ -24,39 +24,42 @@ class conn_represent:
 class network:
     _num_osc = 0;
     _osc_conn = None;
+    _conn_represent = None;
     
-    def __init__(self, num_osc, type_conn = conn_type.ALL_TO_ALL):
+    def __init__(self, num_osc, type_conn = conn_type.ALL_TO_ALL, conn_represent = conn_represent.MATRIX):
         self._num_osc = num_osc;
+        self._conn_represent = conn_represent;
+        
         self._create_structure(type_conn);
         
     
     def __create_all_to_all_connections(self):
         "Create connections between all oscillators"
         if (self._conn_represent == conn_represent.MATRIX):
-            for index in range(0, self.num_osc, 1):
-                self._osc_conn.append([True] * self.num_osc);
+            for index in range(0, self._num_osc, 1):
+                self._osc_conn.append([True] * self._num_osc);
                 self._osc_conn[index][index] = False;    
         
         elif (self._conn_represent == conn_represent.LIST):
-            for index in range(0, self.num_osc, 1):
-                self._osc_conn.append([neigh for neigh in range(0, self.num_osc, 1) if index != neigh]); 
+            for index in range(0, self._num_osc, 1):
+                self._osc_conn.append([neigh for neigh in range(0, self._num_osc, 1) if index != neigh]); 
           
             
     def __create_grid_four_connections(self):
         "Each oscillator may be connected with four neighbors in line with 'grid' structure: right, upper, left, lower"
-        side_size = self.num_osc ** (0.5);
+        side_size = self._num_osc ** (0.5);
         if (side_size - math.floor(side_size) > 0):
             raise NameError('Invalid number of oscillators in the network');
         
         side_size = int(side_size);
         if (self._conn_represent == conn_represent.MATRIX):
-            self._osc_conn = [[0] * self.num_osc for index in range(0, self.num_osc, 1)];
+            self._osc_conn = [[0] * self._num_osc for index in range(0, self._num_osc, 1)];
         elif (self._conn_represent == conn_represent.LIST):
-            self._osc_conn = [[] for index in range(0, self.num_osc, 1)];
+            self._osc_conn = [[] for index in range(0, self._num_osc, 1)];
         else:
             raise NameError("Unknown type of representation of connections");
         
-        for index in range(0, self.num_osc, 1):
+        for index in range(0, self._num_osc, 1):
             upper_index = index - side_size;
             lower_index = index + side_size;
             left_index = index - 1;
@@ -69,7 +72,7 @@ class network:
                 else:
                     self._osc_conn[index].append(upper_index);
             
-            if (lower_index < self.num_osc):
+            if (lower_index < self._num_osc):
                 if (self._conn_represent == conn_represent.MATRIX):
                     self._osc_conn[index][lower_index] = True;
                 else:
@@ -81,7 +84,7 @@ class network:
                 else:
                     self._osc_conn[index].append(left_index);
             
-            if ( (right_index < self.num_osc) and (math.ceil(right_index / side_size) == node_row_index) ):
+            if ( (right_index < self._num_osc) and (math.ceil(right_index / side_size) == node_row_index) ):
                 if (self._conn_represent == conn_represent.MATRIX):
                     self._osc_conn[index][right_index] = True;
                 else:
@@ -91,32 +94,32 @@ class network:
     def __create_list_bidir_connections(self):
         "Each oscillator may be conneted with two neighbors in line with 'list' structure: right, left"
         if (self._conn_represent == conn_represent.MATRIX):
-            for index in range(0, self.num_osc, 1):
-                self._osc_conn.append([0] * self.num_osc);
+            for index in range(0, self._num_osc, 1):
+                self._osc_conn.append([0] * self._num_osc);
                 self._osc_conn[index][index] = False;
                 if (index > 0):
                     self._osc_conn[index][index - 1] = True;
                     
-                if (index < (self.num_osc - 1)):
+                if (index < (self._num_osc - 1)):
                     self._osc_conn[index][index + 1] = True;   
                     
         elif (self._conn_represent == conn_represent.LIST):
-            for index in range(self.num_osc):
+            for index in range(self._num_osc):
                 self._osc_conn.append([]);
                 if (index > 0):
                     self._osc_conn[index].append(index - 1);
                 
-                if (index < (self.num_osc - 1)):
+                if (index < (self._num_osc - 1)):
                     self._osc_conn[index].append(index + 1);
     
     
     def __create_none_connections(self):
         "Create non-exited connections"
         if (self._conn_represent == conn_represent.MATRIX):
-            for index in range(0, self.num_osc, 1):
-                self._osc_conn.append([False] * self.num_osc);   
+            for index in range(0, self._num_osc, 1):
+                self._osc_conn.append([False] * self._num_osc);   
         elif (self._conn_represent == conn_represent.LIST):
-            self._osc_conn = [[] for index in range(0, self.num_osc, 1)];
+            self._osc_conn = [[] for index in range(0, self._num_osc, 1)];
 
     
     def _create_structure(self, type_conn = conn_type.ALL_TO_ALL):
@@ -152,3 +155,17 @@ class network:
         
         else:
             raise NameError("Unknown type of representation of coupling");
+        
+        
+    def get_neighbors(self, index):
+        "Return list of neighbors of a oscillator with sequence number 'index'"
+        
+        "(in) index    - index of oscillator in the network"
+        
+        "Return list of neighbors"
+        if (self._conn_represent == conn_represent.LIST):
+            return self._osc_conn[index];      # connections are represented by list.
+        elif (self._conn_represent == conn_represent.MATRIX):
+            return [neigh_index for neigh_index in range(self._num_osc) if self._osc_conn[index][neigh_index] == True];
+        else:
+            raise NameError("Unknown type of representation of connections");
