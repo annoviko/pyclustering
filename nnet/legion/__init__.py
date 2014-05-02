@@ -8,7 +8,6 @@ from support import heaviside;
 
 from scipy.integrate import odeint;
 
-
 class legion_parameters:
     eps         = 0.02;
     alpha       = 0.005;
@@ -64,31 +63,46 @@ class legion_network(network):
         self._buffer_coupling_term = [0] * self._num_osc;
         
         # set stimulus
+        self.__create_stimulus(stimulus);
+        
+        # calculate dynamic weights
+        self.__create_dynamic_connections();
+            
+        # generate first noises
+        self._noise = [random.random() * -self._params.ro for i in range(self._num_osc)];
+    
+    def __create_stimulus(self, stimulus):
         if (stimulus is None):
             self._stimulus = [0] * self._num_osc;
         else:
-            if (len(stimulus) != num_osc):
+            if (len(stimulus) != self._num_osc):
                 raise NameError("Number of stimulus should be equal number of oscillators in the network");
             else:
                 self._stimulus = stimulus;
+    
+    def __create_dynamic_connections(self):
+        if (self._stimulus is None):
+            raise NameError("Stimulus should initialed before creation of the dynamic connections in the network");
         
-        # calculate dynamic weights
-        self._dynamic_coupling = [0] * self._num_osc;
+        self._dynamic_coupling = [ [0] * self._num_osc for i in range(self._num_osc)];
+        
         for i in range(self._num_osc):
             neighbors = self.get_neighbors(i);
             
-            if (len(neighbors) > 0):
-                self._dynamic_coupling[i] = (self._params.Wt * self._params.T) / len(neighbors);
-            else:
-                self._dynamic_coupling[i] = 0;
-            
-        # generate first noises
-        self._noise = [random.random() * self._params.ro for i in range(self._num_osc)];
-        
-    def simulate(self, steps, time, solution = solve_type.FAST, collect_dynamic = True):
+            if ( (len(neighbors) > 0) and (self._stimulus[i] > 0) ):
+                number_stimulated_neighbors = 0;
+                for j in neighbors:
+                    if (self._stimulus[j] > 0):
+                        number_stimulated_neighbors += 1;
+                
+                dynamic_weight = self._params.Wt / number_stimulated_neighbors;
+                for j in neighbors:
+                    self._dynamic_coupling[i][j] = dynamic_weight;    
+    
+    def simulate(self, steps, time, solution = solve_type.ODEINT, collect_dynamic = True):
         return self.simulate_static(steps, time, solution, collect_dynamic);
     
-    def simulate_static(self, steps, time, solution = solve_type.FAST, collect_dynamic = False):
+    def simulate_static(self, steps, time, solution = solve_type.ODEINT, collect_dynamic = False):       
         dyn_exc = None;
         dyn_time = None;
         
@@ -123,10 +137,11 @@ class legion_network(network):
         # Update states of oscillators
         for index in range (0, self._num_osc, 1):
             if (solution == solve_type.FAST):
-                [ next_excitatory[index], next_inhibitory[index], next_potential[index] ]  = self.legion_state([self._excitatory[index], self._inhibitory[index], self._potential[index]], 0, index);
-                next_excitatory[index] += self._excitatory[index];
-                next_inhibitory[index] += self._inhibitory[index];
-                next_potential[index] += self._potential[index];
+                assert 0;
+                #[ next_excitatory[index], next_inhibitory[index], next_potential[index] ]  = self.legion_state([self._excitatory[index], self._inhibitory[index], self._potential[index]], 0, index);
+                #next_excitatory[index] += self._excitatory[index];
+                #next_inhibitory[index] += self._inhibitory[index];
+                #next_potential[index] += self._potential[index];
                 
             elif (solution == solve_type.ODEINT):
                 result = odeint(self.legion_state, [self._excitatory[index], self._inhibitory[index], self._potential[index]], numpy.arange(t - step, t, int_step), (index , ));
@@ -137,10 +152,12 @@ class legion_network(network):
         
         # Update state of global inhibitory
         if (solution == solve_type.FAST):
-            z = self._global_inhibitor + self.global_inhibitor_state(self._global_inhibitor, t, None);
+            assert 0;
+            # z = self._global_inhibitor + self.global_inhibitor_state(self._global_inhibitor, t, None);
             
         elif (solution == solve_type.ODEINT):
             result = odeint(self.global_inhibitor_state, self._global_inhibitor, numpy.arange(t - step, t, int_step), (None, ));
+            self._global_inhibitor = result[len(result) - 1][0];
             
         else:
             assert 0;
@@ -182,15 +199,15 @@ class legion_network(network):
 
         coupling = 0
         for index_neighbor in neighbors:
-            coupling += self._dynamic_coupling[index_neighbor] * heaviside(self._excitatory[index_neighbor] - self._params.teta_x);
+            coupling += self._dynamic_coupling[index][index_neighbor] * heaviside(self._excitatory[index_neighbor] - self._params.teta_x);
             
         self._buffer_coupling_term[index] = coupling - self._params.Wz * heaviside(self._global_inhibitor - self._params.teta_xz);
         
         return [dx, dy, dp];
     
 
-from support import draw_dynamics;
-
-net = legion_network(1);
-(t, x) = net.simulate(1000, 500, solve_type.ODEINT, collect_dynamic = True);
-draw_dynamics(t, x, x_title = "Time", y_title = "x(t)");
+# from support import draw_dynamics;
+#  
+# net = legion_network(5, [0.2, 0.2, 0.2, 0.2, 0.2], type_conn = conn_type.LIST_BIDIR);
+# (t, x) = net.simulate(1000, 500, solution = solve_type.ODEINT, collect_dynamic = True);
+# draw_dynamics(t, x, x_title = "Time", y_title = "x(t)");
