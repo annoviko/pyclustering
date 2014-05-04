@@ -147,7 +147,7 @@ def draw_clusters(data, clusters, noise = []):
     plt.show();
     
 
-def draw_dynamics(t, dyn, x_title = None, y_title = None, x_lim = None, y_lim = None):
+def draw_dynamics(t, dyn, x_title = None, y_title = None, x_lim = None, y_lim = None, separate = False):
     "Draw dynamics of neurons in the network"
     if (x_title is None): x_title = "Time";     
     if (y_title is None): y_title = "Dynamic";
@@ -158,8 +158,19 @@ def draw_dynamics(t, dyn, x_title = None, y_title = None, x_lim = None, y_lim = 
     rcParams['font.sans-serif'] = ['Arial'];
     rcParams['font.size'] = 12;
     
-    fig = plt.figure();
-    axes = fig.add_subplot(111);
+    fig = None; 
+    axes = None;
+    number_lines = 0;
+    
+    if (separate is True):
+        if (isinstance(dyn[0], list) is True):
+            number_lines = len(dyn[0]);
+        else:
+            number_lines = 1;
+    else:
+        number_lines = 1;
+        
+    (fig, axes) = plt.subplots(number_lines, 1);
     
     surface_font = FontProperties();
     surface_font.set_name('Arial');
@@ -169,12 +180,18 @@ def draw_dynamics(t, dyn, x_title = None, y_title = None, x_lim = None, y_lim = 
         num_items = len(dyn[0]);
         for index in range(0, num_items, 1):       
             y = [item[index] for item in dyn];
-            axes.plot(t, y, 'b-', linewidth=0.5); 
+            if (number_lines > 1):
+                axes[index].plot(t, y, 'b-', linewidth = 0.5); 
+                
+                axes[index].get_xaxis().set_visible(False);
+                axes[index].get_yaxis().set_visible(False);
+            else:
+                axes.plot(t, y, 'b-', linewidth = 0.5);
     else:
-        axes.plot(t, dyn, 'b-', linewidth=0.5);     
+        axes.plot(t, dyn, 'b-', linewidth = 0.5);     
 
-    plt.ylabel(y_title, fontproperties=surface_font);
-    plt.xlabel(x_title, fontproperties=surface_font);
+    plt.ylabel(y_title, fontproperties = surface_font);
+    plt.xlabel(x_title, fontproperties = surface_font);
     
     if (x_lim is not None): plt.xlim(x_lim[0], x_lim[1]);
     if (y_lim is not None): plt.ylim(y_lim[0], y_lim[1]);

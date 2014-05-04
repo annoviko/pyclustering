@@ -16,7 +16,7 @@ class legion_parameters:
     lamda       = 0.1;
     teta        = 0.9;
     teta_x      = -0.5;
-    teta_p      = 7.0;
+    teta_p      = 2.0;
     teta_xz     = 0.1;
     teta_zx     = 0.1;
     T           = 2.0;
@@ -107,11 +107,13 @@ class legion_network(network):
     def simulate_static(self, steps, time, solution = solve_type.ODEINT, collect_dynamic = False):       
         dyn_exc = None;
         dyn_time = None;
+        dyn_ginh = None;
         
         # Store only excitatory of the oscillator
         if (collect_dynamic == True):
             dyn_exc = [];
             dyn_time = [];
+            dyn_ginh = [];
             
         step = time / steps;
         int_step = step / 10;
@@ -124,11 +126,13 @@ class legion_network(network):
             if (collect_dynamic == True):
                 dyn_exc.append(self._excitatory);
                 dyn_time.append(t);
+                dyn_ginh.append(self._global_inhibitor);
             else:
                 dyn_exc = self._excitatory;
                 dyn_time = t;
+                dyn_ginh = self._global_inhibitor;
         
-        return (dyn_time, dyn_exc); 
+        return (dyn_time, dyn_exc, dyn_ginh); 
     
     
     def _calculate_states(self, solution, t, step, int_step):
@@ -148,6 +152,8 @@ class legion_network(network):
             elif (solution == solve_type.ODEINT):
                 result = odeint(self.legion_state, [self._excitatory[index], self._inhibitory[index], self._potential[index]], numpy.arange(t - step, t, int_step), (index , ));
                 [ next_excitatory[index], next_inhibitory[index], next_potential[index] ] = result[len(result) - 1][0:3];
+                
+                #print("index: ", index, next_excitatory[index], next_inhibitory[index], next_potential[index]);
                 
             else:
                 assert 0;
@@ -188,7 +194,9 @@ class legion_network(network):
         y = inputs[1];
         p = inputs[2];
         
-        dx = 3 * x - x ** 3 + 2 - y + self._stimulus[index] + self._coupling_term[index] + self._noise[index];
+        potential_influence = heaviside(p + math.exp(-self._params.alpha * t) - self._params.teta);
+        
+        dx = 3 * x - x ** 3 + 2 - y + self._stimulus[index] * potential_influence + self._coupling_term[index] + self._noise[index];
         dy = self._params.eps * (self._params.gamma * (1 + math.tanh(x / self._params.betta)) - y);
         
         neighbors = self.get_neighbors(index);
