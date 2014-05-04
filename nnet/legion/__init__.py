@@ -196,6 +196,7 @@ class legion_network(network):
         
         potential_influence = heaviside(p + math.exp(-self._params.alpha * t) - self._params.teta);
         
+        #TODO: Noise should be negative!
         dx = 3 * x - x ** 3 + 2 - y + self._stimulus[index] * potential_influence + self._coupling_term[index] + self._noise[index];
         dy = self._params.eps * (self._params.gamma * (1 + math.tanh(x / self._params.betta)) - y);
         
@@ -214,3 +215,17 @@ class legion_network(network):
         self._buffer_coupling_term[index] = coupling - self._params.Wz * heaviside(self._global_inhibitor - self._params.teta_xz);
         
         return [dx, dy, dp];
+
+def extract_number_oscillations(osc_dyn, index = 0, amplitute_threshold = 1.0):
+    number_oscillations = 0;
+    high_level_trigger = False;
+    
+    for values in osc_dyn:
+        if ( (values[index] > amplitute_threshold) and (high_level_trigger is False) ):
+            number_oscillations += 1;
+            high_level_trigger = True;
+        
+        elif ( (values[index] < amplitute_threshold) and (high_level_trigger is True) ):
+            high_level_trigger = False;
+            
+    return number_oscillations;
