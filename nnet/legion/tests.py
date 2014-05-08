@@ -3,10 +3,8 @@ import unittest;
 from nnet.legion import legion_network, legion_parameters, extract_number_oscillations;
 from nnet import *;
 
-from support import draw_dynamics;
 
-
-class Test(unittest.TestCase):
+class Test(unittest.TestCase):   
     def testUstimulatedOscillatorWithoutLateralPotential(self):
         params = legion_parameters();
         params.teta = 0;    # because no neighbors at all
@@ -38,11 +36,9 @@ class Test(unittest.TestCase):
         net = legion_network(2, [1, 1], type_conn = conn_type.LIST_BIDIR);
         (t, x, z) = net.simulate(1000, 2000);
         
-        draw_dynamics(t, x);
-        draw_dynamics(t, z);
-        
         assert extract_number_oscillations(x, 0) > 1;
         assert extract_number_oscillations(x, 1) > 1;
+
 
     def testUnstimulatedTwoOscillators(self):
         params = legion_parameters();
@@ -53,8 +49,16 @@ class Test(unittest.TestCase):
         
         assert extract_number_oscillations(x, 0) == 1;
         assert extract_number_oscillations(x, 1) == 1;
+        
+        
+    def testMixStimulatedThreeOscillators(self):
+        net = legion_network(3, [1, 0, 1], type_conn = conn_type.LIST_BIDIR);
+        (t, x, z) = net.simulate(1000, 2000);
+        
+        assert extract_number_oscillations(x, 0) > 1;
+        assert extract_number_oscillations(x, 1) == 1;   
+        assert extract_number_oscillations(x, 2) > 1;       
 
 
 if __name__ == "__main__":
-    #import sys;sys.argv = ['', 'Test.testName']
-    unittest.main()
+    unittest.main();

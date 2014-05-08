@@ -14,13 +14,13 @@ def one_oscillator_unstimulated():
     parameters = legion_parameters();
     parameters.teta = 0;    # because no neighbors at all
     
-    template_dynamic_legion(1, 2000, 200, params = parameters);
+    template_dynamic_legion(1, 2000, 500, params = parameters);
 
 def one_oscillator_stimulated():
     parameters = legion_parameters();
     parameters.teta = 0;    # because no neighbors at all
     
-    template_dynamic_legion(1, 2000, 200, stimulus = [1], params = parameters);
+    template_dynamic_legion(1, 2000, 500, stimulus = [1], params = parameters);
     
 def three_oscillator_unstimulated_list():
     parameters = legion_parameters();
@@ -32,32 +32,33 @@ def three_oscillator_stimulated_list():
     template_dynamic_legion(3, 1500, 1500, conn_type = conn_type.LIST_BIDIR, stimulus = [1, 1, 1]);
     
 def three_oscillator_mix_stimulated_list():
-    template_dynamic_legion(3, 1500, 1500, conn_type = conn_type.LIST_BIDIR, stimulus = [1, 0, 1]);
+    parameters = legion_parameters();
+    parameters.Wt = 4.0;
+    template_dynamic_legion(3, 1500, 1500, conn_type = conn_type.LIST_BIDIR, stimulus = [1, 0, 1], params = parameters);
     
 def ten_oscillator_stimulated_list():
     template_dynamic_legion(10, 1000, 750, conn_type = conn_type.LIST_BIDIR, stimulus = [1] * 10);
     
 def ten_oscillator_mix_stimulated_list():
-    template_dynamic_legion(10, 1500, 1500, conn_type = conn_type.LIST_BIDIR, stimulus = [1, 1, 1, 0, 0, 0, 0, 1, 1, 1]);
+    template_dynamic_legion(10, 1500, 1500, conn_type = conn_type.LIST_BIDIR, stimulus = [1, 1, 1, 0, 0, 0, 1, 1, 0, 0]);
     
-def ten_oscillator_three_stimulated_ensembles_list():
+def thirteen_oscillator_three_stimulated_ensembles_list():
+    "Good example of three synchronous ensembels"
     parameters = legion_parameters();
-    parameters.betta = 0.2;
-    parameters.Wz = 2.5;
-    template_dynamic_legion(10, 2000, 2000, conn_type = conn_type.LIST_BIDIR, stimulus = [1, 1, 0, 0, 1, 1, 0, 0, 1, 1], params = parameters);
+    parameters.teta_x = -1.05;
+    parameters.Wt = 4.0;
+    parameters.teta_p = 3.0;
+    parameters.Wz = 3.0;
+    template_dynamic_legion(13, 2000, 1500, conn_type = conn_type.LIST_BIDIR, stimulus = [1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1], params = parameters);
     
 def sixteen_oscillator_two_stimulated_ensembles_grid():
     parameters = legion_parameters();
-    template_dynamic_legion(16, 1500, 1500, conn_type = conn_type.GRID_FOUR, params = parameters, stimulus = [1, 1, 0, 0, 
-                                                                                                              1, 1, 0, 0, 
-                                                                                                              0, 0, 1, 1, 
+    parameters.teta_x = -1.1;
+    template_dynamic_legion(16, 2000, 1500, conn_type = conn_type.GRID_FOUR, params = parameters, stimulus = [1, 1, 1, 0, 
+                                                                                                              1, 1, 1, 0, 
+                                                                                                              0, 0, 0, 1, 
                                                                                                               0, 0, 1, 1]);
 
-def sixteen_oscillator_three_stimulated_ensembles_grid(): 
-    parameters = legion_parameters();
-    parameters.betta = 0.2;
-    parameters.Wz = 8;
-    template_dynamic_legion(16, 3000, 2000, conn_type = conn_type.LIST_BIDIR, stimulus = [1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1 ]);
     
 one_oscillator_unstimulated();
 one_oscillator_stimulated();
@@ -66,6 +67,5 @@ three_oscillator_stimulated_list();
 three_oscillator_mix_stimulated_list();
 ten_oscillator_stimulated_list();
 ten_oscillator_mix_stimulated_list();
-ten_oscillator_three_stimulated_ensembles_list();
+thirteen_oscillator_three_stimulated_ensembles_list();
 sixteen_oscillator_two_stimulated_ensembles_grid();
-sixteen_oscillator_three_stimulated_ensembles_grid();

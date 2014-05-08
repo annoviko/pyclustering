@@ -15,8 +15,8 @@ class legion_parameters:
     betta       = 0.1;
     lamda       = 0.1;
     teta        = 0.9;
-    teta_x      = -0.5;
-    teta_p      = 2.0;
+    teta_x      = -1.5;
+    teta_p      = 1.5;
     teta_xz     = 0.1;
     teta_zx     = 0.1;
     T           = 2.0;
@@ -25,6 +25,7 @@ class legion_parameters:
     Wt          = 8.0;
     fi          = 3.0;
     ro          = 0.02;
+    I           = 0.2;
 
 
 class legion_network(network):
@@ -55,7 +56,7 @@ class legion_network(network):
             self._params = legion_parameters();
             
         # initial states
-        self._excitatory = [0] * self._num_osc;
+        self._excitatory = [ random.random() for i in range(self._num_osc) ];
         self._inhibitory = [0] * self._num_osc;
         self._potential = [0] * self._num_osc;
         
@@ -69,7 +70,7 @@ class legion_network(network):
         self.__create_dynamic_connections();
             
         # generate first noises
-        self._noise = [random.random() * -self._params.ro for i in range(self._num_osc)];
+        self._noise = [random.random() * self._params.ro for i in range(self._num_osc)];
     
     def __create_stimulus(self, stimulus):
         if (stimulus is None):
@@ -78,7 +79,11 @@ class legion_network(network):
             if (len(stimulus) != self._num_osc):
                 raise NameError("Number of stimulus should be equal number of oscillators in the network");
             else:
-                self._stimulus = stimulus;
+                self._stimulus = [];
+                 
+                for val in stimulus:
+                    if (val > 0): self._stimulus.append(self._params.I);
+                    else: self._stimulus.append(0);
     
     def __create_dynamic_connections(self):
         if (self._stimulus is None):
@@ -171,9 +176,11 @@ class legion_network(network):
             assert 0;
         
         self._noise = [random.random() * self._params.ro for i in range(self._num_osc)];
-        self._coupling_term = [val for val in self._buffer_coupling_term];
-        self._inhibitory = next_inhibitory;
-        self._potential = next_potential;
+        self._coupling_term = self._buffer_coupling_term[:]; # [val for val in self._buffer_coupling_term];
+        self._inhibitory = next_inhibitory[:]; # [val for val in next_inhibitory];
+        self._potential = next_potential[:]; # [val for val in next_potential];
+        
+        #print(self._potential);
         
         return next_excitatory;
     
@@ -196,8 +203,7 @@ class legion_network(network):
         
         potential_influence = heaviside(p + math.exp(-self._params.alpha * t) - self._params.teta);
         
-        #TODO: Noise should be negative!
-        dx = 3 * x - x ** 3 + 2 - y + self._stimulus[index] * potential_influence + self._coupling_term[index] + self._noise[index];
+        dx = 3 * x - x ** 3 + 2 - y + self._stimulus[index] * potential_influence + self._coupling_term[index] - self._noise[index];
         dy = self._params.eps * (self._params.gamma * (1 + math.tanh(x / self._params.betta)) - y);
         
         neighbors = self.get_neighbors(index);
