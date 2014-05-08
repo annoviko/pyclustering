@@ -15,7 +15,7 @@ from hierarchical import hierarchical;
 from nnet import *;
 
 
-class sync_network(network):    
+class sync_network(network, network_interface):    
     # Protected members:
     _name = 'Phase Sync Network'
     _phases = None;                    # Current phases of oscillators.

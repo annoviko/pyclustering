@@ -1,5 +1,7 @@
 import math;
 
+from abc import ABCMeta, abstractmethod;
+
 class initial_type:
     RANDOM_GAUSSIAN = 0;
     EQUIPARTITION = 1;
@@ -20,6 +22,24 @@ class conn_represent:
     LIST = 0;
     MATRIX = 1;    
 
+
+class network_interface(metaclass = ABCMeta):
+    @abstractmethod
+    def simulate(self):
+        pass;
+    
+    @abstractmethod
+    def simulate_static(self):
+        pass;
+    
+    @abstractmethod
+    def simulate_dynamic(self):
+        pass;
+    
+    @abstractmethod
+    def allocate_sync_ensembles(self):
+        pass;
+    
 
 class network:
     _num_osc = 0;

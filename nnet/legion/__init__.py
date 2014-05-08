@@ -139,7 +139,6 @@ class legion_network(network):
         
         return (dyn_time, dyn_exc, dyn_ginh); 
     
-    
     def _calculate_states(self, solution, t, step, int_step):
         next_excitatory = [0] * self._num_osc;
         next_inhibitory = [0] * self._num_osc;
