@@ -29,10 +29,6 @@ class sync_network(network, network_interface):
         return self._name;
     
     @property
-    def num_osc(self):
-        return self._num_osc;
-    
-    @property
     def phases(self):
         return self._phases;
     

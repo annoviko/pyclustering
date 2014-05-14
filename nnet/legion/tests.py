@@ -60,5 +60,27 @@ class Test(unittest.TestCase):
         assert extract_number_oscillations(x, 2) > 1;       
 
 
+
+    def templateOscillationsWithStructures(self, type_conn):
+        net = legion_network(4, [1, 1, 1, 1], type_conn = conn_type.LIST_BIDIR);
+        (t, x, z) = net.simulate(500, 1000);
+        
+        for i in range(net.num_osc):
+            assert extract_number_oscillations(x, i) > 1;
+
+
+    def testStimulatedOscillatorListStructure(self):
+        self.templateOscillationsWithStructures(conn_type.LIST_BIDIR);
+
+    def testStimulatedOscillatorGridFourStructure(self):
+        self.templateOscillationsWithStructures(conn_type.GRID_FOUR);
+        
+    def testStimulatedOscillatorGridEightStructure(self):
+        self.templateOscillationsWithStructures(conn_type.GRID_EIGHT);
+
+    def testStimulatedOscillatorAllToAllStructure(self):
+        self.templateOscillationsWithStructures(conn_type.ALL_TO_ALL);
+
+
 if __name__ == "__main__":
     unittest.main();

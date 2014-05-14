@@ -25,19 +25,19 @@ class conn_represent:
 
 class network_interface(metaclass = ABCMeta):
     @abstractmethod
-    def simulate(self):
+    def simulate(self, steps, time, solution, collect_dynamic):
         pass;
     
     @abstractmethod
-    def simulate_static(self):
+    def simulate_static(self, steps, time, solution, collect_dynamic):
         pass;
     
     @abstractmethod
-    def simulate_dynamic(self):
+    def simulate_dynamic(self, order, solution, collect_dynamic, step, int_step, threshold_changes):
         pass;
     
     @abstractmethod
-    def allocate_sync_ensembles(self):
+    def allocate_sync_ensembles(self, tolerance):
         pass;
     
 
@@ -45,6 +45,12 @@ class network:
     _num_osc = 0;
     _osc_conn = None;
     _conn_represent = None;
+    
+    
+    @property
+    def num_osc(self):
+        return self._num_osc;
+    
     
     def __init__(self, num_osc, type_conn = conn_type.ALL_TO_ALL, conn_represent = conn_represent.MATRIX):
         self._num_osc = num_osc;
