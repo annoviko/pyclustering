@@ -162,29 +162,53 @@ def draw_dynamics(t, dyn, x_title = None, y_title = None, x_lim = None, y_lim = 
     axes = None;
     number_lines = 0;
     
-    if (separate is True):
+    if (isinstance(separate, bool) is True):
         if (isinstance(dyn[0], list) is True):
             number_lines = len(dyn[0]);
         else:
             number_lines = 1;
+            
+    elif (isinstance(separate, list) is True):
+        number_lines = len(separate);
+        
     else:
         number_lines = 1;
         
     (fig, axes) = plt.subplots(number_lines, 1);
     
+    if (number_lines > 1):
+        for index_stage in range(number_lines):
+            axes[index_stage].get_xaxis().set_visible(False);
+            axes[index_stage].get_yaxis().set_visible(False);
+    
     surface_font = FontProperties();
     surface_font.set_name('Arial');
     surface_font.set_size('12');
     
+    # Check if we have more than one dynamic
     if (isinstance(dyn[0], list) is True):
         num_items = len(dyn[0]);
         for index in range(0, num_items, 1):       
             y = [item[index] for item in dyn];
-            if (number_lines > 1):
-                axes[index].plot(t, y, 'b-', linewidth = 0.5); 
+            
+            if (number_lines > 1): 
+                index_stage = -1;
                 
-                axes[index].get_xaxis().set_visible(False);
-                axes[index].get_yaxis().set_visible(False);
+                # Find required axes for the y
+                if (isinstance(separate, bool) is True):
+                    index_stage = index;
+                    
+                elif (isinstance(separate, list) is True):
+                    for index_group in range(0, len(separate), 1):
+                        if (index in separate[index_group]): 
+                            index_stage = index_group;
+                            break;
+                
+                if (index_stage == -1):
+                    raise NameError('Index ' + str(index) + ' is not specified in the separation list.');
+                              
+                axes[index_stage].plot(t, y, 'b-', linewidth = 0.5); 
+                
             else:
                 axes.plot(t, y, 'b-', linewidth = 0.5);
     else:
