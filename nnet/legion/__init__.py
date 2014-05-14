@@ -120,7 +120,7 @@ class legion_network(network, network_interface):
     
     
     def simulate(self, steps, time, solution = solve_type.ODEINT, collect_dynamic = True):
-        "Performs static simulation of oscillatory network"
+        "Performs static simulation of LEGION oscillatory network"
         
         "(in) steps            - number steps of simulations during simulation"
         "(in) time             - time of simulation"
@@ -140,7 +140,7 @@ class legion_network(network, network_interface):
     
     
     def simulate_static(self, steps, time, solution = solve_type.ODEINT, collect_dynamic = False):  
-        "Performs static simulation of oscillatory network"
+        "Performs static simulation of LEGION oscillatory network"
         
         "(in) steps            - number steps of simulations during simulation"
         "(in) time             - time of simulation"
@@ -280,6 +280,14 @@ class legion_network(network, network_interface):
     
     
     def allocate_sync_ensembles(self, tolerance = 0.1):
+        "Allocate clusters in line with ensembles of synchronous oscillators where each" 
+        "synchronous ensemble corresponds to only one cluster"
+        
+        "(in) tolerance        - maximum error for allocation of synchronous ensemble oscillators"
+        
+        "Returns list of grours (lists) of indexes of synchronous oscillators"
+        "For example [ [index_osc1, index_osc3], [index_osc2], [index_osc4, index_osc5] ]"
+        
         raise NameError("Allocation of synchronous ensembles is not supported");
 
 

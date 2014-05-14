@@ -1,6 +1,8 @@
 from nnet.hysteresis import hysteresis_network;
+from nnet import *;
 
 from support import draw_dynamics;
+
 
 def template_dynamic(num_osc, own_weight = -3, neigh_weight = -1, initial_states = None, initial_outputs = None, steps = 1000, time = 10):
     network = hysteresis_network(num_osc, own_weight, neigh_weight);

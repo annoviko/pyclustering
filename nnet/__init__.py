@@ -26,18 +26,62 @@ class conn_represent:
 class network_interface(metaclass = ABCMeta):
     @abstractmethod
     def simulate(self, steps, time, solution, collect_dynamic):
+        "Performs static simulation of LEGION oscillatory network"
+        
+        "(in) steps            - number steps of simulations during simulation"
+        "(in) time             - time of simulation"
+        "(in) solution         - type of solution (solving)"
+        "(in) collect_dynamic  - if True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics"
+        
+        "Returns dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,"
+        "otherwise returns only last values (last step of simulation) of dynamic"        
+        
         pass;
+    
     
     @abstractmethod
     def simulate_static(self, steps, time, solution, collect_dynamic):
+        "Performs static simulation of LEGION oscillatory network"
+        
+        "(in) steps            - number steps of simulations during simulation"
+        "(in) time             - time of simulation"
+        "(in) solution         - type of solution (solving)"
+        "(in) collect_dynamic  - if True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics"
+        
+        "Returns dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,"
+        "otherwise returns only last values (last step of simulation) of dynamic"        
+                
         pass;
+    
     
     @abstractmethod
     def simulate_dynamic(self, order, solution, collect_dynamic, step, int_step, threshold_changes):
+        "Performs dynamic simulation of the network until stop condition is not reached. Stop condition is defined by"
+        "input argument 'order'."
+        
+        "(in) order              - order of process synchronization, destributed 0..1"
+        "(in) solution           - type of solution (solving)"
+        "(in) collect_dynamic    - if True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics"
+        "(in) step               - time step of one iteration of simulation"
+        "(in) int_step           - integration step, should be less than step"
+        "(in) threshold_changes  - additional stop condition that helps prevent infinite simulation, defines limit of changes of oscillators between current and previous steps"
+        
+        "Returns dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,"
+        "otherwise returns only last values (last step of simulation) of dynamic"
+                
         pass;
+    
     
     @abstractmethod
     def allocate_sync_ensembles(self, tolerance):
+        "Allocate clusters in line with ensembles of synchronous oscillators where each" 
+        "synchronous ensemble corresponds to only one cluster"
+        
+        "(in) tolerance        - maximum error for allocation of synchronous ensemble oscillators"
+        
+        "Returns list of grours (lists) of indexes of synchronous oscillators"
+        "For example [ [index_osc1, index_osc3], [index_osc2], [index_osc4, index_osc5] ]"
+        
         pass;
     
 

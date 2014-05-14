@@ -107,6 +107,12 @@ class sync_network(network, network_interface):
     def allocate_sync_ensembles(self, tolerance = 0.01):
         "Allocate clusters in line with ensembles of synchronous oscillators where each" 
         "synchronous ensemble corresponds to only one cluster"
+        
+        "(in) tolerance        - maximum error for allocation of synchronous ensemble oscillators"
+        
+        "Returns list of grours (lists) of indexes of synchronous oscillators"
+        "For example [ [index_osc1, index_osc3], [index_osc2], [index_osc4, index_osc5] ]"
+        
         clusters = [ [0] ];
         
         for i in range(1, self._num_osc, 1):
@@ -128,12 +134,33 @@ class sync_network(network, network_interface):
     
     
     def simulate(self, steps, time, solution = solve_type.FAST, collect_dynamic = True):
-        "Simulate phase dynamics of network and return simulated dynamic"
+        "Performs static simulation of LEGION oscillatory network"
+        
+        "(in) steps            - number steps of simulations during simulation"
+        "(in) time             - time of simulation"
+        "(in) solution         - type of solution (solving)"
+        "(in) collect_dynamic  - if True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics"
+        
+        "Returns dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,"
+        "otherwise returns only last values (last step of simulation) of dynamic"
+        
         return self.simulate_static(steps, time, solution, collect_dynamic);
 
 
     def simulate_dynamic(self, order = 0.998, solution = solve_type.FAST, collect_dynamic = False, step = 0.1, int_step = 0.01, threshold_changes = 0.000001):
-        "Simulate network until level synchronization level (order) is not reached"
+        "Performs dynamic simulation of the network until stop condition is not reached. Stop condition is defined by"
+        "input argument 'order'."
+        
+        "(in) order              - order of process synchronization, destributed 0..1"
+        "(in) solution           - type of solution (solving)"
+        "(in) collect_dynamic    - if True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics"
+        "(in) step               - time step of one iteration of simulation"
+        "(in) int_step           - integration step, should be less than step"
+        "(in) threshold_changes  - additional stop condition that helps prevent infinite simulation, defines limit of changes of oscillators between current and previous steps"
+        
+        "Returns dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,"
+        "otherwise returns only last values (last step of simulation) of dynamic"
+        
         # For statistics and integration
         time_counter = 0;
         
@@ -176,7 +203,16 @@ class sync_network(network, network_interface):
 
 
     def simulate_static(self, steps, time, solution = solve_type.FAST, collect_dynamic = False):
-        "Simulate network during specified time and return dynamic of the network if it's required"
+        "Performs static simulation of LEGION oscillatory network"
+        
+        "(in) steps            - number steps of simulations during simulation"
+        "(in) time             - time of simulation"
+        "(in) solution         - type of solution (solving)"
+        "(in) collect_dynamic  - if True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics"
+        
+        "Returns dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,"
+        "otherwise returns only last values (last step of simulation) of dynamic"  
+        
         dyn_phase = None;
         dyn_time = None;
         
