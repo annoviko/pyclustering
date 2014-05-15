@@ -19,13 +19,13 @@ class legion_parameters:
     teta_p      = 1.5;
     teta_xz     = 0.1;
     teta_zx     = 0.1;
-    T           = 2.0;
+    T           = 2.0;          # value of permanent connections
     mu          = 0.01;
-    Wz          = 1.5;
+    Wz          = 1.5;          # value of global inhibitory connections
     Wt          = 8.0;
     fi          = 3.0;
-    ro          = 0.02;
-    I           = 0.2;
+    ro          = 0.02;         # multiplier of oscillator noise
+    I           = 0.2;          # value of stimulus
 
 
 class legion_network(network, network_interface):
@@ -84,6 +84,10 @@ class legion_network(network, network_interface):
     
     
     def __create_stimulus(self, stimulus):
+        "Create stimulus for oscillators in line with stimulus map and parameters"
+        
+        "(in) stimulus        - stimulus for oscillators that is represented by list, number of stimulus should be equal number of oscillators"
+        
         if (stimulus is None):
             self._stimulus = [0] * self._num_osc;
         else:
@@ -98,6 +102,7 @@ class legion_network(network, network_interface):
     
     
     def __create_dynamic_connections(self):
+        "Create dynamic connection in line with input stimulus"
         if (self._stimulus is None):
             raise NameError("Stimulus should initialed before creation of the dynamic connections in the network");
         
@@ -289,18 +294,3 @@ class legion_network(network, network_interface):
         "For example [ [index_osc1, index_osc3], [index_osc2], [index_osc4, index_osc5] ]"
         
         raise NameError("Allocation of synchronous ensembles is not supported");
-
-
-def extract_number_oscillations(osc_dyn, index = 0, amplitute_threshold = 1.0):
-    number_oscillations = 0;
-    high_level_trigger = False;
-    
-    for values in osc_dyn:
-        if ( (values[index] > amplitute_threshold) and (high_level_trigger is False) ):
-            number_oscillations += 1;
-            high_level_trigger = True;
-        
-        elif ( (values[index] < amplitute_threshold) and (high_level_trigger is True) ):
-            high_level_trigger = False;
-            
-    return number_oscillations;

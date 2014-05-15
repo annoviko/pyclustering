@@ -1,7 +1,9 @@
 import unittest;
 
-from nnet.legion import legion_network, legion_parameters, extract_number_oscillations;
+from nnet.legion import legion_network, legion_parameters;
 from nnet import *;
+
+from support import extract_number_oscillations;
 
 
 class Test(unittest.TestCase):   

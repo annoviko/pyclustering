@@ -7,6 +7,7 @@ from gcolor.sync        import tests as gcolor_sync_unit_tests;
 from hierarchical       import tests as hierarchical_unit_tests;
 from hsyncnet           import tests as hsyncnet_unit_tests;
 from kmeans             import tests as kmeans_unit_tests;
+from nnet.hysteresis    import tests as nnet_hysteresis_unit_tests;
 from nnet.legion        import tests as nnet_legion_unit_tests;
 from nnet.som           import tests as nnet_som_unit_tests;
 from nnet.sync          import tests as nnet_sync_unit_tests;
@@ -25,6 +26,7 @@ if __name__ == "__main__":
     suite.addTests(unittest.TestLoader().loadTestsFromModule(gcolor_sync_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(hierarchical_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(hsyncnet_unit_tests));
+    suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_hysteresis_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_legion_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_som_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_sync_unit_tests));

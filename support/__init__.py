@@ -85,6 +85,21 @@ def timedcall(fn, *args):
     return t1 - t0, result;
 
 
+def extract_number_oscillations(osc_dyn, index = 0, amplitute_threshold = 1.0):
+    number_oscillations = 0;
+    high_level_trigger = False;
+    
+    for values in osc_dyn:
+        if ( (values[index] > amplitute_threshold) and (high_level_trigger is False) ):
+            number_oscillations += 1;
+            high_level_trigger = True;
+        
+        elif ( (values[index] < amplitute_threshold) and (high_level_trigger is True) ):
+            high_level_trigger = False;
+            
+    return number_oscillations;
+
+
 def draw_clusters(data, clusters, noise = []):   
     # Get dimension
     dimension = 0;
