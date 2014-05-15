@@ -2,7 +2,9 @@ from nnet.hysteresis import hysteresis_network;
 
 class hysteresisgcolor(hysteresis_network):
     def __init__(self, graph_matrix, alpha, eps):
-        self._num_osc = len(graph_matrix);
+        number_oscillators = len(graph_matrix);
+        
+        super().__init__(number_oscillators);
         
         self._states = [0] * self._num_osc;
         for i in range(0, self._num_osc):
