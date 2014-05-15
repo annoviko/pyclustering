@@ -9,14 +9,12 @@ from nnet import *;
 import matplotlib.pyplot as plt;
 
 
-class hysteresis_network(network_interface):
+class hysteresis_network(network, network_interface):
     _name = "Hysteresis Neural Network"
-    _num_osc = 0;
     _states = None;
     _outputs_buffer = None;
     _outputs = None;
     _weight = None;
-    #_time_constant = 0;
     
     @property
     def outputs(self):
@@ -36,13 +34,20 @@ class hysteresis_network(network_interface):
         self._states = [val for val in values];
    
     
-    def __init__(self, num_osc, own_weight = -4, neigh_weight = -1, time_constant = 1):
-        self._num_osc = num_osc;
+    def __init__(self, num_osc, own_weight = -4, neigh_weight = -1, type_conn = conn_type.ALL_TO_ALL, conn_represent = conn_represent.MATRIX):
+        "Constructor of hysteresis oscillatory network"
+        
+        "(in) num_osc            - number of oscillators in the network"
+        "(in) own_weight         - weight of connection from oscillator to itself - own weight"
+        "(in) neigh_weight       - weight of connection between oscillators"
+        "(in) type_conn          - type of connection between oscillators in the network"
+        "(in) conn_represent     - internal representation of connection in the network: matrix or list"
+        
+        super().__init__(num_osc, type_conn, conn_represent);
         
         self._states = [0] * self._num_osc;
         self._outputs = [-1] * self._num_osc;
         self._outputs_buffer = [-1] * self._num_osc;
-        self._time_contant = time_constant;
         
         self._weight = list();
         for index in range(0, self._num_osc, 1):
@@ -53,20 +58,20 @@ class hysteresis_network(network_interface):
     def neuron_states(self, inputs, t, argv):
         xi = inputs[0];
         index = argv;
-        impact = 0;
+        
+        # own impact
+        impact = self._weight[index][index] * self._outputs[index];
         
         for i in range(0, self._num_osc, 1):
-            impact += self._weight[index][i] * self._outputs[i];
+            if (self.has_connection(i, index)):
+                impact += self._weight[index][i] * self._outputs[i];
 
         x = -xi + impact;
-        
-        #if (xi > 1): self._outputs[index] = 1; 
-        #if (xi < -1): self._outputs[index] = -1;
                 
         if (xi > 1): self._outputs_buffer[index] = 1; 
         if (xi < -1): self._outputs_buffer[index] = -1;
        
-        return x / self._time_contant;
+        return x;
         
     
     def simulate(self, steps, time, solution = solve_type.ODEINT, collect_dynamic = True):
