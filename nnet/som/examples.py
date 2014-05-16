@@ -7,10 +7,14 @@ from samples.definitions import FCPS_SAMPLES;
 
 from support import read_sample;
 
+import matplotlib.pyplot as plt;
+from matplotlib import cm;
+from pylab import *;
+
 def template_self_organization(file, rows, cols, time, structure, init_type = type_init.uniform_grid):
     sample = read_sample(file);
     network = som(rows, cols, sample, time, structure, init_type);
-    network.train();
+    network.train();        
     network.show_network(False, dataset = False);
 
 def som_sample1():

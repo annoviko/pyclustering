@@ -386,6 +386,22 @@ class som:
         return winner_number;
     
     
+    def get_density_matrix(self):
+        maximum_value = max(self._award);
+        minimum_value = min(self._award);
+        
+        difference = maximum_value - minimum_value;
+        if (difference == 0): difference = 1;
+        
+        density_matrix = [ [0] * self._cols for i in range(self._rows) ];
+        for i in range(self._rows):
+            for j in range(self._cols):
+                neuron_index = i * self._cols + j;
+                density_matrix[i][j] = (self._award[neuron_index] - minimum_value) / difference;
+        
+        return density_matrix;
+        
+    
     def show_award(self):
         awards = list();
         
@@ -444,19 +460,18 @@ class som:
                 
                 if ( (self._conn_type != type_conn.func_neighbor) and (coupling != False) ):
                     for neighbor in self._neighbors[index]:
-                        axes.plot([self._weights[index][0], self._weights[neighbor][0]], [self._weights[index][1], self._weights[neighbor][1]], 'g', linewidth = 0.5);
+                        if (neighbor > index):
+                            axes.plot([self._weights[index][0], self._weights[neighbor][0]], [self._weights[index][1], self._weights[neighbor][1]], 'g', linewidth = 0.5);
             
             elif (dimension == 3):
                 axes.scatter(self._weights[index][0], self._weights[index][1], self._weights[index][2], c = color, marker = 'o');
                 
+                if ( (self._conn_type != type_conn.func_neighbor) and (coupling != False) ):
+                    for neighbor in self._neighbors[index]:
+                        if (neighbor > index):
+                            axes.plot([self._weights[index][0], self._weights[neighbor][0]], [self._weights[index][1], self._weights[neighbor][1]], [self._weights[index][2], self._weights[neighbor][2]], 'g-', linewidth = 0.5);
+                        
+                
 
         plt.grid();
         plt.show();
-        
-        
-# sample = read_sample('../../samples/SampleTwoDiamonds.txt');
-# network = som(5, 5, sample, 100, type_conn.grid_four);
-# network.show_network();
-# 
-# network.train();
-# network.show_network();

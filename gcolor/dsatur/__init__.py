@@ -98,13 +98,4 @@ def get_amount_color(node_indexes, coloring, color_number):
 
 
 def get_neighbors(node_index, data):
-    return [ index for index in range(len(data[node_index])) if data[node_index][index] != 0 ];
-    
-
-# from support import draw_graph, read_graph;
-# 
-# graph = read_graph(GRAPH_SIMPLE_SAMPLES.GRAPH_FULL1);
-# coloring = dsatur(graph.data);
-# draw_graph(graph, coloring);
-# print(graph);
-# print(coloring); 
+    return [ index for index in range(len(data[node_index])) if data[node_index][index] != 0 ]; 

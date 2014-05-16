@@ -175,13 +175,3 @@ class hysteresis_network(network, network_interface):
                 clusters.append([i]);
         
         return clusters;
-    
-    
-# network = net(2, -3, -1);
-# network.states[0] = 1;
-# network.outputs[0] = 1;
-# network.states[1] = 0;
-# network.outputs[1] = 1;
-#
-# (t, x) = network.simulate(1000, 10);
-# draw_dynamics(t, x, x_title = "Time", y_title = "x(t)");
