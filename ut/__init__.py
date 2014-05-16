@@ -3,6 +3,7 @@ import unittest;
 from cure               import tests as cure_unit_tests;
 from dbscan             import tests as dbscan_unit_tests;
 from gcolor.dsatur      import tests as gcolor_dsatur_unit_tests;
+from gcolor.hysteresis  import tests as gcolor_hysteresis_unit_tests;
 from gcolor.sync        import tests as gcolor_sync_unit_tests;
 from hierarchical       import tests as hierarchical_unit_tests;
 from hsyncnet           import tests as hsyncnet_unit_tests;
@@ -23,6 +24,7 @@ if __name__ == "__main__":
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cure_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(dbscan_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(gcolor_dsatur_unit_tests));
+    suite.addTests(unittest.TestLoader().loadTestsFromModule(gcolor_hysteresis_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(gcolor_sync_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(hierarchical_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(hsyncnet_unit_tests));

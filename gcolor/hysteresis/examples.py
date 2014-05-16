@@ -1,4 +1,4 @@
-from gcolor.histeresis import hysteresisgcolor;
+from gcolor.hysteresis import hysteresisgcolor;
 
 from support.graph import read_graph, draw_graph;
 from support import draw_dynamics;
