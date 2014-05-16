@@ -177,7 +177,7 @@ def draw_dynamics(t, dyn, x_title = None, y_title = None, x_lim = None, y_lim = 
     axes = None;
     number_lines = 0;
     
-    if (isinstance(separate, bool) is True):
+    if ( (isinstance(separate, bool) is True) and (separate is True) ):
         if (isinstance(dyn[0], list) is True):
             number_lines = len(dyn[0]);
         else:

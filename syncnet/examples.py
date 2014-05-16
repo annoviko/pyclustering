@@ -50,7 +50,10 @@ def cluster_lsun():
     template_clustering(FCPS_SAMPLES.SAMPLE_LSUN, 0.5, 0.999, show_dyn = True, show_conn = True);
 
 def cluster_hepta():
-    template_clustering(FCPS_SAMPLES.SAMPLE_HEPTA, 1, 0.999, show_dyn = True, show_conn = False);
+    template_clustering(FCPS_SAMPLES.SAMPLE_HEPTA, 1, 0.999, show_dyn = True, show_conn = True);
+    
+def cluster_chainlink():
+    template_clustering(FCPS_SAMPLES.SAMPLE_CHAINLINK, 0.6, 0.999, show_dyn = True, show_conn = True);
 
 def cluster_two_diamonds():
     "Toooo long and wrong"
@@ -95,14 +98,15 @@ cluster_simple5();
 cluster_elongate();
 cluster_lsun();
 cluster_hepta();
+cluster_chainlink();
 cluster_two_diamonds();
 cluster_atom();
 cluster_wing_nut();
-
+ 
 cluster_simple1_conn_weight();
 cluster_simple2_conn_weight();
 cluster_simple3_conn_weight();
 cluster_simple4_conn_weight();
 cluster_simple5_conn_weight();
-
+ 
 experiment_execution_time();
