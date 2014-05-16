@@ -36,6 +36,15 @@ class Test(unittest.TestCase):
         
     def testColoringFivePointedFrameStar(self):
         self.templateTestColoring(GRAPH_SIMPLE_SAMPLES.GRAPH_FIVE_POINTED_FRAME_STAR, 1, 1, 3000, 30);
+        
+    def testColoringOneLine(self):
+        self.templateTestColoring(GRAPH_SIMPLE_SAMPLES.GRAPH_ONE_LINE, 1.2, 1.8, 2000, 20);
+        
+    def testColoringOneCrossroad(self):
+        self.templateTestColoring(GRAPH_SIMPLE_SAMPLES.GRAPH_ONE_CROSSROAD, 1.2, 1.8, 2000, 20);
+    
+    def testColoringTwoCrossroads(self):
+        self.templateTestColoring(GRAPH_SIMPLE_SAMPLES.GRAPH_TWO_CROSSROADS, 1.2, 1.8, 2000, 20);
 
 
 if __name__ == "__main__":
