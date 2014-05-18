@@ -3,7 +3,6 @@ import random as rnd
 import matplotlib.pyplot as plt;
 import math
 
-from samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
 from support import read_sample;
 
 ro = 0.0;
@@ -134,20 +133,21 @@ def clustering(   data_to_clusters
                         else:
                             weights[num_of_samples_with_further_distance,:] = weights_old
                             unless_perm = unless_perm + 1;
-                    else:
-                        f_new = 0;
-                        for u in range(num_clusters):
-                            for j in range(num_samples):
-                                for k in range(dimention):
-                                    f_new = f_new + weights[j,u] * ( data_to_clusters[j,k] - mean_cluster[u,k] )**2
-                        f[ant] = f_new
-                        for jj in range(num_clusters):
-                            for j in range(dimention):
-                                mean_cluster[jj,j] = 0
-                                for k in range(num_samples):
-                                    mean_cluster[jj,j] += weights[k,jj]*data_to_clusters[k,j]
-                                if sum( weights[:,jj] ) > 0:
-                                    mean_cluster[jj,j] /= sum( weights[:,jj] )
+                if( calc_new_mean == 0 ):
+                    f_new = 0;
+                    for u in range(num_clusters):
+                        for j in range(num_samples):
+                            for k in range(dimention):
+                                f_new = f_new + weights[j,u] * ( data_to_clusters[j,k] - mean_cluster[u,k] )**2
+                    f[ant] = f_new
+                    for jj in range(num_clusters):
+                        for j in range(dimention):
+                            mean_cluster[jj,j] = 0
+                            for k in range(num_samples):
+                                mean_cluster[jj,j] += weights[k,jj]*data_to_clusters[k,j]
+                            if sum( weights[:,jj] ) > 0:
+                                mean_cluster[jj,j] /= sum( weights[:,jj] )
+
             weights_ants[:,:,ant] = weights[:,:]
             mean_cluster_ants[:,:,ant] = mean_cluster
 
@@ -156,6 +156,7 @@ def clustering(   data_to_clusters
                     if set_min[i,j] == 1:
                         pheromone[i,j] += coeff_each*(1/f[ant])**alfa
 
+            ''' end for ant in range(count_ants):'''
         for i in range(count_ants):
             if f_min > f[i]:
                 f_min = f[i]
@@ -169,60 +170,6 @@ def clustering(   data_to_clusters
                 if set_min[i,j] == 1:
                     pheromone[i,j] += coeff * 1/f_min
 
-
+        '''for iteration in range(num_iterations):'''
     return pheromone, set_min, f_min, mean_min
-
-s = 100;
-delta = 25;
-
-X = np.zeros( (s,2) )
-for i in range(delta): X[i,0] = rnd.random()+1
-for i in range(delta): X[i,1] = rnd.random()+1
-
-for i in range(delta): X[i+delta,0] = rnd.random()-1
-for i in range(delta): X[i+delta,1] = rnd.random()+1
-
-for i in range(delta): X[i+delta*2,0] = rnd.random()-1
-for i in range(delta): X[i+delta*2,1] = rnd.random()-1
-
-for i in range(delta): X[i+delta*3,0] = rnd.random()+1
-for i in range(delta): X[i+delta*3,1] = rnd.random()-1
-
-sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1);
-
-X = np.zeros( (len(sample),2) )
-for i in range( len(sample) ):
-    for j in range( 2 ):
-        X[i,j] = sample[i][j];
-
-#print( X )
-
-
-#[pheromone, weights, f, mean_min ]= clustering( X, 1, 1, 0.1, len(X), 2, 2 );
-
-#print( weights )
-
-"""
-fig = plt.figure()
-axes = fig.add_subplot(111);
-
-colors = ['b', 'r', 'g', 'y', 'm', 'k', 'c']
-
-for i in range(len(X)):
-    for j in range(len(weights)):
-        if weights[i][j] == 1:
-            idx_color = j
-            break
-    axes.plot(X[i][0], X[i][1], colors[j] + 'o');
-
-#print( mean_min )
-for i in range(len(mean_min)):
-    axes.plot(mean_min[i][0], mean_min[i][1], colors[i] + '*', markersize=24);
-
-plt.grid();
-plt.show();
-
-"""
-
-
 
