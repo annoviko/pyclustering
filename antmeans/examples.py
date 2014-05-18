@@ -7,7 +7,7 @@ import time
 
 from support import read_sample;
 
-import ant_clustering_with_mean as ant_clustering
+import antmean as ant_clustering
 
 
 def draw( X, weights, mean_min ):
