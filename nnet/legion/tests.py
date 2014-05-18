@@ -61,7 +61,16 @@ class Test(unittest.TestCase):
         assert extract_number_oscillations(x, 1) == 1;   
         assert extract_number_oscillations(x, 2) > 1;       
 
+    def testListConnectionRepresentation(self):
+        net = legion_network(3, [1, 0, 1], type_conn = conn_type.LIST_BIDIR, conn_represent=conn_represent.LIST);
+        (t, x, z) = net.simulate(1000, 2000);
 
+        assert extract_number_oscillations(x, 0) > 1;
+        assert extract_number_oscillations(x, 1) == 1;   
+        assert extract_number_oscillations(x, 2) > 1;  
+        
+        
+        
 
     def templateOscillationsWithStructures(self, type_conn):
         net = legion_network(4, [1, 1, 1, 1], type_conn = conn_type.LIST_BIDIR);
@@ -82,6 +91,7 @@ class Test(unittest.TestCase):
 
     def testStimulatedOscillatorAllToAllStructure(self):
         self.templateOscillationsWithStructures(conn_type.ALL_TO_ALL);
+          
 
 
 if __name__ == "__main__":
