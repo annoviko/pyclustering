@@ -8,7 +8,7 @@ def template_clustering(start_centers, path):
     sample = read_sample(path);
     
     (ticks, (clusters, centers)) = timedcall(kmeans, sample, start_centers);
-    print("Execution time: ", ticks);
+    print("Sample: ", path, "\t\tExecution time: ", ticks, "\n");
 
     draw_clusters(sample, clusters, centers, start_centers);
     

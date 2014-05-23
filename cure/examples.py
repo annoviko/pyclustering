@@ -76,6 +76,15 @@ def find_best_atom():
             print("number of represent points: ", represent, ", compression: ", float(compression) / 10);
             template_clustering(2, FCPS_SAMPLES.SAMPLE_ATOM, represent, float(compression) / 10);
 
+def experiment_execution_time():
+    template_clustering(3, FCPS_SAMPLES.SAMPLE_LSUN, draw = False);
+    template_clustering(6, FCPS_SAMPLES.SAMPLE_TARGET, 10, 0.3, draw = False);
+    template_clustering(2, FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, draw = False); 
+    template_clustering(2, FCPS_SAMPLES.SAMPLE_WING_NUT, 1, 1, draw = False);
+    template_clustering(2, FCPS_SAMPLES.SAMPLE_CHAINLINK, draw = False);
+    template_clustering(4, FCPS_SAMPLES.SAMPLE_TETRA, draw = False);
+    template_clustering(7, FCPS_SAMPLES.SAMPLE_HEPTA, draw = False);
+
 # find_best_atom();
 
 
@@ -95,3 +104,6 @@ cluster_tetra();
 cluster_atom();
 cluster_engy_time();
 cluster_golf_ball();
+
+
+# experiment_execution_time();

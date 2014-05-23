@@ -10,7 +10,7 @@ def template_clustering(number_clusters, path):
     sample = read_sample(path);
     
     (ticks, clusters) = timedcall(hierarchical, sample, number_clusters);
-    print("Execution time: ", ticks);
+    print("Sample: ", path, "\t\tExecution time: ", ticks, "\n");
     
     draw_clusters(sample, clusters);
     

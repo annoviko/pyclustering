@@ -76,24 +76,23 @@ def cluster_tetra():
 def experiment_execution_time():
     template_clustering(FCPS_SAMPLES.SAMPLE_LSUN, [9, 9], 10, 0.998, False, False, False, False);
     template_clustering(FCPS_SAMPLES.SAMPLE_TARGET, [9, 9], 20, 0.998, False, False, False, False);
-    template_clustering(FCPS_SAMPLES.SAMPLE_TARGET, [10, 10], 10, 0.998, False, False, False, False);
     template_clustering(FCPS_SAMPLES.SAMPLE_WING_NUT, [10, 10], 5, 0.998, False, False, False, False);
     template_clustering(FCPS_SAMPLES.SAMPLE_CHAINLINK, [10, 10], 15, 0.998, False, False, False, False);
     template_clustering(FCPS_SAMPLES.SAMPLE_TETRA, [7, 7], 5, 0.998, False, False, False, False);
     template_clustering(FCPS_SAMPLES.SAMPLE_HEPTA, [7, 7], 5, 0.998, False, False, False, False);
 
 
-cluster_simple1();
-cluster_simple2();
-cluster_simple3();
-cluster_simple4();
-cluster_simple5();
-cluster_lsun();
-cluster_target();
-cluster_two_diamonds();
-cluster_chainlink();
-cluster_hepta();
-cluster_tetra();
+# cluster_simple1();
+# cluster_simple2();
+# cluster_simple3();
+# cluster_simple4();
+# cluster_simple5();
+# cluster_lsun();
+# cluster_target();
+# cluster_two_diamonds();
+# cluster_chainlink();
+# cluster_hepta();
+# cluster_tetra();
 
 
-# experiment_execution_time();
+experiment_execution_time();
