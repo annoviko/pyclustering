@@ -87,7 +87,6 @@ def experiment_execution_time():
 
 # find_best_atom();
 
-
 cluster_sample1();
 cluster_sample2();
 cluster_sample3();
@@ -105,5 +104,4 @@ cluster_atom();
 cluster_engy_time();
 cluster_golf_ball();
 
-
-# experiment_execution_time();
+experiment_execution_time();
