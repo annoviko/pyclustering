@@ -6,7 +6,7 @@ from support import read_sample;
 from support import draw_clusters;
 
 
-def dbscan(data, eps, min_neighbors, draw = False, return_noise = False):
+def dbscan(data, eps, min_neighbors, return_noise = False):
     "Return allocated clusters and noise that are consisted from input data."
     "This algorithm was invented in 1996."
     "Format object in data: ([index] [coordinates])"
@@ -26,9 +26,6 @@ def dbscan(data, eps, min_neighbors, draw = False, return_noise = False):
             else:
                 noise.append(i);
                 belong[i] = True;
-    
-    if (draw == True):
-        draw_clusters(data, clusters, noise);
     
     if (return_noise == True):
         return (clusters, noise);

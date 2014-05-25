@@ -33,9 +33,10 @@ class type_conn:
     
     
 class type_init:
-    random_centroid = 0;
-    random_surface = 1;
-    uniform_grid = 2;
+    random = 0;
+    random_centroid = 1;
+    random_surface = 2;
+    uniform_grid = 3;
 
 
 class som:
@@ -197,10 +198,13 @@ class som:
             # Random weights at the full surface.
             self._weights = [ [random.uniform(minimum_dimension[i], maximum_dimension[i]) for i in range(dimension)] for j in range(self._size) ];
             
-        else:
+        elif (init_type == type_init.random_centroid):
             # Random weights at the center of input data.
             self._weights = [ [(random.random() + center_dimension[i])  for i in range(dimension)] for j in range(self._size) ];        
-            
+        
+        else:
+            # Random weights of input data.
+            self._weights = [ [random.random()  for i in range(dimension)] for j in range(self._size) ]; 
     
     def _create_connections(self, conn_type):
         "Create connections in line with input rule"
@@ -415,7 +419,7 @@ class som:
         print(awards);
             
     
-    def show_network(self, awards = False, belongs = False, coupling = True, dataset = True):
+    def show_network(self, awards = False, belongs = False, coupling = True, dataset = True, marker_type = '.'):
         "Show neurons in the dimension of data"
         dimension = len(self._weights[0]);
         
@@ -445,7 +449,7 @@ class som:
             if (self._award[index] == 0): color = 'y';
             
             if (dimension == 2):
-                axes.plot(self._weights[index][0], self._weights[index][1], color + 'o');
+                axes.plot(self._weights[index][0], self._weights[index][1], color + marker_type);
                 
                 if (awards == True):
                     location = '{0}'.format(self._award[index]);
@@ -464,7 +468,7 @@ class som:
                             axes.plot([self._weights[index][0], self._weights[neighbor][0]], [self._weights[index][1], self._weights[neighbor][1]], 'g', linewidth = 0.5);
             
             elif (dimension == 3):
-                axes.scatter(self._weights[index][0], self._weights[index][1], self._weights[index][2], c = color, marker = 'o');
+                axes.scatter(self._weights[index][0], self._weights[index][1], self._weights[index][2], c = color, marker = marker_type);
                 
                 if ( (self._conn_type != type_conn.func_neighbor) and (coupling != False) ):
                     for neighbor in self._neighbors[index]:

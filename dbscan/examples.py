@@ -1,15 +1,22 @@
 from dbscan import dbscan;
 from support import read_sample;
 from support import timedcall;
+from support import draw_clusters;
 
 from samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
 
-def template_clustering(radius, neighb, path, draw = True):
+def template_clustering(radius, neighb, path, invisible_axes = True):
     sample = read_sample(path);
     
-    (ticks, clusters) = timedcall(dbscan, sample, radius, neighb, draw);
+    (ticks, result) = timedcall(dbscan, sample, radius, neighb, True);
+    clusters = result[0];
+    noise = result[1];
+    
     print("Sample: ", path, "\t\tExecution time: ", ticks, "\n");
     
+    draw_clusters(sample, clusters, [], 'o', hide_axes = invisible_axes);
+    
+
 
 def cluster_sample1():
     template_clustering(0.5, 3, SIMPLE_SAMPLES.SAMPLE_SIMPLE1);
@@ -96,4 +103,4 @@ cluster_atom();
 cluster_tetra();
 cluster_engy_time();
 
-# experiment_execution_time();
+experiment_execution_time();

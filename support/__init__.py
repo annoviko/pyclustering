@@ -100,7 +100,7 @@ def extract_number_oscillations(osc_dyn, index = 0, amplitute_threshold = 1.0):
     return number_oscillations;
 
 
-def draw_clusters(data, clusters, noise = []):   
+def draw_clusters(data, clusters, noise = [], marker_descr = '.', hide_axes = False):   
     # Get dimension
     dimension = 0;
     if ( (data is not None) and (clusters is not None) ):
@@ -129,34 +129,38 @@ def draw_clusters(data, clusters, noise = []):
     color_index = 0;
     for cluster in clusters:
         color = colors[color_index];
-        marker_point = 'o';
         for item in cluster:
             if (dimension == 2):
                 if (data is None):
-                    axes.plot(item[0], item[1], color + marker_point);
+                    axes.plot(item[0], item[1], color + marker_descr);
                 else:
-                    axes.plot(data[item][0], data[item][1], color + marker_point);
+                    axes.plot(data[item][0], data[item][1], color + marker_descr);
                     
             elif (dimension == 3):
                 if (data is None):
-                    axes.scatter(item[0], item[1], item[2], c = color, marker = marker_point);
+                    axes.scatter(item[0], item[1], item[2], c = color, marker = marker_descr);
                 else:
-                    axes.scatter(data[item][0], data[item][1], data[item][2], c = color, marker = marker_point);
+                    axes.scatter(data[item][0], data[item][1], data[item][2], c = color, marker = marker_descr);
         
         color_index += 1;
     
     for item in noise:
         if (dimension == 2):
             if (data is None):
-                axes.plot(item[0], item[1], 'wo');
+                axes.plot(item[0], item[1], 'w' + marker_descr);
             else:
-                axes.plot(data[item][0], data[item][1], 'wo');
+                axes.plot(data[item][0], data[item][1], 'w' + marker_descr);
                 
         elif (dimension == 3):
             if (data is None):
-                axes.scatter(item[0], item[1], item[2], c = 'w', marker = 'o');
+                axes.scatter(item[0], item[1], item[2], c = 'w', marker = marker_descr);
             else:
-                axes.scatter(data[item][0], data[item][1], data[item][2], c = 'w', marker = 'o');
+                axes.scatter(data[item][0], data[item][1], data[item][2], c = 'w', marker = marker_descr);
+    
+    if (hide_axes is True):
+        axes.xaxis.set_ticklabels([]);
+        axes.yaxis.set_ticklabels([]);
+        axes.zaxis.set_ticklabels([]);
     
     plt.grid();
     plt.show();

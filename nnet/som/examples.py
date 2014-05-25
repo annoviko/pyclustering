@@ -66,14 +66,16 @@ def som_engy_time():
     template_self_organization(FCPS_SAMPLES.SAMPLE_ENGY_TIME, 5, 5, 100, type_conn.grid_four);
     
 def som_target_diffence_intialization():
+    template_self_organization(FCPS_SAMPLES.SAMPLE_TARGET, 9, 9, 150, type_conn.grid_four, type_init.random);
     template_self_organization(FCPS_SAMPLES.SAMPLE_TARGET, 9, 9, 150, type_conn.grid_four, type_init.random_centroid);
     template_self_organization(FCPS_SAMPLES.SAMPLE_TARGET, 9, 9, 150, type_conn.grid_four, type_init.random_surface);
     template_self_organization(FCPS_SAMPLES.SAMPLE_TARGET, 9, 9, 150, type_conn.grid_four, type_init.uniform_grid);
     
 def som_two_diamonds_diffence_intialization():
-    template_self_organization(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, 5, 5, 150, type_conn.grid_four, type_init.random_centroid);
-    template_self_organization(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, 5, 5, 150, type_conn.grid_four, type_init.random_surface);
-    template_self_organization(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, 5, 5, 150, type_conn.grid_four, type_init.uniform_grid);    
+    template_self_organization(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, 9, 9, 150, type_conn.grid_four, type_init.random);
+    template_self_organization(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, 9, 9, 150, type_conn.grid_four, type_init.random_centroid);
+    template_self_organization(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, 9, 9, 150, type_conn.grid_four, type_init.random_surface);
+    template_self_organization(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, 9, 9, 150, type_conn.grid_four, type_init.uniform_grid);    
 
 
 som_sample1();
@@ -93,5 +95,5 @@ som_golf_ball();
 som_hepta();
 som_engy_time();
 
-#som_target_diffence_intialization();
-#som_two_diamonds_diffence_intialization();
+som_target_diffence_intialization();
+som_two_diamonds_diffence_intialization();
