@@ -7,9 +7,15 @@ from support import draw_clusters;
 
 
 def dbscan(data, eps, min_neighbors, return_noise = False):
-    "Return allocated clusters and noise that are consisted from input data."
-    "This algorithm was invented in 1996."
-    "Format object in data: ([index] [coordinates])"
+    "Clustering algorithm DBSCAN returns allocated clusters and noise that are consisted from input data."
+    
+    "(in) data            - input data that is presented as list of points (objects), each point should be represented by list or tuple."
+    "(in) eps             - connectivity radius between points, points may be connected if distance between them less then the radius."
+    "(in) min_neighbors   - minimum number of shared neighbors that is requied for establish links between points."
+    "(in) return_noise    - if True than list of points that have been marked as noise will be returned."
+    
+    "If return_noise is False: Returns list of allocated clusters, each cluster contains indexes of objects in list of data."
+    "If return_noise is True: Returns tuple of list of allicated clusters and list of points that are marked as noise."
     
     noise = list();
     clusters = list();
@@ -34,7 +40,16 @@ def dbscan(data, eps, min_neighbors, return_noise = False):
 
 
 def expand_cluster(data, visited, belong, point, eps, min_neighbors):
-    "Return structure (cluster, noise) or None"
+    "Private function that is used by dbscan. It expands cluster in the input data space."
+    
+    "(in) data          - input data set that is presented by list of points."
+    "(in) visited       - list where points are marked as visited or not, size of the list equals to list of data and index of element the visited list corresponds to index of element from the data."
+    "(in) belong        - list where points are marked as belonging to cluster or noise list."
+    "(in) point         - index of the point from the data."
+    "(in) eps           - connectivity radius between points, points may be connected if distance between them less then the radius."
+    "(in) min_neighbors - if True than list of points that have been marked as noise will be returned."
+    
+    "Return tuple of list of indexes that belong to the same cluster and list of points that are marked as noise: (cluster, noise), or None if nothing has been expanded."
     cluster = None;
     visited[point] = True;
     neighbors = neighbor_indexes(data, point, eps);
@@ -65,5 +80,11 @@ def expand_cluster(data, visited, belong, point, eps, min_neighbors):
             
         
 def neighbor_indexes(data, point, eps):
-    "Return list of indexes of neighbors of specified point"
+    "Return list of indexes of neighbors of specified point for the data"
+    
+    "(in) data        - input data for clustering."
+    "(in) point       - index of point for which potential neighbors should be returned for the data in line with connectivity radius."
+    "(in) eps         - connectivity radius between points, points may be connected if distance between them less then the radius."
+    
+    "Return list of indexes of neighbors in line the connectivity radius."
     return [i for i in range(0, len(data)) if euclidean_distance(data[point], data[i]) <= eps and data[i] != data[point]];
