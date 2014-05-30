@@ -80,7 +80,7 @@ def expand_cluster(data, visited, belong, point, eps, min_neighbors):
             
         
 def neighbor_indexes(data, point, eps):
-    "Return list of indexes of neighbors of specified point for the data"
+    "Private function that is used by dbscan. Return list of indexes of neighbors of specified point for the data."
     
     "(in) data        - input data for clustering."
     "(in) point       - index of point for which potential neighbors should be returned for the data in line with connectivity radius."

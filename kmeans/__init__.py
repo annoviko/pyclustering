@@ -7,6 +7,13 @@ import scipy.spatial;
 from support import euclidean_distance;
 
 def kmeans(data, centers):
+    "Clustering algorithm K-Means returns allocated clusters and noise that are consisted from input data."
+    
+    "(in) data        - input data that is presented as list of points (objects), each point should be represented by list or tuple."
+    "(in) centers     - inital coordinates of centers of clusters that are represented by list: [center1, center2, ...]."
+    
+    "Returns list of allocated clusters, each cluster contains indexes of objects in list of data."
+    
     changes = 1;
     clusters = [];
     
@@ -25,6 +32,14 @@ def kmeans(data, centers):
 
     
 def update_clusters(data, centers):
+    "Private function that is used by kmeans. Calculate Euclidean distance to each point from the each cluster."
+    "Nearest points are captured by according clusters and as a result clusters are updated."
+    
+    "(in) data         - input data that is presented as list of points (objects), each point should be represented by list or tuple."
+    "(in) centers      - coordinates of centers of clusters that are represented by list: [center1, center2, ...]."
+    
+    "Returns updated clusters as list of clusters. Each cluster contains indexes of objects from data."
+    
     clusters = [[] for i in range(len(centers))];
     for index_point in range(len(data)):
         index_optim = -1;
@@ -42,6 +57,13 @@ def update_clusters(data, centers):
         
 
 def update_centers(data, clusters):
+    "Private function that is used by kmeans. Update centers of clusters in line with contained objects."
+    
+    "(in) data         - input data that is presented as list of points (objects), each point should be represented by list or tuple."
+    "(in) clusters     - list of clusters that contain indexes of objects from data."
+    
+    "Returns updated centers as list of centers."
+    
     centers = [[] for i in range(len(clusters))];
     
     for index in range(len(clusters)):
@@ -67,7 +89,7 @@ def vec_dev(a, b):
     return [a[i] / b for i in range(len(a))];
 
 
-def draw_clusters(data, clusters, centers, start_centers = []):   
+def draw_clusters(data, clusters, centers, start_centers = []):
     "Draw clusters"
     colors = ['b', 'r', 'g', 'y', 'm', 'k', 'c'];
     if (len(clusters) > len(colors)):
