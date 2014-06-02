@@ -48,14 +48,14 @@ class legion_network(network, network_interface):
     
     
     def __init__(self, num_osc, stimulus = None, parameters = None, type_conn = conn_type.ALL_TO_ALL, conn_represent = conn_represent.MATRIX):
-        "Constructor of oscillatory network LEGION (local excitatory global inhibitory oscillatory network)"
+        "Constructor of oscillatory network LEGION (local excitatory global inhibitory oscillatory network)."
         
-        "(in) num_osc             - number of oscillators in the network"
+        "(in) num_osc             - number of oscillators in the network."
         "(in) stimulus            - list of stimulus for oscillators, number of stimulus should be equal to number of oscillators,"
-        "                           example of stimulus for 5 oscillators [0, 0, 1, 1, 0], value of stimulus is defined by parameter 'I'"
-        "(in) parameters          - parameters of the network that are defined by structure 'legion_network'"
-        "(in) type_conn           - type of connection between oscillators in the network"
-        "(in) conn_represent      - internal representation of connection in the network: matrix or list"
+        "                           example of stimulus for 5 oscillators [0, 0, 1, 1, 0], value of stimulus is defined by parameter 'I'."
+        "(in) parameters          - parameters of the network that are defined by structure 'legion_network'."
+        "(in) type_conn           - type of connection between oscillators in the network."
+        "(in) conn_represent      - internal representation of connection in the network: matrix or list."
         
         super().__init__(num_osc, type_conn, conn_represent);
         
@@ -84,15 +84,15 @@ class legion_network(network, network_interface):
     
     
     def __create_stimulus(self, stimulus):
-        "Create stimulus for oscillators in line with stimulus map and parameters"
+        "Create stimulus for oscillators in line with stimulus map and parameters."
         
-        "(in) stimulus        - stimulus for oscillators that is represented by list, number of stimulus should be equal number of oscillators"
+        "(in) stimulus        - stimulus for oscillators that is represented by list, number of stimulus should be equal number of oscillators."
         
         if (stimulus is None):
             self._stimulus = [0] * self._num_osc;
         else:
             if (len(stimulus) != self._num_osc):
-                raise NameError("Number of stimulus should be equal number of oscillators in the network");
+                raise NameError("Number of stimulus should be equal number of oscillators in the network.");
             else:
                 self._stimulus = [];
                  
@@ -102,9 +102,10 @@ class legion_network(network, network_interface):
     
     
     def __create_dynamic_connections(self):
-        "Create dynamic connection in line with input stimulus"
+        "Create dynamic connection in line with input stimulus."
+        
         if (self._stimulus is None):
-            raise NameError("Stimulus should initialed before creation of the dynamic connections in the network");
+            raise NameError("Stimulus should initialed before creation of the dynamic connections in the network.");
         
         self._dynamic_coupling = [ [0] * self._num_osc for i in range(self._num_osc)];
         
@@ -125,35 +126,36 @@ class legion_network(network, network_interface):
     
     
     def simulate(self, steps, time, solution = solve_type.ODEINT, collect_dynamic = True):
-        "Performs static simulation of LEGION oscillatory network"
+        "Performs static simulation of LEGION oscillatory network."
         
-        "(in) steps            - number steps of simulations during simulation"
-        "(in) time             - time of simulation"
-        "(in) solution         - type of solution (solving)"
-        "(in) collect_dynamic  - if True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics"
+        "(in) steps            - number steps of simulations during simulation."
+        "(in) time             - time of simulation."
+        "(in) solution         - type of solution (solving)."
+        "(in) collect_dynamic  - if True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics."
         
         "Returns dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,"
-        "otherwise returns only last values (last step of simulation) of dynamic"
+        "otherwise returns only last values (last step of simulation) of dynamic."
         
         return self.simulate_static(steps, time, solution, collect_dynamic);
     
     
     def simulate_dynamic(self, order, solution, collect_dynamic, step, int_step, threshold_changes):
-        "Performs dynamic simulation, when time simulation is not specified, only stop condition"
+        "Performs dynamic simulation, when time simulation is not specified, only stop condition."
+        "The method is not supported."
         
-        raise NameError("Dynamic simulation is not supported due to lack of stop conditions for the model");
+        raise NameError("Dynamic simulation is not supported due to lack of stop conditions for the model.");
     
     
     def simulate_static(self, steps, time, solution = solve_type.ODEINT, collect_dynamic = False):  
-        "Performs static simulation of LEGION oscillatory network"
+        "Performs static simulation of LEGION oscillatory network."
         
-        "(in) steps            - number steps of simulations during simulation"
-        "(in) time             - time of simulation"
-        "(in) solution         - type of solution (solving)"
-        "(in) collect_dynamic  - if True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics"
+        "(in) steps            - number steps of simulations during simulation."
+        "(in) time             - time of simulation."
+        "(in) solution         - type of solution (solving)."
+        "(in) collect_dynamic  - if True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics."
         
         "Returns dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,"
-        "otherwise returns only last values (last step of simulation) of dynamic"        
+        "otherwise returns only last values (last step of simulation) of dynamic."        
         
         dyn_exc = None;
         dyn_time = None;
@@ -186,6 +188,15 @@ class legion_network(network, network_interface):
     
     
     def _calculate_states(self, solution, t, step, int_step):
+        "Caclculates new state of each oscillator in the network. Returns only excitatory state of oscillators."
+        
+        "(in) solution        - type solver of the differential equation."
+        "(in) t               - current time of sumation."
+        "(in) step            - step of solution at the end of which states of oscillators should be calculated."
+        "(in) int_step        - step differentiation that is used for solving differential equation."
+        
+        "Returns new state of excitatory parts of oscillators."
+        
         next_excitatory = [0] * self._num_osc;
         next_inhibitory = [0] * self._num_osc;
         next_potential = [0] * self._num_osc;
@@ -221,23 +232,22 @@ class legion_network(network, network_interface):
             assert 0;
         
         self._noise = [random.random() * self._params.ro for i in range(self._num_osc)];
-        self._coupling_term = self._buffer_coupling_term[:]; # [val for val in self._buffer_coupling_term];
-        self._inhibitory = next_inhibitory[:]; # [val for val in next_inhibitory];
-        self._potential = next_potential[:]; # [val for val in next_potential];
-        
-        #print(self._potential);
+        self._coupling_term = self._buffer_coupling_term[:];
+        self._inhibitory = next_inhibitory[:];
+        self._potential = next_potential[:];
         
         return next_excitatory;
     
     
     def global_inhibitor_state(self, z, t, argv):
-        "Returns new value of global inhibitory"
+        "Returns new value of global inhibitory."
         
-        "(in) z        - current value of inhibitory"
-        "(in) t        - current time of simulation"
-        "(in) argv     - it's not used, can be ignored"
+        "(in) z        - current value of inhibitory."
+        "(in) t        - current time of simulation."
+        "(in) argv     - it's not used, can be ignored."
         
-        "Returns new value if global inhibitory (not assign)"
+        "Returns new value if global inhibitory (not assign)."
+        
         sigma = 0;
         
         for x in self._excitatory:
@@ -249,13 +259,14 @@ class legion_network(network, network_interface):
     
     
     def legion_state(self, inputs, t, argv):
-        "Returns new values of excitatory and inhibitory parts of oscillator and potential of oscillator"
+        "Returns new values of excitatory and inhibitory parts of oscillator and potential of oscillator."
         
-        "(in) inputs        - list of initial values (current) of oscillator [excitatory, inhibitory, potential]"
+        "(in) inputs        - list of initial values (current) of oscillator [excitatory, inhibitory, potential]."
         "(in) t             - current time of simulation"
-        "(in) argv          - extra arguments that are not used for integration - index of oscillator"
+        "(in) argv          - extra arguments that are not used for integration - index of oscillator."
         
-        "Returns new values of excitatoty and inhibitory part of oscillator and new value of potential (not assign)"
+        "Returns new values of excitatoty and inhibitory part of oscillator and new value of potential (not assign)."
+        
         index = argv;
         
         x = inputs[0];  # excitatory
@@ -285,12 +296,12 @@ class legion_network(network, network_interface):
     
     
     def allocate_sync_ensembles(self, tolerance = 0.1):
-        "Allocate clusters in line with ensembles of synchronous oscillators where each" 
-        "synchronous ensemble corresponds to only one cluster"
+        "Allocate clusters in line with ensembles of synchronous oscillators where each." 
+        "synchronous ensemble corresponds to only one cluster."
         
-        "(in) tolerance        - maximum error for allocation of synchronous ensemble oscillators"
+        "(in) tolerance        - maximum error for allocation of synchronous ensemble oscillators."
         
-        "Returns list of grours (lists) of indexes of synchronous oscillators"
-        "For example [ [index_osc1, index_osc3], [index_osc2], [index_osc4, index_osc5] ]"
+        "Returns list of grours (lists) of indexes of synchronous oscillators."
+        "For example [ [index_osc1, index_osc3], [index_osc2], [index_osc4, index_osc5] ]."
         
         raise NameError("Allocation of synchronous ensembles is not supported");
