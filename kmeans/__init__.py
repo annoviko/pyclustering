@@ -4,7 +4,7 @@ from mpl_toolkits.mplot3d import Axes3D;
 
 import scipy.spatial;
 
-from support import euclidean_distance;
+from support import euclidean_distance, list_math_addition, list_math_division_number;
 
 def kmeans(data, centers):
     "Clustering algorithm K-Means returns allocated clusters and noise that are consisted from input data."
@@ -70,27 +70,22 @@ def update_centers(data, clusters):
         point_sum = [0] * len(data[0]);
         
         for index_point in clusters[index]:
-            point_sum = vec_sum(point_sum, data[index_point]);
+            point_sum = list_math_addition(point_sum, data[index_point]);
             
-        centers[index] = vec_dev(point_sum, len(clusters[index]));
+        centers[index] = list_math_division_number(point_sum, len(clusters[index]));
         
     return centers;
+
+
+
+def draw_clusters(data, clusters, centers, start_centers = None):
+    "Public function. Draw clusters and specified intial and final cluster centers."
     
-            
-def vec_diff(a, b):
-    return [a[i] - b[i] for i in range(len(a))];
-
-
-def vec_sum(a, b):
-    return [a[i] + b[i] for i in range(len(a))];
-
-
-def vec_dev(a, b):
-    return [a[i] / b for i in range(len(a))];
-
-
-def draw_clusters(data, clusters, centers, start_centers = []):
-    "Draw clusters"
+    "(in) data              - input data - list of objects (points) where each point is described by list of coordinates."
+    "(in) clusters          - list of clusters where each cluster is described by list of point indexes from input data."
+    "(in) centers           - list of cluster centers where each cluster center is described by list of coordinates."
+    "(in) start_clusters    - list of initial cluster centers. Optional argument and can be omitted."
+    
     colors = ['b', 'r', 'g', 'y', 'm', 'k', 'c'];
     if (len(clusters) > len(colors)):
         raise NameError('Impossible to represent clusters due to number of specified colors.');
@@ -117,11 +112,11 @@ def draw_clusters(data, clusters, centers, start_centers = []):
         
         if (len(data[0]) == 2):
             axes.plot(centers[index_cluster][0], centers[index_cluster][1], c = color, marker = '*', markersize = 15);
-            if (start_centers != []):
+            if (start_centers is not None):
                 axes.plot(start_centers[index_cluster][0], start_centers[index_cluster][1], c = color, marker = '*', markersize = 15, fillstyle = 'none');
         elif (len(data[0]) == 3):
             axes.scatter(centers[index_cluster][0], centers[index_cluster][1], centers[index_cluster][2], c = color, marker = '*', s = 150);
-            if (start_centers != []):
+            if (start_centers is not None):
                 axes.scatter(start_centers[index_cluster][0], start_centers[index_cluster][1], start_centers[index_cluster][2], c = color, marker = '*', s = 150, alpha = 0.1);
         
         color_index += 1;

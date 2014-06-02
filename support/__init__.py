@@ -9,7 +9,12 @@ from mpl_toolkits.mplot3d import Axes3D;
     
 
 def read_sample(filename):
-    "Returns sample for clusterization"
+    "Returns sample for cluster analysis."
+    
+    "(in) filename        - path to file with data for cluster analysis."
+    
+    "Returns list of points where each point represented by list of coordinates."
+    
     file = open(filename, 'r');
 
     sample = [[float(val) for val in line.split()] for line in file];
@@ -21,7 +26,10 @@ def read_sample(filename):
 def read_image(filename):
     "Returns image as N-dimension (depends on the input image) matrix, when one element describes pixel"
     
-    "(in) filename    - path to image"
+    "(in) filename        - path to image"
+    
+    "Return list of pixels where each pixel described by list of RGB-values"
+    
     image_source = Image.open(filename);
     data = [pixel for pixel in image_source.getdata()];
     
@@ -30,6 +38,12 @@ def read_image(filename):
 
 
 def average_neighbor_distance(points, num_neigh):
+    "Returns average distance for establish links between specified number of neighbors."
+    
+    "(in) points        - input data, list of points where each point represented by list."
+    
+    "Returns average distance for establish links between 'num_neigh' in data set 'points'"
+    
     if (num_neigh > len(points) - 1):
         raise NameError('Impossible to calculate average distance to neighbors when number of object is less than number of neighbors.');
     
@@ -164,6 +178,7 @@ def draw_clusters(data, clusters, noise = [], marker_descr = '.', hide_axes = Fa
     
     plt.grid();
     plt.show();
+
     
 
 def draw_dynamics(t, dyn, x_title = None, y_title = None, x_lim = None, y_lim = None, separate = False):
@@ -293,3 +308,69 @@ def draw_image_segments(source, clusters):
         
     plt.show();
     
+    
+def list_math_subtraction(a, b):
+    "Subtraction of two lists. Each element from list 'a' is subtracted by element from list 'b' accordingly."
+    
+    "(in) a    - list of elements that support mathematical subtraction."
+    "(in) b    - list of elements that support mathematical subtraction."
+    
+    "Returns list with results of subtraction of two lists."
+    
+    return [a[i] - b[i] for i in range(len(a))];
+
+
+def list_math_addition(a, b):
+    "Addition of two lists. Each element from list 'a' is added to element from list 'b' accordingly."
+    
+    "(in) a    - list of elements that support mathematic addition."
+    "(in) b    - list of elements that support mathematic addition."
+    
+    "Returns list with results of addtion of two lists."
+    
+    return [a[i] + b[i] for i in range(len(a))];
+
+
+def list_math_division_number(a, b):
+    "Division between list and number. Each element from list 'a' is divided by number 'b'."
+    
+    "(in) a    - list of elements that support mathematic division."
+    "(in) b    - value that supports mathematic division."
+    
+    "Returns list with results of division between list and number."
+    
+    return [a[i] / b for i in range(len(a))];
+
+
+def list_math_division(a, b):
+    "Division of two lists. Each element from list 'a' is divided by element from list 'b' accordingly."
+    
+    "(in) a    - list of elements that support mathematic division."
+    "(in) b    - list of elements that support mathematic division."
+    
+    "Returns list with results of division of two lists."
+    
+    return [a[i] / b[i] for i in range(len(a))];
+
+
+def list_math_multiplication_number(a, b):
+    "Multiplication between list and number. Each element from list 'a' is multiplied by number 'b'."
+    
+    "(in) a    - list of elements that support mathematic division."
+    "(in) b    - number that supports mathematic division."
+    
+    "Returns list with results of division between list and number."
+    
+    return [a[i] * b for i in range(len(a))];
+
+
+def list_math_multiplication(a, b):
+    "Multiplication of two lists. Each element from list 'a' is multiplied by element from list 'b' accordingly."
+    
+    "(in) a    - list of elements that support mathematic multiplication."
+    "(in) b    - number that supports mathematic multiplication."
+    
+    "Returns list with results of multiplication between list and number."
+        
+    return [a[i] * b[i] for i in range(len(a))];
+ 
