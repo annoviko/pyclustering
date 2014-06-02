@@ -1,4 +1,4 @@
-from support import euclidean_distance;
+from support import euclidean_distance_sqrt;
 from support import read_sample;
 from support import draw_clusters;
 
@@ -8,28 +8,21 @@ def hierarchical(data, number_clusters):
     centers = data.copy();
     clusters = [[index] for index in range(0, len(data))];
 
-    time_sum_find_cluster = 0;
-    time_sum_center = 0;
     iterator = 0;
    
     while (len(clusters) > number_clusters):
         indexes = find_nearest_clusters(clusters, centers);
-        #(ticks, indexes) = timedcall(find_nearest_clusters, clusters, centers);
-        #time_sum_find_cluster += ticks;
         
         clusters[indexes[0]] += clusters[indexes[1]];
         centers[indexes[0]] = calculate_center(data, clusters[indexes[0]]);
-        #(ticks, centers[indexes[0]]) = timedcall(calculate_center, data, clusters[indexes[0]]);
-        #time_sum_center += ticks;
         
         clusters.pop(indexes[1]);   # remove merged cluster.
         centers.pop(indexes[1]);    # remove merged center.
         
         iterator += 1;
    
-    #print("Find average time: ", time_sum_find_cluster / iterator, " summary: ", time_sum_find_cluster);
-    #print("Calc average time: ", time_sum_center / iterator, " summary: ", time_sum_center);
     return clusters;
+   
    
 def find_nearest_clusters(clusters, centers):
     min_dist = 0;
@@ -37,7 +30,7 @@ def find_nearest_clusters(clusters, centers):
    
     for index1 in range(0, len(centers)):
         for index2 in range(index1 + 1, len(centers)):
-            distance = euclidean_distance(centers[index1], centers[index2]);
+            distance = euclidean_distance_sqrt(centers[index1], centers[index2]);
             if ( (distance < min_dist) or (indexes == None) ):
                 min_dist = distance;
                 indexes = [index1, index2];
