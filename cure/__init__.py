@@ -8,7 +8,7 @@ from support import euclidean_distance;
 from support import euclidean_distance_sqrt;
 from support import draw_clusters;
 
-class cluster:   
+class cure_cluster:   
     "Representation of CURE cluster."
     
     def __init__(self, point = None):
@@ -105,7 +105,7 @@ def cure(data, number_cluster, number_represent_points = 5, compression = 0.5):
         [relocate_cluster(queue, item) for item in cluster_relocation_requests];
 
     # Change cluster representation
-    clusters = [ cure_cluster.points for cure_cluster in queue ];
+    clusters = [ cure_cluster_unit.points for cure_cluster_unit in queue ];
     return clusters;
 
 
@@ -189,7 +189,7 @@ def merge_clusters(cluster1, cluster2, number_represent_points, compression):
     
     "Returns new merged CURE cluster."
     
-    merged_cluster = cluster();
+    merged_cluster = cure_cluster();
     
     merged_cluster.points = cluster1.points + cluster2.points;
     
@@ -211,7 +211,7 @@ def merge_clusters(cluster1, cluster2, number_represent_points, compression):
                 minimal_distance = euclidean_distance(point, merged_cluster.mean);
                 #minimal_distance = euclidean_distance_sqrt(point, merged_cluster.mean);
             else:
-                minimal_distance = cluster_distance(cluster(point), cluster(temporary[0]));
+                minimal_distance = cluster_distance(cure_cluster(point), cure_cluster(temporary[0]));
                 
             if (minimal_distance >= maximal_distance):
                 maximal_distance = minimal_distance;
@@ -238,7 +238,7 @@ def create_queue(data):
     
     "Returns create queue (list) of sorted clusters by distance between them."
     
-    queue = [cluster(point) for point in data];
+    queue = [cure_cluster(point) for point in data];
     
     # set closest clusters
     for i in range(0, len(queue)):
