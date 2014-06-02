@@ -2,8 +2,6 @@ import matplotlib.pyplot as plt;
 import matplotlib.lines as mlines;
 from mpl_toolkits.mplot3d import Axes3D;
 
-import scipy.spatial;
-
 from support import euclidean_distance, list_math_addition, list_math_division_number;
 
 def kmeans(data, centers):

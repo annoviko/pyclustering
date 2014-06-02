@@ -75,7 +75,7 @@ class Test(unittest.TestCase):
     def templateLengthProcessData(self, path_to_file, radius, min_number_neighbors, max_number_neighbors):
         for number_neighbors in range(min_number_neighbors, max_number_neighbors, 1):
             sample = support.read_sample(path_to_file);
-            (clusters, noise) = dbscan.dbscan(sample, radius, number_neighbors, False, True);
+            (clusters, noise) = dbscan.dbscan(sample, radius, number_neighbors, True);
             
             length = len(noise);
             length += sum([len(cluster) for cluster in clusters]);
@@ -107,7 +107,7 @@ class Test(unittest.TestCase):
     
     def testResultDataClusteringSample1(self):
         sample = support.read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1);
-        (clusters, noise) = dbscan.dbscan(sample, 0.5, 3, False, True);
+        (clusters, noise) = dbscan.dbscan(sample, 0.5, 3, True);
         
         assert noise == [];
         assert sorted(clusters[0]) == [0, 1, 2, 3, 4];
@@ -116,7 +116,7 @@ class Test(unittest.TestCase):
     
     def testResultDataClusteringSample2(self):
         sample = support.read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE2);
-        (clusters, noise) = dbscan.dbscan(sample, 0.7, 3, False, True);
+        (clusters, noise) = dbscan.dbscan(sample, 0.7, 3, True);
         
         assert noise == [];
         assert sorted(clusters[0]) == [i for i in range(0, 10)];
@@ -126,4 +126,4 @@ class Test(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    unittest.main()
+    unittest.main();
