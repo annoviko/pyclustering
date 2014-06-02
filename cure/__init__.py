@@ -2,8 +2,6 @@ import numpy;
 
 from decimal import *;
 
-from scipy.spatial import KDTree;
-
 from support import kdtree;
 from support import read_sample;
 from support import euclidean_distance;
@@ -11,6 +9,8 @@ from support import euclidean_distance_sqrt;
 from support import draw_clusters;
 
 class cluster:   
+    "Representation of CURE cluster."
+    
     def __init__(self, point = None):
         if (point is not None):
             self.points = [ point ];
@@ -29,7 +29,15 @@ class cluster:
         
 
 def cure(data, number_cluster, number_represent_points = 5, compression = 0.5):
-    "CURE algorithm. Return formed clusters from input data set."
+    "Clustering algorithm CURE returns allocated clusters and noise that are consisted from input data."
+    
+    "(in) data                       - input data that is presented as list of points (objects), each point should be represented by list or tuple."
+    "(in) number_cluster             - number of clusters that should be allocated."
+    "(in) number_represent_points    - number of representation points for each cluster."
+    "(in) compression                - coefficient defines level of shrinking of representation points toward the mean of the new created cluster after merging on each step."
+    
+    "Returns list of allocated clusters, each cluster contains indexes of objects in list of data."
+    
     queue = create_queue(data);     # queue
     tree = create_kdtree(queue);    # create k-d tree
     
@@ -95,35 +103,20 @@ def cure(data, number_cluster, number_represent_points = 5, compression = 0.5):
         # New cluster and updated clusters should relocated in queue
         insert_cluster(queue, merged_cluster);
         [relocate_cluster(queue, item) for item in cluster_relocation_requests];
-        
-        # DEBUG stuff
-#         result_cluster_insertion = merged_cluster in queue;
-#         assert result_cluster_insertion is True;
-#         print("New cluster ", merged_cluster, " has been inserted to the queue: ", result_cluster_insertion, "\n\n");
-#         check_links(queue, tree);
 
-    return queue;
+    # Change cluster representation
+    clusters = [ cure_cluster.points for cure_cluster in queue ];
+    return clusters;
 
 
-# DEBUG ONLY
-def check_links(queue, tree):
-    for item in queue:
-        if (item.closest not in queue):
-            print("Assertion:");
-            print("item = ", item);
-            print("item.closest = ", item.closest, " is not in queue");
-        
-        assert item.closest in queue;
-        assert item.closest is not item;
-        
-        for rep in item.rep:
-            node = tree.find_node(rep);
-            assert None != node;
-            assert item is node.payload;
 
 
 def insert_cluster(queue, cluster):
-    "Insert cluster to queue in line with order"
+    "Private function that is used by cure. Insert cluster to list in line with sequence order (distance). Thus list should be always sorted."
+    
+    "(in) queue       - list of CURE clusters."
+    "(in) cluster     - CURE cluster that should be inserted."
+    
     for index in range(len(queue)):
         if (cluster.distance < queue[index].distance):
             queue.insert(index, cluster);
@@ -133,13 +126,24 @@ def insert_cluster(queue, cluster):
 
 
 def relocate_cluster(queue, cluster):
-    "Relocate cluster in queue in line with order"
+    "Private function that is used by cure. Relocate cluster in list in line with distance order. Helps list to be sorted."
+    
+    "(in) queue       - list of CURE clusters."
+    "(in) cluster     - CURE cluster that should be relocated."
+    
     queue.remove(cluster);
     insert_cluster(queue, cluster);
 
 
 def closest_cluster(cluster, distance, tree):
-    "Return closest cluster to the specified cluster in line with distance"
+    "Private function that is used by cure. Returns closest cluster to the specified cluster in line with distance."
+    
+    "(in) cluster     - CURE cluster for which nearest cluster should be found."
+    "(in) distance    - closest distance to the previous cluster."
+    "(in) tree        - k-d tree where representation points of clusters are stored."
+    
+    "Returns tuple (nearest CURE cluster, nearest distance) if nearest cluster has been found, otherwise None is returned."
+    
     nearest_cluster = None;
     nearest_distance = numpy.Inf;
     
@@ -155,17 +159,36 @@ def closest_cluster(cluster, distance, tree):
 
 
 def insert_represented_points(cluster, tree):
+    "Private function that is used by cure. Insert representation points to the k-d tree."
+    
+    "(in) cluster    - CURE cluster whose representation points should be inserted."
+    "(in) tree       - k-d tree where representation points are stored."
+    
     for point in cluster.rep:
         tree.insert(point, cluster);
 
 
 def delete_represented_points(cluster, tree):   
+    "Private function that is used by cure. Remove representation points of clusters from the k-d tree."
+    
+    "(in) cluster    - CURE cluster whose representation points should be removed."
+    "(in) tree       - k-d tree where representation points are stored."
+    
     for point in cluster.rep:
         tree.find_node(point);
         tree.remove(point);
 
 
 def merge_clusters(cluster1, cluster2, number_represent_points, compression):
+    "Private function that is used by cure. Merges two clusters and returns new merged cluster. Representation points and mean points are calculated for the new cluster."
+    
+    "(in) cluster1                   - CURE cluster that should be merged with cluster2."
+    "(in) cluster2                   - CURE cluster that should be merged with cluster1."
+    "(in) number_represent_points    - number of representation points for each cluster."
+    "(in) compression                - coefficient defines level of shrinking of representation points toward the mean of the new created cluster after merging on each step."
+    
+    "Returns new merged CURE cluster."
+    
     merged_cluster = cluster();
     
     merged_cluster.points = cluster1.points + cluster2.points;
@@ -208,7 +231,13 @@ def merge_clusters(cluster1, cluster2, number_represent_points, compression):
 
 
 def create_queue(data):
-    "Create queue (list) of sorted clusters by distance between them, where first cluster has the nearest neighbor"
+    "Private function that is used by cure. Create queue (list) of sorted clusters by distance between them, where first cluster has the nearest neighbor."
+    "At the first iteration each cluster contains only one point."
+    
+    "(in) data        - input data that is presented as list of points (objects), each point should be represented by list or tuple."
+    
+    "Returns create queue (list) of sorted clusters by distance between them."
+    
     queue = [cluster(point) for point in data];
     
     # set closest clusters
@@ -232,7 +261,13 @@ def create_queue(data):
     
 
 def create_kdtree(queue):
-    "Create k-d tree in line with created clusters"
+    "Private function that is used by cure. Create k-d tree in line with created clusters."
+    "At the first iteration contains all points from the input data set."
+    
+    "(in) queue    - list of CURE clusters whose representation points should be used for creation k-d tree."
+    
+    "Return k-d tree of representation points of CURE clusters."
+    
     tree = kdtree.kdtree();
     for current_cluster in queue:
         for representative_point in current_cluster.rep:
@@ -242,7 +277,13 @@ def create_kdtree(queue):
 
 
 def cluster_distance(cluster1, cluster2):
-    "Return minimal distance between clusters. Representative points are used for that"
+    "Private function that is used by several function related to the CURE algorithm. Return minimal distance between clusters. Representative points are used for that."
+    
+    "(in) cluster1        - CURE cluster 1."
+    "(in) cluster2        - CURE cluster 2."
+    
+    "Returns Euclidean distance between two clusters that is defined by minimum distance between representation points of two clusters."
+    
     distance = numpy.Inf;
     for i in range(0, len(cluster1.rep)):
         for k in range(0, len(cluster2.rep)):
@@ -252,12 +293,3 @@ def cluster_distance(cluster1, cluster2):
                 distance = dist;
                 
     return distance;
-
-
-    
-# sample = read_sample('../samples/SampleLsun.txt');
-# cure_clusters = cure(sample, 3);
-#    
-# clusters = [ cure_cluster.points for cure_cluster in cure_clusters ];
-#    
-# draw_clusters(None, clusters);
