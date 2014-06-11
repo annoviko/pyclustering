@@ -16,6 +16,8 @@ from nnet import *;
 
 
 class sync_network(network, network_interface):    
+    "Model of oscillatory network that is based on the Kuramoto model of synchronization."
+    
     # Protected members:
     _name = 'Phase Sync Network'
     _phases = None;                    # Current phases of oscillators.
@@ -26,22 +28,36 @@ class sync_network(network, network_interface):
     # Properties of class that represents oscillatory neural network
     @property
     def name(self):
+        "Returns title of the network."
         return self._name;
     
     @property
     def phases(self):
+        "Returns list of phases of oscillators."
         return self._phases;
     
     @property
     def cluster(self):
+        "Get cluster parameter that defines number of cluster in all-to-all networks."
         return self._cluster;
     
     @cluster.setter
     def cluster(self, value):
+        "Set cluster parameter that defines number of cluster in all-to-all networks."
         self._cluster = value;
 
 
-    def __init__(self, num_osc, weight = 1, frequency = False, type_conn = conn_type.ALL_TO_ALL, conn_represent = conn_represent.MATRIX, initial_phases = initial_type.RANDOM_GAUSSIAN):
+
+    def __init__(self, num_osc, weight = 1, frequency = 0, type_conn = conn_type.ALL_TO_ALL, conn_represent = conn_represent.MATRIX, initial_phases = initial_type.RANDOM_GAUSSIAN):
+        "Constructor of oscillatory network is based on Kuramoto model."
+        
+        "(in) num_osc            - number of oscillators in the network."
+        "(in) weight             - coupling strength of the links between oscillators."
+        "(in) frequency          - multiplier of internal frequency of the oscillators."
+        "(in) type_conn          - type of connection between oscillators in the network (all-to-all, grid, bidirectional list, etc.)."
+        "(in) conn_represent     - internal representation of connection in the network: matrix or list."
+        "(in) initial_phases     - type of initialization of initial phases of oscillators (random, uniformly distributed, etc.)."
+        
         super().__init__(num_osc, type_conn, conn_represent);
         
         self._weight = weight;
@@ -55,14 +71,12 @@ class sync_network(network, network_interface):
             elif (initial_phases == initial_type.EQUIPARTITION):
                 self._phases.append( (2 * pi) / (num_osc - 1) * index);
             
-            if (frequency == True):
-                self._freq.append(random.random());
-            else:
-                self._freq.append(0);        
+            self._freq.append(random.random() * frequency); 
     
     
     def sync_order(self):
-        "Return level of global synchorization"
+        "Returns level of global synchorization in the network."
+        
         exp_amount = 0;
         average_phase = 0;
         
@@ -77,6 +91,8 @@ class sync_network(network, network_interface):
     
     
     def sync_local_order(self):
+        "Returns level of local (partial) synchronization in the network."
+        
         exp_amount = 0;
         num_neigh = 0;
         
@@ -93,8 +109,15 @@ class sync_network(network, network_interface):
     
     
     def phase_kuramoto(self, teta, t, argv):
-        "Return result of phase calculation for oscillator in the network"
-        "Solvers as ODEINT or ODE may pass only one value if their extra argument has length equals to one"
+        "Returns result of phase calculation for specified oscillator in the network."
+        "Solvers as ODEINT or ODE may pass only one value if their extra argument has length equals to one."
+        
+        "(in) teta        - phase of the oscillator that is differentiated."
+        "(in) t           - current time of simulation."
+        "(in) argv        - index of the oscillator in the list."
+        
+        "Returns new phase for specified oscillator (don't assign here)."
+        
         index = argv;
         phase = 0;
         for k in range(0, self.num_osc):
@@ -106,12 +129,12 @@ class sync_network(network, network_interface):
     
     def allocate_sync_ensembles(self, tolerance = 0.01):
         "Allocate clusters in line with ensembles of synchronous oscillators where each" 
-        "synchronous ensemble corresponds to only one cluster"
+        "synchronous ensemble corresponds to only one cluster."
         
-        "(in) tolerance        - maximum error for allocation of synchronous ensemble oscillators"
+        "(in) tolerance        - maximum error for allocation of synchronous ensemble oscillators."
         
-        "Returns list of grours (lists) of indexes of synchronous oscillators"
-        "For example [ [index_osc1, index_osc3], [index_osc2], [index_osc4, index_osc5] ]"
+        "Returns list of grours (lists) of indexes of synchronous oscillators."
+        "For example [ [index_osc1, index_osc3], [index_osc2], [index_osc4, index_osc5] ]."
         
         clusters = [ [0] ];
         
@@ -134,15 +157,15 @@ class sync_network(network, network_interface):
     
     
     def simulate(self, steps, time, solution = solve_type.FAST, collect_dynamic = True):
-        "Performs static simulation of LEGION oscillatory network"
+        "Performs static simulation of LEGION oscillatory network."
         
-        "(in) steps            - number steps of simulations during simulation"
-        "(in) time             - time of simulation"
-        "(in) solution         - type of solution (solving)"
-        "(in) collect_dynamic  - if True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics"
+        "(in) steps            - number steps of simulations during simulation."
+        "(in) time             - time of simulation."
+        "(in) solution         - type of solution (solving)."
+        "(in) collect_dynamic  - if True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics."
         
         "Returns dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,"
-        "otherwise returns only last values (last step of simulation) of dynamic"
+        "otherwise returns only last values (last step of simulation) of dynamic."
         
         return self.simulate_static(steps, time, solution, collect_dynamic);
 
@@ -151,15 +174,15 @@ class sync_network(network, network_interface):
         "Performs dynamic simulation of the network until stop condition is not reached. Stop condition is defined by"
         "input argument 'order'."
         
-        "(in) order              - order of process synchronization, destributed 0..1"
-        "(in) solution           - type of solution (solving)"
-        "(in) collect_dynamic    - if True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics"
-        "(in) step               - time step of one iteration of simulation"
-        "(in) int_step           - integration step, should be less than step"
-        "(in) threshold_changes  - additional stop condition that helps prevent infinite simulation, defines limit of changes of oscillators between current and previous steps"
+        "(in) order              - order of process synchronization, destributed 0..1."
+        "(in) solution           - type of solution (solving)."
+        "(in) collect_dynamic    - if True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics."
+        "(in) step               - time step of one iteration of simulation."
+        "(in) int_step           - integration step, should be less than step."
+        "(in) threshold_changes  - additional stop condition that helps prevent infinite simulation, defines limit of changes of oscillators between current and previous steps."
         
         "Returns dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,"
-        "otherwise returns only last values (last step of simulation) of dynamic"
+        "otherwise returns only last values (last step of simulation) of dynamic."
         
         # For statistics and integration
         time_counter = 0;
@@ -203,15 +226,15 @@ class sync_network(network, network_interface):
 
 
     def simulate_static(self, steps, time, solution = solve_type.FAST, collect_dynamic = False):
-        "Performs static simulation of LEGION oscillatory network"
+        "Performs static simulation of LEGION oscillatory network."
         
-        "(in) steps            - number steps of simulations during simulation"
-        "(in) time             - time of simulation"
-        "(in) solution         - type of solution (solving)"
-        "(in) collect_dynamic  - if True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics"
+        "(in) steps            - number steps of simulations during simulation."
+        "(in) time             - time of simulation."
+        "(in) solution         - type of solution (solving)."
+        "(in) collect_dynamic  - if True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics."
         
         "Returns dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,"
-        "otherwise returns only last values (last step of simulation) of dynamic"  
+        "otherwise returns only last values (last step of simulation) of dynamic."  
         
         dyn_phase = None;
         dyn_time = None;
@@ -242,7 +265,15 @@ class sync_network(network, network_interface):
 
 
     def _calculate_phases(self, solution, t, step, int_step):
-        "Calculate new states of oscillator in the network"
+        "Calculates new phases for oscillators in the network in line with current step."
+        
+        "(in) solution        - type solver of the differential equation."
+        "(in) t               - time of simulation."
+        "(in) step            - step of solution at the end of which states of oscillators should be calculated."
+        "(in) int_step        - step differentiation that is used for solving differential equation."
+        
+        "Returns list of new states (phases) for oscillators."
+        
         next_phases = [0] * self.num_osc;    # new oscillator _phases
         
         for index in range (0, self.num_osc, 1):
@@ -261,7 +292,12 @@ class sync_network(network, network_interface):
         
 
 def phase_normalization(teta):
-    "Normalization of phase of oscillator that should be placed between [0; 2 * pi]"
+    "Normalization of phase of oscillator that should be placed between [0; 2 * pi]."
+    
+    "(in) teta        - phase of oscillator."
+    
+    "Returns normalized phase."
+    
     norm_teta = teta;
     while (norm_teta > (2 * pi)) or (norm_teta < 0):
         if (norm_teta > (2 * pi)):

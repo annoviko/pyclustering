@@ -191,7 +191,7 @@ class legion_network(network, network_interface):
         "Caclculates new state of each oscillator in the network. Returns only excitatory state of oscillators."
         
         "(in) solution        - type solver of the differential equation."
-        "(in) t               - current time of sumation."
+        "(in) t               - current time of simulation."
         "(in) step            - step of solution at the end of which states of oscillators should be calculated."
         "(in) int_step        - step differentiation that is used for solving differential equation."
         

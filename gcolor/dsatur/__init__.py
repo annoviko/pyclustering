@@ -1,9 +1,9 @@
 def dsatur(data):
     "DSATUR algorithm implementation. Performs graph coloring problem."
     
-    "(in) data        - matrix graph representation"
+    "(in) data        - matrix graph representation."
     
-    "Returns vector with assigned colors where each element corresponds to node in the graph"
+    "Returns vector with assigned colors where each element corresponds to node in the graph, for example (1, 2, 2, 1, 3, 4, 1)."
     if (len(data[0]) != len(data)):
         raise NameError('Only matrix graph representation is available.');
     
@@ -82,13 +82,13 @@ def dsatur(data):
 
 
 def get_amount_color(node_indexes, coloring, color_number):
-    "Countes how many nodes has color 'color_number'"
+    "Private function that is used by 'dsatur'. Countes how many nodes has color 'color_number'."
     
-    "(in) node_indexes    - indexes of graph nodes for checking"
-    "(in) coloring        - map where colors are stored"
-    "(in) color_number    - number of color that is searched in nodes"
+    "(in) node_indexes    - indexes of graph nodes for checking."
+    "(in) coloring        - map where colors are stored."
+    "(in) color_number    - number of color that is searched in nodes."
     
-    "Returns number found nodes with the specified color 'color_number'"
+    "Returns number found nodes with the specified color 'color_number'."
     color_counter = 0;  
     for index in node_indexes:
         if (coloring[index] == color_number):
@@ -98,4 +98,10 @@ def get_amount_color(node_indexes, coloring, color_number):
 
 
 def get_neighbors(node_index, data):
+    "Private function that is used by 'dsatur'. Returns indexes of neighbors of the specified node."
+    
+    "(in) node_index    - index of node for which neighbours should be found."
+    "(in) data          - matrix graph representation."
+    
+    "Returns list of neighbors of the specified node."
     return [ index for index in range(len(data[node_index])) if data[node_index][index] != 0 ]; 
