@@ -7,10 +7,10 @@ from syncnet import syncnet;
 from support import average_neighbor_distance, read_sample, draw_clusters;
 
 class syncsom:
-    _som = None;
-    _data = None;       # Pointer to input data
-    _sync = None;
-    _struct = None;
+    _som = None;        # The first (input) later - SOM layer.
+    _data = None;       # Pointer to input data.
+    _sync = None;       # The second (output) layer - Sync layer.
+    _struct = None;     # Structure of connections between oscillators in the second layer - Sync layer.
     
     # For convenience
     _som_osc_table = None;
@@ -24,11 +24,26 @@ class syncsom:
         return self._sync;
     
     def __init__(self, data, rows, cols):
+        "Constructor of the double layer oscillatory network SYNC-SOM."
+        
+        "(in) data    - input data that is presented as list of points (objects), each point should be represented by list or tuple."
+        "(in) rows    - rows of neurons (number of neurons in column) in the input layer (self-organized feature map)."
+        "(in) cols    - columns of neurons (number of neurons in row) in the input later (self-organized feature map)."
+        
         self._data = data;
         self._som = som(rows, cols, data, 100, conn_type = type_conn.grid_four);
         self._som_osc_table = list();        
     
-    def process(self, number_neighbors, collect_dynamic = False, order = 0.999):
+    def process(self, number_neighbours, collect_dynamic = False, order = 0.999):
+        "Performs simulation of the oscillatory network. Returns results of simulation."
+        
+        "(in) number_neighbours   - number of neighbours that should be used for calculation average distance and creation connections between oscillators."
+        "(in) collect_dynamic     - if True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics."
+        "(in) order               - order of process synchronization, destributed 0..1."
+        
+        "Returns dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,"
+        "otherwise returns only last values (last step of simulation) of dynamic."
+        
         # train self-organization map.
         self._som.train();
         
@@ -42,8 +57,8 @@ class syncsom:
         
         # calculate trusted distance between objects.
         radius = 0;
-        if (len(weights) >= number_neighbors):
-            radius = average_neighbor_distance(weights, number_neighbors);
+        if (len(weights) >= number_neighbours):
+            radius = average_neighbor_distance(weights, number_neighbours);
         else:
             radius = 0;
         
@@ -60,6 +75,12 @@ class syncsom:
         return (dyn_time, dyn_phase);   
     
     def get_som_clusters(self, eps = 0.1):
+        "Returns clusters with SOM neurons that encode input features in line with result of synchronization in the second (Sync) layer."
+        
+        "(in) eps    - maximum error for allocation of synchronous ensemble oscillators."
+        
+        "Returns list of clusters that are represented by lists of indexes of neurons that encode input data."
+        
         sync_clusters = self._sync.get_clusters();
         
         # Decode it to indexes of SOM neurons
@@ -76,6 +97,13 @@ class syncsom:
             
     
     def get_clusters(self, eps = 0.1):
+        "Returns clusters in line with ensembles of synchronous oscillators where each synchronous ensemble corresponds to only one cluster."
+        
+        "(in) eps    - maximum error for allocation of synchronous ensemble oscillators."
+        
+        "Returns list of grours (lists) of indexes of synchronous oscillators."
+        "For example [ [index_osc1, index_osc3], [index_osc2], [index_osc4, index_osc5] ]."
+        
         sync_clusters = self._sync.get_clusters(eps);       # NOTE: it isn't indexes of SOM neurons
         
         clusters = list();
@@ -106,9 +134,15 @@ class syncsom:
         
         return clusters;
 
+
     def show_som_layer(self):
+        "Shows visual representation of the first (SOM) layer."
+        
         self._som.show_network();
     
+    
     def show_sync_layer(self):
+        "Shows visual representation of the second (Sync) layer."
+        
         self._sync.show_network();
         
