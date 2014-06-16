@@ -96,6 +96,15 @@ class som:
     
     
     def __init__(self, rows, cols, data, epochs, conn_type = type_conn.grid_eight, init_type = type_init.uniform_grid):
+        "Constructor of self-organized map."
+        
+        "(in) rows        - number of neurons in the column (number of rows)."
+        "(in) cols        - number of neurons in the row (number of columns)."
+        "(in) data        - input data - list of points where each point is represented by list of features, for example coordinates."
+        "(in) epochs      - number of epochs for training."
+        "(in) conn_type   - type of connection between oscillators in the network (grid four, grid eight, honeycomb, function neighbour)."
+        "(in) init_type   - type of initialization of initial neuron weights (random, random in center of the input data, random distributed in data, ditributed in line with uniform grid)."
+        
         self._cols = cols;
         self._rows = rows;        
         self._data = data;
@@ -138,6 +147,10 @@ class som:
         
 
     def _create_initial_weights(self, init_type):
+        "Creates initial weights for neurons in line with the specified initialization."
+        
+        "(in) init_type    - type of initialization of initial neuron weights (random, random in center of the input data, random distributed in data, ditributed in line with uniform grid)."
+        
         dimension = len(self._data[0]);
         
         maximum_dimension = [self._data[0][i] for i in range(dimension)];
@@ -207,7 +220,10 @@ class som:
             self._weights = [ [random.random()  for i in range(dimension)] for j in range(self._size) ]; 
     
     def _create_connections(self, conn_type):
-        "Create connections in line with input rule"
+        "Create connections in line with input rule (grid four, grid eight, honeycomb, function neighbour)."
+        
+        "(in) conn_type    -  type of connection between oscillators in the network."
+        
         self._neighbors = [[] for index in range(self._size)];    
             
         for index in range(0, self._size, 1):
@@ -284,7 +300,12 @@ class som:
     
     
     def _competition(self, x):
-        "Return neuron winner (distance, neuron index)"
+        "Return neuron winner (distance, neuron index)."
+        
+        "(in) x    - input pattern from the input data set, for example it can be coordinates of point."
+        
+        "Returns index of neuron that is winner."
+        
         index = 0;
         minimum = euclidean_distance_sqrt(self._weights[0], x);
         
@@ -298,7 +319,11 @@ class som:
     
     
     def _adaptation(self, index, x):
-        "Change weight of neurons in line with won neuron"
+        "Change weight of neurons in line with won neuron."
+        
+        "(in) index    - index of neuron-winner."
+        "(in) x        - input pattern from the input data set."
+        
         dimension = len(self._weights[0]);
         
         if (self._conn_type == type_conn.func_neighbor):
@@ -327,7 +352,10 @@ class som:
     
                             
     def train(self, autostop = False):
-        "Train SOM"
+        "Trains self-organized feature map (SOM)."
+        
+        "(in) autostop    - automatic termination of learining process when adaptation is not occurred."
+        
         previous_weights = None;
         
         for epoch in range(1, self._epochs + 1):
@@ -366,6 +394,12 @@ class som:
             
     
     def _get_maximal_adaptation(self, previous_weights):
+        "Returns maximum changes of weight in line with comparison between previous weights and current weights."
+        
+        "(in) previous_weights    - weights from the previous step of learning process."
+        
+        "Returns value that represents maximum changes of weight after adaptation process."
+        
         dimension = len(self._data[0]);
         maximal_adaptation = 0.0;
         
@@ -382,6 +416,8 @@ class som:
     
     
     def get_winner_number(self):
+        "Returns number of winner at the last step of learning process."
+        
         winner_number = 0;
         for i in range(self._size):
             if (self._award[i] > 0):
@@ -391,6 +427,8 @@ class som:
     
     
     def get_density_matrix(self):
+        "Returns density matrix in line with last step of learning process."
+        
         maximum_value = max(self._award);
         minimum_value = min(self._award);
         
@@ -407,6 +445,8 @@ class som:
         
     
     def show_award(self):
+        "Prints indexes of won objects by each neuron."
+        
         awards = list();
         
         for index in range(self._size):
@@ -420,7 +460,14 @@ class som:
             
     
     def show_network(self, awards = False, belongs = False, coupling = True, dataset = True, marker_type = '.'):
-        "Show neurons in the dimension of data"
+        "Shows neurons in the dimension of data."
+        
+        "(in) awards        - if True - displays how many objects won each neuron."
+        "(in) belongs       - if True - marks each won object by according index of neuron-winner (only when dataset is displayed too)."
+        "(in) coupling      - if True - displays connections between neurons (except case when function neighbor is used)."
+        "(in) dataset       - if True - displays inputs data set."
+        "(in) marker_type   - defines marker that is used for dispaying neurons in the network."
+        
         dimension = len(self._weights[0]);
         
         fig = plt.figure();
