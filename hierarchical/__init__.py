@@ -5,6 +5,13 @@ from support import draw_clusters;
 from support import timedcall;
  
 def hierarchical(data, number_clusters):
+    "Clustering algorithm hierarchical returns allocated clusters and noise that are consisted from input data."
+    
+    "(in) data               - input data that is presented as list of points (objects), each point should be represented by list or tuple."
+    "(in) number_clusters    - number of cluster that should be allocated."
+    
+    "Returns list of allocated clusters, each cluster contains indexes of objects in list of data."
+    
     centers = data.copy();
     clusters = [[index] for index in range(0, len(data))];
 
@@ -25,6 +32,13 @@ def hierarchical(data, number_clusters):
    
    
 def find_nearest_clusters(clusters, centers):
+    "Private function that is used by 'hierarchical'. Returns indexes of two clusters whose distance is the smallest."
+    
+    "(in) clusters    - list of clusters that are represented by lists."
+    "(in) centers     - list of cluster centers that are represented by list."
+    
+    "Returns list with two indexes of two clusters whose distance is the smallest."
+    
     min_dist = 0;
     indexes = None;
    
@@ -39,6 +53,13 @@ def find_nearest_clusters(clusters, centers):
  
 
 def calculate_center(data, cluster):
+    "Private function that is used by 'hierarchical'. Returns new value of the center of the cluster."
+    
+    "(in) data        - input data that is presented as list of points (objects), each point should be represented by list or tuple."
+    "(in) cluster     - list of indexes (cluster) of objects from the input data."
+    
+    "Returns new value of the center of the specified cluster."
+    
     dimension = len(data[cluster[0]]);
     center = [0] * dimension;
     for index_point in cluster:
