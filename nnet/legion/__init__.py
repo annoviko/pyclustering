@@ -262,7 +262,7 @@ class legion_network(network, network_interface):
         "Returns new values of excitatory and inhibitory parts of oscillator and potential of oscillator."
         
         "(in) inputs        - list of initial values (current) of oscillator [excitatory, inhibitory, potential]."
-        "(in) t             - current time of simulation"
+        "(in) t             - current time of simulation."
         "(in) argv          - extra arguments that are not used for integration - index of oscillator."
         
         "Returns new values of excitatoty and inhibitory part of oscillator and new value of potential (not assign)."

@@ -2,46 +2,46 @@ import numpy;
 
 from scipy.integrate import odeint;
 
-from support import draw_dynamics;
-
 from nnet import *;
-
-import matplotlib.pyplot as plt;
 
 
 class hysteresis_network(network, network_interface):
-    _name = "Hysteresis Neural Network"
-    _states = None;
-    _outputs_buffer = None;
-    _outputs = None;
-    _weight = None;
+    _name = "Hysteresis Neural Network";
+    _states = None;             # list of states of neurons.
+    _outputs_buffer = None;     # list of previous outputs of neurons.
+    _outputs = None;            # list of current outputs of neurons.
+    _weight = None;             # matrix of connection weights between neurons.
     
     @property
     def outputs(self):
+        "Returns current outputs of neurons."
         return self._outputs;
     
     @outputs.setter
     def outputs(self, values):
+        "Set current outputs of neurons."
         self._outputs = [val for val in values];
         self._outputs_buffer = [val for val in values];
     
     @property
     def states(self):
+        "Returns current states of neurons."
         return self._states;
     
     @states.setter
     def states(self, values):
+        "Set current states of neurons."
         self._states = [val for val in values];
    
     
     def __init__(self, num_osc, own_weight = -4, neigh_weight = -1, type_conn = conn_type.ALL_TO_ALL, conn_represent = conn_represent.MATRIX):
-        "Constructor of hysteresis oscillatory network"
+        "Constructor of hysteresis oscillatory network."
         
-        "(in) num_osc            - number of oscillators in the network"
-        "(in) own_weight         - weight of connection from oscillator to itself - own weight"
-        "(in) neigh_weight       - weight of connection between oscillators"
-        "(in) type_conn          - type of connection between oscillators in the network"
-        "(in) conn_represent     - internal representation of connection in the network: matrix or list"
+        "(in) num_osc            - number of oscillators in the network."
+        "(in) own_weight         - weight of connection from oscillator to itself - own weight."
+        "(in) neigh_weight       - weight of connection between oscillators."
+        "(in) type_conn          - type of connection between oscillators in the network."
+        "(in) conn_represent     - internal representation of connection in the network: matrix or list."
         
         super().__init__(num_osc, type_conn, conn_represent);
         
@@ -56,6 +56,14 @@ class hysteresis_network(network, network_interface):
 
     
     def neuron_states(self, inputs, t, argv):
+        "Returns new value of the neuron (oscillator)."
+        
+        "(in) inputs    - list of initial values (current) of the neuron - excitatory."
+        "(in) t         - current time of simulation."
+        "(in) argv      - extra arguments that are not used for integration - index of the neuron."
+        
+        "Returns new value of the neuron."
+        
         xi = inputs[0];
         index = argv;
         
@@ -75,35 +83,36 @@ class hysteresis_network(network, network_interface):
         
     
     def simulate(self, steps, time, solution = solve_type.ODEINT, collect_dynamic = True):
-        "Performs static simulation of LEGION oscillatory network"
+        "Performs static simulation of LEGION oscillatory network."
         
-        "(in) steps            - number steps of simulations during simulation"
-        "(in) time             - time of simulation"
-        "(in) solution         - type of solution (solving)"
-        "(in) collect_dynamic  - if True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics"
+        "(in) steps            - number steps of simulations during simulation."
+        "(in) time             - time of simulation."
+        "(in) solution         - type of solution (solving)."
+        "(in) collect_dynamic  - if True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics."
         
         "Returns dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,"
-        "otherwise returns only last values (last step of simulation) of dynamic"  
+        "otherwise returns only last values (last step of simulation) of dynamic."  
                 
         return self.simulate_static(steps, time, solution, collect_dynamic);
     
     
     def simulate_dynamic(self, order, solution, collect_dynamic, step, int_step, threshold_changes):
-        "Performs dynamic simulation, when time simulation is not specified, only stop condition"
+        "Performs dynamic simulation, when time simulation is not specified, only stop condition."
+        "Not supported because of model specific."
         
         raise NameError("Dynamic simulation is not supported due to lack of stop conditions for the model");
     
     
     def simulate_static(self, steps, time, solution = solve_type.ODEINT, collect_dynamic = False):
-        "Performs static simulation of LEGION oscillatory network"
+        "Performs static simulation of LEGION oscillatory network."
         
-        "(in) steps            - number steps of simulations during simulation"
-        "(in) time             - time of simulation"
-        "(in) solution         - type of solution (solving)"
-        "(in) collect_dynamic  - if True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics"
+        "(in) steps            - number steps of simulations during simulation."
+        "(in) time             - time of simulation."
+        "(in) solution         - type of solution (solving)."
+        "(in) collect_dynamic  - if True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics."
         
         "Returns dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,"
-        "otherwise returns only last values (last step of simulation) of dynamic"  
+        "otherwise returns only last values (last step of simulation) of dynamic."  
         
         dyn_state = None;
         dyn_time = None;
@@ -134,7 +143,14 @@ class hysteresis_network(network, network_interface):
     
         
     def _calculate_states(self, solution, t, step, int_step):
-        "Return new states for neurons"
+        "Calculates new states for neurons using differential calculus. Returns new states for neurons."
+        
+        "(in) solution    - type solver of the differential equation."
+        "(in) t           - current time of simulation."
+        "(in) step        - step of solution at the end of which states of oscillators should be calculated."
+        "(in) int_step    - step differentiation that is used for solving differential equation."
+        
+        "Returns new states for neurons (don't assign)."
         next_states = [0] * self._num_osc;
         
         for index in range (0, self._num_osc, 1):            
@@ -150,12 +166,12 @@ class hysteresis_network(network, network_interface):
     
     def allocate_sync_ensembles(self, tolerance = 0.1):
         "Allocate clusters in line with ensembles of synchronous oscillators where each" 
-        "synchronous ensemble corresponds to only one cluster"
+        "synchronous ensemble corresponds to only one cluster."
         
-        "(in) tolerance        - maximum error for allocation of synchronous ensemble oscillators"
+        "(in) tolerance        - maximum error for allocation of synchronous ensemble oscillators."
         
         "Returns list of grours (lists) of indexes of synchronous oscillators"
-        "For example [ [index_osc1, index_osc3], [index_osc2], [index_osc4, index_osc5] ]"
+        "For example [ [index_osc1, index_osc3], [index_osc2], [index_osc4, index_osc5] ]."
         
         clusters = [ [0] ];
         
