@@ -7,23 +7,23 @@ from support import average_neighbor_distance, read_sample;
 
 class hsyncnet(syncnet):
     def __init__(self, source_data, osc_initial_phases = initial_type.RANDOM_GAUSSIAN):
-        "Costructor of the oscillatory network hSync"
+        "Costructor of the oscillatory network hSync."
         
-        "(in) source_data         - input data set defines structure of the network"
-        "(in) osc_initial_phases  - type of initialization of initial values of phases of oscillators"
+        "(in) source_data         - input data set defines structure of the network."
+        "(in) osc_initial_phases  - type of initialization of initial values of phases of oscillators."
         
         super().__init__(source_data, initial_phases = osc_initial_phases);
     
     
     def process(self, number_clusters, order = 0.998, solution = solve_type.FAST, collect_dynamic = False):
-        "Perform clustering of input data set in line with input parameters"
+        "Performs clustering of input data set in line with input parameters."
         
-        "(in) number_clusters     - number of clusters that should be allocated"
-        "(in) order               - level of local synchronization between oscillator that defines end of process of synchronization, range [0..1]"
+        "(in) number_clusters     - number of clusters that should be allocated."
+        "(in) order               - level of local synchronization between oscillator that defines end of process of synchronization, range [0..1]."
         "(in) solution            - type of solving differential equation: ode45, usual diff, etc."
-        "(in) collect_dynamic     - if True - return whole history of process synchronization otherwise - final state (when process of clustering is over)"
+        "(in) collect_dynamic     - if True - return whole history of process synchronization otherwise - final state (when process of clustering is over)."
         
-        "Returns dynamic of the network as tuple (time, oscillator_phases) that depends on collect_dynamic parameters"
+        "Returns dynamic of the network as tuple (time, oscillator_phases) that depends on collect_dynamic parameters."
         
         number_neighbors = 3;
         current_number_clusters = numpy.Inf;
