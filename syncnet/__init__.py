@@ -4,12 +4,21 @@ from support import draw_clusters;
 from support import read_sample;
 
 class syncnet(sync_network):
-    _osc_loc = None;
+    _osc_loc = None;            # Location (coordinates) of oscillators in the feature space.
     
-    _ena_conn_weight = False;
-    _conn_weight = None;
+    _ena_conn_weight = False;   # Enable mode: when strength of connection depends on distance between two oscillators.
+    _conn_weight = None;        # Stength of connection between oscillators.
     
     def __init__(self, source_data, conn_repr = conn_represent.MATRIX, radius = None, initial_phases = initial_type.RANDOM_GAUSSIAN, enable_conn_weight = False):
+        "Contructor of the oscillatory network SYNC for cluster analysis."
+        
+        "(in) source_data        - input data that is presented as list of points (objects), each point should be represented by list or tuple."
+        "(in) conn_repr          - internal representation of connection in the network: matrix or list."
+        "(in) radius             - connectivity radius between points, points should be connected if distance between them less then the radius."
+        "(in) initial_phases     - type of initialization of initial phases of oscillators (random, uniformly distributed, etc.)."
+        "(in) enable_conn_weight - if True - enable mode when strength between oscillators depends on distance between two oscillators."
+        "If False - all connection between oscillators have the same strength that equals to 1 (True)."
+        
         sample = None;
         if ( isinstance(source_data, str) ):
             file = open(source_data, 'r');
@@ -40,9 +49,10 @@ class syncnet(sync_network):
     
 
     def _create_connections(self, radius):
-        "Create connections between oscillators in line with input radius of connectivity"
+        "Create connections between oscillators in line with input radius of connectivity."
         
-        "(in) radius    - connectivity radius between oscillators"
+        "(in) radius    - connectivity radius between oscillators."
+        
         if (self._ena_conn_weight is True):
             self._conn_weight = [[0] * self._num_osc for index in range(0, self._num_osc, 1)];
         
@@ -86,15 +96,16 @@ class syncnet(sync_network):
 
 
     def process(self, radius = None, order = 0.998, solution = solve_type.FAST, collect_dynamic = False):
-        "Network is trained via achievement sync state between the oscillators using the radius of coupling"
+        "Network is trained via achievement sync state between the oscillators using the radius of coupling."
         
-        "(in) radius            - connectivity radius for simulation, if it is specified then connections will be recreated"
-        "(in) order             - order of synchronization that is used as indication for stopping processing"
-        "(in) solution          - specified type of solving diff. equation"
-        "(in) collect_dynamic   - specified requirement to collect whole dynamic of the network"
+        "(in) radius            - connectivity radius for simulation, if it is specified then connections will be recreated."
+        "(in) order             - order of synchronization that is used as indication for stopping processing."
+        "(in) solution          - specified type of solving diff. equation."
+        "(in) collect_dynamic   - specified requirement to collect whole dynamic of the network."
         
         "Return last values of simulation time and phases of oscillators as a tuple if collect_dynamic is False, and whole dynamic"
         "if collect_dynamic is True. Format of returned value: (simulation_time, oscillator_phases)."
+        
         # Create connections in line with input radius
         if (radius != None):
             self._create_connections(radius);
@@ -103,13 +114,14 @@ class syncnet(sync_network):
     
     
     def phase_kuramoto(self, teta, t, argv):
-        "Overrided method for calculation of oscillator phase"
+        "Overrided method for calculation of oscillator phase."
         
-        "(in) teta     - current value of phase"
-        "(in) t        - time (can be ignored)"
-        "(in) argv     - index of oscillator whose phase represented by argument teta"
+        "(in) teta     - current value of phase."
+        "(in) t        - time (can be ignored)."
+        "(in) argv     - index of oscillator whose phase represented by argument teta."
         
-        "Return new value of phase of oscillator with index 'argv'"
+        "Return new value of phase of oscillator with index 'argv'."
+        
         index = argv;   # index of oscillator
         phase = 0;      # phase of a specified oscillator that will calculated in line with current env. states.
         
@@ -131,14 +143,16 @@ class syncnet(sync_network):
     def get_clusters(self, eps = 0.1):
         "Return list of clusters in line with state of ocillators (phases)."
         
-        "(in) eps     - tolerance level that define maximal difference between phases of oscillators in one cluster"
+        "(in) eps     - tolerance level that define maximal difference between phases of oscillators in one cluster."
         
-        "Return list of clusters, for example [ [cluster1], [cluster2], ... ]"
+        "Return list of clusters, for example [ [cluster1], [cluster2], ... ]."
+        
         return self.allocate_sync_ensembles(eps);
     
     
     def show_network(self):
-        "Show connections in the network. It supports only 2-d and 3-d representation."
+        "Shows connections in the network. It supports only 2-d and 3-d representation."
+        
         dimension = len(self._osc_loc[0]);
         if ( (dimension != 3) and (dimension != 2) ):
             raise NameError('Network that is located in different from 2-d and 3-d dimensions can not be represented');
