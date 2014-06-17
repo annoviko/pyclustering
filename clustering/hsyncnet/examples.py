@@ -3,7 +3,7 @@ from support import read_sample, draw_clusters, draw_dynamics;
 from samples.definitions import SIMPLE_SAMPLES;
 from samples.definitions import FCPS_SAMPLES;
 
-from hsyncnet import hsyncnet;
+from clustering.hsyncnet import hsyncnet;
 
 def template_clustering(file, number_clusters, arg_collect_dynamic = True, show_network_structure = False, arg_order = 0.999, arg_eps = 0.1):
         sample = read_sample(file);

@@ -1,4 +1,5 @@
-from dbscan import dbscan;
+from clustering.dbscan import dbscan;
+
 from support import read_sample;
 from support import timedcall;
 from support import draw_clusters;

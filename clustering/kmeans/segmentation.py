@@ -4,7 +4,7 @@ from support import draw_image_segments, read_image;
 
 from samples.definitions import IMAGE_SIMPLE_SAMPLES;
 
-from kmeans import kmeans;
+from clustering.kmeans import kmeans;
 
 
 def template_segmentation_image(source, start_centers):    

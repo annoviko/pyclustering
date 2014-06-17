@@ -1,6 +1,7 @@
 from samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
 
-from kmeans import kmeans, draw_clusters
+from clustering.kmeans import kmeans, draw_clusters;
+
 from support import read_sample;
 from support import timedcall;
 

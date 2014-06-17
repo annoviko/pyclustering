@@ -2,7 +2,7 @@ import unittest;
 
 from nnet import initial_type, conn_represent;
 
-from syncnet import syncnet;
+from clustering.syncnet import syncnet;
 
 from support import read_sample;
 

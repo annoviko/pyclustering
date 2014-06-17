@@ -1,6 +1,6 @@
 import unittest;
 
-from syncsom import syncsom;
+from clustering.syncsom import syncsom;
 
 from support import read_sample;
 

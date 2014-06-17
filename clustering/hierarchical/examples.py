@@ -1,4 +1,4 @@
-from hierarchical import hierarchical
+from clustering.hierarchical import hierarchical;
 
 from support import read_sample;
 from support import draw_clusters;

@@ -11,7 +11,6 @@ from scipy.integrate import odeint;
 from scipy.integrate import ode;
 
 from support import euclidean_distance;
-from hierarchical import hierarchical;
 from nnet import *;
 
 

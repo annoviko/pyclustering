@@ -2,7 +2,7 @@ import unittest;
 
 from PIL import Image;
 
-from kmeans import kmeans;
+from clustering.kmeans import kmeans;
 
 from support import read_sample;
 

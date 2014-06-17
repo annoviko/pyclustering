@@ -1,4 +1,4 @@
-from syncnet import syncnet;
+from clustering.syncnet import syncnet;
 
 from nnet import solve_type;
 

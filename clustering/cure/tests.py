@@ -4,8 +4,8 @@ from samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
 
 from support import read_sample;
 
-from cure import cure;
-from cure import create_queue;
+from clustering.cure import cure;
+from clustering.cure import create_queue;
 
 class Test(unittest.TestCase):
     def template_cluster_allocation(self, path, cluster_sizes, number_cluster, number_represent_points = 5, compression = 0.5):

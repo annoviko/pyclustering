@@ -5,7 +5,7 @@ from support import timedcall;
 
 from samples.definitions import IMAGE_SIMPLE_SAMPLES;
 
-from syncsom import syncsom;
+from clustering.syncsom import syncsom;
 
 def template_segmentation_image(source, map_som_size = [5, 5], average_neighbors = 5, sync_order = 0.998, show_dyn = False, show_som_map = False):
     data = read_image(source);

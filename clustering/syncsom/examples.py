@@ -1,4 +1,4 @@
-from syncsom import syncsom;
+from clustering.syncsom import syncsom;
 
 from samples.definitions import SIMPLE_SAMPLES;
 from samples.definitions import FCPS_SAMPLES;

@@ -1,6 +1,8 @@
 import unittest;
-import dbscan;
+
 import support;
+
+import clustering.dbscan as dbscan;
 
 from samples.definitions import SIMPLE_SAMPLES;
 

@@ -1,4 +1,4 @@
-from rock import rock;
+from clustering.rock import rock;
 
 from samples.definitions import SIMPLE_SAMPLES;
 from samples.definitions import FCPS_SAMPLES;

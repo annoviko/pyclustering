@@ -2,7 +2,7 @@ from nnet.som import som, type_conn;
 from nnet.sync import sync_network;
 from nnet import initial_type;
 
-from syncnet import syncnet;
+from clustering.syncnet import syncnet;
 
 from support import average_neighbor_distance, read_sample, draw_clusters;
 

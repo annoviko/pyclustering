@@ -1,6 +1,6 @@
 import unittest;
 
-from rock import rock;
+from clustering.rock import rock;
 
 from support import read_sample;
 

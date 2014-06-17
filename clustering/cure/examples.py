@@ -5,7 +5,7 @@ from support import timedcall;
 from samples.definitions import SIMPLE_SAMPLES;
 from samples.definitions import FCPS_SAMPLES;
 
-from cure import cure;
+from clustering.cure import cure;
 
 def template_clustering(number_clusters, path, number_represent_points = 5, compression = 0.5, draw = True):
     sample = read_sample(path);
