@@ -5,8 +5,9 @@ from support import euclidean_distance;
 from support import read_sample;
 from support import draw_clusters;
 
+import core;
 
-def dbscan(data, eps, min_neighbors, return_noise = False):
+def dbscan(data, eps, min_neighbors, return_noise = False, ccore = False):
     "Clustering algorithm DBSCAN returns allocated clusters and noise that are consisted from input data."
     
     "(in) data            - input data that is presented as list of points (objects), each point should be represented by list or tuple."
@@ -16,7 +17,7 @@ def dbscan(data, eps, min_neighbors, return_noise = False):
     
     "If return_noise is False: Returns list of allocated clusters, each cluster contains indexes of objects in list of data."
     "If return_noise is True: Returns tuple of list of allicated clusters and list of points that are marked as noise."
-    
+   
     noise = list();
     clusters = list();
     
