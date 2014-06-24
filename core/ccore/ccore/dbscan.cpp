@@ -23,6 +23,7 @@ dbscan::dbscan(std::vector<std::vector<double> > * input_data, const double radi
 	matrix_neighbors = create_neighbor_matrix();
 }
 
+
 dbscan::~dbscan() {
 	if (visited != NULL) {
 		delete visited;
@@ -119,11 +120,11 @@ void dbscan::process(void) {
 	}
 }
 
-const std::vector<std::vector<unsigned int> *> * const dbscan::get_clusters(void) const {
+std::vector<std::vector<unsigned int> *> * dbscan::get_clusters(void) const {
 	return clusters;
 }
 
-const std::vector<unsigned int> * const dbscan::get_noise(void) const {
+std::vector<unsigned int> * dbscan::get_noise(void) const {
 	return noise;
 }
 

@@ -29,9 +29,9 @@ public:
 
 	void process(void);
 
-	const std::vector<std::vector<unsigned int> *> * const get_clusters(void) const;
+	std::vector<std::vector<unsigned int> *> * get_clusters(void) const;
 
-	const std::vector<unsigned int> * const get_noise(void) const;
+	std::vector<unsigned int> * get_noise(void) const;
 
 private:
 	std::vector<std::vector<unsigned int> * > * create_neighbor_matrix(void);

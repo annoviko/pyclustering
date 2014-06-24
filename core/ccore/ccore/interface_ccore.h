@@ -11,7 +11,13 @@ typedef struct clustering_result {
 	cluster_representation * clusters;
 } clustering_result;
 
+typedef struct data_representation {
+	unsigned int size;
+	double * objects;
+};
+
 
 extern "C" __declspec(dllexport) clustering_result * dbscan_algorithm(const char * const path_file, const double radius, const unsigned int minumum_neighbors);
+
 
 #endif

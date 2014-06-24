@@ -21,6 +21,9 @@
     <ClCompile Include="dbscan.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="support.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dbscan.h">
