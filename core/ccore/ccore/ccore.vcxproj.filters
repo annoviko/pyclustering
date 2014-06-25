@@ -24,6 +24,9 @@
     <ClCompile Include="support.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="hierarchical.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dbscan.h">
@@ -33,6 +36,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="support.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="hierarchical.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

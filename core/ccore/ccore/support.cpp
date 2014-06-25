@@ -48,8 +48,15 @@ std::vector<std::vector<double> > * read_sample(const data_representation * cons
 
 clustering_result * create_clustering_result(const std::vector<std::vector<unsigned int> *> * const clusters) {
 	clustering_result * result = new clustering_result();
-	result->size = clusters->size();
-	result->clusters = new cluster_representation[result->size];
+
+	if (clusters == NULL) {
+		result->size = 0;
+		result->clusters = NULL;
+	}
+	else {
+		result->size = clusters->size();
+		result->clusters = new cluster_representation[result->size];
+	}
 
 	for (unsigned int index_cluster = 0; index_cluster < result->size; index_cluster++) {
 		result->clusters[index_cluster].size = (*clusters)[index_cluster]->size();

@@ -121,14 +121,6 @@ void dbscan::process(void) {
 	}
 }
 
-const std::vector<std::vector<unsigned int> *> * const dbscan::get_clusters(void) const {
-	return clusters;
-}
-
-const std::vector<unsigned int> * const dbscan::get_noise(void) const {
-	return noise;
-}
-
 std::vector<std::vector<unsigned int> * > * dbscan::create_neighbor_matrix(void) {
 	std::vector<std::vector<unsigned int> * > * neighbor_matrix = new std::vector<std::vector<unsigned int> * >(data->size(), NULL);
 	for (unsigned int point_index1 = 0; point_index1 < data->size(); point_index1++) {

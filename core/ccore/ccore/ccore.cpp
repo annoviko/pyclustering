@@ -4,6 +4,7 @@
 
 #include "dbscan.h"
 #include "support.h"
+#include "hierarchical.h"
 
 #include "interface_ccore.h"
 
@@ -31,6 +32,21 @@ clustering_result * dbscan_algorithm(const data_representation * const sample, c
 	clustering_result * result = create_clustering_result(clusters_with_noise);
 
 	delete clusters_with_noise; clusters_with_noise = NULL;
+	delete solver; solver = NULL;
+	delete dataset; dataset = NULL;
+
+	return result;
+}
+
+clustering_result * hierarchical_algorithm(const data_representation * const sample, const unsigned int number_clusters) {
+	std::vector<std::vector<double> > * dataset = read_sample(sample);
+
+	hierarchical * solver = new hierarchical(dataset, number_clusters);
+	solver->process();
+
+	const std::vector<std::vector<unsigned int> *> * const clusters = solver->get_clusters();
+	clustering_result * result = create_clustering_result(clusters);
+
 	delete solver; solver = NULL;
 	delete dataset; dataset = NULL;
 

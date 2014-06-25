@@ -19,7 +19,8 @@ typedef struct data_representation {
 
 extern "C" __declspec(dllexport) void free_clustering_result(clustering_result * pointer);
 
-/* extern "C" __declspec(dllexport) clustering_result * dbscan_algorithm(const char * const path_file, const double radius, const unsigned int minumum_neighbors); */
-extern "C" __declspec(dllexport) clustering_result * dbscan_algorithm(const data_representation * const path_file, const double radius, const unsigned int minumum_neighbors);
+extern "C" __declspec(dllexport) clustering_result * dbscan_algorithm(const data_representation * const sample, const double radius, const unsigned int minumum_neighbors);
+
+extern "C" __declspec(dllexport) clustering_result * hierarchical_algorithm(const data_representation * const sample, const unsigned int number_clusters);
 
 #endif

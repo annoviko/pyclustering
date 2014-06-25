@@ -146,10 +146,12 @@
   <ItemGroup>
     <ClCompile Include="ccore.cpp" />
     <ClCompile Include="dbscan.cpp" />
+    <ClCompile Include="hierarchical.cpp" />
     <ClCompile Include="support.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dbscan.h" />
+    <ClInclude Include="hierarchical.h" />
     <ClInclude Include="interface_ccore.h" />
     <ClInclude Include="support.h" />
   </ItemGroup>
