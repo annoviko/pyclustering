@@ -34,6 +34,8 @@ inline double euclidean_distance(const std::vector<double> * const point1, const
 
 std::vector<std::vector<double> > * read_sample(const char * const path_file);
 
+std::vector<std::vector<double> > * read_sample(const data_representation * const sample);
+
 clustering_result * create_clustering_result(const std::vector<std::vector<unsigned int> *> * const clusters);
 
 #endif

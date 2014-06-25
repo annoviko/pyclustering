@@ -120,11 +120,11 @@ void dbscan::process(void) {
 	}
 }
 
-std::vector<std::vector<unsigned int> *> * dbscan::get_clusters(void) const {
+const std::vector<std::vector<unsigned int> *> * const dbscan::get_clusters(void) const {
 	return clusters;
 }
 
-std::vector<unsigned int> * dbscan::get_noise(void) const {
+const std::vector<unsigned int> * const dbscan::get_noise(void) const {
 	return noise;
 }
 

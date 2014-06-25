@@ -8,47 +8,38 @@ from samples.definitions import SIMPLE_SAMPLES;
 
 from support import read_sample;
 
-
-# Global variable.
-PATH_DLL_CCORE_WIN64 = "./ccore/x64/ccore.dll";
-
-
-# Structures that are required for exchaging with DLL.
-class cluster_representation(Structure):
-    "Decription of cluster in memory"
-    _fields_ = [("number_objects", c_uint), ("pointer_objects", POINTER(c_uint))];
-    
-class clustering_result(Structure):
-    "Description of result of clustering in memory"
-    _fields_ = [("number_clusters", c_uint), ("pointer_clusters", POINTER(cluster_representation))];
-
-class data_representation(Structure):
-    "Description of input data"
-    _fields_ = [("number_objects", c_uint), ("pointer_objects", POINTER(c_double))];
+from core.definitions import *;
 
 
 # API that is required for interaction with DLL.
-def create_pointer_data(path_to_file):
+def create_pointer_data(sample):
     "Allocates memory for representing input data for processing that is described by structure 'data_representation' and returns pointer this structure."
     
-    "(in) path_to_file    - path to file with data for processing, for example for clustering."
+    "(in) sample    - dataset for processing."
     
     "Returns pointer to the data for processing."
     
-    sample = read_sample(path_to_file);
-    
     input_data = data_representation();
     input_data.number_objects = len(sample);
-    input_data.pointer_objects = (c_double * input_data.number_objects);
+    input_data.dimension = len(sample[0]);
     
-    for index in range(0, sample):
-        input_data.pointer_objects[index] = sample[index];
+    pointer_objects = (POINTER(c_double) * input_data.number_objects)();
+     
+    for index in range(0, input_data.number_objects):
+        point = (c_double * input_data.dimension)();
+        for dimension in range(0, input_data.dimension):
+            point[dimension] = sample[index][dimension];
+            
+        pointer_objects[index] = cast(point, POINTER(c_double));
+       
+    input_data.pointer_objects = cast(pointer_objects, POINTER(POINTER(c_double)));
+    input_data = pointer(input_data);
     
     return input_data;
 
 
 # Implemented algorithms.
-def dbscan(path_to_file, eps, min_neighbors, return_noise = False):
+def dbscan(sample, eps, min_neighbors, return_noise = False):
     "Clustering algorithm DBSCAN returns allocated clusters and noise that are consisted from input data."
     
     "(in) data            - input data that is presented as list of points (objects), each point should be represented by list or tuple."
@@ -58,9 +49,11 @@ def dbscan(path_to_file, eps, min_neighbors, return_noise = False):
     
     "If return_noise is False: Returns list of allocated clusters, each cluster contains indexes of objects in list of data."
     "If return_noise is True: Returns tuple of list of allicated clusters and list of points that are marked as noise."
-        
+    
+    pointer_data = create_pointer_data(sample);
+    
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
-    result = ccore.dbscan_algorithm(c_char_p(path_to_file.encode()), c_double(eps), c_uint(min_neighbors));
+    result = ccore.dbscan_algorithm(pointer_data, c_double(eps), c_uint(min_neighbors));
 
     list_of_clusters = [];
     noise = [];
@@ -83,10 +76,13 @@ def dbscan(path_to_file, eps, min_neighbors, return_noise = False):
         for index_object in range(0, clusters[index_cluster].number_objects):
             pointer_container.append(objects[index_object]);
     
+    ccore.free_clustering_result(pointer_clustering_result);
+    
     if (return_noise is True):
         return (list_of_clusters, noise);
     else:
         return list_of_clusters;
 
 
-dbscan(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 0.5, 2);
+# sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1);
+# dbscan(sample, 0.5, 2);

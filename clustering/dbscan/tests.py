@@ -74,10 +74,10 @@ class Test(unittest.TestCase):
         assert (clusters[0] == [0, 1, 2, 3] and clusters[1] == [4, 5, 6, 7] and clusters[2] == [8, 9, 10, 11]);
 
 
-    def templateLengthProcessData(self, path_to_file, radius, min_number_neighbors, max_number_neighbors):
+    def templateLengthProcessData(self, path_to_file, radius, min_number_neighbors, max_number_neighbors, ccore = False):
         for number_neighbors in range(min_number_neighbors, max_number_neighbors, 1):
             sample = support.read_sample(path_to_file);
-            (clusters, noise) = dbscan.dbscan(sample, radius, number_neighbors, True);
+            (clusters, noise) = dbscan.dbscan(sample, radius, number_neighbors, True, ccore);
             
             length = len(noise);
             length += sum([len(cluster) for cluster in clusters]);
@@ -86,25 +86,36 @@ class Test(unittest.TestCase):
 
 
     def testLengthProcessedSampleSimple1(self):    
-        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 0.7, 0, 10);       
+        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 0.7, 0, 10);
+        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 0.7, 0, 10, True);     
         self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 0.5, 0, 10); 
+        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 0.5, 0, 10, True);
 
     def testLengthProcessedSampleSimple2(self):    
         self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 0.3, 0, 15);
+        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 0.3, 0, 15, True);
         self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 1, 0, 15);
+        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 1, 0, 15, True);
         
     def testLengthProcessedSampleSimple3(self):
         self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 0.1, 0, 20);
+        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 0.1, 0, 20, True);
         self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 5, 0, 20);
+        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 5, 0, 20, True);
         
     def testLengthProcessedSampleSimple4(self):
         self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 0.1, 0, 10);
+        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 0.1, 0, 10, True);
         self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 10, 65, 75);
+        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 10, 65, 75, True);
     
     def testLengthProcessedSampleSimple5(self):
         self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 0.1, 0, 10);
+        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 0.1, 0, 10, True);
         self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 0.3, 0, 10);
+        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 0.3, 0, 10, True);
         self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 0.6, 0, 10);
+        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 0.6, 0, 10, True);
         
     
     def testResultDataClusteringSample1(self):

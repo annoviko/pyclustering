@@ -14,10 +14,14 @@ def dbscan(data, eps, min_neighbors, return_noise = False, ccore = False):
     "(in) eps             - connectivity radius between points, points may be connected if distance between them less then the radius."
     "(in) min_neighbors   - minimum number of shared neighbors that is requied for establish links between points."
     "(in) return_noise    - if True than list of points that have been marked as noise will be returned."
+    "(in) ccore           - if True than DLL CCORE (C++ solution) will be used for solving the problem."
     
     "If return_noise is False: Returns list of allocated clusters, each cluster contains indexes of objects in list of data."
     "If return_noise is True: Returns tuple of list of allicated clusters and list of points that are marked as noise."
-   
+    
+    if (ccore is True):
+        return core.dbscan(data, eps, min_neighbors, return_noise);
+    
     noise = list();
     clusters = list();
     
