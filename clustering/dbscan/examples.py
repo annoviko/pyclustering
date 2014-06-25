@@ -6,10 +6,10 @@ from support import draw_clusters;
 
 from samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
 
-def template_clustering(radius, neighb, path, invisible_axes = True):
+def template_clustering(radius, neighb, path, invisible_axes = False, ccore = True):
     sample = read_sample(path);
     
-    (ticks, result) = timedcall(dbscan, sample, radius, neighb, True);
+    (ticks, result) = timedcall(dbscan, sample, radius, neighb, True, ccore);
     clusters = result[0];
     noise = result[1];
     
@@ -20,7 +20,7 @@ def template_clustering(radius, neighb, path, invisible_axes = True):
 
 
 def cluster_sample1():
-    template_clustering(0.5, 3, SIMPLE_SAMPLES.SAMPLE_SIMPLE1);
+    template_clustering(0.4, 2, SIMPLE_SAMPLES.SAMPLE_SIMPLE1);
     
 def cluster_sample2():
     template_clustering(1, 2, SIMPLE_SAMPLES.SAMPLE_SIMPLE2);
@@ -68,23 +68,23 @@ def cluster_tetra():
     template_clustering(0.4, 3, FCPS_SAMPLES.SAMPLE_TETRA);
      
 def cluster_engy_time():
-    template_clustering(0.4, 3, FCPS_SAMPLES.SAMPLE_ENGY_TIME);
+    template_clustering(0.2, 20, FCPS_SAMPLES.SAMPLE_ENGY_TIME);
 
-def experiment_execution_time():
+def experiment_execution_time(ccore = False):
     "Performance measurement"
-    template_clustering(0.5, 3, SIMPLE_SAMPLES.SAMPLE_SIMPLE1, False);
-    template_clustering(1, 2, SIMPLE_SAMPLES.SAMPLE_SIMPLE2, False);
-    template_clustering(0.7, 3, SIMPLE_SAMPLES.SAMPLE_SIMPLE3, False);
-    template_clustering(0.7, 3, SIMPLE_SAMPLES.SAMPLE_SIMPLE4, False);
-    template_clustering(0.7, 3, SIMPLE_SAMPLES.SAMPLE_SIMPLE5, False);
-    template_clustering(0.5, 3, SIMPLE_SAMPLES.SAMPLE_ELONGATE, False);
-    template_clustering(0.5, 3, FCPS_SAMPLES.SAMPLE_LSUN, False);
-    template_clustering(0.5, 2, FCPS_SAMPLES.SAMPLE_TARGET, False);
-    template_clustering(0.15, 7, FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, False);
-    template_clustering(0.25, 2, FCPS_SAMPLES.SAMPLE_WING_NUT, False);
-    template_clustering(0.5, 3, FCPS_SAMPLES.SAMPLE_CHAINLINK, False);
-    template_clustering(1, 3, FCPS_SAMPLES.SAMPLE_HEPTA, False);
-    template_clustering(0.4, 3, FCPS_SAMPLES.SAMPLE_TETRA, False);
+    template_clustering(0.5, 3, SIMPLE_SAMPLES.SAMPLE_SIMPLE1, False, ccore);
+    template_clustering(1, 2, SIMPLE_SAMPLES.SAMPLE_SIMPLE2, False, ccore);
+    template_clustering(0.7, 3, SIMPLE_SAMPLES.SAMPLE_SIMPLE3, False, ccore);
+    template_clustering(0.7, 3, SIMPLE_SAMPLES.SAMPLE_SIMPLE4, False, ccore);
+    template_clustering(0.7, 3, SIMPLE_SAMPLES.SAMPLE_SIMPLE5, False, ccore);
+    template_clustering(0.5, 3, SIMPLE_SAMPLES.SAMPLE_ELONGATE, False, ccore);
+    template_clustering(0.5, 3, FCPS_SAMPLES.SAMPLE_LSUN, False, ccore);
+    template_clustering(0.5, 2, FCPS_SAMPLES.SAMPLE_TARGET, False, ccore);
+    template_clustering(0.15, 7, FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, False, ccore);
+    template_clustering(0.25, 2, FCPS_SAMPLES.SAMPLE_WING_NUT, False, ccore);
+    template_clustering(0.5, 3, FCPS_SAMPLES.SAMPLE_CHAINLINK, False, ccore);
+    template_clustering(1, 3, FCPS_SAMPLES.SAMPLE_HEPTA, False, ccore);
+    template_clustering(0.4, 3, FCPS_SAMPLES.SAMPLE_TETRA, False, ccore);
 
 
 cluster_sample1();
@@ -104,4 +104,5 @@ cluster_atom();
 cluster_tetra();
 cluster_engy_time();
 
-experiment_execution_time();
+experiment_execution_time(False);   # Python code
+experiment_execution_time(True);    # C++ code + Python env.

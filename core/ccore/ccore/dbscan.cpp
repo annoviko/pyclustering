@@ -78,10 +78,11 @@ void dbscan::process(void) {
 #endif
 
 			/* get neighbors of the current node */
-			std::vector<unsigned int> index_matrix_neighbors(*((*matrix_neighbors)[i]));
+			std::vector<unsigned int> index_matrix_neighbors(*(*matrix_neighbors)[i]);
 
 			for (unsigned int k = 0; k < index_matrix_neighbors.size(); k++) {
 				unsigned int index_neighbor = index_matrix_neighbors[k];
+
 				if ((*visited)[index_neighbor] != true) {
 					(*visited)[index_neighbor] = true;
 
@@ -93,7 +94,7 @@ void dbscan::process(void) {
 						for (std::vector<unsigned int>::const_iterator neighbor_index = neighbor_neighbor_indexes->begin(); neighbor_index != neighbor_neighbor_indexes->end(); neighbor_index++) {
 							/* Check if some of neighbors already in check list */
 							std::vector<unsigned int>::const_iterator position = std::find(index_matrix_neighbors.begin(), index_matrix_neighbors.end(), *neighbor_index);
-							if (position != index_matrix_neighbors.end()) {
+							if (position == index_matrix_neighbors.end()) {
 								/* Add neighbor if it does not exist in the list */
 								index_matrix_neighbors.push_back(*neighbor_index);
 							}
@@ -109,13 +110,13 @@ void dbscan::process(void) {
 
 			index_matrix_neighbors.clear();
 		}
-		else {
-			noise->push_back(i);
-			(*belong)[i] = true;
-		}
 
 		if (allocated_cluster->empty() != true) {
 			clusters->push_back(allocated_cluster);
+		}
+		else {
+			noise->push_back(i);
+			(*belong)[i] = true;
 		}
 	}
 }

@@ -174,7 +174,9 @@ def draw_clusters(data, clusters, noise = [], marker_descr = '.', hide_axes = Fa
     if (hide_axes is True):
         axes.xaxis.set_ticklabels([]);
         axes.yaxis.set_ticklabels([]);
-        axes.zaxis.set_ticklabels([]);
+        
+        if (dimension == 3):
+            axes.zaxis.set_ticklabels([]);
     
     plt.grid();
     plt.show();
