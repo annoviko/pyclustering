@@ -37,6 +37,24 @@ def create_pointer_data(sample):
     
     return input_data;
 
+def extract_clusters(ccore_result):
+    pointer_clustering_result = cast(ccore_result, POINTER(clustering_result));    # clustering_result * clusters
+    number_clusters = pointer_clustering_result[0].number_clusters;
+    
+    list_of_clusters = [];
+    
+    for index_cluster in range(0, number_clusters):
+        clusters = cast(pointer_clustering_result[0].pointer_clusters, POINTER(cluster_representation));  # cluster_representation * cluster
+        
+        objects = cast(clusters[index_cluster].pointer_objects, POINTER(c_uint));   # cluster->objects (unsigned int *)
+        
+        list_of_clusters.append([]);
+        pointer_container = list_of_clusters[index_cluster];
+
+        for index_object in range(0, clusters[index_cluster].number_objects):
+            pointer_container.append(objects[index_object]);
+    
+    return list_of_clusters;
 
 # Implemented algorithms.
 def dbscan(sample, eps, min_neighbors, return_noise = False):
@@ -55,28 +73,11 @@ def dbscan(sample, eps, min_neighbors, return_noise = False):
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
     result = ccore.dbscan_algorithm(pointer_data, c_double(eps), c_uint(min_neighbors));
 
-    list_of_clusters = [];
-    noise = [];
+    list_of_clusters = extract_clusters(result);
+    ccore.free_clustering_result(result);
     
-    pointer_clustering_result = cast(result, POINTER(clustering_result));    # clustering_result * clusters
-    number_clusters = pointer_clustering_result[0].number_clusters;
-    
-    for index_cluster in range(0, number_clusters):
-        clusters = cast(pointer_clustering_result[0].pointer_clusters, POINTER(cluster_representation));  # cluster_representation * cluster
-        
-        objects = cast(clusters[index_cluster].pointer_objects, POINTER(c_uint));   # cluster->objects (unsigned int *)
-        
-        pointer_container = None;
-        if (index_cluster < (number_clusters - 1)):
-            list_of_clusters.append([]);
-            pointer_container = list_of_clusters[index_cluster];
-        else:
-            pointer_container = noise;
-            
-        for index_object in range(0, clusters[index_cluster].number_objects):
-            pointer_container.append(objects[index_object]);
-    
-    ccore.free_clustering_result(pointer_clustering_result);
+    noise = list_of_clusters[len(list_of_clusters) - 1];
+    list_of_clusters.remove(noise);
     
     if (return_noise is True):
         return (list_of_clusters, noise);
@@ -90,23 +91,9 @@ def hierarchical(sample, number_clusters):
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
     result = ccore.hierarchical_algorithm(pointer_data, c_uint(number_clusters));
     
-    pointer_clustering_result = cast(result, POINTER(clustering_result));    # clustering_result * clusters
-    number_clusters = pointer_clustering_result[0].number_clusters;
+    list_of_clusters = extract_clusters(result);
     
-    list_of_clusters = [];
-    
-    for index_cluster in range(0, number_clusters):
-        clusters = cast(pointer_clustering_result[0].pointer_clusters, POINTER(cluster_representation));  # cluster_representation * cluster
-        
-        objects = cast(clusters[index_cluster].pointer_objects, POINTER(c_uint));   # cluster->objects (unsigned int *)
-        
-        list_of_clusters.append([]);
-        pointer_container = list_of_clusters[index_cluster];
-
-        for index_object in range(0, clusters[index_cluster].number_objects):
-            pointer_container.append(objects[index_object]);
-    
-    ccore.free_clustering_result(pointer_clustering_result);
+    ccore.free_clustering_result(result);
     return list_of_clusters;
 
 
