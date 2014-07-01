@@ -6,10 +6,10 @@ from support import timedcall;
 
 from samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
 
-def template_clustering(number_clusters, path):
+def template_clustering(number_clusters, path, ccore = True):
     sample = read_sample(path);
     
-    (ticks, clusters) = timedcall(hierarchical, sample, number_clusters);
+    (ticks, clusters) = timedcall(hierarchical, sample, number_clusters, ccore);
     print("Sample: ", path, "\t\tExecution time: ", ticks, "\n");
     
     draw_clusters(sample, clusters);

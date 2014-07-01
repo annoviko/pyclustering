@@ -84,5 +84,32 @@ def dbscan(sample, eps, min_neighbors, return_noise = False):
         return list_of_clusters;
 
 
+def hierarchical(sample, number_clusters):
+    pointer_data = create_pointer_data(sample);
+    
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    result = ccore.hierarchical_algorithm(pointer_data, c_uint(number_clusters));
+    
+    pointer_clustering_result = cast(result, POINTER(clustering_result));    # clustering_result * clusters
+    number_clusters = pointer_clustering_result[0].number_clusters;
+    
+    list_of_clusters = [];
+    
+    for index_cluster in range(0, number_clusters):
+        clusters = cast(pointer_clustering_result[0].pointer_clusters, POINTER(cluster_representation));  # cluster_representation * cluster
+        
+        objects = cast(clusters[index_cluster].pointer_objects, POINTER(c_uint));   # cluster->objects (unsigned int *)
+        
+        list_of_clusters.append([]);
+        pointer_container = list_of_clusters[index_cluster];
+
+        for index_object in range(0, clusters[index_cluster].number_objects):
+            pointer_container.append(objects[index_object]);
+    
+    ccore.free_clustering_result(pointer_clustering_result);
+    return list_of_clusters;
+
+
 # sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1);
-# dbscan(sample, 0.5, 2);
+# res = hierarchical(sample, 2);
+# print(res);

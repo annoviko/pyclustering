@@ -3,14 +3,20 @@ from support import read_sample;
 from support import draw_clusters;
 
 from support import timedcall;
+
+import core;
  
-def hierarchical(data, number_clusters):
+def hierarchical(data, number_clusters, ccore = False):
     "Clustering algorithm hierarchical returns allocated clusters and noise that are consisted from input data."
     
     "(in) data               - input data that is presented as list of points (objects), each point should be represented by list or tuple."
     "(in) number_clusters    - number of cluster that should be allocated."
+    "(in) ccore              - if True than DLL CCORE (C++ solution) will be used for solving the problem."
     
     "Returns list of allocated clusters, each cluster contains indexes of objects in list of data."
+    
+    if (ccore is True):
+        return core.hierarchical(data, number_clusters);    
     
     centers = data.copy();
     clusters = [[index] for index in range(0, len(data))];

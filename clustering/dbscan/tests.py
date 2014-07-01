@@ -5,6 +5,7 @@ import support;
 import clustering.dbscan as dbscan;
 
 from samples.definitions import SIMPLE_SAMPLES;
+from samples.definitions import FCPS_SAMPLES;
 
 class Test(unittest.TestCase):  
         
@@ -136,6 +137,20 @@ class Test(unittest.TestCase):
         assert sorted(clusters[1]) == [i for i in range(10, 15)];
         assert sorted(clusters[2]) == [i for i in range(15, 23)];
         
+        
+    def testResultDataClusteringHepta(self):
+        sample = support.read_sample(FCPS_SAMPLES.SAMPLE_HEPTA);
+        (clusters, noise) = dbscan.dbscan(sample, 1, 3, True);
+        
+        assert noise == [];
+        
+        obtained_cluster_sizes = [len(cluster) for cluster in clusters];
+        total_length = sum(obtained_cluster_sizes);
+        assert total_length == len(sample);
+        
+        obtained_cluster_sizes.sort();
+        
+        assert obtained_cluster_sizes == [30, 30, 30, 30, 30, 30, 32]; 
 
 
 if __name__ == "__main__":
