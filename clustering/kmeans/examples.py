@@ -1,17 +1,18 @@
 from samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
 
-from clustering.kmeans import kmeans, draw_clusters;
+from clustering.kmeans import kmeans;
 
+from support import draw_clusters;
 from support import read_sample;
 from support import timedcall;
 
 def template_clustering(start_centers, path):
     sample = read_sample(path);
     
-    (ticks, (clusters, centers)) = timedcall(kmeans, sample, start_centers);
+    (ticks, clusters) = timedcall(kmeans, sample, start_centers);
     print("Sample: ", path, "\t\tExecution time: ", ticks, "\n");
 
-    draw_clusters(sample, clusters, centers, start_centers);
+    draw_clusters(sample, clusters);
     
 def cluster_sample1():
     start_centers = [[3.7, 5.5], [6.7, 7.5]];

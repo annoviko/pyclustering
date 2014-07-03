@@ -23,4 +23,6 @@ extern "C" __declspec(dllexport) clustering_result * dbscan_algorithm(const data
 
 extern "C" __declspec(dllexport) clustering_result * hierarchical_algorithm(const data_representation * const sample, const unsigned int number_clusters);
 
+extern "C" __declspec(dllexport) clustering_result * kmeans_algorithm(const data_representation * const sample, const data_representation * const initial_centers, const double tolerance);
+
 #endif

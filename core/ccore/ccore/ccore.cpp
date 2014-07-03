@@ -5,6 +5,7 @@
 #include "dbscan.h"
 #include "support.h"
 #include "hierarchical.h"
+#include "kmeans.h"
 
 #include "interface_ccore.h"
 
@@ -49,6 +50,22 @@ clustering_result * hierarchical_algorithm(const data_representation * const sam
 
 	delete solver; solver = NULL;
 	delete dataset; dataset = NULL;
+
+	return result;
+}
+
+clustering_result * kmeans_algorithm(const data_representation * const sample, const data_representation * const initial_centers, const double tolerance) {
+	std::vector<std::vector<double> > * dataset = read_sample(sample);
+	std::vector<std::vector<double> > * centers = read_sample(initial_centers);
+
+	kmeans * solver = new kmeans(dataset, centers, tolerance);
+	solver->process();
+
+	clustering_result * result = create_clustering_result(solver->get_clusters());
+
+	delete solver; solver = NULL;
+	delete dataset; dataset = NULL;
+	delete centers; centers = NULL;
 
 	return result;
 }

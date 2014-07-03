@@ -97,6 +97,19 @@ def hierarchical(sample, number_clusters):
     return list_of_clusters;
 
 
+def kmeans(sample, centers, tolerance):
+    pointer_data = create_pointer_data(sample);
+    pointer_centers = create_pointer_data(centers);
+    
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    result = ccore.kmeans_algorithm(pointer_data, pointer_centers, c_double(tolerance));
+    
+    list_of_clusters = extract_clusters(result);
+    
+    ccore.free_clustering_result(result);
+    return list_of_clusters;
+
+
 # sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1);
-# res = hierarchical(sample, 2);
+# res = kmeans(sample, [ [3.7, 5.5], [6.7, 7.5] ], 0.05);
 # print(res);
