@@ -6,10 +6,10 @@ from support import draw_clusters;
 from support import read_sample;
 from support import timedcall;
 
-def template_clustering(start_centers, path):
+def template_clustering(start_centers, path, tolerance = 0.25, ccore = True):
     sample = read_sample(path);
     
-    (ticks, clusters) = timedcall(kmeans, sample, start_centers);
+    (ticks, clusters) = timedcall(kmeans, sample, start_centers, tolerance, ccore);
     print("Sample: ", path, "\t\tExecution time: ", ticks, "\n");
 
     draw_clusters(sample, clusters);

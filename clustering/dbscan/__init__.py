@@ -26,9 +26,6 @@ def dbscan(data, eps, min_neighbors, return_noise = False, ccore = False):
     belong = [False] * len(data);
     
     for i in range(0, len(data)):
-        next_neighbors = neighbor_indexes(data, i, eps);
-    
-    for i in range(0, len(data)):
         if (visited[i] == False):
             
             cluster = expand_cluster(data, visited, belong, i, eps, min_neighbors);
