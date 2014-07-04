@@ -10,7 +10,9 @@
 rock::rock(const std::vector<std::vector<double> > * const data, const double radius, const unsigned int num_clusters, const double threshold) {
 	dataset = (std::vector<std::vector<double> > * const) data;
 
-	clusters = new std::vector<std::vector<unsigned int> *>();
+	vector_clusters = NULL;	/* result will be set after the calculation */
+
+	clusters = new std::list<std::vector<unsigned int> *>();
 	for (unsigned int index = 0; index < data->size(); index++) {
 		clusters->push_back(new std::vector<unsigned int>(1, index));
 	}
@@ -50,63 +52,90 @@ rock::~rock() {
 		adjacency_matrix = NULL;
 	}
 
+	/* pointer of clusters can be freed by list and by vector representation */
+	bool trigger_clean_cluster = true;
+
 	if (clusters != NULL) {
+		/* possible if process() isn't called, therefore clusters should be cleared here */
+		trigger_clean_cluster = false;
+
+		for (std::list<std::vector<unsigned int> *>::const_iterator iter = clusters->begin(); iter != clusters->end(); iter++) {
+			delete (*iter);
+		}
+
 		delete clusters;
 		clusters = NULL;
+	}
+
+	if (vector_clusters != NULL) {
+		if (trigger_clean_cluster == true) {
+			for (std::vector<std::vector<unsigned int> *>::const_iterator iter = vector_clusters->begin(); iter != vector_clusters->end(); iter++) {
+				delete (*iter);
+			}			
+		}
+
+		delete vector_clusters;
+		vector_clusters = NULL;
 	}
 }
 
 void rock::process(void) {
 	while( (number_clusters < clusters->size()) && (merge_cluster()) ) { }
+
+	vector_clusters = new std::vector<std::vector<unsigned int> *>();
+	//std::copy(clusters->begin(), clusters->end(), std::back_inserter(vector_clusters));
+	vector_clusters->insert(vector_clusters->begin(), clusters->begin(), clusters->end());
+
+	/* no need to store list anymore */
+	delete clusters;
+	clusters = NULL;
 }
 
 bool rock::merge_cluster(void) {
-	unsigned int cluster_index1 = -1;
-	unsigned int cluster_index2 = -1;
+	std::list<std::vector<unsigned int> *>::iterator cluster1 = clusters->end();
+	std::list<std::vector<unsigned int> *>::iterator cluster2 = clusters->end();
 
 	double maximum_goodness = 0;
 
-	for (unsigned int i = 0; i < clusters->size(); i++) {
-		for (unsigned int j = i + 1; j < clusters->size(); j++) {
+	for (std::list<std::vector<unsigned int> *>::iterator i = clusters->begin(); i != clusters->end(); i++) {
+		std::list<std::vector<unsigned int> *>::iterator next = i;
+		for (std::list<std::vector<unsigned int> *>::iterator j = ++next; j != clusters->end(); j++) {
 			double goodness = calculate_goodness(i, j);
 			if (goodness > maximum_goodness) {
 				maximum_goodness = goodness;
 
-				cluster_index1 = i;
-				cluster_index2 = j;
+				cluster1 = i;
+				cluster2 = j;
 			}
 		}
 	}
 
-	if (cluster_index1 == cluster_index2) {
+	if (cluster1 == cluster2) {
 		return false;	/* clusters are totally separated (no links between them), it's impossible to made a desicion which of them should be merged */
 	}
 
-	(*clusters)[cluster_index1]->insert( (*clusters)[cluster_index1]->end(), (*clusters)[cluster_index2]->begin(), (*clusters)[cluster_index2]->end() );
-	clusters->erase(clusters->begin() + cluster_index2);	/* inefficient operation compared to the one performed for the same operation by other kinds of sequence containers (such as list or forward_list). */
+	(*cluster1)->insert((*cluster1)->end(), (*cluster2)->begin(), (*cluster2)->end());
+	clusters->erase(cluster2);
 	
 	return true;
 }
 
-unsigned int rock::calculate_links(const unsigned int index_cluster1, const unsigned int index_cluster2) const {
+unsigned int rock::calculate_links(std::list<std::vector<unsigned int> *>::const_iterator & cluster1, std::list<std::vector<unsigned int> *>::const_iterator & cluster2) const {
 	unsigned int number_links = 0;
-	for (unsigned int i = 0; i < (*clusters)[index_cluster1]->size(); i++) {
-		for (unsigned int j = 0; j < (*clusters)[index_cluster2]->size(); j++) {
-			unsigned int index_object1 = (*((*clusters)[index_cluster1]))[i];
-			unsigned int index_object2 = (*((*clusters)[index_cluster2]))[j];
-
-			number_links += (*adjacency_matrix)[index_object1][index_object2];
+	for (std::vector<unsigned int>::const_iterator i = (*cluster1)->begin(); i != (*cluster1)->end(); i++) {
+		for (std::vector<unsigned int>::const_iterator j = (*cluster2)->begin(); j != (*cluster2)->end(); j++) {
+			number_links += (*adjacency_matrix)[*i][*j];
 		}
 	}
 
 	return number_links;
 }
 
-double rock::calculate_goodness(const unsigned int index_cluster1, const unsigned int index_cluster2) const {
-	const double number_links = calculate_links(index_cluster1, index_cluster2);
+double rock::calculate_goodness(std::list<std::vector<unsigned int> *>::const_iterator & cluster1, std::list<std::vector<unsigned int> *>::const_iterator & cluster2) const {
+	const double number_links = calculate_links(cluster1, cluster2);
 	
-	const double size_cluster1 = (*clusters)[index_cluster1]->size();
-	const double size_cluster2 = (*clusters)[index_cluster2]->size();
+	const double size_cluster1 = (*cluster1)->size();
+	const double size_cluster2 = (*cluster2)->size();
 
 	return number_links / ( std::pow( size_cluster1 + size_cluster2, degree_normalization ) - 
 		std::pow( size_cluster1, degree_normalization ) -

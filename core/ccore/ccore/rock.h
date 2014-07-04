@@ -2,13 +2,15 @@
 #define _ROCK_H_
 
 #include <vector>
+#include <list>
 
 class rock {
 private:
 	std::vector<std::vector<double> >			* dataset;
 	std::vector<std::vector<unsigned int> >		* adjacency_matrix;
 
-	std::vector<std::vector<unsigned int> *>	* clusters;
+	std::vector<std::vector<unsigned int> *>	* vector_clusters;		/* created only at the end of processing */
+	std::list<std::vector<unsigned int> *>		* clusters;				/* removed when processing is over */
 
 	double			degree_normalization;
 	unsigned int	number_clusters;
@@ -21,7 +23,7 @@ public:
 	void process(void);
 
 	inline const std::vector<std::vector<unsigned int> *> * const get_clusters(void) const {
-		return clusters;
+		return vector_clusters;
 	}
 
 private:
@@ -29,9 +31,9 @@ private:
 
 	std::vector<unsigned int> * find_pair_clusters(void) const;
 
-	unsigned int calculate_links(const unsigned int index_cluster1, const unsigned int index_cluster2) const;
+	unsigned int calculate_links(std::list<std::vector<unsigned int> *>::const_iterator & cluster1, std::list<std::vector<unsigned int> *>::const_iterator & cluster2) const;
 
-	double calculate_goodness(const unsigned int index_cluster1, const unsigned int index_cluster2) const;
+	double calculate_goodness(std::list<std::vector<unsigned int> *>::const_iterator & cluster1, std::list<std::vector<unsigned int> *>::const_iterator & cluster2) const;
 };
 
 #endif
