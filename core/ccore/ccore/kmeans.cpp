@@ -4,6 +4,8 @@
 #include <algorithm>
 #include <climits>
 
+#define FAST_SOLUTION
+
 kmeans::kmeans(const std::vector<std::vector<double> > * const data, const std::vector<std::vector<double> > * const initial_centers, const double minimum_change) {
 	dataset = (std::vector<std::vector<double> > * const) data;
 
@@ -15,7 +17,7 @@ kmeans::kmeans(const std::vector<std::vector<double> > * const data, const std::
 	}
 
 
-#ifndef FAST_SOLUTION
+#ifdef FAST_SOLUTION
 	tolerance = minimum_change * minimum_change;
 #else
 	tolerance = minimum_change;
@@ -60,7 +62,7 @@ void kmeans::update_clusters(void) {
 		unsigned int	suitable_index_cluster = 0;
 
 		for (unsigned int index_cluster = 0; index_cluster < clusters->size(); index_cluster++) {
-#ifndef FAST_SOLUTION
+#ifdef FAST_SOLUTION
 			double distance = euclidean_distance( &(*centers)[index_cluster], &(*dataset)[index_object] );
 #else
 			double distance = euclidean_distance_sqrt( &(*centers)[index_cluster], &(*dataset)[index_object] );
@@ -95,7 +97,7 @@ double kmeans::update_centers(void) {
 			*dimension_iterator = *dimension_iterator / (*clusters)[index_cluster]->size();
 		}
 
-#ifndef FAST_SOLUTION
+#ifdef FAST_SOLUTION
 		double distance = euclidean_distance( &(*centers)[index_cluster], (std::vector<double> *) &total );
 #else
 		double distance = euclidean_distance_sqrt( &(*centers)[index_cluster], (std::vector<double> *) &total );

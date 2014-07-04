@@ -25,4 +25,6 @@ extern "C" __declspec(dllexport) clustering_result * hierarchical_algorithm(cons
 
 extern "C" __declspec(dllexport) clustering_result * kmeans_algorithm(const data_representation * const sample, const data_representation * const initial_centers, const double tolerance);
 
+extern "C" __declspec(dllexport) clustering_result * rock_algorithm(const data_representation * const sample, const double radius, const unsigned int number_clusters, const double threshold);
+
 #endif

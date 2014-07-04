@@ -110,6 +110,18 @@ def kmeans(sample, centers, tolerance):
     return list_of_clusters;
 
 
-# sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1);
-# res = kmeans(sample, [ [3.7, 5.5], [6.7, 7.5] ], 0.05);
+def rock(sample, eps, number_clusters, threshold):
+    pointer_data = create_pointer_data(sample);
+    
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    result = ccore.rock_algorithm(pointer_data, c_double(eps), c_uint(number_clusters), c_double(threshold));
+    
+    list_of_clusters = extract_clusters(result);
+    
+    ccore.free_clustering_result(result);
+    return list_of_clusters;    
+
+
+# sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE4);
+# res = rock(sample, 1, 4, 0.5);
 # print(res);

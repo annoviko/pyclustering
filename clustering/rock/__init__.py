@@ -1,9 +1,10 @@
 from support import euclidean_distance;
 from support import read_sample;
-from support import draw_clusters;
+
+import core;
 
 
-def rock(data, eps, number_clusters, threshold = 0.5):
+def rock(data, eps, number_clusters, threshold = 0.5, ccore = False):
     "Clustering algorithm ROCK returns allocated clusters and noise that are consisted from input data."
     
     "(in) data                - input data - list of points where each point is represented by list of coordinates."
@@ -13,16 +14,24 @@ def rock(data, eps, number_clusters, threshold = 0.5):
     
     "Returns list of allocated clusters, each cluster contains indexes of objects in list of data."
     
-    # TODO: First iteration should be investigated. Euclidean distance should be used for clustering between two points and rock algorithm between clusters 
-    # because we consider non-categorical samples. But it is required more investigations.
-    degree_normalization = 1 + 2 * ( (1 - threshold) / (1 + threshold) );
+    # TODO: (Not related to specification, just idea) First iteration should be investigated. Euclidean distance should be used for clustering between two 
+    # points and rock algorithm between clusters because we consider non-categorical samples. But it is required more investigations.
+    
+    if (ccore is True):
+        return core.rock(data, eps, number_clusters, threshold);
+    
+    degree_normalization = 1.0 + 2.0 * ( (1.0 - threshold) / (1.0 + threshold) );
     adjacency_matrix = create_adjacency_matrix(data, eps);
     clusters = [[index] for index in range(len(data))];
     
     while (len(clusters) > number_clusters):
         indexes = find_pair_clusters(clusters, adjacency_matrix, degree_normalization);
-        clusters[indexes[0]] += clusters[indexes[1]];
-        clusters.pop(indexes[1]);   # remove merged cluster.
+        
+        if (indexes != [-1, -1]):
+            clusters[indexes[0]] += clusters[indexes[1]];
+            clusters.pop(indexes[1]);   # remove merged cluster.
+        else:
+            break;  # totally separated clusters have been allocated
     
     return clusters;
 
@@ -35,9 +44,10 @@ def find_pair_clusters(clusters, adjacency_matrix, degree_normalization):
     "(in) adjacency_matrix         - adjacency matrix that represents distances between objects (points) from the input data set."
     "(in) degree_normalization     - degree of normalization that is used by goodness measurement for obtaining most suitable clusters for merging."
     
-    "Returns list that contains two indexes of clusters (from list 'clusters') that should be merged on this step."
+    "Returns list that contains two indexes of clusters (from list 'clusters') that should be merged on this step. It can be equals to [-1, -1] when number of links between"
+    "all clusters doesn't exist."
     
-    maximum_goodness = 0;
+    maximum_goodness = 0.0;
     cluster_indexes = [-1, -1];
     
     for i in range(0, len(clusters)):

@@ -3,10 +3,11 @@
 #include <sstream>
 
 #include "dbscan.h"
-#include "support.h"
 #include "hierarchical.h"
 #include "kmeans.h"
+#include "rock.h"
 
+#include "support.h"
 #include "interface_ccore.h"
 
 void free_clustering_result(clustering_result * pointer) {
@@ -66,6 +67,20 @@ clustering_result * kmeans_algorithm(const data_representation * const sample, c
 	delete solver; solver = NULL;
 	delete dataset; dataset = NULL;
 	delete centers; centers = NULL;
+
+	return result;
+}
+
+clustering_result * rock_algorithm(const data_representation * const sample, const double radius, const unsigned int number_clusters, const double threshold) {
+	std::vector<std::vector<double> > * dataset = read_sample(sample);
+
+	rock * solver = new rock(dataset, radius, number_clusters, threshold);
+	solver->process();
+
+	clustering_result * result = create_clustering_result(solver->get_clusters());
+
+	delete solver; solver = NULL;
+	delete dataset; dataset = NULL;
 
 	return result;
 }

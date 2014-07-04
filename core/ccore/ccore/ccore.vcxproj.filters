@@ -30,6 +30,9 @@
     <ClCompile Include="kmeans.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="rock.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dbscan.h">
@@ -45,6 +48,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="kmeans.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="rock.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
