@@ -83,7 +83,7 @@ class hysteresis_network(network, network_interface):
         
     
     def simulate(self, steps, time, solution = solve_type.ODEINT, collect_dynamic = True):
-        "Performs static simulation of LEGION oscillatory network."
+        "Performs static simulation of hysteresis oscillatory network."
         
         "(in) steps            - number steps of simulations during simulation."
         "(in) time             - time of simulation."
@@ -104,7 +104,7 @@ class hysteresis_network(network, network_interface):
     
     
     def simulate_static(self, steps, time, solution = solve_type.ODEINT, collect_dynamic = False):
-        "Performs static simulation of LEGION oscillatory network."
+        "Performs static simulation of hysteresis oscillatory network."
         
         "(in) steps            - number steps of simulations during simulation."
         "(in) time             - time of simulation."
