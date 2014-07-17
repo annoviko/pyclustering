@@ -15,6 +15,7 @@ from gcolor.sync                    import tests as gcolor_sync_unit_tests;
 
 from nnet.hysteresis                import tests as nnet_hysteresis_unit_tests;
 from nnet.legion                    import tests as nnet_legion_unit_tests;
+from nnet.pcnn                      import tests as nnet_pcnn_unit_tests;
 from nnet.som                       import tests as nnet_som_unit_tests;
 from nnet.sync                      import tests as nnet_sync_unit_tests;
 
@@ -34,6 +35,7 @@ if __name__ == "__main__":
     suite.addTests(unittest.TestLoader().loadTestsFromModule(hsyncnet_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_hysteresis_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_legion_unit_tests));
+    suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_pcnn_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_som_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_sync_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(support_unit_tests));
