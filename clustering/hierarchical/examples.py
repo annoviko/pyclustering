@@ -60,6 +60,22 @@ def cluster_tetra():
 def cluster_engy_time():
     template_clustering(2, FCPS_SAMPLES.SAMPLE_ENGY_TIME);
     
+def experiment_execution_time(ccore = False):
+    template_clustering(2, SIMPLE_SAMPLES.SAMPLE_SIMPLE1, ccore);
+    template_clustering(3, SIMPLE_SAMPLES.SAMPLE_SIMPLE2, ccore);
+    template_clustering(4, SIMPLE_SAMPLES.SAMPLE_SIMPLE3, ccore);
+    template_clustering(5, SIMPLE_SAMPLES.SAMPLE_SIMPLE4, ccore);
+    template_clustering(4, SIMPLE_SAMPLES.SAMPLE_SIMPLE5, ccore);
+    template_clustering(2, SIMPLE_SAMPLES.SAMPLE_ELONGATE, ccore);
+    template_clustering(3, FCPS_SAMPLES.SAMPLE_LSUN, ccore); 
+    template_clustering(6, FCPS_SAMPLES.SAMPLE_TARGET, ccore); 
+    template_clustering(2, FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, ccore);
+    template_clustering(2, FCPS_SAMPLES.SAMPLE_WING_NUT, ccore);
+    template_clustering(2, FCPS_SAMPLES.SAMPLE_CHAINLINK, ccore);
+    template_clustering(7, FCPS_SAMPLES.SAMPLE_HEPTA, ccore);
+    template_clustering(4, FCPS_SAMPLES.SAMPLE_TETRA, ccore);
+    template_clustering(2, FCPS_SAMPLES.SAMPLE_ENGY_TIME, ccore);
+    
     
 cluster_sample1();
 cluster_sample2();
@@ -75,3 +91,6 @@ cluster_chainlink();
 cluster_hepta();
 cluster_tetra();
 cluster_engy_time();
+ 
+experiment_execution_time(False);   # Python code
+experiment_execution_time(True);    # C++ code + Python env.
