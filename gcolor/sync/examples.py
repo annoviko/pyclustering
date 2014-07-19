@@ -5,7 +5,7 @@ from nnet import *;
 from support import draw_dynamics;
 from support.graph import read_graph, draw_graph;
 
-from samples.definitions import GRAPH_SIMPLE_SAMPLES;
+from samples.definitions import GRAPH_SIMPLE_SAMPLES, GRAPH_DSJC_SAMPLES;
 
 
 def template_graph_coloring(positive_weight, negative_weight, filename, reduction = None, title = None):
@@ -24,7 +24,18 @@ def template_graph_coloring(positive_weight, negative_weight, filename, reductio
         print("Color #", index, ": ", clusters[index]);
         
     coloring_map = network.get_map_coloring();
+    print("Number colors: ", max(coloring_map));
+    
     draw_graph(graph, coloring_map);
+    
+    # Check validity of colors
+    for index_node in range(len(graph.data)):
+        color_neighbors = [ coloring_map[index] for index in range(len(graph.data[index_node])) if graph.data[index_node][index] != 0 and index_node != index];
+        #print(index_node, map_coloring[index_node], color_neighbors, assigned_colors, map_coloring, "\n\n");
+        
+        if (coloring_map[index_node] in color_neighbors):
+            print("Warining: Incorrect coloring");
+            return;
 
 
 def one_circle1():
@@ -74,6 +85,8 @@ def full_interconnected1():
 def full_interconnected2():
     template_graph_coloring(0, -1, GRAPH_SIMPLE_SAMPLES.GRAPH_FULL2, None, "Full interconneted graph 2 (all-to-all)"); 
         
+def dsjc250_5():
+    template_graph_coloring(0, -1, GRAPH_DSJC_SAMPLES.DSJC_250_5, None, None); 
         
 one_line();
 one_circle1();
@@ -87,3 +100,5 @@ five_pointed_star();
 five_pointed_frame_star();
 full_interconnected1();
 full_interconnected2();
+
+dsjc250_5();
