@@ -4,7 +4,7 @@ from gcolor.dsatur import dsatur;
 
 from support.graph import read_graph;
 
-from samples.definitions import GRAPH_SIMPLE_SAMPLES;
+from samples.definitions import GRAPH_SIMPLE_SAMPLES, GRAPH_DSJC_SAMPLES;
 
 class Test(unittest.TestCase):
     def templateTestColoring(self, filename):
@@ -39,6 +39,9 @@ class Test(unittest.TestCase):
     def testColoringFivePointedStar(self):
         self.templateTestColoring(GRAPH_SIMPLE_SAMPLES.GRAPH_FIVE_POINTED_STAR);
         
+    def testColoringDSJC250d5(self):
+        self.templateTestColoring(GRAPH_DSJC_SAMPLES.DSJC_250_5);
+        
     def testColoringVerification(self):
         self.templateTestColoring(GRAPH_SIMPLE_SAMPLES.GRAPH_BROKEN_CIRCLE1);
         self.templateTestColoring(GRAPH_SIMPLE_SAMPLES.GRAPH_BROKEN_CIRCLE2);
@@ -53,6 +56,7 @@ class Test(unittest.TestCase):
         self.templateTestColoring(GRAPH_SIMPLE_SAMPLES.GRAPH_ONE_LINE);
         self.templateTestColoring(GRAPH_SIMPLE_SAMPLES.GRAPH_SIMPLE1);
         self.templateTestColoring(GRAPH_SIMPLE_SAMPLES.GRAPH_TWO_CROSSROADS);
+        self.templateTestColoring(GRAPH_DSJC_SAMPLES.DSJC_250_5);
         
          
 

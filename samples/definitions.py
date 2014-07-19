@@ -35,6 +35,15 @@ class GRAPH_SIMPLE_SAMPLES:
     GRAPH_FULL2                     = samples.__path__[0] + "\\graphs\\GraphFull2.grpr"
     GRAPH_SIMPLE1                   = samples.__path__[0] + "\\graphs\\GraphSimple1.grpr"
     
+class GRAPH_DSJC_SAMPLES:
+    DSJC_250_5                      = samples.__path__[0] + "\\graphs\\DSJC250.5.grpr";
+    DSJC_500_1                      = samples.__path__[0] + "\\graphs\\DSJC500.1.grpr";
+    DSJC_500_5                      = samples.__path__[0] + "\\graphs\\DSJC500.5.grpr";
+    DSJC_500_9                      = samples.__path__[0] + "\\graphs\\DSJC500.9.grpr";
+    DSJC_1000_1                     = samples.__path__[0] + "\\graphs\\DSJC1000.1.grpr";
+    DSJC_1000_5                     = samples.__path__[0] + "\\graphs\\DSJC1000.5.grpr";
+    DSJC_1000_9                     = samples.__path__[0] + "\\graphs\\DSJC1000.9.grpr";
+    
 class IMAGE_SIMPLE_SAMPLES:
     IMAGE_THREE_OBJECT1             = samples.__path__[0] + "\\images\\ImageSimple1.png";
     IMAGE_THREE_OBJECT2             = samples.__path__[0] + "\\images\\ImageSimple2.png";
