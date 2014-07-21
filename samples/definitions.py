@@ -34,6 +34,8 @@ class GRAPH_SIMPLE_SAMPLES:
     GRAPH_FULL1                     = samples.__path__[0] + "\\graphs\\GraphFull1.grpr"
     GRAPH_FULL2                     = samples.__path__[0] + "\\graphs\\GraphFull2.grpr"
     GRAPH_SIMPLE1                   = samples.__path__[0] + "\\graphs\\GraphSimple1.grpr"
+    GRAPH_SIMPLE2                   = samples.__path__[0] + "\\graphs\\GraphSimple2.grpr"
+    GRAPH_SIMPLE3                   = samples.__path__[0] + "\\graphs\\GraphSimple3.grpr"
     
 class GRAPH_DSJC_SAMPLES:
     DSJC_250_5                      = samples.__path__[0] + "\\graphs\\DSJC250.5.grpr";

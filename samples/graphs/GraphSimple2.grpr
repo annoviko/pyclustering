@@ -1,0 +1,22 @@
+c DESCRIPTION: 9 Nodes, 12 Edges
+c OPTIMAL NUMBER OF COLORS: 3
+
+m 0 1 0 1 0 0 0 0 0
+m 1 0 1 1 1 0 0 0 0
+m 0 1 0 0 1 0 0 0 0
+m 1 1 0 0 1 0 0 1 0
+m 0 1 1 1 0 1 0 1 0
+m 0 0 0 0 1 0 0 0 0
+m 0 0 0 0 0 0 0 1 0
+m 0 0 0 1 1 0 1 0 1
+m 0 0 0 0 0 0 0 1 0
+
+r 3 3
+r 5 3
+r 7 3
+r 3 6
+r 7 6
+r 9 6
+r 3 9
+r 5 9
+r 7 9

@@ -25,8 +25,10 @@ def run_all_graph_simple_samples():
     template_graph_coloring(GRAPH_SIMPLE_SAMPLES.GRAPH_ONE_CIRCLE3);
     template_graph_coloring(GRAPH_SIMPLE_SAMPLES.GRAPH_ONE_CROSSROAD);
     template_graph_coloring(GRAPH_SIMPLE_SAMPLES.GRAPH_ONE_LINE);
-    template_graph_coloring(GRAPH_SIMPLE_SAMPLES.GRAPH_SIMPLE1);
     template_graph_coloring(GRAPH_SIMPLE_SAMPLES.GRAPH_TWO_CROSSROADS);
+    template_graph_coloring(GRAPH_SIMPLE_SAMPLES.GRAPH_SIMPLE1);
+    template_graph_coloring(GRAPH_SIMPLE_SAMPLES.GRAPH_SIMPLE2);
+    template_graph_coloring(GRAPH_SIMPLE_SAMPLES.GRAPH_SIMPLE3);
 
 def run_all_graph_dsjc_samples():
     template_graph_coloring(GRAPH_DSJC_SAMPLES.DSJC_250_5);
