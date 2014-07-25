@@ -29,7 +29,6 @@ std::vector<std::vector<double> > * read_sample(const char * const path_file) {
 	return dataset;
 }
 
-#include <iostream>
 
 std::vector<std::vector<double> > * read_sample(const data_representation * const sample) {
 	std::vector<std::vector<double> > * dataset = new std::vector<std::vector<double> >();
@@ -45,6 +44,7 @@ std::vector<std::vector<double> > * read_sample(const data_representation * cons
 
 	return dataset;
 }
+
 
 clustering_result * create_clustering_result(const std::vector<std::vector<unsigned int> *> * const clusters) {
 	clustering_result * result = new clustering_result();
@@ -70,6 +70,31 @@ clustering_result * create_clustering_result(const std::vector<std::vector<unsig
 		else {
 			result->clusters[index_cluster].objects = NULL;
 		}
+	}
+
+	return result;
+}
+
+
+std::vector<differential_result> * rk4(double (*function_pointer)(double t, double val, const std::vector<double> & argv), double initial_value, const double a, const double b, const unsigned int steps, const std::vector<double> & argv) {
+	const double step = (b - a) / (double) steps;
+
+	differential_result current_result;
+	current_result.time = 0.0;
+	current_result.value = initial_value;
+
+	std::vector<differential_result> * result = new std::vector<differential_result>(1, current_result);
+
+	for (unsigned int i = 0; i < steps; i++) {
+		double k1 = step * function_pointer(current_result.time, current_result.value, argv);
+		double k2 = step * function_pointer(current_result.time + step / 2.0, current_result.value + k1 / 2.0, argv);
+		double k3 = step * function_pointer(current_result.time + step / 2.0, current_result.value + k2 / 2.0, argv);
+		double k4 = step * function_pointer(current_result.time + step, current_result.value + k3, argv);
+
+		current_result.value += (k1 + 2.0 * k2 + 2.0 * k3 + k4) / 6.0;
+		current_result.time += step;
+
+		result->push_back(current_result);
 	}
 
 	return result;

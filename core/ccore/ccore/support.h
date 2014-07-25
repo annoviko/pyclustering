@@ -10,6 +10,13 @@
 
 #include "interface_ccore.h"
 
+
+typedef struct differential_result {
+	double time;
+	double value;
+} differential_result;
+
+
 inline double euclidean_distance_sqrt(const std::vector<double> * const point1, const std::vector<double> * const point2) {
 	double distance = 0.0;
 	/* assert(point1->size() != point1->size()); */
