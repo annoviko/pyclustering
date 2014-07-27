@@ -10,7 +10,7 @@ from clustering.kmeans import kmeans;
 def template_segmentation_image(source, start_centers):    
     data = read_image(source);
 
-    (clusters, centers) = kmeans(data, start_centers);
+    clusters = kmeans(data, start_centers);
     draw_image_segments(source, clusters);
     
     
