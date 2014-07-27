@@ -23,6 +23,7 @@ class sync_network(network, network_interface):
     _freq = None;                      # Own frequencies of oscillators.
     _weight = 0;                       # Strength of connections between oscillators.
     _cluster = 1;                      # Parameter of artificial clustering during synchronization of phases of oscillators.
+    _ccore = False;                    # CCORE is used for modeling.
     
     # Properties of class that represents oscillatory neural network
     @property
@@ -47,7 +48,7 @@ class sync_network(network, network_interface):
 
 
 
-    def __init__(self, num_osc, weight = 1, frequency = 0, type_conn = conn_type.ALL_TO_ALL, conn_represent = conn_represent.MATRIX, initial_phases = initial_type.RANDOM_GAUSSIAN):
+    def __init__(self, num_osc, weight = 1, frequency = 0, type_conn = conn_type.ALL_TO_ALL, conn_represent = conn_represent.MATRIX, initial_phases = initial_type.RANDOM_GAUSSIAN, ccore = False):
         "Constructor of oscillatory network is based on Kuramoto model."
         
         "(in) num_osc            - number of oscillators in the network."
@@ -135,7 +136,9 @@ class sync_network(network, network_interface):
         "Returns list of grours (lists) of indexes of synchronous oscillators."
         "For example [ [index_osc1, index_osc3], [index_osc2], [index_osc4, index_osc5] ]."
         
-        clusters = [ [0] ];
+        clusters = [];
+        if (self._num_osc > 0):
+            clusters.append([0]);
         
         for i in range(1, self._num_osc, 1):
             cluster_allocated = False;

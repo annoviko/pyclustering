@@ -27,4 +27,10 @@ extern "C" __declspec(dllexport) clustering_result * kmeans_algorithm(const data
 
 extern "C" __declspec(dllexport) clustering_result * rock_algorithm(const data_representation * const sample, const double radius, const unsigned int number_clusters, const double threshold);
 
+extern "C" __declspec(dllexport) void * create_sync_network(const unsigned int size, const double weight_factor, const double frequency_factor, const unsigned int connection_type, const unsigned int initial_phases);
+
+extern "C" __declspec(dllexport) clustering_result * sync_network_algorithm(void * pointer_network);
+
+extern "C" __declspec(dllexport) void destroy_object(void * object);
+
 #endif

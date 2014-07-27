@@ -7,6 +7,8 @@
 #include "kmeans.h"
 #include "rock.h"
 
+#include "sync_network.h"
+
 #include "support.h"
 #include "interface_ccore.h"
 
@@ -83,4 +85,19 @@ clustering_result * rock_algorithm(const data_representation * const sample, con
 	delete dataset; dataset = NULL;
 
 	return result;
+}
+
+void * create_sync_network(const unsigned int size, const double weight_factor, const double frequency_factor, const unsigned int connection_type, const unsigned int initial_phases) {
+	return (void *) new sync_network(size, weight_factor, frequency_factor, (conn_type) connection_type, (initial_type) initial_phases);
+}
+
+clustering_result * sync_network_algorithm(void * pointer_network) {
+	return NULL;
+}
+
+void destroy_object(void * object) {
+	if (object != NULL) {
+		delete object;
+		object = NULL;
+	}
 }

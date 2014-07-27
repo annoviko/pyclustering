@@ -147,17 +147,21 @@
     <ClCompile Include="ccore.cpp" />
     <ClCompile Include="dbscan.cpp" />
     <ClCompile Include="hierarchical.cpp" />
+    <ClCompile Include="interface_network.cpp" />
     <ClCompile Include="kmeans.cpp" />
     <ClCompile Include="rock.cpp" />
     <ClCompile Include="support.cpp" />
+    <ClCompile Include="sync_network.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dbscan.h" />
     <ClInclude Include="hierarchical.h" />
     <ClInclude Include="interface_ccore.h" />
+    <ClInclude Include="interface_network.h" />
     <ClInclude Include="kmeans.h" />
     <ClInclude Include="rock.h" />
     <ClInclude Include="support.h" />
+    <ClInclude Include="sync_network.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

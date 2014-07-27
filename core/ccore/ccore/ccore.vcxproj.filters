@@ -33,6 +33,12 @@
     <ClCompile Include="rock.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="interface_network.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sync_network.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dbscan.h">
@@ -51,6 +57,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="rock.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sync_network.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="interface_network.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

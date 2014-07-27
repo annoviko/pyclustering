@@ -122,6 +122,16 @@ def rock(sample, eps, number_clusters, threshold):
     return list_of_clusters;    
 
 
-# sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE4);
-# res = rock(sample, 1, 4, 0.5);
-# print(res);
+def create_sync_network(num_osc, weight, frequency, type_conn, initial_phases):
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    pointer_network = ccore.create_sync_network(c_uint(num_osc), c_double(weight), c_double(frequency), c_uint(type_conn), c_uint(initial_phases));
+    
+    return pointer_network;
+
+def destroy_object(pointer_object):
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore.destroy_object(pointer_object);
+
+
+# pointer_network = create_sync_network(1, 1, 0, 1, 0);
+# destroy_object(pointer_network);
