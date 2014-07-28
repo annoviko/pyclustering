@@ -10,6 +10,8 @@ network::network(const unsigned int number_oscillators, const conn_type connecti
 	for (unsigned int index = 0; index < number_oscillators; index++) {
 		(*osc_conn)[index] = new std::vector<unsigned int>(number_oscillators, 0);
 	}
+
+	create_structure(connection_type);
 }
 
 network::~network() {
@@ -69,13 +71,13 @@ void network::create_all_to_all_connections() {
 }
 
 void network::create_list_bidir_connections() {
-	for (unsigned int index = 0; index < num_osc; index++) {
+	for (unsigned int index = 1; index < num_osc; index++) {
 		if (index > 0) {
 			(*(*osc_conn)[index])[index - 1] = 1;
 		}
 
 		if (index < (num_osc - 1)) {
-			(*(*osc_conn)[index])[index - 1] = 1;
+			(*(*osc_conn)[index])[index + 1] = 1;
 		}
 	}
 }

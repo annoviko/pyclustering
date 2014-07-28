@@ -147,7 +147,7 @@
     <ClCompile Include="ccore.cpp" />
     <ClCompile Include="dbscan.cpp" />
     <ClCompile Include="hierarchical.cpp" />
-    <ClCompile Include="interface_network.cpp" />
+    <ClCompile Include="network.cpp" />
     <ClCompile Include="kmeans.cpp" />
     <ClCompile Include="rock.cpp" />
     <ClCompile Include="support.cpp" />

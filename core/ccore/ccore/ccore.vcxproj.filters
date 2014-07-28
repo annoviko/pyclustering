@@ -33,10 +33,10 @@
     <ClCompile Include="rock.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="interface_network.cpp">
+    <ClCompile Include="sync_network.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sync_network.cpp">
+    <ClCompile Include="network.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

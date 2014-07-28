@@ -11,6 +11,8 @@ sync_network::sync_network(const unsigned int size, const double weight_factor, 
 	num_osc = size;
 	weight = weight_factor;
 
+	cluster = 1;
+
 	std::default_random_engine				generator;
 	std::uniform_real_distribution<double>	phase_distribution(0.0, 2.0 * pi());
 	std::uniform_real_distribution<double>	frequency_distribution(0.0, 1.0);
@@ -87,7 +89,8 @@ double sync_network::phase_kuramoto(const double teta, const double t, const std
 		}
 	}
 
-	return (*oscillators)[index].frequency + (phase * weight / num_osc);
+	phase = (*oscillators)[index].frequency + (phase * weight / num_osc);
+	return phase;
 }
 
 std::vector< std::vector<unsigned int> * > * sync_network::allocate_sync_ensembles(const double tolerance) const {	
@@ -131,13 +134,14 @@ std::vector< std::vector<sync_dynamic> * > * sync_network::simulate_static(const
 	std::vector< std::vector<sync_dynamic> * > * dynamic = new std::vector< std::vector<sync_dynamic> * >;
 
 	const double step = time / (double) steps;
-	const double int_step = step / 10;
+	const double int_step = step / 10.0;
 
 	for (double cur_time = 0; cur_time < time; cur_time += step) {
 		calculate_phases(solver, cur_time, step, int_step);
 
 		if (collect_dynamic == true) {
 			std::vector<sync_dynamic> * network_dynamic = new std::vector<sync_dynamic>();
+
 			for (unsigned int index = 0; index < num_osc; index++) {
 				sync_dynamic oscillator_dynamic;
 				oscillator_dynamic.phase = (*oscillators)[index].phase;
@@ -154,10 +158,11 @@ std::vector< std::vector<sync_dynamic> * > * sync_network::simulate_static(const
 }
 
 void sync_network::calculate_phases(const solve_type solver, const double t, const double step, const double int_step) {
-	std::vector<double> * next_phases = new std::vector<double> ();
+	std::vector<double> * next_phases = new std::vector<double> (num_osc, 0);
+	std::vector<double> argv(1, 0);
 
 	for (unsigned int index = 0; index < num_osc; index++) {
-		std::vector<double>		argv(1, index);
+		argv[0] = index;
 
 		switch(solver) {
 			case solve_type::FAST: {

@@ -14,6 +14,11 @@
 
 void free_clustering_result(clustering_result * pointer) {
 	if (pointer != NULL) {
+		if (pointer->clusters != NULL) {
+			delete pointer->clusters;
+			pointer->clusters = NULL;
+		}
+
 		delete pointer;
 		pointer = NULL;
 	}
@@ -87,8 +92,60 @@ clustering_result * rock_algorithm(const data_representation * const sample, con
 	return result;
 }
 
+void free_dynamic_result(dynamic_result * pointer) {
+	if (pointer != NULL) {
+		if (pointer->times != NULL) {
+			delete pointer->times;
+			pointer->times = NULL;
+		}
+
+		if (pointer->dynamic != NULL) {
+			for (unsigned int index_object = 0; index_object < pointer->size_dynamic; index_object++) {
+				if (pointer->dynamic[index_object] != NULL) {
+					delete pointer->dynamic[index_object];
+					pointer->dynamic[index_object] = NULL;
+				}
+			}
+
+			delete pointer->dynamic;
+			pointer->dynamic = NULL;
+		}
+
+		delete pointer;
+		pointer = NULL;
+	}
+}
+
 void * create_sync_network(const unsigned int size, const double weight_factor, const double frequency_factor, const unsigned int connection_type, const unsigned int initial_phases) {
 	return (void *) new sync_network(size, weight_factor, frequency_factor, (conn_type) connection_type, (initial_type) initial_phases);
+}
+
+dynamic_result * simulate_sync_network(const void * pointer_network, unsigned int steps, const double time, const unsigned int solver, const bool collect_dynamic) {
+	sync_network * network = (sync_network *) pointer_network;
+
+	std::vector< std::vector<sync_dynamic> * > * dynamic = network->simulate(steps, time, (solve_type) solver, collect_dynamic);
+
+	dynamic_result * result = new dynamic_result();
+	result->size_dynamic = dynamic->size();
+	result->size_network = network->size();
+	result->times = new double[result->size_dynamic];
+	result->dynamic = new double * [result->size_dynamic];
+
+	for (unsigned int index_dynamic = 0; index_dynamic < result->size_dynamic; index_dynamic++) {
+		result->times[index_dynamic] = (*(*dynamic)[index_dynamic])[0].time;
+		result->dynamic[index_dynamic] = new double[result->size_network];
+		for (unsigned int index_neuron = 0; index_neuron < result->size_network; index_neuron++) {
+			result->dynamic[index_dynamic][index_neuron] = (*(*dynamic)[index_dynamic])[index_neuron].phase;
+		}
+
+		delete (*dynamic)[index_dynamic];
+		(*dynamic)[index_dynamic] = NULL;
+	}
+	
+	delete dynamic;
+	dynamic = NULL;
+
+	return result;
 }
 
 clustering_result * sync_network_algorithm(void * pointer_network) {

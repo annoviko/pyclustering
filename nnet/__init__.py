@@ -7,9 +7,9 @@ class initial_type:
     EQUIPARTITION = 1;
 
 class solve_type:
-    FAST = 1;                   # Usual calculation: x(k + 1) = x(k) + f(x(k)).
-    ODEINT = 2;                 # Runge-Kutte method with fixed step.
-    ODE = 3;
+    FAST = 0;                   # Usual calculation: x(k + 1) = x(k) + f(x(k)).
+    ODEINT = 1;                 # Runge-Kutte method with fixed step.
+    ODE = 1;
 
 class conn_type:
     NONE = 0;                   # No connection between oscillators.

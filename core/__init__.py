@@ -56,6 +56,28 @@ def extract_clusters(ccore_result):
     
     return list_of_clusters;
 
+def extract_dynamics(ccore_result):
+    pointer_dynamic_result = cast(ccore_result, POINTER(dynamic_result));   # dynamic_result * pointer_dynamic_result
+    size_dynamic = pointer_dynamic_result[0].size_dynamic;
+    size_network = pointer_dynamic_result[0].size_network;
+    
+    pointer_time = cast(pointer_dynamic_result[0].times, POINTER(c_double));
+    pointer_pointer_dynamic = cast(pointer_dynamic_result[0].dynamic, POINTER(POINTER(c_double)));
+    
+    times = [];
+    dynamic = [];
+    
+    for index in range(0, size_dynamic):
+        times.append(pointer_time[index]);
+        dynamic.append([]);
+        
+        pointer_dynamic = cast(pointer_pointer_dynamic[index], POINTER(c_double));
+        
+        for object_dynamic in range(0, size_network):
+            dynamic[index].append(pointer_dynamic[object_dynamic]);
+        
+    return (times, dynamic);
+
 # Implemented algorithms.
 def dbscan(sample, eps, min_neighbors, return_noise = False):
     "Clustering algorithm DBSCAN returns allocated clusters and noise that are consisted from input data."
@@ -122,16 +144,39 @@ def rock(sample, eps, number_clusters, threshold):
     return list_of_clusters;    
 
 
+def free_dynamic_result(pointer_dynamic_result):
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore.free_dynamic_result(pointer_dynamic_result);
+
+
 def create_sync_network(num_osc, weight, frequency, type_conn, initial_phases):
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
     pointer_network = ccore.create_sync_network(c_uint(num_osc), c_double(weight), c_double(frequency), c_uint(type_conn), c_uint(initial_phases));
     
     return pointer_network;
 
+
+def simulate_sync_network(pointer_network, steps, time, solution, collect_dynamic):
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore_dynamic_result = ccore.simulate_sync_network(pointer_network, c_uint(steps), c_double(time), c_uint(solution), c_bool(collect_dynamic));
+    
+    python_dynamic_result = extract_dynamics(ccore_dynamic_result);
+    free_dynamic_result(ccore_dynamic_result);
+    
+    return python_dynamic_result;
+
+
 def destroy_object(pointer_object):
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
     ccore.destroy_object(pointer_object);
 
 
-# pointer_network = create_sync_network(1, 1, 0, 1, 0);
+# from support import draw_dynamics;
+# from nnet import *;
+# 
+# pointer_network = create_sync_network(256, 1, 0, conn_type.LIST_BIDIR, 0);
+# (t, dyn) = simulate_sync_network(pointer_network, 50000, 10000, 0, True);
+# 
+# draw_dynamics(t, dyn);
+# 
 # destroy_object(pointer_network);
