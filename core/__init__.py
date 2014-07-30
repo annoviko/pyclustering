@@ -149,9 +149,9 @@ def free_dynamic_result(pointer_dynamic_result):
     ccore.free_dynamic_result(pointer_dynamic_result);
 
 
-def create_sync_network(num_osc, weight, frequency, type_conn, initial_phases):
+def create_sync_network(num_osc, weight, frequency, qcluster, type_conn, initial_phases):
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
-    pointer_network = ccore.create_sync_network(c_uint(num_osc), c_double(weight), c_double(frequency), c_uint(type_conn), c_uint(initial_phases));
+    pointer_network = ccore.create_sync_network(c_uint(num_osc), c_double(weight), c_double(frequency), c_uint(qcluster), c_uint(type_conn), c_uint(initial_phases));
     
     return pointer_network;
 
@@ -173,10 +173,10 @@ def destroy_object(pointer_object):
 
 # from support import draw_dynamics;
 # from nnet import *;
-# 
-# pointer_network = create_sync_network(256, 1, 0, conn_type.LIST_BIDIR, 0);
-# (t, dyn) = simulate_sync_network(pointer_network, 50000, 10000, 0, True);
-# 
+#    
+# pointer_network = create_sync_network(20, 1, 0, 2, conn_type.ALL_TO_ALL, 0);
+# (t, dyn) = simulate_sync_network(pointer_network, 500, 100, 0, True);
+#    
 # draw_dynamics(t, dyn);
-# 
+#    
 # destroy_object(pointer_network);

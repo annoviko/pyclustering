@@ -5,13 +5,13 @@
 #include <random>
 #include <complex>
 
-sync_network::sync_network(const unsigned int size, const double weight_factor, const double frequency_factor, const conn_type connection_type, const initial_type initial_phases) :
+sync_network::sync_network(const unsigned int size, const double weight_factor, const double frequency_factor, const unsigned int qcluster, const conn_type connection_type, const initial_type initial_phases) :
 	network(size, connection_type) 
 {
 	num_osc = size;
 	weight = weight_factor;
 
-	cluster = 1;
+	cluster = qcluster;
 
 	std::default_random_engine				generator;
 	std::uniform_real_distribution<double>	phase_distribution(0.0, 2.0 * pi());
@@ -35,12 +35,29 @@ sync_network::sync_network(const unsigned int size, const double weight_factor, 
 		oscillator_context.frequency = frequency_distribution(generator) * frequency_factor;
 		oscillators->push_back(oscillator_context);
 	}
+
+	sync_ensembles = NULL;
 }
 
 sync_network::~sync_network() {
 	if (oscillators != NULL) {
 		delete oscillators;
 		oscillators = NULL;
+	}
+
+	free_sync_ensembles();
+}
+
+void sync_network::free_sync_ensembles() {
+	if (sync_ensembles != NULL) {
+		for (std::vector< std::vector<unsigned int> * >::const_iterator iter = sync_ensembles->begin(); iter != sync_ensembles->end(); iter++) {
+			if (*iter != NULL) {
+				delete *iter;
+			}
+		}
+
+		delete sync_ensembles;
+		sync_ensembles = NULL;
 	}
 }
 
@@ -93,17 +110,23 @@ double sync_network::phase_kuramoto(const double teta, const double t, const std
 	return phase;
 }
 
-std::vector< std::vector<unsigned int> * > * sync_network::allocate_sync_ensembles(const double tolerance) const {	
-	std::vector< std::vector<unsigned int> * > * clusters = new std::vector< std::vector<unsigned int> * >();
-	clusters->push_back(new std::vector<unsigned int> ());
+std::vector< std::vector<unsigned int> * > * sync_network::allocate_sync_ensembles(const double tolerance) {	
+	if (sync_ensembles == NULL) {
+		sync_ensembles = new std::vector< std::vector<unsigned int> * >();
+	}
+	else {
+		return sync_ensembles;
+	}
+
+	sync_ensembles->push_back(new std::vector<unsigned int> ());
 	
 	if (num_osc > 0) {
-		(*clusters)[0]->push_back(0);
+		(*sync_ensembles)[0]->push_back(0);
 	}
 
 	for (unsigned int i = 1; i < num_osc; i++) {
 		bool cluster_allocated = false;
-		for (std::vector< std::vector<unsigned int> * >::const_iterator cluster = clusters->begin(); cluster != clusters->end(); cluster++) {
+		for (std::vector< std::vector<unsigned int> * >::const_iterator cluster = sync_ensembles->begin(); cluster != sync_ensembles->end(); cluster++) {
 			for (std::vector<unsigned int>::const_iterator neuron_index = (*cluster)->begin(); neuron_index != (*cluster)->end(); neuron_index++) {
 				if ( ( (*oscillators)[i].phase < ((*oscillators)[*neuron_index].phase + tolerance) ) && ( (*oscillators)[i].phase > ((*oscillators)[*neuron_index].phase - tolerance) ) ) {
 					cluster_allocated = true;
@@ -123,14 +146,13 @@ std::vector< std::vector<unsigned int> * > * sync_network::allocate_sync_ensembl
 		}
 	}
 
-	return clusters;
+	return sync_ensembles;
 }
 
-std::vector< std::vector<sync_dynamic> * > * sync_network::simulate(const unsigned int steps, const double time, const solve_type solver, const bool collect_dynamic) {
-	return simulate_static(steps, time, solver, collect_dynamic);
-}
 
 std::vector< std::vector<sync_dynamic> * > * sync_network::simulate_static(const unsigned int steps, const double time, const solve_type solver, const bool collect_dynamic) {
+	free_sync_ensembles();
+
 	std::vector< std::vector<sync_dynamic> * > * dynamic = new std::vector< std::vector<sync_dynamic> * >;
 
 	const double step = time / (double) steps;
@@ -156,6 +178,12 @@ std::vector< std::vector<sync_dynamic> * > * sync_network::simulate_static(const
 
 	return dynamic;
 }
+
+
+std::vector< std::vector<sync_dynamic> * > * sync_network::simulate_dynamic(const double order, const solve_type solver, const bool collect_dynamic, const double step, const double step_int, const double threshold_changes) {
+	return NULL;
+}
+
 
 void sync_network::calculate_phases(const solve_type solver, const double t, const double step, const double int_step) {
 	std::vector<double> * next_phases = new std::vector<double> (num_osc, 0);

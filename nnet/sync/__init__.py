@@ -159,7 +159,7 @@ class sync_network(network, network_interface):
     
     
     def simulate(self, steps, time, solution = solve_type.FAST, collect_dynamic = True):
-        "Performs static simulation of LEGION oscillatory network."
+        "Performs static simulation of Sync oscillatory network."
         
         "(in) steps            - number steps of simulations during simulation."
         "(in) time             - time of simulation."
