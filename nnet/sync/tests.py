@@ -238,8 +238,7 @@ class Test(unittest.TestCase):
 
 
     def template_dynamic_simulation_cluster_parameter(self, num_osc, cluster_parameter, ccore_flag = False):
-        network = sync_network(num_osc, 1, 0, 0, conn_type.ALL_TO_ALL, ccore = ccore_flag);   
-        network.cluster = cluster_parameter;
+        network = sync_network(num_osc, 1, 0, cluster_parameter, conn_type.ALL_TO_ALL, ccore = ccore_flag);   
           
         network.simulate_dynamic(solution = solve_type.ODEINT);
         clusters = network.allocate_sync_ensembles(0.1);
@@ -266,11 +265,6 @@ class Test(unittest.TestCase):
     
     def test_static_simulation_by_core(self):
         self.template_simulate_test(10, 1, solve_type.FAST, True);
-
-
-    def test_dynamic_simulation_by_core(self):
-        self.template_dynamic_simulation_cluster_parameter(20, 2, True);
-        self.template_dynamic_simulation_cluster_parameter(20, 3, True);
         
 
 if __name__ == "__main__":

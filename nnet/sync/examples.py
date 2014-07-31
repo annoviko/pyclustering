@@ -3,8 +3,8 @@ from support import draw_dynamics;
 from nnet import solve_type, conn_type;
 from nnet.sync import sync_network;
 
-def template_dynamic_sync(num_osc, k = 1, q = 1, sim_arg = None, conn = conn_type.ALL_TO_ALL, type_solution = solve_type.FAST, collect_dyn = True):
-    network = sync_network(num_osc, k, type_conn = conn);
+def template_dynamic_sync(num_osc, k = 1, q = 1, sim_arg = None, conn = conn_type.ALL_TO_ALL, type_solution = solve_type.FAST, collect_dyn = True, ccore_flag = False):
+    network = sync_network(num_osc, k, type_conn = conn, ccore = ccore_flag);
     network.cluster = q;
 
     if (sim_arg is not None):
@@ -19,6 +19,7 @@ def template_dynamic_sync(num_osc, k = 1, q = 1, sim_arg = None, conn = conn_typ
 # Positive connections
 def trivial_dynamic_sync():
     template_dynamic_sync(100, 1, sim_arg = [50, 10]);
+    template_dynamic_sync(100, 1, sim_arg = [50, 10], ccore_flag = True);
 
 def weight_5_dynamic_sync():
     template_dynamic_sync(10, 10, sim_arg = [100, 10], type_solution = solve_type.ODEINT);
@@ -38,7 +39,8 @@ def grid_four_struct_dynamic_sync():
         
 # Negative connections        
 def negative_connection_5_oscillators():
-    template_dynamic_sync(5, -1);       
+    template_dynamic_sync(5, -1); 
+    template_dynamic_sync(5, -1, ccore_flag = True);    
     
 def negative_connection_10_oscillators():
     "Comment: It is not full desynchronization"
