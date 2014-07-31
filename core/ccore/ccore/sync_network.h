@@ -45,7 +45,9 @@ public:
 	static double phase_normalization(const double teta);
 
 protected:
-	virtual double phase_kuramoto(const double t, const double teta, const std::vector<double> & argv);
+	static double adapter_phase_kuramoto(const double t, const double teta, const std::vector<void *> & argv);
+
+	virtual double phase_kuramoto(const double t, const double teta, const std::vector<void *> & argv);
 
 	virtual void calculate_phases(const solve_type solver, const double t, const double step, const double int_step);
 

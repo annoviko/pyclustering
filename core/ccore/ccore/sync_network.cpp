@@ -101,8 +101,14 @@ double sync_network::sync_local_order() const {
 }
 
 
-double sync_network::phase_kuramoto(const double teta, const double t, const std::vector<double> & argv) {
-	unsigned int index = (unsigned int) argv[0];
+
+double sync_network::adapter_phase_kuramoto(const double t, const double teta, const std::vector<void *> & argv) {
+	return ((sync_network *) argv[0])->phase_kuramoto(t, teta, argv);
+}
+
+
+double sync_network::phase_kuramoto(const double t, const double teta, const std::vector<void *> & argv) {
+	unsigned int index = (unsigned int) argv[1];
 	double phase = 0;
 
 	for (unsigned int k = 0; k < num_osc; k++) {
@@ -221,19 +227,25 @@ void sync_network::store_dynamic(std::vector< std::vector<sync_dynamic> * > * dy
 
 void sync_network::calculate_phases(const solve_type solver, const double t, const double step, const double int_step) {
 	std::vector<double> * next_phases = new std::vector<double> (num_osc, 0);
-	std::vector<double> argv(1, 0);
+	std::vector<void *> argv(2, NULL);
+
+	argv[0] = (void *) this;
 
 	for (unsigned int index = 0; index < num_osc; index++) {
-		argv[0] = index;
+		argv[1] = (void *) index;
 
 		switch(solver) {
 			case solve_type::FAST: {
-				double result = (*oscillators)[index].phase + phase_kuramoto((*oscillators)[index].phase, t, argv);
+				double result = (*oscillators)[index].phase + phase_kuramoto(t, (*oscillators)[index].phase, argv);
 				(*next_phases)[index] = phase_normalization(result);
 				break;
 			}
 			case solve_type::RK4: {
-				throw std::runtime_error("RK4 is not supported");
+				std::vector<differential_result> * result = rk4(&sync_network::adapter_phase_kuramoto, (*oscillators)[index].phase, t, t + step, int_step, argv);
+				(*next_phases)[index] = phase_normalization( (*result)[result->size() - 1].value );
+
+				delete result;
+				break;
 			}
 			default: {
 				throw std::runtime_error("Unknown type of solver");

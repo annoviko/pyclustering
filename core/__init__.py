@@ -203,3 +203,18 @@ def sync_local_order(pointer_network):
 def destroy_object(pointer_object):
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
     ccore.destroy_object(pointer_object);
+
+
+from support import draw_dynamics;
+from nnet import *;
+      
+pointer_network = create_sync_network(6, 1, 0, 1, conn_type.ALL_TO_ALL, 0);
+(t, dyn) = simulate_sync_network(pointer_network, 100, 10, 1, True);
+      
+draw_dynamics(t, dyn);
+clusters = allocate_sync_ensembles_sync_network(pointer_network, 0.1);
+  
+print(clusters);   
+print(sync_order(pointer_network));
+print(sync_local_order(pointer_network));
+destroy_object(pointer_network);

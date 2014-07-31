@@ -49,6 +49,6 @@ std::vector<std::vector<double> > * read_sample(const data_representation * cons
 
 clustering_result * create_clustering_result(const std::vector<std::vector<unsigned int> *> * const clusters);
 
-std::vector<differential_result> * rk4(double (*function_pointer)(double t, double val, const std::vector<double> & argv), double initial_value, const double a, const double b, const unsigned int steps, const std::vector<double> & argv);
+std::vector<differential_result> * rk4(double (*function_pointer)(const double t, const double val, const std::vector<void *> & argv), double initial_value, const double a, const double b, const unsigned int steps, const std::vector<void *> & argv);
 
 #endif
