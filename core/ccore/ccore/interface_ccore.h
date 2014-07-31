@@ -102,4 +102,26 @@ extern "C" __declspec(dllexport) dynamic_result * simulate_dynamic_sync_network(
  ***********************************************************************************************/
 extern "C" __declspec(dllexport) clustering_result * allocate_sync_ensembles_sync_network(const void * pointer_network, const double tolerance);
 
+/***********************************************************************************************
+ *
+ * @brief   Returns level of global synchorization in the network.
+ *
+ * @param   (in) pointer_network	- pointer to the Sync network.
+ *
+ * @return	Returns level of global synchorization in the network.
+ *
+ ***********************************************************************************************/
+extern "C" __declspec(dllexport) double sync_order(const void * pointer_network);
+
+/***********************************************************************************************
+ *
+ * @brief   Returns level of local (partial) synchronization in the network.
+ *
+ * @param   (in) pointer_network	- pointer to the Sync network.
+ *
+ * @return	Returns level of global synchorization in the network.
+ *
+ ***********************************************************************************************/
+extern "C" __declspec(dllexport) double sync_local_order(const void * pointer_network);
+
 #endif

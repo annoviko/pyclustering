@@ -72,19 +72,17 @@ class Test(unittest.TestCase):
         self.template_simulate_test(128, 1, solve_type.FAST);              
         
         
-    def template_simulate_test(self, nodes = 10, weight = 1, solution = solve_type.FAST):
+    def template_simulate_test(self, nodes = 10, weight = 1, solution = solve_type.FAST, ccore_flag = False):
         sim_time = 20;
         sim_steps = 50;
         tolerance = 0.01;
         
-        network = sync_network(nodes, weight);
+        network = sync_network(nodes, weight, ccore = ccore_flag);
               
         (t, dyn_phase) = network.simulate(sim_steps, sim_time, solution);
         
         index = len(dyn_phase) - 1;
         value = dyn_phase[index][0];
-            
-        assert t[index] == sim_time;
         
         for item in dyn_phase[index]:
             assert (abs(item - value) < tolerance) == True;        
@@ -239,8 +237,8 @@ class Test(unittest.TestCase):
         self.template_dynamic_simulation_connection_type_test(10, 1, conn_type.LIST_BIDIR);
 
 
-    def template_dynamic_simulation_cluster_parameter(self, num_osc, cluster_parameter):
-        network = sync_network(num_osc, 1, False, conn_type.ALL_TO_ALL);   
+    def template_dynamic_simulation_cluster_parameter(self, num_osc, cluster_parameter, ccore_flag = False):
+        network = sync_network(num_osc, 1, 0, 0, conn_type.ALL_TO_ALL, ccore = ccore_flag);   
         network.cluster = cluster_parameter;
           
         network.simulate_dynamic(solution = solve_type.ODEINT);
@@ -264,8 +262,16 @@ class Test(unittest.TestCase):
     
     def test_dynamic_simulation_cluster_parameter_6(self):
         self.template_dynamic_simulation_cluster_parameter(20, 6);
-        
+    
+    
+    def test_static_simulation_by_core(self):
+        self.template_simulate_test(10, 1, solve_type.FAST, True);
 
+
+    def test_dynamic_simulation_by_core(self):
+        self.template_dynamic_simulation_cluster_parameter(20, 2, True);
+        self.template_dynamic_simulation_cluster_parameter(20, 3, True);
+        
 
 if __name__ == "__main__":
     unittest.main();

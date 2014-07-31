@@ -213,3 +213,31 @@ clustering_result * allocate_sync_ensembles_sync_network(const void * pointer_ne
 
 	return result;
 }
+
+#include <iostream>
+/***********************************************************************************************
+ *
+ * @brief   Returns level of global synchorization in the network.
+ *
+ * @param   (in) pointer_network	- pointer to the Sync network.
+ *
+ * @return	Returns level of global synchorization in the network.
+ *
+ ***********************************************************************************************/
+double sync_order(const void * pointer_network) {
+	return ((sync_network *) pointer_network)->sync_order();
+}
+
+
+/***********************************************************************************************
+ *
+ * @brief   Returns level of local (partial) synchronization in the network.
+ *
+ * @param   (in) pointer_network	- pointer to the Sync network.
+ *
+ * @return	Returns level of global synchorization in the network.
+ *
+ ***********************************************************************************************/
+double sync_local_order(const void * pointer_network) {
+	return ((sync_network *) pointer_network)->sync_local_order();
+}

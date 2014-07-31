@@ -63,4 +63,4 @@ class Test(unittest.TestCase):
         self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 1, 4, 0.5, [15, 15, 15, 15, 15], True);
 
 if __name__ == "__main__":
-    unittest.main()
+    unittest.main();

@@ -27,7 +27,7 @@ class syncnet(sync_network):
         else:
             sample = source_data;
         
-        super().__init__(len(sample), 1, False, conn_type.NONE, initial_phases);
+        super().__init__(len(sample), 1, 0, 1, conn_type.NONE, initial_phases);
         
         self._ena_conn_weight = enable_conn_weight;
         self._osc_loc = sample;

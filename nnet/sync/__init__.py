@@ -49,7 +49,7 @@ class sync_network(network, network_interface):
         self._cluster = value;
 
 
-    def __init__(self, num_osc, weight = 1, frequency = 0, type_conn = conn_type.ALL_TO_ALL, conn_represent = conn_represent.MATRIX, initial_phases = initial_type.RANDOM_GAUSSIAN, ccore = False):
+    def __init__(self, num_osc, weight = 1, frequency = 0, qcluster = 1, type_conn = conn_type.ALL_TO_ALL, conn_represent = conn_represent.MATRIX, initial_phases = initial_type.RANDOM_GAUSSIAN, ccore = False):
         "Constructor of oscillatory network is based on Kuramoto model."
         
         "(in) num_osc            - number of oscillators in the network."
@@ -60,12 +60,12 @@ class sync_network(network, network_interface):
         "(in) initial_phases     - type of initialization of initial phases of oscillators (random, uniformly distributed, etc.)."
         
         if (ccore is True):
-            self._ccore_network_pointer = core.create_sync_network(num_osc, weight, frequency, 1, type_conn, initial_phases);
+            self._ccore_network_pointer = core.create_sync_network(num_osc, weight, frequency, qcluster, type_conn, initial_phases);
         else:   
             super().__init__(num_osc, type_conn, conn_represent);
             
             self._weight = weight;
-            self._cluster = 1;
+            self._cluster = qcluster;
             
             self._phases = list();
             self._freq = list();
@@ -89,6 +89,9 @@ class sync_network(network, network_interface):
     def sync_order(self):
         "Returns level of global synchorization in the network."
         
+        if (self._ccore_network_pointer is not None):
+            return core.sync_order(self._ccore_network_pointer);
+        
         exp_amount = 0;
         average_phase = 0;
         
@@ -104,6 +107,9 @@ class sync_network(network, network_interface):
     
     def sync_local_order(self):
         "Returns level of local (partial) synchronization in the network."
+        
+        if (self._ccore_network_pointer is not None):
+            return core.sync_local_order(self._ccore_network_pointer);
         
         exp_amount = 0;
         num_neigh = 0;
