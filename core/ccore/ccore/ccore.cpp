@@ -160,27 +160,7 @@ void * create_sync_network(const unsigned int size, const double weight_factor, 
 dynamic_result * simulate_sync_network(const void * pointer_network, unsigned int steps, const double time, const unsigned int solver, const bool collect_dynamic) {
 	sync_network * network = (sync_network *) pointer_network;
 
-	std::vector< std::vector<sync_dynamic> * > * dynamic = network->simulate_static(steps, time, (solve_type) solver, collect_dynamic);
-
-	dynamic_result * result = new dynamic_result();
-	result->size_dynamic = dynamic->size();
-	result->size_network = network->size();
-	result->times = new double[result->size_dynamic];
-	result->dynamic = new double * [result->size_dynamic];
-
-	for (unsigned int index_dynamic = 0; index_dynamic < result->size_dynamic; index_dynamic++) {
-		result->times[index_dynamic] = (*(*dynamic)[index_dynamic])[0].time;
-		result->dynamic[index_dynamic] = new double[result->size_network];
-		for (unsigned int index_neuron = 0; index_neuron < result->size_network; index_neuron++) {
-			result->dynamic[index_dynamic][index_neuron] = (*(*dynamic)[index_dynamic])[index_neuron].phase;
-		}
-
-		delete (*dynamic)[index_dynamic];
-		(*dynamic)[index_dynamic] = NULL;
-	}
-	
-	delete dynamic;
-	dynamic = NULL;
+	dynamic_result * result = network->simulate_static(steps, time, (solve_type) solver, collect_dynamic);
 
 	return result;
 }
@@ -188,8 +168,35 @@ dynamic_result * simulate_sync_network(const void * pointer_network, unsigned in
 
 /***********************************************************************************************
  *
- * @brief   Allocate clusters in line with ensembles of synchronous oscillators where each
- *          synchronous ensemble corresponds to only one cluster.
+ * @brief   Simulate dynamic of the oscillatory Sync network until stop condition is not reached.
+ *
+ * @param   (in) pointer_network	- pointer to the Sync network.
+ *          (in) order				- order of process synchronization, destributed 0..1.
+ *          (in) solver				- type of solution (solving).
+ *          (in) collect_dynamic	- if true - returns whole dynamic of oscillatory network, 
+ *                                    otherwise returns only last values of dynamics.
+ *          (in) step				- time step of one iteration of simulation.
+ *          (in) step_int			- integration step, should be less than step.
+ *          (in) threshold_changes	- additional stop condition that helps prevent infinite 
+ *                                    simulation, defines limit of changes of oscillators between 
+ *                                    current and previous steps.
+ *
+ * @return	Returns dynamic of simulation of the network.
+ *
+ ***********************************************************************************************/
+dynamic_result * simulate_dynamic_sync_network(const void * pointer_network, const double order, const unsigned int solver, const bool collect_dynamic, const double step, const double step_int, const double threshold_changes) {
+	sync_network * network = (sync_network *) pointer_network;
+	
+	dynamic_result * result = network->simulate_dynamic(order, (solve_type) solver, collect_dynamic, step, step_int, threshold_changes);
+
+	return result;
+}
+
+
+/***********************************************************************************************
+ *
+ * @brief   Allocate clusters of ensembles of synchronous oscillators where each
+ *          synchronous ensemble corresponds to only one cluster for Sync network.
  *
  * @param   (in) pointer_network	- pointer to the Sync network.
  *          (in) tolerance			- maximum error for allocation of synchronous ensemble 
@@ -198,7 +205,7 @@ dynamic_result * simulate_sync_network(const void * pointer_network, unsigned in
  * @return	Returns ensembles of synchronous oscillators as clustering result.
  *
  ***********************************************************************************************/
-clustering_result * allocate_sync_ensembles(const void * pointer_network, const double tolerance) {
+clustering_result * allocate_sync_ensembles_sync_network(const void * pointer_network, const double tolerance) {
 	sync_network * network = (sync_network *) pointer_network;	
 
 	const std::vector<std::vector<unsigned int> *> * const clusters = network->allocate_sync_ensembles(tolerance);

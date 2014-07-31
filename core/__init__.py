@@ -166,6 +166,26 @@ def simulate_sync_network(pointer_network, steps, time, solution, collect_dynami
     return python_dynamic_result;
 
 
+def simulate_dynamic_sync_network(pointer_network, order, solution, collect_dynamic, step, int_step, threshold_changes):
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore_dynamic_result = ccore.simulate_dynamic_sync_network(pointer_network, c_double(order), c_uint(solution), c_bool(collect_dynamic), c_double(step), c_double(int_step), c_double(threshold_changes));
+    
+    python_dynamic_result = extract_dynamics(ccore_dynamic_result);
+    free_dynamic_result(ccore_dynamic_result);
+    
+    return python_dynamic_result;    
+
+
+def allocate_sync_ensembles_sync_network(pointer_network, tolerance):
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore_cluster_result = ccore.allocate_sync_ensembles_sync_network(pointer_network, c_double(tolerance));
+    
+    list_of_clusters = extract_clusters(ccore_cluster_result);
+    
+    ccore.free_clustering_result(ccore_cluster_result);
+    return list_of_clusters; 
+
+
 def destroy_object(pointer_object):
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
     ccore.destroy_object(pointer_object);
@@ -173,10 +193,12 @@ def destroy_object(pointer_object):
 
 # from support import draw_dynamics;
 # from nnet import *;
-#    
-# pointer_network = create_sync_network(20, 1, 0, 2, conn_type.ALL_TO_ALL, 0);
-# (t, dyn) = simulate_sync_network(pointer_network, 500, 100, 0, True);
-#    
+#     
+# pointer_network = create_sync_network(6, 1, 0, 1, conn_type.ALL_TO_ALL, 0);
+# (t, dyn) = simulate_sync_network(pointer_network, 100, 10, 0, True);
+#     
 # draw_dynamics(t, dyn);
-#    
+# clusters = allocate_sync_ensembles_sync_network(pointer_network, 0.5);
+# 
+# print(clusters);   
 # destroy_object(pointer_network);

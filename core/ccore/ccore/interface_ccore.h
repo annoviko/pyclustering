@@ -38,9 +38,6 @@ extern "C" __declspec(dllexport) void free_dynamic_result(dynamic_result * point
 
 extern "C" __declspec(dllexport) void destroy_object(void * object);
 
-
-
-
 /***********************************************************************************************
  *
  * @brief   Create oscillatory network Sync that is based on Kuramoto model.
@@ -73,8 +70,28 @@ extern "C" __declspec(dllexport) dynamic_result * simulate_sync_network(const vo
 
 /***********************************************************************************************
  *
- * @brief   Allocate clusters in line with ensembles of synchronous oscillators where each
- *          synchronous ensemble corresponds to only one cluster.
+ * @brief   Simulate dynamic of the oscillatory Sync network until stop condition is not reached.
+ *
+ * @param   (in) pointer_network	- pointer to the Sync network.
+ *          (in) order				- order of process synchronization, destributed 0..1.
+ *          (in) solver				- type of solution (solving).
+ *          (in) collect_dynamic	- if true - returns whole dynamic of oscillatory network, 
+ *                                    otherwise returns only last values of dynamics.
+ *          (in) step				- time step of one iteration of simulation.
+ *          (in) step_int			- integration step, should be less than step.
+ *          (in) threshold_changes	- additional stop condition that helps prevent infinite 
+ *                                    simulation, defines limit of changes of oscillators between 
+ *                                    current and previous steps.
+ *
+ * @return	Returns dynamic of simulation of the network.
+ *
+ ***********************************************************************************************/
+extern "C" __declspec(dllexport) dynamic_result * simulate_dynamic_sync_network(const void * pointer_network, const double order, const unsigned int solver, const bool collect_dynamic, const double step, const double step_int, const double threshold_changes);
+
+/***********************************************************************************************
+ *
+ * @brief   Allocate clusters of ensembles of synchronous oscillators where each
+ *          synchronous ensemble corresponds to only one cluster for Sync network.
  *
  * @param   (in) pointer_network	- pointer to the Sync network.
  *          (in) tolerance			- maximum error for allocation of synchronous ensemble 
@@ -83,6 +100,6 @@ extern "C" __declspec(dllexport) dynamic_result * simulate_sync_network(const vo
  * @return	Returns ensembles of synchronous oscillators as clustering result.
  *
  ***********************************************************************************************/
-extern "C" __declspec(dllexport) clustering_result * allocate_sync_ensembles(const void * pointer_network, const double tolerance);
+extern "C" __declspec(dllexport) clustering_result * allocate_sync_ensembles_sync_network(const void * pointer_network, const double tolerance);
 
 #endif

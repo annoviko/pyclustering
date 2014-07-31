@@ -62,7 +62,7 @@
     <ClInclude Include="sync_network.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="interface_network.h">
+    <ClInclude Include="network.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

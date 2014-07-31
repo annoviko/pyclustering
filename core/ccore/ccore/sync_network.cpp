@@ -39,6 +39,7 @@ sync_network::sync_network(const unsigned int size, const double weight_factor, 
 	sync_ensembles = NULL;
 }
 
+
 sync_network::~sync_network() {
 	if (oscillators != NULL) {
 		delete oscillators;
@@ -47,6 +48,7 @@ sync_network::~sync_network() {
 
 	free_sync_ensembles();
 }
+
 
 void sync_network::free_sync_ensembles() {
 	if (sync_ensembles != NULL) {
@@ -60,6 +62,7 @@ void sync_network::free_sync_ensembles() {
 		sync_ensembles = NULL;
 	}
 }
+
 
 double sync_network::sync_order() const {
 	double exp_amount = 0;
@@ -75,6 +78,7 @@ double sync_network::sync_order() const {
 
 	return std::abs(average_phase) / std::abs(exp_amount);
 }
+
 
 double sync_network::sync_local_order() const {
 	double			exp_amount = 0;
@@ -96,6 +100,7 @@ double sync_network::sync_local_order() const {
 	return exp_amount / (double) number_neighbors;
 }
 
+
 double sync_network::phase_kuramoto(const double teta, const double t, const std::vector<double> & argv) {
 	unsigned int index = (unsigned int) argv[0];
 	double phase = 0;
@@ -109,6 +114,7 @@ double sync_network::phase_kuramoto(const double teta, const double t, const std
 	phase = (*oscillators)[index].frequency + (phase * weight / num_osc);
 	return phase;
 }
+
 
 std::vector< std::vector<unsigned int> * > * sync_network::allocate_sync_ensembles(const double tolerance) {	
 	if (sync_ensembles == NULL) {
@@ -143,6 +149,7 @@ std::vector< std::vector<unsigned int> * > * sync_network::allocate_sync_ensembl
 		if (cluster_allocated == false) {
 			std::vector<unsigned int> * allocated_cluster = new std::vector<unsigned int>();
 			allocated_cluster->push_back(i);
+			sync_ensembles->push_back(allocated_cluster);
 		}
 	}
 
@@ -150,7 +157,7 @@ std::vector< std::vector<unsigned int> * > * sync_network::allocate_sync_ensembl
 }
 
 
-std::vector< std::vector<sync_dynamic> * > * sync_network::simulate_static(const unsigned int steps, const double time, const solve_type solver, const bool collect_dynamic) {
+dynamic_result * sync_network::simulate_static(const unsigned int steps, const double time, const solve_type solver, const bool collect_dynamic) {
 	free_sync_ensembles();
 
 	std::vector< std::vector<sync_dynamic> * > * dynamic = new std::vector< std::vector<sync_dynamic> * >;
@@ -162,26 +169,53 @@ std::vector< std::vector<sync_dynamic> * > * sync_network::simulate_static(const
 		calculate_phases(solver, cur_time, step, int_step);
 
 		if (collect_dynamic == true) {
-			std::vector<sync_dynamic> * network_dynamic = new std::vector<sync_dynamic>();
-
-			for (unsigned int index = 0; index < num_osc; index++) {
-				sync_dynamic oscillator_dynamic;
-				oscillator_dynamic.phase = (*oscillators)[index].phase;
-				oscillator_dynamic.time = cur_time;
-
-				network_dynamic->push_back(oscillator_dynamic);
-			}
-
-			dynamic->push_back(network_dynamic);
+			store_dynamic(dynamic, cur_time);
 		}
 	}
 
-	return dynamic;
+	return convert_dynamic_representation(dynamic);
 }
 
 
-std::vector< std::vector<sync_dynamic> * > * sync_network::simulate_dynamic(const double order, const solve_type solver, const bool collect_dynamic, const double step, const double step_int, const double threshold_changes) {
-	return NULL;
+dynamic_result * sync_network::simulate_dynamic(const double order, const solve_type solver, const bool collect_dynamic, const double step, const double step_int, const double threshold_changes) {
+	free_sync_ensembles();
+
+	double previous_order = 0.0;
+	double current_order = sync_local_order();
+
+	std::vector< std::vector<sync_dynamic> * > * dynamic = new std::vector< std::vector<sync_dynamic> * >;
+
+	for (double time_counter = 0; current_order < order; time_counter += step) {
+		calculate_phases(solver, time_counter, step, step_int);
+
+		if (collect_dynamic == true) {
+			store_dynamic(dynamic, time_counter);
+		}
+
+		previous_order = current_order;
+		current_order = sync_local_order();
+
+		if (std::abs(current_order - previous_order) < threshold_changes) {
+			break;
+		}
+	}
+
+	return convert_dynamic_representation(dynamic);
+}
+
+
+void sync_network::store_dynamic(std::vector< std::vector<sync_dynamic> * > * dynamic, const double time) const {
+	std::vector<sync_dynamic> * network_dynamic = new std::vector<sync_dynamic>();
+
+	for (unsigned int index = 0; index < num_osc; index++) {
+		sync_dynamic oscillator_dynamic;
+		oscillator_dynamic.phase = (*oscillators)[index].phase;
+		oscillator_dynamic.time = time;
+
+		network_dynamic->push_back(oscillator_dynamic);
+	}
+
+	dynamic->push_back(network_dynamic);
 }
 
 
@@ -228,4 +262,29 @@ double sync_network::phase_normalization(const double teta) {
 	}
 
 	return norm_teta;
+}
+
+dynamic_result * sync_network::convert_dynamic_representation(std::vector< std::vector<sync_dynamic> * > * dynamic) const {
+	dynamic_result * result = new dynamic_result();
+
+	result->size_dynamic = dynamic->size();
+	result->size_network = this->size();
+	result->times = new double[result->size_dynamic];
+	result->dynamic = new double * [result->size_dynamic];
+
+	for (unsigned int index_dynamic = 0; index_dynamic < result->size_dynamic; index_dynamic++) {
+		result->times[index_dynamic] = (*(*dynamic)[index_dynamic])[0].time;
+		result->dynamic[index_dynamic] = new double[result->size_network];
+		for (unsigned int index_neuron = 0; index_neuron < result->size_network; index_neuron++) {
+			result->dynamic[index_dynamic][index_neuron] = (*(*dynamic)[index_dynamic])[index_neuron].phase;
+		}
+
+		delete (*dynamic)[index_dynamic];
+		(*dynamic)[index_dynamic] = NULL;
+	}
+	
+	delete dynamic;
+	dynamic = NULL;
+
+	return result;
 }

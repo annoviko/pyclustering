@@ -6,7 +6,7 @@ from nnet.sync import sync_network;
 def template_dynamic_sync(num_osc, k = 1, q = 1, sim_arg = None, conn = conn_type.ALL_TO_ALL, type_solution = solve_type.FAST, collect_dyn = True):
     network = sync_network(num_osc, k, type_conn = conn);
     network.cluster = q;
-    
+
     if (sim_arg is not None):
         (t, dyn_phase) = network.simulate(sim_arg[0], sim_arg[1], solution = type_solution, collect_dynamic = collect_dyn);
     else:

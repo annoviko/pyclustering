@@ -1,4 +1,4 @@
-#include "interface_network.h"
+#include "network.h"
 
 #include <cmath>
 #include <exception>

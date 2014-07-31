@@ -3,6 +3,7 @@ import random;
 import math;
 import scipy.spatial;
 import support;
+import core;
 
 import matplotlib.pyplot as plt;
 
@@ -19,11 +20,12 @@ class sync_network(network, network_interface):
     
     # Protected members:
     _name = 'Phase Sync Network'
-    _phases = None;                    # Current phases of oscillators.
-    _freq = None;                      # Own frequencies of oscillators.
-    _weight = 0;                       # Strength of connections between oscillators.
-    _cluster = 1;                      # Parameter of artificial clustering during synchronization of phases of oscillators.
-    _ccore = False;                    # CCORE is used for modeling.
+    _phases = None;                     # Current phases of oscillators.
+    _freq = None;                       # Own frequencies of oscillators.
+    _weight = 0;                        # Strength of connections between oscillators.
+    _cluster = 1;                       # Parameter of artificial clustering during synchronization of phases of oscillators.
+    
+    _ccore_network_pointer = None;      # Pointer to CCORE Sync implementation of the network.
     
     # Properties of class that represents oscillatory neural network
     @property
@@ -40,12 +42,11 @@ class sync_network(network, network_interface):
     def cluster(self):
         "Get cluster parameter that defines number of cluster in all-to-all networks."
         return self._cluster;
-    
+
     @cluster.setter
     def cluster(self, value):
         "Set cluster parameter that defines number of cluster in all-to-all networks."
         self._cluster = value;
-
 
 
     def __init__(self, num_osc, weight = 1, frequency = 0, type_conn = conn_type.ALL_TO_ALL, conn_represent = conn_represent.MATRIX, initial_phases = initial_type.RANDOM_GAUSSIAN, ccore = False):
@@ -58,20 +59,31 @@ class sync_network(network, network_interface):
         "(in) conn_represent     - internal representation of connection in the network: matrix or list."
         "(in) initial_phases     - type of initialization of initial phases of oscillators (random, uniformly distributed, etc.)."
         
-        super().__init__(num_osc, type_conn, conn_represent);
-        
-        self._weight = weight;
-        
-        self._phases = list();
-        self._freq = list();
-        
-        for index in range(0, num_osc, 1):    
-            if (initial_phases == initial_type.RANDOM_GAUSSIAN):
-                self._phases.append(random.random() * 2 * pi);
-            elif (initial_phases == initial_type.EQUIPARTITION):
-                self._phases.append( (2 * pi) / (num_osc - 1) * index);
+        if (ccore is True):
+            self._ccore_network_pointer = core.create_sync_network(num_osc, weight, frequency, 1, type_conn, initial_phases);
+        else:   
+            super().__init__(num_osc, type_conn, conn_represent);
             
-            self._freq.append(random.random() * frequency); 
+            self._weight = weight;
+            self._cluster = 1;
+            
+            self._phases = list();
+            self._freq = list();
+            
+            for index in range(0, num_osc, 1):    
+                if (initial_phases == initial_type.RANDOM_GAUSSIAN):
+                    self._phases.append(random.random() * 2 * pi);
+                elif (initial_phases == initial_type.EQUIPARTITION):
+                    self._phases.append( (2 * pi) / (num_osc - 1) * index);
+                
+                self._freq.append(random.random() * frequency); 
+    
+    
+    def __del__(self):
+        "Destructor of oscillatory network is based on Kuramoto model."
+        if (self._ccore_network_pointer is not None):
+            core.destroy_object(self._ccore_network_pointer);
+            self._ccore_network_pointer = None;
     
     
     def sync_order(self):
@@ -136,6 +148,9 @@ class sync_network(network, network_interface):
         "Returns list of grours (lists) of indexes of synchronous oscillators."
         "For example [ [index_osc1, index_osc3], [index_osc2], [index_osc4, index_osc5] ]."
         
+        if (self._ccore_network_pointer is not None):
+            return core.allocate_sync_ensembles_sync_network(self._ccore_network_pointer, tolerance);
+        
         clusters = [];
         if (self._num_osc > 0):
             clusters.append([0]);
@@ -185,6 +200,9 @@ class sync_network(network, network_interface):
         
         "Returns dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,"
         "otherwise returns only last values (last step of simulation) of dynamic."
+        
+        if (self._ccore_network_pointer is not None):
+            return core.simulate_dynamic_sync_network(self._ccore_network_pointer, order, solution, collect_dynamic, step, int_step, threshold_changes);
         
         # For statistics and integration
         time_counter = 0;
@@ -237,6 +255,9 @@ class sync_network(network, network_interface):
         
         "Returns dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,"
         "otherwise returns only last values (last step of simulation) of dynamic."  
+        
+        if (self._ccore_network_pointer is not None):
+            return core.simulate_sync_network(self._ccore_network_pointer, steps, time, solution, collect_dynamic);
         
         dyn_phase = None;
         dyn_time = None;

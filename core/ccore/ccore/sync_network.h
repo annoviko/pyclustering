@@ -1,7 +1,8 @@
 #ifndef _SYNC_NETWORK_H_
 #define _SYNC_NETWORK_H_
 
-#include "interface_network.h"
+#include "network.h"
+#include "interface_ccore.h"
 
 #include <vector>
 
@@ -37,9 +38,9 @@ public:
 
 	std::vector< std::vector<unsigned int> * > * allocate_sync_ensembles(const double tolerance = 0.01);
 
-	std::vector< std::vector<sync_dynamic> * > * simulate_static(const unsigned int steps, const double time, const solve_type solver, const bool collect_dynamic);
+	dynamic_result * simulate_static(const unsigned int steps, const double time, const solve_type solver, const bool collect_dynamic);
 
-	std::vector< std::vector<sync_dynamic> * > * simulate_dynamic(const double order, const solve_type solver, const bool collect_dynamic, const double step = 0.1, const double step_int = 0.01, const double threshold_changes = 0.000001);
+	dynamic_result * simulate_dynamic(const double order, const solve_type solver, const bool collect_dynamic, const double step = 0.1, const double step_int = 0.01, const double threshold_changes = 0.000001);
 
 	static double phase_normalization(const double teta);
 
@@ -50,6 +51,10 @@ protected:
 
 private:
 	void free_sync_ensembles(void);
+
+	void store_dynamic(std::vector< std::vector<sync_dynamic> * > * dynamic, const double time) const;
+
+	dynamic_result * convert_dynamic_representation(std::vector< std::vector<sync_dynamic> * > * dynamic) const;
 };
 
 #endif

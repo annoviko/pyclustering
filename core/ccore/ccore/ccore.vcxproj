@@ -157,7 +157,7 @@
     <ClInclude Include="dbscan.h" />
     <ClInclude Include="hierarchical.h" />
     <ClInclude Include="interface_ccore.h" />
-    <ClInclude Include="interface_network.h" />
+    <ClInclude Include="network.h" />
     <ClInclude Include="kmeans.h" />
     <ClInclude Include="rock.h" />
     <ClInclude Include="support.h" />
