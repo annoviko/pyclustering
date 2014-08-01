@@ -8,7 +8,7 @@ def kmeans(data, centers, tolerance = 0.025, ccore = False):
     "Clustering algorithm K-Means returns allocated clusters and noise that are consisted from input data."
     
     "(in) data        - input data that is presented as list of points (objects), each point should be represented by list or tuple."
-    "(in) centers     - inital coordinates of centers of clusters that are represented by list: [center1, center2, ...]."
+    "(in) centers     - initial coordinates of centers of clusters that are represented by list: [center1, center2, ...]."
     "(in) tolerance   - stop condition: if maximum value of change of centers of clusters is less than tolerance than algorithm will stop processing."
     
     "Returns list of allocated clusters, each cluster contains indexes of objects in list of data."

@@ -24,74 +24,6 @@ void free_clustering_result(clustering_result * pointer) {
 	}
 }
 
-clustering_result * dbscan_algorithm(const data_representation * const sample, const double radius, const unsigned int minumum_neighbors) {
-	std::vector<std::vector<double> > * dataset = read_sample(sample);
-
-	dbscan * solver = new dbscan(dataset, radius, minumum_neighbors);
-	solver->process();
-
-	const std::vector<std::vector<unsigned int> *> * const clusters = solver->get_clusters();
-
-	std::vector<std::vector<unsigned int> *> * clusters_with_noise = new std::vector<std::vector<unsigned int> *>();
-	for (std::vector<std::vector<unsigned int> *>::const_iterator iter = clusters->begin(); iter != clusters->end(); iter++) {
-		clusters_with_noise->push_back(*iter);
-	}
-	clusters_with_noise->push_back((std::vector<unsigned int> *) solver->get_noise());
-
-	clustering_result * result = create_clustering_result(clusters_with_noise);
-
-	delete clusters_with_noise; clusters_with_noise = NULL;
-	delete solver; solver = NULL;
-	delete dataset; dataset = NULL;
-
-	return result;
-}
-
-clustering_result * hierarchical_algorithm(const data_representation * const sample, const unsigned int number_clusters) {
-	std::vector<std::vector<double> > * dataset = read_sample(sample);
-
-	hierarchical * solver = new hierarchical(dataset, number_clusters);
-	solver->process();
-
-	const std::vector<std::vector<unsigned int> *> * const clusters = solver->get_clusters();
-	clustering_result * result = create_clustering_result(clusters);
-
-	delete solver; solver = NULL;
-	delete dataset; dataset = NULL;
-
-	return result;
-}
-
-clustering_result * kmeans_algorithm(const data_representation * const sample, const data_representation * const initial_centers, const double tolerance) {
-	std::vector<std::vector<double> > * dataset = read_sample(sample);
-	std::vector<std::vector<double> > * centers = read_sample(initial_centers);
-
-	kmeans * solver = new kmeans(dataset, centers, tolerance);
-	solver->process();
-
-	clustering_result * result = create_clustering_result(solver->get_clusters());
-
-	delete solver; solver = NULL;
-	delete dataset; dataset = NULL;
-	delete centers; centers = NULL;
-
-	return result;
-}
-
-clustering_result * rock_algorithm(const data_representation * const sample, const double radius, const unsigned int number_clusters, const double threshold) {
-	std::vector<std::vector<double> > * dataset = read_sample(sample);
-
-	rock * solver = new rock(dataset, radius, number_clusters, threshold);
-	solver->process();
-
-	clustering_result * result = create_clustering_result(solver->get_clusters());
-
-	delete solver; solver = NULL;
-	delete dataset; dataset = NULL;
-
-	return result;
-}
-
 void free_dynamic_result(dynamic_result * pointer) {
 	if (pointer != NULL) {
 		if (pointer->times != NULL) {
@@ -123,8 +55,125 @@ void destroy_object(void * object) {
 	}
 }
 
+/***********************************************************************************************
+ *
+ * @brief   Clustering algorithm DBSCAN returns allocated clusters and noise that are consisted
+ *          from input data.
+ *
+ * @param   (in) sample				- input data for clustering.
+ *          (in) radius				- connectivity radius between points, points may be connected
+ *                                    if distance between them less then the radius.
+ *          (in) minumum_neighbors	- minimum number of shared neighbors that is required for
+ *                                    establish links between points.
+ *
+ * @return	Returns result of clustering - array of allocated clusters. The last cluster in the
+ * 			array is noise.
+ *
+ ***********************************************************************************************/
+clustering_result * dbscan_algorithm(const data_representation * const sample, const double radius, const unsigned int minumum_neighbors) {
+	std::vector<std::vector<double> > * dataset = read_sample(sample);
 
+	dbscan * solver = new dbscan(dataset, radius, minumum_neighbors);
+	solver->process();
 
+	const std::vector<std::vector<unsigned int> *> * const clusters = solver->get_clusters();
+
+	std::vector<std::vector<unsigned int> *> * clusters_with_noise = new std::vector<std::vector<unsigned int> *>();
+	for (std::vector<std::vector<unsigned int> *>::const_iterator iter = clusters->begin(); iter != clusters->end(); iter++) {
+		clusters_with_noise->push_back(*iter);
+	}
+	clusters_with_noise->push_back((std::vector<unsigned int> *) solver->get_noise());
+
+	clustering_result * result = create_clustering_result(clusters_with_noise);
+
+	delete clusters_with_noise; clusters_with_noise = NULL;
+	delete solver; solver = NULL;
+	delete dataset; dataset = NULL;
+
+	return result;
+}
+
+/***********************************************************************************************
+ *
+ * @brief   Clustering hierarchical algorithm returns allocated clusters.
+ *
+ * @param   (in) sample				- input data for clustering.
+ *          (in) number_clusters	- number of cluster that should be allocated.
+ *
+ * @return	Returns result of clustering - array of allocated clusters.
+ *
+ ***********************************************************************************************/
+clustering_result * hierarchical_algorithm(const data_representation * const sample, const unsigned int number_clusters) {
+	std::vector<std::vector<double> > * dataset = read_sample(sample);
+
+	hierarchical * solver = new hierarchical(dataset, number_clusters);
+	solver->process();
+
+	const std::vector<std::vector<unsigned int> *> * const clusters = solver->get_clusters();
+	clustering_result * result = create_clustering_result(clusters);
+
+	delete solver; solver = NULL;
+	delete dataset; dataset = NULL;
+
+	return result;
+}
+
+/***********************************************************************************************
+ *
+ * @brief   Clustering algorithm K-Means returns allocated clusters.
+ *
+ * @param   (in) sample				- input data for clustering.
+ *          (in) initial_centers	- initial coordinates of centers of clusters.
+ *          (in) tolerance			- stop condition: if maximum value of change of centers of
+ *                                    clusters is less than tolerance than algorithm will stop
+ *                                    processing.
+ *
+ * @return	Returns result of clustering - array of allocated clusters.
+ *
+ ***********************************************************************************************/
+clustering_result * kmeans_algorithm(const data_representation * const sample, const data_representation * const initial_centers, const double tolerance) {
+	std::vector<std::vector<double> > * dataset = read_sample(sample);
+	std::vector<std::vector<double> > * centers = read_sample(initial_centers);
+
+	kmeans * solver = new kmeans(dataset, centers, tolerance);
+	solver->process();
+
+	clustering_result * result = create_clustering_result(solver->get_clusters());
+
+	delete solver; solver = NULL;
+	delete dataset; dataset = NULL;
+	delete centers; centers = NULL;
+
+	return result;
+}
+
+/***********************************************************************************************
+ *
+ * @brief   Clustering algorithm ROCK returns allocated clusters.
+ *
+ * @param   (in) sample				- input data for clustering.
+ *          (in) radius				- connectivity radius (similarity threshold).
+ *          (in) number_clusters	- defines number of clusters that should be allocated from
+ *          						  the input data set.
+ *          (in) threshold			- value that defines degree of normalization that influences
+ *                                    on choice of clusters for merging during processing.
+ *
+ * @return	Returns result of clustering - array of allocated clusters.
+ *
+ ***********************************************************************************************/
+clustering_result * rock_algorithm(const data_representation * const sample, const double radius, const unsigned int number_clusters, const double threshold) {
+	std::vector<std::vector<double> > * dataset = read_sample(sample);
+
+	rock * solver = new rock(dataset, radius, number_clusters, threshold);
+	solver->process();
+
+	clustering_result * result = create_clustering_result(solver->get_clusters());
+
+	delete solver; solver = NULL;
+	delete dataset; dataset = NULL;
+
+	return result;
+}
 
 /***********************************************************************************************
  *
@@ -141,7 +190,6 @@ void destroy_object(void * object) {
 void * create_sync_network(const unsigned int size, const double weight_factor, const double frequency_factor, const unsigned int qcluster, const unsigned int connection_type, const unsigned int initial_phases) {
 	return (void *) new sync_network(size, weight_factor, frequency_factor, qcluster, (conn_type) connection_type, (initial_type) initial_phases);
 }
-
 
 /***********************************************************************************************
  *
@@ -164,7 +212,6 @@ dynamic_result * simulate_sync_network(const void * pointer_network, unsigned in
 
 	return result;
 }
-
 
 /***********************************************************************************************
  *
@@ -192,7 +239,6 @@ dynamic_result * simulate_dynamic_sync_network(const void * pointer_network, con
 	return result;
 }
 
-
 /***********************************************************************************************
  *
  * @brief   Allocate clusters of ensembles of synchronous oscillators where each
@@ -214,7 +260,6 @@ clustering_result * allocate_sync_ensembles_sync_network(const void * pointer_ne
 	return result;
 }
 
-#include <iostream>
 /***********************************************************************************************
  *
  * @brief   Returns level of global synchorization in the network.
@@ -227,7 +272,6 @@ clustering_result * allocate_sync_ensembles_sync_network(const void * pointer_ne
 double sync_order(const void * pointer_network) {
 	return ((sync_network *) pointer_network)->sync_order();
 }
-
 
 /***********************************************************************************************
  *

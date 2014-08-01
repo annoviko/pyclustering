@@ -9,7 +9,7 @@ def dbscan(data, eps, min_neighbors, return_noise = False, ccore = False):
     
     "(in) data            - input data that is presented as list of points (objects), each point should be represented by list or tuple."
     "(in) eps             - connectivity radius between points, points may be connected if distance between them less then the radius."
-    "(in) min_neighbors   - minimum number of shared neighbors that is requied for establish links between points."
+    "(in) min_neighbors   - minimum number of shared neighbors that is required for establish links between points."
     "(in) return_noise    - if True than list of points that have been marked as noise will be returned."
     "(in) ccore           - if True than DLL CCORE (C++ solution) will be used for solving the problem."
     

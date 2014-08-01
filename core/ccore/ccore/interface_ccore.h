@@ -26,17 +26,69 @@ typedef struct dynamic_result {
 
 extern "C" __declspec(dllexport) void free_clustering_result(clustering_result * pointer);
 
-extern "C" __declspec(dllexport) clustering_result * dbscan_algorithm(const data_representation * const sample, const double radius, const unsigned int minumum_neighbors);
-
-extern "C" __declspec(dllexport) clustering_result * hierarchical_algorithm(const data_representation * const sample, const unsigned int number_clusters);
-
-extern "C" __declspec(dllexport) clustering_result * kmeans_algorithm(const data_representation * const sample, const data_representation * const initial_centers, const double tolerance);
-
-extern "C" __declspec(dllexport) clustering_result * rock_algorithm(const data_representation * const sample, const double radius, const unsigned int number_clusters, const double threshold);
-
 extern "C" __declspec(dllexport) void free_dynamic_result(dynamic_result * pointer);
 
 extern "C" __declspec(dllexport) void destroy_object(void * object);
+
+/***********************************************************************************************
+ *
+ * @brief   Clustering algorithm DBSCAN returns allocated clusters and noise that are consisted
+ *          from input data.
+ *
+ * @param   (in) sample				- input data for clustering.
+ *          (in) radius				- connectivity radius between points, points may be connected
+ *                                    if distance between them less then the radius.
+ *          (in) minumum_neighbors	- minimum number of shared neighbors that is required for
+ *                                    establish links between points.
+ *
+ * @return	Returns result of clustering - array of allocated clusters. The last cluster in the
+ * 			array is noise.
+ *
+ ***********************************************************************************************/
+extern "C" __declspec(dllexport) clustering_result * dbscan_algorithm(const data_representation * const sample, const double radius, const unsigned int minumum_neighbors);
+
+/***********************************************************************************************
+ *
+ * @brief   Clustering hierarchical algorithm returns allocated clusters.
+ *
+ * @param   (in) sample				- input data for clustering.
+ *          (in) number_clusters	- number of cluster that should be allocated.
+ *
+ * @return	Returns result of clustering - array of allocated clusters.
+ *
+ ***********************************************************************************************/
+extern "C" __declspec(dllexport) clustering_result * hierarchical_algorithm(const data_representation * const sample, const unsigned int number_clusters);
+
+/***********************************************************************************************
+ *
+ * @brief   Clustering algorithm K-Means returns allocated clusters.
+ *
+ * @param   (in) sample				- input data for clustering.
+ *          (in) initial_centers	- initial coordinates of centers of clusters.
+ *          (in) tolerance			- stop condition: if maximum value of change of centers of
+ *                                    clusters is less than tolerance than algorithm will stop
+ *                                    processing.
+ *
+ * @return	Returns result of clustering - array of allocated clusters.
+ *
+ ***********************************************************************************************/
+extern "C" __declspec(dllexport) clustering_result * kmeans_algorithm(const data_representation * const sample, const data_representation * const initial_centers, const double tolerance);
+
+/***********************************************************************************************
+ *
+ * @brief   Clustering algorithm ROCK returns allocated clusters.
+ *
+ * @param   (in) sample				- input data for clustering.
+ *          (in) radius				- connectivity radius (similarity threshold).
+ *          (in) number_clusters	- defines number of clusters that should be allocated from
+ *          						  the input data set.
+ *          (in) threshold			- value that defines degree of normalization that influences
+ *                                    on choice of clusters for merging during processing.
+ *
+ * @return	Returns result of clustering - array of allocated clusters.
+ *
+ ***********************************************************************************************/
+extern "C" __declspec(dllexport) clustering_result * rock_algorithm(const data_representation * const sample, const double radius, const unsigned int number_clusters, const double threshold);
 
 /***********************************************************************************************
  *
