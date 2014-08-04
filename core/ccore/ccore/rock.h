@@ -31,9 +31,9 @@ private:
 
 	std::vector<unsigned int> * find_pair_clusters(void) const;
 
-	unsigned int calculate_links(std::list<std::vector<unsigned int> *>::const_iterator & cluster1, std::list<std::vector<unsigned int> *>::const_iterator & cluster2) const;
+	unsigned int calculate_links(std::list<std::vector<unsigned int> *>::iterator & cluster1, std::list<std::vector<unsigned int> *>::iterator & cluster2) const;
 
-	double calculate_goodness(std::list<std::vector<unsigned int> *>::const_iterator & cluster1, std::list<std::vector<unsigned int> *>::const_iterator & cluster2) const;
+	double calculate_goodness(std::list<std::vector<unsigned int> *>::iterator & cluster1, std::list<std::vector<unsigned int> *>::iterator & cluster2) const;
 };
 
 #endif

@@ -3,7 +3,7 @@ import core;
 from ctypes import Structure, c_uint, c_double, POINTER;
 
 # Path to DLL.
-PATH_DLL_CCORE_WIN64 = core.__path__[0] + "\\ccore\\x64\\ccore.dll";
+PATH_DLL_CCORE_WIN64 = core.__path__[0] + "\\ccore\\x64\\win\\ccore.dll";
 
 
 # Structures that are required for exchaging with DLL.

@@ -120,7 +120,7 @@ bool rock::merge_cluster(void) {
 	return true;
 }
 
-unsigned int rock::calculate_links(std::list<std::vector<unsigned int> *>::const_iterator & cluster1, std::list<std::vector<unsigned int> *>::const_iterator & cluster2) const {
+unsigned int rock::calculate_links(std::list<std::vector<unsigned int> *>::iterator & cluster1, std::list<std::vector<unsigned int> *>::iterator & cluster2) const {
 	unsigned int number_links = 0;
 	for (std::vector<unsigned int>::const_iterator i = (*cluster1)->begin(); i != (*cluster1)->end(); i++) {
 		for (std::vector<unsigned int>::const_iterator j = (*cluster2)->begin(); j != (*cluster2)->end(); j++) {
@@ -131,7 +131,7 @@ unsigned int rock::calculate_links(std::list<std::vector<unsigned int> *>::const
 	return number_links;
 }
 
-double rock::calculate_goodness(std::list<std::vector<unsigned int> *>::const_iterator & cluster1, std::list<std::vector<unsigned int> *>::const_iterator & cluster2) const {
+double rock::calculate_goodness(std::list<std::vector<unsigned int> *>::iterator & cluster1, std::list<std::vector<unsigned int> *>::iterator & cluster2) const {
 	const double number_links = calculate_links(cluster1, cluster2);
 	
 	const double size_cluster1 = (*cluster1)->size();

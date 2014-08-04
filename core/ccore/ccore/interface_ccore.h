@@ -1,6 +1,14 @@
 #ifndef _INTERFACE_CCORE_H_
 #define _INTERFACE_CCORE_H_
 
+#if defined (__GNUC__) && defined(__unix__)
+	#define DECLARATION __attribute__ ((__visibility__("default")))
+#elif defined (WIN32)
+	#define DECLARATION __declspec(dllexport)
+#else
+	#error Unsupported platform
+#endif
+
 typedef struct cluster_representation {
 	unsigned int			size;
 	unsigned int			* objects;
@@ -24,11 +32,11 @@ typedef struct dynamic_result {
 	double					** dynamic;
 } dynamic_result;
 
-extern "C" __declspec(dllexport) void free_clustering_result(clustering_result * pointer);
+extern "C" DECLARATION void free_clustering_result(clustering_result * pointer);
 
-extern "C" __declspec(dllexport) void free_dynamic_result(dynamic_result * pointer);
+extern "C" DECLARATION void free_dynamic_result(dynamic_result * pointer);
 
-extern "C" __declspec(dllexport) void destroy_object(void * object);
+extern "C" DECLARATION void destroy_object(void * object);
 
 /***********************************************************************************************
  *
@@ -45,7 +53,7 @@ extern "C" __declspec(dllexport) void destroy_object(void * object);
  * 			array is noise.
  *
  ***********************************************************************************************/
-extern "C" __declspec(dllexport) clustering_result * dbscan_algorithm(const data_representation * const sample, const double radius, const unsigned int minumum_neighbors);
+extern "C" DECLARATION clustering_result * dbscan_algorithm(const data_representation * const sample, const double radius, const unsigned int minumum_neighbors);
 
 /***********************************************************************************************
  *
@@ -57,7 +65,7 @@ extern "C" __declspec(dllexport) clustering_result * dbscan_algorithm(const data
  * @return	Returns result of clustering - array of allocated clusters.
  *
  ***********************************************************************************************/
-extern "C" __declspec(dllexport) clustering_result * hierarchical_algorithm(const data_representation * const sample, const unsigned int number_clusters);
+extern "C" DECLARATION clustering_result * hierarchical_algorithm(const data_representation * const sample, const unsigned int number_clusters);
 
 /***********************************************************************************************
  *
@@ -72,7 +80,7 @@ extern "C" __declspec(dllexport) clustering_result * hierarchical_algorithm(cons
  * @return	Returns result of clustering - array of allocated clusters.
  *
  ***********************************************************************************************/
-extern "C" __declspec(dllexport) clustering_result * kmeans_algorithm(const data_representation * const sample, const data_representation * const initial_centers, const double tolerance);
+extern "C" DECLARATION clustering_result * kmeans_algorithm(const data_representation * const sample, const data_representation * const initial_centers, const double tolerance);
 
 /***********************************************************************************************
  *
@@ -88,7 +96,7 @@ extern "C" __declspec(dllexport) clustering_result * kmeans_algorithm(const data
  * @return	Returns result of clustering - array of allocated clusters.
  *
  ***********************************************************************************************/
-extern "C" __declspec(dllexport) clustering_result * rock_algorithm(const data_representation * const sample, const double radius, const unsigned int number_clusters, const double threshold);
+extern "C" DECLARATION clustering_result * rock_algorithm(const data_representation * const sample, const double radius, const unsigned int number_clusters, const double threshold);
 
 /***********************************************************************************************
  *
@@ -102,7 +110,7 @@ extern "C" __declspec(dllexport) clustering_result * rock_algorithm(const data_r
  *          (in) initial_phases		- type of initialization of initial phases of oscillators.
  *
  ***********************************************************************************************/
-extern "C" __declspec(dllexport) void * create_sync_network(const unsigned int size, const double weight_factor, const double frequency_factor, const unsigned int qcluster, const unsigned int connection_type, const unsigned int initial_phases);
+extern "C" DECLARATION void * create_sync_network(const unsigned int size, const double weight_factor, const double frequency_factor, const unsigned int qcluster, const unsigned int connection_type, const unsigned int initial_phases);
 
 /***********************************************************************************************
  *
@@ -118,7 +126,7 @@ extern "C" __declspec(dllexport) void * create_sync_network(const unsigned int s
  * @return	Returns dynamic of simulation of the network.
  *
  ***********************************************************************************************/
-extern "C" __declspec(dllexport) dynamic_result * simulate_sync_network(const void * pointer_network, unsigned int steps, const double time, const unsigned int solver, const bool collect_dynamic);
+extern "C" DECLARATION dynamic_result * simulate_sync_network(const void * pointer_network, unsigned int steps, const double time, const unsigned int solver, const bool collect_dynamic);
 
 /***********************************************************************************************
  *
@@ -138,7 +146,7 @@ extern "C" __declspec(dllexport) dynamic_result * simulate_sync_network(const vo
  * @return	Returns dynamic of simulation of the network.
  *
  ***********************************************************************************************/
-extern "C" __declspec(dllexport) dynamic_result * simulate_dynamic_sync_network(const void * pointer_network, const double order, const unsigned int solver, const bool collect_dynamic, const double step, const double step_int, const double threshold_changes);
+extern "C" DECLARATION dynamic_result * simulate_dynamic_sync_network(const void * pointer_network, const double order, const unsigned int solver, const bool collect_dynamic, const double step, const double step_int, const double threshold_changes);
 
 /***********************************************************************************************
  *
@@ -152,7 +160,7 @@ extern "C" __declspec(dllexport) dynamic_result * simulate_dynamic_sync_network(
  * @return	Returns ensembles of synchronous oscillators as clustering result.
  *
  ***********************************************************************************************/
-extern "C" __declspec(dllexport) clustering_result * allocate_sync_ensembles_sync_network(const void * pointer_network, const double tolerance);
+extern "C" DECLARATION clustering_result * allocate_sync_ensembles_sync_network(const void * pointer_network, const double tolerance);
 
 /***********************************************************************************************
  *
@@ -163,7 +171,7 @@ extern "C" __declspec(dllexport) clustering_result * allocate_sync_ensembles_syn
  * @return	Returns level of global synchorization in the network.
  *
  ***********************************************************************************************/
-extern "C" __declspec(dllexport) double sync_order(const void * pointer_network);
+extern "C" DECLARATION double sync_order(const void * pointer_network);
 
 /***********************************************************************************************
  *
@@ -174,6 +182,6 @@ extern "C" __declspec(dllexport) double sync_order(const void * pointer_network)
  * @return	Returns level of global synchorization in the network.
  *
  ***********************************************************************************************/
-extern "C" __declspec(dllexport) double sync_local_order(const void * pointer_network);
+extern "C" DECLARATION double sync_local_order(const void * pointer_network);
 
 #endif

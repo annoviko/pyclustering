@@ -2,6 +2,7 @@
 
 #include <cmath>
 #include <exception>
+#include <stdexcept>
 
 network::network(const unsigned int number_oscillators, const conn_type connection_type) {
 	num_osc = number_oscillators;

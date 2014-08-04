@@ -4,6 +4,7 @@
 #include <cmath>
 #include <random>
 #include <complex>
+#include <stdexcept>
 
 sync_network::sync_network(const unsigned int size, const double weight_factor, const double frequency_factor, const unsigned int qcluster, const conn_type connection_type, const initial_type initial_phases) :
 	network(size, connection_type) 
@@ -108,7 +109,7 @@ double sync_network::adapter_phase_kuramoto(const double t, const double teta, c
 
 
 double sync_network::phase_kuramoto(const double t, const double teta, const std::vector<void *> & argv) {
-	unsigned int index = (unsigned int) argv[1];
+	unsigned int index = *(unsigned int *) argv[1];
 	double phase = 0;
 
 	for (unsigned int k = 0; k < num_osc; k++) {
@@ -232,7 +233,7 @@ void sync_network::calculate_phases(const solve_type solver, const double t, con
 	argv[0] = (void *) this;
 
 	for (unsigned int index = 0; index < num_osc; index++) {
-		argv[1] = (void *) index;
+		argv[1] = (void *) &index;
 
 		switch(solver) {
 			case solve_type::FAST: {
