@@ -24,10 +24,10 @@ inline double pi(void) { return (double) 3.14159265358979323846; }
  *
  * @brief   Calculates square of Euclidean distance between points.
  *
- * @param   (in) point1		- point #1 that is represented by coordinates.
- *			(in) point2		- point #2 that is represented by coordinates.
+ * @param   (in) point1     - point #1 that is represented by coordinates.
+ *          (in) point2     - point #2 that is represented by coordinates.
  *
- * @return	Returns square of Euclidean distance between points.
+ * @return  Returns square of Euclidean distance between points.
  *
  ***********************************************************************************************/
 inline double euclidean_distance_sqrt(const std::vector<double> * const point1, const std::vector<double> * const point2) {
@@ -45,10 +45,10 @@ inline double euclidean_distance_sqrt(const std::vector<double> * const point1, 
  *
  * @brief   Calculates Euclidean distance between points.
  *
- * @param   (in) point1		- point #1 that is represented by coordinates.
- *			(in) point2		- point #2 that is represented by coordinates.
+ * @param   (in) point1     - point #1 that is represented by coordinates.
+ *          (in) point2     - point #2 that is represented by coordinates.
  *
- * @return	Returns Euclidean distance between points.
+ * @return  Returns Euclidean distance between points.
  *
  ***********************************************************************************************/
 inline double euclidean_distance(const std::vector<double> * const point1, const std::vector<double> * const point2) {
@@ -66,9 +66,9 @@ inline double euclidean_distance(const std::vector<double> * const point1, const
  *
  * @brief   Reads sample (input data) from the specified file.
  *
- * @param   (in) path_file	- path to the file with data.
+ * @param   (in) path_file  - path to the file with data.
  *
- * @return	Returns internal type of representation of input data.
+ * @return  Returns internal type of representation of input data.
  *
  ***********************************************************************************************/
 std::vector<std::vector<double> > * read_sample(const char * const path_file);
@@ -77,9 +77,9 @@ std::vector<std::vector<double> > * read_sample(const char * const path_file);
  *
  * @brief   Converts representation of data from CCORE standard to internal.
  *
- * @param   (in) sample		- input data (sample) for converting.
+ * @param   (in) sample     - input data (sample) for converting.
  *
- * @return	Returns internal type of representation of input data.
+ * @return  Returns internal type of representation of input data.
  *
  ***********************************************************************************************/
 std::vector<std::vector<double> > * read_sample(const data_representation * const sample);
@@ -88,9 +88,9 @@ std::vector<std::vector<double> > * read_sample(const data_representation * cons
  *
  * @brief   Converts representation of cluster to standard type of CCORE interface.
  *
- * @param   (in) clusters	- input clusters for converting.
+ * @param   (in) clusters   - input clusters for converting.
  *
- * @return	Returns standard type of representation of clusters.
+ * @return  Returns standard type of representation of clusters.
  *
  ***********************************************************************************************/
 clustering_result * create_clustering_result(const std::vector<std::vector<unsigned int> *> * const clusters);
@@ -99,14 +99,14 @@ clustering_result * create_clustering_result(const std::vector<std::vector<unsig
  *
  * @brief   Runge-Kutta 4 solver.
  *
- * @param   (in) function_pointer	- pointer to function.
- *          (in) initial_value		- initial values.
- *          (in) a					- left point (start time).
- *			(in) b					- right point (end time).
- *			(in) steps				- number of steps.
- *			(in) argv				- extra arguments are required by function_pointer.
+ * @param   (in) function_pointer   - pointer to function.
+ *          (in) initial_value      - initial values.
+ *          (in) a                  - left point (start time).
+ *          (in) b                  - right point (end time).
+ *          (in) steps              - number of steps.
+ *          (in) argv               - extra arguments are required by function_pointer.
  *
- * @return	Returns full result of integration (each step of integration).
+ * @return  Returns full result of integration (each step of integration).
  *
  ***********************************************************************************************/
 std::vector<differential_result> * rk4(double (*function_pointer)(const double t, const double val, const std::vector<void *> & argv), double initial_value, const double a, const double b, const unsigned int steps, const std::vector<void *> & argv);
@@ -115,12 +115,12 @@ std::vector<differential_result> * rk4(double (*function_pointer)(const double t
  *
  * @brief   Runge-Kutta-Felhberg (RKF45) solver.
  *
- * @param   (in) function_pointer	- pointer to function.
- *          (in) initial_value		- initial values.
- *          (in) a					- left point (start time).
- *			(in) b					- right point (end time).
- *			(in) tolerance			- acceptable error for solving.
- *			(in) argv				- extra arguments are required by function_pointer.
+ * @param   (in) function_pointer   - pointer to function.
+ *          (in) initial_value      - initial values.
+ *          (in) a                  - left point (start time).
+ *          (in) b                  - right point (end time).
+ *          (in) tolerance          - acceptable error for solving.
+ *          (in) argv               - extra arguments are required by function_pointer.
  *
  * @return	Returns full result of integration (each step of integration).
  *
