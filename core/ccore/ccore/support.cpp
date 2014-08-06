@@ -130,10 +130,11 @@ std::vector<differential_result> * rk4(double (*function_pointer)(const double t
 	const double step = (b - a) / (double) steps;
 
 	differential_result current_result;
-	current_result.time = 0.0;
+	std::vector<differential_result> * result = new std::vector<differential_result>(steps, current_result);
+
+	current_result.time = a;
 	current_result.value = initial_value;
 
-	std::vector<differential_result> * result = new std::vector<differential_result>();
 	result->push_back(current_result);
 
 	for (unsigned int i = 0; i < steps; i++) {
@@ -145,7 +146,8 @@ std::vector<differential_result> * rk4(double (*function_pointer)(const double t
 		current_result.value += (k1 + 2.0 * k2 + 2.0 * k3 + k4) / 6.0;
 		current_result.time += step;
 
-		result->push_back(current_result);
+		(*result)[i].time = current_result.time;
+		(*result)[i].value = current_result.value;
 	}
 
 	return result;
