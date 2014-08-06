@@ -13,6 +13,7 @@ typedef enum initial_type {
 typedef enum solve_type {
 	FAST,
 	RK4,
+	RKF45,
 	TOTAL_NUMBER_SOLVE_TYPES
 } solve_type;
 

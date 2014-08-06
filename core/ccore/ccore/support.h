@@ -49,6 +49,36 @@ std::vector<std::vector<double> > * read_sample(const data_representation * cons
 
 clustering_result * create_clustering_result(const std::vector<std::vector<unsigned int> *> * const clusters);
 
+/***********************************************************************************************
+ *
+ * @brief   Runge-Kutta 4 solver.
+ *
+ * @param   (in) function_pointer	- pointer to function.
+ *          (in) initial_value		- initial values.
+ *          (in) a					- left point (start time).
+ *			(in) b					- right point (end time).
+ *			(in) steps				- number of steps.
+ *			(in) argv				- extra arguments are required by function_pointer.
+ *
+ * @return	Returns full result of integration (each step of integration).
+ *
+ ***********************************************************************************************/
 std::vector<differential_result> * rk4(double (*function_pointer)(const double t, const double val, const std::vector<void *> & argv), double initial_value, const double a, const double b, const unsigned int steps, const std::vector<void *> & argv);
+
+/***********************************************************************************************
+ *
+ * @brief   Runge-Kutta-Felhberg (RKF45) solver.
+ *
+ * @param   (in) function_pointer	- pointer to function.
+ *          (in) initial_value		- initial values.
+ *          (in) a					- left point (start time).
+ *			(in) b					- right point (end time).
+ *			(in) tolerance			- acceptable error for solving.
+ *			(in) argv				- extra arguments are required by function_pointer.
+ *
+ * @return	Returns full result of integration (each step of integration).
+ *
+ ***********************************************************************************************/
+std::vector<differential_result> * rkf45(double (*function_pointer)(const double t, const double val, const std::vector<void *> & argv), double initial_value, const double a, const double b, const double tolerance, const std::vector<void *> & argv);
 
 #endif

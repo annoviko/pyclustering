@@ -43,7 +43,7 @@ def rk4(function_pointer, inputs, a, b, steps, argv = None):
     return (times, values);
 
 
-def rkf45(function_pointer, inputs, a, b, steps = None, tolerance = None, argv = None):
+def rkf45(function_pointer, inputs, a, b, steps = None, argv = None, tolerance = None):
     "Runge-Kutta-Felhberg (RKF45) function"
     
     "(in) function_pointer     - pointer to function"

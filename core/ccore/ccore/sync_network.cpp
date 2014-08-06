@@ -232,6 +232,8 @@ void sync_network::calculate_phases(const solve_type solver, const double t, con
 
 	argv[0] = (void *) this;
 
+	unsigned int number_int_steps = (unsigned int) (step / int_step);
+
 	for (unsigned int index = 0; index < num_osc; index++) {
 		argv[1] = (void *) &index;
 
@@ -242,7 +244,14 @@ void sync_network::calculate_phases(const solve_type solver, const double t, con
 				break;
 			}
 			case solve_type::RK4: {
-				std::vector<differential_result> * result = rk4(&sync_network::adapter_phase_kuramoto, (*oscillators)[index].phase, t, t + step, int_step, argv);
+				std::vector<differential_result> * result = rk4(&sync_network::adapter_phase_kuramoto, (*oscillators)[index].phase, t, t + step, number_int_steps, argv);
+				(*next_phases)[index] = phase_normalization( (*result)[result->size() - 1].value );
+
+				delete result;
+				break;
+			}
+			case solve_type::RKF45: {
+				std::vector<differential_result> * result = rkf45(&sync_network::adapter_phase_kuramoto, (*oscillators)[index].phase, t, t + step, 0.00001, argv);
 				(*next_phases)[index] = phase_normalization( (*result)[result->size() - 1].value );
 
 				delete result;
@@ -265,7 +274,7 @@ void sync_network::calculate_phases(const solve_type solver, const double t, con
 double sync_network::phase_normalization(const double teta) {
 	double norm_teta = teta;
 
-	while ( (norm_teta > 2.0 * pi()) || (norm_teta < 0) ) {
+	while ( (norm_teta > 2.0 * pi()) || (norm_teta < 0.0) ) {
 		if (norm_teta > 2.0 * pi()) {
 			norm_teta -= 2.0 * pi();
 		}
