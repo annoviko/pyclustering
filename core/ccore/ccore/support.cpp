@@ -12,7 +12,15 @@ namespace butcher_table {
     const double r1 = 1.0/360.0,	r3 = -128.0/4275.0,		r4 = -2197.0/75240.0,	r5 = 1.0/50.0,			r6 = 2.0/55.0;  
 }
 
-
+/***********************************************************************************************
+ *
+ * @brief   Read sample (input data) from the specified file.
+ *
+ * @param   (in) path_file	- path to the file with data.
+ *
+ * @return	Returns internal type of representation of input data.
+ *
+ ***********************************************************************************************/
 std::vector<std::vector<double> > * read_sample(const char * const path_file) {
 	std::string filename(path_file);
 
@@ -42,7 +50,15 @@ std::vector<std::vector<double> > * read_sample(const char * const path_file) {
 	return dataset;
 }
 
-
+/***********************************************************************************************
+ *
+ * @brief   Converts representation of data from CCORE standard to internal.
+ *
+ * @param   (in) sample		- input data (sample) for converting.
+ *
+ * @return	Returns internal type of representation of input data.
+ *
+ ***********************************************************************************************/
 std::vector<std::vector<double> > * read_sample(const data_representation * const sample) {
 	std::vector<std::vector<double> > * dataset = new std::vector<std::vector<double> >();
 
@@ -58,7 +74,15 @@ std::vector<std::vector<double> > * read_sample(const data_representation * cons
 	return dataset;
 }
 
-
+/***********************************************************************************************
+ *
+ * @brief   Converts representation of cluster to standard type of CCORE interface.
+ *
+ * @param   (in) clusters	- input clusters for converting.
+ *
+ * @return	Returns standard type of representation of clusters.
+ *
+ ***********************************************************************************************/
 clustering_result * create_clustering_result(const std::vector<std::vector<unsigned int> *> * const clusters) {
 	clustering_result * result = new clustering_result();
 
@@ -87,7 +111,6 @@ clustering_result * create_clustering_result(const std::vector<std::vector<unsig
 
 	return result;
 }
-
 
 /***********************************************************************************************
  *
@@ -127,7 +150,6 @@ std::vector<differential_result> * rk4(double (*function_pointer)(const double t
 
 	return result;
 }
-
 
 /***********************************************************************************************
  *

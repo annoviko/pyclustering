@@ -18,7 +18,18 @@ typedef struct differential_result {
 } differential_result;
 
 
+inline double pi(void) { return (double) 3.14159265358979323846; }
 
+/***********************************************************************************************
+ *
+ * @brief   Calculates square of Euclidean distance between points.
+ *
+ * @param   (in) point1		- point #1 that is represented by coordinates.
+ *			(in) point2		- point #2 that is represented by coordinates.
+ *
+ * @return	Returns square of Euclidean distance between points.
+ *
+ ***********************************************************************************************/
 inline double euclidean_distance_sqrt(const std::vector<double> * const point1, const std::vector<double> * const point2) {
 	double distance = 0.0;
 	/* assert(point1->size() != point1->size()); */
@@ -30,6 +41,16 @@ inline double euclidean_distance_sqrt(const std::vector<double> * const point1, 
 	return distance;
 }
 
+/***********************************************************************************************
+ *
+ * @brief   Calculates Euclidean distance between points.
+ *
+ * @param   (in) point1		- point #1 that is represented by coordinates.
+ *			(in) point2		- point #2 that is represented by coordinates.
+ *
+ * @return	Returns Euclidean distance between points.
+ *
+ ***********************************************************************************************/
 inline double euclidean_distance(const std::vector<double> * const point1, const std::vector<double> * const point2) {
 	double distance = 0.0;
 	/* assert(point1->size() != point1->size()); */
@@ -41,12 +62,37 @@ inline double euclidean_distance(const std::vector<double> * const point1, const
 	return std::sqrt(distance);
 }
 
-inline double pi(void) { return (double) 3.14159265358979323846; }
-
+/***********************************************************************************************
+ *
+ * @brief   Reads sample (input data) from the specified file.
+ *
+ * @param   (in) path_file	- path to the file with data.
+ *
+ * @return	Returns internal type of representation of input data.
+ *
+ ***********************************************************************************************/
 std::vector<std::vector<double> > * read_sample(const char * const path_file);
 
+/***********************************************************************************************
+ *
+ * @brief   Converts representation of data from CCORE standard to internal.
+ *
+ * @param   (in) sample		- input data (sample) for converting.
+ *
+ * @return	Returns internal type of representation of input data.
+ *
+ ***********************************************************************************************/
 std::vector<std::vector<double> > * read_sample(const data_representation * const sample);
 
+/***********************************************************************************************
+ *
+ * @brief   Converts representation of cluster to standard type of CCORE interface.
+ *
+ * @param   (in) clusters	- input clusters for converting.
+ *
+ * @return	Returns standard type of representation of clusters.
+ *
+ ***********************************************************************************************/
 clustering_result * create_clustering_result(const std::vector<std::vector<unsigned int> *> * const clusters);
 
 /***********************************************************************************************
