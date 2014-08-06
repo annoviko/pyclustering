@@ -16,9 +16,9 @@ SOURCES += ccore/sync_network.cpp
 
 OBJECTS = $(SOURCES:.cpp=.o)
 
-EXECUTABLE = ccore.so
+EXECUTABLE = x64/linux/ccore.so
 
-all: $(EXECUTABLE)
+all: $(EXECUTABLE) clean
 
 $(EXECUTABLE): $(OBJECTS)
 	$(CC) $(LFLAGS) $(OBJECTS) $(INCLUDES) -o $@

@@ -1,10 +1,16 @@
 import core;
+import os;
 
 from ctypes import Structure, c_uint, c_double, POINTER;
+from sys import platform as _platform;
 
 # Path to DLL.
-PATH_DLL_CCORE_WIN64 = core.__path__[0] + "\\ccore\\x64\\win\\ccore.dll";
+PATH_DLL_CCORE_WIN64 = None;
 
+if (_platform == "linux") or (_platform == "linux2"):
+    PATH_DLL_CCORE_WIN64 = core.__path__[0] + os.sep + "ccore" + os.sep + "x64" + os.sep + "linux" + os.sep + "ccore.so";
+elif (_platform == "win32"):
+    PATH_DLL_CCORE_WIN64 = core.__path__[0] + os.sep + "ccore" + os.sep + "x64" + os.sep + "win" + os.sep + "ccore.dll";
 
 # Structures that are required for exchaging with DLL.
 class cluster_representation(Structure):
