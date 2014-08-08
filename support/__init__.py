@@ -314,29 +314,51 @@ def draw_image_segments(source, clusters):
 def list_math_subtraction(a, b):
     "Subtraction of two lists. Each element from list 'a' is subtracted by element from list 'b' accordingly."
     
-    "(in) a    - list of elements that support mathematical subtraction."
-    "(in) b    - list of elements that support mathematical subtraction."
+    "(in) a    - list of elements that supports mathematical subtraction."
+    "(in) b    - list of elements that supports mathematical subtraction."
     
     "Returns list with results of subtraction of two lists."
     
     return [a[i] - b[i] for i in range(len(a))];
 
 
+def list_math_substraction_number(a, b):
+    "Subtraction between list and number. Each element from list 'a' is subtracted by number 'b'."
+    
+    "(in) a    - list of elements that supports mathematical subtraction."
+    "(in) b    - value that supports mathematical subtraction."
+    
+    "Returns list with results of subtraction of two lists." 
+    
+    return [a[i] - b for i in range(len(a))];  
+
+
 def list_math_addition(a, b):
     "Addition of two lists. Each element from list 'a' is added to element from list 'b' accordingly."
     
-    "(in) a    - list of elements that support mathematic addition."
-    "(in) b    - list of elements that support mathematic addition."
+    "(in) a    - list of elements that supports mathematic addition."
+    "(in) b    - list of elements that supports mathematic addition."
     
     "Returns list with results of addtion of two lists."
     
     return [a[i] + b[i] for i in range(len(a))];
 
 
+def list_math_addition_number(a, b):
+    "Addition between list and number. Each element from list 'a' is added to number 'b'."
+    
+    "(in) a    - list of elements that supports mathematic addition."
+    "(in) b    - value that supports mathematic addition."
+    
+    "Returns list with results of addtion of two lists."
+    
+    return [a[i] + b for i in range(len(a))];
+
+
 def list_math_division_number(a, b):
     "Division between list and number. Each element from list 'a' is divided by number 'b'."
     
-    "(in) a    - list of elements that support mathematic division."
+    "(in) a    - list of elements that supports mathematic division."
     "(in) b    - value that supports mathematic division."
     
     "Returns list with results of division between list and number."
@@ -347,8 +369,8 @@ def list_math_division_number(a, b):
 def list_math_division(a, b):
     "Division of two lists. Each element from list 'a' is divided by element from list 'b' accordingly."
     
-    "(in) a    - list of elements that support mathematic division."
-    "(in) b    - list of elements that support mathematic division."
+    "(in) a    - list of elements that supports mathematic division."
+    "(in) b    - list of elements that supports mathematic division."
     
     "Returns list with results of division of two lists."
     
@@ -358,7 +380,7 @@ def list_math_division(a, b):
 def list_math_multiplication_number(a, b):
     "Multiplication between list and number. Each element from list 'a' is multiplied by number 'b'."
     
-    "(in) a    - list of elements that support mathematic division."
+    "(in) a    - list of elements that supports mathematic division."
     "(in) b    - number that supports mathematic division."
     
     "Returns list with results of division between list and number."
@@ -369,7 +391,7 @@ def list_math_multiplication_number(a, b):
 def list_math_multiplication(a, b):
     "Multiplication of two lists. Each element from list 'a' is multiplied by element from list 'b' accordingly."
     
-    "(in) a    - list of elements that support mathematic multiplication."
+    "(in) a    - list of elements that supports mathematic multiplication."
     "(in) b    - number that supports mathematic multiplication."
     
     "Returns list with results of multiplication between list and number."
