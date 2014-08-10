@@ -42,29 +42,24 @@ def improve_parameters(data, centers, available_indexes = None, tolerance = 0.02
 
     
 def improve_structure(data, clusters, centers):
-    # Small step is required for initial splitting of clusters
-    smallest_distance = numpy.Inf;
-    for i in range(0, len(clusters) - 1, 1):
-        for j in range(i + 1, len(clusters), 1):
-            dist = euclidean_distance_sqrt(centers[i], centers[j]);
-            if (dist < smallest_distance):
-                smallest_distance = dist;
-    
-    difference = smallest_distance / 10.0;
+    difference = 0.001;
     
     # split each cluster (parent) into two clusters
     child_centers = [];
-    child_clusters = [];
+    child_clusters = [None] * ( len(clusters) * 2 );
     for index_cluster in range(len(clusters)):
         child_centers.append(list_math_addition_number(centers[index_cluster], -difference));
         child_centers.append(list_math_addition_number(centers[index_cluster], difference));
     
     # solve k-means problem for each parent cluster
+    parent_scores = [0.0] * len(clusters);
+    child_scores = [0.0] * len(child_centers);
+    
     for index_parent_cluster in range(len(clusters)):
-        (parent_child_clusters, parent_child_centers) = improve_parameters(data, child_centers, clusters[index_parent_cluster]);
-        
         index_child1 = index_parent_cluster * 2;
         index_child2 = index_child1 + 1;
+        
+        (parent_child_clusters, parent_child_centers) = improve_parameters(data, [ child_centers[index_child1], child_centers[index_child2] ], clusters[index_parent_cluster]);
         
         child_centers[index_child1] = parent_child_centers[0];
         child_centers[index_child2] = parent_child_centers[1];
@@ -72,9 +67,15 @@ def improve_structure(data, clusters, centers):
         child_clusters[index_child1] = parent_child_clusters[0];
         child_clusters[index_child2] = parent_child_clusters[1];
     
-    # Calculate splitting criterion
-    parent_scores = splitting_criterion(data, clusters, centers);
-    child_scores = splitting_criterion(data, child_clusters, child_centers);
+        # Calculate splitting criterion
+        result_parent_scores = splitting_criterion(data, [ clusters[index_parent_cluster] ], [ centers[index_parent_cluster] ]);
+        result_child_scores = splitting_criterion(data, parent_child_clusters, child_centers);
+        
+        parent_scores[index_parent_cluster] = result_parent_scores[0];
+        child_scores[index_child1] = result_child_scores[0];
+        child_scores[index_child2] = result_child_scores[1];
+                
+        print("Scores: parent = ", result_parent_scores, "child = ", result_child_scores);
     
     # Reallocate number of centers (clusters) in line with scores
     allocated_centers = [];
@@ -98,18 +99,19 @@ def splitting_criterion(data, clusters, centers):
     dimension = len(data[0]);
     
     # estimation of the noise variance in the data set
-    sigma = 0.0;
+    sigma = [0.0] * len(clusters);
     for index_cluster in range(0, len(clusters), 1):
         for index_object in clusters[index_cluster]:
-            sigma += euclidean_distance_sqrt(data[index_object], centers[index_cluster]);
+            sigma[index_cluster] += euclidean_distance_sqrt(data[index_object], centers[index_cluster]);
     
-    sigma /= len(data) - len(clusters);
+        sigma[index_cluster] /= (len(data) - len(clusters));
 
     # splitting criterion for each cluster
     for index_cluster in range(0, len(clusters), 1):
         n = len(clusters[index_cluster]);
         
-        scores[index_cluster] = n * math.log10(n) - n * math.log10(len(data)) - n * math.log(2.0 * numpy.pi) / 2.0 - n * dimension * math.log(sigma) / 2.0 - (n - len(clusters)) / 2.0;
+        if (n > 1):
+            scores[index_cluster] = n * math.log10(n) - n * math.log10(len(data)) - n * math.log10(2.0 * numpy.pi) / 2.0 - n * dimension * math.log10(sigma[index_cluster]) / 2.0 - (n - len(clusters)) / 2.0;
     
     return scores;
 
