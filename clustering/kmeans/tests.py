@@ -1,12 +1,10 @@
 import unittest;
 
-from PIL import Image;
-
 from clustering.kmeans import kmeans;
 
 from support import read_sample;
 
-from samples.definitions import SIMPLE_SAMPLES, IMAGE_SIMPLE_SAMPLES;
+from samples.definitions import SIMPLE_SAMPLES;
 
 class Test(unittest.TestCase):
     def templateLengthProcessData(self, path_to_file, start_centers, expected_cluster_length, ccore = False):
@@ -27,7 +25,7 @@ class Test(unittest.TestCase):
         self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [[3.5, 4.8], [6.9, 7], [7.5, 0.5]], [10, 5, 8]);
 
     def testClusterAllocationSampleSimple3(self):
-        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [[0.2, 0.1], [4.0, 1.0], [2.0, 2.0], [2.3, 3.9]], [10, 10, 10, 30]);    
+        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [[0.2, 0.1], [4.0, 1.0]], [10, 10, 10, 30]);    
 
     def testClusterAllocationSampleSimple4(self):
         self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, [[1.5, 0.0], [1.5, 2.0], [1.5, 4.0], [1.5, 6.0], [1.5, 8.0]], [15, 15, 15, 15, 15]);
