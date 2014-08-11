@@ -14,23 +14,28 @@ def template_clustering(start_centers, path, tolerance = 0.25, ccore = True):
     
 
 def cluster_sample1():
-    start_centers = [[3.7, 5.5], [6.7, 7.5]];
+    "Start with wrong number of clusters."
+    start_centers = [[3.7, 5.5]];
     template_clustering(start_centers, SIMPLE_SAMPLES.SAMPLE_SIMPLE1);
     
 def cluster_sample2():
-    start_centers = [[3.5, 4.8], [6.9, 7], [7.5, 0.5]];
+    "Start with wrong number of clusters."
+    start_centers = [[3.5, 4.8], [2.6, 2.5]];
     template_clustering(start_centers, SIMPLE_SAMPLES.SAMPLE_SIMPLE2);
     
 def cluster_sample3():
-    start_centers = [[0.2, 0.1], [4.0, 1.0], [2.0, 2.0], [2.3, 3.9]];
+    "Start with wrong number of clusters."
+    start_centers = [[0.2, 0.1], [4.0, 1.0]];
     template_clustering(start_centers, SIMPLE_SAMPLES.SAMPLE_SIMPLE3);
     
 def cluster_sample4():
+    "Start with right number of clusters."
     start_centers = [[1.5, 0.0], [1.5, 2.0], [1.5, 4.0], [1.5, 6.0], [1.5, 8.0]];
     template_clustering(start_centers, SIMPLE_SAMPLES.SAMPLE_SIMPLE4);    
     
 def cluster_sample5():
-    start_centers = [[0.0, 1.0], [0.0, 0.0], [1.0, 1.0], [1.0, 0.0]];
+    "Start with wrong number of clusters."
+    start_centers = [[0.0, 1.0], [0.0, 0.0]];
     template_clustering(start_centers, SIMPLE_SAMPLES.SAMPLE_SIMPLE5);   
     
 cluster_sample1();
