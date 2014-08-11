@@ -2,7 +2,11 @@ Project: PyClustering
 
 ------------------------------------------------
 
-Python 3.3 windows 64-bit
+Based on:
+
+Python 3.x windows 64-bit
+Python 3.x linux 64-bit
+C++ 11 (MVS, GCC compilers)
 
 ------------------------------------------------
 
@@ -18,6 +22,41 @@ six-1.5.2.win-amd64-py3.3
 
 ------------------------------------------------
 
-Index of packages:
+Index of packages for Windows:
 
 http://www.lfd.uci.edu/~gohlke/pythonlibs/
+
+
+Index of packages for Linux:
+
+Check repositories, for example: sudo apt-get install python3-numpy
+
+------------------------------------------------
+
+What is implemented in the project:
+
+Clustering algorithms:
+- CURE [Python, C++]
+- DBSCAN [Python, C++]
+- Hierarchical [Python, C++]
+- HSyncNet [Python]
+- K-Means [Python, C++]
+- ROCK [Python, C++]
+- SyncNet [Python]
+- SyncSom [Python]
+- X-Means [Python]
+
+Oscillatory networks and neural networks:
+- Hysteresis Oscillatory Network [Python]
+- LEGION (Local Excitatory Global Inhibitory Oscillatory Network) [Python]
+- PCNN (Pulse-Coupled Neural Network) [Python]
+- SOM (Self-Organized Map) [Python]
+- Sync (Oscillatory network based on Kuramoto model) [Python, C++]
+
+Graph Coloring Algorithms:
+- DSatur [Python]
+- Hysteresis [Python]
+- Sync [Python]
+
+Misc Algorithms:
+- K-D Tree [Python]
