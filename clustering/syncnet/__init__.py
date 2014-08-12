@@ -9,7 +9,9 @@ class syncnet(sync_network):
     _ena_conn_weight = False;   # Enable mode: when strength of connection depends on distance between two oscillators.
     _conn_weight = None;        # Stength of connection between oscillators.
     
-    def __init__(self, source_data, radius, conn_repr = conn_represent.MATRIX, initial_phases = initial_type.RANDOM_GAUSSIAN, enable_conn_weight = False):
+    _ccore_network_pointer = None;      # Pointer to CCORE Sync implementation of the network.
+    
+    def __init__(self, source_data, radius, conn_repr = conn_represent.MATRIX, initial_phases = initial_type.RANDOM_GAUSSIAN, enable_conn_weight = False, ccore = False):
         "Contructor of the oscillatory network SYNC for cluster analysis."
         
         "(in) source_data        - input data that is presented as list of points (objects), each point should be represented by list or tuple."
@@ -17,7 +19,8 @@ class syncnet(sync_network):
         "(in) conn_repr          - internal representation of connection in the network: matrix or list."
         "(in) initial_phases     - type of initialization of initial phases of oscillators (random, uniformly distributed, etc.)."
         "(in) enable_conn_weight - if True - enable mode when strength between oscillators depends on distance between two oscillators."
-        "If False - all connection between oscillators have the same strength that equals to 1 (True)."
+        "                          if False - all connection between oscillators have the same strength that equals to 1 (True)."
+        "(in) ccore              - defines should be CCORE C++ library used instead of Python code or not."
         
         sample = None;
         if ( isinstance(source_data, str) ):

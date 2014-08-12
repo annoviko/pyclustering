@@ -6,6 +6,7 @@
 #include "hierarchical.h"
 #include "kmeans.h"
 #include "rock.h"
+#include "syncnet.h"
 
 #include "sync_network.h"
 
@@ -284,4 +285,63 @@ double sync_order(const void * pointer_network) {
  ***********************************************************************************************/
 double sync_local_order(const void * pointer_network) {
 	return ((sync_network *) pointer_network)->sync_local_order();
+}
+
+/***********************************************************************************************
+ *
+ * @brief   Create oscillatory network SYNC for cluster analysis.
+ *
+ * @param   (in) sample                - input data for clustering.
+ * @param   (in) connectivity_radius   - connectivity radius between points.
+ * @param   (in) enable_conn_weight    - if True - enable mode when strength between oscillators 
+ *                                       depends on distance between two oscillators. Otherwise
+ *                                       all connection between oscillators have the same strength.
+ * @param   (in) initial_phases        - type of initialization of initial phases of oscillators.
+ *
+ ***********************************************************************************************/
+void * create_syncnet(const data_representation * const sample, const double connectivity_radius, const bool enable_conn_weight, const unsigned int initial_phases) {
+	std::vector<std::vector<double> > * dataset = read_sample(sample);	/* belongs to syncnet */
+	return (void *) new syncnet(dataset, connectivity_radius, enable_conn_weight, (initial_type) initial_phases);
+}
+
+/***********************************************************************************************
+ *
+ * @brief   Simulate oscillatory network SYNC until clustering problem is not resolved.
+ *
+ * @param   (in) order             - order of synchronization that is used as indication for 
+ *                                   stopping processing.
+ * @param   (in) solver            - specified type of solving diff. equation. 
+ * @param   (in) collect_dynamic   - specified requirement to collect whole dynamic of the network.
+ *
+ * @return  Return last values of simulation time and phases of oscillators as a tuple if 
+ *          collect_dynamic is False, and whole dynamic if collect_dynamic is True.
+ *
+ ***********************************************************************************************/
+dynamic_result * process_syncnet(const void * pointer_network, const double order, const unsigned int solver, const bool collect_dynamic) {
+	syncnet * network = (syncnet *) pointer_network;
+	
+	dynamic_result * result = network->process(order, (solve_type) solver, collect_dynamic);
+
+	return result;
+}
+
+/***********************************************************************************************
+ *
+ * @brief   Allocate clusters of ensembles of synchronous oscillators where each
+ *          synchronous ensemble corresponds to only one cluster for SYNC network.
+ *
+ * @param   (in) pointer_network	- pointer to the Sync network.
+ *          (in) tolerance			- maximum error for allocation of synchronous ensemble 
+ *                                    oscillators.
+ *
+ * @return	Returns ensembles of synchronous oscillators as clustering result.
+ *
+ ***********************************************************************************************/
+clustering_result * get_clusters_syncnet(const void * pointer_network, const double tolerance) {
+	syncnet * network = (syncnet *) pointer_network;	
+
+	const std::vector<std::vector<unsigned int> *> * const clusters = network->allocate_sync_ensembles(tolerance);
+	clustering_result * result = create_clustering_result(clusters);
+
+	return result;
 }

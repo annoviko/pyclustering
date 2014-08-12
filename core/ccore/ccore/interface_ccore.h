@@ -184,4 +184,47 @@ extern "C" DECLARATION double sync_order(const void * pointer_network);
  ***********************************************************************************************/
 extern "C" DECLARATION double sync_local_order(const void * pointer_network);
 
+/***********************************************************************************************
+ *
+ * @brief   Create oscillatory network SYNC for cluster analysis.
+ *
+ * @param   (in) sample                - input data for clustering.
+ * @param   (in) connectivity_radius   - connectivity radius between points.
+ * @param   (in) enable_conn_weight    - if True - enable mode when strength between oscillators 
+ *                                       depends on distance between two oscillators. Otherwise
+ *                                       all connection between oscillators have the same strength.
+ * @param   (in) initial_phases        - type of initialization of initial phases of oscillators.
+ *
+ ***********************************************************************************************/
+extern "C" DECLARATION void * create_syncnet(const data_representation * const sample, const double connectivity_radius, const bool enable_conn_weight, const unsigned int initial_phases);
+
+/***********************************************************************************************
+ *
+ * @brief   Simulate oscillatory network SYNC until clustering problem is not resolved.
+ *
+ * @param   (in) order             - order of synchronization that is used as indication for 
+ *                                   stopping processing.
+ * @param   (in) solver            - specified type of solving diff. equation. 
+ * @param   (in) collect_dynamic   - specified requirement to collect whole dynamic of the network.
+ *
+ * @return  Return last values of simulation time and phases of oscillators as a tuple if 
+ *          collect_dynamic is False, and whole dynamic if collect_dynamic is True.
+ *
+ ***********************************************************************************************/
+extern "C" DECLARATION dynamic_result * process_syncnet(const void * pointer_network, const double order, const unsigned int solver, const bool collect_dynamic);
+
+/***********************************************************************************************
+ *
+ * @brief   Allocate clusters of ensembles of synchronous oscillators where each
+ *          synchronous ensemble corresponds to only one cluster for SYNC network.
+ *
+ * @param   (in) pointer_network	- pointer to the Sync network.
+ *          (in) tolerance			- maximum error for allocation of synchronous ensemble 
+ *                                    oscillators.
+ *
+ * @return	Returns ensembles of synchronous oscillators as clustering result.
+ *
+ ***********************************************************************************************/
+extern "C" DECLARATION clustering_result * get_clusters_syncnet(const void * pointer_network, const double tolerance);
+
 #endif

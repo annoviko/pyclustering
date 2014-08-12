@@ -200,21 +200,51 @@ def sync_local_order(pointer_network):
     return ccore.sync_local_order(pointer_network);
 
 
+def create_syncnet(sample, radius, initial_phases, enable_conn_weight):
+    pointer_data = create_pointer_data(sample);
+    
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    pointer_network = ccore.create_syncnet(pointer_data, c_double(radius), c_uint(initial_phases), c_bool(enable_conn_weight));
+    
+    return pointer_network;
+
+
+def process_syncnet(network_pointer, order, solution, collect_dynamic):
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore_dynamic_result = ccore.process_syncnet(network_pointer, c_double(order), c_uint(solution), c_bool(collect_dynamic));
+
+    python_dynamic_result = extract_dynamics(ccore_dynamic_result);
+    free_dynamic_result(ccore_dynamic_result);
+    
+    return python_dynamic_result;    
+
+
+def get_clusters_syncnet(pointer_network, tolerance):
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore_cluster_result = ccore.get_clusters_syncnet(pointer_network, c_double(tolerance));
+    
+    list_of_clusters = extract_clusters(ccore_cluster_result);
+    
+    ccore.free_clustering_result(ccore_cluster_result);
+    return list_of_clusters; 
+
+
 def destroy_object(pointer_object):
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
     ccore.destroy_object(pointer_object);
 
 
-# from support import draw_dynamics;
+# from support import draw_dynamics, draw_clusters;
 # from nnet import *;
-#       
-# pointer_network = create_sync_network(6, 1, 0, 1, conn_type.ALL_TO_ALL, 0);
-# (t, dyn) = simulate_sync_network(pointer_network, 100, 10, 2, True);
-#       
+# from samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
+# 
+# sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1);
+# pointer_network = create_syncnet(sample, 1, 0, False);
+# (t, dyn) = process_syncnet(pointer_network, 0.999, 1, True);
+#        
 # draw_dynamics(t, dyn);
-# clusters = allocate_sync_ensembles_sync_network(pointer_network, 0.1);
-#   
-# # print(clusters);   
-# # print(sync_order(pointer_network));
-# # print(sync_local_order(pointer_network));
+# clusters = get_clusters_syncnet(pointer_network, 0.1);
+# 
+# draw_clusters(sample, clusters);
+# 
 # destroy_object(pointer_network);
