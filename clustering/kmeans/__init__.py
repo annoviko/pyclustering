@@ -5,11 +5,12 @@ import core;
 from support import euclidean_distance, euclidean_distance_sqrt, list_math_addition, list_math_division_number;
 
 def kmeans(data, centers, tolerance = 0.025, ccore = False):
-    "Clustering algorithm K-Means returns allocated clusters and noise that are consisted from input data."
+    "Clustering algorithm K-Means returns allocated clusters."
     
     "(in) data        - input data that is presented as list of points (objects), each point should be represented by list or tuple."
     "(in) centers     - initial coordinates of centers of clusters that are represented by list: [center1, center2, ...]."
     "(in) tolerance   - stop condition: if maximum value of change of centers of clusters is less than tolerance than algorithm will stop processing."
+    "(in) ccore       - defines should be CCORE C++ library used instead of Python code or not."
     
     "Returns list of allocated clusters, each cluster contains indexes of objects in list of data."
     

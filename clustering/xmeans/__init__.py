@@ -6,6 +6,15 @@ from support import list_math_addition_number, list_math_addition, list_math_div
 
 
 def xmeans(data, centers, kmax = 20, ccore = False):
+    "Clustering algorithm X-Means returns allocated clusters."
+    
+    "(in) data        - input data that is presented as list of points (objects), each point should be represented by list or tuple."
+    "(in) centers     - initial coordinates of centers of clusters that are represented by list: [center1, center2, ...]."
+    "(in) kmax        - maximum number of clusters that can be allocated."
+    "(in) ccore       - defines should be CCORE C++ library used instead of Python code or not."
+    
+    "Returns list of allocated clusters, each cluster contains indexes of objects in list of data."
+    
     clusters = [];
     while ( len(centers) < kmax ):
         current_cluster_number = len(centers);
@@ -22,6 +31,15 @@ def xmeans(data, centers, kmax = 20, ccore = False):
 
 
 def improve_parameters(data, centers, available_indexes = None, tolerance = 0.025):
+    "Private function that is used by xmeans. Performs k-means clustering in the specified region."
+    
+    "(in) data                 - input data that should be clustered."
+    "(in) centers              - list of centers of clusters."
+    "(in) available_indexes    - list of indexes that defines which points can be used for k-means clustering, if None - then all points are used."
+    "(in) tolerance            - stop condition: if maximum value of change of centers of clusters is less than tolerance than algorithm will stop processing."
+    
+    "Returns list of allocated clusters, each cluster contains indexes of objects in list of data."    
+    
     changes = numpy.Inf;
     
     stop_condition = tolerance * tolerance;   # Fast solution
@@ -42,11 +60,15 @@ def improve_parameters(data, centers, available_indexes = None, tolerance = 0.02
 
     
 def improve_structure(data, clusters, centers):
-    difference = 0.001;
+    "Private function that is used by xmeans. Check for best structure: divides each cluster into two and checks for best results using splitting criterion."
     
-    # split each cluster (parent) into two clusters
-    child_centers = [];
-    child_clusters = [None] * ( len(clusters) * 2 );
+    "(in) data       - input data that should be clustered."
+    "(in) clusters   - list of clusters that have been allocated (each cluster contains indexes of points from data)."
+    "(in) centers    - list of centers of clusters."
+    
+    "Returns list of allocated centers for clustering."
+    
+    difference = 0.001;
     
     allocated_centers = [];
     
@@ -77,6 +99,14 @@ def improve_structure(data, clusters, centers):
 
 
 def splitting_criterion(data, clusters, centers):
+    "Private function that is used by xmeans. Calculates splitting criterion for input clusters."
+    
+    "(in) data       - input data that should be clustered."
+    "(in) clusters   - list of clusters for which splitting criterion should be calculated."
+    "(in) centers    - list of centers of the clusters."
+    
+    "Returns splitting criterion. High value of splitting cretion means that current structure is much better."
+    
     scores = [0.0] * len(clusters)     # splitting criterion
     dimension = len(data[0]);
     
@@ -103,7 +133,16 @@ def splitting_criterion(data, clusters, centers):
     return sum(scores);
 
 
-def update_clusters(data, centers, available_indexes = None):    
+def update_clusters(data, centers, available_indexes = None): 
+    "Private function that is used by xmeans. Calculate Euclidean distance to each point from the each cluster."
+    "Nearest points are captured by according clusters and as a result clusters are updated."
+    
+    "(in) data                 - input data that is presented as list of points (objects), each point should be represented by list or tuple."
+    "(in) centers              - coordinates of centers of clusters that are represented by list: [center1, center2, ...]."
+    "(in) available_indexes    - list of indexes that defines which points can be used from imput data, if None - then all points are used."
+    
+    "Returns updated clusters as list of clusters. Each cluster contains indexes of objects from data."
+       
     bypass = None;
     if (available_indexes is None):
         bypass = range(len(data));
@@ -129,6 +168,13 @@ def update_clusters(data, centers, available_indexes = None):
         
 
 def update_centers(data, clusters):
+    "Private function that is used by xmeans. Update centers of clusters in line with contained objects."
+    
+    "(in) data         - input data that is presented as list of points (objects), each point should be represented by list or tuple."
+    "(in) clusters     - list of clusters that contain indexes of objects from data."
+    
+    "Returns updated centers as list of centers."
+    
     centers = [[] for i in range(len(clusters))];
     dimension = len(data[0])
     
