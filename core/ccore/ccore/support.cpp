@@ -135,8 +135,6 @@ std::vector<differential_result> * rk4(double (*function_pointer)(const double t
 	current_result.time = a;
 	current_result.value = initial_value;
 
-	result->push_back(current_result);
-
 	for (unsigned int i = 0; i < steps; i++) {
 		double k1 = step * function_pointer(current_result.time, current_result.value, argv);
 		double k2 = step * function_pointer(current_result.time + step / 2.0, current_result.value + k1 / 2.0, argv);

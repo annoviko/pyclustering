@@ -6,6 +6,8 @@ from numpy import array;
 
 import matplotlib.pyplot as plt;
 from mpl_toolkits.mplot3d import Axes3D;
+
+from sys import platform as _platform;
     
 
 def read_sample(filename):
@@ -191,7 +193,11 @@ def draw_dynamics(t, dyn, x_title = None, y_title = None, x_lim = None, y_lim = 
     from matplotlib.font_manager import FontProperties;
     from matplotlib import rcParams;
     
-    rcParams['font.sans-serif'] = ['Arial'];
+    if (_platform == "linux") or (_platform == "linux2"):
+        rcParams['font.sans-serif'] = ['Liberation Serif'];
+    else:
+        rcParams['font.sans-serif'] = ['Arial'];
+        
     rcParams['font.size'] = 12;
     
     fig = None; 
@@ -218,7 +224,11 @@ def draw_dynamics(t, dyn, x_title = None, y_title = None, x_lim = None, y_lim = 
             axes[index_stage].get_yaxis().set_visible(False);
     
     surface_font = FontProperties();
-    surface_font.set_name('Arial');
+    if (_platform == "linux") or (_platform == "linux2"):
+        surface_font.set_name('Liberation Serif');
+    else:
+        surface_font.set_name('Arial');
+        
     surface_font.set_size('12');
     
     # Check if we have more than one dynamic
