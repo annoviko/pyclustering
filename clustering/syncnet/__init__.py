@@ -9,12 +9,12 @@ class syncnet(sync_network):
     _ena_conn_weight = False;   # Enable mode: when strength of connection depends on distance between two oscillators.
     _conn_weight = None;        # Stength of connection between oscillators.
     
-    def __init__(self, source_data, conn_repr = conn_represent.MATRIX, radius = None, initial_phases = initial_type.RANDOM_GAUSSIAN, enable_conn_weight = False):
+    def __init__(self, source_data, radius, conn_repr = conn_represent.MATRIX, initial_phases = initial_type.RANDOM_GAUSSIAN, enable_conn_weight = False):
         "Contructor of the oscillatory network SYNC for cluster analysis."
         
         "(in) source_data        - input data that is presented as list of points (objects), each point should be represented by list or tuple."
-        "(in) conn_repr          - internal representation of connection in the network: matrix or list."
         "(in) radius             - connectivity radius between points, points should be connected if distance between them less then the radius."
+        "(in) conn_repr          - internal representation of connection in the network: matrix or list."
         "(in) initial_phases     - type of initialization of initial phases of oscillators (random, uniformly distributed, etc.)."
         "(in) enable_conn_weight - if True - enable mode when strength between oscillators depends on distance between two oscillators."
         "If False - all connection between oscillators have the same strength that equals to 1 (True)."
@@ -95,21 +95,16 @@ class syncnet(sync_network):
                     self._conn_weight[j][i] = value_conn_weight;
 
 
-    def process(self, radius = None, order = 0.998, solution = solve_type.FAST, collect_dynamic = False):
+    def process(self, order = 0.998, solution = solve_type.FAST, collect_dynamic = False):
         "Network is trained via achievement sync state between the oscillators using the radius of coupling."
         
-        "(in) radius            - connectivity radius for simulation, if it is specified then connections will be recreated."
         "(in) order             - order of synchronization that is used as indication for stopping processing."
         "(in) solution          - specified type of solving diff. equation."
         "(in) collect_dynamic   - specified requirement to collect whole dynamic of the network."
         
         "Return last values of simulation time and phases of oscillators as a tuple if collect_dynamic is False, and whole dynamic"
         "if collect_dynamic is True. Format of returned value: (simulation_time, oscillator_phases)."
-        
-        # Create connections in line with input radius
-        if (radius != None):
-            self._create_connections(radius);
-        
+                
         return self.simulate_dynamic(order, solution, collect_dynamic);
     
     
@@ -131,7 +126,7 @@ class syncnet(sync_network):
             if (self._ena_conn_weight is True):
                 conn_weight = self._conn_weight[index][k];
                 
-            phase += conn_weight * self._weight * math.sin(self._cluster * (self._phases[k] - teta));
+            phase += conn_weight * self._weight * math.sin(self._phases[k] - teta);
         
         divider = len(neighbors);
         if (divider == 0): 

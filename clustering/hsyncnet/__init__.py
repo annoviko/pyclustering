@@ -12,7 +12,7 @@ class hsyncnet(syncnet):
         "(in) source_data         - input data set defines structure of the network."
         "(in) osc_initial_phases  - type of initialization of initial values of phases of oscillators."
         
-        super().__init__(source_data, initial_phases = osc_initial_phases);
+        super().__init__(source_data, 0, initial_phases = osc_initial_phases);
     
     
     def process(self, number_clusters, order = 0.998, solution = solve_type.FAST, collect_dynamic = False):

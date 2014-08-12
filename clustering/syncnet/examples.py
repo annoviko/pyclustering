@@ -12,9 +12,9 @@ from support import draw_dynamics;
 
 def template_clustering(file, radius, order, show_dyn = False, show_conn = False, show_clusters = True, ena_conn_weight = False):
     sample = read_sample(file);
-    network = syncnet(sample, enable_conn_weight = ena_conn_weight);
+    network = syncnet(sample, radius, enable_conn_weight = ena_conn_weight);
     
-    (ticks, (dyn_time, dyn_phase)) = timedcall(network.process, radius, order, solve_type.FAST, show_dyn);
+    (ticks, (dyn_time, dyn_phase)) = timedcall(network.process, order, solve_type.FAST, show_dyn);
     print("Sample: ", file, "\t\tExecution time: ", ticks, "\n");
     
     if (show_dyn == True):

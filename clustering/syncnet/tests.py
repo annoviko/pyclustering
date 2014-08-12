@@ -14,8 +14,8 @@ from samples.definitions import SIMPLE_SAMPLES;
 class Test(unittest.TestCase):
     def templateClustering(self, file, radius, order, connection_representation, expected_cluster_length):
         sample = read_sample(file);
-        network = syncnet(sample, initial_phases = initial_type.EQUIPARTITION, conn_repr = connection_representation); # EQUIPARTITION - makes test more stable.
-        network.process(radius, order);
+        network = syncnet(sample, radius, initial_phases = initial_type.EQUIPARTITION, conn_repr = connection_representation); # EQUIPARTITION - makes test more stable.
+        network.process(order);
         
         clusters = network.get_clusters(0.05);
         
@@ -64,8 +64,8 @@ class Test(unittest.TestCase):
     
     def templateClusterAllocationHighTolerance(self, file, radius, order):
         sample = read_sample(file);
-        network = syncnet(sample);
-        network.process(radius, order);
+        network = syncnet(sample, radius);
+        network.process(order);
         clusters = network.get_clusters(2 * pi);
         
         assert sum([len(cluster) for cluster in clusters]) == network.num_osc;
@@ -94,8 +94,8 @@ class Test(unittest.TestCase):
 
     def templateClusterAllocationConnWeights(self, file, radius, order, expected_cluster_length):
         sample = read_sample(file);
-        network = syncnet(sample, enable_conn_weight = True);
-        network.process(radius, order);
+        network = syncnet(sample, radius, enable_conn_weight = True);
+        network.process(order);
         
         clusters = network.get_clusters(0.05);
         

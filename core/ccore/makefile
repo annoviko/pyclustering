@@ -13,6 +13,7 @@ SOURCES += ccore/network.cpp
 SOURCES += ccore/rock.cpp
 SOURCES += ccore/support.cpp
 SOURCES += ccore/sync_network.cpp
+SOURCES += ccore/syncnet.cpp
 
 OBJECTS = $(SOURCES:.cpp=.o)
 

@@ -20,12 +20,12 @@ typedef struct sync_dynamic {
 
 
 class sync_network : public network {
-private:
+protected:
 	std::vector<sync_oscillator>	* oscillators;					/* oscillators						*/
-	double							weight;							/* multiplier for connections		*/
-	unsigned int					cluster;						/* q parameter						*/
+	std::vector< std::vector<unsigned int> * > * sync_ensembles;	/* pointer to sync ensembles		*/
 
-	std::vector< std::vector<unsigned int> * > * sync_ensembles;	/* pointer to sync ensembles */
+	double							weight;							/* multiplier for connections		*/
+	unsigned int					cluster;						/* q parameter						*/	
 
 public:
 	sync_network(const unsigned int size, const double weight_factor, const double frequency_factor, const unsigned int qcluster, const conn_type connection_type, const initial_type initial_phases);
@@ -45,13 +45,13 @@ public:
 	static double phase_normalization(const double teta);
 
 protected:
-	static double adapter_phase_kuramoto(const double t, const double teta, const std::vector<void *> & argv);
-
 	virtual double phase_kuramoto(const double t, const double teta, const std::vector<void *> & argv);
 
 	virtual void calculate_phases(const solve_type solver, const double t, const double step, const double int_step);
 
 private:
+	static double adapter_phase_kuramoto(const double t, const double teta, const std::vector<void *> & argv);
+
 	void free_sync_ensembles(void);
 
 	void store_dynamic(std::vector< std::vector<sync_dynamic> * > * dynamic, const double time) const;

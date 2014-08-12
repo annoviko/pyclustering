@@ -63,8 +63,8 @@ class syncsom:
             radius = 0;
         
         # create oscillatory neural network.
-        self._sync = syncnet(weights, initial_phases = initial_type.EQUIPARTITION);
-        (dyn_time, dyn_phase) = self._sync.process(radius, order, collect_dynamic = collect_dynamic);
+        self._sync = syncnet(weights, radius, initial_phases = initial_type.EQUIPARTITION);
+        (dyn_time, dyn_phase) = self._sync.process(order, collect_dynamic = collect_dynamic);
         
         # Draw SOM clusters.
         #clusters = self._sync.get_clusters();
