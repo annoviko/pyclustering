@@ -19,7 +19,7 @@ OBJECTS = $(SOURCES:.cpp=.o)
 
 EXECUTABLE = x64/linux/ccore.so
 
-all: $(EXECUTABLE) clean
+all: $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJECTS)
 	$(CC) $(LFLAGS) $(OBJECTS) $(INCLUDES) -o $@
