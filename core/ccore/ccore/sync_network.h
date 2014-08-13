@@ -40,7 +40,7 @@ public:
 
 	dynamic_result * simulate_static(const unsigned int steps, const double time, const solve_type solver, const bool collect_dynamic);
 
-	dynamic_result * simulate_dynamic(const double order, const solve_type solver, const bool collect_dynamic, const double step = 0.1, const double step_int = 0.01, const double threshold_changes = 0.000001);
+	dynamic_result * simulate_dynamic(const double order, const solve_type solver, const bool collect_dynamic, const double step = 0.1, const double step_int = 0.01, const double threshold_changes = 0.0000001);
 
 	static double phase_normalization(const double teta);
 

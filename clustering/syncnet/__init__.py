@@ -1,3 +1,5 @@
+import core;
+
 from nnet.sync import *;
 
 from support import draw_clusters;
@@ -11,10 +13,10 @@ class syncnet(sync_network):
     
     _ccore_network_pointer = None;      # Pointer to CCORE Sync implementation of the network.
     
-    def __init__(self, source_data, radius, conn_repr = conn_represent.MATRIX, initial_phases = initial_type.RANDOM_GAUSSIAN, enable_conn_weight = False, ccore = False):
+    def __init__(self, sample, radius, conn_repr = conn_represent.MATRIX, initial_phases = initial_type.RANDOM_GAUSSIAN, enable_conn_weight = False, ccore = False):
         "Contructor of the oscillatory network SYNC for cluster analysis."
         
-        "(in) source_data        - input data that is presented as list of points (objects), each point should be represented by list or tuple."
+        "(in) sample             - input data that is presented as list of points (objects), each point should be represented by list or tuple."
         "(in) radius             - connectivity radius between points, points should be connected if distance between them less then the radius."
         "(in) conn_repr          - internal representation of connection in the network: matrix or list."
         "(in) initial_phases     - type of initialization of initial phases of oscillators (random, uniformly distributed, etc.)."
@@ -22,33 +24,28 @@ class syncnet(sync_network):
         "                          if False - all connection between oscillators have the same strength that equals to 1 (True)."
         "(in) ccore              - defines should be CCORE C++ library used instead of Python code or not."
         
-        sample = None;
-        if ( isinstance(source_data, str) ):
-            file = open(source_data, 'r');
-            sample = [[float(val) for val in line.split()] for line in file];
-            file.close();
+        if (ccore is True):
+            self._ccore_network_pointer = core.create_syncnet(sample, radius, initial_phases, enable_conn_weight);
         else:
-            sample = source_data;
-        
-        super().__init__(len(sample), 1, 0, 1, conn_type.NONE, initial_phases);
-        
-        self._ena_conn_weight = enable_conn_weight;
-        self._osc_loc = sample;
-        self._conn_represent = conn_repr;
-
-        # Connections will be represent by lists.
-        if (conn_repr == conn_represent.MATRIX):
-            self._osc_conn = [[0] * self._num_osc for index in range(0, self._num_osc, 1)];
+            super().__init__(len(sample), 1, 0, 1, conn_type.NONE, initial_phases);
             
-        elif (conn_repr == conn_represent.LIST):
-            self._osc_conn = [[] for index in range(0, self._num_osc, 1)];
+            self._ena_conn_weight = enable_conn_weight;
+            self._osc_loc = sample;
+            self._conn_represent = conn_repr;
+    
+            # Connections will be represent by lists.
+            if (conn_repr == conn_represent.MATRIX):
+                self._osc_conn = [[0] * self._num_osc for index in range(0, self._num_osc, 1)];
+                
+            elif (conn_repr == conn_represent.LIST):
+                self._osc_conn = [[] for index in range(0, self._num_osc, 1)];
+                
+            else:
+                raise NameError("Unknown type of representation of coupling between oscillators");
             
-        else:
-            raise NameError("Unknown type of representation of coupling between oscillators");
-        
-        # Create connections.
-        if (radius is not None):
-            self._create_connections(radius);
+            # Create connections.
+            if (radius is not None):
+                self._create_connections(radius);
     
 
     def _create_connections(self, radius):
@@ -107,8 +104,11 @@ class syncnet(sync_network):
         
         "Return last values of simulation time and phases of oscillators as a tuple if collect_dynamic is False, and whole dynamic"
         "if collect_dynamic is True. Format of returned value: (simulation_time, oscillator_phases)."
-                
-        return self.simulate_dynamic(order, solution, collect_dynamic);
+        
+        if (self._ccore_network_pointer is not None):
+            return core.process_syncnet(self._ccore_network_pointer, order, solution, collect_dynamic);
+        else:
+            return self.simulate_dynamic(order, solution, collect_dynamic);
     
     
     def phase_kuramoto(self, teta, t, argv):
@@ -145,11 +145,17 @@ class syncnet(sync_network):
         
         "Return list of clusters, for example [ [cluster1], [cluster2], ... ]."
         
-        return self.allocate_sync_ensembles(eps);
+        if (self._ccore_network_pointer is not None):
+            return core.get_clusters_syncnet(self._ccore_network_pointer, eps);
+        else:
+            return self.allocate_sync_ensembles(eps);
     
     
     def show_network(self):
         "Shows connections in the network. It supports only 2-d and 3-d representation."
+        
+        if (self._ccore_network_pointer is not None):
+            raise NameError("Not supported for CCORE");
         
         dimension = len(self._osc_loc[0]);
         if ( (dimension != 3) and (dimension != 2) ):

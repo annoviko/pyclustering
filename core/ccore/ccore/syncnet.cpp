@@ -49,7 +49,6 @@ syncnet::~syncnet() {
  *
  ***********************************************************************************************/
 void syncnet::create_connections(const double connectivity_radius, const bool enable_conn_weight) {
-
 	double sqrt_connectivity_radius = connectivity_radius * connectivity_radius;
 
 	if (enable_conn_weight == true) {

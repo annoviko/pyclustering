@@ -5,6 +5,7 @@
 #include <random>
 #include <complex>
 #include <stdexcept>
+#include <chrono>
 
 sync_network::sync_network(const unsigned int size, const double weight_factor, const double frequency_factor, const unsigned int qcluster, const conn_type connection_type, const initial_type initial_phases) :
 	network(size, connection_type) 
@@ -14,7 +15,8 @@ sync_network::sync_network(const unsigned int size, const double weight_factor, 
 
 	cluster = qcluster;
 
-	std::default_random_engine				generator;
+	std::random_device						device;
+	std::default_random_engine				generator(device());
 	std::uniform_real_distribution<double>	phase_distribution(0.0, 2.0 * pi());
 	std::uniform_real_distribution<double>	frequency_distribution(0.0, 1.0);
 	
@@ -82,7 +84,7 @@ double sync_network::sync_order() const {
 
 
 double sync_network::sync_local_order() const {
-	double			exp_amount = 0;
+	double			exp_amount = 0.0;
 	unsigned int	number_neighbors = 0;
 
 	for (unsigned int i = 0; i < num_osc; i++) {
@@ -139,11 +141,16 @@ std::vector< std::vector<unsigned int> * > * sync_network::allocate_sync_ensembl
 
 	for (unsigned int i = 1; i < num_osc; i++) {
 		bool cluster_allocated = false;
-		for (std::vector< std::vector<unsigned int> * >::const_iterator cluster = sync_ensembles->begin(); cluster != sync_ensembles->end(); cluster++) {
-			for (std::vector<unsigned int>::const_iterator neuron_index = (*cluster)->begin(); neuron_index != (*cluster)->end(); neuron_index++) {
+
+		std::vector< std::vector<unsigned int> * >::iterator last_sync_ensemble_element = sync_ensembles->end();
+		for (std::vector< std::vector<unsigned int> * >::const_iterator cluster = sync_ensembles->begin(); cluster != last_sync_ensemble_element; cluster++) {
+
+			std::vector<unsigned int>::iterator last_cluster_element = (*cluster)->end();
+			for (std::vector<unsigned int>::const_iterator neuron_index = (*cluster)->begin(); neuron_index != last_cluster_element; neuron_index++) {
 				if ( ( (*oscillators)[i].phase < ((*oscillators)[*neuron_index].phase + tolerance) ) && ( (*oscillators)[i].phase > ((*oscillators)[*neuron_index].phase - tolerance) ) ) {
 					cluster_allocated = true;
 					(*cluster)->push_back(i);
+
 					break;
 				}
 			}

@@ -12,15 +12,15 @@ from samples.definitions import SIMPLE_SAMPLES;
 
 
 class Test(unittest.TestCase):
-    def templateClustering(self, file, radius, order, connection_representation, expected_cluster_length):
+    def templateClustering(self, file, radius, order, connection_representation, expected_cluster_length, ccore_flag = False):
         sample = read_sample(file);
-        network = syncnet(sample, radius, initial_phases = initial_type.EQUIPARTITION, conn_repr = connection_representation); # EQUIPARTITION - makes test more stable.
+        network = syncnet(sample, radius, initial_phases = initial_type.EQUIPARTITION, conn_repr = connection_representation, ccore = ccore_flag); # EQUIPARTITION - makes test more stable.
         network.process(order);
         
         clusters = network.get_clusters(0.05);
         
         obtained_cluster_sizes = [len(cluster) for cluster in clusters];
-        
+
         assert len(obtained_cluster_sizes) == len(expected_cluster_length);
         
         obtained_cluster_sizes.sort();
@@ -30,36 +30,43 @@ class Test(unittest.TestCase):
         
     
     def testClusteringSampleSimple1(self):
-        self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, 0.998, conn_represent.MATRIX, [5, 5]);
+        self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, 0.999, conn_represent.MATRIX, [5, 5]);
         
     
     def testClusteringSampleSimple1ListRepr(self):
-        self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, 0.998, conn_represent.LIST, [5, 5]);
+        self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, 0.999, conn_represent.LIST, [5, 5]);
         
         
     def testClusteringSampleSimple2(self):
-        self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 1, 0.998, conn_represent.MATRIX, [5, 8, 10]);
+        self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 1, 0.999, conn_represent.MATRIX, [5, 8, 10]);
         
     
     def testClusteringSampleSimple2ListRepr(self):
-        self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 1, 0.998, conn_represent.LIST, [5, 8, 10]);     
+        self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 1, 0.999, conn_represent.LIST, [5, 8, 10]);     
 
     
     def testClusteringSampleSimple3(self):
-        self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 1, 0.998, conn_represent.MATRIX, [10, 10, 10, 30]);
+        self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 1, 0.999, conn_represent.MATRIX, [10, 10, 10, 30]);
  
  
     def testClusteringSampleSimple3ListRepr(self):
-        self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 1, 0.998, conn_represent.LIST, [10, 10, 10, 30]);
+        self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 1, 0.999, conn_represent.LIST, [10, 10, 10, 30]);
     
     
     def testClusteringSampleSimple4(self):
-        self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 1, 0.998, conn_represent.MATRIX, [15, 15, 15, 15, 15]); 
+        self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 1, 0.999, conn_represent.MATRIX, [15, 15, 15, 15, 15]); 
     
     
     def testClusteringSampleSimple5(self):
-        self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 1, 0.998, conn_represent.MATRIX, [15, 15, 15, 15]);
+        self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 1, 0.999, conn_represent.MATRIX, [15, 15, 15, 15]);
         
+    def testClusteringByCore(self):
+        self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, 0.999, None, [5, 5], True);
+        self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 1, 0.999, None, [5, 8, 10], True);
+        self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 1, 0.999, None, [10, 10, 10, 30], True);
+        self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 1, 0.999, None, [15, 15, 15, 15, 15], True); 
+        self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 1, 0.999, None, [15, 15, 15, 15], True);
+        self.templateClustering(SIMPLE_SAMPLES.SAMPLE_ELONGATE, 0.5, 0.999, None, [135, 20], True);
         
     
     def templateClusterAllocationHighTolerance(self, file, radius, order):
