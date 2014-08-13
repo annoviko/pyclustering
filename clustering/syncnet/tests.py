@@ -79,29 +79,29 @@ class Test(unittest.TestCase):
                 
     
     def testClusterAllocationHighToleranceSampleSimple1(self):
-        self.templateClusterAllocationHighTolerance(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, 0.998);
+        self.templateClusterAllocationHighTolerance(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, 0.999);
         
         
     def testClusterAllocationHighToleranceSampleSimple2(self):
-        self.templateClusterAllocationHighTolerance(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 1, 0.998);
+        self.templateClusterAllocationHighTolerance(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 1, 0.999);
         
         
     def testClusterAllocationHighToleranceSampleSimple3(self):
-        self.templateClusterAllocationHighTolerance(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 1, 0.998);
+        self.templateClusterAllocationHighTolerance(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 1, 0.999);
     
     
     def testClusterAllocationHighToleranceSampleSimple4(self):
-        self.templateClusterAllocationHighTolerance(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 0.7, 0.998);
+        self.templateClusterAllocationHighTolerance(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 0.7, 0.999);
     
     
     def testClusterAllocationHighToleranceSampleSimple5(self):
-        self.templateClusterAllocationHighTolerance(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 1, 0.998);
+        self.templateClusterAllocationHighTolerance(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 1, 0.999);
 
 
 
-    def templateClusterAllocationConnWeights(self, file, radius, order, expected_cluster_length):
+    def templateClusterAllocationConnWeights(self, file, radius, order, expected_cluster_length, ccore_flag = False):
         sample = read_sample(file);
-        network = syncnet(sample, radius, enable_conn_weight = True);
+        network = syncnet(sample, radius, enable_conn_weight = True, ccore = ccore_flag);
         network.process(order);
         
         clusters = network.get_clusters(0.05);
@@ -116,12 +116,19 @@ class Test(unittest.TestCase):
         assert obtained_cluster_sizes == expected_cluster_length;
         
     def testClusterAllocationConnWeightSampleSimple1(self):
-        self.templateClusterAllocationConnWeights(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, 0.998, [5, 5]);
-        self.templateClusterAllocationConnWeights(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 10, 0.998, [10]);
+        self.templateClusterAllocationConnWeights(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, 0.999, [5, 5]);
+        self.templateClusterAllocationConnWeights(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 10, 0.999, [10]);
     
     def testClusterAllocationConnWeightSampleSimple2(self):
-        self.templateClusterAllocationConnWeights(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 2, 0.998, [5, 8, 10]);
-        self.templateClusterAllocationConnWeights(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 10, 0.998, [23]);
+        self.templateClusterAllocationConnWeights(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 2, 0.999, [5, 8, 10]);
+        self.templateClusterAllocationConnWeights(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 10, 0.999, [23]);
+        
+    def testClusterAllocationConnWeightByCore(self):
+        self.templateClusterAllocationConnWeights(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, 0.999, [5, 5], True);
+        self.templateClusterAllocationConnWeights(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 10, 0.999, [10], True);
+        self.templateClusterAllocationConnWeights(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 2, 0.999, [5, 8, 10], True);
+        self.templateClusterAllocationConnWeights(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 10, 0.999, [23], True);
+        
     
 if __name__ == "__main__":
     unittest.main()
