@@ -193,7 +193,7 @@ class sync_network(network, network_interface):
         return self.simulate_static(steps, time, solution, collect_dynamic);
 
 
-    def simulate_dynamic(self, order = 0.998, solution = solve_type.FAST, collect_dynamic = False, step = 0.1, int_step = 0.01, threshold_changes = 0.000001):
+    def simulate_dynamic(self, order = 0.998, solution = solve_type.FAST, collect_dynamic = False, step = 0.1, int_step = 0.01, threshold_changes = 0.0000001):
         "Performs dynamic simulation of the network until stop condition is not reached. Stop condition is defined by"
         "input argument 'order'."
         
@@ -246,6 +246,7 @@ class sync_network(network, network_interface):
             
             # hang prevention
             if (abs(current_order - previous_order) < threshold_changes):
+                print("Warning: sync_network::simulate_dynamic - simulation is aborted due to low level of convergence rate (order = " + str(current_order) + ").");
                 break;
                 
         return (dyn_time, dyn_phase);
@@ -276,7 +277,7 @@ class sync_network(network, network_interface):
             dyn_time.append(0);
         
         step = time / steps;
-        int_step = step / 10;
+        int_step = step / 10.0;
         
         for t in numpy.arange(step, time + step, step):
             # update states of oscillators
@@ -328,10 +329,10 @@ def phase_normalization(teta):
     "Returns normalized phase."
     
     norm_teta = teta;
-    while (norm_teta > (2 * pi)) or (norm_teta < 0):
-        if (norm_teta > (2 * pi)):
-            norm_teta -= 2 * pi;
+    while (norm_teta > (2.0 * pi)) or (norm_teta < 0):
+        if (norm_teta > (2.0 * pi)):
+            norm_teta -= 2.0 * pi;
         else:
-            norm_teta += 2 * pi;
+            norm_teta += 2.0 * pi;
     
     return norm_teta;

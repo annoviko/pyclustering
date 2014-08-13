@@ -1,6 +1,7 @@
 #include "sync_network.h"
 #include "support.h"
 
+#include <iostream>
 #include <cmath>
 #include <random>
 #include <complex>
@@ -210,6 +211,7 @@ dynamic_result * sync_network::simulate_dynamic(const double order, const solve_
 		current_order = sync_local_order();
 
 		if (std::abs(current_order - previous_order) < threshold_changes) {
+			std::cout << "Warning: sync_network::simulate_dynamic - simulation is aborted due to low level of convergence rate (order = " << current_order << ")." << std::endl;
 			break;
 		}
 	}
