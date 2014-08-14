@@ -37,7 +37,14 @@ def create_pointer_data(sample):
     
     return input_data;
 
+
 def extract_clusters(ccore_result):
+    "Parse clustering result that is provided by the CCORE. Return Python list of clusters."
+    
+    "(in) ccore_result    - pointer to clustering result that has been returned by CCORE."
+    
+    "Returns Python list of clusters."
+    
     pointer_clustering_result = cast(ccore_result, POINTER(clustering_result));    # clustering_result * clusters
     number_clusters = pointer_clustering_result[0].number_clusters;
     
@@ -56,7 +63,14 @@ def extract_clusters(ccore_result):
     
     return list_of_clusters;
 
+
 def extract_dynamics(ccore_result):
+    "Parse dynamic result that is provided by the CCORE. Return Python tuple that represent dynamics (times, dynamic)."
+    
+    "(in) ccore_result    - pointer to dynamic result that has been returned by CCORE."
+    
+    "Returns Python tuple dynamic (times, dynamic)."
+    
     pointer_dynamic_result = cast(ccore_result, POINTER(dynamic_result));   # dynamic_result * pointer_dynamic_result
     size_dynamic = pointer_dynamic_result[0].size_dynamic;
     size_network = pointer_dynamic_result[0].size_network;
@@ -80,7 +94,7 @@ def extract_dynamics(ccore_result):
 
 # Implemented algorithms.
 def dbscan(sample, eps, min_neighbors, return_noise = False):
-    "Clustering algorithm DBSCAN returns allocated clusters and noise that are consisted from input data."
+    "Clustering algorithm DBSCAN returns allocated clusters and noise that are consisted from input data. Calculation is performed via CCORE."
     
     "(in) data            - input data that is presented as list of points (objects), each point should be represented by list or tuple."
     "(in) eps             - connectivity radius between points, points may be connected if distance between them less then the radius."
@@ -108,6 +122,13 @@ def dbscan(sample, eps, min_neighbors, return_noise = False):
 
 
 def hierarchical(sample, number_clusters):
+    "Clustering algorithm hierarchical returns allocated clusters and noise that are consisted from input data. Calculation is performed via CCORE."
+    
+    "(in) data               - input data that is presented as list of points (objects), each point should be represented by list or tuple."
+    "(in) number_clusters    - number of cluster that should be allocated."
+    
+    "Returns list of allocated clusters, each cluster contains indexes of objects in list of data."
+    
     pointer_data = create_pointer_data(sample);
     
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
@@ -120,6 +141,14 @@ def hierarchical(sample, number_clusters):
 
 
 def kmeans(sample, centers, tolerance):
+    "Clustering algorithm K-Means returns allocated clusters. Calculation is performed via CCORE."
+    
+    "(in) data        - input data that is presented as list of points (objects), each point should be represented by list or tuple."
+    "(in) centers     - initial coordinates of centers of clusters that are represented by list: [center1, center2, ...]."
+    "(in) tolerance   - stop condition: if maximum value of change of centers of clusters is less than tolerance than algorithm will stop processing."
+    
+    "Returns list of allocated clusters, each cluster contains indexes of objects in list of data."
+    
     pointer_data = create_pointer_data(sample);
     pointer_centers = create_pointer_data(centers);
     
@@ -133,6 +162,15 @@ def kmeans(sample, centers, tolerance):
 
 
 def rock(sample, eps, number_clusters, threshold):
+    "Clustering algorithm ROCK returns allocated clusters and noise that are consisted from input data. Calculation is performed via CCORE."
+    
+    "(in) data                - input data - list of points where each point is represented by list of coordinates."
+    "(in) eps                 - connectivity radius (similarity threshold), points are neighbors if distance between them is less than connectivity radius."
+    "(in) number_clusters     - defines number of clusters that should be allocated from the input data set."
+    "(in) threshold           - value that defines degree of normalization that influences on choice of clusters for merging during processing."
+    
+    "Returns list of allocated clusters, each cluster contains indexes of objects in list of data."
+    
     pointer_data = create_pointer_data(sample);
     
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
@@ -142,11 +180,6 @@ def rock(sample, eps, number_clusters, threshold):
     
     ccore.free_clustering_result(result);
     return list_of_clusters;    
-
-
-def free_dynamic_result(pointer_dynamic_result):
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
-    ccore.free_dynamic_result(pointer_dynamic_result);
 
 
 def create_sync_network(num_osc, weight, frequency, qcluster, type_conn, initial_phases):
@@ -161,7 +194,7 @@ def simulate_sync_network(pointer_network, steps, time, solution, collect_dynami
     ccore_dynamic_result = ccore.simulate_sync_network(pointer_network, c_uint(steps), c_double(time), c_uint(solution), c_bool(collect_dynamic));
     
     python_dynamic_result = extract_dynamics(ccore_dynamic_result);
-    free_dynamic_result(ccore_dynamic_result);
+    ccore.free_dynamic_result(ccore_dynamic_result);
     
     return python_dynamic_result;
 
@@ -171,7 +204,7 @@ def simulate_dynamic_sync_network(pointer_network, order, solution, collect_dyna
     ccore_dynamic_result = ccore.simulate_dynamic_sync_network(pointer_network, c_double(order), c_uint(solution), c_bool(collect_dynamic), c_double(step), c_double(int_step), c_double(threshold_changes));
     
     python_dynamic_result = extract_dynamics(ccore_dynamic_result);
-    free_dynamic_result(ccore_dynamic_result);
+    ccore.free_dynamic_result(ccore_dynamic_result);
     
     return python_dynamic_result;    
 
@@ -214,7 +247,7 @@ def process_syncnet(network_pointer, order, solution, collect_dynamic):
     ccore_dynamic_result = ccore.process_syncnet(network_pointer, c_double(order), c_uint(solution), c_bool(collect_dynamic));
 
     python_dynamic_result = extract_dynamics(ccore_dynamic_result);
-    free_dynamic_result(ccore_dynamic_result);
+    ccore.free_dynamic_result(ccore_dynamic_result);
     
     return python_dynamic_result;    
 

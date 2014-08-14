@@ -11,6 +11,7 @@ def rock(data, eps, number_clusters, threshold = 0.5, ccore = False):
     "(in) eps                 - connectivity radius (similarity threshold), points are neighbors if distance between them is less than connectivity radius."
     "(in) number_clusters     - defines number of clusters that should be allocated from the input data set."
     "(in) threshold           - value that defines degree of normalization that influences on choice of clusters for merging during processing."
+    "(in) ccore               - defines should be CCORE C++ library used instead of Python code or not."
     
     "Returns list of allocated clusters, each cluster contains indexes of objects in list of data."
     
