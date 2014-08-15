@@ -98,9 +98,9 @@ void hierarchical::merge_nearest_clusters(void) {
 		std::list<hierarchical_cluster *>::iterator iter2 = iter1;
 		for(++iter2; iter2 != clusters->end(); iter2++) {
 #ifndef FAST_SOLUTION
-			double distance = euclidean_distance((*iter1)->get_center(), (*iter2)->get_center());
-#else
 			double distance = euclidean_distance_sqrt((*iter1)->get_center(), (*iter2)->get_center());
+#else
+			double distance = euclidean_distance((*iter1)->get_center(), (*iter2)->get_center());
 #endif
 			if (distance < minimum_distance) {
 				candidate1 = iter1;

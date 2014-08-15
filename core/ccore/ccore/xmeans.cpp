@@ -1,4 +1,5 @@
 #include <cmath>
+#include <limits>
 
 #include "xmeans.h"
 #include "support.h"
@@ -41,7 +42,7 @@ void xmeans::process(void) {
 	unsigned int current_number_clusters = clusters->size();
 
 	while (current_number_clusters < maximum_clusters) {
-		improve_parameters(clusters, centers);
+		improve_parameters(clusters, centers, NULL);
 		improve_structure();
 
 		if (current_number_clusters == centers->size()) {

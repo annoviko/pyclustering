@@ -14,6 +14,7 @@ SOURCES += ccore/rock.cpp
 SOURCES += ccore/support.cpp
 SOURCES += ccore/sync_network.cpp
 SOURCES += ccore/syncnet.cpp
+SOURCES += ccore/xmeans.cpp
 
 OBJECTS = $(SOURCES:.cpp=.o)
 

@@ -26,17 +26,17 @@ public:
 	}
 
 private:
-	void update_clusters(std::vector<std::vector<unsigned int> *> * clusters, std::vector<std::vector<double> > * centers, const std::vector<unsigned int> * const available_indexes = NULL);
+	void update_clusters(std::vector<std::vector<unsigned int> *> * clusters, std::vector<std::vector<double> > * centers, const std::vector<unsigned int> * const available_indexes);
 
 	double update_centers(std::vector<std::vector<unsigned int> *> * clusters, std::vector<std::vector<double> > * centers);
 
 	void improve_structure(void);
 
-	void improve_parameters(std::vector<std::vector<unsigned int> *> * clusters, std::vector<std::vector<double> > * centers, const std::vector<unsigned int> * const available_indexes = NULL);
+	void improve_parameters(std::vector<std::vector<unsigned int> *> * clusters, std::vector<std::vector<double> > * centers, const std::vector<unsigned int> * const available_indexes);
 
 	double splitting_criterion(const std::vector<std::vector<unsigned int> * > * const clusters, const std::vector<std::vector<double> > * const centers) const;
 
-	unsigned int xmeans::find_proper_cluster(std::vector<std::vector<double> > * analysed_centers, const std::vector<double> * const point) const;
+	unsigned int find_proper_cluster(std::vector<std::vector<double> > * analysed_centers, const std::vector<double> * const point) const;
 };
 
 #endif

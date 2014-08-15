@@ -2,7 +2,7 @@
 #include "support.h"
 
 #include <algorithm>
-#include <climits>
+#include <limits>
 
 #define FAST_SOLUTION
 
@@ -58,7 +58,7 @@ void kmeans::update_clusters(void) {
 
 	/* fill clusters again in line with centers. */
 	for (unsigned int index_object = 0; index_object < dataset->size(); index_object++) {
-		double			minimum_distance = std::numeric_limits<double>::max();
+		double		minimum_distance = std::numeric_limits<double>::max();
 		unsigned int	suitable_index_cluster = 0;
 
 		for (unsigned int index_cluster = 0; index_cluster < clusters->size(); index_cluster++) {
