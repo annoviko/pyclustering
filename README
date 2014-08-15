@@ -42,9 +42,9 @@ Clustering algorithms:
 - HSyncNet [Python]
 - K-Means [Python, C++]
 - ROCK [Python, C++]
-- SyncNet [Python]
+- SyncNet [Python, C++]
 - SyncSom [Python]
-- X-Means [Python]
+- X-Means [Python, C++]
 
 Oscillatory networks and neural networks:
 - Hysteresis Oscillatory Network [Python]
