@@ -153,6 +153,7 @@
     <ClCompile Include="support.cpp" />
     <ClCompile Include="syncnet.cpp" />
     <ClCompile Include="sync_network.cpp" />
+    <ClCompile Include="xmeans.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dbscan.h" />
@@ -164,6 +165,7 @@
     <ClInclude Include="support.h" />
     <ClInclude Include="syncnet.h" />
     <ClInclude Include="sync_network.h" />
+    <ClInclude Include="xmeans.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

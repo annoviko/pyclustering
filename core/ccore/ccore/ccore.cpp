@@ -7,6 +7,7 @@
 #include "kmeans.h"
 #include "rock.h"
 #include "syncnet.h"
+#include "xmeans.h"
 
 #include "sync_network.h"
 
@@ -174,6 +175,34 @@ clustering_result * rock_algorithm(const data_representation * const sample, con
 	delete dataset; dataset = NULL;
 
 	return result;
+}
+
+/***********************************************************************************************
+ *
+ * @brief   Clustering algorithm X-Means returns allocated clusters.
+ *
+ * @param   (in) sample				- input data for clustering.
+ *          (in) initial_centers	- initial coordinates of centers of clusters.
+ *          (in) kmax               - maximum number of clusters that can be allocated.
+ *          (in) tolerance			- stop condition for local parameter improvement.
+ *
+ * @return	Returns result of clustering - array of allocated clusters.
+ *
+ ***********************************************************************************************/
+clustering_result * xmeans_algorithm(const data_representation * const sample, const data_representation * const initial_centers, const unsigned int kmax, const double tolerance) {
+	std::vector<std::vector<double> > * dataset = read_sample(sample);
+	std::vector<std::vector<double> > * centers = read_sample(initial_centers);
+
+	xmeans * solver = new xmeans(dataset, centers, kmax, tolerance);
+	solver->process();
+
+	clustering_result * result = create_clustering_result(solver->get_clusters());
+
+	delete solver; solver = NULL;
+	delete dataset; dataset = NULL;
+	delete centers; centers = NULL;
+
+	return result;	
 }
 
 /***********************************************************************************************

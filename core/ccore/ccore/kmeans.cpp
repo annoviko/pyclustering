@@ -63,9 +63,9 @@ void kmeans::update_clusters(void) {
 
 		for (unsigned int index_cluster = 0; index_cluster < clusters->size(); index_cluster++) {
 #ifdef FAST_SOLUTION
-			double distance = euclidean_distance( &(*centers)[index_cluster], &(*dataset)[index_object] );
-#else
 			double distance = euclidean_distance_sqrt( &(*centers)[index_cluster], &(*dataset)[index_object] );
+#else
+			double distance = euclidean_distance( &(*centers)[index_cluster], &(*dataset)[index_object] );
 #endif
 			if (distance < minimum_distance) {
 				minimum_distance = distance;
@@ -98,9 +98,9 @@ double kmeans::update_centers(void) {
 		}
 
 #ifdef FAST_SOLUTION
-		double distance = euclidean_distance( &(*centers)[index_cluster], (std::vector<double> *) &total );
-#else
 		double distance = euclidean_distance_sqrt( &(*centers)[index_cluster], (std::vector<double> *) &total );
+#else
+		double distance = euclidean_distance( &(*centers)[index_cluster], (std::vector<double> *) &total );
 #endif
 
 		if (distance > maximum_change) {

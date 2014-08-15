@@ -182,6 +182,27 @@ def rock(sample, eps, number_clusters, threshold):
     return list_of_clusters;    
 
 
+def xmeans(sample, centers, kmax, tolerance):
+    "Clustering algorithm X-Means returns allocated clusters. Calculation is performed via CCORE."
+    
+    "(in) data        - input data that is presented as list of points (objects), each point should be represented by list or tuple."
+    "(in) centers     - initial coordinates of centers of clusters that are represented by list: [center1, center2, ...]."
+    "(in) kmax        - maximum number of clusters that can be allocated."
+    
+    "Returns list of allocated clusters, each cluster contains indexes of objects in list of data."
+    
+    pointer_data = create_pointer_data(sample);
+    pointer_centers = create_pointer_data(centers);
+    
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    result = ccore.xmeans_algorithm(pointer_data, pointer_centers, c_uint(kmax), c_double(tolerance));
+    
+    list_of_clusters = extract_clusters(result);
+    
+    ccore.free_clustering_result(result);
+    return list_of_clusters;
+
+
 def create_sync_network(num_osc, weight, frequency, qcluster, type_conn, initial_phases):
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
     pointer_network = ccore.create_sync_network(c_uint(num_osc), c_double(weight), c_double(frequency), c_uint(qcluster), c_uint(type_conn), c_uint(initial_phases));
@@ -268,16 +289,9 @@ def destroy_object(pointer_object):
 
 
 # from support import draw_dynamics, draw_clusters;
-# from nnet import *;
 # from samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
-# 
-# sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1);
-# pointer_network = create_syncnet(sample, 1, 0, False);
-# (t, dyn) = process_syncnet(pointer_network, 0.999, 1, True);
-#        
-# draw_dynamics(t, dyn);
-# clusters = get_clusters_syncnet(pointer_network, 0.1);
-# 
+#   
+# sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE3);
+# clusters = xmeans(sample, [ [0.2, 0.1], [4.0, 1.0] ], 20, 0.025);
+#  
 # draw_clusters(sample, clusters);
-# 
-# destroy_object(pointer_network);

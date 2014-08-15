@@ -1,6 +1,8 @@
 import numpy;
 import math;
 
+import core;
+
 from support import euclidean_distance, euclidean_distance_sqrt;
 from support import list_math_addition_number, list_math_addition, list_math_division_number;
 
@@ -14,6 +16,9 @@ def xmeans(data, centers, kmax = 20, ccore = False):
     "(in) ccore       - defines should be CCORE C++ library used instead of Python code or not."
     
     "Returns list of allocated clusters, each cluster contains indexes of objects in list of data."
+    
+    if (ccore is True):
+        return core.xmeans(data, centers, kmax, 0.025);
     
     clusters = [];
     while ( len(centers) < kmax ):
@@ -85,7 +90,7 @@ def improve_structure(data, clusters, centers):
         parent_scores = splitting_criterion(data, [ clusters[index_cluster] ], [ centers[index_cluster] ]);
         child_scores = splitting_criterion(data, [ parent_child_clusters[0], parent_child_clusters[1] ], parent_child_centers);
                 
-        # print(index_cluster, "Scores: parent = ", parent_scores, "child = ", child_scores);
+        #print(index_cluster, "Scores: parent = ", parent_scores, "child = ", child_scores);
     
         # Reallocate number of centers (clusters) in line with scores        
         if (parent_scores > child_scores):
@@ -94,7 +99,6 @@ def improve_structure(data, clusters, centers):
             allocated_centers.append(parent_child_centers[0]);
             allocated_centers.append(parent_child_centers[1]);
     
-    # print("\n\n");
     return allocated_centers;
 
 
