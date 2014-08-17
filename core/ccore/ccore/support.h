@@ -7,6 +7,7 @@
 
 #include <vector>
 #include <cmath>
+#include <algorithm>
 
 #include "interface_ccore.h"
 #include "network.h"
@@ -94,6 +95,18 @@ std::vector<std::vector<double> > * read_sample(const data_representation * cons
  *
  ***********************************************************************************************/
 clustering_result * create_clustering_result(const std::vector<std::vector<unsigned int> *> * const clusters);
+
+/***********************************************************************************************
+ *
+ * @brief   Returns average distance for establish links between specified number of neighbors.
+ *
+ * @param   (in) points         - input data.
+ * @param   (in) num_neigh      - number of neighbors.
+ *
+ * @return  Returns average distance for establish links between 'num_neigh' in data set 'points'.
+ *
+ ***********************************************************************************************/
+double average_neighbor_distance(const std::vector<std::vector<double> > * points, const unsigned int num_neigh);
 
 /***********************************************************************************************
  *

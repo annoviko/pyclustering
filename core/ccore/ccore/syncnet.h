@@ -11,10 +11,10 @@
  *
  ***********************************************************************************************/
 class syncnet: public sync_network {
-private:
+protected:
 	std::vector<std::vector<double> >	* oscillator_locations;
 	std::vector<std::vector<double> >	* distance_conn_weights;
-	double								connection_weight;
+	double					connection_weight;
 
 public:
 	/***********************************************************************************************
@@ -48,11 +48,11 @@ public:
 	 * @param   (in) solver            - specified type of solving diff. equation. 
 	 * @param   (in) collect_dynamic   - specified requirement to collect whole dynamic of the network.
 	 *
-	 * @return  Return last values of simulation time and phases of oscillators as a tuple if 
+	 * @return  Return last values of simulation time and phases of oscillators if 
 	 *          collect_dynamic is False, and whole dynamic if collect_dynamic is True.
 	 *
 	 ***********************************************************************************************/
-	dynamic_result * process(const double order, const solve_type solver, const bool collect_dynamic);
+	virtual std::vector< std::vector<sync_dynamic> * > * process(const double order, const solve_type solver, const bool collect_dynamic);
 
 	/***********************************************************************************************
 	 *
@@ -67,6 +67,21 @@ public:
 	 ***********************************************************************************************/
 	virtual double phase_kuramoto(const double t, const double teta, const std::vector<void *> & argv);
 
+protected:
+	/***********************************************************************************************
+	 *
+	 * @brief   Create connections between oscillators in line with input radius of connectivity.
+
+	 *
+	 * @param   (in) connectivity_radius  - connectivity radius between oscillators.
+	 * @param   (in) enable_conn_weight   - if True - enable mode when strength between oscillators 
+	 *                                      depends on distance between two oscillators. Otherwise
+	 *                                      all connection between oscillators have the same strength.
+
+	 *
+	 ***********************************************************************************************/
+	void create_connections(const double connectivity_radius, const bool enable_conn_weight);
+
 private:
 	/***********************************************************************************************
 	 *
@@ -80,18 +95,6 @@ private:
 	 *
 	 ***********************************************************************************************/
 	static double adapter_phase_kuramoto(const double t, const double teta, const std::vector<void *> & argv);
-
-	/***********************************************************************************************
-	 *
-	 * @brief   Create connections between oscillators in line with input radius of connectivity.
-	 *
-	 * @param   (in) connectivity_radius  - connectivity radius between oscillators.
-	 * @param   (in) enable_conn_weight   - if True - enable mode when strength between oscillators 
-	 *                                      depends on distance between two oscillators. Otherwise
-	 *                                      all connection between oscillators have the same strength.
-	 *
-	 ***********************************************************************************************/
-	void create_connections(const double connectivity_radius, const bool enable_conn_weight);
 };
 
 #endif

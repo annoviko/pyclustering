@@ -16,8 +16,8 @@ sync_network::sync_network(const unsigned int size, const double weight_factor, 
 
 	cluster = qcluster;
 
-	std::random_device						device;
-	std::default_random_engine				generator(device());
+	std::random_device			device;
+	std::default_random_engine		generator(device());
 	std::uniform_real_distribution<double>	phase_distribution(0.0, 2.0 * pi());
 	std::uniform_real_distribution<double>	frequency_distribution(0.0, 1.0);
 	
@@ -172,7 +172,7 @@ std::vector< std::vector<unsigned int> * > * sync_network::allocate_sync_ensembl
 }
 
 
-dynamic_result * sync_network::simulate_static(const unsigned int steps, const double time, const solve_type solver, const bool collect_dynamic) {
+std::vector< std::vector<sync_dynamic> * > * sync_network::simulate_static(const unsigned int steps, const double time, const solve_type solver, const bool collect_dynamic) {
 	free_sync_ensembles();
 
 	std::vector< std::vector<sync_dynamic> * > * dynamic = new std::vector< std::vector<sync_dynamic> * >;
@@ -188,17 +188,17 @@ dynamic_result * sync_network::simulate_static(const unsigned int steps, const d
 		}
 	}
 
-	return convert_dynamic_representation(dynamic);
+	return dynamic;
 }
 
-
-dynamic_result * sync_network::simulate_dynamic(const double order, const solve_type solver, const bool collect_dynamic, const double step, const double step_int, const double threshold_changes) {
+#include <stdio.h>
+std::vector< std::vector<sync_dynamic> * > * sync_network::simulate_dynamic(const double order, const solve_type solver, const bool collect_dynamic, const double step, const double step_int, const double threshold_changes) {
 	free_sync_ensembles();
 
 	double previous_order = 0.0;
 	double current_order = sync_local_order();
 
-	std::vector< std::vector<sync_dynamic> * > * dynamic = new std::vector< std::vector<sync_dynamic> * >;
+	std::vector< std::vector<sync_dynamic> * > * dynamic = new std::vector< std::vector<sync_dynamic> * >();
 
 	for (double time_counter = 0; current_order < order; time_counter += step) {
 		calculate_phases(solver, time_counter, step, step_int);
@@ -216,7 +216,7 @@ dynamic_result * sync_network::simulate_dynamic(const double order, const solve_
 		}
 	}
 
-	return convert_dynamic_representation(dynamic);
+	return dynamic;
 }
 
 
@@ -295,11 +295,11 @@ double sync_network::phase_normalization(const double teta) {
 	return norm_teta;
 }
 
-dynamic_result * sync_network::convert_dynamic_representation(std::vector< std::vector<sync_dynamic> * > * dynamic) const {
+dynamic_result * sync_network::convert_dynamic_representation(std::vector< std::vector<sync_dynamic> * > * dynamic) {
 	dynamic_result * result = new dynamic_result();
 
 	result->size_dynamic = dynamic->size();
-	result->size_network = this->size();
+	result->size_network = ((*dynamic)[0])->size();
 	result->times = new double[result->size_dynamic];
 	result->dynamic = new double * [result->size_dynamic];
 
@@ -310,12 +310,7 @@ dynamic_result * sync_network::convert_dynamic_representation(std::vector< std::
 			result->dynamic[index_dynamic][index_neuron] = (*(*dynamic)[index_dynamic])[index_neuron].phase;
 		}
 
-		delete (*dynamic)[index_dynamic];
-		(*dynamic)[index_dynamic] = NULL;
 	}
-	
-	delete dynamic;
-	dynamic = NULL;
 
 	return result;
 }

@@ -8,6 +8,7 @@ INCLUDES = -Iccore/
 SOURCES += ccore/ccore.cpp
 SOURCES += ccore/dbscan.cpp
 SOURCES += ccore/hierarchical.cpp
+SOURCES += ccore/hsyncnet.cpp
 SOURCES += ccore/kmeans.cpp
 SOURCES += ccore/network.cpp
 SOURCES += ccore/rock.cpp

@@ -95,7 +95,7 @@ class syncnet(sync_network):
                     self._conn_weight[j][i] = value_conn_weight;
 
 
-    def process(self, order = 0.998, solution = solve_type.FAST, collect_dynamic = False):
+    def process(self, order = 0.998, solution = solve_type.FAST, collect_dynamic = True):
         "Network is trained via achievement sync state between the oscillators using the radius of coupling."
         
         "(in) order             - order of synchronization that is used as indication for stopping processing."

@@ -21,11 +21,11 @@ typedef struct sync_dynamic {
 
 class sync_network : public network {
 protected:
-	std::vector<sync_oscillator>	* oscillators;					/* oscillators						*/
-	std::vector< std::vector<unsigned int> * > * sync_ensembles;	/* pointer to sync ensembles		*/
+	std::vector<sync_oscillator>	* oscillators;			/* oscillators			*/
+	std::vector< std::vector<unsigned int> * > * sync_ensembles;	/* pointer to sync ensembles	*/
 
-	double							weight;							/* multiplier for connections		*/
-	unsigned int					cluster;						/* q parameter						*/	
+	double						weight;		/* multiplier for connections	*/
+	unsigned int					cluster;	/* q parameter			*/	
 
 public:
 	sync_network(const unsigned int size, const double weight_factor, const double frequency_factor, const unsigned int qcluster, const conn_type connection_type, const initial_type initial_phases);
@@ -38,11 +38,13 @@ public:
 
 	std::vector< std::vector<unsigned int> * > * allocate_sync_ensembles(const double tolerance = 0.01);
 
-	dynamic_result * simulate_static(const unsigned int steps, const double time, const solve_type solver, const bool collect_dynamic);
+	std::vector< std::vector<sync_dynamic> * > * simulate_static(const unsigned int steps, const double time, const solve_type solver, const bool collect_dynamic);
 
-	dynamic_result * simulate_dynamic(const double order, const solve_type solver, const bool collect_dynamic, const double step = 0.1, const double step_int = 0.01, const double threshold_changes = 0.0000001);
+	std::vector< std::vector<sync_dynamic> * > * simulate_dynamic(const double order, const solve_type solver, const bool collect_dynamic, const double step = 0.1, const double step_int = 0.01, const double threshold_changes = 0.0000001);
 
 	static double phase_normalization(const double teta);
+
+	static dynamic_result * convert_dynamic_representation(std::vector< std::vector<sync_dynamic> * > * dynamic);
 
 protected:
 	virtual double phase_kuramoto(const double t, const double teta, const std::vector<void *> & argv);
@@ -55,8 +57,6 @@ private:
 	void free_sync_ensembles(void);
 
 	void store_dynamic(std::vector< std::vector<sync_dynamic> * > * dynamic, const double time) const;
-
-	dynamic_result * convert_dynamic_representation(std::vector< std::vector<sync_dynamic> * > * dynamic) const;
 };
 
 #endif

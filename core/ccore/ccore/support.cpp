@@ -114,6 +114,37 @@ clustering_result * create_clustering_result(const std::vector<std::vector<unsig
 
 /***********************************************************************************************
  *
+ * @brief   Returns average distance for establish links between specified number of neighbors.
+ *
+ * @param   (in) points         - input data.
+ * @param   (in) num_neigh      - number of neighbors.
+ *
+ * @return  Returns average distance for establish links between 'num_neigh' in data set 'points'.
+ *
+ ***********************************************************************************************/
+double average_neighbor_distance(const std::vector<std::vector<double> > * points, const unsigned int num_neigh) {
+	std::vector<std::vector<double> > dist_matrix( points->size(), std::vector<double>(points->size(), 0.0) );
+	for (unsigned int i = 0; i < points->size(); i++) {
+		for (unsigned int j = i + 1; j < points->size(); j++) {
+			double distance = euclidean_distance( &(*points)[i], &(*points)[j] );
+			dist_matrix[i][j] = distance;
+			dist_matrix[j][i] = distance;
+		}
+		std::sort(dist_matrix[i].begin(), dist_matrix[i].end());
+	}
+
+	double total_distance = 0.0;
+	for (unsigned int i = 0; i < points->size(); i++) {
+		for (unsigned int j = 0; j < num_neigh; j++) {
+			total_distance += dist_matrix[i][j + 1];
+		}
+	}
+
+	return total_distance / ( (double) num_neigh * (double) points->size() );
+}
+
+/***********************************************************************************************
+ *
  * @brief   Runge-Kutta 4 solver.
  *
  * @param   (in) function_pointer   - pointer to function.
@@ -196,13 +227,13 @@ std::vector<differential_result> * rkf45(double (*function_pointer)(const double
 		double y3 = current_value + butcher_table::b3 * k1 + butcher_table::c3 * k2;
 
 		double k3 = h * function_pointer(current_time + butcher_table::a3 * h, y3, argv);
-        double y4 = current_value + butcher_table::b4 * k1 + butcher_table::c4 * k2 + butcher_table::d4 * k3;
+        	double y4 = current_value + butcher_table::b4 * k1 + butcher_table::c4 * k2 + butcher_table::d4 * k3;
 
 		double k4 = h * function_pointer(current_time + butcher_table::a4 * h, y4, argv);
-        double y5 = current_value + butcher_table::b5 * k1 + butcher_table::c5 * k2 + butcher_table::d5 * k3 + butcher_table::e5 * k4;
+        	double y5 = current_value + butcher_table::b5 * k1 + butcher_table::c5 * k2 + butcher_table::d5 * k3 + butcher_table::e5 * k4;
 
 		double k5 = h * function_pointer(current_time + butcher_table::a5 * h, y5, argv);
-        double y6 = current_value + butcher_table::b6 * k1 + butcher_table::c6 * k2 + butcher_table::d6 * k3 + butcher_table::e6 * k4 + butcher_table::f6 * k5;
+        	double y6 = current_value + butcher_table::b6 * k1 + butcher_table::c6 * k2 + butcher_table::d6 * k3 + butcher_table::e6 * k4 + butcher_table::f6 * k5;
 
 		double k6 = h * function_pointer(current_time + butcher_table::a6 * h, y6, argv);
 

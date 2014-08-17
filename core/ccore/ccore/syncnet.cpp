@@ -173,10 +173,10 @@ double syncnet::phase_kuramoto(const double t, const double teta, const std::vec
  * @param   (in) solver            - specified type of solving diff. equation. 
  * @param   (in) collect_dynamic   - specified requirement to collect whole dynamic of the network.
  *
- * @return  Return last values of simulation time and phases of oscillators as a tuple if 
+ * @return  Return last values of simulation time and phases of oscillators if 
  *          collect_dynamic is False, and whole dynamic if collect_dynamic is True.
  *
  ***********************************************************************************************/
-dynamic_result * syncnet::process(const double order, const solve_type solver, const bool collect_dynamic) {
+std::vector< std::vector<sync_dynamic> * > * syncnet::process(const double order, const solve_type solver, const bool collect_dynamic) {
 	return simulate_dynamic(order, solver, collect_dynamic);
 }

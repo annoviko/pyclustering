@@ -225,20 +225,28 @@ void * create_sync_network(const unsigned int size, const double weight_factor, 
  *
  * @brief   Simulate dynamic of the oscillatory Sync network.
  *
- * @param   (in) pointer_network	- pointer to the Sync network.
- *          (in) steps				- number steps of simulations during simulation.
- *          (in) time				- time of simulation.
- *          (in) solver				- type of solution (solving).
- *          (in) collect_dynamic	- true - returns whole dynamic of oscillatory network, 
- *                                    otherwise returns only last values of dynamics.
+ * @param   (in) pointer_network        - pointer to the Sync network.
+ *          (in) steps                  - number steps of simulations during simulation.
+ *          (in) time                   - time of simulation.
+ *          (in) solver	                - type of solution (solving).
+ *          (in) collect_dynamic        - true - returns whole dynamic of oscillatory network, 
+ *                                        otherwise returns only last values of dynamics.
  *
- * @return	Returns dynamic of simulation of the network.
+ * @return  Returns dynamic of simulation of the network.
  *
  ***********************************************************************************************/
 dynamic_result * simulate_sync_network(const void * pointer_network, unsigned int steps, const double time, const unsigned int solver, const bool collect_dynamic) {
 	sync_network * network = (sync_network *) pointer_network;
 
-	dynamic_result * result = network->simulate_static(steps, time, (solve_type) solver, collect_dynamic);
+	std::vector< std::vector<sync_dynamic> * > * dynamic = network->simulate_static(steps, time, (solve_type) solver, collect_dynamic);
+	dynamic_result * result = sync_network::convert_dynamic_representation(dynamic);
+
+	for (std::vector< std::vector<sync_dynamic> * >::const_iterator iter = dynamic->begin(); iter != dynamic->end(); iter++) {
+		delete (*iter);
+	}
+
+	delete dynamic;
+	dynamic = NULL;
 
 	return result;
 }
@@ -247,24 +255,32 @@ dynamic_result * simulate_sync_network(const void * pointer_network, unsigned in
  *
  * @brief   Simulate dynamic of the oscillatory Sync network until stop condition is not reached.
  *
- * @param   (in) pointer_network	- pointer to the Sync network.
- *          (in) order				- order of process synchronization, destributed 0..1.
- *          (in) solver				- type of solution (solving).
- *          (in) collect_dynamic	- if true - returns whole dynamic of oscillatory network, 
- *                                    otherwise returns only last values of dynamics.
- *          (in) step				- time step of one iteration of simulation.
- *          (in) step_int			- integration step, should be less than step.
- *          (in) threshold_changes	- additional stop condition that helps prevent infinite 
- *                                    simulation, defines limit of changes of oscillators between 
- *                                    current and previous steps.
+ * @param   (in) pointer_network        - pointer to the Sync network.
+ *          (in) order                  - order of process synchronization, destributed 0..1.
+ *          (in) solver                 - type of solution (solving).
+ *          (in) collect_dynamic        - if true - returns whole dynamic of oscillatory network, 
+ *                                        otherwise returns only last values of dynamics.
+ *          (in) step                   - time step of one iteration of simulation.
+ *          (in) step_int               - integration step, should be less than step.
+ *          (in) threshold_changes      - additional stop condition that helps prevent infinite 
+ *                                        simulation, defines limit of changes of oscillators between 
+ *                                        current and previous steps.
  *
- * @return	Returns dynamic of simulation of the network.
+ * @return  Returns dynamic of simulation of the network.
  *
  ***********************************************************************************************/
 dynamic_result * simulate_dynamic_sync_network(const void * pointer_network, const double order, const unsigned int solver, const bool collect_dynamic, const double step, const double step_int, const double threshold_changes) {
 	sync_network * network = (sync_network *) pointer_network;
 	
-	dynamic_result * result = network->simulate_dynamic(order, (solve_type) solver, collect_dynamic, step, step_int, threshold_changes);
+	std::vector< std::vector<sync_dynamic> * > * dynamic = network->simulate_dynamic(order, (solve_type) solver, collect_dynamic, step, step_int, threshold_changes);
+	dynamic_result * result = sync_network::convert_dynamic_representation(dynamic);
+
+	for (std::vector< std::vector<sync_dynamic> * >::const_iterator iter = dynamic->begin(); iter != dynamic->end(); iter++) {
+		delete (*iter);
+	}
+
+	delete dynamic;
+	dynamic = NULL;
 
 	return result;
 }
@@ -349,7 +365,16 @@ void * create_syncnet(const data_representation * const sample, const double con
 dynamic_result * process_syncnet(const void * pointer_network, const double order, const unsigned int solver, const bool collect_dynamic) {
 	syncnet * network = (syncnet *) pointer_network;
 	
-	dynamic_result * result = network->process(order, (solve_type) solver, collect_dynamic);
+	std::vector< std::vector<sync_dynamic> * > * dynamic = network->process(order, (solve_type) solver, collect_dynamic);
+
+	dynamic_result * result = sync_network::convert_dynamic_representation(dynamic);
+
+	for (std::vector< std::vector<sync_dynamic> * >::const_iterator iter = dynamic->begin(); iter != dynamic->end(); iter++) {
+		delete (*iter);
+	}
+
+	delete dynamic;
+	dynamic = NULL;
 
 	return result;
 }

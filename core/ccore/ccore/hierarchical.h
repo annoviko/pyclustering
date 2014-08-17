@@ -7,8 +7,8 @@
 class hierarchical_cluster {
 private:
 	std::vector<std::vector<double> >	* dataset;	/* pointer to input data set */
-	std::vector<unsigned int>			* indexes; 	/* indexes of objects in input data set */
-	std::vector<double>					* center; 	/* center of the cluster */
+	std::vector<unsigned int>		* indexes; 	/* indexes of objects in input data set */
+	std::vector<double>			* center; 	/* center of the cluster */
 
 public:
 	hierarchical_cluster(const std::vector<std::vector<double> > * const data, const unsigned int index, const std::vector<double> * const point);
@@ -29,10 +29,10 @@ public:
 
 class hierarchical {
 private:
-	std::list<hierarchical_cluster *>			* clusters;
+	std::list<hierarchical_cluster *>		* clusters;
 	std::vector<std::vector<unsigned int> * >	* standard_clusters;
-	std::vector<std::vector<double> >			* data;
-	unsigned int 								number_clusters;
+	std::vector<std::vector<double> >		* data;
+	unsigned int 					number_clusters;
 
 public:
 	hierarchical(const std::vector<std::vector<double> > * const dataset, unsigned int cluster_number);
