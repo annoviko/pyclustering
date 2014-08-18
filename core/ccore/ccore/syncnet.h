@@ -14,7 +14,7 @@ class syncnet: public sync_network {
 protected:
 	std::vector<std::vector<double> >	* oscillator_locations;
 	std::vector<std::vector<double> >	* distance_conn_weights;
-	double					connection_weight;
+	double								connection_weight;
 
 public:
 	/***********************************************************************************************

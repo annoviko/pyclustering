@@ -63,10 +63,10 @@ void syncnet::create_connections(const double connectivity_radius, const bool en
 	double minimum_distance = std::numeric_limits<double>::max();
 
 	for (unsigned int i = 0; i < num_osc; i++) {
-		for (unsigned int j = 0; j < num_osc; j++) {
+		for (unsigned int j = i + 1; j < num_osc; j++) {
 			double distance = euclidean_distance_sqrt( &(*oscillator_locations)[i], &(*oscillator_locations)[j] );
 
-			if (distance <= connectivity_radius) {
+			if (distance <= sqrt_connectivity_radius) {
 				(*(*osc_conn)[i])[j] = 1;
 				(*(*osc_conn)[j])[i] = 1;
 			}
@@ -96,7 +96,7 @@ void syncnet::create_connections(const double connectivity_radius, const bool en
 		}
 
 		for (unsigned int i = 0; i < num_osc; i++) {
-			for (unsigned int j = 0; j < num_osc; j++) {
+			for (unsigned int j = i + 1; j < num_osc; j++) {
 				double value_weight = ((*distance_conn_weights)[i][j] - subtractor) / multiplier;
 
 				(*distance_conn_weights)[i][j] = value_weight;
