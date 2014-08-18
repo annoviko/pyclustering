@@ -48,6 +48,13 @@ class syncnet(sync_network):
                 self._create_connections(radius);
     
 
+    def __del__(self):
+        "Destructor of oscillatory network is based on Kuramoto model."
+        if (self._ccore_network_pointer is not None):
+            core.destroy_object(self._ccore_network_pointer);
+            self._ccore_network_pointer = None;
+
+
     def _create_connections(self, radius):
         "Create connections between oscillators in line with input radius of connectivity."
         

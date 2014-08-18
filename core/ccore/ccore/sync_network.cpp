@@ -8,6 +8,18 @@
 #include <stdexcept>
 #include <chrono>
 
+/***********************************************************************************************
+ *
+ * @brief   Contructor of the oscillatory network SYNC based on Kuramoto model.
+ *
+ * @param   (in) size                - number of oscillators in the network.
+ * @param   (in) weight_factor       - coupling strength of the links between oscillators.
+ * @param   (in) frequency_factor    - multiplier of internal frequency of the oscillators.
+ * @param   (in) qcluster            - number of clusters that should be allocated.
+ * @param   (in) connection_type     - type of connection between oscillators in the network.
+ * @param   (in) initial_phases      - type of initialization of initial phases of oscillators.
+ *
+ ***********************************************************************************************/
 sync_network::sync_network(const unsigned int size, const double weight_factor, const double frequency_factor, const unsigned int qcluster, const conn_type connection_type, const initial_type initial_phases) :
 	network(size, connection_type) 
 {
@@ -43,7 +55,11 @@ sync_network::sync_network(const unsigned int size, const double weight_factor, 
 	sync_ensembles = NULL;
 }
 
-
+/***********************************************************************************************
+ *
+ * @brief   Default destructor.
+ *
+ ***********************************************************************************************/
 sync_network::~sync_network() {
 	if (oscillators != NULL) {
 		delete oscillators;
@@ -53,7 +69,12 @@ sync_network::~sync_network() {
 	free_sync_ensembles();
 }
 
-
+/***********************************************************************************************
+ *
+ * @brief   Remove allocated clusters. Should be used when dynamic is changed (phases of
+ *          oscillators are changed). Required for fast providing results of clustering.
+ *
+ ***********************************************************************************************/
 void sync_network::free_sync_ensembles() {
 	if (sync_ensembles != NULL) {
 		for (std::vector< std::vector<unsigned int> * >::const_iterator iter = sync_ensembles->begin(); iter != sync_ensembles->end(); iter++) {
@@ -67,7 +88,13 @@ void sync_network::free_sync_ensembles() {
 	}
 }
 
-
+/***********************************************************************************************
+ *
+ * @brief   Calculates level of global synchorization in the network.
+ *
+ * @return  Return level of global synchorization in the network.
+ *
+ ***********************************************************************************************/
 double sync_network::sync_order() const {
 	double exp_amount = 0;
 	double average_phase = 0;
@@ -83,7 +110,13 @@ double sync_network::sync_order() const {
 	return std::abs(average_phase) / std::abs(exp_amount);
 }
 
-
+/***********************************************************************************************
+ *
+ * @brief   Calculates level of local (partial) synchorization in the network.
+ *
+ * @return  Return level of local (partial) synchorization in the network.
+ *
+ ***********************************************************************************************/
 double sync_network::sync_local_order() const {
 	double			exp_amount = 0.0;
 	unsigned int	number_neighbors = 0;
@@ -104,13 +137,33 @@ double sync_network::sync_local_order() const {
 	return exp_amount / (double) number_neighbors;
 }
 
-
-
+/***********************************************************************************************
+ *
+ * @brief   Adapter for solving differential equation for calculation of oscillator phase.
+ *
+ * @param   (in) t      - current value of phase.
+ * @param   (in) teta   - time (can be ignored). 
+ * @param   (in) argv   - pointer to the network 'argv[0]' and index of oscillator whose phase 
+ *                        represented by argument teta 'argv[1]'.
+ *
+ * @return  Return new value of phase of oscillator that is specified in index 'argv[1]'.
+ *
+ ***********************************************************************************************/
 double sync_network::adapter_phase_kuramoto(const double t, const double teta, const std::vector<void *> & argv) {
 	return ((sync_network *) argv[0])->phase_kuramoto(t, teta, argv);
 }
 
-
+/***********************************************************************************************
+ *
+ * @brief   Calculation of oscillator phase using Kuramoto model.
+ *
+ * @param   (in) t      - current value of phase.
+ * @param   (in) teta   - time (can be ignored). 
+ * @param   (in) argv   - index of oscillator whose phase represented by argument teta.
+ *
+ * @return  Return new value of phase of oscillator with index 'argv[1]'.
+ *
+ ***********************************************************************************************/
 double sync_network::phase_kuramoto(const double t, const double teta, const std::vector<void *> & argv) {
 	unsigned int index = *(unsigned int *) argv[1];
 	double phase = 0;
@@ -125,7 +178,16 @@ double sync_network::phase_kuramoto(const double t, const double teta, const std
 	return phase;
 }
 
-
+/***********************************************************************************************
+ *
+ * @brief   Allocate clusters in line with ensembles of synchronous oscillators where each
+ *          synchronous ensemble corresponds to only one cluster.
+ *
+ * @param   (in) tolerance   - maximum error for allocation of synchronous ensemble oscillators.
+ *
+ * @return  Return vectors synchronous oscillators.
+ *
+ ***********************************************************************************************/
 std::vector< std::vector<unsigned int> * > * sync_network::allocate_sync_ensembles(const double tolerance) {	
 	if (sync_ensembles == NULL) {
 		sync_ensembles = new std::vector< std::vector<unsigned int> * >();
@@ -171,7 +233,21 @@ std::vector< std::vector<unsigned int> * > * sync_network::allocate_sync_ensembl
 	return sync_ensembles;
 }
 
-
+/***********************************************************************************************
+ *
+ * @brief   Performs static simulation of oscillatory network.
+ *
+ * @param   (in) steps             - number steps of simulations during simulation.
+ * @param   (in) time              - time of simulation.
+ * @param   (in) solver            - type of solver for simulation.
+ * @param   (in) collect_dynamic   - if true - returns whole dynamic of oscillatory network, 
+ *                                   otherwise returns only last values of dynamics.
+ *
+ * @return  Returns dynamic of oscillatory network. If argument 'collect_dynamic' = true, than it 
+ *          returns dynamic for the whole simulation time, otherwise returns only last values 
+ *          (last step of simulation) of dynamic.
+ *
+ ***********************************************************************************************/
 std::vector< std::vector<sync_dynamic> * > * sync_network::simulate_static(const unsigned int steps, const double time, const solve_type solver, const bool collect_dynamic) {
 	free_sync_ensembles();
 
@@ -189,7 +265,26 @@ std::vector< std::vector<sync_dynamic> * > * sync_network::simulate_static(const
 	return dynamic;
 }
 
-
+/***********************************************************************************************
+ *
+ * @brief   Performs dynamic simulation of oscillatory network until stop condition is not 
+ *          reached. Stop condition is defined by input argument 'order'.
+ *
+ * @param   (in) order               - order of process synchronization, destributed 0..1.
+ * @param   (in) solver              - type of solver for simulation.
+ * @param   (in) collect_dynamic     - if true - returns whole dynamic of oscillatory network, 
+ *                                     otherwise returns only last values of dynamics.
+ * @param   (in) step                - time step of one iteration of simulation (can be ignored).
+ * @param   (in) step_int            - integration step, should be less than step (can be ignored).
+ * @param   (in) threshold_changes   - additional stop condition that helps prevent infinite 
+ *                                     simulation, defines limit of changes of oscillators between 
+ *                                     current and previous steps.
+ *
+ * @return  Returns dynamic of oscillatory network. If argument 'collect_dynamic' = true, than it 
+ *          returns dynamic for the whole simulation time, otherwise returns only last values 
+ *          (last step of simulation) of dynamic.
+ *
+ ***********************************************************************************************/
 std::vector< std::vector<sync_dynamic> * > * sync_network::simulate_dynamic(const double order, const solve_type solver, const bool collect_dynamic, const double step, const double step_int, const double threshold_changes) {
 	free_sync_ensembles();
 
@@ -215,7 +310,18 @@ std::vector< std::vector<sync_dynamic> * > * sync_network::simulate_dynamic(cons
 	return dynamic;
 }
 
-
+/***********************************************************************************************
+ *
+ * @brief   Stores dynamic of oscillators. Type of saving depends on argument 'collect_dynamic', 
+ *          if it's true - than new values are added to previous, otherwise new values rewrite 
+ *          previous.
+ *
+ * @param   (in) dynamic             - dynamic of oscillators.
+ * @param   (in) time                - type of solver for simulation.
+ * @param   (in) collect_dynamic     - if true - added new values to previous, otherwise rewrites 
+ *                                     previous values by new values of dynamics.
+ *
+ ***********************************************************************************************/
 void sync_network::store_dynamic(std::vector< std::vector<sync_dynamic> * > * dynamic, const double time, const bool collect_dynamic) const {
 	std::vector<sync_dynamic> * network_dynamic = new std::vector<sync_dynamic>();
 
@@ -234,7 +340,19 @@ void sync_network::store_dynamic(std::vector< std::vector<sync_dynamic> * > * dy
 	dynamic->push_back(network_dynamic);
 }
 
-
+/***********************************************************************************************
+ *
+ * @brief   Calculates new phases for oscillators in the network in line with current step.
+ *
+ * @param   (in) solver             - type solver of the differential equation.
+ * @param   (in) t                  - time of simulation.
+ * @param   (in) step               - step of solution at the end of which states of oscillators 
+ *                                    should be calculated.
+ * @param   (in) int_step           - step differentiation that is used for solving differential 
+ *                                    equation (can be ignored in case of solvers when integration
+ *                                    step is defined by solver itself).
+ *
+ ***********************************************************************************************/
 void sync_network::calculate_phases(const solve_type solver, const double t, const double step, const double int_step) {
 	std::vector<double> * next_phases = new std::vector<double> (num_osc, 0);
 	std::vector<void *> argv(2, NULL);
@@ -280,6 +398,15 @@ void sync_network::calculate_phases(const solve_type solver, const double t, con
 	delete next_phases;
 }
 
+/***********************************************************************************************
+ *
+ * @brief   Normalization of phase of oscillator that should be placed between [0; 2 * pi].
+ *
+ * @param   (in) teta    - phase of oscillator.
+ *
+ * @return  Returns normalized phase.
+ *
+ ***********************************************************************************************/
 double sync_network::phase_normalization(const double teta) {
 	double norm_teta = teta;
 
@@ -295,6 +422,16 @@ double sync_network::phase_normalization(const double teta) {
 	return norm_teta;
 }
 
+/***********************************************************************************************
+ *
+ * @brief   Convert dynamic of the network to CCORE interface representation of dynamic. It
+ *          creates new data block and it should deleted by user.
+ *
+ * @param   (in) dynamic    - dynamic of the network.
+ *
+ * @return  Returns dynamic in line with CCORE interface representation.
+ *
+ ***********************************************************************************************/
 dynamic_result * sync_network::convert_dynamic_representation(std::vector< std::vector<sync_dynamic> * > * dynamic) {
 	dynamic_result * result = new dynamic_result();
 

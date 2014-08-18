@@ -55,6 +55,7 @@ class sync_network(network, network_interface):
         "(in) num_osc            - number of oscillators in the network."
         "(in) weight             - coupling strength of the links between oscillators."
         "(in) frequency          - multiplier of internal frequency of the oscillators."
+        "(in) qcluster           - number of clusters that should be allocated."
         "(in) type_conn          - type of connection between oscillators in the network (all-to-all, grid, bidirectional list, etc.)."
         "(in) conn_represent     - internal representation of connection in the network: matrix or list."
         "(in) initial_phases     - type of initialization of initial phases of oscillators (random, uniformly distributed, etc.)."
@@ -253,7 +254,7 @@ class sync_network(network, network_interface):
 
 
     def simulate_static(self, steps, time, solution = solve_type.FAST, collect_dynamic = False):
-        "Performs static simulation of LEGION oscillatory network."
+        "Performs static simulation of oscillatory network."
         
         "(in) steps            - number steps of simulations during simulation."
         "(in) time             - time of simulation."

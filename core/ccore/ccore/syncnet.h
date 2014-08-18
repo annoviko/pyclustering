@@ -19,7 +19,7 @@ protected:
 public:
 	/***********************************************************************************************
 	 *
-	 * @brief   Contructor of the oscillatory network SYNC for cluster analysis.
+	 * @brief   Contructor of the adapted oscillatory network SYNC for cluster analysis.
 	 *
 	 * @param   (in) input_data            - input data for clustering.
 	 * @param   (in) connectivity_radius   - connectivity radius between points.
@@ -89,9 +89,10 @@ private:
 	 *
 	 * @param   (in) t      - current value of phase.
 	 * @param   (in) teta   - time (can be ignored). 
-	 * @param   (in) argv   - index of oscillator whose phase represented by argument teta.
+	 * @param   (in) argv   - pointer to the network 'argv[0]' and index of oscillator whose phase 
+	 *                        represented by argument teta 'argv[1]'.
 	 *
-	 * @return  Return new value of phase of oscillator with index 'argv'.
+	 * @return  Return new value of phase of oscillator that is specified in index 'argv[1]'.
 	 *
 	 ***********************************************************************************************/
 	static double adapter_phase_kuramoto(const double t, const double teta, const std::vector<void *> & argv);
