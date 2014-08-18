@@ -66,7 +66,7 @@ class pcnn_network(network, network_interface):
                 self._stimulus = stimulus;
     
     
-    def simulate(self, steps, time = None, solution = solve_type.ODEINT, collect_dynamic = False):
+    def simulate(self, steps, time = None, solution = solve_type.RK4, collect_dynamic = False):
         "Performs static simulation of pulse coupled neural network."
         
         "(in) steps            - number steps of simulations during simulation."
@@ -80,7 +80,7 @@ class pcnn_network(network, network_interface):
         return self.simulate_static(steps, time, solution, collect_dynamic);
         
         
-    def simulate_static(self, steps, time = None, solution = solve_type.ODEINT, collect_dynamic = False):
+    def simulate_static(self, steps, time = None, solution = solve_type.RK4, collect_dynamic = False):
         "Performs static simulation of pulse coupled neural network."
         
         "(in) steps            - number steps of simulations during simulation."

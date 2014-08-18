@@ -125,7 +125,7 @@ class legion_network(network, network_interface):
                         self._dynamic_coupling[i][j] = dynamic_weight;    
     
     
-    def simulate(self, steps, time, solution = solve_type.ODEINT, collect_dynamic = True):
+    def simulate(self, steps, time, solution = solve_type.RK4, collect_dynamic = True):
         "Performs static simulation of LEGION oscillatory network."
         
         "(in) steps            - number steps of simulations during simulation."
@@ -146,7 +146,7 @@ class legion_network(network, network_interface):
         raise NameError("Dynamic simulation is not supported due to lack of stop conditions for the model.");
     
     
-    def simulate_static(self, steps, time, solution = solve_type.ODEINT, collect_dynamic = False):  
+    def simulate_static(self, steps, time, solution = solve_type.RK4, collect_dynamic = False):  
         "Performs static simulation of LEGION oscillatory network."
         
         "(in) steps            - number steps of simulations during simulation."
@@ -210,7 +210,7 @@ class legion_network(network, network_interface):
                 #next_inhibitory[index] += self._inhibitory[index];
                 #next_potential[index] += self._potential[index];
                 
-            elif (solution == solve_type.ODEINT):
+            elif (solution == solve_type.RK4):
                 result = odeint(self.legion_state, [self._excitatory[index], self._inhibitory[index], self._potential[index]], numpy.arange(t - step, t, int_step), (index , ));
                 [ next_excitatory[index], next_inhibitory[index], next_potential[index] ] = result[len(result) - 1][0:3];
                 
@@ -224,7 +224,7 @@ class legion_network(network, network_interface):
             assert 0;
             # z = self._global_inhibitor + self.global_inhibitor_state(self._global_inhibitor, t, None);
             
-        elif (solution == solve_type.ODEINT):
+        elif (solution == solve_type.RK4):
             result = odeint(self.global_inhibitor_state, self._global_inhibitor, numpy.arange(t - step, t, int_step), (None, ));
             self._global_inhibitor = result[len(result) - 1][0];
             

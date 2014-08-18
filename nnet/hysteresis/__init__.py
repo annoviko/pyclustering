@@ -82,7 +82,7 @@ class hysteresis_network(network, network_interface):
         return x;
         
     
-    def simulate(self, steps, time, solution = solve_type.ODEINT, collect_dynamic = True):
+    def simulate(self, steps, time, solution = solve_type.RK4, collect_dynamic = True):
         "Performs static simulation of hysteresis oscillatory network."
         
         "(in) steps            - number steps of simulations during simulation."
@@ -103,7 +103,7 @@ class hysteresis_network(network, network_interface):
         raise NameError("Dynamic simulation is not supported due to lack of stop conditions for the model");
     
     
-    def simulate_static(self, steps, time, solution = solve_type.ODEINT, collect_dynamic = False):
+    def simulate_static(self, steps, time, solution = solve_type.RK4, collect_dynamic = False):
         "Performs static simulation of hysteresis oscillatory network."
         
         "(in) steps            - number steps of simulations during simulation."
@@ -154,7 +154,7 @@ class hysteresis_network(network, network_interface):
         next_states = [0] * self._num_osc;
         
         for index in range (0, self._num_osc, 1):            
-            if (solution == solve_type.ODEINT):
+            if (solution == solve_type.RK4):
                 result = odeint(self.neuron_states, self._states[index], numpy.arange(t - step, t, int_step), (index , ));
                 next_states[index] = result[len(result) - 1][0];
             else:

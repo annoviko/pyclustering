@@ -35,7 +35,7 @@ class Test(unittest.TestCase):
         sync_state = 1;
         tolerance = 0.1;
         
-        network.simulate(50, 20, solve_type.ODEINT);
+        network.simulate(50, 20, solve_type.RK4);
         assert (abs(network.sync_order() - sync_state) < tolerance) == True;        
     
     
@@ -47,7 +47,7 @@ class Test(unittest.TestCase):
     def test_sync_local_order_network(self):
         network = sync_network(10, 1);
         network.cluster = 2;
-        network.simulate(20, 10, solve_type.ODEINT); 
+        network.simulate(20, 10, solve_type.RK4); 
 
         # There are all-to-all connected network, but two clusters, so it means that we have half sync. state Rc ~ 0.5.
         assert (abs(network.sync_local_order() - 0.5) < 0.2) == True;
@@ -63,8 +63,8 @@ class Test(unittest.TestCase):
         
     
     def test_odeint_solution(self):
-        # Check for convergence when solution using ODEINT function of calculation of derivative
-        self.template_simulate_test(10, 1, solve_type.ODEINT);   
+        # Check for convergence when solution using RK4 function of calculation of derivative
+        self.template_simulate_test(10, 1, solve_type.RK4);   
     
     
     def test_large_network(self):
@@ -100,7 +100,7 @@ class Test(unittest.TestCase):
         network = sync_network(num_osc, weight);   
         network.cluster = cluster_param;
         
-        network.simulate(50, 20, solve_type.ODEINT);
+        network.simulate(50, 20, solve_type.RK4);
         clusters = network.allocate_sync_ensembles(0.1);
         
         assert len(clusters) == cluster_param;
@@ -240,7 +240,7 @@ class Test(unittest.TestCase):
     def template_dynamic_simulation_cluster_parameter(self, num_osc, cluster_parameter, ccore_flag = False):
         network = sync_network(num_osc, 1, 0, cluster_parameter, conn_type.ALL_TO_ALL, ccore = ccore_flag);   
           
-        network.simulate_dynamic(solution = solve_type.ODEINT);
+        network.simulate_dynamic(solution = solve_type.RK4);
         clusters = network.allocate_sync_ensembles(0.1);
         
         assert len(clusters) == cluster_parameter;

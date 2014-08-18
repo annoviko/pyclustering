@@ -22,19 +22,19 @@ def trivial_dynamic_sync():
     template_dynamic_sync(100, 1, sim_arg = [50, 10], ccore_flag = True);
 
 def weight_5_dynamic_sync():
-    template_dynamic_sync(10, 10, sim_arg = [100, 10], type_solution = solve_type.ODEINT);
+    template_dynamic_sync(10, 10, sim_arg = [100, 10], type_solution = solve_type.RK4);
     
 def cluster_2_dynamic_sync():
-    template_dynamic_sync(10, 1, q = 2, sim_arg = [20, 10], type_solution = solve_type.ODEINT);
+    template_dynamic_sync(10, 1, q = 2, sim_arg = [20, 10], type_solution = solve_type.RK4);
 
 def cluster_5_dynamic_sync():
-    template_dynamic_sync(50, 1, q = 5, sim_arg = [20, 10], type_solution = solve_type.ODEINT);
+    template_dynamic_sync(50, 1, q = 5, sim_arg = [20, 10], type_solution = solve_type.RK4);
 
 def bidir_struct_dynamic_sync():
-    template_dynamic_sync(10, 100, sim_arg = [100, 10], conn = conn_type.LIST_BIDIR, type_solution = solve_type.ODEINT);    
+    template_dynamic_sync(10, 100, sim_arg = [100, 10], conn = conn_type.LIST_BIDIR, type_solution = solve_type.RK4);    
     
 def grid_four_struct_dynamic_sync():
-    template_dynamic_sync(25, 50, sim_arg = [50, 10], conn = conn_type.GRID_FOUR, type_solution = solve_type.ODEINT);
+    template_dynamic_sync(25, 50, sim_arg = [50, 10], conn = conn_type.GRID_FOUR, type_solution = solve_type.RK4);
     
         
 # Negative connections        

@@ -34,7 +34,6 @@ class syncgcolor(sync_network):
     
     def phase_kuramoto(self, teta, t, argv):
         "Return result of phase calculation for oscillator in the network"
-        "Solvers as ODEINT or ODE may pass only one value if their extra argument has length equals to one"
         
         "(in) teta     - value of phase of the oscillator with index argv in the network"
         "(in) t        - unused"

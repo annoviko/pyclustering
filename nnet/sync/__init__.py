@@ -129,7 +129,6 @@ class sync_network(network, network_interface):
     
     def phase_kuramoto(self, teta, t, argv):
         "Returns result of phase calculation for specified oscillator in the network."
-        "Solvers as ODEINT or ODE may pass only one value if their extra argument has length equals to one."
         
         "(in) teta        - phase of the oscillator that is differentiated."
         "(in) t           - current time of simulation."
@@ -312,7 +311,7 @@ class sync_network(network, network_interface):
                 result = self._phases[index] + self.phase_kuramoto(self._phases[index], 0, index);
                 next_phases[index] = phase_normalization(result);
                 
-            elif (solution == solve_type.ODEINT):
+            elif (solution == solve_type.RK4):
                 result = odeint(self.phase_kuramoto, self._phases[index], numpy.arange(t - step, t, int_step), (index , ));
                 next_phases[index] = phase_normalization(result[len(result) - 1][0]);
                 
