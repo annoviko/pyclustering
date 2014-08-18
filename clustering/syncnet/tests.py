@@ -13,20 +13,32 @@ from samples.definitions import SIMPLE_SAMPLES;
 
 class Test(unittest.TestCase):
     def templateClustering(self, file, radius, order, solver, initial, storage_flag, conn_weigh_flag, tolerance, connection, expected_cluster_length, ccore_flag):
-        sample = read_sample(file);
-        network = syncnet(sample, radius, connection, initial, conn_weigh_flag, ccore_flag);
-        network.process(order, solver, storage_flag);
+        result_testing = False;
         
-        clusters = network.get_clusters(tolerance);
+        # If phases crosses each other because of random part of the network then we should try again.
+        for attempt in range(0, 3, 1):
+            sample = read_sample(file);
+            network = syncnet(sample, radius, connection, initial, conn_weigh_flag, ccore_flag);
+            network.process(order, solver, storage_flag);
+            
+            clusters = network.get_clusters(tolerance);
+            
+            obtained_cluster_sizes = [len(cluster) for cluster in clusters];
+    
+            if (len(obtained_cluster_sizes) != len(expected_cluster_length)):
+                continue;
+            
+            obtained_cluster_sizes.sort();
+            expected_cluster_length.sort();
+            
+            if (obtained_cluster_sizes != expected_cluster_length):
+                continue;
+            
+            # Unit-test is passed
+            result_testing = True;
+            break;
         
-        obtained_cluster_sizes = [len(cluster) for cluster in clusters];
-
-        assert len(obtained_cluster_sizes) == len(expected_cluster_length);
-        
-        obtained_cluster_sizes.sort();
-        expected_cluster_length.sort();
-        
-        assert obtained_cluster_sizes == expected_cluster_length;
+        assert result_testing;
         
     
     def testClusteringSampleSimple1(self):
@@ -137,6 +149,19 @@ class Test(unittest.TestCase):
 
     def testClusteringWithoutDynamicCollectingSampleSimple3ByCore(self):
         self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 1, 0.999, solve_type.FAST, initial_type.EQUIPARTITION, False, False, 0.05, conn_represent.MATRIX, [10, 10, 10, 30], False);
+
+
+    def testClusteringRandomInitialSampleSimple1(self):
+        self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, 0.999, solve_type.FAST, initial_type.RANDOM_GAUSSIAN, True, False, 0.05, conn_represent.MATRIX, [5, 5], False);
+        
+    def testClusteringRandomInitialSampleSimple1ByCore(self):
+        self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, 0.999, solve_type.FAST, initial_type.RANDOM_GAUSSIAN, True, False, 0.05, None, [5, 5], True);    
+
+    def testClusteringRandomInitialSampleSimple2(self):
+        self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 1, 0.999, solve_type.FAST, initial_type.RANDOM_GAUSSIAN, False, False, 0.05, conn_represent.MATRIX, [5, 8, 10], False);
+
+    def testClusteringRandomInitialSampleSimple2ByCore(self):
+        self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 1, 0.999, solve_type.FAST, initial_type.RANDOM_GAUSSIAN, False, False, 0.05, None, [5, 8, 10], True);
 
 
 if __name__ == "__main__":
