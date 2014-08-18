@@ -56,7 +56,7 @@ private:
 
 	void free_sync_ensembles(void);
 
-	void store_dynamic(std::vector< std::vector<sync_dynamic> * > * dynamic, const double time) const;
+	void store_dynamic(std::vector< std::vector<sync_dynamic> * > * dynamic, const double time, const bool collect_dynamic) const;
 };
 
 #endif

@@ -183,15 +183,13 @@ std::vector< std::vector<sync_dynamic> * > * sync_network::simulate_static(const
 	for (double cur_time = 0; cur_time < time; cur_time += step) {
 		calculate_phases(solver, cur_time, step, int_step);
 
-		if (collect_dynamic == true) {
-			store_dynamic(dynamic, cur_time);
-		}
+		store_dynamic(dynamic, cur_time, collect_dynamic);
 	}
 
 	return dynamic;
 }
 
-#include <stdio.h>
+
 std::vector< std::vector<sync_dynamic> * > * sync_network::simulate_dynamic(const double order, const solve_type solver, const bool collect_dynamic, const double step, const double step_int, const double threshold_changes) {
 	free_sync_ensembles();
 
@@ -203,9 +201,7 @@ std::vector< std::vector<sync_dynamic> * > * sync_network::simulate_dynamic(cons
 	for (double time_counter = 0; current_order < order; time_counter += step) {
 		calculate_phases(solver, time_counter, step, step_int);
 
-		if (collect_dynamic == true) {
-			store_dynamic(dynamic, time_counter);
-		}
+		store_dynamic(dynamic, time_counter, collect_dynamic);
 
 		previous_order = current_order;
 		current_order = sync_local_order();
@@ -220,7 +216,7 @@ std::vector< std::vector<sync_dynamic> * > * sync_network::simulate_dynamic(cons
 }
 
 
-void sync_network::store_dynamic(std::vector< std::vector<sync_dynamic> * > * dynamic, const double time) const {
+void sync_network::store_dynamic(std::vector< std::vector<sync_dynamic> * > * dynamic, const double time, const bool collect_dynamic) const {
 	std::vector<sync_dynamic> * network_dynamic = new std::vector<sync_dynamic>();
 
 	for (unsigned int index = 0; index < num_osc; index++) {
@@ -229,6 +225,10 @@ void sync_network::store_dynamic(std::vector< std::vector<sync_dynamic> * > * dy
 		oscillator_dynamic.time = time;
 
 		network_dynamic->push_back(oscillator_dynamic);
+	}
+	
+	if (collect_dynamic == false) {
+		dynamic->clear();
 	}
 
 	dynamic->push_back(network_dynamic);
