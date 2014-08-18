@@ -283,6 +283,25 @@ def get_clusters_syncnet(pointer_network, tolerance):
     return list_of_clusters; 
 
 
+def create_hsyncnet(sample, number_clusters, initial_phases):
+    pointer_data = create_pointer_data(sample);
+    
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    pointer_network = ccore.create_hsyncnet(pointer_data, c_uint(number_clusters), c_uint(initial_phases));
+    
+    return pointer_network;
+
+
+def process_hsyncnet(network_pointer, order, solution, collect_dynamic):
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore_dynamic_result = ccore.process_hsyncnet(network_pointer, c_double(order), c_uint(solution), c_bool(collect_dynamic));
+
+    python_dynamic_result = extract_dynamics(ccore_dynamic_result);
+    ccore.free_dynamic_result(ccore_dynamic_result);
+    
+    return python_dynamic_result;  
+
+
 def destroy_object(pointer_object):
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
     ccore.destroy_object(pointer_object);

@@ -5,16 +5,13 @@ from samples.definitions import FCPS_SAMPLES;
 
 from clustering.hsyncnet import hsyncnet;
 
-def template_clustering(file, number_clusters, arg_collect_dynamic = True, show_network_structure = False, arg_order = 0.999, arg_eps = 0.1):
+def template_clustering(file, number_clusters, arg_order = 0.999, arg_collect_dynamic = True, ccore_flag = False):
         sample = read_sample(file);
-        network = hsyncnet(sample);
+        network = hsyncnet(sample, number_clusters, ccore = ccore_flag);
         
-        (time, dynamic) = network.process(number_clusters, order = arg_order, collect_dynamic = arg_collect_dynamic);
+        (time, dynamic) = network.process(arg_order, collect_dynamic = arg_collect_dynamic);
         clusters = network.get_clusters();
         
-        if (show_network_structure == True):
-            network.show_network();
-            
         if (arg_collect_dynamic == True):
             draw_dynamics(time, dynamic, x_title = "Time", y_title = "Phase", y_lim = [0, 2 * 3.14]);
         
@@ -66,6 +63,21 @@ def cluster_two_diamonds():
     "NOTE: Too slow"
     template_clustering(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, 2, arg_collect_dynamic = False);    
 
+def experiment_execution_time(show_dyn = False, ccore = False):
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, 0.999, show_dyn, ccore);
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 3, 0.999, show_dyn, ccore);
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 4, 0.999, show_dyn, ccore);
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 5, 0.999, show_dyn, ccore);
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 4, 0.999, show_dyn, ccore);
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_ELONGATE, 2, 0.999, show_dyn, ccore);
+    
+    template_clustering(FCPS_SAMPLES.SAMPLE_LSUN, 3, 0.999, show_dyn, ccore);
+    template_clustering(FCPS_SAMPLES.SAMPLE_TARGET, 6, 0.999, show_dyn, ccore);
+    template_clustering(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, 2, 0.999, show_dyn, ccore);
+    template_clustering(FCPS_SAMPLES.SAMPLE_WING_NUT, 2, 0.999, show_dyn, ccore);
+    template_clustering(FCPS_SAMPLES.SAMPLE_CHAINLINK, 2, 0.999, show_dyn, ccore);
+    template_clustering(FCPS_SAMPLES.SAMPLE_HEPTA, 7, 0.999, show_dyn, ccore);
+    template_clustering(FCPS_SAMPLES.SAMPLE_TETRA, 4, 0.999, show_dyn, ccore);
 
 cluster_sample1();
 cluster_sample2();
@@ -79,3 +91,6 @@ cluster_target();
 cluster_chainlink();
 cluster_wing_nut();
 cluster_two_diamonds();
+ 
+experiment_execution_time(False, False);
+experiment_execution_time(False, True);

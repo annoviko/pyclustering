@@ -11,7 +11,7 @@ class syncnet(sync_network):
     _ena_conn_weight = False;   # Enable mode: when strength of connection depends on distance between two oscillators.
     _conn_weight = None;        # Stength of connection between oscillators.
     
-    _ccore_network_pointer = None;      # Pointer to CCORE Sync implementation of the network.
+    __ccore_network_pointer = None;      # Pointer to CCORE SyncNet implementation of the network.
     
     def __init__(self, sample, radius, conn_repr = conn_represent.MATRIX, initial_phases = initial_type.RANDOM_GAUSSIAN, enable_conn_weight = False, ccore = False):
         "Contructor of the oscillatory network SYNC for cluster analysis."
@@ -25,7 +25,7 @@ class syncnet(sync_network):
         "(in) ccore              - defines should be CCORE C++ library used instead of Python code or not."
         
         if (ccore is True):
-            self._ccore_network_pointer = core.create_syncnet(sample, radius, initial_phases, enable_conn_weight);
+            self.__ccore_network_pointer = core.create_syncnet(sample, radius, initial_phases, enable_conn_weight);
         else:
             super().__init__(len(sample), 1, 0, 1, conn_type.NONE, initial_phases);
             
@@ -50,9 +50,9 @@ class syncnet(sync_network):
 
     def __del__(self):
         "Destructor of oscillatory network is based on Kuramoto model."
-        if (self._ccore_network_pointer is not None):
-            core.destroy_object(self._ccore_network_pointer);
-            self._ccore_network_pointer = None;
+        if (self.__ccore_network_pointer is not None):
+            core.destroy_object(self.__ccore_network_pointer);
+            self.__ccore_network_pointer = None;
 
 
     def _create_connections(self, radius):
@@ -112,8 +112,8 @@ class syncnet(sync_network):
         "Return last values of simulation time and phases of oscillators as a tuple if collect_dynamic is False, and whole dynamic"
         "if collect_dynamic is True. Format of returned value: (simulation_time, oscillator_phases)."
         
-        if (self._ccore_network_pointer is not None):
-            return core.process_syncnet(self._ccore_network_pointer, order, solution, collect_dynamic);
+        if (self.__ccore_network_pointer is not None):
+            return core.process_syncnet(self.__ccore_network_pointer, order, solution, collect_dynamic);
         else:
             return self.simulate_dynamic(order, solution, collect_dynamic);
     
@@ -152,8 +152,8 @@ class syncnet(sync_network):
         
         "Return list of clusters, for example [ [cluster1], [cluster2], ... ]."
         
-        if (self._ccore_network_pointer is not None):
-            return core.get_clusters_syncnet(self._ccore_network_pointer, eps);
+        if (self.__ccore_network_pointer is not None):
+            return core.get_clusters_syncnet(self.__ccore_network_pointer, eps);
         else:
             return self.allocate_sync_ensembles(eps);
     
@@ -161,7 +161,7 @@ class syncnet(sync_network):
     def show_network(self):
         "Shows connections in the network. It supports only 2-d and 3-d representation."
         
-        if (self._ccore_network_pointer is not None):
+        if (self.__ccore_network_pointer is not None):
             raise NameError("Not supported for CCORE");
         
         dimension = len(self._osc_loc[0]);

@@ -241,4 +241,30 @@ extern "C" DECLARATION dynamic_result * process_syncnet(const void * pointer_net
  ***********************************************************************************************/
 extern "C" DECLARATION clustering_result * get_clusters_syncnet(const void * pointer_network, const double tolerance);
 
+/***********************************************************************************************
+ *
+ * @brief   Create oscillatory network hierarchical SYNC for cluster analysis.
+ *
+ * @param   (in) sample                - input data for clustering.
+ * @param   (in) number_clusters       - number of clusters that should be allocated.
+ * @param   (in) initial_phases        - type of initialization of initial phases of oscillators.
+ *
+ ***********************************************************************************************/
+extern "C" DECLARATION void * create_hsyncnet(const data_representation * const sample, const unsigned int number_clusters, const unsigned int initial_phases);
+
+/***********************************************************************************************
+ *
+ * @brief   Simulate oscillatory network hierarchical SYNC until clustering problem is not resolved.
+ *
+ * @param   (in) order             - order of synchronization that is used as indication for 
+ *                                   stopping processing.
+ * @param   (in) solver            - specified type of solving diff. equation. 
+ * @param   (in) collect_dynamic   - specified requirement to collect whole dynamic of the network.
+ *
+ * @return  Return last values of simulation time and phases of oscillators as a tuple if 
+ *          collect_dynamic is False, and whole dynamic if collect_dynamic is True.
+ *
+ ***********************************************************************************************/
+extern "C" DECLARATION dynamic_result * process_hsyncnet(const void * pointer_network, const double order, const unsigned int solver, const bool collect_dynamic);
+
 #endif
