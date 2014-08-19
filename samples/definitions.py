@@ -53,4 +53,5 @@ class IMAGE_SIMPLE_SAMPLES:
     IMAGE_THREE_OBJECT3             = samples.__path__[0] + os.sep + "images" + os.sep + "ImageSimple3.png";
     IMAGE_TWO_COLOR_SET             = samples.__path__[0] + os.sep + "images" + os.sep + "ImageSimple4.png";
     IMAGE_SIMPLE_BEACH              = samples.__path__[0] + os.sep + "images" + os.sep + "ImageSimpleBeach.png";
+    IMAGE_SIMPLE_DOUBLE_T           = samples.__path__[0] + os.sep + "images" + os.sep + "ImageSimpleDoubleT.png";
     

@@ -26,11 +26,11 @@ def read_sample(filename):
 
 
 def read_image(filename):
-    "Returns image as N-dimension (depends on the input image) matrix, when one element describes pixel"
+    "Returns image as N-dimension (depends on the input image) matrix, where one element of list describes pixel."
     
-    "(in) filename        - path to image"
+    "(in) filename        - path to image."
     
-    "Return list of pixels where each pixel described by list of RGB-values"
+    "Return list of pixels where each pixel described by list of RGB-values."
     
     image_source = Image.open(filename);
     data = [pixel for pixel in image_source.getdata()];
@@ -38,6 +38,20 @@ def read_image(filename):
     del image_source;
     return data;
 
+
+def rgb2gray(image_rgb_array):
+    "Returns image as 1-dimension (gray colored) matrix, where one element of list describes pixel."
+    
+    "(in) image_rgb_array    - image represented by RGB list."
+    
+    "Returns image as gray colored matrix, where one element of list describes pixel."
+    
+    image_gray_array = [0.0] * len(image_rgb_array);
+    for index in range(0, len(image_rgb_array), 1):
+        image_gray_array[index] = float(image_rgb_array[index][0]) * 0.2989 + float(image_rgb_array[index][1]) * 0.5870 + float(image_rgb_array[index][2]) * 0.1140;
+    
+    return image_gray_array;
+    
 
 def average_neighbor_distance(points, num_neigh):
     "Returns average distance for establish links between specified number of neighbors."
