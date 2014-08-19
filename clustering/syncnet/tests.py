@@ -164,5 +164,14 @@ class Test(unittest.TestCase):
         self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 1, 0.999, solve_type.FAST, initial_type.RANDOM_GAUSSIAN, False, False, 0.05, None, [5, 8, 10], True);
 
 
+    def testClusteringSolverRK4SampleSimple1(self):
+        self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, 0.999, solve_type.RK4, initial_type.EQUIPARTITION, True, False, 0.05, conn_represent.MATRIX, [5, 5], False);
+
+    def testClusteringSolverRK4SampleSimple1ByCore(self):
+        self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, 0.999, solve_type.RK4, initial_type.EQUIPARTITION, True, False, 0.05, conn_represent.MATRIX, [5, 5], True);
+
+    def testClusteringSolverRKF45SampleSimple1ByCore(self):
+        self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, 0.999, solve_type.RKF45, initial_type.EQUIPARTITION, True, False, 0.05, conn_represent.MATRIX, [5, 5], True);
+
 if __name__ == "__main__":
     unittest.main();

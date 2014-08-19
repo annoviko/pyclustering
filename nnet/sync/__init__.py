@@ -314,9 +314,9 @@ class sync_network(network, network_interface):
             elif (solution == solve_type.RK4):
                 result = odeint(self.phase_kuramoto, self._phases[index], numpy.arange(t - step, t, int_step), (index , ));
                 next_phases[index] = phase_normalization(result[len(result) - 1][0]);
-                
+            
             else:
-                assert 0;
+                raise NameError("Solver '" + solution + "' is not supported");
         
         return next_phases;
         

@@ -147,6 +147,7 @@
     <ClCompile Include="ccore.cpp" />
     <ClCompile Include="dbscan.cpp" />
     <ClCompile Include="hierarchical.cpp" />
+    <ClCompile Include="hsyncnet.cpp" />
     <ClCompile Include="network.cpp" />
     <ClCompile Include="kmeans.cpp" />
     <ClCompile Include="rock.cpp" />
@@ -158,6 +159,7 @@
   <ItemGroup>
     <ClInclude Include="dbscan.h" />
     <ClInclude Include="hierarchical.h" />
+    <ClInclude Include="hsyncnet.h" />
     <ClInclude Include="interface_ccore.h" />
     <ClInclude Include="network.h" />
     <ClInclude Include="kmeans.h" />
