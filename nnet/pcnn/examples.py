@@ -5,19 +5,22 @@ from nnet import *;
 
 from samples.definitions import IMAGE_SIMPLE_SAMPLES;
 
-from support import read_image, rgb2gray;
+from support import read_image, rgb2gray, draw_image_segments;
 
 def template_dynamic_pcnn(num_osc, steps, stimulus = None, params = None, conn_type = conn_type.NONE, separate_representation = True):
     net = pcnn_network(num_osc, stimulus, params, conn_type);
     (t, y) = net.simulate(steps, None, None, True);
     # (t, y, thr, f, l) = net.simulate(steps, None, None, True);
     
-    print(net.allocate_sync_ensembles());
+    ensembles = net.allocate_sync_ensembles();
+    print("Number of objects:", len(ensembles), "\nEnsembles:", ensembles);
     
     draw_dynamics(t, y, x_title = "Time", y_title = "y(t)", separate = separate_representation);
     #draw_dynamics(t, thr, x_title = "Time", y_title = "threshold");
     #draw_dynamics(t, f, x_title = "Time", y_title = "feeding");
     #draw_dynamics(t, l, x_title = "Time", y_title = "linking");
+    
+    return ensembles;
     
 def one_neuron_unstimulated():
     template_dynamic_pcnn(1, 100, [0]);
@@ -100,8 +103,9 @@ def segmentation_double_t():
     params.VT = 20.0;
     params.W = 1.0;
     params.M = 1.0;
-
-    template_dynamic_pcnn(32 * 32, 50,  image, params, conn_type.GRID_EIGHT, False);
+    
+    ensebles = template_dynamic_pcnn(32 * 32, 50,  image, params, conn_type.GRID_EIGHT, False);
+    draw_image_segments(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE_DOUBLE_T, ensebles);
 
 
 one_neuron_unstimulated();
@@ -111,4 +115,4 @@ nine_neurons_mix_stimulated();
 twenty_five_neurons_mix_stimulated();
 hundred_neurons_mix_stimulated();
 
-# segmentation_double_t();
+segmentation_double_t();
