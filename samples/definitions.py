@@ -48,14 +48,18 @@ class GRAPH_DSJC_SAMPLES:
     DSJC_1000_9                     = samples.__path__[0] + os.sep + "graphs" + os.sep + "DSJC1000.9.grpr";
     
 class IMAGE_SIMPLE_SAMPLES:
-    IMAGE_THREE_OBJECT1             = samples.__path__[0] + os.sep + "images" + os.sep + "ImageSimple1.png";
-    IMAGE_THREE_OBJECT2             = samples.__path__[0] + os.sep + "images" + os.sep + "ImageSimple2.png";
-    IMAGE_THREE_OBJECT3             = samples.__path__[0] + os.sep + "images" + os.sep + "ImageSimple3.png";
-    IMAGE_TWO_COLOR_SET             = samples.__path__[0] + os.sep + "images" + os.sep + "ImageSimple4.png";
-    IMAGE_THREE_LETTERS1            = samples.__path__[0] + os.sep + "images" + os.sep + "ImageSimple5.png";
-    IMAGE_THREE_LETTERS2            = samples.__path__[0] + os.sep + "images" + os.sep + "ImageSimple6.png";
+    IMAGE_SIMPLE01                  = samples.__path__[0] + os.sep + "images" + os.sep + "ImageSimple01.png";
+    IMAGE_SIMPLE02                  = samples.__path__[0] + os.sep + "images" + os.sep + "ImageSimple02.png";
+    IMAGE_SIMPLE03                  = samples.__path__[0] + os.sep + "images" + os.sep + "ImageSimple03.png";
+    IMAGE_SIMPLE04                  = samples.__path__[0] + os.sep + "images" + os.sep + "ImageSimple04.png";
+    IMAGE_SIMPLE05                  = samples.__path__[0] + os.sep + "images" + os.sep + "ImageSimple05.png";
+    IMAGE_SIMPLE06                  = samples.__path__[0] + os.sep + "images" + os.sep + "ImageSimple06.png";
+    IMAGE_SIMPLE07                  = samples.__path__[0] + os.sep + "images" + os.sep + "ImageSimple07.png";
+    IMAGE_SIMPLE08                  = samples.__path__[0] + os.sep + "images" + os.sep + "ImageSimple08.png";
+    IMAGE_SIMPLE09                  = samples.__path__[0] + os.sep + "images" + os.sep + "ImageSimple09.png";
+    IMAGE_SIMPLE10                  = samples.__path__[0] + os.sep + "images" + os.sep + "ImageSimple10.png";
     IMAGE_SIMPLE_BEACH              = samples.__path__[0] + os.sep + "images" + os.sep + "ImageSimpleBeach.png";
-    IMAGE_SIMPLE_DOUBLE_T           = samples.__path__[0] + os.sep + "images" + os.sep + "ImageSimpleDoubleT.png";
+    
     
 class IMAGE_MAP_SAMPLES:
     IMAGE_WHITE_SEA                 = samples.__path__[0] + os.sep + "images" + os.sep + "ImageWhiteSea.png";

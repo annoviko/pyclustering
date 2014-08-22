@@ -16,7 +16,7 @@ def template_segmentation_image(source, color_radius, object_radius, noise_size,
     network = syncnet(data, color_radius, ccore = True);
     print("Network has been created");
     
-    (ticks, (t, dyn)) = timedcall(network.process, 0.998, solve_type.FAST, show_dyn);
+    (ticks, (t, dyn)) = timedcall(network.process, 0.9995, solve_type.FAST, show_dyn);
     # (t, dyn) = network.process(0.998, solve_type.FAST, show_dyn);
     
     print("Sample: ", source, "\t\tExecution time: ", ticks, "\n");
@@ -56,7 +56,7 @@ def template_segmentation_image(source, color_radius, object_radius, noise_size,
             continue;
         
         network = syncnet(coordinates, object_radius, ccore = True);
-        network.process(0.998, solve_type.FAST, False);
+        network.process(0.999, solve_type.FAST, False);
         
         object_clusters = network.get_clusters();
         
@@ -78,23 +78,35 @@ def template_segmentation_image(source, color_radius, object_radius, noise_size,
     draw_image_segments(source, object_colored_clusters);
     
 def segmentation_image_simple1():
-    template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_THREE_OBJECT1, 128, None, 10, show_dyn = False);
+    template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE01, 128, None, 10, show_dyn = False);
     
 def segmentation_image_simple2():
-    template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_THREE_OBJECT2, 128, None, 10, show_dyn = False);  
+    template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE02, 128, None, 10, show_dyn = False);  
     
 def segmentation_image_simple3():
-    template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_THREE_OBJECT3, 128, None, 10, show_dyn = False);
+    template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE03, 128, None, 10, show_dyn = False);
     
 def segmentation_image_simple4():
-    template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_TWO_COLOR_SET, 128, None, 10, show_dyn = False);
+    template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE04, 128, None, 10, show_dyn = False);
     
-def segmentation_image_letters1():
-    template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_THREE_LETTERS1, 128, 4, 10, show_dyn = False);
+def segmentation_image_simple5():
+    template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE05, 128, 4, 10, show_dyn = False);
 
-def segmentation_image_letters2():
-    template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_THREE_LETTERS2, 128, 4, 10, show_dyn = False);
+def segmentation_image_simple6():
+    template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE06, 128, 4, 10, show_dyn = False);
   
+def segmentation_image_simple7():
+    template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE07, 128, 5, 10, show_dyn = False);
+  
+def segmentation_image_simple8():
+    template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE08, 128, 5, 10, show_dyn = False);
+
+def segmentation_image_simple9():
+    template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE09, 128, 4, 10, show_dyn = False);
+
+def segmentation_image_simple10():
+    template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE10, 128, 5, 10, show_dyn = False);  
+
 def segmentation_image_beach():
     template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE_BEACH, 128, None, 10, show_dyn = False);
 
@@ -102,14 +114,18 @@ def segmentation_image_white_sea():
     template_segmentation_image(IMAGE_MAP_SAMPLES.IMAGE_WHITE_SEA, 16, None, 50, show_dyn = False);
 
 def segmentation_image_white_sea_small():
-    template_segmentation_image(IMAGE_MAP_SAMPLES.IMAGE_WHITE_SEA_SMALL, 16, None, 50, show_dyn = False);
+    template_segmentation_image(IMAGE_MAP_SAMPLES.IMAGE_WHITE_SEA_SMALL, 20, None, 50, show_dyn = False);
 
 segmentation_image_simple1();
 segmentation_image_simple2();
 segmentation_image_simple3();
 segmentation_image_simple4();
-segmentation_image_letters1();
-segmentation_image_letters2();
+segmentation_image_simple5();
+segmentation_image_simple6();
+segmentation_image_simple7();
+segmentation_image_simple8();
+segmentation_image_simple9();
+segmentation_image_simple10();
 segmentation_image_beach();
 
 # segmentation_image_white_sea();    Don't run it - it requires a lot of resources.

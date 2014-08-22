@@ -84,7 +84,7 @@ def hundred_neurons_mix_stimulated():
                                      0, 0, 0, 0, 0, 0, 0, 0, 0, 0], params, conn_type.GRID_EIGHT, False);
 
 def segmentation_double_t():
-    image = read_image(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE_DOUBLE_T);
+    image = read_image(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE10);
     image = rgb2gray(image);
 
     for pixel_index in range(len(image)):
@@ -105,7 +105,7 @@ def segmentation_double_t():
     params.M = 1.0;
     
     ensebles = template_dynamic_pcnn(32 * 32, 50,  image, params, conn_type.GRID_EIGHT, False);
-    draw_image_segments(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE_DOUBLE_T, ensebles);
+    draw_image_segments(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE10, ensebles);
 
 
 one_neuron_unstimulated();
