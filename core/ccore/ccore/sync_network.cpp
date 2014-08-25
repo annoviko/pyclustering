@@ -371,15 +371,15 @@ void sync_network::calculate_phases(const solve_type solver, const double t, con
 				break;
 			}
 			case solve_type::RK4: {
-				std::vector<differential_result> * result = rk4(&sync_network::adapter_phase_kuramoto, (*oscillators)[index].phase, t, t + step, number_int_steps, argv);
-				(*next_phases)[index] = phase_normalization( (*result)[result->size() - 1].value );
+				std::vector<differential_result> * result = rk4(&sync_network::adapter_phase_kuramoto, (*oscillators)[index].phase, t, t + step, number_int_steps, false, argv);
+				(*next_phases)[index] = phase_normalization( (*result)[0].value );
 
 				delete result;
 				break;
 			}
 			case solve_type::RKF45: {
-				std::vector<differential_result> * result = rkf45(&sync_network::adapter_phase_kuramoto, (*oscillators)[index].phase, t, t + step, 0.00001, argv);
-				(*next_phases)[index] = phase_normalization( (*result)[result->size() - 1].value );
+				std::vector<differential_result> * result = rkf45(&sync_network::adapter_phase_kuramoto, (*oscillators)[index].phase, t, t + step, 0.00001, false, argv);
+				(*next_phases)[index] = phase_normalization( (*result)[0].value );
 
 				delete result;
 				break;
