@@ -60,15 +60,15 @@ std::vector<std::vector<double> > * read_sample(const char * const path_file) {
  *
  ***********************************************************************************************/
 std::vector<std::vector<double> > * read_sample(const data_representation * const sample) {
-	std::vector<std::vector<double> > * dataset = new std::vector<std::vector<double> >();
+	std::vector<double> point(sample->dimension, 0);
+	std::vector<std::vector<double> > * dataset = new std::vector<std::vector<double> >(sample->size, point);
 
 	for (unsigned int index = 0; index < sample->size; index++) {
-		std::vector<double> point;
 		for (unsigned int dimension = 0; dimension < sample->dimension; dimension++) {
-			point.push_back(sample->objects[index][dimension]);
+			point[dimension] = sample->objects[index][dimension];
 		}
 
-		dataset->push_back(point);
+		(*dataset)[index] = point;
 	}
 
 	return dataset;

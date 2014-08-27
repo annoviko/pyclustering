@@ -32,11 +32,11 @@ sync_network::sync_network(const unsigned int size, const double weight_factor, 
 	std::default_random_engine		generator(device());
 	std::uniform_real_distribution<double>	phase_distribution(0.0, 2.0 * pi());
 	std::uniform_real_distribution<double>	frequency_distribution(0.0, 1.0);
-	
-	oscillators = new std::vector<sync_oscillator>();
-	for (unsigned int index = 0; index < size; index++) {
-		sync_oscillator oscillator_context;
 
+	sync_oscillator oscillator_context;
+	oscillators = new std::vector<sync_oscillator>(size, oscillator_context);
+
+	for (unsigned int index = 0; index < size; index++) {
 		switch(initial_phases) {
 		case initial_type::RANDOM_GAUSSIAN:
 			oscillator_context.phase = phase_distribution(generator);
@@ -49,7 +49,7 @@ sync_network::sync_network(const unsigned int size, const double weight_factor, 
 		}
 
 		oscillator_context.frequency = frequency_distribution(generator) * frequency_factor;
-		oscillators->push_back(oscillator_context);
+		(*oscillators)[index] = oscillator_context;
 	}
 
 	sync_ensembles = NULL;
