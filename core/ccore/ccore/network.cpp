@@ -4,12 +4,23 @@
 #include <exception>
 #include <stdexcept>
 
+
 network::network(const unsigned int number_oscillators, const conn_type connection_type) {
 	num_osc = number_oscillators;
-
 	osc_conn = new std::vector<std::vector<unsigned int> * >(number_oscillators, NULL);
+
+	unsigned int number_elements = 0;
+	if (number_oscillators > MAXIMUM_OSCILLATORS_MATRIX_REPRESENTATION) {
+		conn_representation = BITMAP_CONN_REPRESENTATION;
+		number_elements = std::ceil( number_oscillators / sizeof(unsigned int) );
+	}
+	else {
+		conn_representation = MATRIX_CONN_REPRESENTATION;
+		number_elements = number_oscillators;
+	}
+	
 	for (unsigned int index = 0; index < number_oscillators; index++) {
-		(*osc_conn)[index] = new std::vector<unsigned int>(number_oscillators, 0);
+		(*osc_conn)[index] = new std::vector<unsigned int>(number_elements, 0);
 	}
 
 	create_structure(connection_type);
@@ -29,9 +40,9 @@ network::~network() {
 
 std::vector<unsigned int> * network::get_neighbors(const unsigned int index) const {
 	std::vector<unsigned int> * result = new std::vector<unsigned int>();
-	for (std::vector<unsigned int>::const_iterator iter = (*osc_conn)[index]->begin(); iter != (*osc_conn)[index]->end(); iter++) {
-		if ((*iter) > 0) {
-			result->push_back(*iter);
+	for (unsigned int index_neighbour = 0; index_neighbour < num_osc; index_neighbour++) {
+		if (get_connection(index, index_neighbour) > 0) {
+			result->push_back(index_neighbour);
 		}
 	}
 
@@ -65,8 +76,8 @@ void network::create_none_connections() { return; }
 void network::create_all_to_all_connections() {
 	for (unsigned int row = 0; row < num_osc; row++) {
 		for (unsigned int col = row + 1; col < num_osc; col++) {
-			(*(*osc_conn)[row])[col] = 1;
-			(*(*osc_conn)[col])[row] = 1;
+			set_connection(row, col);
+			set_connection(col, row);
 		}
 	}
 }
@@ -74,11 +85,11 @@ void network::create_all_to_all_connections() {
 void network::create_list_bidir_connections() {
 	for (unsigned int index = 1; index < num_osc; index++) {
 		if (index > 0) {
-			(*(*osc_conn)[index])[index - 1] = 1;
+			set_connection(index, index - 1);
 		}
 
 		if (index < (num_osc - 1)) {
-			(*(*osc_conn)[index])[index + 1] = 1;
+			set_connection(index, index + 1);
 		}
 	}
 }
@@ -99,19 +110,19 @@ void network::create_grid_four_connections() {
 
 		unsigned int node_row_index = std::ceil(index / side_size);
 		if (upper_index >= 0) {
-			(*(*osc_conn)[index])[upper_index] = 1;
+			set_connection(index, upper_index);
 		}
 
 		if (lower_index < num_osc) {
-			(*(*osc_conn)[index])[lower_index] = 1;
+			set_connection(index, lower_index);
 		}
 
 		if ( (left_index >= 0) && (std::ceil(left_index / side_size) == node_row_index) ) {
-			(*(*osc_conn)[index])[left_index] = 1;
+			set_connection(index, left_index);
 		}
 
 		if ( (right_index < num_osc) && (std::ceil(right_index / side_size) == node_row_index) ) {
-			(*(*osc_conn)[index])[right_index] = 1;
+			set_connection(index, right_index);
 		}
 	}
 }
@@ -138,19 +149,19 @@ void network::create_grid_eight_connections() {
         const unsigned int lower_row_index = node_row_index + 1;
 
 		if ( (upper_left_index >= 0) && (std::floor(upper_left_index / side_size) == upper_row_index) ) {
-			(*(*osc_conn)[index])[upper_left_index] = 1;
+			set_connection(index, upper_left_index);
 		}
 
 		if ( (upper_right_index >= 0) && (std::floor(upper_right_index / side_size) == upper_row_index) ) {
-			(*(*osc_conn)[index])[upper_right_index] = 1;
+			set_connection(index, upper_right_index);
 		}
 
 		if ( (lower_left_index < num_osc) && (std::floor(lower_left_index / side_size) == lower_row_index) ) {
-			(*(*osc_conn)[index])[lower_left_index] = 1;
+			set_connection(index, lower_left_index);
 		}
 
 		if ( (lower_right_index < num_osc) && (std::floor(lower_right_index / side_size) == lower_row_index) ) {
-			(*(*osc_conn)[index])[lower_right_index] = 1;
+			set_connection(index, lower_right_index);
 		}
 	}
 }

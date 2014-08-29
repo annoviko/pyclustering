@@ -67,8 +67,8 @@ void syncnet::create_connections(const double connectivity_radius, const bool en
 			double distance = euclidean_distance_sqrt( &(*oscillator_locations)[i], &(*oscillator_locations)[j] );
 
 			if (distance <= sqrt_connectivity_radius) {
-				(*(*osc_conn)[i])[j] = 1;
-				(*(*osc_conn)[j])[i] = 1;
+				set_connection(j, i);
+				set_connection(i, j);
 			}
 
 			if (enable_conn_weight == true) {
