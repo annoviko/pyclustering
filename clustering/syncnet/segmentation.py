@@ -2,7 +2,7 @@ from math import floor;
 
 from PIL import Image;
 
-from support import draw_image_segments, read_image, draw_dynamics, timedcall;
+from support import draw_image_segments, read_image, draw_dynamics, draw_dynamics_set, timedcall;
 
 from samples.definitions import IMAGE_SIMPLE_SAMPLES, IMAGE_MAP_SAMPLES;
 
@@ -37,6 +37,9 @@ def template_segmentation_image(source, color_radius, object_radius, noise_size,
     image_size = pointer_image.size;
     
     object_colored_clusters = [];
+    object_colored_dynamics = [];
+    total_dyn = [];
+    
     for cluster in clusters:
         coordinates = [];
         for index in cluster:
@@ -56,7 +59,9 @@ def template_segmentation_image(source, color_radius, object_radius, noise_size,
             continue;
         
         network = syncnet(coordinates, object_radius, ccore = True);
-        network.process(0.999, solve_type.FAST, False);
+        (t, dyn) = network.process(0.999, solve_type.FAST, show_dyn);
+        
+        object_colored_dynamics.append( (t, dyn) );
         
         object_clusters = network.get_clusters();
         
@@ -74,8 +79,27 @@ def template_segmentation_image(source, color_radius, object_radius, noise_size,
             
         # draw_image_segments(source, [ cluster ]);
         # draw_image_segments(source, real_description_clusters);
-    
+        
     draw_image_segments(source, object_colored_clusters);
+    draw_dynamics_set(object_colored_dynamics, None, None, None, [0, 2 * 3.14], False, False);
+    
+    
+    
+def memory_measurement(source, radius):
+    import time;
+    
+    data = read_image(source);
+    
+    print("Network is created");
+    #network = syncnet(data, radius, ccore = True);
+    #del network;
+    #network = syncnet(data, radius, ccore = True);
+    time.sleep(15);
+    
+    print("Network is destoyed");
+    #del network;
+    
+    time.sleep(15);
     
 def segmentation_image_simple1():
     template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE01, 128, None, 10, show_dyn = False);
@@ -93,7 +117,7 @@ def segmentation_image_simple5():
     template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE05, 128, 4, 10, show_dyn = False);
 
 def segmentation_image_simple6():
-    template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE06, 128, 4, 10, show_dyn = False);
+    template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE06, 128, 4, 10, show_dyn = True);
   
 def segmentation_image_simple7():
     template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE07, 128, 5, 10, show_dyn = False);
@@ -116,17 +140,20 @@ def segmentation_image_white_sea():
 def segmentation_image_white_sea_small():
     template_segmentation_image(IMAGE_MAP_SAMPLES.IMAGE_WHITE_SEA_SMALL, 20, None, 50, show_dyn = False);
 
-segmentation_image_simple1();
-segmentation_image_simple2();
-segmentation_image_simple3();
-segmentation_image_simple4();
-segmentation_image_simple5();
-segmentation_image_simple6();
-segmentation_image_simple7();
-segmentation_image_simple8();
-segmentation_image_simple9();
-segmentation_image_simple10();
-segmentation_image_beach();
+# memory_measurement(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE01, 128);
+# memory_measurement(IMAGE_MAP_SAMPLES.IMAGE_WHITE_SEA_SMALL, 16);
 
-# segmentation_image_white_sea();    Don't run it - it requires a lot of resources.
-segmentation_image_white_sea_small();
+# segmentation_image_simple1();
+# segmentation_image_simple2();
+# segmentation_image_simple3();
+# segmentation_image_simple4();
+# segmentation_image_simple5();
+segmentation_image_simple6();
+# segmentation_image_simple7();
+# segmentation_image_simple8();
+# segmentation_image_simple9();
+# segmentation_image_simple10();
+# segmentation_image_beach();
+# 
+# # segmentation_image_white_sea();    Don't run it - it requires a lot of resources.
+# segmentation_image_white_sea_small();

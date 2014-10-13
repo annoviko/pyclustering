@@ -199,11 +199,8 @@ def draw_clusters(data, clusters, noise = [], marker_descr = '.', hide_axes = Fa
 
     
 
-def draw_dynamics(t, dyn, x_title = None, y_title = None, x_lim = None, y_lim = None, separate = False):
-    "Draw dynamics of neurons in the network"
-    if (x_title is None): x_title = "Time";     
-    if (y_title is None): y_title = "Dynamic";
-    
+def draw_dynamics(t, dyn, x_title = None, y_title = None, x_lim = None, y_lim = None, x_labels = True, y_labels = True, separate = False, axes = None):
+    "Draw dynamics of neurons in the network"   
     from matplotlib.font_manager import FontProperties;
     from matplotlib import rcParams;
     
@@ -214,8 +211,6 @@ def draw_dynamics(t, dyn, x_title = None, y_title = None, x_lim = None, y_lim = 
         
     rcParams['font.size'] = 12;
     
-    fig = None; 
-    axes = None;
     number_lines = 0;
     
     if ( (isinstance(separate, bool) is True) and (separate is True) ):
@@ -229,8 +224,11 @@ def draw_dynamics(t, dyn, x_title = None, y_title = None, x_lim = None, y_lim = 
         
     else:
         number_lines = 1;
-        
-    (fig, axes) = plt.subplots(number_lines, 1);
+    
+    dysplay_result = False;
+    if (axes is None):
+        dysplay_result = True;
+        (fig, axes) = plt.subplots(number_lines, 1);
     
     if (number_lines > 1):
         for index_stage in range(number_lines):
@@ -274,17 +272,55 @@ def draw_dynamics(t, dyn, x_title = None, y_title = None, x_lim = None, y_lim = 
     else:
         axes.plot(t, dyn, 'b-', linewidth = 0.5);     
 
-    plt.ylabel(y_title, fontproperties = surface_font);
-    plt.xlabel(x_title, fontproperties = surface_font);
+    if (y_title is not None): axes.set_ylabel(y_title, fontproperties = surface_font);
+    if (x_title is not None): axes.set_xlabel(x_title, fontproperties = surface_font);
     
-    if (x_lim is not None): plt.xlim(x_lim[0], x_lim[1]);
-    if (y_lim is not None): plt.ylim(y_lim[0], y_lim[1]);
+    if (x_lim is not None): axes.set_xlim(x_lim[0], x_lim[1]);
+    if (y_lim is not None): axes.set_ylim(y_lim[0], y_lim[1]);
+    
+    if (x_labels is False): axes.xaxis.set_ticklabels([]);
+    if (y_labels is False): axes.yaxis.set_ticklabels([]);
 
-    plt.grid();
+    axes.grid(True);
+    
+    if (dysplay_result is True):
+        plt.show();
+    
+    return axes;
+
+
+def draw_dynamics_set(dynamics, xtitle = None, ytitle = None, xlim = None, ylim = None, xlabels = False, ylabels = False):
+    # Calculate edge for confortable representation.
+    number_dynamics = len(dynamics);
+    
+    number_cols = int(numpy.ceil(number_dynamics ** 0.5));
+    number_rows = int(numpy.ceil(number_dynamics / number_cols));
+    
+
+    real_index = 0, 0;
+    double_indexer = True;
+    if ( (number_cols == 1) or (number_rows == 1) ):
+        real_index = 0;
+        double_indexer = False;
+    
+    (fig, axarr) = plt.subplots(number_rows, number_cols);
+    #plt.setp([ax for ax in axarr], visible = False);
+    
+    for dynamic in dynamics:
+        axarr[real_index] = draw_dynamics(dynamic[0], dynamic[1], xtitle, ytitle, xlim, ylim, xlabels, ylabels, axes = axarr[real_index]);
+        #plt.setp(axarr[real_index], visible = True);
+        
+        if (double_indexer is True):
+            real_index = real_index[0], real_index[1] + 1;
+            if (real_index[1] >= number_cols):
+                real_index = real_index[0] + 1, 0; 
+        else:
+            real_index += 1;
+            
     plt.show();
 
 
-def draw_image_segments(source, clusters):
+def draw_image_segments(source, clusters, hide_axes = True):
     image_source = Image.open(source);
     image_size = image_source.size;
     
@@ -307,6 +343,11 @@ def draw_image_segments(source, clusters):
     axarr[real_index].imshow(image_source, interpolation = 'none');
     plt.setp(axarr[real_index], visible = True);
     
+    axarr[real_index].xaxis.set_ticklabels([]);
+    axarr[real_index].yaxis.set_ticklabels([]);
+    axarr[real_index].xaxis.set_ticks_position('none');
+    axarr[real_index].yaxis.set_ticks_position('none');
+            
     if (double_indexer is True):
         real_index = 0, 1;
     else:
@@ -325,13 +366,21 @@ def draw_image_segments(source, clusters):
         axarr[real_index].imshow(image_cluster, interpolation = 'none');
         plt.setp(axarr[real_index], visible = True);
         
+        if (hide_axes is True):
+            axarr[real_index].xaxis.set_ticklabels([]);
+            axarr[real_index].yaxis.set_ticklabels([]);
+            
+            axarr[real_index].xaxis.set_ticks_position('none');
+            axarr[real_index].yaxis.set_ticks_position('none');
+        
         if (double_indexer is True):
             real_index = real_index[0], real_index[1] + 1;
             if (real_index[1] >= number_cols):
                 real_index = real_index[0] + 1, 0; 
         else:
             real_index += 1;
-        
+
+            
     plt.show();
     
     
