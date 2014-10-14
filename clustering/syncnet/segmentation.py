@@ -61,7 +61,8 @@ def template_segmentation_image(source, color_radius, object_radius, noise_size,
         network = syncnet(coordinates, object_radius, ccore = True);
         (t, dyn) = network.process(0.999, solve_type.FAST, show_dyn);
         
-        object_colored_dynamics.append( (t, dyn) );
+        if (show_dyn is True):
+            object_colored_dynamics.append( (t, dyn) );
         
         object_clusters = network.get_clusters();
         
@@ -79,9 +80,11 @@ def template_segmentation_image(source, color_radius, object_radius, noise_size,
             
         # draw_image_segments(source, [ cluster ]);
         # draw_image_segments(source, real_description_clusters);
-        
+    
     draw_image_segments(source, object_colored_clusters);
-    draw_dynamics_set(object_colored_dynamics, None, None, None, [0, 2 * 3.14], False, False);
+    
+    if (show_dyn is True):
+        draw_dynamics_set(object_colored_dynamics, None, None, None, [0, 2 * 3.14], False, False);
     
     
     
@@ -139,21 +142,29 @@ def segmentation_image_white_sea():
 
 def segmentation_image_white_sea_small():
     template_segmentation_image(IMAGE_MAP_SAMPLES.IMAGE_WHITE_SEA_SMALL, 20, None, 50, show_dyn = False);
+    
+def segmentation_image_nile():
+    template_segmentation_image(IMAGE_MAP_SAMPLES.IMAGE_NILE, 16, None, 50, show_dyn = False);
+    
+def segmentation_image_nile_small():
+    template_segmentation_image(IMAGE_MAP_SAMPLES.IMAGE_NILE_SMALL, 50, None, 50, show_dyn = False);
 
 # memory_measurement(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE01, 128);
 # memory_measurement(IMAGE_MAP_SAMPLES.IMAGE_WHITE_SEA_SMALL, 16);
 
-# segmentation_image_simple1();
-# segmentation_image_simple2();
-# segmentation_image_simple3();
-# segmentation_image_simple4();
-# segmentation_image_simple5();
+segmentation_image_simple1();
+segmentation_image_simple2();
+segmentation_image_simple3();
+segmentation_image_simple4();
+segmentation_image_simple5();
 segmentation_image_simple6();
-# segmentation_image_simple7();
-# segmentation_image_simple8();
-# segmentation_image_simple9();
-# segmentation_image_simple10();
-# segmentation_image_beach();
-# 
-# # segmentation_image_white_sea();    Don't run it - it requires a lot of resources.
-# segmentation_image_white_sea_small();
+segmentation_image_simple7();
+segmentation_image_simple8();
+segmentation_image_simple9();
+segmentation_image_simple10();
+segmentation_image_beach();
+ 
+segmentation_image_white_sea();
+segmentation_image_white_sea_small();
+segmentation_image_nile();
+segmentation_image_nile_small();
