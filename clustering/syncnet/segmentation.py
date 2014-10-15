@@ -12,6 +12,7 @@ from nnet import solve_type;
 
 def template_segmentation_image(source, color_radius, object_radius, noise_size, show_dyn):    
     data = read_image(source);
+    print("Pixel dimension: ", len(data[0]));
 
     network = syncnet(data, color_radius, ccore = True);
     print("Network has been created");
@@ -136,6 +137,12 @@ def segmentation_image_simple10():
 
 def segmentation_image_beach():
     template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE_BEACH, 128, None, 10, show_dyn = False);
+    
+def segmentation_image_building():
+    template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE_BUILDING, 16, 10, 10, show_dyn = False);
+
+def segmentation_image_fruits_small():
+    template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE_FRUITS_SMALL, 16, 4, 20, show_dyn = False);
 
 def segmentation_image_white_sea():
     template_segmentation_image(IMAGE_MAP_SAMPLES.IMAGE_WHITE_SEA, 16, None, 50, show_dyn = False);
@@ -163,7 +170,9 @@ segmentation_image_simple8();
 segmentation_image_simple9();
 segmentation_image_simple10();
 segmentation_image_beach();
- 
+segmentation_image_building();
+segmentation_image_fruits_small();
+
 segmentation_image_white_sea();
 segmentation_image_white_sea_small();
 segmentation_image_nile();
