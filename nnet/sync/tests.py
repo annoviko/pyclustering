@@ -11,6 +11,13 @@ class Test(unittest.TestCase):
         network = sync_network(10, 1);
         assert network.num_osc == 10;
   
+  
+    def test_creation_deletion_by_core(self):
+        # Crash occurs in case of memory leak
+        for iteration in range(0, 15):
+            network = sync_network(4096, 1, type_conn = conn_type.ALL_TO_ALL, ccore = True);
+            del network;
+    
     
     def test_phase_normalization(self):       
         "Check for phase normalization"

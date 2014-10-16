@@ -89,22 +89,6 @@ def template_segmentation_image(source, color_radius, object_radius, noise_size,
     
     
     
-def memory_measurement(source, radius):
-    import time;
-    
-    data = read_image(source);
-    
-    print("Network is created");
-    #network = syncnet(data, radius, ccore = True);
-    #del network;
-    #network = syncnet(data, radius, ccore = True);
-    time.sleep(15);
-    
-    print("Network is destoyed");
-    #del network;
-    
-    time.sleep(15);
-    
 def segmentation_image_simple1():
     template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE01, 128, None, 10, show_dyn = False);
     
@@ -156,8 +140,6 @@ def segmentation_image_nile():
 def segmentation_image_nile_small():
     template_segmentation_image(IMAGE_MAP_SAMPLES.IMAGE_NILE_SMALL, 50, None, 50, show_dyn = False);
 
-# memory_measurement(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE01, 128);
-# memory_measurement(IMAGE_MAP_SAMPLES.IMAGE_WHITE_SEA_SMALL, 16);
 
 segmentation_image_simple1();
 segmentation_image_simple2();

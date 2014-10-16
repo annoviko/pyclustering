@@ -2,11 +2,11 @@ import unittest;
 
 from nnet import *;
 
-from support import read_sample;
+from support import read_sample, read_image;
 
 from clustering.hsyncnet import hsyncnet;
 
-from samples.definitions import SIMPLE_SAMPLES;
+from samples.definitions import SIMPLE_SAMPLES, IMAGE_MAP_SAMPLES;
 
 class Test(unittest.TestCase):
     def templateClustering(self, path, number_clusters, expected_length_clusters, solver, ccore_flag):
@@ -68,6 +68,15 @@ class Test(unittest.TestCase):
     def testClusteringSolverRKF45SampleSimple1ByCore(self):
         self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, [5, 5], solve_type.RKF45, True);        
            
+    
+    def testCreationDeletionByCore(self):
+        # Crash occurs in case of memory leak
+        data = read_image(IMAGE_MAP_SAMPLES.IMAGE_WHITE_SEA_SMALL);
+        
+        for iteration in range(0, 15):
+            network = hsyncnet(data, 2, ccore = True);
+            del network;
+        
         
 if __name__ == "__main__":
     unittest.main()

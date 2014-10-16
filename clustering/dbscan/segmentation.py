@@ -92,7 +92,7 @@ def segmentation_image_building():
     template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE_BUILDING, 16, 10, 10, 10, 10);
 
 def segmentation_image_fruits_small():
-    template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE_FRUITS_SMALL, 12, 5, 2, 4, 20);
+    template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE_FRUITS_SMALL, 15, 10, 2, 4, 20);
 
 def segmentation_image_white_sea():
     template_segmentation_image(IMAGE_MAP_SAMPLES.IMAGE_WHITE_SEA, 16, 4, None, None, 50);

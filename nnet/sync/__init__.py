@@ -83,7 +83,7 @@ class sync_network(network, network_interface):
     def __del__(self):
         "Destructor of oscillatory network is based on Kuramoto model."
         if (self._ccore_network_pointer is not None):
-            core.destroy_object(self._ccore_network_pointer);
+            core.destroy_sync_network(self._ccore_network_pointer);
             self._ccore_network_pointer = None;
     
     

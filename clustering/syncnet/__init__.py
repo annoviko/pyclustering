@@ -25,7 +25,7 @@ class syncnet(sync_network):
         "(in) ccore              - defines should be CCORE C++ library used instead of Python code or not."
         
         if (ccore is True):
-            self.__ccore_network_pointer = core.create_syncnet(sample, radius, initial_phases, enable_conn_weight);
+            self.__ccore_network_pointer = core.create_syncnet_network(sample, radius, initial_phases, enable_conn_weight);
         else:
             super().__init__(len(sample), 1, 0, 1, conn_type.NONE, initial_phases);
             
@@ -51,7 +51,7 @@ class syncnet(sync_network):
     def __del__(self):
         "Destructor of oscillatory network is based on Kuramoto model."
         if (self.__ccore_network_pointer is not None):
-            core.destroy_object(self.__ccore_network_pointer);
+            core.destroy_syncnet_network(self.__ccore_network_pointer);
             self.__ccore_network_pointer = None;
 
 

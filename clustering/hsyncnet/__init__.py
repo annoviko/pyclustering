@@ -28,7 +28,7 @@ class hsyncnet(syncnet):
     def __del__(self):
         "Destructor of oscillatory network hierachical Sync."
         if (self.__ccore_network_pointer is not None):
-            core.destroy_object(self.__ccore_network_pointer);
+            core.destroy_hsyncnet_network(self.__ccore_network_pointer);
             self.__ccore_network_pointer = None;
             
             

@@ -4,11 +4,11 @@ from nnet import initial_type, conn_represent, solve_type;
 
 from clustering.syncnet import syncnet;
 
-from support import read_sample;
+from support import read_sample, read_image;
 
 from numpy import pi;
 
-from samples.definitions import SIMPLE_SAMPLES;
+from samples.definitions import SIMPLE_SAMPLES, IMAGE_MAP_SAMPLES;
 
 
 class Test(unittest.TestCase):
@@ -172,6 +172,14 @@ class Test(unittest.TestCase):
 
     def testClusteringSolverRKF45SampleSimple1ByCore(self):
         self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, 0.999, solve_type.RKF45, initial_type.EQUIPARTITION, True, False, 0.05, conn_represent.MATRIX, [5, 5], True);
+
+
+    def testCreationDeletionByCore(self):
+        # Crash occurs in case of memory leak
+        data = read_image(IMAGE_MAP_SAMPLES.IMAGE_WHITE_SEA_SMALL);
+        for iteration in range(0, 15):
+            network = syncnet(data, 16, ccore = True);
+            del network;
 
 if __name__ == "__main__":
     unittest.main();

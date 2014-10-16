@@ -203,11 +203,18 @@ def xmeans(sample, centers, kmax, tolerance):
     return list_of_clusters;
 
 
+"CCORE Interface for SYNC oscillatory network"
+
 def create_sync_network(num_osc, weight, frequency, qcluster, type_conn, initial_phases):
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
     pointer_network = ccore.create_sync_network(c_uint(num_osc), c_double(weight), c_double(frequency), c_uint(qcluster), c_uint(type_conn), c_uint(initial_phases));
     
     return pointer_network;
+
+
+def destroy_sync_network(pointer_network):
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore.destroy_sync_network(pointer_network);
 
 
 def simulate_sync_network(pointer_network, steps, time, solution, collect_dynamic):
@@ -254,13 +261,20 @@ def sync_local_order(pointer_network):
     return ccore.sync_local_order(pointer_network);
 
 
-def create_syncnet(sample, radius, initial_phases, enable_conn_weight):
+"CCORE Interface for SYNCNET oscillatory network"
+
+def create_syncnet_network(sample, radius, initial_phases, enable_conn_weight):
     pointer_data = create_pointer_data(sample);
     
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
-    pointer_network = ccore.create_syncnet(pointer_data, c_double(radius), c_uint(initial_phases), c_bool(enable_conn_weight));
+    pointer_network = ccore.create_syncnet_network(pointer_data, c_double(radius), c_uint(initial_phases), c_bool(enable_conn_weight));
     
     return pointer_network;
+
+
+def destroy_syncnet_network(pointer_network):
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore.destroy_syncnet_network(pointer_network);
 
 
 def process_syncnet(network_pointer, order, solution, collect_dynamic):
@@ -283,6 +297,8 @@ def get_clusters_syncnet(pointer_network, tolerance):
     return list_of_clusters; 
 
 
+"CCORE Interface for HSYNCNET oscillatory network"
+
 def create_hsyncnet(sample, number_clusters, initial_phases):
     pointer_data = create_pointer_data(sample);
     
@@ -290,6 +306,11 @@ def create_hsyncnet(sample, number_clusters, initial_phases):
     pointer_network = ccore.create_hsyncnet(pointer_data, c_uint(number_clusters), c_uint(initial_phases));
     
     return pointer_network;
+
+
+def destroy_hsyncnet_network(pointer_network):
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore.destroy_hsyncnet_network(pointer_network);
 
 
 def process_hsyncnet(network_pointer, order, solution, collect_dynamic):

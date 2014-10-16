@@ -128,6 +128,15 @@ extern "C" DECLARATION void * create_sync_network(const unsigned int size, const
 
 /***********************************************************************************************
  *
+ * @brief   Destroy sync_network (calls destructor).
+ *
+ * @param   (in) pointer_network	- pointer to the Sync network.
+ *
+ ***********************************************************************************************/
+extern "C" DECLARATION void destroy_sync_network(const void * pointer_network);
+
+/***********************************************************************************************
+ *
  * @brief   Simulate dynamic of the oscillatory Sync network.
  *
  * @param   (in) pointer_network	- pointer to the Sync network.
@@ -210,7 +219,16 @@ extern "C" DECLARATION double sync_local_order(const void * pointer_network);
  * @param   (in) initial_phases        - type of initialization of initial phases of oscillators.
  *
  ***********************************************************************************************/
-extern "C" DECLARATION void * create_syncnet(const data_representation * const sample, const double connectivity_radius, const bool enable_conn_weight, const unsigned int initial_phases);
+extern "C" DECLARATION void * create_syncnet_network(const data_representation * const sample, const double connectivity_radius, const bool enable_conn_weight, const unsigned int initial_phases);
+
+/***********************************************************************************************
+ *
+ * @brief   Destroy SyncNet (calls destructor).
+ *
+ * @param   (in) pointer_network       - pointer to the SyncNet network.
+ *
+ ***********************************************************************************************/
+extern "C" DECLARATION void destroy_syncnet_network(const void * pointer_network);
 
 /***********************************************************************************************
  *
@@ -243,7 +261,7 @@ extern "C" DECLARATION clustering_result * get_clusters_syncnet(const void * poi
 
 /***********************************************************************************************
  *
- * @brief   Create oscillatory network hierarchical SYNC for cluster analysis.
+ * @brief   Create oscillatory network hierarchical HSyncNet for cluster analysis.
  *
  * @param   (in) sample                - input data for clustering.
  * @param   (in) number_clusters       - number of clusters that should be allocated.
@@ -251,6 +269,15 @@ extern "C" DECLARATION clustering_result * get_clusters_syncnet(const void * poi
  *
  ***********************************************************************************************/
 extern "C" DECLARATION void * create_hsyncnet(const data_representation * const sample, const unsigned int number_clusters, const unsigned int initial_phases);
+
+/***********************************************************************************************
+ *
+ * @brief   Destroy oscillatory network HSyncNet (calls destructor).
+ *
+ * @param   (in) pointer_network      - pointer to HSyncNet oscillatory network.
+ *
+ ***********************************************************************************************/
+extern "C" DECLARATION void destroy_hsyncnet_network(const void * pointer_network);
 
 /***********************************************************************************************
  *

@@ -224,6 +224,19 @@ void * create_sync_network(const unsigned int size, const double weight_factor, 
 
 /***********************************************************************************************
  *
+ * @brief   Destroy Sync network (calls destructor).
+ *
+ * @param   (in) pointer_network	- pointer to the Sync network.
+ *
+ ***********************************************************************************************/
+void destroy_sync_network(const void * pointer_network) {
+	if (pointer_network != NULL) {
+		delete (sync_network *) pointer_network;
+	}
+}
+
+/***********************************************************************************************
+ *
  * @brief   Simulate dynamic of the oscillatory Sync network.
  *
  * @param   (in) pointer_network        - pointer to the Sync network.
@@ -335,7 +348,7 @@ double sync_local_order(const void * pointer_network) {
 
 /***********************************************************************************************
  *
- * @brief   Create oscillatory network SYNC for cluster analysis.
+ * @brief   Create oscillatory network SyncNet for cluster analysis.
  *
  * @param   (in) sample                - input data for clustering.
  * @param   (in) connectivity_radius   - connectivity radius between points.
@@ -345,9 +358,22 @@ double sync_local_order(const void * pointer_network) {
  * @param   (in) initial_phases        - type of initialization of initial phases of oscillators.
  *
  ***********************************************************************************************/
-void * create_syncnet(const data_representation * const sample, const double connectivity_radius, const bool enable_conn_weight, const unsigned int initial_phases) {
+void * create_syncnet_network(const data_representation * const sample, const double connectivity_radius, const bool enable_conn_weight, const unsigned int initial_phases) {
 	std::vector<std::vector<double> > * dataset = read_sample(sample);	/* belongs to syncnet */
 	return (void *) new syncnet(dataset, connectivity_radius, enable_conn_weight, (initial_type) initial_phases);
+}
+
+/***********************************************************************************************
+ *
+ * @brief   Destroy SyncNet (calls destructor).
+ *
+ * @param   (in) pointer_network      - pointer to SyncNet oscillatory network.
+ *
+ ***********************************************************************************************/
+void destroy_syncnet_network(const void * pointer_network) {
+	if (pointer_network != NULL) {
+		delete (syncnet *) pointer_network;
+	}
 }
 
 /***********************************************************************************************
@@ -414,7 +440,20 @@ void * create_hsyncnet(const data_representation * const sample, const unsigned 
 	std::vector<std::vector<double> > * dataset = read_sample(sample);	/* belongs to hsyncnet */
 	return (void *) new hsyncnet(dataset, number_clusters, (initial_type) initial_phases);
 }
-#include <stdio.h>
+
+/***********************************************************************************************
+ *
+ * @brief   Destroy oscillatory network HSyncNet (calls destructor).
+ *
+ * @param   (in) pointer_network      - pointer to HSyncNet oscillatory network.
+ *
+ ***********************************************************************************************/
+void destroy_hsyncnet_network(const void * pointer_network) {
+	if (pointer_network != NULL) {
+		delete (hsyncnet *) pointer_network;
+	}
+}
+
 /***********************************************************************************************
  *
  * @brief   Simulate oscillatory network hierarchical SYNC until clustering problem is not resolved.
