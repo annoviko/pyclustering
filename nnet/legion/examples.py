@@ -10,6 +10,9 @@ def template_dynamic_legion(num_osc, steps, time, conn_type = conn_type.NONE, st
     draw_dynamics(t, x, x_title = "Time", y_title = "x(t)", separate = separate_repr);
     draw_dynamics(t, z, x_title = "Time", y_title = "z(t)");
     
+    ensembles = net.allocate_sync_ensembles(0.1);
+    print(ensembles);
+    
 def one_oscillator_unstimulated():
     parameters = legion_parameters();
     parameters.teta = 0;    # because no neighbors at all
@@ -44,6 +47,7 @@ def ten_oscillator_mix_stimulated_list():
     
 def thirteen_oscillator_three_stimulated_ensembles_list():
     "Good example of three synchronous ensembels"
+    "Not accurate due to false skipes are observed"
     parameters = legion_parameters();
     parameters.teta_x = -1.05;
     parameters.Wt = 4.0;
@@ -52,6 +56,7 @@ def thirteen_oscillator_three_stimulated_ensembles_list():
     template_dynamic_legion(13, 2000, 1500, conn_type = conn_type.LIST_BIDIR, stimulus = [1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1], params = parameters, separate_repr = [ [0, 1, 2], [3, 4, 8, 9], [5, 6, 7], [10, 11, 12] ]);
     
 def sixteen_oscillator_two_stimulated_ensembles_grid():
+    "Not accurate false due to spikes are observed"
     parameters = legion_parameters();
     parameters.teta_x = -1.1;
     template_dynamic_legion(16, 2000, 1500, conn_type = conn_type.GRID_FOUR, params = parameters, stimulus = [1, 1, 1, 0, 
