@@ -201,17 +201,7 @@ def draw_clusters(data, clusters, noise = [], marker_descr = '.', hide_axes = Fa
     
 
 def draw_dynamics(t, dyn, x_title = None, y_title = None, x_lim = None, y_lim = None, x_labels = True, y_labels = True, separate = False, axes = None):
-    "Draw dynamics of neurons in the network"   
-    from matplotlib.font_manager import FontProperties;
-    from matplotlib import rcParams;
-    
-    if (_platform == "linux") or (_platform == "linux2"):
-        rcParams['font.sans-serif'] = ['Liberation Serif'];
-    else:
-        rcParams['font.sans-serif'] = ['Arial'];
-        
-    rcParams['font.size'] = 12;
-    
+    "Draw dynamics of neurons in the network"       
     number_lines = 0;
     
     if ( (isinstance(separate, bool) is True) and (separate is True) ):
@@ -230,19 +220,6 @@ def draw_dynamics(t, dyn, x_title = None, y_title = None, x_lim = None, y_lim = 
     if (axes is None):
         dysplay_result = True;
         (fig, axes) = plt.subplots(number_lines, 1);
-    
-    if (number_lines > 1):
-        for index_stage in range(number_lines):
-            axes[index_stage].get_xaxis().set_visible(False);
-            axes[index_stage].get_yaxis().set_visible(False);
-    
-    surface_font = FontProperties();
-    if (_platform == "linux") or (_platform == "linux2"):
-        surface_font.set_name('Liberation Serif');
-    else:
-        surface_font.set_name('Arial');
-        
-    surface_font.set_size('12');
     
     # Check if we have more than one dynamic
     if (isinstance(dyn[0], list) is True):
@@ -267,27 +244,50 @@ def draw_dynamics(t, dyn, x_title = None, y_title = None, x_lim = None, y_lim = 
                     raise NameError('Index ' + str(index) + ' is not specified in the separation list.');
                               
                 axes[index_stage].plot(t, y, 'b-', linewidth = 0.5); 
+                set_ax_param(axes[index_stage], x_title, y_title, x_lim, y_lim, x_labels, y_labels, True);
                 
             else:
                 axes.plot(t, y, 'b-', linewidth = 0.5);
+                set_ax_param(axes, x_title, y_title, x_lim, y_lim, x_labels, y_labels, True);
     else:
         axes.plot(t, dyn, 'b-', linewidth = 0.5);     
-
-    if (y_title is not None): axes.set_ylabel(y_title, fontproperties = surface_font);
-    if (x_title is not None): axes.set_xlabel(x_title, fontproperties = surface_font);
-    
-    if (x_lim is not None): axes.set_xlim(x_lim[0], x_lim[1]);
-    if (y_lim is not None): axes.set_ylim(y_lim[0], y_lim[1]);
-    
-    if (x_labels is False): axes.xaxis.set_ticklabels([]);
-    if (y_labels is False): axes.yaxis.set_ticklabels([]);
-
-    axes.grid(True);
+        set_ax_param(axes, x_title, y_title, x_lim, y_lim, x_labels, y_labels, True);
     
     if (dysplay_result is True):
         plt.show();
     
     return axes;
+
+
+def set_ax_param(ax, x_title = None, y_title = None, x_lim = None, y_lim = None, x_labels = True, y_labels = True, grid = True):
+    from matplotlib.font_manager import FontProperties;
+    from matplotlib import rcParams;
+    
+    if (_platform == "linux") or (_platform == "linux2"):
+        rcParams['font.sans-serif'] = ['Liberation Serif'];
+    else:
+        rcParams['font.sans-serif'] = ['Arial'];
+        
+    rcParams['font.size'] = 12;
+        
+    surface_font = FontProperties();
+    if (_platform == "linux") or (_platform == "linux2"):
+        surface_font.set_name('Liberation Serif');
+    else:
+        surface_font.set_name('Arial');
+        
+    surface_font.set_size('12');
+    
+    if (y_title is not None): ax.set_ylabel(y_title, fontproperties = surface_font);
+    if (x_title is not None): ax.set_xlabel(x_title, fontproperties = surface_font);
+    
+    if (x_lim is not None): ax.set_xlim(x_lim[0], x_lim[1]);
+    if (y_lim is not None): ax.set_ylim(y_lim[0], y_lim[1]);
+    
+    if (x_labels is False): ax.xaxis.set_ticklabels([]);
+    if (y_labels is False): ax.yaxis.set_ticklabels([]);
+    
+    ax.grid(grid);
 
 
 def draw_dynamics_set(dynamics, xtitle = None, ytitle = None, xlim = None, ylim = None, xlabels = False, ylabels = False):
