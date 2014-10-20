@@ -3,10 +3,9 @@
 
 #include <vector>
 
-template <class TData>
 class kdnode {
 private:
-	const std::vector<TData *> * 	data;
+	const std::vector<double> * 	data;
 	const void * 					payload;
 
 	kdnode  *		left;
@@ -15,7 +14,8 @@ private:
 	unsigned int	discriminator;
 
 public:
-	kdnode(std::vector<TData *> * p_data, void * p_payload,  kdnode * p_left, kdnode * p_right, kdnode * p_parent, unsigned int disc);
+	kdnode(std::vector<double> * p_data, void * p_payload,  kdnode * p_left, kdnode * p_right, kdnode * p_parent, unsigned int disc);
+
 	~kdnode(void);
 
 	inline void set_left(kdnode * node) { left = node; }
@@ -26,39 +26,60 @@ public:
 	inline kdnode * get_right(void) { return right; }
 	inline kdnode * get_parent(void) { return parent; }
 
-	inline TData * get_value(void) { return data[discriminator]; }
+	inline double get_value(void) const { return (*data)[discriminator]; }
+	inline unsigned int get_discriminator(void) const { return discriminator; }
 
-	std::vector<kdnode *> * get_children(void);
+	inline std::vector<kdnode *> * get_children(void) {
+		std::vector<kdnode *> * children = new std::vector<kdnode *>();
+		if (left != NULL) { children->push_back(left); }
+		if (right != NULL) { children->push_back(right); }
 
-	inline bool operator < (const & kdnode node1, const & kdnode node2) { return *(node1.get_value()) < *(node2.get_value()); }
-	inline bool operator > (const & kdnode node1, const & kdnode node2) { return node2 < node1; }
-	inline bool operator <= (const & kdnode node1, const & kdnode node2) { return !(node1 > node2); }
-	inline bool operator >= (const & kdnode node1, const & kdnode node2) { return !(node1 < node2); }
+		return children;
+	}
 };
 
 
-template <class TData>
+inline bool operator < (const kdnode & node, const std::vector<double> & point) { return node.get_value() < point[node.get_discriminator()]; }
+inline bool operator < (const std::vector<double> & point, const kdnode & node) { return point[node.get_discriminator()] < node.get_value(); }
+
+inline bool operator > (const kdnode & node, const std::vector<double> & point) { return point[node.get_discriminator()] < node.get_value(); }
+inline bool operator > (const std::vector<double> & point, const kdnode & node) { return node.get_value() < point[node.get_discriminator()]; }
+
+inline bool operator <= (const kdnode & node, const std::vector<double> & point) { return !(node.get_value() > point[node.get_discriminator()]); }
+inline bool operator <= (const std::vector<double> & point, const kdnode & node) { return !(point[node.get_discriminator()] > node.get_value()); }
+
+inline bool operator >= (const kdnode & node, const std::vector<double> & point) { return !(node.get_value() < point[node.get_discriminator()]); }
+inline bool operator >= (const std::vector<double> & point, const kdnode & node) { return !(point[node.get_discriminator()] < node.get_value()); }
+
+
 class kdtree {
 private:
-	kdnode<TData> * root;
+	kdnode *		root;
 	unsigned int	dimension;
 
+private:
+	kdnode * recursive_remove(kdnode * node);
+
 public:
-	kdtree(const std::vector<TData *> * data, const std::vector<void *> payloads);
+	kdtree(void);
+
+	kdtree(const std::vector< std::vector<double> *> * data, const std::vector<void *> * payloads);
 
 	~kdtree(void);
 
-	kdnode * insert(TData * point, void * payload);
+	kdnode * insert(std::vector<double> * point, void * payload);
 
-	void remove(kdnode * node);
+	void remove(std::vector<double> * point);
 
 	kdnode * find_minimal_node(kdnode * cur_node, unsigned int discriminator);
 
-	kdnode * find_node(TData * point, kdnode * cur_node);
+	kdnode * find_node(std::vector<double> * point);
 
-	kdnode * find_nearest_dist_node(TData * point, double distance);
+	kdnode * find_node(std::vector<double> * point, kdnode * cur_node);
 
-	std::vector<kdnode *> * find_nearest_dist_nodes(TData * point, double distance);
+	kdnode * find_nearest_dist_node(std::vector<double> * point, double distance);
+
+	std::vector<kdnode *> * find_nearest_dist_nodes(std::vector<double> * point, double distance);
 };
 
 #endif
