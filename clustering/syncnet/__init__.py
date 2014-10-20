@@ -53,6 +53,8 @@ class syncnet(sync_network):
         if (self.__ccore_network_pointer is not None):
             core.destroy_syncnet_network(self.__ccore_network_pointer);
             self.__ccore_network_pointer = None;
+        else:
+            self._osc_loc = None;   # pointer to external object
 
 
     def _create_connections(self, radius):

@@ -180,6 +180,7 @@ class Test(unittest.TestCase):
         for iteration in range(0, 15):
             network = syncnet(data, 16, ccore = True);
             del network;
+        
 
 if __name__ == "__main__":
     unittest.main();

@@ -36,6 +36,7 @@ def read_image(filename):
     data = [pixel for pixel in image_source.getdata()];
     
     del image_source;
+    image_source = None;
     return data;
 
 
