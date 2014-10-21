@@ -189,13 +189,13 @@ class kdtree:
                 if (cur_node.right is not None):
                     cur_node = cur_node.right;
                 else:
-                    break;  # assert 0
+                    assert 0
             
             else:
                 if (cur_node.left is not None):
                     cur_node = cur_node.left;
                 else:
-                    break;  # assert 0
+                    assert 0
                 
         return req_node;
     
