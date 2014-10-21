@@ -5,7 +5,7 @@ from nnet import *;
 
 def template_dynamic_legion(num_osc, steps, time, conn_type = conn_type.NONE, stimulus = None, params = None, separate_repr = True):
     net = legion_network(num_osc, stimulus, type_conn = conn_type, parameters = params);
-    (t, x, z) = net.simulate(steps, time);
+    (t, x, z) = net.simulate(steps, time, solution = solve_type.FAST);
     
     draw_dynamics(t, x, x_title = "Time", y_title = "x(t)", separate = separate_repr);
     draw_dynamics(t, z, x_title = "Time", y_title = "z(t)");

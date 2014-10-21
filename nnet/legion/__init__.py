@@ -158,6 +158,12 @@ class legion_network(network, network_interface):
         "Returns dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,"
         "otherwise returns only last values (last step of simulation) of dynamic."        
         
+        # Check solver before simulation
+        if (solution == solve_type.FAST):
+            raise NameError("Solver FAST is not support due to low accuracy that leads to huge error.");
+        elif (solution == solve_type.RKF45):
+            raise NameError("Solver RKF45 is not support in python version.")
+        
         if (self._dyn_exc is not None):
             del self._dyn_exc;
             self._dyn_exc = None;
@@ -209,33 +215,12 @@ class legion_network(network, network_interface):
         
         # Update states of oscillators
         for index in range (0, self._num_osc, 1):
-            if (solution == solve_type.FAST):
-                assert 0;
-                #[ next_excitatory[index], next_inhibitory[index], next_potential[index] ]  = self.legion_state([self._excitatory[index], self._inhibitory[index], self._potential[index]], 0, index);
-                #next_excitatory[index] += self._excitatory[index];
-                #next_inhibitory[index] += self._inhibitory[index];
-                #next_potential[index] += self._potential[index];
-                
-            elif (solution == solve_type.RK4):
-                result = odeint(self.legion_state, [self._excitatory[index], self._inhibitory[index], self._potential[index]], numpy.arange(t - step, t, int_step), (index , ));
-                [ next_excitatory[index], next_inhibitory[index], next_potential[index] ] = result[len(result) - 1][0:3];
-                
-                #print("index: ", index, next_excitatory[index], next_inhibitory[index], next_potential[index]);
-                
-            else:
-                assert 0;
+            result = odeint(self.legion_state, [self._excitatory[index], self._inhibitory[index], self._potential[index]], numpy.arange(t - step, t, int_step), (index , ));
+            [ next_excitatory[index], next_inhibitory[index], next_potential[index] ] = result[len(result) - 1][0:3];
         
         # Update state of global inhibitory
-        if (solution == solve_type.FAST):
-            assert 0;
-            # z = self._global_inhibitor + self.global_inhibitor_state(self._global_inhibitor, t, None);
-            
-        elif (solution == solve_type.RK4):
-            result = odeint(self.global_inhibitor_state, self._global_inhibitor, numpy.arange(t - step, t, int_step), (None, ));
-            self._global_inhibitor = result[len(result) - 1][0];
-            
-        else:
-            assert 0;
+        result = odeint(self.global_inhibitor_state, self._global_inhibitor, numpy.arange(t - step, t, int_step), (None, ));
+        self._global_inhibitor = result[len(result) - 1][0];
         
         self._noise = [random.random() * self._params.ro for i in range(self._num_osc)];
         self._coupling_term = self._buffer_coupling_term[:];

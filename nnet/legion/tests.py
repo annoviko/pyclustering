@@ -93,7 +93,7 @@ class Test(unittest.TestCase):
     
     
     # Tests regarded to synchronous ensembles allocation.
-    def templateSyncEnsembleAllocation(self, stimulus, params, type_conn, sim_steps, sim_time, expected_clusters):
+    def templateSyncEnsembleAllocation(self, stimulus, params, type_conn, sim_steps, sim_time, expected_clusters, solver):
         net = legion_network(len(stimulus), stimulus, params, type_conn);
         (t, x, z) = net.simulate(sim_steps, sim_time);
         
