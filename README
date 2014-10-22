@@ -39,7 +39,7 @@ $ sudo apt-get install python3-matplotlib
 What is implemented in the project:
 
 Clustering algorithms:
-- CURE [Python, C++]
+- CURE [Python]
 - DBSCAN [Python, C++]
 - Hierarchical [Python, C++]
 - HSyncNet [Python, C++]
@@ -62,4 +62,4 @@ Graph Coloring Algorithms:
 - Sync [Python]
 
 Misc Algorithms:
-- K-D Tree [Python]
+- K-D Tree [Python, C++]

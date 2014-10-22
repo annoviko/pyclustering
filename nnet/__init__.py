@@ -9,7 +9,7 @@ class initial_type:
 class solve_type:
     FAST = 0;                   # Usual calculation: x(k + 1) = x(k) + f(x(k)).
     RK4 = 1;                    # Runge-Kutte 4 method with fixed step.
-    RKF45 = 1;                  # Runge-Kutte-Fehlberg 45 method float step.
+    RKF45 = 2;                  # Runge-Kutte-Fehlberg 45 method float step.
 
 class conn_type:
     NONE = 0;                   # No connection between oscillators.
