@@ -152,7 +152,7 @@ class legion_network(network, network_interface):
         
         "(in) steps            - number steps of simulations during simulation."
         "(in) time             - time of simulation."
-        "(in) solution         - type of solution (solving)."
+        "(in) solution         - type of solution (only RK4 is supported for python implementation)."
         "(in) collect_dynamic  - if True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics."
         
         "Returns dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,"
@@ -162,7 +162,7 @@ class legion_network(network, network_interface):
         if (solution == solve_type.FAST):
             raise NameError("Solver FAST is not support due to low accuracy that leads to huge error.");
         elif (solution == solve_type.RKF45):
-            raise NameError("Solver RKF45 is not support in python version.")
+            raise NameError("Solver RKF45 is not support in python version.");
         
         if (self._dyn_exc is not None):
             del self._dyn_exc;

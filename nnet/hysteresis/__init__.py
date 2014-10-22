@@ -108,12 +108,18 @@ class hysteresis_network(network, network_interface):
         
         "(in) steps            - number steps of simulations during simulation."
         "(in) time             - time of simulation."
-        "(in) solution         - type of solution (solving)."
+        "(in) solution         - type of solution (only RK4 is supported for python implementation)."
         "(in) collect_dynamic  - if True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics."
         
         "Returns dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,"
         "otherwise returns only last values (last step of simulation) of dynamic."  
-        
+
+        # Check solver before simulation
+        if (solution == solve_type.FAST):
+            raise NameError("Solver FAST is not support due to low accuracy that leads to huge error.");
+        elif (solution == solve_type.RKF45):
+            raise NameError("Solver RKF45 is not support in python version.");
+
         dyn_state = None;
         dyn_time = None;
         
@@ -154,11 +160,8 @@ class hysteresis_network(network, network_interface):
         next_states = [0] * self._num_osc;
         
         for index in range (0, self._num_osc, 1):            
-            if (solution == solve_type.RK4):
-                result = odeint(self.neuron_states, self._states[index], numpy.arange(t - step, t, int_step), (index , ));
-                next_states[index] = result[len(result) - 1][0];
-            else:
-                assert 0;
+            result = odeint(self.neuron_states, self._states[index], numpy.arange(t - step, t, int_step), (index , ));
+            next_states[index] = result[len(result) - 1][0];
         
         self._outputs = [val for val in self._outputs_buffer];
         return next_states;
