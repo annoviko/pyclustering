@@ -51,6 +51,9 @@
     <ClCompile Include="kdtree.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="cure.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dbscan.h">
@@ -87,6 +90,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="kdtree.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cure.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

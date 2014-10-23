@@ -390,7 +390,7 @@ void kdtree_searcher::recursive_nearest_nodes(kdnode * node) {
 * @return  Return vector of found nodes in kd tree that satisfy the request.
 *
 ***********************************************************************************************/
-std::vector<kdnode *> * kdtree_searcher::find_nearest_nodes() {
+std::vector<kdnode *> * kdtree_searcher::find_nearest_nodes(std::vector<double> * distances) {
 	prepare_storages();
 
 	std::vector<kdnode *> * result = nearest_nodes;
@@ -399,8 +399,14 @@ std::vector<kdnode *> * kdtree_searcher::find_nearest_nodes() {
 
 	nearest_nodes = NULL; /* application responds for the vector */
 
-	delete nodes_distance;
-	nodes_distance = NULL;
+	if (distances != NULL) {
+		distances = nodes_distance; /* application responds for the vector */
+		nodes_distance = NULL;
+	}
+	else {
+		delete nodes_distance;
+		nodes_distance = NULL;
+	}
 
 	return result;
 }

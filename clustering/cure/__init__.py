@@ -175,7 +175,6 @@ def delete_represented_points(cluster, tree):
     "(in) tree       - k-d tree where representation points are stored."
     
     for point in cluster.rep:
-        tree.find_node(point);
         tree.remove(point);
 
 
@@ -211,7 +210,8 @@ def merge_clusters(cluster1, cluster2, number_represent_points, compression):
                 minimal_distance = euclidean_distance(point, merged_cluster.mean);
                 #minimal_distance = euclidean_distance_sqrt(point, merged_cluster.mean);
             else:
-                minimal_distance = cluster_distance(cure_cluster(point), cure_cluster(temporary[0]));
+                minimal_distance = euclidean_distance(point, temporary[0]);
+                #minimal_distance = cluster_distance(cure_cluster(point), cure_cluster(temporary[0]));
                 
             if (minimal_distance >= maximal_distance):
                 maximal_distance = minimal_distance;

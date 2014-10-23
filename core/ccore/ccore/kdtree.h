@@ -11,7 +11,7 @@
 class kdnode {
 private:
 	const std::vector<double> * 	data;
-	const void * 					payload;
+	void * 							payload;
 
 	kdnode  *		left;
 	kdnode  *		right;
@@ -32,6 +32,7 @@ public:
 	inline kdnode * get_right(void) { return right; }
 	inline kdnode * get_parent(void) { return parent; }
 
+	inline void * get_payload(void) { return payload; }
 	inline const std::vector<double> * get_data(void) { return data; }
 
 	inline double get_value(void) const { return (*data)[discriminator]; }
@@ -175,6 +176,15 @@ public:
 	*
 	***********************************************************************************************/
 	kdnode * find_node(std::vector<double> * point, kdnode * cur_node);
+
+	/***********************************************************************************************
+	*
+	* @brief   Return root of the tree.
+	*
+	* @return  Returns pointer to root of the tree.
+	*
+	***********************************************************************************************/
+	inline kdnode * get_root(void) { return root; }
 };
 
 
@@ -251,10 +261,11 @@ public:
 	*
 	* @brief   Search nodes that are located in specified distance from specified point.
 	*
-	* @return  Return vector of found nodes in kd tree that satisfy the request.
+	* @return  Return vector of found nodes in kd tree that satisfy the request. If distances are
+	*          specified then it will be filled by corresponding distances.
 	*
 	***********************************************************************************************/
-	std::vector<kdnode *> * find_nearest_nodes(void);
+	std::vector<kdnode *> * find_nearest_nodes(std::vector<double> * distances = NULL);
 
 	/***********************************************************************************************
 	*

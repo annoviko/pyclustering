@@ -145,6 +145,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ccore.cpp" />
+    <ClCompile Include="cure.cpp" />
     <ClCompile Include="dbscan.cpp" />
     <ClCompile Include="hierarchical.cpp" />
     <ClCompile Include="hsyncnet.cpp" />
@@ -158,6 +159,7 @@
     <ClCompile Include="xmeans.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="cure.h" />
     <ClInclude Include="dbscan.h" />
     <ClInclude Include="hierarchical.h" />
     <ClInclude Include="hsyncnet.h" />
