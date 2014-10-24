@@ -167,7 +167,7 @@ private:
 	std::vector<std::vector<double> >			* data;
 
 public:
-	cure(const std::vector<std::vector<double> > * data, const unsigned int clusters_number, const unsigned int points_number, const double compression);
+	cure(const std::vector<std::vector<double> > * sample, const unsigned int clusters_number, const unsigned int points_number, const double level_compression);
 
 	~cure(void);
 

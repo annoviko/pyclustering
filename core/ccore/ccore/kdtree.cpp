@@ -1,6 +1,8 @@
 #include "kdtree.h"
 #include "support.h"
 
+#include <stdio.h>
+
 kdnode::kdnode(std::vector<double> * p_data, void * p_payload,  kdnode * p_left, kdnode * p_right, kdnode * p_parent, unsigned int disc) :
 	data(p_data), payload(p_payload), left(p_left), right(p_right), parent(p_parent), discriminator(disc)
 	{ }
@@ -65,7 +67,10 @@ kdtree::~kdtree(void) {
 kdnode * kdtree::insert(std::vector<double> * point, void * payload) {
 	if (root == NULL) {
 		kdnode * node = new kdnode(point, payload, NULL, NULL, NULL, 0);
+
 		root = node;
+		dimension = node->get_data()->size();
+
 		return node;
 	}
 	else {
@@ -164,7 +169,6 @@ void kdtree::remove(kdnode * node_for_remove) {
 *
 ***********************************************************************************************/
 kdnode * kdtree::recursive_remove(kdnode * node) {
-	/* Check if it's a leaf */
 	if ( (node->get_right() == NULL) && (node->get_left() == NULL) ) {
 		return NULL;
 	}
@@ -185,7 +189,7 @@ kdnode * kdtree::recursive_remove(kdnode * node) {
 		parent->set_left(recursive_remove(minimal_node));
 	}
 	else if (parent->get_right() == minimal_node) {
-		parent->set_left(recursive_remove(minimal_node));
+		parent->set_right(recursive_remove(minimal_node));
 	}
 	else {
 		throw std::runtime_error("Structure of KD Tree is corrupted");
@@ -351,7 +355,10 @@ void kdtree_searcher::initialize(std::vector<double> * point, kdnode * node, con
 *
 ***********************************************************************************************/
 void kdtree_searcher::prepare_storages() {
-	nodes_distance = new std::vector<double>();
+	if (nodes_distance == NULL) {
+		nodes_distance = new std::vector<double>();
+	}
+
 	nearest_nodes = new std::vector<kdnode *>();
 }
 
@@ -393,6 +400,10 @@ void kdtree_searcher::recursive_nearest_nodes(kdnode * node) {
 *
 ***********************************************************************************************/
 std::vector<kdnode *> * kdtree_searcher::find_nearest_nodes(std::vector<double> * distances) {
+	if (distances != NULL) {
+		nodes_distance = distances;
+	}
+
 	prepare_storages();
 
 	std::vector<kdnode *> * result = nearest_nodes;

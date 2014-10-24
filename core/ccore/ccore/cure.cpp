@@ -74,7 +74,7 @@ cure_queue::cure_queue(const std::vector< std::vector<double> > * data) {
 
 	for (cure_queue::const_iterator cluster = queue->begin(); cluster != queue->end(); cluster++) {
 		for (std::vector<std::vector<double> *>::const_iterator point = (*cluster)->rep->begin(); point != (*cluster)->rep->end(); point++) {
-			tree->insert(*point, *cluster);
+			kdnode * node = tree->insert(*point, *cluster);
 		}
 	}
 }
@@ -132,7 +132,7 @@ void cure_queue::create_queue(const std::vector< std::vector<double> > * data) {
 		(*first_cluster)->distance_closest = minimal_distance;
 	}
 
-	auto distance_comparison = [](cure_cluster * cluster1, cure_cluster * cluster2) { return cluster2->distance_closest < cluster1->distance_closest; };
+	auto distance_comparison = [](cure_cluster * cluster1, cure_cluster * cluster2) { return cluster1->distance_closest < cluster2->distance_closest; };
 	queue->sort(distance_comparison);
 }
 
@@ -148,7 +148,6 @@ void cure_queue::create_queue(const std::vector< std::vector<double> > * data) {
 ***********************************************************************************************/
 double cure_queue::get_distance(cure_cluster * cluster1, cure_cluster * cluster2) {
 	double distance = std::numeric_limits<double>::max();
-
 	for (std::vector<std::vector<double> *>::const_iterator point1 = cluster1->rep->begin(); point1 != cluster1->rep->end(); point1++) {
 		for (std::vector<std::vector<double> *>::const_iterator point2 = cluster2->rep->begin(); point2 != cluster2->rep->end(); point2++) {
 			double candidate_distance = euclidean_distance(*point1, *point2);
@@ -175,6 +174,9 @@ void cure_queue::merge(cure_cluster * cluster1, cure_cluster * cluster2, const u
 	remove_representative_points(cluster1);
 	remove_representative_points(cluster2);
 
+	queue->remove(cluster1);
+	queue->remove(cluster2);
+
 	cure_cluster * merged_cluster = new cure_cluster();
 	merged_cluster->insert_points(cluster1->points);
 	merged_cluster->insert_points(cluster2->points);
@@ -185,7 +187,7 @@ void cure_queue::merge(cure_cluster * cluster1, cure_cluster * cluster2, const u
 	}
 
 	std::set<std::vector<double> *> * temporary = new std::set<std::vector<double> *>();
-
+	
 	for (unsigned int index = 0; index < number_repr_points; index++) {
 		double maximal_distance = 0;
 		std::vector<double> * maximal_point = NULL;
@@ -225,6 +227,8 @@ void cure_queue::merge(cure_cluster * cluster1, cure_cluster * cluster2, const u
 	merged_cluster->closest = *(queue->begin());
 	merged_cluster->distance_closest = get_distance(merged_cluster, merged_cluster->closest);
 
+	insert_representative_points(merged_cluster);
+
 	/* relocation request */
 	std::list<cure_cluster *> * relocation_request = new std::list<cure_cluster *>();
 
@@ -246,6 +250,7 @@ void cure_queue::merge(cure_cluster * cluster1, cure_cluster * cluster2, const u
 
 				for (std::vector<std::vector<double> * >::iterator point = (*cluster)->rep->begin(); point != (*cluster)->rep->end(); point++) {
 					kdtree_searcher searcher(*point, tree->get_root(), distance);
+
 					std::vector<double> * nearest_node_distances = new std::vector<double>();
 					std::vector<kdnode *> * nearest_nodes = searcher.find_nearest_nodes(nearest_node_distances);
 
@@ -278,6 +283,9 @@ void cure_queue::merge(cure_cluster * cluster1, cure_cluster * cluster2, const u
 		}
 	}
 
+	delete cluster1; cluster1 = NULL;
+	delete cluster2; cluster2 = NULL;
+
 	/* insert merged cluster */
 	insert_cluster(merged_cluster);
 
@@ -305,6 +313,8 @@ void cure_queue::insert_cluster(cure_cluster * inserted_cluster) {
 			return;
 		}
 	}
+
+	queue->push_back(inserted_cluster);
 }
 
 void cure_queue::remove_representative_points(cure_cluster * cluster) {
@@ -321,8 +331,14 @@ void cure_queue::insert_representative_points(cure_cluster * cluster) {
 
 
 
-cure::cure(const std::vector< std::vector<double> > * data, const unsigned int clusters_number, const unsigned int points_number, const double compression) {
-	queue = new cure_queue(data);
+cure::cure(const std::vector< std::vector<double> > * sample, const unsigned int clusters_number, const unsigned int points_number, const double level_compression) {
+	data = (std::vector< std::vector<double> > *) sample;
+
+	number_points = points_number;
+	number_clusters = clusters_number;
+	compression = level_compression;
+
+	queue = new cure_queue(sample);
 }
 
 cure::~cure() {
@@ -342,20 +358,23 @@ cure::~cure() {
 }
 
 void cure::process() {
-	while(queue->size() > number_clusters) {
+	unsigned int allocated_clusters = queue->size();
+	while(allocated_clusters > number_clusters) {
 		cure_cluster * cluster1 = *(queue->begin());
 		cure_cluster * cluster2 = cluster1->closest;
 
 		/* merge new cluster using these clusters */
 		queue->merge(cluster1, cluster2, number_points, compression);
+
+		allocated_clusters = queue->size();
 	}
 
 	/* prepare stardard representation of clusters */
 	clusters = new std::vector<std::vector<unsigned int> *>();
 	for (cure_queue::const_iterator cluster = queue->begin(); cluster != queue->end(); cluster++) {
-		std::vector<unsigned int> * standard_cluster = new std::vector<unsigned int>((*cluster)->points->size(), 0);
+		std::vector<unsigned int> * standard_cluster = new std::vector<unsigned int>();
 		for (std::vector<std::vector<double> * >::const_iterator point = (*cluster)->points->begin(); point != (*cluster)->points->end(); point++) {
-			unsigned int index_point = (unsigned int) (&(*data->begin()) - *point);
+			unsigned int index_point = (unsigned int) (*point - &(*(data->begin())));
 			standard_cluster->push_back(index_point);
 		}
 
