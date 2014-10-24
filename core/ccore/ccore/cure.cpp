@@ -74,7 +74,7 @@ cure_queue::cure_queue(const std::vector< std::vector<double> > * data) {
 
 	for (cure_queue::const_iterator cluster = queue->begin(); cluster != queue->end(); cluster++) {
 		for (std::vector<std::vector<double> *>::const_iterator point = (*cluster)->rep->begin(); point != (*cluster)->rep->end(); point++) {
-			kdnode * node = tree->insert(*point, *cluster);
+			tree->insert(*point, *cluster);
 		}
 	}
 }

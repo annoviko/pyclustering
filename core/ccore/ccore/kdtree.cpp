@@ -1,8 +1,6 @@
 #include "kdtree.h"
 #include "support.h"
 
-#include <stdio.h>
-
 kdnode::kdnode(std::vector<double> * p_data, void * p_payload,  kdnode * p_left, kdnode * p_right, kdnode * p_parent, unsigned int disc) :
 	data(p_data), payload(p_payload), left(p_left), right(p_right), parent(p_parent), discriminator(disc)
 	{ }

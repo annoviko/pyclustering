@@ -55,11 +55,12 @@ def cure(data, number_cluster, number_represent_points = 5, compression = 0.5, c
         
         queue.remove(cluster1);
         queue.remove(cluster2);
+        
+        delete_represented_points(cluster1, tree);
+        delete_represented_points(cluster2, tree);
 
         merged_cluster = merge_clusters(cluster1, cluster2, number_represent_points, compression);
 
-        delete_represented_points(cluster1, tree);
-        delete_represented_points(cluster2, tree);
         insert_represented_points(merged_cluster, tree);
         
         merged_cluster.closest = queue[0];  # arbitrary cluster from queue

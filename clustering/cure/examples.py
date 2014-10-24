@@ -7,14 +7,17 @@ from samples.definitions import FCPS_SAMPLES;
 
 from clustering.cure import cure;
 
-def template_clustering(number_clusters, path, number_represent_points = 5, compression = 0.5, draw = True):
+def template_clustering(number_clusters, path, number_represent_points = 5, compression = 0.5, draw = True, ccore_flag = False):
     sample = read_sample(path);
-    (ticks, clusters) = timedcall(cure, sample, number_clusters, number_represent_points, compression);
+    (ticks, clusters) = timedcall(cure, sample, number_clusters, number_represent_points, compression, ccore_flag);
 
     print("Sample: ", path, "\t\tExecution time: ", ticks, "\n");
 
     if (draw is True):
-        draw_clusters(None, clusters);
+        if (ccore_flag is True):
+            draw_clusters(sample, clusters);
+        else:
+            draw_clusters(None, clusters);
 
 
 def cluster_sample1():
@@ -68,22 +71,16 @@ def cluster_atom():
     "Results of clustering is not so dramatically, but clusters are not allocated properly"
     template_clustering(2, FCPS_SAMPLES.SAMPLE_ATOM, 20, 0.2);
 
-def find_best_atom():
-    for represent in range(5, 20, 100):
-        for compression in range(0, 10, 1):
-            print("number of represent points: ", represent, ", compression: ", float(compression) / 10);
-            template_clustering(2, FCPS_SAMPLES.SAMPLE_ATOM, represent, float(compression) / 10);
 
-def experiment_execution_time():
-    template_clustering(3, FCPS_SAMPLES.SAMPLE_LSUN, draw = False);
-    template_clustering(6, FCPS_SAMPLES.SAMPLE_TARGET, 10, 0.3, draw = False);
-    template_clustering(2, FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, draw = False); 
-    template_clustering(2, FCPS_SAMPLES.SAMPLE_WING_NUT, 1, 1, draw = False);
-    template_clustering(2, FCPS_SAMPLES.SAMPLE_CHAINLINK, draw = False);
-    template_clustering(4, FCPS_SAMPLES.SAMPLE_TETRA, draw = False);
-    template_clustering(7, FCPS_SAMPLES.SAMPLE_HEPTA, draw = False);
+def experiment_execution_time(draw, ccore):
+    template_clustering(3, FCPS_SAMPLES.SAMPLE_LSUN, 5, 0.5, draw, ccore);
+    template_clustering(6, FCPS_SAMPLES.SAMPLE_TARGET, 10, 0.3, draw, ccore);
+    template_clustering(2, FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, 5, 0.5, draw, ccore); 
+    template_clustering(2, FCPS_SAMPLES.SAMPLE_WING_NUT, 1, 1, draw, ccore);
+    template_clustering(2, FCPS_SAMPLES.SAMPLE_CHAINLINK, 5, 0.5, draw, ccore);
+    template_clustering(4, FCPS_SAMPLES.SAMPLE_TETRA, 5, 0.5, draw, ccore);
+    template_clustering(7, FCPS_SAMPLES.SAMPLE_HEPTA, 5, 0.5, draw, ccore);
 
-# find_best_atom();
 
 cluster_sample1();
 cluster_sample2();
@@ -102,4 +99,5 @@ cluster_atom();
 cluster_engy_time();
 cluster_golf_ball();
 
-experiment_execution_time();
+experiment_execution_time(False, False);
+experiment_execution_time(True, True);

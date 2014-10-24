@@ -8,9 +8,9 @@ from clustering.cure import cure;
 from clustering.cure import create_queue;
 
 class Test(unittest.TestCase):
-    def template_cluster_allocation(self, path, cluster_sizes, number_cluster, number_represent_points = 5, compression = 0.5):
+    def template_cluster_allocation(self, path, cluster_sizes, number_cluster, number_represent_points = 5, compression = 0.5, ccore_flag = False):
         sample = read_sample(path);
-        clusters = cure(sample, number_cluster);
+        clusters = cure(sample, number_cluster, ccore = ccore_flag);
 
         obtained_cluster_sizes = [len(cluster) for cluster in clusters];
         
