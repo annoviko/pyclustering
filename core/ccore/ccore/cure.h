@@ -75,7 +75,7 @@ private:
 	* @param   data            - pointer to points.
 	*
 	***********************************************************************************************/
-	void create_queue(const std::vector< std::vector<double> * > * data);
+	void create_queue(const std::vector< std::vector<double> > * data);
 
 	void remove_representative_points(cure_cluster * cluster);
 
@@ -119,7 +119,7 @@ public:
 	* @param   data            - pointer to points.
 	*
 	***********************************************************************************************/
-	cure_queue(const std::vector< std::vector<double> * > * data);
+	cure_queue(const std::vector< std::vector<double> > * data);
 
 	/***********************************************************************************************
 	*
@@ -163,14 +163,19 @@ private:
 	unsigned int number_clusters;
 	double compression;
 
+	std::vector<std::vector<unsigned int> * >	* clusters;
+	std::vector<std::vector<double> >			* data;
+
 public:
-	cure(const std::vector<std::vector<double> * > * data, const unsigned int clusters_number, const unsigned int points_number, const double compression);
+	cure(const std::vector<std::vector<double> > * data, const unsigned int clusters_number, const unsigned int points_number, const double compression);
 
 	~cure(void);
 
 	void process(void);
 
-	const std::vector<std::vector<unsigned int> *> * const get_clusters(void) const;
+	inline const std::vector<std::vector<unsigned int> *> * const get_clusters(void) const {
+		return clusters;
+	}
 };
 
 #endif

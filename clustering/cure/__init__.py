@@ -8,6 +8,8 @@ from support import euclidean_distance;
 from support import euclidean_distance_sqrt;
 from support import draw_clusters;
 
+import core;
+
 class cure_cluster:   
     "Representation of CURE cluster."
     
@@ -28,15 +30,19 @@ class cure_cluster:
         return "%s, %s" % (self.distance, self.points);
         
 
-def cure(data, number_cluster, number_represent_points = 5, compression = 0.5):
+def cure(data, number_cluster, number_represent_points = 5, compression = 0.5, ccore = False):
     "Clustering algorithm CURE returns allocated clusters and noise that are consisted from input data."
     
     "(in) data                       - input data that is presented as list of points (objects), each point should be represented by list or tuple."
     "(in) number_cluster             - number of clusters that should be allocated."
     "(in) number_represent_points    - number of representation points for each cluster."
     "(in) compression                - coefficient defines level of shrinking of representation points toward the mean of the new created cluster after merging on each step."
+    "(in) ccore                      - if True than DLL CCORE (C++ solution) will be used for solving the problem."
     
     "Returns list of allocated clusters, each cluster contains indexes of objects in list of data."
+    
+    if (ccore is True):
+        return core.cure(data, number_cluster, number_represent_points, compression);
     
     queue = create_queue(data);     # queue
     tree = create_kdtree(queue);    # create k-d tree

@@ -4,6 +4,7 @@
 #include <limits>
 #include <set>
 
+
 /***********************************************************************************************
 *
 * @brief   Default constructor of cure cluster.
@@ -65,7 +66,7 @@ cure_queue::cure_queue(void) {
 * @param               - pointer to points.
 *
 ***********************************************************************************************/
-cure_queue::cure_queue(const std::vector< std::vector<double> * > * data) {
+cure_queue::cure_queue(const std::vector< std::vector<double> > * data) {
 	queue = new std::list<cure_cluster *>();
 	create_queue(data);
 
@@ -93,6 +94,11 @@ cure_queue::~cure_queue() {
 		delete queue;
 		queue = NULL;
 	}
+
+	if (tree != NULL) {
+		delete tree;
+		tree = NULL;
+	}
 }
 
 /***********************************************************************************************
@@ -102,9 +108,10 @@ cure_queue::~cure_queue() {
 * @param               - pointer to points.
 *
 ***********************************************************************************************/
-void cure_queue::create_queue(const std::vector< std::vector<double> * > * data) {
-	for (std::vector< std::vector<double> * >::const_iterator iter = data->begin(); iter != data->end(); iter++) {
-		cure_cluster * cluster = new cure_cluster(*iter);
+void cure_queue::create_queue(const std::vector< std::vector<double> > * data) {
+	for (std::vector< std::vector<double> >::const_iterator iter = data->begin(); iter != data->end(); iter++) {
+		cure_cluster * cluster = new cure_cluster((std::vector<double> *) &(*iter));
+		queue->push_back(cluster);
 	}
 
 	for (std::list<cure_cluster *>::iterator first_cluster = queue->begin(); first_cluster != queue->end(); first_cluster++) {
@@ -154,6 +161,16 @@ double cure_queue::get_distance(cure_cluster * cluster1, cure_cluster * cluster2
 	return distance;
 }
 
+/***********************************************************************************************
+*
+* @brief   Merge cure clusters in line with the rule of merging of cure algorithm.
+*
+* @param   cluster1            - pointer to cure cluster 1.
+* @param   cluster2            - pointer to cure cluster 2.
+*
+* @return  Return distance between clusters.
+*
+***********************************************************************************************/
 void cure_queue::merge(cure_cluster * cluster1, cure_cluster * cluster2, const unsigned int number_repr_points, const double compression) {
 	remove_representative_points(cluster1);
 	remove_representative_points(cluster2);
@@ -269,6 +286,9 @@ void cure_queue::merge(cure_cluster * cluster1, cure_cluster * cluster2, const u
 		remove_cluster(*cluster);
 		insert_cluster(*cluster);
 	}
+
+	delete relocation_request;
+	relocation_request = NULL;
 }
 
 /***********************************************************************************************
@@ -299,8 +319,26 @@ void cure_queue::insert_representative_points(cure_cluster * cluster) {
 	}
 }
 
-cure::cure(const std::vector< std::vector<double> * > * data, const unsigned int clusters_number, const unsigned int points_number, const double compression) {
+
+
+cure::cure(const std::vector< std::vector<double> > * data, const unsigned int clusters_number, const unsigned int points_number, const double compression) {
 	queue = new cure_queue(data);
+}
+
+cure::~cure() {
+	if (clusters != NULL) {
+		for (std::vector<std::vector<unsigned int> *>::const_iterator iter = clusters->begin(); iter != clusters->end(); iter++) {
+			delete (*iter);
+		}
+
+		delete clusters;
+		clusters = NULL;
+	}
+
+	if (queue != NULL) {
+		delete queue;
+		queue = NULL;
+	}
 }
 
 void cure::process() {
@@ -311,4 +349,19 @@ void cure::process() {
 		/* merge new cluster using these clusters */
 		queue->merge(cluster1, cluster2, number_points, compression);
 	}
+
+	/* prepare stardard representation of clusters */
+	clusters = new std::vector<std::vector<unsigned int> *>();
+	for (cure_queue::const_iterator cluster = queue->begin(); cluster != queue->end(); cluster++) {
+		std::vector<unsigned int> * standard_cluster = new std::vector<unsigned int>((*cluster)->points->size(), 0);
+		for (std::vector<std::vector<double> * >::const_iterator point = (*cluster)->points->begin(); point != (*cluster)->points->end(); point++) {
+			unsigned int index_point = (unsigned int) (&(*data->begin()) - *point);
+			standard_cluster->push_back(index_point);
+		}
+
+		clusters->push_back(standard_cluster);
+	}
+
+	delete queue;
+	queue = NULL;
 }

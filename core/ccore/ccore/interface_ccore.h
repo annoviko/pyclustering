@@ -57,6 +57,22 @@ extern "C" DECLARATION clustering_result * dbscan_algorithm(const data_represent
 
 /***********************************************************************************************
  *
+ * @brief   Clustering algorithm CURE returns allocated clusters.
+ *
+ * @param   (in) sample				- input data for clustering.
+ *          (in) number_clusters	- number of clusters that should be allocated.
+ *          (in) number_repr_points	- number of representation points for each cluster.
+ *          (in) compression        - coefficient defines level of shrinking of representation 
+ *                                    points toward the mean of the new created cluster after 
+ *                                    merging on each step.
+ *
+ * @return	Returns result of clustering - array of allocated clusters.
+ *
+ ***********************************************************************************************/
+extern "C" DECLARATION clustering_result * cure_algorithm(const data_representation * const sample, const unsigned int number_clusters, const unsigned int number_repr_points, const double compression);
+
+/***********************************************************************************************
+ *
  * @brief   Clustering hierarchical algorithm returns allocated clusters.
  *
  * @param   (in) sample				- input data for clustering.

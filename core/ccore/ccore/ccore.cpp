@@ -3,6 +3,7 @@
 #include <sstream>
 
 #include "dbscan.h"
+#include "cure.h"
 #include "hierarchical.h"
 #include "hsyncnet.h"
 #include "kmeans.h"
@@ -90,6 +91,35 @@ clustering_result * dbscan_algorithm(const data_representation * const sample, c
 	clustering_result * result = create_clustering_result(clusters_with_noise);
 
 	delete clusters_with_noise; clusters_with_noise = NULL;
+	delete solver; solver = NULL;
+	delete dataset; dataset = NULL;
+
+	return result;
+}
+
+/***********************************************************************************************
+ *
+ * @brief   Clustering algorithm CURE returns allocated clusters.
+ *
+ * @param   (in) sample				- input data for clustering.
+ *          (in) number_clusters	- number of clusters that should be allocated.
+ *          (in) number_repr_points	- number of representation points for each cluster.
+ *          (in) compression        - coefficient defines level of shrinking of representation 
+ *                                    points toward the mean of the new created cluster after 
+ *                                    merging on each step.
+ *
+ * @return	Returns result of clustering - array of allocated clusters.
+ *
+ ***********************************************************************************************/
+clustering_result * cure_algorithm(const data_representation * const sample, const unsigned int number_clusters, const unsigned int number_repr_points, const double compression) {
+	std::vector<std::vector<double> > * dataset = read_sample(sample);
+
+	cure * solver = new cure(dataset, number_clusters, number_repr_points, compression);
+	solver->process();
+
+	const std::vector<std::vector<unsigned int> *> * const clusters = solver->get_clusters();
+	clustering_result * result = create_clustering_result(clusters);
+
 	delete solver; solver = NULL;
 	delete dataset; dataset = NULL;
 

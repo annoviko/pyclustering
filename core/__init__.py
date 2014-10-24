@@ -120,6 +120,16 @@ def dbscan(sample, eps, min_neighbors, return_noise = False):
     else:
         return list_of_clusters;
 
+def cure(sample, number_clusters, number_represent_points, compression):    
+    pointer_data = create_pointer_data(sample);
+    
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    result = ccore.cure_algorithm(pointer_data, c_uint(number_clusters), c_uint(number_represent_points), c_double(compression));
+    
+    list_of_clusters = extract_clusters(result);
+    
+    ccore.free_clustering_result(result);
+    return list_of_clusters;
 
 def hierarchical(sample, number_clusters):
     "Clustering algorithm hierarchical returns allocated clusters and noise that are consisted from input data. Calculation is performed via CCORE."

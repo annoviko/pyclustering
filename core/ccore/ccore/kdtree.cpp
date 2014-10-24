@@ -65,6 +65,7 @@ kdtree::~kdtree(void) {
 kdnode * kdtree::insert(std::vector<double> * point, void * payload) {
 	if (root == NULL) {
 		kdnode * node = new kdnode(point, payload, NULL, NULL, NULL, 0);
+		root = node;
 		return node;
 	}
 	else {
@@ -131,6 +132,7 @@ void kdtree::remove(std::vector<double> * point) {
 void kdtree::remove(kdnode * node_for_remove) {
 	kdnode * parent = node_for_remove->get_parent();
 	kdnode * node = recursive_remove(node_for_remove);
+
 	if (parent == NULL) {
 		root = node;
 
