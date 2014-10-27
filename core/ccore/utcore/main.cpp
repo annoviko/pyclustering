@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-TEST(IntAssetion, CommonTest) { }
+#include "utest-kdtree.h"
 
 int main(int argc, char *argv[]) {
 	::testing::InitGoogleTest(&argc, argv);

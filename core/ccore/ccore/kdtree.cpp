@@ -230,7 +230,7 @@ kdnode * kdtree::find_minimal_node(kdnode * node, unsigned int discriminator) {
 	for (unsigned int index_children = 0; index_children < children->size(); index_children++) {
 		kdnode * candidate = find_minimal_node((*children)[index_children], discriminator);
 
-		if (candidate->get_value(discriminator) < minimal_node->get_value(discriminator)) {
+		if (candidate->get_value(discriminator) <= minimal_node->get_value(discriminator)) {
 			minimal_node = candidate;
 		}
 	}
@@ -270,7 +270,7 @@ kdnode * kdtree::find_node(std::vector<double> * point, kdnode * node) {
 
 	while(true) {
 		if (*cur_node <= *point) {
-			if (*cur_node == *point) {
+			if (cur_node->get_data() == point) {
 				req_node = cur_node;
 				break;
 			}
@@ -279,7 +279,7 @@ kdnode * kdtree::find_node(std::vector<double> * point, kdnode * node) {
 				cur_node = cur_node->get_right();
 			}
 			else {
-				throw std::runtime_error("Structure of KD Tree is corrupted");
+				return NULL;
 			}
 		}
 		else {
@@ -287,7 +287,7 @@ kdnode * kdtree::find_node(std::vector<double> * point, kdnode * node) {
 				cur_node = cur_node->get_left();
 			}
 			else {
-				throw std::runtime_error("Structure of KD Tree is corrupted");
+				return NULL;
 			}
 		}
 	}
