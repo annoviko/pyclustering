@@ -123,6 +123,9 @@ void kdtree::remove(std::vector<double> * point) {
 	}
 
 	remove(node_for_remove);
+
+	delete node_for_remove;
+	node_for_remove = NULL;
 }
 
 /***********************************************************************************************
