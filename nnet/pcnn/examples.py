@@ -104,8 +104,8 @@ def segmentation_double_t():
     params.W = 1.0;
     params.M = 1.0;
     
-    ensebles = template_dynamic_pcnn(32 * 32, 28,  image, params, conn_type.GRID_EIGHT, False);
-    draw_image_segments(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE10, ensebles);
+    ensembles = template_dynamic_pcnn(32 * 32, 28,  image, params, conn_type.GRID_EIGHT, False);
+    draw_image_segments(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE10, ensembles);
 
 
 one_neuron_unstimulated();
