@@ -319,6 +319,33 @@ kdnode * kdtree::find_node(std::vector<double> * point, kdnode * node) {
 	return req_node;
 }
 
+/***********************************************************************************************
+*
+* @brief   Traverse tree from specified node and returns number of nodes in subtree.
+*
+* @param   node               - pointer to node of tree.
+*
+* @return  Returns number of nodes in subtree.
+*
+***********************************************************************************************/
+unsigned int kdtree::traverse(kdnode * node) {
+	unsigned int number_nodes = 0;
+
+	if (node != NULL) {
+		if (node->get_left() != NULL) {
+			number_nodes += traverse(node->get_left());
+		}
+
+		if (node->get_right() != NULL) {
+			number_nodes += traverse(node->get_right());
+		}
+
+		number_nodes++;
+	}
+
+	return number_nodes;
+}
+
 
 /***********************************************************************************************
 *

@@ -188,6 +188,17 @@ public:
 
 	/***********************************************************************************************
 	*
+	* @brief   Traverse tree from specified node and returns number of nodes in subtree.
+	*
+	* @param   node               - pointer to node of tree.
+	*
+	* @return  Returns number of nodes in subtree.
+	*
+	***********************************************************************************************/
+	unsigned int kdtree::traverse(kdnode * node);
+
+	/***********************************************************************************************
+	*
 	* @brief   Return root of the tree.
 	*
 	* @return  Returns pointer to root of the tree.
