@@ -49,7 +49,29 @@ kdtree::kdtree(const std::vector< std::vector<double> *> * data, const std::vect
 *
 ***********************************************************************************************/
 kdtree::~kdtree(void) {
-	/* traverse tree and remove each node */
+	if (root != NULL) {
+		recursive_destroy(root);
+	}
+}
+
+/***********************************************************************************************
+*
+* @brief   Recursive destroy tree (used by destructor).
+*
+* @param   node            - node that should be destroyed.
+*
+***********************************************************************************************/
+void kdtree::recursive_destroy(kdnode * node) {
+	if (node->get_right() != NULL) {
+		recursive_destroy(node->get_right());
+	}
+	
+	if (node->get_left() != NULL) {
+		recursive_destroy(node->get_left());
+	}
+
+	delete node;
+	node = NULL;
 }
 
 /***********************************************************************************************
@@ -267,6 +289,8 @@ kdnode * kdtree::find_node(std::vector<double> * point) {
 kdnode * kdtree::find_node(std::vector<double> * point, kdnode * node) {
 	kdnode * req_node = NULL;
 	kdnode * cur_node = node;
+
+	if (node == NULL) { return NULL; }
 
 	while(true) {
 		if (*cur_node <= *point) {

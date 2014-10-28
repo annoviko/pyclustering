@@ -77,8 +77,22 @@ private:
 	***********************************************************************************************/
 	void create_queue(const std::vector< std::vector<double> > * data);
 
+	/***********************************************************************************************
+	*
+	* @brief   Remove representative points of specified cluster from KD Tree.
+	*
+	* @param   cluster             - pointer to points.
+	*
+	***********************************************************************************************/
 	void remove_representative_points(cure_cluster * cluster);
 
+	/***********************************************************************************************
+	*
+	* @brief   Insert representative points of specified cluster to KD tree.
+	*
+	* @param   cluster             - pointer to points.
+	*
+	***********************************************************************************************/
 	void insert_representative_points(cure_cluster * cluster);
 
 	/***********************************************************************************************
@@ -140,6 +154,16 @@ public:
 	***********************************************************************************************/
 	double get_distance(cure_cluster * cluster1, cure_cluster * cluster2);
 
+	/***********************************************************************************************
+	*
+	* @brief   Merge cure clusters in line with the rule of merging of cure algorithm.
+	*
+	* @param   cluster1            - pointer to cure cluster 1.
+	* @param   cluster2            - pointer to cure cluster 2.
+	* @param   number_repr_points  - number of representative points for merged cluster.
+	* @param   compression         - level of compression for calculation representative points.
+	*
+	***********************************************************************************************/
 	void merge(cure_cluster * cluster1, cure_cluster * cluster2, const unsigned int number_repr_points, const double compression);
 
 	inline iterator begin(void) { return queue->begin(); }
@@ -154,7 +178,11 @@ public:
 };
 
 
-
+/***********************************************************************************************
+*
+* @brief   CURE algorithm.
+*
+***********************************************************************************************/
 class cure {
 private:
 	cure_queue * queue;
@@ -167,10 +195,32 @@ private:
 	std::vector<std::vector<double> >			* data;
 
 public:
+	/***********************************************************************************************
+	*
+	* @brief   Constructor of CURE solver (algorithm representer).
+	*
+	* @param   sample              - pointer to input data for clustering.
+	* @param   clusters_number     - number of clusters that should be allocated.
+	* @param   points_number       - number of representative points in each cluster.
+	* @param   level_compression   - level of copression for calculation new representative points
+	*                                for merged cluster.
+	*
+	***********************************************************************************************/
 	cure(const std::vector<std::vector<double> > * sample, const unsigned int clusters_number, const unsigned int points_number, const double level_compression);
 
+	/***********************************************************************************************
+	*
+	* @brief   Default destructor.
+	*
+	***********************************************************************************************/
 	~cure(void);
 
+	/***********************************************************************************************
+	*
+	* @brief   Performs cluster analysis of input data. Results of clustering can be obtained
+	*          via corresponding get method.
+	*
+	***********************************************************************************************/
 	void process(void);
 
 	inline const std::vector<std::vector<unsigned int> *> * const get_clusters(void) const {

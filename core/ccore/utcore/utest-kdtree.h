@@ -111,9 +111,9 @@ TEST_F(utest_kdtree, insert_remove_node) {
 		tree->insert(point, payload);
 
 		kdnode * node = tree->find_node(point);
-		ASSERT_TRUE(node != NULL);
-		ASSERT_TRUE(point == node->get_data());
-		ASSERT_TRUE(payload == node->get_payload());
+		ASSERT_TRUE(NULL != node);
+		ASSERT_EQ(point, node->get_data());
+		ASSERT_EQ(payload, node->get_payload());
 	}
 
 
@@ -121,13 +121,41 @@ TEST_F(utest_kdtree, insert_remove_node) {
 		std::vector<double> * point = (*points)[index];
 		tree->remove(point);
 
+		kdnode * node = tree->find_node((*points)[index]);
+		ASSERT_EQ(NULL, node);
+
 		for (unsigned int next_index = index + 1; next_index < 7; next_index++) {
-			kdnode * node = tree->find_node( (*points)[next_index] );
+			node = tree->find_node( (*points)[next_index] );
 			std::vector<double> * point = (*points)[next_index];
 
-			ASSERT_TRUE(node->get_data() == point);
-			ASSERT_TRUE(node->get_payload() == &test_sample_payload[next_index]);
+			ASSERT_EQ(point, node->get_data());
+			ASSERT_EQ(&test_sample_payload[next_index], node->get_payload());
 		}
+	}
+}
+
+TEST_F(utest_kdtree, find_without_insertion) {
+	double test_sample_point[7][2] = { {4, 3}, {3, 4}, {5, 8}, {3, 3}, {3, 9}, {6, 4}, {5, 9} };
+
+	for (unsigned int index = 0; index < 7; index++) {
+		std::vector<double> * point = CreatePoint((double *) &test_sample_point[index], 2);
+
+		kdnode * node = tree->find_node(point);
+		ASSERT_EQ(NULL, node);
+	}
+}
+
+TEST_F(utest_kdtree, remove_long_branch) {
+	double test_sample_point[5][2] = { {5, 5}, {6, 5}, {6, 6}, {7, 6}, {7, 7} };
+
+	Initialization((double *) &test_sample_point, 2, 5);
+
+	for (unsigned int index = 0; index < 5; index++) {
+		std::vector<double> * point = (*points)[index];
+		tree->remove(point);
+
+		kdnode * node = tree->find_node((*points)[index]);
+		ASSERT_EQ(NULL, node);
 	}
 }
 

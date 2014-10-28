@@ -89,6 +89,15 @@ private:
 
 	/***********************************************************************************************
 	*
+	* @brief   Recursive destroy tree (used by destructor).
+	*
+	* @param   node            - node that should be destroyed.
+	*
+	***********************************************************************************************/
+	void recursive_destroy(kdnode * node);
+
+	/***********************************************************************************************
+	*
 	* @brief   Find minimal node in subtree in line with specified discriminator.
 	*
 	* @param   node            - root of subtree where searching should be performed.

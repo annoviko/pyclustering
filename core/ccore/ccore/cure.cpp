@@ -166,8 +166,8 @@ double cure_queue::get_distance(cure_cluster * cluster1, cure_cluster * cluster2
 *
 * @param   cluster1            - pointer to cure cluster 1.
 * @param   cluster2            - pointer to cure cluster 2.
-*
-* @return  Return distance between clusters.
+* @param   number_repr_points  - number of representative points for merged cluster.
+* @param   compression         - level of compression for calculation representative points.
 *
 ***********************************************************************************************/
 void cure_queue::merge(cure_cluster * cluster1, cure_cluster * cluster2, const unsigned int number_repr_points, const double compression) {
@@ -317,12 +317,26 @@ void cure_queue::insert_cluster(cure_cluster * inserted_cluster) {
 	queue->push_back(inserted_cluster);
 }
 
+/***********************************************************************************************
+*
+* @brief   Remove representative points of specified cluster from KD Tree.
+*
+* @param   cluster             - pointer to points.
+*
+***********************************************************************************************/
 void cure_queue::remove_representative_points(cure_cluster * cluster) {
 	for (std::vector<std::vector<double> *>::const_iterator point = cluster->rep->begin(); point != cluster->rep->end(); point++) {
 		tree->remove(*point);
 	}
 }
 
+/***********************************************************************************************
+*
+* @brief   Insert representative points of specified cluster to KD tree.
+*
+* @param   cluster             - pointer to points.
+*
+***********************************************************************************************/
 void cure_queue::insert_representative_points(cure_cluster * cluster) {
 	for (std::vector<std::vector<double> *>::iterator point = cluster->rep->begin(); point != cluster->rep->end(); point++) {
 		tree->insert(*point, cluster);
@@ -331,6 +345,17 @@ void cure_queue::insert_representative_points(cure_cluster * cluster) {
 
 
 
+/***********************************************************************************************
+*
+* @brief   Constructor of CURE solver (algorithm representer).
+*
+* @param   sample              - pointer to input data for clustering.
+* @param   clusters_number     - number of clusters that should be allocated.
+* @param   points_number       - number of representative points in each cluster.
+* @param   level_compression   - level of copression for calculation new representative points
+*                                for merged cluster.
+*
+***********************************************************************************************/
 cure::cure(const std::vector< std::vector<double> > * sample, const unsigned int clusters_number, const unsigned int points_number, const double level_compression) {
 	data = (std::vector< std::vector<double> > *) sample;
 
@@ -341,6 +366,11 @@ cure::cure(const std::vector< std::vector<double> > * sample, const unsigned int
 	queue = new cure_queue(sample);
 }
 
+/***********************************************************************************************
+*
+* @brief   Default destructor.
+*
+***********************************************************************************************/
 cure::~cure() {
 	if (clusters != NULL) {
 		for (std::vector<std::vector<unsigned int> *>::const_iterator iter = clusters->begin(); iter != clusters->end(); iter++) {
@@ -357,6 +387,12 @@ cure::~cure() {
 	}
 }
 
+/***********************************************************************************************
+*
+* @brief   Performs cluster analysis of input data. Results of clustering can be obtained
+*          via corresponding get method.
+*
+***********************************************************************************************/
 void cure::process() {
 	unsigned int allocated_clusters = queue->size();
 	while(allocated_clusters > number_clusters) {
