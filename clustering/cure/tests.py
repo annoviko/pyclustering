@@ -51,6 +51,13 @@ class Test(unittest.TestCase):
         self.template_cluster_allocation(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, [399, 401], 2, 5, 0.5, True);
 
 
+    def testOneClusterAllocationSample1(self):
+        self.template_cluster_allocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [10], 1);
+        
+    def testOneClusterAllocationSample1ByCore(self):
+        self.template_cluster_allocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [10], 1, 5, 0.5, True);
+
+
     def template_queue_creation(self, path):
         sample = read_sample(path);
         queue = create_queue(sample);
