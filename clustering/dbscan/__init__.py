@@ -1,6 +1,5 @@
-from support import euclidean_distance;
+from support import euclidean_distance, euclidean_distance_sqrt;
 from support import read_sample;
-from support import draw_clusters;
 
 import core;
 
@@ -19,6 +18,8 @@ def dbscan(data, eps, min_neighbors, return_noise = False, ccore = False):
     if (ccore is True):
         return core.dbscan(data, eps, min_neighbors, return_noise);
     
+    sqrt_eps = eps * eps;   # Fast mode
+    
     noise = list();
     clusters = list();
     
@@ -28,7 +29,8 @@ def dbscan(data, eps, min_neighbors, return_noise = False, ccore = False):
     for i in range(0, len(data)):
         if (visited[i] == False):
             
-            cluster = expand_cluster(data, visited, belong, i, eps, min_neighbors);
+            # cluster = expand_cluster(data, visited, belong, i, eps, min_neighbors);       # Slow mode
+            cluster = expand_cluster(data, visited, belong, i, sqrt_eps, min_neighbors);    # Fast mode
             if (cluster != None):
                 clusters.append(cluster);
             else:
@@ -88,4 +90,5 @@ def neighbor_indexes(data, point, eps):
     "(in) eps         - connectivity radius between points, points may be connected if distance between them less then the radius."
     
     "Return list of indexes of neighbors in line the connectivity radius."
-    return [i for i in range(0, len(data)) if euclidean_distance(data[point], data[i]) <= eps and data[i] != data[point]];
+    # return [i for i in range(0, len(data)) if euclidean_distance(data[point], data[i]) <= eps and data[i] != data[point]];    # Slow mode
+    return [i for i in range(0, len(data)) if euclidean_distance_sqrt(data[point], data[i]) <= eps and data[i] != data[point]]; # Fast mode
