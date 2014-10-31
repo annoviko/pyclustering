@@ -7,6 +7,7 @@ class SIMPLE_SAMPLES:
     SAMPLE_SIMPLE3          = samples.__path__[0] + os.sep + "SampleSimple3.txt";
     SAMPLE_SIMPLE4          = samples.__path__[0] + os.sep + "SampleSimple4.txt";
     SAMPLE_SIMPLE5          = samples.__path__[0] + os.sep + "SampleSimple5.txt";
+    SAMPLE_SIMPLE6          = samples.__path__[0] + os.sep + "SampleSimple6.txt";
     SAMPLE_ELONGATE         = samples.__path__[0] + os.sep + "SampleElongate.txt";
 
 class FCPS_SAMPLES:
