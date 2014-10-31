@@ -73,7 +73,7 @@ def cluster_atom():
 
 
 def experiment_execution_time(draw, ccore):
-    template_clustering(3, FCPS_SAMPLES.SAMPLE_LSUN, 5, 0.5, draw, ccore);
+    template_clustering(3, FCPS_SAMPLES.SAMPLE_LSUN, 5, 0.4, draw, ccore);
     template_clustering(6, FCPS_SAMPLES.SAMPLE_TARGET, 10, 0.3, draw, ccore);
     template_clustering(2, FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, 5, 0.5, draw, ccore); 
     template_clustering(2, FCPS_SAMPLES.SAMPLE_WING_NUT, 1, 1, draw, ccore);
@@ -98,6 +98,6 @@ cluster_tetra();
 cluster_atom();
 cluster_engy_time();
 cluster_golf_ball();
- 
+    
 experiment_execution_time(False, False);
 experiment_execution_time(True, True);
