@@ -44,6 +44,7 @@ Clustering algorithms:
 - Hierarchical [Python, C++]
 - HSyncNet [Python, C++]
 - K-Means [Python, C++]
+- OPTICS [Python]
 - ROCK [Python, C++]
 - SyncNet [Python, C++]
 - SyncSom [Python]

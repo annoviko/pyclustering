@@ -9,8 +9,14 @@ from samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
 class Test(unittest.TestCase):
     def templateClusteringResults(self, path, radius, neighbors, expected_length_clusters, ccore):
         sample = read_sample(path);
-        clusters = optics(sample, radius, neighbors);
         
+        optics_instance = optics(sample, radius, neighbors);
+        optics_instance.process();
+        
+        clusters = optics_instance.get_clusters();
+        noise = optics_instance.get_noise();
+        
+        assert sum([len(cluster) for cluster in clusters]) + len(noise) == len(sample);
         assert sum([len(cluster) for cluster in clusters]) == sum(expected_length_clusters);
         assert sorted([len(cluster) for cluster in clusters]) == expected_length_clusters;
     
@@ -31,6 +37,7 @@ class Test(unittest.TestCase):
         
     def testClusteringHepta(self):
         self.templateClusteringResults(FCPS_SAMPLES.SAMPLE_HEPTA, 1, 3, [30, 30, 30, 30, 30, 30, 32], False); 
+    
     
 if __name__ == "__main__":
     unittest.main();
