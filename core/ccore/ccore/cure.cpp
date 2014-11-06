@@ -10,7 +10,7 @@
 * @brief   Default constructor of cure cluster.
 *
 ***********************************************************************************************/
-cure_cluster::cure_cluster(void) : closest(NULL), distance_closest(0), mean(NULL) {
+cure_cluster::cure_cluster(void) : closest(nullptr), distance_closest(0), mean(nullptr) {
 	points = new std::vector< std::vector<double> * >();
 	rep = new std::vector< std::vector<double> * >();
 }
@@ -20,7 +20,7 @@ cure_cluster::cure_cluster(void) : closest(NULL), distance_closest(0), mean(NULL
 * @brief   Default constructor of cure cluster that corresponds to specified point.
 *
 ***********************************************************************************************/
-cure_cluster::cure_cluster(std::vector<double> * point) : closest(NULL), distance_closest(0) {
+cure_cluster::cure_cluster(std::vector<double> * point) : closest(nullptr), distance_closest(0) {
 	mean = new std::vector<double>(point->size(), 0);
 
 	points = new std::vector< std::vector<double> * >(1, point);
@@ -35,16 +35,16 @@ cure_cluster::cure_cluster(std::vector<double> * point) : closest(NULL), distanc
 *
 ***********************************************************************************************/
 cure_cluster::~cure_cluster() {
-	if (mean != NULL) {
+	if (mean != nullptr) {
 		delete mean;
-		mean = NULL;
+		mean = nullptr;
 	}
 
 	delete points;	/* only storage, we are not owners of points */
-	points = NULL;
+	points = nullptr;
 
 	delete rep;		/* only storage, we are not owners of points */
-	rep = NULL;
+	rep = nullptr;
 }
 
 
@@ -85,19 +85,19 @@ cure_queue::cure_queue(const std::vector< std::vector<double> > * data) {
 *
 ***********************************************************************************************/
 cure_queue::~cure_queue() {
-	if (queue != NULL) {
+	if (queue != nullptr) {
 		for (std::list<cure_cluster *>::iterator cluster = queue->begin(); cluster != queue->end(); cluster++) {
 			delete *cluster;
-			*cluster = NULL;
+			*cluster = nullptr;
 		}
 
 		delete queue;
-		queue = NULL;
+		queue = nullptr;
 	}
 
-	if (tree != NULL) {
+	if (tree != nullptr) {
 		delete tree;
-		tree = NULL;
+		tree = nullptr;
 	}
 }
 
@@ -116,7 +116,7 @@ void cure_queue::create_queue(const std::vector< std::vector<double> > * data) {
 
 	for (std::list<cure_cluster *>::iterator first_cluster = queue->begin(); first_cluster != queue->end(); first_cluster++) {
 		double minimal_distance = std::numeric_limits<double>::max();
-		cure_cluster * closest_cluster = NULL;
+		cure_cluster * closest_cluster = nullptr;
 
 		for (std::list<cure_cluster *>::iterator second_cluster = queue->begin(); second_cluster != queue->end(); second_cluster++) {
 			if (*first_cluster != *second_cluster) {
@@ -190,7 +190,7 @@ void cure_queue::merge(cure_cluster * cluster1, cure_cluster * cluster2, const u
 	
 	for (unsigned int index = 0; index < number_repr_points; index++) {
 		double maximal_distance = 0;
-		std::vector<double> * maximal_point = NULL;
+		std::vector<double> * maximal_point = nullptr;
 
 		for (std::vector<std::vector<double> *>::const_iterator point = merged_cluster->points->begin(); point != merged_cluster->points->end(); point++) {
 			double minimal_distance = 0;
@@ -222,7 +222,7 @@ void cure_queue::merge(cure_cluster * cluster1, cure_cluster * cluster2, const u
 	}
 
 	delete temporary;
-	temporary = NULL;
+	temporary = nullptr;
 
 	merged_cluster->closest = *(queue->begin());
 	merged_cluster->distance_closest = get_distance(merged_cluster, merged_cluster->closest);
@@ -245,7 +245,7 @@ void cure_queue::merge(cure_cluster * cluster1, cure_cluster * cluster2, const u
 		if ( ((*cluster)->closest == cluster1) || ((*cluster)->closest == cluster2) ) {
 			/* If previous distance was less then distance to new cluster then nearest cluster should be found in the tree. */
 			if ((*cluster)->distance_closest < distance) {
-				cure_cluster * nearest_cluster = NULL;
+				cure_cluster * nearest_cluster = nullptr;
 				double nearest_distance = std::numeric_limits<double>::max();
 
 				for (std::vector<std::vector<double> * >::iterator point = (*cluster)->rep->begin(); point != (*cluster)->rep->end(); point++) {
@@ -265,7 +265,7 @@ void cure_queue::merge(cure_cluster * cluster1, cure_cluster * cluster2, const u
 					delete nearest_node_distances;
 				}
 
-				if (nearest_cluster == NULL) {
+				if (nearest_cluster == nullptr) {
 					(*cluster)->closest = merged_cluster;
 					(*cluster)->distance_closest = distance;
 				}
@@ -283,8 +283,8 @@ void cure_queue::merge(cure_cluster * cluster1, cure_cluster * cluster2, const u
 		}
 	}
 
-	delete cluster1; cluster1 = NULL;
-	delete cluster2; cluster2 = NULL;
+	delete cluster1; cluster1 = nullptr;
+	delete cluster2; cluster2 = nullptr;
 
 	/* insert merged cluster */
 	insert_cluster(merged_cluster);
@@ -296,7 +296,7 @@ void cure_queue::merge(cure_cluster * cluster1, cure_cluster * cluster2, const u
 	}
 
 	delete relocation_request;
-	relocation_request = NULL;
+	relocation_request = nullptr;
 }
 
 /***********************************************************************************************
@@ -372,18 +372,18 @@ cure::cure(const std::vector< std::vector<double> > * sample, const unsigned int
 *
 ***********************************************************************************************/
 cure::~cure() {
-	if (clusters != NULL) {
+	if (clusters != nullptr) {
 		for (std::vector<std::vector<unsigned int> *>::const_iterator iter = clusters->begin(); iter != clusters->end(); iter++) {
 			delete (*iter);
 		}
 
 		delete clusters;
-		clusters = NULL;
+		clusters = nullptr;
 	}
 
-	if (queue != NULL) {
+	if (queue != nullptr) {
 		delete queue;
-		queue = NULL;
+		queue = nullptr;
 	}
 }
 
@@ -418,5 +418,5 @@ void cure::process() {
 	}
 
 	delete queue;
-	queue = NULL;
+	queue = nullptr;
 }

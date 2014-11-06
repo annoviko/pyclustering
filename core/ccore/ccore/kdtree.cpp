@@ -13,18 +13,18 @@ kdnode::~kdnode() { }
 * @brief   Default constructor.
 *
 ***********************************************************************************************/
-kdtree::kdtree() : root(NULL), dimension(0) { }
+kdtree::kdtree() : root(nullptr), dimension(0) { }
 
 /***********************************************************************************************
 *
 * @brief   Constructor of kd tree with pre-defined information.
 *
 * @param   data               - coordinates that describe nodes in tree.
-* @param   payloads           - payloads of nodes (can be NULL if it's not required).
+* @param   payloads           - payloads of nodes (can be nullptr if it's not required).
 *
 ***********************************************************************************************/
 kdtree::kdtree(const std::vector< std::vector<double> *> * data, const std::vector<void *> * payloads) {
-	root = NULL;
+	root = nullptr;
 	dimension = (*(*data)[0]).size();
 
 	if (payloads) {
@@ -38,7 +38,7 @@ kdtree::kdtree(const std::vector< std::vector<double> *> * data, const std::vect
 	}
 	else {
 		for (unsigned int index = 0; index < data->size(); index++) {
-			insert((*data)[index], NULL);
+			insert((*data)[index], nullptr);
 		}
 	}
 }
@@ -49,7 +49,7 @@ kdtree::kdtree(const std::vector< std::vector<double> *> * data, const std::vect
 *
 ***********************************************************************************************/
 kdtree::~kdtree(void) {
-	if (root != NULL) {
+	if (root != nullptr) {
 		recursive_destroy(root);
 	}
 }
@@ -62,16 +62,16 @@ kdtree::~kdtree(void) {
 *
 ***********************************************************************************************/
 void kdtree::recursive_destroy(kdnode * node) {
-	if (node->get_right() != NULL) {
+	if (node->get_right() != nullptr) {
 		recursive_destroy(node->get_right());
 	}
 	
-	if (node->get_left() != NULL) {
+	if (node->get_left() != nullptr) {
 		recursive_destroy(node->get_left());
 	}
 
 	delete node;
-	node = NULL;
+	node = nullptr;
 }
 
 /***********************************************************************************************
@@ -79,14 +79,14 @@ void kdtree::recursive_destroy(kdnode * node) {
 * @brief   Insert new node in the tree.
 *
 * @param   point              - coordinates that describe node in tree.
-* @param   payload            - payloads of node (can be NULL if it's not required).
+* @param   payload            - payloads of node (can be nullptr if it's not required).
 *
 * @return  Pointer to added node in the tree.
 *
 ***********************************************************************************************/
 kdnode * kdtree::insert(std::vector<double> * point, void * payload) {
-	if (root == NULL) {
-		kdnode * node = new kdnode(point, payload, NULL, NULL, NULL, 0);
+	if (root == nullptr) {
+		kdnode * node = new kdnode(point, payload, nullptr, nullptr, nullptr, 0);
 
 		root = node;
 		dimension = node->get_data()->size();
@@ -99,13 +99,13 @@ kdnode * kdtree::insert(std::vector<double> * point, void * payload) {
 		while(true) {
 			/* If new node is greater or equal than current node then check right leaf */
 			if (*cur_node <= *point) {
-				if (cur_node->get_right() == NULL) {
+				if (cur_node->get_right() == nullptr) {
 					unsigned int discriminator = cur_node->get_discriminator() + 1;
 					if (discriminator >= dimension) {
 						discriminator = 0;
 					}
 
-					cur_node->set_right(new kdnode(point, payload, NULL, NULL, cur_node, discriminator));
+					cur_node->set_right(new kdnode(point, payload, nullptr, nullptr, cur_node, discriminator));
 					return cur_node->get_right();
 				}
 				else {
@@ -114,13 +114,13 @@ kdnode * kdtree::insert(std::vector<double> * point, void * payload) {
 			}
 			/* If new node is less than current then check left leaf */
 			else {
-				if (cur_node->get_left() == NULL) {
+				if (cur_node->get_left() == nullptr) {
 					unsigned int discriminator = cur_node->get_discriminator() + 1;
 					if (discriminator >= dimension) {
 						discriminator = 0;
 					}
 
-					cur_node->set_left(new kdnode(point, payload, NULL, NULL, cur_node, discriminator));
+					cur_node->set_left(new kdnode(point, payload, nullptr, nullptr, cur_node, discriminator));
 					return cur_node->get_left();
 				}
 				else {
@@ -140,14 +140,14 @@ kdnode * kdtree::insert(std::vector<double> * point, void * payload) {
 ***********************************************************************************************/
 void kdtree::remove(std::vector<double> * point) {
 	kdnode * node_for_remove = find_node(point);
-	if (node_for_remove == NULL) {
+	if (node_for_remove == nullptr) {
 		return;
 	}
 
 	remove(node_for_remove);
 
 	delete node_for_remove;
-	node_for_remove = NULL;
+	node_for_remove = nullptr;
 }
 
 /***********************************************************************************************
@@ -161,12 +161,12 @@ void kdtree::remove(kdnode * node_for_remove) {
 	kdnode * parent = node_for_remove->get_parent();
 	kdnode * node = recursive_remove(node_for_remove);
 
-	if (parent == NULL) {
+	if (parent == nullptr) {
 		root = node;
 
 		/* if tree is almost destroyed */
-		if (node != NULL) {
-			node->set_parent(NULL);
+		if (node != nullptr) {
+			node->set_parent(nullptr);
 		}
 	}
 	else {
@@ -192,16 +192,16 @@ void kdtree::remove(kdnode * node_for_remove) {
 *
 ***********************************************************************************************/
 kdnode * kdtree::recursive_remove(kdnode * node) {
-	if ( (node->get_right() == NULL) && (node->get_left() == NULL) ) {
-		return NULL;
+	if ( (node->get_right() == nullptr) && (node->get_left() == nullptr) ) {
+		return nullptr;
 	}
 
 	unsigned int discriminator = node->get_discriminator();
 
 	/* Check if only left branch exist */
-	if (node->get_right() == NULL) {
+	if (node->get_right() == nullptr) {
 		node->set_right(node->get_left());
-		node->set_left(NULL);
+		node->set_left(nullptr);
 	}
 
 	/* Find minimal node in line with coordinate that is defined by discriminator */
@@ -224,11 +224,11 @@ kdnode * kdtree::recursive_remove(kdnode * node) {
 	minimal_node->set_left(node->get_left());
 
 	/* Update parent for successors of previous parent */
-	if (minimal_node->get_right() != NULL) {
+	if (minimal_node->get_right() != nullptr) {
 		minimal_node->get_right()->set_parent(minimal_node);
 	}
 
-	if (minimal_node->get_left() != NULL) {
+	if (minimal_node->get_left() != nullptr) {
 		minimal_node->get_left()->set_parent(minimal_node);
 	}
 
@@ -258,7 +258,7 @@ kdnode * kdtree::find_minimal_node(kdnode * node, unsigned int discriminator) {
 	}
 
 	delete children;
-	children = NULL;
+	children = nullptr;
 
 	return minimal_node;
 }
@@ -287,10 +287,10 @@ kdnode * kdtree::find_node(std::vector<double> * point) {
 *
 ***********************************************************************************************/
 kdnode * kdtree::find_node(std::vector<double> * point, kdnode * node) {
-	kdnode * req_node = NULL;
+	kdnode * req_node = nullptr;
 	kdnode * cur_node = node;
 
-	if (node == NULL) { return NULL; }
+	if (node == nullptr) { return nullptr; }
 
 	while(true) {
 		if (*cur_node <= *point) {
@@ -299,19 +299,19 @@ kdnode * kdtree::find_node(std::vector<double> * point, kdnode * node) {
 				break;
 			}
 
-			if (cur_node->get_right() != NULL) {
+			if (cur_node->get_right() != nullptr) {
 				cur_node = cur_node->get_right();
 			}
 			else {
-				return NULL;
+				return nullptr;
 			}
 		}
 		else {
-			if (cur_node->get_left() != NULL) {
+			if (cur_node->get_left() != nullptr) {
 				cur_node = cur_node->get_left();
 			}
 			else {
-				return NULL;
+				return nullptr;
 			}
 		}
 	}
@@ -331,12 +331,12 @@ kdnode * kdtree::find_node(std::vector<double> * point, kdnode * node) {
 unsigned int kdtree::traverse(kdnode * node) {
 	unsigned int number_nodes = 0;
 
-	if (node != NULL) {
-		if (node->get_left() != NULL) {
+	if (node != nullptr) {
+		if (node->get_left() != nullptr) {
 			number_nodes += traverse(node->get_left());
 		}
 
-		if (node->get_right() != NULL) {
+		if (node->get_right() != nullptr) {
 			number_nodes += traverse(node->get_right());
 		}
 
@@ -352,7 +352,7 @@ unsigned int kdtree::traverse(kdnode * node) {
 * @brief   Default constructor. Search will not be performed until it's initialized.
 *
 ***********************************************************************************************/
-kdtree_searcher::kdtree_searcher() : distance(0), sqrt_distance(0), initial_node(NULL), search_point(NULL) { }
+kdtree_searcher::kdtree_searcher() : distance(0), sqrt_distance(0), initial_node(nullptr), search_point(nullptr) { }
 
 /***********************************************************************************************
 *
@@ -360,14 +360,14 @@ kdtree_searcher::kdtree_searcher() : distance(0), sqrt_distance(0), initial_node
 *
 ***********************************************************************************************/
 kdtree_searcher::~kdtree_searcher() {
-	if (nodes_distance != NULL) {
+	if (nodes_distance != nullptr) {
 		delete nodes_distance;
-		nodes_distance = NULL;
+		nodes_distance = nullptr;
 	}
 
-	if (nearest_nodes != NULL) {
+	if (nearest_nodes != nullptr) {
 		delete nearest_nodes;
-		nearest_nodes = NULL;
+		nearest_nodes = nullptr;
 	}
 }
 
@@ -407,7 +407,7 @@ void kdtree_searcher::initialize(std::vector<double> * point, kdnode * node, con
 *
 ***********************************************************************************************/
 void kdtree_searcher::prepare_storages() {
-	if (nodes_distance == NULL) {
+	if (nodes_distance == nullptr) {
 		nodes_distance = new std::vector<double>();
 	}
 
@@ -425,13 +425,13 @@ void kdtree_searcher::recursive_nearest_nodes(kdnode * node) {
 	double minimum = node->get_value() - distance;
 	double maximum = node->get_value() + distance;
 
-	if (node->get_right() != NULL) {
+	if (node->get_right() != nullptr) {
 		if ((*search_point)[node->get_discriminator()] >= minimum) {
 			recursive_nearest_nodes(node->get_right());
 		}
 	}
 
-	if (node->get_left() != NULL) {
+	if (node->get_left() != nullptr) {
 		if ((*search_point)[node->get_discriminator()] < maximum) {
 			recursive_nearest_nodes(node->get_left());
 		}
@@ -452,7 +452,7 @@ void kdtree_searcher::recursive_nearest_nodes(kdnode * node) {
 *
 ***********************************************************************************************/
 std::vector<kdnode *> * kdtree_searcher::find_nearest_nodes(std::vector<double> * distances) {
-	if (distances != NULL) {
+	if (distances != nullptr) {
 		nodes_distance = distances;
 	}
 
@@ -462,15 +462,15 @@ std::vector<kdnode *> * kdtree_searcher::find_nearest_nodes(std::vector<double> 
 
 	recursive_nearest_nodes(initial_node);
 
-	nearest_nodes = NULL; /* application responds for the vector */
+	nearest_nodes = nullptr; /* application responds for the vector */
 
-	if (distances != NULL) {
+	if (distances != nullptr) {
 		distances = nodes_distance; /* application responds for the vector */
-		nodes_distance = NULL;
+		nodes_distance = nullptr;
 	}
 	else {
 		delete nodes_distance;
-		nodes_distance = NULL;
+		nodes_distance = nullptr;
 	}
 
 	return result;
@@ -486,7 +486,7 @@ std::vector<kdnode *> * kdtree_searcher::find_nearest_nodes(std::vector<double> 
 kdnode * kdtree_searcher::find_nearest_node() {
 	prepare_storages();
 
-	kdnode * node = NULL;
+	kdnode * node = nullptr;
 
 	recursive_nearest_nodes(initial_node);
 
@@ -501,10 +501,10 @@ kdnode * kdtree_searcher::find_nearest_node() {
 	}
 
 	delete nearest_nodes;
-	nearest_nodes = NULL;
+	nearest_nodes = nullptr;
 
 	delete nodes_distance;
-	nodes_distance = NULL;
+	nodes_distance = nullptr;
 
 	return node;
 }

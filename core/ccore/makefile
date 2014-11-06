@@ -6,9 +6,11 @@ LFLAGS = -std=gnu++0x -shared
 INCLUDES = -Iccore/
 
 SOURCES += ccore/ccore.cpp
+SOURCES += ccore/cure.cpp
 SOURCES += ccore/dbscan.cpp
 SOURCES += ccore/hierarchical.cpp
 SOURCES += ccore/hsyncnet.cpp
+SOURCES += ccore/kdtree.cpp
 SOURCES += ccore/kmeans.cpp
 SOURCES += ccore/network.cpp
 SOURCES += ccore/rock.cpp
@@ -21,7 +23,7 @@ OBJECTS = $(SOURCES:.cpp=.o)
 
 EXECUTABLE = x64/linux/ccore.so
 
-all: $(EXECUTABLE)
+ccore: $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJECTS)
 	$(CC) $(LFLAGS) $(OBJECTS) $(INCLUDES) -o $@

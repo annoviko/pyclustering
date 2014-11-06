@@ -41,8 +41,8 @@ public:
 
 	inline std::vector<kdnode *> * get_children(void) {
 		std::vector<kdnode *> * children = new std::vector<kdnode *>();
-		if (left != NULL) { children->push_back(left); }
-		if (right != NULL) { children->push_back(right); }
+		if (left != nullptr) { children->push_back(left); }
+		if (right != nullptr) { children->push_back(right); }
 
 		return children;
 	}
@@ -121,7 +121,7 @@ public:
 	* @brief   Constructor of kd tree with pre-defined information.
 	*
 	* @param   data               - coordinates that describe nodes in tree.
-	* @param   payloads           - payloads of nodes (can be NULL if it's not required).
+	* @param   payloads           - payloads of nodes (can be nullptr if it's not required).
 	*
 	***********************************************************************************************/
 	kdtree(const std::vector< std::vector<double> *> * data, const std::vector<void *> * payloads);
@@ -138,7 +138,7 @@ public:
 	* @brief   Insert new node in the tree.
 	*
 	* @param   point              - coordinates that describe node in tree.
-	* @param   payload            - payloads of node (can be NULL if it's not required).
+	* @param   payload            - payloads of node (can be nullptr if it's not required).
 	*
 	* @return  Pointer to added node in the tree.
 	*
@@ -195,7 +195,7 @@ public:
 	* @return  Returns number of nodes in subtree.
 	*
 	***********************************************************************************************/
-	unsigned int kdtree::traverse(kdnode * node);
+	unsigned int traverse(kdnode * node);
 
 	/***********************************************************************************************
 	*
@@ -285,7 +285,7 @@ public:
 	*          specified then it will be filled by corresponding distances.
 	*
 	***********************************************************************************************/
-	std::vector<kdnode *> * find_nearest_nodes(std::vector<double> * distances = NULL);
+	std::vector<kdnode *> * find_nearest_nodes(std::vector<double> * distances = nullptr);
 
 	/***********************************************************************************************
 	*
