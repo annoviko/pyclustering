@@ -1,3 +1,14 @@
+'''
+
+Cluster analysis algorithm: Classical Hierarchical Algorithm
+
+Based on article description:
+ - No Reference
+
+Implementation: Andrei Novikov (spb.andr@yandex.ru)
+
+'''
+
 from support import euclidean_distance_sqrt;
 from support import read_sample;
 from support import draw_clusters;

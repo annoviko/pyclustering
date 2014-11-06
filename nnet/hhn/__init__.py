@@ -26,24 +26,40 @@ class hhn_params:
     vNa = 50.0;
     vK = -77.0;
     vL = -54.4;
+    vRest = -60.0;
     
     Icn1 = 5.0;
     Icn2 = 30.0;
+    
+    Vsyninh = -80.0;
+    
+    alfa_peripheral = 6.0;
+    betta_peripheral = 0.3;
+    
+    alfa_central = 40.0;
+    betta_central = 2.0;
+    
+    w1 = 0.1;   # strength of the synaptic connection from PN to CN1
+    w2 = 9.0;   # strength of the synaptic connection from CN1 to PN
+    w3 = 5.0;   # strength of the synaptic connection from CN2 to PN
 
 
 class hhn_network(network, network_interface):
     _name = "Oscillatory Neural Network based on Hodgkin-Huxley Neuron Model"
     
     _membrane_potential = None;          # membrane potential of neuron (V)
+    _active_cond_sodium = None;          # activation conductance of the sodium channel (m)
+    _inactive_cond_sodium = None;        # inactivaton conductance of the sodium channel (h)
+    _active_cond_potassium = None;       # activation conductance of the potassium channel (n)
     
-    _active_cond_sodium = None;          # activation conductance of the sodium channel (h).
-    _inactive_cond_sodium = None;        # inactivaton conductance of the sodium channel (m).
-    _active_cond_potassium = None;       # activation conductance of the potassium channel (n).
+    _pulse_generation_time = None;       # memory of times of pulse generation for each oscillator
     
     _stimulus = None;               # stimulus of each oscillator
     
     _params = None;                 # parameters of the network
+    
     _noise = None;
+    _alfa_inh = None;               # inhibitory potential
     
     def __init__(self, num_osc, stimulus = None, parameters = None, type_conn = conn_type.NONE, conn_represent = conn_represent.MATRIX):
         super().__init__(num_osc, type_conn, conn_represent);
@@ -51,9 +67,11 @@ class hhn_network(network, network_interface):
         self._active_cond_sodium = [0.0] * self._num_osc;
         self._inactive_cond_sodium = [0.0] * self._num_osc;
         self._active_cond_potassium = [0.0] * self._num_osc;
+        self._alfa_inh = 0.0;
         
         self._membrane_potential = [0.0] * self._num_osc;
         self._noise = [random.random() * 2.0 - 1.0 for i in range(self._num_osc)];
+        self._pulse_generation_time = [0.0] * 2;
         
         if (stimulus is None):
             self._stimulus = [0.0] * self._num_osc;
@@ -165,22 +183,41 @@ class hhn_network(network, network_interface):
         
         index = argv;
         
+        v = inputs[0];
+        m = inputs[1]; # activation conductance of the sodium channel (m).
+        h = inputs[2]; # inactivaton conductance of the sodium channel (h).
+        n = inputs[3]; # activation conductance of the potassium channel (n).
+        
         # Calculate ion current
         # gNa * m[i]^3 * h * (v[i] - vNa) + gK * n[i]^4 * (v[i] - vK) + gL  (v[i] - vL)
-        active_sodium_part = self._params.gNa * (self._active_cond_sodium[index] ** 3) * (self._membrane_potential[index] - self._params.vNa);
-        inactive_sodium_part = self._params.gK * (self._inactive_cond_sodium[index] ** 4) * (self._membrane_potential[index] - self._params.vK);
-        active_potassium_part = self._params.gL * (self._membrane_potential - self._params.vL);
+        active_sodium_part = self._params.gNa * (m ** 3) * h * (v - self._params.vNa);
+        inactive_sodium_part = self._params.gK * (n ** 4) * (v - self._params.vK);
+        active_potassium_part = self._params.gL * (v - self._params.vL);
         
         Iion = active_sodium_part + inactive_sodium_part + active_potassium_part;
+        Iext = self._stimulus[index] * (1.0 + 0.01 * self._noise[index]);    # probably noise can be pre-defined for reducting compexity
         
         # Caclulation states
-        Iext = 0;
-        Isyn = 0;
+        memory_impact1 = self._alfa_inh * (t - self._pulse_generation_time[0]);
+        memory_impact2 = self._alfa_inh * (t - self._pulse_generation_time[1]);
+        Isyn = self._params.w2 * (v - self._params.Vsyninh) * memory_impact1 + self._params.w3 * (v - self._params.Vsyninh) * memory_impact2;
         
+        # Membrane potential
         dv = -Iion + Iext - Isyn;
-        dh = 0;
-        dk = 0;
-        dl = 0;
         
-        return [dv, dh, dk, dl];
+        # Calculate variables
+        potential = v - self._params.vRest;
+        am = (2.5 - 0.1 * potential) / (math.exp(2.5 - 0.1 * potential) - 1.0);
+        ah = 0.07 * math.exp(-potential / 20.0);
+        an = (0.1 - 0.01 * potential) / (math.exp(1 - 0.1 * potential) - 1.0);
+        
+        bm = 4.0 * math.exp(-potential / 18.0);
+        bh = 1.0 / (math.exp(3.0 - 0.1 * potential) + 1.0);
+        bn = 0.125 * math.exp(-potential / 80.0);
+        
+        dm = am * (1.0 - m) - bm * m;
+        dh = ah * (1.0 - h) - bh * h;
+        dn = an * (1.0 - n) - bn * n;
+        
+        return [dv, dm, dh, dn];
         
