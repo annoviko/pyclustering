@@ -2,6 +2,8 @@ from support import euclidean_distance;
 
 
 class optics_descriptor:
+    "Object description that used by OPTICS algorithm for cluster analysis."
+    
     reachability_distance = None;
     core_distance = None;
     
@@ -15,10 +17,12 @@ class optics_descriptor:
         self.processed = False;
         
     def __repr__(self):
-        return '(%s, [c: %s, r: %s])' % (self.index_object, self.core_distance, self.reachability_distance);
-    
+        return '(%s, [c: %s, r: %s])' % (self.index_object, self.core_distance, self.reachability_distance);               
+
 
 class optics:
+    "Performs cluster analysis using OPTICS algorithm."
+    
     __optics_objects = None;      # List of OPTICS objects that corresponds to objects from input sample.
     __ordered_database = None;    # List of OPTICS objects in traverse order. 
     
@@ -90,7 +94,7 @@ class optics:
         
         # Check core distance
         if (len(neighbors_descriptor) >= self.__minpts):
-            neighbors_descriptor.sort(key = lambda obj: obj[1]); # TODO: Find three smallest distances much faster than sorting
+            neighbors_descriptor.sort(key = lambda obj: obj[1]);
             optics_object.core_distance = neighbors_descriptor[self.__minpts - 1][1];
             
             # Continue processing
@@ -107,7 +111,7 @@ class optics:
                 self.__ordered_database.append(optic_descriptor);
                 
                 if (len(neighbors_descriptor) >= self.__minpts):
-                    neighbors_descriptor.sort(key = lambda obj: obj[1]);    # TODO: Find three smallest distances much faster than sorting
+                    neighbors_descriptor.sort(key = lambda obj: obj[1]);
                     optic_descriptor.core_distance = neighbors_descriptor[self.__minpts - 1][1];
                     
                     self.__update_order_seed(optic_descriptor, neighbors_descriptor, order_seed);
@@ -158,13 +162,19 @@ class optics:
                 if (self.__optics_objects[index_neighbor].reachability_distance is None):
                     self.__optics_objects[index_neighbor].reachability_distance = reachable_distance;
                     
-                    order_seed.append(self.__optics_objects[index_neighbor]);
-                    order_seed.sort(key = lambda obj: obj.reachability_distance); # TODO: Rellocation is less complexity than sorting
+                    # insert element in queue O(n) - worst case.
+                    index_insertion = len(order_seed);
+                    for index_seed in range(0, len(order_seed)):
+                        if (reachable_distance < order_seed[index_seed].reachability_distance):
+                            index_insertion = index_seed;
+                            break;
+                    
+                    order_seed.insert(index_insertion, self.__optics_objects[index_neighbor]);
+
                 else:
                     if (reachable_distance < self.__optics_objects[index_neighbor].reachability_distance):
                         self.__optics_objects[index_neighbor].reachability_distance = reachable_distance;
-                        
-                        order_seed.sort(key = lambda obj: obj.reachability_distance); # TODO: Rellocation is less complexity than sorting
+                        order_seed.sort(key = lambda obj: obj.reachability_distance);
 
 
     def __neighbor_indexes(self, optic_object):  
