@@ -1,3 +1,16 @@
+'''
+
+Neural Network: Local Excitatory Global Inhibitory Oscillatory Network (LEGION)
+
+Based on article description:
+ - D.Wang, D.Terman. "Image Segmentation Based on Oscillatory Correlation" - 1997.
+ - D.Wang, D.Terman. "Locally Excitatory Globally Inhibitory Oscillator Networks" - 1995.
+
+Implementation: Andrei Novikov (spb.andr@yandex.ru)
+
+'''
+
+
 import numpy;
 import math;
 import random;
@@ -68,11 +81,11 @@ class legion_network(network, network_interface):
             
         # initial states
         self._excitatory = [ random.random() for i in range(self._num_osc) ];
-        self._inhibitory = [0] * self._num_osc;
-        self._potential = [0] * self._num_osc;
+        self._inhibitory = [0.0] * self._num_osc;
+        self._potential = [0.0] * self._num_osc;
         
-        self._coupling_term = [0] * self._num_osc;
-        self._buffer_coupling_term = [0] * self._num_osc;
+        self._coupling_term = [0.0] * self._num_osc;
+        self._buffer_coupling_term = [0.0] * self._num_osc;
         
         # set stimulus
         self.__create_stimulus(stimulus);
@@ -179,7 +192,7 @@ class legion_network(network, network_interface):
             dyn_ginh = [];
             
         step = time / steps;
-        int_step = step / 10;
+        int_step = step / 10.0;
         
         for t in numpy.arange(step, time + step, step):
             # update states of oscillators
@@ -209,9 +222,9 @@ class legion_network(network, network_interface):
         
         "Returns new state of excitatory parts of oscillators."
         
-        next_excitatory = [0] * self._num_osc;
-        next_inhibitory = [0] * self._num_osc;
-        next_potential = [0] * self._num_osc;
+        next_excitatory = [0.0] * self._num_osc;
+        next_inhibitory = [0.0] * self._num_osc;
+        next_potential = [0.0] * self._num_osc;
         
         # Update states of oscillators
         for index in range (0, self._num_osc, 1):
