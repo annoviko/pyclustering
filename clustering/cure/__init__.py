@@ -63,49 +63,47 @@ def cure(data, number_cluster, number_represent_points = 5, compression = 0.5, c
 
         insert_represented_points(merged_cluster, tree);
         
-        merged_cluster.closest = queue[0];  # arbitrary cluster from queue
-        merged_cluster.distance = cluster_distance(merged_cluster, merged_cluster.closest);
-        
-        #print("New cluster with temp. nearest: ", merged_cluster);
-        
         # Pointers to clusters that should be relocated is stored here.
         cluster_relocation_requests = [];
         
-        for item in queue:
-            distance = cluster_distance(merged_cluster, item);
-            # Check if distance between new cluster and current is the best than now.
-            if (distance < merged_cluster.distance):
-                merged_cluster.closest = item;
-                merged_cluster.distance = distance;
+        # Check for the last cluster
+        if (len(queue) > 0):
+            merged_cluster.closest = queue[0];  # arbitrary cluster from queue
+            merged_cluster.distance = cluster_distance(merged_cluster, merged_cluster.closest);
             
-            # Check if current cluster has removed neighbor.
-            if ( (item.closest is cluster1) or (item.closest is cluster2) ):
-                # If previous distance was less then distance to new cluster then nearest cluster should be found in the tree.
-                #print("Update: ", item);
-                if (item.distance < distance):
-                    (item.closest, item.distance) = closest_cluster(item, distance, tree);
-                    
-                    # TODO: investigation of root cause is required.
-                    # Itself and merged cluster should be always in list of neighbors in line with specified radius.
-                    # But merged cluster may not be in list due to error calculation, therefore it should be added
-                    # manually.
-                    if (item.closest is None):
+            for item in queue:
+                distance = cluster_distance(merged_cluster, item);
+                # Check if distance between new cluster and current is the best than now.
+                if (distance < merged_cluster.distance):
+                    merged_cluster.closest = item;
+                    merged_cluster.distance = distance;
+                
+                # Check if current cluster has removed neighbor.
+                if ( (item.closest is cluster1) or (item.closest is cluster2) ):
+                    # If previous distance was less then distance to new cluster then nearest cluster should be found in the tree.
+                    #print("Update: ", item);
+                    if (item.distance < distance):
+                        (item.closest, item.distance) = closest_cluster(item, distance, tree);
+                        
+                        # TODO: investigation of root cause is required.
+                        # Itself and merged cluster should be always in list of neighbors in line with specified radius.
+                        # But merged cluster may not be in list due to error calculation, therefore it should be added
+                        # manually.
+                        if (item.closest is None):
+                            item.closest = merged_cluster;
+                            item.distance = distance;
+                        
+                    # Otherwise new cluster is nearest.
+                    else:
                         item.closest = merged_cluster;
                         item.distance = distance;
                     
-                # Otherwise new cluster is nearest.
-                else:
+                    cluster_relocation_requests.append(item);
+                elif (item.distance > distance):
                     item.closest = merged_cluster;
-                    item.distance = distance;
-                
-                cluster_relocation_requests.append(item);
-                #relocate_cluster(queue, item);
-            elif (item.distance > distance):
-                #print("Update: ", item);
-                item.closest = merged_cluster;
-                item.ditance = distance;
-                
-                cluster_relocation_requests.append(item);
+                    item.ditance = distance;
+                    
+                    cluster_relocation_requests.append(item);
         
         # New cluster and updated clusters should relocated in queue
         insert_cluster(queue, merged_cluster);

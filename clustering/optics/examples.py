@@ -1,3 +1,10 @@
+'''
+
+Examples how to use OPTICS algorithm and clustering result demonstration.
+Just run it for obtaining results.
+
+'''
+
 from clustering.optics import optics;
 
 from support import read_sample, draw_clusters;
@@ -20,6 +27,7 @@ def template_clustering(path_sample, eps, minpts):
     ordering = optics_instance.get_cluster_ordering();
     indexes = [i for i in range(0, len(ordering))];
     
+    # visualization of cluster ordering in line with reachability distance.
     plt.bar(indexes, ordering);
     plt.show();
     

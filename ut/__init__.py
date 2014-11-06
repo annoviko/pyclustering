@@ -5,6 +5,7 @@ from clustering.dbscan              import tests as cluster_dbscan_unit_tests;
 from clustering.hierarchical        import tests as cluster_hierarchical_unit_tests;
 from clustering.hsyncnet            import tests as cluster_hsyncnet_unit_tests;
 from clustering.kmeans              import tests as cluster_kmeans_unit_tests;
+from clustering.optics              import tests as cluster_optics_unit_tests;
 from clustering.rock                import tests as cluster_rock_unit_tests;
 from clustering.syncnet             import tests as cluster_syncnet_unit_tests;
 from clustering.syncsom             import tests as cluster_syncsom_unit_tests;
@@ -33,6 +34,7 @@ if __name__ == "__main__":
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_hierarchical_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_hsyncnet_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_kmeans_unit_tests));
+    suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_optics_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_rock_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_syncnet_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_syncsom_unit_tests));

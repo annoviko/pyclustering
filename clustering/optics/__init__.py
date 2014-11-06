@@ -1,3 +1,14 @@
+'''
+
+Cluster analysis algorithm: OPTICS
+
+Based on article description:
+ - M.Ankerst, M.Breunig, H.Kriegel, J.Sander. "OPTICS: Ordering Points To Identify the Clustering Structure" - 1999.
+
+Implementation: Andrei Novikov (spb.andr@yandex.ru)
+
+'''
+
 from support import euclidean_distance;
 
 
