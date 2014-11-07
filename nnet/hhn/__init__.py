@@ -17,61 +17,90 @@ import numpy;
 import random;
 
 class hhn_params:    
-    nu = random.random() * 2.0 - 1.0;
+    nu      = random.random() * 2.0 - 1.0;
     
-    gNa = 120.0 * (1 + 0.02 * nu);
-    gK = 0.3 * (1 + 0.02 * nu);
-    gL = -1.1;
+    gNa     = 120.0 * (1 + 0.02 * nu);
+    gK      = 0.3 * (1 + 0.02 * nu);
+    gL      = -1.1;
     
-    vNa = 50.0;
-    vK = -77.0;
-    vL = -54.4;
-    vRest = -60.0;
+    vNa     = 50.0;
+    vK      = -77.0;
+    vL      = -54.4;
+    vRest   = -60.0;
     
-    Icn1 = 5.0;
-    Icn2 = 30.0;
+    Icn1    = 5.0;
+    Icn2    = 30.0;
     
-    Vsyninh = -80.0;
+    Vsyninh = -80.0;    # [mV] synaptic reversal potential for inhibitory effects
+    Vsynexc = 0.0;      # [mV] synaptic reversal potential for exciting effects
     
-    alfa_peripheral = 6.0;
-    betta_peripheral = 0.3;
+    alfa_inhibitory     = 6.0;
+    betta_inhibitory    = 0.3;
     
-    alfa_central = 40.0;
-    betta_central = 2.0;
+    alfa_excitatory     = 40.0;
+    betta_excitatory    = 2.0;
     
     w1 = 0.1;   # strength of the synaptic connection from PN to CN1
     w2 = 9.0;   # strength of the synaptic connection from CN1 to PN
     w3 = 5.0;   # strength of the synaptic connection from CN2 to PN
+    
+    deltah = 650; # period of time when high strength value of synaptic connection exists from CN2 to PN.
+
+
+class central_element:
+    "Central element consist of two central neurons that are described by a little bit different dynamic"
+    membrane_potential      = 0.0;        # membrane potential of cenral neuron (V)
+    active_cond_sodium      = 0.0;        # activation conductance of the sodium channel (m)
+    inactive_cond_sodium    = 0.0;        # inactivaton conductance of the sodium channel (h)
+    active_cond_potassium   = 0.0;        # inactivaton conductance of the sodium channel (h)
+    
+    pulse_generation_time = [];     # times of pulse generation by central neuron
+    pulse_generation = False;       # spike generation of central neuron
 
 
 class hhn_network(network, network_interface):
     _name = "Oscillatory Neural Network based on Hodgkin-Huxley Neuron Model"
     
-    _membrane_potential = None;          # membrane potential of neuron (V)
-    _active_cond_sodium = None;          # activation conductance of the sodium channel (m)
-    _inactive_cond_sodium = None;        # inactivaton conductance of the sodium channel (h)
-    _active_cond_potassium = None;       # activation conductance of the potassium channel (n)
+    # States of peripheral oscillators
+    _membrane_potential     = None;          # membrane potential of neuron (V)
+    _active_cond_sodium     = None;          # activation conductance of the sodium channel (m)
+    _inactive_cond_sodium   = None;          # inactivaton conductance of the sodium channel (h)
+    _active_cond_potassium  = None;          # inactivaton conductance of the sodium channel (h)
+    _link_activation_time   = None;          # time of set w3 - connection from CN2 to PN for each oscillator.
+    _link_deactivation_time = None;          # time of reset w3 - connection from CN2 to PN for each oscillator.
+    _link_weight3           = None;          # connection strength for each oscillator from CN2 to PN.
     
-    _pulse_generation_time = None;       # memory of times of pulse generation for each oscillator
+    _pulse_generation_time  = None;          # time of spike generation for each oscillator.
+    _pulse_generation       = None;          # spike generation for each oscillator.
     
     _stimulus = None;               # stimulus of each oscillator
+    _noise = None;                  # Noise for each oscillator
+    
+    _central_element = None;        # Central element description
     
     _params = None;                 # parameters of the network
     
-    _noise = None;
-    _alfa_inh = None;               # inhibitory potential
+    _alfa_inhibitory = None;        # inhibitory potential
+    _alfa_excitatory = None;        # excitatory potential
     
     def __init__(self, num_osc, stimulus = None, parameters = None, type_conn = conn_type.NONE, conn_represent = conn_represent.MATRIX):
         super().__init__(num_osc, type_conn, conn_represent);
         
-        self._active_cond_sodium = [0.0] * self._num_osc;
-        self._inactive_cond_sodium = [0.0] * self._num_osc;
-        self._active_cond_potassium = [0.0] * self._num_osc;
-        self._alfa_inh = 0.0;
+        self._membrane_potential        = [0.0] * self._num_osc;
+        self._active_cond_sodium        = [0.0] * self._num_osc;
+        self._inactive_cond_sodium      = [0.0] * self._num_osc;
+        self._active_cond_potassium     = [0.0] * self._num_osc;
+        self._link_activation_time      = [0.0] * self._num_osc;
+        self._link_deactivation_time    = [0.0] * self.num_osc;
+        self._link_weight3              = [0.0] * self._num_osc;
+        self._pulse_generation_time     = [ [] ] * self._num_osc;
+        self._pulse_generation          = [False] * self._num_osc;
         
-        self._membrane_potential = [0.0] * self._num_osc;
+        self._alfa_inh = 0.0;       # alfa-function for excitatory
+        
         self._noise = [random.random() * 2.0 - 1.0 for i in range(self._num_osc)];
-        self._pulse_generation_time = [0.0] * 2;
+        
+        self._central_element = [central_element(), central_element()];
         
         if (stimulus is None):
             self._stimulus = [0.0] * self._num_osc;
@@ -122,10 +151,6 @@ class hhn_network(network, network_interface):
         elif (solution == solve_type.RKF45):
             raise NameError("Solver RKF45 is not support in python version.");
         
-        if (self._dyn_exc is not None):
-            del self._dyn_exc;
-            self._dyn_exc = None;
-        
         dyn_memb = None;
         dyn_time = None;
         
@@ -139,17 +164,16 @@ class hhn_network(network, network_interface):
         
         for t in numpy.arange(step, time + step, step):
             # update states of oscillators
-            self._excitatory = self._calculate_states(solution, t, step, int_step);
+            self._calculate_states(solution, t, step, int_step);
             
             # update states of oscillators
             if (collect_dynamic == True):
-                dyn_memb.append(self._excitatory);
+                dyn_memb.append(self._membrane_potential);
                 dyn_time.append(t);
             else:
                 dyn_memb = self._membrane_potential;
                 dyn_time = t;
         
-        self._membrane_potential = dyn_memb;
         return (dyn_time, dyn_memb);
     
     
@@ -163,12 +187,81 @@ class hhn_network(network, network_interface):
         
         "Returns new state of excitatory parts of oscillators."
         
-        next_membrane = [0.0] * self._num_osc;
+        next_membrane           = [0.0] * self._num_osc;
+        next_active_sodium      = [0.0] * self._num_osc;
+        next_inactive_sodium    = [0.0] * self._num_osc;
+        next_active_potassium   = [0.0] * self._num_osc;
         
         # Update states of oscillators
         for index in range (0, self._num_osc, 1):
-            result = odeint(self.hhn_state, self._membrane_potential[index], numpy.arange(t - step, t, int_step), (index , ));
-            next_membrane[index] = result[len(result) - 1];
+            result = odeint(self.hnn_state, 
+                            [ self._membrane_potential[index], self._active_cond_sodium[index], self._inactive_cond_sodium[index], self._active_cond_potassium[index] ], 
+                            numpy.arange(t - step, t, int_step), 
+                            (index , ));
+                            
+            [ next_membrane[index], next_active_sodium[index], next_inactive_sodium[index], next_active_potassium[index] ] = result[len(result) - 1][0:4];        
+        
+        next_cn_membrane            = [0.0, 0.0];
+        next_cn_active_sodium       = [0.0, 0.0];
+        next_cn_inactive_sodium     = [0.0, 0.0];
+        next_cn_active_potassium    = [0.0, 0.0];
+        
+        # Update states of central elements
+        for index in range(0, len(self._central_element)):
+            result = odeint(self.hnn_state, 
+                            [ self._central_element[0].membrane_potential, self._central_element[0].active_cond_sodium, self._central_element[0].inactive_cond_sodium, self._central_element[0].active_cond_potassium ], 
+                            numpy.arange(t - step, t, int_step), 
+                            (self._num_osc + index , ));
+                            
+            [ next_cn_membrane[index], next_cn_active_sodium[index], next_cn_inactive_sodium[index], next_cn_active_potassium[index] ] = result[len(result) - 1][0:4];
+        
+        # Noise generation
+        self._noise = [ 1.0 + 0.01 * (random.random() * 2.0 - 1.0) for i in range(self._num_osc)];
+        self._alfa_inhibitory = self._params.alfa_inhibitory * t * math.exp(-self._params.betta_inhibitory * t);
+        self._alfa_excitatory = self._params.alfa_excitatory * t * math.exp(-self._params.betta_excitatory * t);
+        
+        # Updating states of PNs
+        for index in range(0, self._num_osc):
+            if (self._pulse_generation is False):
+                if (next_membrane[index] > 0):
+                    self._pulse_generation[index] = True;
+                    self._pulse_generation_time[index].append(t);
+            else:
+                if (next_membrane[index] < 0):
+                    self._pulse_generation[index] = False;
+            
+            # Update connection from CN2 to PN
+            if ( (self._link_activation_time[index] < t) and (t < self._link_activation_time[index] + self._params.deltah) ):
+                if (self._link_weight3[index] == 0):
+                    self._link_activation_time[index] = t;
+                    
+                self._link_weight3[index] = self._params.w3;
+            else:
+                if (self._link_weight3[index] != 0):
+                    self._link_deactivation_time[index] = t;
+                
+                self._link_weight3[index] = 0.0;            
+        
+        
+        # Updation states of CN
+        for index in range(0, len(self._central_element)):
+            if (self._central_element[index].pulse_generation is False):
+                if (next_cn_membrane[index] > 0):
+                    self._central_element[index].pulse_generation = True;
+                    self._central_element[index].pulse_generation_time.append(t);
+                else:
+                    if (next_cn_membrane[index] < 0):
+                        self._central_element[index].pulse_generation = False;
+            
+            self._central_element[index].membrane_potential = next_cn_membrane[index];
+            self._central_element[index].active_cond_sodium = next_cn_active_sodium[index];
+            self._central_element[index].inactive_cond_sodium = next_cn_inactive_sodium[index];
+            self._central_element[index].active_cond_potassium = next_cn_active_potassium[index];
+        
+        self._membrane_potential = next_membrane[:];
+        self._active_cond_sodium = next_active_sodium[:];
+        self._inactive_cond_sodium = next_inactive_sodium[:];
+        self._active_cond_potassium = next_cn_active_potassium[:];
         
         return next_membrane;
     
@@ -183,7 +276,7 @@ class hhn_network(network, network_interface):
         
         index = argv;
         
-        v = inputs[0];
+        v = inputs[0]; # membrane potential (v).
         m = inputs[1]; # activation conductance of the sodium channel (m).
         h = inputs[2]; # inactivaton conductance of the sodium channel (h).
         n = inputs[3]; # activation conductance of the potassium channel (n).
@@ -195,12 +288,42 @@ class hhn_network(network, network_interface):
         active_potassium_part = self._params.gL * (v - self._params.vL);
         
         Iion = active_sodium_part + inactive_sodium_part + active_potassium_part;
-        Iext = self._stimulus[index] * (1.0 + 0.01 * self._noise[index]);    # probably noise can be pre-defined for reducting compexity
         
-        # Caclulation states
-        memory_impact1 = self._alfa_inh * (t - self._pulse_generation_time[0]);
-        memory_impact2 = self._alfa_inh * (t - self._pulse_generation_time[1]);
-        Isyn = self._params.w2 * (v - self._params.Vsyninh) * memory_impact1 + self._params.w3 * (v - self._params.Vsyninh) * memory_impact2;
+        Iext = 0;
+        Isyn = 0;
+        if (index < self._num_osc): 
+            # PN - peripheral neuron - calculation of external current and synaptic current.
+            Iext = self._stimulus[index] * self._noise[index];    # probably noise can be pre-defined for reducting compexity
+            
+            memory_impact1 = 0.0;
+            for i in range(0, len(self._central_element[0].pulse_generation_time)):
+                memory_impact1 += self._alfa_inhibitory * (t - self._central_element[0].pulse_generation_time[i]);
+            
+            memory_impact2 = 0.0;
+            for i in range(0, len(self._central_element[1].pulse_generation_time)):
+                memory_impact2 += self._alfa_inhibitory * (t - self._central_element[1].pulse_generation_time[i]);        
+    
+            Isyn = self._params.w2 * (v - self._params.Vsyninh) * memory_impact1 + self._link_weight3[index] * (v - self._params.Vsyninh) * memory_impact2;            
+        else:
+            # CN - central element.
+            central_index = index - self._num_osc;
+            if (central_index == 0):
+                Iext = self._params.Icn1;   # CN1
+                
+                memory_impact = 0;
+                for index_oscillator in range(0, self._num_osc):
+                    for index_generation in range(0, len(self._pulse_generation_time[index_oscillator])):
+                        memory_impact += self._alfa_excitatory * (t - self._pulse_generation_time[index_oscillator][index_generation]);
+                
+                Isyn = self._params.w1 * (v - self._params.Vsynexc) * memory_impact;
+                
+                
+            elif (central_index == 1):
+                Iext = self._params.Icn2;   # CN2
+                Isyn = 0.0;
+            else:
+                assert 0;
+        
         
         # Membrane potential
         dv = -Iion + Iext - Isyn;
@@ -221,3 +344,14 @@ class hhn_network(network, network_interface):
         
         return [dv, dm, dh, dn];
         
+        
+    def allocate_sync_ensembles(self, tolerance = 0.1):
+        "Allocate clusters in line with ensembles of synchronous oscillators where each." 
+        "synchronous ensemble corresponds to only one cluster."
+        
+        "(in) tolerance        - maximum error for allocation of synchronous ensemble oscillators."
+        
+        "Returns list of grours (lists) of indexes of synchronous oscillators."
+        "For example [ [index_osc1, index_osc3], [index_osc2], [index_osc4, index_osc5] ]."
+        pass;
+    

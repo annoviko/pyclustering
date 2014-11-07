@@ -1,3 +1,14 @@
+'''
+
+Cluster analysis algorithm: X-Means
+
+Based on article description:
+ - D.Pelleg, A.Moore. "X-means: Extending K-means with Efficient Estimation of the Number of Clusters" - 2000.
+
+Implementation: Andrei Novikov (spb.andr@yandex.ru)
+
+'''
+
 import numpy;
 import math;
 

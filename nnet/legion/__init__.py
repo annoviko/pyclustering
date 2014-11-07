@@ -10,7 +10,6 @@ Implementation: Andrei Novikov (spb.andr@yandex.ru)
 
 '''
 
-
 import numpy;
 import math;
 import random;
