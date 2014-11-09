@@ -1,11 +1,11 @@
 from support import draw_dynamics;
 
-from nnet.hhn import hhn_network;
+from nnet.hhn import hhn_network, hhn_params;
 
-def template_dynamic_hhn(num_osc, steps, time, stimulus = None, separate_representation = False):
-    network = hhn_network(num_osc, stimulus);
+def template_dynamic_hhn(num_osc, steps, time, stimulus = None, params = None, separate_representation = False):
+    net = hhn_network(num_osc, stimulus, params);
 
-    (t, dyn) = network.simulate(steps, time);
+    (t, dyn) = net.simulate(steps, time);
 
     draw_dynamics(t, dyn, x_title = "Time", y_title = "V", separate = separate_representation);
 
@@ -19,6 +19,31 @@ def one_oscillator_stimulated():
 def three_oscillators_stimulated():
     template_dynamic_hhn(3, 750, 100, [25] * 3, separate_representation = True);
     
+def ten_oscillators_stimulated_desync():
+    params = hhn_params();
+    params.w1 = 0;
+    params.w2 = 0;
+    params.w3 = 0;
+    
+    template_dynamic_hhn(10, 750, 100, [25, 25, 25, 25, 25, 11, 11, 11, 11, 11], params, separate_representation = True);
+    
+def ten_oscillators_stimulated_sync():
+    params = hhn_params();
+    params.w1 = 0.1;
+    params.w2 = 0.0;
+    params.w3 = 0;
+    
+    template_dynamic_hhn(10, 750, 100, [25, 25, 25, 25, 25, 27, 27, 27, 27, 27], params, separate_representation = True);    
+    
+def ten_oscillators_stimulated_partial_sync():
+    params = hhn_params();
+    params.w1 = 0.1;
+    params.w2 = 15.0;
+    params.w3 = 0;
+    params.Icn1 = 5.0;
+    
+    template_dynamic_hhn(10, 800, 200, [25, 25, 25, 25, 25, 11, 11, 11, 11, 11], params, separate_representation = True);     
+    
 def four_oscillators_mix_stimulated():
     template_dynamic_hhn(4, 600, 200, [20, 20, 40, 40], separate_representation = True);
 
@@ -26,4 +51,7 @@ def four_oscillators_mix_stimulated():
 one_oscillator_unstimulated();
 one_oscillator_stimulated();
 three_oscillators_stimulated();
+ten_oscillators_stimulated_desync();
+ten_oscillators_stimulated_sync();
+ten_oscillators_stimulated_partial_sync();
 four_oscillators_mix_stimulated();
