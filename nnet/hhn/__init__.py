@@ -44,7 +44,7 @@ class hhn_params:
     w2 = 9.0;   # strength of the synaptic connection from CN1 to PN
     w3 = 5.0;   # strength of the synaptic connection from CN2 to PN
     
-    deltah = 650.0;     # [ms] period of time when high strength value of synaptic connection exists from CN2 to PN.
+    deltah = 100.0;     # [ms] period of time when high strength value of synaptic connection exists from CN2 to PN.
     eps = 3;
 
 
@@ -55,8 +55,14 @@ class central_element:
     inactive_cond_sodium    = 0.0;        # inactivaton conductance of the sodium channel (h)
     active_cond_potassium   = 0.0;        # inactivaton conductance of the sodium channel (h)
     
-    pulse_generation_time = [];     # times of pulse generation by central neuron
-    pulse_generation = False;       # spike generation of central neuron
+    pulse_generation_time = None;         # times of pulse generation by central neuron
+    pulse_generation = False;             # spike generation of central neuron
+    
+    def __init__(self):
+        self.pulse_generation_time = [];
+    
+    def __repr__(self):
+        return "%s, %s" % (self.membrane_potential, self.pulse_generation_time);
 
 
 class hhn_network(network, network_interface):
@@ -174,7 +180,7 @@ class hhn_network(network, network_interface):
                 dyn_memb.append(memb);
                 dyn_time.append(t);
             else:
-                dyn_memb = self._membrane_potential;
+                dyn_memb = memb;
                 dyn_time = t;
         
         return (dyn_time, dyn_memb);
@@ -224,14 +230,14 @@ class hhn_network(network, network_interface):
         # Updating states of PNs
         for index in range(0, self._num_osc):
             if (self._pulse_generation[index] is False):
-                if (next_membrane[index] > 1.0):
+                if (next_membrane[index] > 0.0):
                     self._pulse_generation[index] = True;
                     self._pulse_generation_time[index].append(t);
                     
-                    if (next_cn_membrane[0] > 1.0):
+                    if (next_cn_membrane[1] > 0.0):
                         self._link_pulse_counter[index] += 1;
             else:
-                if (next_membrane[index] < 1.0):
+                if (next_membrane[index] < 0.0):
                     self._pulse_generation[index] = False;
             
             # Update connection from CN2 to PN
@@ -250,12 +256,12 @@ class hhn_network(network, network_interface):
         # Updation states of CN
         for index in range(0, len(self._central_element)):
             if (self._central_element[index].pulse_generation is False):
-                if (next_cn_membrane[index] > 1.0):
+                if (next_cn_membrane[index] > 0.0):
                     self._central_element[index].pulse_generation = True;
                     self._central_element[index].pulse_generation_time.append(t);
-                else:
-                    if (next_cn_membrane[index] < 1.0):
-                        self._central_element[index].pulse_generation = False;
+            else:
+                if (next_cn_membrane[index] < 0.0):
+                    self._central_element[index].pulse_generation = False;
             
             self._central_element[index].membrane_potential = next_cn_membrane[index];
             self._central_element[index].active_cond_sodium = next_cn_active_sodium[index];
