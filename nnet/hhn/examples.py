@@ -1,6 +1,6 @@
 from support import draw_dynamics;
 
-from nnet.hhn import hhn_network, hhn_params;
+from nnet.hhn import hhn_network, hhn_parameters;
 
 def template_dynamic_hhn(num_osc, steps, time, stimulus = None, params = None, separate_representation = False):
     net = hhn_network(num_osc, stimulus, params);
@@ -20,7 +20,7 @@ def three_oscillators_stimulated():
     template_dynamic_hhn(3, 750, 100, [25] * 3, separate_representation = True);
     
 def ten_oscillators_stimulated_desync():
-    params = hhn_params();
+    params = hhn_parameters();
     params.w1 = 0;
     params.w2 = 0;
     params.w3 = 0;
@@ -28,7 +28,7 @@ def ten_oscillators_stimulated_desync():
     template_dynamic_hhn(10, 750, 100, [25, 25, 25, 25, 25, 11, 11, 11, 11, 11], params, separate_representation = True);
     
 def ten_oscillators_stimulated_sync():
-    params = hhn_params();
+    params = hhn_parameters();
     params.w1 = 0.1;
     params.w2 = 0.0;
     params.w3 = 0;
@@ -36,7 +36,7 @@ def ten_oscillators_stimulated_sync():
     template_dynamic_hhn(10, 750, 100, [25, 25, 25, 25, 25, 27, 27, 27, 27, 27], params, separate_representation = True);    
     
 def ten_oscillators_stimulated_partial_sync():
-    params = hhn_params();
+    params = hhn_parameters();
     params.w1 = 0.1;
     params.w2 = 5.0;
     params.w3 = 0;
@@ -44,7 +44,10 @@ def ten_oscillators_stimulated_partial_sync():
     template_dynamic_hhn(10, 750, 200, [25, 25, 25, 25, 25, 11, 11, 11, 11, 11], params, separate_representation = True);     
     
 def ten_oscillators_mix_stimulated():
-    template_dynamic_hhn(10, 1200, 400, [0, 0, 30, 30, 30, 30, 37, 37, 37, 37], separate_representation = True);
+    params = hhn_parameters();
+    params.deltah = 400;
+    
+    template_dynamic_hhn(6, 1200, 600, [0, 0, 25, 25, 47, 47], params, separate_representation = True);
 
     
 one_oscillator_unstimulated();

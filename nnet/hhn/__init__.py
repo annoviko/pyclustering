@@ -11,12 +11,14 @@ Implementation: Andrei Novikov (spb.andr@yandex.ru)
 
 from nnet import *;
 
+from support import heaviside2;
+
 from scipy.integrate import odeint;
 
 import numpy;
 import random;
 
-class hhn_params:    
+class hhn_parameters:    
     nu      = random.random() * 2.0 - 1.0;
     
     gNa     = 120.0 * (1 + 0.02 * nu);  # maximal conductivity for sodium current
@@ -44,8 +46,9 @@ class hhn_params:
     w2 = 9.0;   # strength of the synaptic connection from CN1 to PN
     w3 = 5.0;   # strength of the synaptic connection from CN2 to PN
     
-    deltah = 100.0;     # [ms] period of time when high strength value of synaptic connection exists from CN2 to PN.
-    eps = 3;
+    deltah = 650.0;     # [ms] period of time when high strength value of synaptic connection exists from CN2 to PN.
+    threshold = -10;
+    eps = 0.16;
 
 
 class central_element:
@@ -74,7 +77,6 @@ class hhn_network(network, network_interface):
     _inactive_cond_sodium   = None;          # inactivaton conductance of the sodium channel (h)
     _active_cond_potassium  = None;          # activation conductance of the potassium channel (n)
     _link_activation_time   = None;          # time of set w3 - connection from CN2 to PN for each oscillator.
-    _link_deactivation_time = None;          # time of reset w3 - connection from CN2 to PN for each oscillator.
     _link_weight3           = None;          # connection strength for each oscillator from CN2 to PN.
     
     _pulse_generation_time  = None;          # time of spike generation for each oscillator.
@@ -87,10 +89,14 @@ class hhn_network(network, network_interface):
     
     _params = None;                 # parameters of the network
     
-    # _alfa_inhibitory = None;        # inhibitory potential
-    # _alfa_excitatory = None;        # excitatory potential
-    
     def __init__(self, num_osc, stimulus = None, parameters = None, type_conn = conn_type.NONE, conn_represent = conn_represent.MATRIX):
+        "Constructor of oscillatory network LEGION (local excitatory global inhibitory oscillatory network)."
+        
+        "(in) num_osc             - number of peripheral oscillators in the network."
+        "(in) stimulus            - list of stimulus for oscillators, number of stimulus should be equal to number of peripheral oscillators."
+        "(in) parameters          - parameters of the network that are defined by structure 'hhn_parameters'."
+        "(in) type_conn           - type of connection between oscillators in the network."
+        "(in) conn_represent      - internal representation of connection in the network: matrix or list."        
         super().__init__(num_osc, type_conn, conn_represent);
         
         self._membrane_potential        = [0.0] * self._num_osc;
@@ -98,14 +104,11 @@ class hhn_network(network, network_interface):
         self._inactive_cond_sodium      = [0.0] * self._num_osc;
         self._active_cond_potassium     = [0.0] * self._num_osc;
         self._link_activation_time      = [0.0] * self._num_osc;
-        self._link_pulse_counter        = [0] * self._num_osc;
+        self._link_pulse_counter        = [0.0] * self._num_osc;
         self._link_deactivation_time    = [0.0] * self.num_osc;
         self._link_weight3              = [0.0] * self._num_osc;
         self._pulse_generation_time     = [ [] for i in range(self._num_osc) ];
         self._pulse_generation          = [False] * self._num_osc;
-        
-        # self._alfa_inhibitory = 0.0;
-        # self._alfa_excitatory = 0.0;
         
         self._noise = [random.random() * 2.0 - 1.0 for i in range(self._num_osc)];
         
@@ -119,7 +122,7 @@ class hhn_network(network, network_interface):
         if (parameters is not None):
             self._params = parameters;
         else:
-            self._params = hhn_params();
+            self._params = hhn_parameters();
     
     
     def simulate(self, steps, time, solution = solve_type.RK4, collect_dynamic = True):
@@ -194,7 +197,8 @@ class hhn_network(network, network_interface):
         "(in) step            - step of solution at the end of which states of oscillators should be calculated."
         "(in) int_step        - step differentiation that is used for solving differential equation."
         
-        "Returns new state of excitatory parts of oscillators."
+        "Returns new state of membrance potential for peripheral oscillators and for cental elements as a list where"
+        "the last two values correspond to central element 1 and 2."
         
         next_membrane           = [0.0] * self._num_osc;
         next_active_sodium      = [0.0] * self._num_osc;
@@ -233,24 +237,23 @@ class hhn_network(network, network_interface):
                 if (next_membrane[index] > 0.0):
                     self._pulse_generation[index] = True;
                     self._pulse_generation_time[index].append(t);
-                    
-                    if (next_cn_membrane[1] > 0.0):
-                        self._link_pulse_counter[index] += 1;
             else:
                 if (next_membrane[index] < 0.0):
                     self._pulse_generation[index] = False;
             
             # Update connection from CN2 to PN
-            if (self._link_pulse_counter[index] > self._params.eps):
-                self._link_activation_time[index] = t;  # activate connection from CN2 to PN
-            
-            # Check if it's time to reset connection
-            if ( (self._link_activation_time[index] < t) and (t < self._link_activation_time[index] + self._params.deltah) ):
-                self._link_weight3[index] = self._params.w3;    # Keep activation
-                self._link_pulse_counter[index] = 0;            # Protection from updating time of activation
-                 
+            if (self._link_weight3[index] == 0.0):
+                if ( (next_membrane[index] > self._params.threshold) and (next_membrane[index] > self._params.threshold) ):
+                    self._link_pulse_counter[index] += step;
+                
+                    if (self._link_pulse_counter[index] >= 1 / self._params.eps):
+                        self._link_weight3[index] = self._params.w3;
+                        self._link_activation_time[index] = t;
             else:
-                self._link_weight3[index] = 0.0;                # Reset          
+                if ( not ((self._link_activation_time[index] < t) and (t < self._link_activation_time[index] + self._params.deltah)) ):
+                    self._link_weight3[index] = 0.0;
+                    self._link_pulse_counter[index] = 0.0;
+                    
         
         
         # Updation states of CN
@@ -279,10 +282,15 @@ class hhn_network(network, network_interface):
     def hnn_state(self, inputs, t, argv):
         "Returns new values of excitatory and inhibitory parts of oscillator and potential of oscillator."
         
+        "(in) inputs        - list of states of oscillator for integration [v, m, h, n] (see description below)."
         "(in) t             - current time of simulation."
         "(in) argv          - extra arguments that are not used for integration - index of oscillator."
         
-        "Returns new values of excitatoty and inhibitory part of oscillator and new value of potential (not assign)."
+        "Returns list of new values of oscillator [v, m, h, n], where:"
+        "v - membrane potantial of oscillator,"
+        "m - activation conductance of the sodium channel,"
+        "h - inactication conductance of the sodium channel,"
+        "n - activation conductance of the potassium channel."
         
         index = argv;
         
@@ -366,9 +374,19 @@ class hhn_network(network, network_interface):
         
         "Returns list of grours (lists) of indexes of synchronous oscillators."
         "For example [ [index_osc1, index_osc3], [index_osc2], [index_osc4, index_osc5] ]."
+        
+        # TODO: LEGION allocation of clusters should be reused for avoiding duplicated code.
         pass;
     
     
     def __alfa_function(self, time, alfa, betta):
+        "Calculate value of alfa-function for difference between spike generation time and current simulation time."
+        
+        "(in) time    - difference between last spike generation time and current time."
+        "(in) alfa    - alfa parameter for alfa-function."
+        "(in) betta   - betta parameter for alfa-function."
+        
+        "Returns value of alfa-function."
+        
         return alfa * time * math.exp(-betta * time);
     

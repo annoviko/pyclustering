@@ -66,7 +66,7 @@ class legion_network(network, network_interface):
         "(in) num_osc             - number of oscillators in the network."
         "(in) stimulus            - list of stimulus for oscillators, number of stimulus should be equal to number of oscillators,"
         "                           example of stimulus for 5 oscillators [0, 0, 1, 1, 0], value of stimulus is defined by parameter 'I'."
-        "(in) parameters          - parameters of the network that are defined by structure 'legion_network'."
+        "(in) parameters          - parameters of the network that are defined by structure 'legion_parameters'."
         "(in) type_conn           - type of connection between oscillators in the network."
         "(in) conn_represent      - internal representation of connection in the network: matrix or list."
         
