@@ -1,8 +1,8 @@
 #ifndef _UTEST_KDTREE_
 #define _UTEST_KDTREE_
 
-#include "ccore\kdtree.h"
-#include "gtest\gtest.h"
+#include "ccore/kdtree.h"
+#include "gtest/gtest.h"
 
 #include <algorithm>
 

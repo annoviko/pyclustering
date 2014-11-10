@@ -1,4 +1,6 @@
 # GCC should support C++11, for example, GCC 4.7.2
+# CCORE PyClustering project
+
 CC = g++
 CFLAGS = -std=gnu++0x -fPIC -c 
 LFLAGS = -std=gnu++0x -shared
@@ -33,3 +35,4 @@ $(EXECUTABLE): $(OBJECTS)
 
 clean:
 	rm -rf ccore/*o ccore.so
+
