@@ -10,7 +10,10 @@ from clustering.kmeans import kmeans;
 def template_segmentation_image(source, start_centers):    
     data = read_image(source);
 
-    clusters = kmeans(data, start_centers);
+    kmeans_instance = kmeans(data, start_centers);
+    kmeans_instance.process();
+    
+    clusters = kmeans_instance.get_clusters();
     draw_image_segments(source, clusters);
     
     
@@ -38,9 +41,6 @@ def segmentation_image_fruit():
 def segmentation_image_fruit_small():
     template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE_FRUITS_SMALL, [[164, 35, 39, 128], [248, 187, 18, 128], [255, 255, 255, 128]]);
 
-def segmentation_image_white_sea():
-    template_segmentation_image(IMAGE_MAP_SAMPLES.IMAGE_WHITE_SEA_SMALL, [[164, 35, 39], [248, 187, 18], [255, 255, 255]]);
-
 def segmentation_image_nil():
     template_segmentation_image(IMAGE_MAP_SAMPLES.IMAGE_NILE_SMALL, [[54, 64, 39], [193, 171, 134], [26, 71, 128]]);
     
@@ -53,6 +53,4 @@ segmentation_image_beach();
 segmentation_image_fruit();
 segmentation_image_building();
 segmentation_image_fruit_small();
- 
-segmentation_image_white_sea();
 segmentation_image_nil();

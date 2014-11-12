@@ -9,7 +9,11 @@ from samples.definitions import SIMPLE_SAMPLES;
 class Test(unittest.TestCase):
     def templateLengthProcessData(self, path_to_file, start_centers, expected_cluster_length, ccore = False):
         sample = read_sample(path_to_file);
-        clusters = kmeans(sample, start_centers, 0.025, ccore);
+        
+        kmeans_instance = kmeans(sample, start_centers, 0.025, ccore);
+        kmeans_instance.process();
+        
+        clusters = kmeans_instance.get_clusters();
     
         obtained_cluster_sizes = [len(cluster) for cluster in clusters];
         assert len(sample) == sum(obtained_cluster_sizes);
@@ -64,8 +68,9 @@ class Test(unittest.TestCase):
             
     
     def testDifferentDimensions(self):
-        self.assertRaises(NameError, kmeans, [ [0, 1, 5], [0, 2, 3] ], [ [0, 3] ]);
-        self.assertRaises(NameError, kmeans, [ [0, 1, 5, 2], [0, 2, 3, 7] ], [ [0] ]);
+        kmeans_instance = kmeans([ [0, 1, 5], [0, 2, 3] ], [ [0, 3] ]);
+        self.assertRaises(NameError, kmeans_instance.process);
+
 
 
 if __name__ == "__main__":

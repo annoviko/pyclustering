@@ -9,7 +9,10 @@ from support import timedcall;
 def template_clustering(start_centers, path, tolerance = 0.25, ccore = True):
     sample = read_sample(path);
     
-    (ticks, clusters) = timedcall(kmeans, sample, start_centers, tolerance, ccore);
+    kmeans_instance = kmeans(sample, start_centers, tolerance, ccore);
+    (ticks, result) = timedcall(kmeans_instance.process);
+    
+    clusters = kmeans_instance.get_clusters();
     print("Sample: ", path, "\t\tExecution time: ", ticks, "\n");
 
     draw_clusters(sample, clusters);
@@ -105,6 +108,6 @@ cluster_chainlink();
 cluster_hepta();
 cluster_tetra();
 cluster_engy_time();
- 
+  
 experiment_execution_time(False);   # Python code
 experiment_execution_time(True);    # C++ code + Python env.
