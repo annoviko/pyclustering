@@ -51,6 +51,7 @@ Clustering algorithms:
 - X-Means [Python, C++]
 
 Oscillatory networks and neural networks:
+- HHN (Oscillatory network based on Hodgkin-Huxley model) [Python]
 - Hysteresis Oscillatory Network [Python]
 - LEGION (Local Excitatory Global Inhibitory Oscillatory Network) [Python]
 - PCNN (Pulse-Coupled Neural Network) [Python]

@@ -11,9 +11,9 @@ Implementation: Andrei Novikov (spb.andr@yandex.ru)
 
 from nnet import *;
 
-from support import heaviside2;
-
 from scipy.integrate import odeint;
+
+from support import allocate_sync_ensembles;
 
 import numpy;
 import random;
@@ -89,15 +89,18 @@ class hhn_network(network, network_interface):
     
     _params = None;                 # parameters of the network
     
-    def __init__(self, num_osc, stimulus = None, parameters = None, type_conn = conn_type.NONE, conn_represent = conn_represent.MATRIX):
-        "Constructor of oscillatory network LEGION (local excitatory global inhibitory oscillatory network)."
+    _membrane_dynamic_pointer = None;        # final result is stored here.
+    
+    def __init__(self, num_osc, stimulus = None, parameters = None, type_conn = None, conn_represent = conn_represent.MATRIX):
+        "Constructor of oscillatory network based on Hodgkin-Huxley meuron model."
         
         "(in) num_osc             - number of peripheral oscillators in the network."
         "(in) stimulus            - list of stimulus for oscillators, number of stimulus should be equal to number of peripheral oscillators."
         "(in) parameters          - parameters of the network that are defined by structure 'hhn_parameters'."
-        "(in) type_conn           - type of connection between oscillators in the network."
-        "(in) conn_represent      - internal representation of connection in the network: matrix or list."        
-        super().__init__(num_osc, type_conn, conn_represent);
+        "(in) type_conn           - type of connection between oscillators in the network (ignored for this type of network)."
+        "(in) conn_represent      - internal representation of connection in the network: matrix or list."      
+          
+        super().__init__(num_osc, conn_type.NONE, conn_represent);
         
         self._membrane_potential        = [0.0] * self._num_osc;
         self._active_cond_sodium        = [0.0] * self._num_osc;
@@ -157,6 +160,8 @@ class hhn_network(network, network_interface):
         "Returns dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,"
         "otherwise returns only last values (last step of simulation) of dynamic."        
         
+        self._membrane_dynamic_pointer = None;
+        
         # Check solver before simulation
         if (solution == solve_type.FAST):
             raise NameError("Solver FAST is not support due to low accuracy that leads to huge error.");
@@ -186,6 +191,7 @@ class hhn_network(network, network_interface):
                 dyn_memb = memb;
                 dyn_time = t;
         
+        self._membrane_dynamic_pointer = dyn_memb;
         return (dyn_time, dyn_memb);
     
     
@@ -375,8 +381,12 @@ class hhn_network(network, network_interface):
         "Returns list of grours (lists) of indexes of synchronous oscillators."
         "For example [ [index_osc1, index_osc3], [index_osc2], [index_osc4, index_osc5] ]."
         
-        # TODO: LEGION allocation of clusters should be reused for avoiding duplicated code.
-        pass;
+        ignore = set();
+        
+        ignore.add(self._num_osc);
+        ignore.add(self._num_osc + 1);
+        
+        return allocate_sync_ensembles(self._membrane_dynamic_pointer, tolerance, 20.0, ignore);
     
     
     def __alfa_function(self, time, alfa, betta):

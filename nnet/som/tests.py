@@ -1,4 +1,4 @@
-import unittest
+import unittest;
 
 from nnet.som import som;
 from nnet.som import type_conn;
