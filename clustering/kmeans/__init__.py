@@ -44,6 +44,7 @@ class kmeans:
         
         if (self.__ccore is True):
             self.__clusters = core.kmeans(self.__pointer_data, self.__centers, self.__tolerance);
+            self.__centers = self.__update_centers();
         else: 
             changes = numpy.Inf;
              
@@ -68,6 +69,12 @@ class kmeans:
         "Returns list of allocated clusters, each cluster contains indexes of objects in list of data."
         
         return self.__clusters;
+    
+    
+    def get_centers(self):
+        "Returns list of centers for allocated clusters."
+
+        return self.__centers;
 
 
     def __update_clusters(self):
