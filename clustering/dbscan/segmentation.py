@@ -12,7 +12,10 @@ from clustering.dbscan import dbscan;
 def template_segmentation_image(source, color_radius, color_neighbors, object_radius, object_neighbors, noise_size):    
     data = read_image(source);
 
-    clusters = dbscan(data, color_radius, color_neighbors, False, True);
+    dbscan_instance = dbscan(data, color_radius, color_neighbors, True);
+    dbscan_instance.process();
+    
+    clusters = dbscan_instance.get_clusters();
     
     real_clusters = [cluster for cluster in clusters if len(cluster) > noise_size];
     draw_image_segments(source, real_clusters);
@@ -38,7 +41,10 @@ def template_segmentation_image(source, color_radius, color_neighbors, object_ra
         if (len(coordinates) < noise_size):
             continue;
         
-        object_clusters = dbscan(coordinates, object_radius, object_neighbors, False, True);
+        dbscan_instance = dbscan(coordinates, object_radius, object_neighbors, True);
+        dbscan_instance.process();
+    
+        object_clusters = dbscan_instance.get_clusters();
         
         # decode it
         real_description_clusters = [];

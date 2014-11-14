@@ -14,92 +14,114 @@ from support import read_sample;
 
 import core;
 
-def dbscan(data, eps, min_neighbors, return_noise = False, ccore = False):
-    "Clustering algorithm DBSCAN returns allocated clusters and noise that are consisted from input data."
+class dbscan:
+    __pointer_data = None;
+    __eps = 0;
+    __sqrt_eps = 0;
+    __neighbors = 0;
     
-    "(in) data            - input data that is presented as list of points (objects), each point should be represented by list or tuple."
-    "(in) eps             - connectivity radius between points, points may be connected if distance between them less then the radius."
-    "(in) min_neighbors   - minimum number of shared neighbors that is required for establish links between points."
-    "(in) return_noise    - if True than list of points that have been marked as noise will be returned."
-    "(in) ccore           - if True than DLL CCORE (C++ solution) will be used for solving the problem."
+    __clusters = None;
+    __noise = None;
     
-    "If return_noise is False: Returns list of allocated clusters, each cluster contains indexes of objects in list of data."
-    "If return_noise is True: Returns tuple of list of allicated clusters and list of points that are marked as noise."
+    __visited = None;
+    __belong = None;
     
-    if (ccore is True):
-        return core.dbscan(data, eps, min_neighbors, return_noise);
+    __ccore = False;
     
-    sqrt_eps = eps * eps;   # Fast mode
     
-    noise = list();
-    clusters = list();
+    def __init__(self, data, eps, neighbors, ccore):
+        "Constructor of clustering algorithm DBSCAN."
+         
+        "(in) data            - input data that is presented as list of points (objects), each point should be represented by list or tuple."
+        "(in) eps             - connectivity radius between points, points may be connected if distance between them less then the radius."
+        "(in) neighbors       - minimum number of shared neighbors that is required for establish links between points."
+        "(in) ccore           - if True than DLL CCORE (C++ solution) will be used for solving the problem."
     
-    visited = [False] * len(data);
-    belong = [False] * len(data);
-    
-    for i in range(0, len(data)):
-        if (visited[i] == False):
+        self.__pointer_data = data;
+        self.__eps = eps;
+        self.__sqrt_eps = eps * eps;
+        self.__neighbors = neighbors;
+        
+        self.__visited = [False] * len(self.__pointer_data);
+        self.__belong = [False] * len(self.__pointer_data);
+        
+        self.__clusters = [];
+        self.__noise = [];
+        
+        self.__ccore = ccore;
+
+    def process(self):
+        "Performs cluster analysis in line with rules of DBSCAN algorithm. Results of clustering can be obtained using corresponding gets methods."
+        
+        if (self.__ccore is True):
+            result = core.dbscan(self.__pointer_data, self.__eps, self.__neighbors, True);
+            self.__clusters = result[0];
+            self.__noise = result[1];
             
-            # cluster = expand_cluster(data, visited, belong, i, eps, min_neighbors);       # Slow mode
-            cluster = expand_cluster(data, visited, belong, i, sqrt_eps, min_neighbors);    # Fast mode
-            if (cluster != None):
-                clusters.append(cluster);
-            else:
-                noise.append(i);
-                belong[i] = True;
-    
-    if (return_noise == True):
-        return (clusters, noise);
-    else:
-        return clusters;
+            del result;
+        else:
+            for i in range(0, len(self.__pointer_data)):
+                if (self.__visited[i] == False):
+                     
+                    cluster = self.__expand_cluster(i);    # Fast mode
+                    if (cluster != None):
+                        self.__clusters.append(cluster);
+                    else:
+                        self.__noise.append(i);
+                        self.__belong[i] = True;       
 
 
-def expand_cluster(data, visited, belong, point, eps, min_neighbors):
-    "Private function that is used by dbscan. It expands cluster in the input data space."
-    
-    "(in) data          - input data set that is presented by list of points."
-    "(in) visited       - list where points are marked as visited or not, size of the list equals to list of data and index of element the visited list corresponds to index of element from the data."
-    "(in) belong        - list where points are marked as belonging to cluster or noise list."
-    "(in) point         - index of the point from the data."
-    "(in) eps           - connectivity radius between points, points may be connected if distance between them less then the radius."
-    "(in) min_neighbors - if True than list of points that have been marked as noise will be returned."
-    
-    "Return tuple of list of indexes that belong to the same cluster and list of points that are marked as noise: (cluster, noise), or None if nothing has been expanded."
-    cluster = None;
-    visited[point] = True;
-    neighbors = neighbor_indexes(data, point, eps);
-    
-    if (len(neighbors) >= min_neighbors):
+    def get_clusters(self):
+        "Returns list of allocated clusters, each cluster contains indexes of objects in list of data."
         
-        cluster = [];
-        cluster.append(point);
-        
-        belong[point] = True;
-        
-        for i in neighbors:
-            if (visited[i] == False):
-                visited[i] = True;
-                next_neighbors = neighbor_indexes(data, i, eps);
-                
-                if (len(next_neighbors) >= min_neighbors):
-                    # if some node has less then minimal number of neighbors than we shouldn't look at them
-                    # because maybe it's a noise.
-                    neighbors += [k for k in next_neighbors if ( (k in neighbors) == False)];
-            
-            if (belong[i] == False):
-                cluster.append(i);
-                belong[i] = True;
-        
-    return cluster;
-            
-        
-def neighbor_indexes(data, point, eps):
-    "Private function that is used by dbscan. Return list of indexes of neighbors of specified point for the data."
+        return self.__clusters;
     
-    "(in) data        - input data for clustering."
-    "(in) point       - index of point for which potential neighbors should be returned for the data in line with connectivity radius."
-    "(in) eps         - connectivity radius between points, points may be connected if distance between them less then the radius."
     
-    "Return list of indexes of neighbors in line the connectivity radius."
-    # return [i for i in range(0, len(data)) if euclidean_distance(data[point], data[i]) <= eps and data[i] != data[point]];    # Slow mode
-    return [i for i in range(0, len(data)) if euclidean_distance_sqrt(data[point], data[i]) <= eps and data[i] != data[point]]; # Fast mode
+    def get_noise(self):
+        "Returns list of index that are marked as a noise."
+
+        return self.__noise;
+
+
+    def __expand_cluster(self, point):
+        "Expands cluster from specified point in the input data space."
+         
+        "(in) point         - index of the point from the data."
+
+        "Return tuple of list of indexes that belong to the same cluster and list of points that are marked as noise: (cluster, noise), or None if nothing has been expanded."
+        
+        cluster = None;
+        self.__visited[point] = True;
+        neighbors = self.__neighbor_indexes(point);
+         
+        if (len(neighbors) >=self.__neighbors):
+             
+            cluster = [];
+            cluster.append(point);
+             
+            self.__belong[point] = True;
+             
+            for i in neighbors:
+                if (self.__visited[i] == False):
+                    self.__visited[i] = True;
+                    next_neighbors = self.__neighbor_indexes(i);
+                     
+                    if (len(next_neighbors) >= self.__neighbors):
+                        # if some node has less then minimal number of neighbors than we shouldn't look at them
+                        # because maybe it's a noise.
+                        neighbors += [k for k in next_neighbors if ( (k in neighbors) == False)];
+                 
+                if (self.__belong[i] == False):
+                    cluster.append(i);
+                    self.__belong[i] = True;
+             
+        return cluster;
+
+    def __neighbor_indexes(self, point):
+        "Return list of indexes of neighbors of specified point for the data."
+         
+        "(in) point       - index of point for which potential neighbors should be returned for the data in line with connectivity radius."
+         
+        "Return list of indexes of neighbors in line the connectivity radius."
+        # return [i for i in range(0, len(data)) if euclidean_distance(data[point], data[i]) <= eps and data[i] != data[point]];    # Slow mode
+        return [i for i in range(0, len(self.__pointer_data)) if euclidean_distance_sqrt(self.__pointer_data[point], self.__pointer_data[i]) <= self.__sqrt_eps and self.__pointer_data[i] != self.__pointer_data[point]]; # Fast mode

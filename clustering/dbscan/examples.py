@@ -9,13 +9,15 @@ from samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
 def template_clustering(radius, neighb, path, invisible_axes = False, ccore = True):
     sample = read_sample(path);
     
-    (ticks, result) = timedcall(dbscan, sample, radius, neighb, True, ccore);
-    clusters = result[0];
-    noise = result[1];
+    dbscan_instance = dbscan(sample, radius, neighb, ccore);
+    (ticks, result) = timedcall(dbscan_instance.process);
+    
+    clusters = dbscan_instance.get_clusters();
+    noise = dbscan_instance.get_noise();
     
     print("Sample: ", path, "\t\tExecution time: ", ticks, "\n");
     
-    draw_clusters(sample, clusters, [], 'o', hide_axes = invisible_axes);
+    draw_clusters(sample, clusters, [], '.', hide_axes = invisible_axes);
     
 
 

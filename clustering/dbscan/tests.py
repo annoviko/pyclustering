@@ -10,7 +10,12 @@ from samples.definitions import FCPS_SAMPLES;
 class Test(unittest.TestCase):  
     def templateClusteringResults(self, path, radius, neighbors, expected_length_clusters, ccore = False):
         sample = support.read_sample(path);
-        (clusters, noise) = dbscan(sample, radius, neighbors, True, ccore);
+        
+        dbscan_instance = dbscan(sample, radius, neighbors, ccore);
+        dbscan_instance.process();
+        
+        clusters = dbscan_instance.get_clusters();
+        noise = dbscan_instance.get_noise();
         
         assert sum([len(cluster) for cluster in clusters]) + len(noise) == len(sample);
         assert sum([len(cluster) for cluster in clusters]) == sum(expected_length_clusters);
@@ -59,7 +64,12 @@ class Test(unittest.TestCase):
     def templateLengthProcessData(self, path_to_file, radius, min_number_neighbors, max_number_neighbors, ccore = False):
         for number_neighbors in range(min_number_neighbors, max_number_neighbors, 1):
             sample = support.read_sample(path_to_file);
-            (clusters, noise) = dbscan(sample, radius, number_neighbors, True, ccore);
+            
+            dbscan_instance = dbscan(sample, radius, min_number_neighbors, ccore);
+            dbscan_instance.process();
+            
+            clusters = dbscan_instance.get_clusters();
+            noise = dbscan_instance.get_noise();
             
             length = len(noise);
             length += sum([len(cluster) for cluster in clusters]);
