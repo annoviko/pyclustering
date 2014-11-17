@@ -9,9 +9,12 @@ from samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
 def template_clustering(number_clusters, path, ccore = True):
     sample = read_sample(path);
     
-    (ticks, clusters) = timedcall(hierarchical, sample, number_clusters, ccore);
+    hierarchical_instance = hierarchical(sample, number_clusters, ccore)
+    (ticks, result) = timedcall(hierarchical_instance.process);
+    
     print("Sample: ", path, "\t\tExecution time: ", ticks, "\n");
     
+    clusters = hierarchical_instance.get_clusters();
     draw_clusters(sample, clusters);
     
 def cluster_sample1():

@@ -8,7 +8,11 @@ from support import read_sample;
 class Test(unittest.TestCase):
     def templateClusteringResults(self, path, number_clusters, expected_length_clusters, ccore = False):
         sample = read_sample(path);
-        clusters = hierarchical(sample, number_clusters, ccore);
+        
+        hierarchical_instance = hierarchical(sample, number_clusters, ccore);
+        hierarchical_instance.process();
+        
+        clusters = hierarchical_instance.get_clusters();
         
         assert sum([len(cluster) for cluster in clusters]) == len(sample);
         assert sum([len(cluster) for cluster in clusters]) == sum(expected_length_clusters);
