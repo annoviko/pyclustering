@@ -3,7 +3,7 @@
 Cluster analysis algorithm: Classical Hierarchical Algorithm
 
 Based on article description:
- - Anil, K., Dubes, J.C., Dubes, R.C. (1988). Algorithms for Clustering Data.
+ - K.Anil, J.C.Dubes, R.C.Dubes. Algorithms for Clustering Data. 1988.
 
 Implementation: Andrei Novikov (spb.andr@yandex.ru)
 

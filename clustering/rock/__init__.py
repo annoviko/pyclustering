@@ -3,7 +3,7 @@
 Cluster analysis algorithm: ROCK
 
 Based on article description:
- - S.Guha, R.Rastogi, K.Shim. "ROCK: A Robust Clustering Algorithm for Categorical Attributes" - 1999.
+ - S.Guha, R.Rastogi, K.Shim. ROCK: A Robust Clustering Algorithm for Categorical Attributes. 1999.
 
 Implementation: Andrei Novikov (spb.andr@yandex.ru)
 

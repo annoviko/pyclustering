@@ -1,3 +1,14 @@
+'''
+
+Cluster analysis algorithm: SYNC-SOM
+
+Based on article description:
+ - A.Novikov, E.Benderskaya. SYNC-SOM Double-layer Oscillatory Network for Cluster Analysis. 2014.
+
+Implementation: Andrei Novikov (spb.andr@yandex.ru)
+
+'''
+
 from nnet.som import som, type_conn;
 from nnet.sync import sync_network;
 from nnet import initial_type;

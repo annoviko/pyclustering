@@ -1,3 +1,14 @@
+'''
+
+Cluster analysis algorithm: Sync
+
+Based on article description:
+ - T.Miyano, T.Tsutsui. Data Synchronization as a Method of Data Mining. 2007.
+
+Implementation: Andrei Novikov (spb.andr@yandex.ru)
+
+'''
+
 import core;
 
 from nnet.sync import *;

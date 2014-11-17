@@ -3,7 +3,7 @@
 Cluster analysis algorithm: DBSCAN
 
 Based on article description:
- - M.Ester, H.Kriegel, J.Sander, X.Xiaowei. "A density-based algorithm for discovering clusters in large spatial databases with noise", 1996.
+ - M.Ester, H.Kriegel, J.Sander, X.Xiaowei. A density-based algorithm for discovering clusters in large spatial databases with noise. 1996.
 
 Implementation: Andrei Novikov (spb.andr@yandex.ru)
 

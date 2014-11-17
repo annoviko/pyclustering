@@ -3,8 +3,8 @@
 Neural Network: Local Excitatory Global Inhibitory Oscillatory Network (LEGION)
 
 Based on article description:
- - D.Wang, D.Terman. "Image Segmentation Based on Oscillatory Correlation" - 1997.
- - D.Wang, D.Terman. "Locally Excitatory Globally Inhibitory Oscillator Networks" - 1995.
+ - D.Wang, D.Terman. Image Segmentation Based on Oscillatory Correlation. 1997.
+ - D.Wang, D.Terman. Locally Excitatory Globally Inhibitory Oscillator Networks. 1995.
 
 Implementation: Andrei Novikov (spb.andr@yandex.ru)
 
