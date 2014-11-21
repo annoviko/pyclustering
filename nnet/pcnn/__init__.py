@@ -1,3 +1,14 @@
+'''
+
+Neural Network: Pulse Coupled Neural Network
+
+Based on book description:
+ - T.Lindblad, J.M.Kinser. Image Processing Using Pulse-Coupled Neural Networks (2nd edition). 2005.
+
+Implementation: Andrei Novikov (spb.andr@yandex.ru)
+
+'''
+
 from nnet import *;
 
 class pcnn_parameters:

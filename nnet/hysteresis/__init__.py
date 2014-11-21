@@ -1,3 +1,15 @@
+'''
+
+Neural Network: Hysteresis Oscillatory Network
+
+Based on article description:
+ - K.Jinno. Oscillatory Hysteresis Associative Memory. 2002.
+ - K.Jinno, H.Taguchi, T.Yamamoto, H.Hirose. Dynamical Hysteresis Neural Network for Graph Coloring Problem. 2003.
+
+Implementation: Andrei Novikov (spb.andr@yandex.ru)
+
+'''
+
 import numpy;
 
 from scipy.integrate import odeint;

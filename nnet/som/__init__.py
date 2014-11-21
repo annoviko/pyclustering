@@ -1,3 +1,16 @@
+'''
+
+Neural Network: Self-Organized Feature Map
+
+Based on article description:
+ - T.Kohonen. The Self-Organizing Map. 1990.
+ - T.Kohonen, E.Oja, O.Simula, A.Visa, J.Kangas. Engineering Applications of the Self-Organizing Map. 1996.
+
+Implementation: Andrei Novikov (spb.andr@yandex.ru)
+
+'''
+
+
 import math;
 import random;
 import time;

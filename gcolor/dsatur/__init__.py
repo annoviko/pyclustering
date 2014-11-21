@@ -1,3 +1,14 @@
+'''
+
+Graph coloring algorithm: DSATUR
+
+Based on article description:
+ - D.Brelaz. New Methods to color the vertices of a graph. 1979.
+
+Implementation: Andrei Novikov (spb.andr@yandex.ru)
+
+'''
+
 def dsatur(data):
     "DSATUR algorithm implementation. Performs graph coloring problem."
     

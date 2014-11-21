@@ -1,3 +1,18 @@
+'''
+
+Neural Network: Oscillatory Neural Network based on Kuramoto model
+
+Based on article description:
+ - A.Arenas, Y.Moreno, C.Zhou. Synchronization in complex networks. 2008.
+ - X.B.Lu. Adaptive Cluster Synchronization in Coupled Phase Oscillators. 2009.
+ - X.Lou. Adaptive Synchronizability of Coupled Oscillators With Switching. 2012.
+ - A.Novikov, E.Benderskaya. Oscillatory Neural Networks Based on the Kuramoto Model. 2014.
+
+Implementation: Andrei Novikov (spb.andr@yandex.ru)
+
+'''
+
+
 import numpy;
 import random;
 import math;
