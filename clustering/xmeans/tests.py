@@ -9,7 +9,12 @@ from samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
 class Test(unittest.TestCase):
     def templateLengthProcessData(self, path_to_file, start_centers, expected_cluster_length, ccore = False):
         sample = read_sample(path_to_file);
-        clusters = xmeans(sample, start_centers, 20, ccore);
+        
+        #clusters = xmeans(sample, start_centers, 20, ccore);
+        xmeans_instance = xmeans(sample, start_centers, 20, 0.025, ccore);
+        xmeans_instance.process();
+         
+        clusters = xmeans_instance.get_clusters();
     
         obtained_cluster_sizes = [len(cluster) for cluster in clusters];
         assert len(sample) == sum(obtained_cluster_sizes);

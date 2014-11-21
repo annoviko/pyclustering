@@ -4,10 +4,14 @@ from clustering.xmeans import xmeans;
 
 from support import draw_clusters, read_sample, timedcall;
 
-def template_clustering(start_centers, path, tolerance = 0.25, ccore = False):
+def template_clustering(start_centers, path, tolerance = 0.025, ccore = False):
     sample = read_sample(path);
     
-    (ticks, clusters) = timedcall(xmeans, sample, start_centers, 20, ccore);
+    xmeans_instance = xmeans(sample, start_centers, 20, tolerance, ccore);
+    (ticks, result) = timedcall(xmeans_instance.process);
+    
+    clusters = xmeans_instance.get_clusters();
+    
     print("Sample: ", path, "\t\tExecution time: ", ticks, "Number of clusters: ", len(clusters), "\n");
 
     draw_clusters(sample, clusters);
