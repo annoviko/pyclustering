@@ -83,13 +83,25 @@ def average_neighbor_distance(points, num_neigh):
         
 
 def euclidean_distance(a, b):
-    "Return Euclidean distance between two points: 'a' and 'b'"
-    "NOTE! This function for calculation is faster then standard function in ~100 times!"
+    "Calculate Euclidian distance between vector a and b. NOTE! This function for calculation is faster then standard function in ~100 times!"
+    
+    "(in) a    - vector that is represented by list."
+    "(in) b    - vector that is represented by list."
+    
+    "Return Euclidian distance between two vectors."
+    
     distance = euclidean_distance_sqrt(a, b);
     return distance**(0.5);
 
 
 def euclidean_distance_sqrt(a, b):
+    "Calculate square Euclidian distance between vector a and b."
+    
+    "(in) a    - vector that is represented by list."
+    "(in) b    - vector that is represented by list."
+    
+    "Return square Euclidian distance between two vectors."    
+    
     if ( ((type(a) == float) and (type(b) == float)) or ((type(a) == int) and (type(b) == int)) ):
         return (a - b)**2.0;
         
@@ -100,6 +112,26 @@ def euclidean_distance_sqrt(a, b):
     for i in range(0, dimension):
         distance += (a[i] - b[i])**2.0;
         
+    return distance;
+
+
+def manhattan_distance(a, b):
+    "Calculate Manhattan distance between vector a and b."
+    
+    "(in) a    - vector that is represented by list."
+    "(in) b    - vector that is represented by list."
+    
+    "Return Manhattan distance between two vectors."
+    
+    if ( ((type(a) == float) and (type(b) == float)) or ((type(a) == int) and (type(b) == int)) ):
+        return abs(a - b);
+    
+    distance = 0.0;
+    dimension = len(a);
+    
+    for i in range(0, dimension):
+        distance += abs(a[i] - b[i]);
+    
     return distance;
 
 
