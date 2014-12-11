@@ -53,9 +53,12 @@ def cluster_sample6():
 def cluster_elongate():
     template_clustering(SIMPLE_SAMPLES.SAMPLE_ELONGATE, 0.5, 3);
     
-def cluster_two_densities():
-    template_clustering(SIMPLE_SAMPLES.SAMPLE_TWO_DENSITIES, 0.5, 2);
-    
+def cluster_densities1():
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_DENSITIES1, 0.5, 5);
+
+def cluster_densities2():
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_DENSITIES2, 0.5, 5);
+
 def cluster_lsun():
     template_clustering(FCPS_SAMPLES.SAMPLE_LSUN, 0.5, 3);    
     
@@ -94,7 +97,8 @@ cluster_sample4();
 cluster_sample5();
 cluster_sample6();
 cluster_elongate();
-cluster_two_densities();
+cluster_densities1();
+cluster_densities2();
 cluster_lsun();
 cluster_target();
 cluster_two_diamonds();
