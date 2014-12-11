@@ -10,7 +10,9 @@ class Test(unittest.TestCase):
     def templateLengthProcessData(self, path_to_file, radius, cluster_numbers, threshold, expected_cluster_length, ccore = False):
         sample = read_sample(path_to_file);
         
-        clusters = rock(sample, radius, cluster_numbers, threshold, ccore);
+        rock_instance = rock(sample, radius, cluster_numbers, threshold, ccore);
+        rock_instance.process();
+        clusters = rock_instance.get_clusters();
         
         length = sum([len(cluster) for cluster in clusters]);
         assert len(sample) == length;

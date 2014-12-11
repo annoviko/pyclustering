@@ -10,7 +10,11 @@ from support import timedcall;
 def template_clustering(path, radius, cluster_numbers, threshold, draw = True, ccore = True):
     sample = read_sample(path);
     
-    (ticks, clusters) = timedcall(rock, sample, radius, cluster_numbers, threshold, ccore);
+    rock_instance = rock(sample, radius, cluster_numbers, threshold, ccore);
+    (ticks, result) = timedcall(rock_instance.process);
+    
+    clusters = rock_instance.get_clusters();
+    
     print("Sample: ", path, "\t\tExecution time: ", ticks, "\n");
     
     if (draw == True):
