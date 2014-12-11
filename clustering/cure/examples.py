@@ -9,8 +9,11 @@ from clustering.cure import cure;
 
 def template_clustering(number_clusters, path, number_represent_points = 5, compression = 0.5, draw = True, ccore_flag = False):
     sample = read_sample(path);
-    (ticks, clusters) = timedcall(cure, sample, number_clusters, number_represent_points, compression, ccore_flag);
-
+    
+    cure_instance = cure(sample, number_clusters, number_represent_points, compression, ccore_flag);
+    (ticks, result) = timedcall(cure_instance.process);
+    clusters = cure_instance.get_clusters();
+    
     print("Sample: ", path, "\t\tExecution time: ", ticks, "\n");
 
     if (draw is True):

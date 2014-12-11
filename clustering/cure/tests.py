@@ -5,12 +5,14 @@ from samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
 from support import read_sample;
 
 from clustering.cure import cure;
-from clustering.cure import create_queue;
 
 class Test(unittest.TestCase):
     def template_cluster_allocation(self, path, cluster_sizes, number_cluster, number_represent_points = 5, compression = 0.5, ccore_flag = False):
         sample = read_sample(path);
-        clusters = cure(sample, number_cluster, ccore = ccore_flag);
+        
+        cure_instance = cure(sample, number_cluster, ccore = ccore_flag);
+        cure_instance.process();
+        clusters = cure_instance.get_clusters();
 
         obtained_cluster_sizes = [len(cluster) for cluster in clusters];
         
@@ -67,32 +69,6 @@ class Test(unittest.TestCase):
         self.template_cluster_allocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [60], 1, 5, 0.5, True);
         self.template_cluster_allocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, [75], 1, 5, 0.5, True);
         self.template_cluster_allocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [60], 1, 5, 0.5, True);
-
-
-    def template_queue_creation(self, path):
-        sample = read_sample(path);
-        queue = create_queue(sample);
-        
-        cursor_distance = 0;
-        for cluster in queue:
-            assert cluster.points != None;
-            assert len(cluster.points) == 1;
-            assert cluster.mean == cluster.points[0];
-            assert cluster.rep != None;
-            assert cluster.rep == cluster.points;
-            assert cluster.closest != None;
-            assert cluster.closest is not cluster;
-            assert cluster.closest in queue;
-            assert cluster.distance >= cursor_distance;
-            
-            cursor_distance = cluster.distance;
-
-    def testCreateQueue(self):
-        self.template_queue_creation(SIMPLE_SAMPLES.SAMPLE_SIMPLE1);
-        self.template_queue_creation(SIMPLE_SAMPLES.SAMPLE_SIMPLE2);
-        self.template_queue_creation(SIMPLE_SAMPLES.SAMPLE_SIMPLE3);
-        self.template_queue_creation(SIMPLE_SAMPLES.SAMPLE_SIMPLE4);
-        self.template_queue_creation(SIMPLE_SAMPLES.SAMPLE_SIMPLE5);
         
 
 if __name__ == "__main__":
