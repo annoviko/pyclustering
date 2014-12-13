@@ -13,11 +13,11 @@ import numpy;
 
 from decimal import *;
 
-from support import kdtree;
 from support import read_sample;
 from support import euclidean_distance;
 from support import euclidean_distance_sqrt;
 from support import draw_clusters;
+from support.kdtree import kdtree;
 
 import core;
 
@@ -299,7 +299,7 @@ class cure:
         
         "Return k-d tree of representation points of CURE clusters."
         
-        self.__tree = kdtree.kdtree();
+        self.__tree = kdtree();
         for current_cluster in self.__queue:
             for representative_point in current_cluster.rep:
                 self.__tree.insert(representative_point, current_cluster);    

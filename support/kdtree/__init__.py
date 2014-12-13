@@ -1,9 +1,29 @@
+'''
+
+Data Structure: KD-Tree
+
+Based on book description:
+ - M.Samet. The Design And Analysis Of Spatial Data Structures. 1994.
+
+Implementation: Andrei Novikov (spb.andr@yandex.ru)
+
+'''
+
 import numpy;
 
 from support import euclidean_distance_sqrt;
 
 class node:
     def __init__(self, data = None, payload = None, left = None, right = None, disc = None, parent = None):
+        "Constructor of node of KD Tree."
+        
+        "(in) data           - data point that is presented as list of coodinates."
+        "(in) payload        - payload of node (pointer to essense that is attached to this node)."
+        "(in) left           - pointer to the node of KD-Tree that is represented left successor."
+        "(in) right          - pointer to the node of KD-Tree that is represented right successor."
+        "(in) disc           - index of dimention of that node."
+        "(in) parent         - pointer to the node of KD-Tree that is represented parent."
+        
         self.data = data;
         self.payload = payload;
         self.left = left;
@@ -33,8 +53,11 @@ class kdtree:
     __dimension = None;
     
     def __init__(self, data_list = None, payload_list = None):
-        "Create kd-tree from list of points and from according list of payloads"
-        "If lists were not specified then empty kd-tree will be created"
+        "Create kd-tree from list of points and from according list of payloads."
+        "If lists were not specified then empty kd-tree will be created."
+        
+        "(in) data_list       - insert points from the list to created KD tree."
+        "(in) payload_list    - insert payload from the list to created KD tree, length should be equal to length of data_list if it is specified."
         
         if (data_list is None):
             return; # Just return from here, tree can be filled by insert method later
@@ -50,7 +73,10 @@ class kdtree:
             
                     
     def insert(self, point, payload):
-        "Insert new point with payload to kd-tree"
+        "Insert new point with payload to kd-tree."
+        
+        "(in) point      - coordinates of the point of inserted node."
+        "(in) payload    - payload of inserted node."
         
         if (self.__root is None):
             self.__dimension = len(point);
@@ -86,7 +112,11 @@ class kdtree:
     
     
     def remove(self, point):
-        "Remove specified point from kd-tree"
+        "Remove specified point from kd-tree."
+        
+        "(in) point      - coordinates of the point of removed node."
+        
+        "Return root if node has been successfully removed, otherwise None."
         
         # Get required node
         node_for_remove = self.find_node(point);
@@ -113,7 +143,11 @@ class kdtree:
     
     
     def __recursive_remove(self, node):
-        "Delete node and return root of subtree"
+        "Delete node and return root of subtree."
+        
+        "(in) node    - pointer to the node that should be removed."
+        
+        "Return minimal node in line with coordinate that is defined by descriminator."
                 
         # Check if it is leaf
         if ( (node.right is None) and (node.left is None) ):
@@ -126,9 +160,9 @@ class kdtree:
             node.right = node.left;
             node.left = None;
         
-        # Find minimal node with in line with coordinate that is defined by discriminator
+        # Find minimal node in line with coordinate that is defined by discriminator
         minimal_node = self.find_minimal_node(node.right, discriminator);
-        parent = self.find_parent(minimal_node);
+        parent = minimal_node.parent;
         
         if (parent.left is minimal_node):
             parent.left = self.__recursive_remove(minimal_node);
@@ -153,26 +187,30 @@ class kdtree:
         
     
     def find_minimal_node(self, node, discriminator):
-        "Return node minimal coordinate that is defined by discriminator"
+        "Return node minimal coordinate that is defined by discriminator."
+        
+        "(in) node            - node of KD tree from that search should be started."
+        "(in) discriminator   - coordinate number that is used for comparison."
+        
+        "Return minimal node in line with descriminator from the specified node."
+        
         assert node is not None;
         candidates = [self.find_minimal_node(child, discriminator) for child in self.children(node) if child is not None];
         candidates = candidates + [ node ];
         
         min_key = lambda cur_node: cur_node.data[discriminator];
-        return min(candidates, key = min_key);
-    
-    
-    def find_parent(self, node, cur_node = None):
-        "Return parent of specified node"
-        "The parent was added for reducing execution time, so the method is used for compatibility, so should be removed"
-        # TODO: refactoring is required for removing this method.
-        return node.parent;
+        return min(candidates, key = min_key);    
     
     
     def find_node(self, point, cur_node = None):
-        "Return node with coordinates that are defined by specified point"
-        "If node does not exist then None will be returned"
-        "Otherwise required node will be returned"
+        "Return node with coordinates that are defined by specified point."
+        "If node does not exist then None will be returned."
+        "Otherwise required node will be returned."
+        
+        "(in) point    - list of coordinates of the point whose node should be found."
+        "(in) cure_node    - pointer to node of tree from that search should be started."
+        
+        "Return founded node in case of existance of node with specified coordinates, otherwise it return None."
         
         req_node = None;
         
@@ -202,7 +240,14 @@ class kdtree:
     
     
     def find_nearest_dist_node(self, point, distance, retdistance = False):
-        "Return nearest neighbor in area with radius = distance"
+        "Return nearest neighbor in area with radius = distance."
+        
+        "(in) point        - list of coordinates (point) for which searching is performed."
+        "(in) distance     - maximum distance where neighbors are searched."
+        "(in) retdistance  - if True - returns neighbors with distances to them, otherwise only neighbors is returned."
+        
+        "Return neighbors, of redistance is True then neighbors with distances to them will be returned."
+        
         best_nodes = self.find_nearest_dist_nodes(point, distance);
             
         if (best_nodes == []): 
@@ -217,7 +262,13 @@ class kdtree:
     
     
     def find_nearest_dist_nodes(self, point, distance):
-        "Return list of neighbors such as tuple (distance, node) that is located in area that is covered by distance"
+        "Return list of neighbors such as tuple (distance, node) that is located in area that is covered by distance."
+        
+        "(in) point       - list of coordinates that is considered as centroind for searching."
+        "(in) distance    - distance from the center where seaching is performed."
+        
+        "Return list of neighbors in area that is specified by point (center) and distance (radius)."
+        
         best_nodes = [];
         self.__recursive_nearest_nodes(point, distance, distance ** 2, self.__root, best_nodes);
         
@@ -225,6 +276,14 @@ class kdtree:
     
     
     def __recursive_nearest_nodes(self, point, distance, sqrt_distance, node, best_nodes):
+        "Return list of neighbors such as tuple (distance, node) that is located in area that is covered by distance."
+        
+        "(in) point           - list of coordinates that is considered as centroind for searching."
+        "(in) distance        - distance from the center where seaching is performed."
+        "(in) sqrt_distance   - square distance from the center where searching is performed."
+        "(in) node            - node from that searching is performed."
+        "(out) best_nodes     - list of founded nodes."
+        
         minimum = node.data[node.disc] - distance;
         maximum = node.data[node.disc] + distance;
         
@@ -274,6 +333,12 @@ class kdtree:
     
     
     def children(self, node):
+        "Return list of children of node."
+        
+        "(in) node    - node whose children are required."
+        
+        "Return list of children of node. If node haven't got any child then None is returned."
+        
         if (node.left is not None):
             yield node.left;
         if (node.right is not None):
@@ -281,6 +346,13 @@ class kdtree:
             
     
     def traverse(self, node = None, level = None):
+        "Return all nodes of subtree that is defined by node specified in input parameter."
+        
+        "(in) node        - node from that travering of subtree is performed."
+        "(in) level       - should be ignored by application."
+        
+        "Return all nodes of subtree."
+        
         if (node is None):
             node  = self.__root;
             level = 0;
@@ -297,6 +369,8 @@ class kdtree:
             
     
     def show(self):
+        "Display tree on the console."
+        
         nodes = self.traverse();
         if (nodes == []):
             return;
