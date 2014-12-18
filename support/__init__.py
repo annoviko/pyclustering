@@ -508,7 +508,54 @@ def draw_image_segments(source, clusters, hide_axes = True):
 
             
     plt.show();
+
+
+def linear_sum(list_vector):
+    "Calculate linear sum of vector that is represented by list. Each element can be represented by list - multidimensional elements."
     
+    "(in) list_vector    - input vector represented by list."
+    
+    "Return calculated linear sum of vector that can be represented by list in case of multidimensional elements."
+    
+    dimension = 1;
+    linear_sum = 0.0;
+    
+    if (type(list_vector[0]) == list):
+        dimension = len(list_vector[0]);
+        linear_sum = [0] * dimension;
+        
+    for index_element in range(0, len(list_vector)):
+        if (dimension > 1):
+            for index_dimension in range(0, dimension):
+                linear_sum[index_dimension] += list_vector[index_element][index_dimension];
+        else:
+            linear_sum += list_vector[index_element];
+
+    return linear_sum;
+
+
+def square_sum(list_vector):
+    "Calculate square sum of vector that is represented by list. Each element can be represented by list - multidimensional elements."
+    
+    "(in) square_sum    - input vector represented by list."
+    
+    "Return calculated square sum of vector."
+    
+    dimension = 1;
+    linear_sum = 0.0;
+    
+    if (type(list_vector[0]) == list):
+        dimension = len(list_vector[0]);
+        linear_sum = [0] * dimension;
+        
+    for index_element in range(0, len(list_vector)):
+        if (dimension > 1):
+            linear_sum += sum(list_math_multiplication(list_vector[index_element], list_vector[index_element]));
+        else:
+            linear_sum += list_vector[index_element] * list_vector[index_element];
+         
+    return linear_sum;
+
     
 def list_math_subtraction(a, b):
     "Subtraction of two lists. Each element from list 'a' is subtracted by element from list 'b' accordingly."

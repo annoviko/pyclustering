@@ -23,6 +23,7 @@ from nnet.som                       import tests as nnet_som_unit_tests;
 from nnet.sync                      import tests as nnet_sync_unit_tests;
 from nnet                           import tests as nnet_unit_tests;
 
+from support.cftree                 import tests as support_cftree_unit_tests;
 from support.kdtree                 import tests as support_kdtree_unit_tests;
 from support                        import tests as support_unit_tests;
 
@@ -54,6 +55,7 @@ if __name__ == "__main__":
     suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_som_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_sync_unit_tests));
     
+    suite.addTests(unittest.TestLoader().loadTestsFromModule(support_cftree_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(support_kdtree_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(support_unit_tests));
     
