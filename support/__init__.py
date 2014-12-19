@@ -542,19 +542,18 @@ def square_sum(list_vector):
     "Return calculated square sum of vector."
     
     dimension = 1;
-    linear_sum = 0.0;
+    square_sum = 0.0;
     
     if (type(list_vector[0]) == list):
         dimension = len(list_vector[0]);
-        linear_sum = [0] * dimension;
         
     for index_element in range(0, len(list_vector)):
         if (dimension > 1):
-            linear_sum += sum(list_math_multiplication(list_vector[index_element], list_vector[index_element]));
+            square_sum += sum(list_math_multiplication(list_vector[index_element], list_vector[index_element]));
         else:
-            linear_sum += list_vector[index_element] * list_vector[index_element];
+            square_sum += list_vector[index_element] * list_vector[index_element];
          
-    return linear_sum;
+    return square_sum;
 
     
 def list_math_subtraction(a, b):

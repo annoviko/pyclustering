@@ -101,16 +101,16 @@ def segmentation_image_fruits_small():
     template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE_FRUITS_SMALL, 15, 10, 2, 4, 20);
 
 def segmentation_image_white_sea():
-    template_segmentation_image(IMAGE_MAP_SAMPLES.IMAGE_WHITE_SEA, 16, 4, None, None, 50);
+    template_segmentation_image(IMAGE_MAP_SAMPLES.IMAGE_WHITE_SEA, 8, 16, None, None, 30);
 
 def segmentation_image_white_sea_small():
-    template_segmentation_image(IMAGE_MAP_SAMPLES.IMAGE_WHITE_SEA_SMALL, 16, 4, None, None, 50);
+    template_segmentation_image(IMAGE_MAP_SAMPLES.IMAGE_WHITE_SEA_SMALL, 8, 16, None, None, 10);
     
 def segmentation_image_nile():
-    template_segmentation_image(IMAGE_MAP_SAMPLES.IMAGE_NILE, 16, 4, None, None, 50);
+    template_segmentation_image(IMAGE_MAP_SAMPLES.IMAGE_NILE, 5, 11, None, None, 30);
     
 def segmentation_image_nile_small():
-    template_segmentation_image(IMAGE_MAP_SAMPLES.IMAGE_NILE_SMALL, 16, 4, None, None, 50);
+    template_segmentation_image(IMAGE_MAP_SAMPLES.IMAGE_NILE_SMALL, 5, 11, 10, 5, 10);
     
     
 segmentation_image_simple1();
@@ -126,7 +126,7 @@ segmentation_image_simple10();
 segmentation_image_beach();
 segmentation_image_building();
 segmentation_image_fruits_small();
- 
+
 segmentation_image_white_sea();
 segmentation_image_white_sea_small();
 segmentation_image_nile();

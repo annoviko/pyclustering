@@ -124,11 +124,19 @@ class cfentry:
         if (self.__radius is not None):
             return self.__radius;
         
-        centroid = self.__get_centroid();
+        centroid = self.get_centroid();
         
         radius_part_1 = self.square_sum;
-        radius_part_2 = 2.0 * sum(list_math_multiplication(self.linear_sum, centroid));
-        radius_part_3 = sum(list_math_multiplication(centroid, centroid));
+        
+        radius_part_2 = 0.0;
+        radius_part_3 = 0.0;
+        
+        if (type(centroid) == list):
+            radius_part_2 = 2.0 * sum(list_math_multiplication(self.linear_sum, centroid));
+            radius_part_3 = self.number_points * sum(list_math_multiplication(centroid, centroid));
+        else:
+            radius_part_2 = 2.0 * self.linear_sum * centroid;
+            radius_part_3 = self.number_points * centroid * centroid;
         
         self.__radius = ( (1.0 / self.number_points) * (radius_part_1 - radius_part_2 + radius_part_3) ) ** 0.5;
         return self.__radius;
@@ -140,9 +148,14 @@ class cfentry:
         if (self.__diameter is not None):
             return self.__diameter;
         
-        diameter_part = self.square_sum - 2.0 * sum(list_math_multiplication(self.linear_sum, self.linear_sum)) + self.square_sum;
+        diameter_part = 0.0;
+        if (type(self.linear_sum) == list):
+            diameter_part = self.square_sum * self.number_points - 2.0 * sum(list_math_multiplication(self.linear_sum, self.linear_sum)) + self.square_sum * self.number_points;
+            print("diameter_part:", diameter_part);
+        else:
+            diameter_part = self.square_sum * self.number_points - 2.0 * self.linear_sum * self.linear_sum + self.square_sum * self.number_points;
+            
         self.__diameter = ( diameter_part / (self.number_points * (self.number_points - 1)) ) ** 0.5;
-        
         return self.__diameter;
     
         
