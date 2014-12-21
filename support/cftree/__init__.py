@@ -84,10 +84,10 @@ class cfentry:
         "Return distance between two clusters."
         
         if (type_measurement is measurement_type.CENTROID_EUCLIDIAN_DISTANCE):
-            return euclidean_distance_sqrt(entry.__get_centroid(), self.__get_centroid());
+            return euclidean_distance_sqrt(entry.get_centroid(), self.get_centroid());
         
         elif (type_measurement is measurement_type.CENTROID_MANHATTAN_DISTANCE):
-            return manhattan_distance(entry.__get_centroid(), self.__get_centroid());
+            return manhattan_distance(entry.get_centroid(), self.get_centroid());
         
         elif (type_measurement is measurement_type.AVERAGE_INTER_CLUSTER_DISTANCE):
             return self.__get_average_inter_cluster_distance(entry);
@@ -166,9 +166,9 @@ class cfentry:
         
         "Return average inter cluster distance."
         
-        linear_part_distance = sum(list_math_multiplication(self.__centroid, entry.__centroid));
+        linear_part_distance = sum(list_math_multiplication(self.linear_sum, entry.linear_sum));
         
-        return ( (self.square_sum - 2.0 * linear_part_distance + entry.square_sum) / (self.number_points * entry.number_points) ) ** 0.5;
+        return ( (entry.number_points * self.square_sum - 2.0 * linear_part_distance + self.number_points * entry.square_sum) / (self.number_points * entry.number_points) ) ** 0.5;
     
     
     def __get_average_intra_cluster_distance(self, entry):
