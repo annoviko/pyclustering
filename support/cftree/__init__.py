@@ -9,9 +9,12 @@ Implementation: Andrei Novikov (spb.andr@yandex.ru)
 
 '''
 
+from copy import copy;
+
 from support import euclidean_distance, euclidean_distance_sqrt;
 from support import manhattan_distance;
 from support import list_math_addition, list_math_multiplication,list_math_division_number;
+from support import linear_sum, square_sum;
 
 class measurement_type:
     CENTROID_EUCLIDIAN_DISTANCE = 0;
@@ -53,26 +56,37 @@ class cfentry:
         self.__radius = None;
         self.__diameter = None;
     
+    
+    def __copy__(self):
+        return cfentry(self.__number_points, self.__linear_sum, self.__square_sum);
+    
+    
     def __repr__(self):
         return 'CF (N: %s, LS: %s, SS: %s)' % (self.number_points, self.__linear_sum, self.__square_sum);    
     
     
-    def merge(self, entry):
-        "Merge current clustering feature with another."
+    def __str__(self):
+        return self.__repr__();
+    
+    
+    def merge(self, entry, threshold_diameter):
+        "Try to merge current clustering feature with another. Return result of merging cluster features."
         
-        "(in) entry    - pointer to clustering feature that should be merged with current."
+        "(in) entry                 - pointer to clustering feature that should be merged with current."
+        "(in) threshold_diameter    - if specified then cluster feature is merged if new diameter is less than threshold."
+        "                             if None then cluster feature is merged certainly."
         
-        self.number_points += entry.number_points;
+        "Return merged cluster feature in case of successful merging (less than specified diameter). Otherwise return None."
         
-        dimension = len(self.linear_sum);
-        for index_dimension in range(0, dimension):
-            self.linear_sum[index_dimension] += entry.linear_sum[index_dimension];
+        number_points = self.number_points + entry.number_points;
+        linear_sum = list_math_addition(self.linear_sum, entry.linear_sum);        
+        square_sum = self.square_sum + entry.square_sum;
         
-        self.square_sum += entry.square_sum;
+        merged_entry = cfentry(number_points, linear_sum, square_sum);
+        if ( (threshold_diameter is not None) and (merged_entry.get_diameter() > threshold_diameter) ):
+            return None;
         
-        self.__centroid = None;
-        self.__radius = None;
-        self.__diameter = None;
+        return merged_entry;
     
     
     def get_distance(self, entry, type_measurement):
@@ -206,33 +220,241 @@ class cfentry:
         
         linear_part_22 = sum(list_math_multiplication(entry.linear_sum, entry.linear_sum));
         variance_part_third = -( entry.square_sum - (2.0 / entry.number_points) * linear_part_22 + entry.number_points * (1.0 / entry.number_points ** 2.0) * linear_part_22 );
-        
-        print(variance_part_first, variance_part_second, variance_part_third);
-        
+
         return (variance_part_first + variance_part_second + variance_part_third);
         
+
+class cfnode:
+    "Representation of node of CF-Tree."
+    
+    def __init__(self, feature, parent, successors, entities):
+        self.feature = copy(feature);
+        self.successors = successors;   # pointers to CF nodes
+        self.parent = parent;
+        
+        self.entities = entities;       # pointer to entities (clustering features) - used only in case of leaf
+    
+    
+    def __repr__(self):
+        return 'Node (%s, %s, [%s, %s])' % (self.feature, len(self.successors));
+
+
+    def __str__(self):
+        return self.__repr__();
+    
+    
+    def append_entity(self, entity):
+        self.feature = self.feature.merge(entity);
+        self.entities.append(entity);
+    
+    
+    def append_successor(self, successor):
+        self.feature = self.feature.merge(successor.feature);
+        self.successors.append(successor);
+    
+    
+    def get_distance(self, node, type_measurement):
+        if (type(node) == cfnode):
+            return self.feature.get_distance(node.feature, type_measurement);
+        elif (type(node) == cfentry):
+            return self.feature.get_distance(node, type_measurement);
+        else:
+            assert 0;
+
+    
+    def get_farthest_entities(self):
+        farthest_entity1 = None;
+        farthest_entity2 = None;
+        farthest_distance = float("Inf");
+        
+        for i in range(0, len(self.entities)):
+            candidate1 = self.entities[i];
+            
+            for j in range(i, len(self.entities)):
+                candidate2 = self.entities[j];
+                candidate_distance = candidate1.get_distance(candidate2, self.__type_measurement);
+                
+                if (candidate_distance < farthest_distance):
+                    farthest_distance = candidate_distance;
+                    farthest_entity1 = candidate1;
+                    farthest_entity2 = candidate2;        
+        
+        return [farthest_entity1, farthest_entity2];
+    
+    
+    def get_farthest_nodes(self, essences):
+        farthest_node1 = None;
+        farthest_node2 = None;
+        farthest_distance = float("Inf");
+        
+        for i in range(0, len(self.successors)):
+            candidate1 = self.successors[i];
+            
+            for j in range(i, len(self.successors)):
+                candidate2 = self.successors[j];
+                candidate_distance = candidate1.get_distance(candidate2, self.__type_measurement);
+                
+                if (candidate_distance < farthest_distance):
+                    farthest_distance = candidate_distance;
+                    farthest_node1 = candidate1;
+                    farthest_node2 = candidate2;        
+        
+        return [farthest_node1, farthest_node2];
+    
+    
+    def get_nearest_entity(self, entity): 
+        min_key = lambda cur_entity: cur_entity.get_distance(entity, self.__type_measurement);
+        return min(self.entities, key = min_key);
+
 
 
 class cftree:
     __root = None;
+    __leafes = None;
     
     __branch_factor = 0;
     __threshold = 0.0;
+    __max_entities = None;
     
-    def __init__(self, branch_factor, threshold):
+    __type_measurement = None;
+    
+    
+    def __init__(self, branch_factor, threshold, max_entities, type_measurement = measurement_type.CENTROID_EUCLIDIAN_DISTANCE):
         self.__branch_factor = branch_factor; # maximum number of children
         self.__threshold = threshold;         # maximum diameter of sub-clusters stored at the leaf nodes
-    
-    def insert(self, node):
-        if (self.__root is None):
-            self.__root = node;
-            
-        else:
-            # find the closest child node
-            pass;
+        self.__max_entities = max_entities;
         
-    def __find_nearest_leaf(self, node):
-        pass;
+        self.__leafes = [];
+        
+        self.__type_measurement = type_measurement;
+    
+    
+    def insert(self, cluster):
+        entry = cfentry(len(cluster), linear_sum(cluster), square_sum(cluster));
+        node = cfnode(copy(entry), None, None, None);
+        
+        if (self.__root is None):
+            self.__root = cfnode(copy(entry), None, [ node ], None);
+            
+            node.parent = self.__root;
+            node.entries = [ copy(node.feature) ];
+            
+            self.__leafes.append(node);
+        else:
+            self.__recursive_insert(node, self.__root);
+    
+    
+    def find_nearest_leaf(self, node, search_node = None):
+        nearest_node = self.__root;
+        
+        if (search_node is not None):
+            nearest_node = search_node;
+        
+        if (search_node.successors is not None):
+            min_key = lambda child_node: child_node.get_distance(node, self.__type_measurement);
+            nearest_child_node = min(node.successors, key = min_key);
+            
+            nearest_node = self.__find_nearest_leaf(node, nearest_child_node);
+        
+        return nearest_node;
+    
+    
+    def __recursive_insert(self, new_node, search_node):
+        # None-leaf node
+        if (search_node.successors is not None):
+            min_key = lambda child_node: child_node.get_distance(search_node, self.__type_measurement);
+            nearest_child_node = min(search_node.successors, key = min_key);
+            
+            self.__recursive_insert(new_node, nearest_child_node);
+            
+            # Update clustering feature of none-leaf node.
+            search_node.feature.merge(new_node.feature);
+                
+            # Check branch factor, probably some leaf has been splitted and threshold has been exceeded.
+            if (len(search_node.successors) > self.__branch_factor):
+                
+                # Check if it's aleady root then new root should be created (height is increased in this case).
+                if (search_node is self.__root):
+                    self.__root = cfnode(copy(search_node.feature), None, [ search_node ], None);
+                    search_node.parent = self.__root;
+                    
+                [new_node1, new_node2] = self.__split_nonleaf_node(self, search_node);
+                
+                # Update parent list of successors
+                parent = search_node.parent;
+                parent.successors.remove(search_node);
+                parent.successors.append(new_node1);
+                parent.successors.append(new_node2);
+        
+        # Leaf is reached 
+        else:
+            # Try to absorb by the entity
+            search_entity = search_node.get_nearest_entity();
+            merged_entity = search_entity.merge(new_node.feature, self.__threshold);
+            
+            # Otherwise try to add new entry
+            if (merged_entity is None):
+                # If it's not exceeded append entity and update feature of the leaf node.
+                if (len(search_node.successors) < self.__max_entities):
+                    search_node.append_entity(new_node.feature);
+                
+                # otherwise current node should be splitted
+                else:
+                    [new_node1, new_node2] = self.__split_leaf_node(search_node);        
+                    
+                    self.__leafes.append(new_node1);
+                    self.__leafes.append(new_node2);
+                    
+                    # Update parent list of successors
+                    parent = search_node.parent;
+                    if (parent is not None):
+                        if (parent is not self.__root):
+                            parent.successors.remove(search_node);
+                            parent.successors.append(new_node1);
+                            parent.successors.append(new_node2);
+    
+    
+    def __split_nonleaf_node(self, node):
+        [farthest_node1, farthest_node2] = node.get_farthest_nodes();
+        
+        # create new non-leaf nodes
+        new_node1 = cfnode(farthest_node1.feature, node.parent, [ farthest_node1 ], None);
+        new_node2 = cfnode(farthest_node2.feature, node.parent, [ farthest_node2 ], None);
+                    
+        # re-insert other successors
+        for successor in node.successors:
+            if ( (successor is not farthest_node1) and (successor is not farthest_node2) ):
+                distance1 = new_node1.get_distance(successor, self.__type_measurement);
+                distance2 = new_node2.get_distance(successor, self.__type_measurement);
+                
+                if (distance1 < distance2):
+                    new_node1.append_successor(successor);
+                else:
+                    new_node2.append_successor(successor);
+        
+        return [new_node1, new_node2];
+    
+    
+    def __split_leaf_node(self, node):
+        # search farthest pair of entities
+        [farthest_entity1, farthest_entity2] = node.get_farthest_entities();
+                    
+        # create new nodes
+        new_node1 = cfnode(farthest_entity1, node.parent, None, [ farthest_entity1 ]);
+        new_node2 = cfnode(farthest_entity2, node.parent, None, [ farthest_entity2 ]);
+        
+        # re-insert other entities
+        for entity in node.entities:
+            if ( (entity is not farthest_entity1) and (entity is not farthest_entity2) ):
+                distance1 = new_node1.get_distance(entity, self.__type_measurement);
+                distance2 = new_node2.get_distance(entity, self.__type_measurement);
+                
+                if (distance1 < distance2):
+                    new_node1.append_entity(entity);
+                else:
+                    new_node2.append_entity(entity);
+        
+        return [new_node1, new_node2];
 
     
     
