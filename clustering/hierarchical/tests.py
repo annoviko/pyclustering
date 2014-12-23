@@ -5,6 +5,8 @@ from samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
 from clustering.hierarchical import hierarchical;
 from support import read_sample;
 
+from random import random;
+
 class Test(unittest.TestCase):
     def templateClusteringResults(self, path, number_clusters, expected_length_clusters, ccore = False):
         sample = read_sample(path);
@@ -36,11 +38,7 @@ class Test(unittest.TestCase):
         
     def testClusteringSampleSimple5(self):
         self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 4, [15, 15, 15, 15]);
-        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 1, [60]);
-        
-    def testClusteringHepta(self):
-        self.templateClusteringResults(FCPS_SAMPLES.SAMPLE_HEPTA, 7, [30, 30, 30, 30, 30, 30, 32]);        
-        self.templateClusteringResults(FCPS_SAMPLES.SAMPLE_HEPTA, 1, [212]);  
+        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 1, [60]); 
 
     def testClusteringByCore(self):
         self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, [5, 5], ccore = True);
@@ -53,9 +51,24 @@ class Test(unittest.TestCase):
         self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 1, [75], ccore = True);
         self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 4, [15, 15, 15, 15], ccore = True);
         self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 1, [60], ccore = True);
-        self.templateClusteringResults(FCPS_SAMPLES.SAMPLE_HEPTA, 7, [30, 30, 30, 30, 30, 30, 32], ccore = True);
-        self.templateClusteringResults(FCPS_SAMPLES.SAMPLE_HEPTA, 1, [212], ccore = True);
         
+    
+    def templateClusterAllocationOneDimensionData(self, ccore_flag):
+        input_data = [ [random()] for i in range(10) ] + [ [random() + 3] for i in range(10) ] + [ [random() + 5] for i in range(10) ] + [ [random() + 8] for i in range(10) ];
+        
+        hierarchical_instance = hierarchical(input_data, 4, ccore_flag);
+        hierarchical_instance.process();
+        clusters = hierarchical_instance.get_clusters();
+        
+        assert len(clusters) == 4;
+        for cluster in clusters:
+            assert len(cluster) == 10;
+                
+    def testClusterAllocationOneDimensionData(self):
+        self.templateClusterAllocationOneDimensionData(False);
+        
+    def testClusterAllocationOneDimensionDataByCore(self):
+        self.templateClusterAllocationOneDimensionData(True);
 
 if __name__ == "__main__":
     unittest.main();

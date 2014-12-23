@@ -6,6 +6,8 @@ from support import read_sample;
 
 from clustering.cure import cure;
 
+from random import random;
+
 class Test(unittest.TestCase):
     def template_cluster_allocation(self, path, cluster_sizes, number_cluster, number_represent_points = 5, compression = 0.5, ccore_flag = False):
         sample = read_sample(path);
@@ -69,7 +71,26 @@ class Test(unittest.TestCase):
         self.template_cluster_allocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [60], 1, 5, 0.5, True);
         self.template_cluster_allocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, [75], 1, 5, 0.5, True);
         self.template_cluster_allocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [60], 1, 5, 0.5, True);
+    
+    
+    def templateClusterAllocationOneDimensionData(self, ccore_flag):
+        input_data = [ [random()] for i in range(10) ] + [ [random() + 3] for i in range(10) ] + [ [random() + 5] for i in range(10) ] + [ [random() + 8] for i in range(10) ];
         
+        cure_instance = cure(input_data, 4, ccore = ccore_flag);
+        cure_instance.process();
+        clusters = cure_instance.get_clusters();
+        
+        assert len(clusters) == 4;
+        for cluster in clusters:
+            assert len(cluster) == 10;
+                
+    def testClusterAllocationOneDimensionData(self):
+        self.templateClusterAllocationOneDimensionData(False);
+        
+    def testClusterAllocationOneDimensionDataByCore(self):
+        self.templateClusterAllocationOneDimensionData(True);
+        
+                
 
 if __name__ == "__main__":
     unittest.main();

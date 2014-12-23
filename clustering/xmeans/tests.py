@@ -6,6 +6,8 @@ from support import read_sample;
 
 from samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
 
+from random import random;
+
 class Test(unittest.TestCase):
     def templateLengthProcessData(self, path_to_file, start_centers, expected_cluster_length, ccore = False):
         sample = read_sample(path_to_file);
@@ -74,6 +76,24 @@ class Test(unittest.TestCase):
         self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, [[1.5, 0.0], [1.5, 2.0], [1.5, 4.0], [1.5, 6.0]], [15, 15, 15, 15, 15], True);
         self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [[0.0, 1.0], [0.0, 0.0]], [15, 15, 15, 15], True);
         self.templateLengthProcessData(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, [[0.8, 0.2]], [400, 400], True);
+        
+    
+    def templateClusterAllocationOneDimensionData(self, ccore_flag):
+        input_data = [ [random()] for i in range(10) ] + [ [random() + 3] for i in range(10) ] + [ [random() + 5] for i in range(10) ] + [ [random() + 8] for i in range(10) ];
+        
+        xmeans_instance = xmeans(input_data, [ [0.5], [3.5], [5.5], [8.5] ], 20, 0.025, ccore_flag);
+        xmeans_instance.process();
+        clusters = xmeans_instance.get_clusters();
+        
+        assert len(clusters) == 4;
+        for cluster in clusters:
+            assert len(cluster) == 10;
+                
+    def testClusterAllocationOneDimensionData(self):
+        self.templateClusterAllocationOneDimensionData(False);
+        
+    def testClusterAllocationOneDimensionDataByCore(self):
+        self.templateClusterAllocationOneDimensionData(True);
 
 
 if __name__ == "__main__":

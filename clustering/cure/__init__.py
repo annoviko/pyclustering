@@ -68,11 +68,12 @@ class cure:
         self.__number_represent_points = number_represent_points;
         self.__compression = compression;
         
-        self.__create_queue();      # queue
-        self.__create_kdtree();     # create k-d tree
-        
         self.__ccore = ccore;
-    
+        
+        if (ccore is False):
+            self.__create_queue();      # queue
+            self.__create_kdtree();     # create k-d tree
+
     
     def process(self):
         "Performs cluster analysis in line with rules of CURE algorithm. Results of clustering can be obtained using corresponding gets methods."

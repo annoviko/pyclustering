@@ -7,6 +7,8 @@ from clustering.dbscan import dbscan;
 from samples.definitions import SIMPLE_SAMPLES;
 from samples.definitions import FCPS_SAMPLES;
 
+from random import random;
+
 class Test(unittest.TestCase):  
     def templateClusteringResults(self, path, radius, neighbors, expected_length_clusters, ccore = False):
         sample = support.read_sample(path);
@@ -109,6 +111,26 @@ class Test(unittest.TestCase):
         self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 0.1, 0, 10, True);
         self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 0.3, 0, 10, True);
         self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 0.6, 0, 10, True);
+    
+    
+    def templateClusterAllocationOneDimensionData(self, ccore_flag):
+        input_data = [ [random()] for i in range(10) ] + [ [random() + 3] for i in range(10) ] + [ [random() + 5] for i in range(10) ] + [ [random() + 8] for i in range(10) ];
+
+        dbscan_instance = dbscan(input_data, 0.5, 2, ccore_flag);
+        dbscan_instance.process();
+            
+        clusters = dbscan_instance.get_clusters();
+        
+        assert len(clusters) == 4;
+        for cluster in clusters:
+            assert len(cluster) == 10;
+                
+    def testClusterAllocationOneDimensionData(self):
+        self.templateClusterAllocationOneDimensionData(False);
+        
+    def testClusterAllocationOneDimensionDataByCore(self):
+        self.templateClusterAllocationOneDimensionData(True);
+
 
 
 if __name__ == "__main__":

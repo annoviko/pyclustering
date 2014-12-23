@@ -6,6 +6,8 @@ from support import read_sample;
 
 from samples.definitions import SIMPLE_SAMPLES;
 
+from random import random;
+
 class Test(unittest.TestCase):
     def templateLengthProcessData(self, path_to_file, start_centers, expected_cluster_length, ccore = False):
         sample = read_sample(path_to_file);
@@ -70,6 +72,24 @@ class Test(unittest.TestCase):
     def testDifferentDimensions(self):
         kmeans_instance = kmeans([ [0, 1, 5], [0, 2, 3] ], [ [0, 3] ]);
         self.assertRaises(NameError, kmeans_instance.process);
+        
+        
+    def templateClusterAllocationOneDimensionData(self, ccore_flag):
+        input_data = [ [random()] for i in range(10) ] + [ [random() + 3] for i in range(10) ] + [ [random() + 5] for i in range(10) ] + [ [random() + 8] for i in range(10) ];
+        
+        kmeans_instance = kmeans(input_data, [ [0.0], [3.0], [5.0], [8.0] ], 0.025, ccore_flag);
+        kmeans_instance.process();
+        clusters = kmeans_instance.get_clusters();
+        
+        assert len(clusters) == 4;
+        for cluster in clusters:
+            assert len(cluster) == 10;
+                
+    def testClusterAllocationOneDimensionData(self):
+        self.templateClusterAllocationOneDimensionData(False);
+        
+    def testClusterAllocationOneDimensionDataByCore(self):
+        self.templateClusterAllocationOneDimensionData(True);
 
 
 

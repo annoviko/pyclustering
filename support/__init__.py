@@ -519,13 +519,14 @@ def linear_sum(list_vector):
     
     dimension = 1;
     linear_sum = 0.0;
+    list_representation = (type(list_vector[0]) == list);
     
-    if (type(list_vector[0]) == list):
+    if (list_representation is True):
         dimension = len(list_vector[0]);
         linear_sum = [0] * dimension;
         
     for index_element in range(0, len(list_vector)):
-        if (dimension > 1):
+        if (list_representation is True):
             for index_dimension in range(0, dimension):
                 linear_sum[index_dimension] += list_vector[index_element][index_dimension];
         else:
@@ -543,12 +544,13 @@ def square_sum(list_vector):
     
     dimension = 1;
     square_sum = 0.0;
+    list_representation = (type(list_vector[0]) == list);
     
-    if (type(list_vector[0]) == list):
+    if (list_representation is True):
         dimension = len(list_vector[0]);
         
     for index_element in range(0, len(list_vector)):
-        if (dimension > 1):
+        if (list_representation is True):
             square_sum += sum(list_math_multiplication(list_vector[index_element], list_vector[index_element]));
         else:
             square_sum += list_vector[index_element] * list_vector[index_element];
