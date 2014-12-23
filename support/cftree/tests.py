@@ -69,31 +69,30 @@ class Test(unittest.TestCase):
         
         
     def testCfTreeCreationWithoutMerging(self):
-        clusters = [ [ [random(), random()] for i in range(10) ] for j in range(10) ];
+        clusters = [ [ [random() + j, random() + j] for i in range(10) ] for j in range(10) ];
         tree = cftree(2, 1, 0.0);
         
         for cluster in clusters:
             tree.insert(cluster);
         
-        assert tree.height == 11;
+        assert tree.height >= 4;
         assert tree.amount_entries == 10;
-        assert tree.amount_nodes == 11;
-        assert len(tree.leafes) == 1;
+        assert len(tree.leafes) == 10;
         
     def testCfTreeInserionOneLeafThreeEntries(self):
         cluster1 = [[0.1, 0.1], [0.1, 0.2], [0.2, 0.1], [0.2, 0.2]];
         cluster2 = [[0.4, 0.4], [0.4, 0.5], [0.5, 0.4], [0.5, 0.5]];
         cluster3 = [[0.9, 0.9], [0.9, 1.0], [1.0, 0.9], [1.0, 1.0]];
-        
+         
         tree = cftree(3, 4, 0.0);
         tree.insert(cluster1);
         tree.insert(cluster2);
         tree.insert(cluster3);
-        
+         
         requested_node1 = cfnode(cfentry(len(cluster1), linear_sum(cluster1), square_sum(cluster1)), None, None, None);
         requested_node2 = cfnode(cfentry(len(cluster2), linear_sum(cluster2), square_sum(cluster2)), None, None, None);
         requested_node3 = cfnode(cfentry(len(cluster3), linear_sum(cluster3), square_sum(cluster3)), None, None, None);
-        
+         
         assert tree.find_nearest_leaf(requested_node1) == tree.find_nearest_leaf(requested_node2);
         assert tree.find_nearest_leaf(requested_node2) == tree.find_nearest_leaf(requested_node3);
         

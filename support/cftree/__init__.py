@@ -246,7 +246,7 @@ class cfnode:
         else:
             type_node = 'leaf (entries %s)' % len(self.entries);
             
-        return 'CF %s node [%s]' % ( type_node, hex(id(self)) );
+        return 'CF %s node [%s], parent [%s]' % ( type_node, hex(id(self)), hex(id(self.parent)) );
 
 
     def __str__(self):
@@ -370,21 +370,17 @@ class cftree:
         self.__type_measurement = type_measurement;
         
         # statistics
-        self.__amount_nodes = 1;    # root, despite it can be None.
+        self.__amount_nodes = 0;    # root, despite it can be None.
         self.__amount_entries = 0;
-        self.__height = 1;          # tree size with root.
+        self.__height = 0;          # tree size with root.
     
     
     def insert(self, cluster):
         entry = cfentry(len(cluster), linear_sum(cluster), square_sum(cluster));
-        node = cfnode(copy(entry), None, None, None);
+        node = cfnode(entry, None, None, [ entry ]);
         
         if (self.__root is None):
-            self.__root = cfnode(copy(entry), None, [ node ], None);
-            
-            node.parent = self.__root;
-            node.entries = [ copy(node.feature) ];
-            
+            self.__root = node;            
             self.__leafes.append(node);
             
             # Update statistics
@@ -426,7 +422,7 @@ class cftree:
                 
                 # Check if it's aleady root then new root should be created (height is increased in this case).
                 if (search_node is self.__root):
-                    self.__root = cfnode(copy(search_node.feature), None, [ search_node ], None);
+                    self.__root = cfnode(search_node.feature, None, [ search_node ], None);
                     search_node.parent = self.__root;
                     
                     # Update statistics
@@ -457,6 +453,14 @@ class cftree:
                 
                 # Otherwise current node should be splitted
                 if (len(search_node.entries) > self.__max_entries):
+                    if (search_node is self.__root):
+                        self.__root = cfnode(search_node.feature, None, [ search_node ], None);
+                        search_node.parent = self.__root;
+                        
+                        # Update statistics
+                        self.__amount_nodes += 1;
+                        self.__height += 1;
+                    
                     [new_node1, new_node2] = self.__split_leaf_node(search_node);        
                     
                     self.__leafes.remove(search_node);
@@ -465,10 +469,9 @@ class cftree:
                     
                     # Update parent list of successors
                     parent = search_node.parent;
-                    if (parent is not None):
-                        parent.successors.remove(search_node);
-                        parent.successors.append(new_node1);
-                        parent.successors.append(new_node2);
+                    parent.successors.remove(search_node);
+                    parent.successors.append(new_node1);
+                    parent.successors.append(new_node2);
                             
                     # Update statistics
                     self.__amount_nodes += 1;
@@ -483,7 +486,10 @@ class cftree:
         # create new non-leaf nodes
         new_node1 = cfnode(farthest_node1.feature, node.parent, [ farthest_node1 ], None);
         new_node2 = cfnode(farthest_node2.feature, node.parent, [ farthest_node2 ], None);
-                    
+        
+        farthest_node1.parent = new_node1;
+        farthest_node2.parent = new_node2;
+        
         # re-insert other successors
         for successor in node.successors:
             if ( (successor is not farthest_node1) and (successor is not farthest_node2) ):
@@ -518,6 +524,5 @@ class cftree:
                     new_node2.append_entity(entity);
         
         return [new_node1, new_node2];
-
     
     
