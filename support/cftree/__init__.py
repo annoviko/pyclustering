@@ -265,6 +265,23 @@ class cfnode:
         successor.parent = self;
     
     
+    def merge(self, node):
+        self.feature.merge(node.feature);
+        
+        if ( (self.successors is not None) and (node.successors is not None) ):
+            # Update parent of successors of merged node
+            for child in node.successors:
+                child.parent = self;
+        
+        elif ( (self.entries is not None) and (node.entities is not None) ):
+            # Move entries from merged node
+            for entry in node.entities:
+                self.entries.append(entry);
+                
+        else:
+            assert 0;
+            
+    
     def get_distance(self, node, type_measurement):
         if (type(node) == cfnode):
             return self.feature.get_distance(node.feature, type_measurement);
@@ -277,7 +294,7 @@ class cfnode:
     def get_farthest_entries(self, type_measurement):
         farthest_entity1 = None;
         farthest_entity2 = None;
-        farthest_distance = float("Inf");
+        farthest_distance = 0;
         
         for i in range(0, len(self.entries)):
             candidate1 = self.entries[i];
@@ -286,7 +303,7 @@ class cfnode:
                 candidate2 = self.entries[j];
                 candidate_distance = candidate1.get_distance(candidate2, type_measurement);
                 
-                if (candidate_distance < farthest_distance):
+                if (candidate_distance > farthest_distance):
                     farthest_distance = candidate_distance;
                     farthest_entity1 = candidate1;
                     farthest_entity2 = candidate2;        
@@ -297,7 +314,7 @@ class cfnode:
     def get_farthest_successors(self, type_measurement):
         farthest_node1 = None;
         farthest_node2 = None;
-        farthest_distance = float("Inf");
+        farthest_distance = 0;
         
         for i in range(0, len(self.successors)):
             candidate1 = self.successors[i];
@@ -306,12 +323,32 @@ class cfnode:
                 candidate2 = self.successors[j];
                 candidate_distance = candidate1.get_distance(candidate2, type_measurement);
                 
-                if (candidate_distance < farthest_distance):
+                if (candidate_distance > farthest_distance):
                     farthest_distance = candidate_distance;
                     farthest_node1 = candidate1;
                     farthest_node2 = candidate2;        
         
         return [farthest_node1, farthest_node2];
+    
+    
+    def get_nearest_successors(self, type_measurement):
+        nearest_node1 = None;
+        nearest_node2 = None;
+        nearest_distance = float("Inf");
+        
+        for i in range(0, len(self.successors)):
+            candidate1 = self.successors[i];
+            
+            for j in range(i + 1, len(self.successors)):
+                candidate2 = self.successors[j];
+                candidate_distance = candidate1.get_distance(candidate2, type_measurement);
+                
+                if (candidate_distance < nearest_distance):
+                    nearest_distance = candidate_distance;
+                    nearest_node1 = candidate1;
+                    nearest_node2 = candidate2;        
+        
+        return [nearest_node1, nearest_node2];        
     
     
     def get_nearest_entity(self, entity, type_measurement): 
@@ -388,7 +425,11 @@ class cftree:
             self.__amount_nodes += 1;       
             self.__height += 1;             # root has successor now
         else:
-            self.__recursive_insert(node, self.__root);
+            child_node_updation = self.__recursive_insert(node, self.__root);
+            if (child_node_updation is True):
+                # Splitting has been finished, check for possibility to merge (at least we have already two children).
+                if (self.__merge_nearest_successors(self.__root) is True):
+                    self.__amount_nodes -= 1;
     
     
     def find_nearest_leaf(self, node, search_node = None):
@@ -407,12 +448,14 @@ class cftree:
     
     
     def __recursive_insert(self, new_node, search_node):
+        node_amount_updation = False;
+        
         # None-leaf node
         if (search_node.successors is not None):
             min_key = lambda child_node: child_node.get_distance(search_node, self.__type_measurement);
             nearest_child_node = min(search_node.successors, key = min_key);
             
-            self.__recursive_insert(new_node, nearest_child_node);
+            child_node_updation = self.__recursive_insert(new_node, nearest_child_node);
             
             # Update clustering feature of none-leaf node.
             search_node.feature.merge(new_node.feature, None);
@@ -439,6 +482,12 @@ class cftree:
                 
                 # Update statistics
                 self.__amount_nodes += 1;
+                node_amount_updation = True;
+                
+            elif (child_node_updation is True):
+                # Splitting has been finished, check for possibility to merge (at least we have already two children).
+                if (self.__merge_nearest_successors(search_node) is True):
+                    self.__amount_nodes -= 1;
         
         # Leaf is reached 
         else:
@@ -475,10 +524,27 @@ class cftree:
                             
                     # Update statistics
                     self.__amount_nodes += 1;
+                    node_amount_updation = True;
                 
                 # Update statistics
                 self.__amount_entries += 1;
+                
+        return node_amount_updation;
     
+    
+    def __merge_nearest_successors(self, node):
+        merging_result = False;
+        
+        if (len(node.successors) < self.__branch_factor):
+            [nearest_child_node1, nearest_child_node2] = node.get_nearest_successors();
+                    
+            node.successors.remove(nearest_child_node2);
+            nearest_child_node1.merge(nearest_child_node2);
+            
+            merging_result = True;
+        
+        return merging_result;
+            
     
     def __split_nonleaf_node(self, node):
         [farthest_node1, farthest_node2] = node.get_farthest_successors(self.__type_measurement);
