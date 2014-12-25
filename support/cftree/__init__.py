@@ -272,7 +272,11 @@ class cfnode:
         
     
     def __repr__(self):
-        return 'CF node %s, parent %s' % ( hex(id(self)), hex(id(self.parent)) );
+        parent = None;
+        if (self.parent is not None):
+            parent = hex(id(self.parent));
+            
+        return 'CF node %s, parent %s' % ( hex(id(self)), parent );
 
 
     def __str__(self):
@@ -323,7 +327,7 @@ class non_leaf_node(cfnode):
         successor.parent = self;
     
     
-    def remove_successor(self, node):
+    def remove_successor(self, successor):
         "Remove successor from the node."
         
         "(in) successor    - pointer to the successor."
@@ -475,9 +479,29 @@ class leaf_node(cfnode):
         return [farthest_entity1, farthest_entity2];
     
     
+    def get_nearest_index_entry(self, entry, type_measurement):
+        "Return index of nearest entry of node for the specified entry."
+        
+        "(in) entry               - entry that is used for calculation distance."
+        "(in) type_measurement    - measurement type that is used for obtaining nearest entry to the specified."
+        
+        "Return index of nearest entry of node for the specified entry."  
+        
+        minimum_distance = float('Inf');
+        nearest_index = 0;
+        
+        for candidate_index in range(0, len(self.entries)):
+            candidate_distance = self.entries[candidate_index].get_distance(entry, type_measurement)    ;
+            if (candidate_distance < minimum_distance):
+                nearest_index = candidate_index;
+                
+        return candidate_index;
+    
+    
     def get_nearest_entry(self, entry, type_measurement):
         "Return nearest entry of node for the specified entry."
         
+        "(in) entry               - entry that is used for calculation distance."
         "(in) type_measurement    - measurement type that is used for obtaining nearest entry to the specified."
         
         "Return nearest entry of node for the specified entry."
@@ -550,14 +574,21 @@ class cftree:
         self.__height = 0;          # tree size with root.
     
     
-    def insert(self, cluster):
+    def insert_cluster(self, cluster):
         "Insert cluster that is represented as list of points where each point is represented by list of coordinates."
         "Clustering feature is created for that cluster and inserted to the tree."
         
-        "(in) cluster    - cluster that should be inserted to the tree."
+        "(in) cluster    - cluster that is represented by list of points that should be inserted to the tree."
         
         entry = cfentry(len(cluster), linear_sum(cluster), square_sum(cluster));
+        self.insert(entry);
         
+        
+    def insert(self, entry):
+        "Insert clustering feature to the tree."
+        
+        "(in) entry    - clustering feature that should be inserted."
+                
         if (self.__root is None):
             node = leaf_node(entry, None, [ entry ]);
             
@@ -650,11 +681,11 @@ class cftree:
         # Leaf is reached 
         else:
             # Try to absorb by the entity
-            search_entity = search_node.get_nearest_entry(entry, self.__type_measurement);
-            merged_entity = search_entity + entry;
+            index_nearest_entry= search_node.get_nearest_index_entry(entry, self.__type_measurement);
+            merged_entry = search_node.entries[index_nearest_entry] + entry;
             
             # Otherwise try to add new entry
-            if (merged_entity.get_diameter() > self.__threshold):
+            if (merged_entry.get_diameter() > self.__threshold):
                 # If it's not exceeded append entity and update feature of the leaf node.
                 search_node.insert_entry(entry);
                 
@@ -686,6 +717,10 @@ class cftree:
                 
                 # Update statistics
                 self.__amount_entries += 1;
+                
+            else:
+                search_node.entries[index_nearest_entry] = merged_entry;
+                search_node.feature = copy(merged_entry);
                 
         return node_amount_updation;
     
