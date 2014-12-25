@@ -548,6 +548,22 @@ class cftree:
     def height(self):
         return self.__height;
     
+    @property
+    def branch_factor(self):
+        return self.__branch_factor;
+    
+    @property
+    def threshold(self):
+        return self.__threshold;
+    
+    @property
+    def max_entries(self):
+        return self.__max_entries;
+    
+    @property
+    def type_measurement(self):
+        return self.__type_measurement;
+    
     
     def __init__(self, branch_factor, max_entries, threshold, type_measurement = measurement_type.CENTROID_EUCLIDIAN_DISTANCE):
         "Create CF-tree."

@@ -64,4 +64,5 @@ Graph Coloring Algorithms:
 - Sync [Python]
 
 Misc Algorithms:
-- K-D Tree [Python, C++]
+- KD Tree [Python, C++]
+- CF Tree [Python]

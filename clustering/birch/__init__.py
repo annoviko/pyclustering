@@ -10,78 +10,71 @@ Implementation: Andrei Novikov (spb.andr@yandex.ru)
 '''
 
 from support import euclidean_distance_sqrt;
+from support.cftree import cftree;
+from scipy.stats.mstats_basic import threshold
 
 class birch:
     __pointer_data = None;
+    __tree = None;
     
-    def __init__(self, data):
+    __entry_size_limit = 0;
+    
+    __clusters = None;
+    
+    __ccore = False;
+    
+    def __init__(self, data, branching_factor, max_node_entries, initial_diameter, type_measurement, entry_size_limit = 400, ccore = False):
         self.__pointer_data = data;
         
+        self.__entry_size_limit = entry_size_limit;
+        self.__ccore = ccore;
+        
+        self.__tree = cftree(branching_factor, max_node_entries, initial_diameter, type_measurement);
+        
     def process(self):
-        pass;
+        self.__insert_data();
+        
     
     def get_clusters(self):
-        pass;
+        return self.__clusters;
     
-    def __get_centroid(self, cluster):
-        "Calculates centroid of the specified cluster."
-        
-        "(in) cluster    - list of indexes that belong to cluster."
-        
-        "Returns centroid of the cluster as a list."
-        
-        dimension = len(cluster[0]);
-        centroid = [0] * dimension;
-        
-        for index_dimension in range(0, dimension):
-            for index_object in cluster:   
-                centroid[index_dimension] += self.__pointer_data[index_object][index_dimension];
+    def __insert_data(self):
+        for index_point in range(0, len(self.__pointer_data)):
+            point = self.__pointer_data[index_point];
+            self.__tree.insert_cluster(point);
             
-            centroid[index_dimension] /= len(cluster);
+            if (self.__tree.amount_entries > self.__entry_size_limit):
+                self.__tree = self.__rebuild_tree(index_point);
     
     
-    def __get_radius(self, centroid, cluster):
-        "Calculates radius of the specified cluster."
+    def __rebuild_tree(self, index_end_point):
+        rebuild_result = False;
+        increased_diameter = self.__tree.threshold * 1.5;
         
-        "(in) cluster    - list of indexes that belong to cluster."
+        tree = None;
         
-        "Returns radius of the cluster as a list."
+        while(rebuild_result is False):
+            # increase diameter and rebuild tree
+            if (increased_diameter == 0.0):
+                increased_diameter = 1.0;
+            
+            # build tree with update parameters
+            tree = cftree(self.__tree.branch_factor, self.__tree.max_entries, increased_diameter, self.__tree.type_measurement);
+            
+            for index_point in range(0, index_end_point):
+                point = self.__pointer_data[index_point];
+                tree.insert_cluster(point);
+            
+                if (tree.amount_entries > self.__entry_size_limit):
+                    increased_diameter *= 1.5;
+                    continue;
+            
+            # Re-build is successful.
+            rebuild_result = True;
+        
+        return tree;
+            
+            
+            
                 
-        radius = 0.0;
-        
-        for index_object in cluster:
-            radius += euclidean_distance_sqrt(self.__pointer_data[index_object], centroid);
-        
-        radius /= len(cluster);
-        return radius ** (0.5);
-    
-    
-    def __get_diameter(self, cluster):
-        "Calculates diameter of the specified cluster."
-        
-        "(in) cluster    - list of indexes that belong to cluster."
-        
-        "Returns diameter of the cluster as a list."
-        
-        diameter = 0.0;
-        
-        for i in range(0, len(cluster)):
-            for j in range(i + 1, len(cluster)):
-                index_first = cluster[i];
-                index_second = cluster[j];
-                
-                diameter += euclidean_distance_sqrt(self.__pointer_data[index_first], self.__pointer_data[index_second]);
-        
-        diameter /= len(cluster) * (len(cluster) - 1);
-        return diameter ** (0.5);
-    
-    
-    def __average_inter_cluster_distance(self, cluster1, cluster2):
-        pass;
-    
-    def __average_intra_cluster_distance(self, cluster1, cluster2):
-        pass;
-    
-    def __variance_increase_distance(self, cluster1, cluster2):
-        pass;
                 
