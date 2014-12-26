@@ -264,11 +264,19 @@ class cfnode:
     feature     = None;     # clustering feature of the node
     parent      = None;     # pointer to parent node (None for root)
     type        = None;     # type node
+    payload     = None;     # payload of node where user data can be stored
     
-    def __init__(self, feature, parent, type = cfnode_type.CFNODE_DUMMY):
+    def __init__(self, feature, parent, payload):
+        "Constructor of dummy node of CF-Tree."
+        
+        "(in) feature    - clustering feature of the created node."
+        "(in) parent     - parent of the created node."
+        "(in) payload    - data that is stored by the node."        
+        
         self.feature = copy(feature);
         self.parent = parent;
-        self.type = type;
+        self.type = cfnode_type.CFNODE_DUMMY;
+        self.payload = payload;
         
     
     def __repr__(self):
@@ -304,15 +312,17 @@ class non_leaf_node(cfnode):
         return self.__successors;
     
     
-    def __init__(self, feature, parent, successors):
+    def __init__(self, feature, parent, successors, payload):
         "Create CF Non-leaf node."
         
         "(in) feature    - clustering feature of the created node."
         "(in) parent     - parent of the created node."
         "(in) successors - list of successors of the node."
+        "(in) payload    - data that is stored by the node."
                 
-        super().__init__(feature, parent, cfnode_type.CFNODE_NONLEAF);
+        super().__init__(feature, parent, payload);
         
+        self.type = cfnode_type.CFNODE_NONLEAF;
         self.__successors = successors;
     
     
@@ -411,15 +421,17 @@ class leaf_node(cfnode):
         return self.__entries;
     
     
-    def __init__(self, feature, parent, entries):
+    def __init__(self, feature, parent, entries, payload):
         "Create CF Leaf node."
         
         "(in) feature    - clustering feature of the created node."
         "(in) parent     - parent of the created node."
         "(in) entries    - list of entries of the node."
+        "(in) payload    - data that is stored by the node."
         
-        super().__init__(feature, parent, cfnode_type.CFNODE_LEAF);
+        super().__init__(feature, parent, payload);
         
+        self.type = cfnode_type.CFNODE_LEAF;
         self.__entries = entries;
     
     
@@ -606,7 +618,7 @@ class cftree:
         "(in) entry    - clustering feature that should be inserted."
                 
         if (self.__root is None):
-            node = leaf_node(entry, None, [ entry ]);
+            node = leaf_node(entry, None, [ entry ], None);
             
             self.__root = node;            
             self.__leafes.append(node);
@@ -670,7 +682,7 @@ class cftree:
                 
                 # Check if it's aleady root then new root should be created (height is increased in this case).
                 if (search_node is self.__root):
-                    self.__root = non_leaf_node(search_node.feature, None, [ search_node ]);
+                    self.__root = non_leaf_node(search_node.feature, None, [ search_node ], None);
                     search_node.parent = self.__root;
                     
                     # Update statistics
@@ -708,7 +720,7 @@ class cftree:
                 # Otherwise current node should be splitted
                 if (len(search_node.entries) > self.__max_entries):
                     if (search_node is self.__root):
-                        self.__root = non_leaf_node(search_node.feature, None, [ search_node ]);
+                        self.__root = non_leaf_node(search_node.feature, None, [ search_node ], None);
                         search_node.parent = self.__root;
                         
                         # Update statistics
@@ -771,8 +783,8 @@ class cftree:
         [farthest_node1, farthest_node2] = node.get_farthest_successors(self.__type_measurement);
         
         # create new non-leaf nodes
-        new_node1 = non_leaf_node(farthest_node1.feature, node.parent, [ farthest_node1 ]);
-        new_node2 = non_leaf_node(farthest_node2.feature, node.parent, [ farthest_node2 ]);
+        new_node1 = non_leaf_node(farthest_node1.feature, node.parent, [ farthest_node1 ], None);
+        new_node2 = non_leaf_node(farthest_node2.feature, node.parent, [ farthest_node2 ], None);
         
         farthest_node1.parent = new_node1;
         farthest_node2.parent = new_node2;
@@ -802,8 +814,8 @@ class cftree:
         [farthest_entity1, farthest_entity2] = node.get_farthest_entries(self.__type_measurement);
                     
         # create new nodes
-        new_node1 = leaf_node(farthest_entity1, node.parent, [ farthest_entity1 ]);
-        new_node2 = leaf_node(farthest_entity2, node.parent, [ farthest_entity2 ]);
+        new_node1 = leaf_node(farthest_entity1, node.parent, [ farthest_entity1 ], None);
+        new_node2 = leaf_node(farthest_entity2, node.parent, [ farthest_entity2 ], None);
         
         # re-insert other entries
         for entity in node.entries:
@@ -817,5 +829,4 @@ class cftree:
                     new_node2.insert_entry(entity);
         
         return [new_node1, new_node2];
-    
     

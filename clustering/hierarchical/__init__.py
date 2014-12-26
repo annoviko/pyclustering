@@ -51,14 +51,18 @@ class hierarchical:
             self.__centers = self.__pointer_data.copy();
             self.__clusters = [[index] for index in range(0, len(self.__pointer_data))];
             
-            while (len(self.__clusters) > self.__number_clusters):
+            current_number_clusters = len(self.__clusters);
+            
+            while (current_number_clusters > self.__number_clusters):
                 indexes = self.__find_nearest_clusters();
                  
                 self.__clusters[indexes[0]] += self.__clusters[indexes[1]];
                 self.__centers[indexes[0]] = self.__calculate_center(self.__clusters[indexes[0]]);
                  
                 self.__clusters.pop(indexes[1]);   # remove merged cluster.
-                self.__centers.pop(indexes[1]);    # remove merged center.     
+                self.__centers.pop(indexes[1]);    # remove merged center.
+                
+                current_number_clusters = len(self.__clusters);
         
         
     def get_clusters(self):
