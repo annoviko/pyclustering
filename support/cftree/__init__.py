@@ -284,7 +284,7 @@ class cfnode:
         if (self.parent is not None):
             parent = hex(id(self.parent));
             
-        return 'CF node %s, parent %s' % ( hex(id(self)), parent );
+        return 'CF node %s, parent %s, feature %s' % ( hex(id(self)), parent, self.feature );
 
 
     def __str__(self):
@@ -709,7 +709,7 @@ class cftree:
         # Leaf is reached 
         else:
             # Try to absorb by the entity
-            index_nearest_entry= search_node.get_nearest_index_entry(entry, self.__type_measurement);
+            index_nearest_entry = search_node.get_nearest_index_entry(entry, self.__type_measurement);
             merged_entry = search_node.entries[index_nearest_entry] + entry;
             
             # Otherwise try to add new entry
@@ -748,8 +748,8 @@ class cftree:
                 
             else:
                 search_node.entries[index_nearest_entry] = merged_entry;
-                search_node.feature = copy(merged_entry);
-                
+                search_node.feature += entry;
+            
         return node_amount_updation;
     
     
@@ -764,8 +764,11 @@ class cftree:
         
         if (len(node.successors) < self.__branch_factor):
             [nearest_child_node1, nearest_child_node2] = node.get_nearest_successors(self.__type_measurement);
-                    
+            
             node.successors.remove(nearest_child_node2);
+            if (nearest_child_node2.type == cfnode_type.CFNODE_LEAF):
+                self.__leafes.remove(nearest_child_node2);
+            
             nearest_child_node1.merge(nearest_child_node2);
             
             merging_result = True;

@@ -62,8 +62,13 @@ class birch:
         for index_point in range(0, len(self.__pointer_data)):
             cluster_index = self.__get_nearest_feature(self.__pointer_data[index_point]);
             self.__clusters[cluster_index].append(index_point);
+            
+#         for index in range(len(self.__clusters)):
+#             print("cluster:", self.__clusters[index]);
+#             print("feature:", self.__features[index]);
+#         
+#         print();
         
-    
     def get_clusters(self):
         return self.__clusters;
     
@@ -77,7 +82,7 @@ class birch:
                 self.__tree = self.__rebuild_tree(index_point);
     
     
-    def __rebuild_tree(self, index_end_point):
+    def __rebuild_tree(self, index_point):
         rebuild_result = False;
         increased_diameter = self.__tree.threshold * 1.5;
         
@@ -91,7 +96,7 @@ class birch:
             # build tree with update parameters
             tree = cftree(self.__tree.branch_factor, self.__tree.max_entries, increased_diameter, self.__tree.type_measurement);
             
-            for index_point in range(0, index_end_point):
+            for index_point in range(0, index_point + 1):
                 point = self.__pointer_data[index_point];
                 tree.insert_cluster([point]);
             
@@ -127,7 +132,7 @@ class birch:
     
     def __get_nearest_feature(self, point):
         minimum_distance = float("Inf");
-        index_nearest_feature = 0;
+        index_nearest_feature = -1;
         
         for index_entry in range(0, len(self.__features)):
             point_entry = cfentry(1, linear_sum([ point ]), square_sum([ point ]));
