@@ -173,7 +173,7 @@ class Test(unittest.TestCase):
         self.templateDynamicSimulationClusterParameter(20, 4);
     
     def testDynamicSimulationClusterParameter6(self):
-        self.templateDynamicSimulationClusterParameters(20, 6);
+        self.templateDynamicSimulationClusterParameter(20, 6);
         
 
 if __name__ == "__main__":
