@@ -284,7 +284,7 @@ class cfnode:
         if (self.parent is not None):
             parent = hex(id(self.parent));
             
-        return 'CF node %s, parent %s, feature %s' % ( hex(id(self)), parent, self.feature );
+        return 'CF node %s, parent %s, feature %s' % ( hex(id(self)), self.parent, self.feature );
 
 
     def __str__(self):
@@ -324,6 +324,14 @@ class non_leaf_node(cfnode):
         
         self.type = cfnode_type.CFNODE_NONLEAF;
         self.__successors = successors;
+    
+    
+    def __repr__(self):        
+        return 'Non-leaf node %s, parent %s, feature %s, successors: %d' % ( hex(id(self)), self.parent, self.feature, len(self.successors) );
+    
+    
+    def __str__(self):
+        return self.__repr__();
     
     
     def insert_successor(self, successor):
@@ -433,6 +441,18 @@ class leaf_node(cfnode):
         
         self.type = cfnode_type.CFNODE_LEAF;
         self.__entries = entries;
+        
+    
+    def __repr__(self):
+        text_entries = "\n";
+        for entry in self.entries:
+            text_entries += "\t" + str(entry) + "\n";
+        
+        return 'Leaf-node %s, parent %s, feature %s, entries: %d %s' % ( hex(id(self)), self.parent, self.feature, len(self.entries), text_entries );
+    
+    
+    def __str__(self):
+        return self.__repr__();
     
     
     def insert_entry(self, entry):  
@@ -738,7 +758,7 @@ class cftree:
                     parent.successors.remove(search_node);
                     parent.successors.append(new_node1);
                     parent.successors.append(new_node2);
-                            
+                    
                     # Update statistics
                     self.__amount_nodes += 1;
                     node_amount_updation = True;
@@ -763,15 +783,16 @@ class cftree:
         merging_result = False;
         
         if (len(node.successors) < self.__branch_factor):
-            [nearest_child_node1, nearest_child_node2] = node.get_nearest_successors(self.__type_measurement);
-            
-            node.successors.remove(nearest_child_node2);
-            if (nearest_child_node2.type == cfnode_type.CFNODE_LEAF):
-                self.__leafes.remove(nearest_child_node2);
-            
-            nearest_child_node1.merge(nearest_child_node2);
-            
-            merging_result = True;
+            if (node.successors[0].type == cfnode_type.CFNODE_NONLEAF):
+                [nearest_child_node1, nearest_child_node2] = node.get_nearest_successors(self.__type_measurement);
+                
+                node.successors.remove(nearest_child_node2);
+                if (nearest_child_node2.type == cfnode_type.CFNODE_LEAF):
+                    self.__leafes.remove(nearest_child_node2);
+                
+                nearest_child_node1.merge(nearest_child_node2);
+                
+                merging_result = True;
         
         return merging_result;
             

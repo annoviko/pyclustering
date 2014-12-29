@@ -39,6 +39,7 @@ $ sudo apt-get install python3-matplotlib
 What is implemented in the project:
 
 Clustering algorithms:
+- BIRCH [Python]
 - CURE [Python, C++]
 - DBSCAN [Python, C++]
 - Hierarchical [Python, C++]

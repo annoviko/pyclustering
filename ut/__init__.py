@@ -1,5 +1,6 @@
 import unittest;
 
+from clustering.birch               import tests as cluster_birch_unit_tests;
 from clustering.cure                import tests as cluster_cure_unit_tests;
 from clustering.dbscan              import tests as cluster_dbscan_unit_tests;
 from clustering.hierarchical        import tests as cluster_hierarchical_unit_tests;
@@ -32,6 +33,7 @@ from support                        import tests as support_unit_tests;
 if __name__ == "__main__":
     suite = unittest.TestSuite();
     
+    suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_birch_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_cure_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_dbscan_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_hierarchical_unit_tests));
