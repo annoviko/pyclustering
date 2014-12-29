@@ -55,6 +55,8 @@ class xmeans:
          
         if (self.__ccore is True):
             self.__clusters = core.xmeans(self.__pointer_data, self.__centers, self.__kmax, self.__tolerance);
+            self.__clusters = [ cluster for cluster in self.__clusters if len(cluster) > 0 ]; 
+            
             self.__centers = self.__update_centers(self.__clusters);
         else:
             self.__clusters = [];
@@ -63,8 +65,8 @@ class xmeans:
                  
                 (self.__clusters, self.__centers) = self.__improve_parameters(self.__centers);
                 allocated_centers = self.__improve_structure(self.__clusters, self.__centers);
-                 
-                if (current_cluster_number == len(allocated_centers)):
+                
+                if ( (current_cluster_number == len(allocated_centers)) ):
                     break;
                 else:
                     self.__centers = allocated_centers;
@@ -98,6 +100,8 @@ class xmeans:
           
         while (changes > stop_condition):
             clusters = self.__update_clusters(centers, available_indexes);
+            clusters = [ cluster for cluster in clusters if len(cluster) > 0 ]; 
+            
             updated_centers = self.__update_centers(clusters);
           
             changes = max([euclidean_distance_sqrt(centers[index], updated_centers[index]) for index in range(len(updated_centers))]);    # Fast solution
@@ -128,16 +132,21 @@ class xmeans:
             # solve k-means problem for children where data of parent are used.
             (parent_child_clusters, parent_child_centers) = self.__improve_parameters(parent_child_centers, clusters[index_cluster]);
               
-            # Calculate splitting criterion
-            parent_scores = self.__splitting_criterion([ clusters[index_cluster] ], [ centers[index_cluster] ]);
-            child_scores = self.__splitting_criterion([ parent_child_clusters[0], parent_child_clusters[1] ], parent_child_centers);
-          
-            # Reallocate number of centers (clusters) in line with scores        
-            if (parent_scores > child_scores):
-                allocated_centers.append(centers[index_cluster]);
+            # If it's possible to split current data
+            if (len(parent_child_clusters) > 1):
+                # Calculate splitting criterion
+                parent_scores = self.__splitting_criterion([ clusters[index_cluster] ], [ centers[index_cluster] ]);
+                child_scores = self.__splitting_criterion([ parent_child_clusters[0], parent_child_clusters[1] ], parent_child_centers);
+              
+                # Reallocate number of centers (clusters) in line with scores        
+                if (parent_scores > child_scores):
+                    allocated_centers.append(centers[index_cluster]);
+                else:
+                    allocated_centers.append(parent_child_centers[0]);
+                    allocated_centers.append(parent_child_centers[1]);
+                    
             else:
-                allocated_centers.append(parent_child_centers[0]);
-                allocated_centers.append(parent_child_centers[1]);
+                allocated_centers.append(centers[index_cluster]);
           
         return allocated_centers;
      
@@ -162,16 +171,18 @@ class xmeans:
             for index_object in clusters[index_cluster]:
                 # sigma += (euclidean_distance_sqrt(data[index_object], centers[index_cluster]));  # It doesn't works. But why?
                 sigma += (euclidean_distance(self.__pointer_data[index_object], centers[index_cluster]));  # It works
-          
-              
+
             N += len(clusters[index_cluster]);
       
-        sigma /= (N - K);
-              
-        # splitting criterion    
-        for index_cluster in range(0, len(clusters), 1):
-            n = len(clusters[index_cluster]);
-            scores[index_cluster] = n * math.log(n) - n * math.log(N) - n * math.log(2.0 * numpy.pi) / 2.0 - n * dimension * math.log(sigma) / 2.0 - (n - K) / 2.0;
+        if (N - K != 0):
+            sigma /= (N - K);
+        
+            # splitting criterion    
+            for index_cluster in range(0, len(clusters), 1):
+                n = len(clusters[index_cluster]);
+                
+                if (sigma > 0.0):
+                    scores[index_cluster] = n * math.log(n) - n * math.log(N) - n * math.log(2.0 * numpy.pi) / 2.0 - n * dimension * math.log(sigma) / 2.0 - (n - K) / 2.0;
                   
         return sum(scores);
  
@@ -220,11 +231,11 @@ class xmeans:
         dimension = len(self.__pointer_data[0])
           
         for index in range(len(clusters)):
-            point_sum = [0] * dimension;
+            point_sum = [0.0] * dimension;
               
             for index_point in clusters[index]:
                 point_sum = list_math_addition(point_sum, self.__pointer_data[index_point]);
-                  
+            
             centers[index] = list_math_division_number(point_sum, len(clusters[index]));
               
         return centers;

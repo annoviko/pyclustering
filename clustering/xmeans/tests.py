@@ -6,7 +6,6 @@ from support import read_sample;
 
 from samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
 
-from random import random;
 
 class Test(unittest.TestCase):
     def templateLengthProcessData(self, path_to_file, start_centers, expected_cluster_length, ccore = False):
@@ -79,9 +78,9 @@ class Test(unittest.TestCase):
         
     
     def templateClusterAllocationOneDimensionData(self, ccore_flag):
-        input_data = [ [random()] for i in range(10) ] + [ [random() + 3] for i in range(10) ] + [ [random() + 5] for i in range(10) ] + [ [random() + 8] for i in range(10) ];
+        input_data = [ [0.0] for i in range(10) ] + [ [5.0] for i in range(10) ] + [ [10.0] for i in range(10) ] + [ [15.0] for i in range(10) ];
         
-        xmeans_instance = xmeans(input_data, [ [0.5], [3.5], [5.5], [8.5] ], 20, 0.025, ccore_flag);
+        xmeans_instance = xmeans(input_data, [ [0.5], [5.5], [10.5], [15.5] ], 20, 0.025, ccore_flag);
         xmeans_instance.process();
         clusters = xmeans_instance.get_clusters();
         
