@@ -10,14 +10,18 @@ C++ 11 (MVS, GCC compilers)
 
 ------------------------------------------------
 
-Required following packages:
+Required following packages by pyclustering:
 
 scipy-0.13.3.win-amd64-py3.x
 matplotlib-1.3.1.win-amd64-py3.x
+numpy-MKL-1.8.0.win-amd64-py3.x
+
+
+Following packages are required by scipy, matplotlib, numpy:
+
 Pillow-2.3.0.win-amd64-py3.x
 python-dateutil-2.2.win-amd64-py3.x
 pyparsing-2.0.1.win-amd64-py3.x
-numpy-MKL-1.8.0.win-amd64-py3.x
 six-1.5.2.win-amd64-py3.x
 
 ------------------------------------------------
@@ -38,7 +42,7 @@ $ sudo apt-get install python3-matplotlib
 
 What is implemented in the project:
 
-Clustering algorithms:
+Clustering algorithms (module pyclustering.clustering):
 - BIRCH [Python]
 - CURE [Python, C++]
 - DBSCAN [Python, C++]
@@ -51,7 +55,7 @@ Clustering algorithms:
 - SyncSom [Python]
 - X-Means [Python, C++]
 
-Oscillatory networks and neural networks:
+Oscillatory networks and neural networks (module pyclustering.nnet):
 - HHN (Oscillatory network based on Hodgkin-Huxley model) [Python]
 - Hysteresis Oscillatory Network [Python]
 - LEGION (Local Excitatory Global Inhibitory Oscillatory Network) [Python]
@@ -59,11 +63,11 @@ Oscillatory networks and neural networks:
 - SOM (Self-Organized Map) [Python]
 - Sync (Oscillatory network based on Kuramoto model) [Python, C++]
 
-Graph Coloring Algorithms:
+Graph Coloring Algorithms (module pyclustering.gcolor):
 - DSatur [Python]
 - Hysteresis [Python]
 - Sync [Python]
 
-Misc Algorithms:
+Misc Algorithms (module pyclustering.support):
 - KD Tree [Python, C++]
 - CF Tree [Python]
