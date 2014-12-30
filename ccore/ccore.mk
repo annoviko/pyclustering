@@ -9,7 +9,7 @@ LFLAGS = -std=gnu++0x -shared
 
 OBJECTS = $(SOURCES:.cpp=.o)
 
-EXECUTABLE = x64/linux/ccore.so
+EXECUTABLE = ../pyclustering/core/x64/linux/ccore.so
 
 ccore: $(EXECUTABLE)
 

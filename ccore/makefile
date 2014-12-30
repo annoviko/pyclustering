@@ -15,6 +15,6 @@ ut:
 
 
 clean:
-	rm -rf ccore/*o x64/linux/ccore.so
+	rm -rf ccore/*o ../pyclustering/core/x64/linux/ccore.so
 	rm -rf utcore/*o utcore/utcore
 
