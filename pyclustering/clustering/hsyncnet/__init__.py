@@ -9,8 +9,6 @@ Implementation: Andrei Novikov (spb.andr@yandex.ru)
 
 '''
 
-import numpy;
-
 import pyclustering.core.wrapper as wrapper;
 
 from pyclustering.nnet import *;
@@ -56,7 +54,7 @@ class hsyncnet(syncnet):
             return wrapper.process_hsyncnet(self.__ccore_network_pointer, order, solution, collect_dynamic);
         
         number_neighbors = 3;
-        current_number_clusters = numpy.Inf;
+        current_number_clusters = float('inf');
         
         dyn_phase = [];
         dyn_time = [];

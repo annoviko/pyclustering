@@ -9,8 +9,6 @@ Implementation: Andrei Novikov (spb.andr@yandex.ru)
 
 '''
 
-import numpy;
-
 import pyclustering.core.wrapper as wrapper;
 
 from pyclustering.support import euclidean_distance, euclidean_distance_sqrt, list_math_addition, list_math_division_number;
@@ -46,7 +44,7 @@ class kmeans:
             self.__clusters = wrapper.kmeans(self.__pointer_data, self.__centers, self.__tolerance);
             self.__centers = self.__update_centers();
         else: 
-            changes = numpy.Inf;
+            changes = float('inf');
              
             stop_condition = self.__tolerance * self.__tolerance;   # Fast solution
             #stop_condition = self.__tolerance;              # Slow solution

@@ -1,3 +1,11 @@
+'''
+
+Structures for exchange between core and python implementation.
+
+Implementation: Andrei Novikov (spb.andr@yandex.ru)
+
+'''
+
 import pyclustering.core as core;
 import os;
 

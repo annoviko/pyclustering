@@ -9,8 +9,6 @@ Implementation: Andrei Novikov (spb.andr@yandex.ru)
 
 '''
 
-import numpy;
-
 from decimal import *;
 
 from pyclustering.support import read_sample;
@@ -35,7 +33,7 @@ class cure_cluster:
             self.rep = [ ];
             
         self.closest = None;
-        self.distance = numpy.Inf;      # calculation of distance is really complexity operation (even square distance), so let's store distance to closest cluster.
+        self.distance = float('inf');      # calculation of distance is really complexity operation (even square distance), so let's store distance to closest cluster.
         
     def __repr__(self):
         return "%s, %s" % (self.distance, self.points);
@@ -185,7 +183,7 @@ class cure:
         "Returns tuple (nearest CURE cluster, nearest distance) if nearest cluster has been found, otherwise None is returned."
         
         nearest_cluster = None;
-        nearest_distance = numpy.Inf;
+        nearest_distance = float('inf');
         
         for point in cluster.rep:
             # Nearest nodes should be returned (at least it will return itself).
@@ -278,7 +276,7 @@ class cure:
         
         # set closest clusters
         for i in range(0, len(self.__queue)):
-            minimal_distance = numpy.Inf;
+            minimal_distance = float('inf');
             closest_index_cluster = -1;
             
             for k in range(0, len(self.__queue)):
@@ -314,7 +312,7 @@ class cure:
         
         "Returns Euclidean distance between two clusters that is defined by minimum distance between representation points of two clusters."
         
-        distance = numpy.Inf;
+        distance = float('inf');
         for i in range(0, len(cluster1.rep)):
             for k in range(0, len(cluster2.rep)):
                 #dist = euclidean_distance_sqrt(cluster1.rep[i], cluster2.rep[k]);   # Fast mode

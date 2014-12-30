@@ -1,9 +1,6 @@
 import matplotlib.pyplot as plt;
 from matplotlib import colors;
 
-import numpy;
-
-
 class type_graph_descr:
     GRAPH_UNKNOWN = 0;
     GRAPH_MATRIX_DESCR = 1;
@@ -156,10 +153,10 @@ def draw_graph(graph_instance, map_coloring = None):
         if (len(map_coloring) > len(available_colors)):
             raise NameError('Impossible to represent colored graph due to number of specified colors.');
     
-    x_maximum = -numpy.Inf;
-    x_minimum = numpy.Inf;
-    y_maximum = -numpy.Inf;
-    y_minimum = numpy.Inf;
+    x_maximum = -float('inf');
+    x_minimum = float('inf');
+    y_maximum = -float('inf');
+    y_minimum = float('inf');
     
     for i in range(0, len(graph_instance.space_description), 1):
         if (graph_instance.type_graph_descr == type_graph_descr.GRAPH_MATRIX_DESCR):

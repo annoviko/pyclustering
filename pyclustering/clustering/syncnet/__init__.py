@@ -78,7 +78,7 @@ class syncnet(sync_network):
             self._conn_weight = [[0] * self._num_osc for index in range(0, self._num_osc, 1)];
         
         maximum_distance = 0;
-        minimum_distance = numpy.Inf;
+        minimum_distance = float('inf');
         
         # Create connections
         for i in range(0, self._num_osc, 1):
