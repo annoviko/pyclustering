@@ -148,8 +148,6 @@ class xmeans:
               
                 split_require = False;
                 
-                # print(self.__criterion, parent_scores, child_scores);
-                
                 # Reallocate number of centers (clusters) in line with scores        
                 if (self.__criterion == splitting_type.BAYESIAN_INFORMATION_CRITERION):
                     if (parent_scores < child_scores): split_require = True;
@@ -189,46 +187,55 @@ class xmeans:
  
     
     def __minimum_noiseless_description_length(self, clusters, centers):
+        "Calculates splitting criterion for input clusters using minimum noiseless description length criterion."
+         
+        "(in) clusters   - list of clusters for which splitting criterion should be calculated."
+        "(in) centers    - list of centers of the clusters."
+         
+        "Returns splitting criterion in line with bayesian information criterion."
+        "Low value of splitting cretion means that current structure is much better."
+                
         scores = [0.0] * len(clusters);
-        dimension = len(self.__pointer_data[0]);
         
-        W = [0.0] * len(clusters);
+        W = 0.0;
         K = len(clusters);
-        N = [0.0] * len(clusters);
-        sqrt_variance = [0.0] * len(clusters);
-        variance = [0.0] * len(clusters);
+        N = 0.0;
+
+        sigma_sqrt = 0.0;
         
         alpha = 0.9;
         betta = 0.9;
                 
         for index_cluster in range(0, len(clusters), 1):
             for index_object in clusters[index_cluster]:
-                delta = list_math_subtraction(self.__pointer_data[index_object], centers[index_cluster]);
-                object_variance = sum(list_math_multiplication(delta, delta));
+                delta_vector = list_math_subtraction(self.__pointer_data[index_object], centers[index_cluster]);
+                delta_sqrt = sum(list_math_multiplication(delta_vector, delta_vector));
                 
-                sqrt_variance[index_cluster] += object_variance;
-                W[index_cluster] += object_variance;
+                W += delta_sqrt;
+                sigma_sqrt += delta_sqrt;
             
-            sqrt_variance[index_cluster] /= len(clusters[index_cluster]);
-            W[index_cluster] /= len(clusters[index_cluster]);
-            
-            variance[index_cluster] = sqrt_variance[index_cluster] ** 0.5;
-                        
-            N[index_cluster] += len(clusters[index_cluster]);     
+            N += len(clusters[index_cluster]);     
         
-        for index_cluster in range(0, len(clusters), 1):
-            Kw = (1.0 - K / N[index_cluster]) * sqrt_variance[index_cluster];
-            Ks = ( 2.0 * alpha * variance[index_cluster] / (N[index_cluster] ** 0.5) ) + ( (alpha ** 2.0) * sqrt_variance[index_cluster] / N[index_cluster] + W[index_cluster] - Kw / 2.0 ) ** 0.5;
-            U = W[index_cluster] - Kw + 2.0 * (alpha ** 2.0) * sqrt_variance[index_cluster] / N[index_cluster] + Ks;
+        if (N - K != 0):
+            W /= N;
             
-            Z = K * sqrt_variance[index_cluster] / N[index_cluster] + U + betta * ( (2.0 * K) ** 0.5 ) * sqrt_variance[index_cluster] / N[index_cluster];
+            sigma_sqrt /= (N - K);
+            sigma = sigma_sqrt ** 0.5;
             
-            if (Z == 0.0):
-                scores[index_cluster] = float("inf");
-            else:
-                scores[index_cluster] = Z;
-            
-            # print(Z, sqrt_variance, variance, Kw, Ks, U);
+            for index_cluster in range(0, len(clusters), 1):
+                Kw = (1.0 - K / N) * sigma_sqrt;
+                Ks = ( 2.0 * alpha * sigma / (N ** 0.5) ) + ( (alpha ** 2.0) * sigma_sqrt / N + W - Kw / 2.0 ) ** 0.5;
+                U = W - Kw + 2.0 * (alpha ** 2.0) * sigma_sqrt / N + Ks;
+                
+                Z = K * sigma_sqrt / N + U + betta * ( (2.0 * K) ** 0.5 ) * sigma_sqrt / N;
+                
+                if (Z == 0.0):
+                    scores[index_cluster] = float("inf");
+                else:
+                    scores[index_cluster] = Z;
+                
+        else:
+            scores = [float("inf")] * len(clusters);
         
         return sum(scores);
  
@@ -251,7 +258,6 @@ class xmeans:
           
         for index_cluster in range(0, len(clusters), 1):
             for index_object in clusters[index_cluster]:
-                # sigma += (euclidean_distance_sqrt(data[index_object], centers[index_cluster]));  # It doesn't works. But why?
                 sigma += (euclidean_distance(self.__pointer_data[index_object], centers[index_cluster]));  # It works
 
             N += len(clusters[index_cluster]);
