@@ -15,7 +15,12 @@ import math;
 import pyclustering.core.wrapper as wrapper;
 
 from pyclustering.support import euclidean_distance, euclidean_distance_sqrt;
-from pyclustering.support import list_math_addition_number, list_math_addition, list_math_division_number;
+from pyclustering.support import list_math_addition_number, list_math_substraction_number, list_math_addition, list_math_multiplication, list_math_division_number, list_math_subtraction;
+
+
+class splitting_type:
+    BAYESIAN_INFORMATION_CRITERION = 0;
+    MINIMUM_NOISELESS_DESCRIPTION_LENGTH = 1;
 
 
 class xmeans:
@@ -27,16 +32,18 @@ class xmeans:
      
     __kmax = 0;
     __tolerance = 0.0;
+    __criterion = None;
      
     __ccore = False;
      
-    def __init__(self, data, initial_centers, kmax = 20, tolerance = 0.025, ccore = False):
+    def __init__(self, data, initial_centers, kmax = 20, tolerance = 0.025, criterion = splitting_type.BAYESIAN_INFORMATION_CRITERION, ccore = False):
         "Constructor of clustering algorithm X-Means."
          
         "(in) data        - input data that is presented as list of points (objects), each point should be represented by list or tuple."
         "(in) centers     - initial coordinates of centers of clusters that are represented by list: [center1, center2, ...]."
         "(in) kmax        - maximum number of clusters that can be allocated."
         "(in) tolerance   - stop condition for each iteration: if maximum value of change of centers of clusters is less than tolerance than algorithm will stop processing."
+        "(in) criterion   - type of splitting creation."
         "(in) ccore       - defines should be CCORE C++ library used instead of Python code or not."
          
         "Returns list of allocated clusters, each cluster contains indexes of objects in list of data."
@@ -47,6 +54,7 @@ class xmeans:
          
         self.__kmax = kmax;
         self.__tolerance = tolerance;
+        self.__criterion = criterion;
          
         self.__ccore = ccore;
          
@@ -138,12 +146,23 @@ class xmeans:
                 parent_scores = self.__splitting_criterion([ clusters[index_cluster] ], [ centers[index_cluster] ]);
                 child_scores = self.__splitting_criterion([ parent_child_clusters[0], parent_child_clusters[1] ], parent_child_centers);
               
+                split_require = False;
+                
+                # print(self.__criterion, parent_scores, child_scores);
+                
                 # Reallocate number of centers (clusters) in line with scores        
-                if (parent_scores > child_scores):
-                    allocated_centers.append(centers[index_cluster]);
-                else:
+                if (self.__criterion == splitting_type.BAYESIAN_INFORMATION_CRITERION):
+                    if (parent_scores < child_scores): split_require = True;
+                    
+                elif (self.__criterion == splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH):
+                    if (parent_scores > child_scores): split_require = True;
+                    
+                if (split_require is True):
                     allocated_centers.append(parent_child_centers[0]);
                     allocated_centers.append(parent_child_centers[1]);
+                else:
+                    allocated_centers.append(centers[index_cluster]);
+
                     
             else:
                 allocated_centers.append(centers[index_cluster]);
@@ -158,7 +177,70 @@ class xmeans:
         "(in) centers    - list of centers of the clusters."
          
         "Returns splitting criterion. High value of splitting cretion means that current structure is much better."
+        
+        if (self.__criterion == splitting_type.BAYESIAN_INFORMATION_CRITERION):
+            return self.__bayesian_information_criterion(clusters, centers);
+        
+        elif (self.__criterion == splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH):
+            return self.__minimum_noiseless_description_length(clusters, centers);
+        
+        else:
+            assert 0;
+ 
+    
+    def __minimum_noiseless_description_length(self, clusters, centers):
+        scores = [0.0] * len(clusters);
+        dimension = len(self.__pointer_data[0]);
+        
+        W = [0.0] * len(clusters);
+        K = len(clusters);
+        N = [0.0] * len(clusters);
+        sqrt_variance = [0.0] * len(clusters);
+        variance = [0.0] * len(clusters);
+        
+        alpha = 0.9;
+        betta = 0.9;
+                
+        for index_cluster in range(0, len(clusters), 1):
+            for index_object in clusters[index_cluster]:
+                delta = list_math_subtraction(self.__pointer_data[index_object], centers[index_cluster]);
+                object_variance = sum(list_math_multiplication(delta, delta));
+                
+                sqrt_variance[index_cluster] += object_variance;
+                W[index_cluster] += object_variance;
+            
+            sqrt_variance[index_cluster] /= len(clusters[index_cluster]);
+            W[index_cluster] /= len(clusters[index_cluster]);
+            
+            variance[index_cluster] = sqrt_variance[index_cluster] ** 0.5;
+                        
+            N[index_cluster] += len(clusters[index_cluster]);     
+        
+        for index_cluster in range(0, len(clusters), 1):
+            Kw = (1.0 - K / N[index_cluster]) * sqrt_variance[index_cluster];
+            Ks = ( 2.0 * alpha * variance[index_cluster] / (N[index_cluster] ** 0.5) ) + ( (alpha ** 2.0) * sqrt_variance[index_cluster] / N[index_cluster] + W[index_cluster] - Kw / 2.0 ) ** 0.5;
+            U = W[index_cluster] - Kw + 2.0 * (alpha ** 2.0) * sqrt_variance[index_cluster] / N[index_cluster] + Ks;
+            
+            Z = K * sqrt_variance[index_cluster] / N[index_cluster] + U + betta * ( (2.0 * K) ** 0.5 ) * sqrt_variance[index_cluster] / N[index_cluster];
+            
+            if (Z == 0.0):
+                scores[index_cluster] = float("inf");
+            else:
+                scores[index_cluster] = Z;
+            
+            # print(Z, sqrt_variance, variance, Kw, Ks, U);
+        
+        return sum(scores);
+ 
+    def __bayesian_information_criterion(self, clusters, centers):
+        "Calculates splitting criterion for input clusters using bayesian information criterion."
          
+        "(in) clusters   - list of clusters for which splitting criterion should be calculated."
+        "(in) centers    - list of centers of the clusters."
+         
+        "Returns splitting criterion in line with bayesian information criterion."
+        "High value of splitting cretion means that current structure is much better."
+
         scores = [0.0] * len(clusters)     # splitting criterion
         dimension = len(self.__pointer_data[0]);
           
