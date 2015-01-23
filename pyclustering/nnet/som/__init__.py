@@ -406,6 +406,17 @@ class som:
             previous_weights = [item[:] for item in self._weights];
             
     
+    def simulate(self, input_pattern):
+        "Processes input pattern (no learining) and returns index of neuron-winner."
+        "Using index of neuron winner catched object can be obtained using property capture_objects."
+        
+        "(in) input_pattern    - input pattern."
+        
+        "Returns index of neuron-winner."
+                
+        return self._competition(input_pattern);
+    
+    
     def _get_maximal_adaptation(self, previous_weights):
         "Returns maximum changes of weight in line with comparison between previous weights and current weights."
         

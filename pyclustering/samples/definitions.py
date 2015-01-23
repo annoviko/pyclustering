@@ -76,3 +76,31 @@ class IMAGE_MAP_SAMPLES:
     IMAGE_WHITE_SEA_SMALL           = samples.__path__[0] + os.sep + "images" + os.sep + "ImageWhiteSeaSmall.png";
     IMAGE_NILE                      = samples.__path__[0] + os.sep + "images" + os.sep + "ImageNile.png";
     IMAGE_NILE_SMALL                = samples.__path__[0] + os.sep + "images" + os.sep + "ImageNileSmall.png";
+    
+    
+class IMAGE_DIGIT_SAMPLES:    
+    @staticmethod
+    def GET_LIST_IMAGE_SAMPLES(digit):
+        default_path = samples.__path__[0] + os.sep + "images" + os.sep + "digits" + os.sep;
+        number_sample_digits = 15;
+        
+        name_file_pattern = "Digit_%d_Sample%.2d.png";
+        list_image_samples = [];
+        
+        for index_image in range(1, number_sample_digits, 1):
+            file_path = default_path + (name_file_pattern % (digit, index_image));
+            list_image_samples.append(file_path);
+            
+        return list_image_samples;
+    
+    LIST_IMAGES_DIGIT_0             = GET_LIST_IMAGE_SAMPLES.__func__(0);
+    LIST_IMAGES_DIGIT_1             = GET_LIST_IMAGE_SAMPLES.__func__(1);
+    LIST_IMAGES_DIGIT_2             = GET_LIST_IMAGE_SAMPLES.__func__(2);
+    LIST_IMAGES_DIGIT_3             = GET_LIST_IMAGE_SAMPLES.__func__(3);
+    LIST_IMAGES_DIGIT_4             = GET_LIST_IMAGE_SAMPLES.__func__(4);
+    LIST_IMAGES_DIGIT_5             = GET_LIST_IMAGE_SAMPLES.__func__(5);
+    LIST_IMAGES_DIGIT_6             = GET_LIST_IMAGE_SAMPLES.__func__(6);
+    LIST_IMAGES_DIGIT_7             = GET_LIST_IMAGE_SAMPLES.__func__(7);
+    LIST_IMAGES_DIGIT_8             = GET_LIST_IMAGE_SAMPLES.__func__(8);
+    LIST_IMAGES_DIGIT_9             = GET_LIST_IMAGE_SAMPLES.__func__(9);
+    
