@@ -151,6 +151,7 @@
     <ClCompile Include="hierarchical.cpp" />
     <ClCompile Include="hsyncnet.cpp" />
     <ClCompile Include="kdtree.cpp" />
+    <ClCompile Include="legion_network.cpp" />
     <ClCompile Include="network.cpp" />
     <ClCompile Include="kmeans.cpp" />
     <ClCompile Include="rock.cpp" />
@@ -166,6 +167,7 @@
     <ClInclude Include="hsyncnet.h" />
     <ClInclude Include="interface_ccore.h" />
     <ClInclude Include="kdtree.h" />
+    <ClInclude Include="legion_network.h" />
     <ClInclude Include="network.h" />
     <ClInclude Include="kmeans.h" />
     <ClInclude Include="rock.h" />
