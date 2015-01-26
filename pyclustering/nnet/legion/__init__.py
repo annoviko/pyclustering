@@ -229,6 +229,15 @@ class legion_network(network, network_interface):
         for index in range (0, self._num_osc, 1):
             result = odeint(self.legion_state, [self._excitatory[index], self._inhibitory[index], self._potential[index]], numpy.arange(t - step, t, int_step), (index , ));
             [ next_excitatory[index], next_inhibitory[index], next_potential[index] ] = result[len(result) - 1][0:3];
+            
+            # Update coupling term
+            neighbors = self.get_neighbors(index);
+            
+            coupling = 0
+            for index_neighbor in neighbors:
+                coupling += self._dynamic_coupling[index][index_neighbor] * heaviside(self._excitatory[index_neighbor] - self._params.teta_x);
+            
+            self._buffer_coupling_term[index] = coupling - self._params.Wz * heaviside(self._global_inhibitor - self._params.teta_xz);
         
         # Update state of global inhibitory
         result = odeint(self.global_inhibitor_state, self._global_inhibitor, numpy.arange(t - step, t, int_step), (None, ));
@@ -284,17 +293,10 @@ class legion_network(network, network_interface):
         neighbors = self.get_neighbors(index);
         potential = 0;
         
-        
         for index_neighbor in neighbors:
             potential += self._params.T * heaviside(self._excitatory[index_neighbor] - self._params.teta_x);
         
         dp = self._params.lamda * (1 - p) * heaviside(potential - self._params.teta_p) - self._params.mu * p;
-
-        coupling = 0
-        for index_neighbor in neighbors:
-            coupling += self._dynamic_coupling[index][index_neighbor] * heaviside(self._excitatory[index_neighbor] - self._params.teta_x);
-            
-        self._buffer_coupling_term[index] = coupling - self._params.Wz * heaviside(self._global_inhibitor - self._params.teta_xz);
         
         return [dx, dy, dp];
     
