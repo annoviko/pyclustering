@@ -466,7 +466,7 @@ class som:
                 density_matrix[i][j] = (self._award[neuron_index] - minimum_value) / difference;
         
         return density_matrix;
-        
+    
     
     def show_award(self):
         "Prints indexes of won objects by each neuron."

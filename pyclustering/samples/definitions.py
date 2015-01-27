@@ -82,7 +82,7 @@ class IMAGE_DIGIT_SAMPLES:
     @staticmethod
     def GET_LIST_IMAGE_SAMPLES(digit):
         default_path = samples.__path__[0] + os.sep + "images" + os.sep + "digits" + os.sep;
-        number_sample_digits = 15;
+        number_sample_digits = 20;
         
         name_file_pattern = "Digit_%d_Sample%.2d.png";
         list_image_samples = [];
