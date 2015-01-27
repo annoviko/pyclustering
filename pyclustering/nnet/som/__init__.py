@@ -479,8 +479,11 @@ class som:
                 awards.clear();
                 
             awards.append(self._award[index]);
-            
+
         print(awards);
+
+        for index in range(self._size):
+            print("#%2d - captured objects: %s" % (index, self.capture_objects[index]) );
             
     
     def show_network(self, awards = False, belongs = False, coupling = True, dataset = True, marker_type = '.'):

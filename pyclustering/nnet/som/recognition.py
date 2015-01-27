@@ -12,6 +12,7 @@ from tkinter import messagebox;
 import math;
 import pickle;
 import os;
+import random;
 
 class recognizer:
     __network = None;
@@ -41,7 +42,7 @@ class recognizer:
                 
                 for index_pixel in range(len(image_pattern)):
                     if (image_pattern[index_pixel] < 128):
-                        image_pattern[index_pixel] = 255;
+                        image_pattern[index_pixel] = 1;
                     else:
                         image_pattern[index_pixel] = 0;
                 
@@ -49,7 +50,7 @@ class recognizer:
         
        
         print("SOM initialization...");
-        self.__network = som(6, 6, samples, 200, type_conn.grid_four, type_init.uniform_grid);
+        self.__network = som(2, 5, samples, 200, type_conn.grid_four, type_init.uniform_grid);
         
         print("SOM training...");
         self.__network.train();
@@ -66,6 +67,7 @@ class recognizer:
             decoded_capture_objects.append(self.__decode_map[index_capture_object]);
             
         frequent_index = max(set(decoded_capture_objects), key = decoded_capture_objects.count);
+        print(decoded_capture_objects);
         return frequent_index;
         
     def save_knowledge(self):
@@ -84,6 +86,9 @@ class recognizer:
         if (os.path.isfile("knowledge_recognition_memory_dump") is True):
             file_network_dump = open("knowledge_recognition_memory_dump", "rb");
             self.__network = pickle.load(file_network_dump);
+            
+            self.__network.show_award();
+            
             result_loading = True;
         
         return result_loading;
@@ -110,6 +115,9 @@ class digit_application:
         button_recognize = Button(self.__master, text = "Recognize", command = self.click_recognize, width = 25);
         button_recognize.pack(side = BOTTOM);
         
+        button_recognize = Button(self.__master, text = "Random Image", command = self.click_image_load, width = 25);
+        button_recognize.pack(side = BOTTOM);
+        
         button_save = Button(self.__master, text = "Save", command = self.click_save, width = 25);
         button_save.pack(side = BOTTOM);
         
@@ -122,7 +130,7 @@ class digit_application:
         button_clean = Button(self.__master, text = "Clean", command = self.click_clean, width = 25);
         button_clean.pack(side = BOTTOM);
         
-        self.__user_pattern = [ [ 0 for i in range(32) ] for j in range(32) ];
+        self.__user_pattern = [ 0 for i in range(32 * 32) ];
         self.__recognizer = recognizer();
 
     def __paint(self, event):
@@ -130,13 +138,19 @@ class digit_application:
         if ( (event.x >= 0) and (event.x < 320) and (event.y >= 0) and (event.y < 320) ):
             x1, y1 = math.floor(event.x / 10), math.floor(event.y / 10);
             
-            self.__user_pattern[x1][y1] = 1;
-            if (x1 + 1 < 32): 
-                self.__user_pattern[x1 + 1][y1] = 1;
-            if (y1 + 1 < 32): 
-                self.__user_pattern[x1][y1 + 1];
-            if ( (x1 + 1 < 32) and (y1 + 1 < 32) ): 
-                self.__user_pattern[x1 + 1][y1 + 1];
+            self.__user_pattern[x1 * 32 + y1] = 1;
+            
+            index2 = (x1 + 1) * 32 + y1;
+            index3 = x1 * 32 + (y1 + 1);
+            index4 = (x1 + 1) * 32 + (y1 + 1);
+            
+            
+            if (index2 < len(self.__user_pattern)): 
+                self.__user_pattern[index2] = 1;
+            if (index3 < len(self.__user_pattern)): 
+                self.__user_pattern[index3] = 1;
+            if (index4 < len(self.__user_pattern)): 
+                self.__user_pattern[index4] = 1;
             
             display_x1, display_y1 = x1 * 10, y1 * 10;
             display_x2, display_y2 = display_x1 + 20, display_y1 + 20;
@@ -158,20 +172,32 @@ class digit_application:
             messagebox.showwarning("Recognition - Knowledge Saving", "Knowledge represented by self-organized feature map has been created "
                                    "because training has been performed. Please train recognizer and after save result of training.");
 
-    def click_recognize(self):
-        input_patter = [0] * (len(self.__user_pattern) ** 2);
-        print("Input Pattern Length:", len(input_patter));
-        for x_index in range(len(self.__user_pattern)):
-            for y_index in range(len(self.__user_pattern[0])):
-                if (self.__user_pattern[x_index][y_index] == 1):                
-                    input_patter[x_index * len(self.__user_pattern) + y_index] = 255;
-                
-        digit_index = self.__recognizer.recognize(input_patter);
+    def click_recognize(self):               
+        digit_index = self.__recognizer.recognize(self.__user_pattern);
         messagebox.showinfo("Recognition - Result", "Most probably input digit is " + str(digit_index));
 
     def click_clean(self):
-        self.__user_pattern = [ [ 0 for i in range(32) ] for j in range(32) ];
+        self.__user_pattern = [ 0 for i in range(32 * 32) ];
         Canvas.delete(self.__widget, "all");
+        
+    def click_image_load(self):
+        self.__user_pattern = [ 0 for i in range(32 * 32) ];
+        Canvas.delete(self.__widget, "all");
+        
+        index_digit = int(math.floor(random.random() * 10));
+        list_file_digit_sample = IMAGE_DIGIT_SAMPLES.GET_LIST_IMAGE_SAMPLES(index_digit);
+        
+        index_image = int(math.floor( random.random() * len(list_file_digit_sample) ));
+        file_name = list_file_digit_sample[index_image];
+        data = read_image(file_name);
+                
+        image_pattern = rgb2gray(data);
+        for x in range(32):
+            for y in range(32):
+                linear_index = x * 32 + y;
+                if (image_pattern[linear_index] < 128):
+                    self.__user_pattern[linear_index] = 1;
+                    self.__widget.create_rectangle(x * 10, y * 10, x * 10 + 10, y * 10 + 10, fill = self.__color, width = 0);
         
     def start(self):  
         mainloop();
