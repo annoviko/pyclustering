@@ -155,6 +155,7 @@
     <ClCompile Include="network.cpp" />
     <ClCompile Include="kmeans.cpp" />
     <ClCompile Include="rock.cpp" />
+    <ClCompile Include="som.cpp" />
     <ClCompile Include="support.cpp" />
     <ClCompile Include="syncnet.cpp" />
     <ClCompile Include="sync_network.cpp" />
@@ -171,6 +172,7 @@
     <ClInclude Include="network.h" />
     <ClInclude Include="kmeans.h" />
     <ClInclude Include="rock.h" />
+    <ClInclude Include="som.h" />
     <ClInclude Include="support.h" />
     <ClInclude Include="syncnet.h" />
     <ClInclude Include="sync_network.h" />

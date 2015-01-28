@@ -54,6 +54,9 @@
     <ClCompile Include="cure.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="som.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="legion_network.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -96,6 +99,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="cure.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="som.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="legion_network.h">
