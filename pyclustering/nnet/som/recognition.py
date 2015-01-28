@@ -50,7 +50,7 @@ class recognizer:
         
        
         print("SOM initialization...");
-        self.__network = som(2, 5, samples, 200, type_conn.grid_four, type_init.uniform_grid);
+        self.__network = som(2, 5, samples, 300, type_conn.grid_four, type_init.uniform_grid);
         
         print("SOM training...");
         self.__network.train();
@@ -138,11 +138,11 @@ class digit_application:
         if ( (event.x >= 0) and (event.x < 320) and (event.y >= 0) and (event.y < 320) ):
             x1, y1 = math.floor(event.x / 10), math.floor(event.y / 10);
             
-            self.__user_pattern[x1 * 32 + y1] = 1;
+            self.__user_pattern[y1 * 32 + x1] = 1;
             
-            index2 = (x1 + 1) * 32 + y1;
-            index3 = x1 * 32 + (y1 + 1);
-            index4 = (x1 + 1) * 32 + (y1 + 1);
+            index2 = (y1 + 1) * 32 + x1;
+            index3 = y1 * 32 + (x1 + 1);
+            index4 = (y1 + 1) * 32 + (x1 + 1);
             
             
             if (index2 < len(self.__user_pattern)): 
@@ -192,9 +192,9 @@ class digit_application:
         data = read_image(file_name);
                 
         image_pattern = rgb2gray(data);
-        for x in range(32):
-            for y in range(32):
-                linear_index = x * 32 + y;
+        for y in range(32):
+            for x in range(32):
+                linear_index = y * 32 + x;
                 if (image_pattern[linear_index] < 128):
                     self.__user_pattern[linear_index] = 1;
                     self.__widget.create_rectangle(x * 10, y * 10, x * 10 + 10, y * 10 + 10, fill = self.__color, width = 0);
