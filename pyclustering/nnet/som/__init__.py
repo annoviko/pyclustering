@@ -178,17 +178,7 @@ class som:
         # Increase border
         width_dimension = [0] * dimension;
         center_dimension = [0] * dimension;
-        for dim in range(dimension):
-            if (maximum_dimension[dim] > 0):
-                maximum_dimension[dim] * 1.1;
-            elif(maximum_dimension[dim] < 0):
-                maximum_dimension * 0.9;
-                  
-            if (minimum_dimension[dim] > 0):
-                minimum_dimension[dim] * 0.9;
-            elif (minimum_dimension[dim] < 0):
-                minimum_dimension[dim] * 1.1;
-             
+        for dim in range(dimension):            
             width_dimension[dim] = maximum_dimension[dim] - minimum_dimension[dim];
             center_dimension[dim] = (maximum_dimension[dim] + minimum_dimension[dim]) / 2;
         
@@ -259,7 +249,6 @@ class som:
                 if (upper_index >= 0):
                     self._neighbors[index].append(upper_index);
                     
-                
                 if (lower_index < self._size):
                     self._neighbors[index].append(lower_index);
             
@@ -397,13 +386,14 @@ class som:
                     self._capture_objects[index].append(i);
             
             # Feature SOM 0003: Check requirement of stopping
-            if ( (autostop == True) and (previous_weights is not None) ):
-                maximal_adaptation = self._get_maximal_adaptation(previous_weights);
-                if (maximal_adaptation < self._adaptation_threshold):
-                    # print("Learning process is stopped. Iteration: ", epoch);
-                    return;
-                
-            previous_weights = [item[:] for item in self._weights];
+            if (autostop == True):
+                if (previous_weights is not None):
+                    maximal_adaptation = self._get_maximal_adaptation(previous_weights);
+                    if (maximal_adaptation < self._adaptation_threshold):
+                        # print("Learning process is stopped. Iteration: ", epoch);
+                        return;
+            
+                previous_weights = [item[:] for item in self._weights];
             
     
     def simulate(self, input_pattern):
