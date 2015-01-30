@@ -310,4 +310,23 @@ extern "C" DECLARATION void destroy_hsyncnet_network(const void * pointer_networ
  ***********************************************************************************************/
 extern "C" DECLARATION dynamic_result * process_hsyncnet(const void * pointer_network, const double order, const unsigned int solver, const bool collect_dynamic);
 
+
+extern "C" DECLARATION void * som_create(const data_representation * const sample, const unsigned int num_rows, const unsigned int num_cols, const unsigned int num_epochs, const unsigned int type_conn, const unsigned int type_init);
+
+extern "C" DECLARATION void som_destroy(const void * pointer);
+
+extern "C" DECLARATION unsigned int som_train(const void * pointer, const bool autostop);
+
+extern "C" DECLARATION unsigned int som_simulate(const void * pointer, const data_representation * const pattern);
+
+extern "C" DECLARATION unsigned int som_get_winner_number(const void * pointer);
+
+extern "C" DECLARATION unsigned int som_get_size(const void * pointer);
+
+// extern "C" DECLARATION data_representation * som_get_weights(const void * pointer);
+
+// extern "C" DECLARATION data_representation * som_get_capture_objects(const void * pointer);
+
+// extern "C" DECLARATION data_representation * som_get_awards(const void * pointer);
+
 #endif

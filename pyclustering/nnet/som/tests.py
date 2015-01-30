@@ -69,7 +69,7 @@ class Test(unittest.TestCase):
     
     def testTwoNeuronsTwoClusters(self):
         self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, 2, 100, [5, 5]);
-        self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, 1, 100, [5, 5]);
+        self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, 1, 100, [5, 5]);        
         
     
     def testAutostopTwoNeuronsTwoClusters(self):

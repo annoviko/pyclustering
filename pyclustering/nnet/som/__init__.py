@@ -26,6 +26,8 @@ from pyclustering.support import euclidean_distance;
 from pyclustering.support import euclidean_distance_sqrt;
 from pyclustering.support import timedcall;
 
+import pyclustering.core.wrapper as wrapper;
+
 
 # Feature SOM 0001: Predefined initial radius that depends on size of the network. 
 #                   Improves results of self-organization and helps avoid tug of neurons when network is small.
@@ -78,8 +80,13 @@ class som:
     _local_radius = 0.0;
     _learn_rate = 0.0;
     
+    __ccore_som_pointer = None;
+    
     @property
     def size(self):
+        if (self.__ccore_som_pointer is not None):
+            return wrapper.som_get_size(self.__ccore_som_pointer);
+            
         return self._size;
     
     @property
@@ -108,7 +115,7 @@ class som:
             self._adaptation_threshold = value;
     
     
-    def __init__(self, rows, cols, data, epochs, conn_type = type_conn.grid_eight, init_type = type_init.uniform_grid):
+    def __init__(self, rows, cols, data, epochs, conn_type = type_conn.grid_eight, init_type = type_init.uniform_grid, ccore = False):
         "Constructor of self-organized map."
         
         "(in) rows        - number of neurons in the column (number of rows)."
@@ -118,46 +125,55 @@ class som:
         "(in) conn_type   - type of connection between oscillators in the network (grid four, grid eight, honeycomb, function neighbour)."
         "(in) init_type   - type of initialization of initial neuron weights (random, random in center of the input data, random distributed in data, ditributed in line with uniform grid)."
         
-        self._cols = cols;
-        self._rows = rows;        
-        self._data = data;
-        self._size = cols * rows;
-        self._epochs = epochs;
-        self._conn_type = conn_type;
-        
-        # Feature SOM 0001: Predefined initial radius that depends on size of the network.
-        if ((cols + rows) / 4.0 > 1):
-            self._init_radius = 2.0;
-        elif ( (cols > 1) and (rows > 1) ):
-            self._init_radius = 1.5;
+        if (ccore is True):
+            self.__ccore_som_pointer = wrapper.som_create(data, rows, cols, epochs, conn_type, init_type);
+            
         else:
-            self._init_radius = 1.0;
+            self._cols = cols;
+            self._rows = rows;        
+            self._data = data;
+            self._size = cols * rows;
+            self._epochs = epochs;
+            self._conn_type = conn_type;
+            
+            # Feature SOM 0001: Predefined initial radius that depends on size of the network.
+            if ((cols + rows) / 4.0 > 1):
+                self._init_radius = 2.0;
+            elif ( (cols > 1) and (rows > 1) ):
+                self._init_radius = 1.5;
+            else:
+                self._init_radius = 1.0;
+            
+            # location
+            self._location = list();
+            for i in range(self._rows):
+                for j in range(self._cols):
+                    self._location.append([float(i), float(j)]);
+            
+            # awards
+            self._award = [0] * self._size;
+            self._capture_objects = [ [] for i in range(self._size) ];
+            
+            # distances
+            self._sqrt_distances = [ [ [] for i in range(self._size) ] for j in range(self._size) ];
+            for i in range(self._size):
+                for j in range(i, self._size, 1):
+                    dist = euclidean_distance_sqrt(self._location[i], self._location[j]);
+                    self._sqrt_distances[i][j] = dist;
+                    self._sqrt_distances[j][i] = dist;
         
-        # location
-        self._location = list();
-        for i in range(self._rows):
-            for j in range(self._cols):
-                self._location.append([float(i), float(j)]);
+            # connections
+            if (conn_type != type_conn.func_neighbor):
+                self._create_connections(conn_type);
+            
+            # weights
+            self._create_initial_weights(init_type);
         
-        # awards
-        self._award = [0] * self._size;
-        self._capture_objects = [ [] for i in range(self._size) ];
-        
-        # distances
-        self._sqrt_distances = [ [ [] for i in range(self._size) ] for j in range(self._size) ];
-        for i in range(self._size):
-            for j in range(i, self._size, 1):
-                dist = euclidean_distance_sqrt(self._location[i], self._location[j]);
-                self._sqrt_distances[i][j] = dist;
-                self._sqrt_distances[j][i] = dist;
-    
-        # connections
-        if (conn_type != type_conn.func_neighbor):
-            self._create_connections(conn_type);
-        
-        # weights
-        self._create_initial_weights(init_type);
-        
+
+    def __del__(self):
+        if (self.__ccore_som_pointer is not None):
+            wrapper.som_destroy(self.__ccore_som_pointer);
+            
 
     def _create_initial_weights(self, init_type):
         "Creates initial weights for neurons in line with the specified initialization."
@@ -358,6 +374,9 @@ class som:
         
         "(in) autostop    - automatic termination of learining process when adaptation is not occurred."
         
+        if (self.__ccore_som_pointer is not None):
+            return wrapper.som_train(self.__ccore_som_pointer, autostop);
+        
         previous_weights = None;
         
         for epoch in range(1, self._epochs + 1):
@@ -391,10 +410,11 @@ class som:
                     maximal_adaptation = self._get_maximal_adaptation(previous_weights);
                     if (maximal_adaptation < self._adaptation_threshold):
                         # print("Learning process is stopped. Iteration: ", epoch);
-                        return;
+                        return epoch;
             
                 previous_weights = [item[:] for item in self._weights];
-            
+        
+        return self._epochs;
     
     def simulate(self, input_pattern):
         "Processes input pattern (no learining) and returns index of neuron-winner."
@@ -404,6 +424,9 @@ class som:
         
         "Returns index of neuron-winner."
                 
+        if (self.__ccore_som_pointer is not None):
+            return wrapper.som_simulate(self.__ccore_som_pointer, [ input_pattern ]);
+            
         return self._competition(input_pattern);
     
     
@@ -431,6 +454,9 @@ class som:
     
     def get_winner_number(self):
         "Returns number of winner at the last step of learning process."
+        
+        if (self.__ccore_som_pointer is not None):
+            return wrapper.som_get_winner_number(self.__ccore_som_pointer);
         
         winner_number = 0;
         for i in range(self._size):

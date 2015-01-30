@@ -54,6 +54,12 @@ som::som(std::vector<std::vector<double> > * input_data, const unsigned int num_
 		}
 	}
 
+	/* captured objects */
+	capture_objects = new std::vector<std::vector<unsigned int> * >(size, NULL);
+	for (unsigned int i = 0; i < size; i++) {
+		(*capture_objects)[i] = new std::vector<unsigned int>();
+	}
+
 	/* connections */
 	if (type_conn != som_conn_type::SOM_FUNC_NEIGHBOR) {
 		create_connections(type_conn);
@@ -357,7 +363,7 @@ unsigned int som::adaptation(const unsigned int index_winner, const std::vector<
 
 	return number_adapted_neurons;
 }
-
+#include <stdio.h>
 unsigned int som::train(bool autostop) {
 	std::vector<std::vector<double> * > * previous_weights = NULL;
 
@@ -383,7 +389,9 @@ unsigned int som::train(bool autostop) {
 
 			/* Update statistics */
 			if ( (autostop == true) || (epouch == (epouchs - 1)) ) {
+				//printf("Time to save results: %x, %x\n", awards, capture_objects);
 				(*awards)[index_winner]++;
+				//printf("Captured objects: %x, %x\n", capture_objects, (*capture_objects)[index_winner]);
 				(*capture_objects)[index_winner]->push_back(i);
 			}
 		}

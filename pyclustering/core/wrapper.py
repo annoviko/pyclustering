@@ -328,12 +328,49 @@ def process_hsyncnet(network_pointer, order, solution, collect_dynamic):
 def destroy_object(pointer_object):
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
     ccore.destroy_object(pointer_object);
+    
+    
+    
+def som_create(data, rows, cols, epochs, conn_type, init_type):
+    pointer_data = create_pointer_data(data);
+    
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    som_pointer = ccore.som_create(pointer_data, c_uint(rows), c_uint(cols), c_uint(epochs), c_uint(conn_type), c_uint(init_type));
+    
+    return som_pointer;
+
+def som_destroy(som_pointer):
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore.som_destroy(som_pointer);
+    
+def som_train(som_pointer, autostop):
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    return ccore.som_train(som_pointer, autostop);
+
+def som_simulate(som_pointer, pattern):
+    pointer_data = create_pointer_data(pattern);
+    
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    return ccore.som_simulate(som_pointer, pointer_data);
+
+def som_get_winner_number(som_pointer):
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    return ccore.som_get_winner_number(som_pointer);
+
+def som_get_size(som_pointer):
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    return ccore.som_get_size(som_pointer);
+    
 
 
-# from support import draw_dynamics, draw_clusters;
-# from samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
+# from pyclustering.support import draw_dynamics, draw_clusters, read_sample;
+# from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
 #   
 # sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE3);
+# som_pointer = som_create(sample, 1, 3, 100, 0, 3);
+# iterations = som_train(som_pointer, False);
+# som_destroy(som_pointer);
+
 # clusters = xmeans(sample, [ [0.2, 0.1], [4.0, 1.0] ], 20, 0.025);
 #  
 # draw_clusters(sample, clusters);

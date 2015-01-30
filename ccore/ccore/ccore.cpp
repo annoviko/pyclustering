@@ -11,6 +11,7 @@
 #include "syncnet.h"
 #include "xmeans.h"
 
+#include "som.h"
 #include "sync_network.h"
 
 #include "support.h"
@@ -514,3 +515,36 @@ dynamic_result * process_hsyncnet(const void * pointer_network, const double ord
 	return result;
 }
 
+void * som_create(const data_representation * const sample, const unsigned int num_rows, const unsigned int num_cols, const unsigned int num_epochs, const unsigned int type_conn, const unsigned int type_init) {
+	std::vector<std::vector<double> > * dataset = read_sample(sample);
+	return (void *) new som(dataset, num_rows, num_cols, num_epochs, (som_conn_type) type_conn, (som_init_type) type_init);
+}
+
+void som_destroy(const void * pointer) {
+	if (pointer != NULL) {
+		delete (som *) pointer;
+	}
+}
+
+unsigned int som_train(const void * pointer, const bool autostop) {
+	return ((som *) pointer)->train(autostop);
+}
+
+unsigned int som_simulate(const void * pointer, const data_representation * const pattern) {
+	std::vector<std::vector<double> > * input_pattern = read_sample(pattern);
+	return ((som *) pointer)->simulate( &(*input_pattern)[0] );
+}
+
+unsigned int som_get_winner_number(const void * pointer) {
+	return ((som *) pointer)->get_winner_number();
+}
+
+unsigned int som_get_size(const void * pointer) {
+	return ((som *) pointer)->get_size();
+}
+
+// data_representation * som_get_weights(const void * pointer) { }
+
+// data_representation * som_get_capture_objects(const void * pointer) { }
+
+// data_representation * som_get_awards(const void * pointer) { }
