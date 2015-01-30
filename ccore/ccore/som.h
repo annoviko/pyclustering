@@ -4,18 +4,18 @@
 #include <vector>
 
 typedef enum som_conn_type {
-	GRID_FOUR,
-	GRID_EIGHT,
-	HONEYCOMB,
-	FUNC_NEIGHBOR
+	SOM_GRID_FOUR,
+	SOM_GRID_EIGHT,
+	SOM_HONEYCOMB,
+	SOM_FUNC_NEIGHBOR
 } som_conn_type;
 
 typedef enum som_init_type {
-	RANDOM,
-	RANDOM_CENTROID,
-	RANDOM_SURFACE,
-	UNIFORM_GRID
-};
+	SOM_RANDOM,
+	SOM_RANDOM_CENTROID,
+	SOM_RANDOM_SURFACE,
+	SOM_UNIFORM_GRID
+} som_init_type;
 
 /***********************************************************************************************
  *
@@ -23,7 +23,7 @@ typedef enum som_init_type {
  *
  ***********************************************************************************************/
 class som {
-protected:
+private:
 	/* network description */
 	unsigned int rows;
 	unsigned int cols;
@@ -32,7 +32,8 @@ protected:
 	som_conn_type conn_type;
 
 	std::vector<std::vector<double> * > * weights;
-	std::vector<std::vector<unsigned int> * > * awards;
+	std::vector<std::vector<double> * > * previous_weights;
+	std::vector<unsigned int> * awards;
 
 	std::vector<std::vector<double> > * data;
 
@@ -43,7 +44,7 @@ protected:
 	std::vector<std::vector<unsigned int> * > * neighbors;
 
 	/* describe learning process and internal state */
-	unsigned int enophs;
+	unsigned int epouchs;
 	double init_radius;
 	double init_learn_rate;
 	double adaptation_threshold;
@@ -57,12 +58,30 @@ public:
 	
 	~som(void);
 
+	unsigned int train(bool autostop);
+
+	unsigned int simulate(const std::vector<double> * pattern) const;
+
+	unsigned int get_winner_number(void) const;
+
+	inline unsigned int get_size(void) const { return size; }
+
+	inline const std::vector<std::vector<double> * > * const get_weights(void) const { return weights; }
+
+	inline const std::vector<std::vector<unsigned int> * > * const get_capture_objects(void) const { return capture_objects; }
+	
+	inline const std::vector<unsigned int> * const get_awards(void) const { return awards; }
+
 private:
-	void create_connections(som_conn_type type_conn);
+	void create_connections(const som_conn_type type_conn);
 
-	void create_initial_weights(som_init_type type_init);
+	void create_initial_weights(const som_init_type type_init);
+
+	unsigned int competition(const std::vector<double> * pattern) const;
+
+	unsigned int adaptation(const unsigned int index_winner, const std::vector<double> * pattern);
+
+	double calculate_maximal_adaptation(void) const;
 };
-
-
 
 #endif
