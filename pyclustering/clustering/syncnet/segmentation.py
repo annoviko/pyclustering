@@ -154,7 +154,7 @@ segmentation_image_simple10();
 segmentation_image_beach();
 segmentation_image_building();
 segmentation_image_fruits_small();
-
+ 
 segmentation_image_white_sea();
 segmentation_image_white_sea_small();
 segmentation_image_nile();

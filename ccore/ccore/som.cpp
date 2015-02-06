@@ -363,7 +363,7 @@ unsigned int som::adaptation(const unsigned int index_winner, const std::vector<
 
 	return number_adapted_neurons;
 }
-#include <stdio.h>
+
 unsigned int som::train(bool autostop) {
 	std::vector<std::vector<double> * > * previous_weights = NULL;
 
@@ -449,7 +449,6 @@ double som::calculate_maximal_adaptation() const {
 
 	return maximal_adaptation;
 }
-
 
 unsigned int som::get_winner_number(void) const {
 	unsigned int winner_number = 0;

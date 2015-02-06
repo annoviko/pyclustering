@@ -13,6 +13,7 @@ def template_segmentation_image(source, color_radius, color_neighbors, object_ra
     data = read_image(source);
 
     dbscan_instance = dbscan(data, color_radius, color_neighbors, True);
+    print("dimensions:", len(data[0]));
     dbscan_instance.process();
     
     clusters = dbscan_instance.get_clusters();
@@ -91,6 +92,9 @@ def segmentation_image_simple9():
 def segmentation_image_simple10():
     template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE10, 128, 5, 4, 10, 4);  
 
+def segmentation_image_simple11():
+    template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE11, 64, 10, 4, 10, 4);
+
 def segmentation_image_beach():
     template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE_BEACH, 128, 4, None, None, 10);
     
@@ -123,6 +127,7 @@ segmentation_image_simple7();
 segmentation_image_simple8();
 segmentation_image_simple9();
 segmentation_image_simple10();
+segmentation_image_simple11();
 segmentation_image_beach();
 segmentation_image_building();
 segmentation_image_fruits_small();
