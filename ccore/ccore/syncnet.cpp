@@ -16,7 +16,7 @@
  *
  ***********************************************************************************************/
 syncnet::syncnet(std::vector<std::vector<double> > * input_data, const double connectivity_radius, const bool enable_conn_weight, const initial_type initial_phases) :
-sync_network(input_data->size(), 1, 0, 1, conn_type::NONE, initial_type::RANDOM_GAUSSIAN) {
+sync_network(input_data->size(), 1, 0, conn_type::NONE, initial_type::RANDOM_GAUSSIAN) {
 	oscillator_locations = input_data;
 	create_connections(connectivity_radius, enable_conn_weight);
 }

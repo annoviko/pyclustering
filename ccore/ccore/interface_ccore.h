@@ -140,7 +140,7 @@ extern "C" DECLARATION clustering_result * xmeans_algorithm(const data_represent
  *          (in) initial_phases		- type of initialization of initial phases of oscillators.
  *
  ***********************************************************************************************/
-extern "C" DECLARATION void * create_sync_network(const unsigned int size, const double weight_factor, const double frequency_factor, const unsigned int qcluster, const unsigned int connection_type, const unsigned int initial_phases);
+extern "C" DECLARATION void * create_sync_network(const unsigned int size, const double weight_factor, const double frequency_factor, const unsigned int connection_type, const unsigned int initial_phases);
 
 /***********************************************************************************************
  *

@@ -30,7 +30,6 @@ protected:
 	std::vector< std::vector<unsigned int> * > * sync_ensembles;    /* pointer to sync ensembles    */
 
 	double weight;                                                  /* multiplier for connections   */
-	unsigned int cluster;                                           /* q parameter                  */	
 
 public:
 	/***********************************************************************************************
@@ -40,12 +39,11 @@ public:
 	 * @param   (in) size                - number of oscillators in the network.
 	 * @param   (in) weight_factor       - coupling strength of the links between oscillators.
 	 * @param   (in) frequency_factor    - multiplier of internal frequency of the oscillators.
-	 * @param   (in) qcluster            - number of clusters that should be allocated.
 	 * @param   (in) connection_type     - type of connection between oscillators in the network.
 	 * @param   (in) initial_phases      - type of initialization of initial phases of oscillators.
 	 *
 	 ***********************************************************************************************/
-	sync_network(const unsigned int size, const double weight_factor, const double frequency_factor, const unsigned int qcluster, const conn_type connection_type, const initial_type initial_phases);
+	sync_network(const unsigned int size, const double weight_factor, const double frequency_factor, const conn_type connection_type, const initial_type initial_phases);
 	
 	/***********************************************************************************************
 	 *

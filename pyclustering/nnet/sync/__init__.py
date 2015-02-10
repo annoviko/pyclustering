@@ -39,7 +39,6 @@ class sync_network(network, network_interface):
     _phases = None;                     # Current phases of oscillators.
     _freq = None;                       # Own frequencies of oscillators.
     _weight = 0;                        # Strength of connections between oscillators.
-    _cluster = 1;                       # Parameter of artificial clustering during synchronization of phases of oscillators.
     
     _ccore_network_pointer = None;      # Pointer to CCORE Sync implementation of the network.
     
@@ -53,47 +52,35 @@ class sync_network(network, network_interface):
     def phases(self):
         "Returns list of phases of oscillators."
         return self._phases;
-    
-    @property
-    def cluster(self):
-        "Get cluster parameter that defines number of cluster in all-to-all networks."
-        return self._cluster;
-
-    @cluster.setter
-    def cluster(self, value):
-        "Set cluster parameter that defines number of cluster in all-to-all networks."
-        self._cluster = value;
 
 
-    def __init__(self, num_osc, weight = 1, frequency = 0, qcluster = 1, type_conn = conn_type.ALL_TO_ALL, conn_represent = conn_represent.MATRIX, initial_phases = initial_type.RANDOM_GAUSSIAN, ccore = False):
+    def __init__(self, num_osc, weight = 1, frequency = 0, type_conn = conn_type.ALL_TO_ALL, conn_represent = conn_represent.MATRIX, initial_phases = initial_type.RANDOM_GAUSSIAN, ccore = False):
         "Constructor of oscillatory network is based on Kuramoto model."
         
         "(in) num_osc            - number of oscillators in the network."
         "(in) weight             - coupling strength of the links between oscillators."
         "(in) frequency          - multiplier of internal frequency of the oscillators."
-        "(in) qcluster           - number of clusters that should be allocated."
         "(in) type_conn          - type of connection between oscillators in the network (all-to-all, grid, bidirectional list, etc.)."
         "(in) conn_represent     - internal representation of connection in the network: matrix or list."
         "(in) initial_phases     - type of initialization of initial phases of oscillators (random, uniformly distributed, etc.)."
         
         if (ccore is True):
-            self._ccore_network_pointer = wrapper.create_sync_network(num_osc, weight, frequency, qcluster, type_conn, initial_phases);
+            self._ccore_network_pointer = wrapper.create_sync_network(num_osc, weight, frequency, type_conn, initial_phases);
         else:   
             super().__init__(num_osc, type_conn, conn_represent);
             
             self._weight = weight;
-            self._cluster = qcluster;
             
             self._phases = list();
             self._freq = list();
             
             for index in range(0, num_osc, 1):    
                 if (initial_phases == initial_type.RANDOM_GAUSSIAN):
-                    self._phases.append(random.random() * 2 * pi);
+                    self._phases.append(random.random() * 2.0 * pi);
                 elif (initial_phases == initial_type.EQUIPARTITION):
-                    self._phases.append( (2 * pi) / (num_osc - 1) * index);
+                    self._phases.append( pi / num_osc * index);
                 
-                self._freq.append(random.random() * frequency); 
+                self._freq.append(random.random() * frequency);
     
     
     def __del__(self):
@@ -156,7 +143,7 @@ class sync_network(network, network_interface):
         phase = 0;
         for k in range(0, self.num_osc):
             if (self.has_connection(index, k) == True):
-                phase += math.sin(self._cluster * (self._phases[k] - teta));
+                phase += math.sin(self._phases[k] - teta);
             
         return ( self._freq[index] + (phase * self._weight / self.num_osc) );             
     

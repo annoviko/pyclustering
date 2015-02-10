@@ -15,18 +15,15 @@
  * @param   (in) size                - number of oscillators in the network.
  * @param   (in) weight_factor       - coupling strength of the links between oscillators.
  * @param   (in) frequency_factor    - multiplier of internal frequency of the oscillators.
- * @param   (in) qcluster            - number of clusters that should be allocated.
  * @param   (in) connection_type     - type of connection between oscillators in the network.
  * @param   (in) initial_phases      - type of initialization of initial phases of oscillators.
  *
  ***********************************************************************************************/
-sync_network::sync_network(const unsigned int size, const double weight_factor, const double frequency_factor, const unsigned int qcluster, const conn_type connection_type, const initial_type initial_phases) :
+sync_network::sync_network(const unsigned int size, const double weight_factor, const double frequency_factor, const conn_type connection_type, const initial_type initial_phases) :
 	network(size, connection_type) 
 {
 	num_osc = size;
 	weight = weight_factor;
-
-	cluster = qcluster;
 
 	std::random_device			device;
 	std::default_random_engine		generator(device());
@@ -42,7 +39,7 @@ sync_network::sync_network(const unsigned int size, const double weight_factor, 
 			oscillator_context.phase = phase_distribution(generator);
 			break;
 		case initial_type::EQUIPARTITION:
-			oscillator_context.phase = (2 * pi() / (size - 1) * index);
+			oscillator_context.phase = (pi() / size * index);
 			break;
 		default:
 			throw std::runtime_error("Unknown type of initialization");
@@ -170,7 +167,7 @@ double sync_network::phase_kuramoto(const double t, const double teta, const std
 
 	for (unsigned int k = 0; k < num_osc; k++) {
 		if (get_connection(index, k) > 0) {
-			phase += std::sin(cluster * ( (*oscillators)[k].phase - teta ) );
+			phase += std::sin((*oscillators)[k].phase - teta);
 		}
 	}
 

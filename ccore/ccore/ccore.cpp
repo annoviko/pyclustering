@@ -249,8 +249,8 @@ clustering_result * xmeans_algorithm(const data_representation * const sample, c
  *          (in) initial_phases		- type of initialization of initial phases of oscillators.
  *
  ***********************************************************************************************/
-void * create_sync_network(const unsigned int size, const double weight_factor, const double frequency_factor, const unsigned int qcluster, const unsigned int connection_type, const unsigned int initial_phases) {
-	return (void *) new sync_network(size, weight_factor, frequency_factor, qcluster, (conn_type) connection_type, (initial_type) initial_phases);
+void * create_sync_network(const unsigned int size, const double weight_factor, const double frequency_factor, const unsigned int connection_type, const unsigned int initial_phases) {
+	return (void *) new sync_network(size, weight_factor, frequency_factor, (conn_type) connection_type, (initial_type) initial_phases);
 }
 
 /***********************************************************************************************
