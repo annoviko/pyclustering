@@ -1,11 +1,32 @@
-from clustering.rock import rock;
+'''
 
-from samples.definitions import SIMPLE_SAMPLES;
-from samples.definitions import FCPS_SAMPLES;
+Examples of usage and demonstration of abilities of ROCK algorithm in cluster analysis.
 
-from support import read_sample;
-from support import draw_clusters;
-from support import timedcall;
+Copyright (C) 2015    Andrei Novikov (spb.andr@yandex.ru)
+
+pyclustering is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+pyclustering is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+'''
+
+from pyclustering.clustering.rock import rock;
+
+from pyclustering.samples.definitions import SIMPLE_SAMPLES;
+from pyclustering.samples.definitions import FCPS_SAMPLES;
+
+from pyclustering.support import read_sample;
+from pyclustering.support import draw_clusters;
+from pyclustering.support import timedcall;
 
 def template_clustering(path, radius, cluster_numbers, threshold, draw = True, ccore = True):
     sample = read_sample(path);
