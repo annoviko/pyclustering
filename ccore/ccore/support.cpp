@@ -112,6 +112,48 @@ clustering_result * create_clustering_result(const std::vector<std::vector<unsig
 	return result;
 }
 
+pyclustering_package * create_package(std::vector<int> * data) {
+	pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_INT);
+	prepare_package(data, package);
+
+	return package;
+}
+
+pyclustering_package * create_package(std::vector<unsigned int> * data) {
+	pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_INT);
+	prepare_package(data, package);
+
+	return package;
+}
+
+pyclustering_package * create_package(std::vector<float> * data) {
+	pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_FLOAT);
+	prepare_package(data, package);
+
+	return package;
+}
+
+pyclustering_package * create_package(std::vector<double> * data) {
+	pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_DOUBLE);
+	prepare_package(data, package);
+
+	return package;
+}
+
+pyclustering_package * create_package(std::vector<long> * data) {
+	pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_LONG);
+	prepare_package(data, package);
+
+	return package;
+}
+
+pyclustering_package * create_package(std::vector<unsigned long> * data) {
+	pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_UNSIGNED_LONG);
+	prepare_package(data, package);
+
+	return package;
+}
+
 /***********************************************************************************************
  *
  * @brief   Returns average distance for establish links between specified number of neighbors.

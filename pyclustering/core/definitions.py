@@ -22,7 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import pyclustering.core as core;
 import os;
 
-from ctypes import Structure, c_uint, c_double, POINTER;
+from ctypes import Structure, c_uint, c_double, c_void_p, POINTER;
 from sys import platform as _platform;
 
 # Path to DLL.
@@ -32,6 +32,17 @@ if (_platform == "linux") or (_platform == "linux2"):
     PATH_DLL_CCORE_WIN64 = core.__path__[0] + os.sep + "x64" + os.sep + "linux" + os.sep + "ccore.so";
 elif (_platform == "win32"):
     PATH_DLL_CCORE_WIN64 = core.__path__[0] + os.sep + "x64" + os.sep + "win" + os.sep + "ccore.dll";
+
+
+class pyclustering_type_data:
+    PYCLUSTERING_TYPE_INT = 0;
+    PYCLUSTERING_TYPE_UNSIGNED_INT = 1;
+    PYCLUSTERING_TYPE_FLOAT = 2;
+    PYCLUSTERING_TYPE_DOUBLE = 3;
+    PYCLUSTERING_TYPE_LONG = 4;
+    PYCLUSTERING_TYPE_UNSIGNED_LONG = 5;
+    PYCLUSTERING_TYPE_LIST = 6;
+
 
 # Structures that are required for exchaging with DLL.
 class cluster_representation(Structure):
@@ -74,3 +85,15 @@ class dynamic_result(Structure):
                 ("size_network", c_uint),
                 ("times", POINTER(c_double)),
                 ("dynamic", POINTER(POINTER(c_double)))];
+
+
+class pyclustering_package(Structure):
+    "Description of output dynamic in memory"
+    " - unsigned int size"
+    " - unsigned int type"
+    " - void * data"
+    
+    _fields_ = [("size", c_uint),
+                ("type", c_uint),
+                ("data", POINTER(c_void_p))];
+                

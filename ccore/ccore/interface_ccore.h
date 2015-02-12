@@ -9,6 +9,25 @@
 	#error Unsupported platform
 #endif
 
+typedef enum pyclustering_type_data {
+	PYCLUSTERING_TYPE_INT				= 0,
+	PYCLUSTERING_TYPE_UNSIGNED_INT		= 1,
+	PYCLUSTERING_TYPE_FLOAT				= 2,
+	PYCLUSTERING_TYPE_DOUBLE			= 3,
+	PYCLUSTERING_TYPE_LONG				= 4,
+	PYCLUSTERING_TYPE_UNSIGNED_LONG		= 5,
+	PYCLUSTERING_TYPE_LIST				= 6
+};
+
+typedef struct pyclustering_package {
+	unsigned int size;
+	unsigned int type;		/* pyclustering_type_data    */
+	void * data;			/* pointer to data           */
+
+	pyclustering_package(void) { }
+	pyclustering_package(unsigned int package_type) : type(package_type) { }
+};
+
 typedef struct cluster_representation {
 	unsigned int			size;
 	unsigned int			* objects;
@@ -32,11 +51,25 @@ typedef struct dynamic_result {
 	double					** dynamic;
 } dynamic_result;
 
+/***********************************************************************************************
+ *
+ * @brief   Free clustering results that have been provided by CCORE to client.
+ *
+ * @param   (in) pointer            - pointer to clustering results.
+ *
+ ***********************************************************************************************/
 extern "C" DECLARATION void free_clustering_result(clustering_result * pointer);
 
+/***********************************************************************************************
+ *
+ * @brief   Free dynamic that have been provided by CCORE to client.
+ *
+ * @param   (in) pointer            - pointer to dynamic.
+ *
+ ***********************************************************************************************/
 extern "C" DECLARATION void free_dynamic_result(dynamic_result * pointer);
 
-extern "C" DECLARATION void destroy_object(void * object);
+extern "C" DECLARATION void free_pyclustering_package(pyclustering_package * package);
 
 /***********************************************************************************************
  *
@@ -135,7 +168,6 @@ extern "C" DECLARATION clustering_result * xmeans_algorithm(const data_represent
  * @param   (in) size				- number of oscillators in the network.
  *          (in) weight_factor		- coupling strength of the links between oscillators.
  *          (in) frequency_factor	- multiplier of internal frequency of the oscillators.
- *          (in) qcluster			- number of artificial clustering during synchronization.
  *          (in) connection_type	- type of connection between oscillators in the network.
  *          (in) initial_phases		- type of initialization of initial phases of oscillators.
  *
@@ -323,10 +355,12 @@ extern "C" DECLARATION unsigned int som_get_winner_number(const void * pointer);
 
 extern "C" DECLARATION unsigned int som_get_size(const void * pointer);
 
-// extern "C" DECLARATION data_representation * som_get_weights(const void * pointer);
+extern "C" DECLARATION pyclustering_package * som_get_weights(const void * pointer);
 
-// extern "C" DECLARATION data_representation * som_get_capture_objects(const void * pointer);
+extern "C" DECLARATION pyclustering_package * som_get_capture_objects(const void * pointer);
 
-// extern "C" DECLARATION data_representation * som_get_awards(const void * pointer);
+extern "C" DECLARATION pyclustering_package * som_get_awards(const void * pointer);
+
+extern "C" DECLARATION pyclustering_package * som_get_neighbors(const void * pointer);
 
 #endif

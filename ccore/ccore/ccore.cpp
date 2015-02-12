@@ -17,6 +17,13 @@
 #include "support.h"
 #include "interface_ccore.h"
 
+/***********************************************************************************************
+ *
+ * @brief   Free clustering results that have been provided by CCORE to client.
+ *
+ * @param   (in) pointer            - pointer to clustering results.
+ *
+ ***********************************************************************************************/
 void free_clustering_result(clustering_result * pointer) {
 	if (pointer != NULL) {
 		if (pointer->clusters != NULL) {
@@ -29,6 +36,13 @@ void free_clustering_result(clustering_result * pointer) {
 	}
 }
 
+/***********************************************************************************************
+ *
+ * @brief   Free dynamic that have been provided by CCORE to client.
+ *
+ * @param   (in) pointer            - pointer to dynamic.
+ *
+ ***********************************************************************************************/
 void free_dynamic_result(dynamic_result * pointer) {
 	if (pointer != NULL) {
 		if (pointer->times != NULL) {
@@ -53,10 +67,48 @@ void free_dynamic_result(dynamic_result * pointer) {
 	}
 }
 
-void destroy_object(void * object) {
-	if (object != NULL) {
-		delete object;
-		object = NULL;
+void free_pyclustering_package(pyclustering_package * package) {
+	if (package->type != (unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_LIST) {
+		switch(package->type) {
+			case pyclustering_type_data::PYCLUSTERING_TYPE_INT:
+				delete (int *) package->data;
+				break;
+
+			case pyclustering_type_data::PYCLUSTERING_TYPE_UNSIGNED_INT:
+				delete (unsigned int *) package->data;
+				break;
+
+			case pyclustering_type_data::PYCLUSTERING_TYPE_FLOAT:
+				delete (float *) package->data;
+				break;
+
+			case pyclustering_type_data::PYCLUSTERING_TYPE_DOUBLE:
+				delete (double *) package->data;
+				break;
+
+			case pyclustering_type_data::PYCLUSTERING_TYPE_LONG:
+				delete (long *) package->data;
+				break;
+
+			case pyclustering_type_data::PYCLUSTERING_TYPE_UNSIGNED_LONG:
+				delete (unsigned long *) package->data;
+				break;
+
+			default:
+				/* Memory Leak */
+				break;
+		}
+
+		delete package;
+		package = NULL;
+	}
+	else {
+		for (unsigned int i = 0; i < package->size; i++) {
+			free_pyclustering_package( ( (pyclustering_package **) package->data)[i] );
+		}
+
+		delete package;
+		package = NULL;
 	}
 }
 
@@ -244,7 +296,6 @@ clustering_result * xmeans_algorithm(const data_representation * const sample, c
  * @param   (in) size				- number of oscillators in the network.
  *          (in) weight_factor		- coupling strength of the links between oscillators.
  *          (in) frequency_factor	- multiplier of internal frequency of the oscillators.
- *          (in) qcluster			- number of artificial clustering during synchronization.
  *          (in) connection_type	- type of connection between oscillators in the network.
  *          (in) initial_phases		- type of initialization of initial phases of oscillators.
  *
@@ -543,8 +594,35 @@ unsigned int som_get_size(const void * pointer) {
 	return ((som *) pointer)->get_size();
 }
 
-// data_representation * som_get_weights(const void * pointer) { }
 
-// data_representation * som_get_capture_objects(const void * pointer) { }
+pyclustering_package * som_get_weights(const void * pointer) {
+	std::vector<std::vector<double> * > * wieghts = (std::vector<std::vector<double> * > *) ((som *) pointer)->get_weights();
+	pyclustering_package * package = create_package(wieghts);
 
-// data_representation * som_get_awards(const void * pointer) { }
+	return package;
+}
+
+pyclustering_package * som_get_capture_objects(const void * pointer) {
+	std::vector<std::vector<unsigned int> * > * capture_objects = (std::vector<std::vector<unsigned int> * > *) ((som *) pointer)->get_capture_objects();
+	pyclustering_package * package = create_package(capture_objects);
+
+	return package;
+}
+
+pyclustering_package * som_get_awards(const void * pointer) {
+	std::vector<unsigned int> * awards = (std::vector<unsigned int> *) ((som *) pointer)->get_awards();
+	pyclustering_package * package = create_package(awards);
+
+	return package;
+}
+
+pyclustering_package * som_get_neighbors(const void * pointer) {
+	pyclustering_package * package = NULL;
+
+	std::vector<std::vector<unsigned int> * > * neighbors = (std::vector<std::vector<unsigned int> * > *) ((som *) pointer)->get_neighbors();
+	if (neighbors != NULL) {
+		package = create_package(neighbors);
+	}
+
+	return package;
+}

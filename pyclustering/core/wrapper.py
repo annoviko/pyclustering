@@ -105,6 +105,53 @@ def extract_dynamics(ccore_result):
         
     return (times, dynamic);
 
+def extract_pyclustering_package(ccore_package_pointer):
+    if (ccore_package_pointer == 0):
+        return [];
+    
+    pointer_package = cast(ccore_package_pointer, POINTER(pyclustering_package));
+    size = pointer_package[0].size;
+    type_package = pointer_package[0].type;
+    
+    result = [];
+    pointer_data = None;
+    
+    if (type_package == pyclustering_type_data.PYCLUSTERING_TYPE_INT):
+        pointer_data = cast(pointer_package[0].data, POINTER(c_int));
+    
+    elif (type_package == pyclustering_type_data.PYCLUSTERING_TYPE_UNSIGNED_INT):
+        pointer_data = cast(pointer_package[0].data, POINTER(c_uint));
+    
+    elif (type_package == pyclustering_type_data.PYCLUSTERING_TYPE_FLOAT):
+        pointer_data = cast(pointer_package[0].data, POINTER(c_float));
+    
+    elif (type_package == pyclustering_type_data.PYCLUSTERING_TYPE_DOUBLE):
+        pointer_data = cast(pointer_package[0].data, POINTER(c_double));
+    
+    elif (type_package == pyclustering_type_data.PYCLUSTERING_TYPE_LONG):
+        pointer_data = cast(pointer_package[0].data, POINTER(c_long));
+    
+    elif (type_package == pyclustering_type_data.PYCLUSTERING_TYPE_UNSIGNED_LONG):
+        pointer_data = cast(pointer_package[0].data, POINTER(c_ulong));
+    
+    elif (type_package == pyclustering_type_data.PYCLUSTERING_TYPE_LIST):
+        # pointer_package[0].data == pyclustering_package **
+        pointer_data = cast(pointer_package[0].data, POINTER(POINTER(pyclustering_package)));
+        
+        for index in range(0, size):
+            pointer_package = cast(pointer_data[index], (POINTER(pyclustering_package)));
+            result.append(extract_pyclustering_package(pointer_package));
+
+    else:
+        assert(0);
+    
+    if (type_package != pyclustering_type_data.PYCLUSTERING_TYPE_LIST):
+        for index in range(0, size):
+            result.append(pointer_data[index]);
+    
+    return result;
+    
+
 # Implemented algorithms.
 def dbscan(sample, eps, min_neighbors, return_noise = False):
     "Clustering algorithm DBSCAN returns allocated clusters and noise that are consisted from input data. Calculation is performed via CCORE."
@@ -381,7 +428,35 @@ def som_get_winner_number(som_pointer):
 def som_get_size(som_pointer):
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
     return ccore.som_get_size(som_pointer);
+
+def som_get_capture_objects(som_pointer):
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    package = ccore.som_get_capture_objects(som_pointer);
     
+    result = extract_pyclustering_package(package);
+    return result;
+
+def som_get_weights(som_pointer):
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    package = ccore.som_get_weights(som_pointer);
+    
+    result = extract_pyclustering_package(package);
+    return result;   
+
+def som_get_awards(som_pointer):
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    package = ccore.som_get_awards(som_pointer);
+    
+    result = extract_pyclustering_package(package);
+    return result;  
+
+def som_get_neighbors(som_pointer):
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    package = ccore.som_get_neighbors(som_pointer);
+    
+    result = extract_pyclustering_package(package);
+    return result;  
+
 
 
 # from pyclustering.support import draw_dynamics, draw_clusters, read_sample;
@@ -390,8 +465,13 @@ def som_get_size(som_pointer):
 # sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE3);
 # som_pointer = som_create(sample, 1, 3, 100, 0, 3);
 # iterations = som_train(som_pointer, False);
+# 
+# capture_objects = som_get_capture_objects(som_pointer);
+# awards = som_get_awards(som_pointer);
+# weights = som_get_weights(som_pointer);
+# 
+# print("Captured objects:", capture_objects);
+# print("Awards:", awards);
+# print("Weights:", weights);
+# 
 # som_destroy(som_pointer);
-
-# clusters = xmeans(sample, [ [0.2, 0.1], [4.0, 1.0] ], 20, 0.025);
-#  
-# draw_clusters(sample, clusters);

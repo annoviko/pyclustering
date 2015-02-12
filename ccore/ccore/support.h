@@ -21,6 +21,7 @@ typedef struct differential_result {
 
 inline double pi(void) { return (double) 3.14159265358979323846; }
 
+
 /***********************************************************************************************
  *
  * @brief   Calculates square of Euclidean distance between points.
@@ -95,6 +96,57 @@ std::vector<std::vector<double> > * read_sample(const data_representation * cons
  *
  ***********************************************************************************************/
 clustering_result * create_clustering_result(const std::vector<std::vector<unsigned int> *> * const clusters);
+
+pyclustering_package * create_package(std::vector<int> * data);
+
+pyclustering_package * create_package(std::vector<unsigned int> * data);
+
+pyclustering_package * create_package(std::vector<float> * data);
+
+pyclustering_package * create_package(std::vector<double> * data);
+
+pyclustering_package * create_package(std::vector<long> * data);
+
+pyclustering_package * create_package(std::vector<unsigned long> * data);
+
+template <class type_object>
+void prepare_package(std::vector<type_object> * data, pyclustering_package * package) {
+	package->size = data->size();
+	package->data = (void *) new type_object[package->size];
+
+	for (unsigned int i = 0; i < data->size(); i++) {
+		((type_object *) package->data)[i] = (*data)[i];
+	}
+}
+
+template <class type_object>
+pyclustering_package * create_package(std::vector< std::vector<type_object> > * data) {
+	pyclustering_package ** package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
+
+	package->size = data->size();
+	package->data = new pyclustering_package * [package->size];
+
+	for (unsigned int i = 0; i < package->size(); i++) {
+		((pyclustering_package *) package->data)[i] = create_package(&(*data)[i]);
+	}
+
+	return package;
+}
+
+template <class type_object>
+pyclustering_package * create_package(std::vector< std::vector<type_object> * > * data) {
+	pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
+
+	package->size = data->size();
+	package->data = new pyclustering_package * [package->size];
+
+	for (unsigned int i = 0; i < package->size; i++) {
+		((pyclustering_package **) package->data)[i] = create_package((*data)[i]);
+	}
+
+	return package;
+}
+
 
 /***********************************************************************************************
  *

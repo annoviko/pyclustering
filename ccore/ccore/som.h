@@ -69,6 +69,8 @@ public:
 	inline const std::vector<std::vector<double> * > * const get_weights(void) const { return weights; }
 
 	inline const std::vector<std::vector<unsigned int> * > * const get_capture_objects(void) const { return capture_objects; }
+
+	inline const std::vector<std::vector<unsigned int> * > * const get_neighbors(void) const { return neighbors; }
 	
 	inline const std::vector<unsigned int> * const get_awards(void) const { return awards; }
 

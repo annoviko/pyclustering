@@ -12,6 +12,7 @@ som::som(std::vector<std::vector<double> > * input_data, const unsigned int num_
 	size = cols * rows;
 	epouchs = num_epochs;
 	conn_type = type_conn;
+	init_learn_rate = 0.1;
 
 	/* Feature SOM 0001: Predefined initial radius that depends on size of the network. */
 	if ( (cols + rows) / 4.0 > 1.0 ) {
@@ -50,7 +51,7 @@ som::som(std::vector<std::vector<double> > * input_data, const unsigned int num_
 		for (unsigned int j = i; j < size; j++) {
 			double distance = euclidean_distance_sqrt((*location)[i], (*location)[j]);
 			(*(*sqrt_distances)[i])[j] = distance;
-			(*(*sqrt_distances)[i])[j] = distance;
+			(*(*sqrt_distances)[j])[i] = distance;
 		}
 	}
 
@@ -169,15 +170,15 @@ void som::create_connections(const som_conn_type type) {
 			}
 
 			if ( (upper_right_index >= 0) && ( (int) std::floor(std::floor((double) upper_right_index / (double) cols)) == upper_row_index) ) {
-				neuron_neighbors->push_back(upper_left_index);
+				neuron_neighbors->push_back(upper_right_index);
 			}
 
 			if ( (lower_left_index < (int) size) && ( (int) std::floor(std::floor((double) lower_left_index / (double) cols)) == lower_row_index) ) {
-				neuron_neighbors->push_back(upper_left_index);
+				neuron_neighbors->push_back(lower_left_index);
 			}
 
 			if ( (lower_right_index < (int) size) && ( (int) std::floor(std::floor((double) lower_right_index / (double) cols)) == lower_row_index) ) {
-				neuron_neighbors->push_back(upper_left_index);
+				neuron_neighbors->push_back(lower_right_index);
 			}
 		}
 	}
@@ -332,7 +333,7 @@ unsigned int som::adaptation(const unsigned int index_winner, const std::vector<
 
 				std::vector<double> * neuron_weight = (*weights)[neuron_index];
 				for (unsigned int dim = 0; dim < dimensions; dim++) {
-					(*neuron_weight)[dim] += learn_rate * influence * ( (*pattern)[dim] - (*neuron_weight)[dim] );
+					(*neuron_weight)[dim] += learn_rate * influence * ( (*pattern)[dim] - (*(*weights)[neuron_index])[dim] );
 				}
 
 				number_adapted_neurons++;
@@ -348,6 +349,7 @@ unsigned int som::adaptation(const unsigned int index_winner, const std::vector<
 		std::vector<unsigned int> * winner_neighbors = (*neighbors)[index_winner];
 		for (std::vector<unsigned int>::iterator neighbor_index = winner_neighbors->begin(); neighbor_index != winner_neighbors->end(); neighbor_index++) {
 			double distance = (*(*sqrt_distances)[index_winner])[*neighbor_index];
+
 			if (distance < local_radius) {
 				double influence = std::exp( -( distance / (2.0 * local_radius) ) );
 
@@ -365,7 +367,7 @@ unsigned int som::adaptation(const unsigned int index_winner, const std::vector<
 }
 
 unsigned int som::train(bool autostop) {
-	std::vector<std::vector<double> * > * previous_weights = NULL;
+	previous_weights = NULL;
 
 	for (unsigned int epouch = 1; epouch < (epouchs + 1); epouch++) {
 		/* Depression term of coupling */
@@ -389,9 +391,7 @@ unsigned int som::train(bool autostop) {
 
 			/* Update statistics */
 			if ( (autostop == true) || (epouch == (epouchs - 1)) ) {
-				//printf("Time to save results: %x, %x\n", awards, capture_objects);
 				(*awards)[index_winner]++;
-				//printf("Captured objects: %x, %x\n", capture_objects, (*capture_objects)[index_winner]);
 				(*capture_objects)[index_winner]->push_back(i);
 			}
 		}
@@ -403,10 +403,9 @@ unsigned int som::train(bool autostop) {
 
 				unsigned int dimensions = (*weights)[0]->size();
 				for (unsigned int i = 0; i < weights->size(); i++) {
-					std::vector<double> * previous_neuron_weight = new std::vector<double>(dimensions, 0.0);
-					previous_weights->push_back(previous_neuron_weight);
+					(*previous_weights)[i] = new std::vector<double>(dimensions, 0.0);
 
-					std::copy((*weights)[i]->begin(), (*weights)[i]->end(), previous_neuron_weight->begin());
+					std::copy((*weights)[i]->begin(), (*weights)[i]->end(), (*previous_weights)[i]->begin());
 				}
 			}
 			else {
@@ -436,7 +435,8 @@ double som::calculate_maximal_adaptation() const {
 	for (unsigned int neuron_index = 0; neuron_index < size; neuron_index++) {
 		std::vector<double> * neuron_weight = (*weights)[neuron_index];
 		std::vector<double> * previous_neuron_weight = (*previous_weights)[neuron_index];
-		for (unsigned int dim = 0; dim < size; dim++) {
+
+		for (unsigned int dim = 0; dim < dimensions; dim++) {
 			double current_adaptation = (*previous_neuron_weight)[dim] - (*neuron_weight)[dim];
 
 			if (current_adaptation < 0) { current_adaptation = -current_adaptation; }

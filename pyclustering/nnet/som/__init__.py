@@ -90,29 +90,25 @@ class som:
         return self._size;
     
     @property
-    def neighbors(self):
-        return self._neighbors;
-    
-    @property
     def weights(self):
+        if (self.__ccore_som_pointer is not None):
+            self._weights = wrapper.som_get_weights(self.__ccore_som_pointer);
+        
         return self._weights;
     
     @property
     def awards(self):
+        if (self.__ccore_som_pointer is not None):
+            self._award = wrapper.som_get_awards(self.__ccore_som_pointer);
+        
         return self._award;
     
     @property
     def capture_objects(self):
+        if (self.__ccore_som_pointer is not None):
+            self._capture_objects = wrapper.som_get_capture_objects(self.__ccore_som_pointer);
+        
         return self._capture_objects;
-    
-    @property
-    def autostop_adaptation_threshold(self):
-        return self._adaptation_threshold;
-    
-    @autostop_adaptation_threshold.setter
-    def autostop_adaptation_threshold(self, value):
-        if (value > 0):
-            self._adaptation_threshold = value;
     
     
     def __init__(self, rows, cols, data, epochs, conn_type = type_conn.grid_eight, init_type = type_init.uniform_grid, ccore = False):
@@ -125,17 +121,18 @@ class som:
         "(in) conn_type   - type of connection between oscillators in the network (grid four, grid eight, honeycomb, function neighbour)."
         "(in) init_type   - type of initialization of initial neuron weights (random, random in center of the input data, random distributed in data, ditributed in line with uniform grid)."
         
+        # some of these parameters are required despite core implementation, for example, for network demonstration.
+        self._cols = cols;
+        self._rows = rows;        
+        self._data = data;
+        self._size = cols * rows;
+        self._epochs = epochs;
+        self._conn_type = conn_type;
+        
         if (ccore is True):
             self.__ccore_som_pointer = wrapper.som_create(data, rows, cols, epochs, conn_type, init_type);
             
         else:
-            self._cols = cols;
-            self._rows = rows;        
-            self._data = data;
-            self._size = cols * rows;
-            self._epochs = epochs;
-            self._conn_type = conn_type;
-            
             # Feature SOM 0001: Predefined initial radius that depends on size of the network.
             if ((cols + rows) / 4.0 > 1):
                 self._init_radius = 2.0;
@@ -347,13 +344,13 @@ class som:
         if (self._conn_type == type_conn.func_neighbor):
             for neuron_index in range(self._size):
                 distance = self._sqrt_distances[index][neuron_index];
-                #print("distance: ", distance, ", local radius: ", self._local_radius);
+                
                 if (distance < self._local_radius):
-                    #influence = math.exp(-(distance / (2 * self._local_radius)));
                     influence = math.exp( -( distance / (2.0 * self._local_radius) ) );
                     
                     for i in range(dimension):
-                        self._weights[neuron_index][i] = self._weights[neuron_index][i] + self._learn_rate * influence * (x[i] - self._weights[neuron_index][i]);  
+                        old_value = self._weights[neuron_index][i];
+                        self._weights[neuron_index][i] = self._weights[neuron_index][i] + self._learn_rate * influence * (x[i] - self._weights[neuron_index][i]); 
                     
         else:
             for i in range(dimension):
@@ -363,7 +360,6 @@ class som:
                 distance = self._sqrt_distances[index][neighbor_index]
                 if (distance < self._local_radius):
                     influence = math.exp( -( distance / (2.0 * self._local_radius) ) );
-                    #print("distance: ", distance, ", local radius: ", self._local_radius, "influence: ", influence);
                     
                     for i in range(dimension):       
                         self._weights[neighbor_index][i] = self._weights[neighbor_index][i] + self._learn_rate * influence * (x[i] - self._weights[neighbor_index][i]);  
@@ -409,7 +405,6 @@ class som:
                 if (previous_weights is not None):
                     maximal_adaptation = self._get_maximal_adaptation(previous_weights);
                     if (maximal_adaptation < self._adaptation_threshold):
-                        # print("Learning process is stopped. Iteration: ", epoch);
                         return epoch;
             
                 previous_weights = [item[:] for item in self._weights];
@@ -456,7 +451,7 @@ class som:
         "Returns number of winner at the last step of learning process."
         
         if (self.__ccore_som_pointer is not None):
-            return wrapper.som_get_winner_number(self.__ccore_som_pointer);
+            self._award = wrapper.som_get_awards(self.__ccore_som_pointer);
         
         winner_number = 0;
         for i in range(self._size):
@@ -468,6 +463,9 @@ class som:
     
     def get_density_matrix(self):
         "Returns density matrix in line with last step of learning process."
+        
+        if (self.__ccore_som_pointer is not None):
+            self._award = wrapper.som_get_awards(self.__ccore_som_pointer);
         
         maximum_value = max(self._award);
         minimum_value = min(self._award);
@@ -486,6 +484,9 @@ class som:
     
     def show_award(self):
         "Prints indexes of won objects by each neuron."
+        
+        if (self.__ccore_som_pointer is not None):
+            self._award = wrapper.som_get_awards(self.__ccore_som_pointer);
         
         awards = list();
         
@@ -510,6 +511,12 @@ class som:
         "(in) coupling      - if True - displays connections between neurons (except case when function neighbor is used)."
         "(in) dataset       - if True - displays inputs data set."
         "(in) marker_type   - defines marker that is used for dispaying neurons in the network."
+        
+        if (self.__ccore_som_pointer is not None):
+            self._size = wrapper.som_get_size(self.__ccore_som_pointer);
+            self._weights = wrapper.som_get_weights(self.__ccore_som_pointer);
+            self._neighbors = wrapper.som_get_neighbors(self.__ccore_som_pointer);
+            self._award = wrapper.som_get_awards(self.__ccore_som_pointer);
         
         dimension = len(self._weights[0]);
         
