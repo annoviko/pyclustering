@@ -1,3 +1,24 @@
+'''
+
+Unit-tests for self-organized feature map.
+
+Copyright (C) 2015    Andrei Novikov (spb.andr@yandex.ru)
+
+pyclustering is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+pyclustering is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+'''
+
 import unittest;
 
 from pyclustering.nnet.som import som;
@@ -91,55 +112,101 @@ class Test(unittest.TestCase):
       
       
     def testTwoNeuronsFourClustersByCore(self):
-        self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 1, 2, 100, [30, 30], True, True); 
+        self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 1, 2, 100, [30, 30], False, True); 
         
         
     def testAutostopTwoNeuronsFourClusters(self):
         self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 1, 2, 100, [30, 30], True); 
+    
+    
+    def testAutostopTwoNeuronsFourClustersByCore(self):
+        self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 1, 2, 100, [30, 30], True, True); 
       
-      
+    
     def testSevenNeuronsHeptaClusters(self):
         self.templateTestAwardNeurons(FCPS_SAMPLES.SAMPLE_HEPTA, 1, 7, 100, [30, 30, 30, 30, 30, 30, 32]); 
       
+    
+    def testSevenNeuronsHeptaClustersByCore(self):
+        self.templateTestAwardNeurons(FCPS_SAMPLES.SAMPLE_HEPTA, 1, 7, 100, [30, 30, 30, 30, 30, 30, 32], False, True); 
+    
       
     def testAutostopSevenNeuronsHeptaClusters(self):
         self.templateTestAwardNeurons(FCPS_SAMPLES.SAMPLE_HEPTA, 1, 7, 100, [30, 30, 30, 30, 30, 30, 32], True); 
+    
+    
+    def testAutostopSevenNeuronsHeptaClustersByCore(self):
+        self.templateTestAwardNeurons(FCPS_SAMPLES.SAMPLE_HEPTA, 1, 7, 100, [30, 30, 30, 30, 30, 30, 32], True, True);
       
       
     def testFourNeuronsTetraClusters(self):
         self.templateTestAwardNeurons(FCPS_SAMPLES.SAMPLE_TETRA, 1, 4, 100, [100, 100, 100, 100]);
+    
+    
+    def testFourNeuronsTetraClustersByCore(self):
+        self.templateTestAwardNeurons(FCPS_SAMPLES.SAMPLE_TETRA, 1, 4, 100, [100, 100, 100, 100], False, True); 
       
-      
+    
     def testAutostopFourNeuronsTetraClusters(self):
         self.templateTestAwardNeurons(FCPS_SAMPLES.SAMPLE_TETRA, 1, 4, 100, [100, 100, 100, 100], True);
+    
+    
+    def testAutostopFourNeuronsTetraClustersByCore(self):
+        self.templateTestAwardNeurons(FCPS_SAMPLES.SAMPLE_TETRA, 1, 4, 100, [100, 100, 100, 100], True, True);
       
       
     def testTwoNeuronsTwoDiamondsClusters(self):
         self.templateTestAwardNeurons(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, 1, 2, 100, [400, 400]);
       
       
+    def testTwoNeuronsTwoDiamondsClustersByCore(self):
+        self.templateTestAwardNeurons(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, 1, 2, 100, [400, 400], False, True);
+         
+         
     def testAutostopTwoNeuronsTwoDiamondsClusters(self):
         self.templateTestAwardNeurons(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, 1, 2, 100, [400, 400], True);
+    
+    
+    def testAutostopTwoNeuronsTwoDiamondsClustersByCore(self):
+        self.templateTestAwardNeurons(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, 1, 2, 100, [400, 400], True, True);
       
-      
+    
     def testFiveNeuronsFiveClusters(self):
         self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 1, 5, 100, [15, 15, 15, 15, 15]);      
-      
-      
+    
+    
+    def testFiveNeuronsFiveClustersByCore(self):
+        self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 1, 5, 100, [15, 15, 15, 15, 15], False, True);  
+    
+    
     def testAutostopFiveNeuronsFiveClusters(self):
         self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 1, 5, 100, [15, 15, 15, 15, 15], True);
-      
+
+
+    def testAutostopFiveNeuronsFiveClustersByCore(self):
+        self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 1, 5, 100, [15, 15, 15, 15, 15], True, True);      
+
       
     def testFourNeuronsSquareClusters(self):
         self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 2, 2, 100, [15, 15, 15, 15]);
         self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 1, 4, 100, [15, 15, 15, 15]);
+    
+    
+    def testFourNeuronsSquareClustersByCore(self):
+        self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 2, 2, 100, [15, 15, 15, 15], False, True);
+        self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 1, 4, 100, [15, 15, 15, 15], False, True);    
       
-      
+    
     def testAutostopFourNeuronsSquareClusters(self):
         self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 2, 2, 100, [15, 15, 15, 15], True);
         self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 1, 4, 100, [15, 15, 15, 15], True);
-      
-      
+    
+    
+    def testAutostopFourNeuronsSquareClustersByCore(self):
+        self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 2, 2, 100, [15, 15, 15, 15], True, True);
+        self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 1, 4, 100, [15, 15, 15, 15], True, True);
+    
+    
     def testHighEpochs(self):
         # This test requires too much time for execution
         epochs = 1000;
@@ -151,27 +218,33 @@ class Test(unittest.TestCase):
         self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 2, 2, epochs, [15, 15, 15, 15]);
         self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 1, 4, epochs, [15, 15, 15, 15]);
       
-      
-    def testWinners(self):
+    
+    def templateTestWinners(self, ccore_flag):
         types = [type_conn.func_neighbor, type_conn.grid_eight, type_conn.grid_four, type_conn.honeycomb];
         sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE3);
           
         for stucture in types:
-            network = som(5, 5, sample, 100, stucture);
+            network = som(5, 5, sample, 100, stucture, ccore = ccore_flag);
             network.train();
               
-            assert sum(network._award) == 60;
+            assert sum(network.awards) == 60;
               
             points = list();
             for i in range(network.size):
-                if (network._award[i] > 0):
-                    points += network._capture_objects[i];
+                if (network.awards[i] > 0):
+                    points += network.capture_objects[i];
               
             assert len(points) == len(sample);
               
             points = sorted(points);
             for i in range(len(points)):
                 assert points[i] == i;
+    
+    def testWinners(self):
+        self.templateTestWinners(False);
+    
+    def testWinnersByCore(self):
+        self.templateTestWinners(True);
              
          
 if __name__ == "__main__":

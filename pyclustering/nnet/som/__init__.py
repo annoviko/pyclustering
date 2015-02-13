@@ -6,7 +6,20 @@ Based on article description:
  - T.Kohonen. The Self-Organizing Map. 1990.
  - T.Kohonen, E.Oja, O.Simula, A.Visa, J.Kangas. Engineering Applications of the Self-Organizing Map. 1996.
 
-Implementation: Andrei Novikov (spb.andr@yandex.ru)
+Copyright (C) 2015    Andrei Novikov (spb.andr@yandex.ru)
+
+pyclustering is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+pyclustering is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 '''
 
@@ -84,13 +97,17 @@ class som:
     
     @property
     def size(self):
+        "Returns size of self-organized map (number of neurons)."
+        
         if (self.__ccore_som_pointer is not None):
-            return wrapper.som_get_size(self.__ccore_som_pointer);
+            self._size = wrapper.som_get_size(self.__ccore_som_pointer);
             
         return self._size;
     
     @property
     def weights(self):
+        "Returns list of weights of each neuron."
+        
         if (self.__ccore_som_pointer is not None):
             self._weights = wrapper.som_get_weights(self.__ccore_som_pointer);
         
@@ -98,6 +115,8 @@ class som:
     
     @property
     def awards(self):
+        "Returns list of numbers of captured objects by each neuron."
+        
         if (self.__ccore_som_pointer is not None):
             self._award = wrapper.som_get_awards(self.__ccore_som_pointer);
         
@@ -105,6 +124,8 @@ class som:
     
     @property
     def capture_objects(self):
+        "Returns list of indexes of captured objects by each neuron."
+        
         if (self.__ccore_som_pointer is not None):
             self._capture_objects = wrapper.som_get_capture_objects(self.__ccore_som_pointer);
         
@@ -168,6 +189,8 @@ class som:
         
 
     def __del__(self):
+        "Destructor of the self-organized feature map."
+        
         if (self.__ccore_som_pointer is not None):
             wrapper.som_destroy(self.__ccore_som_pointer);
             
@@ -315,7 +338,7 @@ class som:
     
     
     def _competition(self, x):
-        "Return neuron winner (distance, neuron index)."
+        "Returns neuron winner (distance, neuron index)."
         
         "(in) x    - input pattern from the input data set, for example it can be coordinates of point."
         
@@ -369,6 +392,8 @@ class som:
         "Trains self-organized feature map (SOM)."
         
         "(in) autostop    - automatic termination of learining process when adaptation is not occurred."
+        
+        "Returns number of learining iterations."
         
         if (self.__ccore_som_pointer is not None):
             return wrapper.som_train(self.__ccore_som_pointer, autostop);

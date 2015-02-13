@@ -397,9 +397,19 @@ def destroy_object(pointer_object):
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
     ccore.destroy_object(pointer_object);
     
-    
+
+"CCORE Interface for self-organized feature map (SOM)"
     
 def som_create(data, rows, cols, epochs, conn_type, init_type):
+    "Constructor of self-organized map."
+    
+    "(in) data        - input data - list of points where each point is represented by list of features, for example coordinates."
+    "(in) rows        - number of neurons in the column (number of rows)."
+    "(in) cols        - number of neurons in the row (number of columns)."
+    "(in) epochs      - number of epochs for training."
+    "(in) conn_type   - type of connection between oscillators in the network (grid four, grid eight, honeycomb, function neighbour)."
+    "(in) init_type   - type of initialization of initial neuron weights (random, random in center of the input data, random distributed in data, ditributed in line with uniform grid)."    
+    
     pointer_data = create_pointer_data(data);
     
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
@@ -408,28 +418,57 @@ def som_create(data, rows, cols, epochs, conn_type, init_type):
     return som_pointer;
 
 def som_destroy(som_pointer):
+    "Destructor of self-organized map."
+    
+    "(in) som_pointer    - pointer to object of self-organized map."
+    
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
     ccore.som_destroy(som_pointer);
     
 def som_train(som_pointer, autostop):
+    "Trains self-organized feature map (SOM)."
+    
+    "(in) som_pointer    - pointer to object of self-organized map."
+    "(in) autostop       - automatic termination of learining process when adaptation is not occurred."   
+     
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
     return ccore.som_train(som_pointer, autostop);
 
 def som_simulate(som_pointer, pattern):
+    "Processes input pattern (no learining) and returns index of neuron-winner."
+    "Using index of neuron winner catched object can be obtained using property capture_objects."
+    
+    "(in) som_pointer      - pointer to object of self-organized map."
+    "(in) input_pattern    - input pattern."
+        
+    "Returns index of neuron-winner."
+            
     pointer_data = create_pointer_data(pattern);
     
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
     return ccore.som_simulate(som_pointer, pointer_data);
 
 def som_get_winner_number(som_pointer):
+    "Returns of number of winner at the last step of learning process."
+    
+    "(in) som_pointer    - pointer to object of self-organized map."
+    
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
     return ccore.som_get_winner_number(som_pointer);
 
 def som_get_size(som_pointer):
+    "Returns size of self-organized map (number of neurons)."
+    
+    "(in) som_pointer    - pointer to object of self-organized map."
+    
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
     return ccore.som_get_size(som_pointer);
 
 def som_get_capture_objects(som_pointer):
+    "Returns list of indexes of captured objects by each neuron."
+    
+    "(in) som_pointer    - pointer to object of self-organized map."
+    
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
     package = ccore.som_get_capture_objects(som_pointer);
     
@@ -437,6 +476,10 @@ def som_get_capture_objects(som_pointer):
     return result;
 
 def som_get_weights(som_pointer):
+    "Returns list of weights of each neuron."
+    
+    "(in) som_pointer    - pointer to object of self-organized map."
+    
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
     package = ccore.som_get_weights(som_pointer);
     
@@ -444,6 +487,10 @@ def som_get_weights(som_pointer):
     return result;   
 
 def som_get_awards(som_pointer):
+    "Returns list of numbers of captured objects by each neuron."
+    
+    "(in) som_pointer    - pointer to object of self-organized map."
+    
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
     package = ccore.som_get_awards(som_pointer);
     
@@ -451,6 +498,10 @@ def som_get_awards(som_pointer):
     return result;  
 
 def som_get_neighbors(som_pointer):
+    "Returns list of indexes of neighbors of each neuron."
+    
+    "(in) som_pointer    - pointer to object of self-organized map."
+    
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
     package = ccore.som_get_neighbors(som_pointer);
     

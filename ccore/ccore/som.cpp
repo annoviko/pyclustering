@@ -1,3 +1,28 @@
+/**************************************************************************************************************
+
+Neural Network: Self-Organized Feature Map
+
+Based on article description:
+ - T.Kohonen. The Self-Organizing Map. 1990.
+ - T.Kohonen, E.Oja, O.Simula, A.Visa, J.Kangas. Engineering Applications of the Self-Organizing Map. 1996.
+
+Copyright (C) 2015    Andrei Novikov (spb.andr@yandex.ru)
+
+pyclustering is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+pyclustering is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+**************************************************************************************************************/
+
 #include "som.h"
 #include "support.h"
 
@@ -5,6 +30,19 @@
 #include <climits>
 #include <random>
 
+/***********************************************************************************************
+ *
+ * @brief   Constructor of self-organized map.
+ *
+ * @param   (in) data            - list of points where each point is represented by list of features, 
+ *                                 for example coordinates.
+ * @param   (in) rows            - number of neurons in the column (number of rows).
+ * @param   (in) cols            - number of neurons in the row (number of columns).
+ * @param   (in) epochs          - number of epochs for training.
+ * @param   (in) conn_type       - type of connection between oscillators in the network.
+ * @param   (in) init_type       - type of initialization of initial neuron weights.
+ *
+ ***********************************************************************************************/
 som::som(std::vector<std::vector<double> > * input_data, const unsigned int num_rows, const unsigned int num_cols, const unsigned int num_epochs, const som_conn_type type_conn, const som_init_type type_init) {
 	data = input_data;
 	rows = num_rows;
@@ -70,6 +108,11 @@ som::som(std::vector<std::vector<double> > * input_data, const unsigned int num_
 	create_initial_weights(type_init);
 }
 
+/***********************************************************************************************
+ *
+ * @brief   Default destructor.
+ *
+ ***********************************************************************************************/
 som::~som() {
 	for (unsigned int i = 0; i < size; i++) {
 		if (location != NULL)			{ delete (*location)[i];			}
@@ -89,6 +132,14 @@ som::~som() {
 	if (neighbors != NULL)				{ delete neighbors;			neighbors = NULL;			}
 }
 
+/***********************************************************************************************
+ *
+ * @brief   Create connections in line with input rule (grid four, grid eight, honeycomb, 
+ *          function neighbour).
+ *
+ * @param   (in) conn_type       - type of connection between oscillators in the network. 
+ *
+ ***********************************************************************************************/
 void som::create_connections(const som_conn_type type) {
 	neighbors = new std::vector<std::vector<unsigned int> * >(size, NULL);
 
@@ -184,6 +235,15 @@ void som::create_connections(const som_conn_type type) {
 	}
 }
 
+/***********************************************************************************************
+ *
+ * @brief   Creates initial weights for neurons in line with the specified initialization.
+ *
+ * @param   (in) init_type       - type of initialization of initial neuron weights (random, 
+ *                                 random in center of the input data, random distributed in 
+ *                                 data, ditributed in line with uniform grid). 
+ *
+ ***********************************************************************************************/
 void som::create_initial_weights(const som_init_type type) {
 	unsigned int dimension = (*data)[0].size();
 
@@ -305,6 +365,16 @@ void som::create_initial_weights(const som_init_type type) {
 	}
 }
 
+/***********************************************************************************************
+ *
+ * @brief   Returns neuron winner (distance, neuron index).
+ *
+ * @param   (in) pattern    - input pattern from the input data set, for example it can be 
+ *                            coordinates of point.
+ *
+ * @return  Returns index of neuron that is winner.
+ *
+ ***********************************************************************************************/
 unsigned int som::competition(const std::vector<double> * pattern) const {
 	unsigned int index = 0;
 	double minimum = euclidean_distance_sqrt((*weights)[0], pattern);
@@ -320,6 +390,14 @@ unsigned int som::competition(const std::vector<double> * pattern) const {
 	return index;
 }
 
+/***********************************************************************************************
+ *
+ * @brief   Change weight of neurons in line with won neuron.
+ *
+ * @param   (in) index_winner    - index of neuron-winner.
+ * @param   (in) pattern         - input pattern from the input data set.
+ *
+ ***********************************************************************************************/
 unsigned int som::adaptation(const unsigned int index_winner, const std::vector<double> * pattern) {
 	unsigned int dimensions = (*weights)[0]->size();
 	unsigned int number_adapted_neurons = 0;
@@ -366,6 +444,16 @@ unsigned int som::adaptation(const unsigned int index_winner, const std::vector<
 	return number_adapted_neurons;
 }
 
+/***********************************************************************************************
+ *
+ * @brief   Trains self-organized feature map (SOM).
+ *
+ * @param   (in) index_winner    - index of neuron-winner.
+ * @param   (in) pattern         - input pattern from the input data set.
+ *
+ * @return  Returns number of learining iterations.
+ *
+ ***********************************************************************************************/
 unsigned int som::train(bool autostop) {
 	previous_weights = NULL;
 
@@ -424,10 +512,28 @@ unsigned int som::train(bool autostop) {
 	return epouchs;
 }
 
+/***********************************************************************************************
+ *
+ * @brief   Processes input pattern (no learining) and returns index of neuron-winner.
+ *          Using index of neuron winner catched object can be obtained by get_capture_objects().
+ *
+ * @param   (in) pattern    - input pattern.
+ *
+ * @return  Returns index of neuron-winner.
+ *
+ ***********************************************************************************************/
 unsigned int som::simulate(const std::vector<double> * pattern) const {
 	return competition(pattern);
 }
 
+/***********************************************************************************************
+ *
+ * @brief   Returns maximum changes of weight in line with comparison between previous weights 
+ *          and current weights.
+ *
+ * @return  Returns value that represents maximum changes of weight after adaptation process.
+ *
+ ***********************************************************************************************/
 double som::calculate_maximal_adaptation() const {
 	unsigned int dimensions = (*data)[0].size();
 	double maximal_adaptation = 0;
@@ -450,6 +556,13 @@ double som::calculate_maximal_adaptation() const {
 	return maximal_adaptation;
 }
 
+/***********************************************************************************************
+ *
+ * @brief   Calculates number of winner at the last step of learning process.
+ *
+ * @return  Returns number of winner at the last step of learning process.
+ *
+ ***********************************************************************************************/
 unsigned int som::get_winner_number(void) const {
 	unsigned int winner_number = 0;
 	for (unsigned int i = 0; i < size; i++) {

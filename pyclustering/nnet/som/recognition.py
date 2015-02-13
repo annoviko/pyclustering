@@ -1,3 +1,26 @@
+'''
+
+Example of application for digit recognition based on self-organized feature map.
+Digits for 0 to 9 can be recognized. The application has GUI that provides following 
+function: learning, drawing, recognition, dump saving/loading. 
+
+Copyright (C) 2015    Andrei Novikov (spb.andr@yandex.ru)
+
+pyclustering is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+pyclustering is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+'''
+
 from pyclustering.nnet.som import som;
 from pyclustering.nnet.som import type_conn, type_init;
 
@@ -50,7 +73,7 @@ class recognizer:
         
        
         print("SOM initialization...");
-        self.__network = som(2, 5, samples, 300, type_conn.grid_four, type_init.uniform_grid);
+        self.__network = som(2, 5, samples, 300, type_conn.grid_four, type_init.uniform_grid, True);
         
         print("SOM training...");
         self.__network.train();
