@@ -101,6 +101,10 @@ def average_neighbor_distance(points, num_neigh):
             total_distance += dist_matrix[i][j + 1];
             
     return ( total_distance / (num_neigh * len(points)) );
+
+
+def variance_increase_distance(cluster1, cluster2, data):
+    pass;
         
 
 def euclidean_distance(a, b):
@@ -154,6 +158,77 @@ def manhattan_distance(a, b):
         distance += abs(a[i] - b[i]);
     
     return distance;
+
+
+def average_inter_cluster_distance(cluster1, cluster2, data = None):
+    "Calculates average inter-cluster distance between two clusters. Clusters can be represented"
+    "by list of coordinates (in this case data shouldn't be specified), or by list of indexes of" 
+    "points from the data (represented by list of points), in this case data should be specified."
+    
+    "(in) cluster1    - the first cluster."
+    "(in) cluster2    - the second cluster."
+    "(in) data        - if specified than elements of clusters will be used as indexes,"
+    "                   otherwise elements of cluster will be considered as points."
+    
+    "Returns average inter-cluster distance between two clusters."
+    
+    distance = 0.0;
+    
+    if (data is None):
+        for i in range(len(cluster1)):
+            for j in range(len(cluster2)):
+                distance += euclidean_distance_sqrt(cluster1[i], cluster2[j]);
+    else:
+        for i in range(len(cluster1)):
+            for j in range(len(cluster2)):
+                distance += euclidean_distance_sqrt(data[ cluster1[i] ], data[ cluster2[j] ]);
+    
+    distance /= float(len(cluster1) * len(cluster2));
+    return distance ** 0.5;
+
+
+def average_intra_cluster_distance(cluster1, cluster2, data = None):
+    "Calculates average intra-cluster distance between two clusters. Clusters can be represented"
+    "by list of coordinates (in this case data shouldn't be specified), or by list of indexes of" 
+    "points from the data (represented by list of points), in this case data should be specified."
+    
+    "(in) cluster1    - the first cluster."
+    "(in) cluster2    - the second cluster."
+    "(in) data        - if specified than elements of clusters will be used as indexes,"
+    "                   otherwise elements of cluster will be considered as points."
+    
+    "Returns average intra-cluster distance between two clusters."
+        
+    distance = 0.0;
+    
+    for i in range(len(cluster1) + len(cluster2)):
+        for j in range(len(cluster1) + len(cluster2)):
+            first_point = None;
+            second_point = None;
+            
+            if (data is None):
+                # the first point
+                if (i < len(cluster1)): first_point = cluster1[i];
+                else: first_point = cluster2[i - len(cluster1)];
+                
+                # the second point
+                if (j < len(cluster1)): second_point = cluster1[j];
+                else: second_point = cluster2[j - len(cluster1)];
+                
+            else:
+                # the first point
+                if (i < len(cluster1)): first_point = data[ cluster1[i] ];
+                else: first_point = data[ cluster2[i - len(cluster1)] ];                
+            
+                if (j < len(cluster1)): second_point = data[ cluster1[j] ];
+                else: second_point = data[ cluster2[j - len(cluster1)] ];    
+            
+
+            
+            distance += euclidean_distance_sqrt(first_point, second_point);
+    
+    distance /= float( (len(cluster1) + len(cluster2)) * (len(cluster1) + len(cluster2) - 1.0) );
+    return distance ** 0.5;
 
 
 def heaviside(value):
