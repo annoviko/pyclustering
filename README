@@ -60,7 +60,7 @@ Oscillatory networks and neural networks (module pyclustering.nnet):
 - Hysteresis Oscillatory Network [Python]
 - LEGION (Local Excitatory Global Inhibitory Oscillatory Network) [Python]
 - PCNN (Pulse-Coupled Neural Network) [Python]
-- SOM (Self-Organized Map) [Python]
+- SOM (Self-Organized Map) [Python, C++]
 - Sync (Oscillatory network based on Kuramoto model) [Python, C++]
 
 Graph Coloring Algorithms (module pyclustering.gcolor):
