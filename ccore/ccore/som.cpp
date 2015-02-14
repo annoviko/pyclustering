@@ -44,6 +44,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  ***********************************************************************************************/
 som::som(std::vector<std::vector<double> > * input_data, const unsigned int num_rows, const unsigned int num_cols, const unsigned int num_epochs, const som_conn_type type_conn, const som_init_type type_init) {
+	previous_weights = NULL;
+	neighbors = NULL;
+
 	data = input_data;
 	rows = num_rows;
 	cols = num_cols;
@@ -51,6 +54,7 @@ som::som(std::vector<std::vector<double> > * input_data, const unsigned int num_
 	epouchs = num_epochs;
 	conn_type = type_conn;
 	init_learn_rate = 0.1;
+	adaptation_threshold = 0.001;
 
 	/* Feature SOM 0001: Predefined initial radius that depends on size of the network. */
 	if ( (cols + rows) / 4.0 > 1.0 ) {
@@ -115,12 +119,41 @@ som::som(std::vector<std::vector<double> > * input_data, const unsigned int num_
  ***********************************************************************************************/
 som::~som() {
 	for (unsigned int i = 0; i < size; i++) {
-		if (location != NULL)			{ delete (*location)[i];			}
-		if (capture_objects != NULL)	{ delete (*capture_objects)[i];		}
-		if (sqrt_distances != NULL)		{ delete (*sqrt_distances)[i];		}
-		if (weights != NULL)			{ delete (*weights)[i];				}
-		if (previous_weights != NULL)	{ delete (*previous_weights)[i];	}
-		if (neighbors != NULL)			{ delete (*neighbors)[i];			}
+		if (location != NULL) {
+			if ((*location)[i] != NULL) {
+				delete (*location)[i];
+			}
+		}
+
+		if (capture_objects != NULL) {
+			if ((*capture_objects)[i] != NULL) {
+				delete (*capture_objects)[i];
+			}
+		}
+
+		if (sqrt_distances != NULL) {
+			if ((*sqrt_distances)[i] != NULL) {
+				delete (*sqrt_distances)[i];
+			}
+		}
+
+		if (weights != NULL) {
+			if ((*weights)[i] != NULL) {
+				delete (*weights)[i];
+			}
+		}
+
+		if (previous_weights != NULL) {
+			if ((*previous_weights)[i] != NULL) {
+				delete (*previous_weights)[i];
+			}
+		}
+
+		if (neighbors != NULL) {
+			if ((*neighbors)[i] != NULL) {
+				delete (*neighbors)[i];
+			}
+		}
 	}
 
 	if (location != NULL)				{ delete location;			location = NULL;			}
@@ -130,6 +163,7 @@ som::~som() {
 	if (weights != NULL)				{ delete weights;			weights = NULL;				}
 	if (previous_weights != NULL)		{ delete previous_weights;	previous_weights = NULL;	}
 	if (neighbors != NULL)				{ delete neighbors;			neighbors = NULL;			}
+	if (data != NULL) 					{ delete data;				data = NULL;				}
 }
 
 /***********************************************************************************************
