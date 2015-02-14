@@ -41,7 +41,7 @@ typedef enum pyclustering_type_data {
 	PYCLUSTERING_TYPE_LONG				= 4,
 	PYCLUSTERING_TYPE_UNSIGNED_LONG		= 5,
 	PYCLUSTERING_TYPE_LIST				= 6
-};
+} pyclustering_type_data;
 
 typedef struct pyclustering_package {
 	unsigned int size;
@@ -50,7 +50,7 @@ typedef struct pyclustering_package {
 
 	pyclustering_package(void) { }
 	pyclustering_package(unsigned int package_type) : type(package_type) { }
-};
+} pyclustering_package;
 
 typedef struct cluster_representation {
 	unsigned int			size;

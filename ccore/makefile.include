@@ -11,6 +11,7 @@ SOURCES += ccore/kdtree.cpp
 SOURCES += ccore/kmeans.cpp
 SOURCES += ccore/network.cpp
 SOURCES += ccore/rock.cpp
+SOURCES += ccore/som.cpp
 SOURCES += ccore/support.cpp
 SOURCES += ccore/sync_network.cpp
 SOURCES += ccore/syncnet.cpp

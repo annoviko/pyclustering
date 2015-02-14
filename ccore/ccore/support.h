@@ -142,13 +142,13 @@ void prepare_package(std::vector<type_object> * data, pyclustering_package * pac
 
 template <class type_object>
 pyclustering_package * create_package(std::vector< std::vector<type_object> > * data) {
-	pyclustering_package ** package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
+	pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
 
 	package->size = data->size();
 	package->data = new pyclustering_package * [package->size];
 
-	for (unsigned int i = 0; i < package->size(); i++) {
-		((pyclustering_package *) package->data)[i] = create_package(&(*data)[i]);
+	for (unsigned int i = 0; i < package->size; i++) {
+		((pyclustering_package **) package->data)[i] = create_package(&(*data)[i]);
 	}
 
 	return package;
