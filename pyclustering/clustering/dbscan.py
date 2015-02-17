@@ -1,6 +1,6 @@
 '''
 
-PyClustering module 'dbscan' for cluster analysis based on the algorithm DBSCAN.
+Cluster analysis algorithm: DBSCAN.
 
 Implementation based on article:
  - M.Ester, H.Kriegel, J.Sander, X.Xiaowei. A density-based algorithm for discovering clusters in large spatial databases with noise. 1996.

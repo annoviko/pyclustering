@@ -1,6 +1,6 @@
 '''
 
-PyClustering module 'hierarchical' for cluster analysis based on the hierarchical algorithm.
+Cluster analysis algorithm: hierarchical algorithm.
 
 Implementation based on article:
  - K.Anil, J.C.Dubes, R.C.Dubes. Algorithms for Clustering Data. 1988.

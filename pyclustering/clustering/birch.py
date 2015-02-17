@@ -2,7 +2,7 @@
 
 Cluster analysis algorithm: BIRCH
 
-Based on article description:
+Implementation based on article:
  - T.Zhang, R.Ramakrishnan, M.Livny. BIRCH: An Efficient Data Clustering Method for Very Large Databases. 1996.
 
 Copyright (C) 2015    Andrei Novikov (spb.andr@yandex.ru)
@@ -28,6 +28,25 @@ from pyclustering.support.cftree import cftree, cfentry, measurement_type;
 from copy import copy;
 
 class birch:
+    """!
+    @brief Class represents clustering algorithm BIRCH.
+    
+    Example:
+    @code
+        # sample for cluster analysis (represented by list)
+        sample = read_sample(path_to_sample);
+        
+        # create object of birch that uses CCORE for processing
+        birch_instance = birch(sample, 2, 5, 5, 0.05, measurement_type.CENTROID_EUCLIDIAN_DISTANCE, 200, True);
+        
+        # cluster analysis
+        birch_instance.process();
+        
+        # obtain results of clustering
+        clusters = birch_instance.get_clusters();  
+    @endcode
+    
+    """    
     __pointer_data = None;
     __number_clusters = 0;
     
@@ -43,16 +62,31 @@ class birch:
     __ccore = False;
     
     def __init__(self, data, number_clusters, branching_factor = 5, max_node_entries = 5, initial_diameter = 0.1, type_measurement = measurement_type.CENTROID_EUCLIDIAN_DISTANCE, entry_size_limit = 200, ccore = False):
-        "Constructor of clustering algorithm BIRCH."
-         
-        "(in) data                       - input data that is presented as list of points (objects), each point should be represented by list or tuple."
-        "(in) number_cluster             - number of clusters that should be allocated."
-        "(in) branching_factor           - maximum number of successor that might be contained by each non-leaf node in CF-Tree."
-        "(in) max_node_entries           - maximum number of entries that might be contained by each leaf node in CF-Tree."
-        "(in) initial_diameter           - initial diameter that used for CF-Tree construction, it can be increase if entry_size_limit is exceeded."
-        "(in) type_measurement           - type measurement that is used for calculation distance metrics."
-        "(in) entry_size_limit           - maximum number of entries that can be stored in CF-Tree, if it is exceeded than diameter is increased and CF-Tree is rebuilt."
-        "(in) ccore                      - if True than DLL CCORE (C++ solution) will be used for solving the problem."
+        """!
+        @brief Constructor of clustering algorithm BIRCH.
+        
+        @param[in] data (list): Input data presented as list of points (objects), where each point should be represented by list or tuple.
+        @param[in] number_cluster (uint): Number of clusters that should be allocated.
+        @param[in] branching_factor (uint): Maximum number of successor that might be contained by each non-leaf node in CF-Tree.
+        @param[in] max_node_entries (uint): Maximum number of entries that might be contained by each leaf node in CF-Tree.
+        @param[in] initial_diameter (double): Initial diameter that used for CF-Tree construction, it can be increase if entry_size_limit is exceeded.
+        @param[in] type_measurement (measurement_type): Type measurement used for calculation distance metrics.
+        @param[in] entry_size_limit (uint): Maximum number of entries that can be stored in CF-Tree, if it is exceeded during creation then diameter is increased and CF-Tree is rebuilt.
+        @param[in] ccore (bool): If True than DLL CCORE (C++ solution) will be used for solving the problem.
+        
+        @remark Despite eight arguments only the first two is mandatory, others can be ommitted. In this case default values are used for instance creation.
+        
+        Example:
+        @code
+            birch_instance1 = birch(sample1, 2);    # two clusters should be allocated
+            birch_instance2 = birch(sample2, 5);    # five clusters should be allocated
+            
+            # three clusters should be allocated, but also each leaf node can have maximum 5 
+            # entries and each entry can have maximum 5 descriptors with initial diameter 0.05.
+            birch_instance3 = birch(sample3, 3, 5, 5, 0.05);
+        @endcode
+        
+        """
         
         self.__pointer_data = data;
         self.__number_clusters = number_clusters;
@@ -65,7 +99,14 @@ class birch:
                
         
     def process(self):
-        "Performs cluster analysis in line with rules of BIRCH algorithm. Results of clustering can be obtained using corresponding gets methods."
+        """!
+        @brief Performs cluster analysis in line with rules of BIRCH algorithm.
+        
+        @remark Results of clustering can be obtained using corresponding gets methods.
+        
+        @see get_clusters()
+        
+        """
         
         self.__insert_data();
         
@@ -97,13 +138,23 @@ class birch:
             
         
     def get_clusters(self):
-        "Returns list of allocated clusters, each cluster contains indexes of objects in list of data."
+        """!
+        @brief Returns list of allocated clusters, each cluster contains indexes of objects in list of data.
+        
+        @return (list) List of allocated clusters.
+        
+        """
         
         return self.__clusters;
     
     
     def __insert_data(self):
-        "Insert input data to the tree. If number of maximum number of entries is exceeded than diameter is increased and tree is rebuilt."
+        """!
+        @brief Insert input data to the tree.
+        
+        @remark If number of maximum number of entries is exceeded than diameter is increased and tree is rebuilt.
+        
+        """
         
         for index_point in range(0, len(self.__pointer_data)):
             point = self.__pointer_data[index_point];
@@ -114,11 +165,14 @@ class birch:
     
     
     def __rebuild_tree(self, index_point):
-        "Rebuilt tree in case of maxumum number of entries is exceeded."
+        """!
+        @brief Rebuilt tree in case of maxumum number of entries is exceeded.
         
-        "(in) index_point    - index of point that is used as end point of re-building."
+        @param[in] index_point (uint): Index of point that is used as end point of re-building.
         
-        "Returns rebuilt tree with encoded points till specified point from input data space."
+        @return (cftree) Rebuilt tree with encoded points till specified point from input data space.
+        
+        """
         
         rebuild_result = False;
         increased_diameter = self.__tree.threshold * 1.5;
@@ -148,9 +202,12 @@ class birch:
     
     
     def __find_nearest_cluster_features(self):
-        "Find pair of nearest CF entries."
+        """!
+        @brief Find pair of nearest CF entries.
         
-        "Return list of two nearest enties that are represented by list [index_point1, index_point2]."
+        @return (list) List of two nearest enties that are represented by list [index_point1, index_point2].
+        
+        """
         
         minimum_distance = float("Inf");
         index1 = 0;
@@ -172,11 +229,14 @@ class birch:
     
     
     def __get_nearest_feature(self, point):
-        "Find nearest entry for specified point."
+        """!
+        @brief Find nearest entry for specified point.
         
-        "(in) point    - pointer to point from input dataset."
+        @param[in] point (list): Pointer to point from input dataset.
         
-        "Return index of nearest entry to the specified point."
+        @return (uint) Index of nearest entry to the specified point.
+        
+        """
         
         minimum_distance = float("Inf");
         index_nearest_feature = -1;
