@@ -33,9 +33,18 @@ from pyclustering.support.kdtree import kdtree;
 import pyclustering.core.wrapper as wrapper;
 
 class cure_cluster:   
-    "Representation of CURE cluster."
+    """!
+    @brief Represents data cluster in CURE term. CURE cluster is described by points of cluster, representation points of the cluster and by the cluster center.
+    
+    """
     
     def __init__(self, point = None):
+        """!
+        @brief Constructor of CURE cluster.
+        
+        @param[in] point (list): Point represented by list of coordinates.
+        
+        """
         if (point is not None):
             self.points = [ point ];
             self.mean = point;
@@ -53,6 +62,26 @@ class cure_cluster:
         
 
 class cure:
+    """!
+    @brief Class represents clustering algorithm CURE.
+    
+    Example:
+    @code
+        # read data for clustering from some file
+        sample = read_sample(path_to_data);
+        
+        # create instance of cure algorithm for cluster analysis
+        # request for allocation of two clusters.
+        cure_instance = cure(sample, 2, 5, 0.5, True);
+        
+        # run cluster analysis
+        cure_instance.process();
+        
+        # get results of clustering
+        clusters = cure_instance.get_clusters();
+    @endcode
+    
+    """
     __pointer_data = None;
     __clusters = None;
     
@@ -66,14 +95,17 @@ class cure:
     __ccore = False;
     
     def __init__(self, data, number_cluster, number_represent_points = 5, compression = 0.5, ccore = False):
-        "Constructor of clustering algorithm CURE."
-         
-        "(in) data                       - input data that is presented as list of points (objects), each point should be represented by list or tuple."
-        "(in) number_cluster             - number of clusters that should be allocated."
-        "(in) number_represent_points    - number of representation points for each cluster."
-        "(in) compression                - coefficient defines level of shrinking of representation points toward the mean of the new created cluster after merging on each step."
-        "(in) ccore                      - if True than DLL CCORE (C++ solution) will be used for solving the problem."
+        """!
+        @brief Constructor of clustering algorithm CURE.
         
+        @param[in] data (list): Input data that is presented as list of points (objects), each point should be represented by list or tuple.
+        @param[in] number_cluster (uint): Number of clusters that should be allocated.
+        @param[in] number_represent_points (uint): Number of representative points for each cluster.
+        @param[in] compression (double): Coefficient defines level of shrinking of representation points toward the mean of the new created cluster after merging on each step. Usually it destributed from 0 to 1.
+        @param[in] ccore (bool): If True than DLL CCORE (C++ solution) will be used for solving.
+        
+        """
+                
         self.__pointer_data = data;
         self.__number_cluster = number_cluster;
         self.__number_represent_points = number_represent_points;
@@ -87,7 +119,14 @@ class cure:
 
     
     def process(self):
-        "Performs cluster analysis in line with rules of CURE algorithm. Results of clustering can be obtained using corresponding gets methods."
+        """!
+        @brief Performs cluster analysis in line with rules of CURE algorithm.
+        
+        @remark Results of clustering can be obtained using corresponding get methods.
+        
+        @see get_clusters()
+        
+        """
         
         if (self.__ccore is True):
             self.__clusters = wrapper.cure(self.__pointer_data, self.__number_cluster, self.__number_represent_points, self.__compression);
@@ -160,15 +199,25 @@ class cure:
     
     
     def get_clusters(self):
-        "Returns list of allocated clusters, each cluster contains indexes of objects in list of data."
+        """!
+        @brief Returns list of allocated clusters, each cluster contains indexes of objects in list of data.
+        
+        @return (list) List of allocated clusters.
+        
+        @see process()
+        
+        """
         
         return self.__clusters;  
     
     
     def __insert_cluster(self, cluster):
-        "Insert cluster to list in line with sequence order (distance). Thus list should be always sorted."
+        """!
+        @brief Insert cluster to the list (sorted queue) in line with sequence order (distance).
         
-        "(in) cluster     - CURE cluster that should be inserted."
+        @param[in] cluster (cure_cluster): Cluster that should be inserted.
+        
+        """
         
         for index in range(len(self.__queue)):
             if (cluster.distance < self.__queue[index].distance):
@@ -179,21 +228,27 @@ class cure:
 
 
     def __relocate_cluster(self, cluster):
-        "Relocate cluster in list in line with distance order. Helps list to be sorted."
+        """!
+        @brief Relocate cluster in list in line with distance order.
         
-        "(in) cluster     - CURE cluster that should be relocated."
+        @param[in] cluster (cure_cluster): Cluster that should be relocated in line with order.
+        
+        """
         
         self.__queue.remove(cluster);
         self.__insert_cluster(cluster);
 
 
     def __closest_cluster(self, cluster, distance):
-        "Returns closest cluster to the specified cluster in line with distance."
+        """!
+        @brief Find closest cluster to the specified cluster in line with distance.
         
-        "(in) cluster     - CURE cluster for which nearest cluster should be found."
-        "(in) distance    - closest distance to the previous cluster."
+        @param[in] cluster (cure_cluster): Cluster for which nearest cluster should be found.
+        @param[in] distance (double): Closest distance to the previous cluster.
         
-        "Returns tuple (nearest CURE cluster, nearest distance) if nearest cluster has been found, otherwise None is returned."
+        @return (tuple) Pair (nearest CURE cluster, nearest distance) if the nearest cluster has been found, otherwise None is returned.
+        
+        """
         
         nearest_cluster = None;
         nearest_distance = float('inf');
@@ -210,30 +265,39 @@ class cure:
 
 
     def __insert_represented_points(self, cluster):
-        "Private function that is used by cure. Insert representation points to the k-d tree."
+        """!
+        @brief Insert representation points to the k-d tree.
         
-        "(in) cluster    - CURE cluster whose representation points should be inserted."
+        @param[in] cluster (cure_cluster): Cluster whose representation points should be inserted.
+        
+        """
         
         for point in cluster.rep:
             self.__tree.insert(point, cluster);
 
 
-    def __delete_represented_points(self, cluster):   
-        "Remove representation points of clusters from the k-d tree."
+    def __delete_represented_points(self, cluster): 
+        """!
+        @brief Remove representation points of clusters from the k-d tree
         
-        "(in) cluster    - CURE cluster whose representation points should be removed."
+        @param[in] cluster (cure_cluster): Cluster whose representation points should be removed.
+        
+        """
         
         for point in cluster.rep:
             self.__tree.remove(point);
 
 
     def __merge_clusters(self, cluster1, cluster2):
-        "Merges two clusters and returns new merged cluster. Representation points and mean points are calculated for the new cluster."
+        """!
+        @brief Merges two clusters and returns new merged cluster. Representation points and mean points are calculated for the new cluster.
         
-        "(in) cluster1                   - CURE cluster that should be merged with cluster2."
-        "(in) cluster2                   - CURE cluster that should be merged with cluster1."
+        @param[in] cluster1 (cure_cluster): Cluster that should be merged.
+        @param[in] cluster2 (cure_cluster): Cluster that should be merged.
         
-        "Returns new merged CURE cluster."
+        @return (cure_cluster) New merged CURE cluster.
+        
+        """
         
         merged_cluster = cure_cluster();
         
@@ -278,12 +342,14 @@ class cure:
 
 
     def __create_queue(self):
-        "Private function that is used by cure. Create queue (list) of sorted clusters by distance between them, where first cluster has the nearest neighbor."
-        "At the first iteration each cluster contains only one point."
+        """!
+        @brief Create queue of sorted clusters by distance between them, where first cluster has the nearest neighbor. At the first iteration each cluster contains only one point.
         
-        "(in) data        - input data that is presented as list of points (objects), each point should be represented by list or tuple."
+        @param[in] data (list): Input data that is presented as list of points (objects), each point should be represented by list or tuple.
         
-        "Returns create queue (list) of sorted clusters by distance between them."
+        @return (list) Create queue of sorted clusters by distance between them.
+        
+        """
         
         self.__queue = [cure_cluster(point) for point in self.__pointer_data];
         
@@ -307,9 +373,12 @@ class cure:
     
 
     def __create_kdtree(self):
-        "Create k-d tree in line with created clusters. At the first iteration contains all points from the input data set."
+        """!
+        @brief Create k-d tree in line with created clusters. At the first iteration contains all points from the input data set.
         
-        "Return k-d tree of representation points of CURE clusters."
+        @return (kdtree) k-d tree that consist of representative points of CURE clusters.
+        
+        """
         
         self.__tree = kdtree();
         for current_cluster in self.__queue:
@@ -318,12 +387,15 @@ class cure:
 
 
     def __cluster_distance(self, cluster1, cluster2):
-        "Return minimal distance between clusters. Representative points are used for that."
+        """!
+        @brief Calculate minimal distance between clusters using representative points.
         
-        "(in) cluster1        - CURE cluster 1."
-        "(in) cluster2        - CURE cluster 2."
+        @param[in] cluster1 (cure_cluster): The first cluster.
+        @param[in] cluster2 (cure_cluster): The second cluster.
         
-        "Returns Euclidean distance between two clusters that is defined by minimum distance between representation points of two clusters."
+        @return (double) Euclidean distance between two clusters that is defined by minimum distance between representation points of two clusters.
+        
+        """
         
         distance = float('inf');
         for i in range(0, len(cluster1.rep)):

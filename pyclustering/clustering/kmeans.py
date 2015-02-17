@@ -27,6 +27,22 @@ import pyclustering.core.wrapper as wrapper;
 from pyclustering.support import euclidean_distance, euclidean_distance_sqrt, list_math_addition, list_math_division_number;
 
 class kmeans:
+    """!
+    @brief Class represents clustering algorithm K-Means.
+    
+    Example:
+    @code
+        # load list of points for cluster analysis
+        sample = read_sample(path);
+        
+        # create instance of K-Means algorithm
+        kmeans_instance = kmeans(sample, [ [0.0, 0.1], [2.5, 2.6] ]);
+        
+        # run cluster analysis and obtain results
+        kmeans_instance.process();
+        kmeans_instance.get_clusters();    
+    @endcode
+    """
     __pointer_data = None;
     __clusters = None;
     __centers = None;
@@ -35,13 +51,15 @@ class kmeans:
     __ccore = False;
     
     def __init__(self, data, initial_centers, tolerance = 0.25, ccore = False):
-        "Constructor of clustering algorithm K-Means."
-         
-        "(in) data        - input data that is presented as list of points (objects), each point should be represented by list or tuple."
-        "(in) centers     - initial coordinates of centers of clusters that are represented by list: [center1, center2, ...]."
-        "(in) tolerance   - stop condition: if maximum value of change of centers of clusters is less than tolerance than algorithm will stop processing."
-        "(in) ccore       - defines should be CCORE C++ library used instead of Python code or not."
-               
+        """!
+        @brief Constructor of clustering algorithm K-Means.
+        
+        @param[in] data (list): Input data that is presented as list of points (objects), each point should be represented by list or tuple.
+        @param[in] initial_centers (list): Initial coordinates of centers of clusters that are represented by list: [center1, center2, ...].
+        @param[in] tolerance (double): Stop condition: if maximum value of change of centers of clusters is less than tolerance than algorithm will stop processing
+        @param[in] ccore (bool): Defines should be CCORE library (C++ pyclustering library) used instead of Python code or not.
+        
+        """
         self.__pointer_data = data;
         self.__clusters = [];
         self.__centers = initial_centers[:];     # initial centers shouldn't be chaged
@@ -51,7 +69,15 @@ class kmeans:
 
 
     def process(self):
-        "Performs cluster analysis in line with rules of K-Means algorithm. Results of clustering can be obtained using corresponding gets methods."
+        """!
+        @brief Performs cluster analysis in line with rules of K-Means algorithm.
+        
+        @remark Results of clustering can be obtained using corresponding get methods.
+        
+        @see get_clusters()
+        @see get_centers()
+        
+        """
         
         if (self.__ccore is True):
             self.__clusters = wrapper.kmeans(self.__pointer_data, self.__centers, self.__tolerance);
@@ -77,21 +103,36 @@ class kmeans:
 
 
     def get_clusters(self):
-        "Returns list of allocated clusters, each cluster contains indexes of objects in list of data."
+        """!
+        @brief Returns list of allocated clusters, each cluster contains indexes of objects in list of data.
+        
+        @see process()
+        @see get_centers()
+        
+        """
         
         return self.__clusters;
     
     
     def get_centers(self):
-        "Returns list of centers for allocated clusters."
+        """!
+        @brief Returns list of centers of allocated clusters.
+        
+        @see process()
+        @see get_clusters()
+        
+        """
 
         return self.__centers;
 
 
     def __update_clusters(self):
-        "Calculate Euclidean distance to each point from the each cluster. Nearest points are captured by according clusters and as a result clusters are updated."
-
-        "Returns updated clusters as list of clusters. Each cluster contains indexes of objects from data."
+        """!
+        @brief Calculate Euclidean distance to each point from the each cluster. Nearest points are captured by according clusters and as a result clusters are updated.
+        
+        @return (list) updated clusters as list of clusters. Each cluster contains indexes of objects from data.
+        
+        """
         
         clusters = [[] for i in range(len(self.__centers))];
         for index_point in range(len(self.__pointer_data)):
@@ -112,9 +153,12 @@ class kmeans:
     
     
     def __update_centers(self):
-        "Calculate centers of clusters in line with contained objects."
-
-        "Returns updated centers as list of centers."
+        """!
+        @brief Calculate centers of clusters in line with contained objects.
+        
+        @return (list) Updated centers as list of centers.
+        
+        """
          
         centers = [[] for i in range(len(self.__clusters))];
          

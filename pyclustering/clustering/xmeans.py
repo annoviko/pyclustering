@@ -32,12 +32,37 @@ from pyclustering.support import list_math_addition_number, list_math_substracti
 
 
 class splitting_type:
+    """!
+    @brief Enumeration of splitting types that can be used as splitting creation of cluster in X-Means algorithm.
+    
+    """
+    
     BAYESIAN_INFORMATION_CRITERION = 0;
     MINIMUM_NOISELESS_DESCRIPTION_LENGTH = 1;
 
 
 class xmeans:
-    "Performs cluster analysis using X-Means algorithm."
+    """!
+    @brief Class represents clustering algorithm X-Means.
+    
+    Example:
+    @code
+        # sample for cluster analysis (represented by list)
+        sample = read_sample(path_to_sample);
+        
+        # create object of X-Means algorithm that uses CCORE for processing
+        xmeans_instance = xmeans(sample, [ [0.0, 0.5] ], ccore = True);
+        
+        # run cluster analysis
+        xmeans_instance.process();
+        
+        # obtain results of clustering
+        clusters = xmeans_instance.get_clusters();
+        
+        # display allocated clusters
+        draw_clusters(sample, clusters);
+    @endcode
+    """
     
     __pointer_data = None;
     __clusters = None;
@@ -50,16 +75,17 @@ class xmeans:
     __ccore = False;
      
     def __init__(self, data, initial_centers, kmax = 20, tolerance = 0.025, criterion = splitting_type.BAYESIAN_INFORMATION_CRITERION, ccore = False):
-        "Constructor of clustering algorithm X-Means."
-         
-        "(in) data        - input data that is presented as list of points (objects), each point should be represented by list or tuple."
-        "(in) centers     - initial coordinates of centers of clusters that are represented by list: [center1, center2, ...]."
-        "(in) kmax        - maximum number of clusters that can be allocated."
-        "(in) tolerance   - stop condition for each iteration: if maximum value of change of centers of clusters is less than tolerance than algorithm will stop processing."
-        "(in) criterion   - type of splitting creation."
-        "(in) ccore       - defines should be CCORE C++ library used instead of Python code or not."
-         
-        "Returns list of allocated clusters, each cluster contains indexes of objects in list of data."
+        """!
+        @brief Constructor of clustering algorithm X-Means.
+        
+        @param[in] data (list): Input data that is presented as list of points (objects), each point should be represented by list or tuple.
+        @param[in] initial_centers (list): Initial coordinates of centers of clusters that are represented by list: [center1, center2, ...].
+        @param[in] kmax (uint): Maximum number of clusters that can be allocated.
+        @param[in] tolerance (double): Stop condition for each iteration: if maximum value of change of centers of clusters is less than tolerance than algorithm will stop processing.
+        @param[in] criterion (splitting_type): Type of splitting creation.
+        @param[in] ccore (bool): Defines should be CCORE (C++ pyclustering library) used instead of Python code or not.
+        
+        """
            
         self.__pointer_data = data;
         self.__clusters = [];
@@ -72,8 +98,16 @@ class xmeans:
         self.__ccore = ccore;
          
     def process(self):
-        "Performs cluster analysis in line with rules of X-Means algorithm. Results of clustering can be obtained using corresponding gets methods."
-         
+        """!
+        @brief Performs cluster analysis in line with rules of X-Means algorithm.
+        
+        @remark Results of clustering can be obtained using corresponding gets methods.
+        
+        @see get_clusters()
+        @see get_centers()
+        
+        """
+        
         if (self.__ccore is True):
             self.__clusters = wrapper.xmeans(self.__pointer_data, self.__centers, self.__kmax, self.__tolerance);
             self.__clusters = [ cluster for cluster in self.__clusters if len(cluster) > 0 ]; 
@@ -94,24 +128,43 @@ class xmeans:
                     
      
     def get_clusters(self):
-        "Returns list of allocated clusters, each cluster contains indexes of objects in list of data."
+        """!
+        @brief Returns list of allocated clusters, each cluster contains indexes of objects in list of data.
+        
+        @return (list) List of allocated clusters.
+        
+        @see process()
+        @see get_centers()
+        
+        """
          
         return self.__clusters;
      
      
     def get_centers(self):
-        "Returns list of centers for allocated clusters."
+        """!
+        @brief Returns list of centers for allocated clusters.
+        
+        @return (list) List of centers for allocated clusters.
+        
+        @see process()
+        @see get_clusters()
+        
+        """
          
         return self.__centers;      
      
      
     def __improve_parameters(self, centers, available_indexes = None):
-        "Performs k-means clustering in the specified region."
-         
-        "(in) centers              - list of centers of clusters."
-        "(in) available_indexes    - list of indexes that defines which points can be used for k-means clustering, if None - then all points are used."
-         
-        "Returns list of allocated clusters, each cluster contains indexes of objects in list of data."    
+        """!
+        @brief Performs k-means clustering in the specified region.
+        
+        @param[in] centers (list): Centers of clusters.
+        @param[in] available_indexes (list): Indexes that defines which points can be used for k-means clustering, if None - then all points are used.
+        
+        @return (list) List of allocated clusters, each cluster contains indexes of objects in list of data.
+        
+        """
         
         changes = numpy.Inf;
         
@@ -133,12 +186,15 @@ class xmeans:
      
      
     def __improve_structure(self, clusters, centers):
-        "Check for best structure: divides each cluster into two and checks for best results using splitting criterion."
-         
-        "(in) clusters   - list of clusters that have been allocated (each cluster contains indexes of points from data)."
-        "(in) centers    - list of centers of clusters."
-         
-        "Returns list of allocated centers for clustering."
+        """!
+        @brief Check for best structure: divides each cluster into two and checks for best results using splitting criterion.
+        
+        @param[in] clusters (list): Clusters that have been allocated (each cluster contains indexes of points from data).
+        @param[in] centers (list): Centers of clusters.
+        
+        @return (list) Allocated centers for clustering.
+        
+        """
          
         difference = 0.001;
           
@@ -182,12 +238,18 @@ class xmeans:
      
      
     def __splitting_criterion(self, clusters, centers):
-        "Calculates splitting criterion for input clusters."
-         
-        "(in) clusters   - list of clusters for which splitting criterion should be calculated."
-        "(in) centers    - list of centers of the clusters."
-         
-        "Returns splitting criterion. High value of splitting cretion means that current structure is much better."
+        """!
+        @brief Calculates splitting criterion for input clusters.
+        
+        @param[in] clusters (list): Clusters for which splitting criterion should be calculated.
+        @param[in] centers (list): Centers of the clusters.
+        
+        @return (double) Returns splitting criterion. High value of splitting cretion means that current structure is much better.
+        
+        @see __bayesian_information_criterion(clusters, centers)
+        @see __minimum_noiseless_description_length(clusters, centers)
+        
+        """
         
         if (self.__criterion == splitting_type.BAYESIAN_INFORMATION_CRITERION):
             return self.__bayesian_information_criterion(clusters, centers);
@@ -200,13 +262,18 @@ class xmeans:
  
     
     def __minimum_noiseless_description_length(self, clusters, centers):
-        "Calculates splitting criterion for input clusters using minimum noiseless description length criterion."
-         
-        "(in) clusters   - list of clusters for which splitting criterion should be calculated."
-        "(in) centers    - list of centers of the clusters."
-         
-        "Returns splitting criterion in line with bayesian information criterion."
-        "Low value of splitting cretion means that current structure is much better."
+        """!
+        @brief Calculates splitting criterion for input clusters using minimum noiseless description length criterion.
+        
+        @param[in] clusters (list): Clusters for which splitting criterion should be calculated.
+        @param[in] centers (list): Centers of the clusters.
+        
+        @return (double) Returns splitting criterion in line with bayesian information criterion. 
+                Low value of splitting cretion means that current structure is much better.
+        
+        @see __bayesian_information_criterion(clusters, centers)
+        
+        """
                 
         scores = [0.0] * len(clusters);
         
@@ -253,13 +320,18 @@ class xmeans:
         return sum(scores);
  
     def __bayesian_information_criterion(self, clusters, centers):
-        "Calculates splitting criterion for input clusters using bayesian information criterion."
-         
-        "(in) clusters   - list of clusters for which splitting criterion should be calculated."
-        "(in) centers    - list of centers of the clusters."
-         
-        "Returns splitting criterion in line with bayesian information criterion."
-        "High value of splitting cretion means that current structure is much better."
+        """!
+        @brief Calculates splitting criterion for input clusters using bayesian information criterion.
+        
+        @param[in] clusters (list): Clusters for which splitting criterion should be calculated.
+        @param[in] centers (list): Centers of the clusters.
+        
+        @return (double) Splitting criterion in line with bayesian information criterion.
+                High value of splitting cretion means that current structure is much better.
+                
+        @see __minimum_noiseless_description_length(clusters, centers)
+        
+        """
 
         scores = [0.0] * len(clusters)     # splitting criterion
         dimension = len(self.__pointer_data[0]);
@@ -288,14 +360,17 @@ class xmeans:
         return sum(scores);
  
  
-    def __update_clusters(self, centers, available_indexes = None): 
-        "Calculate Euclidean distance to each point from the each cluster."
-        "Nearest points are captured by according clusters and as a result clusters are updated."
-         
-        "(in) centers              - coordinates of centers of clusters that are represented by list: [center1, center2, ...]."
-        "(in) available_indexes    - list of indexes that defines which points can be used from imput data, if None - then all points are used."
-         
-        "Returns updated clusters as list of clusters. Each cluster contains indexes of objects from data."
+    def __update_clusters(self, centers, available_indexes = None):
+        """!
+        @brief Calculates Euclidean distance to each point from the each cluster.
+               Nearest points are captured by according clusters and as a result clusters are updated.
+               
+        @param[in] centers (list): Coordinates of centers of clusters that are represented by list: [center1, center2, ...].
+        @param[in] available_indexes (list): Indexes that defines which points can be used from imput data, if None - then all points are used.
+        
+        @return (list) Updated clusters.
+        
+        """
             
         bypass = None;
         if (available_indexes is None):
@@ -322,11 +397,14 @@ class xmeans:
              
      
     def __update_centers(self, clusters):
-        "Update centers of clusters in line with contained objects."
-         
-        "(in) clusters     - list of clusters that contain indexes of objects from data."
-         
-        "Returns updated centers as list of centers."
+        """!
+        @brief Updates centers of clusters in line with contained objects.
+        
+        @param[in] clusters (list): Clusters that contain indexes of objects from data.
+        
+        @return (list) Updated centers.
+        
+        """
          
         centers = [[] for i in range(len(clusters))];
         dimension = len(self.__pointer_data[0])

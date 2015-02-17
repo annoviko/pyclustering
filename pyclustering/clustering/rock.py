@@ -23,12 +23,31 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
 from pyclustering.support import euclidean_distance;
-from pyclustering.support import read_sample;
 
 import pyclustering.core.wrapper as wrapper;
 
 
 class rock:
+    """!
+    @brief Class represents clustering algorithm ROCK.
+
+    Example:
+    @code
+        # Read sample for clustering from some file
+        sample = read_sample(path_to_sample);
+        
+        # Create instance of ROCK algorithm for cluster analysis
+        # Five clusters should be allocated
+        rock_instance = rock(sample, 1.0, 5);
+        
+        # Run cluster analysis
+        rock_instance.process();
+        
+        # Obtain results of clustering
+        clusters = rock_instance.get_clusters();  
+    @endcode
+       
+    """    
     __pointer_data = None;
     __clusters = None;
     
@@ -44,13 +63,16 @@ class rock:
     __ccore = False;
     
     def __init__(self, data, eps, number_clusters, threshold = 0.5, ccore = False):
-        "Constructor of clustering algorithm ROCK."
+        """!
+        @brief Constructor of clustering algorithm ROCK.
         
-        "(in) data                - input data - list of points where each point is represented by list of coordinates."
-        "(in) eps                 - connectivity radius (similarity threshold), points are neighbors if distance between them is less than connectivity radius."
-        "(in) number_clusters     - defines number of clusters that should be allocated from the input data set."
-        "(in) threshold           - value that defines degree of normalization that influences on choice of clusters for merging during processing."
-        "(in) ccore               - defines should be CCORE C++ library used instead of Python code or not."
+        @param[in] data (list): Input data - list of points where each point is represented by list of coordinates.
+        @param[in] eps (double): Connectivity radius (similarity threshold), points are neighbors if distance between them is less than connectivity radius.
+        @param[in] number_clusters (uint): Defines number of clusters that should be allocated from the input data set.
+        @param[in] threshold (double): Value that defines degree of normalization that influences on choice of clusters for merging during processing.
+        @param[in] ccore (bool): Defines should be CCORE (C++ pyclustering library) used instead of Python code or not.
+        
+        """
         
         self.__pointer_data = data;
         self.__eps = eps;
@@ -66,7 +88,14 @@ class rock:
         
         
     def process(self):
-        "Performs cluster analysis in line with rules of ROCK algorithm. Results of clustering can be obtained using corresponding gets methods."
+        """!
+        @brief Performs cluster analysis in line with rules of ROCK algorithm.
+        
+        @remark Results of clustering can be obtained using corresponding get methods.
+        
+        @see get_clusters()
+        
+        """
         
         # TODO: (Not related to specification, just idea) First iteration should be investigated. Euclidean distance should be used for clustering between two 
         # points and rock algorithm between clusters because we consider non-categorical samples. But it is required more investigations.
@@ -88,19 +117,29 @@ class rock:
     
     
     def get_clusters(self):
-        "Returns list of allocated clusters, each cluster contains indexes of objects in list of data."
+        """!
+        @brief Returns list of allocated clusters, each cluster contains indexes of objects in list of data.
+        
+        @return (list) List of allocated clusters, each cluster contains indexes of objects in list of data.
+        
+        @see process()
+        
+        """
         
         return self.__clusters;
 
 
     def __find_pair_clusters(self, clusters):
-        "Returns pair of clusters that are best candidates for merging in line with goodness measure."
-        "The pair of clusters for which the above goodness measure is maximum is the best pair of clusters to be merged."
+        """!
+        @brief Returns pair of clusters that are best candidates for merging in line with goodness measure.
+               The pair of clusters for which the above goodness measure is maximum is the best pair of clusters to be merged.
+               
+        @param[in] clusters (list): List of clusters that have been allocated during processing, each cluster is represented by list of indexes of points from the input data set.
         
-        "(in) clusters                 - list of cluster that have been allocated during processing, each cluster is represented by list of indexes of points from the input data set."
-
-        "Returns list that contains two indexes of clusters (from list 'clusters') that should be merged on this step. It can be equals to [-1, -1] when number of links between"
-        "all clusters doesn't exist."
+        @return (list) List that contains two indexes of clusters (from list 'clusters') that should be merged on this step.
+                It can be equals to [-1, -1] when no links between clusters.
+        
+        """
         
         maximum_goodness = 0.0;
         cluster_indexes = [-1, -1];
@@ -116,12 +155,15 @@ class rock:
 
 
     def __calculate_links(self, cluster1, cluster2):
-        "Returns number of link between two clusters. Link between objects (points) exists only if distance between them less than connectivity radius."
+        """!
+        @brief Returns number of link between two clusters. Link between objects (points) exists only if distance between them less than connectivity radius.
         
-        "(in) cluster1                - cluster that is represented by list contains indexes of objects (points) from input data set."
-        "(in) cluster2                - cluster that is represented by list contains indexes of objects (points) from input data set."
+        @param[in] cluster1 (list): The first cluster.
+        @param[in] cluster2 (list): The second cluster.
         
-        "Returns number of links between two clusters."
+        @return (uint) Number of links between two clusters.
+        
+        """
         
         number_links = 0;
         
@@ -133,9 +175,10 @@ class rock:
             
 
     def __create_adjacency_matrix(self):
-        "Returns 2D matrix (list of lists) where each element described existence of link between points (marks them as neighbors)."
-    
-        "Returns adjacency matrix for the input data set in line with connectivity radius."
+        """!
+        @brief Creates 2D adjacency matrix (list of lists) where each element described existence of link between points (means that points are neighbors).
+        
+        """
         
         size_data = len(self.__pointer_data);
         
@@ -150,12 +193,15 @@ class rock:
     
 
     def __calculate_goodness(self, cluster1, cluster2):
-        "Calculates coefficient 'goodness measurement' between two clusters. The coefficient defines level of suitability of clusters for merging."
+        """!
+        @brief Calculates coefficient 'goodness measurement' between two clusters. The coefficient defines level of suitability of clusters for merging.
         
-        "(in) cluster1                - cluster that is represented by list contains indexes of objects (points) from input data set."
-        "(in) cluster2                - cluster that is represented by list contains indexes of objects (points) from input data set."
+        @param[in] cluster1 (list): The first cluster.
+        @param[in] cluster2 (list): The second cluster.
         
-        "Returns goodness measure between two clusters."
+        @return Goodness measure between two clusters.
+        
+        """
         
         number_links = self.__calculate_links(cluster1, cluster2);
         devider = (len(cluster1) + len(cluster2)) ** self.__degree_normalization - len(cluster1) ** self.__degree_normalization - len(cluster2) ** self.__degree_normalization;

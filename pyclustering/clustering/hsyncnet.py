@@ -30,15 +30,40 @@ from pyclustering.clustering.syncnet import syncnet;
 from pyclustering.support import average_neighbor_distance, read_sample;
 
 class hsyncnet(syncnet):
+    """!
+    @brief Class represents clustering algorithm HSyncNet. HSyncNet is bio-inspired algorithm that is based on oscillatory network that uses modified Kuramoto model.
+    
+    Example:
+    @code
+        # read list of points for cluster analysis
+        sample = read_sample(file);
+        
+        # create network for allocation three clusters using CCORE (C++ implementation)
+        network = hsyncnet(sample, 3, ccore = True);
+        
+        # run cluster analysis and output dynamic of the network
+        (time, dynamic) = network.process(0.995, collect_dynamic = True);
+        
+        # get allocated clusters
+        clusters = network.get_clusters();
+        
+        # show output dynamic of the network
+        draw_dynamics(time, dynamic);
+    @endcode
+    """
     _number_clusters = 0;    
     __ccore_network_pointer = None;      # Pointer to CCORE HSyncNet implementation of the network.
     
     def __init__(self, source_data, number_clusters, osc_initial_phases = initial_type.RANDOM_GAUSSIAN, ccore = False):
-        "Costructor of the oscillatory network hSync."
+        """!
+        @brief Costructor of the oscillatory network hSyncNet for cluster analysis.
+            
+        @param[in] source_data (list): Input data set defines structure of the network.
+        @param[in] number_clusters (uint): Number of clusters that should be allocated.
+        @param[in] osc_initial_phases (initial_type): Type of initialization of initial values of phases of oscillators.
+        @param[in] ccore (bool): If True than DLL CCORE (C++ solution) will be used for solving.
         
-        "(in) number_clusters     - number of clusters that should be allocated."
-        "(in) source_data         - input data set defines structure of the network."
-        "(in) osc_initial_phases  - type of initialization of initial values of phases of oscillators."
+        """
         
         if (ccore is True):
             self.__ccore_network_pointer = wrapper.create_hsyncnet(source_data, number_clusters, osc_initial_phases);
@@ -48,20 +73,29 @@ class hsyncnet(syncnet):
     
     
     def __del__(self):
-        "Destructor of oscillatory network hierachical Sync."
+        """!
+        @brief Destructor of oscillatory network HSyncNet.
+        
+        """
+        
         if (self.__ccore_network_pointer is not None):
             wrapper.destroy_hsyncnet_network(self.__ccore_network_pointer);
             self.__ccore_network_pointer = None;
             
             
     def process(self, order = 0.998, solution = solve_type.FAST, collect_dynamic = False):
-        "Performs clustering of input data set in line with input parameters."
+        """!
+        @brief Performs clustering of input data set in line with input parameters.
         
-        "(in) order               - level of local synchronization between oscillator that defines end of process of synchronization, range [0..1]."
-        "(in) solution            - type of solving differential equation: ode45, usual diff, etc."
-        "(in) collect_dynamic     - if True - return whole history of process synchronization otherwise - final state (when process of clustering is over)."
+        @param[in] order (double): Level of local synchronization between oscillator that defines end of synchronization process, range [0..1].
+        @param[in] solution (solve_type) Type of solving differential equation.
+        @param[in] collect_dynamic (bool): If True - returns whole history of process synchronization otherwise - only final state (when process of clustering is over).
         
-        "Returns dynamic of the network as tuple (time, oscillator_phases) that depends on collect_dynamic parameters."
+        @return (tuple) Returns dynamic of the network as tuple of lists on each iteration (time, oscillator_phases) that depends on collect_dynamic parameter. 
+        
+        @see get_clusters()
+        
+        """
         
         if (self.__ccore_network_pointer is not None):
             return wrapper.process_hsyncnet(self.__ccore_network_pointer, order, solution, collect_dynamic);
@@ -106,11 +140,14 @@ class hsyncnet(syncnet):
     
     
     def get_clusters(self, eps = 0.1):
-        "Return list of clusters in line with state of ocillators (phases)."
+        """!
+        @brief Return list of clusters in line with state of oscillators (phases).
         
-        "(in) eps     - tolerance level that define maximal difference between phases of oscillators in one cluster."
+        @param[in] eps (double): Tolerance level that define maximal difference between phases of oscillators in one cluster, range [0..2 * pi].
         
-        "Return list of clusters, for example [ [cluster1], [cluster2], ... ]."
+        @return (list) List of clusters, for example [ [cluster1], [cluster2], ... ].
+        
+        """
         
         if (self.__ccore_network_pointer is not None):
             return wrapper.get_clusters_syncnet(self.__ccore_network_pointer, eps);

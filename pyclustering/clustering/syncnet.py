@@ -27,10 +27,34 @@ import pyclustering.core.wrapper as wrapper;
 from pyclustering.nnet import *;
 from pyclustering.nnet.sync import *;
 
-from pyclustering.support import draw_clusters;
-from pyclustering.support import read_sample;
 
 class syncnet(sync_network):
+    """!
+    @brief Class represents clustering algorithm SyncNet. SyncNet is bio-inspired algorithm that is based on oscillatory network that uses modified Kuramoto model.
+    
+    Example:
+    @code
+        # read sample for clustering from some file
+        sample = read_sample(path_to_file);
+        
+        # create oscillatory network with connectivity radius 0.5 using CCORE (C++ implementation of pyclustering)
+        network = syncnet(sample, 0.5, ccore = True);
+        
+        # run cluster analysis and collect output dynamic of the oscillatory network, 
+        # network simulation is performed by Runge Kutta Fehlberg 45.
+        (dyn_time, dyn_phase) = network.process(0.998, solve_type.RFK45, True);
+        
+        # show oscillatory network
+        network.show_network();
+        
+        # obtain clustering results
+        clusters = network.get_clusters();
+        
+        # show clusters
+        draw_clusters(sample, clusters);
+    @endcode
+    
+    """
     _osc_loc = None;            # Location (coordinates) of oscillators in the feature space.
     
     _ena_conn_weight = False;   # Enable mode: when strength of connection depends on distance between two oscillators.
@@ -39,15 +63,18 @@ class syncnet(sync_network):
     __ccore_network_pointer = None;      # Pointer to CCORE SyncNet implementation of the network.
     
     def __init__(self, sample, radius, conn_repr = conn_represent.MATRIX, initial_phases = initial_type.RANDOM_GAUSSIAN, enable_conn_weight = False, ccore = False):
-        "Contructor of the oscillatory network SYNC for cluster analysis."
+        """!
+        @brief Contructor of the oscillatory network SYNC for cluster analysis.
         
-        "(in) sample             - input data that is presented as list of points (objects), each point should be represented by list or tuple."
-        "(in) radius             - connectivity radius between points, points should be connected if distance between them less then the radius."
-        "(in) conn_repr          - internal representation of connection in the network: matrix or list."
-        "(in) initial_phases     - type of initialization of initial phases of oscillators (random, uniformly distributed, etc.)."
-        "(in) enable_conn_weight - if True - enable mode when strength between oscillators depends on distance between two oscillators."
-        "                          if False - all connection between oscillators have the same strength that equals to 1 (True)."
-        "(in) ccore              - defines should be CCORE C++ library used instead of Python code or not."
+        @param[in] sample (list): Input data that is presented as list of points (objects), each point should be represented by list or tuple.
+        @param[in] radius (double): Connectivity radius between points, points should be connected if distance between them less then the radius.
+        @param[in] conn_repr (conn_represent): Internal representation of connection in the network: matrix or list. Ignored in case of usage of CCORE library.
+        @param[in] initial_phases (initial_type): Type of initialization of initial phases of oscillators (random, uniformly distributed, etc.).
+        @param[in] enable_conn_weight (bool): If True - enable mode when strength between oscillators depends on distance between two oscillators.
+              If False - all connection between oscillators have the same strength that equals to 1 (True).
+        @param[in] ccore (bool): Defines should be CCORE C++ library used instead of Python code or not.
+        
+        """
         
         if (ccore is True):
             self.__ccore_network_pointer = wrapper.create_syncnet_network(sample, radius, initial_phases, enable_conn_weight);
@@ -74,7 +101,11 @@ class syncnet(sync_network):
     
 
     def __del__(self):
-        "Destructor of oscillatory network is based on Kuramoto model."
+        """!
+        @brief Destructor of oscillatory network is based on Kuramoto model.
+        
+        """
+        
         if (self.__ccore_network_pointer is not None):
             wrapper.destroy_syncnet_network(self.__ccore_network_pointer);
             self.__ccore_network_pointer = None;
@@ -83,9 +114,12 @@ class syncnet(sync_network):
 
 
     def _create_connections(self, radius):
-        "Create connections between oscillators in line with input radius of connectivity."
+        """!
+        @brief Create connections between oscillators in line with input radius of connectivity.
         
-        "(in) radius    - connectivity radius between oscillators."
+        @param[in] radius (double): Connectivity radius between oscillators.
+        
+        """
         
         if (self._ena_conn_weight is True):
             self._conn_weight = [[0] * self._num_osc for index in range(0, self._num_osc, 1)];
@@ -130,14 +164,19 @@ class syncnet(sync_network):
 
 
     def process(self, order = 0.998, solution = solve_type.FAST, collect_dynamic = True):
-        "Network is trained via achievement sync state between the oscillators using the radius of coupling."
+        """!
+        @brief Peforms cluster analysis using simulation of the oscillatory network.
         
-        "(in) order             - order of synchronization that is used as indication for stopping processing."
-        "(in) solution          - specified type of solving diff. equation."
-        "(in) collect_dynamic   - specified requirement to collect whole dynamic of the network."
+        @param[in] order (double): Order of synchronization that is used as indication for stopping processing.
+        @param[in] solution (solve_type): Specified type of solving diff. equation.
+        @param[in] collect_dynamic (bool): Specified requirement to collect whole dynamic of the network.
         
-        "Return last values of simulation time and phases of oscillators as a tuple if collect_dynamic is False, and whole dynamic"
-        "if collect_dynamic is True. Format of returned value: (simulation_time, oscillator_phases)."
+        @return (tuple) Last values of simulation time and phases of oscillators as a tuple if collect_dynamic is False, and whole dynamic
+                if collect_dynamic is True. Format of returned value: (simulation_time, oscillator_phases).
+        
+        @see get_clusters()
+        
+        """
         
         if (self.__ccore_network_pointer is not None):
             return wrapper.process_syncnet(self.__ccore_network_pointer, order, solution, collect_dynamic);
@@ -146,13 +185,16 @@ class syncnet(sync_network):
     
     
     def phase_kuramoto(self, teta, t, argv):
-        "Overrided method for calculation of oscillator phase."
+        """!
+        @brief Overrided method for calculation of oscillator phase.
         
-        "(in) teta     - current value of phase."
-        "(in) t        - time (can be ignored)."
-        "(in) argv     - index of oscillator whose phase represented by argument teta."
+        @param[in] teta (double): Current value of phase.
+        @param[in] t (double): Time (can be ignored).
+        @param[in] argv (uint): Index of oscillator whose phase represented by argument teta.
         
-        "Return new value of phase of oscillator with index 'argv'."
+        @return (double) New value of phase of oscillator with index 'argv'.
+        
+        """
         
         index = argv;   # index of oscillator
         phase = 0;      # phase of a specified oscillator that will calculated in line with current env. states.
@@ -173,11 +215,16 @@ class syncnet(sync_network):
 
 
     def get_clusters(self, eps = 0.1):
-        "Return list of clusters in line with state of ocillators (phases)."
+        """!
+        @brief Returns list of clusters in line with state of ocillators (phases).
         
-        "(in) eps     - tolerance level that define maximal difference between phases of oscillators in one cluster."
+        @param[in] eps (double): Tolerance level that define maximal difference between phases of oscillators in one cluster.
         
-        "Return list of clusters, for example [ [cluster1], [cluster2], ... ]."
+        @return (list) List of clusters, for example [ [cluster1], [cluster2], ... ].
+        
+        @see process()
+        
+        """
         
         if (self.__ccore_network_pointer is not None):
             return wrapper.get_clusters_syncnet(self.__ccore_network_pointer, eps);
@@ -186,7 +233,10 @@ class syncnet(sync_network):
     
     
     def show_network(self):
-        "Shows connections in the network. It supports only 2-d and 3-d representation."
+        """!
+        @brief Shows connections in the network. It supports only 2-d and 3-d representation.
+        
+        """
         
         if (self.__ccore_network_pointer is not None):
             raise NameError("Not supported for CCORE");

@@ -26,7 +26,10 @@ from pyclustering.support import euclidean_distance;
 
 
 class optics_descriptor:
-    "Object description that used by OPTICS algorithm for cluster analysis."
+    """!
+    @brief Object description that used by OPTICS algorithm for cluster analysis.
+    
+    """
     
     reachability_distance = None;
     core_distance = None;
@@ -35,6 +38,14 @@ class optics_descriptor:
     index_object = None;
     
     def __init__(self, index, core_distance = None, reachability_distance = None):
+        """!
+        @brief Constructor of object description.
+        
+        @param[in] index (uint): Index of object in data set.
+        @param[in] core_distance (double): Core distance that is minimum distance to specified number of neighbors.
+        @param[in] reachability_distance (double): Reachability distance to this object.
+        
+        """
         self.index_object = index;
         self.core_distance = core_distance;
         self.reachability_distance = reachability_distance;
@@ -45,7 +56,34 @@ class optics_descriptor:
 
 
 class optics:
-    "Performs cluster analysis using OPTICS algorithm."
+    """!
+    @brief Class represents clustering algorithm OPTICS.
+
+    Example:
+    @code
+        # Read sample for clustering from some file
+        sample = read_sample(path_sample);
+        
+        # Create OPTICS algorithm for cluster analysis
+        optics_instance = optics(sample, 0.5, 6);
+        
+        # Run cluster analysis
+        optics_instance.process();
+        
+        # Obtain results of clustering
+        clusters = optics_instance.get_clusters();
+        noise = optics_instance.get_noise();
+        
+        # Obtain rechability-distances
+        ordering = optics_instance.get_cluster_ordering();
+        
+        # Visualization of cluster ordering in line with reachability distance.
+        indexes = [i for i in range(0, len(ordering))];
+        plt.bar(indexes, ordering);
+        plt.show(); 
+    @endcode
+       
+    """
     
     __optics_objects = None;      # List of OPTICS objects that corresponds to objects from input sample.
     __ordered_database = None;    # List of OPTICS objects in traverse order. 
@@ -60,12 +98,15 @@ class optics:
     __ccore_algorithm_pointer = None;
     
     def __init__(self, sample, eps, minpts):
-        "Constructor of clustering algorithm OPTICS."
+        """!
+        @brief Constructor of clustering algorithm OPTICS.
         
-        "(in) sample      - input data that is presented as list of points (objects), each point should be represented by list or tuple."
-        "(in) eps         - connectivity radius between points, points may be connected if distance between them less then the radius."
-        "(in) minpts      - minimum number of shared neighbors that is required for establish links between points."
-         
+        @param[in] sample (list): Input data that is presented as list of points (objects), each point should be represented by list or tuple.
+        @param[in] eps (double): Connectivity radius between points, points may be connected if distance between them less then the radius.
+        @param[in] minpts (uint): Minimum number of shared neighbors that is required for establish links between points.
+        
+        """
+        
         self.__processed = [False] * len(sample);
         self.__optics_objects = [optics_descriptor(i) for i in range(len(sample))];
         self.__ordered_database = [];
@@ -76,7 +117,16 @@ class optics:
 
 
     def process(self):
-        "Performs cluster analysis in line with rules of OPTICS algorithm. Results of clustering can be obtained using corresponding gets methods."  
+        """!
+        @brief Performs cluster analysis in line with rules of OPTICS algorithm.
+        
+        @remark Results of clustering can be obtained using corresponding gets methods.
+        
+        @see get_clusters()
+        @see get_noise()
+        @see get_cluster_ordering()
+        
+        """
         
         for optic_object in self.__optics_objects:
             if (optic_object.processed is False):
@@ -86,28 +136,60 @@ class optics:
     
     
     def get_clusters(self):
-        "Returns list of allocated clusters, each cluster contains indexes of objects in list of data."
+        """!
+        @brief Returns list of allocated clusters, each cluster contains indexes of objects in list of data.
+        
+        @return (list) List of allocated clusters.
+        
+        @see process()
+        @see get_noise()
+        @see get_cluster_ordering()
+        
+        """
         
         return self.__clusters;
     
     
     def get_noise(self):
-        "Returns list of noise that contains indexes of objects that corresponds to input data."
+        """!
+        @brief Returns list of noise that contains indexes of objects that corresponds to input data.
+        
+        @return (list) List of allocated noise objects.
+        
+        @see process()
+        @see get_clusters()
+        @see get_cluster_ordering()
+        
+        """
+        
         return self.__noise;
     
     
     def get_cluster_ordering(self):
-        "Returns clustering ordering that uses reachability distances."  
+        """!
+        @brief Returns clustering ordering that uses reachability distances.
+        
+        @return (list) List of reachability distances (clustering ordering).
+        
+        @see process()
+        @see get_clusters()
+        @see get_noise()
+        
+        """
+        
         ordering = [ optics_object.reachability_distance for optics_object in self.__optics_objects if optics_object.reachability_distance is not None ];
         return ordering;
     
     
     def __expand_cluster_order(self, optics_object):
-        "Expand cluster order from not processed optic-object that corresponds to object from input data."
-        "Traverse procedure is performed until objects are reachable from core-objects in line with connectivity radius."
-        "Order database is updated during expanding."
-    
-        "(in) optics_object   - object that hasn't been processed."
+        """!
+        @brief Expand cluster order from not processed optic-object that corresponds to object from input data.
+               Traverse procedure is performed until objects are reachable from core-objects in line with connectivity radius.
+               Order database is updated during expanding.
+               
+        @param[in] optics_object (optics_descriptor): Object that hasn't been processed.
+        
+        """
         
         optics_object.processed = True;
         
@@ -147,7 +229,10 @@ class optics:
 
     
     def __extract_clusters(self):
-        "Extract clusters and noise from order database."
+        """!
+        @brief Extract clusters and noise from order database.
+        
+        """
      
         self.__clusters = [];
         self.__noise = [];
@@ -170,14 +255,17 @@ class optics:
             self.__clusters.append(current_cluster);
                 
 
-    def __update_order_seed(self, optic_descriptor, neighbors_descriptor, order_seed):
-        "Update sorted list of reachable objects (from core-object) that should be processed using neighbors of core-object."
+    def __update_order_seed(self, optic_descriptor, neighbors_descriptors, order_seed):
+        """!
+        @brief Update sorted list of reachable objects (from core-object) that should be processed using neighbors of core-object.
         
-        "(in) optic_descriptor         - core-object whose neighbors should be analysed."
-        "(in) neighbors_descriptor     - list of neighbors of core-object."
-        "(in/out) order_seed           - pointer to list of sorted object in line with reachable distance."
-
-        for neighbor_descriptor in neighbors_descriptor:
+        @param[in] optic_descriptor (optics_descriptor): Core-object whose neighbors should be analysed.
+        @param[in] neighbors_descriptors (list): List of neighbors of core-object.
+        @param[in|out] order_seed (list): List of sorted object in line with reachable distance.
+        
+        """
+        
+        for neighbor_descriptor in neighbors_descriptors:
             index_neighbor = neighbor_descriptor[0];
             current_reachable_distance = neighbor_descriptor[1];
             
@@ -201,12 +289,15 @@ class optics:
                         order_seed.sort(key = lambda obj: obj.reachability_distance);
 
 
-    def __neighbor_indexes(self, optic_object):  
-        "Private function that is used by dbscan. Return list of indexes of neighbors of specified point for the data."
-    
-        "(in) optic_object     - object for which neighbors should be returned in line with connectivity radius."
+    def __neighbor_indexes(self, optic_object):
+        """!
+        @brief Return list of indexes of neighbors of specified point for the data.
         
-        "Return list of indexes of neighbors in line the connectivity radius."
+        @param[in] optic_object (optics_descriptor): Object for which neighbors should be returned in line with connectivity radius.
+        
+        @return (list) List of indexes of neighbors in line the connectivity radius.
+        
+        """
               
         neighbor_description = [];
         

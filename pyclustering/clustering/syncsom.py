@@ -23,14 +23,42 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
 from pyclustering.nnet.som import som, type_conn;
-from pyclustering.nnet.sync import sync_network;
 from pyclustering.nnet import initial_type;
 
 from pyclustering.clustering.syncnet import syncnet;
 
-from pyclustering.support import average_neighbor_distance, read_sample, draw_clusters;
+from pyclustering.support import average_neighbor_distance;
 
 class syncsom:
+    """!
+    @brief Class represents clustering algorithm SYNC-SOM. SYNC-SOM is bio-inspired algorithm that is based on oscillatory network 
+           that uses self-organized feature map as the first layer.
+           
+    Example:
+    @code
+        # read sample for clustering
+        sample = read_sample(file);
+        
+        # create oscillatory network for cluster analysis where the first layer has size 10x10
+        network = syncsom(sample, 10, 10);
+        
+        # simulate network (perform cluster analysis) and collect output dynamic
+        (dyn_time, dyn_phase) = network.process(5, True, 0.998);
+        
+        # obtain encoded clusters
+        encoded_clusters = network.get_som_clusters();
+        
+        # obtain real clusters
+        clusters = network.get_clusters();
+        
+        # show the first layer of the network
+        network.show_som_layer();
+        
+        # show the second layer of the network
+        network.show_sync_layer();
+    @endcode
+    
+    """
     _som = None;        # The first (input) later - SOM layer.
     _data = None;       # Pointer to input data.
     _sync = None;       # The second (output) layer - Sync layer.
@@ -41,32 +69,48 @@ class syncsom:
     
     @property
     def som_layer(self):
+        """!
+        @brief The first layer of the oscillatory network - self-organized feature map.
+        
+        """
         return self._som;
     
     @property
     def sync_layer(self):
+        """!
+        @brief The second layer of the oscillatory network based on Kuramoto model.
+        
+        """
         return self._sync;
     
     def __init__(self, data, rows, cols):
-        "Constructor of the double layer oscillatory network SYNC-SOM."
+        """!
+        @brief Constructor of the double layer oscillatory network SYNC-SOM.
         
-        "(in) data    - input data that is presented as list of points (objects), each point should be represented by list or tuple."
-        "(in) rows    - rows of neurons (number of neurons in column) in the input layer (self-organized feature map)."
-        "(in) cols    - columns of neurons (number of neurons in row) in the input later (self-organized feature map)."
+        @param[in] data (list): Input data that is presented as list of points (objects), each point should be represented by list or tuple.
+        @param[in] rows (uint): Rows of neurons (number of neurons in column) in the input layer (self-organized feature map).
+        @param[in] cols (uint): Columns of neurons (number of neurons in row) in the input later (self-organized feature map).
+        
+        """
         
         self._data = data;
         self._som = som(rows, cols, data, 100, conn_type = type_conn.grid_four);
         self._som_osc_table = list();        
     
     def process(self, number_neighbours, collect_dynamic = False, order = 0.999):
-        "Performs simulation of the oscillatory network. Returns results of simulation."
+        """!
+        @brief Performs simulation of the oscillatory network.
         
-        "(in) number_neighbours   - number of neighbours that should be used for calculation average distance and creation connections between oscillators."
-        "(in) collect_dynamic     - if True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics."
-        "(in) order               - order of process synchronization, destributed 0..1."
+        @param[in] number_neighbours (uint): Number of neighbours that should be used for calculation average distance and creation connections between oscillators.
+        @param[in] collect_dynamic (bool): If True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics.
+        @param[in] order (double): Order of process synchronization that should be considered as end of clustering, destributed 0..1.
         
-        "Returns dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,"
-        "otherwise returns only last values (last step of simulation) of dynamic."
+        @return (tuple) Dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,
+                otherwise returns only last values (last step of simulation) of dynamic.
+        
+        @see get_som_clusters()
+        @see get_clusters()
+        """
         
         # train self-organization map.
         self._som.train();
@@ -99,11 +143,17 @@ class syncsom:
         return (dyn_time, dyn_phase);   
     
     def get_som_clusters(self, eps = 0.1):
-        "Returns clusters with SOM neurons that encode input features in line with result of synchronization in the second (Sync) layer."
+        """!
+        @brief Returns clusters with SOM neurons that encode input features in line with result of synchronization in the second (Sync) layer.
         
-        "(in) eps    - maximum error for allocation of synchronous ensemble oscillators."
+        @param[in] eps (double): Maximum error for allocation of synchronous ensemble oscillators.
         
-        "Returns list of clusters that are represented by lists of indexes of neurons that encode input data."
+        @return (list) List of clusters that are represented by lists of indexes of neurons that encode input data.
+        
+        @see process()
+        @see get_clusters()
+        
+        """
         
         sync_clusters = self._sync.get_clusters();
         
@@ -121,12 +171,17 @@ class syncsom:
             
     
     def get_clusters(self, eps = 0.1):
-        "Returns clusters in line with ensembles of synchronous oscillators where each synchronous ensemble corresponds to only one cluster."
+        """!
+        @brief Returns clusters in line with ensembles of synchronous oscillators where each synchronous ensemble corresponds to only one cluster.
         
-        "(in) eps    - maximum error for allocation of synchronous ensemble oscillators."
+        @param[in] eps (double): Maximum error for allocation of synchronous ensemble oscillators.
         
-        "Returns list of grours (lists) of indexes of synchronous oscillators."
-        "For example [ [index_osc1, index_osc3], [index_osc2], [index_osc4, index_osc5] ]."
+        @return (list) List of grours (lists) of indexes of synchronous oscillators that corresponds to index of objects.
+        
+        @see process()
+        @see get_som_clusters()
+        
+        """
         
         sync_clusters = self._sync.get_clusters(eps);       # NOTE: it isn't indexes of SOM neurons
         
@@ -160,13 +215,19 @@ class syncsom:
 
 
     def show_som_layer(self):
-        "Shows visual representation of the first (SOM) layer."
+        """!
+        @brief Shows visual representation of the first (SOM) layer.
+        
+        """
         
         self._som.show_network();
     
     
     def show_sync_layer(self):
-        "Shows visual representation of the second (Sync) layer."
+        """!
+        @brief Shows visual representation of the second (Sync) layer.
+        
+        """
         
         self._sync.show_network();
         
