@@ -21,17 +21,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import unittest;
 
-from pyclustering.clustering.birch               import tests as cluster_birch_unit_tests;
-from pyclustering.clustering.cure                import tests as cluster_cure_unit_tests;
-from pyclustering.clustering.dbscan              import tests as cluster_dbscan_unit_tests;
-from pyclustering.clustering.hierarchical        import tests as cluster_hierarchical_unit_tests;
-from pyclustering.clustering.hsyncnet            import tests as cluster_hsyncnet_unit_tests;
-from pyclustering.clustering.kmeans              import tests as cluster_kmeans_unit_tests;
-from pyclustering.clustering.optics              import tests as cluster_optics_unit_tests;
-from pyclustering.clustering.rock                import tests as cluster_rock_unit_tests;
-from pyclustering.clustering.syncnet             import tests as cluster_syncnet_unit_tests;
-from pyclustering.clustering.syncsom             import tests as cluster_syncsom_unit_tests;
-from pyclustering.clustering.xmeans              import tests as cluster_xmeans_unit_tests;
+from pyclustering.clustering.tests               import birch_tests         as cluster_birch_unit_tests;
+from pyclustering.clustering.tests               import cure_tests          as cluster_cure_unit_tests;
+from pyclustering.clustering.tests               import dbscan_tests        as cluster_dbscan_unit_tests;
+from pyclustering.clustering.tests               import hierarchical_tests  as cluster_hierarchical_unit_tests;
+from pyclustering.clustering.tests               import hsyncnet_tests      as cluster_hsyncnet_unit_tests;
+from pyclustering.clustering.tests               import kmeans_tests        as cluster_kmeans_unit_tests;
+from pyclustering.clustering.tests               import optics_tests        as cluster_optics_unit_tests;
+from pyclustering.clustering.tests               import rock_tests          as cluster_rock_unit_tests;
+from pyclustering.clustering.tests               import syncnet_tests       as cluster_syncnet_unit_tests;
+from pyclustering.clustering.tests               import syncsom_tests       as cluster_syncsom_unit_tests;
+from pyclustering.clustering.tests               import xmeans_tests        as cluster_xmeans_unit_tests;
 
 from pyclustering.gcolor.dsatur                  import tests as gcolor_dsatur_unit_tests;
 from pyclustering.gcolor.hysteresis              import tests as gcolor_hysteresis_unit_tests;
