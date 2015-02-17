@@ -1,8 +1,8 @@
 '''
 
-Cluster analysis algorithm: Classical Hierarchical Algorithm
+PyClustering module 'hierarchical' for cluster analysis based on the hierarchical algorithm.
 
-Based on article description:
+Implementation based on article:
  - K.Anil, J.C.Dubes, R.C.Dubes. Algorithms for Clustering Data. 1988.
 
 Copyright (C) 2015    Andrei Novikov (spb.andr@yandex.ru)
@@ -32,6 +32,26 @@ import pyclustering.core.wrapper as wrapper;
 
 
 class hierarchical:
+    """!
+    @brief Class represents hierarchical algorithm for cluster analysis.
+    
+    Example:
+    @code
+        # sample for cluster analysis (represented by list)
+        sample = read_sample(path_to_sample);
+        
+        # create object that uses python code only
+        hierarchical_instance = hierarchical(sample, 2, False)
+        
+        # cluster analysis
+        hierarchical_instance.process();
+        
+        # obtain results of clustering
+        clusters = hierarchical_instance.get_clusters();  
+    @endcode
+    
+    """
+        
     __pointer_data = None;
     __number_clusters = 0;
     
@@ -41,14 +61,14 @@ class hierarchical:
     __centers = None;
     
     def __init__(self, data, number_clusters, ccore):
-        "Constructor of clustering algorithm hierarchical."
-         
-        "(in) data               - input data that is presented as list of points (objects), each point should be represented by list or tuple."
-        "(in) number_clusters    - number of cluster that should be allocated."
-        "(in) ccore              - if True than DLL CCORE (C++ solution) will be used for solving the problem."
-         
-        "Returns list of allocated clusters, each cluster contains indexes of objects in list of data."        
+        """!
+        @brief Constructor of clustering algorithm hierarchical.
         
+        @param[in] data (list): Input data that is presented as a list of points (objects), each point should be represented by a list or tuple.
+        @param[in] number_clusters (uint): Number of clusters that should be allocated.
+        @param[in] ccore (bool): if True than DLL CCORE (C++ solution) will be used for solving the problem.
+        
+        """  
         self.__pointer_data = data;
         self.__number_clusters = number_clusters;
         self.__ccore = None;
@@ -58,6 +78,12 @@ class hierarchical:
         
     
     def process(self):
+        """!
+        @brief Performs cluster analysis in line with rules of hierarchical algorithm.
+        
+        @see get_clusters()
+        
+        """
         if (self.__ccore is True):
             self.__clusters = wrapper.hierarchical(self.__pointer_data, self.__number_clusters); 
         else:        
@@ -79,13 +105,27 @@ class hierarchical:
         
         
     def get_clusters(self):
-        "Performs cluster analysis in line with rules of heirarchical algorithm. Results of clustering can be obtained using corresponding gets methods."
+        """!
+        @brief Performs cluster analysis in line with rules of heirarchical algorithm.
+        
+        @remark Results of clustering can be obtained using corresponding gets methods.
+        
+        @return (list) List of allocated clusters, each cluster contains indexes of objects in list of data.
+        
+        @see process()
+        
+        """
         
         return self.__clusters;
 
 
     def __find_nearest_clusters(self):
-        "Returns list with two indexes of two clusters whose distance is the smallest."       
+        """!
+        @brief Find two indexes of two clusters whose distance is the smallest.
+        
+        @return (list) List with two indexes of two clusters whose distance is the smallest.
+        
+        """     
         
         min_dist = 0;
         indexes = None;
@@ -101,7 +141,12 @@ class hierarchical:
     
            
     def __calculate_center(self, cluster):
-        "Returns new value of the center of the specified cluster."
+        """!
+        @brief Calculates new center.
+        
+        @return (list) New value of the center of the specified cluster.
+        
+        """
          
         dimension = len(self.__pointer_data[cluster[0]]);
         center = [0] * dimension;
