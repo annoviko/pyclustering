@@ -1,8 +1,8 @@
 '''
 
-Cluster analysis algorithm: DBSCAN
+PyClustering module 'dbscan' for cluster analysis based on the algorithm DBSCAN.
 
-Based on article description:
+Implementation based on article:
  - M.Ester, H.Kriegel, J.Sander, X.Xiaowei. A density-based algorithm for discovering clusters in large spatial databases with noise. 1996.
 
 Copyright (C) 2015    Andrei Novikov (spb.andr@yandex.ru)
@@ -22,12 +22,33 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 '''
 
+
 from pyclustering.support import euclidean_distance, euclidean_distance_sqrt;
 from pyclustering.support import read_sample;
 
 import pyclustering.core.wrapper as wrapper;
 
 class dbscan:
+    """!
+    @brief Class represents clustering algorithm DBSCAN.
+    
+    Example:
+    @code
+        # sample for cluster analysis (represented by list)
+        sample = read_sample(path_to_sample);
+        
+        # create object that uses CCORE for processing
+        dbscan_instance = dbscan(sample, 0.5, 3, True);
+        
+        # cluster analysis
+        dbscan_instance.process();
+        
+        # obtain results of clustering
+        clusters = dbscan_instance.get_clusters();
+        noise = dbscan_instance.get_noise();    
+    @endcode
+    
+    """
     __pointer_data = None;
     __eps = 0;
     __sqrt_eps = 0;
@@ -41,15 +62,16 @@ class dbscan:
     
     __ccore = False;
     
-    
     def __init__(self, data, eps, neighbors, ccore):
-        "Constructor of clustering algorithm DBSCAN."
-         
-        "(in) data            - input data that is presented as list of points (objects), each point should be represented by list or tuple."
-        "(in) eps             - connectivity radius between points, points may be connected if distance between them less then the radius."
-        "(in) neighbors       - minimum number of shared neighbors that is required for establish links between points."
-        "(in) ccore           - if True than DLL CCORE (C++ solution) will be used for solving the problem."
-    
+        """!
+        @brief Constructor of clustering algorithm DBSCAN.
+        
+        @param[in] data (list): Input data that is presented as list of points (objects), each point should be represented by list or tuple.
+        @param[in] eps (double): Connectivity radius between points, points may be connected if distance between them less then the radius.
+        @param[in] neighbors (uint): minimum number of shared neighbors that is required for establish links between points.
+        @param[in] ccore (bool): if True than DLL CCORE (C++ solution) will be used for solving the problem.
+        
+        """       
         self.__pointer_data = data;
         self.__eps = eps;
         self.__sqrt_eps = eps * eps;
@@ -64,7 +86,13 @@ class dbscan:
         self.__ccore = ccore;
 
     def process(self):
-        "Performs cluster analysis in line with rules of DBSCAN algorithm. Results of clustering can be obtained using corresponding gets methods."
+        """!
+        @brief Performs cluster analysis in line with rules of DBSCAN algorithm.
+        
+        @see get_clusters()
+        @see get_noise()
+        
+        """
         
         if (self.__ccore is True):
             result = wrapper.dbscan(self.__pointer_data, self.__eps, self.__neighbors, True);
@@ -85,23 +113,46 @@ class dbscan:
 
 
     def get_clusters(self):
-        "Returns list of allocated clusters, each cluster contains indexes of objects in list of data."
+        """!
+        @brief Returns allocated clusters.
+        
+        @remark Allocated clusters can be returned only after data processing (use method process()). Otherwise empty list is returned.
+        
+        @return (list) List of allocated clusters, each cluster contains indexes of objects in list of data.
+        
+        @see process()
+        @see get_noise()
+        
+        """
         
         return self.__clusters;
     
     
     def get_noise(self):
-        "Returns list of index that are marked as a noise."
+        """!
+        @brief Returns allocated noise.
+        
+        @remark Allocated noise can be returned only after data processing (use method process() before). Otherwise empty list is returned.
+        
+        @return (list) List of indexes that are marked as a noise.
+        
+        @see process()
+        @see get_clusters()
+        
+        """
 
         return self.__noise;
 
 
     def __expand_cluster(self, point):
-        "Expands cluster from specified point in the input data space."
-         
-        "(in) point         - index of the point from the data."
+        """!
+        @brief Expands cluster from specified point in the input data space.
+        
+        @param[in] point (list): Index of a point from the data.
 
-        "Return tuple of list of indexes that belong to the same cluster and list of points that are marked as noise: (cluster, noise), or None if nothing has been expanded."
+        @return (list) Return tuple of list of indexes that belong to the same cluster and list of points that are marked as noise: (cluster, noise), or None if nothing has been expanded.
+        
+        """
         
         cluster = None;
         self.__visited[point] = True;
@@ -131,10 +182,14 @@ class dbscan:
         return cluster;
 
     def __neighbor_indexes(self, point):
-        "Return list of indexes of neighbors of specified point for the data."
-         
-        "(in) point       - index of point for which potential neighbors should be returned for the data in line with connectivity radius."
-         
-        "Return list of indexes of neighbors in line the connectivity radius."
+        """!
+        @brief Return list of indexes of neighbors of specified point for the data.
+        
+        @param[in] point (list): An index of a point for which potential neighbors should be returned in line with connectivity radius.
+        
+        @return (list) Return list of indexes of neighbors in line the connectivity radius.
+        
+        """
+        
         # return [i for i in range(0, len(data)) if euclidean_distance(data[point], data[i]) <= eps and data[i] != data[point]];    # Slow mode
         return [i for i in range(0, len(self.__pointer_data)) if euclidean_distance_sqrt(self.__pointer_data[point], self.__pointer_data[i]) <= self.__sqrt_eps and self.__pointer_data[i] != self.__pointer_data[point]]; # Fast mode
