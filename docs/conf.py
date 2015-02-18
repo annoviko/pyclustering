@@ -1,4 +1,4 @@
-import subprocess, os
+import subprocess, os;
 
 read_the_docs_build = os.environ.get('READTHEDOCS', None) == 'True'
 
