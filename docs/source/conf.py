@@ -15,9 +15,9 @@
 import sys
 import os
 
-sys.path.append("/docs/breathe/")
+sys.path.append("../breathe/")
 
-breathe_projects = { "pyclustering": "/docs/xml/" }
+breathe_projects = { "pyclustering": "..//xml/" }
 breathe_default_project = "pyclustering"
 
 # If extensions (or modules to document with autodoc) are in another directory,
@@ -343,4 +343,4 @@ read_the_docs_build = os.environ.get('READTHEDOCS', None) == 'True'
 
 if read_the_docs_build:
 
-    subprocess.call('cd ../; doxygen docs/doxygen_conf_readthedocs', shell=True)
+    subprocess.call('doxygen ../doxygen_conf_readthedocs', shell=True)
