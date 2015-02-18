@@ -14,16 +14,15 @@
 
 import sys
 import os
-
-sys.path.append("../breathe/")
-
-breathe_projects = { "pyclustering": "..//xml/" }
-breathe_default_project = "pyclustering"
+import subprocess
+import re
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #sys.path.insert(0, os.path.abspath('.'))
+sys.path.append( "../../docs/" )
+sys.path.append( "../../docs/breathe/" )
 
 # -- General configuration ------------------------------------------------
 
@@ -33,12 +32,7 @@ breathe_default_project = "pyclustering"
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = [
-    'sphinx.ext.autodoc',
-    'sphinx.ext.doctest',
-    'sphinx.ext.pngmath',
-	'breathe'
-]
+extensions = [ 'breathe', 'sphinx.ext.mathjax', 'sphinx.ext.ifconfig' ]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -96,6 +90,8 @@ exclude_patterns = []
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
+
+breathe_projects = { "pyclustering":"../../docs/xml" }
 
 # A list of ignored prefixes for module index sorting.
 #modindex_common_prefix = []
@@ -337,10 +333,8 @@ epub_exclude_files = ['search.html']
 # If false, no index is generated.
 #epub_use_index = True
 
-import subprocess, os
-
 read_the_docs_build = os.environ.get('READTHEDOCS', None) == 'True'
 
 if read_the_docs_build:
 
-    subprocess.call('pwd; doxygen ../doxygen_conf_readthedocs', shell=True)
+    subprocess.call('doxygen ../../docs/doxygen_conf_readthedocs', shell=True)
