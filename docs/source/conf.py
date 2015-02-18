@@ -15,6 +15,11 @@
 import sys
 import os
 
+sys.path.append("/docs/breathe/")
+
+breathe_projects = { "pyclustering": "/docs/xml/" }
+breathe_default_project = "pyclustering"
+
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
@@ -32,6 +37,7 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.doctest',
     'sphinx.ext.pngmath',
+	'breathe'
 ]
 
 # Add any paths that contain templates here, relative to this directory.

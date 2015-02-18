@@ -1,0 +1,3 @@
+
+class BreatheError(Exception):
+    pass
