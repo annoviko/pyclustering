@@ -337,4 +337,4 @@ read_the_docs_build = os.environ.get('READTHEDOCS', None) == 'True'
 
 if read_the_docs_build:
 
-    subprocess.call('doxygen ../../docs/doxygen_conf_readthedocs', shell=True)
+    subprocess.call('cd ../../; doxygen docs/doxygen_conf_readthedocs', shell=True)
