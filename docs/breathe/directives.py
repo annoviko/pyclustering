@@ -1,5 +1,5 @@
 
-from .finder.core import FinderFactory, NoMatchesError
+from .finder.core import FinderFactory
 from .parser import DoxygenParserFactory, CacheFactory
 from .renderer.rst.doxygen import DoxygenToRstRendererFactoryCreatorConstructor, \
     RstContentCreator, RenderContext
@@ -10,8 +10,7 @@ from .renderer.rst.doxygen.target import TargetHandlerFactory
 from .renderer.rst.doxygen.mask import MaskFactory, NullMaskFactory, NoParameterNamesMask
 
 from .finder.doxygen.core import DoxygenItemFinderFactoryCreator
-from .finder.doxygen.matcher import ItemMatcherFactory
-from .directive.base import BaseDirective, DoxygenBaseDirective, WarningHandler, create_warning
+from .directive.base import BaseDirective, create_warning
 from .directive.index import DoxygenIndexDirective, AutoDoxygenIndexDirective
 from .directive.file import DoxygenFileDirective, AutoDoxygenFileDirective
 from .process import AutoDoxygenProcessHandle
@@ -20,16 +19,13 @@ from .project import ProjectInfoFactory, ProjectError
 
 from docutils.parsers.rst.directives import unchanged_required, unchanged, flag
 from docutils.statemachine import ViewList
-from docutils.core import publish_from_doctree
-from sphinx.domains.cpp import DefinitionParser
+from sphinx.domains import cpp, c
 from sphinx.writers.text import TextWriter
 from sphinx.builders.text import TextBuilder
 
 import docutils.nodes
 import sphinx.addnodes
 import sphinx.ext.mathbase
-
-from StringIO import StringIO
 
 import os
 import fnmatch
@@ -39,8 +35,7 @@ import collections
 import subprocess
 
 # Somewhat outrageously, reach in and fix a Sphinx regex
-import sphinx.domains.cpp
-sphinx.domains.cpp._identifier_re = re.compile(r'(~?\b[a-zA-Z_][a-zA-Z0-9_]*)\b')
+cpp._identifier_re = re.compile(r'(~?\b[a-zA-Z_][a-zA-Z0-9_]*)\b')
 
 
 class NoMatchingFunctionError(BreatheError):
@@ -96,7 +91,7 @@ class DoxygenFunctionDirective(BaseDirective):
     final_argument_whitespace = True
 
     def __init__(self, node_factory, text_renderer, *args, **kwargs):
-        super(DoxygenFunctionDirective, self).__init__(*args, **kwargs)
+        BaseDirective.__init__(self, *args, **kwargs)
 
         self.node_factory = node_factory
         self.text_renderer = text_renderer
@@ -128,7 +123,8 @@ class DoxygenFunctionDirective(BaseDirective):
         # Extract arguments from the function name.
         args = self.parse_args(args)
 
-        finder_filter = self.filter_factory.create_function_finder_filter(namespace, function_name)
+        finder_filter = self.filter_factory.create_member_finder_filter(
+            namespace, function_name, 'function')
 
         matches = []
         finder.filter_(finder_filter, matches)
@@ -145,7 +141,7 @@ class DoxygenFunctionDirective(BaseDirective):
             )
 
         try:
-            data_object = self.resolve_function(matches, args, project_info)
+            node_stack = self.resolve_function(matches, args, project_info)
         except NoMatchingFunctionError:
             return warning.warn('doxygenfunction: Cannot find function "{namespace}{function}" '
                                 '{tail}')
@@ -186,9 +182,7 @@ class DoxygenFunctionDirective(BaseDirective):
             )
         filter_ = self.filter_factory.create_outline_filter(self.options)
 
-        mask_factory = NullMaskFactory()
-        return self.render(data_object, project_info, self.options, filter_, target_handler,
-                           mask_factory)
+        return self.render(node_stack, project_info, self.options, filter_, target_handler, NullMaskFactory())
 
     def parse_args(self, function_description):
         # Strip off trailing qualifiers
@@ -237,7 +231,7 @@ class DoxygenFunctionDirective(BaseDirective):
         if len(matches) == 1:
             return matches[0]
 
-        data_object = None
+        node_stack = None
 
         signatures = []
 
@@ -252,8 +246,7 @@ class DoxygenFunctionDirective(BaseDirective):
                 )
             filter_ = self.filter_factory.create_outline_filter(text_options)
             mask_factory = MaskFactory({'param': NoParameterNamesMask})
-            nodes = self.render(entry, project_info, text_options, filter_, target_handler,
-                                mask_factory)
+            nodes = self.render(entry, project_info, text_options, filter_, target_handler, mask_factory)
 
             # Render the nodes to text
             signature = self.text_renderer.render(nodes, self.state.document)
@@ -267,13 +260,32 @@ class DoxygenFunctionDirective(BaseDirective):
 
             # Match them against the arg spec
             if args == match_args:
-                data_object = entry
+                node_stack = entry
                 break
 
-        if not data_object:
+        if not node_stack:
             raise UnableToResolveFunctionError(signatures)
 
-        return data_object
+        return node_stack
+
+    def render(self, node_stack, project_info, options, filter_, target_handler, mask_factory):
+        # Get full function signature for the domain directive.
+        node = node_stack[0]
+        params = []
+        for param in node.param:
+            param = mask_factory.mask(param)
+            param_type = param.type_.content_[0].value
+            if not isinstance(param_type, unicode):
+                param_type = param_type.valueOf_
+            param_name = param.defname if param.defname else param.declname
+            params.append(param_type if not param_name else param_type + ' ' + param_name)
+        signature = '{0}({1})'.format(node.definition, ', '.join(params))
+        # Remove 'virtual' keyword as Sphinx 1.2 doesn't support virtual functions.
+        virtual = 'virtual '
+        if signature.startswith(virtual):
+            signature = signature[len(virtual):]
+        self.directive_args[1] = [signature]
+        return BaseDirective.render(self, node_stack, project_info, options, filter_, target_handler, mask_factory)
 
 
 class DoxygenClassLikeDirective(BaseDirective):
@@ -310,16 +322,12 @@ class DoxygenClassLikeDirective(BaseDirective):
             warning = create_warning(None, self.state, self.lineno, kind=self.kind)
             return warning.warn('doxygen{kind}: %s' % e)
 
-        matcher_stack = self.matcher_factory.create_matcher_stack(
-            {
-                "compound": self.matcher_factory.create_name_type_matcher(name, self.kind)
-                },
-            "compound"
-            )
+        finder_filter = self.filter_factory.create_compound_finder_filter(name, self.kind)
 
-        try:
-            data_object = finder.find_one(matcher_stack)
-        except NoMatchesError as e:
+        matches = []
+        finder.filter_(finder_filter, matches)
+
+        if len(matches) == 0:
             warning = create_warning(project_info, self.state, self.lineno, name=name,
                                      kind=self.kind)
             return warning.warn('doxygen{kind}: Cannot find class "{name}" {tail}')
@@ -330,8 +338,7 @@ class DoxygenClassLikeDirective(BaseDirective):
         filter_ = self.filter_factory.create_class_filter(name, self.options)
 
         mask_factory = NullMaskFactory()
-        return self.render(data_object, project_info, self.options, filter_, target_handler,
-                           mask_factory)
+        return self.render(matches[0], project_info, self.options, filter_, target_handler, mask_factory)
 
 
 class DoxygenClassDirective(DoxygenClassLikeDirective):
@@ -393,13 +400,13 @@ class DoxygenContentBlockDirective(BaseDirective):
         if 'content-only' in self.options:
 
             # Unpack the single entry in the matches list
-            (data_object,) = matches
+            (node_stack,) = matches
 
             filter_ = self.filter_factory.create_content_filter(self.kind, self.options)
 
             # Having found the compound node for the namespace or group in the index we want to grab
             # the contents of it which match the filter
-            contents_finder = self.finder_factory.create_finder_from_root(data_object, project_info)
+            contents_finder = self.finder_factory.create_finder_from_root(node_stack[0], project_info)
             contents = []
             contents_finder.filter_(filter_, contents)
 
@@ -419,9 +426,9 @@ class DoxygenContentBlockDirective(BaseDirective):
             )
         node_list = []
 
-        for data_object in matches:
+        for node_stack in matches:
             renderer_factory = renderer_factory_creator.create_factory(
-                data_object,
+                node_stack,
                 self.state,
                 self.state.document,
                 filter_,
@@ -429,7 +436,7 @@ class DoxygenContentBlockDirective(BaseDirective):
                 )
 
             mask_factory = NullMaskFactory()
-            context = RenderContext([data_object, self.root_data_object], mask_factory)
+            context = RenderContext(node_stack, mask_factory, self.directive_args)
             object_renderer = renderer_factory.create_renderer(context)
             node_list.extend(object_renderer.render())
 
@@ -463,6 +470,12 @@ class DoxygenBaseItemDirective(BaseDirective):
         }
     has_content = False
 
+    def create_finder_filter(self, namespace, name):
+        """Creates a filter to find the node corresponding to this item."""
+
+        return self.filter_factory.create_member_finder_filter(
+            namespace, name, self.kind)
+
     def run(self):
 
         try:
@@ -482,12 +495,12 @@ class DoxygenBaseItemDirective(BaseDirective):
             warning = create_warning(None, self.state, self.lineno, kind=self.kind)
             return warning.warn('doxygen{kind}: %s' % e)
 
+        finder_filter = self.create_finder_filter(namespace, name)
 
-        matcher_stack = self.create_matcher_stack(namespace, name)
+        matches = []
+        finder.filter_(finder_filter, matches)
 
-        try:
-            data_object = finder.find_one(matcher_stack)
-        except NoMatchesError as e:
+        if len(matches) == 0:
             display_name = "%s::%s" % (namespace, name) if namespace else name
             warning = create_warning(project_info, self.state, self.lineno, kind=self.kind,
                                      display_name=display_name)
@@ -498,88 +511,62 @@ class DoxygenBaseItemDirective(BaseDirective):
             )
         filter_ = self.filter_factory.create_outline_filter(self.options)
 
+        node_stack = matches[0]
         mask_factory = NullMaskFactory()
-        return self.render(data_object, project_info, self.options, filter_, target_handler, mask_factory)
+        return self.render(node_stack, project_info, self.options, filter_, target_handler, mask_factory)
 
 
 class DoxygenVariableDirective(DoxygenBaseItemDirective):
 
     kind = "variable"
 
-    def create_matcher_stack(self, namespace, name):
-
-        return self.matcher_factory.create_matcher_stack(
-            {
-                "compound": self.matcher_factory.create_name_matcher(namespace),
-                "member": self.matcher_factory.create_name_type_matcher(name, self.kind)
-                },
-            "member"
-            )
+    def render(self, node_stack, project_info, options, filter_, target_handler, mask_factory):
+        # Remove 'extern' keyword as Sphinx doesn't support it.
+        definition = node_stack[0].definition
+        extern = 'extern '
+        if definition.startswith(extern):
+            definition = definition[len(extern):]
+        self.directive_args[1] = [definition]
+        return DoxygenBaseItemDirective.render(self, node_stack, project_info, options, filter_,
+                                               target_handler, mask_factory)
 
 
 class DoxygenDefineDirective(DoxygenBaseItemDirective):
 
     kind = "define"
 
-    def create_matcher_stack(self, namespace, name):
-
-        return self.matcher_factory.create_matcher_stack(
-            {
-                "compound": self.matcher_factory.create_name_matcher(namespace),
-                "member": self.matcher_factory.create_name_type_matcher(name, self.kind)
-                },
-            "member"
-            )
-
 
 class DoxygenEnumDirective(DoxygenBaseItemDirective):
 
     kind = "enum"
 
-    def create_matcher_stack(self, namespace, name):
 
-        return self.matcher_factory.create_matcher_stack(
-            {
-                "compound": self.matcher_factory.create_name_matcher(namespace),
-                "member": self.matcher_factory.create_name_type_matcher(name, self.kind)
-                },
-            "member"
-            )
+class DoxygenEnumValueDirective(DoxygenBaseItemDirective):
+
+    kind = "enumvalue"
+
+    def create_finder_filter(self, namespace, name):
+
+        return self.filter_factory.create_enumvalue_finder_filter(name)
 
 
 class DoxygenTypedefDirective(DoxygenBaseItemDirective):
 
     kind = "typedef"
 
-    def create_matcher_stack(self, namespace, name):
-
-        return self.matcher_factory.create_matcher_stack(
-            {
-                "compound": self.matcher_factory.create_name_matcher(namespace),
-                "member": self.matcher_factory.create_name_type_matcher(name, self.kind)
-                },
-            "member"
-            )
-
 
 class DoxygenUnionDirective(DoxygenBaseItemDirective):
 
     kind = "union"
 
-    def create_matcher_stack(self, namespace, name):
+    def create_finder_filter(self, namespace, name):
 
         # Unions are stored in the xml file with their fully namespaced name
         # We're using C++ namespaces here, it might be best to make this file
         # type dependent
         #
         xml_name = "%s::%s" % (namespace, name) if namespace else name
-
-        return self.matcher_factory.create_matcher_stack(
-            {
-                "compound": self.matcher_factory.create_name_type_matcher(xml_name, self.kind)
-                },
-            "compound"
-            )
+        return self.filter_factory.create_compound_finder_filter(xml_name, 'union')
 
 
 # Setup Administration
@@ -619,6 +606,7 @@ class DoxygenDirectiveFactory(object):
         "doxygenvariable": DoxygenVariableDirective,
         "doxygendefine": DoxygenDefineDirective,
         "doxygenenum": DoxygenEnumDirective,
+        "doxygenenumvalue": DoxygenEnumValueDirective,
         "doxygentypedef": DoxygenTypedefDirective,
         "doxygenunion": DoxygenUnionDirective,
         "doxygennamespace": DoxygenNamespaceDirective,
@@ -628,18 +616,18 @@ class DoxygenDirectiveFactory(object):
         }
 
     def __init__(self, node_factory, text_renderer, root_data_object,
-                 renderer_factory_creator_constructor, finder_factory, matcher_factory,
-                 project_info_factory, filter_factory, target_handler_factory):
+                 renderer_factory_creator_constructor, finder_factory,
+                 project_info_factory, filter_factory, target_handler_factory, parser_factory):
 
         self.node_factory = node_factory
         self.text_renderer = text_renderer
         self.root_data_object = root_data_object
         self.renderer_factory_creator_constructor = renderer_factory_creator_constructor
         self.finder_factory = finder_factory
-        self.matcher_factory = matcher_factory
         self.project_info_factory = project_info_factory
         self.filter_factory = filter_factory
         self.target_handler_factory = target_handler_factory
+        self.parser_factory = parser_factory
 
     # TODO: This methods should be scrapped as they are only called in one place. We should just
     # inline the code at the call site
@@ -656,10 +644,10 @@ class DoxygenDirectiveFactory(object):
             self.root_data_object,
             self.renderer_factory_creator_constructor,
             self.finder_factory,
-            self.matcher_factory,
             self.project_info_factory,
             self.filter_factory,
-            self.target_handler_factory
+            self.target_handler_factory,
+            self.parser_factory
             )
 
     def create_struct_directive_container(self):
@@ -667,6 +655,9 @@ class DoxygenDirectiveFactory(object):
 
     def create_enum_directive_container(self):
         return self.create_directive_container("doxygenenum")
+
+    def create_enumvalue_directive_container(self):
+        return self.create_directive_container("doxygenenumvalue")
 
     def create_typedef_directive_container(self):
         return self.create_directive_container("doxygentypedef")
@@ -705,10 +696,10 @@ class DoxygenDirectiveFactory(object):
             self.root_data_object,
             self.renderer_factory_creator_constructor,
             self.finder_factory,
-            self.matcher_factory,
             self.project_info_factory,
             self.filter_factory,
-            self.target_handler_factory
+            self.target_handler_factory,
+            self.parser_factory
             )
 
     def get_config_values(self, app):
@@ -862,6 +853,32 @@ class FileStateCache(object):
             del self.app.env.breathe_file_state[filename]
 
 
+class DomainDirectiveFactory(object):
+    # A mapping from node kinds to cpp domain classes and directive names.
+    cpp_classes = {
+        'class': (cpp.CPPClassObject, 'class'),
+        'struct': (cpp.CPPClassObject, 'class'),
+        'function': (cpp.CPPFunctionObject, 'function'),
+        'enum': (cpp.CPPTypeObject, 'type'),
+        'typedef': (cpp.CPPTypeObject, 'type'),
+        'union': (cpp.CPPTypeObject, 'type'),
+        'namespace': (cpp.CPPTypeObject, 'type'),
+        # Use CPPClassObject for enum values as the cpp domain doesn't have a directive for enum values and
+        # CPPMemberObject requires a type.
+        'enumvalue': (cpp.CPPClassObject, 'member')
+    }
+
+    @staticmethod
+    def create(domain, args):
+        if domain == 'c':
+            return c.CObject(*args)
+        cls, name = DomainDirectiveFactory.cpp_classes.get(args[0], (cpp.CPPMemberObject, 'member'))
+        # Replace the directive name because domain directives don't know how to handle
+        # Breathe's "doxygen" directives.
+        args = [name] + args[1:]
+        return cls(*args)
+
+
 # Setup
 # -----
 
@@ -886,7 +903,7 @@ def setup(app):
     math_nodes.displaymath = sphinx.ext.mathbase.displaymath
     node_factory = NodeFactory(docutils.nodes, sphinx.addnodes, math_nodes)
 
-    cpp_domain_helper = CppDomainHelper(DefinitionParser, re.sub)
+    cpp_domain_helper = CppDomainHelper(cpp.DefinitionParser, re.sub)
     c_domain_helper = CDomainHelper()
     domain_helpers = {"c": c_domain_helper, "cpp": cpp_domain_helper}
     domain_handler_factory_creator = DomainHandlerFactoryCreator(node_factory, domain_helpers)
@@ -896,6 +913,7 @@ def setup(app):
     renderer_factory_creator_constructor = DoxygenToRstRendererFactoryCreatorConstructor(
         node_factory,
         parser_factory,
+        DomainDirectiveFactory,
         default_domain_handler,
         domain_handler_factory_creator,
         rst_content_creator
@@ -907,7 +925,6 @@ def setup(app):
     build_dir = os.path.dirname(app.doctreedir.rstrip(os.sep))
     project_info_factory = ProjectInfoFactory(app.srcdir, build_dir, app.confdir, fnmatch.fnmatch)
     target_handler_factory = TargetHandlerFactory(node_factory)
-    matcher_factory = ItemMatcherFactory()
 
     root_data_object = RootDataObject()
 
@@ -919,10 +936,10 @@ def setup(app):
         root_data_object,
         renderer_factory_creator_constructor,
         finder_factory,
-        matcher_factory,
         project_info_factory,
         filter_factory,
-        target_handler_factory
+        target_handler_factory,
+        parser_factory
         )
 
     DoxygenFunctionDirective.app = app
@@ -945,6 +962,11 @@ def setup(app):
     app.add_directive(
         "doxygenenum",
         directive_factory.create_enum_directive_container(),
+        )
+
+    app.add_directive(
+        "doxygenenumvalue",
+        directive_factory.create_enumvalue_directive_container(),
         )
 
     app.add_directive(

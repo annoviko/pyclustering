@@ -1,6 +1,6 @@
 
 from .base import Renderer
-from .index import render_compound
+from .index import CompoundRenderer
 
 class DoxygenTypeSubRenderer(Renderer):
 
@@ -18,7 +18,7 @@ class CompoundDefTypeSubRenderer(Renderer):
     # having two lists in case they fall out of sync
     sections = [
                 ("user-defined", "User Defined"),
-                ("public-type", "Public Type"),
+                ("public-type", "Public Types"),
                 ("public-func", "Public Functions"),
                 ("public-attrib", "Public Members"),
                 ("public-slot", "Public Slots"),
@@ -214,25 +214,39 @@ class MemberDefTypeSubRenderer(Renderer):
         signode.extend(self.title())
         return [signode]
 
-    def render(self):
+    def objtype(self):
 
-        # Build targets for linking
-        targets = []
-        targets.extend(self.create_domain_target())
-        targets.extend(self.create_doxygen_target())
+        return self.data_object.kind
 
-        signodes = self.build_signodes(targets)
+    def update_signature(self, signode):
+        """Update the signature node if necessary, e.g. add qualifiers."""
+        pass
 
-        # Build description nodes
-        contentnode = self.node_factory.desc_content()
+    def render(self, node=None):
+
+        doxygen_target = self.create_doxygen_target()
+        if node:
+            signode, contentnode = node.children
+            self.update_signature(signode)
+            signode.insert(0, doxygen_target)
+        else:
+            # Build targets for linking
+            targets = []
+            targets.extend(self.create_domain_target())
+            targets.extend(doxygen_target)
+
+            signodes = self.build_signodes(targets)
+
+            # Build description nodes
+            contentnode = self.node_factory.desc_content()
+
+            node = self.node_factory.desc()
+            node.document = self.state.document
+            node['objtype'] = self.objtype()
+            node.extend(signodes)
+            node.append(contentnode)
+
         contentnode.extend(self.description())
-
-        node = self.node_factory.desc()
-        node.document = self.state.document
-        node['objtype'] = self.data_object.kind
-        node.extend(signodes)
-        node.append(contentnode)
-
         return [node]
 
 
@@ -242,39 +256,40 @@ class FuncMemberDefTypeSubRenderer(MemberDefTypeSubRenderer):
 
         return self.domain_handler.create_function_target(self.data_object)
 
+    def update_signature(self, signode):
+
+        # Note whether a member function is virtual
+        if self.data_object.virt != 'non-virtual':
+            signode.insert(0, self.node_factory.Text('virtual '))
+
+        # Add CV-qualifiers
+        if self.data_object.const == 'yes':
+            signode.append(self.node_factory.Text(' const'))
+        # The doxygen xml output doesn't seem to properly register 'volatile' as the xml attribute
+        # 'volatile' so we have to check the argsstring for the moment. Maybe it'll change in
+        # doxygen at some point. Registered as bug:
+        #     https://bugzilla.gnome.org/show_bug.cgi?id=733451
+        if self.data_object.volatile == 'yes' or self.data_object.argsstring.endswith('volatile'):
+            signode.append(self.node_factory.Text(' volatile'))
+
+        # Add `= 0` for pure virtual members.
+        if self.data_object.virt == 'pure-virtual':
+            signode.append(self.node_factory.Text(' = 0'))
+
     def build_signodes(self, targets):
 
-        signodes = []
-        title_signode = self.node_factory.desc_signature()
-
-        # Handle any template information
-        if self.data_object.templateparamlist:
-            context = self.context.create_child_context(self.data_object.templateparamlist)
-            renderer = self.renderer_factory.create_renderer(context)
-            template_nodes = [self.node_factory.Text("template <")]
-            template_nodes.extend(renderer.render())
-            template_nodes.append(self.node_factory.Text("> "))
-            template_signode = self.node_factory.desc_signature()
-            # Add targets to the template line if it is there
-            template_signode.extend(targets)
-            template_signode.extend(template_nodes)
-            signodes.append(template_signode)
-
-        else:
-            # Add targets to title line if there is no template line
-            title_signode.extend(targets)
-
-        title_signode.extend(self.title())
-        signodes.append(title_signode)
+        template_node = self.create_template_node(self.data_object)
+        signodes = [template_node] if template_node else []
+        title_node = self.node_factory.desc_signature()
+        title_node.extend(self.title())
+        signodes.append(title_node)
+        for target in reversed(targets):
+            signodes[0].insert(0, target)
         return signodes
 
     def title(self):
 
         nodes = []
-
-        # Note whether a member function is virtual
-        if self.data_object.virt != 'non-virtual':
-            nodes.append(self.node_factory.Text('virtual '))
 
         # Get the function type and name
         nodes.extend(MemberDefTypeSubRenderer.title(self))
@@ -289,21 +304,16 @@ class FuncMemberDefTypeSubRenderer(MemberDefTypeSubRenderer):
             paramlist.append(param)
         nodes.append(paramlist)
 
-        # Add CV-qualifiers
-        if self.data_object.const == 'yes':
-            nodes.append(self.node_factory.Text(' const'))
-        # The doxygen xml output doesn't seem to properly register 'volatile' as the xml attribute
-        # 'volatile' so we have to check the argsstring for the moment. Maybe it'll change in
-        # doxygen at some point. Registered as bug:
-        #     https://bugzilla.gnome.org/show_bug.cgi?id=733451
-        if self.data_object.volatile == 'yes' or self.data_object.argsstring.endswith('volatile'):
-            nodes.append(self.node_factory.Text(' volatile'))
-
-        # Add `= 0` for pure virtual members.
-        if self.data_object.virt == 'pure-virtual':
-            nodes.append(self.node_factory.Text(' = 0'))
-
+        self.update_signature(nodes)
         return nodes
+
+    def render(self, node=None):
+        result = MemberDefTypeSubRenderer.render(self, node)
+        if node:
+            template_node = self.create_template_node(self.data_object)
+            if template_node:
+                node.insert(0, template_node)
+        return result
 
 
 class DefineMemberDefTypeSubRenderer(MemberDefTypeSubRenderer):
@@ -334,10 +344,11 @@ class EnumMemberDefTypeSubRenderer(MemberDefTypeSubRenderer):
 
         if self.data_object.name.startswith("@"):
             # Assume anonymous enum
-            return [self.node_factory.strong(text="Anonymous enum")]
+            name = [self.node_factory.strong(text="[anonymous]")]
+        else:
+            name = MemberDefTypeSubRenderer.title(self)
 
-        name = self.node_factory.strong(text="%s enum" % self.data_object.name)
-        return [name]
+        return [self.node_factory.Text("enum ")] + name
 
     def description(self):
 
@@ -353,12 +364,21 @@ class EnumMemberDefTypeSubRenderer(MemberDefTypeSubRenderer):
             renderer = self.renderer_factory.create_renderer(context)
             enums.extend(renderer.render())
 
-        description_nodes.append(self.node_factory.bullet_list("", classes=["breatheenumvalues"], *enums))
+        description_nodes.extend(enums)
 
         return description_nodes
 
+    def update_signature(self, signode):
+        # Replace "type" with "enum" in the signature. This is needed because Sphinx cpp domain doesn't have an enum
+        # directive and we use a type directive instead.
+        signode.children[0][0] = self.node_factory.Text("enum ")
+
 
 class TypedefMemberDefTypeSubRenderer(MemberDefTypeSubRenderer):
+
+    def create_domain_target(self):
+
+        return self.domain_handler.create_typedef_target(self.context.node_stack)
 
     def title(self):
 
@@ -387,35 +407,32 @@ class VariableMemberDefTypeSubRenderer(MemberDefTypeSubRenderer):
         return args
 
 
-class EnumvalueTypeSubRenderer(Renderer):
+class EnumvalueTypeSubRenderer(MemberDefTypeSubRenderer):
 
-    def render(self):
+    def create_domain_target(self):
 
-        name = self.node_factory.literal(text=self.data_object.name)
-        description_nodes = [name]
+        return self.domain_handler.create_enumvalue_target(self.context.node_stack)
+
+    def title(self):
+
+        nodes = [self.node_factory.desc_name(text=self.data_object.name)]
 
         if self.data_object.initializer:
             context = self.context.create_child_context(self.data_object.initializer)
             renderer = self.renderer_factory.create_renderer(context)
-            nodelist = [self.node_factory.Text(" = ")]
-            nodelist.extend(renderer.render())
-            description_nodes.append(self.node_factory.literal("", "", *nodelist))
+            nodes.append(self.node_factory.Text(" "))
+            nodes.extend(renderer.render())
 
-        separator = self.node_factory.Text(" - ")
-        description_nodes.append(separator)
+        return nodes
 
-        if self.data_object.briefdescription:
-            context = self.context.create_child_context(self.data_object.briefdescription)
-            renderer = self.renderer_factory.create_renderer(context)
-            description_nodes.extend(renderer.render())
+    def objtype(self):
 
-        if self.data_object.detaileddescription:
-            context = self.context.create_child_context(self.data_object.detaileddescription)
-            renderer = self.renderer_factory.create_renderer(context)
-            description_nodes.extend(renderer.render())
+        return 'enumvalue'
 
-        # Build the list item
-        return [self.node_factory.list_item("", *description_nodes)]
+    def update_signature(self, signode):
+        # Remove "class" from the signature. This is needed because Sphinx cpp domain doesn't have an enum value
+        # directive and we use a class directive instead.
+        signode.children.pop(0)
 
 
 class DescriptionTypeSubRenderer(Renderer):
@@ -639,7 +656,7 @@ class DocParamListTypeSubRenderer(Renderer):
 
 
 class DocParamListItemSubRenderer(Renderer):
-    """ Paramter Description Renderer  """
+    """ Parameter Description Renderer  """
 
     def render(self):
 
@@ -857,42 +874,19 @@ class IncTypeSubRenderer(Renderer):
 
         return [self.node_factory.emphasis(text=text)]
 
-class RefTypeSubRenderer(Renderer):
+
+class RefTypeSubRenderer(CompoundRenderer):
 
     def __init__(self, compound_parser, *args):
-        Renderer.__init__(self, *args)
+        CompoundRenderer.__init__(self, compound_parser, False, *args)
 
-        self.compound_parser = compound_parser
-
-    def render(self):
-
-        # Read in the corresponding xml file and process
-        file_data = self.compound_parser.parse(self.data_object.refid)
-
-        context = self.context.create_child_context(file_data)
-        data_renderer = self.renderer_factory.create_renderer(context)
-        child_nodes = data_renderer.render()
-
-        if not child_nodes:
-            return []
-
-        refid = "%s%s" % (self.project_info.name(), self.data_object.refid)
-
+    def get_node_info(self, file_data):
         name = self.data_object.content_[0].getValue()
         name = name.rsplit("::", 1)[-1]
+        return name, file_data.compounddef.kind
 
-        # Defer to function for details
-        return render_compound(
-                name,
-                file_data.compounddef.kind,
-                context,
-                child_nodes,
-                self.renderer_factory,
-                self.node_factory,
-                [], # No domain reference
-                self.target_handler.create_target(refid),
-                self.state.document
-                )
+    def create_domain_target(self):
+        return self.domain_handler.create_inner_ref_target(self.data_object)
 
 
 class VerbatimTypeSubRenderer(Renderer):
@@ -921,8 +915,16 @@ class VerbatimTypeSubRenderer(Renderer):
 
             lines = self.data_object.text.splitlines()
             # Replace the first * on each line with a blank space
-            lines = map( lambda text: text.replace( "*", " ", 1 ), lines )
-            self.data_object.text = "\n".join( lines )
+            lines = map(lambda text: text.replace("*", " ", 1), lines)
+            self.data_object.text = "\n".join(lines)
+
+        # do we need to strip leading ///?
+        elif self.data_object.text.strip().startswith("embed:rst:leading-slashes"):
+
+            lines = self.data_object.text.splitlines()
+            # Replace the /// on each line with three blank spaces
+            lines = map(lambda text: text.replace("///", "   ", 1), lines)
+            self.data_object.text = "\n".join(lines)
 
         rst = self.content_creator(self.data_object.text)
 

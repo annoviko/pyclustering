@@ -72,6 +72,15 @@ class NullDomainHandler(DomainHandler):
     def create_class_target(self, data_object):
         return []
 
+    def create_inner_ref_target(self, data_object):
+        return []
+
+    def create_typedef_target(self, node_stack):
+        return []
+
+    def create_enumvalue_target(self, node_stack):
+        return []
+
 
 class CDomainHandler(DomainHandler):
 
@@ -114,6 +123,33 @@ class CDomainHandler(DomainHandler):
 
 class CppDomainHandler(DomainHandler):
 
+    def get_fully_qualified_name(self, node_stack):
+
+        names = []
+        if node_stack[0].node_type == 'enumvalue':
+            names.append(node_stack[0].name)
+            # Skip the name of the containing enum because it is not a part of the fully qualified name.
+            node_stack = node_stack[2:]
+
+        for node in node_stack:
+            if (node.node_type == 'compound' and node.kind not in ['file', 'namespace']) or \
+                node.node_type == 'memberdef':
+                # We skip the 'file' entries because the file name doesn't form part of the
+                # qualified name for the identifier. We skip the 'namespace' entries because if we
+                # find an object through the namespace 'compound' entry in the index.xml then we'll
+                # also have the 'compounddef' entry in our node stack and we'll get it from that. We
+                # need the 'compounddef' entry because if we find the object through the 'file'
+                # entry in the index.xml file then we need to get the namespace name from somewhere
+                names.insert(0, node.name)
+            if (node.node_type == 'compounddef' and node.kind == 'namespace'):
+                # Nested namespaces include there parent namespace in there compoundname. ie,
+                # compoundname is 'foo::bar' instead of just 'bar' for namespace 'bar' nested in
+                # namespace 'foo'. But our node_stack includes 'foo' so we only want 'bar' at
+                # this point.
+                names.insert(0, node.compoundname.split('::')[-1])
+
+        return '::'.join(names)
+
     def create_class_id(self, data_object):
 
         def_ = data_object.name
@@ -129,6 +165,38 @@ class CppDomainHandler(DomainHandler):
         name = data_object.name
 
         return self._create_target(name, "class", id_)
+
+    def create_inner_ref_target(self, data_object):
+        """Creates a target for a class or namespace defined in another class or namespace. This
+        will get called for any 'refType' node which includes a number of doxygen documentation
+        nodes like 'innerpage' & 'innergroup'. So we return nothing unless it is a class or
+        namespace.
+
+        See breathe.parser.doxygen.compoundsuper:compounddefType.buildChildren for the full list.
+        """
+
+        if data_object.node_name not in ['innerclass', 'innernamespace']:
+            return []
+
+        # Drop 'inner' to get 'class' or 'namespace'. Sphinx does support 'namespace' types in the
+        # cpp domain yet but we'll do this properly for the moment and correct it or updated Sphinx
+        # if needed
+        type_ = data_object.node_name.replace('inner', '')
+
+        # Extract fully qualified name (OuterClass::InnerClass) from node with xml like:
+        #    <innerclass refid="..." prot="public">OuterClass::InnerClass</innerclass>
+        name = data_object.content_[0].getValue()
+        return self._create_target(name, type_, name)
+
+    def create_typedef_target(self, node_stack):
+
+        name = self.get_fully_qualified_name(node_stack)
+        return self._create_target(name, "type", name)
+
+    def create_enumvalue_target(self, node_stack):
+
+        name = self.get_fully_qualified_name(node_stack)
+        return self._create_target(name, "member", name)
 
     def create_function_id(self, data_object):
 

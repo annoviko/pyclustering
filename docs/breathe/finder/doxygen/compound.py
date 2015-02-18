@@ -4,12 +4,6 @@ from .base import ItemFinder, stack
 
 class DoxygenTypeSubItemFinder(ItemFinder):
 
-    def find(self, matcher_stack):
-        """Search with MatcherStack functionality - deprecated in favour of the filter approach"""
-
-        compound_finder = self.item_finder_factory.create_finder(self.data_object.compounddef)
-        return compound_finder.find(matcher_stack)
-
     def filter_(self, ancestors, filter_, matches):
         """Find nodes which match the filter. Doesn't test this node, only its children"""
 
@@ -21,23 +15,13 @@ class DoxygenTypeSubItemFinder(ItemFinder):
 
 class CompoundDefTypeSubItemFinder(ItemFinder):
 
-    def find(self, matcher_stack):
-        """Search with MatcherStack functionality - deprecated in favour of the filter approach"""
-
-        results = []
-        for sectiondef in self.data_object.sectiondef:
-            finder = self.item_finder_factory.create_finder(sectiondef)
-            results.extend(finder.find(matcher_stack))
-
-        return results
-
     def filter_(self, ancestors, filter_, matches):
         """Finds nodes which match the filter and continues checks to children"""
 
         node_stack = stack(self.data_object, ancestors)
 
         if filter_.allow(node_stack):
-            matches.append(self.data_object)
+            matches.append(node_stack)
 
         for sectiondef in self.data_object.sectiondef:
             finder = self.item_finder_factory.create_finder(sectiondef)
@@ -50,23 +34,13 @@ class CompoundDefTypeSubItemFinder(ItemFinder):
 
 class SectionDefTypeSubItemFinder(ItemFinder):
 
-    def find(self, matcher_stack):
-        """Search with MatcherStack functionality - deprecated in favour of the filter approach"""
-
-        results = []
-        for memberdef in self.data_object.memberdef:
-            finder = self.item_finder_factory.create_finder(memberdef)
-            results.extend(finder.find(matcher_stack))
-
-        return results
-
     def filter_(self, ancestors, filter_, matches):
         """Find nodes which match the filter. Doesn't test this node, only its children"""
 
         node_stack = stack(self.data_object, ancestors)
 
         if filter_.allow(node_stack):
-            matches.append(self.data_object)
+            matches.append(node_stack)
 
         for memberdef in self.data_object.memberdef:
             finder = self.item_finder_factory.create_finder(memberdef)
@@ -75,20 +49,19 @@ class SectionDefTypeSubItemFinder(ItemFinder):
 
 class MemberDefTypeSubItemFinder(ItemFinder):
 
-    def find(self, matcher_stack):
-        """Search with MatcherStack functionality - deprecated in favour of the filter approach"""
-
-        if matcher_stack.match("member", self.data_object):
-            return [self.data_object]
-        else:
-            return []
-
     def filter_(self, ancestors, filter_, matches):
 
-        node_stack = stack(self.data_object, ancestors)
+        data_object = self.data_object
+        node_stack = stack(data_object, ancestors)
 
         if filter_.allow(node_stack):
-            matches.append(self.data_object)
+            matches.append(node_stack)
+
+        if data_object.kind == 'enum':
+            for value in data_object.enumvalue:
+                value_stack = stack(value, node_stack)
+                if filter_.allow(value_stack):
+                    matches.append(value_stack)
 
 
 class RefTypeSubItemFinder(ItemFinder):
@@ -98,5 +71,5 @@ class RefTypeSubItemFinder(ItemFinder):
         node_stack = stack(self.data_object, ancestors)
 
         if filter_.allow(node_stack):
-            matches.append(self.data_object)
+            matches.append(node_stack)
 

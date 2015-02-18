@@ -35,6 +35,7 @@ class AutoProjectInfo(object):
         self._domain_by_file_pattern = domain_by_file_pattern
         self._match = match
 
+
     def name(self):
         return self._name
 
