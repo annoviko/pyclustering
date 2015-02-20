@@ -1,26 +1,30 @@
-'''
+"""!
 
-Cluster analysis algorithm: BIRCH
+@brief Cluster analysis algorithm: BIRCH
+@details Implementation based on article:
+         - T.Zhang, R.Ramakrishnan, M.Livny. BIRCH: An Efficient Data Clustering Method for Very Large Databases. 1996.
+         
+@authors Andrei Novikov (spb.andr@yandex.ru)
+@version 1.0
+@date 2014-2015
+@copyright GNU Public License
 
-Implementation based on article:
- - T.Zhang, R.Ramakrishnan, M.Livny. BIRCH: An Efficient Data Clustering Method for Very Large Databases. 1996.
+@cond GNU_PUBLIC_LICENSE
+    PyClustering is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    PyClustering is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+@endcond
 
-Copyright (C) 2015    Andrei Novikov (spb.andr@yandex.ru)
-
-pyclustering is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-pyclustering is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-'''
+"""
 
 from pyclustering.support import linear_sum, square_sum;
 from pyclustering.support.cftree import cftree, cfentry, measurement_type;
@@ -66,7 +70,7 @@ class birch:
         @brief Constructor of clustering algorithm BIRCH.
         
         @param[in] data (list): Input data presented as list of points (objects), where each point should be represented by list or tuple.
-        @param[in] number_cluster (uint): Number of clusters that should be allocated.
+        @param[in] number_clusters (uint): Number of clusters that should be allocated.
         @param[in] branching_factor (uint): Maximum number of successor that might be contained by each non-leaf node in CF-Tree.
         @param[in] max_node_entries (uint): Maximum number of entries that might be contained by each leaf node in CF-Tree.
         @param[in] initial_diameter (double): Initial diameter that used for CF-Tree construction, it can be increase if entry_size_limit is exceeded.
