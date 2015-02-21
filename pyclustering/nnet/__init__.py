@@ -47,7 +47,7 @@ class conn_represent:
 class network_interface(metaclass = ABCMeta):
     @abstractmethod
     def simulate(self, steps, time, solution, collect_dynamic):
-        "Performs static simulation of LEGION oscillatory network"
+        "Performs static simulation of oscillatory network"
         
         "(in) steps            - number steps of simulations during simulation"
         "(in) time             - time of simulation"
@@ -62,7 +62,7 @@ class network_interface(metaclass = ABCMeta):
     
     @abstractmethod
     def simulate_static(self, steps, time, solution, collect_dynamic):
-        "Performs static simulation of LEGION oscillatory network"
+        "Performs static simulation of oscillatory network"
         
         "(in) steps            - number steps of simulations during simulation"
         "(in) time             - time of simulation"

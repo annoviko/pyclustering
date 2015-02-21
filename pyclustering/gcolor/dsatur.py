@@ -1,33 +1,42 @@
-'''
+"""!
 
-Graph coloring algorithm: DSATUR
+@brief Graph coloring algorithm: DSATUR
+@details Based on article description:
+         - D.Brelaz. New Methods to color the vertices of a graph. 1979.
 
-Based on article description:
- - D.Brelaz. New Methods to color the vertices of a graph. 1979.
+@authors Andrei Novikov (spb.andr@yandex.ru)
+@version 1.0
+@date 2014-2015
+@copyright GNU Public License
 
-Copyright (C) 2015    Andrei Novikov (spb.andr@yandex.ru)
+@cond GNU_PUBLIC_LICENSE
+    PyClustering is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    PyClustering is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+@endcond
 
-pyclustering is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-pyclustering is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-'''
+"""
 
 def dsatur(data):
-    "DSATUR algorithm implementation. Performs graph coloring problem."
+    """!
+    @brief DSATUR algorithm implementation. Performs graph coloring problem.
     
-    "(in) data        - matrix graph representation."
+    @param[in] data (list): Matrix graph representation.
     
-    "Returns vector with assigned colors where each element corresponds to node in the graph, for example (1, 2, 2, 1, 3, 4, 1)."
+    @return (list) list with assigned colors where each element corresponds 
+            to node in the graph, for example (1, 2, 2, 1, 3, 4, 1).
+    
+    """
+    
     if (len(data[0]) != len(data)):
         raise NameError('Only matrix graph representation is available.');
     
@@ -106,13 +115,20 @@ def dsatur(data):
 
 
 def get_amount_color(node_indexes, coloring, color_number):
-    "Private function that is used by 'dsatur'. Countes how many nodes has color 'color_number'."
+    """!
     
-    "(in) node_indexes    - indexes of graph nodes for checking."
-    "(in) coloring        - map where colors are stored."
-    "(in) color_number    - number of color that is searched in nodes."
+    @brief Private function that is used by 'dsatur'. Countes how many nodes has color 'color_number'.
     
-    "Returns number found nodes with the specified color 'color_number'."
+    @param[in] node_indexes (list): Indexes of graph nodes for checking.
+    @param[in] coloring (list): Map where colors are stored.
+    @param[in] color_number (uint): Number of color that is searched in nodes.
+    
+    @return (uint) Number found nodes with the specified color 'color_number'.
+    
+    @see dsatur()
+    
+    """
+    
     color_counter = 0;  
     for index in node_indexes:
         if (coloring[index] == color_number):
@@ -122,10 +138,17 @@ def get_amount_color(node_indexes, coloring, color_number):
 
 
 def get_neighbors(node_index, data):
-    "Private function that is used by 'dsatur'. Returns indexes of neighbors of the specified node."
+    """!
     
-    "(in) node_index    - index of node for which neighbours should be found."
-    "(in) data          - matrix graph representation."
+    @brief Private function that is used by 'dsatur'. Returns indexes of neighbors of the specified node.
     
-    "Returns list of neighbors of the specified node."
+    @param[in] node_index (uint):
+    @param[in] data (list):
+    
+    @return (list) Neighbors of the specified node.
+    
+    @see dsatur()
+    
+    """
+    
     return [ index for index in range(len(data[node_index])) if data[node_index][index] != 0 ]; 
