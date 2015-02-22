@@ -3,7 +3,6 @@
 @brief pyclustering module for cluster analysis.
 
 @authors Andrei Novikov (spb.andr@yandex.ru)
-@version 1.0
 @date 2014-2015
 @copyright GNU Public License
 

@@ -1,31 +1,70 @@
-'''
+"""!
 
-Graph coloring algorithm: Algorithm based on Hysteresis Oscillatory Network
+@brief Graph coloring algorithm: Algorithm based on Hysteresis Oscillatory Network
+@details Based on article description:
+         - K.Jinno, H.Taguchi, T.Yamamoto, H.Hirose. Dynamical Hysteresis Neural Network for Graph Coloring Problem. 2003.
 
-Based on article description:
- - K.Jinno, H.Taguchi, T.Yamamoto, H.Hirose. Dynamical Hysteresis Neural Network for Graph Coloring Problem. 2003.
+@authors Andrei Novikov (spb.andr@yandex.ru)
+@version 1.0
+@date 2014-2015
+@copyright GNU Public License
 
-Copyright (C) 2015    Andrei Novikov (spb.andr@yandex.ru)
+@cond GNU_PUBLIC_LICENSE
+    PyClustering is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    PyClustering is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+@endcond
 
-pyclustering is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-pyclustering is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-'''
+"""
 
 from pyclustering.nnet.hysteresis import hysteresis_network;
 
 class hysteresisgcolor(hysteresis_network):
+    """!
+    @brief Class represents graph coloring algorithm based on hysteresis oscillatory network. 
+           This is bio-inspired algorithm where the network uses relaxation oscillators that is
+           regarded as a multi-vibrator. Each ensemble of synchronous oscillators corresponds to
+           only one color.
+    
+    Example
+    @code
+        # load graph from a file
+        graph = read_graph(filename);
+        
+        # create oscillatory network for solving graph coloring problem
+        network = hysteresisgcolor(graph.data, alpha, eps);
+        
+        # perform simulation of the network
+        (t, dyn) = network.simulate(2000, 20);
+        
+        # show dynamic of the network
+        draw_dynamics(t, dyn, x_title = "Time", y_title = "State");
+        
+        # obtain results of graph coloring and display results
+        coloring_map = network.get_map_coloring();
+        draw_graph(graph, coloring_map);
+    @endcode
+    
+    """
+    
     def __init__(self, graph_matrix, alpha, eps):
+        """!
+        @brief Constructor of hysteresis oscillatory network for graph coloring.
+        
+        @param[in] graph_matrix (list): Matrix representation of a graph.
+        @param[in] alpha (double): Positive constant (affect weight between two oscillators w[i][j]).
+        @param[in] eps (double): Positive constant (affect feedback to itself (i = j) of each oscillator w[i][j] = -alpha - eps).
+                
+        """
         number_oscillators = len(graph_matrix);
         
         super().__init__(number_oscillators);
@@ -49,9 +88,37 @@ class hysteresisgcolor(hysteresis_network):
                     self._weight[row][col] = -alpha - eps;
         
     def get_clusters(self, tolerance = 0.1):
+        """!
+        @brief Returns list of clusters where each cluster represents ensemble of synchronous oscillators and each
+               each cluster denotes set of oscillators that correspond to only one color.
+        
+        @param[in] tolerance (double): Tolerance level that define maximal difference between outputs of oscillators in one synchronous ensemble.
+        
+        @remark Results can be obtained only after network simulation (graph processing by the network).
+        
+        @return (list) Lists of ensembles of synchronous oscillators that consist of indexes of oscillators, 
+                for example [ [0, 2, 5], [1, 3, 4] ].
+        
+        @see simulate()
+        @see get_map_coloring()
+        
+        """
         return self.allocate_sync_ensembles(tolerance);
     
     def get_map_coloring(self, tolerance = 0.1):
+        """!
+        @brief Returns list of color indexes that are assigned to each object from input data space accordingly.
+        
+        @param[in] tolerance (double): Tolerance level that define maximal difference between outputs of oscillators in one synchronous ensemble.
+        
+        @remark Results can be obtained only after network simulation (graph processing by the network).
+        
+        @return (list) Color indexes that are assigned to each object from input data space accordingly.
+        
+        @see simulate()
+        @see get_clusters()
+        
+        """
         clusters = self.get_clusters(tolerance);
         
         coloring_map = [0] * self._num_osc;
