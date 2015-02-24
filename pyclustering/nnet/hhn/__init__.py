@@ -1,26 +1,30 @@
-'''
+"""!
 
-Neural Network: Oscillatory Neural Network based on Hodgkin-Huxley Neuron Model
+@brief Oscillatory Neural Network based on Hodgkin-Huxley Neuron Model
+@details Based on article description:
+         - D.Chik, R.Borisyuk, Y.Kazanovich. Selective attention model with spiking elements. 2009.
 
-Based on article description:
- - D.Chik, R.Borisyuk, Y.Kazanovich. Selective attention model with spiking elements. 2009.
+@authors Andrei Novikov (spb.andr@yandex.ru)
+@version 1.0
+@date 2014-2015
+@copyright GNU Public License
 
-Copyright (C) 2015    Andrei Novikov (spb.andr@yandex.ru)
+@cond GNU_PUBLIC_LICENSE
+    PyClustering is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    PyClustering is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+@endcond
 
-pyclustering is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-pyclustering is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-'''
+"""
 
 from pyclustering.nnet import *;
 
@@ -31,7 +35,12 @@ from pyclustering.support import allocate_sync_ensembles;
 import numpy;
 import random;
 
-class hhn_parameters:    
+class hhn_parameters:
+    """!
+    @brief Describes parameters of Hodgkin-Huxley Oscillatory Network.
+    
+    """  
+    
     nu      = random.random() * 2.0 - 1.0;
     
     gNa     = 120.0 * (1 + 0.02 * nu);  # maximal conductivity for sodium current
@@ -65,7 +74,11 @@ class hhn_parameters:
 
 
 class central_element:
-    "Central element consist of two central neurons that are described by a little bit different dynamic"
+    """!
+    @brief Central element consist of two central neurons that are described by a little bit different dynamic.
+    
+    """
+    
     membrane_potential      = 0.0;        # membrane potential of cenral neuron (V)
     active_cond_sodium      = 0.0;        # activation conductance of the sodium channel (m)
     inactive_cond_sodium    = 0.0;        # inactivaton conductance of the sodium channel (h)
@@ -82,6 +95,30 @@ class central_element:
 
 
 class hhn_network(network, network_interface):
+    """!
+    @brief Oscillatory Neural Network with central element based on Hodgkin-Huxley neuron model. Interaction between oscillators is performed via
+           central element (no connection between oscillators that are called as peripheral). Peripheral oscillators receive external stimulus.
+           Central element consist of two oscillators: the first is used for synchronization some ensemble of oscillators and the second controls
+           synchronization of the first cental oscillator with verious ensembles.
+    
+    Example:
+    @code
+        # change period of time when high strength value of synaptic connection exists from CN2 to PN.
+        params = hhn_parameters();
+        params.deltah = 400;
+        
+        # create oscillatory network with stimulus
+        net = hhn_network(6, [0, 0, 25, 25, 47, 47], params);
+        
+        # simulate network
+        (t, dyn) = net.simulate(1200, 600);
+        
+        # draw network output during simulation
+        draw_dynamics(t, dyn, x_title = "Time", y_title = "V", separate = True);
+    @endcode
+    
+    """
+    
     _name = "Oscillatory Neural Network based on Hodgkin-Huxley Neuron Model"
     
     # States of peripheral oscillators
@@ -104,16 +141,19 @@ class hhn_network(network, network_interface):
     
     _membrane_dynamic_pointer = None;        # final result is stored here.
     
-    def __init__(self, num_osc, stimulus = None, parameters = None, type_conn = None, conn_represent = conn_represent.MATRIX):
-        "Constructor of oscillatory network based on Hodgkin-Huxley meuron model."
+    def __init__(self, num_osc, stimulus = None, parameters = None, type_conn = None, type_conn_represent = conn_represent.MATRIX):
+        """!
+        @brief Constructor of oscillatory network based on Hodgkin-Huxley meuron model.
         
-        "(in) num_osc             - number of peripheral oscillators in the network."
-        "(in) stimulus            - list of stimulus for oscillators, number of stimulus should be equal to number of peripheral oscillators."
-        "(in) parameters          - parameters of the network that are defined by structure 'hhn_parameters'."
-        "(in) type_conn           - type of connection between oscillators in the network (ignored for this type of network)."
-        "(in) conn_represent      - internal representation of connection in the network: matrix or list."      
+        @param[in] num_osc (uint): Number of peripheral oscillators in the network.
+        @param[in] stimulus (list): List of stimulus for oscillators, number of stimulus should be equal to number of peripheral oscillators.
+        @param[in] parameters (hhn_parameters): Parameters of the network.
+        @param[in] type_conn (conn_type): Type of connections between oscillators in the network (ignored for this type of network).
+        @param[in] type_conn_represent (conn_represent): Internal representation of connection in the network: matrix or list.
+        
+        """
           
-        super().__init__(num_osc, conn_type.NONE, conn_represent);
+        super().__init__(num_osc, conn_type.NONE, type_conn_represent);
         
         self._membrane_potential        = [0.0] * self._num_osc;
         self._active_cond_sodium        = [0.0] * self._num_osc;
@@ -142,36 +182,46 @@ class hhn_network(network, network_interface):
     
     
     def simulate(self, steps, time, solution = solve_type.RK4, collect_dynamic = True):
-        "Performs static simulation of oscillatory network based on Hodgkin-Huxley neuron model."
+        """!
+        @brief Performs static simulation of oscillatory network based on Hodgkin-Huxley neuron model.
         
-        "(in) steps            - number steps of simulations during simulation."
-        "(in) time             - time of simulation."
-        "(in) solution         - type of solution (solving)."
-        "(in) collect_dynamic  - if True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics."
+        @param[in] steps (uint): Number steps of simulations during simulation.
+        @param[in] time (double): Time of simulation.
+        @param[in] solution (solve_type): Type of solver for differential equations.
+        @param[in] collect_dynamic (bool): If True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics.
         
-        "Returns dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,"
-        "otherwise returns only last values (last step of simulation) of dynamic."
+        @return (list) Dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,
+                otherwise returns only last values (last step of simulation) of dynamic.
+        
+        """
         
         return self.simulate_static(steps, time, solution, collect_dynamic);
 
 
-    def simulate_dynamic(self, order, solution, collect_dynamic, step, int_step, threshold_changes):
-        "Performs dynamic simulation, when time simulation is not specified, only stop condition."
-        "The method is not supported."
+    def simulate_dynamic(self):
+        """!
+        @brief Performs dynamic simulation, when time simulation is not specified, only stop condition.
+
+        @warning The method is not supported.
+        
+        """
         
         raise NameError("Dynamic simulation is not supported due to lack of stop conditions for the model.");
 
     
-    def simulate_static(self, steps, time, solution = solve_type.RK4, collect_dynamic = False):  
-        "Performs static simulation of oscillatory network based on Hodgkin-Huxley neuron model."
+    def simulate_static(self, steps, time, solution = solve_type.RK4, collect_dynamic = False):
+        """!
+        @brief Performs static simulation of oscillatory network based on Hodgkin-Huxley neuron model.
         
-        "(in) steps            - number steps of simulations during simulation."
-        "(in) time             - time of simulation."
-        "(in) solution         - type of solution (only RK4 is supported for python implementation)."
-        "(in) collect_dynamic  - if True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics."
+        @param[in] steps (uint): Number steps of simulations during simulation.
+        @param[in] time (double): Time of simulation.
+        @param[in] solution (solve_type): Type of solver for differential equations.
+        @param[in] collect_dynamic (bool): If True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics.
         
-        "Returns dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,"
-        "otherwise returns only last values (last step of simulation) of dynamic."        
+        @return (list) Dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,
+                otherwise returns only last values (last step of simulation) of dynamic.
+        
+        """
         
         self._membrane_dynamic_pointer = None;
         
@@ -209,15 +259,18 @@ class hhn_network(network, network_interface):
     
     
     def _calculate_states(self, solution, t, step, int_step):
-        "Caclculates new state of each oscillator in the network. Returns only excitatory state of oscillators."
+        """!
+        @brief Caclculates new state of each oscillator in the network. Returns only excitatory state of oscillators.
         
-        "(in) solution        - type solver of the differential equation."
-        "(in) t               - current time of simulation."
-        "(in) step            - step of solution at the end of which states of oscillators should be calculated."
-        "(in) int_step        - step differentiation that is used for solving differential equation."
+        @param[in] solution (solve_type): Type solver of the differential equations.
+        @param[in] t (double): Current time of simulation.
+        @param[in] step (uint): Step of solution at the end of which states of oscillators should be calculated.
+        @param[in] int_step (double): Differentiation step that is used for solving differential equation.
         
-        "Returns new state of membrance potential for peripheral oscillators and for cental elements as a list where"
-        "the last two values correspond to central element 1 and 2."
+        @return (list) New states of membrance potentials for peripheral oscillators and for cental elements as a list where
+                the last two values correspond to central element 1 and 2.
+                 
+        """
         
         next_membrane           = [0.0] * self._num_osc;
         next_active_sodium      = [0.0] * self._num_osc;
@@ -299,17 +352,20 @@ class hhn_network(network, network_interface):
     
     
     def hnn_state(self, inputs, t, argv):
-        "Returns new values of excitatory and inhibitory parts of oscillator and potential of oscillator."
+        """!
+        @brief Returns new values of excitatory and inhibitory parts of oscillator and potential of oscillator.
         
-        "(in) inputs        - list of states of oscillator for integration [v, m, h, n] (see description below)."
-        "(in) t             - current time of simulation."
-        "(in) argv          - extra arguments that are not used for integration - index of oscillator."
+        @param[in] inputs (list): States of oscillator for integration [v, m, h, n] (see description below).
+        @param[in] t (double): Current time of simulation.
+        @param[in] argv (tuple): Extra arguments that are not used for integration - index of oscillator.
         
-        "Returns list of new values of oscillator [v, m, h, n], where:"
-        "v - membrane potantial of oscillator,"
-        "m - activation conductance of the sodium channel,"
-        "h - inactication conductance of the sodium channel,"
-        "n - activation conductance of the potassium channel."
+        @return (list) new values of oscillator [v, m, h, n], where:
+                v - membrane potantial of oscillator,
+                m - activation conductance of the sodium channel,
+                h - inactication conductance of the sodium channel,
+                n - activation conductance of the potassium channel.
+        
+        """
         
         index = argv;
         
@@ -386,13 +442,14 @@ class hhn_network(network, network_interface):
         
         
     def allocate_sync_ensembles(self, tolerance = 0.1):
-        "Allocate clusters in line with ensembles of synchronous oscillators where each." 
-        "synchronous ensemble corresponds to only one cluster."
+        """!
+        @brief Allocates clusters in line with ensembles of synchronous oscillators where each. Synchronous ensemble corresponds to only one cluster.
         
-        "(in) tolerance        - maximum error for allocation of synchronous ensemble oscillators."
+        @param[in] tolerance (double): maximum error for allocation of synchronous ensemble oscillators.
         
-        "Returns list of grours (lists) of indexes of synchronous oscillators."
-        "For example [ [index_osc1, index_osc3], [index_osc2], [index_osc4, index_osc5] ]."
+        @return (list) Grours (lists) of indexes of synchronous oscillators. For example [ [index_osc1, index_osc3], [index_osc2], [index_osc4, index_osc5] ].
+        
+        """
         
         ignore = set();
         
@@ -403,13 +460,16 @@ class hhn_network(network, network_interface):
     
     
     def __alfa_function(self, time, alfa, betta):
-        "Calculate value of alfa-function for difference between spike generation time and current simulation time."
+        """!
+        @brief Calculates value of alfa-function for difference between spike generation time and current simulation time.
         
-        "(in) time    - difference between last spike generation time and current time."
-        "(in) alfa    - alfa parameter for alfa-function."
-        "(in) betta   - betta parameter for alfa-function."
+        @param[in] time (double): Difference between last spike generation time and current time.
+        @param[in] alfa (double): Alfa parameter for alfa-function.
+        @param[in] betta (double): Betta parameter for alfa-function.
         
-        "Returns value of alfa-function."
+        @return (double) Value of alfa-function.
+        
+        """
         
         return alfa * time * math.exp(-betta * time);
     

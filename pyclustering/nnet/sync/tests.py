@@ -1,28 +1,32 @@
-'''
+"""!
 
-Unit-tests for Oscillatory Neural Network based on Kuramoto model.
+@brief Unit-tests for Oscillatory Neural Network based on Kuramoto model.
 
-Copyright (C) 2015    Andrei Novikov (spb.andr@yandex.ru)
+@authors Andrei Novikov (spb.andr@yandex.ru)
+@date 2014-2015
+@copyright GNU Public License
 
-pyclustering is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+@cond GNU_PUBLIC_LICENSE
+    PyClustering is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    PyClustering is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+@endcond
 
-pyclustering is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-'''
+"""
 
 import unittest;
 
 from pyclustering.nnet import *;
-from pyclustering.nnet.sync import sync_network, phase_normalization;
+from pyclustering.nnet.sync import sync_network;
 
 from scipy import pi;
 
@@ -40,15 +44,6 @@ class Test(unittest.TestCase):
             del network;
      
      
-    def testPhaseNormalization(self):       
-        "Check for phase normalization"
-        assert phase_normalization(2 * math.pi + 1) == 1;
-        assert phase_normalization(2 * math.pi) == 2 * math.pi;
-        assert phase_normalization(0) == 0;
-        assert phase_normalization(4 * math.pi) == 2 * math.pi;
-        assert phase_normalization(-2 * math.pi) == 0;
-     
-     
     def testSyncOrderSingleOscillator(self):
         # Check for order parameter of network with one oscillator
         network = sync_network(1, 1);
@@ -57,7 +52,7 @@ class Test(unittest.TestCase):
      
     def testSyncOrderNetwork(self):
         # Check for order parameter of network with several oscillators
-        network = sync_network(20, 1);
+        network = sync_network(2, 1);
          
         sync_state = 1;
         tolerance = 0.1;
@@ -69,7 +64,18 @@ class Test(unittest.TestCase):
     def testSyncLocalOrderSingleOscillator(self):
         network = sync_network(1, 1);
         assert network.sync_local_order() == 0;   
-     
+    
+    
+    def testOutputNormalization(self):
+        network = sync_network(20, 1);
+        
+        (t, dyn) = network.simulate(50, 20, solve_type.RK4);
+        
+        for iteration in range(len(dyn)):
+            for index_oscillator in range(len(dyn[iteration])):
+                assert (dyn[iteration][index_oscillator] >= 0);
+                assert (dyn[iteration][index_oscillator] <= 2.0 * pi);
+    
      
     def templateSimulateTest(self, nodes = 10, weight = 1, solution = solve_type.FAST, ccore_flag = False):
         sim_time = 20;

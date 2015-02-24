@@ -1,29 +1,33 @@
-'''
+"""!
 
-Neural Network: Oscillatory Neural Network based on Kuramoto model
+@brief Neural Network: Oscillatory Neural Network based on Kuramoto model
+@details Based on article description:
+         - A.Arenas, Y.Moreno, C.Zhou. Synchronization in complex networks. 2008.
+         - X.B.Lu. Adaptive Cluster Synchronization in Coupled Phase Oscillators. 2009.
+         - X.Lou. Adaptive Synchronizability of Coupled Oscillators With Switching. 2012.
+         - A.Novikov, E.Benderskaya. Oscillatory Neural Networks Based on the Kuramoto Model. 2014.
 
-Based on article description:
- - A.Arenas, Y.Moreno, C.Zhou. Synchronization in complex networks. 2008.
- - X.B.Lu. Adaptive Cluster Synchronization in Coupled Phase Oscillators. 2009.
- - X.Lou. Adaptive Synchronizability of Coupled Oscillators With Switching. 2012.
- - A.Novikov, E.Benderskaya. Oscillatory Neural Networks Based on the Kuramoto Model. 2014.
+@authors Andrei Novikov (spb.andr@yandex.ru)
+@version 1.0
+@date 2014-2015
+@copyright GNU Public License
 
-Copyright (C) 2015    Andrei Novikov (spb.andr@yandex.ru)
+@cond GNU_PUBLIC_LICENSE
+    PyClustering is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    PyClustering is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+@endcond
 
-pyclustering is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-pyclustering is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-'''
+"""
 
 
 import numpy;
@@ -45,7 +49,10 @@ from pyclustering.nnet import *;
 
 
 class sync_network(network, network_interface):    
-    "Model of oscillatory network that is based on the Kuramoto model of synchronization."
+    """!
+    @brief Model of oscillatory network that is based on the Kuramoto model of synchronization.
+    
+    """
     
     # Protected members:
     _name = 'Phase Sync Network'
@@ -58,24 +65,36 @@ class sync_network(network, network_interface):
     # Properties of class that represents oscillatory neural network
     @property
     def name(self):
-        "Returns title of the network."
+        """!
+        @brief Returns title of the network.
+        
+        """
+        
         return self._name;
     
     @property
     def phases(self):
-        "Returns list of phases of oscillators."
+        """!
+        @brief Returns list of phases of oscillators.
+        
+        """
+        
         return self._phases;
 
 
     def __init__(self, num_osc, weight = 1, frequency = 0, type_conn = conn_type.ALL_TO_ALL, conn_represent = conn_represent.MATRIX, initial_phases = initial_type.RANDOM_GAUSSIAN, ccore = False):
-        "Constructor of oscillatory network is based on Kuramoto model."
+        """!
+        @brief Constructor of oscillatory network is based on Kuramoto model.
         
-        "(in) num_osc            - number of oscillators in the network."
-        "(in) weight             - coupling strength of the links between oscillators."
-        "(in) frequency          - multiplier of internal frequency of the oscillators."
-        "(in) type_conn          - type of connection between oscillators in the network (all-to-all, grid, bidirectional list, etc.)."
-        "(in) conn_represent     - internal representation of connection in the network: matrix or list."
-        "(in) initial_phases     - type of initialization of initial phases of oscillators (random, uniformly distributed, etc.)."
+        @param[in] num_osc (uint): Number of oscillators in the network.
+        @param[in] weight (double): Coupling strength of the links between oscillators.
+        @param[in] frequency (double): Multiplier of internal frequency of the oscillators.
+        @param[in] type_conn (conn_type): Type of connection between oscillators in the network (all-to-all, grid, bidirectional list, etc.).
+        @param[in] conn_represent (conn_represent): Internal representation of connection in the network: matrix or list.
+        @param[in] initial_phases (initial_type): Type of initialization of initial phases of oscillators (random, uniformly distributed, etc.).
+        @param[in] ccore (bool): If True simulation is performed by CCORE library (C++ implementation of pyclustering).
+        
+        """
         
         if (ccore is True):
             self._ccore_network_pointer = wrapper.create_sync_network(num_osc, weight, frequency, type_conn, initial_phases);
@@ -97,14 +116,25 @@ class sync_network(network, network_interface):
     
     
     def __del__(self):
-        "Destructor of oscillatory network is based on Kuramoto model."
+        """!
+        @brief Destructor of oscillatory network is based on Kuramoto model.
+        
+        """
+        
         if (self._ccore_network_pointer is not None):
             wrapper.destroy_sync_network(self._ccore_network_pointer);
             self._ccore_network_pointer = None;
     
     
     def sync_order(self):
-        "Returns level of global synchorization in the network."
+        """!
+        @brief Calculates level of global synchorization in the network.
+        
+        @return (double) Level of global synchronization.
+        
+        @see sync_local_order()
+        
+        """
         
         if (self._ccore_network_pointer is not None):
             return wrapper.sync_order(self._ccore_network_pointer);
@@ -123,7 +153,14 @@ class sync_network(network, network_interface):
     
     
     def sync_local_order(self):
-        "Returns level of local (partial) synchronization in the network."
+        """!
+        @brief Calculates level of local (partial) synchronization in the network.
+        
+        @return (double) Level of local (partial) synchronization.
+        
+        @see sync_order()
+        
+        """
         
         if (self._ccore_network_pointer is not None):
             return wrapper.sync_local_order(self._ccore_network_pointer);
@@ -144,13 +181,16 @@ class sync_network(network, network_interface):
     
     
     def phase_kuramoto(self, teta, t, argv):
-        "Returns result of phase calculation for specified oscillator in the network."
+        """!
+        @brief Returns result of phase calculation for specified oscillator in the network.
         
-        "(in) teta        - phase of the oscillator that is differentiated."
-        "(in) t           - current time of simulation."
-        "(in) argv        - index of the oscillator in the list."
+        @param[in] teta (double): Phase of the oscillator that is differentiated.
+        @param[in] t (double): Current time of simulation.
+        @param[in] argv (tuple): Index of the oscillator in the list.
         
-        "Returns new phase for specified oscillator (don't assign here)."
+        @return (double) New phase for specified oscillator (don't assign here).
+        
+        """
         
         index = argv;
         phase = 0;
@@ -162,13 +202,16 @@ class sync_network(network, network_interface):
     
     
     def allocate_sync_ensembles(self, tolerance = 0.01):
-        "Allocate clusters in line with ensembles of synchronous oscillators where each" 
-        "synchronous ensemble corresponds to only one cluster."
+        """!
+        @brief Allocate clusters in line with ensembles of synchronous oscillators where each
+               synchronous ensemble corresponds to only one cluster.
+               
+        @param[in] tolerance (double): Maximum error for allocation of synchronous ensemble oscillators.
         
-        "(in) tolerance        - maximum error for allocation of synchronous ensemble oscillators."
+        @return (list) Grours (lists) of indexes of synchronous oscillators.
+                For example [ [index_osc1, index_osc3], [index_osc2], [index_osc4, index_osc5] ].
         
-        "Returns list of grours (lists) of indexes of synchronous oscillators."
-        "For example [ [index_osc1, index_osc3], [index_osc2], [index_osc4, index_osc5] ]."
+        """
         
         if (self._ccore_network_pointer is not None):
             return wrapper.allocate_sync_ensembles_sync_network(self._ccore_network_pointer, tolerance);
@@ -196,32 +239,43 @@ class sync_network(network, network_interface):
     
     
     def simulate(self, steps, time, solution = solve_type.FAST, collect_dynamic = True):
-        "Performs static simulation of Sync oscillatory network."
+        """!
+        @brief Performs static simulation of Sync oscillatory network.
         
-        "(in) steps            - number steps of simulations during simulation."
-        "(in) time             - time of simulation."
-        "(in) solution         - type of solution (solving)."
-        "(in) collect_dynamic  - if True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics."
+        @param[in] steps (uint): Number steps of simulations during simulation.
+        @param[in] time (double): Time of simulation.
+        @param[in] solution (solve_type): Type of solution (solving).
+        @param[in] collect_dynamic (bool): If True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics.
         
-        "Returns dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,"
-        "otherwise returns only last values (last step of simulation) of dynamic."
+        @return (list) Dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,
+                otherwise returns only last values (last step of simulation) of dynamic.
+        
+        @see simulate_dynamic()
+        @see simulate_static()
+        
+        """
         
         return self.simulate_static(steps, time, solution, collect_dynamic);
 
 
     def simulate_dynamic(self, order = 0.998, solution = solve_type.FAST, collect_dynamic = False, step = 0.1, int_step = 0.01, threshold_changes = 0.0000001):
-        "Performs dynamic simulation of the network until stop condition is not reached. Stop condition is defined by"
-        "input argument 'order'."
+        """!
+        @brief Performs dynamic simulation of the network until stop condition is not reached. Stop condition is defined by input argument 'order'.
         
-        "(in) order              - order of process synchronization, destributed 0..1."
-        "(in) solution           - type of solution (solving)."
-        "(in) collect_dynamic    - if True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics."
-        "(in) step               - time step of one iteration of simulation."
-        "(in) int_step           - integration step, should be less than step."
-        "(in) threshold_changes  - additional stop condition that helps prevent infinite simulation, defines limit of changes of oscillators between current and previous steps."
+        @param[in] order (double): Order of process synchronization, destributed 0..1.
+        @param[in] solution (solve_type): Type of solution.
+        @param[in] collect_dynamic (bool): If True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics.
+        @param[in] step (double): Time step of one iteration of simulation.
+        @param[in] int_step (double): Integration step, should be less than step.
+        @param[in] threshold_changes (double): Additional stop condition that helps prevent infinite simulation, defines limit of changes of oscillators between current and previous steps.
         
-        "Returns dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,"
-        "otherwise returns only last values (last step of simulation) of dynamic."
+        @return (list) Dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,
+                otherwise returns only last values (last step of simulation) of dynamic.
+        
+        @see simulate()
+        @see simulate_static()
+        
+        """
         
         if (self._ccore_network_pointer is not None):
             return wrapper.simulate_dynamic_sync_network(self._ccore_network_pointer, order, solution, collect_dynamic, step, int_step, threshold_changes);
@@ -269,15 +323,21 @@ class sync_network(network, network_interface):
 
 
     def simulate_static(self, steps, time, solution = solve_type.FAST, collect_dynamic = False):
-        "Performs static simulation of oscillatory network."
+        """!
+        @brief Performs static simulation of oscillatory network.
         
-        "(in) steps            - number steps of simulations during simulation."
-        "(in) time             - time of simulation."
-        "(in) solution         - type of solution (solving)."
-        "(in) collect_dynamic  - if True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics."
+        @param[in] steps (uint): Number steps of simulations during simulation.
+        @param[in] time (double): Time of simulation.
+        @param[in] solution (solve_type): Type of solution.
+        @param[in] collect_dynamic (bool): If True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics.
         
-        "Returns dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,"
-        "otherwise returns only last values (last step of simulation) of dynamic."  
+        @return (list) Dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,
+                otherwise returns only last values (last step of simulation) of dynamic.
+        
+        @see simulate()
+        @see simulate_dynamic()
+        
+        """
         
         if (self._ccore_network_pointer is not None):
             return wrapper.simulate_sync_network(self._ccore_network_pointer, steps, time, solution, collect_dynamic);
@@ -311,25 +371,28 @@ class sync_network(network, network_interface):
 
 
     def _calculate_phases(self, solution, t, step, int_step):
-        "Calculates new phases for oscillators in the network in line with current step."
+        """!
+        @brief Calculates new phases for oscillators in the network in line with current step.
         
-        "(in) solution        - type solver of the differential equation."
-        "(in) t               - time of simulation."
-        "(in) step            - step of solution at the end of which states of oscillators should be calculated."
-        "(in) int_step        - step differentiation that is used for solving differential equation."
+        @param[in] solution (solve_type): Type solver of the differential equation.
+        @param[in] t (double): Time of simulation.
+        @param[in] step (double): Step of solution at the end of which states of oscillators should be calculated.
+        @param[in] int_step (double): Step differentiation that is used for solving differential equation.
         
-        "Returns list of new states (phases) for oscillators."
+        @return (list) New states (phases) for oscillators.
+        
+        """
         
         next_phases = [0] * self.num_osc;    # new oscillator _phases
         
         for index in range (0, self.num_osc, 1):
             if (solution == solve_type.FAST):
                 result = self._phases[index] + self.phase_kuramoto(self._phases[index], 0, index);
-                next_phases[index] = phase_normalization(result);
+                next_phases[index] = self._phase_normalization(result);
                 
             elif (solution == solve_type.RK4):
                 result = odeint(self.phase_kuramoto, self._phases[index], numpy.arange(t - step, t, int_step), (index , ));
-                next_phases[index] = phase_normalization(result[len(result) - 1][0]);
+                next_phases[index] = self._phase_normalization(result[len(result) - 1][0]);
             
             else:
                 raise NameError("Solver '" + solution + "' is not supported");
@@ -337,18 +400,21 @@ class sync_network(network, network_interface):
         return next_phases;
         
 
-def phase_normalization(teta):
-    "Normalization of phase of oscillator that should be placed between [0; 2 * pi]."
-    
-    "(in) teta        - phase of oscillator."
-    
-    "Returns normalized phase."
-    
-    norm_teta = teta;
-    while (norm_teta > (2.0 * pi)) or (norm_teta < 0):
-        if (norm_teta > (2.0 * pi)):
-            norm_teta -= 2.0 * pi;
-        else:
-            norm_teta += 2.0 * pi;
-    
-    return norm_teta;
+    def _phase_normalization(self, teta):
+        """!
+        @brief Normalization of phase of oscillator that should be placed between [0; 2 * pi].
+        
+        @param[in] teta (double): phase of oscillator.
+        
+        @return (double) Normalized phase.
+        
+        """
+        
+        norm_teta = teta;
+        while (norm_teta > (2.0 * pi)) or (norm_teta < 0):
+            if (norm_teta > (2.0 * pi)):
+                norm_teta -= 2.0 * pi;
+            else:
+                norm_teta += 2.0 * pi;
+        
+        return norm_teta;
