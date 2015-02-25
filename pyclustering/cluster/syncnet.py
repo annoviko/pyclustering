@@ -188,7 +188,7 @@ class syncnet(sync_network):
             return self.simulate_dynamic(order, solution, collect_dynamic);
     
     
-    def phase_kuramoto(self, teta, t, argv):
+    def _phase_kuramoto(self, teta, t, argv):
         """!
         @brief Overrided method for calculation of oscillator phase.
         

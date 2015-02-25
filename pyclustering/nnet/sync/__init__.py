@@ -180,7 +180,7 @@ class sync_network(network, network_interface):
         return exp_amount / num_neigh;        
     
     
-    def phase_kuramoto(self, teta, t, argv):
+    def _phase_kuramoto(self, teta, t, argv):
         """!
         @brief Returns result of phase calculation for specified oscillator in the network.
         
@@ -387,11 +387,11 @@ class sync_network(network, network_interface):
         
         for index in range (0, self.num_osc, 1):
             if (solution == solve_type.FAST):
-                result = self._phases[index] + self.phase_kuramoto(self._phases[index], 0, index);
+                result = self._phases[index] + self._phase_kuramoto(self._phases[index], 0, index);
                 next_phases[index] = self._phase_normalization(result);
                 
             elif (solution == solve_type.RK4):
-                result = odeint(self.phase_kuramoto, self._phases[index], numpy.arange(t - step, t, int_step), (index , ));
+                result = odeint(self._phase_kuramoto, self._phases[index], numpy.arange(t - step, t, int_step), (index , ));
                 next_phases[index] = self._phase_normalization(result[len(result) - 1][0]);
             
             else:

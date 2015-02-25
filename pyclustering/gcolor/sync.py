@@ -56,7 +56,7 @@ class syncgcolor(sync_network):
                 self._osc_conn[row][column] = graph_matrix[row][column];
                 
     
-    def phase_kuramoto(self, teta, t, argv):
+    def _phase_kuramoto(self, teta, t, argv):
         "Return result of phase calculation for oscillator in the network"
         
         "(in) teta     - value of phase of the oscillator with index argv in the network"

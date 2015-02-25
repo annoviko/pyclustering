@@ -1,27 +1,41 @@
-'''
+"""!
 
-Neural Network: Self-Organized Feature Map
+@brief Neural Network: Self-Organized Feature Map
+@details Based on article description:
+         - T.Kohonen. The Self-Organizing Map. 1990.
+         - T.Kohonen, E.Oja, O.Simula, A.Visa, J.Kangas. Engineering Applications of the Self-Organizing Map. 1996.
+         
+         - Feature SOM 0001: Predefined initial radius that depends on size of the network. 
+           Improves results of self-organization and helps avoid tug of neurons when network is small.
+           
+         - Feature SOM 0002: Uniform grid. Initial weights of neurons depends on input data set. The uniform grid represent rectangular grid
+           that covers input data in first two dimensions and distance between the nodes is the same in each of
+           the two dimensions of data. Further the uniform grid should be aligned with the center in other
+           dimensions of data.
+           
+         - Feature SOM 0003: Autostop. Automatic termination of learining process when adaptation is not occurred.
 
-Based on article description:
- - T.Kohonen. The Self-Organizing Map. 1990.
- - T.Kohonen, E.Oja, O.Simula, A.Visa, J.Kangas. Engineering Applications of the Self-Organizing Map. 1996.
+@authors Andrei Novikov (spb.andr@yandex.ru)
+@version 1.0
+@date 2014-2015
+@copyright GNU Public License
 
-Copyright (C) 2015    Andrei Novikov (spb.andr@yandex.ru)
+@cond GNU_PUBLIC_LICENSE
+    PyClustering is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    PyClustering is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+@endcond
 
-pyclustering is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-pyclustering is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-'''
+"""
 
 
 import math;

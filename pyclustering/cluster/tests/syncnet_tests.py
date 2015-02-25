@@ -20,6 +20,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 @endcond
+
 """
 
 import unittest;
@@ -28,11 +29,11 @@ from pyclustering.nnet import initial_type, conn_represent, solve_type;
 
 from pyclustering.cluster.syncnet import syncnet;
 
-from pyclustering.support import read_sample, read_image;
+from pyclustering.support import read_sample;
 
 from numpy import pi;
 
-from pyclustering.samples.definitions import SIMPLE_SAMPLES, IMAGE_MAP_SAMPLES;
+from pyclustering.samples.definitions import SIMPLE_SAMPLES;
 
 
 class Test(unittest.TestCase):

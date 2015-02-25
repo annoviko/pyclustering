@@ -39,6 +39,8 @@ class hhn_parameters:
     """!
     @brief Describes parameters of Hodgkin-Huxley Oscillatory Network.
     
+    @see hhn_network
+    
     """  
     
     nu      = random.random() * 2.0 - 1.0;
@@ -75,7 +77,9 @@ class hhn_parameters:
 
 class central_element:
     """!
-    @brief Central element consist of two central neurons that are described by a little bit different dynamic.
+    @brief Central element consist of two central neurons that are described by a little bit different dynamic than peripheral.
+    
+    @see hhn_network
     
     """
     
