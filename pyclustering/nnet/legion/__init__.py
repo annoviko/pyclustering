@@ -38,6 +38,13 @@ from pyclustering.support import heaviside, allocate_sync_ensembles;
 from scipy.integrate import odeint;
 
 class legion_parameters:
+    """!
+    @brief Describes parameters of LEGION.
+    
+    @see legion_network
+    
+    """  
+    
     eps         = 0.02;
     alpha       = 0.005;
     gamma       = 6.0;
@@ -58,6 +65,13 @@ class legion_parameters:
 
 
 class legion_network(network, network_interface):
+    """!
+    @brief Local excitatory global inhibitory oscillatory network (LEGION) that uses relaxation oscillator
+           based on Van der Pol model. The model uses global inhibitor to de-synchronize synchronous ensembles
+           of oscillators.
+           
+    """
+    
     _name = "Local excitatory global inhibitory oscillatory network (LEGION)"
     
     _excitatory = None;         # excitatory state of each oscillator
@@ -77,17 +91,20 @@ class legion_network(network, network_interface):
     
     _dyn_exc = None;                # save pointer to the excitatory dynamic of the network of the last simulation
     
-    def __init__(self, num_osc, stimulus = None, parameters = None, type_conn = conn_type.ALL_TO_ALL, conn_represent = conn_represent.MATRIX):
-        "Constructor of oscillatory network LEGION (local excitatory global inhibitory oscillatory network)."
+    def __init__(self, num_osc, stimulus = None, parameters = None, type_conn = conn_type.ALL_TO_ALL, type_conn_represent = conn_represent.MATRIX):
+        """!
+        @brief Constructor of oscillatory network LEGION (local excitatory global inhibitory oscillatory network).
         
-        "(in) num_osc             - number of oscillators in the network."
-        "(in) stimulus            - list of stimulus for oscillators, number of stimulus should be equal to number of oscillators,"
-        "                           example of stimulus for 5 oscillators [0, 0, 1, 1, 0], value of stimulus is defined by parameter 'I'."
-        "(in) parameters          - parameters of the network that are defined by structure 'legion_parameters'."
-        "(in) type_conn           - type of connection between oscillators in the network."
-        "(in) conn_represent      - internal representation of connection in the network: matrix or list."
+        @param[in] num_osc (uint): Number of oscillators in the network.
+        @param[in] stimulus (list): Stimulus for oscillators, number of stimulus should be equal to number of oscillators,
+                           example of stimulus for 5 oscillators [0, 0, 1, 1, 0], value of stimulus is defined by parameter 'I'.
+        @param[in] parameters (legion_parameters): Parameters of the network that are defined by structure 'legion_parameters'.
+        @param[in] type_conn (conn_type): Type of connection between oscillators in the network.
+        @param[in] type_conn_represent (conn_represent): Internal representation of connection in the network: matrix or list.
         
-        super().__init__(num_osc, type_conn, conn_represent);
+        """
+        
+        super().__init__(num_osc, type_conn, type_conn_represent);
         
         # set parameters of the network
         if (parameters is not None):
@@ -114,9 +131,12 @@ class legion_network(network, network_interface):
     
     
     def __create_stimulus(self, stimulus):
-        "Create stimulus for oscillators in line with stimulus map and parameters."
+        """!
+        @brief Create stimulus for oscillators in line with stimulus map and parameters.
         
-        "(in) stimulus        - stimulus for oscillators that is represented by list, number of stimulus should be equal number of oscillators."
+        @param[in] stimulus (list): Stimulus for oscillators that is represented by list, number of stimulus should be equal number of oscillators.
+        
+        """
         
         if (stimulus is None):
             self._stimulus = [0] * self._num_osc;
@@ -132,7 +152,10 @@ class legion_network(network, network_interface):
     
     
     def __create_dynamic_connections(self):
-        "Create dynamic connection in line with input stimulus."
+        """!
+        @brief Create dynamic connection in line with input stimulus.
+        
+        """
         
         if (self._stimulus is None):
             raise NameError("Stimulus should initialed before creation of the dynamic connections in the network.");
@@ -156,36 +179,46 @@ class legion_network(network, network_interface):
     
     
     def simulate(self, steps, time, solution = solve_type.RK4, collect_dynamic = True):
-        "Performs static simulation of LEGION oscillatory network."
+        """!
+        @brief Performs static simulation of LEGION oscillatory network.
         
-        "(in) steps            - number steps of simulations during simulation."
-        "(in) time             - time of simulation."
-        "(in) solution         - type of solution (solving)."
-        "(in) collect_dynamic  - if True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics."
+        @param[in] steps (uint): Number steps of simulations during simulation.
+        @param[in] time (double): Time of simulation.
+        @param[in] solution (solve_type): Type of solution (solving).
+        @param[in] collect_dynamic (bool): If True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics.
         
-        "Returns dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,"
-        "otherwise returns only last values (last step of simulation) of dynamic."
+        @return (list) Dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,
+                otherwise returns only last values (last step of simulation) of dynamic.
+        
+        """
         
         return self.simulate_static(steps, time, solution, collect_dynamic);
     
     
     def simulate_dynamic(self, order, solution, collect_dynamic, step, int_step, threshold_changes):
-        "Performs dynamic simulation, when time simulation is not specified, only stop condition."
-        "The method is not supported."
+        """!
+        @brief Performs dynamic simulation, when time simulation is not specified, only stop condition.
+        
+        @warning The method is not supported.
+        
+        """
         
         raise NameError("Dynamic simulation is not supported due to lack of stop conditions for the model.");
     
     
-    def simulate_static(self, steps, time, solution = solve_type.RK4, collect_dynamic = False):  
-        "Performs static simulation of LEGION oscillatory network."
+    def simulate_static(self, steps, time, solution = solve_type.RK4, collect_dynamic = False):
+        """!
+        @brief Performs static simulation of LEGION oscillatory network.
         
-        "(in) steps            - number steps of simulations during simulation."
-        "(in) time             - time of simulation."
-        "(in) solution         - type of solution (only RK4 is supported for python implementation)."
-        "(in) collect_dynamic  - if True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics."
+        @param[in] steps (uint): Number steps of simulations during simulation.
+        @param[in] time (double): Time of simulation.
+        @param[in] solution (solve_type): Type of solution (only RK4 is supported for python implementation).
+        @param[in] collect_dynamic (bool): If True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics.
         
-        "Returns dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,"
-        "otherwise returns only last values (last step of simulation) of dynamic."        
+        @return (list) Dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,
+                otherwise returns only last values (last step of simulation) of dynamic.
+        
+        """  
         
         # Check solver before simulation
         if (solution == solve_type.FAST):
@@ -229,14 +262,17 @@ class legion_network(network, network_interface):
     
     
     def _calculate_states(self, solution, t, step, int_step):
-        "Caclculates new state of each oscillator in the network. Returns only excitatory state of oscillators."
+        """!
+        @brief Calculates new state of each oscillator in the network. Returns only excitatory state of oscillators.
         
-        "(in) solution        - type solver of the differential equation."
-        "(in) t               - current time of simulation."
-        "(in) step            - step of solution at the end of which states of oscillators should be calculated."
-        "(in) int_step        - step differentiation that is used for solving differential equation."
+        @param[in] solution (solve_type): Type solver of the differential equation.
+        @param[in] t (double): Current time of simulation.
+        @param[in] step (double): Step of solution at the end of which states of oscillators should be calculated.
+        @param[in] int_step (double): Step differentiation that is used for solving differential equation.
         
-        "Returns new state of excitatory parts of oscillators."
+        @return (list) New state of excitatory parts of oscillators.
+        
+        """
         
         next_excitatory = [0.0] * self._num_osc;
         next_inhibitory = [0.0] * self._num_osc;
@@ -244,7 +280,7 @@ class legion_network(network, network_interface):
         
         # Update states of oscillators
         for index in range (0, self._num_osc, 1):
-            result = odeint(self.legion_state, [self._excitatory[index], self._inhibitory[index], self._potential[index]], numpy.arange(t - step, t, int_step), (index , ));
+            result = odeint(self._legion_state, [self._excitatory[index], self._inhibitory[index], self._potential[index]], numpy.arange(t - step, t, int_step), (index , ));
             [ next_excitatory[index], next_inhibitory[index], next_potential[index] ] = result[len(result) - 1][0:3];
             
             # Update coupling term
@@ -257,7 +293,7 @@ class legion_network(network, network_interface):
             self._buffer_coupling_term[index] = coupling - self._params.Wz * heaviside(self._global_inhibitor - self._params.teta_xz);
         
         # Update state of global inhibitory
-        result = odeint(self.global_inhibitor_state, self._global_inhibitor, numpy.arange(t - step, t, int_step), (None, ));
+        result = odeint(self._global_inhibitor_state, self._global_inhibitor, numpy.arange(t - step, t, int_step), (None, ));
         self._global_inhibitor = result[len(result) - 1][0];
         
         self._noise = [random.random() * self._params.ro for i in range(self._num_osc)];
@@ -268,33 +304,39 @@ class legion_network(network, network_interface):
         return next_excitatory;
     
     
-    def global_inhibitor_state(self, z, t, argv):
-        "Returns new value of global inhibitory."
+    def _global_inhibitor_state(self, z, t, argv):
+        """!
+        @brief Returns new value of global inhibitory
         
-        "(in) z        - current value of inhibitory."
-        "(in) t        - current time of simulation."
-        "(in) argv     - it's not used, can be ignored."
+        @param[in] z (dobule): Current value of inhibitory.
+        @param[in] t (double): Current time of simulation.
+        @param[in] argv (tuple): It's not used, can be ignored.
         
-        "Returns new value if global inhibitory (not assign)."
+        @return (double) New value if global inhibitory (not assign).
         
-        sigma = 0;
+        """
+        
+        sigma = 0.0;
         
         for x in self._excitatory:
             if (x > self._params.teta_zx):
-                sigma = 1;
+                sigma = 1.0;
                 break;
         
         return self._params.fi * (sigma - z);
     
     
-    def legion_state(self, inputs, t, argv):
-        "Returns new values of excitatory and inhibitory parts of oscillator and potential of oscillator."
+    def _legion_state(self, inputs, t, argv):
+        """!
+        @brief Returns new values of excitatory and inhibitory parts of oscillator and potential of oscillator.
         
-        "(in) inputs        - list of initial values (current) of oscillator [excitatory, inhibitory, potential]."
-        "(in) t             - current time of simulation."
-        "(in) argv          - extra arguments that are not used for integration - index of oscillator."
+        @param[in] inputs (list): Initial values (current) of oscillator [excitatory, inhibitory, potential].
+        @param[in] t (double): Current time of simulation.
+        @param[in] argv (uint): Extra arguments that are not used for integration - index of oscillator.
         
-        "Returns new values of excitatoty and inhibitory part of oscillator and new value of potential (not assign)."
+        @return (list) New values of excitatoty and inhibitory part of oscillator and new value of potential (not assign).
+        
+        """
         
         index = argv;
         
@@ -319,12 +361,13 @@ class legion_network(network, network_interface):
     
     
     def allocate_sync_ensembles(self, tolerance = 0.1):
-        "Allocate clusters in line with ensembles of synchronous oscillators where each." 
-        "synchronous ensemble corresponds to only one cluster."
+        """!
+        @brief Allocate clusters in line with ensembles of synchronous oscillators where each synchronous ensemble corresponds to only one cluster.
         
-        "(in) tolerance        - maximum error for allocation of synchronous ensemble oscillators."
+        @param[in] tolerance (double): Maximum error for allocation of synchronous ensemble oscillators.
         
-        "Returns list of grours (lists) of indexes of synchronous oscillators."
-        "For example [ [index_osc1, index_osc3], [index_osc2], [index_osc4, index_osc5] ]."
+        @return (list) Grours of indexes of synchronous oscillators, for example, [ [index_osc1, index_osc3], [index_osc2], [index_osc4, index_osc5] ].
+        
+        """
 
         return allocate_sync_ensembles(self._dyn_exc, tolerance);

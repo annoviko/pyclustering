@@ -135,7 +135,6 @@ class dsatur:
     
     def __get_amount_color(self, node_indexes, color_number):
         """!
-        
         @brief Countes how many nodes has color 'color_number'.
         
         @param[in] node_indexes (list): Indexes of graph nodes for checking.
@@ -155,7 +154,6 @@ class dsatur:
     
     def __get_neighbors(self, node_index):
         """!
-        
         @brief Returns indexes of neighbors of the specified node.
         
         @param[in] node_index (uint):

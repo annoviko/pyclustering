@@ -64,18 +64,11 @@ class sync_network(network, network_interface):
     
     # Properties of class that represents oscillatory neural network
     @property
-    def name(self):
-        """!
-        @brief Returns title of the network.
-        
-        """
-        
-        return self._name;
-    
-    @property
     def phases(self):
         """!
         @brief Returns list of phases of oscillators.
+        
+        @return (list) Phases of oscillators.
         
         """
         

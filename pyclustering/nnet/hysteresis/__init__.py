@@ -35,6 +35,11 @@ from pyclustering.nnet import *;
 
 
 class hysteresis_network(network, network_interface):
+    """!
+    @brief Hysteresis oscillatory network that uses relaxation oscillators.
+    
+    """
+    
     _name = "Hysteresis Neural Network";
     _states = None;             # list of states of neurons.
     _outputs_buffer = None;     # list of previous outputs of neurons.
@@ -43,36 +48,59 @@ class hysteresis_network(network, network_interface):
     
     @property
     def outputs(self):
-        "Returns current outputs of neurons."
+        """!
+        @brief Returns current outputs of neurons.
+        
+        @return (list) Current outputs of neurons.
+        
+        """
+        
         return self._outputs;
     
     @outputs.setter
     def outputs(self, values):
-        "Set current outputs of neurons."
+        """!
+        @brief Sets outputs of neurons.
+        
+        """
+        
         self._outputs = [val for val in values];
         self._outputs_buffer = [val for val in values];
     
     @property
     def states(self):
-        "Returns current states of neurons."
+        """!
+        @brief Return current states of neurons.
+        
+        @return (list) States of neurons.
+        
+        """
+        
         return self._states;
     
     @states.setter
     def states(self, values):
-        "Set current states of neurons."
+        """!
+        @brief Set current states of neurons.
+        
+        """
+        
         self._states = [val for val in values];
    
     
-    def __init__(self, num_osc, own_weight = -4, neigh_weight = -1, type_conn = conn_type.ALL_TO_ALL, conn_represent = conn_represent.MATRIX):
-        "Constructor of hysteresis oscillatory network."
+    def __init__(self, num_osc, own_weight = -4, neigh_weight = -1, type_conn = conn_type.ALL_TO_ALL, type_conn_represent = conn_represent.MATRIX):
+        """!
+        @brief Constructor of hysteresis oscillatory network.
         
-        "(in) num_osc            - number of oscillators in the network."
-        "(in) own_weight         - weight of connection from oscillator to itself - own weight."
-        "(in) neigh_weight       - weight of connection between oscillators."
-        "(in) type_conn          - type of connection between oscillators in the network."
-        "(in) conn_represent     - internal representation of connection in the network: matrix or list."
+        @param[in] num_osc (uint): Number of oscillators in the network.
+        @param[in] own_weight (double): Weight of connection from oscillator to itself - own weight.
+        @param[in] neigh_weight (double): Weight of connection between oscillators.
+        @param[in] type_conn (conn_type): Type of connection between oscillators in the network.
+        @param[in] type_conn_represent (conn_represent): Internal representation of connection in the network: matrix or list.
         
-        super().__init__(num_osc, type_conn, conn_represent);
+        """
+        
+        super().__init__(num_osc, type_conn, type_conn_represent);
         
         self._states = [0] * self._num_osc;
         self._outputs = [-1] * self._num_osc;
@@ -84,14 +112,17 @@ class hysteresis_network(network, network_interface):
             self._weight[index][index] = own_weight;
 
     
-    def neuron_states(self, inputs, t, argv):
-        "Returns new value of the neuron (oscillator)."
+    def _neuron_states(self, inputs, t, argv):
+        """!
+        @brief Returns new value of the neuron (oscillator).
         
-        "(in) inputs    - list of initial values (current) of the neuron - excitatory."
-        "(in) t         - current time of simulation."
-        "(in) argv      - extra arguments that are not used for integration - index of the neuron."
+        @param[in] inputs (list): Initial values (current) of the neuron - excitatory.
+        @param[in] t (double): Current time of simulation.
+        @param[in] argv (tuple): Extra arguments that are not used for integration - index of the neuron.
         
-        "Returns new value of the neuron."
+        @return (double) New value of the neuron.
+        
+        """
         
         xi = inputs[0];
         index = argv;
@@ -112,36 +143,45 @@ class hysteresis_network(network, network_interface):
         
     
     def simulate(self, steps, time, solution = solve_type.RK4, collect_dynamic = True):
-        "Performs static simulation of hysteresis oscillatory network."
+        """!
+        @brief Performs static simulation of hysteresis oscillatory network.
         
-        "(in) steps            - number steps of simulations during simulation."
-        "(in) time             - time of simulation."
-        "(in) solution         - type of solution (solving)."
-        "(in) collect_dynamic  - if True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics."
+        @param[in] steps (uint): Number steps of simulations during simulation.
+        @param[in] time (double): Time of simulation.
+        @param[in] solution (solve_type): Type of solution (solving).
+        @param[in] collect_dynamic (bool): If True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics.
         
-        "Returns dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,"
-        "otherwise returns only last values (last step of simulation) of dynamic."  
+        @return (list) Dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,
+                otherwise returns only last values (last step of simulation) of dynamic.
+        """
                 
         return self.simulate_static(steps, time, solution, collect_dynamic);
     
     
     def simulate_dynamic(self, order, solution, collect_dynamic, step, int_step, threshold_changes):
-        "Performs dynamic simulation, when time simulation is not specified, only stop condition."
-        "Not supported because of model specific."
+        """!
+        @brief Performs dynamic simulation, when time simulation is not specified, only stop condition.
+        
+        @warning Not supported because of model specific.
+        
+        """
         
         raise NameError("Dynamic simulation is not supported due to lack of stop conditions for the model");
     
     
     def simulate_static(self, steps, time, solution = solve_type.RK4, collect_dynamic = False):
-        "Performs static simulation of hysteresis oscillatory network."
+        """!
+        @brief Performs static simulation of hysteresis oscillatory network.
         
-        "(in) steps            - number steps of simulations during simulation."
-        "(in) time             - time of simulation."
-        "(in) solution         - type of solution (only RK4 is supported for python implementation)."
-        "(in) collect_dynamic  - if True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics."
+        @param[in] steps (uint): Number steps of simulations during simulation.
+        @param[in] time (double): Time of simulation.
+        @param[in] solution (solve_type): Type of solution (solving).
+        @param[in] collect_dynamic (bool): If True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics.
         
-        "Returns dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,"
-        "otherwise returns only last values (last step of simulation) of dynamic."  
+        @return (list) Dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,
+                otherwise returns only last values (last step of simulation) of dynamic.
+        
+        """
 
         # Check solver before simulation
         if (solution == solve_type.FAST):
@@ -178,18 +218,22 @@ class hysteresis_network(network, network_interface):
     
         
     def _calculate_states(self, solution, t, step, int_step):
-        "Calculates new states for neurons using differential calculus. Returns new states for neurons."
+        """!
+        @brief Calculates new states for neurons using differential calculus. Returns new states for neurons.
         
-        "(in) solution    - type solver of the differential equation."
-        "(in) t           - current time of simulation."
-        "(in) step        - step of solution at the end of which states of oscillators should be calculated."
-        "(in) int_step    - step differentiation that is used for solving differential equation."
+        @param[in] solution (solve_type): Type solver of the differential equation.
+        @param[in] t (double): Current time of simulation.
+        @param[in] step (double): Step of solution at the end of which states of oscillators should be calculated.
+        @param[in] int_step (double): Step differentiation that is used for solving differential equation.
         
-        "Returns new states for neurons (don't assign)."
+        @return (list) New states for neurons (don't assign).
+        
+        """
+        
         next_states = [0] * self._num_osc;
         
         for index in range (0, self._num_osc, 1):            
-            result = odeint(self.neuron_states, self._states[index], numpy.arange(t - step, t, int_step), (index , ));
+            result = odeint(self._neuron_states, self._states[index], numpy.arange(t - step, t, int_step), (index , ));
             next_states[index] = result[len(result) - 1][0];
         
         self._outputs = [val for val in self._outputs_buffer];
@@ -197,13 +241,15 @@ class hysteresis_network(network, network_interface):
     
     
     def allocate_sync_ensembles(self, tolerance = 0.1):
-        "Allocate clusters in line with ensembles of synchronous oscillators where each" 
-        "synchronous ensemble corresponds to only one cluster."
+        """!
+        @brief Allocate clusters in line with ensembles of synchronous oscillators where each
+               synchronous ensemble corresponds to only one cluster.
+               
+        @param[in] tolerance (double): Maximum error for allocation of synchronous ensemble oscillators.
         
-        "(in) tolerance        - maximum error for allocation of synchronous ensemble oscillators."
+        @return (list) Grours of indexes of synchronous oscillators, for example, [ [index_osc1, index_osc3], [index_osc2], [index_osc4, index_osc5] ]."
         
-        "Returns list of grours (lists) of indexes of synchronous oscillators"
-        "For example [ [index_osc1, index_osc3], [index_osc2], [index_osc4, index_osc5] ]."
+        """
         
         clusters = [ [0] ];
         
