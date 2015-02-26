@@ -34,7 +34,10 @@ from pyclustering.samples.definitions import GRAPH_SIMPLE_SAMPLES, GRAPH_DSJC_SA
 class Test(unittest.TestCase):
     def templateTestColoring(self, filename):
         graph = read_graph(filename);
-        map_coloring = dsatur(graph.data);
+        
+        dsatur_intance = dsatur(graph.data);
+        dsatur_intance.process();
+        map_coloring = dsatur_intance.get_colors();
         
         # Check number of colors
         assigned_colors = set(map_coloring);

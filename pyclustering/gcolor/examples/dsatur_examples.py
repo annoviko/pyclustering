@@ -31,7 +31,10 @@ from pyclustering.gcolor.dsatur import dsatur;
 
 def template_graph_coloring(filename):
     graph = read_graph(filename);
-    coloring = dsatur(graph.data);
+    
+    dsatur_instance = dsatur(graph.data);
+    dsatur_instance.process();
+    coloring = dsatur_instance.get_colors();
     
     print("Number colors: ", max(coloring));
     
