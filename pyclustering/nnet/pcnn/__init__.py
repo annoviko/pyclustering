@@ -29,7 +29,11 @@
 from pyclustering.nnet import *;
 
 class pcnn_parameters:
-    "Constant for pulse coupled neural network"
+    """!
+    @brief Parameters for pulse coupled neural network.
+    
+    """
+    
     VF = 1.0;   # multiplier for the feeding compartment at the current step
     VL = 1.0;   # multiplier for the linking compartment at the current step
     VT = 10.0;  # multiplier for the threshold at the current step
@@ -47,7 +51,10 @@ class pcnn_parameters:
     OUTPUT_FALSE = 0;   # rest value for oscillators.
 
 class pcnn_network(network, network_interface):
-    "Model of oscillatory network that is based on the Eckhorn model."
+    """!
+    @brief Model of oscillatory network that is based on the Eckhorn model.
+    
+    """
     
     # Protected members:
     _name = "Pulse Coupled Neural Network";
@@ -62,16 +69,19 @@ class pcnn_network(network, network_interface):
     _params = None;
     
     
-    def __init__(self, num_osc, stimulus = None, parameters = None, type_conn = conn_type.ALL_TO_ALL, conn_represent = conn_represent.MATRIX):
-        "Constructor of oscillatory network is based on Kuramoto model."
+    def __init__(self, num_osc, stimulus = None, parameters = None, type_conn = conn_type.ALL_TO_ALL, type_conn_represent = conn_represent.MATRIX):
+        """!
+        @brief Constructor of oscillatory network is based on Kuramoto model.
         
-        "(in) num_osc            - number of oscillators in the network."
-        "(in) stimulus           - list of stimulus for oscillators, number of stimulus should be equal to number of oscillators."
-        "(in) parameters         - parameters of the network that are defined by structure 'pcnn_parameters'."
-        "(in) type_conn          - type of connection between oscillators in the network (all-to-all, grid, bidirectional list, etc.)."
-        "(in) conn_represent     - internal representation of connection in the network: matrix or list."
+        @param[in] num_osc (uint): Number of oscillators in the network.
+        @param[in] stimulus (list): Stimulus for oscillators, number of stimulus should be equal to number of oscillators.
+        @param[in] parameters (pcnn_parameters): Parameters of the network.
+        @param[in] type_conn (conn_type): Type of connection between oscillators in the network (all-to-all, grid, bidirectional list, etc.).
+        @param[in] type_conn_represent (conn_represent): Internal representation of connection in the network: matrix or list.
         
-        super().__init__(num_osc, type_conn, conn_represent);
+        """
+        
+        super().__init__(num_osc, type_conn, type_conn_represent);
         
         # set parameters of the network
         if (parameters is not None):
@@ -95,29 +105,35 @@ class pcnn_network(network, network_interface):
     
     
     def simulate(self, steps, time = None, solution = solve_type.RK4, collect_dynamic = False):
-        "Performs static simulation of pulse coupled neural network."
+        """!
+        @brief Performs static simulation of pulse coupled neural network.
         
-        "(in) steps            - number steps of simulations during simulation."
-        "(in) time             - can be ingored - steps are used instead of time of simulation."
-        "(in) solution         - type of solution (solving)."
-        "(in) collect_dynamic  - if True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics."
+        @param[in] steps (uint): Number steps of simulations during simulation.
+        @param[in] time (double): Can be ingored - steps are used instead of time of simulation.
+        @param[in] solution (solve_type): Type of solution (solving).
+        @param[in] collect_dynamic (bool): If True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics.
         
-        "Returns dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,"
-        "otherwise returns only last values (last step of simulation) of dynamic."  
+        @return (list) Dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,
+                otherwise returns only last values (last step of simulation) of dynamic.
+        
+        """
         
         return self.simulate_static(steps, time, solution, collect_dynamic);
         
         
     def simulate_static(self, steps, time = None, solution = solve_type.RK4, collect_dynamic = False):
-        "Performs static simulation of pulse coupled neural network."
+        """!
+        @brief Performs static simulation of pulse coupled neural network.
         
-        "(in) steps            - number steps of simulations during simulation."
-        "(in) time             - can be ingored - steps are used instead of time of simulation."
-        "(in) solution         - type of solution (solving)."
-        "(in) collect_dynamic  - if True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics."
+        @param[in] steps (uint): Number steps of simulations during simulation.
+        @param[in] time (double): Can be ingored - steps are used instead of time of simulation.
+        @param[in] solution (solve_type): Type of solution (solving).
+        @param[in] collect_dynamic (bool): If True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics.
         
-        "Returns dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,"
-        "otherwise returns only last values (last step of simulation) of dynamic."  
+        @return (list) Dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,
+                otherwise returns only last values (last step of simulation) of dynamic.
+        
+        """
         
         dyn_output = None;
         # dyn_threshold = None;
@@ -161,15 +177,25 @@ class pcnn_network(network, network_interface):
     
     
     def simulate_dynamic(self, order, solution, collect_dynamic, step, int_step, threshold_changes):
-        pass;
+        """!
+        @brief Performs dynamic simulation, when time simulation is not specified, only stop condition.
+        
+        @warning The method is not supported.
+        
+        """
+        
+        raise NameError("Dynamic simulation is not supported due to lack of stop conditions for the model.");
     
         
     def _calculate_states(self, t):
-        "Calculates states of oscillators in the network for current step and stored them except outputs of oscillators."
+        """!
+        @brief Calculates states of oscillators in the network for current step and stored them except outputs of oscillators.
         
-        "(in) t    - can be ignored, current step of simulation."
+        @param[in] t (double): Can be ignored, current step of simulation.
         
-        "Returns new outputs for oscillators (do not stored it)."
+        @return (list) New outputs for oscillators (do not stored it).
+        
+        """
         
         feeding = [0.0] * self._num_osc;
         linking = [0.0] * self._num_osc;
@@ -215,13 +241,16 @@ class pcnn_network(network, network_interface):
     
     
     def allocate_sync_ensembles(self, tolerance = 10):
-        "Allocate clusters in line with ensembles of synchronous oscillators where each." 
-        "synchronous ensemble corresponds to only one cluster."
+        """!
+        @brief Allocate clusters in line with ensembles of synchronous oscillators where each
+               synchronous ensemble corresponds to only one cluster.
+               
+        @param[in] (double): Is not used, can be ignored.
         
-        "(in) tolerance        - can be ignored because of specific of neural network."
-        
-        "Returns list of grours (lists) of indexes of synchronous oscillators."
-        "For example [ [index_osc1, index_osc3], [index_osc2], [index_osc4, index_osc5] ]."
+        @return (list) Grours (lists) of indexes of synchronous oscillators. 
+                For example, [ [index_osc1, index_osc3], [index_osc2], [index_osc4, index_osc5] ].
+                
+        """
         
         sync_ensembles = [];
         traverse_oscillators = set();

@@ -68,6 +68,12 @@ import pyclustering.core.wrapper as wrapper;
 # Feature SOM 0003: Autostop. Automatic termination of learining process when adaptation is not occurred.
 
 class type_conn:
+    """!
+    @brief Enumeration of connection types for SOM.
+    
+    @see som
+    
+    """
     grid_four = 0;
     grid_eight = 1;
     honeycomb = 2;
@@ -75,6 +81,12 @@ class type_conn:
     
     
 class type_init:
+    """!
+    @brief Enumeration of initialization types for SOM
+    
+    @see som
+    
+    """
     random = 0;
     random_centroid = 1;
     random_surface = 2;
@@ -82,6 +94,11 @@ class type_init:
 
 
 class som:
+    """!
+    @brief Represents self-organized feature map (SOM).
+    
+    """
+    
     # describe network
     _rows = 0;
     _cols = 0;
@@ -111,7 +128,12 @@ class som:
     
     @property
     def size(self):
-        "Returns size of self-organized map (number of neurons)."
+        """!
+        @brief Returns size of self-organized map (number of neurons).
+        
+        @return (uint) Size of self-organized map (number of neurons).
+        
+        """
         
         if (self.__ccore_som_pointer is not None):
             self._size = wrapper.som_get_size(self.__ccore_som_pointer);
@@ -120,7 +142,12 @@ class som:
     
     @property
     def weights(self):
-        "Returns list of weights of each neuron."
+        """!
+        @brief Returns list of weights of each neuron.
+        
+        @return (list) Weights of each neuron
+        
+        """
         
         if (self.__ccore_som_pointer is not None):
             self._weights = wrapper.som_get_weights(self.__ccore_som_pointer);
@@ -129,7 +156,12 @@ class som:
     
     @property
     def awards(self):
-        "Returns list of numbers of captured objects by each neuron."
+        """!
+        @brief Returns list of numbers of captured objects by each neuron.
+        
+        @return (list) Numbers of captured objects by each neuron.
+        
+        """
         
         if (self.__ccore_som_pointer is not None):
             self._award = wrapper.som_get_awards(self.__ccore_som_pointer);
@@ -138,7 +170,12 @@ class som:
     
     @property
     def capture_objects(self):
-        "Returns list of indexes of captured objects by each neuron."
+        """!
+        @brief Returns list of indexes of captured objects by each neuron.
+        
+        @return (list) Indexes of captured objects by each neuron.
+        
+        """
         
         if (self.__ccore_som_pointer is not None):
             self._capture_objects = wrapper.som_get_capture_objects(self.__ccore_som_pointer);
@@ -147,14 +184,18 @@ class som:
     
     
     def __init__(self, rows, cols, data, epochs, conn_type = type_conn.grid_eight, init_type = type_init.uniform_grid, ccore = False):
-        "Constructor of self-organized map."
+        """!
+        @brief Constructor of self-organized map.
         
-        "(in) rows        - number of neurons in the column (number of rows)."
-        "(in) cols        - number of neurons in the row (number of columns)."
-        "(in) data        - input data - list of points where each point is represented by list of features, for example coordinates."
-        "(in) epochs      - number of epochs for training."
-        "(in) conn_type   - type of connection between oscillators in the network (grid four, grid eight, honeycomb, function neighbour)."
-        "(in) init_type   - type of initialization of initial neuron weights (random, random in center of the input data, random distributed in data, ditributed in line with uniform grid)."
+        @param[in] rows (uint): Number of neurons in the column (number of rows).
+        @param[in] cols (uint): Number of neurons in the row (number of columns).
+        @param[in] data (list): Input data - list of points where each point is represented by list of features, for example coordinates.
+        @param[in] epochs (uint): Number of epochs for training.
+        @param[in] conn_type (type_conn): Type of connection between oscillators in the network (grid four, grid eight, honeycomb, function neighbour).
+        @param[in] init_type (type_init): Type of initialization of initial neuron weights (random, random in center of the input data, random distributed in data, ditributed in line with uniform grid).
+        @param[in] ccore (bool): If True simulation is performed by CCORE library (C++ implementation of pyclustering).
+        
+        """
         
         # some of these parameters are required despite core implementation, for example, for network demonstration.
         self._cols = cols;
@@ -203,16 +244,22 @@ class som:
         
 
     def __del__(self):
-        "Destructor of the self-organized feature map."
+        """!
+        @brief Destructor of the self-organized feature map.
+        
+        """
         
         if (self.__ccore_som_pointer is not None):
             wrapper.som_destroy(self.__ccore_som_pointer);
             
 
     def _create_initial_weights(self, init_type):
-        "Creates initial weights for neurons in line with the specified initialization."
+        """!
+        @brief Creates initial weights for neurons in line with the specified initialization.
         
-        "(in) init_type    - type of initialization of initial neuron weights (random, random in center of the input data, random distributed in data, ditributed in line with uniform grid)."
+        @param[in] init_type (type_init): Type of initialization of initial neuron weights (random, random in center of the input data, random distributed in data, ditributed in line with uniform grid).
+        
+        """
         
         dimension = len(self._data[0]);
         
@@ -273,9 +320,12 @@ class som:
             self._weights = [ [random.random()  for i in range(dimension)] for j in range(self._size) ]; 
     
     def _create_connections(self, conn_type):
-        "Create connections in line with input rule (grid four, grid eight, honeycomb, function neighbour)."
+        """!
+        @brief Create connections in line with input rule (grid four, grid eight, honeycomb, function neighbour).
         
-        "(in) conn_type    -  type of connection between oscillators in the network."
+        @param[in] conn_type (type_conn): Type of connection between oscillators in the network.
+        
+        """
         
         self._neighbors = [[] for index in range(self._size)];    
             
@@ -352,11 +402,14 @@ class som:
     
     
     def _competition(self, x):
-        "Returns neuron winner (distance, neuron index)."
+        """!
+        @brief Calculates neuron winner (distance, neuron index).
         
-        "(in) x    - input pattern from the input data set, for example it can be coordinates of point."
+        @param[in] x (list): Input pattern from the input data set, for example it can be coordinates of point.
         
-        "Returns index of neuron that is winner."
+        @return (uint) Returns index of neuron that is winner.
+        
+        """
         
         index = 0;
         minimum = euclidean_distance_sqrt(self._weights[0], x);
@@ -371,10 +424,13 @@ class som:
     
     
     def _adaptation(self, index, x):
-        "Change weight of neurons in line with won neuron."
+        """!
+        @brief Change weight of neurons in line with won neuron.
         
-        "(in) index    - index of neuron-winner."
-        "(in) x        - input pattern from the input data set."
+        @param[in] index (uint): Index of neuron-winner.
+        @param[in] x (list): Input pattern from the input data set.
+        
+        """
         
         dimension = len(self._weights[0]);
         
@@ -403,11 +459,14 @@ class som:
     
                             
     def train(self, autostop = False):
-        "Trains self-organized feature map (SOM)."
+        """!
+        @brief Trains self-organized feature map (SOM).
         
-        "(in) autostop    - automatic termination of learining process when adaptation is not occurred."
+        @param[in] autostop (bool): Automatic termination of learining process when adaptation is not occurred.
         
-        "Returns number of learining iterations."
+        @return (uint) Number of learining iterations.
+        
+        """
         
         if (self.__ccore_som_pointer is not None):
             return wrapper.som_train(self.__ccore_som_pointer, autostop);
@@ -451,12 +510,17 @@ class som:
         return self._epochs;
     
     def simulate(self, input_pattern):
-        "Processes input pattern (no learining) and returns index of neuron-winner."
-        "Using index of neuron winner catched object can be obtained using property capture_objects."
+        """!
+        @brief Processes input pattern (no learining) and returns index of neuron-winner.
+               Using index of neuron winner catched object can be obtained using property capture_objects.
+               
+        @param[in] input_pattern (list): Input pattern.
         
-        "(in) input_pattern    - input pattern."
+        @return (uint) Returns index of neuron-winner.
+               
+        @see capture_objects
         
-        "Returns index of neuron-winner."
+        """
                 
         if (self.__ccore_som_pointer is not None):
             return wrapper.som_simulate(self.__ccore_som_pointer, [ input_pattern ]);
@@ -465,11 +529,14 @@ class som:
     
     
     def _get_maximal_adaptation(self, previous_weights):
-        "Returns maximum changes of weight in line with comparison between previous weights and current weights."
+        """!
+        @brief Calculates maximum changes of weight in line with comparison between previous weights and current weights.
         
-        "(in) previous_weights    - weights from the previous step of learning process."
+        @param[in] previous_weights (list): Weights from the previous step of learning process.
         
-        "Returns value that represents maximum changes of weight after adaptation process."
+        @return (double) Value that represents maximum changes of weight after adaptation process.
+        
+        """
         
         dimension = len(self._data[0]);
         maximal_adaptation = 0.0;
@@ -487,7 +554,12 @@ class som:
     
     
     def get_winner_number(self):
-        "Returns number of winner at the last step of learning process."
+        """!
+        @brief Calculates number of winner at the last step of learning process.
+        
+        @return (uint) Number of winner.
+        
+        """
         
         if (self.__ccore_som_pointer is not None):
             self._award = wrapper.som_get_awards(self.__ccore_som_pointer);
@@ -501,7 +573,12 @@ class som:
     
     
     def get_density_matrix(self):
-        "Returns density matrix in line with last step of learning process."
+        """!
+        @brief Calculates density matrix in line with last step of learning process.
+        
+        @return (list) Density matrix in line with last step of learning process.
+        
+        """
         
         if (self.__ccore_som_pointer is not None):
             self._award = wrapper.som_get_awards(self.__ccore_som_pointer);
@@ -522,7 +599,10 @@ class som:
     
     
     def show_award(self):
-        "Prints indexes of won objects by each neuron."
+        """!
+        @brief Prints indexes of won objects by each neuron.
+        
+        """
         
         if (self.__ccore_som_pointer is not None):
             self._award = wrapper.som_get_awards(self.__ccore_som_pointer);
@@ -543,13 +623,16 @@ class som:
             
     
     def show_network(self, awards = False, belongs = False, coupling = True, dataset = True, marker_type = '.'):
-        "Shows neurons in the dimension of data."
+        """!
+        @brief Shows neurons in the dimension of data.
         
-        "(in) awards        - if True - displays how many objects won each neuron."
-        "(in) belongs       - if True - marks each won object by according index of neuron-winner (only when dataset is displayed too)."
-        "(in) coupling      - if True - displays connections between neurons (except case when function neighbor is used)."
-        "(in) dataset       - if True - displays inputs data set."
-        "(in) marker_type   - defines marker that is used for dispaying neurons in the network."
+        @param[in] awards (bool): If True - displays how many objects won each neuron.
+        @param[in] belongs (bool): If True - marks each won object by according index of neuron-winner (only when dataset is displayed too).
+        @param[in] coupling (bool): If True - displays connections between neurons (except case when function neighbor is used).
+        @param[in] dataset (bool): If True - displays inputs data set.
+        @param[in] marker_type (string): Defines marker that is used for dispaying neurons in the network.
+        
+        """
         
         if (self.__ccore_som_pointer is not None):
             self._size = wrapper.som_get_size(self.__ccore_som_pointer);
