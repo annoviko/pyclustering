@@ -28,7 +28,8 @@ import unittest;
 from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
 
 from pyclustering.support import read_sample;
-from pyclustering.support.cftree import measurement_type;
+
+from pyclustering.container.cftree import measurement_type;
 
 from pyclustering.cluster.birch import birch;
 

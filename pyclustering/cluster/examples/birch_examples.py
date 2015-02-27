@@ -25,7 +25,7 @@
 
 from pyclustering.cluster.birch import birch;
 
-from pyclustering.support.cftree import measurement_type;
+from pyclustering.container.cftree import measurement_type;
 
 from pyclustering.support import read_sample;
 from pyclustering.support import draw_clusters;

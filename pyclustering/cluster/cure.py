@@ -26,13 +26,10 @@
 
 """
 
-from decimal import *;
-
-from pyclustering.support import read_sample;
 from pyclustering.support import euclidean_distance;
 from pyclustering.support import euclidean_distance_sqrt;
-from pyclustering.support import draw_clusters;
-from pyclustering.support.kdtree import kdtree;
+
+from pyclustering.container.kdtree import kdtree;
 
 import pyclustering.core.wrapper as wrapper;
 

@@ -25,33 +25,34 @@
 
 import unittest;
 
-from pyclustering.cluster.tests               import birch_tests         as cluster_birch_unit_tests;
-from pyclustering.cluster.tests               import cure_tests          as cluster_cure_unit_tests;
-from pyclustering.cluster.tests               import dbscan_tests        as cluster_dbscan_unit_tests;
-from pyclustering.cluster.tests               import hierarchical_tests  as cluster_hierarchical_unit_tests;
-from pyclustering.cluster.tests               import hsyncnet_tests      as cluster_hsyncnet_unit_tests;
-from pyclustering.cluster.tests               import kmeans_tests        as cluster_kmeans_unit_tests;
-from pyclustering.cluster.tests               import optics_tests        as cluster_optics_unit_tests;
-from pyclustering.cluster.tests               import rock_tests          as cluster_rock_unit_tests;
-from pyclustering.cluster.tests               import syncnet_tests       as cluster_syncnet_unit_tests;
-from pyclustering.cluster.tests               import syncsom_tests       as cluster_syncsom_unit_tests;
-from pyclustering.cluster.tests               import xmeans_tests        as cluster_xmeans_unit_tests;
+from pyclustering.cluster.tests                  import birch_tests         as cluster_birch_unit_tests;
+from pyclustering.cluster.tests                  import cure_tests          as cluster_cure_unit_tests;
+from pyclustering.cluster.tests                  import dbscan_tests        as cluster_dbscan_unit_tests;
+from pyclustering.cluster.tests                  import hierarchical_tests  as cluster_hierarchical_unit_tests;
+from pyclustering.cluster.tests                  import hsyncnet_tests      as cluster_hsyncnet_unit_tests;
+from pyclustering.cluster.tests                  import kmeans_tests        as cluster_kmeans_unit_tests;
+from pyclustering.cluster.tests                  import optics_tests        as cluster_optics_unit_tests;
+from pyclustering.cluster.tests                  import rock_tests          as cluster_rock_unit_tests;
+from pyclustering.cluster.tests                  import syncnet_tests       as cluster_syncnet_unit_tests;
+from pyclustering.cluster.tests                  import syncsom_tests       as cluster_syncsom_unit_tests;
+from pyclustering.cluster.tests                  import xmeans_tests        as cluster_xmeans_unit_tests;
 
 from pyclustering.gcolor.tests                   import dsatur_tests        as gcolor_dsatur_unit_tests;
 from pyclustering.gcolor.tests                   import hysteresis_tests    as gcolor_hysteresis_unit_tests;
 from pyclustering.gcolor.tests                   import sync_tests          as gcolor_sync_unit_tests;
 
-from pyclustering.nnet.hhn                       import tests as nnet_hhn_unit_tests;
-from pyclustering.nnet.hysteresis                import tests as nnet_hysteresis_unit_tests;
-from pyclustering.nnet.legion                    import tests as nnet_legion_unit_tests;
-from pyclustering.nnet.pcnn                      import tests as nnet_pcnn_unit_tests;
-from pyclustering.nnet.som                       import tests as nnet_som_unit_tests;
-from pyclustering.nnet.sync                      import tests as nnet_sync_unit_tests;
-from pyclustering.nnet                           import tests as nnet_unit_tests;
+from pyclustering.nnet.tests                     import hhn_tests           as nnet_hhn_unit_tests;
+from pyclustering.nnet.tests                     import hysteresis_tests    as nnet_hysteresis_unit_tests;
+from pyclustering.nnet.tests                     import legion_tests        as nnet_legion_unit_tests;
+from pyclustering.nnet.tests                     import nnet_tests          as nnet_unit_tests;
+from pyclustering.nnet.tests                     import pcnn_tests          as nnet_pcnn_unit_tests;
+from pyclustering.nnet.tests                     import som_tests           as nnet_som_unit_tests;
+from pyclustering.nnet.tests                     import sync_tests          as nnet_sync_unit_tests;
 
-from pyclustering.support.cftree                 import tests as support_cftree_unit_tests;
-from pyclustering.support.kdtree                 import tests as support_kdtree_unit_tests;
-from pyclustering.support                        import tests as support_unit_tests;
+from pyclustering.container.tests                import cftree_tests        as container_cftree_unit_tests;
+from pyclustering.container.tests                import kdtree_tests        as container_kdtree_unit_tests;
+
+from pyclustering.support                        import tests               as support_unit_tests;
 
 
 
@@ -82,8 +83,9 @@ if __name__ == "__main__":
     suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_som_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_sync_unit_tests));
     
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(support_cftree_unit_tests));
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(support_kdtree_unit_tests));
+    suite.addTests(unittest.TestLoader().loadTestsFromModule(container_cftree_unit_tests));
+    suite.addTests(unittest.TestLoader().loadTestsFromModule(container_kdtree_unit_tests));
+    
     suite.addTests(unittest.TestLoader().loadTestsFromModule(support_unit_tests));
     
     unittest.TextTestRunner(verbosity = 2).run(suite);
