@@ -1,23 +1,27 @@
-'''
+"""!
 
-Useful functions that are used by modules of pyclustering.
+@brief Useful functions that are used by modules of pyclustering.
 
-Copyright (C) 2015    Andrei Novikov (spb.andr@yandex.ru)
+@authors Andrei Novikov (spb.andr@yandex.ru)
+@date 2014-2015
+@copyright GNU Public License
 
-pyclustering is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+@cond GNU_PUBLIC_LICENSE
+    PyClustering is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    PyClustering is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+@endcond
 
-pyclustering is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-'''
+"""
 
 import time;
 import numpy;
@@ -32,11 +36,14 @@ from sys import platform as _platform;
     
 
 def read_sample(filename):
-    "Returns sample for cluster analysis."
+    """!
+    @brief Returns sample for cluster analysis.
     
-    "(in) filename        - path to file with data for cluster analysis."
+    @param[in] filename (string): Path to file with data for cluster analysis.
     
-    "Returns list of points where each point represented by list of coordinates."
+    @return (list) Points where each point represented by list of coordinates.
+    
+    """
     
     file = open(filename, 'r');
 
@@ -47,11 +54,14 @@ def read_sample(filename):
 
 
 def read_image(filename):
-    "Returns image as N-dimension (depends on the input image) matrix, where one element of list describes pixel."
+    """!
+    @brief Returns image as N-dimension (depends on the input image) matrix, where one element of list describes pixel.
     
-    "(in) filename        - path to image."
+    @param[in] filename (string): Path to image.
     
-    "Return list of pixels where each pixel described by list of RGB-values."
+    @return (list) Pixels where each pixel described by list of RGB-values.
+    
+    """
     
     image_source = Image.open(filename);
     data = [pixel for pixel in image_source.getdata()];
@@ -62,11 +72,22 @@ def read_image(filename):
 
 
 def rgb2gray(image_rgb_array):
-    "Returns image as 1-dimension (gray colored) matrix, where one element of list describes pixel."
+    """!
+    @brief Returns image as 1-dimension (gray colored) matrix, where one element of list describes pixel.
+    @details Luma coding is used for transformation.
     
-    "(in) image_rgb_array    - image represented by RGB list."
+    @param[in] image_rgb_array (list): Image represented by RGB list.
     
-    "Returns image as gray colored matrix, where one element of list describes pixel."
+    @return (list) Image as gray colored matrix, where one element of list describes pixel.
+    
+    @code
+        colored_image = read_image(file_name);
+        gray_image = rgb2gray(colored_image);
+    @endcode
+    
+    @see read_image()
+    
+    """
     
     image_gray_array = [0.0] * len(image_rgb_array);
     for index in range(0, len(image_rgb_array), 1):
@@ -76,11 +97,15 @@ def rgb2gray(image_rgb_array):
     
 
 def average_neighbor_distance(points, num_neigh):
-    "Returns average distance for establish links between specified number of neighbors."
+    """!
+    @brief Returns average distance for establish links between specified number of neighbors.
     
-    "(in) points        - input data, list of points where each point represented by list."
+    @param[in] points (list): Input data, list of points where each point represented by list.
+    @param[in] num_neigh (uint): Number of neighbors that should be used for distance calculation.
     
-    "Returns average distance for establish links between 'num_neigh' in data set 'points'"
+    @return (double) Average distance for establish links between 'num_neigh' in data set 'points'.
+    
+    """
     
     if (num_neigh > len(points) - 1):
         raise NameError('Impossible to calculate average distance to neighbors when number of object is less than number of neighbors.');
@@ -101,31 +126,35 @@ def average_neighbor_distance(points, num_neigh):
             total_distance += dist_matrix[i][j + 1];
             
     return ( total_distance / (num_neigh * len(points)) );
-
-
-def variance_increase_distance(cluster1, cluster2, data):
-    pass;
         
 
 def euclidean_distance(a, b):
-    "Calculate Euclidian distance between vector a and b. NOTE! This function for calculation is faster then standard function in ~100 times!"
+    """!
+    @brief Calculate Euclidian distance between vector a and b. 
     
-    "(in) a    - vector that is represented by list."
-    "(in) b    - vector that is represented by list."
+    @param[in] a (list): The first vector.
+    @param[in] b (list): The second vector.
     
-    "Return Euclidian distance between two vectors."
+    @return (double) Euclidian distance between two vectors.
+    
+    @note This function for calculation is faster then standard function in ~100 times!
+    
+    """
     
     distance = euclidean_distance_sqrt(a, b);
     return distance**(0.5);
 
 
 def euclidean_distance_sqrt(a, b):
-    "Calculate square Euclidian distance between vector a and b."
+    """!
+    @brief Calculate square Euclidian distance between vector a and b.
     
-    "(in) a    - vector that is represented by list."
-    "(in) b    - vector that is represented by list."
+    @param[in] a (list): The first vector.
+    @param[in] b (list): The second vector.
     
-    "Return square Euclidian distance between two vectors."    
+    @return (double) Square Euclidian distance between two vectors.
+    
+    """  
     
     if ( ((type(a) == float) and (type(b) == float)) or ((type(a) == int) and (type(b) == int)) ):
         return (a - b)**2.0;
@@ -141,12 +170,15 @@ def euclidean_distance_sqrt(a, b):
 
 
 def manhattan_distance(a, b):
-    "Calculate Manhattan distance between vector a and b."
+    """!
+    @brief Calculate Manhattan distance between vector a and b.
     
-    "(in) a    - vector that is represented by list."
-    "(in) b    - vector that is represented by list."
+    @param[in] a (list): The first vector.
+    @param[in] b (list): The second vector.
     
-    "Return Manhattan distance between two vectors."
+    @return (double) Manhattan distance between two vectors.
+    
+    """
     
     if ( ((type(a) == float) and (type(b) == float)) or ((type(a) == int) and (type(b) == int)) ):
         return abs(a - b);
@@ -161,16 +193,20 @@ def manhattan_distance(a, b):
 
 
 def average_inter_cluster_distance(cluster1, cluster2, data = None):
-    "Calculates average inter-cluster distance between two clusters. Clusters can be represented"
-    "by list of coordinates (in this case data shouldn't be specified), or by list of indexes of" 
-    "points from the data (represented by list of points), in this case data should be specified."
+    """!
+    @brief Calculates average inter-cluster distance between two clusters.
+    @details Clusters can be represented by list of coordinates (in this case data shouldn't be specified),
+             or by list of indexes of points from the data (represented by list of points), in this case 
+             data should be specified.
+             
+    @param[in] cluster1 (list): The first cluster.
+    @param[in] cluster2 (list): The second cluster.
+    @param[in] data (list): If specified than elements of clusters will be used as indexes,
+               otherwise elements of cluster will be considered as points.
     
-    "(in) cluster1    - the first cluster."
-    "(in) cluster2    - the second cluster."
-    "(in) data        - if specified than elements of clusters will be used as indexes,"
-    "                   otherwise elements of cluster will be considered as points."
+    @return (double) Average inter-cluster distance between two clusters.
     
-    "Returns average inter-cluster distance between two clusters."
+    """
     
     distance = 0.0;
     
@@ -188,16 +224,20 @@ def average_inter_cluster_distance(cluster1, cluster2, data = None):
 
 
 def average_intra_cluster_distance(cluster1, cluster2, data = None):
-    "Calculates average intra-cluster distance between two clusters. Clusters can be represented"
-    "by list of coordinates (in this case data shouldn't be specified), or by list of indexes of" 
-    "points from the data (represented by list of points), in this case data should be specified."
+    """!
+    @brief Calculates average intra-cluster distance between two clusters.
+    @details Clusters can be represented by list of coordinates (in this case data shouldn't be specified),
+             or by list of indexes of points from the data (represented by list of points), in this case 
+             data should be specified.
     
-    "(in) cluster1    - the first cluster."
-    "(in) cluster2    - the second cluster."
-    "(in) data        - if specified than elements of clusters will be used as indexes,"
-    "                   otherwise elements of cluster will be considered as points."
+    @param[in] cluster1 (list): The first cluster.
+    @param[in] cluster2 (list): The second cluster.
+    @param[in] data (list): If specified than elements of clusters will be used as indexes,
+               otherwise elements of cluster will be considered as points.
     
-    "Returns average intra-cluster distance between two clusters."
+    @return (double) Average intra-cluster distance between two clusters.
+    
+    """
         
     distance = 0.0;
     
@@ -230,46 +270,83 @@ def average_intra_cluster_distance(cluster1, cluster2, data = None):
     distance /= float( (len(cluster1) + len(cluster2)) * (len(cluster1) + len(cluster2) - 1.0) );
     return distance ** 0.5;
 
+def variance_increase_distance(cluster1, cluster2, data):
+    pass;
+
 
 def heaviside(value):
+    """!
+    @brief Calculates Heaviside function that represents step function.
+    @details If input value is greater than 0 then returns 1, otherwise returns 0.
+    
+    @param[in] value (double): Argument of Heaviside function.
+    
+    @return (double) Value of Heaviside function.
+    
+    """
     if (value >= 0): return 1;
     return 0;
 
 
-def timedcall(fn, *args):
-    "Call function with args; return the time in seconds and result."
-    t0 = time.clock();
-    result = fn(*args);
-    t1 = time.clock();
-    return t1 - t0, result;
+def timedcall(executable_function, *args):
+    """!
+    @brief Executes specified method or function with measuring of execution time.
+    
+    @param[in] executable_function (pointer): Pointer to function or method.
+    @param[in] args (*): Arguments of called function or method.
+    
+    @return (tuple) Execution time and result of execution of function or method (execution_time, result_execution).
+    
+    """
+    
+    time_start = time.clock();
+    result = executable_function(*args);
+    time_end = time.clock();
+    
+    return (time_end - time_start, result);
 
 
-def extract_number_oscillations(osc_dyn, index = 0, amplitute_threshold = 1.0):
+def extract_number_oscillations(osc_dyn, index = 0, amplitude_threshold = 1.0):
+    """!
+    @brief Extracts number of oscillations of specified oscillator.
+    
+    @param[in] osc_dyn (list): Dynamic of oscillators.
+    @param[in] index (uint): Index of oscillator in dynamic.
+    @param[in] amplitude_threshold (double): Amplitude threshold, when oscillator value is greater than threshold then
+               oscillation is incremented.
+    
+    @return (uint) Number of oscillations of specified oscillator.
+    
+    """
+    
     number_oscillations = 0;
     high_level_trigger = False;
     
     for values in osc_dyn:
-        if ( (values[index] > amplitute_threshold) and (high_level_trigger is False) ):
+        if ( (values[index] > amplitude_threshold) and (high_level_trigger is False) ):
             number_oscillations += 1;
             high_level_trigger = True;
         
-        elif ( (values[index] < amplitute_threshold) and (high_level_trigger is True) ):
+        elif ( (values[index] < amplitude_threshold) and (high_level_trigger is True) ):
             high_level_trigger = False;
             
     return number_oscillations;
 
 
 def allocate_sync_ensembles(dynamic, tolerance = 0.1, threshold = 1.0, ignore = None):
-    "Allocate clusters in line with ensembles of synchronous oscillators where each." 
-    "synchronous ensemble corresponds to only one cluster."
+    """!
+    @brief Allocate clusters in line with ensembles of synchronous oscillators where each
+           synchronous ensemble corresponds to only one cluster.
     
-    "(in) dynamic          - list of dynamic of each oscillator."
-    "(in) tolerance        - maximum error for allocation of synchronous ensemble oscillators."
-    "(in) threshold        - amlitude trigger when spike is taken into account."
-    "(in) ignore           - set of indexes that shouldn't be taken into account."
+    @param[in] dynamic (dynamic): Dynamic of each oscillator.
+    @param[in] tolerance (double): Maximum error for allocation of synchronous ensemble oscillators.
+    @param[in] threshold (double): Amlitude trigger when spike is taken into account.
+    @param[in] ignore (bool): Set of indexes that shouldn't be taken into account.
     
-    "Returns list of grours (lists) of indexes of synchronous oscillators."
-    "For example [ [index_osc1, index_osc3], [index_osc2], [index_osc4, index_osc5] ]."
+    @return (list) Grours (lists) of indexes of synchronous oscillators, for example, 
+            [ [index_osc1, index_osc3], [index_osc2], [index_osc4, index_osc5] ].
+            
+    """
     
     descriptors = [] * len(dynamic);
     
@@ -352,7 +429,16 @@ def allocate_sync_ensembles(dynamic, tolerance = 0.1, threshold = 1.0, ignore = 
     return sync_ensembles;
 
 
-def draw_clusters(data, clusters, noise = [], marker_descr = '.', hide_axes = False):   
+def draw_clusters(data, clusters, noise = [], marker_descr = '.', hide_axes = False):
+    """!
+    @brief Displays clusters for data in 2D or 3D.
+    
+    @param[in] data (list): Points that are described by coordinates represented.
+    @param[in] clusters (list): Clusters that are represented by lists of indexes where each index corresponds to point in data.
+    @param[in] marker_descr (string): Marker for displaying points.
+    @param[in] hide_axes (bool): If True - axes is not displayed.
+    
+    """
     # Get dimension
     dimension = 0;
     if ( (data is not None) and (clusters is not None) ):

@@ -25,8 +25,7 @@
 
 """
 
-from pyclustering.nnet.som import som;
-from pyclustering.nnet.som import type_conn, type_init;
+from pyclustering.nnet.som import som, type_conn, type_init;
 
 from pyclustering.samples.definitions import IMAGE_DIGIT_SAMPLES;
 

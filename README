@@ -68,6 +68,6 @@ Graph Coloring Algorithms (module pyclustering.gcolor):
 - Hysteresis [Python]
 - Sync [Python]
 
-Misc Algorithms (module pyclustering.support):
+Containers (module pyclustering.container):
 - KD Tree [Python, C++]
 - CF Tree [Python]

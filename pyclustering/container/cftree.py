@@ -1,26 +1,30 @@
-'''
+"""!
 
-Data Structure: CF-Tree
+@brief Data Structure: CF-Tree
+@details Based on book description:
+         - M.Zhang, R.Ramakrishnan, M.Livny. BIRCH: An Efficient Data Clustering Method for Very Large Databases. 1996.
 
-Based on book description:
- - M.Zhang, R.Ramakrishnan, M.Livny. BIRCH: An Efficient Data Clustering Method for Very Large Databases. 1996.
+@authors Andrei Novikov (spb.andr@yandex.ru)
+@version 1.0
+@date 2014-2015
+@copyright GNU Public License
 
-Copyright (C) 2015    Andrei Novikov (spb.andr@yandex.ru)
+@cond GNU_PUBLIC_LICENSE
+    PyClustering is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    PyClustering is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+@endcond
 
-pyclustering is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-pyclustering is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-'''
+"""
 
 from copy import copy;
 
@@ -31,6 +35,12 @@ from pyclustering.support import linear_sum, square_sum;
 
 
 class measurement_type:
+    """!
+    @brief Enumeration of measurement types for CF-Tree.
+    
+    @see cftree
+    
+    """
     CENTROID_EUCLIDIAN_DISTANCE     = 0;
     CENTROID_MANHATTAN_DISTANCE     = 1;
     AVERAGE_INTER_CLUSTER_DISTANCE  = 2;
@@ -39,13 +49,26 @@ class measurement_type:
     
 
 class cfnode_type:
+    """!
+    @brief Enumeration of CF-Node types that are used by CF-Tree.
+    
+    @see cfnode
+    @see cftree
+    
+    """
     CFNODE_DUMMY    = 0;
     CFNODE_LEAF     = 1;
     CFNODE_NONLEAF  = 2;
     
 
 class cfentry:
-    "Clustering feature representation."
+    """!
+    @brief Clustering feature representation.
+    
+    @see cfnode
+    @see cftree
+    
+    """
     
     __centroid = None;
     __radius = None;
@@ -57,14 +80,33 @@ class cfentry:
     
     @property
     def number_points(self):
+        """!
+        @brief Returns number of points that are encoded.
+        
+        @return (uint) Number of encoded points.
+        
+        """
         return self.__number_points;
     
     @property
     def linear_sum(self):
+        """!
+        @brief Returns linear sum.
+        
+        @return (list) Linear sum.
+        
+        """
+        
         return self.__linear_sum;
     
     @property
     def square_sum(self):
+        """!
+        @brief Returns square sum.
+        
+        @return (double) Square sum.
+        
+        """
         return self.__square_sum;
     
     
