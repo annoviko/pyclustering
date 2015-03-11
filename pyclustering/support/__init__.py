@@ -271,7 +271,76 @@ def average_intra_cluster_distance(cluster1, cluster2, data = None):
     return distance ** 0.5;
 
 def variance_increase_distance(cluster1, cluster2, data):
-    pass;
+    """!
+    @brief Calculates variance increase distance between two clusters.
+    @details Clusters can be represented by list of coordinates (in this case data shouldn't be specified),
+             or by list of indexes of points from the data (represented by list of points), in this case 
+             data should be specified.
+    
+    @param[in] cluster1 (list): The first cluster.
+    @param[in] cluster2 (list): The second cluster.
+    @param[in] data (list): If specified than elements of clusters will be used as indexes,
+               otherwise elements of cluster will be considered as points.
+    
+    @return (double) Average variance increase distance between two clusters.
+    
+    """
+    
+    # calculate local sum
+    member_cluster1 = None;
+    member_cluster2 = None;
+    
+    if (data is None):
+        member_cluster1 = [0.0] * len(cluster1[0]);
+        member_cluster2 = [0.0] * len(cluster2[0]);
+        
+    else:
+        member_cluster1 = [0.0] * len(data[0]);
+        member_cluster2 = [0.0] * len(data[0]);
+    
+    for i in range(len(cluster1)):
+        if (data is None):
+            member_cluster1 = list_math_addition(member_cluster1, cluster1[i]);
+        else:
+            member_cluster1 = list_math_addition(member_cluster1, data[ cluster1[i] ]);
+    
+    
+    for j in range(len(cluster2)):
+        if (data is None):
+            member_cluster2 = list_math_addition(member_cluster2, cluster2[j]);
+        else:
+            member_cluster2 = list_math_addition(member_cluster2, data[ cluster2[j] ]);
+    
+    member_cluster_general = list_math_addition(member_cluster1, member_cluster2);
+    member_cluster_general = list_math_division_number(member_cluster_general, len(cluster1) + len(cluster2));
+    
+    member_cluster1 = list_math_division_number(member_cluster1, len(cluster1));
+    member_cluster2 = list_math_division_number(member_cluster2, len(cluster2));
+    
+    # calculate global sum
+    distance_general = 0.0;
+    distance_cluster1 = 0.0;
+    distance_cluster2 = 0.0;
+    
+    for i in range(len(cluster1)):
+        if (data is None):
+            distance_cluster1 += euclidean_distance_sqrt(cluster1[i], member_cluster1);
+            distance_general += euclidean_distance_sqrt(cluster1[i], member_cluster_general);
+            
+        else:
+            distance_cluster1 += euclidean_distance_sqrt(data[ cluster1[i] ], member_cluster1);
+            distance_general += euclidean_distance_sqrt(data[ cluster1[i] ], member_cluster_general);
+    
+    for j in range(len(cluster2)):
+        if (data is None):
+            distance_cluster2 += euclidean_distance_sqrt(cluster2[j], member_cluster2);
+            distance_general += euclidean_distance_sqrt(cluster2[j], member_cluster_general);
+            
+        else:
+            distance_cluster2 += euclidean_distance_sqrt(data[ cluster2[j] ], member_cluster2);
+            distance_general += euclidean_distance_sqrt(data[ cluster2[j] ], member_cluster_general);
+    
+    return distance_general - distance_cluster1 - distance_cluster2;
 
 
 def heaviside(value):
@@ -508,7 +577,25 @@ def draw_clusters(data, clusters, noise = [], marker_descr = '.', hide_axes = Fa
     
 
 def draw_dynamics(t, dyn, x_title = None, y_title = None, x_lim = None, y_lim = None, x_labels = True, y_labels = True, separate = False, axes = None):
-    "Draw dynamics of neurons in the network"       
+    """!
+    @brief Draw dynamics of neurons (oscillators) in the network.
+    @details It draws if matplotlib is not specified (None), othewise it should be performed manually.
+    
+    @param[in] t (list): Values of time (used by x axis).
+    @param[in] dyn (list): Values of output of oscillators (used by y axis).
+    @param[in] x_title (string): Title for Y.
+    @param[in] y_title (string): Title for X.
+    @param[in] x_lim (double): X limit.
+    @param[in] y_lim (double): Y limit.
+    @param[in] x_labels (bool): If True - shows X labels.
+    @param[in] y_labels (bool): If True - shows Y labels.
+    @param[in] separate (bool): If True - output of each oscillators (each dynamic) is presented on separate plot.
+    @param[in] axis (ax): If specified then matplotlib axes will be used for drawing and plot will not be shown.
+    
+    @return (ax) Axis of matplotlib.
+    
+    """
+         
     number_lines = 0;
     
     if ( (isinstance(separate, bool) is True) and (separate is True) ):
@@ -567,6 +654,18 @@ def draw_dynamics(t, dyn, x_title = None, y_title = None, x_lim = None, y_lim = 
 
 
 def set_ax_param(ax, x_title = None, y_title = None, x_lim = None, y_lim = None, x_labels = True, y_labels = True, grid = True):
+    """!
+    @brief Sets parameters for matplotlib ax.
+    
+    @param[in] x_title (string): Title for Y.
+    @param[in] y_title (string): Title for X.
+    @param[in] x_lim (double): X limit.
+    @param[in] y_lim (double): Y limit.
+    @param[in] x_labels (bool): If True - shows X labels.
+    @param[in] y_labels (bool): If True - shows Y labels.
+    @param[in] grid (bool): If True - shows grid.
+    
+    """
     from matplotlib.font_manager import FontProperties;
     from matplotlib import rcParams;
     
@@ -598,6 +697,20 @@ def set_ax_param(ax, x_title = None, y_title = None, x_lim = None, y_lim = None,
 
 
 def draw_dynamics_set(dynamics, xtitle = None, ytitle = None, xlim = None, ylim = None, xlabels = False, ylabels = False):
+    """!
+    @brief Draw lists of dynamics of neurons (oscillators) in the network.
+    
+    @param[in] dynamics (list): List of network outputs that are represented by values of output of oscillators (used by y axis).
+    @param[in] x_title (string): Title for Y.
+    @param[in] y_title (string): Title for X.
+    @param[in] x_lim (double): X limit.
+    @param[in] y_lim (double): Y limit.
+    @param[in] x_labels (bool): If True - shows X labels.
+    @param[in] y_labels (bool): If True - shows Y labels.
+    @param[in] separate (bool): If True - output of each oscillators (each dynamic) is presented on separate plot.
+    @param[in] axis (ax): If specified than already existed matplotlib axes will be used.
+    
+    """
     # Calculate edge for confortable representation.
     number_dynamics = len(dynamics);
     
@@ -629,6 +742,17 @@ def draw_dynamics_set(dynamics, xtitle = None, ytitle = None, xlim = None, ylim 
 
 
 def draw_image_segments(source, clusters, hide_axes = True):
+    """!
+    @brief Shows image segments using black masks.
+    @details Each black mask of allocated segment is presented on separate plot.
+             The first image is initial and others are black masks of segments.
+    
+    @param[in] source (string): Path to image.
+    @param[in] clusters (list): List of clusters (allocated segments of image) where each cluster
+                                consists of indexes of pixel from source image.
+    @param[in] hide_axes (bool): If True - hides axes.
+    
+    """
     image_source = Image.open(source);
     image_size = image_source.size;
     
@@ -693,12 +817,14 @@ def draw_image_segments(source, clusters, hide_axes = True):
 
 
 def linear_sum(list_vector):
-    "Calculate linear sum of vector that is represented by list. Each element can be represented by list - multidimensional elements."
+    """!
+    @brief Calculates linear sum of vector that is represented by list, each element can be represented by list - multidimensional elements.
     
-    "(in) list_vector    - input vector represented by list."
+    @param[in] list_vector (list): Input vector.
     
-    "Return calculated linear sum of vector that can be represented by list in case of multidimensional elements."
+    @return (list|double) Linear sum of vector that can be represented by list in case of multidimensional elements.
     
+    """
     dimension = 1;
     linear_sum = 0.0;
     list_representation = (type(list_vector[0]) == list);
@@ -718,18 +844,17 @@ def linear_sum(list_vector):
 
 
 def square_sum(list_vector):
-    "Calculate square sum of vector that is represented by list. Each element can be represented by list - multidimensional elements."
+    """!
+    @brief Calculates square sum of vector that is represented by list, each element can be represented by list - multidimensional elements.
     
-    "(in) square_sum    - input vector represented by list."
+    @param[in] list_vector (list): Input vector.
     
-    "Return calculated square sum of vector."
+    @return (double) Square sum of vector.
     
-    dimension = 1;
+    """
+    
     square_sum = 0.0;
     list_representation = (type(list_vector[0]) == list);
-    
-    if (list_representation is True):
-        dimension = len(list_vector[0]);
         
     for index_element in range(0, len(list_vector)):
         if (list_representation is True):
@@ -741,89 +866,113 @@ def square_sum(list_vector):
 
     
 def list_math_subtraction(a, b):
-    "Subtraction of two lists. Each element from list 'a' is subtracted by element from list 'b' accordingly."
+    """!
+    @brief Calculates subtraction of two lists.
+    @details Each element from list 'a' is subtracted by element from list 'b' accordingly.
     
-    "(in) a    - list of elements that supports mathematical subtraction."
-    "(in) b    - list of elements that supports mathematical subtraction."
+    @param[in] a (list): List of elements that supports mathematical subtraction.
+    @param[in] b (list): List of elements that supports mathematical subtraction.
     
-    "Returns list with results of subtraction of two lists."
+    @return (list) Results of subtraction of two lists.
     
+    """
     return [a[i] - b[i] for i in range(len(a))];
 
 
 def list_math_substraction_number(a, b):
-    "Subtraction between list and number. Each element from list 'a' is subtracted by number 'b'."
+    """!
+    @brief Calculates subtraction between list and number.
+    @details Each element from list 'a' is subtracted by number 'b'.
     
-    "(in) a    - list of elements that supports mathematical subtraction."
-    "(in) b    - value that supports mathematical subtraction."
+    @param[in] a (list): List of elements that supports mathematical subtraction.
+    @param[in] b (list): Value that supports mathematical subtraction.
     
-    "Returns list with results of subtraction of two lists." 
+    @return (list) Results of subtraction between list and number.
     
+    """        
     return [a[i] - b for i in range(len(a))];  
 
 
 def list_math_addition(a, b):
-    "Addition of two lists. Each element from list 'a' is added to element from list 'b' accordingly."
+    """!
+    @brief Addition of two lists.
+    @details Each element from list 'a' is added to element from list 'b' accordingly.
     
-    "(in) a    - list of elements that supports mathematic addition."
-    "(in) b    - list of elements that supports mathematic addition."
+    @param[in] a (list): List of elements that supports mathematic addition..
+    @param[in] b (list): List of elements that supports mathematic addition..
     
-    "Returns list with results of addtion of two lists."
+    @return (list) Results of addtion of two lists.
     
+    """    
     return [a[i] + b[i] for i in range(len(a))];
 
 
 def list_math_addition_number(a, b):
-    "Addition between list and number. Each element from list 'a' is added to number 'b'."
+    """!
+    @brief Addition between list and number.
+    @details Each element from list 'a' is added to number 'b'.
     
-    "(in) a    - list of elements that supports mathematic addition."
-    "(in) b    - value that supports mathematic addition."
+    @param[in] a (list): List of elements that supports mathematic addition.
+    @param[in] b (double): Value that supports mathematic addition.
     
-    "Returns list with results of addtion of two lists."
+    @return (list) Result of addtion of two lists.
     
+    """    
     return [a[i] + b for i in range(len(a))];
 
 
 def list_math_division_number(a, b):
-    "Division between list and number. Each element from list 'a' is divided by number 'b'."
+    """!
+    @brief Division between list and number.
+    @details Each element from list 'a' is divided by number 'b'.
     
-    "(in) a    - list of elements that supports mathematic division."
-    "(in) b    - value that supports mathematic division."
+    @param[in] a (list): List of elements that supports mathematic division.
+    @param[in] b (double): Value that supports mathematic division.
     
-    "Returns list with results of division between list and number."
+    @return (list) Result of division between list and number.
     
+    """    
     return [a[i] / b for i in range(len(a))];
 
 
 def list_math_division(a, b):
-    "Division of two lists. Each element from list 'a' is divided by element from list 'b' accordingly."
+    """!
+    @brief Division of two lists.
+    @details Each element from list 'a' is divided by element from list 'b' accordingly.
     
-    "(in) a    - list of elements that supports mathematic division."
-    "(in) b    - list of elements that supports mathematic division."
+    @param[in] a (list): List of elements that supports mathematic division.
+    @param[in] b (list): List of elements that supports mathematic division.
     
-    "Returns list with results of division of two lists."
+    @return (list) Result of division of two lists.
     
+    """    
     return [a[i] / b[i] for i in range(len(a))];
 
 
 def list_math_multiplication_number(a, b):
-    "Multiplication between list and number. Each element from list 'a' is multiplied by number 'b'."
+    """!
+    @brief Multiplication between list and number.
+    @details Each element from list 'a' is multiplied by number 'b'.
     
-    "(in) a    - list of elements that supports mathematic division."
-    "(in) b    - number that supports mathematic division."
+    @param[in] a (list): List of elements that supports mathematic division.
+    @param[in] b (double): Number that supports mathematic division.
     
-    "Returns list with results of division between list and number."
+    @return (list) Result of division between list and number.
     
+    """    
     return [a[i] * b for i in range(len(a))];
 
 
 def list_math_multiplication(a, b):
-    "Multiplication of two lists. Each element from list 'a' is multiplied by element from list 'b' accordingly."
+    """!
+    @brief Multiplication of two lists.
+    @details Each element from list 'a' is multiplied by element from list 'b' accordingly.
     
-    "(in) a    - list of elements that supports mathematic multiplication."
-    "(in) b    - number that supports mathematic multiplication."
+    @param[in] a (list): List of elements that supports mathematic multiplication.
+    @param[in] b (double): Number that supports mathematic multiplication.
     
-    "Returns list with results of multiplication between list and number."
-        
+    @return (list) Result of multiplication between list and number.
+    
+    """        
     return [a[i] * b[i] for i in range(len(a))];
  
