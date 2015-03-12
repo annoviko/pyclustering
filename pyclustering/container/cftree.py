@@ -133,11 +133,14 @@ class cfentry:
     
     
     def __add__(self, entry):
-        "Overloaded operator add. Performs addition of two clustering features."
+        """!
+        @brief Overloaded operator add. Performs addition of two clustering features.
         
-        "(in) entry    - entry that is added to the current."
+        @param[in] entry (cfentry): Entry that is added to the current.
         
-        "Returns result of addition of two clustering features."
+        @return (cfentry) Result of addition of two clustering features.
+        
+        """
         
         number_points = self.number_points + entry.number_points;
         linear_sum = list_math_addition(self.linear_sum, entry.linear_sum);        
@@ -147,12 +150,15 @@ class cfentry:
     
     
     def __sub__(self, entry):
-        "Overloaded operator sub. Performs substraction of two clustering features."
-        "Substraction can't be performed with clustering feature whose description is less then substractor."
+        """!
+        @brief Overloaded operator sub. Performs substraction of two clustering features.
+        @details Substraction can't be performed with clustering feature whose description is less then substractor.
         
-        "(in) entry    - entry that is substracted from the current."
+        @param[in] entry (cfentry): Entry that is substracted from the current.
         
-        "Returns result of substraction of two clustering features."
+        @return (cfentry) Result of substraction of two clustering features.
+        
+        """
                 
         number_points = self.number_points - entry.number_points;
         linear_sum = list_math_subtraction(self.linear_sum, entry.linear_sum);        
@@ -165,11 +171,15 @@ class cfentry:
     
     
     def __eq__(self, entry):
-        "Overloaded operator eq. Performs comparison of two clustering features."
+        """!
+        @brief Overloaded operator eq. 
+        @details Performs comparison of two clustering features.
         
-        "(in) entry    - entry that is used for comparison with current."
+        @param[in] entry (cfentry): Entry that is used for comparison with current.
         
-        "Returns True is both clustering features are equals in line with tolerance, otherwise False."
+        @return (bool) True is both clustering features are equals in line with tolerance, otherwise False.
+        
+        """
                 
         tolerance = 0.00001;
         
@@ -183,12 +193,15 @@ class cfentry:
     
     
     def get_distance(self, entry, type_measurement):
-        "Return distance between two clusters in line with measurement type."
+        """!
+        @brief Calculates distance between two clusters in line with measurement type.
         
-        "(in) entry               - pointer of clustering feature to which distance should be obtained."
-        "(in) type_measurement    - distance measurement algorithm between two clusters."
+        @param[in] entry (cfentry): Clustering feature to which distance should be obtained.
+        @param[in] type_measurement (measurement_type): Distance measurement algorithm between two clusters.
         
-        "Return distance between two clusters."
+        @return (double) Distance between two clusters.
+        
+        """
         
         if (type_measurement is measurement_type.CENTROID_EUCLIDIAN_DISTANCE):
             return euclidean_distance_sqrt(entry.get_centroid(), self.get_centroid());
@@ -210,7 +223,13 @@ class cfentry:
     
         
     def get_centroid(self):
-        "Return centroid of cluster that is represented by the entry. It's calculated once when it's requested after the last changes."
+        """!
+        @brief Calculates centroid of cluster that is represented by the entry. 
+        @details It's calculated once when it's requested after the last changes.
+        
+        @return (list) Centroid of cluster that is represented by the entry.
+        
+        """
         
         if (self.__centroid is not None):
             return self.__centroid;
@@ -223,7 +242,13 @@ class cfentry:
     
     
     def get_radius(self):
-        "Return radius of cluster that is represented by the entry. It's calculated once when it's requested after the last changes."
+        """!
+        @brief Calculates radius of cluster that is represented by the entry.
+        @details It's calculated once when it's requested after the last changes.
+        
+        @return (double) Radius of cluster that is represented by the entry.
+        
+        """
         
         if (self.__radius is not None):
             return self.__radius;
@@ -247,7 +272,13 @@ class cfentry:
         
     
     def get_diameter(self):
-        "Return diameter of cluster that is represented by the entry. It's calculated once when it's requested after the last changes."
+        """!
+        @brief Calculates diameter of cluster that is represented by the entry.
+        @details It's calculated once when it's requested after the last changes.
+        
+        @return (double) Diameter of cluster that is represented by the entry.
+        
+        """
         
         if (self.__diameter is not None):
             return self.__diameter;
@@ -263,11 +294,14 @@ class cfentry:
     
         
     def __get_average_inter_cluster_distance(self, entry):
-        "Return average inter cluster distance between current and specified clusters."
+        """!
+        @brief Calculates average inter cluster distance between current and specified clusters.
         
-        "(in) entry    - pointer to clustering feature to which distance should be obtained."
+        @param[in] entry (cfentry): Clustering feature to which distance should be obtained.
         
-        "Return average inter cluster distance."
+        @return (double) Average inter cluster distance.
+        
+        """
         
         linear_part_distance = sum(list_math_multiplication(self.linear_sum, entry.linear_sum));
         
@@ -275,11 +309,14 @@ class cfentry:
     
     
     def __get_average_intra_cluster_distance(self, entry):
-        "Return average intra cluster distance between current and specified clusters."
+        """!
+        @brief Calculates average intra cluster distance between current and specified clusters.
         
-        "(in) entry    - pointer to clustering feature to which distance should be obtained."
+        @param[in] entry (cfentry): Clustering feature to which distance should be obtained.
         
-        "Return average intra cluster distance."
+        @return (double) Average intra cluster distance.
+        
+        """
         
         linear_part_first = list_math_addition(self.linear_sum, entry.linear_sum);
         linear_part_second = linear_part_first;
@@ -292,11 +329,14 @@ class cfentry:
     
     
     def __get_variance_increase_distance(self, entry):
-        "Return variance increase distance between current and specified clusters."
+        """!
+        @brief Calculates variance increase distance between current and specified clusters.
         
-        "(in) entry    - pointer to clustering feature to which distance should be obtained."
+        @param[in] entry (cfentry): Clustering feature to which distance should be obtained.
         
-        "Return variance increase distance."
+        @return (double) Variance increase distance.
+        
+        """
                 
         linear_part_12 = list_math_addition(self.linear_sum, entry.linear_sum);
         variance_part_first = (self.square_sum + entry.square_sum) - \
@@ -314,7 +354,10 @@ class cfentry:
         
 
 class cfnode:
-    "Representation of node of CF-Tree."
+    """!
+    @brief Representation of node of CF-Tree.
+    
+    """
     
     feature     = None;     # clustering feature of the node
     parent      = None;     # pointer to parent node (None for root)
@@ -322,11 +365,14 @@ class cfnode:
     payload     = None;     # payload of node where user data can be stored
     
     def __init__(self, feature, parent, payload):
-        "Constructor of dummy node of CF-Tree."
+        """!
+        @brief
         
-        "(in) feature    - clustering feature of the created node."
-        "(in) parent     - parent of the created node."
-        "(in) payload    - data that is stored by the node."        
+        @param[in] feature (cfentry): Clustering feature of the created node.
+        @param[in] parent (cfnode): Parent of the created node.
+        @param[in] payload (*): Data that is stored by the node.
+        
+        """     
         
         self.feature = copy(feature);
         self.parent = parent;
@@ -347,18 +393,24 @@ class cfnode:
     
     
     def get_distance(self, node, type_measurement):
-        "Returns distance between nodes in line with specified type measurement."
+        """!
+        @brief Calculates distance between nodes in line with specified type measurement.
         
-        "(in) node                - cf node that is used for calculation distance to the current node."
-        "(in) type_measurement    - measurement type that is used for calculation distance."
+        @param[in] node (cfnode): CF-node that is used for calculation distance to the current node.
+        @param[in] type_measurement (measurement_type): Measurement type that is used for calculation distance.
         
-        "Return distance between two nodes."
+        @return (double) Distance between two nodes.
+        
+        """
         
         return self.feature.get_distance(node.feature, type_measurement);
     
 
-class non_leaf_node(cfnode):    
-    "Representation of clustering feature non-leaf node."
+class non_leaf_node(cfnode):
+    """!
+    @brief Representation of clustering feature non-leaf node.
+    
+    """ 
     
     __successors = None;
     
@@ -368,12 +420,15 @@ class non_leaf_node(cfnode):
     
     
     def __init__(self, feature, parent, successors, payload):
-        "Create CF Non-leaf node."
+        """!
+        @brief Create CF Non-leaf node.
         
-        "(in) feature    - clustering feature of the created node."
-        "(in) parent     - parent of the created node."
-        "(in) successors - list of successors of the node."
-        "(in) payload    - data that is stored by the node."
+        @param[in] feature (cfentry): Clustering feature of the created node.
+        @param[in] parent (non_leaf_node): Parent of the created node.
+        @param[in] successors (list): List of successors of the node.
+        @param[in] payload (*): Data that is stored by the node.
+        
+        """
                 
         super().__init__(feature, parent, payload);
         
@@ -390,9 +445,12 @@ class non_leaf_node(cfnode):
     
     
     def insert_successor(self, successor):
-        "Insert successor to the node."
+        """!
+        @brief Insert successor to the node.
         
-        "(in) successor    - pointer to the successor."
+        @param[in] successor (cfnode): Successor for adding.
+        
+        """
         
         self.feature += successor.feature;
         self.successors.append(successor);
@@ -401,9 +459,12 @@ class non_leaf_node(cfnode):
     
     
     def remove_successor(self, successor):
-        "Remove successor from the node."
+        """!
+        @brief Remove successor from the node.
         
-        "(in) successor    - pointer to the successor."
+        @param[in] successor (cfnode): Successor for removing.
+        
+        """
         
         self.feature -= successor.feature;
         self.successors.append(successor);
@@ -412,9 +473,12 @@ class non_leaf_node(cfnode):
     
     
     def merge(self, node):
-        "Merge non-leaf node to the current."
+        """!
+        @brief Merge non-leaf node to the current.
         
-        "(in) node    - pointer to non-leaf node that should be merged with current."
+        @param[in] (non_leaf_node): Non-leaf node that should be merged with current.
+        
+        """
                 
         self.feature += node.feature;
         
@@ -423,11 +487,14 @@ class non_leaf_node(cfnode):
     
     
     def get_farthest_successors(self, type_measurement):
-        "Return pair of farthest successors of the node in line with measurement type."
+        """!
+        @brief Find pair of farthest successors of the node in line with measurement type.
         
-        "(in) type_measurement    - measurement type that is used for obtaining farthest successors."
+        @param[in] type_measurement (measurement_type): Measurement type that is used for obtaining farthest successors.
         
-        "Return pair of farthest successors represented by list."
+        @return (list) Pair of farthest successors represented by list [cfnode1, cfnode2].
+        
+        """
         
         farthest_node1 = None;
         farthest_node2 = None;
@@ -449,11 +516,14 @@ class non_leaf_node(cfnode):
     
     
     def get_nearest_successors(self, type_measurement):
-        "Return pair of nearest successors of the node in line with measurement type."
+        """!
+        @brief Find pair of nearest successors of the node in line with measurement type.
         
-        "(in) type_measurement    - measurement type that is used for obtaining nearest successors."
+        @param[in] type_measurement (measurement_type): Measurement type that is used for obtaining nearest successors.
         
-        "Return pair of nearest successors represented by list."
+        @return (list) Pair of nearest successors represented by list.
+        
+        """
                 
         nearest_node1 = None;
         nearest_node2 = None;
@@ -475,7 +545,10 @@ class non_leaf_node(cfnode):
 
 
 class leaf_node(cfnode):
-    "Representation of clustering feature leaf node."
+    """!
+    @brief Represents clustering feature leaf node.
+    
+    """
     
     __entries = None;   # list of clustering features
     
@@ -485,12 +558,15 @@ class leaf_node(cfnode):
     
     
     def __init__(self, feature, parent, entries, payload):
-        "Create CF Leaf node."
+        """!
+        @brief Create CF Leaf node.
         
-        "(in) feature    - clustering feature of the created node."
-        "(in) parent     - parent of the created node."
-        "(in) entries    - list of entries of the node."
-        "(in) payload    - data that is stored by the node."
+        @param[in] feature (cfentry): Clustering feature of the created node.
+        @param[in] parent (non_leaf_node): Parent of the created node.
+        @param[in] entries (list): List of entries of the node.
+        @param[in] payload (*): Data that is stored by the node.
+        
+        """
         
         super().__init__(feature, parent, payload);
         
@@ -510,28 +586,37 @@ class leaf_node(cfnode):
         return self.__repr__();
     
     
-    def insert_entry(self, entry):  
-        "Insert new clustering feature to the leaf node."
+    def insert_entry(self, entry):
+        """!
+        @brief Insert new clustering feature to the leaf node.
         
-        "(in) entry    - pointer to the clustering feature."
+        @param[in] entry (cfentry): Clustering feature.
+        
+        """
                               
         self.feature += entry;
         self.entries.append(entry);
         
     
     def remove_entry(self, entry):
-        "Remove clustering feature from the leaf node."
+        """!
+        @brief Remove clustering feature from the leaf node.
         
-        "(in) entry    - pointer to the clustering feature."
+        @param[in] entry (cfentry): Clustering feature.
+        
+        """
                 
         self.feature -= entry;
         self.entries.remove(entry);
     
     
     def merge(self, node):
-        "Merge leaf node to the current."
+        """!
+        @brief Merge leaf node to the current.
         
-        "(in) node    - pointer to leaf node that should be merged with current."
+        @param[in] node (leaf_node): Leaf node that should be merged with current.
+        
+        """
         
         self.feature += node.feature;
         
@@ -541,11 +626,14 @@ class leaf_node(cfnode):
             
     
     def get_farthest_entries(self, type_measurement):
-        "Return pair of farthest entries of the node."
+        """!
+        @brief Find pair of farthest entries of the node.
         
-        "(in) type_measurement    - measurement type that is used for obtaining farthest entries."
+        @param[in] type_measurement (measurement_type): Measurement type that is used for obtaining farthest entries.
         
-        "Return pair of farthest entries of the node that are represented by list."
+        @return (list) Pair of farthest entries of the node that are represented by list.
+        
+        """
         
         farthest_entity1 = None;
         farthest_entity2 = None;
@@ -567,12 +655,15 @@ class leaf_node(cfnode):
     
     
     def get_nearest_index_entry(self, entry, type_measurement):
-        "Return index of nearest entry of node for the specified entry."
+        """!
+        @brief Find nearest index of nearest entry of node for the specified entry.
         
-        "(in) entry               - entry that is used for calculation distance."
-        "(in) type_measurement    - measurement type that is used for obtaining nearest entry to the specified."
+        @param[in] entry (cfentry): Entry that is used for calculation distance.
+        @param[in] type_measurement (measurement_type): Measurement type that is used for obtaining nearest entry to the specified.
         
-        "Return index of nearest entry of node for the specified entry."  
+        @return (uint) Index of nearest entry of node for the specified entry.
+        
+        """
         
         minimum_distance = float('Inf');
         nearest_index = 0;
@@ -586,19 +677,25 @@ class leaf_node(cfnode):
     
     
     def get_nearest_entry(self, entry, type_measurement):
-        "Return nearest entry of node for the specified entry."
+        """!
+        @brief Find nearest entry of node for the specified entry.
         
-        "(in) entry               - entry that is used for calculation distance."
-        "(in) type_measurement    - measurement type that is used for obtaining nearest entry to the specified."
+        @param[in] entry (cfentry): Entry that is used for calculation distance.
+        @param[in] type_measurement (measurement_type): Measurement type that is used for obtaining nearest entry to the specified.
         
-        "Return nearest entry of node for the specified entry."
+        @return (cfentry) Nearest entry of node for the specified entry.
+        
+        """
         
         min_key = lambda cur_entity: cur_entity.get_distance(entry, type_measurement);
         return min(self.__entries, key = min_key);
 
 
 class cftree:
-    "CF-Tree representation."
+    """!
+    @brief CF-Tree representation.
+    
+    """
     
     __root = None;
     __leafes = None;
@@ -653,12 +750,15 @@ class cftree:
     
     
     def __init__(self, branch_factor, max_entries, threshold, type_measurement = measurement_type.CENTROID_EUCLIDIAN_DISTANCE):
-        "Create CF-tree."
+        """!
+        @brief Create CF-tree.
         
-        "(in) branch_factor        - maximum number of children for non-leaf nodes."
-        "(in) max_entries          - maximum number of entries for leaf nodes."
-        "(in) threshold            - maximum diameter of feature clustering for each leaf node."
-        "(in) type_measurement     - measurement type that is used for calculation distance metrics."
+        @param[in] branch_factor (uint): Maximum number of children for non-leaf nodes.
+        @param[in] max_entries (uint): Maximum number of entries for leaf nodes.
+        @param[in] threshold (double): Maximum diameter of feature clustering for each leaf node.
+        @param[in] type_measurement (measurement_type): Measurement type that is used for calculation distance metrics.
+        
+        """
         
         if (branch_factor < 2):
             branch_factor = 2;
@@ -678,19 +778,25 @@ class cftree:
     
     
     def insert_cluster(self, cluster):
-        "Insert cluster that is represented as list of points where each point is represented by list of coordinates."
-        "Clustering feature is created for that cluster and inserted to the tree."
+        """!
+        @brief Insert cluster that is represented as list of points where each point is represented by list of coordinates.
+        @details Clustering feature is created for that cluster and inserted to the tree.
         
-        "(in) cluster    - cluster that is represented by list of points that should be inserted to the tree."
+        @param[in] cluster (list): Cluster that is represented by list of points that should be inserted to the tree.
+        
+        """
         
         entry = cfentry(len(cluster), linear_sum(cluster), square_sum(cluster));
         self.insert(entry);
         
         
     def insert(self, entry):
-        "Insert clustering feature to the tree."
+        """!
+        @brief Insert clustering feature to the tree.
         
-        "(in) entry    - clustering feature that should be inserted."
+        @param[in] entry (cfentry): Clustering feature that should be inserted.
+        
+        """
                 
         if (self.__root is None):
             node = leaf_node(entry, None, [ entry ], None);
@@ -711,12 +817,15 @@ class cftree:
     
     
     def find_nearest_leaf(self, entry, search_node = None):
-        "Search nearest leaf to the specified clustering feature."
+        """!
+        @brief Search nearest leaf to the specified clustering feature.
         
-        "(in) entry          - pointer to clustering feature."
-        "(in) search_node    - node from that searching should be started."
+        @param[in] (cfentry): Clustering feature.
+        @param[in] (cfnode): Node from that searching should be started.
         
-        "Return nearest node to the specified clustering feature."
+        @return (leaf_node) Nearest node to the specified clustering feature.
+        
+        """
         
         if (search_node is None):
             search_node = self.__root;
@@ -733,12 +842,16 @@ class cftree:
     
     
     def __recursive_insert(self, entry, search_node):
-        "Recursive insert of the entry to the tree. It performs all required procedures during insertion such as splitting, merging."
+        """!
+        @brief Recursive insert of the entry to the tree.
+        @details It performs all required procedures during insertion such as splitting, merging.
         
-        "(in) entry          - pointer to clustering feature."
-        "(in) search_node    - node from that insertion should be started."
+        @param[in] (cfentry): Clustering feature.
+        @param[in] (cfnode): Node from that insertion should be started.
         
-        "Return True is number of nodes at the below level is changed, otherwise False."
+        @return (bool) True is number of nodes at the below level is changed, otherwise False.
+        
+        """
         
         node_amount_updation = False;
         
@@ -829,11 +942,14 @@ class cftree:
     
     
     def __merge_nearest_successors(self, node):
-        "Find pair of nearest successors and try to merge taking into account branch factor."
+        """!
+        @brief Find nearest sucessors and merge them.
         
-        "(in) node    - node whose two nearest successors should be merged."
+        @param[in] node (non_leaf_node): Node whose two nearest successors should be merged.
         
-        "Return True if merging has been successfully performed, otherwise False."
+        @return (bool): True if merging has been successfully performed, otherwise False.
+        
+        """
         
         merging_result = False;
         
@@ -853,11 +969,14 @@ class cftree:
             
     
     def __split_nonleaf_node(self, node):
-        "Performs splitting of the specified non-leaf node."
+        """!
+        @brief Performs splitting of the specified non-leaf node.
         
-        "(in) node    - non-leaf node that should be splitted."
+        @param[in] node (non_leaf_node): Non-leaf node that should be splitted.
         
-        "Return new pair of non-leaf nodes."
+        @return (list) New pair of non-leaf nodes [non_leaf_node1, non_leaf_node2].
+        
+        """
         
         [farthest_node1, farthest_node2] = node.get_farthest_successors(self.__type_measurement);
         
@@ -883,11 +1002,16 @@ class cftree:
     
     
     def __split_leaf_node(self, node):
-        "Performs splitting of the specified leaf node."
+        """!
+        @brief Performs splitting of the specified leaf node.
         
-        "(in) node    - leaf node that should be splitted."
+        @param[in] node (leaf_node): Leaf node that should be splitted.
         
-        "Return new pair of leaf nodes."
+        @return (list) New pair of leaf nodes [leaf_node1, leaf_node2].
+        
+        @warning Splitted node is transformed to non_leaf.
+        
+        """
         
         # search farthest pair of entries
         [farthest_entity1, farthest_entity2] = node.get_farthest_entries(self.__type_measurement);
