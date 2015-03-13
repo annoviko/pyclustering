@@ -40,18 +40,12 @@
 
 import math;
 import random;
-import time;
 
 import matplotlib.pyplot as plt;
 import matplotlib.lines as mlines;
 from mpl_toolkits.mplot3d import Axes3D;
 
-import scipy.spatial;
-
-from pyclustering.support import read_sample;
-from pyclustering.support import euclidean_distance;
 from pyclustering.support import euclidean_distance_sqrt;
-from pyclustering.support import timedcall;
 
 import pyclustering.core.wrapper as wrapper;
 
@@ -97,6 +91,26 @@ class som:
     """!
     @brief Represents self-organized feature map (SOM).
     
+    Example:
+    @code
+        # sample for training
+        sample_train = read_sample(file_train_sample);
+        
+        # create self-organized feature map with size 5x5
+        network = som(5, 5, sample_train, 100);
+        
+        # train network
+        network.train();
+        
+        # simulate using another sample
+        sample = read_sample(file_sample);
+        index_winner = network.simulate(sample);
+        
+        # check what it is (what it looks like?)
+        index_similar_objects = network.capture_objects[index_winner];
+        
+    @endcode
+        
     """
     
     # describe network
@@ -126,11 +140,10 @@ class som:
     
     __ccore_som_pointer = None;
     
+    
     @property
     def size(self):
         """!
-        @brief Returns size of self-organized map (number of neurons).
-        
         @return (uint) Size of self-organized map (number of neurons).
         
         """
@@ -143,9 +156,7 @@ class som:
     @property
     def weights(self):
         """!
-        @brief Returns list of weights of each neuron.
-        
-        @return (list) Weights of each neuron
+        @return (list) Weights of each neuron.
         
         """
         
@@ -157,8 +168,6 @@ class som:
     @property
     def awards(self):
         """!
-        @brief Returns list of numbers of captured objects by each neuron.
-        
         @return (list) Numbers of captured objects by each neuron.
         
         """
@@ -171,8 +180,6 @@ class som:
     @property
     def capture_objects(self):
         """!
-        @brief Returns list of indexes of captured objects by each neuron.
-        
         @return (list) Indexes of captured objects by each neuron.
         
         """
@@ -252,7 +259,16 @@ class som:
         if (self.__ccore_som_pointer is not None):
             wrapper.som_destroy(self.__ccore_som_pointer);
             
-
+    
+    def __len__(self):
+        """!
+        @return (uint) Size of self-organized map (number of neurons).
+        
+        """
+        
+        return self.size;
+    
+    
     def _create_initial_weights(self, init_type):
         """!
         @brief Creates initial weights for neurons in line with the specified initialization.

@@ -27,17 +27,41 @@ import matplotlib.pyplot as plt;
 from matplotlib import colors;
 
 class type_graph_descr:
+    """!
+    @brief Enumeration of graph description.
+    @details Matrix representation is list of lists where number of rows equals number of columns and each element
+             of square matrix determines whether there is connection between two vertices. For example:
+             [ [0, 1, 1], [1, 0, 1], [1, 1, 0] ].
+             
+             Vector representation is list of lists where index of row corresponds to index of vertex and elements
+             of row consists of indexes of connected vertices. For example:
+             [ [1, 2], [0, 2], [0, 1] ].
+    
+    """
     GRAPH_UNKNOWN = 0;
     GRAPH_MATRIX_DESCR = 1;
     GRAPH_VECTOR_DESCR = 2;
 
 class graph:
+    """!
+    @brief Graph representation.
+    
+    """
     __type_graph = None;
     __data = None;
     __space_description = None;
     __comments = None;
     
     def __init__(self, data, type_graph = None, space_descr = None, comments = None):
+        """!
+        @brief Constructor of graph.
+        
+        @param[in] data (list): Representation of graph. Considered as matrix if 'type_graph' is not specified.
+        @param[in] type_graph (type_graph_descr): Type of graph representation in 'data'.
+        @param[in] space_descr (list): Coordinates of each vertex that are used for graph drawing (can be omitted).
+        @param[in] comments (string): Comments related to graph.
+        
+        """
         self.__data = data;
         self.__space_descr = space_descr;
         self.__comments = comments;
@@ -54,26 +78,62 @@ class graph:
                 for element in row:
                     if ( (element != 0) or (element != 1) ):
                         self.__type_graph = type_graph_descr.GRAPH_VECTOR_DESCR;
+    
+    
+    def __len__(self):
+        """!
+        @return (uint) Size of graph defined by number of vertices.
         
-    @property
-    def data(self): return self.__data;
+        """
+        return len(self.__data);
+    
     
     @property
-    def space_description(self): 
+    def data(self): 
+        """!
+        @return (list) Graph representation.
+        
+        """
+        return self.__data;
+    
+    @property
+    def space_description(self):
+        """!
+        @return (list) Space description.
+        
+        """
         if (self.__space_descr == [] or self.__space_descr is None):
             return None;
 
         return self.__space_descr;
     
     @property
-    def comments(self): return self.__comments;
+    def comments(self): 
+        """!
+        @return (string) Comments.
+        
+        """
+        return self.__comments;
     
     @property
-    def type_graph_descr(self): return self.__type_graph;
+    def type_graph_descr(self):
+        """!
+        @return (type_graph_descr) Type of graph representation.
+        
+        """
+        return self.__type_graph;
     
     
 def read_graph(filename):
-    "Read graph from file in GRPR format"
+    """!
+    @brief Read graph from file in GRPR format.
+    
+    @param[in] filename (string): Path to file with graph in GRPR format.
+    
+    @return (graph) Graph that is read from file.
+    
+    """
+    
     file = open(filename, 'r');
     
     comments = "";
@@ -159,9 +219,24 @@ def read_graph(filename):
 
 
 def draw_graph(graph_instance, map_coloring = None):
+    """!
+    @brief Draw graph.
+
+    @param[in] graph_instance (graph): Graph that should be drawn.
+    @param[in] map_coloring (list): List of color indexes for each vertex. Size of this list should be equal to size of graph (number of vertices).
+                                    If it's not specified (None) than graph without coloring will be dwarn.
+    
+    @warning Graph can be represented if there is space representation for it.
+    
+    """
+    
     if (graph_instance.space_description is None):
-        print("Warning: The graph haven't got representation in space");
-        return;
+        raise NameError("The graph haven't got representation in space");
+    
+    if (map_coloring is not None):
+        if (len(graph_instance) != len(map_coloring)):
+            raise NameError("Size of graph should be equal to size coloring map");
+        
     
     fig = plt.figure();
     axes = fig.add_subplot(111);
