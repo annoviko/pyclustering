@@ -26,7 +26,7 @@ from pyclustering.nnet import *;
 
 from pyclustering.samples.definitions import IMAGE_SIMPLE_SAMPLES;
 
-from pyclustering.support import read_image, rgb2gray, draw_image_segments;
+from pyclustering.support import read_image, rgb2gray, draw_image_mask_segments;
 
 def template_dynamic_pcnn(num_osc, steps, stimulus = None, params = None, conn_type = conn_type.NONE, separate_representation = True):
     net = pcnn_network(num_osc, stimulus, params, conn_type);
@@ -126,7 +126,7 @@ def segmentation_double_t():
     params.M = 1.0;
     
     ensembles = template_dynamic_pcnn(32 * 32, 28,  image, params, conn_type.GRID_EIGHT, False);
-    draw_image_segments(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE10, ensembles);
+    draw_image_mask_segments(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE10, ensembles);
 
 
 one_neuron_unstimulated();

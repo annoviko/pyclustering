@@ -27,7 +27,7 @@ from math import floor;
 
 from PIL import Image;
 
-from pyclustering.support import draw_image_segments, read_image, draw_dynamics, draw_dynamics_set, timedcall;
+from pyclustering.support import draw_image_mask_segments, read_image, draw_dynamics, draw_dynamics_set, timedcall;
 
 from pyclustering.samples.definitions import IMAGE_SIMPLE_SAMPLES, IMAGE_MAP_SAMPLES;
 
@@ -53,7 +53,7 @@ def template_segmentation_image(source, color_radius, object_radius, noise_size,
     clusters = network.get_clusters();
     real_clusters = [cluster for cluster in clusters if len(cluster) > noise_size];
     
-    draw_image_segments(source, real_clusters);
+    draw_image_mask_segments(source, real_clusters);
     
     if (object_radius is None):
         return;
@@ -104,10 +104,10 @@ def template_segmentation_image(source, color_radius, object_radius, noise_size,
             if (len(real_description) > noise_size):
                 object_colored_clusters.append(real_description);
             
-        # draw_image_segments(source, [ cluster ]);
-        # draw_image_segments(source, real_description_clusters);
+        # draw_image_mask_segments(source, [ cluster ]);
+        # draw_image_mask_segments(source, real_description_clusters);
     
-    draw_image_segments(source, object_colored_clusters);
+    draw_image_mask_segments(source, object_colored_clusters);
     
     if (show_dyn is True):
         draw_dynamics_set(object_colored_dynamics, None, None, None, [0, 2 * 3.14], False, False);

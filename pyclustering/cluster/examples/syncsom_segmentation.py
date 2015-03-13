@@ -25,7 +25,7 @@
 
 from PIL import Image;
 
-from pyclustering.support import draw_image_segments, read_image, draw_dynamics;
+from pyclustering.support import draw_image_mask_segments, read_image, draw_dynamics;
 from pyclustering.support import timedcall;
 
 from pyclustering.samples.definitions import IMAGE_SIMPLE_SAMPLES;
@@ -43,7 +43,7 @@ def template_segmentation_image(source, map_som_size = [5, 5], average_neighbors
         draw_dynamics(dyn_time, dyn_phase);
     
     clusters = network.get_clusters();
-    draw_image_segments(source, clusters);
+    draw_image_mask_segments(source, clusters);
     
     
 def segmentation_image_simple1():

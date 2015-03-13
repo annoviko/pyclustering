@@ -27,7 +27,7 @@ from math import floor;
 
 from PIL import Image;
 
-from pyclustering.support import draw_image_segments, read_image;
+from pyclustering.support import draw_image_mask_segments, draw_image_color_segments, read_image;
 
 from pyclustering.samples.definitions import IMAGE_SIMPLE_SAMPLES, IMAGE_MAP_SAMPLES;
 
@@ -38,13 +38,18 @@ def template_segmentation_image(source, color_radius, color_neighbors, object_ra
     data = read_image(source);
 
     dbscan_instance = dbscan(data, color_radius, color_neighbors, True);
-    print("dimensions:", len(data[0]));
+    print("Segmentation: '", source, "', Dimensions:", len(data[0]));
     dbscan_instance.process();
     
     clusters = dbscan_instance.get_clusters();
     
     real_clusters = [cluster for cluster in clusters if len(cluster) > noise_size];
-    draw_image_segments(source, real_clusters);
+    
+    print("Draw allocated color segments (back mask representation)...");
+    draw_image_mask_segments(source, real_clusters);
+    
+    print("Draw allocated color segments (color segment representation)...");
+    draw_image_color_segments(source, real_clusters);
     
     if (object_radius is None):
         return;
@@ -84,7 +89,11 @@ def template_segmentation_image(source, color_radius, color_neighbors, object_ra
             if (len(real_description) > noise_size):
                 object_colored_clusters.append(real_description);
     
-    draw_image_segments(source, object_colored_clusters);
+    print("Draw allocated object segments (back mask representation)...");
+    draw_image_mask_segments(source, object_colored_clusters);
+    
+    print("Draw allocated object segments (color segment representation)...");
+    draw_image_color_segments(source, object_colored_clusters);
     
 
 def segmentation_image_simple1():

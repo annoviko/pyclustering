@@ -27,7 +27,7 @@ from pyclustering.nnet import *;
 
 from pyclustering.samples.definitions import IMAGE_SIMPLE_SAMPLES;
 
-from pyclustering.support import read_image, rgb2gray, draw_image_segments;
+from pyclustering.support import read_image, rgb2gray, draw_image_mask_segments;
 
 def template_segmentation_image(image, parameters, simulation_time, brightness):
     stimulus = read_image(image);
@@ -63,7 +63,7 @@ def template_segmentation_image(image, parameters, simulation_time, brightness):
     draw_dynamics(t, y, x_title = "Time", y_title = "y(t)");
     
     ensembles = net.allocate_sync_ensembles();
-    draw_image_segments(image, ensembles);
+    draw_image_mask_segments(image, ensembles);
     
 def segmentation_image_simple1():
     template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE01, None, 47, 235);
