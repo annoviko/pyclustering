@@ -28,6 +28,8 @@
 
 from pyclustering.nnet import *;
 
+import matplotlib.pyplot as plt;
+
 class pcnn_parameters:
     """!
     @brief Parameters for pulse coupled neural network.
@@ -255,13 +257,13 @@ class pcnn_network(network, network_interface):
         sync_ensembles = [];
         traverse_oscillators = set();
         
+        if (self._pointer_dynamic is None):
+            return None;
+        
         if (isinstance(self._pointer_dynamic[0], list) is not True):
             return None;
         
         lower_boundary = 0;
-#         lower_boundary = len(self._pointer_dynamic) - 1 - tolerance;
-#         if (lower_boundary < 0):
-#             lower_boundary = 0;
         
         for t in range(len(self._pointer_dynamic) - 1, lower_boundary, -1):
             sync_ensemble = [];
@@ -275,3 +277,50 @@ class pcnn_network(network, network_interface):
                 sync_ensembles.append(sync_ensemble);
         
         return sync_ensembles;
+
+    
+    def get_time_signal(self):
+        """!
+        @brief Calculates time signal (signal vector information) of network output.
+        
+        @remark Dynamic should be collected during simulation. Otherwise time signal will calculated only for last step of simulation.
+                
+        @return (list) Time signal of network output.
+        
+        @see simulate()
+        @see show_time_signal()
+        
+        """
+        if (isinstance(self._pointer_dynamic[0], list) is not True):
+            return [ sum(self._pointer_dynamic) ];
+        
+        signal_vector_information = [];
+        for t in range(0, len(self._pointer_dynamic)):
+            signal_vector_information.append(sum(self._pointer_dynamic[t]));
+        
+        return signal_vector_information;
+    
+
+    def show_time_signal(self):
+        """!
+        @brief Shows time signal (signal vector information) using network dynamic during simulation.
+        
+        @remark Dynamic should be collected during simulation.
+        
+        @see simulate()
+        @see get_time_signal()
+        
+        """
+        
+        time_signal = self.get_time_signal();
+        time_axis = range(len(time_signal));
+        
+        plt.subplot(1, 1, 1);
+        plt.plot(time_axis, time_signal, '-');
+        plt.ylabel("G (time signal)");
+        plt.xlabel("t (iteration)");
+        plt.grid(True);
+        
+        plt.show();
+        
+        

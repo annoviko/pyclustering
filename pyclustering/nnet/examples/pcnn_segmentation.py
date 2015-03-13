@@ -68,32 +68,38 @@ def template_segmentation_image(image, parameters, simulation_time, brightness):
     ensembles = net.allocate_sync_ensembles();
     draw_image_mask_segments(image, ensembles);
     
+    net.show_time_signal();
+    
 def segmentation_image_simple1():
     template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE01, None, 47, 235);
-    
+
 def segmentation_image_simple2():
     template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE02, None, 47, 235);
 
 def segmentation_image_simple6():
     template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE06, None, 47, 128);
-    
-def segmentation_image_beach():
+
+
+def segmentation_gray_image_simple1():
+    template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE01, None, 47, None);
+
+def segmentation_gray_image_simple5():
+    template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE05, None, 47, None);    
+
+def segmentation_gray_image_beach():
+    template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE_BEACH, None, 94, None);    
+
+def segmentation_gray_image_building():
     "Long processing"
-    parameters = pcnn_parameters();
-    
-    parameters.AF = 0.1;
-    parameters.AL = 0.1;
-    parameters.AT = 0.8;
-    parameters.VF = 1.0;
-    parameters.VL = 1.0;
-    parameters.VT = 30.0;
-    parameters.W = 1.0;
-    parameters.M = 1.0;
-        
-    template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE_BUILDING, parameters, 47, None);
+    template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE_BUILDING, None, 47, None);
 
 
 segmentation_image_simple1();
 segmentation_image_simple2();
 segmentation_image_simple6();
-segmentation_image_beach();
+ 
+segmentation_gray_image_simple1();
+segmentation_gray_image_simple5();
+segmentation_gray_image_beach();
+
+segmentation_gray_image_building();
