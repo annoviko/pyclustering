@@ -749,7 +749,7 @@ def draw_image_color_segments(source, clusters, hide_axes = True):
     @param[in] source (string): Path to image.
     @param[in] clusters (list): List of clusters (allocated segments of image) where each cluster
                                 consists of indexes of pixel from source image.
-    @param[in] hide_axes (bool): If True - hides axes.
+    @param[in] hide_axes (bool): If True then axes will not be displayed.
     
     """
         
@@ -802,7 +802,7 @@ def draw_image_mask_segments(source, clusters, hide_axes = True):
     @param[in] source (string): Path to image.
     @param[in] clusters (list): List of clusters (allocated segments of image) where each cluster
                                 consists of indexes of pixel from source image.
-    @param[in] hide_axes (bool): If True - hides axes.
+    @param[in] hide_axes (bool): If True then axes will not be displayed.
     
     """
     image_source = Image.open(source);

@@ -38,9 +38,18 @@ from pylab import *;
 
 def template_self_organization(file, rows, cols, time, structure, init_type = type_init.uniform_grid):
     sample = read_sample(file);
-    network = som(rows, cols, sample, time, structure, init_type);
+    network = som(rows, cols, sample, time, structure, init_type, True);
     network.train();        
     network.show_network(False, dataset = False);
+    
+
+def template_matrix_self_organization(file, rows, cols, time, structure, init_type = type_init.uniform_grid):
+    sample = read_sample(file);
+    network = som(rows, cols, sample, time, structure, init_type, True);
+    network.train();        
+    network.show_network(False, dataset = False);
+    network.show_distance_matrix();    
+
 
 def som_sample1():
     template_self_organization(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, 2, 100, type_conn.grid_four);
@@ -89,7 +98,19 @@ def som_hepta():
     
 def som_engy_time():
     template_self_organization(FCPS_SAMPLES.SAMPLE_ENGY_TIME, 5, 5, 100, type_conn.grid_four);
-    
+
+
+def som_distance_matrix():
+    template_matrix_self_organization(SIMPLE_SAMPLES.SAMPLE_ELONGATE, 12, 12, 100, type_conn.grid_eight);
+    template_matrix_self_organization(FCPS_SAMPLES.SAMPLE_LSUN, 10, 10, 100, type_conn.grid_eight);
+    template_matrix_self_organization(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, 16, 16, 100, type_conn.grid_eight);
+    template_matrix_self_organization(FCPS_SAMPLES.SAMPLE_TARGET, 16, 16, 100, type_conn.grid_eight);
+    template_matrix_self_organization(FCPS_SAMPLES.SAMPLE_WING_NUT, 30, 30, 100, type_conn.grid_eight);
+    template_matrix_self_organization(FCPS_SAMPLES.SAMPLE_CHAINLINK, 12, 12, 100, type_conn.grid_eight);
+    template_matrix_self_organization(FCPS_SAMPLES.SAMPLE_TETRA, 12, 12, 100, type_conn.grid_eight);
+    template_matrix_self_organization(FCPS_SAMPLES.SAMPLE_ENGY_TIME, 25, 25, 100, type_conn.grid_eight);
+
+
 def som_target_diffence_intialization():
     template_self_organization(FCPS_SAMPLES.SAMPLE_TARGET, 9, 9, 150, type_conn.grid_four, type_init.random);
     template_self_organization(FCPS_SAMPLES.SAMPLE_TARGET, 9, 9, 150, type_conn.grid_four, type_init.random_centroid);
@@ -119,6 +140,8 @@ som_atom();
 som_golf_ball();
 som_hepta();
 som_engy_time();
+
+som_distance_matrix();
 
 som_target_diffence_intialization();
 som_two_diamonds_diffence_intialization();
