@@ -91,17 +91,17 @@ def segmentation_image_simple6():
 
 
 def segmentation_gray_image_simple1():
-    template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE01, None, 47, None);
+    template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE01, None, 47, None, True, False, True);
 
 def segmentation_gray_image_simple5():
-    template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE05, None, 47, None);    
+    template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE05, None, 47, None, True, False, True);    
 
 def segmentation_gray_image_beach():
-    template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE_BEACH, None, 94, None);    
+    template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE_BEACH, None, 94, None, True, False, True);    
 
 def segmentation_gray_image_building():
     "Long processing"
-    template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE_BUILDING, None, 47, None);
+    template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE_BUILDING, None, 47, None, True, False, True);
 
 
 def segmentation_fast_linking_image_beach():

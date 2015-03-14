@@ -26,9 +26,11 @@
 
 """
 
+import matplotlib.pyplot as plt;
+import random;
+
 from pyclustering.nnet import *;
 
-import matplotlib.pyplot as plt;
 
 class pcnn_parameters:
     """!
@@ -44,15 +46,16 @@ class pcnn_parameters:
     AL = 0.1;   # multiplier for the linking compartment at the previous step
     AT = 0.5;   # multiplier for the threshold at the previous step
     
-    W = 1.0;    # neighbours influence on linking compartment
-    M = 1.0;    # neighbours influence on feeding compartment
+    W = 1.0;    # synaptic weight - neighbours influence on linking compartment
+    M = 1.0;    # synaptic weight - neighbours influence on feeding compartment
     
     B = 0.1;    # linking strength in the network.
     
     OUTPUT_TRUE = 1;    # fire value for oscillators.
     OUTPUT_FALSE = 0;   # rest value for oscillators.
     
-    FAST_LINKING = False;   # enable Fast-Linking mode
+    # Helps to overcome some of the effects of time quantisation. This process allows the linking wave to progress a lot faster than the feeding wave.
+    FAST_LINKING = False;   # enable/disable Fast-Linking mode
     
 
 class pcnn_network(network, network_interface):
@@ -98,7 +101,7 @@ class pcnn_network(network, network_interface):
         
         self._feeding = [0.0] * self._num_osc;    
         self._linking = [0.0] * self._num_osc;        
-        self._threshold = [0.0] * self._num_osc;
+        self._threshold = [ random.random() for i in range(self._num_osc) ];
         
         if (stimulus is None):
             self._stimulus = [0.0] * self._num_osc;
@@ -149,16 +152,9 @@ class pcnn_network(network, network_interface):
         
         if (collect_dynamic == True):
             dyn_output = [];
-            # dyn_threshold = [];
-            # dyn_feeding = [];
-            # dyn_linking = [];
-            
             dyn_time = [];
             
             dyn_output.append(self._outputs);
-            # dyn_threshold.append(self._threshold);
-            # dyn_feeding.append(self._feeding);
-            # dyn_linking.append(self._linking);
             dyn_time.append(0);
         
         for step in range(0, steps, 1):
@@ -167,17 +163,12 @@ class pcnn_network(network, network_interface):
             # update states of oscillators
             if (collect_dynamic == True):
                 dyn_output.append(self._outputs);
-                # dyn_threshold.append(self._threshold);
-                # dyn_feeding.append(self._feeding);
-                # dyn_linking.append(self._linking);
-                
                 dyn_time.append(step);
             else:
                 dyn_output = self._outputs;
                 dyn_time = step;
         
         self._pointer_dynamic = dyn_output;
-        #return (dyn_time, dyn_output, dyn_threshold, dyn_feeding, dyn_linking);
         return (dyn_time, dyn_output);
     
     
