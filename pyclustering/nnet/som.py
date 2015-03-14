@@ -42,13 +42,10 @@ import math;
 import random;
 
 import matplotlib.pyplot as plt;
-import matplotlib.lines as mlines;
-from mpl_toolkits.mplot3d import Axes3D;
-
-from pyclustering.support import euclidean_distance_sqrt;
 
 import pyclustering.core.wrapper as wrapper;
-from scipy.spatial.kdtree import distance_matrix
+
+from pyclustering.support import euclidean_distance_sqrt;
 
 
 # Feature SOM 0001: Predefined initial radius that depends on size of the network. 

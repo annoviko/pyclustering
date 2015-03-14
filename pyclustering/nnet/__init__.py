@@ -122,7 +122,11 @@ class network:
         self._conn_represent = conn_represent;
         
         self._create_structure(type_conn);
-        
+    
+    
+    def __len__(self):
+        return self._num_osc;
+    
     
     def __create_all_to_all_connections(self):
         "Create connections between all oscillators"

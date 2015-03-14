@@ -51,6 +51,9 @@ class pcnn_parameters:
     
     OUTPUT_TRUE = 1;    # fire value for oscillators.
     OUTPUT_FALSE = 0;   # rest value for oscillators.
+    
+    FAST_LINKING = False;   # enable Fast-Linking mode
+    
 
 class pcnn_network(network, network_interface):
     """!
@@ -204,6 +207,9 @@ class pcnn_network(network, network_interface):
         outputs = [0.0] * self._num_osc;
         threshold = [0.0] * self._num_osc;
         
+        # Used by Fast-Linking
+        output_change = False;
+        
         for index in range(0, self._num_osc, 1):
             neighbors = self.get_neighbors(index);
             
@@ -217,9 +223,6 @@ class pcnn_network(network, network_interface):
             feeding_influence *= self._params.VF;
             linking_influence *= self._params.VL;
             
-            # feeding[index] = math.exp(-self._params.AF) * self._feeding[index] + self._stimulus[index];
-            # linking[index] = math.exp(-self._params.AL) * self._linking[index];
-            
             feeding[index] = self._params.AF * self._feeding[index] + self._stimulus[index] + feeding_influence;
             linking[index] = self._params.AL * self._linking[index] + linking_influence;
             
@@ -232,9 +235,50 @@ class pcnn_network(network, network_interface):
             else:
                 outputs[index] = self._params.OUTPUT_FALSE;
                 
-            # threshold[index] = math.exp(-self._params.AT) * self._threshold[index] + self._params.VT * outputs[index];
-            threshold[index] = self._params.AT * self._threshold[index] + self._params.VT * outputs[index];
+            if (outputs[index] != self._outputs[index]):
+                output_change = True;
             
+            # In case of Fast Linking we should calculate threshould until output is changed.
+            if (self._params.FAST_LINKING is not True):
+                threshold[index] = self._params.AT * self._threshold[index] + self._params.VT * outputs[index];
+        
+        
+        # In case of Fast Linking we need to wait until output is changed.
+        if (self._params.FAST_LINKING is True):
+            current_output_change = False;
+            
+            while (output_change is True):
+                # Save previous values
+                self._outputs = outputs[:];
+                
+                for index in range(0, self._num_osc, 1):
+                    linking_influence = 0.0;
+            
+                    for index_neighbour in neighbors:
+                        linking_influence += self._outputs[index_neighbour] * self._params.W;
+                    
+                    linking_influence *= self._params.VL;
+                    linking[index] = linking_influence;
+                    
+                    internal_activity = feeding[index] * (1.0 + self._params.B * linking[index]);
+                    
+                    # calculate output of the oscillator
+                    if (internal_activity > self._threshold[index]):
+                        outputs[index] = self._params.OUTPUT_TRUE;
+                    else:
+                        outputs[index] = self._params.OUTPUT_FALSE;
+                        
+                    if (outputs[index] != self._outputs[index]):
+                        current_output_change = True;
+                
+                output_change = current_output_change;
+                current_output_change = False;
+        
+        # In case of Fast Linking threshould should be calculated after fast linking.
+        if (self._params.FAST_LINKING is True):
+            for index in range(0, self._num_osc, 1):
+                threshold[index] = self._params.AT * self._threshold[index] + self._params.VT * outputs[index];
+        
         self._feeding = feeding[:];
         self._linking = linking[:];
         self._threshold = threshold[:];
@@ -247,7 +291,7 @@ class pcnn_network(network, network_interface):
         @brief Allocate clusters in line with ensembles of synchronous oscillators where each
                synchronous ensemble corresponds to only one cluster.
                
-        @param[in] (double): Is not used, can be ignored.
+        @param[in] tolerance (double): Is not used, can be ignored.
         
         @return (list) Grours (lists) of indexes of synchronous oscillators. 
                 For example, [ [index_osc1, index_osc3], [index_osc2], [index_osc4, index_osc5] ].
@@ -277,6 +321,33 @@ class pcnn_network(network, network_interface):
                 sync_ensembles.append(sync_ensemble);
         
         return sync_ensembles;
+
+
+    def allocate_spike_ensembles(self):
+        """!
+        @brief Analyses output dynamic of network and allocates spikes on each iteration as a list of indexes of oscillators.
+        @details Each allocated spike ensemble represents list of indexes of oscillators whose output is active.
+        
+        @remark Dynamic should be collected during simulation. Otherwise time signal will calculated only for last step of simulation.
+        
+        @return (list) Spike ensembles of oscillators.
+        
+        @see simulate()
+        
+        """
+        
+        spike_ensembles = [];
+        for t in range(len(self._pointer_dynamic)):
+            spike_ensemble = [];
+            
+            for index in range(len(self)):
+                if (self._pointer_dynamic[t][index] == self._params.OUTPUT_TRUE):
+                    spike_ensemble.append(index);
+            
+            if (len(spike_ensemble) > 0):
+                spike_ensembles.append(spike_ensemble);
+        
+        return spike_ensembles;
 
     
     def get_time_signal(self):
