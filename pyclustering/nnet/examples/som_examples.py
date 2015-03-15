@@ -48,7 +48,8 @@ def template_matrix_self_organization(file, rows, cols, time, structure, init_ty
     network = som(rows, cols, sample, time, structure, init_type, True);
     network.train();        
     network.show_network(False, dataset = False);
-    network.show_distance_matrix();    
+    network.show_distance_matrix();
+    network.show_winner_matrix();  
 
 
 def som_sample1():

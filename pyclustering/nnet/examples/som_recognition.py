@@ -113,8 +113,6 @@ class recognizer:
             file_network_dump = open("knowledge_recognition_memory_dump", "rb");
             self.__network = pickle.load(file_network_dump);
             
-            self.__network.show_award();
-            
             result_loading = True;
         
         return result_loading;

@@ -456,7 +456,6 @@ class som:
                     influence = math.exp( -( distance / (2.0 * self._local_radius) ) );
                     
                     for i in range(dimension):
-                        old_value = self._weights[neuron_index][i];
                         self._weights[neuron_index][i] = self._weights[neuron_index][i] + self._learn_rate * influence * (x[i] - self._weights[neuron_index][i]); 
                     
         else:
@@ -596,6 +595,7 @@ class som:
         distance_matrix = self.get_distance_matrix();
         
         plt.imshow(distance_matrix, cmap = plt.get_cmap('hot'), interpolation='kaiser');
+        plt.title("U-Matrix");
         plt.colorbar();
         plt.show();
 
@@ -656,28 +656,30 @@ class som:
         return density_matrix;
     
     
-    def show_award(self):
+    def show_winner_matrix(self):
         """!
-        @brief Prints indexes of won objects by each neuron.
+        @brief Show winner matrix where each element corresponds to neuron and value represents
+               amount of won objects from input dataspace at the last training iteration.
+        
+        @see show_distance_matrix()
         
         """
         
         if (self.__ccore_som_pointer is not None):
             self._award = wrapper.som_get_awards(self.__ccore_som_pointer);
         
-        awards = list();
+        winner_matrix = [ [0] * self._cols for i in range(self._rows) ];
         
-        for index in range(self._size):
-            if ((index != 0) and (index % self._cols == 0)):
-                print(awards);
-                awards.clear();
+        for i in range(self._rows):
+            for j in range(self._cols):
+                neuron_index = i * self._cols + j;
                 
-            awards.append(self._award[index]);
-
-        print(awards);
-
-        for index in range(self._size):
-            print("#%2d - captured objects: %s" % (index, self.capture_objects[index]) );
+                winner_matrix[i][j] = self._award[neuron_index];
+        
+        plt.imshow(winner_matrix, cmap = plt.get_cmap('hot'), interpolation='kaiser');
+        plt.title("Winner Matrix");
+        plt.colorbar();
+        plt.show();
             
     
     def show_network(self, awards = False, belongs = False, coupling = True, dataset = True, marker_type = '.'):
@@ -753,6 +755,6 @@ class som:
                             axes.plot([self._weights[index][0], self._weights[neighbor][0]], [self._weights[index][1], self._weights[neighbor][1]], [self._weights[index][2], self._weights[neighbor][2]], 'g-', linewidth = 0.5);
                         
                 
-
+        plt.title("Network Structure");
         plt.grid();
         plt.show();
