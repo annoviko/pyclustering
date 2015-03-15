@@ -629,9 +629,11 @@ class som:
         return distance_matrix;
     
     
-    def show_density_matrix(self):
+    def show_density_matrix(self, surface_divider = 20.0):
         """!
         @brief Show density matrix (P-matrix) using kernel density estimation.
+        
+        @param[in] surface_divider (double): Divider in each dimension that affect radius for density measurement.
         
         @see show_distance_matrix()
         
@@ -644,9 +646,11 @@ class som:
         plt.show();
     
     
-    def get_density_matrix(self):
+    def get_density_matrix(self, surface_divider = 20.0):
         """!
         @brief Calculates density matrix (P-Matrix).
+        
+        @param[in] surface_divider (double): Divider in each dimension that affect radius for density measurement.
         
         @return (list) Density matrix (P-Matrix).
         
@@ -673,7 +677,7 @@ class som:
         
         radius = [0.0] * len(self._weights[0]);
         for index_dim in range(dimension):
-            radius[index_dim] = ( dim_max[index_dim] - dim_min[index_dim] ) / 20.0;
+            radius[index_dim] = ( dim_max[index_dim] - dim_min[index_dim] ) / surface_divider;
         
         for point in self._data:
             for index_neuron in range(len(self)):
