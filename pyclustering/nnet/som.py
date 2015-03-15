@@ -613,7 +613,8 @@ class som:
         """
         if (self.__ccore_som_pointer is not None):
             self._weights = wrapper.som_get_weights(self.__ccore_som_pointer);
-        
+            self._neighbors = wrapper.som_get_neighbors(self.__ccore_som_pointer);
+            
         distance_matrix = [ [0.0] * self._cols for i in range(self._rows) ];
         
         for i in range(self._rows):
@@ -628,6 +629,21 @@ class som:
         return distance_matrix;
     
     
+    def show_density_matrix(self):
+        """!
+        @brief Show density matrix (P-matrix) using kernel density estimation.
+        
+        @see show_distance_matrix()
+        
+        """        
+        density_matrix = self.get_density_matrix();
+        
+        plt.imshow(density_matrix, cmap = plt.get_cmap('hot'), interpolation='kaiser');
+        plt.title("P-Matrix");
+        plt.colorbar();
+        plt.show();
+    
+    
     def get_density_matrix(self):
         """!
         @brief Calculates density matrix (P-Matrix).
@@ -639,19 +655,40 @@ class som:
         """
         
         if (self.__ccore_som_pointer is not None):
-            self._award = wrapper.som_get_awards(self.__ccore_som_pointer);
-        
-        maximum_value = max(self._award);
-        minimum_value = min(self._award);
-        
-        difference = maximum_value - minimum_value;
-        if (difference == 0): difference = 1;
+            self._weights = wrapper.som_get_weights(self.__ccore_som_pointer);
         
         density_matrix = [ [0] * self._cols for i in range(self._rows) ];
-        for i in range(self._rows):
-            for j in range(self._cols):
-                neuron_index = i * self._cols + j;
-                density_matrix[i][j] = (self._award[neuron_index] - minimum_value) / difference;
+        dimension = len(self._weights[0]);
+        
+        dim_max = [ float('-Inf') ] * dimension;
+        dim_min = [ float('Inf') ] * dimension;
+        
+        for weight in self._weights:
+            for index_dim in range(dimension):
+                if (weight[index_dim] > dim_max[index_dim]):
+                    dim_max[index_dim] = weight[index_dim];
+                
+                if (weight[index_dim] < dim_min[index_dim]):
+                    dim_min[index_dim] = weight[index_dim];
+        
+        radius = [0.0] * len(self._weights[0]);
+        for index_dim in range(dimension):
+            radius[index_dim] = ( dim_max[index_dim] - dim_min[index_dim] ) / 20.0;
+        
+        for point in self._data:
+            for index_neuron in range(len(self)):
+                point_covered = True;
+                
+                for index_dim in range(dimension):
+                    if (abs(point[index_dim] - self._weights[index_neuron][index_dim]) > radius[index_dim]):
+                        point_covered = False;
+                        break;
+                
+                row = math.floor(index_neuron / self._cols);
+                col = index_neuron - row * self._cols;
+                
+                if (point_covered is True):
+                    density_matrix[row][col] += 1;
         
         return density_matrix;
     

@@ -48,6 +48,8 @@ def template_matrix_self_organization(file, rows, cols, time, structure, init_ty
     network = som(rows, cols, sample, time, structure, init_type, True);
     network.train();        
     network.show_network(False, dataset = False);
+    
+    network.show_density_matrix();
     network.show_distance_matrix();
     network.show_winner_matrix();  
 
@@ -125,22 +127,22 @@ def som_two_diamonds_diffence_intialization():
     template_self_organization(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, 9, 9, 150, type_conn.grid_four, type_init.uniform_grid);    
 
 
-som_sample1();
-som_sample2();
-som_sample3();
-som_sample4();
-som_sample5();
-som_lsun();
-som_target();
-som_tetra();
-som_two_diamonds();
-som_elongate();
-som_wing_nut();
-som_chainlink();
-som_atom();
-som_golf_ball();
-som_hepta();
-som_engy_time();
+# som_sample1();
+# som_sample2();
+# som_sample3();
+# som_sample4();
+# som_sample5();
+# som_lsun();
+# som_target();
+# som_tetra();
+# som_two_diamonds();
+# som_elongate();
+# som_wing_nut();
+# som_chainlink();
+# som_atom();
+# som_golf_ball();
+# som_hepta();
+# som_engy_time();
 
 som_distance_matrix();
 
