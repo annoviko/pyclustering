@@ -367,7 +367,7 @@ extern "C" DECLARATION void destroy_hsyncnet_network(const void * pointer_networ
 extern "C" DECLARATION dynamic_result * process_hsyncnet(const void * pointer_network, const double order, const unsigned int solver, const bool collect_dynamic);
 
 
-extern "C" DECLARATION void * som_create(const data_representation * const sample, const unsigned int num_rows, const unsigned int num_cols, const unsigned int num_epochs, const unsigned int type_conn, const unsigned int type_init);
+extern "C" DECLARATION void * som_create(const data_representation * const sample, const unsigned int num_rows, const unsigned int num_cols, const unsigned int num_epochs, const unsigned int type_conn, const void * parameters);
 
 extern "C" DECLARATION void som_destroy(const void * pointer);
 

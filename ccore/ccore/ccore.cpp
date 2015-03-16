@@ -590,9 +590,9 @@ dynamic_result * process_hsyncnet(const void * pointer_network, const double ord
 	return result;
 }
 
-void * som_create(const data_representation * const sample, const unsigned int num_rows, const unsigned int num_cols, const unsigned int num_epochs, const unsigned int type_conn, const unsigned int type_init) {
+void * som_create(const data_representation * const sample, const unsigned int num_rows, const unsigned int num_cols, const unsigned int num_epochs, const unsigned int type_conn, const void * parameters) {
 	std::vector<std::vector<double> > * dataset = read_sample(sample);
-	return (void *) new som(dataset, num_rows, num_cols, num_epochs, (som_conn_type) type_conn, (som_init_type) type_init);
+	return (void *) new som(dataset, num_rows, num_cols, num_epochs, (som_conn_type) type_conn, (som_parameters *) parameters);
 }
 
 void som_destroy(const void * pointer) {

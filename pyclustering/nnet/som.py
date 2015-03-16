@@ -4,19 +4,9 @@
 @details Based on article description:
          - T.Kohonen. The Self-Organizing Map. 1990.
          - T.Kohonen, E.Oja, O.Simula, A.Visa, J.Kangas. Engineering Applications of the Self-Organizing Map. 1996.
-         
-         - Feature SOM 0001: Predefined initial radius that depends on size of the network. 
-           Improves results of self-organization and helps avoid tug of neurons when network is small.
-           
-         - Feature SOM 0002: Uniform grid. Initial weights of neurons depends on input data set. The uniform grid represent rectangular grid
-           that covers input data in first two dimensions and distance between the nodes is the same in each of
-           the two dimensions of data. Further the uniform grid should be aligned with the center in other
-           dimensions of data.
-           
-         - Feature SOM 0003: Autostop. Automatic termination of learining process when adaptation is not occurred.
 
 @authors Andrei Novikov (spb.andr@yandex.ru)
-@version 1.0
+@version 1.1
 @date 2014-2015
 @copyright GNU Public License
 
@@ -43,7 +33,7 @@ import random;
 
 import matplotlib.pyplot as plt;
 
-import pyclustering.core.wrapper as wrapper;
+import pyclustering.core.som_wrapper as wrapper;
 
 from pyclustering.support import euclidean_distance_sqrt;
 
@@ -83,6 +73,38 @@ class type_init:
     random_centroid = 1;
     random_surface = 2;
     uniform_grid = 3;
+
+
+class som_parameters:
+    """!
+    @brief Represents SOM parameters.
+    
+    """
+    
+    """!
+    @brief Type of initialization of initial neuron weights (random, random in center of the input data, random 
+           distributed in data, ditributed in line with uniform grid).
+    
+    """
+    init_type = type_init.uniform_grid; 
+    
+    """!
+    @brief Initial radius (if not specified then will be calculated by SOM). 
+    
+    """
+    init_radius = None;
+    
+    """!
+    @brief Rate of learning. 
+    
+    """   
+    init_learn_rate = 0.1;
+    
+    """!
+    @brief Condition when learining process should be stoped. It's used when autostop mode is used. 
+     
+    """
+    adaptation_threshold = 0.001; 
 
 
 class som:
@@ -128,9 +150,7 @@ class som:
     
     # describe learning process and internal state
     _epochs = 0;                    # Iteration for learning.
-    _init_radius = 0.0;             
-    _init_learn_rate = 0.1;         # Rate of learning.
-    _adaptation_threshold = 0.001;  # Condition when learining process should be stoped. It's used when autostop mode is used.
+    _params = None;
     
     # dynamic changes learning parameters
     _local_radius = 0.0;
@@ -188,7 +208,7 @@ class som:
         return self._capture_objects;
     
     
-    def __init__(self, rows, cols, data, epochs, conn_type = type_conn.grid_eight, init_type = type_init.uniform_grid, ccore = False):
+    def __init__(self, rows, cols, data, epochs, conn_type = type_conn.grid_eight, parameters = None, ccore = False):
         """!
         @brief Constructor of self-organized map.
         
@@ -197,7 +217,7 @@ class som:
         @param[in] data (list): Input data - list of points where each point is represented by list of features, for example coordinates.
         @param[in] epochs (uint): Number of epochs for training.
         @param[in] conn_type (type_conn): Type of connection between oscillators in the network (grid four, grid eight, honeycomb, function neighbour).
-        @param[in] init_type (type_init): Type of initialization of initial neuron weights (random, random in center of the input data, random distributed in data, ditributed in line with uniform grid).
+        @param[in] parameters (som_parameters): Other specific parameters.
         @param[in] ccore (bool): If True simulation is performed by CCORE library (C++ implementation of pyclustering).
         
         """
@@ -210,18 +230,23 @@ class som:
         self._epochs = epochs;
         self._conn_type = conn_type;
         
+        if (self._params is not None):
+            self._params = parameters;
+        else:
+            self._params = som_parameters();
+            
+        if (self._params.init_radius is None):
+            if ((cols + rows) / 4.0 > 1.0): 
+                self._params.init_radius = 2.0;
+            elif ( (cols > 1) and (rows > 1) ): 
+                self._params.init_radius = 1.5;
+            else: 
+                self._params.init_radius = 1.0;
+        
         if (ccore is True):
-            self.__ccore_som_pointer = wrapper.som_create(data, rows, cols, epochs, conn_type, init_type);
+            self.__ccore_som_pointer = wrapper.som_create(data, rows, cols, epochs, conn_type, self._params);
             
         else:
-            # Feature SOM 0001: Predefined initial radius that depends on size of the network.
-            if ((cols + rows) / 4.0 > 1):
-                self._init_radius = 2.0;
-            elif ( (cols > 1) and (rows > 1) ):
-                self._init_radius = 1.5;
-            else:
-                self._init_radius = 1.0;
-            
             # location
             self._location = list();
             for i in range(self._rows):
@@ -245,7 +270,7 @@ class som:
                 self._create_connections(conn_type);
             
             # weights
-            self._create_initial_weights(init_type);
+            self._create_initial_weights(self._params.init_type);
         
 
     def __del__(self):
@@ -488,8 +513,8 @@ class som:
         
         for epoch in range(1, self._epochs + 1):
             # Depression term of coupling
-            self._local_radius = ( self._init_radius * math.exp(-(epoch / self._epochs)) ) ** 2;
-            self._learn_rate = self._init_learn_rate * math.exp(-(epoch / self._epochs));
+            self._local_radius = ( self._params.init_radius * math.exp(-(epoch / self._epochs)) ) ** 2;
+            self._learn_rate = self._params.init_learn_rate * math.exp(-(epoch / self._epochs));
 
             #random.shuffle(self._data);    # Random order
             
@@ -515,7 +540,7 @@ class som:
             if (autostop == True):
                 if (previous_weights is not None):
                     maximal_adaptation = self._get_maximal_adaptation(previous_weights);
-                    if (maximal_adaptation < self._adaptation_threshold):
+                    if (maximal_adaptation < self._params.adaptation_threshold):
                         return epoch;
             
                 previous_weights = [item[:] for item in self._weights];

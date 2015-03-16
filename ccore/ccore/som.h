@@ -42,6 +42,19 @@ typedef enum som_init_type {
 	SOM_UNIFORM_GRID
 } som_init_type;
 
+typedef struct som_parameters {
+	som_init_type init_type;
+	double init_radius;
+	double init_learn_rate;
+	double adaptation_threshold;
+
+	som_parameters() : 
+		init_type(SOM_UNIFORM_GRID), 
+		init_radius(1.0), 
+		init_learn_rate(0.1), 
+		adaptation_threshold(0.001) { }
+};
+
 /***********************************************************************************************
  *
  * @brief   Self-Orzanized Feature Map based on Kohonen desription of SOM.
@@ -70,9 +83,7 @@ private:
 
 	/* describe learning process and internal state */
 	unsigned int epouchs;
-	double init_radius;
-	double init_learn_rate;
-	double adaptation_threshold;
+	som_parameters params;
 
 	/* dynamic changes learning parameters */
 	double local_radius;
@@ -89,11 +100,11 @@ public:
 	 * @param   (in) cols            - number of neurons in the row (number of columns).
 	 * @param   (in) epochs          - number of epochs for training.
 	 * @param   (in) conn_type       - type of connection between oscillators in the network.
-	 * @param   (in) init_type       - type of initialization of initial neuron weights.
+	 * @param   (in) parameters		 - others parameters of the network.
 	 *
 	 ***********************************************************************************************/
-	som(std::vector<std::vector<double> > * input_data, const unsigned int num_rows, const unsigned int num_cols, const unsigned int num_epochs, const som_conn_type type_conn, const som_init_type type_init);
-	
+	som(std::vector<std::vector<double> > * input_data, const unsigned int num_rows, const unsigned int num_cols, const unsigned int num_epochs, const som_conn_type type_conn, const som_parameters * parameters);
+
 	/***********************************************************************************************
 	 *
 	 * @brief   Default destructor.

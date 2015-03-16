@@ -26,6 +26,7 @@
 from pyclustering.nnet.som import som;
 from pyclustering.nnet.som import type_conn;
 from pyclustering.nnet.som import type_init;
+from pyclustering.nnet.som import som_parameters;
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES;
 from pyclustering.samples.definitions import FCPS_SAMPLES;
@@ -38,8 +39,10 @@ from pylab import *;
 
 
 def template_self_organization(file, rows, cols, time, structure, init_type = None, umatrix = False, pmatrix = False, awards = False):
-    if (init_type is None):
-        init_type = type_init.uniform_grid;
+    parameters = som_parameters();
+    
+    if (init_type is not None):
+        parameters.init_type = init_type;
     
     sample = read_sample(file);
     network = som(rows, cols, sample, time, structure, init_type, True);

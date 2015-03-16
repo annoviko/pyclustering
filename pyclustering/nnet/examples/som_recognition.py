@@ -76,7 +76,7 @@ class recognizer:
         
        
         print("SOM initialization...");
-        self.__network = som(2, 5, samples, 300, type_conn.grid_four, type_init.uniform_grid, True);
+        self.__network = som(2, 5, samples, 300, type_conn.grid_four, None, True);
         
         print("SOM training...");
         self.__network.train();
@@ -142,11 +142,11 @@ class digit_application:
         button_recognize = Button(self.__master, text = "Random Image", command = self.click_image_load, width = 25);
         button_recognize.pack(side = BOTTOM);
         
-        button_save = Button(self.__master, text = "Save", command = self.click_save, width = 25);
-        button_save.pack(side = BOTTOM);
-        
-        button_load = Button(self.__master, text = "Load", command = self.click_load, width = 25);
-        button_load.pack(side = BOTTOM);
+#         button_save = Button(self.__master, text = "Save", command = self.click_save, width = 25);
+#         button_save.pack(side = BOTTOM);
+#         
+#         button_load = Button(self.__master, text = "Load", command = self.click_load, width = 25);
+#         button_load.pack(side = BOTTOM);
         
         button_train = Button(self.__master, text = "Train", command = self.click_train, width = 25);
         button_train.pack(side = BOTTOM);

@@ -30,6 +30,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <climits>
 #include <random>
 
+
 /***********************************************************************************************
  *
  * @brief   Constructor of self-organized map.
@@ -40,10 +41,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * @param   (in) cols            - number of neurons in the row (number of columns).
  * @param   (in) epochs          - number of epochs for training.
  * @param   (in) conn_type       - type of connection between oscillators in the network.
- * @param   (in) init_type       - type of initialization of initial neuron weights.
  *
  ***********************************************************************************************/
-som::som(std::vector<std::vector<double> > * input_data, const unsigned int num_rows, const unsigned int num_cols, const unsigned int num_epochs, const som_conn_type type_conn, const som_init_type type_init) {
+som::som(std::vector<std::vector<double> > * input_data, const unsigned int num_rows, const unsigned int num_cols, const unsigned int num_epochs, const som_conn_type type_conn, const som_parameters * parameters) {
 	previous_weights = NULL;
 	neighbors = NULL;
 
@@ -53,18 +53,12 @@ som::som(std::vector<std::vector<double> > * input_data, const unsigned int num_
 	size = cols * rows;
 	epouchs = num_epochs;
 	conn_type = type_conn;
-	init_learn_rate = 0.1;
-	adaptation_threshold = 0.001;
 
-	/* Feature SOM 0001: Predefined initial radius that depends on size of the network. */
-	if ( (cols + rows) / 4.0 > 1.0 ) {
-		init_radius = 2.0;
-	}
-	else if ( (cols > 1.0) && (rows > 1.0) ) {
-		init_radius = 1.5;
-	}
-	else {
-		init_radius = 1.0;
+	if (parameters != nullptr) {
+		params.init_type = parameters->init_type;
+		params.init_learn_rate = parameters->init_learn_rate;
+		params.adaptation_threshold = parameters->adaptation_threshold;
+		params.init_radius = parameters->init_radius;
 	}
 
 	/* location */
@@ -109,7 +103,7 @@ som::som(std::vector<std::vector<double> > * input_data, const unsigned int num_
 	}
 
 	/* weights */
-	create_initial_weights(type_init);
+	create_initial_weights(params.init_type);
 }
 
 /***********************************************************************************************
@@ -493,8 +487,8 @@ unsigned int som::train(bool autostop) {
 
 	for (unsigned int epouch = 1; epouch < (epouchs + 1); epouch++) {
 		/* Depression term of coupling */
-		local_radius = std::pow( ( init_radius * std::exp(-( (double) epouch / (double) epouchs)) ), 2);
-		learn_rate = init_learn_rate * std::exp(-( (double) epouch / (double) epouchs));
+		local_radius = std::pow( ( params.init_radius * std::exp(-( (double) epouch / (double) epouchs)) ), 2);
+		learn_rate = params.init_learn_rate * std::exp(-( (double) epouch / (double) epouchs));
 
 		/* Feature SOM 0003: Clear statistics */
 		if (autostop == true) {
@@ -532,7 +526,7 @@ unsigned int som::train(bool autostop) {
 			}
 			else {
 				double maximal_adaptation = calculate_maximal_adaptation();
-				if (maximal_adaptation < adaptation_threshold) {
+				if (maximal_adaptation < params.adaptation_threshold) {
 					return epouch;
 				}
 
