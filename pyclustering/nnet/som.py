@@ -6,7 +6,7 @@
          - T.Kohonen, E.Oja, O.Simula, A.Visa, J.Kangas. Engineering Applications of the Self-Organizing Map. 1996.
 
 @authors Andrei Novikov (spb.andr@yandex.ru)
-@version 1.1
+@version 1.0
 @date 2014-2015
 @copyright GNU Public License
 
@@ -37,17 +37,6 @@ import pyclustering.core.som_wrapper as wrapper;
 
 from pyclustering.support import euclidean_distance_sqrt;
 
-
-# Feature SOM 0001: Predefined initial radius that depends on size of the network. 
-#                   Improves results of self-organization and helps avoid tug of neurons when network is small.
-
-# Feature SOM 0002: Uniform grid.
-#                   Initial weights of neurons depends on input data set. The uniform grid represent rectangular grid 
-#                   that covers input data in first two dimensions and distance between the nodes is the same in each of 
-#                   the two dimensions of data. Further the uniform grid should be aligned with the center in other 
-#                   dimensions of data.
-
-# Feature SOM 0003: Autostop. Automatic termination of learining process when adaptation is not occurred.
 
 class type_conn:
     """!
@@ -230,7 +219,7 @@ class som:
         self._epochs = epochs;
         self._conn_type = conn_type;
         
-        if (self._params is not None):
+        if (parameters is not None):
             self._params = parameters;
         else:
             self._params = som_parameters();
@@ -638,7 +627,9 @@ class som:
         """
         if (self.__ccore_som_pointer is not None):
             self._weights = wrapper.som_get_weights(self.__ccore_som_pointer);
-            self._neighbors = wrapper.som_get_neighbors(self.__ccore_som_pointer);
+            
+            if (self._conn_type != type_conn.func_neighbor):
+                self._neighbors = wrapper.som_get_neighbors(self.__ccore_som_pointer);
             
         distance_matrix = [ [0.0] * self._cols for i in range(self._rows) ];
         
@@ -646,9 +637,12 @@ class som:
             for j in range(self._cols):
                 neuron_index = i * self._cols + j;
                 
+                if (self._conn_type == type_conn.func_neighbor):
+                    self._create_connections(type_conn.grid_eight);
+                
                 for neighbor_index in self._neighbors[neuron_index]:
                     distance_matrix[i][j] += euclidean_distance_sqrt(self._weights[neuron_index], self._weights[neighbor_index]);
-                
+                    
                 distance_matrix[i][j] /= len(self._neighbors[neuron_index]);
     
         return distance_matrix;

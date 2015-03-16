@@ -38,15 +38,19 @@ from matplotlib import cm;
 from pylab import *;
 
 
-def template_self_organization(file, rows, cols, time, structure, init_type = None, umatrix = False, pmatrix = False, awards = False):
+def template_self_organization(file, rows, cols, time, structure, init_type = None, init_radius = None, init_rate = None, umatrix = False, pmatrix = False, awards = False):
     parameters = som_parameters();
     
     if (init_type is not None):
         parameters.init_type = init_type;
+    if (init_radius is not None):
+        parameters.init_radius = init_radius;
+    if (init_rate is not None):
+        parameters.init_learn_rate = init_rate;
     
     sample = read_sample(file);
-    network = som(rows, cols, sample, time, structure, init_type, True);
-    network.train();        
+    network = som(rows, cols, sample, time, structure, parameters, True);
+    network.train();
     network.show_network(False, dataset = False);
     
     if (umatrix is True):
@@ -109,24 +113,24 @@ def som_engy_time():
 
 
 def som_distance_matrix():
-    template_self_organization(SIMPLE_SAMPLES.SAMPLE_ELONGATE, 12, 12, 100, type_conn.grid_eight, umatrix = True);
-    template_self_organization(FCPS_SAMPLES.SAMPLE_LSUN, 10, 10, 100, type_conn.grid_eight, umatrix = True);
-    template_self_organization(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, 16, 16, 100, type_conn.grid_eight, umatrix = True);
-    template_self_organization(FCPS_SAMPLES.SAMPLE_TARGET, 16, 16, 100, type_conn.grid_eight, umatrix = True);
-    template_self_organization(FCPS_SAMPLES.SAMPLE_WING_NUT, 30, 30, 100, type_conn.grid_eight, umatrix = True);
-    template_self_organization(FCPS_SAMPLES.SAMPLE_CHAINLINK, 12, 12, 100, type_conn.grid_eight, umatrix = True);
-    template_self_organization(FCPS_SAMPLES.SAMPLE_TETRA, 12, 12, 100, type_conn.grid_eight, umatrix = True);
-    template_self_organization(FCPS_SAMPLES.SAMPLE_ENGY_TIME, 25, 25, 100, type_conn.grid_eight, umatrix = True);
+    template_self_organization(SIMPLE_SAMPLES.SAMPLE_ELONGATE, 32, 32, 150, type_conn.func_neighbor, init_radius = 6.0, init_rate = 0.1, umatrix = True);
+    template_self_organization(FCPS_SAMPLES.SAMPLE_LSUN, 32, 32, 1000, type_conn.func_neighbor, init_radius = 2.5, init_rate = 0.5, umatrix = True);
+    template_self_organization(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, 32, 32, 200, type_conn.func_neighbor, init_radius = 3.0, init_rate = 0.5, umatrix = True);
+    template_self_organization(FCPS_SAMPLES.SAMPLE_TARGET, 32, 32, 200, type_conn.func_neighbor, init_radius = 3.0, init_rate = 0.6, umatrix = True);
+    template_self_organization(FCPS_SAMPLES.SAMPLE_WING_NUT, 32, 32, 200, type_conn.func_neighbor, init_radius = 6.0, umatrix = True);
+    template_self_organization(FCPS_SAMPLES.SAMPLE_CHAINLINK, 32, 32, 1000, type_conn.func_neighbor, init_radius = 3.0, init_rate = 0.6, umatrix = True);
+    template_self_organization(FCPS_SAMPLES.SAMPLE_TETRA, 32, 32, 1000, type_conn.func_neighbor, init_radius = 3.0, init_rate = 0.6, umatrix = True);
+    template_self_organization(FCPS_SAMPLES.SAMPLE_ENGY_TIME, 32, 32, 100, type_conn.func_neighbor, init_radius = 6.0, umatrix = True);
 
 def som_density_matrix():
-    template_self_organization(SIMPLE_SAMPLES.SAMPLE_ELONGATE, 12, 12, 100, type_conn.grid_eight, pmatrix = True);
-    template_self_organization(FCPS_SAMPLES.SAMPLE_LSUN, 10, 10, 100, type_conn.grid_eight, pmatrix = True);
-    template_self_organization(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, 16, 16, 100, type_conn.grid_eight, pmatrix = True);
-    template_self_organization(FCPS_SAMPLES.SAMPLE_TARGET, 16, 16, 100, type_conn.grid_eight, pmatrix = True);
-    template_self_organization(FCPS_SAMPLES.SAMPLE_WING_NUT, 30, 30, 100, type_conn.grid_eight, pmatrix = True);
-    template_self_organization(FCPS_SAMPLES.SAMPLE_CHAINLINK, 12, 12, 100, type_conn.grid_eight, pmatrix = True);
-    template_self_organization(FCPS_SAMPLES.SAMPLE_TETRA, 12, 12, 100, type_conn.grid_eight, pmatrix = True);
-    template_self_organization(FCPS_SAMPLES.SAMPLE_ENGY_TIME, 25, 25, 100, type_conn.grid_eight, pmatrix = True);    
+    template_self_organization(SIMPLE_SAMPLES.SAMPLE_ELONGATE, 32, 32, 150, type_conn.func_neighbor, init_radius = 6.0, init_rate = 0.1, pmatrix = True);
+    template_self_organization(FCPS_SAMPLES.SAMPLE_LSUN, 32, 32, 1000, type_conn.func_neighbor, init_radius = 2.5, init_rate = 0.5, pmatrix = True);
+    template_self_organization(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, 32, 32, 200, type_conn.func_neighbor, init_radius = 3.0, init_rate = 0.5, pmatrix = True);
+    template_self_organization(FCPS_SAMPLES.SAMPLE_TARGET, 32, 32, 200, type_conn.func_neighbor, init_radius = 3.0, init_rate = 0.6, pmatrix = True);
+    template_self_organization(FCPS_SAMPLES.SAMPLE_WING_NUT, 32, 32, 200, type_conn.func_neighbor, init_radius = 6.0, pmatrix = True);
+    template_self_organization(FCPS_SAMPLES.SAMPLE_CHAINLINK, 32, 32, 1000, type_conn.func_neighbor, init_radius = 3.0, init_rate = 0.6, pmatrix = True);
+    template_self_organization(FCPS_SAMPLES.SAMPLE_TETRA, 32, 32, 1000, type_conn.func_neighbor, init_radius = 3.0, init_rate = 0.6, pmatrix = True);
+    template_self_organization(FCPS_SAMPLES.SAMPLE_ENGY_TIME, 32, 32, 100, type_conn.func_neighbor, init_radius = 6.0, pmatrix = True);   
 
 
 def som_target_diffence_intialization():
@@ -158,7 +162,7 @@ som_atom();
 som_golf_ball();
 som_hepta();
 som_engy_time();
- 
+  
 som_distance_matrix();
 som_density_matrix();
 
