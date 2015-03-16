@@ -112,6 +112,16 @@ def som_engy_time():
     template_self_organization(FCPS_SAMPLES.SAMPLE_ENGY_TIME, 5, 5, 100, type_conn.grid_four);
 
 
+def som_winner_matrix():
+    template_self_organization(SIMPLE_SAMPLES.SAMPLE_ELONGATE, 10, 10, 150, type_conn.func_neighbor, init_radius = 6.0, init_rate = 0.1, awards = True);
+    template_self_organization(FCPS_SAMPLES.SAMPLE_LSUN, 10, 10, 200, type_conn.func_neighbor, init_radius = 2.5, init_rate = 0.5, awards = True);
+    template_self_organization(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, 10, 10, 200, type_conn.func_neighbor, init_radius = 3.0, init_rate = 0.5, awards = True);
+    template_self_organization(FCPS_SAMPLES.SAMPLE_TARGET, 10, 10, 200, type_conn.func_neighbor, init_radius = 3.0, init_rate = 0.6, awards = True);
+    template_self_organization(FCPS_SAMPLES.SAMPLE_WING_NUT, 10, 10, 200, type_conn.func_neighbor, init_radius = 6.0, awards = True);
+    template_self_organization(FCPS_SAMPLES.SAMPLE_CHAINLINK, 10, 10, 200, type_conn.func_neighbor, init_radius = 3.0, init_rate = 0.6, awards = True);
+    template_self_organization(FCPS_SAMPLES.SAMPLE_TETRA, 10, 10, 200, type_conn.func_neighbor, init_radius = 3.0, init_rate = 0.6, awards = True);
+    template_self_organization(FCPS_SAMPLES.SAMPLE_ENGY_TIME, 10, 10, 100, type_conn.func_neighbor, init_radius = 6.0, awards = True);
+
 def som_distance_matrix():
     template_self_organization(SIMPLE_SAMPLES.SAMPLE_ELONGATE, 32, 32, 150, type_conn.func_neighbor, init_radius = 6.0, init_rate = 0.1, umatrix = True);
     template_self_organization(FCPS_SAMPLES.SAMPLE_LSUN, 32, 32, 1000, type_conn.func_neighbor, init_radius = 2.5, init_rate = 0.5, umatrix = True);
@@ -162,7 +172,8 @@ som_atom();
 som_golf_ball();
 som_hepta();
 som_engy_time();
-  
+ 
+som_winner_matrix();
 som_distance_matrix();
 som_density_matrix();
 

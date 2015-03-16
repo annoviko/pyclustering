@@ -53,7 +53,7 @@ typedef struct som_parameters {
 		init_radius(1.0), 
 		init_learn_rate(0.1), 
 		adaptation_threshold(0.001) { }
-};
+} som_parameters;
 
 /***********************************************************************************************
  *
