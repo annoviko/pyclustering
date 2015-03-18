@@ -61,13 +61,29 @@ typedef struct pcnn_parameters {
 class pcnn : public network {
 protected:
 	std::vector<double> * stimulus;
+
 	std::vector<pcnn_oscillator> * oscillators;
-	std::vector<std::vector<double> * > * dynamic;
+
+	std::vector<std::vector<double> > * dynamic;
+
 	pcnn_parameters params;
 
 public:
+	pcnn(const unsigned int num_osc, std::vector<double> * stimulus, const pcnn_parameters * parameters, const conn_type connection_type);
+
+	virtual ~pcnn(void);
+
+	std::vector< std::vector<sync_dynamic> * > * simulate_static(const unsigned int steps, const double time, const bool collect_dynamic);
+
+	std::vector< std::vector<unsigned int> * > * allocate_sync_ensembles(void);
+
+	std::vector< std::vector<unsigned int> * > * allocate_spike_ensembles(void);
+
+	std::vector<unsigned int> * get_time_signal(void) const;
+
 
 private:
+	void calculate_states(void);
 };
 
 #endif
