@@ -33,15 +33,7 @@ namespace butcher_table {
     const double r1 = 1.0/360.0,	r3 = -128.0/4275.0,		r4 = -2197.0/75240.0,	r5 = 1.0/50.0,			r6 = 2.0/55.0;  
 }
 
-/***********************************************************************************************
- *
- * @brief   Reads sample (input data) from the specified file.
- *
- * @param   (in) path_file  - path to the file with data.
- *
- * @return  Returns internal type of representation of input data.
- *
- ***********************************************************************************************/
+
 std::vector<std::vector<double> > * read_sample(const char * const path_file) {
 	std::string filename(path_file);
 
@@ -71,15 +63,7 @@ std::vector<std::vector<double> > * read_sample(const char * const path_file) {
 	return dataset;
 }
 
-/***********************************************************************************************
- *
- * @brief   Converts representation of data from CCORE standard to internal.
- *
- * @param   (in) sample     - input data (sample) for converting.
- *
- * @return  Returns internal type of representation of input data.
- *
- ***********************************************************************************************/
+
 std::vector<std::vector<double> > * read_sample(const data_representation * const sample) {
 	std::vector<double> point(sample->dimension, 0);
 	std::vector<std::vector<double> > * dataset = new std::vector<std::vector<double> >(sample->size, point);
@@ -95,15 +79,7 @@ std::vector<std::vector<double> > * read_sample(const data_representation * cons
 	return dataset;
 }
 
-/***********************************************************************************************
- *
- * @brief   Converts representation of cluster to standard type of CCORE interface.
- *
- * @param   (in) clusters   - input clusters for converting.
- *
- * @return  Returns standard type of representation of clusters.
- *
- ***********************************************************************************************/
+
 clustering_result * create_clustering_result(const std::vector<std::vector<unsigned int> *> * const clusters) {
 	clustering_result * result = new clustering_result();
 
@@ -175,16 +151,7 @@ pyclustering_package * create_package(const std::vector<unsigned long> * const d
 	return package;
 }
 
-/***********************************************************************************************
- *
- * @brief   Returns average distance for establish links between specified number of neighbors.
- *
- * @param   (in) points         - input data.
- * @param   (in) num_neigh      - number of neighbors.
- *
- * @return  Returns average distance for establish links between 'num_neigh' in data set 'points'.
- *
- ***********************************************************************************************/
+
 double average_neighbor_distance(const std::vector<std::vector<double> > * points, const unsigned int num_neigh) {
 	std::vector<std::vector<double> > dist_matrix( points->size(), std::vector<double>(points->size(), 0.0) );
 	for (unsigned int i = 0; i < points->size(); i++) {
@@ -206,22 +173,7 @@ double average_neighbor_distance(const std::vector<std::vector<double> > * point
 	return total_distance / ( (double) num_neigh * (double) points->size() );
 }
 
-/***********************************************************************************************
- *
- * @brief   Runge-Kutta 4 solver.
- *
- * @param   (in) function_pointer   - pointer to function.
- *          (in) initial_value      - initial values.
- *          (in) a                  - left point (start time).
- *          (in) b                  - right point (end time).
- *          (in) steps              - number of steps.
- *          (in) flag_collect       - if true then collects whole results of integation, 
- *                                    otherwise it stores only last value.
- *          (in) argv               - extra arguments are required by function_pointer.
- *
- * @return  Returns full result of integration (each step of integration).
- *
- ***********************************************************************************************/
+
 std::vector<differential_result> * rk4(double (*function_pointer)(const double t, const double val, const std::vector<void *> & argv), 
 	                                   const double initial_value, 
 									   const double a, 
@@ -265,22 +217,7 @@ std::vector<differential_result> * rk4(double (*function_pointer)(const double t
 	return result;
 }
 
-/***********************************************************************************************
- *
- * @brief   Runge-Kutta-Felhberg (RKF45) solver.
- *
- * @param   (in) function_pointer   - pointer to function.
- *          (in) initial_value      - initial values.
- *          (in) a                  - left point (start time).
- *          (in) b                  - right point (end time).
- *          (in) tolerance          - acceptable error for solving.
- *          (in) flag_collect       - if true then collects whole results of integation, 
- *                                    otherwise it stores only last value.
- *          (in) argv               - extra arguments are required by function_pointer.
- *
- * @return	Returns full result of integration (each step of integration).
- *
- ***********************************************************************************************/
+
 std::vector<differential_result> * rkf45(double (*function_pointer)(const double t, const double val, const std::vector<void *> & argv), 
 	                                             const double initial_value, 
 												 const double a, 

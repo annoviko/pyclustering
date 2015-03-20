@@ -27,29 +27,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <limits>
 
-/***********************************************************************************************
- *
- * @brief   Contructor of the adapted oscillatory network SYNC for cluster analysis.
- *
- * @param   (in) input_data            - input data for clustering.
- * @param   (in) connectivity_radius   - connectivity radius between points.
- * @param   (in) enable_conn_weight    - if True - enable mode when strength between oscillators 
- *                                       depends on distance between two oscillators. Otherwise
- *                                       all connection between oscillators have the same strength.
- * @param   (in) initial_phases        - type of initialization of initial phases of oscillators.
- *
- ***********************************************************************************************/
+
 syncnet::syncnet(std::vector<std::vector<double> > * input_data, const double connectivity_radius, const bool enable_conn_weight, const initial_type initial_phases) :
 sync_network(input_data->size(), 1, 0, conn_type::NONE, initial_type::RANDOM_GAUSSIAN) {
 	oscillator_locations = input_data;
 	create_connections(connectivity_radius, enable_conn_weight);
 }
 
-/***********************************************************************************************
- *
- * @brief   Default destructor.
- *
- ***********************************************************************************************/
+
 syncnet::~syncnet() {
 	if (oscillator_locations != NULL) {
 		delete oscillator_locations;
@@ -62,16 +47,7 @@ syncnet::~syncnet() {
 	}
 }
 
-/***********************************************************************************************
- *
- * @brief   Create connections between oscillators in line with input radius of connectivity.
- *
- * @param   (in) connectivity_radius  - connectivity radius between oscillators.
- * @param   (in) enable_conn_weight   - if True - enable mode when strength between oscillators 
- *                                      depends on distance between two oscillators. Otherwise
- *                                      all connection between oscillators have the same strength.
- *
- ***********************************************************************************************/
+
 void syncnet::create_connections(const double connectivity_radius, const bool enable_conn_weight) {
 	double sqrt_connectivity_radius = connectivity_radius * connectivity_radius;
 
@@ -130,33 +106,12 @@ void syncnet::create_connections(const double connectivity_radius, const bool en
 	}
 }
 
-/***********************************************************************************************
- *
- * @brief   Adapter for solving differential equation for calculation of oscillator phase.
- *
- * @param   (in) t      - current value of phase.
- * @param   (in) teta   - time (can be ignored). 
- * @param   (in) argv   - pointer to the network 'argv[0]' and index of oscillator whose phase 
- *                        represented by argument teta 'argv[1]'.
- *
- * @return  Return new value of phase of oscillator that is specified in index 'argv[1]'.
- *
- ***********************************************************************************************/
+
 double syncnet::adapter_phase_kuramoto(const double t, const double teta, const std::vector<void *> & argv) {
 	return ((syncnet *) argv[0])->phase_kuramoto(t, teta, argv);
 }
 
-/***********************************************************************************************
- *
- * @brief   Overrided method for calculation of oscillator phase.
- *
- * @param   (in) t      - current value of phase.
- * @param   (in) teta   - time (can be ignored). 
- * @param   (in) argv   - index of oscillator whose phase represented by argument teta.
- *
- * @return  Return new value of phase of oscillator with index 'argv'.
- *
- ***********************************************************************************************/
+
 double syncnet::phase_kuramoto(const double t, const double teta, const std::vector<void *> & argv) {
 	unsigned int index = *(unsigned int *) argv[1];
 	unsigned int num_neighbors = 0;
@@ -188,20 +143,7 @@ double syncnet::phase_kuramoto(const double t, const double teta, const std::vec
 	return phase;
 }
 
-/***********************************************************************************************
- *
- * @brief   Network is trained via achievement sync state between the oscillators using the 
- *          radius of coupling.
- *
- * @param   (in) order             - order of synchronization that is used as indication for 
- *                                   stopping processing.
- * @param   (in) solver            - specified type of solving diff. equation. 
- * @param   (in) collect_dynamic   - specified requirement to collect whole dynamic of the network.
- *
- * @return  Return last values of simulation time and phases of oscillators if 
- *          collect_dynamic is False, and whole dynamic if collect_dynamic is True.
- *
- ***********************************************************************************************/
+
 std::vector< std::vector<sync_dynamic> * > * syncnet::process(const double order, const solve_type solver, const bool collect_dynamic) {
 	return simulate_dynamic(order, solver, collect_dynamic);
 }

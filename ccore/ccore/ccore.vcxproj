@@ -151,7 +151,7 @@
     <ClCompile Include="hierarchical.cpp" />
     <ClCompile Include="hsyncnet.cpp" />
     <ClCompile Include="kdtree.cpp" />
-    <ClCompile Include="legion_network.cpp" />
+    <ClCompile Include="legion.cpp" />
     <ClCompile Include="network.cpp" />
     <ClCompile Include="kmeans.cpp" />
     <ClCompile Include="pcnn.cpp" />
@@ -159,7 +159,7 @@
     <ClCompile Include="som.cpp" />
     <ClCompile Include="support.cpp" />
     <ClCompile Include="syncnet.cpp" />
-    <ClCompile Include="sync_network.cpp" />
+    <ClCompile Include="sync.cpp" />
     <ClCompile Include="xmeans.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -167,9 +167,9 @@
     <ClInclude Include="dbscan.h" />
     <ClInclude Include="hierarchical.h" />
     <ClInclude Include="hsyncnet.h" />
-    <ClInclude Include="interface_ccore.h" />
+    <ClInclude Include="ccore.h" />
     <ClInclude Include="kdtree.h" />
-    <ClInclude Include="legion_network.h" />
+    <ClInclude Include="legion.h" />
     <ClInclude Include="network.h" />
     <ClInclude Include="kmeans.h" />
     <ClInclude Include="pcnn.h" />
@@ -178,7 +178,7 @@
     <ClInclude Include="som.h" />
     <ClInclude Include="support.h" />
     <ClInclude Include="syncnet.h" />
-    <ClInclude Include="sync_network.h" />
+    <ClInclude Include="sync.h" />
     <ClInclude Include="xmeans.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

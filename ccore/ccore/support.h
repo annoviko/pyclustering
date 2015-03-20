@@ -30,7 +30,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <cmath>
 #include <algorithm>
 
-#include "interface_ccore.h"
+#include "ccore.h"
 #include "network.h"
 
 

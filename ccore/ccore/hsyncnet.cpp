@@ -27,25 +27,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <limits>
 
-/***********************************************************************************************
- *
- * @brief   Contructor of the oscillatory network heirarchical SYNC for cluster analysis.
- *
- * @param   (in) input_data            - input data for clustering.
- * @param   (in) initial_phases        - type of initialization of initial phases of oscillators.
- *
- ***********************************************************************************************/
+
 hsyncnet::hsyncnet(std::vector<std::vector<double> > * input_data, const unsigned int cluster_number, const initial_type initial_phases) :
 syncnet(input_data, 0, false, initial_phases) { 
 	number_clusters = cluster_number;
 }
 
-/***********************************************************************************************
- *
- * @brief   Default destructor.
- *
- ***********************************************************************************************/
+
 hsyncnet::~hsyncnet() { }
+
 
 std::vector< std::vector<sync_dynamic> * > * hsyncnet::process(const double order, const solve_type solver, const bool collect_dynamic) {
 	unsigned int number_neighbors = 3;

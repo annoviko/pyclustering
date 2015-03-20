@@ -29,21 +29,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <set>
 
 
-/***********************************************************************************************
-*
-* @brief   Default constructor of cure cluster.
-*
-***********************************************************************************************/
 cure_cluster::cure_cluster(void) : closest(nullptr), distance_closest(0), mean(nullptr) {
 	points = new std::vector< std::vector<double> * >();
 	rep = new std::vector< std::vector<double> * >();
 }
 
-/***********************************************************************************************
-*
-* @brief   Default constructor of cure cluster that corresponds to specified point.
-*
-***********************************************************************************************/
+
 cure_cluster::cure_cluster(std::vector<double> * point) : closest(nullptr), distance_closest(0) {
 	mean = new std::vector<double>(point->size(), 0);
 
@@ -53,11 +44,7 @@ cure_cluster::cure_cluster(std::vector<double> * point) : closest(nullptr), dist
 	std::copy(point->begin(), point->end(), mean->begin());
 }
 
-/***********************************************************************************************
-*
-* @brief   Default destructor.
-*
-***********************************************************************************************/
+
 cure_cluster::~cure_cluster() {
 	if (mean != nullptr) {
 		delete mean;
@@ -72,24 +59,12 @@ cure_cluster::~cure_cluster() {
 }
 
 
-
-/***********************************************************************************************
-*
-* @brief   Default constructor of cure queue (always keepds sorted state).
-*
-***********************************************************************************************/
 cure_queue::cure_queue(void) {
 	queue = new std::list<cure_cluster *>();
 	tree = new kdtree();
 }
 
-/***********************************************************************************************
-*
-* @brief   Default constructor of sorted queue of cure clusters.
-*
-* @param               - pointer to points.
-*
-***********************************************************************************************/
+
 cure_queue::cure_queue(const std::vector< std::vector<double> > * data) {
 	queue = new std::list<cure_cluster *>();
 	create_queue(data);
@@ -103,11 +78,7 @@ cure_queue::cure_queue(const std::vector< std::vector<double> > * data) {
 	}
 }
 
-/***********************************************************************************************
-*
-* @brief   Default destructor.
-*
-***********************************************************************************************/
+
 cure_queue::~cure_queue() {
 	if (queue != nullptr) {
 		for (std::list<cure_cluster *>::iterator cluster = queue->begin(); cluster != queue->end(); cluster++) {
@@ -125,13 +96,7 @@ cure_queue::~cure_queue() {
 	}
 }
 
-/***********************************************************************************************
-*
-* @brief   Create sorted queue of points for specified data.
-*
-* @param               - pointer to points.
-*
-***********************************************************************************************/
+
 void cure_queue::create_queue(const std::vector< std::vector<double> > * data) {
 	for (std::vector< std::vector<double> >::const_iterator iter = data->begin(); iter != data->end(); iter++) {
 		cure_cluster * cluster = new cure_cluster((std::vector<double> *) &(*iter));
@@ -160,16 +125,7 @@ void cure_queue::create_queue(const std::vector< std::vector<double> > * data) {
 	queue->sort(distance_comparison);
 }
 
-/***********************************************************************************************
-*
-* @brief   Calculate distance between clusters.
-*
-* @param   cluster1            - pointer to cure cluster 1.
-* @param   cluster2            - pointer to cure cluster 2.
-*
-* @return  Return distance between clusters.
-*
-***********************************************************************************************/
+
 double cure_queue::get_distance(cure_cluster * cluster1, cure_cluster * cluster2) {
 	double distance = std::numeric_limits<double>::max();
 	for (std::vector<std::vector<double> *>::const_iterator point1 = cluster1->rep->begin(); point1 != cluster1->rep->end(); point1++) {
@@ -184,16 +140,7 @@ double cure_queue::get_distance(cure_cluster * cluster1, cure_cluster * cluster2
 	return distance;
 }
 
-/***********************************************************************************************
-*
-* @brief   Merge cure clusters in line with the rule of merging of cure algorithm.
-*
-* @param   cluster1            - pointer to cure cluster 1.
-* @param   cluster2            - pointer to cure cluster 2.
-* @param   number_repr_points  - number of representative points for merged cluster.
-* @param   compression         - level of compression for calculation representative points.
-*
-***********************************************************************************************/
+
 void cure_queue::merge(cure_cluster * cluster1, cure_cluster * cluster2, const unsigned int number_repr_points, const double compression) {
 	remove_representative_points(cluster1);
 	remove_representative_points(cluster2);
@@ -329,13 +276,7 @@ void cure_queue::merge(cure_cluster * cluster1, cure_cluster * cluster2, const u
 	}
 }
 
-/***********************************************************************************************
-*
-* @brief   Insert cluster to sorted queue (it's not insertion of new object).
-*
-* @param   inserted_cluster    - pointer to points.
-*
-***********************************************************************************************/
+
 void cure_queue::insert_cluster(cure_cluster * inserted_cluster) {
 	for (cure_queue::iterator cluster = queue->begin(); cluster != queue->end(); cluster++) {
 		if ( inserted_cluster->distance_closest < (*cluster)->distance_closest ) {
@@ -347,26 +288,14 @@ void cure_queue::insert_cluster(cure_cluster * inserted_cluster) {
 	queue->push_back(inserted_cluster);
 }
 
-/***********************************************************************************************
-*
-* @brief   Remove representative points of specified cluster from KD Tree.
-*
-* @param   cluster             - pointer to points.
-*
-***********************************************************************************************/
+
 void cure_queue::remove_representative_points(cure_cluster * cluster) {
 	for (std::vector<std::vector<double> *>::const_iterator point = cluster->rep->begin(); point != cluster->rep->end(); point++) {
 		tree->remove(*point);
 	}
 }
 
-/***********************************************************************************************
-*
-* @brief   Insert representative points of specified cluster to KD tree.
-*
-* @param   cluster             - pointer to points.
-*
-***********************************************************************************************/
+
 void cure_queue::insert_representative_points(cure_cluster * cluster) {
 	for (std::vector<std::vector<double> *>::iterator point = cluster->rep->begin(); point != cluster->rep->end(); point++) {
 		tree->insert(*point, cluster);
@@ -374,18 +303,6 @@ void cure_queue::insert_representative_points(cure_cluster * cluster) {
 }
 
 
-
-/***********************************************************************************************
-*
-* @brief   Constructor of CURE solver (algorithm representer).
-*
-* @param   sample              - pointer to input data for clustering.
-* @param   clusters_number     - number of clusters that should be allocated.
-* @param   points_number       - number of representative points in each cluster.
-* @param   level_compression   - level of copression for calculation new representative points
-*                                for merged cluster.
-*
-***********************************************************************************************/
 cure::cure(const std::vector< std::vector<double> > * sample, const unsigned int clusters_number, const unsigned int points_number, const double level_compression) {
 	data = (std::vector< std::vector<double> > *) sample;
 
@@ -396,11 +313,7 @@ cure::cure(const std::vector< std::vector<double> > * sample, const unsigned int
 	queue = new cure_queue(sample);
 }
 
-/***********************************************************************************************
-*
-* @brief   Default destructor.
-*
-***********************************************************************************************/
+
 cure::~cure() {
 	if (clusters != nullptr) {
 		for (std::vector<std::vector<unsigned int> *>::const_iterator iter = clusters->begin(); iter != clusters->end(); iter++) {
@@ -417,12 +330,7 @@ cure::~cure() {
 	}
 }
 
-/***********************************************************************************************
-*
-* @brief   Performs cluster analysis of input data. Results of clustering can be obtained
-*          via corresponding get method.
-*
-***********************************************************************************************/
+
 void cure::process() {
 	unsigned int allocated_clusters = queue->size();
 	while(allocated_clusters > number_clusters) {

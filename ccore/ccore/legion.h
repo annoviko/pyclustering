@@ -2,7 +2,7 @@
 #define _LEGION_NETWORK_H_
 
 #include "network.h"
-#include "interface_ccore.h"
+#include "ccore.h"
 
 #include <vector>
 

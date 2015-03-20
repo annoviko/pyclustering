@@ -29,24 +29,13 @@ kdnode::kdnode(std::vector<double> * p_data, void * p_payload,  kdnode * p_left,
 	data(p_data), payload(p_payload), left(p_left), right(p_right), parent(p_parent), discriminator(disc)
 	{ }
 
+
 kdnode::~kdnode() { }
 
 
-/***********************************************************************************************
-*
-* @brief   Default constructor.
-*
-***********************************************************************************************/
 kdtree::kdtree() : root(nullptr), dimension(0) { }
 
-/***********************************************************************************************
-*
-* @brief   Constructor of kd tree with pre-defined information.
-*
-* @param   data               - coordinates that describe nodes in tree.
-* @param   payloads           - payloads of nodes (can be nullptr if it's not required).
-*
-***********************************************************************************************/
+
 kdtree::kdtree(const std::vector< std::vector<double> *> * data, const std::vector<void *> * payloads) {
 	root = nullptr;
 	dimension = (*(*data)[0]).size();
@@ -67,24 +56,14 @@ kdtree::kdtree(const std::vector< std::vector<double> *> * data, const std::vect
 	}
 }
 
-/***********************************************************************************************
-*
-* @brief   Default destructor.
-*
-***********************************************************************************************/
+
 kdtree::~kdtree(void) {
 	if (root != nullptr) {
 		recursive_destroy(root);
 	}
 }
 
-/***********************************************************************************************
-*
-* @brief   Recursive destroy tree (used by destructor).
-*
-* @param   node            - node that should be destroyed.
-*
-***********************************************************************************************/
+
 void kdtree::recursive_destroy(kdnode * node) {
 	if (node->get_right() != nullptr) {
 		recursive_destroy(node->get_right());
@@ -98,16 +77,7 @@ void kdtree::recursive_destroy(kdnode * node) {
 	node = nullptr;
 }
 
-/***********************************************************************************************
-*
-* @brief   Insert new node in the tree.
-*
-* @param   point              - coordinates that describe node in tree.
-* @param   payload            - payloads of node (can be nullptr if it's not required).
-*
-* @return  Pointer to added node in the tree.
-*
-***********************************************************************************************/
+
 kdnode * kdtree::insert(std::vector<double> * point, void * payload) {
 	if (root == nullptr) {
 		kdnode * node = new kdnode(point, payload, nullptr, nullptr, nullptr, 0);
@@ -155,13 +125,7 @@ kdnode * kdtree::insert(std::vector<double> * point, void * payload) {
 	}
 }
 
-/***********************************************************************************************
-*
-* @brief   Remove point with specified coordinates.
-*
-* @param   point              - coordinates that describe node in tree.
-*
-***********************************************************************************************/
+
 void kdtree::remove(std::vector<double> * point) {
 	kdnode * node_for_remove = find_node(point);
 	if (node_for_remove == nullptr) {
@@ -174,13 +138,7 @@ void kdtree::remove(std::vector<double> * point) {
 	node_for_remove = nullptr;
 }
 
-/***********************************************************************************************
-*
-* @brief   Remove node from the tree.
-*
-* @param   node_for_remove    - pointer to node that is located in tree.
-*
-***********************************************************************************************/
+
 void kdtree::remove(kdnode * node_for_remove) {
 	kdnode * parent = node_for_remove->get_parent();
 	kdnode * node = recursive_remove(node_for_remove);
@@ -206,15 +164,7 @@ void kdtree::remove(kdnode * node_for_remove) {
 	}
 }
 
-/***********************************************************************************************
-*
-* @brief   Recursive remove of node in tree.
-*
-* @param   node            - node that should be removed.
-*
-* @return  Node that should replace removed node (if it's not leaf).
-*
-***********************************************************************************************/
+
 kdnode * kdtree::recursive_remove(kdnode * node) {
 	if ( (node->get_right() == nullptr) && (node->get_left() == nullptr) ) {
 		return nullptr;
@@ -259,16 +209,7 @@ kdnode * kdtree::recursive_remove(kdnode * node) {
 	return minimal_node;
 }
 
-/***********************************************************************************************
-*
-* @brief   Find minimal node in subtree in line with specified discriminator.
-*
-* @param   node            - root of subtree where searching should be performed.
-* @param   discriminator   - discriminator that is used for comparison of nodes.
-*
-* @return  Return the smallest node in specified subtree in line with discriminator.
-*
-***********************************************************************************************/
+
 kdnode * kdtree::find_minimal_node(kdnode * node, unsigned int discriminator) {
 	kdnode * minimal_node = node;
 
@@ -287,29 +228,12 @@ kdnode * kdtree::find_minimal_node(kdnode * node, unsigned int discriminator) {
 	return minimal_node;
 }
 
-/***********************************************************************************************
-*
-* @brief   Find node in tree using coordinates.
-*
-* @param   point              - coordinates of searched node.
-*
-* @return  Pointer to found node in tree.
-*
-***********************************************************************************************/
+
 kdnode * kdtree::find_node(std::vector<double> * point) {
 	return find_node(point, root);
 }
 
-/***********************************************************************************************
-*
-* @brief   Find node in tree using coordinates in subtree.
-*
-* @param   point              - coordinates of searched node.
-* @param   cur_node           - root of subtree.
-*
-* @return  Pointer to found node in tree.
-*
-***********************************************************************************************/
+
 kdnode * kdtree::find_node(std::vector<double> * point, kdnode * node) {
 	kdnode * req_node = nullptr;
 	kdnode * cur_node = node;
@@ -343,15 +267,7 @@ kdnode * kdtree::find_node(std::vector<double> * point, kdnode * node) {
 	return req_node;
 }
 
-/***********************************************************************************************
-*
-* @brief   Traverse tree from specified node and returns number of nodes in subtree.
-*
-* @param   node               - pointer to node of tree.
-*
-* @return  Returns number of nodes in subtree.
-*
-***********************************************************************************************/
+
 unsigned int kdtree::traverse(kdnode * node) {
 	unsigned int number_nodes = 0;
 
@@ -371,18 +287,9 @@ unsigned int kdtree::traverse(kdnode * node) {
 }
 
 
-/***********************************************************************************************
-*
-* @brief   Default constructor. Search will not be performed until it's initialized.
-*
-***********************************************************************************************/
 kdtree_searcher::kdtree_searcher() : distance(0), sqrt_distance(0), initial_node(nullptr), search_point(nullptr) { }
 
-/***********************************************************************************************
-*
-* @brief   Default destructor.
-*
-***********************************************************************************************/
+
 kdtree_searcher::~kdtree_searcher() {
 	if (nodes_distance != nullptr) {
 		delete nodes_distance;
@@ -395,28 +302,12 @@ kdtree_searcher::~kdtree_searcher() {
 	}
 }
 
-/***********************************************************************************************
-*
-* @brief   Constructor of searcher with request for searching.
-*
-* @param   (in) point              - point for which nearest nodes should be found.
-* @param   (in) node               - initial node in tree from which searching should started.
-* @param   (in) radius_search      - allowable distance for searching from the point.
-*
-***********************************************************************************************/
+
 kdtree_searcher::kdtree_searcher(std::vector<double> * point, kdnode * node, const double radius_search) {
 	initialize(point, node, radius_search);
 }
 
-/***********************************************************************************************
-*
-* @brief   Initialization of new request for searching.
-*
-* @param   (in) point              - point for which nearest nodes should be found.
-* @param   (in) node               - initial node in tree from which searching should started.
-* @param   (in) radius_search      - allowable distance for searching from the point.
-*
-***********************************************************************************************/
+
 void kdtree_searcher::initialize(std::vector<double> * point, kdnode * node, const double radius_search) {
 	distance = radius_search;
 	sqrt_distance = radius_search * radius_search;
@@ -425,11 +316,7 @@ void kdtree_searcher::initialize(std::vector<double> * point, kdnode * node, con
 	search_point = point;
 }
 
-/***********************************************************************************************
-*
-* @brief   Prepare storages that are required for searching.
-*
-***********************************************************************************************/
+
 void kdtree_searcher::prepare_storages() {
 	if (nodes_distance == nullptr) {
 		nodes_distance = new std::vector<double>();
@@ -438,13 +325,7 @@ void kdtree_searcher::prepare_storages() {
 	nearest_nodes = new std::vector<kdnode *>();
 }
 
-/***********************************************************************************************
-*
-* @brief   Recursive method for searching nodes that satisfy the request.
-*
-* @param   node               - initial node in tree from which searching should performed.
-*
-***********************************************************************************************/
+
 void kdtree_searcher::recursive_nearest_nodes(kdnode * node) {
 	double minimum = node->get_value() - distance;
 	double maximum = node->get_value() + distance;
@@ -468,13 +349,7 @@ void kdtree_searcher::recursive_nearest_nodes(kdnode * node) {
 	}
 }
 
-/***********************************************************************************************
-*
-* @brief   Search nodes that are located in specified distance from specified point.
-*
-* @return  Return vector of found nodes in kd tree that satisfy the request.
-*
-***********************************************************************************************/
+
 std::vector<kdnode *> * kdtree_searcher::find_nearest_nodes(std::vector<double> * distances) {
 	if (distances != nullptr) {
 		nodes_distance = distances;
@@ -500,13 +375,7 @@ std::vector<kdnode *> * kdtree_searcher::find_nearest_nodes(std::vector<double> 
 	return result;
 }
 
-/***********************************************************************************************
-*
-* @brief   Search the nearest node in specified location for specified point in the request.
-*
-* @return  Return pointer to the nearest node in kd tree that satisfy the request.
-*
-***********************************************************************************************/
+
 kdnode * kdtree_searcher::find_nearest_node() {
 	prepare_storages();
 

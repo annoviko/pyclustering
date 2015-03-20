@@ -27,7 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <vector>
 
-#include "sync_network.h"
+#include "sync.h"
 
 /***********************************************************************************************
  *
