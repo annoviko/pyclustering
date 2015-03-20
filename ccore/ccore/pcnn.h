@@ -63,7 +63,9 @@ class pcnn;
 class pcnn_dynamic {
 	friend class pcnn;
 private:
-	std::vector<std::vector<double> > dynamic;
+	std::vector<std::vector<double> > output;
+
+	std::vector<double> time;
 
 public:
 	~pcnn_dynamic(void);
@@ -75,7 +77,11 @@ public:
 
 	std::vector<unsigned int> * allocate_time_signal(void) const;	
 
-	const std::vector<std::vector<double> > * const get_dynamic(void) const { return &dynamic; }
+	const std::vector<std::vector<double> > * const get_output(void) const { return &output; }
+
+	const std::vector<double> * const get_time(void) const { return &time; }
+
+	inline unsigned int size(void) const { return output.size(); }
 
 private:
 	pcnn_dynamic(void);
@@ -98,7 +104,8 @@ public:
 	virtual ~pcnn(void);
 
 public:
-	pcnn_dynamic * simulate_static(const unsigned int steps, const std::vector<double> & stimulus);
+	pcnn_dynamic * simulate(const unsigned int steps, const std::vector<double> & stimulus);
+
 
 private:
 	void calculate_states(const std::vector<double> & stimulus);

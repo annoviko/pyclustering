@@ -11,7 +11,7 @@ pcnn::pcnn(const unsigned int size, const conn_type connection_type, const pcnn_
 
 pcnn::~pcnn() { }
 
-pcnn_dynamic * pcnn::simulate_static(const unsigned int steps, const std::vector<double> & stimulus) {
+pcnn_dynamic * pcnn::simulate(const unsigned int steps, const std::vector<double> & stimulus) {
 	pcnn_dynamic * dynamic = new pcnn_dynamic(num_osc, steps);
 
 	for (unsigned int i = 0; i < steps; i++) {
@@ -130,8 +130,10 @@ void pcnn::fast_linking(const std::vector<double> & feeding, std::vector<double>
 }
 
 void pcnn::store_dynamic(pcnn_dynamic * const dynamic, const unsigned int step) {
+	dynamic->time[step] = step;
+
 	for (unsigned int index = 0; index < num_osc; index++) {
-		dynamic->dynamic[step][index] = oscillators[index].output;
+		dynamic->output[step][index] = oscillators[index].output;
 	}
 }
 
@@ -141,33 +143,34 @@ pcnn_dynamic::pcnn_dynamic() { }
 pcnn_dynamic::~pcnn_dynamic() { }
 
 pcnn_dynamic::pcnn_dynamic(const unsigned int number_oscillators, const unsigned int simulation_steps) : 
-	dynamic(simulation_steps, std::vector<double>(number_oscillators, 0)) { }
+	output(simulation_steps, std::vector<double>(number_oscillators, 0)),
+	time(simulation_steps, 0.0) { }
 
 std::vector< std::vector<unsigned int> * > * pcnn_dynamic::allocate_sync_ensembles(void) const {
 	std::vector< std::vector<unsigned int> * > * sync_ensembles = new std::vector< std::vector<unsigned int> * >();
 
 	std::unordered_set<unsigned int> traverse_oscillators;
-	traverse_oscillators.reserve(dynamic.size());
+	traverse_oscillators.reserve(output.size());
 
-	const unsigned int number_oscillators = dynamic[0].size();
+	const unsigned int number_oscillators = output[0].size();
 
-	for (unsigned int t = (dynamic.size() - 1); t != 0; t--) {
-		std::vector<unsigned int> * sync_ensemble = new std::vector<unsigned int>();
+	for (unsigned int t = (output.size() - 1); t != 0; t--) {
+		std::vector<unsigned int> * ensemble = new std::vector<unsigned int>();
 		
 		for (unsigned int i = 0; i < number_oscillators; i++) {
-			if (dynamic[t][i] == OUTPUT_ACTIVE_STATE) {
-				if (traverse_oscillators.find(i) != traverse_oscillators.end()) {
-					sync_ensemble->push_back(i);
+			if (output[t][i] == OUTPUT_ACTIVE_STATE) {
+				if (traverse_oscillators.find(i) == traverse_oscillators.end()) {
+					ensemble->push_back(i);
 					traverse_oscillators.insert(i);
 				}
 			}
 		}
 
-		if (!sync_ensembles->empty()) {
-			sync_ensembles->push_back(sync_ensemble);
+		if (!ensemble->empty()) {
+			sync_ensembles->push_back(ensemble);
 		}
 		else {
-			delete sync_ensemble;
+			delete ensemble;
 		}
 	}
 
@@ -177,22 +180,22 @@ std::vector< std::vector<unsigned int> * > * pcnn_dynamic::allocate_sync_ensembl
 std::vector< std::vector<unsigned int> * > * pcnn_dynamic::allocate_spike_ensembles(void) const {
 	std::vector< std::vector<unsigned int> * > * sync_ensembles = new std::vector< std::vector<unsigned int> * >();
 
-	const unsigned int number_oscillators = dynamic[0].size();
+	const unsigned int number_oscillators = output[0].size();
 
-	for (unsigned int t = 0; t < dynamic.size(); t++) {
-		std::vector<unsigned int> * sync_ensemble = new std::vector<unsigned int>();
+	for (unsigned int t = 0; t < output.size(); t++) {
+		std::vector<unsigned int> * ensemble = new std::vector<unsigned int>();
 
 		for (unsigned int i = 0; i < number_oscillators; i++) {
-			if (dynamic[t][i] == OUTPUT_ACTIVE_STATE) {
-				sync_ensemble->push_back(i);
+			if (output[t][i] == OUTPUT_ACTIVE_STATE) {
+				ensemble->push_back(i);
 			}
 		}
 
-		if (!sync_ensembles->empty()) {
-			sync_ensembles->push_back(sync_ensemble);
+		if (!ensemble->empty()) {
+			sync_ensembles->push_back(ensemble);
 		}
 		else {
-			delete sync_ensemble;
+			delete ensemble;
 		}
 	}
 
@@ -200,13 +203,13 @@ std::vector< std::vector<unsigned int> * > * pcnn_dynamic::allocate_spike_ensemb
 }
 
 std::vector<unsigned int> * pcnn_dynamic::allocate_time_signal(void) const {
-	const unsigned int number_oscillators = dynamic[0].size();
+	const unsigned int number_oscillators = output[0].size();
 
-	std::vector<unsigned int> * signal_vector = new std::vector<unsigned int>(number_oscillators, 0);
+	std::vector<unsigned int> * signal_vector = new std::vector<unsigned int>(output.size(), 0);
 
-	for (unsigned int t = 0; t < dynamic.size(); t++) {
+	for (unsigned int t = 0; t < output.size(); t++) {
 		for (unsigned int i = 0; i < number_oscillators; i++) {
-			if (dynamic[t][i] == OUTPUT_ACTIVE_STATE) {
+			if (output[t][i] == OUTPUT_ACTIVE_STATE) {
 				(*signal_vector)[t]++;
 			}
 		}

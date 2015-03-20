@@ -168,6 +168,8 @@ pyclustering_package * create_package(const std::vector< std::vector<type_object
 	return package;
 }
 
+void destroy_package(pyclustering_package * package);
+
 
 /***********************************************************************************************
  *

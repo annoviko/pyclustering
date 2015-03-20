@@ -393,9 +393,11 @@ extern "C" DECLARATION void * pcnn_create(const unsigned int size, const unsigne
 
 extern "C" DECLARATION void pcnn_destroy(const void * pointer);
 
-extern "C" DECLARATION void pcnn_dynamic_destroy(const void * pointer);
+extern "C" DECLARATION void * pcnn_simulate(const void * pointer, const unsigned int steps, const void * const stimulus);
 
-extern "C" DECLARATION void * pcnn_simulate_static(const void * pointer, const unsigned int steps, const data_representation * const stimulus);
+extern "C" DECLARATION unsigned int pcnn_get_size(const void * pointer);
+
+extern "C" DECLARATION void pcnn_dynamic_destroy(const void * pointer);
 
 extern "C" DECLARATION pyclustering_package * pcnn_dynamic_allocate_sync_ensembles(const void * pointer);
 
@@ -403,6 +405,10 @@ extern "C" DECLARATION pyclustering_package * pcnn_dynamic_allocate_spike_ensemb
 
 extern "C" DECLARATION pyclustering_package * pcnn_dynamic_allocate_time_signal(const void * pointer);
 
-extern "C" DECLARATION pyclustering_package * pcnn_dynamic_get_dynamic(const void * pointer);
+extern "C" DECLARATION pyclustering_package * pcnn_dynamic_get_output(const void * pointer);
+
+extern "C" DECLARATION pyclustering_package * pcnn_dynamic_get_time(const void * pointer);
+
+extern "C" DECLARATION unsigned int pcnn_dynamic_get_size(const void * pointer); 
 
 #endif

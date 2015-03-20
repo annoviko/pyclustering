@@ -418,14 +418,22 @@ void pcnn_destroy(const void * pointer) {
 	delete (pcnn *) pointer;
 }
 
+
+void * pcnn_simulate(const void * pointer, const unsigned int steps, const void * const stimulus) {
+	const pyclustering_package * const package_stimulus = (const pyclustering_package * const) stimulus;
+	std::vector<double> stimulus_vector((double *) package_stimulus->data, ((double *) package_stimulus->data) + package_stimulus->size);
+	return (void *) ((pcnn *) pointer)->simulate(steps, stimulus_vector);
+}
+
+unsigned int pcnn_get_size(const void * pointer) {
+	return ((pcnn *) pointer)->size();
+}
+
+
 void pcnn_dynamic_destroy(const void * pointer) {
 	delete (pcnn_dynamic *) pointer;
 }
 
-void * pcnn_simulate_static(const void * pointer, const unsigned int steps, const pyclustering_package * const stimulus) {
-	std::vector<double> stimulus_vector((double *) stimulus->data, ((double *) stimulus->data) + stimulus->size);
-	return (void *) ((pcnn *) pointer)->simulate_static(steps, stimulus_vector);
-}
 
 pyclustering_package * pcnn_dynamic_allocate_sync_ensembles(const void * pointer) {
 	std::vector<std::vector<unsigned int> * > * sync_ensembles = ((pcnn_dynamic *) pointer)->allocate_sync_ensembles();
@@ -460,9 +468,20 @@ pyclustering_package * pcnn_dynamic_allocate_time_signal(const void * pointer) {
 	return package;
 }
 
-pyclustering_package * pcnn_dynamic_get_dynamic(const void * pointer) {
-	const std::vector<std::vector<double> > * const dynamic = ((pcnn_dynamic *) pointer)->get_dynamic();
+pyclustering_package * pcnn_dynamic_get_output(const void * pointer) {
+	const std::vector<std::vector<double> > * const dynamic = ((pcnn_dynamic *) pointer)->get_output();
 	pyclustering_package * package = create_package(dynamic);
 
 	return package;
+}
+
+pyclustering_package * pcnn_dynamic_get_time(const void * pointer) {
+	const std::vector<double> * const time = ((pcnn_dynamic *) pointer)->get_time();
+	pyclustering_package * package = create_package(time);
+
+	return package;
+}
+
+unsigned int pcnn_dynamic_get_size(const void * pointer) {
+	return ((pcnn_dynamic *) pointer)->size();
 }

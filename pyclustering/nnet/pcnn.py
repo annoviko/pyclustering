@@ -30,6 +30,7 @@ import matplotlib.pyplot as plt;
 import random;
 
 from pyclustering.nnet import *;
+import pyclustering.core.pcnn_wrapper as wrapper;
 
 
 class pcnn_parameters:
@@ -65,25 +66,49 @@ class pcnn_dynamic:
     
     
     @property
-    def dynamic(self):
+    def output(self):
         """!
-        @brief (list) Returns raw reprensetation of PCNN dynamic.
+        @brief (list) Returns outputs of oscillator during simulation.
         
         """
+        if (self.__ccore_pcnn_dynamic_pointer is not None):
+            return wrapper.pcnn_dynamic_get_output(self.__ccore_pcnn_dynamic_pointer);
+            
         return self.__dynamic;
     
     
-    def __init__(self, dynamic):
+    @property
+    def time(self):
+        """!
+        @brief (list) Returns sampling times when dynamic is measured during simulation.
+        
+        """
+        if (self.__ccore_pcnn_dynamic_pointer is not None):
+            return wrapper.pcnn_dynamic_get_time(self.__ccore_pcnn_dynamic_pointer);
+        
+        return [i for i in range(len(self))];
+    
+    
+    def __init__(self, dynamic, ccore = None):
         """!
         @brief Constructor of PCNN dynamic.
         
-        @param[in] dynamic (list): Dynamic of oscillators on each step of simulation.
+        @param[in] dynamic (list): Dynamic of oscillators on each step of simulation. If ccore pointer is specified than it can be ignored.
+        @param[in] ccore (ctypes.pointer): Pointer to CCORE pcnn_dynamic instance in memory.
         
         """
         self.__dynamic = dynamic;
+        self.__ccore_pcnn_dynamic_pointer = ccore;
     
     
     def __len__(self):
+        """!
+        @brief (uint) Returns number of simulation steps that are stored in dynamic.
+        
+        """
+        if (self.__ccore_pcnn_dynamic_pointer is not None):
+            return wrapper.pcnn_dynamic_get_size(self.__ccore_pcnn_dynamic_pointer);
+                    
         return len(self.__dynamic);
     
     
@@ -98,6 +123,9 @@ class pcnn_dynamic:
                 For example, [ [index_osc1, index_osc3], [index_osc2], [index_osc4, index_osc5] ].
                 
         """
+        
+        if (self.__ccore_pcnn_dynamic_pointer is not None):
+            return wrapper.pcnn_dynamic_allocate_sync_ensembles(self.__ccore_pcnn_dynamic_pointer);
         
         sync_ensembles = [];
         traverse_oscillators = set();
@@ -127,6 +155,9 @@ class pcnn_dynamic:
         
         """
         
+        if (self.__ccore_pcnn_dynamic_pointer is not None):
+            return wrapper.pcnn_dynamic_allocate_spike_ensembles(self.__ccore_pcnn_dynamic_pointer);
+        
         spike_ensembles = [];
         for t in range(len(self.__dynamic)):
             spike_ensemble = [];
@@ -148,8 +179,9 @@ class pcnn_dynamic:
         @return (list) Time signal of network output.
         
         """
-        if (isinstance(self.__dynamic[0], list) is not True):
-            return [ sum(self.__dynamic) ];
+        
+        if (self.__ccore_pcnn_dynamic_pointer is not None):
+            return wrapper.pcnn_dynamic_allocate_time_signal(self.__ccore_pcnn_dynamic_pointer);
         
         signal_vector_information = [];
         for t in range(0, len(self.__dynamic)):
@@ -193,10 +225,12 @@ class pcnn_network(network):
     
     _params = None;
     
+    __ccore_pcnn_pointer = None;
+    
     OUTPUT_TRUE = 1;    # fire value for oscillators.
     OUTPUT_FALSE = 0;   # rest value for oscillators.
     
-    def __init__(self, num_osc, parameters = None, type_conn = conn_type.ALL_TO_ALL, type_conn_represent = conn_represent.MATRIX):
+    def __init__(self, num_osc, parameters = None, type_conn = conn_type.ALL_TO_ALL, type_conn_represent = conn_represent.MATRIX, ccore = False):
         """!
         @brief Constructor of oscillatory network is based on Kuramoto model.
         
@@ -204,10 +238,9 @@ class pcnn_network(network):
         @param[in] parameters (pcnn_parameters): Parameters of the network.
         @param[in] type_conn (conn_type): Type of connection between oscillators in the network (all-to-all, grid, bidirectional list, etc.).
         @param[in] type_conn_represent (conn_represent): Internal representation of connection in the network: matrix or list.
+        @param[in] ccore (bool): If True then all interaction with object will be performed via CCORE library (C++ implementation of pyclustering).
         
         """
-        
-        super().__init__(num_osc, type_conn, type_conn_represent);
         
         # set parameters of the network
         if (parameters is not None):
@@ -215,11 +248,16 @@ class pcnn_network(network):
         else:
             self._params = pcnn_parameters();
         
-        self._outputs = [0.0] * self._num_osc;
-        
-        self._feeding = [0.0] * self._num_osc;    
-        self._linking = [0.0] * self._num_osc;        
-        self._threshold = [ random.random() for i in range(self._num_osc) ];
+        if (ccore is True):
+            self.__ccore_pcnn_pointer = wrapper.pcnn_create(num_osc, type_conn, self._params);
+        else:
+            super().__init__(num_osc, type_conn, type_conn_represent);
+            
+            self._outputs = [0.0] * self._num_osc;
+            
+            self._feeding = [0.0] * self._num_osc;    
+            self._linking = [0.0] * self._num_osc;        
+            self._threshold = [ random.random() for i in range(self._num_osc) ];
     
         
     def simulate(self, steps, stimulus):
@@ -233,6 +271,10 @@ class pcnn_network(network):
         
         """
         
+        if (self.__ccore_pcnn_pointer is not None):
+            ccore_instance_dynamic = wrapper.pcnn_simulate(self.__ccore_pcnn_pointer, steps, stimulus);
+            return pcnn_dynamic(None, ccore_instance_dynamic);
+            
         dynamic = [];
         dynamic.append(self._outputs);
         

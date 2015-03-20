@@ -152,7 +152,6 @@ pyclustering_package * create_package(const std::vector<unsigned long> * const d
 	return package;
 }
 
-
 double average_neighbor_distance(const std::vector<std::vector<double> > * points, const unsigned int num_neigh) {
 	std::vector<std::vector<double> > dist_matrix( points->size(), std::vector<double>(points->size(), 0.0) );
 	for (unsigned int i = 0; i < points->size(); i++) {

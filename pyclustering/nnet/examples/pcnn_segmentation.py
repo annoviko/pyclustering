@@ -32,7 +32,7 @@ from pyclustering.samples.definitions import IMAGE_SIMPLE_SAMPLES;
 
 from pyclustering.support import read_image, rgb2gray, draw_image_mask_segments;
 
-def template_segmentation_image(image, parameters, simulation_time, brightness, scale_color = True, fastlinking = False, show_spikes = False):
+def template_segmentation_image(image, parameters, simulation_time, brightness, scale_color = True, fastlinking = False, show_spikes = False, ccore_flag = True):
     stimulus = read_image(image);
     stimulus = rgb2gray(stimulus);
     
@@ -65,10 +65,10 @@ def template_segmentation_image(image, parameters, simulation_time, brightness, 
         
         parameters.FAST_LINKING = fastlinking;
     
-    net = pcnn_network(len(stimulus), parameters, conn_type.GRID_EIGHT);
+    net = pcnn_network(len(stimulus), parameters, conn_type.GRID_EIGHT, ccore = ccore_flag);
     output_dynamic = net.simulate(simulation_time, stimulus);
     
-    draw_dynamics(range(len(output_dynamic)), output_dynamic.dynamic, x_title = "Time", y_title = "y(t)");
+    draw_dynamics(output_dynamic.time, output_dynamic.output, x_title = "Time", y_title = "y(t)");
     
     ensembles = output_dynamic.allocate_sync_ensembles();
     draw_image_mask_segments(image, ensembles);
@@ -117,7 +117,7 @@ def segmentation_fast_linking_image_fruits():
 segmentation_image_simple1();
 segmentation_image_simple2();
 segmentation_image_simple6();
-
+ 
 segmentation_gray_image_simple1();
 segmentation_gray_image_simple5();
 segmentation_gray_image_beach();
