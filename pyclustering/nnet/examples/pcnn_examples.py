@@ -33,13 +33,13 @@ from pyclustering.samples.definitions import IMAGE_SIMPLE_SAMPLES;
 from pyclustering.support import read_image, rgb2gray, draw_image_mask_segments;
 
 def template_dynamic_pcnn(num_osc, steps, stimulus = None, params = None, conn_type = conn_type.NONE, separate_representation = True):
-    net = pcnn_network(num_osc, stimulus, params, conn_type);
-    (t, y) = net.simulate(steps);
+    net = pcnn_network(num_osc, params, conn_type);
+    output_dynamic = net.simulate(steps, stimulus);
     
-    ensembles = net.allocate_sync_ensembles();
+    ensembles = output_dynamic.allocate_sync_ensembles();
     print("Number of objects:", len(ensembles), "\nEnsembles:", ensembles);
     
-    draw_dynamics(t, y, x_title = "Time", y_title = "y(t)", separate = separate_representation);
+    draw_dynamics(range(len(output_dynamic)), output_dynamic.dynamic, x_title = "t", y_title = "y(t)", separate = separate_representation);
     
     return ensembles;
     

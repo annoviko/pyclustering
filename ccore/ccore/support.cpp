@@ -109,6 +109,7 @@ clustering_result * create_clustering_result(const std::vector<std::vector<unsig
 	return result;
 }
 
+
 pyclustering_package * create_package(const std::vector<int> * const data) {
 	pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_INT);
 	prepare_package(data, package);

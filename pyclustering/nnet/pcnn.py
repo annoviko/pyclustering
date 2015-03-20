@@ -51,14 +51,133 @@ class pcnn_parameters:
     
     B = 0.1;    # linking strength in the network.
     
-    OUTPUT_TRUE = 1;    # fire value for oscillators.
-    OUTPUT_FALSE = 0;   # rest value for oscillators.
-    
     # Helps to overcome some of the effects of time quantisation. This process allows the linking wave to progress a lot faster than the feeding wave.
     FAST_LINKING = False;   # enable/disable Fast-Linking mode
     
+    
+class pcnn_dynamic:
+    """!
+    @brief Represents output dynamic of PCNN.
+    
+    """
+    __dynamic = None;
+    __ccore_pcnn_dynamic_pointer = None;
+    
+    
+    @property
+    def dynamic(self):
+        """!
+        @brief (list) Returns raw reprensetation of PCNN dynamic.
+        
+        """
+        return self.__dynamic;
+    
+    
+    def __init__(self, dynamic):
+        """!
+        @brief Constructor of PCNN dynamic.
+        
+        @param[in] dynamic (list): Dynamic of oscillators on each step of simulation.
+        
+        """
+        self.__dynamic = dynamic;
+    
+    
+    def __len__(self):
+        return len(self.__dynamic);
+    
+    
+    def allocate_sync_ensembles(self, tolerance = 10):
+        """!
+        @brief Allocate clusters in line with ensembles of synchronous oscillators where each
+               synchronous ensemble corresponds to only one cluster.
+               
+        @param[in] tolerance (double): Is not used, can be ignored.
+        
+        @return (list) Grours (lists) of indexes of synchronous oscillators. 
+                For example, [ [index_osc1, index_osc3], [index_osc2], [index_osc4, index_osc5] ].
+                
+        """
+        
+        sync_ensembles = [];
+        traverse_oscillators = set();
+        
+        number_oscillators = len(self.__dynamic[0]);
+        
+        for t in range(len(self.__dynamic) - 1, 0, -1):
+            sync_ensemble = [];
+            for i in range(number_oscillators):
+                if (self.__dynamic[t][i] == pcnn_network.OUTPUT_TRUE):
+                    if (i not in traverse_oscillators):
+                        sync_ensemble.append(i);
+                        traverse_oscillators.add(i);
+            
+            if (sync_ensemble != []):
+                sync_ensembles.append(sync_ensemble);
+        
+        return sync_ensembles;
 
-class pcnn_network(network, network_interface):
+
+    def allocate_spike_ensembles(self):
+        """!
+        @brief Analyses output dynamic of network and allocates spikes on each iteration as a list of indexes of oscillators.
+        @details Each allocated spike ensemble represents list of indexes of oscillators whose output is active.
+        
+        @return (list) Spike ensembles of oscillators.
+        
+        """
+        
+        spike_ensembles = [];
+        for t in range(len(self.__dynamic)):
+            spike_ensemble = [];
+            
+            for index in range(len(self)):
+                if (self.__dynamic[t][index] == pcnn_network.OUTPUT_TRUE):
+                    spike_ensemble.append(index);
+            
+            if (len(spike_ensemble) > 0):
+                spike_ensembles.append(spike_ensemble);
+        
+        return spike_ensembles;
+    
+    
+    def allocate_time_signal(self):
+        """!
+        @brief Analyses output dynamic and calculates time signal (signal vector information) of network output.
+           
+        @return (list) Time signal of network output.
+        
+        """
+        if (isinstance(self.__dynamic[0], list) is not True):
+            return [ sum(self.__dynamic) ];
+        
+        signal_vector_information = [];
+        for t in range(0, len(self.__dynamic)):
+            signal_vector_information.append(sum(self.__dynamic[t]));
+        
+        return signal_vector_information;
+    
+    
+    def show_time_signal(self):
+        """!
+        @brief Shows time signal (signal vector information) using network dynamic during simulation.
+        
+        """
+        
+        time_signal = self.allocate_time_signal();
+        time_axis = range(len(time_signal));
+        
+        plt.subplot(1, 1, 1);
+        plt.plot(time_axis, time_signal, '-');
+        plt.ylabel("G (time signal)");
+        plt.xlabel("t (iteration)");
+        plt.grid(True);
+        
+        plt.show();
+        
+    
+
+class pcnn_network(network):
     """!
     @brief Model of oscillatory network that is based on the Eckhorn model.
     
@@ -66,9 +185,7 @@ class pcnn_network(network, network_interface):
     
     # Protected members:
     _name = "Pulse Coupled Neural Network";
-    _stimulus = None;           # stimulus of each oscillator.
     _outputs = None;            # list of outputs of oscillors.
-    _pointer_dynamic = None;    # pointer to output dynamics.
     
     _feeding = None;            # feeding compartment of each oscillator.    
     _linking = None;            # linking compartment of each oscillator. 
@@ -76,13 +193,14 @@ class pcnn_network(network, network_interface):
     
     _params = None;
     
+    OUTPUT_TRUE = 1;    # fire value for oscillators.
+    OUTPUT_FALSE = 0;   # rest value for oscillators.
     
-    def __init__(self, num_osc, stimulus = None, parameters = None, type_conn = conn_type.ALL_TO_ALL, type_conn_represent = conn_represent.MATRIX):
+    def __init__(self, num_osc, parameters = None, type_conn = conn_type.ALL_TO_ALL, type_conn_represent = conn_represent.MATRIX):
         """!
         @brief Constructor of oscillatory network is based on Kuramoto model.
         
         @param[in] num_osc (uint): Number of oscillators in the network.
-        @param[in] stimulus (list): Stimulus for oscillators, number of stimulus should be equal to number of oscillators.
         @param[in] parameters (pcnn_parameters): Parameters of the network.
         @param[in] type_conn (conn_type): Type of connection between oscillators in the network (all-to-all, grid, bidirectional list, etc.).
         @param[in] type_conn_represent (conn_represent): Internal representation of connection in the network: matrix or list.
@@ -102,76 +220,35 @@ class pcnn_network(network, network_interface):
         self._feeding = [0.0] * self._num_osc;    
         self._linking = [0.0] * self._num_osc;        
         self._threshold = [ random.random() for i in range(self._num_osc) ];
+    
         
-        if (stimulus is None):
-            self._stimulus = [0.0] * self._num_osc;
-        else:
-            if (len(stimulus) != self._num_osc):
-                raise NameError('Number of the stimulus should be equal to number of oscillators.');
-            else:
-                self._stimulus = stimulus;
-    
-    
-    def simulate(self, steps, time = None, solution = solve_type.RK4, collect_dynamic = False):
+    def simulate(self, steps, stimulus):
         """!
         @brief Performs static simulation of pulse coupled neural network.
         
         @param[in] steps (uint): Number steps of simulations during simulation.
-        @param[in] time (double): Can be ingored - steps are used instead of time of simulation.
-        @param[in] solution (solve_type): Type of solution (solving).
-        @param[in] collect_dynamic (bool): If True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics.
+        @param[in] stimulus (list): Stimulus for oscillators, number of stimulus should be equal to number of oscillators.
         
-        @return (list) Dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,
-                otherwise returns only last values (last step of simulation) of dynamic.
+        @return (pcnn_dynamic) Dynamic of oscillatory network - output of each oscillator on each step of simulation.
         
         """
         
-        return self.simulate_static(steps, time, solution, collect_dynamic);
-        
-        
-    def simulate_static(self, steps):
-        """!
-        @brief Performs static simulation of pulse coupled neural network.
-        
-        @param[in] steps (uint): Number steps of simulations during simulation.
-        
-        @return (list) Dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,
-                otherwise returns only last values (last step of simulation) of dynamic.
-        
-        """
-        
-        dyn_output = [];
-        dyn_time = [];
-            
-        dyn_output.append(self._outputs);
-        dyn_time.append(0);
+        dynamic = [];
+        dynamic.append(self._outputs);
         
         for step in range(0, steps, 1):
-            self._outputs = self._calculate_states(step);
+            self._outputs = self._calculate_states(stimulus);
             
-            dyn_output.append(self._outputs);
-            dyn_time.append(step);
+            dynamic.append(self._outputs);
         
-        self._pointer_dynamic = dyn_output;
-        return (dyn_time, dyn_output);
+        return pcnn_dynamic(dynamic);
     
     
-    def simulate_dynamic(self, order, solution, collect_dynamic, step, int_step, threshold_changes):
-        """!
-        @brief Performs dynamic simulation, when time simulation is not specified, only stop condition.
-        
-        @warning The method is not supported.
-        
-        """
-        
-        raise NameError("Dynamic simulation is not supported due to lack of stop conditions for the model.");
-    
-        
-    def _calculate_states(self, t):
+    def _calculate_states(self, stimulus):
         """!
         @brief Calculates states of oscillators in the network for current step and stored them except outputs of oscillators.
         
-        @param[in] t (double): Can be ignored, current step of simulation.
+        @param[in] stimulus (list): Stimulus for oscillators, number of stimulus should be equal to number of oscillators.
         
         @return (list) New outputs for oscillators (do not stored it).
         
@@ -198,7 +275,7 @@ class pcnn_network(network, network_interface):
             feeding_influence *= self._params.VF;
             linking_influence *= self._params.VL;
             
-            feeding[index] = self._params.AF * self._feeding[index] + self._stimulus[index] + feeding_influence;
+            feeding[index] = self._params.AF * self._feeding[index] + stimulus[index] + feeding_influence;
             linking[index] = self._params.AL * self._linking[index] + linking_influence;
             
             # calculate internal activity
@@ -206,10 +283,10 @@ class pcnn_network(network, network_interface):
             
             # calculate output of the oscillator
             if (internal_activity > self._threshold[index]):
-                outputs[index] = self._params.OUTPUT_TRUE;
+                outputs[index] = self.OUTPUT_TRUE;
             else:
-                outputs[index] = self._params.OUTPUT_FALSE;
-                
+                outputs[index] = self.OUTPUT_FALSE;
+            
             if (outputs[index] != self._outputs[index]):
                 output_change = True;
             
@@ -239,9 +316,9 @@ class pcnn_network(network, network_interface):
                     
                     # calculate output of the oscillator
                     if (internal_activity > self._threshold[index]):
-                        outputs[index] = self._params.OUTPUT_TRUE;
+                        outputs[index] = self.OUTPUT_TRUE;
                     else:
-                        outputs[index] = self._params.OUTPUT_FALSE;
+                        outputs[index] = self.OUTPUT_FALSE;
                         
                     if (outputs[index] != self._outputs[index]):
                         current_output_change = True;
@@ -258,113 +335,6 @@ class pcnn_network(network, network_interface):
         self._linking = linking[:];
         self._threshold = threshold[:];
         
-        return outputs;
-    
-    
-    def allocate_sync_ensembles(self, tolerance = 10):
-        """!
-        @brief Allocate clusters in line with ensembles of synchronous oscillators where each
-               synchronous ensemble corresponds to only one cluster.
-               
-        @param[in] tolerance (double): Is not used, can be ignored.
-        
-        @return (list) Grours (lists) of indexes of synchronous oscillators. 
-                For example, [ [index_osc1, index_osc3], [index_osc2], [index_osc4, index_osc5] ].
-                
-        """
-        
-        sync_ensembles = [];
-        traverse_oscillators = set();
-        
-        if (self._pointer_dynamic is None):
-            return None;
-        
-        if (isinstance(self._pointer_dynamic[0], list) is not True):
-            return None;
-        
-        for t in range(len(self._pointer_dynamic) - 1, 0, -1):
-            sync_ensemble = [];
-            for i in range(self._num_osc):
-                if (self._pointer_dynamic[t][i] == self._params.OUTPUT_TRUE):
-                    if (i not in traverse_oscillators):
-                        sync_ensemble.append(i);
-                        traverse_oscillators.add(i);
-            
-            if (sync_ensemble != []):
-                sync_ensembles.append(sync_ensemble);
-        
-        return sync_ensembles;
-
-
-    def allocate_spike_ensembles(self):
-        """!
-        @brief Analyses output dynamic of network and allocates spikes on each iteration as a list of indexes of oscillators.
-        @details Each allocated spike ensemble represents list of indexes of oscillators whose output is active.
-        
-        @remark Dynamic should be collected during simulation. Otherwise time signal will calculated only for last step of simulation.
-        
-        @return (list) Spike ensembles of oscillators.
-        
-        @see simulate()
-        
-        """
-        
-        spike_ensembles = [];
-        for t in range(len(self._pointer_dynamic)):
-            spike_ensemble = [];
-            
-            for index in range(len(self)):
-                if (self._pointer_dynamic[t][index] == self._params.OUTPUT_TRUE):
-                    spike_ensemble.append(index);
-            
-            if (len(spike_ensemble) > 0):
-                spike_ensembles.append(spike_ensemble);
-        
-        return spike_ensembles;
-
-    
-    def get_time_signal(self):
-        """!
-        @brief Calculates time signal (signal vector information) of network output.
-        
-        @remark Dynamic should be collected during simulation. Otherwise time signal will calculated only for last step of simulation.
-                
-        @return (list) Time signal of network output.
-        
-        @see simulate()
-        @see show_time_signal()
-        
-        """
-        if (isinstance(self._pointer_dynamic[0], list) is not True):
-            return [ sum(self._pointer_dynamic) ];
-        
-        signal_vector_information = [];
-        for t in range(0, len(self._pointer_dynamic)):
-            signal_vector_information.append(sum(self._pointer_dynamic[t]));
-        
-        return signal_vector_information;
-    
-
-    def show_time_signal(self):
-        """!
-        @brief Shows time signal (signal vector information) using network dynamic during simulation.
-        
-        @remark Dynamic should be collected during simulation.
-        
-        @see simulate()
-        @see get_time_signal()
-        
-        """
-        
-        time_signal = self.get_time_signal();
-        time_axis = range(len(time_signal));
-        
-        plt.subplot(1, 1, 1);
-        plt.plot(time_axis, time_signal, '-');
-        plt.ylabel("G (time signal)");
-        plt.xlabel("t (iteration)");
-        plt.grid(True);
-        
-        plt.show();
+        return outputs
         
         

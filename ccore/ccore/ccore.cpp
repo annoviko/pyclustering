@@ -422,9 +422,8 @@ void pcnn_dynamic_destroy(const void * pointer) {
 	delete (pcnn_dynamic *) pointer;
 }
 
-void * pcnn_simulate_static(const void * pointer, const unsigned int steps, const data_representation * const stimulus) {
-	/* data_representation ??? */
-	std::vector<double> stimulus_vector;
+void * pcnn_simulate_static(const void * pointer, const unsigned int steps, const pyclustering_package * const stimulus) {
+	std::vector<double> stimulus_vector((double *) stimulus->data, ((double *) stimulus->data) + stimulus->size);
 	return (void *) ((pcnn *) pointer)->simulate_static(steps, stimulus_vector);
 }
 

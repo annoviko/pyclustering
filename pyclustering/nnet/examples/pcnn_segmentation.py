@@ -65,18 +65,18 @@ def template_segmentation_image(image, parameters, simulation_time, brightness, 
         
         parameters.FAST_LINKING = fastlinking;
     
-    net = pcnn_network(len(stimulus), stimulus, parameters, conn_type.GRID_EIGHT);
-    (t, y) = net.simulate(simulation_time);
+    net = pcnn_network(len(stimulus), parameters, conn_type.GRID_EIGHT);
+    output_dynamic = net.simulate(simulation_time, stimulus);
     
-    draw_dynamics(t, y, x_title = "Time", y_title = "y(t)");
+    draw_dynamics(range(len(output_dynamic)), output_dynamic.dynamic, x_title = "Time", y_title = "y(t)");
     
-    ensembles = net.allocate_sync_ensembles();
+    ensembles = output_dynamic.allocate_sync_ensembles();
     draw_image_mask_segments(image, ensembles);
     
-    net.show_time_signal();
+    output_dynamic.show_time_signal();
     
     if (show_spikes is True):
-        spikes = net.allocate_spike_ensembles();
+        spikes = output_dynamic.allocate_spike_ensembles();
         draw_image_mask_segments(image, spikes);
     
     
