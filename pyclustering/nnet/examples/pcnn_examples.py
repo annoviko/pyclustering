@@ -34,16 +34,12 @@ from pyclustering.support import read_image, rgb2gray, draw_image_mask_segments;
 
 def template_dynamic_pcnn(num_osc, steps, stimulus = None, params = None, conn_type = conn_type.NONE, separate_representation = True):
     net = pcnn_network(num_osc, stimulus, params, conn_type);
-    (t, y) = net.simulate(steps, None, None, True);
-    # (t, y, thr, f, l) = net.simulate(steps, None, None, True);
+    (t, y) = net.simulate(steps);
     
     ensembles = net.allocate_sync_ensembles();
     print("Number of objects:", len(ensembles), "\nEnsembles:", ensembles);
     
     draw_dynamics(t, y, x_title = "Time", y_title = "y(t)", separate = separate_representation);
-    #draw_dynamics(t, thr, x_title = "Time", y_title = "threshold");
-    #draw_dynamics(t, f, x_title = "Time", y_title = "feeding");
-    #draw_dynamics(t, l, x_title = "Time", y_title = "linking");
     
     return ensembles;
     

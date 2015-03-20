@@ -66,7 +66,7 @@ def template_segmentation_image(image, parameters, simulation_time, brightness, 
         parameters.FAST_LINKING = fastlinking;
     
     net = pcnn_network(len(stimulus), stimulus, parameters, conn_type.GRID_EIGHT);
-    (t, y) = net.simulate(simulation_time, None, None, True);
+    (t, y) = net.simulate(simulation_time);
     
     draw_dynamics(t, y, x_title = "Time", y_title = "y(t)");
     

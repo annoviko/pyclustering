@@ -154,6 +154,7 @@
     <ClCompile Include="legion_network.cpp" />
     <ClCompile Include="network.cpp" />
     <ClCompile Include="kmeans.cpp" />
+    <ClCompile Include="pcnn.cpp" />
     <ClCompile Include="rock.cpp" />
     <ClCompile Include="som.cpp" />
     <ClCompile Include="support.cpp" />
@@ -171,6 +172,8 @@
     <ClInclude Include="legion_network.h" />
     <ClInclude Include="network.h" />
     <ClInclude Include="kmeans.h" />
+    <ClInclude Include="pcnn.h" />
+    <ClInclude Include="point.h" />
     <ClInclude Include="rock.h" />
     <ClInclude Include="som.h" />
     <ClInclude Include="support.h" />

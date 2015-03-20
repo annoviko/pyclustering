@@ -27,7 +27,7 @@ from pyclustering.nnet import *;
 class Test(unittest.TestCase):
     def testUnstimulatedOscillators(self):
         net = pcnn_network(9, [0] * 9, type_conn=conn_type.GRID_FOUR);
-        net.simulate(100, collect_dynamic = True);
+        net.simulate(100);
         
         assert [] == net.allocate_sync_ensembles();
 
@@ -35,7 +35,7 @@ class Test(unittest.TestCase):
         params = pcnn_parameters();
         
         net = pcnn_network(9, [1.0] * 9, params, type_conn = conn_type.GRID_FOUR);
-        net.simulate(100, collect_dynamic = True);
+        net.simulate(100);
         
         sync_ensebles = net.allocate_sync_ensembles(5);
         sync_ensebles.sort();
@@ -52,7 +52,7 @@ class Test(unittest.TestCase):
                                 0, 1, 1, 1, 0,
                                 0, 0, 0, 0, 0], params, type_conn = conn_type.GRID_EIGHT);
                                
-        net.simulate(100, collect_dynamic = True);
+        net.simulate(100);
         
         sync_ensebles = net.allocate_sync_ensembles(5);
         sync_ensebles.sort();

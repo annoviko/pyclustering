@@ -118,20 +118,20 @@ std::vector<std::vector<double> > * read_sample(const data_representation * cons
  ***********************************************************************************************/
 clustering_result * create_clustering_result(const std::vector<std::vector<unsigned int> *> * const clusters);
 
-pyclustering_package * create_package(std::vector<int> * data);
+pyclustering_package * create_package(const std::vector<int> * const data);
 
-pyclustering_package * create_package(std::vector<unsigned int> * data);
+pyclustering_package * create_package(const std::vector<unsigned int> * const data);
 
-pyclustering_package * create_package(std::vector<float> * data);
+pyclustering_package * create_package(const std::vector<float> * const data);
 
-pyclustering_package * create_package(std::vector<double> * data);
+pyclustering_package * create_package(const std::vector<double> * const data);
 
-pyclustering_package * create_package(std::vector<long> * data);
+pyclustering_package * create_package(const std::vector<long> * const data);
 
-pyclustering_package * create_package(std::vector<unsigned long> * data);
+pyclustering_package * create_package(const std::vector<unsigned long> * const data);
 
 template <class type_object>
-void prepare_package(std::vector<type_object> * data, pyclustering_package * package) {
+void prepare_package(const std::vector<type_object> * const data, pyclustering_package * package) {
 	package->size = data->size();
 	package->data = (void *) new type_object[package->size];
 
@@ -141,7 +141,7 @@ void prepare_package(std::vector<type_object> * data, pyclustering_package * pac
 }
 
 template <class type_object>
-pyclustering_package * create_package(std::vector< std::vector<type_object> > * data) {
+pyclustering_package * create_package(const std::vector< std::vector<type_object> > * const data) {
 	pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
 
 	package->size = data->size();
@@ -155,7 +155,7 @@ pyclustering_package * create_package(std::vector< std::vector<type_object> > * 
 }
 
 template <class type_object>
-pyclustering_package * create_package(std::vector< std::vector<type_object> * > * data) {
+pyclustering_package * create_package(const std::vector< std::vector<type_object> * > * const data) {
 	pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
 
 	package->size = data->size();

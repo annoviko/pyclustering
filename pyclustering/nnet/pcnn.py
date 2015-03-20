@@ -129,44 +129,28 @@ class pcnn_network(network, network_interface):
         return self.simulate_static(steps, time, solution, collect_dynamic);
         
         
-    def simulate_static(self, steps, time = None, solution = solve_type.RK4, collect_dynamic = False):
+    def simulate_static(self, steps):
         """!
         @brief Performs static simulation of pulse coupled neural network.
         
         @param[in] steps (uint): Number steps of simulations during simulation.
-        @param[in] time (double): Can be ingored - steps are used instead of time of simulation.
-        @param[in] solution (solve_type): Type of solution (solving).
-        @param[in] collect_dynamic (bool): If True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics.
         
         @return (list) Dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,
                 otherwise returns only last values (last step of simulation) of dynamic.
         
         """
         
-        dyn_output = None;
-        # dyn_threshold = None;
-        # dyn_feeding = None;
-        # dyn_linking = None;
-        
-        dyn_time = None;
-        
-        if (collect_dynamic == True):
-            dyn_output = [];
-            dyn_time = [];
+        dyn_output = [];
+        dyn_time = [];
             
-            dyn_output.append(self._outputs);
-            dyn_time.append(0);
+        dyn_output.append(self._outputs);
+        dyn_time.append(0);
         
         for step in range(0, steps, 1):
             self._outputs = self._calculate_states(step);
             
-            # update states of oscillators
-            if (collect_dynamic == True):
-                dyn_output.append(self._outputs);
-                dyn_time.append(step);
-            else:
-                dyn_output = self._outputs;
-                dyn_time = step;
+            dyn_output.append(self._outputs);
+            dyn_time.append(step);
         
         self._pointer_dynamic = dyn_output;
         return (dyn_time, dyn_output);
@@ -298,9 +282,7 @@ class pcnn_network(network, network_interface):
         if (isinstance(self._pointer_dynamic[0], list) is not True):
             return None;
         
-        lower_boundary = 0;
-        
-        for t in range(len(self._pointer_dynamic) - 1, lower_boundary, -1):
+        for t in range(len(self._pointer_dynamic) - 1, 0, -1):
             sync_ensemble = [];
             for i in range(self._num_osc):
                 if (self._pointer_dynamic[t][i] == self._params.OUTPUT_TRUE):

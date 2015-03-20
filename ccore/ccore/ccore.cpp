@@ -35,6 +35,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "syncnet.h"
 #include "xmeans.h"
 
+#include "pcnn.h"
 #include "som.h"
 #include "sync_network.h"
 
@@ -647,6 +648,66 @@ pyclustering_package * som_get_neighbors(const void * pointer) {
 	if (neighbors != NULL) {
 		package = create_package(neighbors);
 	}
+
+	return package;
+}
+
+
+void * pcnn_create(const unsigned int size, const unsigned int connection_type, const void * const parameters) {
+	pcnn * pcnn_network = new pcnn(size, (conn_type) connection_type, *((pcnn_parameters *) parameters));
+	return (void *) pcnn_network;
+}
+
+void pcnn_destroy(const void * pointer) {
+	delete (pcnn *) pointer;
+}
+
+void pcnn_dynamic_destroy(const void * pointer) {
+	delete (pcnn_dynamic *) pointer;
+}
+
+void * pcnn_simulate_static(const void * pointer, const unsigned int steps, const data_representation * const stimulus) {
+	/* data_representation ??? */
+	std::vector<double> stimulus_vector;
+	return (void *) ((pcnn *) pointer)->simulate_static(steps, stimulus_vector);
+}
+
+pyclustering_package * pcnn_dynamic_allocate_sync_ensembles(const void * pointer) {
+	std::vector<std::vector<unsigned int> * > * sync_ensembles = ((pcnn_dynamic *) pointer)->allocate_sync_ensembles();
+	pyclustering_package * package = create_package(sync_ensembles);
+
+	for (std::vector<std::vector<unsigned int> * >::iterator iter = sync_ensembles->begin(); iter != sync_ensembles->end(); iter++) {
+		delete (*iter);
+	}
+	delete sync_ensembles;
+
+	return package;
+}
+
+pyclustering_package * pcnn_dynamic_allocate_spike_ensembles(const void * pointer) {
+	std::vector<std::vector<unsigned int> * > * spike_ensembles = ((pcnn_dynamic *) pointer)->allocate_spike_ensembles();
+	pyclustering_package * package = create_package(spike_ensembles);
+
+	for (std::vector<std::vector<unsigned int> * >::iterator iter = spike_ensembles->begin(); iter != spike_ensembles->end(); iter++) {
+		delete (*iter);
+	}
+	delete spike_ensembles;
+
+	return package;
+}
+
+pyclustering_package * pcnn_dynamic_allocate_time_signal(const void * pointer) {
+	std::vector<unsigned int> * time_signal = ((pcnn_dynamic *) pointer)->allocate_time_signal();
+	pyclustering_package * package = create_package(time_signal);
+
+	delete time_signal;
+
+	return package;
+}
+
+pyclustering_package * pcnn_dynamic_get_dynamic(const void * pointer) {
+	const std::vector<std::vector<double> > * const dynamic = ((pcnn_dynamic *) pointer)->get_dynamic();
+	pyclustering_package * package = create_package(dynamic);
 
 	return package;
 }

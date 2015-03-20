@@ -387,4 +387,22 @@ extern "C" DECLARATION pyclustering_package * som_get_awards(const void * pointe
 
 extern "C" DECLARATION pyclustering_package * som_get_neighbors(const void * pointer);
 
+
+
+extern "C" DECLARATION void * pcnn_create(const unsigned int size, const unsigned int connection_type, const void * const parameters);
+
+extern "C" DECLARATION void pcnn_destroy(const void * pointer);
+
+extern "C" DECLARATION void pcnn_dynamic_destroy(const void * pointer);
+
+extern "C" DECLARATION void * pcnn_simulate_static(const void * pointer, const unsigned int steps, const data_representation * const stimulus);
+
+extern "C" DECLARATION pyclustering_package * pcnn_dynamic_allocate_sync_ensembles(const void * pointer);
+
+extern "C" DECLARATION pyclustering_package * pcnn_dynamic_allocate_spike_ensembles(const void * pointer);
+
+extern "C" DECLARATION pyclustering_package * pcnn_dynamic_allocate_time_signal(const void * pointer);
+
+extern "C" DECLARATION pyclustering_package * pcnn_dynamic_get_dynamic(const void * pointer);
+
 #endif
