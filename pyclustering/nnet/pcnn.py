@@ -86,7 +86,7 @@ class pcnn_dynamic:
         if (self.__ccore_pcnn_dynamic_pointer is not None):
             return wrapper.pcnn_dynamic_get_time(self.__ccore_pcnn_dynamic_pointer);
         
-        return [i for i in range(len(self))];
+        return list(range(len(self)));
     
     
     def __init__(self, dynamic, ccore = None):
@@ -108,16 +108,14 @@ class pcnn_dynamic:
         """
         if (self.__ccore_pcnn_dynamic_pointer is not None):
             return wrapper.pcnn_dynamic_get_size(self.__ccore_pcnn_dynamic_pointer);
-                    
+        
         return len(self.__dynamic);
     
     
-    def allocate_sync_ensembles(self, tolerance = 10):
+    def allocate_sync_ensembles(self):
         """!
         @brief Allocate clusters in line with ensembles of synchronous oscillators where each
                synchronous ensemble corresponds to only one cluster.
-               
-        @param[in] tolerance (double): Is not used, can be ignored.
         
         @return (list) Grours (lists) of indexes of synchronous oscillators. 
                 For example, [ [index_osc1, index_osc3], [index_osc2], [index_osc4, index_osc5] ].
@@ -159,10 +157,12 @@ class pcnn_dynamic:
             return wrapper.pcnn_dynamic_allocate_spike_ensembles(self.__ccore_pcnn_dynamic_pointer);
         
         spike_ensembles = [];
+        number_oscillators = len(self.__dynamic[0]);
+        
         for t in range(len(self.__dynamic)):
             spike_ensemble = [];
             
-            for index in range(len(self)):
+            for index in range(number_oscillators):
                 if (self.__dynamic[t][index] == pcnn_network.OUTPUT_TRUE):
                     spike_ensemble.append(index);
             
@@ -259,10 +259,22 @@ class pcnn_network(network):
             self._linking = [0.0] * self._num_osc;        
             self._threshold = [ random.random() for i in range(self._num_osc) ];
     
+    
+    def __len__(self):
+        """!
+        @brief (uint) Returns size of oscillatory network.
+        
+        """
+        
+        if (self.__ccore_pcnn_pointer is not None):
+            return wrapper.pcnn_get_size(self.__ccore_pcnn_pointer);
+        
+        return self._num_osc;
+    
         
     def simulate(self, steps, stimulus):
         """!
-        @brief Performs static simulation of pulse coupled neural network.
+        @brief Performs static simulation of pulse coupled neural network using.
         
         @param[in] steps (uint): Number steps of simulations during simulation.
         @param[in] stimulus (list): Stimulus for oscillators, number of stimulus should be equal to number of oscillators.
@@ -271,14 +283,17 @@ class pcnn_network(network):
         
         """
         
+        if (len(stimulus) != len(self)):
+            raise NameError('Number of stimulus should be equal to number of oscillators. Each stimulus corresponds to only one oscillators.');
+        
         if (self.__ccore_pcnn_pointer is not None):
             ccore_instance_dynamic = wrapper.pcnn_simulate(self.__ccore_pcnn_pointer, steps, stimulus);
             return pcnn_dynamic(None, ccore_instance_dynamic);
-            
+        
         dynamic = [];
         dynamic.append(self._outputs);
         
-        for step in range(0, steps, 1):
+        for step in range(1, steps, 1):
             self._outputs = self._calculate_states(stimulus);
             
             dynamic.append(self._outputs);
