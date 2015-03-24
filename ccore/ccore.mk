@@ -4,21 +4,33 @@
 include makefile.include
 
 CC = g++
-CFLAGS = -std=gnu++0x -fPIC -c 
+LD = g++
+
+# Toolchain arguments.
+CFLAGS = -MMD -MP -std=gnu++0x -fPIC -c 
 LFLAGS = -std=gnu++0x -shared
 
+# Project sources
 OBJECTS = $(SOURCES:.cpp=.o)
+
+# The dependency file names
+DEPS = $(OBJECTS:.o=.d)
 
 EXECUTABLE = ../pyclustering/core/x64/linux/ccore.so
 
 ccore: $(EXECUTABLE)
 
+clean:
+	rm -rf ccore/*o ccore.so
+
+rebuild: clean ccore
+
 $(EXECUTABLE): $(OBJECTS)
-	$(CC) $(LFLAGS) $(OBJECTS) $(INCLUDES) -o $@
+	$(LD) $(LFLAGS) $(OBJECTS) $(INCLUDES) -o $@
 
 .cpp.o:
 	$(CC) $(CFLAGS) $(INCLUDES) $< -o $@
 
-clean:
-	rm -rf ccore/*o ccore.so
+# Let make read the dependency files and handle them.
+-include $(DEPS)
 
