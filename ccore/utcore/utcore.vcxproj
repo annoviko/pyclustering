@@ -84,11 +84,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\ccore\kdtree.cpp" />
+    <ClCompile Include="..\ccore\network.cpp" />
+    <ClCompile Include="..\ccore\pcnn.cpp" />
+    <ClCompile Include="..\ccore\support.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\ccore\kdtree.h" />
+    <ClInclude Include="..\ccore\network.h" />
+    <ClInclude Include="..\ccore\pcnn.h" />
+    <ClInclude Include="..\ccore\support.h" />
     <ClInclude Include="utest-kdtree.h" />
+    <ClInclude Include="utest-pcnn.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

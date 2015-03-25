@@ -21,12 +21,33 @@
     <ClCompile Include="..\ccore\kdtree.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\ccore\network.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ccore\pcnn.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ccore\support.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="utest-kdtree.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\ccore\kdtree.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utest-pcnn.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ccore\network.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ccore\pcnn.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ccore\support.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
   </ItemGroup>
