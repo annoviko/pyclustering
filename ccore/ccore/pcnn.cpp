@@ -3,26 +3,24 @@
 #include <unordered_set>
 
 pcnn::pcnn(const unsigned int size, const conn_type connection_type, const pcnn_parameters & parameters) :
-	oscillators(size), 
+	m_oscillators(size), 
 	network(size, connection_type)
 {
-	params = parameters;
+	m_params = parameters;
 }
 
 pcnn::~pcnn() { }
 
-pcnn_dynamic * pcnn::simulate(const unsigned int steps, const std::vector<double> & stimulus) {
-	pcnn_dynamic * dynamic = new pcnn_dynamic(num_osc, steps);
+void pcnn::simulate(const unsigned int steps, const pcnn_stimulus & stimulus, pcnn_dynamic & output_dynamic) {
+	output_dynamic.resize(steps, size());
 
 	for (unsigned int i = 0; i < steps; i++) {
 		calculate_states(stimulus);
-		store_dynamic(dynamic, i);
+		store_dynamic(i, output_dynamic);
 	}
-
-	return dynamic;
 }
 
-void pcnn::calculate_states(const std::vector<double> & stimulus) {
+void pcnn::calculate_states(const pcnn_stimulus & stimulus) {
 	std::vector<double> feeding(num_osc, 0.0);
 	std::vector<double> linking(num_osc, 0.0);
 	std::vector<double> outputs(num_osc, 0.0);
@@ -31,29 +29,29 @@ void pcnn::calculate_states(const std::vector<double> & stimulus) {
 	bool output_change = false;
 
 	for (unsigned int index = 0; index < num_osc; index++) {
-		pcnn_oscillator & current_oscillator = oscillators[index];
+		pcnn_oscillator & current_oscillator = m_oscillators[index];
 		std::vector<unsigned int> * neighbors = get_neighbors(index);
 
 		double feeding_influence = 0.0;
 		double linking_influence = 0.0;
 
 		for (std::vector<unsigned int>::const_iterator iter = neighbors->begin(); iter != neighbors->end(); iter++) {
-			const double output_neighbor = oscillators[(*iter)].output;
+			const double output_neighbor = m_oscillators[(*iter)].output;
 
-			feeding_influence += output_neighbor * params.M;
-			linking_influence += output_neighbor * params.W;
+			feeding_influence += output_neighbor * m_params.M;
+			linking_influence += output_neighbor * m_params.W;
 		}
 
 		delete neighbors;
 
-		feeding_influence *= params.VF;
-		linking_influence *= params.VL;
+		feeding_influence *= m_params.VF;
+		linking_influence *= m_params.VL;
 
-		feeding[index] = params.AF * current_oscillator.feeding + stimulus[index] + feeding_influence;
-		linking[index] = params.AL * current_oscillator.linking + linking_influence;
+		feeding[index] = m_params.AF * current_oscillator.feeding + stimulus[index] + feeding_influence;
+		linking[index] = m_params.AL * current_oscillator.linking + linking_influence;
 
 		/* calculate internal activity */
-		double internal_activity = feeding[index] * (1.0 + params.B * linking[index]);
+		double internal_activity = feeding[index] * (1.0 + m_params.B * linking[index]);
 
 		/* calculate output of the oscillator */
 		if (internal_activity > current_oscillator.threshold) {
@@ -69,18 +67,18 @@ void pcnn::calculate_states(const std::vector<double> & stimulus) {
 	}
 
 	/* fast linking */
-	if ( (params.FAST_LINKING) && (output_change) ) {
+	if ( (m_params.FAST_LINKING) && (output_change) ) {
 		fast_linking(feeding, linking, outputs);
 	}
 
 	/* update states of oscillators */
 	for (unsigned int index = 0; index < size(); index++) {
-		pcnn_oscillator & oscillator = oscillators[index];
+		pcnn_oscillator & oscillator = m_oscillators[index];
 
 		oscillator.feeding = feeding[index];
 		oscillator.linking = linking[index];
 		oscillator.output = outputs[index];
-		oscillator.threshold = params.AT * oscillator.threshold + params.VT * outputs[index];
+		oscillator.threshold = m_params.AT * oscillator.threshold + m_params.VT * outputs[index];
 	}
 }
 
@@ -92,21 +90,21 @@ void pcnn::fast_linking(const std::vector<double> & feeding, std::vector<double>
 	
 	while (previous_output_change) {
 		for (unsigned int index = 0; index < num_osc; index++) {
-			pcnn_oscillator & current_oscillator = oscillators[index];
+			pcnn_oscillator & current_oscillator = m_oscillators[index];
 			std::vector<unsigned int> * neighbors = get_neighbors(index);
 
 			double linking_influence = 0.0;
 
 			for (std::vector<unsigned int>::const_iterator iter = neighbors->begin(); iter != neighbors->end(); iter++) {
-				linking_influence += previous_outputs[(*iter)] * params.W;
+				linking_influence += previous_outputs[(*iter)] * m_params.W;
 			}
 
 			delete neighbors;
 
-			linking_influence *= params.VL;
+			linking_influence *= m_params.VL;
 			linking[index] = linking_influence;
 
-			double internal_activity = feeding[index] * (1.0 + params.B * linking[index]);
+			double internal_activity = feeding[index] * (1.0 + m_params.B * linking[index]);
 			if (internal_activity > current_oscillator.threshold) {
 				output[index] = OUTPUT_ACTIVE_STATE;
 			}
@@ -129,91 +127,74 @@ void pcnn::fast_linking(const std::vector<double> & feeding, std::vector<double>
 	}
 }
 
-void pcnn::store_dynamic(pcnn_dynamic * const dynamic, const unsigned int step) {
-	dynamic->time[step] = step;
+void pcnn::store_dynamic(const unsigned int step, pcnn_dynamic & dynamic) {
+	pcnn_network_state & current_state = (pcnn_network_state &) dynamic[step];
+	current_state.m_output.resize(size());
 
-	for (unsigned int index = 0; index < num_osc; index++) {
-		dynamic->output[step][index] = oscillators[index].output;
+	current_state.m_time = step;
+	for (size_t i = 0; i < m_oscillators.size(); i++) {
+		current_state.m_output[i] = m_oscillators[i].output;
 	}
 }
+
 
 
 pcnn_dynamic::pcnn_dynamic() { }
 
 pcnn_dynamic::~pcnn_dynamic() { }
 
-pcnn_dynamic::pcnn_dynamic(const unsigned int number_oscillators, const unsigned int simulation_steps) : 
-	output(simulation_steps, std::vector<double>(number_oscillators, 0)),
-	time(simulation_steps, 0.0) { }
+pcnn_dynamic::pcnn_dynamic(const unsigned int number_oscillators, const unsigned int simulation_steps) { }
 
-std::vector< std::vector<unsigned int> * > * pcnn_dynamic::allocate_sync_ensembles(void) const {
-	std::vector< std::vector<unsigned int> * > * sync_ensembles = new std::vector< std::vector<unsigned int> * >();
-
+void pcnn_dynamic::allocate_sync_ensembles(ensemble_data<pcnn_ensemble> & ensembles) const {
 	std::unordered_set<unsigned int> traverse_oscillators;
-	traverse_oscillators.reserve(output.size());
+	traverse_oscillators.reserve(number_oscillators());
 
-	const unsigned int number_oscillators = output[0].size();
+	for (const_reverse_iterator iter_state = crbegin(); iter_state != crend(); iter_state++) {
+		pcnn_ensemble ensemble;
+		const pcnn_network_state & state_network = (*iter_state);
 
-	for (unsigned int t = (output.size() - 1); t != 0; t--) {
-		std::vector<unsigned int> * ensemble = new std::vector<unsigned int>();
-		
-		for (unsigned int i = 0; i < number_oscillators; i++) {
-			if (output[t][i] == OUTPUT_ACTIVE_STATE) {
+		for (unsigned int i = 0; i < number_oscillators(); i++) {
+			if (state_network.m_output[i] == OUTPUT_ACTIVE_STATE) {
 				if (traverse_oscillators.find(i) == traverse_oscillators.end()) {
-					ensemble->push_back(i);
+					ensemble.push_back(i);
 					traverse_oscillators.insert(i);
 				}
 			}
 		}
 
-		if (!ensemble->empty()) {
-			sync_ensembles->push_back(ensemble);
-		}
-		else {
-			delete ensemble;
+		if (!ensemble.empty()) {
+			ensembles.push_back(ensemble);
 		}
 	}
-
-	return sync_ensembles;
 }
 
-std::vector< std::vector<unsigned int> * > * pcnn_dynamic::allocate_spike_ensembles(void) const {
-	std::vector< std::vector<unsigned int> * > * sync_ensembles = new std::vector< std::vector<unsigned int> * >();
+void pcnn_dynamic::allocate_spike_ensembles(ensemble_data<pcnn_ensemble> & ensembles) const {
+	for (const_iterator iter_state = cbegin(); iter_state != cend(); iter_state++) {
+		pcnn_ensemble ensemble;
+		const pcnn_network_state & state_network = (*iter_state);
 
-	const unsigned int number_oscillators = output[0].size();
-
-	for (unsigned int t = 0; t < output.size(); t++) {
-		std::vector<unsigned int> * ensemble = new std::vector<unsigned int>();
-
-		for (unsigned int i = 0; i < number_oscillators; i++) {
-			if (output[t][i] == OUTPUT_ACTIVE_STATE) {
-				ensemble->push_back(i);
+		for (unsigned int i = 0; i < number_oscillators(); i++) {
+			if (state_network.m_output[i] == OUTPUT_ACTIVE_STATE) {
+				ensemble.push_back(i);
 			}
 		}
 
-		if (!ensemble->empty()) {
-			sync_ensembles->push_back(ensemble);
-		}
-		else {
-			delete ensemble;
+		if (!ensemble.empty()) {
+			ensembles.push_back(ensemble);
 		}
 	}
-
-	return sync_ensembles;
 }
 
-std::vector<unsigned int> * pcnn_dynamic::allocate_time_signal(void) const {
-	const unsigned int number_oscillators = output[0].size();
+void pcnn_dynamic::allocate_time_signal(pcnn_time_signal & time_signal) const {
+	time_signal.resize(size());
 
-	std::vector<unsigned int> * signal_vector = new std::vector<unsigned int>(output.size(), 0);
+	for (size_t t = 0; t < size(); t++) {
+		const pcnn_network_state & state_network = (*this)[t];
 
-	for (unsigned int t = 0; t < output.size(); t++) {
-		for (unsigned int i = 0; i < number_oscillators; i++) {
-			if (output[t][i] == OUTPUT_ACTIVE_STATE) {
-				(*signal_vector)[t]++;
+		for (unsigned int i = 0; i < number_oscillators(); i++) {
+			if (state_network.m_output[i] == OUTPUT_ACTIVE_STATE) {
+				time_signal[t]++;
 			}
 		}
 	}
-
-	return signal_vector;
 }

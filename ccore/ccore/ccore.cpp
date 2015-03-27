@@ -421,8 +421,12 @@ void pcnn_destroy(const void * pointer) {
 
 void * pcnn_simulate(const void * pointer, const unsigned int steps, const void * const stimulus) {
 	const pyclustering_package * const package_stimulus = (const pyclustering_package * const) stimulus;
-	std::vector<double> stimulus_vector((double *) package_stimulus->data, ((double *) package_stimulus->data) + package_stimulus->size);
-	return (void *) ((pcnn *) pointer)->simulate(steps, stimulus_vector);
+	pcnn_stimulus stimulus_vector((double *) package_stimulus->data, ((double *) package_stimulus->data) + package_stimulus->size);
+
+	pcnn_dynamic * dynamic = new pcnn_dynamic();
+	((pcnn *) pointer)->simulate(steps, stimulus_vector, (*dynamic));
+
+	return dynamic;
 }
 
 unsigned int pcnn_get_size(const void * pointer) {
@@ -436,48 +440,68 @@ void pcnn_dynamic_destroy(const void * pointer) {
 
 
 pyclustering_package * pcnn_dynamic_allocate_sync_ensembles(const void * pointer) {
-	std::vector<std::vector<unsigned int> * > * sync_ensembles = ((pcnn_dynamic *) pointer)->allocate_sync_ensembles();
-	pyclustering_package * package = create_package(sync_ensembles);
+	ensemble_data<pcnn_ensemble> sync_ensembles;
+	((pcnn_dynamic *) pointer)->allocate_sync_ensembles(sync_ensembles);
 
-	for (std::vector<std::vector<unsigned int> * >::iterator iter = sync_ensembles->begin(); iter != sync_ensembles->end(); iter++) {
-		delete (*iter);
+	pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
+	package->size = sync_ensembles.size();
+	package->data = new pyclustering_package * [package->size];
+
+	for (unsigned int i = 0; i < package->size; i++) {
+		((pyclustering_package **) package->data)[i] = create_package(&sync_ensembles[i]);
 	}
-	delete sync_ensembles;
 
 	return package;
 }
 
 pyclustering_package * pcnn_dynamic_allocate_spike_ensembles(const void * pointer) {
-	std::vector<std::vector<unsigned int> * > * spike_ensembles = ((pcnn_dynamic *) pointer)->allocate_spike_ensembles();
-	pyclustering_package * package = create_package(spike_ensembles);
+	ensemble_data<pcnn_ensemble> spike_ensembles;
+	((pcnn_dynamic *) pointer)->allocate_spike_ensembles(spike_ensembles);
 
-	for (std::vector<std::vector<unsigned int> * >::iterator iter = spike_ensembles->begin(); iter != spike_ensembles->end(); iter++) {
-		delete (*iter);
+	pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
+	package->size = spike_ensembles.size();
+	package->data = new pyclustering_package * [package->size];
+
+	for (unsigned int i = 0; i < package->size; i++) {
+		((pyclustering_package **) package->data)[i] = create_package(&spike_ensembles[i]);
 	}
-	delete spike_ensembles;
 
 	return package;
 }
 
 pyclustering_package * pcnn_dynamic_allocate_time_signal(const void * pointer) {
-	std::vector<unsigned int> * time_signal = ((pcnn_dynamic *) pointer)->allocate_time_signal();
-	pyclustering_package * package = create_package(time_signal);
+	pcnn_time_signal time_signal;
+	((pcnn_dynamic *) pointer)->allocate_time_signal(time_signal);
 
-	delete time_signal;
+	pyclustering_package * package = create_package(&time_signal);
 
 	return package;
 }
 
 pyclustering_package * pcnn_dynamic_get_output(const void * pointer) {
-	const std::vector<std::vector<double> > * const dynamic = ((pcnn_dynamic *) pointer)->get_output();
-	pyclustering_package * package = create_package(dynamic);
+	pcnn_dynamic & dynamic = *((pcnn_dynamic *) pointer);
+
+	pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
+	package->size = dynamic.size();
+	package->data = new pyclustering_package * [package->size];
+
+	for (unsigned int i = 0; i < package->size; i++) {
+		((pyclustering_package **) package->data)[i] = create_package(&dynamic[i].m_output);
+	}
 
 	return package;
 }
 
 pyclustering_package * pcnn_dynamic_get_time(const void * pointer) {
-	const std::vector<double> * const time = ((pcnn_dynamic *) pointer)->get_time();
-	pyclustering_package * package = create_package(time);
+	pcnn_dynamic & dynamic = *((pcnn_dynamic *) pointer);
+
+	pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_DOUBLE);
+	package->size = dynamic.size();
+	package->data = new double[package->size];
+
+	for (unsigned int i = 0; i < package->size; i++) {
+		((double *) package->data)[i]  = dynamic[i].m_time;
+	}
 
 	return package;
 }

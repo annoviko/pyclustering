@@ -57,44 +57,51 @@ typedef struct pcnn_parameters {
 } pcnn_parameters;
 
 
-class pcnn;
+typedef std::vector<unsigned int>		pcnn_ensemble;
+typedef std::vector<unsigned int>		pcnn_stimulus;
+typedef std::vector<unsigned int>		pcnn_time_signal;
 
-
-class pcnn_dynamic {
-	friend class pcnn;
-private:
-	std::vector<std::vector<double> > output;
-
-	std::vector<double> time;
-
+typedef struct pcnn_network_state {
 public:
-	~pcnn_dynamic(void);
+	std::vector<double> m_output;
+	double				m_time;
 
+	inline size_t size(void) const { return m_output.size(); }
+	inline pcnn_network_state & operator=(const pcnn_network_state & other) {
+		if (this != &other) {
+			m_output.resize(other.size());
+			std::copy(other.m_output.cbegin(), other.m_output.cend(), m_output.begin());
+
+			m_time = other.m_time;
+		}
+
+		return *this;
+	}
+} pcnn_network_state;
+
+
+class pcnn_dynamic : public dynamic_data<pcnn_network_state> {
 public:
-	std::vector< std::vector<unsigned int> * > * allocate_sync_ensembles(void) const;
-
-	std::vector< std::vector<unsigned int> * > * allocate_spike_ensembles(void) const;
-
-	std::vector<unsigned int> * allocate_time_signal(void) const;	
-
-	const std::vector<std::vector<double> > * const get_output(void) const { return &output; }
-
-	const std::vector<double> * const get_time(void) const { return &time; }
-
-	inline unsigned int size(void) const { return output.size(); }
-
-private:
 	pcnn_dynamic(void);
 
 	pcnn_dynamic(const unsigned int number_oscillators, const unsigned int simulation_steps);
+
+	~pcnn_dynamic(void);
+
+public:
+	void allocate_sync_ensembles(ensemble_data<pcnn_ensemble> & sync_ensembles) const;
+
+	void allocate_spike_ensembles(ensemble_data<pcnn_ensemble> & spike_ensembles) const;
+
+	void allocate_time_signal(pcnn_time_signal & time_signal) const;
 };
 
 
 class pcnn : public network {
 protected:
-	std::vector<pcnn_oscillator> oscillators;
+	std::vector<pcnn_oscillator> m_oscillators;
 
-	pcnn_parameters params;
+	pcnn_parameters m_params;
 
 public:
 	pcnn(void);
@@ -104,13 +111,13 @@ public:
 	virtual ~pcnn(void);
 
 public:
-	pcnn_dynamic * simulate(const unsigned int steps, const std::vector<double> & stimulus);
+	void simulate(const unsigned int steps, const pcnn_stimulus & stimulus, pcnn_dynamic & output_dynamic);
 
 
 private:
-	void calculate_states(const std::vector<double> & stimulus);
+	void calculate_states(const pcnn_stimulus & stimulus);
 
-	void store_dynamic(pcnn_dynamic * const dynamic, const unsigned int step);
+	void store_dynamic(const unsigned int step, pcnn_dynamic & dynamic);
 
 	void fast_linking(const std::vector<double> & feeding, std::vector<double> & linking, std::vector<double> & output);
 };

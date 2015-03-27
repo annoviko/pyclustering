@@ -28,6 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <cmath>
 #include <vector>
 #include <stdexcept>
+#include <memory>
 
 #define MAXIMUM_OSCILLATORS_MATRIX_REPRESENTATION	(unsigned int) 4096
 
@@ -61,6 +62,151 @@ typedef enum conn_repr_type {
 	BITMAP_CONN_REPRESENTATION,
 	TOTAL_NUMBER_CONN_REPR_TYPES
 } conn_repr_type;
+
+
+
+template <typename network_dynamic_type>
+class dynamic_data {
+public:
+	typedef network_dynamic_type				value_type;
+	typedef std::vector<value_type>				output_dynamic;
+
+	typedef typename output_dynamic::iterator					iterator;
+	typedef typename output_dynamic::const_iterator				const_iterator;
+	typedef typename output_dynamic::reverse_iterator			reverse_iterator;
+	typedef typename output_dynamic::const_reverse_iterator		const_reverse_iterator;
+
+public:
+	dynamic_data(void) : m_dynamic(new output_dynamic()), m_number_oscillators(0) { };
+
+	dynamic_data(const size_t size) : m_dynamic(new output_dynamic(size)) { };
+
+	dynamic_data(const size_t size, const value_type & initial_value) : m_dynamic(new output_dynamic(size, initial_value)), m_number_oscillators(initial_value.size()) { };
+
+	dynamic_data(const dynamic_data & rhs) {
+		(*dynamic_data) = rhs;
+	}
+
+	~dynamic_data(void) { delete m_dynamic; }
+
+public:
+	inline void insert(iterator position, const value_type & value) {
+		if (empty()) {
+			m_number_oscillators = value.size();
+		}
+		else if (m_number_oscillators != value.size()) {
+			throw std::runtime_error("Dynamic collection can consist of network states with the same size only");
+		}
+
+		m_dynamic->insert(position, value); 
+	}
+
+	inline void push_back(const value_type & value) {
+		if (empty()) {
+			m_number_oscillators = value.size();
+		}
+		else if (m_number_oscillators != value.size()) {
+			throw std::runtime_error("Dynamic collection can consist of network states with the same size only");
+		}
+
+		m_dynamic->push_back(value); 
+	}
+
+	inline void pop_back(void) { 
+		m_dynamic->pop_back(); 
+
+		if (empty()) {
+			m_number_oscillators = 0;
+		}
+		else {
+			m_number_oscillators--;
+		}
+	}
+
+	inline iterator begin(void) { return m_dynamic->begin(); }
+	inline iterator end(void) { return m_dynamic->end(); }
+
+	inline const_iterator cbegin(void) const { return m_dynamic->begin(); }
+	inline const_iterator cend(void) const { return m_dynamic->end(); }
+
+	inline reverse_iterator rbegin(void) { return m_dynamic->rbegin(); }
+	inline reverse_iterator rend(void) { return m_dynamic->rend(); }
+
+	inline const_reverse_iterator crbegin(void) const { return m_dynamic->crbegin(); }
+	inline const_reverse_iterator crend(void) const { return m_dynamic->crend(); }
+
+	inline void reserve(size_t size) { 
+		m_dynamic->reserve(size); 
+	}
+
+	inline void resize(size_t size, size_t number_oscillators) {
+		m_dynamic->resize(size);
+		m_number_oscillators = number_oscillators;
+	}
+
+	inline void clear(void) { 
+		m_dynamic->clear();
+		m_number_oscillators = 0;
+	}
+
+	inline bool empty(void) const { return m_dynamic->empty(); }
+	inline size_t size(void) const { return m_dynamic->size(); }
+	inline size_t number_oscillators(void) const { return m_number_oscillators; }
+
+	inline value_type & operator[](size_t index) { return (*m_dynamic)[index]; };
+	inline const value_type & operator[](size_t index) const { return (*m_dynamic)[index]; };
+
+private:
+	output_dynamic * m_dynamic;
+	size_t m_number_oscillators;
+};
+
+
+
+template <typename sync_ensemble_type>
+class ensemble_data {
+public:
+	typedef sync_ensemble_type				value_type;
+	typedef std::vector<value_type>			sync_ensembles;
+	
+	typedef typename sync_ensembles::iterator			iterator;
+	typedef typename sync_ensembles::const_iterator		const_iterator;
+	typedef typename sync_ensembles::reverse_iterator	reverse_iterator;
+
+public:
+	ensemble_data(void) : m_ensembles(new sync_ensembles()) { };
+	ensemble_data(const ensemble_data & rhs) {
+		(*m_ensembles) = rhs;
+	}
+
+	~ensemble_data(void) { delete m_ensembles; }
+
+public:
+	inline void insert(iterator position, const value_type & value) { m_ensembles->insert(position, value); }
+
+	inline void push_back(const value_type & ensemble) { m_ensembles->push_back(ensemble); }
+	inline void pop_back(void) { m_ensembles->pop_back(); }
+
+	inline iterator begin(void) { return m_ensembles->begin(); }
+	inline iterator end(void) { return m_ensembles->end(); }
+
+	inline const_iterator cbegin(void) const { return m_ensembles->begin(); }
+	inline const_iterator cend(void) const { return m_ensembles->end(); }
+
+	inline reverse_iterator rbegin(void) { return m_ensembles->rbegin(); }
+	inline reverse_iterator rend(void) { return m_ensembles->rend(); }
+
+	inline void reserve(size_t size) { m_ensembles->reserve(size); }
+	inline void clear(void) { m_ensembles->clear(); }
+
+	inline size_t size(void) { return m_ensembles->size(); }
+
+	inline value_type & operator[](size_t index) { return (*m_ensembles)[index]; };
+	inline const value_type & operator[](size_t index) const { return (*m_ensembles)[index]; };
+
+private:
+	sync_ensembles * m_ensembles;
+};
 
 
 class network {
