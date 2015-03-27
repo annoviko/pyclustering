@@ -31,23 +31,28 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 network::network(const unsigned int number_oscillators, const conn_type connection_type) {
 	num_osc = number_oscillators;
-	osc_conn = new std::vector<std::vector<unsigned int> * >(number_oscillators, NULL);
+	m_conn_type = connection_type;
+	osc_conn = NULL;
 
-	unsigned int number_elements = 0;
-	if (number_oscillators > MAXIMUM_OSCILLATORS_MATRIX_REPRESENTATION) {
-		conn_representation = BITMAP_CONN_REPRESENTATION;
-		number_elements = std::ceil( number_oscillators / sizeof(unsigned int) );
-	}
-	else {
-		conn_representation = MATRIX_CONN_REPRESENTATION;
-		number_elements = number_oscillators;
-	}
+	if ( (m_conn_type != conn_type::ALL_TO_ALL) && (m_conn_type != conn_type::NONE) ) {
+		osc_conn = new std::vector<std::vector<unsigned int> * >(number_oscillators, NULL);
+
+		unsigned int number_elements = 0;
+		if (number_oscillators > MAXIMUM_OSCILLATORS_MATRIX_REPRESENTATION) {
+			conn_representation = BITMAP_CONN_REPRESENTATION;
+			number_elements = std::ceil( number_oscillators / sizeof(unsigned int) );
+		}
+		else {
+			conn_representation = MATRIX_CONN_REPRESENTATION;
+			number_elements = number_oscillators;
+		}
 	
-	for (unsigned int index = 0; index < number_oscillators; index++) {
-		(*osc_conn)[index] = new std::vector<unsigned int>(number_elements, 0);
-	}
+		for (unsigned int index = 0; index < number_oscillators; index++) {
+			(*osc_conn)[index] = new std::vector<unsigned int>(number_elements, 0);
+		}
 
-	create_structure(connection_type);
+		create_structure(connection_type);
+	}
 }
 
 network::~network() {
@@ -64,10 +69,30 @@ network::~network() {
 
 std::vector<unsigned int> * network::get_neighbors(const unsigned int index) const {
 	std::vector<unsigned int> * result = new std::vector<unsigned int>();
-	for (unsigned int index_neighbour = 0; index_neighbour < num_osc; index_neighbour++) {
-		if (get_connection(index, index_neighbour) > 0) {
-			result->push_back(index_neighbour);
+
+	switch (m_conn_type) {
+		case conn_type::ALL_TO_ALL: {
+			for (unsigned int index_neighbour = 0; index_neighbour < num_osc; index_neighbour++) {
+				result->push_back(index_neighbour);
+			}
+			break;
 		}
+
+		case conn_type::DYNAMIC:
+		case conn_type::GRID_EIGHT:
+		case conn_type::GRID_FOUR:
+		case conn_type::LIST_BIDIR: {
+			for (unsigned int index_neighbour = 0; index_neighbour < num_osc; index_neighbour++) {
+				if (get_connection(index, index_neighbour) > 0) {
+					result->push_back(index_neighbour);
+				}
+			}
+			break;
+		}
+
+		case conn_type::NONE:
+		default:
+			break;
 	}
 
 	return result;
@@ -76,10 +101,8 @@ std::vector<unsigned int> * network::get_neighbors(const unsigned int index) con
 void network::create_structure(const conn_type connection_structure) {
 	switch(connection_structure) {
 		case conn_type::NONE:
-			create_none_connections();
-			break;
+		case conn_type::DYNAMIC:
 		case conn_type::ALL_TO_ALL:
-			create_all_to_all_connections();
 			break;
 		case conn_type::GRID_FOUR:
 			create_grid_four_connections();
@@ -95,16 +118,6 @@ void network::create_structure(const conn_type connection_structure) {
 	}
 }
 
-void network::create_none_connections() { return; }
-
-void network::create_all_to_all_connections() {
-	for (unsigned int row = 0; row < num_osc; row++) {
-		for (unsigned int col = row + 1; col < num_osc; col++) {
-			set_connection(row, col);
-			set_connection(col, row);
-		}
-	}
-}
 
 void network::create_list_bidir_connections() {
 	for (unsigned int index = 1; index < num_osc; index++) {

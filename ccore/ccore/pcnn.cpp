@@ -21,14 +21,14 @@ void pcnn::simulate(const unsigned int steps, const pcnn_stimulus & stimulus, pc
 }
 
 void pcnn::calculate_states(const pcnn_stimulus & stimulus) {
-	std::vector<double> feeding(num_osc, 0.0);
-	std::vector<double> linking(num_osc, 0.0);
-	std::vector<double> outputs(num_osc, 0.0);
-	std::vector<double> threshold(num_osc, 0.0);
+	std::vector<double> feeding(size(), 0.0);
+	std::vector<double> linking(size(), 0.0);
+	std::vector<double> outputs(size(), 0.0);
+	std::vector<double> threshold(size(), 0.0);
 
 	bool output_change = false;
 
-	for (unsigned int index = 0; index < num_osc; index++) {
+	for (unsigned int index = 0; index < size(); index++) {
 		pcnn_oscillator & current_oscillator = m_oscillators[index];
 		std::vector<unsigned int> * neighbors = get_neighbors(index);
 
@@ -89,7 +89,7 @@ void pcnn::fast_linking(const std::vector<double> & feeding, std::vector<double>
 	bool current_output_change = false;
 	
 	while (previous_output_change) {
-		for (unsigned int index = 0; index < num_osc; index++) {
+		for (unsigned int index = 0; index < size(); index++) {
 			pcnn_oscillator & current_oscillator = m_oscillators[index];
 			std::vector<unsigned int> * neighbors = get_neighbors(index);
 

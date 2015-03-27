@@ -29,7 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 syncnet::syncnet(std::vector<std::vector<double> > * input_data, const double connectivity_radius, const bool enable_conn_weight, const initial_type initial_phases) :
-sync_network(input_data->size(), 1, 0, conn_type::NONE, initial_type::RANDOM_GAUSSIAN) {
+sync_network(input_data->size(), 1, 0, conn_type::DYNAMIC, initial_type::RANDOM_GAUSSIAN) {
 	oscillator_locations = input_data;
 	create_connections(connectivity_radius, enable_conn_weight);
 }
@@ -52,8 +52,8 @@ void syncnet::create_connections(const double connectivity_radius, const bool en
 	double sqrt_connectivity_radius = connectivity_radius * connectivity_radius;
 
 	if (enable_conn_weight == true) {
-		std::vector<double> instance(num_osc, 0);
-		distance_conn_weights = new std::vector<std::vector<double> >(num_osc, instance);
+		std::vector<double> instance(size(), 0);
+		distance_conn_weights = new std::vector<std::vector<double> >(size(), instance);
 	}
 	else {
 		distance_conn_weights = NULL;
@@ -62,8 +62,8 @@ void syncnet::create_connections(const double connectivity_radius, const bool en
 	double maximum_distance = 0;
 	double minimum_distance = std::numeric_limits<double>::max();
 
-	for (unsigned int i = 0; i < num_osc; i++) {
-		for (unsigned int j = i + 1; j < num_osc; j++) {
+	for (unsigned int i = 0; i < size(); i++) {
+		for (unsigned int j = i + 1; j < size(); j++) {
 			double distance = euclidean_distance_sqrt( &(*oscillator_locations)[i], &(*oscillator_locations)[j] );
 
 			if (distance <= sqrt_connectivity_radius) {
@@ -95,8 +95,8 @@ void syncnet::create_connections(const double connectivity_radius, const bool en
 			subtractor = minimum_distance;
 		}
 
-		for (unsigned int i = 0; i < num_osc; i++) {
-			for (unsigned int j = i + 1; j < num_osc; j++) {
+		for (unsigned int i = 0; i < size(); i++) {
+			for (unsigned int j = i + 1; j < size(); j++) {
 				double value_weight = ((*distance_conn_weights)[i][j] - subtractor) / multiplier;
 
 				(*distance_conn_weights)[i][j] = value_weight;
@@ -119,7 +119,7 @@ double syncnet::phase_kuramoto(const double t, const double teta, const std::vec
 
 	/* Avoid a lot of checking of this condition in the loop */
 	if (distance_conn_weights != NULL) {
-		for (unsigned int k = 0; k < num_osc; k++) {
+		for (unsigned int k = 0; k < size(); k++) {
 			if (get_connection(index, k) > 0) {
 				phase += (*distance_conn_weights)[index][k] * std::sin( (*oscillators)[k].phase - teta );
 				num_neighbors++;
@@ -127,7 +127,7 @@ double syncnet::phase_kuramoto(const double t, const double teta, const std::vec
 		}
 	}
 	else {
-		for (unsigned int k = 0; k < num_osc; k++) {
+		for (unsigned int k = 0; k < size(); k++) {
 			if (get_connection(index, k) > 0) {
 				phase += std::sin( (*oscillators)[k].phase - teta );
 				num_neighbors++;

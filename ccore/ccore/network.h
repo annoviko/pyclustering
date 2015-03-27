@@ -53,6 +53,7 @@ typedef enum conn_type {
 	GRID_FOUR,
 	GRID_EIGHT,
 	LIST_BIDIR,
+	DYNAMIC,
 	TOTAL_NUMBER_CONN_TYPES
 } conn_type;
 
@@ -210,11 +211,11 @@ private:
 
 
 class network {
-protected:
-	unsigned int									num_osc;
-	conn_repr_type									conn_representation;
-
 private:
+	unsigned int			num_osc;
+	conn_repr_type			conn_representation;
+	conn_type				m_conn_type;
+
 	std::vector<std::vector<unsigned int> * >		* osc_conn;
 
 public:
@@ -224,6 +225,13 @@ public:
 	inline unsigned int size(void) const { return num_osc; }
 
 	inline unsigned int get_connection(const unsigned int index1, const unsigned int index2) const { 
+		if (m_conn_type == conn_type::ALL_TO_ALL) {
+			return (unsigned int) true;
+		}
+		else if (m_conn_type == conn_type::NONE) {
+			return (unsigned int) false;
+		}
+
 		switch(conn_representation) {
 			case MATRIX_CONN_REPRESENTATION: {
 				return (*(*osc_conn)[index1])[index2];
@@ -241,6 +249,8 @@ public:
 	}
 
 	inline void set_connection(const unsigned int index1, const unsigned int index2) {
+		if (m_conn_type != conn_type::DYNAMIC) { return; }
+
 		switch(conn_representation) {
 			case MATRIX_CONN_REPRESENTATION: {
 				(*(*osc_conn)[index1])[index2] = 1;
@@ -264,11 +274,9 @@ public:
 	virtual void create_structure(const conn_type connection_structure);
 
 private:
-	void create_all_to_all_connections(void);
 	void create_grid_four_connections(void);
 	void create_grid_eight_connections(void);
 	void create_list_bidir_connections(void);
-	void create_none_connections(void);
 };
 
 #endif

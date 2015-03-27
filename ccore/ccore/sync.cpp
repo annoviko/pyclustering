@@ -39,7 +39,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 sync_network::sync_network(const unsigned int size, const double weight_factor, const double frequency_factor, const conn_type connection_type, const initial_type initial_phases) :
 	network(size, connection_type) 
 {
-	num_osc = size;
 	weight = weight_factor;
 
 	std::random_device			device;
@@ -98,13 +97,13 @@ double sync_network::sync_order() const {
 	double exp_amount = 0;
 	double average_phase = 0;
 
-	for (unsigned int index = 0; index < num_osc; index++) {
+	for (unsigned int index = 0; index < size(); index++) {
 		exp_amount += std::exp( std::abs( std::complex<double>(0, 1) * (*oscillators)[index].phase ) );
 		average_phase += (*oscillators)[index].phase;
 	}
 
-	exp_amount /= num_osc;
-	average_phase = std::exp( std::abs( std::complex<double>(0, 1) * (average_phase / num_osc) ) );
+	exp_amount /= size();
+	average_phase = std::exp( std::abs( std::complex<double>(0, 1) * (average_phase / size()) ) );
 
 	return std::abs(average_phase) / std::abs(exp_amount);
 }
@@ -114,8 +113,8 @@ double sync_network::sync_local_order() const {
 	double			exp_amount = 0.0;
 	unsigned int	number_neighbors = 0;
 
-	for (unsigned int i = 0; i < num_osc; i++) {
-		for (unsigned int j = 0; j < num_osc; j++) {
+	for (unsigned int i = 0; i < size(); i++) {
+		for (unsigned int j = 0; j < size(); j++) {
 			if (get_connection(i, j) > 0) {
 				exp_amount += std::exp( -std::abs( (*oscillators)[j].phase - (*oscillators)[i].phase ) );
 				number_neighbors++;
@@ -140,13 +139,13 @@ double sync_network::phase_kuramoto(const double t, const double teta, const std
 	unsigned int index = *(unsigned int *) argv[1];
 	double phase = 0;
 
-	for (unsigned int k = 0; k < num_osc; k++) {
+	for (unsigned int k = 0; k < size(); k++) {
 		if (get_connection(index, k) > 0) {
 			phase += std::sin((*oscillators)[k].phase - teta);
 		}
 	}
 
-	phase = (*oscillators)[index].frequency + (phase * weight / num_osc);
+	phase = (*oscillators)[index].frequency + (phase * weight / size());
 	return phase;
 }
 
@@ -161,11 +160,11 @@ std::vector< std::vector<unsigned int> * > * sync_network::allocate_sync_ensembl
 
 	sync_ensembles->push_back(new std::vector<unsigned int> ());
 	
-	if (num_osc > 0) {
+	if (size() > 0) {
 		(*sync_ensembles)[0]->push_back(0);
 	}
 
-	for (unsigned int i = 1; i < num_osc; i++) {
+	for (unsigned int i = 1; i < size(); i++) {
 		bool cluster_allocated = false;
 
 		std::vector< std::vector<unsigned int> * >::iterator last_sync_ensemble_element = sync_ensembles->end();
@@ -244,7 +243,7 @@ std::vector< std::vector<sync_dynamic> * > * sync_network::simulate_dynamic(cons
 void sync_network::store_dynamic(std::vector< std::vector<sync_dynamic> * > * dynamic, const double time, const bool collect_dynamic) const {
 	std::vector<sync_dynamic> * network_dynamic = new std::vector<sync_dynamic>();
 
-	for (unsigned int index = 0; index < num_osc; index++) {
+	for (unsigned int index = 0; index < size(); index++) {
 		sync_dynamic oscillator_dynamic;
 		oscillator_dynamic.phase = (*oscillators)[index].phase;
 		oscillator_dynamic.time = time;
@@ -261,14 +260,14 @@ void sync_network::store_dynamic(std::vector< std::vector<sync_dynamic> * > * dy
 
 
 void sync_network::calculate_phases(const solve_type solver, const double t, const double step, const double int_step) {
-	std::vector<double> * next_phases = new std::vector<double> (num_osc, 0);
+	std::vector<double> * next_phases = new std::vector<double> (size(), 0);
 	std::vector<void *> argv(2, NULL);
 
 	argv[0] = (void *) this;
 
 	unsigned int number_int_steps = (unsigned int) (step / int_step);
 
-	for (unsigned int index = 0; index < num_osc; index++) {
+	for (unsigned int index = 0; index < size(); index++) {
 		argv[1] = (void *) &index;
 
 		switch(solver) {
@@ -298,7 +297,7 @@ void sync_network::calculate_phases(const solve_type solver, const double t, con
 	}
 
 	/* store result */
-	for (unsigned int index = 0; index < num_osc; index++) {
+	for (unsigned int index = 0; index < size(); index++) {
 		(*oscillators)[index].phase = (*next_phases)[index];
 	}
 
