@@ -27,10 +27,17 @@
 """
 
 import matplotlib.pyplot as plt;
+import matplotlib.animation as animation;
+
 import random;
+import numpy;
+
+from PIL import Image;
 
 from pyclustering.nnet import *;
 import pyclustering.core.pcnn_wrapper as wrapper;
+
+from pyclustering.support import draw_dynamics;
 
 
 class pcnn_parameters:
@@ -188,15 +195,17 @@ class pcnn_dynamic:
             signal_vector_information.append(sum(self.__dynamic[t]));
         
         return signal_vector_information;
-    
-    
-    def show_time_signal(self):
+
+
+class pcnn_visualizer:
+    @staticmethod
+    def show_time_signal(pcnn_output_dynamic):
         """!
         @brief Shows time signal (signal vector information) using network dynamic during simulation.
         
         """
         
-        time_signal = self.allocate_time_signal();
+        time_signal = pcnn_output_dynamic.allocate_time_signal();
         time_axis = range(len(time_signal));
         
         plt.subplot(1, 1, 1);
@@ -207,7 +216,48 @@ class pcnn_dynamic:
         
         plt.show();
         
+    @staticmethod
+    def show_output_dynamic(pcnn_output_dynamic, separate_representation = False):
+        """!
+        @brief Shows output dynamic (output of each oscillator) during simulation.
+        
+        """
+        
+        draw_dynamics(pcnn_output_dynamic.time, pcnn_output_dynamic.output, x_title = "t", y_title = "y(t)", separate = separate_representation);
     
+    @staticmethod
+    def animate_spike_ensembles(pcnn_output_dynamic, image_size):
+        """!
+        @brief Shows animation of output dynamic (output of each oscillator) during simulation.
+        
+        """
+        
+        figure = plt.figure();
+        
+        time_signal = pcnn_output_dynamic.allocate_time_signal();
+        spike_ensembles = pcnn_output_dynamic.allocate_spike_ensembles();
+        
+        spike_animation = [];
+        ensemble_index = 0;
+        for t in range(len(time_signal)):
+            image_color_segments = [(255, 255, 255)] * (image_size[0] * image_size[1]);
+            
+            if (time_signal[t] > 0):
+                for index_pixel in spike_ensembles[ensemble_index]:
+                    image_color_segments[index_pixel] = (0, 0, 0);
+                
+                ensemble_index += 1;
+                
+            stage = numpy.array(image_color_segments, numpy.uint8);
+            stage = numpy.reshape(stage, image_size + ((3),)); # ((3),) it's size of RGB - third dimension.
+            image_cluster = Image.fromarray(stage, 'RGB');
+            
+            spike_animation.append( [ plt.imshow(image_cluster, interpolation = 'none') ] );
+            
+        
+        im_ani = animation.ArtistAnimation(figure, spike_animation, interval = 75, repeat_delay = 3000, blit = True)
+        plt.show();
+
 
 class pcnn_network(network):
     """!
@@ -393,5 +443,5 @@ class pcnn_network(network):
         self._threshold = threshold[:];
         
         return outputs
-        
+
         

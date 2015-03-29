@@ -22,10 +22,11 @@
 @endcond
 
 """
+from PIL import Image;
 
 from pyclustering.support import draw_dynamics;
 
-from pyclustering.nnet.pcnn import pcnn_network, pcnn_parameters;
+from pyclustering.nnet.pcnn import pcnn_network, pcnn_parameters, pcnn_visualizer;
 from pyclustering.nnet import *;
 
 from pyclustering.samples.definitions import IMAGE_SIMPLE_SAMPLES;
@@ -68,16 +69,21 @@ def template_segmentation_image(image, parameters, simulation_time, brightness, 
     net = pcnn_network(len(stimulus), parameters, conn_type.GRID_EIGHT, ccore = ccore_flag);
     output_dynamic = net.simulate(simulation_time, stimulus);
     
-    draw_dynamics(output_dynamic.time, output_dynamic.output, x_title = "Time", y_title = "y(t)");
+    pcnn_visualizer.show_output_dynamic(output_dynamic);
     
     ensembles = output_dynamic.allocate_sync_ensembles();
     draw_image_mask_segments(image, ensembles);
     
-    output_dynamic.show_time_signal();
+    pcnn_visualizer.show_time_signal(output_dynamic);
     
     if (show_spikes is True):
         spikes = output_dynamic.allocate_spike_ensembles();
         draw_image_mask_segments(image, spikes);
+    
+        image_source = Image.open(image);
+        image_size = image_source.size;
+        
+        pcnn_visualizer.animate_spike_ensembles(output_dynamic, image_size);
     
     
 def segmentation_image_simple1():
