@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 
 #include "utest-kdtree.h"
+#include "utest-network.h"
 #include "utest-pcnn.h"
 
 int main(int argc, char *argv[]) {

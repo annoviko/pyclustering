@@ -38,6 +38,7 @@ class conn_type:
     GRID_FOUR = 2;              # Connections between oscillators represents grid where one oscillator can be connected with four oscillators: right, upper, left, lower.
     GRID_EIGHT = 3;             # Similar to previous, but neighbors are: right, right-upper, upper, upper-left, left, left-lower, lower, lower-right.
     LIST_BIDIR = 4;             # Connections between oscillators represents bidirectional list (chain).
+    DYNAMIC = 5;
 
 class conn_represent:
     LIST = 0;

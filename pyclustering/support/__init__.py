@@ -805,6 +805,10 @@ def draw_image_mask_segments(source, clusters, hide_axes = True):
     @param[in] hide_axes (bool): If True then axes will not be displayed.
     
     """
+    if (len(clusters) == 0):
+        print("Warning: Nothing to draw - list of clusters is empty.")
+        return;
+        
     image_source = Image.open(source);
     image_size = image_source.size;
     

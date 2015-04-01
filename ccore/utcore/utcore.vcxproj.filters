@@ -50,5 +50,8 @@
     <ClInclude Include="..\ccore\support.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
+    <ClInclude Include="utest-network.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

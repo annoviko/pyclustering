@@ -226,10 +226,14 @@ public:
 
 	inline unsigned int get_connection(const unsigned int index1, const unsigned int index2) const { 
 		if (m_conn_type == conn_type::ALL_TO_ALL) {
-			return (unsigned int) true;
+			if (index1 != index2) {
+				return (unsigned int) 0;
+			}
+
+			return (unsigned int) 1;
 		}
 		else if (m_conn_type == conn_type::NONE) {
-			return (unsigned int) false;
+			return (unsigned int) 0;
 		}
 
 		switch(conn_representation) {
@@ -249,7 +253,7 @@ public:
 	}
 
 	inline void set_connection(const unsigned int index1, const unsigned int index2) {
-		if (m_conn_type != conn_type::DYNAMIC) { return; }
+		if (m_conn_type == conn_type::DYNAMIC) { return; }
 
 		switch(conn_representation) {
 			case MATRIX_CONN_REPRESENTATION: {

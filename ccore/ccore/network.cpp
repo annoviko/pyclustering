@@ -73,7 +73,9 @@ std::vector<unsigned int> * network::get_neighbors(const unsigned int index) con
 	switch (m_conn_type) {
 		case conn_type::ALL_TO_ALL: {
 			for (unsigned int index_neighbour = 0; index_neighbour < num_osc; index_neighbour++) {
-				result->push_back(index_neighbour);
+				if (index_neighbour != index) {
+					result->push_back(index_neighbour);
+				}
 			}
 			break;
 		}
