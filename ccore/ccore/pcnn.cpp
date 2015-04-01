@@ -3,7 +3,7 @@
 #include <unordered_set>
 
 pcnn::pcnn(const unsigned int size, const conn_type connection_type, const pcnn_parameters & parameters) :
-	m_oscillators(size), 
+	m_oscillators(size, pcnn_oscillator()), 
 	network(size, connection_type)
 {
 	m_params = parameters;
@@ -19,12 +19,11 @@ void pcnn::simulate(const unsigned int steps, const pcnn_stimulus & stimulus, pc
 		store_dynamic(i, output_dynamic);
 	}
 }
-
+#include <iostream>
 void pcnn::calculate_states(const pcnn_stimulus & stimulus) {
 	std::vector<double> feeding(size(), 0.0);
 	std::vector<double> linking(size(), 0.0);
 	std::vector<double> outputs(size(), 0.0);
-	std::vector<double> threshold(size(), 0.0);
 
 	bool output_change = false;
 
@@ -69,6 +68,7 @@ void pcnn::calculate_states(const pcnn_stimulus & stimulus) {
 	/* fast linking */
 	if ( (m_params.FAST_LINKING) && (output_change) ) {
 		fast_linking(feeding, linking, outputs);
+		output_change = false;
 	}
 
 	/* update states of oscillators */
@@ -112,18 +112,18 @@ void pcnn::fast_linking(const std::vector<double> & feeding, std::vector<double>
 				output[index] = OUTPUT_INACTIVE_STATE;
 			}
 
-			if (output[index] != current_oscillator.output) {
+			if (output[index] != previous_outputs[index]) {
 				current_output_change = true;
 			}
 		}
-
-		previous_output_change = current_output_change;
-		current_output_change = false;
 
 		/* check for changes for avoiding useless operation copy */
 		if (current_output_change) {
 			std::copy(output.begin(), output.end(), previous_outputs.begin());
 		}
+
+		previous_output_change = current_output_change;
+		current_output_change = false;
 	}
 }
 
