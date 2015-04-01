@@ -148,6 +148,7 @@
     <ClCompile Include="ccore.cpp" />
     <ClCompile Include="cure.cpp" />
     <ClCompile Include="dbscan.cpp" />
+    <ClCompile Include="differential.cpp" />
     <ClCompile Include="hierarchical.cpp" />
     <ClCompile Include="hsyncnet.cpp" />
     <ClCompile Include="kdtree.cpp" />
@@ -165,6 +166,7 @@
   <ItemGroup>
     <ClInclude Include="cure.h" />
     <ClInclude Include="dbscan.h" />
+    <ClInclude Include="differential.h" />
     <ClInclude Include="hierarchical.h" />
     <ClInclude Include="hsyncnet.h" />
     <ClInclude Include="ccore.h" />
