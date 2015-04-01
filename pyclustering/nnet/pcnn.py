@@ -108,6 +108,15 @@ class pcnn_dynamic:
         self.__ccore_pcnn_dynamic_pointer = ccore;
     
     
+    def __del__(self):
+        """!
+        @brief Default destructor of PCNN dynamic.
+        
+        """
+        if (self.__ccore_pcnn_dynamic_pointer is not None):
+            wrapper.pcnn_dynamic_destroy(self.__ccore_pcnn_dynamic_pointer);
+    
+    
     def __len__(self):
         """!
         @brief (uint) Returns number of simulation steps that are stored in dynamic.
@@ -308,6 +317,15 @@ class pcnn_network(network):
             self._feeding = [0.0] * self._num_osc;    
             self._linking = [0.0] * self._num_osc;        
             self._threshold = [ random.random() for i in range(self._num_osc) ];
+    
+    
+    def __del__(self):
+        """!
+        @brief Default destructor of PCNN.
+        
+        """
+        if (self.__ccore_pcnn_pointer is not None):
+            wrapper.pcnn_destroy(self.__ccore_pcnn_pointer);
     
     
     def __len__(self):

@@ -103,6 +103,10 @@ class IMAGE_MAP_SAMPLES:
     IMAGE_NILE                      = samples.__path__[0] + os.sep + "images" + os.sep + "ImageNile.png";
     IMAGE_NILE_SMALL                = samples.__path__[0] + os.sep + "images" + os.sep + "ImageNileSmall.png";
     
+
+class IMAGE_REAL_SAMPLES:
+    IMAGE_LENA                      = samples.__path__[0] + os.sep + "images" + os.sep + "ImageLena.png";
+    
     
 class IMAGE_DIGIT_SAMPLES:    
     @staticmethod
