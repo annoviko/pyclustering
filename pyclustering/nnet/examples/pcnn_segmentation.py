@@ -29,11 +29,11 @@ from pyclustering.support import draw_dynamics;
 from pyclustering.nnet.pcnn import pcnn_network, pcnn_parameters, pcnn_visualizer;
 from pyclustering.nnet import *;
 
-from pyclustering.samples.definitions import IMAGE_SIMPLE_SAMPLES;
+from pyclustering.samples.definitions import IMAGE_SIMPLE_SAMPLES, IMAGE_MAP_SAMPLES;
 
 from pyclustering.support import read_image, rgb2gray, draw_image_mask_segments;
 
-def template_segmentation_image(image, parameters, simulation_time, brightness, scale_color = True, fastlinking = False, show_spikes = False, ccore_flag = False):
+def template_segmentation_image(image, parameters, simulation_time, brightness, scale_color = True, fastlinking = False, show_spikes = False, ccore_flag = True):
     stimulus = read_image(image);
     stimulus = rgb2gray(stimulus);
     
@@ -119,16 +119,24 @@ def segmentation_fast_linking_image_building():
 def segmentation_fast_linking_image_fruits():
     template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE_FRUITS_SMALL, None, 47, None, False, True, True); 
 
+def segmentation_fast_linking_white_sea():
+    template_segmentation_image(IMAGE_MAP_SAMPLES.IMAGE_WHITE_SEA_SMALL, None, 47, None, False, True, True); 
+
+def segmentation_fast_linking_nil():
+    template_segmentation_image(IMAGE_MAP_SAMPLES.IMAGE_NILE_SMALL, None, 47, None, False, True, True); 
+
 
 segmentation_image_simple1();
 segmentation_image_simple2();
 segmentation_image_simple6();
-    
+     
 segmentation_gray_image_simple1();
 segmentation_gray_image_simple5();
 segmentation_gray_image_beach();
 segmentation_gray_image_building();
-
+ 
 segmentation_fast_linking_image_beach();
 segmentation_fast_linking_image_building();
 segmentation_fast_linking_image_fruits();
+segmentation_fast_linking_white_sea();
+segmentation_fast_linking_nil();

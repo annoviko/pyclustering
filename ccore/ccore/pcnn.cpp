@@ -19,7 +19,7 @@ void pcnn::simulate(const unsigned int steps, const pcnn_stimulus & stimulus, pc
 		store_dynamic(i, output_dynamic);
 	}
 }
-#include <iostream>
+
 void pcnn::calculate_states(const pcnn_stimulus & stimulus) {
 	std::vector<double> feeding(size(), 0.0);
 	std::vector<double> linking(size(), 0.0);

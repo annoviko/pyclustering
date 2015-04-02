@@ -39,45 +39,76 @@ TEST(utest_network, none_connections) {
 	}
 }
 
-static void template_grid_four_connections(unsigned int number_oscillators) {
-	network net(number_oscillators, conn_type::GRID_FOUR);
+static void template_grid_connections(const unsigned int number_oscillators, const conn_type connections) {
+	network net(number_oscillators, connections);
+
 	int base = std::sqrt(number_oscillators);
 	
 	for (int index = 0; index < net.size(); index++) {
-		int upper_index = index - base;
-		int lower_index = index + base;
-		int left_index = index - 1;
-		int right_index = index + 1;
+		const int upper_index = index - base;
+        const int upper_left_index = index - base - 1;
+        const int upper_right_index = index - base + 1;
+            
+        const int lower_index = index + base;
+        const int lower_left_index = index + base - 1;
+        const int lower_right_index = index + base + 1;
+            
+        const int left_index = index - 1;
+        const int right_index = index + 1;
+            
+        const int node_row_index = std::ceil(index / base);
+        const int upper_row_index = node_row_index - 1;
+        const int lower_row_index = node_row_index + 1;
 
-		int node_row_index = std::ceil(index / base);
-		bool node_neighbour = false;
-
-		if (upper_index >= 0) {
-			node_neighbour = true;
+		if (upper_index >= 0)
 			ASSERT_EQ(1, net.get_connection(index, upper_index));
-		}
 
-		if (lower_index < net.size()) {
-			node_neighbour = true;
+		if (lower_index < net.size()) 
 			ASSERT_EQ(1, net.get_connection(index, lower_index));
-		}
 
-		if ( (left_index >= 0) && (std::ceil(left_index / base) == node_row_index) ) {
-			node_neighbour = true;
+		if ( (left_index >= 0) && (std::ceil(left_index / base) == node_row_index) )
 			ASSERT_EQ(1, net.get_connection(index, left_index));
-		}
 
-		if ( (right_index < net.size()) && (std::ceil(right_index / base) == node_row_index) ) {
-			node_neighbour = true;
+		if ( (right_index < net.size()) && (std::ceil(right_index / base) == node_row_index) )
 			ASSERT_EQ(1, net.get_connection(index, right_index));
-		}
 
-		for (unsigned int j = 0; j < net.size(); j++) {
-			if ( (j != index) && (j != upper_index) && (j != lower_index) && (j != left_index) && (j != right_index) ) {
-				ASSERT_EQ(0, net.get_connection(index, j));
+		if (connections == conn_type::GRID_EIGHT) {
+			if ( (upper_left_index >= 0) && (std::floor(upper_left_index / base) == upper_row_index) )
+				ASSERT_EQ(1, net.get_connection(index, upper_left_index));
+
+			if ( (upper_right_index >= 0) && (std::floor(upper_right_index / base) == upper_row_index) )
+				ASSERT_EQ(1, net.get_connection(index, upper_right_index));
+
+			if ( (lower_left_index < net.size()) && (std::floor(lower_left_index / base) == lower_row_index) )
+				ASSERT_EQ(1, net.get_connection(index, lower_left_index));
+
+			if ( (lower_right_index < net.size()) && (std::floor(lower_right_index / base) == lower_row_index) )
+				ASSERT_EQ(1, net.get_connection(index, lower_right_index));
+
+			for (unsigned int j = 0; j < net.size(); j++) {
+				if ( (j != index) && 
+					 (j != upper_index) && (j != lower_index) && (j != left_index) && (j != right_index) &&
+					 (j != upper_left_index) && (j != upper_right_index) && (j != lower_left_index) && (j != lower_right_index) ) {
+					ASSERT_EQ(0, net.get_connection(index, j));
+				}
 			}
 		}
+		else {
+			for (unsigned int j = 0; j < net.size(); j++) {
+				if ( (j != index) && (j != upper_index) && (j != lower_index) && (j != left_index) && (j != right_index) ) {
+					ASSERT_EQ(0, net.get_connection(index, j));
+				}
+			}			
+		}
 	}
+}
+
+static void template_grid_four_connections(unsigned int number_oscillators) {
+	template_grid_connections(number_oscillators, conn_type::GRID_FOUR);
+}
+
+static void template_grid_eight_connections(unsigned int number_oscillators) {
+	template_grid_connections(number_oscillators, conn_type::GRID_EIGHT);
 }
 
 TEST(utest_network, grid_four_connections_25) {
@@ -89,13 +120,41 @@ TEST(utest_network, grid_four_connections_81) {
 }
 
 TEST(utest_network, grid_four_connections_625) {
-	template_grid_four_connections(81);
+	template_grid_four_connections(625);
 }
 
-TEST(utest_network, grid_four_bit_representation) {
-	unsigned int maximum_matrix_repr_base = std::ceil(std::sqrt(MAXIMUM_OSCILLATORS_MATRIX_REPRESENTATION));
-	unsigned int number_oscillators = std::pow(maximum_matrix_repr_base, 2);
-	template_grid_four_connections(number_oscillators);
+TEST(utest_network, grid_eight_connections_25) {
+	template_grid_eight_connections(25);
+}
+
+TEST(utest_network, grid_eight_connections_81) {
+	template_grid_eight_connections(81);
+}
+
+TEST(utest_network, grid_eight_connections_625) {
+	template_grid_eight_connections(625);
+}
+
+TEST(utest_network, bidir_connections) {
+	const unsigned int number_oscillators = 100;
+	network net(number_oscillators, conn_type::LIST_BIDIR);
+
+	for (unsigned int i = 0; i < number_oscillators; i++) {
+		if (i > 0) {
+			ASSERT_EQ(1, net.get_connection(i, i - 1));
+			ASSERT_EQ(1, net.get_connection(i - 1, i));
+		}
+
+		if (i < (number_oscillators - 1)) {
+			ASSERT_EQ(1, net.get_connection(i, i + 1));
+			ASSERT_EQ(1, net.get_connection(i + 1, i));
+		}
+
+		for (unsigned int j = 0; j < number_oscillators; j++) {
+			if ( (j > (i + 1)) && (j < (i - 1)) )
+				ASSERT_EQ(0, net.get_connection(i, j));
+		}
+	}
 }
 
 #endif

@@ -122,7 +122,7 @@ void network::create_structure(const conn_type connection_structure) {
 
 
 void network::create_list_bidir_connections() {
-	for (unsigned int index = 1; index < num_osc; index++) {
+	for (unsigned int index = 0; index < num_osc; index++) {
 		if (index > 0) {
 			set_connection(index, index - 1);
 		}
@@ -169,23 +169,23 @@ void network::create_grid_four_connections() {
 void network::create_grid_eight_connections() {
 	create_grid_four_connections();	/* create connection with right, upper, left, lower neighbor */
 	
-	const unsigned int side_size = (unsigned int) std::sqrt((double) num_osc);
+	const int side_size = (unsigned int) std::sqrt((double) num_osc);
 
 	for (unsigned int index = 0; index < num_osc; index++) {
-        const unsigned int upper_index = index - side_size;
-        const unsigned int upper_left_index = index - side_size - 1;
-        const unsigned int upper_right_index = index - side_size + 1;
+        const int upper_index = index - side_size;
+        const int upper_left_index = index - side_size - 1;
+        const int upper_right_index = index - side_size + 1;
             
-        const unsigned int lower_index = index + side_size;
-        const unsigned int lower_left_index = index + side_size - 1;
-        const unsigned int lower_right_index = index + side_size + 1;
+        const int lower_index = index + side_size;
+        const int lower_left_index = index + side_size - 1;
+        const int lower_right_index = index + side_size + 1;
             
-        const unsigned int left_index = index - 1;
-        const unsigned int right_index = index + 1;
+        const int left_index = index - 1;
+        const int right_index = index + 1;
             
-        const unsigned int node_row_index = std::floor(index / side_size);
-        const unsigned int upper_row_index = node_row_index - 1;
-        const unsigned int lower_row_index = node_row_index + 1;
+        const int node_row_index = std::floor(index / side_size);
+        const int upper_row_index = node_row_index - 1;
+        const int lower_row_index = node_row_index + 1;
 
 		if ( (upper_left_index >= 0) && (std::floor(upper_left_index / side_size) == upper_row_index) ) {
 			set_connection(index, upper_left_index);

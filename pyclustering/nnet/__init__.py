@@ -193,16 +193,11 @@ class network:
         side_size = int(self._num_osc ** (0.5));
         
         for index in range(0, self._num_osc, 1):
-            upper_index = index - side_size;
             upper_left_index = index - side_size - 1;
             upper_right_index = index - side_size + 1;
             
-            lower_index = index + side_size;
             lower_left_index = index + side_size - 1;
             lower_right_index = index + side_size + 1;
-            
-            left_index = index - 1;
-            right_index = index + 1;
             
             node_row_index = math.floor(index / side_size);
             upper_row_index = node_row_index - 1;
