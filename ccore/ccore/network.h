@@ -85,7 +85,10 @@ public:
 	dynamic_data(const size_t size, const value_type & initial_value) : m_dynamic(new output_dynamic(size, initial_value)), m_number_oscillators(initial_value.size()) { };
 
 	dynamic_data(const dynamic_data & rhs) {
-		(*dynamic_data) = rhs;
+		m_number_oscillators = rhs.m_number_oscillators;
+
+		m_dynamic = new output_dynamic(rhs.size());
+		std::copy(rhs.cbegin(), rhs.cend(), m_dynamic->begin());
 	}
 
 	~dynamic_data(void) { delete m_dynamic; }
