@@ -61,6 +61,7 @@ typedef enum conn_type {
 typedef enum conn_repr_type {
 	MATRIX_CONN_REPRESENTATION,
 	BITMAP_CONN_REPRESENTATION,
+	LIST_CONN_REPRESENTATION,
 	TOTAL_NUMBER_CONN_REPR_TYPES
 } conn_repr_type;
 
@@ -227,54 +228,9 @@ public:
 
 	inline unsigned int size(void) const { return num_osc; }
 
-	inline unsigned int get_connection(const unsigned int index1, const unsigned int index2) const { 
-		if (m_conn_type == conn_type::ALL_TO_ALL) {
-			if (index1 != index2) {
-				return (unsigned int) 0;
-			}
+	unsigned int get_connection(const unsigned int index1, const unsigned int index2) const;
 
-			return (unsigned int) 1;
-		}
-		else if (m_conn_type == conn_type::NONE) {
-			return (unsigned int) 0;
-		}
-
-		switch(conn_representation) {
-			case MATRIX_CONN_REPRESENTATION: {
-				return (*(*osc_conn)[index1])[index2];
-			}
-			case BITMAP_CONN_REPRESENTATION: {
-				const unsigned int index_element = index2 / ( sizeof(unsigned int) << 3 );
-				const unsigned int bit_number = index2 - ( index_element * (sizeof(unsigned int) << 3) );
-
-				return ( (*(*osc_conn)[index1])[index_element] >> bit_number ) & (unsigned int) 0x01;
-			}
-			default: {
-				throw std::runtime_error("Unknown type of representation of connections");
-			}
-		}
-	}
-
-	inline void set_connection(const unsigned int index1, const unsigned int index2) {
-		if (m_conn_type == conn_type::DYNAMIC) { return; }
-
-		switch(conn_representation) {
-			case MATRIX_CONN_REPRESENTATION: {
-				(*(*osc_conn)[index1])[index2] = 1;
-				break;
-			}
-			case BITMAP_CONN_REPRESENTATION: {
-				unsigned int index_element = index2 / ( sizeof(unsigned int) << 3 );
-				unsigned int bit_number = index2 % ( sizeof(unsigned int) << 3 );
-
-				(*(*osc_conn)[index1])[index_element] = (*(*osc_conn)[index1])[index_element] | ( (unsigned int) 0x01 << bit_number );
-				break;
-			}
-			default: {
-				throw std::runtime_error("Unknown type of representation of connections");
-			}
-		}
-	}
+	void set_connection(const unsigned int index1, const unsigned int index2);
 
 	std::vector<unsigned int> * get_neighbors(const unsigned int index) const;
 

@@ -75,7 +75,6 @@ void pcnn::calculate_states(const pcnn_stimulus & stimulus) {
 	}
 }
 
-#include <iostream>
 void pcnn::fast_linking(const std::vector<double> & feeding, std::vector<double> & linking, std::vector<double> & output) {
 	std::vector<double> previous_outputs(output.cbegin(), output.cend());
 	

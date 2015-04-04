@@ -37,18 +37,30 @@ network::network(const unsigned int number_oscillators, const conn_type connecti
 	if ( (m_conn_type != conn_type::ALL_TO_ALL) && (m_conn_type != conn_type::NONE) ) {
 		osc_conn = new std::vector<std::vector<unsigned int> * >(number_oscillators, NULL);
 
-		unsigned int number_elements = 0;
-		if (number_oscillators > MAXIMUM_OSCILLATORS_MATRIX_REPRESENTATION) {
-			conn_representation = BITMAP_CONN_REPRESENTATION;
-			number_elements = std::ceil( number_oscillators / sizeof(unsigned int) );
-		}
-		else {
-			conn_representation = MATRIX_CONN_REPRESENTATION;
-			number_elements = number_oscillators;
-		}
+		if (m_conn_type == conn_type::DYNAMIC) {
+			unsigned int number_elements = 0;
+			if (number_oscillators > MAXIMUM_OSCILLATORS_MATRIX_REPRESENTATION) {
+				conn_representation = BITMAP_CONN_REPRESENTATION;
+				number_elements = std::ceil( number_oscillators / sizeof(unsigned int) );
+			}
+			else {
+				conn_representation = MATRIX_CONN_REPRESENTATION;
+				number_elements = number_oscillators;
+			}
 	
-		for (unsigned int index = 0; index < number_oscillators; index++) {
-			(*osc_conn)[index] = new std::vector<unsigned int>(number_elements, 0);
+			for (unsigned int index = 0; index < number_oscillators; index++) {
+				(*osc_conn)[index] = new std::vector<unsigned int>(number_elements, 0);
+			}
+		}
+		else if ( (m_conn_type == conn_type::GRID_FOUR) || 
+			      (m_conn_type == conn_type::GRID_EIGHT) ||
+				  (m_conn_type == conn_type::LIST_BIDIR) ) {
+			conn_representation = LIST_CONN_REPRESENTATION;
+
+			/* No predefined size for list representation */
+			for (unsigned int index = 0; index < number_oscillators; index++) {
+				(*osc_conn)[index] = new std::vector<unsigned int>();
+			}
 		}
 
 		create_structure(connection_type);
@@ -80,10 +92,15 @@ std::vector<unsigned int> * network::get_neighbors(const unsigned int index) con
 			break;
 		}
 
-		case conn_type::DYNAMIC:
 		case conn_type::GRID_EIGHT:
 		case conn_type::GRID_FOUR:
 		case conn_type::LIST_BIDIR: {
+			result->resize((*osc_conn)[index]->size());
+			std::copy((*osc_conn)[index]->cbegin(), (*osc_conn)[index]->cend(), result->begin());
+			break;
+		}
+
+		case conn_type::DYNAMIC: {
 			for (unsigned int index_neighbour = 0; index_neighbour < num_osc; index_neighbour++) {
 				if (get_connection(index, index_neighbour) > 0) {
 					result->push_back(index_neighbour);
@@ -98,6 +115,69 @@ std::vector<unsigned int> * network::get_neighbors(const unsigned int index) con
 	}
 
 	return result;
+}
+
+unsigned int network::get_connection(const unsigned int index1, const unsigned int index2) const { 
+	if (m_conn_type == conn_type::ALL_TO_ALL) {
+		if (index1 != index2) {
+			return (unsigned int) 0;
+		}
+
+		return (unsigned int) 1;
+	}
+	else if (m_conn_type == conn_type::NONE) {
+		return (unsigned int) 0;
+	}
+
+	switch(conn_representation) {
+		case MATRIX_CONN_REPRESENTATION: {
+			return (*(*osc_conn)[index1])[index2];
+		}
+		case BITMAP_CONN_REPRESENTATION: {
+			const unsigned int index_element = index2 / ( sizeof(unsigned int) << 3 );
+			const unsigned int bit_number = index2 - ( index_element * (sizeof(unsigned int) << 3) );
+
+			return ( (*(*osc_conn)[index1])[index_element] >> bit_number ) & (unsigned int) 0x01;
+		}
+		case LIST_CONN_REPRESENTATION: {
+			unsigned int output_value = (unsigned int) 0;
+			std::vector<unsigned int> * neighbors = (*osc_conn)[index1];
+			std::vector<unsigned int>::const_iterator existance = std::find(neighbors->cbegin(), neighbors->cend(), index2);
+			if (existance != neighbors->cend()) {
+				output_value = (unsigned int) 1;
+			}
+
+			return output_value;
+		}
+		default: {
+			throw std::runtime_error("Unknown type of representation of connections");
+		}
+	}
+}
+
+void network::set_connection(const unsigned int index1, const unsigned int index2) {
+	if (m_conn_type == conn_type::DYNAMIC) { return; }
+
+	switch(conn_representation) {
+		case MATRIX_CONN_REPRESENTATION: {
+			(*(*osc_conn)[index1])[index2] = 1;
+			break;
+		}
+		case BITMAP_CONN_REPRESENTATION: {
+			unsigned int index_element = index2 / ( sizeof(unsigned int) << 3 );
+			unsigned int bit_number = index2 % ( sizeof(unsigned int) << 3 );
+
+			(*(*osc_conn)[index1])[index_element] = (*(*osc_conn)[index1])[index_element] | ( (unsigned int) 0x01 << bit_number );
+			break;
+		}
+		case LIST_CONN_REPRESENTATION: {
+			(*osc_conn)[index1]->push_back(index2);
+			break;
+		}
+		default: {
+			throw std::runtime_error("Unknown type of representation of connections");
+		}
+	}
 }
 
 void network::create_structure(const conn_type connection_structure) {
@@ -142,6 +222,8 @@ void network::create_grid_four_connections() {
 	const unsigned int side_size = (unsigned int) conv_side_size;
 
 	for (unsigned int index = 0; index < num_osc; index++) {
+
+
 		const int upper_index = index - side_size;
 		const int lower_index = index + side_size;
 		const int left_index = index - 1;
