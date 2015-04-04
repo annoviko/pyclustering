@@ -33,7 +33,7 @@ from pyclustering.samples.definitions import IMAGE_SIMPLE_SAMPLES, IMAGE_MAP_SAM
 
 from pyclustering.support import read_image, rgb2gray, draw_image_mask_segments;
 
-def template_segmentation_image(image, parameters, simulation_time, brightness, scale_color = True, fastlinking = False, show_spikes = False, ccore_flag = True):
+def template_segmentation_image(image, parameters, simulation_time, brightness, scale_color = True, fastlinking = False, show_spikes = False, ccore_flag = False):
     stimulus = read_image(image);
     stimulus = rgb2gray(stimulus);
     
@@ -126,14 +126,14 @@ def segmentation_fast_linking_nil():
     template_segmentation_image(IMAGE_MAP_SAMPLES.IMAGE_NILE_SMALL, None, 47, None, False, True, True); 
 
 
-segmentation_image_simple1();
-segmentation_image_simple2();
-segmentation_image_simple6();
-     
-segmentation_gray_image_simple1();
-segmentation_gray_image_simple5();
-segmentation_gray_image_beach();
-segmentation_gray_image_building();
+# segmentation_image_simple1();
+# segmentation_image_simple2();
+# segmentation_image_simple6();
+#      
+# segmentation_gray_image_simple1();
+# segmentation_gray_image_simple5();
+# segmentation_gray_image_beach();
+# segmentation_gray_image_building();
  
 segmentation_fast_linking_image_beach();
 segmentation_fast_linking_image_building();

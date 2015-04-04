@@ -25,8 +25,6 @@ void pcnn::calculate_states(const pcnn_stimulus & stimulus) {
 	std::vector<double> linking(size(), 0.0);
 	std::vector<double> outputs(size(), 0.0);
 
-	bool output_change = false;
-
 	for (unsigned int index = 0; index < size(); index++) {
 		pcnn_oscillator & current_oscillator = m_oscillators[index];
 		std::vector<unsigned int> * neighbors = get_neighbors(index);
@@ -59,16 +57,11 @@ void pcnn::calculate_states(const pcnn_stimulus & stimulus) {
 		else {
 			outputs[index] = OUTPUT_INACTIVE_STATE;
 		}
-
-		if (outputs[index] != current_oscillator.output) {
-			output_change = true;
-		}
 	}
 
 	/* fast linking */
-	if ( (m_params.FAST_LINKING) && (output_change) ) {
+	if (m_params.FAST_LINKING) {
 		fast_linking(feeding, linking, outputs);
-		output_change = false;
 	}
 
 	/* update states of oscillators */
@@ -82,10 +75,11 @@ void pcnn::calculate_states(const pcnn_stimulus & stimulus) {
 	}
 }
 
+#include <iostream>
 void pcnn::fast_linking(const std::vector<double> & feeding, std::vector<double> & linking, std::vector<double> & output) {
-	std::vector<double> previous_outputs(output.begin(), output.end());
+	std::vector<double> previous_outputs(output.cbegin(), output.cend());
 	
-	bool previous_output_change = false;
+	bool previous_output_change = true;
 	bool current_output_change = false;
 	
 	while (previous_output_change) {

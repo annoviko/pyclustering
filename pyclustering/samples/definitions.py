@@ -105,7 +105,7 @@ class IMAGE_MAP_SAMPLES:
     
 
 class IMAGE_REAL_SAMPLES:
-    IMAGE_LENA                      = samples.__path__[0] + os.sep + "images" + os.sep + "ImageLena.png";
+    IMAGE_FIELD_FLOWER              = samples.__path__[0] + os.sep + "images" + os.sep + "ImageFieldFlower.png";
     
     
 class IMAGE_DIGIT_SAMPLES:    

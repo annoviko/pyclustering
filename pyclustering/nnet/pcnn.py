@@ -412,9 +412,6 @@ class pcnn_network(network):
             else:
                 outputs[index] = self.OUTPUT_FALSE;
             
-            if (outputs[index] != self._outputs[index]):
-                output_change = True;
-            
             # In case of Fast Linking we should calculate threshould until output is changed.
             if (self._params.FAST_LINKING is not True):
                 threshold[index] = self._params.AT * self._threshold[index] + self._params.VT * outputs[index];
@@ -423,16 +420,14 @@ class pcnn_network(network):
         # In case of Fast Linking we need to wait until output is changed.
         if (self._params.FAST_LINKING is True):
             current_output_change = False;
+            previous_outputs = outputs[:];
             
-            while (output_change is True):
-                # Save previous values
-                self._outputs = outputs[:];
-                
+            while (output_change is True):               
                 for index in range(0, self._num_osc, 1):
                     linking_influence = 0.0;
             
                     for index_neighbour in neighbors:
-                        linking_influence += self._outputs[index_neighbour] * self._params.W;
+                        linking_influence += previous_outputs[index_neighbour] * self._params.W;
                     
                     linking_influence *= self._params.VL;
                     linking[index] = linking_influence;
@@ -445,11 +440,14 @@ class pcnn_network(network):
                     else:
                         outputs[index] = self.OUTPUT_FALSE;
                         
-                    if (outputs[index] != self._outputs[index]):
+                    if (outputs[index] != previous_outputs[index]):
                         current_output_change = True;
                 
                 output_change = current_output_change;
                 current_output_change = False;
+                
+                if (output_change is True):
+                    previous_outputs = outputs[:];
         
         # In case of Fast Linking threshould should be calculated after fast linking.
         if (self._params.FAST_LINKING is True):
