@@ -30,9 +30,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "network.h"
 #include "ccore.h"
+#include "differential.h"
 
 #include <vector>
 
+using namespace differential;
 
 typedef struct sync_oscillator {
 	double phase;
@@ -214,6 +216,8 @@ private:
 	 *
 	 ***********************************************************************************************/
 	static double adapter_phase_kuramoto(const double t, const double teta, const std::vector<void *> & argv);
+
+	static void adapter_phase_kuramoto_2(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs);
 
 	/***********************************************************************************************
 	 *

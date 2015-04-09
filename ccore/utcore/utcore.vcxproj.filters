@@ -53,5 +53,11 @@
     <ClInclude Include="utest-network.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\ccore\differential.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utest-differential.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

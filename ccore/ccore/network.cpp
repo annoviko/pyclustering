@@ -119,7 +119,7 @@ std::vector<unsigned int> * network::get_neighbors(const unsigned int index) con
 
 unsigned int network::get_connection(const unsigned int index1, const unsigned int index2) const { 
 	if (m_conn_type == conn_type::ALL_TO_ALL) {
-		if (index1 != index2) {
+		if (index1 == index2) {
 			return (unsigned int) 0;
 		}
 
@@ -156,8 +156,6 @@ unsigned int network::get_connection(const unsigned int index1, const unsigned i
 }
 
 void network::set_connection(const unsigned int index1, const unsigned int index2) {
-	if (m_conn_type == conn_type::DYNAMIC) { return; }
-
 	switch(conn_representation) {
 		case MATRIX_CONN_REPRESENTATION: {
 			(*(*osc_conn)[index1])[index2] = 1;

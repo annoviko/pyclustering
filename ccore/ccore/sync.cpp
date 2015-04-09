@@ -27,6 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "sync.h"
 #include "support.h"
+#include "differential.h"
 
 #include <iostream>
 #include <cmath>
@@ -111,22 +112,25 @@ double sync_network::sync_order() const {
 
 double sync_network::sync_local_order() const {
 	double			exp_amount = 0.0;
-	unsigned int	number_neighbors = 0;
+	double			number_neighbors = 0;
 
 	for (unsigned int i = 0; i < size(); i++) {
-		for (unsigned int j = 0; j < size(); j++) {
-			if (get_connection(i, j) > 0) {
-				exp_amount += std::exp( -std::abs( (*oscillators)[j].phase - (*oscillators)[i].phase ) );
-				number_neighbors++;
-			}
+		std::vector<unsigned int> * neighbors = get_neighbors(i);
+		for (std::vector<unsigned int>::const_iterator iter_index = neighbors->begin(); iter_index != neighbors->cend(); iter_index++) {
+			unsigned int index_neighbor = *(iter_index);
+			exp_amount += std::exp( -std::abs( (*oscillators)[index_neighbor].phase - (*oscillators)[i].phase ) );	
 		}
+
+		number_neighbors += neighbors->size();
+
+		delete neighbors;
 	}
 
-	if (number_neighbors == 0) {
-		number_neighbors = 1;
+	if (number_neighbors == 0.0) {
+		number_neighbors = 1.0;
 	}
-
-	return exp_amount / (double) number_neighbors;
+	
+	return exp_amount / number_neighbors;
 }
 
 
@@ -134,16 +138,22 @@ double sync_network::adapter_phase_kuramoto(const double t, const double teta, c
 	return ((sync_network *) argv[0])->phase_kuramoto(t, teta, argv);
 }
 
+void sync_network::adapter_phase_kuramoto_2(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs) {
+	outputs.resize(1);
+	outputs[0] = ((sync_network *) argv[0])->phase_kuramoto(t, inputs[0], argv);
+}
 
 double sync_network::phase_kuramoto(const double t, const double teta, const std::vector<void *> & argv) {
 	unsigned int index = *(unsigned int *) argv[1];
 	double phase = 0;
 
-	for (unsigned int k = 0; k < size(); k++) {
-		if (get_connection(index, k) > 0) {
-			phase += std::sin((*oscillators)[k].phase - teta);
-		}
+	std::vector<unsigned int> * neighbors = get_neighbors(index);
+	for (std::vector<unsigned int>::const_iterator index_iterator = neighbors->cbegin(); index_iterator != neighbors->cend(); index_iterator++) {
+		unsigned int index_neighbor = (*index_iterator);
+		phase += std::sin((*oscillators)[index_neighbor].phase - teta);
 	}
+		
+	delete neighbors;
 
 	phase = (*oscillators)[index].frequency + (phase * weight / size());
 	return phase;
@@ -199,12 +209,14 @@ std::vector< std::vector<unsigned int> * > * sync_network::allocate_sync_ensembl
 std::vector< std::vector<sync_dynamic> * > * sync_network::simulate_static(const unsigned int steps, const double time, const solve_type solver, const bool collect_dynamic) {
 	free_sync_ensembles();
 
-	std::vector< std::vector<sync_dynamic> * > * dynamic = new std::vector< std::vector<sync_dynamic> * >;
+	std::vector< std::vector<sync_dynamic> * > * dynamic = new std::vector< std::vector<sync_dynamic> * >();
 
 	const double step = time / (double) steps;
 	const double int_step = step / 10.0;
+	
+	store_dynamic(dynamic, 0.0, collect_dynamic);	/* store initial state */
 
-	for (double cur_time = 0; cur_time < time; cur_time += step) {
+	for (double cur_time = step; cur_time < time; cur_time += step) {
 		calculate_phases(solver, cur_time, step, int_step);
 
 		store_dynamic(dynamic, cur_time, collect_dynamic);
@@ -221,8 +233,8 @@ std::vector< std::vector<sync_dynamic> * > * sync_network::simulate_dynamic(cons
 	double current_order = sync_local_order();
 
 	std::vector< std::vector<sync_dynamic> * > * dynamic = new std::vector< std::vector<sync_dynamic> * >();
-
-	for (double time_counter = 0; current_order < order; time_counter += step) {
+	store_dynamic(dynamic, 0.0, collect_dynamic);     /* store initial state */
+	for (double time_counter = step; current_order < order; time_counter += step) {
 		calculate_phases(solver, time_counter, step, step_int);
 
 		store_dynamic(dynamic, time_counter, collect_dynamic);
@@ -241,21 +253,22 @@ std::vector< std::vector<sync_dynamic> * > * sync_network::simulate_dynamic(cons
 
 
 void sync_network::store_dynamic(std::vector< std::vector<sync_dynamic> * > * dynamic, const double time, const bool collect_dynamic) const {
-	std::vector<sync_dynamic> * network_dynamic = new std::vector<sync_dynamic>();
+	std::vector<sync_dynamic> * network_dynamic = new std::vector<sync_dynamic>(size());
 
 	for (unsigned int index = 0; index < size(); index++) {
 		sync_dynamic oscillator_dynamic;
 		oscillator_dynamic.phase = (*oscillators)[index].phase;
 		oscillator_dynamic.time = time;
 
-		network_dynamic->push_back(oscillator_dynamic);
+		(*network_dynamic)[index] = oscillator_dynamic;
 	}
 	
-	if (collect_dynamic == false) {
-		dynamic->clear();
+	if ( (collect_dynamic == false) && (!dynamic->empty()) ) {
+		(*dynamic)[0] = network_dynamic;
 	}
-
-	dynamic->push_back(network_dynamic);
+	else {
+		dynamic->push_back(network_dynamic);
+	}
 }
 
 
@@ -277,10 +290,12 @@ void sync_network::calculate_phases(const solve_type solver, const double t, con
 				break;
 			}
 			case solve_type::RK4: {
-				std::vector<differential_result> * result = rk4(&sync_network::adapter_phase_kuramoto, (*oscillators)[index].phase, t, t + step, number_int_steps, false, argv);
-				(*next_phases)[index] = phase_normalization( (*result)[0].value );
+				differ_state<double> inputs(1, (*oscillators)[index].phase);
+				differ_result<double> outputs;
 
-				delete result;
+				runge_kutta_4(&sync_network::adapter_phase_kuramoto_2, inputs, t, t + step, number_int_steps, false, argv, outputs);
+				(*next_phases)[index] = phase_normalization( outputs[0].state[0] );
+
 				break;
 			}
 			case solve_type::RKF45: {
@@ -320,9 +335,9 @@ double sync_network::phase_normalization(const double teta) {
 	return norm_teta;
 }
 
-
+#include <iostream>
 dynamic_result * sync_network::convert_dynamic_representation(std::vector< std::vector<sync_dynamic> * > * dynamic) {
-	dynamic_result * result = new dynamic_result();
+	dynamic_result * result = new dynamic_result;
 
 	result->size_dynamic = dynamic->size();
 	result->size_network = ((*dynamic)[0])->size();

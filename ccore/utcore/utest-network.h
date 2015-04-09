@@ -19,7 +19,7 @@ TEST(utest_network, all_to_all_connections) {
 	network net(100, conn_type::ALL_TO_ALL);
 	for (size_t i = 0; i < net.size(); i++) {
 		for (size_t j = 0; j < net.size(); j++) {
-			if (i != j) {
+			if (i == j) {
 				ASSERT_EQ(0, net.get_connection(i, j));
 			}
 			else {
