@@ -107,11 +107,6 @@ void syncnet::create_connections(const double connectivity_radius, const bool en
 }
 
 
-double syncnet::adapter_phase_kuramoto(const double t, const double teta, const std::vector<void *> & argv) {
-	return ((syncnet *) argv[0])->phase_kuramoto(t, teta, argv);
-}
-
-
 double syncnet::phase_kuramoto(const double t, const double teta, const std::vector<void *> & argv) {
 	unsigned int index = *(unsigned int *) argv[1];
 	unsigned int num_neighbors = 0;

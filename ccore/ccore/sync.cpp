@@ -134,14 +134,11 @@ double sync_network::sync_local_order() const {
 }
 
 
-double sync_network::adapter_phase_kuramoto(const double t, const double teta, const std::vector<void *> & argv) {
-	return ((sync_network *) argv[0])->phase_kuramoto(t, teta, argv);
-}
-
-void sync_network::adapter_phase_kuramoto_2(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs) {
+void sync_network::adapter_phase_kuramoto(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs) {
 	outputs.resize(1);
 	outputs[0] = ((sync_network *) argv[0])->phase_kuramoto(t, inputs[0], argv);
 }
+
 
 double sync_network::phase_kuramoto(const double t, const double teta, const std::vector<void *> & argv) {
 	unsigned int index = *(unsigned int *) argv[1];
@@ -293,16 +290,18 @@ void sync_network::calculate_phases(const solve_type solver, const double t, con
 				differ_state<double> inputs(1, (*oscillators)[index].phase);
 				differ_result<double> outputs;
 
-				runge_kutta_4(&sync_network::adapter_phase_kuramoto_2, inputs, t, t + step, number_int_steps, false, argv, outputs);
+				runge_kutta_4(&sync_network::adapter_phase_kuramoto, inputs, t, t + step, number_int_steps, false, argv, outputs);
 				(*next_phases)[index] = phase_normalization( outputs[0].state[0] );
 
 				break;
 			}
 			case solve_type::RKF45: {
-				std::vector<differential_result> * result = rkf45(&sync_network::adapter_phase_kuramoto, (*oscillators)[index].phase, t, t + step, 0.00001, false, argv);
-				(*next_phases)[index] = phase_normalization( (*result)[0].value );
+				differ_state<double> inputs(1, (*oscillators)[index].phase);
+				differ_result<double> outputs;
 
-				delete result;
+				runge_kutta_fehlberg_45(&sync_network::adapter_phase_kuramoto, inputs, t, t + step, 0.00001, false, argv, outputs);
+				(*next_phases)[index] = phase_normalization( outputs[0].state[0] );
+
 				break;
 			}
 			default: {
@@ -335,7 +334,7 @@ double sync_network::phase_normalization(const double teta) {
 	return norm_teta;
 }
 
-#include <iostream>
+
 dynamic_result * sync_network::convert_dynamic_representation(std::vector< std::vector<sync_dynamic> * > * dynamic) {
 	dynamic_result * result = new dynamic_result;
 

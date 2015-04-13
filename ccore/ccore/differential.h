@@ -6,8 +6,48 @@
 
 namespace differential {
 
+namespace factor {
+
+#define A2		(double) 1.0 / 4.0
+#define B2		(double) 1.0 / 4.0
+
+#define A3		(double) 3.0 / 8.0
+#define B3		(double) 3.0 / 32.0
+#define C3      (double) 9.0 / 32.0
+
+#define A4		(double) 12.0 / 13.0
+#define B4		(double) 1932.0 / 2197.0
+#define C4		(double) -7200.0 / 2197.0
+#define D4		(double) 7296.0 / 2197.0
+
+#define A5		(double) 1.0
+#define B5		(double) 439.0 / 216.0
+#define C5		(double) -8.0
+#define D5		(double) 3680.0 / 513.0
+#define E5		(double) -845.0 / 4104.0
+
+#define A6		(double) 1.0 / 2.0
+#define B6		(double) -8.0 / 27.0
+#define C6		(double) 2.0
+#define D6		(double) -3544.0 / 2565.0
+#define E6		(double) 1859.0 / 4104.0
+#define F6		(double) -11.0 / 40.0
+
+#define N1		(double) 25.0 / 216.0
+#define N3		(double) 1408.0 / 2565.0
+#define N4		(double) 2197.0 / 4104.0
+#define N5		(double) -1.0 / 5.0
+
+#define R1		(double) 1.0 / 360.0
+#define R3		(double) -128.0 / 4275.0
+#define R4		(double) -2197.0 / 75240.0
+#define R5		(double) 1.0 / 50.0
+#define R6		(double) 2.0 / 55.0
+
+}
+
 template <typename state_type>
-class differ_state : std::vector<state_type> {
+class differ_state {
 public:
 	typedef state_type							value_type;
 	typedef std::vector<value_type>				differ_variables;
@@ -384,8 +424,126 @@ void runge_kutta_4(void (*function_pointer)(const double t, const differ_state<s
 	}
 }
 
-template <typename input_type>
-void runge_kutta_fehlberg_45(void);
+
+template <typename state_type, typename extra_type = void *> 
+void runge_kutta_fehlberg_45(void (*function_pointer)(const double t, const differ_state<state_type> & inputs, const differ_extra<extra_type> & argv, differ_state<state_type> & outputs),
+                   const differ_state<state_type> &		inputs,
+                   const double							time_start,
+                   const double							time_end,
+                   const double					        tolerance,
+                   const bool							flag_collect,
+                   const differ_extra<extra_type> &		argv,
+                   differ_result<state_type> &			outputs) {
+	
+	using namespace factor;
+
+	if (flag_collect) {
+		outputs.clear();
+	}
+	else {
+		outputs.resize(1);
+	}
+
+	differ_output<state_type> current_result;
+	current_result.time = time_start;
+	current_result.state = inputs;
+
+	double h = (time_end - time_start) / 10.0;		/* default number of steps */
+	const double hmin = h / 1000.0;	/* default multiplier for maximum step size */
+	const double hmax = 1000.0 * h;	/* default multiplier for minimum step size */
+
+	const double br = time_end - 0.00001 * (double) std::abs(time_end);
+	const unsigned int iteration_limit = 300;
+
+	unsigned int iteration_counter = 0;
+
+	while (current_result.time < time_end) {
+		const double current_time = current_result.time;
+		const differ_state<state_type> current_value = current_result.state;
+
+		if ( (current_time + h) > br ) {
+			h = time_end - current_result.time;
+		}
+
+		differ_state<state_type> fp1, fp2, fp3, fp4, fp5, fp6;
+		differ_state<state_type> k1, k2, k3, k4, k5, k6;
+		differ_state<state_type> y2, y3, y4, y5, y6;
+
+		function_pointer(current_time, current_value, argv, fp1);
+		k1 = h * fp1;
+		y2 = current_value + B2 * k1;
+
+		function_pointer(current_time + A2 * h, y2, argv, fp2);
+		k2 = h * fp2;
+		y3 = current_value + B3 * k1 + C3 * k2;
+
+		function_pointer(current_time + A3 * h, y3, argv, fp3);
+		k3 = h * fp3;
+		y4 = current_value + B4 * k1 + C4 * k2 + D4 * k3;
+
+		function_pointer(current_time + A4 * h, y4, argv, fp4);
+		k4 = h * fp4;
+		y5 = current_value + B5 * k1 + C5 * k2 + D5 * k3 + E5 * k4;
+
+		function_pointer(current_time + A5 * h, y5, argv, fp5);
+		k5 = h * fp5;
+		y6 = current_value + B6 * k1 + C6 * k2 + D6 * k3 + E6 * k4 + F6 * k5;
+
+		function_pointer(current_time + A6 * h, y6, argv, fp6);
+		k6 = h * fp6;
+
+		/* Calculate error (difference between Runge-Kutta 4 and Runge-Kutta 5) and new value. */
+		differ_state<state_type> errors = R1 * k1 + R3 * k3 + R4 * k4 + R5 * k5 + R6 * k6;
+
+		double err = 0.0;
+		for (differ_state<state_type>::const_iterator iter = errors.cbegin(); iter != errors.cend(); iter++) {
+			double current_error = std::abs(*iter);
+			if (current_error > err) {
+				err = current_error;
+			}
+		}
+
+		/* Calculate new value. */
+		differ_state<state_type> ynew = current_value + N1 * k1 + N3 * k3 + N4 * k4 + N5 * k5;
+
+		if ( (err < tolerance) || (h < 2.0 * hmin) ) {
+			current_result.state = ynew;
+
+			if (current_time + h > br) {
+				current_result.time = time_end;
+			}
+			else {
+				current_result.time = current_time + h;
+			}
+
+			if (flag_collect) {
+				outputs.push_back(current_result);
+			}
+			else {
+				outputs[0] = current_result;
+			}
+
+			iteration_counter++;
+		}
+
+		double s = 0.0;
+		if (err != 0.0) {
+			s = 0.84 * std::pow( (tolerance * h / err), 0.25 );
+		}
+
+		if ( (s < 0.75) && (h > 2.0 * hmin) ) {
+			h = h / 2.0;
+		}
+
+		if ( (s > 1.5) && (h * 2.0 < hmax) ) {
+			h = 2.0 * h;
+		}
+
+		if (iteration_counter >= iteration_limit) {
+			break;
+		}
+	}
+}
 
 }
 

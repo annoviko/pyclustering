@@ -90,6 +90,9 @@ class Test(unittest.TestCase):
         value = dyn_phase[index][0];
           
         for item in dyn_phase[index]:
+            if ((abs(item - value) < tolerance) != True):
+                print(dyn_phase[:][0]);
+                
             assert (abs(item - value) < tolerance) == True;
       
     def testFastSolution(self):
@@ -106,9 +109,12 @@ class Test(unittest.TestCase):
     def testRK4SolutionByCore(self):
         self.templateSimulateTest(10, 1, solve_type.RK4, ccore_flag = True);
       
+    def testRKF45SolutionByCore(self):
+        self.templateSimulateTest(10, 1, solve_type.RKF45, ccore_flag = True);    
+      
     def testLargeNetwork(self):
         # Check for convergence of phases in large network - network that contains large number of oscillators
-        self.templateSimulateTest(128, 1, solve_type.FAST);                      
+        self.templateSimulateTest(128, 1, solve_type.FAST);           
       
       
       
