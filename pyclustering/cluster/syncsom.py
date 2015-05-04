@@ -33,6 +33,7 @@ from pyclustering.cluster.syncnet import syncnet;
 
 from pyclustering.support import average_neighbor_distance;
 
+
 class syncsom:
     """!
     @brief Class represents clustering algorithm SYNC-SOM. SYNC-SOM is bio-inspired algorithm that is based on oscillatory network 
@@ -70,6 +71,7 @@ class syncsom:
     
     # For convenience
     _som_osc_table = None;
+    _analyser = None;
     
     @property
     def som_layer(self):
@@ -136,7 +138,7 @@ class syncsom:
         
         # create oscillatory neural network.
         self._sync = syncnet(weights, radius, initial_phases = initial_type.EQUIPARTITION);
-        (dyn_time, dyn_phase) = self._sync.process(order, collect_dynamic = collect_dynamic);
+        self._analyser = self._sync.process(order, collect_dynamic = collect_dynamic);
         
         # Draw SOM clusters.
         #clusters = self._sync.get_clusters();
@@ -144,7 +146,7 @@ class syncsom:
         #self._som.show_network(awards = False, belongs = True);
         
         # return dynamic if it was requested.
-        return (dyn_time, dyn_phase);   
+        return (self._analyser.time, self._analyser.output);   
     
     def get_som_clusters(self, eps = 0.1):
         """!
@@ -159,7 +161,7 @@ class syncsom:
         
         """
         
-        sync_clusters = self._sync.get_clusters();
+        sync_clusters = self._analyser.allocate_clusters();
         
         # Decode it to indexes of SOM neurons
         som_clusters = list();
@@ -187,7 +189,7 @@ class syncsom:
         
         """
         
-        sync_clusters = self._sync.get_clusters(eps);       # NOTE: it isn't indexes of SOM neurons
+        sync_clusters = self._analyser.allocate_clusters(eps);       # NOTE: it isn't indexes of SOM neurons
         
         clusters = list();
         total_winners = 0;

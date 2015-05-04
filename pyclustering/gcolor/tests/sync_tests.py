@@ -42,9 +42,9 @@ class Test(unittest.TestCase):
             graph = read_graph(filename);
             syncgcolor_network = syncgcolor(graph.data, 0, -1);
             
-            (t, dyn) = syncgcolor_network.process(solution = solver_type);
+            analyser = syncgcolor_network.process(solution = solver_type);
             
-            map_coloring = syncgcolor_network.get_map_coloring(0.05);
+            map_coloring = analyser.allocate_map_coloring(0.05);
             
             # Check number of colors
             assigned_colors = set(map_coloring);

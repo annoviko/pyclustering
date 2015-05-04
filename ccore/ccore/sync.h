@@ -39,13 +39,61 @@ using namespace differential;
 typedef struct sync_oscillator {
 	double phase;
 	double frequency;
+
+	sync_oscillator() :
+		phase(0.0),
+		frequency(0.0) { }
 } sync_oscillator;
 
 
-typedef struct sync_dynamic {
-	double time;
-	double phase;
-} sync_dynamic;
+typedef std::vector<unsigned int>		sync_ensemble;
+
+
+typedef struct sync_network_state {
+public:
+	std::vector<double> m_phase;
+	double m_time;
+
+public:
+	sync_network_state(void) : m_time(0.0) { }
+	sync_network_state(const unsigned int size) : m_phase(size, 0.0), m_time(0.0) { }
+
+	inline size_t size(void) const { return m_phase.size(); }
+
+	inline sync_network_state & operator=(const sync_network_state & other) {
+		if (this != &other) {
+			m_phase.resize(other.size());
+			std::copy(other.m_phase.cbegin(), other.m_phase.cend(), m_phase.begin());
+
+			m_time = other.m_time;
+		}
+
+		return *this;
+	}
+} sync_network_state;
+
+
+class sync_dynamic : public dynamic_data<sync_network_state> {
+public:
+	sync_dynamic(void) { }
+
+	sync_dynamic(const unsigned int number_oscillators, const unsigned int simulation_steps) { }
+
+	virtual ~sync_dynamic(void) { }
+
+public:
+	/***********************************************************************************************
+	 *
+	 * @brief Allocate clusters in line with ensembles of synchronous oscillators where each
+	 *        synchronous ensemble corresponds to only one cluster.
+	 *
+	 * @param[in]  tolerance: maximum error for allocation of synchronous ensemble oscillators.
+	 * @param[out] ensembles: synchronous ensembles of oscillators where each ensemble consists of
+	 *                        indexes of oscillators that are synchronous to each other.
+	 *
+	 ***********************************************************************************************/
+	void allocate_sync_ensembles(const double tolerance, ensemble_data<sync_ensemble> & ensembles) const;
+};
 
 
 /***********************************************************************************************
@@ -55,10 +103,8 @@ typedef struct sync_dynamic {
  ***********************************************************************************************/
 class sync_network : public network {
 protected:
-	std::vector<sync_oscillator> * oscillators;	                    /* oscillators                  */
-	std::vector< std::vector<unsigned int> * > * sync_ensembles;    /* pointer to sync ensembles    */
-
-	double weight;                                                  /* multiplier for connections   */
+	std::vector<sync_oscillator> m_oscillators;
+	double weight;
 
 public:
 	/***********************************************************************************************
@@ -101,54 +147,44 @@ public:
 
 	/***********************************************************************************************
 	 *
-	 * @brief   Allocate clusters in line with ensembles of synchronous oscillators where each
-	 *          synchronous ensemble corresponds to only one cluster.
-	 *
-	 * @param   (in) tolerance   - maximum error for allocation of synchronous ensemble oscillators.
-	 *
-	 * @return  Return vectors synchronous oscillators.
-	 *
-	 ***********************************************************************************************/
-	std::vector< std::vector<unsigned int> * > * allocate_sync_ensembles(const double tolerance = 0.01);
-	
-	/***********************************************************************************************
-	 *
 	 * @brief   Performs static simulation of oscillatory network.
 	 *
-	 * @param   (in) steps             - number steps of simulations during simulation.
-	 * @param   (in) time              - time of simulation.
-	 * @param   (in) solver            - type of solver for simulation.
-	 * @param   (in) collect_dynamic   - if true - returns whole dynamic of oscillatory network, 
-	 *                                   otherwise returns only last values of dynamics.
-	 *
-	 * @return  Returns dynamic of oscillatory network. If argument 'collect_dynamic' = true, than it 
-	 *          returns dynamic for the whole simulation time, otherwise returns only last values 
-	 *          (last step of simulation) of dynamic.
+	 * @param[in]  steps: number steps of simulations during simulation.
+	 * @param[in]  time: time of simulation.
+	 * @param[in]  solver: type of solver for simulation.
+	 * @param[in]  collect_dynamic: if true - returns whole dynamic of oscillatory network, 
+	 *              otherwise returns only last values of dynamics.
+	 * @param[out] output_dynamic: output dynamic of the network, if argument 'collect_dynamic' = true, 
+	 *              than it will be dynamic for the whole simulation time, otherwise returns only last 
+	 *              values  (last step of simulation) of dynamic.
 	 *
 	 ***********************************************************************************************/
-	std::vector< std::vector<sync_dynamic> * > * simulate_static(const unsigned int steps, const double time, const solve_type solver, const bool collect_dynamic);
+	void simulate_static(const unsigned int steps, 
+		                 const double time, 
+						 const solve_type solver, 
+						 const bool collect_dynamic, 
+						 sync_dynamic & output_dynamic);
 
 	/***********************************************************************************************
 	 *
 	 * @brief   Performs dynamic simulation of oscillatory network until stop condition is not 
 	 *          reached. Stop condition is defined by input argument 'order'.
 	 *
-	 * @param   (in) order               - order of process synchronization, destributed 0..1.
-	 * @param   (in) solver              - type of solver for simulation.
-	 * @param   (in) collect_dynamic     - if true - returns whole dynamic of oscillatory network, 
-	 *                                     otherwise returns only last values of dynamics.
-	 * @param   (in) step                - time step of one iteration of simulation (can be ignored).
-	 * @param   (in) step_int            - integration step, should be less than step (can be ignored).
-	 * @param   (in) threshold_changes   - additional stop condition that helps prevent infinite 
-	 *                                     simulation, defines limit of changes of oscillators between 
-	 *                                     current and previous steps.
-	 *
-	 * @return  Returns dynamic of oscillatory network. If argument 'collect_dynamic' = true, than it 
-	 *          returns dynamic for the whole simulation time, otherwise returns only last values 
-	 *          (last step of simulation) of dynamic.
+	 * @param[in]  order: order of process synchronization, destributed 0..1.
+	 * @param[in]  step: time step of one iteration of simulation.
+	 * @param[in]  solver: type of solver for simulation.
+	 * @param[in]  collect_dynamic: if true - returns whole dynamic of oscillatory network, 
+	 *              otherwise returns only last values of dynamics.
+	 * @param[out] output_dynamic: output dynamic of the network, if argument 'collect_dynamic' = true, 
+	 *              than it will be dynamic for the whole simulation time, otherwise returns only last 
+	 *              values  (last step of simulation) of dynamic.
 	 *
 	 ***********************************************************************************************/
-	std::vector< std::vector<sync_dynamic> * > * simulate_dynamic(const double order, const solve_type solver, const bool collect_dynamic, const double step = 0.1, const double step_int = 0.01, const double threshold_changes = 0.0000001);
+	void simulate_dynamic(const double order, 
+		                  const double step,
+		                  const solve_type solver, 
+						  const bool collect_dynamic,
+						  sync_dynamic & output_dynamic);
 
 	/***********************************************************************************************
 	 *
@@ -160,18 +196,6 @@ public:
 	 *
 	 ***********************************************************************************************/
 	static double phase_normalization(const double teta);
-
-	/***********************************************************************************************
-	 *
-	 * @brief   Convert dynamic of the network to CCORE interface representation of dynamic. It
-	 *          creates new data block and it should deleted by user.
-	 *
-	 * @param   (in) dynamic    - dynamic of the network.
-	 *
-	 * @return  Returns dynamic in line with CCORE interface representation.
-	 *
-	 ***********************************************************************************************/
-	static dynamic_result * convert_dynamic_representation(std::vector< std::vector<sync_dynamic> * > * dynamic);
 
 protected:
 	/***********************************************************************************************
@@ -218,25 +242,17 @@ private:
 
 	/***********************************************************************************************
 	 *
-	 * @brief   Remove allocated clusters. Should be used when dynamic is changed (phases of
-	 *          oscillators are changed). Required for fast providing results of clustering.
-	 *
-	 ***********************************************************************************************/
-	void free_sync_ensembles(void);
-
-	/***********************************************************************************************
-	 *
 	 * @brief   Stores dynamic of oscillators. Type of saving depends on argument 'collect_dynamic', 
 	 *          if it's true - than new values are added to previous, otherwise new values rewrite 
 	 *          previous.
 	 *
-	 * @param   (in) dynamic             - dynamic of oscillators.
-	 * @param   (in) time                - type of solver for simulation.
-	 * @param   (in) collect_dynamic     - if true - added new values to previous, otherwise rewrites 
-	 *                                     previous values by new values of dynamics.
+	 * @param[in]  step: dynamic of oscillators.
+	 * @param[in]  collect_dynamic: if true - added new values to previous, otherwise rewrites 
+	 *              previous values by new values of dynamics.
+	 * @param[out] dynamic: storage of output dynamic.
 	 *
 	 ***********************************************************************************************/
-	void store_dynamic(std::vector< std::vector<sync_dynamic> * > * dynamic, const double time, const bool collect_dynamic) const;
+	void store_dynamic(const double step, const bool collect_dynamic, sync_dynamic & dynamic) const;
 };
 
 #endif

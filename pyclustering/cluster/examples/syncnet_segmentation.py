@@ -34,6 +34,8 @@ from pyclustering.samples.definitions import IMAGE_SIMPLE_SAMPLES, IMAGE_MAP_SAM
 from pyclustering.cluster.syncnet import syncnet;
 
 from pyclustering.nnet import solve_type;
+from pyclustering.nnet.sync import sync_visualizer;
+
 
 def template_segmentation_image(source, color_radius, object_radius, noise_size, show_dyn):    
     data = read_image(source);
@@ -42,15 +44,14 @@ def template_segmentation_image(source, color_radius, object_radius, noise_size,
     network = syncnet(data, color_radius, ccore = True);
     print("Network has been created");
     
-    (ticks, (t, dyn)) = timedcall(network.process, 0.9995, solve_type.FAST, show_dyn);
-    # (t, dyn) = network.process(0.998, solve_type.FAST, show_dyn);
+    (ticks, analyser) = timedcall(network.process, 0.9995, solve_type.FAST, show_dyn);
     
     print("Sample: ", source, "\t\tExecution time: ", ticks, "\n");
     
     if (show_dyn is True):
-        draw_dynamics(t, dyn);
+        sync_visualizer.show_output_dynamic(analyser);
     
-    clusters = network.get_clusters();
+    clusters = analyser.allocate_clusters();
     real_clusters = [cluster for cluster in clusters if len(cluster) > noise_size];
     
     draw_image_mask_segments(source, real_clusters);
@@ -85,12 +86,12 @@ def template_segmentation_image(source, color_radius, object_radius, noise_size,
             continue;
         
         network = syncnet(coordinates, object_radius, ccore = True);
-        (t, dyn) = network.process(0.999, solve_type.FAST, show_dyn);
+        analyser = network.process(0.999, solve_type.FAST, show_dyn);
         
         if (show_dyn is True):
-            object_colored_dynamics.append( (t, dyn) );
+            object_colored_dynamics.append( (analyser.time, analyser.output) );
         
-        object_clusters = network.get_clusters();
+        object_clusters = analyser.allocate_clusters();
         
         # decode it
         real_description_clusters = [];

@@ -223,55 +223,32 @@ clustering_result * xmeans_algorithm(const data_representation * const sample, c
 	return result;	
 }
 
-void * create_sync_network(const unsigned int size, const double weight_factor, const double frequency_factor, const unsigned int connection_type, const unsigned int initial_phases) {
+void * sync_create_network(const unsigned int size, const double weight_factor, const double frequency_factor, const unsigned int connection_type, const unsigned int initial_phases) {
 	return (void *) new sync_network(size, weight_factor, frequency_factor, (conn_type) connection_type, (initial_type) initial_phases);
 }
 
-void destroy_sync_network(const void * pointer_network) {
+void sync_destroy_network(const void * pointer_network) {
 	if (pointer_network != NULL) {
 		delete (sync_network *) pointer_network;
 	}
 }
 
-dynamic_result * simulate_sync_network(const void * pointer_network, unsigned int steps, const double time, const unsigned int solver, const bool collect_dynamic) {
+void * sync_simulate_static(const void * pointer_network, unsigned int steps, const double time, const unsigned int solver, const bool collect_dynamic) {
 	sync_network * network = (sync_network *) pointer_network;
 
-	std::vector< std::vector<sync_dynamic> * > * dynamic = network->simulate_static(steps, time, (solve_type) solver, collect_dynamic);
-	dynamic_result * result = sync_network::convert_dynamic_representation(dynamic);
+	sync_dynamic * dynamic = new sync_dynamic();
+	network->simulate_static(steps, time, (solve_type) solver, collect_dynamic, (*dynamic));
 
-	for (std::vector< std::vector<sync_dynamic> * >::const_iterator iter = dynamic->begin(); iter != dynamic->end(); iter++) {
-		delete (*iter);
-	}
-
-	delete dynamic;
-	dynamic = NULL;
-
-	return result;
+	return (void *) dynamic;
 }
 
-dynamic_result * simulate_dynamic_sync_network(const void * pointer_network, const double order, const unsigned int solver, const bool collect_dynamic, const double step, const double step_int, const double threshold_changes) {
+void * sync_simulate_dynamic(const void * pointer_network, const double order, const unsigned int solver, const bool collect_dynamic, const double step, const double step_int, const double threshold_changes) {
 	sync_network * network = (sync_network *) pointer_network;
 	
-	std::vector< std::vector<sync_dynamic> * > * dynamic = network->simulate_dynamic(order, (solve_type) solver, collect_dynamic, step, step_int, threshold_changes);
-	dynamic_result * result = sync_network::convert_dynamic_representation(dynamic);
+	sync_dynamic * dynamic = new sync_dynamic();
+	network->simulate_dynamic(order, step, (solve_type) solver, collect_dynamic, (*dynamic));
 
-	for (std::vector< std::vector<sync_dynamic> * >::const_iterator iter = dynamic->begin(); iter != dynamic->end(); iter++) {
-		delete (*iter);
-	}
-
-	delete dynamic;
-	dynamic = NULL;
-
-	return result;
-}
-
-clustering_result * allocate_sync_ensembles_sync_network(const void * pointer_network, const double tolerance) {
-	sync_network * network = (sync_network *) pointer_network;	
-
-	const std::vector<std::vector<unsigned int> *> * const clusters = network->allocate_sync_ensembles(tolerance);
-	clustering_result * result = create_clustering_result(clusters);
-
-	return result;
+	return (void *) dynamic;
 }
 
 double sync_order(const void * pointer_network) {
@@ -282,70 +259,115 @@ double sync_local_order(const void * pointer_network) {
 	return ((sync_network *) pointer_network)->sync_local_order();
 }
 
-void * create_syncnet_network(const data_representation * const sample, const double connectivity_radius, const bool enable_conn_weight, const unsigned int initial_phases) {
+unsigned int sync_dynamic_get_size(const void * pointer_network) {
+	return ((sync_network *) pointer_network)->size();
+}
+
+void sync_dynamic_destroy(const void * pointer) {
+	delete (sync_dynamic *) pointer;
+}
+
+pyclustering_package * sync_dynamic_allocate_sync_ensembles(const void * pointer, const double tolerance) {
+	ensemble_data<sync_ensemble> ensembles;
+
+	((sync_dynamic *) pointer)->allocate_sync_ensembles(tolerance, ensembles);
+
+	pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
+	package->size = ensembles.size();
+	package->data = new pyclustering_package * [package->size];
+
+	for (unsigned int i = 0; i < package->size; i++) {
+		((pyclustering_package **) package->data)[i] = create_package(&ensembles[i]);
+	}
+
+	return package;
+}
+
+pyclustering_package * sync_dynamic_get_time(const void * pointer) {
+	sync_dynamic & dynamic = *((sync_dynamic *) pointer);
+
+	pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_DOUBLE);
+	package->size = dynamic.size();
+	package->data = new double[package->size];
+
+	for (unsigned int i = 0; i < package->size; i++) {
+		((double *) package->data)[i]  = dynamic[i].m_time;
+	}
+
+	return package;
+}
+
+pyclustering_package * sync_dynamic_get_output(const void * pointer) {
+	sync_dynamic & dynamic = *((sync_dynamic *) pointer);
+
+	pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
+	package->size = dynamic.size();
+	package->data = new pyclustering_package * [package->size];
+
+	for (unsigned int i = 0; i < package->size; i++) {
+		((pyclustering_package **) package->data)[i] = create_package(&dynamic[i].m_phase);
+	}
+
+	return package;
+}
+
+
+void * syncnet_create_network(const data_representation * const sample, const double connectivity_radius, const bool enable_conn_weight, const unsigned int initial_phases) {
 	std::vector<std::vector<double> > * dataset = read_sample(sample);	/* belongs to syncnet */
 	return (void *) new syncnet(dataset, connectivity_radius, enable_conn_weight, (initial_type) initial_phases);
 }
 
-void destroy_syncnet_network(const void * pointer_network) {
+void syncnet_destroy_network(const void * pointer_network) {
 	if (pointer_network != NULL) {
 		delete (syncnet *) pointer_network;
 	}
 }
 
-dynamic_result * process_syncnet(const void * pointer_network, const double order, const unsigned int solver, const bool collect_dynamic) {
+void * syncnet_process(const void * pointer_network, const double order, const unsigned int solver, const bool collect_dynamic) {
 	syncnet * network = (syncnet *) pointer_network;
 	
-	std::vector< std::vector<sync_dynamic> * > * dynamic = network->process(order, (solve_type) solver, collect_dynamic);
+	syncnet_analyser * analyser = new syncnet_analyser();
+	network->process(order, (solve_type) solver, collect_dynamic, (*analyser));
 
-	dynamic_result * result = sync_network::convert_dynamic_representation(dynamic);
+	ensemble_data<sync_ensemble> ensembles;
+	analyser->allocate_sync_ensembles(0.1, ensembles);
 
-	for (std::vector< std::vector<sync_dynamic> * >::const_iterator iter = dynamic->begin(); iter != dynamic->end(); iter++) {
-		delete (*iter);
+	return analyser;
+}
+
+void syncnet_analyser_destroy(const void * pointer_analyser) {
+	if (pointer_analyser != NULL) {
+		delete (syncnet_analyser *) pointer_analyser;
 	}
-
-	delete dynamic;
-	dynamic = NULL;
-
-	return result;
 }
 
-clustering_result * get_clusters_syncnet(const void * pointer_network, const double tolerance) {
-	syncnet * network = (syncnet *) pointer_network;	
-
-	const std::vector<std::vector<unsigned int> *> * const clusters = network->allocate_sync_ensembles(tolerance);
-	clustering_result * result = create_clustering_result(clusters);
-
-	return result;
-}
-
-void * create_hsyncnet(const data_representation * const sample, const unsigned int number_clusters, const unsigned int initial_phases) {
+#if 1
+void * hsyncnet_create_network(const data_representation * const sample, const unsigned int number_clusters, const unsigned int initial_phases) {
 	std::vector<std::vector<double> > * dataset = read_sample(sample);	/* belongs to hsyncnet */
 	return (void *) new hsyncnet(dataset, number_clusters, (initial_type) initial_phases);
 }
 
-void destroy_hsyncnet_network(const void * pointer_network) {
+void hsyncnet_destroy_network(const void * pointer_network) {
 	if (pointer_network != NULL) {
 		delete (hsyncnet *) pointer_network;
 	}
 }
 
-dynamic_result * process_hsyncnet(const void * pointer_network, const double order, const unsigned int solver, const bool collect_dynamic) {
+void * hsyncnet_process(const void * pointer_network, const double order, const unsigned int solver, const bool collect_dynamic) {
 	hsyncnet * network = (hsyncnet *) pointer_network;
 
-	std::vector< std::vector<sync_dynamic> * > * dynamic = network->process(order, (solve_type) solver, collect_dynamic);
+	hsyncnet_analyser * analyser = new hsyncnet_analyser();
+	network->process(order, (solve_type) solver, collect_dynamic, *analyser);
 
-	dynamic_result * result = sync_network::convert_dynamic_representation(dynamic);
-
-	for (std::vector< std::vector<sync_dynamic> * >::const_iterator iter = dynamic->begin(); iter != dynamic->end(); iter++) {
-		delete (*iter);
-	}
-
-	delete dynamic;
-	dynamic = NULL;
-
-	return result;
+	return (void *) analyser;
 }
+
+void hsyncnet_analyser_destroy(const void * pointer_analyser) {
+	if (pointer_analyser != NULL) {
+		delete (hsyncnet_analyser *) pointer_analyser;
+	}
+}
+#endif
 
 void * som_create(const data_representation * const sample, const unsigned int num_rows, const unsigned int num_cols, const unsigned int num_epochs, const unsigned int type_conn, const void * parameters) {
 	std::vector<std::vector<double> > * dataset = read_sample(sample);

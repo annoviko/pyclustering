@@ -207,6 +207,11 @@ class pcnn_dynamic:
 
 
 class pcnn_visualizer:
+    """!
+    @brief Visualizer of output dynamic of pulse-coupled neural network (PCNN).
+    
+    """
+    
     @staticmethod
     def show_time_signal(pcnn_output_dynamic):
         """!

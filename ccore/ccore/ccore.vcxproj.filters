@@ -104,9 +104,6 @@
     <ClInclude Include="som.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="point.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="pcnn.h">
       <Filter>Header Files</Filter>
     </ClInclude>

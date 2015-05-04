@@ -24,6 +24,7 @@
 """
 
 from pyclustering.cluster.syncnet import syncnet;
+from pyclustering.nnet.sync import sync_visualizer;
 
 from pyclustering.nnet import solve_type;
 
@@ -33,23 +34,23 @@ from pyclustering.samples.definitions import FCPS_SAMPLES;
 from pyclustering.support import draw_clusters;
 from pyclustering.support import read_sample;
 from pyclustering.support import timedcall;
-from pyclustering.support import draw_dynamics;
+
 
 def template_clustering(file, radius, order, show_dyn = False, show_conn = False, show_clusters = True, ena_conn_weight = False, ccore_flag = False):
     sample = read_sample(file);
     network = syncnet(sample, radius, enable_conn_weight = ena_conn_weight, ccore = ccore_flag);
     
-    (ticks, (dyn_time, dyn_phase)) = timedcall(network.process, order, solve_type.FAST, show_dyn);
+    (ticks, analyser) = timedcall(network.process, order, solve_type.FAST, show_dyn);
     print("Sample: ", file, "\t\tExecution time: ", ticks, "\n");
     
     if (show_dyn == True):
-        draw_dynamics(dyn_time, dyn_phase, x_title = "Time", y_title = "Phase", y_lim = [0, 2 * 3.14]);
+        sync_visualizer.show_output_dynamic(analyser);
     
     if (show_conn == True):
         network.show_network();
     
     if (show_clusters == True):
-        clusters = network.get_clusters(0.1);
+        clusters = analyser.allocate_clusters();
         draw_clusters(sample, clusters);
     
     

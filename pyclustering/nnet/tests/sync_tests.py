@@ -43,7 +43,7 @@ class Test(unittest.TestCase):
             network = sync_network(4096, 1, type_conn = conn_type.ALL_TO_ALL, ccore = True);
             del network;
       
-      
+    
     def testSyncOrderSingleOscillator(self):
         # Check for order parameter of network with one oscillator
         network = sync_network(1, 1);
@@ -53,10 +53,10 @@ class Test(unittest.TestCase):
     def testSyncOrderNetwork(self):
         # Check for order parameter of network with several oscillators
         network = sync_network(2, 1);
-          
+           
         sync_state = 1;
         tolerance = 0.1;
-          
+           
         network.simulate(50, 20, solve_type.RK4);
         assert (abs(network.sync_order() - sync_state) < tolerance) == True;        
       
@@ -69,8 +69,11 @@ class Test(unittest.TestCase):
     def testOutputNormalization(self):
         network = sync_network(20, 1);
          
-        (t, dyn) = network.simulate(50, 20, solve_type.RK4);
-         
+        output_dynamic = network.simulate(50, 20, solve_type.RK4);
+        
+        t = output_dynamic.time;
+        dyn = output_dynamic.output;
+        
         for iteration in range(len(dyn)):
             for index_oscillator in range(len(dyn[iteration])):
                 assert (dyn[iteration][index_oscillator] >= 0);
@@ -84,8 +87,10 @@ class Test(unittest.TestCase):
           
         network = sync_network(nodes, weight, ccore = ccore_flag);
                 
-        (t, dyn_phase) = network.simulate(sim_steps, sim_time, solution);
-          
+        output_dynamic = network.simulate(sim_steps, sim_time, solution);
+        
+        dyn_phase = output_dynamic.output;
+        
         index = len(dyn_phase) - 1;
         value = dyn_phase[index][0];
           
@@ -120,9 +125,9 @@ class Test(unittest.TestCase):
       
     def templateDynamicSimulationConnectionTypeTest(self, num_osc, weight, connection_type):
         network = sync_network(num_osc, weight, type_conn = connection_type);
-        network.simulate_dynamic(collect_dynamic = False);  # Just current state of network is required
+        output_dynamic = network.simulate_dynamic(collect_dynamic = False);  # Just current state of network is required
           
-        clusters = network.allocate_sync_ensembles(0.1);
+        clusters = output_dynamic.allocate_sync_ensembles(0.1);
         assert len(clusters) == 1;
           
     def testDynamicSimulationAllToAll(self):
@@ -144,9 +149,9 @@ class Test(unittest.TestCase):
 
     def templateDynamicSimulationConvergence(self, num_osc, weight, connection_type, ccore_flag):
         network = sync_network(num_osc, weight, type_conn = connection_type, initial_phases=initial_type.EQUIPARTITION, ccore = ccore_flag);
-        (t, dyn) = network.simulate_dynamic(collect_dynamic = False);  # Just current state of network is required
+        output_dynamic = network.simulate_dynamic(collect_dynamic = False);  # Just current state of network is required
         
-        clusters = network.allocate_sync_ensembles(0.1);
+        clusters = output_dynamic.allocate_sync_ensembles(0.1);
         assert len(clusters) == 1;
         
     def testTwoOscillatorDynamic(self):

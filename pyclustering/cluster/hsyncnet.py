@@ -30,7 +30,7 @@ import pyclustering.core.wrapper as wrapper;
 
 from pyclustering.nnet import initial_type, solve_type;
 
-from pyclustering.cluster.syncnet import syncnet;
+from pyclustering.cluster.syncnet import syncnet, syncnet_analyser;
 from pyclustering.support import average_neighbor_distance;
 
 class hsyncnet(syncnet):
@@ -70,7 +70,7 @@ class hsyncnet(syncnet):
         """
         
         if (ccore is True):
-            self.__ccore_network_pointer = wrapper.create_hsyncnet(source_data, number_clusters, osc_initial_phases);
+            self.__ccore_network_pointer = wrapper.hsyncnet_create_network(source_data, number_clusters, osc_initial_phases);
         else: 
             super().__init__(source_data, 0, initial_phases = osc_initial_phases);
             self._number_clusters = number_clusters;
@@ -83,7 +83,7 @@ class hsyncnet(syncnet):
         """
         
         if (self.__ccore_network_pointer is not None):
-            wrapper.destroy_hsyncnet_network(self.__ccore_network_pointer);
+            wrapper.hsyncnet_destroy_network(self.__ccore_network_pointer);
             self.__ccore_network_pointer = None;
             
             
@@ -102,7 +102,8 @@ class hsyncnet(syncnet):
         """
         
         if (self.__ccore_network_pointer is not None):
-            return wrapper.process_hsyncnet(self.__ccore_network_pointer, order, solution, collect_dynamic);
+            analyser = wrapper.hsyncnet_process(self.__ccore_network_pointer, order, solution, collect_dynamic);
+            return syncnet_analyser(None, None, analyser);
         
         number_neighbors = 3;
         current_number_clusters = float('inf');
@@ -115,17 +116,17 @@ class hsyncnet(syncnet):
         while(current_number_clusters > self._number_clusters):                
             self._create_connections(radius);
         
-            (t, dyn) = self.simulate_dynamic(order, solution, collect_dynamic);
+            analyser = self.simulate_dynamic(order, solution, collect_dynamic);
             if (collect_dynamic == True):
-                dyn_phase += dyn;
+                dyn_phase += analyser.output;
                 
                 if (len(dyn_time) > 0):
                     point_time_last = dyn_time[len(dyn_time) - 1];
-                    dyn_time += [time_point + point_time_last for time_point in t];
+                    dyn_time += [time_point + point_time_last for time_point in analyser.time];
                 else:
-                    dyn_time += t;
+                    dyn_time += analyser.time;
             
-            clusters = self.get_clusters(0.05);
+            clusters = analyser.allocate_sync_ensembles(0.05);
             
             # Get current number of allocated clusters
             current_number_clusters = len(clusters);
@@ -139,21 +140,5 @@ class hsyncnet(syncnet):
             else:
                 radius = average_neighbor_distance(self._osc_loc, number_neighbors);
         
-        
-        return (dyn_time, dyn_phase);
+        return syncnet_analyser(dyn_phase, dyn_time, None);
     
-    
-    def get_clusters(self, eps = 0.1):
-        """!
-        @brief Return list of clusters in line with state of oscillators (phases).
-        
-        @param[in] eps (double): Tolerance level that define maximal difference between phases of oscillators in one cluster, range [0..2 * pi].
-        
-        @return (list) List of clusters, for example [ [cluster1], [cluster2], ... ].
-        
-        """
-        
-        if (self.__ccore_network_pointer is not None):
-            return wrapper.get_clusters_syncnet(self.__ccore_network_pointer, eps);
-        else:
-            return self.allocate_sync_ensembles(eps);

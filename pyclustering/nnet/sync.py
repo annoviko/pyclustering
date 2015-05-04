@@ -8,7 +8,7 @@
          - A.Novikov, E.Benderskaya. Oscillatory Neural Networks Based on the Kuramoto Model. 2014.
 
 @authors Andrei Novikov (spb.andr@yandex.ru)
-@version 1.0
+@version 1.1
 @date 2014-2015
 @copyright GNU Public License
 
@@ -33,18 +33,141 @@
 import numpy;
 import random;
 
-import pyclustering.core.wrapper as wrapper;
+import pyclustering.core.sync_wapper as wrapper;
 
 from scipy import pi;
 from scipy.integrate import odeint;
 from scipy.integrate import ode;
 
-from pyclustering.support import euclidean_distance;
-
 from pyclustering.nnet import *;
 
+from pyclustering.support import draw_dynamics;
 
-class sync_network(network, network_interface):    
+
+class sync_dynamic:
+    """!
+    @brief Represents output dynamic of Sync.
+    
+    """
+    
+    _dynamic = None;
+    _time = None;
+    _ccore_sync_dynamic_pointer = None;
+    
+    @property
+    def output(self):
+        """!
+        @brief (list) Returns outputs of oscillator during simulation.
+        
+        """
+        if (self._ccore_sync_dynamic_pointer is not None):
+            return wrapper.sync_dynamic_get_output(self._ccore_sync_dynamic_pointer);
+            
+        return self._dynamic;
+    
+    
+    @property
+    def time(self):
+        """!
+        @brief (list) Returns sampling times when dynamic is measured during simulation.
+        
+        """
+        if (self._ccore_sync_dynamic_pointer is not None):
+            return wrapper.sync_dynamic_get_time(self._ccore_sync_dynamic_pointer);
+        
+        return self._time;
+    
+    
+    def __init__(self, phase, time, ccore = None):
+        """!
+        @brief Constructor of Sync dynamic.
+        
+        @param[in] dynamic (list): Dynamic of oscillators on each step of simulation. If ccore pointer is specified than it can be ignored.
+        @param[in] ccore (ctypes.pointer): Pointer to CCORE sync_dynamic instance in memory.
+        
+        """
+        self._dynamic = phase;
+        self._time = time;
+        self._ccore_sync_dynamic_pointer = ccore;
+    
+    
+    def __del__(self):
+        """!
+        @brief Default destructor of Sync dynamic.
+        
+        """
+        if (self._ccore_sync_dynamic_pointer is not None):
+            wrapper.sync_dynamic_destroy(self._ccore_sync_dynamic_pointer);
+    
+    
+    def __len__(self):
+        """!
+        @brief (uint) Returns number of simulation steps that are stored in dynamic.
+        
+        """
+        if (self._ccore_sync_dynamic_pointer is not None):
+            return wrapper.sync_dynamic_get_size(self._ccore_sync_dynamic_pointer);
+        
+        return len(self._dynamic);
+    
+    
+    def allocate_sync_ensembles(self, tolerance = 0.01):
+        """!
+        @brief Allocate clusters in line with ensembles of synchronous oscillators where each
+               synchronous ensemble corresponds to only one cluster.
+               
+        @param[in] tolerance (double): Maximum error for allocation of synchronous ensemble oscillators.
+        
+        @return (list) Grours (lists) of indexes of synchronous oscillators.
+                For example [ [index_osc1, index_osc3], [index_osc2], [index_osc4, index_osc5] ].
+        
+        """
+        
+        if (self._ccore_sync_dynamic_pointer is not None):
+            return wrapper.sync_dynamic_allocate_sync_ensembles(self._ccore_sync_dynamic_pointer, tolerance);
+        
+        number_oscillators = len(self._dynamic[0]);
+        last_state = self._dynamic[len(self._dynamic) - 1];
+        
+        clusters = [];
+        if (number_oscillators > 0):
+            clusters.append([0]);
+        
+        for i in range(1, number_oscillators, 1):
+            cluster_allocated = False;
+            for cluster in clusters:
+                for neuron_index in cluster:
+                    if ( (last_state[i] < (last_state[neuron_index] + tolerance)) and (last_state[i] > (last_state[neuron_index] - tolerance)) ):
+                        cluster_allocated = True;
+                        cluster.append(i);
+                        break;
+                
+                if (cluster_allocated == True):
+                    break;
+            
+            if (cluster_allocated == False):
+                clusters.append([i]);
+        
+        return clusters;    
+
+
+class sync_visualizer:
+    """!
+    @brief Visualizer of output dynamic of sync network (Sync).
+    
+    """
+        
+    @staticmethod
+    def show_output_dynamic(sync_output_dynamic):
+        """!
+        @brief Shows output dynamic (output of each oscillator) during simulation.
+        
+        """
+        
+        draw_dynamics(sync_output_dynamic.time, sync_output_dynamic.output, x_title = "t", y_title = "phase", y_lim = [0, 2 * 3.14]);
+    
+
+class sync_network(network):    
     """!
     @brief Model of oscillatory network that is based on the Kuramoto model of synchronization.
     
@@ -58,18 +181,6 @@ class sync_network(network, network_interface):
     
     _ccore_network_pointer = None;      # Pointer to CCORE Sync implementation of the network.
     
-    # Properties of class that represents oscillatory neural network
-    @property
-    def phases(self):
-        """!
-        @brief Returns list of phases of oscillators.
-        
-        @return (list) Phases of oscillators.
-        
-        """
-        
-        return self._phases;
-
 
     def __init__(self, num_osc, weight = 1, frequency = 0, type_conn = conn_type.ALL_TO_ALL, conn_represent = conn_represent.MATRIX, initial_phases = initial_type.RANDOM_GAUSSIAN, ccore = False):
         """!
@@ -86,7 +197,7 @@ class sync_network(network, network_interface):
         """
         
         if (ccore is True):
-            self._ccore_network_pointer = wrapper.create_sync_network(num_osc, weight, frequency, type_conn, initial_phases);
+            self._ccore_network_pointer = wrapper.sync_create_network(num_osc, weight, frequency, type_conn, initial_phases);
         else:   
             super().__init__(num_osc, type_conn, conn_represent);
             
@@ -111,7 +222,7 @@ class sync_network(network, network_interface):
         """
         
         if (self._ccore_network_pointer is not None):
-            wrapper.destroy_sync_network(self._ccore_network_pointer);
+            wrapper.sync_destroy_network(self._ccore_network_pointer);
             self._ccore_network_pointer = None;
     
     
@@ -188,44 +299,7 @@ class sync_network(network, network_interface):
                 phase += math.sin(self._phases[k] - teta);
             
         return ( self._freq[index] + (phase * self._weight / self.num_osc) );             
-    
-    
-    def allocate_sync_ensembles(self, tolerance = 0.01):
-        """!
-        @brief Allocate clusters in line with ensembles of synchronous oscillators where each
-               synchronous ensemble corresponds to only one cluster.
-               
-        @param[in] tolerance (double): Maximum error for allocation of synchronous ensemble oscillators.
         
-        @return (list) Grours (lists) of indexes of synchronous oscillators.
-                For example [ [index_osc1, index_osc3], [index_osc2], [index_osc4, index_osc5] ].
-        
-        """
-        
-        if (self._ccore_network_pointer is not None):
-            return wrapper.allocate_sync_ensembles_sync_network(self._ccore_network_pointer, tolerance);
-        
-        clusters = [];
-        if (self._num_osc > 0):
-            clusters.append([0]);
-        
-        for i in range(1, self._num_osc, 1):
-            cluster_allocated = False;
-            for cluster in clusters:
-                for neuron_index in cluster:
-                    if ( (self._phases[i] < (self._phases[neuron_index] + tolerance)) and (self._phases[i] > (self._phases[neuron_index] - tolerance)) ):
-                        cluster_allocated = True;
-                        cluster.append(i);
-                        break;
-                
-                if (cluster_allocated == True):
-                    break;
-            
-            if (cluster_allocated == False):
-                clusters.append([i]);
-        
-        return clusters;
-    
     
     def simulate(self, steps, time, solution = solve_type.FAST, collect_dynamic = True):
         """!
@@ -267,7 +341,8 @@ class sync_network(network, network_interface):
         """
         
         if (self._ccore_network_pointer is not None):
-            return wrapper.simulate_dynamic_sync_network(self._ccore_network_pointer, order, solution, collect_dynamic, step, int_step, threshold_changes);
+            ccore_instance_dynamic = wrapper.sync_simulate_dynamic(self._ccore_network_pointer, order, solution, collect_dynamic, step, int_step, threshold_changes);
+            return sync_dynamic(None, None, ccore_instance_dynamic);
         
         # For statistics and integration
         time_counter = 0;
@@ -296,7 +371,7 @@ class sync_network(network, network_interface):
                 dyn_phase.append(self._phases);
                 dyn_time.append(time_counter);
             else:
-                dyn_phase = self._phases;
+                dyn_phase = [ self._phases ];
                 dyn_time = time_counter;
                 
             # update orders
@@ -307,8 +382,9 @@ class sync_network(network, network_interface):
             if (abs(current_order - previous_order) < threshold_changes):
                 print("Warning: sync_network::simulate_dynamic - simulation is aborted due to low level of convergence rate (order = " + str(current_order) + ").");
                 break;
-                
-        return (dyn_time, dyn_phase);
+        
+        output_sync_dynamic = sync_dynamic(dyn_phase, dyn_time, None);
+        return output_sync_dynamic;
 
 
     def simulate_static(self, steps, time, solution = solve_type.FAST, collect_dynamic = False):
@@ -329,7 +405,8 @@ class sync_network(network, network_interface):
         """
         
         if (self._ccore_network_pointer is not None):
-            return wrapper.simulate_sync_network(self._ccore_network_pointer, steps, time, solution, collect_dynamic);
+            ccore_instance_dynamic = wrapper.sync_simulate_static(self._ccore_network_pointer, steps, time, solution, collect_dynamic);
+            return sync_dynamic(None, None, ccore_instance_dynamic);
         
         dyn_phase = None;
         dyn_time = None;
@@ -353,10 +430,11 @@ class sync_network(network, network_interface):
                 dyn_phase.append(self._phases);
                 dyn_time.append(t);
             else:
-                dyn_phase = self._phases;
+                dyn_phase = [ self._phases ];
                 dyn_time = t;
         
-        return (dyn_time, dyn_phase);        
+        output_sync_dynamic = sync_dynamic(dyn_phase, dyn_time);
+        return output_sync_dynamic;     
 
 
     def _calculate_phases(self, solution, t, step, int_step):

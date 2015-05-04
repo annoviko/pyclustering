@@ -30,7 +30,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 syncnet::syncnet(std::vector<std::vector<double> > * input_data, const double connectivity_radius, const bool enable_conn_weight, const initial_type initial_phases) :
 sync_network(input_data->size(), 1, 0, conn_type::DYNAMIC, initial_type::RANDOM_GAUSSIAN) {
-	oscillator_locations = input_data;
+	oscillator_locations = new std::vector<std::vector<double> >(*input_data);
 	create_connections(connectivity_radius, enable_conn_weight);
 }
 
@@ -116,7 +116,7 @@ double syncnet::phase_kuramoto(const double t, const double teta, const std::vec
 	if (distance_conn_weights != NULL) {
 		for (unsigned int k = 0; k < size(); k++) {
 			if (get_connection(index, k) > 0) {
-				phase += (*distance_conn_weights)[index][k] * std::sin( (*oscillators)[k].phase - teta );
+				phase += (*distance_conn_weights)[index][k] * std::sin( m_oscillators[k].phase - teta );
 				num_neighbors++;
 			}
 		}
@@ -124,7 +124,7 @@ double syncnet::phase_kuramoto(const double t, const double teta, const std::vec
 	else {
 		for (unsigned int k = 0; k < size(); k++) {
 			if (get_connection(index, k) > 0) {
-				phase += std::sin( (*oscillators)[k].phase - teta );
+				phase += std::sin( m_oscillators[k].phase - teta );
 				num_neighbors++;
 			}
 		}	
@@ -139,6 +139,6 @@ double syncnet::phase_kuramoto(const double t, const double teta, const std::vec
 }
 
 
-std::vector< std::vector<sync_dynamic> * > * syncnet::process(const double order, const solve_type solver, const bool collect_dynamic) {
-	return simulate_dynamic(order, solver, collect_dynamic);
+void syncnet::process(const double order, const solve_type solver, const bool collect_dynamic, syncnet_analyser & analyser) {
+	simulate_dynamic(order, 0.1, solver, collect_dynamic, analyser);
 }

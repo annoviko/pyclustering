@@ -23,22 +23,23 @@
 
 """
 
-from pyclustering.support import read_sample, draw_clusters, draw_dynamics;
+from pyclustering.support import read_sample, draw_clusters;
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES;
 from pyclustering.samples.definitions import FCPS_SAMPLES;
 
 from pyclustering.cluster.hsyncnet import hsyncnet;
+from pyclustering.nnet.sync import sync_visualizer;
 
 def template_clustering(file, number_clusters, arg_order = 0.999, arg_collect_dynamic = True, ccore_flag = False):
         sample = read_sample(file);
         network = hsyncnet(sample, number_clusters, ccore = ccore_flag);
         
-        (time, dynamic) = network.process(arg_order, collect_dynamic = arg_collect_dynamic);
-        clusters = network.get_clusters();
+        analyser = network.process(arg_order, collect_dynamic = arg_collect_dynamic);
+        clusters = analyser.allocate_clusters();
         
         if (arg_collect_dynamic == True):
-            draw_dynamics(time, dynamic, x_title = "Time", y_title = "Phase", y_lim = [0, 2 * 3.14]);
+            sync_visualizer.show_output_dynamic(analyser);
         
         draw_clusters(sample, clusters);
         

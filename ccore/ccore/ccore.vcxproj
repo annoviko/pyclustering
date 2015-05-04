@@ -175,7 +175,6 @@
     <ClInclude Include="network.h" />
     <ClInclude Include="kmeans.h" />
     <ClInclude Include="pcnn.h" />
-    <ClInclude Include="point.h" />
     <ClInclude Include="rock.h" />
     <ClInclude Include="som.h" />
     <ClInclude Include="support.h" />

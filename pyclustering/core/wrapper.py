@@ -150,7 +150,12 @@ def extract_pyclustering_package(ccore_package_pointer):
             result.append(pointer_data[index]);
     
     return result;
-    
+
+
+def destroy_object(pointer_object):
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore.destroy_object(pointer_object);    
+
 
 # Implemented algorithms.
 def dbscan(sample, eps, min_neighbors, return_noise = False):
@@ -273,147 +278,28 @@ def xmeans(sample, centers, kmax, tolerance):
     return list_of_clusters;
 
 
-"CCORE Interface for SYNC oscillatory network"
-
-def create_sync_network(num_osc, weight, frequency, type_conn, initial_phases):
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
-    pointer_network = ccore.create_sync_network(c_uint(num_osc), c_double(weight), c_double(frequency), c_uint(type_conn), c_uint(initial_phases));
-    
-    return pointer_network;
-
-
-def destroy_sync_network(pointer_network):
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
-    ccore.destroy_sync_network(pointer_network);
-
-
-def simulate_sync_network(pointer_network, steps, time, solution, collect_dynamic):
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
-    ccore_dynamic_result = ccore.simulate_sync_network(pointer_network, c_uint(steps), c_double(time), c_uint(solution), c_bool(collect_dynamic));
-    
-    python_dynamic_result = extract_dynamics(ccore_dynamic_result);
-    ccore.free_dynamic_result(ccore_dynamic_result);
-    
-    return python_dynamic_result;
-
-
-def simulate_dynamic_sync_network(pointer_network, order, solution, collect_dynamic, step, int_step, threshold_changes):
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
-    ccore_dynamic_result = ccore.simulate_dynamic_sync_network(pointer_network, c_double(order), c_uint(solution), c_bool(collect_dynamic), c_double(step), c_double(int_step), c_double(threshold_changes));
-    
-    python_dynamic_result = extract_dynamics(ccore_dynamic_result);
-    ccore.free_dynamic_result(ccore_dynamic_result);
-    
-    return python_dynamic_result;    
-
-
-def allocate_sync_ensembles_sync_network(pointer_network, tolerance):
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
-    ccore_cluster_result = ccore.allocate_sync_ensembles_sync_network(pointer_network, c_double(tolerance));
-    
-    list_of_clusters = extract_clusters(ccore_cluster_result);
-    
-    ccore.free_clustering_result(ccore_cluster_result);
-    return list_of_clusters; 
-
-
-def sync_order(pointer_network):
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
-    ccore.sync_order.restype = c_double;
-    
-    return ccore.sync_order(pointer_network);
-    
-    
-def sync_local_order(pointer_network):
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
-    ccore.sync_local_order.restype = c_double;
-    
-    return ccore.sync_local_order(pointer_network);
-
-
-"CCORE Interface for SYNCNET oscillatory network"
-
-def create_syncnet_network(sample, radius, initial_phases, enable_conn_weight):
-    pointer_data = create_pointer_data(sample);
-    
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
-    pointer_network = ccore.create_syncnet_network(pointer_data, c_double(radius), c_uint(initial_phases), c_bool(enable_conn_weight));
-    
-    return pointer_network;
-
-
-def destroy_syncnet_network(pointer_network):
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
-    ccore.destroy_syncnet_network(pointer_network);
-
-
-def process_syncnet(network_pointer, order, solution, collect_dynamic):
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
-    ccore_dynamic_result = ccore.process_syncnet(network_pointer, c_double(order), c_uint(solution), c_bool(collect_dynamic));
-
-    python_dynamic_result = extract_dynamics(ccore_dynamic_result);
-    ccore.free_dynamic_result(ccore_dynamic_result);
-    
-    return python_dynamic_result;    
-
-
-def get_clusters_syncnet(pointer_network, tolerance):
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
-    ccore_cluster_result = ccore.get_clusters_syncnet(pointer_network, c_double(tolerance));
-    
-    list_of_clusters = extract_clusters(ccore_cluster_result);
-    
-    ccore.free_clustering_result(ccore_cluster_result);
-    return list_of_clusters; 
-
-
 "CCORE Interface for HSYNCNET oscillatory network"
 
-def create_hsyncnet(sample, number_clusters, initial_phases):
+def hsyncnet_create_network(sample, number_clusters, initial_phases):
     pointer_data = create_pointer_data(sample);
     
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
-    pointer_network = ccore.create_hsyncnet(pointer_data, c_uint(number_clusters), c_uint(initial_phases));
+    pointer_network = ccore.hsyncnet_create_network(pointer_data, c_uint(number_clusters), c_uint(initial_phases));
     
     return pointer_network;
 
 
-def destroy_hsyncnet_network(pointer_network):
+def hsyncnet_destroy_network(pointer_network):
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
-    ccore.destroy_hsyncnet_network(pointer_network);
+    ccore.hsyncnet_destroy_network(pointer_network);
 
 
-def process_hsyncnet(network_pointer, order, solution, collect_dynamic):
+def hsyncnet_process(network_pointer, order, solution, collect_dynamic):
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
-    ccore_dynamic_result = ccore.process_hsyncnet(network_pointer, c_double(order), c_uint(solution), c_bool(collect_dynamic));
-
-    python_dynamic_result = extract_dynamics(ccore_dynamic_result);
-    ccore.free_dynamic_result(ccore_dynamic_result);
-    
-    return python_dynamic_result;  
+    return ccore.hsyncnet_process(network_pointer, c_double(order), c_uint(solution), c_bool(collect_dynamic));  
 
 
-def destroy_object(pointer_object):
+def hsyncnet_analyser_destroy(pointer_analyser):
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
-    ccore.destroy_object(pointer_object);
-    
+    ccore.syncnet_analyser_destroy(pointer_analyser);     
 
-
-
-
-# from pyclustering.support import draw_dynamics, draw_clusters, read_sample;
-# from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
-#   
-# sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE3);
-# som_pointer = som_create(sample, 1, 3, 100, 0, 3);
-# iterations = som_train(som_pointer, False);
-# 
-# capture_objects = som_get_capture_objects(som_pointer);
-# awards = som_get_awards(som_pointer);
-# weights = som_get_weights(som_pointer);
-# 
-# print("Captured objects:", capture_objects);
-# print("Awards:", awards);
-# print("Weights:", weights);
-# 
-# som_destroy(som_pointer);

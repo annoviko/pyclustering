@@ -29,6 +29,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "sync.h"
 
+typedef std::vector<unsigned int>			syncnet_cluster;
+typedef ensemble_data<syncnet_cluster>		syncnet_cluster_data;
+
+class syncnet_analyser: public sync_dynamic {
+public:
+	syncnet_analyser(void) : sync_dynamic() { }
+
+	~syncnet_analyser(void) { }
+
+public:
+	void allocate_clusters(const double eps, syncnet_cluster_data & data) { allocate_sync_ensembles(eps, data); }
+};
+
+
 /***********************************************************************************************
  *
  * @brief   Oscillatory neural network based on Kuramoto model for cluster analysis.
@@ -64,19 +78,15 @@ public:
 
 	/***********************************************************************************************
 	 *
-	 * @brief   Network is trained via achievement sync state between the oscillators using the 
-	 *          radius of coupling.
+	 * @brief Network is trained via achievement sync state between the oscillators using the radius of coupling.
 	 *
-	 * @param   (in) order             - order of synchronization that is used as indication for 
-	 *                                   stopping processing.
-	 * @param   (in) solver            - specified type of solving diff. equation. 
-	 * @param   (in) collect_dynamic   - specified requirement to collect whole dynamic of the network.
-	 *
-	 * @return  Return last values of simulation time and phases of oscillators if 
-	 *          collect_dynamic is False, and whole dynamic if collect_dynamic is True.
+	 * @param[in]  order: order of synchronization that is used as indication for stopping processing.
+	 * @param[in]  solver: specified type of solving diff. equation. 
+	 * @param[in]  collect_dynamic: specified requirement to collect whole dynamic of the network.
+	 * @param[out] analyser: analyser of sync results of clustering.
 	 *
 	 ***********************************************************************************************/
-	virtual std::vector< std::vector<sync_dynamic> * > * process(const double order, const solve_type solver, const bool collect_dynamic);
+	virtual void process(const double order, const solve_type solver, const bool collect_dynamic, syncnet_analyser & analyser);
 
 	/***********************************************************************************************
 	 *

@@ -27,11 +27,11 @@ import unittest;
 
 from pyclustering.nnet import *;
 
-from pyclustering.support import read_sample, read_image;
+from pyclustering.support import read_sample;
 
 from pyclustering.cluster.hsyncnet import hsyncnet;
 
-from pyclustering.samples.definitions import SIMPLE_SAMPLES, IMAGE_MAP_SAMPLES;
+from pyclustering.samples.definitions import SIMPLE_SAMPLES;
 
 class Test(unittest.TestCase):
     def templateClustering(self, path, number_clusters, expected_length_clusters, solver, ccore_flag):
@@ -42,8 +42,8 @@ class Test(unittest.TestCase):
             sample = read_sample(path);
             network = hsyncnet(sample, number_clusters, initial_type.EQUIPARTITION, ccore = ccore_flag); # EQUIPARTITION - makes test more stable.
             
-            (t, d) = network.process(order = 0.997, solution = solver, collect_dynamic = True);
-            clusters = network.get_clusters();
+            analyser = network.process(order = 0.997, solution = solver, collect_dynamic = True);
+            clusters = analyser.allocate_clusters(0.1);
             
             if (sum([len(cluster) for cluster in clusters]) != sum(expected_length_clusters)):
                 continue;
@@ -61,46 +61,27 @@ class Test(unittest.TestCase):
     
     def testClusteringSampleSimple1(self):
         self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, [5, 5], solve_type.FAST, False);
-        
+         
     def testClusteringOneAllocationSampleSimple1(self):
         self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, [10], solve_type.FAST, False);
-        
+         
     def testClusteringSampleSimple1ByCore(self):
         self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, [5, 5], solve_type.FAST, True);
-        
+         
     def testClusteringOneAllocationSampleSimple1ByCore(self):
         self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, [10], solve_type.FAST, True);
-        
+         
     def testClusteringSampleSimple2(self):
-        self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 3, [5, 8, 10], solve_type.FAST, False);
-        
-    def testClusteringOneAllocationSampleSimple2(self):
-        self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 1, [23], solve_type.FAST, False);    
-
-    def testClusteringSampleSimple2ByCore(self):
-        self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 3, [5, 8, 10], solve_type.FAST, True);
-
-    def testClusteringOneAllocationSampleSimple2ByCore(self):
-        self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 1, [23], solve_type.FAST, True);
-    
-    
+        self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 3, [5, 8, 10], solve_type.FAST, False);     
+     
     def testClusteringSolverRK4SampleSimple1(self):
         self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, [5, 5], solve_type.RK4, False);
-        
+         
     def testClusteringSolverRK4SampleSimple1ByCore(self):
         self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, [5, 5], solve_type.RK4, True);
-        
+         
     def testClusteringSolverRKF45SampleSimple1ByCore(self):
         self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, [5, 5], solve_type.RKF45, True);        
-           
-    
-    def testCreationDeletionByCore(self):
-        # Crash occurs in case of memory leak
-        data = read_image(IMAGE_MAP_SAMPLES.IMAGE_WHITE_SEA_SMALL);
-        
-        for iteration in range(0, 15):
-            network = hsyncnet(data, 2, ccore = True);
-            del network;
         
         
 if __name__ == "__main__":

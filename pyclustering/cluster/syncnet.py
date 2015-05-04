@@ -5,7 +5,7 @@
          - T.Miyano, T.Tsutsui. Data Synchronization as a Method of Data Mining. 2007.
 
 @authors Andrei Novikov (spb.andr@yandex.ru)
-@version 1.0
+@version 1.1
 @date 2014-2015
 @copyright GNU Public License
 
@@ -26,10 +26,50 @@
 
 """
 
-import pyclustering.core.wrapper as wrapper;
+import matplotlib.pyplot as plt;
+
+from pyclustering.core.syncnet_wrapper import *;
 
 from pyclustering.nnet import *;
 from pyclustering.nnet.sync import *;
+
+from pyclustering.support import euclidean_distance;
+
+
+class syncnet_analyser(sync_dynamic):    
+    def __init__(self, phase, time, pointer_sync_analyser):
+        super().__init__(phase, time, pointer_sync_analyser);
+    
+    def __del__(self):
+        if (self._ccore_sync_dynamic_pointer is not None):
+            syncnet_analyser_destroy(self._ccore_sync_dynamic_pointer);
+            self._ccore_sync_dynamic_pointer = None;
+    
+    def allocate_clusters(self, eps = 0.01):
+        """!
+        @brief Returns list of clusters in line with state of ocillators (phases).
+        
+        @param[in] eps (double): Tolerance level that define maximal difference between phases of oscillators in one cluster.
+        
+        @return (list) List of clusters, for example [ [cluster1], [cluster2], ... ].
+        
+        @see allocate_noise()
+        
+        """        
+        return self.allocate_sync_ensembles(eps);
+    
+    def allocate_noise(self):
+        """!
+        @brief Returns allocated noise.
+        
+        @remark Allocated noise can be returned only after data processing (use method process() before). Otherwise empty list is returned.
+        
+        @return (list) List of indexes that are marked as a noise.
+        
+        @see allocate_clusters()
+        
+        """         
+        return [];
 
 
 class syncnet(sync_network):
@@ -81,7 +121,7 @@ class syncnet(sync_network):
         """
         
         if (ccore is True):
-            self.__ccore_network_pointer = wrapper.create_syncnet_network(sample, radius, initial_phases, enable_conn_weight);
+            self.__ccore_network_pointer = syncnet_create_network(sample, radius, initial_phases, enable_conn_weight);
         else:
             super().__init__(len(sample), 1, 0, conn_type.NONE, initial_phases);
             
@@ -111,7 +151,7 @@ class syncnet(sync_network):
         """
         
         if (self.__ccore_network_pointer is not None):
-            wrapper.destroy_syncnet_network(self.__ccore_network_pointer);
+            syncnet_destroy_network(self.__ccore_network_pointer);
             self.__ccore_network_pointer = None;
         else:
             self._osc_loc = None;   # pointer to external object
@@ -175,17 +215,16 @@ class syncnet(sync_network):
         @param[in] solution (solve_type): Specified type of solving diff. equation.
         @param[in] collect_dynamic (bool): Specified requirement to collect whole dynamic of the network.
         
-        @return (tuple) Last values of simulation time and phases of oscillators as a tuple if collect_dynamic is False, and whole dynamic
-                if collect_dynamic is True. Format of returned value: (simulation_time, oscillator_phases).
-        
-        @see get_clusters()
+        @return (syncnet_analyser) Returns analyser of results of clustering.
         
         """
         
         if (self.__ccore_network_pointer is not None):
-            return wrapper.process_syncnet(self.__ccore_network_pointer, order, solution, collect_dynamic);
+            pointer_output_dynamic = syncnet_process(self.__ccore_network_pointer, order, solution, collect_dynamic);
+            return syncnet_analyser(None, None, pointer_output_dynamic);
         else:
-            return self.simulate_dynamic(order, solution, collect_dynamic);
+            output_sync_dynamic = self.simulate_dynamic(order, solution, collect_dynamic);
+            return syncnet_analyser(output_sync_dynamic.output, output_sync_dynamic.time, None);
     
     
     def _phase_kuramoto(self, teta, t, argv):
@@ -216,24 +255,6 @@ class syncnet(sync_network):
             divider = 1;
             
         return ( self._freq[index] + (phase / divider) );   
-
-
-    def get_clusters(self, eps = 0.1):
-        """!
-        @brief Returns list of clusters in line with state of ocillators (phases).
-        
-        @param[in] eps (double): Tolerance level that define maximal difference between phases of oscillators in one cluster.
-        
-        @return (list) List of clusters, for example [ [cluster1], [cluster2], ... ].
-        
-        @see process()
-        
-        """
-        
-        if (self.__ccore_network_pointer is not None):
-            return wrapper.get_clusters_syncnet(self.__ccore_network_pointer, eps);
-        else:
-            return self.allocate_sync_ensembles(eps);
     
     
     def show_network(self):

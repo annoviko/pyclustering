@@ -37,35 +37,26 @@ syncnet(input_data, 0, false, initial_phases) {
 hsyncnet::~hsyncnet() { }
 
 
-std::vector< std::vector<sync_dynamic> * > * hsyncnet::process(const double order, const solve_type solver, const bool collect_dynamic) {
+void hsyncnet::process(const double order, const solve_type solver, const bool collect_dynamic, hsyncnet_analyser & analyser) {
 	unsigned int number_neighbors = 3;
 	unsigned int current_number_clusters = std::numeric_limits<unsigned int>::max();
 
 	double radius = average_neighbor_distance(oscillator_locations, number_neighbors);
 	double current_time = 0.0;
 
-	std::vector< std::vector<sync_dynamic> * > * dynamic = new std::vector< std::vector<sync_dynamic> * >();
-
 	while(current_number_clusters > number_clusters) {
 		create_connections(radius, false);
 
-		std::vector< std::vector<sync_dynamic> * > * current_dynamic = simulate_dynamic(order, solver, collect_dynamic);
+		sync_dynamic current_dynamic;
+		simulate_dynamic(order, 0.1, solver, collect_dynamic, current_dynamic);
 
-		double counter_timer = 0.0;
-		for (std::vector< std::vector<sync_dynamic> * >::iterator iter = current_dynamic->begin(); iter != current_dynamic->end(); iter++) {
-			for (std::vector<sync_dynamic>::iterator osc_dyn = (*iter)->begin(); osc_dyn != (*iter)->end(); osc_dyn++) {
-				(*osc_dyn).time += current_time;
-				counter_timer = (*osc_dyn).time;	
-			}
-			dynamic->push_back(*iter);
-		}
+		sync_dynamic::const_iterator last_state_dynamic = current_dynamic.cend() - 1;
+		analyser.push_back(*(last_state_dynamic));
 
-		current_time = counter_timer;
+		hsyncnet_cluster_data clusters;
+		analyser.allocate_sync_ensembles(0.05, clusters);
 
-		delete current_dynamic;
-
-		std::vector< std::vector<unsigned int> * > * clusters = allocate_sync_ensembles(0.05);
-		current_number_clusters = clusters->size();
+		current_number_clusters = clusters.size();
 
 		number_neighbors++;
 
@@ -76,6 +67,4 @@ std::vector< std::vector<sync_dynamic> * > * hsyncnet::process(const double orde
 			radius = average_neighbor_distance(oscillator_locations, number_neighbors);
 		}
 	}
-
-	return dynamic;
 }

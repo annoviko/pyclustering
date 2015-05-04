@@ -196,7 +196,7 @@ extern "C" DECLARATION clustering_result * xmeans_algorithm(const data_represent
  *          (in) initial_phases		- type of initialization of initial phases of oscillators.
  *
  ***********************************************************************************************/
-extern "C" DECLARATION void * create_sync_network(const unsigned int size, const double weight_factor, const double frequency_factor, const unsigned int connection_type, const unsigned int initial_phases);
+extern "C" DECLARATION void * sync_create_network(const unsigned int size, const double weight_factor, const double frequency_factor, const unsigned int connection_type, const unsigned int initial_phases);
 
 /***********************************************************************************************
  *
@@ -205,7 +205,7 @@ extern "C" DECLARATION void * create_sync_network(const unsigned int size, const
  * @param   (in) pointer_network	- pointer to the Sync network.
  *
  ***********************************************************************************************/
-extern "C" DECLARATION void destroy_sync_network(const void * pointer_network);
+extern "C" DECLARATION void sync_destroy_network(const void * pointer_network);
 
 /***********************************************************************************************
  *
@@ -221,7 +221,7 @@ extern "C" DECLARATION void destroy_sync_network(const void * pointer_network);
  * @return	Returns dynamic of simulation of the network.
  *
  ***********************************************************************************************/
-extern "C" DECLARATION dynamic_result * simulate_sync_network(const void * pointer_network, unsigned int steps, const double time, const unsigned int solver, const bool collect_dynamic);
+extern "C" DECLARATION void * sync_simulate_static(const void * pointer_network, unsigned int steps, const double time, const unsigned int solver, const bool collect_dynamic);
 
 /***********************************************************************************************
  *
@@ -238,24 +238,10 @@ extern "C" DECLARATION dynamic_result * simulate_sync_network(const void * point
  *                                    simulation, defines limit of changes of oscillators between 
  *                                    current and previous steps.
  *
- * @return	Returns dynamic of simulation of the network.
+ * @return	Returns pointer to output dynamic of the network.
  *
  ***********************************************************************************************/
-extern "C" DECLARATION dynamic_result * simulate_dynamic_sync_network(const void * pointer_network, const double order, const unsigned int solver, const bool collect_dynamic, const double step, const double step_int, const double threshold_changes);
-
-/***********************************************************************************************
- *
- * @brief   Allocate clusters of ensembles of synchronous oscillators where each
- *          synchronous ensemble corresponds to only one cluster for Sync network.
- *
- * @param   (in) pointer_network	- pointer to the Sync network.
- *          (in) tolerance			- maximum error for allocation of synchronous ensemble 
- *                                    oscillators.
- *
- * @return	Returns ensembles of synchronous oscillators as clustering result.
- *
- ***********************************************************************************************/
-extern "C" DECLARATION clustering_result * allocate_sync_ensembles_sync_network(const void * pointer_network, const double tolerance);
+extern "C" DECLARATION void * sync_simulate_dynamic(const void * pointer_network, const double order, const unsigned int solver, const bool collect_dynamic, const double step, const double step_int, const double threshold_changes);
 
 /***********************************************************************************************
  *
@@ -279,6 +265,28 @@ extern "C" DECLARATION double sync_order(const void * pointer_network);
  ***********************************************************************************************/
 extern "C" DECLARATION double sync_local_order(const void * pointer_network);
 
+extern "C" DECLARATION unsigned int sync_dynamic_get_size(const void * pointer_network);
+
+extern "C" DECLARATION void sync_dynamic_destroy(const void * pointer);
+
+/***********************************************************************************************
+ *
+ * @brief   Allocate clusters of ensembles of synchronous oscillators where each
+ *          synchronous ensemble corresponds to only one cluster for Sync network.
+ *
+ * @param   (in) pointer_network	- pointer to dynamic of Sync.
+ *          (in) tolerance			- maximum error for allocation of synchronous ensemble 
+ *                                    oscillators.
+ *
+ * @return	Returns pointer to output dynamic of the network.
+ *
+ ***********************************************************************************************/
+extern "C" DECLARATION pyclustering_package * sync_dynamic_allocate_sync_ensembles(const void * pointer_dynamic, const double tolerance);
+
+extern "C" DECLARATION pyclustering_package * sync_dynamic_get_time(const void * pointer);
+
+extern "C" DECLARATION pyclustering_package * sync_dynamic_get_output(const void * pointer);
+
 /***********************************************************************************************
  *
  * @brief   Create oscillatory network SYNC for cluster analysis.
@@ -291,7 +299,10 @@ extern "C" DECLARATION double sync_local_order(const void * pointer_network);
  * @param   (in) initial_phases        - type of initialization of initial phases of oscillators.
  *
  ***********************************************************************************************/
-extern "C" DECLARATION void * create_syncnet_network(const data_representation * const sample, const double connectivity_radius, const bool enable_conn_weight, const unsigned int initial_phases);
+extern "C" DECLARATION void * syncnet_create_network(const data_representation * const sample, 
+                                                     const double connectivity_radius, 
+                                                     const bool enable_conn_weight, 
+                                                     const unsigned int initial_phases);
 
 /***********************************************************************************************
  *
@@ -300,7 +311,7 @@ extern "C" DECLARATION void * create_syncnet_network(const data_representation *
  * @param   (in) pointer_network       - pointer to the SyncNet network.
  *
  ***********************************************************************************************/
-extern "C" DECLARATION void destroy_syncnet_network(const void * pointer_network);
+extern "C" DECLARATION void syncnet_destroy_network(const void * pointer_network);
 
 /***********************************************************************************************
  *
@@ -311,25 +322,15 @@ extern "C" DECLARATION void destroy_syncnet_network(const void * pointer_network
  * @param   (in) solver            - specified type of solving diff. equation. 
  * @param   (in) collect_dynamic   - specified requirement to collect whole dynamic of the network.
  *
- * @return  Return last values of simulation time and phases of oscillators as a tuple if 
- *          collect_dynamic is False, and whole dynamic if collect_dynamic is True.
+ * @return  Returns analyser of output dynamic.
  *
  ***********************************************************************************************/
-extern "C" DECLARATION dynamic_result * process_syncnet(const void * pointer_network, const double order, const unsigned int solver, const bool collect_dynamic);
+extern "C" DECLARATION void * syncnet_process(const void * pointer_network, 
+                                              const double order, 
+                                              const unsigned int solver, 
+                                              const bool collect_dynamic);
 
-/***********************************************************************************************
- *
- * @brief   Allocate clusters of ensembles of synchronous oscillators where each
- *          synchronous ensemble corresponds to only one cluster for SYNC network.
- *
- * @param   (in) pointer_network	- pointer to the Sync network.
- *          (in) tolerance			- maximum error for allocation of synchronous ensemble 
- *                                    oscillators.
- *
- * @return	Returns ensembles of synchronous oscillators as clustering result.
- *
- ***********************************************************************************************/
-extern "C" DECLARATION clustering_result * get_clusters_syncnet(const void * pointer_network, const double tolerance);
+extern "C" DECLARATION void syncnet_analyser_destroy(const void * pointer_analyser);
 
 /***********************************************************************************************
  *
@@ -339,8 +340,10 @@ extern "C" DECLARATION clustering_result * get_clusters_syncnet(const void * poi
  * @param   (in) number_clusters       - number of clusters that should be allocated.
  * @param   (in) initial_phases        - type of initialization of initial phases of oscillators.
  *
+ * @return Return pointer of hsyncnet network.
+ *
  ***********************************************************************************************/
-extern "C" DECLARATION void * create_hsyncnet(const data_representation * const sample, const unsigned int number_clusters, const unsigned int initial_phases);
+extern "C" DECLARATION void * hsyncnet_create_network(const data_representation * const sample, const unsigned int number_clusters, const unsigned int initial_phases);
 
 /***********************************************************************************************
  *
@@ -349,7 +352,7 @@ extern "C" DECLARATION void * create_hsyncnet(const data_representation * const 
  * @param   (in) pointer_network      - pointer to HSyncNet oscillatory network.
  *
  ***********************************************************************************************/
-extern "C" DECLARATION void destroy_hsyncnet_network(const void * pointer_network);
+extern "C" DECLARATION void hsyncnet_destroy_network(const void * pointer_network);
 
 /***********************************************************************************************
  *
@@ -360,11 +363,12 @@ extern "C" DECLARATION void destroy_hsyncnet_network(const void * pointer_networ
  * @param   (in) solver            - specified type of solving diff. equation. 
  * @param   (in) collect_dynamic   - specified requirement to collect whole dynamic of the network.
  *
- * @return  Return last values of simulation time and phases of oscillators as a tuple if 
- *          collect_dynamic is False, and whole dynamic if collect_dynamic is True.
+ * @return  Return pointer to hsyncnet analyser of output dynamic
  *
  ***********************************************************************************************/
-extern "C" DECLARATION dynamic_result * process_hsyncnet(const void * pointer_network, const double order, const unsigned int solver, const bool collect_dynamic);
+extern "C" DECLARATION void * hsyncnet_process(const void * pointer_network, const double order, const unsigned int solver, const bool collect_dynamic);
+
+extern "C" DECLARATION void hsyncnet_analyser_destroy(const void * pointer_analyser);
 
 
 extern "C" DECLARATION void * som_create(const data_representation * const sample, const unsigned int num_rows, const unsigned int num_cols, const unsigned int num_epochs, const unsigned int type_conn, const void * parameters);
