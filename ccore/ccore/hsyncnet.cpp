@@ -38,10 +38,10 @@ hsyncnet::~hsyncnet() { }
 
 
 void hsyncnet::process(const double order, const solve_type solver, const bool collect_dynamic, hsyncnet_analyser & analyser) {
-	unsigned int number_neighbors = 3;
+	unsigned int number_neighbors = 0;
 	unsigned int current_number_clusters = std::numeric_limits<unsigned int>::max();
 
-	double radius = average_neighbor_distance(oscillator_locations, number_neighbors);
+	double radius = 0.0;
 	double current_time = 0.0;
 
 	while(current_number_clusters > number_clusters) {

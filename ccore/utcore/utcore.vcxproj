@@ -83,6 +83,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\ccore\hsyncnet.cpp" />
     <ClCompile Include="..\ccore\kdtree.cpp" />
     <ClCompile Include="..\ccore\network.cpp" />
     <ClCompile Include="..\ccore\pcnn.cpp" />
@@ -93,6 +94,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\ccore\differential.h" />
+    <ClInclude Include="..\ccore\hsyncnet.h" />
     <ClInclude Include="..\ccore\kdtree.h" />
     <ClInclude Include="..\ccore\network.h" />
     <ClInclude Include="..\ccore\pcnn.h" />
@@ -100,6 +102,7 @@
     <ClInclude Include="..\ccore\sync.h" />
     <ClInclude Include="..\ccore\syncnet.h" />
     <ClInclude Include="utest-differential.h" />
+    <ClInclude Include="utest-hsyncnet.h" />
     <ClInclude Include="utest-kdtree.h" />
     <ClInclude Include="utest-network.h" />
     <ClInclude Include="utest-pcnn.h" />

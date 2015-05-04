@@ -31,7 +31,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 typedef std::vector<unsigned int>			hsyncnet_cluster;
 typedef ensemble_data<hsyncnet_cluster>		hsyncnet_cluster_data;
-typedef sync_dynamic						hsyncnet_analyser;
+typedef syncnet_analyser					hsyncnet_analyser;
 
 
 class hsyncnet: public syncnet {

@@ -105,13 +105,13 @@ class hsyncnet(syncnet):
             analyser = wrapper.hsyncnet_process(self.__ccore_network_pointer, order, solution, collect_dynamic);
             return syncnet_analyser(None, None, analyser);
         
-        number_neighbors = 3;
+        number_neighbors = 0;
         current_number_clusters = float('inf');
         
         dyn_phase = [];
         dyn_time = [];
         
-        radius = average_neighbor_distance(self._osc_loc, number_neighbors);
+        radius = 0.0;
         
         while(current_number_clusters > self._number_clusters):                
             self._create_connections(radius);

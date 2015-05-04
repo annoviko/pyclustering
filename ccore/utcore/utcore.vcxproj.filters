@@ -36,6 +36,9 @@
     <ClCompile Include="..\ccore\syncnet.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\ccore\hsyncnet.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="utest-kdtree.h">
@@ -76,6 +79,12 @@
     </ClInclude>
     <ClInclude Include="utest-syncnet.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utest-hsyncnet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ccore\hsyncnet.h">
+      <Filter>Resource Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
