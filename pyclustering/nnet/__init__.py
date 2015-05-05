@@ -1,111 +1,139 @@
-'''
+"""!
 
-Abstract network representation that is used as a basic class.
+@brief Neural and oscillatory network module. Consists of models of bio-inspired networks.
 
-Copyright (C) 2015    Andrei Novikov (spb.andr@yandex.ru)
+@authors Andrei Novikov (spb.andr@yandex.ru)
+@date 2014-2015
+@copyright GNU Public License
 
-pyclustering is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+@cond GNU_PUBLIC_LICENSE
+    PyClustering is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    PyClustering is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+@endcond
 
-pyclustering is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-'''
+"""
 
 import math;
 
 from abc import ABCMeta, abstractmethod;
 
+
 class initial_type:
+    """!
+    @brief Enumerator of types of oscillator output initialization.
+    
+    """
+    
+    """!
+    @brief Output of oscillators are random in line with gaussian distribution.
+    
+    """
     RANDOM_GAUSSIAN = 0;
+    
+    """!
+    @brief Output of oscillators are equidistant from each other (uniformly distributed, not randomly).
+    
+    """
     EQUIPARTITION = 1;
 
+
 class solve_type:
+    """!
+    @brief Enumerator of solver types that are used for network simulation.
+    
+    """
+    
+    """!
+    @brief Forward Euler first-order method.
+    
+    """
     FAST = 0;                   # Usual calculation: x(k + 1) = x(k) + f(x(k)).
-    RK4 = 1;                    # Runge-Kutte 4 method with fixed step.
-    RKF45 = 2;                  # Runge-Kutte-Fehlberg 45 method float step.
+    
+    """!
+    @brief Classic fourth-order Runge-Kutta method (fixed step).
+    
+    """
+    RK4 = 1;
+    
+    """!
+    @brief Runge-Kutta-Fehlberg method with order 4 and 5 (float step).
+    
+    """
+    RKF45 = 2;
+
 
 class conn_type:
-    NONE = 0;                   # No connection between oscillators.
-    ALL_TO_ALL = 1;             # All oscillators have counnection with each other.
-    GRID_FOUR = 2;              # Connections between oscillators represents grid where one oscillator can be connected with four oscillators: right, upper, left, lower.
-    GRID_EIGHT = 3;             # Similar to previous, but neighbors are: right, right-upper, upper, upper-left, left, left-lower, lower, lower-right.
-    LIST_BIDIR = 4;             # Connections between oscillators represents bidirectional list (chain).
+    """!
+    @brief Enumerator of connection types between oscillators.
+    
+    """
+    
+    """!
+    @brief No connection between oscillators.
+    
+    """
+    NONE = 0;
+    
+    """!
+    @brief All oscillators have connection with each other.
+    
+    """
+    ALL_TO_ALL = 1;
+    
+    """!
+    @brief Connections between oscillators represent grid where one oscillator can be connected with four neighbor oscillators: right, upper, left, lower.
+    
+    """
+    GRID_FOUR = 2;
+    
+    """!
+    @brief Connections between oscillators represent grid where one oscillator can be connected with eight neighbor 
+           oscillators: right, right-upper, upper, upper-left, left, left-lower, lower, lower-right.
+           
+    """
+    GRID_EIGHT = 3;
+    
+    """!
+    @brief Connections between oscillators represent bidirectional list.
+    
+    """
+    LIST_BIDIR = 4; 
+    
+    """!
+    @brief Connections are defined by user or by network during simulation.
+    
+    """
     DYNAMIC = 5;
 
+
 class conn_represent:
+    """!
+    @brief Enumerator of internal network connection representation between oscillators.
+    
+    """
+    
+    """!
+    @brief Each oscillator has list of his neighbors.
+    
+    """
     LIST = 0;
+    
+    """!
+    @brief Connections are represented my matrix connection NxN, where N is number of oscillators.
+    
+    """
     MATRIX = 1;    
 
-
-class network_interface(metaclass = ABCMeta):
-    @abstractmethod
-    def simulate(self, steps, time, solution, collect_dynamic):
-        "Performs static simulation of oscillatory network"
-        
-        "(in) steps            - number steps of simulations during simulation"
-        "(in) time             - time of simulation"
-        "(in) solution         - type of solution (solving)"
-        "(in) collect_dynamic  - if True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics"
-        
-        "Returns dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,"
-        "otherwise returns only last values (last step of simulation) of dynamic"        
-        
-        pass;
-    
-    
-    @abstractmethod
-    def simulate_static(self, steps, time, solution, collect_dynamic):
-        "Performs static simulation of oscillatory network"
-        
-        "(in) steps            - number steps of simulations during simulation"
-        "(in) time             - time of simulation"
-        "(in) solution         - type of solution (solving)"
-        "(in) collect_dynamic  - if True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics"
-        
-        "Returns dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,"
-        "otherwise returns only last values (last step of simulation) of dynamic"        
-                
-        pass;
-    
-    
-    @abstractmethod
-    def simulate_dynamic(self, order, solution, collect_dynamic, step, int_step, threshold_changes):
-        "Performs dynamic simulation of the network until stop condition is not reached. Stop condition is defined by"
-        "input argument 'order'."
-        
-        "(in) order              - order of process synchronization, destributed 0..1"
-        "(in) solution           - type of solution (solving)"
-        "(in) collect_dynamic    - if True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics"
-        "(in) step               - time step of one iteration of simulation"
-        "(in) int_step           - integration step, should be less than step"
-        "(in) threshold_changes  - additional stop condition that helps prevent infinite simulation, defines limit of changes of oscillators between current and previous steps"
-        
-        "Returns dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,"
-        "otherwise returns only last values (last step of simulation) of dynamic"
-                
-        pass;
-    
-    
-    @abstractmethod
-    def allocate_sync_ensembles(self, tolerance):
-        "Allocate clusters in line with ensembles of synchronous oscillators where each" 
-        "synchronous ensemble corresponds to only one cluster"
-        
-        "(in) tolerance        - maximum error for allocation of synchronous ensemble oscillators"
-        
-        "Returns list of grours (lists) of indexes of synchronous oscillators"
-        "For example [ [index_osc1, index_osc3], [index_osc2], [index_osc4, index_osc5] ]"
-        
-        pass;
-    
 
 class network:
     _num_osc = 0;

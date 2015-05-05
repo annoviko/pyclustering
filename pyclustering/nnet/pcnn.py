@@ -277,6 +277,31 @@ class pcnn_network(network):
     """!
     @brief Model of oscillatory network that is based on the Eckhorn model.
     
+    Example:
+    @code
+        # Create pulse-coupled neural network:
+        # - 9 oscillators.
+        # - default parameters.
+        # - grid type of connections (each oscillator has connection with four neighbors).
+        net = pcnn_network(9, None, conn_type.GRID_FOUR, ccore = ccore_flag);
+        
+        # Create external stimulus. Number of stimulus should be equal to number of neurons.
+        stimulus = [1, 1, 1, 0, 0, 0, 1, 1, 1];
+        
+        # Simulate dynamic of the network during 40 iterations
+        dynamic = net.simulate(40, stimulus);
+        
+        # Allocate synchronous oscillators
+        ensembles = dynamic.allocate_sync_ensembles();
+        print(ensembles);
+        
+        # Show output dynamic of the network
+        pcnn_visualizer.show_output_dynamic(dynamic);
+        
+        # Show time signal vector information
+        pcnn_visualizer.show_time_signal(dynamic);
+    @endcode
+    
     """
     
     # Protected members:

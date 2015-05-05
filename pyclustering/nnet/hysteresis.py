@@ -34,7 +34,7 @@ from scipy.integrate import odeint;
 from pyclustering.nnet import *;
 
 
-class hysteresis_network(network, network_interface):
+class hysteresis_network(network):
     """!
     @brief Hysteresis oscillatory network that uses relaxation oscillators.
     
@@ -156,17 +156,6 @@ class hysteresis_network(network, network_interface):
         """
                 
         return self.simulate_static(steps, time, solution, collect_dynamic);
-    
-    
-    def simulate_dynamic(self, order, solution, collect_dynamic, step, int_step, threshold_changes):
-        """!
-        @brief Performs dynamic simulation, when time simulation is not specified, only stop condition.
-        
-        @warning Not supported because of model specific.
-        
-        """
-        
-        raise NameError("Dynamic simulation is not supported due to lack of stop conditions for the model");
     
     
     def simulate_static(self, steps, time, solution = solve_type.RK4, collect_dynamic = False):

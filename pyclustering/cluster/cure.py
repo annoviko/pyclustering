@@ -59,6 +59,10 @@ class cure_cluster:
         self.distance = float('inf');      # calculation of distance is really complexity operation (even square distance), so let's store distance to closest cluster.
         
     def __repr__(self):
+        """!
+        @brief Displays distance to closest cluster and points that are contained by current cluster.
+        
+        """
         return "%s, %s" % (self.distance, self.points);
         
 

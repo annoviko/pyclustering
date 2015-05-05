@@ -64,7 +64,7 @@ class legion_parameters:
     I           = 0.2;          # value of stimulus
 
 
-class legion_network(network, network_interface):
+class legion_network(network):
     """!
     @brief Local excitatory global inhibitory oscillatory network (LEGION) that uses relaxation oscillator
            based on Van der Pol model. The model uses global inhibitor to de-synchronize synchronous ensembles
@@ -193,17 +193,6 @@ class legion_network(network, network_interface):
         """
         
         return self.simulate_static(steps, time, solution, collect_dynamic);
-    
-    
-    def simulate_dynamic(self, order, solution, collect_dynamic, step, int_step, threshold_changes):
-        """!
-        @brief Performs dynamic simulation, when time simulation is not specified, only stop condition.
-        
-        @warning The method is not supported.
-        
-        """
-        
-        raise NameError("Dynamic simulation is not supported due to lack of stop conditions for the model.");
     
     
     def simulate_static(self, steps, time, solution = solve_type.RK4, collect_dynamic = False):

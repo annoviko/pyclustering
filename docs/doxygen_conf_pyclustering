@@ -771,11 +771,14 @@ INPUT                 += pyclustering/cluster/syncnet.py
 INPUT                 += pyclustering/cluster/syncsom.py
 INPUT                 += pyclustering/cluster/xmeans.py
 
+INPUT				  += pyclustering/container/__init__.py
 INPUT				  += pyclustering/container/cftree.py
 INPUT				  += pyclustering/container/kdtree.py
 
+INPUT				  += pyclustering/gcolor/__init__.py
 INPUT				  += pyclustering/gcolor/dsatur.py
 INPUT				  += pyclustering/gcolor/hysteresis.py
+INPUT				  += pyclustering/gcolor/sync.py
 
 INPUT				  += pyclustering/nnet/__init__.py
 INPUT				  += pyclustering/nnet/hhn.py
