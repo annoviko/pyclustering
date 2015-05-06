@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <initializer_list>
+#include <cmath>
 
 namespace differential {
 
@@ -496,7 +497,7 @@ void runge_kutta_fehlberg_45(void (*function_pointer)(const double t, const diff
 		differ_state<state_type> errors = R1 * k1 + R3 * k3 + R4 * k4 + R5 * k5 + R6 * k6;
 
 		double err = 0.0;
-		for (differ_state<state_type>::const_iterator iter = errors.cbegin(); iter != errors.cend(); iter++) {
+		for (typename differ_state<state_type>::const_iterator iter = errors.cbegin(); iter != errors.cend(); iter++) {
 			double current_error = std::abs(*iter);
 			if (current_error > err) {
 				err = current_error;

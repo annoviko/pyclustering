@@ -27,6 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <cmath>
 #include <exception>
 #include <stdexcept>
+#include <algorithm>
 
 
 network::network(const unsigned int number_oscillators, const conn_type connection_type) {
