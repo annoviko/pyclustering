@@ -42,6 +42,10 @@ typedef struct differential_result {
 
 inline double pi(void) { return (double) 3.14159265358979323846; }
 
+inline double heaviside(double value) {
+	if (value >= 0) { return 1.0; }
+	else { return 0.0; }
+}
 
 /***********************************************************************************************
  *
@@ -182,53 +186,5 @@ void destroy_package(pyclustering_package * package);
  *
  ***********************************************************************************************/
 double average_neighbor_distance(const std::vector<std::vector<double> > * points, const unsigned int num_neigh);
-
-/***********************************************************************************************
- *
- * @brief   Runge-Kutta 4 solver.
- *
- * @param   (in) function_pointer   - pointer to function.
- *          (in) initial_value      - initial values.
- *          (in) a                  - left point (start time).
- *          (in) b                  - right point (end time).
- *          (in) steps              - number of steps.
- *          (in) flag_collect       - if true then collects whole results of integation, 
- *                                    otherwise it stores only last value.
- *          (in) argv               - extra arguments are required by function_pointer.
- *
- * @return  Returns full result of integration (each step of integration).
- *
- ***********************************************************************************************/
-std::vector<differential_result> * rk4(double (*function_pointer)(const double t, const double val, const std::vector<void *> & argv), 
-	                                   const double initial_value, 
-									   const double a, 
-									   const double b, 
-									   const unsigned int steps, 
-									   const bool flag_collect,
-									   const std::vector<void *> & argv);
-
-/***********************************************************************************************
- *
- * @brief   Runge-Kutta-Felhberg (RKF45) solver.
- *
- * @param   (in) function_pointer   - pointer to function.
- *          (in) initial_value      - initial values.
- *          (in) a                  - left point (start time).
- *          (in) b                  - right point (end time).
- *          (in) tolerance          - acceptable error for solving.
- *          (in) flag_collect       - if true then collects whole results of integation, 
- *                                    otherwise it stores only last value.
- *          (in) argv               - extra arguments are required by function_pointer.
- *
- * @return	Returns full result of integration (each step of integration).
- *
- ***********************************************************************************************/
-std::vector<differential_result> * rkf45(double (*function_pointer)(const double t, const double val, const std::vector<void *> & argv), 
-	                                     const double initial_value, 
-										 const double a, 
-										 const double b, 
-										 const double tolerance,
-										 const bool flag_collect,
-										 const std::vector<void *> & argv);
 
 #endif

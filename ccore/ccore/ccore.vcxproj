@@ -148,7 +148,6 @@
     <ClCompile Include="ccore.cpp" />
     <ClCompile Include="cure.cpp" />
     <ClCompile Include="dbscan.cpp" />
-    <ClCompile Include="differential.cpp" />
     <ClCompile Include="hierarchical.cpp" />
     <ClCompile Include="hsyncnet.cpp" />
     <ClCompile Include="kdtree.cpp" />

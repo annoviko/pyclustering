@@ -413,6 +413,31 @@ extern "C" DECLARATION pyclustering_package * pcnn_dynamic_get_output(const void
 
 extern "C" DECLARATION pyclustering_package * pcnn_dynamic_get_time(const void * pointer);
 
-extern "C" DECLARATION unsigned int pcnn_dynamic_get_size(const void * pointer); 
+extern "C" DECLARATION unsigned int pcnn_dynamic_get_size(const void * pointer);
+
+
+
+extern "C" DECLARATION void * legion_create(const unsigned int size, const unsigned int connection_type, const void * const parameters);
+
+extern "C" DECLARATION void legion_destroy(const void * pointer);
+
+extern "C" DECLARATION void * legion_simulate(const void * pointer, 
+                                              const unsigned int steps, 
+                                              const double time, 
+                                              const unsigned int solver, 
+                                              const bool collect_dynamic, 
+                                              const void * const stimulus);
+
+extern "C" DECLARATION unsigned int legion_get_size(const void * pointer);
+
+extern "C" DECLARATION void legion_dynamic_destroy(const void * pointer);
+
+extern "C" DECLARATION pyclustering_package * legion_dynamic_get_output(const void * pointer);
+
+extern "C" DECLARATION pyclustering_package * legion_dynamic_get_inhibitory_output(const void * pointer);
+
+extern "C" DECLARATION pyclustering_package * legion_dynamic_get_time(const void * pointer);
+
+extern "C" DECLARATION unsigned int legion_dynamic_get_size(const void * pointer);
 
 #endif

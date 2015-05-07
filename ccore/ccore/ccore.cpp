@@ -35,6 +35,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "syncnet.h"
 #include "xmeans.h"
 
+#include "legion.h"
 #include "pcnn.h"
 #include "som.h"
 #include "sync.h"
@@ -341,7 +342,6 @@ void syncnet_analyser_destroy(const void * pointer_analyser) {
 	}
 }
 
-#if 1
 void * hsyncnet_create_network(const data_representation * const sample, const unsigned int number_clusters, const unsigned int initial_phases) {
 	std::vector<std::vector<double> > * dataset = read_sample(sample);	/* belongs to hsyncnet */
 	return (void *) new hsyncnet(dataset, number_clusters, (initial_type) initial_phases);
@@ -367,7 +367,8 @@ void hsyncnet_analyser_destroy(const void * pointer_analyser) {
 		delete (hsyncnet_analyser *) pointer_analyser;
 	}
 }
-#endif
+
+
 
 void * som_create(const data_representation * const sample, const unsigned int num_rows, const unsigned int num_cols, const unsigned int num_epochs, const unsigned int type_conn, const void * parameters) {
 	std::vector<std::vector<double> > * dataset = read_sample(sample);
@@ -429,6 +430,7 @@ pyclustering_package * som_get_neighbors(const void * pointer) {
 
 	return package;
 }
+
 
 
 void * pcnn_create(const unsigned int size, const unsigned int connection_type, const void * const parameters) {
@@ -530,4 +532,85 @@ pyclustering_package * pcnn_dynamic_get_time(const void * pointer) {
 
 unsigned int pcnn_dynamic_get_size(const void * pointer) {
 	return ((pcnn_dynamic *) pointer)->size();
+}
+
+
+
+void * legion_create(const unsigned int size, const unsigned int connection_type, const void * const parameters) {
+	legion_network * pcnn_network = new legion_network(size, (conn_type) connection_type, *((legion_parameters *) parameters));
+	return (void *) pcnn_network;
+}
+
+void legion_destroy(const void * pointer) {
+	delete (legion_network *) pointer;
+}
+
+void * legion_simulate(const void * pointer, 
+                       const unsigned int steps, 
+					   const double time, 
+					   const unsigned int solver, 
+					   const bool collect_dynamic, 
+					   const void * const stimulus) {
+
+	const pyclustering_package * const package_stimulus = (const pyclustering_package * const) stimulus;
+	legion_stimulus stimulus_vector((double *) package_stimulus->data, ((double *) package_stimulus->data) + package_stimulus->size);
+
+	legion_dynamic * dynamic = new legion_dynamic();
+	((legion_network *) pointer)->simulate(steps, time, (solve_type) solver, collect_dynamic, stimulus_vector, (*dynamic));
+
+	return dynamic;
+}
+
+unsigned int legion_get_size(const void * pointer) {
+	return ((legion_network *) pointer)->size();
+}
+
+void legion_dynamic_destroy(const void * pointer) {
+	delete (legion_dynamic *) pointer;
+}
+
+pyclustering_package * legion_dynamic_get_output(const void * pointer) {
+	legion_dynamic & dynamic = *((legion_dynamic *) pointer);
+
+	pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
+	package->size = dynamic.size();
+	package->data = new pyclustering_package * [package->size];
+
+	for (unsigned int i = 0; i < package->size; i++) {
+		((pyclustering_package **) package->data)[i] = create_package(&dynamic[i].m_output);
+	}
+
+	return package;
+}
+
+pyclustering_package * legion_dynamic_get_inhibitory_output(const void * pointer) {
+	legion_dynamic & dynamic = *((legion_dynamic *) pointer);
+
+	pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_DOUBLE);
+	package->size = dynamic.size();
+	package->data = new double[package->size];
+
+	for (unsigned int i = 0; i < package->size; i++) {
+		((double *) package->data)[i] = dynamic[i].m_inhibitor;
+	}
+
+	return package;
+}
+
+pyclustering_package * legion_dynamic_get_time(const void * pointer) {
+	legion_dynamic & dynamic = *((legion_dynamic *) pointer);
+
+	pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_DOUBLE);
+	package->size = dynamic.size();
+	package->data = new double[package->size];
+
+	for (unsigned int i = 0; i < package->size; i++) {
+		((double *) package->data)[i] = dynamic[i].m_time;
+	}
+
+	return package;
+}
+
+unsigned int legion_dynamic_get_size(const void * pointer) {
+	return ((legion_dynamic *) pointer)->size();
 }
