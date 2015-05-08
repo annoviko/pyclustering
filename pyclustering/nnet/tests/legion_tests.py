@@ -36,72 +36,72 @@ class Test(unittest.TestCase):
         params = legion_parameters();
         params.teta = 0;    # because no neighbors at all
      
-        net = legion_network(1, [0], type_conn = conn_type.NONE, parameters = params);
-        (t, x, z) = net.simulate(1000, 200);
+        net = legion_network(1, type_conn = conn_type.NONE, parameters = params);
+        dynamic = net.simulate(1000, 200, [0]);
          
-        assert extract_number_oscillations(x) == 1;
+        assert extract_number_oscillations(dynamic.output) == 1;
          
          
     def testStimulatedOscillatorWithoutLateralPotential(self):
         params = legion_parameters();
         params.teta = 0;    # because no neighbors at all
          
-        net = legion_network(1, [1], type_conn = conn_type.NONE, parameters = params);
-        (t, x, z) = net.simulate(1000, 200);
+        net = legion_network(1, type_conn = conn_type.NONE, parameters = params);
+        dynamic = net.simulate(1000, 200, [1]);
          
-        assert extract_number_oscillations(x) > 1;      
+        assert extract_number_oscillations(dynamic.output) > 1;      
  
  
     def testStimulatedOscillatorWithLateralPotential(self):
-        net = legion_network(1, [1], type_conn = conn_type.NONE);
-        (t, x, z) = net.simulate(1000, 200);
+        net = legion_network(1, type_conn = conn_type.NONE);
+        dynamic = net.simulate(1000, 200, [1]);
          
-        assert extract_number_oscillations(x) == 1;
+        assert extract_number_oscillations(dynamic.output) == 1;
          
      
     def testStimulatedTwoOscillators(self):
-        net = legion_network(2, [1, 1], type_conn = conn_type.LIST_BIDIR);
-        (t, x, z) = net.simulate(1000, 2000);
+        net = legion_network(2, type_conn = conn_type.LIST_BIDIR);
+        dynamic = net.simulate(1000, 2000, [1, 1]);
          
-        assert extract_number_oscillations(x, 0) > 1;
-        assert extract_number_oscillations(x, 1) > 1;
+        assert extract_number_oscillations(dynamic.output, 0) > 1;
+        assert extract_number_oscillations(dynamic.output, 1) > 1;
  
  
     def testUnstimulatedTwoOscillators(self):
         params = legion_parameters();
         params.teta_p = 2.5;
          
-        net = legion_network(2, [0, 0], type_conn = conn_type.LIST_BIDIR, parameters = params);
-        (t, x, z) = net.simulate(1000, 1000);
+        net = legion_network(2, type_conn = conn_type.LIST_BIDIR, parameters = params);
+        dynamic = net.simulate(1000, 1000, [0, 0]);
          
-        assert extract_number_oscillations(x, 0) == 1;
-        assert extract_number_oscillations(x, 1) == 1;
+        assert extract_number_oscillations(dynamic.output, 0) == 1;
+        assert extract_number_oscillations(dynamic.output, 1) == 1;
          
          
     def testMixStimulatedThreeOscillators(self):
-        net = legion_network(3, [1, 0, 1], type_conn = conn_type.LIST_BIDIR);
-        (t, x, z) = net.simulate(1000, 2000);
+        net = legion_network(3, type_conn = conn_type.LIST_BIDIR);
+        dynamic = net.simulate(1000, 2000, [1, 0, 1]);
          
-        assert extract_number_oscillations(x, 0) > 1;
-        assert extract_number_oscillations(x, 1) == 1;   
-        assert extract_number_oscillations(x, 2) > 1;       
+        assert extract_number_oscillations(dynamic.output, 0) > 1;
+        assert extract_number_oscillations(dynamic.output, 1) == 1;   
+        assert extract_number_oscillations(dynamic.output, 2) > 1;       
  
     def testListConnectionRepresentation(self):
-        net = legion_network(3, [1, 0, 1], type_conn = conn_type.LIST_BIDIR, type_conn_represent = conn_represent.LIST);
-        (t, x, z) = net.simulate(1000, 2000);
+        net = legion_network(3, type_conn = conn_type.LIST_BIDIR, type_conn_represent = conn_represent.LIST);
+        dynamic = net.simulate(1000, 2000, [1, 0, 1]);
  
-        assert extract_number_oscillations(x, 0) > 1;
-        assert extract_number_oscillations(x, 1) == 1;   
-        assert extract_number_oscillations(x, 2) > 1;  
+        assert extract_number_oscillations(dynamic.output, 0) > 1;
+        assert extract_number_oscillations(dynamic.output, 1) == 1;   
+        assert extract_number_oscillations(dynamic.output, 2) > 1;  
          
          
     # Tests regarded to various structures that can be used.
     def templateOscillationsWithStructures(self, type_conn):
-        net = legion_network(4, [1, 1, 1, 1], type_conn = conn_type.LIST_BIDIR);
-        (t, x, z) = net.simulate(500, 1000);
+        net = legion_network(4, type_conn = conn_type.LIST_BIDIR);
+        dynamic = net.simulate(500, 1000, [1, 1, 1, 1]);
          
         for i in range(net.num_osc):
-            assert extract_number_oscillations(x, i) > 1;
+            assert extract_number_oscillations(dynamic.output, i) > 1;
  
  
     def testStimulatedOscillatorListStructure(self):
@@ -119,10 +119,10 @@ class Test(unittest.TestCase):
     
     # Tests regarded to synchronous ensembles allocation.
     def templateSyncEnsembleAllocation(self, stimulus, params, type_conn, sim_steps, sim_time, expected_clusters):
-        net = legion_network(len(stimulus), stimulus, params, type_conn);
-        (t, x, z) = net.simulate(sim_steps, sim_time);
+        net = legion_network(len(stimulus), params, type_conn);
+        dynamic = net.simulate(sim_steps, sim_time, stimulus);
         
-        ensembles = net.allocate_sync_ensembles(0.1);
+        ensembles = dynamic.allocate_sync_ensembles(0.1);
         assert ensembles == expected_clusters;
         
     def testSyncEnsembleAllocationOneStimulatedOscillator(self):

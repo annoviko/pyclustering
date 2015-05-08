@@ -6,6 +6,8 @@
 #include "differential.h"
 
 #include <vector>
+#include <random>
+
 
 using namespace differential;
 
@@ -101,11 +103,19 @@ class legion_network : public network {
 private:
 	std::vector<legion_oscillator> m_oscillators;
 
+	double m_global_inhibitor;
+
 	legion_parameters m_params;
 
 	std::vector<std::vector<double> > m_dynamic_connections;
 
 	legion_stimulus * m_stimulus;		/* just keep it during simulation for convinience (pointer to external object, legion is not owner) */
+
+	std::random_device                      m_device;
+
+	std::default_random_engine              m_generator;
+
+	std::uniform_real_distribution<double>	m_noise_distribution;
 
 private:
 	legion_network::legion_network() : m_stimulus(NULL), network(0, conn_type::NONE) { }
@@ -122,6 +132,10 @@ private:
 	void create_dynamic_connections(const legion_stimulus & stimulus);
 
 	void calculate_states(const legion_stimulus & stimulus, const solve_type solver, const double t, const double step, const double int_step);
+
+	void inhibitor_state(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs);
+
+	static void adapter_inhibitor_state(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs);
 
 	void neuron_states(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs);
 

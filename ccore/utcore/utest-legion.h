@@ -1,5 +1,5 @@
-#ifndef _UTEST_DIFFERENTIAL_
-#define _UTEST_DIFFERENTIAL_
+#ifndef _UTEST_LEGION_
+#define _UTEST_LEGION_
 
 #include "ccore/legion.h"
 
@@ -47,6 +47,10 @@ static void template_dynamic_simulation(const legion_stimulus & stimulus, const 
 	network.simulate(steps, time, solver, true, stimulus, output_legion_dynamic);
 
 	ASSERT_EQ(steps, output_legion_dynamic.size());
+}
+
+TEST(utest_legion, one_unstimulated_oscillator_rk4) {
+	template_dynamic_simulation({ 0 }, conn_type::NONE, solve_type::RK4, 10, 100);
 }
 
 TEST(utest_legion, one_stimulated_oscillator_rk4) {

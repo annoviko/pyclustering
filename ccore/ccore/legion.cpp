@@ -1,23 +1,19 @@
 #include "legion.h"
 #include "support.h"
 
-#include <random>
-
 
 legion_network::legion_network(const unsigned int num_osc, const conn_type connection_type, const legion_parameters & params) :
 	m_oscillators(num_osc, legion_oscillator()),
 	m_dynamic_connections(num_osc, std::vector<double>(num_osc, 0.0)),
 	m_stimulus(NULL),
+	m_generator(m_device()),
+	m_noise_distribution(0.0, params.ro),
 	network(num_osc, connection_type) {
 
 	m_params = params;
 
-	std::random_device                      device;
-	std::default_random_engine              generator(device());
-	std::uniform_real_distribution<double>	noise_distribution(0.0, params.ro);
-
 	for (size_t index = 0; index < m_oscillators.size(); index++) {
-		m_oscillators[index].m_noise = noise_distribution(generator);
+		m_oscillators[index].m_noise = m_noise_distribution(m_generator);
 	}
 }
 
@@ -25,7 +21,7 @@ legion_network::~legion_network() {
 	m_stimulus = NULL;
 }
 
-
+#include <iostream>
 void legion_network::simulate(const unsigned int steps, 
                               const double time, 
                               const solve_type solver, 
@@ -43,10 +39,12 @@ void legion_network::simulate(const unsigned int steps,
 
 	store_dynamic(0.0, collect_dynamic, output_dynamic);	/* store initial state */
 
+	std::cout << "simulation - initial itaration " << steps << ", " << time << ", " << step << std::endl;
 	for (double cur_time = step; cur_time < time; cur_time += step) {
 		calculate_states(stimulus, solver, cur_time, step, int_step);
 		
 		store_dynamic(cur_time, collect_dynamic, output_dynamic);	/* store initial state */
+		//std::cout << "simulation - itaration " << cur_time << std::endl;
 	}
 }
 
@@ -99,12 +97,8 @@ void legion_network::store_dynamic(const double time, const bool collect_dynamic
 }
 
 void legion_network::calculate_states(const legion_stimulus & stimulus, const solve_type solver, const double t, const double step, const double int_step) {
-	std::vector<double> excitatory(size(), 0.0);
 	std::vector<void *> argv(2, NULL);
-
-	std::vector<double> next_excitatory(size(), 0.0);
-	std::vector<double> next_inhibitory(size(), 0.0);
-	std::vector<double> next_potential(size(), 0.0);
+	std::vector<differ_result<double> > next_states(size());
 
 	argv[0] = (void *) this;
 
@@ -114,7 +108,6 @@ void legion_network::calculate_states(const legion_stimulus & stimulus, const so
 		argv[1] = (void *) &index;
 
 		differ_state<double> inputs { m_oscillators[index].m_excitatory, m_oscillators[index].m_inhibitory, m_oscillators[index].m_potential };
-		differ_result<double> outputs;
 
 		switch(solver) {
 			case solve_type::FAST: {
@@ -122,12 +115,12 @@ void legion_network::calculate_states(const legion_stimulus & stimulus, const so
 			}
 
 			case solve_type::RK4: {
-				runge_kutta_4(&legion_network::adapter_neuron_states, inputs, t, t + step, number_int_steps, false /* only last states */, argv, outputs);
+				runge_kutta_4(&legion_network::adapter_neuron_states, inputs, t, t + step, number_int_steps, false /* only last states */, argv, next_states[index]);
 				break;
 			}
 
 			case solve_type::RKF45: {
-				runge_kutta_fehlberg_45(&legion_network::adapter_neuron_states, inputs, t, t + step, 0.00001, false /* only last states */, argv, outputs);
+				runge_kutta_fehlberg_45(&legion_network::adapter_neuron_states, inputs, t, t + step, 0.00001, false /* only last states */, argv, next_states[index]);
 				break;
 			}
 
@@ -136,15 +129,51 @@ void legion_network::calculate_states(const legion_stimulus & stimulus, const so
 			}
 		}
 
-		next_excitatory[index] = outputs[0].state[0];
-		next_inhibitory[index] = outputs[0].state[1];
-		next_potential[index] = outputs[0].state[2];
+		std::vector<unsigned int> * neighbors = get_neighbors(index);
+		double coupling = 0.0;
+
+		for (std::vector<unsigned int>::const_iterator index_neighbor_iterator = neighbors->begin(); index_neighbor_iterator != neighbors->end(); index_neighbor_iterator++) {
+			coupling += m_dynamic_connections[index][*index_neighbor_iterator] * heaviside(m_oscillators[*index_neighbor_iterator].m_excitatory - m_params.teta_x);
+		}
+
+		delete neighbors;
+
+		m_oscillators[index].m_buffer_coupling_term = coupling - m_params.Wz * heaviside(m_global_inhibitor - m_params.teta_xz);
+	}
+
+	differ_result<double> inhibitor_next_state;
+	differ_state<double> inhibitor_input { m_global_inhibitor };
+
+	switch (solver) {
+		case solve_type::RK4: {
+			runge_kutta_4(&legion_network::adapter_inhibitor_state, inhibitor_input, t, t + step, number_int_steps, false /* only last states */, argv, inhibitor_next_state);
+			break;
+		}
+		case solve_type::RKF45: {
+			runge_kutta_fehlberg_45(&legion_network::adapter_inhibitor_state, inhibitor_input, t, t + step, 0.00001, false /* only last states */, argv, inhibitor_next_state);
+			break;
+		}
+	}
+
+	m_global_inhibitor = inhibitor_next_state[0].state[0];
+
+	for (unsigned int i = 0; i < size(); i++) {
+		m_oscillators[i].m_excitatory = next_states[i][0].state[0];
+		m_oscillators[i].m_inhibitory = next_states[i][0].state[1];
+		m_oscillators[i].m_potential = next_states[i][0].state[2];
+		m_oscillators[i].m_coupling_term = m_oscillators[i].m_buffer_coupling_term;
+		m_oscillators[i].m_noise = m_noise_distribution(m_generator);
 	}
 }
 
 
 void legion_network::adapter_neuron_states(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs) {
 	((legion_network *) argv[0])->neuron_states(t, inputs, argv, outputs);
+}
+
+
+void legion_network::adapter_inhibitor_state(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs) {
+	((legion_network *) argv[0])->inhibitor_state(t, inputs, argv, outputs);
 }
 
 
@@ -176,4 +205,22 @@ void legion_network::neuron_states(const double t, const differ_state<double> & 
 	outputs.push_back(dx);
 	outputs.push_back(dy);
 	outputs.push_back(dp);
+}
+
+
+void legion_network::inhibitor_state(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs) {
+	const double z = inputs[0];
+
+	double sigma = 0.0;
+	for (unsigned int index = 0; index < size(); index++) {
+		if (m_oscillators[index].m_excitatory > m_params.teta_zx) {
+			sigma = 1.0;
+			break;
+		}
+	}
+
+	double dz = m_params.fi * (sigma - z);
+
+	outputs.clear();
+	outputs.push_back(dz);
 }
