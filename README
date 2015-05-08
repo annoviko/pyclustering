@@ -59,7 +59,7 @@ Clustering algorithms (module pyclustering.cluster):
 Oscillatory networks and neural networks (module pyclustering.nnet):
 - HHN (Oscillatory network based on Hodgkin-Huxley model) [Python]
 - Hysteresis Oscillatory Network [Python]
-- LEGION (Local Excitatory Global Inhibitory Oscillatory Network) [Python]
+- LEGION (Local Excitatory Global Inhibitory Oscillatory Network) [Python, C++]
 - PCNN (Pulse-Coupled Neural Network) [Python, C++]
 - SOM (Self-Organized Map) [Python, C++]
 - Sync (Oscillatory network based on Kuramoto model) [Python, C++]
