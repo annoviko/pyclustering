@@ -25,13 +25,7 @@
 
 from pyclustering.core.wrapper import *;
 
-class c_pcnn_parameters(Structure):
-    "Description of SOM parameters in memory"
-    " - unsigned int init_type"
-    " - double init_radius"
-    " - double init_learn_rate"
-    " - double adaptation_threshold"
-    
+class c_pcnn_parameters(Structure):   
     _fields_ = [("VF", c_double),
                 ("VL", c_double),
                 ("VT", c_double),

@@ -136,6 +136,7 @@ pcnn_dynamic::pcnn_dynamic() { }
 
 pcnn_dynamic::~pcnn_dynamic() { }
 
+/* TODO: implementation */
 pcnn_dynamic::pcnn_dynamic(const unsigned int number_oscillators, const unsigned int simulation_steps) { }
 
 void pcnn_dynamic::allocate_sync_ensembles(ensemble_data<pcnn_ensemble> & ensembles) const {

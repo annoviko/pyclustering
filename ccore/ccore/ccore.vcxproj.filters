@@ -63,9 +63,6 @@
     <ClCompile Include="legion.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="differential.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dbscan.h">

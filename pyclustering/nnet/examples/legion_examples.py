@@ -28,33 +28,36 @@ from pyclustering.support import draw_dynamics;
 from pyclustering.nnet.legion import legion_network, legion_parameters;
 from pyclustering.nnet import *;
 
-def template_dynamic_legion(num_osc, steps, time, conn_type = conn_type.NONE, stimulus = None, params = None, separate_repr = True):
-    net = legion_network(num_osc, stimulus, type_conn = conn_type, parameters = params);
-    (t, x, z) = net.simulate(steps, time, solution = solve_type.RK4);
+def template_dynamic_legion(num_osc, steps, time, conn_type, stimulus, params = None, separate_repr = True, ccore_flag = True):
+    net = legion_network(num_osc, params, conn_type, ccore = ccore_flag);
+    print("Created");
     
-    draw_dynamics(t, x, x_title = "Time", y_title = "x(t)", separate = separate_repr);
-    draw_dynamics(t, z, x_title = "Time", y_title = "z(t)");
+    dynamic = net.simulate(steps, time, stimulus, solution = solve_type.RK4);
+    print("Simulated");
     
-    ensembles = net.allocate_sync_ensembles(0.1);
-    print(ensembles);
+    draw_dynamics(dynamic.time, dynamic.output, x_title = "Time", y_title = "x(t)", separate = separate_repr);
+    draw_dynamics(dynamic.time, dynamic.output, x_title = "Time", y_title = "z(t)");
+    
+    # ensembles = dynamic.allocate_sync_ensembles(0.1);
+    # print(ensembles);
     
 def one_oscillator_unstimulated():
     parameters = legion_parameters();
     parameters.teta = 0;    # because no neighbors at all
     
-    template_dynamic_legion(1, 2000, 500, params = parameters);
+    template_dynamic_legion(1, 2000, 500, conn_type.NONE, [0], parameters);
 
 def one_oscillator_stimulated():
     parameters = legion_parameters();
     parameters.teta = 0;    # because no neighbors at all
     
-    template_dynamic_legion(1, 2000, 500, stimulus = [1], params = parameters);
+    template_dynamic_legion(1, 2000, 500, conn_type.NONE, [1], parameters);
     
 def three_oscillator_unstimulated_list():
     parameters = legion_parameters();
     parameters.teta = 0;    # because no stmulated neighbors
     
-    template_dynamic_legion(3, 2000, 200, conn_type = conn_type.LIST_BIDIR, params = parameters);
+    template_dynamic_legion(3, 2000, 200, conn_type.LIST_BIDIR, [0, 0, 0], parameters);
     
 def three_oscillator_stimulated_list():
     template_dynamic_legion(3, 1500, 1500, conn_type = conn_type.LIST_BIDIR, stimulus = [1, 1, 1]);

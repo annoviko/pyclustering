@@ -3,6 +3,7 @@
 #include "utest-differential.h"
 #include "utest-hsyncnet.h"
 #include "utest-kdtree.h"
+#include "utest-legion.h"
 #include "utest-network.h"
 #include "utest-pcnn.h"
 #include "utest-sync.h"

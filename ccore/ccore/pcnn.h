@@ -14,7 +14,7 @@ typedef struct pcnn_oscillator {
 	double linking;
 	double threshold;
 
-	pcnn_oscillator() :
+	pcnn_oscillator(void) :
 		output(0.0),
 		feeding(0.0),
 		linking(0.0),
@@ -23,37 +23,20 @@ typedef struct pcnn_oscillator {
 
 
 typedef struct pcnn_parameters {
-	double VF;
-	double VL;
-	double VT;
+	double VF = 1.0;
+	double VL = 1.0;
+	double VT = 10.0;
 
-	double AF;
-	double AL;
-	double AT;
+	double AF = 0.1;
+	double AL = 0.1;
+	double AT = 0.5;
 
-	double W;
-	double M;
+	double W = 1.0;
+	double M = 1.0;
 
-	double B;
+	double B = 0.1;
 
-	bool FAST_LINKING;
-
-	pcnn_parameters(void) {
-	    VF = 1.0;
-	    VL = 1.0;
-	    VT = 10.0;
-
-	    AF = 0.1;
-	    AL = 0.1;
-	    AT = 0.5;
-
-	    W = 1.0;
-	    M = 1.0;
-
-	    B = 0.1;
-
-	    FAST_LINKING = false;
-	}
+	bool FAST_LINKING = false;
 } pcnn_parameters;
 
 
@@ -64,9 +47,12 @@ typedef std::vector<unsigned int>		pcnn_time_signal;
 typedef struct pcnn_network_state {
 public:
 	std::vector<double> m_output;
+
 	double				m_time;
 
+public:
 	inline size_t size(void) const { return m_output.size(); }
+
 	inline pcnn_network_state & operator=(const pcnn_network_state & other) {
 		if (this != &other) {
 			m_output.resize(other.size());
@@ -103,9 +89,10 @@ protected:
 
 	pcnn_parameters m_params;
 
-public:
+private:
 	pcnn(void);
 
+public:
 	pcnn(const unsigned int num_osc, const conn_type connection_type, const pcnn_parameters & parameters);
 
 	virtual ~pcnn(void);

@@ -77,6 +77,7 @@ class sync_dynamic : public dynamic_data<sync_network_state> {
 public:
 	sync_dynamic(void) { }
 
+	/* TODO: implementation */
 	sync_dynamic(const unsigned int number_oscillators, const unsigned int simulation_steps) { }
 
 	virtual ~sync_dynamic(void) { }
@@ -104,7 +105,11 @@ public:
 class sync_network : public network {
 protected:
 	std::vector<sync_oscillator> m_oscillators;
+
 	double weight;
+
+private:
+	sync_network(void) : network(0, conn_type::NONE) { }
 
 public:
 	/***********************************************************************************************
