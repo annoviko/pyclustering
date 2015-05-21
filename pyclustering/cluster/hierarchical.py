@@ -106,7 +106,7 @@ class hierarchical:
         
     def get_clusters(self):
         """!
-        @brief Performs cluster analysis in line with rules of heirarchical algorithm.
+        @brief Returns list of allocated clusters, each cluster contains indexes of objects in list of data.
         
         @remark Results of clustering can be obtained using corresponding gets methods.
         
