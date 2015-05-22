@@ -181,7 +181,7 @@ class agglomerative:
             for index_cluster2 in range(index_cluster1 + 1, len(self.__clusters)):
                 
                 # Find farthest objects
-                candidate_average_distance = float('Inf');
+                candidate_average_distance = 0.0;
                 for index_object1 in self.__clusters[index_cluster1]:
                     for index_object2 in self.__clusters[index_cluster2]:
                         candidate_average_distance += euclidean_distance_sqrt(self.__pointer_data[index_object1], self.__pointer_data[index_object2]);
@@ -232,7 +232,7 @@ class agglomerative:
             for index_cluster2 in range(index_cluster1 + 1, len(self.__clusters)):
                 
                 # Find farthest objects
-                candidate_maximum_distance = float('Inf');
+                candidate_maximum_distance = 0.0;
                 for index_object1 in self.__clusters[index_cluster1]:
                     for index_object2 in self.__clusters[index_cluster2]:
                         distance = euclidean_distance_sqrt(self.__pointer_data[index_object1], self.__pointer_data[index_object2]);
