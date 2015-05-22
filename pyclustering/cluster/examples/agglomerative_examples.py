@@ -104,7 +104,7 @@ def cluster_lsun():
     
 def cluster_target():
     "NOTE: Not applicable for this sample"
-    template_clustering(6, FCPS_SAMPLES.SAMPLE_TARGET, [ type_link.CENTROID_LINK ]);     
+    template_clustering(6, FCPS_SAMPLES.SAMPLE_TARGET, [ type_link.SINGLE_LINK ]);     
 
 def cluster_two_diamonds():
     template_clustering(2, FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, [ type_link.CENTROID_LINK ]);  
@@ -126,13 +126,13 @@ def cluster_engy_time():
     template_clustering(2, FCPS_SAMPLES.SAMPLE_ENGY_TIME, [ type_link.CENTROID_LINK ]);
     
     
-cluster_sample1();
-cluster_sample2();
-cluster_sample3();
-cluster_sample4();
-cluster_sample5();
-cluster_elongate();
-cluster_lsun();
+# cluster_sample1();
+# cluster_sample2();
+# cluster_sample3();
+# cluster_sample4();
+# cluster_sample5();
+# cluster_elongate();
+# cluster_lsun();
 cluster_target();
 cluster_two_diamonds();
 cluster_wing_nut();
