@@ -32,15 +32,17 @@ from pyclustering.support import euclidean_distance_sqrt, geometric_median;
 class kmedoids:
     """!
     @brief Class represents clustering algorithm K-Medoids.
-    @details The algorithm is less sensitive to outliers tham K-Means.
+    @details The algorithm is less sensitive to outliers tham K-Means. The principle difference between K-Medoids and K-Medians is that
+             K-Medoids uses existed points from input data space as medoids, but median in K-Medians can be unreal object (not from
+             input data space).
     
     Example:
     @code
         # load list of points for cluster analysis
         sample = read_sample(path);
         
-        # create instance of K-Medians algorithm
-        kmedians_instance = kmedians(sample, [ [0.0, 0.1], [2.5, 2.6] ]);
+        # create instance of K-Medoids algorithm
+        kmedians_instance = kmedians(sample, [1, 10]);
         
         # run cluster analysis and obtain results
         kmedians_instance.process();
