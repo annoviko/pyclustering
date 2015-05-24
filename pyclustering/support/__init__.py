@@ -126,7 +126,39 @@ def average_neighbor_distance(points, num_neigh):
             total_distance += dist_matrix[i][j + 1];
             
     return ( total_distance / (num_neigh * len(points)) );
+
+
+def geometric_median(points, indexes = None):
+    """!
+    @brief Calculate geometric median of input set of points using Euclidian distance. 
+    
+    @param[in] points (list): Set of points for median calculation.
+    @param[in] indexes (list): Indexes of objects in input set of points that will be taken into account during median calculation.
+    
+    @return (uint) index of point in input set that corresponds to median.
+    
+    """
+    
+    index_median = None;
+    distance = float('Inf');
+    
+    range_points = None;
+    if (indexes is None):
+        range_points = range(len(points));
+    else:
+        range_points = indexes;
+    
+    for index_candidate in range_points:
+        distance_candidate = 0.0;
+        for index in range_points:
+            distance_candidate += euclidean_distance_sqrt(points[index_candidate], points[index]);
         
+        if (distance_candidate < distance):
+            distance = distance_candidate;
+            index_median = index_candidate;
+    
+    return index_median;
+    
 
 def euclidean_distance(a, b):
     """!
