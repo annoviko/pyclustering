@@ -2,7 +2,7 @@
 
 @brief Cluster analysis algorithm: K-Medians
 @details Based on book description:
-         - J.B.MacQueen. Some Methods for Classification and Analysis of Multivariate Observations. 1967.
+         - A.K. Jain, R.C Dubes, Algorithms for Clustering Data. 1988.
 
 @authors Andrei Novikov (spb.andr@yandex.ru)
 @version 1.0

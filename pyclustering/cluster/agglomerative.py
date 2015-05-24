@@ -1,7 +1,7 @@
 """!
 
 @brief Cluster analysis algorithm: agglomerative algorithm.
-@details Implementation based on article:
+@details Implementation based on book:
          - K.Anil, J.C.Dubes, R.C.Dubes. Algorithms for Clustering Data. 1988.
 
 @authors Andrei Novikov (spb.andr@yandex.ru)
