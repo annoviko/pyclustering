@@ -49,7 +49,7 @@ Clustering algorithms (module pyclustering.cluster):
 - DBSCAN [Python, C++]
 - Agglomerative [Python]
 - HSyncNet [Python, C++]
-- K-Medians [Python]
+- K-Medoids [Python]
 - K-Means [Python, C++]
 - OPTICS [Python]
 - ROCK [Python, C++]

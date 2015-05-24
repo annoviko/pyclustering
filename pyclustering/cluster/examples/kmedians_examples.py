@@ -1,6 +1,6 @@
 """!
 
-@brief Examples of usage and demonstration of abilities of K-Medians algorithm in cluster analysis.
+@brief Examples of usage and demonstration of abilities of K-Medoids algorithm in cluster analysis.
 
 @authors Andrei Novikov (spb.andr@yandex.ru)
 @date 2014-2015
@@ -25,78 +25,64 @@
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
 
-from pyclustering.cluster.kmedians import kmedians;
+from pyclustering.cluster.kmedoids import kmedoids;
 
 from pyclustering.support import draw_clusters;
 from pyclustering.support import read_sample;
 from pyclustering.support import timedcall;
 
-def template_clustering(start_centers, path, tolerance = 0.25):
+def template_clustering(start_medoids, path, tolerance = 0.25):
     sample = read_sample(path);
     
-    kmedians_instance = kmedians(sample, start_centers, tolerance);
-    (ticks, result) = timedcall(kmedians_instance.process);
+    kmedoids_instance = kmedoids(sample, start_medoids, tolerance);
+    (ticks, result) = timedcall(kmedoids_instance.process);
     
-    clusters = kmedians_instance.get_clusters();
+    clusters = kmedoids_instance.get_clusters();
     print("Sample: ", path, "\t\tExecution time: ", ticks, "\n");
 
     draw_clusters(sample, clusters);
     
 def cluster_sample1():
-    start_centers = [[3.7, 5.5], [6.7, 7.5]];
-    template_clustering(start_centers, SIMPLE_SAMPLES.SAMPLE_SIMPLE1);
+    template_clustering([2, 9], SIMPLE_SAMPLES.SAMPLE_SIMPLE1);
     
 def cluster_sample2():
-    start_centers = [[3.5, 4.8], [6.9, 7], [7.5, 0.5]];
-    template_clustering(start_centers, SIMPLE_SAMPLES.SAMPLE_SIMPLE2);
+    template_clustering([3, 12, 20], SIMPLE_SAMPLES.SAMPLE_SIMPLE2);
     
 def cluster_sample3():
-    start_centers = [[0.2, 0.1], [4.0, 1.0], [2.0, 2.0], [2.3, 3.9]];
-    template_clustering(start_centers, SIMPLE_SAMPLES.SAMPLE_SIMPLE3);
+    template_clustering([4, 12, 25, 37], SIMPLE_SAMPLES.SAMPLE_SIMPLE3);
     
 def cluster_sample4():
-    start_centers = [[1.5, 0.0], [1.5, 2.0], [1.5, 4.0], [1.5, 6.0], [1.5, 8.0]];
-    template_clustering(start_centers, SIMPLE_SAMPLES.SAMPLE_SIMPLE4);    
+    template_clustering([4, 15, 30, 40, 50], SIMPLE_SAMPLES.SAMPLE_SIMPLE4);    
     
 def cluster_sample5():
-    start_centers = [[0.0, 1.0], [0.0, 0.0], [1.0, 1.0], [1.0, 0.0]];
-    template_clustering(start_centers, SIMPLE_SAMPLES.SAMPLE_SIMPLE5);    
+    template_clustering([4, 18, 34, 55], SIMPLE_SAMPLES.SAMPLE_SIMPLE5);    
         
 def cluster_elongate():
-    start_centers = [[1.0, 4.5], [3.1, 2.7]];
-    template_clustering(start_centers, SIMPLE_SAMPLES.SAMPLE_ELONGATE);
+    template_clustering([8, 56], SIMPLE_SAMPLES.SAMPLE_ELONGATE);
 
 def cluster_lsun():
-    start_centers = [[1.0, 3.5], [2.0, 0.5], [3.0, 3.0]];
-    template_clustering(start_centers, FCPS_SAMPLES.SAMPLE_LSUN);  
+    template_clustering([10, 275, 385], FCPS_SAMPLES.SAMPLE_LSUN);  
     
 def cluster_target():
-    start_centers = [[0.2, 0.2], [0.0, -2.0], [3.0, -3.0], [3.0, 3.0], [-3.0, 3.0], [-3.0, -3.0]];
-    template_clustering(start_centers, FCPS_SAMPLES.SAMPLE_TARGET);     
+    template_clustering([10, 160, 310, 460, 560, 700], FCPS_SAMPLES.SAMPLE_TARGET);     
 
 def cluster_two_diamonds():
-    start_centers = [[0.8, 0.2], [3.0, 0.0]];
-    template_clustering(start_centers, FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS);  
+    template_clustering([10, 650], FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS);  
 
 def cluster_wing_nut():
-    start_centers = [[-1.5, 1.5], [1.5, 1.5]];
-    template_clustering(start_centers, FCPS_SAMPLES.SAMPLE_WING_NUT); 
+    template_clustering([19, 823], FCPS_SAMPLES.SAMPLE_WING_NUT); 
     
 def cluster_chainlink():
-    start_centers = [[1.1, -1.7, 1.1], [-1.4, 2.5, -1.2]];
-    template_clustering(start_centers, FCPS_SAMPLES.SAMPLE_CHAINLINK);     
+    template_clustering([30, 900], FCPS_SAMPLES.SAMPLE_CHAINLINK);     
     
 def cluster_hepta():
-    start_centers = [[0.0, 0.0, 0.0], [3.0, 0.0, 0.0], [-2.0, 0.0, 0.0], [0.0, 3.0, 0.0], [0.0, -3.0, 0.0], [0.0, 0.0, 2.5], [0.0, 0.0, -2.5]];
-    template_clustering(start_centers, FCPS_SAMPLES.SAMPLE_HEPTA); 
+    template_clustering([0, 35, 86, 93, 125, 171, 194], FCPS_SAMPLES.SAMPLE_HEPTA); 
     
 def cluster_tetra():
-    start_centers = [[1, 0, 0], [0, 1, 0], [0, -1, 0], [-1, 0, 0]];
-    template_clustering(start_centers, FCPS_SAMPLES.SAMPLE_TETRA);    
+    template_clustering([0, 131, 214, 265], FCPS_SAMPLES.SAMPLE_TETRA);    
     
 def cluster_engy_time():
-    start_centers = [[0.5, 0.5], [2.3, 2.9]];
-    template_clustering(start_centers, FCPS_SAMPLES.SAMPLE_ENGY_TIME);
+    template_clustering([10, 3000], FCPS_SAMPLES.SAMPLE_ENGY_TIME);
     
     
 cluster_sample1();

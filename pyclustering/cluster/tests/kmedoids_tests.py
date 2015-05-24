@@ -1,6 +1,6 @@
 """!
 
-@brief Unit-tests for K-Medians algorithm.
+@brief Unit-tests for K-Medoids algorithm.
 
 @authors Andrei Novikov (spb.andr@yandex.ru)
 @date 2014-2015
@@ -25,7 +25,7 @@
 
 import unittest;
 
-from pyclustering.cluster.kmedians import kmedians;
+from pyclustering.cluster.kmedoids import kmedoids;
 
 from pyclustering.support import read_sample;
 
@@ -37,10 +37,10 @@ class Test(unittest.TestCase):
     def templateLengthProcessData(self, path_to_file, start_centers, expected_cluster_length):
         sample = read_sample(path_to_file);
         
-        kmedians_instance = kmedians(sample, start_centers, 0.025);
-        kmedians_instance.process();
+        kmedoids_instance = kmedoids(sample, start_centers, 0.025);
+        kmedoids_instance.process();
         
-        clusters = kmedians_instance.get_clusters();
+        clusters = kmedoids_instance.get_clusters();
     
         obtained_cluster_sizes = [len(cluster) for cluster in clusters];
         assert len(sample) == sum(obtained_cluster_sizes);
@@ -50,39 +50,34 @@ class Test(unittest.TestCase):
         assert obtained_cluster_sizes == expected_cluster_length;
     
     def testClusterAllocationSampleSimple1(self):
-        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5]);
+        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5]);
         
     def testClusterOneAllocationSampleSimple1(self):
-        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[1.0, 2.5]], [10]);
+        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [5], [10]);
 
     def testClusterAllocationSampleSimple2(self):
-        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [[3.5, 4.8], [6.9, 7], [7.5, 0.5]], [10, 5, 8]);
+        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [3, 12, 20], [10, 5, 8]);
 
     def testClusterOneAllocationSampleSimple2(self):
-        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [[0.5, 0.2]], [23]);
+        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [10], [23]);
 
     def testClusterAllocationSampleSimple3(self):
-        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [[0.2, 0.1], [4.0, 1.0], [2.0, 2.0], [2.3, 3.9]], [10, 10, 10, 30]);    
+        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [4, 12, 25, 37], [10, 10, 10, 30]);    
 
     def testClusterOneAllocationSampleSimple3(self):
-        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [[0.2, 0.1]], [60]);
+        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [30], [60]);
 
     def testClusterAllocationSampleSimple5(self):
-        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [[0.0, 1.0], [0.0, 0.0], [1.0, 1.0], [1.0, 0.0]], [15, 15, 15, 15]);
+        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [4, 18, 34, 55], [15, 15, 15, 15]);
   
     def testClusterOneAllocationSampleSimple5(self):
-        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [[0.0, 0.0]], [60]);   
+        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [35], [60]);   
             
-    
-    def testDifferentDimensions(self):
-        kmedians_instance = kmedians([ [0, 1, 5], [0, 2, 3] ], [ [0, 3] ]);
-        self.assertRaises(NameError, kmedians_instance.process);
-        
-        
+
     def templateClusterAllocationOneDimensionData(self):
         input_data = [ [random()] for i in range(10) ] + [ [random() + 3] for i in range(10) ] + [ [random() + 5] for i in range(10) ] + [ [random() + 8] for i in range(10) ];
         
-        kmedians_instance = kmedians(input_data, [ [0.0], [3.0], [5.0], [8.0] ], 0.025);
+        kmedians_instance = kmedoids(input_data, [ 5, 15, 25, 35 ], 0.025);
         kmedians_instance.process();
         clusters = kmedians_instance.get_clusters();
         
