@@ -1,6 +1,6 @@
 """!
 
-@brief Cluster analysis algorithm: K-Medoids
+@brief Cluster analysis algorithm: K-Medians
 @details Based on book description:
          - A.K. Jain, R.C Dubes, Algorithms for Clustering Data. 1988.
 
@@ -26,23 +26,22 @@
 
 """
 
+import math;
 
 from pyclustering.support import euclidean_distance_sqrt, geometric_median;
 
-class kmedoids:
+class kmedians:
     """!
-    @brief Class represents clustering algorithm K-Medoids.
-    @details The algorithm is less sensitive to outliers tham K-Means. The principle difference between K-Medoids and K-Medians is that
-             K-Medoids uses existed points from input data space as medoids, but median in K-Medians can be unreal object (not from
-             input data space).
+    @brief Class represents clustering algorithm K-Medians.
+    @details The algorithm is less sensitive to outliers tham K-Means.
     
     Example:
     @code
         # load list of points for cluster analysis
         sample = read_sample(path);
         
-        # create instance of K-Medoids algorithm
-        kmedians_instance = kmedians(sample, [1, 10]);
+        # create instance of K-Medians algorithm
+        kmedians_instance = kmedians(sample, [ [0.0, 0.1], [2.5, 2.6] ]);
         
         # run cluster analysis and obtain results
         kmedians_instance.process();
@@ -52,33 +51,33 @@ class kmedoids:
     """
     __pointer_data = None;
     __clusters = None;
-    __medoids = None;
+    __medians = None;
     __tolerance = 0.0;
     
     
-    def __init__(self, data, initial_index_medoids, tolerance = 0.25):
+    def __init__(self, data, initial_centers, tolerance = 0.25):
         """!
-        @brief Constructor of clustering algorithm K-Medoids.
+        @brief Constructor of clustering algorithm K-Medians.
         
         @param[in] data (list): Input data that is presented as list of points (objects), each point should be represented by list or tuple.
-        @param[in] initial_index_medoids (list): Indexes of intial medoids (indexes of points in input data).
+        @param[in] initial_centers (list): Initial coordinates of centers of clusters that are represented by list: [center1, center2, ...].
         @param[in] tolerance (double): Stop condition: if maximum value of change of centers of clusters is less than tolerance than algorithm will stop processing
         
         """
         self.__pointer_data = data;
         self.__clusters = [];
-        self.__medoids = [ self.__pointer_data[medoid_index] for medoid_index in initial_index_medoids ];
+        self.__medians = initial_centers[:];     # initial centers shouldn't be chaged
         self.__tolerance = tolerance;
 
 
     def process(self):
         """!
-        @brief Performs cluster analysis in line with rules of K-Medoids algorithm.
+        @brief Performs cluster analysis in line with rules of K-Medians algorithm.
         
         @remark Results of clustering can be obtained using corresponding get methods.
         
         @see get_clusters()
-        @see get_medoids()
+        @see get_medians()
         
         """
         
@@ -88,16 +87,16 @@ class kmedoids:
         #stop_condition = self.__tolerance;              # Slow solution
          
         # Check for dimension
-        if (len(self.__pointer_data[0]) != len(self.__medoids[0])):
+        if (len(self.__pointer_data[0]) != len(self.__medians[0])):
             raise NameError('Dimension of the input data and dimension of the initial cluster medians must be equal.');
          
         while (changes > stop_condition):
             self.__clusters = self.__update_clusters();
             updated_centers = self.__update_medians();  # changes should be calculated before asignment
          
-            changes = max([euclidean_distance_sqrt(self.__medoids[index], updated_centers[index]) for index in range(len(self.__medoids))]);    # Fast solution
+            changes = max([euclidean_distance_sqrt(self.__medians[index], updated_centers[index]) for index in range(len(self.__medians))]);    # Fast solution
              
-            self.__medoids = updated_centers;
+            self.__medians = updated_centers;
 
 
     def get_clusters(self):
@@ -105,14 +104,14 @@ class kmedoids:
         @brief Returns list of allocated clusters, each cluster contains indexes of objects in list of data.
         
         @see process()
-        @see get_medoids()
+        @see get_medians()
         
         """
         
         return self.__clusters;
     
     
-    def get_medoids(self):
+    def get_medians(self):
         """!
         @brief Returns list of centers of allocated clusters.
         
@@ -121,25 +120,25 @@ class kmedoids:
         
         """
 
-        return self.__medoids;
+        return self.__medians;
 
 
     def __update_clusters(self):
         """!
-        @brief Calculate distance to each point from the each cluster. 
+        @brief Calculate Manhattan distance to each point from the each cluster. 
         @details Nearest points are captured by according clusters and as a result clusters are updated.
         
         @return (list) updated clusters as list of clusters where each cluster contains indexes of objects from data.
         
         """
         
-        clusters = [[] for i in range(len(self.__medoids))];
+        clusters = [[] for i in range(len(self.__medians))];
         for index_point in range(len(self.__pointer_data)):
             index_optim = -1;
             dist_optim = 0.0;
              
-            for index in range(len(self.__medoids)):
-                dist = euclidean_distance_sqrt(self.__pointer_data[index_point], self.__medoids[index]);
+            for index in range(len(self.__medians)):
+                dist = euclidean_distance_sqrt(self.__pointer_data[index_point], self.__medians[index]);
                  
                 if ( (dist < dist_optim) or (index is 0)):
                     index_optim = index;
@@ -152,7 +151,7 @@ class kmedoids:
     
     def __update_medians(self):
         """!
-        @brief Find medoids of clusters in line with contained objects.
+        @brief Calculate medians of clusters in line with contained objects.
         
         @return (list) list of medians for current number of clusters.
         
@@ -161,7 +160,20 @@ class kmedoids:
         medians = [[] for i in range(len(self.__clusters))];
          
         for index in range(len(self.__clusters)):
-            meadian_index = geometric_median(self.__pointer_data, self.__clusters[index]);
-            medians[index] = self.__pointer_data[meadian_index];
+            medians[index] = [ 0.0 for i in range(len(self.__pointer_data[0]))];
+            length_cluster = len(self.__clusters[index]);
+            
+            for index_dimension in range(len(self.__pointer_data[0])):
+                sorted_cluster = sorted(self.__clusters[index], key = lambda x: self.__pointer_data[x][index_dimension]);
+                
+                relative_index_median = math.floor(length_cluster / 2);
+                index_median = sorted_cluster[relative_index_median];
+                
+                if (length_cluster % 2):
+                    index_median_second = sorted_cluster[relative_index_median + 1];
+                    medians[index][index_dimension] =  (self.__pointer_data[index_median][index_dimension] + self.__pointer_data[index_median_second][index_dimension]) / 2.0;
+                    
+                else:
+                    medians[index][index_dimension] = self.__pointer_data[index_median][index_dimension];
              
         return medians;
