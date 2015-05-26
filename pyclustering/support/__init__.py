@@ -302,6 +302,7 @@ def average_intra_cluster_distance(cluster1, cluster2, data = None):
     distance /= float( (len(cluster1) + len(cluster2)) * (len(cluster1) + len(cluster2) - 1.0) );
     return distance ** 0.5;
 
+
 def variance_increase_distance(cluster1, cluster2, data):
     """!
     @brief Calculates variance increase distance between two clusters.
@@ -528,8 +529,8 @@ def allocate_sync_ensembles(dynamic, tolerance = 0.1, threshold = 1.0, ignore = 
                 sync_ensembles.append([ index_desc ]);
     
     return sync_ensembles;
-
-
+    
+    
 def draw_clusters(data, clusters, noise = [], marker_descr = '.', hide_axes = False):
     """!
     @brief Displays clusters for data in 2D or 3D.

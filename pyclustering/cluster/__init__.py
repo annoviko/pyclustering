@@ -23,42 +23,43 @@
 
 """
 
-from abc import ABCMeta, abstractmethod;
 
-class cluster_interface(metaclass = ABCMeta):
-    @abstractmethod
-    def process(self):
-        """!
+class cluster_visual_descr:
+    cluster = None;
+    data = None;
+    canvas = None;
+    marker = None;
+    
+    def __init__(self, cluster, data, canvas, marker):
+        self.cluster = cluster;
+        self.data = data;
+        self.canvas = canvas;
+        self.marker = marker;
+    
+
+class cluster_visualizer:
+    __colors = ['b', 'r', 'g', 'y', 'm', 'k', 'c'];
+    
+    __cluster_descriptors = None;
+    __number_canvases = None;
+    
+    
+    def __init__(self, number_canvases = 1):
+        self.__number_canvases = number_canvases;
         
-        @brief Abstract method that is responsible for performing cluster analysis.
-        
-        """
+    
+    def append_cluster(self, cluster, data = None, canvas = 1, marker = '.'):
+        if (canvas > self.__number_canvases):
+            raise NameError('Canvas does ' + canvas + ' not exists');
+            
+        self.__cluster_descriptors.append( cluster_visual_descr(cluster, data, canvas, marker) );
+    
+    
+    def addend_clusters(self, clusters, data = None, canvas = 1, marker = '.'):
+        for cluster in clusters:
+            self.append_cluster(cluster, data, canvas, marker);
+    
+    
+    def show(self, visible_axis = True):
         pass;
     
-    @abstractmethod
-    def get_clusters(self):
-        """!
-        
-        @brief Abstract method that is responsible for returning allocated clusters.
-        
-        @return (list) Allocated clusters.
-        
-        @see process()
-        @see get_noise()
-        
-        """
-        pass;
-    
-    @abstractmethod
-    def get_noise(self):
-        """!
-        
-        @brief Abstract method that is responsible for returning allocated noise.
-        
-        @return (list) Allocated noise.
-        
-        @see process()
-        @see get_noise()
-        
-        """
-        pass;
