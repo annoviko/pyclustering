@@ -25,9 +25,9 @@
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
 
+from pyclustering.cluster import cluster_visualizer;
 from pyclustering.cluster.kmeans import kmeans;
 
-from pyclustering.support import draw_clusters;
 from pyclustering.support import read_sample;
 from pyclustering.support import timedcall;
 
@@ -38,9 +38,16 @@ def template_clustering(start_centers, path, tolerance = 0.25, ccore = True):
     (ticks, result) = timedcall(kmeans_instance.process);
     
     clusters = kmeans_instance.get_clusters();
+    centers = kmeans_instance.get_centers();
+    
     print("Sample: ", path, "\t\tExecution time: ", ticks, "\n");
 
-    draw_clusters(sample, clusters);
+    visualizer = cluster_visualizer();
+    visualizer.append_clusters(clusters, sample);
+    visualizer.append_cluster(start_centers, marker = '*', markersize = 20);
+    visualizer.append_cluster(centers, marker = '*', markersize = 20);
+    visualizer.show();
+    
     
 def cluster_sample1():
     start_centers = [[3.7, 5.5], [6.7, 7.5]];

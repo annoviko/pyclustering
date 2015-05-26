@@ -30,11 +30,13 @@ class _cluster_descr:
     cluster = None;
     data = None;
     marker = None;
+    markersize = None;
     
-    def __init__(self, cluster, data, marker):
+    def __init__(self, cluster, data, marker, markersize):
         self.cluster = cluster;
         self.data = data;
         self.marker = marker;
+        self.markersize = markersize;
     
 
 class cluster_visualizer:
@@ -68,7 +70,7 @@ class cluster_visualizer:
         self.__canvas_titles = [ None for i in range(number_canvases) ];
     
     
-    def append_cluster(self, cluster, data = None, canvas = 0, marker = '.'):
+    def append_cluster(self, cluster, data = None, canvas = 0, marker = '.', markersize = 5):
         """!
         @brief Appends cluster to canvas for drawing.
         
@@ -76,6 +78,7 @@ class cluster_visualizer:
         @param[in] data (list): If defines that each element of cluster is considered as a index of object from the data.
         @param[in] canvas (uint): Number of canvas that should be used for displaying cluster.
         @param[in] marker (string): Marker that is used for displaying objects from cluster on the canvas.
+        @param[in] markersize (uint): Size of marker.
         
         """
         
@@ -85,7 +88,7 @@ class cluster_visualizer:
         if (canvas > self.__number_canvases):
             raise NameError('Canvas does ' + canvas + ' not exists.');
             
-        self.__canvas_clusters[canvas].append( _cluster_descr(cluster, data, marker) );
+        self.__canvas_clusters[canvas].append( _cluster_descr(cluster, data, marker, markersize) );
         if (len(self.__canvas_clusters[canvas]) > len(self.__colors)):
             raise NameError('Not enough colors to display clusters.');
         
@@ -105,7 +108,7 @@ class cluster_visualizer:
             raise NameError('Only objects with size dimension 2 (2D plot) or 3 (3D plot) can be displayed.');
     
     
-    def append_clusters(self, clusters, data = None, canvas = 0, marker = '.'):
+    def append_clusters(self, clusters, data = None, canvas = 0, marker = '.', markersize = 5):
         """!
         @brief Appends list of cluster to canvas for drawing.
         
@@ -113,11 +116,12 @@ class cluster_visualizer:
         @param[in] data (list): If defines that each element of cluster is considered as a index of object from the data.
         @param[in] canvas (uint): Number of canvas that should be used for displaying clusters.
         @param[in] marker (string): Marker that is used for displaying objects from clusters on the canvas.
+        @param[in] markersize (uint): Size of marker.
         
         """
             
         for cluster in clusters:
-            self.append_cluster(cluster, data, canvas, marker);
+            self.append_cluster(cluster, data, canvas, marker, markersize);
     
     
     def set_canvas_title(self, text, canvas):
@@ -164,20 +168,21 @@ class cluster_visualizer:
                 cluster = canvas[index_cluster].cluster;
                 data = canvas[index_cluster].data;
                 marker = canvas[index_cluster].marker;
+                markersize = canvas[index_cluster].markersize;
                 color = self.__colors[index_cluster];
                 
                 for item in cluster:
                     if (dimension == 2):
                         if (data is None):
-                            ax.plot(item[0], item[1], color = color, marker = marker);
+                            ax.plot(item[0], item[1], color = color, marker = marker, markersize = markersize);
                         else:
-                            ax.plot(data[item][0], data[item][1], color = color, marker = marker);
+                            ax.plot(data[item][0], data[item][1], color = color, marker = marker, markersize = markersize);
                 
                     elif (dimension == 3):
                         if (data is None):
-                            ax.scatter(item[0], item[1], item[2], c = color, marker = marker);
+                            ax.scatter(item[0], item[1], item[2], c = color, marker = marker, markersize = markersize);
                         else:
-                            ax.scatter(data[item][0], data[item][1], data[item][2], c = color, marker = marker);
+                            ax.scatter(data[item][0], data[item][1], data[item][2], c = color, marker = marker, markersize = markersize);
                             
             if (visible_axis is True):
                 ax.xaxis.set_ticklabels([]);
