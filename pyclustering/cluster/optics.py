@@ -172,6 +172,7 @@ class optics:
     def get_cluster_ordering(self):
         """!
         @brief Returns clustering ordering that uses reachability distances.
+        @details Clustering ordering of data-set contains the information about the internal clustering structure in line with connectivity radius.
         
         @return (list) List of reachability distances (clustering ordering).
         
@@ -181,7 +182,14 @@ class optics:
         
         """
         
-        ordering = [ optics_object.reachability_distance for optics_object in self.__optics_objects if optics_object.reachability_distance is not None ];
+        ordering = [];
+        
+        for cluster in self.__clusters:
+            for index_object in cluster:
+                optics_object = self.__optics_objects[index_object];
+                if (optics_object.reachability_distance is not None):
+                    ordering.append(optics_object.reachability_distance);
+                    
         return ordering;
     
     
