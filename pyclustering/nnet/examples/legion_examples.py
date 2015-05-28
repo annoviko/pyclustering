@@ -93,12 +93,10 @@ def sixteen_oscillator_two_stimulated_ensembles_grid():
 
 def simple_segmentation_example():
     parameters = legion_parameters();
-#     parameters.gamma = 8.0;
     parameters.teta_p = 7.0;
     parameters.teta_x = -1.046;
     parameters.teta_xz = 0.2;
     parameters.teta_zx = 0.2;
-#    parameters.fi = 1.0;
     parameters.Wz = 3.0;
     template_dynamic_legion(49, 3000, 2500, 
                             conn_type = conn_type.GRID_FOUR, 
