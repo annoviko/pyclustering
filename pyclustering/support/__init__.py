@@ -667,11 +667,11 @@ def draw_dynamics(t, dyn, x_title = None, y_title = None, x_lim = None, y_lim = 
                             index_stage = index_group;
                             break;
                 
-                if (index_stage == -1):
-                    raise NameError('Index ' + str(index) + ' is not specified in the separation list.');
+                if (index_stage != -1):
+                    # raise NameError('Index ' + str(index) + ' is not specified in the separation list.');
                               
-                axes[index_stage].plot(t, y, 'b-', linewidth = 0.5); 
-                set_ax_param(axes[index_stage], x_title, y_title, x_lim, y_lim, x_labels, y_labels, True);
+                    axes[index_stage].plot(t, y, 'b-', linewidth = 0.5); 
+                    set_ax_param(axes[index_stage], x_title, y_title, x_lim, y_lim, x_labels, y_labels, True);
                 
             else:
                 axes.plot(t, y, 'b-', linewidth = 0.5);

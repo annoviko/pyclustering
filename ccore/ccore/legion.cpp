@@ -21,7 +21,6 @@ legion_network::~legion_network() {
 	m_stimulus = NULL;
 }
 
-#include <iostream>
 void legion_network::simulate(const unsigned int steps, 
                               const double time, 
                               const solve_type solver, 
@@ -39,12 +38,10 @@ void legion_network::simulate(const unsigned int steps,
 
 	store_dynamic(0.0, collect_dynamic, output_dynamic);	/* store initial state */
 
-	std::cout << "simulation - initial itaration " << steps << ", " << time << ", " << step << std::endl;
 	for (double cur_time = step; cur_time < time; cur_time += step) {
 		calculate_states(stimulus, solver, cur_time, step, int_step);
 		
 		store_dynamic(cur_time, collect_dynamic, output_dynamic);	/* store initial state */
-		//std::cout << "simulation - itaration " << cur_time << std::endl;
 	}
 }
 
@@ -86,6 +83,7 @@ void legion_network::store_dynamic(const double time, const bool collect_dynamic
 		state.m_output[index] = m_oscillators[index].m_excitatory;
 	}
 
+	state.m_inhibitor = m_global_inhibitor;
 	state.m_time = time;
 	
 	if ( (collect_dynamic == false) && (!dynamic.empty()) ) {

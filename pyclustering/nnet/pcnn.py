@@ -46,21 +46,69 @@ class pcnn_parameters:
     
     """
     
-    VF = 1.0;   # multiplier for the feeding compartment at the current step
-    VL = 1.0;   # multiplier for the linking compartment at the current step
-    VT = 10.0;  # multiplier for the threshold at the current step
+    """!
+    @brief Multiplier for the feeding compartment at the current step.
     
-    AF = 0.1;   # multiplier for the feeding compartment at the previous step
-    AL = 0.1;   # multiplier for the linking compartment at the previous step
-    AT = 0.5;   # multiplier for the threshold at the previous step
+    """
+    VF = 1.0;
     
-    W = 1.0;    # synaptic weight - neighbours influence on linking compartment
-    M = 1.0;    # synaptic weight - neighbours influence on feeding compartment
+    """!
+    @brief Multiplier for the linking compartment at the current step.
     
-    B = 0.1;    # linking strength in the network.
+    """    
+    VL = 1.0;
     
-    # Helps to overcome some of the effects of time quantisation. This process allows the linking wave to progress a lot faster than the feeding wave.
-    FAST_LINKING = False;   # enable/disable Fast-Linking mode
+    """!
+    @brief Multiplier for the threshold at the current step.
+    
+    """      
+    VT = 10.0;
+    
+    
+    """!
+    @brief Multiplier for the feeding compartment at the previous step.
+    
+    """      
+    AF = 0.1;
+    
+    """!
+    @brief Multiplier for the linking compartment at the previous step.
+    
+    """
+    AL = 0.1;
+    
+    """!
+    @brief Multiplier for the threshold at the previous step.
+    
+    """
+    AT = 0.5;
+    
+    
+    """!
+    @brief Synaptic weight - neighbours influence on linking compartment
+    
+    """
+    W = 1.0;
+    
+    """!
+    @brief Synaptic weight - neighbours influence on feeding compartment.
+    
+    """
+    M = 1.0;
+    
+    
+    """!
+    @brief Linking strength in the network.
+    
+    """
+    B = 0.1;
+    
+    """!
+    @brief Enable/disable Fast-Linking mode. 
+    @details Fast linking helps to overcome some of the effects of time quantisation. This process allows the linking wave to progress a lot faster than the feeding wave.
+    
+    """
+    FAST_LINKING = False;
     
     
 class pcnn_dynamic:

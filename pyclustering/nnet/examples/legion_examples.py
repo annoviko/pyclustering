@@ -36,7 +36,7 @@ def template_dynamic_legion(num_osc, steps, time, conn_type, stimulus, params = 
     print("Simulated");
     
     draw_dynamics(dynamic.time, dynamic.output, x_title = "Time", y_title = "x(t)", separate = separate_repr);
-    draw_dynamics(dynamic.time, dynamic.output, x_title = "Time", y_title = "z(t)");
+    draw_dynamics(dynamic.time, dynamic.inhibitor, x_title = "Time", y_title = "z(t)");
     
     # ensembles = dynamic.allocate_sync_ensembles(0.1);
     # print(ensembles);
@@ -89,6 +89,28 @@ def sixteen_oscillator_two_stimulated_ensembles_grid():
                                                                                                               1, 1, 1, 0, 
                                                                                                               0, 0, 0, 1, 
                                                                                                               0, 0, 1, 1]);
+                                                                                                              
+
+def simple_segmentation_example():
+    parameters = legion_parameters();
+#     parameters.gamma = 8.0;
+    parameters.teta_p = 7.0;
+    parameters.teta_x = -1.046;
+    parameters.teta_xz = 0.2;
+    parameters.teta_zx = 0.2;
+#    parameters.fi = 1.0;
+    parameters.Wz = 3.0;
+    template_dynamic_legion(49, 3000, 2500, 
+                            conn_type = conn_type.GRID_FOUR, 
+                            params = parameters, 
+                            stimulus = [1, 1, 1, 0, 0, 0, 0, 
+                                        1, 1, 1, 0, 0, 0, 0, 
+                                        1, 1, 0, 0, 1, 1, 1, 
+                                        0, 0, 0, 0, 1, 1, 1,
+                                        0, 0, 0, 0, 1, 1, 1,
+                                        1, 1, 1, 0, 0, 0, 0,
+                                        1, 1, 1, 0, 0, 0, 0],
+                            separate_repr = [ [0, 1, 2, 7, 8, 9, 14, 15], [18, 19, 20, 25, 26, 27, 32, 33, 34], [35, 36, 37, 42, 43, 44] ]);
 
     
 one_oscillator_unstimulated();
@@ -100,3 +122,4 @@ ten_oscillator_stimulated_list();
 ten_oscillator_mix_stimulated_list();
 thirteen_oscillator_three_stimulated_ensembles_list();
 sixteen_oscillator_two_stimulated_ensembles_grid();
+simple_segmentation_example();

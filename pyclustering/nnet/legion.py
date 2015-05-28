@@ -55,16 +55,47 @@ class legion_parameters:
     lamda       = 0.1;
     teta        = 0.9;
     teta_x      = -1.5;
+    
+    """!
+    @brief Potential threshold that defines when potential is fired.
+    @details If potential less than the threshold then potential is relaxed to 0 on time scale 'mu'.
+    
+    """
     teta_p      = 1.5;
     teta_xz     = 0.1;
     teta_zx     = 0.1;
-    T           = 2.0;          # value of permanent connections
+    
+    """!
+    @brief Weight of permanent connections.
+    
+    """
+    T           = 2.0; 
     mu          = 0.01;
-    Wz          = 1.5;          # value of global inhibitory connections
+    
+    """!
+    @brief Weight of global inhibitory connections.
+    
+    """
+    Wz          = 1.5;
     Wt          = 8.0;
+    
+    """!
+    @brief Rate at which the global inhibitor reacts to the stimulation from the oscillator network.
+    
+    """
     fi          = 3.0;
-    ro          = 0.02;         # multiplier of oscillator noise
-    I           = 0.2;          # value of stimulus
+    
+    """!
+    @brief Multiplier of oscillator noise.
+    
+    """
+    ro          = 0.02;
+    
+    """!
+    @brief Value of external stimulus.
+    
+    """
+    I           = 0.2;
 
 
 class legion_dynamic:
@@ -85,9 +116,9 @@ class legion_dynamic:
     @property
     def inhibitor(self):
         if (self.__ccore_legion_dynamic_pointer is not None):
-            return wrapper.legion_dynamic_get_output(self.__ccore_legion_dynamic_pointer);
+            return wrapper.legion_dynamic_get_inhibitory_output(self.__ccore_legion_dynamic_pointer);
             
-        return self.__output;
+        return self.__inhibitor;
     
     
     @property
