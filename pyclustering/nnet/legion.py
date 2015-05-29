@@ -413,16 +413,16 @@ class legion_network(network):
         
         potential_influence = heaviside(p + math.exp(-self._params.alpha * t) - self._params.teta);
         
-        dx = 3 * x - x ** 3 + 2 - y + self._stimulus[index] * potential_influence + self._coupling_term[index] - self._noise[index];
-        dy = self._params.eps * (self._params.gamma * (1 + math.tanh(x / self._params.betta)) - y);
+        dx = 3.0 * x - x ** 3.0 + 2.0 - y + self._stimulus[index] * potential_influence + self._coupling_term[index] - self._noise[index];
+        dy = self._params.eps * (self._params.gamma * (1.0 + math.tanh(x / self._params.betta)) - y);
         
         neighbors = self.get_neighbors(index);
-        potential = 0;
+        potential = 0.0;
         
         for index_neighbor in neighbors:
             potential += self._params.T * heaviside(self._excitatory[index_neighbor] - self._params.teta_x);
         
-        dp = self._params.lamda * (1 - p) * heaviside(potential - self._params.teta_p) - self._params.mu * p;
+        dp = self._params.lamda * (1.0 - p) * heaviside(potential - self._params.teta_p) - self._params.mu * p;
         
         return [dx, dy, dp];
     

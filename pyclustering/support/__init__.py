@@ -386,8 +386,8 @@ def heaviside(value):
     @return (double) Value of Heaviside function.
     
     """
-    if (value >= 0): return 1;
-    return 0;
+    if (value >= 0.0): return 1.0;
+    return 0.0;
 
 
 def timedcall(executable_function, *args):

@@ -94,21 +94,24 @@ def sixteen_oscillator_two_stimulated_ensembles_grid():
 def simple_segmentation_example():
     parameters = legion_parameters();
     parameters.teta_p = 7.0;
-    parameters.teta_x = -1.046;
-    parameters.teta_xz = 0.2;
-    parameters.teta_zx = 0.2;
-    parameters.Wz = 3.0;
-    template_dynamic_legion(49, 3000, 2500, 
+    parameters.teta_x = -1.0385;
+    parameters.Wz = 2.0;
+    parameters.eps = 0.03;
+    template_dynamic_legion(81, 2000, 1500, 
                             conn_type = conn_type.GRID_FOUR, 
                             params = parameters, 
-                            stimulus = [1, 1, 1, 0, 0, 0, 0, 
-                                        1, 1, 1, 0, 0, 0, 0, 
-                                        1, 1, 0, 0, 1, 1, 1, 
-                                        0, 0, 0, 0, 1, 1, 1,
-                                        0, 0, 0, 0, 1, 1, 1,
-                                        1, 1, 1, 0, 0, 0, 0,
-                                        1, 1, 1, 0, 0, 0, 0],
-                            separate_repr = [ [0, 1, 2, 7, 8, 9, 14, 15], [18, 19, 20, 25, 26, 27, 32, 33, 34], [35, 36, 37, 42, 43, 44] ]);
+                            stimulus = [1, 1, 1, 0, 0, 0, 0, 0, 0, 
+                                        1, 1, 1, 0, 0, 1, 1, 1, 1, 
+                                        1, 1, 1, 0, 0, 1, 1, 1, 1, 
+                                        0, 0, 0, 0, 0, 0, 1, 1, 1,
+                                        0, 0, 0, 0, 0, 0, 1, 1, 1,
+                                        1, 1, 1, 1, 0, 0, 1, 1, 1,
+                                        1, 1, 1, 1, 0, 0, 0, 0, 0,
+                                        1, 1, 1, 1, 0, 0, 0, 0, 0,
+                                        1, 1, 1, 1, 0, 0, 0, 0, 0],
+                            separate_repr = [ [0, 1, 2, 9, 10, 11, 18, 19, 20], 
+                                              [14, 15, 16, 17, 23, 24, 25, 26, 33, 34, 35, 42, 43, 44, 51, 52, 53], 
+                                              [45, 46, 47, 48, 54, 55, 56, 57, 63, 64, 65, 66, 72, 73, 74, 75] ]);
 
     
 one_oscillator_unstimulated();

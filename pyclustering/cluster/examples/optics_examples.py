@@ -78,7 +78,7 @@ def cluster_densities2():
     template_clustering(SIMPLE_SAMPLES.SAMPLE_DENSITIES2, 0.5, 5);
 
 def cluster_lsun():
-    template_clustering(FCPS_SAMPLES.SAMPLE_LSUN, 0.5, 3);    
+    template_clustering(FCPS_SAMPLES.SAMPLE_LSUN, 0.5, 3);
     
 def cluster_target():
     template_clustering(FCPS_SAMPLES.SAMPLE_TARGET, 0.5, 2);    
