@@ -1,6 +1,6 @@
 """!
 
-@brief  Examples of usage and demonstration of abilities of Pulse Coupled Neural Network.
+@brief Examples of usage and demonstration of abilities of Pulse Coupled Neural Network.
 
 @authors Andrei Novikov (spb.andr@yandex.ru)
 @date 2014-2015

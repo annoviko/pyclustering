@@ -159,6 +159,9 @@ class legion_dynamic:
         
         """
 
+        if (self.__ccore_legion_dynamic_pointer is not None):
+            self.__output = wrapper.legion_dynamic_get_output(self.__ccore_legion_dynamic_pointer);
+            
         return allocate_sync_ensembles(self.__output, tolerance);
 
 

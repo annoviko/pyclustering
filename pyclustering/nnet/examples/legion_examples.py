@@ -38,8 +38,8 @@ def template_dynamic_legion(num_osc, steps, time, conn_type, stimulus, params = 
     draw_dynamics(dynamic.time, dynamic.output, x_title = "Time", y_title = "x(t)", separate = separate_repr);
     draw_dynamics(dynamic.time, dynamic.inhibitor, x_title = "Time", y_title = "z(t)");
     
-    # ensembles = dynamic.allocate_sync_ensembles(0.1);
-    # print(ensembles);
+    ensembles = dynamic.allocate_sync_ensembles(0.1);
+    print(ensembles);
     
 def one_oscillator_unstimulated():
     parameters = legion_parameters();
