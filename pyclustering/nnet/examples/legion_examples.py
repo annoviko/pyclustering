@@ -97,6 +97,7 @@ def simple_segmentation_example():
     parameters.teta_x = -1.0385;
     parameters.Wz = 2.0;
     parameters.eps = 0.03;
+    parameters.alpha = 0.03;
     template_dynamic_legion(81, 2000, 1500, 
                             conn_type = conn_type.GRID_FOUR, 
                             params = parameters, 

@@ -43,33 +43,86 @@ from scipy.integrate import odeint;
 class legion_parameters:
     """!
     @brief Describes parameters of LEGION.
+    @details Contained parameters affect on output dynamic of each oscillator of the network.
     
     @see legion_network
     
     """  
     
+    """!
+    @brief Coefficient that affects intrinsic inhibitor of each oscillator.
+    @details Should be the same as 'alpha'
+    
+    """
     eps         = 0.02;
+    
+    """!
+    @brief Coefficient is chosen to be on the same order of magnitude as 'eps'.
+    @details Affects on exponential function that decays on a slow time scale.
+    
+    """
     alpha       = 0.005;
+    
+    """!
+    @brief Coefficient that is used to control the ratio of the times that the solution spends in these two phases.
+    @details For a larger value of g, the solution spends a shorter time in the active phase.
+    
+    """
     gamma       = 6.0;
+    
+    """!
+    @brief Coefficient that affects on intrinsic inhibitor of each oscillator.
+    @details Specifies the steepness of the sigmoid function.
+    
+    """
     betta       = 0.1;
+    
+    """!
+    @brief Scale coefficient that is used by potential, should be greater than 0.
+    
+    """
     lamda       = 0.1;
+    
+    """!
+    @brief 
+    """
     teta        = 0.9;
+    
+    """!
+    @brief Threshold that should be exceeded by a single oscillator to affect its neighbors.
+    
+    """
     teta_x      = -1.5;
     
     """!
-    @brief Potential threshold that defines when potential is fired.
+    @brief Threshold that should be exceeded to activate potential.
     @details If potential less than the threshold then potential is relaxed to 0 on time scale 'mu'.
     
     """
     teta_p      = 1.5;
+    
+    """!
+    @brief Threshold that should be exceeded by any oscillator to activate global inhibitor.
+    
+    """
     teta_xz     = 0.1;
+    
+    """!
+    @brief Threshold that should be exceeded to affect on a oscillator by the global inhibitor.
+    
+    """
     teta_zx     = 0.1;
     
     """!
     @brief Weight of permanent connections.
     
     """
-    T           = 2.0; 
+    T           = 2.0;
+    
+    """!
+    @brief Defines time scaling of relaxing of oscillator potential.
+    
+    """
     mu          = 0.01;
     
     """!
@@ -77,6 +130,12 @@ class legion_parameters:
     
     """
     Wz          = 1.5;
+    
+    """!
+    @brief Total dynamic weights to a single oscillator from neighbors.
+    @details Sum of weights of dynamic connections to a single oscillator can not be bigger than Wt.
+    
+    """
     Wt          = 8.0;
     
     """!
@@ -87,6 +146,7 @@ class legion_parameters:
     
     """!
     @brief Multiplier of oscillator noise.
+    @details Plays important role in desynchronization process.
     
     """
     ro          = 0.02;
