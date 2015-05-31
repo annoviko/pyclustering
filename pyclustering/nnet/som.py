@@ -308,9 +308,12 @@ class som:
             center_dimension[dim] = (maximum_dimension[dim] + minimum_dimension[dim]) / 2;
         
         step_x = center_dimension[0];
-        step_y = center_dimension[1];
         if (self._rows > 1): step_x = width_dimension[0] / (self._rows - 1);
-        if (self._cols > 1): step_y = width_dimension[1] / (self._cols - 1); 
+        
+        step_y = 0.0;
+        if (dimension > 1):
+            step_y = center_dimension[1];
+            if (self._cols > 1): step_y = width_dimension[1] / (self._cols - 1); 
                       
         # generate weights (topological coordinates)
         random.seed();
@@ -327,6 +330,7 @@ class som:
                             self._weights[i][dim] = minimum_dimension[dim] + step_x * location[dim];
                         else:
                             self._weights[i][dim] = center_dimension[dim];
+                            
                     elif (dim == 1):
                         if (self._cols > 1):
                             self._weights[i][dim] = minimum_dimension[dim] + step_y * location[dim];
@@ -745,7 +749,7 @@ class som:
         plt.show();
             
     
-    def show_network(self, awards = False, belongs = False, coupling = True, dataset = True, marker_type = '.'):
+    def show_network(self, awards = False, belongs = False, coupling = True, dataset = True, marker_type = 'o'):
         """!
         @brief Shows neurons in the dimension of data.
         
@@ -769,19 +773,23 @@ class som:
         axes = None;
         
         # Check for dimensions
-        if (dimension == 2):
+        if ( (dimension == 1) or (dimension == 2) ):
             axes = fig.add_subplot(111);
         elif (dimension == 3):
             axes = fig.gca(projection='3d');
         else:
-            raise NameError('Dwawer supports only 2d and 3d data representation');
+            raise NameError('Dwawer supports only 1D, 2D and 3D data representation');
         
         
         # Show data
         if (dataset == True):
             for x in self._data:
-                if (dimension == 2):
+                if (dimension == 1):
+                    axes.plot(x[0], 0.0, 'b|', ms = 30);
+                    
+                elif (dimension == 2):
                     axes.plot(x[0], x[1], 'b.');
+                    
                 elif (dimension == 3):
                     axes.scatter(x[0], x[1], x[2], c = 'b', marker = '.');                           
         
@@ -789,6 +797,20 @@ class som:
         for index in range(self._size):
             color = 'g';
             if (self._award[index] == 0): color = 'y';
+            
+            if (dimension == 1):
+                axes.plot(self._weights[index][0], 0.0, color + marker_type);
+                
+                if (awards == True):
+                    location = '{0}'.format(self._award[index]);
+                    axes.text(self._weights[index][0], 0.0, location, color='black', fontsize = 10);                   
+            
+                if (belongs == True):
+                    location = '{0}'.format(index);
+                    axes.text(self._weights[index][0], 0.0, location, color='black', fontsize = 12);
+                    for k in range(len(self._capture_objects[index])):
+                        point = self._data[self._capture_objects[index][k]];
+                        axes.text(point[0], 0.0, location, color='blue', fontsize = 10);
             
             if (dimension == 2):
                 axes.plot(self._weights[index][0], self._weights[index][1], color + marker_type);

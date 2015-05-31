@@ -274,10 +274,13 @@ void som::create_initial_weights(const som_init_type type) {
 	}
 
 	double step_x = center_value_dimension[0];
-	double step_y = center_value_dimension[1];
+	double step_y = 0.0;
+	if (dimension > 1) {
+		step_y = center_value_dimension[1];
+		if (cols > 1) { step_y = width_value_dimension[1] / (cols - 1.0); }
+	}
 
 	if (rows > 1) { step_x = width_value_dimension[0] / (rows - 1.0); }
-	if (cols > 1) { step_y = width_value_dimension[1] / (cols - 1.0); }
 
 	/* generate weights (topological coordinates) */
 	std::random_device device;
