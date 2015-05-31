@@ -261,7 +261,7 @@ double sync_local_order(const void * pointer_network) {
 }
 
 unsigned int sync_dynamic_get_size(const void * pointer_network) {
-	return ((sync_network *) pointer_network)->size();
+	return ((sync_dynamic *) pointer_network)->size();
 }
 
 void sync_dynamic_destroy(const void * pointer) {

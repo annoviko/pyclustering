@@ -34,10 +34,12 @@ from pyclustering.samples.definitions import IMAGE_SIMPLE_SAMPLES;
 
 from pyclustering.support import read_image, rgb2gray, draw_image_mask_segments;
 
+from pyclustering.cluster.dbscan import dbscan;
 
-def template_segmentation_image(image, parameters, steps, time, ccore_flag = True):
-    stimulus = read_image(image);
-    stimulus = rgb2gray(stimulus);
+
+def template_segmentation_image(image_file, parameters, steps, time, ccore_flag = True):
+    image = read_image(image_file);
+    stimulus = rgb2gray(image);
     
     for pixel_index in range(len(stimulus)):
         if (stimulus[pixel_index] < 235): stimulus[pixel_index] = 1;
@@ -51,14 +53,21 @@ def template_segmentation_image(image, parameters, steps, time, ccore_flag = Tru
     
     ensembles = output_dynamic.allocate_sync_ensembles();
     
-    draw_image_mask_segments(image, ensembles);
-    draw_dynamics(output_dynamic.time, output_dynamic.output, x_title = "Time", y_title = "x(t)", separate = ensembles);
+    draw_image_mask_segments(image_file, ensembles);
+    # draw_dynamics(output_dynamic.time, output_dynamic.output, x_title = "Time", y_title = "x(t)", separate = ensembles);
+    
+    # just for checking correctness of results - let's use classical algorithm
+    dbscan_instance = dbscan(image, 3, 4, True);
+    dbscan_instance.process();
+    trustable_clusters = dbscan_instance.get_clusters();
+    
+    draw_dynamics(output_dynamic.time, output_dynamic.output, x_title = "Time", y_title = "x(t)", separate = trustable_clusters);
     
 
 def segmentation_image_simple1():
     parameters = legion_parameters();
-    parameters.teta_p = 7.0;
-    parameters.teta_x = -1.04;
+    parameters.teta_p = 6.0;
+    parameters.teta_x = -1.048;
     parameters.Wz = 3.0;
     parameters.eps = 0.03;
     template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE01, parameters, 2000, 1000, True);

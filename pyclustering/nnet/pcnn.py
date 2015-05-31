@@ -265,6 +265,8 @@ class pcnn_visualizer:
         """!
         @brief Shows time signal (signal vector information) using network dynamic during simulation.
         
+        @param[in] pcnn_output_dynamic (pcnn_dynamic): Output dynamic of the pulse-coupled neural network.
+        
         """
         
         time_signal = pcnn_output_dynamic.allocate_time_signal();
@@ -283,6 +285,9 @@ class pcnn_visualizer:
         """!
         @brief Shows output dynamic (output of each oscillator) during simulation.
         
+        @param[in] pcnn_output_dynamic (pcnn_dynamic): Output dynamic of the pulse-coupled neural network.
+        @param[in] separate_representation (list): Consists of lists of oscillators where each such list consists of oscillator indexes that will be shown on separated stage.
+        
         """
         
         draw_dynamics(pcnn_output_dynamic.time, pcnn_output_dynamic.output, x_title = "t", y_title = "y(t)", separate = separate_representation);
@@ -291,6 +296,9 @@ class pcnn_visualizer:
     def animate_spike_ensembles(pcnn_output_dynamic, image_size):
         """!
         @brief Shows animation of output dynamic (output of each oscillator) during simulation.
+        
+        @param[in] pcnn_output_dynamic (pcnn_dynamic): Output dynamic of the pulse-coupled neural network.
+        @param[in] image_size (list): Image size represented as [height, width].
         
         """
         

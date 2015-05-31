@@ -51,7 +51,7 @@ class legion_parameters:
     
     """!
     @brief Coefficient that affects intrinsic inhibitor of each oscillator.
-    @details Should be the same as 'alpha'
+    @details Should be the same as 'alpha'.
     
     """
     eps         = 0.02;
@@ -319,10 +319,10 @@ class legion_network(network):
             neighbors = self.get_neighbors(i);
             
             if ( (len(neighbors) > 0) and (self._stimulus[i] > 0) ):
-                number_stimulated_neighbors = 0;
+                number_stimulated_neighbors = 0.0;
                 for j in neighbors:
                     if (self._stimulus[j] > 0):
-                        number_stimulated_neighbors += 1;
+                        number_stimulated_neighbors += 1.0;
                 
                 if (number_stimulated_neighbors > 0):
                     dynamic_weight = self._params.Wt / number_stimulated_neighbors;
@@ -356,7 +356,7 @@ class legion_network(network):
             raise NameError("Solver FAST is not support due to low accuracy that leads to huge error.");
         
         elif (solution == solve_type.RKF45):
-            raise NameError("Solver RKF45 is not support in python version.");
+            raise NameError("Solver RKF45 is not support in python version. RKF45 is supported in CCORE implementation.");
         
         # set stimulus
         self.__create_stimulus(stimulus);

@@ -551,7 +551,11 @@ def draw_clusters(data, clusters, noise = [], marker_descr = '.', hide_axes = Fa
         raise NameError('Data or clusters should be specified exactly.');
     
     "Draw clusters"
-    colors = ['b', 'r', 'g', 'y', 'm', 'k', 'c'];
+    colors = [ 'red', 'blue', 'darkgreen', 'brown', 'violet', 
+               'deepskyblue', 'darkgrey', 'lightsalmon', 'deeppink', 'yellow',
+               'black', 'mediumspringgreen', 'orange', 'darkviolet', 'darkblue',
+               'silver', 'lime', 'pink', 'gold', 'bisque' ];
+               
     if (len(clusters) > len(colors)):
         raise NameError('Impossible to represent clusters due to number of specified colors.');
     
@@ -572,9 +576,9 @@ def draw_clusters(data, clusters, noise = [], marker_descr = '.', hide_axes = Fa
         for item in cluster:
             if (dimension == 2):
                 if (data is None):
-                    axes.plot(item[0], item[1], color + marker_descr);
+                    axes.plot(item[0], item[1], color = color, marker = marker_descr);
                 else:
-                    axes.plot(data[item][0], data[item][1], color + marker_descr);
+                    axes.plot(data[item][0], data[item][1], color = color, marker = marker_descr);
                     
             elif (dimension == 3):
                 if (data is None):
@@ -622,7 +626,7 @@ def draw_dynamics(t, dyn, x_title = None, y_title = None, x_lim = None, y_lim = 
     @param[in] y_lim (double): Y limit.
     @param[in] x_labels (bool): If True - shows X labels.
     @param[in] y_labels (bool): If True - shows Y labels.
-    @param[in] separate (bool): If True - output of each oscillators (each dynamic) is presented on separate plot.
+    @param[in] separate (list): Consists of lists of oscillators where each such list consists of oscillator indexes that will be shown on separated stage.
     @param[in] axis (ax): If specified then matplotlib axes will be used for drawing and plot will not be shown.
     
     @return (ax) Axis of matplotlib.

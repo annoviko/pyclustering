@@ -36,7 +36,7 @@ from pyclustering.support import read_sample;
 from pyclustering.support import timedcall;
 
 
-def template_clustering(file, radius, order, show_dyn = False, show_conn = False, show_clusters = True, ena_conn_weight = False, ccore_flag = False):
+def template_clustering(file, radius, order, show_dyn = False, show_conn = False, show_clusters = True, ena_conn_weight = False, ccore_flag = True):
     sample = read_sample(file);
     network = syncnet(sample, radius, enable_conn_weight = ena_conn_weight, ccore = ccore_flag);
     
@@ -45,8 +45,9 @@ def template_clustering(file, radius, order, show_dyn = False, show_conn = False
     
     if (show_dyn == True):
         sync_visualizer.show_output_dynamic(analyser);
+        sync_visualizer.animate_output_dynamic(analyser);
     
-    if (show_conn == True):
+    if ( (show_conn == True) and (ccore_flag == False) ):
         network.show_network();
     
     if (show_clusters == True):

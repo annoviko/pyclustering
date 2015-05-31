@@ -1,8 +1,9 @@
 """!
 
-@brief Cluster analysis algorithm: K-Medoids
+@brief Cluster analysis algorithm: K-Medoids (PAM - Partitioning Around Medoids).
 @details Based on book description:
          - A.K. Jain, R.C Dubes, Algorithms for Clustering Data. 1988.
+         - L. Kaufman, P.J. Rousseeuw, Finding Groups in Data: an Introduction to Cluster Analysis. 1990.
 
 @authors Andrei Novikov (spb.andr@yandex.ru)
 @version 1.0
@@ -31,7 +32,7 @@ from pyclustering.support import euclidean_distance_sqrt, geometric_median;
 
 class kmedoids:
     """!
-    @brief Class represents clustering algorithm K-Medoids.
+    @brief Class represents clustering algorithm K-Medoids (another one title is PAM - Parti).
     @details The algorithm is less sensitive to outliers tham K-Means. The principle difference between K-Medoids and K-Medians is that
              K-Medoids uses existed points from input data space as medoids, but median in K-Medians can be unreal object (not from
              input data space).
