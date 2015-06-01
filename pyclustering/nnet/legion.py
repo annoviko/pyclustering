@@ -156,6 +156,12 @@ class legion_parameters:
     
     """
     I           = 0.2;
+    
+    """!
+    @brief Defines whether to use potentional of oscillator or not.
+    
+    """
+    ENABLE_POTENTIONAL = True;
 
 
 class legion_dynamic:
@@ -407,12 +413,20 @@ class legion_network(network):
         
         next_excitatory = [0.0] * self._num_osc;
         next_inhibitory = [0.0] * self._num_osc;
-        next_potential = [0.0] * self._num_osc;
+        
+        next_potential = [];
+        if (self._params.ENABLE_POTENTIONAL is True):
+            next_potential = [0.0] * self._num_osc;
         
         # Update states of oscillators
         for index in range (0, self._num_osc, 1):
-            result = odeint(self._legion_state, [self._excitatory[index], self._inhibitory[index], self._potential[index]], numpy.arange(t - step, t, int_step), (index , ));
-            [ next_excitatory[index], next_inhibitory[index], next_potential[index] ] = result[len(result) - 1][0:3];
+            if (self._params.ENABLE_POTENTIONAL is True):
+                result = odeint(self._legion_state, [self._excitatory[index], self._inhibitory[index], self._potential[index]], numpy.arange(t - step, t, int_step), (index , ));
+                [ next_excitatory[index], next_inhibitory[index], next_potential[index] ] = result[len(result) - 1][0:3];
+                
+            else:
+                result = odeint(self._legion_state_simplify, [self._excitatory[index], self._inhibitory[index] ], numpy.arange(t - step, t, int_step), (index , ));
+                [ next_excitatory[index], next_inhibitory[index] ] = result[len(result) - 1][0:2];               
             
             # Update coupling term
             neighbors = self.get_neighbors(index);
@@ -430,8 +444,11 @@ class legion_network(network):
         self._noise = [random.random() * self._params.ro for i in range(self._num_osc)];
         self._coupling_term = self._buffer_coupling_term[:];
         self._inhibitory = next_inhibitory[:];
-        self._potential = next_potential[:];
         self._excitatory = next_excitatory[:];
+        
+        if (self._params.ENABLE_POTENTIONAL is True):
+            self._potential = next_potential[:];
+            
     
     
     def _global_inhibitor_state(self, z, t, argv):
@@ -454,6 +471,36 @@ class legion_network(network):
                 break;
         
         return self._params.fi * (sigma - z);
+    
+    
+    def _legion_state_simplify(self, inputs, t, argv):
+        """!
+        @brief Returns new values of excitatory and inhibitory parts of oscillator of oscillator.
+        @details Simplify model doesn't consider oscillator potential.
+        
+        @param[in] inputs (list): Initial values (current) of oscillator [excitatory, inhibitory].
+        @param[in] t (double): Current time of simulation.
+        @param[in] argv (uint): Extra arguments that are not used for integration - index of oscillator.
+        
+        @return (list) New values of excitatoty and inhibitory part of oscillator (not assign).
+        
+        """
+        
+        index = argv;
+        
+        x = inputs[0];  # excitatory
+        y = inputs[1];  # inhibitory
+        
+        dx = 3.0 * x - x ** 3.0 + 2.0 - y + self._stimulus[index] + self._coupling_term[index] - self._noise[index];
+        dy = self._params.eps * (self._params.gamma * (1.0 + math.tanh(x / self._params.betta)) - y);
+        
+        neighbors = self.get_neighbors(index);
+        potential = 0.0;
+        
+        for index_neighbor in neighbors:
+            potential += self._params.T * heaviside(self._excitatory[index_neighbor] - self._params.teta_x);
+        
+        return [dx, dy];    
     
     
     def _legion_state(self, inputs, t, argv):

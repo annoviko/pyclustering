@@ -41,6 +41,7 @@ def template_dynamic_legion(num_osc, steps, time, conn_type, stimulus, params = 
     ensembles = dynamic.allocate_sync_ensembles(0.1);
     print(ensembles);
     
+    
 def one_oscillator_unstimulated():
     parameters = legion_parameters();
     parameters.teta = 0;    # because no neighbors at all
@@ -81,6 +82,21 @@ def thirteen_oscillator_three_stimulated_ensembles_list():
     parameters.fi = 0.8;
     template_dynamic_legion(15, 1000, 1000, conn_type = conn_type.LIST_BIDIR, stimulus = [1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1], params = parameters, separate_repr = [ [0, 1, 2], [3, 4, 5, 9, 10], [6, 7, 8], [11, 12, 13, 14] ]);
     
+
+def thirteen_simplify_oscillator_three_stimulated_ensembles_list():
+    "Good example of three synchronous ensembels"
+    "Not accurate due to false skipes are observed"
+    parameters = legion_parameters();
+    parameters.Wt = 4.0;
+    parameters.fi = 0.8;
+    parameters.ENABLE_POTENTIONAL = False;
+    template_dynamic_legion(15, 1000, 1000, conn_type = conn_type.LIST_BIDIR, 
+                            stimulus = [1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1], 
+                            params = parameters, 
+                            separate_repr = [ [0, 1, 2], [3, 4, 5, 9, 10], [6, 7, 8], [11, 12, 13, 14] ],
+                            ccore_flag = False);
+    
+
 def sixteen_oscillator_two_stimulated_ensembles_grid():
     "Not accurate false due to spikes are observed"
     parameters = legion_parameters();
@@ -125,3 +141,5 @@ ten_oscillator_mix_stimulated_list();
 thirteen_oscillator_three_stimulated_ensembles_list();
 sixteen_oscillator_two_stimulated_ensembles_grid();
 simple_segmentation_example();
+
+thirteen_simplify_oscillator_three_stimulated_ensembles_list();
