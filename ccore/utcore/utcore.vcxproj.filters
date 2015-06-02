@@ -42,6 +42,12 @@
     <ClCompile Include="..\ccore\legion.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\ccore\som.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="samples.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="utest-kdtree.h">
@@ -93,6 +99,12 @@
       <Filter>Resource Files</Filter>
     </ClInclude>
     <ClInclude Include="utest-legion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ccore\som.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utest-som.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

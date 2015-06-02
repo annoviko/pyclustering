@@ -88,10 +88,12 @@
     <ClCompile Include="..\ccore\legion.cpp" />
     <ClCompile Include="..\ccore\network.cpp" />
     <ClCompile Include="..\ccore\pcnn.cpp" />
+    <ClCompile Include="..\ccore\som.cpp" />
     <ClCompile Include="..\ccore\support.cpp" />
     <ClCompile Include="..\ccore\sync.cpp" />
     <ClCompile Include="..\ccore\syncnet.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="samples.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\ccore\differential.h" />
@@ -100,6 +102,7 @@
     <ClInclude Include="..\ccore\legion.h" />
     <ClInclude Include="..\ccore\network.h" />
     <ClInclude Include="..\ccore\pcnn.h" />
+    <ClInclude Include="..\ccore\som.h" />
     <ClInclude Include="..\ccore\support.h" />
     <ClInclude Include="..\ccore\sync.h" />
     <ClInclude Include="..\ccore\syncnet.h" />
@@ -109,6 +112,7 @@
     <ClInclude Include="utest-legion.h" />
     <ClInclude Include="utest-network.h" />
     <ClInclude Include="utest-pcnn.h" />
+    <ClInclude Include="utest-som.h" />
     <ClInclude Include="utest-sync.h" />
     <ClInclude Include="utest-syncnet.h" />
   </ItemGroup>
