@@ -84,6 +84,6 @@ def segmentation_image_simple1():
     parameters.ENABLE_POTENTIONAL = False;
     
     template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE12, parameters, 2000, 2000, True);
-    
+
 
 segmentation_image_simple1();
