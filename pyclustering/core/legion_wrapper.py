@@ -42,7 +42,8 @@ class c_legion_parameters(Structure):
                 ("Wt", c_double),
                 ("fi", c_double),
                 ("ro", c_double),
-                ("I", c_double)];
+                ("I", c_double),
+                ("ENABLE_POTENTIONAL", c_bool)];
                 
 
 def legion_create(size, conn_type, params):
@@ -65,6 +66,7 @@ def legion_create(size, conn_type, params):
     c_params.fi = params.fi;
     c_params.ro = params.ro;
     c_params.I = params.I;
+    c_params.ENABLE_POTENTIONAL = params.ENABLE_POTENTIONAL;
     
     legion_network_pointer = ccore.legion_create(c_uint(size), c_uint(conn_type), pointer(c_params));
     return legion_network_pointer;

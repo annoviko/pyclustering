@@ -66,11 +66,23 @@ def template_segmentation_image(image_file, parameters, steps, time, ccore_flag 
 
 def segmentation_image_simple1():
     parameters = legion_parameters();
-    parameters.teta_p = 6.0;
-    parameters.teta_x = -1.048;
-    parameters.Wz = 3.0;
-    parameters.eps = 0.03;
-    template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE01, parameters, 2000, 1000, True);
+    parameters.eps = 0.02;
+    parameters.alpha = 0.005;
+    parameters.betta = 0.1;
+    parameters.gamma = 7.0;
+    parameters.teta = 0.9;
+    parameters.lamda = 0.1;
+    parameters.teta_x = -0.5;
+    parameters.teta_p = 7.0;
+    parameters.Wz = 1.5;
+    parameters.mu = 0.01;
+    parameters.fi = 3.0;
+    parameters.teta_xz = 0.1;
+    parameters.teta_zx = 0.1;
+    
+    parameters.ENABLE_POTENTIONAL = False;
+    
+    template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE01, parameters, 2000, 2000, True);
     
 
 segmentation_image_simple1();

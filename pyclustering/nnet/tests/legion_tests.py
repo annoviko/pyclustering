@@ -65,33 +65,20 @@ class Test(unittest.TestCase):
          
         assert extract_number_oscillations(dynamic.output, 0) > 1;
         assert extract_number_oscillations(dynamic.output, 1) > 1;
- 
- 
-    def testUnstimulatedTwoOscillators(self):
-        params = legion_parameters();
-        params.teta_p = 2.5;
-         
-        net = legion_network(2, type_conn = conn_type.LIST_BIDIR, parameters = params);
-        dynamic = net.simulate(1000, 1000, [0, 0]);
-         
-        assert extract_number_oscillations(dynamic.output, 0) == 1;
-        assert extract_number_oscillations(dynamic.output, 1) == 1;
-         
+        
          
     def testMixStimulatedThreeOscillators(self):
         net = legion_network(3, type_conn = conn_type.LIST_BIDIR);
         dynamic = net.simulate(1000, 2000, [1, 0, 1]);
          
-        assert extract_number_oscillations(dynamic.output, 0) > 1;
-        assert extract_number_oscillations(dynamic.output, 1) == 1;   
+        assert extract_number_oscillations(dynamic.output, 0) > 1; 
         assert extract_number_oscillations(dynamic.output, 2) > 1;       
  
     def testListConnectionRepresentation(self):
         net = legion_network(3, type_conn = conn_type.LIST_BIDIR, type_conn_represent = conn_represent.LIST);
         dynamic = net.simulate(1000, 2000, [1, 0, 1]);
  
-        assert extract_number_oscillations(dynamic.output, 0) > 1;
-        assert extract_number_oscillations(dynamic.output, 1) == 1;   
+        assert extract_number_oscillations(dynamic.output, 0) > 1;  
         assert extract_number_oscillations(dynamic.output, 2) > 1;  
          
          

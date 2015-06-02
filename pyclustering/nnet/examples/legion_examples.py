@@ -79,7 +79,7 @@ def thirteen_oscillator_three_stimulated_ensembles_list():
     "Not accurate due to false skipes are observed"
     parameters = legion_parameters();
     parameters.Wt = 4.0;
-    parameters.fi = 0.8;
+    parameters.fi = 10.0;
     template_dynamic_legion(15, 1000, 1000, conn_type = conn_type.LIST_BIDIR, stimulus = [1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1], params = parameters, separate_repr = [ [0, 1, 2], [3, 4, 5, 9, 10], [6, 7, 8], [11, 12, 13, 14] ]);
     
 
@@ -93,8 +93,7 @@ def thirteen_simplify_oscillator_three_stimulated_ensembles_list():
     template_dynamic_legion(15, 1000, 1000, conn_type = conn_type.LIST_BIDIR, 
                             stimulus = [1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1], 
                             params = parameters, 
-                            separate_repr = [ [0, 1, 2], [3, 4, 5, 9, 10], [6, 7, 8], [11, 12, 13, 14] ],
-                            ccore_flag = False);
+                            separate_repr = [ [0, 1, 2], [3, 4, 5, 9, 10], [6, 7, 8], [11, 12, 13, 14] ]);
     
 
 def sixteen_oscillator_two_stimulated_ensembles_grid():
@@ -108,13 +107,24 @@ def sixteen_oscillator_two_stimulated_ensembles_grid():
                                                                                                               
 
 def simple_segmentation_example():
+    "Perfect results!"
     parameters = legion_parameters();
+    parameters.eps = 0.02;
+    parameters.alpha = 0.005;
+    parameters.betta = 0.1;
+    parameters.gamma = 7.0;
+    parameters.teta = 0.9;
+    parameters.lamda = 0.1;
+    parameters.teta_x = -0.5;
     parameters.teta_p = 7.0;
-    parameters.teta_x = -1.0385;
-    parameters.Wz = 2.0;
-    parameters.eps = 0.03;
-    parameters.alpha = 0.03;
-    template_dynamic_legion(81, 2000, 1500, 
+    parameters.Wz = 0.7;
+    parameters.mu = 0.01;
+    parameters.fi = 3.0;
+    parameters.teta_xz = 0.1;
+    parameters.teta_zx = 0.1;
+    
+    parameters.ENABLE_POTENTIONAL = False;
+    template_dynamic_legion(81, 2500, 2500, 
                             conn_type = conn_type.GRID_FOUR, 
                             params = parameters, 
                             stimulus = [1, 1, 1, 0, 0, 0, 0, 0, 0, 
@@ -139,7 +149,6 @@ three_oscillator_mix_stimulated_list();
 ten_oscillator_stimulated_list();
 ten_oscillator_mix_stimulated_list();
 thirteen_oscillator_three_stimulated_ensembles_list();
+thirteen_simplify_oscillator_three_stimulated_ensembles_list();
 sixteen_oscillator_two_stimulated_ensembles_grid();
 simple_segmentation_example();
-
-thirteen_simplify_oscillator_three_stimulated_ensembles_list();

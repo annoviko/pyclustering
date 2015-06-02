@@ -491,7 +491,7 @@ class legion_network(network):
         x = inputs[0];  # excitatory
         y = inputs[1];  # inhibitory
         
-        dx = 3.0 * x - x ** 3.0 + 2.0 - y + self._stimulus[index] + self._coupling_term[index] - self._noise[index];
+        dx = 3.0 * x - x ** 3.0 + 2.0 - y + self._stimulus[index] + self._coupling_term[index] + self._noise[index];
         dy = self._params.eps * (self._params.gamma * (1.0 + math.tanh(x / self._params.betta)) - y);
         
         neighbors = self.get_neighbors(index);
@@ -523,7 +523,7 @@ class legion_network(network):
         
         potential_influence = heaviside(p + math.exp(-self._params.alpha * t) - self._params.teta);
         
-        dx = 3.0 * x - x ** 3.0 + 2.0 - y + self._stimulus[index] * potential_influence + self._coupling_term[index] - self._noise[index];
+        dx = 3.0 * x - x ** 3.0 + 2.0 - y + self._stimulus[index] * potential_influence + self._coupling_term[index] + self._noise[index];
         dy = self._params.eps * (self._params.gamma * (1.0 + math.tanh(x / self._params.betta)) - y);
         
         neighbors = self.get_neighbors(index);
