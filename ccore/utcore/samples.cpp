@@ -1,4 +1,6 @@
-const double SIMPLE_SAMPLE_01[10][2] = 
+#include "samples.h"
+
+dataset SIMPLE_SAMPLE_1 = 
 {
 	{ 3.522979, 5.487981 },
 	{ 3.768699, 5.364477 },
@@ -12,7 +14,7 @@ const double SIMPLE_SAMPLE_01[10][2] =
 	{ 6.554487, 7.498119 },
 };
 
-const double SIMPLE_SAMPLE_02[23][2] =
+dataset SIMPLE_SAMPLE_02 =
 {
 	{ 3.461363, 4.135324 },
 	{ 3.699588, 4.827335 },

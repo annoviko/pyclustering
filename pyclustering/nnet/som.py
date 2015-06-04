@@ -197,14 +197,12 @@ class som:
         return self._capture_objects;
     
     
-    def __init__(self, rows, cols, data, epochs, conn_type = type_conn.grid_eight, parameters = None, ccore = False):
+    def __init__(self, rows, cols, conn_type = type_conn.grid_eight, parameters = None, ccore = False):
         """!
         @brief Constructor of self-organized map.
         
         @param[in] rows (uint): Number of neurons in the column (number of rows).
         @param[in] cols (uint): Number of neurons in the row (number of columns).
-        @param[in] data (list): Input data - list of points where each point is represented by list of features, for example coordinates.
-        @param[in] epochs (uint): Number of epochs for training.
         @param[in] conn_type (type_conn): Type of connection between oscillators in the network (grid four, grid eight, honeycomb, function neighbour).
         @param[in] parameters (som_parameters): Other specific parameters.
         @param[in] ccore (bool): If True simulation is performed by CCORE library (C++ implementation of pyclustering).
@@ -214,9 +212,7 @@ class som:
         # some of these parameters are required despite core implementation, for example, for network demonstration.
         self._cols = cols;
         self._rows = rows;        
-        self._data = data;
         self._size = cols * rows;
-        self._epochs = epochs;
         self._conn_type = conn_type;
         
         if (parameters is not None):
@@ -233,7 +229,7 @@ class som:
                 self._params.init_radius = 1.0;
         
         if (ccore is True):
-            self.__ccore_som_pointer = wrapper.som_create(data, rows, cols, epochs, conn_type, self._params);
+            self.__ccore_som_pointer = wrapper.som_create(rows, cols, conn_type, self._params);
             
         else:
             # location
@@ -257,9 +253,6 @@ class som:
             # connections
             if (conn_type != type_conn.func_neighbor):
                 self._create_connections(conn_type);
-            
-            # weights
-            self._create_initial_weights(self._params.init_type);
         
 
     def __del__(self):
@@ -489,18 +482,26 @@ class som:
                         self._weights[neighbor_index][i] = self._weights[neighbor_index][i] + self._learn_rate * influence * (x[i] - self._weights[neighbor_index][i]);  
     
                             
-    def train(self, autostop = False):
+    def train(self, data, epochs, autostop = False):
         """!
         @brief Trains self-organized feature map (SOM).
-        
+
+        @param[in] data (list): Input data - list of points where each point is represented by list of features, for example coordinates.
+        @param[in] epochs (uint): Number of epochs for training.        
         @param[in] autostop (bool): Automatic termination of learining process when adaptation is not occurred.
         
         @return (uint) Number of learining iterations.
         
         """
         
+        self._epochs = epochs;
+        self._data = data;
+        
         if (self.__ccore_som_pointer is not None):
-            return wrapper.som_train(self.__ccore_som_pointer, autostop);
+            return wrapper.som_train(self.__ccore_som_pointer, data, epochs, autostop);
+        
+        # weights
+        self._create_initial_weights(self._params.init_type);
         
         previous_weights = None;
         

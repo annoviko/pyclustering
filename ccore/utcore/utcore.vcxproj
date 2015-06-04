@@ -106,6 +106,7 @@
     <ClInclude Include="..\ccore\support.h" />
     <ClInclude Include="..\ccore\sync.h" />
     <ClInclude Include="..\ccore\syncnet.h" />
+    <ClInclude Include="samples.h" />
     <ClInclude Include="utest-differential.h" />
     <ClInclude Include="utest-hsyncnet.h" />
     <ClInclude Include="utest-kdtree.h" />

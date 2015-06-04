@@ -107,5 +107,8 @@
     <ClInclude Include="utest-som.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="samples.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

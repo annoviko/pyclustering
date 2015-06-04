@@ -371,11 +371,11 @@ extern "C" DECLARATION void * hsyncnet_process(const void * pointer_network, con
 extern "C" DECLARATION void hsyncnet_analyser_destroy(const void * pointer_analyser);
 
 
-extern "C" DECLARATION void * som_create(const data_representation * const sample, const unsigned int num_rows, const unsigned int num_cols, const unsigned int num_epochs, const unsigned int type_conn, const void * parameters);
+extern "C" DECLARATION void * som_create(const unsigned int num_rows, const unsigned int num_cols, const unsigned int type_conn, const void * parameters);
 
 extern "C" DECLARATION void som_destroy(const void * pointer);
 
-extern "C" DECLARATION unsigned int som_train(const void * pointer, const bool autostop);
+extern "C" DECLARATION unsigned int som_train(const void * pointer, const data_representation * const sample, const unsigned int num_epochs, const bool autostop);
 
 extern "C" DECLARATION unsigned int som_simulate(const void * pointer, const data_representation * const pattern);
 

@@ -370,9 +370,8 @@ void hsyncnet_analyser_destroy(const void * pointer_analyser) {
 
 
 
-void * som_create(const data_representation * const sample, const unsigned int num_rows, const unsigned int num_cols, const unsigned int num_epochs, const unsigned int type_conn, const void * parameters) {
-	std::vector<std::vector<double> > * dataset = read_sample(sample);
-	return (void *) new som(dataset, num_rows, num_cols, num_epochs, (som_conn_type) type_conn, (som_parameters *) parameters);
+void * som_create(const unsigned int num_rows, const unsigned int num_cols, const unsigned int type_conn, const void * parameters) {
+	return (void *) new som(num_rows, num_cols, (som_conn_type) type_conn,  *((som_parameters *) parameters));
 }
 
 void som_destroy(const void * pointer) {
@@ -381,8 +380,12 @@ void som_destroy(const void * pointer) {
 	}
 }
 
-unsigned int som_train(const void * pointer, const bool autostop) {
-	return ((som *) pointer)->train(autostop);
+unsigned int som_train(const void * pointer, const data_representation * const sample, const unsigned int epochs, const bool autostop) {
+	std::vector<std::vector<double> > * dataset = read_sample(sample);
+	unsigned int result = ((som *) pointer)->train(*dataset, epochs, autostop);
+	delete dataset;
+
+	return result;
 }
 
 unsigned int som_simulate(const void * pointer, const data_representation * const pattern) {
@@ -400,14 +403,14 @@ unsigned int som_get_size(const void * pointer) {
 
 
 pyclustering_package * som_get_weights(const void * pointer) {
-	std::vector<std::vector<double> * > * wieghts = (std::vector<std::vector<double> * > *) ((som *) pointer)->get_weights();
+	std::vector<std::vector<double> > * wieghts = (std::vector<std::vector<double> > *) ((som *) pointer)->get_weights();
 	pyclustering_package * package = create_package(wieghts);
 
 	return package;
 }
 
 pyclustering_package * som_get_capture_objects(const void * pointer) {
-	std::vector<std::vector<unsigned int> * > * capture_objects = (std::vector<std::vector<unsigned int> * > *) ((som *) pointer)->get_capture_objects();
+	std::vector<std::vector<unsigned int> > * capture_objects = (std::vector<std::vector<unsigned int> > *) ((som *) pointer)->get_capture_objects();
 	pyclustering_package * package = create_package(capture_objects);
 
 	return package;
@@ -423,7 +426,7 @@ pyclustering_package * som_get_awards(const void * pointer) {
 pyclustering_package * som_get_neighbors(const void * pointer) {
 	pyclustering_package * package = NULL;
 
-	std::vector<std::vector<unsigned int> * > * neighbors = (std::vector<std::vector<unsigned int> * > *) ((som *) pointer)->get_neighbors();
+	std::vector<std::vector<unsigned int> > * neighbors = (std::vector<std::vector<unsigned int> > *) ((som *) pointer)->get_neighbors();
 	if (neighbors != NULL) {
 		package = create_package(neighbors);
 	}
