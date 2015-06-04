@@ -49,8 +49,8 @@ def template_self_organization(file, rows, cols, time, structure, init_type = No
         parameters.init_learn_rate = init_rate;
     
     sample = read_sample(file);
-    network = som(rows, cols, sample, time, structure, parameters, True);
-    network.train();
+    network = som(rows, cols, structure, parameters, True);
+    network.train(sample, time);
     network.show_network(False, dataset = False);
     
     if (umatrix is True):

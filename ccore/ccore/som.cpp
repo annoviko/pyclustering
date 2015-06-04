@@ -295,12 +295,12 @@ void som::create_initial_weights(const som_init_type type) {
 }
 
 
-unsigned int som::competition(const std::vector<double> * pattern) const {
+unsigned int som::competition(const std::vector<double> & pattern) const {
 	unsigned int index = 0;
-	double minimum = euclidean_distance_sqrt(&m_weights[0], pattern);
+	double minimum = euclidean_distance_sqrt(&m_weights[0], &pattern);
 
 	for (unsigned int i = 1; i < m_size; i++) {
-		double candidate = euclidean_distance_sqrt(&m_weights[i], pattern);
+		double candidate = euclidean_distance_sqrt(&m_weights[i], &pattern);
 		if (candidate < minimum) {
 			index = i;
 			minimum = candidate;
@@ -311,7 +311,7 @@ unsigned int som::competition(const std::vector<double> * pattern) const {
 }
 
 
-unsigned int som::adaptation(const unsigned int index_winner, const std::vector<double> * pattern) {
+unsigned int som::adaptation(const unsigned int index_winner, const std::vector<double> & pattern) {
 	unsigned int dimensions = m_weights[0].size();
 	unsigned int number_adapted_neurons = 0;
 
@@ -324,7 +324,7 @@ unsigned int som::adaptation(const unsigned int index_winner, const std::vector<
 
 				std::vector<double> & neuron_weight = m_weights[neuron_index];
 				for (unsigned int dim = 0; dim < dimensions; dim++) {
-					neuron_weight[dim] += m_learn_rate * influence * ( (*pattern)[dim] - m_weights[neuron_index][dim] );
+					neuron_weight[dim] += m_learn_rate * influence * (pattern[dim] - m_weights[neuron_index][dim]);
 				}
 
 				number_adapted_neurons++;
@@ -334,7 +334,7 @@ unsigned int som::adaptation(const unsigned int index_winner, const std::vector<
 	else {
 		std::vector<double> & neuron_winner_weight = m_weights[index_winner];
 		for (unsigned int dim = 0; dim < dimensions; dim++) {
-			neuron_winner_weight[dim] += m_learn_rate * ( (*pattern)[dim] - neuron_winner_weight[dim] );
+			neuron_winner_weight[dim] += m_learn_rate * (pattern[dim] - neuron_winner_weight[dim] );
 		}
 
 		std::vector<unsigned int> & winner_neighbors = m_neighbors[index_winner];
@@ -346,7 +346,7 @@ unsigned int som::adaptation(const unsigned int index_winner, const std::vector<
 
 				std::vector<double> & neighbor_weight = m_weights[*neighbor_index];
 				for (unsigned int dim = 0; dim < dimensions; dim++) {
-					neighbor_weight[dim] += m_learn_rate * influence * ( (*pattern)[dim] - neighbor_weight[dim] );
+					neighbor_weight[dim] += m_learn_rate * influence * (pattern[dim] - neighbor_weight[dim]);
 				}
 
 				number_adapted_neurons++;
@@ -359,6 +359,11 @@ unsigned int som::adaptation(const unsigned int index_winner, const std::vector<
 
 
 unsigned int som::train(const std::vector<std::vector<double> > & input_data, const unsigned int num_epochs, bool autostop) {
+    for (unsigned int i = 0; i < m_capture_objects.size(); i++) {
+        m_capture_objects[i].clear();
+        m_awards[i] = 0;
+    }
+
 	/* number of epouch */
 	m_epouchs = num_epochs;
 
@@ -384,13 +389,13 @@ unsigned int som::train(const std::vector<std::vector<double> > & input_data, co
 
 		for (unsigned int i = 0; i < data->size(); i++) {
 			/* Step 1: Competition */
-			unsigned int index_winner = competition(&(*data)[i]);
+			unsigned int index_winner = competition((*data)[i]);
 
 			/* Step 2: Adaptation */
-			adaptation(index_winner, &(*data)[i]);
+			adaptation(index_winner, (*data)[i]);
 
 			/* Update statistics */
-			if ( (autostop == true) || (epouch == (m_epouchs - 1)) ) {
+			if ( (autostop == true) || (epouch == m_epouchs) ) {
 				m_awards[index_winner]++;
 				m_capture_objects[index_winner].push_back(i);
 			}
@@ -413,7 +418,7 @@ unsigned int som::train(const std::vector<std::vector<double> > & input_data, co
 }
 
 
-unsigned int som::simulate(const std::vector<double> * pattern) const {
+unsigned int som::simulate(const std::vector<double> & pattern) const {
 	return competition(pattern);
 }
 

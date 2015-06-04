@@ -390,7 +390,7 @@ unsigned int som_train(const void * pointer, const data_representation * const s
 
 unsigned int som_simulate(const void * pointer, const data_representation * const pattern) {
 	std::vector<std::vector<double> > * input_pattern = read_sample(pattern);
-	return ((som *) pointer)->simulate( &(*input_pattern)[0] );
+	return ((som *) pointer)->simulate( (*input_pattern)[0] );
 }
 
 unsigned int som_get_winner_number(const void * pointer) {
@@ -403,22 +403,27 @@ unsigned int som_get_size(const void * pointer) {
 
 
 pyclustering_package * som_get_weights(const void * pointer) {
-	std::vector<std::vector<double> > * wieghts = (std::vector<std::vector<double> > *) ((som *) pointer)->get_weights();
-	pyclustering_package * package = create_package(wieghts);
+	std::vector<std::vector<double> > weights;
+	((som *) pointer)->allocate_weights(weights);
+
+	pyclustering_package * package = create_package(&weights);
 
 	return package;
 }
 
 pyclustering_package * som_get_capture_objects(const void * pointer) {
-	std::vector<std::vector<unsigned int> > * capture_objects = (std::vector<std::vector<unsigned int> > *) ((som *) pointer)->get_capture_objects();
-	pyclustering_package * package = create_package(capture_objects);
+	std::vector<std::vector<unsigned int> > capture_objects;
+	((som *) pointer)->allocate_capture_objects(capture_objects);
+
+	pyclustering_package * package = create_package(&capture_objects);
 
 	return package;
 }
 
 pyclustering_package * som_get_awards(const void * pointer) {
-	std::vector<unsigned int> * awards = (std::vector<unsigned int> *) ((som *) pointer)->get_awards();
-	pyclustering_package * package = create_package(awards);
+	std::vector<unsigned int> awards;
+	((som *) pointer)->allocate_awards(awards);
+	pyclustering_package * package = create_package(&awards);
 
 	return package;
 }
@@ -426,9 +431,10 @@ pyclustering_package * som_get_awards(const void * pointer) {
 pyclustering_package * som_get_neighbors(const void * pointer) {
 	pyclustering_package * package = NULL;
 
-	std::vector<std::vector<unsigned int> > * neighbors = (std::vector<std::vector<unsigned int> > *) ((som *) pointer)->get_neighbors();
-	if (neighbors != NULL) {
-		package = create_package(neighbors);
+	std::vector<std::vector<unsigned int> > neighbors;
+	((som *) pointer)->allocate_neighbors(neighbors);
+	if (!neighbors.empty()) {
+		package = create_package(&neighbors);
 	}
 
 	return package;

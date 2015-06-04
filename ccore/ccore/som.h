@@ -73,6 +73,7 @@ private:
 	std::vector<std::vector<double> > m_previous_weights;
 	std::vector<unsigned int> m_awards;
 
+	/* store pointer to training data for convinience */
 	std::vector<std::vector<double> > * data;
 
 	/* just for convenience (avoid excess calculation during learning) */
@@ -132,7 +133,7 @@ public:
 	 * @return  Returns index of neuron-winner.
 	 *
 	 ***********************************************************************************************/
-	unsigned int simulate(const std::vector<double> * pattern) const;
+	unsigned int simulate(const std::vector<double> & pattern) const;
 
 	/***********************************************************************************************
 	 *
@@ -148,33 +149,23 @@ public:
 	 ***********************************************************************************************/
 	inline unsigned int get_size(void) const { return m_size; }
 
-	/***********************************************************************************************
-	 *
-	 * @return  Returns list of weights of each neuron.
-	 *
-	 ***********************************************************************************************/
-	inline const std::vector<std::vector<double> > * const get_weights(void) const { return &m_weights; }
 
-	/***********************************************************************************************
-	 *
-	 * @return  Returns list of indexes of captured objects by each neuron.
-	 *
-	 ***********************************************************************************************/
-	inline const std::vector<std::vector<unsigned int> > * const get_capture_objects(void) const { return &m_capture_objects; }
+	inline void allocate_weights(std::vector<std::vector<double> > & weights) {
+		weights = m_weights;
+	}
 
-	/***********************************************************************************************
-	 *
-	 * @return  Returns list of indexes of neighbors of each neuron.
-	 *
-	 ***********************************************************************************************/
-	inline const std::vector<std::vector<unsigned int> > * const get_neighbors(void) const { return &m_neighbors; }
+
+	inline void allocate_capture_objects(std::vector<std::vector<unsigned int> > & objects) {
+		objects = m_capture_objects;
+	}
+
+	inline void allocate_neighbors(std::vector<std::vector<unsigned int> > & neighbors) {
+		neighbors = m_neighbors;
+	}
 	
-	/***********************************************************************************************
-	 *
-	 * @return  Returns list of numbers of captured objects by each neuron.
-	 *
-	 ***********************************************************************************************/
-	inline const std::vector<unsigned int> * const get_awards(void) const { return &m_awards; }
+	inline void allocate_awards(std::vector<unsigned int> & awards) {
+		awards = m_awards;
+	}
 
 private:
 	/***********************************************************************************************
@@ -208,7 +199,7 @@ private:
 	 * @return  Returns index of neuron that is winner.
 	 *
 	 ***********************************************************************************************/
-	unsigned int competition(const std::vector<double> * pattern) const;
+	unsigned int competition(const std::vector<double> & pattern) const;
 
 	/***********************************************************************************************
 	 *
@@ -218,7 +209,7 @@ private:
 	 * @param   (in) pattern         - input pattern from the input data set.
 	 *
 	 ***********************************************************************************************/
-	unsigned int adaptation(const unsigned int index_winner, const std::vector<double> * pattern);
+	unsigned int adaptation(const unsigned int index_winner, const std::vector<double> & pattern);
 
 	/***********************************************************************************************
 	 *
