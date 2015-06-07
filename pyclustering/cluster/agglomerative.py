@@ -26,39 +26,27 @@
 
 """
 
+from enum import Enum;
+
 from pyclustering.support import euclidean_distance_sqrt;
 
 
-class type_link:
+class type_link(Enum):
     """!
     @brief Enumerator of types of link between clusters.
     
     """
-    
-    """!
-    @brief Nearest objects in clusters is considered as a link.
-    
-    """
+
+    ## Nearest objects in clusters is considered as a link.
     SINGLE_LINK = 0;
     
-    
-    """!
-    @brief Farthest objects in clusters is considered as a link.
-    
-    """
+    ## Farthest objects in clusters is considered as a link.
     COMPLETE_LINK = 1;
     
-    
-    """!
-    @brief Average distance between objects in clusters is considered as a link.
-    
-    """
+    ## Average distance between objects in clusters is considered as a link.
     AVERAGE_LINK = 2;
     
-    """!
-    @brief Distance between centers of clusters is considered as a link.
-    
-    """
+    ## Distance between centers of clusters is considered as a link.
     CENTROID_LINK = 3;
 
 

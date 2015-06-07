@@ -26,7 +26,12 @@
 import matplotlib.pyplot as plt;
 
 
-class _cluster_descr:
+class canvas_cluster_descr:
+    """!
+    @brief Descriptor of cluster for representation on canvas.
+    
+    """
+    
     cluster = None;
     data = None;
     marker = None;
@@ -88,7 +93,7 @@ class cluster_visualizer:
         if (canvas > self.__number_canvases):
             raise NameError('Canvas does ' + canvas + ' not exists.');
             
-        self.__canvas_clusters[canvas].append( _cluster_descr(cluster, data, marker, markersize) );
+        self.__canvas_clusters[canvas].append( canvas_cluster_descr(cluster, data, marker, markersize) );
         if (len(self.__canvas_clusters[canvas]) > len(self.__colors)):
             raise NameError('Not enough colors to display clusters.');
         
