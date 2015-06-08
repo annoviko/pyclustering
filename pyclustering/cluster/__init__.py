@@ -28,16 +28,32 @@ import matplotlib.pyplot as plt;
 
 class canvas_cluster_descr:
     """!
-    @brief Descriptor of cluster for representation on canvas.
+    @brief Description of cluster for representation on canvas.
     
     """
     
+    ## Cluster that may consist of objects or indexes of objects from data.
     cluster = None;
+    
+    ## Data where objects are stored. It can be None if clusters consist of objects instead of indexes.
     data = None;
+    
+    ## Marker that is used for drawing objects.
     marker = None;
+    
+    ## Size of marker that is used for drawing objects.
     markersize = None;
     
     def __init__(self, cluster, data, marker, markersize):
+        """!
+        @brief Constructor of cluster representation on the canvas.
+        
+        @param[in] cluster (list): Single cluster that consists of objects or indexes from data.
+        @param[in] data (list): Objects that should be displayed, can be None if clusters consist of objects instead of indexes.
+        @param[in] marker (string): Type of marker that is used for drawing objects.
+        @param[in] markersize (uint): Size of marker that is used for drawing objects.
+        
+        """
         self.cluster = cluster;
         self.data = data;
         self.marker = marker;

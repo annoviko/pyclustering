@@ -39,6 +39,21 @@ class cure_cluster:
     
     """
     
+    ## List of points that make up cluster.
+    points = None;
+    
+    ## Mean of points that make up cluster.
+    mean = None;
+    
+    ## List of points that represents clusters.
+    rep = None;
+    
+    ## Pointer to the closest cluster.
+    closest = None;
+    
+    ## Distance to the closest cluster.
+    distance = None;
+    
     def __init__(self, point = None):
         """!
         @brief Constructor of CURE cluster.

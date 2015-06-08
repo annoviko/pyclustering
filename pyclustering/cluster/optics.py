@@ -35,10 +35,16 @@ class optics_descriptor:
     
     """
     
+    ## Reachability distance - the smallest distance to be reachable by core object.
     reachability_distance = None;
+    
+    ## Core distance - the smallest distance to reach specified number of neighbors that is not greater then connectivity radius.
     core_distance = None;
     
+    ## True is object has been already traversed.
     processed = None;
+    
+    ## Index of object from the input data.
     index_object = None;
     
     def __init__(self, index, core_distance = None, reachability_distance = None):
@@ -56,6 +62,11 @@ class optics_descriptor:
         self.processed = False;
         
     def __repr__(self):
+        """!
+        @brief Returns string representation of the optics descriptor.
+        
+        """
+        
         return '(%s, [c: %s, r: %s])' % (self.index_object, self.core_distance, self.reachability_distance);               
 
 

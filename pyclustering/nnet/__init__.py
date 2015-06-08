@@ -27,126 +27,96 @@ import math;
 
 from abc import ABCMeta, abstractmethod;
 
+from enum import Enum;
 
-class initial_type:
+class initial_type(Enum):
     """!
     @brief Enumerator of types of oscillator output initialization.
     
     """
     
-    """!
-    @brief Output of oscillators are random in line with gaussian distribution.
-    
-    """
+    ## Output of oscillators are random in line with gaussian distribution.
     RANDOM_GAUSSIAN = 0;
     
-    """!
-    @brief Output of oscillators are equidistant from each other (uniformly distributed, not randomly).
-    
-    """
+    ## Output of oscillators are equidistant from each other (uniformly distributed, not randomly).
     EQUIPARTITION = 1;
 
 
-class solve_type:
+class solve_type(Enum):
     """!
     @brief Enumerator of solver types that are used for network simulation.
     
     """
     
-    """!
-    @brief Forward Euler first-order method.
-    
-    """
+    ## Forward Euler first-order method.
     FAST = 0;                   # Usual calculation: x(k + 1) = x(k) + f(x(k)).
     
-    """!
-    @brief Classic fourth-order Runge-Kutta method (fixed step).
-    
-    """
+    ## Classic fourth-order Runge-Kutta method (fixed step).
     RK4 = 1;
     
-    """!
-    @brief Runge-Kutta-Fehlberg method with order 4 and 5 (float step).
-    
-    """
+    ## Runge-Kutta-Fehlberg method with order 4 and 5 (float step)."
     RKF45 = 2;
 
 
-class conn_type:
+class conn_type(Enum):
     """!
     @brief Enumerator of connection types between oscillators.
     
     """
     
-    """!
-    @brief No connection between oscillators.
-    
-    """
+    ## No connection between oscillators.
     NONE = 0;
     
-    """!
-    @brief All oscillators have connection with each other.
-    
-    """
+    ##All oscillators have connection with each other.
     ALL_TO_ALL = 1;
     
-    """!
-    @brief Connections between oscillators represent grid where one oscillator can be connected with four neighbor oscillators: right, upper, left, lower.
-    
-    """
+    ## Connections between oscillators represent grid where one oscillator can be connected with four neighbor oscillators: right, upper, left, lower.
     GRID_FOUR = 2;
     
-    """!
-    @brief Connections between oscillators represent grid where one oscillator can be connected with eight neighbor 
-           oscillators: right, right-upper, upper, upper-left, left, left-lower, lower, lower-right.
-           
-    """
+    ## Connections between oscillators represent grid where one oscillator can be connected with eight neighbor oscillators: right, right-upper, upper, upper-left, left, left-lower, lower, lower-right.
     GRID_EIGHT = 3;
     
-    """!
-    @brief Connections between oscillators represent bidirectional list.
-    
-    """
+    ## Connections between oscillators represent bidirectional list.
     LIST_BIDIR = 4; 
     
-    """!
-    @brief Connections are defined by user or by network during simulation.
-    
-    """
+    ## Connections are defined by user or by network during simulation.
     DYNAMIC = 5;
 
 
-class conn_represent:
+class conn_represent(Enum):
     """!
     @brief Enumerator of internal network connection representation between oscillators.
     
     """
     
-    """!
-    @brief Each oscillator has list of his neighbors.
-    
-    """
+    ## Each oscillator has list of his neighbors.
     LIST = 0;
     
-    """!
-    @brief Connections are represented my matrix connection NxN, where N is number of oscillators.
-    
-    """
+    ## Connections are represented my matrix connection NxN, where N is number of oscillators.
     MATRIX = 1;    
 
 
 class network:
+    """!
+    @brief Common network description.
+    
+    """
+    
     _num_osc = 0;
     _osc_conn = None;
     _conn_represent = None;
     
     
-    @property
-    def num_osc(self):
-        return self._num_osc;
-    
-    
     def __init__(self, num_osc, type_conn = conn_type.ALL_TO_ALL, conn_represent = conn_represent.MATRIX):
+        """!
+        @brief Constructor of the network.
+        
+        @param[in] num_osc (uint): Number of oscillators in the network.
+        @param[in] type_conn (conn_type): Type of connections that are used in the network between oscillators.
+        @param[in] conn_represent (conn_represent): Type of representation of connections.
+        
+        """
+        
         self._num_osc = num_osc;
         self._conn_represent = conn_represent;
         
@@ -154,11 +124,19 @@ class network:
     
     
     def __len__(self):
+        """!
+        @brief Returns size of the network that is defined by amount of oscillators.
+        
+        """
         return self._num_osc;
     
     
     def __create_all_to_all_connections(self):
-        "Create connections between all oscillators"
+        """!
+        @brief Creates connections between all oscillators.
+        
+        """
+        
         if (self._conn_represent == conn_represent.MATRIX):
             for index in range(0, self._num_osc, 1):
                 self._osc_conn.append([True] * self._num_osc);
@@ -170,7 +148,12 @@ class network:
           
             
     def __create_grid_four_connections(self):
-        "Each oscillator may be connected with four neighbors in line with 'grid' structure: right, upper, left, lower"
+        """!
+        @brief Creates network with connections that make up four grid structure.
+        @details Each oscillator may be connected with four neighbors in line with 'grid' structure: right, upper, left, lower.
+        
+        """
+        
         side_size = self._num_osc ** (0.5);
         if (side_size - math.floor(side_size) > 0):
             raise NameError('Invalid number of oscillators in the network');
@@ -216,7 +199,12 @@ class network:
     
     
     def __create_grid_eight_connections(self):
-        "Each oscillator may be connected with eight neighbors in line with 'grid' structure: right, right-upper, upper, upper-left, left, left-lower, lower, lower-right"
+        """!
+        @brief Creates network with connections that make up eight grid structure.
+        @details Each oscillator may be connected with eight neighbors in line with grid structure: right, right-upper, upper, upper-left, left, left-lower, lower, lower-right.
+        
+        """
+        
         self.__create_grid_four_connections();     # create connection with right, upper, left, lower.
         side_size = int(self._num_osc ** (0.5));
         
@@ -257,7 +245,12 @@ class network:
     
     
     def __create_list_bidir_connections(self):
-        "Each oscillator may be conneted with two neighbors in line with 'list' structure: right, left"
+        """!
+        @brief Creates network as bidirectional list.
+        @details Each oscillator may be conneted with two neighbors in line with classical list structure: right, left.
+        
+        """
+        
         if (self._conn_represent == conn_represent.MATRIX):
             for index in range(0, self._num_osc, 1):
                 self._osc_conn.append([0] * self._num_osc);
@@ -279,7 +272,10 @@ class network:
     
     
     def __create_none_connections(self):
-        "Create non-exited connections"
+        """!
+        @brief Creates network without connections.
+        
+        """
         if (self._conn_represent == conn_represent.MATRIX):
             for index in range(0, self._num_osc, 1):
                 self._osc_conn.append([False] * self._num_osc);   
@@ -288,7 +284,13 @@ class network:
 
     
     def _create_structure(self, type_conn = conn_type.ALL_TO_ALL):
-        "Create connection in line with representation of matrix connections [NunOsc x NumOsc]"
+        """!
+        @brief Creates connection in line with representation of matrix connections [NunOsc x NumOsc].
+        
+        @param[in] type_conn (conn_type): Connection type that is used by the network.
+        
+        """
+        
         self._osc_conn = list();
         
         if (type_conn == conn_type.NONE):
@@ -311,7 +313,10 @@ class network:
          
          
     def has_connection(self, i, j):
-        "Return strength of connection between i and j oscillators. Return 0 - if connection doesn't exist."
+        """!
+        @brief Returns strength of connection between i and j oscillators. Return 0 - if connection doesn't exist.
+        
+        """
         if (self._conn_represent == conn_represent.MATRIX):
             return (self._osc_conn[i][j]);
         
@@ -326,11 +331,15 @@ class network:
         
         
     def get_neighbors(self, index):
-        "Return list of neighbors of a oscillator with sequence number 'index'"
+        """!
+        @brief Find neighbors of the oscillator with specified index.
         
-        "(in) index    - index of oscillator in the network"
+        @param[in] index (uint): index of oscillator in the network.
         
-        "Return list of neighbors"
+        @return (list) Neighbors of the oscillator.
+        
+        """
+        
         if (self._conn_represent == conn_represent.LIST):
             return self._osc_conn[index];      # connections are represented by list.
         elif (self._conn_represent == conn_represent.MATRIX):
