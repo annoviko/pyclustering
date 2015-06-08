@@ -46,68 +46,37 @@ class pcnn_parameters:
     
     """
     
-    """!
-    @brief Multiplier for the feeding compartment at the current step.
-    
-    """
+    ## Multiplier for the feeding compartment at the current step.
     VF = 1.0;
     
-    """!
-    @brief Multiplier for the linking compartment at the current step.
-    
-    """    
+    ## Multiplier for the linking compartment at the current step.  
     VL = 1.0;
     
-    """!
-    @brief Multiplier for the threshold at the current step.
-    
-    """      
+    ## Multiplier for the threshold at the current step.    
     VT = 10.0;
     
     
-    """!
-    @brief Multiplier for the feeding compartment at the previous step.
-    
-    """      
+    ## Multiplier for the feeding compartment at the previous step.    
     AF = 0.1;
     
-    """!
-    @brief Multiplier for the linking compartment at the previous step.
-    
-    """
+    ## Multiplier for the linking compartment at the previous step.
     AL = 0.1;
     
-    """!
-    @brief Multiplier for the threshold at the previous step.
-    
-    """
+    ## Multiplier for the threshold at the previous step.
     AT = 0.5;
     
     
-    """!
-    @brief Synaptic weight - neighbours influence on linking compartment
-    
-    """
+    ## Synaptic weight - neighbours influence on linking compartment
     W = 1.0;
     
-    """!
-    @brief Synaptic weight - neighbours influence on feeding compartment.
-    
-    """
+    ## Synaptic weight - neighbours influence on feeding compartment.
     M = 1.0;
     
     
-    """!
-    @brief Linking strength in the network.
-    
-    """
+    ## Linking strength in the network.
     B = 0.1;
     
-    """!
-    @brief Enable/disable Fast-Linking mode. 
-    @details Fast linking helps to overcome some of the effects of time quantisation. This process allows the linking wave to progress a lot faster than the feeding wave.
-    
-    """
+    ## Enable/disable Fast-Linking mode. Fast linking helps to overcome some of the effects of time quantisation. This process allows the linking wave to progress a lot faster than the feeding wave.
     FAST_LINKING = False;
     
     
@@ -197,7 +166,7 @@ class pcnn_dynamic:
         for t in range(len(self.__dynamic) - 1, 0, -1):
             sync_ensemble = [];
             for i in range(number_oscillators):
-                if (self.__dynamic[t][i] == pcnn_network.OUTPUT_TRUE):
+                if (self.__dynamic[t][i] == pcnn_network.__OUTPUT_TRUE):
                     if (i not in traverse_oscillators):
                         sync_ensemble.append(i);
                         traverse_oscillators.add(i);
@@ -227,7 +196,7 @@ class pcnn_dynamic:
             spike_ensemble = [];
             
             for index in range(number_oscillators):
-                if (self.__dynamic[t][index] == pcnn_network.OUTPUT_TRUE):
+                if (self.__dynamic[t][index] == pcnn_network.__OUTPUT_TRUE):
                     spike_ensemble.append(index);
             
             if (len(spike_ensemble) > 0):
@@ -372,8 +341,8 @@ class pcnn_network(network):
     
     __ccore_pcnn_pointer = None;
     
-    OUTPUT_TRUE = 1;    # fire value for oscillators.
-    OUTPUT_FALSE = 0;   # rest value for oscillators.
+    __OUTPUT_TRUE = 1;    # fire value for oscillators.
+    __OUTPUT_FALSE = 0;   # rest value for oscillators.
     
     def __init__(self, num_osc, parameters = None, type_conn = conn_type.ALL_TO_ALL, type_conn_represent = conn_represent.MATRIX, ccore = False):
         """!
@@ -494,9 +463,9 @@ class pcnn_network(network):
             
             # calculate output of the oscillator
             if (internal_activity > self._threshold[index]):
-                outputs[index] = self.OUTPUT_TRUE;
+                outputs[index] = self.__OUTPUT_TRUE;
             else:
-                outputs[index] = self.OUTPUT_FALSE;
+                outputs[index] = self.__OUTPUT_FALSE;
             
             # In case of Fast Linking we should calculate threshould until output is changed.
             if (self._params.FAST_LINKING is not True):
@@ -522,9 +491,9 @@ class pcnn_network(network):
                     
                     # calculate output of the oscillator
                     if (internal_activity > self._threshold[index]):
-                        outputs[index] = self.OUTPUT_TRUE;
+                        outputs[index] = self.__OUTPUT_TRUE;
                     else:
-                        outputs[index] = self.OUTPUT_FALSE;
+                        outputs[index] = self.__OUTPUT_FALSE;
                         
                     if (outputs[index] != previous_outputs[index]):
                         current_output_change = True;

@@ -37,30 +37,48 @@ import pyclustering.core.som_wrapper as wrapper;
 
 from pyclustering.support import euclidean_distance_sqrt;
 
+from enum import Enum;
 
-class type_conn:
+
+class type_conn(Enum):
     """!
     @brief Enumeration of connection types for SOM.
     
     @see som
     
     """
+    
+    ## Grid type of connections when each oscillator has connections with left, upper, right, lower neighbors.
     grid_four = 0;
+    
+    ## Grid type of connections when each oscillator has connections with left, upper-left, upper, upper-right, right, right-lower, lower, lower-left neighbors.
     grid_eight = 1;
+    
+    ## Grid type of connections when each oscillator has connections with left, upper-left, upper-right, right, right-lower, lower-left neighbors.
     honeycomb = 2;
+    
+    ## Grid type of connections when existance of each connection is defined by the SOM rule on each step of simulation.
     func_neighbor = 3;
     
     
-class type_init:
+class type_init(Enum):
     """!
     @brief Enumeration of initialization types for SOM
     
     @see som
     
     """
+    
+    ## Weights are randomly distributed using Gaussian distribution (0, 1).
     random = 0;
+    
+    ## Weights are randomly distributed using Gaussian distribution (input data centroid, 1).
     random_centroid = 1;
+    
+    ## Weights are randomly distrbiuted using Gaussian distribution (input data centroid, surface of input data).
     random_surface = 2;
+    
+    ## Weights are distributed as a uniform grid that covers whole surface of the input data.
     uniform_grid = 3;
 
 
@@ -70,29 +88,16 @@ class som_parameters:
     
     """
     
-    """!
-    @brief Type of initialization of initial neuron weights (random, random in center of the input data, random 
-           distributed in data, ditributed in line with uniform grid).
-    
-    """
+    ## Type of initialization of initial neuron weights (random, random in center of the input data, random distributed in data, ditributed in line with uniform grid).
     init_type = type_init.uniform_grid; 
     
-    """!
-    @brief Initial radius (if not specified then will be calculated by SOM). 
-    
-    """
+    ## Initial radius (if not specified then will be calculated by SOM). 
     init_radius = None;
     
-    """!
-    @brief Rate of learning. 
-    
-    """   
+    ## Rate of learning.   
     init_learn_rate = 0.1;
     
-    """!
-    @brief Condition when learining process should be stoped. It's used when autostop mode is used. 
-     
-    """
+    ## Condition when learining process should be stoped. It's used when autostop mode is used. 
     adaptation_threshold = 0.001; 
 
 

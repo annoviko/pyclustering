@@ -537,6 +537,7 @@ def draw_clusters(data, clusters, noise = [], marker_descr = '.', hide_axes = Fa
     
     @param[in] data (list): Points that are described by coordinates represented.
     @param[in] clusters (list): Clusters that are represented by lists of indexes where each index corresponds to point in data.
+    @param[in] noise (list): Points that are regarded to noise.
     @param[in] marker_descr (string): Marker for displaying points.
     @param[in] hide_axes (bool): If True - axes is not displayed.
     
@@ -627,9 +628,9 @@ def draw_dynamics(t, dyn, x_title = None, y_title = None, x_lim = None, y_lim = 
     @param[in] x_labels (bool): If True - shows X labels.
     @param[in] y_labels (bool): If True - shows Y labels.
     @param[in] separate (list): Consists of lists of oscillators where each such list consists of oscillator indexes that will be shown on separated stage.
-    @param[in] axis (ax): If specified then matplotlib axes will be used for drawing and plot will not be shown.
+    @param[in] axes (ax): If specified then matplotlib axes will be used for drawing and plot will not be shown.
     
-    @return (ax) Axis of matplotlib.
+    @return (ax) Axes of matplotlib.
     
     """
          
@@ -694,6 +695,7 @@ def set_ax_param(ax, x_title = None, y_title = None, x_lim = None, y_lim = None,
     """!
     @brief Sets parameters for matplotlib ax.
     
+    @param[in] ax (Axes): Axes for which parameters should applied.
     @param[in] x_title (string): Title for Y.
     @param[in] y_title (string): Title for X.
     @param[in] x_lim (double): X limit.
@@ -738,14 +740,12 @@ def draw_dynamics_set(dynamics, xtitle = None, ytitle = None, xlim = None, ylim 
     @brief Draw lists of dynamics of neurons (oscillators) in the network.
     
     @param[in] dynamics (list): List of network outputs that are represented by values of output of oscillators (used by y axis).
-    @param[in] x_title (string): Title for Y.
-    @param[in] y_title (string): Title for X.
-    @param[in] x_lim (double): X limit.
-    @param[in] y_lim (double): Y limit.
-    @param[in] x_labels (bool): If True - shows X labels.
-    @param[in] y_labels (bool): If True - shows Y labels.
-    @param[in] separate (bool): If True - output of each oscillators (each dynamic) is presented on separate plot.
-    @param[in] axis (ax): If specified than already existed matplotlib axes will be used.
+    @param[in] xtitle (string): Title for Y.
+    @param[in] ytitle (string): Title for X.
+    @param[in] xlim (double): X limit.
+    @param[in] ylim (double): Y limit.
+    @param[in] xlabels (bool): If True - shows X labels.
+    @param[in] ylabels (bool): If True - shows Y labels.
     
     """
     # Calculate edge for confortable representation.

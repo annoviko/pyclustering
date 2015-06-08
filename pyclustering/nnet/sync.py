@@ -84,7 +84,8 @@ class sync_dynamic:
         """!
         @brief Constructor of Sync dynamic.
         
-        @param[in] dynamic (list): Dynamic of oscillators on each step of simulation. If ccore pointer is specified than it can be ignored.
+        @param[in] phase (list): Dynamic of oscillators on each step of simulation. If ccore pointer is specified than it can be ignored.
+        @param[in] time (list): Simulation time.
         @param[in] ccore (ctypes.pointer): Pointer to CCORE sync_dynamic instance in memory.
         
         """
@@ -153,11 +154,11 @@ class sync_dynamic:
         return clusters;
     
     
-    def allocate_correlation_matrix(self, interation = None):
+    def allocate_correlation_matrix(self, iteration = None):
         """!
         @brief Allocate correlation matrix between oscillators at the specified step of simulation.
                
-        @param[in] interation (uint): Number of interation of simulation for which correlation matrix should be allocated.
+        @param[in] iteration (uint): Number of iteration of simulation for which correlation matrix should be allocated.
                                       If iternation number is not specified, the last step of simulation is used for the matrix allocation.
         
         @return (list) Correlation matrix between oscillators with size [number_oscillators x number_oscillators].
@@ -167,8 +168,8 @@ class sync_dynamic:
         dynamic = self.output;
         current_dynamic = dynamic[len(dynamic) - 1];
         
-        if (interation is not None):
-            current_dynamic = dynamic[interation];
+        if (iteration is not None):
+            current_dynamic = dynamic[iteration];
         
         number_oscillators = len(dynamic[0]);
         affinity_matrix = [ [ 0.0 for i in range(number_oscillators) ] for j in range(number_oscillators) ];  
@@ -194,7 +195,7 @@ class sync_visualizer:
         """!
         @brief Shows output dynamic (output of each oscillator) during simulation.
         
-        @param[in] pcnn_output_dynamic (sync_dynamic): Output dynamic of the Sync network.
+        @param[in] sync_output_dynamic (sync_dynamic): Output dynamic of the Sync network.
         
         """
         
@@ -206,8 +207,8 @@ class sync_visualizer:
         """!
         @brief Shows correlation matrix between oscillators at the specified iteration.
         
-        @param[in] pcnn_output_dynamic (sync_dynamic): Output dynamic of the Sync network.
-        @param[in] interation (uint): Number of interation of simulation for which correlation matrix should be allocated.
+        @param[in] sync_output_dynamic (sync_dynamic): Output dynamic of the Sync network.
+        @param[in] iteration (uint): Number of interation of simulation for which correlation matrix should be allocated.
                                       If iternation number is not specified, the last step of simulation is used for the matrix allocation.
         
         """
@@ -224,7 +225,7 @@ class sync_visualizer:
         """!
         @brief Shows animation of output dynamic (output of each oscillator) during simulation on a circle from [0; 2pi].
         
-        @param[in] pcnn_output_dynamic (sync_dynamic): Output dynamic of the Sync network.
+        @param[in] sync_output_dynamic (sync_dynamic): Output dynamic of the Sync network.
         @param[in] animation_velocity (uint): Interval between frames in milliseconds. 
         
         """
@@ -273,7 +274,7 @@ class sync_visualizer:
         """!
         @brief Shows animation of correlation matrix between oscillators during simulation.
         
-        @param[in] pcnn_output_dynamic (sync_dynamic): Output dynamic of the Sync network.
+        @param[in] sync_output_dynamic (sync_dynamic): Output dynamic of the Sync network.
         @param[in] animation_velocity (uint): Interval between frames in milliseconds. 
         
         """

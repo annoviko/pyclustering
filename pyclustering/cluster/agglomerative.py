@@ -31,7 +31,7 @@ from enum import Enum;
 from pyclustering.support import euclidean_distance_sqrt;
 
 
-class link_type(Enum):
+class type_link(Enum):
     """!
     @brief Enumerator of types of link between clusters.
     
@@ -99,7 +99,7 @@ class agglomerative:
         
         self.__clusters = [];
         
-        if (self.__similarity == link_type.CENTROID_LINK):
+        if (self.__similarity == type_link.CENTROID_LINK):
             self.__centers = self.__pointer_data.copy();
     
     
@@ -141,16 +141,16 @@ class agglomerative:
         
         """
         
-        if (self.__similarity == link_type.AVERAGE_LINK):
+        if (self.__similarity == type_link.AVERAGE_LINK):
             self.__merge_by_average_link();
         
-        elif (self.__similarity == link_type.CENTROID_LINK):
+        elif (self.__similarity == type_link.CENTROID_LINK):
             self.__merge_by_centroid_link();
         
-        elif (self.__similarity == link_type.COMPLETE_LINK):
+        elif (self.__similarity == type_link.COMPLETE_LINK):
             self.__merge_by_complete_link();
         
-        elif (self.__similarity == link_type.SINGLE_LINK):
+        elif (self.__similarity == type_link.SINGLE_LINK):
             self.__merge_by_signle_link();
         
         else:

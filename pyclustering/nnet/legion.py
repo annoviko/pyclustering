@@ -49,118 +49,58 @@ class legion_parameters:
     
     """  
     
-    """!
-    @brief Coefficient that affects intrinsic inhibitor of each oscillator.
-    @details Should be the same as 'alpha'.
-    
-    """
+    ## Coefficient that affects intrinsic inhibitor of each oscillator. Should be the same as 'alpha'.
     eps         = 0.02;
     
-    """!
-    @brief Coefficient is chosen to be on the same order of magnitude as 'eps'.
-    @details Affects on exponential function that decays on a slow time scale.
-    
-    """
+    ## Coefficient is chosen to be on the same order of magnitude as 'eps'. Affects on exponential function that decays on a slow time scale.
     alpha       = 0.005;
     
-    """!
-    @brief Coefficient that is used to control the ratio of the times that the solution spends in these two phases.
-    @details For a larger value of g, the solution spends a shorter time in the active phase.
-    
-    """
+    ## Coefficient that is used to control the ratio of the times that the solution spends in these two phases. For a larger value of g, the solution spends a shorter time in the active phase.
     gamma       = 6.0;
     
-    """!
-    @brief Coefficient that affects on intrinsic inhibitor of each oscillator.
-    @details Specifies the steepness of the sigmoid function.
-    
-    """
+    ## Coefficient that affects on intrinsic inhibitor of each oscillator. Specifies the steepness of the sigmoid function.
     betta       = 0.1;
     
-    """!
-    @brief Scale coefficient that is used by potential, should be greater than 0.
-    
-    """
+    ## Scale coefficient that is used by potential, should be greater than 0.
     lamda       = 0.1;
     
-    """!
-    @brief 
-    """
+    ## Threshold that should be exceeded by a potential to switch on potential.
     teta        = 0.9;
     
-    """!
-    @brief Threshold that should be exceeded by a single oscillator to affect its neighbors.
-    
-    """
+    ## Threshold that should be exceeded by a single oscillator to affect its neighbors.
     teta_x      = -1.5;
     
-    """!
-    @brief Threshold that should be exceeded to activate potential.
-    @details If potential less than the threshold then potential is relaxed to 0 on time scale 'mu'.
-    
-    """
+    ## Threshold that should be exceeded to activate potential. If potential less than the threshold then potential is relaxed to 0 on time scale 'mu'.
     teta_p      = 1.5;
     
-    """!
-    @brief Threshold that should be exceeded by any oscillator to activate global inhibitor.
-    
-    """
+    ## Threshold that should be exceeded by any oscillator to activate global inhibitor.
     teta_xz     = 0.1;
     
-    """!
-    @brief Threshold that should be exceeded to affect on a oscillator by the global inhibitor.
-    
-    """
+    ## Threshold that should be exceeded to affect on a oscillator by the global inhibitor.
     teta_zx     = 0.1;
     
-    """!
-    @brief Weight of permanent connections.
-    
-    """
+    ## Weight of permanent connections.
     T           = 2.0;
     
-    """!
-    @brief Defines time scaling of relaxing of oscillator potential.
-    
-    """
+    ## Defines time scaling of relaxing of oscillator potential.
     mu          = 0.01;
     
-    """!
-    @brief Weight of global inhibitory connections.
-    
-    """
+    ## Weight of global inhibitory connections.
     Wz          = 1.5;
     
-    """!
-    @brief Total dynamic weights to a single oscillator from neighbors.
-    @details Sum of weights of dynamic connections to a single oscillator can not be bigger than Wt.
-    
-    """
+    ## Total dynamic weights to a single oscillator from neighbors. Sum of weights of dynamic connections to a single oscillator can not be bigger than Wt.
     Wt          = 8.0;
     
-    """!
-    @brief Rate at which the global inhibitor reacts to the stimulation from the oscillator network.
-    
-    """
+    ## Rate at which the global inhibitor reacts to the stimulation from the oscillator network.
     fi          = 3.0;
     
-    """!
-    @brief Multiplier of oscillator noise.
-    @details Plays important role in desynchronization process.
-    
-    """
+    ## Multiplier of oscillator noise. Plays important role in desynchronization process.
     ro          = 0.02;
     
-    """!
-    @brief Value of external stimulus.
-    
-    """
+    ## Value of external stimulus.
     I           = 0.2;
     
-    """!
-    @brief Defines whether to use potentional of oscillator or not.
-    
-    """
+    ## Defines whether to use potentional of oscillator or not.
     ENABLE_POTENTIONAL = True;
 
 
@@ -173,6 +113,10 @@ class legion_dynamic:
     
     @property
     def output(self):
+        """!
+        @brief Returns output dynamic of the network.
+        
+        """
         if (self.__ccore_legion_dynamic_pointer is not None):
             return wrapper.legion_dynamic_get_output(self.__ccore_legion_dynamic_pointer);
             
@@ -181,6 +125,11 @@ class legion_dynamic:
 
     @property
     def inhibitor(self):
+        """!
+        @brief Returns output dynamic of the global inhibitor of the network.
+        
+        """
+        
         if (self.__ccore_legion_dynamic_pointer is not None):
             return wrapper.legion_dynamic_get_inhibitory_output(self.__ccore_legion_dynamic_pointer);
             
@@ -189,6 +138,10 @@ class legion_dynamic:
     
     @property
     def time(self):
+        """!
+        @brief Returns simulation time.
+        
+        """
         if (self.__ccore_legion_dynamic_pointer is not None):
             return wrapper.legion_dynamic_get_time(self.__ccore_legion_dynamic_pointer);
         
@@ -196,6 +149,15 @@ class legion_dynamic:
     
     
     def __init__(self, output, inhibitor, time, ccore = None):
+        """!
+        @brief Constructor of legion dynamic.
+        
+        @param[in] output (list): Output dynamic of the network represented by excitatory values of oscillators.
+        @param[in] inhibitor (list): Output dynamic of the global inhibitor of the network.
+        @param[in] time (list): Simulation time.
+        @param[in] ccore (POINTER): Pointer to CCORE legion_dynamic. If it is specified then others arguments can be omitted.
+        
+        """
         self.__output = output;
         self.__inhibitor = inhibitor;
         self.__time = time;
@@ -204,11 +166,19 @@ class legion_dynamic:
         
         
     def __del__(self):
+        """!
+        @brief Destructor of the dynamic of the legion network.
+        
+        """
         if (self.__ccore_legion_dynamic_pointer is not None):
             wrapper.legion_dynamic_destroy(self.__ccore_legion_dynamic_pointer);
 
 
     def __len__(self):
+        """!
+        @brief Returns length of output dynamic.
+        
+        """
         if (self.__ccore_legion_dynamic_pointer is not None):
             return wrapper.legion_dynamic_get_size(self.__ccore_legion_dynamic_pointer);
         
@@ -266,6 +236,7 @@ class legion_network(network):
         @param[in] parameters (legion_parameters): Parameters of the network that are defined by structure 'legion_parameters'.
         @param[in] type_conn (conn_type): Type of connection between oscillators in the network.
         @param[in] type_conn_represent (conn_represent): Internal representation of connection in the network: matrix or list.
+        @param[in] ccore (bool): If True then all interaction with object will be performed via CCORE library (C++ implementation of pyclustering).
         
         """
         
