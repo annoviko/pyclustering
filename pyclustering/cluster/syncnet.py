@@ -33,7 +33,7 @@ from pyclustering.core.syncnet_wrapper import *;
 from pyclustering.nnet import *;
 from pyclustering.nnet.sync import *;
 
-from pyclustering.support import euclidean_distance;
+from pyclustering.utils import euclidean_distance;
 
 
 class syncnet_analyser(sync_dynamic):    

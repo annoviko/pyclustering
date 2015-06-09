@@ -35,7 +35,7 @@ import pyclustering.core.legion_wrapper as wrapper;
 
 from pyclustering.nnet import *;  
 
-from pyclustering.support import heaviside, allocate_sync_ensembles;
+from pyclustering.utils import heaviside, allocate_sync_ensembles;
 
 from scipy.integrate import odeint;
 

@@ -1,6 +1,6 @@
 """!
 
-@brief Useful functions that are used by modules of pyclustering.
+@brief Utils that are used by modules of pyclustering.
 
 @authors Andrei Novikov (spb.andr@yandex.ru)
 @date 2014-2015

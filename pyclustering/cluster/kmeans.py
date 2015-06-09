@@ -28,7 +28,7 @@
 
 import pyclustering.core.wrapper as wrapper;
 
-from pyclustering.support import euclidean_distance, euclidean_distance_sqrt, list_math_addition, list_math_division_number;
+from pyclustering.utils import euclidean_distance, euclidean_distance_sqrt, list_math_addition, list_math_division_number;
 
 class kmeans:
     """!

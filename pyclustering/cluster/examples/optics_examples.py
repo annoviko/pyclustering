@@ -25,7 +25,7 @@
 
 from pyclustering.cluster.optics import optics;
 
-from pyclustering.support import read_sample, draw_clusters;
+from pyclustering.utils import read_sample, draw_clusters;
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
 

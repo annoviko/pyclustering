@@ -29,7 +29,7 @@ from pyclustering.nnet.som import som, type_conn, type_init;
 
 from pyclustering.samples.definitions import IMAGE_DIGIT_SAMPLES;
 
-from pyclustering.support import read_image, rgb2gray;
+from pyclustering.utils import read_image, rgb2gray;
 
 
 from tkinter import *;

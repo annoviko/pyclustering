@@ -31,7 +31,7 @@ from pyclustering.nnet import initial_type;
 
 from pyclustering.cluster.syncnet import syncnet;
 
-from pyclustering.support import average_neighbor_distance;
+from pyclustering.utils import average_neighbor_distance;
 
 
 class syncsom:

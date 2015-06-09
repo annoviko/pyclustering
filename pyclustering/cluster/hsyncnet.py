@@ -31,7 +31,7 @@ import pyclustering.core.wrapper as wrapper;
 from pyclustering.nnet import initial_type, solve_type;
 
 from pyclustering.cluster.syncnet import syncnet, syncnet_analyser;
-from pyclustering.support import average_neighbor_distance;
+from pyclustering.utils import average_neighbor_distance;
 
 class hsyncnet(syncnet):
     """!

@@ -27,7 +27,7 @@ from math import floor;
 
 from PIL import Image;
 
-from pyclustering.support import draw_image_mask_segments, read_image, draw_dynamics, draw_dynamics_set, timedcall;
+from pyclustering.utils import draw_image_mask_segments, read_image, draw_dynamics, draw_dynamics_set, timedcall;
 
 from pyclustering.samples.definitions import IMAGE_SIMPLE_SAMPLES, IMAGE_MAP_SAMPLES;
 

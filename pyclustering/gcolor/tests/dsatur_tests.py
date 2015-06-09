@@ -27,7 +27,7 @@ import unittest;
 
 from pyclustering.gcolor.dsatur import dsatur;
 
-from pyclustering.support.graph import read_graph;
+from pyclustering.utils.graph import read_graph;
 
 from pyclustering.samples.definitions import GRAPH_SIMPLE_SAMPLES, GRAPH_DSJC_SAMPLES;
 

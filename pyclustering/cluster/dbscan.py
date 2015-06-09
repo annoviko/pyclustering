@@ -27,8 +27,8 @@
 """
 
 
-from pyclustering.support import euclidean_distance, euclidean_distance_sqrt;
-from pyclustering.support import read_sample;
+from pyclustering.utils import euclidean_distance, euclidean_distance_sqrt;
+from pyclustering.utils import read_sample;
 
 import pyclustering.core.wrapper as wrapper;
 

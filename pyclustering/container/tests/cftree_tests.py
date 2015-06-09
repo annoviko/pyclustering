@@ -24,7 +24,7 @@ import unittest;
 from pyclustering.container.cftree import cfentry, cftree;
 from pyclustering.container.cftree import measurement_type;
 
-from pyclustering.support import linear_sum, square_sum;
+from pyclustering.utils import linear_sum, square_sum;
 
 from random import random;
 

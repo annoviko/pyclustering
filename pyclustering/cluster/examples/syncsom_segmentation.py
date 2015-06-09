@@ -25,8 +25,8 @@
 
 from PIL import Image;
 
-from pyclustering.support import draw_image_mask_segments, read_image, draw_dynamics;
-from pyclustering.support import timedcall;
+from pyclustering.utils import draw_image_mask_segments, read_image, draw_dynamics;
+from pyclustering.utils import timedcall;
 
 from pyclustering.samples.definitions import IMAGE_SIMPLE_SAMPLES;
 

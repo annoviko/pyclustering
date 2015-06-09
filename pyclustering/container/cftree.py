@@ -28,10 +28,10 @@
 
 from copy import copy;
 
-from pyclustering.support import euclidean_distance, euclidean_distance_sqrt;
-from pyclustering.support import manhattan_distance;
-from pyclustering.support import list_math_addition, list_math_subtraction, list_math_multiplication,list_math_division_number;
-from pyclustering.support import linear_sum, square_sum;
+from pyclustering.utils import euclidean_distance, euclidean_distance_sqrt;
+from pyclustering.utils import manhattan_distance;
+from pyclustering.utils import list_math_addition, list_math_subtraction, list_math_multiplication,list_math_division_number;
+from pyclustering.utils import linear_sum, square_sum;
 
 
 class measurement_type:

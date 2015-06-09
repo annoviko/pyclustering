@@ -31,9 +31,9 @@ from pyclustering.nnet import solve_type;
 from pyclustering.samples.definitions import SIMPLE_SAMPLES;
 from pyclustering.samples.definitions import FCPS_SAMPLES;
 
-from pyclustering.support import draw_clusters;
-from pyclustering.support import read_sample;
-from pyclustering.support import timedcall;
+from pyclustering.utils import draw_clusters;
+from pyclustering.utils import read_sample;
+from pyclustering.utils import timedcall;
 
 
 def template_clustering(file, radius, order, show_dyn = False, show_conn = False, show_clusters = True, ena_conn_weight = False, ccore_flag = True):

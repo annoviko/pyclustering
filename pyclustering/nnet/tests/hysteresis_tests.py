@@ -28,7 +28,7 @@ import unittest;
 from pyclustering.nnet.hysteresis import hysteresis_network;
 from pyclustering.nnet import *;
 
-from pyclustering.support import extract_number_oscillations;
+from pyclustering.utils import extract_number_oscillations;
 
 class Test(unittest.TestCase):
     def templateOscillationExistance(self, num_osc, own_weight, neigh_weight, steps, time, initial_states = None, initial_outputs = None, conn_repr = conn_represent.MATRIX):

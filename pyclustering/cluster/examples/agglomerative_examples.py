@@ -26,8 +26,8 @@
 from pyclustering.cluster import cluster_visualizer;
 from pyclustering.cluster.agglomerative import agglomerative, type_link;
 
-from pyclustering.support import read_sample;
-from pyclustering.support import timedcall;
+from pyclustering.utils import read_sample;
+from pyclustering.utils import timedcall;
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
 

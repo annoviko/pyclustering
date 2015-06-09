@@ -43,7 +43,7 @@ from scipy.integrate import ode;
 
 from pyclustering.nnet import *;
 
-from pyclustering.support import draw_dynamics;
+from pyclustering.utils import draw_dynamics;
 
 
 class sync_dynamic:

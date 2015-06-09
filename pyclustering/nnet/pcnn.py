@@ -37,7 +37,7 @@ from PIL import Image;
 from pyclustering.nnet import *;
 import pyclustering.core.pcnn_wrapper as wrapper;
 
-from pyclustering.support import draw_dynamics;
+from pyclustering.utils import draw_dynamics;
 
 
 class pcnn_parameters:

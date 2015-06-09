@@ -26,7 +26,7 @@
 
 """
 
-from pyclustering.support import euclidean_distance;
+from pyclustering.utils import euclidean_distance;
 
 
 class optics_descriptor:

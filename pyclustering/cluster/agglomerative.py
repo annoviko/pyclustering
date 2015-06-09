@@ -28,7 +28,7 @@
 
 from enum import Enum;
 
-from pyclustering.support import euclidean_distance_sqrt;
+from pyclustering.utils import euclidean_distance_sqrt;
 
 
 class type_link(Enum):

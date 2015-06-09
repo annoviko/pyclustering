@@ -23,9 +23,9 @@
 
 """
 
-from pyclustering.support import read_sample;
-from pyclustering.support import draw_clusters;
-from pyclustering.support import timedcall;
+from pyclustering.utils import read_sample;
+from pyclustering.utils import draw_clusters;
+from pyclustering.utils import timedcall;
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES;
 from pyclustering.samples.definitions import FCPS_SAMPLES;

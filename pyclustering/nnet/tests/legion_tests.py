@@ -28,7 +28,7 @@ import unittest;
 from pyclustering.nnet.legion import legion_network, legion_parameters;
 from pyclustering.nnet import *;
 
-from pyclustering.support import extract_number_oscillations;
+from pyclustering.utils import extract_number_oscillations;
 
 
 class Test(unittest.TestCase):   

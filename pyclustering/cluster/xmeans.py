@@ -31,8 +31,8 @@ import math;
 
 import pyclustering.core.wrapper as wrapper;
 
-from pyclustering.support import euclidean_distance, euclidean_distance_sqrt;
-from pyclustering.support import list_math_addition_number, list_math_substraction_number, list_math_addition, list_math_multiplication, list_math_division_number, list_math_subtraction;
+from pyclustering.utils import euclidean_distance, euclidean_distance_sqrt;
+from pyclustering.utils import list_math_addition_number, list_math_substraction_number, list_math_addition, list_math_multiplication, list_math_division_number, list_math_subtraction;
 
 
 class splitting_type:

@@ -28,7 +28,7 @@ import unittest;
 from pyclustering.samples.definitions import SIMPLE_SAMPLES;
 
 from pyclustering.cluster.agglomerative import agglomerative, type_link;
-from pyclustering.support import read_sample;
+from pyclustering.utils import read_sample;
 
 from random import random;
 

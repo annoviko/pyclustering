@@ -25,14 +25,13 @@
 
 from PIL import Image;
 
-from pyclustering.support import draw_dynamics;
+from pyclustering.utils import draw_dynamics;
+from pyclustering.utils import read_image, rgb2gray, draw_image_mask_segments;
 
 from pyclustering.nnet.legion import legion_network, legion_parameters;
 from pyclustering.nnet import *;
 
 from pyclustering.samples.definitions import IMAGE_SIMPLE_SAMPLES;
-
-from pyclustering.support import read_image, rgb2gray, draw_image_mask_segments;
 
 from pyclustering.cluster.dbscan import dbscan;
 

@@ -27,7 +27,7 @@ import unittest;
 
 from pyclustering.nnet.som import som, type_conn, type_init;
 
-from pyclustering.support import read_sample;
+from pyclustering.utils import read_sample;
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
 from pyclustering.nnet.som import som_parameters

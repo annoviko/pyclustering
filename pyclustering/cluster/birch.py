@@ -26,7 +26,7 @@
 
 """
 
-from pyclustering.support import linear_sum, square_sum;
+from pyclustering.utils import linear_sum, square_sum;
 
 from pyclustering.container.cftree import cftree, cfentry, measurement_type;
 

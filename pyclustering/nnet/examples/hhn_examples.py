@@ -24,7 +24,7 @@
 
 """
 
-from pyclustering.support import draw_dynamics;
+from pyclustering.utils import draw_dynamics;
 
 from pyclustering.nnet.hhn import hhn_network, hhn_parameters;
 

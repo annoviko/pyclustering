@@ -25,7 +25,7 @@
 
 import unittest;
 
-from pyclustering.support import read_sample;
+from pyclustering.utils import read_sample;
 
 from pyclustering.cluster.dbscan import dbscan;
 

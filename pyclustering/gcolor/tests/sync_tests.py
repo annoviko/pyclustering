@@ -29,7 +29,7 @@ from pyclustering.nnet import solve_type;
 
 from pyclustering.gcolor.sync import syncgcolor;
 
-from pyclustering.support.graph import read_graph;
+from pyclustering.utils.graph import read_graph;
 
 from pyclustering.samples.definitions import GRAPH_SIMPLE_SAMPLES;
 

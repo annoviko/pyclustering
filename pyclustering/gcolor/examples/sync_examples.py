@@ -27,8 +27,8 @@ from pyclustering.gcolor.sync import syncgcolor;
 
 from pyclustering.nnet import *;
 
-from pyclustering.support import draw_dynamics;
-from pyclustering.support.graph import read_graph, draw_graph;
+from pyclustering.utils import draw_dynamics;
+from pyclustering.utils.graph import read_graph, draw_graph;
 
 from pyclustering.samples.definitions import GRAPH_SIMPLE_SAMPLES, GRAPH_DSJC_SAMPLES;
 

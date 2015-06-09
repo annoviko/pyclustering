@@ -26,9 +26,9 @@
 from pyclustering.cluster import cluster_visualizer;
 from pyclustering.cluster.dbscan import dbscan;
 
-from pyclustering.support import read_sample;
-from pyclustering.support import timedcall;
-from pyclustering.support import draw_clusters;
+from pyclustering.utils import read_sample;
+from pyclustering.utils import timedcall;
+from pyclustering.utils import draw_clusters;
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
 

@@ -31,7 +31,7 @@ from pyclustering.nnet.som import som_parameters;
 from pyclustering.samples.definitions import SIMPLE_SAMPLES;
 from pyclustering.samples.definitions import FCPS_SAMPLES;
 
-from pyclustering.support import read_sample;
+from pyclustering.utils import read_sample;
 
 import matplotlib.pyplot as plt;
 from matplotlib import cm;

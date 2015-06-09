@@ -25,7 +25,7 @@
 
 import unittest;
 
-from pyclustering.support import extract_number_oscillations;
+from pyclustering.utils import extract_number_oscillations;
 
 from pyclustering.nnet.hhn import hhn_network, hhn_parameters;
 

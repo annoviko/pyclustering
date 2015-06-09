@@ -28,8 +28,8 @@ from pyclustering.cluster.syncsom import syncsom;
 from pyclustering.samples.definitions import SIMPLE_SAMPLES;
 from pyclustering.samples.definitions import FCPS_SAMPLES;
 
-from pyclustering.support import read_sample, draw_clusters, draw_dynamics;
-from pyclustering.support import timedcall;
+from pyclustering.utils import read_sample, draw_clusters, draw_dynamics;
+from pyclustering.utils import timedcall;
 
 def template_clustering(file, map_size, trust_order, sync_order = 0.999, show_dyn = False, show_layer1 = False, show_layer2 = False, show_clusters = True):
     # Read sample

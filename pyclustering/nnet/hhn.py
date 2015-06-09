@@ -30,7 +30,7 @@ from pyclustering.nnet import *;
 
 from scipy.integrate import odeint;
 
-from pyclustering.support import allocate_sync_ensembles;
+from pyclustering.utils import allocate_sync_ensembles;
 
 import numpy;
 import random;

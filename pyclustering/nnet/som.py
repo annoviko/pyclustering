@@ -35,7 +35,7 @@ import matplotlib.pyplot as plt;
 
 import pyclustering.core.som_wrapper as wrapper;
 
-from pyclustering.support import euclidean_distance_sqrt;
+from pyclustering.utils import euclidean_distance_sqrt;
 
 from enum import Enum;
 

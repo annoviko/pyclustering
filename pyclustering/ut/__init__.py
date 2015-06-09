@@ -52,7 +52,7 @@ from pyclustering.nnet.tests                     import sync_tests          as n
 from pyclustering.container.tests                import cftree_tests        as container_cftree_unit_tests;
 from pyclustering.container.tests                import kdtree_tests        as container_kdtree_unit_tests;
 
-from pyclustering.support                        import tests               as support_unit_tests;
+from pyclustering.utils.tests                    import utils_tests         as utils_unit_tests;
 
 
 
@@ -86,7 +86,7 @@ if __name__ == "__main__":
     suite.addTests(unittest.TestLoader().loadTestsFromModule(container_cftree_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(container_kdtree_unit_tests));
     
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(support_unit_tests));
+    suite.addTests(unittest.TestLoader().loadTestsFromModule(utils_unit_tests));
     
     unittest.TextTestRunner(verbosity = 2).run(suite);
     

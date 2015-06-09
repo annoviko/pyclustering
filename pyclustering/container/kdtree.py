@@ -28,7 +28,7 @@
 
 import numpy;
 
-from pyclustering.support import euclidean_distance_sqrt;
+from pyclustering.utils import euclidean_distance_sqrt;
 
 class node:
     """!

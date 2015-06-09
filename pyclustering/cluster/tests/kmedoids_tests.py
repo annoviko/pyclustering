@@ -27,7 +27,7 @@ import unittest;
 
 from pyclustering.cluster.kmedoids import kmedoids;
 
-from pyclustering.support import read_sample;
+from pyclustering.utils import read_sample;
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES;
 
