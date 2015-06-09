@@ -23,7 +23,7 @@
 
 """
 
-from pyclustering.support import draw_dynamics;
+from pyclustering.utils import draw_dynamics;
 
 from pyclustering.nnet.legion import legion_network, legion_parameters;
 from pyclustering.nnet import *;
