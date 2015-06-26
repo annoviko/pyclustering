@@ -36,6 +36,12 @@ class dsatur:
     __coloring = None;
     
     def __init__(self, data):
+        """!
+        @brief Constructor of DSATUR algorithm.
+        
+        @param[in] data (list): Matrix graph representation.
+        
+        """
         if (len(data[0]) != len(data)):
             raise NameError('Only matrix graph representation is available.');
     

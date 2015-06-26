@@ -29,19 +29,24 @@
 import numpy;
 import math;
 
+from enum import Enum;
+
 import pyclustering.core.wrapper as wrapper;
 
 from pyclustering.utils import euclidean_distance, euclidean_distance_sqrt;
 from pyclustering.utils import list_math_addition_number, list_math_substraction_number, list_math_addition, list_math_multiplication, list_math_division_number, list_math_subtraction;
 
 
-class splitting_type:
+class splitting_type(Enum):
     """!
     @brief Enumeration of splitting types that can be used as splitting creation of cluster in X-Means algorithm.
     
     """
     
+    ## Bayesian information criterion to approximate the correct number of clusters.
     BAYESIAN_INFORMATION_CRITERION = 0;
+    
+    ## Minimum noiseless description length to approximate the correct number of clusters.
     MINIMUM_NOISELESS_DESCRIPTION_LENGTH = 1;
 
 

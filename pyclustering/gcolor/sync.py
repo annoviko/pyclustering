@@ -30,8 +30,23 @@ from pyclustering.nnet.sync import sync_network;
 from pyclustering.nnet.sync import sync_dynamic;
 
 class syncgcolor_analyser(sync_dynamic):
+    """!
+    @brief Analyser of output dynamic of the oscillatory network syncgcolor.
+    
+    """
+        
     def __init__(self, phase, time, pointer_sync_analyser):
+        """!
+        @brief Constructor of the analyser.
+        
+        @param[in] phase (list): Output dynamic of the oscillatory network, where one iteration consists of all phases of oscillators.
+        @param[in] time (list): Simulation time.
+        @param[in] pointer_sync_analyser (POINTER): Pointer to CCORE analyser, if specified then other arguments can be omitted.
+        
+        """
+        
         super().__init__(phase, time, pointer_sync_analyser);
+    
     
     def allocate_color_clusters(self, tolerance = 0.1):
         """!
@@ -74,6 +89,15 @@ class syncgcolor(sync_network):
     _reduction = None;
     
     def __init__(self, graph_matrix, positive_weight, negative_weight, reduction = None):
+        """!
+        @brief Constructor of the oscillatory network syncgcolor for graph coloring problem.
+        
+        @param[in] graph_matrix (list): Graph represented by matrix.
+        @param[in] positive_weight (double): Value of weight of positive connections.
+        @param[in] negative_weight (double): Value of weight of negative connections.
+        @param[in] reduction (bool): Inverse degree of the processed graph.
+        
+        """
         number_oscillators = len(graph_matrix);
         super().__init__(number_oscillators, type_conn = conn_type.NONE);
         
@@ -89,9 +113,12 @@ class syncgcolor(sync_network):
         
     
     def _create_connections(self, graph_matrix):
-        "Create connection in the network in line with graph."
-
-        "(in) graph_matrix     - matrix representation of the graph"
+        """!
+        @brief Creates connection in the network in line with graph.
+        
+        @param[in] graph_matrix (list): Matrix representation of the graph.
+        
+        """
         
         for row in range(0, len(graph_matrix)):
             for column in range (0, len(graph_matrix[row])):
@@ -99,13 +126,16 @@ class syncgcolor(sync_network):
                 
     
     def _phase_kuramoto(self, teta, t, argv):
-        "Return result of phase calculation for oscillator in the network"
+        """!
+        @brief Returns result of phase calculation for oscillator in the network.
         
-        "(in) teta     - value of phase of the oscillator with index argv in the network"
-        "(in) t        - unused"
-        "(in) argv     - index of the oscillator in the network"
+        @param[in] teta (double): Value of phase of the oscillator with index argv in the network.
+        @param[in] t (double): Unused, can be ignored.
+        @param[in] argv (uint): Index of the oscillator in the network.
         
-        "Return new value of phase for oscillator with index argv"
+        @return (double) New value of phase for oscillator with index argv.
+        
+        """
         
         index = argv;
         phase = 0;
@@ -121,7 +151,7 @@ class syncgcolor(sync_network):
     
     def process(self, order = 0.998, solution = solve_type.FAST, collect_dynamic = False):
         """!
-        @brief Performs simulation of the network (perform solving of graph coloring problem
+        @brief Performs simulation of the network (performs solving of graph coloring problem).
         
         @param[in] order (double): Defines when process of synchronization in the network is over, range from 0 to 1.
         @param[in] solution (solve_type): defines type (method) of solving diff. equation.

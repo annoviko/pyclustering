@@ -36,11 +36,29 @@ from pyclustering.nnet.sync import *;
 from pyclustering.utils import euclidean_distance;
 
 
-class syncnet_analyser(sync_dynamic):    
+class syncnet_analyser(sync_dynamic):
+    """!
+    @brief Performs analysis of output dynamic of the oscillatory network syncnet to extract information about cluster allocation.
+    
+    """
+    
     def __init__(self, phase, time, pointer_sync_analyser):
+        """!
+        @brief Constructor of the analyser.
+        
+        @param[in] phase (list): Output dynamic of the oscillatory network, where one iteration consists of all phases of oscillators.
+        @param[in] time (list): Simulation time.
+        @param[in] pointer_sync_analyser (POINTER): Pointer to CCORE analyser, if specified then other arguments can be omitted.
+        
+        """
         super().__init__(phase, time, pointer_sync_analyser);
     
     def __del__(self):
+        """!
+        @brief Desctructor of the analyser.
+        
+        """
+        
         if (self._ccore_sync_dynamic_pointer is not None):
             syncnet_analyser_destroy(self._ccore_sync_dynamic_pointer);
             self._ccore_sync_dynamic_pointer = None;

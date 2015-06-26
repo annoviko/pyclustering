@@ -25,8 +25,6 @@
 
 import math;
 
-from abc import ABCMeta, abstractmethod;
-
 from enum import Enum;
 
 class initial_type(Enum):

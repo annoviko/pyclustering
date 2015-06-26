@@ -44,22 +44,37 @@ class node:
         @param[in] payload (*): Payload of node (pointer to essense that is attached to this node).
         @param[in] left (node): Node of KD-Tree that is represented left successor.
         @param[in] right (node): Node of KD-Tree that is represented right successor.
-        @param[in] disc (uint): Index of dimention of that node.
+        @param[in] disc (uint): Index of dimension of that node.
         @param[in] parent (node): Node of KD-Tree that is represented parent.
         
         """
         
+        ## Data point that is presented as list of coodinates.
         self.data = data;
+        
+        ## Payload of node that can be used by user for storing specific information in the node.
         self.payload = payload;
+        
+        ## Left node successor of the node.
         self.left = left;
+        
+        ## Right node successor of the node.
         self.right = right;
+        
+        ## Index of dimension.
         self.disc = disc;
+        
+        ## Parent node of the node.
         self.parent = parent;
     
     def __repr__(self):
-        #return 'Node (%s, %s)' % (self.data, hex(id(self.payload)));
+        """!
+        @return (string) Default representation of the node.
         
-        left = None; right = None; parent = None;
+        """
+        left = None; 
+        right = None; 
+        
         if (self.left is not None):
             left = self.left.data;
             
@@ -69,7 +84,10 @@ class node:
         return 'Node (%s, [%s %s])' % (self.data, left, right);
     
     def __str__(self):
-        #return 'Node (%s, %s)' % (self.data, hex(id(self.payload)));
+        """!
+        @return (string) String representation of the node.
+        
+        """
         return self.__repr__();
 
 
@@ -356,38 +374,6 @@ class kdtree:
             best_nodes.append( (candidate_distance, node) );
     
     
-    # TODO: This method is not ready yet
-    def find_nearest_node(self, point):
-        "Search the nearest node of the given point"
-        "Note: Does not work properly"
-        cur_node = self.__root;
-        
-        best_node = None;
-        best_distance = numpy.Inf;
-        
-        while True:
-            # Check if it's best candidate and maybe it's owner of the coordinates.
-            candidate_distance = euclidean_distance_sqrt(cur_node.data, point);
-            if ((candidate_distance < best_distance) and (candidate_distance != 0)):
-                best_node = cur_node;
-                best_distance = candidate_distance;
-
-            # Sort the children, nearer one first
-            children = iter( sorted(self.children(cur_node), key = lambda node: euclidean_distance_sqrt(node.data[cur_node.disc], point[cur_node.disc])) );
-
-            c1 = next(children, None);
-            if c1:
-                cur_node = c1;
-                continue;
-
-            c2 = next(children, None);
-            if c2 and ( euclidean_distance_sqrt(cur_node.data[cur_node.disc], point[cur_node.disc]) < best_distance ):
-                cur_node = c2;
-                continue;
-
-            return best_node;
-    
-    
     def children(self, node):
         """!
         @brief Returns list of children of node.
@@ -404,26 +390,26 @@ class kdtree:
             yield node.right;
             
     
-    def traverse(self, node = None, level = None):
+    def traverse(self, start_node = None, level = None):
         """!
         @brief Traverses all nodes of subtree that is defined by node specified in input parameter.
         
-        @param[in] node (node): Node from that travering of subtree is performed.
-        @param[in|out] level (uint): Should be ignored by application.
+        @param[in] start_node (node): Node from that travering of subtree is performed.
+        @param[in, out] level (uint): Should be ignored by application.
         
-        @return (list) All nodes of subtree.
+        @return (list) All nodes of the subtree.
         
         """
         
-        if (node is None):
-            node  = self.__root;
+        if (start_node is None):
+            start_node  = self.__root;
             level = 0;
         
-        if (node is None):
+        if (start_node is None):
             return [];
         
-        items = [ (level, node) ];        
-        for child in self.children(node):
+        items = [ (level, start_node) ];        
+        for child in self.children(start_node):
             if child is not None:
                 items += self.traverse(child, level + 1);
         
