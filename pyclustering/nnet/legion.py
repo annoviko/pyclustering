@@ -105,6 +105,10 @@ class legion_parameters:
 
 
 class legion_dynamic:
+    """!
+    @brief Represents output dynamic of LEGION.
+    
+    """
     __output = None;
     __inhibitor = None;
     __time = None;

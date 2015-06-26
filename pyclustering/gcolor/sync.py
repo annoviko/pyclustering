@@ -84,6 +84,10 @@ class syncgcolor_analyser(sync_dynamic):
     
 
 class syncgcolor(sync_network):
+    """!
+    @brief Oscillatory network based on Kuramoto model with negative and positive connections for graph coloring problem.
+    
+    """
     _positive_weight = None;
     _negative_weight = None;
     _reduction = None;
