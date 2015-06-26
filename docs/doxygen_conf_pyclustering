@@ -773,25 +773,25 @@ INPUT                 += pyclustering/cluster/syncnet.py
 INPUT                 += pyclustering/cluster/syncsom.py
 INPUT                 += pyclustering/cluster/xmeans.py
 
-INPUT				  += pyclustering/container/__init__.py
-INPUT				  += pyclustering/container/cftree.py
-INPUT				  += pyclustering/container/kdtree.py
+INPUT                 += pyclustering/container/__init__.py
+INPUT                 += pyclustering/container/cftree.py
+INPUT                 += pyclustering/container/kdtree.py
 
-INPUT				  += pyclustering/gcolor/__init__.py
-INPUT				  += pyclustering/gcolor/dsatur.py
-INPUT				  += pyclustering/gcolor/hysteresis.py
-INPUT				  += pyclustering/gcolor/sync.py
+INPUT                 += pyclustering/gcolor/__init__.py
+INPUT                 += pyclustering/gcolor/dsatur.py
+INPUT                 += pyclustering/gcolor/hysteresis.py
+INPUT                 += pyclustering/gcolor/sync.py
 
-INPUT				  += pyclustering/nnet/__init__.py
-INPUT				  += pyclustering/nnet/hhn.py
-INPUT				  += pyclustering/nnet/hysteresis.py
-INPUT				  += pyclustering/nnet/legion.py
-INPUT				  += pyclustering/nnet/pcnn.py
-INPUT				  += pyclustering/nnet/som.py
-INPUT				  += pyclustering/nnet/sync.py
+INPUT                 += pyclustering/nnet/__init__.py
+INPUT                 += pyclustering/nnet/hhn.py
+INPUT                 += pyclustering/nnet/hysteresis.py
+INPUT                 += pyclustering/nnet/legion.py
+INPUT                 += pyclustering/nnet/pcnn.py
+INPUT                 += pyclustering/nnet/som.py
+INPUT                 += pyclustering/nnet/sync.py
 
-INPUT				  += pyclustering/support/__init__.py
-INPUT				  += pyclustering/support/graph.py
+INPUT                 += pyclustering/utils/__init__.py
+INPUT                 += pyclustering/utils/graph.py
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses
