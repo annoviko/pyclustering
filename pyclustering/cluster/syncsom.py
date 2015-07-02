@@ -100,7 +100,8 @@ class syncsom:
         """
         
         self._data = data;
-        self._som = som(rows, cols, data, 100, conn_type = type_conn.grid_four);
+        
+        self._som = som(rows, cols, conn_type = type_conn.grid_four);
         self._som_osc_table = list();        
     
     def process(self, number_neighbours, collect_dynamic = False, order = 0.999):
@@ -119,7 +120,7 @@ class syncsom:
         """
         
         # train self-organization map.
-        self._som.train();
+        self._som.train(self._data, 100);
         
         # prepare to build list.
         weights = list();

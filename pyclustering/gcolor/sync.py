@@ -144,7 +144,7 @@ class syncgcolor(sync_network):
         index = argv;
         phase = 0;
         
-        for k in range(0, self.num_osc):
+        for k in range(0, self._num_osc):
             if (self.has_connection(index, k) == True):
                 phase += self._negative_weight * math.sin(self._phases[k] - teta);
             else:

@@ -33,10 +33,10 @@ from pyclustering.utils import manhattan_distance;
 from pyclustering.utils import list_math_addition, list_math_subtraction, list_math_multiplication,list_math_division_number;
 from pyclustering.utils import linear_sum, square_sum;
 
-from enum import Enum;
+from enum import IntEnum;
 
 
-class measurement_type(Enum):
+class measurement_type(IntEnum):
     """!
     @brief Enumeration of measurement types for CF-Tree.
     
@@ -61,7 +61,7 @@ class measurement_type(Enum):
     VARIANCE_INCREASE_DISTANCE      = 4;
     
 
-class cfnode_type(Enum):
+class cfnode_type(IntEnum):
     """!
     @brief Enumeration of CF-Node types that are used by CF-Tree.
     
@@ -181,7 +181,7 @@ class cfentry:
         
         """
         
-        number_points = self.number_points() + entry.number_points();
+        number_points = self.number_points + entry.number_points;
         linear_sum = list_math_addition(self.linear_sum, entry.linear_sum);        
         square_sum = self.square_sum + entry.square_sum;  
         
@@ -222,7 +222,7 @@ class cfentry:
                 
         tolerance = 0.00001;
         
-        result = (self.number_points() == entry.number_points());
+        result = (self.number_points == entry.number_points);
         result &= ( (self.square_sum + tolerance > entry.square_sum) and (self.square_sum - tolerance < entry.square_sum) );
         
         for index_dimension in range(0, len(self.linear_sum)):

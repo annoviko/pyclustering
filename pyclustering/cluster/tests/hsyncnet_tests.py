@@ -70,9 +70,7 @@ class Test(unittest.TestCase):
          
     def testClusteringOneAllocationSampleSimple1ByCore(self):
         self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, [10], solve_type.FAST, True);
-         
-    def testClusteringSampleSimple2(self):
-        self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 3, [5, 8, 10], solve_type.FAST, False);     
+      
      
     def testClusteringSolverRK4SampleSimple1(self):
         self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, [5, 5], solve_type.RK4, False);

@@ -305,7 +305,7 @@ class syncnet(sync_network):
         surface_font.set_name('Arial');
         surface_font.set_size('12');
         
-        for i in range(0, self.num_osc, 1):
+        for i in range(0, self._num_osc, 1):
             if (dimension == 2):
                 axes.plot(self._osc_loc[i][0], self._osc_loc[i][1], 'bo');  
                 if (self._conn_represent == conn_represent.MATRIX):

@@ -26,12 +26,12 @@
 
 """
 
-from enum import Enum;
+from enum import IntEnum;
 
 from pyclustering.utils import euclidean_distance_sqrt;
 
 
-class type_link(Enum):
+class type_link(IntEnum):
     """!
     @brief Enumerator of types of link between clusters.
     

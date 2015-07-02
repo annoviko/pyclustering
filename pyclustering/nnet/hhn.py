@@ -225,7 +225,7 @@ class hhn_network(network):
         self._active_cond_potassium     = [0.0] * self._num_osc;
         self._link_activation_time      = [0.0] * self._num_osc;
         self._link_pulse_counter        = [0.0] * self._num_osc;
-        self._link_deactivation_time    = [0.0] * self.num_osc;
+        self._link_deactivation_time    = [0.0] * self._num_osc;
         self._link_weight3              = [0.0] * self._num_osc;
         self._pulse_generation_time     = [ [] for i in range(self._num_osc) ];
         self._pulse_generation          = [False] * self._num_osc;

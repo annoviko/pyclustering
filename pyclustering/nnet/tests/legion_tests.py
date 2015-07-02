@@ -87,7 +87,7 @@ class Test(unittest.TestCase):
         net = legion_network(4, type_conn = conn_type.LIST_BIDIR);
         dynamic = net.simulate(500, 1000, [1, 1, 1, 1]);
          
-        for i in range(net.num_osc):
+        for i in range(len(net)):
             assert extract_number_oscillations(dynamic.output, i) > 1;
  
  

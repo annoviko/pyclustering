@@ -37,10 +37,10 @@ import pyclustering.core.som_wrapper as wrapper;
 
 from pyclustering.utils import euclidean_distance_sqrt;
 
-from enum import Enum;
+from enum import IntEnum;
 
 
-class type_conn(Enum):
+class type_conn(IntEnum):
     """!
     @brief Enumeration of connection types for SOM.
     
@@ -61,7 +61,7 @@ class type_conn(Enum):
     func_neighbor = 3;
     
     
-class type_init(Enum):
+class type_init(IntEnum):
     """!
     @brief Enumeration of initialization types for SOM
     

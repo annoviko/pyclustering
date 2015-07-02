@@ -372,12 +372,12 @@ class sync_network(network):
         exp_amount = 0;
         average_phase = 0;
         
-        for index in range(0, self.num_osc, 1):
+        for index in range(0, self._num_osc, 1):
             exp_amount += math.expm1( abs(1j * self._phases[index]) );
             average_phase += self._phases[index];
         
-        exp_amount /= self.num_osc;
-        average_phase = math.expm1( abs(1j * (average_phase / self.num_osc)) );
+        exp_amount /= self._num_osc;
+        average_phase = math.expm1( abs(1j * (average_phase / self._num_osc)) );
         
         return abs(average_phase) / abs(exp_amount);    
     
@@ -398,8 +398,8 @@ class sync_network(network):
         exp_amount = 0;
         num_neigh = 0;
         
-        for i in range(0, self.num_osc, 1):
-            for j in range(0, self.num_osc, 1):
+        for i in range(0, self._num_osc, 1):
+            for j in range(0, self._num_osc, 1):
                 if (self.has_connection(i, j) == True):
                     exp_amount += math.exp(-abs(self._phases[j] - self._phases[i]));
                     num_neigh += 1;
@@ -424,11 +424,11 @@ class sync_network(network):
         
         index = argv;
         phase = 0;
-        for k in range(0, self.num_osc):
+        for k in range(0, self._num_osc):
             if (self.has_connection(index, k) == True):
                 phase += math.sin(self._phases[k] - teta);
             
-        return ( self._freq[index] + (phase * self._weight / self.num_osc) );             
+        return ( self._freq[index] + (phase * self._weight / self._num_osc) );             
         
     
     def simulate(self, steps, time, solution = solve_type.FAST, collect_dynamic = True):
@@ -580,9 +580,9 @@ class sync_network(network):
         
         """
         
-        next_phases = [0] * self.num_osc;    # new oscillator _phases
+        next_phases = [0] * self._num_osc;    # new oscillator _phases
         
-        for index in range (0, self.num_osc, 1):
+        for index in range (0, self._num_osc, 1):
             if (solution == solve_type.FAST):
                 result = self._phases[index] + self._phase_kuramoto(self._phases[index], 0, index);
                 next_phases[index] = self._phase_normalization(result);

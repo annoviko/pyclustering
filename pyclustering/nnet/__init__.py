@@ -25,9 +25,9 @@
 
 import math;
 
-from enum import Enum;
+from enum import IntEnum;
 
-class initial_type(Enum):
+class initial_type(IntEnum):
     """!
     @brief Enumerator of types of oscillator output initialization.
     
@@ -40,7 +40,7 @@ class initial_type(Enum):
     EQUIPARTITION = 1;
 
 
-class solve_type(Enum):
+class solve_type(IntEnum):
     """!
     @brief Enumerator of solver types that are used for network simulation.
     
@@ -56,7 +56,7 @@ class solve_type(Enum):
     RKF45 = 2;
 
 
-class conn_type(Enum):
+class conn_type(IntEnum):
     """!
     @brief Enumerator of connection types between oscillators.
     
@@ -81,7 +81,7 @@ class conn_type(Enum):
     DYNAMIC = 5;
 
 
-class conn_represent(Enum):
+class conn_represent(IntEnum):
     """!
     @brief Enumerator of internal network connection representation between oscillators.
     

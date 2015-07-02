@@ -26,9 +26,9 @@
 import matplotlib.pyplot as plt;
 from matplotlib import colors;
 
-from enum import Enum;
+from enum import IntEnum;
 
-class type_graph_descr(Enum):
+class type_graph_descr(IntEnum):
     """!
     @brief Enumeration of graph description.
     @details Matrix representation is list of lists where number of rows equals number of columns and each element

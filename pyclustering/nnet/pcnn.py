@@ -88,7 +88,9 @@ class pcnn_dynamic:
     __dynamic = None;
     __ccore_pcnn_dynamic_pointer = None;
     
-    
+    __OUTPUT_TRUE = 1;    # fire value for oscillators.
+    __OUTPUT_FALSE = 0;   # rest value for oscillators.
+        
     @property
     def output(self):
         """!
@@ -166,7 +168,7 @@ class pcnn_dynamic:
         for t in range(len(self.__dynamic) - 1, 0, -1):
             sync_ensemble = [];
             for i in range(number_oscillators):
-                if (self.__dynamic[t][i] == pcnn_network.__OUTPUT_TRUE):
+                if (self.__dynamic[t][i] == self.__OUTPUT_TRUE):
                     if (i not in traverse_oscillators):
                         sync_ensemble.append(i);
                         traverse_oscillators.add(i);
@@ -196,7 +198,7 @@ class pcnn_dynamic:
             spike_ensemble = [];
             
             for index in range(number_oscillators):
-                if (self.__dynamic[t][index] == pcnn_network.__OUTPUT_TRUE):
+                if (self.__dynamic[t][index] == self.__OUTPUT_TRUE):
                     spike_ensemble.append(index);
             
             if (len(spike_ensemble) > 0):
@@ -340,6 +342,7 @@ class pcnn_network(network):
     _params = None;
     
     __ccore_pcnn_pointer = None;
+    
     
     __OUTPUT_TRUE = 1;    # fire value for oscillators.
     __OUTPUT_FALSE = 0;   # rest value for oscillators.

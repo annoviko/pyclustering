@@ -32,8 +32,8 @@ from pyclustering.nnet import network, conn_type, conn_represent;
 class Test(unittest.TestCase):
     # All to All connection suite
     def templateAllToAllConnectionsTest(self, network):
-        for i in range(0, network.num_osc, 1):
-            for j in range(0, network.num_osc, 1):
+        for i in range(0, len(network), 1):
+            for j in range(0, len(network), 1):
                 if (i != j):
                     assert network.has_connection(i, j) == True;
                 else:
@@ -50,8 +50,8 @@ class Test(unittest.TestCase):
 
     # None connection suite
     def templateNoneConnectionsTest(self, network):
-        for i in range(0, network.num_osc, 1):
-            for j in range(0, network.num_osc, 1):
+        for i in range(0, len(network), 1):
+            for j in range(0, len(network), 1):
                 assert network.has_connection(i, j) == False;
 
     def testNoneConnections(self):
@@ -65,11 +65,11 @@ class Test(unittest.TestCase):
     
     # Bidirectional list connection suite
     def templateBidirListConnectionsTest(self, network):
-        for index in range(0, network.num_osc, 1):
+        for index in range(0, len(network), 1):
             if (index > 0):
                 assert network.has_connection(index, index - 1) == True;
             
-            if (index < (network.num_osc - 1)):
+            if (index < (len(network) - 1)):
                 assert network.has_connection(index, index + 1) == True;   
                 
     def testBidirListConnections(self):
@@ -84,7 +84,7 @@ class Test(unittest.TestCase):
 
     # Grid four connection suite
     def templateGridFourConnectionsTest(self, network):
-        for index in range(0, network.num_osc, 1):
+        for index in range(0, len(network), 1):
             upper_index = index - 5;
             lower_index = index + 5;
             left_index = index - 1;
@@ -94,13 +94,13 @@ class Test(unittest.TestCase):
             if (upper_index >= 0):
                 assert network.has_connection(index, upper_index) == True;
             
-            if (lower_index < network.num_osc):
+            if (lower_index < len(network)):
                 assert network.has_connection(index, lower_index) == True;
             
             if ( (left_index >= 0) and (math.ceil(left_index / 5) == node_row_index) ):
                 assert network.has_connection(index, left_index) == True;
             
-            if ( (right_index < network.num_osc) and (math.ceil(right_index / 5) == node_row_index) ):
+            if ( (right_index < network._num_osc) and (math.ceil(right_index / 5) == node_row_index) ):
                 assert network.has_connection(index, right_index) == True;
                 
     def testGridFourConnections(self):
