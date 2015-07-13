@@ -210,7 +210,26 @@ class legion_network(network):
     @brief Local excitatory global inhibitory oscillatory network (LEGION) that uses relaxation oscillator
            based on Van der Pol model. The model uses global inhibitor to de-synchronize synchronous ensembles
            of oscillators.
-           
+    
+    Example:
+    @code
+        # Create parameters of the network
+        parameters = legion_parameters();
+        parameters.Wt = 4.0;
+        
+        # Create stimulus
+        stimulus = [1, 1, 0, 0, 0, 1, 1, 1];
+        
+        # Create the network (use CCORE for fast solving)
+        net = legion_network(len(stimulus), parameters, conn_type.GRID_FOUR, ccore = True);
+        
+        # Simulate network - result of simulation is output dynamic of the network
+        output_dynamic = net.simulate(1000, 750, stimulus);
+        
+        # Draw output dynamic
+        draw_dynamics(output_dynamic.time, output_dynamic.output, x_title = "Time", y_title = "x(t)");
+    @endcode
+    
     """
     
     _name = "Local excitatory global inhibitory oscillatory network (LEGION)"
