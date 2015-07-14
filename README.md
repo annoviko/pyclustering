@@ -6,6 +6,11 @@ E-Mail: pyclustering@yandex.ru
 
 ------------------------------------------------
 
+Status:
+[![Build Status](https://travis-ci.org/annoviko/pyclustering.svg?branch=master)](https://travis-ci.org/annoviko/pyclustering)
+
+------------------------------------------------
+
 Based on:
 
 Python >= 3.4 windows 64-bit
