@@ -3,7 +3,7 @@ python:
   - "3.4"
 
 before_install:
-  - sudo apt-get install python3-numpy python3-scipy python3-matplotlib
+  - sudo apt-get install -qq python-numpy python-scipy python-matplotlib
 
 install:
   - pip install numpy
