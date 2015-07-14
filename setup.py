@@ -21,23 +21,34 @@
 
 """
 
-from setuptools import setup, find_packages;
+from setuptools import setup;
+from setuptools import find_packages;
 
-setup(
-      name = 'pyclustering',
-      version = '0.5.dev0',
-      description = 'pyclustring is a python data mining library',
-      url = 'https://github.com/annoviko/pyclustering',
-      license = 'GNU Public License',
-      classifiers = [
-                     'Development Status :: 5 - Production/Stable',
-                     'Intended Audience :: Developers',
-                     'License :: GNU Public License',
-                     'Programming Language :: Python :: 3.4'
-                     ],
-      keywords = 'pyclustering data mining cluster analysis neural oscillatory networks',
-      packages = find_packages(exclude = ['docs', 'ccore']),
-      author = 'Andrei Novikov',
-      author_email = 'pyclustering@yandex.ru',
-      install_requires=['pyclustering'],
-      );
+
+def full_setup():
+    setup(
+          name = 'pyclustering',
+          version = '0.5.dev0',
+          description = 'pyclustring is a python data mining library',
+          url = 'https://github.com/annoviko/pyclustering',
+          license = 'GNU Public License',
+          classifiers = [
+                         'Development Status :: 5 - Production/Stable',
+                         'Intended Audience :: Developers',
+                         'License :: GNU Public License',
+                         'Programming Language :: Python :: 3.4'
+                         ],
+          keywords = 'pyclustering data mining cluster analysis neural oscillatory networks',
+          author = 'Andrei Novikov',
+          author_email = 'pyclustering@yandex.ru',
+          install_requires = ['pyclustering'],
+          packages = find_packages(),
+          package_data = {
+                            'pyclustering.samples': ['samples/*.txt', 'graphs/*.grpr', 'images/*.png', 'images/digits/*.png'],
+                            'pyclustering.core': ['x64/linux/ccore.so', 'x64/win/ccore.dll'],
+                          },
+        );
+
+
+full_setup();
+

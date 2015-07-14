@@ -13,33 +13,31 @@ Status:
 
 Based on:
 
-Python >= 3.4 windows 64-bit
-Python >= 3.4 linux 64-bit
-C++ 11 (MVS, GCC compilers)
+- Python >= 3.4 windows 64-bit
+- Python >= 3.4 linux 64-bit
+- C++ 11 (MVS, GCC compilers)
 
 ------------------------------------------------
 
 Required following packages by pyclustering:
 
-scipy, matplotlib, numpy
+- scipy, matplotlib, numpy
 
 ------------------------------------------------
 
 Index of packages for Windows:
 
-http://www.lfd.uci.edu/~gohlke/pythonlibs/
+- http://www.lfd.uci.edu/~gohlke/pythonlibs/
 
 
 Index of packages for Linux:
-
-Check repositories, for example: 
-$ sudo apt-get install python3-numpy
-$ sudo apt-get install python3-scipy
-$ sudo apt-get install python3-matplotlib
+- sudo apt-get install python3-numpy
+- sudo apt-get install python3-scipy
+- sudo apt-get install python3-matplotlib
 
 ------------------------------------------------
 
-What is implemented in the project:
+What is implemented in the project.
 
 Clustering algorithms (module pyclustering.cluster):
 - BIRCH [Python]
