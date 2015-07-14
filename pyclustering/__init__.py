@@ -2,7 +2,7 @@
 
 @brief PyClustering module that consists of general modules related to clustering, graph coloring, containers, neural networks, oscillatory networks.
 
-@authors Andrei Novikov (spb.andr@yandex.ru)
+@authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2015
 @copyright GNU Public License
 

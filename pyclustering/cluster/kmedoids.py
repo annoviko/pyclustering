@@ -5,7 +5,7 @@
          - A.K. Jain, R.C Dubes, Algorithms for Clustering Data. 1988.
          - L. Kaufman, P.J. Rousseeuw, Finding Groups in Data: an Introduction to Cluster Analysis. 1990.
 
-@authors Andrei Novikov (spb.andr@yandex.ru)
+@authors Andrei Novikov (pyclustering@yandex.ru)
 @version 1.0
 @date 2014-2015
 @copyright GNU Public License

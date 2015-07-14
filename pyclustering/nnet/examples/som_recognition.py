@@ -4,7 +4,7 @@
        Digits for 0 to 9 can be recognized. The application has GUI that provides following 
        function: learning, drawing, recognition, dump saving/loading. 
 
-@authors Andrei Novikov (spb.andr@yandex.ru)
+@authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2015
 @copyright GNU Public License
 

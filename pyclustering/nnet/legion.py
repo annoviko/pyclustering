@@ -5,7 +5,7 @@
          - D.Wang, D.Terman. Image Segmentation Based on Oscillatory Correlation. 1997.
          - D.Wang, D.Terman. Locally Excitatory Globally Inhibitory Oscillator Networks. 1995.
 
-@authors Andrei Novikov (spb.andr@yandex.ru)
+@authors Andrei Novikov (pyclustering@yandex.ru)
 @version 1.0
 @date 2014-2015
 @copyright GNU Public License

@@ -4,7 +4,7 @@
 @details Based on book description:
          - J.B.MacQueen. Some Methods for Classification and Analysis of Multivariate Observations. 1967.
 
-@authors Andrei Novikov (spb.andr@yandex.ru)
+@authors Andrei Novikov (pyclustering@yandex.ru)
 @version 1.0
 @date 2014-2015
 @copyright GNU Public License

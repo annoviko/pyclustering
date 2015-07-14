@@ -2,7 +2,7 @@
 
 @brief Abstract network representation that is used as a basic class.
 
-@authors Andrei Novikov (spb.andr@yandex.ru)
+@authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2015
 @copyright GNU Public License
 

@@ -5,7 +5,7 @@ Cluster analysis algorithm: Classical Hierarchical Algorithm
 Based on article description:
  - K.Anil, J.C.Dubes, R.C.Dubes. Algorithms for Clustering Data. 1988.
 
-Copyright (C) 2015    Andrei Novikov (spb.andr@yandex.ru)
+Copyright (C) 2015    Andrei Novikov (pyclustering@yandex.ru)
 
 pyclustering is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

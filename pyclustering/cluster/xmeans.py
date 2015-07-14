@@ -4,7 +4,7 @@
 @details Based on article description:
          - D.Pelleg, A.Moore. X-means: Extending K-means with Efficient Estimation of the Number of Clusters. 2000.
 
-@authors Andrei Novikov (spb.andr@yandex.ru)
+@authors Andrei Novikov (pyclustering@yandex.ru)
 @version 1.0
 @date 2014-2015
 @copyright GNU Public License

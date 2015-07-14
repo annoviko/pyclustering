@@ -4,7 +4,7 @@
 @details Based on book description:
          - M.Samet. The Design And Analysis Of Spatial Data Structures. 1994.
 
-@authors Andrei Novikov (spb.andr@yandex.ru)
+@authors Andrei Novikov (pyclustering@yandex.ru)
 @version 1.0
 @date 2014-2015
 @copyright GNU Public License

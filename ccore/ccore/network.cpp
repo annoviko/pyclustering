@@ -5,7 +5,7 @@ Abstract network representation that is used as a basic class.
 Based on book description:
  - J.B.MacQueen. Some Methods for Classification and Analysis of Multivariate Observations. 1967.
 
-Copyright (C) 2015    Andrei Novikov (spb.andr@yandex.ru)
+Copyright (C) 2015    Andrei Novikov (pyclustering@yandex.ru)
 
 pyclustering is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

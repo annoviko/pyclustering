@@ -4,7 +4,7 @@
 @details Implementation based on book:
          - K.Anil, J.C.Dubes, R.C.Dubes. Algorithms for Clustering Data. 1988.
 
-@authors Andrei Novikov (spb.andr@yandex.ru)
+@authors Andrei Novikov (pyclustering@yandex.ru)
 @version 1.0
 @date 2014-2015
 @copyright GNU Public License

@@ -4,7 +4,7 @@
 @details Based on article description:
          - J.Wu J, L.Jiao, W.Chen. Clustering dynamics of nonlinear oscillator network: Application to graph coloring problem. 2011.
          
-@authors Andrei Novikov (spb.andr@yandex.ru)
+@authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2015
 @copyright GNU Public License
 
