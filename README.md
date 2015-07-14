@@ -6,7 +6,7 @@ License: GNU General Public License
 
 E-Mail: pyclustering@yandex.ru
 
-https://travis-ci.org/annoviko/pyclustering.svg?branch=master
+[![Build Status](https://travis-ci.org/annoviko/pyclustering.svg?branch=master)](https://travis-ci.org/annoviko/pyclustering)
 
 ------------------------------------------------
 
