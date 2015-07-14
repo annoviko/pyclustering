@@ -6,7 +6,6 @@
          - D.Wang, D.Terman. Locally Excitatory Globally Inhibitory Oscillator Networks. 1995.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
-@version 1.0
 @date 2014-2015
 @copyright GNU Public License
 

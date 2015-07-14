@@ -5,7 +5,6 @@
          - T.Miyano, T.Tsutsui. Data Synchronization as a Method of Data Mining. 2007.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
-@version 1.1
 @date 2014-2015
 @copyright GNU Public License
 

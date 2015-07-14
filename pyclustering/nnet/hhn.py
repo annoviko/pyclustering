@@ -5,7 +5,6 @@
          - D.Chik, R.Borisyuk, Y.Kazanovich. Selective attention model with spiking elements. 2009.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
-@version 1.0
 @date 2014-2015
 @copyright GNU Public License
 

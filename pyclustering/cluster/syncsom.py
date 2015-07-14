@@ -5,7 +5,6 @@
          - A.Novikov, E.Benderskaya. SYNC-SOM Double-layer Oscillatory Network for Cluster Analysis. 2014.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
-@version 1.0
 @date 2014-2015
 @copyright GNU Public License
 

@@ -6,7 +6,6 @@
          - T.Kohonen, E.Oja, O.Simula, A.Visa, J.Kangas. Engineering Applications of the Self-Organizing Map. 1996.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
-@version 1.0
 @date 2014-2015
 @copyright GNU Public License
 

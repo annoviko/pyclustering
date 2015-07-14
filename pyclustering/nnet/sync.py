@@ -8,7 +8,6 @@
          - A.Novikov, E.Benderskaya. Oscillatory Neural Networks Based on the Kuramoto Model. 2014.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
-@version 1.1
 @date 2014-2015
 @copyright GNU Public License
 

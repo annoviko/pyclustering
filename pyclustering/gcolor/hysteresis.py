@@ -5,7 +5,6 @@
          - K.Jinno, H.Taguchi, T.Yamamoto, H.Hirose. Dynamical Hysteresis Neural Network for Graph Coloring Problem. 2003.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
-@version 1.0
 @date 2014-2015
 @copyright GNU Public License
 
