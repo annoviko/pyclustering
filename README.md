@@ -1,13 +1,12 @@
 Project: PyClustering
+
 Version: 0.5.dev0
+
 License: GNU General Public License
 
 E-Mail: pyclustering@yandex.ru
 
-------------------------------------------------
-
-Status:
-!https://travis-ci.org/annoviko/pyclustering.svg?branch=master!:https://travis-ci.org/annoviko/pyclustering
+https://travis-ci.org/annoviko/pyclustering.svg?branch=master
 
 ------------------------------------------------
 
