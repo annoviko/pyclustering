@@ -1,11 +1,16 @@
 language: python
 python:
-  - "3.4"
+- "3.4"
+  
+env:
+  global:
+    - DEPENDS = "numpy scipy matplotlib"
 
 before_install:
   - sudo apt-get install -qq python-numpy python-scipy python-matplotlib
 
 install:
+  - pip install setuptools
   - pip install numpy
   - pip install scipy
   - pip install matplotlib
