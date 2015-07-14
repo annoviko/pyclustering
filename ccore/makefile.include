@@ -9,6 +9,7 @@ SOURCES += ccore/hierarchical.cpp
 SOURCES += ccore/hsyncnet.cpp
 SOURCES += ccore/kdtree.cpp
 SOURCES += ccore/kmeans.cpp
+SOURCES += ccore/legion.cpp
 SOURCES += ccore/network.cpp
 SOURCES += ccore/pcnn.cpp
 SOURCES += ccore/rock.cpp

@@ -1,6 +1,7 @@
 #include "legion.h"
 #include "support.h"
 
+legion_network::legion_network(void) : m_stimulus(NULL), network(0, conn_type::NONE) { }
 
 legion_network::legion_network(const unsigned int num_osc, const conn_type connection_type, const legion_parameters & params) :
 	m_oscillators(num_osc, legion_oscillator()),

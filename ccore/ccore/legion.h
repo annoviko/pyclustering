@@ -120,7 +120,7 @@ private:
 	std::uniform_real_distribution<double>	m_noise_distribution;
 
 private:
-	legion_network::legion_network() : m_stimulus(NULL), network(0, conn_type::NONE) { }
+	legion_network(void);
 
 public:
 	legion_network(const unsigned int num_osc, const conn_type connection_type, const legion_parameters & params);

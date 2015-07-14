@@ -13,6 +13,8 @@ LDFLAGS = -std=gnu++0x -pthread tools/gtest/lib/linux/libgtest.a
 
 # Project sources
 SOURCES += utcore/main.cpp
+SOURCES += utcore/samples.cpp
+
 OBJECTS = $(SOURCES:.cpp=.o)
 INCLUDES += -I./ -Iutcore/ -Itools/ -Iccore/
 
