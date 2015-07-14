@@ -3,9 +3,12 @@ python:
   - "3.4"
 
 before_install:
-  - sudo apt-get install -qq python-numpy python-scipy python-matplotlib
+  - sudo apt-get install python3-numpy python3-scipy python3-matplotlib
 
 install:
+  - pip install numpy
+  - pip install scipy
+  - pip install matplotlib
   - python setup.py install
 
 script: python pyclustering/ut/__init__.py
