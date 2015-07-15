@@ -26,7 +26,7 @@ install:
   - python setup.py install
 
 script: 
-  cd ccore/
-  make ccore
-  cd ../
-  python pyclustering/ut/__init__.py
+  cd ccore/;
+  make ccore;
+  cd ../;
+  python pyclustering/ut/__init__.py;
