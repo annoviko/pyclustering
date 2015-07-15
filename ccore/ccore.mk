@@ -8,7 +8,7 @@ LD = g++
 
 # Toolchain arguments.
 CFLAGS = -MMD -MP -std=gnu++0x -fPIC -c 
-LFLAGS = -std=gnu++0x -shared
+LFLAGS = -static-libstdc++ -std=gnu++0x -shared
 
 # Project sources
 OBJECTS = $(SOURCES:.cpp=.o)

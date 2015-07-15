@@ -69,17 +69,7 @@ class Test(unittest.TestCase):
         self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, [5, 5], solve_type.FAST, True);
          
     def testClusteringOneAllocationSampleSimple1ByCore(self):
-        self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, [10], solve_type.FAST, True);
-      
-     
-    def testClusteringSolverRK4SampleSimple1(self):
-        self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, [5, 5], solve_type.RK4, False);
-         
-    def testClusteringSolverRK4SampleSimple1ByCore(self):
-        self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, [5, 5], solve_type.RK4, True);
-         
-    def testClusteringSolverRKF45SampleSimple1ByCore(self):
-        self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, [5, 5], solve_type.RKF45, True);        
+        self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, [10], solve_type.FAST, True);     
         
         
 if __name__ == "__main__":
