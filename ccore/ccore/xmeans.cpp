@@ -219,7 +219,7 @@ double xmeans::update_centers(std::vector<std::vector<unsigned int> *> * analyse
 	
 	/* for each cluster */
 	for (unsigned int index_cluster = 0; index_cluster < analysed_clusters->size(); index_cluster++) {
-		std::vector<long double> total((*analysed_centers)[index_cluster].size(), 0);
+		std::vector<double> total((*analysed_centers)[index_cluster].size(), 0);
 
 		/* for each object in cluster */
 		for (std::vector<unsigned int>::const_iterator object_index_iterator = (*analysed_clusters)[index_cluster]->begin(); object_index_iterator < (*analysed_clusters)[index_cluster]->end(); object_index_iterator++) {
@@ -230,7 +230,7 @@ double xmeans::update_centers(std::vector<std::vector<unsigned int> *> * analyse
 		}
 
 		/* average for each dimension */
-		for (std::vector<long double>::iterator dimension_iterator = total.begin(); dimension_iterator != total.end(); dimension_iterator++) {
+		for (std::vector<double>::iterator dimension_iterator = total.begin(); dimension_iterator != total.end(); dimension_iterator++) {
 			*dimension_iterator = *dimension_iterator / (*analysed_clusters)[index_cluster]->size();
 		}
 

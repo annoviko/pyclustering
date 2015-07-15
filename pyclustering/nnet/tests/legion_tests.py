@@ -126,9 +126,6 @@ class Test(unittest.TestCase):
         parameters.Wt = 4.0;
         
         self.templateSyncEnsembleAllocation([1, 0, 1], None, conn_type.LIST_BIDIR, 1500, 1500, [[0, 2], [1]]);
-        
-    def testSyncEnsembleAllocationTenMixStimulatedOscillators(self):
-        self.templateSyncEnsembleAllocation([1, 1, 1, 0, 0, 0, 1, 1, 0, 0], None, conn_type.LIST_BIDIR, 1500, 1500, [[0, 1, 2], [3, 4, 5, 8, 9], [6, 7]]);
 
 
 if __name__ == "__main__":

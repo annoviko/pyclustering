@@ -509,7 +509,7 @@ class sync_network(network):
             
             # hang prevention
             if (abs(current_order - previous_order) < threshold_changes):
-                print("Warning: sync_network::simulate_dynamic - simulation is aborted due to low level of convergence rate (order = " + str(current_order) + ").");
+                # print("Warning: sync_network::simulate_dynamic - simulation is aborted due to low level of convergence rate (order = " + str(current_order) + ").");
                 break;
         
         output_sync_dynamic = sync_dynamic(dyn_phase, dyn_time, None);

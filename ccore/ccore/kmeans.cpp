@@ -106,7 +106,7 @@ double kmeans::update_centers(void) {
 	
 	/* for each cluster */
 	for (unsigned int index_cluster = 0; index_cluster < clusters->size(); index_cluster++) {
-		std::vector<long double> total((*centers)[index_cluster].size(), 0);
+		std::vector<double> total((*centers)[index_cluster].size(), 0);
 
 		/* for each object in cluster */
 		for (std::vector<unsigned int>::const_iterator object_index_iterator = (*clusters)[index_cluster]->begin(); object_index_iterator < (*clusters)[index_cluster]->end(); object_index_iterator++) {
@@ -117,7 +117,7 @@ double kmeans::update_centers(void) {
 		}
 
 		/* average for each dimension */
-		for (std::vector<long double>::iterator dimension_iterator = total.begin(); dimension_iterator != total.end(); dimension_iterator++) {
+		for (std::vector<double>::iterator dimension_iterator = total.begin(); dimension_iterator != total.end(); dimension_iterator++) {
 			*dimension_iterator = *dimension_iterator / (*clusters)[index_cluster]->size();
 		}
 

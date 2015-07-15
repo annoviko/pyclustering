@@ -279,7 +279,6 @@ class Test(unittest.TestCase):
         network.train(sample, 100, False);
         network.train(sample, 100, False);
         
-        print(sum(network.awards), len(sample))
         assert sum(network.awards) == len(sample);
         
         total_capture_points = 0;
