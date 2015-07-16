@@ -122,6 +122,8 @@ std::vector<std::vector<double> > * read_sample(const data_representation * cons
  ***********************************************************************************************/
 clustering_result * create_clustering_result(const std::vector<std::vector<unsigned int> *> * const clusters);
 
+clustering_result * create_clustering_result(const std::vector<std::vector<unsigned int> > & clusters);
+
 pyclustering_package * create_package(const std::vector<int> * const data);
 
 pyclustering_package * create_package(const std::vector<unsigned int> * const data);

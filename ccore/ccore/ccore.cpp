@@ -212,12 +212,14 @@ clustering_result * xmeans_algorithm(const data_representation * const sample, c
 	std::vector<std::vector<double> > * dataset = read_sample(sample);
 	std::vector<std::vector<double> > * centers = read_sample(initial_centers);
 
-	xmeans * solver = new xmeans(dataset, centers, kmax, tolerance);
-	solver->process();
+	xmeans solver(*dataset, *centers, kmax, tolerance);
+	solver.process();
 
-	clustering_result * result = create_clustering_result(solver->get_clusters());
+	std::vector<std::vector<unsigned int> > output_clusters;
+	solver.get_clusters(output_clusters);
 
-	delete solver; solver = NULL;
+	clustering_result * result = create_clustering_result(output_clusters);
+
 	delete dataset; dataset = NULL;
 	delete centers; centers = NULL;
 

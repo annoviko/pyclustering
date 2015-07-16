@@ -97,6 +97,30 @@ clustering_result * create_clustering_result(const std::vector<std::vector<unsig
 }
 
 
+clustering_result * create_clustering_result(const std::vector<std::vector<unsigned int> > & clusters) {
+	clustering_result * result = new clustering_result();
+
+	result->size = clusters.size();
+	result->clusters = new cluster_representation[result->size];
+
+	for (unsigned int index_cluster = 0; index_cluster < result->size; index_cluster++) {
+		result->clusters[index_cluster].size = clusters[index_cluster].size();
+		if (result->clusters[index_cluster].size > 0) {
+			result->clusters[index_cluster].objects = new unsigned int[result->clusters[index_cluster].size];
+
+			for (unsigned int index_object = 0; index_object < result->clusters[index_cluster].size; index_object++) {
+				result->clusters[index_cluster].objects[index_object] = clusters[index_cluster][index_object];
+			}
+		}
+		else {
+			result->clusters[index_cluster].objects = NULL;
+		}
+	}
+
+	return result;
+}
+
+
 pyclustering_package * create_package(const std::vector<int> * const data) {
 	pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_INT);
 	prepare_package(data, package);

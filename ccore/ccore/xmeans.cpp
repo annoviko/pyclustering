@@ -28,56 +28,41 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "xmeans.h"
 #include "support.h"
 
-xmeans::xmeans(const std::vector<std::vector<double> > * const data, const std::vector<std::vector<double> > * const initial_centers, const unsigned int kmax, const double minimum_change) {
+#include <iostream>
+
+xmeans::xmeans(const std::vector<std::vector<double> > & data, const std::vector<std::vector<double> > & initial_centers, const unsigned int kmax, const double minimum_change) :
+centers(initial_centers),
+m_clusters(initial_centers.size(), std::vector<unsigned int>()),
+maximum_clusters(kmax)
+{
 #ifdef FAST_SOLUTION
 	tolerance = minimum_change * minimum_change;
 #else
 	tolerance = minimum_change;
 #endif
 	
-	maximum_clusters = kmax;
-	dataset = (std::vector<std::vector<double> > * const) data;
-
-	centers = new std::vector<std::vector<double> >( (*initial_centers) );
-
-	clusters = new std::vector<std::vector<unsigned int> * >();
-	for (unsigned int index = 0; index < centers->size(); index++) {
-		clusters->push_back(new std::vector<unsigned int>());
-	}
+	dataset = (std::vector<std::vector<double> > *) &data;
 }
 
-xmeans::~xmeans(void) {
-	if (centers != NULL) {
-		delete centers;
-		centers = NULL;
-	}
-
-	if (clusters != NULL) {
-		for (std::vector<std::vector<unsigned int> * >::const_iterator iter = clusters->begin(); iter != clusters->end(); iter++) {
-			delete (*iter);
-		}
-
-		delete clusters;
-		clusters = NULL;
-	}
-}
+xmeans::~xmeans(void) { }
 
 void xmeans::process(void) {
-	unsigned int current_number_clusters = clusters->size();
+	unsigned int current_number_clusters = m_clusters.size();
+	const std::vector<unsigned int> dummy;
 
 	while (current_number_clusters < maximum_clusters) {
-		improve_parameters(clusters, centers, NULL);
+		improve_parameters(m_clusters, centers, dummy);
 		improve_structure();
 
-		if (current_number_clusters == centers->size()) {
+		if (current_number_clusters == centers.size()) {
 			break;
 		}
 
-		current_number_clusters = centers->size();
+		current_number_clusters = centers.size();
 	}
 }
 
-void xmeans::improve_parameters(std::vector<std::vector<unsigned int> *> * improved_clusters, std::vector<std::vector<double> > * improved_centers, const std::vector<unsigned int> * const available_indexes) {
+void xmeans::improve_parameters(std::vector<std::vector<unsigned int> > & improved_clusters, std::vector<std::vector<double> > & improved_centers, const std::vector<unsigned int> & available_indexes) {
 	double current_change = std::numeric_limits<double>::max();
 
 	while(current_change > tolerance) {
@@ -91,10 +76,10 @@ void xmeans::improve_structure() {
 	const double difference = 0.001;
 	std::vector<std::vector<double> > allocated_centers;
 
-	for (unsigned int index = 0; index < clusters->size(); index++) {
+	for (unsigned int index = 0; index < m_clusters.size(); index++) {
 		std::vector<std::vector<double> > parent_child_centers;
-		parent_child_centers.push_back( (*centers)[index] );	/* the first child		*/
-		parent_child_centers.push_back( (*centers)[index] );	/* the second child		*/
+		parent_child_centers.push_back( centers[index] );	/* the first child		*/
+		parent_child_centers.push_back( centers[index] );	/* the second child		*/
 
 		/* change location of each child (total number of children is two) */
 		for (unsigned int dimension = 0; dimension < parent_child_centers[0].size(); dimension++) {
@@ -103,26 +88,20 @@ void xmeans::improve_structure() {
 		}
 
 		/* solve k-means problem for children where data of parent are used */
-		std::vector<std::vector<unsigned int> *> * parent_child_clusters = new std::vector<std::vector<unsigned int> *>(2, NULL);
-		(*parent_child_clusters)[0] = new std::vector<unsigned int>();
-		(*parent_child_clusters)[1] = new std::vector<unsigned int>();
+		std::vector<std::vector<unsigned int> > parent_child_clusters(2, std::vector<unsigned int>());
 
-		improve_parameters(parent_child_clusters, &parent_child_centers, (*clusters)[index]);
+		improve_parameters(parent_child_clusters, parent_child_centers, m_clusters[index]);
 
 		/* splitting criterion */
-		std::vector<std::vector<unsigned int> *> parent_cluster(1, (*clusters)[index]);
-		std::vector<std::vector<double> > parent_center(1, (*centers)[index]);
+		std::vector<std::vector<unsigned int> > parent_cluster(1, m_clusters[index]);
+		std::vector<std::vector<double> > parent_center(1, centers[index]);
 
-		double parent_scores = splitting_criterion(&parent_cluster, &parent_center);
-		double child_scores = splitting_criterion(parent_child_clusters, &parent_child_centers);
-
-		/* delete allocated objects */
-		delete (*parent_child_clusters)[0], (*parent_child_clusters)[1];
-		delete parent_child_clusters;
+		double parent_scores = splitting_criterion(parent_cluster, parent_center);
+		double child_scores = splitting_criterion(parent_child_clusters, parent_child_centers);
 
 		/* take the best representation of the considered data */
 		if (parent_scores > child_scores) {
-			allocated_centers.push_back((*centers)[index]);
+			allocated_centers.push_back(centers[index]);
 		}
 		else {
 			allocated_centers.push_back(parent_child_centers[0]);
@@ -131,33 +110,34 @@ void xmeans::improve_structure() {
 	}
 
 	/* update current centers */
-	centers->clear();
+	centers.clear();
 	for (unsigned int index = 0; index < allocated_centers.size(); index++) {
-		centers->push_back(allocated_centers[index]);
+		centers.push_back(allocated_centers[index]);
 	}
 }
 
-double xmeans::splitting_criterion(const std::vector<std::vector<unsigned int> * > * const analysed_clusters, const std::vector<std::vector<double> > * const analysed_centers) const {
-	std::vector<double> scores(analysed_centers->size(), 0.0);
 
-	double dimension = (*analysed_centers)[0].size();
+double xmeans::splitting_criterion(const std::vector<std::vector<unsigned int> > & analysed_clusters, const std::vector<std::vector<double> > & analysed_centers) const {
+	std::vector<double> scores(analysed_centers.size(), 0.0);
+
+	double dimension = analysed_centers[0].size();
 	double sigma = 0.0;
-	unsigned int K = analysed_centers->size();
+	unsigned int K = analysed_centers.size();
 	unsigned int N = 0;
 
-	for (unsigned int index_cluster = 0; index_cluster < analysed_clusters->size(); index_cluster++) {
-		for (std::vector<unsigned int>::const_iterator index_object = (*analysed_clusters)[index_cluster]->begin(); index_object != (*analysed_clusters)[index_cluster]->end(); index_object++) {
-			sigma += euclidean_distance( &(*dataset)[*index_object], &(*analysed_centers)[index_cluster] );
+	for (unsigned int index_cluster = 0; index_cluster < analysed_clusters.size(); index_cluster++) {
+		for (std::vector<unsigned int>::const_iterator index_object = analysed_clusters[index_cluster].begin(); index_object != analysed_clusters[index_cluster].end(); index_object++) {
+			sigma += euclidean_distance( &(*dataset)[*index_object], &(analysed_centers[index_cluster]) );
 		}
 
-		N += (*analysed_clusters)[index_cluster]->size();
+		N += analysed_clusters[index_cluster].size();
 	}
 
 	sigma /= (double) (N - K);
 
 	/* splitting criterion */
-	for (unsigned int index_cluster = 0; index_cluster < analysed_centers->size(); index_cluster++) {
-		double n = (double) (*analysed_clusters)[index_cluster]->size();
+	for (unsigned int index_cluster = 0; index_cluster < analysed_centers.size(); index_cluster++) {
+		double n = (double) analysed_clusters[index_cluster].size();
 		scores[index_cluster] = n * std::log(n) - n * std::log(N) - n * std::log(2.0 * pi()) / 2.0 - n * dimension * std::log(sigma) / 2.0 - (n - K) / 2.0;
 	}
 
@@ -169,40 +149,33 @@ double xmeans::splitting_criterion(const std::vector<std::vector<unsigned int> *
 	return score;
 }
 
-void xmeans::update_clusters(std::vector<std::vector<unsigned int> *> * analysed_clusters, std::vector<std::vector<double> > * analysed_centers, const std::vector<unsigned int> * const available_indexes) {
-	for (std::vector<std::vector<unsigned int> *>::iterator cluster = analysed_clusters->begin(); cluster != analysed_clusters->end(); cluster++) {
-		delete *cluster;
-	}
-
-	delete analysed_clusters;
-	analysed_clusters = new std::vector<std::vector<unsigned int> *>(analysed_centers->size(), NULL);
-	for (std::vector<std::vector<unsigned int> *>::iterator cluster = analysed_clusters->begin(); cluster != analysed_clusters->end(); cluster++) {
-		(*cluster) = new std::vector<unsigned int>();
-	}
+void xmeans::update_clusters(std::vector<std::vector<unsigned int> > & analysed_clusters, const std::vector<std::vector<double> > & analysed_centers, const std::vector<unsigned int> & available_indexes) {
+	analysed_clusters.clear();
+	analysed_clusters.resize(analysed_centers.size(), std::vector<unsigned int>());
 	
-	if (available_indexes == NULL) {
+	if (available_indexes.empty()) {
 		for (unsigned int index_object = 0; index_object < dataset->size(); index_object++) {
-			unsigned int index_cluster = find_proper_cluster(analysed_centers, &(*dataset)[index_object]);
-			(*analysed_clusters)[index_cluster]->push_back(index_object);
+			unsigned int index_cluster = find_proper_cluster(analysed_centers, (*dataset)[index_object]);
+			analysed_clusters[index_cluster].push_back(index_object);
 		}
 	}
 	else {
-		for (std::vector<unsigned int>::const_iterator index_object = available_indexes->begin(); index_object != available_indexes->end(); index_object++) {
-			unsigned int index_cluster = find_proper_cluster(analysed_centers, &(*dataset)[*index_object]);
-			(*analysed_clusters)[index_cluster]->push_back(*index_object);
+		for (std::vector<unsigned int>::const_iterator index_object = available_indexes.begin(); index_object != available_indexes.end(); index_object++) {
+			unsigned int index_cluster = find_proper_cluster(analysed_centers, (*dataset)[*index_object]);
+			analysed_clusters[index_cluster].push_back(*index_object);
 		}
 	}
 }
 
-unsigned int xmeans::find_proper_cluster(std::vector<std::vector<double> > * analysed_centers, const std::vector<double> * const point) const {
+unsigned int xmeans::find_proper_cluster(const std::vector<std::vector<double> > & analysed_centers, const std::vector<double> & point) const {
 	unsigned int index_optimum = 0;
 	double distance_optimum = std::numeric_limits<double>::max();
 	
-	for (unsigned int index_cluster = 0; index_cluster < analysed_centers->size(); index_cluster++) {
+	for (unsigned int index_cluster = 0; index_cluster < analysed_centers.size(); index_cluster++) {
 #ifdef FAST_SOLUTION
-		double distance = euclidean_distance_sqrt( point, &(*analysed_centers)[index_cluster] ); 
+		double distance = euclidean_distance_sqrt( &point, &(analysed_centers[index_cluster]) );
 #else
-		double distance = euclidean_distance( point, &(*analysed_centers)[index_cluster] );
+		double distance = euclidean_distance( &point, &(analysed_centers[index_cluster]) );
 #endif
 
 		if (distance < distance_optimum) {
@@ -214,15 +187,15 @@ unsigned int xmeans::find_proper_cluster(std::vector<std::vector<double> > * ana
 	return index_optimum;
 }
 
-double xmeans::update_centers(std::vector<std::vector<unsigned int> *> * analysed_clusters, std::vector<std::vector<double> > * analysed_centers) {
+double xmeans::update_centers(const std::vector<std::vector<unsigned int> > & analysed_clusters, std::vector<std::vector<double> > & analysed_centers) {
 	double maximum_change = 0;
 	
 	/* for each cluster */
-	for (unsigned int index_cluster = 0; index_cluster < analysed_clusters->size(); index_cluster++) {
-		std::vector<double> total((*analysed_centers)[index_cluster].size(), 0);
+	for (unsigned int index_cluster = 0; index_cluster < analysed_clusters.size(); index_cluster++) {
+		std::vector<double> total(analysed_centers[index_cluster].size(), 0);
 
 		/* for each object in cluster */
-		for (std::vector<unsigned int>::const_iterator object_index_iterator = (*analysed_clusters)[index_cluster]->begin(); object_index_iterator < (*analysed_clusters)[index_cluster]->end(); object_index_iterator++) {
+		for (std::vector<unsigned int>::const_iterator object_index_iterator = analysed_clusters[index_cluster].begin(); object_index_iterator < analysed_clusters[index_cluster].end(); object_index_iterator++) {
 			/* for each dimension */
 			for (unsigned int dimension = 0; dimension < total.size(); dimension++) {
 				total[dimension] += (*dataset)[*object_index_iterator][dimension];
@@ -231,20 +204,20 @@ double xmeans::update_centers(std::vector<std::vector<unsigned int> *> * analyse
 
 		/* average for each dimension */
 		for (std::vector<double>::iterator dimension_iterator = total.begin(); dimension_iterator != total.end(); dimension_iterator++) {
-			*dimension_iterator = *dimension_iterator / (*analysed_clusters)[index_cluster]->size();
+			*dimension_iterator = *dimension_iterator / analysed_clusters[index_cluster].size();
 		}
 
 #ifdef FAST_SOLUTION
-		double distance = euclidean_distance_sqrt( &(*analysed_centers)[index_cluster], (std::vector<double> *) &total );
+		double distance = euclidean_distance_sqrt( &(analysed_centers[index_cluster]), &total );
 #else
-		double distance = euclidean_distance( &(*analysed_centers)[index_cluster], (std::vector<double> *) &total );
+		double distance = euclidean_distance( &(analysed_centers[index_cluster]), &total );
 #endif
 
 		if (distance > maximum_change) {
 			maximum_change = distance;
 		}
 
-		std::copy(total.begin(), total.end(), (*analysed_centers)[index_cluster].begin());
+		std::copy(total.begin(), total.end(), analysed_centers[index_cluster].begin());
 	}
 
 	return maximum_change;
