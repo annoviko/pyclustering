@@ -1,6 +1,6 @@
 Project: PyClustering
 
-Version: 0.5.dev0
+Version: 0.6.dev0
 
 License: GNU General Public License
 

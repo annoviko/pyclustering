@@ -427,7 +427,7 @@ class sync_network(network):
             if (self.has_connection(index, k) == True):
                 phase += math.sin(self._phases[k] - teta);
             
-        return ( self._freq[index] + (phase * self._weight / self._num_osc) );             
+        return ( self._freq[index] + (phase * self._weight / self._num_osc) );
         
     
     def simulate(self, steps, time, solution = solve_type.FAST, collect_dynamic = True):
