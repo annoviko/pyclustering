@@ -31,12 +31,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 class xmeans {
 private:
-	std::vector<std::vector<double> >			* dataset;
-	std::vector<std::vector<unsigned int> >	    m_clusters;
-	std::vector<std::vector<double> >			centers;
+    std::vector<std::vector<double> >           * m_dataset;
+    std::vector<std::vector<unsigned int> >	    m_clusters;
+    std::vector<std::vector<double> >           m_centers;
 
-	unsigned int								maximum_clusters;
-	double										tolerance;
+	unsigned int    m_maximum_clusters;
+	double          m_tolerance;
 
 public:
 	xmeans(const std::vector<std::vector<double> > & data, const std::vector<std::vector<double> > & initial_centers, const unsigned int kmax, const double minimum_change);

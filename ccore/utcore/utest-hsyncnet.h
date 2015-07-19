@@ -27,10 +27,6 @@ static void template_cluster_allocation(const unsigned int number_clusters) {
 	ASSERT_EQ(number_clusters, ensembles.size());
 }
 
-TEST(utest_hsyncnet, allocation_6_clusters) {
-	template_cluster_allocation(6);
-}
-
 TEST(utest_hsyncnet, allocation_2_clusters) {
 	template_cluster_allocation(2);
 }

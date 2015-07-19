@@ -10,8 +10,8 @@
 #include <algorithm>
 #include <numeric>
 
-extern dataset SIMPLE_SAMPLE_1;
-extern dataset SIMPLE_SAMPLE_2;
+extern dataset SIMPLE_SAMPLE_01;
+extern dataset SIMPLE_SAMPLE_02;
 
 static void template_create_delete(const unsigned int rows, const unsigned int cols, const som_conn_type conn_type, const som_init_type init_type) {
 	som_parameters params;
@@ -91,34 +91,34 @@ static void template_award_neurons(dataset & data,
 
 TEST(utest_som, awards_two_clusters_func_neighbor) {
     std::vector<unsigned int> expected_awards = {5, 5};
-    template_award_neurons(SIMPLE_SAMPLE_1, 100, false, 1, 2, som_conn_type::SOM_FUNC_NEIGHBOR, expected_awards);
-    template_award_neurons(SIMPLE_SAMPLE_1, 100, false, 2, 1, som_conn_type::SOM_FUNC_NEIGHBOR, expected_awards);
+    template_award_neurons(SIMPLE_SAMPLE_01, 100, false, 1, 2, som_conn_type::SOM_FUNC_NEIGHBOR, expected_awards);
+    template_award_neurons(SIMPLE_SAMPLE_01, 100, false, 2, 1, som_conn_type::SOM_FUNC_NEIGHBOR, expected_awards);
 }
 
 TEST(utest_som, awards_two_clusters_grid_eight) {
     std::vector<unsigned int> expected_awards = {5, 5};
-    template_award_neurons(SIMPLE_SAMPLE_1, 100, false, 1, 2, som_conn_type::SOM_GRID_EIGHT, expected_awards);
-    template_award_neurons(SIMPLE_SAMPLE_1, 100, false, 2, 1, som_conn_type::SOM_GRID_EIGHT, expected_awards);
+    template_award_neurons(SIMPLE_SAMPLE_01, 100, false, 1, 2, som_conn_type::SOM_GRID_EIGHT, expected_awards);
+    template_award_neurons(SIMPLE_SAMPLE_01, 100, false, 2, 1, som_conn_type::SOM_GRID_EIGHT, expected_awards);
 }
 
 TEST(utest_som, awards_two_clusters_grid_four) {
     std::vector<unsigned int> expected_awards = {5, 5};
-    template_award_neurons(SIMPLE_SAMPLE_1, 100, false, 1, 2, som_conn_type::SOM_GRID_FOUR, expected_awards);
-    template_award_neurons(SIMPLE_SAMPLE_1, 100, false, 2, 1, som_conn_type::SOM_GRID_FOUR, expected_awards);
+    template_award_neurons(SIMPLE_SAMPLE_01, 100, false, 1, 2, som_conn_type::SOM_GRID_FOUR, expected_awards);
+    template_award_neurons(SIMPLE_SAMPLE_01, 100, false, 2, 1, som_conn_type::SOM_GRID_FOUR, expected_awards);
 }
 
 TEST(utest_som, awards_two_clusters_honeycomb) {
     std::vector<unsigned int> expected_awards = {5, 5};
-    template_award_neurons(SIMPLE_SAMPLE_1, 100, false, 1, 2, som_conn_type::SOM_HONEYCOMB, expected_awards);
-    template_award_neurons(SIMPLE_SAMPLE_1, 100, false, 2, 1, som_conn_type::SOM_HONEYCOMB, expected_awards);
+    template_award_neurons(SIMPLE_SAMPLE_01, 100, false, 1, 2, som_conn_type::SOM_HONEYCOMB, expected_awards);
+    template_award_neurons(SIMPLE_SAMPLE_01, 100, false, 2, 1, som_conn_type::SOM_HONEYCOMB, expected_awards);
 }
 
 TEST(utest_som, double_training) {
     som_parameters params;
 	som som_map(2, 2, som_conn_type::SOM_GRID_EIGHT, params);
 
-	som_map.train(SIMPLE_SAMPLE_1, 100, false);
-    som_map.train(SIMPLE_SAMPLE_1, 100, false);
+	som_map.train(SIMPLE_SAMPLE_01, 100, false);
+    som_map.train(SIMPLE_SAMPLE_01, 100, false);
 
     std::vector<std::vector<unsigned int> > captured_objects;
     som_map.allocate_capture_objects(captured_objects);
@@ -128,14 +128,14 @@ TEST(utest_som, double_training) {
         total_capture_points += captured_objects[i].size();
     }
 
-    ASSERT_EQ(SIMPLE_SAMPLE_1.size(), total_capture_points);
+    ASSERT_EQ(SIMPLE_SAMPLE_01.size(), total_capture_points);
 
     std::vector<unsigned int> awards;
     som_map.allocate_awards(awards);
 
     unsigned int number_awards = std::accumulate(awards.begin(), awards.end(), 0);
 
-    ASSERT_EQ(SIMPLE_SAMPLE_1.size(), number_awards);
+    ASSERT_EQ(SIMPLE_SAMPLE_01.size(), number_awards);
 }
 
 #endif

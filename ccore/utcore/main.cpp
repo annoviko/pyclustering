@@ -9,6 +9,7 @@
 #include "utest-som.h"
 #include "utest-sync.h"
 #include "utest-syncnet.h"
+#include "utest-xmeans.h"
 
 int main(int argc, char *argv[]) {
 	::testing::InitGoogleTest(&argc, argv);
