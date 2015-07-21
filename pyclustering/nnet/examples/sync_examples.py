@@ -1,6 +1,6 @@
 """!
 
-@brief Examples of usage and demonstration of abilities of Oscillatory Neural  Network based on Kuramoto model.
+@brief Examples of usage and demonstration of abilities of Oscillatory Neural Network based on Kuramoto model.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2015
