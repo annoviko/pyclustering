@@ -110,6 +110,27 @@ class IMAGE_MAP_SAMPLES:
 class IMAGE_REAL_SAMPLES:
     IMAGE_FIELD_FLOWER              = samples.__path__[0] + os.sep + "images" + os.sep + "ImageFieldFlower.png";
     
+
+class IMAGE_SYMBOL_SAMPLES:
+    @staticmethod
+    def GET_LIST_IMAGE_SAMPLES(symbol):
+        default_path = samples.__path__[0] + os.sep + "images" + os.sep + "symbols" + os.sep;
+        number_sample_symbols = 1;
+        
+        name_file_pattern = "Symbol_%s_Sample%.2d.png";
+        list_image_samples = [];
+        
+        for index_image in range(1, number_sample_symbols + 1, 1):
+            file_path = default_path + (name_file_pattern % (symbol, index_image));
+            list_image_samples.append(file_path);
+            
+        return list_image_samples;      
+
+    LIST_IMAGES_SYMBOL_I            = GET_LIST_IMAGE_SAMPLES.__func__('I');
+    LIST_IMAGES_SYMBOL_D            = GET_LIST_IMAGE_SAMPLES.__func__('D');
+    LIST_IMAGES_SYMBOL_M            = GET_LIST_IMAGE_SAMPLES.__func__('M');
+    LIST_IMAGES_SYMBOL_N            = GET_LIST_IMAGE_SAMPLES.__func__('N');
+
     
 class IMAGE_DIGIT_SAMPLES:    
     @staticmethod
@@ -120,7 +141,7 @@ class IMAGE_DIGIT_SAMPLES:
         name_file_pattern = "Digit_%d_Sample%.2d.png";
         list_image_samples = [];
         
-        for index_image in range(1, number_sample_digits, 1):
+        for index_image in range(1, number_sample_digits + 1, 1):
             file_path = default_path + (name_file_pattern % (digit, index_image));
             list_image_samples.append(file_path);
             
