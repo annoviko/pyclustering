@@ -25,15 +25,17 @@
 
 """
 
-from pyclustering.nnet import solve_type, initial_type, conn_type;
-from pyclustering.nnet.sync import sync_network, sync_dynamic, sync_visualizer;
+from pyclustering.nnet          import solve_type, initial_type, conn_type;
+from pyclustering.nnet.sync     import sync_network, sync_dynamic, sync_visualizer;
+from pyclustering.utils         import draw_dynamics;
 
-from pyclustering.utils import draw_dynamics;
+from PIL import Image;
+
+import matplotlib.pyplot as plt;
 
 import math;
 import numpy;
 
-from scipy.integrate import odeint;
 
 class syncpr_dynamic(sync_dynamic):
     _energy = None;
@@ -41,7 +43,6 @@ class syncpr_dynamic(sync_dynamic):
     @property
     def energy(self):
         return self._energy;
-    
     
     def __init__(self, phase, energy, time):
         self._energy = energy;
@@ -52,7 +53,79 @@ class syncpr_dynamic(sync_dynamic):
 class syncpr_visualizer(sync_visualizer):
     @staticmethod
     def show_energy(syncpr_output_dynamic):
+        if (syncpr_output_dynamic.energy is None):
+            return;
+        
         draw_dynamics(syncpr_output_dynamic.time, syncpr_output_dynamic.energy, x_title = "t", y_title = "L");
+    
+    
+    @staticmethod
+    def show_pattern(syncpr_output_dynamic, image_height, image_width):
+        number_pictures = len(syncpr_output_dynamic);
+        iteration_math_step = 1.0;
+        if (number_pictures > 50):
+            iteration_math_step = math.ceil(number_pictures / 50.0);
+            number_pictures = 50;
+            
+        image_size = image_height * image_width;
+        
+        number_cols = int(numpy.ceil(number_pictures ** 0.5));
+        number_rows = int(numpy.ceil(number_pictures / number_cols));
+        
+        real_index = 0, 0;
+        double_indexer = True;
+        if ( (number_cols == 1) or (number_rows == 1) ):
+            real_index = 0;
+            double_indexer = False;
+        
+        (fig, axarr) = plt.subplots(number_rows, number_cols);
+        plt.setp([ax for ax in axarr], visible = False);
+        
+        axarr[real_index].xaxis.set_ticklabels([]);
+        axarr[real_index].yaxis.set_ticklabels([]);
+        axarr[real_index].xaxis.set_ticks_position('none');
+        axarr[real_index].yaxis.set_ticks_position('none');
+                
+        if (double_indexer is True):
+            real_index = 0, 1;
+        else:
+            real_index += 1;
+        
+        iteration_display = 0.0;
+        for iteration in range(len(syncpr_output_dynamic)):
+            if (iteration >= iteration_display):
+                iteration_display += iteration_math_step;
+                
+                current_dynamic = syncpr_output_dynamic.output[iteration];
+                stage_picture = [(255, 255, 255)] * image_size;
+                for index_phase in range(len(current_dynamic)):
+                    phase = current_dynamic[index_phase];
+                    
+                    pixel_color = math.floor( phase * (255 / (2 * math.pi)) );
+                    stage_picture[index_phase] = (pixel_color, pixel_color, pixel_color);
+                  
+                stage = numpy.array(stage_picture, numpy.uint8);
+                stage = numpy.reshape(stage, (image_height, image_width) + ((3),)); # ((3),) it's size of RGB - third dimension.
+                
+                image_cluster = Image.fromarray(stage, 'RGB');
+                
+                axarr[real_index].imshow(image_cluster, interpolation = 'none');
+                plt.setp(axarr[real_index], visible = True);
+                
+                axarr[real_index].xaxis.set_ticklabels([]);
+                axarr[real_index].yaxis.set_ticklabels([]);
+                    
+                axarr[real_index].xaxis.set_ticks_position('none');
+                axarr[real_index].yaxis.set_ticks_position('none');
+                
+                if (double_indexer is True):
+                    real_index = real_index[0], real_index[1] + 1;
+                    if (real_index[1] >= number_cols):
+                        real_index = real_index[0] + 1, 0; 
+                else:
+                    real_index += 1;
+    
+        plt.show();
 
 
 class syncpr(sync_network):
@@ -131,7 +204,7 @@ class syncpr(sync_network):
                 dyn_time = t;
                 # dyn_energy = [ self.__calculate_energy(self._phases) ];
         
-        output_sync_dynamic = syncpr_dynamic(dyn_phase, dyn_energy, dyn_time);
+        output_sync_dynamic = syncpr_dynamic(dyn_phase, None, dyn_time);
         return output_sync_dynamic;     
     
     
@@ -152,7 +225,7 @@ class syncpr(sync_network):
                 term_oscillator += (term1 - term2);
                 energy_oscillator += self._coupling[i][j] * math.cos(phase_delta);
             
-            energy[i] = -0.5 * energy_oscillator - ( 1.0 / (12.0 * length) ) * term_oscillator;
+            energy[i] = -0.5 * energy_oscillator - ( 0.08333 / length ) * term_oscillator;
         
         return energy;
     

@@ -20,7 +20,7 @@ Based on:
 
 Required following packages by pyclustering:
 
-- scipy, matplotlib, numpy
+- scipy, matplotlib, numpy, PIL
 
 ------------------------------------------------
 
@@ -33,6 +33,7 @@ Index of packages for Linux:
 - sudo apt-get install python3-numpy
 - sudo apt-get install python3-scipy
 - sudo apt-get install python3-matplotlib
+- sudo apt-get install python3-pil
 
 ------------------------------------------------
 
@@ -69,3 +70,7 @@ Graph Coloring Algorithms (module pyclustering.gcolor):
 Containers (module pyclustering.container):
 - KD Tree [Python, C++]
 - CF Tree [Python]
+
+------------------------------------------------
+
+In case of any questions or proposals related to the pyclustering please contact to pyclustering@yandex.ru.

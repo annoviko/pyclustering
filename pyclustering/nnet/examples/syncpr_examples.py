@@ -31,6 +31,9 @@ from pyclustering.utils import read_image, rgb2gray;
 from pyclustering.nnet import solve_type;
 from pyclustering.nnet.syncpr import syncpr, syncpr_visualizer;
 
+import random;
+import math;
+
 def template_recognition_image(images):
     samples = [];
     
@@ -47,21 +50,33 @@ def template_recognition_image(images):
                 
         samples += [ image_pattern ];
     
-    net = syncpr(len(samples[0]), 1.0, 1.0);
+    net = syncpr(len(samples[0]), 0.15, 0.15);
     net.train(samples);
     
     # Recognize the each learned pattern
     for i in range(len(samples)):
-        sync_output_dynamic = net.simulate(25, 25, samples[i], solve_type.RK4);
+        sync_output_dynamic = net.simulate(100, 20, samples[i], solve_type.FAST, True);
         syncpr_visualizer.show_output_dynamic(sync_output_dynamic);
-        # syncpr_visualizer.show_energy(sync_output_dynamic);
-    
+        syncpr_visualizer.show_pattern(sync_output_dynamic, 10, 10);
+        
+        # corrupt a little bit by noise the image
+        for k in range( math.floor(len(samples[i]) * 0.1) ):
+            random.seed();
+            random_pixel = math.floor(random.random() * len(samples[i]));
+            samples[i][random_pixel] = 1.0;
+        
+        sync_output_dynamic = net.simulate(100, 20, samples[i], solve_type.FAST, True);
+        syncpr_visualizer.show_pattern(sync_output_dynamic, 10, 10);
+            
+        
 
 def small_image_recognition():
-    images = IMAGE_SYMBOL_SAMPLES.LIST_IMAGES_SYMBOL_D;
-    images += IMAGE_SYMBOL_SAMPLES.LIST_IMAGES_SYMBOL_I;
-    #images += IMAGE_SYMBOL_SAMPLES.LIST_IMAGES_SYMBOL_M;
-    #images += IMAGE_SYMBOL_SAMPLES.LIST_IMAGES_SYMBOL_N;
+    images = [];
+    for i in range(0, 1, 1):
+        images += IMAGE_SYMBOL_SAMPLES.LIST_IMAGES_SYMBOL_M;
+        images += IMAGE_SYMBOL_SAMPLES.LIST_IMAGES_SYMBOL_I;
+#         images += IMAGE_SYMBOL_SAMPLES.LIST_IMAGES_SYMBOL_N;
+#         images += IMAGE_SYMBOL_SAMPLES.LIST_IMAGES_SYMBOL_D;
     
     template_recognition_image(images);
     
