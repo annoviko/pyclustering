@@ -2,7 +2,7 @@
 
 @brief Unit-test runner that runs all unit-tests in the project.
 
-@authors Andrei Novikov (spb.andr@yandex.ru)
+@authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2015
 @copyright GNU Public License
 
@@ -28,7 +28,7 @@ import unittest;
 from pyclustering.cluster.tests                  import birch_tests         as cluster_birch_unit_tests;
 from pyclustering.cluster.tests                  import cure_tests          as cluster_cure_unit_tests;
 from pyclustering.cluster.tests                  import dbscan_tests        as cluster_dbscan_unit_tests;
-from pyclustering.cluster.tests                  import hierarchical_tests  as cluster_hierarchical_unit_tests;
+from pyclustering.cluster.tests                  import agglomerative_tests as cluster_agglomerative_unit_tests;
 from pyclustering.cluster.tests                  import hsyncnet_tests      as cluster_hsyncnet_unit_tests;
 from pyclustering.cluster.tests                  import kmeans_tests        as cluster_kmeans_unit_tests;
 from pyclustering.cluster.tests                  import optics_tests        as cluster_optics_unit_tests;
@@ -52,7 +52,7 @@ from pyclustering.nnet.tests                     import sync_tests          as n
 from pyclustering.container.tests                import cftree_tests        as container_cftree_unit_tests;
 from pyclustering.container.tests                import kdtree_tests        as container_kdtree_unit_tests;
 
-from pyclustering.support                        import tests               as support_unit_tests;
+from pyclustering.utils.tests                    import utils_tests         as utils_unit_tests;
 
 
 
@@ -62,7 +62,7 @@ if __name__ == "__main__":
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_birch_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_cure_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_dbscan_unit_tests));
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_hierarchical_unit_tests));
+    suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_agglomerative_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_hsyncnet_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_kmeans_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_optics_unit_tests));
@@ -86,7 +86,7 @@ if __name__ == "__main__":
     suite.addTests(unittest.TestLoader().loadTestsFromModule(container_cftree_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(container_kdtree_unit_tests));
     
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(support_unit_tests));
+    suite.addTests(unittest.TestLoader().loadTestsFromModule(utils_unit_tests));
     
-    unittest.TextTestRunner(verbosity = 2).run(suite);
+    unittest.TextTestRunner().run(suite);
     

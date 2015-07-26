@@ -4,7 +4,7 @@
        Digits for 0 to 9 can be recognized. The application has GUI that provides following 
        function: learning, drawing, recognition, dump saving/loading. 
 
-@authors Andrei Novikov (spb.andr@yandex.ru)
+@authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2015
 @copyright GNU Public License
 
@@ -29,7 +29,7 @@ from pyclustering.nnet.som import som, type_conn, type_init;
 
 from pyclustering.samples.definitions import IMAGE_DIGIT_SAMPLES;
 
-from pyclustering.support import read_image, rgb2gray;
+from pyclustering.utils import read_image, rgb2gray;
 
 
 from tkinter import *;
@@ -76,10 +76,10 @@ class recognizer:
         
        
         print("SOM initialization...");
-        self.__network = som(2, 5, samples, 300, type_conn.grid_four, None, True);
+        self.__network = som(2, 5, type_conn.grid_four, None, True);
         
         print("SOM training...");
-        self.__network.train();
+        self.__network.train(samples, 300);
         
         print("SOM is ready...");
         

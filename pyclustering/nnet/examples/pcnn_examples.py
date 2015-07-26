@@ -1,8 +1,8 @@
 """!
 
-@brief  Examples of usage and demonstration of abilities of Pulse Coupled Neural Network.
+@brief Examples of usage and demonstration of abilities of Pulse Coupled Neural Network.
 
-@authors Andrei Novikov (spb.andr@yandex.ru)
+@authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2015
 @copyright GNU Public License
 
@@ -23,14 +23,14 @@
 
 """
 
-from pyclustering.support import draw_dynamics;
+from pyclustering.utils import draw_dynamics;
+from pyclustering.utils import read_image, rgb2gray, draw_image_mask_segments;
 
 from pyclustering.nnet.pcnn import pcnn_network, pcnn_parameters;
 from pyclustering.nnet import *;
 
 from pyclustering.samples.definitions import IMAGE_SIMPLE_SAMPLES;
 
-from pyclustering.support import read_image, rgb2gray, draw_image_mask_segments;
 from pyclustering.nnet.pcnn import pcnn_visualizer
 
 def template_dynamic_pcnn(num_osc, steps, stimulus = None, params = None, conn_type = conn_type.NONE, separate_representation = True, ccore_flag = True):

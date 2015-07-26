@@ -2,7 +2,7 @@
 
 Useful functions that are used by the CCORE of pyclustering.
 
-Copyright (C) 2015    Andrei Novikov (spb.andr@yandex.ru)
+Copyright (C) 2015    Andrei Novikov (pyclustering@yandex.ru)
 
 pyclustering is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -86,6 +86,30 @@ clustering_result * create_clustering_result(const std::vector<std::vector<unsig
 
 			for (unsigned int index_object = 0; index_object < result->clusters[index_cluster].size; index_object++) {
 				result->clusters[index_cluster].objects[index_object] = (*(*clusters)[index_cluster])[index_object];
+			}
+		}
+		else {
+			result->clusters[index_cluster].objects = NULL;
+		}
+	}
+
+	return result;
+}
+
+
+clustering_result * create_clustering_result(const std::vector<std::vector<unsigned int> > & clusters) {
+	clustering_result * result = new clustering_result();
+
+	result->size = clusters.size();
+	result->clusters = new cluster_representation[result->size];
+
+	for (unsigned int index_cluster = 0; index_cluster < result->size; index_cluster++) {
+		result->clusters[index_cluster].size = clusters[index_cluster].size();
+		if (result->clusters[index_cluster].size > 0) {
+			result->clusters[index_cluster].objects = new unsigned int[result->clusters[index_cluster].size];
+
+			for (unsigned int index_object = 0; index_object < result->clusters[index_cluster].size; index_object++) {
+				result->clusters[index_cluster].objects[index_object] = clusters[index_cluster][index_object];
 			}
 		}
 		else {

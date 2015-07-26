@@ -2,7 +2,7 @@
 
 @brief Unit-tests for Hysteresis Oscillatory Network for graph coloring.
 
-@authors Andrei Novikov (spb.andr@yandex.ru)
+@authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2015
 @copyright GNU Public License
 
@@ -27,7 +27,7 @@ import unittest;
 
 from pyclustering.gcolor.hysteresis import hysteresisgcolor;
 
-from pyclustering.support.graph import read_graph;
+from pyclustering.utils.graph import read_graph;
 
 from pyclustering.samples.definitions import GRAPH_SIMPLE_SAMPLES;
 

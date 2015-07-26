@@ -2,7 +2,7 @@
 
 @brief Graph representation (uses format GRPR).
 
-@authors Andrei Novikov (spb.andr@yandex.ru)
+@authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2015
 @copyright GNU Public License
 
@@ -26,7 +26,9 @@
 import matplotlib.pyplot as plt;
 from matplotlib import colors;
 
-class type_graph_descr:
+from enum import IntEnum;
+
+class type_graph_descr(IntEnum):
     """!
     @brief Enumeration of graph description.
     @details Matrix representation is list of lists where number of rows equals number of columns and each element
@@ -38,9 +40,16 @@ class type_graph_descr:
              [ [1, 2], [0, 2], [0, 1] ].
     
     """
+    
+    ## Unknown graph representation.
     GRAPH_UNKNOWN = 0;
+    
+    ## Matrix graph representation.
     GRAPH_MATRIX_DESCR = 1;
+    
+    ## Vector graph representation.
     GRAPH_VECTOR_DESCR = 2;
+
 
 class graph:
     """!

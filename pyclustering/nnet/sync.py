@@ -7,8 +7,7 @@
          - X.Lou. Adaptive Synchronizability of Coupled Oscillators With Switching. 2012.
          - A.Novikov, E.Benderskaya. Oscillatory Neural Networks Based on the Kuramoto Model. 2014.
 
-@authors Andrei Novikov (spb.andr@yandex.ru)
-@version 1.1
+@authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2015
 @copyright GNU Public License
 
@@ -29,6 +28,8 @@
 
 """
 
+import matplotlib.pyplot as plt;
+import matplotlib.animation as animation;
 
 import numpy;
 import random;
@@ -41,7 +42,7 @@ from scipy.integrate import ode;
 
 from pyclustering.nnet import *;
 
-from pyclustering.support import draw_dynamics;
+from pyclustering.utils import draw_dynamics;
 
 
 class sync_dynamic:
@@ -82,7 +83,8 @@ class sync_dynamic:
         """!
         @brief Constructor of Sync dynamic.
         
-        @param[in] dynamic (list): Dynamic of oscillators on each step of simulation. If ccore pointer is specified than it can be ignored.
+        @param[in] phase (list): Dynamic of oscillators on each step of simulation. If ccore pointer is specified than it can be ignored.
+        @param[in] time (list): Simulation time.
         @param[in] ccore (ctypes.pointer): Pointer to CCORE sync_dynamic instance in memory.
         
         """
@@ -148,7 +150,37 @@ class sync_dynamic:
             if (cluster_allocated == False):
                 clusters.append([i]);
         
-        return clusters;    
+        return clusters;
+    
+    
+    def allocate_correlation_matrix(self, iteration = None):
+        """!
+        @brief Allocate correlation matrix between oscillators at the specified step of simulation.
+               
+        @param[in] iteration (uint): Number of iteration of simulation for which correlation matrix should be allocated.
+                                      If iternation number is not specified, the last step of simulation is used for the matrix allocation.
+        
+        @return (list) Correlation matrix between oscillators with size [number_oscillators x number_oscillators].
+        
+        """
+        
+        dynamic = self.output;
+        current_dynamic = dynamic[len(dynamic) - 1];
+        
+        if (iteration is not None):
+            current_dynamic = dynamic[iteration];
+        
+        number_oscillators = len(dynamic[0]);
+        affinity_matrix = [ [ 0.0 for i in range(number_oscillators) ] for j in range(number_oscillators) ];  
+        
+        for i in range(number_oscillators):
+            for j in range(number_oscillators):
+                phase1 = current_dynamic[i];
+                phase2 = current_dynamic[j];
+                
+                affinity_matrix[i][j] = math.sin(phase1 - phase2);
+                
+        return affinity_matrix;
 
 
 class sync_visualizer:
@@ -162,10 +194,107 @@ class sync_visualizer:
         """!
         @brief Shows output dynamic (output of each oscillator) during simulation.
         
+        @param[in] sync_output_dynamic (sync_dynamic): Output dynamic of the Sync network.
+        
         """
         
         draw_dynamics(sync_output_dynamic.time, sync_output_dynamic.output, x_title = "t", y_title = "phase", y_lim = [0, 2 * 3.14]);
     
+    
+    @staticmethod
+    def show_correlation_matrix(sync_output_dynamic, iteration = None):
+        """!
+        @brief Shows correlation matrix between oscillators at the specified iteration.
+        
+        @param[in] sync_output_dynamic (sync_dynamic): Output dynamic of the Sync network.
+        @param[in] iteration (uint): Number of interation of simulation for which correlation matrix should be allocated.
+                                      If iternation number is not specified, the last step of simulation is used for the matrix allocation.
+        
+        """
+        
+        figure = plt.figure();
+        correlation_matrix = sync_output_dynamic.allocate_correlation_matrix(iteration);
+        
+        plt.imshow(correlation_matrix, cmap = plt.get_cmap('cool'), interpolation='kaiser'); 
+        plt.show();
+        
+    
+    @staticmethod
+    def animate_output_dynamic(sync_output_dynamic, animation_velocity = 75):
+        """!
+        @brief Shows animation of output dynamic (output of each oscillator) during simulation on a circle from [0; 2pi].
+        
+        @param[in] sync_output_dynamic (sync_dynamic): Output dynamic of the Sync network.
+        @param[in] animation_velocity (uint): Interval between frames in milliseconds. 
+        
+        """
+        
+        figure = plt.figure();
+        
+        xcircle = numpy.linspace(-1.0, 1.0, 500);
+        ycircle_positive = [ (1.0 - x ** 2) ** 0.5 for x in xcircle ];
+        ycircle_negative = [ -y for y in ycircle_positive ];
+        
+        def init_frame():
+            artist1, = plt.plot(xcircle, ycircle_positive, 'b-');
+            artist2, = plt.plot(xcircle, ycircle_negative, 'b-');
+            artist3, = plt.plot([-1.1, 1.1], [0.0, 0.0], 'b-');
+            artist4, = plt.plot([0.0, 0.0], [-1.1, 1.1], 'b-');
+            
+            text1 = plt.text(-1.1, 0.0, r'$\pi$');
+            text2 = plt.text(1.1, 0.0, r'0');
+            text3 = plt.text(0.0, 1.1, r'$\pi$/2');
+            text4 = plt.text(0.0, -1.1, r'3$\pi$/2');
+            
+            return [ artist1, artist2, artist3, artist4, text1, text2, text3, text4 ];          
+        
+        def frame_generation(index_dynamic):
+            dynamic = sync_output_dynamic.output[index_dynamic];
+            
+            xdata = [];
+            ydata = [];
+            
+            for phase in dynamic:
+                xcoord = math.cos(phase);
+                ycoord = math.sin(phase);
+                
+                xdata.append(xcoord);
+                ydata.append(ycoord);
+            
+            artist5, = plt.plot(xdata, ydata, 'ro');
+            return [ artist5 ];
+        
+        im_ani = animation.FuncAnimation(figure, frame_generation, len(sync_output_dynamic), interval = 75, repeat_delay = 5000, init_func = init_frame, blit = True);
+        plt.show();
+    
+    
+    @staticmethod
+    def animate_correlation_matrix(sync_output_dynamic, animation_velocity = 75):
+        """!
+        @brief Shows animation of correlation matrix between oscillators during simulation.
+        
+        @param[in] sync_output_dynamic (sync_dynamic): Output dynamic of the Sync network.
+        @param[in] animation_velocity (uint): Interval between frames in milliseconds. 
+        
+        """
+        
+        figure = plt.figure();
+        
+        correlation_matrix = sync_output_dynamic.allocate_correlation_matrix(0);
+        
+        def init_frame(): 
+            artist = plt.imshow(correlation_matrix, cmap = plt.get_cmap('cool'), interpolation='kaiser', hold = True);           
+            return [ artist ];   
+        
+        def frame_generation(index_dynamic):
+            correlation_matrix = sync_output_dynamic.allocate_correlation_matrix(index_dynamic);
+            artist = plt.imshow(correlation_matrix, cmap = plt.get_cmap('cool'), interpolation='kaiser');
+            
+            return [ artist ];
+
+        im_ani = animation.FuncAnimation(figure, frame_generation, len(sync_output_dynamic), init_func = init_frame, interval = 75, repeat_delay = 1000, blit = True);
+        plt.show();        
+        
 
 class sync_network(network):    
     """!
@@ -242,12 +371,12 @@ class sync_network(network):
         exp_amount = 0;
         average_phase = 0;
         
-        for index in range(0, self.num_osc, 1):
+        for index in range(0, self._num_osc, 1):
             exp_amount += math.expm1( abs(1j * self._phases[index]) );
             average_phase += self._phases[index];
         
-        exp_amount /= self.num_osc;
-        average_phase = math.expm1( abs(1j * (average_phase / self.num_osc)) );
+        exp_amount /= self._num_osc;
+        average_phase = math.expm1( abs(1j * (average_phase / self._num_osc)) );
         
         return abs(average_phase) / abs(exp_amount);    
     
@@ -268,8 +397,8 @@ class sync_network(network):
         exp_amount = 0;
         num_neigh = 0;
         
-        for i in range(0, self.num_osc, 1):
-            for j in range(0, self.num_osc, 1):
+        for i in range(0, self._num_osc, 1):
+            for j in range(0, self._num_osc, 1):
                 if (self.has_connection(i, j) == True):
                     exp_amount += math.exp(-abs(self._phases[j] - self._phases[i]));
                     num_neigh += 1;
@@ -294,11 +423,11 @@ class sync_network(network):
         
         index = argv;
         phase = 0;
-        for k in range(0, self.num_osc):
+        for k in range(0, self._num_osc):
             if (self.has_connection(index, k) == True):
                 phase += math.sin(self._phases[k] - teta);
             
-        return ( self._freq[index] + (phase * self._weight / self.num_osc) );             
+        return ( self._freq[index] + (phase * self._weight / self._num_osc) );
         
     
     def simulate(self, steps, time, solution = solve_type.FAST, collect_dynamic = True):
@@ -380,7 +509,7 @@ class sync_network(network):
             
             # hang prevention
             if (abs(current_order - previous_order) < threshold_changes):
-                print("Warning: sync_network::simulate_dynamic - simulation is aborted due to low level of convergence rate (order = " + str(current_order) + ").");
+                # print("Warning: sync_network::simulate_dynamic - simulation is aborted due to low level of convergence rate (order = " + str(current_order) + ").");
                 break;
         
         output_sync_dynamic = sync_dynamic(dyn_phase, dyn_time, None);
@@ -450,9 +579,9 @@ class sync_network(network):
         
         """
         
-        next_phases = [0] * self.num_osc;    # new oscillator _phases
+        next_phases = [0] * self._num_osc;    # new oscillator _phases
         
-        for index in range (0, self.num_osc, 1):
+        for index in range (0, self._num_osc, 1):
             if (solution == solve_type.FAST):
                 result = self._phases[index] + self._phase_kuramoto(self._phases[index], 0, index);
                 next_phases[index] = self._phase_normalization(result);

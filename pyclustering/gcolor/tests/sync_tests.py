@@ -2,7 +2,7 @@
 
 @brief Unit-tests for algorithm based on modified Sync.
 
-@authors Andrei Novikov (spb.andr@yandex.ru)
+@authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2015
 @copyright GNU Public License
 
@@ -29,7 +29,7 @@ from pyclustering.nnet import solve_type;
 
 from pyclustering.gcolor.sync import syncgcolor;
 
-from pyclustering.support.graph import read_graph;
+from pyclustering.utils.graph import read_graph;
 
 from pyclustering.samples.definitions import GRAPH_SIMPLE_SAMPLES;
 

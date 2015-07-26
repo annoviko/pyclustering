@@ -2,7 +2,7 @@
 
 @brief Examples of usage and demonstration of abilities of DBSCAN algorithm in cluster analysis.
 
-@authors Andrei Novikov (spb.andr@yandex.ru)
+@authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2015
 @copyright GNU Public License
 
@@ -23,11 +23,12 @@
 
 """
 
+from pyclustering.cluster import cluster_visualizer;
 from pyclustering.cluster.dbscan import dbscan;
 
-from pyclustering.support import read_sample;
-from pyclustering.support import timedcall;
-from pyclustering.support import draw_clusters;
+from pyclustering.utils import read_sample;
+from pyclustering.utils import timedcall;
+from pyclustering.utils import draw_clusters;
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
 
@@ -40,9 +41,12 @@ def template_clustering(radius, neighb, path, invisible_axes = False, ccore = Tr
     clusters = dbscan_instance.get_clusters();
     noise = dbscan_instance.get_noise();
     
-    print("Sample: ", path, "\t\tExecution time: ", ticks, "\n");
+    visualizer = cluster_visualizer();
+    visualizer.append_clusters(clusters, sample);
+    visualizer.append_cluster(noise, sample, marker = 'x');
+    visualizer.show();
     
-    draw_clusters(sample, clusters, [], '.', hide_axes = invisible_axes);
+    print("Sample: ", path, "\t\tExecution time: ", ticks, "\n");
     
 
 

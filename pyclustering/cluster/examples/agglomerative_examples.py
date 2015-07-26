@@ -2,7 +2,7 @@
 
 @brief Examples of usage and demonstration of abilities of agglomerative algorithm in cluster analysis.
 
-@authors Andrei Novikov (spb.andr@yandex.ru)
+@authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2015
 @copyright GNU Public License
 
@@ -23,11 +23,11 @@
 
 """
 
+from pyclustering.cluster import cluster_visualizer;
 from pyclustering.cluster.agglomerative import agglomerative, type_link;
 
-from pyclustering.support import read_sample;
-from pyclustering.support import draw_clusters;
-from pyclustering.support import timedcall;
+from pyclustering.utils import read_sample;
+from pyclustering.utils import timedcall;
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
 
@@ -40,11 +40,18 @@ def template_clustering(number_clusters, path, links):
     clusters_complete_link = None;
     clusters_average_link = None;
     
+    visualizer = cluster_visualizer(len(links));
+    index_canvas = 0;
+    
     if (type_link.CENTROID_LINK in links):
         agglomerative_centroid_link = agglomerative(sample, number_clusters, type_link.CENTROID_LINK);
         
         (ticks, result) = timedcall(agglomerative_centroid_link.process);
         clusters_centroid_link = agglomerative_centroid_link.get_clusters();
+        
+        visualizer.append_clusters(clusters_centroid_link, sample, index_canvas);
+        visualizer.set_canvas_title('Link: Centroid', index_canvas);
+        index_canvas += 1;
         
         print("Sample: ", path, "Link: Centroid", "\tExecution time: ", ticks, "\n");
     
@@ -54,6 +61,10 @@ def template_clustering(number_clusters, path, links):
         (ticks, result) = timedcall(agglomerative_simple_link.process);
         clusters_single_link = agglomerative_simple_link.get_clusters();
         
+        visualizer.append_clusters(clusters_single_link, sample, index_canvas);
+        visualizer.set_canvas_title('Link: Single', index_canvas);
+        index_canvas += 1;
+        
         print("Sample: ", path, "Link: Single", "\tExecution time: ", ticks, "\n");
     
     if (type_link.COMPLETE_LINK in links):
@@ -61,6 +72,10 @@ def template_clustering(number_clusters, path, links):
         
         (ticks, result) = timedcall(agglomerative_complete_link.process);
         clusters_complete_link = agglomerative_complete_link.get_clusters();
+        
+        visualizer.append_clusters(clusters_complete_link, sample, index_canvas);
+        visualizer.set_canvas_title('Link: Complete', index_canvas);
+        index_canvas += 1;
         
         print("Sample: ", path, "Link: Complete", "\tExecution time: ", ticks, "\n");        
     
@@ -70,13 +85,13 @@ def template_clustering(number_clusters, path, links):
         (ticks, result) = timedcall(agglomerative_average_link.process);
         clusters_average_link = agglomerative_average_link.get_clusters();
         
+        visualizer.append_clusters(clusters_average_link, sample, index_canvas);
+        visualizer.set_canvas_title('Link: Average', index_canvas);
+        index_canvas += 1;
+        
         print("Sample: ", path, "Link: Average", "\tExecution time: ", ticks, "\n");  
     
-    if (clusters_centroid_link is not None): draw_clusters(sample, clusters_centroid_link);
-    if (clusters_single_link is not None): draw_clusters(sample, clusters_single_link);
-    if (clusters_complete_link is not None): draw_clusters(sample, clusters_complete_link);
-    if (clusters_average_link is not None): draw_clusters(sample, clusters_average_link);
-    
+    visualizer.show();
     
     
 def cluster_sample1():
@@ -95,16 +110,13 @@ def cluster_sample5():
     template_clustering(4, SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [type_link.CENTROID_LINK, type_link.SINGLE_LINK, type_link.AVERAGE_LINK, type_link.COMPLETE_LINK]);    
     
 def cluster_elongate():
-    "NOTE: Not applicable for this sample"
     template_clustering(2, SIMPLE_SAMPLES.SAMPLE_ELONGATE, [type_link.CENTROID_LINK, type_link.SINGLE_LINK, type_link.AVERAGE_LINK, type_link.COMPLETE_LINK]);
 
 def cluster_lsun():
-    "NOTE: Not applicable for this sample"
     template_clustering(3, FCPS_SAMPLES.SAMPLE_LSUN, [type_link.CENTROID_LINK, type_link.SINGLE_LINK, type_link.AVERAGE_LINK, type_link.COMPLETE_LINK]);  
     
 def cluster_target():
-    "NOTE: Not applicable for this sample"
-    template_clustering(6, FCPS_SAMPLES.SAMPLE_TARGET, [ type_link.SINGLE_LINK ]);     
+    template_clustering(6, FCPS_SAMPLES.SAMPLE_TARGET, [ type_link.CENTROID_LINK ]);     
 
 def cluster_two_diamonds():
     template_clustering(2, FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, [ type_link.CENTROID_LINK ]);  
@@ -113,7 +125,6 @@ def cluster_wing_nut():
     template_clustering(2, FCPS_SAMPLES.SAMPLE_WING_NUT, [type_link.CENTROID_LINK ]); 
     
 def cluster_chainlink():
-    "NOTE: Not applicable for this sample"
     template_clustering(2, FCPS_SAMPLES.SAMPLE_CHAINLINK, [ type_link.CENTROID_LINK ]);     
     
 def cluster_hepta():
@@ -126,13 +137,13 @@ def cluster_engy_time():
     template_clustering(2, FCPS_SAMPLES.SAMPLE_ENGY_TIME, [ type_link.CENTROID_LINK ]);
     
     
-# cluster_sample1();
-# cluster_sample2();
-# cluster_sample3();
-# cluster_sample4();
-# cluster_sample5();
-# cluster_elongate();
-# cluster_lsun();
+cluster_sample1();
+cluster_sample2();
+cluster_sample3();
+cluster_sample4();
+cluster_sample5();
+cluster_elongate();
+cluster_lsun();
 cluster_target();
 cluster_two_diamonds();
 cluster_wing_nut();

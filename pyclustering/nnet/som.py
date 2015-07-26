@@ -5,8 +5,7 @@
          - T.Kohonen. The Self-Organizing Map. 1990.
          - T.Kohonen, E.Oja, O.Simula, A.Visa, J.Kangas. Engineering Applications of the Self-Organizing Map. 1996.
 
-@authors Andrei Novikov (spb.andr@yandex.ru)
-@version 1.0
+@authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2015
 @copyright GNU Public License
 
@@ -35,32 +34,50 @@ import matplotlib.pyplot as plt;
 
 import pyclustering.core.som_wrapper as wrapper;
 
-from pyclustering.support import euclidean_distance_sqrt;
+from pyclustering.utils import euclidean_distance_sqrt;
+
+from enum import IntEnum;
 
 
-class type_conn:
+class type_conn(IntEnum):
     """!
     @brief Enumeration of connection types for SOM.
     
     @see som
     
     """
+    
+    ## Grid type of connections when each oscillator has connections with left, upper, right, lower neighbors.
     grid_four = 0;
+    
+    ## Grid type of connections when each oscillator has connections with left, upper-left, upper, upper-right, right, right-lower, lower, lower-left neighbors.
     grid_eight = 1;
+    
+    ## Grid type of connections when each oscillator has connections with left, upper-left, upper-right, right, right-lower, lower-left neighbors.
     honeycomb = 2;
+    
+    ## Grid type of connections when existance of each connection is defined by the SOM rule on each step of simulation.
     func_neighbor = 3;
     
     
-class type_init:
+class type_init(IntEnum):
     """!
     @brief Enumeration of initialization types for SOM
     
     @see som
     
     """
+    
+    ## Weights are randomly distributed using Gaussian distribution (0, 1).
     random = 0;
+    
+    ## Weights are randomly distributed using Gaussian distribution (input data centroid, 1).
     random_centroid = 1;
+    
+    ## Weights are randomly distrbiuted using Gaussian distribution (input data centroid, surface of input data).
     random_surface = 2;
+    
+    ## Weights are distributed as a uniform grid that covers whole surface of the input data.
     uniform_grid = 3;
 
 
@@ -70,29 +87,16 @@ class som_parameters:
     
     """
     
-    """!
-    @brief Type of initialization of initial neuron weights (random, random in center of the input data, random 
-           distributed in data, ditributed in line with uniform grid).
-    
-    """
+    ## Type of initialization of initial neuron weights (random, random in center of the input data, random distributed in data, ditributed in line with uniform grid).
     init_type = type_init.uniform_grid; 
     
-    """!
-    @brief Initial radius (if not specified then will be calculated by SOM). 
-    
-    """
+    ## Initial radius (if not specified then will be calculated by SOM). 
     init_radius = None;
     
-    """!
-    @brief Rate of learning. 
-    
-    """   
+    ## Rate of learning.   
     init_learn_rate = 0.1;
     
-    """!
-    @brief Condition when learining process should be stoped. It's used when autostop mode is used. 
-     
-    """
+    ## Condition when learining process should be stoped. It's used when autostop mode is used. 
     adaptation_threshold = 0.001; 
 
 
@@ -197,14 +201,12 @@ class som:
         return self._capture_objects;
     
     
-    def __init__(self, rows, cols, data, epochs, conn_type = type_conn.grid_eight, parameters = None, ccore = False):
+    def __init__(self, rows, cols, conn_type = type_conn.grid_eight, parameters = None, ccore = False):
         """!
         @brief Constructor of self-organized map.
         
         @param[in] rows (uint): Number of neurons in the column (number of rows).
         @param[in] cols (uint): Number of neurons in the row (number of columns).
-        @param[in] data (list): Input data - list of points where each point is represented by list of features, for example coordinates.
-        @param[in] epochs (uint): Number of epochs for training.
         @param[in] conn_type (type_conn): Type of connection between oscillators in the network (grid four, grid eight, honeycomb, function neighbour).
         @param[in] parameters (som_parameters): Other specific parameters.
         @param[in] ccore (bool): If True simulation is performed by CCORE library (C++ implementation of pyclustering).
@@ -214,9 +216,7 @@ class som:
         # some of these parameters are required despite core implementation, for example, for network demonstration.
         self._cols = cols;
         self._rows = rows;        
-        self._data = data;
         self._size = cols * rows;
-        self._epochs = epochs;
         self._conn_type = conn_type;
         
         if (parameters is not None):
@@ -233,7 +233,7 @@ class som:
                 self._params.init_radius = 1.0;
         
         if (ccore is True):
-            self.__ccore_som_pointer = wrapper.som_create(data, rows, cols, epochs, conn_type, self._params);
+            self.__ccore_som_pointer = wrapper.som_create(rows, cols, conn_type, self._params);
             
         else:
             # location
@@ -257,9 +257,6 @@ class som:
             # connections
             if (conn_type != type_conn.func_neighbor):
                 self._create_connections(conn_type);
-            
-            # weights
-            self._create_initial_weights(self._params.init_type);
         
 
     def __del__(self):
@@ -308,9 +305,12 @@ class som:
             center_dimension[dim] = (maximum_dimension[dim] + minimum_dimension[dim]) / 2;
         
         step_x = center_dimension[0];
-        step_y = center_dimension[1];
         if (self._rows > 1): step_x = width_dimension[0] / (self._rows - 1);
-        if (self._cols > 1): step_y = width_dimension[1] / (self._cols - 1); 
+        
+        step_y = 0.0;
+        if (dimension > 1):
+            step_y = center_dimension[1];
+            if (self._cols > 1): step_y = width_dimension[1] / (self._cols - 1); 
                       
         # generate weights (topological coordinates)
         random.seed();
@@ -327,6 +327,7 @@ class som:
                             self._weights[i][dim] = minimum_dimension[dim] + step_x * location[dim];
                         else:
                             self._weights[i][dim] = center_dimension[dim];
+                            
                     elif (dim == 1):
                         if (self._cols > 1):
                             self._weights[i][dim] = minimum_dimension[dim] + step_y * location[dim];
@@ -485,10 +486,12 @@ class som:
                         self._weights[neighbor_index][i] = self._weights[neighbor_index][i] + self._learn_rate * influence * (x[i] - self._weights[neighbor_index][i]);  
     
                             
-    def train(self, autostop = False):
+    def train(self, data, epochs, autostop = False):
         """!
         @brief Trains self-organized feature map (SOM).
-        
+
+        @param[in] data (list): Input data - list of points where each point is represented by list of features, for example coordinates.
+        @param[in] epochs (uint): Number of epochs for training.        
         @param[in] autostop (bool): Automatic termination of learining process when adaptation is not occurred.
         
         @return (uint) Number of learining iterations.
@@ -496,7 +499,17 @@ class som:
         """
         
         if (self.__ccore_som_pointer is not None):
-            return wrapper.som_train(self.__ccore_som_pointer, autostop);
+            return wrapper.som_train(self.__ccore_som_pointer, data, epochs, autostop);
+        
+        for i in range(self._size):
+            self._award[i] = 0;
+            self._capture_objects[i].clear();
+            
+        self._epochs = epochs;
+        self._data = data;
+        
+        # weights
+        self._create_initial_weights(self._params.init_type);
         
         previous_weights = None;
         
@@ -521,7 +534,7 @@ class som:
                 self._adaptation(index, self._data[i]);
                 
                 # Update statistics
-                if ( (autostop == True) or (epoch == (self._epochs - 1)) ):
+                if ( (autostop == True) or (epoch == self._epochs) ):
                     self._award[index] += 1;
                     self._capture_objects[index].append(i);
             
@@ -745,7 +758,7 @@ class som:
         plt.show();
             
     
-    def show_network(self, awards = False, belongs = False, coupling = True, dataset = True, marker_type = '.'):
+    def show_network(self, awards = False, belongs = False, coupling = True, dataset = True, marker_type = 'o'):
         """!
         @brief Shows neurons in the dimension of data.
         
@@ -769,19 +782,23 @@ class som:
         axes = None;
         
         # Check for dimensions
-        if (dimension == 2):
+        if ( (dimension == 1) or (dimension == 2) ):
             axes = fig.add_subplot(111);
         elif (dimension == 3):
             axes = fig.gca(projection='3d');
         else:
-            raise NameError('Dwawer supports only 2d and 3d data representation');
+            raise NameError('Dwawer supports only 1D, 2D and 3D data representation');
         
         
         # Show data
         if (dataset == True):
             for x in self._data:
-                if (dimension == 2):
+                if (dimension == 1):
+                    axes.plot(x[0], 0.0, 'b|', ms = 30);
+                    
+                elif (dimension == 2):
                     axes.plot(x[0], x[1], 'b.');
+                    
                 elif (dimension == 3):
                     axes.scatter(x[0], x[1], x[2], c = 'b', marker = '.');                           
         
@@ -789,6 +806,20 @@ class som:
         for index in range(self._size):
             color = 'g';
             if (self._award[index] == 0): color = 'y';
+            
+            if (dimension == 1):
+                axes.plot(self._weights[index][0], 0.0, color + marker_type);
+                
+                if (awards == True):
+                    location = '{0}'.format(self._award[index]);
+                    axes.text(self._weights[index][0], 0.0, location, color='black', fontsize = 10);                   
+            
+                if (belongs == True):
+                    location = '{0}'.format(index);
+                    axes.text(self._weights[index][0], 0.0, location, color='black', fontsize = 12);
+                    for k in range(len(self._capture_objects[index])):
+                        point = self._data[self._capture_objects[index][k]];
+                        axes.text(point[0], 0.0, location, color='blue', fontsize = 10);
             
             if (dimension == 2):
                 axes.plot(self._weights[index][0], self._weights[index][1], color + marker_type);

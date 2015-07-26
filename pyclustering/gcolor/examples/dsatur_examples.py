@@ -2,7 +2,7 @@
 
 @brief Examples of usage and demonstration of abilities of DSATUR algorithm in graph coloring.
 
-@authors Andrei Novikov (spb.andr@yandex.ru)
+@authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2015
 @copyright GNU Public License
 
@@ -23,7 +23,7 @@
 
 """
 
-from pyclustering.support.graph import read_graph, draw_graph;
+from pyclustering.utils.graph import read_graph, draw_graph;
 
 from pyclustering.samples.definitions import GRAPH_SIMPLE_SAMPLES, GRAPH_DSJC_SAMPLES;
 

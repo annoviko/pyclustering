@@ -57,10 +57,6 @@ TEST(utest_legion, one_stimulated_oscillator_rk4) {
 	template_dynamic_simulation({ 1 }, conn_type::GRID_FOUR, solve_type::RK4, 10, 100);
 }
 
-TEST(utest_legion, one_stimulated_oscillator_rkf45) {
-	template_dynamic_simulation({ 1 }, conn_type::GRID_FOUR, solve_type::RKF45, 10, 100);
-}
-
 TEST(utest_legion, dynamic_simulation_grid_four_rk4) {
 	template_dynamic_simulation({ 1, 1, 1, 0, 0, 0, 1, 1, 1 }, conn_type::GRID_FOUR, solve_type::RK4, 10, 100);
 }

@@ -5,7 +5,7 @@ Cluster analysis algorithm: Sync
 Based on article description:
  - T.Miyano, T.Tsutsui. Data Synchronization as a Method of Data Mining. 2007.
 
-Copyright (C) 2015    Andrei Novikov (spb.andr@yandex.ru)
+Copyright (C) 2015    Andrei Novikov (pyclustering@yandex.ru)
 
 pyclustering is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

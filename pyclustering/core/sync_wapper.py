@@ -2,7 +2,7 @@
 
 @brief CCORE Wrapper for oscillatory neural network based on Sync.
 
-@authors Andrei Novikov (spb.andr@yandex.ru)
+@authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2015
 @copyright GNU Public License
 
@@ -61,9 +61,9 @@ def sync_local_order(pointer_network):
     return ccore.sync_local_order(pointer_network);
 
 
-def sync_dynamic_get_size(pointer_network):
+def sync_dynamic_get_size(pointer_dynamic):
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
-    return ccore.sync_dynamic_get_size(pointer_network);
+    return ccore.sync_dynamic_get_size(pointer_dynamic);
 
 
 def sync_dynamic_destroy(pointer_dynamic):

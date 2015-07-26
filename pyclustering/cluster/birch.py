@@ -4,8 +4,7 @@
 @details Implementation based on article:
          - T.Zhang, R.Ramakrishnan, M.Livny. BIRCH: An Efficient Data Clustering Method for Very Large Databases. 1996.
          
-@authors Andrei Novikov (spb.andr@yandex.ru)
-@version 1.0
+@authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2015
 @copyright GNU Public License
 
@@ -26,7 +25,7 @@
 
 """
 
-from pyclustering.support import linear_sum, square_sum;
+from pyclustering.utils import linear_sum, square_sum;
 
 from pyclustering.container.cftree import cftree, cfentry, measurement_type;
 

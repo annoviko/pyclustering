@@ -2,7 +2,7 @@
 
 @brief Examples of usage and demonstration of abilities of Sync algorithm in cluster analysis.
 
-@authors Andrei Novikov (spb.andr@yandex.ru)
+@authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2015
 @copyright GNU Public License
 
@@ -31,12 +31,12 @@ from pyclustering.nnet import solve_type;
 from pyclustering.samples.definitions import SIMPLE_SAMPLES;
 from pyclustering.samples.definitions import FCPS_SAMPLES;
 
-from pyclustering.support import draw_clusters;
-from pyclustering.support import read_sample;
-from pyclustering.support import timedcall;
+from pyclustering.utils import draw_clusters;
+from pyclustering.utils import read_sample;
+from pyclustering.utils import timedcall;
 
 
-def template_clustering(file, radius, order, show_dyn = False, show_conn = False, show_clusters = True, ena_conn_weight = False, ccore_flag = False):
+def template_clustering(file, radius, order, show_dyn = False, show_conn = False, show_clusters = True, ena_conn_weight = False, ccore_flag = True):
     sample = read_sample(file);
     network = syncnet(sample, radius, enable_conn_weight = ena_conn_weight, ccore = ccore_flag);
     
@@ -45,8 +45,9 @@ def template_clustering(file, radius, order, show_dyn = False, show_conn = False
     
     if (show_dyn == True):
         sync_visualizer.show_output_dynamic(analyser);
+        sync_visualizer.animate_output_dynamic(analyser);
     
-    if (show_conn == True):
+    if ( (show_conn == True) and (ccore_flag == False) ):
         network.show_network();
     
     if (show_clusters == True):

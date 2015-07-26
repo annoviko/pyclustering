@@ -2,7 +2,7 @@
 
 Unit-tests for CF-Tree.
 
-Copyright (C) 2015    Andrei Novikov (spb.andr@yandex.ru)
+Copyright (C) 2015    Andrei Novikov (pyclustering@yandex.ru)
 
 pyclustering is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@ import unittest;
 from pyclustering.container.cftree import cfentry, cftree;
 from pyclustering.container.cftree import measurement_type;
 
-from pyclustering.support import linear_sum, square_sum;
+from pyclustering.utils import linear_sum, square_sum;
 
 from random import random;
 

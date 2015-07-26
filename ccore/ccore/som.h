@@ -6,7 +6,7 @@ Based on article description:
  - T.Kohonen. The Self-Organizing Map. 1990.
  - T.Kohonen, E.Oja, O.Simula, A.Visa, J.Kangas. Engineering Applications of the Self-Organizing Map. 1996.
 
-Copyright (C) 2015    Andrei Novikov (spb.andr@yandex.ru)
+Copyright (C) 2015    Andrei Novikov (pyclustering@yandex.ru)
 
 pyclustering is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -63,47 +63,45 @@ typedef struct som_parameters {
 class som {
 private:
 	/* network description */
-	unsigned int rows;
-	unsigned int cols;
-	unsigned int size;
+	unsigned int m_rows;
+	unsigned int m_cols;
+	unsigned int m_size;
 
-	som_conn_type conn_type;
+	som_conn_type m_conn_type;
 
-	std::vector<std::vector<double> * > * weights;
-	std::vector<std::vector<double> * > * previous_weights;
-	std::vector<unsigned int> * awards;
+	std::vector<std::vector<double> > m_weights;
+	std::vector<std::vector<double> > m_previous_weights;
+	std::vector<unsigned int> m_awards;
 
+	/* store pointer to training data for convinience */
 	std::vector<std::vector<double> > * data;
 
 	/* just for convenience (avoid excess calculation during learning) */
-	std::vector<std::vector<double> * > * location;
-	std::vector<std::vector<double> * > *  sqrt_distances;
-	std::vector<std::vector<unsigned int> * > * capture_objects;
-	std::vector<std::vector<unsigned int> * > * neighbors;
+	std::vector<std::vector<double> > m_location;
+	std::vector<std::vector<double> > m_sqrt_distances;
+	std::vector<std::vector<unsigned int> > m_capture_objects;
+	std::vector<std::vector<unsigned int> > m_neighbors;
 
 	/* describe learning process and internal state */
-	unsigned int epouchs;
-	som_parameters params;
+	unsigned int m_epouchs;
+	som_parameters m_params;
 
 	/* dynamic changes learning parameters */
-	double local_radius;
-	double learn_rate;
+	double m_local_radius;
+	double m_learn_rate;
 
 public:
 	/***********************************************************************************************
 	 *
 	 * @brief   Constructor of self-organized map.
 	 *
-	 * @param   (in) data            - list of points where each point is represented by list of features, 
-	 *                                 for example coordinates.
 	 * @param   (in) rows            - number of neurons in the column (number of rows).
 	 * @param   (in) cols            - number of neurons in the row (number of columns).
-	 * @param   (in) epochs          - number of epochs for training.
 	 * @param   (in) conn_type       - type of connection between oscillators in the network.
 	 * @param   (in) parameters		 - others parameters of the network.
 	 *
 	 ***********************************************************************************************/
-	som(std::vector<std::vector<double> > * input_data, const unsigned int num_rows, const unsigned int num_cols, const unsigned int num_epochs, const som_conn_type type_conn, const som_parameters * parameters);
+	som(const unsigned int num_rows, const unsigned int num_cols, const som_conn_type type_conn, const som_parameters & parameters);
 
 	/***********************************************************************************************
 	 *
@@ -116,13 +114,14 @@ public:
 	 *
 	 * @brief   Trains self-organized feature map (SOM).
 	 *
-	 * @param   (in) index_winner    - index of neuron-winner.
-	 * @param   (in) pattern         - input pattern from the input data set.
+	 * @param   (in) input_data     - input dataset for learining.
+	 * @param   (in) epochs         - number of epochs for training.
+	 * @param   (in) autostop       - stop learining when convergance is too low.
 	 *
 	 * @return  Returns number of learining iterations.
 	 *
 	 ***********************************************************************************************/
-	unsigned int train(bool autostop);
+	unsigned int train(const std::vector<std::vector<double> > & input_data, const unsigned int epochs, bool autostop);
 
 	/***********************************************************************************************
 	 *
@@ -134,7 +133,7 @@ public:
 	 * @return  Returns index of neuron-winner.
 	 *
 	 ***********************************************************************************************/
-	unsigned int simulate(const std::vector<double> * pattern) const;
+	unsigned int simulate(const std::vector<double> & pattern) const;
 
 	/***********************************************************************************************
 	 *
@@ -148,35 +147,25 @@ public:
 	 * @return  Returns size of self-organized map (number of neurons).
 	 *
 	 ***********************************************************************************************/
-	inline unsigned int get_size(void) const { return size; }
+	inline unsigned int get_size(void) const { return m_size; }
 
-	/***********************************************************************************************
-	 *
-	 * @return  Returns list of weights of each neuron.
-	 *
-	 ***********************************************************************************************/
-	inline const std::vector<std::vector<double> * > * const get_weights(void) const { return weights; }
 
-	/***********************************************************************************************
-	 *
-	 * @return  Returns list of indexes of captured objects by each neuron.
-	 *
-	 ***********************************************************************************************/
-	inline const std::vector<std::vector<unsigned int> * > * const get_capture_objects(void) const { return capture_objects; }
+	inline void allocate_weights(std::vector<std::vector<double> > & weights) {
+		weights = m_weights;
+	}
 
-	/***********************************************************************************************
-	 *
-	 * @return  Returns list of indexes of neighbors of each neuron.
-	 *
-	 ***********************************************************************************************/
-	inline const std::vector<std::vector<unsigned int> * > * const get_neighbors(void) const { return neighbors; }
+
+	inline void allocate_capture_objects(std::vector<std::vector<unsigned int> > & objects) {
+		objects = m_capture_objects;
+	}
+
+	inline void allocate_neighbors(std::vector<std::vector<unsigned int> > & neighbors) {
+		neighbors = m_neighbors;
+	}
 	
-	/***********************************************************************************************
-	 *
-	 * @return  Returns list of numbers of captured objects by each neuron.
-	 *
-	 ***********************************************************************************************/
-	inline const std::vector<unsigned int> * const get_awards(void) const { return awards; }
+	inline void allocate_awards(std::vector<unsigned int> & awards) {
+		awards = m_awards;
+	}
 
 private:
 	/***********************************************************************************************
@@ -210,7 +199,7 @@ private:
 	 * @return  Returns index of neuron that is winner.
 	 *
 	 ***********************************************************************************************/
-	unsigned int competition(const std::vector<double> * pattern) const;
+	unsigned int competition(const std::vector<double> & pattern) const;
 
 	/***********************************************************************************************
 	 *
@@ -220,7 +209,7 @@ private:
 	 * @param   (in) pattern         - input pattern from the input data set.
 	 *
 	 ***********************************************************************************************/
-	unsigned int adaptation(const unsigned int index_winner, const std::vector<double> * pattern);
+	unsigned int adaptation(const unsigned int index_winner, const std::vector<double> & pattern);
 
 	/***********************************************************************************************
 	 *

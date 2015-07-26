@@ -1,47 +1,42 @@
 Project: PyClustering
+
+Version: 0.6.dev0
+
 License: GNU General Public License
+
+E-Mail: pyclustering@yandex.ru
+
+[![Build Status](https://travis-ci.org/annoviko/pyclustering.svg?branch=master)](https://travis-ci.org/annoviko/pyclustering)
 
 ------------------------------------------------
 
 Based on:
 
-Python 3.x windows 64-bit
-Python 3.x linux 64-bit
-C++ 11 (MVS, GCC compilers)
+- Python >= 3.4 windows 64-bit
+- Python >= 3.4 linux 64-bit
+- C++ 11 (MVS, GCC compilers)
 
 ------------------------------------------------
 
 Required following packages by pyclustering:
 
-scipy-0.13.3.win-amd64-py3.x
-matplotlib-1.3.1.win-amd64-py3.x
-numpy-MKL-1.8.0.win-amd64-py3.x
-
-
-Following packages are required by scipy, matplotlib, numpy:
-
-Pillow-2.3.0.win-amd64-py3.x
-python-dateutil-2.2.win-amd64-py3.x
-pyparsing-2.0.1.win-amd64-py3.x
-six-1.5.2.win-amd64-py3.x
+- scipy, matplotlib, numpy
 
 ------------------------------------------------
 
 Index of packages for Windows:
 
-http://www.lfd.uci.edu/~gohlke/pythonlibs/
+- http://www.lfd.uci.edu/~gohlke/pythonlibs/
 
 
 Index of packages for Linux:
-
-Check repositories, for example: 
-$ sudo apt-get install python3-numpy
-$ sudo apt-get install python3-scipy
-$ sudo apt-get install python3-matplotlib
+- sudo apt-get install python3-numpy
+- sudo apt-get install python3-scipy
+- sudo apt-get install python3-matplotlib
 
 ------------------------------------------------
 
-What is implemented in the project:
+What is implemented in the project.
 
 Clustering algorithms (module pyclustering.cluster):
 - BIRCH [Python]

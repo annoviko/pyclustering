@@ -1,8 +1,8 @@
 """!
 
-@brief Useful functions that are used by modules of pyclustering.
+@brief Utils that are used by modules of pyclustering.
 
-@authors Andrei Novikov (spb.andr@yandex.ru)
+@authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2015
 @copyright GNU Public License
 
@@ -302,6 +302,7 @@ def average_intra_cluster_distance(cluster1, cluster2, data = None):
     distance /= float( (len(cluster1) + len(cluster2)) * (len(cluster1) + len(cluster2) - 1.0) );
     return distance ** 0.5;
 
+
 def variance_increase_distance(cluster1, cluster2, data):
     """!
     @brief Calculates variance increase distance between two clusters.
@@ -385,8 +386,8 @@ def heaviside(value):
     @return (double) Value of Heaviside function.
     
     """
-    if (value >= 0): return 1;
-    return 0;
+    if (value >= 0.0): return 1.0;
+    return 0.0;
 
 
 def timedcall(executable_function, *args):
@@ -528,14 +529,15 @@ def allocate_sync_ensembles(dynamic, tolerance = 0.1, threshold = 1.0, ignore = 
                 sync_ensembles.append([ index_desc ]);
     
     return sync_ensembles;
-
-
+    
+    
 def draw_clusters(data, clusters, noise = [], marker_descr = '.', hide_axes = False):
     """!
     @brief Displays clusters for data in 2D or 3D.
     
     @param[in] data (list): Points that are described by coordinates represented.
     @param[in] clusters (list): Clusters that are represented by lists of indexes where each index corresponds to point in data.
+    @param[in] noise (list): Points that are regarded to noise.
     @param[in] marker_descr (string): Marker for displaying points.
     @param[in] hide_axes (bool): If True - axes is not displayed.
     
@@ -550,7 +552,11 @@ def draw_clusters(data, clusters, noise = [], marker_descr = '.', hide_axes = Fa
         raise NameError('Data or clusters should be specified exactly.');
     
     "Draw clusters"
-    colors = ['b', 'r', 'g', 'y', 'm', 'k', 'c'];
+    colors = [ 'red', 'blue', 'darkgreen', 'brown', 'violet', 
+               'deepskyblue', 'darkgrey', 'lightsalmon', 'deeppink', 'yellow',
+               'black', 'mediumspringgreen', 'orange', 'darkviolet', 'darkblue',
+               'silver', 'lime', 'pink', 'gold', 'bisque' ];
+               
     if (len(clusters) > len(colors)):
         raise NameError('Impossible to represent clusters due to number of specified colors.');
     
@@ -571,9 +577,9 @@ def draw_clusters(data, clusters, noise = [], marker_descr = '.', hide_axes = Fa
         for item in cluster:
             if (dimension == 2):
                 if (data is None):
-                    axes.plot(item[0], item[1], color + marker_descr);
+                    axes.plot(item[0], item[1], color = color, marker = marker_descr);
                 else:
-                    axes.plot(data[item][0], data[item][1], color + marker_descr);
+                    axes.plot(data[item][0], data[item][1], color = color, marker = marker_descr);
                     
             elif (dimension == 3):
                 if (data is None):
@@ -621,10 +627,10 @@ def draw_dynamics(t, dyn, x_title = None, y_title = None, x_lim = None, y_lim = 
     @param[in] y_lim (double): Y limit.
     @param[in] x_labels (bool): If True - shows X labels.
     @param[in] y_labels (bool): If True - shows Y labels.
-    @param[in] separate (bool): If True - output of each oscillators (each dynamic) is presented on separate plot.
-    @param[in] axis (ax): If specified then matplotlib axes will be used for drawing and plot will not be shown.
+    @param[in] separate (list): Consists of lists of oscillators where each such list consists of oscillator indexes that will be shown on separated stage.
+    @param[in] axes (ax): If specified then matplotlib axes will be used for drawing and plot will not be shown.
     
-    @return (ax) Axis of matplotlib.
+    @return (ax) Axes of matplotlib.
     
     """
          
@@ -666,11 +672,11 @@ def draw_dynamics(t, dyn, x_title = None, y_title = None, x_lim = None, y_lim = 
                             index_stage = index_group;
                             break;
                 
-                if (index_stage == -1):
-                    raise NameError('Index ' + str(index) + ' is not specified in the separation list.');
+                if (index_stage != -1):
+                    # raise NameError('Index ' + str(index) + ' is not specified in the separation list.');
                               
-                axes[index_stage].plot(t, y, 'b-', linewidth = 0.5); 
-                set_ax_param(axes[index_stage], x_title, y_title, x_lim, y_lim, x_labels, y_labels, True);
+                    axes[index_stage].plot(t, y, 'b-', linewidth = 0.5); 
+                    set_ax_param(axes[index_stage], x_title, y_title, x_lim, y_lim, x_labels, y_labels, True);
                 
             else:
                 axes.plot(t, y, 'b-', linewidth = 0.5);
@@ -689,6 +695,7 @@ def set_ax_param(ax, x_title = None, y_title = None, x_lim = None, y_lim = None,
     """!
     @brief Sets parameters for matplotlib ax.
     
+    @param[in] ax (Axes): Axes for which parameters should applied.
     @param[in] x_title (string): Title for Y.
     @param[in] y_title (string): Title for X.
     @param[in] x_lim (double): X limit.
@@ -733,14 +740,12 @@ def draw_dynamics_set(dynamics, xtitle = None, ytitle = None, xlim = None, ylim 
     @brief Draw lists of dynamics of neurons (oscillators) in the network.
     
     @param[in] dynamics (list): List of network outputs that are represented by values of output of oscillators (used by y axis).
-    @param[in] x_title (string): Title for Y.
-    @param[in] y_title (string): Title for X.
-    @param[in] x_lim (double): X limit.
-    @param[in] y_lim (double): Y limit.
-    @param[in] x_labels (bool): If True - shows X labels.
-    @param[in] y_labels (bool): If True - shows Y labels.
-    @param[in] separate (bool): If True - output of each oscillators (each dynamic) is presented on separate plot.
-    @param[in] axis (ax): If specified than already existed matplotlib axes will be used.
+    @param[in] xtitle (string): Title for Y.
+    @param[in] ytitle (string): Title for X.
+    @param[in] xlim (double): X limit.
+    @param[in] ylim (double): Y limit.
+    @param[in] xlabels (bool): If True - shows X labels.
+    @param[in] ylabels (bool): If True - shows Y labels.
     
     """
     # Calculate edge for confortable representation.

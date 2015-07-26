@@ -1,6 +1,7 @@
 #include "legion.h"
 #include "support.h"
 
+legion_network::legion_network(void) : m_stimulus(NULL), network(0, conn_type::NONE) { }
 
 legion_network::legion_network(const unsigned int num_osc, const conn_type connection_type, const legion_parameters & params) :
 	m_oscillators(num_osc, legion_oscillator()),
@@ -21,7 +22,6 @@ legion_network::~legion_network() {
 	m_stimulus = NULL;
 }
 
-#include <iostream>
 void legion_network::simulate(const unsigned int steps, 
                               const double time, 
                               const solve_type solver, 
@@ -39,12 +39,10 @@ void legion_network::simulate(const unsigned int steps,
 
 	store_dynamic(0.0, collect_dynamic, output_dynamic);	/* store initial state */
 
-	std::cout << "simulation - initial itaration " << steps << ", " << time << ", " << step << std::endl;
 	for (double cur_time = step; cur_time < time; cur_time += step) {
 		calculate_states(stimulus, solver, cur_time, step, int_step);
 		
 		store_dynamic(cur_time, collect_dynamic, output_dynamic);	/* store initial state */
-		//std::cout << "simulation - itaration " << cur_time << std::endl;
 	}
 }
 
@@ -86,6 +84,7 @@ void legion_network::store_dynamic(const double time, const bool collect_dynamic
 		state.m_output[index] = m_oscillators[index].m_excitatory;
 	}
 
+	state.m_inhibitor = m_global_inhibitor;
 	state.m_time = time;
 	
 	if ( (collect_dynamic == false) && (!dynamic.empty()) ) {
@@ -107,7 +106,10 @@ void legion_network::calculate_states(const legion_stimulus & stimulus, const so
 	for (unsigned int index = 0; index < size(); index++) {
 		argv[1] = (void *) &index;
 
-		differ_state<double> inputs { m_oscillators[index].m_excitatory, m_oscillators[index].m_inhibitory, m_oscillators[index].m_potential };
+		differ_state<double> inputs { m_oscillators[index].m_excitatory, m_oscillators[index].m_inhibitory };
+		if (m_params.ENABLE_POTENTIAL) {
+			inputs.push_back(m_oscillators[index].m_potential);
+		}
 
 		switch(solver) {
 			case solve_type::FAST: {
@@ -115,12 +117,24 @@ void legion_network::calculate_states(const legion_stimulus & stimulus, const so
 			}
 
 			case solve_type::RK4: {
-				runge_kutta_4(&legion_network::adapter_neuron_states, inputs, t, t + step, number_int_steps, false /* only last states */, argv, next_states[index]);
+				if (m_params.ENABLE_POTENTIAL) {
+					runge_kutta_4(&legion_network::adapter_neuron_states, inputs, t, t + step, number_int_steps, false /* only last states */, argv, next_states[index]);
+				}
+				else {
+					runge_kutta_4(&legion_network::adapter_neuron_simplify_states, inputs, t, t + step, number_int_steps, false /* only last states */, argv, next_states[index]);
+				}
+
 				break;
 			}
 
 			case solve_type::RKF45: {
-				runge_kutta_fehlberg_45(&legion_network::adapter_neuron_states, inputs, t, t + step, 0.00001, false /* only last states */, argv, next_states[index]);
+				if (m_params.ENABLE_POTENTIAL) {
+					runge_kutta_fehlberg_45(&legion_network::adapter_neuron_states, inputs, t, t + step, 0.00001, false /* only last states */, argv, next_states[index]);
+				}
+				else {
+					runge_kutta_fehlberg_45(&legion_network::adapter_neuron_simplify_states, inputs, t, t + step, 0.00001, false /* only last states */, argv, next_states[index]);
+				}
+				
 				break;
 			}
 
@@ -160,7 +174,11 @@ void legion_network::calculate_states(const legion_stimulus & stimulus, const so
 	for (unsigned int i = 0; i < size(); i++) {
 		m_oscillators[i].m_excitatory = next_states[i][0].state[0];
 		m_oscillators[i].m_inhibitory = next_states[i][0].state[1];
-		m_oscillators[i].m_potential = next_states[i][0].state[2];
+
+		if (m_params.ENABLE_POTENTIAL) {
+			m_oscillators[i].m_potential = next_states[i][0].state[2];
+		}
+
 		m_oscillators[i].m_coupling_term = m_oscillators[i].m_buffer_coupling_term;
 		m_oscillators[i].m_noise = m_noise_distribution(m_generator);
 	}
@@ -169,6 +187,11 @@ void legion_network::calculate_states(const legion_stimulus & stimulus, const so
 
 void legion_network::adapter_neuron_states(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs) {
 	((legion_network *) argv[0])->neuron_states(t, inputs, argv, outputs);
+}
+
+
+void legion_network::adapter_neuron_simplify_states(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs) {
+	((legion_network *) argv[0])->neuron_simplify_states(t, inputs, argv, outputs);
 }
 
 
@@ -186,7 +209,12 @@ void legion_network::neuron_states(const double t, const differ_state<double> & 
 
 	double potential_influence = heaviside(p + std::exp(-m_params.alpha * t) - m_params.teta);
 
-	double dx = 3.0 * x - std::pow(x, 3) + 2.0 - y + (*m_stimulus)[index] * potential_influence + m_oscillators[index].m_coupling_term - m_oscillators[index].m_noise;
+	double stumulus = 0.0;
+	if ((*m_stimulus)[index] > 0) {
+		stumulus = m_params.I;
+	}
+
+	double dx = 3.0 * x - std::pow(x, 3) + 2.0 - y + stumulus * potential_influence + m_oscillators[index].m_coupling_term + m_oscillators[index].m_noise;
 	double dy = m_params.eps * (m_params.gamma * (1.0 + std::tanh(x / m_params.betta)) - y);
 
 	std::vector<unsigned int> * neighbors = get_neighbors(index);
@@ -205,6 +233,25 @@ void legion_network::neuron_states(const double t, const differ_state<double> & 
 	outputs.push_back(dx);
 	outputs.push_back(dy);
 	outputs.push_back(dp);
+}
+
+void legion_network::neuron_simplify_states(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs) {
+	unsigned int index = *(unsigned int *) argv[1];
+
+	const double x = inputs[0];
+	const double y = inputs[1];
+
+	double stumulus = 0.0;
+	if ((*m_stimulus)[index] > 0) {
+		stumulus = m_params.I;
+	}
+
+	double dx = 3.0 * x - std::pow(x, 3) + 2.0 - y + stumulus + m_oscillators[index].m_coupling_term + m_oscillators[index].m_noise;
+	double dy = m_params.eps * (m_params.gamma * (1.0 + std::tanh(x / m_params.betta)) - y);
+
+	outputs.clear();
+	outputs.push_back(dx);
+	outputs.push_back(dy);
 }
 
 

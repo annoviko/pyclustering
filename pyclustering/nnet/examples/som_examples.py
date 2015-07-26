@@ -2,7 +2,7 @@
 
 @brief Examples of usage and demonstration of abilities of self-organized feature map.
 
-@authors Andrei Novikov (spb.andr@yandex.ru)
+@authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2015
 @copyright GNU Public License
 
@@ -31,7 +31,7 @@ from pyclustering.nnet.som import som_parameters;
 from pyclustering.samples.definitions import SIMPLE_SAMPLES;
 from pyclustering.samples.definitions import FCPS_SAMPLES;
 
-from pyclustering.support import read_sample;
+from pyclustering.utils import read_sample;
 
 import matplotlib.pyplot as plt;
 from matplotlib import cm;
@@ -49,8 +49,8 @@ def template_self_organization(file, rows, cols, time, structure, init_type = No
         parameters.init_learn_rate = init_rate;
     
     sample = read_sample(file);
-    network = som(rows, cols, sample, time, structure, parameters, True);
-    network.train();
+    network = som(rows, cols, structure, parameters, True);
+    network.train(sample, time);
     network.show_network(False, dataset = False);
     
     if (umatrix is True):

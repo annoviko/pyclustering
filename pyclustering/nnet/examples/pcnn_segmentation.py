@@ -2,7 +2,7 @@
 
 @brief  Examples of usage and demonstration of abilities of Pulse Coupled Neural Network in image segmentation.
 
-@authors Andrei Novikov (spb.andr@yandex.ru)
+@authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2015
 @copyright GNU Public License
 
@@ -24,14 +24,13 @@
 """
 from PIL import Image;
 
-from pyclustering.support import draw_dynamics;
+from pyclustering.utils import read_image, rgb2gray, draw_image_mask_segments;
 
 from pyclustering.nnet.pcnn import pcnn_network, pcnn_parameters, pcnn_visualizer;
 from pyclustering.nnet import *;
 
 from pyclustering.samples.definitions import IMAGE_SIMPLE_SAMPLES, IMAGE_MAP_SAMPLES, IMAGE_REAL_SAMPLES;
 
-from pyclustering.support import read_image, rgb2gray, draw_image_mask_segments;
 
 def template_segmentation_image(image, parameters, simulation_time, brightness, scale_color = True, fastlinking = False, show_spikes = False, ccore_flag = True):
     stimulus = read_image(image);

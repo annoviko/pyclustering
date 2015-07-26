@@ -2,7 +2,7 @@
 
 @brief Unit-tests for Hysteresis Oscillatory Network.
 
-@authors Andrei Novikov (spb.andr@yandex.ru)
+@authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2015
 @copyright GNU Public License
 
@@ -28,7 +28,7 @@ import unittest;
 from pyclustering.nnet.hysteresis import hysteresis_network;
 from pyclustering.nnet import *;
 
-from pyclustering.support import extract_number_oscillations;
+from pyclustering.utils import extract_number_oscillations;
 
 class Test(unittest.TestCase):
     def templateOscillationExistance(self, num_osc, own_weight, neigh_weight, steps, time, initial_states = None, initial_outputs = None, conn_repr = conn_represent.MATRIX):

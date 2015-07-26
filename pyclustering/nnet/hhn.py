@@ -4,8 +4,7 @@
 @details Based on article description:
          - D.Chik, R.Borisyuk, Y.Kazanovich. Selective attention model with spiking elements. 2009.
 
-@authors Andrei Novikov (spb.andr@yandex.ru)
-@version 1.0
+@authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2015
 @copyright GNU Public License
 
@@ -30,7 +29,7 @@ from pyclustering.nnet import *;
 
 from scipy.integrate import odeint;
 
-from pyclustering.support import allocate_sync_ensembles;
+from pyclustering.utils import allocate_sync_ensembles;
 
 import numpy;
 import random;
@@ -43,35 +42,76 @@ class hhn_parameters:
     
     """  
     
+    ## Intrinsic noise.
     nu      = random.random() * 2.0 - 1.0;
     
-    gNa     = 120.0 * (1 + 0.02 * nu);  # maximal conductivity for sodium current
-    gK      = 36.0 * (1 + 0.02 * nu);   # maximal conductivity for potassium current
-    gL      = 0.3 * (1 + 0.02 * nu);    # maximal conductivity for leakage current
+    ## Maximal conductivity for sodium current.
+    gNa     = 120.0 * (1 + 0.02 * nu);
     
-    vNa     = 50.0;     # [mV] reverse potential of sodium current
-    vK      = -77.0;    # [mV] reverse potential of potassium current
-    vL      = -54.4;    # [mV] reverse potantial of leakage current
-    vRest   = -65.0;    # [mV] rest potential
+    ## Maximal conductivity for potassium current.
+    gK      = 36.0 * (1 + 0.02 * nu);
     
-    Icn1    = 5.0;      # [mV] external current for central element 1
-    Icn2    = 30.0;     # [mV] external current for central element 2
+    ## Maximal conductivity for leakage current.
+    gL      = 0.3 * (1 + 0.02 * nu);
     
-    Vsyninh = -80.0;    # [mV] synaptic reversal potential for inhibitory effects
-    Vsynexc = 0.0;      # [mV] synaptic reversal potential for exciting effects
     
-    alfa_inhibitory     = 6.0;      # alfa-parameter for alfa-function for inhibitory effect
-    betta_inhibitory    = 0.3;      # betta-parameter for alfa-function for inhibitory effect
+    ## Reverse potential of sodium current [mV].
+    vNa     = 50.0;
     
-    alfa_excitatory     = 40.0;     # alfa-parameter for alfa-function for excitatoty effect
-    betta_excitatory    = 2.0;      # betta-parameter for alfa-function for excitatoty effect
+    ## Reverse potential of potassium current [mV].
+    vK      = -77.0;
     
-    w1 = 0.1;   # strength of the synaptic connection from PN to CN1
-    w2 = 9.0;   # strength of the synaptic connection from CN1 to PN
-    w3 = 5.0;   # strength of the synaptic connection from CN2 to PN
+    ## Reverse potantial of leakage current [mV].
+    vL      = -54.4;
     
-    deltah = 650.0;     # [ms] period of time when high strength value of synaptic connection exists from CN2 to PN.
+    ## Rest potential [mV].
+    vRest   = -65.0;    
+    
+    
+    ## External current [mV] for central element 1.
+    Icn1    = 5.0;
+    
+    ## External current [mV] for central element 2.
+    Icn2    = 30.0;
+    
+    
+    ## Synaptic reversal potential [mV] for inhibitory effects.
+    Vsyninh = -80.0;    
+    
+    ## Synaptic reversal potential [mV] for exciting effects.
+    Vsynexc = 0.0;
+    
+    ## Alfa-parameter for alfa-function for inhibitory effect.
+    alfa_inhibitory     = 6.0;
+    
+    ## Betta-parameter for alfa-function for inhibitory effect.
+    betta_inhibitory    = 0.3;
+    
+    
+    ## Alfa-parameter for alfa-function for excitatoty effect.
+    alfa_excitatory     = 40.0;
+    
+    ## Betta-parameter for alfa-function for excitatoty effect.
+    betta_excitatory    = 2.0;
+    
+    
+    ## Strength of the synaptic connection from PN to CN1.
+    w1 = 0.1;
+    
+    ## Strength of the synaptic connection from CN1 to PN.
+    w2 = 9.0;
+    
+    ## Strength of the synaptic connection from CN2 to PN.
+    w3 = 5.0;
+    
+    
+    ## Period of time [ms] when high strength value of synaptic connection exists from CN2 to PN.
+    deltah = 650.0;
+    
+    ## Threshold of the membrane potential that should exceeded by oscillator to be considered as an active.
     threshold = -10;
+    
+    ## Affects pulse counter.
     eps = 0.16;
 
 
@@ -83,18 +123,37 @@ class central_element:
     
     """
     
-    membrane_potential      = 0.0;        # membrane potential of cenral neuron (V)
-    active_cond_sodium      = 0.0;        # activation conductance of the sodium channel (m)
-    inactive_cond_sodium    = 0.0;        # inactivaton conductance of the sodium channel (h)
-    active_cond_potassium   = 0.0;        # inactivaton conductance of the sodium channel (h)
+    ## Membrane potential of cenral neuron (V).
+    membrane_potential      = 0.0;
     
-    pulse_generation_time = None;         # times of pulse generation by central neuron
-    pulse_generation = False;             # spike generation of central neuron
+    ## Activation conductance of the sodium channel (m).
+    active_cond_sodium      = 0.0;
+    
+    ## Inactivaton conductance of the sodium channel (h).
+    inactive_cond_sodium    = 0.0;
+    
+    ## Inactivaton conductance of the sodium channel (h)
+    active_cond_potassium   = 0.0;
+    
+    ## Times of pulse generation by central neuron.
+    pulse_generation_time = None;
+    
+    ## Spike generation of central neuron.
+    pulse_generation = False;
     
     def __init__(self):
+        """!
+        @brief Constructor of central element.
+        
+        """
+        
         self.pulse_generation_time = [];
     
     def __repr__(self):
+        """!
+        @brief Returns string that represents central element.
+        
+        """
         return "%s, %s" % (self.membrane_potential, self.pulse_generation_time);
 
 
@@ -165,7 +224,7 @@ class hhn_network(network):
         self._active_cond_potassium     = [0.0] * self._num_osc;
         self._link_activation_time      = [0.0] * self._num_osc;
         self._link_pulse_counter        = [0.0] * self._num_osc;
-        self._link_deactivation_time    = [0.0] * self.num_osc;
+        self._link_deactivation_time    = [0.0] * self._num_osc;
         self._link_weight3              = [0.0] * self._num_osc;
         self._pulse_generation_time     = [ [] for i in range(self._num_osc) ];
         self._pulse_generation          = [False] * self._num_osc;

@@ -2,7 +2,7 @@
 
 @brief CCORE Wrapper for Self-Organized Feature Map
 
-@authors Andrei Novikov (spb.andr@yandex.ru)
+@authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2015
 @copyright GNU Public License
 
@@ -38,18 +38,19 @@ class c_som_parameters(Structure):
                 ("adaptation_threshold", c_double)];
 
 
-def som_create(data, rows, cols, epochs, conn_type, parameters):
-    "Constructor of self-organized map."
+def som_create(rows, cols, conn_type, parameters):
+    """!
+    @brief Create of self-organized map using CCORE pyclustering library.
     
-    "(in) data        - input data - list of points where each point is represented by list of features, for example coordinates."
-    "(in) rows        - number of neurons in the column (number of rows)."
-    "(in) cols        - number of neurons in the row (number of columns)."
-    "(in) epochs      - number of epochs for training."
-    "(in) conn_type   - type of connection between oscillators in the network (grid four, grid eight, honeycomb, function neighbour)."
-    "(in) parameters  - others SOM parameters."    
+    @param[in] rows (uint): Number of neurons in the column (number of rows).
+    @param[in] cols (uint): Number of neurons in the row (number of columns).
+    @param[in] conn_type (type_conn): Type of connection between oscillators in the network (grid four, grid eight, honeycomb, function neighbour).
+    @param[in] parameters (som_parameters): Other specific parameters.
     
-    pointer_data = create_pointer_data(data);
+    @return (POINTER) C-pointer to object of self-organized feature in memory.
     
+    """  
+
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
     
     c_params = c_som_parameters();
@@ -59,26 +60,39 @@ def som_create(data, rows, cols, epochs, conn_type, parameters):
     c_params.init_learn_rate = parameters.init_learn_rate;
     c_params.adaptation_threshold = parameters.adaptation_threshold;
     
-    som_pointer = ccore.som_create(pointer_data, c_uint(rows), c_uint(cols), c_uint(epochs), c_uint(conn_type), pointer(c_params));
+    som_pointer = ccore.som_create(c_uint(rows), c_uint(cols), c_uint(conn_type), pointer(c_params));
     
     return som_pointer;
 
+
 def som_destroy(som_pointer):
-    "Destructor of self-organized map."
+    """!
+    @brief Destroys self-organized map.
     
-    "(in) som_pointer    - pointer to object of self-organized map."
+    @param[in] som_pointer (POINTER): pointer to object of self-organized map.
+    
+    """
     
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
     ccore.som_destroy(som_pointer);
     
-def som_train(som_pointer, autostop):
-    "Trains self-organized feature map (SOM)."
     
-    "(in) som_pointer    - pointer to object of self-organized map."
-    "(in) autostop       - automatic termination of learining process when adaptation is not occurred."   
-     
+def som_train(som_pointer, data, epochs, autostop):
+    """!
+    @brief Trains self-organized feature map (SOM) using CCORE pyclustering library.
+
+    @param[in] data (list): Input data - list of points where each point is represented by list of features, for example coordinates.
+    @param[in] epochs (uint): Number of epochs for training.        
+    @param[in] autostop (bool): Automatic termination of learining process when adaptation is not occurred.
+    
+    @return (uint) Number of learining iterations.
+    
+    """ 
+    
+    pointer_data = create_pointer_data(data);
+    
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
-    return ccore.som_train(som_pointer, autostop);
+    return ccore.som_train(som_pointer, pointer_data, c_uint(epochs), autostop);
 
 def som_simulate(som_pointer, pattern):
     "Processes input pattern (no learining) and returns index of neuron-winner."

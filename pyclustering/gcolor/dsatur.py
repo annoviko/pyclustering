@@ -4,8 +4,7 @@
 @details Based on article description:
          - D.Brelaz. New Methods to color the vertices of a graph. 1979.
 
-@authors Andrei Novikov (spb.andr@yandex.ru)
-@version 1.0
+@authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2015
 @copyright GNU Public License
 
@@ -36,6 +35,12 @@ class dsatur:
     __coloring = None;
     
     def __init__(self, data):
+        """!
+        @brief Constructor of DSATUR algorithm.
+        
+        @param[in] data (list): Matrix graph representation.
+        
+        """
         if (len(data[0]) != len(data)):
             raise NameError('Only matrix graph representation is available.');
     

@@ -4,8 +4,7 @@
 @details Based on book description:
          - M.Zhang, R.Ramakrishnan, M.Livny. BIRCH: An Efficient Data Clustering Method for Very Large Databases. 1996.
 
-@authors Andrei Novikov (spb.andr@yandex.ru)
-@version 1.0
+@authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2015
 @copyright GNU Public License
 
@@ -28,27 +27,40 @@
 
 from copy import copy;
 
-from pyclustering.support import euclidean_distance, euclidean_distance_sqrt;
-from pyclustering.support import manhattan_distance;
-from pyclustering.support import list_math_addition, list_math_subtraction, list_math_multiplication,list_math_division_number;
-from pyclustering.support import linear_sum, square_sum;
+from pyclustering.utils import euclidean_distance, euclidean_distance_sqrt;
+from pyclustering.utils import manhattan_distance;
+from pyclustering.utils import list_math_addition, list_math_subtraction, list_math_multiplication,list_math_division_number;
+from pyclustering.utils import linear_sum, square_sum;
+
+from enum import IntEnum;
 
 
-class measurement_type:
+class measurement_type(IntEnum):
     """!
     @brief Enumeration of measurement types for CF-Tree.
     
     @see cftree
     
     """
+    
+    ## Euclidian distance between centroids of clustering features.
     CENTROID_EUCLIDIAN_DISTANCE     = 0;
+    
+    ## Manhattan distance between centroids of clustering features.
+    
     CENTROID_MANHATTAN_DISTANCE     = 1;
+    
+    ## Average distance between all objects from clustering features.
     AVERAGE_INTER_CLUSTER_DISTANCE  = 2;
+    
+    ## Average distance between all objects within clustering features and between them.
     AVERAGE_INTRA_CLUSTER_DISTANCE  = 3;
+    
+    ## Variance based distance between clustering features.
     VARIANCE_INCREASE_DISTANCE      = 4;
     
 
-class cfnode_type:
+class cfnode_type(IntEnum):
     """!
     @brief Enumeration of CF-Node types that are used by CF-Tree.
     
@@ -56,8 +68,14 @@ class cfnode_type:
     @see cftree
     
     """
+    
+    ## Undefined node.
     CFNODE_DUMMY    = 0;
+    
+    ## Leaf node hasn't got successors, only entries.
     CFNODE_LEAF     = 1;
+    
+    ## Non-leaf node has got successors and hasn't got entries.
     CFNODE_NONLEAF  = 2;
     
 
@@ -111,6 +129,14 @@ class cfentry:
     
     
     def __init__(self, number_points, linear_sum, square_sum):
+        """!
+        @brief CF-entry constructor.
+        
+        @param[in] number_points (uint): Number of objects that is represented by the entry.
+        @param[in] linear_sum (list): Linear sum of values that represent objects in each dimension.
+        @param[in] square_sum (double): Square sum of values that represent objects.
+        
+        """
         self.__number_points = number_points;
         self.__linear_sum = linear_sum;
         self.__square_sum = square_sum;
@@ -121,14 +147,26 @@ class cfentry:
     
     
     def __copy__(self):
+        """!
+        @returns (cfentry) Makes copy of the cfentry instance.
+        
+        """
         return cfentry(self.__number_points, self.__linear_sum, self.__square_sum);
     
     
     def __repr__(self):
+        """!
+        @return (string) Default cfentry representation.
+        
+        """
         return 'CF (%s, %s, %0.2f) [%s]' % ( self.number_points, self.linear_sum, self.__square_sum, hex(id(self)) );    
     
     
     def __str__(self):
+        """!
+        @brief Default cfentry string representation.
+        
+        """
         return self.__repr__();
     
     
@@ -359,14 +397,21 @@ class cfnode:
     
     """
     
-    feature     = None;     # clustering feature of the node
-    parent      = None;     # pointer to parent node (None for root)
-    type        = None;     # type node
-    payload     = None;     # payload of node where user data can be stored
+    ## Clustering feature of the node.
+    feature     = None;
+    
+    ## Pointer to the parent node (None for root).
+    parent      = None;
+    
+    ## Type node (leaf or non-leaf).
+    type        = None;
+    
+    ## Payload of node where user data can be stored.
+    payload     = None;
     
     def __init__(self, feature, parent, payload):
         """!
-        @brief
+        @brief Constructor of abstract CF node.
         
         @param[in] feature (cfentry): Clustering feature of the created node.
         @param[in] parent (cfnode): Parent of the created node.
@@ -381,14 +426,19 @@ class cfnode:
         
     
     def __repr__(self):
-        parent = None;
-        if (self.parent is not None):
-            parent = hex(id(self.parent));
-            
+        """!
+        @return (string) Default representation of CF node.
+        
+        """
+        
         return 'CF node %s, parent %s, feature %s' % ( hex(id(self)), self.parent, self.feature );
 
 
     def __str__(self):
+        """!
+        @return (string) String representation of CF node.
+        
+        """
         return self.__repr__();
     
     
@@ -416,6 +466,10 @@ class non_leaf_node(cfnode):
     
     @property
     def successors(self):
+        """!
+        @return (list) List of successors of the node.
+        
+        """
         return self.__successors;
     
     
@@ -436,11 +490,19 @@ class non_leaf_node(cfnode):
         self.__successors = successors;
     
     
-    def __repr__(self):        
+    def __repr__(self):     
+        """!
+        @return (string) Representation of non-leaf node representation.
+        
+        """   
         return 'Non-leaf node %s, parent %s, feature %s, successors: %d' % ( hex(id(self)), self.parent, self.feature, len(self.successors) );
     
     
     def __str__(self):
+        """!
+        @return (string) String non-leaf representation.
+        
+        """
         return self.__repr__();
     
     
@@ -476,7 +538,7 @@ class non_leaf_node(cfnode):
         """!
         @brief Merge non-leaf node to the current.
         
-        @param[in] (non_leaf_node): Non-leaf node that should be merged with current.
+        @param[in] node (non_leaf_node): Non-leaf node that should be merged with current.
         
         """
                 
@@ -554,6 +616,10 @@ class leaf_node(cfnode):
     
     @property
     def entries(self):
+        """!
+        @return (list) List of leaf nodes.
+        
+        """
         return self.__entries;
     
     
@@ -575,6 +641,10 @@ class leaf_node(cfnode):
         
     
     def __repr__(self):
+        """!
+        @return (string) Default leaf node represenation.
+        
+        """
         text_entries = "\n";
         for entry in self.entries:
             text_entries += "\t" + str(entry) + "\n";
@@ -583,6 +653,10 @@ class leaf_node(cfnode):
     
     
     def __str__(self):
+        """!
+        @return (string) String leaf node representation.
+        
+        """
         return self.__repr__();
     
     
@@ -669,7 +743,7 @@ class leaf_node(cfnode):
         nearest_index = 0;
         
         for candidate_index in range(0, len(self.entries)):
-            candidate_distance = self.entries[candidate_index].get_distance(entry, type_measurement)    ;
+            candidate_distance = self.entries[candidate_index].get_distance(entry, type_measurement);
             if (candidate_distance < minimum_distance):
                 nearest_index = candidate_index;
                 
@@ -694,6 +768,7 @@ class leaf_node(cfnode):
 class cftree:
     """!
     @brief CF-Tree representation.
+    @details A CF-tree is a height-balanced tree with two parameters: branching factor and threshold.
     
     """
     
@@ -714,38 +789,83 @@ class cftree:
     
     @property
     def root(self):
+        """!
+        @return (cfnode) Root of the tree.
+        
+        """
         return self.__root;
+    
     
     @property
     def leafes(self):
+        """!
+        @return (list) List of all non-leaf nodes in the tree.
+        
+        """
         return self.__leafes;
+    
     
     @property
     def amount_nodes(self):
+        """!
+        @return (unit) Number of nodes (leaf and non-leaf) in the tree.
+        
+        """
         return self.__amount_nodes;
+    
     
     @property
     def amount_entries(self):
+        """!
+        @return (uint) Number of entries in the tree.
+        
+        """
         return self.__amount_entries;
+    
     
     @property
     def height(self):
+        """!
+        @return (uint) Height of the tree.
+        
+        """
         return self.__height;
+    
     
     @property
     def branch_factor(self):
+        """!
+        @return (uint) Branching factor of the tree.
+        @details Branching factor defines maximum number of successors in each non-leaf node.
+        
+        """
         return self.__branch_factor;
+    
     
     @property
     def threshold(self):
+        """!
+        @return (double) Threshold of the tree that represents maximum diameter of sub-clusters that is formed by leaf node entries.
+        
+        """
         return self.__threshold;
+    
     
     @property
     def max_entries(self):
+        """!
+        @return (uint) Maximum number of entries in each leaf node.
+        
+        """
         return self.__max_entries;
+    
     
     @property
     def type_measurement(self):
+        """!
+        @return (measurement_type) Type that is used for measuring.
+        
+        """
         return self.__type_measurement;
     
     
@@ -820,8 +940,8 @@ class cftree:
         """!
         @brief Search nearest leaf to the specified clustering feature.
         
-        @param[in] (cfentry): Clustering feature.
-        @param[in] (cfnode): Node from that searching should be started.
+        @param[in] entry (cfentry): Clustering feature.
+        @param[in] search_node (cfnode): Node from that searching should be started, if None then search process will be started for the root.
         
         @return (leaf_node) Nearest node to the specified clustering feature.
         

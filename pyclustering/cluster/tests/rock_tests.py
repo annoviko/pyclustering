@@ -2,7 +2,7 @@
 
 @brief Unit-tests for ROCK algorithm.
 
-@authors Andrei Novikov (spb.andr@yandex.ru)
+@authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2015
 @copyright GNU Public License
 
@@ -27,7 +27,7 @@ import unittest;
 
 from pyclustering.cluster.rock import rock;
 
-from pyclustering.support import read_sample;
+from pyclustering.utils import read_sample;
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES;
 

@@ -5,7 +5,7 @@ Interface of the CCORE library that is used by pyclustering.
 Based on article description:
  - S.Guha, R.Rastogi, K.Shim. CURE: An Efficient Clustering Algorithm for Large Databases. 1998.
 
-Copyright (C) 2015    Andrei Novikov (spb.andr@yandex.ru)
+Copyright (C) 2015    Andrei Novikov (pyclustering@yandex.ru)
 
 pyclustering is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -212,12 +212,14 @@ clustering_result * xmeans_algorithm(const data_representation * const sample, c
 	std::vector<std::vector<double> > * dataset = read_sample(sample);
 	std::vector<std::vector<double> > * centers = read_sample(initial_centers);
 
-	xmeans * solver = new xmeans(dataset, centers, kmax, tolerance);
-	solver->process();
+	xmeans solver(*dataset, *centers, kmax, tolerance);
+	solver.process();
 
-	clustering_result * result = create_clustering_result(solver->get_clusters());
+	std::vector<std::vector<unsigned int> > output_clusters;
+	solver.get_clusters(output_clusters);
 
-	delete solver; solver = NULL;
+	clustering_result * result = create_clustering_result(output_clusters);
+
 	delete dataset; dataset = NULL;
 	delete centers; centers = NULL;
 
@@ -261,7 +263,7 @@ double sync_local_order(const void * pointer_network) {
 }
 
 unsigned int sync_dynamic_get_size(const void * pointer_network) {
-	return ((sync_network *) pointer_network)->size();
+	return ((sync_dynamic *) pointer_network)->size();
 }
 
 void sync_dynamic_destroy(const void * pointer) {
@@ -370,9 +372,8 @@ void hsyncnet_analyser_destroy(const void * pointer_analyser) {
 
 
 
-void * som_create(const data_representation * const sample, const unsigned int num_rows, const unsigned int num_cols, const unsigned int num_epochs, const unsigned int type_conn, const void * parameters) {
-	std::vector<std::vector<double> > * dataset = read_sample(sample);
-	return (void *) new som(dataset, num_rows, num_cols, num_epochs, (som_conn_type) type_conn, (som_parameters *) parameters);
+void * som_create(const unsigned int num_rows, const unsigned int num_cols, const unsigned int type_conn, const void * parameters) {
+	return (void *) new som(num_rows, num_cols, (som_conn_type) type_conn,  *((som_parameters *) parameters));
 }
 
 void som_destroy(const void * pointer) {
@@ -381,13 +382,17 @@ void som_destroy(const void * pointer) {
 	}
 }
 
-unsigned int som_train(const void * pointer, const bool autostop) {
-	return ((som *) pointer)->train(autostop);
+unsigned int som_train(const void * pointer, const data_representation * const sample, const unsigned int epochs, const bool autostop) {
+	std::vector<std::vector<double> > * dataset = read_sample(sample);
+	unsigned int result = ((som *) pointer)->train(*dataset, epochs, autostop);
+	delete dataset;
+
+	return result;
 }
 
 unsigned int som_simulate(const void * pointer, const data_representation * const pattern) {
 	std::vector<std::vector<double> > * input_pattern = read_sample(pattern);
-	return ((som *) pointer)->simulate( &(*input_pattern)[0] );
+	return ((som *) pointer)->simulate( (*input_pattern)[0] );
 }
 
 unsigned int som_get_winner_number(const void * pointer) {
@@ -400,22 +405,27 @@ unsigned int som_get_size(const void * pointer) {
 
 
 pyclustering_package * som_get_weights(const void * pointer) {
-	std::vector<std::vector<double> * > * wieghts = (std::vector<std::vector<double> * > *) ((som *) pointer)->get_weights();
-	pyclustering_package * package = create_package(wieghts);
+	std::vector<std::vector<double> > weights;
+	((som *) pointer)->allocate_weights(weights);
+
+	pyclustering_package * package = create_package(&weights);
 
 	return package;
 }
 
 pyclustering_package * som_get_capture_objects(const void * pointer) {
-	std::vector<std::vector<unsigned int> * > * capture_objects = (std::vector<std::vector<unsigned int> * > *) ((som *) pointer)->get_capture_objects();
-	pyclustering_package * package = create_package(capture_objects);
+	std::vector<std::vector<unsigned int> > capture_objects;
+	((som *) pointer)->allocate_capture_objects(capture_objects);
+
+	pyclustering_package * package = create_package(&capture_objects);
 
 	return package;
 }
 
 pyclustering_package * som_get_awards(const void * pointer) {
-	std::vector<unsigned int> * awards = (std::vector<unsigned int> *) ((som *) pointer)->get_awards();
-	pyclustering_package * package = create_package(awards);
+	std::vector<unsigned int> awards;
+	((som *) pointer)->allocate_awards(awards);
+	pyclustering_package * package = create_package(&awards);
 
 	return package;
 }
@@ -423,9 +433,10 @@ pyclustering_package * som_get_awards(const void * pointer) {
 pyclustering_package * som_get_neighbors(const void * pointer) {
 	pyclustering_package * package = NULL;
 
-	std::vector<std::vector<unsigned int> * > * neighbors = (std::vector<std::vector<unsigned int> * > *) ((som *) pointer)->get_neighbors();
-	if (neighbors != NULL) {
-		package = create_package(neighbors);
+	std::vector<std::vector<unsigned int> > neighbors;
+	((som *) pointer)->allocate_neighbors(neighbors);
+	if (!neighbors.empty()) {
+		package = create_package(&neighbors);
 	}
 
 	return package;

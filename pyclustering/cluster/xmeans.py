@@ -4,8 +4,7 @@
 @details Based on article description:
          - D.Pelleg, A.Moore. X-means: Extending K-means with Efficient Estimation of the Number of Clusters. 2000.
 
-@authors Andrei Novikov (spb.andr@yandex.ru)
-@version 1.0
+@authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2015
 @copyright GNU Public License
 
@@ -29,19 +28,24 @@
 import numpy;
 import math;
 
+from enum import IntEnum;
+
 import pyclustering.core.wrapper as wrapper;
 
-from pyclustering.support import euclidean_distance, euclidean_distance_sqrt;
-from pyclustering.support import list_math_addition_number, list_math_substraction_number, list_math_addition, list_math_multiplication, list_math_division_number, list_math_subtraction;
+from pyclustering.utils import euclidean_distance, euclidean_distance_sqrt;
+from pyclustering.utils import list_math_addition_number, list_math_substraction_number, list_math_addition, list_math_multiplication, list_math_division_number, list_math_subtraction;
 
 
-class splitting_type:
+class splitting_type(IntEnum):
     """!
     @brief Enumeration of splitting types that can be used as splitting creation of cluster in X-Means algorithm.
     
     """
     
+    ## Bayesian information criterion to approximate the correct number of clusters.
     BAYESIAN_INFORMATION_CRITERION = 0;
+    
+    ## Minimum noiseless description length to approximate the correct number of clusters.
     MINIMUM_NOISELESS_DESCRIPTION_LENGTH = 1;
 
 

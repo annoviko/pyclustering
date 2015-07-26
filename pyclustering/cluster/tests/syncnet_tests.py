@@ -2,7 +2,7 @@
 
 @brief Unit-tests for Sync algorithm.
 
-@authors Andrei Novikov (spb.andr@yandex.ru)
+@authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2015
 @copyright GNU Public License
 
@@ -29,7 +29,7 @@ from pyclustering.nnet import initial_type, conn_represent, solve_type;
 
 from pyclustering.cluster.syncnet import syncnet;
 
-from pyclustering.support import read_sample;
+from pyclustering.utils import read_sample;
 
 from numpy import pi;
 

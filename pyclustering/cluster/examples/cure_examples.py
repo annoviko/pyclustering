@@ -2,7 +2,7 @@
 
 @brief Examples of usage and demonstration of abilities of CURE algorithm in cluster analysis.
 
-@authors Andrei Novikov (spb.andr@yandex.ru)
+@authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2015
 @copyright GNU Public License
 
@@ -23,9 +23,9 @@
 
 """
 
-from pyclustering.support import read_sample;
-from pyclustering.support import draw_clusters;
-from pyclustering.support import timedcall;
+from pyclustering.utils import read_sample;
+from pyclustering.utils import draw_clusters;
+from pyclustering.utils import timedcall;
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES;
 from pyclustering.samples.definitions import FCPS_SAMPLES;

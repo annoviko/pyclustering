@@ -2,7 +2,7 @@
 
 @brief Unit-tests for oscillatory network based on Hodgkin-Huxley model of neuron.
 
-@authors Andrei Novikov (spb.andr@yandex.ru)
+@authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2015
 @copyright GNU Public License
 
@@ -25,7 +25,7 @@
 
 import unittest;
 
-from pyclustering.support import extract_number_oscillations;
+from pyclustering.utils import extract_number_oscillations;
 
 from pyclustering.nnet.hhn import hhn_network, hhn_parameters;
 

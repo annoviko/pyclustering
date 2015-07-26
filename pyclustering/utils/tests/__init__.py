@@ -1,8 +1,8 @@
 """!
 
-@brief Unit-test runner for support module.
+@brief Unit-test runner for utils module.
 
-@authors Andrei Novikov (spb.andr@yandex.ru)
+@authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2015
 @copyright GNU Public License
 
@@ -25,11 +25,11 @@
 
 import unittest;
 
-from pyclustering.support.tests                   import support_tests        as support_unit_tests;
+from pyclustering.utils.tests                   import utils_tests        as utils_unit_tests;
 
 if __name__ == "__main__":
     suite = unittest.TestSuite();
 
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(support_unit_tests));
+    suite.addTests(unittest.TestLoader().loadTestsFromModule(utils_unit_tests));
     
     unittest.TextTestRunner(verbosity = 2).run(suite);

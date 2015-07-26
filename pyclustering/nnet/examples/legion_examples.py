@@ -2,7 +2,7 @@
 
 @brief Examples of usage and demonstration of abilities of Local Excitatory Global Inhibitory Oscillatory Network (LEGION).
 
-@authors Andrei Novikov (spb.andr@yandex.ru)
+@authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2015
 @copyright GNU Public License
 
@@ -23,7 +23,7 @@
 
 """
 
-from pyclustering.support import draw_dynamics;
+from pyclustering.utils import draw_dynamics;
 
 from pyclustering.nnet.legion import legion_network, legion_parameters;
 from pyclustering.nnet import *;
@@ -36,10 +36,11 @@ def template_dynamic_legion(num_osc, steps, time, conn_type, stimulus, params = 
     print("Simulated");
     
     draw_dynamics(dynamic.time, dynamic.output, x_title = "Time", y_title = "x(t)", separate = separate_repr);
-    draw_dynamics(dynamic.time, dynamic.output, x_title = "Time", y_title = "z(t)");
+    draw_dynamics(dynamic.time, dynamic.inhibitor, x_title = "Time", y_title = "z(t)");
     
-    # ensembles = dynamic.allocate_sync_ensembles(0.1);
-    # print(ensembles);
+    ensembles = dynamic.allocate_sync_ensembles(0.1);
+    print(ensembles);
+    
     
 def one_oscillator_unstimulated():
     parameters = legion_parameters();
@@ -78,9 +79,23 @@ def thirteen_oscillator_three_stimulated_ensembles_list():
     "Not accurate due to false skipes are observed"
     parameters = legion_parameters();
     parameters.Wt = 4.0;
-    parameters.fi = 0.8;
+    parameters.fi = 10.0;
     template_dynamic_legion(15, 1000, 1000, conn_type = conn_type.LIST_BIDIR, stimulus = [1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1], params = parameters, separate_repr = [ [0, 1, 2], [3, 4, 5, 9, 10], [6, 7, 8], [11, 12, 13, 14] ]);
     
+
+def thirteen_simplify_oscillator_three_stimulated_ensembles_list():
+    "Good example of three synchronous ensembels"
+    "Not accurate due to false skipes are observed"
+    parameters = legion_parameters();
+    parameters.Wt = 4.0;
+    parameters.fi = 0.8;
+    parameters.ENABLE_POTENTIONAL = False;
+    template_dynamic_legion(15, 1000, 1000, conn_type = conn_type.LIST_BIDIR, 
+                            stimulus = [1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1], 
+                            params = parameters, 
+                            separate_repr = [ [0, 1, 2], [3, 4, 5, 9, 10], [6, 7, 8], [11, 12, 13, 14] ]);
+    
+
 def sixteen_oscillator_two_stimulated_ensembles_grid():
     "Not accurate false due to spikes are observed"
     parameters = legion_parameters();
@@ -89,6 +104,41 @@ def sixteen_oscillator_two_stimulated_ensembles_grid():
                                                                                                               1, 1, 1, 0, 
                                                                                                               0, 0, 0, 1, 
                                                                                                               0, 0, 1, 1]);
+                                                                                                              
+
+def simple_segmentation_example():
+    "Perfect results!"
+    parameters = legion_parameters();
+    parameters.eps = 0.02;
+    parameters.alpha = 0.005;
+    parameters.betta = 0.1;
+    parameters.gamma = 7.0;
+    parameters.teta = 0.9;
+    parameters.lamda = 0.1;
+    parameters.teta_x = -0.5;
+    parameters.teta_p = 7.0;
+    parameters.Wz = 0.7;
+    parameters.mu = 0.01;
+    parameters.fi = 3.0;
+    parameters.teta_xz = 0.1;
+    parameters.teta_zx = 0.1;
+    
+    parameters.ENABLE_POTENTIONAL = False;
+    template_dynamic_legion(81, 2500, 2500, 
+                            conn_type = conn_type.GRID_FOUR, 
+                            params = parameters, 
+                            stimulus = [1, 1, 1, 0, 0, 0, 0, 0, 0, 
+                                        1, 1, 1, 0, 0, 1, 1, 1, 1, 
+                                        1, 1, 1, 0, 0, 1, 1, 1, 1, 
+                                        0, 0, 0, 0, 0, 0, 1, 1, 1,
+                                        0, 0, 0, 0, 0, 0, 1, 1, 1,
+                                        1, 1, 1, 1, 0, 0, 1, 1, 1,
+                                        1, 1, 1, 1, 0, 0, 0, 0, 0,
+                                        1, 1, 1, 1, 0, 0, 0, 0, 0,
+                                        1, 1, 1, 1, 0, 0, 0, 0, 0],
+                            separate_repr = [ [0, 1, 2, 9, 10, 11, 18, 19, 20], 
+                                              [14, 15, 16, 17, 23, 24, 25, 26, 33, 34, 35, 42, 43, 44, 51, 52, 53], 
+                                              [45, 46, 47, 48, 54, 55, 56, 57, 63, 64, 65, 66, 72, 73, 74, 75] ]);
 
     
 one_oscillator_unstimulated();
@@ -99,4 +149,6 @@ three_oscillator_mix_stimulated_list();
 ten_oscillator_stimulated_list();
 ten_oscillator_mix_stimulated_list();
 thirteen_oscillator_three_stimulated_ensembles_list();
+thirteen_simplify_oscillator_three_stimulated_ensembles_list();
 sixteen_oscillator_two_stimulated_ensembles_grid();
+simple_segmentation_example();

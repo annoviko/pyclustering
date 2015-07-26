@@ -2,7 +2,7 @@
 
 @brief Examples of usage and demonstration of abilities of K-Medoids algorithm in cluster analysis.
 
-@authors Andrei Novikov (spb.andr@yandex.ru)
+@authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2015
 @copyright GNU Public License
 
@@ -27,9 +27,9 @@ from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
 
 from pyclustering.cluster.kmedoids import kmedoids;
 
-from pyclustering.support import draw_clusters;
-from pyclustering.support import read_sample;
-from pyclustering.support import timedcall;
+from pyclustering.utils import draw_clusters;
+from pyclustering.utils import read_sample;
+from pyclustering.utils import timedcall;
 
 def template_clustering(start_medoids, path, tolerance = 0.25):
     sample = read_sample(path);

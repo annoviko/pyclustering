@@ -4,8 +4,7 @@
 @details Based on article description:
          - J.Shao, X.He, C.Bohm, Q.Yang, C.Plant. Synchronization-Inspired Partitioning and Hierarchical Clustering. 2013.
 
-@authors Andrei Novikov (spb.andr@yandex.ru)
-@version 1.0
+@authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2015
 @copyright GNU Public License
 
@@ -31,7 +30,7 @@ import pyclustering.core.wrapper as wrapper;
 from pyclustering.nnet import initial_type, solve_type;
 
 from pyclustering.cluster.syncnet import syncnet, syncnet_analyser;
-from pyclustering.support import average_neighbor_distance;
+from pyclustering.utils import average_neighbor_distance;
 
 class hsyncnet(syncnet):
     """!

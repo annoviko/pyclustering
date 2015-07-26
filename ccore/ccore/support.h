@@ -2,7 +2,7 @@
 
 Useful functions that are used by the CCORE of pyclustering.
 
-Copyright (C) 2015    Andrei Novikov (spb.andr@yandex.ru)
+Copyright (C) 2015    Andrei Novikov (pyclustering@yandex.ru)
 
 pyclustering is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@ typedef struct differential_result {
 inline double pi(void) { return (double) 3.14159265358979323846; }
 
 inline double heaviside(double value) {
-	if (value >= 0) { return 1.0; }
+	if (value >= 0.0) { return 1.0; }
 	else { return 0.0; }
 }
 
@@ -121,6 +121,8 @@ std::vector<std::vector<double> > * read_sample(const data_representation * cons
  *
  ***********************************************************************************************/
 clustering_result * create_clustering_result(const std::vector<std::vector<unsigned int> *> * const clusters);
+
+clustering_result * create_clustering_result(const std::vector<std::vector<unsigned int> > & clusters);
 
 pyclustering_package * create_package(const std::vector<int> * const data);
 

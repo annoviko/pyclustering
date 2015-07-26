@@ -78,6 +78,8 @@ typedef struct legion_parameters {
 	double fi		= 3.0;
 	double ro		= 0.02;
 	double I		= 0.2;
+
+	bool ENABLE_POTENTIAL = true;
 } legion_parameters;
 
 
@@ -118,7 +120,7 @@ private:
 	std::uniform_real_distribution<double>	m_noise_distribution;
 
 private:
-	legion_network::legion_network() : m_stimulus(NULL), network(0, conn_type::NONE) { }
+	legion_network(void);
 
 public:
 	legion_network(const unsigned int num_osc, const conn_type connection_type, const legion_parameters & params);
@@ -139,7 +141,11 @@ private:
 
 	void neuron_states(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs);
 
+	void neuron_simplify_states(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs);
+
 	static void adapter_neuron_states(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs);
+
+	static void adapter_neuron_simplify_states(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs);
 
 	void store_dynamic(const double time, const bool collect_dynamic, legion_dynamic & dynamic);
 };

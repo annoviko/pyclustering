@@ -4,8 +4,7 @@
 @details Based on article description:
          - T.Miyano, T.Tsutsui. Data Synchronization as a Method of Data Mining. 2007.
 
-@authors Andrei Novikov (spb.andr@yandex.ru)
-@version 1.1
+@authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2015
 @copyright GNU Public License
 
@@ -33,14 +32,32 @@ from pyclustering.core.syncnet_wrapper import *;
 from pyclustering.nnet import *;
 from pyclustering.nnet.sync import *;
 
-from pyclustering.support import euclidean_distance;
+from pyclustering.utils import euclidean_distance;
 
 
-class syncnet_analyser(sync_dynamic):    
+class syncnet_analyser(sync_dynamic):
+    """!
+    @brief Performs analysis of output dynamic of the oscillatory network syncnet to extract information about cluster allocation.
+    
+    """
+    
     def __init__(self, phase, time, pointer_sync_analyser):
+        """!
+        @brief Constructor of the analyser.
+        
+        @param[in] phase (list): Output dynamic of the oscillatory network, where one iteration consists of all phases of oscillators.
+        @param[in] time (list): Simulation time.
+        @param[in] pointer_sync_analyser (POINTER): Pointer to CCORE analyser, if specified then other arguments can be omitted.
+        
+        """
         super().__init__(phase, time, pointer_sync_analyser);
     
     def __del__(self):
+        """!
+        @brief Desctructor of the analyser.
+        
+        """
+        
         if (self._ccore_sync_dynamic_pointer is not None):
             syncnet_analyser_destroy(self._ccore_sync_dynamic_pointer);
             self._ccore_sync_dynamic_pointer = None;
@@ -287,7 +304,7 @@ class syncnet(sync_network):
         surface_font.set_name('Arial');
         surface_font.set_size('12');
         
-        for i in range(0, self.num_osc, 1):
+        for i in range(0, self._num_osc, 1):
             if (dimension == 2):
                 axes.plot(self._osc_loc[i][0], self._osc_loc[i][1], 'bo');  
                 if (self._conn_represent == conn_represent.MATRIX):

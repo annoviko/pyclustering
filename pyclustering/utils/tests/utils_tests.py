@@ -1,8 +1,8 @@
-'''
+"""!
 
-Unit-tests for support functions.
+Unit-tests for utils module.
 
-Copyright (C) 2015    Andrei Novikov (spb.andr@yandex.ru)
+Copyright (C) 2015    Andrei Novikov (pyclustering@yandex.ru)
 
 pyclustering is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -17,12 +17,12 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-'''
+"""
 
 import unittest;
 
-from pyclustering.support import euclidean_distance;
-from pyclustering.support import average_neighbor_distance;
+from pyclustering.utils import euclidean_distance;
+from pyclustering.utils import average_neighbor_distance;
 
 class Test(unittest.TestCase):
 

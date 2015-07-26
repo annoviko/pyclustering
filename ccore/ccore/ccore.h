@@ -5,7 +5,7 @@ Interface of the CCORE library that is used by pyclustering.
 Based on article description:
  - S.Guha, R.Rastogi, K.Shim. CURE: An Efficient Clustering Algorithm for Large Databases. 1998.
 
-Copyright (C) 2015    Andrei Novikov (spb.andr@yandex.ru)
+Copyright (C) 2015    Andrei Novikov (pyclustering@yandex.ru)
 
 pyclustering is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -371,11 +371,11 @@ extern "C" DECLARATION void * hsyncnet_process(const void * pointer_network, con
 extern "C" DECLARATION void hsyncnet_analyser_destroy(const void * pointer_analyser);
 
 
-extern "C" DECLARATION void * som_create(const data_representation * const sample, const unsigned int num_rows, const unsigned int num_cols, const unsigned int num_epochs, const unsigned int type_conn, const void * parameters);
+extern "C" DECLARATION void * som_create(const unsigned int num_rows, const unsigned int num_cols, const unsigned int type_conn, const void * parameters);
 
 extern "C" DECLARATION void som_destroy(const void * pointer);
 
-extern "C" DECLARATION unsigned int som_train(const void * pointer, const bool autostop);
+extern "C" DECLARATION unsigned int som_train(const void * pointer, const data_representation * const sample, const unsigned int num_epochs, const bool autostop);
 
 extern "C" DECLARATION unsigned int som_simulate(const void * pointer, const data_representation * const pattern);
 

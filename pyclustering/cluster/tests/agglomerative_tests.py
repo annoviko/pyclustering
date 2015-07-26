@@ -2,7 +2,7 @@
 
 @brief Unit-tests for agglomerative algorithm.
 
-@authors Andrei Novikov (spb.andr@yandex.ru)
+@authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2015
 @copyright GNU Public License
 
@@ -28,7 +28,7 @@ import unittest;
 from pyclustering.samples.definitions import SIMPLE_SAMPLES;
 
 from pyclustering.cluster.agglomerative import agglomerative, type_link;
-from pyclustering.support import read_sample;
+from pyclustering.utils import read_sample;
 
 from random import random;
 

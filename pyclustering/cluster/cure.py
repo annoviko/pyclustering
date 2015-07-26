@@ -4,8 +4,7 @@
 @details Implementation based on article:
          - S.Guha, R.Rastogi, K.Shim. CURE: An Efficient Clustering Algorithm for Large Databases. 1998.
 
-@authors Andrei Novikov (spb.andr@yandex.ru)
-@version 1.0
+@authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2015
 @copyright GNU Public License
 
@@ -26,8 +25,8 @@
 
 """
 
-from pyclustering.support import euclidean_distance;
-from pyclustering.support import euclidean_distance_sqrt;
+from pyclustering.utils import euclidean_distance;
+from pyclustering.utils import euclidean_distance_sqrt;
 
 from pyclustering.container.kdtree import kdtree;
 
@@ -38,6 +37,21 @@ class cure_cluster:
     @brief Represents data cluster in CURE term. CURE cluster is described by points of cluster, representation points of the cluster and by the cluster center.
     
     """
+    
+    ## List of points that make up cluster.
+    points = None;
+    
+    ## Mean of points that make up cluster.
+    mean = None;
+    
+    ## List of points that represents clusters.
+    rep = None;
+    
+    ## Pointer to the closest cluster.
+    closest = None;
+    
+    ## Distance to the closest cluster.
+    distance = None;
     
     def __init__(self, point = None):
         """!

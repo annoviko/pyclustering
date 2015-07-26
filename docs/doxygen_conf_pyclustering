@@ -759,37 +759,39 @@ WARN_LOGFILE           =
 # Note: If this tag is empty the current directory is searched.
 
 INPUT				   = pyclustering/cluster/__init__.py
+INPUT                 += pyclustering/cluster/agglomerative.py
 INPUT                 += pyclustering/cluster/birch.py
 INPUT                 += pyclustering/cluster/cure.py
 INPUT                 += pyclustering/cluster/dbscan.py
-INPUT                 += pyclustering/cluster/hierarchical.py
 INPUT                 += pyclustering/cluster/hsyncnet.py
 INPUT                 += pyclustering/cluster/kmeans.py
+INPUT                 += pyclustering/cluster/kmedians.py
+INPUT                 += pyclustering/cluster/kmedoids.py
 INPUT                 += pyclustering/cluster/optics.py
 INPUT                 += pyclustering/cluster/rock.py
 INPUT                 += pyclustering/cluster/syncnet.py
 INPUT                 += pyclustering/cluster/syncsom.py
 INPUT                 += pyclustering/cluster/xmeans.py
 
-INPUT				  += pyclustering/container/__init__.py
-INPUT				  += pyclustering/container/cftree.py
-INPUT				  += pyclustering/container/kdtree.py
+INPUT                 += pyclustering/container/__init__.py
+INPUT                 += pyclustering/container/cftree.py
+INPUT                 += pyclustering/container/kdtree.py
 
-INPUT				  += pyclustering/gcolor/__init__.py
-INPUT				  += pyclustering/gcolor/dsatur.py
-INPUT				  += pyclustering/gcolor/hysteresis.py
-INPUT				  += pyclustering/gcolor/sync.py
+INPUT                 += pyclustering/gcolor/__init__.py
+INPUT                 += pyclustering/gcolor/dsatur.py
+INPUT                 += pyclustering/gcolor/hysteresis.py
+INPUT                 += pyclustering/gcolor/sync.py
 
-INPUT				  += pyclustering/nnet/__init__.py
-INPUT				  += pyclustering/nnet/hhn.py
-INPUT				  += pyclustering/nnet/hysteresis.py
-INPUT				  += pyclustering/nnet/legion.py
-INPUT				  += pyclustering/nnet/pcnn.py
-INPUT				  += pyclustering/nnet/som.py
-INPUT				  += pyclustering/nnet/sync.py
+INPUT                 += pyclustering/nnet/__init__.py
+INPUT                 += pyclustering/nnet/hhn.py
+INPUT                 += pyclustering/nnet/hysteresis.py
+INPUT                 += pyclustering/nnet/legion.py
+INPUT                 += pyclustering/nnet/pcnn.py
+INPUT                 += pyclustering/nnet/som.py
+INPUT                 += pyclustering/nnet/sync.py
 
-INPUT				  += pyclustering/support/__init__.py
-INPUT				  += pyclustering/support/graph.py
+INPUT                 += pyclustering/utils/__init__.py
+INPUT                 += pyclustering/utils/graph.py
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses
@@ -1065,7 +1067,7 @@ IGNORE_PREFIX          =
 # If the GENERATE_HTML tag is set to YES, doxygen will generate HTML output
 # The default value is: YES.
 
-GENERATE_HTML          = YES
+GENERATE_HTML          = NO
 
 # The HTML_OUTPUT tag is used to specify where the HTML docs will be put. If a
 # relative path is entered the value of OUTPUT_DIRECTORY will be put in front of
@@ -1608,7 +1610,7 @@ EXTRA_SEARCH_MAPPINGS  =
 # If the GENERATE_LATEX tag is set to YES, doxygen will generate LaTeX output.
 # The default value is: YES.
 
-GENERATE_LATEX         = NO
+GENERATE_LATEX         = YES
 
 # The LATEX_OUTPUT tag is used to specify where the LaTeX docs will be put. If a
 # relative path is entered the value of OUTPUT_DIRECTORY will be put in front of
@@ -1706,7 +1708,7 @@ LATEX_EXTRA_STYLESHEET =
 # markers available.
 # This tag requires that the tag GENERATE_LATEX is set to YES.
 
-LATEX_EXTRA_FILES      =
+LATEX_EXTRA_FILES      = YES
 
 # If the PDF_HYPERLINKS tag is set to YES, the LaTeX that is generated is
 # prepared for conversion to PDF (using ps2pdf or pdflatex). The PDF file will
@@ -1953,7 +1955,7 @@ GENERATE_PERLMOD       = NO
 # The default value is: NO.
 # This tag requires that the tag GENERATE_PERLMOD is set to YES.
 
-PERLMOD_LATEX          = NO
+PERLMOD_LATEX          = YES
 
 # If the PERLMOD_PRETTY tag is set to YES, the Perl module output will be nicely
 # formatted so it can be parsed by a human reader. This is useful if you want to

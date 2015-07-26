@@ -4,8 +4,7 @@
 @details Based on article description:
          - S.Guha, R.Rastogi, K.Shim. ROCK: A Robust Clustering Algorithm for Categorical Attributes. 1999.
 
-@authors Andrei Novikov (spb.andr@yandex.ru)
-@version 1.0
+@authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2015
 @copyright GNU Public License
 
@@ -26,7 +25,7 @@
 
 """
 
-from pyclustering.support import euclidean_distance;
+from pyclustering.utils import euclidean_distance;
 
 import pyclustering.core.wrapper as wrapper;
 

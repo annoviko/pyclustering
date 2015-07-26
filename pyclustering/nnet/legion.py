@@ -5,8 +5,7 @@
          - D.Wang, D.Terman. Image Segmentation Based on Oscillatory Correlation. 1997.
          - D.Wang, D.Terman. Locally Excitatory Globally Inhibitory Oscillator Networks. 1995.
 
-@authors Andrei Novikov (spb.andr@yandex.ru)
-@version 1.0
+@authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2015
 @copyright GNU Public License
 
@@ -35,7 +34,7 @@ import pyclustering.core.legion_wrapper as wrapper;
 
 from pyclustering.nnet import *;  
 
-from pyclustering.support import heaviside, allocate_sync_ensembles;
+from pyclustering.utils import heaviside, allocate_sync_ensembles;
 
 from scipy.integrate import odeint;
 
@@ -43,31 +42,72 @@ from scipy.integrate import odeint;
 class legion_parameters:
     """!
     @brief Describes parameters of LEGION.
+    @details Contained parameters affect on output dynamic of each oscillator of the network.
     
     @see legion_network
     
     """  
     
+    ## Coefficient that affects intrinsic inhibitor of each oscillator. Should be the same as 'alpha'.
     eps         = 0.02;
+    
+    ## Coefficient is chosen to be on the same order of magnitude as 'eps'. Affects on exponential function that decays on a slow time scale.
     alpha       = 0.005;
+    
+    ## Coefficient that is used to control the ratio of the times that the solution spends in these two phases. For a larger value of g, the solution spends a shorter time in the active phase.
     gamma       = 6.0;
+    
+    ## Coefficient that affects on intrinsic inhibitor of each oscillator. Specifies the steepness of the sigmoid function.
     betta       = 0.1;
+    
+    ## Scale coefficient that is used by potential, should be greater than 0.
     lamda       = 0.1;
+    
+    ## Threshold that should be exceeded by a potential to switch on potential.
     teta        = 0.9;
+    
+    ## Threshold that should be exceeded by a single oscillator to affect its neighbors.
     teta_x      = -1.5;
+    
+    ## Threshold that should be exceeded to activate potential. If potential less than the threshold then potential is relaxed to 0 on time scale 'mu'.
     teta_p      = 1.5;
+    
+    ## Threshold that should be exceeded by any oscillator to activate global inhibitor.
     teta_xz     = 0.1;
+    
+    ## Threshold that should be exceeded to affect on a oscillator by the global inhibitor.
     teta_zx     = 0.1;
-    T           = 2.0;          # value of permanent connections
+    
+    ## Weight of permanent connections.
+    T           = 2.0;
+    
+    ## Defines time scaling of relaxing of oscillator potential.
     mu          = 0.01;
-    Wz          = 1.5;          # value of global inhibitory connections
+    
+    ## Weight of global inhibitory connections.
+    Wz          = 1.5;
+    
+    ## Total dynamic weights to a single oscillator from neighbors. Sum of weights of dynamic connections to a single oscillator can not be bigger than Wt.
     Wt          = 8.0;
+    
+    ## Rate at which the global inhibitor reacts to the stimulation from the oscillator network.
     fi          = 3.0;
-    ro          = 0.02;         # multiplier of oscillator noise
-    I           = 0.2;          # value of stimulus
+    
+    ## Multiplier of oscillator noise. Plays important role in desynchronization process.
+    ro          = 0.02;
+    
+    ## Value of external stimulus.
+    I           = 0.2;
+    
+    ## Defines whether to use potentional of oscillator or not.
+    ENABLE_POTENTIONAL = True;
 
 
 class legion_dynamic:
+    """!
+    @brief Represents output dynamic of LEGION.
+    
+    """
     __output = None;
     __inhibitor = None;
     __time = None;
@@ -76,6 +116,10 @@ class legion_dynamic:
     
     @property
     def output(self):
+        """!
+        @brief Returns output dynamic of the network.
+        
+        """
         if (self.__ccore_legion_dynamic_pointer is not None):
             return wrapper.legion_dynamic_get_output(self.__ccore_legion_dynamic_pointer);
             
@@ -84,14 +128,23 @@ class legion_dynamic:
 
     @property
     def inhibitor(self):
+        """!
+        @brief Returns output dynamic of the global inhibitor of the network.
+        
+        """
+        
         if (self.__ccore_legion_dynamic_pointer is not None):
-            return wrapper.legion_dynamic_get_output(self.__ccore_legion_dynamic_pointer);
+            return wrapper.legion_dynamic_get_inhibitory_output(self.__ccore_legion_dynamic_pointer);
             
-        return self.__output;
+        return self.__inhibitor;
     
     
     @property
     def time(self):
+        """!
+        @brief Returns simulation time.
+        
+        """
         if (self.__ccore_legion_dynamic_pointer is not None):
             return wrapper.legion_dynamic_get_time(self.__ccore_legion_dynamic_pointer);
         
@@ -99,6 +152,15 @@ class legion_dynamic:
     
     
     def __init__(self, output, inhibitor, time, ccore = None):
+        """!
+        @brief Constructor of legion dynamic.
+        
+        @param[in] output (list): Output dynamic of the network represented by excitatory values of oscillators.
+        @param[in] inhibitor (list): Output dynamic of the global inhibitor of the network.
+        @param[in] time (list): Simulation time.
+        @param[in] ccore (POINTER): Pointer to CCORE legion_dynamic. If it is specified then others arguments can be omitted.
+        
+        """
         self.__output = output;
         self.__inhibitor = inhibitor;
         self.__time = time;
@@ -107,11 +169,19 @@ class legion_dynamic:
         
         
     def __del__(self):
+        """!
+        @brief Destructor of the dynamic of the legion network.
+        
+        """
         if (self.__ccore_legion_dynamic_pointer is not None):
             wrapper.legion_dynamic_destroy(self.__ccore_legion_dynamic_pointer);
 
 
     def __len__(self):
+        """!
+        @brief Returns length of output dynamic.
+        
+        """
         if (self.__ccore_legion_dynamic_pointer is not None):
             return wrapper.legion_dynamic_get_size(self.__ccore_legion_dynamic_pointer);
         
@@ -128,6 +198,9 @@ class legion_dynamic:
         
         """
 
+        if (self.__ccore_legion_dynamic_pointer is not None):
+            self.__output = wrapper.legion_dynamic_get_output(self.__ccore_legion_dynamic_pointer);
+            
         return allocate_sync_ensembles(self.__output, tolerance);
 
 
@@ -136,7 +209,26 @@ class legion_network(network):
     @brief Local excitatory global inhibitory oscillatory network (LEGION) that uses relaxation oscillator
            based on Van der Pol model. The model uses global inhibitor to de-synchronize synchronous ensembles
            of oscillators.
-           
+    
+    Example:
+    @code
+        # Create parameters of the network
+        parameters = legion_parameters();
+        parameters.Wt = 4.0;
+        
+        # Create stimulus
+        stimulus = [1, 1, 0, 0, 0, 1, 1, 1];
+        
+        # Create the network (use CCORE for fast solving)
+        net = legion_network(len(stimulus), parameters, conn_type.GRID_FOUR, ccore = True);
+        
+        # Simulate network - result of simulation is output dynamic of the network
+        output_dynamic = net.simulate(1000, 750, stimulus);
+        
+        # Draw output dynamic
+        draw_dynamics(output_dynamic.time, output_dynamic.output, x_title = "Time", y_title = "x(t)");
+    @endcode
+    
     """
     
     _name = "Local excitatory global inhibitory oscillatory network (LEGION)"
@@ -166,6 +258,7 @@ class legion_network(network):
         @param[in] parameters (legion_parameters): Parameters of the network that are defined by structure 'legion_parameters'.
         @param[in] type_conn (conn_type): Type of connection between oscillators in the network.
         @param[in] type_conn_represent (conn_represent): Internal representation of connection in the network: matrix or list.
+        @param[in] ccore (bool): If True then all interaction with object will be performed via CCORE library (C++ implementation of pyclustering).
         
         """
         
@@ -225,10 +318,10 @@ class legion_network(network):
             neighbors = self.get_neighbors(i);
             
             if ( (len(neighbors) > 0) and (self._stimulus[i] > 0) ):
-                number_stimulated_neighbors = 0;
+                number_stimulated_neighbors = 0.0;
                 for j in neighbors:
                     if (self._stimulus[j] > 0):
-                        number_stimulated_neighbors += 1;
+                        number_stimulated_neighbors += 1.0;
                 
                 if (number_stimulated_neighbors > 0):
                     dynamic_weight = self._params.Wt / number_stimulated_neighbors;
@@ -262,7 +355,7 @@ class legion_network(network):
             raise NameError("Solver FAST is not support due to low accuracy that leads to huge error.");
         
         elif (solution == solve_type.RKF45):
-            raise NameError("Solver RKF45 is not support in python version.");
+            raise NameError("Solver RKF45 is not support in python version. RKF45 is supported in CCORE implementation.");
         
         # set stimulus
         self.__create_stimulus(stimulus);
@@ -313,12 +406,20 @@ class legion_network(network):
         
         next_excitatory = [0.0] * self._num_osc;
         next_inhibitory = [0.0] * self._num_osc;
-        next_potential = [0.0] * self._num_osc;
+        
+        next_potential = [];
+        if (self._params.ENABLE_POTENTIONAL is True):
+            next_potential = [0.0] * self._num_osc;
         
         # Update states of oscillators
         for index in range (0, self._num_osc, 1):
-            result = odeint(self._legion_state, [self._excitatory[index], self._inhibitory[index], self._potential[index]], numpy.arange(t - step, t, int_step), (index , ));
-            [ next_excitatory[index], next_inhibitory[index], next_potential[index] ] = result[len(result) - 1][0:3];
+            if (self._params.ENABLE_POTENTIONAL is True):
+                result = odeint(self._legion_state, [self._excitatory[index], self._inhibitory[index], self._potential[index]], numpy.arange(t - step, t, int_step), (index , ));
+                [ next_excitatory[index], next_inhibitory[index], next_potential[index] ] = result[len(result) - 1][0:3];
+                
+            else:
+                result = odeint(self._legion_state_simplify, [self._excitatory[index], self._inhibitory[index] ], numpy.arange(t - step, t, int_step), (index , ));
+                [ next_excitatory[index], next_inhibitory[index] ] = result[len(result) - 1][0:2];               
             
             # Update coupling term
             neighbors = self.get_neighbors(index);
@@ -336,8 +437,11 @@ class legion_network(network):
         self._noise = [random.random() * self._params.ro for i in range(self._num_osc)];
         self._coupling_term = self._buffer_coupling_term[:];
         self._inhibitory = next_inhibitory[:];
-        self._potential = next_potential[:];
         self._excitatory = next_excitatory[:];
+        
+        if (self._params.ENABLE_POTENTIONAL is True):
+            self._potential = next_potential[:];
+            
     
     
     def _global_inhibitor_state(self, z, t, argv):
@@ -362,6 +466,36 @@ class legion_network(network):
         return self._params.fi * (sigma - z);
     
     
+    def _legion_state_simplify(self, inputs, t, argv):
+        """!
+        @brief Returns new values of excitatory and inhibitory parts of oscillator of oscillator.
+        @details Simplify model doesn't consider oscillator potential.
+        
+        @param[in] inputs (list): Initial values (current) of oscillator [excitatory, inhibitory].
+        @param[in] t (double): Current time of simulation.
+        @param[in] argv (uint): Extra arguments that are not used for integration - index of oscillator.
+        
+        @return (list) New values of excitatoty and inhibitory part of oscillator (not assign).
+        
+        """
+        
+        index = argv;
+        
+        x = inputs[0];  # excitatory
+        y = inputs[1];  # inhibitory
+        
+        dx = 3.0 * x - x ** 3.0 + 2.0 - y + self._stimulus[index] + self._coupling_term[index] + self._noise[index];
+        dy = self._params.eps * (self._params.gamma * (1.0 + math.tanh(x / self._params.betta)) - y);
+        
+        neighbors = self.get_neighbors(index);
+        potential = 0.0;
+        
+        for index_neighbor in neighbors:
+            potential += self._params.T * heaviside(self._excitatory[index_neighbor] - self._params.teta_x);
+        
+        return [dx, dy];    
+    
+    
     def _legion_state(self, inputs, t, argv):
         """!
         @brief Returns new values of excitatory and inhibitory parts of oscillator and potential of oscillator.
@@ -382,16 +516,16 @@ class legion_network(network):
         
         potential_influence = heaviside(p + math.exp(-self._params.alpha * t) - self._params.teta);
         
-        dx = 3 * x - x ** 3 + 2 - y + self._stimulus[index] * potential_influence + self._coupling_term[index] - self._noise[index];
-        dy = self._params.eps * (self._params.gamma * (1 + math.tanh(x / self._params.betta)) - y);
+        dx = 3.0 * x - x ** 3.0 + 2.0 - y + self._stimulus[index] * potential_influence + self._coupling_term[index] + self._noise[index];
+        dy = self._params.eps * (self._params.gamma * (1.0 + math.tanh(x / self._params.betta)) - y);
         
         neighbors = self.get_neighbors(index);
-        potential = 0;
+        potential = 0.0;
         
         for index_neighbor in neighbors:
             potential += self._params.T * heaviside(self._excitatory[index_neighbor] - self._params.teta_x);
         
-        dp = self._params.lamda * (1 - p) * heaviside(potential - self._params.teta_p) - self._params.mu * p;
+        dp = self._params.lamda * (1.0 - p) * heaviside(potential - self._params.teta_p) - self._params.mu * p;
         
         return [dx, dy, dp];
     

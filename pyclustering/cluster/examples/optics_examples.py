@@ -2,7 +2,7 @@
 
 @brief Examples of usage and demonstration of abilities of OPTICS algorithm in cluster analysis.
 
-@authors Andrei Novikov (spb.andr@yandex.ru)
+@authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2015
 @copyright GNU Public License
 
@@ -25,7 +25,7 @@
 
 from pyclustering.cluster.optics import optics;
 
-from pyclustering.support import read_sample, draw_clusters;
+from pyclustering.utils import read_sample, draw_clusters;
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
 
@@ -78,7 +78,7 @@ def cluster_densities2():
     template_clustering(SIMPLE_SAMPLES.SAMPLE_DENSITIES2, 0.5, 5);
 
 def cluster_lsun():
-    template_clustering(FCPS_SAMPLES.SAMPLE_LSUN, 0.5, 3);    
+    template_clustering(FCPS_SAMPLES.SAMPLE_LSUN, 0.5, 3);
     
 def cluster_target():
     template_clustering(FCPS_SAMPLES.SAMPLE_TARGET, 0.5, 2);    

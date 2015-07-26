@@ -2,7 +2,7 @@
 
 @brief General definitions of samples.
 
-@authors Andrei Novikov (spb.andr@yandex.ru)
+@authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2015
 @copyright GNU Public License
 
@@ -33,6 +33,8 @@ class SIMPLE_SAMPLES:
     SAMPLE_SIMPLE4          = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleSimple4.txt";
     SAMPLE_SIMPLE5          = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleSimple5.txt";
     SAMPLE_SIMPLE6          = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleSimple6.txt";
+    SAMPLE_SIMPLE7          = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleSimple7.txt";
+    SAMPLE_SIMPLE8          = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleSimple8.txt";
     SAMPLE_ELONGATE         = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleElongate.txt";
     SAMPLE_DENSITIES1       = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleDensities1.txt";
     SAMPLE_DENSITIES2       = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleDensities2.txt";
@@ -91,6 +93,7 @@ class IMAGE_SIMPLE_SAMPLES:
     IMAGE_SIMPLE09                  = samples.__path__[0] + os.sep + "images" + os.sep + "ImageSimple09.png";
     IMAGE_SIMPLE10                  = samples.__path__[0] + os.sep + "images" + os.sep + "ImageSimple10.png";
     IMAGE_SIMPLE11                  = samples.__path__[0] + os.sep + "images" + os.sep + "ImageSimple11.png";
+    IMAGE_SIMPLE12                  = samples.__path__[0] + os.sep + "images" + os.sep + "ImageSimple12.png";
     IMAGE_SIMPLE_BEACH              = samples.__path__[0] + os.sep + "images" + os.sep + "ImageSimpleBeach.png";
     IMAGE_SIMPLE_BUILDING           = samples.__path__[0] + os.sep + "images" + os.sep + "ImageSimpleBuilding.png";
     IMAGE_SIMPLE_FRUITS             = samples.__path__[0] + os.sep + "images" + os.sep + "ImageSimpleFruits.png";
@@ -107,6 +110,27 @@ class IMAGE_MAP_SAMPLES:
 class IMAGE_REAL_SAMPLES:
     IMAGE_FIELD_FLOWER              = samples.__path__[0] + os.sep + "images" + os.sep + "ImageFieldFlower.png";
     
+
+class IMAGE_SYMBOL_SAMPLES:
+    @staticmethod
+    def GET_LIST_IMAGE_SAMPLES(symbol):
+        default_path = samples.__path__[0] + os.sep + "images" + os.sep + "symbols" + os.sep;
+        number_sample_symbols = 1;
+        
+        name_file_pattern = "Symbol_%s_Sample%.2d.png";
+        list_image_samples = [];
+        
+        for index_image in range(1, number_sample_symbols + 1, 1):
+            file_path = default_path + (name_file_pattern % (symbol, index_image));
+            list_image_samples.append(file_path);
+            
+        return list_image_samples;      
+
+    LIST_IMAGES_SYMBOL_I            = GET_LIST_IMAGE_SAMPLES.__func__('I');
+    LIST_IMAGES_SYMBOL_D            = GET_LIST_IMAGE_SAMPLES.__func__('D');
+    LIST_IMAGES_SYMBOL_M            = GET_LIST_IMAGE_SAMPLES.__func__('M');
+    LIST_IMAGES_SYMBOL_N            = GET_LIST_IMAGE_SAMPLES.__func__('N');
+
     
 class IMAGE_DIGIT_SAMPLES:    
     @staticmethod
@@ -117,7 +141,7 @@ class IMAGE_DIGIT_SAMPLES:
         name_file_pattern = "Digit_%d_Sample%.2d.png";
         list_image_samples = [];
         
-        for index_image in range(1, number_sample_digits, 1):
+        for index_image in range(1, number_sample_digits + 1, 1):
             file_path = default_path + (name_file_pattern % (digit, index_image));
             list_image_samples.append(file_path);
             

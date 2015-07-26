@@ -4,8 +4,7 @@
 @details Based on book description:
          - T.Lindblad, J.M.Kinser. Image Processing Using Pulse-Coupled Neural Networks (2nd edition). 2005.
 
-@authors Andrei Novikov (spb.andr@yandex.ru)
-@version 1.0
+@authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2015
 @copyright GNU Public License
 
@@ -37,7 +36,7 @@ from PIL import Image;
 from pyclustering.nnet import *;
 import pyclustering.core.pcnn_wrapper as wrapper;
 
-from pyclustering.support import draw_dynamics;
+from pyclustering.utils import draw_dynamics;
 
 
 class pcnn_parameters:
@@ -46,21 +45,38 @@ class pcnn_parameters:
     
     """
     
-    VF = 1.0;   # multiplier for the feeding compartment at the current step
-    VL = 1.0;   # multiplier for the linking compartment at the current step
-    VT = 10.0;  # multiplier for the threshold at the current step
+    ## Multiplier for the feeding compartment at the current step.
+    VF = 1.0;
     
-    AF = 0.1;   # multiplier for the feeding compartment at the previous step
-    AL = 0.1;   # multiplier for the linking compartment at the previous step
-    AT = 0.5;   # multiplier for the threshold at the previous step
+    ## Multiplier for the linking compartment at the current step.  
+    VL = 1.0;
     
-    W = 1.0;    # synaptic weight - neighbours influence on linking compartment
-    M = 1.0;    # synaptic weight - neighbours influence on feeding compartment
+    ## Multiplier for the threshold at the current step.    
+    VT = 10.0;
     
-    B = 0.1;    # linking strength in the network.
     
-    # Helps to overcome some of the effects of time quantisation. This process allows the linking wave to progress a lot faster than the feeding wave.
-    FAST_LINKING = False;   # enable/disable Fast-Linking mode
+    ## Multiplier for the feeding compartment at the previous step.    
+    AF = 0.1;
+    
+    ## Multiplier for the linking compartment at the previous step.
+    AL = 0.1;
+    
+    ## Multiplier for the threshold at the previous step.
+    AT = 0.5;
+    
+    
+    ## Synaptic weight - neighbours influence on linking compartment
+    W = 1.0;
+    
+    ## Synaptic weight - neighbours influence on feeding compartment.
+    M = 1.0;
+    
+    
+    ## Linking strength in the network.
+    B = 0.1;
+    
+    ## Enable/disable Fast-Linking mode. Fast linking helps to overcome some of the effects of time quantisation. This process allows the linking wave to progress a lot faster than the feeding wave.
+    FAST_LINKING = False;
     
     
 class pcnn_dynamic:
@@ -71,7 +87,9 @@ class pcnn_dynamic:
     __dynamic = None;
     __ccore_pcnn_dynamic_pointer = None;
     
-    
+    __OUTPUT_TRUE = 1;    # fire value for oscillators.
+    __OUTPUT_FALSE = 0;   # rest value for oscillators.
+        
     @property
     def output(self):
         """!
@@ -149,7 +167,7 @@ class pcnn_dynamic:
         for t in range(len(self.__dynamic) - 1, 0, -1):
             sync_ensemble = [];
             for i in range(number_oscillators):
-                if (self.__dynamic[t][i] == pcnn_network.OUTPUT_TRUE):
+                if (self.__dynamic[t][i] == self.__OUTPUT_TRUE):
                     if (i not in traverse_oscillators):
                         sync_ensemble.append(i);
                         traverse_oscillators.add(i);
@@ -179,7 +197,7 @@ class pcnn_dynamic:
             spike_ensemble = [];
             
             for index in range(number_oscillators):
-                if (self.__dynamic[t][index] == pcnn_network.OUTPUT_TRUE):
+                if (self.__dynamic[t][index] == self.__OUTPUT_TRUE):
                     spike_ensemble.append(index);
             
             if (len(spike_ensemble) > 0):
@@ -217,6 +235,8 @@ class pcnn_visualizer:
         """!
         @brief Shows time signal (signal vector information) using network dynamic during simulation.
         
+        @param[in] pcnn_output_dynamic (pcnn_dynamic): Output dynamic of the pulse-coupled neural network.
+        
         """
         
         time_signal = pcnn_output_dynamic.allocate_time_signal();
@@ -235,6 +255,9 @@ class pcnn_visualizer:
         """!
         @brief Shows output dynamic (output of each oscillator) during simulation.
         
+        @param[in] pcnn_output_dynamic (pcnn_dynamic): Output dynamic of the pulse-coupled neural network.
+        @param[in] separate_representation (list): Consists of lists of oscillators where each such list consists of oscillator indexes that will be shown on separated stage.
+        
         """
         
         draw_dynamics(pcnn_output_dynamic.time, pcnn_output_dynamic.output, x_title = "t", y_title = "y(t)", separate = separate_representation);
@@ -243,6 +266,9 @@ class pcnn_visualizer:
     def animate_spike_ensembles(pcnn_output_dynamic, image_size):
         """!
         @brief Shows animation of output dynamic (output of each oscillator) during simulation.
+        
+        @param[in] pcnn_output_dynamic (pcnn_dynamic): Output dynamic of the pulse-coupled neural network.
+        @param[in] image_size (list): Image size represented as [height, width].
         
         """
         
@@ -316,8 +342,9 @@ class pcnn_network(network):
     
     __ccore_pcnn_pointer = None;
     
-    OUTPUT_TRUE = 1;    # fire value for oscillators.
-    OUTPUT_FALSE = 0;   # rest value for oscillators.
+    
+    __OUTPUT_TRUE = 1;    # fire value for oscillators.
+    __OUTPUT_FALSE = 0;   # rest value for oscillators.
     
     def __init__(self, num_osc, parameters = None, type_conn = conn_type.ALL_TO_ALL, type_conn_represent = conn_represent.MATRIX, ccore = False):
         """!
@@ -438,9 +465,9 @@ class pcnn_network(network):
             
             # calculate output of the oscillator
             if (internal_activity > self._threshold[index]):
-                outputs[index] = self.OUTPUT_TRUE;
+                outputs[index] = self.__OUTPUT_TRUE;
             else:
-                outputs[index] = self.OUTPUT_FALSE;
+                outputs[index] = self.__OUTPUT_FALSE;
             
             # In case of Fast Linking we should calculate threshould until output is changed.
             if (self._params.FAST_LINKING is not True):
@@ -466,9 +493,9 @@ class pcnn_network(network):
                     
                     # calculate output of the oscillator
                     if (internal_activity > self._threshold[index]):
-                        outputs[index] = self.OUTPUT_TRUE;
+                        outputs[index] = self.__OUTPUT_TRUE;
                     else:
-                        outputs[index] = self.OUTPUT_FALSE;
+                        outputs[index] = self.__OUTPUT_FALSE;
                         
                     if (outputs[index] != previous_outputs[index]):
                         current_output_change = True;

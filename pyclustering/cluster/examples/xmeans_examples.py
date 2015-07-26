@@ -2,7 +2,7 @@
 
 @brief Examples of usage and demonstration of abilities of X-Means algorithm in cluster analysis.
 
-@authors Andrei Novikov (spb.andr@yandex.ru)
+@authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2015
 @copyright GNU Public License
 
@@ -27,7 +27,7 @@ from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
 
 from pyclustering.cluster.xmeans import xmeans, splitting_type;
 
-from pyclustering.support import draw_clusters, read_sample, timedcall;
+from pyclustering.utils import draw_clusters, read_sample, timedcall;
 
 def template_clustering(start_centers, path, tolerance = 0.025, criterion = splitting_type.BAYESIAN_INFORMATION_CRITERION, ccore = False):
     sample = read_sample(path);

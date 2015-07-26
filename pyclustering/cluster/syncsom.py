@@ -4,8 +4,7 @@
 @details Based on article description:
          - A.Novikov, E.Benderskaya. SYNC-SOM Double-layer Oscillatory Network for Cluster Analysis. 2014.
 
-@authors Andrei Novikov (spb.andr@yandex.ru)
-@version 1.0
+@authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2015
 @copyright GNU Public License
 
@@ -31,7 +30,7 @@ from pyclustering.nnet import initial_type;
 
 from pyclustering.cluster.syncnet import syncnet;
 
-from pyclustering.support import average_neighbor_distance;
+from pyclustering.utils import average_neighbor_distance;
 
 
 class syncsom:
@@ -100,7 +99,8 @@ class syncsom:
         """
         
         self._data = data;
-        self._som = som(rows, cols, data, 100, conn_type = type_conn.grid_four);
+        
+        self._som = som(rows, cols, conn_type = type_conn.grid_four);
         self._som_osc_table = list();        
     
     def process(self, number_neighbours, collect_dynamic = False, order = 0.999):
@@ -119,7 +119,7 @@ class syncsom:
         """
         
         # train self-organization map.
-        self._som.train();
+        self._som.train(self._data, 100);
         
         # prepare to build list.
         weights = list();

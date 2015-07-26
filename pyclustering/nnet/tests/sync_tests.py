@@ -2,7 +2,7 @@
 
 @brief Unit-tests for Oscillatory Neural Network based on Kuramoto model.
 
-@authors Andrei Novikov (spb.andr@yandex.ru)
+@authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2015
 @copyright GNU Public License
 
@@ -34,7 +34,7 @@ from scipy import pi;
 class Test(unittest.TestCase):
     def testCreate(self):
         network = sync_network(10, 1);
-        assert network.num_osc == 10;
+        assert len(network) == 10;
     
     
     def testCreationDeletionByCore(self):

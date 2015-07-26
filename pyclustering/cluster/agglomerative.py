@@ -4,8 +4,7 @@
 @details Implementation based on book:
          - K.Anil, J.C.Dubes, R.C.Dubes. Algorithms for Clustering Data. 1988.
 
-@authors Andrei Novikov (spb.andr@yandex.ru)
-@version 1.0
+@authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2015
 @copyright GNU Public License
 
@@ -26,39 +25,27 @@
 
 """
 
-from pyclustering.support import euclidean_distance_sqrt;
+from enum import IntEnum;
+
+from pyclustering.utils import euclidean_distance_sqrt;
 
 
-class type_link:
+class type_link(IntEnum):
     """!
     @brief Enumerator of types of link between clusters.
     
     """
-    
-    """!
-    @brief Nearest objects in clusters is considered as a link.
-    
-    """
+
+    ## Nearest objects in clusters is considered as a link.
     SINGLE_LINK = 0;
     
-    
-    """!
-    @brief Farthest objects in clusters is considered as a link.
-    
-    """
+    ## Farthest objects in clusters is considered as a link.
     COMPLETE_LINK = 1;
     
-    
-    """!
-    @brief Average distance between objects in clusters is considered as a link.
-    
-    """
+    ## Average distance between objects in clusters is considered as a link.
     AVERAGE_LINK = 2;
     
-    """!
-    @brief Distance between centers of clusters is considered as a link.
-    
-    """
+    ## Distance between centers of clusters is considered as a link.
     CENTROID_LINK = 3;
 
 

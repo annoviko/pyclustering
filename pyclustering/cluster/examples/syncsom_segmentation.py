@@ -2,7 +2,7 @@
 
 @brief Examples of usage and demonstration of abilities of SYNC-SOM algorithm in image segmentation.
 
-@authors Andrei Novikov (spb.andr@yandex.ru)
+@authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2015
 @copyright GNU Public License
 
@@ -25,8 +25,8 @@
 
 from PIL import Image;
 
-from pyclustering.support import draw_image_mask_segments, read_image, draw_dynamics;
-from pyclustering.support import timedcall;
+from pyclustering.utils import draw_image_mask_segments, read_image, draw_dynamics;
+from pyclustering.utils import timedcall;
 
 from pyclustering.samples.definitions import IMAGE_SIMPLE_SAMPLES;
 

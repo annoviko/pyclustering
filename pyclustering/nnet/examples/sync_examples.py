@@ -1,8 +1,8 @@
 """!
 
-@brief Examples of usage and demonstration of abilities of Oscillatory Neural  Network based on Kuramoto model.
+@brief Examples of usage and demonstration of abilities of Oscillatory Neural Network based on Kuramoto model.
 
-@authors Andrei Novikov (spb.andr@yandex.ru)
+@authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2015
 @copyright GNU Public License
 
@@ -23,7 +23,6 @@
 
 """
 
-from pyclustering.support import draw_dynamics;
 
 from pyclustering.nnet import solve_type, conn_type;
 from pyclustering.nnet.sync import sync_network, sync_visualizer;
@@ -37,6 +36,8 @@ def template_dynamic_sync(num_osc, k = 1, sim_arg = None, conn = conn_type.ALL_T
         sync_output_dynamic = network.simulate_dynamic(collect_dynamic = collect_dyn, solution = type_solution);
     
     sync_visualizer.show_output_dynamic(sync_output_dynamic);
+    sync_visualizer.animate_output_dynamic(sync_output_dynamic);
+    sync_visualizer.animate_correlation_matrix(sync_output_dynamic);
     return network;
     
 

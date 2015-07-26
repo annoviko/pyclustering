@@ -2,7 +2,7 @@
 
 @brief Unit-tests for Hierarchical Sync (HSyncNet) algorithm.
 
-@authors Andrei Novikov (spb.andr@yandex.ru)
+@authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2015
 @copyright GNU Public License
 
@@ -27,7 +27,7 @@ import unittest;
 
 from pyclustering.nnet import *;
 
-from pyclustering.support import read_sample;
+from pyclustering.utils import read_sample;
 
 from pyclustering.cluster.hsyncnet import hsyncnet;
 
@@ -69,19 +69,7 @@ class Test(unittest.TestCase):
         self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, [5, 5], solve_type.FAST, True);
          
     def testClusteringOneAllocationSampleSimple1ByCore(self):
-        self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, [10], solve_type.FAST, True);
-         
-    def testClusteringSampleSimple2(self):
-        self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 3, [5, 8, 10], solve_type.FAST, False);     
-     
-    def testClusteringSolverRK4SampleSimple1(self):
-        self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, [5, 5], solve_type.RK4, False);
-         
-    def testClusteringSolverRK4SampleSimple1ByCore(self):
-        self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, [5, 5], solve_type.RK4, True);
-         
-    def testClusteringSolverRKF45SampleSimple1ByCore(self):
-        self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, [5, 5], solve_type.RKF45, True);        
+        self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, [10], solve_type.FAST, True);     
         
         
 if __name__ == "__main__":

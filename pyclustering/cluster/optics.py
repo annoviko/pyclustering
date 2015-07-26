@@ -1,11 +1,10 @@
 """!
 
-@brief Cluster analysis algorithm: OPTICS
+@brief Cluster analysis algorithm: OPTICS (Ordering Points To Identify Clustering Structure)
 @details Based on article description:
          - M.Ankerst, M.Breunig, H.Kriegel, J.Sander. OPTICS: Ordering Points To Identify the Clustering Structure. 1999.
 
-@authors Andrei Novikov (spb.andr@yandex.ru)
-@version 1.0
+@authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2015
 @copyright GNU Public License
 
@@ -26,7 +25,7 @@
 
 """
 
-from pyclustering.support import euclidean_distance;
+from pyclustering.utils import euclidean_distance;
 
 
 class optics_descriptor:
@@ -35,17 +34,23 @@ class optics_descriptor:
     
     """
     
+    ## Reachability distance - the smallest distance to be reachable by core object.
     reachability_distance = None;
+    
+    ## Core distance - the smallest distance to reach specified number of neighbors that is not greater then connectivity radius.
     core_distance = None;
     
+    ## True is object has been already traversed.
     processed = None;
+    
+    ## Index of object from the input data.
     index_object = None;
     
     def __init__(self, index, core_distance = None, reachability_distance = None):
         """!
-        @brief Constructor of object description.
+        @brief Constructor of object description in optics terms.
         
-        @param[in] index (uint): Index of object in data set.
+        @param[in] index (uint): Index of the object in the data set.
         @param[in] core_distance (double): Core distance that is minimum distance to specified number of neighbors.
         @param[in] reachability_distance (double): Reachability distance to this object.
         
@@ -56,12 +61,19 @@ class optics_descriptor:
         self.processed = False;
         
     def __repr__(self):
+        """!
+        @brief Returns string representation of the optics descriptor.
+        
+        """
+        
         return '(%s, [c: %s, r: %s])' % (self.index_object, self.core_distance, self.reachability_distance);               
 
 
 class optics:
     """!
-    @brief Class represents clustering algorithm OPTICS.
+    @brief Class represents clustering algorithm OPTICS (Ordering Points To Identify Clustering Structure).
+    @details OPTICS is a density-based algorithm. Purpose of the algorithm is to provide explicit clusters, but create clustering-ordering representation of the input data. 
+             Clustering-ordering information contains information about internal structures of data set in terms of density. 
 
     Example:
     @code
@@ -105,9 +117,9 @@ class optics:
         """!
         @brief Constructor of clustering algorithm OPTICS.
         
-        @param[in] sample (list): Input data that is presented as list of points (objects), each point should be represented by list or tuple.
-        @param[in] eps (double): Connectivity radius between points, points may be connected if distance between them less then the radius.
-        @param[in] minpts (uint): Minimum number of shared neighbors that is required for establish links between points.
+        @param[in] sample (list): Input data that is presented as a list of points (objects), where each point is represented by list or tuple.
+        @param[in] eps (double): Connectivity radius between points, points may be connected if distance between them less than the radius.
+        @param[in] minpts (uint): Minimum number of shared neighbors that is required for establishing links between points.
         
         """
         
@@ -141,7 +153,7 @@ class optics:
     
     def get_clusters(self):
         """!
-        @brief Returns list of allocated clusters, each cluster contains indexes of objects in list of data.
+        @brief Returns list of allocated clusters, where each cluster contains indexes of objects and each cluster is represented by list.
         
         @return (list) List of allocated clusters.
         
@@ -171,7 +183,8 @@ class optics:
     
     def get_cluster_ordering(self):
         """!
-        @brief Returns clustering ordering that uses reachability distances.
+        @brief Returns clustering ordering information about the input data set.
+        @details Clustering ordering of data-set contains the information about the internal clustering structure in line with connectivity radius.
         
         @return (list) List of reachability distances (clustering ordering).
         
@@ -181,7 +194,14 @@ class optics:
         
         """
         
-        ordering = [ optics_object.reachability_distance for optics_object in self.__optics_objects if optics_object.reachability_distance is not None ];
+        ordering = [];
+        
+        for cluster in self.__clusters:
+            for index_object in cluster:
+                optics_object = self.__optics_objects[index_object];
+                if (optics_object.reachability_distance is not None):
+                    ordering.append(optics_object.reachability_distance);
+                    
         return ordering;
     
     

@@ -5,7 +5,7 @@ Data Structure: KD-Tree
 Based on book description:
  - M.Samet. The Design And Analysis Of Spatial Data Structures. 1994.
 
-Copyright (C) 2015    Andrei Novikov (spb.andr@yandex.ru)
+Copyright (C) 2015    Andrei Novikov (pyclustering@yandex.ru)
 
 pyclustering is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
