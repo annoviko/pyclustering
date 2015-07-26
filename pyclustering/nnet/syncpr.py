@@ -38,33 +38,42 @@ import numpy;
 
 
 class syncpr_dynamic(sync_dynamic):
-    _energy = None;
+    """!
+    @brief Represents output dynamic of syncpr (Sync for Pattern Recognition).
     
-    @property
-    def energy(self):
-        return self._energy;
+    """
     
-    def __init__(self, phase, energy, time):
-        self._energy = energy;
+    def __init__(self, phase, time):
+        """!
+        @brief Constructor of syncpr dynamic.
         
+        @param[in] phase (list): Dynamic of oscillators on each step of simulation. If ccore pointer is specified than it can be ignored.
+        @param[in] time (list): Simulation time.
+        
+        """     
         super().__init__(phase, time, None);
 
 
 class syncpr_visualizer(sync_visualizer):
-    @staticmethod
-    def show_energy(syncpr_output_dynamic):
-        if (syncpr_output_dynamic.energy is None):
-            return;
-        
-        draw_dynamics(syncpr_output_dynamic.time, syncpr_output_dynamic.energy, x_title = "t", y_title = "L");
+    """!
+    @brief Visualizer of output dynamic of syncpr network (Sync for Pattern Recognition).
     
+    """
     
     @staticmethod
     def show_pattern(syncpr_output_dynamic, image_height, image_width):
+        """!
+        @brief Displays evolution of phase oscillators as set of patterns where the last one means final result of recognition.
+        
+        @param[in] syncpr_output_dynamic (syncpr_dynamic): Output dynamic of a syncpr network.
+        @param[in] image_height (uint): Height of the pattern (image_height * image_width should be equal to number of oscillators).
+        @param[in] image_width (uint): Width of the pattern.
+        
+        """
         number_pictures = len(syncpr_output_dynamic);
         iteration_math_step = 1.0;
         if (number_pictures > 50):
-            iteration_math_step = math.ceil(number_pictures / 50.0);
+            iteration_math_step = number_pictures / 50.0;
             number_pictures = 50;
             
         image_size = image_height * image_width;
@@ -80,16 +89,6 @@ class syncpr_visualizer(sync_visualizer):
         
         (fig, axarr) = plt.subplots(number_rows, number_cols);
         plt.setp([ax for ax in axarr], visible = False);
-        
-        axarr[real_index].xaxis.set_ticklabels([]);
-        axarr[real_index].yaxis.set_ticklabels([]);
-        axarr[real_index].xaxis.set_ticks_position('none');
-        axarr[real_index].yaxis.set_ticks_position('none');
-                
-        if (double_indexer is True):
-            real_index = 0, 1;
-        else:
-            real_index += 1;
         
         iteration_display = 0.0;
         for iteration in range(len(syncpr_output_dynamic)):
@@ -114,7 +113,6 @@ class syncpr_visualizer(sync_visualizer):
                 
                 axarr[real_index].xaxis.set_ticklabels([]);
                 axarr[real_index].yaxis.set_ticklabels([]);
-                    
                 axarr[real_index].xaxis.set_ticks_position('none');
                 axarr[real_index].yaxis.set_ticks_position('none');
                 
@@ -129,11 +127,44 @@ class syncpr_visualizer(sync_visualizer):
 
 
 class syncpr(sync_network):
+    """!
+    @brief Model of phase oscillatory network for pattern recognition that is based on the Kuramoto model.
+    @details The model uses second-order and third-order modes of the Fourier components.
+    
+    Example:
+    @code
+    # Network size should be equal to size of pattern for learning.
+    net = syncpr(size_network, 0.3, 0.3);
+    
+    # Train network using list of patterns (input images).
+    net.train(image_samples);
+    
+    # Recognize image using 10 steps during 10 seconds of simulation.
+    sync_output_dynamic = net.simulate(10, 10, pattern, solve_type.RK4, True);
+    
+    # Display output dynamic.
+    syncpr_visualizer.show_output_dynamic(sync_output_dynamic);
+    
+    # Display evolution of recognition of the pattern.
+    syncpr_visualizer.show_pattern(sync_output_dynamic, image_height, image_width);
+    
+    @endcode
+    
+    """
+    
     _increase_strength1 = 0.0;
     _increase_strength2 = 0.0;
     _coupling = None;
     
     def __init__(self, num_osc, increase_strength1, increase_strength2):
+        """!
+        @brief Constructor of oscillatory network for pattern recognition based on Kuramoto model.
+        
+        @param[in] num_osc (uint): Number of oscillators in the network.
+        @param[in] increase_strength1 (double): Parameter for increasing strength of the second term of the Fourier component.
+        @param[in] increase_strength2 (double): Parameter for increasing strength of the third term of the Fourier component.
+        
+        """
         self._increase_strength1 = increase_strength1;
         self._increase_strength2 = increase_strength2;
         self._coupling = [ [0.0 for i in range(num_osc)] for j in range(num_osc) ];
@@ -142,6 +173,13 @@ class syncpr(sync_network):
         
         
     def train(self, samples):
+        """!
+        @brief Trains syncpr network using Hebbian rule for adjusting strength of connections between oscillators during training.
+        
+        @param[in] samples (list): list of patterns where each pattern is represented by list of features distributed in [-1, 1].
+        
+        """
+        
         length = float(len(self));
         
         for i in range(0, len(self), 1):
@@ -164,6 +202,23 @@ class syncpr(sync_network):
     
     
     def simulate(self, steps, time, pattern, solution = solve_type.FAST, collect_dynamic = True):
+        """!
+        @brief Performs static simulation of syncpr oscillatory network.
+        
+        @param[in] steps (uint): Number steps of simulations during simulation.
+        @param[in] time (double): Time of simulation.
+        @param[in] pattern (list): Pattern for recognition represented by list of features destributed in [-1, 1].
+        @param[in] solution (solve_type): Type of solver that should be used for simulation.
+        @param[in] collect_dynamic (bool): If True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics.
+        
+        @return (list) Dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,
+                otherwise returns only last values (last step of simulation) of dynamic.
+        
+        @see simulate_dynamic()
+        @see simulate_static()
+        
+        """
+        
         for i in range(0, len(pattern), 1):
             if (pattern[i] > 0.0):
                 self._phases[i] = 0.0;
@@ -173,64 +228,18 @@ class syncpr(sync_network):
         return self.simulate_static(steps, time, solution, collect_dynamic);
     
     
-    def simulate_static(self, steps, time, solution = solve_type.FAST, collect_dynamic = False):
-        dyn_phase = None;
-        dyn_time = None;
-        dyn_energy = None;
-        
-        if (collect_dynamic == True):
-            dyn_phase = [];
-            dyn_time = [];
-            dyn_energy = [];
-            
-            dyn_phase.append(self._phases);
-            dyn_time.append(0);
-            dyn_energy.append( self.__calculate_energy(self._phases) );
-        
-        step = time / steps;
-        int_step = step / 10.0;
-        
-        for t in numpy.arange(step, time + step, step):
-            # update states of oscillators
-            self._phases = self._calculate_phases(solution, t, step, int_step);
-            
-            # update states of oscillators
-            if (collect_dynamic == True):
-                dyn_phase.append(self._phases);
-                dyn_time.append(t);
-                # dyn_energy.append( self.__calculate_energy(self._phases) );
-            else:
-                dyn_phase = [ self._phases ];
-                dyn_time = t;
-                # dyn_energy = [ self.__calculate_energy(self._phases) ];
-        
-        output_sync_dynamic = syncpr_dynamic(dyn_phase, None, dyn_time);
-        return output_sync_dynamic;     
-    
-    
-    def __calculate_energy(self, phases):
-        energy = [0.0] * len(self);
-        length = float(len(self));
-        
-        for i in range(len(self)):
-            energy_oscillator = 0.0;
-            term_oscillator = 0.0;
-            
-            for j in range(len(self)):
-                phase_delta = phases[j] - phases[i];
-                
-                term1 = 3.0 * self._increase_strength1 * math.cos(2.0 * phase_delta);
-                term2 = 2.0 * self._increase_strength2 * math.cos(3.0 * phase_delta);
-                
-                term_oscillator += (term1 - term2);
-                energy_oscillator += self._coupling[i][j] * math.cos(phase_delta);
-            
-            energy[i] = -0.5 * energy_oscillator - ( 0.08333 / length ) * term_oscillator;
-        
-        return energy;
-    
-    
     def _phase_kuramoto(self, teta, t, argv):
+        """!
+        @brief Returns result of phase calculation for specified oscillator in the network.
+        
+        @param[in] teta (double): Phase of the oscillator that is differentiated.
+        @param[in] t (double): Current time of simulation.
+        @param[in] argv (tuple): Index of the oscillator in the list.
+        
+        @return (double) New phase for specified oscillator (don't assign it here).
+        
+        """
+        
         index = argv;
         
         phase = 0.0;

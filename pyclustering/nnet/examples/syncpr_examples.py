@@ -50,33 +50,40 @@ def template_recognition_image(images):
                 
         samples += [ image_pattern ];
     
-    net = syncpr(len(samples[0]), 0.15, 0.15);
+    net = syncpr(len(samples[0]), 0.3, 0.3);
     net.train(samples);
     
     # Recognize the each learned pattern
     for i in range(len(samples)):
-        sync_output_dynamic = net.simulate(100, 20, samples[i], solve_type.FAST, True);
+        sync_output_dynamic = net.simulate(10, 10, samples[i], solve_type.RK4, True);
         syncpr_visualizer.show_output_dynamic(sync_output_dynamic);
         syncpr_visualizer.show_pattern(sync_output_dynamic, 10, 10);
         
-        # corrupt a little bit by noise the image
+        # corrupt a little bit by black and white pixels
         for k in range( math.floor(len(samples[i]) * 0.1) ):
             random.seed();
             random_pixel = math.floor(random.random() * len(samples[i]));
             samples[i][random_pixel] = 1.0;
+            
+            random_pixel = math.floor(random.random() * len(samples[i]));
+            samples[i][random_pixel] = -1.0;
         
-        sync_output_dynamic = net.simulate(100, 20, samples[i], solve_type.FAST, True);
+        sync_output_dynamic = net.simulate(10, 10, samples[i], solve_type.RK4, True);
+        syncpr_visualizer.show_output_dynamic(sync_output_dynamic);
         syncpr_visualizer.show_pattern(sync_output_dynamic, 10, 10);
             
         
 
 def small_image_recognition():
+    """!
+    @brief Trains network using letters 'M', 'I', 'N', 'D' and recognize each of them with and without noise.
+    
+    """
     images = [];
-    for i in range(0, 1, 1):
-        images += IMAGE_SYMBOL_SAMPLES.LIST_IMAGES_SYMBOL_M;
-        images += IMAGE_SYMBOL_SAMPLES.LIST_IMAGES_SYMBOL_I;
-#         images += IMAGE_SYMBOL_SAMPLES.LIST_IMAGES_SYMBOL_N;
-#         images += IMAGE_SYMBOL_SAMPLES.LIST_IMAGES_SYMBOL_D;
+    images += IMAGE_SYMBOL_SAMPLES.LIST_IMAGES_SYMBOL_M;
+    images += IMAGE_SYMBOL_SAMPLES.LIST_IMAGES_SYMBOL_I;
+    images += IMAGE_SYMBOL_SAMPLES.LIST_IMAGES_SYMBOL_N;
+    images += IMAGE_SYMBOL_SAMPLES.LIST_IMAGES_SYMBOL_D;
     
     template_recognition_image(images);
     

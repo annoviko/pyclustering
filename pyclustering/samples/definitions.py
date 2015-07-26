@@ -126,11 +126,33 @@ class IMAGE_SYMBOL_SAMPLES:
             
         return list_image_samples;      
 
-    LIST_IMAGES_SYMBOL_I            = GET_LIST_IMAGE_SAMPLES.__func__('I');
+    LIST_IMAGES_SYMBOL_A            = GET_LIST_IMAGE_SAMPLES.__func__('A');
+    LIST_IMAGES_SYMBOL_B            = GET_LIST_IMAGE_SAMPLES.__func__('B');
+    LIST_IMAGES_SYMBOL_C            = GET_LIST_IMAGE_SAMPLES.__func__('C');
     LIST_IMAGES_SYMBOL_D            = GET_LIST_IMAGE_SAMPLES.__func__('D');
+    LIST_IMAGES_SYMBOL_E            = GET_LIST_IMAGE_SAMPLES.__func__('E');
+    LIST_IMAGES_SYMBOL_F            = GET_LIST_IMAGE_SAMPLES.__func__('F');
+    LIST_IMAGES_SYMBOL_G            = GET_LIST_IMAGE_SAMPLES.__func__('G');
+    LIST_IMAGES_SYMBOL_H            = GET_LIST_IMAGE_SAMPLES.__func__('H');
+    LIST_IMAGES_SYMBOL_I            = GET_LIST_IMAGE_SAMPLES.__func__('I');
+    LIST_IMAGES_SYMBOL_J            = GET_LIST_IMAGE_SAMPLES.__func__('J');
+    LIST_IMAGES_SYMBOL_K            = GET_LIST_IMAGE_SAMPLES.__func__('K');
+    LIST_IMAGES_SYMBOL_L            = GET_LIST_IMAGE_SAMPLES.__func__('L');
     LIST_IMAGES_SYMBOL_M            = GET_LIST_IMAGE_SAMPLES.__func__('M');
     LIST_IMAGES_SYMBOL_N            = GET_LIST_IMAGE_SAMPLES.__func__('N');
-
+    LIST_IMAGES_SYMBOL_O            = GET_LIST_IMAGE_SAMPLES.__func__('O');
+    LIST_IMAGES_SYMBOL_P            = GET_LIST_IMAGE_SAMPLES.__func__('P');
+    LIST_IMAGES_SYMBOL_Q            = GET_LIST_IMAGE_SAMPLES.__func__('Q');
+    LIST_IMAGES_SYMBOL_R            = GET_LIST_IMAGE_SAMPLES.__func__('R');
+    LIST_IMAGES_SYMBOL_S            = GET_LIST_IMAGE_SAMPLES.__func__('S');
+    LIST_IMAGES_SYMBOL_T            = GET_LIST_IMAGE_SAMPLES.__func__('T');
+    LIST_IMAGES_SYMBOL_U            = GET_LIST_IMAGE_SAMPLES.__func__('U');
+    LIST_IMAGES_SYMBOL_V            = GET_LIST_IMAGE_SAMPLES.__func__('V');
+    LIST_IMAGES_SYMBOL_W            = GET_LIST_IMAGE_SAMPLES.__func__('W');
+    LIST_IMAGES_SYMBOL_X            = GET_LIST_IMAGE_SAMPLES.__func__('X');
+    LIST_IMAGES_SYMBOL_Y            = GET_LIST_IMAGE_SAMPLES.__func__('Y');
+    LIST_IMAGES_SYMBOL_Z            = GET_LIST_IMAGE_SAMPLES.__func__('Z');
+    
     
 class IMAGE_DIGIT_SAMPLES:    
     @staticmethod
