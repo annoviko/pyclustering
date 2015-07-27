@@ -97,8 +97,10 @@ class syncpr_visualizer(sync_visualizer):
             double_indexer = False;
         
         (fig, axarr) = plt.subplots(number_rows, number_cols);
-        plt.setp([ax for ax in axarr], visible = False);
         
+        if (number_pictures > 1):
+            plt.setp([ax for ax in axarr], visible = False);
+            
         iteration_display = 0.0;
         for iteration in range(len(syncpr_output_dynamic)):
             if (iteration >= iteration_display):
@@ -117,13 +119,17 @@ class syncpr_visualizer(sync_visualizer):
                 
                 image_cluster = Image.fromarray(stage, 'RGB');
                 
-                axarr[real_index].imshow(image_cluster, interpolation = 'none');
-                plt.setp(axarr[real_index], visible = True);
+                ax_handle = axarr;
+                if (number_pictures > 1):
+                    ax_handle = axarr[real_index];
+                    
+                ax_handle.imshow(image_cluster, interpolation = 'none');
+                plt.setp(ax_handle, visible = True);
                 
-                axarr[real_index].xaxis.set_ticklabels([]);
-                axarr[real_index].yaxis.set_ticklabels([]);
-                axarr[real_index].xaxis.set_ticks_position('none');
-                axarr[real_index].yaxis.set_ticks_position('none');
+                ax_handle.xaxis.set_ticklabels([]);
+                ax_handle.yaxis.set_ticklabels([]);
+                ax_handle.xaxis.set_ticks_position('none');
+                ax_handle.yaxis.set_ticks_position('none');
                 
                 if (double_indexer is True):
                     real_index = real_index[0], real_index[1] + 1;
@@ -185,7 +191,7 @@ class syncpr(sync_network):
         """!
         @brief Trains syncpr network using Hebbian rule for adjusting strength of connections between oscillators during training.
         
-        @param[in] samples (list): list of patterns where each pattern is represented by list of features distributed in [-1, 1].
+        @param[in] samples (list): list of patterns where each pattern is represented by list of features that are equal to [-1; 1].
         
         """
         
@@ -196,13 +202,10 @@ class syncpr(sync_network):
                 
                 # go through via all patterns
                 for p in range(len(samples)):
-                    value1 = 1.0;
-                    if (samples[p][i] > 0.0):
-                        value1 = -1.0;
+                    self.__validate_pattern(samples[p]);
                     
-                    value2 = 1.0;
-                    if (samples[p][j] > 0.0):
-                        value2 = -1.0;
+                    value1 = samples[p][i];
+                    value2 = samples[p][j];
                     
                     self._coupling[i][j] += value1 * value2;
                 
@@ -216,7 +219,7 @@ class syncpr(sync_network):
         
         @param[in] steps (uint): Number steps of simulations during simulation.
         @param[in] time (double): Time of simulation.
-        @param[in] pattern (list): Pattern for recognition represented by list of features destributed in [-1, 1].
+        @param[in] pattern (list): Pattern for recognition represented by list of features that are equal to [-1; 1].
         @param[in] solution (solve_type): Type of solver that should be used for simulation.
         @param[in] collect_dynamic (bool): If True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics.
         
@@ -227,6 +230,8 @@ class syncpr(sync_network):
         @see simulate_static()
         
         """
+        
+        self.__validate_pattern(pattern);
         
         for i in range(0, len(pattern), 1):
             if (pattern[i] > 0.0):
@@ -266,3 +271,19 @@ class syncpr(sync_network):
                 term += (term1 - term2);
                 
         return ( phase + (1.0 / len(self)) * term );
+    
+    
+    def __validate_pattern(self, pattern):
+        """!
+        @brief Validates pattern.
+        @details Throws exception if length of pattern is not equal to size of the network or if it consists feature with value that are not equal to [-1; 1]
+        
+        @param[in] pattern (list): Pattern for recognition represented by list of features that are equal to [-1; 1].
+        
+        """
+        if (len(pattern) != len(self)):
+            raise NameError('syncpr: length of the pattern (' + len(pattern) + ') should be equal to size of the network');
+        
+        for feature in pattern:
+            if ( (feature != -1.0) and (feature != 1.0) ):
+                raise NameError('syncpr: patten feature (' + feature + ') should be distributed in [-1; 1]');

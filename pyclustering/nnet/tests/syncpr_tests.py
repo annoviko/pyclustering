@@ -25,8 +25,11 @@
 
 import unittest;
 
+import matplotlib;
+matplotlib.use('agg');
+
 from pyclustering.nnet import *;
-from pyclustering.nnet.syncpr import syncpr, syncpr_dynamic;
+from pyclustering.nnet.syncpr import syncpr, syncpr_dynamic, syncpr_visualizer;
 
 class Test(unittest.TestCase):
     def testCreateTenOscillatorsNetwork(self):
@@ -37,13 +40,21 @@ class Test(unittest.TestCase):
     def testCreateHundredOscillatorsNetwork(self):
         net = syncpr(100, 0.1, 0.1);
         assert len(net) == 100;
-        
-        
-    def testOutputDynamic(self):
+    
+    
+    def templateOutputDynamic(self, solver):    
         net = syncpr(5, 0.1, 0.1);
-        output_dynamic = net.simulate(10, 10, [-1, 1, -1, 1, -1], solve_type.RK4, True);
+        output_dynamic = net.simulate(10, 10, [-1, 1, -1, 1, -1], solver, True);
         
-        assert len(output_dynamic) == 10;
+        assert len(output_dynamic) == 11; # 10 steps without initial values.
+            
+    
+    def testOutputDynamicFastSolver(self):
+        self.templateOutputDynamic(solve_type.FAST);
+
+
+    def testOutputDynamicRK4Solver(self):
+        self.templateOutputDynamic(solve_type.RK4);
         
         
     def testTrainNetworkAndRecognizePattern(self):
@@ -69,54 +80,68 @@ class Test(unittest.TestCase):
             
             assert (ensembles[0] == [0, 1, 2, 3, 4]) or (ensembles[0] == [5, 6, 7, 8, 9]);
             assert (ensembles[1] == [0, 1, 2, 3, 4]) or (ensembles[1] == [5, 6, 7, 8, 9]);
+        
     
-    
-    def testIncorrectPatternValues(self):
+    def templateIncorrectPatternForTraining(self, patterns):
         net = syncpr(10, 0.1, 0.1);
         
+        self.assertRaises(Exception, net.train, patterns);        
+        
+
+    def testIncorrectPatternValues(self):
         patterns =  [];
         patterns += [ [2, 1, 1, 1, 1, -1, -1, -1, -1, -1] ];
         patterns += [ [-1, -2, -1, -1, -1, 1, 1, 1, 1, 1] ];
         
-        self.assertRaises(Exception, net.train, patterns);
-        
+        self.templateIncorrectPatternForTraining(patterns);
+
         
     def testIncorrectSmallPatternSize(self):
-        net = syncpr(10, 0.1, 0.1);
+        patterns = [ [1, 1, 1, 1, 1, -1] ];
         
-        patterns =  [];
-        patterns += [ [1, 1, 1, 1, 1, -1] ];
-        
-        self.assertRaises(Exception, net.train, patterns);
+        self.templateIncorrectPatternForTraining(patterns);
         
         
     def testIncorrectLargePatternSize(self):
+        patterns = [ [1, 1, 1, 1, 1, -1, -1, -1, -1, -1, 1] ];
+        
+        self.templateIncorrectPatternForTraining(patterns);
+        
+
+    def templateIncorrectPatternForSimulation(self, pattern):
         net = syncpr(10, 0.1, 0.1);
         
-        patterns =  [];
-        patterns += [ [1, 1, 1, 1, 1, -1, -1, -1, -1, -1, 1] ];
-        
-        self.assertRaises(Exception, net.train, patterns);
-        
+        self.assertRaises(Exception, net.simulate, 10, 10, pattern);
+
         
     def testIncorrectSmallPatternSizeSimulation(self):
-        net = syncpr(10, 0.1, 0.1);
+        pattern = [1, 1, 1, 1, 1, -1];
         
-        patterns =  [];
-        patterns += [ [1, 1, 1, 1, 1, -1] ];
-        
-        self.assertRaises(Exception, net.simulate, 10, 10, patterns[0]);
+        self.templateIncorrectPatternForSimulation(pattern);
     
     
     def testIncorrectLargePatternSizeSimulation(self):
-        net = syncpr(10, 0.1, 0.1);
+        pattern = [1, 1, 1, 1, 1, -1, -1, -1, -1, -1, 1];
         
-        patterns =  [];
-        patterns += [ [1, 1, 1, 1, 1, -1, -1, -1, -1, -1, 1] ];
-        
-        self.assertRaises(Exception, net.simulate, 10, 10, patterns[0]);
+        self.templateIncorrectPatternForSimulation(pattern);
     
     
+    def templatePatternVisualizer(self, collect_dynamic):
+        net = syncpr(5, 0.1, 0.1);
+        output_dynamic = net.simulate(10, 10, [-1, 1, -1, 1, -1], solve_type.RK4, collect_dynamic);
+        
+        # test that we don't have any exception during vizualization.
+        syncpr_visualizer.show_pattern(output_dynamic, 5, 2);
+            
+    
+    def testPatternVisualizerCollectDynamic(self):
+        self.templatePatternVisualizer(True);
+    
+    
+    def testPatternVisualizerWithoutCollectDynamic(self):
+        self.templatePatternVisualizer(False);
+        
+            
 if __name__ == "__main__":
     unittest.main();
 
