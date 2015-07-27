@@ -34,7 +34,7 @@ from pyclustering.nnet.syncpr import syncpr, syncpr_visualizer;
 import random;
 import math;
 
-def template_recognition_image(images):
+def template_recognition_image(images, steps, time):
     samples = [];
     
     for file_name in images:
@@ -55,7 +55,7 @@ def template_recognition_image(images):
     
     # Recognize the each learned pattern
     for i in range(len(samples)):
-        sync_output_dynamic = net.simulate(10, 10, samples[i], solve_type.RK4, True);
+        sync_output_dynamic = net.simulate(steps, time, samples[i], solve_type.RK4, True);
         syncpr_visualizer.show_output_dynamic(sync_output_dynamic);
         syncpr_visualizer.show_pattern(sync_output_dynamic, 10, 10);
         
@@ -68,13 +68,13 @@ def template_recognition_image(images):
             random_pixel = math.floor(random.random() * len(samples[i]));
             samples[i][random_pixel] = -1.0;
         
-        sync_output_dynamic = net.simulate(10, 10, samples[i], solve_type.RK4, True);
+        sync_output_dynamic = net.simulate(steps, time, samples[i], solve_type.RK4, True);
         syncpr_visualizer.show_output_dynamic(sync_output_dynamic);
         syncpr_visualizer.show_pattern(sync_output_dynamic, 10, 10);
             
         
 
-def small_image_recognition():
+def small_mind_image_recognition():
     """!
     @brief Trains network using letters 'M', 'I', 'N', 'D' and recognize each of them with and without noise.
     
@@ -85,7 +85,21 @@ def small_image_recognition():
     images += IMAGE_SYMBOL_SAMPLES.LIST_IMAGES_SYMBOL_N;
     images += IMAGE_SYMBOL_SAMPLES.LIST_IMAGES_SYMBOL_D;
     
-    template_recognition_image(images);
+    template_recognition_image(images, 10, 10);
     
+    
+def small_abcd_image_recognition():
+    """!
+    @brief Trains network using letters 'A', 'B', 'C', 'D' and recognize each of them with and without noise.
+    
+    """
+    images = [];
+    images += IMAGE_SYMBOL_SAMPLES.LIST_IMAGES_SYMBOL_A;
+    images += IMAGE_SYMBOL_SAMPLES.LIST_IMAGES_SYMBOL_B;
+    images += IMAGE_SYMBOL_SAMPLES.LIST_IMAGES_SYMBOL_C;
+    images += IMAGE_SYMBOL_SAMPLES.LIST_IMAGES_SYMBOL_D;
+    
+    template_recognition_image(images, 25, 25);
 
-small_image_recognition();
+# small_mind_image_recognition();
+small_abcd_image_recognition();

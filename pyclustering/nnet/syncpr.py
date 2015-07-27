@@ -52,6 +52,15 @@ class syncpr_dynamic(sync_dynamic):
         
         """     
         super().__init__(phase, time, None);
+        
+        
+    def __len__(self):
+        """!
+        @brief (uint) Returns number of simulation steps that are stored in dynamic.
+        
+        """
+        
+        return len(self._dynamic);        
 
 
 class syncpr_visualizer(sync_visualizer):
