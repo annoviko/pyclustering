@@ -1,0 +1,12 @@
+Change notes for 0.6.dev0 (start Jul 18, 2015)
+
+General changes (pyclustering):
+- Implemented phase oscillatory network syncpr (pyclustering.nnet.syncpr).
+  See: https://github.com/annoviko/pyclustering/issues/208
+  
+- Optimized simulation algorithm for sync oscillatory network (pyclustering.nnet.sync) when collecting results are not requested.
+  See: https://github.com/annoviko/pyclustering/issues/233
+ 
+General changes (ccore): 
+
+Corrected bugs:
