@@ -538,13 +538,10 @@ class sync_network(network):
             ccore_instance_dynamic = wrapper.sync_simulate_static(self._ccore_network_pointer, steps, time, solution, collect_dynamic);
             return sync_dynamic(None, None, ccore_instance_dynamic);
         
-        dyn_phase = None;
-        dyn_time = None;
+        dyn_phase = [];
+        dyn_time = [];
         
         if (collect_dynamic == True):
-            dyn_phase = [];
-            dyn_time = [];
-            
             dyn_phase.append(self._phases);
             dyn_time.append(0);
         

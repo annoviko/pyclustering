@@ -61,6 +61,7 @@ Oscillatory networks and neural networks (module pyclustering.nnet):
 - PCNN (Pulse-Coupled Neural Network) [Python, C++]
 - SOM (Self-Organized Map) [Python, C++]
 - Sync (Oscillatory network based on Kuramoto model) [Python, C++]
+- SyncPR (Oscillatory network for pattern recognition) [Python]
 
 Graph Coloring Algorithms (module pyclustering.gcolor):
 - DSatur [Python]
