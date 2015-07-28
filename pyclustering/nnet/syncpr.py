@@ -34,6 +34,7 @@ from PIL import Image;
 import matplotlib.pyplot as plt;
 
 import math;
+import cmath;
 import numpy;
 
 
@@ -213,9 +214,10 @@ class syncpr(sync_network):
                 self._coupling[j][i] = self._coupling[i][j];
     
     
-    def simulate(self, steps, time, pattern, solution = solve_type.FAST, collect_dynamic = True):
+    def simulate(self, steps, time, pattern, solution = solve_type.RK4, collect_dynamic = True):
         """!
         @brief Performs static simulation of syncpr oscillatory network.
+        @details In other words network performs pattern recognition during simulation.
         
         @param[in] steps (uint): Number steps of simulations during simulation.
         @param[in] time (double): Time of simulation.
@@ -230,6 +232,33 @@ class syncpr(sync_network):
         @see simulate_static()
         
         """
+                    
+        return self.simulate_static(steps, time, pattern, solution, collect_dynamic);
+    
+    
+    def simulate_dynamic(self, pattern, order = 0.998, solution = solve_type.FAST, collect_dynamic = False, step = 0.1, int_step = 0.01, threshold_changes = 0.0000001):
+        """!
+        @brief Performs dynamic simulation of the network until stop condition is not reached.
+        @details In other words network performs pattern recognition during simulation. 
+                 Stop condition is defined by input argument 'order' that represents memory order, but
+                 process of simulation can be stopped if convergance rate is low whose threshold is defined
+                 by the argument 'threshold_changes'.
+        
+        @param[in] pattern (list): Pattern for recognition represented by list of features that are equal to [-1; 1].
+        @param[in] order (double): Order of process synchronization, distributed 0..1.
+        @param[in] solution (solve_type): Type of solution.
+        @param[in] collect_dynamic (bool): If True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics.
+        @param[in] step (double): Time step of one iteration of simulation.
+        @param[in] int_step (double): Integration step, should be less than step.
+        @param[in] threshold_changes (double): Additional stop condition that helps prevent infinite simulation, defines limit of changes of oscillators between current and previous steps.
+        
+        @return (list) Dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,
+                otherwise returns only last values (last step of simulation) of dynamic.
+        
+        @see simulate()
+        @see simulate_static()
+        
+        """
         
         self.__validate_pattern(pattern);
         
@@ -238,9 +267,136 @@ class syncpr(sync_network):
                 self._phases[i] = 0.0;
             else:
                 self._phases[i] = math.pi / 2.0;
-                    
-        return self.simulate_static(steps, time, solution, collect_dynamic);
+        
+        # For statistics and integration
+        time_counter = 0;
+        
+        # Prevent infinite loop. It's possible when required state cannot be reached.
+        previous_order = 0;
+        current_order = self.__calculate_memory_order(pattern);
+        
+        # If requested input dynamics
+        dyn_phase = [];
+        dyn_time = [];
+        if (collect_dynamic == True):
+            dyn_phase.append(self._phases);
+            dyn_time.append(0);
+        
+        # Execute until sync state will be reached
+        while (current_order < order):                
+            # update states of oscillators
+            self._phases = self._calculate_phases(solution, time_counter, step, int_step);
+            
+            # update time
+            time_counter += step;
+            
+            # if requested input dynamic
+            if (collect_dynamic == True):
+                dyn_phase.append(self._phases);
+                dyn_time.append(time_counter);
+                
+            # update orders
+            previous_order = current_order;
+            current_order = self.__calculate_memory_order(pattern);
+            
+            # hang prevention
+            if (abs(current_order - previous_order) < threshold_changes):
+                break;
+        
+        if (collect_dynamic != True):
+            dyn_phase.append(self._phases);
+            dyn_time.append(time_counter);
+        
+        output_sync_dynamic = syncpr_dynamic(dyn_phase, dyn_time);
+        return output_sync_dynamic;
+
+
+    def simulate_static(self, steps, time, pattern, solution = solve_type.FAST, collect_dynamic = False):
+        """!
+        @brief Performs static simulation of syncpr oscillatory network.
+        @details In other words network performs pattern recognition during simulation.
+        
+        @param[in] steps (uint): Number steps of simulations during simulation.
+        @param[in] time (double): Time of simulation.
+        @param[in] pattern (list): Pattern for recognition represented by list of features that are equal to [-1; 1].
+        @param[in] solution (solve_type): Type of solution.
+        @param[in] collect_dynamic (bool): If True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics.
+        
+        @return (list) Dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,
+                otherwise returns only last values (last step of simulation) of dynamic.
+        
+        @see simulate()
+        @see simulate_dynamic()
+        
+        """
+        
+        self.__validate_pattern(pattern);
+        
+        for i in range(0, len(pattern), 1):
+            if (pattern[i] > 0.0):
+                self._phases[i] = 0.0;
+            else:
+                self._phases[i] = math.pi / 2.0;
+        
+        dyn_phase = [];
+        dyn_time = [];
+        
+        if (collect_dynamic == True):            
+            dyn_phase.append(self._phases);
+            dyn_time.append(0);
+        
+        step = time / steps;
+        int_step = step / 10.0;
+        
+        for t in numpy.arange(step, time + step, step):
+            # update states of oscillators
+            self._phases = self._calculate_phases(solution, t, step, int_step);
+            
+            # update states of oscillators
+            if (collect_dynamic == True):
+                dyn_phase.append(self._phases);
+                dyn_time.append(t);
+        
+        if (collect_dynamic != True):
+            dyn_phase.append(self._phases);
+            dyn_time.append(t);
+                
+        output_sync_dynamic = syncpr_dynamic(dyn_phase, dyn_time);
+        return output_sync_dynamic;
     
+    
+    def memory_order(self, pattern):
+        """!
+        @brief Calculates function of the memorized pattern.
+        @details Throws exception if length of pattern is not equal to size of the network or if it consists feature with value that are not equal to [-1; 1].
+        
+        @param[in] pattern (list): Pattern for recognition represented by list of features that are equal to [-1; 1].
+        
+        @return (double) Order of memory for the specified pattern.
+        
+        """
+        
+        self.__validate_pattern(pattern);
+        return self.__calculate_memory_order(pattern);
+
+    
+    def __calculate_memory_order(self, pattern):
+        """!
+        @brief Calculates function of the memorized pattern without any pattern validation.
+        
+        @param[in] pattern (list): Pattern for recognition represented by list of features that are equal to [-1; 1].
+        
+        @return (double) Order of memory for the specified pattern.
+                
+        """
+        
+        memory_order = 0.0;
+        for index in range(len(self)):
+            memory_order += pattern[index] * cmath.exp( 1j * self._phases[index] );
+        
+        memory_order /= len(self);
+        return abs(memory_order);
+        
     
     def _phase_kuramoto(self, teta, t, argv):
         """!
@@ -276,7 +432,7 @@ class syncpr(sync_network):
     def __validate_pattern(self, pattern):
         """!
         @brief Validates pattern.
-        @details Throws exception if length of pattern is not equal to size of the network or if it consists feature with value that are not equal to [-1; 1]
+        @details Throws exception if length of pattern is not equal to size of the network or if it consists feature with value that are not equal to [-1; 1].
         
         @param[in] pattern (list): Pattern for recognition represented by list of features that are equal to [-1; 1].
         

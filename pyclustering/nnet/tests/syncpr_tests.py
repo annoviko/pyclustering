@@ -56,7 +56,42 @@ class Test(unittest.TestCase):
     def testOutputDynamicRK4Solver(self):
         self.templateOutputDynamic(solve_type.RK4);
         
+    
+    def testOutputDinamicLengthSimulation(self):
+        net = syncpr(5, 0.1, 0.1);
+        output_dynamic = net.simulate(10, 10, [-1, 1, -1, 1, -1], solution = solve_type.FAST, collect_dynamic = True);
         
+        assert len(output_dynamic) == 11; # 10 steps without initial values.
+    
+    
+    def testOutputDynamicLengthStaticSimulation(self):
+        net = syncpr(5, 0.1, 0.1);
+        output_dynamic = net.simulate_static(10, 10, [-1, 1, -1, 1, -1], solution = solve_type.FAST, collect_dynamic = True);
+        
+        assert len(output_dynamic) == 11; # 10 steps without initial values.    
+
+
+    def testOutputDynamicLengthStaticSimulationWithouCollecting(self):
+        net = syncpr(5, 0.1, 0.1);
+        output_dynamic = net.simulate_static(10, 10, [-1, 1, -1, 1, -1], solution = solve_type.FAST, collect_dynamic = False);
+        
+        assert len(output_dynamic) == 1; # 10 steps without initial values.    
+    
+    
+    def testOutputDynamicLengthDynamicSimulation(self):
+        net = syncpr(5, 0.1, 0.1);
+        output_dynamic = net.simulate_dynamic([-1, 1, -1, 1, -1], solution = solve_type.FAST, collect_dynamic = True);
+        
+        assert len(output_dynamic) > 1; 
+
+
+    def testOutputDynamicLengthDynamicSimulationWithoutCollecting(self):
+        net = syncpr(5, 0.1, 0.1);
+        output_dynamic = net.simulate_dynamic([-1, 1, -1, 1, -1], solution = solve_type.FAST, collect_dynamic = False);
+        
+        assert len(output_dynamic) == 1; 
+
+    
     def testTrainNetworkAndRecognizePattern(self):
         net = syncpr(10, 0.1, 0.1);
         
@@ -141,7 +176,54 @@ class Test(unittest.TestCase):
     def testPatternVisualizerWithoutCollectDynamic(self):
         self.templatePatternVisualizer(False);
         
-            
+        
+    def testMemoryOrder(self):
+        net = syncpr(10, 0.1, 0.1);
+        
+        patterns =  [];
+        patterns += [ [1, 1, 1, 1, 1, -1, -1, -1, -1, -1] ];
+        patterns += [ [-1, -1, -1, -1, -1, 1, 1, 1, 1, 1] ];
+        
+        net.train(patterns);
+        assert net.memory_order(patterns[0]) < 0.8;
+        assert net.memory_order(patterns[1]) < 0.8;
+        
+        net.simulate(10, 10, patterns[0], solve_type.RK4);
+        memory_order = net.memory_order(patterns[0]);
+        assert (memory_order > 0.95) and (memory_order <= 1.0);
+
+        net.simulate(10, 10, patterns[1], solve_type.RK4);
+        assert (memory_order > 0.95) and (memory_order <= 1.0);               
+        
+        
+    def testStaticSimulation(self):
+        net = syncpr(10, 0.1, 0.1);
+        
+        patterns =  [];
+        patterns += [ [1, 1, 1, 1, 1, -1, -1, -1, -1, -1] ];
+        patterns += [ [-1, -1, -1, -1, -1, 1, 1, 1, 1, 1] ];
+        
+        net.train(patterns);
+        net.simulate_static(10, 10, patterns[0], solve_type.RK4);
+        memory_order = net.memory_order(patterns[0]);
+        
+        assert (memory_order > 0.95) and (memory_order <= 1.0);
+    
+    
+    def testDynamicSimulation(self):
+        net = syncpr(10, 0.1, 0.1);
+        
+        patterns =  [];
+        patterns += [ [1, 1, 1, 1, 1, -1, -1, -1, -1, -1] ];
+        patterns += [ [-1, -1, -1, -1, -1, 1, 1, 1, 1, 1] ];
+        
+        net.train(patterns);
+        net.simulate_dynamic(patterns[0], order = 0.998, solution = solve_type.RK4);
+        memory_order = net.memory_order(patterns[0]);
+        
+        assert (memory_order > 0.998) and (memory_order <= 1.0);
+                
+    
 if __name__ == "__main__":
     unittest.main();
 

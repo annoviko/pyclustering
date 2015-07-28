@@ -454,7 +454,7 @@ class sync_network(network):
         """!
         @brief Performs dynamic simulation of the network until stop condition is not reached. Stop condition is defined by input argument 'order'.
         
-        @param[in] order (double): Order of process synchronization, destributed 0..1.
+        @param[in] order (double): Order of process synchronization, distributed 0..1.
         @param[in] solution (solve_type): Type of solution.
         @param[in] collect_dynamic (bool): If True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics.
         @param[in] step (double): Time step of one iteration of simulation.
@@ -499,9 +499,6 @@ class sync_network(network):
             if (collect_dynamic == True):
                 dyn_phase.append(self._phases);
                 dyn_time.append(time_counter);
-            else:
-                dyn_phase = [ self._phases ];
-                dyn_time = time_counter;
                 
             # update orders
             previous_order = current_order;
@@ -511,6 +508,10 @@ class sync_network(network):
             if (abs(current_order - previous_order) < threshold_changes):
                 # print("Warning: sync_network::simulate_dynamic - simulation is aborted due to low level of convergence rate (order = " + str(current_order) + ").");
                 break;
+        
+        if (collect_dynamic != True):
+            dyn_phase.append(self._phases);
+            dyn_time.append(time_counter);        
         
         output_sync_dynamic = sync_dynamic(dyn_phase, dyn_time, None);
         return output_sync_dynamic;
@@ -558,10 +559,12 @@ class sync_network(network):
             if (collect_dynamic == True):
                 dyn_phase.append(self._phases);
                 dyn_time.append(t);
-            else:
-                dyn_phase = [ self._phases ];
-                dyn_time = t;
+
         
+        if (collect_dynamic != True):
+            dyn_phase.append(self._phases);
+            dyn_time.append(t);
+                        
         output_sync_dynamic = sync_dynamic(dyn_phase, dyn_time);
         return output_sync_dynamic;     
 
