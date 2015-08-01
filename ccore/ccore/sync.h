@@ -139,7 +139,7 @@ public:
 	 * @return  Return level of global synchorization in the network.
 	 *
 	 ***********************************************************************************************/
-	double sync_order(void) const;
+	virtual double sync_order(void) const;
 
 	/***********************************************************************************************
 	 *
@@ -148,7 +148,7 @@ public:
 	 * @return  Return level of local (partial) synchorization in the network.
 	 *
 	 ***********************************************************************************************/
-	double sync_local_order(void) const;
+	virtual double sync_local_order(void) const;
 
 	/***********************************************************************************************
 	 *
@@ -164,7 +164,7 @@ public:
 	 *              values  (last step of simulation) of dynamic.
 	 *
 	 ***********************************************************************************************/
-	void simulate_static(const unsigned int steps, 
+	virtual void simulate_static(const unsigned int steps, 
 		                 const double time, 
 						 const solve_type solver, 
 						 const bool collect_dynamic, 
@@ -185,7 +185,7 @@ public:
 	 *              values  (last step of simulation) of dynamic.
 	 *
 	 ***********************************************************************************************/
-	void simulate_dynamic(const double order, 
+	virtual void simulate_dynamic(const double order, 
 		                  const double step,
 		                  const solve_type solver, 
 						  const bool collect_dynamic,
@@ -200,7 +200,7 @@ public:
 	 * @return  Returns normalized phase.
 	 *
 	 ***********************************************************************************************/
-	static double phase_normalization(const double teta);
+	virtual double phase_normalization(const double teta) const;
 
 protected:
 	/***********************************************************************************************
@@ -214,7 +214,7 @@ protected:
 	 * @return  Return new value of phase of oscillator with index 'argv[1]'.
 	 *
 	 ***********************************************************************************************/
-	virtual double phase_kuramoto(const double t, const double teta, const std::vector<void *> & argv);
+	virtual double phase_kuramoto(const double t, const double teta, const std::vector<void *> & argv) const;
 
 	/***********************************************************************************************
 	 *
@@ -231,6 +231,20 @@ protected:
 	 ***********************************************************************************************/
 	virtual void calculate_phases(const solve_type solver, const double t, const double step, const double int_step);
 
+    /***********************************************************************************************
+    *
+    * @brief   Stores dynamic of oscillators. Type of saving depends on argument 'collect_dynamic',
+    *          if it's true - than new values are added to previous, otherwise new values rewrite
+    *          previous.
+    *
+    * @param[in]  step: dynamic of oscillators.
+    * @param[in]  collect_dynamic: if true - added new values to previous, otherwise rewrites
+    *              previous values by new values of dynamics.
+    * @param[out] dynamic: storage of output dynamic.
+    *
+    ***********************************************************************************************/
+    virtual void store_dynamic(const double step, const bool collect_dynamic, sync_dynamic & dynamic) const;
+
 private:
 	/***********************************************************************************************
 	 *
@@ -244,20 +258,6 @@ private:
 	 *
 	 ***********************************************************************************************/
 	static void adapter_phase_kuramoto(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs);
-
-	/***********************************************************************************************
-	 *
-	 * @brief   Stores dynamic of oscillators. Type of saving depends on argument 'collect_dynamic', 
-	 *          if it's true - than new values are added to previous, otherwise new values rewrite 
-	 *          previous.
-	 *
-	 * @param[in]  step: dynamic of oscillators.
-	 * @param[in]  collect_dynamic: if true - added new values to previous, otherwise rewrites 
-	 *              previous values by new values of dynamics.
-	 * @param[out] dynamic: storage of output dynamic.
-	 *
-	 ***********************************************************************************************/
-	void store_dynamic(const double step, const bool collect_dynamic, sync_dynamic & dynamic) const;
 };
 
 #endif

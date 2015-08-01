@@ -27,7 +27,8 @@
 
 from pyclustering.nnet          import solve_type, initial_type, conn_type;
 from pyclustering.nnet.sync     import sync_network, sync_dynamic, sync_visualizer;
-from pyclustering.utils         import draw_dynamics;
+
+import pyclustering.core.syncpr_wrapper as wrapper;
 
 from PIL import Image;
 
@@ -44,24 +45,16 @@ class syncpr_dynamic(sync_dynamic):
     
     """
     
-    def __init__(self, phase, time):
+    def __init__(self, phase, time, ccore):
         """!
         @brief Constructor of syncpr dynamic.
         
         @param[in] phase (list): Dynamic of oscillators on each step of simulation. If ccore pointer is specified than it can be ignored.
         @param[in] time (list): Simulation time.
+        @param[in] ccore (ctypes.pointer): Pointer to CCORE sync_dynamic instance in memory.
         
         """     
-        super().__init__(phase, time, None);
-        
-        
-    def __len__(self):
-        """!
-        @brief (uint) Returns number of simulation steps that are stored in dynamic.
-        
-        """
-        
-        return len(self._dynamic);        
+        super().__init__(phase, time, ccore);       
 
 
 class syncpr_visualizer(sync_visualizer):
@@ -172,22 +165,51 @@ class syncpr(sync_network):
     _increase_strength2 = 0.0;
     _coupling = None;
     
-    def __init__(self, num_osc, increase_strength1, increase_strength2):
+    def __init__(self, num_osc, increase_strength1, increase_strength2, ccore = False):
         """!
         @brief Constructor of oscillatory network for pattern recognition based on Kuramoto model.
         
         @param[in] num_osc (uint): Number of oscillators in the network.
         @param[in] increase_strength1 (double): Parameter for increasing strength of the second term of the Fourier component.
         @param[in] increase_strength2 (double): Parameter for increasing strength of the third term of the Fourier component.
+        @param[in] ccore (bool): If True simulation is performed by CCORE library (C++ implementation of pyclustering).
         
         """
-        self._increase_strength1 = increase_strength1;
-        self._increase_strength2 = increase_strength2;
-        self._coupling = [ [0.0 for i in range(num_osc)] for j in range(num_osc) ];
+        
+        if (ccore is True):
+            self._ccore_network_pointer = wrapper.syncpr_create(num_osc, increase_strength1, increase_strength2);
+            
+        else:
+            self._increase_strength1 = increase_strength1;
+            self._increase_strength2 = increase_strength2;
+            self._coupling = [ [0.0 for i in range(num_osc)] for j in range(num_osc) ];
+        
+            super().__init__(num_osc, 1, 0, conn_type.NONE, initial_type.RANDOM_GAUSSIAN);
     
-        super().__init__(num_osc, 1, 0, conn_type.NONE, initial_type.RANDOM_GAUSSIAN);
+    
+    def __del__(self):
+        """!
+        @brief Default destructor of syncpr.
         
+        """
         
+        if (self._ccore_network_pointer is not None):
+            wrapper.syncpr_destroy(self._ccore_network_pointer);
+            self._ccore_network_pointer = None;
+
+            
+    def __len__(self):
+        """!
+        @brief Returns size of the network.
+        
+        """        
+        if (self._ccore_network_pointer is not None):
+            return wrapper.syncpr_get_size(self._ccore_network_pointer);
+        
+        else:
+            return self._num_osc;
+                    
+    
     def train(self, samples):
         """!
         @brief Trains syncpr network using Hebbian rule for adjusting strength of connections between oscillators during training.
@@ -196,15 +218,21 @@ class syncpr(sync_network):
         
         """
         
-        length = float(len(self));
+        # Verify pattern for learning
+        for pattern in samples:
+            self.__validate_pattern(pattern);
         
-        for i in range(0, len(self), 1):
+        if (self._ccore_network_pointer is not None):
+            return wrapper.syncpr_train(self._ccore_network_pointer, samples);
+        
+        length = len(self);
+        number_samples = len(samples);
+        
+        for i in range(length):
             for j in range(i + 1, len(self), 1):
                 
                 # go through via all patterns
-                for p in range(len(samples)):
-                    self.__validate_pattern(samples[p]);
-                    
+                for p in range(number_samples):
                     value1 = samples[p][i];
                     value2 = samples[p][j];
                     
@@ -262,6 +290,10 @@ class syncpr(sync_network):
         
         self.__validate_pattern(pattern);
         
+        if (self._ccore_network_pointer is not None):
+            ccore_instance_dynamic = wrapper.syncpr_simulate_dynamic(self._ccore_network_pointer, pattern, order, solution, collect_dynamic, step);
+            return syncpr_dynamic(None, None, ccore_instance_dynamic);
+        
         for i in range(0, len(pattern), 1):
             if (pattern[i] > 0.0):
                 self._phases[i] = 0.0;
@@ -307,7 +339,7 @@ class syncpr(sync_network):
             dyn_phase.append(self._phases);
             dyn_time.append(time_counter);
         
-        output_sync_dynamic = syncpr_dynamic(dyn_phase, dyn_time);
+        output_sync_dynamic = syncpr_dynamic(dyn_phase, dyn_time, None);
         return output_sync_dynamic;
 
 
@@ -332,37 +364,17 @@ class syncpr(sync_network):
         
         self.__validate_pattern(pattern);
         
+        if (self._ccore_network_pointer is not None):
+            ccore_instance_dynamic = wrapper.syncpr_simulate_static(self._ccore_network_pointer, steps, time, pattern, solution, collect_dynamic);
+            return syncpr_dynamic(None, None, ccore_instance_dynamic);
+        
         for i in range(0, len(pattern), 1):
             if (pattern[i] > 0.0):
                 self._phases[i] = 0.0;
             else:
                 self._phases[i] = math.pi / 2.0;
-        
-        dyn_phase = [];
-        dyn_time = [];
-        
-        if (collect_dynamic == True):            
-            dyn_phase.append(self._phases);
-            dyn_time.append(0);
-        
-        step = time / steps;
-        int_step = step / 10.0;
-        
-        for t in numpy.arange(step, time + step, step):
-            # update states of oscillators
-            self._phases = self._calculate_phases(solution, t, step, int_step);
-            
-            # update states of oscillators
-            if (collect_dynamic == True):
-                dyn_phase.append(self._phases);
-                dyn_time.append(t);
-        
-        if (collect_dynamic != True):
-            dyn_phase.append(self._phases);
-            dyn_time.append(t);
                 
-        output_sync_dynamic = syncpr_dynamic(dyn_phase, dyn_time);
-        return output_sync_dynamic;
+        return super().simulate_static(steps, time, solution, collect_dynamic);
     
     
     def memory_order(self, pattern):
@@ -377,7 +389,12 @@ class syncpr(sync_network):
         """
         
         self.__validate_pattern(pattern);
-        return self.__calculate_memory_order(pattern);
+        
+        if (self._ccore_network_pointer is not None):
+            return wrapper.syncpr_memory_order(self._ccore_network_pointer, pattern);
+        
+        else:
+            return self.__calculate_memory_order(pattern);
 
     
     def __calculate_memory_order(self, pattern):
@@ -426,7 +443,7 @@ class syncpr(sync_network):
                 
                 term += (term1 - term2);
                 
-        return ( phase + (1.0 / len(self)) * term );
+        return ( phase + term / len(self) );
     
     
     def __validate_pattern(self, pattern):

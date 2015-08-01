@@ -34,7 +34,7 @@ import matplotlib.animation as animation;
 import numpy;
 import random;
 
-import pyclustering.core.sync_wapper as wrapper;
+import pyclustering.core.sync_wrapper as wrapper;
 
 from scipy import pi;
 from scipy.integrate import odeint;
@@ -556,7 +556,6 @@ class sync_network(network):
             if (collect_dynamic == True):
                 dyn_phase.append(self._phases);
                 dyn_time.append(t);
-
         
         if (collect_dynamic != True):
             dyn_phase.append(self._phases);

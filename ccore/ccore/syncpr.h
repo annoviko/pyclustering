@@ -5,7 +5,19 @@
 
 
 typedef std::vector<std::vector<double> >   matrix;
-typedef std::vector<int>                    pattern;
+typedef std::vector<int>                    syncpr_pattern;
+
+
+/* it is enough functionality in parent dynamic */
+typedef sync_dynamic                        syncpr_dynamic;
+
+
+class syncpr_invalid_pattern : public std::runtime_error {
+public:
+    syncpr_invalid_pattern(void);
+
+    syncpr_invalid_pattern(const std::string & description);
+};
 
 
 class syncpr: public sync_network {
@@ -22,27 +34,33 @@ public:
     virtual ~syncpr(void);
 
 public:
-    void train(const std::vector<pattern> & patterns);
+    void train(const std::vector<syncpr_pattern> & patterns);
 
-	void simulate_static(const unsigned int steps, 
+    void simulate_static(const unsigned int steps, 
 		                 const double time, 
-                         const pattern & input_pattern,
-						 const solve_type solver, 
-						 const bool collect_dynamic, 
-						 sync_dynamic & output_dynamic);
+                         const syncpr_pattern & input_pattern,
+                         const solve_type solver, 
+                         const bool collect_dynamic, 
+                         syncpr_dynamic & output_dynamic);
 
-	void simulate_dynamic(const pattern & input_pattern,
-                          const double order, 
-		                  const double step,
-		                  const solve_type solver, 
-						  const bool collect_dynamic,
-						  sync_dynamic & output_dynamic);
+    void simulate_dynamic(const syncpr_pattern & input_pattern,
+                          const double order,
+                          const double step,
+                          const solve_type solver, 
+                          const bool collect_dynamic,
+                          syncpr_dynamic & output_dynamic);
 
-    double memory_order(const pattern & input_pattern) const;
+    double memory_order(const syncpr_pattern & input_pattern) const;
 
 protected:
-    virtual double phase_kuramoto(const double t, const double teta, const std::vector<void *> & argv);
+    double phase_kuramoto(const double t, const double teta, const std::vector<void *> & argv);
 
+private:
+    void validate_pattern(const syncpr_pattern & sample) const;
+
+    void initialize_phases(const syncpr_pattern & sample);
+
+    double calculate_memory_order(const syncpr_pattern & input_pattern) const;
 };
 
 #endif

@@ -35,15 +35,25 @@ class Test(unittest.TestCase):
     def testCreateTenOscillatorsNetwork(self):
         net = syncpr(10, 0.1, 0.1);
         assert len(net) == 10;
+        
+    
+    def testCreateTenOscillatorsNetworkByCore(self):
+        net = syncpr(10, 0.1, 0.1, True);
+        assert len(net) == 10;
     
     
     def testCreateHundredOscillatorsNetwork(self):
         net = syncpr(100, 0.1, 0.1);
         assert len(net) == 100;
+        
+    
+    def testCreateHundredOscillatorsNetworkByCore(self):
+        net = syncpr(100, 0.1, 0.1, True);
+        assert len(net) == 100;
     
     
-    def templateOutputDynamic(self, solver):    
-        net = syncpr(5, 0.1, 0.1);
+    def templateOutputDynamic(self, solver, ccore = False):    
+        net = syncpr(5, 0.1, 0.1, ccore);
         output_dynamic = net.simulate(10, 10, [-1, 1, -1, 1, -1], solver, True);
         
         assert len(output_dynamic) == 11; # 10 steps without initial values.
@@ -53,8 +63,16 @@ class Test(unittest.TestCase):
         self.templateOutputDynamic(solve_type.FAST);
 
 
+    def testOutputDynamicFastSolverByCore(self):
+        self.templateOutputDynamic(solve_type.FAST, True);
+
+
     def testOutputDynamicRK4Solver(self):
         self.templateOutputDynamic(solve_type.RK4);
+ 
+ 
+    def testOutputDynamicRK4SolverByCore(self):
+        self.templateOutputDynamic(solve_type.RK4, True);
         
     
     def testOutputDinamicLengthSimulation(self):
@@ -64,36 +82,60 @@ class Test(unittest.TestCase):
         assert len(output_dynamic) == 11; # 10 steps without initial values.
     
     
-    def testOutputDynamicLengthStaticSimulation(self):
-        net = syncpr(5, 0.1, 0.1);
-        output_dynamic = net.simulate_static(10, 10, [-1, 1, -1, 1, -1], solution = solve_type.FAST, collect_dynamic = True);
+    def templateOutputDynamicLengthStaticSimulation(self, collect_flag, ccore_flag):
+        net = syncpr(5, 0.1, 0.1, ccore_flag);
+        output_dynamic = net.simulate_static(10, 10, [-1, 1, -1, 1, -1], solution = solve_type.FAST, collect_dynamic = collect_flag);
         
-        assert len(output_dynamic) == 11; # 10 steps without initial values.    
+        if (collect_flag is True):
+            assert len(output_dynamic) == 11; # 10 steps without initial values.
+        else:
+            assert len(output_dynamic) == 1;
+    
+    
+    def testOutputDynamicLengthStaticSimulation(self):
+        self.templateOutputDynamicLengthStaticSimulation(True, False);    
 
 
     def testOutputDynamicLengthStaticSimulationWithouCollecting(self):
-        net = syncpr(5, 0.1, 0.1);
-        output_dynamic = net.simulate_static(10, 10, [-1, 1, -1, 1, -1], solution = solve_type.FAST, collect_dynamic = False);
+        self.templateOutputDynamicLengthStaticSimulation(False, False);   
+
+
+    def testOutputDynamicLengthStaticSimulationByCore(self):
+        self.templateOutputDynamicLengthStaticSimulation(True, True);    
+
+
+    def testOutputDynamicLengthStaticSimulationWithouCollectingByCore(self):
+        self.templateOutputDynamicLengthStaticSimulation(False, True);   
+   
+    
+    def templateOutputDynamicLengthDynamicSimulation(self, collect_flag, ccore_flag):
+        net = syncpr(5, 0.1, 0.1, ccore_flag);
+        output_dynamic = net.simulate_dynamic([-1, 1, -1, 1, -1], solution = solve_type.FAST, collect_dynamic = collect_flag);
         
-        assert len(output_dynamic) == 1; # 10 steps without initial values.    
-    
-    
+        if (collect_flag is True):
+            assert len(output_dynamic) > 1;
+        else:
+            assert len(output_dynamic) == 1;
+               
+        
     def testOutputDynamicLengthDynamicSimulation(self):
-        net = syncpr(5, 0.1, 0.1);
-        output_dynamic = net.simulate_dynamic([-1, 1, -1, 1, -1], solution = solve_type.FAST, collect_dynamic = True);
-        
-        assert len(output_dynamic) > 1; 
+        self.templateOutputDynamicLengthDynamicSimulation(True, False);
+
+
+    def testOutputDynamicLengthDynamicSimulationByCore(self):
+        self.templateOutputDynamicLengthDynamicSimulation(True, True);
 
 
     def testOutputDynamicLengthDynamicSimulationWithoutCollecting(self):
-        net = syncpr(5, 0.1, 0.1);
-        output_dynamic = net.simulate_dynamic([-1, 1, -1, 1, -1], solution = solve_type.FAST, collect_dynamic = False);
-        
-        assert len(output_dynamic) == 1; 
+        self.templateOutputDynamicLengthDynamicSimulation(False, False);
+
+
+    def testOutputDynamicLengthDynamicSimulationWithoutCollectingByCore(self):
+        self.templateOutputDynamicLengthDynamicSimulation(False, True);
 
     
-    def testTrainNetworkAndRecognizePattern(self):
-        net = syncpr(10, 0.1, 0.1);
+    def templateTrainNetworkAndRecognizePattern(self, ccore_flag):
+        net = syncpr(10, 0.1, 0.1, ccore_flag);
         
         patterns =  [];
         patterns += [ [1, 1, 1, 1, 1, -1, -1, -1, -1, -1] ];
@@ -115,32 +157,56 @@ class Test(unittest.TestCase):
             
             assert (ensembles[0] == [0, 1, 2, 3, 4]) or (ensembles[0] == [5, 6, 7, 8, 9]);
             assert (ensembles[1] == [0, 1, 2, 3, 4]) or (ensembles[1] == [5, 6, 7, 8, 9]);
+    
+    
+    def testTrainNetworkAndRecognizePattern(self):
+        self.templateTrainNetworkAndRecognizePattern(False);
         
     
-    def templateIncorrectPatternForTraining(self, patterns):
-        net = syncpr(10, 0.1, 0.1);
+    def testTrainNetworkAndRecognizePatternByCore(self):
+        self.templateTrainNetworkAndRecognizePattern(True); 
+        
+    
+    def templateIncorrectPatternForTraining(self, patterns, ccore_flag):
+        net = syncpr(10, 0.1, 0.1, ccore_flag);
         
         self.assertRaises(Exception, net.train, patterns);        
         
 
-    def testIncorrectPatternValues(self):
+    def templateIncorrectPatternValues(self, ccore_flag):
         patterns =  [];
         patterns += [ [2, 1, 1, 1, 1, -1, -1, -1, -1, -1] ];
         patterns += [ [-1, -2, -1, -1, -1, 1, 1, 1, 1, 1] ];
         
-        self.templateIncorrectPatternForTraining(patterns);
+        self.templateIncorrectPatternForTraining(patterns, ccore_flag);
 
-        
+
+    def testIncorrectPatternValues(self):
+        self.templateIncorrectPatternValues(False);
+
+
+    def testIncorrectPatternValuesByCore(self):
+        self.templateIncorrectPatternValues(True);
+    
+    
     def testIncorrectSmallPatternSize(self):
         patterns = [ [1, 1, 1, 1, 1, -1] ];
-        
-        self.templateIncorrectPatternForTraining(patterns);
+        self.templateIncorrectPatternForTraining(patterns, False);
+
+
+    def testIncorrectSmallPatternSizeByCore(self):
+        patterns = [ [1, 1, 1, 1, 1, -1] ];
+        self.templateIncorrectPatternForTraining(patterns, True);
         
         
     def testIncorrectLargePatternSize(self):
         patterns = [ [1, 1, 1, 1, 1, -1, -1, -1, -1, -1, 1] ];
-        
-        self.templateIncorrectPatternForTraining(patterns);
+        self.templateIncorrectPatternForTraining(patterns, False);
+
+
+    def testIncorrectLargePatternSizeByCore(self):
+        patterns = [ [1, 1, 1, 1, 1, -1, -1, -1, -1, -1, 1] ];
+        self.templateIncorrectPatternForTraining(patterns, True);
         
 
     def templateIncorrectPatternForSimulation(self, pattern):
@@ -176,9 +242,9 @@ class Test(unittest.TestCase):
     def testPatternVisualizerWithoutCollectDynamic(self):
         self.templatePatternVisualizer(False);
         
-        
-    def testMemoryOrder(self):
-        net = syncpr(10, 0.1, 0.1);
+    
+    def templateMemoryOrder(self, ccore_flag):
+        net = syncpr(10, 0.1, 0.1, ccore_flag);
         
         patterns =  [];
         patterns += [ [1, 1, 1, 1, 1, -1, -1, -1, -1, -1] ];
@@ -193,8 +259,17 @@ class Test(unittest.TestCase):
         assert (memory_order > 0.95) and (memory_order <= 1.0);
 
         net.simulate(10, 10, patterns[1], solve_type.RK4);
+        memory_order = net.memory_order(patterns[1]);
         assert (memory_order > 0.95) and (memory_order <= 1.0);               
-        
+    
+    
+    def testMemoryOrder(self):
+        self.templateMemoryOrder(False);
+
+
+#     def testMemoryOrderByCore(self):
+#         self.templateMemoryOrder(True);
+   
         
     def testStaticSimulation(self):
         net = syncpr(10, 0.1, 0.1);

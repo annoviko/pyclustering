@@ -1,6 +1,6 @@
 """!
 
-@brief CCORE Wrapper for oscillatory neural network based on Sync.
+@brief CCORE Wrapper for oscillatory neural network based on Kuramoto model.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2015
@@ -33,6 +33,7 @@ def sync_create_network(num_osc, weight, frequency, type_conn, initial_phases):
 
 
 def sync_destroy_network(pointer_network):
+    assert 0;
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
     ccore.sync_destroy_network(pointer_network);
 

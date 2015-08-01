@@ -116,7 +116,7 @@ void sync_network::adapter_phase_kuramoto(const double t, const differ_state<dou
 }
 
 
-double sync_network::phase_kuramoto(const double t, const double teta, const std::vector<void *> & argv) {
+double sync_network::phase_kuramoto(const double t, const double teta, const std::vector<void *> & argv) const {
 	unsigned int index = *(unsigned int *) argv[1];
 	double phase = 0.0;
 
@@ -141,7 +141,7 @@ void sync_network::simulate_static(const unsigned int steps, const double time, 
 	
 	store_dynamic(0.0, collect_dynamic, output_dynamic);	/* store initial state */
 
-	for (double cur_time = step; cur_time < time; cur_time += step) {
+    for (double cur_time = step; cur_time < (time + step); cur_time += step) {
 		calculate_phases(solver, cur_time, step, int_step);
 		
 		store_dynamic(cur_time, collect_dynamic, output_dynamic);	/* store initial state */
@@ -243,7 +243,7 @@ void sync_network::calculate_phases(const solve_type solver, const double t, con
 }
 
 
-double sync_network::phase_normalization(const double teta) {
+double sync_network::phase_normalization(const double teta) const {
 	double norm_teta = teta;
 
 	while ( (norm_teta > 2.0 * pi()) || (norm_teta < 0.0) ) {
