@@ -29,7 +29,6 @@ syncpr::syncpr(const unsigned int num_osc,
 syncpr::~syncpr() { }
 
 
-#include <iostream>
 void syncpr::train(const std::vector<syncpr_pattern> & patterns) {
     for (std::vector<syncpr_pattern>::const_iterator iter = patterns.begin(); iter != patterns.end(); iter++) {
         validate_pattern( (*iter) );

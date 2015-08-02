@@ -20,3 +20,4 @@ General changes (ccore):
 
 
 Corrected bugs:
+- Bug with callback methods in ccore library in syncnet and hsyncnet that may lead to loss of accuracy.
