@@ -19,6 +19,7 @@ CPP_SRCS += \
 ../ccore/support.cpp \
 ../ccore/sync.cpp \
 ../ccore/syncnet.cpp \
+../ccore/syncpr.cpp \
 ../ccore/xmeans.cpp 
 
 OBJS += \
@@ -37,6 +38,7 @@ OBJS += \
 ./ccore/support.o \
 ./ccore/sync.o \
 ./ccore/syncnet.o \
+./ccore/syncpr.o \
 ./ccore/xmeans.o 
 
 CPP_DEPS += \
@@ -55,6 +57,7 @@ CPP_DEPS += \
 ./ccore/support.d \
 ./ccore/sync.d \
 ./ccore/syncnet.d \
+./ccore/syncpr.d \
 ./ccore/xmeans.d 
 
 

@@ -61,6 +61,8 @@ private:
     void initialize_phases(const syncpr_pattern & sample);
 
     double calculate_memory_order(const syncpr_pattern & input_pattern) const;
+
+    static void adapter_phase_kuramoto(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs);
 };
 
 #endif

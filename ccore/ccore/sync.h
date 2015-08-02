@@ -47,6 +47,7 @@ typedef struct sync_oscillator {
 
 
 typedef std::vector<unsigned int>		sync_ensemble;
+typedef void (*sync_callback_solver)(const double, const differ_state<double> &, const differ_extra<void *> &, differ_state<double> &);
 
 
 typedef struct sync_network_state {
@@ -107,6 +108,9 @@ protected:
 	std::vector<sync_oscillator> m_oscillators;
 
 	double weight;
+
+private:
+	sync_callback_solver m_callback_solver;
 
 private:
 	sync_network(void) : network(0, conn_type::NONE) { }
@@ -244,6 +248,8 @@ protected:
     *
     ***********************************************************************************************/
     virtual void store_dynamic(const double step, const bool collect_dynamic, sync_dynamic & dynamic) const;
+
+    virtual void set_callback_solver(sync_callback_solver solver);
 
 private:
 	/***********************************************************************************************

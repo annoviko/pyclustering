@@ -22,15 +22,16 @@ syncpr::syncpr(const unsigned int num_osc,
     m_increase_strength2(increase_strength2),
     m_coupling(num_osc, std::vector<double>(num_osc, 0.0))
 {
-
+    set_callback_solver(&syncpr::adapter_phase_kuramoto);
 }
 
 
 syncpr::~syncpr() { }
 
 
+#include <iostream>
 void syncpr::train(const std::vector<syncpr_pattern> & patterns) {
-    for (std::vector<syncpr_pattern>::const_iterator iter = patterns.cbegin(); iter != patterns.cend(); iter++) {
+    for (std::vector<syncpr_pattern>::const_iterator iter = patterns.begin(); iter != patterns.end(); iter++) {
         validate_pattern( (*iter) );
     }
 
@@ -45,7 +46,7 @@ void syncpr::train(const std::vector<syncpr_pattern> & patterns) {
                 m_coupling[i][j] += value1 * value2;
             }
 
-            m_coupling[i][j] /= size();
+            m_coupling[i][j] /= (double) size();
             m_coupling[j][i] = m_coupling[i][j];
         }
     }
@@ -71,7 +72,17 @@ void syncpr::simulate_static(const unsigned int steps,
         }
     }
 
-    sync_network::simulate_static(steps, time, solver, collect_dynamic, output_dynamic);
+    output_dynamic.clear();
+
+    const double step = time / (double) steps;
+    const double int_step = step / 10.0;
+
+    store_dynamic(0.0, collect_dynamic, output_dynamic);    /* store initial state */
+    for (double cur_time = step; cur_time < (time + step); cur_time += step) {
+        calculate_phases(solver, cur_time, step, int_step);
+
+        store_dynamic(cur_time, collect_dynamic, output_dynamic);   /* store initial state */
+    }
 }
 
 
@@ -108,6 +119,7 @@ void syncpr::simulate_dynamic(const syncpr_pattern & input_pattern,
         }
     }
 }
+
 
 void syncpr::initialize_phases(const syncpr_pattern & sample) {
     for (size_t i = 0; i < sample.size(); i++) {
@@ -159,7 +171,7 @@ double syncpr::phase_kuramoto(const double t, const double teta, const std::vect
         }
     }
 
-    return (phase + term / size());
+    return ( phase + term / ((double) size()) );
 }
 
 
@@ -173,4 +185,10 @@ void syncpr::validate_pattern(const syncpr_pattern & sample) const {
             throw syncpr_invalid_pattern("invalid value in the pattern, pattern value should be +1 or -1");
         }
     }
+}
+
+
+void syncpr::adapter_phase_kuramoto(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs) {
+    outputs.resize(1);
+    outputs[0] = ((syncpr *) argv[0])->phase_kuramoto(t, inputs[0], argv);
 }
