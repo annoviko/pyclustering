@@ -310,6 +310,52 @@ class Test(unittest.TestCase):
 
     def testDynamicSimulationByCore(self):
         self.templateDynamicSimulation(True);
+        
+    
+    def templateGlobalSyncOrder(self, ccore_flag):
+        net = syncpr(10, 0.1, 0.1, ccore_flag);
+        
+        patterns =  [ [1, 1, 1, 1, 1, -1, -1, -1, -1, -1] ];
+        patterns += [ [-1, -1, -1, -1, -1, 1, 1, 1, 1, 1] ];
+        
+        global_sync_order = net.sync_order();
+        assert (global_sync_order < 1.0) and (global_sync_order > 0.0);
+        
+        net.train(patterns);
+        
+        global_sync_order = net.sync_order();
+        assert (global_sync_order < 1.0) and (global_sync_order > 0.0);
+
+
+    def testGlobalSyncOrder(self):
+        self.templateGlobalSyncOrder(False);
+
+
+    def testGlobalSyncOrderByCore(self):
+        self.templateGlobalSyncOrder(True);
+        
+
+    def templateLocalSyncOrder(self, ccore_flag):
+        net = syncpr(10, 0.1, 0.1, ccore_flag);
+        
+        patterns =  [ [1, 1, 1, 1, 1, -1, -1, -1, -1, -1] ];
+        patterns += [ [-1, -1, -1, -1, -1, 1, 1, 1, 1, 1] ];
+        
+        local_sync_order = net.sync_local_order();
+        assert (local_sync_order < 1.0) and (local_sync_order > 0.0);
+        
+        net.train(patterns);
+        
+        local_sync_order = net.sync_local_order();
+        assert (local_sync_order < 1.0) and (local_sync_order > 0.0);
+
+
+    def testLocalSyncOrder(self):
+        self.templateLocalSyncOrder(False);
+
+
+    def testLocalSyncOrderByCore(self):
+        self.templateLocalSyncOrder(True);
 
 
 if __name__ == "__main__":

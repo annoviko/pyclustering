@@ -154,4 +154,38 @@ TEST(utest_syncpr, train_and_recognize_pattern) {
     }
 }
 
+TEST(utest_syncpr, sync_local_order) {
+    syncpr network(10, 0.1, 0.1);
+
+    double local_order = network.sync_local_order();
+    ASSERT_TRUE((local_order > 0.0) && (local_order < 1.0));
+
+    std::vector<syncpr_pattern> patterns = {
+        { 1, 1, 1, 1, 1, -1, -1, -1, -1, -1 },
+        { -1, -1, -1, -1, -1, 1, 1, 1, 1, 1 }
+    };
+
+    network.train(patterns);
+
+    local_order = network.sync_local_order();
+    ASSERT_TRUE((local_order > 0.0) && (local_order < 1.0));
+}
+
+TEST(utest_syncpr, sync_global_order) {
+    syncpr network(10, 0.1, 0.1);
+
+    double global_order = network.sync_order();
+    ASSERT_TRUE((global_order > 0.0) && (global_order < 1.0));
+
+    std::vector<syncpr_pattern> patterns = {
+        { 1, 1, 1, 1, 1, -1, -1, -1, -1, -1 },
+        { -1, -1, -1, -1, -1, 1, 1, 1, 1, 1 }
+    };
+
+    network.train(patterns);
+
+    global_order = network.sync_order();
+    ASSERT_TRUE((global_order > 0.0) && (global_order < 1.0));
+}
+
 #endif

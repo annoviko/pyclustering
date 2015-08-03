@@ -107,8 +107,9 @@ unsigned int network::get_connection(const unsigned int index1, const unsigned i
 		if (index1 == index2) {
 			return (unsigned int) 0;
 		}
-
-		return (unsigned int) 1;
+        else {
+            return (unsigned int) 1;
+        }
 	}
 	else if (m_conn_type == conn_type::NONE) {
 		return (unsigned int) 0;

@@ -229,14 +229,14 @@ public:
 
 	inline unsigned int size(void) const { return num_osc; }
 
-	unsigned int get_connection(const unsigned int index1, const unsigned int index2) const;
+	virtual unsigned int get_connection(const unsigned int index1, const unsigned int index2) const;
 
-	void set_connection(const unsigned int index1, const unsigned int index2);
+	virtual void set_connection(const unsigned int index1, const unsigned int index2);
 
-	void get_neighbors(const unsigned int index, std::vector<unsigned int> & result) const;
+	virtual void get_neighbors(const unsigned int index, std::vector<unsigned int> & result) const;
 
-	virtual void create_structure(const conn_type connection_structure);
-
+    virtual void create_structure(const conn_type connection_structure);
+	
 private:
 	void create_grid_four_connections(void);
 	void create_grid_eight_connections(void);
