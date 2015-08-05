@@ -564,7 +564,7 @@ def draw_clusters(data, clusters, noise = [], marker_descr = '.', hide_axes = Fa
     axes = None;
     
     # Check for dimensions
-    if (dimension == 2):
+    if ((dimension) == 1 or (dimension == 2)):
         axes = fig.add_subplot(111);
     elif (dimension == 3):
         axes = fig.gca(projection='3d');
@@ -575,6 +575,12 @@ def draw_clusters(data, clusters, noise = [], marker_descr = '.', hide_axes = Fa
     for cluster in clusters:
         color = colors[color_index];
         for item in cluster:
+            if (dimension == 1):
+                if (data is None):
+                    axes.plot(item[0], 0.0, color = color, marker = marker_descr);
+                else:
+                    axes.plot(data[item][0], 0.0, color = color, marker = marker_descr);
+            
             if (dimension == 2):
                 if (data is None):
                     axes.plot(item[0], item[1], color = color, marker = marker_descr);
@@ -590,6 +596,12 @@ def draw_clusters(data, clusters, noise = [], marker_descr = '.', hide_axes = Fa
         color_index += 1;
     
     for item in noise:
+        if (dimension == 1):
+            if (data is None):
+                axes.plot(item[0], 0.0, 'w' + marker_descr);
+            else:
+                axes.plot(data[item][0], 0.0, 'w' + marker_descr);
+
         if (dimension == 2):
             if (data is None):
                 axes.plot(item[0], item[1], 'w' + marker_descr);
