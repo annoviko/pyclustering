@@ -45,9 +45,10 @@ class Test(unittest.TestCase):
         obtained_cluster_sizes = [len(cluster) for cluster in clusters];
         assert len(sample) == sum(obtained_cluster_sizes);
         
-        obtained_cluster_sizes.sort();
-        expected_cluster_length.sort();
-        assert obtained_cluster_sizes == expected_cluster_length;
+        if (expected_cluster_length != None):
+            obtained_cluster_sizes.sort();
+            expected_cluster_length.sort();
+            assert obtained_cluster_sizes == expected_cluster_length;
     
     def testClusterAllocationSampleSimple1(self):
         self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5]);
@@ -104,12 +105,35 @@ class Test(unittest.TestCase):
         self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [[0.0, 1.0], [0.0, 0.0], [1.0, 1.0], [1.0, 0.0]], [15, 15, 15, 15], True);
   
     def testClusterOneAllocationSampleSimple5(self):
-        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [[0.0, 0.0]], [60]);   
+        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [[0.0, 0.0]], [60]);
 
     def testClusterOneAllocationSampleSimple5ByCore(self):
-        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [[0.0, 0.0]], [60], True);   
+        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [[0.0, 0.0]], [60], True);
 
-    
+    def testClusterOneDimensionSampleSimple7(self):
+        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE7, [[-3.0], [2.0]], [10, 10]);
+
+    def testClusterOneDimensionSampleSimple7ByCore(self):
+        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE7, [[-3.0], [2.0]], [10, 10], True);
+
+    def testClusterOneDimensionSampleSimple8(self):
+        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE8, [[-4.0], [3.1], [6.1], [12.0]], [15, 30, 20, 80]);
+
+    def testClusterOneDimensionSampleSimple8ByCore(self):
+        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE8, [[-4.0], [3.1], [6.1], [12.0]], [15, 30, 20, 80], True);
+
+    def testWrongNumberOfCentersSimpleSample1(self):
+        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[2.0, 4.5], [3.3, 6.5], [5.0, 7.8]], None);
+
+    def testWrongNumberOfCentersSimpleSample1ByCore(self):
+        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[2.0, 4.5], [3.3, 6.5], [5.0, 7.8]], None, True);
+
+    def testWrongNumberOfCentersSimpleSample2(self):
+        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [[1.3, 1.5], [5.2, 8.5], [5.0, 7.8], [11.0, -3.0]], None);
+
+    def testWrongNumberOfCentersSimpleSample2ByCore(self):
+        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [[1.3, 1.5], [5.2, 8.5], [5.0, 7.8], [11.0, -3.0]], None, True);
+
     def testDifferentDimensions(self):
         kmeans_instance = kmeans([ [0, 1, 5], [0, 2, 3] ], [ [0, 3] ]);
         self.assertRaises(NameError, kmeans_instance.process);
