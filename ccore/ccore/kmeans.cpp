@@ -99,11 +99,23 @@ void kmeans::update_clusters(void) {
 
 		(*clusters)[suitable_index_cluster]->push_back(index_object);
 	}
+
+    /* if there is clusters that are not able to capture objects */
+    for (size_t index_cluster = clusters->size() - 1; index_cluster != (size_t) -1; index_cluster--) {
+        if ((*clusters)[index_cluster]->empty()) {
+            clusters->erase(clusters->begin() + index_cluster);
+        }
+    }
 }
 
 double kmeans::update_centers(void) {
 	double maximum_change = 0;
 	
+    /* check if number of clusters has been changed */
+    if (clusters->size() < centers->size()) {
+        centers->erase(centers->begin() + clusters->size(), centers->end());
+    }
+
 	/* for each cluster */
 	for (unsigned int index_cluster = 0; index_cluster < clusters->size(); index_cluster++) {
 		std::vector<double> total((*centers)[index_cluster].size(), 0);
