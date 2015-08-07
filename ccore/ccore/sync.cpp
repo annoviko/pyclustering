@@ -43,6 +43,8 @@ sync_network::sync_network(const unsigned int size, const double weight_factor, 
 {
 	weight = weight_factor;
 
+	m_callback_solver = &sync_network::adapter_phase_kuramoto;
+
 	std::random_device                      device;
 	std::default_random_engine              generator(device());
 	std::uniform_real_distribution<double>	phase_distribution(0.0, 2.0 * pi());
@@ -91,15 +93,15 @@ double sync_network::sync_local_order() const {
 	double			number_neighbors = 0;
 
 	for (unsigned int i = 0; i < size(); i++) {
-		std::vector<unsigned int> * neighbors = get_neighbors(i);
-		for (std::vector<unsigned int>::const_iterator iter_index = neighbors->begin(); iter_index != neighbors->cend(); iter_index++) {
+		std::vector<unsigned int> neighbors;
+		get_neighbors(i, neighbors);
+
+		for (std::vector<unsigned int>::const_iterator iter_index = neighbors.begin(); iter_index != neighbors.cend(); iter_index++) {
 			unsigned int index_neighbor = *(iter_index);
 			exp_amount += std::exp( -std::abs( m_oscillators[index_neighbor].phase - m_oscillators[i].phase ) );	
 		}
 
-		number_neighbors += neighbors->size();
-
-		delete neighbors;
+		number_neighbors += neighbors.size();
 	}
 
 	if (number_neighbors == 0.0) {
@@ -110,23 +112,28 @@ double sync_network::sync_local_order() const {
 }
 
 
+void sync_network::set_callback_solver(sync_callback_solver solver) {
+    m_callback_solver = solver;
+}
+
+
 void sync_network::adapter_phase_kuramoto(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs) {
 	outputs.resize(1);
 	outputs[0] = ((sync_network *) argv[0])->phase_kuramoto(t, inputs[0], argv);
 }
 
 
-double sync_network::phase_kuramoto(const double t, const double teta, const std::vector<void *> & argv) {
-	unsigned int index = *(unsigned int *) argv[1];
+double sync_network::phase_kuramoto(const double t, const double teta, const std::vector<void *> & argv) const {
+    unsigned int index = *(unsigned int *) argv[1];
 	double phase = 0.0;
 
-	std::vector<unsigned int> * neighbors = get_neighbors(index);
-	for (std::vector<unsigned int>::const_iterator index_iterator = neighbors->cbegin(); index_iterator != neighbors->cend(); index_iterator++) {
+	std::vector<unsigned int> neighbors;
+	get_neighbors(index, neighbors);
+
+	for (std::vector<unsigned int>::const_iterator index_iterator = neighbors.cbegin(); index_iterator != neighbors.cend(); index_iterator++) {
 		unsigned int index_neighbor = (*index_iterator);
 		phase += std::sin(m_oscillators[index_neighbor].phase - teta);
 	}
-		
-	delete neighbors;
 
 	phase = m_oscillators[index].frequency + (phase * weight / size());
 	return phase;
@@ -134,18 +141,18 @@ double sync_network::phase_kuramoto(const double t, const double teta, const std
 
 
 void sync_network::simulate_static(const unsigned int steps, const double time,  const solve_type solver, const bool collect_dynamic, sync_dynamic & output_dynamic) {
-	output_dynamic.clear();
+    output_dynamic.clear();
 
-	const double step = time / (double) steps;
-	const double int_step = step / 10.0;
-	
-	store_dynamic(0.0, collect_dynamic, output_dynamic);	/* store initial state */
+    const double step = time / (double) steps;
+    const double int_step = step / 10.0;
 
-	for (double cur_time = step; cur_time < time; cur_time += step) {
-		calculate_phases(solver, cur_time, step, int_step);
-		
-		store_dynamic(cur_time, collect_dynamic, output_dynamic);	/* store initial state */
-	}
+    store_dynamic(0.0, collect_dynamic, output_dynamic);	/* store initial state */
+
+    for (double cur_time = step; cur_time < (time + step); cur_time += step) {
+        calculate_phases(solver, cur_time, step, int_step);
+
+        store_dynamic(cur_time, collect_dynamic, output_dynamic);	/* store initial state */
+    }
 }
 
 
@@ -194,7 +201,7 @@ void sync_network::store_dynamic(const double time, const bool collect_dynamic, 
 
 
 void sync_network::calculate_phases(const solve_type solver, const double t, const double step, const double int_step) {
-	std::vector<double> * next_phases = new std::vector<double> (size(), 0);
+	std::vector<double> next_phases(size(), 0);
 	std::vector<void *> argv(2, NULL);
 
 	argv[0] = (void *) this;
@@ -207,15 +214,15 @@ void sync_network::calculate_phases(const solve_type solver, const double t, con
 		switch(solver) {
 			case solve_type::FAST: {
 				double result = m_oscillators[index].phase + phase_kuramoto(t, m_oscillators[index].phase, argv);
-				(*next_phases)[index] = phase_normalization(result);
+				next_phases[index] = phase_normalization(result);
 				break;
 			}
 			case solve_type::RK4: {
 				differ_state<double> inputs(1, m_oscillators[index].phase);
 				differ_result<double> outputs;
 
-				runge_kutta_4(&sync_network::adapter_phase_kuramoto, inputs, t, t + step, number_int_steps, false, argv, outputs);
-				(*next_phases)[index] = phase_normalization( outputs[0].state[0] );
+				runge_kutta_4(m_callback_solver, inputs, t, t + step, number_int_steps, false, argv, outputs);
+				next_phases[index] = phase_normalization( outputs[0].state[0] );
 
 				break;
 			}
@@ -223,8 +230,8 @@ void sync_network::calculate_phases(const solve_type solver, const double t, con
 				differ_state<double> inputs(1, m_oscillators[index].phase);
 				differ_result<double> outputs;
 
-				runge_kutta_fehlberg_45(&sync_network::adapter_phase_kuramoto, inputs, t, t + step, 0.00001, false, argv, outputs);
-				(*next_phases)[index] = phase_normalization( outputs[0].state[0] );
+				runge_kutta_fehlberg_45(m_callback_solver, inputs, t, t + step, 0.00001, false, argv, outputs);
+				next_phases[index] = phase_normalization( outputs[0].state[0] );
 
 				break;
 			}
@@ -236,14 +243,12 @@ void sync_network::calculate_phases(const solve_type solver, const double t, con
 
 	/* store result */
 	for (unsigned int index = 0; index < size(); index++) {
-		m_oscillators[index].phase = (*next_phases)[index];
+		m_oscillators[index].phase = next_phases[index];
 	}
-
-	delete next_phases;
 }
 
 
-double sync_network::phase_normalization(const double teta) {
+double sync_network::phase_normalization(const double teta) const {
 	double norm_teta = teta;
 
 	while ( (norm_teta > 2.0 * pi()) || (norm_teta < 0.0) ) {

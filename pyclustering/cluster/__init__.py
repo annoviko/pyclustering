@@ -125,8 +125,8 @@ class cluster_visualizer:
             elif (self.__canvas_dimensions[canvas] != len(data[0])):
                 raise NameError('Only clusters with the same dimension of objects can be displayed on canvas.');
 
-        if ( (self.__canvas_dimensions[canvas] != 2) and (self.__canvas_dimensions[canvas] != 3) ):
-            raise NameError('Only objects with size dimension 2 (2D plot) or 3 (3D plot) can be displayed.');
+        if ( (self.__canvas_dimensions[canvas] < 1) and (self.__canvas_dimensions[canvas] > 3) ):
+            raise NameError('Only objects with size dimension 1 (1D plot), 2 (2D plot) or 3 (3D plot) can be displayed.');
     
     
     def append_clusters(self, clusters, data = None, canvas = 0, marker = '.', markersize = 5):
@@ -193,6 +193,12 @@ class cluster_visualizer:
                 color = self.__colors[index_cluster];
                 
                 for item in cluster:
+                    if (dimension == 1):
+                        if (data is None):
+                            ax.plot(item[0], 0.0, color = color, marker = marker, markersize = markersize);
+                        else:
+                            ax.plot(data[item][0], 0.0, color = color, marker = marker, markersize = markersize);
+
                     if (dimension == 2):
                         if (data is None):
                             ax.plot(item[0], item[1], color = color, marker = marker, markersize = markersize);

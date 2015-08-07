@@ -117,19 +117,7 @@ protected:
 	void create_connections(const double connectivity_radius, const bool enable_conn_weight);
 
 private:
-	/***********************************************************************************************
-	 *
-	 * @brief   Adapter for solving differential equation for calculation of oscillator phase.
-	 *
-	 * @param   (in) t      - current value of phase.
-	 * @param   (in) teta   - time (can be ignored). 
-	 * @param   (in) argv   - pointer to the network 'argv[0]' and index of oscillator whose phase 
-	 *                        represented by argument teta 'argv[1]'.
-	 *
-	 * @return  Return new value of phase of oscillator that is specified in index 'argv[1]'.
-	 *
-	 ***********************************************************************************************/
-	static double adapter_phase_kuramoto(const double t, const double teta, const std::vector<void *> & argv);
+	static void adapter_phase_kuramoto(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs);
 };
 
 #endif

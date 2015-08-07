@@ -136,15 +136,25 @@ TEST(utest_sync, dynamic_simulation_runge_kutta_fehlberg_45) {
 }
 
 
-TEST(utest_sync, static_collecting_dynamic) {
+static void template_static_collecting_dynamic(const unsigned int steps) {
 	sync_network network(10, 1, 0, conn_type::ALL_TO_ALL, initial_type::EQUIPARTITION);
 
 	sync_dynamic output_dynamic;
-	network.simulate_static(25, 0.1, solve_type::FAST, true, output_dynamic);
+	network.simulate_static(steps, 0.1, solve_type::FAST, true, output_dynamic);
 
 	ASSERT_EQ(10, output_dynamic.number_oscillators());
-	ASSERT_EQ(25, output_dynamic.size());
+	ASSERT_EQ(steps + 1, output_dynamic.size());
 }
+
+TEST(utest_sync, static_collecting_dynamic_25_oscillators) {
+    template_static_collecting_dynamic(25);
+}
+
+
+TEST(utest_sync, static_collecting_dynamic_100_oscillators) {
+    template_static_collecting_dynamic(100);
+}
+
 
 TEST(utest_sync, dynamic_collecting_dynamic) {
 	sync_network network(10, 1, 0, conn_type::ALL_TO_ALL, initial_type::EQUIPARTITION);

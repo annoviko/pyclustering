@@ -68,7 +68,15 @@ def cluster_sample4():
 def cluster_sample5():
     start_centers = [[0.0, 1.0], [0.0, 0.0], [1.0, 1.0], [1.0, 0.0]];
     template_clustering(start_centers, SIMPLE_SAMPLES.SAMPLE_SIMPLE5);    
-        
+
+def cluster_sample7():
+    start_centers = [[-3.0], [2.5]];
+    template_clustering(start_centers, SIMPLE_SAMPLES.SAMPLE_SIMPLE7);
+
+def cluster_sample8():
+    start_centers = [[-4.0], [3.1], [6.1], [12.0]];
+    template_clustering(start_centers, SIMPLE_SAMPLES.SAMPLE_SIMPLE8);
+
 def cluster_elongate():
     "Not so applicable for this sample"
     start_centers = [[1.0, 4.5], [3.1, 2.7]];
@@ -124,13 +132,15 @@ def experiment_execution_time(ccore = False):
     template_clustering([[0.0, 0.0, 0.0], [3.0, 0.0, 0.0], [-2.0, 0.0, 0.0], [0.0, 3.0, 0.0], [0.0, -3.0, 0.0], [0.0, 0.0, 2.5], [0.0, 0.0, -2.5]], FCPS_SAMPLES.SAMPLE_HEPTA, ccore); 
     template_clustering([[1, 0, 0], [0, 1, 0], [0, -1, 0], [-1, 0, 0]], FCPS_SAMPLES.SAMPLE_TETRA, ccore);    
     template_clustering([[0.5, 0.5], [2.3, 2.9]], FCPS_SAMPLES.SAMPLE_ENGY_TIME, ccore);    
-    
-    
+
+
 cluster_sample1();
 cluster_sample2();
 cluster_sample3();
 cluster_sample4();
 cluster_sample5();
+cluster_sample7();
+cluster_sample8();
 cluster_elongate();
 cluster_lsun();
 cluster_target();

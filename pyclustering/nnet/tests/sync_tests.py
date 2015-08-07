@@ -190,6 +190,41 @@ class Test(unittest.TestCase):
     def testSevenOscillatorDynamicByCore(self):
         self.templateDynamicSimulationConvergence(7, 1, conn_type.ALL_TO_ALL, True);
         
+    
+    def testOutputDinamicLengthSimulation(self):
+        net = sync_network(5);
+        output_dynamic = net.simulate(10, 10, solution = solve_type.FAST, collect_dynamic = True);
+        
+        assert len(output_dynamic) == 11; # 10 steps without initial values.
+    
+    
+    def testOutputDynamicLengthStaticSimulation(self):
+        net = sync_network(5);
+        output_dynamic = net.simulate_static(10, 10, solution = solve_type.FAST, collect_dynamic = True);
+        
+        assert len(output_dynamic) == 11; # 10 steps without initial values.    
+
+
+    def testOutputDynamicLengthStaticSimulationWithouCollecting(self):
+        net = sync_network(5);
+        output_dynamic = net.simulate_static(10, 10, solution = solve_type.FAST, collect_dynamic = False);
+        
+        assert len(output_dynamic) == 1; # 10 steps without initial values.    
+    
+    
+    def testOutputDynamicLengthDynamicSimulation(self):
+        net = sync_network(5);
+        output_dynamic = net.simulate_dynamic(solution = solve_type.FAST, collect_dynamic = True);
+        
+        assert len(output_dynamic) > 1; 
+
+
+    def testOutputDynamicLengthDynamicSimulationWithoutCollecting(self):
+        net = sync_network(5);
+        output_dynamic = net.simulate_dynamic(solution = solve_type.FAST, collect_dynamic = False);
+        
+        assert len(output_dynamic) == 1; 
+        
 
 if __name__ == "__main__":
     unittest.main();

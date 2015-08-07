@@ -52,13 +52,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>D:\userdata\annoviko\workspace\pyclustering\ccore\;D:\userdata\annoviko\workspace\pyclustering\ccore\tools;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)tools\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>D:\userdata\annoviko\workspace\pyclustering\ccore\tools\gtest\lib\win;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)tools\gtest\lib\win;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>gtestd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -92,6 +92,8 @@
     <ClCompile Include="..\ccore\support.cpp" />
     <ClCompile Include="..\ccore\sync.cpp" />
     <ClCompile Include="..\ccore\syncnet.cpp" />
+    <ClCompile Include="..\ccore\syncpr.cpp" />
+    <ClCompile Include="..\ccore\xmeans.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="samples.cpp" />
   </ItemGroup>
@@ -106,6 +108,8 @@
     <ClInclude Include="..\ccore\support.h" />
     <ClInclude Include="..\ccore\sync.h" />
     <ClInclude Include="..\ccore\syncnet.h" />
+    <ClInclude Include="..\ccore\syncpr.h" />
+    <ClInclude Include="..\ccore\xmeans.h" />
     <ClInclude Include="samples.h" />
     <ClInclude Include="utest-differential.h" />
     <ClInclude Include="utest-hsyncnet.h" />
@@ -116,6 +120,8 @@
     <ClInclude Include="utest-som.h" />
     <ClInclude Include="utest-sync.h" />
     <ClInclude Include="utest-syncnet.h" />
+    <ClInclude Include="utest-syncpr.h" />
+    <ClInclude Include="utest-xmeans.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

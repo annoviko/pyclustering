@@ -31,7 +31,10 @@ from pyclustering.utils import read_image, rgb2gray;
 from pyclustering.nnet import solve_type;
 from pyclustering.nnet.syncpr import syncpr, syncpr_visualizer;
 
-def template_recognition_image(images):
+import random;
+import math;
+
+def template_recognition_image(images, steps, time):
     samples = [];
     
     for file_name in images:
@@ -47,23 +50,70 @@ def template_recognition_image(images):
                 
         samples += [ image_pattern ];
     
-    net = syncpr(len(samples[0]), 1.0, 1.0);
+    net = syncpr(len(samples[0]), 0.3, 0.3);
     net.train(samples);
     
     # Recognize the each learned pattern
     for i in range(len(samples)):
-        sync_output_dynamic = net.simulate(25, 25, samples[i], solve_type.RK4);
+        sync_output_dynamic = net.simulate(steps, time, samples[i], solve_type.RK4, True);
         syncpr_visualizer.show_output_dynamic(sync_output_dynamic);
-        # syncpr_visualizer.show_energy(sync_output_dynamic);
-    
+        syncpr_visualizer.show_pattern(sync_output_dynamic, 10, 10);
+        
+        # corrupt a little bit by black and white pixels
+        for k in range( math.floor(len(samples[i]) * 0.1) ):
+            random.seed();
+            random_pixel = math.floor(random.random() * len(samples[i]));
+            samples[i][random_pixel] = 1.0;
+            
+            random_pixel = math.floor(random.random() * len(samples[i]));
+            samples[i][random_pixel] = -1.0;
+        
+        sync_output_dynamic = net.simulate(steps, time, samples[i], solve_type.RK4, True);
+        syncpr_visualizer.show_output_dynamic(sync_output_dynamic);
+        syncpr_visualizer.show_pattern(sync_output_dynamic, 10, 10);
+            
+        
 
-def small_image_recognition():
-    images = IMAGE_SYMBOL_SAMPLES.LIST_IMAGES_SYMBOL_D;
+def small_mind_image_recognition():
+    """!
+    @brief Trains network using letters 'M', 'I', 'N', 'D' and recognize each of them with and without noise.
+    
+    """
+    images = [];
+    images += IMAGE_SYMBOL_SAMPLES.LIST_IMAGES_SYMBOL_M;
     images += IMAGE_SYMBOL_SAMPLES.LIST_IMAGES_SYMBOL_I;
-    #images += IMAGE_SYMBOL_SAMPLES.LIST_IMAGES_SYMBOL_M;
-    #images += IMAGE_SYMBOL_SAMPLES.LIST_IMAGES_SYMBOL_N;
+    images += IMAGE_SYMBOL_SAMPLES.LIST_IMAGES_SYMBOL_N;
+    images += IMAGE_SYMBOL_SAMPLES.LIST_IMAGES_SYMBOL_D;
     
-    template_recognition_image(images);
+    template_recognition_image(images, 10, 10);
     
+    
+def small_abcd_image_recognition():
+    """!
+    @brief Trains network using letters 'A', 'B', 'C', 'D' and recognize each of them with and without noise.
+    
+    """
+    images = [];
+    images += IMAGE_SYMBOL_SAMPLES.LIST_IMAGES_SYMBOL_A;
+    images += IMAGE_SYMBOL_SAMPLES.LIST_IMAGES_SYMBOL_B;
+    images += IMAGE_SYMBOL_SAMPLES.LIST_IMAGES_SYMBOL_C;
+    images += IMAGE_SYMBOL_SAMPLES.LIST_IMAGES_SYMBOL_D;
+    
+    template_recognition_image(images, 25, 25);
+    
+    
+def small_ftk_image_recognition():
+    """!
+    @brief Trains network using letters 'F', 'T', 'K' and recognize each of them with and without noise.
+    
+    """
+    images = [];
+    images += IMAGE_SYMBOL_SAMPLES.LIST_IMAGES_SYMBOL_F;
+    images += IMAGE_SYMBOL_SAMPLES.LIST_IMAGES_SYMBOL_T;
+    images += IMAGE_SYMBOL_SAMPLES.LIST_IMAGES_SYMBOL_K;
+    
+    template_recognition_image(images, 10, 10);
 
-small_image_recognition();
+small_mind_image_recognition();
+small_abcd_image_recognition();
+small_ftk_image_recognition();

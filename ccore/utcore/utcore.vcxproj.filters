@@ -48,6 +48,12 @@
     <ClCompile Include="samples.cpp">
       <Filter>Header Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\ccore\syncpr.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ccore\xmeans.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="utest-kdtree.h">
@@ -108,6 +114,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="samples.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utest-syncpr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ccore\syncpr.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ccore\xmeans.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utest-xmeans.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

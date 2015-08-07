@@ -1,0 +1,26 @@
+Change notes for 0.6.dev0 (start Jul 18, 2015)
+
+General changes (pyclustering):
+- Implemented phase oscillatory network syncpr (pyclustering.nnet.syncpr).
+  See: https://github.com/annoviko/pyclustering/issues/208
+
+- Feature for pyclustering.nnet.syncpr that allows to use ccore library for solving.
+  See: https://github.com/annoviko/pyclustering/issues/232
+
+- Optimized simulation algorithm for sync oscillatory network (pyclustering.nnet.sync) when collecting results are not requested.
+  See: https://github.com/annoviko/pyclustering/issues/233
+
+- Images of english alphabet 100x100.
+  See: https://github.com/annoviko/pyclustering/commit/aa28f1a8a363fbeb5f074d22ec1e8258a1dd0579
+
+
+General changes (ccore):
+- Implemented phase oscillatory network for pattern recognition syncpr.
+  See: https://github.com/annoviko/pyclustering/issues/232
+
+
+Corrected bugs:
+- Bug with callback methods in ccore library in syncnet (ccore.syncnet) and hsyncnet (ccore.hsyncnet) that may lead to loss of accuracy.
+
+- Bug with division by zero in kmeans algorithm (ccore.kmeans, pyclustering.cluster.kmeans) when cluster after center updating is not able to capture object.
+  See: https://github.com/annoviko/pyclustering/issues/238

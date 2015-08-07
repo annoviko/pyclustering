@@ -33,10 +33,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 network::network(const unsigned int number_oscillators, const conn_type connection_type) {
 	num_osc = number_oscillators;
 	m_conn_type = connection_type;
-	osc_conn = NULL;
 
 	if ( (m_conn_type != conn_type::ALL_TO_ALL) && (m_conn_type != conn_type::NONE) ) {
-		osc_conn = new std::vector<std::vector<unsigned int> * >(number_oscillators, NULL);
+	    m_osc_conn.resize(number_oscillators, std::vector<unsigned int>());
 
 		if (m_conn_type == conn_type::DYNAMIC) {
 			unsigned int number_elements = 0;
@@ -50,44 +49,31 @@ network::network(const unsigned int number_oscillators, const conn_type connecti
 			}
 	
 			for (unsigned int index = 0; index < number_oscillators; index++) {
-				(*osc_conn)[index] = new std::vector<unsigned int>(number_elements, 0);
+			    m_osc_conn[index].resize(number_elements, 0);
 			}
 		}
 		else if ( (m_conn_type == conn_type::GRID_FOUR) || 
 			      (m_conn_type == conn_type::GRID_EIGHT) ||
 				  (m_conn_type == conn_type::LIST_BIDIR) ) {
-			conn_representation = LIST_CONN_REPRESENTATION;
+			       conn_representation = LIST_CONN_REPRESENTATION;
 
-			/* No predefined size for list representation */
-			for (unsigned int index = 0; index < number_oscillators; index++) {
-				(*osc_conn)[index] = new std::vector<unsigned int>();
-			}
+			       /* No predefined size for list representation */
 		}
 
 		create_structure(connection_type);
 	}
 }
 
-network::~network() {
-	if (osc_conn != NULL) {
-		for (std::vector<std::vector<unsigned int> *>::iterator iter = osc_conn->begin(); iter != osc_conn->end(); iter++) {
-			delete (*iter); 
-			(*iter) = NULL;
-		}
+network::~network() { }
 
-		delete osc_conn;
-		osc_conn = NULL;
-	}
-}
-
-std::vector<unsigned int> * network::get_neighbors(const unsigned int index) const {
-	std::vector<unsigned int> * result = new std::vector<unsigned int>();
+void network::get_neighbors(const unsigned int index, std::vector<unsigned int> & result) const {
+	result.clear();
 
 	switch (m_conn_type) {
 		case conn_type::ALL_TO_ALL: {
 			for (unsigned int index_neighbour = 0; index_neighbour < num_osc; index_neighbour++) {
 				if (index_neighbour != index) {
-					result->push_back(index_neighbour);
+					result.push_back(index_neighbour);
 				}
 			}
 			break;
@@ -96,15 +82,15 @@ std::vector<unsigned int> * network::get_neighbors(const unsigned int index) con
 		case conn_type::GRID_EIGHT:
 		case conn_type::GRID_FOUR:
 		case conn_type::LIST_BIDIR: {
-			result->resize((*osc_conn)[index]->size());
-			std::copy((*osc_conn)[index]->cbegin(), (*osc_conn)[index]->cend(), result->begin());
+			result.resize(m_osc_conn[index].size());
+			std::copy(m_osc_conn[index].begin(), m_osc_conn[index].end(), result.begin());
 			break;
 		}
 
 		case conn_type::DYNAMIC: {
 			for (unsigned int index_neighbour = 0; index_neighbour < num_osc; index_neighbour++) {
 				if (get_connection(index, index_neighbour) > 0) {
-					result->push_back(index_neighbour);
+					result.push_back(index_neighbour);
 				}
 			}
 			break;
@@ -114,8 +100,6 @@ std::vector<unsigned int> * network::get_neighbors(const unsigned int index) con
 		default:
 			break;
 	}
-
-	return result;
 }
 
 unsigned int network::get_connection(const unsigned int index1, const unsigned int index2) const { 
@@ -123,8 +107,9 @@ unsigned int network::get_connection(const unsigned int index1, const unsigned i
 		if (index1 == index2) {
 			return (unsigned int) 0;
 		}
-
-		return (unsigned int) 1;
+        else {
+            return (unsigned int) 1;
+        }
 	}
 	else if (m_conn_type == conn_type::NONE) {
 		return (unsigned int) 0;
@@ -132,19 +117,19 @@ unsigned int network::get_connection(const unsigned int index1, const unsigned i
 
 	switch(conn_representation) {
 		case MATRIX_CONN_REPRESENTATION: {
-			return (*(*osc_conn)[index1])[index2];
+			return m_osc_conn[index1][index2];
 		}
 		case BITMAP_CONN_REPRESENTATION: {
 			const unsigned int index_element = index2 / ( sizeof(unsigned int) << 3 );
 			const unsigned int bit_number = index2 - ( index_element * (sizeof(unsigned int) << 3) );
 
-			return ( (*(*osc_conn)[index1])[index_element] >> bit_number ) & (unsigned int) 0x01;
+			return ( m_osc_conn[index1][index_element] >> bit_number ) & (unsigned int) 0x01;
 		}
 		case LIST_CONN_REPRESENTATION: {
 			unsigned int output_value = (unsigned int) 0;
-			std::vector<unsigned int> * neighbors = (*osc_conn)[index1];
-			std::vector<unsigned int>::const_iterator existance = std::find(neighbors->cbegin(), neighbors->cend(), index2);
-			if (existance != neighbors->cend()) {
+			const std::vector<unsigned int> & neighbors = m_osc_conn[index1];
+			std::vector<unsigned int>::const_iterator existance = std::find(neighbors.begin(), neighbors.end(), index2);
+			if (existance != neighbors.end()) {
 				output_value = (unsigned int) 1;
 			}
 
@@ -159,18 +144,18 @@ unsigned int network::get_connection(const unsigned int index1, const unsigned i
 void network::set_connection(const unsigned int index1, const unsigned int index2) {
 	switch(conn_representation) {
 		case MATRIX_CONN_REPRESENTATION: {
-			(*(*osc_conn)[index1])[index2] = 1;
+			m_osc_conn[index1][index2] = 1;
 			break;
 		}
 		case BITMAP_CONN_REPRESENTATION: {
 			unsigned int index_element = index2 / ( sizeof(unsigned int) << 3 );
 			unsigned int bit_number = index2 % ( sizeof(unsigned int) << 3 );
 
-			(*(*osc_conn)[index1])[index_element] = (*(*osc_conn)[index1])[index_element] | ( (unsigned int) 0x01 << bit_number );
+			m_osc_conn[index1][index_element] = m_osc_conn[index1][index_element] | ( (unsigned int) 0x01 << bit_number );
 			break;
 		}
 		case LIST_CONN_REPRESENTATION: {
-			(*osc_conn)[index1]->push_back(index2);
+			m_osc_conn[index1].push_back(index2);
 			break;
 		}
 		default: {

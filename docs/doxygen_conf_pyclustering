@@ -789,6 +789,7 @@ INPUT                 += pyclustering/nnet/legion.py
 INPUT                 += pyclustering/nnet/pcnn.py
 INPUT                 += pyclustering/nnet/som.py
 INPUT                 += pyclustering/nnet/sync.py
+INPUT				  += pyclustering/nnet/syncpr.py
 
 INPUT                 += pyclustering/utils/__init__.py
 INPUT                 += pyclustering/utils/graph.py

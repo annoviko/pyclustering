@@ -29,7 +29,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 syncnet::syncnet(std::vector<std::vector<double> > * input_data, const double connectivity_radius, const bool enable_conn_weight, const initial_type initial_phases) :
-sync_network(input_data->size(), 1, 0, conn_type::DYNAMIC, initial_type::RANDOM_GAUSSIAN) {
+sync_network(input_data->size(), 1, 0, conn_type::DYNAMIC, initial_type::RANDOM_GAUSSIAN)
+{
+    set_callback_solver(&syncnet::adapter_phase_kuramoto);
+
 	oscillator_locations = new std::vector<std::vector<double> >(*input_data);
 	create_connections(connectivity_radius, enable_conn_weight);
 }
@@ -141,4 +144,10 @@ double syncnet::phase_kuramoto(const double t, const double teta, const std::vec
 
 void syncnet::process(const double order, const solve_type solver, const bool collect_dynamic, syncnet_analyser & analyser) {
 	simulate_dynamic(order, 0.1, solver, collect_dynamic, analyser);
+}
+
+
+void syncnet::adapter_phase_kuramoto(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs) {
+    outputs.resize(1);
+    outputs[0] = ((syncnet *) argv[0])->phase_kuramoto(t, inputs[0], argv);
 }

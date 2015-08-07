@@ -220,22 +220,23 @@ private:
 	conn_repr_type			conn_representation;
 	conn_type				m_conn_type;
 
-	std::vector<std::vector<unsigned int> * >		* osc_conn;
+	std::vector<std::vector<unsigned int> >		m_osc_conn;
 
 public:
 	network(const unsigned int number_oscillators, const conn_type connection_type);
+
 	virtual ~network();
 
 	inline unsigned int size(void) const { return num_osc; }
 
-	unsigned int get_connection(const unsigned int index1, const unsigned int index2) const;
+	virtual unsigned int get_connection(const unsigned int index1, const unsigned int index2) const;
 
-	void set_connection(const unsigned int index1, const unsigned int index2);
+	virtual void set_connection(const unsigned int index1, const unsigned int index2);
 
-	std::vector<unsigned int> * get_neighbors(const unsigned int index) const;
+	virtual void get_neighbors(const unsigned int index, std::vector<unsigned int> & result) const;
 
-	virtual void create_structure(const conn_type connection_structure);
-
+    virtual void create_structure(const conn_type connection_structure);
+	
 private:
 	void create_grid_four_connections(void);
 	void create_grid_eight_connections(void);

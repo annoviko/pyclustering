@@ -48,6 +48,7 @@ from pyclustering.nnet.tests                     import nnet_tests          as n
 from pyclustering.nnet.tests                     import pcnn_tests          as nnet_pcnn_unit_tests;
 from pyclustering.nnet.tests                     import som_tests           as nnet_som_unit_tests;
 from pyclustering.nnet.tests                     import sync_tests          as nnet_sync_unit_tests;
+from pyclustering.nnet.tests                     import syncpr_tests        as nnet_syncpr_unit_tests;
 
 from pyclustering.container.tests                import cftree_tests        as container_cftree_unit_tests;
 from pyclustering.container.tests                import kdtree_tests        as container_kdtree_unit_tests;

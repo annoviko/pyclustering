@@ -27,19 +27,18 @@ void pcnn::calculate_states(const pcnn_stimulus & stimulus) {
 
 	for (unsigned int index = 0; index < size(); index++) {
 		pcnn_oscillator & current_oscillator = m_oscillators[index];
-		std::vector<unsigned int> * neighbors = get_neighbors(index);
+		std::vector<unsigned int> neighbors;
+		get_neighbors(index, neighbors);
 
 		double feeding_influence = 0.0;
 		double linking_influence = 0.0;
 
-		for (std::vector<unsigned int>::const_iterator iter = neighbors->begin(); iter != neighbors->end(); iter++) {
+		for (std::vector<unsigned int>::const_iterator iter = neighbors.begin(); iter != neighbors.end(); iter++) {
 			const double output_neighbor = m_oscillators[(*iter)].output;
 
 			feeding_influence += output_neighbor * m_params.M;
 			linking_influence += output_neighbor * m_params.W;
 		}
-
-		delete neighbors;
 
 		feeding_influence *= m_params.VF;
 		linking_influence *= m_params.VL;
@@ -84,15 +83,15 @@ void pcnn::fast_linking(const std::vector<double> & feeding, std::vector<double>
 	while (previous_output_change) {
 		for (unsigned int index = 0; index < size(); index++) {
 			pcnn_oscillator & current_oscillator = m_oscillators[index];
-			std::vector<unsigned int> * neighbors = get_neighbors(index);
+
+			std::vector<unsigned int> neighbors;
+			get_neighbors(index, neighbors);
 
 			double linking_influence = 0.0;
 
-			for (std::vector<unsigned int>::const_iterator iter = neighbors->begin(); iter != neighbors->end(); iter++) {
+			for (std::vector<unsigned int>::const_iterator iter = neighbors.begin(); iter != neighbors.end(); iter++) {
 				linking_influence += previous_outputs[(*iter)] * m_params.W;
 			}
-
-			delete neighbors;
 
 			linking_influence *= m_params.VL;
 			linking[index] = linking_influence;
