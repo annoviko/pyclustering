@@ -325,8 +325,11 @@ class cure:
         # merged_cluster.mean = ( len(cluster1.points) * cluster1.mean + len(cluster2.points) * cluster2.mean ) / ( len(cluster1.points) + len(cluster2.points) );
         dimension = len(cluster1.mean);
         merged_cluster.mean = [0] * dimension;
-        for index in range(dimension):
-            merged_cluster.mean[index] = ( len(cluster1.points) * cluster1.mean[index] + len(cluster2.points) * cluster2.mean[index] ) / ( len(cluster1.points) + len(cluster2.points) );
+        if merged_cluster.points[1:] == merged_cluster.points[:-1]:
+            merged_cluster.mean = merged_cluster.points[0]
+        else:
+            for index in range(dimension):
+                merged_cluster.mean[index] = ( len(cluster1.points) * cluster1.mean[index] + len(cluster2.points) * cluster2.mean[index] ) / ( len(cluster1.points) + len(cluster2.points) );
         
         temporary = list(); # TODO: Set should be used in line with specification (article), but list is not hashable object therefore it's impossible to use list in this fucking set!
         
