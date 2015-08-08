@@ -26,6 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <fstream>
 #include <sstream>
 
+#include "agglomerative.h"
 #include "dbscan.h"
 #include "cure.h"
 #include "hierarchical.h"
@@ -124,6 +125,27 @@ void free_pyclustering_package(pyclustering_package * package) {
 		delete package;
 		package = NULL;
 	}
+}
+
+pyclustering_package * agglomerative_algorithm(const data_representation * const sample, const unsigned int number_clusters, const unsigned int link) {
+    agglomerative algorithm(number_clusters, (type_link) link);
+
+    std::vector<std::vector<double> > * dataset = read_sample(sample);
+
+    std::vector<cluster> clusters;
+    algorithm.process(*dataset, clusters);
+
+    pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
+    package->size = clusters.size();
+    package->data = new pyclustering_package * [package->size];
+
+    for (unsigned int i = 0; i < package->size; i++) {
+        ((pyclustering_package **) package->data)[i] = create_package(&clusters[i]);
+    }
+
+    delete dataset;
+
+    return package;
 }
 
 clustering_result * dbscan_algorithm(const data_representation * const sample, const double radius, const unsigned int minumum_neighbors) {

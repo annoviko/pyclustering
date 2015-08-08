@@ -40,7 +40,8 @@ typedef enum pyclustering_type_data {
 	PYCLUSTERING_TYPE_DOUBLE			= 3,
 	PYCLUSTERING_TYPE_LONG				= 4,
 	PYCLUSTERING_TYPE_UNSIGNED_LONG		= 5,
-	PYCLUSTERING_TYPE_LIST				= 6
+	PYCLUSTERING_TYPE_LIST				= 6,
+	PYCLUSTERING_TYPE_UNDEFINED         = 7,
 } pyclustering_type_data;
 
 typedef struct pyclustering_package {
@@ -48,8 +49,16 @@ typedef struct pyclustering_package {
 	unsigned int type;		/* pyclustering_type_data    */
 	void * data;			/* pointer to data           */
 
-	pyclustering_package(void) { }
-	pyclustering_package(unsigned int package_type) : type(package_type) { }
+    pyclustering_package(void) :
+        type(PYCLUSTERING_TYPE_UNDEFINED),
+        size(0),
+        data(nullptr) { }
+
+    pyclustering_package(unsigned int package_type) :
+        type(package_type),
+        size(0),
+        data(nullptr) { }
+
 } pyclustering_package;
 
 typedef struct cluster_representation {
@@ -94,6 +103,8 @@ extern "C" DECLARATION void free_clustering_result(clustering_result * pointer);
 extern "C" DECLARATION void free_dynamic_result(dynamic_result * pointer);
 
 extern "C" DECLARATION void free_pyclustering_package(pyclustering_package * package);
+
+extern "C" DECLARATION pyclustering_package * agglomerative_algorithm(const data_representation * const sample, const unsigned int number_clusters, const unsigned int link);
 
 /***********************************************************************************************
  *
