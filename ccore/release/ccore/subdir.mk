@@ -3,6 +3,24 @@
 ################################################################################
 
 # Add inputs and outputs from these tool invocations to the build variables 
+O_SRCS += \
+../ccore/ccore.o \
+../ccore/cure.o \
+../ccore/dbscan.o \
+../ccore/hierarchical.o \
+../ccore/hsyncnet.o \
+../ccore/kdtree.o \
+../ccore/kmeans.o \
+../ccore/legion.o \
+../ccore/network.o \
+../ccore/pcnn.o \
+../ccore/rock.o \
+../ccore/som.o \
+../ccore/support.o \
+../ccore/sync.o \
+../ccore/syncnet.o \
+../ccore/xmeans.o 
+
 CPP_SRCS += \
 ../ccore/ccore.cpp \
 ../ccore/cure.cpp \
