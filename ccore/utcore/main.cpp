@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 
+#include "utest-agglomerative.h"
 #include "utest-differential.h"
 #include "utest-hsyncnet.h"
 #include "utest-kdtree.h"

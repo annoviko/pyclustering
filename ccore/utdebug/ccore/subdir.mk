@@ -4,6 +4,7 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
+../ccore/agglomerative.cpp \
 ../ccore/ccore.cpp \
 ../ccore/cure.cpp \
 ../ccore/dbscan.cpp \
@@ -23,6 +24,7 @@ CPP_SRCS += \
 ../ccore/xmeans.cpp 
 
 OBJS += \
+./ccore/agglomerative.o \
 ./ccore/ccore.o \
 ./ccore/cure.o \
 ./ccore/dbscan.o \
@@ -42,6 +44,7 @@ OBJS += \
 ./ccore/xmeans.o 
 
 CPP_DEPS += \
+./ccore/agglomerative.d \
 ./ccore/ccore.d \
 ./ccore/cure.d \
 ./ccore/dbscan.d \
