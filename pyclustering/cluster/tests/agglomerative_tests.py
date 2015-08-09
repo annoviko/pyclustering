@@ -33,10 +33,10 @@ from pyclustering.utils import read_sample;
 from random import random;
 
 class Test(unittest.TestCase):
-    def templateClusteringResults(self, path, number_clusters, link, expected_length_clusters):
+    def templateClusteringResults(self, path, number_clusters, link, expected_length_clusters, ccore_flag = False):
         sample = read_sample(path);
         
-        agglomerative_instance = agglomerative(sample, number_clusters, link);
+        agglomerative_instance = agglomerative(sample, number_clusters, link, ccore_flag);
         agglomerative_instance.process();
         
         clusters = agglomerative_instance.get_clusters();
@@ -48,49 +48,81 @@ class Test(unittest.TestCase):
     def testClusteringSampleSimple1LinkAverage(self):
         self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, type_link.AVERAGE_LINK, [5, 5]);
         self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, type_link.AVERAGE_LINK, [10]);
-        
+
+    def testClusteringSampleSimple1LinkAverageByCore(self):
+        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, type_link.AVERAGE_LINK, [5, 5], True);
+        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, type_link.AVERAGE_LINK, [10], True);
+
     def testClusteringSampleSimple1LinkCentroid(self):
         self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, type_link.CENTROID_LINK, [5, 5]);
         self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, type_link.CENTROID_LINK, [10]);
 
+    def testClusteringSampleSimple1LinkCentroidByCore(self):
+        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, type_link.CENTROID_LINK, [5, 5], True);
+        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, type_link.CENTROID_LINK, [10], True);
+
     def testClusteringSampleSimple1LinkComplete(self):
         self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, type_link.COMPLETE_LINK, [5, 5]);
         self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, type_link.COMPLETE_LINK, [10]);
-        
+
+    def testClusteringSampleSimple1LinkCompleteByCore(self):
+        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, type_link.COMPLETE_LINK, [5, 5], True);
+        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, type_link.COMPLETE_LINK, [10], True);
+
     def testClusteringSampleSimple1LinkSingle(self):
         self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, type_link.SINGLE_LINK, [5, 5]);
         self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, type_link.SINGLE_LINK, [10]);
 
+    def testClusteringSampleSimple1LinkSingleByCore(self):
+        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, type_link.SINGLE_LINK, [5, 5], True);
+        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, type_link.SINGLE_LINK, [10], True);
+
     def testClusteringSampleSimple2LinkAverage(self):
-        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 3, type_link.AVERAGE_LINK, [5, 8, 10]);        
+        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 3, type_link.AVERAGE_LINK, [5, 8, 10]);
         self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 1, type_link.AVERAGE_LINK, [23]);
 
+    def testClusteringSampleSimple2LinkAverageByCore(self):
+        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 3, type_link.AVERAGE_LINK, [5, 8, 10], True);
+        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 1, type_link.AVERAGE_LINK, [23], True);
+
     def testClusteringSampleSimple2LinkCentroid(self):
-        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 3, type_link.CENTROID_LINK, [5, 8, 10]);        
+        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 3, type_link.CENTROID_LINK, [5, 8, 10]);
         self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 1, type_link.CENTROID_LINK, [23]);
-        
+
+    def testClusteringSampleSimple2LinkCentroidByCore(self):
+        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 3, type_link.CENTROID_LINK, [5, 8, 10], True);
+        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 1, type_link.CENTROID_LINK, [23], True);
+
     def testClusteringSampleSimple2LinkComplete(self):
-        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 3, type_link.COMPLETE_LINK, [5, 8, 10]);        
+        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 3, type_link.COMPLETE_LINK, [5, 8, 10]);
         self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 1, type_link.COMPLETE_LINK, [23]);
-        
+
+    def testClusteringSampleSimple2LinkCompleteByCore(self):
+        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 3, type_link.COMPLETE_LINK, [5, 8, 10], True);
+        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 1, type_link.COMPLETE_LINK, [23], True);
+
     def testClusteringSampleSimple2LinkSingle(self):
-        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 3, type_link.SINGLE_LINK, [5, 8, 10]);        
+        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 3, type_link.SINGLE_LINK, [5, 8, 10]);
         self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 1, type_link.SINGLE_LINK, [23]);
 
+    def testClusteringSampleSimple2LinkSingleByCore(self):
+        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 3, type_link.SINGLE_LINK, [5, 8, 10], True);
+        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 1, type_link.SINGLE_LINK, [23], True);
+
     def testClusteringSampleSimple3LinkAverage(self):
-        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 4, type_link.AVERAGE_LINK, [10, 10, 10, 30]);        
+        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 4, type_link.AVERAGE_LINK, [10, 10, 10, 30]);
         self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 1, type_link.AVERAGE_LINK, [60]);
         
     def testClusteringSampleSimple3LinkCentroid(self):
-        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 4, type_link.CENTROID_LINK, [10, 10, 10, 30]);        
+        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 4, type_link.CENTROID_LINK, [10, 10, 10, 30]);
         self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 1, type_link.CENTROID_LINK, [60]);
         
     def testClusteringSampleSimple3LinkComplete(self):
-        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 4, type_link.COMPLETE_LINK, [10, 10, 10, 30]);        
+        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 4, type_link.COMPLETE_LINK, [10, 10, 10, 30]);
         self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 1, type_link.COMPLETE_LINK, [60]);
         
     def testClusteringSampleSimple3LinkSingle(self):
-        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 4, type_link.SINGLE_LINK, [10, 10, 10, 30]);        
+        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 4, type_link.SINGLE_LINK, [10, 10, 10, 30]);
         self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 1, type_link.SINGLE_LINK, [60]);
         
     def testClusteringSampleSimple4LinkAverage(self):
@@ -126,10 +158,10 @@ class Test(unittest.TestCase):
         self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 1, type_link.SINGLE_LINK, [60]); 
         
     
-    def templateClusterAllocationOneDimensionData(self, link):
+    def templateClusterAllocationOneDimensionData(self, link, ccore_flag = False):
         input_data = [ [random()] for i in range(10) ] + [ [random() + 3] for i in range(10) ] + [ [random() + 5] for i in range(10) ] + [ [random() + 8] for i in range(10) ];
         
-        agglomerative_instance = agglomerative(input_data, 4, link);
+        agglomerative_instance = agglomerative(input_data, 4, link, ccore_flag);
         agglomerative_instance.process();
         clusters = agglomerative_instance.get_clusters();
         
@@ -140,14 +172,27 @@ class Test(unittest.TestCase):
     def testClusterAllocationOneDimensionDataLinkAverage(self):
         self.templateClusterAllocationOneDimensionData(type_link.AVERAGE_LINK);
 
+    def testClusterAllocationOneDimensionDataLinkAverageByCore(self):
+        self.templateClusterAllocationOneDimensionData(type_link.AVERAGE_LINK, True);
+
     def testClusterAllocationOneDimensionDataLinkCentroid(self):
         self.templateClusterAllocationOneDimensionData(type_link.CENTROID_LINK);
-        
+
+    def testClusterAllocationOneDimensionDataLinkCentroidByCore(self):
+        self.templateClusterAllocationOneDimensionData(type_link.CENTROID_LINK, True);
+
     def testClusterAllocationOneDimensionDataLinkComplete(self):
         self.templateClusterAllocationOneDimensionData(type_link.COMPLETE_LINK);
-        
+
+    def testClusterAllocationOneDimensionDataLinkCompleteByCore(self):
+        self.templateClusterAllocationOneDimensionData(type_link.COMPLETE_LINK, True);
+
     def testClusterAllocationOneDimensionDataLinkSingle(self):
         self.templateClusterAllocationOneDimensionData(type_link.SINGLE_LINK);
+
+    def testClusterAllocationOneDimensionDataLinkSingleByCore(self):
+        self.templateClusterAllocationOneDimensionData(type_link.SINGLE_LINK, True);
+
 
 if __name__ == "__main__":
     unittest.main();

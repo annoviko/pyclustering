@@ -29,6 +29,8 @@ from enum import IntEnum;
 
 from pyclustering.utils import euclidean_distance_sqrt;
 
+import pyclustering.core.agglomerative_wrapper as wrapper;
+
 
 class type_link(IntEnum):
     """!
@@ -82,13 +84,14 @@ class agglomerative:
     __centers = None;   # used in case of usage of centroid links
     
     
-    def __init__(self, data, number_clusters, link):
+    def __init__(self, data, number_clusters, link, ccore = False):
         """!
         @brief Constructor of clustering algorithm hierarchical.
         
         @param[in] data (list): Input data that is presented as a list of points (objects), each point should be represented by a list or tuple.
         @param[in] number_clusters (uint): Number of clusters that should be allocated.
         @param[in] link (type_link): Link type that is used for calculation similarity between objects and clusters.
+        @param[in] ccore (bool): Defines should be CCORE (C++ pyclustering library) used instead of Python code or not.
         
         """  
         
@@ -97,6 +100,7 @@ class agglomerative:
         self.__similarity = link;
         
         self.__clusters = [];
+        self.__ccore = ccore;
         
         if (self.__similarity == type_link.CENTROID_LINK):
             self.__centers = self.__pointer_data.copy();
@@ -109,14 +113,18 @@ class agglomerative:
         @see get_clusters()
         
         """
-                
-        self.__clusters = [[index] for index in range(0, len(self.__pointer_data))];
         
-        current_number_clusters = len(self.__clusters);
+        if (self.__ccore is True):
+            self.__clusters = wrapper.agglomerative_algorithm(self.__pointer_data, self.__number_clusters, self.__similarity);
+
+        else:
+            self.__clusters = [[index] for index in range(0, len(self.__pointer_data))];
             
-        while (current_number_clusters > self.__number_clusters):
-            self.__merge_similar_clusters();
             current_number_clusters = len(self.__clusters);
+                
+            while (current_number_clusters > self.__number_clusters):
+                self.__merge_similar_clusters();
+                current_number_clusters = len(self.__clusters);
     
     
     def get_clusters(self):
