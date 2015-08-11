@@ -66,6 +66,9 @@
     <ClCompile Include="syncpr.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="agglomerative.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dbscan.h">
@@ -120,6 +123,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="syncpr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="agglomerative.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

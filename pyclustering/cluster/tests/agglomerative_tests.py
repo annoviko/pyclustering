@@ -192,6 +192,53 @@ class Test(unittest.TestCase):
 
     def testClusterAllocationOneDimensionDataLinkSingleByCore(self):
         self.templateClusterAllocationOneDimensionData(type_link.SINGLE_LINK, True);
+    
+    
+    def templateClusterAllocationTheSameObjects(self, number_objects, number_clusters, link, ccore_flag = False):
+        input_data = [ [random()] ] * number_objects;
+        
+        agglomerative_instance = agglomerative(input_data, number_clusters, link, ccore_flag);
+        agglomerative_instance.process();
+        clusters = agglomerative_instance.get_clusters();
+        
+        assert len(clusters) == number_clusters;
+        
+        object_mark = [False] * number_objects;
+        allocated_number_objects = 0;
+        
+        for cluster in clusters:
+            for index_object in cluster: 
+                assert (object_mark[index_object] == False);    # one object can be in only one cluster.
+                
+                object_mark[index_object] = True;
+                allocated_number_objects += 1;
+            
+        assert (number_objects == allocated_number_objects);    # number of allocated objects should be the same.
+    
+    
+    def testTwoClusterAllocationTheSameObjectsLinkAverage(self):
+        self.templateClusterAllocationTheSameObjects(10, 2, type_link.AVERAGE_LINK, False);
+        
+    def testTwoClusterAllocationTheSameObjectsLinkAverageByCore(self):
+        self.templateClusterAllocationTheSameObjects(10, 2, type_link.AVERAGE_LINK, True);
+    
+    def testTwoClusterAllocationTheSameObjectLinkCentroid(self):
+        self.templateClusterAllocationTheSameObjects(10, 2, type_link.CENTROID_LINK, False);
+
+    def testTwoClusterAllocationTheSameObjectLinkCentroidByCore(self):
+        self.templateClusterAllocationTheSameObjects(10, 2, type_link.CENTROID_LINK, True);
+ 
+    def testTwoClusterAllocationTheSameObjectLinkComplete(self):
+        self.templateClusterAllocationTheSameObjects(10, 2, type_link.COMPLETE_LINK, False);   
+
+    def testTwoClusterAllocationTheSameObjectLinkCompleteByCore(self):
+        self.templateClusterAllocationTheSameObjects(10, 2, type_link.COMPLETE_LINK, True); 
+
+    def testTwoClusterAllocationTheSameObjectLinkSingle(self):
+        self.templateClusterAllocationTheSameObjects(10, 2, type_link.SINGLE_LINK, False); 
+
+    def testTwoClusterAllocationTheSameObjectLinkSingleByCore(self):
+        self.templateClusterAllocationTheSameObjects(10, 2, type_link.SINGLE_LINK, True);
 
 
 if __name__ == "__main__":

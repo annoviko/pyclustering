@@ -145,6 +145,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="agglomerative.cpp" />
     <ClCompile Include="ccore.cpp" />
     <ClCompile Include="cure.cpp" />
     <ClCompile Include="dbscan.cpp" />
@@ -164,6 +165,7 @@
     <ClCompile Include="xmeans.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="agglomerative.h" />
     <ClInclude Include="cure.h" />
     <ClInclude Include="dbscan.h" />
     <ClInclude Include="differential.h" />
