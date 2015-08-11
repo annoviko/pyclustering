@@ -15,8 +15,11 @@ General changes (pyclustering):
 
 
 General changes (ccore):
-- Implemented phase oscillatory network for pattern recognition syncpr.
+- Implemented phase oscillatory network for pattern recognition syncpr (ccore.syncpr).
   See: https://github.com/annoviko/pyclustering/issues/232
+  
+- Implemented agglomerative algorithm for cluster analysis (ccore.agglomerative).
+  See: https://github.com/annoviko/pyclustering/issues/212
 
 
 Corrected bugs:
@@ -24,3 +27,9 @@ Corrected bugs:
 
 - Bug with division by zero in kmeans algorithm (ccore.kmeans, pyclustering.cluster.kmeans) when cluster after center updating is not able to capture object.
   See: https://github.com/annoviko/pyclustering/issues/238
+
+- Bug with stack overflow in KD tree in case of big data (pyclustering.container.kdtree).
+  See: https://github.com/annoviko/pyclustering/pull/239
+
+- But with incorrect clustering in case of the same elements in cure algorithm (pyclustering.cluster.cure).
+  See: https://github.com/annoviko/pyclustering/pull/239

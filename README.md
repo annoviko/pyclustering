@@ -43,7 +43,7 @@ Clustering algorithms (module pyclustering.cluster):
 - BIRCH [Python]
 - CURE [Python, C++]
 - DBSCAN [Python, C++]
-- Agglomerative [Python]
+- Agglomerative [Python, C++]
 - HSyncNet [Python, C++]
 - K-Means [Python, C++]
 - K-Medians [Python]
