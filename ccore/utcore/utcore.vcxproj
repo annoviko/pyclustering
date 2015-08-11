@@ -83,6 +83,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\ccore\agglomerative.cpp" />
     <ClCompile Include="..\ccore\hsyncnet.cpp" />
     <ClCompile Include="..\ccore\kdtree.cpp" />
     <ClCompile Include="..\ccore\legion.cpp" />
@@ -98,6 +99,7 @@
     <ClCompile Include="samples.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\ccore\agglomerative.h" />
     <ClInclude Include="..\ccore\differential.h" />
     <ClInclude Include="..\ccore\hsyncnet.h" />
     <ClInclude Include="..\ccore\kdtree.h" />
@@ -111,6 +113,7 @@
     <ClInclude Include="..\ccore\syncpr.h" />
     <ClInclude Include="..\ccore\xmeans.h" />
     <ClInclude Include="samples.h" />
+    <ClInclude Include="utest-agglomerative.h" />
     <ClInclude Include="utest-differential.h" />
     <ClInclude Include="utest-hsyncnet.h" />
     <ClInclude Include="utest-kdtree.h" />
