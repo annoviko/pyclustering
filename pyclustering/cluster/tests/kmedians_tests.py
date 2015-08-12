@@ -45,9 +45,10 @@ class Test(unittest.TestCase):
         obtained_cluster_sizes = [len(cluster) for cluster in clusters];
         assert len(sample) == sum(obtained_cluster_sizes);
         
-        obtained_cluster_sizes.sort();
-        expected_cluster_length.sort();
-        assert obtained_cluster_sizes == expected_cluster_length;
+        if (expected_cluster_length is not None):
+            obtained_cluster_sizes.sort();
+            expected_cluster_length.sort();
+            assert obtained_cluster_sizes == expected_cluster_length;
     
     def testClusterAllocationSampleSimple1(self):
         self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5]);
@@ -72,7 +73,12 @@ class Test(unittest.TestCase):
   
     def testClusterOneAllocationSampleSimple5(self):
         self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [[0.0, 0.0]], [60]);   
-            
+    
+    def testClusterAllocationSample1WrongInitialNumberCenters(self):
+        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[2.8, 9.5], [3.5, 6.6], [1.3, 4.0]], None);
+    
+    def testClusterAllocationSample2WrongInitialNumberCenters(self):
+        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [[3.5, 4.8], [6.9, 7], [7.5, 0.5], [7.3, 4.5], [3.1, 5.4]], None);
     
     def testDifferentDimensions(self):
         kmedians_instance = kmedians([ [0, 1, 5], [0, 2, 3] ], [ [0, 3] ]);
@@ -92,6 +98,40 @@ class Test(unittest.TestCase):
                 
     def testClusterAllocationOneDimensionData(self):
         self.templateClusterAllocationOneDimensionData();
+    
+    
+    def templateClusterAllocationTheSameObjects(self, number_objects, number_clusters, ccore_flag = False):
+        value = random();
+        input_data = [ [value] ] * number_objects;
+        
+        initial_centers = [];
+        for i in range(number_clusters):
+            initial_centers.append([ random() ]);
+        
+        kmedians_instance = kmedians(input_data, initial_centers);
+        kmedians_instance.process();
+        clusters = kmedians_instance.get_clusters();
+        
+        object_mark = [False] * number_objects;
+        allocated_number_objects = 0;
+        
+        for cluster in clusters:
+            for index_object in cluster: 
+                assert (object_mark[index_object] == False);    # one object can be in only one cluster.
+                
+                object_mark[index_object] = True;
+                allocated_number_objects += 1;
+            
+        assert (number_objects == allocated_number_objects);    # number of allocated objects should be the same.
+
+    def testClusterAllocationTheSameObjectsOneInitialCenter(self):
+        self.templateClusterAllocationTheSameObjects(20, 1, False);
+
+    def testClusterAllocationTheSameObjectsTwoInitialCenters(self):
+        self.templateClusterAllocationTheSameObjects(15, 2, False);
+
+    def testClusterAllocationTheSameObjectsThreeInitialCenters(self):
+        self.templateClusterAllocationTheSameObjects(25, 3, False);
 
 
 if __name__ == "__main__":
