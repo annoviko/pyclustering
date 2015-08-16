@@ -260,8 +260,6 @@ class kdtree:
         stack = [];
         candidates = [];
         isFinished = False;
-        # candidates.append(node)
-        # stack.append(node)
         while isFinished is False:
             if node is not None:
                 stack.append(node);

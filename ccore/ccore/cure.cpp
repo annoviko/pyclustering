@@ -27,6 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <limits>
 #include <set>
+#include <iostream>
 
 
 cure_cluster::cure_cluster(void) : closest(nullptr), distance_closest(0), mean(nullptr) {
@@ -141,7 +142,28 @@ double cure_queue::get_distance(cure_cluster * cluster1, cure_cluster * cluster2
 }
 
 
+bool cure_queue::are_all_elements_same(cure_cluster * merged_cluster) {
+	
+	std::vector< std::vector<double> * > * points;
+	points = merged_cluster->points;
+	bool are_all_same = true;
+	std::vector<double> *first_point;
+	first_point = points->front();
+	std::vector<double> *point;
+	for (unsigned int i = 0; i < points->size(); i++) {
+		point = (*points)[i];
+		if (*point != *first_point) {
+			are_all_same = false;
+			break;
+		}
+	}
+
+	return are_all_same;
+}
+
+
 void cure_queue::merge(cure_cluster * cluster1, cure_cluster * cluster2, const unsigned int number_repr_points, const double compression) {
+
 	remove_representative_points(cluster1);
 	remove_representative_points(cluster2);
 
@@ -153,8 +175,18 @@ void cure_queue::merge(cure_cluster * cluster1, cure_cluster * cluster2, const u
 	merged_cluster->insert_points(cluster2->points);
 
 	merged_cluster->mean = new std::vector<double>((*cluster1->points)[0]->size(), 0);
-	for (unsigned int dimension = 0; dimension < merged_cluster->mean->size(); dimension++) {
-		(*merged_cluster->mean)[dimension] = (cluster1->points->size() * (*cluster1->mean)[dimension] + cluster2->points->size() * (*cluster2->mean)[dimension]) / (cluster1->points->size() + cluster2->points->size());
+	
+	//If all elements were same then avoid calculating the mean mathematically as it may lead to precision error.
+	if (are_all_elements_same(merged_cluster)) {
+		for (unsigned int i = 0; i < (*merged_cluster->points)[0]->size(); i++) {
+			(*merged_cluster->mean)[i] = (*(*merged_cluster->points)[0])[i];
+		}
+		
+	}
+	else {
+		for (unsigned int dimension = 0; dimension < merged_cluster->mean->size(); dimension++) {
+			(*merged_cluster->mean)[dimension] = (cluster1->points->size() * (*cluster1->mean)[dimension] + cluster2->points->size() * (*cluster2->mean)[dimension]) / (cluster1->points->size() + cluster2->points->size());
+		}
 	}
 
 	std::set<std::vector<double> *> * temporary = new std::set<std::vector<double> *>();

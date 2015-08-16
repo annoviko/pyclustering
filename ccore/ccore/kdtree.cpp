@@ -25,6 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "kdtree.h"
 #include "support.h"
 
+
 kdnode::kdnode(std::vector<double> * p_data, void * p_payload,  kdnode * p_left, kdnode * p_right, kdnode * p_parent, unsigned int disc) :
 	data(p_data), payload(p_payload), left(p_left), right(p_right), parent(p_parent), discriminator(disc)
 	{ }
@@ -211,19 +212,35 @@ kdnode * kdtree::recursive_remove(kdnode * node) {
 
 
 kdnode * kdtree::find_minimal_node(kdnode * node, unsigned int discriminator) {
+
+	std::stack <kdnode *> stack;
 	kdnode * minimal_node = node;
+	std::vector<kdnode *> candidates;
+	bool is_done = false;
 
-	std::vector<kdnode *> * children = node->get_children();
-	for (unsigned int index_children = 0; index_children < children->size(); index_children++) {
-		kdnode * candidate = find_minimal_node((*children)[index_children], discriminator);
-
-		if (candidate->get_value(discriminator) <= minimal_node->get_value(discriminator)) {
-			minimal_node = candidate;
+	while (!is_done) {
+		if (node != nullptr) {
+			stack.push(node);
+			node = node->get_left();
+		}
+		else {
+			if (stack.size() != 0) {
+				node = stack.top();
+				candidates.push_back(node);
+				stack.pop();
+				node = node->get_right();
+			}
+			else {
+				is_done = true;
+			}
 		}
 	}
 
-	delete children;
-	children = nullptr;
+	for (int i = 0; i < candidates.size(); i++) {
+		if (candidates[i]->get_value(discriminator) <= minimal_node->get_value(discriminator)) {
+			minimal_node = candidates[i];
+		}
+	}
 
 	return minimal_node;
 }
