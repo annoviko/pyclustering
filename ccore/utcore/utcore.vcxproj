@@ -53,7 +53,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)tools\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -86,6 +86,7 @@
     <ClCompile Include="..\ccore\agglomerative.cpp" />
     <ClCompile Include="..\ccore\hsyncnet.cpp" />
     <ClCompile Include="..\ccore\kdtree.cpp" />
+    <ClCompile Include="..\ccore\kmedians.cpp" />
     <ClCompile Include="..\ccore\legion.cpp" />
     <ClCompile Include="..\ccore\network.cpp" />
     <ClCompile Include="..\ccore\pcnn.cpp" />
@@ -103,6 +104,7 @@
     <ClInclude Include="..\ccore\differential.h" />
     <ClInclude Include="..\ccore\hsyncnet.h" />
     <ClInclude Include="..\ccore\kdtree.h" />
+    <ClInclude Include="..\ccore\kmedians.h" />
     <ClInclude Include="..\ccore\legion.h" />
     <ClInclude Include="..\ccore\network.h" />
     <ClInclude Include="..\ccore\pcnn.h" />

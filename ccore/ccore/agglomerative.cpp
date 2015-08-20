@@ -80,7 +80,7 @@ void agglomerative::merge_similar_clusters(void) {
     }
 }
 
-#include <iostream>
+
 void agglomerative::merge_by_average_link(void) {
     double minimum_average_distance = std::numeric_limits<double>::max();
 

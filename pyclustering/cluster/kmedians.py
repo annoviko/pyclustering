@@ -59,7 +59,7 @@ class kmedians:
         @brief Constructor of clustering algorithm K-Medians.
         
         @param[in] data (list): Input data that is presented as list of points (objects), each point should be represented by list or tuple.
-        @param[in] initial_centers (list): Initial coordinates of centers of clusters that are represented by list: [center1, center2, ...].
+        @param[in] initial_centers (list): Initial coordinates of medians of clusters that are represented by list: [center1, center2, ...].
         @param[in] tolerance (double): Stop condition: if maximum value of change of centers of clusters is less than tolerance than algorithm will stop processing
         
         """

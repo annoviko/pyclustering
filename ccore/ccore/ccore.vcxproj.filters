@@ -69,6 +69,9 @@
     <ClCompile Include="agglomerative.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="kmedians.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dbscan.h">
@@ -126,6 +129,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="agglomerative.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="kmedians.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

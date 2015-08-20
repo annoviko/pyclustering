@@ -32,6 +32,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "hierarchical.h"
 #include "hsyncnet.h"
 #include "kmeans.h"
+#include "kmedians.h"
 #include "rock.h"
 #include "syncnet.h"
 #include "xmeans.h"
@@ -216,6 +217,30 @@ clustering_result * kmeans_algorithm(const data_representation * const sample, c
 	delete centers; centers = NULL;
 
 	return result;
+}
+
+pyclustering_package * kmedians_algorithm(const data_representation * const sample, const data_representation * const initial_medians, const double tolerance) {
+    std::vector<std::vector<double> > * dataset = read_sample(sample);
+    std::vector<std::vector<double> > * medians = read_sample(initial_medians);
+
+    kmedians algorithm(*medians, tolerance);
+
+    std::vector<cluster> clusters;
+    algorithm.process(*dataset);
+    algorithm.get_clusters(clusters);
+
+    pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
+    package->size = clusters.size();
+    package->data = new pyclustering_package * [package->size];
+
+    for (unsigned int i = 0; i < package->size; i++) {
+        ((pyclustering_package **) package->data)[i] = create_package(&clusters[i]);
+    }
+
+    delete dataset;
+    delete medians;
+
+    return package;
 }
 
 clustering_result * rock_algorithm(const data_representation * const sample, const double radius, const unsigned int number_clusters, const double threshold) {

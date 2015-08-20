@@ -166,6 +166,8 @@ extern "C" DECLARATION clustering_result * hierarchical_algorithm(const data_rep
  ***********************************************************************************************/
 extern "C" DECLARATION clustering_result * kmeans_algorithm(const data_representation * const sample, const data_representation * const initial_centers, const double tolerance);
 
+extern "C" DECLARATION pyclustering_package * kmedians_algorithm(const data_representation * const sample, const data_representation * const initial_medians, const double tolerance);
+
 /***********************************************************************************************
  *
  * @brief   Clustering algorithm ROCK returns allocated clusters.

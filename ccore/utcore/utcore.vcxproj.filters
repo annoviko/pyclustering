@@ -57,6 +57,9 @@
     <ClCompile Include="..\ccore\agglomerative.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\ccore\kmedians.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="utest-kdtree.h">
@@ -135,6 +138,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\ccore\agglomerative.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ccore\kmedians.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
   </ItemGroup>
