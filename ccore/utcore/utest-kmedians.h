@@ -62,35 +62,35 @@ const std::vector<unsigned int> & expected_cluster_length)
 }
 
 
-//TEST(utest_kmedians, allocation_sample_simple_01) {
-//    std::vector<std::vector<double> > start_medians = { { 3.7, 5.5 }, { 6.7, 7.5 } };
-//    std::vector<unsigned int> expected_clusters_length = { 5, 5 };
-//    template_length_process_data(SIMPLE_SAMPLE_01, start_medians, expected_clusters_length);
-//}
-//
-//TEST(utest_kmedians, allocation_sample_simple_02) {
-//    std::vector<std::vector<double> > start_medians = { { 3.5, 4.8 }, { 6.9, 7.0 }, { 7.5, 0.5 } };
-//    std::vector<unsigned int> expected_clusters_length = { 10, 5, 8 };
-//    template_length_process_data(SIMPLE_SAMPLE_02, start_medians, expected_clusters_length);
-//}
-//
-//TEST(utest_kmedians, allocation_sample_simple_03) {
-//    std::vector<std::vector<double> > start_medians = { { 0.2, 0.1 }, { 4.0, 1.0 }, { 2.0, 2.0 }, { 2.3, 3.9 } };
-//    std::vector<unsigned int> expected_clusters_length = { 10, 10, 10, 30 };
-//    template_length_process_data(SIMPLE_SAMPLE_03, start_medians, expected_clusters_length);
-//}
-//
-//TEST(utest_kmedians, large_number_medoids_sample_simple_01) {
-//    std::vector<std::vector<double> > start_medians = { { 1.7, 2.6 }, { 3.7, 4.5 }, { 4.5, 1.6 }, { 6.4, 5.0 }, { 2.2, 2.2 } };
-//    std::vector<unsigned int> expected_clusters_length;   /* pass empty */
-//    template_length_process_data(SIMPLE_SAMPLE_01, start_medians, expected_clusters_length);
-//}
-//
-//TEST(utest_kmedians, large_number_medoids_sample_simple_02) {
-//    std::vector<std::vector<double> > start_medians = { { -1.5, 0.8 }, { -4.9, 5.0 }, { 2.3, 3.2 }, { -1.2, -0.8 }, { 2.5, 2.9 }, { 6.8, 7.9 } };
-//    std::vector<unsigned int> expected_clusters_length;   /* pass empty */
-//    template_length_process_data(SIMPLE_SAMPLE_02, start_medians, expected_clusters_length);
-//}
+TEST(utest_kmedians, allocation_sample_simple_01) {
+    std::vector<std::vector<double> > start_medians = { { 3.7, 5.5 }, { 6.7, 7.5 } };
+    std::vector<unsigned int> expected_clusters_length = { 5, 5 };
+    template_length_process_data(SIMPLE_SAMPLE_01, start_medians, expected_clusters_length);
+}
+
+TEST(utest_kmedians, allocation_sample_simple_02) {
+    std::vector<std::vector<double> > start_medians = { { 3.5, 4.8 }, { 6.9, 7.0 }, { 7.5, 0.5 } };
+    std::vector<unsigned int> expected_clusters_length = { 10, 5, 8 };
+    template_length_process_data(SIMPLE_SAMPLE_02, start_medians, expected_clusters_length);
+}
+
+TEST(utest_kmedians, allocation_sample_simple_03) {
+    std::vector<std::vector<double> > start_medians = { { 0.2, 0.1 }, { 4.0, 1.0 }, { 2.0, 2.0 }, { 2.3, 3.9 } };
+    std::vector<unsigned int> expected_clusters_length = { 10, 10, 10, 30 };
+    template_length_process_data(SIMPLE_SAMPLE_03, start_medians, expected_clusters_length);
+}
+
+TEST(utest_kmedians, large_number_medoids_sample_simple_01) {
+    std::vector<std::vector<double> > start_medians = { { 1.7, 2.6 }, { 3.7, 4.5 }, { 4.5, 1.6 }, { 6.4, 5.0 }, { 2.2, 2.2 } };
+    std::vector<unsigned int> expected_clusters_length;   /* pass empty */
+    template_length_process_data(SIMPLE_SAMPLE_01, start_medians, expected_clusters_length);
+}
+
+TEST(utest_kmedians, large_number_medoids_sample_simple_02) {
+    std::vector<std::vector<double> > start_medians = { { -1.5, 0.8 }, { -4.9, 5.0 }, { 2.3, 3.2 }, { -1.2, -0.8 }, { 2.5, 2.9 }, { 6.8, 7.9 } };
+    std::vector<unsigned int> expected_clusters_length;   /* pass empty */
+    template_length_process_data(SIMPLE_SAMPLE_02, start_medians, expected_clusters_length);
+}
 
 
 TEST(utest_kmedians, large_number_medoids_sample_simple_03) {
