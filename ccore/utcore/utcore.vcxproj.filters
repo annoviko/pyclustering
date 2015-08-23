@@ -143,5 +143,8 @@
     <ClInclude Include="..\ccore\kmedians.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
+    <ClInclude Include="utest-kmedians.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -36,12 +36,25 @@ void kmedians::process(const std::vector<point> & data) {
 
     double stop_condition = m_tolerance * m_tolerance;
     double changes = 0.0;
+    double prev_changes = 0.0;
+
+    size_t counter_repeaters = 0;
 
     do {
         update_clusters();
         changes = update_medians();
+
+        double change_difference = abs(changes - prev_changes);
+        if (change_difference < 0.000001) {
+            counter_repeaters++;
+        }
+        else {
+            counter_repeaters = 0;
+        }
+
+        prev_changes = changes;
     }
-    while(changes > stop_condition);
+    while ((changes > stop_condition) && (counter_repeaters < 10));
 
     m_ptr_data = nullptr;
 }
@@ -58,7 +71,7 @@ void kmedians::update_clusters() {
         double distance_optim = std::numeric_limits<double>::max();
 
         for (size_t index_cluster = 0; index_cluster < m_medians.size(); index_cluster++) {
-            double distance = euclidean_distance_sqrt(&data[index_point], &data[index_cluster]);
+            double distance = euclidean_distance_sqrt(&data[index_point], &m_medians[index_cluster]);
             if (distance < distance_optim) {
                 index_cluster_optim = index_cluster;
                 distance_optim = distance;

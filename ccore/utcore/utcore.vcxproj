@@ -119,6 +119,7 @@
     <ClInclude Include="utest-differential.h" />
     <ClInclude Include="utest-hsyncnet.h" />
     <ClInclude Include="utest-kdtree.h" />
+    <ClInclude Include="utest-kmedians.h" />
     <ClInclude Include="utest-legion.h" />
     <ClInclude Include="utest-network.h" />
     <ClInclude Include="utest-pcnn.h" />
