@@ -28,8 +28,10 @@ Corrected bugs:
 - Bug with division by zero in kmeans algorithm (ccore.kmeans, pyclustering.cluster.kmeans) when cluster after center updating is not able to capture object.
   See: https://github.com/annoviko/pyclustering/issues/238
 
-- Bug with stack overflow in KD tree in case of big data (pyclustering.container.kdtree).
+- Bug with stack overflow in KD tree in case of big data (pyclustering.container.kdtree, ccore.kdtree).
   See: https://github.com/annoviko/pyclustering/pull/239
-
-- But with incorrect clustering in case of the same elements in cure algorithm (pyclustering.cluster.cure).
+  See: https://github.com/annoviko/pyclustering/issues/255
+  See: https://github.com/annoviko/pyclustering/issues/254
+  
+- Bug with incorrect clustering in case of the same elements in cure algorithm (pyclustering.cluster.cure).
   See: https://github.com/annoviko/pyclustering/pull/239

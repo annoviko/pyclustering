@@ -66,7 +66,7 @@ def three_oscillator_stimulated_list():
 def three_oscillator_mix_stimulated_list():
     parameters = legion_parameters();
     parameters.Wt = 4.0;
-    template_dynamic_legion(3, 1500, 1500, conn_type = conn_type.LIST_BIDIR, stimulus = [1, 0, 1], params = parameters);
+    template_dynamic_legion(3, 1200, 1200, conn_type = conn_type.LIST_BIDIR, stimulus = [1, 0, 1], params = parameters);
     
 def ten_oscillator_stimulated_list():
     template_dynamic_legion(10, 1000, 750, conn_type = conn_type.LIST_BIDIR, stimulus = [1] * 10);
