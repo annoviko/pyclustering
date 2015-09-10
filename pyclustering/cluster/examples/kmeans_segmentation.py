@@ -68,7 +68,9 @@ def segmentation_image_fruit_small():
 
 def segmentation_image_nil():
     template_segmentation_image(IMAGE_MAP_SAMPLES.IMAGE_NILE_SMALL, [[54, 64, 39], [193, 171, 134], [26, 71, 128]]);
-    
+
+def segmentation_image_map_buildings():
+    template_segmentation_image(IMAGE_MAP_SAMPLES.IMAGE_BUILDINGS, [[134, 179, 166], [73, 95, 74], [75, 84, 80]]);   
     
 segmentation_image_simple1();
 segmentation_image_simple2();
@@ -79,3 +81,4 @@ segmentation_image_fruit();
 segmentation_image_building();
 segmentation_image_fruit_small();
 segmentation_image_nil();
+segmentation_image_map_buildings();

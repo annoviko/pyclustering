@@ -29,7 +29,7 @@ from PIL import Image;
 
 from pyclustering.utils import draw_image_mask_segments, draw_image_color_segments, read_image;
 
-from pyclustering.samples.definitions import IMAGE_SIMPLE_SAMPLES, IMAGE_MAP_SAMPLES;
+from pyclustering.samples.definitions import IMAGE_SIMPLE_SAMPLES, IMAGE_MAP_SAMPLES, IMAGE_REAL_SAMPLES;
 
 from pyclustering.cluster.dbscan import dbscan;
 
@@ -149,8 +149,18 @@ def segmentation_image_nile():
     
 def segmentation_image_nile_small():
     template_segmentation_image(IMAGE_MAP_SAMPLES.IMAGE_NILE_SMALL, 5, 11, 10, 5, 10);
+
+def segmentation_image_map_buildings():
+    template_segmentation_image(IMAGE_MAP_SAMPLES.IMAGE_BUILDINGS, 8, 10, None, None, 5);
+
+def segmentation_image_flower_field():
+    template_segmentation_image(IMAGE_REAL_SAMPLES.IMAGE_FIELD_FLOWER, 8, 8, None, None, 5);
+
+def segmentation_image_tree_field():
+    template_segmentation_image(IMAGE_REAL_SAMPLES.IMAGE_FIELD_TREE, 11, 4, None, None, 5);
     
-    
+
+   
 segmentation_image_simple1();
 segmentation_image_simple2();
 segmentation_image_simple3();
@@ -165,8 +175,12 @@ segmentation_image_simple11();
 segmentation_image_beach();
 segmentation_image_building();
 segmentation_image_fruits_small();
-
+ 
 segmentation_image_white_sea();
 segmentation_image_white_sea_small();
 segmentation_image_nile();
 segmentation_image_nile_small();
+segmentation_image_map_buildings();
+
+segmentation_image_flower_field();
+segmentation_image_tree_field();

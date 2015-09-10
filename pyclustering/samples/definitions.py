@@ -105,10 +105,12 @@ class IMAGE_MAP_SAMPLES:
     IMAGE_WHITE_SEA_SMALL           = samples.__path__[0] + os.sep + "images" + os.sep + "ImageWhiteSeaSmall.png";
     IMAGE_NILE                      = samples.__path__[0] + os.sep + "images" + os.sep + "ImageNile.png";
     IMAGE_NILE_SMALL                = samples.__path__[0] + os.sep + "images" + os.sep + "ImageNileSmall.png";
+    IMAGE_BUILDINGS                 = samples.__path__[0] + os.sep + "images" + os.sep + "ImageBuildings.png";
     
 
 class IMAGE_REAL_SAMPLES:
     IMAGE_FIELD_FLOWER              = samples.__path__[0] + os.sep + "images" + os.sep + "ImageFieldFlower.png";
+    IMAGE_FIELD_TREE                = samples.__path__[0] + os.sep + "images" + os.sep + "ImageFieldTree.png";
     
 
 class IMAGE_SYMBOL_SAMPLES:
