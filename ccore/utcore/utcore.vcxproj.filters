@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="TestEnv Source Files">
+      <UniqueIdentifier>{9c57f161-4c1e-4636-bce0-4c7f5277b6ab}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -59,6 +62,9 @@
     </ClCompile>
     <ClCompile Include="..\ccore\kmedians.cpp">
       <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\tools\gtest\gtest-all.cc">
+      <Filter>TestEnv Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -145,6 +151,9 @@
     </ClInclude>
     <ClInclude Include="utest-kmedians.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tools\gtest\gtest.h">
+      <Filter>TestEnv Source Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
