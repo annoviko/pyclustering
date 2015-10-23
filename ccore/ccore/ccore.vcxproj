@@ -170,6 +170,7 @@
     <ClInclude Include="cure.h" />
     <ClInclude Include="dbscan.h" />
     <ClInclude Include="differential.h" />
+    <ClInclude Include="dynamic_data.h" />
     <ClInclude Include="hierarchical.h" />
     <ClInclude Include="hsyncnet.h" />
     <ClInclude Include="ccore.h" />

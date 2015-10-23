@@ -25,6 +25,7 @@ static void template_dynamic_generation(
     /* check that each iteration of output dynamic has states for the same number of oscillators */
     for (unsigned int index = 0; index < num_osc; index++) {
         ASSERT_EQ(num_osc, dynamic[index].m_output.size());
+        ASSERT_EQ(num_osc, dynamic.dynamic_at(index).size());
     }
 	
 	pcnn_time_signal time_signal;

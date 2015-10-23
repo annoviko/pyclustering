@@ -155,5 +155,8 @@
     <ClInclude Include="..\tools\gtest\gtest.h">
       <Filter>TestEnv Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\ccore\dynamic_data.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
