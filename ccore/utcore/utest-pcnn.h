@@ -21,6 +21,11 @@ static void template_dynamic_generation(
 	network.simulate(steps, stimulus, dynamic);
 
 	ASSERT_EQ(steps, dynamic.size());
+
+    /* check that each iteration of output dynamic has states for the same number of oscillators */
+    for (unsigned int index = 0; index < num_osc; index++) {
+        ASSERT_EQ(num_osc, dynamic[index].m_output.size());
+    }
 	
 	pcnn_time_signal time_signal;
 	dynamic.allocate_time_signal(time_signal);
