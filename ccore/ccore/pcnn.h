@@ -93,7 +93,11 @@ private:
 	pcnn(void);
 
 public:
-	pcnn(const unsigned int num_osc, const conn_type connection_type, const pcnn_parameters & parameters);
+	pcnn(const unsigned int num_osc, 
+		 const conn_type connection_type, 
+		 const pcnn_parameters & parameters,
+		 const unsigned int width_osc,
+		 const unsigned int height_osc);
 
 	virtual ~pcnn(void);
 
