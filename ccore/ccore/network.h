@@ -118,13 +118,18 @@ private:
 class network {
 private:
 	unsigned int			num_osc;
+	unsigned int            width_osc;
+	unsigned int            height_osc; 
 	conn_repr_type			conn_representation;
 	conn_type				m_conn_type;
 
 	std::vector<std::vector<unsigned int> >		m_osc_conn;
 
 public:
-	network(const unsigned int number_oscillators, const conn_type connection_type);
+	network(const unsigned int number_oscillators, 
+		 	const conn_type connection_type,
+		 	const unsigned int width_oscillators,
+    	 	const unsigned int height_oscillators);
 
 	virtual ~network();
 

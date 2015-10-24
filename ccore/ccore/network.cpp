@@ -29,10 +29,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdexcept>
 #include <algorithm>
 
+network::network(const unsigned int number_oscillators, 
+				 const conn_type connection_type,
+				 const unsigned int width_oscillators,
+				 const unsigned int height_oscillators) {
 
-network::network(const unsigned int number_oscillators, const conn_type connection_type) {
 	num_osc = number_oscillators;
 	m_conn_type = connection_type;
+	width_osc = width_oscillators;
+	height_osc = height_oscillators;
 
 	if ( (m_conn_type != conn_type::ALL_TO_ALL) && (m_conn_type != conn_type::NONE) ) {
 	    m_osc_conn.resize(number_oscillators, std::vector<unsigned int>());
@@ -198,22 +203,15 @@ void network::create_list_bidir_connections() {
 }
 
 void network::create_grid_four_connections() {
-	const double conv_side_size = std::sqrt((double) num_osc);
-	if (conv_side_size - std::floor(conv_side_size) > 0) {
-		throw std::runtime_error("Invalid number of oscillators in the network for the grid structure");
-	}
-
-	const unsigned int side_size = (unsigned int) conv_side_size;
 
 	for (unsigned int index = 0; index < num_osc; index++) {
 
-
-		const int upper_index = index - side_size;
-		const int lower_index = index + side_size;
+		const int upper_index = index - width_osc;
+		const int lower_index = index + width_osc;
 		const int left_index = index - 1;
 		const int right_index = index + 1;
 
-		unsigned int node_row_index = std::ceil(index / side_size);
+		unsigned int node_row_index = std::ceil(index / width_osc);
 		if (upper_index >= 0) {
 			set_connection(index, upper_index);
 		}
@@ -222,11 +220,11 @@ void network::create_grid_four_connections() {
 			set_connection(index, lower_index);
 		}
 
-		if ( (left_index >= 0) && (std::ceil(left_index / side_size) == node_row_index) ) {
+		if ( (left_index >= 0) && (std::ceil(left_index / width_osc) == node_row_index) ) {
 			set_connection(index, left_index);
 		}
 
-		if ( (right_index < num_osc) && (std::ceil(right_index / side_size) == node_row_index) ) {
+		if ( (right_index < num_osc) && (std::ceil(right_index / width_osc) == node_row_index) ) {
 			set_connection(index, right_index);
 		}
 	}
@@ -235,37 +233,35 @@ void network::create_grid_four_connections() {
 void network::create_grid_eight_connections() {
 	create_grid_four_connections();	/* create connection with right, upper, left, lower neighbor */
 	
-	const int side_size = (unsigned int) std::sqrt((double) num_osc);
-
 	for (unsigned int index = 0; index < num_osc; index++) {
-        const int upper_index = index - side_size;
-        const int upper_left_index = index - side_size - 1;
-        const int upper_right_index = index - side_size + 1;
+        const int upper_index = index - width_osc;
+        const int upper_left_index = index - width_osc - 1;
+        const int upper_right_index = index - width_osc + 1;
             
-        const int lower_index = index + side_size;
-        const int lower_left_index = index + side_size - 1;
-        const int lower_right_index = index + side_size + 1;
+        const int lower_index = index + width_osc;
+        const int lower_left_index = index + width_osc - 1;
+        const int lower_right_index = index + width_osc + 1;
             
         const int left_index = index - 1;
         const int right_index = index + 1;
             
-        const int node_row_index = std::floor(index / side_size);
+        const int node_row_index = std::floor(index / width_osc);
         const int upper_row_index = node_row_index - 1;
         const int lower_row_index = node_row_index + 1;
 
-		if ( (upper_left_index >= 0) && (std::floor(upper_left_index / side_size) == upper_row_index) ) {
+		if ( (upper_left_index >= 0) && (std::floor(upper_left_index / width_osc) == upper_row_index) ) {
 			set_connection(index, upper_left_index);
 		}
 
-		if ( (upper_right_index >= 0) && (std::floor(upper_right_index / side_size) == upper_row_index) ) {
+		if ( (upper_right_index >= 0) && (std::floor(upper_right_index / width_osc) == upper_row_index) ) {
 			set_connection(index, upper_right_index);
 		}
 
-		if ( (lower_left_index < num_osc) && (std::floor(lower_left_index / side_size) == lower_row_index) ) {
+		if ( (lower_left_index < num_osc) && (std::floor(lower_left_index / width_osc) == lower_row_index) ) {
 			set_connection(index, lower_left_index);
 		}
 
-		if ( (lower_right_index < num_osc) && (std::floor(lower_right_index / side_size) == lower_row_index) ) {
+		if ( (lower_right_index < num_osc) && (std::floor(lower_right_index / width_osc) == lower_row_index) ) {
 			set_connection(index, lower_right_index);
 		}
 	}
