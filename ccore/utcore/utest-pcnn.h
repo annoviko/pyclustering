@@ -8,6 +8,29 @@
 
 #include <unordered_set>
 
+static void template_dynamic_generation_runner(
+    pcnn & network,
+    const unsigned int steps,
+    const conn_type type_conn,
+    const pcnn_stimulus & stimulus) {
+
+    pcnn_dynamic dynamic;
+    network.simulate(steps, stimulus, dynamic);
+
+    ASSERT_EQ(steps, dynamic.size());
+
+    /* check that each iteration of output dynamic has states for the same number of oscillators */
+    for (unsigned int index = 0; index < network.size(); index++) {
+        ASSERT_EQ(network.size(), dynamic[index].m_output.size());
+        ASSERT_EQ(network.size(), dynamic.dynamic_at(index).size());
+    }
+
+    pcnn_time_signal time_signal;
+    dynamic.allocate_time_signal(time_signal);
+
+    ASSERT_EQ(steps, time_signal.size());
+}
+
 static void template_dynamic_generation(
 		const unsigned int num_osc, 
 		const unsigned int steps, 
@@ -17,22 +40,23 @@ static void template_dynamic_generation(
 	pcnn_parameters parameters;
 	pcnn network(num_osc, type_conn, parameters);
 
-	pcnn_dynamic dynamic;
-	network.simulate(steps, stimulus, dynamic);
-
-	ASSERT_EQ(steps, dynamic.size());
-
-    /* check that each iteration of output dynamic has states for the same number of oscillators */
-    for (unsigned int index = 0; index < num_osc; index++) {
-        ASSERT_EQ(num_osc, dynamic[index].m_output.size());
-        ASSERT_EQ(num_osc, dynamic.dynamic_at(index).size());
-    }
-	
-	pcnn_time_signal time_signal;
-	dynamic.allocate_time_signal(time_signal);
-
-	ASSERT_EQ(steps, time_signal.size());
+    template_dynamic_generation_runner(network, steps, type_conn, stimulus);
 }
+
+static void template_rectangle_network_dynamic_generation(
+    const unsigned int num_osc,
+    const unsigned int steps,
+    const conn_type type_conn,
+    const size_t height,
+    const size_t width,
+    const pcnn_stimulus & stimulus) {
+
+    pcnn_parameters parameters;
+    pcnn network(num_osc, type_conn, height, width, parameters);
+
+    template_dynamic_generation_runner(network, steps, type_conn, stimulus);
+}
+
 
 TEST(utest_pcnn, create_delete) {
 	pcnn_parameters parameters;
@@ -53,9 +77,19 @@ TEST(utest_pcnn, dynamic_generation_grid_four_connections) {
 	template_dynamic_generation(stimulus.size(), 20, conn_type::GRID_FOUR, stimulus);
 }
 
+TEST(utest_pcnn, dynamic_generation_grid_four_rectangle_connections) {
+    pcnn_stimulus stimulus{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+    template_rectangle_network_dynamic_generation(stimulus.size(), 20, conn_type::GRID_FOUR, 2, 8, stimulus);
+}
+
 TEST(utest_pcnn, dynamic_generation_grid_eight_connections) {
 	pcnn_stimulus stimulus { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }; 
 	template_dynamic_generation(stimulus.size(), 20, conn_type::GRID_EIGHT, stimulus);
+}
+
+TEST(utest_pcnn, dynamic_generation_grid_eight_rectangle_connections) {
+    pcnn_stimulus stimulus{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+    template_rectangle_network_dynamic_generation(stimulus.size(), 20, conn_type::GRID_EIGHT, 8, 2, stimulus);
 }
 
 TEST(utest_pcnn, dynamic_generation_bidir_list_connections) {
@@ -78,9 +112,19 @@ TEST(utest_pcnn, dynamic_grid_four_connections_stimulated) {
 	template_dynamic_generation(stimulus.size(), 20, conn_type::GRID_FOUR, stimulus);
 }
 
+TEST(utest_pcnn, dynamic_grid_four_connections_rectangle_stimulated) {
+    pcnn_stimulus stimulus{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+    template_rectangle_network_dynamic_generation(stimulus.size(), 20, conn_type::GRID_FOUR, 2, 8, stimulus);
+}
+
 TEST(utest_pcnn, dynamic_grid_eight_connections_stimulated) {
 	pcnn_stimulus stimulus { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }; 
 	template_dynamic_generation(stimulus.size(), 20, conn_type::GRID_EIGHT, stimulus);
+}
+
+TEST(utest_pcnn, dynamic_grid_eight_connections_rectangle_stimulated) {
+    pcnn_stimulus stimulus{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+    template_rectangle_network_dynamic_generation(stimulus.size(), 20, conn_type::GRID_EIGHT, 8, 2, stimulus);
 }
 
 TEST(utest_pcnn, dynamic_bidir_list_connections_stimulated) {

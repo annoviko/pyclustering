@@ -105,6 +105,7 @@
     <ClInclude Include="..\ccore\agglomerative.h" />
     <ClInclude Include="..\ccore\differential.h" />
     <ClInclude Include="..\ccore\dynamic_data.h" />
+    <ClInclude Include="..\ccore\ensemble_data.h" />
     <ClInclude Include="..\ccore\hsyncnet.h" />
     <ClInclude Include="..\ccore\kdtree.h" />
     <ClInclude Include="..\ccore\kmedians.h" />

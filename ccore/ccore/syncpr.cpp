@@ -26,6 +26,21 @@ syncpr::syncpr(const unsigned int num_osc,
 }
 
 
+syncpr::syncpr(const unsigned int num_osc,
+    const size_t height,
+    const size_t width,
+    const double increase_strength1,
+    const double increase_strength2) :
+
+    sync_network(num_osc, 1, 0, conn_type::ALL_TO_ALL, height, width, initial_type::RANDOM_GAUSSIAN),
+    m_increase_strength1(increase_strength1),
+    m_increase_strength2(increase_strength2),
+    m_coupling(num_osc, std::vector<double>(num_osc, 0.0))
+{
+    set_callback_solver(&syncpr::adapter_phase_kuramoto);
+}
+
+
 syncpr::~syncpr() { }
 
 

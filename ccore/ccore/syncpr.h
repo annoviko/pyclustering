@@ -31,6 +31,12 @@ public:
            const double increase_strength1, 
            const double increase_strength2);
 
+    syncpr(const unsigned int num_osc,
+           const size_t height,
+           const size_t width,
+           const double increase_strength1,
+           const double increase_strength2);
+
     virtual ~syncpr(void);
 
 public:

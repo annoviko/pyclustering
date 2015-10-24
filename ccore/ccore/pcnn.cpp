@@ -9,6 +9,13 @@ pcnn::pcnn(const unsigned int size, const conn_type connection_type, const pcnn_
 	m_params = parameters;
 }
 
+pcnn::pcnn(const unsigned int size, const conn_type connection_type, const size_t height, const size_t width, const pcnn_parameters & parameters) :
+m_oscillators(size, pcnn_oscillator()),
+network(size, connection_type, height, width)
+{
+    m_params = parameters;
+}
+
 pcnn::~pcnn() { }
 
 void pcnn::simulate(const unsigned int steps, const pcnn_stimulus & stimulus, pcnn_dynamic & output_dynamic) {
@@ -27,13 +34,13 @@ void pcnn::calculate_states(const pcnn_stimulus & stimulus) {
 
 	for (unsigned int index = 0; index < size(); index++) {
 		pcnn_oscillator & current_oscillator = m_oscillators[index];
-		std::vector<unsigned int> neighbors;
+		std::vector<size_t> neighbors;
 		get_neighbors(index, neighbors);
 
 		double feeding_influence = 0.0;
 		double linking_influence = 0.0;
 
-		for (std::vector<unsigned int>::const_iterator iter = neighbors.begin(); iter != neighbors.end(); iter++) {
+        for (std::vector<size_t>::const_iterator iter = neighbors.begin(); iter != neighbors.end(); iter++) {
 			const double output_neighbor = m_oscillators[(*iter)].output;
 
 			feeding_influence += output_neighbor * m_params.M;
@@ -84,12 +91,12 @@ void pcnn::fast_linking(const std::vector<double> & feeding, std::vector<double>
 		for (unsigned int index = 0; index < size(); index++) {
 			pcnn_oscillator & current_oscillator = m_oscillators[index];
 
-			std::vector<unsigned int> neighbors;
+            std::vector<size_t> neighbors;
 			get_neighbors(index, neighbors);
 
 			double linking_influence = 0.0;
 
-			for (std::vector<unsigned int>::const_iterator iter = neighbors.begin(); iter != neighbors.end(); iter++) {
+            for (std::vector<size_t>::const_iterator iter = neighbors.begin(); iter != neighbors.end(); iter++) {
 				linking_influence += previous_outputs[(*iter)] * m_params.W;
 			}
 

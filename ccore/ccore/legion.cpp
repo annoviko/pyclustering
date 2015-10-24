@@ -18,6 +18,21 @@ legion_network::legion_network(const unsigned int num_osc, const conn_type conne
 	}
 }
 
+legion_network::legion_network(const unsigned int num_osc, const conn_type connection_type, const size_t height, const size_t width, const legion_parameters & params) :
+m_oscillators(num_osc, legion_oscillator()),
+m_dynamic_connections(num_osc, std::vector<double>(num_osc, 0.0)),
+m_stimulus(NULL),
+m_generator(m_device()),
+m_noise_distribution(0.0, params.ro),
+network(num_osc, connection_type, height, width) {
+
+    m_params = params;
+
+    for (size_t index = 0; index < m_oscillators.size(); index++) {
+        m_oscillators[index].m_noise = m_noise_distribution(m_generator);
+    }
+}
+
 legion_network::~legion_network() {
 	m_stimulus = NULL;
 }
@@ -51,13 +66,13 @@ void legion_network::create_dynamic_connections(const legion_stimulus & stimulus
 		/* re-initialization by 0.0 */
 		std::fill(m_dynamic_connections[i].begin(), m_dynamic_connections[i].end(), 0.0);
 
-		std::vector<unsigned int> neighbors;
+		std::vector<size_t> neighbors;
 		get_neighbors(i, neighbors);
 
 		if (neighbors.size() > 0 && stimulus[i] > 0) {
 			int number_stimulated_neighbors = 0;
 
-			for (std::vector<unsigned int>::iterator index_iterator = neighbors.begin(); index_iterator != neighbors.end(); index_iterator++) {
+			for (std::vector<size_t>::iterator index_iterator = neighbors.begin(); index_iterator != neighbors.end(); index_iterator++) {
 				if (stimulus[*index_iterator] > 0) {
 					number_stimulated_neighbors++;
 				}
@@ -66,7 +81,7 @@ void legion_network::create_dynamic_connections(const legion_stimulus & stimulus
 			if (number_stimulated_neighbors > 0) {
 				double dynamic_weight = m_params.Wt / (double) number_stimulated_neighbors;
 
-				for (std::vector<unsigned int>::iterator index_iterator = neighbors.begin(); index_iterator != neighbors.end(); index_iterator++) {
+				for (std::vector<size_t>::iterator index_iterator = neighbors.begin(); index_iterator != neighbors.end(); index_iterator++) {
 					m_dynamic_connections[i][*index_iterator] = dynamic_weight;
 				}
 			}
@@ -140,12 +155,12 @@ void legion_network::calculate_states(const legion_stimulus & stimulus, const so
 			}
 		}
 
-		std::vector<unsigned int> neighbors;
+        std::vector<size_t> neighbors;
 		get_neighbors(index, neighbors);
 
 		double coupling = 0.0;
 
-		for (std::vector<unsigned int>::const_iterator index_neighbor_iterator = neighbors.begin(); index_neighbor_iterator != neighbors.end(); index_neighbor_iterator++) {
+        for (std::vector<size_t>::const_iterator index_neighbor_iterator = neighbors.begin(); index_neighbor_iterator != neighbors.end(); index_neighbor_iterator++) {
 			coupling += m_dynamic_connections[index][*index_neighbor_iterator] * heaviside(m_oscillators[*index_neighbor_iterator].m_excitatory - m_params.teta_x);
 		}
 
@@ -214,12 +229,12 @@ void legion_network::neuron_states(const double t, const differ_state<double> & 
 	double dx = 3.0 * x - std::pow(x, 3) + 2.0 - y + stumulus * potential_influence + m_oscillators[index].m_coupling_term + m_oscillators[index].m_noise;
 	double dy = m_params.eps * (m_params.gamma * (1.0 + std::tanh(x / m_params.betta)) - y);
 
-	std::vector<unsigned int> neighbors;
+    std::vector<size_t> neighbors;
 	get_neighbors(index, neighbors);
 
 	double potential = 0.0;
 
-	for (std::vector<unsigned int>::const_iterator index_iterator = neighbors.begin(); index_iterator != neighbors.end(); index_iterator++) {
+    for (std::vector<size_t>::const_iterator index_iterator = neighbors.begin(); index_iterator != neighbors.end(); index_iterator++) {
 		unsigned int index_neighbor = *index_iterator;
 		potential += m_params.T * heaviside(m_oscillators[index_neighbor].m_excitatory - m_params.teta_x);
 	}

@@ -125,6 +125,12 @@ private:
 public:
 	legion_network(const unsigned int num_osc, const conn_type connection_type, const legion_parameters & params);
 
+    legion_network(const unsigned int num_osc,
+        const conn_type connection_type,
+        const size_t height,
+        const size_t width,
+        const legion_parameters & params);
+
 	virtual ~legion_network(void);
 
 public:

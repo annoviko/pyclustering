@@ -110,7 +110,7 @@ public:
     *
     * @brief   Returns dynamic state of the network at the specified iteration step.
     *
-    * @param[in] iteration (const size_t): number of iteration at which dynamic is required.
+    * @param[in] iteration (size_t): number of iteration at which dynamic is required.
     *
     * @return (value_type &) reference to dynamic state of the network at the specified iteration.
     *

@@ -15,6 +15,49 @@ TEST(utest_network, create_delete) {
 	delete net;
 }
 
+TEST(utest_network, create_four_grid_correct) {
+    network network_grid_structure_10_10(100, conn_type::GRID_FOUR, 10, 10);
+    network network_grid_structure_5_20(100, conn_type::GRID_FOUR, 5, 20);
+    network network_grid_structure_1_100(100, conn_type::GRID_FOUR, 1, 100);
+
+    network network_grid_structure_3_5(15, conn_type::GRID_FOUR, 3, 5);
+    network network_grid_structure_5_3(15, conn_type::GRID_FOUR, 5, 3);
+    network network_grid_structure_15_1(15, conn_type::GRID_FOUR, 15, 1);
+    network network_grid_structure_1_15(15, conn_type::GRID_FOUR, 1, 15);
+}
+
+TEST(utest_network, create_four_grid_incorrect) {
+    ASSERT_ANY_THROW(network network_grid_structure(100, conn_type::GRID_FOUR, 0, 0));
+    ASSERT_ANY_THROW(network network_grid_structure(100, conn_type::GRID_FOUR, 6, 20));
+    ASSERT_ANY_THROW(network network_grid_structure(100, conn_type::GRID_FOUR, 0, 1000));
+    ASSERT_ANY_THROW(network network_grid_structure(100, conn_type::GRID_FOUR, 15, 2));
+}
+
+TEST(utest_network, create_eight_grid_correct) {
+    network network_eight_structure_10_10(100, conn_type::GRID_EIGHT, 10, 10);
+    network network_eight_structure_5_20(100, conn_type::GRID_EIGHT, 5, 20);
+    network network_eight_structure_1_100(100, conn_type::GRID_EIGHT, 1, 100);
+
+    network network_eight_structure_3_5(15, conn_type::GRID_EIGHT, 3, 5);
+    network network_eight_structure_5_3(15, conn_type::GRID_EIGHT, 5, 3);
+    network network_eight_structure_15_1(15, conn_type::GRID_EIGHT, 15, 1);
+    network network_eight_structure_1_15(15, conn_type::GRID_EIGHT, 1, 15);
+}
+
+TEST(utest_network, create_four_eight_incorrect) {
+    ASSERT_ANY_THROW(network network_eight_structure(100, conn_type::GRID_EIGHT, 0, 0));
+    ASSERT_ANY_THROW(network network_eight_structure(100, conn_type::GRID_EIGHT, 6, 20));
+    ASSERT_ANY_THROW(network network_eight_structure(100, conn_type::GRID_EIGHT, 0, 1000));
+    ASSERT_ANY_THROW(network network_eight_structure(100, conn_type::GRID_EIGHT, 15, 2));
+}
+
+TEST(utest_network, create_various_connections_with_incorrect_height_width) {
+    network network_all_to_all_structure(100, conn_type::ALL_TO_ALL, 1, 10);
+    network network_dynamic_structure(100, conn_type::DYNAMIC, 0, 3);
+    network network_list_bidir_structure(100, conn_type::LIST_BIDIR, 7, 9);
+    network network_none_structure(100, conn_type::NONE, 1, 3);
+}
+
 TEST(utest_network, all_to_all_connections) {
 	network net(100, conn_type::ALL_TO_ALL);
 	for (size_t i = 0; i < net.size(); i++) {
@@ -39,10 +82,8 @@ TEST(utest_network, none_connections) {
 	}
 }
 
-static void template_grid_connections(const unsigned int number_oscillators, const conn_type connections) {
-	network net(number_oscillators, connections);
-
-	int base = std::sqrt(number_oscillators);
+static void template_grid_connections(const network & net, const unsigned int number_oscillators, const conn_type connections) {
+	int base = net.width();
 	
 	for (int index = 0; index < net.size(); index++) {
 		const int upper_index = index - base;
@@ -126,11 +167,23 @@ static void template_grid_connections(const unsigned int number_oscillators, con
 }
 
 static void template_grid_four_connections(unsigned int number_oscillators) {
-	template_grid_connections(number_oscillators, conn_type::GRID_FOUR);
+    network net(number_oscillators, conn_type::GRID_FOUR);
+    template_grid_connections(net, number_oscillators, conn_type::GRID_FOUR);
 }
 
 static void template_grid_eight_connections(unsigned int number_oscillators) {
-	template_grid_connections(number_oscillators, conn_type::GRID_EIGHT);
+    network net(number_oscillators, conn_type::GRID_EIGHT);
+	template_grid_connections(net, number_oscillators, conn_type::GRID_EIGHT);
+}
+
+static void template_grid_four_rectange_connections(unsigned int number_oscillators, size_t height, size_t width) {
+    network net(number_oscillators, conn_type::GRID_FOUR, height, width);
+    template_grid_connections(net, number_oscillators, conn_type::GRID_FOUR);
+}
+
+static void template_grid_eight_rectange_connections(unsigned int number_oscillators, size_t height, size_t width) {
+    network net(number_oscillators, conn_type::GRID_EIGHT, height, width);
+    template_grid_connections(net, number_oscillators, conn_type::GRID_EIGHT);
 }
 
 TEST(utest_network, grid_four_connections_25) {
@@ -155,6 +208,36 @@ TEST(utest_network, grid_eight_connections_81) {
 
 TEST(utest_network, grid_eight_connections_100) {
 	template_grid_eight_connections(100);
+}
+
+TEST(utest_network, grid_four_rectangle_connections_25) {
+    template_grid_four_rectange_connections(25, 5, 5);
+}
+
+TEST(utest_network, grid_four_rectangle_connections_80) {
+    template_grid_four_rectange_connections(80, 20, 4);
+    template_grid_four_rectange_connections(80, 4, 20);
+}
+
+TEST(utest_network, grid_four_rectangle_connections_100) {
+    template_grid_four_rectange_connections(100, 10, 10);
+    template_grid_four_rectange_connections(100, 25, 4);
+    template_grid_four_rectange_connections(100, 1, 100);
+}
+
+TEST(utest_network, grid_eight_rectangle_connections_25) {
+    template_grid_eight_rectange_connections(25, 5, 5);
+}
+
+TEST(utest_network, grid_eight_rectangle_connections_80) {
+    template_grid_eight_rectange_connections(80, 20, 4);
+    template_grid_eight_rectange_connections(80, 4, 20);
+}
+
+TEST(utest_network, grid_eight_rectangle_connections_100) {
+    template_grid_eight_rectange_connections(100, 10, 10);
+    template_grid_eight_rectange_connections(100, 25, 4);
+    template_grid_eight_rectange_connections(100, 1, 100);
 }
 
 TEST(utest_network, bidir_connections) {

@@ -105,135 +105,160 @@ public:
  ***********************************************************************************************/
 class sync_network : public network {
 protected:
-	std::vector<sync_oscillator> m_oscillators;
+    std::vector<sync_oscillator> m_oscillators;
 
-	double weight;
-
-private:
-	sync_callback_solver m_callback_solver;
+    double weight;
 
 private:
-	sync_network(void) : network(0, conn_type::NONE) { }
+    sync_callback_solver m_callback_solver;
+
+private:
+    sync_network(void) : network(0, conn_type::NONE) { }
 
 public:
-	/***********************************************************************************************
-	 *
-	 * @brief   Contructor of the oscillatory network SYNC based on Kuramoto model.
-	 *
-	 * @param   (in) size                - number of oscillators in the network.
-	 * @param   (in) weight_factor       - coupling strength of the links between oscillators.
-	 * @param   (in) frequency_factor    - multiplier of internal frequency of the oscillators.
-	 * @param   (in) connection_type     - type of connection between oscillators in the network.
-	 * @param   (in) initial_phases      - type of initialization of initial phases of oscillators.
-	 *
-	 ***********************************************************************************************/
-	sync_network(const unsigned int size, const double weight_factor, const double frequency_factor, const conn_type connection_type, const initial_type initial_phases);
-	
-	/***********************************************************************************************
-	 *
-	 * @brief   Default destructor.
-	 *
-	 ***********************************************************************************************/
-	virtual ~sync_network(void);
+    /***********************************************************************************************
+     *
+     * @brief   Contructor of the oscillatory network SYNC based on Kuramoto model.
+     *
+     * @param[in] size: number of oscillators in the network.
+     * @param[in] weight_factor: coupling strength of the links between oscillators.
+     * @param[in] frequency_factor: multiplier of internal frequency of the oscillators.
+     * @param[in] connection_type: type of connection between oscillators in the network.
+     * @param[in] initial_phases: type of initialization of initial phases of oscillators.
+     *
+     ***********************************************************************************************/
+    sync_network(const unsigned int size, const double weight_factor, const double frequency_factor, const conn_type connection_type, const initial_type initial_phases);
 
-	/***********************************************************************************************
-	 *
-	 * @brief   Calculates level of global synchorization in the network.
-	 *
-	 * @return  Return level of global synchorization in the network.
-	 *
-	 ***********************************************************************************************/
-	virtual double sync_order(void) const;
+    /***********************************************************************************************
+    *
+    * @brief   Contructor of the oscillatory network SYNC based on Kuramoto model.
+    *
+    * @param[in] size: number of oscillators in the network.
+    * @param[in] weight_factor: coupling strength of the links between oscillators.
+    * @param[in] frequency_factor: multiplier of internal frequency of the oscillators.
+    * @param[in] connection_type: type of connection between oscillators in the network.
+    * @param[in] height: number of oscillators in column of the network, this argument is
+    *            used only for network with grid structure (GRID_FOUR, GRID_EIGHT), for other types
+    *            this argument is ignored.
+    * @param[in] width: number of oscillotors in row of the network, this argument is used
+    *            only for network with grid structure (GRID_FOUR, GRID_EIGHT), for other types this
+    *            argument is ignored.
+    * @param[in] initial_phases: type of initialization of initial phases of oscillators.
+    *
+    ***********************************************************************************************/
+    sync_network(const unsigned int size,
+        const double weight_factor,
+        const double frequency_factor,
+        const conn_type connection_type,
+        const size_t height,
+        const size_t width,
+        const initial_type initial_phases);
 
-	/***********************************************************************************************
-	 *
-	 * @brief   Calculates level of local (partial) synchorization in the network.
-	 *
-	 * @return  Return level of local (partial) synchorization in the network.
-	 *
-	 ***********************************************************************************************/
-	virtual double sync_local_order(void) const;
+    /***********************************************************************************************
+     *
+     * @brief   Default destructor.
+     *
+     ***********************************************************************************************/
+    virtual ~sync_network(void);
 
-	/***********************************************************************************************
-	 *
-	 * @brief   Performs static simulation of oscillatory network.
-	 *
-	 * @param[in]  steps: number steps of simulations during simulation.
-	 * @param[in]  time: time of simulation.
-	 * @param[in]  solver: type of solver for simulation.
-	 * @param[in]  collect_dynamic: if true - returns whole dynamic of oscillatory network, 
-	 *              otherwise returns only last values of dynamics.
-	 * @param[out] output_dynamic: output dynamic of the network, if argument 'collect_dynamic' = true, 
-	 *              than it will be dynamic for the whole simulation time, otherwise returns only last 
-	 *              values  (last step of simulation) of dynamic.
-	 *
-	 ***********************************************************************************************/
-	virtual void simulate_static(const unsigned int steps, 
-		                 const double time, 
-						 const solve_type solver, 
-						 const bool collect_dynamic, 
-						 sync_dynamic & output_dynamic);
+    /***********************************************************************************************
+     *
+     * @brief   Calculates level of global synchorization in the network.
+     *
+     * @return  Return level of global synchorization in the network.
+     *
+     ***********************************************************************************************/
+    virtual double sync_order(void) const;
 
-	/***********************************************************************************************
-	 *
-	 * @brief   Performs dynamic simulation of oscillatory network until stop condition is not 
-	 *          reached. Stop condition is defined by input argument 'order'.
-	 *
-	 * @param[in]  order: order of process synchronization, destributed 0..1.
-	 * @param[in]  step: time step of one iteration of simulation.
-	 * @param[in]  solver: type of solver for simulation.
-	 * @param[in]  collect_dynamic: if true - returns whole dynamic of oscillatory network, 
-	 *              otherwise returns only last values of dynamics.
-	 * @param[out] output_dynamic: output dynamic of the network, if argument 'collect_dynamic' = true, 
-	 *              than it will be dynamic for the whole simulation time, otherwise returns only last 
-	 *              values  (last step of simulation) of dynamic.
-	 *
-	 ***********************************************************************************************/
-	virtual void simulate_dynamic(const double order, 
-		                  const double step,
-		                  const solve_type solver, 
-						  const bool collect_dynamic,
-						  sync_dynamic & output_dynamic);
+    /***********************************************************************************************
+     *
+     * @brief   Calculates level of local (partial) synchorization in the network.
+     *
+     * @return  Return level of local (partial) synchorization in the network.
+     *
+     ***********************************************************************************************/
+    virtual double sync_local_order(void) const;
 
-	/***********************************************************************************************
-	 *
-	 * @brief   Normalization of phase of oscillator that should be placed between [0; 2 * pi].
-	 *
-	 * @param   (in) teta    - phase of oscillator.
-	 *
-	 * @return  Returns normalized phase.
-	 *
-	 ***********************************************************************************************/
-	virtual double phase_normalization(const double teta) const;
+    /***********************************************************************************************
+     *
+     * @brief   Performs static simulation of oscillatory network.
+     *
+     * @param[in]  steps: number steps of simulations during simulation.
+     * @param[in]  time: time of simulation.
+     * @param[in]  solver: type of solver for simulation.
+     * @param[in]  collect_dynamic: if true - returns whole dynamic of oscillatory network,
+     *              otherwise returns only last values of dynamics.
+     * @param[out] output_dynamic: output dynamic of the network, if argument 'collect_dynamic' = true,
+     *              than it will be dynamic for the whole simulation time, otherwise returns only last
+     *              values  (last step of simulation) of dynamic.
+     *
+     ***********************************************************************************************/
+    virtual void simulate_static(const unsigned int steps,
+        const double time,
+        const solve_type solver,
+        const bool collect_dynamic,
+        sync_dynamic & output_dynamic);
+
+    /***********************************************************************************************
+     *
+     * @brief   Performs dynamic simulation of oscillatory network until stop condition is not
+     *          reached. Stop condition is defined by input argument 'order'.
+     *
+     * @param[in]  order: order of process synchronization, destributed 0..1.
+     * @param[in]  step: time step of one iteration of simulation.
+     * @param[in]  solver: type of solver for simulation.
+     * @param[in]  collect_dynamic: if true - returns whole dynamic of oscillatory network,
+     *              otherwise returns only last values of dynamics.
+     * @param[out] output_dynamic: output dynamic of the network, if argument 'collect_dynamic' = true,
+     *              than it will be dynamic for the whole simulation time, otherwise returns only last
+     *              values  (last step of simulation) of dynamic.
+     *
+     ***********************************************************************************************/
+    virtual void simulate_dynamic(const double order,
+        const double step,
+        const solve_type solver,
+        const bool collect_dynamic,
+        sync_dynamic & output_dynamic);
+
+    /***********************************************************************************************
+     *
+     * @brief   Normalization of phase of oscillator that should be placed between [0; 2 * pi].
+     *
+     * @param   (in) teta    - phase of oscillator.
+     *
+     * @return  Returns normalized phase.
+     *
+     ***********************************************************************************************/
+    virtual double phase_normalization(const double teta) const;
 
 protected:
-	/***********************************************************************************************
-	 *
-	 * @brief   Calculation of oscillator phase using Kuramoto model.
-	 *
-	 * @param   (in) t      - current value of phase.
-	 * @param   (in) teta   - time (can be ignored). 
-	 * @param   (in) argv   - index of oscillator whose phase represented by argument teta.
-	 *
-	 * @return  Return new value of phase of oscillator with index 'argv[1]'.
-	 *
-	 ***********************************************************************************************/
-	virtual double phase_kuramoto(const double t, const double teta, const std::vector<void *> & argv) const;
+    /***********************************************************************************************
+     *
+     * @brief   Calculation of oscillator phase using Kuramoto model.
+     *
+     * @param   (in) t      - current value of phase.
+     * @param   (in) teta   - time (can be ignored).
+     * @param   (in) argv   - index of oscillator whose phase represented by argument teta.
+     *
+     * @return  Return new value of phase of oscillator with index 'argv[1]'.
+     *
+     ***********************************************************************************************/
+    virtual double phase_kuramoto(const double t, const double teta, const std::vector<void *> & argv) const;
 
-	/***********************************************************************************************
-	 *
-	 * @brief   Calculates new phases for oscillators in the network in line with current step.
-	 *
-	 * @param   (in) solver             - type solver of the differential equation.
-	 * @param   (in) t                  - time of simulation.
-	 * @param   (in) step               - step of solution at the end of which states of oscillators 
-	 *                                    should be calculated.
-	 * @param   (in) int_step           - step differentiation that is used for solving differential 
-	 *                                    equation (can be ignored in case of solvers when integration
-	 *                                    step is defined by solver itself).
-	 *
-	 ***********************************************************************************************/
-	virtual void calculate_phases(const solve_type solver, const double t, const double step, const double int_step);
+    /***********************************************************************************************
+     *
+     * @brief   Calculates new phases for oscillators in the network in line with current step.
+     *
+     * @param   (in) solver             - type solver of the differential equation.
+     * @param   (in) t                  - time of simulation.
+     * @param   (in) step               - step of solution at the end of which states of oscillators
+     *                                    should be calculated.
+     * @param   (in) int_step           - step differentiation that is used for solving differential
+     *                                    equation (can be ignored in case of solvers when integration
+     *                                    step is defined by solver itself).
+     *
+     ***********************************************************************************************/
+    virtual void calculate_phases(const solve_type solver, const double t, const double step, const double int_step);
 
     /***********************************************************************************************
     *
@@ -252,18 +277,29 @@ protected:
     virtual void set_callback_solver(sync_callback_solver solver);
 
 private:
-	/***********************************************************************************************
-	 *
-	 * @brief   Adapter for solving differential equation for calculation of oscillator phase.
-	 *
-	 * @param   (in) t        - current time.
-	 * @param   (in) inputs   - phase of oscillator whose new state should be calculated. 
-	 * @param   (in) argv     - pointer to the network 'argv[0]' and index of oscillator whose phase.
-	 *                          represented by argument teta 'argv[1]'.
-	 * @param   (out) outputs - new value of phase of oscillator that is specified in index 'argv[1]'.
-	 *
-	 ***********************************************************************************************/
-	static void adapter_phase_kuramoto(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs);
+    /***********************************************************************************************
+     *
+     * @brief   Adapter for solving differential equation for calculation of oscillator phase.
+     *
+     * @param   (in) t        - current time.
+     * @param   (in) inputs   - phase of oscillator whose new state should be calculated.
+     * @param   (in) argv     - pointer to the network 'argv[0]' and index of oscillator whose phase.
+     *                          represented by argument teta 'argv[1]'.
+     * @param   (out) outputs - new value of phase of oscillator that is specified in index 'argv[1]'.
+     *
+     ***********************************************************************************************/
+    static void adapter_phase_kuramoto(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs);
+
+    /***********************************************************************************************
+    *
+    * @brief   Initializer of the oscillatory network SYNC based on Kuramoto model.
+    *
+    * @param[in] weight_factor: coupling strength of the links between oscillators.
+    * @param[in] frequency_factor: multiplier of internal frequency of the oscillators.
+    * @param[in] initial_phases: type of initialization of initial phases of oscillators.
+    *
+    ***********************************************************************************************/
+    void initialization(const double weight_factor, const double frequency_factor, const initial_type initial_phases);
 };
 
 #endif

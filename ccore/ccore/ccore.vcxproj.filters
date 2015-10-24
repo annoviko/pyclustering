@@ -137,5 +137,8 @@
     <ClInclude Include="dynamic_data.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ensemble_data.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

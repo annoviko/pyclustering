@@ -95,6 +95,12 @@ private:
 public:
 	pcnn(const unsigned int num_osc, const conn_type connection_type, const pcnn_parameters & parameters);
 
+    pcnn(const unsigned int num_osc, 
+         const conn_type connection_type,
+         const size_t height,
+         const size_t width,
+         const pcnn_parameters & parameters);
+
 	virtual ~pcnn(void);
 
 public:

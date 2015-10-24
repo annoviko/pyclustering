@@ -41,35 +41,54 @@ sync_network::sync_network(const unsigned int size, const double weight_factor, 
 	network(size, connection_type),
 	m_oscillators(size, sync_oscillator())
 {
-	weight = weight_factor;
+    initialization(weight_factor, frequency_factor, initial_phases);
+}
 
-	m_callback_solver = &sync_network::adapter_phase_kuramoto;
 
-	std::random_device                      device;
-	std::default_random_engine              generator(device());
-	std::uniform_real_distribution<double>	phase_distribution(0.0, 2.0 * pi());
-	std::uniform_real_distribution<double>	frequency_distribution(0.0, 1.0);
-
-	for (unsigned int index = 0; index < size; index++) {
-		sync_oscillator & oscillator_context = m_oscillators[index];
-
-		switch(initial_phases) {
-		case initial_type::RANDOM_GAUSSIAN:
-			oscillator_context.phase = phase_distribution(generator);
-			break;
-		case initial_type::EQUIPARTITION:
-			oscillator_context.phase = (pi() / size * index);
-			break;
-		default:
-			throw std::runtime_error("Unknown type of initialization");
-		}
-
-		oscillator_context.frequency = frequency_distribution(generator) * frequency_factor;
-	}
+sync_network::sync_network(const unsigned int size, 
+                           const double weight_factor, 
+                           const double frequency_factor, 
+                           const conn_type connection_type, 
+                           const size_t height,
+                           const size_t width,
+                           const initial_type initial_phases) :
+network(size, connection_type, height, width),
+m_oscillators(size, sync_oscillator())
+{
+    initialization(weight_factor, frequency_factor, initial_phases);
 }
 
 
 sync_network::~sync_network() { }
+
+
+void sync_network::initialization(const double weight_factor, const double frequency_factor, const initial_type initial_phases) {
+    weight = weight_factor;
+
+    m_callback_solver = &sync_network::adapter_phase_kuramoto;
+
+    std::random_device                      device;
+    std::default_random_engine              generator(device());
+    std::uniform_real_distribution<double>	phase_distribution(0.0, 2.0 * pi());
+    std::uniform_real_distribution<double>	frequency_distribution(0.0, 1.0);
+
+    for (unsigned int index = 0; index < size(); index++) {
+        sync_oscillator & oscillator_context = m_oscillators[index];
+
+        switch (initial_phases) {
+        case initial_type::RANDOM_GAUSSIAN:
+            oscillator_context.phase = phase_distribution(generator);
+            break;
+        case initial_type::EQUIPARTITION:
+            oscillator_context.phase = (pi() / size() * index);
+            break;
+        default:
+            throw std::runtime_error("Unknown type of initialization");
+        }
+
+        oscillator_context.frequency = frequency_distribution(generator) * frequency_factor;
+    }
+}
 
 
 double sync_network::sync_order() const {
@@ -93,10 +112,10 @@ double sync_network::sync_local_order() const {
 	double			number_neighbors = 0;
 
 	for (unsigned int i = 0; i < size(); i++) {
-		std::vector<unsigned int> neighbors;
+        std::vector<size_t> neighbors;
 		get_neighbors(i, neighbors);
 
-		for (std::vector<unsigned int>::const_iterator iter_index = neighbors.begin(); iter_index != neighbors.cend(); iter_index++) {
+        for (std::vector<size_t>::const_iterator iter_index = neighbors.begin(); iter_index != neighbors.cend(); iter_index++) {
 			unsigned int index_neighbor = *(iter_index);
 			exp_amount += std::exp( -std::abs( m_oscillators[index_neighbor].phase - m_oscillators[i].phase ) );	
 		}
@@ -127,10 +146,10 @@ double sync_network::phase_kuramoto(const double t, const double teta, const std
     unsigned int index = *(unsigned int *) argv[1];
 	double phase = 0.0;
 
-	std::vector<unsigned int> neighbors;
+    std::vector<size_t> neighbors;
 	get_neighbors(index, neighbors);
 
-	for (std::vector<unsigned int>::const_iterator index_iterator = neighbors.cbegin(); index_iterator != neighbors.cend(); index_iterator++) {
+    for (std::vector<size_t>::const_iterator index_iterator = neighbors.cbegin(); index_iterator != neighbors.cend(); index_iterator++) {
 		unsigned int index_neighbor = (*index_iterator);
 		phase += std::sin(m_oscillators[index_neighbor].phase - teta);
 	}

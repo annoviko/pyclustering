@@ -158,5 +158,8 @@
     <ClInclude Include="..\ccore\dynamic_data.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\ccore\ensemble_data.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
