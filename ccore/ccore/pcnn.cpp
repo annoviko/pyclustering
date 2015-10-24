@@ -1,11 +1,14 @@
 #include "pcnn.h"
-
 #include <unordered_set>
 
-pcnn::pcnn(const unsigned int size, const conn_type connection_type, const pcnn_parameters & parameters) :
+pcnn::pcnn(const unsigned int size, 
+		   const conn_type connection_type, 
+		   const pcnn_parameters & parameters,
+		   const unsigned int width_oscillators,
+		   const unsigned int height_oscillators) :
 	m_oscillators(size, pcnn_oscillator()), 
-	network(size, connection_type)
-{
+	network(size, connection_type, width_oscillators, height_oscillators){
+	
 	m_params = parameters;
 }
 
