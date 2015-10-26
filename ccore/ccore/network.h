@@ -117,12 +117,38 @@ public:
             const size_t height,
             const size_t width);
 
+    /***********************************************************************************************
+    *
+    * @brief   Default destructor of the network.
+    *
+    ***********************************************************************************************/
 	virtual ~network();
 
+    /***********************************************************************************************
+    *
+    * @brief   Returns size of the network that is defined by number of oscillators.
+    *
+    ***********************************************************************************************/
     inline size_t size(void) const { return m_num_osc; }
 
+    /***********************************************************************************************
+    *
+    * @brief   Returns number of oscillators that are located in each column of the network.
+    * @details This value is used by networks that have grid structure. Number of oscillators in
+    *          the column defines height of the network. In case of structures differ from grid this 
+    *          method returns 0.
+    *
+    ***********************************************************************************************/
     inline size_t height(void) const { return m_height; }
 
+    /***********************************************************************************************
+    *
+    * @brief   Returns number of oscillators that are located in each row of the network.
+    * @details This value is used by networks that have grid structure. Number of oscillators in
+    *          the row defines width of the network. In case of structures differ from grid this
+    *          method returns 0.
+    *
+    ***********************************************************************************************/
     inline size_t width(void) const { return m_width; }
 
     virtual size_t get_connection(const size_t index1, const size_t index2) const;

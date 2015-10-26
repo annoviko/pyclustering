@@ -87,10 +87,10 @@ public:
     * @brief   Returns dynamic state of oscillator of the pulse-coupled neural network at the
     *          specified iteration step.
     *
-    * @param[in] iteration (size_t): number of iteration at which oscillator state is required.
-    * @param[in] index_oscillator (size_t): index of oscillator whose state is required.
+    * @param[in] iteration: number of iteration at which oscillator state is required.
+    * @param[in] index_oscillator: index of oscillator whose state is required.
     *
-    * @return (double) dynamic state of the oscillator at the specified iteration.
+    * @return dynamic state of the oscillator at the specified iteration.
     *
     ***********************************************************************************************/
     inline double dynamic_oscillator_at(const size_t iteration, const size_t index_oscillator) const { 
