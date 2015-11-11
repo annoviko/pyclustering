@@ -599,9 +599,8 @@ pyclustering_package * som_get_neighbors(const void * pointer) {
 }
 
 
-
-void * pcnn_create(const unsigned int size, const unsigned int connection_type, const void * const parameters) {
-	pcnn * pcnn_network = new pcnn(size, (conn_type) connection_type, *((pcnn_parameters *) parameters));
+void * pcnn_create(const unsigned int size, const unsigned int connection_type, const unsigned int height, const unsigned width, const void * const parameters) {
+    pcnn * pcnn_network = new pcnn(size, (conn_type) connection_type, height, width, *((pcnn_parameters *) parameters));
 	return (void *) pcnn_network;
 }
 

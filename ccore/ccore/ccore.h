@@ -448,7 +448,7 @@ extern "C" DECLARATION pyclustering_package * som_get_neighbors(const void * poi
 
 
 
-extern "C" DECLARATION void * pcnn_create(const unsigned int size, const unsigned int connection_type, const void * const parameters);
+extern "C" DECLARATION void * pcnn_create(const unsigned int size, const unsigned int connection_type, const unsigned int height, const unsigned int width, const void * const parameters);
 
 extern "C" DECLARATION void pcnn_destroy(const void * pointer);
 

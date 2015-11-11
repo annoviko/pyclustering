@@ -104,19 +104,59 @@ class network:
     _osc_conn = None;
     _conn_represent = None;
     
+    _height = 0;
+    _width = 0;
     
-    def __init__(self, num_osc, type_conn = conn_type.ALL_TO_ALL, conn_represent = conn_represent.MATRIX):
+    
+    @property
+    def height(self):
+        """!
+        @brief Height of the network grid, this value is zero in case of non-grid structure.
+        
+        """
+        return self._height;
+    
+
+    @property
+    def width(self):
+        """!
+        @brief Width of the network grid, this value is zero in case of non-grid structure.
+        
+        """
+        return self._width;
+
+   
+    def __init__(self, num_osc, type_conn = conn_type.ALL_TO_ALL, conn_represent = conn_represent.MATRIX, height = None, width = None):
         """!
         @brief Constructor of the network.
         
-        @param[in] num_osc (uint): Number of oscillators in the network.
+        @param[in] num_osc (uint): Number of oscillators in the network that defines size of the network.
         @param[in] type_conn (conn_type): Type of connections that are used in the network between oscillators.
         @param[in] conn_represent (conn_represent): Type of representation of connections.
+        @param[in] height (uint): Number of oscillators in column of the network, this argument is used 
+                    only for network with grid structure (GRID_FOUR, GRID_EIGHT), for other types this argument is ignored.
+        @param[in] width (uint): Number of oscillotors in row of the network, this argument is used only 
+                    for network with grid structure (GRID_FOUR, GRID_EIGHT), for other types this argument is ignored.
         
         """
         
         self._num_osc = num_osc;
         self._conn_represent = conn_represent;
+        
+        if ( (type_conn == conn_type.GRID_EIGHT) or (type_conn == conn_type.GRID_FOUR) ):
+            if ( (height is not None) and (width is not None) ):
+                self._height = height;
+                self._width = width;
+            else:
+                side_size = self._num_osc ** (0.5);
+                if (side_size - math.floor(side_size) > 0):
+                    raise NameError('Invalid number of oscillators in the network in case of grid structure');
+                
+                self._height = int(side_size);
+                self._width = self._height;
+        
+            if (self._height * self._width != self._num_osc):
+                raise NameError('Width (' + self._width + ') x Height (' + self._height + ') must be equal to Size (' + self._num_osc + ') in case of grid structure');
         
         self._create_structure(type_conn);
     
@@ -152,11 +192,7 @@ class network:
         
         """
         
-        side_size = self._num_osc ** (0.5);
-        if (side_size - math.floor(side_size) > 0):
-            raise NameError('Invalid number of oscillators in the network');
-        
-        side_size = int(side_size);
+        side_size = self._width;
         if (self._conn_represent == conn_represent.MATRIX):
             self._osc_conn = [[0] * self._num_osc for index in range(0, self._num_osc, 1)];
         elif (self._conn_represent == conn_represent.LIST):
@@ -204,7 +240,7 @@ class network:
         """
         
         self.__create_grid_four_connections();     # create connection with right, upper, left, lower.
-        side_size = int(self._num_osc ** (0.5));
+        side_size = self._width;
         
         for index in range(0, self._num_osc, 1):
             upper_left_index = index - side_size - 1;

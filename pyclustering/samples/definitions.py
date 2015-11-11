@@ -98,6 +98,9 @@ class IMAGE_SIMPLE_SAMPLES:
     IMAGE_SIMPLE_BUILDING           = samples.__path__[0] + os.sep + "images" + os.sep + "ImageSimpleBuilding.png";
     IMAGE_SIMPLE_FRUITS             = samples.__path__[0] + os.sep + "images" + os.sep + "ImageSimpleFruits.png";
     IMAGE_SIMPLE_FRUITS_SMALL       = samples.__path__[0] + os.sep + "images" + os.sep + "ImageSimpleFruitsSmall.png";
+    IMAGE_THIN_BLACK_LINES01        = samples.__path__[0] + os.sep + "images" + os.sep + "ImageThinBlackLines01.png";
+    IMAGE_THIN_BLACK_LINES02        = samples.__path__[0] + os.sep + "images" + os.sep + "ImageThinBlackLines02.png";
+    IMAGE_THIN_BLACK_LINES03        = samples.__path__[0] + os.sep + "images" + os.sep + "ImageThinBlackLines03.png";
     
     
 class IMAGE_MAP_SAMPLES:

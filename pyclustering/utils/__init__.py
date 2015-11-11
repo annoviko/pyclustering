@@ -824,7 +824,7 @@ def draw_image_color_segments(source, clusters, hide_axes = True):
             image_color_segments[index_pixel] = available_colors[index_segment];
     
     stage = array(image_color_segments, numpy.uint8);
-    stage = numpy.reshape(stage, image_size + ((3),)); # ((3),) it's size of RGB - third dimension.
+    stage = numpy.reshape(stage, (image_size[1], image_size[0]) + ((3),)); # ((3),) it's size of RGB - third dimension.
     image_cluster = Image.fromarray(stage, 'RGB');
     
     axarr[0].imshow(image_source, interpolation = 'none');
@@ -897,7 +897,7 @@ def draw_image_mask_segments(source, clusters, hide_axes = True):
             stage_cluster[index] = (0, 0, 0);
           
         stage = array(stage_cluster, numpy.uint8);
-        stage = numpy.reshape(stage, image_size + ((3),)); # ((3),) it's size of RGB - third dimension.
+        stage = numpy.reshape(stage, (image_size[1], image_size[0]) + ((3),)); # ((3),) it's size of RGB - third dimension.
         
         image_cluster = Image.fromarray(stage, 'RGB');
         

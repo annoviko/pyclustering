@@ -30,7 +30,7 @@ from pyclustering.nnet import *;
 
 class Test(unittest.TestCase):
     def templateDynamicLength(self, num_osc, steps, type_conn, repr_type, stimulus, ccore):
-        net = pcnn_network(num_osc, None, type_conn, repr_type, ccore);
+        net = pcnn_network(num_osc, None, type_conn, repr_type, None, None, ccore);
         dynamic = net.simulate(steps, stimulus);
         
         assert steps == len(dynamic);
@@ -47,7 +47,7 @@ class Test(unittest.TestCase):
         self.templateDynamicLength(25, 20, conn_type.GRID_FOUR, conn_represent.MATRIX, [0] * 25, False);
  
     def testDynamicLengthGridFourConnectionByCore(self):
-        self.templateDynamicLength(25, 20, conn_type.GRID_FOUR, None, [0] * 25, True);       
+        self.templateDynamicLength(25, 20, conn_type.GRID_FOUR, None, [0] * 25, True);        
  
     def testDynamicLengthGridEightConnection(self):
         self.templateDynamicLength(25, 20, conn_type.GRID_EIGHT, conn_represent.MATRIX, [0] * 25, False);
@@ -75,8 +75,33 @@ class Test(unittest.TestCase):
         self.templateDynamicLength(25, 30, conn_type.ALL_TO_ALL, conn_represent.LIST, [0] * 25, False);
     
     
+    def templateGridRectangleDynamicLength(self, num_osc, steps, type_conn, repr_type, height, width, stimulus, ccore):
+        net = pcnn_network(num_osc, None, type_conn, repr_type, height, width, ccore);
+        dynamic = net.simulate(steps, stimulus);
+        
+        assert steps == len(dynamic);
+        assert num_osc == len(dynamic.output[0]);
+        assert steps == len(dynamic.allocate_time_signal());
+    
+    def testDynamicLengthGridRectangle25FourConnection(self):
+        self.templateGridRectangleDynamicLength(25, 20, conn_type.GRID_FOUR, conn_represent.MATRIX, 1, 25, [0] * 25, False);
+        self.templateGridRectangleDynamicLength(25, 20, conn_type.GRID_FOUR, conn_represent.MATRIX, 25, 1, [0] * 25, False);
+ 
+    def testDynamicLengthGridRectangle25FourConnectionByCore(self):
+        self.templateGridRectangleDynamicLength(25, 20, conn_type.GRID_FOUR, None, 1, 25, [0] * 25, True);
+        self.templateGridRectangleDynamicLength(25, 20, conn_type.GRID_FOUR, None, 25, 1, [0] * 25, True);   
+ 
+    def testDynamicLengthGridRectangle25EightConnection(self):
+        self.templateGridRectangleDynamicLength(25, 20, conn_type.GRID_EIGHT, conn_represent.MATRIX, 1, 25, [0] * 25, False);
+        self.templateGridRectangleDynamicLength(25, 20, conn_type.GRID_EIGHT, conn_represent.MATRIX, 25, 1, [0] * 25, False);
+ 
+    def testDynamicLengthGridRectangle25EightConnectionByCore(self):
+        self.templateGridRectangleDynamicLength(25, 20, conn_type.GRID_EIGHT, None, 1, 25, [0] * 25, True);
+        self.templateGridRectangleDynamicLength(25, 20, conn_type.GRID_EIGHT, None, 25, 1, [0] * 25, True); 
+    
+    
     def templateSyncEnsemblesAllocation(self, num_osc, type_conn, steps, stimulus, ccore, ensembles):
-        net = pcnn_network(num_osc, None, type_conn, conn_represent.MATRIX, ccore);
+        net = pcnn_network(num_osc, None, type_conn, conn_represent.MATRIX, None, None, ccore);
         dynamic = net.simulate(steps, stimulus);
         
         assert steps == len(dynamic);

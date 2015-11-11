@@ -346,7 +346,7 @@ class pcnn_network(network):
     __OUTPUT_TRUE = 1;    # fire value for oscillators.
     __OUTPUT_FALSE = 0;   # rest value for oscillators.
     
-    def __init__(self, num_osc, parameters = None, type_conn = conn_type.ALL_TO_ALL, type_conn_represent = conn_represent.MATRIX, ccore = False):
+    def __init__(self, num_osc, parameters = None, type_conn = conn_type.ALL_TO_ALL, type_conn_represent = conn_represent.MATRIX, height = None, width = None, ccore = False):
         """!
         @brief Constructor of oscillatory network is based on Kuramoto model.
         
@@ -354,6 +354,10 @@ class pcnn_network(network):
         @param[in] parameters (pcnn_parameters): Parameters of the network.
         @param[in] type_conn (conn_type): Type of connection between oscillators in the network (all-to-all, grid, bidirectional list, etc.).
         @param[in] type_conn_represent (conn_represent): Internal representation of connection in the network: matrix or list.
+        @param[in] height (uint): Number of oscillators in column of the network, this argument is used 
+                    only for network with grid structure (GRID_FOUR, GRID_EIGHT), for other types this argument is ignored.
+        @param[in] width (uint): Number of oscillotors in row of the network, this argument is used only 
+                    for network with grid structure (GRID_FOUR, GRID_EIGHT), for other types this argument is ignored.
         @param[in] ccore (bool): If True then all interaction with object will be performed via CCORE library (C++ implementation of pyclustering).
         
         """
@@ -365,9 +369,24 @@ class pcnn_network(network):
             self._params = pcnn_parameters();
         
         if (ccore is True):
-            self.__ccore_pcnn_pointer = wrapper.pcnn_create(num_osc, type_conn, self._params);
+            network_height = height;
+            network_width = width;
+            
+            if ( (type_conn == conn_type.GRID_FOUR) or (type_conn == conn_type.GRID_EIGHT) ):
+                if ( (network_height is None) or (network_width is None) ):
+                    side_size = num_osc ** (0.5);
+                    if (side_size - math.floor(side_size) > 0):
+                        raise NameError('Invalid number of oscillators in the network in case of grid structure');
+                
+                    network_height = int(side_size);
+                    network_width = int(side_size);
+            else:
+                network_height = 0;
+                network_width = 0;
+                
+            self.__ccore_pcnn_pointer = wrapper.pcnn_create(num_osc, type_conn, network_height, network_width, self._params);
         else:
-            super().__init__(num_osc, type_conn, type_conn_represent);
+            super().__init__(num_osc, type_conn, type_conn_represent, height, width);
             
             self._outputs = [0.0] * self._num_osc;
             

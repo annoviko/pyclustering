@@ -33,6 +33,12 @@ from pyclustering.samples.definitions import IMAGE_SIMPLE_SAMPLES, IMAGE_MAP_SAM
 
 
 def template_segmentation_image(image, parameters, simulation_time, brightness, scale_color = True, fastlinking = False, show_spikes = False, ccore_flag = True):
+    image_source = Image.open(image);
+    image_size = image_source.size;
+    
+    width = image_size[0];
+    height = image_size[1];
+    
     stimulus = read_image(image);
     stimulus = rgb2gray(stimulus);
     
@@ -65,7 +71,7 @@ def template_segmentation_image(image, parameters, simulation_time, brightness, 
         
         parameters.FAST_LINKING = fastlinking;
     
-    net = pcnn_network(len(stimulus), parameters, conn_type.GRID_EIGHT, ccore = ccore_flag);
+    net = pcnn_network(len(stimulus), parameters, conn_type.GRID_EIGHT, height = height, width = width, ccore = ccore_flag);
     output_dynamic = net.simulate(simulation_time, stimulus);
     
     pcnn_visualizer.show_output_dynamic(output_dynamic);
@@ -78,9 +84,6 @@ def template_segmentation_image(image, parameters, simulation_time, brightness, 
     if (show_spikes is True):
         spikes = output_dynamic.allocate_spike_ensembles();
         draw_image_mask_segments(image, spikes);
-    
-        image_source = Image.open(image);
-        image_size = image_source.size;
         
         pcnn_visualizer.animate_spike_ensembles(output_dynamic, image_size);
     
@@ -94,6 +97,14 @@ def segmentation_image_simple2():
 def segmentation_image_simple6():
     template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE06, None, 47, 128);
 
+def segmentation_image_black_thin_lines1():
+    template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_THIN_BLACK_LINES01, None, 47, 128);
+
+def segmentation_image_black_thin_lines2():
+    template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_THIN_BLACK_LINES02, None, 47, 128);
+
+def segmentation_image_black_thin_lines3():
+    template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_THIN_BLACK_LINES03, None, 47, 128);
 
 def segmentation_gray_image_simple1():
     template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE01, None, 47, None, True, False, True);
@@ -141,15 +152,23 @@ def segmentation_fast_linking_field_flowers():
     template_segmentation_image(IMAGE_REAL_SAMPLES.IMAGE_FIELD_FLOWER, parameters, 80, None, False, True, True); 
 
 
+# Examples of simple image segmentation
 segmentation_image_simple1();
 segmentation_image_simple2();
 segmentation_image_simple6();
-      
+
+# Line allocation
+segmentation_image_black_thin_lines1();
+segmentation_image_black_thin_lines2();
+segmentation_image_black_thin_lines3();
+
+# More complex image segmentation examples
 segmentation_gray_image_simple1();
 segmentation_gray_image_simple5();
 segmentation_gray_image_beach();
 segmentation_gray_image_building();
-  
+
+# Fast linking usage examples
 segmentation_fast_linking_image_beach();
 segmentation_fast_linking_image_building();
 segmentation_fast_linking_image_fruits();

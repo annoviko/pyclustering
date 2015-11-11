@@ -40,7 +40,6 @@ class Test(unittest.TestCase):
                     assert network.has_connection(i, j) == False; 
                     
     def testAllToAllConnections(self):
-        # Check creation of coupling between oscillator in all-to-all case
         net = network(10, type_conn = conn_type.ALL_TO_ALL);
         self.templateAllToAllConnectionsTest(net);
 
@@ -73,7 +72,6 @@ class Test(unittest.TestCase):
                 assert network.has_connection(index, index + 1) == True;   
                 
     def testBidirListConnections(self):
-        # Check creation of coupling between oscillator in bidirectional list case
         net = network(10, type_conn = conn_type.LIST_BIDIR);
         self.templateBidirListConnectionsTest(net);
     
@@ -85,32 +83,80 @@ class Test(unittest.TestCase):
     # Grid four connection suite
     def templateGridFourConnectionsTest(self, network):
         for index in range(0, len(network), 1):
-            upper_index = index - 5;
-            lower_index = index + 5;
+            upper_index = index - network.width;
+            lower_index = index + network.width;
             left_index = index - 1;
             right_index = index + 1;
             
-            node_row_index = math.ceil(index / 5);
+            node_row_index = math.ceil(index / network.width);
             if (upper_index >= 0):
                 assert network.has_connection(index, upper_index) == True;
             
             if (lower_index < len(network)):
                 assert network.has_connection(index, lower_index) == True;
             
-            if ( (left_index >= 0) and (math.ceil(left_index / 5) == node_row_index) ):
+            if ( (left_index >= 0) and (math.ceil(left_index / network.width) == node_row_index) ):
                 assert network.has_connection(index, left_index) == True;
             
-            if ( (right_index < network._num_osc) and (math.ceil(right_index / 5) == node_row_index) ):
+            if ( (right_index < network._num_osc) and (math.ceil(right_index / network.width) == node_row_index) ):
                 assert network.has_connection(index, right_index) == True;
                 
-    def testGridFourConnections(self):
-        # Check creation of coupling between oscillator in grid with four neighbors case
+    def testGridFourConnectionsMatrixRepresentation(self):
         net = network(25, type_conn = conn_type.GRID_FOUR);
         self.templateGridFourConnectionsTest(net);
     
     def testGridFourConnectionsListRepresentation(self):
-        # Check creation of coupling between oscillator in grid with four neighbors case
         net = network(25, type_conn = conn_type.GRID_FOUR, conn_represent = conn_represent.LIST);        
+        self.templateGridFourConnectionsTest(net);
+
+    def testGridFourConnections1MatrixRepresentation(self):
+        net = network(1, type_conn = conn_type.GRID_FOUR);
+        self.templateGridFourConnectionsTest(net);
+    
+    def testGridFourConnections1ListRepresentation(self):
+        net = network(1, type_conn = conn_type.GRID_FOUR, conn_represent = conn_represent.LIST);        
+        self.templateGridFourConnectionsTest(net);
+
+    def testGridFourConnectionsRectange40MatrixRepresentation(self):
+        net = network(40, type_conn = conn_type.GRID_FOUR, conn_represent = conn_represent.MATRIX, height = 4, width = 10);
+        self.templateGridFourConnectionsTest(net);
+        
+        net = network(40, type_conn = conn_type.GRID_FOUR, conn_represent = conn_represent.MATRIX, height = 10, width = 4);
+        self.templateGridFourConnectionsTest(net);
+        
+    def testGridFourConnectionsRectangeList40Representation(self):
+        net = network(40, type_conn = conn_type.GRID_FOUR, conn_represent = conn_represent.LIST, height = 4, width = 10);        
+        self.templateGridFourConnectionsTest(net);
+        
+        net = network(40, type_conn = conn_type.GRID_FOUR, conn_represent = conn_represent.LIST, height = 10, width = 4);
+        self.templateGridFourConnectionsTest(net);        
+
+    def testGridFourConnectionsRectange10MatrixRepresentation(self):
+        net = network(10, type_conn = conn_type.GRID_FOUR, conn_represent = conn_represent.MATRIX, height = 1, width = 10);
+        self.templateGridFourConnectionsTest(net);
+        
+        net = network(10, type_conn = conn_type.GRID_FOUR, conn_represent = conn_represent.MATRIX, height = 10, width = 1);
+        self.templateGridFourConnectionsTest(net);
+        
+    def testGridFourConnectionsRectangeList10Representation(self):
+        net = network(10, type_conn = conn_type.GRID_FOUR, conn_represent = conn_represent.LIST, height = 1, width = 10);        
+        self.templateGridFourConnectionsTest(net);
+        
+        net = network(10, type_conn = conn_type.GRID_FOUR, conn_represent = conn_represent.LIST, height = 10, width = 1);
+        self.templateGridFourConnectionsTest(net);
+
+    def testGridFourConnectionsRectange1MatrixRepresentation(self):
+        net = network(1, type_conn = conn_type.GRID_FOUR, conn_represent = conn_represent.MATRIX, height = 1, width = 1);
+        self.templateGridFourConnectionsTest(net);
+        
+        net = network(1, type_conn = conn_type.GRID_FOUR, conn_represent = conn_represent.MATRIX, height = 1, width = 1);
+        self.templateGridFourConnectionsTest(net);
+        
+    def testGridFourConnectionsRectangeList1Representation(self):
+        net = network(1, type_conn = conn_type.GRID_FOUR, conn_represent = conn_represent.LIST, height = 1, width = 1);        
+        self.templateGridFourConnectionsTest(net);
+        
+        net = network(1, type_conn = conn_type.GRID_FOUR, conn_represent = conn_represent.LIST, height = 1, width = 1);
         self.templateGridFourConnectionsTest(net);
 
 

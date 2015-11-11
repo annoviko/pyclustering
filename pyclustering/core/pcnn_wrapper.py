@@ -38,7 +38,7 @@ class c_pcnn_parameters(Structure):
                 ("FAST_LINKING", c_bool)];
 
 
-def pcnn_create(size, conn_type, params):
+def pcnn_create(size, conn_type, height, width, params):
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
     
     c_parameters = c_pcnn_parameters();
@@ -52,7 +52,7 @@ def pcnn_create(size, conn_type, params):
     c_parameters.M = params.M;
     c_parameters.FAST_LINKING = params.FAST_LINKING;
     
-    pcnn_pointer = ccore.pcnn_create(c_uint(size), c_uint(conn_type), pointer(c_parameters));
+    pcnn_pointer = ccore.pcnn_create(c_uint(size), c_uint(conn_type), c_uint(height), c_uint(width), pointer(c_parameters));
     return pcnn_pointer;
     
 
