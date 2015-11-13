@@ -93,7 +93,7 @@ class kmedians:
             self.__clusters = self.__update_clusters();
             updated_centers = self.__update_medians();  # changes should be calculated before asignment
          
-            changes = max([euclidean_distance_sqrt(self.__medians[index], updated_centers[index]) for index in range(len(self.__medians))]);    # Fast solution
+            changes = max([euclidean_distance_sqrt(self.__medians[index], updated_centers[index]) for index in range(len(updated_centers))]);    # Fast solution
              
             self.__medians = updated_centers;
 
@@ -144,7 +144,10 @@ class kmedians:
                     dist_optim = dist;
              
             clusters[index_optim].append(index_point);
-             
+            
+        # If cluster is not able to capture object it should be removed
+        clusters = [cluster for cluster in clusters if len(cluster) > 0];
+        
         return clusters;
     
     
