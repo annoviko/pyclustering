@@ -101,7 +101,7 @@ static void template_grid_connections(const network & net, const unsigned int nu
         const int upper_row_index = node_row_index - 1;
         const int lower_row_index = node_row_index + 1;
 
-		std::vector<unsigned int> neighbors;
+		std::vector<size_t> neighbors;
 		net.get_neighbors(index, neighbors);
 
 		if (upper_index >= 0) {
@@ -244,8 +244,8 @@ TEST(utest_network, bidir_connections) {
 	const unsigned int number_oscillators = 100;
 	network net(number_oscillators, conn_type::LIST_BIDIR);
 
-	for (unsigned int i = 0; i < number_oscillators; i++) {
-		std::vector<unsigned int> neighbors;
+	for (size_t i = 0; i < number_oscillators; i++) {
+		std::vector<size_t> neighbors;
 		net.get_neighbors(i, neighbors);
 
 		if (i > 0) {
