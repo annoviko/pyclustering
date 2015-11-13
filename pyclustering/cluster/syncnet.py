@@ -140,21 +140,11 @@ class syncnet(sync_network):
         if (ccore is True):
             self.__ccore_network_pointer = syncnet_create_network(sample, radius, initial_phases, enable_conn_weight);
         else:
-            super().__init__(len(sample), 1, 0, conn_type.NONE, initial_phases);
+            super().__init__(len(sample), 1, 0, conn_type.DYNAMIC, initial_phases);
             
             self._ena_conn_weight = enable_conn_weight;
             self._osc_loc = sample;
             self._conn_represent = conn_repr;
-    
-            # Connections will be represent by lists.
-            if (conn_repr == conn_represent.MATRIX):
-                self._osc_conn = [[0] * self._num_osc for index in range(0, self._num_osc, 1)];
-                
-            elif (conn_repr == conn_represent.LIST):
-                self._osc_conn = [[] for index in range(0, self._num_osc, 1)];
-                
-            else:
-                raise NameError("Unknown type of representation of coupling between oscillators");
             
             # Create connections.
             if (radius is not None):
@@ -201,12 +191,7 @@ class syncnet(sync_network):
                         if (dist < minimum_distance): minimum_distance = dist;
                     
                     if (dist <= radius):
-                        if (self._conn_represent == conn_represent.LIST):
-                            self._osc_conn[i].append(j);
-                            self._osc_conn[j].append(i);
-                        else:
-                            self._osc_conn[i][j] = True;
-                            self._osc_conn[j][i] = True;
+                        self.set_connection(i, j);
         
         if (self._ena_conn_weight is True):
             multiplier = 1; 

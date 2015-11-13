@@ -38,8 +38,10 @@ class Test(unittest.TestCase):
             for j in range(0, len(network), 1):
                 if (i != j):
                     assert network.has_connection(i, j) == True;
+                    assert network.has_connection(j, i) == True;
                 else:
-                    assert network.has_connection(i, j) == False; 
+                    assert network.has_connection(i, j) == False;
+                    assert network.has_connection(j, i) == False;
     
     def testAllToAll1Connections(self):
         net = network(1, type_conn = conn_type.ALL_TO_ALL);
@@ -73,6 +75,7 @@ class Test(unittest.TestCase):
         for i in range(0, len(network), 1):
             for j in range(0, len(network), 1):
                 assert network.has_connection(i, j) == False;
+                assert network.has_connection(j, i) == False;
 
     def testNoneConnections(self):
         net = network(10, type_conn = conn_type.NONE);
@@ -90,9 +93,11 @@ class Test(unittest.TestCase):
         for index in range(0, len(network), 1):
             if (index > 0):
                 assert network.has_connection(index, index - 1) == True;
+                assert network.has_connection(index - 1, index) == True;
             
             if (index < (len(network) - 1)):
-                assert network.has_connection(index, index + 1) == True;   
+                assert network.has_connection(index, index + 1) == True;
+                assert network.has_connection(index + 1, index) == True;
                 
     def testBidirListConnections(self):
         net = network(10, type_conn = conn_type.LIST_BIDIR);
@@ -116,15 +121,19 @@ class Test(unittest.TestCase):
             node_row_index = math.ceil(index / network.width);
             if (upper_index >= 0):
                 assert network.has_connection(index, upper_index) == True;
+                assert network.has_connection(upper_index, index) == True;
             
             if (lower_index < len(network)):
                 assert network.has_connection(index, lower_index) == True;
+                assert network.has_connection(lower_index, index) == True;
             
             if ( (left_index >= 0) and (math.ceil(left_index / network.width) == node_row_index) ):
                 assert network.has_connection(index, left_index) == True;
+                assert network.has_connection(left_index, index) == True;
             
             if ( (right_index < network._num_osc) and (math.ceil(right_index / network.width) == node_row_index) ):
                 assert network.has_connection(index, right_index) == True;
+                assert network.has_connection(right_index, index) == True;
                 
     def testGridFourConnectionsMatrixRepresentation(self):
         net = network(25, type_conn = conn_type.GRID_FOUR);
@@ -197,15 +206,19 @@ class Test(unittest.TestCase):
             node_row_index = math.ceil(index / network.width);
             if (upper_index >= 0):
                 assert network.has_connection(index, upper_index) == True;
+                assert network.has_connection(upper_index, index) == True;
             
             if (lower_index < len(network)):
                 assert network.has_connection(index, lower_index) == True;
+                assert network.has_connection(lower_index, index) == True;
             
             if ( (left_index >= 0) and (math.ceil(left_index / network.width) == node_row_index) ):
                 assert network.has_connection(index, left_index) == True;
+                assert network.has_connection(left_index, index) == True;
             
             if ( (right_index < len(network)) and (math.ceil(right_index / network.width) == node_row_index) ):
                 assert network.has_connection(index, right_index) == True;
+                assert network.has_connection(right_index, index) == True;
     
             side_size = network.width;
 
@@ -221,15 +234,19 @@ class Test(unittest.TestCase):
             
             if ( (upper_left_index >= 0) and (math.floor(upper_left_index / side_size) == upper_row_index) ):
                 assert network.has_connection(index, upper_left_index) == True;
+                assert network.has_connection(upper_left_index, index) == True;
             
             if ( (upper_right_index >= 0) and (math.floor(upper_right_index / side_size) == upper_row_index) ):
                 assert network.has_connection(index, upper_right_index) == True;
+                assert network.has_connection(upper_right_index, index) == True;
                 
             if ( (lower_left_index < len(network)) and (math.floor(lower_left_index / side_size) == lower_row_index) ):
                 assert network.has_connection(index, lower_left_index) == True;
+                assert network.has_connection(lower_left_index, index) == True;
                 
             if ( (lower_right_index < len(network)) and (math.floor(lower_right_index / side_size) == lower_row_index) ):
                 assert network.has_connection(index, lower_right_index) == True;
+                assert network.has_connection(lower_right_index, index) == True;
     
     def testGridEightConnectionsMatrixRepresentation(self):
         net = network(25, type_conn = conn_type.GRID_EIGHT);

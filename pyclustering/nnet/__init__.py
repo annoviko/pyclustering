@@ -333,6 +333,18 @@ class network:
             self.__osc_conn = [[] for index in range(0, self._num_osc, 1)];
 
     
+    def __create_dynamic_connection(self):
+        """!
+        @brief Prepare storage for dynamic connections.
+        
+        """   
+        if (self.__conn_represent == conn_represent.MATRIX):
+            for index in range(0, self._num_osc, 1):
+                self.__osc_conn.append([False] * self._num_osc);   
+        elif (self.__conn_represent == conn_represent.LIST):
+            self.__osc_conn = [[] for index in range(0, self._num_osc, 1)];
+        
+    
     def _create_structure(self, type_conn = conn_type.ALL_TO_ALL):
         """!
         @brief Creates connection in line with representation of matrix connections [NunOsc x NumOsc].
@@ -357,7 +369,10 @@ class network:
             
         elif (type_conn == conn_type.LIST_BIDIR):
             self.__create_list_bidir_connections();
-            
+        
+        elif (type_conn == conn_type.DYNAMIC):
+            self.__create_dynamic_connection();
+        
         else:
             raise NameError('The unknown type of connections');
          
@@ -365,6 +380,9 @@ class network:
     def has_connection(self, i, j):
         """!
         @brief Returns True if there is connection between i and j oscillators and False - if connection doesn't exist.
+        
+        @param[in] i (uint): index of an oscillator in the network.
+        @param[in] j (uint): index of an oscillator in the network.
         
         """
         if (self.__conn_represent == conn_represent.MATRIX):
@@ -378,8 +396,30 @@ class network:
         
         else:
             raise NameError("Unknown type of representation of coupling");
+    
+    
+    def set_connection(self, i, j):
+        """!
+        @brief Couples two specified oscillators in the network with dynamic connections.
         
+        @param[in] i (uint): index of an oscillator that should be coupled with oscillator 'j' in the network.
+        @param[in] j (uint): index of an oscillator that should be coupled with oscillator 'i' in the network.
         
+        @note This method can be used only in case of DYNAMIC connections, otherwise it throws expection.
+        
+        """
+        
+        if (self.structure != conn_type.DYNAMIC):
+            raise NameError("Connection between oscillators can be changed only in case of dynamic type.");
+        
+        if (self.__conn_represent == conn_represent.MATRIX):
+            self.__osc_conn[i][j] = True;
+            self.__osc_conn[j][i] = True;
+        else:
+            self.__osc_conn[i].append(j);
+            self.__osc_conn[j].append(i); 
+    
+    
     def get_neighbors(self, index):
         """!
         @brief Finds neighbors of the oscillator with specified index.
