@@ -13,6 +13,9 @@ General changes (pyclustering):
 - Images of english alphabet 100x100.
   See: https://github.com/annoviko/pyclustering/commit/aa28f1a8a363fbeb5f074d22ec1e8258a1dd0579
 
+- Implemented feature to use rectangular network structures in oscillatory networks.
+  See: https://github.com/annoviko/pyclustering/issues/259
+
 
 General changes (ccore):
 - Implemented phase oscillatory network for pattern recognition syncpr (ccore.syncpr).
@@ -20,6 +23,9 @@ General changes (ccore):
   
 - Implemented agglomerative algorithm for cluster analysis (ccore.agglomerative).
   See: https://github.com/annoviko/pyclustering/issues/212
+
+- Implemented feature to use rectangular network structures in oscillatory networks.
+  See: https://github.com/annoviko/pyclustering/issues/259
 
 
 Corrected bugs:
