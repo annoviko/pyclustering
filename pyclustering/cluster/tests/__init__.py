@@ -32,6 +32,7 @@ from pyclustering.cluster.tests               import dbscan_tests        as clus
 from pyclustering.cluster.tests               import hsyncnet_tests      as cluster_hsyncnet_unit_tests;
 from pyclustering.cluster.tests               import kmeans_tests        as cluster_kmeans_unit_tests;
 from pyclustering.cluster.tests               import kmedians_tests      as cluster_kmedians_unit_tests;
+from pyclustering.cluster.tests               import kmedoids_tests      as cluster_kmedoids_unit_tests;
 from pyclustering.cluster.tests               import optics_tests        as cluster_optics_unit_tests;
 from pyclustering.cluster.tests               import rock_tests          as cluster_rock_unit_tests;
 from pyclustering.cluster.tests               import syncnet_tests       as cluster_syncnet_unit_tests;
@@ -49,6 +50,7 @@ if __name__ == "__main__":
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_hsyncnet_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_kmeans_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_kmedians_unit_tests));
+    suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_kmedoids_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_optics_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_rock_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_syncnet_unit_tests));
