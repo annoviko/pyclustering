@@ -38,14 +38,31 @@ class Test(unittest.TestCase):
                     assert network.has_connection(i, j) == True;
                 else:
                     assert network.has_connection(i, j) == False; 
-                    
-    def testAllToAllConnections(self):
+    
+    def testAllToAll1Connections(self):
+        net = network(1, type_conn = conn_type.ALL_TO_ALL);
+        self.templateAllToAllConnectionsTest(net);
+           
+    def testAllToAll10Connections(self):
         net = network(10, type_conn = conn_type.ALL_TO_ALL);
         self.templateAllToAllConnectionsTest(net);
 
-    def testAllToAllConnectionsListRepresentation(self):
+    def testAllToAll25Connections(self):
+        net = network(25, type_conn = conn_type.ALL_TO_ALL);
+        self.templateAllToAllConnectionsTest(net);
+
+    def testAllToAll1ConnectionsListRepresentation(self):
+        net = network(1, type_conn = conn_type.ALL_TO_ALL, conn_represent = conn_represent.LIST);
+        self.templateAllToAllConnectionsTest(net);      
+
+    def testAllToAll10ConnectionsListRepresentation(self):
         net = network(10, type_conn = conn_type.ALL_TO_ALL, conn_represent = conn_represent.LIST);
-        self.templateAllToAllConnectionsTest(net);        
+        self.templateAllToAllConnectionsTest(net);
+
+    def testAllToAll25ConnectionsListRepresentation(self):
+        net = network(25, type_conn = conn_type.ALL_TO_ALL, conn_represent = conn_represent.LIST);
+        self.templateAllToAllConnectionsTest(net);
+
 
     # None connection suite
     def templateNoneConnectionsTest(self, network):
