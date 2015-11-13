@@ -26,7 +26,7 @@
 import unittest;
 
 import matplotlib;
-matplotlib.use('agg');
+matplotlib.use('Agg');
 
 from pyclustering.nnet import *;
 from pyclustering.nnet.syncpr import syncpr, syncpr_dynamic, syncpr_visualizer;
