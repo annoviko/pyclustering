@@ -43,15 +43,23 @@ class Test(unittest.TestCase):
         assert self.float_comparasion(euclidean_distance(4.23, 2.14), 2.09);
     
     
-    def testAverageNeighborDistance(self):
-        points = [[0, 0], [0, 1], [1, 1], [1, 0]];
+    def testAverageNeighborFourDistance(self):
+        points = [[0.0, 0.0], [0.0, 1.0], [1.0, 1.0], [1.0, 0.0]];
         
         assert average_neighbor_distance(points, 1) == 1.0;
         assert average_neighbor_distance(points, 2) == 1.0;
         assert self.float_comparasion(average_neighbor_distance(points, 3), 1.1381);
-            
+
+
+    def testAverageNeighborFourDistanceNegativeValues(self):
+        points = [[0.0, 0.0], [0.0, -1.0], [-1.0, -1.0], [-1.0, 0.0]];
+        
+        assert average_neighbor_distance(points, 1) == 1.0;
+        assert average_neighbor_distance(points, 2) == 1.0;
+        assert self.float_comparasion(average_neighbor_distance(points, 3), 1.1381);
     
-    def float_comparasion(self, float1, float2, eps = 0.001):
+    
+    def float_comparasion(self, float1, float2, eps = 0.0001):
         return ( (float1 + eps) > float2 and (float1 - eps) < float2 );
         
         

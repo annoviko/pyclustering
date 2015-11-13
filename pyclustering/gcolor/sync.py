@@ -103,7 +103,7 @@ class syncgcolor(sync_network):
         
         """
         number_oscillators = len(graph_matrix);
-        super().__init__(number_oscillators, type_conn = conn_type.NONE);
+        super().__init__(number_oscillators, type_conn = conn_type.DYNAMIC);
         
         if (reduction == None):
             self._reduction = self._num_osc;
@@ -126,7 +126,8 @@ class syncgcolor(sync_network):
         
         for row in range(0, len(graph_matrix)):
             for column in range (0, len(graph_matrix[row])):
-                self._osc_conn[row][column] = graph_matrix[row][column];
+                if (graph_matrix[row][column] > 0):
+                    self.set_connection(row, column);
                 
     
     def _phase_kuramoto(self, teta, t, argv):
