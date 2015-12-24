@@ -25,6 +25,11 @@
 
 import unittest;
 
+# Generate images without having a window appear.
+import matplotlib;
+matplotlib.use('Agg');
+
+# Test suits that are used for testing of python implementation.
 from pyclustering.cluster.tests                  import birch_tests         as cluster_birch_unit_tests;
 from pyclustering.cluster.tests                  import cure_tests          as cluster_cure_unit_tests;
 from pyclustering.cluster.tests                  import dbscan_tests        as cluster_dbscan_unit_tests;
@@ -56,7 +61,6 @@ from pyclustering.container.tests                import cftree_tests        as c
 from pyclustering.container.tests                import kdtree_tests        as container_kdtree_unit_tests;
 
 from pyclustering.utils.tests                    import utils_tests         as utils_unit_tests;
-
 
 
 if __name__ == "__main__":
@@ -94,5 +98,5 @@ if __name__ == "__main__":
     
     suite.addTests(unittest.TestLoader().loadTestsFromModule(utils_unit_tests));
     
-    unittest.TextTestRunner().run(suite);
+    return unittest.TextTestRunner().run(suite);
     
