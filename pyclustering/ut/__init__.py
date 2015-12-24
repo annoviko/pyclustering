@@ -79,11 +79,11 @@ if __name__ == "__main__":
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_syncnet_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_syncsom_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_xmeans_unit_tests));
-     
+      
     suite.addTests(unittest.TestLoader().loadTestsFromModule(gcolor_dsatur_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(gcolor_hysteresis_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(gcolor_sync_unit_tests));
- 
+  
     suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_hhn_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_hysteresis_unit_tests));
@@ -92,11 +92,21 @@ if __name__ == "__main__":
     suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_som_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_sync_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_syncpr_unit_tests));
-    
+     
     suite.addTests(unittest.TestLoader().loadTestsFromModule(container_cftree_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(container_kdtree_unit_tests));
     
     suite.addTests(unittest.TestLoader().loadTestsFromModule(utils_unit_tests));
     
-    unittest.TextTestRunner().run(suite);
+    result = unittest.TextTestRunner().run(suite);
+    
+    # Get execution result
+    execution_testing_result = 0;
+    
+    if (result.wasSuccessful() is True):
+        execution_testing_result = 0;
+    else:
+        execution_testing_result = 1;
+    
+    exit(execution_testing_result);
     
