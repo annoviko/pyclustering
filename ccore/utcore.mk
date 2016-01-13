@@ -8,15 +8,16 @@ CC = g++
 LD = g++
 
 # Toolchain arguments.
-CFLAGS = -MMD -MP -std=gnu++0x -fPIC -c -isystem tools/
-LDFLAGS = -std=gnu++0x -pthread tools/gtest/lib/linux/libgtest.a
+CFLAGS = -MMD -MP -std=c++11 -fPIC -c
+LDFLAGS = -std=c++11 -pthread
 
 # Project sources
 SOURCES += utcore/main.cpp
 SOURCES += utcore/samples.cpp
+SOURCES += tools/gtest/gtest-all.cpp
 
 OBJECTS = $(SOURCES:.cpp=.o)
-INCLUDES += -I./ -Iutcore/ -Itools/ -Iccore/
+INCLUDES += -I./ -Iutcore/ -Itools/
 
 # The dependency file names
 DEPS = $(OBJECTS:.o=.d)
