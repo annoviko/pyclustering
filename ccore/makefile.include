@@ -1,0 +1,24 @@
+# GCC should support C++11, for example, GCC 4.7.2
+
+INCLUDES = -Iccore/
+
+SOURCES += ccore/agglomerative.cpp
+SOURCES += ccore/ccore.cpp
+SOURCES += ccore/cure.cpp
+SOURCES += ccore/dbscan.cpp
+SOURCES += ccore/hierarchical.cpp
+SOURCES += ccore/hsyncnet.cpp
+SOURCES += ccore/kdtree.cpp
+SOURCES += ccore/kmeans.cpp
+SOURCES += ccore/kmedians.cpp
+SOURCES += ccore/legion.cpp
+SOURCES += ccore/network.cpp
+SOURCES += ccore/pcnn.cpp
+SOURCES += ccore/rock.cpp
+SOURCES += ccore/som.cpp
+SOURCES += ccore/support.cpp
+SOURCES += ccore/sync.cpp
+SOURCES += ccore/syncnet.cpp
+SOURCES += ccore/syncpr.cpp
+SOURCES += ccore/xmeans.cpp
+
