@@ -49,6 +49,6 @@ case $PYCLUSTERING_TARGET in
 		run_python_job ;;
 		
 	*)
-		echo "CI Job (travis CI): Unknown target '$PYCLUSTERING_TARGET'"
+		echo "CI Job (travis CI): Unknown target $PYCLUSTERING_TARGET"
 		exit 1 ;;
 esac
