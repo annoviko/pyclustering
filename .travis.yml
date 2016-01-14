@@ -18,7 +18,7 @@ install:
   - source activate test-environment
   - python setup.py install
   
-script: ./.travis.sh
+script: ./ci.sh
   
 env:
   - PYCLUSTERING_TARGET = CCORE
