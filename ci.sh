@@ -8,10 +8,9 @@ run_ccore_job() {
 	
 	if [ $? -eq 0 ] ; then
 		echo "ccore library creation... success"
-		exit(0)
 	else
 		echo "ccore library creation... fail"
-		exit(1)
+		exit 1
 	fi
 }
 
@@ -23,10 +22,9 @@ run_utcore_job() {
 	
 	if [ $? -eq 0 ] ; then
 		echo "ccore library creation... success"
-		exit(0)
 	else
 		echo "ccore library creation... fail"
-		exit(1)
+		exit 1
 	fi	
 }
 
@@ -52,5 +50,5 @@ case $PYCLUSTERING_TARGET in
 		
 	*)
 		echo "CI Job (travis CI): Unknown target '$PYCLUSTERING_TARGET'"
-		exit(1) ;;
+		exit 1 ;;
 esac
