@@ -1,9 +1,8 @@
 #!/bin/bash
 
 run_ccore_job() {
-	if [ "$CXX" = "g++" ]; then 
-		export CXX="g++-4.8" CC="gcc-4.8"; 
-	fi
+	sudo apt-get install -qq "g++-4.8"
+	export CXX="g++-4.8" CC="gcc-4.8"
 	
 	echo "CI Job (travis CI): CCORE (C++ code library compilation)"
 	
@@ -19,9 +18,8 @@ run_ccore_job() {
 }
 
 run_utcore_job() {
-	if [ "$CXX" = "g++" ]; then 
-		export CXX="g++-4.8" CC="gcc-4.8"; 
-	fi
+	sudo apt-get install -qq "g++-4.8"
+	export CXX="g++-${GCC_VERSION}" CC="gcc-${GCC_VERSION}"
 	
 	echo "CI Job (travis CI): UT CORE (C++ code unit-testing)"
 	
