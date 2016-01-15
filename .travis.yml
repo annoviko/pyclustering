@@ -10,6 +10,12 @@ addons:
     - python3
 
 
+before_install:
+    - export CC="gcc-4.8"
+    - export CXX="g++-4.8"
+    - export LINK="gcc-4.8"
+    - export LINKXX="g++-4.8"
+
 install:
   - sudo apt-get update
   
@@ -29,8 +35,11 @@ install:
   - python setup.py install
   - chmod u+x ci.sh
   
-  - export CXX="g++-4.8"
-  - export CC="gcc-4.8";
+  - sudo apt-get install -qq g++-4.8
+  - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 50
+  
+  - g++ --version
+  - gcc --version
   
 script: ./ci.sh
   
