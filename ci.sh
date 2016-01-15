@@ -41,8 +41,7 @@ case $PYCLUSTERING_TARGET in
 	CCORE) 
 		run_ccore_job ;;
 		
-	UTCCORE) 
-	
+	UTCORE) 
 		run_utcore_job ;;
 		
 	PYTHON) 

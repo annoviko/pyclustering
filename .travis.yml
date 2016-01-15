@@ -5,7 +5,8 @@ addons:
     sources:
     - ubuntu-toolchain-r-test
     packages:
-    - g++-4.9
+    - g++-4.8
+    - gcc-4.8
     - python3
 
 
@@ -23,10 +24,13 @@ install:
   - conda info -a
 
   # Replace dep1 dep2 ... with your dependencies
-  - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION numpy scipy matplotlib Pillow
+  - conda create -q -n test-environment python=3.4 numpy scipy matplotlib Pillow
   - source activate test-environment
   - python setup.py install
   - chmod u+x ci.sh
+  
+  - export CXX="g++-4.8"
+  - export CC="gcc-4.8";
   
 script: ./ci.sh
   
