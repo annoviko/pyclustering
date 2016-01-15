@@ -1,6 +1,7 @@
 #!/bin/bash
 
 run_ccore_job() {
+	g++ --version
 	echo "CI Job (travis CI): CCORE (C++ code library compilation)"
 	
 	cd ccore/
@@ -15,6 +16,7 @@ run_ccore_job() {
 }
 
 run_utcore_job() {
+	g++ --version
 	echo "CI Job (travis CI): UT CORE (C++ code unit-testing)"
 	
 	cd ccore/
