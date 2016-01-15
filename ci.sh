@@ -1,7 +1,6 @@
 #!/bin/bash
 
 run_ccore_job() {
-	g++ --version
 	echo "CI Job (travis CI): CCORE (C++ code library compilation)"
 	
 	cd ccore/
@@ -16,7 +15,6 @@ run_ccore_job() {
 }
 
 run_utcore_job() {
-	g++ --version
 	echo "CI Job (travis CI): UT CORE (C++ code unit-testing)"
 	
 	cd ccore/
@@ -27,12 +25,16 @@ run_utcore_job() {
 	else
 		echo "ccore library creation... fail"
 		exit 1
-	fi	
+	fi
+	
+	# run unit-tests
+	./utcore/utcore
 }
 
 run_python_job() {
 	echo "CI Job (travis CI): PYCLUSTERING (Python code unit-testing)"
 
+	# run unit-tests
 	python pyclustering/ut/__init__.py
 }
 
