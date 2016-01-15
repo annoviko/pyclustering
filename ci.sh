@@ -1,6 +1,10 @@
 #!/bin/bash
 
 run_ccore_job() {
+	if [ "$CXX" = "g++" ]; then 
+		export CXX="g++-4.8" CC="gcc-4.8"; 
+	fi
+	
 	echo "CI Job (travis CI): CCORE (C++ code library compilation)"
 	
 	cd ccore/
@@ -15,6 +19,10 @@ run_ccore_job() {
 }
 
 run_utcore_job() {
+	if [ "$CXX" = "g++" ]; then 
+		export CXX="g++-4.8" CC="gcc-4.8"; 
+	fi
+	
 	echo "CI Job (travis CI): UT CORE (C++ code unit-testing)"
 	
 	cd ccore/
