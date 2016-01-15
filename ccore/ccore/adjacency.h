@@ -3,12 +3,21 @@
 
 #include <vector>
 
+
+template<typename T>
+using matrix = std::vector<std::vector<T>>;
+
+
 /***********************************************************************************************
 *
-* @brief   Interface of the adjacency collection that provides ability to control adjacancy objects.
+* @brief   Abstract class of the adjacency collection that provides ability to control objects.
 *
 ***********************************************************************************************/
-class adjacency {
+template<typename TypeNode>
+class adjacency_collection {
+public:
+    matrix<TypeNode>      m_adjacency; 
+    
 public:
     /***********************************************************************************************
     *
@@ -19,28 +28,15 @@ public:
 
     /***********************************************************************************************
     *
-    * @brief   Returns width of adjacency collection that defines number of nodes in row.
-    *
-    ***********************************************************************************************/
-    virtual size_t width(void) const = 0;
-
-    /***********************************************************************************************
-    *
-    * @brief   Returns height of adjacency collection that defines number of nodes in column.
-    *
-    ***********************************************************************************************/
-    virtual size_t height(void) const = 0;
-
-    /***********************************************************************************************
-    *
     * @brief   Establishes connection between two nodes in adjacency collection.
     *
     * @param[in] node_index1: index of node in the collection that should be connected with another.
     * @param[in] node_index2: index of another node in the collection that should be connected with
     *                         the node defined by the first argument 'node_index1'.
+    * @param[in] conn_weight: value of connection that defines
     *
     ***********************************************************************************************/
-    virtual void set_connection(const size_t node_index1, const size_t node_index2) = 0;
+    virtual void set_connection(const size_t node_index1, const size_t node_index2, const TypeNode conn_weight) = 0;
 
     /***********************************************************************************************
     *
@@ -50,7 +46,7 @@ public:
     * @param[in] node_index2: index of another node in the collection.
     *
     ***********************************************************************************************/
-    virtual double get_connection(const size_t node_index1, const size_t node_index2) const = 0;
+    virtual TypeNode get_connection(const size_t node_index1, const size_t node_index2) const = 0;
 
     /***********************************************************************************************
     *
@@ -64,23 +60,19 @@ public:
 };
 
 
-template<typename T>
-using matrix = std::vector<std::vector<T>>;
-
-
-class adjacency_bit_matrix : public adjacency {
+class adjacency_bit_matrix : public adjacency_collection<size_t> {
 public:
-    matrix<size_t>      m_adjacency;            
+
 };
 
-class adjacency_list_matrix : public adjacency {
+class adjacency_list_matrix : public adjacency_collection<size_t> {
 public:
-    matrix<size_t>      m_adjacency;
+
 };
 
-class adjacency_matrix : public adjacency {
+class adjacency_matrix : public adjacency_collection<double> {
 public:
-    matrix<double>      m_adjacency;
+
 };
 
 #endif
