@@ -8,8 +8,8 @@ CC = g++
 LD = g++
 
 # Toolchain arguments.
-CFLAGS = -MMD -MP -std=c++11 -fPIC -c
-LDFLAGS = -std=c++11 -pthread
+CFLAGS = -O3 -MMD -MP -std=c++11 -fPIC -c
+LDFLAGS = -O3 -std=c++11 -pthread
 
 # Project sources
 SOURCES += utcore/main.cpp
@@ -26,7 +26,6 @@ DEPS = $(OBJECTS:.o=.d)
 EXECUTABLE = utcore/utcore
 
 utcore: $(EXECUTABLE)
-	./utcore/utcore
 
 clean:
 	rm utcore/*.o utcore/utcore
