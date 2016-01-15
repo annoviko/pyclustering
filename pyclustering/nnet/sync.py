@@ -139,7 +139,10 @@ class sync_dynamic:
             cluster_allocated = False;
             for cluster in clusters:
                 for neuron_index in cluster:
-                    if ( (last_state[i] < (last_state[neuron_index] + tolerance)) and (last_state[i] > (last_state[neuron_index] - tolerance)) ):
+                    last_state_shifted = abs(last_state[i] - 2 * pi);
+                    
+                    if ( ( (last_state[i] < (last_state[neuron_index] + tolerance)) and (last_state[i] > (last_state[neuron_index] - tolerance)) ) or
+                         ( (last_state_shifted < (last_state[neuron_index] + tolerance)) and (last_state_shifted > (last_state[neuron_index] - tolerance)) ) ):
                         cluster_allocated = True;
                         cluster.append(i);
                         break;
@@ -394,7 +397,7 @@ class sync_network(network):
         if (self._ccore_network_pointer is not None):
             return wrapper.sync_local_order(self._ccore_network_pointer);
         
-        exp_amount = 0;
+        exp_amount = 0.0;
         num_neigh = 0;
         
         for i in range(0, self._num_osc, 1):
@@ -406,7 +409,7 @@ class sync_network(network):
         if (num_neigh == 0):
             num_neigh = 1;
         
-        return exp_amount / num_neigh;        
+        return exp_amount / num_neigh;
     
     
     def _phase_kuramoto(self, teta, t, argv):
@@ -508,11 +511,11 @@ class sync_network(network):
             if (abs(current_order - previous_order) < threshold_changes):
                 # print("Warning: sync_network::simulate_dynamic - simulation is aborted due to low level of convergence rate (order = " + str(current_order) + ").");
                 break;
-        
+            
         if (collect_dynamic != True):
             dyn_phase.append(self._phases);
-            dyn_time.append(time_counter);        
-        
+            dyn_time.append(time_counter);
+
         output_sync_dynamic = sync_dynamic(dyn_phase, dyn_time, None);
         return output_sync_dynamic;
 

@@ -44,3 +44,6 @@ CORRECTED BUGS:
 
 - Bug with execution fail in case of wrong number of initial medians and in case of the same objects with several initial medians (pyclustering.kmedians.kmedians).
   See: https://github.com/annoviko/pyclustering/issues/256
+  
+- Bug with calculation synchronous ensembles near by zero: oscillators 2*pi and 0 are considered as different (pyclustering.nnet.sync, ccore.sync).
+  See: https://github.com/annoviko/pyclustering/issues/263

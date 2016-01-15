@@ -155,7 +155,6 @@ TEST(utest_sync, static_collecting_dynamic_100_oscillators) {
     template_static_collecting_dynamic(100);
 }
 
-
 TEST(utest_sync, dynamic_collecting_dynamic) {
 	sync_network network(10, 1, 0, conn_type::ALL_TO_ALL, initial_type::EQUIPARTITION);
 
@@ -164,6 +163,27 @@ TEST(utest_sync, dynamic_collecting_dynamic) {
 	
 	ASSERT_EQ(10, output_dynamic.number_oscillators());
 	ASSERT_GT(output_dynamic.size(), 1);
+}
+
+TEST(utest_sync, dynamic_around_zero) {
+    sync_dynamic output_dynamic;
+    output_dynamic.push_back(sync_network_state(10.0, { 0.01, 0.02, 0.03, 6.25, 6.26, 6.27 }));
+
+    ensemble_data<sync_ensemble> ensembles;
+    output_dynamic.allocate_sync_ensembles(0.1, ensembles);
+
+    ASSERT_EQ(1, ensembles.size());
+
+    output_dynamic.allocate_sync_ensembles(0.2, ensembles);
+
+    ASSERT_EQ(1, ensembles.size());
+
+    output_dynamic.clear();
+    output_dynamic.push_back(sync_network_state(20.0, { 1.02, 1.05, 1.52, 5.87, 5.98, 5.14 }));
+
+    output_dynamic.allocate_sync_ensembles(2.0, ensembles);
+
+    ASSERT_EQ(1, ensembles.size());
 }
 
 #endif

@@ -303,7 +303,14 @@ void sync_dynamic::allocate_sync_ensembles(const double tolerance, ensemble_data
 				for (sync_ensemble::const_iterator iter_neuron_index = (*cluster).cbegin(); iter_neuron_index != last_cluster_element; iter_neuron_index++) {
 					unsigned int index = (*iter_neuron_index);
 
-					if ( ( (*last_state_dynamic).m_phase[i] < ((*last_state_dynamic).m_phase[index] + tolerance) ) && ( (*last_state_dynamic).m_phase[i] > ((*last_state_dynamic).m_phase[index] - tolerance) ) ) {
+                    double phase_first = (*last_state_dynamic).m_phase[i];
+                    double phase_second = (*last_state_dynamic).m_phase[index];
+
+                    double phase_shifted = std::abs((*last_state_dynamic).m_phase[i] - 2 * pi());
+
+					if ( ( (phase_first < (phase_second + tolerance)) && (phase_first > (phase_second - tolerance)) ) || 
+                         ( (phase_shifted < (phase_second + tolerance)) && (phase_shifted > (phase_second - tolerance)) ) ) {
+
 						cluster_allocated = true;
 						(*cluster).push_back(i);
 

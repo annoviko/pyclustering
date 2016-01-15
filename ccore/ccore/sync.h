@@ -57,7 +57,10 @@ public:
 
 public:
 	sync_network_state(void) : m_time(0.0) { }
+
 	sync_network_state(const unsigned int size) : m_phase(size, 0.0), m_time(0.0) { }
+
+    sync_network_state(double time, std::vector<double> phases) : m_phase(phases), m_time(time) { }
 
 	inline size_t size(void) const { return m_phase.size(); }
 

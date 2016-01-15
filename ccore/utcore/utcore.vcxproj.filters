@@ -63,7 +63,7 @@
     <ClCompile Include="..\ccore\kmedians.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\tools\gtest\gtest-all.cc">
+    <ClCompile Include="..\tools\gtest\gtest-all.cpp">
       <Filter>TestEnv Source Files</Filter>
     </ClCompile>
   </ItemGroup>

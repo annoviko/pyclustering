@@ -97,7 +97,7 @@
     <ClCompile Include="..\ccore\syncnet.cpp" />
     <ClCompile Include="..\ccore\syncpr.cpp" />
     <ClCompile Include="..\ccore\xmeans.cpp" />
-    <ClCompile Include="..\tools\gtest\gtest-all.cc" />
+    <ClCompile Include="..\tools\gtest\gtest-all.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="samples.cpp" />
   </ItemGroup>
