@@ -1,5 +1,14 @@
 language: python
 
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - g++-4.9
+    - python3
+
+
 install:
   - sudo apt-get update
   
