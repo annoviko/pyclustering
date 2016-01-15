@@ -61,7 +61,7 @@ class Test(unittest.TestCase):
         result_testing = False;
         
         # If phases crosses each other because of random part of the network then we should try again.
-        for attempt in range(0, 3, 1):
+        for attempt in range(0, 5, 1):
             sample = read_sample(file);
             network = syncsom(sample, som_map_size[0], som_map_size[1]);
             network.process(avg_num_conn, collect_dynamic = False, order = eps);
