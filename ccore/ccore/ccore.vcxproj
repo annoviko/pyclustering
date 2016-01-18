@@ -145,6 +145,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="adjacency_bit_matrix.cpp" />
+    <ClCompile Include="adjacency_list_matrix.cpp" />
+    <ClCompile Include="adjacency_matrix.cpp" />
     <ClCompile Include="agglomerative.cpp" />
     <ClCompile Include="ccore.cpp" />
     <ClCompile Include="cure.cpp" />
@@ -166,6 +169,10 @@
     <ClCompile Include="xmeans.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="adjacency.h" />
+    <ClInclude Include="adjacency_bit_matrix.h" />
+    <ClInclude Include="adjacency_list_matrix.h" />
+    <ClInclude Include="adjacency_matrix.h" />
     <ClInclude Include="agglomerative.h" />
     <ClInclude Include="cure.h" />
     <ClInclude Include="dbscan.h" />

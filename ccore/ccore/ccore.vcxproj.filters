@@ -72,6 +72,15 @@
     <ClCompile Include="kmedians.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="adjacency_bit_matrix.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="adjacency_list_matrix.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="adjacency_matrix.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dbscan.h">
@@ -138,6 +147,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ensemble_data.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="adjacency.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="adjacency_bit_matrix.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="adjacency_list_matrix.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="adjacency_matrix.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
