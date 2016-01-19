@@ -146,7 +146,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="adjacency_bit_matrix.cpp" />
-    <ClCompile Include="adjacency_list_matrix.cpp" />
+    <ClCompile Include="adjacency_list.cpp" />
     <ClCompile Include="adjacency_matrix.cpp" />
     <ClCompile Include="agglomerative.cpp" />
     <ClCompile Include="ccore.cpp" />
@@ -171,7 +171,8 @@
   <ItemGroup>
     <ClInclude Include="adjacency.h" />
     <ClInclude Include="adjacency_bit_matrix.h" />
-    <ClInclude Include="adjacency_list_matrix.h" />
+    <ClInclude Include="adjacency_factory.h" />
+    <ClInclude Include="adjacency_list.h" />
     <ClInclude Include="adjacency_matrix.h" />
     <ClInclude Include="agglomerative.h" />
     <ClInclude Include="cure.h" />

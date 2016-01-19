@@ -4,9 +4,6 @@
 #include "adjacency.h"
 
 
-template <class TypeNode> using adjacency_matrix_container = std::vector<std::vector<double>>;
-
-
 /***********************************************************************************************
 *
 * @brief   Implementation of classical adjacency matrix where each node stores weight of connection
@@ -20,10 +17,71 @@ template <class TypeNode> using adjacency_matrix_container = std::vector<std::ve
 * @see     adjacency_list_matrix
 *
 ***********************************************************************************************/
-class adjacency_matrix : public adjacency_collection<double, adjacency_matrix_container> {
+class adjacency_matrix : public adjacency_weight_collection {
 private:
+    typedef std::vector<std::vector<double>>    adjacency_matrix_container;
+
+protected:
+    adjacency_matrix_container  m_adjacency;
+
+public:
+    /***********************************************************************************************
+    *
+    * @brief   Default destructor without arguments is forbiden.
+    *
+    ***********************************************************************************************/
+    adjacency_matrix(void) = delete;
+
+    /***********************************************************************************************
+    *
+    * @brief   Default copy constructor.
+    *
+    * @param[in]  another_matrix: adjacency matrix that should be copied.
+    *
+    ***********************************************************************************************/
+    adjacency_matrix(const adjacency_matrix & another_matrix);
+
+    /***********************************************************************************************
+    *
+    * @brief   Default move constructor.
+    *
+    * @param[in]  another_matrix: adjacency matrix that should be moved.
+    *
+    ***********************************************************************************************/
+    adjacency_matrix(adjacency_matrix && another_matrix);
+
+    /***********************************************************************************************
+    *
+    * @brief   Classic adjacency matrix constructor.
+    *
+    * @param[in]  node_amount: number of nodes whose connections are described in matrix.
+    *
+    ***********************************************************************************************/
+    adjacency_matrix(const size_t node_amount);
+
+    /***********************************************************************************************
+    *
+    * @brief   Default destructor.
+    *
+    ***********************************************************************************************/
+    virtual ~adjacency_matrix(void);
+
+
+private:
+    /***********************************************************************************************
+    *
+    * @brief   Default value that denotes existance of connection (non-zero weight of connection).
+    *
+    ***********************************************************************************************/
     static const double DEFAULT_EXISTANCE_CONNECTION_VALUE;
+
+    /***********************************************************************************************
+    *
+    * @brief   Default value that denotes lack of connection (zero weight of connection).
+    *
+    ***********************************************************************************************/
     static const double DEFAULT_NON_EXISTANCE_CONNECTION_VALUE;
+
 
 public:
     /***********************************************************************************************
@@ -41,31 +99,30 @@ public:
 
     /***********************************************************************************************
     *
-    * @brief   Establishes one-way connection from the first node to the second in adjacency collection
-    *          in case of zero value of weight of connection and resets connection (remove it) in case of 
-    *          zero value.
+    * @brief   Removes one-way connection from the first node to the second in adjacency collection.
     *
-    * @details Complexity of updating weight of connection is O(1).
+    * @details Complexity of removing is O(1).
     *
-    * @param[in]  node_index1: index of node in the collection whose connection should be updated with another.
-    * @param[in]  node_index2: index of another node in the collection.
-    * @param[in]  weight_connection: weight of connection from the first node to the second.
+    * @param[in]  node_index1: index of node in the collection that should be disconnected from another.
+    * @param[in]  node_index2: index of another node in the collection that should be diconnected from
+    *              the node defined by the first argument 'node_index1'.
     *
     ***********************************************************************************************/
-    virtual void update_connection(const size_t node_index1, const size_t node_index2, const double weight_connection);
+    virtual void erase_connection(const size_t node_index1, const size_t node_index2);
 
     /***********************************************************************************************
     *
-    * @brief   Returns value of connection that denotes weight of connection, if there is no connection
-    *          from the first node to the second then null value is returned.
+    * @brief   Checks existance of connection between specified nodes.
     *
-    * @details Complexity of getting weight of connection is O(1).
+    * @details Complexity of checking is O(1).
     *
     * @param[in]  node_index1: index of node in the collection.
     * @param[in]  node_index2: index of another node in the collection.
     *
+    * @return  'true' - connection between the nodes exists, 'false' - connection does not exist.
+    *
     ***********************************************************************************************/
-    virtual double get_connection(const size_t node_index1, const size_t node_index2) const;
+    virtual bool has_connection(const size_t node_index1, const size_t node_index2) const;
 
     /***********************************************************************************************
     *
@@ -78,6 +135,39 @@ public:
     *
     ***********************************************************************************************/
     virtual void get_neighbors(const size_t node_index, std::vector<size_t> & node_neighbors) const;
+
+    /***********************************************************************************************
+    *
+    * @brief   Set weight of connection between nodes where zero value means lack of connection and
+    *          non-zero means connection with specified weight.
+    *
+    * @details Complexity of updating weight of connection is O(1).
+    *
+    * @param[in]  node_index1: index of node in the collection whose connection weight should be updated 
+    *              with another node.
+    * @param[in]  node_index2: index of another node in the collection.
+    * @param[in]  weight: new value of weight of connection between the nodes.
+    *
+    ***********************************************************************************************/
+    virtual void set_connection_weight(const size_t node_index1, const size_t node_index2, const double weight);
+
+    /***********************************************************************************************
+    *
+    * @brief   Returns weight of one-way connection between specified nodes.
+    *
+    * @details If connection from the first node to the second does not exist than zero value is
+    *          returned and if it exists than non-zero value is returned. Complexity of getting weight 
+    *          of connection is O(1).
+    *
+    * @param[in]  node_index1: index of node in the collection whose connection weight should be 
+    *              updated with another node.
+    * @param[in]  node_index2: index of another node in the collection that is connected to the 
+    *              first node.
+    *
+    * @return  Weight of one-way connection between specified nodes.
+    *
+    ***********************************************************************************************/
+    virtual double get_connection_weight(const size_t node_index1, const size_t node_index2) const;
 };
 
 #endif
