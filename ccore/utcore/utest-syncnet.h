@@ -31,43 +31,63 @@ TEST(utest_syncnet, create_delete_network_100) {
 }
 
 TEST(utest_syncnet, one_cluster) {
-	std::vector<std::vector<double> > sample;
+	bool result_testing = false;
 
-	sample.push_back( { 0.1, 0.1 } );
-	sample.push_back( { 0.2, 0.1 } );
-	sample.push_back( { 0.0, 0.0 } );
+	for (unsigned int attempt = 0; attempt < 3; attempt++) {
+		std::vector<std::vector<double> > sample;
 
-	syncnet network(&sample, 0.5, false, initial_type::EQUIPARTITION);
+		sample.push_back( { 0.1, 0.1 } );
+		sample.push_back( { 0.2, 0.1 } );
+		sample.push_back( { 0.0, 0.0 } );
 
-	syncnet_analyser analyser;
-	network.process(0.998, solve_type::FAST, true, analyser);
+		syncnet network(&sample, 0.5, false, initial_type::EQUIPARTITION);
 
-	syncnet_cluster_data clusters;
-	analyser.allocate_clusters(0.1, clusters);
+		syncnet_analyser analyser;
+		network.process(0.998, solve_type::FAST, true, analyser);
 
-	ASSERT_EQ(1, clusters.size());
+		syncnet_cluster_data clusters;
+		analyser.allocate_clusters(0.1, clusters);
+
+		if (1 != clusters.size()) {
+			continue;
+		}
+
+		result_testing = true;
+	}
+
+	ASSERT_TRUE(result_testing);
 }
 
 static void template_two_cluster_allocation(const solve_type solver, const bool collect_dynamic) {
-	std::vector<std::vector<double> > sample;
+	bool result_testing = false;
 
-	sample.push_back( { 0.1, 0.1 } );
-	sample.push_back( { 0.2, 0.1 } );
-	sample.push_back( { 0.0, 0.0 } );
+	for (unsigned int attempt = 0; attempt < 3; attempt++) {
+		std::vector<std::vector<double> > sample;
 
-	sample.push_back( { 2.2, 2.1 } );
-	sample.push_back( { 2.3, 2.0 } );
-	sample.push_back( { 2.1, 2.4 } );
+		sample.push_back( { 0.1, 0.1 } );
+		sample.push_back( { 0.2, 0.1 } );
+		sample.push_back( { 0.0, 0.0 } );
 
-	syncnet network(&sample, 0.5, false, initial_type::EQUIPARTITION);
+		sample.push_back( { 2.2, 2.1 } );
+		sample.push_back( { 2.3, 2.0 } );
+		sample.push_back( { 2.1, 2.4 } );
 
-	syncnet_analyser analyser;
-	network.process(0.995, solver, true, analyser);
+		syncnet network(&sample, 0.5, false, initial_type::EQUIPARTITION);
 
-	ensemble_data<syncnet_cluster> ensembles;
-	analyser.allocate_clusters(0.1, ensembles);
+		syncnet_analyser analyser;
+		network.process(0.995, solver, true, analyser);
 
-	ASSERT_EQ(2, ensembles.size());
+		ensemble_data<syncnet_cluster> ensembles;
+		analyser.allocate_clusters(0.1, ensembles);
+
+		if (2 != ensembles.size()) {
+			continue;
+		}
+
+		result_testing = true;
+	}
+
+	ASSERT_TRUE(result_testing);
 }
 
 TEST(utest_syncnet, two_clusters_fast_solver_with_collection) {
