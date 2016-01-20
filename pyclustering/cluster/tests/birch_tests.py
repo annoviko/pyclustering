@@ -33,6 +33,7 @@ from pyclustering.container.cftree import measurement_type;
 
 from pyclustering.cluster.birch import birch;
 
+from random import random;
 
 class Test(unittest.TestCase):
     def templateClusterAllocation(self, path, cluster_sizes, number_clusters, branching_factor = 5, max_node_entries = 5, initial_diameter = 0.1, type_measurement = measurement_type.CENTROID_EUCLIDIAN_DISTANCE, entry_size_limit = 200, ccore = True):
@@ -51,8 +52,20 @@ class Test(unittest.TestCase):
         obtained_cluster_sizes.sort();
         assert cluster_sizes == obtained_cluster_sizes;
         
-    def testClusterAllocationSampleSimple1(self):
-        self.templateClusterAllocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [5, 5], 2);
+    def testClusterAllocationSampleSimple1CentroidEuclidianDistance(self):
+        self.templateClusterAllocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [5, 5], 2, type_measurement = measurement_type.CENTROID_EUCLIDIAN_DISTANCE);
+    
+    def testClusterAllocationSampleSimple1CentroidManhattanDistance(self):
+        self.templateClusterAllocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [5, 5], 2, type_measurement = measurement_type.CENTROID_MANHATTAN_DISTANCE);
+    
+    def testClusterAllicationSampleSimple1AverageInterClusterDistance(self):
+        self.templateClusterAllocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [5, 5], 2, type_measurement = measurement_type.AVERAGE_INTER_CLUSTER_DISTANCE);
+    
+    def testClusterAllicationSampleSimple1AverageIntraClusterDistance(self):
+        self.templateClusterAllocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [5, 5], 2, type_measurement = measurement_type.AVERAGE_INTRA_CLUSTER_DISTANCE);
+    
+    def testClusterAllicationSampleSimple1VarianceIncreaseDistance(self):
+        self.templateClusterAllocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [5, 5], 2, type_measurement = measurement_type.VARIANCE_INCREASE_DISTANCE);
     
     def testClusterAllocationSampleSimple2(self):
         self.templateClusterAllocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [10, 5, 8], 3);
@@ -65,6 +78,33 @@ class Test(unittest.TestCase):
         
     def testClusterAllocationSampleSimple5(self):
         self.templateClusterAllocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [15, 15, 15, 15], 4);
+    
+    
+    def templateClusterAllocationOneDimensionData(self, branching_factor = 5, max_node_entries = 5, initial_diameter = 0.1, type_measurement = measurement_type.CENTROID_EUCLIDIAN_DISTANCE, entry_size_limit = 200, ccore = True):
+        input_data = [ [random()] for i in range(10) ] + [ [random() + 3] for i in range(10) ] + [ [random() + 6] for i in range(10) ] + [ [random() + 9] for i in range(10) ];
+        
+        birch_instance = birch(input_data, 4, branching_factor, max_node_entries, initial_diameter, type_measurement, entry_size_limit, ccore);
+        birch_instance.process();
+        clusters = birch_instance.get_clusters();
+        
+        assert len(clusters) == 4;
+        for cluster in clusters:
+            assert len(cluster) == 10;
+    
+    def testClusterAllocationOneDimensionCentroidEuclidianDistance(self):
+        self.templateClusterAllocationOneDimensionData(type_measurement = measurement_type.CENTROID_EUCLIDIAN_DISTANCE);
+
+    def testClusterAllocationOneDimensionCentroidManhattanDistance(self):
+        self.templateClusterAllocationOneDimensionData(type_measurement = measurement_type.CENTROID_MANHATTAN_DISTANCE);
+
+    def testClusterAllocationOneAverageInterClusterDistance(self):
+        self.templateClusterAllocationOneDimensionData(type_measurement = measurement_type.AVERAGE_INTER_CLUSTER_DISTANCE);
+
+    def testClusterAllocationOneAverageIntraClusterDistance(self):
+        self.templateClusterAllocationOneDimensionData(type_measurement = measurement_type.AVERAGE_INTRA_CLUSTER_DISTANCE);
+    
+    def testClusterAllocationOneVarianceIncreaseDistance(self):
+        self.templateClusterAllocationOneDimensionData(type_measurement = measurement_type.VARIANCE_INCREASE_DISTANCE);
 
 
 if __name__ == "__main__":
