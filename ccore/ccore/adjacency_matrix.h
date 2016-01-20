@@ -14,7 +14,7 @@
 *          collection allows to specify weight of each connection between nodes.
 *
 * @see     adjacency_bit_matrix
-* @see     adjacency_list_matrix
+* @see     adjacency_list
 *
 ***********************************************************************************************/
 class adjacency_matrix : public adjacency_weight_collection {

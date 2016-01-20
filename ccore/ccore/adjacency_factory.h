@@ -30,13 +30,17 @@ enum connection_t {
 
 class adjacency_factory {
 public:
-    std::shared_ptr<adjacency_collection> create_collection(const adjacency_t type);
+    std::shared_ptr<adjacency_collection> create_collection(const adjacency_t storing_type);
+
+    std::shared_ptr<adjacency_collection> create_collection(const adjacency_t storing_type, const connection_t structure_type);
 };
 
 
 class adjacency_weight_factory {
 public:
     std::shared_ptr<adjacency_weight_collection> create_collection(const adjacency_weight_t type);
+
+    std::shared_ptr<adjacency_weight_collection> create_collection(const adjacency_weight_t storing_type, const connection_t structure_type);
 };
 
 #endif

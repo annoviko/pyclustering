@@ -148,6 +148,7 @@
     <ClCompile Include="adjacency_bit_matrix.cpp" />
     <ClCompile Include="adjacency_list.cpp" />
     <ClCompile Include="adjacency_matrix.cpp" />
+    <ClCompile Include="adjacency_weight_list.cpp" />
     <ClCompile Include="agglomerative.cpp" />
     <ClCompile Include="ccore.cpp" />
     <ClCompile Include="cure.cpp" />
@@ -174,6 +175,7 @@
     <ClInclude Include="adjacency_factory.h" />
     <ClInclude Include="adjacency_list.h" />
     <ClInclude Include="adjacency_matrix.h" />
+    <ClInclude Include="adjacency_weight_list.h" />
     <ClInclude Include="agglomerative.h" />
     <ClInclude Include="cure.h" />
     <ClInclude Include="dbscan.h" />

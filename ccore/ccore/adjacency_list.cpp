@@ -1,10 +1,6 @@
 #include "adjacency_list.h"
 
 
-const size_t adjacency_list::DEFAULT_EXISTANCE_CONNECTION_VALUE = 1;
-const size_t adjacency_list::DEFAULT_NON_EXISTANCE_CONNECTION_VALUE = 0;
-
-
 adjacency_list::adjacency_list(const adjacency_list & another_matrix) {
     m_adjacency = another_matrix.m_adjacency;
 }

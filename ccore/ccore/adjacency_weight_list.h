@@ -1,29 +1,34 @@
-#ifndef _ADJACENCY_BIT_MATRIX_
-#define _ADJACENCY_BIT_MATRIX_
+#ifndef _ADJACENCY_WEIGHT_LIST_H_
+#define _ADJACENCY_WEIGHT_LIST_H_
 
 #include "adjacency.h"
+
+#include <unordered_map>
 
 
 /***********************************************************************************************
 *
-* @brief   Implementation of classical bit adjacency matrix where each node has bit map where 
-*          each bit stores state of connection to correspoding node.
+* @brief   Implementation of adjacency matrix where each node stores its neighbors in unordered
+*          set with corresponding weight of connection to corresponding neighbor.
 *
-* @details Bit matrix implementation helps to significantly reduce usage of memory than list matrix
-*          and classic matrix representations. But operations of getting and setting are slower than
-*          mentioned implementations.
-*          
-* @see     adjacency_list
+* @details Unordered ensures maximum performance in case of getting elements by index because only 
+*          indexes are used as keys that ensures uniform distribution. It takes less memory
+*          than classical matrix representation. And it is faster in case of getting neighbors than
+*          bit matrix and classical matrix representation. Unlike adjacency_list this implementation
+*          requires twice as much memory because of storing weight of each connection.
+*
+* @see     adjacency_bit_matrix
 * @see     adjacency_matrix
 *
 ***********************************************************************************************/
-class adjacency_bit_matrix : public adjacency_collection {
+class adjacency_weight_list : public adjacency_weight_collection {
 private:
-    typedef std::vector<std::vector<size_t>>      adjacency_bit_matrix_container;
+    typedef std::vector<std::unordered_map<size_t, double>>     adjacency_list_container;
 
 
 protected:
-    adjacency_bit_matrix_container  m_adjacency;
+    adjacency_list_container     m_adjacency;
+
 
 public:
     /***********************************************************************************************
@@ -31,7 +36,7 @@ public:
     * @brief   Default destructor without arguments is forbiden.
     *
     ***********************************************************************************************/
-    adjacency_bit_matrix(void) = delete;
+    adjacency_weight_list(void) = delete;
 
     /***********************************************************************************************
     *
@@ -40,7 +45,7 @@ public:
     * @param[in]  another_matrix: adjacency matrix that should be copied.
     *
     ***********************************************************************************************/
-    adjacency_bit_matrix(const adjacency_bit_matrix & another_matrix);
+    adjacency_weight_list(const adjacency_weight_list & another_matrix);
 
     /***********************************************************************************************
     *
@@ -49,28 +54,39 @@ public:
     * @param[in]  another_matrix: adjacency matrix that should be moved.
     *
     ***********************************************************************************************/
-    adjacency_bit_matrix(adjacency_bit_matrix && another_matrix);
+    adjacency_weight_list(adjacency_weight_list && another_matrix);
 
     /***********************************************************************************************
     *
-    * @brief   Adjacency bit matrix constructor.
+    * @brief   Adjacency list constructor.
     *
     * @param[in]  node_amount: number of nodes whose connections are described in matrix.
     *
     ***********************************************************************************************/
-    adjacency_bit_matrix(const size_t node_amount);
+    adjacency_weight_list(const size_t node_amount);
 
     /***********************************************************************************************
     *
     * @brief   Default destructor.
     *
     ***********************************************************************************************/
-    virtual ~adjacency_bit_matrix(void);
+    virtual ~adjacency_weight_list(void);
 
 
 private:
-    static const size_t DEFAULT_EXISTANCE_CONNECTION_VALUE;
-    static const size_t DEFAULT_NON_EXISTANCE_CONNECTION_VALUE;
+    /***********************************************************************************************
+    *
+    * @brief   Default value that denotes existance of connection (non-zero weight of connection).
+    *
+    ***********************************************************************************************/
+    static const double DEFAULT_EXISTANCE_CONNECTION_VALUE;
+
+    /***********************************************************************************************
+    *
+    * @brief   Default value that denotes lack of connection (zero weight of connection).
+    *
+    ***********************************************************************************************/
+    static const double DEFAULT_NON_EXISTANCE_CONNECTION_VALUE;
 
 
 public:
@@ -78,7 +94,7 @@ public:
     *
     * @brief   Establishes one-way connection from the first node to the second in adjacency collection.
     *
-    * @details Requies math-logical operations to set connection.
+    * @details Complexity equals to complexity of insertion of std::unrodered_map.
     *
     * @param[in]  node_index1: index of node in the collection that should be connected with another.
     * @param[in]  node_index2: index of another node in the collection that should be connected with
@@ -91,6 +107,8 @@ public:
     *
     * @brief   Removes one-way connection from the first node to the second in adjacency collection.
     *
+    * @details Complexity equals to complexity of erasing of std::unrodered_map.
+    *
     * @param[in]  node_index1: index of node in the collection that should be disconnected from another.
     * @param[in]  node_index2: index of another node in the collection that should be diconnected from
     *              the node defined by the first argument 'node_index1'.
@@ -101,6 +119,8 @@ public:
     /***********************************************************************************************
     *
     * @brief   Checks existance of connection between specified nodes.
+    *
+    * @details Complexity equal to searching element in std::unrodered_map.
     *
     * @param[in]  node_index1: index of node in the collection.
     * @param[in]  node_index2: index of another node in the collection.
@@ -114,28 +134,44 @@ public:
     *
     * @brief   Returns vector of indexes of neighbors of specified node in line with adjacency collection.
     *
-    * @details Requies math-logical operations to set connection.
+    * @details Complexity equals to complexity of traversing of unrodered_map.
     *
-    * @param[in]  node_index: index of node in the collection.
+    * @param[in]  node_index: index of node in the collection whose neighbors are required.
     * @param[out] node_neighbors: vector of indexes of neighbors of specified node.
     *
     ***********************************************************************************************/
     virtual void get_neighbors(const size_t node_index, std::vector<size_t> & node_neighbors) const;
 
-
-private:
     /***********************************************************************************************
     *
-    * @brief   Sets or erases connection in line with specified state of connection.
+    * @brief   Set weight of connection between nodes where zero value means lack of connection and
+    *          non-zero means connection with specified weight.
     *
-    * @details Requies math-logical operations to set connection.
+    * @details Complexity equal to searching element in std::unrodered_map.
     *
-    * @param[in]  node_index1: index of node whose state of connection should be updated.
+    * @param[in]  node_index1: index of node in the collection whose connection weight should be updated 
+    *              with another node.
     * @param[in]  node_index2: index of another node in the collection.
+    * @param[in]  weight: new value of weight of connection between the nodes.
     *
     ***********************************************************************************************/
-    void update_connection(const size_t node_index1, const size_t node_index2, const size_t state_connection);
+    virtual void set_connection_weight(const size_t node_index1, const size_t node_index2, const double weight);
+
+    /***********************************************************************************************
+    *
+    * @brief   Returns weight of one-way connection between specified nodes.
+    *
+    * @details Complexity equal to searching element in std::unrodered_map.
+    *
+    * @param[in]  node_index1: index of node in the collection whose connection weight should be 
+    *              updated with another node.
+    * @param[in]  node_index2: index of another node in the collection that is connected to the 
+    *              first node.
+    *
+    * @return  Weight of one-way connection between specified nodes.
+    *
+    ***********************************************************************************************/
+    virtual double get_connection_weight(const size_t node_index1, const size_t node_index2) const;
 };
 
 #endif
-

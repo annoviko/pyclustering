@@ -71,9 +71,6 @@ public:
     ***********************************************************************************************/
     virtual ~adjacency_list(void);
 
-private:
-    static const size_t DEFAULT_EXISTANCE_CONNECTION_VALUE;
-    static const size_t DEFAULT_NON_EXISTANCE_CONNECTION_VALUE;
 
 public:
     /***********************************************************************************************
