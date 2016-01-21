@@ -25,6 +25,7 @@ from pyclustering.container.cftree import cfentry, cftree;
 from pyclustering.container.cftree import measurement_type;
 
 from pyclustering.utils import linear_sum, square_sum;
+from pyclustering.utils import euclidean_distance_sqrt, manhattan_distance, average_inter_cluster_distance, average_intra_cluster_distance, variance_increase_distance;
 
 from random import random;
 
@@ -103,9 +104,9 @@ class Test(unittest.TestCase):
         distance12 = entry1.get_distance(entry2, type_measurement);
         distance23 = entry2.get_distance(entry3, type_measurement);
         distance13 = entry1.get_distance(entry3, type_measurement);
-           
+        
         assert distance12 < distance23;
-        assert distance23 < distance13;  
+        assert distance23 < distance13;
        
     def testCfDistanceCentroidEuclidian(self):
         self.templateCfEntryDistance(measurement_type.CENTROID_EUCLIDIAN_DISTANCE);
@@ -121,8 +122,56 @@ class Test(unittest.TestCase):
            
     def testCfDistanceVarianceIncrease(self):
         self.templateCfEntryDistance(measurement_type.VARIANCE_INCREASE_DISTANCE);
-       
-       
+    
+    
+    def templateDistanceCalculation(self, cluster1, cluster2, type_measurement):
+        entry1 = cfentry(len(cluster1), linear_sum(cluster1), square_sum(cluster1));
+        entry2 = cfentry(len(cluster2), linear_sum(cluster2), square_sum(cluster2));
+        
+        # check that the same distance from 1 to 2 and from 2 to 1.
+        distance12 = entry1.get_distance(entry2, type_measurement);
+        distance21 = entry2.get_distance(entry1, type_measurement);
+        
+        assert distance12 == distance21;
+        
+        # check with utils calculation
+        if (type_measurement == measurement_type.CENTROID_EUCLIDIAN_DISTANCE):
+            assert distance12 == euclidean_distance_sqrt(entry1.get_centroid(), entry2.get_centroid());
+        
+        elif (type_measurement == measurement_type.CENTROID_MANHATTAN_DISTANCE):
+            assert distance12 == manhattan_distance(entry1.get_centroid(), entry2.get_centroid());
+        
+        elif (type_measurement == measurement_type.AVERAGE_INTER_CLUSTER_DISTANCE):
+            assert distance12 == average_inter_cluster_distance(cluster1, cluster2);
+        
+        elif (type_measurement == measurement_type.AVERAGE_INTRA_CLUSTER_DISTANCE):
+            assert distance12 == average_intra_cluster_distance(cluster1, cluster2);
+        
+        elif (type_measurement == measurement_type.VARIANCE_INCREASE_DISTANCE):
+            assert distance12 == variance_increase_distance(cluster1, cluster2);
+    
+    def templateDistanceCalculationTheSimplestSample(self, type_measurement):
+        cluster1 = [[0.1, 0.1], [0.1, 0.2], [0.2, 0.1], [0.2, 0.2]];
+        cluster2 = [[0.4, 0.4], [0.4, 0.5], [0.5, 0.4], [0.5, 0.5]];
+        
+        self.templateDistanceCalculation(cluster1, cluster2, type_measurement);
+    
+    def testDistanceCalculationTheSimplestSampleCentroidEuclidian(self):
+        self.templateDistanceCalculationTheSimplestSample(measurement_type.CENTROID_EUCLIDIAN_DISTANCE);
+
+    def testDistanceCalculationTheSimplestSampleCentroidManhattan(self):
+        self.templateDistanceCalculationTheSimplestSample(measurement_type.CENTROID_MANHATTAN_DISTANCE);
+
+    def testDistanceCalculationTheSimplestSampleAverageInterClusterDistance(self):
+        self.templateDistanceCalculationTheSimplestSample(measurement_type.AVERAGE_INTER_CLUSTER_DISTANCE);
+
+    def testDistanceCalculationTheSimplestSampleAverageIntraClusterDistance(self):
+        self.templateDistanceCalculationTheSimplestSample(measurement_type.AVERAGE_INTRA_CLUSTER_DISTANCE);
+
+    def testDistanceCalculationTheSimplestSampleVarianceIncreaseDistance(self):
+        self.templateDistanceCalculationTheSimplestSample(measurement_type.VARIANCE_INCREASE_DISTANCE);
+
+
     def testCfTreeCreationWithOneEntry(self):
         tree = cftree(2, 1, 1.0);
         entry = cfentry(5, [0.0, 0.1], 0.05);

@@ -290,7 +290,7 @@ def average_intra_cluster_distance(cluster1, cluster2, data = None):
             else:
                 # the first point
                 if (i < len(cluster1)): first_point = data[ cluster1[i] ];
-                else: first_point = data[ cluster2[i - len(cluster1)] ];                
+                else: first_point = data[ cluster2[i - len(cluster1)] ];
             
                 if (j < len(cluster1)): second_point = data[ cluster1[j] ];
                 else: second_point = data[ cluster2[j - len(cluster1)] ];    
@@ -303,7 +303,7 @@ def average_intra_cluster_distance(cluster1, cluster2, data = None):
     return distance ** 0.5;
 
 
-def variance_increase_distance(cluster1, cluster2, data):
+def variance_increase_distance(cluster1, cluster2, data = None):
     """!
     @brief Calculates variance increase distance between two clusters.
     @details Clusters can be represented by list of coordinates (in this case data shouldn't be specified),

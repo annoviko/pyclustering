@@ -234,6 +234,10 @@ class cfentry:
         """!
         @brief Calculates distance between two clusters in line with measurement type.
         
+        @details In case of usage CENTROID_EUCLIDIAN_DISTANCE square euclidian distance will be returned.
+                 Square root should be taken from the result for obtaining real euclidian distance between
+                 entries. 
+        
         @param[in] entry (cfentry): Clustering feature to which distance should be obtained.
         @param[in] type_measurement (measurement_type): Distance measurement algorithm between two clusters.
         
