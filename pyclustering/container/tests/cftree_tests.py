@@ -21,6 +21,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import unittest;
 
+import numpy;
+
 from pyclustering.container.cftree import cfentry, cftree;
 from pyclustering.container.cftree import measurement_type;
 
@@ -135,6 +137,7 @@ class Test(unittest.TestCase):
         assert distance12 == distance21;
         
         # check with utils calculation
+        float_delta = 0.0000001;
         if (type_measurement == measurement_type.CENTROID_EUCLIDIAN_DISTANCE):
             assert distance12 == euclidean_distance_sqrt(entry1.get_centroid(), entry2.get_centroid());
         
@@ -142,13 +145,13 @@ class Test(unittest.TestCase):
             assert distance12 == manhattan_distance(entry1.get_centroid(), entry2.get_centroid());
         
         elif (type_measurement == measurement_type.AVERAGE_INTER_CLUSTER_DISTANCE):
-            assert distance12 == average_inter_cluster_distance(cluster1, cluster2);
+            assert numpy.isclose(distance12, average_inter_cluster_distance(cluster1, cluster2)) == True;
         
         elif (type_measurement == measurement_type.AVERAGE_INTRA_CLUSTER_DISTANCE):
-            assert distance12 == average_intra_cluster_distance(cluster1, cluster2);
+            assert numpy.isclose(distance12, average_intra_cluster_distance(cluster1, cluster2)) == True;
         
         elif (type_measurement == measurement_type.VARIANCE_INCREASE_DISTANCE):
-            assert distance12 == variance_increase_distance(cluster1, cluster2);
+            assert numpy.isclose(distance12, variance_increase_distance(cluster1, cluster2)) == True;
     
     def templateDistanceCalculationTheSimplestSample(self, type_measurement):
         cluster1 = [[0.1, 0.1], [0.1, 0.2], [0.2, 0.1], [0.2, 0.2]];
