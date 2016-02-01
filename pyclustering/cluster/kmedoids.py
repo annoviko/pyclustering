@@ -27,7 +27,7 @@
 """
 
 
-from pyclustering.utils import euclidean_distance_sqrt, geometric_median;
+from pyclustering.utils import euclidean_distance_sqrt, median;
 
 class kmedoids:
     """!
@@ -161,7 +161,7 @@ class kmedoids:
         medians = [[] for i in range(len(self.__clusters))];
          
         for index in range(len(self.__clusters)):
-            meadian_index = geometric_median(self.__pointer_data, self.__clusters[index]);
+            meadian_index = median(self.__pointer_data, self.__clusters[index]);
             medians[index] = self.__pointer_data[meadian_index];
              
         return medians;

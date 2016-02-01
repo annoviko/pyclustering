@@ -94,7 +94,7 @@ def rgb2gray(image_rgb_array):
         image_gray_array[index] = float(image_rgb_array[index][0]) * 0.2989 + float(image_rgb_array[index][1]) * 0.5870 + float(image_rgb_array[index][2]) * 0.1140;
     
     return image_gray_array;
-    
+
 
 def average_neighbor_distance(points, num_neigh):
     """!
@@ -128,7 +128,34 @@ def average_neighbor_distance(points, num_neigh):
     return ( total_distance / (num_neigh * len(points)) );
 
 
-def geometric_median(points, indexes = None):
+def centroid(points, indexes = None):
+    """!
+    @brief Calculate centroid of input set of points. 
+    
+    @param[in] points (list): Set of points for centroid calculation.
+    @param[in] indexes (list): Indexes of objects in input set of points that will be taken into account during centroid calculation.
+    
+    @return (list) centroid on the set of points where each element of list is corresponding to value in its dimension.
+    
+    """
+    
+    dimension = len(points[0]);
+    centroid_value = [0.0] * dimension;
+    
+    range_points = None;
+    if (indexes is None):
+        range_points = range(len(points));
+    else:
+        range_points = indexes;
+    
+    for index_point in range_points:
+        centroid_value = list_math_addition(centroid_value, points[index_point]);
+    
+    centroid_value = list_math_division_number(centroid_value, len(range_points));
+    return centroid_value;
+
+
+def median(points, indexes = None):
     """!
     @brief Calculate geometric median of input set of points using Euclidian distance. 
     
@@ -205,8 +232,8 @@ def manhattan_distance(a, b):
     """!
     @brief Calculate Manhattan distance between vector a and b.
     
-    @param[in] a (list): The first vector.
-    @param[in] b (list): The second vector.
+    @param[in] a (list): The first cluster.
+    @param[in] b (list): The second cluster.
     
     @return (double) Manhattan distance between two vectors.
     
@@ -231,8 +258,8 @@ def average_inter_cluster_distance(cluster1, cluster2, data = None):
              or by list of indexes of points from the data (represented by list of points), in this case 
              data should be specified.
              
-    @param[in] cluster1 (list): The first cluster.
-    @param[in] cluster2 (list): The second cluster.
+    @param[in] cluster1 (list): The first cluster where each element can represent index from the data or object itself.
+    @param[in] cluster2 (list): The second cluster where each element can represent index from the data or object itself.
     @param[in] data (list): If specified than elements of clusters will be used as indexes,
                otherwise elements of cluster will be considered as points.
     
@@ -531,7 +558,7 @@ def allocate_sync_ensembles(dynamic, tolerance = 0.1, threshold = 1.0, ignore = 
     return sync_ensembles;
     
     
-def draw_clusters(data, clusters, noise = [], marker_descr = '.', hide_axes = False):
+def draw_clusters(data, clusters, noise = [], marker_descr = '.', hide_axes = False, axes = None, display_result = True):
     """!
     @brief Displays clusters for data in 2D or 3D.
     
@@ -540,6 +567,10 @@ def draw_clusters(data, clusters, noise = [], marker_descr = '.', hide_axes = Fa
     @param[in] noise (list): Points that are regarded to noise.
     @param[in] marker_descr (string): Marker for displaying points.
     @param[in] hide_axes (bool): If True - axes is not displayed.
+    @param[in] axes (ax) Matplotlib axes where clusters should be drawn, if it is not specified (None) then new plot will be created.
+    @param[in] display_result (bool): If specified then matplotlib axes will be used for drawing and plot will not be shown.
+    
+    @return (ax) Matplotlib axes where drawn clusters are presented.
     
     """
     # Get dimension
@@ -561,15 +592,15 @@ def draw_clusters(data, clusters, noise = [], marker_descr = '.', hide_axes = Fa
         raise NameError('Impossible to represent clusters due to number of specified colors.');
     
     fig = plt.figure();
-    axes = None;
     
-    # Check for dimensions
-    if ((dimension) == 1 or (dimension == 2)):
-        axes = fig.add_subplot(111);
-    elif (dimension == 3):
-        axes = fig.gca(projection='3d');
-    else:
-        raise NameError('Drawer supports only 2d and 3d data representation');
+    if (axes is None):
+        # Check for dimensions
+        if ((dimension) == 1 or (dimension == 2)):
+            axes = fig.add_subplot(111);
+        elif (dimension == 3):
+            axes = fig.gca(projection='3d');
+        else:
+            raise NameError('Drawer supports only 2d and 3d data representation');
     
     color_index = 0;
     for cluster in clusters:
@@ -614,6 +645,8 @@ def draw_clusters(data, clusters, noise = [], marker_descr = '.', hide_axes = Fa
             else:
                 axes.scatter(data[item][0], data[item][1], data[item][2], c = 'w', marker = marker_descr);
     
+    axes.grid(True);
+    
     if (hide_axes is True):
         axes.xaxis.set_ticklabels([]);
         axes.yaxis.set_ticklabels([]);
@@ -621,10 +654,11 @@ def draw_clusters(data, clusters, noise = [], marker_descr = '.', hide_axes = Fa
         if (dimension == 3):
             axes.zaxis.set_ticklabels([]);
     
-    plt.grid();
-    plt.show();
+    if (display_result is True):
+        plt.show();
 
-    
+    return axes;
+
 
 def draw_dynamics(t, dyn, x_title = None, y_title = None, x_lim = None, y_lim = None, x_labels = True, y_labels = True, separate = False, axes = None):
     """!

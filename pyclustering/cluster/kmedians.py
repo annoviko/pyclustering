@@ -27,7 +27,7 @@
 
 import math;
 
-from pyclustering.utils import euclidean_distance_sqrt, geometric_median;
+from pyclustering.utils import euclidean_distance_sqrt, median;
 
 class kmedians:
     """!

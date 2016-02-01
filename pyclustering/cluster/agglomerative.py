@@ -84,13 +84,13 @@ class agglomerative:
     __centers = None;   # used in case of usage of centroid links
     
     
-    def __init__(self, data, number_clusters, link, ccore = False):
+    def __init__(self, data, number_clusters, link = None, ccore = False):
         """!
         @brief Constructor of clustering algorithm hierarchical.
         
         @param[in] data (list): Input data that is presented as a list of points (objects), each point should be represented by a list or tuple.
         @param[in] number_clusters (uint): Number of clusters that should be allocated.
-        @param[in] link (type_link): Link type that is used for calculation similarity between objects and clusters.
+        @param[in] link (type_link): Link type that is used for calculation similarity between objects and clusters, if it is not specified centroid link will be used by default.
         @param[in] ccore (bool): Defines should be CCORE (C++ pyclustering library) used instead of Python code or not.
         
         """  
@@ -98,6 +98,9 @@ class agglomerative:
         self.__pointer_data = data;
         self.__number_clusters = number_clusters;
         self.__similarity = link;
+        
+        if (self.__similarity is None):
+            self.__similarity = type_link.CENTROID_LINK;
         
         self.__clusters = [];
         self.__ccore = ccore;
