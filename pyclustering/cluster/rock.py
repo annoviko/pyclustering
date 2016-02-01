@@ -5,7 +5,7 @@
          - S.Guha, R.Rastogi, K.Shim. ROCK: A Robust Clustering Algorithm for Categorical Attributes. 1999.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
-@date 2014-2015
+@date 2014-2016
 @copyright GNU Public License
 
 @cond GNU_PUBLIC_LICENSE

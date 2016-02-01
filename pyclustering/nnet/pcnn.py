@@ -5,7 +5,7 @@
          - T.Lindblad, J.M.Kinser. Image Processing Using Pulse-Coupled Neural Networks (2nd edition). 2005.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
-@date 2014-2015
+@date 2014-2016
 @copyright GNU Public License
 
 @cond GNU_PUBLIC_LICENSE

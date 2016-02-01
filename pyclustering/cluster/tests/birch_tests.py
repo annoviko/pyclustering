@@ -3,7 +3,7 @@
 @brief Unit-tests for BIRCH algorithm.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
-@date 2014-2015
+@date 2014-2016
 @copyright GNU Public License
 
 @cond GNU_PUBLIC_LICENSE
@@ -35,6 +35,8 @@ from pyclustering.cluster.birch import birch;
 
 from random import random;
 
+from pyclustering.utils import draw_clusters;
+
 class Test(unittest.TestCase):
     def templateClusterAllocation(self, path, cluster_sizes, number_clusters, branching_factor = 5, max_node_entries = 5, initial_diameter = 0.1, type_measurement = measurement_type.CENTROID_EUCLIDIAN_DISTANCE, entry_size_limit = 200, ccore = True):
         sample = read_sample(path);
@@ -46,10 +48,16 @@ class Test(unittest.TestCase):
         obtained_cluster_sizes = [len(cluster) for cluster in clusters];
         
         total_length = sum(obtained_cluster_sizes);
+        if (total_length != len(sample)):
+            draw_clusters(sample, clusters);
+            
         assert total_length == len(sample);
         
         cluster_sizes.sort();
         obtained_cluster_sizes.sort();
+        if (cluster_sizes != obtained_cluster_sizes):
+            draw_clusters(sample, clusters);
+            
         assert cluster_sizes == obtained_cluster_sizes;
     
     def testClusterAllocationSampleSimple1CentroidEuclidianDistance(self):

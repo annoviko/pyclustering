@@ -3,7 +3,7 @@
 @brief CCORE Wrapper for oscillatory neural network for pattern recognition (syncpr).
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
-@date 2014-2015
+@date 2014-2016
 @copyright GNU Public License
 
 @cond GNU_PUBLIC_LICENSE

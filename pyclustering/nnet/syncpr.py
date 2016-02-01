@@ -5,7 +5,7 @@
          - R.Follmann, E.E.N.Macau, E.Rosa, Jr., J.R.C.Piqueira. Phase Oscillatory Network and Visual Pattern Recognition. 2014.
          
 @authors Andrei Novikov (pyclustering@yandex.ru)
-@date 2014-2015
+@date 2014-2016
 @copyright GNU Public License
 
 @cond GNU_PUBLIC_LICENSE
