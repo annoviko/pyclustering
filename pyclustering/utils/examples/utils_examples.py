@@ -34,6 +34,48 @@ import matplotlib.pyplot as plt;
 def cluster_distances(path_sample, amount_clusters):
     distances = ['euclidian', 'manhattan', 'avr-inter', 'avr-intra', 'variance'];
     
+    sample = utils.read_sample(path_sample);
+    
+    agglomerative_instance = agglomerative(sample, amount_clusters);
+    agglomerative_instance.process();
+    
+    obtained_clusters = agglomerative_instance.get_clusters();
+    
+    print("Measurements for:", path_sample);
+    
+    for index_cluster in range(len(obtained_clusters)):
+        for index_neighbor in range(index_cluster + 1, len(obtained_clusters), 1):
+            cluster1 = obtained_clusters[index_cluster];
+            cluster2 = obtained_clusters[index_neighbor];
+            
+            center_cluster1 = utils.centroid(sample, cluster1);
+            center_cluster2 = utils.centroid(sample, cluster2);
+            
+            for index_distance_type in range(len(distances)):
+                distance = None;
+                distance_type = distances[index_distance_type];
+        
+                if (distance_type == 'euclidian'):
+                    distance = utils.euclidean_distance(center_cluster1, center_cluster2);
+                    
+                elif (distance_type == 'manhattan'):
+                    distance = utils.manhattan_distance(center_cluster1, center_cluster2);
+                    
+                elif (distance_type == 'avr-inter'):
+                    distance = utils.average_inter_cluster_distance(cluster1, cluster2, sample);
+                
+                elif (distance_type == 'avr-intra'):
+                    distance = utils.average_intra_cluster_distance(cluster1, cluster2, sample);
+                
+                elif (distance_type == 'variance'):
+                    distance = utils.variance_increase_distance(cluster1, cluster2, sample);
+            
+            print("\tDistance", distance_type, "from", index_cluster, "to", index_neighbor, "is:", distance);
+        
+
+def display_two_dimensional_cluster_distances(path_sample, amount_clusters):
+    distances = ['euclidian', 'manhattan', 'avr-inter', 'avr-intra', 'variance'];
+    
     ajacency = [ [0] * amount_clusters for i in range(amount_clusters) ];
     
     sample = utils.read_sample(path_sample);
@@ -121,16 +163,28 @@ def cluster_distances(path_sample, amount_clusters):
     
     plt.show();
 
-def cluster_distances_simple_sample_01():
-    cluster_distances(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2);
 
-def cluster_distances_simple_sample_02():
-    cluster_distances(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 3);
+def display_cluster_distances_simple_sample_01():
+    display_two_dimensional_cluster_distances(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2);
 
-def cluster_distances_simple_sample_03():
-    cluster_distances(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 4);
+def display_cluster_distances_simple_sample_02():
+    display_two_dimensional_cluster_distances(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 3);
+
+def display_cluster_distances_simple_sample_03():
+    display_two_dimensional_cluster_distances(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 4);
 
 
-cluster_distances_simple_sample_01();
-cluster_distances_simple_sample_02();
-cluster_distances_simple_sample_03();
+def print_cluster_distances_simple_sample_07():
+    cluster_distances(SIMPLE_SAMPLES.SAMPLE_SIMPLE7, 2);
+
+def print_cluster_distances_simple_sample_08():
+    cluster_distances(SIMPLE_SAMPLES.SAMPLE_SIMPLE8, 4);
+
+
+display_cluster_distances_simple_sample_01();
+display_cluster_distances_simple_sample_02();
+display_cluster_distances_simple_sample_03();
+
+print_cluster_distances_simple_sample_07();
+print_cluster_distances_simple_sample_08();
+
