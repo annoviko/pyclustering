@@ -93,11 +93,11 @@ class kmedoids:
          
         while (changes > stop_condition):
             self.__clusters = self.__update_clusters();
-            updated_centers = self.__update_medians();  # changes should be calculated before asignment
+            updated_medoids = self.__update_medoids();  # changes should be calculated before asignment
          
-            changes = max([euclidean_distance_sqrt(self.__medoids[index], updated_centers[index]) for index in range(len(self.__medoids))]);    # Fast solution
+            changes = max([euclidean_distance_sqrt(self.__medoids[index], updated_medoids[index]) for index in range(len(updated_medoids))]);    # Fast solution
              
-            self.__medoids = updated_centers;
+            self.__medoids = updated_medoids;
 
 
     def get_clusters(self):
@@ -146,11 +146,14 @@ class kmedoids:
                     dist_optim = dist;
              
             clusters[index_optim].append(index_point);
-             
+        
+        # If cluster is not able to capture object it should be removed
+        clusters = [cluster for cluster in clusters if len(cluster) > 0];
+        
         return clusters;
     
     
-    def __update_medians(self):
+    def __update_medoids(self):
         """!
         @brief Find medoids of clusters in line with contained objects.
         
