@@ -27,6 +27,7 @@ install:
   - conda config --set always_yes yes --set changeps1 no
   - conda update -q conda
   
+  - conda install libgfortran
   - conda info -a
 
   # Replace dep1 dep2 ... with your dependencies
