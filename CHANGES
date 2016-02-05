@@ -42,8 +42,11 @@ CORRECTED BUGS:
 - Bug with incorrect clustering in case of the same elements in cure algorithm (pyclustering.cluster.cure).
   See: https://github.com/annoviko/pyclustering/pull/239
 
-- Bug with execution fail in case of wrong number of initial medians and in case of the same objects with several initial medians (pyclustering.kmedians.kmedians).
+- Bug with execution fail in case of wrong number of initial medians and in case of the same objects with several initial medians (pyclustering.cluster.kmedians).
   See: https://github.com/annoviko/pyclustering/issues/256
   
 - Bug with calculation synchronous ensembles near by zero: oscillators 2*pi and 0 are considered as different (pyclustering.nnet.sync, ccore.sync).
   See: https://github.com/annoviko/pyclustering/issues/263
+  
+- Bug with cluster allocation in kmedoids algorithm in case of the same objects with several initial medoids (pyclustering.cluster.kmedoids).
+  See: https://github.com/annoviko/pyclustering/issues/269
