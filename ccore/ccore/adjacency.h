@@ -12,6 +12,13 @@ class adjacency_collection {
 public:
     /***********************************************************************************************
     *
+    * @brief   Returns amount of nodes in the adjacency collection.
+    *
+    ***********************************************************************************************/
+    virtual size_t size(void);
+
+    /***********************************************************************************************
+    *
     * @brief   Establishes one-way connection from the first node to the second in adjacency collection.
     *
     * @param[in]  node_index1: index of node in the collection that should be connected with another.
