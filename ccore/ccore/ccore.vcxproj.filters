@@ -90,6 +90,9 @@
     <ClCompile Include="adjacency_connector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="adjacency_weight_connector.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dbscan.h">
@@ -177,6 +180,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="adjacency_connector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="adjacency_weight_connector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

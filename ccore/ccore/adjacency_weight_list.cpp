@@ -58,7 +58,7 @@ void adjacency_weight_list::get_neighbors(const size_t node_index, std::vector<s
 void adjacency_weight_list::set_connection_weight(const size_t node_index1, const size_t node_index2, const double weight) {
     std::unordered_map<size_t, double> & node_neighbors = m_adjacency[node_index1];
 
-    if (weight > 0) {
+    if (weight != 0.0) {
         node_neighbors[node_index2] = weight;
     }
     else {
