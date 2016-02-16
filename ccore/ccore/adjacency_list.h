@@ -75,6 +75,13 @@ public:
 public:
     /***********************************************************************************************
     *
+    * @brief   Returns amount of nodes in adjacency collection.
+    *
+    ***********************************************************************************************/
+    virtual size_t size(void) const;
+
+    /***********************************************************************************************
+    *
     * @brief   Establishes one-way connection from the first node to the second in adjacency collection.
     *
     * @details Complexity equals to complexity of insertion of std::unrodered_set.

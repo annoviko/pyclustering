@@ -86,6 +86,13 @@ private:
 public:
     /***********************************************************************************************
     *
+    * @brief   Returns amount of nodes in the adjacency collection.
+    *
+    ***********************************************************************************************/
+    virtual size_t size(void) const;
+
+    /***********************************************************************************************
+    *
     * @brief   Establishes one-way connection from the first node to the second in adjacency collection.
     *
     * @details Complexity of setting weight of connection is O(1).

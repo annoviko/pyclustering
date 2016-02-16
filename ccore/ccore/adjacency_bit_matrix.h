@@ -24,6 +24,7 @@ private:
 
 protected:
     adjacency_bit_matrix_container  m_adjacency;
+    size_t                          m_size;
 
 public:
     /***********************************************************************************************
@@ -74,6 +75,13 @@ private:
 
 
 public:
+    /***********************************************************************************************
+    *
+    * @brief   Returns amount of nodes in adjacency collection.
+    *
+    ***********************************************************************************************/
+    virtual size_t size(void) const;
+
     /***********************************************************************************************
     *
     * @brief   Establishes one-way connection from the first node to the second in adjacency collection.

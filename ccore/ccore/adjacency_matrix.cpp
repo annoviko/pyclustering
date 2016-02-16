@@ -21,6 +21,9 @@ adjacency_matrix::adjacency_matrix(const size_t node_amount) : m_adjacency(node_
 adjacency_matrix::~adjacency_matrix(void) { }
 
 
+size_t adjacency_matrix::size(void) const { return m_adjacency.size(); }
+
+
 void adjacency_matrix::set_connection(const size_t node_index1, const size_t node_index2) {
     m_adjacency[node_index1][node_index2] = DEFAULT_EXISTANCE_CONNECTION_VALUE;
 }

@@ -17,6 +17,9 @@ adjacency_list::adjacency_list(const size_t node_amount) : m_adjacency(node_amou
 adjacency_list::~adjacency_list(void) { }
 
 
+size_t adjacency_list::size(void) const { return m_adjacency.size(); }
+
+
 void adjacency_list::set_connection(const size_t node_index1, const size_t node_index2) {
     m_adjacency[node_index1].insert(node_index2);
 }

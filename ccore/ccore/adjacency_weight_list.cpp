@@ -21,6 +21,9 @@ adjacency_weight_list::adjacency_weight_list(const size_t node_amount) : m_adjac
 adjacency_weight_list::~adjacency_weight_list(void) { }
 
 
+size_t adjacency_weight_list::size(void) const { return m_adjacency.size(); }
+
+
 void adjacency_weight_list::set_connection(const size_t node_index1, const size_t node_index2) {
     m_adjacency[node_index1].insert( { node_index2, DEFAULT_EXISTANCE_CONNECTION_VALUE } );
 }

@@ -11,19 +11,19 @@ std::shared_ptr<adjacency_collection> adjacency_unweight_factory::create_collect
 }
 
 std::shared_ptr<adjacency_collection> adjacency_unweight_factory::create_collection(const size_t amount_nodes, const adjacency_unweight_t storing_type, const connection_t structure_type) {
-    std::shared_ptr<adjacency_collection> collection;
+    adjacency_collection * collection = nullptr;
 
     switch(storing_type) {
     case adjacency_unweight_t::ADJACENCY_BIT_MATRIX:
-        collection = std::unique_ptr<adjacency_collection>(new adjacency_bit_matrix(amount_nodes));
+        collection = new adjacency_bit_matrix(amount_nodes);
         break;
 
     case adjacency_unweight_t::ADJACENCY_LIST:
-        collection = std::unique_ptr<adjacency_collection>(new adjacency_list(amount_nodes));
+        collection = new adjacency_list(amount_nodes);
         break;
 
     case adjacency_unweight_t::ADJACENCY_MATRIX:
-        collection = std::unique_ptr<adjacency_collection>(new adjacency_matrix(amount_nodes));
+        collection = new adjacency_matrix(amount_nodes);
         break;
 
     default:
@@ -31,4 +31,7 @@ std::shared_ptr<adjacency_collection> adjacency_unweight_factory::create_collect
     }
 
     /* establish structures between nodes */
+    adjacency_connector::create_structure(structure_type, *collection);
+
+    return std::unique_ptr<adjacency_collection>(collection);
 }

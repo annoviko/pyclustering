@@ -15,7 +15,7 @@ public:
     * @brief   Returns amount of nodes in the adjacency collection.
     *
     ***********************************************************************************************/
-    virtual size_t size(void);
+    virtual size_t size(void) const = 0;
 
     /***********************************************************************************************
     *
