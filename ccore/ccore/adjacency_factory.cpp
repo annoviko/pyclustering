@@ -31,7 +31,8 @@ std::shared_ptr<adjacency_collection> adjacency_unweight_factory::create_collect
     }
 
     /* establish structures between nodes */
-    adjacency_connector::create_structure(structure_type, *collection);
+    adjacency_connector connector;
+    connector.create_structure(structure_type, *collection);
 
     return std::unique_ptr<adjacency_collection>(collection);
 }

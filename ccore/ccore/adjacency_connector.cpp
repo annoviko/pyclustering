@@ -1,8 +1,40 @@
 #include "adjacency_connector.h"
 
-void adjacency_connector::create_structure(const connection_t structure_type, adjacency_collection & output_adjacency_collection) {
 
+adjacency_connector::adjacency_connector(void) {
+    m_connector = [this](const size_t index1, const size_t index2, adjacency_collection & collection) { 
+        collection.set_connection(index1, index2); 
+    };
 }
+
+
+void adjacency_connector::create_structure(const connection_t structure_type, adjacency_collection & output_adjacency_collection) {
+    switch(structure_type) {
+    case connection_t::CONNECTION_NONE:
+        create_none_connections(output_adjacency_collection);
+        break;
+
+    case connection_t::CONNECTION_ALL_TO_ALL:
+        create_all_to_all_connections(output_adjacency_collection);
+        break;
+
+    case connection_t::CONNECTION_GRID_FOUR:
+        create_grid_four_connections(output_adjacency_collection);
+        break;
+
+    case connection_t::CONNECTION_GRID_EIGHT:
+        create_grid_eight_connections(output_adjacency_collection);
+        break;
+
+    case connection_t::CONNECTION_LIST_BIDIRECTIONAL:
+        create_list_bidir_connections(output_adjacency_collection);
+        break;
+
+    default:
+        throw std::runtime_error("Type of connection is not supported.");
+    }
+}
+
 
 void adjacency_connector::create_none_connections(adjacency_collection & output_adjacency_collection) {
     for (size_t i = 0; i < output_adjacency_collection.size(); i++) {
@@ -21,8 +53,8 @@ void adjacency_connector::create_all_to_all_connections(adjacency_collection & o
         output_adjacency_collection.erase_connection(i, i);
 
         for (size_t j = i + 1; j < output_adjacency_collection.size(); j++) {
-            output_adjacency_collection.set_connection(i, j);
-            output_adjacency_collection.set_connection(j, i);
+            m_connector(i, j, output_adjacency_collection);
+            m_connector(j, i, output_adjacency_collection);
         }
     }
 }
@@ -33,11 +65,11 @@ void adjacency_connector::create_list_bidir_connections(adjacency_collection & o
 
     for (size_t i = 0; i < output_adjacency_collection.size(); i++) {
 		if (i > 0) {
-			output_adjacency_collection.set_connection(i, i - 1);
+			m_connector(i, i - 1, output_adjacency_collection);
 		}
 
 		if (i < (output_adjacency_collection.size() - 1)) {
-			output_adjacency_collection.set_connection(i, i + 1);
+			m_connector(i, i + 1, output_adjacency_collection);
 		}
 	}
 }
@@ -69,19 +101,19 @@ void adjacency_connector::create_grid_four_connections(const size_t width, const
 
         const size_t node_row_index = (size_t) std::ceil(index / width);
 		if (upper_index >= 0) {
-			output_adjacency_collection.set_connection(index, upper_index);
+			m_connector(index, upper_index, output_adjacency_collection);
 		}
 
 		if (lower_index < output_adjacency_collection.size()) {
-			output_adjacency_collection.set_connection(index, lower_index);
+			m_connector(index, lower_index, output_adjacency_collection);
 		}
 
         if ((left_index >= 0) && (std::ceil(left_index / width) == node_row_index)) {
-			output_adjacency_collection.set_connection(index, left_index);
+			m_connector(index, left_index, output_adjacency_collection);
 		}
 
         if ((right_index < output_adjacency_collection.size()) && (std::ceil(right_index / width) == node_row_index)) {
-			output_adjacency_collection.set_connection(index, right_index);
+			m_connector(index, right_index, output_adjacency_collection);
 		}
 	}
 }
@@ -118,19 +150,29 @@ void adjacency_connector::create_grid_eight_connections(const size_t width, cons
         const size_t lower_row_index = node_row_index + 1;
 
         if ((upper_left_index >= 0) && (std::floor(upper_left_index / width) == upper_row_index)) {
-			output_adjacency_collection.set_connection(index, upper_left_index);
+			m_connector(index, upper_left_index, output_adjacency_collection);
 		}
 
         if ((upper_right_index >= 0) && (std::floor(upper_right_index / width) == upper_row_index)) {
-			output_adjacency_collection.set_connection(index, upper_right_index);
+			m_connector(index, upper_right_index, output_adjacency_collection);
 		}
 
         if ((lower_left_index < output_adjacency_collection.size()) && (std::floor(lower_left_index / width) == lower_row_index)) {
-			output_adjacency_collection.set_connection(index, lower_left_index);
+			m_connector(index, lower_left_index, output_adjacency_collection);
 		}
 
         if ((lower_right_index < output_adjacency_collection.size()) && (std::floor(lower_right_index / width) == lower_row_index)) {
-			output_adjacency_collection.set_connection(index, lower_right_index);
+			m_connector(index, lower_right_index, output_adjacency_collection);
 		}
 	}
+}
+
+
+adjacency_weight_connector::adjacency_weight_connector(void) : m_initializer(nullptr) { }
+
+
+adjacency_weight_connector::adjacency_weight_connector(adjacency_weight_initializer & initializer) : m_initializer(initializer) {
+    m_connector = [this](const size_t index1, const size_t index2, adjacency_collection & collection) { 
+        ((adjacency_weight_collection *) &collection)->set_connection_weight(index1, index2, m_initializer()); 
+    };
 }

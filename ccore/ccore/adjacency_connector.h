@@ -3,6 +3,9 @@
 
 #include "adjacency.h"
 
+#include <memory>
+#include <functional>
+
 
 /***********************************************************************************************
 *
@@ -34,6 +37,22 @@ enum class connection_t {
 *
 ***********************************************************************************************/
 class adjacency_connector {
+protected:
+    typedef std::function<void(const size_t, const size_t, adjacency_collection &)>  connector_controller;
+
+
+protected:
+    connector_controller    m_connector;
+
+
+public:
+    /***********************************************************************************************
+    *
+    * @brief   Default constructor of connector.
+    *
+    ***********************************************************************************************/
+    adjacency_connector(void);
+
 public:
     /***********************************************************************************************
     *
@@ -47,7 +66,7 @@ public:
     * @param[out] output_adjacency_collection: adjacency collection whose connections should be updated.
     *
     ***********************************************************************************************/
-    static void create_structure(const connection_t structure_type, adjacency_collection & output_adjacency_collection);
+    virtual void create_structure(const connection_t structure_type, adjacency_collection & output_adjacency_collection);
 
     /***********************************************************************************************
     *
@@ -56,7 +75,7 @@ public:
     * @param[out] output_adjacency_collection: adjacency collection whose connections should be updated.
     *
     ***********************************************************************************************/
-    static void create_none_connections(adjacency_collection & output_adjacency_collection);
+    virtual void create_none_connections(adjacency_collection & output_adjacency_collection);
 
     /***********************************************************************************************
     *
@@ -66,7 +85,7 @@ public:
     * @param[out] output_adjacency_collection: adjacency collection whose connections should be updated.
     *
     ***********************************************************************************************/
-    static void create_all_to_all_connections(adjacency_collection & output_adjacency_collection);
+    virtual void create_all_to_all_connections(adjacency_collection & output_adjacency_collection);
 
     /***********************************************************************************************
     *
@@ -77,7 +96,7 @@ public:
     * @param[out] output_adjacency_collection: adjacency collection whose connections should be updated.
     *
     ***********************************************************************************************/
-    static void create_list_bidir_connections(adjacency_collection & output_adjacency_collection);
+    virtual void create_list_bidir_connections(adjacency_collection & output_adjacency_collection);
 
     /***********************************************************************************************
     *
@@ -90,7 +109,7 @@ public:
     * @param[out] output_adjacency_collection: adjacency collection whose connections should be updated.
     *
     ***********************************************************************************************/
-    static void create_grid_four_connections(adjacency_collection & output_adjacency_collection);
+    virtual void create_grid_four_connections(adjacency_collection & output_adjacency_collection);
 
     /***********************************************************************************************
     *
@@ -102,7 +121,7 @@ public:
     * @param[out] output_adjacency_collection: adjacency collection whose connections should be updated.
     *
     ***********************************************************************************************/
-    static void create_grid_four_connections(const size_t width, const size_t height, adjacency_collection & output_adjacency_collection);
+    virtual void create_grid_four_connections(const size_t width, const size_t height, adjacency_collection & output_adjacency_collection);
 
     /***********************************************************************************************
     *
@@ -115,7 +134,7 @@ public:
     * @param[out] output_adjacency_collection: adjacency collection whose connections should be updated.
     *
     ***********************************************************************************************/
-    static void create_grid_eight_connections(adjacency_collection & output_adjacency_collection);
+    virtual void create_grid_eight_connections(adjacency_collection & output_adjacency_collection);
 
     /***********************************************************************************************
     *
@@ -127,7 +146,43 @@ public:
     * @param[out] output_adjacency_collection: adjacency collection whose connections should be updated.
     *
     ***********************************************************************************************/
-    static void create_grid_eight_connections(const size_t width, const size_t height, adjacency_collection & output_adjacency_collection);
+    virtual void create_grid_eight_connections(const size_t width, const size_t height, adjacency_collection & output_adjacency_collection);
+};
+
+
+/***********************************************************************************************
+*
+* @brief   Class for creating pre-defined most popular structures by establishing connections
+*          between nodes in weight adjacency collections.
+*
+***********************************************************************************************/
+class adjacency_weight_connector : public adjacency_connector {
+public:
+    typedef std::function<double(void)>     adjacency_weight_initializer;
+
+
+protected:
+    adjacency_weight_initializer    m_initializer;
+
+
+public:
+    /***********************************************************************************************
+    *
+    * @brief   Default constructor of connector where weight initializer is not specified.
+    * @details In this case adjacency collection defines default value of weight by itself in
+    *          method 'set_connection()'.
+    *
+    ***********************************************************************************************/
+    adjacency_weight_connector(void);
+
+    /***********************************************************************************************
+    *
+    * @brief   Constructor of connector with weight initializer.
+    *
+    * @param[in] initializer: initializer that is used for setting value of each weight connection.
+    *
+    ***********************************************************************************************/
+    adjacency_weight_connector(adjacency_weight_initializer & initializer);
 };
 
 
