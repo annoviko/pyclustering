@@ -28,7 +28,8 @@ run_utcore_job() {
 	fi
 	
 	# run unit-tests
-	./utcore/utcore
+	cd utcore/
+	./utcore
 }
 
 run_python_job() {
