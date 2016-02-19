@@ -1,106 +1,75 @@
 #include "samples.h"
 
-dataset SIMPLE_SAMPLE_01 =
-{
-    { 3.522979, 5.487981 },
-    { 3.768699, 5.364477 },
-    { 3.423602, 5.419900 },
-    { 3.803905, 5.389491 },
-    { 3.936690, 5.663041 },
-    { 6.968136, 7.755556 },
-    { 6.750795, 7.269541 },
-    { 6.593196, 7.850364 },
-    { 6.978178, 7.609850 },
-    { 6.554487, 7.498119 },
+#include <fstream>
+#include <sstream>
+#include <iostream>
+
+#if defined _WIN32 || defined __CYGWIN__
+    #define separator std::string("\\")
+#else
+    #define separator std::string("/")
+#endif
+
+
+const std::string simple_sample_factory::PATH_SAMPLE_SIMPLE_FOLDER = ".." + separator + ".." + separator + "pyclustering" + separator + "samples" + separator + "samples";
+
+
+const std::string simple_sample_factory::PATH_SAMPLE_SIMPLE_01 = PATH_SAMPLE_SIMPLE_FOLDER + separator + "SampleSimple01.txt";
+const std::string simple_sample_factory::PATH_SAMPLE_SIMPLE_02 = PATH_SAMPLE_SIMPLE_FOLDER + separator + "SampleSimple02.txt";
+const std::string simple_sample_factory::PATH_SAMPLE_SIMPLE_03 = PATH_SAMPLE_SIMPLE_FOLDER + separator + "SampleSimple03.txt";
+const std::string simple_sample_factory::PATH_SAMPLE_SIMPLE_04 = PATH_SAMPLE_SIMPLE_FOLDER + separator + "SampleSimple04.txt";
+const std::string simple_sample_factory::PATH_SAMPLE_SIMPLE_05 = PATH_SAMPLE_SIMPLE_FOLDER + separator + "SampleSimple05.txt";
+const std::string simple_sample_factory::PATH_SAMPLE_SIMPLE_06 = PATH_SAMPLE_SIMPLE_FOLDER + separator + "SampleSimple06.txt";
+const std::string simple_sample_factory::PATH_SAMPLE_SIMPLE_07 = PATH_SAMPLE_SIMPLE_FOLDER + separator + "SampleSimple07.txt";
+const std::string simple_sample_factory::PATH_SAMPLE_SIMPLE_08 = PATH_SAMPLE_SIMPLE_FOLDER + separator + "SampleSimple08.txt";
+const std::string simple_sample_factory::PATH_SAMPLE_SIMPLE_09 = PATH_SAMPLE_SIMPLE_FOLDER + separator + "SampleSimple09.txt";
+
+
+const simple_sample_factory::map_sample simple_sample_factory::m_sample_table = {
+    { SAMPLE_SIMPLE::SAMPLE_SIMPLE_01, simple_sample_factory::PATH_SAMPLE_SIMPLE_01 },
+    { SAMPLE_SIMPLE::SAMPLE_SIMPLE_02, simple_sample_factory::PATH_SAMPLE_SIMPLE_02 },
+    { SAMPLE_SIMPLE::SAMPLE_SIMPLE_03, simple_sample_factory::PATH_SAMPLE_SIMPLE_03 },
+    { SAMPLE_SIMPLE::SAMPLE_SIMPLE_04, simple_sample_factory::PATH_SAMPLE_SIMPLE_04 },
+    { SAMPLE_SIMPLE::SAMPLE_SIMPLE_05, simple_sample_factory::PATH_SAMPLE_SIMPLE_05 },
+    { SAMPLE_SIMPLE::SAMPLE_SIMPLE_06, simple_sample_factory::PATH_SAMPLE_SIMPLE_06 },
+    { SAMPLE_SIMPLE::SAMPLE_SIMPLE_07, simple_sample_factory::PATH_SAMPLE_SIMPLE_07 },
+    { SAMPLE_SIMPLE::SAMPLE_SIMPLE_08, simple_sample_factory::PATH_SAMPLE_SIMPLE_08 },
+    { SAMPLE_SIMPLE::SAMPLE_SIMPLE_09, simple_sample_factory::PATH_SAMPLE_SIMPLE_09 },
 };
 
-dataset SIMPLE_SAMPLE_02 =
-{
-    { 3.461363, 4.135324 },
-    { 3.699588, 4.827335 },
-    { 3.400206, 4.127698 },
-    { 3.889032, 4.103663 },
-    { 3.612092, 4.225430 },
-    { 3.976381, 4.547439 },
-    { 3.563788, 4.876437 },
-    { 3.177711, 4.332012 },
-    { 3.392175, 4.370581 },
-    { 3.248184, 4.786105 },
-    { 7.500097, 6.704815 },
-    { 7.090406, 6.647416 },
-    { 7.336926, 6.143379 },
-    { 7.062946, 6.022702 },
-    { 7.349885, 6.188665 },
-    { 7.502041, 0.161533 },
-    { 7.206695, 0.353056 },
-    { 7.835975, 0.449885 },
-    { 7.672964, 0.842298 },
-    { 7.016772, 0.912601 },
-    { 7.482343, 0.762685 },
-    { 7.118470, 0.022688 },
-    { 7.167884, 0.926609 },
-};
 
-dataset SIMPLE_SAMPLE_03 =
-{
-    { 0.926445, 0.126412 },
-    { 0.144706, 0.987019 },
-    { 0.617830, 0.962600 },
-    { 0.364875, 0.873276 },
-    { 0.816825, 0.767734 },
-    { 0.568450, 0.569056 },
-    { 0.986346, 0.055090 },
-    { 0.653092, 0.801198 },
-    { 0.199204, 0.474921 },
-    { 0.085177, 0.440827 },
-    { 1.923789, 4.306381 },
-    { 1.257845, 4.101970 },
-    { 1.153872, 4.215423 },
-    { 1.027098, 4.331249 },
-    { 1.235441, 4.639630 },
-    { 1.805080, 4.609467 },
-    { 1.056782, 4.315670 },
-    { 1.884653, 4.077510 },
-    { 1.373499, 4.506044 },
-    { 1.199638, 4.549227 },
-    { 2.739741, 2.285940 },
-    { 2.935752, 2.089660 },
-    { 2.006202, 2.124409 },
-    { 2.161529, 2.470410 },
-    { 2.916867, 2.523174 },
-    { 2.083596, 2.343243 },
-    { 2.353953, 2.582947 },
-    { 2.275744, 2.341464 },
-    { 2.195224, 2.831759 },
-    { 2.357756, 2.861451 },
-    { 4.261191, 1.733438 },
-    { 4.036062, 1.465132 },
-    { 4.368142, 1.100842 },
-    { 4.471069, 1.576629 },
-    { 4.331865, 1.451407 },
-    { 4.698860, 1.674527 },
-    { 4.300143, 1.286052 },
-    { 4.249831, 1.727785 },
-    { 4.751436, 1.878438 },
-    { 4.425734, 1.033563 },
-    { 1.744950, 4.294445 },
-    { 1.691943, 4.258711 },
-    { 1.875249, 4.558748 },
-    { 1.241175, 4.830152 },
-    { 1.826282, 4.740381 },
-    { 1.799403, 4.183979 },
-    { 1.801944, 4.851211 },
-    { 1.094918, 4.693440 },
-    { 1.632979, 4.069506 },
-    { 1.884346, 4.936861 },
-    { 1.173389, 4.291984 },
-    { 1.390938, 4.431651 },
-    { 1.831380, 4.015487 },
-    { 1.803364, 4.984064 },
-    { 1.060471, 4.167168 },
-    { 1.399258, 4.106216 },
-    { 1.526876, 4.372410 },
-    { 1.416799, 4.198118 },
-    { 1.656860, 4.489688 },
-    { 1.627973, 4.339493 },
-};
+std::shared_ptr<dataset_t> simple_sample_factory::create_sample(const SAMPLE_SIMPLE sample) {
+    std::shared_ptr<dataset_t> sample_data(new dataset_t);
+    size_t sample_dimension = 0;
+
+    const std::string path_sample = m_sample_table.at(sample);
+    
+    std::ifstream file_sample(path_sample);
+    if (file_sample.is_open()) {
+        std::string file_line;
+
+        while(std::getline(file_sample, file_line)) {
+            double      value = 0.0;
+            point_t     sample_point;
+
+            std::istringstream stream_value(file_line);
+
+            while(stream_value >> value) {
+                sample_point.push_back(value);
+            }
+
+            if (sample_dimension == 0) {
+                sample_dimension = sample_point.size();
+            }
+            else {
+                if (sample_dimension != sample_point.size()) {
+                    throw std::runtime_error("Points from input data set should have the same dimension.");
+                }
+            }
+
+            sample_data->push_back(sample_point);
+        }
+    }
+
+    return sample_data;
+}

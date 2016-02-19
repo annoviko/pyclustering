@@ -27,14 +27,15 @@ import pyclustering.samples as samples;
 import os;
 
 class SIMPLE_SAMPLES:
-    SAMPLE_SIMPLE1          = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleSimple1.txt";
-    SAMPLE_SIMPLE2          = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleSimple2.txt";
-    SAMPLE_SIMPLE3          = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleSimple3.txt";
-    SAMPLE_SIMPLE4          = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleSimple4.txt";
-    SAMPLE_SIMPLE5          = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleSimple5.txt";
-    SAMPLE_SIMPLE6          = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleSimple6.txt";
-    SAMPLE_SIMPLE7          = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleSimple7.txt";
-    SAMPLE_SIMPLE8          = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleSimple8.txt";
+    SAMPLE_SIMPLE1          = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleSimple01.txt";
+    SAMPLE_SIMPLE2          = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleSimple02.txt";
+    SAMPLE_SIMPLE3          = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleSimple03.txt";
+    SAMPLE_SIMPLE4          = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleSimple04.txt";
+    SAMPLE_SIMPLE5          = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleSimple05.txt";
+    SAMPLE_SIMPLE6          = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleSimple06.txt";
+    SAMPLE_SIMPLE7          = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleSimple07.txt";
+    SAMPLE_SIMPLE8          = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleSimple08.txt";
+    SAMPLE_SIMPLE9          = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleSimple09.txt";
     SAMPLE_ELONGATE         = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleElongate.txt";
     SAMPLE_DENSITIES1       = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleDensities1.txt";
     SAMPLE_DENSITIES2       = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleDensities2.txt";

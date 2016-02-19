@@ -8,17 +8,13 @@
 
 #include <algorithm>
 
-extern dataset SIMPLE_SAMPLE_01;
-extern dataset SIMPLE_SAMPLE_02;
-extern dataset SIMPLE_SAMPLE_03;
-
 static void
-template_length_process_data(const dataset & data,
+template_length_process_data(const std::shared_ptr<dataset_t> & data,
                              const unsigned int number_clusters,
                              const type_link link,
                              const std::vector<unsigned int> & expected_cluster_length) {
     agglomerative solver(number_clusters, link);
-    solver.process(data);
+    solver.process(*data.get());
 
     std::vector<std::vector<unsigned int> > results;
     solver.get_clusters(results);
@@ -44,122 +40,122 @@ template_length_process_data(const dataset & data,
 
 TEST(utest_agglomerative, clustering_sampl_simple_01_two_cluster_link_average) {
     std::vector<unsigned int> expected_clusters_length_1 = {5, 5};
-    template_length_process_data(SIMPLE_SAMPLE_01, 2, type_link::AVERAGE_LINK, expected_clusters_length_1);
+    template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), 2, type_link::AVERAGE_LINK, expected_clusters_length_1);
 }
 
 TEST(utest_agglomerative, clustering_sampl_simple_01_one_cluster_link_average) {
     std::vector<unsigned int> expected_clusters_length_2 = {10};
-    template_length_process_data(SIMPLE_SAMPLE_01, 1, type_link::AVERAGE_LINK, expected_clusters_length_2);
+    template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), 1, type_link::AVERAGE_LINK, expected_clusters_length_2);
 }
 
 TEST(utest_agglomerative, clustering_sampl_simple_01_two_cluster_link_centroid) {
     std::vector<unsigned int> expected_clusters_length_1 = {5, 5};
-    template_length_process_data(SIMPLE_SAMPLE_01, 2, type_link::CENTROID_LINK, expected_clusters_length_1);
+    template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), 2, type_link::CENTROID_LINK, expected_clusters_length_1);
 }
 
 TEST(utest_agglomerative, clustering_sampl_simple_01_one_cluster_link_centroid) {
     std::vector<unsigned int> expected_clusters_length_2 = {10};
-    template_length_process_data(SIMPLE_SAMPLE_01, 1, type_link::CENTROID_LINK, expected_clusters_length_2);
+    template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), 1, type_link::CENTROID_LINK, expected_clusters_length_2);
 }
 
 TEST(utest_agglomerative, clustering_sampl_simple_01_two_cluster_link_complete) {
     std::vector<unsigned int> expected_clusters_length_1 = {5, 5};
-    template_length_process_data(SIMPLE_SAMPLE_01, 2, type_link::COMPLETE_LINK, expected_clusters_length_1);
+    template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), 2, type_link::COMPLETE_LINK, expected_clusters_length_1);
 }
 
 TEST(utest_agglomerative, clustering_sampl_simple_01_one_cluster_link_complete) {
     std::vector<unsigned int> expected_clusters_length_2 = {10};
-    template_length_process_data(SIMPLE_SAMPLE_01, 1, type_link::COMPLETE_LINK, expected_clusters_length_2);
+    template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), 1, type_link::COMPLETE_LINK, expected_clusters_length_2);
 }
 
 TEST(utest_agglomerative, clustering_sampl_simple_01_two_cluster_link_single) {
     std::vector<unsigned int> expected_clusters_length_1 = {5, 5};
-    template_length_process_data(SIMPLE_SAMPLE_01, 2, type_link::SINGLE_LINK, expected_clusters_length_1);
+    template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), 2, type_link::SINGLE_LINK, expected_clusters_length_1);
 }
 
 TEST(utest_agglomerative, clustering_sampl_simple_01_one_cluster_link_single) {
     std::vector<unsigned int> expected_clusters_length_2 = {10};
-    template_length_process_data(SIMPLE_SAMPLE_01, 1, type_link::SINGLE_LINK, expected_clusters_length_2);
+    template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), 1, type_link::SINGLE_LINK, expected_clusters_length_2);
 }
 
 TEST(utest_agglomerative, clustering_sampl_simple_02_three_cluster_link_average) {
     std::vector<unsigned int> expected_clusters_length_1 = {5, 8, 10};
-    template_length_process_data(SIMPLE_SAMPLE_02, 3, type_link::AVERAGE_LINK, expected_clusters_length_1);
+    template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02), 3, type_link::AVERAGE_LINK, expected_clusters_length_1);
 }
 
 TEST(utest_agglomerative, clustering_sampl_simple_02_one_cluster_link_average) {
     std::vector<unsigned int> expected_clusters_length_2 = {23};
-    template_length_process_data(SIMPLE_SAMPLE_02, 1, type_link::AVERAGE_LINK, expected_clusters_length_2);
+    template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02), 1, type_link::AVERAGE_LINK, expected_clusters_length_2);
 }
 
 TEST(utest_agglomerative, clustering_sampl_simple_02_three_cluster_link_centroid) {
     std::vector<unsigned int> expected_clusters_length_1 = {5, 8, 10};
-    template_length_process_data(SIMPLE_SAMPLE_02, 3, type_link::CENTROID_LINK, expected_clusters_length_1);
+    template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02), 3, type_link::CENTROID_LINK, expected_clusters_length_1);
 }
 
 TEST(utest_agglomerative, clustering_sampl_simple_02_one_cluster_link_centroid) {
     std::vector<unsigned int> expected_clusters_length_2 = {23};
-    template_length_process_data(SIMPLE_SAMPLE_02, 1, type_link::CENTROID_LINK, expected_clusters_length_2);
+    template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02), 1, type_link::CENTROID_LINK, expected_clusters_length_2);
 }
 
 TEST(utest_agglomerative, clustering_sampl_simple_02_three_cluster_link_complete) {
     std::vector<unsigned int> expected_clusters_length_1 = {5, 8, 10};
-    template_length_process_data(SIMPLE_SAMPLE_02, 3, type_link::COMPLETE_LINK, expected_clusters_length_1);
+    template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02), 3, type_link::COMPLETE_LINK, expected_clusters_length_1);
 }
 
 TEST(utest_agglomerative, clustering_sampl_simple_02_one_cluster_link_complete) {
     std::vector<unsigned int> expected_clusters_length_2 = {23};
-    template_length_process_data(SIMPLE_SAMPLE_02, 1, type_link::COMPLETE_LINK, expected_clusters_length_2);
+    template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02), 1, type_link::COMPLETE_LINK, expected_clusters_length_2);
 }
 
 TEST(utest_agglomerative, clustering_sampl_simple_02_three_cluster_link_single) {
     std::vector<unsigned int> expected_clusters_length_1 = {5, 8, 10};
-    template_length_process_data(SIMPLE_SAMPLE_02, 3, type_link::SINGLE_LINK, expected_clusters_length_1);
+    template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02), 3, type_link::SINGLE_LINK, expected_clusters_length_1);
 }
 
 TEST(utest_agglomerative, clustering_sampl_simple_02_one_cluster_link_single) {
     std::vector<unsigned int> expected_clusters_length_2 = {23};
-    template_length_process_data(SIMPLE_SAMPLE_02, 1, type_link::SINGLE_LINK, expected_clusters_length_2);
+    template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02), 1, type_link::SINGLE_LINK, expected_clusters_length_2);
 }
 
 TEST(utest_agglomerative, clustering_sampl_simple_03_four_cluster_link_average) {
     std::vector<unsigned int> expected_clusters_length_1 = {10, 10, 10, 30};
-    template_length_process_data(SIMPLE_SAMPLE_03, 4, type_link::AVERAGE_LINK, expected_clusters_length_1);
+    template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_03), 4, type_link::AVERAGE_LINK, expected_clusters_length_1);
 }
 
 TEST(utest_agglomerative, clustering_sampl_simple_03_one_cluster_link_average) {
     std::vector<unsigned int> expected_clusters_length_2 = {60};
-    template_length_process_data(SIMPLE_SAMPLE_03, 1, type_link::AVERAGE_LINK, expected_clusters_length_2);
+    template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_03), 1, type_link::AVERAGE_LINK, expected_clusters_length_2);
 }
 
 TEST(utest_agglomerative, clustering_sampl_simple_03_four_cluster_link_centroid) {
     std::vector<unsigned int> expected_clusters_length_1 = {10, 10, 10, 30};
-    template_length_process_data(SIMPLE_SAMPLE_03, 4, type_link::CENTROID_LINK, expected_clusters_length_1);
+    template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_03), 4, type_link::CENTROID_LINK, expected_clusters_length_1);
 }
 
 TEST(utest_agglomerative, clustering_sampl_simple_03_one_cluster_link_centroid) {
     std::vector<unsigned int> expected_clusters_length_2 = {60};
-    template_length_process_data(SIMPLE_SAMPLE_03, 1, type_link::CENTROID_LINK, expected_clusters_length_2);
+    template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_03), 1, type_link::CENTROID_LINK, expected_clusters_length_2);
 }
 
 TEST(utest_agglomerative, clustering_sampl_simple_03_four_cluster_link_complete) {
     std::vector<unsigned int> expected_clusters_length_1 = {10, 10, 10, 30};
-    template_length_process_data(SIMPLE_SAMPLE_03, 4, type_link::COMPLETE_LINK, expected_clusters_length_1);
+    template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_03), 4, type_link::COMPLETE_LINK, expected_clusters_length_1);
 }
 
 TEST(utest_agglomerative, clustering_sampl_simple_03_one_cluster_link_complete) {
     std::vector<unsigned int> expected_clusters_length_2 = {60};
-    template_length_process_data(SIMPLE_SAMPLE_03, 1, type_link::COMPLETE_LINK, expected_clusters_length_2);
+    template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_03), 1, type_link::COMPLETE_LINK, expected_clusters_length_2);
 }
 
 TEST(utest_agglomerative, clustering_sampl_simple_03_four_cluster_link_single) {
     std::vector<unsigned int> expected_clusters_length_1 = {10, 10, 10, 30};
-    template_length_process_data(SIMPLE_SAMPLE_03, 4, type_link::SINGLE_LINK, expected_clusters_length_1);
+    template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_03), 4, type_link::SINGLE_LINK, expected_clusters_length_1);
 }
 
 TEST(utest_agglomerative, clustering_sampl_simple_03_one_cluster_link_single) {
     std::vector<unsigned int> expected_clusters_length_2 = {60};
-    template_length_process_data(SIMPLE_SAMPLE_03, 1, type_link::SINGLE_LINK, expected_clusters_length_2);
+    template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_03), 1, type_link::SINGLE_LINK, expected_clusters_length_2);
 }
 
 #endif

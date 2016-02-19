@@ -33,7 +33,7 @@ def full_setup():
           url = 'https://github.com/annoviko/pyclustering',
           license = 'GNU Public License',
           classifiers = [
-                         'Development Status :: 5 - Production/Stable',
+                         'Development Status :: 3 - Alpha',
                          'Intended Audience :: Developers',
                          'License :: GNU Public License',
                          'Programming Language :: Python :: 3.4'
