@@ -5,6 +5,7 @@
 
 #include <memory>
 #include <functional>
+#include <cmath>
 
 
 /***********************************************************************************************
@@ -321,7 +322,7 @@ public:
     *
     * @brief   Constructor of connector with weight initializer.
     * @details Initializer is used during creating connections between nodes for assigning weight
-    *          for each connection. Generally the intializer represents pointer to some function
+    *          for each connection. Generally the initializer represents pointer to some function
     *          that is used to assign weight, for example, if constant value is required then
     *          the function should return always the same value, otherwise some logic can be
     *          implemented.
@@ -331,9 +332,9 @@ public:
     ***********************************************************************************************/
     adjacency_weight_connector(const adjacency_weight_initializer & initializer) {
         if (initializer != nullptr) {
-            m_connector = [this](const size_t index1, const size_t index2, TypeCollection & collection) { 
-                collection.set_connection_weight(index1, index2, m_initializer()); 
-            };
+            m_initializer = initializer; /* [this](const size_t index1, const size_t index2, TypeCollection & collection) {
+                collection.set_connection_weight(index1, index2, initializer());
+            }; */
         }
     }
 };
