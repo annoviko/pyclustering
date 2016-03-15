@@ -1,5 +1,7 @@
 #include "adjacency_list.h"
 
+#include <string>
+#include <stdexcept>
 
 adjacency_list::adjacency_list(const adjacency_list & another_matrix) {
     m_adjacency = another_matrix.m_adjacency;
@@ -43,4 +45,22 @@ bool adjacency_list::has_connection(const size_t node_index1, const size_t node_
 void adjacency_list::get_neighbors(const size_t node_index, std::vector<size_t> & node_neighbors) const {
     node_neighbors.resize(m_adjacency[node_index].size());
 	std::copy(m_adjacency[node_index].begin(), m_adjacency[node_index].end(), node_neighbors.begin());
+}
+
+
+adjacency_list & adjacency_list::operator=(const adjacency_list & another_collection) {
+    if (this != &another_collection) {
+        m_adjacency = another_collection.m_adjacency;
+    }
+
+    return *this;
+}
+
+
+adjacency_list & adjacency_list::operator=(adjacency_list && another_collection) {
+    if (this != &another_collection) {
+        m_adjacency = std::move(another_collection.m_adjacency);
+    }
+
+    return *this;
 }

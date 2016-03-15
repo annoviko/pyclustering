@@ -84,7 +84,8 @@ public:
     *
     * @brief   Establishes one-way connection from the first node to the second in adjacency collection.
     *
-    * @details Complexity equals to complexity of insertion of std::unrodered_set.
+    * @details Complexity equals to complexity of insertion of std::unrodered_set. No bounds checking
+    *          is performed.
     *
     * @param[in]  node_index1: index of node in the collection that should be connected with another.
     * @param[in]  node_index2: index of another node in the collection that should be connected with
@@ -97,7 +98,8 @@ public:
     *
     * @brief   Removes one-way connection from the first node to the second in adjacency collection.
     *
-    * @details Complexity equals to complexity of erasing of std::unrodered_set.
+    * @details Complexity equals to complexity of erasing of std::unrodered_set. No bounds checking
+    *          is performed.
     *
     * @param[in]  node_index1: index of node in the collection that should be disconnected from another.
     * @param[in]  node_index2: index of another node in the collection that should be diconnected from
@@ -108,9 +110,10 @@ public:
 
     /***********************************************************************************************
     *
-    * @brief   Checks existance of connection between specified nodes.
+    * @brief   Checks existence of connection between specified nodes.
     *
-    * @details Complexity equal to searching of std::unrodered_set.
+    * @details Complexity equal to searching of std::unrodered_set. No bounds checking
+    *          is performed.
     *
     * @param[in]  node_index1: index of node in the collection.
     * @param[in]  node_index2: index of another node in the collection.
@@ -124,13 +127,19 @@ public:
     *
     * @brief   Returns vector of indexes of neighbors of specified node in line with adjacency collection.
     *
-    * @details Complexity equals to complexity of copying from unordered_set to vector.
+    * @details Complexity equals to complexity of copying from unordered_set to vector. No bounds checking
+    *          is performed.
     *
     * @param[in]  node_index: index of node in the collection whose neighbors are required.
     * @param[out] node_neighbors: vector of indexes of neighbors of specified node.
     *
     ***********************************************************************************************/
     virtual void get_neighbors(const size_t node_index, std::vector<size_t> & node_neighbors) const;
+
+public:
+    adjacency_list & operator=(const adjacency_list & another_collection);
+
+    adjacency_list & operator=(adjacency_list && another_collection);
 };
 
 #endif

@@ -79,13 +79,6 @@ TEST(utest_adjacency_bit_matrix, move_matrix) {
         for (size_t j = i + 1; j < matrix_first.size(); j++) {
             if ((i % 2) != 0) {
                 ASSERT_EQ(true, matrix_first.has_connection(i, j));
-
-                /* out of range exception should be */
-                try {
-                    matrix_second.has_connection(i, j);
-                    FAIL();
-                }
-                catch(...) { }
             }
         }
     }

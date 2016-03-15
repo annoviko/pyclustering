@@ -3,6 +3,7 @@
 INCLUDES = -Iccore/
 
 SOURCES += ccore/adjacency_bit_matrix.cpp
+SOURCES += ccore/adjacency_list.cpp
 SOURCES += ccore/agglomerative.cpp
 SOURCES += ccore/ccore.cpp
 SOURCES += ccore/cure.cpp
@@ -22,4 +23,3 @@ SOURCES += ccore/sync.cpp
 SOURCES += ccore/syncnet.cpp
 SOURCES += ccore/syncpr.cpp
 SOURCES += ccore/xmeans.cpp
-

@@ -48,11 +48,6 @@ bool adjacency_bit_matrix::has_connection(const size_t node_index1, const size_t
     const size_t index_element = node_index2 / (sizeof(size_t) << 3);
     const size_t bit_number = node_index2 - (index_element * (sizeof(size_t) << 3));
 
-    if ( (node_index1 > m_adjacency.size()) || (index_element > m_adjacency.size()) ) {
-        std::string message("adjacency bit matrix size: " + std::to_string(m_adjacency.size()) + ", index1: " + std::to_string(node_index1) + ", index2: " + std::to_string(node_index2));
-        throw std::out_of_range(message);
-    }
-
     const size_t bit_value = (m_adjacency[node_index1][index_element] >> bit_number) & (size_t) DEFAULT_EXISTANCE_CONNECTION_VALUE;
 
     return (bit_value > 0);

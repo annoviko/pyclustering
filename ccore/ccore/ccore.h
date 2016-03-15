@@ -50,13 +50,13 @@ typedef struct pyclustering_package {
 	void * data;			/* pointer to data           */
 
     pyclustering_package(void) :
-        type(PYCLUSTERING_TYPE_UNDEFINED),
         size(0),
+        type(PYCLUSTERING_TYPE_UNDEFINED),
         data(nullptr) { }
 
     pyclustering_package(unsigned int package_type) :
-        type(package_type),
         size(0),
+        type(package_type),
         data(nullptr) { }
 
 } pyclustering_package;

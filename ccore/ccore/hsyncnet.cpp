@@ -42,7 +42,6 @@ void hsyncnet::process(const double order, const solve_type solver, const bool c
 	unsigned int current_number_clusters = std::numeric_limits<unsigned int>::max();
 
 	double radius = 0.0;
-	double current_time = 0.0;
 
 	while(current_number_clusters > number_clusters) {
 		create_connections(radius, false);

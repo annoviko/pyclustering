@@ -86,7 +86,7 @@ public:
     *
     * @brief   Establishes one-way connection from the first node to the second in adjacency collection.
     *
-    * @details Requies math-logical operations to set connection.
+    * @details Requies math-logical operations to set connection. No bounds checking is performed.
     *
     * @param[in]  node_index1: index of node in the collection that should be connected with another.
     * @param[in]  node_index2: index of another node in the collection that should be connected with
@@ -99,8 +99,10 @@ public:
     *
     * @brief   Removes one-way connection from the first node to the second in adjacency collection.
     *
+    * @details No bounds checking is performed.
+    *
     * @param[in]  node_index1: index of node in the collection that should be disconnected from another.
-    * @param[in]  node_index2: index of another node in the collection that should be diconnected from
+    * @param[in]  node_index2: index of another node in the collection that should be disconnected from
     *              the node defined by the first argument 'node_index1'.
     *
     ***********************************************************************************************/
@@ -108,7 +110,9 @@ public:
 
     /***********************************************************************************************
     *
-    * @brief   Checks existance of connection between specified nodes.
+    * @brief   Checks existence of connection between specified nodes.
+    *
+    * @details No bounds checking is performed.
     *
     * @param[in]  node_index1: index of node in the collection.
     * @param[in]  node_index2: index of another node in the collection.
@@ -122,7 +126,7 @@ public:
     *
     * @brief   Returns vector of indexes of neighbors of specified node in line with adjacency collection.
     *
-    * @details Requies math-logical operations to set connection.
+    * @details Requies math-logical operations to set connection. No bounds checking is performed.
     *
     * @param[in]  node_index: index of node in the collection.
     * @param[out] node_neighbors: vector of indexes of neighbors of specified node.
@@ -136,7 +140,7 @@ private:
     *
     * @brief   Sets or erases connection in line with specified state of connection.
     *
-    * @details Requies math-logical operations to set connection.
+    * @details Requires math-logical operations to set connection.
     *
     * @param[in]  node_index1: index of node whose state of connection should be updated.
     * @param[in]  node_index2: index of another node in the collection.
