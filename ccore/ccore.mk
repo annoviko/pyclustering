@@ -1,4 +1,4 @@
-# GCC should support C++11, for example, GCC 4.7.2
+# GCC should support C++1y
 # CCORE PyClustering project
 
 include makefile.include
@@ -7,8 +7,8 @@ CC = g++
 LD = g++
 
 # Toolchain arguments.
-CFLAGS = -O3 -MMD -MP -std=c++11 -fPIC -c 
-LFLAGS = -O3 -static-libstdc++ -std=c++11 -shared
+CFLAGS = -O3 -MMD -MP -std=c++1y -fPIC -c 
+LFLAGS = -O3 -static-libstdc++ -std=c++1y -shared
 
 # Project sources
 OBJECTS = $(SOURCES:.cpp=.o)

@@ -1,6 +1,7 @@
 #include "adjacency_bit_matrix.h"
 
 #include <string>
+#include <stdexcept>
 
 
 const size_t adjacency_bit_matrix::DEFAULT_EXISTANCE_CONNECTION_VALUE = 0x01;
@@ -70,22 +71,23 @@ void adjacency_bit_matrix::get_neighbors(const size_t node_index, std::vector<si
 
 
 void adjacency_bit_matrix::update_connection(const size_t node_index1, const size_t node_index2, const size_t state_connection) {
-    size_t bit_value = 0x00;
-
-    if (state_connection > 0) {
-        bit_value = 0x01;
-    }
-
-    size_t index_element = node_index2 / (sizeof(size_t) << 3);
-    size_t bit_number = node_index2 % (sizeof(size_t) << 3);
+    size_t element_byte_length = (sizeof(size_t) << 3);
+    size_t index_element = node_index2 / element_byte_length;
+    size_t bit_number = node_index2 % element_byte_length;
 
     if ( (node_index1 > m_adjacency.size()) || (index_element > m_adjacency.size()) ) {
         std::string message("adjacency bit matrix size: " + std::to_string(m_adjacency.size()) + ", index1: " + std::to_string(node_index1) + ", index2: " + std::to_string(node_index2));
         throw std::out_of_range(message);
     }
 
-    m_adjacency[node_index1][index_element] = m_adjacency[node_index1][index_element] | ((size_t) bit_value << bit_number);
+    if (state_connection > 0) {
+        m_adjacency[node_index1][index_element] |= ((size_t) 0x01 << bit_number);
+    }
+    else {
+        m_adjacency[node_index1][index_element] &= ~((size_t) 0x01 << bit_number);
+    }
 }
+
 
 
 adjacency_bit_matrix & adjacency_bit_matrix::operator=(const adjacency_bit_matrix & another_matrix) {

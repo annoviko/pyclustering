@@ -1,4 +1,4 @@
-# GCC should support C++11, for example, GCC 4.7.2
+# GCC should support C++1y
 # Unit-test project for CCORE PyClustering
 
 # Include all sources of CCORE pyclustering library
@@ -8,8 +8,8 @@ CC = g++
 LD = g++
 
 # Toolchain arguments.
-CFLAGS = -O3 -MMD -MP -std=c++11 -fPIC -c
-LDFLAGS = -O3 -std=c++11 -pthread
+CFLAGS = -O3 -MMD -MP -std=c++1y -fPIC -c
+LDFLAGS = -O3 -std=c++1y -pthread
 
 # Project sources
 SOURCES += utcore/main.cpp

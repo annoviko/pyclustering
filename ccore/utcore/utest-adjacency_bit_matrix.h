@@ -92,4 +92,107 @@ TEST(utest_adjacency_bit_matrix, move_matrix) {
 }
 
 
+TEST(utest_adjacency_bit_matrix, set_get_connection) {
+    adjacency_bit_matrix matrix(100);
+
+    for (size_t i = 0; i < matrix.size(); i++) {
+        for (size_t j = i + 1; j < matrix.size(); j++) {
+            ASSERT_EQ(false, matrix.has_connection(i, j));
+
+            matrix.set_connection(i, j);
+
+            ASSERT_EQ(true, matrix.has_connection(i, j));
+            ASSERT_EQ(false, matrix.has_connection(j, i));
+
+            matrix.set_connection(j, i);
+
+            ASSERT_EQ(true, matrix.has_connection(j, i));
+        }
+    }
+}
+
+
+TEST(utest_adjacency_bit_matrix, erase_get_connection) {
+    adjacency_bit_matrix matrix(20);
+
+    for (size_t i = 0; i < matrix.size(); i++) {
+        for (size_t j = i + 1; j < matrix.size(); j++) {
+            matrix.set_connection(i, j);
+            matrix.set_connection(j, i);
+        }
+    }
+
+    for (size_t i = 0; i < matrix.size(); i++) {
+        for (size_t j = i + 1; j < matrix.size(); j++) {
+            ASSERT_EQ(true, matrix.has_connection(i, j));
+            ASSERT_EQ(true, matrix.has_connection(j, i));
+
+            matrix.erase_connection(i, j);
+
+            ASSERT_EQ(false, matrix.has_connection(i, j));
+            ASSERT_EQ(true, matrix.has_connection(j, i));
+
+            matrix.erase_connection(j, i);
+
+            ASSERT_EQ(false, matrix.has_connection(i, j));
+            ASSERT_EQ(false, matrix.has_connection(j, i));
+        }
+    }
+}
+
+
+TEST(utest_adjacency_bit_matrix, get_neighbors_sizes) {
+    adjacency_bit_matrix matrix(20);
+
+    std::vector<size_t> node_neighbors;
+
+    for (size_t i = 0; i < matrix.size(); i++) {
+        for (size_t j = i + 1; j < matrix.size(); j++) {
+            matrix.set_connection(i, j);
+            matrix.set_connection(j, i);
+
+            matrix.get_neighbors(i, node_neighbors);
+            ASSERT_EQ(j, node_neighbors.size());
+
+            matrix.get_neighbors(j, node_neighbors);
+            ASSERT_EQ(i + 1, node_neighbors.size());
+        }
+    }
+}
+
+
+TEST(utest_adjacency_bit_matrix, get_neighbors_indexes) {
+    adjacency_bit_matrix matrix(20);
+
+    std::vector<size_t> node_neighbors;
+
+    for (size_t i = 0; i < matrix.size(); i++) {
+        for (size_t j = i + 1; j < matrix.size(); j++) {
+            matrix.set_connection(i, j);
+            matrix.set_connection(j, i);
+        }
+    }
+
+    for (size_t i = 0; i < matrix.size(); i++) {
+        matrix.get_neighbors(i, node_neighbors);
+        ASSERT_EQ(matrix.size() - 1, node_neighbors.size());
+
+        std::vector<bool> index_neighbor_checker(matrix.size(), false);
+        for (size_t j = 0; j < node_neighbors.size(); j++) {
+            size_t neighbor_index = node_neighbors[j];
+            index_neighbor_checker[neighbor_index] = true;
+        }
+
+        for (size_t j = 0; j < node_neighbors.size(); j++) {
+            if (i != j) {
+                ASSERT_EQ(true, index_neighbor_checker[j]);
+            }
+            else {
+                ASSERT_EQ(false, index_neighbor_checker[i]);
+            }
+        }
+    }
+}
+
+
 #endif

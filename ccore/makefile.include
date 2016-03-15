@@ -1,7 +1,8 @@
-# GCC should support C++11, for example, GCC 4.7.2
+# GCC should support C++1y
 
 INCLUDES = -Iccore/
 
+SOURCES += ccore/adjacency_bit_matrix.cpp
 SOURCES += ccore/agglomerative.cpp
 SOURCES += ccore/ccore.cpp
 SOURCES += ccore/cure.cpp
