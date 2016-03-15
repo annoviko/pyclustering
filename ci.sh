@@ -36,7 +36,7 @@ run_python_job() {
 	echo "CI Job (travis CI): PYCLUSTERING (Python code unit-testing)"
 
 	# run unit-tests with code coverage
-	python coverage run pyclustering/ut/__init__.py
+	coverage run pyclustering/ut/__init__.py
 	coveralls
 }
 
