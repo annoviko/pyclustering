@@ -252,7 +252,7 @@ void network::create_grid_four_connections() {
 		const int left_index = index - 1;
 		const int right_index = index + 1;
 
-        unsigned int node_row_index = std::ceil(index / m_width);
+        const int node_row_index = std::ceil(index / m_width);
 		if (upper_index >= 0) {
 			set_connection(index, upper_index);
 		}

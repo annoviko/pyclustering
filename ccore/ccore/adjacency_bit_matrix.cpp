@@ -1,5 +1,7 @@
 #include "adjacency_bit_matrix.h"
 
+#include <string>
+
 
 const size_t adjacency_bit_matrix::DEFAULT_EXISTANCE_CONNECTION_VALUE = 0x01;
 const size_t adjacency_bit_matrix::DEFAULT_NON_EXISTANCE_CONNECTION_VALUE = 0x00;
@@ -45,6 +47,11 @@ bool adjacency_bit_matrix::has_connection(const size_t node_index1, const size_t
     const size_t index_element = node_index2 / (sizeof(size_t) << 3);
     const size_t bit_number = node_index2 - (index_element * (sizeof(size_t) << 3));
 
+    if ( (node_index1 > m_adjacency.size()) || (index_element > m_adjacency.size()) ) {
+        std::string message("adjacency bit matrix size: " + std::to_string(m_adjacency.size()) + ", index1: " + std::to_string(node_index1) + ", index2: " + std::to_string(node_index2));
+        throw std::out_of_range(message);
+    }
+
     const size_t bit_value = (m_adjacency[node_index1][index_element] >> bit_number) & (size_t) DEFAULT_EXISTANCE_CONNECTION_VALUE;
 
     return (bit_value > 0);
@@ -72,5 +79,32 @@ void adjacency_bit_matrix::update_connection(const size_t node_index1, const siz
     size_t index_element = node_index2 / (sizeof(size_t) << 3);
     size_t bit_number = node_index2 % (sizeof(size_t) << 3);
 
+    if ( (node_index1 > m_adjacency.size()) || (index_element > m_adjacency.size()) ) {
+        std::string message("adjacency bit matrix size: " + std::to_string(m_adjacency.size()) + ", index1: " + std::to_string(node_index1) + ", index2: " + std::to_string(node_index2));
+        throw std::out_of_range(message);
+    }
+
     m_adjacency[node_index1][index_element] = m_adjacency[node_index1][index_element] | ((size_t) bit_value << bit_number);
+}
+
+
+adjacency_bit_matrix & adjacency_bit_matrix::operator=(const adjacency_bit_matrix & another_matrix) {
+    if (this != &another_matrix) {
+        m_adjacency = another_matrix.m_adjacency;
+        m_size = another_matrix.m_size;
+    }
+
+    return *this;
+}
+
+
+adjacency_bit_matrix & adjacency_bit_matrix::operator=(adjacency_bit_matrix && another_matrix) {
+    if (this != &another_matrix) {
+        m_adjacency = std::move(another_matrix.m_adjacency);
+        m_size = std::move(another_matrix.m_size);
+
+        another_matrix.m_size = 0;    
+    }
+
+    return *this;
 }

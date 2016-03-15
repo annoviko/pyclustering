@@ -38,8 +38,8 @@ TEST(utest_adjacency_bit_matrix, copy_matrix) {
 
     matrix_first = matrix_second;
 
-    ASSERT_EQ(20, matrix_first.size());
-    ASSERT_EQ(20, matrix_second.size());
+    ASSERT_EQ(10, matrix_first.size());
+    ASSERT_EQ(10, matrix_second.size());
     ASSERT_EQ(false, matrix_first.has_connection(1, 2));
     ASSERT_EQ(false, matrix_first.has_connection(2, 3));
     ASSERT_EQ(true, matrix_first.has_connection(2, 1));
@@ -51,6 +51,7 @@ TEST(utest_adjacency_bit_matrix, move_matrix) {
     adjacency_bit_matrix matrix_first(40);
     adjacency_bit_matrix matrix_second(40);
 
+    ASSERT_TRUE(matrix_first.size() == matrix_second.size());
     ASSERT_EQ(40, matrix_first.size());
     ASSERT_EQ(40, matrix_second.size());
 
@@ -78,7 +79,13 @@ TEST(utest_adjacency_bit_matrix, move_matrix) {
         for (size_t j = i + 1; j < matrix_first.size(); j++) {
             if ((i % 2) != 0) {
                 ASSERT_EQ(true, matrix_first.has_connection(i, j));
-                ASSERT_EQ(false, matrix_second.has_connection(i, j));
+
+                /* out of range exception should be */
+                try {
+                    matrix_second.has_connection(i, j);
+                    FAIL();
+                }
+                catch(...) { }
             }
         }
     }

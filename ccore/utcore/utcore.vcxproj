@@ -84,6 +84,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\ccore\adjacency_bit_matrix.cpp" />
     <ClCompile Include="..\ccore\agglomerative.cpp" />
     <ClCompile Include="..\ccore\hsyncnet.cpp" />
     <ClCompile Include="..\ccore\kdtree.cpp" />
@@ -102,6 +103,8 @@
     <ClCompile Include="samples.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\ccore\adjacency.h" />
+    <ClInclude Include="..\ccore\adjacency_bit_matrix.h" />
     <ClInclude Include="..\ccore\agglomerative.h" />
     <ClInclude Include="..\ccore\differential.h" />
     <ClInclude Include="..\ccore\dynamic_data.h" />
@@ -120,6 +123,7 @@
     <ClInclude Include="..\ccore\xmeans.h" />
     <ClInclude Include="..\tools\gtest\gtest.h" />
     <ClInclude Include="samples.h" />
+    <ClInclude Include="utest-adjacency_bit_matrix.h" />
     <ClInclude Include="utest-agglomerative.h" />
     <ClInclude Include="utest-differential.h" />
     <ClInclude Include="utest-hsyncnet.h" />

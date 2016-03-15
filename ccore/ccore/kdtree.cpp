@@ -236,7 +236,7 @@ kdnode * kdtree::find_minimal_node(kdnode * node, unsigned int discriminator) {
 		}
 	}
 
-	for (int i = 0; i < candidates.size(); i++) {
+	for (size_t i = 0; i < candidates.size(); i++) {
 		if (candidates[i]->get_value(discriminator) <= minimal_node->get_value(discriminator)) {
 			minimal_node = candidates[i];
 		}

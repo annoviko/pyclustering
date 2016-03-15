@@ -51,9 +51,6 @@
     <ClCompile Include="samples.cpp">
       <Filter>Header Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\ccore\syncpr.cpp">
-      <Filter>Resource Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\ccore\xmeans.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
@@ -65,6 +62,10 @@
     </ClCompile>
     <ClCompile Include="..\tools\gtest\gtest-all.cpp">
       <Filter>TestEnv Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ccore\syncpr.cpp" />
+    <ClCompile Include="..\ccore\adjacency_bit_matrix.cpp">
+      <Filter>Resource Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -159,6 +160,15 @@
       <Filter>Resource Files</Filter>
     </ClInclude>
     <ClInclude Include="..\ccore\ensemble_data.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utest-adjacency_bit_matrix.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ccore\adjacency.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ccore\adjacency_bit_matrix.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
   </ItemGroup>
