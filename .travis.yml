@@ -30,17 +30,20 @@ install:
   - conda install libgfortran
   - conda info -a
 
-  # Replace dep1 dep2 ... with your dependencies
+  # set conda environment with required libraries for python part of pyclustering
   - conda create -q -n test-environment python=3.4 numpy scipy matplotlib Pillow
   - source activate test-environment
-  - python setup.py install
-  - chmod u+x ci.sh
   
+  # install gcc for building C/C++ part (ccore) of pyclustering
   - sudo apt-get install -qq g++-4.8
   - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 50
   
-  - g++ --version
-  - gcc --version
+  # install module to measure code coverage in python part of pyclustering
+  - pip install coveralls
+  
+  # install pyclustering library (project itself)
+  - python setup.py install
+  - chmod u+x ci.sh
   
 script: ./ci.sh
   

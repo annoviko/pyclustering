@@ -35,8 +35,9 @@ run_utcore_job() {
 run_python_job() {
 	echo "CI Job (travis CI): PYCLUSTERING (Python code unit-testing)"
 
-	# run unit-tests
-	python pyclustering/ut/__init__.py
+	# run unit-tests with code coverage
+	python coverage run pyclustering/ut/__init__.py
+	coveralls
 }
 
 set -e
