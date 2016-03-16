@@ -37,6 +37,7 @@ run_python_job() {
 
 	# run unit-tests with code coverage
 	coverage run pyclustering/ut/__init__.py
+	coverage report --include="`python -c \"import os, pyclustering; print os.path.dirname(pyclustering.__file__)\"`/*"
 	coveralls
 }
 
