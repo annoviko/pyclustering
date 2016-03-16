@@ -34,14 +34,10 @@ run_utcore_job() {
 
 run_python_job() {
 	echo "CI Job (travis CI): PYCLUSTERING (Python code unit-testing)"
-	cd /
-
-	# set current folder where installed library is located
-	library_folder="`python -c \"import os, pyclustering; print(os.path.dirname(pyclustering.__file__))\"`/*";
-	cd $library_folder
 
 	# run unit-tests with code coverage
 	coverage run pyclustering/ut/__init__.py
+	coverage report --include="`python -c \"import os, pyclustering; print(os.path.dirname(pyclustering.__file__))\"`/*"
 	coveralls
 }
 
