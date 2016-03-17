@@ -42,7 +42,6 @@ install:
   - pip install coveralls
   
   # install pyclustering library (project itself)
-  - python setup.py install
   - chmod u+x ci.sh
   
 script: ./ci.sh

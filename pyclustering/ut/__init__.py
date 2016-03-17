@@ -29,6 +29,11 @@ import unittest;
 import matplotlib;
 matplotlib.use('Agg');
 
+# Add path to pyclustering package (much better to set PYTHONPATH).
+# parent_obtainer = lambda current_folder, level: os.sep.join(current_folder.split(os.sep)[:-level])
+# working_folder = parent_obtainer(os.path.abspath(__file__), 3);
+# sys.path.insert(0, working_folder);
+
 # Test suits that are used for testing of python implementation.
 from pyclustering.cluster.tests                  import birch_tests         as cluster_birch_unit_tests;
 from pyclustering.cluster.tests                  import cure_tests          as cluster_cure_unit_tests;
