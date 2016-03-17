@@ -38,7 +38,7 @@ run_python_job() {
 	PYTHONPATH=`pwd`
 	export PYTHONPATH=${PYTHONPATH}
 
-	coverage run --source=pyclustering --omit='pyclustering/*/tests/*, pyclustering/*/examples/*, pyclustering/ut/*' pyclustering/ut/__init__.py
+	coverage run --source=pyclustering --omit='pyclustering/*/tests/*,pyclustering/*/examples/*,pyclustering/ut/*' pyclustering/ut/__init__.py
 	coveralls
 }
 
