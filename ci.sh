@@ -43,7 +43,7 @@ run_python_job() {
 	#coverage run ut/__init__.py
 	#coverage report --include="`python -c \"import os, pyclustering; print(os.path.dirname(pyclustering.__file__))\"`/*"
 
-	coverage run pyclustering/ut/__init__.py	
+	coverage run --source=pyclustering pyclustering/ut/__init__.py
 	coveralls
 }
 
