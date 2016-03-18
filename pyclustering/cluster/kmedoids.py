@@ -114,7 +114,7 @@ class kmedoids:
     
     def get_medoids(self):
         """!
-        @brief Returns list of centers of allocated clusters.
+        @brief Returns list of medoids of allocated clusters.
         
         @see process()
         @see get_clusters()
