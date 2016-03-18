@@ -162,7 +162,7 @@ class kmedoids:
         """
          
         medians = [[] for i in range(len(self.__clusters))];
-         
+        
         for index in range(len(self.__clusters)):
             meadian_index = median(self.__pointer_data, self.__clusters[index]);
             medians[index] = self.__pointer_data[meadian_index];

@@ -74,7 +74,7 @@ class dbscan:
         @param[in] neighbors (uint): minimum number of shared neighbors that is required for establish links between points.
         @param[in] ccore (bool): if True than DLL CCORE (C++ solution) will be used for solving the problem.
         
-        """       
+        """
         self.__pointer_data = data;
         self.__eps = eps;
         self.__sqrt_eps = eps * eps;
