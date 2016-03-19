@@ -43,9 +43,12 @@ class clarans:
     
     __clusters = None;
     __belong = None;
-    __medoids = None;
     __current = None;
     
+    __optimal_medoids = None;
+    __optimal_estimation = 0;
+
+
     def __init__(self, data, number_clusters, numlocal, maxneighbor):
         """!
         @brief Constructor of clustering algorithm CLARANS.
@@ -64,9 +67,11 @@ class clarans:
         self.__number_clusters = number_clusters;
         
         self.__clusters = [];
-        self.__medoids = [];
         self.__current = [];
         self.__belong = [];
+        
+        self.__optimal_medoids = [];
+        self.__optimal_estimation = float('inf');
     
     
     def process(self):
@@ -85,13 +90,18 @@ class clarans:
             self.__current = random.sample(range(0, len(self.__pointer_data)), self.__number_clusters);
             
             # update clusters in line with random allocated medoids
-            self.__update_clusters();
+            self.__update_clusters(self.__current);
             
             # optimize configuration
             self.__optimize_configuration();
             
             # obtain cost of current cluster configuration and compare it with the best obtained
-            assert(0); # under implementation
+            estimation = self.__calculate_estimation();
+            if (estimation < self.__optimal_estimation):
+                self.__optimal_medoids = self.__current[:];
+                self.__optimal_estimation = estimation;
+        
+        self.__update_clusters(self.__optimal_medoids);
     
     
     def get_clusters(self):
@@ -122,20 +132,20 @@ class clarans:
         return self.__medoids;
     
     
-    def __update_clusters(self):
+    def __update_clusters(self, medoids):
         """!
-        @brief Forms cluster in line with current medoids by calculation distance from each point to medoids. 
+        @brief Forms cluster in line with specified medoids by calculation distance from each point to medoids. 
         
         """
         
-        self.__belong = [0] * len(self.__current);
-        self.__clusters = [[] for i in range(len(self.__current))];
+        self.__belong = [0] * len(self.__pointer_data);
+        self.__clusters = [[] for i in range(len(medoids))];
         for index_point in range(len(self.__pointer_data)):
             index_optim = -1;
             dist_optim = 0.0;
              
-            for index in range(len(self.__current)):
-                dist = euclidean_distance_sqrt(self.__pointer_data[index_point], self.__current[index]);
+            for index in range(len(medoids)):
+                dist = euclidean_distance_sqrt(self.__pointer_data[index_point], self.__pointer_data[medoids[index]]);
                  
                 if ( (dist < dist_optim) or (index is 0)):
                     index_optim = index;
@@ -156,7 +166,7 @@ class clarans:
         index_neighbor = 0;
         while (index_neighbor < self.__maxneighbor):
             # get random current medoid that is to be replaced
-            current_medoid_index = self.__current[random.randint(0, len(self.__number_clusters) - 1)];
+            current_medoid_index = self.__current[random.randint(0, self.__number_clusters - 1)];
             current_medoid_cluster_index = self.__belong[current_medoid_index];
             
             # get new candidate to be medoid
@@ -213,7 +223,7 @@ class clarans:
                 self.__current[current_medoid_cluster_index] = candidate_medoid_index;
                 
                 # recalculate clusters
-                self.__update_clusters();
+                self.__update_clusters(self.__current);
                 
                 # reset iterations and starts investigation from the begining
                 index_neighbor = 0;
@@ -243,3 +253,21 @@ class clarans:
                     other_medoid_index = index_medoid;
         
         return other_medoid_index;
+    
+    
+    def __calculate_estimation(self):
+        """!
+        @brief Calculates estimation (cost) of the current clusters. The lower the estimation,
+               the more optimally configuration of clusters.
+        
+        @return (double) estimation of current clusters.
+        
+        """
+        estimation = 0.0;
+        for index_cluster in range(0, len(self.__clusters)):
+            cluster = self.__clusters[index_cluster];
+            index_medoid = self.__current[index_cluster];
+            for index_point in cluster:
+                estimation += euclidean_distance_sqrt(self.__pointer_data[index_point], self.__pointer_data[index_medoid]);
+        
+        return estimation;

@@ -16,6 +16,9 @@ GENERAL CHANGES (pyclustering):
 - Implemented feature to use rectangular network structures in oscillatory networks.
   See: https://github.com/annoviko/pyclustering/issues/259
 
+- Implemented CLARANS algorithm (pyclustering.cluster.clarans).
+  See: https://github.com/annoviko/pyclustering/issues/52
+
 
 GENERAL CHANGES (ccore):
 - Implemented phase oscillatory network for pattern recognition syncpr (ccore.syncpr).

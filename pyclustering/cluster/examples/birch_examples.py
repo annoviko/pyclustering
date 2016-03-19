@@ -33,10 +33,11 @@ from pyclustering.utils import timedcall;
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
 
+
 def template_clustering(number_clusters, path, branching_factor = 5, max_node_entries = 5, initial_diameter = 0.0, type_measurement = measurement_type.CENTROID_EUCLIDIAN_DISTANCE, entry_size_limit = 200, ccore = True):
     sample = read_sample(path);
 
-    birch_instance = birch(sample, number_clusters, branching_factor, max_node_entries, initial_diameter, type_measurement, entry_size_limit, ccore)
+    birch_instance = birch(sample, number_clusters, branching_factor, max_node_entries, initial_diameter, type_measurement, entry_size_limit, ccore);
     (ticks, result) = timedcall(birch_instance.process);
 
     print("Sample: ", path, "\t\tExecution time: ", ticks, "\n");

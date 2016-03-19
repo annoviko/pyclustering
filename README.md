@@ -42,6 +42,7 @@ What is implemented in the project.
 
 Clustering algorithms (module pyclustering.cluster):
 - BIRCH [Python]
+- CLARANS [Python]
 - CURE [Python, C++]
 - DBSCAN [Python, C++]
 - Agglomerative [Python, C++]

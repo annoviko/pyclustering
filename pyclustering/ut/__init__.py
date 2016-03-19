@@ -35,10 +35,11 @@ matplotlib.use('Agg');
 # sys.path.insert(0, working_folder);
 
 # Test suits that are used for testing of python implementation.
+from pyclustering.cluster.tests                  import agglomerative_tests as cluster_agglomerative_unit_tests;
 from pyclustering.cluster.tests                  import birch_tests         as cluster_birch_unit_tests;
+from pyclustering.cluster.tests                  import clarans_tests       as cluster_clarans_unit_tests;
 from pyclustering.cluster.tests                  import cure_tests          as cluster_cure_unit_tests;
 from pyclustering.cluster.tests                  import dbscan_tests        as cluster_dbscan_unit_tests;
-from pyclustering.cluster.tests                  import agglomerative_tests as cluster_agglomerative_unit_tests;
 from pyclustering.cluster.tests                  import hsyncnet_tests      as cluster_hsyncnet_unit_tests;
 from pyclustering.cluster.tests                  import kmeans_tests        as cluster_kmeans_unit_tests;
 from pyclustering.cluster.tests                  import kmedians_tests      as cluster_kmedians_unit_tests;
@@ -73,6 +74,7 @@ if __name__ == "__main__":
     
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_agglomerative_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_birch_unit_tests));
+    suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_clarans_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_cure_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_dbscan_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_hsyncnet_unit_tests));
