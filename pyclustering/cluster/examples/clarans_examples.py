@@ -69,31 +69,35 @@ def cluster_sample8():
     template_clustering(4, SIMPLE_SAMPLES.SAMPLE_SIMPLE8, 15, 5);
 
 def cluster_elongate():
-    template_clustering(2, SIMPLE_SAMPLES.SAMPLE_ELONGATE, 5, 3);
+    template_clustering(2, SIMPLE_SAMPLES.SAMPLE_ELONGATE, 2, 2);
 
 def cluster_lsun():
-    template_clustering(3, FCPS_SAMPLES.SAMPLE_LSUN, 15, 5);
+    template_clustering(3, FCPS_SAMPLES.SAMPLE_LSUN, 2, 2);
 
 def cluster_target():
-    template_clustering(6, FCPS_SAMPLES.SAMPLE_TARGET, 15, 5);
+    template_clustering(6, FCPS_SAMPLES.SAMPLE_TARGET, 2, 2);
 
 def cluster_two_diamonds():
-    template_clustering(2, FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, 20, 10);
+    # tooo long
+    template_clustering(2, FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, 2, 2);
 
 def cluster_wing_nut():
-    template_clustering(2, FCPS_SAMPLES.SAMPLE_WING_NUT, 20, 10);
+    # too long
+    template_clustering(2, FCPS_SAMPLES.SAMPLE_WING_NUT, 2, 2);
 
 def cluster_chainlink():
-    template_clustering(2, FCPS_SAMPLES.SAMPLE_CHAINLINK, 20, 10);
+    # too long
+    template_clustering(2, FCPS_SAMPLES.SAMPLE_CHAINLINK, 2, 2);
 
 def cluster_hepta():
-    template_clustering(7, FCPS_SAMPLES.SAMPLE_HEPTA, 15, 8); 
+    template_clustering(7, FCPS_SAMPLES.SAMPLE_HEPTA, 2, 2); 
 
 def cluster_tetra():
-    template_clustering(4, FCPS_SAMPLES.SAMPLE_TETRA, 15, 10);
+    template_clustering(4, FCPS_SAMPLES.SAMPLE_TETRA, 2, 2);
 
 def cluster_engy_time():
-    template_clustering(2, FCPS_SAMPLES.SAMPLE_ENGY_TIME, 20, 10);
+    # too long
+    template_clustering(2, FCPS_SAMPLES.SAMPLE_ENGY_TIME, 2, 2);
 
 
 cluster_sample1();
@@ -105,12 +109,12 @@ cluster_sample6();
 cluster_sample7();
 cluster_sample8();
 cluster_elongate();
-
+ 
 cluster_lsun();
 cluster_target();
-cluster_two_diamonds();
-cluster_wing_nut();
-cluster_chainlink();
+cluster_two_diamonds();   # too long
+cluster_wing_nut();       # too long
+cluster_chainlink();      # too long
 cluster_hepta();
 cluster_tetra();
-cluster_engy_time();
+cluster_engy_time();      # too long
