@@ -29,10 +29,12 @@ import unittest;
 import matplotlib;
 matplotlib.use('Agg');
 
-# Add path to pyclustering package (much better to set PYTHONPATH).
+# Add path to pyclustering package (much better to set PYTHONPATH), but just to be sure that at least unit-tests can be run.
+# import os, sys;
 # parent_obtainer = lambda current_folder, level: os.sep.join(current_folder.split(os.sep)[:-level])
 # working_folder = parent_obtainer(os.path.abspath(__file__), 3);
 # sys.path.insert(0, working_folder);
+
 
 # Test suits that are used for testing of python implementation.
 from pyclustering.cluster.tests                  import agglomerative_tests as cluster_agglomerative_unit_tests;
