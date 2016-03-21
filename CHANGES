@@ -19,6 +19,12 @@ GENERAL CHANGES (pyclustering):
 - Implemented CLARANS algorithm (pyclustering.cluster.clarans).
   See: https://github.com/annoviko/pyclustering/issues/52
 
+- Implemented feature to analyse and visualize results of hysteresis oscillatory network (pyclustering.nnet.hysteresis):
+  See: https://github.com/annoviko/pyclustering/issues/75
+
+- Implemented feature to analyse and visualize results of graph coloring algorithm based on hysteresis oscillatory network (pyclustering.gcolor.hysteresis):
+  See: https://github.com/annoviko/pyclustering/issues/75
+
 
 GENERAL CHANGES (ccore):
 - Implemented phase oscillatory network for pattern recognition syncpr (ccore.syncpr).

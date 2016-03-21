@@ -297,7 +297,7 @@ class sync_visualizer:
 
         im_ani = animation.FuncAnimation(figure, frame_generation, len(sync_output_dynamic), init_func = init_frame, interval = 75, repeat_delay = 1000, blit = True);
         plt.show();        
-        
+
 
 class sync_network(network):    
     """!

@@ -30,20 +30,20 @@ from pyclustering.utils import draw_dynamics;
 
 from pyclustering.samples.definitions import GRAPH_SIMPLE_SAMPLES;
 
-def template_graph_coloring(filename, alpha, eps, steps, time, title = None, tolerance = 0.1):
+def template_graph_coloring(filename, alpha, eps, steps, time, title = None, tolerance = 0.1, threshold_steps = 10):
     if (title is None): title = filename;
     
     graph = read_graph(filename);
     network = hysteresisgcolor(graph.data, alpha, eps);
     
-    (t, dyn) = network.simulate(steps, time);
-    draw_dynamics(t, dyn, x_title = "Time", y_title = "State");
+    output_dynamic = network.simulate(steps, time);
+    draw_dynamics(output_dynamic.time, output_dynamic.output, x_title = "Time", y_title = "State");
     
-    clusters = network.get_clusters(tolerance);
+    clusters = output_dynamic.allocate_clusters(tolerance, threshold_steps);
     for index in range(0, len(clusters)):
         print("Color #", index, ": ", clusters[index]);
     
-    coloring_map = network.get_map_coloring(tolerance);
+    coloring_map = output_dynamic.allocate_map_coloring(tolerance, threshold_steps);
     draw_graph(graph, coloring_map);
 
 

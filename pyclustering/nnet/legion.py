@@ -110,7 +110,7 @@ class legion_dynamic:
     """
     __output = None;
     __inhibitor = None;
-    __time = None;
+    _time = None;
     
     __ccore_legion_dynamic_pointer = None;
     
@@ -163,7 +163,7 @@ class legion_dynamic:
         """
         self.__output = output;
         self.__inhibitor = inhibitor;
-        self.__time = time;
+        self._time = time;
         
         self.__ccore_legion_dynamic_pointer = ccore;
         
@@ -185,7 +185,7 @@ class legion_dynamic:
         if (self.__ccore_legion_dynamic_pointer is not None):
             return wrapper.legion_dynamic_get_size(self.__ccore_legion_dynamic_pointer);
         
-        return len(self.__time);
+        return len(self._time);
 
 
     def allocate_sync_ensembles(self, tolerance = 0.1):

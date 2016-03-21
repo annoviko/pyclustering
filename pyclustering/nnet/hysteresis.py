@@ -32,6 +32,125 @@ from scipy.integrate import odeint;
 
 from pyclustering.nnet import *;
 
+from pyclustering.utils import draw_dynamics;
+
+
+class hysteresis_dynamic:
+    """!
+    @brief Represents output dynamic of hysteresis oscillatory network.
+    
+    """
+    _dynamic   = None;
+    _time      = None;
+    
+    @property
+    def output(self):
+        """!
+        @brief (list) Returns outputs of oscillator during simulation.
+        
+        """
+        return self._dynamic;
+    
+    
+    @property
+    def time(self):
+        """!
+        @brief (list) Returns sampling times when dynamic is measured during simulation.
+        
+        """
+        
+        return self._time;
+    
+    
+    def __init__(self, amplitudes, time):
+        """!
+        @brief Constructor of hysteresis neural network dynamic.
+        
+        @param[in] amplitudes (list): Dynamic (amplitudes) of oscillators on each step of simulation.
+        @param[in] time (list): Simulation time (timestamps of simulation steps) when amplitudes are stored.
+        
+        """
+        
+        if (len(amplitudes) != len(time)):
+            raise NameError("Length of list of dynamics of oscillators should be equal to length of simulation timestamps of steps.");
+        
+        self._dynamic = amplitudes;
+        self._time = time;
+
+
+    def __len__(self):
+        """!
+        @brief (uint) Returns number of simulation steps that are stored in dynamic.
+        
+        """
+        
+        return len(self._dynamic);
+    
+    
+    def allocate_sync_ensembles(self, tolerance = 0.1, threshold_steps = 1):
+        """!
+        @brief Allocate clusters in line with ensembles of synchronous oscillators where each
+               synchronous ensemble corresponds to only one cluster.
+               
+        @param[in] tolerance (double): Maximum error for allocation of synchronous ensemble oscillators.
+        @param[in] threshold_steps (uint): Number of steps from the end of simulation that should be analysed for ensemble allocation.
+                    If amout of simulation steps has been less than threshold steps than amount of steps will be reduced to amout
+                    of simulation steps.
+        
+        @return (list) Grours of indexes of synchronous oscillators, for example, [ [index_osc1, index_osc3], [index_osc2], [index_osc4, index_osc5] ]."
+        
+        """
+        
+        clusters = [ [0] ];
+        
+        number_oscillators = len(self._dynamic[0]);
+        
+        for i in range(1, number_oscillators, 1):
+            captured_neuron = True;
+            for cluster in clusters:
+                neuron_index = cluster[0];
+                
+                analysis_steps = threshold_steps;
+                if (len(self._dynamic) < analysis_steps):
+                    analysis_steps = len(self._dynamic);
+                
+                analysis_start_step_index = len(self._dynamic) - 1;
+                
+                for step in range(analysis_start_step_index, analysis_start_step_index - analysis_steps, -1):
+                    neuron_amplitude = self._dynamic[step][neuron_index];
+                    candidate_amplitude = self._dynamic[step][i];
+                    
+                    if ( not (candidate_amplitude < (neuron_amplitude + tolerance)) or not (candidate_amplitude > (neuron_amplitude - tolerance)) ):
+                        captured_neuron = False;
+                        break;
+                    
+                if ( captured_neuron is True ):
+                    cluster.append(i);
+                    break;
+            
+            if (captured_neuron is False):
+                clusters.append([i]);
+        
+        return clusters;
+
+
+class hysteresis_visualizer:
+    """!
+    @brief Visualizer of output dynamic of hysteresis oscillatory network.
+    
+    """
+        
+    @staticmethod
+    def show_output_dynamic(hysteresis_output_dynamic):
+        """!
+        @brief Shows output dynamic (output of each oscillator) during simulation.
+        
+        @param[in] hysteresis_output_dynamic (hysteresis_dynamic): Output dynamic of the hysteresis oscillatory network.
+        
+        """
+        
+        draw_dynamics(hysteresis_output_dynamic.time, hysteresis_output_dynamic.output, x_title = "Time", y_title = "x(t)");
+
 
 class hysteresis_network(network):
     """!
@@ -150,7 +269,7 @@ class hysteresis_network(network):
         @param[in] solution (solve_type): Type of solution (solving).
         @param[in] collect_dynamic (bool): If True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics.
         
-        @return (list) Dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,
+        @return (hysteresis_dynamic) Dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,
                 otherwise returns only last values (last step of simulation) of dynamic.
         """
                 
@@ -166,7 +285,7 @@ class hysteresis_network(network):
         @param[in] solution (solve_type): Type of solution (solving).
         @param[in] collect_dynamic (bool): If True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics.
         
-        @return (list) Dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,
+        @return (hysteresis_dynamic) Dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,
                 otherwise returns only last values (last step of simulation) of dynamic.
         
         """
@@ -188,23 +307,24 @@ class hysteresis_network(network):
             dyn_time.append(0);
         
         step = time / steps;
-        int_step = step / 10;
+        int_step = step / 10.0;
         
         for t in numpy.arange(step, time + step, step):
             # update states of oscillators
             self._states = self._calculate_states(solution, t, step, int_step);
             
             # update states of oscillators
-            if (collect_dynamic == True):
+            if (collect_dynamic is True):
                 dyn_state.append(self._states);
                 dyn_time.append(t);
-            else:
-                dyn_state = self._states;
-                dyn_time = t;
         
-        return (dyn_time, dyn_state);   
-    
+        if (collect_dynamic is False):
+            dyn_state.append(self._states);
+            dyn_time.append(t);
         
+        return hysteresis_dynamic(dyn_state, dyn_time);
+
+
     def _calculate_states(self, solution, t, step, int_step):
         """!
         @brief Calculates new states for neurons using differential calculus. Returns new states for neurons.
@@ -226,34 +346,3 @@ class hysteresis_network(network):
         
         self._outputs = [val for val in self._outputs_buffer];
         return next_states;
-    
-    
-    def allocate_sync_ensembles(self, tolerance = 0.1):
-        """!
-        @brief Allocate clusters in line with ensembles of synchronous oscillators where each
-               synchronous ensemble corresponds to only one cluster.
-               
-        @param[in] tolerance (double): Maximum error for allocation of synchronous ensemble oscillators.
-        
-        @return (list) Grours of indexes of synchronous oscillators, for example, [ [index_osc1, index_osc3], [index_osc2], [index_osc4, index_osc5] ]."
-        
-        """
-        
-        clusters = [ [0] ];
-        
-        for i in range(1, self._num_osc, 1):
-            cluster_allocated = False;
-            for cluster in clusters:
-                for neuron_index in cluster:
-                    if ( (self._states[i] < (self._states[neuron_index] + tolerance)) and (self._states[i] > (self._states[neuron_index] - tolerance)) ):
-                        cluster_allocated = True;
-                        cluster.append(i);
-                        break;
-                
-                if (cluster_allocated == True):
-                    break;
-            
-            if (cluster_allocated == False):
-                clusters.append([i]);
-        
-        return clusters;

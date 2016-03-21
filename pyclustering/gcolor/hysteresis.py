@@ -25,7 +25,71 @@
 
 """
 
-from pyclustering.nnet.hysteresis import hysteresis_network;
+from pyclustering.nnet.hysteresis import hysteresis_network, hysteresis_dynamic;
+
+
+class hysteresis_analyser(hysteresis_dynamic):
+    """!
+    @brief Performs analysis of output dynamic of the hysteresis oscillatory network to extract information about clusters or color allocation.
+    
+    """
+    
+    def __init__(self, aplitudes, time):
+        """!
+        @brief Constructor of the analyser.
+        
+        @param[in] amplitudes (list): Output dynamic of the hysteresis oscillatory network, where one iteration consists of all amplitudes of oscillators.
+        @param[in] time (list): Simulation time (timestamps of simulation steps) when amplitudes are stored.
+        
+        """
+        super().__init__(aplitudes, time);
+
+
+    def allocate_clusters(self, tolerance = 0.1, threshold_steps = 1):
+        """!
+        @brief Returns list of clusters in line with state of ocillators (phases).
+        
+        @param[in] tolerance (double): Maximum error for allocation of synchronous ensemble oscillators.
+        @param[in] threshold_steps (uint): Number of steps from the end of simulation that should be analysed for ensemble allocation.
+                    If amout of simulation steps has been less than threshold steps than amount of steps will be reduced to amout
+                    of simulation steps.
+        
+        @remark Results can be obtained only after network simulation (graph processing by the network).
+        
+        @return (list) List of clusters, for example [ [cluster1], [cluster2], ... ].
+        
+        @see allocate_map_coloring()
+        
+        """
+        return self.allocate_sync_ensembles(tolerance, threshold_steps = 10);
+
+
+    def allocate_map_coloring(self, tolerance, threshold_steps = 10):
+        """!
+        @brief Returns list of color indexes that are assigned to each object from input data space accordingly.
+        
+        @param[in] tolerance (double): Tolerance level that define maximal difference between outputs of oscillators in one synchronous ensemble.
+        @param[in] threshold_steps (uint): Number of steps from the end of simulation that should be analysed for ensemble allocation.
+                    If amout of simulation steps has been less than threshold steps than amount of steps will be reduced to amout
+                    of simulation steps.
+        
+        @remark Results can be obtained only after network simulation (graph processing by the network).
+        
+        @return (list) Color indexes that are assigned to each object from input data space accordingly.
+        
+        @see allocate_clusters()
+        
+        """
+        clusters = self.allocate_clusters(tolerance);
+        
+        coloring_map = [0] * len(self._dynamic[0]);
+        
+        for color_index in range(len(clusters)):
+            for node_index in clusters[color_index]:
+                coloring_map[node_index] = color_index;
+                
+        return coloring_map;
+
 
 class hysteresisgcolor(hysteresis_network):
     """!
@@ -36,6 +100,13 @@ class hysteresisgcolor(hysteresis_network):
     
     Example
     @code
+        # import required modules
+        from pyclustering.nnet.hysteresis import hysteresis_visualizer;
+        
+        from pyclustering.gcolor.hysteresis import hysteresisgcolor;
+        
+        from pyclustering.utils.graph import read_graph, draw_graph;
+        
         # load graph from a file
         graph = read_graph(filename);
         
@@ -43,13 +114,13 @@ class hysteresisgcolor(hysteresis_network):
         network = hysteresisgcolor(graph.data, alpha, eps);
         
         # perform simulation of the network
-        (t, dyn) = network.simulate(2000, 20);
+        output_dynamic = network.simulate(2000, 20);
         
         # show dynamic of the network
-        draw_dynamics(t, dyn, x_title = "Time", y_title = "State");
+        hysteresis_visualizer.show_output_dynamic(output_dynamic);
         
         # obtain results of graph coloring and display results
-        coloring_map = network.get_map_coloring();
+        coloring_map = hysteresis_visualizer.allocate_map_coloring();
         draw_graph(graph, coloring_map);
     @endcode
     
@@ -85,46 +156,19 @@ class hysteresisgcolor(hysteresis_network):
                     self._weight[row][col] = -alpha * (graph_matrix[row][col]) / sum(graph_matrix[row]);
                 else:
                     self._weight[row][col] = -alpha - eps;
-        
-    def get_clusters(self, tolerance = 0.1):
+    
+    
+    def process(self, steps, time, collect_dynamic = True):
         """!
-        @brief Returns list of clusters where each cluster represents ensemble of synchronous oscillators and each
-               each cluster denotes set of oscillators that correspond to only one color.
+        @brief Peforms graph coloring analysis using simulation of the oscillatory network.
         
-        @param[in] tolerance (double): Tolerance level that define maximal difference between outputs of oscillators in one synchronous ensemble.
+        @param[in] steps (uint): Number steps of simulations during simulation.
+        @param[in] time (double): Time of simulation.
+        @param[in] collect_dynamic (bool): Specified requirement to collect whole dynamic of the network.
         
-        @remark Results can be obtained only after network simulation (graph processing by the network).
-        
-        @return (list) Lists of ensembles of synchronous oscillators that consist of indexes of oscillators, 
-                for example [ [0, 2, 5], [1, 3, 4] ].
-        
-        @see simulate()
-        @see get_map_coloring()
+        @return (hysteresis_analyser) Returns analyser of results of clustering.
         
         """
-        return self.allocate_sync_ensembles(tolerance);
-    
-    def get_map_coloring(self, tolerance = 0.1):
-        """!
-        @brief Returns list of color indexes that are assigned to each object from input data space accordingly.
         
-        @param[in] tolerance (double): Tolerance level that define maximal difference between outputs of oscillators in one synchronous ensemble.
-        
-        @remark Results can be obtained only after network simulation (graph processing by the network).
-        
-        @return (list) Color indexes that are assigned to each object from input data space accordingly.
-        
-        @see simulate()
-        @see get_clusters()
-        
-        """
-        clusters = self.get_clusters(tolerance);
-        
-        coloring_map = [0] * self._num_osc;
-        
-        for color_index in range(len(clusters)):
-            for node_index in clusters[color_index]:
-                coloring_map[node_index] = color_index;
-                
-        return coloring_map;
-    
+        output_dynamic = super().simulate(steps, time, collect_dynamic = True);
+        return hysteresis_analyser(output_dynamic.output, output_dynamic.time);

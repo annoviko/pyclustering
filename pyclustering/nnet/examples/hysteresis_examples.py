@@ -23,10 +23,8 @@
 
 """
 
-from pyclustering.nnet.hysteresis import hysteresis_network;
+from pyclustering.nnet.hysteresis import hysteresis_network, hysteresis_visualizer;
 from pyclustering.nnet import *;
-
-from pyclustering.utils import draw_dynamics;
 
 
 def template_dynamic(num_osc, own_weight = -3, neigh_weight = -1, initial_states = None, initial_outputs = None, steps = 1000, time = 10):
@@ -38,10 +36,13 @@ def template_dynamic(num_osc, own_weight = -3, neigh_weight = -1, initial_states
     if (initial_outputs is not None):
         network.outputs = initial_outputs;
     
-    (t, x) = network.simulate(steps, time);
-    draw_dynamics(t, x, x_title = "Time", y_title = "x(t)");
+    output_dynamic = network.simulate(steps, time);
+    hysteresis_visualizer.show_output_dynamic(output_dynamic);
     
-    
+    ensembles = output_dynamic.allocate_sync_ensembles(tolerance = 0.5, threshold_steps = 5);
+    print("Allocated synchronous ensembles ( amout:", len(ensembles), "):", ensembles);
+
+
 def one_oscillator_weight_2():
     template_dynamic(1, -2);
 
