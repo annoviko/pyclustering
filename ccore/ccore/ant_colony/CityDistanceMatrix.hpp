@@ -96,25 +96,28 @@ public:
 		return std::shared_ptr<CityDistanceMatrix>(new CityDistanceMatrix(cities));
 	}
 
+
+	std::vector<std::vector<T>>& get_matrix() { return matrix; }
+
+
 private:
 	// constructor for initiating by matrix
     CityDistanceMatrix(const std::vector<std::vector<T>>& init_distance)
     {
-        distance = init_distance;
+		matrix = init_distance;
     }
 
 	// constructor for initiating by matrix with move semantic
     CityDistanceMatrix(std::vector<std::vector<T>>&& init_distance)
     {
-        distance = std::move(init_distance);
+		matrix = std::move(init_distance);
     }
 
 	// constructor for initiating by list with city's coordinates
     CityDistanceMatrix(const std::vector<CityCoord<T>>& cities);
 
-
 public:
-    std::vector<std::vector<T>> distance;
+    std::vector<std::vector<T>> matrix;
 }; //end CityDistanceMatrix
 
 
@@ -123,10 +126,10 @@ template <typename T>
 CityDistanceMatrix<T>::CityDistanceMatrix(const std::vector<CityCoord<T>>& cities)
 {
     // Resize matrix to able contains all the cities
-    distance.resize(cities.size());
+	matrix.resize(cities.size());
     for (std::size_t i = 0; i < cities.size(); ++i)
     {
-        distance[i].resize(cities.size());
+		matrix[i].resize(cities.size());
     }
 
     // initialize distance matrix
@@ -134,7 +137,7 @@ CityDistanceMatrix<T>::CityDistanceMatrix(const std::vector<CityCoord<T>>& citie
     {
         for (std::size_t city_to = 0; city_to < cities.size(); ++city_to)
         {
-            distance[city_from][city_to] = cities[city_from].get_distance(cities[city_to]);
+			matrix[city_from][city_to] = cities[city_from].get_distance(cities[city_to]);
         }
     }
 }

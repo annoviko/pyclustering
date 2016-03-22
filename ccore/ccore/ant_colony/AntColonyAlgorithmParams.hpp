@@ -11,10 +11,10 @@
 
 #include <memory>
 #include <unordered_map>
+#include <tuple>
 #include <cassert>
 
-#include "city_distance.hpp"
-
+#include <type_traits>
 
 namespace ant_colony
 {
@@ -36,11 +36,14 @@ public:
 
 	enum class paramsName
 	{
-		Q
-		, RO
-		, ALPHA
-		, BETA
-		, GAMMA
+		Q			// [double]
+		, RO		// [double]
+		, ALPHA		// [double]
+		, BETA		// [double]
+		, GAMMA		// [double]
+
+
+		, ITERATIONS // [unsigned]
 
 		, LAST_ELEM // should be always last
 					// using to check what all params are set 
@@ -49,38 +52,91 @@ public:
 	/*
 	*	Base class for all params
 	*/
+	template<typename T>
 	class Base_t
 	{
 	public:
-		Base_t(double init)
+		Base_t(T init)
 			:value{ init }
 		{}
 
 		auto get() const { return value; }
 
 	private:
-		double value;
+		T value;
 	};//end class Base_t
 
 	// All params should take one argument -> value
 	// and forward it to base class
-	#define CREATE_CLASS_WITH_BASE_T_CONSTRACTOR(name)	\
-				class name : public Base_t				\
-				{										\
-				public:									\
-					name(double init)					\
-					:Base_t(init)						\
-					{}									\
+	#define CREATE_CLASS_WITH_BASE_T_CONSTRACTOR(name, type)	\
+				class name : public Base_t<type>				\
+				{												\
+				public:											\
+					name(type init)								\
+					:Base_t(init)								\
+					{}											\
 				};										
 
 	//Should be declared all params from 'enum class paramsName'
-	CREATE_CLASS_WITH_BASE_T_CONSTRACTOR(Q_t);
-	CREATE_CLASS_WITH_BASE_T_CONSTRACTOR(Ro_t);
-	CREATE_CLASS_WITH_BASE_T_CONSTRACTOR(Alpha_t);
-	CREATE_CLASS_WITH_BASE_T_CONSTRACTOR(Beta_t);
-	CREATE_CLASS_WITH_BASE_T_CONSTRACTOR(Gamma_t);
+	CREATE_CLASS_WITH_BASE_T_CONSTRACTOR(Q_t	, double);
+	CREATE_CLASS_WITH_BASE_T_CONSTRACTOR(Ro_t	, double);
+	CREATE_CLASS_WITH_BASE_T_CONSTRACTOR(Alpha_t, double);
+	CREATE_CLASS_WITH_BASE_T_CONSTRACTOR(Beta_t , double);
+	CREATE_CLASS_WITH_BASE_T_CONSTRACTOR(Gamma_t, double);
+
+	CREATE_CLASS_WITH_BASE_T_CONSTRACTOR(Iterations_t, unsigned);
 
 	#undef CREATE_CLASS_WITH_BASE_T_CONSTRACTOR
+
+
+	// Type to using it in the algorithm 
+	using params_t = std::tuple<Q_t, Ro_t, Alpha_t, Beta_t, Gamma_t, Iterations_t>;
+
+	template<paramsName name>
+	static decltype(auto) get(const params_t& params)
+	{
+		return std::get<static_cast<int>(name)>(params);
+	}
+
+	template<paramsName name>
+	static decltype(auto) get(params_t& params)
+	{
+		return std::get<static_cast<int>(name)>(params);
+	}
+
+	template<typename... Args>
+	static void init_params(const params_t& params, Args&&... args)
+	{
+		params = std::make_tuple(std::forward(Args)...);
+	}
+
+private:
+	// Tuple should contain all params elements
+	static_assert(std::tuple_size<params_t>::value == static_cast<std::size_t>(paramsName::LAST_ELEM)
+		, "AntColonyAlgorithmParamsInitializer should have all params in tuple");
+
+
+	// Check : all params in tuple must be mapped to paramsName in enum
+	template<paramsName paramName, typename tupleElem>
+	struct get_elem_type
+	{
+		//using param_type = std::tuple_element<static_cast<int>(paramName), params_t>;
+		using res = std::is_same<typename std::tuple_element<static_cast<int>(paramName), params_t>::type, tupleElem>;
+	};
+
+	#define STATIC_ASSERT_TUPLE_TYPES(paramName, className)								\
+		static_assert(get_elem_type<paramName, className>::res::value					\
+				, "paramName(className) param has error placement in tuple");			\
+
+	STATIC_ASSERT_TUPLE_TYPES(paramsName::Q, Q_t);
+	STATIC_ASSERT_TUPLE_TYPES(paramsName::RO, Ro_t);
+	STATIC_ASSERT_TUPLE_TYPES(paramsName::ALPHA, Alpha_t);
+	STATIC_ASSERT_TUPLE_TYPES(paramsName::BETA, Beta_t);
+	STATIC_ASSERT_TUPLE_TYPES(paramsName::GAMMA, Gamma_t);
+	STATIC_ASSERT_TUPLE_TYPES(paramsName::ITERATIONS, Iterations_t);
+
+	#undef STATIC_ASSERT_TUPLE_TYPES
+
 
 }; //end AntColonyAlgorithmParamsInitializer
 
@@ -125,14 +181,16 @@ public:
 		, AP::Ro_t&& ro_init
 		, AP::Alpha_t&& alpha_init
 		, AP::Beta_t&& beta_init
-		, AP::Gamma_t&& gamma_init)
+		, AP::Gamma_t&& gamma_init
+		, AP::Iterations_t&& iterations)
 	{
 		return std::shared_ptr<AntColonyAlgorithmParams>(new AntColonyAlgorithmParams(
 			std::move(Q_init)
 			, std::move(ro_init)
 			, std::move(alpha_init)
 			, std::move(beta_init)
-			, std::move(gamma_init))
+			, std::move(gamma_init)
+			, std::move(iterations))
 			);
 	}
 
@@ -143,14 +201,16 @@ public:
 
 
 	// return a value for a requested param
-	decltype(auto) get(AP::paramsName name) const
+	template<AP::paramsName name>
+	decltype(auto) get() const
 	{
-		return params.find(name)->second;
+		return AP::get<name>(params);
 	}
 
-	void set(AP::paramsName name, double value)
+	template<AP::paramsName name>
+	void set(double value)
 	{
-		params[name] = value;
+		AP::get<name>(params) = value;
 	}
 
 private:
@@ -161,14 +221,28 @@ private:
 		, AP::Ro_t&& ro_init
 		, AP::Alpha_t&& alpha_init
 		, AP::Beta_t&& beta_init
-		, AP::Gamma_t&& gamma_init);
+		, AP::Gamma_t&& gamma_init
+		, AP::Iterations_t&& iterations)
+		: params{
+				Q_init, ro_init, alpha_init, beta_init, gamma_init, iterations
+			}
+	{}
 
-	AntColonyAlgorithmParams();
-
+	AntColonyAlgorithmParams()
+		: params{
+				AP::Q_t(0.5)
+				, AP::Ro_t(0.7)
+				, AP::Alpha_t(1.0)
+				, AP::Beta_t(1.0)
+				, AP::Gamma_t(2.0)
+				, AP::Iterations_t(100)
+			}
+	{}
 
 private:
 
-	std::unordered_map<AntColonyAlgorithmParamsInitializer::paramsName, double> params;
+	AP::params_t params;
+
 };
 
 }//namespace ant_colony

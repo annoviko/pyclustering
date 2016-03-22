@@ -8,13 +8,8 @@
 #pragma once
 
 #include <memory>
-#include <vector>
-#include <initializer_list>
-#include <cmath>
-#include <unordered_map>
-#include <cassert>
 
-#include "city_distance.hpp"
+#include "CityDistanceMatrix.hpp"
 #include "AntColonyAlgorithmParams.hpp"
 
 namespace ant_colony
@@ -41,22 +36,25 @@ public:
 *
 ***********************************************************************************************/
 template<typename T>
-class Ant_colony
+class AntColony
 {
 
 public:
-	Ant_colony(const std::shared_ptr<city_distance::CityDistanceMatrix<T>>& init_distance
+	AntColony(const std::shared_ptr<city_distance::CityDistanceMatrix<T>>& init_distance
 					, const std::shared_ptr<AntColonyAlgorithmParams>& init_params)
 		: distance(init_distance)
 		, params(init_params)
 	{}
 
-    decltype(auto) solve();
+    decltype(auto) process();
 
     decltype(auto) get_result() { return result; }
 
 private:
 
+	decltype(auto) get_count_city()	{ return distance->matrix.size(); }
+
+	// decltype(auto) get_count_iterations();
 
 public:
 
