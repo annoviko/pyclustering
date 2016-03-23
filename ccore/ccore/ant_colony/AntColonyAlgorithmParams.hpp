@@ -1,5 +1,3 @@
-
-
 /*
 * ant_colony.h
 *
@@ -10,7 +8,6 @@
 #pragma once
 
 #include <memory>
-#include <unordered_map>
 #include <tuple>
 #include <cassert>
 
@@ -41,17 +38,19 @@ public:
 		, ALPHA		// [double]
 		, BETA		// [double]
 		, GAMMA		// [double]
-
+		, INITIAL_PHERAMONE // [double]
 
 		, ITERATIONS // [unsigned]
+		, COUNT_ANTS_IN_ITERATION // [unsigned]
 
 		, LAST_ELEM // should be always last
 					// using to check what all params are set 
 	};
 
-	/*
+
+	/*****************************
 	*	Base class for all params
-	*/
+	*****************************/
 	template<typename T>
 	class Base_t
 	{
@@ -66,8 +65,11 @@ public:
 		T value;
 	};//end class Base_t
 
+
+	//
 	// All params should take one argument -> value
 	// and forward it to base class
+	//
 	#define CREATE_CLASS_WITH_BASE_T_CONSTRACTOR(name, type)	\
 				class name : public Base_t<type>				\
 				{												\
@@ -77,21 +79,31 @@ public:
 					{}											\
 				};										
 
+	//
 	//Should be declared all params from 'enum class paramsName'
+	//
 	CREATE_CLASS_WITH_BASE_T_CONSTRACTOR(Q_t	, double);
 	CREATE_CLASS_WITH_BASE_T_CONSTRACTOR(Ro_t	, double);
 	CREATE_CLASS_WITH_BASE_T_CONSTRACTOR(Alpha_t, double);
 	CREATE_CLASS_WITH_BASE_T_CONSTRACTOR(Beta_t , double);
 	CREATE_CLASS_WITH_BASE_T_CONSTRACTOR(Gamma_t, double);
+	CREATE_CLASS_WITH_BASE_T_CONSTRACTOR(InitialPheramone_t, double);
 
 	CREATE_CLASS_WITH_BASE_T_CONSTRACTOR(Iterations_t, unsigned);
+	CREATE_CLASS_WITH_BASE_T_CONSTRACTOR(CountAntsInIteration_t, unsigned);
 
 	#undef CREATE_CLASS_WITH_BASE_T_CONSTRACTOR
 
-
+	//
+	//		MAIN TYPE for params
 	// Type to using it in the algorithm 
-	using params_t = std::tuple<Q_t, Ro_t, Alpha_t, Beta_t, Gamma_t, Iterations_t>;
+	//
+	using params_t = std::tuple<Q_t, Ro_t, Alpha_t, Beta_t, Gamma_t, InitialPheramone_t, Iterations_t, CountAntsInIteration_t>;
 
+
+	//
+	//	Functions get for const and non const return value
+	//
 	template<paramsName name>
 	static decltype(auto) get(const params_t& params)
 	{
@@ -104,6 +116,10 @@ public:
 		return std::get<static_cast<int>(name)>(params);
 	}
 
+
+	//
+	// Function to init tuple
+	//
 	template<typename... Args>
 	static void init_params(const params_t& params, Args&&... args)
 	{
@@ -133,7 +149,9 @@ private:
 	STATIC_ASSERT_TUPLE_TYPES(paramsName::ALPHA, Alpha_t);
 	STATIC_ASSERT_TUPLE_TYPES(paramsName::BETA, Beta_t);
 	STATIC_ASSERT_TUPLE_TYPES(paramsName::GAMMA, Gamma_t);
+	STATIC_ASSERT_TUPLE_TYPES(paramsName::INITIAL_PHERAMONE, InitialPheramone_t);
 	STATIC_ASSERT_TUPLE_TYPES(paramsName::ITERATIONS, Iterations_t);
+	STATIC_ASSERT_TUPLE_TYPES(paramsName::COUNT_ANTS_IN_ITERATION, CountAntsInIteration_t);
 
 	#undef STATIC_ASSERT_TUPLE_TYPES
 
@@ -182,7 +200,9 @@ public:
 		, AP::Alpha_t&& alpha_init
 		, AP::Beta_t&& beta_init
 		, AP::Gamma_t&& gamma_init
-		, AP::Iterations_t&& iterations)
+		, AP::InitialPheramone_t&& initial_pheromone
+		, AP::Iterations_t&& iterations
+		, AP::CountAntsInIteration_t&& ants_in_iteration)
 	{
 		return std::shared_ptr<AntColonyAlgorithmParams>(new AntColonyAlgorithmParams(
 			std::move(Q_init)
@@ -190,7 +210,9 @@ public:
 			, std::move(alpha_init)
 			, std::move(beta_init)
 			, std::move(gamma_init)
-			, std::move(iterations))
+			, std::move(initial_pheromone)
+			, std::move(iterations)
+			, std::move(ants_in_iteration))
 			);
 	}
 
@@ -222,20 +244,24 @@ private:
 		, AP::Alpha_t&& alpha_init
 		, AP::Beta_t&& beta_init
 		, AP::Gamma_t&& gamma_init
-		, AP::Iterations_t&& iterations)
+		, AP::InitialPheramone_t&& initial_pheromone
+		, AP::Iterations_t&& iterations
+		, AP::CountAntsInIteration_t&& ants_in_iteration)
 		: params{
-				Q_init, ro_init, alpha_init, beta_init, gamma_init, iterations
+				Q_init, ro_init, alpha_init, beta_init, gamma_init, initial_pheromone, iterations, ants_in_iteration
 			}
 	{}
 
 	AntColonyAlgorithmParams()
 		: params{
-				AP::Q_t(0.5)
-				, AP::Ro_t(0.7)
-				, AP::Alpha_t(1.0)
-				, AP::Beta_t(1.0)
-				, AP::Gamma_t(2.0)
-				, AP::Iterations_t(100)
+				AP::Q_t{ 0.5 }
+				, AP::Ro_t{ 0.7 }
+				, AP::Alpha_t{ 1.0 }
+				, AP::Beta_t{ 1.0 }
+				, AP::Gamma_t{ 2.0 }
+				, AP::InitialPheramone_t{ 0.1 }
+				, AP::Iterations_t{ 100 }
+				, AP::CountAntsInIteration_t{ 50 }
 			}
 	{}
 

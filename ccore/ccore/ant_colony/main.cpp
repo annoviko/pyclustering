@@ -15,11 +15,21 @@ int main()
     city_distance::CityCoord<double> Moscow {14.0, 22.0};
     city_distance::CityCoord<double> Zero {0.0, 0.0};
 
+	city_distance::CityCoord<double> One{ 0.0, 1.0 };
+	city_distance::CityCoord<double> Two{ 1.0, 1.0 };
+	city_distance::CityCoord<double> Three{ 2.0, 1.0 };
+	city_distance::CityCoord<double> Thour{ 0.0, 0.0 };
+	city_distance::CityCoord<double> Five{ 1.0, 0.0 };
+	city_distance::CityCoord<double> Six{ 2.0, 0.0 };
+
     std::cout << Piter.get_dimention() << std::endl;
     std::cout << Piter.get_distance(Zero) << std::endl;
 
+	//auto dist = city_distance::CityDistanceMatrix<double>::make_city_distance_matrix
+	//		({ Piter, Zero, Moscow });
+
 	auto dist = city_distance::CityDistanceMatrix<double>::make_city_distance_matrix
-			({ Piter, Zero, Moscow });
+		({ One, Two, Three, Thour, Five, Six });
 
 
     for (const auto& i : dist->get_matrix())
@@ -41,7 +51,9 @@ int main()
 			, AntAPI::Alpha_t{ 1.0 }
 			, AntAPI::Beta_t{ 1.0 }
 			, AntAPI::Gamma_t{ 2.0 }
-			, AntAPI::Iterations_t{ 100 }
+			, AntAPI::InitialPheramone_t{ 0.1 }
+			, AntAPI::Iterations_t{ 50 }
+			, AntAPI::CountAntsInIteration_t{ 10 }
 		);
 
 	std::cout << "Param_1 -> Q :" << sp_algo_params->get<AntAPI::paramsName::Q>().get() << std::endl;
@@ -59,6 +71,7 @@ int main()
 
 
 	ant_colony::AntColony<double> ant_algo{ dist, sp_algo_params_2 };
+	ant_algo.process();
 
 
 
