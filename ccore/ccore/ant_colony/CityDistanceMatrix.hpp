@@ -17,7 +17,7 @@ namespace city_distance
 {
 
 /***********************************************************************************************
- * template<typename T> CityCoord;
+ * CityCoord;
  *              - contains coordinates of a city
  *
  * example for initialization by initializer list:
@@ -26,12 +26,11 @@ namespace city_distance
  *      ant_colony::CityCoord<double> Zero   {0.0, 0.0};
  *
  ***********************************************************************************************/
-template<typename T>
 class CityCoord
 {
 public:
 
-    CityCoord(std::initializer_list<T> init_coord)
+    CityCoord(std::initializer_list<double> init_coord)
     {
         for (auto e : init_coord)
         {
@@ -45,102 +44,66 @@ public:
 
 
 private:
-    std::vector<T> location_point;
+    std::vector<double> location_point;
 
 
 }; //end class CityCoord
 
 
-template<typename T>
-double CityCoord<T>::get_distance(const CityCoord<T>& to_city) const
-{
-    if (get_dimention() != to_city.get_dimention()) return -1.0;
-
-    double res = 0;
-    for (std::size_t i = 0; i < get_dimention(); ++i)
-    {
-        res += (location_point[i] - to_city.location_point[i]) * (location_point[i] - to_city.location_point[i]);
-    }
-
-    return std::sqrt(res);
-}
-
-
 /***********************************************************************************************
- * template <typename T> class CityDistanceMatrix
+ * class CityDistanceMatrix
  *                          - contains distance matrix between all cities
  *
- * auto dist = city_distance::CityDistanceMatrix<double>::make_city_distance_matrix
+ * auto dist = city_distance::CityDistanceMatrix::make_city_distance_matrix
  *					({ Piter, Zero, Moscow });
  *
 ***********************************************************************************************/
-template <typename T>
 class CityDistanceMatrix
 {
 public:
 	// fabric functions for initiating by matrix
-	static decltype(auto) make_city_distance_matrix(const std::vector<std::vector<T>>& init_distance)
+	static decltype(auto) make_city_distance_matrix(const std::vector<std::vector<double>>& init_distance)
 	{
 		return std::shared_ptr<CityDistanceMatrix>(new CityDistanceMatrix(init_distance));
 	}
 
 	// fabric functions for initiating by matrix with move semantic
-	static decltype(auto) make_city_distance_matrix(std::vector<std::vector<T>>&& init_distance)
+	static decltype(auto) make_city_distance_matrix(std::vector<std::vector<double>>&& init_distance)
 	{
 		return std::shared_ptr<CityDistanceMatrix>(new CityDistanceMatrix(std::move(init_distance)));
 	}
 
 	// fabric functions for initiating by list with city's coordinates
-	static decltype(auto) make_city_distance_matrix(const std::vector<CityCoord<T>>& cities)
+	static decltype(auto) make_city_distance_matrix(const std::vector<CityCoord>& cities)
 	{
 		return std::shared_ptr<CityDistanceMatrix>(new CityDistanceMatrix(cities));
 	}
 
 
-	std::vector<std::vector<T>>& get_matrix() { return matrix; }
+	// return reference out of class is a bad idea!!! (TODO: shared_ptr)
+	std::vector<std::vector<double>>& get_matrix() { return matrix; }
 
 
 private:
 	// constructor for initiating by matrix
-    CityDistanceMatrix(const std::vector<std::vector<T>>& init_distance)
+    CityDistanceMatrix(const std::vector<std::vector<double>>& init_distance)
     {
 		matrix = init_distance;
     }
 
 	// constructor for initiating by matrix with move semantic
-    CityDistanceMatrix(std::vector<std::vector<T>>&& init_distance)
+    CityDistanceMatrix(std::vector<std::vector<double>>&& init_distance)
     {
 		matrix = std::move(init_distance);
     }
 
 	// constructor for initiating by list with city's coordinates
-    CityDistanceMatrix(const std::vector<CityCoord<T>>& cities);
+	CityDistanceMatrix(const std::vector<CityCoord>& cities);
 
 public:
-    std::vector<std::vector<T>> matrix;
+    std::vector<std::vector<double>> matrix;
 }; //end CityDistanceMatrix
 
-
-
-template <typename T>
-CityDistanceMatrix<T>::CityDistanceMatrix(const std::vector<CityCoord<T>>& cities)
-{
-    // Resize matrix to able contains all the cities
-	matrix.resize(cities.size());
-    for (std::size_t i = 0; i < cities.size(); ++i)
-    {
-		matrix[i].resize(cities.size());
-    }
-
-    // initialize distance matrix
-    for (std::size_t city_from = 0; city_from < cities.size(); ++city_from)
-    {
-        for (std::size_t city_to = 0; city_to < cities.size(); ++city_to)
-        {
-			matrix[city_from][city_to] = cities[city_from].get_distance(cities[city_to]);
-        }
-    }
-}
 
 
 

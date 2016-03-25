@@ -11,16 +11,16 @@
 
 int main()
 {
-    city_distance::CityCoord<double> Piter {4.0, 3.0};
-    city_distance::CityCoord<double> Moscow {14.0, 22.0};
-    city_distance::CityCoord<double> Zero {0.0, 0.0};
+    city_distance::CityCoord Piter {4.0, 3.0};
+    city_distance::CityCoord Moscow {14.0, 22.0};
+    city_distance::CityCoord Zero {0.0, 0.0};
 
-	city_distance::CityCoord<double> One{ 0.0, 1.0 };
-	city_distance::CityCoord<double> Two{ 1.0, 1.0 };
-	city_distance::CityCoord<double> Three{ 2.0, 1.0 };
-	city_distance::CityCoord<double> Thour{ 0.0, 0.0 };
-	city_distance::CityCoord<double> Five{ 1.0, 0.0 };
-	city_distance::CityCoord<double> Six{ 2.0, 0.0 };
+	city_distance::CityCoord One{ 0.0, 1.0 };
+	city_distance::CityCoord Two{ 1.0, 1.0 };
+	city_distance::CityCoord Three{ 2.0, 1.0 };
+	city_distance::CityCoord Thour{ 0.0, 0.0 };
+	city_distance::CityCoord Five{ 1.0, 0.0 };
+	city_distance::CityCoord Six{ 2.0, 0.0 };
 
     std::cout << Piter.get_dimention() << std::endl;
     std::cout << Piter.get_distance(Zero) << std::endl;
@@ -28,7 +28,7 @@ int main()
 	//auto dist = city_distance::CityDistanceMatrix<double>::make_city_distance_matrix
 	//		({ Piter, Zero, Moscow });
 
-	auto dist = city_distance::CityDistanceMatrix<double>::make_city_distance_matrix
+	auto dist = city_distance::CityDistanceMatrix::make_city_distance_matrix
 		({ One, Two, Three, Thour, Five, Six });
 
 
@@ -70,10 +70,16 @@ int main()
 
 
 
-	ant_colony::AntColony<double> ant_algo{ dist, sp_algo_params_2 };
-	ant_algo.process();
+	ant_colony::AntColony ant_algo{ dist, sp_algo_params_2 };
+	auto res = ant_algo.process();
 
-
+	std::cout << "\n\nTEST RESULT \n";
+	for (std::size_t i = 0; i < res->shortestPath.size(); ++i)
+	{
+		std::cout << "Visit : " << res->shortestPath[i] << ",   ";
+	}
+	std::cout << std::endl;
+	std::cout << "Path length : " << (res->pathLen) << std::endl;
 
 
 
