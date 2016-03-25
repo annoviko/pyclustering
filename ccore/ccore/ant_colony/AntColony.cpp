@@ -5,9 +5,9 @@
  *      Author: alex
  */
 
+#include <algorithm>
 
 #include "AntColony.hpp"
-
 
 
 namespace ant_colony

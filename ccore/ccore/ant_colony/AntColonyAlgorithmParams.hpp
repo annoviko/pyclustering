@@ -123,7 +123,7 @@ public:
 	template<typename... Args>
 	static void init_params(const params_t& params, Args&&... args)
 	{
-		params = std::make_tuple(std::forward(Args)...);
+		params = std::make_tuple(std::forward(args)...);
 	}
 
 private:
