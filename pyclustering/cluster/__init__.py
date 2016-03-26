@@ -169,21 +169,16 @@ class cluster_visualizer:
         @param[in] visible_grid (bool): Defines visibility of axes on each canvas, if True - grid is displayed.
         
         """
-    
-        (fig, axarr) = plt.subplots(1, self.__number_canvases);
         
         for index_canvas in range(len(self.__canvas_clusters)):
             canvas = self.__canvas_clusters[index_canvas];
             dimension = self.__canvas_dimensions[index_canvas];
             
             ax = None;
-            if (self.__number_canvases == 1):
-                ax = axarr;
+            if (dimension == 2):
+                ax = plt.subplot(self.__number_canvases, 1, index_canvas);
             else:
-                ax = axarr[index_canvas];
-            
-            if (len(canvas) == 0):
-                plt.setp(ax, visible = False);
+                ax = plt.subplot(self.__number_canvases, 1, index_canvas, projection='3d');
             
             for index_cluster in range(len(canvas)):
                 cluster = canvas[index_cluster].cluster;
@@ -207,9 +202,9 @@ class cluster_visualizer:
                 
                     elif (dimension == 3):
                         if (data is None):
-                            ax.scatter(item[0], item[1], item[2], c = color, marker = marker, markersize = markersize);
+                            ax.scatter(item[0], item[1], item[2], c = color, marker = marker, s = markersize);
                         else:
-                            ax.scatter(data[item][0], data[item][1], data[item][2], c = color, marker = marker, markersize = markersize);
+                            ax.scatter(data[item][0], data[item][1], data[item][2], c = color, marker = marker, s = markersize);
                             
             if (visible_axis is True):
                 ax.xaxis.set_ticklabels([]);
