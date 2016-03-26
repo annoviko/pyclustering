@@ -176,9 +176,9 @@ class cluster_visualizer:
             
             ax = None;
             if (dimension == 2):
-                ax = plt.subplot(self.__number_canvases, 1, index_canvas);
+                ax = plt.subplot(self.__number_canvases, 1, index_canvas + 1);
             else:
-                ax = plt.subplot(self.__number_canvases, 1, index_canvas, projection='3d');
+                ax = plt.subplot(self.__number_canvases, 1, index_canvas + 1, projection='3d');
             
             if (len(canvas) == 0):
                 plt.setp(ax, visible = False);
