@@ -180,6 +180,9 @@ class cluster_visualizer:
             else:
                 ax = plt.subplot(self.__number_canvases, 1, index_canvas, projection='3d');
             
+            if (len(canvas) == 0):
+                plt.setp(ax, visible = False);
+            
             for index_cluster in range(len(canvas)):
                 cluster = canvas[index_cluster].cluster;
                 data = canvas[index_cluster].data;
