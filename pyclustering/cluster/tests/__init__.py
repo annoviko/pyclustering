@@ -25,11 +25,16 @@
 
 import unittest;
 
+# Generate images without having a window appear.
+import matplotlib;
+matplotlib.use('Agg');
+
 from pyclustering.cluster.tests               import agglomerative_tests as cluster_agglomerative_unit_tests;
 from pyclustering.cluster.tests               import birch_tests         as cluster_birch_unit_tests;
 from pyclustering.cluster.tests               import clarans_tests       as cluster_clarans_unit_tests;
 from pyclustering.cluster.tests               import cure_tests          as cluster_cure_unit_tests;
 from pyclustering.cluster.tests               import dbscan_tests        as cluster_dbscan_unit_tests;
+from pyclustering.cluster.tests               import general_tests       as cluster_general_unit_tests;
 from pyclustering.cluster.tests               import hsyncnet_tests      as cluster_hsyncnet_unit_tests;
 from pyclustering.cluster.tests               import kmeans_tests        as cluster_kmeans_unit_tests;
 from pyclustering.cluster.tests               import kmedians_tests      as cluster_kmedians_unit_tests;
@@ -49,6 +54,7 @@ if __name__ == "__main__":
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_clarans_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_cure_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_dbscan_unit_tests));
+    suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_general_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_hsyncnet_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_kmeans_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_kmedians_unit_tests));
