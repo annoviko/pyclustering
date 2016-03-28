@@ -137,6 +137,23 @@ def cluster_engy_time():
     template_clustering(2, FCPS_SAMPLES.SAMPLE_ENGY_TIME, [ type_link.CENTROID_LINK ]);
     
     
+def experiment_execution_time(ccore = False):
+    template_clustering(2, SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [type_link.SINGLE_LINK]);
+    template_clustering(3, SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [type_link.SINGLE_LINK]);
+    template_clustering(4, SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [type_link.SINGLE_LINK]);
+    template_clustering(5, SIMPLE_SAMPLES.SAMPLE_SIMPLE4, [type_link.SINGLE_LINK]);
+    template_clustering(4, SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [type_link.SINGLE_LINK]);
+    template_clustering(2, SIMPLE_SAMPLES.SAMPLE_ELONGATE, [type_link.SINGLE_LINK]);
+    template_clustering(3, FCPS_SAMPLES.SAMPLE_LSUN, [type_link.SINGLE_LINK]);
+    template_clustering(6, FCPS_SAMPLES.SAMPLE_TARGET, [type_link.SINGLE_LINK]);
+    template_clustering(2, FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, [type_link.SINGLE_LINK]);
+    template_clustering(2, FCPS_SAMPLES.SAMPLE_WING_NUT, [type_link.SINGLE_LINK]);
+    template_clustering(2, FCPS_SAMPLES.SAMPLE_CHAINLINK, [type_link.SINGLE_LINK]);
+    template_clustering(7, FCPS_SAMPLES.SAMPLE_HEPTA, [type_link.SINGLE_LINK]);
+    template_clustering(4, FCPS_SAMPLES.SAMPLE_TETRA, [type_link.SINGLE_LINK]);
+    template_clustering(2, FCPS_SAMPLES.SAMPLE_ATOM, [type_link.SINGLE_LINK]);
+
+
 cluster_sample1();
 cluster_sample2();
 cluster_sample3();
@@ -151,3 +168,6 @@ cluster_chainlink();
 cluster_hepta();
 cluster_tetra();
 cluster_engy_time();
+
+
+experiment_execution_time(False);   # Python code

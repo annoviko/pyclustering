@@ -77,7 +77,7 @@ class cluster_visualizer:
     __number_canvases = None;
     
     __default_2d_marker_size = 5;
-    __default_3d_marker_size = 20;
+    __default_3d_marker_size = 30;
     
     
     def __init__(self, number_canvases = 1):
