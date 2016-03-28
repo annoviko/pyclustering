@@ -23,3 +23,5 @@ SOURCES += ccore/sync.cpp
 SOURCES += ccore/syncnet.cpp
 SOURCES += ccore/syncpr.cpp
 SOURCES += ccore/xmeans.cpp
+SOURCES += ccore/ant_colony/AntColony.cpp
+SOURCES += ccore/ant_colony/CityDistanceMatrix.cpp

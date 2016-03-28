@@ -5,15 +5,17 @@
 #include "ccore/ant_colony/AntColony.hpp"
 
 
+constexpr double EPS = 0.0000001; 
+
 TEST(utest_ant_colony, city_distance) {
 	city_distance::CityCoord One{ 23.46, 97.512 };
 	city_distance::CityCoord Two{ -5671.2, -12.459 };
 	city_distance::CityCoord Three{ 871.612, -987.293 };
 
-	ASSERT_DOUBLE_EQ(5695.721739730708, One.get_distance(Two));
-	//ASSERT_NEAR(5695.721739730708, One.get_distance(Two), 0.0000001);
-	ASSERT_DOUBLE_EQ(1377.01260093326, One.get_distance(Three));
-	ASSERT_DOUBLE_EQ(6615.035162030509, Two.get_distance(Three));
+	//ASSERT_DOUBLE_EQ(5695.721739730708, One.get_distance(Two));
+	ASSERT_NEAR(5695.721739730708, One.get_distance(Two), EPS);
+	ASSERT_NEAR(1377.01260093326, One.get_distance(Three), EPS);
+	ASSERT_NEAR(6615.035162030509, Two.get_distance(Three), EPS);
 }
 
 
