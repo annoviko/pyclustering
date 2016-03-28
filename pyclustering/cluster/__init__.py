@@ -76,6 +76,9 @@ class cluster_visualizer:
     __canvas_dimensions = None;
     __number_canvases = None;
     
+    __default_2d_marker_size = 5;
+    __default_3d_marker_size = 20;
+    
     
     def __init__(self, number_canvases = 1):
         """!
@@ -91,7 +94,7 @@ class cluster_visualizer:
         self.__canvas_titles = [ None for i in range(number_canvases) ];
     
     
-    def append_cluster(self, cluster, data = None, canvas = 0, marker = '.', markersize = 5):
+    def append_cluster(self, cluster, data = None, canvas = 0, marker = '.', markersize = None):
         """!
         @brief Appends cluster to canvas for drawing.
         
@@ -108,28 +111,38 @@ class cluster_visualizer:
         
         if (canvas > self.__number_canvases):
             raise NameError('Canvas does ' + canvas + ' not exists.');
-            
-        self.__canvas_clusters[canvas].append( canvas_cluster_descr(cluster, data, marker, markersize) );
+        
+        added_canvas_descriptor = canvas_cluster_descr(cluster, data, marker, markersize);
+        self.__canvas_clusters[canvas].append( added_canvas_descriptor );
         if (len(self.__canvas_clusters[canvas]) > len(self.__colors)):
             raise NameError('Not enough colors to display clusters.');
         
+        dimension = 0;
         if (data is None):
+            dimension = len(cluster[0]);
             if (self.__canvas_dimensions[canvas] is None):
-                self.__canvas_dimensions[canvas] = len(cluster[0]);
-            elif (self.__canvas_dimensions[canvas] != len(cluster[0])):
+                self.__canvas_dimensions[canvas] = dimension;
+            elif (self.__canvas_dimensions[canvas] != dimension):
                 raise NameError('Only clusters with the same dimension of objects can be displayed on canvas.');
                 
         else:
+            dimension = len(data[0]);
             if (self.__canvas_dimensions[canvas] is None):
-                self.__canvas_dimensions[canvas] = len(data[0]);
-            elif (self.__canvas_dimensions[canvas] != len(data[0])):
+                self.__canvas_dimensions[canvas] = dimension;
+            elif (self.__canvas_dimensions[canvas] != dimension):
                 raise NameError('Only clusters with the same dimension of objects can be displayed on canvas.');
 
-        if ( (self.__canvas_dimensions[canvas] < 1) and (self.__canvas_dimensions[canvas] > 3) ):
+        if ( (dimension < 1) and (dimension > 3) ):
             raise NameError('Only objects with size dimension 1 (1D plot), 2 (2D plot) or 3 (3D plot) can be displayed.');
+        
+        if (markersize is None):
+            if (dimension == 2):
+                added_canvas_descriptor.markersize = self.__default_2d_marker_size;
+            elif (dimension == 3):
+                added_canvas_descriptor.markersize = self.__default_3d_marker_size;
     
     
-    def append_clusters(self, clusters, data = None, canvas = 0, marker = '.', markersize = 5):
+    def append_clusters(self, clusters, data = None, canvas = 0, marker = '.', markersize = None):
         """!
         @brief Appends list of cluster to canvas for drawing.
         

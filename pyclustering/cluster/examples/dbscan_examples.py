@@ -116,6 +116,7 @@ def experiment_execution_time(ccore = False):
     template_clustering(0.5, 3, FCPS_SAMPLES.SAMPLE_CHAINLINK, False, ccore);
     template_clustering(1, 3, FCPS_SAMPLES.SAMPLE_HEPTA, False, ccore);
     template_clustering(0.4, 3, FCPS_SAMPLES.SAMPLE_TETRA, False, ccore);
+    template_clustering(15, 3, FCPS_SAMPLES.SAMPLE_ATOM, False, ccore);
 
 
 cluster_sample1();
