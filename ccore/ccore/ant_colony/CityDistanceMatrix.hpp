@@ -38,6 +38,22 @@ public:
         }
     }
 
+    CityCoord(const std::vector<double>& init_coord)
+    {
+        for (auto e : init_coord)
+        {
+            location_point.push_back(e);
+        }
+    }
+
+    CityCoord(std::vector<double>&& init_coord)
+    {
+        for (auto e : init_coord)
+        {
+            location_point.push_back(std::move(e));
+        }
+    }
+
     double get_distance (const CityCoord& to_city) const;
 
     decltype(auto) get_dimention() const { return location_point.size(); }

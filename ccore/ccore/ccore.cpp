@@ -43,6 +43,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "sync.h"
 #include "syncpr.h"
 
+#include "ant_colony/AntColony.hpp"
+
 #include "support.h"
 #include "ccore.h"
 
@@ -526,6 +528,61 @@ void hsyncnet_analyser_destroy(const void * pointer_analyser) {
 	}
 }
 
+
+ant_colony_TSP_result * ant_colony_TSP(const ant_colony_TSP_cities * cities_coord, const ant_colony_TSP_params * algorithm_params)
+{
+    std::vector<city_distance::CityCoord> cities;
+
+    for (std::size_t city_num = 0; city_num < cities_coord->size; ++city_num)
+    {
+        std::vector<double> v(cities_coord->dimention);
+
+        for (std::size_t dim = 0; dim < cities_coord->dimention; ++dim)
+        {
+            v[dim] = cities_coord->data[city_num*cities_coord->dimention + dim];
+        }
+
+        cities.push_back(std::move(v));
+    }
+
+    auto dist = city_distance::CityDistanceMatrix::make_city_distance_matrix (cities);
+
+
+    // Algorithm params
+    using AntAPI = ant_colony::AntColonyAlgorithmParamsInitializer;
+    auto algo_params = ant_colony::AntColonyAlgorithmParams::make_param
+        (AntAPI::Q_t{ algorithm_params->q }
+            , AntAPI::Ro_t{ algorithm_params->ro }
+            , AntAPI::Alpha_t{ algorithm_params->alpha }
+            , AntAPI::Beta_t{ algorithm_params->beta }
+            , AntAPI::Gamma_t{ algorithm_params->gamma }
+            , AntAPI::InitialPheramone_t{ algorithm_params->initial_pheramone }
+            , AntAPI::Iterations_t{ algorithm_params->iterations }
+            , AntAPI::CountAntsInIteration_t{ algorithm_params->count_ants_in_iteration }
+    );
+
+    // process()
+    ant_colony::AntColony ant_algo{ dist, algo_params };
+    auto algo_res = ant_algo.process();
+
+    // create result for python
+    ant_colony_TSP_result *res = new ant_colony_TSP_result();
+
+    // init path length
+    res->path_length = algo_res->pathLen;
+
+    // create array to stored cities in the path
+    res->cities_num = new unsigned int[algo_res->shortestPath.size()];
+    res->size = algo_res->shortestPath.size();
+
+    // copy cities to result
+    for (std::size_t city_num = 0; city_num < algo_res->shortestPath.size(); ++city_num)
+    {
+        res->cities_num[city_num] = algo_res->shortestPath[city_num];
+    }
+
+    return res;
+}
 
 
 void * som_create(const unsigned int num_rows, const unsigned int num_cols, const unsigned int type_conn, const void * parameters) {
