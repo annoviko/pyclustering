@@ -89,13 +89,7 @@ class Test(unittest.TestCase):
         
     def testClusterAllocationSampleSimple2(self):
         self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [5, 5], 4, 0.999, [10, 5, 8]);
-        
-    def testClusterAllocationSampleSimple3(self):
-        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [5, 5], 4, 0.999, [10, 10, 10, 30]);
-         
-    def testClusterAllocationSampleSimple5(self):
-        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [7, 7], 5, 0.999, [15, 15, 15, 15]);
-        
+
 
 if __name__ == "__main__":
     unittest.main();
