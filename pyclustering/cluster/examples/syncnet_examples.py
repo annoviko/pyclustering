@@ -98,14 +98,15 @@ def experiment_execution_time(show_dyn = False, ccore = False):
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 1, 0.999, show_dyn, False, True, False, ccore);
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 1, 0.999, show_dyn, False, True, False, ccore);
     template_clustering(SIMPLE_SAMPLES.SAMPLE_ELONGATE, 0.5, 0.999, show_dyn, False, True, False, ccore);
-    
-    template_clustering(FCPS_SAMPLES.SAMPLE_LSUN, 0.3, 0.999, show_dyn, False, True, False, ccore);
-    template_clustering(FCPS_SAMPLES.SAMPLE_TARGET, 0.4, 0.999, show_dyn, False, True, False, ccore);
-    template_clustering(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, 0.03, 0.999, show_dyn, False, True, False, ccore);
-    template_clustering(FCPS_SAMPLES.SAMPLE_WING_NUT, 0.08, 0.999, show_dyn, False, True, False, ccore);
-    template_clustering(FCPS_SAMPLES.SAMPLE_CHAINLINK, 0.5, 0.999, show_dyn, False, True, False, ccore);
-    template_clustering(FCPS_SAMPLES.SAMPLE_HEPTA, 1, 0.999, show_dyn, False, True, False, ccore);
-    template_clustering(FCPS_SAMPLES.SAMPLE_TETRA, 0.3, 0.999, show_dyn, False, True, False, ccore);
+ 
+    template_clustering(FCPS_SAMPLES.SAMPLE_LSUN, 0.4, 0.98, show_dyn, False, False, False, ccore);
+    template_clustering(FCPS_SAMPLES.SAMPLE_TARGET, 0.4, 0.98, show_dyn, False, False, False, ccore);
+    template_clustering(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, 0.03, 0.98, show_dyn, False, False, False, ccore);
+    template_clustering(FCPS_SAMPLES.SAMPLE_WING_NUT, 0.08, 0.98, show_dyn, False, False, False, ccore);
+    template_clustering(FCPS_SAMPLES.SAMPLE_CHAINLINK, 0.5, 0.98, show_dyn, False, False, False, ccore);
+    template_clustering(FCPS_SAMPLES.SAMPLE_HEPTA, 1, 0.98, show_dyn, False, False, False, ccore);
+    template_clustering(FCPS_SAMPLES.SAMPLE_TETRA, 0.3, 0.98, show_dyn, False, False, False, ccore);
+    template_clustering(FCPS_SAMPLES.SAMPLE_ATOM, 1, 0.98, False, False, False, ccore);
 
 def cluster_simple1_conn_weight():
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, 0.999, show_dyn = True, show_conn = True, ena_conn_weight = True); 
@@ -135,7 +136,7 @@ cluster_chainlink();
 cluster_two_diamonds();
 cluster_atom();
 cluster_wing_nut();
-      
+       
 cluster_simple1_conn_weight();
 cluster_simple2_conn_weight();
 cluster_simple3_conn_weight();

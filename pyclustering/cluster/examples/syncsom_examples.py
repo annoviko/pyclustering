@@ -105,6 +105,8 @@ def experiment_execution_time():
     template_clustering(FCPS_SAMPLES.SAMPLE_CHAINLINK, [10, 10], 15, 0.998, False, False, False, False);
     template_clustering(FCPS_SAMPLES.SAMPLE_TETRA, [7, 7], 5, 0.998, False, False, False, False);
     template_clustering(FCPS_SAMPLES.SAMPLE_HEPTA, [7, 7], 5, 0.998, False, False, False, False);
+    template_clustering(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, [10, 10], 5, 0.998, False, False, False, False);
+    template_clustering(FCPS_SAMPLES.SAMPLE_ATOM, [7, 7], 5, 0.998, False, False, False, False);
 
 
 cluster_simple1();

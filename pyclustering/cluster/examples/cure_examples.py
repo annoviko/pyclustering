@@ -108,6 +108,7 @@ def experiment_execution_time(draw, ccore):
     template_clustering(2, FCPS_SAMPLES.SAMPLE_CHAINLINK, 5, 0.5, draw, ccore);
     template_clustering(4, FCPS_SAMPLES.SAMPLE_TETRA, 5, 0.5, draw, ccore);
     template_clustering(7, FCPS_SAMPLES.SAMPLE_HEPTA, 5, 0.5, draw, ccore);
+    template_clustering(2, FCPS_SAMPLES.SAMPLE_ATOM, 20, 0.2);
 
 
 cluster_sample1();
@@ -126,6 +127,7 @@ cluster_tetra();
 cluster_atom();
 cluster_engy_time();
 cluster_golf_ball();
-    
-experiment_execution_time(False, False);
+
+
+experiment_execution_time(True, False);
 experiment_execution_time(True, True);

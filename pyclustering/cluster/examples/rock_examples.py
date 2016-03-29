@@ -90,14 +90,15 @@ def experiment_execution_time(ccore):
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 1, 4, 0.5, False, ccore);
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 1, 5, 0.5, False, ccore);
     template_clustering(SIMPLE_SAMPLES.SAMPLE_ELONGATE, 1, 2, 0.5, False, ccore);
-    template_clustering(FCPS_SAMPLES.SAMPLE_LSUN, 1, 3, 0.5, False, ccore);
-    template_clustering(FCPS_SAMPLES.SAMPLE_TARGET, 1.2, 6, 0.2, False, ccore);
-    template_clustering(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, 0.2, 2, 0.2, False, ccore);
-    template_clustering(FCPS_SAMPLES.SAMPLE_WING_NUT, 0.3, 2, 0.2, False, ccore);
-    template_clustering(FCPS_SAMPLES.SAMPLE_CHAINLINK, 0.6, 2, 0.2, False, ccore);
-    template_clustering(FCPS_SAMPLES.SAMPLE_HEPTA, 1.2, 7, 0.2, False, ccore);
-    template_clustering(FCPS_SAMPLES.SAMPLE_TETRA, 0.5, 4, 0.2, False, ccore);
-    
+    template_clustering(FCPS_SAMPLES.SAMPLE_LSUN, 1, 3, 0.5, True, ccore);
+    template_clustering(FCPS_SAMPLES.SAMPLE_TARGET, 1.2, 6, 0.2, True, ccore);
+    template_clustering(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, 0.2, 2, 0.2, True, ccore);
+    template_clustering(FCPS_SAMPLES.SAMPLE_WING_NUT, 0.3, 2, 0.2, True, ccore);
+    template_clustering(FCPS_SAMPLES.SAMPLE_CHAINLINK, 0.6, 2, 0.2, True, ccore);
+    template_clustering(FCPS_SAMPLES.SAMPLE_HEPTA, 1.2, 7, 0.2, True, ccore);
+    template_clustering(FCPS_SAMPLES.SAMPLE_TETRA, 0.5, 4, 0.2, True, ccore);
+    template_clustering(FCPS_SAMPLES.SAMPLE_ATOM, 15, 2, 0.2, True, ccore)
+
 
 cluster_simple1();
 cluster_simple2();
@@ -113,5 +114,6 @@ cluster_chainlink();
 cluster_hepta();
 cluster_tetra();
  
+ 
 experiment_execution_time(False);   # Slow code - python
-experiment_execution_time(True);    # Fast code - C++ CCORE
+# experiment_execution_time(True);    # Fast code - C++ CCORE

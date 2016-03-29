@@ -97,8 +97,12 @@ def cluster_tetra():
 def cluster_engy_time():
     start_centers = [[0.5, 0.5], [2.3, 2.9]];
     template_clustering(start_centers, FCPS_SAMPLES.SAMPLE_ENGY_TIME);
-    
-    
+
+def cluster_atom():
+    start_centers = [[-0.5, -0.5, -0.5], [0.5, 0.5, 0.5]];
+    template_clustering(start_centers, FCPS_SAMPLES.SAMPLE_ATOM);
+
+
 cluster_sample1();
 cluster_sample2();
 cluster_sample3();
@@ -112,4 +116,5 @@ cluster_wing_nut();
 cluster_chainlink();
 cluster_hepta();
 cluster_tetra();
+cluster_atom();
 cluster_engy_time();
