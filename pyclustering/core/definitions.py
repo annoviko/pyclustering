@@ -97,3 +97,47 @@ class pyclustering_package(Structure):
                 ("type", c_uint),
                 ("data", POINTER(c_void_p))];
                 
+class ant_colony_TSP_params(Structure):
+    """
+    double                  q;
+    double                  ro;
+    double                  alpha;
+    double                  beta;
+    double                  gamma;
+    double                  initial_pheramone;
+    unsigned int            iterations;
+    unsigned int            count_ants_in_iteration;
+    """
+    _fields_ = [("q"        , c_double),
+                ("ro"       , c_double),
+                ("alpha"    , c_double),
+                ("beta"     , c_double),
+                ("gamma"    , c_double),
+                ("qinitial_pheramone"       , c_double),
+                ("iterations"               , c_uint),
+                ("count_ants_in_iteration"  , c_uint)    ];
+    
+class ant_colony_TSP_cities(Structure):
+    """
+    unsigned int            size;
+    unsigned int            dimension;
+    double                  *data;
+    """
+    _fields_ = [("size"        , c_uint),
+                ("dimension"   , c_uint),
+                ("data"        , POINTER(c_double)) ];
+
+class ant_colony_TSP_result(Structure):
+    """
+    unsigned int            size;
+    double                  path_length;
+    unsigned int            *cities_num;
+    """
+    _fields_ = [("size"         , c_uint),
+                ("path_length"  , c_double),
+                ("cities_num"   , POINTER(c_uint)) ];
+    
+    
+    
+            
+                

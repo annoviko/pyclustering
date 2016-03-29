@@ -84,6 +84,47 @@ typedef struct dynamic_result {
 	double					** dynamic;
 } dynamic_result;
 
+typedef struct ant_colony_TSP_params {
+//    enum class paramsName
+//    {
+//        Q           // [double]
+//        , RO        // [double]
+//        , ALPHA     // [double]
+//        , BETA      // [double]
+//        , GAMMA     // [double]
+//        , INITIAL_PHERAMONE // [double]
+//
+//        , ITERATIONS // [unsigned]
+//        , COUNT_ANTS_IN_ITERATION // [unsigned]
+//
+//        , LAST_ELEM // should be always last
+//                    // using to check what all params are set
+//    };
+    double                  q;
+    double                  ro;
+    double                  alpha;
+    double                  beta;
+    double                  gamma;
+    double                  initial_pheramone;
+    unsigned int            iterations;
+    unsigned int            count_ants_in_iteration;
+} ant_colony_TSP_params;
+
+typedef struct ant_colony_TSP_cities {
+    unsigned int            size;
+    unsigned int            dimention;
+    double                  *data;
+    //sizeof(data) = size
+    //cities count = size / dimention
+} ant_colony_TSP_cities;
+
+typedef struct ant_colony_TSP_result {
+    unsigned int            size;
+    double                  path_length;
+    unsigned int            *cities_num;
+
+} ant_colony_TSP_result;
+
 /***********************************************************************************************
  *
  * @brief   Free clustering results that have been provided by CCORE to client.
@@ -423,6 +464,18 @@ extern "C" DECLARATION void hsyncnet_destroy_network(const void * pointer_networ
 extern "C" DECLARATION void * hsyncnet_process(const void * pointer_network, const double order, const unsigned int solver, const bool collect_dynamic);
 
 extern "C" DECLARATION void hsyncnet_analyser_destroy(const void * pointer_analyser);
+
+
+/***********************************************************************************************
+ *
+ * @brief   Create and run Ant Colony Net for TSP
+ *
+ * @param   (in) cities      - pointer to array with cities in format
+ *
+ *
+ * @param   (in) algorithm_params - pointer to parametrs for the algorithm
+ ***********************************************************************************************/
+extern "C" DECLARATION ant_colony_TSP_result * ant_colony_TSP(const ant_colony_TSP_cities * cities_coord, const ant_colony_TSP_params * algorithm_params);
 
 
 

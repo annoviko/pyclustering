@@ -533,7 +533,7 @@ ant_colony_TSP_result * ant_colony_TSP(const ant_colony_TSP_cities * cities_coor
 {
     std::vector<city_distance::CityCoord> cities;
 
-    for (std::size_t city_num = 0; city_num < cities_coord->size; ++city_num)
+    for (std::size_t city_num = 0; city_num < cities_coord->size / cities_coord->dimention; ++city_num)
     {
         std::vector<double> v(cities_coord->dimention);
 
