@@ -51,7 +51,11 @@ public:
 
     double get_distance (const CityCoord & to_city) const;
 
-    inline size_t get_dimention() const { return location_point.size(); }
+#ifdef __CPP_14_ENABLED__
+    decltype(auto) get_dimention() const { return location_point.size(); }
+#else
+	std::size_t get_dimention() const { return location_point.size(); }
+#endif
 
 
 private:
@@ -61,7 +65,7 @@ private:
 };
 
 
-typedef std::vector<std::vector<double>>    array_coordinate;
+
 
 /***********************************************************************************************
  * class CityDistanceMatrix
@@ -74,23 +78,45 @@ typedef std::vector<std::vector<double>>    array_coordinate;
 class CityDistanceMatrix
 {
 public:
+	using array_coordinate = std::vector<std::vector<double>>;
+
 	// fabric functions for initiating by matrix
-    static auto make_city_distance_matrix(const array_coordinate & init_distance) -> std::shared_ptr<CityDistanceMatrix> {
-        return std::shared_ptr<CityDistanceMatrix>(new CityDistanceMatrix(init_distance));
-    }	
+#ifdef __CPP_14_ENABLED__
+	static decltype(auto) 
+#else
+	static std::shared_ptr<CityDistanceMatrix>
+#endif
+		make_city_distance_matrix(const array_coordinate& init_distance)
+	{
+		return std::shared_ptr<CityDistanceMatrix>(new CityDistanceMatrix(init_distance));
+	}	
 
 	// fabric functions for initiating by matrix with move semantic
-    static auto make_city_distance_matrix(const array_coordinate && init_distance) -> std::shared_ptr<CityDistanceMatrix> {
+#ifdef __CPP_14_ENABLED__
+	static decltype(auto)
+#else
+	static std::shared_ptr<CityDistanceMatrix>
+#endif
+		make_city_distance_matrix(array_coordinate&& init_distance)
+	{
 		return std::shared_ptr<CityDistanceMatrix>(new CityDistanceMatrix(std::move(init_distance)));
 	}
 
+
 	// fabric functions for initiating by list with city's coordinates
-    static auto make_city_distance_matrix(const std::vector<CityCoord> & cities) -> std::shared_ptr<CityDistanceMatrix> {
-        return std::shared_ptr<CityDistanceMatrix>(new CityDistanceMatrix(cities));
-    }
+#ifdef __CPP_14_ENABLED__
+	static decltype(auto)
+#else
+	static std::shared_ptr<CityDistanceMatrix>
+#endif 
+		make_city_distance_matrix(const std::vector<CityCoord>& cities)
+	{
+		return std::shared_ptr<CityDistanceMatrix>(new CityDistanceMatrix(cities));
+	}
+
 
 	// return reference out of class is a bad idea!!! (TODO: shared_ptr)
-	std::vector<std::vector<double>> & get_matrix() { return m_matrix; }
+	array_coordinate & get_matrix() { return m_matrix; }
 
 
 private:

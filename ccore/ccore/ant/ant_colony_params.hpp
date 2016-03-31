@@ -55,11 +55,13 @@ public:
 	class Base_t
 	{
 	public:
-		Base_t(T init)
+		using type = T;
+
+		explicit Base_t(T init)
 			:value{ init }
 		{}
 
-		auto get() const -> T { return value; }
+		T get() const { return value; }
 
 	private:
 		T value;
@@ -74,7 +76,7 @@ public:
 				class name : public Base_t<type>				\
 				{												\
 				public:											\
-					name(type init)								\
+					explicit name(type init)					\
 					:Base_t(init)								\
 					{}											\
 				};										
@@ -101,19 +103,48 @@ public:
 	using params_t = std::tuple<Q_t, Ro_t, Alpha_t, Beta_t, Gamma_t, InitialPheramone_t, Iterations_t, CountAntsInIteration_t>;
 
 
-	//
-	//	Functions get for const and non const return value
-	//
+	// template class to represent types for each param
 	template<paramsName name>
-	static auto get(const params_t& params) -> decltype(std::get<static_cast<int>(name)>(params)) {
+	struct ParamType
+	{
+		using type = typename std::tuple_element<static_cast<int>(name), params_t>::type;
+	};
+
+	template <paramsName name>
+	using get_base_param_type = typename ParamType<name>::type::type;
+
+	template <paramsName name>
+	using get_param_type = typename ParamType<name>::type;
+
+	//
+	//	Functions 'get' for const and non const return value
+	//
+#ifdef __CPP_14_ENABLED__
+	template<paramsName name>
+	static decltype(auto) get(const params_t& params)
+	{
 		return std::get<static_cast<int>(name)>(params);
 	}
 
 	template<paramsName name>
-	static auto get(params_t& params) -> decltype(std::get<static_cast<int>(name)>(params)) {
+	static decltype(auto) get(params_t& params)
+	{
 		return std::get<static_cast<int>(name)>(params);
 	}
 
+#else
+	template<paramsName name>
+	static auto get(const params_t& params) -> const typename ParamType<name>::type&
+	{
+		return std::get<static_cast<int>(name)>(params);
+	}
+
+	template<paramsName name>
+	static auto get(params_t& params) -> typename ParamType<name>::type&
+	{
+		return std::get<static_cast<int>(name)>(params);
+	}
+#endif
 
 	//
 	// Function to init tuple
@@ -124,13 +155,6 @@ public:
 		params = std::make_tuple(std::forward(args)...);
 	}
 
-private:
-	// Tuple should contain all params elements
-	static_assert(std::tuple_size<params_t>::value == static_cast<std::size_t>(paramsName::LAST_ELEM)
-		, "AntColonyAlgorithmParamsInitializer should have all params in tuple");
-
-
-	// Check : all params in tuple must be mapped to paramsName in enum
 	template<paramsName paramName, typename tupleElem>
 	struct get_elem_type
 	{
@@ -138,6 +162,13 @@ private:
 		using res = std::is_same<typename std::tuple_element<static_cast<int>(paramName), params_t>::type, tupleElem>;
 	};
 
+private:
+	// Tuple should contain all params elements
+	static_assert(std::tuple_size<params_t>::value == static_cast<std::size_t>(paramsName::LAST_ELEM)
+		, "AntColonyAlgorithmParamsInitializer should have all params in tuple");
+
+
+	// Check : all params in tuple must be mapped to paramsName in enum
 	#define STATIC_ASSERT_TUPLE_TYPES(paramName, className)								\
 		static_assert(get_elem_type<paramName, className>::res::value					\
 				, "paramName(className) param has error placement in tuple");			\
@@ -172,12 +203,14 @@ class AntColonyAlgorithmParams
 public:
 
 	// delete constructor
-	AntColonyAlgorithmParams(const AntColonyAlgorithmParams & other) = delete;
+	AntColonyAlgorithmParams(const AntColonyAlgorithmParams&) = delete;
 	// delete move constructor
-	AntColonyAlgorithmParams(AntColonyAlgorithmParams && other) = delete;
-    
+	AntColonyAlgorithmParams(const AntColonyAlgorithmParams&&) = delete;
+
 	// but it's able to assignment for objects
-	AntColonyAlgorithmParams & operator= (const AntColonyAlgorithmParams & other) = default;
+	AntColonyAlgorithmParams& operator= (const AntColonyAlgorithmParams& other) = default;
+	AntColonyAlgorithmParams& operator= (AntColonyAlgorithmParams&& other) = default;
+
 
 	using AP = AntColonyAlgorithmParamsInitializer;
 
@@ -191,43 +224,60 @@ public:
 	//-----------------------------------------
 
 	// fabric functions to produce shared ptr to algorithm's params
-	static auto make_param(AP::Q_t&& Q_init
+
+#ifdef __CPP_14_ENABLED__
+	static decltype(auto) 
+#else
+	static std::shared_ptr<AntColonyAlgorithmParams>
+#endif
+		make_param(AP::Q_t&& Q_init
 		, AP::Ro_t&& ro_init
 		, AP::Alpha_t&& alpha_init
 		, AP::Beta_t&& beta_init
 		, AP::Gamma_t&& gamma_init
 		, AP::InitialPheramone_t&& initial_pheromone
 		, AP::Iterations_t&& iterations
-		, AP::CountAntsInIteration_t&& ants_in_iteration) -> std::shared_ptr<AntColonyAlgorithmParams>
+		, AP::CountAntsInIteration_t&& ants_in_iteration)
 	{
+		// AntColonyAlgorithmParams has a private constructor so make_shared is unavailable
 		return std::shared_ptr<AntColonyAlgorithmParams>(new AntColonyAlgorithmParams(
-			std::move(Q_init),
-			std::move(ro_init),
-			std::move(alpha_init),
-			std::move(beta_init),
-			std::move(gamma_init),
-			std::move(initial_pheromone),
-			std::move(iterations),
-			std::move(ants_in_iteration))
+			std::move(Q_init)
+			, std::move(ro_init)
+			, std::move(alpha_init)
+			, std::move(beta_init)
+			, std::move(gamma_init)
+			, std::move(initial_pheromone)
+			, std::move(iterations)
+			, std::move(ants_in_iteration))
 			);
 	}
 
-	static auto make_param() -> std::shared_ptr<AntColonyAlgorithmParams> {
+#ifdef __CPP_14_ENABLED__
+	static decltype(auto)
+#else
+	static std::shared_ptr<AntColonyAlgorithmParams>
+#endif
+		make_param()
+	{
 		return std::shared_ptr<AntColonyAlgorithmParams>(new AntColonyAlgorithmParams());
 	}
 
-
 	// return a value for a requested param
 	template<AP::paramsName name>
-	auto get() const -> decltype(std::get<static_cast<int>(name)>(params))
+#ifdef __CPP_14_ENABLED__
+	decltype(auto)
+#else
+	const AP::get_param_type<name>&
+#endif
+		get() const
 	{
 		return AP::get<name>(params);
 	}
 
 	template<AP::paramsName name>
-	void set(double value)
+	void set(AP::get_base_param_type<name> value)
 	{
-		AP::get<name>(params) = value;
+		AP::get<name>(params) = AP::get_param_type<name>(value);
 	}
 
 private:

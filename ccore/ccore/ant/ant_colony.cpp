@@ -24,7 +24,7 @@ void AntColony::place_ants_randomly(std::vector<ant_t>& ants)
 }
 
 
-std::vector<AntColony::CityProbability> AntColony::calc_probability(const ant_t & ant, const Pheramone & pheramone)
+std::vector<AntColony::CityProbability> AntColony::calc_probability(const ant_t& ant, const Pheramone& pheramone)
 {
 	std::vector<CityProbability> prob;
 	double commonDivider = 0;
@@ -33,7 +33,7 @@ std::vector<AntColony::CityProbability> AntColony::calc_probability(const ant_t 
 	{
 		if (std::find(ant.visited.begin(), ant.visited.end(), city_num) == ant.visited.end())
 		{
-			double p = std::pow(pheramone[ant.curState][city_num], params->get<AntAPI::ALPHA>().get())
+			double p = std::pow(pheramone[ant.curState][city_num], params->get<AntParamsName::ALPHA>().get())
 				*  (1 / distance->get_matrix()[ant.curState][city_num]);
 
 			prob.emplace_back(city_num, p);
@@ -62,7 +62,7 @@ int AntColony::realize_probability(const ant_t& ant, const std::vector<CityProba
 }
 
 
-double AntColony::calc_path_length(const cities_t & cities)
+double AntColony::calc_path_length(const cities_t& cities)
 {
 	double pathLength = 0;
 
@@ -149,7 +149,7 @@ std::shared_ptr<AntColonyResult> AntColony::process()
 	//initialize random number generator
 	std::srand(static_cast<unsigned>(std::time(0)));
 
-	const unsigned int cityCount = get_count_city();
+	const unsigned cityCount = get_count_city();
 	cities_t shortestPath;
 
 	//initiate pheramones to value from params
