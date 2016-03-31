@@ -8,8 +8,8 @@ CC = g++
 LD = g++
 
 # Toolchain arguments.
-CFLAGS = -O3 -MMD -MP -std=c++1y -fPIC -c
-LDFLAGS = -O3 -std=c++1y -pthread
+CFLAGS = -O3 -MMD -MP -std=gnu++1y -fPIC -c
+LDFLAGS = -O3 -std=gnu++1y -pthread
 
 # Project sources
 SOURCES += utcore/main.cpp

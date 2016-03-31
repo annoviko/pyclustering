@@ -43,7 +43,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "sync.h"
 #include "syncpr.h"
 
-#include "ant_colony/AntColony.hpp"
+#include "ant/ant_colony.hpp"
 
 #include "support.h"
 #include "ccore.h"

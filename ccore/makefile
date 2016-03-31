@@ -1,4 +1,4 @@
-# GCC should support C++11, for example, GCC 4.7.2
+# GCC should support C++14
 
 MAKE = make
 MKFLAG = -f
