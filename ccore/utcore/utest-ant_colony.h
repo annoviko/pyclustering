@@ -49,12 +49,35 @@ TEST(utest_ant_colony, one_city_only) {
 
 
 TEST(utest_ant_colony, two_cities_negative_coordinate) {	
-	city_distance::CityCoord One{ -5.0, 0.0 };
+	city_distance::CityCoord One{ -5.0,  0.0 };
 	city_distance::CityCoord Two{ -5.0, -4.0 };
 
-	auto dist = city_distance::CityDistanceMatrix::make_city_distance_matrix({ One });
+	auto dist = city_distance::CityDistanceMatrix::make_city_distance_matrix({ One, Two });
 
 	template_smallest_distance_test(dist, 8.0);
+}
+
+
+TEST(utest_ant_colony, three_cities_negative_positive_coordinate) {	
+	city_distance::CityCoord One{ -1.0, 1.0 };
+	city_distance::CityCoord Two{ -5.0, 1.0 };
+	city_distance::CityCoord Three{  3.0, 1.0 };
+
+	auto dist = city_distance::CityDistanceMatrix::make_city_distance_matrix({ One, Two, Three });
+
+	template_smallest_distance_test(dist, 16.0);
+}
+
+
+TEST(utest_ant_colony, cities_same_coordinates) {	
+	city_distance::CityCoord One{ 1.5, 2.5 };
+	city_distance::CityCoord Two{ 1.5, 2.5 };
+	city_distance::CityCoord Three{ 1.5, 2.5 };
+	city_distance::CityCoord Four{ 1.5, 2.5 };
+
+	auto dist = city_distance::CityDistanceMatrix::make_city_distance_matrix({ One, Two, Three, Four });
+
+	template_smallest_distance_test(dist, 0.0);
 }
 
 
