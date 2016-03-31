@@ -129,7 +129,7 @@ class clarans:
         
         """
 
-        return self.__medoids;
+        return self.__optimal_medoids;
     
     
     def __update_clusters(self, medoids):
