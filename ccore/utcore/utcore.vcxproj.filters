@@ -78,6 +78,9 @@
     <ClCompile Include="..\ccore\ant\city_distance_matrix.cpp">
       <Filter>Resource Files\ant</Filter>
     </ClCompile>
+    <ClCompile Include="..\ccore\adjacency_list.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="utest-kdtree.h">
@@ -193,6 +196,9 @@
     </ClInclude>
     <ClInclude Include="..\ccore\ant\city_distance_matrix.hpp">
       <Filter>Resource Files\ant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ccore\adjacency_list.h">
+      <Filter>Resource Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

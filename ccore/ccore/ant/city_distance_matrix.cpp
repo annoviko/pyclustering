@@ -30,10 +30,10 @@ double CityCoord::get_distance(const CityCoord& to_city) const
 CityDistanceMatrix::CityDistanceMatrix(const std::vector<CityCoord>& cities)
 {
 	// Resize matrix to able contains all the cities
-	matrix.resize(cities.size());
+	m_matrix.resize(cities.size());
 	for (std::size_t i = 0; i < cities.size(); ++i)
 	{
-		matrix[i].resize(cities.size());
+		m_matrix[i].resize(cities.size());
 	}
 
 	// initialize distance matrix
@@ -41,7 +41,7 @@ CityDistanceMatrix::CityDistanceMatrix(const std::vector<CityCoord>& cities)
 	{
 		for (std::size_t city_to = 0; city_to < cities.size(); ++city_to)
 		{
-			matrix[city_from][city_to] = cities[city_from].get_distance(cities[city_to]);
+			m_matrix[city_from][city_to] = cities[city_from].get_distance(cities[city_to]);
 		}
 	}
 }

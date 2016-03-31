@@ -85,6 +85,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\ccore\adjacency_bit_matrix.cpp" />
+    <ClCompile Include="..\ccore\adjacency_list.cpp" />
     <ClCompile Include="..\ccore\agglomerative.cpp" />
     <ClCompile Include="..\ccore\ant\ant_colony.cpp" />
     <ClCompile Include="..\ccore\ant\city_distance_matrix.cpp" />
@@ -107,6 +108,7 @@
   <ItemGroup>
     <ClInclude Include="..\ccore\adjacency.h" />
     <ClInclude Include="..\ccore\adjacency_bit_matrix.h" />
+    <ClInclude Include="..\ccore\adjacency_list.h" />
     <ClInclude Include="..\ccore\agglomerative.h" />
     <ClInclude Include="..\ccore\ant\ant_colony.hpp" />
     <ClInclude Include="..\ccore\ant\ant_colony_params.hpp" />

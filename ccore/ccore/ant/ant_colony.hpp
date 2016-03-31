@@ -46,14 +46,16 @@ public:
 
 	std::shared_ptr<AntColonyResult> process();
 
-	decltype(auto) get_result() { return result; }
+	auto get_result() -> std::shared_ptr<AntColonyResult> { return result; }
 
 private:
 
 	using AntAPI = ant_colony::AntColonyAlgorithmParamsInitializer::paramsName;
 	using cities_t = std::vector<int>;
 
+    typedef std::tuple_element<static_cast<int>(AntAPI::COUNT_ANTS_IN_ITERATION), ant_colony::AntColonyAlgorithmParamsInitializer::params_t>::type  param_t;
 
+private:
 	/*********************************************************
 	* struct ant_t
 	*			- contains visited cities and current state of an agent
@@ -77,8 +79,9 @@ private:
 			:value(city_num, prob)
 		{}
 
-		decltype(auto) get_city_num() const { return value.first; }
-		decltype(auto) get_probability() const { return value.second; }
+		auto get_city_num() const -> int { return value.first; }
+
+		auto get_probability() const -> double { return value.second; }
 
 		void divide_by(double divider) { value.second /= divider; }
 
@@ -94,7 +97,7 @@ private:
 	class Pheramone
 	{
 	public:
-		Pheramone(int cityCount, double initialPheramone)
+		Pheramone(unsigned int cityCount, double initialPheramone)
 			: value(cityCount, std::vector<double>(cityCount, initialPheramone))
 		{}
 
@@ -110,7 +113,7 @@ private:
 	//
 	void place_ants_randomly(std::vector<ant_t>& ants);
 	
-	std::vector<CityProbability> calc_probability(const ant_t& ant, const Pheramone& pheramone);
+	std::vector<AntColony::CityProbability> calc_probability(const ant_t& ant, const Pheramone& pheramone);
 	
 	int realize_probability(const ant_t& ant, const std::vector<CityProbability>& prob);
 
@@ -122,22 +125,26 @@ private:
 
 	void update_shortes_path(cities_t& shortes_path, const std::vector<ant_t>& ants);
 
+	inline auto get_count_city(void)				const -> int      { return distance->m_matrix.size(); }
 
+	inline auto get_count_ants_in_iteration(void)	const -> unsigned { return params->get<AntAPI::COUNT_ANTS_IN_ITERATION>().get(); }
 
-	decltype(auto) get_count_city				()				const { return distance->matrix.size(); }
-	decltype(auto) get_count_ants_in_iteration	()				const { return params->get<AntAPI::COUNT_ANTS_IN_ITERATION>().get(); }
-	decltype(auto) get_random_number			(unsigned max)	const { return (std::rand() % max); }
-	decltype(auto) get_initial_pheromone		()				const { return params->get<AntAPI::INITIAL_PHERAMONE>().get(); }
-	decltype(auto) get_count_iterations			()				const { return params->get<AntAPI::ITERATIONS>().get(); }
-	decltype(auto) get_param_ro					()				const { return params->get<AntAPI::RO>().get(); }
-	decltype(auto) get_param_Q					()				const { return params->get<AntAPI::Q>().get(); }
+	inline auto get_random_number(unsigned max)	    const -> int      { return (std::rand() % max); }
 
-	// decltype(auto) get_count_iterations();
+	inline auto get_initial_pheromone(void)			const -> double   { return params->get<AntAPI::INITIAL_PHERAMONE>().get(); }
+
+	inline auto get_count_iterations(void)			const -> unsigned { return params->get<AntAPI::ITERATIONS>().get(); }
+
+	inline auto get_param_ro(void)				    const -> double   { return params->get<AntAPI::RO>().get(); }
+
+	inline auto get_param_Q(void)				    const -> double   { return params->get<AntAPI::Q>().get(); }
 
 public:
 
     std::shared_ptr<AntColonyResult> result;
+
 	std::shared_ptr<city_distance::CityDistanceMatrix> distance;
+
 	std::shared_ptr<AntColonyAlgorithmParams> params;
 
 };

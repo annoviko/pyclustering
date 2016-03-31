@@ -59,7 +59,7 @@ public:
 			:value{ init }
 		{}
 
-		auto get() const { return value; }
+		auto get() const -> T { return value; }
 
 	private:
 		T value;
@@ -105,14 +105,12 @@ public:
 	//	Functions get for const and non const return value
 	//
 	template<paramsName name>
-	static decltype(auto) get(const params_t& params)
-	{
+	static auto get(const params_t& params) -> decltype(std::get<static_cast<int>(name)>(params)) {
 		return std::get<static_cast<int>(name)>(params);
 	}
 
 	template<paramsName name>
-	static decltype(auto) get(params_t& params)
-	{
+	static auto get(params_t& params) -> decltype(std::get<static_cast<int>(name)>(params)) {
 		return std::get<static_cast<int>(name)>(params);
 	}
 
@@ -174,14 +172,12 @@ class AntColonyAlgorithmParams
 public:
 
 	// delete constructor
-	AntColonyAlgorithmParams(const AntColonyAlgorithmParams&) = delete;
+	AntColonyAlgorithmParams(const AntColonyAlgorithmParams & other) = delete;
 	// delete move constructor
-	AntColonyAlgorithmParams(const AntColonyAlgorithmParams&&) = delete;
-
+	AntColonyAlgorithmParams(AntColonyAlgorithmParams && other) = delete;
+    
 	// but it's able to assignment for objects
-	AntColonyAlgorithmParams& operator= (const AntColonyAlgorithmParams& other) = default;
-	AntColonyAlgorithmParams& operator= (AntColonyAlgorithmParams&& other) = default;
-
+	AntColonyAlgorithmParams & operator= (const AntColonyAlgorithmParams & other) = default;
 
 	using AP = AntColonyAlgorithmParamsInitializer;
 
@@ -195,36 +191,35 @@ public:
 	//-----------------------------------------
 
 	// fabric functions to produce shared ptr to algorithm's params
-	static decltype(auto) make_param(AP::Q_t&& Q_init
+	static auto make_param(AP::Q_t&& Q_init
 		, AP::Ro_t&& ro_init
 		, AP::Alpha_t&& alpha_init
 		, AP::Beta_t&& beta_init
 		, AP::Gamma_t&& gamma_init
 		, AP::InitialPheramone_t&& initial_pheromone
 		, AP::Iterations_t&& iterations
-		, AP::CountAntsInIteration_t&& ants_in_iteration)
+		, AP::CountAntsInIteration_t&& ants_in_iteration) -> std::shared_ptr<AntColonyAlgorithmParams>
 	{
 		return std::shared_ptr<AntColonyAlgorithmParams>(new AntColonyAlgorithmParams(
-			std::move(Q_init)
-			, std::move(ro_init)
-			, std::move(alpha_init)
-			, std::move(beta_init)
-			, std::move(gamma_init)
-			, std::move(initial_pheromone)
-			, std::move(iterations)
-			, std::move(ants_in_iteration))
+			std::move(Q_init),
+			std::move(ro_init),
+			std::move(alpha_init),
+			std::move(beta_init),
+			std::move(gamma_init),
+			std::move(initial_pheromone),
+			std::move(iterations),
+			std::move(ants_in_iteration))
 			);
 	}
 
-	static decltype(auto) make_param()
-	{
+	static auto make_param() -> std::shared_ptr<AntColonyAlgorithmParams> {
 		return std::shared_ptr<AntColonyAlgorithmParams>(new AntColonyAlgorithmParams());
 	}
 
 
 	// return a value for a requested param
 	template<AP::paramsName name>
-	decltype(auto) get() const
+	auto get() const -> decltype(std::get<static_cast<int>(name)>(params))
 	{
 		return AP::get<name>(params);
 	}

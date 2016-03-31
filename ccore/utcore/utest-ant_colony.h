@@ -5,7 +5,7 @@
 #include "ccore/ant/ant_colony.hpp"
 
 
-constexpr double EPS = 0.0000001; 
+const double EPS = 0.0000001; 
 
 TEST(utest_ant_colony, city_distance) {
 	city_distance::CityCoord One{ 23.46, 97.512 };

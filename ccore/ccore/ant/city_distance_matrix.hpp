@@ -1,10 +1,3 @@
-/*
- * city_distance.hpp
- *
- *  Created on: Mar 21, 2016
- *      Author: alex
- */
-
 #pragma once
 
 #include <cmath>
@@ -17,15 +10,17 @@ namespace city_distance
 {
 
 /***********************************************************************************************
- * CityCoord;
- *              - contains coordinates of a city
- *
- * example for initialization by initializer list:
- *      ant_colony::CityCoord<double> Piter  {4.0, 3.0};
- *      ant_colony::CityCoord<double> Moscow {14.0, 22.0};
- *      ant_colony::CityCoord<double> Zero   {0.0, 0.0};
- *
- ***********************************************************************************************/
+*
+* @brief   Contains coordinates of a city.
+*
+* Example for city coordinate creation by initializer list:
+* @code
+*      ant_colony::CityCoord Piter  {4.0, 3.0};
+*      ant_colony::CityCoord Moscow {14.0, 22.0};
+*      ant_colony::CityCoord Zero   {0.0, 0.0};
+* @endcode
+*
+***********************************************************************************************/
 class CityCoord
 {
 public:
@@ -38,7 +33,7 @@ public:
         }
     }
 
-    CityCoord(const std::vector<double>& init_coord)
+    CityCoord(const std::vector<double> & init_coord)
     {
         for (auto e : init_coord)
         {
@@ -46,7 +41,7 @@ public:
         }
     }
 
-    CityCoord(std::vector<double>&& init_coord)
+    CityCoord(std::vector<double> && init_coord)
     {
         for (auto e : init_coord)
         {
@@ -54,17 +49,19 @@ public:
         }
     }
 
-    double get_distance (const CityCoord& to_city) const;
+    double get_distance (const CityCoord & to_city) const;
 
-    decltype(auto) get_dimention() const { return location_point.size(); }
+    inline size_t get_dimention() const { return location_point.size(); }
 
 
 private:
     std::vector<double> location_point;
 
 
-}; //end class CityCoord
+};
 
+
+typedef std::vector<std::vector<double>>    array_coordinate;
 
 /***********************************************************************************************
  * class CityDistanceMatrix
@@ -78,47 +75,41 @@ class CityDistanceMatrix
 {
 public:
 	// fabric functions for initiating by matrix
-	static decltype(auto) make_city_distance_matrix(const std::vector<std::vector<double>>& init_distance)
-	{
-		return std::shared_ptr<CityDistanceMatrix>(new CityDistanceMatrix(init_distance));
-	}
+    static auto make_city_distance_matrix(const array_coordinate & init_distance) -> std::shared_ptr<CityDistanceMatrix> {
+        return std::shared_ptr<CityDistanceMatrix>(new CityDistanceMatrix(init_distance));
+    }	
 
 	// fabric functions for initiating by matrix with move semantic
-	static decltype(auto) make_city_distance_matrix(std::vector<std::vector<double>>&& init_distance)
-	{
+    static auto make_city_distance_matrix(const array_coordinate && init_distance) -> std::shared_ptr<CityDistanceMatrix> {
 		return std::shared_ptr<CityDistanceMatrix>(new CityDistanceMatrix(std::move(init_distance)));
 	}
 
 	// fabric functions for initiating by list with city's coordinates
-	static decltype(auto) make_city_distance_matrix(const std::vector<CityCoord>& cities)
-	{
-		return std::shared_ptr<CityDistanceMatrix>(new CityDistanceMatrix(cities));
-	}
-
+    static auto make_city_distance_matrix(const std::vector<CityCoord> & cities) -> std::shared_ptr<CityDistanceMatrix> {
+        return std::shared_ptr<CityDistanceMatrix>(new CityDistanceMatrix(cities));
+    }
 
 	// return reference out of class is a bad idea!!! (TODO: shared_ptr)
-	std::vector<std::vector<double>>& get_matrix() { return matrix; }
+	std::vector<std::vector<double>> & get_matrix() { return m_matrix; }
 
 
 private:
 	// constructor for initiating by matrix
-    CityDistanceMatrix(const std::vector<std::vector<double>>& init_distance)
-    {
-		matrix = init_distance;
+    CityDistanceMatrix(const array_coordinate & init_distance) {
+		m_matrix = init_distance;
     }
 
 	// constructor for initiating by matrix with move semantic
-    CityDistanceMatrix(std::vector<std::vector<double>>&& init_distance)
-    {
-		matrix = std::move(init_distance);
+    CityDistanceMatrix(array_coordinate && init_distance) {
+		m_matrix = std::move(init_distance);
     }
 
 	// constructor for initiating by list with city's coordinates
-	CityDistanceMatrix(const std::vector<CityCoord>& cities);
+	CityDistanceMatrix(const std::vector<CityCoord> & cities);
 
 public:
-    std::vector<std::vector<double>> matrix;
-}; //end CityDistanceMatrix
+    array_coordinate    m_matrix;
+};
 
 
 
