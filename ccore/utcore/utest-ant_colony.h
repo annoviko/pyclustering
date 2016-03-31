@@ -3,6 +3,7 @@
 #include "gtest/gtest.h"
 
 #include "ccore/ant/ant_colony.hpp"
+#include "ccore/ant/city_distance_matrix.hpp"
 
 
 const double EPS = 0.0000001; 
@@ -18,8 +19,58 @@ TEST(utest_ant_colony, city_distance) {
 	ASSERT_NEAR(6615.035162030509, Two.get_distance(Three), EPS);
 }
 
+void template_smallest_distance_test(const std::shared_ptr<city_distance::CityDistanceMatrix> & coordinates, const double expected_result) {
+	using AntAPI = ant_colony::AntColonyAlgorithmParamsInitializer;
+	auto sp_algo_params_2 = ant_colony::AntColonyAlgorithmParams::make_param
+		(AntAPI::Q_t{ 1.5 }, 
+                 AntAPI::Ro_t{ 0.7 }, 
+                 AntAPI::Alpha_t{ 1.0 }, 
+                 AntAPI::Beta_t{ 1.0 }, 
+                 AntAPI::Gamma_t{ 2.0 }, 
+                 AntAPI::InitialPheramone_t{ 0.1 }, 
+                 AntAPI::Iterations_t{ 50 }, 
+                 AntAPI::CountAntsInIteration_t{ 10 }
+	);
 
-TEST(utest_ant_colony, find_smallest_path) {
+	ant_colony::AntColony ant_algo{ coordinates, sp_algo_params_2 };
+	auto res = ant_algo.process();
+
+	ASSERT_DOUBLE_EQ(expected_result, res->pathLen);	
+}
+
+
+TEST(utest_ant_colony, one_city_only) {	
+	city_distance::CityCoord One{ 0.0, 0.0 };
+
+	auto dist = city_distance::CityDistanceMatrix::make_city_distance_matrix({ One });
+
+	template_smallest_distance_test(dist, 0.0);
+}
+
+
+TEST(utest_ant_colony, two_cities_negative_coordinate) {	
+	city_distance::CityCoord One{ -5.0, 0.0 };
+	city_distance::CityCoord Two{ -5.0, -4.0 };
+
+	auto dist = city_distance::CityDistanceMatrix::make_city_distance_matrix({ One });
+
+	template_smallest_distance_test(dist, 8.0);
+}
+
+
+TEST(utest_ant_colony, smallest_path_two_cities) {
+	/* Cities placement for the case: 1 - 2 */
+	
+	city_distance::CityCoord One{ 0.0, 0.0 };
+	city_distance::CityCoord Two{ 15.0, 0.0 };
+
+	auto dist = city_distance::CityDistanceMatrix::make_city_distance_matrix({ One, Two });
+
+	template_smallest_distance_test(dist, 30.0);
+}
+
+
+TEST(utest_ant_colony, smallest_path_six_cities) {
 
 	/*
 	* Cities placement for the case:
@@ -38,20 +89,5 @@ TEST(utest_ant_colony, find_smallest_path) {
 	auto dist = city_distance::CityDistanceMatrix::make_city_distance_matrix
 		({ One, Two, Three, Thour, Five, Six });
 
-	using AntAPI = ant_colony::AntColonyAlgorithmParamsInitializer;
-	auto sp_algo_params_2 = ant_colony::AntColonyAlgorithmParams::make_param
-		(AntAPI::Q_t{ 1.5 }
-			, AntAPI::Ro_t{ 0.7 }
-			, AntAPI::Alpha_t{ 1.0 }
-			, AntAPI::Beta_t{ 1.0 }
-			, AntAPI::Gamma_t{ 2.0 }
-			, AntAPI::InitialPheramone_t{ 0.1 }
-			, AntAPI::Iterations_t{ 50 }
-			, AntAPI::CountAntsInIteration_t{ 10 }
-	);
-
-	ant_colony::AntColony ant_algo{ dist, sp_algo_params_2 };
-	auto res = ant_algo.process();
-
-	ASSERT_DOUBLE_EQ(6.0, res->pathLen);
+	template_smallest_distance_test(dist, 6.0);
 }
