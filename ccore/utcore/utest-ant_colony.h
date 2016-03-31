@@ -113,7 +113,7 @@ TEST(utest_ant_colony, smallest_path_four_cities_by_graph) {
     city_distance::CityDistanceMatrix::array_coordinate dist_matrix(citiesCount, std::vector<double>(citiesCount, 0));
 
 #ifdef __CPP_14_ENABLED__
-    auto write_symmetric = [&dist_matrix] (city_name_t city1, city_name_t city2, double dist)
+    auto write_symmetric = [&dist_matrix] (auto city1, auto city2, auto dist)
 #else
     auto write_symmetric = [&dist_matrix] (city_name_t city1, city_name_t city2, double dist)
 #endif
