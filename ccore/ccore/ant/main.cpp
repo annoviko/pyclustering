@@ -7,7 +7,7 @@
 
 #include <iostream>
 
-#include "AntColony.hpp"
+#include "ant_colony.hpp"
 
 int main()
 {

@@ -1,4 +1,4 @@
-#include "CityDistanceMatrix.hpp"
+#include "city_distance_matrix.hpp"
 
 
 namespace city_distance

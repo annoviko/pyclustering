@@ -7,7 +7,7 @@
 
 #include <algorithm>
 
-#include "AntColony.hpp"
+#include "ant_colony.hpp"
 
 
 namespace ant_colony
