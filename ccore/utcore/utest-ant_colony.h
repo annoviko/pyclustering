@@ -112,7 +112,11 @@ TEST(utest_ant_colony, smallest_path_four_cities_by_graph) {
     // bad style for initialization !!!
     city_distance::CityDistanceMatrix::array_coordinate dist_matrix(citiesCount, std::vector<double>(citiesCount, 0));
 
-    auto write_symmetric = [&dist_matrix] (auto city1, auto city2, auto dist)
+#ifdef __CPP_14_ENABLED__
+    auto write_symmetric = [&dist_matrix] (city_name_t city1, city_name_t city2, double dist)
+#else
+    auto write_symmetric = [&dist_matrix] (city_name_t city1, city_name_t city2, double dist)
+#endif
             {
                 dist_matrix[static_cast<unsigned int>(city1)][static_cast<unsigned int>(city2)]
                       = dist_matrix[static_cast<unsigned int>(city2)][static_cast<unsigned int>(city1)]
