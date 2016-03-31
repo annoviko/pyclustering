@@ -92,6 +92,46 @@ TEST(utest_ant_colony, smallest_path_two_cities) {
 	template_smallest_distance_test(dist, 30.0);
 }
 
+TEST(utest_ant_colony, smallest_path_four_cities_by_graph) {
+    /* Cities placement for the case
+     *  symmetric matrix for 4 cities:
+     *  (a,b) = 1
+     *  (a,c) = 30
+     *  (a,d) = 99
+     *  (b,c) = 1
+     *  (b,d) = 30
+     *  (c,d) = 1
+     * */
+    enum class city_name_t
+    {
+        A, B, C, D
+    };
+
+    const std::size_t citiesCount = 4;
+
+    // bad style for initialization !!!
+    city_distance::CityDistanceMatrix::array_coordinate dist_matrix(citiesCount, std::vector<double>(citiesCount, 0));
+
+    auto write_symmetric = [&dist_matrix] (auto city1, auto city2, auto dist)
+            {
+                dist_matrix[static_cast<unsigned int>(city1)][static_cast<unsigned int>(city2)]
+                      = dist_matrix[static_cast<unsigned int>(city2)][static_cast<unsigned int>(city1)]
+                      = dist;
+            };
+
+    write_symmetric(city_name_t::A, city_name_t::B, 1.0);
+    write_symmetric(city_name_t::A, city_name_t::C, 30.0);
+    write_symmetric(city_name_t::A, city_name_t::D, 99.0);
+    write_symmetric(city_name_t::B, city_name_t::C, 1.0);
+    write_symmetric(city_name_t::B, city_name_t::D, 30.0);
+    write_symmetric(city_name_t::C, city_name_t::D, 1.0);
+
+
+    auto dist = city_distance::CityDistanceMatrix::make_city_distance_matrix(std::move(dist_matrix));
+
+    template_smallest_distance_test(dist, 62.0);
+}
+
 
 TEST(utest_ant_colony, smallest_path_six_cities) {
 
