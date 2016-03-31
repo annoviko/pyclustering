@@ -131,7 +131,7 @@ private:
 
 #ifdef __CPP_14_ENABLED__
 	
-	decltype(auto) get_count_city				()				const { return distance->matrix.size(); }
+	decltype(auto) get_count_city				()				const { return distance->m_matrix.size(); }
 	decltype(auto) get_count_ants_in_iteration	()				const { return params->get<AntParamsName::COUNT_ANTS_IN_ITERATION>().get(); }
 	decltype(auto) get_random_number			(unsigned max)	const { return (std::rand() % max); }
 	decltype(auto) get_initial_pheromone		()				const { return params->get<AntParamsName::INITIAL_PHERAMONE>().get(); }
