@@ -2,7 +2,7 @@
 
 #include "gtest/gtest.h"
 
-#include "ccore/ant_colony/AntColony.hpp"
+#include "ccore/ant/ant_colony.hpp"
 
 
 constexpr double EPS = 0.0000001; 

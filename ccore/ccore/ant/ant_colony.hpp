@@ -12,8 +12,8 @@
 
 #include <iostream>
 
-#include "CityDistanceMatrix.hpp"
-#include "AntColonyAlgorithmParams.hpp"
+#include "city_distance_matrix.hpp"
+#include "ant_colony_params.hpp"
 
 namespace ant_colony
 {
