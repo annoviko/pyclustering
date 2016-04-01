@@ -209,7 +209,10 @@ public:
 
 	// but it's able to assignment for objects
 	AntColonyAlgorithmParams& operator= (const AntColonyAlgorithmParams& other) = default;
+
+#ifdef __CPP_14_ENABLED__
 	AntColonyAlgorithmParams& operator= (AntColonyAlgorithmParams&& other) = default;
+#endif
 
 
 	using AP = AntColonyAlgorithmParamsInitializer;

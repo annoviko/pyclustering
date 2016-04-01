@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\ant">
+      <UniqueIdentifier>{67fbbe0c-e707-4e1a-b1a2-4e91898d703c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ant">
+      <UniqueIdentifier>{17aefe89-fd1e-469c-9bd8-9056bc0cf5f4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ccore.cpp">
@@ -86,6 +92,12 @@
     </ClCompile>
     <ClCompile Include="adjacency_factory.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ant\city_distance_matrix.cpp">
+      <Filter>Source Files\ant</Filter>
+    </ClCompile>
+    <ClCompile Include="ant\ant_colony.cpp">
+      <Filter>Source Files\ant</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -175,6 +187,12 @@
     </ClInclude>
     <ClInclude Include="adjacency_connector.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ant\ant_colony_params.hpp">
+      <Filter>Header Files\ant</Filter>
+    </ClInclude>
+    <ClInclude Include="ant\city_distance_matrix.hpp">
+      <Filter>Header Files\ant</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

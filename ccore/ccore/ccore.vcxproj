@@ -151,6 +151,8 @@
     <ClCompile Include="adjacency_matrix.cpp" />
     <ClCompile Include="adjacency_weight_list.cpp" />
     <ClCompile Include="agglomerative.cpp" />
+    <ClCompile Include="ant\ant_colony.cpp" />
+    <ClCompile Include="ant\city_distance_matrix.cpp" />
     <ClCompile Include="ccore.cpp" />
     <ClCompile Include="cure.cpp" />
     <ClCompile Include="dbscan.cpp" />
@@ -179,6 +181,8 @@
     <ClInclude Include="adjacency_matrix.h" />
     <ClInclude Include="adjacency_weight_list.h" />
     <ClInclude Include="agglomerative.h" />
+    <ClInclude Include="ant\ant_colony_params.hpp" />
+    <ClInclude Include="ant\city_distance_matrix.hpp" />
     <ClInclude Include="cure.h" />
     <ClInclude Include="dbscan.h" />
     <ClInclude Include="differential.h" />
