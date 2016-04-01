@@ -157,3 +157,28 @@ TEST(utest_ant_colony, smallest_path_six_cities) {
 
 	template_smallest_distance_test(dist, 6.0);
 }
+
+
+#if 0
+TEST(utest_ant_colony, no_ants_for_processing) {
+    city_distance::object_coordinate One{ -5.0,  0.0 };
+    city_distance::object_coordinate Two{ -5.0, -4.0 };
+
+    auto dist = city_distance::distance_matrix::make_city_distance_matrix({ One, Two });
+
+    using AntAPI = ant::ant_colony_params_initializer;
+    auto sp_algo_params_2 = ant::ant_colony_params::make_param
+            (AntAPI::Q_t{ 1.5 },
+                 AntAPI::Ro_t{ 0.7 },
+                 AntAPI::Alpha_t{ 1.0 },
+                 AntAPI::Beta_t{ 1.0 },
+                 AntAPI::Gamma_t{ 2.0 },
+                 AntAPI::InitialPheramone_t{ 0.1 },
+                 AntAPI::Iterations_t{ 50 },
+                 AntAPI::CountAntsInIteration_t{ 0 }
+    );
+
+    ant::ant_colony ant_algo{ dist, sp_algo_params_2 };
+    auto res = ant_algo.process();
+}
+#endif
