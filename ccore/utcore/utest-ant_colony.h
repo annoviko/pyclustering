@@ -8,7 +8,7 @@
 
 const double EPS = 0.0000001; 
 
-TEST(utest_ant_colony, city_distance) {
+TEST(utest_ant_colony, city_distance_calculation) {
 	city_distance::object_coordinate One{ 23.46, 97.512 };
 	city_distance::object_coordinate Two{ -5671.2, -12.459 };
 	city_distance::object_coordinate Three{ 871.612, -987.293 };

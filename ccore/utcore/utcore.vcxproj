@@ -88,7 +88,7 @@
     <ClCompile Include="..\ccore\adjacency_list.cpp" />
     <ClCompile Include="..\ccore\agglomerative.cpp" />
     <ClCompile Include="..\ccore\ant\ant_colony.cpp" />
-    <ClCompile Include="..\ccore\ant\city_distance_matrix.cpp" />
+    <ClCompile Include="..\ccore\ant\distance_matrix.cpp" />
     <ClCompile Include="..\ccore\hsyncnet.cpp" />
     <ClCompile Include="..\ccore\kdtree.cpp" />
     <ClCompile Include="..\ccore\kmedians.cpp" />
@@ -112,7 +112,7 @@
     <ClInclude Include="..\ccore\agglomerative.h" />
     <ClInclude Include="..\ccore\ant\ant_colony.hpp" />
     <ClInclude Include="..\ccore\ant\ant_colony_params.hpp" />
-    <ClInclude Include="..\ccore\ant\city_distance_matrix.hpp" />
+    <ClInclude Include="..\ccore\ant\distance_matrix.hpp" />
     <ClInclude Include="..\ccore\differential.h" />
     <ClInclude Include="..\ccore\dynamic_data.h" />
     <ClInclude Include="..\ccore\ensemble_data.h" />
