@@ -20,6 +20,11 @@ namespace ant
 class ant_colony_result
 {
 public:
+
+    ant_colony_result()
+        : pathLen{0}
+    {}
+
 	std::vector<int> shortestPath;
 	double pathLen;
 };

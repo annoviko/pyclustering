@@ -146,13 +146,19 @@ void ant_colony::update_shortes_path(cities_t& shortes_path, const std::vector<a
 
 std::shared_ptr<ant_colony_result> ant_colony::process()
 {
-	//initialize random number generator
+	// without this check program would be crashed
+    if (get_count_ants_in_iteration() == 0)
+    {
+        return result;
+    }
+
+    // initialize random number generator
 	std::srand(static_cast<unsigned>(std::time(0)));
 
 	const unsigned cityCount = get_count_city();
 	cities_t shortestPath;
 
-	//initiate pheramones to value from params
+	// initiate pheramones to value from params
 	pheramone pheramone(cityCount, get_initial_pheromone());
 
 	for (unsigned iteration = 0; iteration < get_count_iterations(); ++iteration)
