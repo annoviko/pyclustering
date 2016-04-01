@@ -39,7 +39,7 @@ class c_pcnn_parameters(Structure):
 
 
 def pcnn_create(size, conn_type, height, width, params):
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     
     c_parameters = c_pcnn_parameters();
     c_parameters.VF = params.VF;
@@ -57,12 +57,12 @@ def pcnn_create(size, conn_type, height, width, params):
     
 
 def pcnn_destroy(network_pointer):
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     ccore.pcnn_destroy(network_pointer);
 
 
 def pcnn_simulate(network_pointer, steps, stimulus):
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     
     c_stimulus = (c_double * len(stimulus))();
     c_stimulus[:] = stimulus[:];
@@ -76,17 +76,17 @@ def pcnn_simulate(network_pointer, steps, stimulus):
 
 
 def pcnn_get_size(network_pointer):
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     return ccore.pcnn_get_size(network_pointer);
 
 
 def pcnn_dynamic_destroy(dynamic_pointer):
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     ccore.pcnn_dynamic_destroy(dynamic_pointer);
     
 
 def pcnn_dynamic_allocate_sync_ensembles(dynamic_pointer):
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     package = ccore.pcnn_dynamic_allocate_sync_ensembles(dynamic_pointer);
     
     result = extract_pyclustering_package(package);
@@ -96,7 +96,7 @@ def pcnn_dynamic_allocate_sync_ensembles(dynamic_pointer):
 
 
 def pcnn_dynamic_allocate_spike_ensembles(dynamic_pointer):
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     package = ccore.pcnn_dynamic_allocate_spike_ensembles(dynamic_pointer);
     
     result = extract_pyclustering_package(package);
@@ -106,7 +106,7 @@ def pcnn_dynamic_allocate_spike_ensembles(dynamic_pointer):
 
 
 def pcnn_dynamic_allocate_time_signal(dynamic_pointer):
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     package = ccore.pcnn_dynamic_allocate_time_signal(dynamic_pointer);
     
     result = extract_pyclustering_package(package);
@@ -116,7 +116,7 @@ def pcnn_dynamic_allocate_time_signal(dynamic_pointer):
 
 
 def pcnn_dynamic_get_output(dynamic_pointer):
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     package = ccore.pcnn_dynamic_get_output(dynamic_pointer);
     
     result = extract_pyclustering_package(package);
@@ -126,7 +126,7 @@ def pcnn_dynamic_get_output(dynamic_pointer):
 
 
 def pcnn_dynamic_get_time(dynamic_pointer):
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     package = ccore.pcnn_dynamic_get_time(dynamic_pointer);
     
     result = extract_pyclustering_package(package);
@@ -135,5 +135,5 @@ def pcnn_dynamic_get_time(dynamic_pointer):
     return result;
 
 def pcnn_dynamic_get_size(dynamic_pointer):
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     return ccore.pcnn_dynamic_get_size(dynamic_pointer);

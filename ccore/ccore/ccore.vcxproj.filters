@@ -93,10 +93,10 @@
     <ClCompile Include="adjacency_factory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ant\city_distance_matrix.cpp">
+    <ClCompile Include="ant\ant_colony.cpp">
       <Filter>Source Files\ant</Filter>
     </ClCompile>
-    <ClCompile Include="ant\ant_colony.cpp">
+    <ClCompile Include="ant\distance_matrix.cpp">
       <Filter>Source Files\ant</Filter>
     </ClCompile>
   </ItemGroup>
@@ -191,7 +191,10 @@
     <ClInclude Include="ant\ant_colony_params.hpp">
       <Filter>Header Files\ant</Filter>
     </ClInclude>
-    <ClInclude Include="ant\city_distance_matrix.hpp">
+    <ClInclude Include="ant\ant_colony.hpp">
+      <Filter>Header Files\ant</Filter>
+    </ClInclude>
+    <ClInclude Include="ant\distance_matrix.hpp">
       <Filter>Header Files\ant</Filter>
     </ClInclude>
   </ItemGroup>

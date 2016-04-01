@@ -25,6 +25,7 @@
 
 from pyclustering.core.wrapper import *;
 
+
 class c_legion_parameters(Structure):   
     _fields_ = [("eps", c_double),
                 ("alpha", c_double),
@@ -44,10 +45,10 @@ class c_legion_parameters(Structure):
                 ("ro", c_double),
                 ("I", c_double),
                 ("ENABLE_POTENTIONAL", c_bool)];
-                
+
 
 def legion_create(size, conn_type, params):
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     
     c_params = c_legion_parameters();
     c_params.eps = params.eps;
@@ -73,12 +74,12 @@ def legion_create(size, conn_type, params):
 
 
 def legion_destroy(legion_network_pointer):
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     ccore.legion_destroy(legion_network_pointer);
     
     
 def legion_simulate(legion_network_pointer, steps, time, solver, collect_dynamic, stimulus):
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     
     c_stimulus = (c_double * len(stimulus))();
     c_stimulus[:] = stimulus[:];
@@ -92,17 +93,17 @@ def legion_simulate(legion_network_pointer, steps, time, solver, collect_dynamic
 
 
 def legion_get_size(legion_network_pointer):
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     return ccore.legion_get_size(legion_network_pointer);
 
 
 def legion_dynamic_destroy(legion_dynamic_pointer):
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     ccore.legion_dynamic_destroy(legion_dynamic_pointer);
     
     
 def legion_dynamic_get_output(legion_dynamic_pointer):
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     package = ccore.legion_dynamic_get_output(legion_dynamic_pointer);
     
     result = extract_pyclustering_package(package);
@@ -112,7 +113,7 @@ def legion_dynamic_get_output(legion_dynamic_pointer):
 
 
 def legion_dynamic_get_inhibitory_output(legion_dynamic_pointer):
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     package = ccore.legion_dynamic_get_inhibitory_output(legion_dynamic_pointer);
     
     result = extract_pyclustering_package(package);
@@ -122,7 +123,7 @@ def legion_dynamic_get_inhibitory_output(legion_dynamic_pointer):
 
 
 def legion_dynamic_get_time(legion_dynamic_pointer):
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     package = ccore.legion_dynamic_get_time(legion_dynamic_pointer);
     
     result = extract_pyclustering_package(package);
@@ -132,6 +133,6 @@ def legion_dynamic_get_time(legion_dynamic_pointer):
 
 
 def legion_dynamic_get_size(legion_dynamic_pointer):
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     return ccore.legion_dynamic_get_size(legion_dynamic_pointer);
     

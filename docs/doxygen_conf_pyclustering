@@ -758,9 +758,10 @@ WARN_LOGFILE           =
 # spaces.
 # Note: If this tag is empty the current directory is searched.
 
-INPUT				   = pyclustering/cluster/__init__.py
+INPUT                  = pyclustering/cluster/__init__.py
 INPUT                 += pyclustering/cluster/agglomerative.py
 INPUT                 += pyclustering/cluster/birch.py
+INPUT                 += pyclustering/cluster/clarans.py
 INPUT                 += pyclustering/cluster/cure.py
 INPUT                 += pyclustering/cluster/dbscan.py
 INPUT                 += pyclustering/cluster/hsyncnet.py
@@ -789,7 +790,10 @@ INPUT                 += pyclustering/nnet/legion.py
 INPUT                 += pyclustering/nnet/pcnn.py
 INPUT                 += pyclustering/nnet/som.py
 INPUT                 += pyclustering/nnet/sync.py
-INPUT				  += pyclustering/nnet/syncpr.py
+INPUT                 += pyclustering/nnet/syncpr.py
+
+INPUT                 += pyclustering/tsp/__init__.py
+INPUT                 += pyclustering/tsp/antcolony.py
 
 INPUT                 += pyclustering/utils/__init__.py
 INPUT                 += pyclustering/utils/graph.py

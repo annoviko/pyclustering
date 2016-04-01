@@ -29,23 +29,23 @@ from pyclustering.core.wrapper import *;
 def syncnet_create_network(sample, radius, initial_phases, enable_conn_weight):
     pointer_data = create_pointer_data(sample);
     
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     pointer_network = ccore.syncnet_create_network(pointer_data, c_double(radius), c_uint(initial_phases), c_bool(enable_conn_weight));
     
     return pointer_network;
 
 
 def syncnet_destroy_network(pointer_network):
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     ccore.syncnet_destroy_network(pointer_network);
 
 
 def syncnet_process(network_pointer, order, solution, collect_dynamic):
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     return ccore.syncnet_process(network_pointer, c_double(order), c_uint(solution), c_bool(collect_dynamic));
 
 
 def syncnet_analyser_destroy(pointer_analyser):
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     ccore.syncnet_analyser_destroy(pointer_analyser);
     

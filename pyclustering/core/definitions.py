@@ -26,12 +26,12 @@ from ctypes import Structure, c_uint, c_double, c_void_p, POINTER;
 from sys import platform as _platform;
 
 # Path to DLL.
-PATH_DLL_CCORE_WIN64 = None;
+PATH_DLL_CCORE_64 = None;
 
 if (_platform == "linux") or (_platform == "linux2"):
-    PATH_DLL_CCORE_WIN64 = core.__path__[0] + os.sep + "x64" + os.sep + "linux" + os.sep + "ccore.so";
+    PATH_DLL_CCORE_64 = core.__path__[0] + os.sep + "x64" + os.sep + "linux" + os.sep + "ccore.so";
 elif (_platform == "win32"):
-    PATH_DLL_CCORE_WIN64 = core.__path__[0] + os.sep + "x64" + os.sep + "win" + os.sep + "ccore.dll";
+    PATH_DLL_CCORE_64 = core.__path__[0] + os.sep + "x64" + os.sep + "win" + os.sep + "ccore.dll";
 
 
 class pyclustering_type_data:
@@ -96,48 +96,4 @@ class pyclustering_package(Structure):
     _fields_ = [("size", c_uint),
                 ("type", c_uint),
                 ("data", POINTER(c_void_p))];
-                
-class ant_colony_TSP_params(Structure):
-    """
-    double                  q;
-    double                  ro;
-    double                  alpha;
-    double                  beta;
-    double                  gamma;
-    double                  initial_pheramone;
-    unsigned int            iterations;
-    unsigned int            count_ants_in_iteration;
-    """
-    _fields_ = [("q"        , c_double),
-                ("ro"       , c_double),
-                ("alpha"    , c_double),
-                ("beta"     , c_double),
-                ("gamma"    , c_double),
-                ("qinitial_pheramone"       , c_double),
-                ("iterations"               , c_uint),
-                ("count_ants_in_iteration"  , c_uint)    ];
-    
-class ant_colony_TSP_cities(Structure):
-    """
-    unsigned int            size;
-    unsigned int            dimension;
-    double                  *data;
-    """
-    _fields_ = [("size"        , c_uint),
-                ("dimension"   , c_uint),
-                ("data"        , POINTER(c_double)) ];
 
-class ant_colony_TSP_result(Structure):
-    """
-    unsigned int            size;
-    double                  path_length;
-    unsigned int            *cities_num;
-    """
-    _fields_ = [("size"         , c_uint),
-                ("path_length"  , c_double),
-                ("cities_num"   , POINTER(c_uint)) ];
-    
-    
-    
-            
-                

@@ -1,8 +1,8 @@
 """!
 
-@brief Core module provides access to CCORE library (part of this project).
+@brief pyclustering module for travelling salesman problem algorithms.
 
-@authors Andrei Novikov (pyclustering@yandex.ru)
+@authors Andrei Novikov, Aleksey Kukushkin (pyclustering@yandex.ru)
 @date 2014-2016
 @copyright GNU Public License
 

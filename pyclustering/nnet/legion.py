@@ -207,8 +207,9 @@ class legion_dynamic:
 class legion_network(network):
     """!
     @brief Local excitatory global inhibitory oscillatory network (LEGION) that uses relaxation oscillator
-           based on Van der Pol model. The model uses global inhibitor to de-synchronize synchronous ensembles
-           of oscillators.
+           based on Van der Pol model. 
+           
+    @details The model uses global inhibitor to de-synchronize synchronous ensembles of oscillators.
     
     Example:
     @code

@@ -28,7 +28,7 @@ from pyclustering.core.wrapper import *;
 def agglomerative_algorithm(data, number_clusters, link):
     pointer_data = create_pointer_data(data);
 
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     package = ccore.agglomerative_algorithm(pointer_data, c_uint(number_clusters), c_uint(link));
 
     result = extract_pyclustering_package(package);

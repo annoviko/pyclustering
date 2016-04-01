@@ -19,11 +19,14 @@ GENERAL CHANGES (pyclustering):
 - Implemented CLARANS algorithm (pyclustering.cluster.clarans).
   See: https://github.com/annoviko/pyclustering/issues/52
 
-- Implemented feature to analyse and visualize results of hysteresis oscillatory network (pyclustering.nnet.hysteresis):
+- Implemented feature to analyse and visualize results of hysteresis oscillatory network (pyclustering.nnet.hysteresis).
   See: https://github.com/annoviko/pyclustering/issues/75
 
-- Implemented feature to analyse and visualize results of graph coloring algorithm based on hysteresis oscillatory network (pyclustering.gcolor.hysteresis):
+- Implemented feature to analyse and visualize results of graph coloring algorithm based on hysteresis oscillatory network (pyclustering.gcolor.hysteresis).
   See: https://github.com/annoviko/pyclustering/issues/75
+
+- Implemented ant colony based algorithm for TSP problem (pyclustering.tsp.antcolony).
+  See: https://github.com/annoviko/pyclustering/pull/277
 
 
 GENERAL CHANGES (ccore):
@@ -35,6 +38,9 @@ GENERAL CHANGES (ccore):
 
 - Implemented feature to use rectangular network structures in oscillatory networks.
   See: https://github.com/annoviko/pyclustering/issues/259
+
+- Implemented ant colony based algorithm for TSP problem (ccore.ant.antcolony).
+  See: https://github.com/annoviko/pyclustering/pull/277
 
 
 CORRECTED BUGS:

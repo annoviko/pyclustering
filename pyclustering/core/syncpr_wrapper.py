@@ -38,19 +38,19 @@ def pack_pattern(pattern):
     
 
 def syncpr_create(num_osc, increase_strength1, increase_strength2):
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     pointer_network = ccore.syncpr_create(c_uint(num_osc), c_double(increase_strength1), c_double(increase_strength2));
     
     return pointer_network;
 
 
 def syncpr_destroy(pointer_network):
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     ccore.syncpr_destroy(pointer_network);
 
 
 def syncpr_get_size(pointer_network):
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     return ccore.syncpr_get_size(pointer_network);
     
 
@@ -65,45 +65,45 @@ def syncpr_train(pointer_network, patterns):
     package.type = pyclustering_type_data.PYCLUSTERING_TYPE_LIST;
     package.data = cast(c_patterns, POINTER(c_void_p));
     
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     ccore.syncpr_train(pointer_network, pointer(package));    
     
     
 def syncpr_simulate_static(pointer_network, steps, time, pattern, solution, collect_dynamic):
     package_pattern = pack_pattern(pattern);
     
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     return ccore.syncpr_simulate_static(pointer_network, c_uint(steps), c_double(time), pointer(package_pattern), c_uint(solution), c_bool(collect_dynamic));
 
 
 def syncpr_simulate_dynamic(pointer_network, pattern, order, solution, collect_dynamic, step):
     package_pattern = pack_pattern(pattern);
     
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     return ccore.syncpr_simulate_dynamic(pointer_network, pointer(package_pattern), c_double(order), c_uint(solution), c_bool(collect_dynamic), c_double(step));
 
 
 def syncpr_memory_order(pointer_network, pattern):
     package_pattern = pack_pattern(pattern);
     
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     
     ccore.syncpr_memory_order.restype = c_double;
     return ccore.syncpr_memory_order(pointer_network, pointer(package_pattern));
 
 
 def syncpr_dynamic_get_size(pointer_dynamic):
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     return ccore.syncpr_dynamic_get_size(pointer_dynamic);
 
 
 def syncpr_dynamic_destroy(pointer_dynamic):
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     ccore.syncpr_dynamic_destroy(pointer_dynamic);
 
 
 def syncpr_dynamic_allocate_sync_ensembles(pointer_dynamic, tolerance):
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     package = ccore.syncpr_dynamic_allocate_sync_ensembles(pointer_dynamic, c_double(tolerance));
     
     result = extract_pyclustering_package(package);
@@ -113,7 +113,7 @@ def syncpr_dynamic_allocate_sync_ensembles(pointer_dynamic, tolerance):
 
 
 def syncpr_dynamic_get_output(pointer_dynamic):
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     package = ccore.syncpr_dynamic_get_output(pointer_dynamic);
     
     result = extract_pyclustering_package(package);
@@ -123,7 +123,7 @@ def syncpr_dynamic_get_output(pointer_dynamic):
 
 
 def syncpr_dynamic_get_time(pointer_dynamic):
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     package = ccore.syncpr_dynamic_get_time(pointer_dynamic);
     
     result = extract_pyclustering_package(package);

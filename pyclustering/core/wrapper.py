@@ -153,7 +153,7 @@ def extract_pyclustering_package(ccore_package_pointer):
 
 
 def destroy_object(pointer_object):
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     ccore.destroy_object(pointer_object);    
 
 
@@ -171,7 +171,7 @@ def dbscan(sample, eps, min_neighbors, return_noise = False):
     
     pointer_data = create_pointer_data(sample);
     
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     result = ccore.dbscan_algorithm(pointer_data, c_double(eps), c_uint(min_neighbors));
 
     list_of_clusters = extract_clusters(result);
@@ -188,7 +188,7 @@ def dbscan(sample, eps, min_neighbors, return_noise = False):
 def cure(sample, number_clusters, number_represent_points, compression):    
     pointer_data = create_pointer_data(sample);
     
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     result = ccore.cure_algorithm(pointer_data, c_uint(number_clusters), c_uint(number_represent_points), c_double(compression));
     
     list_of_clusters = extract_clusters(result);
@@ -206,7 +206,7 @@ def hierarchical(sample, number_clusters):
     
     pointer_data = create_pointer_data(sample);
     
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     result = ccore.hierarchical_algorithm(pointer_data, c_uint(number_clusters));
     
     list_of_clusters = extract_clusters(result);
@@ -227,7 +227,7 @@ def kmeans(sample, centers, tolerance):
     pointer_data = create_pointer_data(sample);
     pointer_centers = create_pointer_data(centers);
     
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     result = ccore.kmeans_algorithm(pointer_data, pointer_centers, c_double(tolerance));
     
     list_of_clusters = extract_clusters(result);
@@ -248,7 +248,7 @@ def rock(sample, eps, number_clusters, threshold):
     
     pointer_data = create_pointer_data(sample);
     
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     result = ccore.rock_algorithm(pointer_data, c_double(eps), c_uint(number_clusters), c_double(threshold));
     
     list_of_clusters = extract_clusters(result);
@@ -269,7 +269,7 @@ def xmeans(sample, centers, kmax, tolerance):
     pointer_data = create_pointer_data(sample);
     pointer_centers = create_pointer_data(centers);
     
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     result = ccore.xmeans_algorithm(pointer_data, pointer_centers, c_uint(kmax), c_double(tolerance));
     
     list_of_clusters = extract_clusters(result);
@@ -283,23 +283,23 @@ def xmeans(sample, centers, kmax, tolerance):
 def hsyncnet_create_network(sample, number_clusters, initial_phases):
     pointer_data = create_pointer_data(sample);
     
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     pointer_network = ccore.hsyncnet_create_network(pointer_data, c_uint(number_clusters), c_uint(initial_phases));
     
     return pointer_network;
 
 
 def hsyncnet_destroy_network(pointer_network):
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     ccore.hsyncnet_destroy_network(pointer_network);
 
 
 def hsyncnet_process(network_pointer, order, solution, collect_dynamic):
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     return ccore.hsyncnet_process(network_pointer, c_double(order), c_uint(solution), c_bool(collect_dynamic));  
 
 
 def hsyncnet_analyser_destroy(pointer_analyser):
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     ccore.syncnet_analyser_destroy(pointer_analyser);     
 

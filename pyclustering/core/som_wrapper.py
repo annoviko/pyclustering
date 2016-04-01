@@ -51,7 +51,7 @@ def som_create(rows, cols, conn_type, parameters):
     
     """  
 
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     
     c_params = c_som_parameters();
     
@@ -73,7 +73,7 @@ def som_destroy(som_pointer):
     
     """
     
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     ccore.som_destroy(som_pointer);
     
     
@@ -91,7 +91,7 @@ def som_train(som_pointer, data, epochs, autostop):
     
     pointer_data = create_pointer_data(data);
     
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     return ccore.som_train(som_pointer, pointer_data, c_uint(epochs), autostop);
 
 def som_simulate(som_pointer, pattern):
@@ -105,7 +105,7 @@ def som_simulate(som_pointer, pattern):
             
     pointer_data = create_pointer_data(pattern);
     
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     return ccore.som_simulate(som_pointer, pointer_data);
 
 def som_get_winner_number(som_pointer):
@@ -113,7 +113,7 @@ def som_get_winner_number(som_pointer):
     
     "(in) som_pointer    - pointer to object of self-organized map."
     
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     return ccore.som_get_winner_number(som_pointer);
 
 def som_get_size(som_pointer):
@@ -121,7 +121,7 @@ def som_get_size(som_pointer):
     
     "(in) som_pointer    - pointer to object of self-organized map."
     
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     return ccore.som_get_size(som_pointer);
 
 def som_get_capture_objects(som_pointer):
@@ -129,7 +129,7 @@ def som_get_capture_objects(som_pointer):
     
     "(in) som_pointer    - pointer to object of self-organized map."
     
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     package = ccore.som_get_capture_objects(som_pointer);
     
     result = extract_pyclustering_package(package);
@@ -140,7 +140,7 @@ def som_get_weights(som_pointer):
     
     "(in) som_pointer    - pointer to object of self-organized map."
     
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     package = ccore.som_get_weights(som_pointer);
     
     result = extract_pyclustering_package(package);
@@ -151,7 +151,7 @@ def som_get_awards(som_pointer):
     
     "(in) som_pointer    - pointer to object of self-organized map."
     
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     package = ccore.som_get_awards(som_pointer);
     
     result = extract_pyclustering_package(package);
@@ -162,7 +162,7 @@ def som_get_neighbors(som_pointer):
     
     "(in) som_pointer    - pointer to object of self-organized map."
     
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_WIN64);
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     package = ccore.som_get_neighbors(som_pointer);
     
     result = extract_pyclustering_package(package);
