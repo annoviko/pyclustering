@@ -16,6 +16,9 @@
     <Filter Include="TestEnv Source Files">
       <UniqueIdentifier>{9c57f161-4c1e-4636-bce0-4c7f5277b6ab}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\ant">
+      <UniqueIdentifier>{7e897b04-404e-4d9b-9eb1-32dc2cb59b4d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -63,8 +66,19 @@
     <ClCompile Include="..\tools\gtest\gtest-all.cpp">
       <Filter>TestEnv Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\ccore\syncpr.cpp" />
     <ClCompile Include="..\ccore\adjacency_bit_matrix.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ccore\syncpr.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ccore\ant\ant_colony.cpp">
+      <Filter>Resource Files\ant</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ccore\ant\city_distance_matrix.cpp">
+      <Filter>Resource Files\ant</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ccore\adjacency_list.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -169,6 +183,21 @@
       <Filter>Resource Files</Filter>
     </ClInclude>
     <ClInclude Include="..\ccore\adjacency_bit_matrix.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utest-ant_colony.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ccore\ant\ant_colony.hpp">
+      <Filter>Resource Files\ant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ccore\ant\ant_colony_params.hpp">
+      <Filter>Resource Files\ant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ccore\ant\city_distance_matrix.hpp">
+      <Filter>Resource Files\ant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ccore\adjacency_list.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
   </ItemGroup>

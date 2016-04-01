@@ -15,6 +15,7 @@
 #include "utest-syncnet.h"
 #include "utest-syncpr.h"
 #include "utest-xmeans.h"
+#include "utest-ant_colony.h"
 
 int main(int argc, char *argv[]) {
 	::testing::InitGoogleTest(&argc, argv);

@@ -1,4 +1,4 @@
-# GCC should support C++11, for example, GCC 4.7.2
+# GCC should support C++14
 
 MAKE = make
 MKFLAG = -f
@@ -26,4 +26,5 @@ utcore:
 clean:
 	rm -rf ccore/*.o ccore/*.d ../pyclustering/core/x64/linux/ccore.so
 	rm -rf utcore/*.o utcore/*.d utcore/utcore
+	rm -rf ccore/ant_colony/*.[od]
 
