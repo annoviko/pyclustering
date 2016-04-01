@@ -10,14 +10,14 @@
 #include <memory>
 #include <ctime>
 
-#include "city_distance_matrix.hpp"
+#include "distance_matrix.hpp"
 #include "ant_colony_params.hpp"
 
-namespace ant_colony
+namespace ant
 {
 
 
-class AntColonyResult
+class ant_colony_result
 {
 public:
 	std::vector<int> shortestPath;
@@ -31,29 +31,29 @@ public:
 *
 *
 ***********************************************************************************************/
-class AntColony
+class ant_colony
 {
 
 public:
-	AntColony(const std::shared_ptr<city_distance::CityDistanceMatrix>& initDistance
-			, const std::shared_ptr<AntColonyAlgorithmParams>& initParams)
-		: result(new AntColonyResult)
+	ant_colony(const std::shared_ptr<city_distance::distance_matrix>& initDistance
+			, const std::shared_ptr<ant_colony_params>& initParams)
+		: result(new ant_colony_result)
 		, distance(initDistance)
 		, params(initParams)
 	{}
 
-	std::shared_ptr<AntColonyResult> process();
+	std::shared_ptr<ant_colony_result> process();
 
 #ifdef __CPP_14_ENABLED__
 	decltype(auto) get_result() { return result; }
 #else
-	std::shared_ptr<AntColonyResult> get_result() { return result; }
+	std::shared_ptr<ant_colony_result> get_result() { return result; }
 #endif
 
 private:
 
-	using AntParamsName = ant_colony::AntColonyAlgorithmParamsInitializer::paramsName;
-	using AntAPI = ant_colony::AntColonyAlgorithmParamsInitializer;
+	using AntParamsName = ant::ant_colony_params_initializer::paramsName;
+	using AntAPI = ant::ant_colony_params_initializer;
 	using cities_t = std::vector<int>;
 
 
@@ -69,14 +69,14 @@ private:
 
 
 	/*********************************************************
-	* class CityProbability
+	* class object_probability
 	*			- An ant take probabilities when it have more than one possible next state(cities).
 	*			- The ant take an array with probabilities that can be realized by function 'realize_probability'  
 	********************************************************/
-	class CityProbability
+	class object_probability
 	{
 	public:
-		CityProbability(int city_num, double prob)
+		object_probability(int city_num, double prob)
 			:value(city_num, prob)
 		{}
 
@@ -95,13 +95,13 @@ private:
 
 
 	/*********************************************************
-	* class Pheramone
+	* class pheramone
 	*			- contains an array with pheramone value for all ways between cities
 	********************************************************/
-	class Pheramone
+	class pheramone
 	{
 	public:
-		Pheramone(std::size_t cityCount, double initialPheramone)
+		pheramone(std::size_t cityCount, double initialPheramone)
 			: value(cityCount, std::vector<double>(cityCount, initialPheramone))
 		{}
 
@@ -117,15 +117,15 @@ private:
 	//
 	void place_ants_randomly(std::vector<ant_t>& ants);
 	
-	std::vector<CityProbability> calc_probability(const ant_t& ant, const Pheramone& pheramone);
+	std::vector<object_probability> calc_probability(const ant_t& ant, const pheramone& pheramone);
 	
-	int realize_probability(const ant_t& ant, const std::vector<CityProbability>& prob);
+	int realize_probability(const ant_t& ant, const std::vector<object_probability>& prob);
 
 	double calc_path_length(const cities_t& cities);
 
 	std::vector<std::vector<double>> calc_delta_pheramone(const std::vector<ant_t>& ants);
 
-	void update_pheramones(Pheramone& pheramone, const std::vector<ant_t>& ants);
+	void update_pheramones(pheramone& pheramone, const std::vector<ant_t>& ants);
 
 	void update_shortes_path(cities_t& shortes_path, const std::vector<ant_t>& ants);
 
@@ -141,7 +141,7 @@ private:
 #else
 	
 	template <AntParamsName param_name>
-	using get_base_param_type = typename std::tuple_element<static_cast<int>(param_name), ant_colony::AntColonyAlgorithmParamsInitializer::params_t>::type::type;
+	using get_base_param_type = typename std::tuple_element<static_cast<int>(param_name), ant::ant_colony_params_initializer::params_t>::type::type;
 	
 	std::size_t get_count_city()				const { return distance->m_matrix.size(); }
 	unsigned get_random_number(unsigned max)	const { return (std::rand() % max); }
@@ -164,9 +164,9 @@ private:
 
 public:
 
-    std::shared_ptr<AntColonyResult> result;
-	std::shared_ptr<city_distance::CityDistanceMatrix> distance;
-	std::shared_ptr<AntColonyAlgorithmParams> params;
+    std::shared_ptr<ant_colony_result> result;
+	std::shared_ptr<city_distance::distance_matrix> distance;
+	std::shared_ptr<ant_colony_params> params;
 
 };
 

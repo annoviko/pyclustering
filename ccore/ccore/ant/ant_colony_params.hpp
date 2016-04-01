@@ -13,23 +13,23 @@
 
 #include <type_traits>
 
-namespace ant_colony
+namespace ant
 {
 
 
 /***********************************************************************************************
-* AntColonyAlgorithmParamsInitialize
+* ant_colony_params_initializer
 *                          - contains names and classes for all possible params in algorithm
 *  ! NOT CREATABLE !
 *
-*  example below in class AntColonyAlgorithmParams
+*  example below in class ant_colony_params
 ***********************************************************************************************/
-class AntColonyAlgorithmParamsInitializer
+class ant_colony_params_initializer
 {
 public:
 
 	// do not able to create the object
-	AntColonyAlgorithmParamsInitializer() = delete;
+	ant_colony_params_initializer() = delete;
 
 	enum class paramsName
 	{
@@ -165,7 +165,7 @@ public:
 private:
 	// Tuple should contain all params elements
 	static_assert(std::tuple_size<params_t>::value == static_cast<std::size_t>(paramsName::LAST_ELEM)
-		, "AntColonyAlgorithmParamsInitializer should have all params in tuple");
+		, "ant_colony_params_initializer should have all params in tuple");
 
 
 	// Check : all params in tuple must be mapped to paramsName in enum
@@ -185,37 +185,37 @@ private:
 	#undef STATIC_ASSERT_TUPLE_TYPES
 
 
-}; //end AntColonyAlgorithmParamsInitializer
+}; //end ant_colony_params_initializer
 
 
 
 
 /***********************************************************************************************
-* AntColonyAlgorithmParams
+* ant_colony_params
 *                          - contains all params are used in the algorithm
 * Do not able to create object params
 *
 * example:
 *	
 ***********************************************************************************************/
-class AntColonyAlgorithmParams
+class ant_colony_params
 {
 public:
 
 	// delete constructor
-	AntColonyAlgorithmParams(const AntColonyAlgorithmParams&) = delete;
+	ant_colony_params(const ant_colony_params&) = delete;
 	// delete move constructor
-	AntColonyAlgorithmParams(const AntColonyAlgorithmParams&&) = delete;
+	ant_colony_params(const ant_colony_params&&) = delete;
 
 	// but it's able to assignment for objects
-	AntColonyAlgorithmParams& operator= (const AntColonyAlgorithmParams& other) = default;
+	ant_colony_params& operator= (const ant_colony_params& other) = default;
 
 #ifdef __CPP_14_ENABLED__
-	AntColonyAlgorithmParams& operator= (AntColonyAlgorithmParams&& other) = default;
+	ant_colony_params& operator= (ant_colony_params&& other) = default;
 #endif
 
 
-	using AP = AntColonyAlgorithmParamsInitializer;
+	using AP = ant_colony_params_initializer;
 
 
 	//-----------------------------------------
@@ -231,7 +231,7 @@ public:
 #ifdef __CPP_14_ENABLED__
 	static decltype(auto) 
 #else
-	static std::shared_ptr<AntColonyAlgorithmParams>
+	static std::shared_ptr<ant_colony_params>
 #endif
 		make_param(AP::Q_t&& Q_init
 		, AP::Ro_t&& ro_init
@@ -242,8 +242,8 @@ public:
 		, AP::Iterations_t&& iterations
 		, AP::CountAntsInIteration_t&& ants_in_iteration)
 	{
-		// AntColonyAlgorithmParams has a private constructor so make_shared is unavailable
-		return std::shared_ptr<AntColonyAlgorithmParams>(new AntColonyAlgorithmParams(
+		// ant_colony_params has a private constructor so make_shared is unavailable
+		return std::shared_ptr<ant_colony_params>(new ant_colony_params(
 			std::move(Q_init)
 			, std::move(ro_init)
 			, std::move(alpha_init)
@@ -258,11 +258,11 @@ public:
 #ifdef __CPP_14_ENABLED__
 	static decltype(auto)
 #else
-	static std::shared_ptr<AntColonyAlgorithmParams>
+	static std::shared_ptr<ant_colony_params>
 #endif
 		make_param()
 	{
-		return std::shared_ptr<AntColonyAlgorithmParams>(new AntColonyAlgorithmParams());
+		return std::shared_ptr<ant_colony_params>(new ant_colony_params());
 	}
 
 	// return a value for a requested param
@@ -287,7 +287,7 @@ private:
 	// constructors in private to create only by the fabric function 'make_param'
 	// to prevent creating much copies of the same object
 	// all actions are able with pointer returned by the fabric function
-	AntColonyAlgorithmParams(AP::Q_t&& Q_init
+	ant_colony_params(AP::Q_t&& Q_init
 		, AP::Ro_t&& ro_init
 		, AP::Alpha_t&& alpha_init
 		, AP::Beta_t&& beta_init
@@ -300,7 +300,7 @@ private:
 			}
 	{}
 
-	AntColonyAlgorithmParams()
+	ant_colony_params()
 		: params{
 				AP::Q_t{ 0.5 }
 				, AP::Ro_t{ 0.7 }

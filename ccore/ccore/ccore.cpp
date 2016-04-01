@@ -531,7 +531,7 @@ void hsyncnet_analyser_destroy(const void * pointer_analyser) {
 
 ant_colony_TSP_result * ant_colony_TSP(const ant_colony_TSP_cities * cities_coord, const ant_colony_TSP_params * algorithm_params)
 {
-    std::vector<city_distance::CityCoord> cities;
+    std::vector<city_distance::object_coordinate> cities;
 
     for (std::size_t city_num = 0; city_num < cities_coord->size / cities_coord->dimention; ++city_num)
     {
@@ -545,12 +545,12 @@ ant_colony_TSP_result * ant_colony_TSP(const ant_colony_TSP_cities * cities_coor
         cities.push_back(std::move(v));
     }
 
-    auto dist = city_distance::CityDistanceMatrix::make_city_distance_matrix (cities);
+    auto dist = city_distance::distance_matrix::make_city_distance_matrix (cities);
 
 
     // Algorithm params
-    using AntAPI = ant_colony::AntColonyAlgorithmParamsInitializer;
-    auto algo_params = ant_colony::AntColonyAlgorithmParams::make_param
+    using AntAPI = ant::ant_colony_params_initializer;
+    auto algo_params = ant::ant_colony_params::make_param
         (AntAPI::Q_t{ algorithm_params->q }
             , AntAPI::Ro_t{ algorithm_params->ro }
             , AntAPI::Alpha_t{ algorithm_params->alpha }
@@ -562,7 +562,7 @@ ant_colony_TSP_result * ant_colony_TSP(const ant_colony_TSP_cities * cities_coor
     );
 
     // process()
-    ant_colony::AntColony ant_algo{ dist, algo_params };
+    ant::ant_colony ant_algo{ dist, algo_params };
     auto algo_res = ant_algo.process();
 
     // create result for python

@@ -10,11 +10,11 @@
 #include "ant_colony.hpp"
 
 
-namespace ant_colony
+namespace ant
 {
 
 
-void AntColony::place_ants_randomly(std::vector<ant_t>& ants)
+void ant_colony::place_ants_randomly(std::vector<ant_t>& ants)
 {
 	for (auto& ant : ants)
 	{
@@ -24,9 +24,9 @@ void AntColony::place_ants_randomly(std::vector<ant_t>& ants)
 }
 
 
-std::vector<AntColony::CityProbability> AntColony::calc_probability(const ant_t& ant, const Pheramone& pheramone)
+std::vector<ant_colony::object_probability> ant_colony::calc_probability(const ant_t& ant, const pheramone& pheramone)
 {
-	std::vector<CityProbability> prob;
+	std::vector<object_probability> prob;
 	double commonDivider = 0;
 
 	for (std::size_t city_num = 0; city_num < get_count_city(); ++city_num)
@@ -47,7 +47,7 @@ std::vector<AntColony::CityProbability> AntColony::calc_probability(const ant_t&
 }
 
 
-int AntColony::realize_probability(const ant_t& ant, const std::vector<CityProbability>& prob)
+int ant_colony::realize_probability(const ant_t& ant, const std::vector<object_probability>& prob)
 {
 	double reailized = static_cast<double>(get_random_number(RAND_MAX)) / RAND_MAX;
 	double commulated_prob = 0;
@@ -62,7 +62,7 @@ int AntColony::realize_probability(const ant_t& ant, const std::vector<CityProba
 }
 
 
-double AntColony::calc_path_length(const cities_t& cities)
+double ant_colony::calc_path_length(const cities_t& cities)
 {
 	double pathLength = 0;
 
@@ -75,7 +75,7 @@ double AntColony::calc_path_length(const cities_t& cities)
 }
 
 
-std::vector<std::vector<double>> AntColony::calc_delta_pheramone(const std::vector<ant_t>& ants)
+std::vector<std::vector<double>> ant_colony::calc_delta_pheramone(const std::vector<ant_t>& ants)
 {
 	std::vector<std::vector<double>> deltaPh(get_count_city(), std::vector<double>(get_count_city(), 0));
 	std::vector<double> lengthTour(ants.size(), 0.0);
@@ -95,7 +95,7 @@ std::vector<std::vector<double>> AntColony::calc_delta_pheramone(const std::vect
 }
 
 
-void AntColony::update_pheramones(Pheramone& pheramone, const std::vector<ant_t>& ants)
+void ant_colony::update_pheramones(pheramone& pheramone, const std::vector<ant_t>& ants)
 {
 	if (get_count_city() == 0) return;
 
@@ -113,7 +113,7 @@ void AntColony::update_pheramones(Pheramone& pheramone, const std::vector<ant_t>
 }
 
 
-void AntColony::update_shortes_path(cities_t& shortes_path, const std::vector<ant_t>& ants)
+void ant_colony::update_shortes_path(cities_t& shortes_path, const std::vector<ant_t>& ants)
 {
 	int antWithShortesPath = -1;
 	double curShortesLength = -1;
@@ -144,7 +144,7 @@ void AntColony::update_shortes_path(cities_t& shortes_path, const std::vector<an
 }
 
 
-std::shared_ptr<AntColonyResult> AntColony::process()
+std::shared_ptr<ant_colony_result> ant_colony::process()
 {
 	//initialize random number generator
 	std::srand(static_cast<unsigned>(std::time(0)));
@@ -153,7 +153,7 @@ std::shared_ptr<AntColonyResult> AntColony::process()
 	cities_t shortestPath;
 
 	//initiate pheramones to value from params
-	Pheramone pheramone(cityCount, get_initial_pheromone());
+	pheramone pheramone(cityCount, get_initial_pheromone());
 
 	for (unsigned iteration = 0; iteration < get_count_iterations(); ++iteration)
 	{

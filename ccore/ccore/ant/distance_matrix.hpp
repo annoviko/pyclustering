@@ -15,17 +15,17 @@ namespace city_distance
 *
 * Example for city coordinate creation by initializer list:
 * @code
-*      ant_colony::CityCoord Piter  {4.0, 3.0};
-*      ant_colony::CityCoord Moscow {14.0, 22.0};
-*      ant_colony::CityCoord Zero   {0.0, 0.0};
+*      ant_colony::object_coordinate Piter  {4.0, 3.0};
+*      ant_colony::object_coordinate Moscow {14.0, 22.0};
+*      ant_colony::object_coordinate Zero   {0.0, 0.0};
 * @endcode
 *
 ***********************************************************************************************/
-class CityCoord
+class object_coordinate
 {
 public:
 
-    CityCoord(std::initializer_list<double> init_coord)
+	object_coordinate(std::initializer_list<double> init_coord)
     {
         for (auto e : init_coord)
         {
@@ -33,7 +33,7 @@ public:
         }
     }
 
-    CityCoord(const std::vector<double> & init_coord)
+	object_coordinate(const std::vector<double> & init_coord)
     {
         for (auto e : init_coord)
         {
@@ -41,7 +41,7 @@ public:
         }
     }
 
-    CityCoord(std::vector<double> && init_coord)
+	object_coordinate(std::vector<double> && init_coord)
     {
         for (auto e : init_coord)
         {
@@ -49,7 +49,7 @@ public:
         }
     }
 
-    double get_distance (const CityCoord & to_city) const;
+    double get_distance (const object_coordinate & to_city) const;
 
 #ifdef __CPP_14_ENABLED__
     decltype(auto) get_dimention() const { return location_point.size(); }
@@ -68,14 +68,14 @@ private:
 
 
 /***********************************************************************************************
- * class CityDistanceMatrix
+ * class distance_matrix
  *                          - contains distance matrix between all cities
  *
- * auto dist = city_distance::CityDistanceMatrix::make_city_distance_matrix
+ * auto dist = city_distance::distance_matrix::make_city_distance_matrix
  *					({ Piter, Zero, Moscow });
  *
 ***********************************************************************************************/
-class CityDistanceMatrix
+class distance_matrix
 {
 public:
 	using array_coordinate = std::vector<std::vector<double>>;
@@ -84,22 +84,22 @@ public:
 #ifdef __CPP_14_ENABLED__
 	static decltype(auto) 
 #else
-	static std::shared_ptr<CityDistanceMatrix>
+	static std::shared_ptr<distance_matrix>
 #endif
 		make_city_distance_matrix(const array_coordinate& init_distance)
 	{
-		return std::shared_ptr<CityDistanceMatrix>(new CityDistanceMatrix(init_distance));
+		return std::shared_ptr<distance_matrix>(new distance_matrix(init_distance));
 	}	
 
 	// fabric functions for initiating by matrix with move semantic
 #ifdef __CPP_14_ENABLED__
 	static decltype(auto)
 #else
-	static std::shared_ptr<CityDistanceMatrix>
+	static std::shared_ptr<distance_matrix>
 #endif
 		make_city_distance_matrix(array_coordinate&& init_distance)
 	{
-		return std::shared_ptr<CityDistanceMatrix>(new CityDistanceMatrix(std::move(init_distance)));
+		return std::shared_ptr<distance_matrix>(new distance_matrix(std::move(init_distance)));
 	}
 
 
@@ -107,11 +107,11 @@ public:
 #ifdef __CPP_14_ENABLED__
 	static decltype(auto)
 #else
-	static std::shared_ptr<CityDistanceMatrix>
+	static std::shared_ptr<distance_matrix>
 #endif 
-		make_city_distance_matrix(const std::vector<CityCoord>& cities)
+		make_city_distance_matrix(const std::vector<object_coordinate>& cities)
 	{
-		return std::shared_ptr<CityDistanceMatrix>(new CityDistanceMatrix(cities));
+		return std::shared_ptr<distance_matrix>(new distance_matrix(cities));
 	}
 
 
@@ -121,17 +121,17 @@ public:
 
 private:
 	// constructor for initiating by matrix
-    CityDistanceMatrix(const array_coordinate & init_distance) {
+	distance_matrix(const array_coordinate & init_distance) {
 		m_matrix = init_distance;
     }
 
 	// constructor for initiating by matrix with move semantic
-    CityDistanceMatrix(array_coordinate && init_distance) {
+	distance_matrix(array_coordinate && init_distance) {
 		m_matrix = std::move(init_distance);
     }
 
 	// constructor for initiating by list with city's coordinates
-	CityDistanceMatrix(const std::vector<CityCoord> & cities);
+	distance_matrix(const std::vector<object_coordinate> & cities);
 
 public:
     array_coordinate    m_matrix;
