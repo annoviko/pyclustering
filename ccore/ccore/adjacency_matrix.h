@@ -175,6 +175,11 @@ public:
     *
     ***********************************************************************************************/
     virtual double get_connection_weight(const size_t node_index1, const size_t node_index2) const;
+
+public:
+	adjacency_matrix & operator=(const adjacency_matrix & another_collection);
+
+	adjacency_matrix & operator=(adjacency_matrix && another_collection);
 };
 
 #endif

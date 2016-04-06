@@ -81,6 +81,9 @@
     <ClCompile Include="..\ccore\ant\distance_matrix.cpp">
       <Filter>Resource Files\ant</Filter>
     </ClCompile>
+    <ClCompile Include="..\ccore\adjacency_matrix.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="utest-kdtree.h">
@@ -119,9 +122,6 @@
     <ClInclude Include="..\ccore\syncnet.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
-    <ClInclude Include="utest-syncnet.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="utest-hsyncnet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -143,17 +143,11 @@
     <ClInclude Include="samples.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="utest-syncpr.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\ccore\syncpr.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
     <ClInclude Include="..\ccore\xmeans.h">
       <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="utest-xmeans.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="utest-agglomerative.h">
       <Filter>Header Files</Filter>
@@ -199,6 +193,27 @@
     </ClInclude>
     <ClInclude Include="..\ccore\ant\distance_matrix.hpp">
       <Filter>Resource Files\ant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ccore\adjacency_matrix.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utest-adjacency_list.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utest-adjacency_matrix.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utest-syncnet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utest-syncpr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utest-xmeans.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utest-adjacency.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

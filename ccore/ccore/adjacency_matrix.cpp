@@ -44,7 +44,7 @@ void adjacency_matrix::get_neighbors(const size_t node_index, std::vector<size_t
 
     const std::vector<double> & node_neighbor_connections = m_adjacency[node_index];
     for (size_t neighbor_index = 0; neighbor_index != node_neighbor_connections.size(); neighbor_index++) {
-        if (node_neighbor_connections[node_index] > 0) {
+        if (node_neighbor_connections[neighbor_index] > 0) {
             node_neighbors.push_back(neighbor_index);
         }
     }
@@ -58,4 +58,22 @@ void adjacency_matrix::set_connection_weight(const size_t node_index1, const siz
 
 double adjacency_matrix::get_connection_weight(const size_t node_index1, const size_t node_index2) const {
     return m_adjacency[node_index1][node_index2];
+}
+
+
+adjacency_matrix & adjacency_matrix::operator=(const adjacency_matrix & another_collection) {
+	if (this != &another_collection) {
+		m_adjacency = another_collection.m_adjacency;
+	}
+
+	return *this;
+}
+
+
+adjacency_matrix & adjacency_matrix::operator=(adjacency_matrix && another_collection) {
+	if (this != &another_collection) {
+		m_adjacency = std::move(another_collection.m_adjacency);
+	}
+
+	return *this;
 }

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -19,13 +19,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -86,6 +86,7 @@
   <ItemGroup>
     <ClCompile Include="..\ccore\adjacency_bit_matrix.cpp" />
     <ClCompile Include="..\ccore\adjacency_list.cpp" />
+    <ClCompile Include="..\ccore\adjacency_matrix.cpp" />
     <ClCompile Include="..\ccore\agglomerative.cpp" />
     <ClCompile Include="..\ccore\ant\ant_colony.cpp" />
     <ClCompile Include="..\ccore\ant\distance_matrix.cpp" />
@@ -109,6 +110,7 @@
     <ClInclude Include="..\ccore\adjacency.h" />
     <ClInclude Include="..\ccore\adjacency_bit_matrix.h" />
     <ClInclude Include="..\ccore\adjacency_list.h" />
+    <ClInclude Include="..\ccore\adjacency_matrix.h" />
     <ClInclude Include="..\ccore\agglomerative.h" />
     <ClInclude Include="..\ccore\ant\ant_colony.hpp" />
     <ClInclude Include="..\ccore\ant\ant_colony_params.hpp" />
@@ -130,7 +132,10 @@
     <ClInclude Include="..\ccore\xmeans.h" />
     <ClInclude Include="..\tools\gtest\gtest.h" />
     <ClInclude Include="samples.h" />
+    <ClInclude Include="utest-adjacency.h" />
     <ClInclude Include="utest-adjacency_bit_matrix.h" />
+    <ClInclude Include="utest-adjacency_list.h" />
+    <ClInclude Include="utest-adjacency_matrix.h" />
     <ClInclude Include="utest-agglomerative.h" />
     <ClInclude Include="utest-ant_colony.h" />
     <ClInclude Include="utest-differential.h" />

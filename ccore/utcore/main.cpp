@@ -1,8 +1,11 @@
 #include <gtest/gtest.h>
 
+
 #include "utest-adjacency_bit_matrix.h"
 #include "utest-adjacency_list.h"
+#include "utest-adjacency_matrix.h"
 #include "utest-agglomerative.h"
+#include "utest-ant_colony.h"
 #include "utest-differential.h"
 #include "utest-hsyncnet.h"
 #include "utest-kdtree.h"
@@ -15,7 +18,7 @@
 #include "utest-syncnet.h"
 #include "utest-syncpr.h"
 #include "utest-xmeans.h"
-#include "utest-ant_colony.h"
+
 
 int main(int argc, char *argv[]) {
 	::testing::InitGoogleTest(&argc, argv);

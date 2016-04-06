@@ -5,6 +5,8 @@
 
 #include "gtest/gtest.h"
 
+#include "utest-adjacency.h"
+
 #include <cmath>
 #include <utility>
 
@@ -20,6 +22,12 @@ TEST(utest_adjacency_list, create_delete) {
     }
 
     delete matrix;
+}
+
+
+TEST(utest_adjacency_list, null_size) {
+	adjacency_list matrix(0);
+	ASSERT_EQ(0, matrix.size());
 }
 
 
@@ -85,106 +93,57 @@ TEST(utest_adjacency_list, move_matrix) {
 }
 
 
+TEST(utest_adjacency_list, has_no_connection) {
+	adjacency_list matrix(30);
+	template_has_no_connection(matrix);
+}
+
+
+TEST(utest_adjacency_list, has_all_connection) {
+	adjacency_list matrix(25);
+	template_has_all_connection(matrix);
+}
+
+
 TEST(utest_adjacency_list, set_get_connection) {
     adjacency_list matrix(100);
-
-    for (size_t i = 0; i < matrix.size(); i++) {
-        for (size_t j = i + 1; j < matrix.size(); j++) {
-            ASSERT_EQ(false, matrix.has_connection(i, j));
-
-            matrix.set_connection(i, j);
-
-            ASSERT_EQ(true, matrix.has_connection(i, j));
-            ASSERT_EQ(false, matrix.has_connection(j, i));
-
-            matrix.set_connection(j, i);
-
-            ASSERT_EQ(true, matrix.has_connection(j, i));
-        }
-    }
+	template_set_connection(matrix);
 }
 
 
 TEST(utest_adjacency_list, erase_get_connection) {
     adjacency_list matrix(20);
-
-    for (size_t i = 0; i < matrix.size(); i++) {
-        for (size_t j = i + 1; j < matrix.size(); j++) {
-            matrix.set_connection(i, j);
-            matrix.set_connection(j, i);
-        }
-    }
-
-    for (size_t i = 0; i < matrix.size(); i++) {
-        for (size_t j = i + 1; j < matrix.size(); j++) {
-            ASSERT_EQ(true, matrix.has_connection(i, j));
-            ASSERT_EQ(true, matrix.has_connection(j, i));
-
-            matrix.erase_connection(i, j);
-
-            ASSERT_EQ(false, matrix.has_connection(i, j));
-            ASSERT_EQ(true, matrix.has_connection(j, i));
-
-            matrix.erase_connection(j, i);
-
-            ASSERT_EQ(false, matrix.has_connection(i, j));
-            ASSERT_EQ(false, matrix.has_connection(j, i));
-        }
-    }
+	template_erase_connection(matrix);
 }
 
 
 TEST(utest_adjacency_list, get_neighbors_sizes) {
     adjacency_list matrix(20);
-
-    std::vector<size_t> node_neighbors;
-
-    for (size_t i = 0; i < matrix.size(); i++) {
-        for (size_t j = i + 1; j < matrix.size(); j++) {
-            matrix.set_connection(i, j);
-            matrix.set_connection(j, i);
-
-            matrix.get_neighbors(i, node_neighbors);
-            ASSERT_EQ(j, node_neighbors.size());
-
-            matrix.get_neighbors(j, node_neighbors);
-            ASSERT_EQ(i + 1, node_neighbors.size());
-        }
-    }
+	template_get_neighbors_sizes(matrix);
 }
 
 
 TEST(utest_adjacency_list, get_neighbors_indexes) {
     adjacency_list matrix(20);
+	template_get_neighbors_indexes(matrix);
+}
 
-    std::vector<size_t> node_neighbors;
 
-    for (size_t i = 0; i < matrix.size(); i++) {
-        for (size_t j = i + 1; j < matrix.size(); j++) {
-            matrix.set_connection(i, j);
-            matrix.set_connection(j, i);
-        }
-    }
+TEST(utest_adjacency_list, no_get_neighbors) {
+	adjacency_list matrix(30);
+	template_no_get_neighbors(matrix);
+}
 
-    for (size_t i = 0; i < matrix.size(); i++) {
-        matrix.get_neighbors(i, node_neighbors);
-        ASSERT_EQ(matrix.size() - 1, node_neighbors.size());
 
-        std::vector<bool> index_neighbor_checker(matrix.size(), false);
-        for (size_t j = 0; j < node_neighbors.size(); j++) {
-            size_t neighbor_index = node_neighbors[j];
-            index_neighbor_checker[neighbor_index] = true;
-        }
+TEST(utest_adjacency_list, all_get_neighbors) {
+	adjacency_list matrix(11);
+	template_all_get_neighbors(matrix);
+}
 
-        for (size_t j = 0; j < node_neighbors.size(); j++) {
-            if (i != j) {
-                ASSERT_EQ(true, index_neighbor_checker[j]);
-            }
-            else {
-                ASSERT_EQ(false, index_neighbor_checker[i]);
-            }
-        }
-    }
+
+TEST(utest_adjacency_list, get_neighbors_after_erase) {
+	adjacency_list matrix(17);
+	template_get_neighbors_after_erase(matrix);
 }
 
 
