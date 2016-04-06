@@ -26,10 +26,6 @@ run_utcore_job() {
 		echo "ccore library creation... fail"
 		exit 1
 	fi
-	
-	# run unit-tests
-	cd utcore/
-	./utcore
 }
 
 run_python_job() {
