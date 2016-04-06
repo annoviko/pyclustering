@@ -87,6 +87,7 @@
     <ClCompile Include="..\ccore\adjacency_bit_matrix.cpp" />
     <ClCompile Include="..\ccore\adjacency_list.cpp" />
     <ClCompile Include="..\ccore\adjacency_matrix.cpp" />
+    <ClCompile Include="..\ccore\adjacency_weight_list.cpp" />
     <ClCompile Include="..\ccore\agglomerative.cpp" />
     <ClCompile Include="..\ccore\ant\ant_colony.cpp" />
     <ClCompile Include="..\ccore\ant\distance_matrix.cpp" />
@@ -111,6 +112,7 @@
     <ClInclude Include="..\ccore\adjacency_bit_matrix.h" />
     <ClInclude Include="..\ccore\adjacency_list.h" />
     <ClInclude Include="..\ccore\adjacency_matrix.h" />
+    <ClInclude Include="..\ccore\adjacency_weight_list.h" />
     <ClInclude Include="..\ccore\agglomerative.h" />
     <ClInclude Include="..\ccore\ant\ant_colony.hpp" />
     <ClInclude Include="..\ccore\ant\ant_colony_params.hpp" />
@@ -136,6 +138,7 @@
     <ClInclude Include="utest-adjacency_bit_matrix.h" />
     <ClInclude Include="utest-adjacency_list.h" />
     <ClInclude Include="utest-adjacency_matrix.h" />
+    <ClInclude Include="utest-adjacency_weight_list.h" />
     <ClInclude Include="utest-agglomerative.h" />
     <ClInclude Include="utest-ant_colony.h" />
     <ClInclude Include="utest-differential.h" />

@@ -182,3 +182,70 @@ void template_get_neighbors_after_erase(adjacency_collection & collection) {
 		ASSERT_EQ(0, node_neighbors.size());
 	}
 }
+
+
+void template_set_weight_connection(adjacency_weight_collection & collection) {
+	for (size_t i = 0; i < collection.size(); i++) {
+		for (size_t j = 0; j < collection.size(); j++) {
+			ASSERT_EQ(0.0, collection.get_connection_weight(i, j));
+			ASSERT_EQ(false, collection.has_connection(i, j));
+
+			const double weight = (double) i + (double) j / 10.0 + 1.0;
+			collection.set_connection_weight(i, j, weight);
+
+			ASSERT_EQ(weight, collection.get_connection_weight(i, j));
+			ASSERT_EQ(true, collection.has_connection(i, j));
+		}
+	}
+}
+
+
+void template_set_default_weight_connection(adjacency_weight_collection & collection) {
+	for (size_t i = 0; i < collection.size(); i++) {
+		for (size_t j = 0; j < collection.size(); j++) {
+			ASSERT_EQ(0.0, collection.get_connection_weight(i, j));
+			ASSERT_EQ(false, collection.has_connection(i, j));
+
+			collection.set_connection(i, j);
+
+			ASSERT_NE(0.0, collection.get_connection_weight(i, j));
+			ASSERT_EQ(true, collection.has_connection(i, j));
+		}
+	}
+}
+
+
+void template_set_negative_weight(adjacency_weight_collection & collection) {
+	for (size_t i = 0; i < collection.size(); i++) {
+		for (size_t j = 0; j < collection.size(); j++) {
+			ASSERT_EQ(0.0, collection.get_connection_weight(i, j));
+			ASSERT_EQ(false, collection.has_connection(i, j));
+
+			collection.set_connection_weight(i, j, -1.0);
+
+			ASSERT_EQ(-1.0, collection.get_connection_weight(i, j));
+			ASSERT_EQ(true, collection.has_connection(i, j));
+		}
+	}
+}
+
+
+void template_get_neighbors_positive_negative(adjacency_weight_collection & collection) {
+	for (size_t i = 0; i < collection.size(); i++) {
+		for (size_t j = 0; j < collection.size(); j++) {
+			if (i % 2 == 0) {
+				collection.set_connection_weight(i, j, 10.0);
+			}
+			else {
+				collection.set_connection_weight(i, j, -10.0);
+			}
+		}
+	}
+
+	for (size_t i = 0; i < collection.size(); i++) {
+		std::vector<size_t> node_neighbors;
+		collection.get_neighbors(i, node_neighbors);
+
+		ASSERT_EQ(collection.size(), node_neighbors.size());
+	}
+}

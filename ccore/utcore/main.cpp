@@ -4,6 +4,7 @@
 #include "utest-adjacency_bit_matrix.h"
 #include "utest-adjacency_list.h"
 #include "utest-adjacency_matrix.h"
+#include "utest-adjacency_weight_list.h"
 #include "utest-agglomerative.h"
 #include "utest-ant_colony.h"
 #include "utest-differential.h"

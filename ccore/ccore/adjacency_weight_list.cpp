@@ -77,3 +77,21 @@ double adjacency_weight_list::get_connection_weight(const size_t node_index1, co
 
     return DEFAULT_NON_EXISTANCE_CONNECTION_VALUE;
 }
+
+
+adjacency_weight_list & adjacency_weight_list::operator=(const adjacency_weight_list & another_collection) {
+	if (this != &another_collection) {
+		m_adjacency = another_collection.m_adjacency;
+	}
+
+	return *this;
+}
+
+
+adjacency_weight_list & adjacency_weight_list::operator=(adjacency_weight_list && another_collection) {
+	if (this != &another_collection) {
+		m_adjacency = std::move(another_collection.m_adjacency);
+	}
+
+	return *this;
+}

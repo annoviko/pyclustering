@@ -179,6 +179,11 @@ public:
     *
     ***********************************************************************************************/
     virtual double get_connection_weight(const size_t node_index1, const size_t node_index2) const;
+
+public:
+	adjacency_weight_list & operator=(const adjacency_weight_list & another_collection);
+
+	adjacency_weight_list & operator=(adjacency_weight_list && another_collection);
 };
 
 #endif

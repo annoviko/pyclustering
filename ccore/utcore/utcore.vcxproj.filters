@@ -84,6 +84,9 @@
     <ClCompile Include="..\ccore\adjacency_matrix.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\ccore\adjacency_weight_list.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="utest-kdtree.h">
@@ -213,6 +216,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="utest-adjacency.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ccore\adjacency_weight_list.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utest-adjacency_weight_list.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

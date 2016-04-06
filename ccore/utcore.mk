@@ -23,7 +23,7 @@ INCLUDES += -I./ -Iutcore/ -Itools/
 DEPS = $(OBJECTS:.o=.d)
 
 # Output name of executable file
-EXECUTABLE = utcore/utcore
+EXECUTABLE = utcore/utcore.exe
 
 utcore: $(EXECUTABLE)
 
