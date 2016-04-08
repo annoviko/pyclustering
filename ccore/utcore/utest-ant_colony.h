@@ -35,7 +35,7 @@ void template_smallest_distance_test(const std::shared_ptr<city_distance::distan
     ant::ant_colony ant_algo{ coordinates, sp_algo_params_2 };
     auto res = ant_algo.process();
 
-    ASSERT_DOUBLE_EQ(expected_result, res->pathLen);
+    ASSERT_DOUBLE_EQ(expected_result, res->path_length);
 }
 
 
@@ -180,7 +180,7 @@ TEST(utest_ant_colony, no_ants_for_processing) {
     ant::ant_colony ant_algo{ dist, sp_algo_params_2 };
     auto res = ant_algo.process();
 
-    ASSERT_DOUBLE_EQ(0.0, res->pathLen);
+    ASSERT_DOUBLE_EQ(0.0, res->path_length);
 }
 
 
@@ -205,6 +205,6 @@ TEST(utest_ant_colony, no_iterations_for_processing) {
     ant::ant_colony ant_algo{ dist, sp_algo_params_2 };
     auto res = ant_algo.process();
 
-    ASSERT_DOUBLE_EQ(0.0, res->pathLen);
+    ASSERT_DOUBLE_EQ(0.0, res->path_length);
 }
 
