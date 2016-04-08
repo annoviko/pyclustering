@@ -154,7 +154,7 @@ def extract_pyclustering_package(ccore_package_pointer):
 
 def destroy_object(pointer_object):
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
-    ccore.destroy_object(pointer_object);    
+    ccore.destroy_object(pointer_object);
 
 
 # Implemented algorithms.

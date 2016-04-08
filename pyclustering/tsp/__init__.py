@@ -22,3 +22,18 @@
 @endcond
 
 """
+
+
+class tsp_result:
+    """!
+    @brief Describes result of solving travelling salesman problem.
+    
+    @details It consists of information about sequence of visited objects and the shortest path length.
+    
+    """  
+    
+    ## The shortest path for solving travelling salesman problem.
+    shortest_length = 0;
+    
+    ## Sequence of objects that have been visited to obtain shortest path.
+    object_sequence = [];

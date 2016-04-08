@@ -17,16 +17,27 @@ namespace ant
 {
 
 
+typedef struct ant_colony_tsp_params {
+    double                  q;
+    double                  ro;
+    double                  alpha;
+    double                  beta;
+    double                  gamma;
+    double                  initial_pheramone;
+    unsigned int            iterations;
+    unsigned int            count_ants_in_iteration;
+} ant_colony_tsp_params;
+
+
 class ant_colony_result
 {
 public:
-
-    ant_colony_result()
-        : pathLen{0}
+    ant_colony_result(void)
+        : path_length{0}
     {}
 
-	std::vector<int> shortestPath;
-	double pathLen;
+	std::vector<int> shortest_path;
+	double path_length;
 };
 
 

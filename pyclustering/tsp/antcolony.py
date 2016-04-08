@@ -26,6 +26,8 @@
 
 """
 
+from pyclustering.tsp import tsp_result;
+
 import pyclustering.core.antcolony_tsp_wrapper as wrapper;
 
 
@@ -63,8 +65,6 @@ class antcolony:
     """  
     
     __parameters = None;
-    __result_tsp = None;
-    
     
     def __init__(self, parameters):
         """!
@@ -73,7 +73,11 @@ class antcolony:
         @param[in] parameters (antcolony_parameters): Parameters of the ant colony algorithm.
         
         """
-        self.__parameters = parameters;
+        
+        if (parameters is None):
+            self.__parameters = antcolony_parameters();
+        else:
+            self.__parameters = parameters;
     
     
     def process(self, object_locations):
@@ -83,5 +87,14 @@ class antcolony:
         @param[in] object_locations (list): Coordinates of objects that should be visited.
         
         """
-        self.__result_tsp = wrapper.antcolony_tsp_process(object_locations);
-    
+        
+        c_pointer_tsp_result = wrapper.antcolony_tsp_process(object_locations, self.__parameters);
+        
+        result = tsp_result();
+        result.shortest_length = c_pointer_tsp_result.path_length;
+        for i in range(c_pointer_tsp_result.size):
+            result.object_sequence.append(c_pointer_tsp_result.object_sequence[i]);
+        
+        wrapper.antcolony_tsp_destroy(c_pointer_tsp_result);
+        
+        return result;

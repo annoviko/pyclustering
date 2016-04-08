@@ -25,6 +25,7 @@
 
 from pyclustering.core.wrapper import *;
 
+import types;
 
 class c_antcolony_tsp_parameters(Structure):
     """
@@ -67,9 +68,9 @@ class c_antcolony_tsp_result(Structure):
     unsigned int            *cities_num;
     
     """
-    _fields_ = [("size"         , c_uint),
-                ("path_length"  , c_double),
-                ("cities_num"   , POINTER(c_uint)) ];
+    _fields_ = [("size"              , c_uint),
+                ("path_length"       , c_double),
+                ("object_sequence"   , POINTER(c_uint)) ];
 
 
 def antcolony_tsp_process(cities, params):
@@ -82,7 +83,7 @@ def antcolony_tsp_process(cities, params):
     cities_coord.data = (c_double * cities_coord.size)();
     
     for i in range(0, cities_coord.size):
-        cities_coord.data[i] =cities[i // dimension][i % dimension];
+        cities_coord.data[i] = cities[i // dimension][i % dimension];
     
     cities_coord = pointer(cities_coord);
 
@@ -101,30 +102,13 @@ def antcolony_tsp_process(cities, params):
     
     
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
-    result = ccore.ant_colony_TSP(cities_coord, algorithm_params);
+    result = ccore.ant_colony_tsp_process(cities_coord, algorithm_params);
     
     result = cast(result, POINTER(c_antcolony_tsp_result))[0];
     
     return result;
 
 
-# cities = [[0.0, 0.0], [0.0, 1.0], [0.0, 2.0], [1.0, 0.0], [1.0, 1.0], [1.0, 2.0]];
-#  
-# params = c_antcolony_tsp_parameters();
-# params.q        = 1.5;
-# params.ro       = 0.7;
-# params.alpha    = 1.0;
-# params.beta     = 1.0;
-# params.gamma    = 2.0;
-# params.qinitial_pheramone       = 0.1;
-# params.iterations               = 50;
-# params.ants_per_iteration       = 10;
-#  
-# res = antcolony_tsp_process(cities, params)
-#  
-# print ("Result :")
-# print (res.size)
-# print (res.path_length)
-# for i in range(res.size):
-#     print (res.cities_num[i])
-
+def antcolony_tsp_destroy(tsp_result_pointer):
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
+    ccore.ant_colony_tsp_destroy(tsp_result_pointer);

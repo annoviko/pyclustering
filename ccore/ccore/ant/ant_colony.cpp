@@ -192,8 +192,8 @@ std::shared_ptr<ant_colony_result> ant_colony::process()
 		update_shortes_path(shortestPath, v_ants);
 	}
 
-	result->shortestPath = shortestPath;
-	result->pathLen = calc_path_length(result->shortestPath);
+	result->shortest_path = shortestPath;
+	result->path_length = calc_path_length(result->shortest_path);
 
 	return	result;
 }

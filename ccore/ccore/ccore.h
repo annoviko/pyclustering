@@ -44,6 +44,7 @@ typedef enum pyclustering_type_data {
 	PYCLUSTERING_TYPE_UNDEFINED         = 7,
 } pyclustering_type_data;
 
+
 typedef struct pyclustering_package {
 	unsigned int size;
 	unsigned int type;		/* pyclustering_type_data    */
@@ -61,21 +62,25 @@ typedef struct pyclustering_package {
 
 } pyclustering_package;
 
+
 typedef struct cluster_representation {
 	unsigned int			size;
 	unsigned int			* objects;
 } cluster_representation;
+
 
 typedef struct clustering_result {
 	unsigned int			size;
 	cluster_representation	* clusters;
 } clustering_result;
 
+
 typedef struct data_representation {
 	unsigned int			size;
 	unsigned int			dimension;
 	double					** objects;
 } data_representation;
+
 
 typedef struct dynamic_result {
 	unsigned int			size_dynamic;
@@ -84,46 +89,19 @@ typedef struct dynamic_result {
 	double					** dynamic;
 } dynamic_result;
 
-typedef struct ant_colony_TSP_params {
-//    enum class paramsName
-//    {
-//        Q           // [double]
-//        , RO        // [double]
-//        , ALPHA     // [double]
-//        , BETA      // [double]
-//        , GAMMA     // [double]
-//        , INITIAL_PHERAMONE // [double]
-//
-//        , ITERATIONS // [unsigned]
-//        , COUNT_ANTS_IN_ITERATION // [unsigned]
-//
-//        , LAST_ELEM // should be always last
-//                    // using to check what all params are set
-//    };
-    double                  q;
-    double                  ro;
-    double                  alpha;
-    double                  beta;
-    double                  gamma;
-    double                  initial_pheramone;
-    unsigned int            iterations;
-    unsigned int            count_ants_in_iteration;
-} ant_colony_TSP_params;
 
-typedef struct ant_colony_TSP_cities {
+typedef struct tsp_result {
+	unsigned int			size;
+	double					path_length;
+	unsigned int			* objects_sequence;
+} tsp_result;
+
+
+typedef struct tsp_objects {
     unsigned int            size;
     unsigned int            dimention;
-    double                  *data;
-    //sizeof(data) = size
-    //cities count = size / dimention
-} ant_colony_TSP_cities;
-
-typedef struct ant_colony_TSP_result {
-    unsigned int            size;
-    double                  path_length;
-    unsigned int            *cities_num;
-
-} ant_colony_TSP_result;
+    double                  * data;
+} tsp_objects;
 
 /***********************************************************************************************
  *
@@ -468,15 +446,25 @@ extern "C" DECLARATION void hsyncnet_analyser_destroy(const void * pointer_analy
 
 /***********************************************************************************************
  *
- * @brief   Create and run Ant Colony Net for TSP
+ * @brief   Creates and runs ant colony algorithm for TSP.
  *
- * @param   (in) cities      - pointer to array with cities in format
+ * @param[in] objects_coord			 - pointer to array with objects.
+ * @param[in] ant_colony_parameters  - pointer to parameters of the ant colony algorithm.
  *
+ * @return Pointer to allocated TSP result where shortest length is stored with sequence of visited
+ *         objects. This pointer should deallocated by client using 'ant_colony_tsp_destroy'.
  *
- * @param   (in) algorithm_params - pointer to parametrs for the algorithm
+ * @see ant_colony_tsp_destroy();
+ *
  ***********************************************************************************************/
-extern "C" DECLARATION ant_colony_TSP_result * ant_colony_TSP(const ant_colony_TSP_cities * cities_coord, const ant_colony_TSP_params * algorithm_params);
+extern "C" DECLARATION tsp_result * ant_colony_tsp_process(const tsp_objects * objects_coord, const void * ant_colony_parameters);
 
+/***********************************************************************************************
+ *
+ * @brief   Frees TSP results that is allocated by ant colony algorithm.
+ *
+ ***********************************************************************************************/
+extern "C" DECLARATION void ant_colony_tsp_destroy(const void * pointer);
 
 
 extern "C" DECLARATION void * som_create(const unsigned int num_rows, const unsigned int num_cols, const unsigned int type_conn, const void * parameters);

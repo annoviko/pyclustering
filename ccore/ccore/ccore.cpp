@@ -529,17 +529,18 @@ void hsyncnet_analyser_destroy(const void * pointer_analyser) {
 }
 
 
-ant_colony_TSP_result * ant_colony_TSP(const ant_colony_TSP_cities * cities_coord, const ant_colony_TSP_params * algorithm_params)
+tsp_result * ant_colony_tsp_process(const tsp_objects * objects_coord, const void * ant_colony_parameters)
 {
+	const ant::ant_colony_tsp_params * algorithm_params = (const ant::ant_colony_tsp_params *) ant_colony_parameters;
     std::vector<city_distance::object_coordinate> cities;
 
-    for (std::size_t city_num = 0; city_num < cities_coord->size / cities_coord->dimention; ++city_num)
+    for (std::size_t city_num = 0; city_num < objects_coord->size / objects_coord->dimention; ++city_num)
     {
-        std::vector<double> v(cities_coord->dimention);
+        std::vector<double> v(objects_coord->dimention);
 
-        for (std::size_t dim = 0; dim < cities_coord->dimention; ++dim)
+        for (std::size_t dim = 0; dim < objects_coord->dimention; ++dim)
         {
-            v[dim] = cities_coord->data[city_num*cities_coord->dimention + dim];
+            v[dim] = objects_coord->data[city_num*objects_coord->dimention + dim];
         }
 
         cities.push_back(std::move(v));
@@ -566,23 +567,30 @@ ant_colony_TSP_result * ant_colony_TSP(const ant_colony_TSP_cities * cities_coor
     auto algo_res = ant_algo.process();
 
     // create result for python
-    ant_colony_TSP_result *res = new ant_colony_TSP_result();
+    tsp_result * result = new tsp_result();
 
     // init path length
-    res->path_length = algo_res->pathLen;
+    result->path_length = algo_res->path_length;
 
     // create array to stored cities in the path
-    res->cities_num = new unsigned int[algo_res->shortestPath.size()];
-    res->size = algo_res->shortestPath.size();
+    result->objects_sequence = new unsigned int[algo_res->shortest_path.size()];
+    result->size = algo_res->shortest_path.size();
 
     // copy cities to result
-    for (std::size_t city_num = 0; city_num < algo_res->shortestPath.size(); ++city_num)
-    {
-        res->cities_num[city_num] = algo_res->shortestPath[city_num];
+    for (std::size_t object_number = 0; object_number < algo_res->shortest_path.size(); ++object_number) {
+        result->objects_sequence[object_number] = algo_res->shortest_path[object_number];
     }
 
-    return res;
+    return result;
 }
+
+void ant_colony_tsp_destroy(const void * result) {
+	if (result != NULL) {
+		delete ((tsp_result *) result)->objects_sequence;
+		delete (tsp_result *) result;
+	}
+}
+
 
 
 void * som_create(const unsigned int num_rows, const unsigned int num_cols, const unsigned int type_conn, const void * parameters) {
