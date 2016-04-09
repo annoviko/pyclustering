@@ -102,11 +102,11 @@ def antcolony_tsp_process(cities, params):
     
     
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
-    result = ccore.ant_colony_tsp_process(cities_coord, algorithm_params);
+    result_pointer = ccore.ant_colony_tsp_process(cities_coord, algorithm_params);
     
-    result = cast(result, POINTER(c_antcolony_tsp_result))[0];
+    result = cast(result_pointer, POINTER(c_antcolony_tsp_result))[0];
     
-    return result;
+    return (result_pointer, result);
 
 
 def antcolony_tsp_destroy(tsp_result_pointer):

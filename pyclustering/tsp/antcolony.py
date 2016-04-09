@@ -88,13 +88,13 @@ class antcolony:
         
         """
         
-        c_pointer_tsp_result = wrapper.antcolony_tsp_process(object_locations, self.__parameters);
+        (result_address, c_pointer_tsp_result) = wrapper.antcolony_tsp_process(object_locations, self.__parameters);
         
         result = tsp_result();
         result.shortest_length = c_pointer_tsp_result.path_length;
         for i in range(c_pointer_tsp_result.size):
             result.object_sequence.append(c_pointer_tsp_result.object_sequence[i]);
         
-        wrapper.antcolony_tsp_destroy(c_pointer_tsp_result);
+        wrapper.antcolony_tsp_destroy(result_address);
         
         return result;

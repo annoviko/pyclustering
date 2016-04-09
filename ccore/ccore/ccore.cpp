@@ -529,6 +529,7 @@ void hsyncnet_analyser_destroy(const void * pointer_analyser) {
 }
 
 
+#include <iostream>
 tsp_result * ant_colony_tsp_process(const tsp_objects * objects_coord, const void * ant_colony_parameters)
 {
 	const ant::ant_colony_tsp_params * algorithm_params = (const ant::ant_colony_tsp_params *) ant_colony_parameters;
@@ -586,7 +587,7 @@ tsp_result * ant_colony_tsp_process(const tsp_objects * objects_coord, const voi
 
 void ant_colony_tsp_destroy(const void * result) {
 	if (result != NULL) {
-		delete ((tsp_result *) result)->objects_sequence;
+		delete [] ((tsp_result *) result)->objects_sequence;
 		delete (tsp_result *) result;
 	}
 }
