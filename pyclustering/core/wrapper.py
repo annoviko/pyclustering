@@ -264,10 +264,10 @@ def rock(sample, eps, number_clusters, threshold):
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     result = ccore.rock_algorithm(pointer_data, c_double(eps), c_uint(number_clusters), c_double(threshold));
     
-    list_of_clusters = extract_pyclustering_package(result);
-    ccore.free_pyclustering_package(result);
+    list_of_clusters = extract_clusters(result);
+    ccore.free_clustering_result(result);
     
-    return list_of_clusters;    
+    return list_of_clusters;
 
 
 def xmeans(sample, centers, kmax, tolerance):
