@@ -136,8 +136,7 @@ pyclustering_package * agglomerative_algorithm(const data_representation * const
     std::vector<std::vector<double> > * dataset = read_sample(sample);
 
     std::vector<cluster> clusters;
-    algorithm.process(*dataset);
-    algorithm.get_clusters(clusters);
+    algorithm.process(*dataset, clusters);
 
     pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
     package->size = clusters.size();

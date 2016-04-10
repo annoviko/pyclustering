@@ -13,11 +13,10 @@ template_length_process_data(const std::shared_ptr<dataset_t> & data,
                              const unsigned int number_clusters,
                              const type_link link,
                              const std::vector<unsigned int> & expected_cluster_length) {
-    agglomerative solver(number_clusters, link);
-    solver.process(*data.get());
-
     std::vector<std::vector<unsigned int> > results;
-    solver.get_clusters(results);
+
+    agglomerative solver(number_clusters, link);
+    solver.process(*data.get(), results);
 
     /* Check number of clusters */
     ASSERT_EQ(expected_cluster_length.size(), results.size());
