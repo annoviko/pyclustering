@@ -37,30 +37,32 @@ class antcolony_parameters:
     
     @see antcolony
     
-    """  
-    ##
-    q                   = 1.5;
+    """
     
-    ##
-    ro                  = 0.7;
-    
-    ##
-    alpha               = 1.0;
-    
-    ##
-    beta                = 1.0;
-    
-    ##
-    gamma               = 2.0;
-    
-    ##
-    qinit_pheramone     = 0.1;
-    
-    ## Amount of ants that is used on each iteration.
-    ants_per_iteration  = 10;
-    
-    ## Amount of iterations that is used for solving TSP.
-    iterations          = 50;
+    def __init__(self):
+        ##
+        self.q                   = 1.5;
+        
+        ##
+        self.ro                  = 0.7;
+        
+        ##
+        self.alpha               = 1.0;
+        
+        ##
+        self.beta                = 1.0;
+        
+        ##
+        self.gamma               = 2.0;
+        
+        ##
+        self.qinit_pheramone     = 0.1;
+        
+        ## Amount of ants that is used on each iteration.
+        self.ants_per_iteration  = 10;
+        
+        ## Amount of iterations that is used for solving TSP.
+        self.iterations          = 50;
 
 
 class antcolony:

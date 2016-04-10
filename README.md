@@ -71,6 +71,9 @@ Graph Coloring Algorithms (module pyclustering.gcolor):
 - Hysteresis [Python]
 - Sync [Python]
 
+Travelling Salesman Problem Algorithms (module pyclustering.tsp):
+- AntColony [Python, C++]
+
 Containers (module pyclustering.container):
 - KD Tree [Python, C++]
 - CF Tree [Python]
