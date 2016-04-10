@@ -28,6 +28,9 @@ GENERAL CHANGES (pyclustering):
 - Implemented ant colony based algorithm for TSP problem (pyclustering.tsp.antcolony).
   See: https://github.com/annoviko/pyclustering/pull/277
 
+- Implemented feature to use CCORE K-Medians algorithm using argument 'ccore' to ensure high performance (pyclustering.cluster.kmedoids).
+  https://github.com/annoviko/pyclustering/issues/231
+
 
 GENERAL CHANGES (ccore):
 - Implemented phase oscillatory network for pattern recognition syncpr (ccore.syncpr).
@@ -41,6 +44,9 @@ GENERAL CHANGES (ccore):
 
 - Implemented ant colony based algorithm for TSP problem (ccore.ant.antcolony).
   See: https://github.com/annoviko/pyclustering/pull/277
+
+- Implemented K-Medoids algorithm for cluster analysis (ccore.kmedoids).
+  See: https://github.com/annoviko/pyclustering/issues/231
 
 
 CORRECTED BUGS:

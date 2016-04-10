@@ -52,7 +52,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 void free_clustering_result(clustering_result * pointer) {
 	if (pointer != NULL) {
 		if (pointer->clusters != NULL) {
-			delete pointer->clusters;
+		    for (size_t i = 0; i < pointer->size; i++) {
+		        delete [] pointer->clusters[i].objects;
+		    }
+
+			delete [] pointer->clusters;
 			pointer->clusters = NULL;
 		}
 
@@ -64,19 +68,19 @@ void free_clustering_result(clustering_result * pointer) {
 void free_dynamic_result(dynamic_result * pointer) {
 	if (pointer != NULL) {
 		if (pointer->times != NULL) {
-			delete pointer->times;
+			delete [] pointer->times;
 			pointer->times = NULL;
 		}
 
 		if (pointer->dynamic != NULL) {
 			for (unsigned int index_object = 0; index_object < pointer->size_dynamic; index_object++) {
 				if (pointer->dynamic[index_object] != NULL) {
-					delete pointer->dynamic[index_object];
+					delete [] pointer->dynamic[index_object];
 					pointer->dynamic[index_object] = NULL;
 				}
 			}
 
-			delete pointer->dynamic;
+			delete [] pointer->dynamic;
 			pointer->dynamic = NULL;
 		}
 
@@ -220,28 +224,22 @@ clustering_result * kmeans_algorithm(const data_representation * const sample, c
 	return result;
 }
 
-pyclustering_package * kmedians_algorithm(const data_representation * const sample, const data_representation * const initial_medians, const double tolerance) {
+clustering_result * kmedians_algorithm(const data_representation * const sample, const data_representation * const initial_medians, const double tolerance) {
     std::vector<std::vector<double> > * dataset = read_sample(sample);
     std::vector<std::vector<double> > * medians = read_sample(initial_medians);
 
     kmedians algorithm(*medians, tolerance);
 
-    std::vector<cluster> clusters;
-    algorithm.process(*dataset);
-    algorithm.get_clusters(clusters);
+    kmedians_result output_result;
+    algorithm.process(*dataset, output_result);
 
-    pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
-    package->size = clusters.size();
-    package->data = new pyclustering_package * [package->size];
-
-    for (unsigned int i = 0; i < package->size; i++) {
-        ((pyclustering_package **) package->data)[i] = create_package(&clusters[i]);
-    }
+    std::vector<cluster> & clusters = output_result.get_clusters();
+    clustering_result * result = create_clustering_result(clusters);
 
     delete dataset;
     delete medians;
 
-    return package;
+    return result;
 }
 
 clustering_result * rock_algorithm(const data_representation * const sample, const double radius, const unsigned int number_clusters, const double threshold) {

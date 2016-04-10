@@ -236,6 +236,19 @@ def kmeans(sample, centers, tolerance):
     return list_of_clusters;
 
 
+def kmedians(sample, centers, tolerance):
+    pointer_data = create_pointer_data(sample);
+    pointer_centers = create_pointer_data(centers);
+    
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
+    result = ccore.kmedians_algorithm(pointer_data, pointer_centers, c_double(tolerance));
+    
+    list_of_clusters = extract_clusters(result);
+    ccore.free_clustering_result(result);
+    
+    return list_of_clusters;
+
+
 def rock(sample, eps, number_clusters, threshold):
     "Clustering algorithm ROCK returns allocated clusters and noise that are consisted from input data. Calculation is performed via CCORE."
     
@@ -251,9 +264,9 @@ def rock(sample, eps, number_clusters, threshold):
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     result = ccore.rock_algorithm(pointer_data, c_double(eps), c_uint(number_clusters), c_double(threshold));
     
-    list_of_clusters = extract_clusters(result);
+    list_of_clusters = extract_pyclustering_package(result);
+    ccore.free_pyclustering_package(result);
     
-    ccore.free_clustering_result(result);
     return list_of_clusters;    
 
 
