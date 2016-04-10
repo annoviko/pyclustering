@@ -5,6 +5,8 @@
 #include "ccore/ant/ant_colony.hpp"
 #include "ccore/ant/distance_matrix.hpp"
 
+#include "ccore/support.h"
+
 
 const double EPS = 0.0000001; 
 
@@ -19,7 +21,7 @@ TEST(utest_ant_colony, city_distance_calculation) {
     ASSERT_NEAR(6615.035162030509, Two.get_distance(Three), EPS);
 }
 
-void template_smallest_distance_test(const std::shared_ptr<city_distance::distance_matrix> & coordinates, const double expected_result, const std::vector<int> expected_sequence = std::vector<int>()) {
+void template_smallest_distance_test(const std::shared_ptr<city_distance::distance_matrix> & coordinates, const double expected_result) {
     using AntAPI = ant::ant_colony_params_initializer;
     auto sp_algo_params_2 = ant::ant_colony_params::make_param
         (AntAPI::Q_t{ 1.5 },
@@ -36,11 +38,6 @@ void template_smallest_distance_test(const std::shared_ptr<city_distance::distan
     auto res = ant_algo.process();
 
     ASSERT_DOUBLE_EQ(expected_result, res->path_length);
-
-	if (expected_sequence.size() > 0) {
-		ASSERT_EQ(expected_sequence.size(), res->shortest_path.size());
-		ASSERT_EQ(expected_sequence, res->shortest_path);
-	}
 }
 
 
@@ -212,22 +209,3 @@ TEST(utest_ant_colony, no_iterations_for_processing) {
 
     ASSERT_DOUBLE_EQ(0.0, res->path_length);
 }
-
-
-#if 0
-TEST(utest_ant_colony, six_objects_sequence) {
-	city_distance::object_coordinate One{ 0.0, 0.0 };
-	city_distance::object_coordinate Two{ 0.0, 1.0 };
-	city_distance::object_coordinate Three{ 0.0, 2.0 };
-	city_distance::object_coordinate Four{ 0.0, 3.0 };
-	city_distance::object_coordinate Five{ 0.0, 4.0 };
-	city_distance::object_coordinate Six{ 0.0, 5.0 };
-
-	auto dist = city_distance::distance_matrix::make_city_distance_matrix({ One, Two, Three, Four, Five, Six });
-
-	const double expected_length = 10.0;
-	const std::vector<int> expected_sequence = { 0, 1, 2, 3, 4, 5 };
-
-	template_smallest_distance_test(dist, expected_length, expected_sequence);
-}
-#endif

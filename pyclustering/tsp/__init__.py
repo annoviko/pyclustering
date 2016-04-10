@@ -32,8 +32,9 @@ class tsp_result:
     
     """  
     
-    ## The shortest path for solving travelling salesman problem.
-    shortest_length = 0;
-    
-    ## Sequence of objects that have been visited to obtain shortest path.
-    object_sequence = [];
+    def __init__(self):
+        ## The shortest path for solving travelling salesman problem.
+        self.shortest_length = 0;
+        
+        ## Sequence of objects that have been visited to obtain shortest path.
+        self.object_sequence = [];

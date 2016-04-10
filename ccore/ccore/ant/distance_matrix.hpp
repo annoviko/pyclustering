@@ -86,7 +86,7 @@ public:
 #else
 	static std::shared_ptr<distance_matrix>
 #endif
-		make_city_distance_matrix(const array_coordinate& init_distance)
+	make_city_distance_matrix(const array_coordinate& init_distance)
 	{
 		return std::shared_ptr<distance_matrix>(new distance_matrix(init_distance));
 	}	

@@ -28,9 +28,11 @@ import unittest;
 
 from pyclustering.tsp.antcolony import antcolony, antcolony_parameters;
 
+from pyclustering.utils import euclidean_distance;
+
 
 class Test(unittest.TestCase):
-    def templateTspSolving(self, parameters, object_locations, expected_length, expected_order):
+    def templateTspSolving(self, parameters, object_locations, expected_length):
         if (parameters is None):
             # default parameters
             parameters = antcolony_parameters();
@@ -40,17 +42,30 @@ class Test(unittest.TestCase):
         
         assert result.shortest_length == expected_length;
         
-        print(result.object_sequence);
-        if (expected_order != None):
-            assert result.object_sequence == expected_order;
+        assert len(result.object_sequence) == len(object_locations);
+        
+        visited_objects = [False] * len(result.object_sequence);
+        current_distance = 0.0;
+        for i in range(len(result.object_sequence)):
+            assert visited_objects[i] == False;
+            
+            index1 = result.object_sequence[i];
+            index2 = result.object_sequence[0];
+            
+            if (i < len(result.object_sequence) - 1):
+                index2 = result.object_sequence[i + 1];
+                
+            current_distance += euclidean_distance(object_locations[index1], object_locations[index2]);
+        
+        assert current_distance == expected_length;
 
 
     def testSixObjects(self):
-        self.templateTspSolving(None, [[0.0, 1.0], [1.0, 1.0], [2.0, 1.0], [0.0, 0.0], [1.0, 0.0], [2.0, 0.0]], 6.0, None);
+        self.templateTspSolving(None, [[0.0, 1.0], [1.0, 1.0], [2.0, 1.0], [0.0, 0.0], [1.0, 0.0], [2.0, 0.0]], 6.0);
     
     
     def testSimpleSixObjectsSequence(self):
-        self.templateTspSolving(None, [[0.0, 0.0], [0.0, 1.0], [0.0, 2.0], [0.0, 3.0], [0.0, 4.0], [0.0, 5.0]], 10.0, [0, 1, 2, 3, 4, 5]);
+        self.templateTspSolving(None, [[0.0, 0.0], [0.0, 1.0], [0.0, 2.0], [0.0, 3.0], [0.0, 4.0], [0.0, 5.0]], 10.0);
 
 
 if __name__ == "__main__":

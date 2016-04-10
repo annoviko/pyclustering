@@ -38,13 +38,28 @@ class antcolony_parameters:
     @see antcolony
     
     """  
+    ##
     q                   = 1.5;
+    
+    ##
     ro                  = 0.7;
+    
+    ##
     alpha               = 1.0;
+    
+    ##
     beta                = 1.0;
+    
+    ##
     gamma               = 2.0;
+    
+    ##
     qinit_pheramone     = 0.1;
+    
+    ## Amount of ants that is used on each iteration.
     ants_per_iteration  = 10;
+    
+    ## Amount of iterations that is used for solving TSP.
     iterations          = 50;
 
 
@@ -64,8 +79,6 @@ class antcolony:
     
     """  
     
-    __parameters = None;
-    
     def __init__(self, parameters):
         """!
         @brief Constructor of ant colony based algorithm for travelling salesman problem.
@@ -73,6 +86,8 @@ class antcolony:
         @param[in] parameters (antcolony_parameters): Parameters of the ant colony algorithm.
         
         """
+        
+        self.__parameters = None;
         
         if (parameters is None):
             self.__parameters = antcolony_parameters();
@@ -91,6 +106,7 @@ class antcolony:
         (result_address, c_pointer_tsp_result) = wrapper.antcolony_tsp_process(object_locations, self.__parameters);
         
         result = tsp_result();
+        
         result.shortest_length = c_pointer_tsp_result.path_length;
         for i in range(c_pointer_tsp_result.size):
             result.object_sequence.append(c_pointer_tsp_result.object_sequence[i]);
