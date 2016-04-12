@@ -566,7 +566,6 @@ tsp_result * ant_colony_tsp_process_get_result(std::shared_ptr<city_distance::di
        return result;
 }
 
-
 tsp_result * ant_colony_tsp_process_by_matrix(const tsp_matrix * objects_coord, const void * ant_colony_parameters)
 {
     std::vector<std::vector<double>> matrix;
@@ -582,7 +581,6 @@ tsp_result * ant_colony_tsp_process_by_matrix(const tsp_matrix * objects_coord, 
             matrix[i][j] = objects_coord->data[i][j];
         }
     }
-
     auto dist = city_distance::distance_matrix::make_city_distance_matrix (matrix);
 
     return ant_colony_tsp_process_get_result(dist, static_cast<const ant::ant_colony_tsp_params *>(ant_colony_parameters) );

@@ -27,6 +27,11 @@ from pyclustering.core.wrapper import *;
 
 import types;
 
+
+CITIES_DISTANCE_SET_BY_MATRIX = True
+CITIES_DISTANCE_SET_BY_LIST_OF_COORDINATES = False
+
+
 class c_antcolony_tsp_parameters(Structure):
     """
     double                  q;
@@ -61,6 +66,16 @@ class c_antcolony_tsp_objects(Structure):
                 ("data"        , POINTER(c_double)) ];
 
 
+class c_antcolony_tsp_matrix(Structure):
+    """
+    unsigned int            size;
+    double                  **data;
+    
+    """
+    _fields_ = [("size"        , c_uint),
+                ("data"        , POINTER(POINTER(c_double))) ];
+                
+
 class c_antcolony_tsp_result(Structure):
     """
     unsigned int            size;
@@ -73,21 +88,9 @@ class c_antcolony_tsp_result(Structure):
                 ("object_sequence"   , POINTER(c_uint)) ];
 
 
-def antcolony_tsp_process(cities, params):
-    dimension = len(cities[0]);
-    
-    cities_coord = c_antcolony_tsp_objects();
-    cities_coord.size = c_uint(len(cities) * dimension);
-    cities_coord.dimension = c_uint(dimension);
-    
-    cities_coord.data = (c_double * cities_coord.size)();
-    
-    for i in range(0, cities_coord.size):
-        cities_coord.data[i] = cities[i // dimension][i % dimension];
-    
-    cities_coord = pointer(cities_coord);
 
-
+def get_algo_params(params):
+    
     algorithm_params = c_antcolony_tsp_parameters();
     algorithm_params.q          = c_double(params.q);
     algorithm_params.ro         = c_double(params.ro);
@@ -100,9 +103,57 @@ def antcolony_tsp_process(cities, params):
     
     algorithm_params = pointer(algorithm_params);
     
+    return algorithm_params
+
+
+def antcolony_tsp_prepare_matrix(matrix):
+    dist_matrix = c_antcolony_tsp_matrix()
+    
+    dist_matrix.size = len(matrix)
+    
+    p_dist = (POINTER(c_double) * dist_matrix.size)();
+     
+    for i in range(dist_matrix.size):
+        tmp_p_dist = (c_double * dist_matrix.size)();
+        for j in range(dist_matrix.size):
+            tmp_p_dist[j] = matrix[i][j];
+            
+        p_dist[i] = cast(tmp_p_dist, POINTER(c_double));
+    
+    dist_matrix.data = cast(p_dist, POINTER(POINTER(c_double)));
+    dist_matrix = pointer(dist_matrix)
+    
+    return dist_matrix
+    
+    
+def antcolony_tsp_prepare_cities_list(cities):
+    dimension = len(cities[0]);
+    
+    cities_coord = c_antcolony_tsp_objects();
+    cities_coord.size = c_uint(len(cities) * dimension);
+    cities_coord.dimension = c_uint(dimension);
+    
+    cities_coord.data = (c_double * cities_coord.size)();
+    
+    for i in range(0, cities_coord.size):
+        cities_coord.data[i] = cities[i // dimension][i % dimension];
+    
+    cities_coord = pointer(cities_coord);
+    
+    return cities_coord
+
+
+def antcolony_tsp_process(cities, params, citiesDistRepresent = CITIES_DISTANCE_SET_BY_LIST_OF_COORDINATES):
+    algorithm_params = get_algo_params(params)
     
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
-    result_pointer = ccore.ant_colony_tsp_process(cities_coord, algorithm_params);
+     
+    if citiesDistRepresent == CITIES_DISTANCE_SET_BY_MATRIX:
+        cities_coord = antcolony_tsp_prepare_matrix(cities)
+        result_pointer = ccore.ant_colony_tsp_process_by_matrix(cities_coord, algorithm_params);
+    else:
+        cities_coord = antcolony_tsp_prepare_cities_list(cities)
+        result_pointer = ccore.ant_colony_tsp_process(cities_coord, algorithm_params);
     
     result = cast(result_pointer, POINTER(c_antcolony_tsp_result))[0];
     

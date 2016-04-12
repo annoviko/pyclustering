@@ -116,3 +116,22 @@ class antcolony:
         wrapper.antcolony_tsp_destroy(result_address);
         
         return result;
+    
+    def process_by_matrix(self, matrix):
+        """!
+        @brief Perform simulation of ant colony to solve travelling salesman problem.
+        
+        @param[in] object_locations (list): Coordinates of objects that should be visited.
+        
+        """
+        (result_address, c_pointer_tsp_result) = wrapper.antcolony_tsp_process(matrix, self.__parameters, wrapper.CITIES_DISTANCE_SET_BY_MATRIX);
+        
+        result = tsp_result();
+        
+        result.shortest_length = c_pointer_tsp_result.path_length;
+        for i in range(c_pointer_tsp_result.size):
+            result.object_sequence.append(c_pointer_tsp_result.object_sequence[i]);
+        
+        wrapper.antcolony_tsp_destroy(result_address);
+        
+        return result;

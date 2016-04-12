@@ -27,38 +27,50 @@
 import unittest;
 
 from pyclustering.tsp.antcolony import antcolony, antcolony_parameters;
+import pyclustering.core.antcolony_tsp_wrapper as wrapper;
 
 from pyclustering.utils import euclidean_distance;
 
 
 class Test(unittest.TestCase):
-    def templateTspSolving(self, parameters, object_locations, expected_length):
+
+    def getCityDistance(self, result, object_locations, citiesDistRepresent):
+        visited_objects = [False] * len(result.object_sequence);
+        current_distance = 0.0;
+        
+        for i in range(len(result.object_sequence)):
+            assert visited_objects[i] == False;
+            
+            index1 = result.object_sequence[i];
+            index2 = result.object_sequence[(i + 1) % len(result.object_sequence)];
+            
+            if citiesDistRepresent == wrapper.CITIES_DISTANCE_SET_BY_MATRIX:
+                current_distance += object_locations[index1][index2];
+            else:
+                current_distance += euclidean_distance(object_locations[index1], object_locations[index2]);
+        
+        return current_distance
+        
+    
+    def templateTspSolving(self, parameters, object_locations, expected_length, citiesDistRepresent = wrapper.CITIES_DISTANCE_SET_BY_LIST_OF_COORDINATES):
         if (parameters is None):
             # default parameters
             parameters = antcolony_parameters();
         
         algorithm = antcolony(parameters);
-        result = algorithm.process(object_locations);
+        
+        if citiesDistRepresent == wrapper.CITIES_DISTANCE_SET_BY_MATRIX:
+            result = algorithm.process_by_matrix(object_locations);
+        else:
+            result = algorithm.process(object_locations);
         
         assert result.shortest_length == expected_length;
         
         assert len(result.object_sequence) == len(object_locations);
         
-        visited_objects = [False] * len(result.object_sequence);
-        current_distance = 0.0;
-        for i in range(len(result.object_sequence)):
-            assert visited_objects[i] == False;
-            
-            index1 = result.object_sequence[i];
-            index2 = result.object_sequence[0];
-            
-            if (i < len(result.object_sequence) - 1):
-                index2 = result.object_sequence[i + 1];
-                
-            current_distance += euclidean_distance(object_locations[index1], object_locations[index2]);
-        
+        current_distance = self.getCityDistance(result, object_locations, citiesDistRepresent)
         assert current_distance == expected_length;
-
+        
 
     def testSixObjects(self):
         self.templateTspSolving(None, [[0.0, 1.0], [1.0, 1.0], [2.0, 1.0], [0.0, 0.0], [1.0, 0.0], [2.0, 0.0]], 6.0);
@@ -66,6 +78,15 @@ class Test(unittest.TestCase):
     
     def testSimpleSixObjectsSequence(self):
         self.templateTspSolving(None, [[0.0, 0.0], [0.0, 1.0], [0.0, 2.0], [0.0, 3.0], [0.0, 4.0], [0.0, 5.0]], 10.0);
+    
+    def testSmallestPathFourCitiesByMatrix(self):
+        matrix = [[ 0.0,  1.0, 30.0, 99.0],
+                  [ 1.0,  0.0,  1.0, 30.0],
+                  [30.0,  1.0,  0.0,  1.0],
+                  [99.0, 30.0,  1.0,  0.0],]
+        
+        self.templateTspSolving(None, matrix, 62.0, wrapper.CITIES_DISTANCE_SET_BY_MATRIX)
+        
 
 
 if __name__ == "__main__":
