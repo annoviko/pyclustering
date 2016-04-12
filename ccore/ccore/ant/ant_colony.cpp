@@ -33,7 +33,7 @@ std::vector<ant_colony::object_probability> ant_colony::calc_probability(const a
 	{
 		if (std::find(ant.visited.begin(), ant.visited.end(), city_num) == ant.visited.end())
 		{
-			double p = std::pow(pheramone[ant.curState][city_num], params->get<AntParamsName::ALPHA>().get())
+			double p = std::pow(pheramone[ant.curState][city_num], get_param_alpha())
 				*  (1 / distance->get_matrix()[ant.curState][city_num]);
 
 			prob.emplace_back(city_num, p);

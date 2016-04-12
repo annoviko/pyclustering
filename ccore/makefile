@@ -32,5 +32,5 @@ utcore:
 clean:
 	rm -rf ccore/*.o ccore/*.d ../pyclustering/core/x64/linux/ccore.so
 	rm -rf utcore/*.o utcore/*.d utcore/utcore.exe
-	rm -rf ccore/ant_colony/*.[od]
+	rm -rf ccore/ant/*.[od]
 
