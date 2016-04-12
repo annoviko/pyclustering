@@ -14,29 +14,29 @@ template_length_process_data(const std::shared_ptr<dataset_t> & data,
 const std::vector<point> & start_medians,
 const std::vector<unsigned int> & expected_cluster_length) 
 {
+    kmedians_result output_result;
     kmedians solver(start_medians, 0.0001);
-    solver.process(*data.get());
+    solver.process(*data.get(), output_result);
 
-    std::vector<std::vector<unsigned int> > results;
-    solver.get_clusters(results);
+    std::vector<std::vector<unsigned int> > clusters = output_result.get_clusters();
 
     /* Check number of clusters */
     if (!expected_cluster_length.empty()) {
-        ASSERT_EQ(expected_cluster_length.size(), results.size());
+        ASSERT_EQ(expected_cluster_length.size(), clusters.size());
     }
 
     /* Check cluster sizes */
     std::vector<size_t> obtained_cluster_length;
     std::vector<bool> unique_objects(data->size(), false);
     size_t total_size = 0;
-    for (size_t i = 0; i < results.size(); i++) {
-        size_t cluster_length = results[i].size();
+    for (size_t i = 0; i < clusters.size(); i++) {
+        size_t cluster_length = clusters[i].size();
 
         obtained_cluster_length.push_back(cluster_length);
         total_size += cluster_length;
         
         for (size_t j = 0; j < cluster_length; j++) {
-            size_t index_object = results[i][j];
+            size_t index_object = clusters[i][j];
 
             ASSERT_EQ(false, unique_objects[index_object]);
 

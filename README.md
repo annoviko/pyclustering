@@ -49,7 +49,7 @@ Clustering algorithms (module pyclustering.cluster):
 - Agglomerative [Python, C++]
 - HSyncNet [Python, C++]
 - K-Means [Python, C++]
-- K-Medians [Python]
+- K-Medians [Python, C++]
 - K-Medoids [Python]
 - OPTICS [Python]
 - ROCK [Python, C++]
@@ -70,6 +70,9 @@ Graph Coloring Algorithms (module pyclustering.gcolor):
 - DSatur [Python]
 - Hysteresis [Python]
 - Sync [Python]
+
+Travelling Salesman Problem Algorithms (module pyclustering.tsp):
+- AntColony [Python, C++]
 
 Containers (module pyclustering.container):
 - KD Tree [Python, C++]

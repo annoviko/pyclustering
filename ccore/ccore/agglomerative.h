@@ -43,8 +43,8 @@ private:
     type_link               m_similarity;
 
     std::vector<point>      m_centers;
-    std::vector<cluster>    m_clusters;
 
+    std::vector<cluster> *  m_ptr_clusters;
     std::vector<point> *    m_ptr_data;
 
 public:
@@ -57,15 +57,7 @@ public:
 public:
     void initialize(const unsigned int number_clusters, const type_link link);
 
-    void process(const std::vector<point> & data);
-
-public:
-    inline void get_clusters(std::vector<std::vector<unsigned int> > & output_clusters) const {
-        output_clusters.clear();
-        output_clusters.resize(m_clusters.size());
-
-        std::copy(m_clusters.begin(), m_clusters.end(), output_clusters.begin());
-    }
+    void process(const std::vector<point> & data, std::vector<cluster> & result);
 
 private:
     void merge_similar_clusters(void);

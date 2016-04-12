@@ -9,7 +9,7 @@ agglomerative::agglomerative() :
 m_number_clusters(1),
 m_similarity(SINGLE_LINK),
 m_centers(0),
-m_clusters(0),
+m_ptr_clusters(nullptr),
 m_ptr_data(nullptr) { }
 
 
@@ -17,7 +17,7 @@ agglomerative::agglomerative(const unsigned int number_clusters, const type_link
 m_number_clusters(number_clusters),
 m_similarity(link),
 m_centers(0),
-m_clusters(0),
+m_ptr_clusters(nullptr),
 m_ptr_data(nullptr) { }
 
 
@@ -29,32 +29,33 @@ void agglomerative::initialize(const unsigned int number_clusters, const type_li
     m_similarity = link;
 
     m_centers.clear();
-    m_clusters.clear();
 
+    m_ptr_clusters = nullptr;
     m_ptr_data = nullptr;
 }
 
 
-void agglomerative::process(const std::vector<point> & data) {
+void agglomerative::process(const std::vector<point> & data, std::vector<cluster> & result) {
     m_ptr_data = (std::vector<point> *) &data;
+    m_ptr_clusters = &result;
 
     m_centers.clear();
-    m_clusters.clear();
+    m_ptr_clusters->clear();
 
     size_t current_number_clusters = data.size();
 
     m_centers.resize(current_number_clusters);
-    m_clusters.resize(current_number_clusters);
+    m_ptr_clusters->resize(current_number_clusters);
 
     std::copy(data.begin(), data.end(), m_centers.begin());
 
     for (size_t i = 0; i < data.size(); i++) {
-        m_clusters[i].push_back(i);
+        (*m_ptr_clusters)[i].push_back(i);
     }
 
     while(current_number_clusters > m_number_clusters) {
         merge_similar_clusters();
-        current_number_clusters = m_clusters.size();
+        current_number_clusters = m_ptr_clusters->size();
     }
 
     m_ptr_data = nullptr;
@@ -89,17 +90,17 @@ void agglomerative::merge_by_average_link(void) {
     size_t index1 = 0;
     size_t index2 = 1;
 
-    for (size_t index_cluster1 = 0; index_cluster1 < m_clusters.size(); index_cluster1++) {
-        for (size_t index_cluster2 = index_cluster1 + 1; index_cluster2 < m_clusters.size(); index_cluster2++) {
+    for (size_t index_cluster1 = 0; index_cluster1 < m_ptr_clusters->size(); index_cluster1++) {
+        for (size_t index_cluster2 = index_cluster1 + 1; index_cluster2 < m_ptr_clusters->size(); index_cluster2++) {
             double candidate_average_distance = 0.0;
 
-            for (auto index_object1 : m_clusters[index_cluster1]) {
-                for (auto index_object2 : m_clusters[index_cluster2]) {
+            for (auto index_object1 : (*m_ptr_clusters)[index_cluster1]) {
+                for (auto index_object2 : (*m_ptr_clusters)[index_cluster2]) {
                     candidate_average_distance += euclidean_distance_sqrt(&data[index_object1], &data[index_object2]);
                 }
             }
 
-            candidate_average_distance /= (m_clusters[index_cluster1].size() + m_clusters[index_cluster2].size());
+            candidate_average_distance /= ((*m_ptr_clusters)[index_cluster1].size() + (*m_ptr_clusters)[index_cluster2].size());
 
             if (candidate_average_distance < minimum_average_distance) {
                 minimum_average_distance = candidate_average_distance;
@@ -110,8 +111,8 @@ void agglomerative::merge_by_average_link(void) {
         }
     }
 
-    m_clusters[index1].insert(m_clusters[index1].end(), m_clusters[index2].begin(), m_clusters[index2].end());
-    m_clusters.erase(m_clusters.begin() + index2);
+    (*m_ptr_clusters)[index1].insert((*m_ptr_clusters)[index1].end(), (*m_ptr_clusters)[index2].begin(), (*m_ptr_clusters)[index2].end());
+    m_ptr_clusters->erase(m_ptr_clusters->begin() + index2);
 }
 
 
@@ -133,10 +134,10 @@ void agglomerative::merge_by_centroid_link(void) {
         }
     }
 
-    m_clusters[index_cluster1].insert(m_clusters[index_cluster1].end(), m_clusters[index_cluster2].begin(), m_clusters[index_cluster2].end());
-    calculate_center(m_clusters[index_cluster1], m_centers[index_cluster2]);
+    (*m_ptr_clusters)[index_cluster1].insert((*m_ptr_clusters)[index_cluster1].end(), (*m_ptr_clusters)[index_cluster2].begin(), (*m_ptr_clusters)[index_cluster2].end());
+    calculate_center((*m_ptr_clusters)[index_cluster1], m_centers[index_cluster2]);
 
-    m_clusters.erase(m_clusters.begin() + index_cluster2);
+    m_ptr_clusters->erase(m_ptr_clusters->begin() + index_cluster2);
     m_centers.erase(m_centers.begin() + index_cluster2);
 }
 
@@ -149,12 +150,12 @@ void agglomerative::merge_by_complete_link(void) {
 
     const std::vector<point> & data = *m_ptr_data;
 
-    for (size_t index_cluster1 = 0; index_cluster1 < m_clusters.size(); index_cluster1++) {
-        for (size_t index_cluster2 = index_cluster1 + 1; index_cluster2 < m_clusters.size(); index_cluster2++) {
+    for (size_t index_cluster1 = 0; index_cluster1 < m_ptr_clusters->size(); index_cluster1++) {
+        for (size_t index_cluster2 = index_cluster1 + 1; index_cluster2 < m_ptr_clusters->size(); index_cluster2++) {
             double candidate_maximum_distance = 0.0;
 
-            for (auto index_object1 : m_clusters[index_cluster1]) {
-                for (auto index_object2 : m_clusters[index_cluster2]) {
+            for (auto index_object1 : (*m_ptr_clusters)[index_cluster1]) {
+                for (auto index_object2 : (*m_ptr_clusters)[index_cluster2]) {
                     double distance = euclidean_distance_sqrt(&data[index_object1], &data[index_object2]);
                     if (distance > candidate_maximum_distance) {
                         candidate_maximum_distance = distance;
@@ -171,8 +172,8 @@ void agglomerative::merge_by_complete_link(void) {
         }
     }
 
-    m_clusters[index1].insert(m_clusters[index1].end(), m_clusters[index2].begin(), m_clusters[index2].end());
-    m_clusters.erase(m_clusters.begin() + index2);
+    (*m_ptr_clusters)[index1].insert((*m_ptr_clusters)[index1].end(), (*m_ptr_clusters)[index2].begin(), (*m_ptr_clusters)[index2].end());
+    m_ptr_clusters->erase(m_ptr_clusters->begin() + index2);
 }
 
 
@@ -184,12 +185,12 @@ void agglomerative::merge_by_signle_link(void) {
 
     const std::vector<point> & data = *m_ptr_data;
 
-    for (size_t index_cluster1 = 0; index_cluster1 < m_clusters.size(); index_cluster1++) {
-        for (size_t index_cluster2 = index_cluster1 + 1; index_cluster2 < m_clusters.size(); index_cluster2++) {
+    for (size_t index_cluster1 = 0; index_cluster1 < m_ptr_clusters->size(); index_cluster1++) {
+        for (size_t index_cluster2 = index_cluster1 + 1; index_cluster2 < m_ptr_clusters->size(); index_cluster2++) {
             double candidate_minimum_distance = std::numeric_limits<double>::max();
 
-            for (auto index_object1 : m_clusters[index_cluster1]) {
-                for (auto index_object2 : m_clusters[index_cluster2]) {
+            for (auto index_object1 : (*m_ptr_clusters)[index_cluster1]) {
+                for (auto index_object2 : (*m_ptr_clusters)[index_cluster2]) {
                     double distance = euclidean_distance_sqrt(&data[index_object1], &data[index_object2]);
                     if (distance < candidate_minimum_distance) {
                         candidate_minimum_distance = distance;
@@ -206,8 +207,8 @@ void agglomerative::merge_by_signle_link(void) {
         }
     }
 
-    m_clusters[index1].insert(m_clusters[index1].end(), m_clusters[index2].begin(), m_clusters[index2].end());
-    m_clusters.erase(m_clusters.begin() + index2);
+    (*m_ptr_clusters)[index1].insert((*m_ptr_clusters)[index1].end(), (*m_ptr_clusters)[index2].begin(), (*m_ptr_clusters)[index2].end());
+    m_ptr_clusters->erase(m_ptr_clusters->begin() + index2);
 }
 
 
