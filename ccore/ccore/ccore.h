@@ -103,6 +103,11 @@ typedef struct tsp_objects {
     double                  * data;
 } tsp_objects;
 
+typedef struct tsp_matrix {
+    unsigned int            size;
+    double                  ** data;
+} tsp_matrix;
+
 /***********************************************************************************************
  *
  * @brief   Free clustering results that have been provided by CCORE to client.
@@ -458,6 +463,8 @@ extern "C" DECLARATION void hsyncnet_analyser_destroy(const void * pointer_analy
  *
  ***********************************************************************************************/
 extern "C" DECLARATION tsp_result * ant_colony_tsp_process(const tsp_objects * objects_coord, const void * ant_colony_parameters);
+
+extern "C" DECLARATION tsp_result * ant_colony_tsp_process_by_matrix(const tsp_matrix * objects_coord, const void * ant_colony_parameters);
 
 /***********************************************************************************************
  *
