@@ -22,8 +22,8 @@ TEST(utest_ant_colony, city_distance_calculation) {
 }
 
 void template_smallest_distance_test(const std::shared_ptr<city_distance::distance_matrix> & coordinates, const double expected_result) {
-    using AntAPI = ant::ant_colony_params_initializer;
-    auto sp_algo_params_2 = ant::ant_colony_params::make_param
+    using AntAPI = ant::ant_colony_TSP_params_initializer;
+    auto sp_algo_params_2 = ant::ant_colony_TSP_params::make_param
         (AntAPI::Q_t{ 1.5 },
                  AntAPI::Ro_t{ 0.7 }, 
                  AntAPI::Alpha_t{ 1.0 }, 
@@ -167,8 +167,8 @@ TEST(utest_ant_colony, no_ants_for_processing) {
 
     auto dist = city_distance::distance_matrix::make_city_distance_matrix({ One, Two });
 
-    using AntAPI = ant::ant_colony_params_initializer;
-    auto sp_algo_params_2 = ant::ant_colony_params::make_param
+    using AntAPI = ant::ant_colony_TSP_params_initializer;
+    auto sp_algo_params_2 = ant::ant_colony_TSP_params::make_param
             (AntAPI::Q_t{ 1.5 },
                  AntAPI::Ro_t{ 0.7 },
                  AntAPI::Alpha_t{ 1.0 },
@@ -192,8 +192,8 @@ TEST(utest_ant_colony, no_iterations_for_processing) {
 
     auto dist = city_distance::distance_matrix::make_city_distance_matrix({ One, Two });
 
-    using AntAPI = ant::ant_colony_params_initializer;
-    auto sp_algo_params_2 = ant::ant_colony_params::make_param
+    using AntAPI = ant::ant_colony_TSP_params_initializer;
+    auto sp_algo_params_2 = ant::ant_colony_TSP_params::make_param
             (AntAPI::Q_t{ 1.5 },
                  AntAPI::Ro_t{ 0.7 },
                  AntAPI::Alpha_t{ 1.0 },

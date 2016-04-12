@@ -546,8 +546,8 @@ tsp_result * ant_colony_tsp_process(const tsp_objects * objects_coord, const voi
     auto dist = city_distance::distance_matrix::make_city_distance_matrix (cities);
 
     // Algorithm params
-    using AntAPI = ant::ant_colony_params_initializer;
-    auto algo_params = ant::ant_colony_params::make_param
+    using AntAPI = ant::ant_colony_TSP_params_initializer;
+    auto algo_params = ant::ant_colony_TSP_params::make_param
         (AntAPI::Q_t{ algorithm_params->q }
             , AntAPI::Ro_t{ algorithm_params->ro }
             , AntAPI::Alpha_t{ algorithm_params->alpha }

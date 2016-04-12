@@ -103,19 +103,11 @@ private:
         double get_probability() const { return value.second; }
     #endif
         void divide_by(double divider) { value.second /= divider; }
-<<<<<<< HEAD
-=======
-
-    private:
-        std::pair<int, double> value;
-    };
->>>>>>> master
 
     private:
         std::pair<int, double> value;
     };
 
-<<<<<<< HEAD
 
     /*********************************************************
     * class pheramone
@@ -146,37 +138,6 @@ private:
 
     double calc_path_length(const cities_t& cities);
 
-=======
-    /*********************************************************
-    * class pheramone
-    *			- contains an array with pheramone value for all ways between cities
-    ********************************************************/
-    class pheramone
-    {
-    public:
-        pheramone(std::size_t cityCount, double initialPheramone)
-            : value(cityCount, std::vector<double>(cityCount, initialPheramone))
-        {}
-
-        const std::vector<double>& operator[] (std::size_t idx) const { return value[idx]; }
-        std::vector<double>& operator[] (std::size_t idx) { return value[idx]; }
-
-    private:
-        std::vector<std::vector<double>> value;
-    };
-
-    //
-    // Private functions to calculate process result
-    //
-    void place_ants_randomly(std::vector<ant_t>& ants);
-
-    std::vector<object_probability> calc_probability(const ant_t& ant, const pheramone& pheramone);
-
-    int realize_probability(const ant_t& ant, const std::vector<object_probability>& prob);
-
-    double calc_path_length(const cities_t& cities);
-
->>>>>>> master
     std::vector<std::vector<double>> calc_delta_pheramone(const std::vector<ant_t>& ants);
 
     void update_pheramones(pheramone& pheramone, const std::vector<ant_t>& ants);
