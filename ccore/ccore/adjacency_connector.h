@@ -197,13 +197,13 @@ public:
 
         create_none_connections(output_adjacency_collection);
 
-	    for (size_t index = 0; index < output_adjacency_collection.size(); index++) {
-            const size_t upper_index = index - width;
-            const size_t lower_index = index + width;
-		    const size_t left_index = index - 1;
-		    const size_t right_index = index + 1;
+	    for (int index = 0; index < (int) output_adjacency_collection.size(); index++) {
+            const int upper_index = index - width;
+            const int lower_index = index + width;
+		    const int left_index = index - 1;
+		    const int right_index = index + 1;
 
-            const size_t node_row_index = (size_t) std::ceil(index / width);
+            const int node_row_index = (size_t) std::ceil(index / width);
 		    if (upper_index >= 0) {
 			    m_connector(index, upper_index, output_adjacency_collection);
 		    }
@@ -240,7 +240,7 @@ public:
         }
 
         const size_t edge = (size_t) conv_side_size;
-        create_grid_four_connections(edge, edge, output_adjacency_collection);
+		create_grid_eight_connections(edge, edge, output_adjacency_collection);
     }
 
     /***********************************************************************************************
@@ -256,21 +256,21 @@ public:
     virtual void create_grid_eight_connections(const size_t width, const size_t height, TypeCollection & output_adjacency_collection) {
 	    create_grid_four_connections(width, height, output_adjacency_collection);	/* create connection with right, upper, left, lower neighbor */
 
-	    for (size_t index = 0; index < output_adjacency_collection.size(); index++) {
-            const size_t upper_index = index - width;
-            const size_t upper_left_index = index - width - 1;
-            const size_t upper_right_index = index - width + 1;
+	    for (int index = 0; index < output_adjacency_collection.size(); index++) {
+            const int upper_index = index - width;
+            const int upper_left_index = index - width - 1;
+            const int upper_right_index = index - width + 1;
             
-            const size_t lower_index = index + width;
-            const size_t lower_left_index = index + width - 1;
-            const size_t lower_right_index = index + width + 1;
+            const int lower_index = index + width;
+            const int lower_left_index = index + width - 1;
+            const int lower_right_index = index + width + 1;
             
-            const size_t left_index = index - 1;
-            const size_t right_index = index + 1;
+            const int left_index = index - 1;
+            const int right_index = index + 1;
             
-            const size_t node_row_index = (size_t) std::floor(index / width);
-            const size_t upper_row_index = node_row_index - 1;
-            const size_t lower_row_index = node_row_index + 1;
+            const int node_row_index = std::floor(index / width);
+            const int upper_row_index = node_row_index - 1;
+            const int lower_row_index = node_row_index + 1;
 
             if ((upper_left_index >= 0) && (std::floor(upper_left_index / width) == upper_row_index)) {
 			    m_connector(index, upper_left_index, output_adjacency_collection);

@@ -51,9 +51,6 @@
     <ClCompile Include="..\ccore\som.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
-    <ClCompile Include="samples.cpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\ccore\xmeans.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
@@ -86,6 +83,9 @@
     </ClCompile>
     <ClCompile Include="..\ccore\adjacency_weight_list.cpp">
       <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="samples.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -222,6 +222,12 @@
       <Filter>Resource Files</Filter>
     </ClInclude>
     <ClInclude Include="utest-adjacency_weight_list.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ccore\adjacency_connector.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utest_adjacency_connector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

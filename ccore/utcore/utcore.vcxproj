@@ -110,6 +110,7 @@
   <ItemGroup>
     <ClInclude Include="..\ccore\adjacency.h" />
     <ClInclude Include="..\ccore\adjacency_bit_matrix.h" />
+    <ClInclude Include="..\ccore\adjacency_connector.h" />
     <ClInclude Include="..\ccore\adjacency_list.h" />
     <ClInclude Include="..\ccore\adjacency_matrix.h" />
     <ClInclude Include="..\ccore\adjacency_weight_list.h" />
@@ -153,6 +154,7 @@
     <ClInclude Include="utest-syncnet.h" />
     <ClInclude Include="utest-syncpr.h" />
     <ClInclude Include="utest-xmeans.h" />
+    <ClInclude Include="utest_adjacency_connector.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

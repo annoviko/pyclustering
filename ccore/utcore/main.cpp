@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
-
 #include "utest-adjacency_bit_matrix.h"
+#include "utest_adjacency_connector.h"
 #include "utest-adjacency_list.h"
 #include "utest-adjacency_matrix.h"
 #include "utest-adjacency_weight_list.h"
