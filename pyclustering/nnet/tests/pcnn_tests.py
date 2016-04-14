@@ -183,6 +183,27 @@ class Test(unittest.TestCase):
         self.templateSyncEnsemblesAllocation(25, conn_type.GRID_FOUR, 50, [20] * 25, True, None);
         self.templateSyncEnsemblesAllocation(25, conn_type.LIST_BIDIR, 50, [20] * 25, True, None);
         self.templateSyncEnsemblesAllocation(25, conn_type.NONE, 50, [20] * 25, True, None);
+    
+    
+    def templateAllocationInRectangleStructure(self, num_osc, height, width, steps, type_conn, repr_type, stimulus, ccore):
+        net = pcnn_network(num_osc, None, type_conn, repr_type, height, width, ccore);
+        dynamic = net.simulate(steps, stimulus);
+        
+        assert steps == len(dynamic);
+        assert num_osc == len(dynamic.output[0]);
+        assert steps == len(dynamic.allocate_time_signal());
+    
+    def testAllocationInRectangleFourStructure(self):
+        self.templateAllocationInRectangleStructure(20, 4, 5, 20, conn_type.GRID_FOUR, conn_represent.MATRIX, [0] * 20, False);
+
+    def testAllocationInRectangleFourStructureByCore(self):
+        self.templateAllocationInRectangleStructure(20, 4, 5, 20, conn_type.GRID_FOUR, None, [0] * 20, True);
+
+    def testAllocationInRectangleEightStructure(self):
+        self.templateAllocationInRectangleStructure(30, 6, 5, 20, conn_type.GRID_EIGHT, conn_represent.MATRIX, [0] * 30, False);
+    
+    def testAllocationInRectangleEightStructureByCore(self):
+        self.templateAllocationInRectangleStructure(30, 6, 5, 20, conn_type.GRID_EIGHT, None, [0] * 30, True);
 
 
 if __name__ == "__main__":

@@ -99,6 +99,9 @@
     <ClCompile Include="ant\distance_matrix.cpp">
       <Filter>Source Files\ant</Filter>
     </ClCompile>
+    <ClCompile Include="adjacency_connector.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dbscan.h">

@@ -2,6 +2,8 @@
 #define _PCNN_H_
 
 #include "network.h"
+#include "adjacency.h"
+#include "adjacency_connector.h"
 
 #include <vector>
 
@@ -63,6 +65,7 @@ public:
 
 		return *this;
 	}
+
 } pcnn_network_state;
 
 
@@ -99,31 +102,46 @@ public:
 };
 
 
-class pcnn : public network {
+class pcnn {
 protected:
 	std::vector<pcnn_oscillator> m_oscillators;
 
+	std::shared_ptr<adjacency_collection> m_connection;
+
 	pcnn_parameters m_params;
 
+
 private:
-	pcnn(void);
+	const static size_t MAXIMUM_MATRIX_REPRESENTATION_SIZE;
+
 
 public:
-	pcnn(const unsigned int num_osc, const conn_type connection_type, const pcnn_parameters & parameters);
+	pcnn(void);
 
-    pcnn(const unsigned int num_osc, 
-         const conn_type connection_type,
+	pcnn(const size_t p_size, const connection_t p_structure, const pcnn_parameters & p_parameters);
+
+    pcnn(const size_t num_osc, 
+         const connection_t connection_type,
          const size_t height,
          const size_t width,
          const pcnn_parameters & parameters);
 
 	virtual ~pcnn(void);
 
+
 public:
 	void simulate(const unsigned int steps, const pcnn_stimulus & stimulus, pcnn_dynamic & output_dynamic);
 
+	inline size_t size(void) { return m_oscillators.size(); }
+
 
 private:
+	void initilize(const size_t p_size,
+		const connection_t p_structure,
+		const size_t p_height,
+		const size_t p_width,
+		const pcnn_parameters & p_parameters);
+
 	void calculate_states(const pcnn_stimulus & stimulus);
 
 	void store_dynamic(const unsigned int step, pcnn_dynamic & dynamic);

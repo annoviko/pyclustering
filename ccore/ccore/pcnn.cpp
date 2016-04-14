@@ -1,22 +1,33 @@
 #include "pcnn.h"
+#include "adjacency_connector.h"
+#include "adjacency_matrix.h"
+#include "adjacency_bit_matrix.h"
 
 #include <unordered_set>
 
-pcnn::pcnn(const unsigned int size, const conn_type connection_type, const pcnn_parameters & parameters) :
-	m_oscillators(size, pcnn_oscillator()), 
-	network(size, connection_type)
+
+const size_t pcnn::MAXIMUM_MATRIX_REPRESENTATION_SIZE = 4096;
+
+
+pcnn::pcnn(void) : m_oscillators(0), m_connection(nullptr), m_params() { }
+
+
+pcnn::pcnn(const size_t p_size, const connection_t p_structure, const pcnn_parameters & p_parameters) 
+	: m_oscillators(p_size, pcnn_oscillator())
 {
-	m_params = parameters;
+	initilize(p_size, p_structure, 0, 0, p_parameters);
 }
 
-pcnn::pcnn(const unsigned int size, const conn_type connection_type, const size_t height, const size_t width, const pcnn_parameters & parameters) :
-m_oscillators(size, pcnn_oscillator()),
-network(size, connection_type, height, width)
+
+pcnn::pcnn(const size_t p_size, const connection_t p_structure, const size_t p_height, const size_t p_width, const pcnn_parameters & p_parameters) 
+	: m_oscillators(p_size, pcnn_oscillator())
 {
-    m_params = parameters;
+	initilize(p_size, p_structure, p_height, p_width, p_parameters);
 }
+
 
 pcnn::~pcnn() { }
+
 
 void pcnn::simulate(const unsigned int steps, const pcnn_stimulus & stimulus, pcnn_dynamic & output_dynamic) {
 	output_dynamic.resize(steps, size());
@@ -35,7 +46,7 @@ void pcnn::calculate_states(const pcnn_stimulus & stimulus) {
 	for (unsigned int index = 0; index < size(); index++) {
 		pcnn_oscillator & current_oscillator = m_oscillators[index];
 		std::vector<size_t> neighbors;
-		get_neighbors(index, neighbors);
+		m_connection->get_neighbors(index, neighbors);
 
 		double feeding_influence = 0.0;
 		double linking_influence = 0.0;
@@ -81,6 +92,7 @@ void pcnn::calculate_states(const pcnn_stimulus & stimulus) {
 	}
 }
 
+
 void pcnn::fast_linking(const std::vector<double> & feeding, std::vector<double> & linking, std::vector<double> & output) {
 	std::vector<double> previous_outputs(output.cbegin(), output.cend());
 	
@@ -92,7 +104,7 @@ void pcnn::fast_linking(const std::vector<double> & feeding, std::vector<double>
 			pcnn_oscillator & current_oscillator = m_oscillators[index];
 
             std::vector<size_t> neighbors;
-			get_neighbors(index, neighbors);
+			m_connection->get_neighbors(index, neighbors);
 
 			double linking_influence = 0.0;
 
@@ -126,6 +138,7 @@ void pcnn::fast_linking(const std::vector<double> & feeding, std::vector<double>
 	}
 }
 
+
 void pcnn::store_dynamic(const unsigned int step, pcnn_dynamic & dynamic) {
 	pcnn_network_state & current_state = (pcnn_network_state &) dynamic[step];
 	current_state.m_output.resize(size());
@@ -136,14 +149,38 @@ void pcnn::store_dynamic(const unsigned int step, pcnn_dynamic & dynamic) {
 	}
 }
 
+#include <iostream>
+void pcnn::initilize(const size_t p_size, const connection_t p_structure, const size_t p_height, const size_t p_width, const pcnn_parameters & p_parameters) {
+	if (p_size > MAXIMUM_MATRIX_REPRESENTATION_SIZE) {
+		m_connection = std::shared_ptr<adjacency_collection>(new adjacency_bit_matrix(p_size));
+	}
+	else {
+		m_connection = std::shared_ptr<adjacency_matrix>(new adjacency_matrix(p_size));
+	}
+
+	adjacency_connector<adjacency_collection> connector;
+
+	if ((p_height != 0) && (p_width != 0)) {
+		connector.create_grid_structure(p_structure, p_width, p_height, *m_connection);
+	}
+	else {
+		connector.create_structure(p_structure, *m_connection);
+	}
+
+	m_params = p_parameters;
+}
+
 
 
 pcnn_dynamic::pcnn_dynamic() { }
 
+
 pcnn_dynamic::~pcnn_dynamic() { }
+
 
 /* TODO: implementation */
 pcnn_dynamic::pcnn_dynamic(const unsigned int number_oscillators, const unsigned int simulation_steps) { }
+
 
 void pcnn_dynamic::allocate_sync_ensembles(ensemble_data<pcnn_ensemble> & ensembles) const {
 	std::unordered_set<unsigned int> traverse_oscillators;
@@ -168,6 +205,7 @@ void pcnn_dynamic::allocate_sync_ensembles(ensemble_data<pcnn_ensemble> & ensemb
 	}
 }
 
+
 void pcnn_dynamic::allocate_spike_ensembles(ensemble_data<pcnn_ensemble> & ensembles) const {
 	for (const_iterator iter_state = cbegin(); iter_state != cend(); iter_state++) {
 		pcnn_ensemble ensemble;
@@ -184,6 +222,7 @@ void pcnn_dynamic::allocate_spike_ensembles(ensemble_data<pcnn_ensemble> & ensem
 		}
 	}
 }
+
 
 void pcnn_dynamic::allocate_time_signal(pcnn_time_signal & time_signal) const {
 	time_signal.resize(size());

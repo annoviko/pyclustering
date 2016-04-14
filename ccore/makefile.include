@@ -3,6 +3,7 @@
 INCLUDES = -Iccore/
 
 SOURCES += ccore/adjacency_bit_matrix.cpp
+SOURCES += ccore/adjacency_connector.cpp
 SOURCES += ccore/adjacency_list.cpp
 SOURCES += ccore/adjacency_matrix.cpp
 SOURCES += ccore/adjacency_weight_list.cpp

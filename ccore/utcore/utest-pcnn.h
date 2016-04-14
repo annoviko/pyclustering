@@ -11,7 +11,7 @@
 static void template_dynamic_generation_runner(
     pcnn & network,
     const unsigned int steps,
-    const conn_type type_conn,
+    const connection_t type_conn,
     const pcnn_stimulus & stimulus) {
 
     pcnn_dynamic dynamic;
@@ -32,9 +32,9 @@ static void template_dynamic_generation_runner(
 }
 
 static void template_dynamic_generation(
-		const unsigned int num_osc, 
+		const size_t num_osc, 
 		const unsigned int steps, 
-		const conn_type type_conn, 
+		const connection_t type_conn,
 		const pcnn_stimulus & stimulus) {
 
 	pcnn_parameters parameters;
@@ -44,9 +44,9 @@ static void template_dynamic_generation(
 }
 
 static void template_rectangle_network_dynamic_generation(
-    const unsigned int num_osc,
+    const size_t num_osc,
     const unsigned int steps,
-    const conn_type type_conn,
+    const connection_t type_conn,
     const size_t height,
     const size_t width,
     const pcnn_stimulus & stimulus) {
@@ -60,7 +60,7 @@ static void template_rectangle_network_dynamic_generation(
 
 TEST(utest_pcnn, create_delete) {
 	pcnn_parameters parameters;
-	pcnn * network = new pcnn(100, conn_type::ALL_TO_ALL, parameters);
+	pcnn * network = new pcnn(100, connection_t::CONNECTION_ALL_TO_ALL, parameters);
 	
 	ASSERT_EQ(100, network->size());
 
@@ -69,78 +69,78 @@ TEST(utest_pcnn, create_delete) {
 
 TEST(utest_pcnn, dynamic_generation_none_connections) {
 	pcnn_stimulus stimulus { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }; 
-	template_dynamic_generation(stimulus.size(), 20, conn_type::NONE, stimulus);
+	template_dynamic_generation(stimulus.size(), 20, connection_t::CONNECTION_NONE, stimulus);
 }
 
 TEST(utest_pcnn, dynamic_generation_grid_four_connections) {
 	pcnn_stimulus stimulus { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }; 
-	template_dynamic_generation(stimulus.size(), 20, conn_type::GRID_FOUR, stimulus);
+	template_dynamic_generation(stimulus.size(), 20, connection_t::CONNECTION_GRID_FOUR, stimulus);
 }
 
 TEST(utest_pcnn, dynamic_generation_grid_four_rectangle_connections) {
     pcnn_stimulus stimulus{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-    template_rectangle_network_dynamic_generation(stimulus.size(), 20, conn_type::GRID_FOUR, 2, 8, stimulus);
+    template_rectangle_network_dynamic_generation(stimulus.size(), 20, connection_t::CONNECTION_GRID_FOUR, 2, 8, stimulus);
 }
 
 TEST(utest_pcnn, dynamic_generation_grid_eight_connections) {
 	pcnn_stimulus stimulus { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }; 
-	template_dynamic_generation(stimulus.size(), 20, conn_type::GRID_EIGHT, stimulus);
+	template_dynamic_generation(stimulus.size(), 20, connection_t::CONNECTION_GRID_EIGHT, stimulus);
 }
 
 TEST(utest_pcnn, dynamic_generation_grid_eight_rectangle_connections) {
     pcnn_stimulus stimulus{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-    template_rectangle_network_dynamic_generation(stimulus.size(), 20, conn_type::GRID_EIGHT, 8, 2, stimulus);
+    template_rectangle_network_dynamic_generation(stimulus.size(), 20, connection_t::CONNECTION_GRID_EIGHT, 8, 2, stimulus);
 }
 
 TEST(utest_pcnn, dynamic_generation_bidir_list_connections) {
 	pcnn_stimulus stimulus { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }; 
-	template_dynamic_generation(stimulus.size(), 20, conn_type::LIST_BIDIR, stimulus);
+	template_dynamic_generation(stimulus.size(), 20, connection_t::CONNECTION_LIST_BIDIRECTIONAL, stimulus);
 }
 
 TEST(utest_pcnn, dynamic_generation_all_to_all_connections) {
 	pcnn_stimulus stimulus { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }; 
-	template_dynamic_generation(stimulus.size(), 20, conn_type::ALL_TO_ALL, stimulus);
+	template_dynamic_generation(stimulus.size(), 20, connection_t::CONNECTION_ALL_TO_ALL, stimulus);
 }
 
 TEST(utest_pcnn, dynamic_none_connections_stimulated) {
 	pcnn_stimulus stimulus { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }; 
-	template_dynamic_generation(stimulus.size(), 20, conn_type::NONE, stimulus);
+	template_dynamic_generation(stimulus.size(), 20, connection_t::CONNECTION_NONE, stimulus);
 }
 
 TEST(utest_pcnn, dynamic_grid_four_connections_stimulated) {
 	pcnn_stimulus stimulus { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }; 
-	template_dynamic_generation(stimulus.size(), 20, conn_type::GRID_FOUR, stimulus);
+	template_dynamic_generation(stimulus.size(), 20, connection_t::CONNECTION_GRID_FOUR, stimulus);
 }
 
 TEST(utest_pcnn, dynamic_grid_four_connections_rectangle_stimulated) {
     pcnn_stimulus stimulus{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
-    template_rectangle_network_dynamic_generation(stimulus.size(), 20, conn_type::GRID_FOUR, 2, 8, stimulus);
+    template_rectangle_network_dynamic_generation(stimulus.size(), 20, connection_t::CONNECTION_GRID_FOUR, 2, 8, stimulus);
 }
 
 TEST(utest_pcnn, dynamic_grid_eight_connections_stimulated) {
 	pcnn_stimulus stimulus { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }; 
-	template_dynamic_generation(stimulus.size(), 20, conn_type::GRID_EIGHT, stimulus);
+	template_dynamic_generation(stimulus.size(), 20, connection_t::CONNECTION_GRID_EIGHT, stimulus);
 }
 
 TEST(utest_pcnn, dynamic_grid_eight_connections_rectangle_stimulated) {
     pcnn_stimulus stimulus{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
-    template_rectangle_network_dynamic_generation(stimulus.size(), 20, conn_type::GRID_EIGHT, 8, 2, stimulus);
+    template_rectangle_network_dynamic_generation(stimulus.size(), 20, connection_t::CONNECTION_GRID_EIGHT, 8, 2, stimulus);
 }
 
 TEST(utest_pcnn, dynamic_bidir_list_connections_stimulated) {
 	pcnn_stimulus stimulus { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };  
-	template_dynamic_generation(stimulus.size(), 20, conn_type::LIST_BIDIR, stimulus);
+	template_dynamic_generation(stimulus.size(), 20, connection_t::CONNECTION_LIST_BIDIRECTIONAL, stimulus);
 }
 
 TEST(utest_pcnn, dynamic_all_to_all_connections_stimulated) {
 	pcnn_stimulus stimulus { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }; 
-	template_dynamic_generation(stimulus.size(), 20, conn_type::ALL_TO_ALL, stimulus);
+	template_dynamic_generation(stimulus.size(), 20, connection_t::CONNECTION_ALL_TO_ALL, stimulus);
 }
 
 static void template_output_activity(
-	const unsigned int num_osc,
+	const size_t num_osc,
 	const unsigned int steps,
-	const conn_type type_conn, 
+	const connection_t type_conn, 
 	const pcnn_stimulus & stimulus,
 	const bool activity_requirement,
 	const pcnn_parameters * const params = nullptr) {
@@ -184,47 +184,47 @@ static void template_output_activity(
 TEST(utest_pcnn, no_output_activity) {
 	pcnn_stimulus stimulus { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
-	template_output_activity(stimulus.size(), 30, conn_type::ALL_TO_ALL, stimulus, false);
-	template_output_activity(stimulus.size(), 30, conn_type::GRID_EIGHT, stimulus, false);
-	template_output_activity(stimulus.size(), 30, conn_type::GRID_FOUR, stimulus, false);
-	template_output_activity(stimulus.size(), 30, conn_type::LIST_BIDIR, stimulus, false);
-	template_output_activity(stimulus.size(), 30, conn_type::NONE, stimulus, false);
+	template_output_activity(stimulus.size(), 30, connection_t::CONNECTION_ALL_TO_ALL, stimulus, false);
+	template_output_activity(stimulus.size(), 30, connection_t::CONNECTION_GRID_EIGHT, stimulus, false);
+	template_output_activity(stimulus.size(), 30, connection_t::CONNECTION_GRID_FOUR, stimulus, false);
+	template_output_activity(stimulus.size(), 30, connection_t::CONNECTION_LIST_BIDIRECTIONAL, stimulus, false);
+	template_output_activity(stimulus.size(), 30, connection_t::CONNECTION_NONE, stimulus, false);
 }
 
 TEST(utest_pcnn, output_activity_full_stimulated) {
 	pcnn_stimulus stimulus { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
 
-	template_output_activity(stimulus.size(), 30, conn_type::ALL_TO_ALL, stimulus, true);
-	template_output_activity(stimulus.size(), 30, conn_type::GRID_EIGHT, stimulus, true);
-	template_output_activity(stimulus.size(), 30, conn_type::GRID_FOUR, stimulus, true);
-	template_output_activity(stimulus.size(), 30, conn_type::LIST_BIDIR, stimulus, true);
-	template_output_activity(stimulus.size(), 30, conn_type::NONE, stimulus, true);
+	template_output_activity(stimulus.size(), 30, connection_t::CONNECTION_ALL_TO_ALL, stimulus, true);
+	template_output_activity(stimulus.size(), 30, connection_t::CONNECTION_GRID_EIGHT, stimulus, true);
+	template_output_activity(stimulus.size(), 30, connection_t::CONNECTION_GRID_FOUR, stimulus, true);
+	template_output_activity(stimulus.size(), 30, connection_t::CONNECTION_LIST_BIDIRECTIONAL, stimulus, true);
+	template_output_activity(stimulus.size(), 30, connection_t::CONNECTION_NONE, stimulus, true);
 }
 
 TEST(utest_pcnn, output_activity_partial_stimulated) {
 	pcnn_stimulus stimulus { 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1, 1, 0, 0, 1, 0 };
 
-	template_output_activity(stimulus.size(), 30, conn_type::ALL_TO_ALL, stimulus, true);
-	template_output_activity(stimulus.size(), 30, conn_type::GRID_EIGHT, stimulus, true);
-	template_output_activity(stimulus.size(), 30, conn_type::GRID_FOUR, stimulus, true);
-	template_output_activity(stimulus.size(), 30, conn_type::LIST_BIDIR, stimulus, true);
-	template_output_activity(stimulus.size(), 30, conn_type::NONE, stimulus, true);
+	template_output_activity(stimulus.size(), 30, connection_t::CONNECTION_ALL_TO_ALL, stimulus, true);
+	template_output_activity(stimulus.size(), 30, connection_t::CONNECTION_GRID_EIGHT, stimulus, true);
+	template_output_activity(stimulus.size(), 30, connection_t::CONNECTION_GRID_FOUR, stimulus, true);
+	template_output_activity(stimulus.size(), 30, connection_t::CONNECTION_LIST_BIDIRECTIONAL, stimulus, true);
+	template_output_activity(stimulus.size(), 30, connection_t::CONNECTION_NONE, stimulus, true);
 }
 
 TEST(utest_pcnn, output_activity_one_stimulated) {
 	pcnn_stimulus stimulus { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
-	template_output_activity(stimulus.size(), 30, conn_type::ALL_TO_ALL, stimulus, true);
-	template_output_activity(stimulus.size(), 30, conn_type::GRID_EIGHT, stimulus, true);
-	template_output_activity(stimulus.size(), 30, conn_type::GRID_FOUR, stimulus, true);
-	template_output_activity(stimulus.size(), 30, conn_type::LIST_BIDIR, stimulus, true);
-	template_output_activity(stimulus.size(), 30, conn_type::NONE, stimulus, true);
+	template_output_activity(stimulus.size(), 30, connection_t::CONNECTION_ALL_TO_ALL, stimulus, true);
+	template_output_activity(stimulus.size(), 30, connection_t::CONNECTION_GRID_EIGHT, stimulus, true);
+	template_output_activity(stimulus.size(), 30, connection_t::CONNECTION_GRID_FOUR, stimulus, true);
+	template_output_activity(stimulus.size(), 30, connection_t::CONNECTION_LIST_BIDIRECTIONAL, stimulus, true);
+	template_output_activity(stimulus.size(), 30, connection_t::CONNECTION_NONE, stimulus, true);
 }
 
 static void template_ensemble_allocation(
-	const unsigned int num_osc,
+	const size_t num_osc,
 	const unsigned int steps,
-	const conn_type type_conn, 
+	const connection_t type_conn, 
 	const pcnn_stimulus & stimulus,
 	const pcnn_parameters * const params = nullptr) {
 
@@ -269,17 +269,17 @@ static void template_ensemble_allocation(
 
 TEST(utest_pcnn, ensemble_allocation_all_stimulated) {
 	pcnn_stimulus stimulus { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }; 
-	template_ensemble_allocation(stimulus.size(), 20, conn_type::ALL_TO_ALL, stimulus);
+	template_ensemble_allocation(stimulus.size(), 20, connection_t::CONNECTION_ALL_TO_ALL, stimulus);
 }
 
 TEST(utest_pcnn, ensemble_allocation_partial_stimulated) {
 	pcnn_stimulus stimulus { 1, 0, 0, 1, 1, 1, 0, 0, 1, 1 }; 
-	template_ensemble_allocation(stimulus.size(), 20, conn_type::ALL_TO_ALL, stimulus);
+	template_ensemble_allocation(stimulus.size(), 20, connection_t::CONNECTION_ALL_TO_ALL, stimulus);
 }
 
 TEST(utest_pcnn, ensemble_allocation_unstimulated) {
 	pcnn_stimulus stimulus { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-	template_ensemble_allocation(stimulus.size(), 20, conn_type::ALL_TO_ALL, stimulus);
+	template_ensemble_allocation(stimulus.size(), 20, connection_t::CONNECTION_ALL_TO_ALL, stimulus);
 }
 
 TEST(utest_pcnn, ensemble_allocation_fast_linking) {
@@ -290,9 +290,9 @@ TEST(utest_pcnn, ensemble_allocation_fast_linking) {
 	pcnn_parameters params;
 	params.FAST_LINKING = true;
 
-	template_ensemble_allocation(full_stimulus.size(), 50, conn_type::ALL_TO_ALL, full_stimulus, &params);
-	template_ensemble_allocation(partial_stimulus.size(), 50, conn_type::ALL_TO_ALL, partial_stimulus, &params);
-	template_ensemble_allocation(no_stimulus.size(), 50, conn_type::ALL_TO_ALL, no_stimulus, &params);
+	template_ensemble_allocation(full_stimulus.size(), 50, connection_t::CONNECTION_ALL_TO_ALL, full_stimulus, &params);
+	template_ensemble_allocation(partial_stimulus.size(), 50, connection_t::CONNECTION_ALL_TO_ALL, partial_stimulus, &params);
+	template_ensemble_allocation(no_stimulus.size(), 50, connection_t::CONNECTION_ALL_TO_ALL, no_stimulus, &params);
 }
 
 #endif

@@ -146,6 +146,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="adjacency_bit_matrix.cpp" />
+    <ClCompile Include="adjacency_connector.cpp" />
     <ClCompile Include="adjacency_factory.cpp" />
     <ClCompile Include="adjacency_list.cpp" />
     <ClCompile Include="adjacency_matrix.cpp" />

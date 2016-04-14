@@ -85,6 +85,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\ccore\adjacency_bit_matrix.cpp" />
+    <ClCompile Include="..\ccore\adjacency_connector.cpp" />
     <ClCompile Include="..\ccore\adjacency_list.cpp" />
     <ClCompile Include="..\ccore\adjacency_matrix.cpp" />
     <ClCompile Include="..\ccore\adjacency_weight_list.cpp" />

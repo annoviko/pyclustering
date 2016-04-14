@@ -6,6 +6,7 @@
 #include <memory>
 #include <functional>
 #include <cmath>
+#include <ostream>
 
 
 /***********************************************************************************************
@@ -14,21 +15,29 @@
 *
 ***********************************************************************************************/
 enum class connection_t {
-    /*!< Connections does not exists. */
-    CONNECTION_NONE,
+	/*!< Connections does not exists. */
+	CONNECTION_NONE = 0,
+
+	/*!< Each node is connected with all nodes except itself. */
+	CONNECTION_ALL_TO_ALL = 1,
 
     /*!< Each node is connected with four neighbors: left, upper, right and lower. */
-    CONNECTION_GRID_FOUR,
+    CONNECTION_GRID_FOUR = 2,
 
     /*!< Each node is connected with eight neighbors: left, left-upper, upper, upper-right, right, right-lower, lower and lower-left. */
-    CONNECTION_GRID_EIGHT,
-
-    /*!< Each node is connected with all nodes except itself. */
-    CONNECTION_ALL_TO_ALL,
+    CONNECTION_GRID_EIGHT = 3,
 
     /*!< Each node is connected with two neighbors: left and right. */
-    CONNECTION_LIST_BIDIRECTIONAL,
+    CONNECTION_LIST_BIDIRECTIONAL = 4,
 };
+
+
+/***********************************************************************************************
+*
+* @brief   Generates a sequence of characters with the representation of structure of connections.
+*
+***********************************************************************************************/
+std::ostream & operator<<(std::ostream & p_stream, const connection_t & p_structure);
 
 
 /***********************************************************************************************
@@ -289,6 +298,32 @@ public:
 		    }
 	    }
     }
+
+	/***********************************************************************************************
+	*
+	* @brief   Creates rectangle grid structure in line with specify type of connections.
+	* @details It throws exception if non-grid structures is specify as a grid type.
+	*
+	* @param[in] p_grid: type of grid structure (for example, four grid or eight grid).
+	* @param[in] p_width: width of created grid structure that is defined by amount of nodes in a column.
+	* @param[in] p_height: height of created grid structure that is defined by amount of nodes in a row.
+	* @param[out] p_output_adjacency_collection: adjacency collection whose connections should be updated.
+	*
+	***********************************************************************************************/
+	virtual void create_grid_structure(const connection_t p_grid, const size_t p_width, const size_t p_height, TypeCollection & p_output_adjacency_collection) {
+		switch (p_grid) {
+		case connection_t::CONNECTION_GRID_FOUR:
+			create_grid_four_connections(p_width, p_height, p_output_adjacency_collection);
+			break;
+
+		case connection_t::CONNECTION_GRID_EIGHT:
+			create_grid_eight_connections(p_width, p_height, p_output_adjacency_collection);
+			break;
+
+		default:
+			throw std::runtime_error("Grid structure of connection is expected");
+		}
+	}
 };
 
 

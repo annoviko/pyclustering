@@ -87,6 +87,9 @@
     <ClCompile Include="samples.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\ccore\adjacency_connector.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="utest-kdtree.h">
