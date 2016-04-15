@@ -72,18 +72,6 @@ class agglomerative:
     
     """
     
-    __pointer_data = None;
-    __number_clusters = 0;
-    
-    __ccore = False;
-    
-    __clusters = None;
-    __similarity = None;
-    
-    # some cluster charactestics that may be used or may not be used
-    __centers = None;   # used in case of usage of centroid links
-    
-    
     def __init__(self, data, number_clusters, link = None, ccore = False):
         """!
         @brief Constructor of clustering algorithm hierarchical.
@@ -106,7 +94,7 @@ class agglomerative:
         self.__ccore = ccore;
         
         if (self.__similarity == type_link.CENTROID_LINK):
-            self.__centers = self.__pointer_data.copy();
+            self.__centers = self.__pointer_data.copy();    # used in case of usage of centroid links
     
     
     def process(self):

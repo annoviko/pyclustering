@@ -31,9 +31,6 @@ class dsatur:
     
     """
     
-    __data_pointer = None;
-    __coloring = None;
-    
     def __init__(self, data):
         """!
         @brief Constructor of DSATUR algorithm.
@@ -46,6 +43,7 @@ class dsatur:
     
         self.__data_pointer = data;
         self.__colors = [];
+        self.__coloring = None;
         
     def process(self):
         """!

@@ -50,10 +50,6 @@ class kmedoids:
     @endcode
     
     """
-    __pointer_data = None;
-    __clusters = None;
-    __medoids = None;
-    __tolerance = 0.0;
     
     
     def __init__(self, data, initial_index_medoids, tolerance = 0.25):

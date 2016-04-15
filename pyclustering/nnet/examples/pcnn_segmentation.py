@@ -153,9 +153,9 @@ def segmentation_fast_linking_field_flowers():
 
 
 # Examples of simple image segmentation
-# segmentation_image_simple1();
-# segmentation_image_simple2();
-# segmentation_image_simple6();
+segmentation_image_simple1();
+segmentation_image_simple2();
+segmentation_image_simple6();
 
 # Line allocation
 segmentation_image_black_thin_lines1();

@@ -63,15 +63,7 @@ class syncsom:
     @endcode
     
     """
-    _som = None;        # The first (input) later - SOM layer.
-    _data = None;       # Pointer to input data.
-    _sync = None;       # The second (output) layer - Sync layer.
-    _struct = None;     # Structure of connections between oscillators in the second layer - Sync layer.
-    
-    # For convenience
-    _som_osc_table = None;
-    _analyser = None;
-    
+
     @property
     def som_layer(self):
         """!
@@ -100,8 +92,14 @@ class syncsom:
         
         self._data = data;
         
-        self._som = som(rows, cols, conn_type = type_conn.grid_four);
-        self._som_osc_table = list();        
+        self._som = som(rows, cols, conn_type = type_conn.grid_four);   # The first (input) later - SOM layer.
+        self._som_osc_table = list();
+        
+        self._sync = None;       # The second (output) layer - Sync layer.
+        self._struct = None;     # Structure of connections between oscillators in the second layer - Sync layer.
+        
+        # For convenience
+        self._analyser = None;
     
     def process(self, number_neighbours, collect_dynamic = False, order = 0.999):
         """!

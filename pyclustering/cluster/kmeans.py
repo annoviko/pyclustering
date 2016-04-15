@@ -46,12 +46,6 @@ class kmeans:
         kmeans_instance.get_clusters();    
     @endcode
     """
-    __pointer_data = None;
-    __clusters = None;
-    __centers = None;
-    __tolerance = 0.0;
-    
-    __ccore = False;
     
     def __init__(self, data, initial_centers, tolerance = 0.25, ccore = False):
         """!

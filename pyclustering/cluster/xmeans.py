@@ -72,16 +72,6 @@ class xmeans:
     @endcode
     """
     
-    __pointer_data = None;
-    __clusters = None;
-    __centers = None;
-     
-    __kmax = 0;
-    __tolerance = 0.0;
-    __criterion = None;
-     
-    __ccore = False;
-     
     def __init__(self, data, initial_centers, kmax = 20, tolerance = 0.025, criterion = splitting_type.BAYESIAN_INFORMATION_CRITERION, ccore = False):
         """!
         @brief Constructor of clustering algorithm X-Means.

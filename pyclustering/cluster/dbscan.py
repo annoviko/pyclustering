@@ -52,18 +52,6 @@ class dbscan:
     @endcode
     
     """
-    __pointer_data = None;
-    __eps = 0;
-    __sqrt_eps = 0;
-    __neighbors = 0;
-    
-    __clusters = None;
-    __noise = None;
-    
-    __visited = None;
-    __belong = None;
-    
-    __ccore = False;
     
     def __init__(self, data, eps, neighbors, ccore):
         """!

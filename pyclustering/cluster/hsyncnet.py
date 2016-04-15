@@ -54,8 +54,6 @@ class hsyncnet(syncnet):
         draw_dynamics(time, dynamic);
     @endcode
     """
-    _number_clusters = 0;    
-    __ccore_network_pointer = None;      # Pointer to CCORE HSyncNet implementation of the network.
     
     def __init__(self, source_data, number_clusters, osc_initial_phases = initial_type.RANDOM_GAUSSIAN, ccore = False):
         """!
@@ -67,6 +65,8 @@ class hsyncnet(syncnet):
         @param[in] ccore (bool): If True than DLL CCORE (C++ solution) will be used for solving.
         
         """
+        
+        self.__ccore_network_pointer = None;
         
         if (ccore is True):
             self.__ccore_network_pointer = wrapper.hsyncnet_create_network(source_data, number_clusters, osc_initial_phases);
@@ -112,7 +112,7 @@ class hsyncnet(syncnet):
         
         radius = 0.0;
         
-        while(current_number_clusters > self._number_clusters):                
+        while(current_number_clusters > self._number_clusters):
             self._create_connections(radius);
         
             analyser = self.simulate_dynamic(order, solution, collect_dynamic);

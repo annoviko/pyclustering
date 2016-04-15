@@ -38,21 +38,6 @@ class cure_cluster:
     
     """
     
-    ## List of points that make up cluster.
-    points = None;
-    
-    ## Mean of points that make up cluster.
-    mean = None;
-    
-    ## List of points that represents clusters.
-    rep = None;
-    
-    ## Pointer to the closest cluster.
-    closest = None;
-    
-    ## Distance to the closest cluster.
-    distance = None;
-    
     def __init__(self, point = None):
         """!
         @brief Constructor of CURE cluster.
@@ -60,18 +45,27 @@ class cure_cluster:
         @param[in] point (list): Point represented by list of coordinates.
         
         """
+        
+        ## List of points that make up cluster.
+        self.points = [ ];
+        
+        ## Mean of points that make up cluster.
+        self.mean = None;
+        
+        ## List of points that represents clusters.
+        self.rep = [ ];
+        
         if (point is not None):
             self.points = [ point ];
             self.mean = point;
             self.rep = [ point ];
-        else:
-            self.points = [ ];
-            self.mean = None;
-            self.rep = [ ];
-            
-        self.closest = None;
-        self.distance = float('inf');      # calculation of distance is really complexity operation (even square distance), so let's store distance to closest cluster.
         
+        ## Pointer to the closest cluster.
+        self.closest = None;
+        
+        ## Distance to the closest cluster.
+        self.distance = float('inf');      # calculation of distance is really complexity operation (even square distance), so let's store distance to closest cluster.
+
     def __repr__(self):
         """!
         @brief Displays distance to closest cluster and points that are contained by current cluster.

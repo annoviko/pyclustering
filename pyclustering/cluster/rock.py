@@ -50,20 +50,7 @@ class rock:
         clusters = rock_instance.get_clusters();  
     @endcode
        
-    """    
-    __pointer_data = None;
-    __clusters = None;
-    
-    __number_clusters = 0;
-    __threshold = 0;
-    __eps = 0;
-    
-    __degree_normalization = 0;
-    __adjacency_matrix = None;
-    
-    __clusters = None;
-    
-    __ccore = False;
+    """
     
     def __init__(self, data, eps, number_clusters, threshold = 0.5, ccore = False):
         """!
@@ -87,6 +74,8 @@ class rock:
         self.__ccore = ccore;
         
         self.__degree_normalization = 1.0 + 2.0 * ( (1.0 - threshold) / (1.0 + threshold) );
+        
+        self.__adjacency_matrix = None;
         self.__create_adjacency_matrix();
         
         

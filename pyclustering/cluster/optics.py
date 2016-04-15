@@ -34,18 +34,6 @@ class optics_descriptor:
     
     """
     
-    ## Reachability distance - the smallest distance to be reachable by core object.
-    reachability_distance = None;
-    
-    ## Core distance - the smallest distance to reach specified number of neighbors that is not greater then connectivity radius.
-    core_distance = None;
-    
-    ## True is object has been already traversed.
-    processed = None;
-    
-    ## Index of object from the input data.
-    index_object = None;
-    
     def __init__(self, index, core_distance = None, reachability_distance = None):
         """!
         @brief Constructor of object description in optics terms.
@@ -55,9 +43,17 @@ class optics_descriptor:
         @param[in] reachability_distance (double): Reachability distance to this object.
         
         """
+        
+        ## Reachability distance - the smallest distance to be reachable by core object.
         self.index_object = index;
+        
+        ## Core distance - the smallest distance to reach specified number of neighbors that is not greater then connectivity radius.
         self.core_distance = core_distance;
+        
+        ## Index of object from the input data.
         self.reachability_distance = reachability_distance;
+        
+        ## True is object has been already traversed.
         self.processed = False;
         
     def __repr__(self):
@@ -101,18 +97,6 @@ class optics:
        
     """
     
-    __optics_objects = None;      # List of OPTICS objects that corresponds to objects from input sample.
-    __ordered_database = None;    # List of OPTICS objects in traverse order. 
-    
-    __clusters = None;            # Result of clustering (list of clusters where each cluster contains indexes of objects from input data).
-    __noise = None;               # Result of clustering (noise).
-    
-    __sample_pointer = None;      # Algorithm parameter - pointer to sample for processing.
-    __eps = 0;                    # Algorithm parameter - connectivity radius between object for establish links between object.
-    __minpts = 0;                 # Algorithm parameter - minimum number of neighbors that is required for establish links between object.
-    
-    __ccore_algorithm_pointer = None;
-    
     def __init__(self, sample, eps, minpts):
         """!
         @brief Constructor of clustering algorithm OPTICS.
@@ -124,12 +108,15 @@ class optics:
         """
         
         self.__processed = [False] * len(sample);
-        self.__optics_objects = [optics_descriptor(i) for i in range(len(sample))];
-        self.__ordered_database = [];
+        self.__optics_objects = [optics_descriptor(i) for i in range(len(sample))];     # List of OPTICS objects that corresponds to objects from input sample.
+        self.__ordered_database = [];       # List of OPTICS objects in traverse order. 
         
-        self.__sample_pointer = sample;
-        self.__eps = eps;
-        self.__minpts = minpts;
+        self.__sample_pointer = sample;     # Algorithm parameter - pointer to sample for processing.
+        self.__eps = eps;                   # Algorithm parameter - connectivity radius between object for establish links between object.
+        self.__minpts = minpts;             # Algorithm parameter - minimum number of neighbors that is required for establish links between object.
+        
+        self.__clusters = None;             # Result of clustering (list of clusters where each cluster contains indexes of objects from input data).
+        self.__noise = None;                # Result of clustering (noise).
 
 
     def process(self):

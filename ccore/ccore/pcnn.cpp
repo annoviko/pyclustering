@@ -149,7 +149,7 @@ void pcnn::store_dynamic(const unsigned int step, pcnn_dynamic & dynamic) {
 	}
 }
 
-#include <iostream>
+
 void pcnn::initilize(const size_t p_size, const connection_t p_structure, const size_t p_height, const size_t p_width, const pcnn_parameters & p_parameters) {
 	if (p_size > MAXIMUM_MATRIX_REPRESENTATION_SIZE) {
 		m_connection = std::shared_ptr<adjacency_collection>(new adjacency_bit_matrix(p_size));

@@ -31,19 +31,7 @@ class canvas_cluster_descr:
     @brief Description of cluster for representation on canvas.
     
     """
-    
-    ## Cluster that may consist of objects or indexes of objects from data.
-    cluster = None;
-    
-    ## Data where objects are stored. It can be None if clusters consist of objects instead of indexes.
-    data = None;
-    
-    ## Marker that is used for drawing objects.
-    marker = None;
-    
-    ## Size of marker that is used for drawing objects.
-    markersize = None;
-    
+
     def __init__(self, cluster, data, marker, markersize):
         """!
         @brief Constructor of cluster representation on the canvas.
@@ -54,9 +42,16 @@ class canvas_cluster_descr:
         @param[in] markersize (uint): Size of marker that is used for drawing objects.
         
         """
+        ## Cluster that may consist of objects or indexes of objects from data.
         self.cluster = cluster;
+        
+        ## Data where objects are stored. It can be None if clusters consist of objects instead of indexes.
         self.data = data;
+        
+        ## Marker that is used for drawing objects.
         self.marker = marker;
+        
+        ## Size of marker that is used for drawing objects.
         self.markersize = markersize;
     
 
@@ -71,15 +66,7 @@ class cluster_visualizer:
                  'black', 'mediumspringgreen', 'orange', 'darkviolet', 'darkblue',
                  'silver', 'lime', 'pink', 'gold', 'bisque' ];
     
-    __canvas_clusters = None;
-    __canvas_titles = None;
-    __canvas_dimensions = None;
-    __number_canvases = None;
-    
-    __default_2d_marker_size = 5;
-    __default_3d_marker_size = 30;
-    
-    
+
     def __init__(self, number_canvases = 1):
         """!
         @brief Constructor of cluster visualizer.
@@ -92,6 +79,9 @@ class cluster_visualizer:
         self.__canvas_clusters = [ [] for i in range(number_canvases) ];
         self.__canvas_dimensions = [ None for i in range(number_canvases) ];
         self.__canvas_titles = [ None for i in range(number_canvases) ];
+        
+        self.__default_2d_marker_size = 5;
+        self.__default_3d_marker_size = 30;
     
     
     def append_cluster(self, cluster, data = None, canvas = 0, marker = '.', markersize = None):

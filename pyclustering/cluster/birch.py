@@ -50,20 +50,7 @@ class birch:
         clusters = birch_instance.get_clusters();  
     @endcode
     
-    """    
-    __pointer_data = None;
-    __number_clusters = 0;
-    
-    __features = None;
-    __tree = None;
-    
-    __measurement_type = None;
-    __entry_size_limit = 0;
-    
-    __clusters = None;
-    __noise = None;
-    
-    __ccore = False;
+    """
     
     def __init__(self, data, number_clusters, branching_factor = 5, max_node_entries = 5, initial_diameter = 0.1, type_measurement = measurement_type.CENTROID_EUCLIDIAN_DISTANCE, entry_size_limit = 200, ccore = False):
         """!
@@ -99,9 +86,13 @@ class birch:
         self.__entry_size_limit = entry_size_limit;
         self.__ccore = ccore;
         
+        self.__features = None;
         self.__tree = cftree(branching_factor, max_node_entries, initial_diameter, type_measurement);
-               
         
+        self.__clusters = None;
+        self.__noise = None;
+
+
     def process(self):
         """!
         @brief Performs cluster analysis in line with rules of BIRCH algorithm.

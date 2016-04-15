@@ -116,12 +116,6 @@ class syncnet(sync_network):
     @endcode
     
     """
-    _osc_loc = None;            # Location (coordinates) of oscillators in the feature space.
-    
-    _ena_conn_weight = False;   # Enable mode: when strength of connection depends on distance between two oscillators.
-    _conn_weight = None;        # Stength of connection between oscillators.
-    
-    __ccore_network_pointer = None;      # Pointer to CCORE SyncNet implementation of the network.
     
     def __init__(self, sample, radius, conn_repr = conn_represent.MATRIX, initial_phases = initial_type.RANDOM_GAUSSIAN, enable_conn_weight = False, ccore = False):
         """!
@@ -137,11 +131,14 @@ class syncnet(sync_network):
         
         """
         
+        self.__ccore_network_pointer = None;
+        
         if (ccore is True):
             self.__ccore_network_pointer = syncnet_create_network(sample, radius, initial_phases, enable_conn_weight);
         else:
             super().__init__(len(sample), 1, 0, conn_type.DYNAMIC, initial_phases);
             
+            self._conn_weight = None;
             self._ena_conn_weight = enable_conn_weight;
             self._osc_loc = sample;
             self._conn_represent = conn_repr;

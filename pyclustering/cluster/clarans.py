@@ -35,19 +35,6 @@ class clarans:
     @brief Class represents clustering algorithm CLARANS (a method for clustering objects for spatial data mining).
     
     """
-    
-    __pointer_data = None;
-    __numlocal = 0;
-    __maxneighbor = 0;
-    __number_clusters = 0;
-    
-    __clusters = None;
-    __belong = None;
-    __current = None;
-    
-    __optimal_medoids = None;
-    __optimal_estimation = 0;
-
 
     def __init__(self, data, number_clusters, numlocal, maxneighbor):
         """!
