@@ -205,7 +205,8 @@ class cure:
                 
                 # New cluster and updated clusters should relocated in queue
                 self.__insert_cluster(merged_cluster);
-                [self.__relocate_cluster(item) for item in cluster_relocation_requests];
+                for item in cluster_relocation_requests:
+                    self.__relocate_cluster(item);
         
             # Change cluster representation
             self.__clusters = [ cure_cluster_unit.points for cure_cluster_unit in self.__queue ];

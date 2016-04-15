@@ -27,9 +27,9 @@
 
 from copy import copy;
 
-from pyclustering.utils import euclidean_distance, euclidean_distance_sqrt;
+from pyclustering.utils import euclidean_distance_sqrt;
 from pyclustering.utils import manhattan_distance;
-from pyclustering.utils import list_math_addition, list_math_subtraction, list_math_multiplication,list_math_division_number;
+from pyclustering.utils import list_math_addition, list_math_subtraction, list_math_multiplication;
 from pyclustering.utils import linear_sum, square_sum;
 
 from enum import IntEnum;
@@ -199,13 +199,13 @@ class cfentry:
         """
                 
         number_points = self.number_points - entry.number_points;
-        linear_sum = list_math_subtraction(self.linear_sum, entry.linear_sum);        
+        linear_sum = list_math_subtraction(self.linear_sum, entry.linear_sum);
         square_sum = self.square_sum - entry.square_sum;
         
         if ( (number_points < 0) or (square_sum < 0) ):
             raise NameError("Substruction with negative result is not possible for clustering features.");
         
-        return cfentry(number_points, linear_sum, square_sum);        
+        return cfentry(number_points, linear_sum, square_sum);
     
     
     def __eq__(self, entry):
@@ -751,7 +751,7 @@ class leaf_node(cfnode):
             if (candidate_distance < minimum_distance):
                 nearest_index = candidate_index;
                 
-        return candidate_index;
+        return nearest_index;
     
     
     def get_nearest_entry(self, entry, type_measurement):

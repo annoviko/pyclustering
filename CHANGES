@@ -74,3 +74,6 @@ CORRECTED BUGS:
 
 - Bug with visualization of clusters in 3D (pyclustering.cluster).
   See: https://github.com/annoviko/pyclustering/issues/273
+
+- Bug with obtaining nearest entry for absorbing during inserting node (pyclustering.container.cftree).
+  See: https://github.com/annoviko/pyclustering/issues/282
