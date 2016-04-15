@@ -96,9 +96,6 @@ class kdtree:
     
     """
     
-    __root = None;
-    __dimension = None;
-    
     def __init__(self, data_list = None, payload_list = None):
         """!
         @brief Create kd-tree from list of points and from according list of payloads.
@@ -108,6 +105,9 @@ class kdtree:
         @param[in] payload_list (list): Insert payload from the list to created KD tree, length should be equal to length of data_list if it is specified.
         
         """
+        
+        self.__root = None;
+        self.__dimension = None;
         
         if (data_list is None):
             return; # Just return from here, tree can be filled by insert method later
@@ -428,7 +428,7 @@ class kdtree:
     
     def show(self):
         """!
-        @brief Display tree on the console.
+        @brief Display tree on the console using text representation.
         
         """
         

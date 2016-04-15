@@ -1,23 +1,27 @@
-'''
+"""!
 
-Unit-tests for CF-Tree.
+@brief Unit-tests for CF-tree container.
 
-Copyright (C) 2015    Andrei Novikov (pyclustering@yandex.ru)
+@authors Andrei Novikov (pyclustering@yandex.ru)
+@date 2014-2016
+@copyright GNU Public License
 
-pyclustering is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+@cond GNU_PUBLIC_LICENSE
+    PyClustering is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    PyClustering is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+@endcond
 
-pyclustering is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-'''
+"""
 
 import unittest;
 
@@ -48,7 +52,7 @@ class Test(unittest.TestCase):
            
     def testCfClusterRepresentationOneDimension2(self):
         cluster = [ [0.1], [0.2], [0.5], [0.4], [0.6] ];
-        self.templateCfClusterRepresentation(cluster, 0.36, 0.18547, 0.29326, 0.0001);        
+        self.templateCfClusterRepresentation(cluster, 0.36, 0.18547, 0.29326, 0.0001);
        
     def testCfClusterRepresentationTwoDimension(self):
         cluster = [ [0.1, 0.1], [0.2, 0.2], [0.5, 0.5], [0.4, 0.4], [0.6, 0.6] ];

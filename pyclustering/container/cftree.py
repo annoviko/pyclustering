@@ -88,14 +88,6 @@ class cfentry:
     
     """
     
-    __centroid = None;
-    __radius = None;
-    __diameter = None;
-    
-    __number_points = 0;
-    __linear_sum = None;
-    __square_sum = None;
-    
     @property
     def number_points(self):
         """!
@@ -137,6 +129,7 @@ class cfentry:
         @param[in] square_sum (double): Square sum of values that represent objects.
         
         """
+        
         self.__number_points = number_points;
         self.__linear_sum = linear_sum;
         self.__square_sum = square_sum;
@@ -401,18 +394,6 @@ class cfnode:
     
     """
     
-    ## Clustering feature of the node.
-    feature     = None;
-    
-    ## Pointer to the parent node (None for root).
-    parent      = None;
-    
-    ## Type node (leaf or non-leaf).
-    type        = None;
-    
-    ## Payload of node where user data can be stored.
-    payload     = None;
-    
     def __init__(self, feature, parent, payload):
         """!
         @brief Constructor of abstract CF node.
@@ -421,11 +402,18 @@ class cfnode:
         @param[in] parent (cfnode): Parent of the created node.
         @param[in] payload (*): Data that is stored by the node.
         
-        """     
+        """
         
+        ## Clustering feature of the node.
         self.feature = copy(feature);
+        
+        ## Pointer to the parent node (None for root).
         self.parent = parent;
+        
+        ## Type node (leaf or non-leaf).
         self.type = cfnode_type.CFNODE_DUMMY;
+        
+        ## Payload of node where user data can be stored.
         self.payload = payload;
         
     
@@ -465,8 +453,6 @@ class non_leaf_node(cfnode):
     @brief Representation of clustering feature non-leaf node.
     
     """ 
-    
-    __successors = None;
     
     @property
     def successors(self):
@@ -616,8 +602,6 @@ class leaf_node(cfnode):
     
     """
     
-    __entries = None;   # list of clustering features
-    
     @property
     def entries(self):
         """!
@@ -641,7 +625,7 @@ class leaf_node(cfnode):
         super().__init__(feature, parent, payload);
         
         self.type = cfnode_type.CFNODE_LEAF;
-        self.__entries = entries;
+        self.__entries = entries;   # list of clustering features
         
     
     def __repr__(self):
@@ -776,21 +760,6 @@ class cftree:
     
     """
     
-    __root = None;
-    __leafes = None;
-    
-    __branch_factor = 0;
-    __threshold = 0.0;
-    __max_entries = None;
-    
-    __type_measurement = None;
-    
-    #statistics
-    __amount_nodes = 0;     # amount of nodes.
-    __amount_entries = 0;   # amount of entries.
-    __height = 0;           # height of tree.
-    
-    
     @property
     def root(self):
         """!
@@ -883,11 +852,14 @@ class cftree:
         @param[in] type_measurement (measurement_type): Measurement type that is used for calculation distance metrics.
         
         """
-        
-        if (branch_factor < 2):
-            branch_factor = 2;
-        
+
+        self.__root = None;
+
         self.__branch_factor = branch_factor; # maximum number of children
+        if (self.__branch_factor < 2):
+            self.__branch_factor = 2;
+        
+        
         self.__threshold = threshold;         # maximum diameter of sub-clusters stored at the leaf nodes
         self.__max_entries = max_entries;
         
