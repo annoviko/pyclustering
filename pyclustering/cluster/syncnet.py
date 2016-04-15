@@ -27,10 +27,12 @@
 
 import matplotlib.pyplot as plt;
 
-from pyclustering.core.syncnet_wrapper import *;
+import math;
 
-from pyclustering.nnet import *;
-from pyclustering.nnet.sync import *;
+from pyclustering.core.syncnet_wrapper import syncnet_create_network, syncnet_process, syncnet_destroy_network, syncnet_analyser_destroy;
+
+from pyclustering.nnet.sync import sync_dynamic, sync_network;
+from pyclustering.nnet import conn_represent, initial_type, conn_type, solve_type;
 
 from pyclustering.utils import euclidean_distance;
 

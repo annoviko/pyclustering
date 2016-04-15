@@ -180,47 +180,47 @@ class kdtree:
             return None;
         
         parent = node_for_remove.parent;
-        node = self.__recursive_remove(node_for_remove);
+        minimal_node = self.__recursive_remove(node_for_remove);
         if (parent is None):
-            self.__root = node;
+            self.__root = minimal_node;
             
             # If all k-d tree was destroyed
-            if (node is not None):
-                node.parent = None;
+            if (minimal_node is not None):
+                minimal_node.parent = None;
         else:
             if (parent.left is node_for_remove):
-                parent.left = node;
+                parent.left = minimal_node;
             elif (parent.right is node_for_remove):
-                parent.right = node;
+                parent.right = minimal_node;
             else:
                 assert 0;   # FATAL ERROR
         
         return self.__root;
     
     
-    def __recursive_remove(self, node):
+    def __recursive_remove(self, node_removed):
         """!
         @brief Delete node and return root of subtree.
         
-        @param[in] node (node): Node that should be removed.
+        @param[in] node_removed (node): Node that should be removed.
         
         @return (node) Minimal node in line with coordinate that is defined by descriminator.
         
         """
                 
         # Check if it is leaf
-        if ( (node.right is None) and (node.left is None) ):
+        if ( (node_removed.right is None) and (node_removed.left is None) ):
             return None;
         
-        discriminator = node.disc;
+        discriminator = node_removed.disc;
         
         # Check if only left branch exist
-        if (node.right is None):
-            node.right = node.left;
-            node.left = None;
+        if (node_removed.right is None):
+            node_removed.right = node_removed.left;
+            node_removed.left = None;
         
         # Find minimal node in line with coordinate that is defined by discriminator
-        minimal_node = self.find_minimal_node(node.right, discriminator);
+        minimal_node = self.find_minimal_node(node_removed.right, discriminator);
         parent = minimal_node.parent;
         
         if (parent.left is minimal_node):
@@ -230,10 +230,10 @@ class kdtree:
         else:
             assert 0;
         
-        minimal_node.parent = node.parent;
-        minimal_node.disc = node.disc;
-        minimal_node.right = node.right;
-        minimal_node.left = node.left;
+        minimal_node.parent = node_removed.parent;
+        minimal_node.disc = node_removed.disc;
+        minimal_node.right = node_removed.right;
+        minimal_node.left = node_removed.left;
         
         # Update parent for successors of previous parent.
         if (minimal_node.right is not None):
@@ -245,11 +245,11 @@ class kdtree:
         return minimal_node;
         
     
-    def find_minimal_node(self, node, discriminator):
+    def find_minimal_node(self, node_head, discriminator):
         """!
         @brief Find minimal node in line with coordinate that is defined by discriminator.
         
-        @param[in] node (node): Node of KD tree from that search should be started.
+        @param[in] node_head (node): Node of KD tree from that search should be started.
         @param[in] discriminator (uint): Coordinate number that is used for comparison.
         
         @return (node) Minimal node in line with descriminator from the specified node.
@@ -261,14 +261,14 @@ class kdtree:
         candidates = [];
         isFinished = False;
         while isFinished is False:
-            if node is not None:
-                stack.append(node);
-                node = node.left;
+            if node_head is not None:
+                stack.append(node_head);
+                node_head = node_head.left;
             else:
                 if len(stack) != 0:
-                    node = stack.pop();
-                    candidates.append(node);
-                    node = node.right;
+                    node_head = stack.pop();
+                    candidates.append(node_head);
+                    node_head = node_head.right;
                 else:
                     isFinished = True;
 
@@ -356,48 +356,48 @@ class kdtree:
         return best_nodes;
     
     
-    def __recursive_nearest_nodes(self, point, distance, sqrt_distance, node, best_nodes):
+    def __recursive_nearest_nodes(self, point, distance, sqrt_distance, node_head, best_nodes):
         """!
         @brief Returns list of neighbors such as tuple (distance, node) that is located in area that is covered by distance.
         
         @param[in] point (list): Coordinates that is considered as centroind for searching
         @param[in] distance (double): Distance from the center where seaching is performed.
         @param[in] sqrt_distance (double): Square distance from the center where searching is performed.
-        @param[in] node (node): Node from that searching is performed.
+        @param[in] node_head (node): Node from that searching is performed.
         @param[in|out] best_nodes (list): List of founded nodes.
         
         """
         
-        minimum = node.data[node.disc] - distance;
-        maximum = node.data[node.disc] + distance;
+        minimum = node_head.data[node_head.disc] - distance;
+        maximum = node_head.data[node_head.disc] + distance;
         
-        if (node.right is not None):
-            if (point[node.disc] >= minimum):
-                self.__recursive_nearest_nodes(point, distance, sqrt_distance, node.right, best_nodes);
+        if (node_head.right is not None):
+            if (point[node_head.disc] >= minimum):
+                self.__recursive_nearest_nodes(point, distance, sqrt_distance, node_head.right, best_nodes);
         
-        if (node.left is not None):
-            if (point[node.disc] < maximum):
-                self.__recursive_nearest_nodes(point, distance, sqrt_distance, node.left, best_nodes);
+        if (node_head.left is not None):
+            if (point[node_head.disc] < maximum):
+                self.__recursive_nearest_nodes(point, distance, sqrt_distance, node_head.left, best_nodes);
         
-        candidate_distance = euclidean_distance_sqrt(point, node.data);
+        candidate_distance = euclidean_distance_sqrt(point, node_head.data);
         if (candidate_distance <= sqrt_distance):
-            best_nodes.append( (candidate_distance, node) );
+            best_nodes.append( (candidate_distance, node_head) );
     
     
-    def children(self, node):
+    def children(self, node_parent):
         """!
         @brief Returns list of children of node.
         
-        @param[in] node (node): Node whose children are required. 
+        @param[in] node_parent (node): Node whose children are required. 
         
         @return (list) Children of node. If node haven't got any child then None is returned.
         
         """
         
-        if (node.left is not None):
-            yield node.left;
-        if (node.right is not None):
-            yield node.right;
+        if (node_parent.left is not None):
+            yield node_parent.left;
+        if (node_parent.right is not None):
+            yield node_parent.right;
             
     
     def traverse(self, start_node = None, level = None):

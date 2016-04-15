@@ -320,7 +320,7 @@ class hysteresis_network(network):
         
         if (collect_dynamic is False):
             dyn_state.append(self._states);
-            dyn_time.append(t);
+            dyn_time.append(time);
         
         return hysteresis_dynamic(dyn_state, dyn_time);
 

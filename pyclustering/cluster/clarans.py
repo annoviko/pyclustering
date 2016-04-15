@@ -25,7 +25,6 @@
 
 """
 
-import math;
 import random;
 
 from pyclustering.utils import euclidean_distance_sqrt;
@@ -72,7 +71,7 @@ class clarans:
         
         random.seed();
         
-        for iteration in range(0, self.__numlocal):
+        for _ in range(0, self.__numlocal):
             # set (current) random medoids
             self.__current = random.sample(range(0, len(self.__pointer_data)), self.__number_clusters);
             
@@ -158,7 +157,6 @@ class clarans:
             
             # get new candidate to be medoid
             candidate_medoid_index = random.randint(0, len(self.__pointer_data) - 1);
-            candidate_medoid_cluster_index = self.__belong[candidate_medoid_index];
             
             while (candidate_medoid_index in self.__current):
                 candidate_medoid_index = random.randint(0, len(self.__pointer_data) - 1);

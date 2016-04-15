@@ -314,7 +314,7 @@ class sync_network(network):
     _ccore_network_pointer = None;      # Pointer to CCORE Sync implementation of the network.
     
 
-    def __init__(self, num_osc, weight = 1, frequency = 0, type_conn = conn_type.ALL_TO_ALL, conn_represent = conn_represent.MATRIX, initial_phases = initial_type.RANDOM_GAUSSIAN, ccore = False):
+    def __init__(self, num_osc, weight = 1, frequency = 0, type_conn = conn_type.ALL_TO_ALL, representation = conn_represent.MATRIX, initial_phases = initial_type.RANDOM_GAUSSIAN, ccore = False):
         """!
         @brief Constructor of oscillatory network is based on Kuramoto model.
         
@@ -322,7 +322,7 @@ class sync_network(network):
         @param[in] weight (double): Coupling strength of the links between oscillators.
         @param[in] frequency (double): Multiplier of internal frequency of the oscillators.
         @param[in] type_conn (conn_type): Type of connection between oscillators in the network (all-to-all, grid, bidirectional list, etc.).
-        @param[in] conn_represent (conn_represent): Internal representation of connection in the network: matrix or list.
+        @param[in] representation (conn_represent): Internal representation of connection in the network: matrix or list.
         @param[in] initial_phases (initial_type): Type of initialization of initial phases of oscillators (random, uniformly distributed, etc.).
         @param[in] ccore (bool): If True simulation is performed by CCORE library (C++ implementation of pyclustering).
         
@@ -331,7 +331,7 @@ class sync_network(network):
         if (ccore is True):
             self._ccore_network_pointer = wrapper.sync_create_network(num_osc, weight, frequency, type_conn, initial_phases);
         else:   
-            super().__init__(num_osc, type_conn, conn_represent);
+            super().__init__(num_osc, type_conn, representation);
             
             self._weight = weight;
             
@@ -562,7 +562,7 @@ class sync_network(network):
         
         if (collect_dynamic != True):
             dyn_phase.append(self._phases);
-            dyn_time.append(t);
+            dyn_time.append(time);
                         
         output_sync_dynamic = sync_dynamic(dyn_phase, dyn_time);
         return output_sync_dynamic;     

@@ -181,10 +181,10 @@ class cfentry:
         """
         
         number_points = self.number_points + entry.number_points;
-        linear_sum = list_math_addition(self.linear_sum, entry.linear_sum);        
-        square_sum = self.square_sum + entry.square_sum;  
+        result_linear_sum = list_math_addition(self.linear_sum, entry.linear_sum);        
+        result_square_sum = self.square_sum + entry.square_sum;  
         
-        return cfentry(number_points, linear_sum, square_sum);
+        return cfentry(number_points, result_linear_sum, result_square_sum);
     
     
     def __sub__(self, entry):
@@ -199,13 +199,13 @@ class cfentry:
         """
                 
         number_points = self.number_points - entry.number_points;
-        linear_sum = list_math_subtraction(self.linear_sum, entry.linear_sum);
-        square_sum = self.square_sum - entry.square_sum;
+        result_linear_sum = list_math_subtraction(self.linear_sum, entry.linear_sum);
+        result_square_sum = self.square_sum - entry.square_sum;
         
-        if ( (number_points < 0) or (square_sum < 0) ):
+        if ( (number_points < 0) or (result_square_sum < 0) ):
             raise NameError("Substruction with negative result is not possible for clustering features.");
         
-        return cfentry(number_points, linear_sum, square_sum);
+        return cfentry(number_points, result_linear_sum, result_square_sum);
     
     
     def __eq__(self, entry):

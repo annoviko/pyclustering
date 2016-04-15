@@ -26,7 +26,6 @@
 """
 
 from pyclustering.utils import euclidean_distance;
-from pyclustering.utils import euclidean_distance_sqrt;
 
 from pyclustering.container.kdtree import kdtree;
 
