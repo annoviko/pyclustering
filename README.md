@@ -8,7 +8,7 @@ E-Mail: pyclustering@yandex.ru
 
 [![Build Status](https://travis-ci.org/annoviko/pyclustering.svg?branch=master)](https://travis-ci.org/annoviko/pyclustering)
 [![Coverage Status](https://coveralls.io/repos/github/annoviko/pyclustering/badge.svg?branch=master)](https://coveralls.io/github/annoviko/pyclustering?branch=master)
-[![Code Quality](https://scrutinizer-ci.com/g/annoviko/pyclustering/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/annoviko/pyclustering/?branch=master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/annoviko/pyclustering/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/annoviko/pyclustering/?branch=master)
 
 ------------------------------------------------
 

@@ -28,6 +28,7 @@
 
 
 import math;
+
 import random;
 
 import matplotlib.pyplot as plt;
@@ -87,17 +88,23 @@ class som_parameters:
     
     """
     
-    ## Type of initialization of initial neuron weights (random, random in center of the input data, random distributed in data, ditributed in line with uniform grid).
-    init_type = type_init.uniform_grid; 
-    
-    ## Initial radius (if not specified then will be calculated by SOM). 
-    init_radius = None;
-    
-    ## Rate of learning.   
-    init_learn_rate = 0.1;
-    
-    ## Condition when learining process should be stoped. It's used when autostop mode is used. 
-    adaptation_threshold = 0.001; 
+    def __init__(self):
+        """!
+        @brief Constructor container of SOM parameters.
+        
+        """
+        
+        ## Type of initialization of initial neuron weights (random, random in center of the input data, random distributed in data, ditributed in line with uniform grid).
+        self.init_type = type_init.uniform_grid; 
+        
+        ## Initial radius (if not specified then will be calculated by SOM). 
+        self.init_radius = None;
+        
+        ## Rate of learning.   
+        self.init_learn_rate = 0.1;
+        
+        ## Condition when learining process should be stoped. It's used when autostop mode is used. 
+        self.adaptation_threshold = 0.001; 
 
 
 class som:
@@ -215,8 +222,11 @@ class som:
         
         # some of these parameters are required despite core implementation, for example, for network demonstration.
         self._cols = cols;
-        self._rows = rows;        
+        
+        self._rows = rows;
+        
         self._size = cols * rows;
+        
         self._conn_type = conn_type;
         
         if (parameters is not None):
@@ -225,39 +235,28 @@ class som:
             self._params = som_parameters();
             
         if (self._params.init_radius is None):
-            if ((cols + rows) / 4.0 > 1.0): 
-                self._params.init_radius = 2.0;
-            elif ( (cols > 1) and (rows > 1) ): 
-                self._params.init_radius = 1.5;
-            else: 
-                self._params.init_radius = 1.0;
+            self._params.init_radius = self.__initialize_initial_radius(rows, cols);
         
         if (ccore is True):
             self.__ccore_som_pointer = wrapper.som_create(rows, cols, conn_type, self._params);
             
         else:
             # location
-            self._location = list();
-            for i in range(self._rows):
-                for j in range(self._cols):
-                    self._location.append([float(i), float(j)]);
+            self._location = self.__initialize_locations(rows, cols);
             
             # awards
             self._award = [0] * self._size;
+            
+            # captured objects
             self._capture_objects = [ [] for i in range(self._size) ];
             
             # distances
-            self._sqrt_distances = [ [ [] for i in range(self._size) ] for j in range(self._size) ];
-            for i in range(self._size):
-                for j in range(i, self._size, 1):
-                    dist = euclidean_distance_sqrt(self._location[i], self._location[j]);
-                    self._sqrt_distances[i][j] = dist;
-                    self._sqrt_distances[j][i] = dist;
+            self._sqrt_distances = self.__initialize_distances(self._size, self._location);
         
             # connections
             if (conn_type != type_conn.func_neighbor):
                 self._create_connections(conn_type);
-        
+
 
     def __del__(self):
         """!
@@ -267,7 +266,7 @@ class som:
         
         if (self.__ccore_som_pointer is not None):
             wrapper.som_destroy(self.__ccore_som_pointer);
-            
+    
     
     def __len__(self):
         """!
@@ -276,6 +275,66 @@ class som:
         """
         
         return self.size;
+    
+    
+    def __initialize_initial_radius(self, rows, cols):
+        """!
+        @brief Initialize initial radius using map sizes.
+        
+        @param[in] rows (uint): Number of neurons in the column (number of rows).
+        @param[in] cols (uint): Number of neurons in the row (number of columns).
+        
+        @return (list) Value of initial radius.
+        
+        """
+        
+        if ((cols + rows) / 4.0 > 1.0): 
+            return 2.0;
+        
+        elif ( (cols > 1) and (rows > 1) ): 
+            return 1.5;
+        
+        else: 
+            return 1.0;
+    
+    
+    def __initialize_locations(self, rows, cols):
+        """!
+        @brief Initialize locations (coordinates in SOM grid) of each neurons in the map.
+        
+        @param[in] rows (uint): Number of neurons in the column (number of rows).
+        @param[in] cols (uint): Number of neurons in the row (number of columns).
+        
+        @return (list) List of coordinates of each neuron in map.
+        
+        """
+        
+        location = list();
+        for i in range(rows):
+            for j in range(cols):
+                location.append([float(i), float(j)]);
+        
+        return location;
+    
+    
+    def __initialize_distances(self, size, location):
+        """!
+        @brief Initialize distance matrix in SOM grid.
+        
+        @param[in] size (uint): Amount of neurons in the network.
+        @param[in] location (list): List of coordinates of each neuron in the network.
+        
+        @return (list) Distance matrix between neurons in the network.
+        
+        """
+        sqrt_distances = [ [ [] for i in range(size) ] for j in range(size) ];
+        for i in range(size):
+            for j in range(i, size, 1):
+                dist = euclidean_distance_sqrt(location[i], location[j]);
+                sqrt_distances[i][j] = dist;
+                sqrt_distances[j][i] = dist;
+        
+        return sqrt_distances;
     
     
     def _create_initial_weights(self, init_type):
@@ -347,7 +406,8 @@ class som:
         else:
             # Random weights of input data.
             self._weights = [ [random.random()  for i in range(dimension)] for j in range(self._size) ]; 
-    
+
+
     def _create_connections(self, conn_type):
         """!
         @brief Create connections in line with input rule (grid four, grid eight, honeycomb, function neighbour).
