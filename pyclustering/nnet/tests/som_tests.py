@@ -27,7 +27,7 @@ import unittest;
 
 # Generate images without having a window appear.
 import matplotlib;
-#matplotlib.use('Agg');
+matplotlib.use('Agg');
 
 from pyclustering.nnet.som import som, type_conn, type_init;
 
