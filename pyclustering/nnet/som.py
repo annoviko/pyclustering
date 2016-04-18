@@ -558,15 +558,15 @@ class som:
         
         """
         
+        self._data = data;
+        self._epochs = epochs;
+        
         if (self.__ccore_som_pointer is not None):
             return wrapper.som_train(self.__ccore_som_pointer, data, epochs, autostop);
         
         for i in range(self._size):
             self._award[i] = 0;
             self._capture_objects[i].clear();
-            
-        self._epochs = epochs;
-        self._data = data;
         
         # weights
         self._create_initial_weights(self._params.init_type);

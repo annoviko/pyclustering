@@ -2,7 +2,7 @@
 
 @brief Unit-tests for ant colony based algorithm for travelling salesman problem.
 
-@authors Andrei Novikov (pyclustering@yandex.ru)
+@authors Andrei Novikov, Alexey Kukushkin (pyclustering@yandex.ru)
 @date 2014-2016
 @copyright GNU Public License
 
@@ -33,7 +33,6 @@ from pyclustering.utils import euclidean_distance;
 
 
 class Test(unittest.TestCase):
-
     def getCityDistance(self, result, object_locations, citiesDistRepresent):
         visited_objects = [False] * len(result.object_sequence);
         current_distance = 0.0;
@@ -79,6 +78,7 @@ class Test(unittest.TestCase):
     def testSimpleSixObjectsSequence(self):
         self.templateTspSolving(None, [[0.0, 0.0], [0.0, 1.0], [0.0, 2.0], [0.0, 3.0], [0.0, 4.0], [0.0, 5.0]], 10.0);
     
+    
     def testSmallestPathFourCitiesByMatrix(self):
         matrix = [[ 0.0,  1.0, 30.0, 99.0],
                   [ 1.0,  0.0,  1.0, 30.0],
@@ -86,7 +86,7 @@ class Test(unittest.TestCase):
                   [99.0, 30.0,  1.0,  0.0],]
         
         self.templateTspSolving(None, matrix, 62.0, wrapper.CITIES_DISTANCE_SET_BY_MATRIX)
-        
+
 
 
 if __name__ == "__main__":

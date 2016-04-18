@@ -69,6 +69,8 @@ from pyclustering.nnet.tests                     import syncpr_tests        as n
 from pyclustering.container.tests                import cftree_tests        as container_cftree_unit_tests;
 from pyclustering.container.tests                import kdtree_tests        as container_kdtree_unit_tests;
 
+from pyclustering.tsp.tests                      import antcolony_tests     as tsp_antcolony_unit_tests;
+
 from pyclustering.utils.tests                    import utils_tests         as utils_unit_tests;
 
 
@@ -106,6 +108,8 @@ if __name__ == "__main__":
      
     suite.addTests(unittest.TestLoader().loadTestsFromModule(container_cftree_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(container_kdtree_unit_tests));
+    
+    suite.addTests(unittest.TestLoader().loadTestsFromModule(tsp_antcolony_unit_tests));
     
     suite.addTests(unittest.TestLoader().loadTestsFromModule(utils_unit_tests));
     

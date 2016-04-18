@@ -25,12 +25,12 @@
 
 import unittest;
 
-from pyclustering.nnet.tests        import hhn_tests             as nnet_hhn_unit_tests;
+from pyclustering.tsp.tests        import antcolony_tests             as tsp_antcolony_unit_tests;
 
 
 if __name__ == "__main__":
     suite = unittest.TestSuite();
 
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_hhn_unit_tests));
+    suite.addTests(unittest.TestLoader().loadTestsFromModule(tsp_antcolony_unit_tests));
     
     unittest.TextTestRunner(verbosity = 2).run(suite);

@@ -30,6 +30,8 @@ GENERAL CHANGES (pyclustering):
 
 - Implemented feature to use CCORE K-Medians algorithm using argument 'ccore' to ensure high performance (pyclustering.cluster.kmedoids).
   https://github.com/annoviko/pyclustering/issues/231
+  
+- Implemented feature to place several plots on each row using parameter 'maximum number of rows' for cluster visualizer (pyclustering.cluster).
 
 
 GENERAL CHANGES (ccore):
@@ -77,3 +79,6 @@ CORRECTED BUGS:
 
 - Bug with obtaining nearest entry for absorbing during inserting node (pyclustering.container.cftree).
   See: https://github.com/annoviko/pyclustering/issues/282
+
+- Bug with SOM method show_network() in case of usage CCORE (pyclustering.nnet.som).
+  See: https://github.com/annoviko/pyclustering/issues/283
