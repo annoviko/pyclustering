@@ -24,6 +24,9 @@
 """
 
 import matplotlib.pyplot as plt;
+import matplotlib.gridspec as gridspec;
+
+import math;
 
 
 class canvas_cluster_descr:
@@ -67,15 +70,50 @@ class cluster_visualizer:
                  'silver', 'lime', 'pink', 'gold', 'bisque' ];
     
 
-    def __init__(self, number_canvases = 1):
+    def __init__(self, number_canvases = 1, size_row = 1):
         """!
         @brief Constructor of cluster visualizer.
         
         @param[in] number_canvases (uint): Number of canvases that is used for visualization.
+        @param[in] size_row (uint): Amount of canvases that can be placed in one row.
+        
+        Example:
+        @code
+            # load 2D data sample
+            sample_2d = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1);
+            
+            # load 3D data sample
+            sample_3d = read_sample(FCPS_SAMPLES.SAMPLE_HEPTA);
+            
+            # extract clusters from the first sample using DBSCAN algorithm
+            dbscan_instance = dbscan(sample_2d, 0.4, 2, False);
+            dbscan_instance.process();
+            clusters_sample_2d = dbscan_instance.get_clusters();
+        
+            # extract clusters from the second sample using DBSCAN algorithm
+            dbscan_instance = dbscan(sample_3d, 1, 3, True);
+            dbscan_instance.process();
+            clusters_sample_3d = dbscan_instance.get_clusters();
+            
+            # create plot with two canvases where each row contains 2 canvases.
+            size = 2;
+            row_size = 2;
+            visualizer = cluster_visualizer(size, row_size);
+            
+            # place clustering result of sample_2d to the first canvas
+            visualizer.append_clusters(clusters_sample_2d, sample_2d, 0, markersize = 5);
+            
+            # place clustering result of sample_3d to the second canvas
+            visualizer.append_clusters(clusters_sample_3d, sample_3d, 1, markersize = 30);
+            
+            # show plot
+            visualizer.show();
+        @endcode
         
         """
         
         self.__number_canvases = number_canvases;
+        self.__size_row = size_row;
         self.__canvas_clusters = [ [] for i in range(number_canvases) ];
         self.__canvas_dimensions = [ None for i in range(number_canvases) ];
         self.__canvas_titles = [ None for i in range(number_canvases) ];
@@ -173,15 +211,20 @@ class cluster_visualizer:
         
         """
         
+        maximum_cols = self.__size_row;
+        maximum_rows = math.ceil(self.__number_canvases / maximum_cols);
+        
+        grid_spec = gridspec.GridSpec(maximum_rows, maximum_cols);
+        
         for index_canvas in range(len(self.__canvas_clusters)):
             canvas = self.__canvas_clusters[index_canvas];
             dimension = self.__canvas_dimensions[index_canvas];
             
-            ax = None;
+            #ax = axes[real_index];
             if (dimension == 2):
-                ax = plt.subplot(self.__number_canvases, 1, index_canvas + 1);
+                ax = plt.subplot(grid_spec[index_canvas]);
             else:
-                ax = plt.subplot(self.__number_canvases, 1, index_canvas + 1, projection='3d');
+                ax = plt.subplot(grid_spec[index_canvas], projection='3d');
             
             if (len(canvas) == 0):
                 plt.setp(ax, visible = False);
@@ -223,7 +266,7 @@ class cluster_visualizer:
                 ax.set_title(self.__canvas_titles[index_canvas]);
             
             ax.grid(visible_grid);
-            
+        
         plt.show();
 
     
