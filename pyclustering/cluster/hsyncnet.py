@@ -104,13 +104,17 @@ class hsyncnet(syncnet):
             analyser = wrapper.hsyncnet_process(self.__ccore_network_pointer, order, solution, collect_dynamic);
             return syncnet_analyser(None, None, analyser);
         
-        number_neighbors = 0;
+        number_neighbors = 2;
         current_number_clusters = float('inf');
         
         dyn_phase = [];
         dyn_time = [];
         
-        radius = 0.0;
+        radius = average_neighbor_distance(self._osc_loc, number_neighbors);
+        
+        increase_step = int(len(self._osc_loc) * 0.15);
+        if (increase_step < 1):
+            increase_step = 1;
         
         while(current_number_clusters > self._number_clusters):
             self._create_connections(radius);
@@ -131,7 +135,7 @@ class hsyncnet(syncnet):
             current_number_clusters = len(clusters);
             
             # Increase number of neighbors that should be used
-            number_neighbors += 1;
+            number_neighbors += increase_step;
             
             # Update connectivity radius and check if average function can be used anymore
             if (number_neighbors >= len(self._osc_loc)):
