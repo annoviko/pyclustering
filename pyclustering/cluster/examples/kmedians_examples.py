@@ -104,12 +104,12 @@ def cluster_atom():
     template_clustering(start_medians, FCPS_SAMPLES.SAMPLE_ATOM);
 
 
-# cluster_sample1();
-# cluster_sample2();
-# cluster_sample3();
-# cluster_sample4();
-# cluster_sample5();
-# cluster_elongate();
+cluster_sample1();
+cluster_sample2();
+cluster_sample3();
+cluster_sample4();
+cluster_sample5();
+cluster_elongate();
 cluster_lsun();
 cluster_target();
 cluster_two_diamonds();
@@ -118,4 +118,4 @@ cluster_chainlink();
 cluster_hepta();
 cluster_tetra();
 cluster_atom();
-# cluster_engy_time();
+cluster_engy_time();

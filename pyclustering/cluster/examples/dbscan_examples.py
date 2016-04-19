@@ -35,7 +35,7 @@ def template_clustering(radius, neighb, path, invisible_axes = False, ccore = Tr
     sample = read_sample(path);
     
     dbscan_instance = dbscan(sample, radius, neighb, ccore);
-    (ticks, result) = timedcall(dbscan_instance.process);
+    (ticks, _) = timedcall(dbscan_instance.process);
     
     clusters = dbscan_instance.get_clusters();
     noise = dbscan_instance.get_noise();

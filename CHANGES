@@ -32,6 +32,9 @@ GENERAL CHANGES (pyclustering):
   https://github.com/annoviko/pyclustering/issues/231
   
 - Implemented feature to place several plots on each row using parameter 'maximum number of rows' for cluster visualizer (pyclustering.cluster).
+  https://github.com/annoviko/pyclustering/issues/274
+
+- Added new examples and demos of usage algorithms.
 
 
 GENERAL CHANGES (ccore):
