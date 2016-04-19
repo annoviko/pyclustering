@@ -152,11 +152,6 @@ def extract_pyclustering_package(ccore_package_pointer):
     return result;
 
 
-def destroy_object(pointer_object):
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
-    ccore.destroy_object(pointer_object);
-
-
 # Implemented algorithms.
 def dbscan(sample, eps, min_neighbors, return_noise = False):
     "Clustering algorithm DBSCAN returns allocated clusters and noise that are consisted from input data. Calculation is performed via CCORE."

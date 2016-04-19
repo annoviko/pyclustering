@@ -36,10 +36,10 @@ from pyclustering.samples.definitions import SIMPLE_SAMPLES;
 from random import random;
 
 class Test(unittest.TestCase):
-    def templateLengthProcessData(self, path_to_file, start_centers, expected_cluster_length):
+    def templateLengthProcessData(self, path_to_file, initial_medoids, expected_cluster_length):
         sample = read_sample(path_to_file);
          
-        kmedoids_instance = kmedoids(sample, start_centers, 0.025);
+        kmedoids_instance = kmedoids(sample, initial_medoids, 0.025);
         kmedoids_instance.process();
          
         clusters = kmedoids_instance.get_clusters();
@@ -64,7 +64,7 @@ class Test(unittest.TestCase):
         self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [10], [23]);
  
     def testClusterAllocationSampleSimple3(self):
-        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [4, 12, 25, 37], [10, 10, 10, 30]);    
+        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [4, 12, 25, 37], [10, 10, 10, 30]);
  
     def testClusterOneAllocationSampleSimple3(self):
         self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [30], [60]);
