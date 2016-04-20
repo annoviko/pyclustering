@@ -499,9 +499,14 @@ void syncnet_analyser_destroy(const void * pointer_analyser) {
 
 
 
-void * hsyncnet_create_network(const data_representation * const sample, const unsigned int number_clusters, const unsigned int initial_phases) {
+void * hsyncnet_create_network(const data_representation * const sample, 
+                               const unsigned int number_clusters, 
+                               const unsigned int initial_phases,
+                               const unsigned int initial_neighbors,
+                               const double increase_persent) {
+
 	std::vector<std::vector<double> > * dataset = read_sample(sample);	/* belongs to hsyncnet */
-	return (void *) new hsyncnet(dataset, number_clusters, (initial_type) initial_phases);
+	return (void *) new hsyncnet(dataset, number_clusters, (initial_type) initial_phases, initial_neighbors, increase_persent);
 }
 
 void hsyncnet_destroy_network(const void * pointer_network) {

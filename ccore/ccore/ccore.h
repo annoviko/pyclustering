@@ -412,16 +412,24 @@ extern "C" DECLARATION void syncnet_analyser_destroy(const void * pointer_analys
 
 /***********************************************************************************************
  *
- * @brief   Create oscillatory network hierarchical HSyncNet for cluster analysis.
+ * @brief   Create oscillatory network HSyncNet (hierarchical Sync) for cluster analysis.
  *
- * @param   (in) sample                - input data for clustering.
- * @param   (in) number_clusters       - number of clusters that should be allocated.
- * @param   (in) initial_phases        - type of initialization of initial phases of oscillators.
+ * @param[in] sample:            Input data for clustering.
+ * @param[in] number_clusters:   Number of clusters that should be allocated.
+ * @param[in] initial_phases:    Type of initialization of initial phases of oscillators.
+ * @param[in] initial_neighbors: Defines initial radius connectivity by calculation average distance 
+ *                               to connect specify number of oscillators.
+ * @param[in] increase_persent:  Percent of increasing of radius connectivity on each step (input 
+ *                               values in range (0.0; 1.0) correspond to (0%; 100%)).
  *
- * @return Return pointer of hsyncnet network.
+ * @return Pointer of hsyncnet network. Caller should free it by 'hsyncnet_destroy_network'.
  *
  ***********************************************************************************************/
-extern "C" DECLARATION void * hsyncnet_create_network(const data_representation * const sample, const unsigned int number_clusters, const unsigned int initial_phases);
+extern "C" DECLARATION void * hsyncnet_create_network(const data_representation * const sample, 
+                                                      const unsigned int number_clusters, 
+                                                      const unsigned int initial_phases,
+                                                      const unsigned int initial_neighbors,
+                                                      const double increase_persent);
 
 /***********************************************************************************************
  *

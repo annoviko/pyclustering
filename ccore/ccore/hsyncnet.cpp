@@ -26,24 +26,42 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "support.h"
 
 #include <limits>
+#include <cmath>
 
 
 hsyncnet::hsyncnet(std::vector<std::vector<double> > * input_data, const unsigned int cluster_number, const initial_type initial_phases) :
-syncnet(input_data, 0, false, initial_phases) { 
-	number_clusters = cluster_number;
-}
+    syncnet(input_data, 0, false, initial_phases),
+    m_number_clusters(cluster_number),
+    m_initial_neighbors(3),
+    m_increase_persent(0.15) { }
+
+hsyncnet::hsyncnet(std::vector<std::vector<double> > * input_data, 
+    const unsigned int cluster_number, 
+    const initial_type initial_phases, 
+    const unsigned int initial_neighbors, 
+    const double increase_persent) :
+
+    syncnet(input_data, 0, false, initial_phases),
+    m_number_clusters(cluster_number),
+    m_initial_neighbors(initial_neighbors),
+    m_increase_persent(increase_persent) { }
 
 
 hsyncnet::~hsyncnet() { }
 
 
 void hsyncnet::process(const double order, const solve_type solver, const bool collect_dynamic, hsyncnet_analyser & analyser) {
-	unsigned int number_neighbors = 0;
+	unsigned int number_neighbors = m_initial_neighbors;
 	unsigned int current_number_clusters = std::numeric_limits<unsigned int>::max();
 
-	double radius = 0.0;
+	double radius = average_neighbor_distance(oscillator_locations, number_neighbors);
+    
+    unsigned int increase_step = (unsigned int) std::round(oscillator_locations->size() * m_increase_persent);
+    if (increase_step < 1) {
+        increase_step = 1;
+    }
 
-	while(current_number_clusters > number_clusters) {
+	while(current_number_clusters > m_number_clusters) {
 		create_connections(radius, false);
 
 		sync_dynamic current_dynamic;
@@ -57,10 +75,10 @@ void hsyncnet::process(const double order, const solve_type solver, const bool c
 
 		current_number_clusters = clusters.size();
 
-		number_neighbors++;
+        number_neighbors += increase_step;
 
 		if (number_neighbors >= oscillator_locations->size()) {
-			radius = radius * 0.1 + radius;
+			radius = radius * m_increase_persent + radius;
 		}
 		else {
 			radius = average_neighbor_distance(oscillator_locations, number_neighbors);

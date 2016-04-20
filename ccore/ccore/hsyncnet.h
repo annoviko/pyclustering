@@ -29,6 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "syncnet.h"
 
+
 typedef std::vector<unsigned int>			hsyncnet_cluster;
 typedef ensemble_data<hsyncnet_cluster>		hsyncnet_cluster_data;
 typedef syncnet_analyser					hsyncnet_analyser;
@@ -36,10 +37,20 @@ typedef syncnet_analyser					hsyncnet_analyser;
 
 class hsyncnet: public syncnet {
 private:
-	unsigned int number_clusters;
+	unsigned int m_number_clusters;
+    unsigned int m_initial_neighbors;
+    double m_increase_persent;
 
 public:
-	hsyncnet(std::vector<std::vector<double> > * input_data, const unsigned int cluster_number, const initial_type initial_phases);
+	hsyncnet(std::vector<std::vector<double> > * input_data, 
+        const unsigned int cluster_number, 
+        const initial_type initial_phases);
+
+    hsyncnet(std::vector<std::vector<double> > * input_data,
+        const unsigned int cluster_number,
+        const initial_type initial_phasesconst,
+        const unsigned int initial_neighbors,
+        const double increase_persent);
 	
 	virtual ~hsyncnet(void);
 

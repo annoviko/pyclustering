@@ -55,13 +55,15 @@ class hsyncnet(syncnet):
     @endcode
     """
     
-    def __init__(self, source_data, number_clusters, osc_initial_phases = initial_type.RANDOM_GAUSSIAN, ccore = False):
+    def __init__(self, source_data, number_clusters, osc_initial_phases = initial_type.RANDOM_GAUSSIAN, initial_neighbors = 3, increase_persent = 0.15, ccore = False):
         """!
         @brief Costructor of the oscillatory network hSyncNet for cluster analysis.
             
         @param[in] source_data (list): Input data set defines structure of the network.
         @param[in] number_clusters (uint): Number of clusters that should be allocated.
         @param[in] osc_initial_phases (initial_type): Type of initialization of initial values of phases of oscillators.
+        @param[in] initial_neighbors (uint): Defines initial radius connectivity by calculation average distance to connect specify number of oscillators.
+        @param[in] increase_persent (double): Percent of increasing of radius connectivity on each step (input values in range (0.0; 1.0) correspond to (0%; 100%)).
         @param[in] ccore (bool): If True than DLL CCORE (C++ solution) will be used for solving.
         
         """
@@ -69,9 +71,12 @@ class hsyncnet(syncnet):
         self.__ccore_network_pointer = None;
         
         if (ccore is True):
-            self.__ccore_network_pointer = wrapper.hsyncnet_create_network(source_data, number_clusters, osc_initial_phases);
+            self.__ccore_network_pointer = wrapper.hsyncnet_create_network(source_data, number_clusters, osc_initial_phases, initial_neighbors, increase_persent);
         else: 
             super().__init__(source_data, 0, initial_phases = osc_initial_phases);
+            
+            self.__initial_neighbors = initial_neighbors;
+            self.__increase_persent = increase_persent;
             self._number_clusters = number_clusters;
     
     
@@ -104,7 +109,7 @@ class hsyncnet(syncnet):
             analyser = wrapper.hsyncnet_process(self.__ccore_network_pointer, order, solution, collect_dynamic);
             return syncnet_analyser(None, None, analyser);
         
-        number_neighbors = 2;
+        number_neighbors = self.__initial_neighbors;
         current_number_clusters = float('inf');
         
         dyn_phase = [];
@@ -112,7 +117,7 @@ class hsyncnet(syncnet):
         
         radius = average_neighbor_distance(self._osc_loc, number_neighbors);
         
-        increase_step = int(len(self._osc_loc) * 0.15);
+        increase_step = int(len(self._osc_loc) * self.__increase_persent);
         if (increase_step < 1):
             increase_step = 1;
         
@@ -139,7 +144,7 @@ class hsyncnet(syncnet):
             
             # Update connectivity radius and check if average function can be used anymore
             if (number_neighbors >= len(self._osc_loc)):
-                radius = radius * 0.1 + radius;
+                radius = radius * self.__increase_persent + radius;
             else:
                 radius = average_neighbor_distance(self._osc_loc, number_neighbors);
         

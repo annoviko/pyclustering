@@ -288,11 +288,11 @@ def xmeans(sample, centers, kmax, tolerance):
 
 "CCORE Interface for HSYNCNET oscillatory network"
 
-def hsyncnet_create_network(sample, number_clusters, initial_phases):
+def hsyncnet_create_network(sample, number_clusters, initial_phases, initial_neighbors, increase_persent):
     pointer_data = create_pointer_data(sample);
     
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
-    pointer_network = ccore.hsyncnet_create_network(pointer_data, c_uint(number_clusters), c_uint(initial_phases));
+    pointer_network = ccore.hsyncnet_create_network(pointer_data, c_uint(number_clusters), c_uint(initial_phases), c_uint(initial_neighbors), c_double(increase_persent));
     
     return pointer_network;
 
