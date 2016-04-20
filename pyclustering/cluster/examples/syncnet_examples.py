@@ -36,7 +36,7 @@ from pyclustering.utils import read_sample;
 from pyclustering.utils import timedcall;
 
 
-def template_clustering(file, radius, order, show_dyn = False, show_conn = False, show_clusters = True, ena_conn_weight = False, ccore_flag = True):
+def template_clustering(file, radius, order, show_dyn = False, show_conn = False, show_clusters = True, ena_conn_weight = False, ccore_flag = True, tolerance = 0.1):
     sample = read_sample(file);
     network = syncnet(sample, radius, enable_conn_weight = ena_conn_weight, ccore = ccore_flag);
     
@@ -51,7 +51,7 @@ def template_clustering(file, radius, order, show_dyn = False, show_conn = False
         network.show_network();
     
     if (show_clusters == True):
-        clusters = analyser.allocate_clusters();
+        clusters = analyser.allocate_clusters(tolerance);
         draw_clusters(sample, clusters);
     
     
@@ -80,16 +80,16 @@ def cluster_hepta():
     template_clustering(FCPS_SAMPLES.SAMPLE_HEPTA, 1, 0.999, show_dyn = True, show_conn = True);
     
 def cluster_chainlink():
-    template_clustering(FCPS_SAMPLES.SAMPLE_CHAINLINK, 0.5, 0.999, show_dyn = True, show_conn = True);
+    template_clustering(FCPS_SAMPLES.SAMPLE_CHAINLINK, 0.8, 0.999, show_dyn = True, show_conn = True);
 
 def cluster_two_diamonds():
-    template_clustering(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, 0.03, 0.999, show_dyn = False, show_conn = False);  
+    template_clustering(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, 0.3, 0.999, show_dyn = False, show_conn = False);  
 
 def cluster_atom():
-    template_clustering(FCPS_SAMPLES.SAMPLE_ATOM, 20, 0.999, show_dyn = False, show_conn = False); 
+    template_clustering(FCPS_SAMPLES.SAMPLE_ATOM, 25, 0.999, show_dyn = False, show_conn = False); 
     
 def cluster_wing_nut():
-    template_clustering(FCPS_SAMPLES.SAMPLE_WING_NUT, 0.08, 0.999, show_dyn = False, show_conn = False); 
+    template_clustering(FCPS_SAMPLES.SAMPLE_WING_NUT, 0.28, 0.999, show_dyn = False, show_conn = False); 
 
 def experiment_execution_time(show_dyn = False, ccore = False):
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, 0.999, show_dyn, False, True, False, ccore);
@@ -98,15 +98,15 @@ def experiment_execution_time(show_dyn = False, ccore = False):
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 1, 0.999, show_dyn, False, True, False, ccore);
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 1, 0.999, show_dyn, False, True, False, ccore);
     template_clustering(SIMPLE_SAMPLES.SAMPLE_ELONGATE, 0.5, 0.999, show_dyn, False, True, False, ccore);
- 
-    template_clustering(FCPS_SAMPLES.SAMPLE_LSUN, 0.4, 0.98, show_dyn, False, False, False, ccore);
-    template_clustering(FCPS_SAMPLES.SAMPLE_TARGET, 0.4, 0.98, show_dyn, False, False, False, ccore);
-    template_clustering(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, 0.03, 0.98, show_dyn, False, False, False, ccore);
-    template_clustering(FCPS_SAMPLES.SAMPLE_WING_NUT, 0.08, 0.98, show_dyn, False, False, False, ccore);
-    template_clustering(FCPS_SAMPLES.SAMPLE_CHAINLINK, 0.5, 0.98, show_dyn, False, False, False, ccore);
-    template_clustering(FCPS_SAMPLES.SAMPLE_HEPTA, 1, 0.98, show_dyn, False, False, False, ccore);
-    template_clustering(FCPS_SAMPLES.SAMPLE_TETRA, 0.3, 0.98, show_dyn, False, False, False, ccore);
-    template_clustering(FCPS_SAMPLES.SAMPLE_ATOM, 1, 0.98, False, False, False, ccore);
+   
+    template_clustering(FCPS_SAMPLES.SAMPLE_LSUN, 0.4, 0.98, show_dyn, False, False, True, ccore);
+    template_clustering(FCPS_SAMPLES.SAMPLE_TARGET, 0.4, 0.98, show_dyn, False, False, True, ccore);
+    template_clustering(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, 0.3, 0.98, show_dyn, False, True, False, ccore);
+    template_clustering(FCPS_SAMPLES.SAMPLE_WING_NUT, 0.28, 0.98, show_dyn, False, True, False, ccore);
+    template_clustering(FCPS_SAMPLES.SAMPLE_CHAINLINK, 0.8, 0.98, show_dyn, False, True, False, ccore);
+    template_clustering(FCPS_SAMPLES.SAMPLE_HEPTA, 1, 0.98, show_dyn, False, True, False, ccore);
+    template_clustering(FCPS_SAMPLES.SAMPLE_TETRA, 0.3, 0.98, show_dyn, False, True, False, ccore);
+    template_clustering(FCPS_SAMPLES.SAMPLE_ATOM, 25, 0.98, show_dyn, False, True, False, ccore);
 
 def cluster_simple1_conn_weight():
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, 0.999, show_dyn = True, show_conn = True, ena_conn_weight = True); 
@@ -136,7 +136,7 @@ cluster_chainlink();
 cluster_two_diamonds();
 cluster_atom();
 cluster_wing_nut();
- 
+  
 cluster_simple1_conn_weight();
 cluster_simple2_conn_weight();
 cluster_simple3_conn_weight();
@@ -144,4 +144,4 @@ cluster_simple4_conn_weight();
 cluster_simple5_conn_weight();
  
 experiment_execution_time(False, False);
-experiment_execution_time(True, True);
+experiment_execution_time(False, True);
