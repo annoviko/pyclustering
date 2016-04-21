@@ -51,10 +51,6 @@ class sync_dynamic:
     
     """
     
-    _dynamic = None;
-    _time = None;
-    _ccore_sync_dynamic_pointer = None;
-    
     @property
     def output(self):
         """!
@@ -63,7 +59,7 @@ class sync_dynamic:
         """
         if (self._ccore_sync_dynamic_pointer is not None):
             return wrapper.sync_dynamic_get_output(self._ccore_sync_dynamic_pointer);
-            
+        
         return self._dynamic;
     
     

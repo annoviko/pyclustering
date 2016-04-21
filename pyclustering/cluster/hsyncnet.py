@@ -121,6 +121,8 @@ class hsyncnet(syncnet):
         if (increase_step < 1):
             increase_step = 1;
         
+        
+        analyser = None;
         while(current_number_clusters > self._number_clusters):
             self._create_connections(radius);
         
@@ -147,6 +149,10 @@ class hsyncnet(syncnet):
                 radius = radius * self.__increase_persent + radius;
             else:
                 radius = average_neighbor_distance(self._osc_loc, number_neighbors);
+        
+        if (collect_dynamic != True):
+            dyn_phase = analyser.output;
+            dyn_time = analyser.time;
         
         return syncnet_analyser(dyn_phase, dyn_time, None);
     

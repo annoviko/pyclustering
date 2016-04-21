@@ -34,6 +34,9 @@ GENERAL CHANGES (pyclustering):
 - Implemented feature to place several plots on each row using parameter 'maximum number of rows' for cluster visualizer (pyclustering.cluster).
   https://github.com/annoviko/pyclustering/issues/274
 
+- Implemented feature to specify initial number of neighbors to calculate initial connectivity radius and increase percent of number of neighbors (or radius if total number of object is exceeded) on each step (pyclustering.cluster.hsyncnet).
+  https://github.com/annoviko/pyclustering/issues/284
+
 - Added new examples and demos of usage algorithms.
 
 
@@ -52,6 +55,9 @@ GENERAL CHANGES (ccore):
 
 - Implemented K-Medoids algorithm for cluster analysis (ccore.kmedoids).
   See: https://github.com/annoviko/pyclustering/issues/231
+
+- Implemented feature to specify initial number of neighbors to calculate initial connectivity radius and increase percent of number of neighbors (or radius if total number of object is exceeded) on each step (ccore.hsyncnet).
+  https://github.com/annoviko/pyclustering/issues/284
 
 
 CORRECTED BUGS:
@@ -85,3 +91,6 @@ CORRECTED BUGS:
 
 - Bug with SOM method show_network() in case of usage CCORE (pyclustering.nnet.som).
   See: https://github.com/annoviko/pyclustering/issues/283
+  
+- Bug with cluster allocation in case of switched off dynamic collecting (pyclustering.cluster.hsyncnet).
+  See: https://github.com/annoviko/pyclustering/issues/285

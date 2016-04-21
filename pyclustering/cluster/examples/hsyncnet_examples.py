@@ -63,30 +63,24 @@ def cluster_elongate():
     template_clustering(SIMPLE_SAMPLES.SAMPLE_ELONGATE, 2, arg_collect_dynamic = False);
 
 def cluster_lsun():
-    "NOTE: Too slow"
     template_clustering(FCPS_SAMPLES.SAMPLE_LSUN, 3, arg_collect_dynamic = False);
     
 def cluster_hepta():
     template_clustering(FCPS_SAMPLES.SAMPLE_HEPTA, 7, arg_collect_dynamic = False);
     
 def cluster_tetra():
-    "NOTE: Too slow"
     template_clustering(FCPS_SAMPLES.SAMPLE_TETRA, 4, arg_collect_dynamic = False);
 
 def cluster_target():
-    "NOTE: Too slow"
     template_clustering(FCPS_SAMPLES.SAMPLE_TARGET, 6, arg_collect_dynamic = False);
     
 def cluster_chainlink():
-    "NOTE: Too slow"
     template_clustering(FCPS_SAMPLES.SAMPLE_CHAINLINK, 2, arg_collect_dynamic = False);
     
 def cluster_wing_nut():
-    "NOTE: Too slow"
     template_clustering(FCPS_SAMPLES.SAMPLE_WING_NUT, 2, arg_collect_dynamic = False);
     
 def cluster_two_diamonds():
-    "NOTE: Too slow"
     template_clustering(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, 2, arg_collect_dynamic = False);    
 
 def experiment_execution_time(show_dyn = False, ccore = False):
@@ -97,13 +91,13 @@ def experiment_execution_time(show_dyn = False, ccore = False):
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 4, 0.999, show_dyn, ccore);
     template_clustering(SIMPLE_SAMPLES.SAMPLE_ELONGATE, 2, 0.999, show_dyn, ccore);
     
-    template_clustering(FCPS_SAMPLES.SAMPLE_LSUN, 3, 0.999, show_dyn, ccore);
-    template_clustering(FCPS_SAMPLES.SAMPLE_TARGET, 6, 0.999, show_dyn, ccore);
-    template_clustering(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, 2, 0.999, show_dyn, ccore);
-    template_clustering(FCPS_SAMPLES.SAMPLE_WING_NUT, 2, 0.999, show_dyn, ccore);
-    template_clustering(FCPS_SAMPLES.SAMPLE_CHAINLINK, 2, 0.999, show_dyn, ccore);
-    template_clustering(FCPS_SAMPLES.SAMPLE_HEPTA, 7, 0.999, show_dyn, ccore);
-    template_clustering(FCPS_SAMPLES.SAMPLE_TETRA, 4, 0.999, show_dyn, ccore);
+    template_clustering(FCPS_SAMPLES.SAMPLE_LSUN, 3, 0.98, show_dyn, ccore);
+    template_clustering(FCPS_SAMPLES.SAMPLE_TARGET, 6, 0.98, show_dyn, ccore);
+    template_clustering(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, 2, 0.98, show_dyn, ccore);
+    template_clustering(FCPS_SAMPLES.SAMPLE_WING_NUT, 2, 0.98, show_dyn, ccore);
+    template_clustering(FCPS_SAMPLES.SAMPLE_CHAINLINK, 2, 0.98, show_dyn, ccore);
+    template_clustering(FCPS_SAMPLES.SAMPLE_HEPTA, 7, 0.98, show_dyn, ccore);
+    template_clustering(FCPS_SAMPLES.SAMPLE_TETRA, 4, 0.98, show_dyn, ccore);
 
 cluster_sample1();
 cluster_sample2();

@@ -86,8 +86,13 @@ class Test(unittest.TestCase):
         self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 10, 3, [60], True);        
         self.templateClusteringResults(FCPS_SAMPLES.SAMPLE_HEPTA, 1, 3, [30, 30, 30, 30, 30, 30, 32], True);
         self.templateClusteringResults(FCPS_SAMPLES.SAMPLE_HEPTA, 5, 3, [212], True);
-                 
-         
+    
+    def testClusteringSimple5WithoutNeighbors(self):
+        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 0.7, 0, [15, 15, 15, 15], False);
+
+    def testClusteringSimple5WithoutNeighborsByCore(self):
+        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 0.7, 0, [15, 15, 15, 15], True);
+
     def templateLengthProcessData(self, path_to_file, radius, min_number_neighbors, max_number_neighbors, ccore = False):
         for number_neighbors in range(min_number_neighbors, max_number_neighbors, 1):
             sample = read_sample(path_to_file);
