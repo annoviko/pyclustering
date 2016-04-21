@@ -34,7 +34,7 @@ import pyclustering.core.wrapper as wrapper;
 class kmedians:
     """!
     @brief Class represents clustering algorithm K-Medians.
-    @details The algorithm is less sensitive to outliers tham K-Means.
+    @details The algorithm is less sensitive to outliers than K-Means. Medians are calculated instead of centroids.
     
     Example:
     @code
@@ -63,7 +63,7 @@ class kmedians:
         """
         self.__pointer_data = data;
         self.__clusters = [];
-        self.__medians = initial_centers[:];     # initial centers shouldn't be chaged
+        self.__medians = initial_centers[:];
         self.__tolerance = tolerance;
         self.__ccore = ccore;
 
@@ -175,7 +175,7 @@ class kmedians:
                 relative_index_median = math.floor(length_cluster / 2);
                 index_median = sorted_cluster[relative_index_median];
                 
-                if (length_cluster % 2):
+                if ( (length_cluster % 2) and (relative_index_median + 1 < len(sorted_cluster)) ):
                     index_median_second = sorted_cluster[relative_index_median + 1];
                     medians[index][index_dimension] =  (self.__pointer_data[index_median][index_dimension] + self.__pointer_data[index_median_second][index_dimension]) / 2.0;
                     

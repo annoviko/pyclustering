@@ -36,6 +36,7 @@ class SIMPLE_SAMPLES:
     SAMPLE_SIMPLE7          = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleSimple07.txt";
     SAMPLE_SIMPLE8          = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleSimple08.txt";
     SAMPLE_SIMPLE9          = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleSimple09.txt";
+    SAMPLE_SIMPLE10         = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleSimple10.txt";
     SAMPLE_ELONGATE         = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleElongate.txt";
     SAMPLE_DENSITIES1       = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleDensities1.txt";
     SAMPLE_DENSITIES2       = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleDensities2.txt";

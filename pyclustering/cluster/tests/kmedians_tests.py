@@ -48,6 +48,8 @@ class Test(unittest.TestCase):
         if (expected_cluster_length is not None):
             obtained_cluster_sizes.sort();
             expected_cluster_length.sort();
+            if (obtained_cluster_sizes != expected_cluster_length):
+                print(obtained_cluster_sizes);
             assert obtained_cluster_sizes == expected_cluster_length;
     
     def testClusterAllocationSampleSimple1(self):
@@ -174,6 +176,14 @@ class Test(unittest.TestCase):
 
     def testClusterAllocationTheSameObjectsThreeInitialCentersCore(self):
         self.templateClusterAllocationTheSameObjects(25, 3, True);
+    
+    def testClusterAllocationSampleRoughMediansSimple10(self):
+        initial_medians = [[0.0772944481804071, 0.05224990900863469], [1.6021689021213712, 1.0347579135245601], [2.3341008076636096, 1.280022869739064]];
+        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE10, initial_medians, None);
+
+    def testClusterAllocationSampleRoughMediansSimple10ByCore(self):
+        initial_medians = [[0.0772944481804071, 0.05224990900863469], [1.6021689021213712, 1.0347579135245601], [2.3341008076636096, 1.280022869739064]];
+        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE10, initial_medians, None, True);
 
 
 if __name__ == "__main__":

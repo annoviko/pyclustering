@@ -94,3 +94,6 @@ CORRECTED BUGS:
   
 - Bug with cluster allocation in case of switched off dynamic collecting (pyclustering.cluster.hsyncnet).
   See: https://github.com/annoviko/pyclustering/issues/285
+  
+- Bug with execution fail during clustering data with rough values of initial medians (pyclustering.cluster.kmedians).
+  See: https://github.com/annoviko/pyclustering/issues/286

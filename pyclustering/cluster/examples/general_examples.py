@@ -23,7 +23,8 @@
 
 """
 
-from random import random;
+from random import random, randint;
+from math import floor;
 
 from pyclustering.cluster.agglomerative     import agglomerative;
 from pyclustering.cluster.birch             import birch;
@@ -43,6 +44,7 @@ from pyclustering.cluster.xmeans            import xmeans;
 from pyclustering.utils import timedcall;
 
 NUMBER_CLUSTERS = 3;
+CLUSTER_SIZES = [5, 8, 11, 14];
 
 def simple_gaussian_data_clustering(cluster_sizes):
     algorithms_times = { 'agglomerative':   [],
@@ -51,22 +53,26 @@ def simple_gaussian_data_clustering(cluster_sizes):
                          'cure':            [],
                          'dbscan':          [],
                          'hsyncnet':        [],
-                         'kmeans':          [] };
-#                          'kmedians':        [],
-#                          'kmedoids':        [],
+                         'kmeans':          [],
+                         'kmedians':        [], 
+                         'kmedoids':        [],
 #                          'optics':          [],
 #                          'rock':            [],
 #                          'syncnet':         [],
 #                          'syncsom':         [],
 #                          'xmeans':          [] };
-
+                        };
+                        
     algorithms_proc = { 'agglomerative':   process_agglomerative,
                         'birch':           process_birch,
                         'clarans':         process_clarans,
                         'cure':            process_cure,
                         'dbscan':          process_dbscan,
                         'hsyncnet':        process_hsyncnet,
-                        'kmeans':          process_kmeans };
+                        'kmeans':          process_kmeans,
+                        'kmedians':        process_kmedians,
+#                         'kmedoids':        process_kmedoids, 
+                        };
     
     for cluster_size in cluster_sizes:
         # generate data sets
@@ -108,13 +114,23 @@ def process_dbscan(sample):
 
 def process_hsyncnet(sample):
     instance = hsyncnet(sample, 3);
-    (ticks, _) = timedcall(instance.process);
+    (ticks, _) = timedcall(instance.process, 0.98);
     return ticks;
 
 def process_kmeans(sample):
-    instance = kmeans(sample, [ [random() * index, random() * index] for index in range(1, NUMBER_CLUSTERS + 1, 1) ]);
+    instance = kmeans(sample, [ [random() * multiplier, random() * multiplier] for multiplier in CLUSTER_SIZES ]);
+    (ticks, _) = timedcall(instance.process);
+    return ticks;
+
+def process_kmedians(sample):
+    instance = kmedians(sample, [ [random() * multiplier, random() * multiplier] for multiplier in CLUSTER_SIZES ]);
+    (ticks, _) = timedcall(instance.process);
+    return ticks;
+
+def process_kmedoids(sample):
+    instance = kmedoids(sample, [ [int(floor(CLUSTER_SIZES[index] / 2.0)) * (index + 1), int(floor(CLUSTER_SIZES[index] / 2.0))  * (index + 1)] for index in range(0, len(CLUSTER_SIZES)) ]);
     (ticks, _) = timedcall(instance.process);
     return ticks;
 
 
-simple_gaussian_data_clustering([5, 8, 11, 14]);
+simple_gaussian_data_clustering(CLUSTER_SIZES);
