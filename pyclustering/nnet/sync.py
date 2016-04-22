@@ -84,6 +84,7 @@ class sync_dynamic:
         @param[in] ccore (ctypes.pointer): Pointer to CCORE sync_dynamic instance in memory.
         
         """
+        
         self._dynamic = phase;
         self._time = time;
         self._ccore_sync_dynamic_pointer = ccore;
@@ -124,6 +125,9 @@ class sync_dynamic:
         if (self._ccore_sync_dynamic_pointer is not None):
             return wrapper.sync_dynamic_allocate_sync_ensembles(self._ccore_sync_dynamic_pointer, tolerance);
         
+        if ( (self._dynamic is None) or (len(self._dynamic) == 0) ):
+            return [];
+        
         number_oscillators = len(self._dynamic[0]);
         last_state = self._dynamic[len(self._dynamic) - 1];
         
@@ -163,7 +167,10 @@ class sync_dynamic:
         
         """
         
-        dynamic = self.output;
+        if ( (self._dynamic is None) or (len(self._dynamic) == 0) ):
+            return [];
+        
+        dynamic = self._dynamic;
         current_dynamic = dynamic[len(dynamic) - 1];
         
         if (iteration is not None):

@@ -356,18 +356,44 @@ class hhn_network(network):
         self._noise = [ 1.0 + 0.01 * (random.random() * 2.0 - 1.0) for i in range(self._num_osc)];
         
         # Updating states of PNs
+        self.__update_peripheral_neurons(t, step, next_membrane, next_active_sodium, next_inactive_sodium, next_active_potassium);
+        
+        # Updation states of CN
+        self.__update_central_neurons(t, next_cn_membrane, next_cn_active_sodium, next_cn_inactive_sodium, next_cn_active_potassium);
+        
+        return next_membrane + next_cn_membrane;
+    
+    
+    def __update_peripheral_neurons(self, t, step, next_membrane, next_active_sodium, next_inactive_sodium, next_active_potassium):
+        """!
+        @brief Update peripheral neurons in line with new values of current in channels.
+        
+        @param[in] t (doubles): Current time of simulation.
+        @param[in] step (uint): Step (time duration) during simulation when states of oscillators should be calculated.
+        @param[in] next_membrane (list): New values of membrane potentials for peripheral neurons.
+        @Param[in] next_active_sodium (list): New values of activation conductances of the sodium channels for peripheral neurons.
+        @param[in] next_inactive_sodium (list): New values of inactivaton conductances of the sodium channels for peripheral neurons.
+        @param[in] next_active_potassium (list): New values of activation conductances of the potassium channel for peripheral neurons.
+        
+        """
+        
+        self._membrane_potential = next_membrane[:];
+        self._active_cond_sodium = next_active_sodium[:];
+        self._inactive_cond_sodium = next_inactive_sodium[:];
+        self._active_cond_potassium = next_active_potassium[:];
+        
         for index in range(0, self._num_osc):
             if (self._pulse_generation[index] is False):
-                if (next_membrane[index] > 0.0):
+                if (self._membrane_potential[index] > 0.0):
                     self._pulse_generation[index] = True;
                     self._pulse_generation_time[index].append(t);
             else:
-                if (next_membrane[index] < 0.0):
+                if (self._membrane_potential[index] < 0.0):
                     self._pulse_generation[index] = False;
             
             # Update connection from CN2 to PN
             if (self._link_weight3[index] == 0.0):
-                if ( (next_membrane[index] > self._params.threshold) and (next_membrane[index] > self._params.threshold) ):
+                if ( (self._membrane_potential[index] > self._params.threshold) and (self._membrane_potential[index] > self._params.threshold) ):
                     self._link_pulse_counter[index] += step;
                 
                     if (self._link_pulse_counter[index] >= 1 / self._params.eps):
@@ -377,30 +403,33 @@ class hhn_network(network):
                 if ( not ((self._link_activation_time[index] < t) and (t < self._link_activation_time[index] + self._params.deltah)) ):
                     self._link_weight3[index] = 0.0;
                     self._link_pulse_counter[index] = 0.0;
-                    
+    
+    
+    def __update_central_neurons(self, t, next_cn_membrane, next_cn_active_sodium, next_cn_inactive_sodium, next_cn_active_potassium):
+        """!
+        @brief Update of central neurons in line with new values of current in channels.
         
+        @param[in] t (doubles): Current time of simulation.
+        @param[in] next_membrane (list): New values of membrane potentials for central neurons.
+        @Param[in] next_active_sodium (list): New values of activation conductances of the sodium channels for central neurons.
+        @param[in] next_inactive_sodium (list): New values of inactivaton conductances of the sodium channels for central neurons.
+        @param[in] next_active_potassium (list): New values of activation conductances of the potassium channel for central neurons.
         
-        # Updation states of CN
+        """
+        
         for index in range(0, len(self._central_element)):
-            if (self._central_element[index].pulse_generation is False):
-                if (next_cn_membrane[index] > 0.0):
-                    self._central_element[index].pulse_generation = True;
-                    self._central_element[index].pulse_generation_time.append(t);
-            else:
-                if (next_cn_membrane[index] < 0.0):
-                    self._central_element[index].pulse_generation = False;
-            
             self._central_element[index].membrane_potential = next_cn_membrane[index];
             self._central_element[index].active_cond_sodium = next_cn_active_sodium[index];
             self._central_element[index].inactive_cond_sodium = next_cn_inactive_sodium[index];
             self._central_element[index].active_cond_potassium = next_cn_active_potassium[index];
-        
-        self._membrane_potential = next_membrane[:];
-        self._active_cond_sodium = next_active_sodium[:];
-        self._inactive_cond_sodium = next_inactive_sodium[:];
-        self._active_cond_potassium = next_active_potassium[:];
-        
-        return next_membrane + next_cn_membrane;
+            
+            if (self._central_element[index].pulse_generation is False):
+                if (self._central_element[index].membrane_potential > 0.0):
+                    self._central_element[index].pulse_generation = True;
+                    self._central_element[index].pulse_generation_time.append(t);
+            else:
+                if (self._central_element[index].membrane_potential < 0.0):
+                    self._central_element[index].pulse_generation = False;
     
     
     def hnn_state(self, inputs, t, argv):

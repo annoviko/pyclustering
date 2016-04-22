@@ -26,9 +26,7 @@
 import unittest;
 
 from pyclustering.nnet import *;
-from pyclustering.nnet.sync import sync_network, sync_dynamic;
-
-from pyclustering.nnet.sync import sync_network, sync_visualizer;
+from pyclustering.nnet.sync import sync_network, sync_dynamic, sync_visualizer;
 
 from scipy import pi;
 
@@ -210,7 +208,7 @@ class Test(unittest.TestCase):
         self.templateDynamicSimulationConvergence(7, 1, conn_type.ALL_TO_ALL, True);
          
      
-    def testOutputDinamicLengthSimulation(self):
+    def testOutputDynamicLengthSimulation(self):
         net = sync_network(5);
         output_dynamic = net.simulate(10, 10, solution = solve_type.FAST, collect_dynamic = True);
          
@@ -242,7 +240,16 @@ class Test(unittest.TestCase):
         net = sync_network(5);
         output_dynamic = net.simulate_dynamic(solution = solve_type.FAST, collect_dynamic = False);
          
-        assert len(output_dynamic) == 1; 
+        assert len(output_dynamic) == 1;
+    
+    
+    def testInfoAllicationWithNoSimulation(self):
+        output_dynamic = sync_dynamic(None, None, None);
+        ensembles = output_dynamic.allocate_sync_ensembles();
+        assert ensembles == [];
+        
+        matrix = output_dynamic.allocate_correlation_matrix();
+        assert matrix == [];
 
 
 if __name__ == "__main__":

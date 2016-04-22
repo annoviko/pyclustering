@@ -69,7 +69,15 @@ def ten_oscillators_stimulated_partial_sync():
     
     template_dynamic_hhn(10, 750, 200, [25, 25, 25, 25, 25, 11, 11, 11, 11, 11], params, separate_representation = True);     
     
-def ten_oscillators_mix_stimulated():
+
+def six_oscillators_mix_2_stimulated():
+    params = hhn_parameters();
+    params.deltah = 400;
+    
+    template_dynamic_hhn(6, 1200, 600, [25, 25, 25, 47, 47, 47], params, separate_representation = True);
+
+
+def six_oscillators_mix_3_stimulated():
     params = hhn_parameters();
     params.deltah = 400;
     
@@ -82,4 +90,5 @@ three_oscillators_stimulated();
 ten_oscillators_stimulated_desync();
 ten_oscillators_stimulated_sync();
 ten_oscillators_stimulated_partial_sync();
-ten_oscillators_mix_stimulated();
+six_oscillators_mix_2_stimulated();
+six_oscillators_mix_3_stimulated();
