@@ -23,7 +23,9 @@
 
 """
 
-from pyclustering.core.wrapper import *;
+from ctypes import cdll, c_uint;
+
+from pyclustering.core.wrapper import PATH_DLL_CCORE_64, create_pointer_data, extract_pyclustering_package;
 
 def agglomerative_algorithm(data, number_clusters, link):
     pointer_data = create_pointer_data(data);

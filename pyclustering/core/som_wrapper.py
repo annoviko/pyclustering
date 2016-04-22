@@ -23,7 +23,9 @@
 
 """
 
-from pyclustering.core.wrapper import *;
+from ctypes import cdll, Structure, c_uint, c_double, pointer;
+
+from pyclustering.core.wrapper import PATH_DLL_CCORE_64, create_pointer_data, extract_pyclustering_package;
 
 class c_som_parameters(Structure):
     "Description of SOM parameters in memory"

@@ -67,12 +67,12 @@ def negative_connection_10_oscillators():
     
 def negative_connection_9_grid_struct():
     "Comment: Right coloring"
-    network = template_dynamic_sync(9, -2, conn = conn_type.GRID_FOUR);      
+    network = template_dynamic_sync(9, -2, conn = conn_type.GRID_FOUR);
     
     
 def negative_connection_16_grid_struct():
     "Comment: Wrong coloring"
-    network = template_dynamic_sync(16, -3, conn = conn_type.GRID_FOUR);    
+    network = template_dynamic_sync(16, -3, conn = conn_type.GRID_FOUR);
     
 
 # Examples of global synchronization.

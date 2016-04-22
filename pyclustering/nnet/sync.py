@@ -38,7 +38,6 @@ import pyclustering.core.sync_wrapper as wrapper;
 
 from scipy import pi;
 from scipy.integrate import odeint;
-from scipy.integrate import ode;
 
 from pyclustering.nnet import *;
 
@@ -218,7 +217,7 @@ class sync_visualizer:
         
         """
         
-        figure = plt.figure();
+        _ = plt.figure();
         correlation_matrix = sync_output_dynamic.allocate_correlation_matrix(iteration);
         
         plt.imshow(correlation_matrix, cmap = plt.get_cmap('cool'), interpolation='kaiser'); 
@@ -270,7 +269,7 @@ class sync_visualizer:
             artist5, = plt.plot(xdata, ydata, 'ro');
             return [ artist5 ];
         
-        im_ani = animation.FuncAnimation(figure, frame_generation, len(sync_output_dynamic), interval = 75, repeat_delay = 5000, init_func = init_frame, blit = True);
+        _ = animation.FuncAnimation(figure, frame_generation, len(sync_output_dynamic), interval = animation_velocity, repeat_delay = 5000, init_func = init_frame, blit = True);
         plt.show();
     
     
@@ -289,7 +288,7 @@ class sync_visualizer:
         correlation_matrix = sync_output_dynamic.allocate_correlation_matrix(0);
         
         def init_frame(): 
-            artist = plt.imshow(correlation_matrix, cmap = plt.get_cmap('cool'), interpolation='kaiser', hold = True);           
+            artist = plt.imshow(correlation_matrix, cmap = plt.get_cmap('cool'), interpolation='kaiser', hold = True);
             return [ artist ];   
         
         def frame_generation(index_dynamic):
@@ -298,11 +297,11 @@ class sync_visualizer:
             
             return [ artist ];
 
-        im_ani = animation.FuncAnimation(figure, frame_generation, len(sync_output_dynamic), init_func = init_frame, interval = 75, repeat_delay = 1000, blit = True);
-        plt.show();        
+        _ = animation.FuncAnimation(figure, frame_generation, len(sync_output_dynamic), init_func = init_frame, interval = animation_velocity , repeat_delay = 1000, blit = True);
+        plt.show();
 
 
-class sync_network(network):    
+class sync_network(network):
     """!
     @brief Model of oscillatory network that is based on the Kuramoto model of synchronization.
     
