@@ -26,6 +26,10 @@
 from random import random, randint;
 from math import floor;
 
+import matplotlib.pyplot as plt;
+
+from pyclustering.nnet import initial_type;
+
 from pyclustering.cluster.agglomerative     import agglomerative;
 from pyclustering.cluster.birch             import birch;
 from pyclustering.cluster.clarans           import clarans;
@@ -43,48 +47,77 @@ from pyclustering.cluster.xmeans            import xmeans;
 
 from pyclustering.utils import timedcall;
 
-NUMBER_CLUSTERS = 3;
-CLUSTER_SIZES = [5, 8, 11, 14];
+CLUSTER_SIZES = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50];
+NUMBER_CLUSTERS = 4;
+CURRENT_CLUSTER_SIZE = None;
+REPEAT_MEASURE = 15;
 
 def simple_gaussian_data_clustering(cluster_sizes):
-    algorithms_times = { 'agglomerative':   [],
-                         'birch':           [],
-                         'clarans':         [],
-                         'cure':            [],
-                         'dbscan':          [],
-                         'hsyncnet':        [],
-                         'kmeans':          [],
-                         'kmedians':        [], 
-                         'kmedoids':        [],
-#                          'optics':          [],
-#                          'rock':            [],
-#                          'syncnet':         [],
-#                          'syncsom':         [],
-#                          'xmeans':          [] };
-                        };
+    algorithms_times = { 
+                        'agglomerative':   [],
+                        'birch':           [],
+                        'clarans':         [],
+                        'cure':            [],
+                        'dbscan':          [],
+                        'hsyncnet':        [],
+                        'kmeans':          [],
+                        'kmedians':        [], 
+                        'kmedoids':        [],
+                        'optics':          [],
+                        'rock':            [],
+                        'syncnet':         [],
+                        'syncsom':         [],
+                        'xmeans':          [],
+                       };
                         
-    algorithms_proc = { 'agglomerative':   process_agglomerative,
-                        'birch':           process_birch,
-                        'clarans':         process_clarans,
-                        'cure':            process_cure,
-                        'dbscan':          process_dbscan,
-                        'hsyncnet':        process_hsyncnet,
-                        'kmeans':          process_kmeans,
-                        'kmedians':        process_kmedians,
-#                         'kmedoids':        process_kmedoids, 
-                        };
+    algorithms_proc = { 
+                        'agglomerative':    process_agglomerative,
+                        'birch':            process_birch,
+                        'clarans':          process_clarans,
+                        'cure':             process_cure,
+                        'dbscan':           process_dbscan,
+                        'hsyncnet':         process_hsyncnet,
+                        'kmeans':           process_kmeans,
+                        'kmedians':         process_kmedians,
+                        'kmedoids':         process_kmedoids,
+                        'optics':           process_optics,
+                        'rock':             process_rock,
+                        'syncnet':          process_syncnet,
+                        'syncsom':          process_syncsom,
+                        'xmeans':           process_xmeans,
+                      };
+    
+    datasizes = [];
     
     for cluster_size in cluster_sizes:
+        print("processing clusters with size:", cluster_size);
+        
+        global CURRENT_CLUSTER_SIZE;
+        CURRENT_CLUSTER_SIZE = cluster_size;
+        
         # generate data sets
         dataset = [];
         for mean in range(0, NUMBER_CLUSTERS, 1):
             dataset += [ [random() + (mean * 5), random() + (mean * 5)] for _ in range(cluster_size) ];
         
+        datasizes.append(len(dataset));
+            
         # process data and fix time of execution
         for key in algorithms_proc:
-            algorithms_times[key].append( algorithms_proc[key](dataset) );
+            summary_result = 0;
+            print("processing clusters with size:", cluster_size, "by", key);
             
-    print(algorithms_times);
+            for _ in range(REPEAT_MEASURE):
+                summary_result += algorithms_proc[key](dataset);
+            
+            algorithms_times[key].append( summary_result / REPEAT_MEASURE );
+    
+    print(datasizes);
+    for key in algorithms_times:
+        print(key, ":", algorithms_times[key]);
+        plt.plot(datasizes, algorithms_times[key], label = key, linestyle = '-');
+    
+    plt.show();
 
 
 def process_agglomerative(sample):
@@ -113,22 +146,47 @@ def process_dbscan(sample):
     return ticks;
 
 def process_hsyncnet(sample):
-    instance = hsyncnet(sample, 3);
-    (ticks, _) = timedcall(instance.process, 0.98);
+    instance = hsyncnet(sample, CURRENT_CLUSTER_SIZE, initial_type.EQUIPARTITION, CURRENT_CLUSTER_SIZE);
+    (ticks, _) = timedcall(instance.process, 0.998);
     return ticks;
 
 def process_kmeans(sample):
-    instance = kmeans(sample, [ [random() * multiplier, random() * multiplier] for multiplier in CLUSTER_SIZES ]);
+    instance = kmeans(sample, [ [random() + (multiplier * 5), random() + (multiplier + 5)] for multiplier in range(NUMBER_CLUSTERS) ]);
     (ticks, _) = timedcall(instance.process);
     return ticks;
 
 def process_kmedians(sample):
-    instance = kmedians(sample, [ [random() * multiplier, random() * multiplier] for multiplier in CLUSTER_SIZES ]);
+    instance = kmedians(sample, [ [random() + (multiplier * 5), random() + (multiplier + 5)] for multiplier in range(NUMBER_CLUSTERS) ]);
     (ticks, _) = timedcall(instance.process);
     return ticks;
 
 def process_kmedoids(sample):
-    instance = kmedoids(sample, [ [int(floor(CLUSTER_SIZES[index] / 2.0)) * (index + 1), int(floor(CLUSTER_SIZES[index] / 2.0))  * (index + 1)] for index in range(0, len(CLUSTER_SIZES)) ]);
+    instance = kmedoids(sample, [ CURRENT_CLUSTER_SIZE * multiplier for multiplier in range(NUMBER_CLUSTERS) ]);
+    (ticks, _) = timedcall(instance.process);
+    return ticks;
+
+def process_optics(sample):
+    instance = optics(sample, 1.0, 2);
+    (ticks, _) = timedcall(instance.process);
+    return ticks;
+
+def process_rock(sample):
+    instance = rock(sample, 1, NUMBER_CLUSTERS, 0.5);
+    (ticks, _) = timedcall(instance.process);
+    return ticks;
+
+def process_syncnet(sample):
+    instance = syncnet(sample, 3.0, initial_phases = initial_type.EQUIPARTITION);
+    (ticks, _) = timedcall(instance.process);
+    return ticks;
+
+def process_syncsom(sample):
+    instance = syncsom(sample, 1, NUMBER_CLUSTERS);
+    (ticks, _) = timedcall(instance.process, 0, False, 0.998);
+    return ticks;
+
+def process_xmeans(sample):
+    instance = xmeans(sample, [ [random() + (multiplier * 5), random() + (multiplier + 5)] for multiplier in range(NUMBER_CLUSTERS) ]);
     (ticks, _) = timedcall(instance.process);
     return ticks;
 

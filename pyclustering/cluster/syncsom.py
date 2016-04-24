@@ -128,11 +128,12 @@ class syncsom:
                 self._som_osc_table.append(i);
         
         # calculate trusted distance between objects.
-        radius = 0;
-        if (len(weights) >= number_neighbours):
+        radius = 0.0;
+        if ( (len(weights) >= number_neighbours) and (number_neighbours > 0)):
+            # check if it is greater than 0, it helps to avoid useless calculations
             radius = average_neighbor_distance(weights, number_neighbours);
         else:
-            radius = 0;
+            radius = 0.0;
         
         # create oscillatory neural network.
         self._sync = syncnet(weights, radius, initial_phases = initial_type.EQUIPARTITION);

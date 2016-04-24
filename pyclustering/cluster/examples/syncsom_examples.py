@@ -62,10 +62,16 @@ def template_clustering(file, map_size, trust_order, sync_order = 0.999, show_dy
         draw_clusters(sample, clusters);
   
 def cluster_simple1():
-    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [4, 4], 3, 0.999, True, True, True, True);   
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [4, 4], 3, 0.999, True, True, True, True);
+
+def cluster_simple1_as_som():
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [1, 2], 0, 0.999, True, True, True, True);
   
 def cluster_simple2():
-    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [4, 4], 3, 0.999, True, True, True, True);  
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [4, 4], 3, 0.999, True, True, True, True);
+
+def cluster_simple2_as_som():
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [1, 3], 0, 0.999, True, True, True, True);
 
 def cluster_simple3():
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [5, 5], 4, 0.999, True, True, True, True);
@@ -110,7 +116,9 @@ def experiment_execution_time():
 
 
 cluster_simple1();
+cluster_simple1_as_som();
 cluster_simple2();
+cluster_simple2_as_som();
 cluster_simple3();
 cluster_simple4();
 cluster_simple5();

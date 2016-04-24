@@ -118,7 +118,7 @@ def average_neighbor_distance(points, num_neigh):
             dist_matrix[j][i] = distance;
             
         dist_matrix[i] = sorted(dist_matrix[i]);
-    
+
     total_distance = 0;
     for i in range(0, len(points), 1):
         # start from 0 due to - first element is distance to itself.
