@@ -23,19 +23,21 @@
 
 """
 
-from pyclustering.utils import read_sample, draw_clusters;
+from pyclustering.utils import read_sample, draw_clusters, timedcall;
 
-from pyclustering.samples.definitions import SIMPLE_SAMPLES;
-from pyclustering.samples.definitions import FCPS_SAMPLES;
+from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
 
 from pyclustering.cluster.hsyncnet import hsyncnet;
 from pyclustering.nnet.sync import sync_visualizer;
+from pyclustering.nnet import initial_type, solve_type;
 
 def template_clustering(file, number_clusters, arg_order = 0.999, arg_collect_dynamic = True, ccore_flag = False):
         sample = read_sample(file);
-        network = hsyncnet(sample, number_clusters, ccore = ccore_flag);
+        network = hsyncnet(sample, number_clusters, initial_neighbors = int(len(sample) * 0.15), osc_initial_phases = initial_type.EQUIPARTITION, ccore = ccore_flag);
         
-        analyser = network.process(arg_order, collect_dynamic = arg_collect_dynamic);
+        (ticks, analyser) = timedcall(network.process, arg_order, solve_type.FAST, arg_collect_dynamic);
+        print("Sample: ", file, "\t\tExecution time: ", ticks, "\n");
+        
         clusters = analyser.allocate_clusters();
         
         if (arg_collect_dynamic == True):
@@ -98,7 +100,8 @@ def experiment_execution_time(show_dyn = False, ccore = False):
     template_clustering(FCPS_SAMPLES.SAMPLE_CHAINLINK, 2, 0.98, show_dyn, ccore);
     template_clustering(FCPS_SAMPLES.SAMPLE_HEPTA, 7, 0.98, show_dyn, ccore);
     template_clustering(FCPS_SAMPLES.SAMPLE_TETRA, 4, 0.98, show_dyn, ccore);
-
+    template_clustering(FCPS_SAMPLES.SAMPLE_ATOM, 2, 0.98, show_dyn, ccore);
+    
 cluster_sample1();
 cluster_sample2();
 cluster_sample3();
