@@ -37,7 +37,7 @@ from pyclustering.nnet import solve_type;
 from pyclustering.nnet.sync import sync_visualizer;
 
 
-def template_segmentation_image(source, color_radius, object_radius, noise_size, show_dyn):    
+def template_segmentation_image(source, color_radius, object_radius, noise_size, show_dyn):
     data = read_image(source);
     print("Pixel dimension: ", len(data[0]));
 

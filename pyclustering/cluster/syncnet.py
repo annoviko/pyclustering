@@ -54,6 +54,7 @@ class syncnet_analyser(sync_dynamic):
         """
         super().__init__(phase, time, pointer_sync_analyser);
     
+    
     def __del__(self):
         """!
         @brief Desctructor of the analyser.
@@ -64,18 +65,22 @@ class syncnet_analyser(sync_dynamic):
             syncnet_analyser_destroy(self._ccore_sync_dynamic_pointer);
             self._ccore_sync_dynamic_pointer = None;
     
-    def allocate_clusters(self, eps = 0.01):
+    
+    def allocate_clusters(self, eps = 0.01, indexes = None):
         """!
         @brief Returns list of clusters in line with state of ocillators (phases).
         
         @param[in] eps (double): Tolerance level that define maximal difference between phases of oscillators in one cluster.
+        @param[in] indexes (list): List of real object indexes and it should be equal to amount of oscillators (in case of 'None' - indexes are in range [0; amount_oscillators]).
         
         @return (list) List of clusters, for example [ [cluster1], [cluster2], ... ].
         
         @see allocate_noise()
         
-        """        
-        return self.allocate_sync_ensembles(eps);
+        """
+        
+        return self.allocate_sync_ensembles(eps, indexes);
+    
     
     def allocate_noise(self):
         """!

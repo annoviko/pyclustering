@@ -109,12 +109,13 @@ class sync_dynamic:
         return len(self._dynamic);
     
     
-    def allocate_sync_ensembles(self, tolerance = 0.01):
+    def allocate_sync_ensembles(self, tolerance = 0.01, indexes = None):
         """!
         @brief Allocate clusters in line with ensembles of synchronous oscillators where each
                synchronous ensemble corresponds to only one cluster.
                
         @param[in] tolerance (double): Maximum error for allocation of synchronous ensemble oscillators.
+        @param[in] indexes (list): List of real object indexes and it should be equal to amount of oscillators (in case of 'None' - indexes are in range [0; amount_oscillators]).
         
         @return (list) Grours (lists) of indexes of synchronous oscillators.
                 For example [ [index_osc1, index_osc3], [index_osc2], [index_osc4, index_osc5] ].
@@ -143,7 +144,12 @@ class sync_dynamic:
                     if ( ( (last_state[i] < (last_state[neuron_index] + tolerance)) and (last_state[i] > (last_state[neuron_index] - tolerance)) ) or
                          ( (last_state_shifted < (last_state[neuron_index] + tolerance)) and (last_state_shifted > (last_state[neuron_index] - tolerance)) ) ):
                         cluster_allocated = True;
-                        cluster.append(i);
+                        
+                        real_index = i;
+                        if (indexes is not None):
+                            real_index = indexes[i];
+                        
+                        cluster.append(real_index);
                         break;
                 
                 if (cluster_allocated == True):
