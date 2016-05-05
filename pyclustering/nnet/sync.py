@@ -41,7 +41,7 @@ from scipy.integrate import odeint;
 
 from pyclustering.nnet import *;
 
-from pyclustering.utils import draw_dynamics;
+from pyclustering.utils import draw_dynamics, draw_dynamics_set;
 
 
 class sync_dynamic:
@@ -109,6 +109,21 @@ class sync_dynamic:
         return len(self._dynamic);
     
     
+    def __getitem__(self, index):
+        """!
+        @brief Indexing of the dynamic.
+        
+        """
+        if (index is 0):
+            return self.time;
+        
+        elif (index is 1):
+            return self.output;
+        
+        else:
+            raise NameError('Out of range ' + index + ': only indexes 0 and 1 are supported.');
+
+
     def allocate_sync_ensembles(self, tolerance = 0.01, indexes = None):
         """!
         @brief Allocate clusters in line with ensembles of synchronous oscillators where each
@@ -123,7 +138,14 @@ class sync_dynamic:
         """
         
         if (self._ccore_sync_dynamic_pointer is not None):
-            return wrapper.sync_dynamic_allocate_sync_ensembles(self._ccore_sync_dynamic_pointer, tolerance);
+            ensembles = wrapper.sync_dynamic_allocate_sync_ensembles(self._ccore_sync_dynamic_pointer, tolerance);
+            
+            if (indexes is not None):
+                for ensemble in ensembles:
+                    for index in range(len(ensemble)):
+                        ensemble[index] = indexes[ ensemble[index] ];
+                
+            return ensembles;
         
         if ( (self._dynamic is None) or (len(self._dynamic) == 0) ):
             return [];
@@ -207,9 +229,26 @@ class sync_visualizer:
         
         @param[in] sync_output_dynamic (sync_dynamic): Output dynamic of the Sync network.
         
+        @see show_output_dynamics
+        
         """
         
         draw_dynamics(sync_output_dynamic.time, sync_output_dynamic.output, x_title = "t", y_title = "phase", y_lim = [0, 2 * 3.14]);
+    
+    
+    @staticmethod
+    def show_output_dynamics(sync_output_dynamics):
+        """!
+        @brief Shows several output dynamics (output of each oscillator) during simulation.
+        @details Each dynamic is presented on separate plot.
+        
+        @param[in] sync_output_dynamics (list): list of output dynamics 'sync_dynamic' of the Sync network.
+        
+        @see show_output_dynamic
+        
+        """
+        
+        draw_dynamics_set(sync_output_dynamics, "t", "phase", None, [0, 2 * 3.14], False, False);
     
     
     @staticmethod
@@ -257,7 +296,7 @@ class sync_visualizer:
             text3 = plt.text(0.0, 1.1, r'$\pi$/2');
             text4 = plt.text(0.0, -1.1, r'3$\pi$/2');
             
-            return [ artist1, artist2, artist3, artist4, text1, text2, text3, text4 ];          
+            return [ artist1, artist2, artist3, artist4, text1, text2, text3, text4 ];
         
         def frame_generation(index_dynamic):
             dynamic = sync_output_dynamic.output[index_dynamic];

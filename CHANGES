@@ -29,15 +29,19 @@ GENERAL CHANGES (pyclustering):
   See: https://github.com/annoviko/pyclustering/pull/277
 
 - Implemented feature to use CCORE K-Medians algorithm using argument 'ccore' to ensure high performance (pyclustering.cluster.kmedoids).
-  https://github.com/annoviko/pyclustering/issues/231
+  See: https://github.com/annoviko/pyclustering/issues/231
   
 - Implemented feature to place several plots on each row using parameter 'maximum number of rows' for cluster visualizer (pyclustering.cluster).
-  https://github.com/annoviko/pyclustering/issues/274
+  See: https://github.com/annoviko/pyclustering/issues/274
 
 - Implemented feature to specify initial number of neighbors to calculate initial connectivity radius and increase percent of number of neighbors (or radius if total number of object is exceeded) on each step (pyclustering.cluster.hsyncnet).
-  https://github.com/annoviko/pyclustering/issues/284
+  See: https://github.com/annoviko/pyclustering/issues/284
+
+- Implemented segmentation algorithm based on double-layer oscillatory network that is based on modified Kuramoto model for color/object image segmentation (pyclustering.segment.segmsync).
+  See: -
 
 - Added new examples and demos of usage algorithms.
+  See: -
 
 
 GENERAL CHANGES (ccore):

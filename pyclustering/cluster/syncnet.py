@@ -98,7 +98,8 @@ class syncnet_analyser(sync_dynamic):
 
 class syncnet(sync_network):
     """!
-    @brief Class represents clustering algorithm SyncNet. SyncNet is bio-inspired algorithm that is based on oscillatory network that uses modified Kuramoto model.
+    @brief Class represents clustering algorithm SyncNet. 
+    @details SyncNet is bio-inspired algorithm that is based on oscillatory network that uses modified Kuramoto model.
     
     Example:
     @code
