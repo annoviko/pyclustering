@@ -67,14 +67,12 @@ E-Mail: pyclustering@yandex.ru
 - SOM (Self-Organized Map) [Python, C++]
 - Sync (Oscillatory network based on Kuramoto model) [Python, C++]
 - SyncPR (Oscillatory network for pattern recognition) [Python, C++]
+- SegmSync (Oscillatory network for image segmentation) [Python, C++]
 
 **Graph Coloring Algorithms (module pyclustering.gcolor):**
 - DSatur [Python]
 - Hysteresis [Python]
 - GColorSync [Python]
-
-**Segmentation Algorithms (module pyclustering.segment):**
-- SegmSync [Python, C++]
 
 **Travelling Salesman Problem Algorithms (module pyclustering.tsp):**
 - AntColony [Python, C++]
