@@ -791,9 +791,7 @@ INPUT                 += pyclustering/nnet/pcnn.py
 INPUT                 += pyclustering/nnet/som.py
 INPUT                 += pyclustering/nnet/sync.py
 INPUT                 += pyclustering/nnet/syncpr.py
-
-IMPUT                 += pyclustering/segment/__init__.py
-INPUT                 += pyclustering/segment/segmsync.py
+INPUT                 += pyclustering/nnet/syncsegm.py
 
 INPUT                 += pyclustering/tsp/__init__.py
 INPUT                 += pyclustering/tsp/antcolony.py

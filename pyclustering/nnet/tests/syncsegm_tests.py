@@ -1,6 +1,6 @@
 """!
 
-@brief Unit-test for segmentation algorithm based on double-layer oscillatory network 'segmsync' based on Kuramoto model.
+@brief Unit-test for double-layer oscillatory network 'syncsegm' for image segmentation based on Kuramoto model.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2016
@@ -29,17 +29,17 @@ import unittest;
 import matplotlib;
 matplotlib.use('Agg');
 
-from pyclustering.segment.segmsync import segmsync, segmsync_visualizer;
+from pyclustering.nnet.syncsegm import syncsegm, syncsegm_visualizer;
 
 from pyclustering.samples.definitions import IMAGE_SIMPLE_SAMPLES;
 
 
 class Test(unittest.TestCase):
-    def templateSegmSyncSegmentation(self, image_source, radius_color, radius_object, noise_size, expected_color_segments, expected_object_segments, collect_dynamic):
+    def templatesyncsegmSegmentation(self, image_source, radius_color, radius_object, noise_size, expected_color_segments, expected_object_segments, collect_dynamic):
         result_testing = False;
         
         for _ in range(0, 3, 1):
-            algorithm = segmsync(radius_color, radius_object, noise_size);
+            algorithm = syncsegm(radius_color, radius_object, noise_size);
             analyser = algorithm.process(image_source, collect_dynamic, 0.9995, 0.9995);
             
             color_segments = analyser.allocate_colors();
@@ -49,8 +49,8 @@ class Test(unittest.TestCase):
                 continue;
             
             if (collect_dynamic is True):
-                segmsync_visualizer.show_first_layer_dynamic(analyser);
-                segmsync_visualizer.show_second_layer_dynamic(analyser);
+                syncsegm_visualizer.show_first_layer_dynamic(analyser);
+                syncsegm_visualizer.show_second_layer_dynamic(analyser);
             
             result_testing = True;
             break;
@@ -59,13 +59,13 @@ class Test(unittest.TestCase):
     
     
     def testImageSegmentationSimple13(self):
-        self.templateSegmSyncSegmentation(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE13, 225, 5, 0, 2, 4, False);
+        self.templatesyncsegmSegmentation(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE13, 225, 5, 0, 2, 4, False);
     
     def testImageSegmentationSimple15(self):
-        self.templateSegmSyncSegmentation(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE15, 225, 6, 0, 2, 3, False);
+        self.templatesyncsegmSegmentation(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE15, 225, 6, 0, 2, 3, False);
     
     def testImageSegmentationSimple16(self):
-        self.templateSegmSyncSegmentation(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE16, 225, 2, 0, 2, 3, True);
+        self.templatesyncsegmSegmentation(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE16, 225, 2, 0, 2, 3, True);
     
 if __name__ == "__main__":
     unittest.main();

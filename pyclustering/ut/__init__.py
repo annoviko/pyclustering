@@ -65,11 +65,10 @@ from pyclustering.nnet.tests                     import pcnn_tests          as n
 from pyclustering.nnet.tests                     import som_tests           as nnet_som_unit_tests;
 from pyclustering.nnet.tests                     import sync_tests          as nnet_sync_unit_tests;
 from pyclustering.nnet.tests                     import syncpr_tests        as nnet_syncpr_unit_tests;
+from pyclustering.nnet.tests                     import syncsegm_tests      as nnet_syncsegm_unit_tests;
 
 from pyclustering.container.tests                import cftree_tests        as container_cftree_unit_tests;
 from pyclustering.container.tests                import kdtree_tests        as container_kdtree_unit_tests;
-
-from pyclustering.segment.tests                  import segmsync_tests      as segment_segmsync_tests;
 
 from pyclustering.tsp.tests                      import antcolony_tests     as tsp_antcolony_unit_tests;
 
@@ -107,11 +106,10 @@ if __name__ == "__main__":
     suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_som_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_sync_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_syncpr_unit_tests));
+    suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_syncsegm_unit_tests));
      
     suite.addTests(unittest.TestLoader().loadTestsFromModule(container_cftree_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(container_kdtree_unit_tests));
-    
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(segment_segmsync_tests));
     
     suite.addTests(unittest.TestLoader().loadTestsFromModule(tsp_antcolony_unit_tests));
     

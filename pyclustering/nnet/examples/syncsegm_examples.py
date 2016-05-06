@@ -1,6 +1,6 @@
 """!
 
-@brief Examples of usage and demonstration of abilities of multi-layer oscillatory network based on Kuramoto model for segmentation.
+@brief Examples of usage and demonstration of abilities of multi-layer oscillatory network based on Kuramoto model for image segmentation.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2016
@@ -26,13 +26,13 @@
 
 from pyclustering.samples.definitions import IMAGE_SIMPLE_SAMPLES, IMAGE_MAP_SAMPLES;
 
-from pyclustering.segment.segmsync import segmsync, segmsync_visualizer;
+from pyclustering.nnet.syncsegm import syncsegm, syncsegm_visualizer;
 
 from pyclustering.utils import draw_image_mask_segments;
 
 
 def template_segmentation_image(source, color_radius, object_radius, noise_size, show_dyn):
-    algorithm = segmsync(color_radius, object_radius, noise_size);
+    algorithm = syncsegm(color_radius, object_radius, noise_size);
     analyser = algorithm.process(source, show_dyn);
     
     color_segments = analyser.allocate_colors(0.01, noise_size);
@@ -43,8 +43,8 @@ def template_segmentation_image(source, color_radius, object_radius, noise_size,
         draw_image_mask_segments(source, object_segments);
     
     if (show_dyn is True):
-        segmsync_visualizer.show_first_layer_dynamic(analyser);
-        segmsync_visualizer.show_second_layer_dynamic(analyser);
+        syncsegm_visualizer.show_first_layer_dynamic(analyser);
+        syncsegm_visualizer.show_second_layer_dynamic(analyser);
 
 
 def segmentation_image_simple1():

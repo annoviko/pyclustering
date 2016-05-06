@@ -33,6 +33,7 @@ from pyclustering.nnet.tests        import pcnn_tests            as nnet_pcnn_un
 from pyclustering.nnet.tests        import som_tests             as nnet_som_unit_tests;
 from pyclustering.nnet.tests        import sync_tests            as nnet_sync_unit_tests;
 from pyclustering.nnet.tests        import syncpr_tests          as nnet_syncpr_unit_tests;
+from pyclustering.nnet.tests        import syncsegm_tests        as nnet_syncsegm_unit_tests;
 
 if __name__ == "__main__":
     suite = unittest.TestSuite();
@@ -44,5 +45,7 @@ if __name__ == "__main__":
     suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_pcnn_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_som_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_sync_unit_tests));
+    suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_syncpr_unit_tests));
+    suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_syncsegm_unit_tests));
     
     unittest.TextTestRunner(verbosity = 2).run(suite);

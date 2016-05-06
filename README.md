@@ -24,7 +24,7 @@ E-Mail: pyclustering@yandex.ru
 
 ------------------------------------------------
 
-###Required following packages by pyclustering:###
+###Required packages:###
 
 - scipy, matplotlib, numpy, PIL
 
@@ -71,7 +71,7 @@ E-Mail: pyclustering@yandex.ru
 **Graph Coloring Algorithms (module pyclustering.gcolor):**
 - DSatur [Python]
 - Hysteresis [Python]
-- Sync [Python]
+- GColorSync [Python]
 
 **Segmentation Algorithms (module pyclustering.segment):**
 - SegmSync [Python, C++]

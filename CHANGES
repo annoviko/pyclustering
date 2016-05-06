@@ -37,7 +37,7 @@ GENERAL CHANGES (pyclustering):
 - Implemented feature to specify initial number of neighbors to calculate initial connectivity radius and increase percent of number of neighbors (or radius if total number of object is exceeded) on each step (pyclustering.cluster.hsyncnet).
   See: https://github.com/annoviko/pyclustering/issues/284
 
-- Implemented segmentation algorithm based on double-layer oscillatory network that is based on modified Kuramoto model for color/object image segmentation (pyclustering.segment.segmsync).
+- Implemented double-layer oscillatory network based on modified Kuramoto model for image segmentation (pyclustering.nnet.syncsegm).
   See: -
 
 - Added new examples and demos of usage algorithms.

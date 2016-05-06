@@ -1,6 +1,6 @@
 """!
 
-@brief Segmentation algorithm based on double-layer oscillatory network with phase oscillator.
+@brief Double-layer oscillatory network with phase oscillator for image segmentation.
 @details Implementation based on article:
          - A.Novikov, E.Benderskaya. Oscillatory Network Based on Kuramoto Model for Image Segmentation. 2015.
          
@@ -37,9 +37,9 @@ from pyclustering.nnet.sync import sync_visualizer;
 from pyclustering.utils import read_image;
 
 
-class segmsync_visualizer:
+class syncsegm_visualizer:
     """!
-    @brief Result visualizer of double-layer oscillatory network 'segmsync'.
+    @brief Result visualizer of double-layer oscillatory network 'syncsegm'.
     
     """
     
@@ -48,7 +48,7 @@ class segmsync_visualizer:
         """!
         @brief Shows output dynamic of the first layer.
         
-        @param[in] analyser (segmsync_analyser): Analyser of output dynamic of the 'segmsync' oscillatory network.
+        @param[in] analyser (syncsegm_analyser): Analyser of output dynamic of the 'syncsegm' oscillatory network.
         
         """
         
@@ -60,7 +60,7 @@ class segmsync_visualizer:
         """!
         @brief Shows output dynamic of the second layer.
         
-        @param[in] analyser (segmsync_analyser): Analyser of output dynamic of the 'segmsync' oscillatory network.
+        @param[in] analyser (syncsegm_analyser): Analyser of output dynamic of the 'syncsegm' oscillatory network.
         
         """
         
@@ -70,9 +70,9 @@ class segmsync_visualizer:
         sync_visualizer.show_output_dynamics(analysers_sequence);
 
 
-class segmsync_analyser:
+class syncsegm_analyser:
     """!
-    @brief Performs analysis of output dynamic of the double-layer oscillatory network 'segmsync' to extract information about segmentation results.
+    @brief Performs analysis of output dynamic of the double-layer oscillatory network 'syncsegm' to extract information about segmentation results.
     
     """
     
@@ -148,17 +148,17 @@ class segmsync_analyser:
         return real_segments;
 
 
-class segmsync:
+class syncsegm:
     """!
-    @brief Class represents segmentation algorithm SegmSync. 
-    @details SegmSync is a bio-inspired algorithm that is based on double-layer oscillatory network that uses modified Kuramoto model.
+    @brief Class represents segmentation algorithm syncsegm. 
+    @details syncsegm is a bio-inspired algorithm that is based on double-layer oscillatory network that uses modified Kuramoto model.
              Algorithm extracts colors and colored objects. It uses only CCORE (C++ implementation of pyclustering) parts to implement the algorithm.
     
     Example:
     @code
         # create oscillatory for image segmentaion - extract colors (radius 128) and objects (radius 4), 
         # and ignore noise (segments with size that is less than 10 pixels)
-        algorithm = segmsync(128, 4, 10);
+        algorithm = syncsegm(128, 4, 10);
         
         # extract segments (colors and objects)
         analyser = algorithm(path_to_file);
@@ -204,7 +204,7 @@ class segmsync:
         @param[in] order_color (double): Local synchronization order for the first layer - coloring segmentation.
         @param[in] order_object (double): Local synchronization order for the second layer - object segmentation.
         
-        @return (segmsync_analyser) Analyser of segmentation results by the network.
+        @return (syncsegm_analyser) Analyser of segmentation results by the network.
         
         """
         
@@ -215,10 +215,10 @@ class segmsync:
         color_analyser = self.__analyse_colors(data, collect_dynamic);
         
         if (self.__object_radius is None):
-            return segmsync_analyser(color_analyser, None);
+            return syncsegm_analyser(color_analyser, None);
     
         object_segment_analysers = self.__analyse_objects(image_source, color_analyser, collect_dynamic);
-        return segmsync_analyser(color_analyser, object_segment_analysers);
+        return syncsegm_analyser(color_analyser, object_segment_analysers);
     
     
     def __analyse_colors(self, image_source, collect_dynamic):
