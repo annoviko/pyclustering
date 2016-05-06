@@ -162,7 +162,6 @@
     <ClCompile Include="kdtree.cpp" />
     <ClCompile Include="kmedians.cpp" />
     <ClCompile Include="legion.cpp" />
-    <ClCompile Include="network.cpp" />
     <ClCompile Include="kmeans.cpp" />
     <ClCompile Include="pcnn.cpp" />
     <ClCompile Include="rock.cpp" />

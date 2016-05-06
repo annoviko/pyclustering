@@ -12,7 +12,6 @@
 #include "utest-kdtree.h"
 #include "utest-kmedians.h"
 #include "utest-legion.h"
-#include "utest-network.h"
 #include "utest-pcnn.h"
 #include "utest-som.h"
 #include "utest-sync.h"

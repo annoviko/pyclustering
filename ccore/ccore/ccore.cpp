@@ -275,7 +275,7 @@ clustering_result * xmeans_algorithm(const data_representation * const sample, c
 }
 
 void * sync_create_network(const unsigned int size, const double weight_factor, const double frequency_factor, const unsigned int connection_type, const unsigned int initial_phases) {
-	return (void *) new sync_network(size, weight_factor, frequency_factor, (conn_type) connection_type, (initial_type) initial_phases);
+	return (void *) new sync_network(size, weight_factor, frequency_factor, (connection_t) connection_type, (initial_type) initial_phases);
 }
 
 void sync_destroy_network(const void * pointer_network) {

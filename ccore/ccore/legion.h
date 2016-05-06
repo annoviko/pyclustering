@@ -4,6 +4,8 @@
 #include "adjacency.h"
 #include "adjacency_connector.h"
 #include "differential.h"
+#include "dynamic_data.h"
+#include "ensemble_data.h"
 #include "network.h"
 
 #include <vector>
@@ -143,7 +145,7 @@ public:
 public:
 	void simulate(const unsigned int steps, const double time, const solve_type solver, const bool collect_dynamic, const legion_stimulus & stimulus, legion_dynamic & output_dynamic);
 
-    inline size_t size(void) { return m_oscillators.size(); }
+    inline size_t size(void) const { return m_oscillators.size(); }
 
 
 private:

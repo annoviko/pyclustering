@@ -96,7 +96,6 @@
     <ClCompile Include="..\ccore\kdtree.cpp" />
     <ClCompile Include="..\ccore\kmedians.cpp" />
     <ClCompile Include="..\ccore\legion.cpp" />
-    <ClCompile Include="..\ccore\network.cpp" />
     <ClCompile Include="..\ccore\pcnn.cpp" />
     <ClCompile Include="..\ccore\som.cpp" />
     <ClCompile Include="..\ccore\support.cpp" />
@@ -148,7 +147,6 @@
     <ClInclude Include="utest-kdtree.h" />
     <ClInclude Include="utest-kmedians.h" />
     <ClInclude Include="utest-legion.h" />
-    <ClInclude Include="utest-network.h" />
     <ClInclude Include="utest-pcnn.h" />
     <ClInclude Include="utest-som.h" />
     <ClInclude Include="utest-sync.h" />

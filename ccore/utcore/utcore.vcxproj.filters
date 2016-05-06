@@ -27,9 +27,6 @@
     <ClCompile Include="..\ccore\kdtree.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\ccore\network.cpp">
-      <Filter>Resource Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\ccore\pcnn.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
@@ -109,9 +106,6 @@
     </ClInclude>
     <ClInclude Include="..\ccore\support.h">
       <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="utest-network.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\ccore\differential.h">
       <Filter>Resource Files</Filter>

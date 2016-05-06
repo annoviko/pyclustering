@@ -4,6 +4,8 @@
 #include "network.h"
 #include "adjacency.h"
 #include "adjacency_connector.h"
+#include "dynamic_data.h"
+#include "ensemble_data.h"
 
 #include <vector>
 
@@ -132,7 +134,7 @@ public:
 public:
 	void simulate(const unsigned int steps, const pcnn_stimulus & stimulus, pcnn_dynamic & output_dynamic);
 
-	inline size_t size(void) { return m_oscillators.size(); }
+	inline size_t size(void) const { return m_oscillators.size(); }
 
 
 private:

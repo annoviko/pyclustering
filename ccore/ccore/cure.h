@@ -209,7 +209,7 @@ public:
 
 	inline const_iterator end(void) const { return queue->end(); }
 
-	inline unsigned int size(void) { return queue->size(); }
+	inline size_t size(void) { return queue->size(); }
 };
 
 

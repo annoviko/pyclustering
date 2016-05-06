@@ -28,6 +28,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "sync.h"
 #include "support.h"
 #include "differential.h"
+#include "adjacency_connector.h"
+#include "adjacency_matrix.h"
+#include "adjacency_bit_matrix.h"
 
 #include <iostream>
 #include <cmath>
@@ -37,32 +40,44 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <chrono>
 
 
-sync_network::sync_network(const unsigned int size, const double weight_factor, const double frequency_factor, const conn_type connection_type, const initial_type initial_phases) :
-	network(size, connection_type),
-	m_oscillators(size, sync_oscillator())
-{
-    initialization(weight_factor, frequency_factor, initial_phases);
+const size_t sync_network::MAXIMUM_MATRIX_REPRESENTATION_SIZE = 4096;
+
+
+sync_network::sync_network(void) { }
+
+
+sync_network::sync_network(const size_t size, const double weight_factor, const double frequency_factor, const connection_t connection_type, const initial_type initial_phases) {
+    initialize(size, weight_factor, frequency_factor, connection_type, 0, 0, initial_phases);
 }
 
 
-sync_network::sync_network(const unsigned int size, 
-                           const double weight_factor, 
-                           const double frequency_factor, 
-                           const conn_type connection_type, 
-                           const size_t height,
-                           const size_t width,
-                           const initial_type initial_phases) :
-network(size, connection_type, height, width),
-m_oscillators(size, sync_oscillator())
-{
-    initialization(weight_factor, frequency_factor, initial_phases);
+sync_network::sync_network(const size_t size, const double weight_factor,  const double frequency_factor, const connection_t connection_type, const size_t height, const size_t width, const initial_type initial_phases) {
+    initialize(size, weight_factor, frequency_factor, connection_type, height, width, initial_phases);
 }
 
 
-sync_network::~sync_network() { }
+sync_network::~sync_network(void) { }
 
 
-void sync_network::initialization(const double weight_factor, const double frequency_factor, const initial_type initial_phases) {
+void sync_network::initialize(const size_t size, const double weight_factor, const double frequency_factor, const connection_t connection_type, const size_t height, const size_t width, const initial_type initial_phases) {
+    m_oscillators = std::vector<sync_oscillator>(size, sync_oscillator());
+    
+    if (size > MAXIMUM_MATRIX_REPRESENTATION_SIZE) {
+        m_connections = std::shared_ptr<adjacency_collection>(new adjacency_bit_matrix(size));
+    }
+    else {
+        m_connections = std::shared_ptr<adjacency_matrix>(new adjacency_matrix(size));
+    }
+
+    adjacency_connector<adjacency_collection> connector;
+
+    if ((height != 0) && (width != 0)) {
+        connector.create_grid_structure(connection_type, width, height, *m_connections);
+    }
+    else {
+        connector.create_structure(connection_type, *m_connections);
+    }
+
     weight = weight_factor;
 
     m_callback_solver = &sync_network::adapter_phase_kuramoto;
@@ -72,7 +87,7 @@ void sync_network::initialization(const double weight_factor, const double frequ
     std::uniform_real_distribution<double>	phase_distribution(0.0, 2.0 * pi());
     std::uniform_real_distribution<double>	frequency_distribution(0.0, 1.0);
 
-    for (unsigned int index = 0; index < size(); index++) {
+    for (unsigned int index = 0; index < size; index++) {
         sync_oscillator & oscillator_context = m_oscillators[index];
 
         switch (initial_phases) {
@@ -80,7 +95,7 @@ void sync_network::initialization(const double weight_factor, const double frequ
             oscillator_context.phase = phase_distribution(generator);
             break;
         case initial_type::EQUIPARTITION:
-            oscillator_context.phase = (pi() / size() * index);
+            oscillator_context.phase = (pi() / size * index);
             break;
         default:
             throw std::runtime_error("Unknown type of initialization");
@@ -113,7 +128,7 @@ double sync_network::sync_local_order() const {
 
 	for (unsigned int i = 0; i < size(); i++) {
         std::vector<size_t> neighbors;
-		get_neighbors(i, neighbors);
+        m_connections->get_neighbors(i, neighbors);
 
         for (std::vector<size_t>::const_iterator iter_index = neighbors.begin(); iter_index != neighbors.cend(); iter_index++) {
 			unsigned int index_neighbor = *(iter_index);
@@ -147,7 +162,7 @@ double sync_network::phase_kuramoto(const double t, const double teta, const std
 	double phase = 0.0;
 
     std::vector<size_t> neighbors;
-	get_neighbors(index, neighbors);
+    m_connections->get_neighbors(index, neighbors);
 
     for (std::vector<size_t>::const_iterator index_iterator = neighbors.cbegin(); index_iterator != neighbors.cend(); index_iterator++) {
 		unsigned int index_neighbor = (*index_iterator);

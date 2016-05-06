@@ -39,9 +39,6 @@
     <ClCompile Include="rock.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="network.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="syncnet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

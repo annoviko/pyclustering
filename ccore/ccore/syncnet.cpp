@@ -29,7 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 syncnet::syncnet(std::vector<std::vector<double> > * input_data, const double connectivity_radius, const bool enable_conn_weight, const initial_type initial_phases) :
-sync_network(input_data->size(), 1, 0, conn_type::DYNAMIC, initial_type::RANDOM_GAUSSIAN)
+sync_network(input_data->size(), 1, 0, connection_t::CONNECTION_NONE, initial_type::RANDOM_GAUSSIAN)
 {
     set_callback_solver(&syncnet::adapter_phase_kuramoto);
 
@@ -70,8 +70,8 @@ void syncnet::create_connections(const double connectivity_radius, const bool en
 			double distance = euclidean_distance_sqrt( &(*oscillator_locations)[i], &(*oscillator_locations)[j] );
 
 			if (distance <= sqrt_connectivity_radius) {
-				set_connection(j, i);
-				set_connection(i, j);
+				m_connections->set_connection(j, i);
+                m_connections->set_connection(i, j);
 			}
 
 			if (enable_conn_weight == true) {
@@ -118,7 +118,7 @@ double syncnet::phase_kuramoto(const double t, const double teta, const std::vec
 	/* Avoid a lot of checking of this condition in the loop */
 	if (distance_conn_weights != NULL) {
 		for (unsigned int k = 0; k < size(); k++) {
-			if (get_connection(index, k) > 0) {
+			if (m_connections->has_connection(index, k)) {
 				phase += (*distance_conn_weights)[index][k] * std::sin( m_oscillators[k].phase - teta );
 				num_neighbors++;
 			}
@@ -126,7 +126,7 @@ double syncnet::phase_kuramoto(const double t, const double teta, const std::vec
 	}
 	else {
 		for (unsigned int k = 0; k < size(); k++) {
-			if (get_connection(index, k) > 0) {
+			if (m_connections->has_connection(index, k)) {
 				phase += std::sin( m_oscillators[k].phase - teta );
 				num_neighbors++;
 			}
