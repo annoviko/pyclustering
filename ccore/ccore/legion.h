@@ -1,9 +1,10 @@
 #ifndef _LEGION_NETWORK_H_
 #define _LEGION_NETWORK_H_
 
-#include "network.h"
-#include "ccore.h"
+#include "adjacency.h"
+#include "adjacency_connector.h"
 #include "differential.h"
+#include "network.h"
 
 #include <vector>
 #include <random>
@@ -47,9 +48,6 @@ public:
 class legion_dynamic : public dynamic_data<legion_network_state> {
 public:
 	legion_dynamic(void) { }
-
-	/* TODO: implementation */
-	legion_dynamic(const unsigned int number_oscillators, const unsigned int simulation_steps) { }
 
 	~legion_dynamic(void) { }
 
@@ -101,13 +99,15 @@ typedef struct legion_oscillator {
 } legion_oscillator;
 
 
-class legion_network : public network {
+class legion_network {
 private:
 	std::vector<legion_oscillator> m_oscillators;
 
 	double m_global_inhibitor;
 
 	legion_parameters m_params;
+
+    std::shared_ptr<adjacency_collection> m_static_connections;
 
 	std::vector<std::vector<double> > m_dynamic_connections;
 
@@ -119,22 +119,32 @@ private:
 
 	std::uniform_real_distribution<double>	m_noise_distribution;
 
+
 private:
-	legion_network(void);
+    const static size_t MAXIMUM_MATRIX_REPRESENTATION_SIZE;
+
 
 public:
-	legion_network(const unsigned int num_osc, const conn_type connection_type, const legion_parameters & params);
+    legion_network(void);
 
-    legion_network(const unsigned int num_osc,
-        const conn_type connection_type,
+	legion_network(const size_t num_osc, 
+        const connection_t connection_type,
+        const legion_parameters & params);
+
+    legion_network(const size_t num_osc,
+        const connection_t connection_type,
         const size_t height,
         const size_t width,
         const legion_parameters & params);
 
 	virtual ~legion_network(void);
 
+
 public:
 	void simulate(const unsigned int steps, const double time, const solve_type solver, const bool collect_dynamic, const legion_stimulus & stimulus, legion_dynamic & output_dynamic);
+
+    inline size_t size(void) { return m_oscillators.size(); }
+
 
 private:
 	void create_dynamic_connections(const legion_stimulus & stimulus);
@@ -154,6 +164,12 @@ private:
 	static void adapter_neuron_simplify_states(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs);
 
 	void store_dynamic(const double time, const bool collect_dynamic, legion_dynamic & dynamic);
+
+    void initialize(const size_t num_osc,
+        const connection_t connection_type,
+        const size_t height,
+        const size_t width,
+        const legion_parameters & params);
 };
 
 #endif

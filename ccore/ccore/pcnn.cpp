@@ -12,16 +12,12 @@ const size_t pcnn::MAXIMUM_MATRIX_REPRESENTATION_SIZE = 4096;
 pcnn::pcnn(void) : m_oscillators(0), m_connection(nullptr), m_params() { }
 
 
-pcnn::pcnn(const size_t p_size, const connection_t p_structure, const pcnn_parameters & p_parameters) 
-	: m_oscillators(p_size, pcnn_oscillator())
-{
+pcnn::pcnn(const size_t p_size, const connection_t p_structure, const pcnn_parameters & p_parameters) {
 	initilize(p_size, p_structure, 0, 0, p_parameters);
 }
 
 
-pcnn::pcnn(const size_t p_size, const connection_t p_structure, const size_t p_height, const size_t p_width, const pcnn_parameters & p_parameters) 
-	: m_oscillators(p_size, pcnn_oscillator())
-{
+pcnn::pcnn(const size_t p_size, const connection_t p_structure, const size_t p_height, const size_t p_width, const pcnn_parameters & p_parameters) {
 	initilize(p_size, p_structure, p_height, p_width, p_parameters);
 }
 
@@ -151,7 +147,9 @@ void pcnn::store_dynamic(const unsigned int step, pcnn_dynamic & dynamic) {
 
 
 void pcnn::initilize(const size_t p_size, const connection_t p_structure, const size_t p_height, const size_t p_width, const pcnn_parameters & p_parameters) {
-	if (p_size > MAXIMUM_MATRIX_REPRESENTATION_SIZE) {
+    m_oscillators = std::vector<pcnn_oscillator>(p_size, pcnn_oscillator());
+    
+    if (p_size > MAXIMUM_MATRIX_REPRESENTATION_SIZE) {
 		m_connection = std::shared_ptr<adjacency_collection>(new adjacency_bit_matrix(p_size));
 	}
 	else {

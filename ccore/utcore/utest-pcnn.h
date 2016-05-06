@@ -2,7 +2,6 @@
 #define _UTEST_PCNN_
 
 #include "ccore/pcnn.h"
-#include "ccore/network.h"
 
 #include "gtest/gtest.h"
 

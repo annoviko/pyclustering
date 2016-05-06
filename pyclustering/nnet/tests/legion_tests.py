@@ -49,7 +49,7 @@ class Test(unittest.TestCase):
         net = legion_network(1, type_conn = conn_type.NONE, parameters = params);
         dynamic = net.simulate(1000, 200, [1]);
          
-        assert extract_number_oscillations(dynamic.output) > 1;      
+        assert extract_number_oscillations(dynamic.output) > 1;
  
  
     def testStimulatedOscillatorWithLateralPotential(self):
@@ -72,7 +72,16 @@ class Test(unittest.TestCase):
         dynamic = net.simulate(1000, 2000, [1, 0, 1]);
          
         assert extract_number_oscillations(dynamic.output, 0) > 1; 
-        assert extract_number_oscillations(dynamic.output, 2) > 1;       
+        assert extract_number_oscillations(dynamic.output, 2) > 1;
+    
+    
+    def testMixStimulatedThreeOscillatorsByCore(self):
+        net = legion_network(3, type_conn = conn_type.LIST_BIDIR, ccore = True);
+        dynamic = net.simulate(1000, 2000, [1, 0, 1]);
+         
+        assert extract_number_oscillations(dynamic.output, 0) > 1; 
+        assert extract_number_oscillations(dynamic.output, 2) > 1;
+ 
  
     def testListConnectionRepresentation(self):
         net = legion_network(3, type_conn = conn_type.LIST_BIDIR, type_conn_represent = conn_represent.LIST);
@@ -83,8 +92,8 @@ class Test(unittest.TestCase):
          
          
     # Tests regarded to various structures that can be used.
-    def templateOscillationsWithStructures(self, type_conn):
-        net = legion_network(4, type_conn = conn_type.LIST_BIDIR);
+    def templateOscillationsWithStructures(self, type_conn, ccore_flag = False):
+        net = legion_network(4, type_conn = conn_type.LIST_BIDIR, ccore = ccore_flag);
         dynamic = net.simulate(500, 1000, [1, 1, 1, 1]);
          
         for i in range(len(net)):
@@ -93,23 +102,42 @@ class Test(unittest.TestCase):
  
     def testStimulatedOscillatorListStructure(self):
         self.templateOscillationsWithStructures(conn_type.LIST_BIDIR);
- 
+
+
     def testStimulatedOscillatorGridFourStructure(self):
         self.templateOscillationsWithStructures(conn_type.GRID_FOUR);
-         
+
+
     def testStimulatedOscillatorGridEightStructure(self):
         self.templateOscillationsWithStructures(conn_type.GRID_EIGHT);
- 
+
+
     def testStimulatedOscillatorAllToAllStructure(self):
         self.templateOscillationsWithStructures(conn_type.ALL_TO_ALL);
-    
-    
+
+
+    def testStimulatedOscillatorListStructureByCore(self):
+        self.templateOscillationsWithStructures(conn_type.LIST_BIDIR, True);
+
+
+    def testStimulatedOscillatorGridFourStructureByCore(self):
+        self.templateOscillationsWithStructures(conn_type.GRID_FOUR, True);
+
+
+    def testStimulatedOscillatorGridEightStructureByCore(self):
+        self.templateOscillationsWithStructures(conn_type.GRID_EIGHT, True);
+
+
+    def testStimulatedOscillatorAllToAllStructureByCore(self):
+        self.templateOscillationsWithStructures(conn_type.ALL_TO_ALL, True);
+
+
     # Tests regarded to synchronous ensembles allocation.
-    def templateSyncEnsembleAllocation(self, stimulus, params, type_conn, sim_steps, sim_time, expected_clusters):
+    def templateSyncEnsembleAllocation(self, stimulus, params, type_conn, sim_steps, sim_time, expected_clusters, ccore_flag = False):
         result_testing = False;
         
-        for attempt in range(0, 3, 1):
-            net = legion_network(len(stimulus), params, type_conn);
+        for _ in range(0, 3, 1):
+            net = legion_network(len(stimulus), params, type_conn, ccore = ccore_flag);
             dynamic = net.simulate(sim_steps, sim_time, stimulus);
             
             ensembles = dynamic.allocate_sync_ensembles(0.1);
@@ -121,20 +149,37 @@ class Test(unittest.TestCase):
         
         assert result_testing;
 
+
     def testSyncEnsembleAllocationOneStimulatedOscillator(self):
         params = legion_parameters();
         params.teta = 0; # due to no neighbors
-        
         self.templateSyncEnsembleAllocation([1], params, conn_type.NONE, 2000, 500, [[0]]);
+
+
+    def testSyncEnsembleAllocationOneStimulatedOscillatorByCore(self):
+        params = legion_parameters();
+        params.teta = 0; # due to no neighbors
+        self.templateSyncEnsembleAllocation([1], params, conn_type.NONE, 2000, 500, [[0]], True);
+
 
     def testSyncEnsembleAllocationThreeStimulatedOscillators(self):
         self.templateSyncEnsembleAllocation([1, 1, 1], None, conn_type.LIST_BIDIR, 1500, 1500, [[0, 1, 2]]);
 
+
+    def testSyncEnsembleAllocationThreeStimulatedOscillatorsByCore(self):
+        self.templateSyncEnsembleAllocation([1, 1, 1], None, conn_type.LIST_BIDIR, 1500, 1500, [[0, 1, 2]], True);
+
+
     def testSyncEnsembleAllocationThreeMixStimulatedOscillators(self):
         parameters = legion_parameters();
         parameters.Wt = 4.0;
-        
         self.templateSyncEnsembleAllocation([1, 0, 1], None, conn_type.LIST_BIDIR, 1500, 1500, [[0, 2], [1]]);
+
+
+    def testSyncEnsembleAllocationThreeMixStimulatedOscillatorsByCore(self):
+        parameters = legion_parameters();
+        parameters.Wt = 4.0;
+        self.templateSyncEnsembleAllocation([1, 0, 1], None, conn_type.LIST_BIDIR, 1500, 1500, [[0, 2], [1]], True);
 
 
 if __name__ == "__main__":

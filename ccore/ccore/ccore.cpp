@@ -800,7 +800,7 @@ unsigned int pcnn_dynamic_get_size(const void * pointer) {
 
 
 void * legion_create(const unsigned int size, const unsigned int connection_type, const void * const parameters) {
-	legion_network * pcnn_network = new legion_network(size, (conn_type) connection_type, *((legion_parameters *) parameters));
+	legion_network * pcnn_network = new legion_network(size, (connection_t) connection_type, *((legion_parameters *) parameters));
 	return (void *) pcnn_network;
 }
 

@@ -1,41 +1,30 @@
 #include "legion.h"
 #include "support.h"
+#include "adjacency_connector.h"
+#include "adjacency_matrix.h"
+#include "adjacency_bit_matrix.h"
 
-legion_network::legion_network(void) : m_stimulus(NULL), network(0, conn_type::NONE) { }
 
-legion_network::legion_network(const unsigned int num_osc, const conn_type connection_type, const legion_parameters & params) :
-	m_oscillators(num_osc, legion_oscillator()),
-	m_dynamic_connections(num_osc, std::vector<double>(num_osc, 0.0)),
-	m_stimulus(NULL),
-	m_generator(m_device()),
-	m_noise_distribution(0.0, params.ro),
-	network(num_osc, connection_type) {
+const size_t legion_network::MAXIMUM_MATRIX_REPRESENTATION_SIZE = 4096;
 
-	m_params = params;
 
-	for (size_t index = 0; index < m_oscillators.size(); index++) {
-		m_oscillators[index].m_noise = m_noise_distribution(m_generator);
-	}
+legion_network::legion_network(void) : m_stimulus(nullptr) { }
+
+
+legion_network::legion_network(const size_t num_osc, const connection_t connection_type, const legion_parameters & params) {
+    initialize(num_osc, connection_type, 0, 0, params);
 }
 
-legion_network::legion_network(const unsigned int num_osc, const conn_type connection_type, const size_t height, const size_t width, const legion_parameters & params) :
-m_oscillators(num_osc, legion_oscillator()),
-m_dynamic_connections(num_osc, std::vector<double>(num_osc, 0.0)),
-m_stimulus(NULL),
-m_generator(m_device()),
-m_noise_distribution(0.0, params.ro),
-network(num_osc, connection_type, height, width) {
 
-    m_params = params;
-
-    for (size_t index = 0; index < m_oscillators.size(); index++) {
-        m_oscillators[index].m_noise = m_noise_distribution(m_generator);
-    }
+legion_network::legion_network(const size_t num_osc, const connection_t connection_type, const size_t height, const size_t width, const legion_parameters & params) {
+    initialize(num_osc, connection_type, height, width, params);
 }
+
 
 legion_network::~legion_network() {
-	m_stimulus = NULL;
+	m_stimulus = nullptr;
 }
+
 
 void legion_network::simulate(const unsigned int steps, 
                               const double time, 
@@ -67,7 +56,7 @@ void legion_network::create_dynamic_connections(const legion_stimulus & stimulus
 		std::fill(m_dynamic_connections[i].begin(), m_dynamic_connections[i].end(), 0.0);
 
 		std::vector<size_t> neighbors;
-		get_neighbors(i, neighbors);
+		m_static_connections->get_neighbors(i, neighbors);
 
 		if (neighbors.size() > 0 && stimulus[i] > 0) {
 			int number_stimulated_neighbors = 0;
@@ -156,7 +145,7 @@ void legion_network::calculate_states(const legion_stimulus & stimulus, const so
 		}
 
         std::vector<size_t> neighbors;
-		get_neighbors(index, neighbors);
+        m_static_connections->get_neighbors(index, neighbors);
 
 		double coupling = 0.0;
 
@@ -230,7 +219,7 @@ void legion_network::neuron_states(const double t, const differ_state<double> & 
 	double dy = m_params.eps * (m_params.gamma * (1.0 + std::tanh(x / m_params.betta)) - y);
 
     std::vector<size_t> neighbors;
-	get_neighbors(index, neighbors);
+    m_static_connections->get_neighbors(index, neighbors);
 
 	double potential = 0.0;
 
@@ -282,4 +271,35 @@ void legion_network::inhibitor_state(const double t, const differ_state<double> 
 
 	outputs.clear();
 	outputs.push_back(dz);
+}
+
+
+void legion_network::initialize(const size_t num_osc, const connection_t connection_type, const size_t height, const size_t width, const legion_parameters & params) {
+    m_oscillators = std::vector<legion_oscillator>(num_osc, legion_oscillator());
+    m_dynamic_connections = std::vector<std::vector<double> >(num_osc, std::vector<double>(num_osc, 0.0)),
+    m_stimulus = nullptr;
+    m_generator = std::default_random_engine(m_device());
+    m_noise_distribution = std::uniform_real_distribution<double>(0.0, params.ro);
+
+    m_params = params;
+
+    for (size_t index = 0; index < m_oscillators.size(); index++) {
+        m_oscillators[index].m_noise = m_noise_distribution(m_generator);
+    }
+
+    if (num_osc > MAXIMUM_MATRIX_REPRESENTATION_SIZE) {
+        m_static_connections = std::shared_ptr<adjacency_collection>(new adjacency_bit_matrix(num_osc));
+    }
+    else {
+        m_static_connections = std::shared_ptr<adjacency_matrix>(new adjacency_matrix(num_osc));
+    }
+
+    adjacency_connector<adjacency_collection> connector;
+
+    if ((height != 0) && (width != 0)) {
+        connector.create_grid_structure(connection_type, width, height, *m_static_connections);
+    }
+    else {
+        connector.create_structure(connection_type, *m_static_connections);
+    }
 }
