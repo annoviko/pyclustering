@@ -41,7 +41,6 @@ def full_setup():
           keywords = 'pyclustering data mining cluster analysis neural oscillatory networks',
           author = 'Andrei Novikov',
           author_email = 'pyclustering@yandex.ru',
-          install_requires = ['pyclustering'],
           packages = find_packages(),
           package_data = {
                             'pyclustering.samples': ['samples/*.txt', 'graphs/*.grpr', 'images/*.png', 'images/digits/*.png'],
