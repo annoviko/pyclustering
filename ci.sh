@@ -33,6 +33,8 @@ run_utcore_job() {
 	fi
 
 	make utrun
+
+	coveralls --exclude lib --exclude utcore --gcov-options '\-lp'
 }
 
 

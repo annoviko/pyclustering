@@ -40,7 +40,7 @@ GENERAL CHANGES (pyclustering):
 - Implemented double-layer oscillatory network based on modified Kuramoto model for image segmentation (pyclustering.nnet.syncsegm).
   See: -
 
-- Added new examples and demos of usage algorithms.
+- Added new examples and demos.
   See: -
 
 
