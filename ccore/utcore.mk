@@ -6,8 +6,8 @@ CC = g++
 LD = g++
 
 # Toolchain arguments
-CFLAGS = -O3 -MMD -MP -std=c++1y -fPIC -fprofile-arcs -ftest-coverage -c
-LFLAGS = -O3 -pthread -fprofile-arcs -ftest-coverage
+CFLAGS = -O3 -MMD -MP -std=c++1y -fPIC -c
+LFLAGS = -O3 -pthread
 
 
 # Project sources
