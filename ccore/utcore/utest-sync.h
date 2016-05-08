@@ -5,6 +5,8 @@
 
 #include "gtest/gtest.h"
 
+#include <cmath>
+
 static void template_create_delete(const connection_t type, const initial_type initial) {
 	sync_network * network = new sync_network(25, 1, 1, type, initial);
 
@@ -185,5 +187,41 @@ TEST(utest_sync, dynamic_around_zero) {
 
     ASSERT_EQ(1, ensembles.size());
 }
+
+
+static void template_correlation_matrix(const sync_network_state p_state) {
+    sync_dynamic output_dynamic;
+    output_dynamic.push_back(p_state);
+
+    sync_corr_matrix corr_matrix;
+    output_dynamic.allocate_correlation_matrix(corr_matrix);
+
+    ASSERT_EQ(p_state.size(), corr_matrix.size());
+    ASSERT_EQ(p_state.size(), corr_matrix[0].size());
+
+    for (size_t i = 0; i < p_state.size(); i++) {
+        for (size_t j = 0; j < p_state.size(); j++) {
+            double expected_value = std::sin(std::abs((double) p_state.m_phase[i] - p_state.m_phase[j]));
+            ASSERT_NEAR(expected_value, corr_matrix[i][j], 0.00001);
+        }
+    }
+}
+
+TEST(utest_sync, correlation_matrix_similar) {
+    template_correlation_matrix(sync_network_state(0, {0.0, 0.0, 0.0}));
+}
+
+TEST(utest_sync, correlation_matrix_not_similar_1) {
+    template_correlation_matrix(sync_network_state(0, {1.0, 2.0, 3.0}));
+}
+
+TEST(utest_sync, correlation_matrix_not_similar_2) {
+    template_correlation_matrix(sync_network_state(0, {1.0, 2.0, 3.0, 4.0, 5.0, 6.0}));
+}
+
+TEST(utest_sync, correlation_matrix_one_oscillator) {
+    template_correlation_matrix(sync_network_state(0, {1.0}));
+}
+
 
 #endif

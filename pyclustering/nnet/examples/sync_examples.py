@@ -34,7 +34,7 @@ def template_dynamic_sync(num_osc, k = 1, sim_arg = None, conn = conn_type.ALL_T
         sync_output_dynamic = network.simulate(sim_arg[0], sim_arg[1], solution = type_solution, collect_dynamic = collect_dyn);
     else:
         sync_output_dynamic = network.simulate_dynamic(collect_dynamic = collect_dyn, solution = type_solution);
-    
+
     sync_visualizer.show_output_dynamic(sync_output_dynamic);
     sync_visualizer.animate_output_dynamic(sync_output_dynamic);
     sync_visualizer.animate_correlation_matrix(sync_output_dynamic);
@@ -59,7 +59,7 @@ def grid_four_struct_dynamic_sync():
 # Negative connections        
 def negative_connection_5_oscillators():
     template_dynamic_sync(5, -1); 
-    template_dynamic_sync(5, -1, ccore_flag = True);    
+    template_dynamic_sync(5, -1, ccore_flag = True);
     
 def negative_connection_10_oscillators():
     "Comment: It is not full desynchronization"
@@ -67,12 +67,12 @@ def negative_connection_10_oscillators():
     
 def negative_connection_9_grid_struct():
     "Comment: Right coloring"
-    network = template_dynamic_sync(9, -2, conn = conn_type.GRID_FOUR);
+    _ = template_dynamic_sync(9, -2, conn = conn_type.GRID_FOUR);
     
     
 def negative_connection_16_grid_struct():
     "Comment: Wrong coloring"
-    network = template_dynamic_sync(16, -3, conn = conn_type.GRID_FOUR);
+    _ = template_dynamic_sync(16, -3, conn = conn_type.GRID_FOUR);
     
 
 # Examples of global synchronization.

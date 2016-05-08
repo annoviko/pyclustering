@@ -43,9 +43,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 const size_t sync_network::MAXIMUM_MATRIX_REPRESENTATION_SIZE = 4096;
 
 
-sync_network::sync_network(void) { }
-
-
 sync_network::sync_network(const size_t size, const double weight_factor, const double frequency_factor, const connection_t connection_type, const initial_type initial_phases) {
     initialize(size, weight_factor, frequency_factor, connection_type, 0, 0, initial_phases);
 }
@@ -298,51 +295,80 @@ double sync_network::phase_normalization(const double teta) const {
 }
 
 
+sync_dynamic::~sync_dynamic(void) { }
+
+
 void sync_dynamic::allocate_sync_ensembles(const double tolerance, ensemble_data<sync_ensemble> & ensembles) const {
-	ensembles.clear();
+    ensembles.clear();
 
-	if (size() > 0) {
-		/* push back the first object to the first cluster */
-		ensembles.push_back(sync_ensemble());
-		ensembles[0].push_back(0);
+    if (size() == 0) {
+        return;
+    }
 
-		sync_dynamic::const_iterator last_state_dynamic = cend() - 1;
+    /* push back the first object to the first cluster */
+    ensembles.push_back(sync_ensemble());
+    ensembles[0].push_back(0);
 
-		for (unsigned int i = 1; i < number_oscillators(); i++) {
-			bool cluster_allocated = false;
-			ensemble_data<sync_ensemble>::iterator last_sync_ensemble_element = ensembles.end();
+    sync_dynamic::const_iterator last_state_dynamic = cend() - 1;
 
-			for (ensemble_data<sync_ensemble>::iterator cluster = ensembles.begin(); cluster != last_sync_ensemble_element; cluster++) {
-				sync_ensemble::const_iterator last_cluster_element = (*cluster).cend();
+    for (unsigned int i = 1; i < number_oscillators(); i++) {
+        bool cluster_allocated = false;
+        ensemble_data<sync_ensemble>::iterator last_sync_ensemble_element = ensembles.end();
 
-				for (sync_ensemble::const_iterator iter_neuron_index = (*cluster).cbegin(); iter_neuron_index != last_cluster_element; iter_neuron_index++) {
-					unsigned int index = (*iter_neuron_index);
+        for (ensemble_data<sync_ensemble>::iterator cluster = ensembles.begin(); cluster != last_sync_ensemble_element; cluster++) {
+            sync_ensemble::const_iterator last_cluster_element = (*cluster).cend();
 
-                    double phase_first = (*last_state_dynamic).m_phase[i];
-                    double phase_second = (*last_state_dynamic).m_phase[index];
+            for (sync_ensemble::const_iterator iter_neuron_index = (*cluster).cbegin(); iter_neuron_index != last_cluster_element; iter_neuron_index++) {
+                unsigned int index = (*iter_neuron_index);
 
-                    double phase_shifted = std::abs((*last_state_dynamic).m_phase[i] - 2 * pi());
+                double phase_first = (*last_state_dynamic).m_phase[i];
+                double phase_second = (*last_state_dynamic).m_phase[index];
 
-					if ( ( (phase_first < (phase_second + tolerance)) && (phase_first > (phase_second - tolerance)) ) || 
-                         ( (phase_shifted < (phase_second + tolerance)) && (phase_shifted > (phase_second - tolerance)) ) ) {
+                double phase_shifted = std::abs((*last_state_dynamic).m_phase[i] - 2 * pi());
 
-						cluster_allocated = true;
-						(*cluster).push_back(i);
+                if ( ( (phase_first < (phase_second + tolerance)) && (phase_first > (phase_second - tolerance)) ) ||
+                     ( (phase_shifted < (phase_second + tolerance)) && (phase_shifted > (phase_second - tolerance)) ) ) {
 
-						break;
-					}
-				}
+                    cluster_allocated = true;
+                    (*cluster).push_back(i);
 
-				if (cluster_allocated == true) {
-					break;
-				}
-			}
+                    break;
+                }
+            }
 
-			if (cluster_allocated == false) {
-				sync_ensemble allocated_cluster;
-				allocated_cluster.push_back(i);
-				ensembles.push_back(allocated_cluster);
-			}
-		}
-	}
+            if (cluster_allocated == true) {
+                break;
+            }
+        }
+
+        if (cluster_allocated == false) {
+            sync_ensemble allocated_cluster;
+            allocated_cluster.push_back(i);
+            ensembles.push_back(allocated_cluster);
+        }
+    }
+}
+
+
+void sync_dynamic::allocate_correlation_matrix(sync_corr_matrix & p_matrix) const {
+    allocate_correlation_matrix(size() - 1, p_matrix);
+}
+
+
+void sync_dynamic::allocate_correlation_matrix(const size_t p_iteration, sync_corr_matrix & p_matrix) const {
+    if ( (size() == 0) || (p_iteration >= size()) ) {
+        return;
+    }
+
+    p_matrix.resize(number_oscillators(), sync_corr_row(number_oscillators(), 0.0));
+
+    for (size_t i = 0; i < number_oscillators(); i++) {
+        for (size_t j = i + 1; j < number_oscillators(); j++) {
+            const double phase1 = dynamic_at(p_iteration).m_phase[i];
+            const double phase2 = dynamic_at(p_iteration).m_phase[j];
+
+            p_matrix[i][j] = std::sin(std::abs(phase1 - phase2));
+            p_matrix[j][i] = p_matrix[i][j];
+        }
+    }
 }

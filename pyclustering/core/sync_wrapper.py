@@ -81,6 +81,20 @@ def sync_dynamic_allocate_sync_ensembles(pointer_dynamic, tolerance):
     return result;
 
 
+def sync_dynamic_allocate_correlation_matrix(pointer_dynamic, iteration):
+    analyse_iteration = iteration;
+    if (analyse_iteration is None):
+        analyse_iteration = sync_dynamic_get_size(pointer_dynamic) - 1;
+    
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
+    package = ccore.sync_dynamic_allocate_correlation_matrix(pointer_dynamic, c_uint(analyse_iteration));
+    
+    result = extract_pyclustering_package(package);
+    ccore.free_pyclustering_package(package);
+    
+    return result;
+
+
 def sync_dynamic_get_output(pointer_dynamic):
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     package = ccore.sync_dynamic_get_output(pointer_dynamic);

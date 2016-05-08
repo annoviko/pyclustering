@@ -37,6 +37,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "network.h"
 
 #include <vector>
+#include <memory>
 
 using namespace differential;
 
@@ -50,8 +51,14 @@ typedef struct sync_oscillator {
 } sync_oscillator;
 
 
-typedef std::vector<unsigned int>		sync_ensemble;
+typedef std::vector<unsigned int>   sync_ensemble;
+
+
 typedef void (*sync_callback_solver)(const double, const differ_state<double> &, const differ_extra<void *> &, differ_state<double> &);
+
+
+typedef std::vector<double>           sync_corr_row;
+typedef std::vector<sync_corr_row>    sync_corr_matrix;
 
 
 typedef struct sync_network_state {
@@ -81,24 +88,52 @@ public:
 } sync_network_state;
 
 
+/***********************************************************************************************
+ *
+ * @brief   Output dynamic of the oscillatory network 'sync' based on Kuramoto model.
+ *
+ ***********************************************************************************************/
 class sync_dynamic : public dynamic_data<sync_network_state> {
 public:
-	sync_dynamic(void) { }
-
-	virtual ~sync_dynamic(void) { }
+    /***********************************************************************************************
+     *
+     * @brief   Default destructor.
+     *
+     ***********************************************************************************************/
+	virtual ~sync_dynamic(void);
 
 public:
-	/***********************************************************************************************
-	 *
-	 * @brief Allocate clusters in line with ensembles of synchronous oscillators where each
-	 *        synchronous ensemble corresponds to only one cluster.
-	 *
-	 * @param[in]  tolerance: maximum error for allocation of synchronous ensemble oscillators.
-	 * @param[out] ensembles: synchronous ensembles of oscillators where each ensemble consists of
-	 *                        indexes of oscillators that are synchronous to each other.
-	 *
-	 ***********************************************************************************************/
-	void allocate_sync_ensembles(const double tolerance, ensemble_data<sync_ensemble> & ensembles) const;
+    /***********************************************************************************************
+     *
+     * @brief Allocate clusters in line with ensembles of synchronous oscillators where each
+     *        synchronous ensemble corresponds to only one cluster.
+     *
+     * @param[in]  tolerance: maximum error for allocation of synchronous ensemble oscillators.
+     * @param[out] ensembles: synchronous ensembles of oscillators where each ensemble consists of
+     *                        indexes of oscillators that are synchronous to each other.
+     *
+     ***********************************************************************************************/
+    void allocate_sync_ensembles(const double tolerance, ensemble_data<sync_ensemble> & ensembles) const;
+
+    /***********************************************************************************************
+     *
+     * @brief Allocate correlation matrix between oscillators at the last step of simulation.
+     *
+     * @param[out] p_matrix: correlation matrix between oscillators on specified iteration.
+     *
+     ***********************************************************************************************/
+    void allocate_correlation_matrix(sync_corr_matrix & p_matrix) const;
+
+    /***********************************************************************************************
+     *
+     * @brief Allocate correlation matrix between oscillators at the specified step of simulation.
+     *
+     * @param[in]  p_iteration: Number of iteration of simulation for which correlation matrix should
+     *              be allocated.
+     * @param[out] p_matrix: correlation matrix between oscillators on specified iteration.
+     *
+     ***********************************************************************************************/
+    void allocate_correlation_matrix(const size_t p_iteration, sync_corr_matrix & p_matrix) const;
 };
 
 
@@ -124,13 +159,6 @@ private:
     const static size_t MAXIMUM_MATRIX_REPRESENTATION_SIZE;
 
 public:
-    /***********************************************************************************************
-    *
-    * @brief   Default constructor.
-    *
-    ***********************************************************************************************/
-    sync_network(void);
-
     /***********************************************************************************************
      *
      * @brief   Contructor of the oscillatory network SYNC based on Kuramoto model.

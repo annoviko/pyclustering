@@ -99,13 +99,21 @@ public:
     }
 
     inline bool empty(void) const { return m_dynamic->empty(); }
+
+    /***********************************************************************************************
+    *
+    * @brief   Returns amount of iteration of stored dynamic (dynamic length).
+    *
+    ***********************************************************************************************/
     inline size_t size(void) const { return m_dynamic->size(); }
+
+    /***********************************************************************************************
+    *
+    * @brief   Returns number of oscillators that present dynamic.
+    *
+    ***********************************************************************************************/
     inline size_t number_oscillators(void) const { return m_number_oscillators; }
 
-    inline value_type & operator[](size_t index) { return (*m_dynamic)[index]; };
-    inline const value_type & operator[](size_t index) const { return (*m_dynamic)[index]; };
-
-public:
     /***********************************************************************************************
     *
     * @brief   Returns dynamic state of the network at the specified iteration step.
@@ -118,6 +126,11 @@ public:
     inline const value_type & dynamic_at(const size_t iteration) const {
         return (*m_dynamic)[iteration];
     }
+
+public:
+    inline value_type & operator[](size_t index) { return (*m_dynamic)[index]; };
+
+    inline const value_type & operator[](size_t index) const { return (*m_dynamic)[index]; };
 
 private:
     output_dynamic * m_dynamic;

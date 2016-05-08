@@ -334,6 +334,23 @@ pyclustering_package * sync_dynamic_allocate_sync_ensembles(const void * pointer
 	return package;
 }
 
+
+pyclustering_package * sync_dynamic_allocate_correlation_matrix(const void * pointer_dynamic, const unsigned int iteration) {
+    sync_corr_matrix matrix;
+    ((sync_dynamic *) pointer_dynamic)->allocate_correlation_matrix(iteration, matrix);
+
+    pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
+    package->size = matrix.size();
+    package->data = new pyclustering_package * [package->size];
+
+    for (unsigned int i = 0; i < package->size; i++) {
+        ((pyclustering_package **) package->data)[i] = create_package(&matrix[i]);
+    }
+
+    return package;
+}
+
+
 pyclustering_package * sync_dynamic_get_time(const void * pointer) {
 	sync_dynamic & dynamic = *((sync_dynamic *) pointer);
 

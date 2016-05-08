@@ -320,6 +320,8 @@ extern "C" DECLARATION void sync_dynamic_destroy(const void * pointer);
  ***********************************************************************************************/
 extern "C" DECLARATION pyclustering_package * sync_dynamic_allocate_sync_ensembles(const void * pointer_dynamic, const double tolerance);
 
+extern "C" DECLARATION pyclustering_package * sync_dynamic_allocate_correlation_matrix(const void * pointer_dynamic, const unsigned int iteration);
+
 extern "C" DECLARATION pyclustering_package * sync_dynamic_get_time(const void * pointer);
 
 extern "C" DECLARATION pyclustering_package * sync_dynamic_get_output(const void * pointer);

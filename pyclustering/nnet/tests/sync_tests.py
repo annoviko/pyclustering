@@ -25,6 +25,10 @@
 
 import unittest;
 
+# Generate images without having a window appear.
+import matplotlib;
+matplotlib.use('Agg');
+
 from pyclustering.nnet import *;
 from pyclustering.nnet.sync import sync_network, sync_dynamic, sync_visualizer;
 
@@ -259,6 +263,22 @@ class Test(unittest.TestCase):
         
         matrix = output_dynamic.allocate_correlation_matrix();
         assert matrix == [];
+    
+    
+    def templateVisualizerNoFailures(self, size, velocity, ccore_flag):
+        net = sync_network(size, ccore = ccore_flag);
+        output_dynamic = net.simulate_dynamic(solution = solve_type.FAST, collect_dynamic = True);
+        
+        sync_visualizer.animate_correlation_matrix(output_dynamic, velocity);
+        sync_visualizer.animate_output_dynamic(output_dynamic, velocity);
+        sync_visualizer.show_correlation_matrix(output_dynamic);
+        sync_visualizer.show_output_dynamic(output_dynamic);
+    
+    def testVisualizerNoFailures(self):
+        self.templateVisualizerNoFailures(5, 10, False);
+
+    def testVisualizerNoFailuresByCore(self):
+        self.templateVisualizerNoFailures(5, 10, True);
 
 
 if __name__ == "__main__":

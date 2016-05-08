@@ -194,6 +194,9 @@ class sync_dynamic:
         
         """
         
+        if (self._ccore_sync_dynamic_pointer is not None):
+            return wrapper.sync_dynamic_allocate_correlation_matrix(self._ccore_sync_dynamic_pointer, iteration);
+        
         if ( (self._dynamic is None) or (len(self._dynamic) == 0) ):
             return [];
         
@@ -211,7 +214,7 @@ class sync_dynamic:
                 phase1 = current_dynamic[i];
                 phase2 = current_dynamic[j];
                 
-                affinity_matrix[i][j] = math.sin(phase1 - phase2);
+                affinity_matrix[i][j] = math.sin(abs(phase1 - phase2));
                 
         return affinity_matrix;
 
@@ -334,7 +337,7 @@ class sync_visualizer:
         
         def init_frame(): 
             artist = plt.imshow(correlation_matrix, cmap = plt.get_cmap('cool'), interpolation='kaiser', hold = True);
-            return [ artist ];   
+            return [ artist ];
         
         def frame_generation(index_dynamic):
             correlation_matrix = sync_output_dynamic.allocate_correlation_matrix(index_dynamic);
