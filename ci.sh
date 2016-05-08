@@ -1,35 +1,45 @@
 #!/bin/bash
 
+
 run_ccore_job() {
-	echo "CI Job (travis CI): CCORE (C++ code library compilation)"
+	echo "[CI Job] CCORE (C++ code building):"
+	echo "- Build CCORE library."
 	
 	cd ccore/
 	make ccore
 	
 	if [ $? -eq 0 ] ; then
-		echo "ccore library creation... success"
+		echo "Building CCORE library: SUCCESS."
 	else
-		echo "ccore library creation... fail"
+		echo "Building CCORE library: FAILURE."
 		exit 1
 	fi
 }
 
+
 run_utcore_job() {
-	echo "CI Job (travis CI): UT CORE (C++ code unit-testing)"
+	echo "[CI Job] UT CORE (C++ code unit-testing):"
+	echo "- Build C++ unit-test project for CCORE library."
+	echo "- Run CCORE library unit-tests."
 	
 	cd ccore/
 	make utcore
-	
+
 	if [ $? -eq 0 ] ; then
-		echo "ccore library creation... success"
+		echo "Building of CCORE unit-test project: SUCCESS."
 	else
-		echo "ccore library creation... fail"
+		echo "Building of CCORE unit-test project: FAILURE."
 		exit 1
 	fi
+
+	make utrun
 }
 
+
 run_python_job() {
-	echo "CI Job (travis CI): PYCLUSTERING (Python code unit-testing)"
+	echo "[CI Job]: PYCLUSTERING (Python code unit-testing):"
+	echo "- Run unit-tests of pyclustering."
+	echo "- Measure code coverage."
 
 	PYTHONPATH=`pwd`
 	export PYTHONPATH=${PYTHONPATH}
@@ -37,6 +47,7 @@ run_python_job() {
 	coverage run --source=pyclustering --omit='pyclustering/*/tests/*,pyclustering/*/examples/*,pyclustering/ut/*' pyclustering/ut/__init__.py
 	coveralls
 }
+
 
 set -e
 set -x
@@ -52,6 +63,6 @@ case $PYCLUSTERING_TARGET in
 		run_python_job ;;
 		
 	*)
-		echo "CI Job (travis CI): Unknown target $PYCLUSTERING_TARGET"
+		echo "[CI Job] Unknown target $PYCLUSTERING_TARGET"
 		exit 1 ;;
 esac

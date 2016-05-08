@@ -1,5 +1,3 @@
-# GCC should support C++14
-
 MAKE = make
 MKFLAG = -f
 
@@ -7,7 +5,8 @@ MKFLAG = -f
 default:
 	@echo "List of targets:"
 	@echo "ccore       - to build release CCORE library for pyclustering."
-	@echo "utcore      - to build/run release CCORE library unit-tests."
+	@echo "utcore      - to build release CCORE library unit-tests."
+	@echo "utrun       - to run unit-tests of CCORE library.
 	@echo " "
 	@echo "clean       - to clean everything."
 
@@ -20,12 +19,11 @@ ccore:
 .PHONY: utcore
 utcore:
 	$(MAKE) $(MKFLAG) utcore.mk
-	
-	@echo " "
-	@echo "utcore is successfully created, unit-tests are started:"
-	@echo " "
-	
-	cd utcore/ && ./utcore.exe;
+
+
+.PHONY: utrun
+utrun:
+	cd utcore/ && ./utcore.exe
 
 
 .PHONY: clean
