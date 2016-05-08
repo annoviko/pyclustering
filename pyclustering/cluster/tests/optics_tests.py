@@ -43,7 +43,7 @@ class Test(unittest.TestCase):
         
         assert sum([len(cluster) for cluster in clusters]) + len(noise) == len(sample);
         assert sum([len(cluster) for cluster in clusters]) == sum(expected_length_clusters);
-        assert sorted([len(cluster) for cluster in clusters]) == expected_length_clusters;
+        assert sorted([len(cluster) for cluster in clusters]) == sorted(expected_length_clusters);
     
     def testClusteringSampleSimple1(self):
         self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 0.4, 2, [5, 5], False);
@@ -61,7 +61,14 @@ class Test(unittest.TestCase):
         self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 0.7, 3, [15, 15, 15, 15], False);
         
     def testClusteringHepta(self):
-        self.templateClusteringResults(FCPS_SAMPLES.SAMPLE_HEPTA, 1, 3, [30, 30, 30, 30, 30, 30, 32], False); 
+        self.templateClusteringResults(FCPS_SAMPLES.SAMPLE_HEPTA, 1, 3, [30, 30, 30, 30, 30, 30, 32], False);
+    
+    
+    def testClusteringOneDimensionDataSampleSimple7(self):
+        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE7, 2.0, 2, [10, 10], False);
+    
+    def testClusteringOneDimensionDataSampleSimple9(self):
+        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 3.0, 3, [10, 20], False);
     
     
 if __name__ == "__main__":

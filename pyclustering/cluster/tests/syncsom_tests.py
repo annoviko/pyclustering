@@ -61,7 +61,7 @@ class Test(unittest.TestCase):
         result_testing = False;
         
         # If phases crosses each other because of random part of the network then we should try again.
-        for attempt in range(0, 5, 1):
+        for _ in range(0, 5, 1):
             sample = read_sample(file);
             network = syncsom(sample, som_map_size[0], som_map_size[1]);
             network.process(avg_num_conn, collect_dynamic = False, order = eps);
@@ -85,11 +85,17 @@ class Test(unittest.TestCase):
         assert result_testing;
        
     def testClusterAllocationSampleSimple1(self):
-        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [5, 5], 4, 0.999, [5, 5]);   
+        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [5, 5], 4, 0.999, [5, 5]);
         
     def testClusterAllocationSampleSimple2(self):
         self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [5, 5], 4, 0.999, [10, 5, 8]);
+    
+    
+    def testClusterAllocationOneDimensionDataSampleSimple7(self):
+        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE7, [1, 2], 0, 0.999, [10, 10]);
 
+    def testClusterAllocationOneDimensionDataSampleSimple9(self):
+        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, [1, 2], 0, 0.999, [20, 10]);
 
 if __name__ == "__main__":
     unittest.main();

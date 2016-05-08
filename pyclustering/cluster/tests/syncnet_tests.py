@@ -197,6 +197,19 @@ class Test(unittest.TestCase):
 
     def testClusteringSolverRKF45SampleSimple1ByCore(self):
         self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, 0.999, solve_type.RKF45, initial_type.RANDOM_GAUSSIAN, True, False, 0.05, conn_represent.MATRIX, [5, 5], True);
+    
+    
+    def testClusteringOneDimensionDataSampleSimple7(self):
+        self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE7, 2, 0.999, solve_type.FAST, initial_type.EQUIPARTITION, True, False, 0.05, conn_represent.MATRIX, [10, 10], False);
+
+    def testClusteringOneDimensionDataSampleSimple7ByCore(self):
+        self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE7, 2, 0.999, solve_type.FAST, initial_type.EQUIPARTITION, True, False, 0.05, conn_represent.MATRIX, [10, 10], True);
+
+    def testClusteringOneDimensionDataSampleSimple9(self):
+        self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 2, 0.999, solve_type.FAST, initial_type.EQUIPARTITION, True, False, 0.05, conn_represent.MATRIX, [20, 10], False);
+
+    def testClusteringOneDimensionDataSampleSimple9ByCore(self):
+        self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 2, 0.999, solve_type.FAST, initial_type.EQUIPARTITION, True, False, 0.05, conn_represent.MATRIX, [20, 10], True);
 
 
 if __name__ == "__main__":

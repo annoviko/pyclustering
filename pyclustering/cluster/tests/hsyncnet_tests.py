@@ -88,6 +88,12 @@ class Test(unittest.TestCase):
     
     def testClusteringOneAllocationSampleSimple2ByCore(self):
         self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 1, [23], solve_type.FAST, 5, 0.2, True, True);
+    
+    def testClusteringOneDimensionDataSampleSimple7(self):
+        self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE7, 2, [10, 10], solve_type.FAST, 5, 0.3, True, False);
+
+    def testClusteringOneDimensionDataSampleSimple7ByCore(self):
+        self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE7, 2, [10, 10], solve_type.FAST, 5, 0.3, True, True);
 
 
 if __name__ == "__main__":
