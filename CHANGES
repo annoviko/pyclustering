@@ -101,3 +101,7 @@ CORRECTED BUGS:
   
 - Bug with execution fail during clustering data with rough values of initial medians (pyclustering.cluster.kmedians).
   See: https://github.com/annoviko/pyclustering/issues/286
+
+- Bug with meamory leakage on interface between CCORE and pyclustering (ccore).
+  See: -
+

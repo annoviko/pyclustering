@@ -93,27 +93,27 @@ void free_pyclustering_package(pyclustering_package * package) {
 	if (package->type != (unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_LIST) {
 		switch(package->type) {
 			case pyclustering_type_data::PYCLUSTERING_TYPE_INT:
-				delete (int *) package->data;
+				delete [] (int *) package->data;
 				break;
 
 			case pyclustering_type_data::PYCLUSTERING_TYPE_UNSIGNED_INT:
-				delete (unsigned int *) package->data;
+				delete [] (unsigned int *) package->data;
 				break;
 
 			case pyclustering_type_data::PYCLUSTERING_TYPE_FLOAT:
-				delete (float *) package->data;
+				delete [] (float *) package->data;
 				break;
 
 			case pyclustering_type_data::PYCLUSTERING_TYPE_DOUBLE:
-				delete (double *) package->data;
+				delete [] (double *) package->data;
 				break;
 
 			case pyclustering_type_data::PYCLUSTERING_TYPE_LONG:
-				delete (long *) package->data;
+				delete [] (long *) package->data;
 				break;
 
 			case pyclustering_type_data::PYCLUSTERING_TYPE_UNSIGNED_LONG:
-				delete (unsigned long *) package->data;
+				delete [] (unsigned long *) package->data;
 				break;
 
 			default:
