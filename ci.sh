@@ -31,7 +31,7 @@ run_ut_ccore_job() {
 	sudo apt-get install -qq g++-4.8
 	sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 50
   
-	pip install --user cpp-coveralls
+	pip install cpp-coveralls
 	
 	# build unit-test project
 	cd ccore/
@@ -56,10 +56,10 @@ run_ut_pyclustering_job() {
 	echo "- Measure code coverage."
 
 	# install requirements for the job
-	sudo apt-get install python3-numpy
 	sudo apt-get install python3-scipy
-	sudo apt-get install python3-matplotlib
-	sudo apt-get install python3-pil
+	pip3 install numpy
+	pip3 install Pillow
+	pip3 install matplotlib
 	
 	pip install coveralls
 	
