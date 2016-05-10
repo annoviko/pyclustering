@@ -27,7 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <vector>
 
-#include "syncnet.hpp"
+#include "cluster/syncnet.hpp"
 
 
 typedef std::vector<unsigned int>			hsyncnet_cluster;

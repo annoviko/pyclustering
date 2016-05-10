@@ -17,7 +17,7 @@ ccore:
 
 
 .PHONY: ut
-utcore:
+ut:
 	$(MAKE) $(MKFLAG) utcore.mk
 
 

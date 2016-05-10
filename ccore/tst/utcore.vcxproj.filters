@@ -5,227 +5,259 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="TestEnv Source Files">
       <UniqueIdentifier>{9c57f161-4c1e-4636-bce0-4c7f5277b6ab}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files\ant">
-      <UniqueIdentifier>{7e897b04-404e-4d9b-9eb1-32dc2cb59b4d}</UniqueIdentifier>
+    <Filter Include="Unit Tests">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Tested Code">
+      <UniqueIdentifier>{4343b34d-feaf-4ef4-ad0f-fd895a07f7c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tested Code\container">
+      <UniqueIdentifier>{699d8c5c-9f08-4fb9-a3d9-e1b5e7679984}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tested Code\cluster">
+      <UniqueIdentifier>{4babe04d-4ed0-479a-b15f-0e6656f21871}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tested Code\differential">
+      <UniqueIdentifier>{723ea346-3058-4760-aad3-db0d027c0821}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tested Code\nnet">
+      <UniqueIdentifier>{27e24ed9-e9c4-43ab-ac00-726835a7e1be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tested Code\tsp">
+      <UniqueIdentifier>{0f0225d8-7891-4f28-88d6-240d7244d119}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\ccore\kdtree.cpp">
-      <Filter>Resource Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\ccore\pcnn.cpp">
-      <Filter>Resource Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\ccore\support.cpp">
-      <Filter>Resource Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\ccore\sync.cpp">
-      <Filter>Resource Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\ccore\syncnet.cpp">
-      <Filter>Resource Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\ccore\hsyncnet.cpp">
-      <Filter>Resource Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\ccore\legion.cpp">
-      <Filter>Resource Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\ccore\som.cpp">
-      <Filter>Resource Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\ccore\xmeans.cpp">
-      <Filter>Resource Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\ccore\agglomerative.cpp">
-      <Filter>Resource Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\ccore\kmedians.cpp">
-      <Filter>Resource Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\tools\gtest\gtest-all.cpp">
       <Filter>TestEnv Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\ccore\adjacency_bit_matrix.cpp">
-      <Filter>Resource Files</Filter>
+    <ClCompile Include="..\src\container\adjacency_bit_matrix.cpp">
+      <Filter>Tested Code\container</Filter>
     </ClCompile>
-    <ClCompile Include="..\ccore\syncpr.cpp">
-      <Filter>Resource Files</Filter>
+    <ClCompile Include="..\src\container\adjacency_connector.cpp">
+      <Filter>Tested Code\container</Filter>
     </ClCompile>
-    <ClCompile Include="..\ccore\ant\ant_colony.cpp">
-      <Filter>Resource Files\ant</Filter>
+    <ClCompile Include="..\src\container\adjacency_factory.cpp">
+      <Filter>Tested Code\container</Filter>
     </ClCompile>
-    <ClCompile Include="..\ccore\adjacency_list.cpp">
-      <Filter>Resource Files</Filter>
+    <ClCompile Include="..\src\container\adjacency_list.cpp">
+      <Filter>Tested Code\container</Filter>
     </ClCompile>
-    <ClCompile Include="..\ccore\ant\distance_matrix.cpp">
-      <Filter>Resource Files\ant</Filter>
+    <ClCompile Include="..\src\container\adjacency_matrix.cpp">
+      <Filter>Tested Code\container</Filter>
     </ClCompile>
-    <ClCompile Include="..\ccore\adjacency_matrix.cpp">
-      <Filter>Resource Files</Filter>
+    <ClCompile Include="..\src\container\adjacency_weight_list.cpp">
+      <Filter>Tested Code\container</Filter>
     </ClCompile>
-    <ClCompile Include="..\ccore\adjacency_weight_list.cpp">
-      <Filter>Resource Files</Filter>
+    <ClCompile Include="..\src\container\kdtree.cpp">
+      <Filter>Tested Code\container</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\cluster\agglomerative.cpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\cluster\kmedians.cpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\cluster\syncnet.cpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\cluster\xmeans.cpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\differential\differ_factor.cpp">
+      <Filter>Tested Code\differential</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\nnet\legion.cpp">
+      <Filter>Tested Code\nnet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\nnet\pcnn.cpp">
+      <Filter>Tested Code\nnet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\nnet\som.cpp">
+      <Filter>Tested Code\nnet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\nnet\sync.cpp">
+      <Filter>Tested Code\nnet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\nnet\syncpr.cpp">
+      <Filter>Tested Code\nnet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tsp\ant_colony.cpp">
+      <Filter>Tested Code\tsp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tsp\distance_matrix.cpp">
+      <Filter>Tested Code\tsp</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="samples.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\ccore\adjacency_connector.cpp">
-      <Filter>Resource Files</Filter>
+    <ClCompile Include="..\src\cluster\hsyncnet.cpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\utils.cpp">
+      <Filter>Tested Code</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="utest-kdtree.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\ccore\kdtree.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="utest-pcnn.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\ccore\network.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\ccore\pcnn.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\ccore\support.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\ccore\differential.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="utest-differential.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\ccore\sync.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="utest-sync.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\ccore\syncnet.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="utest-hsyncnet.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\ccore\hsyncnet.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\ccore\legion.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="utest-legion.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\ccore\som.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="utest-som.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="samples.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\ccore\syncpr.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\ccore\xmeans.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="utest-agglomerative.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\ccore\agglomerative.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\ccore\kmedians.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="utest-kmedians.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\tools\gtest\gtest.h">
       <Filter>TestEnv Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\ccore\dynamic_data.h">
-      <Filter>Resource Files</Filter>
+    <ClInclude Include="..\src\container\adjacency.hpp">
+      <Filter>Tested Code\container</Filter>
     </ClInclude>
-    <ClInclude Include="..\ccore\ensemble_data.h">
-      <Filter>Resource Files</Filter>
+    <ClInclude Include="..\src\container\adjacency_bit_matrix.hpp">
+      <Filter>Tested Code\container</Filter>
     </ClInclude>
-    <ClInclude Include="utest-adjacency_bit_matrix.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\src\container\adjacency_connector.hpp">
+      <Filter>Tested Code\container</Filter>
     </ClInclude>
-    <ClInclude Include="..\ccore\adjacency.h">
-      <Filter>Resource Files</Filter>
+    <ClInclude Include="..\src\container\adjacency_factory.hpp">
+      <Filter>Tested Code\container</Filter>
     </ClInclude>
-    <ClInclude Include="..\ccore\adjacency_bit_matrix.h">
-      <Filter>Resource Files</Filter>
+    <ClInclude Include="..\src\container\adjacency_list.hpp">
+      <Filter>Tested Code\container</Filter>
     </ClInclude>
-    <ClInclude Include="utest-ant_colony.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\src\container\adjacency_matrix.hpp">
+      <Filter>Tested Code\container</Filter>
     </ClInclude>
-    <ClInclude Include="..\ccore\ant\ant_colony.hpp">
-      <Filter>Resource Files\ant</Filter>
+    <ClInclude Include="..\src\container\adjacency_weight_list.hpp">
+      <Filter>Tested Code\container</Filter>
     </ClInclude>
-    <ClInclude Include="..\ccore\adjacency_list.h">
-      <Filter>Resource Files</Filter>
+    <ClInclude Include="..\src\container\dynamic_data.hpp">
+      <Filter>Tested Code\container</Filter>
     </ClInclude>
-    <ClInclude Include="..\ccore\ant\ant_colony_params.hpp">
-      <Filter>Resource Files\ant</Filter>
+    <ClInclude Include="..\src\container\ensemble_data.hpp">
+      <Filter>Tested Code\container</Filter>
     </ClInclude>
-    <ClInclude Include="..\ccore\ant\distance_matrix.hpp">
-      <Filter>Resource Files\ant</Filter>
+    <ClInclude Include="..\src\container\kdtree.hpp">
+      <Filter>Tested Code\container</Filter>
     </ClInclude>
-    <ClInclude Include="..\ccore\adjacency_matrix.h">
-      <Filter>Resource Files</Filter>
+    <ClInclude Include="..\src\cluster\agglomerative.hpp">
+      <Filter>Tested Code\cluster</Filter>
     </ClInclude>
-    <ClInclude Include="utest-adjacency_list.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\src\cluster\kmedians.hpp">
+      <Filter>Tested Code\cluster</Filter>
     </ClInclude>
-    <ClInclude Include="utest-adjacency_matrix.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\src\cluster\syncnet.hpp">
+      <Filter>Tested Code\cluster</Filter>
     </ClInclude>
-    <ClInclude Include="utest-syncnet.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\src\cluster\xmeans.hpp">
+      <Filter>Tested Code\cluster</Filter>
     </ClInclude>
-    <ClInclude Include="utest-syncpr.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\src\differential\differ_factor.hpp">
+      <Filter>Tested Code\differential</Filter>
     </ClInclude>
-    <ClInclude Include="utest-xmeans.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\src\differential\differ_state.hpp">
+      <Filter>Tested Code\differential</Filter>
     </ClInclude>
-    <ClInclude Include="utest-adjacency.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\src\differential\runge_kutta_4.hpp">
+      <Filter>Tested Code\differential</Filter>
     </ClInclude>
-    <ClInclude Include="..\ccore\adjacency_weight_list.h">
-      <Filter>Resource Files</Filter>
+    <ClInclude Include="..\src\differential\runge_kutta_fehlberg_45.hpp">
+      <Filter>Tested Code\differential</Filter>
     </ClInclude>
-    <ClInclude Include="utest-adjacency_weight_list.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\src\nnet\legion.hpp">
+      <Filter>Tested Code\nnet</Filter>
     </ClInclude>
-    <ClInclude Include="..\ccore\adjacency_connector.h">
-      <Filter>Resource Files</Filter>
+    <ClInclude Include="..\src\nnet\network.hpp">
+      <Filter>Tested Code\nnet</Filter>
     </ClInclude>
-    <ClInclude Include="utest_adjacency_connector.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\src\nnet\pcnn.hpp">
+      <Filter>Tested Code\nnet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\nnet\som.hpp">
+      <Filter>Tested Code\nnet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\nnet\sync.hpp">
+      <Filter>Tested Code\nnet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\nnet\syncpr.hpp">
+      <Filter>Tested Code\nnet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tsp\ant_colony.hpp">
+      <Filter>Tested Code\tsp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tsp\ant_colony_params.hpp">
+      <Filter>Tested Code\tsp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tsp\distance_matrix.hpp">
+      <Filter>Tested Code\tsp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tsp\params_container.hpp">
+      <Filter>Tested Code\tsp</Filter>
+    </ClInclude>
+    <ClInclude Include="utest_adjacency_connector.hpp">
+      <Filter>Unit Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="utest-adjacency.hpp">
+      <Filter>Unit Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="utest-adjacency_bit_matrix.hpp">
+      <Filter>Unit Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="utest-adjacency_list.hpp">
+      <Filter>Unit Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="utest-adjacency_matrix.hpp">
+      <Filter>Unit Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="utest-adjacency_weight_list.hpp">
+      <Filter>Unit Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="utest-agglomerative.hpp">
+      <Filter>Unit Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="utest-ant_colony.hpp">
+      <Filter>Unit Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="utest-differential.hpp">
+      <Filter>Unit Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="utest-hsyncnet.hpp">
+      <Filter>Unit Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="utest-kdtree.hpp">
+      <Filter>Unit Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="utest-kmedians.hpp">
+      <Filter>Unit Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="utest-legion.hpp">
+      <Filter>Unit Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="utest-pcnn.hpp">
+      <Filter>Unit Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="utest-som.hpp">
+      <Filter>Unit Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="utest-sync.hpp">
+      <Filter>Unit Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="utest-syncnet.hpp">
+      <Filter>Unit Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="utest-syncpr.hpp">
+      <Filter>Unit Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="utest-xmeans.hpp">
+      <Filter>Unit Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="samples.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cluster\hsyncnet.hpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\utils.hpp">
+      <Filter>Tested Code</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

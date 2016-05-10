@@ -41,9 +41,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>../src;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>../src;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -84,76 +86,83 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\ccore\adjacency_bit_matrix.cpp" />
-    <ClCompile Include="..\ccore\adjacency_connector.cpp" />
-    <ClCompile Include="..\ccore\adjacency_list.cpp" />
-    <ClCompile Include="..\ccore\adjacency_matrix.cpp" />
-    <ClCompile Include="..\ccore\adjacency_weight_list.cpp" />
-    <ClCompile Include="..\ccore\agglomerative.cpp" />
-    <ClCompile Include="..\ccore\ant\ant_colony.cpp" />
-    <ClCompile Include="..\ccore\ant\distance_matrix.cpp" />
-    <ClCompile Include="..\ccore\hsyncnet.cpp" />
-    <ClCompile Include="..\ccore\kdtree.cpp" />
-    <ClCompile Include="..\ccore\kmedians.cpp" />
-    <ClCompile Include="..\ccore\legion.cpp" />
-    <ClCompile Include="..\ccore\pcnn.cpp" />
-    <ClCompile Include="..\ccore\som.cpp" />
-    <ClCompile Include="..\ccore\support.cpp" />
-    <ClCompile Include="..\ccore\sync.cpp" />
-    <ClCompile Include="..\ccore\syncnet.cpp" />
-    <ClCompile Include="..\ccore\syncpr.cpp" />
-    <ClCompile Include="..\ccore\xmeans.cpp" />
+    <ClCompile Include="..\src\cluster\agglomerative.cpp" />
+    <ClCompile Include="..\src\cluster\hsyncnet.cpp" />
+    <ClCompile Include="..\src\cluster\kmedians.cpp" />
+    <ClCompile Include="..\src\cluster\syncnet.cpp" />
+    <ClCompile Include="..\src\cluster\xmeans.cpp" />
+    <ClCompile Include="..\src\container\adjacency_bit_matrix.cpp" />
+    <ClCompile Include="..\src\container\adjacency_connector.cpp" />
+    <ClCompile Include="..\src\container\adjacency_factory.cpp" />
+    <ClCompile Include="..\src\container\adjacency_list.cpp" />
+    <ClCompile Include="..\src\container\adjacency_matrix.cpp" />
+    <ClCompile Include="..\src\container\adjacency_weight_list.cpp" />
+    <ClCompile Include="..\src\container\kdtree.cpp" />
+    <ClCompile Include="..\src\differential\differ_factor.cpp" />
+    <ClCompile Include="..\src\nnet\legion.cpp" />
+    <ClCompile Include="..\src\nnet\pcnn.cpp" />
+    <ClCompile Include="..\src\nnet\som.cpp" />
+    <ClCompile Include="..\src\nnet\sync.cpp" />
+    <ClCompile Include="..\src\nnet\syncpr.cpp" />
+    <ClCompile Include="..\src\tsp\ant_colony.cpp" />
+    <ClCompile Include="..\src\tsp\distance_matrix.cpp" />
+    <ClCompile Include="..\src\utils.cpp" />
     <ClCompile Include="..\tools\gtest\gtest-all.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="samples.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\ccore\adjacency.h" />
-    <ClInclude Include="..\ccore\adjacency_bit_matrix.h" />
-    <ClInclude Include="..\ccore\adjacency_connector.h" />
-    <ClInclude Include="..\ccore\adjacency_list.h" />
-    <ClInclude Include="..\ccore\adjacency_matrix.h" />
-    <ClInclude Include="..\ccore\adjacency_weight_list.h" />
-    <ClInclude Include="..\ccore\agglomerative.h" />
-    <ClInclude Include="..\ccore\ant\ant_colony.hpp" />
-    <ClInclude Include="..\ccore\ant\ant_colony_params.hpp" />
-    <ClInclude Include="..\ccore\ant\distance_matrix.hpp" />
-    <ClInclude Include="..\ccore\differential.h" />
-    <ClInclude Include="..\ccore\dynamic_data.h" />
-    <ClInclude Include="..\ccore\ensemble_data.h" />
-    <ClInclude Include="..\ccore\hsyncnet.h" />
-    <ClInclude Include="..\ccore\kdtree.h" />
-    <ClInclude Include="..\ccore\kmedians.h" />
-    <ClInclude Include="..\ccore\legion.h" />
-    <ClInclude Include="..\ccore\network.h" />
-    <ClInclude Include="..\ccore\pcnn.h" />
-    <ClInclude Include="..\ccore\som.h" />
-    <ClInclude Include="..\ccore\support.h" />
-    <ClInclude Include="..\ccore\sync.h" />
-    <ClInclude Include="..\ccore\syncnet.h" />
-    <ClInclude Include="..\ccore\syncpr.h" />
-    <ClInclude Include="..\ccore\xmeans.h" />
+    <ClInclude Include="..\src\cluster\agglomerative.hpp" />
+    <ClInclude Include="..\src\cluster\hsyncnet.hpp" />
+    <ClInclude Include="..\src\cluster\kmedians.hpp" />
+    <ClInclude Include="..\src\cluster\syncnet.hpp" />
+    <ClInclude Include="..\src\cluster\xmeans.hpp" />
+    <ClInclude Include="..\src\container\adjacency.hpp" />
+    <ClInclude Include="..\src\container\adjacency_bit_matrix.hpp" />
+    <ClInclude Include="..\src\container\adjacency_connector.hpp" />
+    <ClInclude Include="..\src\container\adjacency_factory.hpp" />
+    <ClInclude Include="..\src\container\adjacency_list.hpp" />
+    <ClInclude Include="..\src\container\adjacency_matrix.hpp" />
+    <ClInclude Include="..\src\container\adjacency_weight_list.hpp" />
+    <ClInclude Include="..\src\container\dynamic_data.hpp" />
+    <ClInclude Include="..\src\container\ensemble_data.hpp" />
+    <ClInclude Include="..\src\container\kdtree.hpp" />
+    <ClInclude Include="..\src\differential\differ_factor.hpp" />
+    <ClInclude Include="..\src\differential\differ_state.hpp" />
+    <ClInclude Include="..\src\differential\runge_kutta_4.hpp" />
+    <ClInclude Include="..\src\differential\runge_kutta_fehlberg_45.hpp" />
+    <ClInclude Include="..\src\nnet\legion.hpp" />
+    <ClInclude Include="..\src\nnet\network.hpp" />
+    <ClInclude Include="..\src\nnet\pcnn.hpp" />
+    <ClInclude Include="..\src\nnet\som.hpp" />
+    <ClInclude Include="..\src\nnet\sync.hpp" />
+    <ClInclude Include="..\src\nnet\syncpr.hpp" />
+    <ClInclude Include="..\src\tsp\ant_colony.hpp" />
+    <ClInclude Include="..\src\tsp\ant_colony_params.hpp" />
+    <ClInclude Include="..\src\tsp\distance_matrix.hpp" />
+    <ClInclude Include="..\src\tsp\params_container.hpp" />
+    <ClInclude Include="..\src\utils.hpp" />
     <ClInclude Include="..\tools\gtest\gtest.h" />
-    <ClInclude Include="samples.h" />
-    <ClInclude Include="utest-adjacency.h" />
-    <ClInclude Include="utest-adjacency_bit_matrix.h" />
-    <ClInclude Include="utest-adjacency_list.h" />
-    <ClInclude Include="utest-adjacency_matrix.h" />
-    <ClInclude Include="utest-adjacency_weight_list.h" />
-    <ClInclude Include="utest-agglomerative.h" />
-    <ClInclude Include="utest-ant_colony.h" />
-    <ClInclude Include="utest-differential.h" />
-    <ClInclude Include="utest-hsyncnet.h" />
-    <ClInclude Include="utest-kdtree.h" />
-    <ClInclude Include="utest-kmedians.h" />
-    <ClInclude Include="utest-legion.h" />
-    <ClInclude Include="utest-pcnn.h" />
-    <ClInclude Include="utest-som.h" />
-    <ClInclude Include="utest-sync.h" />
-    <ClInclude Include="utest-syncnet.h" />
-    <ClInclude Include="utest-syncpr.h" />
-    <ClInclude Include="utest-xmeans.h" />
-    <ClInclude Include="utest_adjacency_connector.h" />
+    <ClInclude Include="samples.hpp" />
+    <ClInclude Include="utest-adjacency.hpp" />
+    <ClInclude Include="utest-adjacency_bit_matrix.hpp" />
+    <ClInclude Include="utest-adjacency_list.hpp" />
+    <ClInclude Include="utest-adjacency_matrix.hpp" />
+    <ClInclude Include="utest-adjacency_weight_list.hpp" />
+    <ClInclude Include="utest-agglomerative.hpp" />
+    <ClInclude Include="utest-ant_colony.hpp" />
+    <ClInclude Include="utest-differential.hpp" />
+    <ClInclude Include="utest-hsyncnet.hpp" />
+    <ClInclude Include="utest-kdtree.hpp" />
+    <ClInclude Include="utest-kmedians.hpp" />
+    <ClInclude Include="utest-legion.hpp" />
+    <ClInclude Include="utest-pcnn.hpp" />
+    <ClInclude Include="utest-som.hpp" />
+    <ClInclude Include="utest-sync.hpp" />
+    <ClInclude Include="utest-syncnet.hpp" />
+    <ClInclude Include="utest-syncpr.hpp" />
+    <ClInclude Include="utest-xmeans.hpp" />
+    <ClInclude Include="utest_adjacency_connector.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

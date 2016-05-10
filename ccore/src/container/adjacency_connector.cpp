@@ -29,6 +29,8 @@ std::ostream & operator<<(std::ostream & p_stream, const connection_t & p_struct
 		p_stream << "unknown structure";
 		break;
 	}
+
+    return p_stream;
 }
 
 }

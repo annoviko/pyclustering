@@ -5,197 +5,213 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    <Filter Include="Source Files\container">
+      <UniqueIdentifier>{b049935d-18a9-46a2-8d26-e7a0c66e121f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="Source Files\cluster">
+      <UniqueIdentifier>{cc2cb47d-4c92-4c11-82a5-9d78abf6ebf6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\ant">
-      <UniqueIdentifier>{67fbbe0c-e707-4e1a-b1a2-4e91898d703c}</UniqueIdentifier>
+    <Filter Include="Source Files\tsp">
+      <UniqueIdentifier>{b6c60a7c-ec29-4363-a123-f210e0eea235}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\ant">
-      <UniqueIdentifier>{17aefe89-fd1e-469c-9bd8-9056bc0cf5f4}</UniqueIdentifier>
+    <Filter Include="Source Files\nnet">
+      <UniqueIdentifier>{749e2e3a-5a11-4f48-93bf-20968207d439}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\differential">
+      <UniqueIdentifier>{3f3cff3c-f601-4c65-b7ac-a1b129961edf}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="cluster\agglomerative.cpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClCompile>
+    <ClCompile Include="cluster\cure.cpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClCompile>
+    <ClCompile Include="cluster\dbscan.cpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClCompile>
+    <ClCompile Include="cluster\hierarchical.cpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClCompile>
+    <ClCompile Include="cluster\hsyncnet.cpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClCompile>
+    <ClCompile Include="cluster\kmeans.cpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClCompile>
+    <ClCompile Include="cluster\kmedians.cpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClCompile>
+    <ClCompile Include="cluster\rock.cpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClCompile>
+    <ClCompile Include="cluster\syncnet.cpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClCompile>
+    <ClCompile Include="cluster\xmeans.cpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClCompile>
+    <ClCompile Include="container\adjacency_bit_matrix.cpp">
+      <Filter>Source Files\container</Filter>
+    </ClCompile>
+    <ClCompile Include="container\adjacency_connector.cpp">
+      <Filter>Source Files\container</Filter>
+    </ClCompile>
+    <ClCompile Include="container\adjacency_factory.cpp">
+      <Filter>Source Files\container</Filter>
+    </ClCompile>
+    <ClCompile Include="container\adjacency_list.cpp">
+      <Filter>Source Files\container</Filter>
+    </ClCompile>
+    <ClCompile Include="container\adjacency_matrix.cpp">
+      <Filter>Source Files\container</Filter>
+    </ClCompile>
+    <ClCompile Include="container\adjacency_weight_list.cpp">
+      <Filter>Source Files\container</Filter>
+    </ClCompile>
+    <ClCompile Include="container\kdtree.cpp">
+      <Filter>Source Files\container</Filter>
+    </ClCompile>
+    <ClCompile Include="nnet\legion.cpp">
+      <Filter>Source Files\nnet</Filter>
+    </ClCompile>
+    <ClCompile Include="nnet\pcnn.cpp">
+      <Filter>Source Files\nnet</Filter>
+    </ClCompile>
+    <ClCompile Include="nnet\som.cpp">
+      <Filter>Source Files\nnet</Filter>
+    </ClCompile>
+    <ClCompile Include="nnet\sync.cpp">
+      <Filter>Source Files\nnet</Filter>
+    </ClCompile>
+    <ClCompile Include="nnet\syncpr.cpp">
+      <Filter>Source Files\nnet</Filter>
+    </ClCompile>
+    <ClCompile Include="tsp\ant_colony.cpp">
+      <Filter>Source Files\tsp</Filter>
+    </ClCompile>
+    <ClCompile Include="tsp\distance_matrix.cpp">
+      <Filter>Source Files\tsp</Filter>
+    </ClCompile>
     <ClCompile Include="ccore.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="dbscan.cpp">
+    <ClCompile Include="utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="support.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="hierarchical.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="kmeans.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="rock.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="syncnet.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="xmeans.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="hsyncnet.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="kdtree.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="cure.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="som.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="pcnn.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sync.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="legion.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="syncpr.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="agglomerative.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="kmedians.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="adjacency_bit_matrix.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="adjacency_matrix.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="adjacency_list.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="adjacency_weight_list.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="adjacency_factory.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ant\ant_colony.cpp">
-      <Filter>Source Files\ant</Filter>
-    </ClCompile>
-    <ClCompile Include="ant\distance_matrix.cpp">
-      <Filter>Source Files\ant</Filter>
-    </ClCompile>
-    <ClCompile Include="adjacency_connector.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="differential\differ_factor.cpp">
+      <Filter>Source Files\differential</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="dbscan.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="cluster\agglomerative.hpp">
+      <Filter>Source Files\cluster</Filter>
     </ClInclude>
-    <ClInclude Include="support.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="cluster\cure.hpp">
+      <Filter>Source Files\cluster</Filter>
     </ClInclude>
-    <ClInclude Include="hierarchical.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="cluster\dbscan.hpp">
+      <Filter>Source Files\cluster</Filter>
     </ClInclude>
-    <ClInclude Include="kmeans.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="cluster\hierarchical.hpp">
+      <Filter>Source Files\cluster</Filter>
     </ClInclude>
-    <ClInclude Include="rock.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="cluster\hsyncnet.hpp">
+      <Filter>Source Files\cluster</Filter>
     </ClInclude>
-    <ClInclude Include="network.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="cluster\kmeans.hpp">
+      <Filter>Source Files\cluster</Filter>
     </ClInclude>
-    <ClInclude Include="syncnet.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="cluster\kmedians.hpp">
+      <Filter>Source Files\cluster</Filter>
     </ClInclude>
-    <ClInclude Include="xmeans.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="cluster\rock.hpp">
+      <Filter>Source Files\cluster</Filter>
     </ClInclude>
-    <ClInclude Include="hsyncnet.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="cluster\syncnet.hpp">
+      <Filter>Source Files\cluster</Filter>
     </ClInclude>
-    <ClInclude Include="kdtree.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="cluster\xmeans.hpp">
+      <Filter>Source Files\cluster</Filter>
     </ClInclude>
-    <ClInclude Include="cure.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="container\adjacency.hpp">
+      <Filter>Source Files\container</Filter>
     </ClInclude>
-    <ClInclude Include="som.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="container\adjacency_bit_matrix.hpp">
+      <Filter>Source Files\container</Filter>
     </ClInclude>
-    <ClInclude Include="pcnn.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="container\adjacency_connector.hpp">
+      <Filter>Source Files\container</Filter>
     </ClInclude>
-    <ClInclude Include="sync.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="container\adjacency_factory.hpp">
+      <Filter>Source Files\container</Filter>
     </ClInclude>
-    <ClInclude Include="legion.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="container\adjacency_list.hpp">
+      <Filter>Source Files\container</Filter>
+    </ClInclude>
+    <ClInclude Include="container\adjacency_matrix.hpp">
+      <Filter>Source Files\container</Filter>
+    </ClInclude>
+    <ClInclude Include="container\adjacency_weight_list.hpp">
+      <Filter>Source Files\container</Filter>
+    </ClInclude>
+    <ClInclude Include="container\dynamic_data.hpp">
+      <Filter>Source Files\container</Filter>
+    </ClInclude>
+    <ClInclude Include="container\ensemble_data.hpp">
+      <Filter>Source Files\container</Filter>
+    </ClInclude>
+    <ClInclude Include="container\kdtree.hpp">
+      <Filter>Source Files\container</Filter>
+    </ClInclude>
+    <ClInclude Include="nnet\legion.hpp">
+      <Filter>Source Files\nnet</Filter>
+    </ClInclude>
+    <ClInclude Include="nnet\network.hpp">
+      <Filter>Source Files\nnet</Filter>
+    </ClInclude>
+    <ClInclude Include="nnet\pcnn.hpp">
+      <Filter>Source Files\nnet</Filter>
+    </ClInclude>
+    <ClInclude Include="nnet\som.hpp">
+      <Filter>Source Files\nnet</Filter>
+    </ClInclude>
+    <ClInclude Include="nnet\sync.hpp">
+      <Filter>Source Files\nnet</Filter>
+    </ClInclude>
+    <ClInclude Include="nnet\syncpr.hpp">
+      <Filter>Source Files\nnet</Filter>
+    </ClInclude>
+    <ClInclude Include="tsp\ant_colony.hpp">
+      <Filter>Source Files\tsp</Filter>
+    </ClInclude>
+    <ClInclude Include="tsp\ant_colony_params.hpp">
+      <Filter>Source Files\tsp</Filter>
+    </ClInclude>
+    <ClInclude Include="tsp\distance_matrix.hpp">
+      <Filter>Source Files\tsp</Filter>
+    </ClInclude>
+    <ClInclude Include="tsp\params_container.hpp">
+      <Filter>Source Files\tsp</Filter>
     </ClInclude>
     <ClInclude Include="ccore.h">
-      <Filter>Header Files</Filter>
+      <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="differential.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="utils.hpp">
+      <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="syncpr.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="differential\differ_factor.hpp">
+      <Filter>Source Files\differential</Filter>
     </ClInclude>
-    <ClInclude Include="agglomerative.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="differential\differ_state.hpp">
+      <Filter>Source Files\differential</Filter>
     </ClInclude>
-    <ClInclude Include="kmedians.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="differential\runge_kutta_4.hpp">
+      <Filter>Source Files\differential</Filter>
     </ClInclude>
-    <ClInclude Include="dynamic_data.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ensemble_data.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="adjacency.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="adjacency_bit_matrix.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="adjacency_matrix.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="adjacency_factory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="adjacency_list.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="adjacency_weight_list.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="adjacency_connector.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ant\ant_colony_params.hpp">
-      <Filter>Header Files\ant</Filter>
-    </ClInclude>
-    <ClInclude Include="ant\ant_colony.hpp">
-      <Filter>Header Files\ant</Filter>
-    </ClInclude>
-    <ClInclude Include="ant\distance_matrix.hpp">
-      <Filter>Header Files\ant</Filter>
+    <ClInclude Include="differential\runge_kutta_fehlberg_45.hpp">
+      <Filter>Source Files\differential</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
