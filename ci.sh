@@ -22,6 +22,10 @@ run_utcore_job() {
 	echo "- Build C++ unit-test project for CCORE library."
 	echo "- Run CCORE library unit-tests."
 	
+	#install coveralls for cpp to measure core coverage
+	pip install --user cpp-coveralls
+	
+	# build unit-test project
 	cd ccore/
 	make ut
 
@@ -32,7 +36,9 @@ run_utcore_job() {
 		exit 1
 	fi
 
+	# run unit-tests and obtain code coverage
 	make utrun
+	coveralls --exclude tst
 }
 
 
@@ -41,9 +47,14 @@ run_python_job() {
 	echo "- Run unit-tests of pyclustering."
 	echo "- Measure code coverage."
 
+	# install coveralls for python to measure code coverage
+	pip install coveralls
+	
+	# initialize environment
 	PYTHONPATH=`pwd`
 	export PYTHONPATH=${PYTHONPATH}
 
+	# run unit-tests and obtain coverage results
 	coverage run --source=pyclustering --omit='pyclustering/*/tests/*,pyclustering/*/examples/*,pyclustering/ut/*' pyclustering/ut/__init__.py
 	coveralls
 }
