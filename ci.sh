@@ -56,8 +56,9 @@ run_ut_pyclustering_job() {
 	echo "- Measure code coverage."
 
 	# install requirements for the job
-	sudo apt-get install python3-scipy
-	pip3 install numpy
+	sudo apt-get install -qq python3-scipy
+	sudo apt-get install -qq python3-numpy
+
 	pip3 install Pillow
 	pip3 install matplotlib
 	
