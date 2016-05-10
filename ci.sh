@@ -23,7 +23,7 @@ run_utcore_job() {
 	echo "- Run CCORE library unit-tests."
 	
 	cd ccore/
-	make utcore
+	make ut
 
 	if [ $? -eq 0 ] ; then
 		echo "Building of CCORE unit-test project: SUCCESS."

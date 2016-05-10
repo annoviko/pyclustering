@@ -11,13 +11,13 @@ LFLAGS = -O3 -pthread
 
 
 # Project sources
-SOURCES += utcore/main.cpp
-SOURCES += utcore/samples.cpp
+SOURCES += tst/main.cpp
+SOURCES += tst/samples.cpp
 SOURCES += tools/gtest/gtest-all.cpp
 
 OBJECTS = $(SOURCES:.cpp=.o)
 
-INCLUDES += -I./ -Iutcore/ -Itools/
+INCLUDES += -I./ -Itst/ -Itools/
 
 
 # The dependency file names
@@ -25,14 +25,14 @@ DEPS = $(OBJECTS:.o=.d)
 
 
 # Output name of executable file
-EXECUTABLE = utcore/utcore.exe
+EXECUTABLE = tst/utcore.exe
 
 
 utcore: $(EXECUTABLE)
 
 
 clean:
-	rm utcore/*.o utcore/utcore
+	rm utcore/*.o tst/utcore.exe
 
 
 $(EXECUTABLE): $(OBJECTS)

@@ -1,29 +1,40 @@
 # GCC should support C++1y
 
-INCLUDES = -Iccore/
+SOURCE_PATH = src
 
-SOURCES += ccore/adjacency_bit_matrix.cpp
-SOURCES += ccore/adjacency_connector.cpp
-SOURCES += ccore/adjacency_list.cpp
-SOURCES += ccore/adjacency_matrix.cpp
-SOURCES += ccore/adjacency_weight_list.cpp
-SOURCES += ccore/agglomerative.cpp
-SOURCES += ccore/ccore.cpp
-SOURCES += ccore/cure.cpp
-SOURCES += ccore/dbscan.cpp
-SOURCES += ccore/hierarchical.cpp
-SOURCES += ccore/hsyncnet.cpp
-SOURCES += ccore/kdtree.cpp
-SOURCES += ccore/kmeans.cpp
-SOURCES += ccore/kmedians.cpp
-SOURCES += ccore/legion.cpp
-SOURCES += ccore/pcnn.cpp
-SOURCES += ccore/rock.cpp
-SOURCES += ccore/som.cpp
-SOURCES += ccore/support.cpp
-SOURCES += ccore/sync.cpp
-SOURCES += ccore/syncnet.cpp
-SOURCES += ccore/syncpr.cpp
-SOURCES += ccore/xmeans.cpp
-SOURCES += ccore/ant/ant_colony.cpp
-SOURCES += ccore/ant/distance_matrix.cpp
+
+INCLUDES = -Isrc/
+
+
+SOURCES += $(SOURCE_PATH)/ccore.cpp
+
+SOURCES += $(SOURCE_PATH)/container/adjacency_bit_matrix.cpp
+SOURCES += $(SOURCE_PATH)/container/adjacency_connector.cpp
+SOURCES += $(SOURCE_PATH)/container/adjacency_list.cpp
+SOURCES += $(SOURCE_PATH)/container/adjacency_matrix.cpp
+SOURCES += $(SOURCE_PATH)/container/adjacency_weight_list.cpp
+SOURCES += $(SOURCE_PATH)/container/kdtree.cpp
+
+SOURCES += $(SOURCE_PATH)/cluster/agglomerative.cpp
+SOURCES += $(SOURCE_PATH)/cluster/cure.cpp
+SOURCES += $(SOURCE_PATH)/cluster/dbscan.cpp
+SOURCES += $(SOURCE_PATH)/cluster/hierarchical.cpp
+SOURCES += $(SOURCE_PATH)/cluster/hsyncnet.cpp
+SOURCES += $(SOURCE_PATH)/cluster/kmeans.cpp
+SOURCES += $(SOURCE_PATH)/cluster/kmedians.cpp
+SOURCES += $(SOURCE_PATH)/cluster/rock.cpp
+SOURCES += $(SOURCE_PATH)/cluster/syncnet.cpp
+SOURCES += $(SOURCE_PATH)/cluster/xmeans.cpp
+
+SOURCES += $(SOURCE_PATH)/differential/differ_factor.cpp
+
+SOURCES += $(SOURCE_PATH)/nnet/legion.cpp
+SOURCES += $(SOURCE_PATH)/nnet/pcnn.cpp
+SOURCES += $(SOURCE_PATH)/nnet/som.cpp
+SOURCES += $(SOURCE_PATH)/nnet/sync.cpp
+SOURCES += $(SOURCE_PATH)/nnet/syncpr.cpp
+
+SOURCES += $(SOURCE_PATH)/utils.cpp
+
+SOURCES += $(SOURCE_PATH)/tsp/ant_colony.cpp
+SOURCES += $(SOURCE_PATH)/tsp/distance_matrix.cpp

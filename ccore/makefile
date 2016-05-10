@@ -5,7 +5,7 @@ MKFLAG = -f
 default:
 	@echo "List of targets:"
 	@echo "ccore       - to build release CCORE library for pyclustering."
-	@echo "utcore      - to build release CCORE library unit-tests."
+	@echo "ut          - to build release unit-tests for CCORE library."
 	@echo "utrun       - to run unit-tests of CCORE library.
 	@echo " "
 	@echo "clean       - to clean everything."
@@ -16,14 +16,14 @@ ccore:
 	$(MAKE) $(MKFLAG) ccore.mk
 
 
-.PHONY: utcore
+.PHONY: ut
 utcore:
 	$(MAKE) $(MKFLAG) utcore.mk
 
 
 .PHONY: utrun
 utrun:
-	cd utcore/ && ./utcore.exe
+	cd tst/ && ./utcore.exe
 
 
 .PHONY: clean
