@@ -56,11 +56,7 @@ run_ut_pyclustering_job() {
 	echo "- Measure code coverage."
 
 	# install requirements for the job
-	sudo apt-get install -qq python3-scipy
-	sudo apt-get install -qq python3-numpy
-	sudo apt-get install -qq python3-pil
-	sudo apt-get install -qq python3-matplotlib
-	
+	install_miniconda
 	pip install coveralls
 	
 	# initialize environment
@@ -70,6 +66,23 @@ run_ut_pyclustering_job() {
 	# run unit-tests and obtain coverage results
 	coverage run --source=pyclustering --omit='pyclustering/*/tests/*,pyclustering/*/examples/*,pyclustering/ut/*' pyclustering/ut/__init__.py
 	coveralls
+}
+
+
+install_miniconda() {
+	wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
+	
+	bash miniconda.sh -b -p $HOME/miniconda
+	
+	export PATH="$HOME/miniconda/bin:$PATH"
+	hash -r
+	
+	conda config --set always_yes yes --set changeps1 no
+	conda update -q conda
+	
+	conda install libgfortran
+	conda create -q -n test-environment python=3.4 numpy scipy matplotlib Pillow
+	source activate test-environment
 }
 
 
