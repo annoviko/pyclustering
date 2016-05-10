@@ -8,42 +8,14 @@ addons:
     - g++-4.8
     - gcc-4.8
     - python3
-    - gfortran
-
-before_install:
-    - export CC="gcc-4.8"
-    - export CXX="g++-4.8"
-    - export LINK="gcc-4.8"
-    - export LINKXX="g++-4.8"
 
 install:
   - sudo apt-get update
-  
-  - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
-  
-  - bash miniconda.sh -b -p $HOME/miniconda
-  - export PATH="$HOME/miniconda/bin:$PATH"
-  - hash -r
-  - conda config --set always_yes yes --set changeps1 no
-  - conda update -q conda
-  
-  - conda install libgfortran
-  - conda info -a
-
-  # set conda environment with required libraries for python part of pyclustering
-  - conda create -q -n test-environment python=3.4 numpy scipy matplotlib Pillow
-  - source activate test-environment
-  
-  # install gcc for building C/C++ part (ccore) of pyclustering
-  - sudo apt-get install -qq g++-4.8
-  - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 50
-  
-  # install pyclustering library (project itself)
   - chmod u+x ci.sh
   
 script: ./ci.sh
   
 env:
-  - PYCLUSTERING_TARGET=CCORE
-  - PYCLUSTERING_TARGET=UTCORE
-  - PYCLUSTERING_TARGET=PYTHON
+  - CI_JOB=BUILD_CCORE
+  - CI_JOB=UT_CCORE
+  - CI_JOB=UT_PYCLUSTERING

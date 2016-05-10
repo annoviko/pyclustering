@@ -1,10 +1,15 @@
 #!/bin/bash
 
 
-run_ccore_job() {
+run_build_ccore_job() {
 	echo "[CI Job] CCORE (C++ code building):"
 	echo "- Build CCORE library."
 	
+	#install requirement for the job
+	sudo apt-get install -qq g++-4.8
+	sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 50
+	
+	# build ccore library
 	cd ccore/
 	make ccore
 	
@@ -17,12 +22,15 @@ run_ccore_job() {
 }
 
 
-run_utcore_job() {
-	echo "[CI Job] UT CORE (C++ code unit-testing):"
+run_ut_ccore_job() {
+	echo "[CI Job] UT CCORE (C++ code unit-testing of CCORE library):"
 	echo "- Build C++ unit-test project for CCORE library."
 	echo "- Run CCORE library unit-tests."
 	
-	#install coveralls for cpp to measure core coverage
+	# install requirements for the job
+	sudo apt-get install -qq g++-4.8
+	sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 50
+  
 	pip install --user cpp-coveralls
 	
 	# build unit-test project
@@ -38,16 +46,21 @@ run_utcore_job() {
 
 	# run unit-tests and obtain code coverage
 	make utrun
-	coveralls --exclude tst
+	coveralls --exclude tst/ --exclude tools/ --gcov-options '\-lp'
 }
 
 
-run_python_job() {
-	echo "[CI Job]: PYCLUSTERING (Python code unit-testing):"
+run_ut_pyclustering_job() {
+	echo "[CI Job]: UT PYCLUSTERING (Python code unit-testing):"
 	echo "- Run unit-tests of pyclustering."
 	echo "- Measure code coverage."
 
-	# install coveralls for python to measure code coverage
+	# install requirements for the job
+	sudo apt-get install python3-numpy
+	sudo apt-get install python3-scipy
+	sudo apt-get install python3-matplotlib
+	sudo apt-get install python3-pil
+	
 	pip install coveralls
 	
 	# initialize environment
@@ -63,17 +76,17 @@ run_python_job() {
 set -e
 set -x
 
-case $PYCLUSTERING_TARGET in
-	CCORE) 
-		run_ccore_job ;;
+case $CI_JOB in
+	BUILD_CCORE) 
+		run_build_ccore_job ;;
 		
-	UTCORE) 
-		run_utcore_job ;;
+	UT_CCORE) 
+		run_ut_ccore_job ;;
 		
-	PYTHON) 
-		run_python_job ;;
+	UT_PYCLUSTERING) 
+		run_ut_pyclustering_job ;;
 		
 	*)
-		echo "[CI Job] Unknown target $PYCLUSTERING_TARGET"
+		echo "[CI Job] Unknown target $CI_JOB"
 		exit 1 ;;
 esac
