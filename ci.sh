@@ -46,7 +46,7 @@ run_ut_ccore_job() {
 
 	# run unit-tests and obtain code coverage
 	make utrun
-	coveralls --exclude tst/ --exclude tools/ --gcov-options '\-lp'
+	# coveralls --exclude tst/ --exclude tools/ --gcov-options '\-lp'
 }
 
 
@@ -58,9 +58,8 @@ run_ut_pyclustering_job() {
 	# install requirements for the job
 	sudo apt-get install -qq python3-scipy
 	sudo apt-get install -qq python3-numpy
-
-	pip3 install Pillow
-	pip3 install matplotlib
+	sudo apt-get install -qq python3-pil
+	sudo apt-get install -qq python3-matplotlib
 	
 	pip install coveralls
 	
