@@ -16,12 +16,14 @@ SOURCES += $(SOURCE_PATH)/container/adjacency_weight_list.cpp
 SOURCES += $(SOURCE_PATH)/container/kdtree.cpp
 
 SOURCES += $(SOURCE_PATH)/cluster/agglomerative.cpp
+SOURCES += $(SOURCE_PATH)/cluster/cluster.cpp
 SOURCES += $(SOURCE_PATH)/cluster/cure.cpp
 SOURCES += $(SOURCE_PATH)/cluster/dbscan.cpp
 SOURCES += $(SOURCE_PATH)/cluster/hierarchical.cpp
 SOURCES += $(SOURCE_PATH)/cluster/hsyncnet.cpp
 SOURCES += $(SOURCE_PATH)/cluster/kmeans.cpp
 SOURCES += $(SOURCE_PATH)/cluster/kmedians.cpp
+SOURCES += $(SOURCE_PATH)/cluster/kmedoids.cpp
 SOURCES += $(SOURCE_PATH)/cluster/rock.cpp
 SOURCES += $(SOURCE_PATH)/cluster/syncnet.cpp
 SOURCES += $(SOURCE_PATH)/cluster/xmeans.cpp

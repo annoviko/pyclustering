@@ -151,8 +151,22 @@ private:
     void update_connection(const size_t node_index1, const size_t node_index2, const size_t state_connection);
 
 public:
+    /***********************************************************************************************
+    *
+    * @brief    Set adjacency bit matrix by copy it from another object.
+    *
+    * @param[in] p_other: another adjacency collection.
+    *
+    ***********************************************************************************************/
     adjacency_bit_matrix & operator=(const adjacency_bit_matrix & another_matrix);
 
+    /***********************************************************************************************
+    *
+    * @brief    Set adjacency bit matrix by move it from another object.
+    *
+    * @param[in] p_other: another adjacency collection.
+    *
+    ***********************************************************************************************/
     adjacency_bit_matrix & operator=(adjacency_bit_matrix && another_matrix);
 };
 

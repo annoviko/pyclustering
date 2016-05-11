@@ -58,7 +58,7 @@ class kmedoids:
         
         @param[in] data (list): Input data that is presented as list of points (objects), each point should be represented by list or tuple.
         @param[in] initial_index_medoids (list): Indexes of intial medoids (indexes of points in input data).
-        @param[in] tolerance (double): Stop condition: if maximum value of change of centers of clusters is less than tolerance than algorithm will stop processing
+        @param[in] tolerance (double): Stop condition: if maximum value of distance change of medoids of clusters is less than tolerance than algorithm will stop processing
         
         """
         self.__pointer_data = data;
@@ -82,10 +82,6 @@ class kmedoids:
          
         stop_condition = self.__tolerance * self.__tolerance;   # Fast solution
         #stop_condition = self.__tolerance;              # Slow solution
-         
-        # Check for dimension
-        if (len(self.__pointer_data[0]) != len(self.__medoids[0])):
-            raise NameError('Dimension of the input data and dimension of the initial cluster medians must be equal.');
          
         while (changes > stop_condition):
             self.__clusters = self.__update_clusters();
@@ -153,14 +149,14 @@ class kmedoids:
         """!
         @brief Find medoids of clusters in line with contained objects.
         
-        @return (list) list of medians for current number of clusters.
+        @return (list) list of medoids for current number of clusters.
         
         """
          
-        medians = [[] for i in range(len(self.__clusters))];
+        medoids = [[] for i in range(len(self.__clusters))];
         
         for index in range(len(self.__clusters)):
-            meadian_index = median(self.__pointer_data, self.__clusters[index]);
-            medians[index] = self.__pointer_data[meadian_index];
+            medoid_index = median(self.__pointer_data, self.__clusters[index]);
+            medoids[index] = self.__pointer_data[medoid_index];
              
-        return medians;
+        return medoids;
