@@ -16,7 +16,8 @@ SOURCES += $(SOURCE_PATH)/container/adjacency_weight_list.cpp
 SOURCES += $(SOURCE_PATH)/container/kdtree.cpp
 
 SOURCES += $(SOURCE_PATH)/cluster/agglomerative.cpp
-SOURCES += $(SOURCE_PATH)/cluster/cluster.cpp
+SOURCES += $(SOURCE_PATH)/cluster/cluster_algorithm.cpp
+SOURCES += $(SOURCE_PATH)/cluster/cluster_data.cpp
 SOURCES += $(SOURCE_PATH)/cluster/cure.cpp
 SOURCES += $(SOURCE_PATH)/cluster/dbscan.cpp
 SOURCES += $(SOURCE_PATH)/cluster/hierarchical.cpp

@@ -4,7 +4,7 @@
 
 #include <memory>
 
-#include "cluster/cluster.hpp"
+#include "cluster_algorithm.hpp"
 
 
 namespace cluster {

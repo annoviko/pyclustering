@@ -70,6 +70,9 @@ void kmedoids::process(const cluster_algorithm::input_data & p_data, kmedoids_da
         medoids.swap(updated_medoids);
     }
     while (changes > m_tolerance);
+
+    m_data_ptr = nullptr;
+    m_result_ptr = nullptr;
 }
 
 
