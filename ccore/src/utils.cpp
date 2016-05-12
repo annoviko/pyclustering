@@ -156,13 +156,6 @@ pyclustering_package * create_package(const std::vector<long> * const data) {
 	return package;
 }
 
-pyclustering_package * create_package(const std::vector<unsigned long> * const data) {
-	pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_UNSIGNED_LONG);
-	prepare_package(data, package);
-
-	return package;
-}
-
 pyclustering_package * create_package(const std::vector<size_t> * const data) {
     pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_SIZE_T);
     prepare_package(data, package);
