@@ -35,14 +35,14 @@ elif (_platform == "win32"):
 
 
 class pyclustering_type_data:
-    PYCLUSTERING_TYPE_INT = 0;
-    PYCLUSTERING_TYPE_UNSIGNED_INT = 1;
-    PYCLUSTERING_TYPE_FLOAT = 2;
-    PYCLUSTERING_TYPE_DOUBLE = 3;
-    PYCLUSTERING_TYPE_LONG = 4;
+    PYCLUSTERING_TYPE_INT           = 0;
+    PYCLUSTERING_TYPE_UNSIGNED_INT  = 1;
+    PYCLUSTERING_TYPE_FLOAT         = 2;
+    PYCLUSTERING_TYPE_DOUBLE        = 3;
+    PYCLUSTERING_TYPE_LONG          = 4;
     PYCLUSTERING_TYPE_UNSIGNED_LONG = 5;
-    PYCLUSTERING_TYPE_SIZE_T = 6;
-    PYCLUSTERING_TYPE_LIST = 7;
+    PYCLUSTERING_TYPE_LIST          = 6;
+    PYCLUSTERING_TYPE_SIZE_T        = 7;
 
 
 # Structures that are required for exchaging with DLL.

@@ -30,6 +30,7 @@ run_ut_ccore_job() {
 	# install requirements for the job
 	sudo apt-get install -qq g++-4.8
 	sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 50
+	sudo update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-4.8 50
   
 	pip install cpp-coveralls
 	
@@ -46,7 +47,7 @@ run_ut_ccore_job() {
 
 	# run unit-tests and obtain code coverage
 	make utrun
-	# coveralls --exclude tst/ --exclude tools/ --gcov-options '\-lp'
+	coveralls --exclude tst/ --exclude tools/ --gcov-options '\-lp'
 }
 
 
