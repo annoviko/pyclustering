@@ -74,7 +74,7 @@ class agglomerative:
     
     def __init__(self, data, number_clusters, link = None, ccore = False):
         """!
-        @brief Constructor of clustering algorithm hierarchical.
+        @brief Constructor of agglomerative hierarchical algorithm.
         
         @param[in] data (list): Input data that is presented as a list of points (objects), each point should be represented by a list or tuple.
         @param[in] number_clusters (uint): Number of clusters that should be allocated.

@@ -134,6 +134,9 @@ def extract_pyclustering_package(ccore_package_pointer):
     elif (type_package == pyclustering_type_data.PYCLUSTERING_TYPE_UNSIGNED_LONG):
         pointer_data = cast(pointer_package[0].data, POINTER(c_ulong));
     
+    elif (type_package == pyclustering_type_data.PYCLUSTERING_TYPE_SIZE_T):
+        pointer_data = cast(pointer_package[0].data, POINTER(c_size_t));
+    
     elif (type_package == pyclustering_type_data.PYCLUSTERING_TYPE_LIST):
         # pointer_package[0].data == pyclustering_package **
         pointer_data = cast(pointer_package[0].data, POINTER(POINTER(pyclustering_package)));
@@ -185,24 +188,6 @@ def cure(sample, number_clusters, number_represent_points, compression):
     
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     result = ccore.cure_algorithm(pointer_data, c_uint(number_clusters), c_uint(number_represent_points), c_double(compression));
-    
-    list_of_clusters = extract_clusters(result);
-    
-    ccore.free_clustering_result(result);
-    return list_of_clusters;
-
-def hierarchical(sample, number_clusters):
-    "Clustering algorithm hierarchical returns allocated clusters and noise that are consisted from input data. Calculation is performed via CCORE."
-    
-    "(in) data               - input data that is presented as list of points (objects), each point should be represented by list or tuple."
-    "(in) number_clusters    - number of cluster that should be allocated."
-    
-    "Returns list of allocated clusters, each cluster contains indexes of objects in list of data."
-    
-    pointer_data = create_pointer_data(sample);
-    
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
-    result = ccore.hierarchical_algorithm(pointer_data, c_uint(number_clusters));
     
     list_of_clusters = extract_clusters(result);
     
