@@ -36,10 +36,10 @@ from pyclustering.samples.definitions import SIMPLE_SAMPLES;
 from random import random;
 
 class Test(unittest.TestCase):
-    def templateLengthProcessData(self, path_to_file, initial_medoids, expected_cluster_length):
+    def templateLengthProcessData(self, path_to_file, initial_medoids, expected_cluster_length, ccore_flag = False):
         sample = read_sample(path_to_file);
          
-        kmedoids_instance = kmedoids(sample, initial_medoids, 0.025);
+        kmedoids_instance = kmedoids(sample, initial_medoids, 0.025, ccore_flag);
         kmedoids_instance.process();
          
         clusters = kmedoids_instance.get_clusters();
@@ -53,29 +53,53 @@ class Test(unittest.TestCase):
      
     def testClusterAllocationSampleSimple1(self):
         self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5]);
-         
+
+    def testClusterAllocationSampleSimple1ByCore(self):
+        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], True);
+
     def testClusterOneAllocationSampleSimple1(self):
         self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [5], [10]);
- 
+
+    def testClusterOneAllocationSampleSimple1ByCore(self):
+        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [5], [10], True);
+
     def testClusterAllocationSampleSimple2(self):
         self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [3, 12, 20], [10, 5, 8]);
- 
+
+    def testClusterAllocationSampleSimple2ByCore(self):
+        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [3, 12, 20], [10, 5, 8], True);
+
     def testClusterOneAllocationSampleSimple2(self):
         self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [10], [23]);
- 
+
+    def testClusterOneAllocationSampleSimple2ByCore(self):
+        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [10], [23], True);
+
     def testClusterAllocationSampleSimple3(self):
         self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [4, 12, 25, 37], [10, 10, 10, 30]);
- 
+
+    def testClusterAllocationSampleSimple3ByCore(self):
+        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [4, 12, 25, 37], [10, 10, 10, 30], True);
+
     def testClusterOneAllocationSampleSimple3(self):
         self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [30], [60]);
- 
+
+    def testClusterOneAllocationSampleSimple3ByCore(self):
+        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [30], [60], True);
+
     def testClusterAllocationSampleSimple5(self):
         self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [4, 18, 34, 55], [15, 15, 15, 15]);
-   
+
+    def testClusterAllocationSampleSimple5ByCore(self):
+        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [4, 18, 34, 55], [15, 15, 15, 15], True);
+
     def testClusterOneAllocationSampleSimple5(self):
-        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [35], [60]);   
-             
- 
+        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [35], [60]);
+
+    def testClusterOneAllocationSampleSimple5ByCore(self):
+        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [35], [60], True);
+
+
     def templateClusterAllocationOneDimensionData(self):
         input_data = [ [random()] for i in range(10) ] + [ [random() + 3] for i in range(10) ] + [ [random() + 5] for i in range(10) ] + [ [random() + 8] for i in range(10) ];
          
@@ -116,14 +140,23 @@ class Test(unittest.TestCase):
             
         assert (number_objects == allocated_number_objects);    # number of allocated objects should be the same.
 
-    def testClusterAllocationTheSameObjectsOneInitialCenter(self):
+    def testClusterAllocationTheSameObjectsOneInitialMedoid(self):
         self.templateClusterAllocationTheSameObjects(20, 1, False);
 
-    def testClusterAllocationTheSameObjectsTwoInitialCenters(self):
+    def testClusterAllocationTheSameObjectsOneInitialMedoidByCore(self):
+        self.templateClusterAllocationTheSameObjects(20, 1, True);
+
+    def testClusterAllocationTheSameObjectsTwoInitialMedoids(self):
         self.templateClusterAllocationTheSameObjects(15, 2, False);
 
-    def testClusterAllocationTheSameObjectsThreeInitialCenters(self):
+    def testClusterAllocationTheSameObjectsTwoInitialMedoidsByCore(self):
+        self.templateClusterAllocationTheSameObjects(15, 2, True);
+
+    def testClusterAllocationTheSameObjectsThreeInitialMedoids(self):
         self.templateClusterAllocationTheSameObjects(25, 3, False);
+
+    def testClusterAllocationTheSameObjectsThreeInitialMedoidsByCore(self):
+        self.templateClusterAllocationTheSameObjects(25, 3, True);
 
 
 if __name__ == "__main__":

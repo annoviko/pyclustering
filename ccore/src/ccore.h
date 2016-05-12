@@ -34,14 +34,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #endif
 
 typedef enum pyclustering_type_data {
-	PYCLUSTERING_TYPE_INT				= 0,
-	PYCLUSTERING_TYPE_UNSIGNED_INT		= 1,
-	PYCLUSTERING_TYPE_FLOAT				= 2,
-	PYCLUSTERING_TYPE_DOUBLE			= 3,
-	PYCLUSTERING_TYPE_LONG				= 4,
-	PYCLUSTERING_TYPE_UNSIGNED_LONG		= 5,
-	PYCLUSTERING_TYPE_LIST				= 6,
-	PYCLUSTERING_TYPE_UNDEFINED         = 7,
+    PYCLUSTERING_TYPE_INT               = 0,
+    PYCLUSTERING_TYPE_UNSIGNED_INT      = 1,
+    PYCLUSTERING_TYPE_FLOAT             = 2,
+    PYCLUSTERING_TYPE_DOUBLE            = 3,
+    PYCLUSTERING_TYPE_LONG              = 4,
+    PYCLUSTERING_TYPE_UNSIGNED_LONG     = 5,
+    PYCLUSTERING_TYPE_LIST              = 6,
+    PYCLUSTERING_TYPE_SIZE_T            = 7,
+    PYCLUSTERING_TYPE_UNDEFINED         = 8,
 } pyclustering_type_data;
 
 
@@ -191,6 +192,8 @@ extern "C" DECLARATION clustering_result * hierarchical_algorithm(const data_rep
 extern "C" DECLARATION clustering_result * kmeans_algorithm(const data_representation * const sample, const data_representation * const initial_centers, const double tolerance);
 
 extern "C" DECLARATION clustering_result * kmedians_algorithm(const data_representation * const sample, const data_representation * const initial_medians, const double tolerance);
+
+extern "C" DECLARATION pyclustering_package * kmedoids_algorithm(const data_representation * const sample, const pyclustering_package * const medoids, const double tolerance);
 
 /***********************************************************************************************
  *

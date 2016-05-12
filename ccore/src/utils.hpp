@@ -137,6 +137,8 @@ pyclustering_package * create_package(const std::vector<long> * const data);
 
 pyclustering_package * create_package(const std::vector<unsigned long> * const data);
 
+pyclustering_package * create_package(const std::vector<size_t> * const data);
+
 template <class type_object>
 void prepare_package(const std::vector<type_object> * const data, pyclustering_package * package) {
 	package->size = data->size();

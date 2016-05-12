@@ -21,12 +21,16 @@
   <ItemGroup>
     <ClCompile Include="ccore.cpp" />
     <ClCompile Include="cluster\agglomerative.cpp" />
+    <ClCompile Include="cluster\cluster_algorithm.cpp" />
+    <ClCompile Include="cluster\cluster_data.cpp" />
     <ClCompile Include="cluster\cure.cpp" />
     <ClCompile Include="cluster\dbscan.cpp" />
     <ClCompile Include="cluster\hierarchical.cpp" />
     <ClCompile Include="cluster\hsyncnet.cpp" />
     <ClCompile Include="cluster\kmeans.cpp" />
     <ClCompile Include="cluster\kmedians.cpp" />
+    <ClCompile Include="cluster\kmedoids.cpp" />
+    <ClCompile Include="cluster\kmedoids_data.cpp" />
     <ClCompile Include="cluster\rock.cpp" />
     <ClCompile Include="cluster\syncnet.cpp" />
     <ClCompile Include="cluster\xmeans.cpp" />
@@ -50,12 +54,16 @@
   <ItemGroup>
     <ClInclude Include="ccore.h" />
     <ClInclude Include="cluster\agglomerative.hpp" />
+    <ClInclude Include="cluster\cluster_algorithm.hpp" />
+    <ClInclude Include="cluster\cluster_data.hpp" />
     <ClInclude Include="cluster\cure.hpp" />
     <ClInclude Include="cluster\dbscan.hpp" />
     <ClInclude Include="cluster\hierarchical.hpp" />
     <ClInclude Include="cluster\hsyncnet.hpp" />
     <ClInclude Include="cluster\kmeans.hpp" />
     <ClInclude Include="cluster\kmedians.hpp" />
+    <ClInclude Include="cluster\kmedoids.hpp" />
+    <ClInclude Include="cluster\kmedoids_data.hpp" />
     <ClInclude Include="cluster\rock.hpp" />
     <ClInclude Include="cluster\syncnet.hpp" />
     <ClInclude Include="cluster\xmeans.hpp" />

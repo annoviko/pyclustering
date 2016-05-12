@@ -103,6 +103,18 @@
     <ClCompile Include="differential\differ_factor.cpp">
       <Filter>Source Files\differential</Filter>
     </ClCompile>
+    <ClCompile Include="cluster\cluster_algorithm.cpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClCompile>
+    <ClCompile Include="cluster\cluster_data.cpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClCompile>
+    <ClCompile Include="cluster\kmedoids_data.cpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClCompile>
+    <ClCompile Include="cluster\kmedoids.cpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cluster\agglomerative.hpp">
@@ -212,6 +224,18 @@
     </ClInclude>
     <ClInclude Include="differential\runge_kutta_fehlberg_45.hpp">
       <Filter>Source Files\differential</Filter>
+    </ClInclude>
+    <ClInclude Include="cluster\cluster_algorithm.hpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="cluster\cluster_data.hpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="cluster\kmedoids_data.hpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="cluster\kmedoids.hpp">
+      <Filter>Source Files\cluster</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
