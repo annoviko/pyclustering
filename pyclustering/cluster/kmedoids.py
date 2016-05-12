@@ -29,6 +29,9 @@
 
 from pyclustering.utils import euclidean_distance_sqrt, median;
 
+import pyclustering.core.kmedoids_wrapper as wrapper;
+
+
 class kmedoids:
     """!
     @brief Class represents clustering algorithm K-Medoids (another one title is PAM - Parti).
@@ -52,19 +55,21 @@ class kmedoids:
     """
     
     
-    def __init__(self, data, initial_index_medoids, tolerance = 0.25):
+    def __init__(self, data, initial_index_medoids, tolerance = 0.25, ccore = False):
         """!
         @brief Constructor of clustering algorithm K-Medoids.
         
         @param[in] data (list): Input data that is presented as list of points (objects), each point should be represented by list or tuple.
         @param[in] initial_index_medoids (list): Indexes of intial medoids (indexes of points in input data).
-        @param[in] tolerance (double): Stop condition: if maximum value of distance change of medoids of clusters is less than tolerance than algorithm will stop processing
+        @param[in] tolerance (double): Stop condition: if maximum value of distance change of medoids of clusters is less than tolerance than algorithm will stop processing.
+        @param[in] ccore (bool): If specified than CCORE library (C++ pyclustering library) is used for clustering instead of Python code.
         
         """
         self.__pointer_data = data;
         self.__clusters = [];
-        self.__medoids = [ self.__pointer_data[medoid_index] for medoid_index in initial_index_medoids ];
+        self.__medoids = initial_index_medoids;
         self.__tolerance = tolerance;
+        self.__ccore = ccore;
 
 
     def process(self):
@@ -78,18 +83,25 @@ class kmedoids:
         
         """
         
-        changes = float('inf');
-         
-        stop_condition = self.__tolerance * self.__tolerance;   # Fast solution
-        #stop_condition = self.__tolerance;              # Slow solution
-         
-        while (changes > stop_condition):
-            self.__clusters = self.__update_clusters();
-            updated_medoids = self.__update_medoids();  # changes should be calculated before asignment
-         
-            changes = max([euclidean_distance_sqrt(self.__medoids[index], updated_medoids[index]) for index in range(len(updated_medoids))]);    # Fast solution
+        if (self.__ccore is True):
+            self.__clusters = wrapper.kmedoids(self.__pointer_data, self.__medoids, self.__tolerance);
+            self.__medoids = self.__update_medoids();
+        
+        else:
+            self.__medoids = [ self.__pointer_data[medoid_index] for medoid_index in self.__medoids ];
+            
+            changes = float('inf');
              
-            self.__medoids = updated_medoids;
+            stop_condition = self.__tolerance * self.__tolerance;   # Fast solution
+            #stop_condition = self.__tolerance;              # Slow solution
+             
+            while (changes > stop_condition):
+                self.__clusters = self.__update_clusters();
+                updated_medoids = self.__update_medoids();  # changes should be calculated before asignment
+             
+                changes = max([euclidean_distance_sqrt(self.__medoids[index], updated_medoids[index]) for index in range(len(updated_medoids))]);    # Fast solution
+                 
+                self.__medoids = updated_medoids;
 
 
     def get_clusters(self):

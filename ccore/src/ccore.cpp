@@ -35,6 +35,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "cluster/hsyncnet.hpp"
 #include "cluster/kmeans.hpp"
 #include "cluster/kmedians.hpp"
+#include "cluster/kmedoids.hpp"
 #include "cluster/rock.hpp"
 #include "cluster/syncnet.hpp"
 #include "cluster/xmeans.hpp"
@@ -94,48 +95,52 @@ void free_dynamic_result(dynamic_result * pointer) {
 }
 
 void free_pyclustering_package(pyclustering_package * package) {
-	if (package->type != (unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_LIST) {
-		switch(package->type) {
-			case pyclustering_type_data::PYCLUSTERING_TYPE_INT:
-				delete [] (int *) package->data;
-				break;
+    if (package->type != (unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_LIST) {
+        switch(package->type) {
+            case pyclustering_type_data::PYCLUSTERING_TYPE_INT:
+                delete [] (int *) package->data;
+                break;
 
-			case pyclustering_type_data::PYCLUSTERING_TYPE_UNSIGNED_INT:
-				delete [] (unsigned int *) package->data;
-				break;
+            case pyclustering_type_data::PYCLUSTERING_TYPE_UNSIGNED_INT:
+                delete [] (unsigned int *) package->data;
+                break;
 
-			case pyclustering_type_data::PYCLUSTERING_TYPE_FLOAT:
-				delete [] (float *) package->data;
-				break;
+            case pyclustering_type_data::PYCLUSTERING_TYPE_FLOAT:
+                delete [] (float *) package->data;
+                break;
 
-			case pyclustering_type_data::PYCLUSTERING_TYPE_DOUBLE:
-				delete [] (double *) package->data;
-				break;
+            case pyclustering_type_data::PYCLUSTERING_TYPE_DOUBLE:
+                delete [] (double *) package->data;
+                break;
 
-			case pyclustering_type_data::PYCLUSTERING_TYPE_LONG:
-				delete [] (long *) package->data;
-				break;
+            case pyclustering_type_data::PYCLUSTERING_TYPE_LONG:
+                delete [] (long *) package->data;
+                break;
 
-			case pyclustering_type_data::PYCLUSTERING_TYPE_UNSIGNED_LONG:
-				delete [] (unsigned long *) package->data;
-				break;
+            case pyclustering_type_data::PYCLUSTERING_TYPE_UNSIGNED_LONG:
+                delete [] (unsigned long *) package->data;
+                break;
 
-			default:
-				/* Memory Leak */
-				break;
-		}
+            case pyclustering_type_data::PYCLUSTERING_TYPE_SIZE_T:
+                delete [] (size_t *) package->data;
+                break;
 
-		delete package;
-		package = NULL;
-	}
-	else {
-		for (unsigned int i = 0; i < package->size; i++) {
-			free_pyclustering_package( ( (pyclustering_package **) package->data)[i] );
-		}
+            default:
+                /* Memory Leak */
+                break;
+        }
 
-		delete package;
-		package = NULL;
-	}
+        delete package;
+        package = NULL;
+    }
+    else {
+        for (unsigned int i = 0; i < package->size; i++) {
+            free_pyclustering_package( ( (pyclustering_package **) package->data)[i] );
+        }
+
+        delete package;
+        package = NULL;
+    }
 }
 
 pyclustering_package * agglomerative_algorithm(const data_representation * const sample, const unsigned int number_clusters, const unsigned int link) {
@@ -244,6 +249,29 @@ clustering_result * kmedians_algorithm(const data_representation * const sample,
     delete medians;
 
     return result;
+}
+
+pyclustering_package * kmedoids_algorithm(const data_representation * const sample, const pyclustering_package * const package_medoids, const double tolerance) {
+    cluster_analysis::medoid_sequence medoids((size_t *) package_medoids->data, ((size_t *) package_medoids->data) + package_medoids->size);
+
+    cluster_analysis::kmedoids algorithm(medoids, tolerance);
+
+    dataset * input_dataset = read_sample(sample);
+
+    cluster_analysis::kmedoids_data output_result;
+    algorithm.process(*input_dataset, output_result);
+
+    pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
+    package->size = output_result.size();
+    package->data = new pyclustering_package * [package->size];
+
+    for (unsigned int i = 0; i < package->size; i++) {
+        ((pyclustering_package **) package->data)[i] = create_package(&output_result[i]);
+    }
+
+    delete input_dataset;
+
+    return package;
 }
 
 clustering_result * rock_algorithm(const data_representation * const sample, const double radius, const unsigned int number_clusters, const double threshold) {

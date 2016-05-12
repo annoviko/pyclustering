@@ -24,16 +24,24 @@
 """
 
 
-from ctypes import cdll, c_double;
+from ctypes import cdll, c_double, c_size_t, c_void_p, cast, POINTER;
 
-from pyclustering.core.wrapper import PATH_DLL_CCORE_64, create_pointer_data, extract_pyclustering_package;
+from pyclustering.core.wrapper import PATH_DLL_CCORE_64, create_pointer_data, pyclustering_package, pyclustering_type_data, extract_pyclustering_package;
 
 
-def kmedoids(sample, tolerance):
+def kmedoids(sample, medoids, tolerance):
     pointer_data = create_pointer_data(sample);
     
+    c_medoids = (c_size_t * len(medoids))();
+    c_medoids[:] = medoids[:];
+    
+    medoids_package = pyclustering_package();
+    medoids_package.size = len(medoids);
+    medoids_package.type = pyclustering_type_data.PYCLUSTERING_TYPE_SIZE_T;
+    medoids_package.data = cast(c_medoids, POINTER(c_void_p));
+    
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
-    package = ccore.kmedoids_algorithm(pointer_data, c_double(tolerance));
+    package = ccore.kmedoids_algorithm(pointer_data, medoids_package, c_double(tolerance));
     
     result = extract_pyclustering_package(package);
     ccore.free_pyclustering_package(package);
