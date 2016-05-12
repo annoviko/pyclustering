@@ -115,7 +115,7 @@ if __name__ == "__main__":
     
     suite.addTests(unittest.TestLoader().loadTestsFromModule(utils_unit_tests));
     
-    result = unittest.TextTestRunner().run(suite);
+    result = unittest.TextTestRunner(verbosity = 2).run(suite);
     
     # Get execution result
     execution_testing_result = 0;
