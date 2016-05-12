@@ -4,6 +4,7 @@
 #include <sstream>
 #include <iostream>
 
+
 #if defined _WIN32 || defined __CYGWIN__
     #define separator std::string("\\")
 #else
@@ -38,8 +39,8 @@ const simple_sample_factory::map_sample simple_sample_factory::m_sample_table = 
 };
 
 
-std::shared_ptr<dataset_t> simple_sample_factory::create_sample(const SAMPLE_SIMPLE sample) {
-    std::shared_ptr<dataset_t> sample_data(new dataset_t);
+std::shared_ptr<dataset> simple_sample_factory::create_sample(const SAMPLE_SIMPLE sample) {
+    std::shared_ptr<dataset> sample_data(new dataset);
     size_t sample_dimension = 0;
 
     const std::string path_sample = m_sample_table.at(sample);
@@ -49,8 +50,8 @@ std::shared_ptr<dataset_t> simple_sample_factory::create_sample(const SAMPLE_SIM
         std::string file_line;
 
         while(std::getline(file_sample, file_line)) {
-            double      value = 0.0;
-            point_t     sample_point;
+            double value = 0.0;
+            point sample_point;
 
             std::istringstream stream_value(file_line);
 

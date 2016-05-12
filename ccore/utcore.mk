@@ -13,6 +13,7 @@ LFLAGS = -O3 -pthread -fprofile-arcs -ftest-coverage
 # Project sources
 SOURCES += tst/main.cpp
 SOURCES += tst/samples.cpp
+SOURCES += tst/utest-cluster.cpp
 SOURCES += tools/gtest/gtest-all.cpp
 
 OBJECTS = $(SOURCES:.cpp=.o)

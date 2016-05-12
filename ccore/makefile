@@ -28,7 +28,7 @@ utrun:
 
 .PHONY: clean
 clean:
-	rm -rf ccore/*.o ccore/*.d ../pyclustering/core/x64/linux/ccore.so
-	rm -rf utcore/*.o utcore/*.d utcore/utcore.exe
-	rm -rf ccore/ant/*.[od]
+	find src/ tst/ -name "*.d" -or -name "*.o" -or -name "*.gcda" -or -name "*.gcno" | xargs rm -rf
+	rm -rf ../pyclustering/core/x64/linux/ccore.so
+	rm -rf tst/utcore.exe
 

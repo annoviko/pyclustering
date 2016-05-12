@@ -104,6 +104,21 @@
     <ClCompile Include="..\src\utils.cpp">
       <Filter>Tested Code</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\cluster\cluster_algorithm.cpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\cluster\cluster_data.cpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\cluster\kmedoids.cpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\cluster\kmedoids_data.cpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClCompile>
+    <ClCompile Include="utest-cluster.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\tools\gtest\gtest.h">
@@ -258,6 +273,27 @@
     </ClInclude>
     <ClInclude Include="..\src\utils.hpp">
       <Filter>Tested Code</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cluster\cluster_algorithm.hpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cluster\cluster_data.hpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cluster\kmedoids.hpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cluster\kmedoids_data.hpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\definitions.hpp">
+      <Filter>Tested Code</Filter>
+    </ClInclude>
+    <ClInclude Include="utest-cluster.hpp">
+      <Filter>Unit Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="utest-kmedoids.hpp">
+      <Filter>Unit Tests</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

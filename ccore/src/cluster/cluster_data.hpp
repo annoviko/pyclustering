@@ -6,7 +6,12 @@
 #include <memory>
 
 
-namespace cluster {
+namespace cluster_analysis {
+
+
+using cluster = std::vector<size_t>;
+using cluster_sequence = std::vector<cluster>;
+using cluster_sequence_ptr = std::shared_ptr<cluster_sequence>;
 
 
 /***********************************************************************************************
@@ -15,11 +20,8 @@ namespace cluster {
 *
 ***********************************************************************************************/
 class cluster_data {
-public:
-    using cluster = std::vector<size_t>;
-
 protected:
-    std::vector<cluster>    m_clusters;
+    cluster_sequence_ptr    m_clusters;
 
 public:
     /***********************************************************************************************
@@ -60,7 +62,7 @@ public:
     * @brief    Returns direct access to encapsulated clusters.
     *
     ***********************************************************************************************/
-    std::vector<cluster> & clusters(void);
+    cluster_sequence_ptr clusters(void);
 
     /***********************************************************************************************
     *

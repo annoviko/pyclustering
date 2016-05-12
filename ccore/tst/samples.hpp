@@ -1,14 +1,13 @@
 #ifndef _SAMPLES_H_
 #define _SAMPLES_H_
 
+
 #include <string>
 #include <vector>
 #include <memory>
 #include <map>
 
-
-typedef std::vector<double>                     point_t;
-typedef std::vector<point_t>                    dataset_t;
+#include "definitions.hpp"
 
 
 /***********************************************************************************************
@@ -63,7 +62,7 @@ public:
     * @return  Smart pointer to created dataset.
     *
     ***********************************************************************************************/
-    static std::shared_ptr<dataset_t> create_sample(const SAMPLE_SIMPLE sample);
+    static std::shared_ptr<dataset> create_sample(const SAMPLE_SIMPLE sample);
 };
 
 

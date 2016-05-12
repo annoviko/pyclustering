@@ -11,6 +11,7 @@
 #include "utest-hsyncnet.hpp"
 #include "utest-kdtree.hpp"
 #include "utest-kmedians.hpp"
+#include "utest-kmedoids.hpp"
 #include "utest-legion.hpp"
 #include "utest-pcnn.hpp"
 #include "utest-som.hpp"

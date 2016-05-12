@@ -87,8 +87,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\src\cluster\agglomerative.cpp" />
+    <ClCompile Include="..\src\cluster\cluster_algorithm.cpp" />
+    <ClCompile Include="..\src\cluster\cluster_data.cpp" />
     <ClCompile Include="..\src\cluster\hsyncnet.cpp" />
     <ClCompile Include="..\src\cluster\kmedians.cpp" />
+    <ClCompile Include="..\src\cluster\kmedoids.cpp" />
+    <ClCompile Include="..\src\cluster\kmedoids_data.cpp" />
     <ClCompile Include="..\src\cluster\syncnet.cpp" />
     <ClCompile Include="..\src\cluster\xmeans.cpp" />
     <ClCompile Include="..\src\container\adjacency_bit_matrix.cpp" />
@@ -110,11 +114,16 @@
     <ClCompile Include="..\tools\gtest\gtest-all.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="samples.cpp" />
+    <ClCompile Include="utest-cluster.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\cluster\agglomerative.hpp" />
+    <ClInclude Include="..\src\cluster\cluster_algorithm.hpp" />
+    <ClInclude Include="..\src\cluster\cluster_data.hpp" />
     <ClInclude Include="..\src\cluster\hsyncnet.hpp" />
     <ClInclude Include="..\src\cluster\kmedians.hpp" />
+    <ClInclude Include="..\src\cluster\kmedoids.hpp" />
+    <ClInclude Include="..\src\cluster\kmedoids_data.hpp" />
     <ClInclude Include="..\src\cluster\syncnet.hpp" />
     <ClInclude Include="..\src\cluster\xmeans.hpp" />
     <ClInclude Include="..\src\container\adjacency.hpp" />
@@ -127,6 +136,7 @@
     <ClInclude Include="..\src\container\dynamic_data.hpp" />
     <ClInclude Include="..\src\container\ensemble_data.hpp" />
     <ClInclude Include="..\src\container\kdtree.hpp" />
+    <ClInclude Include="..\src\definitions.hpp" />
     <ClInclude Include="..\src\differential\differ_factor.hpp" />
     <ClInclude Include="..\src\differential\differ_state.hpp" />
     <ClInclude Include="..\src\differential\runge_kutta_4.hpp" />
@@ -151,10 +161,12 @@
     <ClInclude Include="utest-adjacency_weight_list.hpp" />
     <ClInclude Include="utest-agglomerative.hpp" />
     <ClInclude Include="utest-ant_colony.hpp" />
+    <ClInclude Include="utest-cluster.hpp" />
     <ClInclude Include="utest-differential.hpp" />
     <ClInclude Include="utest-hsyncnet.hpp" />
     <ClInclude Include="utest-kdtree.hpp" />
     <ClInclude Include="utest-kmedians.hpp" />
+    <ClInclude Include="utest-kmedoids.hpp" />
     <ClInclude Include="utest-legion.hpp" />
     <ClInclude Include="utest-pcnn.hpp" />
     <ClInclude Include="utest-som.hpp" />

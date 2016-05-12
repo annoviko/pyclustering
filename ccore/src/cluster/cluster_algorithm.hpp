@@ -4,10 +4,12 @@
 
 #include <vector>
 
-#include "cluster_data.hpp"
+#include "cluster/cluster_data.hpp"
+
+#include "definitions.hpp"
 
 
-namespace cluster {
+namespace cluster_analysis {
 
 
 /***********************************************************************************************
@@ -16,10 +18,6 @@ namespace cluster {
 *
 ***********************************************************************************************/
 class cluster_algorithm {
-public:
-    using point         = std::vector<double>;
-    using input_data    = std::vector<point>;
-
 public:
     /***********************************************************************************************
     *
@@ -37,7 +35,7 @@ public:
     * @param[out] p_result: clustering result of an input data.
     *
     ***********************************************************************************************/
-    virtual void process(const input_data & p_data, cluster_data & p_result) = 0;
+    virtual void process(const dataset & p_data, cluster_data & p_result) = 0;
 };
 
 

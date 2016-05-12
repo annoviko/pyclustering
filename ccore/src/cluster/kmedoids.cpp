@@ -5,31 +5,7 @@
 #include <limits>
 
 
-namespace cluster {
-
-
-kmedoids_data::kmedoids_data(void) :
-        cluster_data(),
-        m_medoids(std::vector<size_t>())
-{ }
-
-
-kmedoids_data::kmedoids_data(const kmedoids_data & p_other) :
-        cluster_data(p_other),
-        m_medoids(p_other.m_medoids)
-{ }
-
-
-kmedoids_data::kmedoids_data(kmedoids_data && p_other) :
-        cluster_data(p_other),
-        m_medoids(std::move(p_other.m_medoids))
-{ }
-
-
-kmedoids_data::~kmedoids_data(void) { }
-
-
-std::vector<size_t> & kmedoids_data::medoids(void) { return m_medoids; }
+namespace cluster_analysis {
 
 
 kmedoids::kmedoids(void) :
@@ -51,11 +27,11 @@ kmedoids::kmedoids(const std::vector<size_t> & p_initial_medoids, const double p
 kmedoids::~kmedoids(void) { }
 
 
-void kmedoids::process(const cluster_algorithm::input_data & p_data, kmedoids_data & p_result) {
+void kmedoids::process(const dataset & p_data, cluster_data & p_result) {
     m_data_ptr = &p_data;
-    m_result_ptr = &p_result;
+    m_result_ptr = (kmedoids_data *) &p_result;
 
-    std::vector<size_t> & medoids = m_result_ptr->medoids();
+    medoid_sequence & medoids = *(m_result_ptr->medoids());
     medoids.assign(m_initial_medoids.begin(), m_initial_medoids.end());
 
     double changes = 0.0;
@@ -77,17 +53,18 @@ void kmedoids::process(const cluster_algorithm::input_data & p_data, kmedoids_da
 
 
 void kmedoids::update_clusters(void) {
-    std::vector<cluster_data::cluster> & clusters = m_result_ptr->clusters();
+    cluster_sequence & clusters = *(m_result_ptr->clusters());
+    medoid_sequence & medoids = *(m_result_ptr->medoids());
 
     clusters.clear();
-    clusters.resize(m_result_ptr->medoids().size());
+    clusters.resize(medoids.size());
 
     for (size_t index_point = 0; index_point < m_data_ptr->size(); index_point++) {
         size_t index_optim = 0;
         double dist_optim = 0.0;
 
-        for (size_t index = 0; index < m_result_ptr->medoids().size(); index++) {
-            const size_t index_medoid = m_result_ptr->medoids()[index];
+        for (size_t index = 0; index < medoids.size(); index++) {
+            const size_t index_medoid = medoids[index];
             const double distance = euclidean_distance_sqrt(&(*m_data_ptr)[index_point], &(*m_data_ptr)[index_medoid]);
 
             if ( (distance < dist_optim) || (index == 0) ) {
@@ -103,7 +80,7 @@ void kmedoids::update_clusters(void) {
 }
 
 
-void kmedoids::erase_empty_clusters(std::vector<cluster_data::cluster> & p_clusters) {
+void kmedoids::erase_empty_clusters(cluster_sequence & p_clusters) {
     for (size_t index_cluster = p_clusters.size() - 1; index_cluster != (size_t) -1; index_cluster--) {
         if (p_clusters[index_cluster].empty()) {
             p_clusters.erase(p_clusters.begin() + index_cluster);
@@ -113,18 +90,18 @@ void kmedoids::erase_empty_clusters(std::vector<cluster_data::cluster> & p_clust
 
 
 void kmedoids::calculate_medoids(std::vector<size_t> & p_medoids) {
-    std::vector<size_t> & medoids = m_result_ptr->medoids();
+    cluster_sequence & clusters = *(m_result_ptr->clusters());
 
-    medoids.clear();
-    medoids.resize(m_result_ptr->clusters().size());
+    p_medoids.clear();
+    p_medoids.resize(clusters.size());
 
-    for (size_t index = 0; index < medoids.size(); index++) {
-        medoids[index] = calculate_cluster_medoid(m_result_ptr->clusters()[index]);
+    for (size_t index = 0; index < clusters.size(); index++) {
+        p_medoids[index] = calculate_cluster_medoid(clusters[index]);
     }
 }
 
 
-size_t kmedoids::calculate_cluster_medoid(const cluster_data::cluster & p_cluster) const {
+size_t kmedoids::calculate_cluster_medoid(const cluster & p_cluster) const {
     size_t index_medoid = 0;
     double distance = std::numeric_limits<double>::max();
 
@@ -144,11 +121,11 @@ size_t kmedoids::calculate_cluster_medoid(const cluster_data::cluster & p_cluste
 }
 
 
-double kmedoids::calculate_changes(const std::vector<size_t> & p_medoids) const {
+double kmedoids::calculate_changes(const medoid_sequence & p_medoids) const {
     double maximum_difference = 0.0;
     for (size_t index = 0; index < p_medoids.size(); index++) {
         const size_t index_point1 = p_medoids[index];
-        const size_t index_point2 = m_result_ptr->medoids()[index];
+        const size_t index_point2 = (*m_result_ptr->medoids())[index];
 
         const double distance = euclidean_distance_sqrt( &(*m_data_ptr)[index_point1], &(*m_data_ptr)[index_point2] );
         if (distance > maximum_difference) {

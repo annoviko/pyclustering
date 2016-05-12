@@ -4,63 +4,11 @@
 
 #include <memory>
 
-#include "cluster_algorithm.hpp"
+#include "cluster/cluster_algorithm.hpp"
+#include "cluster/kmedoids_data.hpp"
 
 
-namespace cluster {
-
-
-/***********************************************************************************************
-*
-* @brief    Clustering results of K-Medoids algorithm that consists of information about allocated
-*           clusters and medoids that correspond to them.
-*
-***********************************************************************************************/
-class kmedoids_data : public cluster_data {
-private:
-    std::vector<size_t>     m_medoids;
-
-public:
-    /***********************************************************************************************
-    *
-    * @brief    Default constructor that creates empty clustering data.
-    *
-    ***********************************************************************************************/
-    kmedoids_data(void);
-
-    /***********************************************************************************************
-    *
-    * @brief    Copy constructor that creates clustering data that is the same to specified.
-    *
-    * @param[in] p_other: another clustering data.
-    *
-    ***********************************************************************************************/
-    kmedoids_data(const kmedoids_data & p_other);
-
-    /***********************************************************************************************
-    *
-    * @brief    Move constructor that creates clustering data from another by moving data.
-    *
-    * @param[in] p_other: another clustering data.
-    *
-    ***********************************************************************************************/
-    kmedoids_data(kmedoids_data && p_other);
-
-    /***********************************************************************************************
-    *
-    * @brief    Default destructor that destroys clustering data.
-    *
-    ***********************************************************************************************/
-    virtual ~kmedoids_data(void);
-
-public:
-    /***********************************************************************************************
-    *
-    * @brief    Returns direct access to encapsulated medoids.
-    *
-    ***********************************************************************************************/
-    std::vector<size_t> & medoids(void);
-};
+namespace cluster_analysis {
 
 
 /***********************************************************************************************
@@ -72,11 +20,11 @@ public:
 ***********************************************************************************************/
 class kmedoids : public cluster_algorithm {
 private:
-    const cluster_algorithm::input_data * m_data_ptr;   /* temporary pointer to input data that is used only during processing */
+    const dataset                   * m_data_ptr;         /* temporary pointer to input data that is used only during processing */
 
     kmedoids_data                   * m_result_ptr;       /* temporary pointer to clustering result that is used only during processing */
 
-    std::vector<size_t>             m_initial_medoids;
+    medoid_sequence                 m_initial_medoids;
 
     double                          m_tolerance;
 
@@ -98,7 +46,7 @@ public:
     *             medoids of clusters is less than tolerance than algorithm will stop processing.
     *
     ***********************************************************************************************/
-    kmedoids(const std::vector<size_t> & p_initial_medoids, const double p_tolerance = 0.25);
+    kmedoids(const medoid_sequence & p_initial_medoids, const double p_tolerance = 0.25);
 
     /***********************************************************************************************
     *
@@ -116,7 +64,7 @@ public:
     * @param[out] p_result: clustering result of an input data.
     *
     ***********************************************************************************************/
-    virtual void process(const cluster_algorithm::input_data & p_data, kmedoids_data & p_result);
+    virtual void process(const dataset & p_data, cluster_data & p_result);
 
 private:
     /***********************************************************************************************
@@ -133,7 +81,7 @@ private:
     * @param[in|out] p_clusters: clusters that should be analyzed and modified.
     *
     ***********************************************************************************************/
-    void erase_empty_clusters(std::vector<cluster_data::cluster> & p_clusters);
+    void erase_empty_clusters(cluster_sequence & p_clusters);
 
     /***********************************************************************************************
     *
@@ -142,7 +90,7 @@ private:
     * @param[out] p_medoids: calculated medoids for current clusters.
     *
     ***********************************************************************************************/
-    void calculate_medoids(std::vector<size_t> & p_medoids);
+    void calculate_medoids(cluster & p_medoids);
 
     /***********************************************************************************************
     *
@@ -153,7 +101,7 @@ private:
     * @return   Medoid (index point) of specified cluster.
     *
     ***********************************************************************************************/
-    size_t calculate_cluster_medoid(const cluster_data::cluster & p_cluster) const;
+    size_t calculate_cluster_medoid(const cluster & p_cluster) const;
 
     /***********************************************************************************************
     *
@@ -164,7 +112,7 @@ private:
     * @return   Maximum difference between current medoids and specified.
     *
     ***********************************************************************************************/
-    double calculate_changes(const std::vector<size_t> & p_medoids) const;
+    double calculate_changes(const medoid_sequence & p_medoids) const;
 };
 
 

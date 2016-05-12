@@ -14,7 +14,7 @@ using namespace container;
 
 
 static void
-template_length_process_data(const std::shared_ptr<dataset_t> & data,
+template_length_process_data(const std::shared_ptr<dataset> & data,
                              const unsigned int number_clusters,
                              const type_link link,
                              const std::vector<unsigned int> & expected_cluster_length) {

@@ -37,7 +37,7 @@ def create_pointer_data(sample):
     input_data.dimension = len(sample[0]);
     
     pointer_objects = (POINTER(c_double) * input_data.number_objects)();
-     
+
     for index in range(0, input_data.number_objects):
         point = (c_double * input_data.dimension)();
         for dimension in range(0, input_data.dimension):

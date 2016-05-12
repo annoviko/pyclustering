@@ -25,6 +25,7 @@ SOURCES += $(SOURCE_PATH)/cluster/hsyncnet.cpp
 SOURCES += $(SOURCE_PATH)/cluster/kmeans.cpp
 SOURCES += $(SOURCE_PATH)/cluster/kmedians.cpp
 SOURCES += $(SOURCE_PATH)/cluster/kmedoids.cpp
+SOURCES += $(SOURCE_PATH)/cluster/kmedoids_data.cpp
 SOURCES += $(SOURCE_PATH)/cluster/rock.cpp
 SOURCES += $(SOURCE_PATH)/cluster/syncnet.cpp
 SOURCES += $(SOURCE_PATH)/cluster/xmeans.cpp
