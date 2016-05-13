@@ -123,7 +123,10 @@ case $CI_JOB in
 		
 	UT_CCORE) 
 		run_ut_ccore_job ;;
-		
+	
+	VALGRIND_CCORE)
+		run_valgrind_ccore_job ;;
+	
 	UT_PYCLUSTERING) 
 		run_ut_pyclustering_job ;;
 		
