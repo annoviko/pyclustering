@@ -60,7 +60,7 @@ run_ut_pyclustering_job() {
 	install_miniconda
 	pip install coveralls
 	
-	# initialize environment
+	# set path to the tested library
 	PYTHONPATH=`pwd`
 	export PYTHONPATH=${PYTHONPATH}
 

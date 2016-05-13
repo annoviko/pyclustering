@@ -121,48 +121,6 @@ clustering_result * create_clustering_result(const std::vector<std::vector<unsig
 }
 
 
-pyclustering_package * create_package(const std::vector<int> * const data) {
-	pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_INT);
-	prepare_package(data, package);
-
-	return package;
-}
-
-pyclustering_package * create_package(const std::vector<unsigned int> * const data) {
-	pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_INT);
-	prepare_package(data, package);
-
-	return package;
-}
-
-pyclustering_package * create_package(const std::vector<float> * const data) {
-	pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_FLOAT);
-	prepare_package(data, package);
-
-	return package;
-}
-
-pyclustering_package * create_package(const std::vector<double> * const data) {
-	pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_DOUBLE);
-	prepare_package(data, package);
-
-	return package;
-}
-
-pyclustering_package * create_package(const std::vector<long> * const data) {
-	pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_LONG);
-	prepare_package(data, package);
-
-	return package;
-}
-
-pyclustering_package * create_package(const std::vector<size_t> * const data) {
-    pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_SIZE_T);
-    prepare_package(data, package);
-
-    return package;
-}
-
 double average_neighbor_distance(const std::vector<std::vector<double> > * points, const unsigned int num_neigh) {
 	std::vector<std::vector<double> > dist_matrix( points->size(), std::vector<double>(points->size(), 0.0) );
 	for (unsigned int i = 0; i < points->size(); i++) {

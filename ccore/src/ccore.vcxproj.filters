@@ -20,6 +20,9 @@
     <Filter Include="Source Files\differential">
       <UniqueIdentifier>{3f3cff3c-f601-4c65-b7ac-a1b129961edf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\interface">
+      <UniqueIdentifier>{5a874dd2-576d-4bcf-b7d4-6a05ffc32138}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cluster\agglomerative.cpp">
@@ -114,6 +117,12 @@
     </ClCompile>
     <ClCompile Include="cluster\kmedoids.cpp">
       <Filter>Source Files\cluster</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\pcnn_interface.cpp">
+      <Filter>Source Files\interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\pyclustering_package.cpp">
+      <Filter>Source Files\interface</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -236,6 +245,15 @@
     </ClInclude>
     <ClInclude Include="cluster\kmedoids.hpp">
       <Filter>Source Files\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="definitions.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\pcnn_interface.h">
+      <Filter>Source Files\interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\pyclustering_package.hpp">
+      <Filter>Source Files\interface</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
