@@ -18,5 +18,4 @@ script: ./ci.sh
 env:
   - CI_JOB=BUILD_CCORE
   - CI_JOB=UT_CCORE
-  - CI_JOB=VALGRIND_CCORE
   - CI_JOB=UT_PYCLUSTERING
