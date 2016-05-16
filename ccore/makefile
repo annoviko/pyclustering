@@ -6,7 +6,7 @@ default:
 	@echo "List of targets:"
 	@echo "ccore       - to build release CCORE library for pyclustering."
 	@echo "ut          - to build release unit-tests for CCORE library."
-	@echo "utrun       - to run unit-tests of CCORE library.
+	@echo "utrun       - to run unit-tests of CCORE library."
 	@echo "valgrind    - to build and run unit-tests for memory leak checking of CCORE library."
 	@echo " "
 	@echo "clean       - to clean everything."
