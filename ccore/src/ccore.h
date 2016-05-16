@@ -85,8 +85,6 @@ extern "C" DECLARATION void free_dynamic_result(dynamic_result * pointer);
 
 extern "C" DECLARATION void free_pyclustering_package(pyclustering_package * package);
 
-extern "C" DECLARATION pyclustering_package * agglomerative_algorithm(const data_representation * const sample, const unsigned int number_clusters, const unsigned int link);
-
 /***********************************************************************************************
  *
  * @brief   Clustering algorithm CURE returns allocated clusters.
@@ -102,18 +100,6 @@ extern "C" DECLARATION pyclustering_package * agglomerative_algorithm(const data
  *
  ***********************************************************************************************/
 extern "C" DECLARATION clustering_result * cure_algorithm(const data_representation * const sample, const unsigned int number_clusters, const unsigned int number_repr_points, const double compression);
-
-/***********************************************************************************************
- *
- * @brief   Clustering hierarchical algorithm returns allocated clusters.
- *
- * @param   (in) sample				- input data for clustering.
- *          (in) number_clusters	- number of cluster that should be allocated.
- *
- * @return	Returns result of clustering - array of allocated clusters.
- *
- ***********************************************************************************************/
-extern "C" DECLARATION clustering_result * hierarchical_algorithm(const data_representation * const sample, const unsigned int number_clusters);
 
 /***********************************************************************************************
  *

@@ -25,40 +25,33 @@
 #include "utils.hpp"
 
 
-
-agglomerative::agglomerative() :
-m_number_clusters(1),
-m_similarity(SINGLE_LINK),
-m_centers(0),
-m_ptr_clusters(nullptr),
-m_ptr_data(nullptr) { }
+namespace cluster_analysis {
 
 
-agglomerative::agglomerative(const unsigned int number_clusters, const type_link link) :
-m_number_clusters(number_clusters),
-m_similarity(link),
-m_centers(0),
-m_ptr_clusters(nullptr),
-m_ptr_data(nullptr) { }
+agglomerative::agglomerative(void) :
+    m_number_clusters(1),
+    m_similarity(type_link::SINGLE_LINK),
+    m_centers(0),
+    m_ptr_clusters(nullptr),
+    m_ptr_data(nullptr)
+{ }
 
 
-agglomerative::~agglomerative() { }
+agglomerative::agglomerative(const size_t number_clusters, const type_link link) :
+    m_number_clusters(number_clusters),
+    m_similarity(link),
+    m_centers(0),
+    m_ptr_clusters(nullptr),
+    m_ptr_data(nullptr)
+{ }
 
 
-void agglomerative::initialize(const unsigned int number_clusters, const type_link link) {
-    m_number_clusters = number_clusters;
-    m_similarity = link;
-
-    m_centers.clear();
-
-    m_ptr_clusters = nullptr;
-    m_ptr_data = nullptr;
-}
+agglomerative::~agglomerative(void) { }
 
 
-void agglomerative::process(const std::vector<point> & data, std::vector<cluster> & result) {
-    m_ptr_data = (std::vector<point> *) &data;
-    m_ptr_clusters = &result;
+void agglomerative::process(const dataset & data, cluster_data & result) {
+    m_ptr_data = &data;
+    m_ptr_clusters = result.clusters().get();
 
     m_centers.clear();
     m_ptr_clusters->clear();
@@ -85,16 +78,16 @@ void agglomerative::process(const std::vector<point> & data, std::vector<cluster
 
 void agglomerative::merge_similar_clusters(void) {
     switch(m_similarity) {
-        case SINGLE_LINK:
+        case type_link::SINGLE_LINK:
             merge_by_signle_link();
             break;
-        case COMPLETE_LINK:
+        case type_link::COMPLETE_LINK:
             merge_by_complete_link();
             break;
-        case AVERAGE_LINK:
+        case type_link::AVERAGE_LINK:
             merge_by_average_link();
             break;
-        case CENTROID_LINK:
+        case type_link::CENTROID_LINK:
             merge_by_centroid_link();
             break;
         default:
@@ -251,3 +244,5 @@ void agglomerative::calculate_center(const cluster & cluster, point & center) {
     }
 }
 
+
+}

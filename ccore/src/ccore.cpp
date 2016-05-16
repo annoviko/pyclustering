@@ -26,7 +26,6 @@
 
 #include "cluster/agglomerative.hpp"
 #include "cluster/cure.hpp"
-#include "cluster/hierarchical.hpp"
 #include "cluster/hsyncnet.hpp"
 #include "cluster/kmeans.hpp"
 #include "cluster/kmedoids.hpp"
@@ -92,47 +91,11 @@ void free_pyclustering_package(pyclustering_package * package) {
     delete package;
 }
 
-pyclustering_package * agglomerative_algorithm(const data_representation * const sample, const unsigned int number_clusters, const unsigned int link) {
-    agglomerative algorithm(number_clusters, (type_link) link);
-
-    std::vector<std::vector<double> > * dataset = read_sample(sample);
-
-    std::vector<cluster> clusters;
-    algorithm.process(*dataset, clusters);
-
-    pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
-    package->size = clusters.size();
-    package->data = new pyclustering_package * [package->size];
-
-    for (unsigned int i = 0; i < package->size; i++) {
-        ((pyclustering_package **) package->data)[i] = create_package(&clusters[i]);
-    }
-
-    delete dataset;
-
-    return package;
-}
-
 
 clustering_result * cure_algorithm(const data_representation * const sample, const unsigned int number_clusters, const unsigned int number_repr_points, const double compression) {
 	std::vector<std::vector<double> > * dataset = read_sample(sample);
 
 	cure * solver = new cure(dataset, number_clusters, number_repr_points, compression);
-	solver->process();
-
-	const std::vector<std::vector<unsigned int> *> * const clusters = solver->get_clusters();
-	clustering_result * result = create_clustering_result(clusters);
-
-	delete solver; solver = NULL;
-	delete dataset; dataset = NULL;
-
-	return result;
-}
-
-clustering_result * hierarchical_algorithm(const data_representation * const sample, const unsigned int number_clusters) {
-	std::vector<std::vector<double> > * dataset = read_sample(sample);
-
-	hierarchical * solver = new hierarchical(dataset, number_clusters);
 	solver->process();
 
 	const std::vector<std::vector<unsigned int> *> * const clusters = solver->get_clusters();

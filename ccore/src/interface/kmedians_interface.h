@@ -18,8 +18,8 @@
 *
 */
 
-#ifndef SRC_INTERFACE_PCNN_INTERFACE_H_
-#define SRC_INTERFACE_PCNN_INTERFACE_H_
+#ifndef SRC_INTERFACE_KMEDIANS_INTERFACE_H_
+#define SRC_INTERFACE_KMEDIANS_INTERFACE_H_
 
 
 #include "interface/pyclustering_package.hpp"
