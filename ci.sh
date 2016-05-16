@@ -51,6 +51,22 @@ run_ut_ccore_job() {
 }
 
 
+run_valgrind_ccore_job() {
+	echo "[CI Job]: VALGRIND CCORE (C++ code valgrind checking):"
+	echo "- Run unit-tests of pyclustering."
+	echo "- Memory leakage detection by valgrind."
+	
+	# install requirements for the job
+	sudo apt-get install -qq g++-4.8
+	sudo apt-get install -qq valgrind
+	sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 50
+	
+	# build and run unit-test project under valgrind to check memory leakage
+	cd ccore/
+	make valgrind
+}
+
+
 run_ut_pyclustering_job() {
 	echo "[CI Job]: UT PYCLUSTERING (Python code unit-testing):"
 	echo "- Run unit-tests of pyclustering."
@@ -60,7 +76,7 @@ run_ut_pyclustering_job() {
 	install_miniconda
 	pip install coveralls
 	
-	# initialize environment
+	# set path to the tested library
 	PYTHONPATH=`pwd`
 	export PYTHONPATH=${PYTHONPATH}
 
@@ -96,7 +112,10 @@ case $CI_JOB in
 		
 	UT_CCORE) 
 		run_ut_ccore_job ;;
-		
+	
+	VALGRIND_CCORE)
+		run_valgrind_ccore_job ;;
+	
 	UT_PYCLUSTERING) 
 		run_ut_pyclustering_job ;;
 		

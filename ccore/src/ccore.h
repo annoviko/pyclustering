@@ -25,43 +25,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef _INTERFACE_CCORE_H_
 #define _INTERFACE_CCORE_H_
 
-#if defined (__GNUC__) && defined(__unix__)
-	#define DECLARATION __attribute__ ((__visibility__("default")))
-#elif defined (WIN32)
-	#define DECLARATION __declspec(dllexport)
-#else
-	#error Unsupported platform
-#endif
 
-typedef enum pyclustering_type_data {
-    PYCLUSTERING_TYPE_INT               = 0,
-    PYCLUSTERING_TYPE_UNSIGNED_INT      = 1,
-    PYCLUSTERING_TYPE_FLOAT             = 2,
-    PYCLUSTERING_TYPE_DOUBLE            = 3,
-    PYCLUSTERING_TYPE_LONG              = 4,
-    PYCLUSTERING_TYPE_UNSIGNED_LONG     = 5,
-    PYCLUSTERING_TYPE_LIST              = 6,
-    PYCLUSTERING_TYPE_SIZE_T            = 7,
-    PYCLUSTERING_TYPE_UNDEFINED         = 8,
-} pyclustering_type_data;
+#include "definitions.hpp"
 
-
-typedef struct pyclustering_package {
-	unsigned int size;
-	unsigned int type;		/* pyclustering_type_data    */
-	void * data;			/* pointer to data           */
-
-    pyclustering_package(void) :
-        size(0),
-        type(PYCLUSTERING_TYPE_UNDEFINED),
-        data(nullptr) { }
-
-    pyclustering_package(unsigned int package_type) :
-        size(0),
-        type(package_type),
-        data(nullptr) { }
-
-} pyclustering_package;
+#include "interface/pyclustering_package.hpp"
 
 
 typedef struct cluster_representation {
@@ -507,29 +474,6 @@ extern "C" DECLARATION pyclustering_package * som_get_awards(const void * pointe
 
 extern "C" DECLARATION pyclustering_package * som_get_neighbors(const void * pointer);
 
-
-
-extern "C" DECLARATION void * pcnn_create(const unsigned int size, const unsigned int connection_type, const unsigned int height, const unsigned int width, const void * const parameters);
-
-extern "C" DECLARATION void pcnn_destroy(const void * pointer);
-
-extern "C" DECLARATION void * pcnn_simulate(const void * pointer, const unsigned int steps, const void * const stimulus);
-
-extern "C" DECLARATION unsigned int pcnn_get_size(const void * pointer);
-
-extern "C" DECLARATION void pcnn_dynamic_destroy(const void * pointer);
-
-extern "C" DECLARATION pyclustering_package * pcnn_dynamic_allocate_sync_ensembles(const void * pointer);
-
-extern "C" DECLARATION pyclustering_package * pcnn_dynamic_allocate_spike_ensembles(const void * pointer);
-
-extern "C" DECLARATION pyclustering_package * pcnn_dynamic_allocate_time_signal(const void * pointer);
-
-extern "C" DECLARATION pyclustering_package * pcnn_dynamic_get_output(const void * pointer);
-
-extern "C" DECLARATION pyclustering_package * pcnn_dynamic_get_time(const void * pointer);
-
-extern "C" DECLARATION unsigned int pcnn_dynamic_get_size(const void * pointer);
 
 
 

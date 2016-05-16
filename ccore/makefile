@@ -7,6 +7,7 @@ default:
 	@echo "ccore       - to build release CCORE library for pyclustering."
 	@echo "ut          - to build release unit-tests for CCORE library."
 	@echo "utrun       - to run unit-tests of CCORE library.
+	@echo "valgrind    - to build and run unit-tests for memory leak checking of CCORE library."
 	@echo " "
 	@echo "clean       - to clean everything."
 
@@ -24,6 +25,12 @@ ut:
 .PHONY: utrun
 utrun:
 	cd tst/ && ./utcore.exe
+
+
+.PHONE: valgrind
+valgrind:
+	$(MAKE) $(MKFLAG) utcore.mk ARGS="valgrind"
+	cd tst/ && valgrind --leak-check=yes ./utcore.exe
 
 
 .PHONY: clean

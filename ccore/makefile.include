@@ -7,6 +7,8 @@ INCLUDES = -Isrc/
 
 
 SOURCES += $(SOURCE_PATH)/ccore.cpp
+SOURCES += $(SOURCE_PATH)/interface/pcnn_interface.cpp
+SOURCES += $(SOURCE_PATH)/interface/pyclustering_package.cpp
 
 SOURCES += $(SOURCE_PATH)/container/adjacency_bit_matrix.cpp
 SOURCES += $(SOURCE_PATH)/container/adjacency_connector.cpp

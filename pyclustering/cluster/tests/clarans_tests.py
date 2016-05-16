@@ -70,9 +70,6 @@ class Test(unittest.TestCase):
 
     def testClusterAllocationSampleSimple3(self):
         self.templateClusterAllocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [10, 10, 10, 30], 4, 10, 3);
-
-    def testClusterAllocationSampleSimple4(self):
-        self.templateClusterAllocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, [15, 15, 15, 15, 15], 5, 15, 5);
        
     def testClusterAllocationSampleSimple5(self):
         self.templateClusterAllocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [15, 15, 15, 15], 4, 10, 5);

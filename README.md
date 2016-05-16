@@ -52,7 +52,7 @@ E-Mail: pyclustering@yandex.ru
 - HSyncNet [Python, C++]
 - K-Means [Python, C++]
 - K-Medians [Python, C++]
-- K-Medoids [Python]
+- K-Medoids [Python, C++]
 - OPTICS [Python]
 - ROCK [Python, C++]
 - SyncNet [Python, C++]

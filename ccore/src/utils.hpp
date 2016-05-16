@@ -43,9 +43,9 @@ typedef struct differential_result {
 
 inline double pi(void) { return (double) 3.14159265358979323846; }
 
-inline double heaviside(double value) {
+inline double heaviside(const double value) {
 	if (value >= 0.0) { return 1.0; }
-	else { return 0.0; }
+	return 0.0;
 }
 
 /***********************************************************************************************
@@ -124,58 +124,6 @@ std::vector<std::vector<double> > * read_sample(const data_representation * cons
 clustering_result * create_clustering_result(const std::vector<std::vector<unsigned int> *> * const clusters);
 
 clustering_result * create_clustering_result(const std::vector<std::vector<unsigned int> > & clusters);
-
-pyclustering_package * create_package(const std::vector<int> * const data);
-
-pyclustering_package * create_package(const std::vector<unsigned int> * const data);
-
-pyclustering_package * create_package(const std::vector<float> * const data);
-
-pyclustering_package * create_package(const std::vector<double> * const data);
-
-pyclustering_package * create_package(const std::vector<long> * const data);
-
-pyclustering_package * create_package(const std::vector<size_t> * const data);
-
-template <class type_object>
-void prepare_package(const std::vector<type_object> * const data, pyclustering_package * package) {
-	package->size = data->size();
-	package->data = (void *) new type_object[package->size];
-
-	for (unsigned int i = 0; i < data->size(); i++) {
-		((type_object *) package->data)[i] = (*data)[i];
-	}
-}
-
-template <class type_object>
-pyclustering_package * create_package(const std::vector< std::vector<type_object> > * const data) {
-	pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
-
-	package->size = data->size();
-	package->data = new pyclustering_package * [package->size];
-
-	for (unsigned int i = 0; i < package->size; i++) {
-		((pyclustering_package **) package->data)[i] = create_package(&(*data)[i]);
-	}
-
-	return package;
-}
-
-template <class type_object>
-pyclustering_package * create_package(const std::vector< std::vector<type_object> * > * const data) {
-	pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
-
-	package->size = data->size();
-	package->data = new pyclustering_package * [package->size];
-
-	for (unsigned int i = 0; i < package->size; i++) {
-		((pyclustering_package **) package->data)[i] = create_package((*data)[i]);
-	}
-
-	return package;
-}
-
-void destroy_package(pyclustering_package * package);
 
 
 /***********************************************************************************************
