@@ -44,3 +44,6 @@ SOURCES += $(SOURCE_PATH)/utils.cpp
 
 SOURCES += $(SOURCE_PATH)/tsp/ant_colony.cpp
 SOURCES += $(SOURCE_PATH)/tsp/distance_matrix.cpp
+
+SOURCES += $(SOURCE_PATH)/cluster/ant_clustering_mean.cpp
+
