@@ -36,7 +36,7 @@ TEST(utest_ant_clustering, simple_4_point_clustering)
     ant::ant_clustering_mean ant_mean_clustering{ params_ant_clustering };
     auto res = ant_mean_clustering.process(input, 2);
 
-    auto test_eq_clusters = [](auto& res, auto num_data_1, auto num_data_2, auto count_clusters){
+    auto test_eq_clusters = [](ant_clustering_result& res, std::size_t num_data_1, std::size_t num_data_2, std::size_t count_clusters){
         for (std::size_t cluster = 0; cluster < count_clusters; ++cluster)
             ASSERT_EQ(res->clusters[num_data_1][cluster],res->clusters[num_data_2][cluster]);
     };
