@@ -28,7 +28,7 @@
 #include "utils.hpp"
 
 
-/***********************************************************************************************
+/**
  *
  * @brief   Clustering algorithm K-Medians returns allocated clusters.
  * @details Caller should destroy returned result in 'pyclustering_package'.
@@ -39,7 +39,7 @@
  *
  * @return  Returns result of clustering - array of allocated clusters.
  *
- ***********************************************************************************************/
+ */
 extern "C" DECLARATION pyclustering_package * kmedians_algorithm(const data_representation * const p_sample, const data_representation * const p_medians, const double p_tolerance);
 
 

@@ -32,11 +32,11 @@
 
 namespace container {
 
-/***********************************************************************************************
+/**
 *
 * @brief   Enumeration of pre-defined structures of connections between nodes in collection.
 *
-***********************************************************************************************/
+*/
 enum class connection_t {
 	/*!< Connections does not exists. */
 	CONNECTION_NONE = 0,
@@ -55,20 +55,20 @@ enum class connection_t {
 };
 
 
-/***********************************************************************************************
+/**
 *
 * @brief   Generates a sequence of characters with the representation of structure of connections.
 *
-***********************************************************************************************/
+*/
 std::ostream & operator<<(std::ostream & p_stream, const connection_t & p_structure);
 
 
-/***********************************************************************************************
+/**
 *
 * @brief   Class for creating pre-defined most popular structures by establishing connections
 *          between nodes in unweight adjacency collections.
 *
-***********************************************************************************************/
+*/
 template <typename TypeCollection = adjacency_collection>
 class adjacency_connector {
 protected:
@@ -80,11 +80,11 @@ protected:
 
 
 public:
-    /***********************************************************************************************
+    /**
     *
     * @brief   Default constructor of connector.
     *
-    ***********************************************************************************************/
+    */
     adjacency_connector(void) {
         m_connector = [this](const size_t index1, const size_t index2, TypeCollection & collection) { 
             collection.set_connection(index1, index2); 
@@ -92,7 +92,7 @@ public:
     }
 
 public:
-    /***********************************************************************************************
+    /**
     *
     * @brief   Creates connections between nodes in adjacency collection in line with specified
     *          structure.
@@ -103,7 +103,7 @@ public:
     * @param[in] structure_type: structure of connections in adjacency collection that should be created.
     * @param[out] output_adjacency_collection: adjacency collection whose connections should be updated.
     *
-    ***********************************************************************************************/
+    */
     virtual void create_structure(const connection_t structure_type, TypeCollection & output_adjacency_collection) {
         switch(structure_type) {
         case connection_t::CONNECTION_NONE:
@@ -131,13 +131,13 @@ public:
         }
     }
 
-    /***********************************************************************************************
+    /**
     *
     * @brief   Removes all connections in adjacency collection.
     *
     * @param[out] output_adjacency_collection: adjacency collection whose connections should be updated.
     *
-    ***********************************************************************************************/
+    */
     virtual void create_none_connections(TypeCollection & output_adjacency_collection) {
         for (size_t i = 0; i < output_adjacency_collection.size(); i++) {
             output_adjacency_collection.erase_connection(i, i);
@@ -149,14 +149,14 @@ public:
         }
     }
 
-    /***********************************************************************************************
+    /**
     *
     * @brief   Creates connections between all nodes where each node has connection with others.
     * @details This method does not connect node with itself.
     *
     * @param[out] output_adjacency_collection: adjacency collection whose connections should be updated.
     *
-    ***********************************************************************************************/
+    */
     virtual void create_all_to_all_connections(TypeCollection & output_adjacency_collection) {
         for (size_t i = 0; i < output_adjacency_collection.size(); i++) {
             output_adjacency_collection.erase_connection(i, i);
@@ -168,7 +168,7 @@ public:
         }
     }
 
-    /***********************************************************************************************
+    /**
     *
     * @brief   Creates connections where each node is connected with two node-neighbors (except the 
     *          first and the last node): left and right in line with following scheme: 1 <-> 2 <-> 3 <- ... -> 
@@ -176,7 +176,7 @@ public:
     *
     * @param[out] output_adjacency_collection: adjacency collection whose connections should be updated.
     *
-    ***********************************************************************************************/
+    */
     virtual void create_list_bidir_connections(TypeCollection & output_adjacency_collection) {
         create_none_connections(output_adjacency_collection);
 
@@ -191,7 +191,7 @@ public:
 	    }
     }
 
-    /***********************************************************************************************
+    /**
     *
     * @brief   Creates connections where each node is connected with four node-neighbors: left, right, 
     *          upper and lower.
@@ -201,7 +201,7 @@ public:
     *
     * @param[out] output_adjacency_collection: adjacency collection whose connections should be updated.
     *
-    ***********************************************************************************************/
+    */
     virtual void create_grid_four_connections(TypeCollection & output_adjacency_collection) {
         const double conv_side_size = std::sqrt((double)output_adjacency_collection.size());
         if (conv_side_size - std::floor(conv_side_size) > 0) {
@@ -212,7 +212,7 @@ public:
         create_grid_four_connections(edge, edge, output_adjacency_collection);
     }
 
-    /***********************************************************************************************
+    /**
     *
     * @brief   Creates connections where each node is connected with four node-neighbors: left, right, 
     *          upper and lower.
@@ -221,7 +221,7 @@ public:
     * @param[in] height: height of created grid structure that is defined by amount of nodes in a row.
     * @param[out] output_adjacency_collection: adjacency collection whose connections should be updated.
     *
-    ***********************************************************************************************/
+    */
     virtual void create_grid_four_connections(const size_t width, const size_t height, TypeCollection & output_adjacency_collection) {
         if (width * height != output_adjacency_collection.size()) {
             throw std::runtime_error("Invalid number of nodes in the adjacency for the grid structure.");
@@ -254,7 +254,7 @@ public:
 	    }
     }
 
-    /***********************************************************************************************
+    /**
     *
     * @brief   Creates connections where each node is connected with eight node-neighbors: left,
     *          left-upper, upper, upper-right, right, right-lower, lower, lower-left.
@@ -264,7 +264,7 @@ public:
     *
     * @param[out] output_adjacency_collection: adjacency collection whose connections should be updated.
     *
-    ***********************************************************************************************/
+    */
     virtual void create_grid_eight_connections(TypeCollection & output_adjacency_collection) {
         const double conv_side_size = std::sqrt((double)output_adjacency_collection.size());
         if (conv_side_size - std::floor(conv_side_size) > 0) {
@@ -275,7 +275,7 @@ public:
 		create_grid_eight_connections(edge, edge, output_adjacency_collection);
     }
 
-    /***********************************************************************************************
+    /**
     *
     * @brief   Creates connections where each node is connected with eight node-neighbors: left,
     *          left-upper, upper, upper-right, right, right-lower, lower, lower-left.
@@ -284,7 +284,7 @@ public:
     * @param[in] height: height of created grid structure that is defined by amount of nodes in a row.
     * @param[out] output_adjacency_collection: adjacency collection whose connections should be updated.
     *
-    ***********************************************************************************************/
+    */
     virtual void create_grid_eight_connections(const size_t width, const size_t height, TypeCollection & output_adjacency_collection) {
 	    create_grid_four_connections(width, height, output_adjacency_collection);	/* create connection with right, upper, left, lower neighbor */
 
@@ -317,7 +317,7 @@ public:
 	    }
     }
 
-	/***********************************************************************************************
+	/**
 	*
 	* @brief   Creates rectangle grid structure in line with specify type of connections.
 	* @details It throws exception if non-grid structures is specify as a grid type.
@@ -327,7 +327,7 @@ public:
 	* @param[in] p_height: height of created grid structure that is defined by amount of nodes in a row.
 	* @param[out] p_output_adjacency_collection: adjacency collection whose connections should be updated.
 	*
-	***********************************************************************************************/
+	*/
 	virtual void create_grid_structure(const connection_t p_grid, const size_t p_width, const size_t p_height, TypeCollection & p_output_adjacency_collection) {
 		switch (p_grid) {
 		case connection_t::CONNECTION_GRID_FOUR:
@@ -345,12 +345,12 @@ public:
 };
 
 
-/***********************************************************************************************
+/**
 *
 * @brief   Class for creating pre-defined most popular structures by establishing connections
 *          between nodes in weight adjacency collections.
 *
-***********************************************************************************************/
+*/
 template <typename TypeCollection>
 class adjacency_weight_connector : public adjacency_connector<TypeCollection> {
 public:
@@ -362,16 +362,16 @@ protected:
 
 
 public:
-    /***********************************************************************************************
+    /**
     *
     * @brief   Default constructor of connector where weight initializer is not specified.
     * @details In this case adjacency collection defines default value of weight by itself in
     *          method 'set_connection()'.
     *
-    ***********************************************************************************************/
+    */
     adjacency_weight_connector(void) { }
 
-    /***********************************************************************************************
+    /**
     *
     * @brief   Constructor of connector with weight initializer.
     * @details Initializer is used during creating connections between nodes for assigning weight
@@ -382,7 +382,7 @@ public:
     *
     * @param[in] initializer: initializer that is used for setting value of each weight connection.
     *
-    ***********************************************************************************************/
+    */
     adjacency_weight_connector(const adjacency_weight_initializer & initializer) {
         if (initializer != nullptr) {
             m_initializer = initializer; /* [this](const size_t index1, const size_t index2, TypeCollection & collection) {

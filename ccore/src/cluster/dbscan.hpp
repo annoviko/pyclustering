@@ -37,12 +37,12 @@ using namespace container;
 namespace cluster_analysis {
 
 
-/***********************************************************************************************
+/**
 *
 * @brief    Represents DBSCAN clustering algorithm for cluster analysis.
 * @details  The algorithm related to density-based class.
 *
-***********************************************************************************************/
+*/
 class dbscan {
 private:
     const dataset       * m_data_ptr;         /* temporary pointer to input data that is used only during processing */
@@ -60,14 +60,14 @@ private:
     size_t              m_neighbors;
 
 public:
-    /***********************************************************************************************
+    /**
     *
     * @brief    Default constructor of clustering algorithm.
     *
-    ***********************************************************************************************/
+    */
     dbscan(void);
 
-    /***********************************************************************************************
+    /**
     *
     * @brief    Constructor of clustering algorithm where algorithm parameters for processing are
     *           specified.
@@ -76,33 +76,33 @@ public:
     * @param[in] p_minimum_neighbors: minimum amount of shared neighbors that is require to connect
     *             two object (if distance between them is less than connectivity radius).
     *
-    ***********************************************************************************************/
+    */
     dbscan(const double p_radius_connectivity, const size_t p_minimum_neighbors);
 
-    /***********************************************************************************************
+    /**
     *
     * @brief    Default destructor of the algorithm.
     *
-    ***********************************************************************************************/
+    */
     virtual ~dbscan(void);
 
 public:
-    /***********************************************************************************************
+    /**
     *
     * @brief    Performs cluster analysis of an input data.
     *
     * @param[in]  p_data: input data for cluster analysis.
     * @param[out] p_result: clustering result of an input data.
     *
-    ***********************************************************************************************/
+    */
     virtual void process(const dataset & p_data, cluster_data & p_result);
 
 private:
-    /***********************************************************************************************
+    /**
     *
     * @brief    Creates adjacency matrix between objects.
     *
-    ***********************************************************************************************/
+    */
     void create_neighbor_matrix(void);
 };
 

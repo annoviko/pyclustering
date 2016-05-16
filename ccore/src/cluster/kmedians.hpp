@@ -31,12 +31,12 @@
 namespace cluster_analysis {
 
 
-/***********************************************************************************************
+/**
 *
 * @brief    Represents K-Medians clustering algorithm for cluster analysis.
 * @details  The algorithm related to partitional class when input data is divided into groups.
 *
-***********************************************************************************************/
+*/
 class kmedians : public cluster_algorithm {
 private:
     double                  m_tolerance;
@@ -48,14 +48,14 @@ private:
     dataset                 * m_ptr_data;     /* used only during processing */
 
 public:
-    /***********************************************************************************************
+    /**
     *
     * @brief    Default constructor of clustering algorithm.
     *
-    ***********************************************************************************************/
+    */
     kmedians(void);
 
-    /***********************************************************************************************
+    /**
     *
     * @brief    Constructor of clustering algorithm where algorithm parameters for processing are
     *           specified.
@@ -64,55 +64,55 @@ public:
     * @param[in] p_tolerance: stop condition in following way: when maximum value of distance change of
     *             medians of clusters is less than tolerance than algorithm will stop processing.
     *
-    ***********************************************************************************************/
+    */
     kmedians(const dataset & p_initial_medians, const double p_tolerance);
 
-    /***********************************************************************************************
+    /**
     *
     * @brief    Default destructor of the algorithm.
     *
-    ***********************************************************************************************/
+    */
     virtual ~kmedians(void);
 
 public:
-    /***********************************************************************************************
+    /**
     *
     * @brief    Performs cluster analysis of an input data.
     *
     * @param[in]  p_data: input data for cluster analysis.
     * @param[out] p_result: clustering result of an input data.
     *
-    ***********************************************************************************************/
+    */
     void process(const dataset & data, cluster_data & output_result);
 
 private:
-    /***********************************************************************************************
+    /**
     *
     * @brief    Updates clusters in line with current medians.
     *
     * @param[in] medians: medians that are used for updating clusters.
     * @param[out] clusters: updated clusters in line with the specified medians.
     *
-    ***********************************************************************************************/
+    */
     void update_clusters(const dataset & medians, cluster_sequence & clusters);
 
-    /***********************************************************************************************
+    /**
     *
     * @brief    Updates medians in line with current clusters.
     *
     * @param[in|out] clusters: clusters that are sorted and used for updating medians.
     * @param[out] medians: updated medians in line with the specified clusters.
     *
-    ***********************************************************************************************/
+    */
     double update_medians(cluster_sequence & clusters, dataset & medians);
 
-    /***********************************************************************************************
+    /**
     *
     * @brief    Erases clusters that do not have any points.
     *
     * @param[in|out] p_clusters: clusters that should be analyzed and modified.
     *
-    ***********************************************************************************************/
+    */
     void erase_empty_clusters(cluster_sequence & p_clusters);
 };
 

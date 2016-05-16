@@ -31,13 +31,13 @@
 namespace cluster_analysis {
 
 
-/***********************************************************************************************
+/**
 *
 * @brief    Represents K-Medoids clustering algorithm for cluster analysis.
 * @details  The algorithm related to partitional class when input data is divided into groups.
 *           K-Medoids algorithm is also known as the PAM (Partitioning Around Medoids).
 *
-***********************************************************************************************/
+*/
 class kmedoids : public cluster_algorithm {
 private:
     const dataset                   * m_data_ptr;         /* temporary pointer to input data that is used only during processing */
@@ -49,14 +49,14 @@ private:
     double                          m_tolerance;
 
 public:
-    /***********************************************************************************************
+    /**
     *
     * @brief    Default constructor of clustering algorithm.
     *
-    ***********************************************************************************************/
+    */
     kmedoids(void);
 
-    /***********************************************************************************************
+    /**
     *
     * @brief    Constructor of clustering algorithm where algorithm parameters for processing are
     *           specified.
@@ -65,54 +65,54 @@ public:
     * @param[in] p_tolerance: stop condition in following way: when maximum value of distance change of
     *             medoids of clusters is less than tolerance than algorithm will stop processing.
     *
-    ***********************************************************************************************/
+    */
     kmedoids(const medoid_sequence & p_initial_medoids, const double p_tolerance = 0.25);
 
-    /***********************************************************************************************
+    /**
     *
     * @brief    Default destructor of the algorithm.
     *
-    ***********************************************************************************************/
+    */
     virtual ~kmedoids(void);
 
 public:
-    /***********************************************************************************************
+    /**
     *
     * @brief    Performs cluster analysis of an input data.
     *
     * @param[in]  p_data: input data for cluster analysis.
     * @param[out] p_result: clustering result of an input data.
     *
-    ***********************************************************************************************/
+    */
     virtual void process(const dataset & p_data, cluster_data & p_result);
 
 private:
-    /***********************************************************************************************
+    /**
     *
     * @brief    Updates clusters in line with current medoids.
     *
-    ***********************************************************************************************/
+    */
     void update_clusters(void);
 
-    /***********************************************************************************************
+    /**
     *
     * @brief    Erases clusters that do not have any points.
     *
     * @param[in|out] p_clusters: clusters that should be analyzed and modified.
     *
-    ***********************************************************************************************/
+    */
     void erase_empty_clusters(cluster_sequence & p_clusters);
 
-    /***********************************************************************************************
+    /**
     *
     * @brief    Calculates medoids in line with current clusters.
     *
     * @param[out] p_medoids: calculated medoids for current clusters.
     *
-    ***********************************************************************************************/
+    */
     void calculate_medoids(cluster & p_medoids);
 
-    /***********************************************************************************************
+    /**
     *
     * @brief    Calculates medoid for specified cluster.
     *
@@ -120,10 +120,10 @@ private:
     *
     * @return   Medoid (index point) of specified cluster.
     *
-    ***********************************************************************************************/
+    */
     size_t calculate_cluster_medoid(const cluster & p_cluster) const;
 
-    /***********************************************************************************************
+    /**
     *
     * @brief    Calculates maximum difference in data allocation between previous medoids and specified.
     *
@@ -131,7 +131,7 @@ private:
     *
     * @return   Maximum difference between current medoids and specified.
     *
-    ***********************************************************************************************/
+    */
     double calculate_changes(const medoid_sequence & p_medoids) const;
 };
 

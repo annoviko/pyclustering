@@ -30,7 +30,7 @@
 #include "utils.hpp"
 
 
-/***********************************************************************************************
+/**
 *
 * @brief    Creates Pulse Coupled Neural Network (PCNN).
 * @details  Caller should destroy created instance by 'pcnn_destroy' when it is not required.
@@ -45,19 +45,19 @@
 *
 * @see  pcnn_destroy
 *
-***********************************************************************************************/
+*/
 extern "C" DECLARATION void * pcnn_create(const unsigned int p_size, const unsigned int p_connection_type, const unsigned int p_height, const unsigned int p_width, const void * const p_parameters);
 
-/***********************************************************************************************
+/**
 *
 * @brief    Destroy instance of Pulse Coupled Neural Network.
 *
 * @param[in] p_pointer: pointer to instance of destroying network.
 *
-***********************************************************************************************/
+*/
 extern "C" DECLARATION void pcnn_destroy(const void * p_pointer);
 
-/***********************************************************************************************
+/**
 *
 * @brief    Simulates Pulse Coupled Neural Network during specify simulation time.
 * @details  Caller should destroy output dynamic of the network when it is not required.
@@ -70,10 +70,10 @@ extern "C" DECLARATION void pcnn_destroy(const void * p_pointer);
 *
 * @see  pcnn_dynamic_destroy
 *
-***********************************************************************************************/
+*/
 extern "C" DECLARATION void * pcnn_simulate(const void * p_pointer, const unsigned int p_steps, const void * const p_stimulus);
 
-/***********************************************************************************************
+/**
 *
 * @brief    Returns size of the oscillatory network that is defined by amount of oscillators.
 *
@@ -81,19 +81,19 @@ extern "C" DECLARATION void * pcnn_simulate(const void * p_pointer, const unsign
 *
 * @return   Size of the oscillatory network.
 *
-***********************************************************************************************/
+*/
 extern "C" DECLARATION unsigned int pcnn_get_size(const void * p_pointer);
 
-/***********************************************************************************************
+/**
 *
 * @brief    Destroys instance of the output dynamic of Pulse Coupled Neural Network (PCNN).
 *
 * @param[in] p_pointer: pointer to instance of the network.
 *
-***********************************************************************************************/
+*/
 extern "C" DECLARATION void pcnn_dynamic_destroy(const void * pointer);
 
-/***********************************************************************************************
+/**
 *
 * @brief    Allocates synchronous ensembles of oscillators.
 * @details  Allocated puclustering package should be freed by caller using 'free_pyclustering_package'.
@@ -102,10 +102,10 @@ extern "C" DECLARATION void pcnn_dynamic_destroy(const void * pointer);
 *
 * @return   Pointer to pyclustering package where allocated synchronous are located.
 *
-***********************************************************************************************/
+*/
 extern "C" DECLARATION pyclustering_package * pcnn_dynamic_allocate_sync_ensembles(const void * pointer);
 
-/***********************************************************************************************
+/**
 *
 * @brief    Allocates spike ensembles of the network (PCNN).
 * @details  Allocated puclustering package should be freed by caller using 'free_pyclustering_package'.
@@ -114,10 +114,10 @@ extern "C" DECLARATION pyclustering_package * pcnn_dynamic_allocate_sync_ensembl
 *
 * @return   Pointer to pyclustering package where allocated spikes ensembles are located.
 *
-***********************************************************************************************/
+*/
 extern "C" DECLARATION pyclustering_package * pcnn_dynamic_allocate_spike_ensembles(const void * pointer);
 
-/***********************************************************************************************
+/**
 *
 * @brief    Allocates time signal of output dynamic of the network (PCNN).
 * @details  Allocated puclustering package should be freed by caller using 'free_pyclustering_package'.
@@ -126,10 +126,10 @@ extern "C" DECLARATION pyclustering_package * pcnn_dynamic_allocate_spike_ensemb
 *
 * @return   Pointer to pyclustering package where time signal is located.
 *
-***********************************************************************************************/
+*/
 extern "C" DECLARATION pyclustering_package * pcnn_dynamic_allocate_time_signal(const void * pointer);
 
-/***********************************************************************************************
+/**
 *
 * @brief    Returns output of each oscillator on each step of simulation.
 * @details  Allocated puclustering package should be freed by caller using 'free_pyclustering_package'.
@@ -138,10 +138,10 @@ extern "C" DECLARATION pyclustering_package * pcnn_dynamic_allocate_time_signal(
 *
 * @return   Pointer to pyclustering package where output of each oscillator is located.
 *
-***********************************************************************************************/
+*/
 extern "C" DECLARATION pyclustering_package * pcnn_dynamic_get_output(const void * pointer);
 
-/***********************************************************************************************
+/**
 *
 * @brief    Returns steps of simulation of the network (PCNN).
 * @details  Allocated puclustering package should be freed by caller using 'free_pyclustering_package'.
@@ -150,10 +150,10 @@ extern "C" DECLARATION pyclustering_package * pcnn_dynamic_get_output(const void
 *
 * @return   Pointer to pyclustering package where time steps are located.
 *
-***********************************************************************************************/
+*/
 extern "C" DECLARATION pyclustering_package * pcnn_dynamic_get_time(const void * pointer);
 
-/***********************************************************************************************
+/**
 *
 * @brief    Returns size of the output dynamic that is defined by amount of simulation steps
 *           stored in the output dynamic of the network (PCNN).
@@ -162,7 +162,7 @@ extern "C" DECLARATION pyclustering_package * pcnn_dynamic_get_time(const void *
 *
 * @return   Size of the output dynamic of the network (PCNN).
 *
-***********************************************************************************************/
+*/
 extern "C" DECLARATION unsigned int pcnn_dynamic_get_size(const void * pointer);
 
 
