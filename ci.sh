@@ -54,27 +54,16 @@ run_ut_ccore_job() {
 run_valgrind_ccore_job() {
 	echo "[CI Job]: VALGRIND CCORE (C++ code valgrind checking):"
 	echo "- Run unit-tests of pyclustering."
-	echo "- Memory leakage detection."
+	echo "- Memory leakage detection by valgrind."
 	
 	# install requirements for the job
 	sudo apt-get install -qq g++-4.8
 	sudo apt-get install -qq valgrind
 	sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 50
 	
-	# build unit-test project
+	# build and run unit-test project under valgrind to check memory leakage
 	cd ccore/
-	make ut
-	
-	if [ $? -eq 0 ] ; then
-		echo "Building of CCORE unit-test project: SUCCESS."
-	else
-		echo "Building of CCORE unit-test project: FAILURE."
-		exit 1
-	fi
-	
-	# run unit-tests and check for memory leaks
-	cd tst/
-	valgrind --error-exitcode=42 --leak-check=full ./utcore.exe
+	make valgrind
 }
 
 

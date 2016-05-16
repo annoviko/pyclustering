@@ -282,6 +282,7 @@ void legion_network::initialize(const size_t num_osc, const connection_t connect
     m_stimulus = nullptr;
     m_generator = std::default_random_engine(m_device());
     m_noise_distribution = std::uniform_real_distribution<double>(0.0, params.ro);
+    m_global_inhibitor = 0;
 
     m_params = params;
 
