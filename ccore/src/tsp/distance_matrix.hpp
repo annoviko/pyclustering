@@ -25,7 +25,7 @@ class object_coordinate
 {
 public:
 
-	object_coordinate(std::initializer_list<double> init_coord)
+    object_coordinate(std::initializer_list<double> init_coord)
     {
         for (auto e : init_coord)
         {
@@ -33,7 +33,7 @@ public:
         }
     }
 
-	object_coordinate(const std::vector<double> & init_coord)
+    object_coordinate(const std::vector<double> & init_coord)
     {
         for (auto e : init_coord)
         {
@@ -41,7 +41,7 @@ public:
         }
     }
 
-	object_coordinate(std::vector<double> && init_coord)
+    object_coordinate(std::vector<double> && init_coord)
     {
         for (auto e : init_coord)
         {
@@ -54,7 +54,7 @@ public:
 #ifdef __CPP_14_ENABLED__
     decltype(auto) get_dimention() const { return location_point.size(); }
 #else
-	std::size_t get_dimention() const { return location_point.size(); }
+    std::size_t get_dimention() const { return location_point.size(); }
 #endif
 
 
@@ -72,66 +72,66 @@ private:
  *                          - contains distance matrix between all cities
  *
  * auto dist = city_distance::distance_matrix::make_city_distance_matrix
- *					({ Piter, Zero, Moscow });
+ *                    ({ Piter, Zero, Moscow });
  *
 ***********************************************************************************************/
 class distance_matrix
 {
 public:
-	using array_coordinate = std::vector<std::vector<double>>;
+    using array_coordinate = std::vector<std::vector<double>>;
 
-	// fabric functions for initiating by matrix
+    // fabric functions for initiating by matrix
 #ifdef __CPP_14_ENABLED__
-	static decltype(auto) 
+    static decltype(auto)
 #else
-	static std::shared_ptr<distance_matrix>
+    static std::shared_ptr<distance_matrix>
 #endif
-	make_city_distance_matrix(const array_coordinate& init_distance)
-	{
-		return std::shared_ptr<distance_matrix>(new distance_matrix(init_distance));
-	}	
+    make_city_distance_matrix(const array_coordinate& init_distance)
+    {
+        return std::shared_ptr<distance_matrix>(new distance_matrix(init_distance));
+    }
 
-	// fabric functions for initiating by matrix with move semantic
+    // fabric functions for initiating by matrix with move semantic
 #ifdef __CPP_14_ENABLED__
-	static decltype(auto)
+    static decltype(auto)
 #else
-	static std::shared_ptr<distance_matrix>
+    static std::shared_ptr<distance_matrix>
 #endif
-		make_city_distance_matrix(array_coordinate&& init_distance)
-	{
-		return std::shared_ptr<distance_matrix>(new distance_matrix(std::move(init_distance)));
-	}
+        make_city_distance_matrix(array_coordinate&& init_distance)
+    {
+        return std::shared_ptr<distance_matrix>(new distance_matrix(std::move(init_distance)));
+    }
 
 
-	// fabric functions for initiating by list with city's coordinates
+    // fabric functions for initiating by list with city's coordinates
 #ifdef __CPP_14_ENABLED__
-	static decltype(auto)
+    static decltype(auto)
 #else
-	static std::shared_ptr<distance_matrix>
+    static std::shared_ptr<distance_matrix>
 #endif 
-		make_city_distance_matrix(const std::vector<object_coordinate>& cities)
-	{
-		return std::shared_ptr<distance_matrix>(new distance_matrix(cities));
-	}
+        make_city_distance_matrix(const std::vector<object_coordinate>& cities)
+    {
+        return std::shared_ptr<distance_matrix>(new distance_matrix(cities));
+    }
 
 
-	// return reference out of class is a bad idea!!! (TODO: shared_ptr)
-	array_coordinate & get_matrix() { return m_matrix; }
+    // return reference out of class is a bad idea!!! (TODO: shared_ptr)
+    array_coordinate & get_matrix() { return m_matrix; }
 
 
 private:
-	// constructor for initiating by matrix
-	distance_matrix(const array_coordinate & init_distance) {
-		m_matrix = init_distance;
+    // constructor for initiating by matrix
+    distance_matrix(const array_coordinate & init_distance) {
+        m_matrix = init_distance;
     }
 
-	// constructor for initiating by matrix with move semantic
-	distance_matrix(array_coordinate && init_distance) {
-		m_matrix = std::move(init_distance);
+    // constructor for initiating by matrix with move semantic
+    distance_matrix(array_coordinate && init_distance) {
+        m_matrix = std::move(init_distance);
     }
 
-	// constructor for initiating by list with city's coordinates
-	distance_matrix(const std::vector<object_coordinate> & cities);
+    // constructor for initiating by list with city's coordinates
+    distance_matrix(const std::vector<object_coordinate> & cities);
 
 public:
     array_coordinate    m_matrix;

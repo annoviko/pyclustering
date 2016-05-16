@@ -22,6 +22,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef _SUPPORT_H_
 #define _SUPPORT_H_
 
+#include <stdexcept>
+
 #include <string>
 #include <fstream>
 #include <sstream>

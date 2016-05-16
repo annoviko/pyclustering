@@ -29,7 +29,7 @@ import math;
 
 from pyclustering.utils import euclidean_distance_sqrt;
 
-import pyclustering.core.wrapper as wrapper;
+import pyclustering.core.kmedians_wrapper as wrapper;
 
 class kmedians:
     """!

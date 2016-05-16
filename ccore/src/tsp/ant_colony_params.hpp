@@ -106,6 +106,8 @@ public:
     STATIC_ASSERT_TUPLE_TYPES(params_name_TSP::INITIAL_PHERAMONE, InitialPheramone_t);
     STATIC_ASSERT_TUPLE_TYPES(params_name_TSP::ITERATIONS, Iterations_t);
     STATIC_ASSERT_TUPLE_TYPES(params_name_TSP::COUNT_ANTS_IN_ITERATION, CountAntsInIteration_t);
+
+    #undef STATIC_ASSERT_TUPLE_TYPES
     //
     ////////////////////
 
@@ -172,126 +174,126 @@ public:
 * Do not able to create object params
 *
 * example:
-*	
+*
 ***********************************************************************************************/
 class ant_colony_TSP_params
 {
 public:
 
-	// delete constructor
+    // delete constructor
     ant_colony_TSP_params(const ant_colony_TSP_params&) = delete;
-	// delete move constructor
+    // delete move constructor
     ant_colony_TSP_params(const ant_colony_TSP_params&&) = delete;
 
-	// but it's able to assignment for objects
+    // but it's able to assignment for objects
     ant_colony_TSP_params& operator= (const ant_colony_TSP_params& other) = default;
 
 #ifdef __CPP_14_ENABLED__
-	ant_colony_params& operator= (ant_colony_params&& other) = default;
+    ant_colony_params& operator= (ant_colony_params&& other) = default;
 #endif
 
 
-	using AP = ant_colony_TSP_params_initializer;
+    using AP = ant_colony_TSP_params_initializer;
 
 
-	//-----------------------------------------
-	//--
-	//-- Can be used to enable make_shared<> for private constructor
-	//-- 
-	//template<class _Ty>
-	//friend class std::_Ref_count_obj;
-	//-----------------------------------------
+    //-----------------------------------------
+    //--
+    //-- Can be used to enable make_shared<> for private constructor
+    //--
+    //template<class _Ty>
+    //friend class std::_Ref_count_obj;
+    //-----------------------------------------
 
-	// fabric functions to produce shared ptr to algorithm's params
+    // fabric functions to produce shared ptr to algorithm's params
 
 #ifdef __CPP_14_ENABLED__
-	static decltype(auto) 
+    static decltype(auto)
 #else
-	static std::shared_ptr<ant_colony_TSP_params>
+    static std::shared_ptr<ant_colony_TSP_params>
 #endif
-		make_param(AP::Q_t&& Q_init
-		, AP::Ro_t&& ro_init
-		, AP::Alpha_t&& alpha_init
-		, AP::Beta_t&& beta_init
-		, AP::Gamma_t&& gamma_init
-		, AP::InitialPheramone_t&& initial_pheromone
-		, AP::Iterations_t&& iterations
-		, AP::CountAntsInIteration_t&& ants_in_iteration)
-	{
-		// ant_colony_params has a private constructor so make_shared is unavailable
-		return std::shared_ptr<ant_colony_TSP_params>(new ant_colony_TSP_params(
-			std::move(Q_init)
-			, std::move(ro_init)
-			, std::move(alpha_init)
-			, std::move(beta_init)
-			, std::move(gamma_init)
-			, std::move(initial_pheromone)
-			, std::move(iterations)
-			, std::move(ants_in_iteration))
-			);
-	}
+        make_param(AP::Q_t&& Q_init
+        , AP::Ro_t&& ro_init
+        , AP::Alpha_t&& alpha_init
+        , AP::Beta_t&& beta_init
+        , AP::Gamma_t&& gamma_init
+        , AP::InitialPheramone_t&& initial_pheromone
+        , AP::Iterations_t&& iterations
+        , AP::CountAntsInIteration_t&& ants_in_iteration)
+    {
+        // ant_colony_params has a private constructor so make_shared is unavailable
+        return std::shared_ptr<ant_colony_TSP_params>(new ant_colony_TSP_params(
+            std::move(Q_init)
+            , std::move(ro_init)
+            , std::move(alpha_init)
+            , std::move(beta_init)
+            , std::move(gamma_init)
+            , std::move(initial_pheromone)
+            , std::move(iterations)
+            , std::move(ants_in_iteration))
+            );
+    }
 
 #ifdef __CPP_14_ENABLED__
-	static decltype(auto)
+    static decltype(auto)
 #else
-	static std::shared_ptr<ant_colony_TSP_params>
+    static std::shared_ptr<ant_colony_TSP_params>
 #endif
-		make_param()
-	{
-		return std::shared_ptr<ant_colony_TSP_params>(new ant_colony_TSP_params());
-	}
+        make_param()
+    {
+        return std::shared_ptr<ant_colony_TSP_params>(new ant_colony_TSP_params());
+    }
 
-	// return a value for a requested param
-	template<params_name_TSP name>
+    // return a value for a requested param
+    template<params_name_TSP name>
 #ifdef __CPP_14_ENABLED__
-	decltype(auto)
+    decltype(auto)
 #else
-	const AP::param_type<name>&
+    const AP::param_type<name>&
 #endif
-		get() const
-	{
-		return AP::get<name>(params);
-	}
+        get() const
+    {
+        return AP::get<name>(params);
+    }
 
-	template<params_name_TSP name>
-	void set(AP::base_param_type<name> value)
-	{
-		AP::get<name>(params) = AP::param_type<name>(value);
-	}
+    template<params_name_TSP name>
+    void set(AP::base_param_type<name> value)
+    {
+        AP::get<name>(params) = AP::param_type<name>(value);
+    }
 
 private:
-	// constructors in private to create only by the fabric function 'make_param'
-	// to prevent creating much copies of the same object
-	// all actions are able with pointer returned by the fabric function
-	ant_colony_TSP_params(AP::Q_t&& Q_init
-		, AP::Ro_t&& ro_init
-		, AP::Alpha_t&& alpha_init
-		, AP::Beta_t&& beta_init
-		, AP::Gamma_t&& gamma_init
-		, AP::InitialPheramone_t&& initial_pheromone
-		, AP::Iterations_t&& iterations
-		, AP::CountAntsInIteration_t&& ants_in_iteration)
-		: params{
-				Q_init, ro_init, alpha_init, beta_init, gamma_init, initial_pheromone, iterations, ants_in_iteration
-			}
-	{}
+    // constructors in private to create only by the fabric function 'make_param'
+    // to prevent creating much copies of the same object
+    // all actions are able with pointer returned by the fabric function
+    ant_colony_TSP_params(AP::Q_t&& Q_init
+        , AP::Ro_t&& ro_init
+        , AP::Alpha_t&& alpha_init
+        , AP::Beta_t&& beta_init
+        , AP::Gamma_t&& gamma_init
+        , AP::InitialPheramone_t&& initial_pheromone
+        , AP::Iterations_t&& iterations
+        , AP::CountAntsInIteration_t&& ants_in_iteration)
+        : params{
+                Q_init, ro_init, alpha_init, beta_init, gamma_init, initial_pheromone, iterations, ants_in_iteration
+            }
+    {}
 
-	ant_colony_TSP_params()
-		: params{
-				AP::Q_t{ 0.5 }
-				, AP::Ro_t{ 0.7 }
-				, AP::Alpha_t{ 1.0 }
-				, AP::Beta_t{ 1.0 }
-				, AP::Gamma_t{ 2.0 }
-				, AP::InitialPheramone_t{ 0.1 }
-				, AP::Iterations_t{ 100 }
-				, AP::CountAntsInIteration_t{ 50 }
-			}
-	{}
+    ant_colony_TSP_params()
+        : params{
+                AP::Q_t{ 0.5 }
+                , AP::Ro_t{ 0.7 }
+                , AP::Alpha_t{ 1.0 }
+                , AP::Beta_t{ 1.0 }
+                , AP::Gamma_t{ 2.0 }
+                , AP::InitialPheramone_t{ 0.1 }
+                , AP::Iterations_t{ 100 }
+                , AP::CountAntsInIteration_t{ 50 }
+            }
+    {}
 
 private:
 
-	AP::params_t params;
+    AP::params_t params;
 
 };
 
