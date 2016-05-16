@@ -269,16 +269,11 @@ public:
 	    create_grid_four_connections(width, height, output_adjacency_collection);	/* create connection with right, upper, left, lower neighbor */
 
 	    for (int index = 0; index < output_adjacency_collection.size(); index++) {
-            const int upper_index = index - width;
             const int upper_left_index = index - width - 1;
             const int upper_right_index = index - width + 1;
             
-            const int lower_index = index + width;
             const int lower_left_index = index + width - 1;
             const int lower_right_index = index + width + 1;
-            
-            const int left_index = index - 1;
-            const int right_index = index + 1;
             
             const int node_row_index = std::floor(index / width);
             const int upper_row_index = node_row_index - 1;

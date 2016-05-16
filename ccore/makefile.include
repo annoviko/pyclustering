@@ -7,6 +7,8 @@ INCLUDES = -Isrc/
 
 
 SOURCES += $(SOURCE_PATH)/ccore.cpp
+SOURCES += $(SOURCE_PATH)/interface/dbscan_interface.cpp
+SOURCES += $(SOURCE_PATH)/interface/kmedians_interface.cpp
 SOURCES += $(SOURCE_PATH)/interface/pcnn_interface.cpp
 SOURCES += $(SOURCE_PATH)/interface/pyclustering_package.cpp
 
@@ -22,10 +24,12 @@ SOURCES += $(SOURCE_PATH)/cluster/cluster_algorithm.cpp
 SOURCES += $(SOURCE_PATH)/cluster/cluster_data.cpp
 SOURCES += $(SOURCE_PATH)/cluster/cure.cpp
 SOURCES += $(SOURCE_PATH)/cluster/dbscan.cpp
+SOURCES += $(SOURCE_PATH)/cluster/dbscan_data.cpp
 SOURCES += $(SOURCE_PATH)/cluster/hierarchical.cpp
 SOURCES += $(SOURCE_PATH)/cluster/hsyncnet.cpp
 SOURCES += $(SOURCE_PATH)/cluster/kmeans.cpp
 SOURCES += $(SOURCE_PATH)/cluster/kmedians.cpp
+SOURCES += $(SOURCE_PATH)/cluster/kmedians_data.cpp
 SOURCES += $(SOURCE_PATH)/cluster/kmedoids.cpp
 SOURCES += $(SOURCE_PATH)/cluster/kmedoids_data.cpp
 SOURCES += $(SOURCE_PATH)/cluster/rock.cpp

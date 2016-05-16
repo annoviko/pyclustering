@@ -14,7 +14,7 @@ using namespace cluster_analysis;
 
 
 static void
-template_length_process_data(const std::shared_ptr<dataset> & p_data,
+template_length_process_data(const dataset_ptr & p_data,
         const medoid_sequence & p_start_medians,
         const std::vector<size_t> & p_expected_cluster_length) {
 

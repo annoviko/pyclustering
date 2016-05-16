@@ -61,7 +61,7 @@ public:
 public:
     /***********************************************************************************************
     *
-    * @brief    Returns direct access to encapsulated medoids using shared pointer.
+    * @brief    Returns shared pointer to medoids that corresponds to allocated clusters.
     *
     ***********************************************************************************************/
     medoid_sequence_ptr medoids(void);

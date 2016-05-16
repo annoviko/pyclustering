@@ -6,17 +6,25 @@
 
 namespace container {
 
-adjacency_list::adjacency_list(const adjacency_list & another_matrix) {
-    m_adjacency = another_matrix.m_adjacency;
-}
+
+adjacency_list::adjacency_list(void) :
+        m_adjacency(adjacency_list_container())
+{ }
 
 
-adjacency_list::adjacency_list(adjacency_list && another_matrix) {
-    m_adjacency = std::move(another_matrix.m_adjacency);
-}
+adjacency_list::adjacency_list(const adjacency_list & another_matrix) :
+        m_adjacency(another_matrix.m_adjacency)
+{ }
 
 
-adjacency_list::adjacency_list(const size_t node_amount) : m_adjacency(node_amount) { }
+adjacency_list::adjacency_list(adjacency_list && another_matrix) :
+        m_adjacency(std::move(another_matrix.m_adjacency))
+{ }
+
+
+adjacency_list::adjacency_list(const size_t node_amount) :
+        m_adjacency(node_amount)
+{ }
 
 
 adjacency_list::~adjacency_list(void) { }

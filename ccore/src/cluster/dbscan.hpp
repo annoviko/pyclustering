@@ -26,44 +26,93 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef _DBSCAN_H_
 #define _DBSCAN_H_
 
+
 #include <cmath>
-#include <vector>
 #include <algorithm>
 
-#include <iostream>
+#include "cluster/cluster_algorithm.hpp"
+#include "cluster/dbscan_data.hpp"
 
-typedef std::vector<std::vector<double> >  	matrix;
-typedef std::vector<unsigned int>			cluster;
+#include "container/adjacency_list.hpp"
 
+
+using namespace container;
+
+
+namespace cluster_analysis {
+
+
+/***********************************************************************************************
+*
+* @brief    Represents DBSCAN clustering algorithm for cluster analysis.
+* @details  The algorithm related to density-based class.
+*
+***********************************************************************************************/
 class dbscan {
 private:
-	std::vector<std::vector<double> >			* data;
-	std::vector<bool>							* visited;
-	std::vector<bool>							* belong;
-	std::vector<std::vector<unsigned int> *>	* clusters;
-	std::vector<unsigned int>					* noise;
-	std::vector<std::vector<unsigned int> *>	* matrix_neighbors;
+    const dataset       * m_data_ptr;         /* temporary pointer to input data that is used only during processing */
 
-	double					radius;
-	unsigned int			neighbors;
+    dbscan_data         * m_result_ptr;       /* temporary pointer to clustering result that is used only during processing */
+
+    std::vector<bool>   m_visited;
+
+    std::vector<bool>   m_belong;
+
+    adjacency_list      m_matrix_neighbors;
+
+    double              m_radius;
+
+    size_t              m_neighbors;
 
 public:
-	dbscan(std::vector<std::vector<double> > * input_data, const double radius_connectivity, const unsigned int minimum_neighbors);
+    /***********************************************************************************************
+    *
+    * @brief    Default constructor of clustering algorithm.
+    *
+    ***********************************************************************************************/
+    dbscan(void);
 
-	~dbscan();
+    /***********************************************************************************************
+    *
+    * @brief    Constructor of clustering algorithm where algorithm parameters for processing are
+    *           specified.
+    *
+    * @param[in] p_radius_connectivity: connectivity radius between objects.
+    * @param[in] p_minimum_neighbors: minimum amount of shared neighbors that is require to connect
+    *             two object (if distance between them is less than connectivity radius).
+    *
+    ***********************************************************************************************/
+    dbscan(const double p_radius_connectivity, const size_t p_minimum_neighbors);
 
-	void process(void);
+    /***********************************************************************************************
+    *
+    * @brief    Default destructor of the algorithm.
+    *
+    ***********************************************************************************************/
+    virtual ~dbscan(void);
 
-	inline const std::vector<std::vector<unsigned int> *> * const get_clusters(void) const {
-		return clusters;
-	}
-
-	inline const std::vector<unsigned int> * const get_noise(void) const {
-		return noise;
-	}
+public:
+    /***********************************************************************************************
+    *
+    * @brief    Performs cluster analysis of an input data.
+    *
+    * @param[in]  p_data: input data for cluster analysis.
+    * @param[out] p_result: clustering result of an input data.
+    *
+    ***********************************************************************************************/
+    virtual void process(const dataset & p_data, cluster_data & p_result);
 
 private:
-	std::vector<std::vector<unsigned int> * > * create_neighbor_matrix(void);
+    /***********************************************************************************************
+    *
+    * @brief    Creates adjacency matrix between objects.
+    *
+    ***********************************************************************************************/
+    void create_neighbor_matrix(void);
 };
+
+
+}
+
 
 #endif

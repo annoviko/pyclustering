@@ -27,149 +27,123 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "utils.hpp"
 
-#if 1
-	#define	FAST_SOLUTION
-#endif
+
+namespace cluster_analysis {
 
 
-dbscan::dbscan(std::vector<std::vector<double> > * input_data, const double radius_connectivity, const unsigned int minimum_neighbors) {
-	data = (std::vector<std::vector<double> > *) input_data;
-#ifdef FAST_SOLUTION
-	radius = radius_connectivity * radius_connectivity;
-#else
-	radius = radius_connectivity;
-#endif
-	neighbors = minimum_neighbors;
+dbscan::dbscan(void) :
+    m_data_ptr(nullptr),
+    m_result_ptr(nullptr),
+    m_radius(0.0),
+    m_neighbors(0),
+    m_visited(std::vector<bool>()),
+    m_belong(std::vector<bool>()),
+    m_matrix_neighbors(adjacency_list())
+{ }
 
-	clusters = new std::vector<std::vector<unsigned int> *>();
-	visited = new std::vector<bool>(input_data->size(), false);
-	belong = new std::vector<bool>(input_data->size(), false);
-	noise = new std::vector<unsigned int>();
 
-	matrix_neighbors = create_neighbor_matrix();
+dbscan::dbscan(const double p_radius_connectivity, const size_t p_minimum_neighbors) :
+    m_data_ptr(nullptr),
+    m_result_ptr(nullptr),
+    m_radius(p_radius_connectivity * p_radius_connectivity),
+    m_neighbors(p_minimum_neighbors),
+    m_visited(std::vector<bool>()),
+    m_belong(std::vector<bool>()),
+    m_matrix_neighbors(adjacency_list())
+{ }
+
+
+dbscan::~dbscan(void) { }
+
+
+void dbscan::process(const dataset & p_data, cluster_data & p_result) {
+    m_data_ptr = &p_data;
+
+    m_visited = std::vector<bool>(m_data_ptr->size(), false);
+    m_belong = std::vector<bool>(m_data_ptr->size(), false);
+
+    create_neighbor_matrix();
+
+    m_result_ptr = (dbscan_data *) &p_result;
+
+    for (size_t i = 0; i < m_data_ptr->size(); i++) {
+        if (m_visited[i] == true) {
+            continue;
+        }
+
+        m_visited[i] = true;
+
+        /* expand cluster */
+        cluster allocated_cluster;
+
+        std::vector<size_t> index_matrix_neighbors;
+        m_matrix_neighbors.get_neighbors(i, index_matrix_neighbors);
+
+        if (index_matrix_neighbors.size() >= m_neighbors) {
+            allocated_cluster.push_back(i);
+            m_belong[i] = true;
+
+            for (size_t k = 0; k < index_matrix_neighbors.size(); k++) {
+                size_t index_neighbor = index_matrix_neighbors[k];
+
+                if (m_visited[index_neighbor] != true) {
+                    m_visited[index_neighbor] = true;
+
+                    /* check for neighbors of the current neighbor - maybe it's noise */
+                    std::vector<size_t> neighbor_neighbor_indexes;
+                    m_matrix_neighbors.get_neighbors(index_neighbor, neighbor_neighbor_indexes);
+                    if (neighbor_neighbor_indexes.size() >= m_neighbors) {
+
+                        /* Add neighbors of the neighbor for checking */
+                        for (auto neighbor_index : neighbor_neighbor_indexes) {
+                            /* Check if some of neighbors already in check list */
+                            std::vector<size_t>::const_iterator position = std::find(index_matrix_neighbors.begin(), index_matrix_neighbors.end(), neighbor_index);
+                            if (position == index_matrix_neighbors.end()) {
+                                /* Add neighbor if it does not exist in the list */
+                                index_matrix_neighbors.push_back(neighbor_index);
+                            }
+                        }
+                    }
+                }
+
+                if (m_belong[index_neighbor] != true) {
+                    allocated_cluster.push_back(index_neighbor);
+                    m_belong[index_neighbor] = true;
+                }
+            }
+
+            index_matrix_neighbors.clear();
+        }
+
+        if (allocated_cluster.empty() != true) {
+            m_result_ptr->clusters()->push_back(allocated_cluster);
+        }
+        else {
+            m_result_ptr->noise()->push_back(i);
+            m_belong[i] = true;
+        }
+    }
+
+    m_data_ptr = nullptr;
+    m_result_ptr = nullptr;
 }
 
 
-dbscan::~dbscan() {
-	if (visited != NULL) {
-		delete visited;
-		visited = NULL;
-	}
+void dbscan::create_neighbor_matrix(void) {
+    m_matrix_neighbors = adjacency_list(m_data_ptr->size());
 
-	if (belong != NULL) {
-		delete belong;
-		belong = NULL;
-	}
+    for (unsigned int point_index1 = 0; point_index1 < m_data_ptr->size(); point_index1++) {
+        for (unsigned int point_index2 = (point_index1 + 1); point_index2 < m_data_ptr->size(); point_index2++) {
 
-	if (clusters != NULL) {
-		for (std::vector<cluster *>::const_iterator iter = clusters->begin(); iter != clusters->end(); iter++) {
-			delete (*iter);
-		}
+            double distance = euclidean_distance_sqrt(&((*m_data_ptr)[point_index1]), &((*m_data_ptr)[point_index2]));
 
-		delete clusters;
-		clusters = NULL;
-	}
-
-	if (noise != NULL) {
-		delete noise;
-		noise = NULL;
-	}
-
-	if (matrix_neighbors != NULL) {
-		for (unsigned int index = 0; index < matrix_neighbors->size(); index++) {
-			if ((*matrix_neighbors)[index] != NULL) {
-				delete (*matrix_neighbors)[index];
-				(*matrix_neighbors)[index] = NULL;
-			}
-		}
-
-		delete matrix_neighbors;
-		matrix_neighbors = NULL;
-	}
+            if (distance < m_radius) {
+                m_matrix_neighbors.set_connection(point_index1, point_index2);
+                m_matrix_neighbors.set_connection(point_index2, point_index1);
+            }
+        }
+    }
 }
 
-void dbscan::process(void) {
-	for (unsigned int i = 0; i < data->size(); i++) {
-		if ((*visited)[i] == true) { continue; }
 
-		(*visited)[i] = true;
-
-		/* expand cluster */
-		cluster * allocated_cluster = new cluster();
-		if ( ((*matrix_neighbors)[i] != NULL) && ((*matrix_neighbors)[i]->size() >= neighbors) ) {
-			allocated_cluster->push_back(i);
-			(*belong)[i] = true;
-#if 0
-			std::cout << "Added to the cluster " << (unsigned int) allocated_cluster << " node [" << i << "]" << std::endl;
-#endif
-
-			/* get neighbors of the current node */
-			std::vector<unsigned int> index_matrix_neighbors(*(*matrix_neighbors)[i]);
-
-			for (unsigned int k = 0; k < index_matrix_neighbors.size(); k++) {
-				unsigned int index_neighbor = index_matrix_neighbors[k];
-
-				if ((*visited)[index_neighbor] != true) {
-					(*visited)[index_neighbor] = true;
-
-					/* check for neighbors of the current neighbor - maybe it's noise */
-					std::vector<unsigned int> * neighbor_neighbor_indexes = (*matrix_neighbors)[index_neighbor];
-					if ( (neighbor_neighbor_indexes != NULL) && (neighbor_neighbor_indexes->size() >= neighbors) ) {
-
-						/* Add neighbors of the neighbor for checking */
-						for (std::vector<unsigned int>::const_iterator neighbor_index = neighbor_neighbor_indexes->begin(); neighbor_index != neighbor_neighbor_indexes->end(); neighbor_index++) {
-							/* Check if some of neighbors already in check list */
-							std::vector<unsigned int>::const_iterator position = std::find(index_matrix_neighbors.begin(), index_matrix_neighbors.end(), *neighbor_index);
-							if (position == index_matrix_neighbors.end()) {
-								/* Add neighbor if it does not exist in the list */
-								index_matrix_neighbors.push_back(*neighbor_index);
-							}
-						}
-					}
-				}
-
-				if ((*belong)[index_neighbor] != true) {
-					allocated_cluster->push_back(index_neighbor);
-					(*belong)[index_neighbor] = true;
-				}
-			}
-
-			index_matrix_neighbors.clear();
-		}
-
-		if (allocated_cluster->empty() != true) {
-			clusters->push_back(allocated_cluster);
-		}
-		else {
-			noise->push_back(i);
-			(*belong)[i] = true;
-		}
-	}
-}
-
-std::vector<std::vector<unsigned int> * > * dbscan::create_neighbor_matrix(void) {
-	std::vector<std::vector<unsigned int> * > * neighbor_matrix = new std::vector<std::vector<unsigned int> * >(data->size(), NULL);
-	for (unsigned int point_index1 = 0; point_index1 < data->size(); point_index1++) {
-		for (unsigned int point_index2 = (point_index1 + 1); point_index2 < data->size(); point_index2++) {
-#ifdef FAST_SOLUTION
-			double distance = euclidean_distance_sqrt(&((*data)[point_index1]), &((*data)[point_index2]));
-#else
-			double distance = euclidean_distance(&((*data)[point_index1]), &((*data)[point_index2]));
-#endif
-			if (distance < radius) {
-				if ((*neighbor_matrix)[point_index1] == NULL) {
-					(*neighbor_matrix)[point_index1] = new std::vector<unsigned int>();
-				}
-
-				if ((*neighbor_matrix)[point_index2] == NULL) {
-					(*neighbor_matrix)[point_index2] = new std::vector<unsigned int>();
-				}
-
-				(*neighbor_matrix)[point_index1]->push_back(point_index2);
-				(*neighbor_matrix)[point_index2]->push_back(point_index1);
-			}
-		}
-	}
-
-	return neighbor_matrix;
 }

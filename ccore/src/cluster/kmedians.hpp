@@ -1,58 +1,103 @@
 #ifndef _KMEDIANS_H_
 #define _KMEDIANS_H_
 
-#include <vector>
+
+#include <memory>
+
+#include "cluster/cluster_algorithm.hpp"
+#include "cluster/kmedians_data.hpp"
 
 
-typedef std::vector<double>         point;
-typedef std::vector<unsigned int>   cluster;
+namespace cluster_analysis {
 
 
-class kmedians_result {
-private:
-    friend class kmedians;
-
-private:
-    std::vector<cluster>    m_clusters;
-    std::vector<point>      m_medians;
-
-public:
-    kmedians_result(void) :
-        m_clusters(0, cluster()),
-        m_medians(0, point()) { }
-
-    virtual ~kmedians_result(void) { }
-
-    inline std::vector<cluster> & get_clusters(void) { return m_clusters; }
-
-    inline std::vector<point> & get_medians(void) { return m_medians; }
-};
-
-
-class kmedians {
+/***********************************************************************************************
+*
+* @brief    Represents K-Medians clustering algorithm for cluster analysis.
+* @details  The algorithm related to partitional class when input data is divided into groups.
+*
+***********************************************************************************************/
+class kmedians : public cluster_algorithm {
 private:
     double                  m_tolerance;
+
     std::vector<point>      m_initial_medians;
 
-    kmedians_result *       m_ptr_result;   /* temporary pointer to output result */
-    std::vector<point> *    m_ptr_data;     /* used only during processing */
+    kmedians_data           * m_ptr_result;   /* temporary pointer to output result */
+
+    dataset                 * m_ptr_data;     /* used only during processing */
 
 public:
+    /***********************************************************************************************
+    *
+    * @brief    Default constructor of clustering algorithm.
+    *
+    ***********************************************************************************************/
     kmedians(void);
 
-    kmedians(const std::vector<point> & initial_medians, const double tolerance);
+    /***********************************************************************************************
+    *
+    * @brief    Constructor of clustering algorithm where algorithm parameters for processing are
+    *           specified.
+    *
+    * @param[in] p_initial_medians: initial medians that are used for processing.
+    * @param[in] p_tolerance: stop condition in following way: when maximum value of distance change of
+    *             medians of clusters is less than tolerance than algorithm will stop processing.
+    *
+    ***********************************************************************************************/
+    kmedians(const dataset & p_initial_medians, const double p_tolerance);
 
-    ~kmedians(void);
+    /***********************************************************************************************
+    *
+    * @brief    Default destructor of the algorithm.
+    *
+    ***********************************************************************************************/
+    virtual ~kmedians(void);
 
 public:
-    void initialize(const std::vector<point> & initial_medians, const double tolerance);
-
-    void process(const std::vector<point> & data, kmedians_result & output_result);
+    /***********************************************************************************************
+    *
+    * @brief    Performs cluster analysis of an input data.
+    *
+    * @param[in]  p_data: input data for cluster analysis.
+    * @param[out] p_result: clustering result of an input data.
+    *
+    ***********************************************************************************************/
+    void process(const dataset & data, cluster_data & output_result);
 
 private:
-    void update_clusters(void);
-    
-    double update_medians(void);
+    /***********************************************************************************************
+    *
+    * @brief    Updates clusters in line with current medians.
+    *
+    * @param[in] medians: medians that are used for updating clusters.
+    * @param[out] clusters: updated clusters in line with the specified medians.
+    *
+    ***********************************************************************************************/
+    void update_clusters(const dataset & medians, cluster_sequence & clusters);
+
+    /***********************************************************************************************
+    *
+    * @brief    Updates medians in line with current clusters.
+    *
+    * @param[in|out] clusters: clusters that are sorted and used for updating medians.
+    * @param[out] medians: updated medians in line with the specified clusters.
+    *
+    ***********************************************************************************************/
+    double update_medians(cluster_sequence & clusters, dataset & medians);
+
+    /***********************************************************************************************
+    *
+    * @brief    Erases clusters that do not have any points.
+    *
+    * @param[in|out] p_clusters: clusters that should be analyzed and modified.
+    *
+    ***********************************************************************************************/
+    void erase_empty_clusters(cluster_sequence & p_clusters);
 };
+
+
+}
+
 
 #endif

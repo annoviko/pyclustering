@@ -7,6 +7,7 @@
 #include "utest-adjacency_weight_list.hpp"
 #include "utest-agglomerative.hpp"
 #include "utest-ant_colony.hpp"
+#include "utest-dbscan.hpp"
 #include "utest-differential.hpp"
 #include "utest-hsyncnet.hpp"
 #include "utest-kdtree.hpp"

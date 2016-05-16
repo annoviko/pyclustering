@@ -30,11 +30,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "cluster/agglomerative.hpp"
 #include "cluster/cure.hpp"
-#include "cluster/dbscan.hpp"
 #include "cluster/hierarchical.hpp"
 #include "cluster/hsyncnet.hpp"
 #include "cluster/kmeans.hpp"
-#include "cluster/kmedians.hpp"
 #include "cluster/kmedoids.hpp"
 #include "cluster/rock.hpp"
 #include "cluster/syncnet.hpp"
@@ -119,28 +117,6 @@ pyclustering_package * agglomerative_algorithm(const data_representation * const
     return package;
 }
 
-clustering_result * dbscan_algorithm(const data_representation * const sample, const double radius, const unsigned int minumum_neighbors) {
-	std::vector<std::vector<double> > * dataset = read_sample(sample);
-
-	dbscan * solver = new dbscan(dataset, radius, minumum_neighbors);
-	solver->process();
-
-	const std::vector<std::vector<unsigned int> *> * const clusters = solver->get_clusters();
-
-	std::vector<std::vector<unsigned int> *> * clusters_with_noise = new std::vector<std::vector<unsigned int> *>();
-	for (std::vector<std::vector<unsigned int> *>::const_iterator iter = clusters->begin(); iter != clusters->end(); iter++) {
-		clusters_with_noise->push_back(*iter);
-	}
-	clusters_with_noise->push_back((std::vector<unsigned int> *) solver->get_noise());
-
-	clustering_result * result = create_clustering_result(clusters_with_noise);
-
-	delete clusters_with_noise; clusters_with_noise = NULL;
-	delete solver; solver = NULL;
-	delete dataset; dataset = NULL;
-
-	return result;
-}
 
 clustering_result * cure_algorithm(const data_representation * const sample, const unsigned int number_clusters, const unsigned int number_repr_points, const double compression) {
 	std::vector<std::vector<double> > * dataset = read_sample(sample);
@@ -188,23 +164,6 @@ clustering_result * kmeans_algorithm(const data_representation * const sample, c
 	return result;
 }
 
-clustering_result * kmedians_algorithm(const data_representation * const sample, const data_representation * const initial_medians, const double tolerance) {
-    std::vector<std::vector<double> > * dataset = read_sample(sample);
-    std::vector<std::vector<double> > * medians = read_sample(initial_medians);
-
-    kmedians algorithm(*medians, tolerance);
-
-    kmedians_result output_result;
-    algorithm.process(*dataset, output_result);
-
-    std::vector<cluster> & clusters = output_result.get_clusters();
-    clustering_result * result = create_clustering_result(clusters);
-
-    delete dataset;
-    delete medians;
-
-    return result;
-}
 
 pyclustering_package * kmedoids_algorithm(const data_representation * const sample, const pyclustering_package * const package_medoids, const double tolerance) {
     cluster_analysis::medoid_sequence medoids((size_t *) package_medoids->data, ((size_t *) package_medoids->data) + package_medoids->size);

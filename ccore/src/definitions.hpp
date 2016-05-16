@@ -2,6 +2,7 @@
 #define SRC_DEFINITIONS_HPP_
 
 
+#include <memory>
 #include <vector>
 
 
@@ -14,9 +15,20 @@
 #endif
 
 
-using point     = std::vector<double>;
+using point         = std::vector<double>;
+using point_ptr     = std::shared_ptr<point>;
 
-using dataset   = std::vector<point>;
+using dataset       = std::vector<point>;
+using dataset_ptr   = std::shared_ptr<dataset>;
+
+
+/* TODO: use pyclustering_package instead of this */
+typedef struct data_representation {
+public:
+    unsigned int            size;
+    unsigned int            dimension;
+    double                  ** objects;
+} data_representation;
 
 
 #endif

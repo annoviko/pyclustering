@@ -156,33 +156,6 @@ def extract_pyclustering_package(ccore_package_pointer):
 
 
 # Implemented algorithms.
-def dbscan(sample, eps, min_neighbors, return_noise = False):
-    "Clustering algorithm DBSCAN returns allocated clusters and noise that are consisted from input data. Calculation is performed via CCORE."
-    
-    "(in) data            - input data that is presented as list of points (objects), each point should be represented by list or tuple."
-    "(in) eps             - connectivity radius between points, points may be connected if distance between them less then the radius."
-    "(in) min_neighbors   - minimum number of shared neighbors that is requied for establish links between points."
-    "(in) return_noise    - if True than list of points that have been marked as noise will be returned."
-    
-    "If return_noise is False: Returns list of allocated clusters, each cluster contains indexes of objects in list of data."
-    "If return_noise is True: Returns tuple of list of allicated clusters and list of points that are marked as noise."
-    
-    pointer_data = create_pointer_data(sample);
-    
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
-    result = ccore.dbscan_algorithm(pointer_data, c_double(eps), c_uint(min_neighbors));
-
-    list_of_clusters = extract_clusters(result);
-    ccore.free_clustering_result(result);
-    
-    noise = list_of_clusters[len(list_of_clusters) - 1];
-    list_of_clusters.remove(noise);
-    
-    if (return_noise is True):
-        return (list_of_clusters, noise);
-    else:
-        return list_of_clusters;
-
 def cure(sample, number_clusters, number_represent_points, compression):    
     pointer_data = create_pointer_data(sample);
     

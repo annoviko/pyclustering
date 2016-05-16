@@ -43,13 +43,6 @@ typedef struct clustering_result {
 } clustering_result;
 
 
-typedef struct data_representation {
-	unsigned int			size;
-	unsigned int			dimension;
-	double					** objects;
-} data_representation;
-
-
 typedef struct dynamic_result {
 	unsigned int			size_dynamic;
 	unsigned int			size_network;
@@ -100,23 +93,6 @@ extern "C" DECLARATION pyclustering_package * agglomerative_algorithm(const data
 
 /***********************************************************************************************
  *
- * @brief   Clustering algorithm DBSCAN returns allocated clusters and noise that are consisted
- *          from input data.
- *
- * @param   (in) sample				- input data for clustering.
- *          (in) radius				- connectivity radius between points, points may be connected
- *                                    if distance between them less then the radius.
- *          (in) minumum_neighbors	- minimum number of shared neighbors that is required for
- *                                    establish links between points.
- *
- * @return	Returns result of clustering - array of allocated clusters. The last cluster in the
- * 			array is noise.
- *
- ***********************************************************************************************/
-extern "C" DECLARATION clustering_result * dbscan_algorithm(const data_representation * const sample, const double radius, const unsigned int minumum_neighbors);
-
-/***********************************************************************************************
- *
  * @brief   Clustering algorithm CURE returns allocated clusters.
  *
  * @param   (in) sample				- input data for clustering.
@@ -157,8 +133,6 @@ extern "C" DECLARATION clustering_result * hierarchical_algorithm(const data_rep
  *
  ***********************************************************************************************/
 extern "C" DECLARATION clustering_result * kmeans_algorithm(const data_representation * const sample, const data_representation * const initial_centers, const double tolerance);
-
-extern "C" DECLARATION clustering_result * kmedians_algorithm(const data_representation * const sample, const data_representation * const initial_medians, const double tolerance);
 
 extern "C" DECLARATION pyclustering_package * kmedoids_algorithm(const data_representation * const sample, const pyclustering_package * const medoids, const double tolerance);
 

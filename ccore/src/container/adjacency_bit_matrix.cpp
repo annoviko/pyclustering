@@ -63,7 +63,7 @@ void adjacency_bit_matrix::get_neighbors(const size_t node_index, std::vector<si
         if (has_connection(node_index, neighbor_index)) {
             node_neighbors.push_back(neighbor_index);
         }
-    }    
+    }
 }
 
 

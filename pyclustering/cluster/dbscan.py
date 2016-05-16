@@ -28,7 +28,7 @@
 
 from pyclustering.utils import euclidean_distance_sqrt;
 
-import pyclustering.core.wrapper as wrapper;
+import pyclustering.core.dbscan_wrapper as wrapper;
 
 class dbscan:
     """!
@@ -85,11 +85,8 @@ class dbscan:
         """
         
         if (self.__ccore is True):
-            result = wrapper.dbscan(self.__pointer_data, self.__eps, self.__neighbors, True);
-            self.__clusters = result[0];
-            self.__noise = result[1];
+            (self.__clusters, self.__noise) = wrapper.dbscan(self.__pointer_data, self.__eps, self.__neighbors, True);
             
-            del result;
         else:
             for i in range(0, len(self.__pointer_data)):
                 if (self.__visited[i] == False):
@@ -99,7 +96,7 @@ class dbscan:
                         self.__clusters.append(cluster);
                     else:
                         self.__noise.append(i);
-                        self.__belong[i] = True;       
+                        self.__belong[i] = True;
 
 
     def get_clusters(self):
