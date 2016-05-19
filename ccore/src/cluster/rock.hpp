@@ -21,39 +21,67 @@
 #ifndef _ROCK_H_
 #define _ROCK_H_
 
+
 #include <vector>
 #include <list>
 
-class rock {
+#include "container/adjacency_matrix.hpp"
+
+#include "cluster/cluster_algorithm.hpp"
+
+#include "definitions.hpp"
+
+
+using namespace container;
+
+
+namespace cluster_analysis {
+
+
+using rock_data = cluster_data;
+
+
+class rock : public cluster_algorithm {
 private:
-	std::vector<std::vector<double> >			* dataset;
-	std::vector<std::vector<unsigned int> >		* adjacency_matrix;
+    /* for optimization list representation is of clusters is used and than
+     * it is moved to output result */
+    using rock_cluster_sequence = std::list<cluster>;
 
-	std::vector<std::vector<unsigned int> *>	* vector_clusters;		/* created only at the end of processing */
-	std::list<std::vector<unsigned int> *>		* clusters;				/* removed when processing is over */
+private:
+    adjacency_matrix        m_adjacency_matrix;
 
-	double			degree_normalization;
-	unsigned int	number_clusters;
+    double                  m_radius;
+
+    double                  m_degree_normalization;
+
+    size_t                  m_number_clusters;
+
+    rock_cluster_sequence   m_clusters;
 
 public:
-	rock(const std::vector<std::vector<double> > * const dataset, const double radius, const unsigned int number_clusters, const double threshold);
+    rock(void);
 
-	~rock(void);
+    rock(const double radius, const size_t number_clusters, const double threshold);
 
-	void process(void);
+    virtual ~rock(void);
 
-	inline const std::vector<std::vector<unsigned int> *> * const get_clusters(void) const {
-		return vector_clusters;
-	}
+public:
+    virtual void process(const dataset & p_data, cluster_data & p_result);
 
 private:
-	bool merge_cluster(void);
+    void create_adjacency_matrix(const dataset & p_data);
 
-	std::vector<unsigned int> * find_pair_clusters(void) const;
+    bool merge_cluster(void);
 
-	unsigned int calculate_links(std::list<std::vector<unsigned int> *>::iterator & cluster1, std::list<std::vector<unsigned int> *>::iterator & cluster2) const;
+    std::vector<unsigned int> * find_pair_clusters(void) const;
 
-	double calculate_goodness(std::list<std::vector<unsigned int> *>::iterator & cluster1, std::list<std::vector<unsigned int> *>::iterator & cluster2) const;
+    unsigned int calculate_links(const cluster & cluster1, const cluster & cluster2) const;
+
+    double calculate_goodness(const cluster & cluster1, const cluster & cluster2) const;
 };
+
+
+}
+
 
 #endif

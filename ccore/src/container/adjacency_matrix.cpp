@@ -27,6 +27,11 @@ const double adjacency_matrix::DEFAULT_EXISTANCE_CONNECTION_VALUE = 1.0;
 const double adjacency_matrix::DEFAULT_NON_EXISTANCE_CONNECTION_VALUE = 0.0;
 
 
+adjacency_matrix::adjacency_matrix(void) {
+    m_adjacency = adjacency_matrix_container();
+}
+
+
 adjacency_matrix::adjacency_matrix(const adjacency_matrix & another_matrix) {
     m_adjacency = another_matrix.m_adjacency;
 }

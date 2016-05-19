@@ -53,7 +53,7 @@ public:
     * @brief   Default destructor without arguments is forbiden.
     *
     */
-    adjacency_matrix(void) = delete;
+    adjacency_matrix(void);
 
     /**
     *

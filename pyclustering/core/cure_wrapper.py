@@ -1,6 +1,6 @@
 """!
 
-@brief CCORE Wrapper for DBSCAN algorithm.
+@brief CCORE Wrapper for CURE algorithm.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2016

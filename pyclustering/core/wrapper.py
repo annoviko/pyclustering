@@ -181,27 +181,6 @@ def kmeans(sample, centers, tolerance):
     return list_of_clusters;
 
 
-def rock(sample, eps, number_clusters, threshold):
-    "Clustering algorithm ROCK returns allocated clusters and noise that are consisted from input data. Calculation is performed via CCORE."
-    
-    "(in) data                - input data - list of points where each point is represented by list of coordinates."
-    "(in) eps                 - connectivity radius (similarity threshold), points are neighbors if distance between them is less than connectivity radius."
-    "(in) number_clusters     - defines number of clusters that should be allocated from the input data set."
-    "(in) threshold           - value that defines degree of normalization that influences on choice of clusters for merging during processing."
-    
-    "Returns list of allocated clusters, each cluster contains indexes of objects in list of data."
-    
-    pointer_data = create_pointer_data(sample);
-    
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
-    result = ccore.rock_algorithm(pointer_data, c_double(eps), c_uint(number_clusters), c_double(threshold));
-    
-    list_of_clusters = extract_clusters(result);
-    ccore.free_clustering_result(result);
-    
-    return list_of_clusters;
-
-
 def xmeans(sample, centers, kmax, tolerance):
     "Clustering algorithm X-Means returns allocated clusters. Calculation is performed via CCORE."
     

@@ -27,7 +27,7 @@
 
 from pyclustering.utils import euclidean_distance;
 
-import pyclustering.core.wrapper as wrapper;
+import pyclustering.core.rock_wrapper as wrapper;
 
 
 class rock:

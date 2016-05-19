@@ -104,22 +104,6 @@ extern "C" DECLARATION pyclustering_package * kmedoids_algorithm(const data_repr
 
 /***********************************************************************************************
  *
- * @brief   Clustering algorithm ROCK returns allocated clusters.
- *
- * @param   (in) sample				- input data for clustering.
- *          (in) radius				- connectivity radius (similarity threshold).
- *          (in) number_clusters	- defines number of clusters that should be allocated from
- *          						  the input data set.
- *          (in) threshold			- value that defines degree of normalization that influences
- *                                    on choice of clusters for merging during processing.
- *
- * @return	Returns result of clustering - array of allocated clusters.
- *
- ***********************************************************************************************/
-extern "C" DECLARATION clustering_result * rock_algorithm(const data_representation * const sample, const double radius, const unsigned int number_clusters, const double threshold);
-
-/***********************************************************************************************
- *
  * @brief   Clustering algorithm X-Means returns allocated clusters.
  *
  * @param   (in) sample				- input data for clustering.

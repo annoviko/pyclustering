@@ -27,6 +27,8 @@
 #include <algorithm>
 
 #include "container/kdtree.hpp"
+
+#include "cluster/cluster_algorithm.hpp"
 #include "cluster/cure_data.hpp"
 
 #include "utils.hpp"
@@ -253,7 +255,7 @@ public:
 * @brief   CURE algorithm.
 *
 */
-class cure {
+class cure : public cluster_algorithm {
 private:
     cure_queue * queue;
 

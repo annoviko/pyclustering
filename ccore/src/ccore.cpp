@@ -28,7 +28,6 @@
 #include "cluster/hsyncnet.hpp"
 #include "cluster/kmeans.hpp"
 #include "cluster/kmedoids.hpp"
-#include "cluster/rock.hpp"
 #include "cluster/syncnet.hpp"
 #include "cluster/xmeans.hpp"
 
@@ -128,20 +127,6 @@ pyclustering_package * kmedoids_algorithm(const data_representation * const samp
     delete input_dataset;
 
     return package;
-}
-
-clustering_result * rock_algorithm(const data_representation * const sample, const double radius, const unsigned int number_clusters, const double threshold) {
-	std::vector<std::vector<double> > * dataset = read_sample(sample);
-
-	rock * solver = new rock(dataset, radius, number_clusters, threshold);
-	solver->process();
-
-	clustering_result * result = create_clustering_result(solver->get_clusters());
-
-	delete solver; solver = NULL;
-	delete dataset; dataset = NULL;
-
-	return result;
 }
 
 clustering_result * xmeans_algorithm(const data_representation * const sample, const data_representation * const initial_centers, const unsigned int kmax, const double tolerance) {
