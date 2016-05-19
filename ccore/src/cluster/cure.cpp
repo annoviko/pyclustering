@@ -38,12 +38,10 @@ cure_cluster::cure_cluster(void) : closest(nullptr), distance_closest(0), mean(n
 
 
 cure_cluster::cure_cluster(std::vector<double> * point) : closest(nullptr), distance_closest(0) {
-    mean = new std::vector<double>(point->size(), 0);
+    mean = new std::vector<double>(*point);
 
-    points = new std::vector< std::vector<double> * >(1, point);
-    rep = new std::vector< std::vector<double> * >(1, point);
-
-    std::copy(point->begin(), point->end(), mean->begin());
+    points = new std::vector< std::vector<double> * >(1, point);    /* use user data points */
+    rep = new std::vector< std::vector<double> * >(1, new std::vector<double>(*point));       /* it's our - despite at the beginning it the same */
 }
 
 
@@ -55,6 +53,10 @@ cure_cluster::~cure_cluster() {
 
     delete points;	/* only storage, we are not owners of points */
     points = nullptr;
+
+    for (auto point_ptr : *rep) {
+        delete point_ptr;
+    }
 
     delete rep;		/* only storage, we are not owners of points */
     rep = nullptr;
@@ -83,9 +85,8 @@ cure_queue::cure_queue(const std::vector< std::vector<double> > * data) {
 
 cure_queue::~cure_queue() {
     if (queue != nullptr) {
-        for (std::list<cure_cluster *>::iterator cluster = queue->begin(); cluster != queue->end(); cluster++) {
-            delete *cluster;
-            *cluster = nullptr;
+        for (auto cluster : *queue) {
+            delete cluster;
         }
 
         delete queue;
@@ -343,7 +344,9 @@ cure::cure(const size_t clusters_number, size_t points_number, const double leve
 { }
 
 
-cure::~cure() { }
+cure::~cure() {
+    delete queue;
+}
 
 
 void cure::process(const dataset & p_data, cluster_data & p_result) {

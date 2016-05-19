@@ -117,5 +117,8 @@ CORRECTED BUGS:
 - Bug with meamory leakage on interface between CCORE and pyclustering (ccore).
   See: -
 
-- Bug with allocation correlation matrix in case of usage CCORE (pycluster.nnet.sync).
+- Bug with allocation correlation matrix in case of usage CCORE (pyclustering.nnet.sync).
   See: https://github.com/annoviko/pyclustering/issues/288
+
+- Bug with memory leakage in CURE algorithm - deallocation of representative points (ccore.cluster.cure).
+  See: https://github.com/annoviko/pyclustering/issues/294
