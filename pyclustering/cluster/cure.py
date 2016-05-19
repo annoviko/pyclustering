@@ -29,9 +29,9 @@ from pyclustering.utils import euclidean_distance;
 
 from pyclustering.container.kdtree import kdtree;
 
-import pyclustering.core.wrapper as wrapper;
+import pyclustering.core.cure_wrapper as wrapper;
 
-class cure_cluster:   
+class cure_cluster:
     """!
     @brief Represents data cluster in CURE term. CURE cluster is described by points of cluster, representation points of the cluster and by the cluster center.
     
@@ -141,9 +141,13 @@ class cure:
         """
         
         if (self.__ccore is True):
-            self.__clusters = wrapper.cure(self.__pointer_data, self.__number_cluster, self.__number_represent_points, self.__compression);
+            cure_data_pointer = wrapper.cure_algorithm(self.__pointer_data, self.__number_cluster, self.__number_represent_points, self.__compression);
+            
+            self.__clusters = wrapper.cure_get_clusters(cure_data_pointer);
+            
+            wrapper.cure_data_destroy(cure_data_pointer);
+            
         else:
-
             while (len(self.__queue) > self.__number_cluster):
                 cluster1 = self.__queue[0];            # cluster that has nearest neighbor.
                 cluster2 = cluster1.closest;    # closest cluster.

@@ -114,8 +114,7 @@ class Test(unittest.TestCase):
         
     def testClusterAllocationOneDimensionDataByCore(self):
         self.templateClusterAllocationOneDimensionData(True);
-        
-                
+
 
 if __name__ == "__main__":
     unittest.main();

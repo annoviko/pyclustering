@@ -141,23 +141,23 @@ def display_fcps_clustering_results():
     visualizer.show();
 
 
-# cluster_sample1();
-# cluster_sample2();
-# cluster_sample3();
-# cluster_sample4();
-# cluster_sample5();
-# cluster_elongate();
-# cluster_lsun();
-# cluster_target();
-# cluster_two_diamonds();
-# cluster_wing_nut();
-# cluster_chainlink();
-# cluster_hepta();
-# cluster_golf_ball();            # it is commented due to long time of processing - it's working absolutely correct!
+cluster_sample1();
+cluster_sample2();
+cluster_sample3();
+cluster_sample4();
+cluster_sample5();
+cluster_elongate();
+cluster_lsun();
+cluster_target();
+cluster_two_diamonds();
+cluster_wing_nut();
+cluster_chainlink();
+cluster_hepta();
+cluster_golf_ball();            # it is commented due to long time of processing - it's working absolutely correct!
 cluster_atom();
 cluster_tetra();
 cluster_engy_time();
- 
+  
 experiment_execution_time(False);   # Python code
 experiment_execution_time(True);    # C++ code + Python env.
 

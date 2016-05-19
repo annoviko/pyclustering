@@ -160,18 +160,6 @@ def extract_pyclustering_package(ccore_package_pointer):
 
 
 # Implemented algorithms.
-def cure(sample, number_clusters, number_represent_points, compression):    
-    pointer_data = create_pointer_data(sample);
-    
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
-    result = ccore.cure_algorithm(pointer_data, c_uint(number_clusters), c_uint(number_represent_points), c_double(compression));
-    
-    list_of_clusters = extract_clusters(result);
-    
-    ccore.free_clustering_result(result);
-    return list_of_clusters;
-
-
 def kmeans(sample, centers, tolerance):
     "Clustering algorithm K-Means returns allocated clusters. Calculation is performed via CCORE."
     
