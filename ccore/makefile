@@ -30,7 +30,7 @@ utrun:
 .PHONE: valgrind
 valgrind:
 	$(MAKE) $(MKFLAG) utcore.mk ARGS="valgrind"
-	cd tst/ && valgrind --leak-check=yes ./utcore.exe
+	cd tst/ && valgrind --leak-check=yes --error-exitcode=1 ./utcore.exe
 
 
 .PHONY: clean
