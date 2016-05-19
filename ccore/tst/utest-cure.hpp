@@ -62,61 +62,61 @@ template_length_process_data(const std::shared_ptr<dataset> & p_data,
 }
 
 
-TEST(utest_dbscan, allocation_sample_simple_01) {
+TEST(utest_cure, allocation_sample_simple_01) {
     const std::vector<size_t> expected_clusters_length = { 5, 5 };
     template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), 2, 5, 0.5, expected_clusters_length);
 }
 
 
-TEST(utest_dbscan, allocation_sample_one_allocation_simple_01) {
+TEST(utest_cure, allocation_sample_one_allocation_simple_01) {
     const std::vector<size_t> expected_clusters_length = { 10 };
     template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), 1, 5, 0.5, expected_clusters_length);
 }
 
 
-TEST(utest_dbscan, allocation_sample_simple_02) {
+TEST(utest_cure, allocation_sample_simple_02) {
     const std::vector<size_t> expected_clusters_length = { 10, 5, 8 };
     template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02), 3, 5, 0.5, expected_clusters_length);
 }
 
 
-TEST(utest_dbscan, allocation_sample_one_allocation_simple_02) {
+TEST(utest_cure, allocation_sample_one_allocation_simple_02) {
     const std::vector<size_t> expected_clusters_length = { 23 };
     template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02), 1, 5, 0.5, expected_clusters_length);
 }
 
 
-TEST(utest_dbscan, allocation_sample_simple_03) {
+TEST(utest_cure, allocation_sample_simple_03) {
     const std::vector<size_t> expected_clusters_length = { 10, 10, 10, 30 };
     template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_03), 4, 5, 0.5, expected_clusters_length);
 }
 
 
-TEST(utest_dbscan, allocation_sample_one_allocation_simple_03) {
+TEST(utest_cure, allocation_sample_one_allocation_simple_03) {
     const std::vector<size_t> expected_clusters_length = { 60 };
     template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_03), 1, 5, 0.5, expected_clusters_length);
 }
 
 
-TEST(utest_dbscan, allocation_sample_simple_04) {
+TEST(utest_cure, allocation_sample_simple_04) {
     const std::vector<size_t> expected_clusters_length = { 15, 15, 15, 15, 15 };
     template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_04), 5, 5, 0.5, expected_clusters_length);
 }
 
 
-TEST(utest_dbscan, allocation_sample_simple_05) {
+TEST(utest_cure, allocation_sample_simple_05) {
     const std::vector<size_t> expected_clusters_length = { 15, 15, 15, 15 };
     template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_05), 4, 5, 0.5, expected_clusters_length);
 }
 
 
-TEST(utest_dbscan, allocation_sample_simple_07) {
+TEST(utest_cure, allocation_sample_simple_07) {
     const std::vector<size_t> expected_clusters_length = { 10, 10 };
     template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_07), 2, 5, 0.5, expected_clusters_length);
 }
 
 
-TEST(utest_dbscan, allocation_sample_simple_08) {
+TEST(utest_cure, allocation_sample_simple_08) {
     const std::vector<size_t> expected_clusters_length = { 15, 30, 20, 80 };
     template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_08), 4, 5, 0.5, expected_clusters_length);
 }

@@ -48,35 +48,41 @@ GENERAL CHANGES (pyclustering):
 
 
 GENERAL CHANGES (ccore):
-- Implemented phase oscillatory network for pattern recognition syncpr (ccore.syncpr).
+- Implemented phase oscillatory network for pattern recognition syncpr (ccore.cluster.syncpr).
   See: https://github.com/annoviko/pyclustering/issues/232
   
-- Implemented agglomerative algorithm for cluster analysis (ccore.agglomerative).
+- Implemented agglomerative algorithm for cluster analysis (ccore.cluster.agglomerative).
   See: https://github.com/annoviko/pyclustering/issues/212
 
 - Implemented feature to use rectangular network structures in oscillatory networks.
   See: https://github.com/annoviko/pyclustering/issues/259
 
-- Implemented ant colony based algorithm for TSP problem (ccore.ant.antcolony).
+- Implemented ant colony based algorithm for TSP problem (ccore.tsp.antcolony).
   See: https://github.com/annoviko/pyclustering/pull/277
 
-- Implemented K-Medians algorithm for cluster analysis (ccore.kmedians).
+- Implemented K-Medians algorithm for cluster analysis (ccore.cluster.kmedians).
   See: https://github.com/annoviko/pyclustering/issues/231
 
-- Implemented feature to specify initial number of neighbors to calculate initial connectivity radius and increase percent of number of neighbors (or radius if total number of object is exceeded) on each step (ccore.hsyncnet).
+- Implemented feature to specify initial number of neighbors to calculate initial connectivity radius and increase percent of number of neighbors (or radius if total number of object is exceeded) on each step (ccore.cluster.hsyncnet).
   https://github.com/annoviko/pyclustering/issues/284
 
-- Implemented K-Medoids algorithm for cluster analysis (ccore.kmedoids).
+- Implemented K-Medoids algorithm for cluster analysis (ccore.cluster.kmedoids).
   See: https://github.com/annoviko/pyclustering/issues/230
+
+- Implemented feature for CCORE that provides additional information about clustering results: representative points and mean point of each cluster (ccore.cluster.cure).
+  See: https://github.com/annoviko/pyclustering/issues/293
+
+- Implemented new class collection to oscillatory and neural network constructing.
+  See: https://github.com/annoviko/pyclustering/issues/264
 
 
 CORRECTED BUGS:
-- Bug with callback methods in ccore library in syncnet (ccore.syncnet) and hsyncnet (ccore.hsyncnet) that may lead to loss of accuracy.
+- Bug with callback methods in ccore library in syncnet (ccore.cluster.syncnet) and hsyncnet (ccore.cluster.hsyncnet) that may lead to loss of accuracy.
 
 - Bug with division by zero in kmeans algorithm (ccore.kmeans, pyclustering.cluster.kmeans) when cluster after center updating is not able to capture object.
   See: https://github.com/annoviko/pyclustering/issues/238
 
-- Bug with stack overflow in KD tree in case of big data (pyclustering.container.kdtree, ccore.kdtree).
+- Bug with stack overflow in KD tree in case of big data (pyclustering.container.kdtree, ccore.container.kdtree).
   See: https://github.com/annoviko/pyclustering/pull/239
   See: https://github.com/annoviko/pyclustering/issues/255
   See: https://github.com/annoviko/pyclustering/issues/254
@@ -87,7 +93,7 @@ CORRECTED BUGS:
 - Bug with execution fail in case of wrong number of initial medians and in case of the same objects with several initial medians (pyclustering.cluster.kmedians).
   See: https://github.com/annoviko/pyclustering/issues/256
   
-- Bug with calculation synchronous ensembles near by zero: oscillators 2*pi and 0 are considered as different (pyclustering.nnet.sync, ccore.sync).
+- Bug with calculation synchronous ensembles near by zero: oscillators 2*pi and 0 are considered as different (pyclustering.nnet.sync, ccore.nnet.sync).
   See: https://github.com/annoviko/pyclustering/issues/263
   
 - Bug with cluster allocation in kmedoids algorithm in case of the same objects with several initial medoids (pyclustering.cluster.kmedoids).
