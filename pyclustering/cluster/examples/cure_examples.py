@@ -24,28 +24,39 @@
 """
 
 from pyclustering.utils import read_sample;
-from pyclustering.utils import draw_clusters;
 from pyclustering.utils import timedcall;
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES;
 from pyclustering.samples.definitions import FCPS_SAMPLES;
 
+from pyclustering.cluster import cluster_visualizer;
 from pyclustering.cluster.cure import cure;
+
 
 def template_clustering(number_clusters, path, number_represent_points = 5, compression = 0.5, draw = True, ccore_flag = False):
     sample = read_sample(path);
     
     cure_instance = cure(sample, number_clusters, number_represent_points, compression, ccore_flag);
-    (ticks, result) = timedcall(cure_instance.process);
+    (ticks, _) = timedcall(cure_instance.process);
+    
     clusters = cure_instance.get_clusters();
+    representors = cure_instance.get_representors();
+    means = cure_instance.get_means();
     
     print("Sample: ", path, "\t\tExecution time: ", ticks, "\n");
 
     if (draw is True):
+        visualizer = cluster_visualizer();
+        
         if (ccore_flag is True):
-            draw_clusters(sample, clusters);
+            visualizer.append_clusters(clusters, sample);
+            
         else:
-            draw_clusters(None, clusters);
+            visualizer.append_clusters(clusters, None);
+        
+        visualizer.append_clusters(representors, marker = '*', markersize = 10);
+        visualizer.append_clusters([ means ], None, marker = 'o');
+        visualizer.show();
 
 
 def cluster_sample1():

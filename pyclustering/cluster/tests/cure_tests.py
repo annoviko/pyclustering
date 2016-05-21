@@ -39,8 +39,15 @@ class Test(unittest.TestCase):
         
         cure_instance = cure(sample, number_cluster, ccore = ccore_flag);
         cure_instance.process();
+        
         clusters = cure_instance.get_clusters();
+        representors = cure_instance.get_representors();
+        means = cure_instance.get_means();
 
+        assert len(clusters) == number_cluster;
+        assert len(representors) == number_cluster;
+        assert len(means) == number_cluster;
+        
         obtained_cluster_sizes = [len(cluster) for cluster in clusters];
         
         total_length = sum(obtained_cluster_sizes);

@@ -67,7 +67,9 @@ class cluster_visualizer:
     __colors = [ 'red', 'blue', 'darkgreen', 'brown', 'violet', 
                  'deepskyblue', 'darkgrey', 'lightsalmon', 'deeppink', 'yellow',
                  'black', 'mediumspringgreen', 'orange', 'darkviolet', 'darkblue',
-                 'silver', 'lime', 'pink', 'gold', 'bisque' ];
+                 'silver', 'lime', 'pink', 'gold', 'bisque',
+                 'dimgray', 'firebrick', 'darksalmon', 'chartreuse', 'stateblue',
+                 'purple', 'fuchsia', 'palegoldenrod', 'coral', 'hotpink' ];
     
 
     def __init__(self, number_canvases = 1, size_row = 1):

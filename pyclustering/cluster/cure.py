@@ -94,17 +94,6 @@ class cure:
     @endcode
     
     """
-    __pointer_data = None;
-    __clusters = None;
-    
-    __number_cluster = 0;
-    __number_represent_points = 0;
-    __compression = 0;
-    
-    __queue = None;
-    __tree = None;
-    
-    __ccore = False;
     
     def __init__(self, data, number_cluster, number_represent_points = 5, compression = 0.5, ccore = False):
         """!
@@ -119,6 +108,11 @@ class cure:
         """
                 
         self.__pointer_data = data;
+        
+        self.__clusters = None;
+        self.__representors = None;
+        self.__means = None;
+        
         self.__number_cluster = number_cluster;
         self.__number_represent_points = number_represent_points;
         self.__compression = compression;
@@ -144,6 +138,8 @@ class cure:
             cure_data_pointer = wrapper.cure_algorithm(self.__pointer_data, self.__number_cluster, self.__number_represent_points, self.__compression);
             
             self.__clusters = wrapper.cure_get_clusters(cure_data_pointer);
+            self.__representors = wrapper.cure_get_representors(cure_data_pointer);
+            self.__means = wrapper.cure_get_means(cure_data_pointer);
             
             wrapper.cure_data_destroy(cure_data_pointer);
             
@@ -213,6 +209,8 @@ class cure:
         
             # Change cluster representation
             self.__clusters = [ cure_cluster_unit.points for cure_cluster_unit in self.__queue ];
+            self.__representors = [ cure_cluster_unit.rep for cure_cluster_unit in self.__queue ];
+            self.__means = [ cure_cluster_unit.mean for cure_cluster_unit in self.__queue ];
     
     
     def get_clusters(self):
@@ -222,10 +220,42 @@ class cure:
         @return (list) List of allocated clusters.
         
         @see process()
+        @see get_representors()
+        @see get_means()
         
         """
         
         return self.__clusters;  
+    
+    
+    def get_representors(self):
+        """!
+        @brief Returns list of representors of each cluster.
+        @details Cluster index should be used for navigation between lists of representors.
+        
+        @return (list) List of representors of each cluster.
+        
+        @see get_clusters()
+        @see get_means()
+        
+        """
+        
+        return self.__representors;
+    
+    
+    def get_means(self):
+        """!
+        @brief Returns list of mean values of each cluster.
+        @details Cluster index should be used for navigation between mean values.
+        
+        @return (list) List of mean values of each cluster.
+        
+        @see get_clusters()
+        @see get_representors()
+        
+        """
+        
+        return self.__means;
     
     
     def __insert_cluster(self, cluster):

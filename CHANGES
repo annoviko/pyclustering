@@ -46,6 +46,9 @@ GENERAL CHANGES (pyclustering):
 - Implemented feature to use CCORE K-Medoids algorithm using argument 'ccore' to ensure high performance (pyclustering.cluster.kmedoids).
   See: https://github.com/annoviko/pyclustering/issues/230
 
+- Implemented feature for CURE algorithm that provides additional information about clustering results: representative points and mean point of each cluster (pyclustering.cluster.cure).
+  See: https://github.com/annoviko/pyclustering/issues/292
+
 
 GENERAL CHANGES (ccore):
 - Implemented phase oscillatory network for pattern recognition syncpr (ccore.cluster.syncpr).
@@ -69,11 +72,14 @@ GENERAL CHANGES (ccore):
 - Implemented K-Medoids algorithm for cluster analysis (ccore.cluster.kmedoids).
   See: https://github.com/annoviko/pyclustering/issues/230
 
-- Implemented feature for CCORE that provides additional information about clustering results: representative points and mean point of each cluster (ccore.cluster.cure).
+- Implemented feature for CURE algorithm that provides additional information about clustering results: representative points and mean point of each cluster (ccore.cluster.cure).
   See: https://github.com/annoviko/pyclustering/issues/293
 
 - Implemented new class collection to oscillatory and neural network constructing.
   See: https://github.com/annoviko/pyclustering/issues/264
+
+- Memory usage optimization for ROCK algorithm.
+  See: -
 
 
 CORRECTED BUGS:
