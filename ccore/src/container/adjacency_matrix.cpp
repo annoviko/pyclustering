@@ -88,21 +88,26 @@ double adjacency_matrix::get_connection_weight(const size_t node_index1, const s
 }
 
 
-adjacency_matrix & adjacency_matrix::operator=(const adjacency_matrix & another_collection) {
-	if (this != &another_collection) {
-		m_adjacency = another_collection.m_adjacency;
-	}
+void adjacency_matrix::clear(void) {
+    m_adjacency.clear();
+}
 
-	return *this;
+
+adjacency_matrix & adjacency_matrix::operator=(const adjacency_matrix & another_collection) {
+    if (this != &another_collection) {
+        m_adjacency = another_collection.m_adjacency;
+    }
+
+    return *this;
 }
 
 
 adjacency_matrix & adjacency_matrix::operator=(adjacency_matrix && another_collection) {
-	if (this != &another_collection) {
-		m_adjacency = std::move(another_collection.m_adjacency);
-	}
+    if (this != &another_collection) {
+        m_adjacency = std::move(another_collection.m_adjacency);
+    }
 
-	return *this;
+    return *this;
 }
 
 }

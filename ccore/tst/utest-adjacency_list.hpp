@@ -50,8 +50,17 @@ TEST(utest_adjacency_list, create_delete) {
 
 
 TEST(utest_adjacency_list, null_size) {
-	adjacency_list matrix(0);
-	ASSERT_EQ(0, matrix.size());
+    adjacency_list matrix(0);
+    ASSERT_EQ(0, matrix.size());
+}
+
+
+TEST(utest_adjacency_list, create_clear) {
+    adjacency_list matrix(10);
+    ASSERT_EQ(10, matrix.size());
+
+    matrix.clear();
+    ASSERT_EQ(0, matrix.size());
 }
 
 

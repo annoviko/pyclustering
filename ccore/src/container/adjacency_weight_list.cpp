@@ -23,6 +23,7 @@
 
 namespace container {
 
+
 const double adjacency_weight_list::DEFAULT_EXISTANCE_CONNECTION_VALUE = 1.0;
 const double adjacency_weight_list::DEFAULT_NON_EXISTANCE_CONNECTION_VALUE = 0.0;
 
@@ -101,21 +102,27 @@ double adjacency_weight_list::get_connection_weight(const size_t node_index1, co
 }
 
 
-adjacency_weight_list & adjacency_weight_list::operator=(const adjacency_weight_list & another_collection) {
-	if (this != &another_collection) {
-		m_adjacency = another_collection.m_adjacency;
-	}
+void adjacency_weight_list::clear(void) {
+    m_adjacency.clear();
+}
 
-	return *this;
+
+adjacency_weight_list & adjacency_weight_list::operator=(const adjacency_weight_list & another_collection) {
+    if (this != &another_collection) {
+        m_adjacency = another_collection.m_adjacency;
+    }
+
+    return *this;
 }
 
 
 adjacency_weight_list & adjacency_weight_list::operator=(adjacency_weight_list && another_collection) {
-	if (this != &another_collection) {
-		m_adjacency = std::move(another_collection.m_adjacency);
-	}
+    if (this != &another_collection) {
+        m_adjacency = std::move(another_collection.m_adjacency);
+    }
 
-	return *this;
+    return *this;
 }
+
 
 }

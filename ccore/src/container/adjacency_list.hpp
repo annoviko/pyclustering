@@ -157,6 +157,13 @@ public:
     */
     virtual void get_neighbors(const size_t node_index, std::vector<size_t> & node_neighbors) const;
 
+    /**
+    *
+    * @brief   Clear content of adjacency matrix.
+    *
+    */
+    virtual void clear(void);
+
 public:
     adjacency_list & operator=(const adjacency_list & another_collection);
 

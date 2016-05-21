@@ -75,7 +75,12 @@ bool adjacency_list::has_connection(const size_t node_index1, const size_t node_
 
 void adjacency_list::get_neighbors(const size_t node_index, std::vector<size_t> & node_neighbors) const {
     node_neighbors.resize(m_adjacency[node_index].size());
-	std::copy(m_adjacency[node_index].begin(), m_adjacency[node_index].end(), node_neighbors.begin());
+    std::copy(m_adjacency[node_index].begin(), m_adjacency[node_index].end(), node_neighbors.begin());
+}
+
+
+void adjacency_list::clear(void) {
+    m_adjacency.clear();
 }
 
 

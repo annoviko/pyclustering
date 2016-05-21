@@ -37,6 +37,7 @@
 #include "utest-kmedoids.hpp"
 #include "utest-legion.hpp"
 #include "utest-pcnn.hpp"
+#include "utest-rock.hpp"
 #include "utest-som.hpp"
 #include "utest-sync.hpp"
 #include "utest-syncnet.hpp"

@@ -49,8 +49,17 @@ TEST(utest_adjacency_matrix, create_delete) {
 
 
 TEST(utest_adjacency_matrix, null_size) {
-	adjacency_matrix matrix(0);
-	ASSERT_EQ(0, matrix.size());
+    adjacency_matrix matrix(0);
+    ASSERT_EQ(0, matrix.size());
+}
+
+
+TEST(utest_adjacency_matrix, create_clear) {
+    adjacency_matrix matrix(10);
+    ASSERT_EQ(10, matrix.size());
+
+    matrix.clear();
+    ASSERT_EQ(0, matrix.size());
 }
 
 

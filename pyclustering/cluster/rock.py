@@ -148,7 +148,8 @@ class rock:
 
     def __calculate_links(self, cluster1, cluster2):
         """!
-        @brief Returns number of link between two clusters. Link between objects (points) exists only if distance between them less than connectivity radius.
+        @brief Returns number of link between two clusters. 
+        @details Link between objects (points) exists only if distance between them less than connectivity radius.
         
         @param[in] cluster1 (list): The first cluster.
         @param[in] cluster2 (list): The second cluster.

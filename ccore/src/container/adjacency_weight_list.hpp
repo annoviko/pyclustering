@@ -203,6 +203,13 @@ public:
     */
     virtual double get_connection_weight(const size_t node_index1, const size_t node_index2) const;
 
+    /**
+    *
+    * @brief   Clear content of adjacency matrix.
+    *
+    */
+    virtual void clear(void);
+
 public:
 	adjacency_weight_list & operator=(const adjacency_weight_list & another_collection);
 

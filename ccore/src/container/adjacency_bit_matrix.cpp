@@ -87,6 +87,12 @@ void adjacency_bit_matrix::get_neighbors(const size_t node_index, std::vector<si
 }
 
 
+void adjacency_bit_matrix::clear(void) {
+    m_adjacency.clear();
+    m_size = 0;
+}
+
+
 void adjacency_bit_matrix::update_connection(const size_t node_index1, const size_t node_index2, const size_t state_connection) {
     size_t element_byte_length = (sizeof(size_t) << 3);
     size_t index_element = node_index2 / element_byte_length;
