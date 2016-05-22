@@ -106,7 +106,7 @@ class cure:
         @param[in] ccore (bool): If True than DLL CCORE (C++ solution) will be used for solving.
         
         """
-                
+        
         self.__pointer_data = data;
         
         self.__clusters = None;
@@ -359,7 +359,7 @@ class cure:
             for index in range(dimension):
                 merged_cluster.mean[index] = ( len(cluster1.points) * cluster1.mean[index] + len(cluster2.points) * cluster2.mean[index] ) / ( len(cluster1.points) + len(cluster2.points) );
         
-        temporary = list(); # TODO: Set should be used in line with specification (article), but list is not hashable object therefore it's impossible to use list in this fucking set!
+        temporary = list(); # TODO: Set should be used in line with specification (article), but list is not hashable object therefore it's impossible to use list in this set!
         
         for index in range(self.__number_represent_points):
             maximal_distance = 0;
