@@ -214,7 +214,7 @@ class sync_dynamic:
                 phase1 = current_dynamic[i];
                 phase2 = current_dynamic[j];
                 
-                affinity_matrix[i][j] = math.sin(abs(phase1 - phase2));
+                affinity_matrix[i][j] = abs(math.sin(phase1 - phase2));
                 
         return affinity_matrix;
 
@@ -341,11 +341,12 @@ class sync_visualizer:
     
     
     @staticmethod
-    def animate(sync_output_dynamic, save_movie = None):
+    def animate(sync_output_dynamic, title = None, save_movie = None):
         """!
         @brief Shows animation of phase coordinates and animation of correlation matrix together for the Sync dynamic output on the same figure.
         
         @param[in] sync_output_dynamic (sync_dynamic): Output dynamic of the Sync network.
+        @param[in] title (string): Title of the animation that is displayed on a figure if it is specified.
         @param[in] save_movie (string): If it is specified then animation will be stored to file that is specified in this parameter.
         
         """
@@ -354,11 +355,14 @@ class sync_visualizer:
         correlation_matrix = sync_output_dynamic.allocate_correlation_matrix(0);
         
         figure = plt.figure(1);
+        if (title is not None):
+            figure.suptitle(title, fontsize = 26, fontweight = 'bold')
+        
         ax1 = figure.add_subplot(121, projection='polar');
         ax2 = figure.add_subplot(122);
         
         artist1, = ax1.plot(dynamic, [1.0] * len(dynamic), marker = 'o', color = 'blue', ls = '');
-        artist2 = ax2.imshow(correlation_matrix, cmap = plt.get_cmap('cool'), interpolation='kaiser');
+        artist2 = ax2.imshow(correlation_matrix, cmap = plt.get_cmap('Accent'), interpolation='kaiser');
         
         def init_frame():
             return [ artist1, artist2 ];
@@ -375,7 +379,7 @@ class sync_visualizer:
         dynamic_animation = animation.FuncAnimation(figure, frame_generation, len(sync_output_dynamic), interval = 75, init_func = init_frame, repeat_delay = 5000);
         
         if (save_movie is not None):
-            dynamic_animation.save(save_movie, writer = 'ffmpeg', fps = 15);
+            dynamic_animation.save(save_movie, writer = 'ffmpeg', fps = 15, bitrate=1500);
         else:
             plt.show();
 

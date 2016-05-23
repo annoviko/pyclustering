@@ -368,7 +368,7 @@ void sync_dynamic::allocate_correlation_matrix(const size_t p_iteration, sync_co
             const double phase1 = dynamic_at(p_iteration).m_phase[i];
             const double phase2 = dynamic_at(p_iteration).m_phase[j];
 
-            p_matrix[i][j] = std::sin(std::abs(phase1 - phase2));
+            p_matrix[i][j] = std::abs(std::sin(phase1 - phase2));
             p_matrix[j][i] = p_matrix[i][j];
         }
     }

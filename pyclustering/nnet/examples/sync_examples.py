@@ -73,16 +73,34 @@ def negative_connection_9_grid_struct():
 def negative_connection_16_grid_struct():
     "Comment: Wrong coloring"
     _ = template_dynamic_sync(16, -3, conn = conn_type.GRID_FOUR);
-    
 
-# Examples of global synchronization.
+
+def template_animate_output_dynamic(title, amount_oscillators, coupling_stregth, frequency, order):
+    network = sync_network(amount_oscillators, coupling_stregth, frequency, ccore = True);
+    sync_output_dynamic = network.simulate_dynamic(order, solution = solve_type.RK4, collect_dynamic = True);
+    
+    sync_visualizer.animate(sync_output_dynamic, title, title + ".mp4");
+    #sync_visualizer.animate(sync_output_dynamic, title);
+
+def animate_phase_locking():
+    template_animate_output_dynamic("Phase locking", 300, 1.0, 1.0, 0.995);
+
+def animate_global_synchronization():
+    template_animate_output_dynamic("Global synchronization", 300, 0.5, 0.0, 0.9999);
+
+
+Examples of global synchronization.
 trivial_dynamic_sync();
 weight_5_dynamic_sync();
 bidir_struct_dynamic_sync();
 grid_four_struct_dynamic_sync();
-
+ 
 # Examples with negative connection
 negative_connection_5_oscillators();        # Almost full desynchronization
 negative_connection_10_oscillators();       # It's not full desynchronization
 negative_connection_9_grid_struct();        # Right coloring
 negative_connection_16_grid_struct();       # Wrong coloring
+
+
+animate_phase_locking();
+animate_global_synchronization();
