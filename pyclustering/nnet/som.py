@@ -416,7 +416,7 @@ class som:
         
         """
         
-        self._neighbors = [[] for index in range(self._size)];    
+        self._neighbors = [[] for index in range(self._size)];
             
         for index in range(0, self._size, 1):
             upper_index = index - self._cols;
@@ -487,7 +487,7 @@ class som:
                     self._neighbors[index].append(lower_left_index);
                     
                 if ( (lower_right_index < self._size) and (math.floor(lower_right_index / self._cols) == lower_row_index) ):
-                    self._neighbors[index].append(lower_right_index);                        
+                    self._neighbors[index].append(lower_right_index);
     
     
     def _competition(self, x):

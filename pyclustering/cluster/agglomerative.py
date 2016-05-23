@@ -216,14 +216,7 @@ class agglomerative:
         
         for index_cluster1 in range(0, len(self.__clusters)):
             for index_cluster2 in range(index_cluster1 + 1, len(self.__clusters)):
-                
-                # Find farthest objects
-                candidate_maximum_distance = 0.0;
-                for index_object1 in self.__clusters[index_cluster1]:
-                    for index_object2 in self.__clusters[index_cluster2]:
-                        distance = euclidean_distance_sqrt(self.__pointer_data[index_object1], self.__pointer_data[index_object2]);
-                        if (distance > candidate_maximum_distance):
-                            candidate_maximum_distance = distance;
+                candidate_maximum_distance = self.__calculate_farthest_distance(index_cluster1, index_cluster2);
                 
                 if (candidate_maximum_distance < minimum_complete_distance):
                     minimum_complete_distance = candidate_maximum_distance;
@@ -231,6 +224,27 @@ class agglomerative:
 
         self.__clusters[indexes[0]] += self.__clusters[indexes[1]];  
         self.__clusters.pop(indexes[1]);   # remove merged cluster.        
+    
+    
+    def __calculate_farthest_distance(self, index_cluster1, index_cluster2):
+        """!
+        @brief Finds two farthest objects in two specified clusters in terms and returns distance between them.
+        
+        @param[in] (uint) Index of the first cluster.
+        @param[in] (uint) Index of the second cluster.
+        
+        @return The farthest euclidean distance between two clusters.
+        
+        """
+        candidate_maximum_distance = 0.0;
+        for index_object1 in self.__clusters[index_cluster1]:
+            for index_object2 in self.__clusters[index_cluster2]:
+                distance = euclidean_distance_sqrt(self.__pointer_data[index_object1], self.__pointer_data[index_object2]);
+                
+                if (distance > candidate_maximum_distance):
+                    candidate_maximum_distance = distance;
+    
+        return candidate_maximum_distance;
     
     
     def __merge_by_signle_link(self):
@@ -244,14 +258,7 @@ class agglomerative:
         
         for index_cluster1 in range(0, len(self.__clusters)):
             for index_cluster2 in range(index_cluster1 + 1, len(self.__clusters)):
-                
-                # Find nearest objects
-                candidate_minimum_distance = float('Inf');
-                for index_object1 in self.__clusters[index_cluster1]:
-                    for index_object2 in self.__clusters[index_cluster2]:
-                        distance = euclidean_distance_sqrt(self.__pointer_data[index_object1], self.__pointer_data[index_object2]);
-                        if (distance < candidate_minimum_distance):
-                            candidate_minimum_distance = distance;
+                candidate_minimum_distance = self.__calculate_nearest_distance(index_cluster1, index_cluster2);
                 
                 if (candidate_minimum_distance < minimum_single_distance):
                     minimum_single_distance = candidate_minimum_distance;
@@ -259,8 +266,29 @@ class agglomerative:
 
         self.__clusters[indexes[0]] += self.__clusters[indexes[1]];  
         self.__clusters.pop(indexes[1]);   # remove merged cluster.
+    
+    
+    def __calculate_nearest_distance(self, index_cluster1, index_cluster2):
+        """!
+        @brief Finds two nearest objects in two specified clusters and returns distance between them.
         
-                
+        @param[in] (uint) Index of the first cluster.
+        @param[in] (uint) Index of the second cluster.
+        
+        @return The nearest euclidean distance between two clusters.
+        
+        """
+        candidate_minimum_distance = float('Inf');
+        
+        for index_object1 in self.__clusters[index_cluster1]:
+            for index_object2 in self.__clusters[index_cluster2]:
+                distance = euclidean_distance_sqrt(self.__pointer_data[index_object1], self.__pointer_data[index_object2]);
+                if (distance < candidate_minimum_distance):
+                    candidate_minimum_distance = distance;
+        
+        return candidate_minimum_distance;
+    
+    
     def __calculate_center(self, cluster):
         """!
         @brief Calculates new center.

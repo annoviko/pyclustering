@@ -192,8 +192,6 @@ class kdtree:
                 parent.left = minimal_node;
             elif (parent.right is node_for_remove):
                 parent.right = minimal_node;
-            else:
-                assert 0;   # FATAL ERROR
         
         return self.__root;
     
@@ -227,8 +225,6 @@ class kdtree:
             parent.left = self.__recursive_remove(minimal_node);
         elif (parent.right is minimal_node):
             parent.right = self.__recursive_remove(minimal_node);
-        else:
-            assert 0;
         
         minimal_node.parent = node_removed.parent;
         minimal_node.disc = node_removed.disc;
@@ -301,14 +297,10 @@ class kdtree:
                 
                 if (cur_node.right is not None):
                     cur_node = cur_node.right;
-                else:
-                    assert 0
             
             else:
                 if (cur_node.left is not None):
                     cur_node = cur_node.left;
-                else:
-                    assert 0
                 
         return req_node;
     

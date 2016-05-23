@@ -194,7 +194,7 @@ class network:
         if (self.__conn_represent == conn_represent.MATRIX):
             for index in range(0, self._num_osc, 1):
                 self.__osc_conn.append([True] * self._num_osc);
-                self.__osc_conn[index][index] = False;    
+                self.__osc_conn[index][index] = False;
         
         elif (self.__conn_represent == conn_represent.LIST):
             for index in range(0, self._num_osc, 1):
