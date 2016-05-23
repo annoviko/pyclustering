@@ -45,8 +45,9 @@ def template_clustering(file, radius, order, show_dyn = False, show_conn = False
     
     if (show_dyn == True):
         sync_visualizer.show_output_dynamic(analyser);
-        sync_visualizer.animate_output_dynamic(analyser);
-        sync_visualizer.animate_correlation_matrix(analyser, colormap = 'hsv');
+        sync_visualizer.animate(analyser);
+        #sync_visualizer.animate_output_dynamic(analyser);
+        #sync_visualizer.animate_correlation_matrix(analyser, colormap = 'hsv');
     
     if ( (show_conn == True) and (ccore_flag == False) ):
         network.show_network();
@@ -75,10 +76,10 @@ def cluster_elongate():
     template_clustering(SIMPLE_SAMPLES.SAMPLE_ELONGATE, 0.5, 0.999, show_dyn = True, show_conn = True);
 
 def cluster_lsun():
-    template_clustering(FCPS_SAMPLES.SAMPLE_LSUN, 0.3, 0.999, show_dyn = True, show_conn = True);
+    template_clustering(FCPS_SAMPLES.SAMPLE_LSUN, 0.45, 0.9995, show_dyn = True, show_conn = True);
 
 def cluster_hepta():
-    template_clustering(FCPS_SAMPLES.SAMPLE_HEPTA, 1, 0.9995, show_dyn = True, show_conn = True);
+    template_clustering(FCPS_SAMPLES.SAMPLE_HEPTA, 1, 0.999, show_dyn = True, show_conn = True);
     
 def cluster_chainlink():
     template_clustering(FCPS_SAMPLES.SAMPLE_CHAINLINK, 0.8, 0.999, show_dyn = True, show_conn = True);

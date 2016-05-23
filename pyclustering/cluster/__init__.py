@@ -274,5 +274,3 @@ class cluster_visualizer:
             ax.grid(visible_grid);
         
         plt.show();
-
-    

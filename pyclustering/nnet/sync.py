@@ -272,6 +272,7 @@ class sync_visualizer:
         plt.show();
         
     
+    
     @staticmethod
     def animate_output_dynamic(sync_output_dynamic, animation_velocity = 75):
         """!
@@ -332,6 +333,41 @@ class sync_visualizer:
             correlation_animation.save(save_movie, writer = 'ffmpeg', fps = 15);
         else:
             plt.show();
+    
+    
+    @staticmethod
+    def animate(sync_output_dynamic):
+        """!
+        @brief Shows animation of phase coordinates and animation of correlation matrix together for the Sync dynamic output on the same figure.
+        
+        @param[in] sync_output_dynamic (sync_dynamic): Output dynamic of the Sync network.
+        
+        """
+        
+        dynamic = sync_output_dynamic.output[0];
+        correlation_matrix = sync_output_dynamic.allocate_correlation_matrix(0);
+        
+        figure = plt.figure(1);
+        ax1 = figure.add_subplot(121, projection='polar');
+        ax2 = figure.add_subplot(122);
+        
+        artist1, = ax1.plot(dynamic, [1.0] * len(dynamic), marker = 'o', color = 'blue', ls = '');
+        artist2 = ax2.imshow(correlation_matrix, cmap = plt.get_cmap('cool'), interpolation='kaiser');
+        
+        def init_frame():
+            return [ artist1, artist2 ];
+
+        def frame_generation(index_dynamic):
+            dynamic = sync_output_dynamic.output[index_dynamic];
+            artist1.set_data(dynamic, [1.0] * len(dynamic));
+            
+            correlation_matrix = sync_output_dynamic.allocate_correlation_matrix(index_dynamic);
+            artist2.set_data(correlation_matrix);
+            
+            return [ artist1, artist2 ];
+        
+        _ = animation.FuncAnimation(figure, frame_generation, len(sync_output_dynamic), interval = 75, init_func = init_frame, repeat_delay = 5000);
+        plt.show();
 
 
 class sync_network(network):

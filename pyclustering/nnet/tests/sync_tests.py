@@ -269,6 +269,7 @@ class Test(unittest.TestCase):
         net = sync_network(size, ccore = ccore_flag);
         output_dynamic = net.simulate_dynamic(solution = solve_type.FAST, collect_dynamic = True);
         
+        sync_visualizer.animate(output_dynamic);
         sync_visualizer.animate_correlation_matrix(output_dynamic, velocity);
         sync_visualizer.animate_output_dynamic(output_dynamic, velocity);
         sync_visualizer.show_correlation_matrix(output_dynamic);
