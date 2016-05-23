@@ -284,40 +284,19 @@ class sync_visualizer:
         
         figure = plt.figure();
         
-        xcircle = numpy.linspace(-1.0, 1.0, 500);
-        ycircle_positive = [ (1.0 - x ** 2) ** 0.5 for x in xcircle ];
-        ycircle_negative = [ -y for y in ycircle_positive ];
+        dynamic = sync_output_dynamic.output[0];
+        artist, = plt.polar(dynamic, [1.0] * len(dynamic), 'o', color = 'blue');
         
         def init_frame():
-            artist1, = plt.plot(xcircle, ycircle_positive, 'b-');
-            artist2, = plt.plot(xcircle, ycircle_negative, 'b-');
-            artist3, = plt.plot([-1.1, 1.1], [0.0, 0.0], 'b-');
-            artist4, = plt.plot([0.0, 0.0], [-1.1, 1.1], 'b-');
-            
-            text1 = plt.text(-1.1, 0.0, r'$\pi$');
-            text2 = plt.text(1.1, 0.0, r'0');
-            text3 = plt.text(0.0, 1.1, r'$\pi$/2');
-            text4 = plt.text(0.0, -1.1, r'3$\pi$/2');
-            
-            return [ artist1, artist2, artist3, artist4, text1, text2, text3, text4 ];
+            return [ artist ];
         
         def frame_generation(index_dynamic):
             dynamic = sync_output_dynamic.output[index_dynamic];
+            artist.set_data(dynamic, [1.0] * len(dynamic));
             
-            xdata = [];
-            ydata = [];
-            
-            for phase in dynamic:
-                xcoord = math.cos(phase);
-                ycoord = math.sin(phase);
-                
-                xdata.append(xcoord);
-                ydata.append(ycoord);
-            
-            artist5, = plt.plot(xdata, ydata, 'ro');
-            return [ artist5 ];
+            return [ artist ];
         
-        _ = animation.FuncAnimation(figure, frame_generation, len(sync_output_dynamic), interval = animation_velocity, repeat_delay = 5000, init_func = init_frame, blit = True);
+        _ = animation.FuncAnimation(figure, frame_generation, len(sync_output_dynamic), interval = animation_velocity, init_func = init_frame, repeat_delay = 5000);
         plt.show();
     
     
