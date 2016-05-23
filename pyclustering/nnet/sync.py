@@ -315,14 +315,14 @@ class sync_visualizer:
         figure = plt.figure();
         
         correlation_matrix = sync_output_dynamic.allocate_correlation_matrix(0);
+        artist = plt.imshow(correlation_matrix, cmap = plt.get_cmap(colormap), interpolation='kaiser', hold = True);
         
         def init_frame(): 
-            artist = plt.imshow(correlation_matrix, cmap = plt.get_cmap(colormap), interpolation='kaiser', hold = True);
             return [ artist ];
         
         def frame_generation(index_dynamic):
             correlation_matrix = sync_output_dynamic.allocate_correlation_matrix(index_dynamic);
-            artist = plt.imshow(correlation_matrix, cmap = plt.get_cmap(colormap), interpolation='kaiser');
+            artist.set_data(correlation_matrix);
             
             return [ artist ];
 
