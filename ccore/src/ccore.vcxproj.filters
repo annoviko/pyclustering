@@ -34,9 +34,6 @@
     <ClCompile Include="cluster\dbscan.cpp">
       <Filter>Source Files\cluster</Filter>
     </ClCompile>
-    <ClCompile Include="cluster\hierarchical.cpp">
-      <Filter>Source Files\cluster</Filter>
-    </ClCompile>
     <ClCompile Include="cluster\hsyncnet.cpp">
       <Filter>Source Files\cluster</Filter>
     </ClCompile>
@@ -124,6 +121,33 @@
     <ClCompile Include="interface\pyclustering_package.cpp">
       <Filter>Source Files\interface</Filter>
     </ClCompile>
+    <ClCompile Include="cluster\ant_clustering_mean.cpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClCompile>
+    <ClCompile Include="cluster\cure_data.cpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClCompile>
+    <ClCompile Include="cluster\dbscan_data.cpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClCompile>
+    <ClCompile Include="cluster\kmedians_data.cpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\agglomerative_interface.cpp">
+      <Filter>Source Files\interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\cure_interface.cpp">
+      <Filter>Source Files\interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\dbscan_interface.cpp">
+      <Filter>Source Files\interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\kmedians_interface.cpp">
+      <Filter>Source Files\interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\rock_interface.cpp">
+      <Filter>Source Files\interface</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cluster\agglomerative.hpp">
@@ -133,9 +157,6 @@
       <Filter>Source Files\cluster</Filter>
     </ClInclude>
     <ClInclude Include="cluster\dbscan.hpp">
-      <Filter>Source Files\cluster</Filter>
-    </ClInclude>
-    <ClInclude Include="cluster\hierarchical.hpp">
       <Filter>Source Files\cluster</Filter>
     </ClInclude>
     <ClInclude Include="cluster\hsyncnet.hpp">
@@ -253,6 +274,36 @@
       <Filter>Source Files\interface</Filter>
     </ClInclude>
     <ClInclude Include="interface\pyclustering_package.hpp">
+      <Filter>Source Files\interface</Filter>
+    </ClInclude>
+    <ClInclude Include="cluster\ant_clustering_mean.hpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="cluster\ant_clustering_params.hpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="cluster\cure_data.hpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="cluster\dbscan_data.hpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="cluster\kmedians_data.hpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\agglomerative_interface.h">
+      <Filter>Source Files\interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\cure_interface.h">
+      <Filter>Source Files\interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\dbscan_interface.h">
+      <Filter>Source Files\interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\kmedians_interface.h">
+      <Filter>Source Files\interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\rock_interface.h">
       <Filter>Source Files\interface</Filter>
     </ClInclude>
   </ItemGroup>

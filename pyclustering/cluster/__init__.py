@@ -145,7 +145,7 @@ class cluster_visualizer:
         added_canvas_descriptor = canvas_cluster_descr(cluster, data, marker, markersize);
         self.__canvas_clusters[canvas].append( added_canvas_descriptor );
         if (len(self.__canvas_clusters[canvas]) > len(self.__colors)):
-            raise NameError('Not enough colors to display clusters.');
+            print('warning: not enough unique colors to display clusters.');
         
         dimension = 0;
         if (data is None):
@@ -236,7 +236,11 @@ class cluster_visualizer:
                 data = canvas[index_cluster].data;
                 marker = canvas[index_cluster].marker;
                 markersize = canvas[index_cluster].markersize;
-                color = self.__colors[index_cluster];
+                
+                if (index_cluster < len(self.__colors)):
+                    color = self.__colors[index_cluster];
+                else:
+                    color = index_cluster % self.__colors[index_cluster];
                 
                 for item in cluster:
                     if (dimension == 1):

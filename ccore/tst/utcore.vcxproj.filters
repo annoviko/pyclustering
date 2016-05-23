@@ -119,6 +119,30 @@
     <ClCompile Include="utest-cluster.cpp">
       <Filter>Unit Tests</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\cluster\ant_clustering_mean.cpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\cluster\cure.cpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\cluster\cure_data.cpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\cluster\dbscan.cpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\cluster\dbscan_data.cpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\cluster\kmeans.cpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\cluster\kmedians_data.cpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\cluster\rock.cpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\tools\gtest\gtest.h">
@@ -293,6 +317,45 @@
       <Filter>Unit Tests</Filter>
     </ClInclude>
     <ClInclude Include="utest-kmedoids.hpp">
+      <Filter>Unit Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cluster\ant_clustering_mean.hpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cluster\ant_clustering_params.hpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cluster\cure.hpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cluster\cure_data.hpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cluster\dbscan.hpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cluster\dbscan_data.hpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cluster\kmeans.hpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cluster\kmedians_data.hpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cluster\rock.hpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="utest-ant_clustering.hpp">
+      <Filter>Unit Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="utest-cure.hpp">
+      <Filter>Unit Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="utest-dbscan.hpp">
+      <Filter>Unit Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="utest-rock.hpp">
       <Filter>Unit Tests</Filter>
     </ClInclude>
   </ItemGroup>

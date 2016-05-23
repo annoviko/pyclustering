@@ -21,14 +21,17 @@
   <ItemGroup>
     <ClCompile Include="ccore.cpp" />
     <ClCompile Include="cluster\agglomerative.cpp" />
+    <ClCompile Include="cluster\ant_clustering_mean.cpp" />
     <ClCompile Include="cluster\cluster_algorithm.cpp" />
     <ClCompile Include="cluster\cluster_data.cpp" />
     <ClCompile Include="cluster\cure.cpp" />
+    <ClCompile Include="cluster\cure_data.cpp" />
     <ClCompile Include="cluster\dbscan.cpp" />
-    <ClCompile Include="cluster\hierarchical.cpp" />
+    <ClCompile Include="cluster\dbscan_data.cpp" />
     <ClCompile Include="cluster\hsyncnet.cpp" />
     <ClCompile Include="cluster\kmeans.cpp" />
     <ClCompile Include="cluster\kmedians.cpp" />
+    <ClCompile Include="cluster\kmedians_data.cpp" />
     <ClCompile Include="cluster\kmedoids.cpp" />
     <ClCompile Include="cluster\kmedoids_data.cpp" />
     <ClCompile Include="cluster\rock.cpp" />
@@ -42,8 +45,13 @@
     <ClCompile Include="container\adjacency_weight_list.cpp" />
     <ClCompile Include="container\kdtree.cpp" />
     <ClCompile Include="differential\differ_factor.cpp" />
+    <ClCompile Include="interface\agglomerative_interface.cpp" />
+    <ClCompile Include="interface\cure_interface.cpp" />
+    <ClCompile Include="interface\dbscan_interface.cpp" />
+    <ClCompile Include="interface\kmedians_interface.cpp" />
     <ClCompile Include="interface\pcnn_interface.cpp" />
     <ClCompile Include="interface\pyclustering_package.cpp" />
+    <ClCompile Include="interface\rock_interface.cpp" />
     <ClCompile Include="nnet\legion.cpp" />
     <ClCompile Include="nnet\pcnn.cpp" />
     <ClCompile Include="nnet\som.cpp" />
@@ -56,14 +64,18 @@
   <ItemGroup>
     <ClInclude Include="ccore.h" />
     <ClInclude Include="cluster\agglomerative.hpp" />
+    <ClInclude Include="cluster\ant_clustering_mean.hpp" />
+    <ClInclude Include="cluster\ant_clustering_params.hpp" />
     <ClInclude Include="cluster\cluster_algorithm.hpp" />
     <ClInclude Include="cluster\cluster_data.hpp" />
     <ClInclude Include="cluster\cure.hpp" />
+    <ClInclude Include="cluster\cure_data.hpp" />
     <ClInclude Include="cluster\dbscan.hpp" />
-    <ClInclude Include="cluster\hierarchical.hpp" />
+    <ClInclude Include="cluster\dbscan_data.hpp" />
     <ClInclude Include="cluster\hsyncnet.hpp" />
     <ClInclude Include="cluster\kmeans.hpp" />
     <ClInclude Include="cluster\kmedians.hpp" />
+    <ClInclude Include="cluster\kmedians_data.hpp" />
     <ClInclude Include="cluster\kmedoids.hpp" />
     <ClInclude Include="cluster\kmedoids_data.hpp" />
     <ClInclude Include="cluster\rock.hpp" />
@@ -84,8 +96,13 @@
     <ClInclude Include="differential\differ_state.hpp" />
     <ClInclude Include="differential\runge_kutta_4.hpp" />
     <ClInclude Include="differential\runge_kutta_fehlberg_45.hpp" />
+    <ClInclude Include="interface\agglomerative_interface.h" />
+    <ClInclude Include="interface\cure_interface.h" />
+    <ClInclude Include="interface\dbscan_interface.h" />
+    <ClInclude Include="interface\kmedians_interface.h" />
     <ClInclude Include="interface\pcnn_interface.h" />
     <ClInclude Include="interface\pyclustering_package.hpp" />
+    <ClInclude Include="interface\rock_interface.h" />
     <ClInclude Include="nnet\legion.hpp" />
     <ClInclude Include="nnet\network.hpp" />
     <ClInclude Include="nnet\pcnn.hpp" />

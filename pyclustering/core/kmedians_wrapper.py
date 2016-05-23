@@ -26,7 +26,7 @@
 
 from ctypes import cdll, c_double;
 
-from pyclustering.core.wrapper import PATH_DLL_CCORE_64, create_pointer_data, pyclustering_package, pyclustering_type_data, extract_pyclustering_package;
+from pyclustering.core.wrapper import PATH_DLL_CCORE_64, create_pointer_data, extract_pyclustering_package;
 
 
 def kmedians(sample, centers, tolerance):

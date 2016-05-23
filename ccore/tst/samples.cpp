@@ -44,6 +44,7 @@ const std::string simple_sample_factory::PATH_SAMPLE_SIMPLE_06 = PATH_SAMPLE_SIM
 const std::string simple_sample_factory::PATH_SAMPLE_SIMPLE_07 = PATH_SAMPLE_SIMPLE_FOLDER + separator + "SampleSimple07.txt";
 const std::string simple_sample_factory::PATH_SAMPLE_SIMPLE_08 = PATH_SAMPLE_SIMPLE_FOLDER + separator + "SampleSimple08.txt";
 const std::string simple_sample_factory::PATH_SAMPLE_SIMPLE_09 = PATH_SAMPLE_SIMPLE_FOLDER + separator + "SampleSimple09.txt";
+const std::string simple_sample_factory::PATH_SAMPLE_SIMPLE_10 = PATH_SAMPLE_SIMPLE_FOLDER + separator + "SampleSimple10.txt";
 
 
 const simple_sample_factory::map_sample simple_sample_factory::m_sample_table = {
@@ -56,6 +57,7 @@ const simple_sample_factory::map_sample simple_sample_factory::m_sample_table = 
     { SAMPLE_SIMPLE::SAMPLE_SIMPLE_07, simple_sample_factory::PATH_SAMPLE_SIMPLE_07 },
     { SAMPLE_SIMPLE::SAMPLE_SIMPLE_08, simple_sample_factory::PATH_SAMPLE_SIMPLE_08 },
     { SAMPLE_SIMPLE::SAMPLE_SIMPLE_09, simple_sample_factory::PATH_SAMPLE_SIMPLE_09 },
+    { SAMPLE_SIMPLE::SAMPLE_SIMPLE_10, simple_sample_factory::PATH_SAMPLE_SIMPLE_10 },
 };
 
 

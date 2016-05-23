@@ -87,12 +87,20 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\src\cluster\agglomerative.cpp" />
+    <ClCompile Include="..\src\cluster\ant_clustering_mean.cpp" />
     <ClCompile Include="..\src\cluster\cluster_algorithm.cpp" />
     <ClCompile Include="..\src\cluster\cluster_data.cpp" />
+    <ClCompile Include="..\src\cluster\cure.cpp" />
+    <ClCompile Include="..\src\cluster\cure_data.cpp" />
+    <ClCompile Include="..\src\cluster\dbscan.cpp" />
+    <ClCompile Include="..\src\cluster\dbscan_data.cpp" />
     <ClCompile Include="..\src\cluster\hsyncnet.cpp" />
+    <ClCompile Include="..\src\cluster\kmeans.cpp" />
     <ClCompile Include="..\src\cluster\kmedians.cpp" />
+    <ClCompile Include="..\src\cluster\kmedians_data.cpp" />
     <ClCompile Include="..\src\cluster\kmedoids.cpp" />
     <ClCompile Include="..\src\cluster\kmedoids_data.cpp" />
+    <ClCompile Include="..\src\cluster\rock.cpp" />
     <ClCompile Include="..\src\cluster\syncnet.cpp" />
     <ClCompile Include="..\src\cluster\xmeans.cpp" />
     <ClCompile Include="..\src\container\adjacency_bit_matrix.cpp" />
@@ -118,12 +126,21 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\cluster\agglomerative.hpp" />
+    <ClInclude Include="..\src\cluster\ant_clustering_mean.hpp" />
+    <ClInclude Include="..\src\cluster\ant_clustering_params.hpp" />
     <ClInclude Include="..\src\cluster\cluster_algorithm.hpp" />
     <ClInclude Include="..\src\cluster\cluster_data.hpp" />
+    <ClInclude Include="..\src\cluster\cure.hpp" />
+    <ClInclude Include="..\src\cluster\cure_data.hpp" />
+    <ClInclude Include="..\src\cluster\dbscan.hpp" />
+    <ClInclude Include="..\src\cluster\dbscan_data.hpp" />
     <ClInclude Include="..\src\cluster\hsyncnet.hpp" />
+    <ClInclude Include="..\src\cluster\kmeans.hpp" />
     <ClInclude Include="..\src\cluster\kmedians.hpp" />
+    <ClInclude Include="..\src\cluster\kmedians_data.hpp" />
     <ClInclude Include="..\src\cluster\kmedoids.hpp" />
     <ClInclude Include="..\src\cluster\kmedoids_data.hpp" />
+    <ClInclude Include="..\src\cluster\rock.hpp" />
     <ClInclude Include="..\src\cluster\syncnet.hpp" />
     <ClInclude Include="..\src\cluster\xmeans.hpp" />
     <ClInclude Include="..\src\container\adjacency.hpp" />
@@ -160,8 +177,11 @@
     <ClInclude Include="utest-adjacency_matrix.hpp" />
     <ClInclude Include="utest-adjacency_weight_list.hpp" />
     <ClInclude Include="utest-agglomerative.hpp" />
+    <ClInclude Include="utest-ant_clustering.hpp" />
     <ClInclude Include="utest-ant_colony.hpp" />
     <ClInclude Include="utest-cluster.hpp" />
+    <ClInclude Include="utest-cure.hpp" />
+    <ClInclude Include="utest-dbscan.hpp" />
     <ClInclude Include="utest-differential.hpp" />
     <ClInclude Include="utest-hsyncnet.hpp" />
     <ClInclude Include="utest-kdtree.hpp" />
@@ -169,6 +189,7 @@
     <ClInclude Include="utest-kmedoids.hpp" />
     <ClInclude Include="utest-legion.hpp" />
     <ClInclude Include="utest-pcnn.hpp" />
+    <ClInclude Include="utest-rock.hpp" />
     <ClInclude Include="utest-som.hpp" />
     <ClInclude Include="utest-sync.hpp" />
     <ClInclude Include="utest-syncnet.hpp" />
