@@ -89,7 +89,7 @@ def animate_global_synchronization():
     template_animate_output_dynamic("Global synchronization", 300, 0.5, 0.0, 0.9999);
 
 
-Examples of global synchronization.
+# Examples of global synchronization.
 trivial_dynamic_sync();
 weight_5_dynamic_sync();
 bidir_struct_dynamic_sync();
