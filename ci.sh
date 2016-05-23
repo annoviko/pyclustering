@@ -19,6 +19,9 @@ run_build_ccore_job() {
 		echo "Building CCORE library: FAILURE."
 		exit 1
 	fi
+	
+	# return back (keep current folder)
+	cd ../
 }
 
 
@@ -48,6 +51,9 @@ run_ut_ccore_job() {
 	# run unit-tests and obtain code coverage
 	make utrun
 	coveralls --exclude tst/ --exclude tools/ --gcov-options '\-lp'
+	
+	# return back (keep current folder)
+	cd ../
 }
 
 
@@ -64,11 +70,15 @@ run_valgrind_ccore_job() {
 	# build and run unit-test project under valgrind to check memory leakage
 	cd ccore/
 	make valgrind
+	
+	# return back (keep current folder)
+	cd ../
 }
 
 
 run_ut_pyclustering_job() {
 	echo "[CI Job]: UT PYCLUSTERING (Python code unit-testing):"
+	echo "- Rebuilt CCORE library."
 	echo "- Run unit-tests of pyclustering."
 	echo "- Measure code coverage."
 
@@ -80,6 +90,9 @@ run_ut_pyclustering_job() {
 	PYTHONPATH=`pwd`
 	export PYTHONPATH=${PYTHONPATH}
 
+	# build ccore library
+	run_build_ccore_job
+	
 	# run unit-tests and obtain coverage results
 	coverage run --source=pyclustering --omit='pyclustering/*/tests/*,pyclustering/*/examples/*,pyclustering/ut/*' pyclustering/ut/__init__.py
 	coveralls
