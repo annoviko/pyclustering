@@ -274,12 +274,13 @@ class sync_visualizer:
     
     
     @staticmethod
-    def animate_output_dynamic(sync_output_dynamic, animation_velocity = 75):
+    def animate_output_dynamic(sync_output_dynamic, animation_velocity = 75, save_movie = None):
         """!
         @brief Shows animation of output dynamic (output of each oscillator) during simulation on a circle from [0; 2pi].
         
         @param[in] sync_output_dynamic (sync_dynamic): Output dynamic of the Sync network.
-        @param[in] animation_velocity (uint): Interval between frames in milliseconds. 
+        @param[in] animation_velocity (uint): Interval between frames in milliseconds.
+        @param[in] save_movie (string): If it is specified then animation will be stored to file that is specified in this parameter.
         
         """
         
@@ -297,10 +298,14 @@ class sync_visualizer:
             
             return [ artist ];
         
-        _ = animation.FuncAnimation(figure, frame_generation, len(sync_output_dynamic), interval = animation_velocity, init_func = init_frame, repeat_delay = 5000);
-        plt.show();
-    
-    
+        phase_animation = animation.FuncAnimation(figure, frame_generation, len(sync_output_dynamic), interval = animation_velocity, init_func = init_frame, repeat_delay = 5000);
+
+        if (save_movie is not None):
+            phase_animation.save(save_movie, writer = 'ffmpeg', fps = 15);
+        else:
+            plt.show();
+
+
     @staticmethod
     def animate_correlation_matrix(sync_output_dynamic, animation_velocity = 75, colormap = 'cool', save_movie = None):
         """!
@@ -336,11 +341,12 @@ class sync_visualizer:
     
     
     @staticmethod
-    def animate(sync_output_dynamic):
+    def animate(sync_output_dynamic, save_movie = None):
         """!
         @brief Shows animation of phase coordinates and animation of correlation matrix together for the Sync dynamic output on the same figure.
         
         @param[in] sync_output_dynamic (sync_dynamic): Output dynamic of the Sync network.
+        @param[in] save_movie (string): If it is specified then animation will be stored to file that is specified in this parameter.
         
         """
         
@@ -366,8 +372,12 @@ class sync_visualizer:
             
             return [ artist1, artist2 ];
         
-        _ = animation.FuncAnimation(figure, frame_generation, len(sync_output_dynamic), interval = 75, init_func = init_frame, repeat_delay = 5000);
-        plt.show();
+        dynamic_animation = animation.FuncAnimation(figure, frame_generation, len(sync_output_dynamic), interval = 75, init_func = init_frame, repeat_delay = 5000);
+        
+        if (save_movie is not None):
+            dynamic_animation.save(save_movie, writer = 'ffmpeg', fps = 15);
+        else:
+            plt.show();
 
 
 class sync_network(network):
