@@ -223,7 +223,7 @@ static void template_correlation_matrix(const sync_network_state p_state) {
 
     for (size_t i = 0; i < p_state.size(); i++) {
         for (size_t j = 0; j < p_state.size(); j++) {
-            double expected_value = std::sin(std::abs((double) p_state.m_phase[i] - p_state.m_phase[j]));
+            double expected_value = std::abs((double) std::sin(p_state.m_phase[i] - p_state.m_phase[j]));
             ASSERT_NEAR(expected_value, corr_matrix[i][j], 0.00001);
         }
     }
