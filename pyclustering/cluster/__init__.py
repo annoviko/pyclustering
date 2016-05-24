@@ -201,20 +201,29 @@ class cluster_visualizer:
             raise NameError('Canvas does ' + canvas + ' not exists.');
         
         self.__canvas_titles[canvas] = text;
-            
     
     
-    def show(self, visible_axis = True, visible_grid = True):
+    def show(self, figure = None, visible_axis = True, visible_grid = True, display = True):
         """!
         @brief Shows clusters (visualize).
         
+        @param[in] figure (fig): Defines requirement to use specified figure, if None - new figure is created for drawing clusters.
         @param[in] visible_axis (bool): Defines visibility of axes on each canvas, if True - axes are invisible.
         @param[in] visible_grid (bool): Defines visibility of axes on each canvas, if True - grid is displayed.
+        @param[in] display (bool): Defines requirement to display clusters on a stage, if True - clusters are displayed, if False - plt.show() should be called by user."
+        
+        @return (fig) Figure where clusters are shown.
         
         """
         
         maximum_cols = self.__size_row;
         maximum_rows = math.ceil(self.__number_canvases / maximum_cols);
+
+        cluster_figure = None;
+        if (figure is not None):
+            cluster_figure = figure;
+        else:
+            cluster_figure = plt.figure();
         
         grid_spec = gridspec.GridSpec(maximum_rows, maximum_cols);
         
@@ -224,9 +233,9 @@ class cluster_visualizer:
             
             #ax = axes[real_index];
             if (dimension == 2):
-                ax = plt.subplot(grid_spec[index_canvas]);
+                ax = cluster_figure.add_subplot(grid_spec[index_canvas]);
             else:
-                ax = plt.subplot(grid_spec[index_canvas], projection='3d');
+                ax = cluster_figure.add_subplot(grid_spec[index_canvas], projection='3d');
             
             if (len(canvas) == 0):
                 plt.setp(ax, visible = False);
@@ -273,4 +282,7 @@ class cluster_visualizer:
             
             ax.grid(visible_grid);
         
-        plt.show();
+        if (display is True):
+            plt.show();
+        
+        return cluster_figure;
