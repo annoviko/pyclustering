@@ -20,6 +20,8 @@
 
 #include "interface/pyclustering_package.hpp"
 
+#include <type_traits>
+
 
 pyclustering_package::pyclustering_package(void) :
         size(0),
@@ -58,10 +60,6 @@ pyclustering_package::~pyclustering_package(void) {
                 delete [] (long *) data;
                 break;
 
-            case pyclustering_type_data::PYCLUSTERING_TYPE_UNSIGNED_LONG:
-                delete [] (unsigned long *) data;
-                break;
-
             case pyclustering_type_data::PYCLUSTERING_TYPE_SIZE_T:
                 delete [] (size_t *) data;
                 break;
@@ -77,47 +75,4 @@ pyclustering_package::~pyclustering_package(void) {
             delete package;
         }
     }
-}
-
-
-pyclustering_package * create_package(const std::vector<int> * const data) {
-    pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_INT);
-    prepare_package(data, package);
-
-    return package;
-}
-
-pyclustering_package * create_package(const std::vector<unsigned int> * const data) {
-    pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_INT);
-    prepare_package(data, package);
-
-    return package;
-}
-
-pyclustering_package * create_package(const std::vector<float> * const data) {
-    pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_FLOAT);
-    prepare_package(data, package);
-
-    return package;
-}
-
-pyclustering_package * create_package(const std::vector<double> * const data) {
-    pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_DOUBLE);
-    prepare_package(data, package);
-
-    return package;
-}
-
-pyclustering_package * create_package(const std::vector<long> * const data) {
-    pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_LONG);
-    prepare_package(data, package);
-
-    return package;
-}
-
-pyclustering_package * create_package(const std::vector<size_t> * const data) {
-    pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_SIZE_T);
-    prepare_package(data, package);
-
-    return package;
 }

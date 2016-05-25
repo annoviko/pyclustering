@@ -27,7 +27,6 @@
 #include "cluster/agglomerative.hpp"
 #include "cluster/hsyncnet.hpp"
 #include "cluster/kmeans.hpp"
-#include "cluster/kmedoids.hpp"
 #include "cluster/syncnet.hpp"
 #include "cluster/xmeans.hpp"
 
@@ -105,29 +104,6 @@ clustering_result * kmeans_algorithm(const data_representation * const sample, c
 	return result;
 }
 
-
-pyclustering_package * kmedoids_algorithm(const data_representation * const sample, const pyclustering_package * const package_medoids, const double tolerance) {
-    cluster_analysis::medoid_sequence medoids((size_t *) package_medoids->data, ((size_t *) package_medoids->data) + package_medoids->size);
-
-    cluster_analysis::kmedoids algorithm(medoids, tolerance);
-
-    dataset * input_dataset = read_sample(sample);
-
-    cluster_analysis::kmedoids_data output_result;
-    algorithm.process(*input_dataset, output_result);
-
-    pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
-    package->size = output_result.size();
-    package->data = new pyclustering_package * [package->size];
-
-    for (unsigned int i = 0; i < package->size; i++) {
-        ((pyclustering_package **) package->data)[i] = create_package(&output_result[i]);
-    }
-
-    delete input_dataset;
-
-    return package;
-}
 
 clustering_result * xmeans_algorithm(const data_representation * const sample, const data_representation * const initial_centers, const unsigned int kmax, const double tolerance) {
 	std::vector<std::vector<double> > * dataset = read_sample(sample);

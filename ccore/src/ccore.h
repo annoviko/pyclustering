@@ -100,8 +100,6 @@ extern "C" DECLARATION void free_pyclustering_package(pyclustering_package * pac
  ***********************************************************************************************/
 extern "C" DECLARATION clustering_result * kmeans_algorithm(const data_representation * const sample, const data_representation * const initial_centers, const double tolerance);
 
-extern "C" DECLARATION pyclustering_package * kmedoids_algorithm(const data_representation * const sample, const pyclustering_package * const medoids, const double tolerance);
-
 /***********************************************************************************************
  *
  * @brief   Clustering algorithm X-Means returns allocated clusters.
