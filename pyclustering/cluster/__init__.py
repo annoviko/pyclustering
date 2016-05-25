@@ -68,7 +68,7 @@ class cluster_visualizer:
                  'deepskyblue', 'darkgrey', 'lightsalmon', 'deeppink', 'yellow',
                  'black', 'mediumspringgreen', 'orange', 'darkviolet', 'darkblue',
                  'silver', 'lime', 'pink', 'gold', 'bisque',
-                 'dimgray', 'firebrick', 'darksalmon', 'chartreuse', 'stateblue',
+                 'dimgray', 'firebrick', 'darksalmon', 'chartreuse', 'skyblue',
                  'purple', 'fuchsia', 'palegoldenrod', 'coral', 'hotpink' ];
     
 
@@ -144,8 +144,6 @@ class cluster_visualizer:
         
         added_canvas_descriptor = canvas_cluster_descr(cluster, data, marker, markersize);
         self.__canvas_clusters[canvas].append( added_canvas_descriptor );
-        if (len(self.__canvas_clusters[canvas]) > len(self.__colors)):
-            print('warning: not enough unique colors to display clusters.');
         
         dimension = 0;
         if (data is None):
@@ -166,7 +164,7 @@ class cluster_visualizer:
             raise NameError('Only objects with size dimension 1 (1D plot), 2 (2D plot) or 3 (3D plot) can be displayed.');
         
         if (markersize is None):
-            if (dimension == 2):
+            if ( (dimension == 1) or (dimension == 2) ):
                 added_canvas_descriptor.markersize = self.__default_2d_marker_size;
             elif (dimension == 3):
                 added_canvas_descriptor.markersize = self.__default_3d_marker_size;
@@ -232,7 +230,7 @@ class cluster_visualizer:
             dimension = self.__canvas_dimensions[index_canvas];
             
             #ax = axes[real_index];
-            if (dimension == 2):
+            if ( (dimension == 1) or (dimension == 2) ):
                 ax = cluster_figure.add_subplot(grid_spec[index_canvas]);
             else:
                 ax = cluster_figure.add_subplot(grid_spec[index_canvas], projection='3d');
@@ -246,10 +244,8 @@ class cluster_visualizer:
                 marker = canvas[index_cluster].marker;
                 markersize = canvas[index_cluster].markersize;
                 
-                if (index_cluster < len(self.__colors)):
-                    color = self.__colors[index_cluster];
-                else:
-                    color = index_cluster % self.__colors[index_cluster];
+                index_color = index_cluster % len(self.__colors);
+                color = self.__colors[index_color];
                 
                 for item in cluster:
                     if (dimension == 1):

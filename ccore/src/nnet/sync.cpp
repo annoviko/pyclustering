@@ -299,7 +299,7 @@ double sync_network::phase_normalization(const double teta) const {
 sync_dynamic::~sync_dynamic(void) { }
 
 
-void sync_dynamic::allocate_sync_ensembles(const double tolerance, ensemble_data<sync_ensemble> & ensembles) const {
+void sync_dynamic::allocate_sync_ensembles(const double tolerance, const size_t iteration, ensemble_data<sync_ensemble> & ensembles) const {
     ensembles.clear();
 
     if (size() == 0) {
@@ -310,7 +310,7 @@ void sync_dynamic::allocate_sync_ensembles(const double tolerance, ensemble_data
     ensembles.push_back(sync_ensemble());
     ensembles[0].push_back(0);
 
-    sync_dynamic::const_iterator last_state_dynamic = cend() - 1;
+    sync_dynamic::const_iterator last_state_dynamic = cbegin() + iteration;
 
     for (unsigned int i = 1; i < number_oscillators(); i++) {
         bool cluster_allocated = false;
@@ -327,8 +327,8 @@ void sync_dynamic::allocate_sync_ensembles(const double tolerance, ensemble_data
 
                 double phase_shifted = std::abs((*last_state_dynamic).m_phase[i] - 2 * pi());
 
-                if ( ( (phase_first < (phase_second + tolerance)) && (phase_first > (phase_second - tolerance)) ) ||
-                     ( (phase_shifted < (phase_second + tolerance)) && (phase_shifted > (phase_second - tolerance)) ) ) {
+                if (((phase_first < (phase_second + tolerance)) && (phase_first >(phase_second - tolerance))) ||
+                    ((phase_shifted < (phase_second + tolerance)) && (phase_shifted >(phase_second - tolerance)))) {
 
                     cluster_allocated = true;
                     (*cluster).push_back(i);
@@ -348,6 +348,11 @@ void sync_dynamic::allocate_sync_ensembles(const double tolerance, ensemble_data
             ensembles.push_back(allocated_cluster);
         }
     }
+}
+
+
+void sync_dynamic::allocate_sync_ensembles(const double tolerance, ensemble_data<sync_ensemble> & ensembles) const {
+    allocate_sync_ensembles(tolerance, size() - 1, ensembles);
 }
 
 

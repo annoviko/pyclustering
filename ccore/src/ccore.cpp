@@ -191,10 +191,11 @@ void sync_dynamic_destroy(const void * pointer) {
 	delete (sync_dynamic *) pointer;
 }
 
-pyclustering_package * sync_dynamic_allocate_sync_ensembles(const void * pointer, const double tolerance) {
+
+pyclustering_package * sync_dynamic_allocate_sync_ensembles(const void * pointer, const double tolerance, const size_t iteration) {
 	ensemble_data<sync_ensemble> ensembles;
 
-	((sync_dynamic *) pointer)->allocate_sync_ensembles(tolerance, ensembles);
+	((sync_dynamic *) pointer)->allocate_sync_ensembles(tolerance, iteration, ensembles);
 
 	pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
 	package->size = ensembles.size();
@@ -340,7 +341,7 @@ void syncpr_dynamic_destroy(const void * pointer) {
 }
 
 pyclustering_package * syncpr_dynamic_allocate_sync_ensembles(const void * pointer, const double tolerance) {
-    return sync_dynamic_allocate_sync_ensembles(pointer, tolerance);
+    return sync_dynamic_allocate_sync_ensembles(pointer, tolerance, syncpr_dynamic_get_size(pointer) - 1);
 }
 
 pyclustering_package * syncpr_dynamic_get_time(const void * pointer) {

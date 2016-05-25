@@ -23,7 +23,7 @@
 
 """
 
-from pyclustering.cluster.syncnet import syncnet;
+from pyclustering.cluster.syncnet import syncnet, syncnet_visualizer;
 from pyclustering.nnet.sync import sync_visualizer;
 
 from pyclustering.nnet import solve_type;
@@ -93,6 +93,7 @@ def cluster_atom():
 def cluster_wing_nut():
     template_clustering(FCPS_SAMPLES.SAMPLE_WING_NUT, 0.28, 0.999, show_dyn = False, show_conn = False); 
 
+
 def experiment_execution_time(show_dyn = False, ccore = False):
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, 0.999, show_dyn, False, True, False, ccore);
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 1, 0.999, show_dyn, False, True, False, ccore);
@@ -126,6 +127,17 @@ def cluster_simple5_conn_weight():
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 10, 0.999, show_dyn = True, show_conn = True, ena_conn_weight = True);
 
 
+def template_animated_clustering(file, radius, order):
+    sample = read_sample(file);
+    network = syncnet(sample, radius, ccore = True);
+    
+    analyser = network.process(order, solve_type.FAST, True);
+    syncnet_visualizer.animate_cluster_allocation(sample, analyser);
+
+def animation_cluster_allocation_elongate():
+    template_animated_clustering(SIMPLE_SAMPLES.SAMPLE_ELONGATE, 0.5, 0.999);
+
+
 cluster_simple1();
 cluster_simple2();
 cluster_simple3();
@@ -138,12 +150,15 @@ cluster_chainlink();
 cluster_two_diamonds();
 cluster_atom();
 cluster_wing_nut();
-  
+   
 cluster_simple1_conn_weight();
 cluster_simple2_conn_weight();
 cluster_simple3_conn_weight();
 cluster_simple4_conn_weight();
 cluster_simple5_conn_weight();
- 
+  
 experiment_execution_time(False, False);
 experiment_execution_time(False, True);
+
+
+animation_cluster_allocation_elongate();

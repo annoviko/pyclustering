@@ -29,15 +29,46 @@ import unittest;
 import matplotlib;
 matplotlib.use('Agg');
 
+import random;
+
 from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
 
 from pyclustering.utils import read_sample;
 
 from pyclustering.cluster import cluster_visualizer;
 from pyclustering.cluster.dbscan import dbscan;
+from pyclustering.cluster.cure import cure;
 
 
 class Test(unittest.TestCase):
+    def testVisualize1DClustersOneCanvas(self):
+        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE8);
+
+        dbscan_instance = dbscan(sample, 1.0, 3, True);
+        dbscan_instance.process();
+        clusters = dbscan_instance.get_clusters();
+         
+        visualizer = cluster_visualizer();
+        visualizer.append_clusters(clusters, sample, markersize = 5);
+        visualizer.show();
+
+    def testVisualize1DClustersOneCanvasSampleOnly(self):
+        clusters = [ [[0.1], [0.2], [0.5]], [[0.1], [0.2], [0.5]] ];
+         
+        visualizer = cluster_visualizer();
+        visualizer.append_clusters(clusters, markersize = 5);
+        visualizer.show();
+    
+    def testVisualize1DClustersTwoCanvases(self):
+        sample_simple7 = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE7);
+        sample_simple8 = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE8);
+    
+        # Two canvas visualization
+        visualizer = cluster_visualizer(2);
+        visualizer.append_clusters([ sample_simple7 ], None, 0, markersize = 30);
+        visualizer.append_clusters([ sample_simple8 ], None, 1, markersize = 30);
+        visualizer.show();
+
     def testVisualize3DClustersOneCanvas(self):
         sample = read_sample(FCPS_SAMPLES.SAMPLE_HEPTA);
          
@@ -48,7 +79,7 @@ class Test(unittest.TestCase):
         visualizer = cluster_visualizer();
         visualizer.append_clusters(clusters, sample, markersize = 30);
         visualizer.show();
-     
+
     def testVisualize3DClustersTwoCanvases(self):
         sample_tetra = read_sample(FCPS_SAMPLES.SAMPLE_TETRA);
         sample_hepta = read_sample(FCPS_SAMPLES.SAMPLE_HEPTA);
@@ -61,7 +92,7 @@ class Test(unittest.TestCase):
      
     def testVisualize2DClustersOneCanvas(self):
         sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE4);
-         
+
         dbscan_instance = dbscan(sample, 0.7, 3, False);
         dbscan_instance.process();
         clusters = dbscan_instance.get_clusters();
@@ -121,6 +152,23 @@ class Test(unittest.TestCase):
             visualizer.append_clusters([ sample ], None, i, markersize = 5);
         
         visualizer.show();
+    
+    def testVisualizeByDataOnly(self):
+        visualizer = cluster_visualizer();
+        
+        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1);
+        visualizer.append_clusters([ sample ]);
+        
+        visualizer.show();
+    
+    def testVisualizeHugeAmountClusters(self):
+        visualizer = cluster_visualizer();
+        
+        data_clusters = [ [ [ random.random() ] ] for _ in range(0, 100) ];
+        visualizer.append_clusters(data_clusters);
+        
+        visualizer.show();
+
 
 if __name__ == "__main__":
     unittest.main();

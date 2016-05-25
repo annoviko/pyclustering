@@ -200,19 +200,9 @@ extern "C" DECLARATION unsigned int sync_dynamic_get_size(const void * pointer_n
 
 extern "C" DECLARATION void sync_dynamic_destroy(const void * pointer);
 
-/***********************************************************************************************
- *
- * @brief   Allocate clusters of ensembles of synchronous oscillators where each
- *          synchronous ensemble corresponds to only one cluster for Sync network.
- *
- * @param   (in) pointer_network	- pointer to dynamic of Sync.
- *          (in) tolerance			- maximum error for allocation of synchronous ensemble 
- *                                    oscillators.
- *
- * @return	Returns pointer to output dynamic of the network.
- *
- ***********************************************************************************************/
-extern "C" DECLARATION pyclustering_package * sync_dynamic_allocate_sync_ensembles(const void * pointer_dynamic, const double tolerance);
+
+
+extern "C" DECLARATION pyclustering_package * sync_dynamic_allocate_sync_ensembles(const void * pointer_dynamic, const double tolerance, const size_t iteration);
 
 extern "C" DECLARATION pyclustering_package * sync_dynamic_allocate_correlation_matrix(const void * pointer_dynamic, const unsigned int iteration);
 

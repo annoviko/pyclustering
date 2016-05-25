@@ -124,13 +124,13 @@ class sync_dynamic:
             raise NameError('Out of range ' + index + ': only indexes 0 and 1 are supported.');
 
 
-    def allocate_sync_ensembles(self, tolerance = 0.01, indexes = None):
+    def allocate_sync_ensembles(self, tolerance = 0.01, indexes = None, iteration = None):
         """!
-        @brief Allocate clusters in line with ensembles of synchronous oscillators where each
-               synchronous ensemble corresponds to only one cluster.
+        @brief Allocate clusters in line with ensembles of synchronous oscillators where each synchronous ensemble corresponds to only one cluster.
                
         @param[in] tolerance (double): Maximum error for allocation of synchronous ensemble oscillators.
         @param[in] indexes (list): List of real object indexes and it should be equal to amount of oscillators (in case of 'None' - indexes are in range [0; amount_oscillators]).
+        @param[in] iteration (uint): Iteration of simulation that should be used for allocation.
         
         @return (list) Grours (lists) of indexes of synchronous oscillators.
                 For example [ [index_osc1, index_osc3], [index_osc2], [index_osc4, index_osc5] ].
@@ -138,7 +138,7 @@ class sync_dynamic:
         """
         
         if (self._ccore_sync_dynamic_pointer is not None):
-            ensembles = wrapper.sync_dynamic_allocate_sync_ensembles(self._ccore_sync_dynamic_pointer, tolerance);
+            ensembles = wrapper.sync_dynamic_allocate_sync_ensembles(self._ccore_sync_dynamic_pointer, tolerance, iteration);
             
             if (indexes is not None):
                 for ensemble in ensembles:
@@ -151,7 +151,12 @@ class sync_dynamic:
             return [];
         
         number_oscillators = len(self._dynamic[0]);
-        last_state = self._dynamic[len(self._dynamic) - 1];
+        last_state = None;
+        
+        if (iteration is None):
+            last_state = self._dynamic[len(self._dynamic) - 1];
+        else:
+            last_state = self._dynamic[iteration];
         
         clusters = [];
         if (number_oscillators > 0):

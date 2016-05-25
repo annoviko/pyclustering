@@ -71,9 +71,12 @@ def sync_dynamic_destroy(pointer_dynamic):
     ccore.sync_dynamic_destroy(pointer_dynamic);
 
 
-def sync_dynamic_allocate_sync_ensembles(pointer_dynamic, tolerance):
+def sync_dynamic_allocate_sync_ensembles(pointer_dynamic, tolerance, iteration):
+    if (iteration is None):
+        iteration = sync_dynamic_get_size(pointer_dynamic) - 1;
+    
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
-    package = ccore.sync_dynamic_allocate_sync_ensembles(pointer_dynamic, c_double(tolerance));
+    package = ccore.sync_dynamic_allocate_sync_ensembles(pointer_dynamic, c_double(tolerance), c_size_t(iteration));
     
     result = extract_pyclustering_package(package);
     ccore.free_pyclustering_package(package);

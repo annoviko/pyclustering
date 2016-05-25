@@ -26,15 +26,17 @@
 """
 
 import matplotlib.pyplot as plt;
+import matplotlib.animation as animation;
 
 import math;
 
 from pyclustering.core.syncnet_wrapper import syncnet_create_network, syncnet_process, syncnet_destroy_network, syncnet_analyser_destroy;
 
-from pyclustering.nnet.sync import sync_dynamic, sync_network;
+from pyclustering.nnet.sync import sync_dynamic, sync_network, sync_visualizer;
 from pyclustering.nnet import conn_represent, initial_type, conn_type, solve_type;
 
 from pyclustering.utils import euclidean_distance;
+from pyclustering.cluster import cluster_visualizer
 
 
 class syncnet_analyser(sync_dynamic):
@@ -66,12 +68,13 @@ class syncnet_analyser(sync_dynamic):
             self._ccore_sync_dynamic_pointer = None;
     
     
-    def allocate_clusters(self, eps = 0.01, indexes = None):
+    def allocate_clusters(self, eps = 0.01, indexes = None, iteration = None):
         """!
         @brief Returns list of clusters in line with state of ocillators (phases).
         
         @param[in] eps (double): Tolerance level that define maximal difference between phases of oscillators in one cluster.
         @param[in] indexes (list): List of real object indexes and it should be equal to amount of oscillators (in case of 'None' - indexes are in range [0; amount_oscillators]).
+        @param[in] iteration (uint): Iteration of simulation that should be used for allocation.
         
         @return (list) List of clusters, for example [ [cluster1], [cluster2], ... ].
         
@@ -79,7 +82,7 @@ class syncnet_analyser(sync_dynamic):
         
         """
         
-        return self.allocate_sync_ensembles(eps, indexes);
+        return self.allocate_sync_ensembles(eps, indexes, iteration);
     
     
     def allocate_noise(self):
@@ -94,6 +97,58 @@ class syncnet_analyser(sync_dynamic):
         
         """         
         return [];
+
+
+class syncnet_visualizer(sync_visualizer):
+    """!
+    @brief Visualizer of output dynamic of oscillatory network 'syncnet' for cluster analysis.
+    
+    """
+    
+    @staticmethod
+    def animate_cluster_allocation(dataset, analyser, animation_velocity = 75, save_movie = None):
+        """!
+        @brief Shows animation of output dynamic (output of each oscillator) during simulation on a circle from [0; 2pi].
+        
+        @param[in] dataset (list): Input data that was used for processing by the network.
+        @param[in] analyser (syncnet_analyser): Output dynamic analyser of the Sync network.
+        @param[in] animation_velocity (uint): Interval between frames in milliseconds.
+        @param[in] save_movie (string): If it is specified then animation will be stored to file that is specified in this parameter.
+        
+        """
+        
+        figure = plt.figure();
+        
+        clusters = analyser.allocate_clusters(iteration = 0);
+        
+        visualizer = cluster_visualizer();
+        visualizer.append_clusters(clusters, dataset);
+        
+        visualizer.show(figure, display = False);
+        actors = figure.gca();
+        
+        def init_frame():
+            return [ actors ];
+        
+        def frame_generation(index_dynamic):
+            figure.clf();
+            
+            clusters = analyser.allocate_clusters(iteration = index_dynamic);
+            
+            visualizer = cluster_visualizer();
+            visualizer.append_clusters(clusters, dataset);
+            
+            visualizer.show(figure, display = False);
+            actors = figure.gca();
+            
+            return [ actors ];
+        
+        cluster_animation = animation.FuncAnimation(figure, frame_generation, len(analyser), interval = animation_velocity, init_func = init_frame, repeat_delay = 5000);
+
+        if (save_movie is not None):
+            cluster_animation.save(save_movie, writer = 'ffmpeg', fps = 15);
+        else:
+            plt.show();
 
 
 class syncnet(sync_network):

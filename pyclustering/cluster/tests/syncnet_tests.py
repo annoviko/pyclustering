@@ -25,9 +25,13 @@
 
 import unittest;
 
+# Generate images without having a window appear.
+import matplotlib;
+matplotlib.use('Agg');
+
 from pyclustering.nnet import initial_type, conn_represent, solve_type;
 
-from pyclustering.cluster.syncnet import syncnet;
+from pyclustering.cluster.syncnet import syncnet, syncnet_visualizer;
 
 from pyclustering.utils import read_sample;
 
@@ -210,6 +214,14 @@ class Test(unittest.TestCase):
 
     def testClusteringOneDimensionDataSampleSimple9ByCore(self):
         self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 2, 0.999, solve_type.FAST, initial_type.EQUIPARTITION, True, False, 0.05, conn_represent.MATRIX, [20, 10], True);
+    
+    
+    def testVisualizeClusteringAnimationNoError(self):
+        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1);
+        network = syncnet(sample, 1.0);
+        analyser = network.process(0.998, solve_type.FAST, True);
+        
+        syncnet_visualizer.animate_cluster_allocation(sample, analyser);
 
 
 if __name__ == "__main__":

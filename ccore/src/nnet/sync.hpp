@@ -105,15 +105,29 @@ public:
 public:
     /***********************************************************************************************
      *
-     * @brief Allocate clusters in line with ensembles of synchronous oscillators where each
-     *        synchronous ensemble corresponds to only one cluster.
+     * @brief Allocate clusters in line with ensembles of synchronous oscillators.
+     * @details  Each synchronous ensemble corresponds to only one cluster.
      *
      * @param[in]  tolerance: maximum error for allocation of synchronous ensemble oscillators.
      * @param[out] ensembles: synchronous ensembles of oscillators where each ensemble consists of
-     *                        indexes of oscillators that are synchronous to each other.
+     *              indexes of oscillators that are synchronous to each other.
      *
      ***********************************************************************************************/
     void allocate_sync_ensembles(const double tolerance, ensemble_data<sync_ensemble> & ensembles) const;
+
+    /***********************************************************************************************
+    *
+    * @brief    Allocate clusters in line with ensembles of synchronous oscillators at the specify iteration
+    *           of simulation.
+    * @details  Each synchronous ensemble corresponds to only one cluster.
+    *
+    * @param[in]  tolerance: maximum error for allocation of synchronous ensemble oscillators.
+    * @param[in]  iteration: simulation iteration that should be used for allocation.
+    * @param[out] ensembles: synchronous ensembles of oscillators where each ensemble consists of
+    *              indexes of oscillators that are synchronous to each other.
+    *
+    ***********************************************************************************************/
+    void allocate_sync_ensembles(const double tolerance, const size_t iteration, ensemble_data<sync_ensemble> & ensembles) const;
 
     /***********************************************************************************************
      *

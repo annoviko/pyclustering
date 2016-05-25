@@ -65,40 +65,46 @@ def cluster_sample4():
 
 def cluster_sample5():
     template_clustering(0.7, 3, SIMPLE_SAMPLES.SAMPLE_SIMPLE5);
- 
+
+def cluster_sample7():
+    template_clustering(1.0, 3, SIMPLE_SAMPLES.SAMPLE_SIMPLE7);
+
+def cluster_sample8():
+    template_clustering(1.0, 3, SIMPLE_SAMPLES.SAMPLE_SIMPLE8);
+
 def cluster_elongate():
     template_clustering(0.5, 3, SIMPLE_SAMPLES.SAMPLE_ELONGATE);
-    
+
 def cluster_lsun():
     template_clustering(0.5, 3, FCPS_SAMPLES.SAMPLE_LSUN);    
-    
+
 def cluster_target():
     template_clustering(0.5, 2, FCPS_SAMPLES.SAMPLE_TARGET);    
-    
+
 def cluster_two_diamonds():
     "It's hard to choose properly parameters, but it's OK"
     template_clustering(0.15, 7, FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS);   
-    
+
 def cluster_wing_nut():
     "It's hard to choose properly parameters, but it's OK"
     template_clustering(0.25, 2, FCPS_SAMPLES.SAMPLE_WING_NUT); 
-    
+
 def cluster_chainlink():
     template_clustering(0.5, 3, FCPS_SAMPLES.SAMPLE_CHAINLINK); 
-    
+
 def cluster_hepta():
     template_clustering(1, 3, FCPS_SAMPLES.SAMPLE_HEPTA); 
-    
+
 def cluster_golf_ball():
     "Toooooooooooo looooong"
     template_clustering(0.5, 3, FCPS_SAMPLES.SAMPLE_GOLF_BALL); 
-    
+
 def cluster_atom():
     template_clustering(15, 3, FCPS_SAMPLES.SAMPLE_ATOM); 
 
 def cluster_tetra():
     template_clustering(0.4, 3, FCPS_SAMPLES.SAMPLE_TETRA);
-     
+
 def cluster_engy_time():
     template_clustering(0.2, 20, FCPS_SAMPLES.SAMPLE_ENGY_TIME);
 
@@ -146,6 +152,8 @@ cluster_sample2();
 cluster_sample3();
 cluster_sample4();
 cluster_sample5();
+cluster_sample7();
+cluster_sample8();
 cluster_elongate();
 cluster_lsun();
 cluster_target();

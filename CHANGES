@@ -38,16 +38,20 @@ GENERAL CHANGES (pyclustering):
   See: https://github.com/annoviko/pyclustering/issues/284
 
 - Implemented double-layer oscillatory network based on modified Kuramoto model for image segmentation (pyclustering.nnet.syncsegm).
-  See: -
+  See: no reference
 
 - Added new examples and demos.
-  See: -
+  See: no reference
 
 - Implemented feature to use CCORE K-Medoids algorithm using argument 'ccore' to ensure high performance (pyclustering.cluster.kmedoids).
   See: https://github.com/annoviko/pyclustering/issues/230
 
 - Implemented feature for CURE algorithm that provides additional information about clustering results: representative points and mean point of each cluster (pyclustering.cluster.cure).
   See: https://github.com/annoviko/pyclustering/issues/292
+
+- Implemented feature to animate analysed output dynamic of Sync family oscillatory networks (sync_visualizer, syncnet_visualizer): correlation matrix, phase coordinates, cluster allocation (pyclustering.nnet.sync, pyclustering.cluster.syncnet).
+  See: https://www.youtube.com/watch?v=5S5mFYVihso
+  See: https://www.youtube.com/watch?v=Vd-ww9PcZvI
 
 
 GENERAL CHANGES (ccore):
@@ -79,10 +83,10 @@ GENERAL CHANGES (ccore):
   See: https://github.com/annoviko/pyclustering/issues/264
 
 - Memory usage optimization for ROCK algorithm.
-  See: -
+  See: no reference
 
 
-CORRECTED BUGS:
+CORRECTED MAJOR BUGS:
 - Bug with callback methods in ccore library in syncnet (ccore.cluster.syncnet) and hsyncnet (ccore.cluster.hsyncnet) that may lead to loss of accuracy.
 
 - Bug with division by zero in kmeans algorithm (ccore.kmeans, pyclustering.cluster.kmeans) when cluster after center updating is not able to capture object.
@@ -121,10 +125,13 @@ CORRECTED BUGS:
   See: https://github.com/annoviko/pyclustering/issues/286
 
 - Bug with meamory leakage on interface between CCORE and pyclustering (ccore).
-  See: -
+  See: no reference
 
 - Bug with allocation correlation matrix in case of usage CCORE (pyclustering.nnet.sync).
   See: https://github.com/annoviko/pyclustering/issues/288
 
 - Bug with memory leakage in CURE algorithm - deallocation of representative points (ccore.cluster.cure).
   See: https://github.com/annoviko/pyclustering/issues/294
+
+- Bug with cluster visualization in case of 1D input data (pyclustering.cluster).
+  See: https://github.com/annoviko/pyclustering/issues/296
