@@ -119,29 +119,25 @@ class syncnet_visualizer(sync_visualizer):
         
         figure = plt.figure();
         
-        clusters = analyser.allocate_clusters(iteration = 0);
-        
-        visualizer = cluster_visualizer();
-        visualizer.append_clusters(clusters, dataset);
-        
-        visualizer.show(figure, display = False);
-        actors = figure.gca();
-        
         def init_frame():
-            return [ actors ];
+            return frame_generation(0);
         
         def frame_generation(index_dynamic):
             figure.clf();
+            ax1 = figure.add_subplot(121, projection='polar');
             
             clusters = analyser.allocate_clusters(iteration = index_dynamic);
+            dynamic = analyser.output[index_dynamic];
             
-            visualizer = cluster_visualizer();
-            visualizer.append_clusters(clusters, dataset);
+            visualizer = cluster_visualizer(size_row = 2);
+            visualizer.append_clusters(clusters, dataset, markersize = 10);
+            
+            artist1, = ax1.plot(dynamic, [1.0] * len(dynamic), marker = 'o', color = 'blue', ls = '');
             
             visualizer.show(figure, display = False);
-            actors = figure.gca();
+            artist2 = figure.gca();
             
-            return [ actors ];
+            return [ artist1, artist2 ];
         
         cluster_animation = animation.FuncAnimation(figure, frame_generation, len(analyser), interval = animation_velocity, init_func = init_frame, repeat_delay = 5000);
 

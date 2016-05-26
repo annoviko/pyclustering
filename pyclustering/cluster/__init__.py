@@ -214,14 +214,16 @@ class cluster_visualizer:
         
         """
         
-        maximum_cols = self.__size_row;
-        maximum_rows = math.ceil(self.__number_canvases / maximum_cols);
-
+        canvas_shift = 0;
         cluster_figure = None;
         if (figure is not None):
+            canvas_shift = len(figure.get_axes());
             cluster_figure = figure;
         else:
             cluster_figure = plt.figure();
+        
+        maximum_cols = self.__size_row;
+        maximum_rows = math.ceil( (self.__number_canvases + canvas_shift) / maximum_cols);
         
         grid_spec = gridspec.GridSpec(maximum_rows, maximum_cols);
         
@@ -231,9 +233,9 @@ class cluster_visualizer:
             
             #ax = axes[real_index];
             if ( (dimension == 1) or (dimension == 2) ):
-                ax = cluster_figure.add_subplot(grid_spec[index_canvas]);
+                ax = cluster_figure.add_subplot(grid_spec[index_canvas + canvas_shift]);
             else:
-                ax = cluster_figure.add_subplot(grid_spec[index_canvas], projection='3d');
+                ax = cluster_figure.add_subplot(grid_spec[index_canvas + canvas_shift], projection='3d');
             
             if (len(canvas) == 0):
                 plt.setp(ax, visible = False);

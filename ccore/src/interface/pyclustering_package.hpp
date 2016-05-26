@@ -54,9 +54,6 @@ public:
 
     ~pyclustering_package(void);
 
-private:
-    void free_package(pyclustering_package * p_package);
-
 } pyclustering_package;
 
 

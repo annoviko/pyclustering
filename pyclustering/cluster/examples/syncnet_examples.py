@@ -102,7 +102,7 @@ def experiment_execution_time(show_dyn = False, ccore = False):
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 1, 0.999, show_dyn, False, True, False, ccore);
     template_clustering(SIMPLE_SAMPLES.SAMPLE_ELONGATE, 0.5, 0.999, show_dyn, False, True, False, ccore);
    
-    template_clustering(FCPS_SAMPLES.SAMPLE_LSUN, 0.4, 0.98, show_dyn, False, False, True, ccore);
+    template_clustering(FCPS_SAMPLES.SAMPLE_LSUN, 0.45, 0.98, show_dyn, False, False, True, ccore);
     template_clustering(FCPS_SAMPLES.SAMPLE_TARGET, 0.4, 0.98, show_dyn, False, False, True, ccore);
     template_clustering(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, 0.3, 0.98, show_dyn, False, True, False, ccore);
     template_clustering(FCPS_SAMPLES.SAMPLE_WING_NUT, 0.28, 0.98, show_dyn, False, True, False, ccore);
@@ -130,12 +130,21 @@ def cluster_simple5_conn_weight():
 def template_animated_clustering(file, radius, order):
     sample = read_sample(file);
     network = syncnet(sample, radius, ccore = True);
-    
+
     analyser = network.process(order, solve_type.FAST, True);
     syncnet_visualizer.animate_cluster_allocation(sample, analyser);
 
+def animation_cluster_allocation_sample_simple5():
+    template_animated_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 1.0, 0.999);
+
 def animation_cluster_allocation_elongate():
     template_animated_clustering(SIMPLE_SAMPLES.SAMPLE_ELONGATE, 0.5, 0.999);
+
+def animation_cluster_allocation_lsun():
+    template_animated_clustering(FCPS_SAMPLES.SAMPLE_LSUN, 0.45, 0.9995);
+
+def animation_cluster_allocation_target():
+    template_animated_clustering(FCPS_SAMPLES.SAMPLE_TARGET, 0.4, 0.999);
 
 
 cluster_simple1();
@@ -150,15 +159,20 @@ cluster_chainlink();
 cluster_two_diamonds();
 cluster_atom();
 cluster_wing_nut();
-   
+ 
+ 
 cluster_simple1_conn_weight();
 cluster_simple2_conn_weight();
 cluster_simple3_conn_weight();
 cluster_simple4_conn_weight();
 cluster_simple5_conn_weight();
-  
+ 
+ 
 experiment_execution_time(False, False);
 experiment_execution_time(False, True);
 
 
+animation_cluster_allocation_sample_simple5();
 animation_cluster_allocation_elongate();
+animation_cluster_allocation_lsun();
+animation_cluster_allocation_target();

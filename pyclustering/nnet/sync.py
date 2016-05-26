@@ -306,7 +306,7 @@ class sync_visualizer:
         phase_animation = animation.FuncAnimation(figure, frame_generation, len(sync_output_dynamic), interval = animation_velocity, init_func = init_frame, repeat_delay = 5000);
 
         if (save_movie is not None):
-            phase_animation.save(save_movie, writer = 'ffmpeg', fps = 15);
+            phase_animation.save(save_movie, writer = 'ffmpeg', fps = 15, bitrate = 1500);
         else:
             plt.show();
 
@@ -340,11 +340,11 @@ class sync_visualizer:
         correlation_animation = animation.FuncAnimation(figure, frame_generation, len(sync_output_dynamic), init_func = init_frame, interval = animation_velocity , repeat_delay = 1000, blit = True);
         
         if (save_movie is not None):
-            correlation_animation.save(save_movie, writer = 'ffmpeg', fps = 15);
+            correlation_animation.save(save_movie, writer = 'ffmpeg', fps = 15, bitrate = 1500);
         else:
             plt.show();
-    
-    
+
+
     @staticmethod
     def animate(sync_output_dynamic, title = None, save_movie = None):
         """!
@@ -384,7 +384,7 @@ class sync_visualizer:
         dynamic_animation = animation.FuncAnimation(figure, frame_generation, len(sync_output_dynamic), interval = 75, init_func = init_frame, repeat_delay = 5000);
         
         if (save_movie is not None):
-            dynamic_animation.save(save_movie, writer = 'ffmpeg', fps = 15, bitrate=1500);
+            dynamic_animation.save(save_movie, writer = 'ffmpeg', fps = 15, bitrate = 1500);
         else:
             plt.show();
 
