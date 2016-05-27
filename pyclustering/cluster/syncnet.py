@@ -106,13 +106,14 @@ class syncnet_visualizer(sync_visualizer):
     """
     
     @staticmethod
-    def animate_cluster_allocation(dataset, analyser, animation_velocity = 75, save_movie = None):
+    def animate_cluster_allocation(dataset, analyser, animation_velocity = 75, tolerance = 0.1, save_movie = None):
         """!
         @brief Shows animation of output dynamic (output of each oscillator) during simulation on a circle from [0; 2pi].
         
         @param[in] dataset (list): Input data that was used for processing by the network.
         @param[in] analyser (syncnet_analyser): Output dynamic analyser of the Sync network.
         @param[in] animation_velocity (uint): Interval between frames in milliseconds.
+        @param[in] tolerance (double): Tolerance level that define maximal difference between phases of oscillators in one cluster.
         @param[in] save_movie (string): If it is specified then animation will be stored to file that is specified in this parameter.
         
         """
@@ -126,11 +127,11 @@ class syncnet_visualizer(sync_visualizer):
             figure.clf();
             ax1 = figure.add_subplot(121, projection='polar');
             
-            clusters = analyser.allocate_clusters(iteration = index_dynamic);
+            clusters = analyser.allocate_clusters(eps = tolerance, iteration = index_dynamic);
             dynamic = analyser.output[index_dynamic];
             
             visualizer = cluster_visualizer(size_row = 2);
-            visualizer.append_clusters(clusters, dataset, markersize = 10);
+            visualizer.append_clusters(clusters, dataset);
             
             artist1, = ax1.plot(dynamic, [1.0] * len(dynamic), marker = 'o', color = 'blue', ls = '');
             
@@ -142,7 +143,10 @@ class syncnet_visualizer(sync_visualizer):
         cluster_animation = animation.FuncAnimation(figure, frame_generation, len(analyser), interval = animation_velocity, init_func = init_frame, repeat_delay = 5000);
 
         if (save_movie is not None):
-            cluster_animation.save(save_movie, writer = 'ffmpeg', fps = 15);
+#             plt.rcParams['animation.ffmpeg_path'] = 'C:\\Users\\annoviko\\programs\\ffmpeg-win64-static\\bin\\ffmpeg.exe';
+#             ffmpeg_writer = animation.FFMpegWriter();
+#             cluster_animation.save(save_movie, writer = ffmpeg_writer, fps = 15);
+            cluster_animation.save(save_movie, writer = 'ffmpeg', fps = 15, bitrate = 1500);
         else:
             plt.show();
 
@@ -150,7 +154,8 @@ class syncnet_visualizer(sync_visualizer):
 class syncnet(sync_network):
     """!
     @brief Class represents clustering algorithm SyncNet. 
-    @details SyncNet is bio-inspired algorithm that is based on oscillatory network that uses modified Kuramoto model.
+    @details SyncNet is bio-inspired algorithm that is based on oscillatory network that uses modified Kuramoto model. Each attribute of a data object
+             is considered as a phase oscillator.
     
     Example:
     @code

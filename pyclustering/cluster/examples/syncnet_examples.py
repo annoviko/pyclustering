@@ -23,10 +23,11 @@
 
 """
 
+from pyclustering.cluster import cluster_visualizer;
 from pyclustering.cluster.syncnet import syncnet, syncnet_visualizer;
-from pyclustering.nnet.sync import sync_visualizer;
 
-from pyclustering.nnet import solve_type;
+from pyclustering.nnet.sync import sync_visualizer;
+from pyclustering.nnet import initial_type, solve_type;
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES;
 from pyclustering.samples.definitions import FCPS_SAMPLES;
@@ -54,6 +55,7 @@ def template_clustering(file, radius, order, show_dyn = False, show_conn = False
     
     if (show_clusters == True):
         clusters = analyser.allocate_clusters(tolerance);
+        print("amout of clusters: ", len(clusters));
         draw_clusters(sample, clusters);
     
     
@@ -77,6 +79,9 @@ def cluster_elongate():
 
 def cluster_lsun():
     template_clustering(FCPS_SAMPLES.SAMPLE_LSUN, 0.45, 0.9995, show_dyn = True, show_conn = True);
+
+def cluster_target():
+    template_clustering(FCPS_SAMPLES.SAMPLE_TARGET, 0.95, 0.99995, show_dyn = False, show_conn = True);
 
 def cluster_hepta():
     template_clustering(FCPS_SAMPLES.SAMPLE_HEPTA, 1, 0.999, show_dyn = True, show_conn = True);
@@ -127,24 +132,45 @@ def cluster_simple5_conn_weight():
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 10, 0.999, show_dyn = True, show_conn = True, ena_conn_weight = True);
 
 
-def template_animated_clustering(file, radius, order):
+def template_animated_clustering(file, radius, order, expected_cluster_amount):
     sample = read_sample(file);
-    network = syncnet(sample, radius, ccore = True);
+    expected_result_obtained = False;
+    
+    analyser = None;
+    
+    while (expected_result_obtained == False):
+        network = syncnet(sample, radius, initial_phases = initial_type.RANDOM_GAUSSIAN, ccore = True);
+    
+        analyser = network.process(order, solve_type.FAST, True);
+        clusters = analyser.allocate_clusters(0.1);
+    
+        if (len(clusters) == expected_cluster_amount):
+            print("Expected result is obtained - start rendering...")
+            expected_result_obtained = True;
+            
+            visualizer = cluster_visualizer();
+            visualizer.append_clusters(clusters, sample);
+            visualizer.show();
+            
+        else:
+            print("Expected result is NOT obtained - rendering is NOT started ( actual:", len(clusters), ")...");
+    
+    syncnet_visualizer.animate_cluster_allocation(sample, analyser, tolerance = 0.1, save_movie = "clustering_animation.mp4");
 
-    analyser = network.process(order, solve_type.FAST, True);
-    syncnet_visualizer.animate_cluster_allocation(sample, analyser);
+def animation_cluster_allocation_sample_simple3():
+    template_animated_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 1.0, 0.999, 4);
 
 def animation_cluster_allocation_sample_simple5():
-    template_animated_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 1.0, 0.999);
+    template_animated_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 1.0, 0.999, 4);
 
 def animation_cluster_allocation_elongate():
-    template_animated_clustering(SIMPLE_SAMPLES.SAMPLE_ELONGATE, 0.5, 0.999);
+    template_animated_clustering(SIMPLE_SAMPLES.SAMPLE_ELONGATE, 0.5, 0.999, 2);
 
 def animation_cluster_allocation_lsun():
-    template_animated_clustering(FCPS_SAMPLES.SAMPLE_LSUN, 0.45, 0.9995);
+    template_animated_clustering(FCPS_SAMPLES.SAMPLE_LSUN, 0.45, 0.999, 3);
 
 def animation_cluster_allocation_target():
-    template_animated_clustering(FCPS_SAMPLES.SAMPLE_TARGET, 0.4, 0.999);
+    template_animated_clustering(FCPS_SAMPLES.SAMPLE_TARGET, 0.95, 0.9999, 6);
 
 
 cluster_simple1();
@@ -154,24 +180,26 @@ cluster_simple4();
 cluster_simple5();
 cluster_elongate();
 cluster_lsun();
+cluster_target();
 cluster_hepta();
 cluster_chainlink();
 cluster_two_diamonds();
 cluster_atom();
 cluster_wing_nut();
- 
- 
+
+
 cluster_simple1_conn_weight();
 cluster_simple2_conn_weight();
 cluster_simple3_conn_weight();
 cluster_simple4_conn_weight();
 cluster_simple5_conn_weight();
- 
- 
+  
+  
 experiment_execution_time(False, False);
 experiment_execution_time(False, True);
 
 
+animation_cluster_allocation_sample_simple3();
 animation_cluster_allocation_sample_simple5();
 animation_cluster_allocation_elongate();
 animation_cluster_allocation_lsun();
