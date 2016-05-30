@@ -27,24 +27,24 @@ namespace cluster_analysis {
 
 
 kmedians::kmedians(void) :
-m_tolerance(0.025),
-m_initial_medians(0, point()),
-m_ptr_result(nullptr),
-m_ptr_data(nullptr) { }
+    m_tolerance(0.025),
+    m_initial_medians(0, point()),
+    m_ptr_result(nullptr),
+    m_ptr_data(nullptr) { }
 
 
 kmedians::kmedians(const dataset & initial_medians, const double tolerance) :
-m_tolerance(tolerance),
-m_initial_medians(initial_medians),
-m_ptr_result(nullptr),
-m_ptr_data(nullptr) { }
+    m_tolerance(tolerance),
+    m_initial_medians(initial_medians),
+    m_ptr_result(nullptr),
+    m_ptr_data(nullptr) { }
 
 
 kmedians::~kmedians(void) { }
 
 
 void kmedians::process(const dataset & data, cluster_data & output_result) {
-    m_ptr_data = (std::vector<point> *) &data;
+    m_ptr_data = &data;
     m_ptr_result = (kmedians_data *) &output_result;
 
     if (data[0].size() != m_initial_medians[0].size()) {

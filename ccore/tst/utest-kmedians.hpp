@@ -86,14 +86,14 @@ TEST(utest_kmedians, large_number_medians_sample_simple_03) {
 }
 
 
-TEST(utest_kmedians, large_number_medians_sample_simple_07) {
+TEST(utest_kmedians, one_dimension_sample_simple_07) {
     dataset start_medians = { { -2.0 }, { 4.0 } };
     std::vector<size_t> expected_clusters_length = { 10, 10 };
     template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_07), start_medians, expected_clusters_length);
 }
 
 
-TEST(utest_kmedians, large_number_medians_sample_simple_08) {
+TEST(utest_kmedians, one_dimension_sample_simple_08) {
     dataset start_medians = { { -4.0 }, { 3.0 }, { 6.0 }, { 10.0 } };
     std::vector<size_t> expected_clusters_length = { 15, 30, 20, 80 };
     template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_08), start_medians, expected_clusters_length);

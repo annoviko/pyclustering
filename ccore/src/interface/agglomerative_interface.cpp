@@ -28,16 +28,10 @@ pyclustering_package * agglomerative_algorithm(const data_representation * const
 
     std::unique_ptr<dataset> data(read_sample(p_sample));
 
-    cluster_analysis::cluster_data clusters;
-    algorithm.process(*data, clusters);
+    cluster_analysis::cluster_data result;
+    algorithm.process(*data, result);
 
-    pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
-    package->size = clusters.size();
-    package->data = new pyclustering_package * [package->size];
-
-    for (unsigned int i = 0; i < package->size; i++) {
-        ((pyclustering_package **) package->data)[i] = create_package(&clusters[i]);
-    }
+    pyclustering_package * package = create_package(result.clusters().get());
 
     return package;
 }

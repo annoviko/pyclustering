@@ -39,13 +39,13 @@ namespace cluster_analysis {
 */
 class kmedians : public cluster_algorithm {
 private:
-    double                  m_tolerance;
+    double                m_tolerance;
 
-    std::vector<point>      m_initial_medians;
+    dataset               m_initial_medians;
 
-    kmedians_data           * m_ptr_result;   /* temporary pointer to output result */
+    kmedians_data         * m_ptr_result;   /* temporary pointer to output result */
 
-    dataset                 * m_ptr_data;     /* used only during processing */
+    const dataset         * m_ptr_data;     /* used only during processing */
 
 public:
     /**

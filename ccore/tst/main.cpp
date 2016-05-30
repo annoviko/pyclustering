@@ -33,6 +33,7 @@
 #include "utest-differential.hpp"
 #include "utest-hsyncnet.hpp"
 #include "utest-kdtree.hpp"
+#include "utest-kmeans.hpp"
 #include "utest-kmedians.hpp"
 #include "utest-kmedoids.hpp"
 #include "utest-legion.hpp"

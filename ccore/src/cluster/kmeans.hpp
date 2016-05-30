@@ -21,31 +21,87 @@
 #ifndef _KMEANS_H_
 #define _KMEANS_H_
 
+
 #include <vector>
 
-class kmeans {
-private:
-	std::vector<std::vector<double> >			* dataset;
-	std::vector<std::vector<unsigned int> *>	* clusters;
-	std::vector<std::vector<double> >			* centers;
+#include "cluster/cluster_algorithm.hpp"
+#include "cluster/kmeans_data.hpp"
 
-	double										tolerance;
+
+namespace cluster_analysis {
+
+
+/**
+*
+* @brief    Represents K-Means clustering algorithm for cluster analysis.
+* @details  The algorithm related to partitional class when input data is divided into groups.
+*
+*/
+class kmeans : public cluster_algorithm {
+private:
+    double          m_tolerance;
+
+    dataset         m_initial_centers;
+
+    kmeans_data     * m_ptr_result;   /* temporary pointer to output result */
+
+    const dataset   * m_ptr_data;     /* used only during processing */
 
 public:
-	kmeans(const std::vector<std::vector<double> > * const data, const std::vector<std::vector<double> > * const centers, const double tolerance);
+    /**
+    *
+    * @brief    Default constructor of clustering algorithm.
+    *
+    */
+    kmeans(void);
 
-	~kmeans(void);
+    /**
+    *
+    * @brief    Constructor of clustering algorithm where algorithm parameters for processing are
+    *           specified.
+    *
+    * @param[in] p_initial_centers: initial centers that are used for processing.
+    * @param[in] p_tolerance: stop condition in following way: when maximum value of distance change of
+    *             cluster centers is less than tolerance than algorithm will stop processing.
+    *
+    */
+    kmeans(const dataset & p_initial_centers, const double p_tolerance);
 
-	void process(void);
+    /**
+    *
+    * @brief    Default destructor of the algorithm.
+    *
+    */
+    ~kmeans(void);
 
-	inline const std::vector<std::vector<unsigned int> *> * const get_clusters(void) const {
-		return clusters;
-	}
+public:
+    /**
+    *
+    * @brief    Performs cluster analysis of an input data.
+    *
+    * @param[in]  p_data: input data for cluster analysis.
+    * @param[out] p_result: clustering result of an input data.
+    *
+    */
+    void process(const dataset & data, cluster_data & output_result);
 
 private:
-	void update_clusters(void);
+    void update_clusters(const dataset & centers, cluster_sequence & clusters);
 
-	double update_centers(void);
+    double update_centers(const cluster_sequence & clusters, dataset & centers);
+
+    /**
+    *
+    * @brief    Erases clusters that do not have any points.
+    *
+    * @param[in|out] p_clusters: clusters that should be analyzed and modified.
+    *
+    */
+    void erase_empty_clusters(cluster_sequence & p_clusters);
 };
+
+
+}
+
 
 #endif

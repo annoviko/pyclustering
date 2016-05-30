@@ -25,123 +25,123 @@
 
 #include "utils.hpp"
 
-#define FAST_SOLUTION
 
-kmeans::kmeans(const std::vector<std::vector<double> > * const data, const std::vector<std::vector<double> > * const initial_centers, const double minimum_change) {
-	dataset = (std::vector<std::vector<double> > * const) data;
-
-	centers = new std::vector<std::vector<double> >( (*initial_centers) );
-
-	clusters = new std::vector<std::vector<unsigned int> * >();
-	for (unsigned int index = 0; index < centers->size(); index++) {
-		clusters->push_back(new std::vector<unsigned int>());
-	}
+namespace cluster_analysis {
 
 
-#ifdef FAST_SOLUTION
-	tolerance = minimum_change * minimum_change;
-#else
-	tolerance = minimum_change;
-#endif
+kmeans::kmeans(void) :
+    m_tolerance(0.025),
+    m_initial_centers(0, point()),
+    m_ptr_result(nullptr),
+    m_ptr_data(nullptr) { }
+
+
+kmeans::kmeans(const dataset & p_initial_centers, const double p_tolerance) :
+    m_tolerance(p_tolerance * p_tolerance),
+    m_initial_centers(p_initial_centers),
+    m_ptr_result(nullptr),
+    m_ptr_data(nullptr) { }
+
+
+kmeans::~kmeans(void) { }
+
+
+void kmeans::process(const dataset & data, cluster_data & output_result) {
+    m_ptr_data = &data;
+
+    output_result = kmeans_data();
+    m_ptr_result = (kmeans_data *) &output_result;
+
+    if (data[0].size() != m_initial_centers[0].size()) {
+        throw std::runtime_error("CCORE [kmeans]: dimension of the input data and dimension of the initial cluster centers must be equal.");
+    }
+
+    m_ptr_result->centers()->assign(m_initial_centers.begin(), m_initial_centers.end());
+
+    double current_change = std::numeric_limits<double>::max();
+
+    while(current_change > m_tolerance) {
+        update_clusters(*m_ptr_result->centers(), *m_ptr_result->clusters());
+        current_change = update_centers(*m_ptr_result->clusters(), *m_ptr_result->centers());
+    }
 }
 
-kmeans::~kmeans(void) {
-	if (centers != NULL) {
-		delete centers;
-		centers = NULL;
-	}
 
-	if (clusters != NULL) {
-		for (std::vector<std::vector<unsigned int> * >::const_iterator iter = clusters->begin(); iter != clusters->end(); iter++) {
-			delete (*iter);
-		}
+void kmeans::update_clusters(const dataset & centers, cluster_sequence & clusters) {
+    const dataset & data = *m_ptr_data;
 
-		delete clusters;
-		clusters = NULL;
-	}
+    clusters.clear();
+    clusters.resize(centers.size());
+
+    /* fill clusters again in line with centers. */
+    for (size_t index_object = 0; index_object < data.size(); index_object++) {
+        double    minimum_distance = std::numeric_limits<double>::max();
+        size_t    suitable_index_cluster = 0;
+
+        for (size_t index_cluster = 0; index_cluster < clusters.size(); index_cluster++) {
+            double distance = euclidean_distance_sqrt(&centers[index_cluster], &data[index_object]);
+
+            if (distance < minimum_distance) {
+                minimum_distance = distance;
+                suitable_index_cluster = index_cluster;
+            }
+        }
+
+        clusters[suitable_index_cluster].push_back(index_object);
+    }
+
+    erase_empty_clusters(clusters);
 }
 
 
-void kmeans::process(void) {
-	double current_change = std::numeric_limits<double>::max();
-
-	while(current_change > tolerance) {
-		update_clusters();
-		current_change = update_centers();
-	}
-}
-
-void kmeans::update_clusters(void) {
-	/* clear content of clusters. */
-	for (std::vector<std::vector<unsigned int> *>::iterator iter = clusters->begin(); iter != clusters->end(); iter++) {
-		(*iter)->clear();
-	}
-
-	/* fill clusters again in line with centers. */
-	for (unsigned int index_object = 0; index_object < dataset->size(); index_object++) {
-		double		minimum_distance = std::numeric_limits<double>::max();
-		unsigned int	suitable_index_cluster = 0;
-
-		for (unsigned int index_cluster = 0; index_cluster < clusters->size(); index_cluster++) {
-#ifdef FAST_SOLUTION
-			double distance = euclidean_distance_sqrt( &(*centers)[index_cluster], &(*dataset)[index_object] );
-#else
-			double distance = euclidean_distance( &(*centers)[index_cluster], &(*dataset)[index_object] );
-#endif
-			if (distance < minimum_distance) {
-				minimum_distance = distance;
-				suitable_index_cluster = index_cluster;
-			}
-		}
-
-		(*clusters)[suitable_index_cluster]->push_back(index_object);
-	}
-
-    /* if there is clusters that are not able to capture objects */
-    for (size_t index_cluster = clusters->size() - 1; index_cluster != (size_t) -1; index_cluster--) {
-        if ((*clusters)[index_cluster]->empty()) {
-            clusters->erase(clusters->begin() + index_cluster);
+void kmeans::erase_empty_clusters(cluster_sequence & p_clusters) {
+    for (size_t index_cluster = p_clusters.size() - 1; index_cluster != (size_t) -1; index_cluster--) {
+        if (p_clusters[index_cluster].empty()) {
+            p_clusters.erase(p_clusters.begin() + index_cluster);
         }
     }
 }
 
-double kmeans::update_centers(void) {
-	double maximum_change = 0;
-	
-    /* check if number of clusters has been changed */
-    if (clusters->size() < centers->size()) {
-        centers->erase(centers->begin() + clusters->size(), centers->end());
+
+double kmeans::update_centers(const cluster_sequence & clusters, dataset & centers) {
+    const dataset & data = *m_ptr_data;
+    const size_t dimension = data[0].size();
+
+    double maximum_change = 0;
+
+    dataset updated_clusters(clusters.size(), point(dimension, 0.0));
+
+    /* for each cluster */
+    for (size_t index_cluster = 0; index_cluster < clusters.size(); index_cluster++) {
+        point total(centers[index_cluster].size(), 0.0);
+
+        /* for each object in cluster */
+        for (auto object_index : clusters[index_cluster]) {
+            /* for each dimension */
+            for (size_t dimension = 0; dimension < total.size(); dimension++) {
+                total[dimension] += data[object_index][dimension];
+            }
+        }
+
+        /* average for each dimension */
+        for (size_t dimension = 0; dimension < total.size(); dimension++) {
+            total[dimension] = total[dimension] / clusters[index_cluster].size();
+        }
+
+        double distance = euclidean_distance_sqrt(&centers[index_cluster], &total);
+
+        if (distance > maximum_change) {
+            maximum_change = distance;
+        }
+
+        updated_clusters[index_cluster] = std::move(total);
     }
 
-	/* for each cluster */
-	for (unsigned int index_cluster = 0; index_cluster < clusters->size(); index_cluster++) {
-		std::vector<double> total((*centers)[index_cluster].size(), 0);
+    centers.clear();
+    centers = std::move(updated_clusters);
 
-		/* for each object in cluster */
-		for (std::vector<unsigned int>::const_iterator object_index_iterator = (*clusters)[index_cluster]->begin(); object_index_iterator < (*clusters)[index_cluster]->end(); object_index_iterator++) {
-			/* for each dimension */
-			for (unsigned int dimension = 0; dimension < total.size(); dimension++) {
-				total[dimension] += (*dataset)[*object_index_iterator][dimension];
-			}
-		}
+    return maximum_change;
+}
 
-		/* average for each dimension */
-		for (std::vector<double>::iterator dimension_iterator = total.begin(); dimension_iterator != total.end(); dimension_iterator++) {
-			*dimension_iterator = *dimension_iterator / (*clusters)[index_cluster]->size();
-		}
 
-#ifdef FAST_SOLUTION
-		double distance = euclidean_distance_sqrt( &(*centers)[index_cluster], (std::vector<double> *) &total );
-#else
-		double distance = euclidean_distance( &(*centers)[index_cluster], (std::vector<double> *) &total );
-#endif
-
-		if (distance > maximum_change) {
-			maximum_change = distance;
-		}
-
-		std::copy(total.begin(), total.end(), (*centers)[index_cluster].begin());
-	}
-
-	return maximum_change;
 }

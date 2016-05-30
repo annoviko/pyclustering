@@ -160,27 +160,6 @@ def extract_pyclustering_package(ccore_package_pointer):
 
 
 # Implemented algorithms.
-def kmeans(sample, centers, tolerance):
-    "Clustering algorithm K-Means returns allocated clusters. Calculation is performed via CCORE."
-    
-    "(in) data        - input data that is presented as list of points (objects), each point should be represented by list or tuple."
-    "(in) centers     - initial coordinates of centers of clusters that are represented by list: [center1, center2, ...]."
-    "(in) tolerance   - stop condition: if maximum value of change of centers of clusters is less than tolerance than algorithm will stop processing."
-    
-    "Returns list of allocated clusters, each cluster contains indexes of objects in list of data."
-    
-    pointer_data = create_pointer_data(sample);
-    pointer_centers = create_pointer_data(centers);
-    
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
-    result = ccore.kmeans_algorithm(pointer_data, pointer_centers, c_double(tolerance));
-    
-    list_of_clusters = extract_clusters(result);
-    
-    ccore.free_clustering_result(result);
-    return list_of_clusters;
-
-
 def xmeans(sample, centers, kmax, tolerance):
     "Clustering algorithm X-Means returns allocated clusters. Calculation is performed via CCORE."
     

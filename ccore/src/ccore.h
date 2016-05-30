@@ -87,21 +87,6 @@ extern "C" DECLARATION void free_pyclustering_package(pyclustering_package * pac
 
 /***********************************************************************************************
  *
- * @brief   Clustering algorithm K-Means returns allocated clusters.
- *
- * @param   (in) sample				- input data for clustering.
- *          (in) initial_centers	- initial coordinates of centers of clusters.
- *          (in) tolerance			- stop condition: if maximum value of change of centers of
- *                                    clusters is less than tolerance than algorithm will stop
- *                                    processing.
- *
- * @return	Returns result of clustering - array of allocated clusters.
- *
- ***********************************************************************************************/
-extern "C" DECLARATION clustering_result * kmeans_algorithm(const data_representation * const sample, const data_representation * const initial_centers, const double tolerance);
-
-/***********************************************************************************************
- *
  * @brief   Clustering algorithm X-Means returns allocated clusters.
  *
  * @param   (in) sample				- input data for clustering.

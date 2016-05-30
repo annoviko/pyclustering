@@ -143,6 +143,9 @@
     <ClCompile Include="..\src\cluster\rock.cpp">
       <Filter>Tested Code\cluster</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\cluster\kmeans_data.cpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\tools\gtest\gtest.h">
@@ -356,6 +359,12 @@
       <Filter>Unit Tests</Filter>
     </ClInclude>
     <ClInclude Include="utest-rock.hpp">
+      <Filter>Unit Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cluster\kmeans_data.hpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="utest-kmeans.hpp">
       <Filter>Unit Tests</Filter>
     </ClInclude>
   </ItemGroup>

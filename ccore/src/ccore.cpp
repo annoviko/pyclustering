@@ -26,7 +26,6 @@
 
 #include "cluster/agglomerative.hpp"
 #include "cluster/hsyncnet.hpp"
-#include "cluster/kmeans.hpp"
 #include "cluster/syncnet.hpp"
 #include "cluster/xmeans.hpp"
 
@@ -85,23 +84,6 @@ void free_dynamic_result(dynamic_result * pointer) {
 
 void free_pyclustering_package(pyclustering_package * package) {
     delete package;
-}
-
-
-clustering_result * kmeans_algorithm(const data_representation * const sample, const data_representation * const initial_centers, const double tolerance) {
-	std::vector<std::vector<double> > * dataset = read_sample(sample);
-	std::vector<std::vector<double> > * centers = read_sample(initial_centers);
-
-	kmeans * solver = new kmeans(dataset, centers, tolerance);
-	solver->process();
-
-	clustering_result * result = create_clustering_result(solver->get_clusters());
-
-	delete solver; solver = NULL;
-	delete dataset; dataset = NULL;
-	delete centers; centers = NULL;
-
-	return result;
 }
 
 
