@@ -43,47 +43,22 @@ void cure_data_destroy(void * pointer_cure_data) {
 pyclustering_package * cure_get_clusters(void * pointer_cure_data) {
     cluster_analysis::cure_data & output_result = (cluster_analysis::cure_data &) *((cluster_analysis::cure_data *)pointer_cure_data);
 
-    pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
-    package->size = output_result.size();
-    package->data = new pyclustering_package * [package->size];
-
-    for (unsigned int i = 0; i < package->size; i++) {
-        ((pyclustering_package **) package->data)[i] = create_package(&output_result[i]);
-    }
-
+    pyclustering_package * package = create_package(output_result.clusters().get());
     return package;
 }
 
 
 pyclustering_package * cure_get_representors(void * pointer_cure_data) {
     cluster_analysis::cure_data & output_result = (cluster_analysis::cure_data &) *((cluster_analysis::cure_data *)pointer_cure_data);
-    cluster_analysis::representor_sequence & representors = *output_result.representors();
 
-    /* TODO: forming packages for clustering is always the same - move to function */
-    pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
-    package->size = output_result.size();
-    package->data = new pyclustering_package * [package->size];
-
-    for (unsigned int i = 0; i < package->size; i++) {
-        ((pyclustering_package **) package->data)[i] = create_package(&representors[i]);
-    }
-
+    pyclustering_package * package = create_package(output_result.representors().get());
     return package;
 }
 
 
 pyclustering_package * cure_get_means(void * pointer_cure_data) {
     cluster_analysis::cure_data & output_result = (cluster_analysis::cure_data &) *((cluster_analysis::cure_data *)pointer_cure_data);
-    dataset & means = *output_result.means();
 
-    /* TODO: forming packages for clustering is always the same - move to function */
-    pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
-    package->size = output_result.size();
-    package->data = new pyclustering_package * [package->size];
-
-    for (unsigned int i = 0; i < package->size; i++) {
-        ((pyclustering_package **) package->data)[i] = create_package(&means[i]);
-    }
-
+    pyclustering_package * package = create_package(output_result.means().get());
     return package;
 }

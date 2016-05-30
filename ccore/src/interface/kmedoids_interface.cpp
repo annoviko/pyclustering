@@ -33,14 +33,7 @@ pyclustering_package * kmedoids_algorithm(const data_representation * const samp
     cluster_analysis::kmedoids_data output_result;
     algorithm.process(*input_dataset, output_result);
 
-    pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
-    package->size = output_result.size();
-    package->data = new pyclustering_package * [package->size];
-
-    for (unsigned int i = 0; i < package->size; i++) {
-        ((pyclustering_package **) package->data)[i] = create_package(&output_result[i]);
-    }
-
+    pyclustering_package * package = create_package(output_result.clusters().get());
     return package;
 }
 
