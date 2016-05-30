@@ -30,7 +30,7 @@ from pyclustering.nnet import initial_type;
 
 from pyclustering.cluster.syncnet import syncnet;
 
-from pyclustering.utils import average_neighbor_distance;
+from pyclustering.utils import euclidean_distance_sqrt;
 
 
 class syncsom:
@@ -43,11 +43,12 @@ class syncsom:
         # read sample for clustering
         sample = read_sample(file);
         
-        # create oscillatory network for cluster analysis where the first layer has size 10x10
-        network = syncsom(sample, 10, 10);
+        # create oscillatory network for cluster analysis where the first layer has 
+        # size 10x10 and connectivity radius for objects 1.0.
+        network = syncsom(sample, 10, 10, 1.0);
         
         # simulate network (perform cluster analysis) and collect output dynamic
-        (dyn_time, dyn_phase) = network.process(5, True, 0.998);
+        (dyn_time, dyn_phase) = network.process(True, 0.998);
         
         # obtain encoded clusters
         encoded_clusters = network.get_som_clusters();
@@ -71,7 +72,8 @@ class syncsom:
         
         """
         return self._som;
-    
+
+
     @property
     def sync_layer(self):
         """!
@@ -79,18 +81,21 @@ class syncsom:
         
         """
         return self._sync;
-    
-    def __init__(self, data, rows, cols):
+
+
+    def __init__(self, data, rows, cols, radius):
         """!
         @brief Constructor of the double layer oscillatory network SYNC-SOM.
         
         @param[in] data (list): Input data that is presented as list of points (objects), each point should be represented by list or tuple.
         @param[in] rows (uint): Rows of neurons (number of neurons in column) in the input layer (self-organized feature map).
         @param[in] cols (uint): Columns of neurons (number of neurons in row) in the input later (self-organized feature map).
+        @param[in] radius (double): Connectivity radius between objects that defines connection between oscillators in the second layer.
         
         """
         
         self._data = data;
+        self._radius = radius * radius;
         
         self._som = som(rows, cols, conn_type = type_conn.grid_four);   # The first (input) later - SOM layer.
         self._som_osc_table = list();
@@ -100,12 +105,12 @@ class syncsom:
         
         # For convenience
         self._analyser = None;
-    
-    def process(self, number_neighbours, collect_dynamic = False, order = 0.999):
+
+
+    def process(self, collect_dynamic = False, order = 0.999):
         """!
         @brief Performs simulation of the oscillatory network.
         
-        @param[in] number_neighbours (uint): Number of neighbours that should be used for calculation average distance and creation connections between oscillators.
         @param[in] collect_dynamic (bool): If True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics.
         @param[in] order (double): Order of process synchronization that should be considered as end of clustering, destributed 0..1.
         
@@ -127,26 +132,54 @@ class syncsom:
                 weights.append(self._som.weights[i]);
                 self._som_osc_table.append(i);
         
-        # calculate trusted distance between objects.
-        radius = 0.0;
-        if ( (len(weights) >= number_neighbours) and (number_neighbours > 0)):
-            # check if it is greater than 0, it helps to avoid useless calculations
-            radius = average_neighbor_distance(weights, number_neighbours);
-        else:
-            radius = 0.0;
-        
         # create oscillatory neural network.
-        self._sync = syncnet(weights, radius, initial_phases = initial_type.EQUIPARTITION);
+        self._sync = self.__create_sync_layer(weights);
         self._analyser = self._sync.process(order, collect_dynamic = collect_dynamic);
         
-        # Draw SOM clusters.
-        #clusters = self._sync.get_clusters();
-        #draw_clusters(weights, clusters);
-        #self._som.show_network(awards = False, belongs = True);
+        return (self._analyser.time, self._analyser.output);
+
+
+    def __create_sync_layer(self, weights):
+        """!
+        @brief Creates second layer of the network.
         
-        # return dynamic if it was requested.
-        return (self._analyser.time, self._analyser.output);   
-    
+        @param[in] weights (list): List of weights of SOM neurons.
+        
+        @return (syncnet) Second layer of the network.
+        
+        """
+        sync_layer = syncnet(weights, 0.0, initial_phases = initial_type.RANDOM_GAUSSIAN);
+        
+        for oscillator_index1 in range(0, len(sync_layer)):
+            for oscillator_index2 in range(oscillator_index1 + 1, len(sync_layer)):
+                if (self.__has_object_connection(oscillator_index1, oscillator_index2)):
+                    sync_layer.set_connection(oscillator_index1, oscillator_index2);
+        
+        return sync_layer;
+
+
+    def __has_object_connection(self, oscillator_index1, oscillator_index2):
+        """!
+        @brief Searches for pair of objects that are encoded by specified neurons and that are connected in line with connectivity radius.
+        
+        @param[in] oscillator_index1 (uint): Index of the first oscillator in the second layer.
+        @param[in] oscillator_index2 (uint): Index of the second oscillator in the second layer.
+        
+        @return (bool) True - if there is pair of connected objects encoded by specified oscillators.
+        
+        """
+        som_neuron_index1 = self._som_osc_table[oscillator_index1];
+        som_neuron_index2 = self._som_osc_table[oscillator_index2];
+        
+        for index_object1 in self._som.capture_objects[som_neuron_index1]:
+            for index_object2 in self._som.capture_objects[som_neuron_index2]:
+                distance = euclidean_distance_sqrt(self._data[index_object1], self._data[index_object2]);
+                if (distance <= self._radius):
+                    return True;
+        
+        return False;
+
+
     def get_som_clusters(self, eps = 0.1):
         """!
         @brief Returns clusters with SOM neurons that encode input features in line with result of synchronization in the second (Sync) layer.
@@ -173,8 +206,8 @@ class syncsom:
             som_clusters.append(cluster);
             
         return som_clusters;
-            
-    
+
+
     def get_clusters(self, eps = 0.1):
         """!
         @brief Returns clusters in line with ensembles of synchronous oscillators where each synchronous ensemble corresponds to only one cluster.
@@ -188,7 +221,7 @@ class syncsom:
         
         """
         
-        sync_clusters = self._analyser.allocate_clusters(eps);       # NOTE: it isn't indexes of SOM neurons
+        sync_clusters = self._analyser.allocate_clusters(eps);       # it isn't indexes of SOM neurons
         
         clusters = list();
         total_winners = 0;
@@ -197,24 +230,12 @@ class syncsom:
             cluster = list();
             for index_oscillator in oscillators:
                 index_neuron = self._som_osc_table[index_oscillator];
-                assert self._som.awards[index_neuron] == len(self._som.capture_objects[index_neuron]);      # TODO: Should be moved to unit-test
-                assert self._som.awards[index_neuron] > 0;              # TODO: Should be moved to unit-test
                 
                 cluster += self._som.capture_objects[index_neuron];
                 total_number_points += len(self._som.capture_objects[index_neuron]);
                 total_winners += 1;
                 
             clusters.append(cluster);
-        
-        assert self._som.get_winner_number() == total_winners;      # TODO: Should be moved to unit-test
-        assert len(self._data) == total_number_points;              # TODO: Should be moved to unit-test
-        
-        # TODO: Should be moved to unit-test
-        capture_points = 0;
-        for points in clusters:
-            capture_points += len(points);
-        # print("[POINTS] Capture: ", capture_points, ", Real: ", len(self._data));
-        assert capture_points == len(self._data);
         
         return clusters;
 
@@ -226,8 +247,8 @@ class syncsom:
         """
         
         self._som.show_network();
-    
-    
+
+
     def show_sync_layer(self):
         """!
         @brief Shows visual representation of the second (Sync) layer.
@@ -235,4 +256,3 @@ class syncsom:
         """
         
         self._sync.show_network();
-        

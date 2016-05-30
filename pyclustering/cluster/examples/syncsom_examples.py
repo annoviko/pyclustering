@@ -23,23 +23,25 @@
 
 """
 
+from pyclustering.cluster import cluster_visualizer;
 from pyclustering.cluster.syncsom import syncsom;
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES;
 from pyclustering.samples.definitions import FCPS_SAMPLES;
 
-from pyclustering.utils import read_sample, draw_clusters, draw_dynamics;
+from pyclustering.utils import read_sample, draw_dynamics;
 from pyclustering.utils import timedcall;
 
-def template_clustering(file, map_size, trust_order, sync_order = 0.999, show_dyn = False, show_layer1 = False, show_layer2 = False, show_clusters = True):
+
+def template_clustering(file, map_size, radius, sync_order = 0.999, show_dyn = False, show_layer1 = False, show_layer2 = False, show_clusters = True):
     # Read sample
     sample = read_sample(file);
 
     # Create network
-    network = syncsom(sample, map_size[0], map_size[1]);
+    network = syncsom(sample, map_size[0], map_size[1], radius);
     
     # Run processing
-    (ticks, (dyn_time, dyn_phase)) = timedcall(network.process, trust_order, show_dyn, sync_order);
+    (ticks, (dyn_time, dyn_phase)) = timedcall(network.process, show_dyn, sync_order);
     print("Sample: ", file, "\t\tExecution time: ", ticks, "\n");
     
     # Show dynamic of the last layer.
@@ -48,7 +50,10 @@ def template_clustering(file, map_size, trust_order, sync_order = 0.999, show_dy
     
     if (show_clusters == True):
         clusters = network.get_som_clusters();
-        draw_clusters(network.som_layer.weights, clusters);
+        
+        visualizer = cluster_visualizer();
+        visualizer.append_clusters(clusters, network.som_layer.weights);
+        visualizer.show();
     
     # Show network stuff.
     if (show_layer1 == True):
@@ -59,50 +64,52 @@ def template_clustering(file, map_size, trust_order, sync_order = 0.999, show_dy
     
     if (show_clusters == True):
         clusters = network.get_clusters();
-        draw_clusters(sample, clusters);
-  
+        
+        visualizer = cluster_visualizer();
+        visualizer.append_clusters(clusters, sample);
+        visualizer.show();
+
 def cluster_simple1():
-    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [4, 4], 3, 0.999, True, True, True, True);
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [4, 4], 1.0, 0.999, True, True, True, True);
 
 def cluster_simple1_as_som():
-    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [1, 2], 0, 0.999, True, True, True, True);
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [1, 2], 1.0, 0.999, True, True, True, True);
   
 def cluster_simple2():
-    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [4, 4], 3, 0.999, True, True, True, True);
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [4, 4], 1.0, 0.999, True, True, True, True);
 
 def cluster_simple2_as_som():
-    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [1, 3], 0, 0.999, True, True, True, True);
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [1, 3], 1.0, 0.999, True, True, True, True);
 
 def cluster_simple3():
-    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [5, 5], 4, 0.999, True, True, True, True);
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [5, 5], 1.0, 0.999, True, True, True, True);
     
 def cluster_simple4():
-    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, [5, 5], 4, 0.999, True, True, True);
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, [5, 5], 1.0, 0.999, True, True, True);
     
 def cluster_simple5():
-    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [5, 5], 4, 0.999, True, True, True);
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [5, 5], 1.0, 0.999, True, True, True);
 
 def cluster_lsun():
-    template_clustering(FCPS_SAMPLES.SAMPLE_LSUN, [9, 9], 10, 0.999, True, True, True);
+    template_clustering(FCPS_SAMPLES.SAMPLE_LSUN, [9, 9], 0.45, 0.999, True, True, True);
      
 def cluster_target():
-    template_clustering(FCPS_SAMPLES.SAMPLE_TARGET, [9, 9], 20, 0.999, True, True, True);
+    template_clustering(FCPS_SAMPLES.SAMPLE_TARGET, [9, 9], 0.9, 0.999, True, True, True);
 
 def cluster_two_diamonds():
-    template_clustering(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, [10, 10], 5, 0.999, True, True, True);
+    template_clustering(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, [10, 10], 0.15, 0.999, True, True, True);
 
 def cluster_wing_nut():
-    template_clustering(FCPS_SAMPLES.SAMPLE_WING_NUT, [10, 10], 5, 0.999, True, True, True);
+    template_clustering(FCPS_SAMPLES.SAMPLE_WING_NUT, [10, 10], 0.25, 0.999, True, True, True);
 
 def cluster_chainlink():
-    template_clustering(FCPS_SAMPLES.SAMPLE_CHAINLINK, [10, 10], 15, 0.999, True, True, True);
+    template_clustering(FCPS_SAMPLES.SAMPLE_CHAINLINK, [10, 10], 0.5, 0.999, True, True, True);
 
 def cluster_hepta():
-    template_clustering(FCPS_SAMPLES.SAMPLE_HEPTA, [7, 7], 5, 0.999, True, True, True);
+    template_clustering(FCPS_SAMPLES.SAMPLE_HEPTA, [7, 7], 1.0, 0.999, True, True, True);
 
 def cluster_tetra():
-    "Problem here"
-    template_clustering(FCPS_SAMPLES.SAMPLE_TETRA, [7, 7], 5, 0.998, True, True, True);
+    template_clustering(FCPS_SAMPLES.SAMPLE_TETRA, [7, 7], 0.4, 0.998, True, True, True);
 
 def experiment_execution_time():
     template_clustering(FCPS_SAMPLES.SAMPLE_LSUN, [9, 9], 10, 0.998, False, False, False, False);

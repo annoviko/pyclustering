@@ -430,7 +430,8 @@ class sync_network(network):
             
             for index in range(0, num_osc, 1):    
                 if (initial_phases == initial_type.RANDOM_GAUSSIAN):
-                    self._phases.append(random.random() * 2.0 * pi);
+                    self._phases.append(random.random() * pi);
+                
                 elif (initial_phases == initial_type.EQUIPARTITION):
                     self._phases.append( pi / num_osc * index);
                 

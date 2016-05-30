@@ -241,7 +241,7 @@ class syncnet(sync_network):
         
         # Create connections
         for i in range(0, self._num_osc, 1):
-            for j in range(i + 1, self._num_osc, 1):                 
+            for j in range(i + 1, self._num_osc, 1):
                     dist = euclidean_distance(self._osc_loc[i], self._osc_loc[j]);
                     
                     if (self._ena_conn_weight is True):

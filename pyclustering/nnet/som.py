@@ -132,33 +132,8 @@ class som:
     @endcode
         
     """
-    
-    # describe network
-    _rows = 0;
-    _cols = 0;
-    _size = 0;
-    _weights = None;        # Weights of each neuron (coordinates in data dimension in other words).
-    _award = None;          # Lists of indexes of won points for each neuron.
-    _data = None;           # Analyzed data.
-    _conn_type = None;      # Type of connections between neuron.
-    
-    # just for convenience (avoid excess calculation during learning)
-    _location = None;           # Location in grid.
-    _sqrt_distances = None;
-    _capture_objects = None;    # Store indexes of input points that were captured by each neurons individually at the end.
-    _neighbors = None;          # Indexes of neighbours for each neuron.
-    
-    # describe learning process and internal state
-    _epochs = 0;                    # Iteration for learning.
-    _params = None;
-    
-    # dynamic changes learning parameters
-    _local_radius = 0.0;
-    _learn_rate = 0.0;
-    
-    __ccore_som_pointer = None;
-    
-    
+
+
     @property
     def size(self):
         """!
@@ -229,6 +204,14 @@ class som:
         
         self._conn_type = conn_type;
         
+        self._data = None;
+        
+        self._neighbors = None;
+        
+        self._local_radius = 0.0;
+        
+        self._learn_rate = 0.0;
+        
         if (parameters is not None):
             self._params = parameters;
         else:
@@ -241,8 +224,13 @@ class som:
             self.__ccore_som_pointer = wrapper.som_create(rows, cols, conn_type, self._params);
             
         else:
+            self.__ccore_som_pointer = None;
+            
             # location
             self._location = self.__initialize_locations(rows, cols);
+            
+            # default weights
+            self._weights = [ [0.0] ] * self._size;
             
             # awards
             self._award = [0] * self._size;
@@ -544,8 +532,8 @@ class som:
                     
                     for i in range(dimension):       
                         self._weights[neighbor_index][i] = self._weights[neighbor_index][i] + self._learn_rate * influence * (x[i] - self._weights[neighbor_index][i]);  
-    
-                            
+
+
     def train(self, data, epochs, autostop = False):
         """!
         @brief Trains self-organized feature map (SOM).
@@ -559,7 +547,6 @@ class som:
         """
         
         self._data = data;
-        self._epochs = epochs;
         
         if (self.__ccore_som_pointer is not None):
             return wrapper.som_train(self.__ccore_som_pointer, data, epochs, autostop);
@@ -573,10 +560,10 @@ class som:
         
         previous_weights = None;
         
-        for epoch in range(1, self._epochs + 1):
+        for epoch in range(1, epochs + 1):
             # Depression term of coupling
-            self._local_radius = ( self._params.init_radius * math.exp(-(epoch / self._epochs)) ) ** 2;
-            self._learn_rate = self._params.init_learn_rate * math.exp(-(epoch / self._epochs));
+            self._local_radius = ( self._params.init_radius * math.exp(-(epoch / epochs)) ) ** 2;
+            self._learn_rate = self._params.init_learn_rate * math.exp(-(epoch / epochs));
 
             #random.shuffle(self._data);    # Random order
             
@@ -594,7 +581,7 @@ class som:
                 self._adaptation(index, self._data[i]);
                 
                 # Update statistics
-                if ( (autostop == True) or (epoch == self._epochs) ):
+                if ( (autostop == True) or (epoch == epochs) ):
                     self._award[index] += 1;
                     self._capture_objects[index].append(i);
             
@@ -607,8 +594,9 @@ class som:
             
                 previous_weights = [item[:] for item in self._weights];
         
-        return self._epochs;
-    
+        return epochs;
+
+
     def simulate(self, input_pattern):
         """!
         @brief Processes input pattern (no learining) and returns index of neuron-winner.
@@ -836,6 +824,7 @@ class som:
             self._neighbors = wrapper.som_get_neighbors(self.__ccore_som_pointer);
             self._award = wrapper.som_get_awards(self.__ccore_som_pointer);
         
+        
         dimension = len(self._weights[0]);
         
         fig = plt.figure();
@@ -851,7 +840,7 @@ class som:
         
         
         # Show data
-        if (dataset == True):
+        if ((self._data is not None) and (dataset is True) ):
             for x in self._data:
                 if (dimension == 1):
                     axes.plot(x[0], 0.0, 'b|', ms = 30);
@@ -860,7 +849,7 @@ class som:
                     axes.plot(x[0], x[1], 'b.');
                     
                 elif (dimension == 3):
-                    axes.scatter(x[0], x[1], x[2], c = 'b', marker = '.');                           
+                    axes.scatter(x[0], x[1], x[2], c = 'b', marker = '.');
         
         # Show neurons
         for index in range(self._size):
@@ -872,7 +861,7 @@ class som:
                 
                 if (awards == True):
                     location = '{0}'.format(self._award[index]);
-                    axes.text(self._weights[index][0], 0.0, location, color='black', fontsize = 10);                   
+                    axes.text(self._weights[index][0], 0.0, location, color='black', fontsize = 10);
             
                 if (belongs == True):
                     location = '{0}'.format(index);
