@@ -52,6 +52,11 @@ GENERAL CHANGES (pyclustering):
 - Implemented feature to animate analysed output dynamic of Sync family oscillatory networks (sync_visualizer, syncnet_visualizer): correlation matrix, phase coordinates, cluster allocation (pyclustering.nnet.sync, pyclustering.cluster.syncnet).
   See: https://www.youtube.com/watch?v=5S5mFYVihso
   See: https://www.youtube.com/watch?v=Vd-ww9PcZvI
+  See: https://www.youtube.com/watch?v=QYPqWoyNHO8
+  See: https://www.youtube.com/watch?v=RA0MiC2WlbY
+
+- Improved algorithm SYNC-SOM: accuracy of clustering and calculation are improved in line with proof of concept where connection between oscillator in the second layer (that is represented by the self-organized feature map) should be created in line with classical radius like in SyncNet, but indirectly: if objects that correspond to two different neurons can be connected than neurons should be also connected with each other (pyclustering.cluster.syncsom).
+  See: https://github.com/annoviko/pyclustering/issues/297
 
 
 GENERAL CHANGES (ccore):
