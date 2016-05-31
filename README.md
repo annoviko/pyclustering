@@ -165,8 +165,14 @@ ensembles = dynamic.allocate_sync_ensembles();
 pcnn_visualizer.show_output_dynamic(dynamic); 
 ```
 
+**Examples for each algorithm or model can be found in following modules of the library:**
+- Cluster analysis examples: `pyclustering/cluster/examples/`
+- Graph coloring examples: `pyclustering/gcolor/examples/`
+- Oscillatory or neural network examples: `pyclustering/nnet/examples/`
+- Travelling salesman problem examples: `/pyclustering/tsp/examples/`
+
 ------------------------------------------------
 
 ###Proposals, questions, bugs:###
 
-In case of any questions, proposals or bugs related to the pyclustering please contact to pyclustering@yandex.ru.
+In case of any questions, proposals or bugs related to the pyclustering please contact to pyclustering@yandex.ru or create an issue here.
