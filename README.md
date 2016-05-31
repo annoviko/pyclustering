@@ -83,6 +83,90 @@ E-Mail: pyclustering@yandex.ru
 
 ------------------------------------------------
 
+###Code examples:###
+
+**Data clustering by CURE algorithm**
+```python
+from pyclustering.cluster import cluster_visualizer;
+from pyclustering.cluster.cure import cure;
+
+from pyclustering.utils import read_sample;
+
+from pyclustering.samples.definitions import FCPS_SAMPLES;
+
+# Input data in following format [ [0.1, 0.5], [0.3, 0.1], ... ].
+input_data = read_sample(FCPS_SAMPLES.SAMPLE_LSUN);
+
+# Allocate three clusters:
+cure_instance = cure(input_data, 3);
+cure_instance.process();
+clusters = cure_instance.get_clusters();
+
+# Visualize clusters:
+visualizer = cluster_visualizer();
+visualizer.append_clusters(clusters, None);
+visualizer.show();
+```
+
+**Data clustering by SYNC-SOM (bio-inspired) algorithm**
+```python
+from pyclustering.cluster import cluster_visualizer;
+from pyclustering.cluster.syncsom import syncsom;
+
+from pyclustering.samples.definitions import FCPS_SAMPLES;
+
+from pyclustering.utils import read_sample, draw_dynamics;
+
+# Input data in following format [ [0.1, 0.5], [0.3, 0.1], ... ].
+input_data = read_sample(FCPS_SAMPLES.SAMPLE_TARGET);
+
+# Create oscillatory network for cluster analysis
+# where the first layer has size 9x9. Radius
+# connectivity (similarity parameter) is 0.9.
+# CCORE library (C/C++ part of the pyclustering library)
+# is used to ensure high performance.
+network = syncsom(input_data, 9, 9, 0.9, ccore = True);
+
+# Simulate network (start processing) with collecting
+# output dynamic.
+(dyn_time, dyn_phase) = network.process(True, 0.999);
+
+# Show structure of the first layer
+network.show_som_layer();
+
+# Show structure of the second layer
+network.show_sync_layer();
+
+# Show results of clustering
+clusters = network.get_clusters();
+visualizer = cluster_visualizer();
+visualizer.append_clusters(clusters, input_data);
+visualizer.show();
+
+# Show output dynamic of the network (that is obtained
+# from the second layer).
+draw_dynamics(dyn_time, dyn_phase, x_title = "Time", y_title = "Phase", y_lim = [0, 2 * 3.14]);
+```
+
+**Simulation of oscillatory network PCNN**
+```python
+from pyclustering.nnet.pcnn import pcnn_network, pcnn_visualizer;
+
+# Create Pulse-Coupled neural network with 10 oscillators.
+net = pcnn_network(10, params, conn_type, ccore = ccore_flag);
+
+# Perform simulation during 100 steps using binary external stimulus.
+dynamic = net.simulate(100, [1, 1, 1, 0, 0, 0, 0, 1, 1, 1]);
+
+# Allocate synchronous ensembles in the network.
+ensembles = dynamic.allocate_sync_ensembles();
+
+# Show output dynamic.
+pcnn_visualizer.show_output_dynamic(dynamic); 
+```
+
+------------------------------------------------
+
 ###Proposals, questions, bugs:###
 
 In case of any questions, proposals or bugs related to the pyclustering please contact to pyclustering@yandex.ru.
