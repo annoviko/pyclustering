@@ -421,7 +421,8 @@ class sync_network(network):
             self._phases = list();
             self._freq = list();
             
-            for index in range(0, num_osc, 1):    
+            random.seed();
+            for index in range(0, num_osc, 1):
                 if (initial_phases == initial_type.RANDOM_GAUSSIAN):
                     self._phases.append(random.random() * pi);
                 
