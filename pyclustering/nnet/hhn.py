@@ -40,79 +40,86 @@ class hhn_parameters:
     
     @see hhn_network
     
-    """  
+    """
     
-    ## Intrinsic noise.
-    nu      = random.random() * 2.0 - 1.0;
-    
-    ## Maximal conductivity for sodium current.
-    gNa     = 120.0 * (1 + 0.02 * nu);
-    
-    ## Maximal conductivity for potassium current.
-    gK      = 36.0 * (1 + 0.02 * nu);
-    
-    ## Maximal conductivity for leakage current.
-    gL      = 0.3 * (1 + 0.02 * nu);
-    
-    
-    ## Reverse potential of sodium current [mV].
-    vNa     = 50.0;
-    
-    ## Reverse potential of potassium current [mV].
-    vK      = -77.0;
-    
-    ## Reverse potantial of leakage current [mV].
-    vL      = -54.4;
-    
-    ## Rest potential [mV].
-    vRest   = -65.0;    
-    
-    
-    ## External current [mV] for central element 1.
-    Icn1    = 5.0;
-    
-    ## External current [mV] for central element 2.
-    Icn2    = 30.0;
-    
-    
-    ## Synaptic reversal potential [mV] for inhibitory effects.
-    Vsyninh = -80.0;    
-    
-    ## Synaptic reversal potential [mV] for exciting effects.
-    Vsynexc = 0.0;
-    
-    ## Alfa-parameter for alfa-function for inhibitory effect.
-    alfa_inhibitory     = 6.0;
-    
-    ## Betta-parameter for alfa-function for inhibitory effect.
-    betta_inhibitory    = 0.3;
-    
-    
-    ## Alfa-parameter for alfa-function for excitatoty effect.
-    alfa_excitatory     = 40.0;
-    
-    ## Betta-parameter for alfa-function for excitatoty effect.
-    betta_excitatory    = 2.0;
-    
-    
-    ## Strength of the synaptic connection from PN to CN1.
-    w1 = 0.1;
-    
-    ## Strength of the synaptic connection from CN1 to PN.
-    w2 = 9.0;
-    
-    ## Strength of the synaptic connection from CN2 to PN.
-    w3 = 5.0;
-    
-    
-    ## Period of time [ms] when high strength value of synaptic connection exists from CN2 to PN.
-    deltah = 650.0;
-    
-    ## Threshold of the membrane potential that should exceeded by oscillator to be considered as an active.
-    threshold = -10;
-    
-    ## Affects pulse counter.
-    eps = 0.16;
+    def __init__(self):
+        """!
+        @brief    Default constructor of parameters for Hodgkin-Huxley Oscillatory Network.
+        @details  Constructor initializes parameters by default non-zero values that can be
+                  used for simple simulation.
+        """
+        
+        ## Intrinsic noise.
+        self.nu      = random.random() * 2.0 - 1.0;
+        
+        ## Maximal conductivity for sodium current.
+        self.gNa     = 120.0 * (1 + 0.02 * self.nu);
+        
+        ## Maximal conductivity for potassium current.
+        self.gK      = 36.0 * (1 + 0.02 * self.nu);
+        
+        ## Maximal conductivity for leakage current.
+        self.gL      = 0.3 * (1 + 0.02 * self.nu);
+        
+        
+        ## Reverse potential of sodium current [mV].
+        self.vNa     = 50.0;
+        
+        ## Reverse potential of potassium current [mV].
+        self.vK      = -77.0;
+        
+        ## Reverse potantial of leakage current [mV].
+        self.vL      = -54.4;
+        
+        ## Rest potential [mV].
+        self.vRest   = -65.0;    
+        
+        
+        ## External current [mV] for central element 1.
+        self.Icn1    = 5.0;
+        
+        ## External current [mV] for central element 2.
+        self.Icn2    = 30.0;
+        
+        
+        ## Synaptic reversal potential [mV] for inhibitory effects.
+        self.Vsyninh = -80.0;    
+        
+        ## Synaptic reversal potential [mV] for exciting effects.
+        self.Vsynexc = 0.0;
+        
+        ## Alfa-parameter for alfa-function for inhibitory effect.
+        self.alfa_inhibitory     = 6.0;
+        
+        ## Betta-parameter for alfa-function for inhibitory effect.
+        self.betta_inhibitory    = 0.3;
+        
+        
+        ## Alfa-parameter for alfa-function for excitatoty effect.
+        self.alfa_excitatory     = 40.0;
+        
+        ## Betta-parameter for alfa-function for excitatoty effect.
+        self.betta_excitatory    = 2.0;
+        
+        
+        ## Strength of the synaptic connection from PN to CN1.
+        self.w1 = 0.1;
+        
+        ## Strength of the synaptic connection from CN1 to PN.
+        self.w2 = 9.0;
+        
+        ## Strength of the synaptic connection from CN2 to PN.
+        self.w3 = 5.0;
+        
+        
+        ## Period of time [ms] when high strength value of synaptic connection exists from CN2 to PN.
+        self.deltah = 650.0;
+        
+        ## Threshold of the membrane potential that should exceeded by oscillator to be considered as an active.
+        self.threshold = -10;
+        
+        ## Affects pulse counter.
+        self.eps = 0.16;
 
 
 class central_element:
@@ -123,30 +130,31 @@ class central_element:
     
     """
     
-    ## Membrane potential of cenral neuron (V).
-    membrane_potential      = 0.0;
-    
-    ## Activation conductance of the sodium channel (m).
-    active_cond_sodium      = 0.0;
-    
-    ## Inactivaton conductance of the sodium channel (h).
-    inactive_cond_sodium    = 0.0;
-    
-    ## Inactivaton conductance of the sodium channel (h)
-    active_cond_potassium   = 0.0;
-    
-    ## Times of pulse generation by central neuron.
-    pulse_generation_time = None;
-    
-    ## Spike generation of central neuron.
-    pulse_generation = False;
-    
     def __init__(self):
         """!
         @brief Constructor of central element.
         
         """
         
+        ## Membrane potential of cenral neuron (V).
+        self.membrane_potential      = 0.0;
+        
+        ## Activation conductance of the sodium channel (m).
+        self.active_cond_sodium      = 0.0;
+        
+        ## Inactivaton conductance of the sodium channel (h).
+        self.inactive_cond_sodium    = 0.0;
+        
+        ## Inactivaton conductance of the sodium channel (h)
+        self.active_cond_potassium   = 0.0;
+        
+        ## Times of pulse generation by central neuron.
+        self.pulse_generation_time = None;
+        
+        ## Spike generation of central neuron.
+        self.pulse_generation = False;
+        
+        ## Timestamps of generated pulses.
         self.pulse_generation_time = [];
     
     def __repr__(self):
@@ -182,28 +190,6 @@ class hhn_network(network):
     
     """
     
-    _name = "Oscillatory Neural Network based on Hodgkin-Huxley Neuron Model"
-    
-    # States of peripheral oscillators
-    _membrane_potential     = None;          # membrane potential of neuron (V)
-    _active_cond_sodium     = None;          # activation conductance of the sodium channel (m)
-    _inactive_cond_sodium   = None;          # inactivaton conductance of the sodium channel (h)
-    _active_cond_potassium  = None;          # activation conductance of the potassium channel (n)
-    _link_activation_time   = None;          # time of set w3 - connection from CN2 to PN for each oscillator.
-    _link_weight3           = None;          # connection strength for each oscillator from CN2 to PN.
-    
-    _pulse_generation_time  = None;          # time of spike generation for each oscillator.
-    _pulse_generation       = None;          # spike generation for each oscillator.
-    
-    _stimulus = None;               # stimulus of each oscillator
-    _noise = None;                  # Noise for each oscillator
-    
-    _central_element = None;        # Central element description
-    
-    _params = None;                 # parameters of the network
-    
-    _membrane_dynamic_pointer = None;        # final result is stored here.
-    
     def __init__(self, num_osc, stimulus = None, parameters = None, type_conn = None, type_conn_represent = conn_represent.MATRIX):
         """!
         @brief Constructor of oscillatory network based on Hodgkin-Huxley meuron model.
@@ -217,6 +203,8 @@ class hhn_network(network):
         """
           
         super().__init__(num_osc, conn_type.NONE, type_conn_represent);
+        
+        self._membrane_dynamic_pointer = None;        # final result is stored here.
         
         self._membrane_potential        = [0.0] * self._num_osc;
         self._active_cond_sodium        = [0.0] * self._num_osc;

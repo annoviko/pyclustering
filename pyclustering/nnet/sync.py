@@ -394,15 +394,6 @@ class sync_network(network):
     @brief Model of oscillatory network that is based on the Kuramoto model of synchronization.
     
     """
-    
-    # Protected members:
-    _name = 'Phase Sync Network'
-    _phases = None;                     # Current phases of oscillators.
-    _freq = None;                       # Own frequencies of oscillators.
-    _weight = 0;                        # Strength of connections between oscillators.
-    
-    _ccore_network_pointer = None;      # Pointer to CCORE Sync implementation of the network.
-    
 
     def __init__(self, num_osc, weight = 1, frequency = 0, type_conn = conn_type.ALL_TO_ALL, representation = conn_represent.MATRIX, initial_phases = initial_type.RANDOM_GAUSSIAN, ccore = False):
         """!
@@ -417,6 +408,8 @@ class sync_network(network):
         @param[in] ccore (bool): If True simulation is performed by CCORE library (C++ implementation of pyclustering).
         
         """
+        
+        self._ccore_network_pointer = None;      # Pointer to CCORE Sync implementation of the network.
         
         if (ccore is True):
             self._ccore_network_pointer = wrapper.sync_create_network(num_osc, weight, frequency, type_conn, initial_phases);
@@ -436,8 +429,8 @@ class sync_network(network):
                     self._phases.append( pi / num_osc * index);
                 
                 self._freq.append(random.random() * frequency);
-    
-    
+
+
     def __del__(self):
         """!
         @brief Destructor of oscillatory network is based on Kuramoto model.

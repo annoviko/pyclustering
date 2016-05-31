@@ -153,7 +153,7 @@ draw_dynamics(dyn_time, dyn_phase, x_title = "Time", y_title = "Phase", y_lim = 
 from pyclustering.nnet.pcnn import pcnn_network, pcnn_visualizer;
 
 # Create Pulse-Coupled neural network with 10 oscillators.
-net = pcnn_network(10, params, conn_type, ccore = ccore_flag);
+net = pcnn_network(10, ccore = ccore_flag);
 
 # Perform simulation during 100 steps using binary external stimulus.
 dynamic = net.simulate(100, [1, 1, 1, 0, 0, 0, 0, 1, 1, 1]);

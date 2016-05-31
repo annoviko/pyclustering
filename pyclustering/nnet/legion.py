@@ -48,59 +48,66 @@ class legion_parameters:
     
     """  
     
-    ## Coefficient that affects intrinsic inhibitor of each oscillator. Should be the same as 'alpha'.
-    eps         = 0.02;
-    
-    ## Coefficient is chosen to be on the same order of magnitude as 'eps'. Affects on exponential function that decays on a slow time scale.
-    alpha       = 0.005;
-    
-    ## Coefficient that is used to control the ratio of the times that the solution spends in these two phases. For a larger value of g, the solution spends a shorter time in the active phase.
-    gamma       = 6.0;
-    
-    ## Coefficient that affects on intrinsic inhibitor of each oscillator. Specifies the steepness of the sigmoid function.
-    betta       = 0.1;
-    
-    ## Scale coefficient that is used by potential, should be greater than 0.
-    lamda       = 0.1;
-    
-    ## Threshold that should be exceeded by a potential to switch on potential.
-    teta        = 0.9;
-    
-    ## Threshold that should be exceeded by a single oscillator to affect its neighbors.
-    teta_x      = -1.5;
-    
-    ## Threshold that should be exceeded to activate potential. If potential less than the threshold then potential is relaxed to 0 on time scale 'mu'.
-    teta_p      = 1.5;
-    
-    ## Threshold that should be exceeded by any oscillator to activate global inhibitor.
-    teta_xz     = 0.1;
-    
-    ## Threshold that should be exceeded to affect on a oscillator by the global inhibitor.
-    teta_zx     = 0.1;
-    
-    ## Weight of permanent connections.
-    T           = 2.0;
-    
-    ## Defines time scaling of relaxing of oscillator potential.
-    mu          = 0.01;
-    
-    ## Weight of global inhibitory connections.
-    Wz          = 1.5;
-    
-    ## Total dynamic weights to a single oscillator from neighbors. Sum of weights of dynamic connections to a single oscillator can not be bigger than Wt.
-    Wt          = 8.0;
-    
-    ## Rate at which the global inhibitor reacts to the stimulation from the oscillator network.
-    fi          = 3.0;
-    
-    ## Multiplier of oscillator noise. Plays important role in desynchronization process.
-    ro          = 0.02;
-    
-    ## Value of external stimulus.
-    I           = 0.2;
-    
-    ## Defines whether to use potentional of oscillator or not.
-    ENABLE_POTENTIONAL = True;
+    def __init__(self):
+        """!
+        @brief    Default constructor of parameters for LEGION (local excitatory global inhibitory oscillatory network).
+        @details  Constructor initializes parameters by default non-zero values that can be
+                  used for simple simulation.
+        """
+        
+        ## Coefficient that affects intrinsic inhibitor of each oscillator. Should be the same as 'alpha'.
+        self.eps         = 0.02;
+        
+        ## Coefficient is chosen to be on the same order of magnitude as 'eps'. Affects on exponential function that decays on a slow time scale.
+        self.alpha       = 0.005;
+        
+        ## Coefficient that is used to control the ratio of the times that the solution spends in these two phases. For a larger value of g, the solution spends a shorter time in the active phase.
+        self.gamma       = 6.0;
+        
+        ## Coefficient that affects on intrinsic inhibitor of each oscillator. Specifies the steepness of the sigmoid function.
+        self.betta       = 0.1;
+        
+        ## Scale coefficient that is used by potential, should be greater than 0.
+        self.lamda       = 0.1;
+        
+        ## Threshold that should be exceeded by a potential to switch on potential.
+        self.teta        = 0.9;
+        
+        ## Threshold that should be exceeded by a single oscillator to affect its neighbors.
+        self.teta_x      = -1.5;
+        
+        ## Threshold that should be exceeded to activate potential. If potential less than the threshold then potential is relaxed to 0 on time scale 'mu'.
+        self.teta_p      = 1.5;
+        
+        ## Threshold that should be exceeded by any oscillator to activate global inhibitor.
+        self.teta_xz     = 0.1;
+        
+        ## Threshold that should be exceeded to affect on a oscillator by the global inhibitor.
+        self.teta_zx     = 0.1;
+        
+        ## Weight of permanent connections.
+        self.T           = 2.0;
+        
+        ## Defines time scaling of relaxing of oscillator potential.
+        self.mu          = 0.01;
+        
+        ## Weight of global inhibitory connections.
+        self.Wz          = 1.5;
+        
+        ## Total dynamic weights to a single oscillator from neighbors. Sum of weights of dynamic connections to a single oscillator can not be bigger than Wt.
+        self.Wt          = 8.0;
+        
+        ## Rate at which the global inhibitor reacts to the stimulation from the oscillator network.
+        self.fi          = 3.0;
+        
+        ## Multiplier of oscillator noise. Plays important role in desynchronization process.
+        self.ro          = 0.02;
+        
+        ## Value of external stimulus.
+        self.I           = 0.2;
+        
+        ## Defines whether to use potentional of oscillator or not.
+        self.ENABLE_POTENTIONAL = True;
 
 
 class legion_dynamic:
@@ -108,11 +115,6 @@ class legion_dynamic:
     @brief Represents output dynamic of LEGION.
     
     """
-    __output = None;
-    __inhibitor = None;
-    _time = None;
-    
-    __ccore_legion_dynamic_pointer = None;
     
     @property
     def output(self):
@@ -161,6 +163,7 @@ class legion_dynamic:
         @param[in] ccore (POINTER): Pointer to CCORE legion_dynamic. If it is specified then others arguments can be omitted.
         
         """
+        
         self.__output = output;
         self.__inhibitor = inhibitor;
         self._time = time;
@@ -231,26 +234,7 @@ class legion_network(network):
     @endcode
     
     """
-    
-    _name = "Local excitatory global inhibitory oscillatory network (LEGION)"
-    
-    _excitatory = None;         # excitatory state of each oscillator
-    _inhibitory = None;         # inhibitory state of each oscillator
-    _potential = None;          # potential of each oscillator
-    
-    _stimulus = None;           # stimulus of each oscillator
-    _coupling_term = None;      # coupling term of each oscillator
-    _global_inhibitor = 0;      # value of global inhibitory
-    
-    _buffer_coupling_term = None;   # coupling terms on previous step of simulation
-    _dynamic_coupling = None;       # dynamic connection between oscillators
-    
-    _params = None;                 # parameters of the network
-    
-    _noise = None;                  # noise of each oscillator
-    
-    __ccore_legion_pointer = None;
-    
+
     def __init__(self, num_osc, parameters = None, type_conn = conn_type.ALL_TO_ALL, type_conn_represent = conn_represent.MATRIX, ccore = False):
         """!
         @brief Constructor of oscillatory network LEGION (local excitatory global inhibitory oscillatory network).
@@ -263,14 +247,18 @@ class legion_network(network):
         
         """
         
+        self._params = None;                 # parameters of the network
+    
+        self.__ccore_legion_pointer = None;
+        self._params = parameters;
+        
         # set parameters of the network
-        if (parameters is not None):
-            self._params = parameters;
-        else:
+        if (self._params is None):
             self._params = legion_parameters();
         
         if (ccore is True):
             self.__ccore_legion_pointer = wrapper.legion_create(num_osc, type_conn, self._params);
+            
         else: 
             super().__init__(num_osc, type_conn, type_conn_represent);
                 
@@ -279,6 +267,11 @@ class legion_network(network):
             self._inhibitory = [0.0] * self._num_osc;
             self._potential = [0.0] * self._num_osc;
             
+            self._coupling_term = None;      # coupling term of each oscillator
+            self._global_inhibitor = 0;      # value of global inhibitory
+            self._stimulus = None;           # stimulus of each oscillator
+            
+            self._dynamic_coupling = None;   # dynamic connection between oscillators
             self._coupling_term = [0.0] * self._num_osc;
             self._buffer_coupling_term = [0.0] * self._num_osc;
                 

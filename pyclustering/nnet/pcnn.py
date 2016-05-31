@@ -45,55 +45,57 @@ class pcnn_parameters:
     
     """
     
-    ## Multiplier for the feeding compartment at the current step.
-    VF = 1.0;
-    
-    ## Multiplier for the linking compartment at the current step.  
-    VL = 1.0;
-    
-    ## Multiplier for the threshold at the current step.    
-    VT = 10.0;
-    
-    
-    ## Multiplier for the feeding compartment at the previous step.    
-    AF = 0.1;
-    
-    ## Multiplier for the linking compartment at the previous step.
-    AL = 0.1;
-    
-    ## Multiplier for the threshold at the previous step.
-    AT = 0.5;
-    
-    
-    ## Synaptic weight - neighbours influence on linking compartment
-    W = 1.0;
-    
-    ## Synaptic weight - neighbours influence on feeding compartment.
-    M = 1.0;
-    
-    
-    ## Linking strength in the network.
-    B = 0.1;
-    
-    ## Enable/disable Fast-Linking mode. Fast linking helps to overcome some of the effects of time quantisation. This process allows the linking wave to progress a lot faster than the feeding wave.
-    FAST_LINKING = False;
+    def __init__(self):
+        """!
+        @brief    Default constructor of parameters for pulse-coupled neural network.
+        @details  Constructor initializes parameters by default non-zero values that can be
+                  used for simple simulation.
+        """
+        
+        ## Multiplier for the feeding compartment at the current step.
+        self.VF = 1.0;
+        
+        ## Multiplier for the linking compartment at the current step.  
+        self.VL = 1.0;
+        
+        ## Multiplier for the threshold at the current step.    
+        self.VT = 10.0;
+        
+        
+        ## Multiplier for the feeding compartment at the previous step.    
+        self.AF = 0.1;
+        
+        ## Multiplier for the linking compartment at the previous step.
+        self.AL = 0.1;
+        
+        ## Multiplier for the threshold at the previous step.
+        self.AT = 0.5;
+        
+        
+        ## Synaptic weight - neighbours influence on linking compartment
+        self.W = 1.0;
+        
+        ## Synaptic weight - neighbours influence on feeding compartment.
+        self.M = 1.0;
+        
+        
+        ## Linking strength in the network.
+        self.B = 0.1;
+        
+        ## Enable/disable Fast-Linking mode. Fast linking helps to overcome some of the effects of time quantisation. This process allows the linking wave to progress a lot faster than the feeding wave.
+        self.FAST_LINKING = False;
     
     
 class pcnn_dynamic:
     """!
-    @brief Represents output dynamic of PCNN.
+    @brief Represents output dynamic of PCNN (pulse-coupled neural network).
     
     """
-    __dynamic = None;
-    __ccore_pcnn_dynamic_pointer = None;
-    
-    __OUTPUT_TRUE = 1;    # fire value for oscillators.
-    __OUTPUT_FALSE = 0;   # rest value for oscillators.
-        
+
     @property
     def output(self):
         """!
-        @brief (list) Returns outputs of oscillator during simulation.
+        @brief (list) Returns oscillato outputs during simulation.
         
         """
         if (self.__ccore_pcnn_dynamic_pointer is not None):
@@ -122,6 +124,9 @@ class pcnn_dynamic:
         @param[in] ccore (ctypes.pointer): Pointer to CCORE pcnn_dynamic instance in memory.
         
         """
+        self.__OUTPUT_TRUE = 1;    # fire value for oscillators.
+        self.__OUTPUT_FALSE = 0;   # rest value for oscillators.
+        
         self.__dynamic = dynamic;
         self.__ccore_pcnn_dynamic_pointer = ccore;
     

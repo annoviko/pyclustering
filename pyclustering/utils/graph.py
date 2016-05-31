@@ -56,10 +56,6 @@ class graph:
     @brief Graph representation.
     
     """
-    __type_graph = None;
-    __data = None;
-    __space_description = None;
-    __comments = None;
     
     def __init__(self, data, type_graph = None, space_descr = None, comments = None):
         """!

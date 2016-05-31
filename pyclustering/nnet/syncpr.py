@@ -160,11 +160,7 @@ class syncpr(sync_network):
     @endcode
     
     """
-    
-    _increase_strength1 = 0.0;
-    _increase_strength2 = 0.0;
-    _coupling = None;
-    
+
     def __init__(self, num_osc, increase_strength1, increase_strength2, ccore = False):
         """!
         @brief Constructor of oscillatory network for pattern recognition based on Kuramoto model.
@@ -197,7 +193,7 @@ class syncpr(sync_network):
             wrapper.syncpr_destroy(self._ccore_network_pointer);
             self._ccore_network_pointer = None;
 
-            
+
     def __len__(self):
         """!
         @brief Returns size of the network.

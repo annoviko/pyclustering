@@ -40,8 +40,6 @@ class hysteresis_dynamic:
     @brief Represents output dynamic of hysteresis oscillatory network.
     
     """
-    _dynamic   = None;
-    _time      = None;
     
     @property
     def output(self):
@@ -75,6 +73,7 @@ class hysteresis_dynamic:
             raise NameError("Length of list of dynamics of oscillators should be equal to length of simulation timestamps of steps.");
         
         self._dynamic = amplitudes;
+        
         self._time = time;
 
 
@@ -158,12 +157,6 @@ class hysteresis_network(network):
     
     """
     
-    _name = "Hysteresis Neural Network";
-    _states = None;             # list of states of neurons.
-    _outputs_buffer = None;     # list of previous outputs of neurons.
-    _outputs = None;            # list of current outputs of neurons.
-    _weight = None;             # matrix of connection weights between neurons.
-    
     @property
     def outputs(self):
         """!
@@ -220,10 +213,16 @@ class hysteresis_network(network):
         
         super().__init__(num_osc, type_conn, type_conn_represent);
         
+        # list of states of neurons.
         self._states = [0] * self._num_osc;
+        
+        # list of current outputs of neurons.
         self._outputs = [-1] * self._num_osc;
+        
+        # list of previous outputs of neurons
         self._outputs_buffer = [-1] * self._num_osc;
         
+        # matrix of connection weights between neurons.
         self._weight = list();
         for index in range(0, self._num_osc, 1):
             self._weight.append( [neigh_weight] * self._num_osc);
@@ -334,7 +333,7 @@ class hysteresis_network(network):
         @param[in] step (double): Step of solution at the end of which states of oscillators should be calculated.
         @param[in] int_step (double): Step differentiation that is used for solving differential equation.
         
-        @return (list) New states for neurons (don't assign).
+        @return (list) New states for neurons.
         
         """
         

@@ -88,9 +88,6 @@ class syncgcolor(sync_network):
     @brief Oscillatory network based on Kuramoto model with negative and positive connections for graph coloring problem.
     
     """
-    _positive_weight = None;
-    _negative_weight = None;
-    _reduction = None;
     
     def __init__(self, graph_matrix, positive_weight, negative_weight, reduction = None):
         """!
@@ -109,7 +106,7 @@ class syncgcolor(sync_network):
             self._reduction = self._num_osc;
         else:
             self._reduction = reduction;
-        
+
         self._positive_weight = positive_weight;
         self._negative_weight = negative_weight;
         
