@@ -4,6 +4,7 @@
 @details Based on article description:
          - T.Kohonen. The Self-Organizing Map. 1990.
          - T.Kohonen, E.Oja, O.Simula, A.Visa, J.Kangas. Engineering Applications of the Self-Organizing Map. 1996.
+         - A.Novikov, E.Benderskaya. SYNC-SOM Double-layer Oscillatory Network for Cluster Analysis. 2014.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2016
@@ -110,6 +111,9 @@ class som_parameters:
 class som:
     """!
     @brief Represents self-organized feature map (SOM).
+    @details The self-organizing feature map (SOM) method is a powerful tool for the visualization of
+             of high-dimensional data. It converts complex, nonlinear statistical relationships between
+             high-dimensional data into simple geometric relationships on a low-dimensional display.
     
     Example:
     @code
@@ -126,9 +130,21 @@ class som:
         sample = read_sample(file_sample);
         index_winner = network.simulate(sample);
         
-        # check what it is (what it looks like?)
+        # check what it is.
         index_similar_objects = network.capture_objects[index_winner];
         
+        # result visualization:
+        # show distance matrix (U-matrix).
+        network.show_distance_matrix();
+        
+        # show density matrix (P-matrix).
+        network.show_density_matrix();
+        
+        # show winner matrix.
+        network.show_winner_matrix();
+        
+        # show self-organized map.
+        network.show_network();
     @endcode
         
     """

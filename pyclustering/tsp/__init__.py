@@ -33,6 +33,11 @@ class tsp_result:
     """  
     
     def __init__(self):
+        """!
+        @brief Default constructor of TSP result.
+        
+        """
+        
         ## The shortest path for solving travelling salesman problem.
         self.shortest_length = 0;
         

@@ -44,11 +44,11 @@ E-Mail: pyclustering@yandex.ru
 ###What is implemented in the project.###
 
 **Clustering algorithms (module pyclustering.cluster):**
+- Agglomerative [Python, C++]
 - BIRCH [Python]
 - CLARANS [Python]
 - CURE [Python, C++]
 - DBSCAN [Python, C++]
-- Agglomerative [Python, C++]
 - HSyncNet [Python, C++]
 - K-Means [Python, C++]
 - K-Medians [Python, C++]

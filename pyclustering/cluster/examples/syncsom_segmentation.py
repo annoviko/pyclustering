@@ -32,11 +32,11 @@ from pyclustering.samples.definitions import IMAGE_SIMPLE_SAMPLES;
 
 from pyclustering.cluster.syncsom import syncsom;
 
-def template_segmentation_image(source, map_som_size = [5, 5], average_neighbors = 5, sync_order = 0.998, show_dyn = False, show_som_map = False):
+def template_segmentation_image(source, map_som_size = [5, 5], radius = 128.0, sync_order = 0.998, show_dyn = False, show_som_map = False):
     data = read_image(source);
     
-    network = syncsom(data, map_som_size[0], map_som_size[1]);
-    (ticks, (dyn_time, dyn_phase)) = timedcall(network.process, average_neighbors, show_dyn, sync_order);
+    network = syncsom(data, map_som_size[0], map_som_size[1], 1.0);
+    (ticks, (dyn_time, dyn_phase)) = timedcall(network.process, show_dyn, sync_order);
     print("Sample: ", source, "\t\tExecution time: ", ticks, "\t\tWinners: ", network.som_layer.get_winner_number(), "\n");
     
     if (show_dyn is True):

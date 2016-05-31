@@ -758,7 +758,9 @@ WARN_LOGFILE           =
 # spaces.
 # Note: If this tag is empty the current directory is searched.
 
-INPUT                  = pyclustering/cluster/__init__.py
+INPUT                  = pyclustering/__init__.py
+
+INPUT                 += pyclustering/cluster/__init__.py
 INPUT                 += pyclustering/cluster/agglomerative.py
 INPUT                 += pyclustering/cluster/birch.py
 INPUT                 += pyclustering/cluster/clarans.py

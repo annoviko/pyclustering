@@ -34,7 +34,7 @@ class hysteresis_analyser(hysteresis_dynamic):
     
     """
     
-    def __init__(self, aplitudes, time):
+    def __init__(self, amplitudes, time):
         """!
         @brief Constructor of the analyser.
         
@@ -42,7 +42,7 @@ class hysteresis_analyser(hysteresis_dynamic):
         @param[in] time (list): Simulation time (timestamps of simulation steps) when amplitudes are stored.
         
         """
-        super().__init__(aplitudes, time);
+        super().__init__(amplitudes, time);
 
 
     def allocate_clusters(self, tolerance = 0.1, threshold_steps = 1):

@@ -23,8 +23,6 @@
 
 """
 
-from PIL import Image;
-
 from pyclustering.utils import draw_image_mask_segments, read_image;
 
 from pyclustering.samples.definitions import IMAGE_SIMPLE_SAMPLES, IMAGE_MAP_SAMPLES;

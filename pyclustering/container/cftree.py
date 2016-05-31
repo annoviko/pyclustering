@@ -174,7 +174,7 @@ class cfentry:
         """
         
         number_points = self.number_points + entry.number_points;
-        result_linear_sum = list_math_addition(self.linear_sum, entry.linear_sum);        
+        result_linear_sum = list_math_addition(self.linear_sum, entry.linear_sum);
         result_square_sum = self.square_sum + entry.square_sum;  
         
         return cfentry(number_points, result_linear_sum, result_square_sum);
@@ -476,7 +476,9 @@ class non_leaf_node(cfnode):
                 
         super().__init__(feature, parent, payload);
         
+        ## Node type in CF tree that is CFNODE_NONLEAF for non leaf node.
         self.type = cfnode_type.CFNODE_NONLEAF;
+        
         self.__successors = successors;
     
     
@@ -624,7 +626,9 @@ class leaf_node(cfnode):
         
         super().__init__(feature, parent, payload);
         
+        ## Node type in CF tree that is CFNODE_LEAF for leaf node.
         self.type = cfnode_type.CFNODE_LEAF;
+        
         self.__entries = entries;   # list of clustering features
         
     

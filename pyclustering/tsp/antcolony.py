@@ -40,6 +40,12 @@ class antcolony_parameters:
     """
     
     def __init__(self):
+        """!
+        @brief Default constructor of ant colony parameters.
+        @details  Constructor initializes parameters by default non-zero values that can be used for simple simulation.
+        
+        """
+        
         ##
         self.q                   = 1.5;
         
@@ -73,12 +79,7 @@ class antcolony:
              in the form of a pheromone trail deposited on the edges of the TSP graph.
     
     @warning Solution is performed only via CCORE library (C/C++ implementation of the library).
-    
-    Example:
-    @code
-        
-    @endcode
-    
+
     """  
     
     def __init__(self, parameters):
@@ -103,6 +104,8 @@ class antcolony:
         
         @param[in] object_locations (list): Coordinates of objects that should be visited.
         
+        @return (list) The shortest path that consists of all objects.
+        
         """
         
         (result_address, c_pointer_tsp_result) = wrapper.antcolony_tsp_process(object_locations, self.__parameters);
@@ -121,7 +124,9 @@ class antcolony:
         """!
         @brief Perform simulation of ant colony to solve travelling salesman problem.
         
-        @param[in] object_locations (list): Coordinates of objects that should be visited.
+        @param[in] matrix (list): Adjacency matrix that describes distances between objects.
+        
+        @return (list) The shortest path that consists of all objects.
         
         """
         (result_address, c_pointer_tsp_result) = wrapper.antcolony_tsp_process(matrix, self.__parameters, wrapper.CITIES_DISTANCE_SET_BY_MATRIX);

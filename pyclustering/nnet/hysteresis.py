@@ -153,7 +153,29 @@ class hysteresis_visualizer:
 
 class hysteresis_network(network):
     """!
-    @brief Hysteresis oscillatory network that uses relaxation oscillators.
+    @brief Hysteresis oscillatory network that uses relaxation oscillators that are represented by objective hysteresis neurons whose output in range [-1, +1].
+    
+    Examples:
+    @code
+        # create hysteresis oscillatory network with 5 oscillators.
+        network = hysteresis_network(5);
+        
+        # set initial states (from range [-1, +1]).
+        network.states = [1 0 1 0 1];
+        
+        # set initial outputs.
+        network.outputs = [1 1 1 1 1];
+        
+        # perform simulation of the network during 1000 steps in 10 time units.
+        output_dynamic = network.simulate(1000, 10);
+        
+        # show output dynamic of the network.
+        hysteresis_visualizer.show_output_dynamic(output_dynamic);
+        
+        # obtain synchronous ensembles.
+        ensembles = output_dynamic.allocate_sync_ensembles(tolerance = 0.5, threshold_steps = 5);
+        print(ensembles);
+    @endcode
     
     """
     
