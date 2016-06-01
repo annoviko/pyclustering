@@ -21,8 +21,27 @@
 
 """
 
+from distutils.command.build import build;
+
 from setuptools import setup;
 from setuptools import find_packages;
+
+from subprocess import call;
+
+from sys import platform as _platform;
+
+
+class ccore_build(build):
+    def run(self):
+        if (_platform == "linux") or (_platform == "linux2"):
+            build.run(self);
+            
+            command = [ 'cd ccore/ && make ccore && cd ../' ];
+            
+            def make_ccore_library():
+                call(command)
+            
+            self.execute(make_ccore_library, [], 'Build CCORE library...');
 
 
 def full_setup():
@@ -46,6 +65,8 @@ def full_setup():
                             'pyclustering.samples': ['samples/*.txt', 'graphs/*.grpr', 'images/*.png', 'images/digits/*.png'],
                             'pyclustering.core': ['x64/linux/ccore.so', 'x64/win/ccore.dll'],
                           },
+          
+          cmdclass = { 'build': ccore_build }
         );
 
 
