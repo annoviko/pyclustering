@@ -28,7 +28,7 @@ from setuptools import find_packages;
 def full_setup():
     setup(
           name = 'pyclustering',
-          version = '0.6.dev0',
+          version = '0.6.0',
           description = 'pyclustring is a python data mining library',
           url = 'https://github.com/annoviko/pyclustering',
           license = 'GNU Public License',

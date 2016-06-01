@@ -1,4 +1,4 @@
-Change notes for 0.6.dev0 (start Jul 18, 2015)
+Change notes for 0.6.0 (start Jul 18, 2015)
 
 GENERAL CHANGES (pyclustering):
 - Implemented phase oscillatory network syncpr (pyclustering.nnet.syncpr).
