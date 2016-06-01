@@ -2,8 +2,8 @@
 
 @brief TSP algorithm: ant colony based
 @details Based on article description:
-         - M.Dorigo, L.M.Gambardella. Ant colonies for the traveling salesman problem. 1996.
-         - J.Yang, X.Shi, M.Marchese, Y.Liang. An ant colony optimization method for generalized TSP problem. 2008.
+         - [1] M.Dorigo, L.M.Gambardella. Ant colonies for the traveling salesman problem. 1996.
+         - [2] J.Yang, X.Shi, M.Marchese, Y.Liang. An ant colony optimization method for generalized TSP problem. 2008.
 
 @authors Alexey Kukushkin (pyclustering@yandex.ru)
 @date 2014-2016
@@ -46,22 +46,22 @@ class antcolony_parameters:
         
         """
         
-        ##
+        ## used to scalability distance in calculation pheromone
         self.q                   = 1.5;
         
-        ##
+        ## is a pheromone decay parameter in (1-ro) * ph
         self.ro                  = 0.7;
         
-        ##
+        ## used to control the relative importance degree of pheromone concentration and the length of path [2]
         self.alpha               = 1.0;
         
-        ##
+        ## used to control the relative importance degree of pheromone concentration and the length of path [2]
         self.beta                = 1.0;
         
-        ##
+        ## [currently unused]
         self.gamma               = 2.0;
         
-        ##
+        ## initial value for pheramones
         self.qinit_pheramone     = 0.1;
         
         ## Amount of ants that is used on each iteration.
