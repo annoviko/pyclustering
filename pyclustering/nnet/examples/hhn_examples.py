@@ -33,7 +33,7 @@ def template_dynamic_hhn(num_osc, steps, time, stimulus = None, params = None, s
 
     (t, dyn) = net.simulate(steps, time);
 
-    draw_dynamics(t, dyn, x_title = "Time", y_title = "V", separate = separate_representation);
+    draw_dynamics(t, dyn, x_title = "Time", y_title = "V", y_labels = False, separate = separate_representation);
 
 
 def one_oscillator_unstimulated():
@@ -59,7 +59,7 @@ def ten_oscillators_stimulated_sync():
     params.w2 = 0.0;
     params.w3 = 0;
     
-    template_dynamic_hhn(10, 750, 100, [25, 25, 25, 25, 25, 27, 27, 27, 27, 27], params, separate_representation = True);    
+    template_dynamic_hhn(10, 750, 100, [25, 25, 25, 25, 25, 27, 27, 27, 27, 27], params, separate_representation = True);
     
 def ten_oscillators_stimulated_partial_sync():
     params = hhn_parameters();
@@ -67,7 +67,7 @@ def ten_oscillators_stimulated_partial_sync():
     params.w2 = 5.0;
     params.w3 = 0;
     
-    template_dynamic_hhn(10, 750, 200, [25, 25, 25, 25, 25, 11, 11, 11, 11, 11], params, separate_representation = True);     
+    template_dynamic_hhn(10, 750, 200, [25, 25, 25, 25, 25, 11, 11, 11, 11, 11], params, separate_representation = True);
     
 
 def six_oscillators_mix_2_stimulated():
@@ -83,7 +83,7 @@ def six_oscillators_mix_3_stimulated():
     
     template_dynamic_hhn(6, 1200, 600, [0, 0, 25, 25, 47, 47], params, separate_representation = True);
 
-    
+
 one_oscillator_unstimulated();
 one_oscillator_stimulated();
 three_oscillators_stimulated();

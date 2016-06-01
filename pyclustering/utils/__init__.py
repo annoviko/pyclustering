@@ -702,10 +702,10 @@ def draw_dynamics(t, dyn, x_title = None, y_title = None, x_lim = None, y_lim = 
     # Check if we have more than one dynamic
     if (isinstance(dyn[0], list) is True):
         num_items = len(dyn[0]);
-        for index in range(0, num_items, 1):       
+        for index in range(0, num_items, 1):
             y = [item[index] for item in dyn];
             
-            if (number_lines > 1): 
+            if (number_lines > 1):
                 index_stage = -1;
                 
                 # Find required axes for the y
@@ -719,7 +719,8 @@ def draw_dynamics(t, dyn, x_title = None, y_title = None, x_lim = None, y_lim = 
                             break;
                 
                 if (index_stage != -1):
-                    # raise NameError('Index ' + str(index) + ' is not specified in the separation list.');
+                    if (index_stage != number_lines - 1):
+                        axes[index_stage].get_xaxis().set_visible(False);
                               
                     axes[index_stage].plot(t, y, 'b-', linewidth = 0.5); 
                     set_ax_param(axes[index_stage], x_title, y_title, x_lim, y_lim, x_labels, y_labels, True);

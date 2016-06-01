@@ -67,7 +67,35 @@ Containers (module pyclustering.container):
 
 Utils that can be used for analysis, visualization, etc are placed in module pyclustering.utils.
 
-The library provides intuitive and friendly interface, cluster analysis can be performed in two steps:
+
+@section install_sec Installation
+The simplest way to install pyclustering library is to use pip:
+@code{.sh}
+    pip install pyclustering
+@endcode
+
+The library can be compiled and manually installed on linux machine wherever you want:
+@code{.sh}
+    # extract content of the pyclustering library...
+    # compile CCORE library (core of the pyclustering library).
+    cd pyclustering/ccore
+    make ccore
+    
+    # return to parent folder of the pyclustering library
+    cd ../
+    
+    # add current folder to python path
+    PYTHONPATH=`pwd`
+    export PYTHONPATH=${PYTHONPATH}
+@endcode
+
+The library CCORE for 64-bit windows is distributed with pyclustering library so there is no need to re-built it. If you want to re-built 
+CCORE library you can open CCORE Microsoft Visual Studio project that is located in ccore/ folder and compile it.
+
+
+@section example_sec Examples
+
+The library provides intuitive and friendly interface, cluster analysis can be easily performed:
 @code{.py}
     # an example of clustering by BIRCH algorithm.
     from pyclustering.cluster.birch import birch;
@@ -120,28 +148,32 @@ Clustering algorithms can be used for image processing:
     draw_image_mask_segments(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE_BEACH, segments);
 @endcode
 
-@section install_sec Installation
-The simplest way to install pyclustering library is to use pip:
-@code{.sh}
-    pip install pyclustering
-@endcode
+An example cluster analysis (that is performed by DBSCAN algorithm) for FCPS samples and visualization of results:
+@image html fcps_cluster_analysis.png
 
-The library can be compiled and manually installed on linux machine wherever you want:
-@code{.sh}
-    # extract content of the pyclustering library...
-    # compile CCORE library (core of the pyclustering library).
-    cd pyclustering/ccore
-    make ccore
-    
-    # return to parent folder of the pyclustering library
-    cd ../
-    
-    # add current folder to python path
-    PYTHONPATH=`pwd`
-    export PYTHONPATH=${PYTHONPATH}
-@endcode
+Simulation of oscillatory network based on Hodgkin-Huxley neuron model where six synchronous ensembles of oscillators are formed. It means that
+three features from input data are allocated where each feature is encoded by only one ensemble.
+@code
+    # an example of simulation of oscillatory network based on Hodgkin-Huxley model
+    from pyclustering.utils import draw_dynamics;
 
-The library CCORE for 64-bit windows is distributed with pyclustering library so there is no need to re-built it. If you want to re-built 
-CCORE library you can open CCORE Microsoft Visual Studio project that is located in ccore/ folder and compile it.
+    from pyclustering.nnet.hhn import hhn_network, hhn_parameters;
+
+    # set period of 400 time units when high strength value of synaptic connection exists from CN2 to PN.
+    params = hhn_parameters();
+    params.deltah = 400;
+    
+    # prepare external stimulus that encode three different features.
+    stimulus = [0, 0, 25, 25, 47, 47];
+    
+    # create oscillatory network that has six oscillators.
+    net = hhn_network(len(stimulus), stimulus, params);
+    
+    # perform simulation during 1200 steps in 600 time units.
+    (t, dyn) = net.simulate(1200, 600);
+    
+    # visualize results of simulation (output dynamic of the network).
+    draw_dynamics(t, dyn, x_title = "Time", y_title = "V", separate = True);
+@endcode
 
 """

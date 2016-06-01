@@ -46,7 +46,7 @@ def template_clustering(file, map_size, radius, sync_order = 0.999, show_dyn = F
     
     # Show dynamic of the last layer.
     if (show_dyn == True):
-        draw_dynamics(dyn_time, dyn_phase, x_title = "Time", y_title = "Phase", y_lim = [0, 2 * 3.14]);
+        draw_dynamics(dyn_time, dyn_phase, x_title = "Time", y_title = "Phase", y_lim = [0, 3.14]);
     
     if (show_clusters == True):
         clusters = network.get_som_clusters();
