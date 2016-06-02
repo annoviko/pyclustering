@@ -21,14 +21,36 @@
 
 """
 
+import os;
+
+from distutils.command.install import install;
+
 from setuptools import setup;
 from setuptools import find_packages;
+
+from subprocess import call;
+
+from sys import platform as _platform;
+
+
+class ccore_install(install):
+    def run(self):
+        print("[CCORE BUILD] Current platform:", _platform);
+        if (_platform == "linux") or (_platform == "linux2"):
+            print("[CCORE BUILD] CCORE library should be built for", _platform);
+            
+            def make_ccore_library():
+                call('cd ccore/ && make ccore && cd -', shell = True);
+            
+            self.execute(make_ccore_library, [], 'Build CCORE library...');
+
+        install.run(self);
 
 
 def full_setup():
     setup(
           name = 'pyclustering',
-          version = '0.6.dev0',
+          version = '0.7.dev0',
           description = 'pyclustring is a python data mining library',
           url = 'https://github.com/annoviko/pyclustering',
           license = 'GNU Public License',
@@ -36,7 +58,8 @@ def full_setup():
                          'Development Status :: 3 - Alpha',
                          'Intended Audience :: Developers',
                          'License :: GNU Public License',
-                         'Programming Language :: Python :: 3.4'
+                         'Programming Language :: Python :: 3.4',
+                         'Programming Language :: C++'
                          ],
           keywords = 'pyclustering data mining cluster analysis neural oscillatory networks',
           author = 'Andrei Novikov',
@@ -46,6 +69,8 @@ def full_setup():
                             'pyclustering.samples': ['samples/*.txt', 'graphs/*.grpr', 'images/*.png', 'images/digits/*.png'],
                             'pyclustering.core': ['x64/linux/ccore.so', 'x64/win/ccore.dll'],
                           },
+          
+          cmdclass = { 'install': ccore_install }
         );
 
 

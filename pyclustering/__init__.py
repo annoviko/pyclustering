@@ -30,6 +30,7 @@ models, tools are implemented. There is ability to use python code implementatio
 use python.h interface to communicate with python code due to requirement to save ability to use CCORE library or C/C++ code part of CCORE in other projects.
 
 PyClustering consists of six general modules where the algorithms, models, tools are placed:
+
 Cluster analysis algorithms (module pyclustering.cluster):
 - Agglomerative (pyclustering.cluster.agglomerative);
 - BIRCH (pyclustering.cluster.birch);
@@ -64,6 +65,9 @@ Graph coloring algorithms (module pyclustering.gcolor):
 Containers (module pyclustering.container):
 - CF-Tree (pyclustering.container.cftree);
 - KD-Tree (pyclustering.container.kdtree);
+
+Travelling Salesman Problem Algorithms (module pyclustering.tsp):
+- AntColony (pyclustering.tsp.antcolony);
 
 Utils that can be used for analysis, visualization, etc are placed in module pyclustering.utils.
 
