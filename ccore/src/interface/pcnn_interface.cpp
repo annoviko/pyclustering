@@ -43,7 +43,7 @@ void * pcnn_simulate(const void * pointer, const unsigned int steps, const void 
 }
 
 
-unsigned int pcnn_get_size(const void * pointer) {
+size_t pcnn_get_size(const void * pointer) {
     return ((pcnn *) pointer)->size();
 }
 
@@ -125,7 +125,7 @@ pyclustering_package * pcnn_dynamic_get_time(const void * pointer) {
 }
 
 
-unsigned int pcnn_dynamic_get_size(const void * pointer) {
+size_t pcnn_dynamic_get_size(const void * pointer) {
     return ((pcnn_dynamic *) pointer)->size();
 }
 

@@ -159,7 +159,7 @@ public:
 	 *
 	 * @brief   Trains self-organized feature map (SOM).
 	 *
-	 * @param[in] input_data: input dataset for learining.
+	 * @param[in] input_data: input dataset for training.
 	 * @param[in] epochs: number of epochs for training.
 	 * @param[in] autostop: stop learining when convergance is too low.
 	 *
@@ -171,7 +171,7 @@ public:
 	/**
 	 *
 	 * @brief   Processes input pattern (no learining) and returns index of neuron-winner.
-	 *          Using index of neuron winner catched object can be obtained by get_capture_objects().
+	 * @details Using index of neuron winner catched object can be obtained by get_capture_objects().
 	 *
 	 * @param[in] input_pattern: input pattern for processing.
 	 *

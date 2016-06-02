@@ -230,12 +230,12 @@ public:
         create_none_connections(output_adjacency_collection);
 
 	    for (int index = 0; index < (int) output_adjacency_collection.size(); index++) {
-            const int upper_index = index - width;
-            const int lower_index = index + width;
+            const int upper_index = index - (int) width;
+            const int lower_index = index + (int) width;
 		    const int left_index = index - 1;
 		    const int right_index = index + 1;
 
-            const int node_row_index = (size_t) std::ceil(index / width);
+            const int node_row_index = (int) std::ceil(index / width);
 		    if (upper_index >= 0) {
 			    m_connector(index, upper_index, output_adjacency_collection);
 		    }
@@ -289,11 +289,11 @@ public:
 	    create_grid_four_connections(width, height, output_adjacency_collection);	/* create connection with right, upper, left, lower neighbor */
 
 	    for (int index = 0; index < (int) output_adjacency_collection.size(); index++) {
-            const int upper_left_index = index - width - 1;
-            const int upper_right_index = index - width + 1;
+            const int upper_left_index = index - 1 - (int) width;
+            const int upper_right_index = index + 1 - (int) width;
             
-            const int lower_left_index = index + width - 1;
-            const int lower_right_index = index + width + 1;
+            const int lower_left_index = index - 1 + (int) width;
+            const int lower_right_index = index + 1 + (int) width;
             
             const int node_row_index = (int) std::floor(index / width);
             const int upper_row_index = node_row_index - 1;
