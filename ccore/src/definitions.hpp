@@ -35,6 +35,9 @@
 #endif
 
 
+using pattern       = std::vector<double>;
+using pattern_ptr   = std::shared_ptr<pattern>;
+
 using point         = std::vector<double>;
 using point_ptr     = std::shared_ptr<point>;
 

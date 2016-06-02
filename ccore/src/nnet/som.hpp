@@ -26,6 +26,8 @@
 
 #include <cstddef>
 
+#include "definitions.hpp"
+
 
 /**
 *
@@ -91,6 +93,13 @@ typedef struct som_parameters {
 } som_parameters;
 
 
+using som_award_sequence    = std::vector<size_t>;
+
+using som_gain_sequence     = std::vector<std::vector<size_t> >;
+
+using som_neighbor_sequence = std::vector<std::vector<size_t> >;
+
+
 /**
  *
  * @brief   Self-Orzanized Feature Map based on Kohonen desription of SOM.
@@ -105,18 +114,18 @@ private:
 
 	som_conn_type m_conn_type;
 
-	std::vector<std::vector<double> > m_weights;
-	std::vector<std::vector<double> > m_previous_weights;
-	std::vector<size_t> m_awards;
+	dataset m_weights;
+	dataset m_previous_weights;
+    som_award_sequence  m_awards;
 
 	/* store pointer to training data for convinience */
-	std::vector<std::vector<double> > * data;
+	const dataset     * data;
 
 	/* just for convenience (avoid excess calculation during learning) */
-	std::vector<std::vector<double> > m_location;
-	std::vector<std::vector<double> > m_sqrt_distances;
-	std::vector<std::vector<size_t> > m_capture_objects;
-	std::vector<std::vector<size_t> > m_neighbors;
+	dataset                 m_location;
+	dataset                 m_sqrt_distances;
+    som_gain_sequence       m_capture_objects;
+    som_neighbor_sequence   m_neighbors;
 
 	/* describe learning process and internal state */
 	size_t m_epouchs;
@@ -157,19 +166,19 @@ public:
 	 * @return  Returns number of learining iterations.
 	 *
 	 */
-    size_t train(const std::vector<std::vector<double> > & input_data, const size_t epochs, bool autostop);
+    size_t train(const dataset & input_data, const size_t epochs, bool autostop);
 
 	/**
 	 *
 	 * @brief   Processes input pattern (no learining) and returns index of neuron-winner.
 	 *          Using index of neuron winner catched object can be obtained by get_capture_objects().
 	 *
-	 * @param[in] pattern: input pattern.
+	 * @param[in] input_pattern: input pattern for processing.
 	 *
 	 * @return  Returns index of neuron-winner.
 	 *
 	 */
-    size_t simulate(const std::vector<double> & pattern) const;
+    size_t simulate(const pattern & input_pattern) const;
 
 	/**
 	 *
@@ -192,7 +201,7 @@ public:
     * param[out] weights: neuron weights.
     *
     */
-	inline void allocate_weights(std::vector<std::vector<double> > & weights) {
+	inline void allocate_weights(dataset & weights) {
 		weights = m_weights;
 	}
 
@@ -203,7 +212,7 @@ public:
     * param[out] objects: captured objects by each neuron.
     *
     */
-	inline void allocate_capture_objects(std::vector<std::vector<size_t> > & objects) {
+	inline void allocate_capture_objects(som_gain_sequence & objects) {
 		objects = m_capture_objects;
 	}
 
@@ -214,7 +223,7 @@ public:
     * param[out] neighbors: neighbor indexes of each neuron.
     *
     */
-	inline void allocate_neighbors(std::vector<std::vector<size_t> > & neighbors) {
+	inline void allocate_neighbors(som_neighbor_sequence & neighbors) {
 		neighbors = m_neighbors;
 	}
 	
@@ -225,7 +234,7 @@ public:
     * param[out] awards: amount of captured objects by each neuron.
     *
     */
-	inline void allocate_awards(std::vector<size_t> & awards) {
+	inline void allocate_awards(som_award_sequence & awards) {
 		awards = m_awards;
 	}
 
@@ -255,23 +264,23 @@ private:
 	 *
 	 * @brief   Returns neuron winner (distance, neuron index).
 	 *
-	 * @param[in] pattern: input pattern from the input data set, for example it can be 
+	 * @param[in] input_pattern: input pattern from the input data set, for example it can be 
 	 *             coordinates of point.
 	 *
 	 * @return  Returns index of neuron that is winner.
 	 *
 	 */
-	size_t competition(const std::vector<double> & pattern) const;
+	size_t competition(const pattern & input_pattern) const;
 
 	/**
 	 *
 	 * @brief   Change weight of neurons in line with won neuron.
 	 *
-	 * @param[in] index_winner    - index of neuron-winner.
-	 * @param[in] pattern         - input pattern from the input data set.
+	 * @param[in] index_winner: index of neuron-winner.
+	 * @param[in] input_pattern: input pattern from the input data set.
 	 *
 	 */
-	size_t adaptation(const size_t index_winner, const std::vector<double> & pattern);
+	size_t adaptation(const size_t index_winner, const pattern & input_pattern);
 
 	/**
 	 *

@@ -85,10 +85,9 @@ static void template_award_neurons(const std::shared_ptr<dataset> & data,
 	som_map.train(*data.get(), epouchs, autostop);
 
     size_t winners = som_map.get_winner_number();
-    std::cout << winners << " " << expected_result.size() << std::endl;
     ASSERT_EQ(expected_result.size(), winners);
 
-    std::vector<unsigned int> awards;
+    som_award_sequence awards;
     som_map.allocate_awards(awards);
 
     std::sort(awards.begin(), awards.end());
@@ -96,26 +95,18 @@ static void template_award_neurons(const std::shared_ptr<dataset> & data,
     ASSERT_EQ(expected_result.size(), awards.size());
 
     for (size_t i = 0; i < awards.size(); i++) {
-        if (expected_result[i] != awards[i]) {
-            std::cout << "[ ";
-            for (size_t j = 0; j < awards.size(); j++) {
-                std::cout << awards[i] << " " << std::endl;
-            }
-            std::cout << "] " << std::endl;
-        }
-        
         ASSERT_EQ(expected_result[i], awards[i]);
     }
 
-    std::vector<std::vector<unsigned int> > captured_objects;
+    som_gain_sequence captured_objects;
     som_map.allocate_capture_objects(captured_objects);
 
-    unsigned int total_capture_points = 0;
+    size_t total_capture_points = 0;
     for (size_t i = 0; i < captured_objects.size(); i++) {
         total_capture_points += captured_objects[i].size();
     }
 
-    unsigned int expected_capture_points = std::accumulate(expected_result.begin(), expected_result.end(), 0);
+    size_t expected_capture_points = std::accumulate(expected_result.begin(), expected_result.end(), 0);
     ASSERT_EQ(expected_capture_points, total_capture_points);
 }
 
@@ -240,20 +231,20 @@ TEST(utest_som, double_training) {
 	som_map.train(*sample_simple_01.get(), 100, false);
     som_map.train(*sample_simple_01.get(), 100, false);
 
-    std::vector<std::vector<unsigned int> > captured_objects;
+    som_gain_sequence captured_objects;
     som_map.allocate_capture_objects(captured_objects);
 
-    unsigned int total_capture_points = 0;
+    size_t total_capture_points = 0;
     for (size_t i = 0; i < captured_objects.size(); i++) {
         total_capture_points += captured_objects[i].size();
     }
 
     ASSERT_EQ(sample_simple_01->size(), total_capture_points);
 
-    std::vector<unsigned int> awards;
+    som_award_sequence awards;
     som_map.allocate_awards(awards);
 
-    unsigned int number_awards = std::accumulate(awards.begin(), awards.end(), 0);
+    size_t number_awards = std::accumulate(awards.begin(), awards.end(), 0);
 
     ASSERT_EQ(sample_simple_01->size(), number_awards);
 }

@@ -56,7 +56,7 @@ size_t som_get_size(const void * pointer) {
 
 
 pyclustering_package * som_get_weights(const void * pointer) {
-    std::vector<std::vector<double> > weights;
+    dataset weights;
     ((som *) pointer)->allocate_weights(weights);
 
     pyclustering_package * package = create_package(&weights);
@@ -66,7 +66,7 @@ pyclustering_package * som_get_weights(const void * pointer) {
 
 
 pyclustering_package * som_get_capture_objects(const void * pointer) {
-    std::vector<std::vector<size_t> > capture_objects;
+    som_gain_sequence capture_objects;
     ((som *) pointer)->allocate_capture_objects(capture_objects);
 
     pyclustering_package * package = create_package(&capture_objects);
@@ -76,7 +76,7 @@ pyclustering_package * som_get_capture_objects(const void * pointer) {
 
 
 pyclustering_package * som_get_awards(const void * pointer) {
-    std::vector<size_t> awards;
+    som_award_sequence awards;
     ((som *) pointer)->allocate_awards(awards);
     pyclustering_package * package = create_package(&awards);
 
