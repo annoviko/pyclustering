@@ -45,7 +45,7 @@ m_maximum_clusters(kmax)
 xmeans::~xmeans(void) { }
 
 void xmeans::process(void) {
-	unsigned int current_number_clusters = m_clusters.size();
+	size_t current_number_clusters = m_clusters.size();
 	const std::vector<unsigned int> dummy;
 
 	while (current_number_clusters < m_maximum_clusters) {
@@ -118,10 +118,10 @@ void xmeans::improve_structure() {
 double xmeans::splitting_criterion(const std::vector<std::vector<unsigned int> > & analysed_clusters, const std::vector<std::vector<double> > & analysed_centers) const {
 	std::vector<double> scores(analysed_centers.size(), 0.0);
 
-	double dimension = analysed_centers[0].size();
+	double dimension = (double) analysed_centers[0].size();
 	double sigma = 0.0;
-	unsigned int K = analysed_centers.size();
-	unsigned int N = 0;
+	size_t K = analysed_centers.size();
+	size_t N = 0;
 
 	for (unsigned int index_cluster = 0; index_cluster < analysed_clusters.size(); index_cluster++) {
 		for (std::vector<unsigned int>::const_iterator index_object = analysed_clusters[index_cluster].begin(); index_object != analysed_clusters[index_cluster].end(); index_object++) {

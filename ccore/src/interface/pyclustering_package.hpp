@@ -43,9 +43,9 @@ typedef enum pyclustering_type_data {
 
 typedef struct pyclustering_package {
 public:
-    unsigned int size;
-    unsigned int type;      /* pyclustering type data    */
-    void * data;            /* pointer to data           */
+    size_t          size;
+    unsigned int    type;      /* pyclustering type data    */
+    void            * data;    /* pointer to data           */
 
 public:
     pyclustering_package(void);
@@ -87,7 +87,7 @@ pyclustering_package * create_package(const std::vector<TypeValue> * const data)
     package->size = data->size();
     package->data = (void *) new TypeValue[package->size];
 
-    for (unsigned int i = 0; i < data->size(); i++) {
+    for (size_t i = 0; i < data->size(); i++) {
         ((TypeValue *) package->data)[i] = (*data)[i];
     }
 
@@ -102,7 +102,7 @@ pyclustering_package * create_package(const std::vector< std::vector<TypeObject>
    package->size = data->size();
    package->data = new pyclustering_package * [package->size];
 
-   for (unsigned int i = 0; i < package->size; i++) {
+   for (size_t i = 0; i < package->size; i++) {
            ((pyclustering_package **) package->data)[i] = create_package(&(*data)[i]);
    }
 
@@ -117,7 +117,7 @@ pyclustering_package * create_package(const std::vector< std::vector<type_object
    package->size = data->size();
    package->data = new pyclustering_package * [package->size];
 
-   for (unsigned int i = 0; i < package->size; i++) {
+   for (size_t i = 0; i < package->size; i++) {
        ((pyclustering_package **) package->data)[i] = create_package((*data)[i]);
    }
 

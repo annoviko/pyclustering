@@ -26,7 +26,7 @@
 import pyclustering.core as core;
 import os;
 
-from ctypes import Structure, c_uint, c_double, c_void_p, POINTER;
+from ctypes import Structure, c_uint, c_double, c_void_p, c_size_t, POINTER;
 from sys import platform as _platform;
 
 # Path to DLL.
@@ -98,7 +98,7 @@ class pyclustering_package(Structure):
     " - unsigned int type"
     " - void * data"
     
-    _fields_ = [("size", c_uint),
+    _fields_ = [("size", c_size_t),
                 ("type", c_uint),
                 ("data", POINTER(c_void_p))];
 

@@ -112,7 +112,7 @@ bool rock::merge_cluster(void) {
     return true;
 }
 
-unsigned int rock::calculate_links(const cluster & cluster1, const cluster & cluster2) const {
+size_t rock::calculate_links(const cluster & cluster1, const cluster & cluster2) const {
     size_t number_links = 0;
     for (auto i : cluster1) {
         for (auto j : cluster2) {
@@ -126,8 +126,8 @@ unsigned int rock::calculate_links(const cluster & cluster1, const cluster & clu
 double rock::calculate_goodness(const cluster & cluster1, const cluster & cluster2) const {
     const double number_links = calculate_links(cluster1, cluster2);
 
-    const double size_cluster1 = cluster1.size();
-    const double size_cluster2 = cluster2.size();
+    const double size_cluster1 = (double) cluster1.size();
+    const double size_cluster2 = (double) cluster2.size();
 
     return number_links / ( std::pow( size_cluster1 + size_cluster2, m_degree_normalization ) -
         std::pow( size_cluster1, m_degree_normalization ) -

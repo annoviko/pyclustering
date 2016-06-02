@@ -27,36 +27,40 @@
 #include "utils.hpp"
 
 
-som::som(const unsigned int num_rows, const unsigned int num_cols, const som_conn_type type_conn, const som_parameters & parameters) :
-m_rows(num_rows),
-m_cols(num_cols),
-m_size(num_rows * num_cols),
-m_conn_type(type_conn),
-m_location(m_size),
-m_awards(m_size, 0),
-m_sqrt_distances(m_size, std::vector<double>(m_size, 0)),
-m_capture_objects(m_size),
-m_params(parameters)
+som::som(const size_t num_rows, const size_t num_cols, const som_conn_type type_conn, const som_parameters & parameters) :
+    m_rows(num_rows),
+    m_cols(num_cols),
+    m_size(num_rows * num_cols),
+    m_conn_type(type_conn),
+    m_location(m_size),
+    m_awards(m_size, 0),
+    m_sqrt_distances(m_size, std::vector<double>(m_size, 0)),
+    m_capture_objects(m_size),
+    m_params(parameters) 
 {
+    if (m_params.init_radius == 0.0) {
+        m_params.init_radius = calculate_init_radius(m_rows, m_cols);
+    }
+
 	/* location */
-	for (unsigned int i = 0; i < m_rows; i++) {
-		for (unsigned int j = 0; j < m_cols; j++) {
+	for (size_t i = 0; i < m_rows; i++) {
+		for (size_t j = 0; j < m_cols; j++) {
 			std::vector<double> neuron_location(2, 0);
-			neuron_location[0] = i;
-			neuron_location[1] = j;
+			neuron_location[0] = (double) i;
+			neuron_location[1] = (double) j;
 
 			m_location[i * m_cols + j] = neuron_location;
 		}
 	}
 
 	/* distances */
-	for (unsigned int i = 0; i < m_size; i++) {
+	for (size_t i = 0; i < m_size; i++) {
 		std::vector<double> column_distances(m_size, 0);
 		m_sqrt_distances[i] = column_distances;
 	}
 
-	for (unsigned int i = 0; i < m_size; i++) {
-		for (unsigned int j = i; j < m_size; j++) {
+	for (size_t i = 0; i < m_size; i++) {
+		for (size_t j = i; j < m_size; j++) {
 			double distance = euclidean_distance_sqrt(&m_location[i], &m_location[j]);
 			m_sqrt_distances[i][j] = distance;
 			m_sqrt_distances[j][i] = distance;
@@ -76,16 +80,16 @@ som::~som() { }
 void som::create_connections(const som_conn_type type) {
 	m_neighbors.resize(m_size);
 
-	for (int index = 0; index < m_size; index++) {
-		std::vector<unsigned int> & neuron_neighbors = m_neighbors[index];
+	for (int index = 0; index < (int) m_size; index++) {
+		std::vector<size_t> & neuron_neighbors = m_neighbors[index];
 
-		int upper_index = index - m_cols;
-		int upper_left_index = index - m_cols - 1;
-		int upper_right_index = index - m_cols + 1;
+		int upper_index = index - (int) m_cols;
+		int upper_left_index = index - (int) m_cols - 1;
+		int upper_right_index = index - (int) m_cols + 1;
 
-		int lower_index = index + m_cols;
-		int lower_left_index = index + m_cols - 1;
-		int lower_right_index = index + m_cols + 1;
+		int lower_index = index + (int) m_cols;
+		int lower_left_index = index + (int) m_cols - 1;
+		int lower_right_index = index + (int) m_cols + 1;
 
 		int left_index = index - 1;
 		int right_index = index + 1;
@@ -134,18 +138,18 @@ void som::create_connections(const som_conn_type type) {
 
 		if (type == som_conn_type::SOM_HONEYCOMB) {
 			if ( (node_row_index % 2) == 0 ) {
-				upper_left_index = index - m_cols;
-				upper_right_index = index - m_cols + 1;
+				upper_left_index = index - (int) m_cols;
+				upper_right_index = index - (int) m_cols + 1;
 
-				lower_left_index = index + m_cols;
-				lower_right_index = index + m_cols + 1;
+				lower_left_index = index + (int) m_cols;
+				lower_right_index = index + (int) m_cols + 1;
 			}
 			else {
-				upper_left_index = index - m_cols - 1;
-				upper_right_index = index - m_cols;
+				upper_left_index = index - (int) m_cols - 1;
+				upper_right_index = index - (int) m_cols;
 
-				lower_left_index = index + m_cols - 1;
-				lower_right_index = index + m_cols;
+				lower_left_index = index + (int) m_cols - 1;
+				lower_right_index = index + (int) m_cols;
 			}
 
 			if ( (upper_left_index >= 0) && ( (int) std::floor(std::floor((double) upper_left_index / (double) m_cols)) == upper_row_index) ) {
@@ -169,15 +173,15 @@ void som::create_connections(const som_conn_type type) {
 
 
 void som::create_initial_weights(const som_init_type type) {
-	unsigned int dimension = (*data)[0].size();
+	size_t dimension = (*data)[0].size();
 
 	m_weights.resize(m_size, std::vector<double>(dimension, 0.0));
 
 	std::vector<double> maximum_value_dimension(dimension, -std::numeric_limits<double>::max());
 	std::vector<double> minimum_value_dimension(dimension, std::numeric_limits<double>::max());
 
-	for (unsigned int i = 0; i < data->size(); i++) {
-		for (unsigned int dim = 0; dim < dimension; dim++) {
+	for (size_t i = 0; i < data->size(); i++) {
+		for (size_t dim = 0; dim < dimension; dim++) {
 			if (maximum_value_dimension[dim] < (*data)[i][dim]) {
 				maximum_value_dimension[dim] = (*data)[i][dim];
 			}
@@ -191,7 +195,7 @@ void som::create_initial_weights(const som_init_type type) {
 	std::vector<double> width_value_dimension(dimension, 0);
 	std::vector<double> center_value_dimension(dimension, 0);
 
-	for (unsigned int dim = 0; dim < dimension; dim++) {
+	for (size_t dim = 0; dim < dimension; dim++) {
 		width_value_dimension[dim] = maximum_value_dimension[dim] - minimum_value_dimension[dim];
 		center_value_dimension[dim] = (maximum_value_dimension[dim] + minimum_value_dimension[dim]) / 2.0;
 	}
@@ -212,11 +216,11 @@ void som::create_initial_weights(const som_init_type type) {
 	switch (type) {
 		/* Feature SOM 0002: Uniform grid. */
 		case som_init_type::SOM_UNIFORM_GRID: {
-			for (unsigned int i = 0; i < m_size; i++) {
+			for (size_t i = 0; i < m_size; i++) {
 				std::vector<double> & neuron_location = m_location[i];
 				std::vector<double> & neuron_weight = m_weights[i];
 
-				for (unsigned int dim = 0; dim < dimension; dim++) {
+				for (size_t dim = 0; dim < dimension; dim++) {
 					if (dim == 0) {
 						if (m_rows > 1) {
 							neuron_weight[dim] = minimum_value_dimension[dim] + step_x * neuron_location[dim];
@@ -244,10 +248,10 @@ void som::create_initial_weights(const som_init_type type) {
 
 		case som_init_type::SOM_RANDOM_SURFACE: {
 			/* Random weights at the full surface. */
-			for (unsigned int i = 0; i < m_size; i++) {
+			for (size_t i = 0; i < m_size; i++) {
 				std::vector<double> & neuron_weight = m_weights[i];
 
-				for (unsigned int dim = 0; dim < dimension; dim++) {
+				for (size_t dim = 0; dim < dimension; dim++) {
 					std::uniform_real_distribution<double> position_distribution(minimum_value_dimension[dim], maximum_value_dimension[dim]);
 					neuron_weight[dim] = position_distribution(generator);
 				}
@@ -260,10 +264,10 @@ void som::create_initial_weights(const som_init_type type) {
 			/* Random weights at the center of input data. */
 			std::uniform_real_distribution<double> position_distribution(-0.5, 0.5);
 
-			for (unsigned int i = 0; i < m_size; i++) {
+			for (size_t i = 0; i < m_size; i++) {
 				std::vector<double> & neuron_weight = m_weights[i];
 
-				for (unsigned int dim = 0; dim < dimension; dim++) {
+				for (size_t dim = 0; dim < dimension; dim++) {
 					neuron_weight[dim] = position_distribution(generator);
 				}
 			}
@@ -275,10 +279,10 @@ void som::create_initial_weights(const som_init_type type) {
 			/* Random weights of input data. */
 			std::uniform_real_distribution<double> position_distribution(-0.5, 0.5);
 
-			for (unsigned int i = 0; i < m_size; i++) {
+			for (size_t i = 0; i < m_size; i++) {
 				std::vector<double> & neuron_weight = m_weights[i];
 
-				for (unsigned int dim = 0; dim < dimension; dim++) {
+				for (size_t dim = 0; dim < dimension; dim++) {
 					neuron_weight[dim] = position_distribution(generator);
 				}
 			}
@@ -291,11 +295,11 @@ void som::create_initial_weights(const som_init_type type) {
 }
 
 
-unsigned int som::competition(const std::vector<double> & pattern) const {
-	unsigned int index = 0;
+size_t som::competition(const std::vector<double> & pattern) const {
+	size_t index = 0;
 	double minimum = euclidean_distance_sqrt(&m_weights[0], &pattern);
 
-	for (unsigned int i = 1; i < m_size; i++) {
+	for (size_t i = 1; i < m_size; i++) {
 		double candidate = euclidean_distance_sqrt(&m_weights[i], &pattern);
 		if (candidate < minimum) {
 			index = i;
@@ -307,19 +311,19 @@ unsigned int som::competition(const std::vector<double> & pattern) const {
 }
 
 
-unsigned int som::adaptation(const unsigned int index_winner, const std::vector<double> & pattern) {
-	unsigned int dimensions = m_weights[0].size();
-	unsigned int number_adapted_neurons = 0;
+size_t som::adaptation(const size_t index_winner, const std::vector<double> & pattern) {
+	size_t dimensions = m_weights[0].size();
+	size_t number_adapted_neurons = 0;
 
 	if (m_conn_type == som_conn_type::SOM_FUNC_NEIGHBOR) {
-		for (unsigned int neuron_index = 0; neuron_index < m_size; neuron_index++) {
+		for (size_t neuron_index = 0; neuron_index < m_size; neuron_index++) {
 			double distance = m_sqrt_distances[index_winner][neuron_index];
 
 			if (distance < m_local_radius) {
 				double influence = std::exp( -( distance / (2.0 * m_local_radius) ) );
 
 				std::vector<double> & neuron_weight = m_weights[neuron_index];
-				for (unsigned int dim = 0; dim < dimensions; dim++) {
+				for (size_t dim = 0; dim < dimensions; dim++) {
 					neuron_weight[dim] += m_learn_rate * influence * (pattern[dim] - m_weights[neuron_index][dim]);
 				}
 
@@ -329,19 +333,19 @@ unsigned int som::adaptation(const unsigned int index_winner, const std::vector<
 	}
 	else {
 		std::vector<double> & neuron_winner_weight = m_weights[index_winner];
-		for (unsigned int dim = 0; dim < dimensions; dim++) {
+		for (size_t dim = 0; dim < dimensions; dim++) {
 			neuron_winner_weight[dim] += m_learn_rate * (pattern[dim] - neuron_winner_weight[dim] );
 		}
 
-		std::vector<unsigned int> & winner_neighbors = m_neighbors[index_winner];
-		for (std::vector<unsigned int>::iterator neighbor_index = winner_neighbors.begin(); neighbor_index != winner_neighbors.end(); neighbor_index++) {
+		std::vector<size_t> & winner_neighbors = m_neighbors[index_winner];
+		for (std::vector<size_t>::iterator neighbor_index = winner_neighbors.begin(); neighbor_index != winner_neighbors.end(); neighbor_index++) {
 			double distance = m_sqrt_distances[index_winner][*neighbor_index];
 
 			if (distance < m_local_radius) {
 				double influence = std::exp( -( distance / (2.0 * m_local_radius) ) );
 
 				std::vector<double> & neighbor_weight = m_weights[*neighbor_index];
-				for (unsigned int dim = 0; dim < dimensions; dim++) {
+				for (size_t dim = 0; dim < dimensions; dim++) {
 					neighbor_weight[dim] += m_learn_rate * influence * (pattern[dim] - neighbor_weight[dim]);
 				}
 
@@ -354,8 +358,8 @@ unsigned int som::adaptation(const unsigned int index_winner, const std::vector<
 }
 
 
-unsigned int som::train(const std::vector<std::vector<double> > & input_data, const unsigned int num_epochs, bool autostop) {
-    for (unsigned int i = 0; i < m_capture_objects.size(); i++) {
+size_t som::train(const std::vector<std::vector<double> > & input_data, const size_t num_epochs, bool autostop) {
+    for (size_t i = 0; i < m_capture_objects.size(); i++) {
         m_capture_objects[i].clear();
         m_awards[i] = 0;
     }
@@ -369,7 +373,7 @@ unsigned int som::train(const std::vector<std::vector<double> > & input_data, co
 	/* create weights */
 	create_initial_weights(m_params.init_type);
 
-	unsigned int epouch = 1;
+	size_t epouch = 1;
 	for ( ; epouch < (m_epouchs + 1); epouch++) {
 		/* Depression term of coupling */
 		m_local_radius = std::pow( ( m_params.init_radius * std::exp(-( (double) epouch / (double) m_epouchs)) ), 2);
@@ -377,15 +381,15 @@ unsigned int som::train(const std::vector<std::vector<double> > & input_data, co
 
 		/* Feature SOM 0003: Clear statistics */
 		if (autostop == true) {
-			for (unsigned int i = 0; i < m_size; i++) {
+			for (size_t i = 0; i < m_size; i++) {
 				m_awards[i] = 0;
 				m_capture_objects[i].clear();
 			}
 		}
 
-		for (unsigned int i = 0; i < data->size(); i++) {
+		for (size_t i = 0; i < data->size(); i++) {
 			/* Step 1: Competition */
-			unsigned int index_winner = competition((*data)[i]);
+			size_t index_winner = competition((*data)[i]);
 
 			/* Step 2: Adaptation */
 			adaptation(index_winner, (*data)[i]);
@@ -404,7 +408,7 @@ unsigned int som::train(const std::vector<std::vector<double> > & input_data, co
 				return epouch;
 			}
 
-			for (unsigned int i = 0; i < m_weights.size(); i++) {
+			for (size_t i = 0; i < m_weights.size(); i++) {
 				std::copy(m_weights[i].begin(), m_weights[i].end(), m_previous_weights[i].begin());
 			}
 		}
@@ -414,20 +418,20 @@ unsigned int som::train(const std::vector<std::vector<double> > & input_data, co
 }
 
 
-unsigned int som::simulate(const std::vector<double> & pattern) const {
+size_t som::simulate(const std::vector<double> & pattern) const {
 	return competition(pattern);
 }
 
 
 double som::calculate_maximal_adaptation() const {
-	unsigned int dimensions = (*data)[0].size();
+	size_t dimensions = (*data)[0].size();
 	double maximal_adaptation = 0;
 
-	for (unsigned int neuron_index = 0; neuron_index < m_size; neuron_index++) {
+	for (size_t neuron_index = 0; neuron_index < m_size; neuron_index++) {
 		const std::vector<double> & neuron_weight = m_weights[neuron_index];
 		const std::vector<double> & previous_neuron_weight = m_previous_weights[neuron_index];
 
-		for (unsigned int dim = 0; dim < dimensions; dim++) {
+		for (size_t dim = 0; dim < dimensions; dim++) {
 			double current_adaptation = previous_neuron_weight[dim] - neuron_weight[dim];
 
 			if (current_adaptation < 0) { current_adaptation = -current_adaptation; }
@@ -442,9 +446,9 @@ double som::calculate_maximal_adaptation() const {
 }
 
 
-unsigned int som::get_winner_number(void) const {
-	unsigned int winner_number = 0;
-	for (unsigned int i = 0; i < m_size; i++) {
+size_t som::get_winner_number(void) const {
+	size_t winner_number = 0;
+	for (size_t i = 0; i < m_size; i++) {
 		if (m_awards[i] > 0) {
 			winner_number++;
 		}
@@ -453,3 +457,15 @@ unsigned int som::get_winner_number(void) const {
 	return winner_number;
 }
 
+
+double som::calculate_init_radius(const size_t p_rows, const size_t p_cols) const {
+    if ((double)(p_cols + p_rows) / 4.0 > 1.0) {
+        return 2.0;
+    }
+    else if ((p_cols > 1) && (p_rows > 1)) {
+        return 1.5;
+    }
+    else {
+        return 1.0;
+    }
+}

@@ -55,6 +55,7 @@
     <ClCompile Include="interface\pcnn_interface.cpp" />
     <ClCompile Include="interface\pyclustering_package.cpp" />
     <ClCompile Include="interface\rock_interface.cpp" />
+    <ClCompile Include="interface\som_interface.cpp" />
     <ClCompile Include="nnet\legion.cpp" />
     <ClCompile Include="nnet\pcnn.cpp" />
     <ClCompile Include="nnet\som.cpp" />
@@ -109,6 +110,7 @@
     <ClInclude Include="interface\pcnn_interface.h" />
     <ClInclude Include="interface\pyclustering_package.hpp" />
     <ClInclude Include="interface\rock_interface.h" />
+    <ClInclude Include="interface\som_interface.h" />
     <ClInclude Include="nnet\legion.hpp" />
     <ClInclude Include="nnet\network.hpp" />
     <ClInclude Include="nnet\pcnn.hpp" />

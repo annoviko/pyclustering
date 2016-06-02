@@ -47,7 +47,10 @@ class Test(unittest.TestCase):
         for stucture in types:
             network = som(rows, cols, stucture, parameters, ccore = ccore_flag);
             network.train(sample, time, autostop);
-             
+            
+            winners = network.get_winner_number();
+            assert winners == len(expected_result);
+            
             if (sorted(network.awards) != expected_result):
                 network.show_network(awards = True);
                 print(sorted(network.awards));

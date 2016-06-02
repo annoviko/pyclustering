@@ -123,7 +123,7 @@ private:
     * @return Number of links between two clusters.
     *
     */
-    unsigned int calculate_links(const cluster & cluster1, const cluster & cluster2) const;
+    size_t calculate_links(const cluster & cluster1, const cluster & cluster2) const;
 
     /**
     *

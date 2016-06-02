@@ -77,8 +77,8 @@ def som_destroy(som_pointer):
     
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     ccore.som_destroy(som_pointer);
-    
-    
+
+
 def som_train(som_pointer, data, epochs, autostop):
     """!
     @brief Trains self-organized feature map (SOM) using CCORE pyclustering library.
@@ -96,40 +96,55 @@ def som_train(som_pointer, data, epochs, autostop):
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     return ccore.som_train(som_pointer, pointer_data, c_uint(epochs), autostop);
 
+
 def som_simulate(som_pointer, pattern):
-    "Processes input pattern (no learining) and returns index of neuron-winner."
-    "Using index of neuron winner catched object can be obtained using property capture_objects."
+    """!
+    @brief Processes input pattern (no learining) and returns index of neuron-winner.
+    @details Using index of neuron winner catched object can be obtained using property capture_objects.
     
-    "(in) som_pointer      - pointer to object of self-organized map."
-    "(in) input_pattern    - input pattern."
-        
-    "Returns index of neuron-winner."
-            
+    @param[in] som_pointer (c_pointer): pointer to object of self-organized map.
+    @param[in] pattern (list): input pattern.
+    
+    @return Returns index of neuron-winner.
+    
+    """
+    
     pointer_data = create_pointer_data(pattern);
     
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     return ccore.som_simulate(som_pointer, pointer_data);
 
+
 def som_get_winner_number(som_pointer):
-    "Returns of number of winner at the last step of learning process."
+    """!
+    @brief Returns of number of winner at the last step of learning process.
     
-    "(in) som_pointer    - pointer to object of self-organized map."
+    @param[in] som_pointer (c_pointer): pointer to object of self-organized map.
+    
+    """
     
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     return ccore.som_get_winner_number(som_pointer);
 
 def som_get_size(som_pointer):
-    "Returns size of self-organized map (number of neurons)."
+    """!
+    @brief Returns size of self-organized map (number of neurons).
     
-    "(in) som_pointer    - pointer to object of self-organized map."
+    @param[in] som_pointer (c_pointer): pointer to object of self-organized map.
+    
+    """
     
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     return ccore.som_get_size(som_pointer);
 
+
 def som_get_capture_objects(som_pointer):
-    "Returns list of indexes of captured objects by each neuron."
+    """!
+    @brief Returns list of indexes of captured objects by each neuron.
     
-    "(in) som_pointer    - pointer to object of self-organized map."
+    @param[in] som_pointer (c_pointer): pointer to object of self-organized map.
+    
+    """
     
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     package = ccore.som_get_capture_objects(som_pointer);
@@ -137,10 +152,14 @@ def som_get_capture_objects(som_pointer):
     result = extract_pyclustering_package(package);
     return result;
 
+
 def som_get_weights(som_pointer):
-    "Returns list of weights of each neuron."
+    """!
+    @brief Returns list of weights of each neuron.
     
-    "(in) som_pointer    - pointer to object of self-organized map."
+    @param[in] som_pointer (c_pointer): pointer to object of self-organized map.
+    
+    """
     
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     package = ccore.som_get_weights(som_pointer);
@@ -148,10 +167,14 @@ def som_get_weights(som_pointer):
     result = extract_pyclustering_package(package);
     return result;   
 
+
 def som_get_awards(som_pointer):
-    "Returns list of numbers of captured objects by each neuron."
+    """!
+    @brief Returns list of amount of captured objects by each neuron.
     
-    "(in) som_pointer    - pointer to object of self-organized map."
+    @param[in] som_pointer (c_pointer): pointer to object of self-organized map.
+    
+    """
     
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     package = ccore.som_get_awards(som_pointer);
@@ -159,10 +182,14 @@ def som_get_awards(som_pointer):
     result = extract_pyclustering_package(package);
     return result;  
 
+
 def som_get_neighbors(som_pointer):
-    "Returns list of indexes of neighbors of each neuron."
+    """!
+    @brief Returns list of indexes of neighbors of each neuron.
     
-    "(in) som_pointer    - pointer to object of self-organized map."
+    @param[in] som_pointer (c_pointer): pointer to object of self-organized map.
+    
+    """
     
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     package = ccore.som_get_neighbors(som_pointer);
