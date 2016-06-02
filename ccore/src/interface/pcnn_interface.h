@@ -163,7 +163,7 @@ extern "C" DECLARATION pyclustering_package * pcnn_dynamic_get_time(const void *
 * @return   Size of the output dynamic of the network (PCNN).
 *
 */
-extern "C" DECLARATION unsigned int pcnn_dynamic_get_size(const void * pointer);
+extern "C" DECLARATION size_t pcnn_dynamic_get_size(const void * pointer);
 
 
 #endif
