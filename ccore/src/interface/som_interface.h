@@ -22,11 +22,14 @@
 #define SRC_INTERFACE_SOM_INTERFACE_H_
 
 
+#include <cstddef>
+
 #include "nnet/som.hpp"
 
 #include "interface/pyclustering_package.hpp"
 
 #include "definitions.hpp"
+
 #include "utils.hpp"
 
 

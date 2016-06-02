@@ -30,7 +30,6 @@
 #include "cluster/xmeans.hpp"
 
 #include "nnet/legion.hpp"
-#include "nnet/som.hpp"
 #include "nnet/sync.hpp"
 #include "nnet/syncpr.hpp"
 
