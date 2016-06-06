@@ -93,19 +93,19 @@ class Test(unittest.TestCase):
      
      
     def testOutputDynamicLengthStaticSimulation(self):
-        self.templateOutputDynamicLengthStaticSimulation(True, False);    
+        self.templateOutputDynamicLengthStaticSimulation(True, False);
  
  
     def testOutputDynamicLengthStaticSimulationWithouCollecting(self):
-        self.templateOutputDynamicLengthStaticSimulation(False, False);   
+        self.templateOutputDynamicLengthStaticSimulation(False, False);
  
  
     def testOutputDynamicLengthStaticSimulationByCore(self):
-        self.templateOutputDynamicLengthStaticSimulation(True, True);    
+        self.templateOutputDynamicLengthStaticSimulation(True, True);
  
  
     def testOutputDynamicLengthStaticSimulationWithouCollectingByCore(self):
-        self.templateOutputDynamicLengthStaticSimulation(False, True);   
+        self.templateOutputDynamicLengthStaticSimulation(False, True);
     
      
     def templateOutputDynamicLengthDynamicSimulation(self, collect_flag, ccore_flag):

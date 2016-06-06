@@ -309,7 +309,7 @@ class network:
                     self.__osc_conn[index][index - 1] = True;
                     
                 if (index < (self._num_osc - 1)):
-                    self.__osc_conn[index][index + 1] = True;   
+                    self.__osc_conn[index][index + 1] = True;
                     
         elif (self.__conn_represent == conn_represent.LIST):
             for index in range(self._num_osc):

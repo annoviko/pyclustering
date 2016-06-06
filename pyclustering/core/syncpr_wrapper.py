@@ -35,7 +35,7 @@ def pack_pattern(pattern):
     package.data = cast(c_pattern, POINTER(c_void_p));
     
     return package;
-    
+
 
 def syncpr_create(num_osc, increase_strength1, increase_strength2):
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);

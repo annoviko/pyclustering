@@ -32,7 +32,7 @@ import random;
 
 import pyclustering.core.legion_wrapper as wrapper;
 
-from pyclustering.nnet import *;  
+from pyclustering.nnet import *;
 
 from pyclustering.utils import heaviside, allocate_sync_ensembles;
 
@@ -321,7 +321,7 @@ class legion_network(network):
                     dynamic_weight = self._params.Wt / number_stimulated_neighbors;
                     
                     for j in neighbors:
-                        self._dynamic_coupling[i][j] = dynamic_weight;    
+                        self._dynamic_coupling[i][j] = dynamic_weight;
     
     
     def simulate(self, steps, time, stimulus, solution = solve_type.RK4, collect_dynamic = True):
@@ -413,7 +413,7 @@ class legion_network(network):
                 
             else:
                 result = odeint(self._legion_state_simplify, [self._excitatory[index], self._inhibitory[index] ], numpy.arange(t - step, t, int_step), (index , ));
-                [ next_excitatory[index], next_inhibitory[index] ] = result[len(result) - 1][0:2];               
+                [ next_excitatory[index], next_inhibitory[index] ] = result[len(result) - 1][0:2];
             
             # Update coupling term
             neighbors = self.get_neighbors(index);
@@ -522,4 +522,3 @@ class legion_network(network):
         dp = self._params.lamda * (1.0 - p) * heaviside(potential - self._params.teta_p) - self._params.mu * p;
         
         return [dx, dy, dp];
-    

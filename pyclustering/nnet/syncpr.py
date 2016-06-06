@@ -33,6 +33,7 @@ import pyclustering.core.syncpr_wrapper as wrapper;
 from PIL import Image;
 
 import matplotlib.pyplot as plt;
+import matplotlib.animation as animation;
 
 import math;
 import cmath;
@@ -53,8 +54,8 @@ class syncpr_dynamic(sync_dynamic):
         @param[in] time (list): Simulation time.
         @param[in] ccore (ctypes.pointer): Pointer to CCORE sync_dynamic instance in memory.
         
-        """     
-        super().__init__(phase, time, ccore);       
+        """
+        super().__init__(phase, time, ccore);
 
 
 class syncpr_visualizer(sync_visualizer):
@@ -78,8 +79,6 @@ class syncpr_visualizer(sync_visualizer):
         if (number_pictures > 50):
             iteration_math_step = number_pictures / 50.0;
             number_pictures = 50;
-            
-        image_size = image_height * image_width;
         
         number_cols = int(numpy.ceil(number_pictures ** 0.5));
         number_rows = int(numpy.ceil(number_pictures / number_cols));
@@ -90,7 +89,7 @@ class syncpr_visualizer(sync_visualizer):
             real_index = 0;
             double_indexer = False;
         
-        (fig, axarr) = plt.subplots(number_rows, number_cols);
+        (_, axarr) = plt.subplots(number_rows, number_cols);
         
         if (number_pictures > 1):
             plt.setp([ax for ax in axarr], visible = False);
@@ -100,30 +99,11 @@ class syncpr_visualizer(sync_visualizer):
             if (iteration >= iteration_display):
                 iteration_display += iteration_math_step;
                 
-                current_dynamic = syncpr_output_dynamic.output[iteration];
-                stage_picture = [(255, 255, 255)] * image_size;
-                for index_phase in range(len(current_dynamic)):
-                    phase = current_dynamic[index_phase];
-                    
-                    pixel_color = math.floor( phase * (255 / (2 * math.pi)) );
-                    stage_picture[index_phase] = (pixel_color, pixel_color, pixel_color);
-                  
-                stage = numpy.array(stage_picture, numpy.uint8);
-                stage = numpy.reshape(stage, (image_height, image_width) + ((3),)); # ((3),) it's size of RGB - third dimension.
-                
-                image_cluster = Image.fromarray(stage, 'RGB');
-                
                 ax_handle = axarr;
                 if (number_pictures > 1):
                     ax_handle = axarr[real_index];
                     
-                ax_handle.imshow(image_cluster, interpolation = 'none');
-                plt.setp(ax_handle, visible = True);
-                
-                ax_handle.xaxis.set_ticklabels([]);
-                ax_handle.yaxis.set_ticklabels([]);
-                ax_handle.xaxis.set_ticks_position('none');
-                ax_handle.yaxis.set_ticks_position('none');
+                syncpr_visualizer.__show_pattern(ax_handle, syncpr_output_dynamic, image_height, image_width, iteration);
                 
                 if (double_indexer is True):
                     real_index = real_index[0], real_index[1] + 1;
@@ -133,6 +113,90 @@ class syncpr_visualizer(sync_visualizer):
                     real_index += 1;
     
         plt.show();
+    
+    
+    @staticmethod
+    def animate_pattern_recognition(syncpr_output_dynamic, image_height, image_width, animation_velocity = 75, title = None, save_movie = None):
+        """!
+        @brief Shows animation of pattern recognition process that has been preformed by the oscillatory network.
+        
+        @param[in] syncpr_output_dynamic (syncpr_dynamic): Output dynamic of a syncpr network.
+        @param[in] image_height (uint): Height of the pattern (image_height * image_width should be equal to number of oscillators).
+        @param[in] image_width (uint): Width of the pattern.
+        @param[in] animation_velocity (uint): Interval between frames in milliseconds.
+        @param[in] title (string): Title of the animation that is displayed on a figure if it is specified.
+        @param[in] save_movie (string): If it is specified then animation will be stored to file that is specified in this parameter.
+        
+        """
+        figure = plt.figure();
+        
+        def init_frame():
+            return frame_generation(0);
+        
+        def frame_generation(index_dynamic):
+            figure.clf();
+            
+            if (title is not None):
+                figure.suptitle(title, fontsize = 26, fontweight = 'bold')
+            
+            ax1 = figure.add_subplot(121, projection='polar');
+            ax2 = figure.add_subplot(122);
+            
+            dynamic = syncpr_output_dynamic.output[index_dynamic];
+            
+            artist1, = ax1.plot(dynamic, [1.0] * len(dynamic), marker = 'o', color = 'blue', ls = '');
+            artist2 = syncpr_visualizer.__show_pattern(ax2, syncpr_output_dynamic, image_height, image_width, index_dynamic);
+            
+            return [ artist1, artist2 ];
+        
+        cluster_animation = animation.FuncAnimation(figure, frame_generation, len(syncpr_output_dynamic), interval = animation_velocity, init_func = init_frame, repeat_delay = 5000);
+
+        if (save_movie is not None):
+#             plt.rcParams['animation.ffmpeg_path'] = 'C:\\Users\\annoviko\\programs\\ffmpeg-win64-static\\bin\\ffmpeg.exe';
+#             ffmpeg_writer = animation.FFMpegWriter();
+#             cluster_animation.save(save_movie, writer = ffmpeg_writer, fps = 15);
+            cluster_animation.save(save_movie, writer = 'ffmpeg', fps = 15, bitrate = 1500);
+        else:
+            plt.show();
+    
+    
+    @staticmethod
+    def __show_pattern(ax_handle, syncpr_output_dynamic, image_height, image_width, iteration):
+        """!
+        @brief Draws pattern on specified ax.
+        
+        @param[in] ax_handle (Axis): Axis where pattern should be drawn.
+        @param[in] syncpr_output_dynamic (syncpr_dynamic): Output dynamic of a syncpr network.
+        @param[in] image_height (uint): Height of the pattern (image_height * image_width should be equal to number of oscillators).
+        @param[in] image_width (uint): Width of the pattern.
+        @param[in] iteration (uint): Simulation iteration that should be used for extracting pattern.
+        
+        @return (matplotlib.artist) Artist (pattern) that is rendered in the canvas.
+        
+        """
+        
+        current_dynamic = syncpr_output_dynamic.output[iteration];
+        stage_picture = [(255, 255, 255)] * (image_height * image_width);
+        for index_phase in range(len(current_dynamic)):
+            phase = current_dynamic[index_phase];
+            
+            pixel_color = math.floor( phase * (255 / (2 * math.pi)) );
+            stage_picture[index_phase] = (pixel_color, pixel_color, pixel_color);
+          
+        stage = numpy.array(stage_picture, numpy.uint8);
+        stage = numpy.reshape(stage, (image_height, image_width) + ((3),)); # ((3),) it's size of RGB - third dimension.
+        
+        image_cluster = Image.fromarray(stage);
+        
+        artist = ax_handle.imshow(image_cluster, interpolation = 'none');
+        plt.setp(ax_handle, visible = True);
+        
+        ax_handle.xaxis.set_ticklabels([]);
+        ax_handle.yaxis.set_ticklabels([]);
+        ax_handle.xaxis.set_ticks_position('none');
+        ax_handle.yaxis.set_ticks_position('none');
+        
+        return artist;
 
 
 class syncpr(sync_network):
@@ -260,7 +324,7 @@ class syncpr(sync_network):
         return self.simulate_static(steps, time, pattern, solution, collect_dynamic);
     
     
-    def simulate_dynamic(self, pattern, order = 0.998, solution = solve_type.FAST, collect_dynamic = False, step = 0.1, int_step = 0.01, threshold_changes = 0.0000001):
+    def simulate_dynamic(self, pattern, order = 0.998, solution = solve_type.RK4, collect_dynamic = False, step = 0.1, int_step = 0.01, threshold_changes = 0.0000001):
         """!
         @brief Performs dynamic simulation of the network until stop condition is not reached.
         @details In other words network performs pattern recognition during simulation. 
@@ -311,7 +375,7 @@ class syncpr(sync_network):
             dyn_time.append(0);
         
         # Execute until sync state will be reached
-        while (current_order < order):                
+        while (current_order < order):
             # update states of oscillators
             self._phases = self._calculate_phases(solution, time_counter, step, int_step);
             

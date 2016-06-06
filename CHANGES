@@ -1,7 +1,9 @@
 Change notes for 0.7.dev0 (started Jun 01, 2016)
 
 GENERAL CHANGES (pyclustering):
-
+- Implemented feature to shows animation of pattern recognition process that has been preformed by the SyncPR oscillatory network. Method 'animate_pattern_recognition()' of class 'syncpr_visualizer' (pyclustering.nnet.syncpr).
+  See: https://www.youtube.com/watch?v=Ro7KbApL4MQ
+  See: https://www.youtube.com/watch?v=iIusOsGehoY
 
 GENERAL CHANGES (ccore):
 
