@@ -227,21 +227,29 @@ class Test(unittest.TestCase):
         self.templateIncorrectPatternForSimulation(pattern);
      
      
-    def templatePatternVisualizer(self, collect_dynamic):
-        net = syncpr(5, 0.1, 0.1);
+    def templatePatternVisualizer(self, collect_dynamic, ccore_flag = False):
+        net = syncpr(5, 0.1, 0.1, ccore = ccore_flag);
         output_dynamic = net.simulate(10, 10, [-1, 1, -1, 1, -1], solve_type.RK4, collect_dynamic);
          
-        # test that we don't have any exception during vizualization.
         syncpr_visualizer.show_pattern(output_dynamic, 5, 2);
-             
-     
+        syncpr_visualizer.animate_pattern_recognition(output_dynamic, 1, 5);
+    
+    
     def testPatternVisualizerCollectDynamic(self):
         self.templatePatternVisualizer(True);
      
      
+    def testPatternVisualizerCollectDynamicByCore(self):
+        self.templatePatternVisualizer(True, True);
+    
+    
     def testPatternVisualizerWithoutCollectDynamic(self):
         self.templatePatternVisualizer(False);
-        
+    
+    
+    def testPatternVisualizerWithoutCollectDynamicByCore(self):
+        self.templatePatternVisualizer(False, True);
+    
     
     def templateMemoryOrder(self, ccore_flag):
         net = syncpr(10, 0.1, 0.1, ccore_flag);

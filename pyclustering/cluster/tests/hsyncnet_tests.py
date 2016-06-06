@@ -38,7 +38,7 @@ class Test(unittest.TestCase):
         result_testing = False;
         
         # If phases crosses each other because of random part of the network then we should try again.
-        for _ in range(0, 3, 1):
+        for _ in range(0, 6, 1):
             sample = read_sample(path);
             network = hsyncnet(sample, number_clusters, initial_type.EQUIPARTITION, initial_neighbors, increase_persent, ccore = ccore_flag);
             
