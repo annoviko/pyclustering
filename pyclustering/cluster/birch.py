@@ -47,7 +47,7 @@ class birch:
         birch_instance.process();
         
         # obtain results of clustering
-        clusters = birch_instance.get_clusters();  
+        clusters = birch_instance.get_clusters();
     @endcode
     
     """
@@ -115,7 +115,7 @@ class birch:
         
         # in line with specification modify hierarchical algorithm should be used for further clustering
         current_number_clusters = len(self.__features);
-            
+        
         while (current_number_clusters > self.__number_clusters):
             indexes = self.__find_nearest_cluster_features();
             
@@ -130,7 +130,7 @@ class birch:
         for index_point in range(0, len(self.__pointer_data)):
             cluster_index = self.__get_nearest_feature(self.__pointer_data[index_point]);
             self.__clusters[cluster_index].append(index_point);
-            
+        
         
     def get_clusters(self):
         """!
