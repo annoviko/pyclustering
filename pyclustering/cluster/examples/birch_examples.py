@@ -23,27 +23,32 @@
 
 """
 
+from pyclustering.cluster import cluster_visualizer;
 from pyclustering.cluster.birch import birch;
 
 from pyclustering.container.cftree import measurement_type;
 
 from pyclustering.utils import read_sample;
-from pyclustering.utils import draw_clusters;
 from pyclustering.utils import timedcall;
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
 
 
-def template_clustering(number_clusters, path, branching_factor = 5, max_node_entries = 5, initial_diameter = 0.0, type_measurement = measurement_type.CENTROID_EUCLIDIAN_DISTANCE, entry_size_limit = 200, ccore = True):
+def template_clustering(number_clusters, path, branching_factor = 5, max_node_entries = 5, initial_diameter = 0.0, type_measurement = measurement_type.AVERAGE_INTER_CLUSTER_DISTANCE, entry_size_limit = 200, diameter_multiplier = 1.5, outlier_detector = 0):
     sample = read_sample(path);
 
-    birch_instance = birch(sample, number_clusters, branching_factor, max_node_entries, initial_diameter, type_measurement, entry_size_limit, ccore);
+    birch_instance = birch(sample, number_clusters, branching_factor, max_node_entries, initial_diameter, type_measurement, entry_size_limit, diameter_multiplier, outlier_detector);
     (ticks, result) = timedcall(birch_instance.process);
 
     print("Sample: ", path, "\t\tExecution time: ", ticks, "\n");
 
     clusters = birch_instance.get_clusters();
-    draw_clusters(sample, clusters);
+    noise = birch_instance.get_noise();
+    
+    visualizer = cluster_visualizer();
+    visualizer.append_clusters(clusters, sample);
+    visualizer.append_cluster(noise, sample, marker = 'x');
+    visualizer.show();
 
 
 def cluster_sample1():
@@ -71,6 +76,12 @@ def cluster_sample8():
 def cluster_elongate():
     template_clustering(2, SIMPLE_SAMPLES.SAMPLE_ELONGATE);
 
+def cluster_densities1():
+    template_clustering(1, SIMPLE_SAMPLES.SAMPLE_DENSITIES1, branching_factor = 20, initial_diameter = 0.1, max_node_entries = 3, entry_size_limit = 200, outlier_detector = 1);
+
+def cluster_densities2():
+    template_clustering(2, SIMPLE_SAMPLES.SAMPLE_DENSITIES2, branching_factor = 5, initial_diameter = 0.2, max_node_entries = 10, entry_size_limit = 200, outlier_detector = 2);
+
 def cluster_lsun():
     template_clustering(3, FCPS_SAMPLES.SAMPLE_LSUN);
     template_clustering(3, FCPS_SAMPLES.SAMPLE_LSUN, 5, 5, 0.2, measurement_type.CENTROID_MANHATTAN_DISTANCE, 200);         # not correct, but almost good result
@@ -81,14 +92,14 @@ def cluster_target():
     template_clustering(6, FCPS_SAMPLES.SAMPLE_TARGET, 50, 100, 0.5, measurement_type.VARIANCE_INCREASE_DISTANCE, 200);      # interesting - sliced cake.
 
 def cluster_two_diamonds():
-    template_clustering(2, FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS);  
+    template_clustering(2, FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS);
 
 def cluster_wing_nut():
     template_clustering(2, FCPS_SAMPLES.SAMPLE_WING_NUT);
     template_clustering(2, FCPS_SAMPLES.SAMPLE_WING_NUT, 5, 5, 0.1, measurement_type.CENTROID_EUCLIDIAN_DISTANCE, 800);     # not correct, but almost good result
 
 def cluster_chainlink():
-    template_clustering(2, FCPS_SAMPLES.SAMPLE_CHAINLINK);     
+    template_clustering(2, FCPS_SAMPLES.SAMPLE_CHAINLINK);
 
 def cluster_hepta():
     template_clustering(7, FCPS_SAMPLES.SAMPLE_HEPTA); 
@@ -125,6 +136,8 @@ cluster_sample4();
 cluster_sample5();
 cluster_sample7();
 cluster_sample8();
+cluster_densities1();
+cluster_densities2();
 cluster_elongate();
 cluster_lsun();
 cluster_target();

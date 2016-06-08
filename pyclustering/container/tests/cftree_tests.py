@@ -27,13 +27,16 @@ import unittest;
 
 import numpy;
 
+import math;
+
+from random import random;
+
 from pyclustering.container.cftree import cfentry, cftree;
 from pyclustering.container.cftree import measurement_type;
 
 from pyclustering.utils import linear_sum, square_sum;
 from pyclustering.utils import euclidean_distance_sqrt, manhattan_distance, average_inter_cluster_distance, average_intra_cluster_distance, variance_increase_distance;
 
-from random import random;
 
 class Test(unittest.TestCase):
     def templateCfClusterRepresentation(self, cluster, centroid, radius, diameter, tolerance):
@@ -270,8 +273,8 @@ class Test(unittest.TestCase):
               
             assert None == tree.root.parent;
             assert absorbing_entry == tree.root.feature;
-             
-     
+    
+    
     def templateCfTreeTotalNumberPoints(self, number_points, dimension, branching_factor, number_entries, diameter):
         tree = cftree(branching_factor, number_entries, diameter);
          
@@ -296,7 +299,7 @@ class Test(unittest.TestCase):
             print(number_points, number_leaf_points);
              
         assert number_points == number_leaf_points;
-         
+    
     def testCfTreeTotalNumberPoints10_1_5_5_NoDiameter(self):
         self.templateCfTreeTotalNumberPoints(10, 1, 5, 5, 0.0);
  
@@ -320,13 +323,107 @@ class Test(unittest.TestCase):
           
     def testCfTreeTotalNumberPoints100_2_2_1_NoDiameter(self):
         self.templateCfTreeTotalNumberPoints(100, 2, 2, 1, 0.0);
-          
+    
     def testCfTreeTotalNumberPoints100_2_2_1_WithDiameter(self):
         self.templateCfTreeTotalNumberPoints(100, 2, 2, 1, 100.0);
          
     def testCfTreeTotalNumberPoints100_2_5_5_WithSmallDiameter(self):
         self.templateCfTreeTotalNumberPoints(100, 2, 5, 5, 10.0);
+    
+    
+    def templateTreeHeight(self, number_points, branching_factor):
+        tree = cftree(branching_factor, 1, 0.1);
+         
+        for index_point in range(0, number_points):
+            point = [ index_point ];
+            tree.insert_cluster([ point ]);
         
+        assert math.floor(math.log(number_points, branching_factor)) <= tree.height;
+    
+    
+    def testObtainNodesFromTheLevel_7_2(self):
+        self.templateTreeHeight(7, 2);
+    
+    def testObtainNodesFromTheLevel_63_2(self):
+        self.templateTreeHeight(63, 2);
+    
+    def testObtainNodesFromTheLevel_40_3(self):
+        self.templateTreeHeight(40, 3);
+    
+    def testObtainNodesFromTheLevel_21_4(self):
+        self.templateTreeHeight(21, 4);
+    
+    def testObtainNodesFromTheLevel_156_5(self):
+        self.templateTreeHeight(156, 5);
+
+
+    def templateLevelNodeObtaining(self, number_points, branching_factor):
+        tree = cftree(branching_factor, 1, 0.1);
+         
+        for index_point in range(0, number_points):
+            point = [ index_point ];
+            tree.insert_cluster([ point ]);
         
+        total_node_amount = 0;
+        for level in range(0, tree.height):
+            nodes = tree.get_level_nodes(level);
+            total_node_amount += len(nodes);
+        
+        assert tree.amount_nodes == total_node_amount;
+
+    def testLevelNodeObtaining_7_2(self):
+        self.templateLevelNodeObtaining(7, 2);
+
+    def testLevelNodeObtaining_10_2(self):
+        self.templateLevelNodeObtaining(10, 2);
+
+    def testLevelNodeObtaining_7_3(self):
+        self.templateLevelNodeObtaining(7, 3);
+
+    def testLevelNodeObtaining_20_3(self):
+        self.templateLevelNodeObtaining(20, 3);
+
+    def testLevelNodeObtaining_26_3(self):
+        self.templateLevelNodeObtaining(26, 3);
+
+    def testLevelNodeObtaining_16_4(self):
+        self.templateLevelNodeObtaining(16, 4);
+
+    def testLevelNodeObtaining_34_4(self):
+        self.templateLevelNodeObtaining(34, 4);
+    
+    
+    def templateLeafNodeAndEntriesAmount(self, number_points, branching_factor):
+        tree = cftree(branching_factor, 1, 0.1);
+        
+        current_size = 0;
+        for index_point in range(0, number_points):
+            point = [ index_point ];
+            tree.insert_cluster([ point ]);
+            
+            current_size += 1;
+            
+            assert current_size == tree.amount_entries;
+            assert current_size == len(tree.leafes);
+        
+        assert number_points == tree.amount_entries;
+        assert number_points == len(tree.leafes);
+    
+    def testLeafNodeAndEntriesAmount_5_2(self):
+        self.templateLeafNodeAndEntriesAmount(5, 2);
+
+    def testLeafNodeAndEntriesAmount_10_2(self):
+        self.templateLeafNodeAndEntriesAmount(10, 2);
+
+    def testLeafNodeAndEntriesAmount_6_3(self):
+        self.templateLeafNodeAndEntriesAmount(6, 3);
+
+    def testLeafNodeAndEntriesAmount_18_3(self):
+        self.templateLeafNodeAndEntriesAmount(18, 3);
+
+    def testLeafNodeAndEntriesAmount_16_4(self):
+        self.templateLeafNodeAndEntriesAmount(16, 4);
+
+
 if __name__ == "__main__":
     unittest.main();

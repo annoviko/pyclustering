@@ -5,10 +5,20 @@ GENERAL CHANGES (pyclustering):
   See: https://www.youtube.com/watch?v=Ro7KbApL4MQ
   See: https://www.youtube.com/watch?v=iIusOsGehoY
 
+- Implemented feature to obtain nodes of specified level of CF-tree. Method 'get_level_nodes()' of class 'cftree' (pyclustering.container.cftree).
+  See: no reference.
+
+- Implemented featore to extract noise using BIRCH algorithm (pyclustering.cluster.birch).
+  See: https://github.com/annoviko/pyclustering/issues/258
+
+
 GENERAL CHANGES (ccore):
 
 
 CORRECTED MAJOR BUGS:
+
+- Bug with loss of CF-nodes in CF-tree during inserting that leads unbalanced CF-tree (pyclustering.container.cftree).
+  See: https://github.com/annoviko/pyclustering/issues/304
 
 
 ------------------------------------------------------------------------

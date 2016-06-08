@@ -81,10 +81,10 @@ def cluster_lsun():
     template_clustering(FCPS_SAMPLES.SAMPLE_LSUN, 0.5, 3);
     
 def cluster_target():
-    template_clustering(FCPS_SAMPLES.SAMPLE_TARGET, 0.5, 2);    
+    template_clustering(FCPS_SAMPLES.SAMPLE_TARGET, 0.5, 2);
     
 def cluster_two_diamonds():
-    template_clustering(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, 0.15, 7);   
+    template_clustering(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, 0.15, 7);
     
 def cluster_wing_nut():
     template_clustering(FCPS_SAMPLES.SAMPLE_WING_NUT, 0.25, 2);
@@ -105,9 +105,9 @@ def cluster_tetra():
     template_clustering(FCPS_SAMPLES.SAMPLE_TETRA, 0.4, 3);
      
 def cluster_engy_time():
-    template_clustering(FCPS_SAMPLES.SAMPLE_ENGY_TIME, 0.2, 20);    
-    
-    
+    template_clustering(FCPS_SAMPLES.SAMPLE_ENGY_TIME, 0.2, 20);
+
+
 cluster_sample1();
 cluster_sample2();
 cluster_sample3();

@@ -52,7 +52,7 @@ class birch:
     
     """
     
-    def __init__(self, data, number_clusters, branching_factor = 5, max_node_entries = 5, initial_diameter = 0.1, type_measurement = measurement_type.CENTROID_EUCLIDIAN_DISTANCE, entry_size_limit = 200, ccore = False):
+    def __init__(self, data, number_clusters, branching_factor = 5, max_node_entries = 5, initial_diameter = 0.1, type_measurement = measurement_type.CENTROID_EUCLIDIAN_DISTANCE, entry_size_limit = 200, diameter_multiplier = 1.5, outlier_detector = 0, ccore = False):
         """!
         @brief Constructor of clustering algorithm BIRCH.
         
@@ -63,6 +63,8 @@ class birch:
         @param[in] initial_diameter (double): Initial diameter that used for CF-Tree construction, it can be increase if entry_size_limit is exceeded.
         @param[in] type_measurement (measurement_type): Type measurement used for calculation distance metrics.
         @param[in] entry_size_limit (uint): Maximum number of entries that can be stored in CF-Tree, if it is exceeded during creation then diameter is increased and CF-Tree is rebuilt.
+        @param[in] diameter_multiplier (double): Multiplier that is used for increasing diameter when entry_size_limit is exceeded.
+        @param[in] outlier_detector (uint): Minimum number of data points that should be contained by node to be considered as non-outlier node.
         @param[in] ccore (bool): If True than DLL CCORE (C++ solution) will be used for solving the problem.
         
         @remark Despite eight arguments only the first two is mandatory, others can be ommitted. In this case default values are used for instance creation.
@@ -84,13 +86,15 @@ class birch:
         
         self.__measurement_type = type_measurement;
         self.__entry_size_limit = entry_size_limit;
+        self.__diameter_multiplier = diameter_multiplier;
+        self.__outlier_detector = outlier_detector;
         self.__ccore = ccore;
         
         self.__features = None;
         self.__tree = cftree(branching_factor, max_node_entries, initial_diameter, type_measurement);
         
-        self.__clusters = None;
-        self.__noise = None;
+        self.__clusters = [];
+        self.__noise = [];
 
 
     def process(self):
@@ -100,19 +104,13 @@ class birch:
         @remark Results of clustering can be obtained using corresponding gets methods.
         
         @see get_clusters()
+        @see get_noise()
         
         """
         
         self.__insert_data();
-        
-        self.__features = None;
-        if (len(self.__tree.leafes) == 1):
-            # parameters are too general, copy all entries
-            self.__features = [ copy(entry) for entry in self.__tree.leafes[0].entries ];
-        else: 
-            # copy all leaf clustering features
-            self.__features = [ copy(node.feature) for node in self.__tree.leafes ];
-        
+        self.__extract_features();
+
         # in line with specification modify hierarchical algorithm should be used for further clustering
         current_number_clusters = len(self.__features);
         
@@ -125,27 +123,88 @@ class birch:
             current_number_clusters = len(self.__features);
             
         # decode data
-        self.__clusters = [ [] for i in range(self.__number_clusters) ];
-        
-        for index_point in range(0, len(self.__pointer_data)):
-            cluster_index = self.__get_nearest_feature(self.__pointer_data[index_point]);
-            self.__clusters[cluster_index].append(index_point);
-        
-        
+        self.__decode_data();
+    
+    
     def get_clusters(self):
         """!
         @brief Returns list of allocated clusters, each cluster contains indexes of objects in list of data.
         
+        @remark Allocated noise can be returned only after data processing (use method process() before). Otherwise empty list is returned.
+        
         @return (list) List of allocated clusters.
+        
+        @see process()
+        @see get_noise()
         
         """
         
         return self.__clusters;
     
     
+    def get_noise(self):
+        """!
+        @brief Returns allocated noise.
+        
+        @remark Allocated noise can be returned only after data processing (use method process() before). Otherwise empty list is returned.
+        
+        @return (list) List of indexes that are marked as a noise.
+        
+        @see process()
+        @see get_clusters()
+        
+        """
+        
+        return self.__noise;
+    
+    
+    def __extract_features(self):
+        """!
+        @brief Extracts features and outlier features from CF-tree cluster.
+        
+        """
+        
+        self.__features = [];
+        self.__outlier_features = [];
+        
+        if (len(self.__tree.leafes) == 1):
+            # parameters are too general, copy all entries
+            for entry in self.__tree.leafes[0].entries:
+                if (self.__outlier_detector < entry.number_points):
+                    self.__features.append(entry);
+                else:
+                    self.__outlier_features.append(entry);
+        else:
+            # copy all leaf clustering features
+            for node in self.__tree.leafes:
+                if (self.__outlier_detector < node.feature.number_points):
+                    self.__features.append(node.feature);
+                else:
+                    self.__outlier_features.append(node.feature);
+    
+    
+    def __decode_data(self):
+        """!
+        @brief Decodes data from CF-tree features.
+        
+        """
+        
+        self.__clusters = [ [] for _ in range(self.__number_clusters) ];
+        self.__noise = [];
+        
+        for index_point in range(0, len(self.__pointer_data)):
+            (cluster_distance, cluster_index) = self.__get_nearest_feature(self.__pointer_data[index_point], self.__features);
+            (outlier_distance, _) = self.__get_nearest_feature(self.__pointer_data[index_point], self.__outlier_features);
+            
+            if (cluster_distance < outlier_distance):
+                self.__clusters[cluster_index].append(index_point);
+            else:
+                self.__noise.append(index_point);
+    
+    
     def __insert_data(self):
         """!
-        @brief Insert input data to the tree.
+        @brief Inserts input data to the tree.
         
         @remark If number of maximum number of entries is exceeded than diameter is increased and tree is rebuilt.
         
@@ -157,6 +216,8 @@ class birch:
             
             if (self.__tree.amount_entries > self.__entry_size_limit):
                 self.__tree = self.__rebuild_tree(index_point);
+        
+        #self.__tree.show_feature_destibution(self.__pointer_data);
     
     
     def __rebuild_tree(self, index_point):
@@ -170,7 +231,7 @@ class birch:
         """
         
         rebuild_result = False;
-        increased_diameter = self.__tree.threshold * 1.5;
+        increased_diameter = self.__tree.threshold * self.__diameter_multiplier;
         
         tree = None;
         
@@ -187,7 +248,7 @@ class birch:
                 tree.insert_cluster([point]);
             
                 if (tree.amount_entries > self.__entry_size_limit):
-                    increased_diameter *= 1.5;
+                    increased_diameter *= self.__diameter_multiplier;
                     continue;
             
             # Re-build is successful.
@@ -223,27 +284,26 @@ class birch:
         return [index1, index2];
     
     
-    def __get_nearest_feature(self, point):
+    def __get_nearest_feature(self, point, feature_collection):
         """!
         @brief Find nearest entry for specified point.
         
         @param[in] point (list): Pointer to point from input dataset.
+        @param[in] feature_collection (list): Feature collection that is used for obtaining nearest feature for the specified point.
         
-        @return (uint) Index of nearest entry to the specified point.
+        @return (double, uint) Tuple of distance to nearest entry to the specified point and index of that entry.
         
         """
         
         minimum_distance = float("Inf");
         index_nearest_feature = -1;
         
-        for index_entry in range(0, len(self.__features)):
+        for index_entry in range(0, len(feature_collection)):
             point_entry = cfentry(1, linear_sum([ point ]), square_sum([ point ]));
             
-            distance = self.__features[index_entry].get_distance(point_entry, self.__measurement_type);
+            distance = feature_collection[index_entry].get_distance(point_entry, self.__measurement_type);
             if (distance < minimum_distance):
                 minimum_distance = distance;
                 index_nearest_feature = index_entry;
                 
-        return index_nearest_feature;
-                
-        
+        return (minimum_distance, index_nearest_feature);
