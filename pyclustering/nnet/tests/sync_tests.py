@@ -272,8 +272,10 @@ class Test(unittest.TestCase):
         sync_visualizer.animate(output_dynamic);
         sync_visualizer.animate_correlation_matrix(output_dynamic, velocity);
         sync_visualizer.animate_output_dynamic(output_dynamic, velocity);
+        sync_visualizer.animate_phase_matrix(output_dynamic, 1, size, velocity);
         sync_visualizer.show_correlation_matrix(output_dynamic);
         sync_visualizer.show_output_dynamic(output_dynamic);
+        sync_visualizer.show_phase_matrix(output_dynamic, 1, size);
     
     def testVisualizerNoFailures(self):
         self.templateVisualizerNoFailures(5, 10, False);

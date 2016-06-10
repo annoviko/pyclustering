@@ -56,8 +56,8 @@ class sync_dynamic:
         @brief (list) Returns outputs of oscillator during simulation.
         
         """
-        if (self._ccore_sync_dynamic_pointer is not None):
-            return wrapper.sync_dynamic_get_output(self._ccore_sync_dynamic_pointer);
+        if ( (self._ccore_sync_dynamic_pointer is not None) and ( (self._dynamic is None) or (len(self._dynamic) == 0) ) ):
+            self._dynamic = wrapper.sync_dynamic_get_output(self._ccore_sync_dynamic_pointer);
         
         return self._dynamic;
     
@@ -68,8 +68,8 @@ class sync_dynamic:
         @brief (list) Returns sampling times when dynamic is measured during simulation.
         
         """
-        if (self._ccore_sync_dynamic_pointer is not None):
-            return wrapper.sync_dynamic_get_time(self._ccore_sync_dynamic_pointer);
+        if ( (self._ccore_sync_dynamic_pointer is not None) and ( (self._dynamic is None) or (len(self._dynamic) == 0) ) ):
+            self._time = wrapper.sync_dynamic_get_time(self._ccore_sync_dynamic_pointer);
         
         return self._time;
     
@@ -188,12 +188,56 @@ class sync_dynamic:
         return clusters;
     
     
+    def allocate_phase_matrix(self, grid_width = None, grid_height = None, iteration = None):
+        """!
+        @brief Returns 2D matrix of phase values of oscillators at the specified iteration of simulation.
+        @details User should ensure correct matrix sizes in line with following expression grid_width x grid_height that should be equal to 
+                  amount of oscillators otherwise exception is thrown. If grid_width or grid_height are not specified than phase matrix size 
+                  will by calculated automatically by square root.
+        
+        @param[in] grid_width (uint): Width of the allocated matrix.
+        @param[in] grid_height (uint): Height of the allocated matrix.
+        @param[in] iteration (uint): Number of iteration of simulation for which correlation matrix should be allocated.
+                    If iternation number is not specified, the last step of simulation is used for the matrix allocation.
+        
+        @return (list) Phase value matrix of oscillators with size [number_oscillators x number_oscillators].
+        
+        """
+        
+        output_dynamic = self.output;
+        
+        if ( (output_dynamic is None) or (len(output_dynamic) == 0) ):
+            return [];
+        
+        current_dynamic = output_dynamic[len(output_dynamic) - 1];
+        if (iteration is not None):
+            current_dynamic = output_dynamic[iteration];
+        
+        width_matrix = grid_width;
+        height_matrix = grid_height;
+        number_oscillators = len(current_dynamic);
+        if ( (width_matrix is None) or (height_matrix is None) ):
+            width_matrix = int(math.ceil(math.sqrt(number_oscillators)));
+            height_matrix = width_matrix;
+
+        if (number_oscillators != width_matrix * height_matrix):
+            raise NameError("Impossible to allocate phase matrix with specified sizes, amout of neurons should be equal to grid_width * grid_height.");
+        
+        
+        phase_matrix = [ [ 0.0 for i in range(width_matrix) ] for j in range(height_matrix) ];
+        for i in range(height_matrix):
+            for j in range(width_matrix):
+                phase_matrix[i][j] = current_dynamic[j + i * width_matrix];
+        
+        return phase_matrix;
+    
+    
     def allocate_correlation_matrix(self, iteration = None):
         """!
         @brief Allocate correlation matrix between oscillators at the specified step of simulation.
                
         @param[in] iteration (uint): Number of iteration of simulation for which correlation matrix should be allocated.
-                                      If iternation number is not specified, the last step of simulation is used for the matrix allocation.
+                    If iternation number is not specified, the last step of simulation is used for the matrix allocation.
         
         @return (list) Correlation matrix between oscillators with size [number_oscillators x number_oscillators].
         
@@ -212,7 +256,7 @@ class sync_dynamic:
             current_dynamic = dynamic[iteration];
         
         number_oscillators = len(dynamic[0]);
-        affinity_matrix = [ [ 0.0 for i in range(number_oscillators) ] for j in range(number_oscillators) ];  
+        affinity_matrix = [ [ 0.0 for i in range(number_oscillators) ] for j in range(number_oscillators) ];
         
         for i in range(number_oscillators):
             for j in range(number_oscillators):
@@ -273,9 +317,31 @@ class sync_visualizer:
         _ = plt.figure();
         correlation_matrix = sync_output_dynamic.allocate_correlation_matrix(iteration);
         
-        plt.imshow(correlation_matrix, cmap = plt.get_cmap('cool'), interpolation='kaiser'); 
+        plt.imshow(correlation_matrix, cmap = plt.get_cmap('cool'), interpolation='kaiser', vmin = 0.0, vmax = 1.0); 
         plt.show();
         
+    
+    
+    @staticmethod
+    def show_phase_matrix(sync_output_dynamic, grid_width = None, grid_height = None, iteration = None):
+        """!
+        @brief Shows 2D matrix of phase values of oscillators at the specified iteration.
+        @details User should ensure correct matrix sizes in line with following expression grid_width x grid_height that should be equal to 
+                  amount of oscillators otherwise exception is thrown. If grid_width or grid_height are not specified than phase matrix size 
+                  will by calculated automatically by square root.
+        
+        @param[in] grid_width (uint): Width of the phase matrix.
+        @param[in] grid_height (uint): Height of the phase matrix.
+        @param[in] iteration (uint): Number of iteration of simulation for which correlation matrix should be allocated.
+                    If iternation number is not specified, the last step of simulation is used for the matrix allocation.
+        
+        """
+        
+        _ = plt.figure();
+        phase_matrix = sync_output_dynamic.allocate_phase_matrix(iteration, grid_width, grid_height);
+        
+        plt.imshow(phase_matrix, cmap = plt.get_cmap('jet'), interpolation='kaiser', vmin = 0.0, vmax = 2.0 * math.pi); 
+        plt.show();
     
     
     @staticmethod
@@ -326,7 +392,7 @@ class sync_visualizer:
         figure = plt.figure();
         
         correlation_matrix = sync_output_dynamic.allocate_correlation_matrix(0);
-        artist = plt.imshow(correlation_matrix, cmap = plt.get_cmap(colormap), interpolation='kaiser', hold = True);
+        artist = plt.imshow(correlation_matrix, cmap = plt.get_cmap(colormap), interpolation='kaiser', hold = True, vmin = 0.0, vmax = 1.0);
         
         def init_frame(): 
             return [ artist ];
@@ -343,6 +409,45 @@ class sync_visualizer:
             correlation_animation.save(save_movie, writer = 'ffmpeg', fps = 15, bitrate = 1500);
         else:
             plt.show();
+
+
+    @staticmethod
+    def animate_phase_matrix(sync_output_dynamic, grid_width = None, grid_height = None, animation_velocity = 75, colormap = 'jet', save_movie = None):
+        """!
+        @brief Shows animation of phase matrix between oscillators during simulation on 2D stage.
+        @details If grid_width or grid_height are not specified than phase matrix size will by calculated automatically by square root.
+        
+        @param[in] sync_output_dynamic (sync_dynamic): Output dynamic of the Sync network.
+        @param[in] grid_width (uint): Width of the phase matrix.
+        @param[in] grid_height (uint): Height of the phase matrix.
+        @param[in] animation_velocity (uint): Interval between frames in milliseconds.
+        @param[in] colormap (string): Name of colormap that is used by matplotlib ('gray', 'pink', 'cool', spring', etc.).
+        @param[in] save_movie (string): If it is specified then animation will be stored to file that is specified in this parameter.
+        
+        """
+        
+        figure = plt.figure();
+        
+        def init_frame(): 
+            return frame_generation(0);
+        
+        def frame_generation(index_dynamic):
+            figure.clf();
+            axis = figure.add_subplot(111);
+            
+            phase_matrix = sync_output_dynamic.allocate_phase_matrix(grid_width, grid_height, index_dynamic);
+            axis.imshow(phase_matrix, cmap = plt.get_cmap(colormap), interpolation='kaiser', vmin = 0.0, vmax = 2.0 * math.pi);
+            artist = figure.gca();
+            
+            return [ artist ];
+
+        phase_animation = animation.FuncAnimation(figure, frame_generation, len(sync_output_dynamic), init_func = init_frame, interval = animation_velocity , repeat_delay = 1000);
+        
+        if (save_movie is not None):
+            phase_animation.save(save_movie, writer = 'ffmpeg', fps = 15, bitrate = 1500);
+        else:
+            plt.show();
+
 
 
     @staticmethod
@@ -424,7 +529,7 @@ class sync_network(network):
             random.seed();
             for index in range(0, num_osc, 1):
                 if (initial_phases == initial_type.RANDOM_GAUSSIAN):
-                    self._phases.append(random.random() * pi);
+                    self._phases.append(random.random() * 2 * pi);
                 
                 elif (initial_phases == initial_type.EQUIPARTITION):
                     self._phases.append( pi / num_osc * index);
