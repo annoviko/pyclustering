@@ -68,7 +68,7 @@ class sync_dynamic:
         @brief (list) Returns sampling times when dynamic is measured during simulation.
         
         """
-        if ( (self._ccore_sync_dynamic_pointer is not None) and ( (self._dynamic is None) or (len(self._dynamic) == 0) ) ):
+        if ( (self._ccore_sync_dynamic_pointer is not None) and ( (self._time is None) or (len(self._time) == 0) ) ):
             self._time = wrapper.sync_dynamic_get_time(self._ccore_sync_dynamic_pointer);
         
         return self._time;
@@ -338,7 +338,7 @@ class sync_visualizer:
         """
         
         _ = plt.figure();
-        phase_matrix = sync_output_dynamic.allocate_phase_matrix(iteration, grid_width, grid_height);
+        phase_matrix = sync_output_dynamic.allocate_phase_matrix(grid_width, grid_height, iteration);
         
         plt.imshow(phase_matrix, cmap = plt.get_cmap('jet'), interpolation='kaiser', vmin = 0.0, vmax = 2.0 * math.pi); 
         plt.show();
