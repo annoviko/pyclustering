@@ -93,7 +93,7 @@ class Test(unittest.TestCase):
         self.templateClusterAllocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [10, 10, 10, 30], 4, initial_diameter = 0.5, type_measurement = measurement_type.AVERAGE_INTER_CLUSTER_DISTANCE);
       
     def testClusterAllocationSampleSimple3AverageIntraClusterDistance(self):
-        self.templateClusterAllocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [10, 10, 10, 30], 4, branching_factor = 4, max_node_entries = 10, initial_diameter = 0.1, type_measurement = measurement_type.AVERAGE_INTRA_CLUSTER_DISTANCE);
+        self.templateClusterAllocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [10, 10, 10, 30], 4, branching_factor = 4, max_node_entries = 1, initial_diameter = 0.2, type_measurement = measurement_type.AVERAGE_INTRA_CLUSTER_DISTANCE);
   
     def testClusterAllocationSampleSimple3VarianceIncreaseDistance(self):
         self.templateClusterAllocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [10, 10, 10, 30], 4, type_measurement = measurement_type.VARIANCE_INCREASE_DISTANCE);

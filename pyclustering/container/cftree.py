@@ -537,7 +537,8 @@ class non_leaf_node(cfnode):
         self.feature += node.feature;
         
         for child in node.successors:
-            child.parent = self;      
+            child.parent = self;
+            self.successors.append(child);
     
     
     def get_farthest_successors(self, type_measurement):
@@ -1053,10 +1054,10 @@ class cftree:
         
         merging_result = False;
         
-        if (len(node.successors) < self.__branch_factor):
-            if (node.successors[0].type == cfnode_type.CFNODE_NONLEAF):
-                [nearest_child_node1, nearest_child_node2] = node.get_nearest_successors(self.__type_measurement);
-                
+        if (node.successors[0].type == cfnode_type.CFNODE_NONLEAF):
+            [nearest_child_node1, nearest_child_node2] = node.get_nearest_successors(self.__type_measurement);
+            
+            if (len(nearest_child_node1.successors) + len(nearest_child_node2.successors) <= self.__branch_factor):
                 node.successors.remove(nearest_child_node2);
                 if (nearest_child_node2.type == cfnode_type.CFNODE_LEAF):
                     self.__leafes.remove(nearest_child_node2);

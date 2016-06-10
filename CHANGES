@@ -1,3 +1,13 @@
+Change notes for 0.6.dev1 (started Jun 10, 2016)
+
+CORRECTED MAJOR BUGS:
+
+- Bug with loss of CF-nodes in CF-tree during inserting that leads unbalanced CF-tree (pyclustering.container.cftree).
+  See: https://github.com/annoviko/pyclustering/issues/304
+
+
+------------------------------------------------------------------------
+
 Change notes for 0.6.0 (start Jul 18, 2015)
 
 GENERAL CHANGES (pyclustering):
