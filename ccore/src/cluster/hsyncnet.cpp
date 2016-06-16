@@ -58,13 +58,15 @@ void hsyncnet::process(const double order, const solve_type solver, const bool c
         increase_step = 1;
     }
 
+    double current_time = 0.0;
 	while(current_number_clusters > m_number_clusters) {
 		create_connections(radius, false);
 
 		sync_dynamic current_dynamic;
 		simulate_dynamic(order, 0.1, solver, collect_dynamic, current_dynamic);
 
-		sync_dynamic::const_iterator last_state_dynamic = current_dynamic.cend() - 1;
+		sync_dynamic::iterator last_state_dynamic = current_dynamic.end() - 1;
+		(*last_state_dynamic).m_time = current_time;
 		analyser.push_back(*(last_state_dynamic));
 
 		hsyncnet_cluster_data clusters;
@@ -80,5 +82,7 @@ void hsyncnet::process(const double order, const solve_type solver, const bool c
 		else {
 			radius = average_neighbor_distance(oscillator_locations, number_neighbors);
 		}
+
+		current_time += 1.0;
 	}
 }
