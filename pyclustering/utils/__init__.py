@@ -98,7 +98,7 @@ def rgb2gray(image_rgb_array):
 
 def average_neighbor_distance(points, num_neigh):
     """!
-    @brief Returns average distance for establish links between specified number of neighbors.
+    @brief Returns average distance for establish links between specified number of nearest neighbors.
     
     @param[in] points (list): Input data, list of points where each point represented by list.
     @param[in] num_neigh (uint): Number of neighbors that should be used for distance calculation.
@@ -121,7 +121,7 @@ def average_neighbor_distance(points, num_neigh):
 
     total_distance = 0;
     for i in range(0, len(points), 1):
-        # start from 0 due to - first element is distance to itself.
+        # start from 0 - first element is distance to itself.
         for j in range(0, num_neigh, 1):
             total_distance += dist_matrix[i][j + 1];
             

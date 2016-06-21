@@ -25,9 +25,12 @@
 
 """
 
-import math;
+import matplotlib.pyplot as plt;
+import matplotlib.animation as animation;
 
+import math;
 import random;
+import numpy;
 
 from enum import IntEnum;
 
@@ -78,10 +81,18 @@ class cnn_visualizer:
     def show_output_dynamic(cnn_output_dynamic):
         draw_dynamics(cnn_output_dynamic.time, cnn_output_dynamic.output, x_title = "t", y_title = "x");
     
+    
+    @staticmethod
+    def show_dynamic_matrix(cnn_output_dynamic):
+        plt.imshow(cnn_output_dynamic.output, cmap = plt.get_cmap('gray'), interpolation='None', vmin = 0.0, vmax = 1.0); 
+        plt.show();
+    
+    
     @staticmethod
     def show_observation_matrix(cnn_output_dynamic):
         observation_matrix = cnn_output_dynamic.allocate_observation_matrix();
-        draw_dynamics(cnn_output_dynamic.time, observation_matrix, x_title = "t", y_title = "outputs");
+        plt.imshow(observation_matrix, cmap = plt.get_cmap('gray'), interpolation='None', vmin = 0.0, vmax = 1.0); 
+        plt.show();
 
 
 class cnn_network:
@@ -128,16 +139,17 @@ class cnn_network:
     
     def __neuron_evolution(self, index):
         value = 0.0;
-        state = 1.0 - 2.0 * self.__output[index];
+        #state = 1.0 - 2.0 * (self.__output[index] ** 2);
         
-        for index in range(self.__num_osc):
-            value += self.__weights[index][index] * state;
+        for index_neighbor in range(self.__num_osc):
+            value += self.__weights[index][index_neighbor] * (1.0 - 2.0 * (self.__output[index_neighbor] ** 2));
         
         return value / self.__weights_summary[index];
     
     
     def __create_weights(self, stimulus):
         self.__average_distance = average_neighbor_distance(stimulus, self.__amount_neighbors);
+        print("Average distance: ", self.__average_distance);
         
         self.__weights = [ [ 0.0 for _ in range(len(stimulus)) ] for _ in range(len(stimulus)) ];
         self.__weights_summary = [ 0.0 for _ in range(self.__num_osc) ];
@@ -153,6 +165,7 @@ class cnn_network:
         for i in range(len(stimulus)):
             for j in range(i + 1, len(stimulus)):
                 weight = self.__calculate_weight(stimulus[i], stimulus[j]);
+                print(i, j, weight, stimulus[i], stimulus[j]);
                 
                 self.__weights[i][j] = weight;
                 self.__weights[j][i] = weight;
@@ -167,4 +180,4 @@ class cnn_network:
     
     def __calculate_weight(self, oscillator_location1, oscillator_location2):
         distance = euclidean_distance_sqrt(oscillator_location1, oscillator_location2);
-        return math.exp(-distance / (2.0 * self.__amount_neighbors));
+        return math.exp(-distance / (2.0 * self.__average_distance));
