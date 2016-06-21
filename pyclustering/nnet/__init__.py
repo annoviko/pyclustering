@@ -65,7 +65,7 @@ class conn_type(IntEnum):
     ## No connection between oscillators.
     NONE = 0;
     
-    ##All oscillators have connection with each other.
+    ## All oscillators have connection with each other.
     ALL_TO_ALL = 1;
     
     ## Connections between oscillators represent grid where one oscillator can be connected with four neighbor oscillators: right, upper, left, lower.
@@ -310,7 +310,7 @@ class network:
                     
                 if (index < (self._num_osc - 1)):
                     self.__osc_conn[index][index + 1] = True;
-                    
+        
         elif (self.__conn_represent == conn_represent.LIST):
             for index in range(self._num_osc):
                 self.__osc_conn.append([]);

@@ -64,7 +64,7 @@ class type_conn(IntEnum):
     
 class type_init(IntEnum):
     """!
-    @brief Enumeration of initialization types for SOM
+    @brief Enumeration of initialization types for SOM.
     
     @see som
     
