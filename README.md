@@ -60,6 +60,7 @@ E-Mail: pyclustering@yandex.ru
 - X-Means [Python, C++]
 
 **Oscillatory networks and neural networks (module pyclustering.nnet):**
+- CNN (Chaotic Neural Network) [Python]
 - HHN (Oscillatory network based on Hodgkin-Huxley model) [Python]
 - Hysteresis Oscillatory Network [Python]
 - LEGION (Local Excitatory Global Inhibitory Oscillatory Network) [Python, C++]
@@ -163,6 +164,32 @@ ensembles = dynamic.allocate_sync_ensembles();
 
 # Show output dynamic.
 pcnn_visualizer.show_output_dynamic(dynamic); 
+```
+
+**Simulation of chaotic neural network CNN**
+```python
+from pyclustering.samples.definitions import FCPS_SAMPLES;
+
+from pyclustering.utils import read_sample;
+
+from pyclustering.nnet.cnn import cnn_network, cnn_visualizer;
+
+# load stimulus from file
+stimulus = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1);
+        
+# create chaotic neural network, amount of neurons should be equal to amout of stimulus
+network_instance = cnn_network(len(stimulus));
+        
+# simulate it during 100 steps
+output_dynamic = network_instance.simulate(steps, stimulus);
+        
+# display output dynamic of the network
+cnn_visualizer.show_output_dynamic(output_dynamic);
+        
+# dysplay dynamic matrix and observation matrix to show clustering
+# phenomenon.
+cnn_visualizer.show_dynamic_matrix(output_dynamic);
+cnn_visualizer.show_observation_matrix(output_dynamic); 
 ```
 
 **Examples for each algorithm or model can be found in following modules of the library:**

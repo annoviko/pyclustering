@@ -786,6 +786,7 @@ INPUT                 += pyclustering/gcolor/hysteresis.py
 INPUT                 += pyclustering/gcolor/sync.py
 
 INPUT                 += pyclustering/nnet/__init__.py
+INPUT                 += pyclustering/nnet/cnn.py
 INPUT                 += pyclustering/nnet/hhn.py
 INPUT                 += pyclustering/nnet/hysteresis.py
 INPUT                 += pyclustering/nnet/legion.py

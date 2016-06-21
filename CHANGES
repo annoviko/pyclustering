@@ -14,6 +14,9 @@ GENERAL CHANGES (pyclustering):
 - Implemented feature to allocate/display/animate phase matrix: 'allocate_phase_matrix()', 'show_phase_matrix()', 'animate_phase_matrix()' (pyclustering.nnet.sync).
   See: no reference.
 
+- Implemented chaotic neural network where clustering phenomenon can be observed: 'cnn_network', 'cnn_dynamic', 'cnn_visualizer' (pyclustering.nnet.cnn).
+  See: https://github.com/annoviko/pyclustering/issues/301
+
 
 GENERAL CHANGES (ccore):
 

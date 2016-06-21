@@ -1,7 +1,6 @@
 """!
 
-@brief Examples of usage and demonstration of abilities of oscillatory network
-       based on Hodgkin-Huxley model of neuron.
+@brief Examples of usage and demonstration of abilities of chaotic oscillatory network.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2016
@@ -59,6 +58,7 @@ def chaotic_clustering_sample_simple_03():
 def chaotic_clustering_sample_simple_04():
     sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE4);
     template_dynamic_hhn(len(sample), 100, sample, 5);
+
 
 chaotic_clustering_sample_simple_01();
 chaotic_clustering_sample_simple_02();

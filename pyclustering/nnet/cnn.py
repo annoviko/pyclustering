@@ -2,7 +2,8 @@
 
 @brief Chaotic Neural Network
 @details Based on article description:
-         - 
+         - E.N.Benderskaya, S.V.Zhukova. Large-dimension image clustering by means of fragmentary synchronization in chaotic systems. 2007.
+         - E.N.Benderskaya, S.V.Zhukova. Clustering by Chaotic Neural Networks with Mean Field Calculated Via Delaunay Triangulation. 2008.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2016
@@ -30,7 +31,6 @@ import matplotlib.animation as animation;
 
 import math;
 import random;
-import numpy;
 
 from enum import IntEnum;
 
@@ -53,16 +53,45 @@ class type_conn(IntEnum):
 
 
 class cnn_dynamic:
+    """!
+    @brief Container of output dynamic of the chaotic neural network where states of each neuron during simulation are stored.
+    
+    @see cnn_network
+    
+    """
+    
     def __init__(self, output = [], time = []):
+        """!
+        @brief Costructor of the chaotic neural network output dynamic.
+
+        @param[in] phase (list): Dynamic of oscillators on each step of simulation.
+        @param[in] time (list): Simulation time.
+        
+        """
+        
+        ## Output value of each neuron on each iteration.
         self.output = output;
+        
+        ## Sequence of simulation steps of the network.
         self.time = time;
 
 
     def __len__(self):
+        """!
+        @brief (uint) Returns amount of simulation steps that are stored.
+        
+        """
         return len(self.output);
 
 
     def allocate_observation_matrix(self):
+        """!
+        @brief Allocates observation matrix in line with output dynamic of the network.
+        @details Matrix where state of each neuron is denoted by zero/one in line with Heaviside function on each iteration.
+        
+        @return (list) Observation matrix of the network dynamic.
+        
+        """
         number_neurons = len(self.output[0]);
         observation_matrix = [];
         
@@ -77,26 +106,97 @@ class cnn_dynamic:
 
 
 class cnn_visualizer:
+    """!
+    @brief Visualizer of output dynamic of chaotic neural network (CNN).
+    
+    """
+    
     @staticmethod
     def show_output_dynamic(cnn_output_dynamic):
+        """!
+        @brief Shows output dynamic (output of each neuron) during simulation.
+        
+        @param[in] cnn_output_dynamic (cnn_dynamic): Output dynamic of the chaotic neural network.
+        
+        @see show_dynamic_matrix
+        @see show_observation_matrix
+        
+        """
+        
         draw_dynamics(cnn_output_dynamic.time, cnn_output_dynamic.output, x_title = "t", y_title = "x");
     
     
     @staticmethod
     def show_dynamic_matrix(cnn_output_dynamic):
+        """!
+        @brief Shows output dynamic as matrix in grey colors.
+        @details This type of visualization is convenient for observing allocated clusters.
+        
+        @param[in] cnn_output_dynamic (cnn_dynamic): Output dynamic of the chaotic neural network.
+        
+        @see show_output_dynamic
+        @see show_observation_matrix
+        
+        """
+        
         plt.imshow(cnn_output_dynamic.output, cmap = plt.get_cmap('gray'), interpolation='None', vmin = 0.0, vmax = 1.0); 
         plt.show();
     
     
     @staticmethod
     def show_observation_matrix(cnn_output_dynamic):
+        """!
+        @brief Shows observation matrix as black/white blocks.
+        @details This type of visualization is convenient for observing allocated clusters.
+        
+        @param[in] cnn_output_dynamic (cnn_dynamic): Output dynamic of the chaotic neural network.
+        
+        @see show_output_dynamic
+        @see show_dynamic_matrix
+        
+        """
+        
         observation_matrix = cnn_output_dynamic.allocate_observation_matrix();
         plt.imshow(observation_matrix, cmap = plt.get_cmap('gray'), interpolation='None', vmin = 0.0, vmax = 1.0); 
         plt.show();
 
 
 class cnn_network:
+    """!
+    @brief Chaotic neural network based on system of logistic map where clustering phenomenon can be observed.
+    
+    Example:
+    @code
+        # load stimulus from file
+        stimulus = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1);
+        
+        # create chaotic neural network, amount of neurons should be equal to amout of stimulus
+        network_instance = cnn_network(len(stimulus));
+        
+        # simulate it during 100 steps
+        output_dynamic = network_instance.simulate(steps, stimulus);
+        
+        # display output dynamic of the network
+        cnn_visualizer.show_output_dynamic(output_dynamic);
+        
+        # dysplay dynamic matrix and observation matrix to show clustering
+        # phenomenon.
+        cnn_visualizer.show_dynamic_matrix(output_dynamic);
+        cnn_visualizer.show_observation_matrix(output_dynamic);
+    @endcode
+    
+    """
+    
     def __init__(self, num_osc, conn_type = type_conn.ALL_TO_ALL, amount_neighbors = 3):
+        """!
+        @brief Constructor of chaotic neural network.
+        
+        @param[in] num_osc (uint): Amount of neurons in the chaotic neural network.
+        @param[in] conn_type (type_conn): CNN type connection for the network.
+        @param[in] amount_neighbors (uint): k-nearest neighbors for calculation scaling constant of weights.
+        
+        """
+        
         self.__num_osc = num_osc;
         self.__conn_type = conn_type;
         self.__amount_neighbors = amount_neighbors;
@@ -105,14 +205,31 @@ class cnn_network:
         self.__weights = None;
         self.__weights_summary = None;
         
+        random.seed();
         self.__output = [ random.random() for _ in range(num_osc) ];
     
     
     def __len__(self):
+        """!
+        @brief Returns size of the chaotic neural network that is defined by amount of neurons.
+        
+        """
         return self.__num_osc;
     
     
     def simulate(self, steps, stimulus):
+        """!
+        @brief Simulates chaotic neural network with extrnal stimulus during specified steps.
+        @details Stimulus are considered as a coordinates of neurons and in line with that weights
+                 are initialized.
+        
+        @param[in] steps (uint): Amount of steps for simulation.
+        @param[in] stimulus (list): Stimulus that are used for simulation.
+        
+        @return (cnn_dynamic) Output dynamic of the chaotic neural network.
+        
+        """
+        
         self.__create_weights(stimulus);
         
         dynamic = cnn_dynamic([], []);
@@ -129,6 +246,14 @@ class cnn_network:
     
     
     def __calculate_states(self):
+        """!
+        @brief Calculates new state of each neuron.
+        @detail There is no any assignment.
+        
+        @return (list) Returns new states (output).
+        
+        """
+        
         output = [ 0.0 for _ in range(self.__num_osc) ];
         
         for i in range(self.__num_osc):
@@ -138,8 +263,15 @@ class cnn_network:
     
     
     def __neuron_evolution(self, index):
+        """!
+        @brief Calculates state of the neuron with specified index.
+        
+        @param[in] index (uint): Index of neuron in the network.
+        
+        @return (double) New output of the specified neuron.
+        
+        """
         value = 0.0;
-        #state = 1.0 - 2.0 * (self.__output[index] ** 2);
         
         for index_neighbor in range(self.__num_osc):
             value += self.__weights[index][index_neighbor] * (1.0 - 2.0 * (self.__output[index_neighbor] ** 2));
@@ -148,8 +280,14 @@ class cnn_network:
     
     
     def __create_weights(self, stimulus):
+        """!
+        @brief Create weights between neurons in line with stimulus.
+        
+        @param[in] stimulus (list): External stimulus for the chaotic neural network.
+        
+        """
+        
         self.__average_distance = average_neighbor_distance(stimulus, self.__amount_neighbors);
-        print("Average distance: ", self.__average_distance);
         
         self.__weights = [ [ 0.0 for _ in range(len(stimulus)) ] for _ in range(len(stimulus)) ];
         self.__weights_summary = [ 0.0 for _ in range(self.__num_osc) ];
@@ -162,6 +300,13 @@ class cnn_network:
     
     
     def __create_weights_all_to_all(self, stimulus):
+        """!
+        @brief Create weight all-to-all structure between neurons in line with stimulus.
+        
+        @param[in] stimulus (list): External stimulus for the chaotic neural network.
+        
+        """
+        
         for i in range(len(stimulus)):
             for j in range(i + 1, len(stimulus)):
                 weight = self.__calculate_weight(stimulus[i], stimulus[j]);
@@ -175,9 +320,26 @@ class cnn_network:
     
     
     def __create_weights_delaunay_triangulation(self, stimulus):
+        """!
+        @brief Create weight Denlauny triangulation structure between neurons in line with stimulus.
+        
+        @param[in] stimulus (list): External stimulus for the chaotic neural network.
+        
+        """
+        
         pass;
     
     
-    def __calculate_weight(self, oscillator_location1, oscillator_location2):
-        distance = euclidean_distance_sqrt(oscillator_location1, oscillator_location2);
+    def __calculate_weight(self, stimulus1, stimulus2):
+        """!
+        @brief Calculate weight between neurons that have external stimulus1 and stimulus2.
+        
+        @param[in] stimulus1 (list): External stimulus of the first neuron.
+        @param[in] stimulus2 (list): External stimulus of the second neuron.
+        
+        @return (double) Weight between neurons that are under specified stimulus.
+        
+        """
+        
+        distance = euclidean_distance_sqrt(stimulus1, stimulus2);
         return math.exp(-distance / (2.0 * self.__average_distance));
