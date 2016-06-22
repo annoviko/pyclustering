@@ -23,17 +23,18 @@
 
 """
 
-from pyclustering.nnet.cnn import cnn_network, cnn_visualizer;
+from pyclustering.nnet.cnn import cnn_network, cnn_visualizer, type_conn;
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES;
 
 from pyclustering.utils import read_sample;
 
 
-def template_dynamic_hhn(num_osc, steps, stimulus, neighbors):
-    network_instance = cnn_network(num_osc, amount_neighbors = neighbors);
+def template_dynamic_cnn(num_osc, steps, stimulus, neighbors, connection):
+    network_instance = cnn_network(num_osc, connection, amount_neighbors = neighbors);
     
     output_dynamic = network_instance.simulate(steps, stimulus);
+    network_instance.show_network();
     
     cnn_visualizer.show_output_dynamic(output_dynamic);
     cnn_visualizer.show_dynamic_matrix(output_dynamic);
@@ -42,25 +43,38 @@ def template_dynamic_hhn(num_osc, steps, stimulus, neighbors):
 
 def chaotic_clustering_sample_simple_01():
     sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1);
-    template_dynamic_hhn(len(sample), 100, sample, 3);
+    template_dynamic_cnn(len(sample), 100, sample, 3, type_conn.ALL_TO_ALL);
+
+
+def chaotic_clustering_triangulation_sample_simple_01():
+    sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1);
+    template_dynamic_cnn(len(sample), 100, sample, 3, type_conn.TRIANGULATION_DELAUNAY);
 
 
 def chaotic_clustering_sample_simple_02():
     sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE2);
-    template_dynamic_hhn(len(sample), 100, sample, 3);
+    template_dynamic_cnn(len(sample), 100, sample, 3, type_conn.ALL_TO_ALL);
+
+
+def chaotic_clustering_triangulation_sample_simple_02():
+    sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE2);
+    template_dynamic_cnn(len(sample), 100, sample, 5, type_conn.TRIANGULATION_DELAUNAY);
 
 
 def chaotic_clustering_sample_simple_03():
     sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE3);
-    template_dynamic_hhn(len(sample), 100, sample, 10);
+    template_dynamic_cnn(len(sample), 100, sample, 10, type_conn.ALL_TO_ALL);
 
 
 def chaotic_clustering_sample_simple_04():
     sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE4);
-    template_dynamic_hhn(len(sample), 100, sample, 5);
+    template_dynamic_cnn(len(sample), 100, sample, 5, type_conn.ALL_TO_ALL);
 
 
 chaotic_clustering_sample_simple_01();
+chaotic_clustering_triangulation_sample_simple_01();
 chaotic_clustering_sample_simple_02();
+chaotic_clustering_triangulation_sample_simple_02();
 chaotic_clustering_sample_simple_03();
 chaotic_clustering_sample_simple_04();
+

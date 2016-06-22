@@ -29,10 +29,16 @@
 import matplotlib.pyplot as plt;
 import matplotlib.animation as animation;
 
+from matplotlib import rcParams;
+from matplotlib.font_manager import FontProperties;
+
 import math;
+import numpy;
 import random;
 
 from enum import IntEnum;
+
+from scipy.spatial import Delaunay;
 
 from pyclustering.utils import euclidean_distance_sqrt, average_neighbor_distance, heaviside, draw_dynamics;
 
@@ -205,6 +211,8 @@ class cnn_network:
         self.__weights = None;
         self.__weights_summary = None;
         
+        self.__location = None;     # just for network visualization
+        
         random.seed();
         self.__output = [ random.random() for _ in range(num_osc) ];
     
@@ -231,6 +239,7 @@ class cnn_network:
         """
         
         self.__create_weights(stimulus);
+        self.__location = stimulus;
         
         dynamic = cnn_dynamic([], []);
         dynamic.output.append(self.__output);
@@ -310,7 +319,6 @@ class cnn_network:
         for i in range(len(stimulus)):
             for j in range(i + 1, len(stimulus)):
                 weight = self.__calculate_weight(stimulus[i], stimulus[j]);
-                print(i, j, weight, stimulus[i], stimulus[j]);
                 
                 self.__weights[i][j] = weight;
                 self.__weights[j][i] = weight;
@@ -327,7 +335,22 @@ class cnn_network:
         
         """
         
-        pass;
+        points = numpy.array(stimulus);
+        triangulation = Delaunay(points);
+        
+        for triangle in triangulation.simplices:
+            for index_tri_point1 in range(len(triangle)):
+                for index_tri_point2 in range(index_tri_point1 + 1, len(triangle)):
+                    index_point1 = triangle[index_tri_point1];
+                    index_point2 = triangle[index_tri_point2];
+                    
+                    weight = self.__calculate_weight(stimulus[index_point1], stimulus[index_point2]);
+                    
+                    self.__weights[index_point1][index_point2] = weight;
+                    self.__weights[index_point2][index_point1] = weight;
+                    
+                    self.__weights_summary[index_point1] += weight;
+                    self.__weights_summary[index_point2] += weight;
     
     
     def __calculate_weight(self, stimulus1, stimulus2):
@@ -343,3 +366,45 @@ class cnn_network:
         
         distance = euclidean_distance_sqrt(stimulus1, stimulus2);
         return math.exp(-distance / (2.0 * self.__average_distance));
+
+    
+    def show_network(self):
+        """!
+        @brief Shows structure of the network: neurons and connections between them.
+        
+        """
+        
+        dimension = len(self.__location[0]);
+        if ( (dimension != 3) and (dimension != 2) ):
+            raise NameError('Network that is located in different from 2-d and 3-d dimensions can not be represented');
+
+        rcParams['font.sans-serif'] = ['Arial'];
+        rcParams['font.size'] = 12;
+
+        fig = plt.figure();
+        axes = None;
+        if (dimension == 2):
+            axes = fig.add_subplot(111);
+        elif (dimension == 3):
+            axes = fig.gca(projection='3d');
+        
+        surface_font = FontProperties();
+        surface_font.set_name('Arial');
+        surface_font.set_size('12');
+        
+        for i in range(0, self.__num_osc, 1):
+            if (dimension == 2):
+                axes.plot(self.__location[i][0], self.__location[i][1], 'bo');  
+                for j in range(i, self.__num_osc, 1):    # draw connection between two points only one time
+                    if (self.__weights[i][j] > 0.0):
+                        axes.plot([self.__location[i][0], self.__location[j][0]], [self.__location[i][1], self.__location[j][1]], 'b-', linewidth = 0.5);
+            
+            elif (dimension == 3):
+                axes.scatter(self.__location[i][0], self.__location[i][1], self.__location[i][2], c = 'b', marker = 'o');
+                
+                for j in range(i, self._num_osc, 1):    # draw connection between two points only one time
+                    if (self.__weights[i][j] > 0.0):
+                        axes.plot([self.__location[i][0], self.__location[j][0]], [self.__location[i][1], self.__location[j][1]], [self.__location[i][2], self.__location[j][2]], 'b-', linewidth = 0.5);
+                
+        plt.grid();
+        plt.show();
