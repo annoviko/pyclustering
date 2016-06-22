@@ -25,16 +25,18 @@
 
 from pyclustering.nnet.cnn import cnn_network, cnn_visualizer, type_conn;
 
-from pyclustering.samples.definitions import SIMPLE_SAMPLES;
+from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
 
 from pyclustering.utils import read_sample;
 
 
-def template_dynamic_cnn(num_osc, steps, stimulus, neighbors, connection):
+def template_dynamic_cnn(num_osc, steps, stimulus, neighbors, connection, show_network = False):
     network_instance = cnn_network(num_osc, connection, amount_neighbors = neighbors);
     
     output_dynamic = network_instance.simulate(steps, stimulus);
-    network_instance.show_network();
+    
+    if (show_network is True):
+        network_instance.show_network();
     
     cnn_visualizer.show_output_dynamic(output_dynamic);
     cnn_visualizer.show_dynamic_matrix(output_dynamic);
@@ -71,10 +73,17 @@ def chaotic_clustering_sample_simple_04():
     template_dynamic_cnn(len(sample), 100, sample, 5, type_conn.ALL_TO_ALL);
 
 
+def chaotic_clustering_fcps_lsun():
+    sample = read_sample(FCPS_SAMPLES.SAMPLE_LSUN);
+    template_dynamic_cnn(len(sample), 100, sample, 10, type_conn.ALL_TO_ALL);
+
+
 chaotic_clustering_sample_simple_01();
 chaotic_clustering_triangulation_sample_simple_01();
 chaotic_clustering_sample_simple_02();
 chaotic_clustering_triangulation_sample_simple_02();
 chaotic_clustering_sample_simple_03();
 chaotic_clustering_sample_simple_04();
+
+chaotic_clustering_fcps_lsun();
 

@@ -145,7 +145,9 @@ class cnn_visualizer:
         
         """
         
-        plt.imshow(cnn_output_dynamic.output, cmap = plt.get_cmap('gray'), interpolation='None', vmin = 0.0, vmax = 1.0); 
+        network_dynamic = numpy.array(cnn_output_dynamic.output);
+        
+        plt.imshow(network_dynamic.T, cmap = plt.get_cmap('gray'), interpolation='None', vmin = 0.0, vmax = 1.0); 
         plt.show();
     
     
@@ -162,8 +164,8 @@ class cnn_visualizer:
         
         """
         
-        observation_matrix = cnn_output_dynamic.allocate_observation_matrix();
-        plt.imshow(observation_matrix, cmap = plt.get_cmap('gray'), interpolation='None', vmin = 0.0, vmax = 1.0); 
+        observation_matrix = numpy.array(cnn_output_dynamic.allocate_observation_matrix());
+        plt.imshow(observation_matrix.T, cmap = plt.get_cmap('gray'), interpolation='None', vmin = 0.0, vmax = 1.0); 
         plt.show();
 
 
@@ -378,19 +380,7 @@ class cnn_network:
         if ( (dimension != 3) and (dimension != 2) ):
             raise NameError('Network that is located in different from 2-d and 3-d dimensions can not be represented');
 
-        rcParams['font.sans-serif'] = ['Arial'];
-        rcParams['font.size'] = 12;
-
-        fig = plt.figure();
-        axes = None;
-        if (dimension == 2):
-            axes = fig.add_subplot(111);
-        elif (dimension == 3):
-            axes = fig.gca(projection='3d');
-        
-        surface_font = FontProperties();
-        surface_font.set_name('Arial');
-        surface_font.set_size('12');
+        (fig, axes) = self.__create_surface(dimension);
         
         for i in range(0, self.__num_osc, 1):
             if (dimension == 2):
@@ -408,3 +398,30 @@ class cnn_network:
                 
         plt.grid();
         plt.show();
+    
+    
+    def __create_surface(self, dimension):
+        """!
+        @brief Prepares surface for showing network structure in line with specified dimension.
+        
+        @param[in] dimension (uint): Dimension of processed data (external stimulus).
+        
+        @return (tuple) Description of surface for drawing network structure.
+        
+        """
+        
+        rcParams['font.sans-serif'] = ['Arial'];
+        rcParams['font.size'] = 12;
+
+        fig = plt.figure();
+        axes = None;
+        if (dimension == 2):
+            axes = fig.add_subplot(111);
+        elif (dimension == 3):
+            axes = fig.gca(projection='3d');
+        
+        surface_font = FontProperties();
+        surface_font.set_name('Arial');
+        surface_font.set_size('12');
+        
+        return (fig, axes);
