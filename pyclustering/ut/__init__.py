@@ -57,6 +57,7 @@ from pyclustering.gcolor.tests                   import dsatur_tests        as g
 from pyclustering.gcolor.tests                   import hysteresis_tests    as gcolor_hysteresis_unit_tests;
 from pyclustering.gcolor.tests                   import sync_tests          as gcolor_sync_unit_tests;
 
+from pyclustering.nnet.tests                     import hhn_tests           as nnet_cnn_unit_tests;
 from pyclustering.nnet.tests                     import hhn_tests           as nnet_hhn_unit_tests;
 from pyclustering.nnet.tests                     import hysteresis_tests    as nnet_hysteresis_unit_tests;
 from pyclustering.nnet.tests                     import legion_tests        as nnet_legion_unit_tests;
@@ -99,6 +100,7 @@ if __name__ == "__main__":
     suite.addTests(unittest.TestLoader().loadTestsFromModule(gcolor_sync_unit_tests));
   
     suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_unit_tests));
+    suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_cnn_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_hhn_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_hysteresis_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_legion_unit_tests));

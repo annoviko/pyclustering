@@ -34,6 +34,7 @@ def template_dynamic_cnn(num_osc, steps, stimulus, neighbors, connection, show_n
     network_instance = cnn_network(num_osc, connection, amount_neighbors = neighbors);
     
     output_dynamic = network_instance.simulate(steps, stimulus);
+    print(output_dynamic.allocate_sync_ensembles(10));
     
     if (show_network is True):
         network_instance.show_network();
