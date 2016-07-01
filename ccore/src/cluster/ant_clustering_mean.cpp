@@ -25,11 +25,21 @@
 
 namespace ant {
 
+bool ant_clustering_mean::check_params()
+{
+    if (get_count_ants() < 1) return false;
+    if (get_ro() < 0) return false;
+    if (get_pheramone_init() < 0) return false;
+
+    return true;
+}
 
 void ant_clustering_mean::process(const dataset & p_data, cluster_data & p_result)
 {
     assert(countClusters > 0);
     assert(p_data.size() >= countClusters);
+
+    if (!check_params()) return;
 
     std::size_t dimension = p_data[0].size();
 

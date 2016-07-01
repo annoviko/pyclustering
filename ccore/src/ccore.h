@@ -351,6 +351,20 @@ extern "C" DECLARATION tsp_result * ant_colony_tsp_process_by_matrix(const tsp_m
 extern "C" DECLARATION void ant_colony_tsp_destroy(const void * pointer);
 
 
+/**********************
+ *
+ * Ant clustering algorithm
+ *
+ * @brief  Run ant clustering algorithm
+ *
+ *
+ */
+
+extern "C" DECLARATION clustering_result * ant_mean_clustering(const data_representation * const sample, const void * p_ant_clustering_params, unsigned int count_clusters);
+
+
+
+
 extern "C" DECLARATION void * som_create(const unsigned int num_rows, const unsigned int num_cols, const unsigned int type_conn, const void * parameters);
 
 extern "C" DECLARATION void som_destroy(const void * pointer);

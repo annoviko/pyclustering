@@ -91,6 +91,7 @@ private:
     const AntAPI::base_param_type<params_name_clustering::COUNT_ANTS>
         get_count_ants()const { return params->get<params_name_clustering::COUNT_ANTS>().get(); }
 
+    bool check_params();
 
     /*
     *   Pheramone
