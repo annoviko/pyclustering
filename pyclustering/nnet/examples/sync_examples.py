@@ -55,8 +55,17 @@ def bidir_struct_dynamic_sync():
     
 def grid_four_struct_dynamic_sync():
     template_dynamic_sync(25, 50, sim_arg = [50, 10], conn = conn_type.GRID_FOUR, type_solution = solve_type.RK4);
-    
-        
+
+
+def dynamic_simulation_all_to_all_structure():
+    template_dynamic_sync(25, 1, conn = conn_type.ALL_TO_ALL, ccore_flag = True);
+
+def dynamic_simulation_grid_four_structure():
+    template_dynamic_sync(25, 1, conn = conn_type.GRID_FOUR, ccore_flag = True);
+
+def dynamic_simulation_bidir_list_structure():
+    template_dynamic_sync(25, 1, conn = conn_type.LIST_BIDIR, ccore_flag = True);
+
 # Negative connections        
 def negative_connection_5_oscillators():
     template_dynamic_sync(5, -1); 
@@ -115,7 +124,12 @@ trivial_dynamic_sync();
 weight_5_dynamic_sync();
 bidir_struct_dynamic_sync();
 grid_four_struct_dynamic_sync();
-    
+
+# Examples of global synchronization for various network structures
+dynamic_simulation_all_to_all_structure();
+dynamic_simulation_grid_four_structure();
+dynamic_simulation_bidir_list_structure();
+
 # Examples with negative connection
 negative_connection_5_oscillators();        # Almost full desynchronization
 negative_connection_10_oscillators();       # It's not full desynchronization
