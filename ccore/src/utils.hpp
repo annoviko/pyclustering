@@ -122,9 +122,17 @@ std::vector<std::vector<double> > * read_sample(const data_representation * cons
  * @return  Returns standard type of representation of clusters.
  *
  ***********************************************************************************************/
+//template <typename T>
+//clustering_result * create_clustering_result(const std::vector<std::vector<T> *> * const clusters);
+//
+//template <typename T>
+//clustering_result * create_clustering_result(const std::vector<std::vector<T> > & clusters);
+
 clustering_result * create_clustering_result(const std::vector<std::vector<unsigned int> *> * const clusters);
 
 clustering_result * create_clustering_result(const std::vector<std::vector<unsigned int> > & clusters);
+
+clustering_result * create_clustering_result(const std::vector<std::vector<std::size_t> > & clusters);
 
 
 /***********************************************************************************************

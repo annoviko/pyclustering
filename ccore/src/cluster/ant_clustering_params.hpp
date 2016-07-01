@@ -31,6 +31,15 @@
 namespace ant
 {
 
+// mapped to python interface
+typedef struct s_ant_clustering_params {
+    double                  ro;
+    double                  pheramone_init;
+    unsigned int            iterations;
+    unsigned int            count_ants;
+} s_ant_clustering_params;
+
+
 enum class params_name_clustering : std::size_t
 {
     RO                                // [double]

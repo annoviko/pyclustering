@@ -23,8 +23,14 @@
 #include <vector>
 
 #include "cluster/ant_clustering_params.hpp"
+#include "cluster/cluster_data.hpp"
+#include "cluster/cluster_algorithm.hpp"
 
 namespace ant {
+
+// using common interface for clustering methods
+using cluster_analysis::cluster_data;
+using cluster_cont = cluster_analysis::cluster;
 
 
 /***********************************************************************
@@ -54,17 +60,17 @@ public:
 * 
 *
 *************************************************************************/
-class ant_clustering_mean
+class ant_clustering_mean : public cluster_analysis::cluster_algorithm
 {
 public:
 
-    ant_clustering_mean(std::shared_ptr<ant_clustering_params>& param_init)
+    ant_clustering_mean(std::shared_ptr<ant_clustering_params>& param_init, std::size_t initCountClusters = 2)
         : result(new ant_clustering_result())
         , params{ param_init }
+        , countClusters{initCountClusters}
     {}
 
-    std::shared_ptr<ant_clustering_result> process(const clustering_data& input, std::size_t count_clusters);
-
+    void process(const dataset & p_data, cluster_data & p_result);
 
 private:
 
@@ -85,6 +91,7 @@ private:
     const AntAPI::base_param_type<params_name_clustering::COUNT_ANTS>
         get_count_ants()const { return params->get<params_name_clustering::COUNT_ANTS>().get(); }
 
+    bool check_params();
 
     /*
     *   Pheramone
@@ -110,32 +117,25 @@ private:
     class Ant
     {
     public:
-        Ant(std::size_t count_data, std::size_t count_clusters)
-            : clustering_data(count_data, std::vector<bool>(count_clusters, false))
+        Ant(std::size_t count_data)
+            : clustering_data(count_data)
         {}
 
-        void clear()
-        {
-            for (std::vector<bool>& cluster : clustering_data)
-                for(std::size_t i = 0; i < cluster.size(); ++i)
-                    cluster[i] = false;
-        }
-
-        std::vector<std::vector<bool>> clustering_data;
-        double F;
+        cluster_cont clustering_data;
+        double F {0};
     };
 
 
     /*
     *        Algorithms sub functions
     */
-    void clustering_by_pheramone(const pheramone& ph, const clustering_data& input, std::vector<Ant>& ants);
+    void clustering_by_pheramone(const pheramone& ph, const dataset& input, std::vector<Ant>& ants);
 
     unsigned get_random_number(unsigned max)    const { return (std::rand() % max); }
     std::size_t realize_pheromone(const pheramone& ph, std::size_t data_num);
 
-    void calculate_F(std::vector<Ant>& ants, const clustering_data& input, std::size_t count_clusters, std::size_t dimension);
-    void calculate_cluster_centers(const clustering_data& input
+    void calculate_F(std::vector<Ant>& ants, const dataset& input, std::size_t count_clusters, std::size_t dimension);
+    void calculate_cluster_centers(const dataset& input
                                     , Ant& ant
                                     , std::vector<std::vector<double>>& cluster_centers
                                     , std::size_t count_clusters
@@ -143,11 +143,13 @@ private:
 
     void update_pheramone(pheramone& ph, const std::vector<Ant>& ants, std::size_t size_of_data, std::size_t count_clusters);
 
-    void update_best_clustering(const std::vector<Ant>& ants, std::vector<std::vector<bool>>& best_clustering);
+    void update_best_clustering(const std::vector<Ant>& ants, cluster_cont& best_clustering);
 
 private:
     std::shared_ptr<ant_clustering_result> result;
     std::shared_ptr<ant_clustering_params> params;
+
+    std::size_t countClusters      {2};
 };
 
 

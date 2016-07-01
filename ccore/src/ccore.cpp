@@ -28,6 +28,7 @@
 #include "cluster/hsyncnet.hpp"
 #include "cluster/syncnet.hpp"
 #include "cluster/xmeans.hpp"
+#include "cluster/ant_clustering_mean.hpp"
 
 #include "nnet/legion.hpp"
 #include "nnet/sync.hpp"
@@ -471,6 +472,116 @@ void ant_colony_tsp_destroy(const void * result) {
 //
 //                  End Ant colony functions
 /////////////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////////////
+//
+//          Ant clustering algorithm
+
+clustering_result * ant_mean_clustering(const data_representation * const sample, const void * p_ant_clustering_params, unsigned int count_clusters)
+{
+    const ant::s_ant_clustering_params * algorithm_params = (const ant::s_ant_clustering_params *) p_ant_clustering_params;
+
+    using AntCAPI = ant::ant_colony_clustering_params_initializer;
+
+    auto params_ant_clustering = ant::ant_clustering_params::make_param(
+        AntCAPI::RO_t(algorithm_params->ro)
+        , AntCAPI::Pheramone_init_t(algorithm_params->pheramone_init)
+        , AntCAPI::Iterations_t(algorithm_params->iterations)
+        , AntCAPI::Count_ants_t(algorithm_params->count_ants)
+        );
+
+    dataset input_points(sample->size);
+
+    for (std::size_t i = 0; i < input_points.size(); ++i)
+    {
+        for (std::size_t j = 0; j < sample->dimension; ++j)
+        {
+            input_points[i].push_back(sample->objects[i][j]);
+        }
+    }
+
+    cluster_analysis::cluster_data result;
+
+    ant::ant_clustering_mean ant_mean_clustering{ params_ant_clustering, count_clusters };
+    ant_mean_clustering.process(input_points, result);
+
+    clustering_result * pack_result = create_clustering_result( *(result.clusters().get()) );
+
+    return pack_result;
+}
+
+
+void * som_create(const unsigned int num_rows, const unsigned int num_cols, const unsigned int type_conn, const void * parameters) {
+	return (void *) new som(num_rows, num_cols, (som_conn_type) type_conn,  *((som_parameters *) parameters));
+}
+
+void som_destroy(const void * pointer) {
+	if (pointer != NULL) {
+		delete (som *) pointer;
+	}
+}
+
+unsigned int som_train(const void * pointer, const data_representation * const sample, const unsigned int epochs, const bool autostop) {
+	std::vector<std::vector<double> > * dataset = read_sample(sample);
+	unsigned int result = ((som *) pointer)->train(*dataset, epochs, autostop);
+	delete dataset;
+
+	return result;
+}
+
+unsigned int som_simulate(const void * pointer, const data_representation * const pattern) {
+	std::vector<std::vector<double> > * input_pattern = read_sample(pattern);
+	return ((som *) pointer)->simulate( (*input_pattern)[0] );
+}
+
+unsigned int som_get_winner_number(const void * pointer) {
+	return ((som *) pointer)->get_winner_number();
+}
+
+unsigned int som_get_size(const void * pointer) {
+	return ((som *) pointer)->get_size();
+}
+
+
+pyclustering_package * som_get_weights(const void * pointer) {
+	std::vector<std::vector<double> > weights;
+	((som *) pointer)->allocate_weights(weights);
+
+	pyclustering_package * package = create_package(&weights);
+
+	return package;
+}
+
+pyclustering_package * som_get_capture_objects(const void * pointer) {
+	std::vector<std::vector<unsigned int> > capture_objects;
+	((som *) pointer)->allocate_capture_objects(capture_objects);
+
+	pyclustering_package * package = create_package(&capture_objects);
+
+	return package;
+}
+
+pyclustering_package * som_get_awards(const void * pointer) {
+	std::vector<unsigned int> awards;
+	((som *) pointer)->allocate_awards(awards);
+	pyclustering_package * package = create_package(&awards);
+
+	return package;
+}
+
+pyclustering_package * som_get_neighbors(const void * pointer) {
+	pyclustering_package * package = NULL;
+
+	std::vector<std::vector<unsigned int> > neighbors;
+	((som *) pointer)->allocate_neighbors(neighbors);
+	if (!neighbors.empty()) {
+		package = create_package(&neighbors);
+	}
+
+	return package;
+}
+
 
 void * legion_create(const unsigned int size, const unsigned int connection_type, const void * const parameters) {
 	legion_network * pcnn_network = new legion_network(size, (connection_t) connection_type, *((legion_parameters *) parameters));

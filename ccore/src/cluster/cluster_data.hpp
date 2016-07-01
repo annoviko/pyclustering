@@ -89,6 +89,13 @@ public:
 
     /**
     *
+    * @brief    Resize the internal collection (m_clusters)
+    *
+    */
+    void resize_clusters(std::size_t p_count_clusters, std::size_t p_count_data);
+
+    /**
+    *
     * @brief    Returns amount of clusters that is stored.
     *
     */

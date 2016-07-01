@@ -25,56 +25,64 @@
 
 namespace ant {
 
-
-std::shared_ptr<ant_clustering_result> ant_clustering_mean::process(const clustering_data& input, std::size_t count_clusters)
+bool ant_clustering_mean::check_params()
 {
-    assert(count_clusters > 0);
-    assert(input.data.size() >= count_clusters);
+    if (get_count_ants() < 1) return false;
+    if (get_ro() < 0) return false;
+    if (get_pheramone_init() < 0) return false;
 
-    std::size_t dimension = input.data[0].size();
+    return true;
+}
 
-    std::vector<std::vector<bool>> best_clustering;
+void ant_clustering_mean::process(const dataset & p_data, cluster_data & p_result)
+{
+    assert(countClusters > 0);
+    assert(p_data.size() >= countClusters);
+
+    if (!check_params()) return;
+
+    std::size_t dimension = p_data[0].size();
+
+    std::vector<std::size_t> best_clustering;
 
     // initialize random number generator
     std::srand(static_cast<unsigned>(std::time(0)));
 
     // init pheramone
-    pheramone ph(input.data.size(), count_clusters, get_pheramone_init());
+    pheramone ph(p_data.size(), countClusters, get_pheramone_init());
     // create agents
-    std::vector<Ant> ants(get_count_ants(), Ant(input.data.size(), count_clusters));
+    std::vector<Ant> ants(get_count_ants(), Ant(p_data.size()));
 
     auto max_iterations = get_iterations();
     for (unsigned iteration = 0; iteration < max_iterations; ++iteration)
     {
         //realize probability
-        clustering_by_pheramone(ph, input, ants);
+        clustering_by_pheramone(ph, p_data, ants);
 
-        calculate_F(ants, input, count_clusters, dimension);
-        update_pheramone(ph, ants, input.data.size(), count_clusters);
+        calculate_F(ants, p_data, countClusters, dimension);
+        update_pheramone(ph, ants, p_data.size(), countClusters);
 
         update_best_clustering(ants, best_clustering);
-
-        // clear agents to use it in a next iteration
-        // if this is a not last turn
-        if (iteration + 1 < max_iterations)
-            for (auto& ant : ants) ant.clear();
     }
 
-    auto result = std::shared_ptr<ant_clustering_result>(new ant_clustering_result());
-    result->clusters = best_clustering;
-
-    return  result;
+    // transform ant result to common result style
+    auto p_clusters = p_result.clusters();
+    p_clusters->resize(countClusters);
+    for (std::size_t idx = 0; idx < p_data.size(); ++idx)
+    {
+        (*p_clusters)[best_clustering[idx]].push_back(idx);
+    }
 }
 
 
-void ant_clustering_mean::clustering_by_pheramone(const pheramone& ph, const clustering_data& input, std::vector<Ant>& ants)
+void ant_clustering_mean::clustering_by_pheramone(const pheramone& ph, const dataset& input, std::vector<Ant>& ants)
 {
     for (auto& ant : ants)
     {
-        for (std::size_t data_num = 0; data_num < input.data.size(); ++data_num)
+        for (std::size_t data_num = 0; data_num < input.size(); ++data_num)
         {
             std::size_t cluster = realize_pheromone(ph, data_num);
-            ant.clustering_data[data_num][cluster] = true;
+            ant.clustering_data[data_num] = cluster;
         }
     }
 }
@@ -103,7 +111,7 @@ std::size_t ant_clustering_mean::realize_pheromone(const pheramone& ph, std::siz
 }
 
 
-void ant_clustering_mean::calculate_F(std::vector<Ant>& ants, const clustering_data& input, std::size_t count_clusters, std::size_t dimension)
+void ant_clustering_mean::calculate_F(std::vector<Ant>& ants, const dataset& input, std::size_t count_clusters, std::size_t dimension)
 {
     for (auto& ant : ants)
     {
@@ -114,24 +122,19 @@ void ant_clustering_mean::calculate_F(std::vector<Ant>& ants, const clustering_d
 
         // calc F
         ant.F = 0.0;
-        for (std::size_t i = 0; i < input.data.size(); ++i)
+        for (std::size_t i = 0; i < input.size(); ++i)
         {
-            for (std::size_t cluster = 0; cluster < count_clusters; ++cluster)
+            for (std::size_t dim = 0; dim < dimension; ++dim)
             {
-                if (true == ant.clustering_data[i][cluster])
-                {
-                    for (std::size_t dim = 0; dim < dimension; ++dim)
-                        ant.F +=  (input.data[i][dim] - cluster_centers[cluster][dim])
-                                * (input.data[i][dim] - cluster_centers[cluster][dim]);
-
-                }
+                ant.F +=  (input[i][dim] - cluster_centers[ant.clustering_data[i]][dim])
+                        * (input[i][dim] - cluster_centers[ant.clustering_data[i]][dim]);
             }
         }
     }
 }
 
 
-void ant_clustering_mean::calculate_cluster_centers(const clustering_data& input
+void ant_clustering_mean::calculate_cluster_centers(const dataset& input
                                                     , Ant& ant
                                                     , std::vector<std::vector<double>>& cluster_centers
                                                     , std::size_t count_clusters
@@ -139,18 +142,12 @@ void ant_clustering_mean::calculate_cluster_centers(const clustering_data& input
 {
     std::vector<unsigned> count_samples_in_cluster(count_clusters, 0);
 
-    for (std::size_t i = 0; i < input.data.size(); ++i)
+    for (std::size_t i = 0; i < input.size(); ++i)
     {
-        for (std::size_t cluster = 0; cluster < count_clusters; ++cluster)
-        {
-            if (true == ant.clustering_data[i][cluster])
-            {
-                for (std::size_t dim = 0; dim < dimension; ++dim)
-                    cluster_centers[cluster][dim] += input.data[i][dim];
+        for (std::size_t dim = 0; dim < dimension; ++dim)
+            cluster_centers[ant.clustering_data[i]][dim] += input[i][dim];
 
-                ++count_samples_in_cluster[cluster];
-            }
-        }
+        ++count_samples_in_cluster[ant.clustering_data[i]];
     }
 
     for (std::size_t cluster = 0; cluster < count_clusters; ++cluster)
@@ -166,23 +163,21 @@ void ant_clustering_mean::calculate_cluster_centers(const clustering_data& input
 
 void ant_clustering_mean::update_pheramone(pheramone& ph, const std::vector<Ant>& ants, std::size_t size_of_data, std::size_t count_clusters)
 {
+
     for (std::size_t i = 0; i < size_of_data; ++i)
     {
         for (std::size_t cluster = 0; cluster < count_clusters; ++cluster)
-        {
             ph[i][cluster] = (1.0 - get_ro()) * ph[i][cluster];
 
-            for (const auto& ant : ants)
-            {
-                if (true == ant.clustering_data[i][cluster])
-                    ph[i][cluster] += 1.0 / ant.F;
-            }
+        for (const auto& ant : ants)
+        {
+            ph[i][ant.clustering_data[i]] += 1.0 / ant.F;
         }
     }
 }
 
 
-void ant_clustering_mean::update_best_clustering(const std::vector<Ant>& ants, std::vector<std::vector<bool>>& best_clustering)
+void ant_clustering_mean::update_best_clustering(const std::vector<Ant>& ants, cluster_cont& best_clustering)
 {
     std::size_t best = 0;
 
