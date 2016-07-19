@@ -147,6 +147,29 @@ def display_fcps_clustering_results():
     visualizer.show();
 
 
+def display_fcps_dependence_clustering_results():
+    (two_diamonds, two_diamonds_clusters_1, _) = template_clustering(0.15, 4, FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, False, True, False);
+    (two_diamonds, two_diamonds_clusters_2, _) = template_clustering(0.15, 5, FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, False, True, False);
+    (two_diamonds, two_diamonds_clusters_3, _) = template_clustering(0.15, 6, FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, False, True, False);
+    (two_diamonds, two_diamonds_clusters_4, _) = template_clustering(0.15, 7, FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, False, True, False);
+    
+    (two_diamonds, two_diamonds_clusters_5, _) = template_clustering(0.10, 6, FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, False, True, False);
+    (two_diamonds, two_diamonds_clusters_6, _) = template_clustering(0.12, 6, FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, False, True, False);
+    (two_diamonds, two_diamonds_clusters_7, _) = template_clustering(0.15, 6, FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, False, True, False);
+    (two_diamonds, two_diamonds_clusters_8, _) = template_clustering(0.17, 6, FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, False, True, False);
+    
+    visualizer = cluster_visualizer(8, 4);
+    visualizer.append_clusters(two_diamonds_clusters_1, two_diamonds, 0);
+    visualizer.append_clusters(two_diamonds_clusters_2, two_diamonds, 1);
+    visualizer.append_clusters(two_diamonds_clusters_3, two_diamonds, 2);
+    visualizer.append_clusters(two_diamonds_clusters_4, two_diamonds, 3);
+    visualizer.append_clusters(two_diamonds_clusters_5, two_diamonds, 4);
+    visualizer.append_clusters(two_diamonds_clusters_6, two_diamonds, 5);
+    visualizer.append_clusters(two_diamonds_clusters_7, two_diamonds, 6);
+    visualizer.append_clusters(two_diamonds_clusters_8, two_diamonds, 7);
+    visualizer.show();
+
+
 cluster_sample1();
 cluster_sample2();
 cluster_sample3();
@@ -170,3 +193,4 @@ experiment_execution_time(False);   # Python code
 experiment_execution_time(True);    # C++ code + Python env.
 
 display_fcps_clustering_results();
+display_fcps_dependence_clustering_results();
