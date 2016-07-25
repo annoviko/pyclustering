@@ -97,13 +97,16 @@ class optics:
        
     """
     
-    def __init__(self, sample, eps, minpts):
+    def __init__(self, sample, eps, minpts, amount_clusters = None):
         """!
         @brief Constructor of clustering algorithm OPTICS.
         
         @param[in] sample (list): Input data that is presented as a list of points (objects), where each point is represented by list or tuple.
         @param[in] eps (double): Connectivity radius between points, points may be connected if distance between them less than the radius.
         @param[in] minpts (uint): Minimum number of shared neighbors that is required for establishing links between points.
+        @param[in] amount_clusters (uint): Optional parameter where amount of clusters that should be allocated is specified.
+                    In case of usage 'amount_clusters' connectivity radius can be greater than real, in other words, there is place for mistake
+                    in connectivity radius usage.
         
         """
         
@@ -114,6 +117,7 @@ class optics:
         self.__sample_pointer = sample;     # Algorithm parameter - pointer to sample for processing.
         self.__eps = eps;                   # Algorithm parameter - connectivity radius between object for establish links between object.
         self.__minpts = minpts;             # Algorithm parameter - minimum number of neighbors that is required for establish links between object.
+        self.__amount_clusters = amount_clusters;
         
         self.__clusters = None;             # Result of clustering (list of clusters where each cluster contains indexes of objects from input data).
         self.__noise = None;                # Result of clustering (noise).
@@ -131,11 +135,120 @@ class optics:
         
         """
         
+        self.__allocate_clusters();
+        
+        if ( (self.__amount_clusters is not None) and (self.__amount_clusters != len(self.get_clusters())) ):
+            radius = self.__calculate_connectivity_radius();
+            if (radius is not None):
+                self.__eps = radius;
+                self.__initialize(self.__sample_pointer);
+                self.__allocate_clusters();
+
+
+    def __initialize(self, sample):
+        """!
+        @brief Initializes internal states and resets clustering results in line with input sample.
+        
+        """
+        
+        self.__processed = [False] * len(sample);
+        self.__optics_objects = [optics_descriptor(i) for i in range(len(sample))];     # List of OPTICS objects that corresponds to objects from input sample.
+        self.__ordered_database = [];       # List of OPTICS objects in traverse order. 
+        
+        self.__clusters = None;
+        self.__noise = None;
+
+
+    def __allocate_clusters(self):
+        """!
+        @brief Performs cluster allocation and builds ordering diagram that is based on reachability-distances.
+        
+        """
+        
         for optic_object in self.__optics_objects:
             if (optic_object.processed is False):
                 self.__expand_cluster_order(optic_object);
         
         self.__extract_clusters();
+    
+    
+    def __calculate_connectivity_radius(self):
+        """!
+        @brief Calculates connectivity radius of allocation specified amount of clusters using ordering diagram.
+        
+        @return (double) Value of connectivity radius.
+        
+        """
+        
+        ordering = self.get_cluster_ordering();
+        
+        maximum_distance = max(ordering);
+        
+        upper_distance = maximum_distance;
+        lower_distance = 0;
+        
+        radius = None;
+        
+        if (self.__get_amount_clusters_by_ordering(ordering, maximum_distance) <= self.__amount_clusters):
+            while(True):
+                radius = (lower_distance + upper_distance) / 2.0;
+                
+                amount_clusters = self.__get_amount_clusters_by_ordering(ordering, radius);
+                if (amount_clusters == self.__amount_clusters):
+                    break;
+                
+                elif (amount_clusters > self.__amount_clusters):
+                    lower_distance = radius;
+                
+                elif (amount_clusters < self.__amount_clusters):
+                    upper_distance = radius;
+            
+        return radius;
+    
+    
+    def __get_amount_clusters_by_ordering(self, ordering, radius):
+        """!
+        @brief Obtains amount of clustering that can be allocated by using specified radius for ordering diagram.
+        @details When growth of reachability-distance  is detected than it is considered as a start point of cluster, 
+                 than pick is detected and after that recession is observed until new growth (that means end of the
+                 current cluster and start of a new one) or end of diagram.
+        
+        @param[in] ordering (list): list of reachability-distances of optics objects.
+        @param[in] radius (double): connectivity radius that is used for cluster allocation.
+        
+        
+        @return (unit) Amount of clusters that can be allocated by the connectivity radius on ordering diagram.
+        
+        """
+        
+        amount_clusters = 1;
+        
+        cluster_start = False;
+        cluster_pick = False;
+        previous_distance = 0;
+        
+        for distance in ordering:
+            if (distance >= radius):
+                if (cluster_start is False):
+                    amount_clusters += 1;
+                    cluster_start = True;
+                
+                elif ( (cluster_start is True) and (distance < previous_distance) and (cluster_pick is False) ):
+                    cluster_pick = True;
+                
+                elif ( (cluster_start is True) and (distance > previous_distance) and (cluster_pick is True) ):
+                    cluster_start = True;
+                    cluster_pick = False;
+                    
+                    amount_clusters += 1;
+                
+                previous_distance = distance;
+            
+            else:
+                cluster_start = False;
+                cluster_pick = False;
+        
+        return amount_clusters;
     
     
     def get_clusters(self):
@@ -188,7 +301,7 @@ class optics:
                 optics_object = self.__optics_objects[index_object];
                 if (optics_object.reachability_distance is not None):
                     ordering.append(optics_object.reachability_distance);
-                    
+        
         return ordering;
     
     

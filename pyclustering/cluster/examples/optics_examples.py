@@ -23,24 +23,30 @@
 
 """
 
+from pyclustering.cluster import cluster_visualizer;
 from pyclustering.cluster.optics import optics;
 
-from pyclustering.utils import read_sample, draw_clusters;
+from pyclustering.utils import read_sample, timedcall;
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
 
 import matplotlib.pyplot as plt;
 
-def template_clustering(path_sample, eps, minpts):
+def template_clustering(path_sample, eps, minpts, amount_clusters = None):
     sample = read_sample(path_sample);
     
-    optics_instance = optics(sample, eps, minpts);
-    optics_instance.process();
+    optics_instance = optics(sample, eps, minpts, amount_clusters);
+    (ticks, _) = timedcall(optics_instance.process);
+    
+    print("Sample: ", path_sample, "\t\tExecution time: ", ticks, "\n");
     
     clusters = optics_instance.get_clusters();
     noise = optics_instance.get_noise();
     
-    draw_clusters(sample, clusters, [], '.');
+    visualizer = cluster_visualizer();
+    visualizer.append_clusters(clusters, sample);
+    visualizer.append_cluster(noise, sample, marker = 'x');
+    visualizer.show();
     
     ordering = optics_instance.get_cluster_ordering();
     indexes = [i for i in range(0, len(ordering))];
@@ -79,16 +85,28 @@ def cluster_densities2():
 
 def cluster_lsun():
     template_clustering(FCPS_SAMPLES.SAMPLE_LSUN, 0.5, 3);
-    
+
+def cluster_lsun_radius_calculation():
+    template_clustering(FCPS_SAMPLES.SAMPLE_LSUN, 1.0, 3, 3);
+
 def cluster_target():
     template_clustering(FCPS_SAMPLES.SAMPLE_TARGET, 0.5, 2);
-    
+
+def cluster_target_radius_calculation():
+    template_clustering(FCPS_SAMPLES.SAMPLE_TARGET, 10.0, 2, 6);
+
 def cluster_two_diamonds():
     template_clustering(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, 0.15, 7);
-    
+
+def cluster_two_diamonds_radius_calculation():
+    template_clustering(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, 1.0, 7, 2);
+
 def cluster_wing_nut():
     template_clustering(FCPS_SAMPLES.SAMPLE_WING_NUT, 0.25, 2);
-    
+
+def cluster_wing_nut_radius_calculation():
+    template_clustering(FCPS_SAMPLES.SAMPLE_WING_NUT, 1.0, 2, 2);
+
 def cluster_chainlink():
     template_clustering(FCPS_SAMPLES.SAMPLE_CHAINLINK, 0.5, 3); 
     
@@ -118,9 +136,13 @@ cluster_elongate();
 cluster_densities1();
 cluster_densities2();
 cluster_lsun();
+cluster_lsun_radius_calculation();
 cluster_target();
+cluster_target_radius_calculation();
 cluster_two_diamonds();
+cluster_two_diamonds_radius_calculation();
 cluster_wing_nut();
+cluster_wing_nut_radius_calculation();
 cluster_chainlink();
 cluster_hepta();
 cluster_golf_ball();

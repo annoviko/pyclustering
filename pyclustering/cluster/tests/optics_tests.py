@@ -32,43 +32,48 @@ from pyclustering.utils import read_sample;
 from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
 
 class Test(unittest.TestCase):
-    def templateClusteringResults(self, path, radius, neighbors, expected_length_clusters, ccore):
+    def templateClusteringResults(self, path, radius, neighbors, amount_clusters, expected_length_clusters, ccore):
         sample = read_sample(path);
         
-        optics_instance = optics(sample, radius, neighbors);
+        optics_instance = optics(sample, radius, neighbors, amount_clusters);
         optics_instance.process();
         
         clusters = optics_instance.get_clusters();
         noise = optics_instance.get_noise();
         
         assert sum([len(cluster) for cluster in clusters]) + len(noise) == len(sample);
-        assert sum([len(cluster) for cluster in clusters]) == sum(expected_length_clusters);
-        assert sorted([len(cluster) for cluster in clusters]) == sorted(expected_length_clusters);
+        assert len(clusters) == len(expected_length_clusters);
+        if (amount_clusters is None):
+            assert sum([len(cluster) for cluster in clusters]) == sum(expected_length_clusters);
+            assert sorted([len(cluster) for cluster in clusters]) == sorted(expected_length_clusters);
+    
     
     def testClusteringSampleSimple1(self):
-        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 0.4, 2, [5, 5], False);
+        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 0.4, 2, None, [5, 5], False);
     
     def testClusteringSampleSimple2(self):
-        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 1, 2, [5, 8, 10], False);
+        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 1, 2, None, [5, 8, 10], False);
 
     def testClusteringSampleSimple3(self):
-        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 0.7, 3, [10, 10, 10, 30], False);
+        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 0.7, 3, None, [10, 10, 10, 30], False);
         
     def testClusteringSampleSimple4(self):
-        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 0.7, 3, [15, 15, 15, 15, 15], False);
+        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 0.7, 3, None, [15, 15, 15, 15, 15], False);
 
     def testClusteringSampleSimple5(self):
-        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 0.7, 3, [15, 15, 15, 15], False);
+        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 0.7, 3, None, [15, 15, 15, 15], False);
         
     def testClusteringHepta(self):
-        self.templateClusteringResults(FCPS_SAMPLES.SAMPLE_HEPTA, 1, 3, [30, 30, 30, 30, 30, 30, 32], False);
-    
+        self.templateClusteringResults(FCPS_SAMPLES.SAMPLE_HEPTA, 1, 3, None, [30, 30, 30, 30, 30, 30, 32], False);
     
     def testClusteringOneDimensionDataSampleSimple7(self):
-        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE7, 2.0, 2, [10, 10], False);
+        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE7, 2.0, 2, None, [10, 10], False);
     
     def testClusteringOneDimensionDataSampleSimple9(self):
-        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 3.0, 3, [10, 20], False);
+        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 3.0, 3, None, [10, 20], False);
+    
+    def testClusteringLsunRadiusGreater(self):
+        self.templateClusteringResults(FCPS_SAMPLES.SAMPLE_LSUN, 1.0, 3, 3, [100, 101, 202], False);
     
     
 if __name__ == "__main__":
