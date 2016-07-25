@@ -136,7 +136,7 @@ class Test(unittest.TestCase):
     def templateSyncEnsembleAllocation(self, stimulus, params, type_conn, sim_steps, sim_time, expected_clusters, ccore_flag = False):
         result_testing = False;
         
-        for _ in range(0, 3, 1):
+        for _ in range(0, 5, 1):
             net = legion_network(len(stimulus), params, type_conn, ccore = ccore_flag);
             dynamic = net.simulate(sim_steps, sim_time, stimulus);
             

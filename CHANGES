@@ -17,6 +17,9 @@ GENERAL CHANGES (pyclustering):
 - Implemented chaotic neural network where clustering phenomenon can be observed: 'cnn_network', 'cnn_dynamic', 'cnn_visualizer' (pyclustering.nnet.cnn).
   See: https://github.com/annoviko/pyclustering/issues/301
 
+- Implemented feature to analyse ordering diagram using amout of clusters that should be allocated as an input parameter to calculate correct connvectity radius for clustering (pyclustering.cluster.optics).
+  See: https://github.com/annoviko/pyclustering/issues/307
+
 
 GENERAL CHANGES (ccore):
 

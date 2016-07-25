@@ -43,9 +43,8 @@ class Test(unittest.TestCase):
         
         assert sum([len(cluster) for cluster in clusters]) + len(noise) == len(sample);
         assert len(clusters) == len(expected_length_clusters);
-        if (amount_clusters is None):
-            assert sum([len(cluster) for cluster in clusters]) == sum(expected_length_clusters);
-            assert sorted([len(cluster) for cluster in clusters]) == sorted(expected_length_clusters);
+        assert sum([len(cluster) for cluster in clusters]) == sum(expected_length_clusters);
+        assert sorted([len(cluster) for cluster in clusters]) == sorted(expected_length_clusters);
     
     
     def testClusteringSampleSimple1(self):
@@ -72,8 +71,17 @@ class Test(unittest.TestCase):
     def testClusteringOneDimensionDataSampleSimple9(self):
         self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 3.0, 3, None, [10, 20], False);
     
+    def testClusteringSampleSimple2RadiusGreater(self):
+        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 3.0, 2, 3, [5, 8, 10], False);
+    
+    def testClusteringSampleSimple3RadiusGreater(self):
+        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 5.0, 3, 4, [10, 10, 10, 30], False);
+    
+    def testClusteringSampleSimple4RadiusGreater(self):
+        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 6.0, 3, 5, [15, 15, 15, 15, 15], False);
+    
     def testClusteringLsunRadiusGreater(self):
-        self.templateClusteringResults(FCPS_SAMPLES.SAMPLE_LSUN, 1.0, 3, 3, [100, 101, 202], False);
+        self.templateClusteringResults(FCPS_SAMPLES.SAMPLE_LSUN, 1.0, 3, 3, [99, 100, 202], False);
     
     
 if __name__ == "__main__":

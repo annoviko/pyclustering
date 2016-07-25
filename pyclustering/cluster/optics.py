@@ -62,14 +62,16 @@ class optics_descriptor:
         
         """
         
-        return '(%s, [c: %s, r: %s])' % (self.index_object, self.core_distance, self.reachability_distance);               
+        return '(%s, [c: %s, r: %s])' % (self.index_object, self.core_distance, self.reachability_distance);
 
 
 class optics:
     """!
     @brief Class represents clustering algorithm OPTICS (Ordering Points To Identify Clustering Structure).
     @details OPTICS is a density-based algorithm. Purpose of the algorithm is to provide explicit clusters, but create clustering-ordering representation of the input data. 
-             Clustering-ordering information contains information about internal structures of data set in terms of density. 
+             Clustering-ordering information contains information about internal structures of data set in terms of density and proper connectivity radius can be obtained
+             for allocation required amount of clusters using this diagram. In case of usage additional input parameter 'amount of clusters' connectivity radius should be
+             bigger than real - because it will be calculated by the algorithms.
 
     Example:
     @code
@@ -94,7 +96,29 @@ class optics:
         plt.bar(indexes, ordering);
         plt.show(); 
     @endcode
-       
+    
+    Amount of clusters that should be allocated can be also specified. In this case connectivity radius should be greater than real, for example:
+    @code
+        # Import required packages
+        from pyclustering.cluster.optics import optics;
+        from pyclustering.samples.definitions import FCPS_SAMPLES;
+        from pyclustering.utils import read_sample;
+        
+        # Read sample for clustering from some file
+        sample = read_sample(FCPS_SAMPLES.SAMPLE_LSUN);
+        
+        # Run cluster analysis where connvectivity radius is bigger than real
+        radius = 2.0;
+        neighbors = 3;
+        amount_of_clusters = 3;
+        
+        optics_instance = optics(sample, radius, neighbors, amount_of_clusters);
+        
+        # Obtain results of clustering
+        clusters = optics_instance.get_clusters();
+        noise = optics_instance.get_noise();
+    @endcode
+    
     """
     
     def __init__(self, sample, eps, minpts, amount_clusters = None):
@@ -110,17 +134,12 @@ class optics:
         
         """
         
-        self.__processed = [False] * len(sample);
-        self.__optics_objects = [optics_descriptor(i) for i in range(len(sample))];     # List of OPTICS objects that corresponds to objects from input sample.
-        self.__ordered_database = [];       # List of OPTICS objects in traverse order. 
-        
         self.__sample_pointer = sample;     # Algorithm parameter - pointer to sample for processing.
         self.__eps = eps;                   # Algorithm parameter - connectivity radius between object for establish links between object.
         self.__minpts = minpts;             # Algorithm parameter - minimum number of neighbors that is required for establish links between object.
         self.__amount_clusters = amount_clusters;
         
-        self.__clusters = None;             # Result of clustering (list of clusters where each cluster contains indexes of objects from input data).
-        self.__noise = None;                # Result of clustering (noise).
+        self.__initialize(sample);
 
 
     def process(self):
@@ -155,8 +174,8 @@ class optics:
         self.__optics_objects = [optics_descriptor(i) for i in range(len(sample))];     # List of OPTICS objects that corresponds to objects from input sample.
         self.__ordered_database = [];       # List of OPTICS objects in traverse order. 
         
-        self.__clusters = None;
-        self.__noise = None;
+        self.__clusters = None;     # Result of clustering (list of clusters where each cluster contains indexes of objects from input data).
+        self.__noise = None;        # Result of clustering (noise).
 
 
     def __allocate_clusters(self):
@@ -202,7 +221,7 @@ class optics:
                 
                 elif (amount_clusters < self.__amount_clusters):
                     upper_distance = radius;
-            
+        
         return radius;
     
     
