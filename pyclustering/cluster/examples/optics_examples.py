@@ -24,13 +24,12 @@
 """
 
 from pyclustering.cluster import cluster_visualizer;
-from pyclustering.cluster.optics import optics;
+from pyclustering.cluster.optics import optics, ordering_analyser, ordering_visualizer;
 
 from pyclustering.utils import read_sample, timedcall;
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
 
-import matplotlib.pyplot as plt;
 
 def template_clustering(path_sample, eps, minpts, amount_clusters = None):
     sample = read_sample(path_sample);
@@ -48,19 +47,19 @@ def template_clustering(path_sample, eps, minpts, amount_clusters = None):
     visualizer.append_cluster(noise, sample, marker = 'x');
     visualizer.show();
     
-    ordering = optics_instance.get_cluster_ordering();
-    indexes = [i for i in range(0, len(ordering))];
+    ordering = optics_instance.get_ordering();
+    analyser = ordering_analyser(ordering);
     
-    # visualization of cluster ordering in line with reachability distance.
-    plt.bar(indexes, ordering);
-    plt.show();
+    print(ordering);
+    
+    ordering_visualizer.show_ordering_diagram(analyser);
     
     
 def cluster_sample1():
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 0.5, 3);
     
 def cluster_sample2():
-    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 2.0, 3);
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 3.0, 3);
     
 def cluster_sample3():
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 0.7, 3);

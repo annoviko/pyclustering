@@ -25,7 +25,11 @@
 
 import unittest;
 
-from pyclustering.cluster.optics import optics;
+# Generate images without having a window appear.
+import matplotlib;
+matplotlib.use('Agg');
+
+from pyclustering.cluster.optics import optics, ordering_analyser, ordering_visualizer;
 
 from pyclustering.utils import read_sample;
 
@@ -45,6 +49,11 @@ class Test(unittest.TestCase):
         assert len(clusters) == len(expected_length_clusters);
         assert sum([len(cluster) for cluster in clusters]) == sum(expected_length_clusters);
         assert sorted([len(cluster) for cluster in clusters]) == sorted(expected_length_clusters);
+        
+        if (amount_clusters is not None):
+            analyser = ordering_analyser(optics_instance.get_ordering());
+            assert len(analyser) > 0;
+            assert analyser.extract_cluster_amount(optics_instance.get_radius()) == len(expected_length_clusters);
     
     
     def testClusteringSampleSimple1(self):
@@ -72,7 +81,7 @@ class Test(unittest.TestCase):
         self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 3.0, 3, None, [10, 20], False);
     
     def testClusteringSampleSimple2RadiusGreater(self):
-        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 3.0, 2, 3, [5, 8, 10], False);
+        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 5.0, 2, 3, [5, 8, 10], False);
     
     def testClusteringSampleSimple3RadiusGreater(self):
         self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 5.0, 3, 4, [10, 10, 10, 30], False);
@@ -82,6 +91,15 @@ class Test(unittest.TestCase):
     
     def testClusteringLsunRadiusGreater(self):
         self.templateClusteringResults(FCPS_SAMPLES.SAMPLE_LSUN, 1.0, 3, 3, [99, 100, 202], False);
+    
+    def testClusteringOrderVisualizer(self):
+        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE4);
+        
+        optics_instance = optics(sample, 6.0, 3, 5);
+        optics_instance.process();
+        
+        analyser = ordering_analyser(optics_instance.get_ordering());
+        ordering_visualizer.show_ordering_diagram(analyser);
     
     
 if __name__ == "__main__":

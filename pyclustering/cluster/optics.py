@@ -27,6 +27,133 @@
 
 from pyclustering.utils import euclidean_distance;
 
+import matplotlib.pyplot as plt;
+
+
+class ordering_visualizer:
+    """!
+    @brief Cluster ordering diagram visualizer that represents dataset graphically.
+    
+    """
+    
+    @staticmethod
+    def show_ordering_diagram(analyser):
+        ordering = analyser.cluster_ordering;
+        indexes = [i for i in range(0, len(ordering))];
+        
+        plt.bar(indexes, ordering);
+        plt.show();
+
+
+class ordering_analyser:
+    """!
+    @brief Analyser of cluster ordering diagram.
+    
+    """
+    
+    @property
+    def cluster_ordering(self):
+        """!
+        @brief (list) Returns values of dataset cluster ordering.
+        
+        """
+        return self.__ordering;
+    
+    
+    def __init__(self, ordering_diagram):
+        """!
+        @brief Analyser of ordering diagram that is based on reachability-distances.
+        
+        @see calculate_connvectivity_radius
+        
+        """
+        self.__ordering = ordering_diagram;
+    
+    
+    def __len__(self):
+        """!
+        @brief Returns length of clustering-ordering diagram.
+        
+        """
+        return len(self.__ordering);
+    
+    
+    def calculate_connvectivity_radius(self, amount_clusters):
+        """!
+        @brief Calculates connectivity radius of allocation specified amount of clusters using ordering diagram.
+        
+        @return (double) Value of connectivity radius.
+        
+        """
+        
+        maximum_distance = max(self.__ordering);
+        
+        upper_distance = maximum_distance;
+        lower_distance = 0.0;
+        
+        radius = None;
+        
+        if (self.extract_cluster_amount(maximum_distance) <= amount_clusters):
+            while(True):
+                radius = (lower_distance + upper_distance) / 2.0;
+                
+                amount = self.extract_cluster_amount(radius);
+                if (amount == amount_clusters):
+                    break;
+                
+                elif (amount > amount_clusters):
+                    lower_distance = radius;
+                
+                elif (amount < amount_clusters):
+                    upper_distance = radius;
+        
+        return radius;
+    
+    
+    def extract_cluster_amount(self, radius):
+        """!
+        @brief Obtains amount of clustering that can be allocated by using specified radius for ordering diagram.
+        @details When growth of reachability-distances is detected than it is considered as a start point of cluster, 
+                 than pick is detected and after that recession is observed until new growth (that means end of the
+                 current cluster and start of a new one) or end of diagram.
+        
+        @param[in] ordering (list): list of reachability-distances of optics objects.
+        @param[in] radius (double): connectivity radius that is used for cluster allocation.
+        
+        
+        @return (unit) Amount of clusters that can be allocated by the connectivity radius on ordering diagram.
+        
+        """
+        
+        amount_clusters = 1;
+        
+        cluster_start = False;
+        cluster_pick = False;
+        previous_distance = 0;
+        
+        for distance in self.__ordering:
+            if (distance >= radius):
+                if (cluster_start is False):
+                    amount_clusters += 1;
+                    cluster_start = True;
+                
+                elif ( (cluster_start is True) and (distance < previous_distance) and (cluster_pick is False) ):
+                    cluster_pick = True;
+                
+                elif ( (cluster_start is True) and (distance > previous_distance) and (cluster_pick is True) ):
+                    cluster_start = True;
+                    cluster_pick = False;
+                    
+                    amount_clusters += 1;
+                
+                previous_distance = distance;
+            
+            else:
+                cluster_start = False;
+                cluster_pick = False;
+        
+        return amount_clusters;
+
 
 class optics_descriptor:
     """!
@@ -89,12 +216,10 @@ class optics:
         noise = optics_instance.get_noise();
         
         # Obtain rechability-distances
-        ordering = optics_instance.get_cluster_ordering();
+        ordering = ordering_analyser(optics_instance.get_ordering());
         
         # Visualization of cluster ordering in line with reachability distance.
-        indexes = [i for i in range(0, len(ordering))];
-        plt.bar(indexes, ordering);
-        plt.show(); 
+        ordering_visualizer.show_ordering_diagram(ordering);
     @endcode
     
     Amount of clusters that should be allocated can be also specified. In this case connectivity radius should be greater than real, for example:
@@ -138,6 +263,7 @@ class optics:
         self.__eps = eps;                   # Algorithm parameter - connectivity radius between object for establish links between object.
         self.__minpts = minpts;             # Algorithm parameter - minimum number of neighbors that is required for establish links between object.
         self.__amount_clusters = amount_clusters;
+        self.__ordering = None;
         
         self.__initialize(sample);
 
@@ -150,14 +276,15 @@ class optics:
         
         @see get_clusters()
         @see get_noise()
-        @see get_cluster_ordering()
+        @see get_ordering()
         
         """
         
         self.__allocate_clusters();
         
         if ( (self.__amount_clusters is not None) and (self.__amount_clusters != len(self.get_clusters())) ):
-            radius = self.__calculate_connectivity_radius();
+            analyser = ordering_analyser(self.get_ordering());
+            radius = analyser.calculate_connvectivity_radius(self.__amount_clusters);
             if (radius is not None):
                 self.__eps = radius;
                 self.__initialize(self.__sample_pointer);
@@ -191,85 +318,6 @@ class optics:
         self.__extract_clusters();
     
     
-    def __calculate_connectivity_radius(self):
-        """!
-        @brief Calculates connectivity radius of allocation specified amount of clusters using ordering diagram.
-        
-        @return (double) Value of connectivity radius.
-        
-        """
-        
-        ordering = self.get_cluster_ordering();
-        
-        maximum_distance = max(ordering);
-        
-        upper_distance = maximum_distance;
-        lower_distance = 0;
-        
-        radius = None;
-        
-        if (self.__get_amount_clusters_by_ordering(ordering, maximum_distance) <= self.__amount_clusters):
-            while(True):
-                radius = (lower_distance + upper_distance) / 2.0;
-                
-                amount_clusters = self.__get_amount_clusters_by_ordering(ordering, radius);
-                if (amount_clusters == self.__amount_clusters):
-                    break;
-                
-                elif (amount_clusters > self.__amount_clusters):
-                    lower_distance = radius;
-                
-                elif (amount_clusters < self.__amount_clusters):
-                    upper_distance = radius;
-        
-        return radius;
-    
-    
-    def __get_amount_clusters_by_ordering(self, ordering, radius):
-        """!
-        @brief Obtains amount of clustering that can be allocated by using specified radius for ordering diagram.
-        @details When growth of reachability-distance  is detected than it is considered as a start point of cluster, 
-                 than pick is detected and after that recession is observed until new growth (that means end of the
-                 current cluster and start of a new one) or end of diagram.
-        
-        @param[in] ordering (list): list of reachability-distances of optics objects.
-        @param[in] radius (double): connectivity radius that is used for cluster allocation.
-        
-        
-        @return (unit) Amount of clusters that can be allocated by the connectivity radius on ordering diagram.
-        
-        """
-        
-        amount_clusters = 1;
-        
-        cluster_start = False;
-        cluster_pick = False;
-        previous_distance = 0;
-        
-        for distance in ordering:
-            if (distance >= radius):
-                if (cluster_start is False):
-                    amount_clusters += 1;
-                    cluster_start = True;
-                
-                elif ( (cluster_start is True) and (distance < previous_distance) and (cluster_pick is False) ):
-                    cluster_pick = True;
-                
-                elif ( (cluster_start is True) and (distance > previous_distance) and (cluster_pick is True) ):
-                    cluster_start = True;
-                    cluster_pick = False;
-                    
-                    amount_clusters += 1;
-                
-                previous_distance = distance;
-            
-            else:
-                cluster_start = False;
-                cluster_pick = False;
-        
-        return amount_clusters;
-    
-    
     def get_clusters(self):
         """!
         @brief Returns list of allocated clusters, where each cluster contains indexes of objects and each cluster is represented by list.
@@ -278,7 +326,8 @@ class optics:
         
         @see process()
         @see get_noise()
-        @see get_cluster_ordering()
+        @see get_ordering()
+        @see get_radius()
         
         """
         
@@ -293,35 +342,54 @@ class optics:
         
         @see process()
         @see get_clusters()
-        @see get_cluster_ordering()
+        @see get_ordering()
+        @see get_radius()
         
         """
         
         return self.__noise;
     
     
-    def get_cluster_ordering(self):
+    def get_ordering(self):
         """!
         @brief Returns clustering ordering information about the input data set.
         @details Clustering ordering of data-set contains the information about the internal clustering structure in line with connectivity radius.
         
-        @return (list) List of reachability distances (clustering ordering).
+        @return (ordering_analyser) Analyser of clustering ordering.
         
         @see process()
+        @see get_clusters()
+        @see get_noise()
+        @see get_radius()
+        
+        """
+        
+        if (self.__ordering is None):
+            self.__ordering = [];
+        
+            for cluster in self.__clusters:
+                for index_object in cluster:
+                    optics_object = self.__optics_objects[index_object];
+                    if (optics_object.reachability_distance is not None):
+                        self.__ordering.append(optics_object.reachability_distance);
+            
+        return self.__ordering;
+    
+    
+    def get_radius(self):
+        """!
+        @brief Returns connectivity radius that is calculated and used for clustering by the algorithm.
+        @details Connectivity radius may be changed only in case of usage additional parameter of the algorithm - amount of clusters for allocation.
+        
+        @return (double) Connectivity radius.
+        
+        @see get_ordering()
         @see get_clusters()
         @see get_noise()
         
         """
         
-        ordering = [];
-        
-        for cluster in self.__clusters:
-            for index_object in cluster:
-                optics_object = self.__optics_objects[index_object];
-                if (optics_object.reachability_distance is not None):
-                    ordering.append(optics_object.reachability_distance);
-        
-        return ordering;
+        return self.__eps;
     
     
     def __expand_cluster_order(self, optics_object):
