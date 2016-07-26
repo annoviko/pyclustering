@@ -129,22 +129,21 @@ class ordering_analyser:
         
         cluster_start = False;
         cluster_pick = False;
-        previous_distance = 0;
+        previous_distance = 0.0;
         
         for distance in self.__ordering:
             if (distance >= radius):
                 if (cluster_start is False):
+                    cluster_start = True;
                     amount_clusters += 1;
-                    cluster_start = True;
                 
-                elif ( (cluster_start is True) and (distance < previous_distance) and (cluster_pick is False) ):
-                    cluster_pick = True;
-                
-                elif ( (cluster_start is True) and (distance > previous_distance) and (cluster_pick is True) ):
-                    cluster_start = True;
-                    cluster_pick = False;
+                else:
+                    if ((distance < previous_distance) and (cluster_pick is False)):
+                        cluster_pick = True;
                     
-                    amount_clusters += 1;
+                    elif ((distance > previous_distance) and (cluster_pick is True)):
+                        cluster_pick = False;
+                        amount_clusters += 1;
                 
                 previous_distance = distance;
             
