@@ -14,6 +14,8 @@ default:
 
 .PHONY: ccore
 ccore:
+	rm -rf ../pyclustering/core/x64/linux
+	mkdir ../pyclustering/core/x64/linux
 	$(MAKE) $(MKFLAG) ccore.mk
 
 
@@ -35,7 +37,7 @@ valgrind:
 
 .PHONY: clean
 clean:
-	find src/ tst/ -name "*.d" -or -name "*.o" -or -name "*.gcda" -or -name "*.gcno" | xargs rm -rf
-	rm -rf ../pyclustering/core/x64/linux/ccore.so
-	rm -rf tst/utcore.exe
+	find src/ tst/ -name "*.d" -or -name "*.o" -or -name "*.gcda" -or -name "*.gcno" | xargs rm -f
+	rm -f ../pyclustering/core/x64/linux/ccore.so
+	rm -f tst/utcore.exe
 
