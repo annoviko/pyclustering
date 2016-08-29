@@ -1,8 +1,29 @@
-'''
-Created on Jul 1, 2016
+"""!
 
-@author: alex
-'''
+@brief Cluster analysis algorithm: BIRCH
+@details Implementation based on article:
+         - T.Zhang, R.Ramakrishnan, M.Livny. BIRCH: An Efficient Data Clustering Method for Very Large Databases. 1996.
+         
+@authors Aleksey Kukushkin (pyclustering@yandex.ru)
+@date 2014-2016
+@copyright GNU Public License
+
+@cond GNU_PUBLIC_LICENSE
+    PyClustering is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    PyClustering is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+@endcond
+
+"""
 
 import pyclustering.core.ant_mean_clustering_wrapper as wrapper
 
@@ -37,7 +58,7 @@ class ant_mean:
             
     
     def process(self, count_clusters, samples):
-        
+
         return wrapper.ant_mean_clustering_process(self.__parameters, count_clusters, samples)
         
         
