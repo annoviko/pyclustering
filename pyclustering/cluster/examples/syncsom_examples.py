@@ -23,6 +23,8 @@
 
 """
 
+from random import random;
+
 from pyclustering.cluster import cluster_visualizer;
 from pyclustering.cluster.syncsom import syncsom;
 
@@ -122,6 +124,27 @@ def experiment_execution_time():
     template_clustering(FCPS_SAMPLES.SAMPLE_ATOM, [7, 7], 5, 0.998, False, False, False, False);
 
 
+def experiment_execution_one_cluster_dependence(layer_first_size, radius, order):
+    print("Experiment: map size =", layer_first_size[0] * layer_first_size[1], "radius =", radius, "order =", order);
+    cluster_sizes = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150];
+    
+    for cluster_size in cluster_sizes:
+        # generate data sets
+        dataset = [];
+        dataset += [ [random(), random()] for _ in range(cluster_size) ];
+        
+        general_value = 0.0;
+        amount_attempt = 5;
+        for _ in range(amount_attempt):
+            network = syncsom(dataset, layer_first_size[0], layer_first_size[1], radius);
+            (ticks, (dyn_time, dyn_phase)) = timedcall(network.process, False, order);
+            general_value += ticks;
+                
+        print("Sample: ", cluster_size, "\t\tExecution time: ", general_value / float(amount_attempt));
+        
+    print("\n");
+
+
 cluster_simple1();
 cluster_simple1_as_som();
 cluster_simple2();
@@ -135,6 +158,13 @@ cluster_two_diamonds();
 cluster_chainlink();
 cluster_hepta();
 cluster_tetra();
-
-
+  
+  
 experiment_execution_time();
+ 
+experiment_execution_one_cluster_dependence([5, 5], 0.6, 0.998);
+experiment_execution_one_cluster_dependence([6, 6], 0.6, 0.998);
+experiment_execution_one_cluster_dependence([7, 7], 0.6, 0.998);
+experiment_execution_one_cluster_dependence([8, 8], 0.6, 0.998);
+experiment_execution_one_cluster_dependence([9, 9], 0.6, 0.998);
+experiment_execution_one_cluster_dependence([10, 10], 0.6, 0.998);
