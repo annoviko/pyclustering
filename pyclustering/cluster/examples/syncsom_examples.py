@@ -114,14 +114,14 @@ def cluster_tetra():
     template_clustering(FCPS_SAMPLES.SAMPLE_TETRA, [7, 7], 0.4, 0.998, True, True, True);
 
 def experiment_execution_time():
-    template_clustering(FCPS_SAMPLES.SAMPLE_LSUN, [9, 9], 10, 0.998, False, False, False, False);
-    template_clustering(FCPS_SAMPLES.SAMPLE_TARGET, [9, 9], 20, 0.998, False, False, False, False);
-    template_clustering(FCPS_SAMPLES.SAMPLE_WING_NUT, [10, 10], 5, 0.998, False, False, False, False);
-    template_clustering(FCPS_SAMPLES.SAMPLE_CHAINLINK, [10, 10], 15, 0.998, False, False, False, False);
-    template_clustering(FCPS_SAMPLES.SAMPLE_TETRA, [7, 7], 5, 0.998, False, False, False, False);
-    template_clustering(FCPS_SAMPLES.SAMPLE_HEPTA, [7, 7], 5, 0.998, False, False, False, False);
-    template_clustering(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, [10, 10], 5, 0.998, False, False, False, False);
-    template_clustering(FCPS_SAMPLES.SAMPLE_ATOM, [7, 7], 5, 0.998, False, False, False, False);
+    template_clustering(FCPS_SAMPLES.SAMPLE_LSUN, [4, 4], 0.45, 0.999, False, False, False, False);
+    template_clustering(FCPS_SAMPLES.SAMPLE_TARGET, [4, 4], 0.9, 0.998, False, False, False, False);
+    template_clustering(FCPS_SAMPLES.SAMPLE_WING_NUT, [4, 4], 0.25, 0.999, False, False, False, False);
+    template_clustering(FCPS_SAMPLES.SAMPLE_CHAINLINK, [4, 4], 0.5, 0.998, False, False, False, False);
+    template_clustering(FCPS_SAMPLES.SAMPLE_TETRA, [4, 4], 0.4, 0.998, False, False, False, False);
+    template_clustering(FCPS_SAMPLES.SAMPLE_HEPTA, [6, 6], 1.0, 0.998, False, False, False, False);
+    template_clustering(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, [4, 4], 0.15, 0.998, False, False, False, False);
+    template_clustering(FCPS_SAMPLES.SAMPLE_ATOM, [4, 4], 15, 0.998, False, False, False, False);
 
 
 def experiment_execution_one_cluster_dependence(layer_first_size, radius, order):
@@ -158,10 +158,9 @@ cluster_two_diamonds();
 cluster_chainlink();
 cluster_hepta();
 cluster_tetra();
-  
-  
+
 experiment_execution_time();
- 
+
 experiment_execution_one_cluster_dependence([5, 5], 0.6, 0.998);
 experiment_execution_one_cluster_dependence([6, 6], 0.6, 0.998);
 experiment_execution_one_cluster_dependence([7, 7], 0.6, 0.998);
