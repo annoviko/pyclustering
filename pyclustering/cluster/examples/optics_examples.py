@@ -31,7 +31,7 @@ from pyclustering.utils import read_sample, timedcall;
 from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
 
 
-def template_clustering(path_sample, eps, minpts, amount_clusters = None):
+def template_clustering(path_sample, eps, minpts, amount_clusters = None, visualize = True):
     sample = read_sample(path_sample);
     
     optics_instance = optics(sample, eps, minpts, amount_clusters);
@@ -39,20 +39,21 @@ def template_clustering(path_sample, eps, minpts, amount_clusters = None):
     
     print("Sample: ", path_sample, "\t\tExecution time: ", ticks, "\n");
     
-    clusters = optics_instance.get_clusters();
-    noise = optics_instance.get_noise();
+    if (visualize is True):
+        clusters = optics_instance.get_clusters();
+        noise = optics_instance.get_noise();
     
-    visualizer = cluster_visualizer();
-    visualizer.append_clusters(clusters, sample);
-    visualizer.append_cluster(noise, sample, marker = 'x');
-    visualizer.show();
+        visualizer = cluster_visualizer();
+        visualizer.append_clusters(clusters, sample);
+        visualizer.append_cluster(noise, sample, marker = 'x');
+        visualizer.show();
     
-    ordering = optics_instance.get_ordering();
-    analyser = ordering_analyser(ordering);
-    
-    print(ordering);
-    
-    ordering_visualizer.show_ordering_diagram(analyser);
+        ordering = optics_instance.get_ordering();
+        analyser = ordering_analyser(ordering);
+        
+        print(ordering);
+        
+        ordering_visualizer.show_ordering_diagram(analyser);
     
     
 def cluster_sample1():
@@ -125,6 +126,17 @@ def cluster_engy_time():
     template_clustering(FCPS_SAMPLES.SAMPLE_ENGY_TIME, 0.2, 20);
 
 
+def experiment_execution_time():
+    template_clustering(FCPS_SAMPLES.SAMPLE_LSUN, 1.0, 3, 3, False);
+    template_clustering(FCPS_SAMPLES.SAMPLE_TARGET, 10.0, 2, 6, False);
+    template_clustering(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, 1.0, 7, 2, False);
+    template_clustering(FCPS_SAMPLES.SAMPLE_CHAINLINK, 2.0, 3, 2, False); 
+    template_clustering(FCPS_SAMPLES.SAMPLE_WING_NUT, 1.0, 2, 2, False);
+    template_clustering(FCPS_SAMPLES.SAMPLE_HEPTA, 1, 3, None, False);
+    template_clustering(FCPS_SAMPLES.SAMPLE_TETRA, 1.0, 3, 4, False);
+    template_clustering(FCPS_SAMPLES.SAMPLE_ATOM, 30, 3, 2, False);
+
+
 cluster_sample1();
 cluster_sample2();
 cluster_sample3();
@@ -148,3 +160,6 @@ cluster_golf_ball();
 cluster_atom();
 cluster_tetra();
 cluster_engy_time();
+
+
+experiment_execution_time();
