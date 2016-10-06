@@ -29,6 +29,7 @@ pyclustering_package * dbscan_algorithm(const data_representation * const sample
     cluster_analysis::dbscan solver(radius, minumum_neighbors);
 
     cluster_analysis::dbscan_data output_result;
+
     solver.process(*input_dataset, output_result);
 
     pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_LIST);

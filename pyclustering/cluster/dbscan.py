@@ -179,4 +179,4 @@ class dbscan:
         """
         
         # return [i for i in range(0, len(data)) if euclidean_distance(data[point], data[i]) <= eps and data[i] != data[point]];    # Slow mode
-        return [i for i in range(0, len(self.__pointer_data)) if euclidean_distance_sqrt(self.__pointer_data[point], self.__pointer_data[i]) <= self.__sqrt_eps and self.__pointer_data[i] != self.__pointer_data[point]]; # Fast mode
+        return [i for i in range(0, len(self.__pointer_data)) if euclidean_distance_sqrt(self.__pointer_data[point], self.__pointer_data[i]) <= self.__sqrt_eps and (i != point) ]; # Fast mode
