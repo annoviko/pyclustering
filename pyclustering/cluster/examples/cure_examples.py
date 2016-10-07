@@ -72,37 +72,37 @@ def cluster_sample4():
     template_clustering(5, SIMPLE_SAMPLES.SAMPLE_SIMPLE4); 
     
 def cluster_sample5():
-    template_clustering(4, SIMPLE_SAMPLES.SAMPLE_SIMPLE5);    
+    template_clustering(4, SIMPLE_SAMPLES.SAMPLE_SIMPLE5);
     
 def cluster_elongate():
     template_clustering(2, SIMPLE_SAMPLES.SAMPLE_ELONGATE);
 
 def cluster_lsun():
-    template_clustering(3, FCPS_SAMPLES.SAMPLE_LSUN);  
+    template_clustering(3, FCPS_SAMPLES.SAMPLE_LSUN, 5, 0.3);
     
 def cluster_target():
-    template_clustering(6, FCPS_SAMPLES.SAMPLE_TARGET, 10, 0.3);     
+    template_clustering(6, FCPS_SAMPLES.SAMPLE_TARGET, 10, 0.3);
 
 def cluster_two_diamonds():
-    template_clustering(2, FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS);  
+    template_clustering(2, FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, 5, 0.3);
 
 def cluster_wing_nut():
-    template_clustering(2, FCPS_SAMPLES.SAMPLE_WING_NUT, 1, 1); 
+    template_clustering(2, FCPS_SAMPLES.SAMPLE_WING_NUT, 1, 1);
     
 def cluster_chainlink():
-    template_clustering(2, FCPS_SAMPLES.SAMPLE_CHAINLINK);     
+    template_clustering(2, FCPS_SAMPLES.SAMPLE_CHAINLINK);
     
 def cluster_hepta():
-    template_clustering(7, FCPS_SAMPLES.SAMPLE_HEPTA); 
+    template_clustering(7, FCPS_SAMPLES.SAMPLE_HEPTA);
     
 def cluster_tetra():
-    template_clustering(4, FCPS_SAMPLES.SAMPLE_TETRA);    
+    template_clustering(4, FCPS_SAMPLES.SAMPLE_TETRA);
     
 def cluster_engy_time():
     template_clustering(2, FCPS_SAMPLES.SAMPLE_ENGY_TIME, 50, 0.5);
 
 def cluster_golf_ball():
-    template_clustering(1, FCPS_SAMPLES.SAMPLE_GOLF_BALL); 
+    template_clustering(1, FCPS_SAMPLES.SAMPLE_GOLF_BALL);
     
 def cluster_atom():
     "Impossible to obtain parameters that satisfy us, it seems to me that compression = 0.2 is key parameter here, because results of clustering doesn't depend on number of represented points, except 0."

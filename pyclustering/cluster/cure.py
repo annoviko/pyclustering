@@ -198,7 +198,7 @@ class cure:
                             cluster_relocation_requests.append(item);
                         elif (item.distance > distance):
                             item.closest = merged_cluster;
-                            item.ditance = distance;
+                            item.distance = distance;
                             
                             cluster_relocation_requests.append(item);
                 
@@ -359,7 +359,7 @@ class cure:
             for index in range(dimension):
                 merged_cluster.mean[index] = ( len(cluster1.points) * cluster1.mean[index] + len(cluster2.points) * cluster2.mean[index] ) / ( len(cluster1.points) + len(cluster2.points) );
         
-        temporary = list(); # TODO: Set should be used in line with specification (article), but list is not hashable object therefore it's impossible to use list in this set!
+        temporary = list();
         
         for index in range(self.__number_represent_points):
             maximal_distance = 0;
@@ -371,7 +371,7 @@ class cure:
                     minimal_distance = euclidean_distance(point, merged_cluster.mean);
                     #minimal_distance = euclidean_distance_sqrt(point, merged_cluster.mean);
                 else:
-                    minimal_distance = euclidean_distance(point, temporary[0]);
+                    minimal_distance = min([euclidean_distance(point, p) for p in temporary]);
                     #minimal_distance = cluster_distance(cure_cluster(point), cure_cluster(temporary[0]));
                     
                 if (minimal_distance >= maximal_distance):
