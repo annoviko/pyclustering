@@ -28,11 +28,6 @@
 #include "cluster/cluster_algorithm.hpp"
 #include "cluster/dbscan_data.hpp"
 
-#include "container/adjacency_list.hpp"
-
-
-using namespace container;
-
 
 namespace cluster_analysis {
 
@@ -52,8 +47,6 @@ private:
     std::vector<bool>   m_visited;
 
     std::vector<bool>   m_belong;
-
-    adjacency_list      m_matrix_neighbors;
 
     double              m_radius;
 
@@ -100,10 +93,13 @@ public:
 private:
     /**
     *
-    * @brief    Creates adjacency matrix between objects.
+    * @brief    Obtains neighbors of the specified node (data object).
+    *
+    * @param[in]  p_index: index of the node (data object).
+    * @param[out] p_neighbors: neighbor indexes of the specified node (data object).
     *
     */
-    void create_neighbor_matrix(void);
+    void get_neighbors(const size_t p_index, std::vector<size_t> & p_neighbors);
 };
 
 

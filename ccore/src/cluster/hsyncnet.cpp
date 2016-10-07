@@ -58,27 +58,31 @@ void hsyncnet::process(const double order, const solve_type solver, const bool c
         increase_step = 1;
     }
 
-	while(current_number_clusters > m_number_clusters) {
-		create_connections(radius, false);
+    double current_time = 0.0;
+    while(current_number_clusters > m_number_clusters) {
+        create_connections(radius, false);
 
-		sync_dynamic current_dynamic;
-		simulate_dynamic(order, 0.1, solver, collect_dynamic, current_dynamic);
+        sync_dynamic current_dynamic;
+        simulate_dynamic(order, 0.1, solver, collect_dynamic, current_dynamic);
 
-		sync_dynamic::const_iterator last_state_dynamic = current_dynamic.cend() - 1;
-		analyser.push_back(*(last_state_dynamic));
+        sync_dynamic::iterator last_state_dynamic = current_dynamic.end() - 1;
+        (*last_state_dynamic).m_time = current_time;
+        analyser.push_back(*(last_state_dynamic));
 
-		hsyncnet_cluster_data clusters;
-		analyser.allocate_sync_ensembles(0.05, clusters);
+        hsyncnet_cluster_data clusters;
+        analyser.allocate_sync_ensembles(0.05, clusters);
 
-		current_number_clusters = clusters.size();
+        current_number_clusters = clusters.size();
 
         number_neighbors += increase_step;
 
-		if (number_neighbors >= oscillator_locations->size()) {
-			radius = radius * m_increase_persent + radius;
-		}
-		else {
-			radius = average_neighbor_distance(oscillator_locations, number_neighbors);
-		}
-	}
+        if (number_neighbors >= oscillator_locations->size()) {
+            radius = radius * m_increase_persent + radius;
+        }
+        else {
+            radius = average_neighbor_distance(oscillator_locations, number_neighbors);
+        }
+
+        current_time += 1.0;
+    }
 }

@@ -32,8 +32,7 @@ dbscan::dbscan(void) :
     m_radius(0.0),
     m_neighbors(0),
     m_visited(std::vector<bool>()),
-    m_belong(std::vector<bool>()),
-    m_matrix_neighbors(adjacency_list())
+    m_belong(std::vector<bool>())
 { }
 
 
@@ -43,8 +42,7 @@ dbscan::dbscan(const double p_radius_connectivity, const size_t p_minimum_neighb
     m_radius(p_radius_connectivity * p_radius_connectivity),
     m_neighbors(p_minimum_neighbors),
     m_visited(std::vector<bool>()),
-    m_belong(std::vector<bool>()),
-    m_matrix_neighbors(adjacency_list())
+    m_belong(std::vector<bool>())
 { }
 
 
@@ -56,8 +54,6 @@ void dbscan::process(const dataset & p_data, cluster_data & p_result) {
 
     m_visited = std::vector<bool>(m_data_ptr->size(), false);
     m_belong = std::vector<bool>(m_data_ptr->size(), false);
-
-    create_neighbor_matrix();
 
     m_result_ptr = (dbscan_data *) &p_result;
 
@@ -72,7 +68,7 @@ void dbscan::process(const dataset & p_data, cluster_data & p_result) {
         cluster allocated_cluster;
 
         std::vector<size_t> index_matrix_neighbors;
-        m_matrix_neighbors.get_neighbors(i, index_matrix_neighbors);
+        get_neighbors(i, index_matrix_neighbors);
 
         if (index_matrix_neighbors.size() >= m_neighbors) {
             allocated_cluster.push_back(i);
@@ -86,7 +82,7 @@ void dbscan::process(const dataset & p_data, cluster_data & p_result) {
 
                     /* check for neighbors of the current neighbor - maybe it's noise */
                     std::vector<size_t> neighbor_neighbor_indexes;
-                    m_matrix_neighbors.get_neighbors(index_neighbor, neighbor_neighbor_indexes);
+                    get_neighbors(index_neighbor, neighbor_neighbor_indexes);
                     if (neighbor_neighbor_indexes.size() >= m_neighbors) {
 
                         /* Add neighbors of the neighbor for checking */
@@ -124,18 +120,10 @@ void dbscan::process(const dataset & p_data, cluster_data & p_result) {
 }
 
 
-void dbscan::create_neighbor_matrix(void) {
-    m_matrix_neighbors = adjacency_list(m_data_ptr->size());
-
-    for (unsigned int point_index1 = 0; point_index1 < m_data_ptr->size(); point_index1++) {
-        for (unsigned int point_index2 = (point_index1 + 1); point_index2 < m_data_ptr->size(); point_index2++) {
-
-            double distance = euclidean_distance_sqrt(&((*m_data_ptr)[point_index1]), &((*m_data_ptr)[point_index2]));
-
-            if (distance < m_radius) {
-                m_matrix_neighbors.set_connection(point_index1, point_index2);
-                m_matrix_neighbors.set_connection(point_index2, point_index1);
-            }
+void dbscan::get_neighbors(const size_t p_index, std::vector<size_t> & p_neighbors) {
+    for (size_t index = 0; index < m_data_ptr->size(); index++) {
+        if ( ( p_index != index ) && ( euclidean_distance_sqrt(&((*m_data_ptr)[index]), &((*m_data_ptr)[p_index])) <= m_radius ) ) {
+            p_neighbors.push_back(index);
         }
     }
 }
