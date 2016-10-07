@@ -54,8 +54,10 @@ def template_clustering(number_clusters, path, number_represent_points = 5, comp
         else:
             visualizer.append_clusters(clusters, None);
         
-        visualizer.append_clusters(representors, marker = '*', markersize = 10);
-        visualizer.append_clusters([ means ], None, marker = 'o');
+        for cluster_index in range(len(clusters)):
+            visualizer.append_cluster_attribute(0, cluster_index, representors[cluster_index], '*', 10);
+            visualizer.append_cluster_attribute(0, cluster_index, [ means[cluster_index] ], 'o');
+        
         visualizer.show();
 
 

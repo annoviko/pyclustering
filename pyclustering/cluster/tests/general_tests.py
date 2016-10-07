@@ -168,9 +168,9 @@ class Test(unittest.TestCase):
          
         data_clusters = [ [ [ random.random() ] ] for _ in range(0, 100) ];
         visualizer.append_clusters(data_clusters);
-         
+
         visualizer.show();
-     
+
     def testVisualizeOnExistedFigure(self):
         figure = plt.figure();
          
@@ -201,6 +201,24 @@ class Test(unittest.TestCase):
         visualizer = cluster_visualizer();
         visualizer.append_clusters([ sample ]);
         visualizer.show(figure);
+    
+    def testVisualizeClusterWithAttributes(self):
+        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1);
+        cure_instance = cure(sample, 2, 5, 0.5, False);
+        cure_instance.process();
+        
+        clusters = cure_instance.get_clusters();
+        representors = cure_instance.get_representors();
+        means = cure_instance.get_means();
+        
+        visualizer = cluster_visualizer();
+        visualizer.append_clusters(clusters, None);
+        
+        for cluster_index in range(len(clusters)):
+            visualizer.append_cluster_attribute(0, cluster_index, representors[cluster_index], '*', 10);
+            visualizer.append_cluster_attribute(0, cluster_index, [ means[cluster_index] ], 'o');
+        
+        visualizer.show();
 
 
 if __name__ == "__main__":

@@ -23,6 +23,8 @@ GENERAL CHANGES (pyclustering):
 - Implemented feature to omit usage of initial centers - X-Means starts processing from random initial center (pyclustering.cluster.xmeans).
   See: no reference.
 
+- Implemented feature for cluster visualizer: cluster attributes (pyclustering.cluster).
+  See: https://github.com/annoviko/pyclustering/issues/295
 
 
 GENERAL CHANGES (ccore):
