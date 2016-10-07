@@ -32,6 +32,12 @@ CORRECTED MAJOR BUGS:
 - Bug with time stamps for each iteration in hsyncnet algorithm (ccore.cluster.hsyncnet).
   See: https://github.com/annoviko/pyclustering/issues/306
 
+- Bug with memory occupation by CCORE DBSCAN implementation due to adjacency matrix usage (ccore.cluster.dbscan).
+  See: https://github.com/annoviko/pyclustering/issues/309
+
+- Bug with CURE: always finds max two representative points (pyclustering.cluster.cure).
+  See: https://github.com/annoviko/pyclustering/issues/310
+
 
 ------------------------------------------------------------------------
 

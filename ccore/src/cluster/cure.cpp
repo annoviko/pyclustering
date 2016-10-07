@@ -201,7 +201,15 @@ void cure_queue::merge(cure_cluster * cluster1, cure_cluster * cluster2, const s
                 minimal_distance = euclidean_distance(*point, merged_cluster->mean);
             }
             else {
-                minimal_distance = euclidean_distance(*point, (*temporary->begin()));
+                double temp_minimal_distance = std::numeric_limits<double>::max();
+                for (auto p : (*temporary)) {
+                    double minimal_candidate = euclidean_distance(*point, p);
+                    if (minimal_candidate < temp_minimal_distance) {
+                        temp_minimal_distance = minimal_candidate;
+                    }
+                }
+
+                minimal_distance = temp_minimal_distance;
             }
 
             if (minimal_distance >= maximal_distance) {
