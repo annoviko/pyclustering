@@ -41,7 +41,7 @@ def template_clustering(start_centers, path, tolerance = 0.025, criterion = spli
     if (criterion == splitting_type.BAYESIAN_INFORMATION_CRITERION): criterion_string = "BAYESIAN_INFORMATION_CRITERION";
     elif (criterion == splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH): criterion_string = "MINIMUM_NOISELESS_DESCRIPTION_LENGTH";
     
-    print("Sample: ", path, "\tExecution time: ", ticks, "Number of clusters: ", len(clusters), criterion_string, "\n");
+    print("Sample: ", path, "\nInitial centers: '", (start_centers is not None), "', Execution time: '", ticks, "', Number of clusters:", len(clusters), ",", criterion_string, "\n");
 
     draw_clusters(sample, clusters);
     
@@ -51,30 +51,50 @@ def cluster_sample1():
     start_centers = [[3.7, 5.5]];
     template_clustering(start_centers, SIMPLE_SAMPLES.SAMPLE_SIMPLE1, criterion = splitting_type.BAYESIAN_INFORMATION_CRITERION);
     template_clustering(start_centers, SIMPLE_SAMPLES.SAMPLE_SIMPLE1, criterion = splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH);
-    
+
+def cluster_sample1_without_initial_centers():
+    template_clustering(None, SIMPLE_SAMPLES.SAMPLE_SIMPLE1, criterion = splitting_type.BAYESIAN_INFORMATION_CRITERION);
+    template_clustering(None, SIMPLE_SAMPLES.SAMPLE_SIMPLE1, criterion = splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH);
+
 def cluster_sample2():
     "Start with wrong number of clusters."
     start_centers = [[3.5, 4.8], [2.6, 2.5]];
     template_clustering(start_centers, SIMPLE_SAMPLES.SAMPLE_SIMPLE2, criterion = splitting_type.BAYESIAN_INFORMATION_CRITERION);
     template_clustering(start_centers, SIMPLE_SAMPLES.SAMPLE_SIMPLE2, criterion = splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH);
-    
+
+def cluster_sample2_without_initial_centers():
+    template_clustering(None, SIMPLE_SAMPLES.SAMPLE_SIMPLE2, criterion = splitting_type.BAYESIAN_INFORMATION_CRITERION);
+    template_clustering(None, SIMPLE_SAMPLES.SAMPLE_SIMPLE2, criterion = splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH);
+
 def cluster_sample3():
     "Start with wrong number of clusters."
     start_centers = [[0.2, 0.1], [4.0, 1.0]];
     template_clustering(start_centers, SIMPLE_SAMPLES.SAMPLE_SIMPLE3, criterion = splitting_type.BAYESIAN_INFORMATION_CRITERION);
     template_clustering(start_centers, SIMPLE_SAMPLES.SAMPLE_SIMPLE3, criterion = splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH);
-    
+
+def cluster_sample3_without_initial_centers():
+    template_clustering(None, SIMPLE_SAMPLES.SAMPLE_SIMPLE3, criterion = splitting_type.BAYESIAN_INFORMATION_CRITERION);
+    template_clustering(None, SIMPLE_SAMPLES.SAMPLE_SIMPLE3, criterion = splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH);
+
 def cluster_sample4():
     start_centers = [[1.5, 0.0], [1.5, 2.0], [1.5, 4.0], [1.5, 6.0], [1.5, 8.0]];
     template_clustering(start_centers, SIMPLE_SAMPLES.SAMPLE_SIMPLE4, criterion = splitting_type.BAYESIAN_INFORMATION_CRITERION);
     template_clustering(start_centers, SIMPLE_SAMPLES.SAMPLE_SIMPLE4, criterion = splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH);
-    
+
+def cluster_sample4_without_initial_centers():
+    template_clustering(None, SIMPLE_SAMPLES.SAMPLE_SIMPLE4, criterion = splitting_type.BAYESIAN_INFORMATION_CRITERION);
+    template_clustering(None, SIMPLE_SAMPLES.SAMPLE_SIMPLE4, criterion = splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH);
+
 def cluster_sample5():
     "Start with wrong number of clusters."
     start_centers = [[0.0, 1.0], [0.0, 0.0]];
     template_clustering(start_centers, SIMPLE_SAMPLES.SAMPLE_SIMPLE5, criterion = splitting_type.BAYESIAN_INFORMATION_CRITERION);
     template_clustering(start_centers, SIMPLE_SAMPLES.SAMPLE_SIMPLE5, criterion = splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH);
-    
+
+def cluster_sample5_without_initial_centers():
+    template_clustering(None, SIMPLE_SAMPLES.SAMPLE_SIMPLE5, criterion = splitting_type.BAYESIAN_INFORMATION_CRITERION);
+    template_clustering(None, SIMPLE_SAMPLES.SAMPLE_SIMPLE5, criterion = splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH);
+
 def cluster_elongate():
     "Not so applicable for this sample"
     start_centers = [[1.0, 4.5], [3.1, 2.7]];
@@ -98,7 +118,11 @@ def cluster_two_diamonds():
     start_centers = [[0.8, 0.2]];
     template_clustering(start_centers, FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, criterion = splitting_type.BAYESIAN_INFORMATION_CRITERION);
     template_clustering(start_centers, FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, criterion = splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH);
-    
+
+def cluster_two_diamonds_without_initial_centers():
+    template_clustering(None, FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, criterion = splitting_type.BAYESIAN_INFORMATION_CRITERION);
+    template_clustering(None, FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, criterion = splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH);
+
 def cluster_wing_nut():
     start_centers = [[-1.5, 1.5], [1.5, 1.5]];
     template_clustering(start_centers, FCPS_SAMPLES.SAMPLE_WING_NUT, criterion = splitting_type.BAYESIAN_INFORMATION_CRITERION); 
@@ -150,6 +174,13 @@ cluster_wing_nut();
 cluster_chainlink();
 cluster_hepta();
 cluster_tetra();
+
+cluster_sample1_without_initial_centers();
+cluster_sample2_without_initial_centers();
+cluster_sample3_without_initial_centers();
+cluster_sample4_without_initial_centers();
+cluster_sample5_without_initial_centers();
+cluster_two_diamonds_without_initial_centers();
  
 experiment_execution_time(False);   # Python code
 experiment_execution_time(True);    # C++ code + Python env.

@@ -27,6 +27,7 @@
 
 import numpy;
 import math;
+import random;
 
 from enum import IntEnum;
 
@@ -59,7 +60,9 @@ class xmeans:
         sample = read_sample(path_to_sample);
         
         # create object of X-Means algorithm that uses CCORE for processing
-        xmeans_instance = xmeans(sample, [ [0.0, 0.5] ], ccore = True);
+        # initial centers - optional parameter, if it is None, then random center will be used by the algorithm
+        initial_centers = [ [0.0, 0.5] ];
+        xmeans_instance = xmeans(sample, initial_centers, ccore = True);
         
         # run cluster analysis
         xmeans_instance.process();
@@ -70,14 +73,16 @@ class xmeans:
         # display allocated clusters
         draw_clusters(sample, clusters);
     @endcode
+    
     """
     
-    def __init__(self, data, initial_centers, kmax = 20, tolerance = 0.025, criterion = splitting_type.BAYESIAN_INFORMATION_CRITERION, ccore = False):
+    def __init__(self, data, initial_centers = None, kmax = 20, tolerance = 0.025, criterion = splitting_type.BAYESIAN_INFORMATION_CRITERION, ccore = False):
         """!
         @brief Constructor of clustering algorithm X-Means.
         
         @param[in] data (list): Input data that is presented as list of points (objects), each point should be represented by list or tuple.
-        @param[in] initial_centers (list): Initial coordinates of centers of clusters that are represented by list: [center1, center2, ...].
+        @param[in] initial_centers (list): Initial coordinates of centers of clusters that are represented by list: [center1, center2, ...], 
+                    if it is not specified then X-Means starts from the random center.
         @param[in] kmax (uint): Maximum number of clusters that can be allocated.
         @param[in] tolerance (double): Stop condition for each iteration: if maximum value of change of centers of clusters is less than tolerance than algorithm will stop processing.
         @param[in] criterion (splitting_type): Type of splitting creation.
@@ -87,8 +92,12 @@ class xmeans:
            
         self.__pointer_data = data;
         self.__clusters = [];
-        self.__centers = initial_centers[:];
-         
+        
+        if (initial_centers is not None):
+            self.__centers = initial_centers[:];
+        else:
+            self.__centers = [ [random.random() for _ in range(len(data[0])) ] ];
+        
         self.__kmax = kmax;
         self.__tolerance = tolerance;
         self.__criterion = criterion;
@@ -150,7 +159,7 @@ class xmeans:
         
         """
          
-        return self.__centers;      
+        return self.__centers;
      
      
     def __improve_parameters(self, centers, available_indexes = None):

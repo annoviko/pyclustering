@@ -20,6 +20,10 @@ GENERAL CHANGES (pyclustering):
 - Implemented feature to analyse ordering diagram using amout of clusters that should be allocated as an input parameter to calculate correct connvectity radius for clustering (pyclustering.cluster.optics).
   See: https://github.com/annoviko/pyclustering/issues/307
 
+- Implemented feature to omit usage of initial centers - X-Means starts processing from random initial center (pyclustering.cluster.xmeans).
+  See: no reference.
+
+
 
 GENERAL CHANGES (ccore):
 
