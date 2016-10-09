@@ -23,6 +23,10 @@ import unittest;
 
 from pyclustering.utils import euclidean_distance;
 from pyclustering.utils import average_neighbor_distance;
+from pyclustering.utils import read_sample;
+from pyclustering.utils import data_corners;
+
+from pyclustering.samples.definitions import SIMPLE_SAMPLES;
 
 class Test(unittest.TestCase):
 
@@ -61,8 +65,26 @@ class Test(unittest.TestCase):
     
     def float_comparasion(self, float1, float2, eps = 0.0001):
         return ( (float1 + eps) > float2 and (float1 - eps) < float2 );
+    
+    
+    def templateDataCorners(self, data_path, data_filter, expected_result):
+        sample = read_sample(data_path);
+        result = data_corners(sample, data_filter);
         
-        
+        assert result == expected_result;
+    
+    def testDataCornersSampleSimple01(self):
+        self.templateDataCorners(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, None, ([3.423602, 5.364477], [6.978178, 7.850364]));
+    
+    def testDataCornersSampleSimple01WithFilter(self):
+        self.templateDataCorners(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [0, 1, 2, 3, 4], ([3.423602, 5.364477], [3.936690, 5.663041]));
+    
+    def testDataCornersSampleSimple02(self):
+        self.templateDataCorners(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, None, ([3.177711, 0.022688], [7.835975, 6.704815]));
+
+    def testDataCornersSampleSimple02WithFilter(self):
+        self.templateDataCorners(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [10, 11, 12, 13, 14], ([7.062946, 6.022702], [7.500097, 6.704815]));
+
 
 if __name__ == "__main__":
     unittest.main();
