@@ -25,6 +25,7 @@ from pyclustering.utils import euclidean_distance;
 from pyclustering.utils import average_neighbor_distance;
 from pyclustering.utils import read_sample;
 from pyclustering.utils import data_corners;
+from pyclustering.utils import norm_vector;
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES;
 
@@ -84,6 +85,11 @@ class Test(unittest.TestCase):
 
     def testDataCornersSampleSimple02WithFilter(self):
         self.templateDataCorners(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [10, 11, 12, 13, 14], ([7.062946, 6.022702], [7.500097, 6.704815]));
+
+    def testVectorLength(self):
+        assert 10 == norm_vector([6, 8]);
+        assert self.float_comparasion(4.219, norm_vector([2.2, 3.6]), 0.001);
+        assert self.float_comparasion(5.280, norm_vector([-4.8, -2.2]), 0.001);
 
 
 if __name__ == "__main__":

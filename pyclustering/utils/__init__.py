@@ -435,6 +435,45 @@ def data_corners(data, data_filter = None):
     return (minimum_corner, maximum_corner);
 
 
+def norm_vector(vector):
+    """!
+    @brief Calculates norm of an input vector that is known as a vector length.
+    
+    @param[in] vector (list): The input vector whose length is calculated.
+    
+    @return (double) vector norm known as vector length.
+    
+    """
+    
+    length = 0.0;
+    for component in vector:
+        length += component * component;
+    
+    length = length ** 0.5;
+    
+    return length;
+
+
+def unit_vector(vector):
+    """!
+    @brief Calculates unit vector.
+    @details Unit vector calculates of an input vector involves two steps. 
+              The first, calculate vector length. The second,
+              divide each vector component by the obtained length.
+    
+    @param[in] vector (list): The input vector that is used for unit vector calculation.
+    
+    """
+    
+    length = norm_vector(vector);
+    unit_vector_instance = [];
+    
+    for component in vector:
+        unit_vector_instance.append(component / length);
+    
+    return unit_vector_instance;
+
+
 def heaviside(value):
     """!
     @brief Calculates Heaviside function that represents step function.
