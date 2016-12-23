@@ -25,6 +25,9 @@
 
 """
 
+
+from pyclustering.cluster.encoder import type_encoding;
+
 from pyclustering.utils import euclidean_distance;
 
 import matplotlib.pyplot as plt;
@@ -390,7 +393,20 @@ class optics:
         
         return self.__eps;
     
-    
+
+    def get_cluster_encoding(self):
+        """!
+        @brief Returns clustering result representation type that indicate how clusters are encoded.
+        
+        @return (type_encoding) Clustering result representation.
+        
+        @see get_clusters()
+        
+        """
+        
+        return type_encoding.CLUSTER_INDEX_LIST_SEPARATION;
+
+
     def __expand_cluster_order(self, optics_object):
         """!
         @brief Expand cluster order from not processed optic-object that corresponds to object from input data.

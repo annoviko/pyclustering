@@ -25,11 +25,14 @@
 
 """
 
+
 import numpy;
 import math;
 import random;
 
 from enum import IntEnum;
+
+from pyclustering.cluster.encoder import type_encoding;
 
 import pyclustering.core.wrapper as wrapper;
 
@@ -160,8 +163,21 @@ class xmeans:
         """
          
         return self.__centers;
-     
-     
+
+
+    def get_cluster_encoding(self):
+        """!
+        @brief Returns clustering result representation type that indicate how clusters are encoded.
+        
+        @return (type_encoding) Clustering result representation.
+        
+        @see get_clusters()
+        
+        """
+        
+        return type_encoding.CLUSTER_INDEX_LIST_SEPARATION;
+
+
     def __improve_parameters(self, centers, available_indexes = None):
         """!
         @brief Performs k-means clustering in the specified region.

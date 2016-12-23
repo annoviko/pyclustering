@@ -27,7 +27,7 @@
 from enum import IntEnum;
 
 
-class type_cluster_result(IntEnum):
+class type_encoding(IntEnum):
     ## Results are represented by list of indexes and belonging to the cluster is defined by cluster index and element's position corresponds to object's position in input data, for example [0, 0, 1, 1, 1, 0].
     CLUSTER_INDEX_LABELING = 0;
     
@@ -38,7 +38,7 @@ class type_cluster_result(IntEnum):
     CLUSTER_OBJECT_LIST_SEPARATION = 2;
 
 
-class cluster_result_representor:
+class cluster_encoder:
     """!
     @brief Provides service to change clustering result representation.
     
@@ -55,34 +55,34 @@ class cluster_result_representor:
         clusters = kmeans_instance.get_clusters();
         
         # by default k-means returns representation CLUSTER_INDEX_LIST_SEPARATION
-        type_repr = type_cluster_result.CLUSTER_INDEX_LIST_SEPARATION;
-        representor = cluster_result_representor(type_repr, clusters, sample);
+        type_repr = kmeans_instance.get_cluster_encoding();
+        encoder = cluster_encoder(type_repr, clusters, sample);
         
         # change representation from index list to label list
-        representor.get_representation(type_cluster_result.CLUSTER_INDEX_LABELING);
+        representor.set_encoding(type_encoding.CLUSTER_INDEX_LABELING);
         
         # change representation from label to object list
-        representor.get_representation(type_cluster_result.CLUSTER_OBJECT_LIST_SEPARATION);
+        representor.set_encoding(type_encoding.CLUSTER_OBJECT_LIST_SEPARATION);
     @endcode
     """
     
-    def __init__(self, type_representation, clusters, data):
+    def __init__(self, encoding, clusters, data):
         """!
-        @brief Constructor of cluster result representor.
+        @brief Constructor of clustering result representor.
         
-        @param[in] type_representation (type_cluster_result): Type of clusters representation (index list, object list or labels).
+        @param[in] encoding (type_encoding): Type of clusters representation (index list, object list or labels).
         @param[in] clusters (list): Current clusters representation.
         @param[in] data (list): Data that corresponds to clusters.
         
         """
     
-        self.__type_representation = type_representation;
+        self.__type_representation = encoding;
         self.__clusters = clusters;
         self.__data = data;
 
 
     @property
-    def get_representation(self):
+    def get_encoding(self):
         """!
         @brief Returns current cluster representation.
         
@@ -106,39 +106,39 @@ class cluster_result_representor:
         return self.__data;
 
 
-    def set_representation(self, type_representation):
+    def set_encoding(self, encoding):
         """!
-        @brief Change clusters representation to specified type.
+        @brief Change clusters encoding to specified type (index list, object list, labeling).
         
-        @param[in] type_representation (type_cluster_result): New type of clusters representation.
+        @param[in] encoding (type_encoding): New type of clusters representation.
         
         """
         
-        if(type_representation == self.__type_representation):
+        if(encoding == self.__type_representation):
             return;
         
-        if (self.__type_representation == type_cluster_result.CLUSTER_INDEX_LABELING):
-            if (type_representation == type_cluster_result.CLUSTER_INDEX_LIST_SEPARATION):
+        if (self.__type_representation == type_encoding.CLUSTER_INDEX_LABELING):
+            if (encoding == type_encoding.CLUSTER_INDEX_LIST_SEPARATION):
                 self.__clusters = self.__convert_label_to_index();
             
             else:
                 self.__clusters = self.__convert_label_to_object();
         
-        elif (self.__type_representation == type_cluster_result.CLUSTER_INDEX_LIST_SEPARATION):
-            if (type_representation == type_cluster_result.CLUSTER_INDEX_LABELING):
+        elif (self.__type_representation == type_encoding.CLUSTER_INDEX_LIST_SEPARATION):
+            if (encoding == type_encoding.CLUSTER_INDEX_LABELING):
                 self.__clusters = self.__convert_index_to_label();
             
             else:
                 self.__clusters = self.__convert_index_to_object();
         
         else:
-            if (type_representation == type_cluster_result.CLUSTER_INDEX_LABELING):
+            if (encoding == type_encoding.CLUSTER_INDEX_LABELING):
                 self.__clusters = self.__convert_object_to_label();
             
             else:
                 self.__clusters = self.__convert_object_to_index();
         
-        self.__type_representation = type_representation;
+        self.__type_representation = encoding;
 
 
     def __convert_index_to_label(self):
@@ -172,13 +172,14 @@ class cluster_result_representor:
         for cluster in self.__clusters:
             for data_object in cluster:
                 index_object = -1;
-                if (data_object in positions):
-                    index_object = self.__data.index(data_object, positions[data_object] + 1);
+                hashable_data_object = str(data_object);
+                if (hashable_data_object in positions):
+                    index_object = self.__data.index(data_object, positions[hashable_data_object] + 1);
                 else:
                     index_object = self.__data.index(data_object);
                     
                 clusters[index_object] = index_cluster;
-                positions[data_object] = index_object;
+                positions[hashable_data_object] = index_object;
             
             index_cluster += 1;
         
@@ -191,13 +192,14 @@ class cluster_result_representor:
         for index_cluster in range(len(self.__clusters)):
             for data_object in self.__clusters[index_cluster]:
                 index_object = -1;
-                if (data_object in positions):
-                    index_object = self.__data.index(data_object, positions[data_object] + 1);
+                hashable_data_object = str(data_object);
+                if (hashable_data_object in positions):
+                    index_object = self.__data.index(data_object, positions[hashable_data_object] + 1);
                 else:
                     index_object = self.__data.index(data_object);
 
                 clusters[index_cluster].append(index_object);
-                positions[data_object] = index_object;
+                positions[hashable_data_object] = index_object;
 
         return clusters;
 

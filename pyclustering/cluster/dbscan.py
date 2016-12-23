@@ -26,9 +26,12 @@
 """
 
 
+from pyclustering.cluster.encoder import type_encoding;
+
 from pyclustering.utils import euclidean_distance_sqrt;
 
 import pyclustering.core.dbscan_wrapper as wrapper;
+
 
 class dbscan:
     """!
@@ -75,6 +78,7 @@ class dbscan:
         
         self.__ccore = ccore;
 
+
     def process(self):
         """!
         @brief Performs cluster analysis in line with rules of DBSCAN algorithm.
@@ -113,8 +117,8 @@ class dbscan:
         """
         
         return self.__clusters;
-    
-    
+
+
     def get_noise(self):
         """!
         @brief Returns allocated noise.
@@ -129,6 +133,19 @@ class dbscan:
         """
 
         return self.__noise;
+
+
+    def get_cluster_encoding(self):
+        """!
+        @brief Returns clustering result representation type that indicate how clusters are encoded.
+        
+        @return (type_encoding) Clustering result representation.
+        
+        @see get_clusters()
+        
+        """
+        
+        return type_encoding.CLUSTER_INDEX_LIST_SEPARATION;
 
 
     def __expand_cluster(self, point):

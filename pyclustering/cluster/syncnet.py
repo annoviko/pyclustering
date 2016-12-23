@@ -25,10 +25,14 @@
 
 """
 
+
 import matplotlib.pyplot as plt;
 import matplotlib.animation as animation;
 
 import math;
+
+from pyclustering.cluster.encoder import type_encoding;
+from pyclustering.cluster import cluster_visualizer;
 
 from pyclustering.core.syncnet_wrapper import syncnet_create_network, syncnet_process, syncnet_destroy_network, syncnet_analyser_destroy;
 
@@ -36,7 +40,6 @@ from pyclustering.nnet.sync import sync_dynamic, sync_network, sync_visualizer;
 from pyclustering.nnet import conn_represent, initial_type, conn_type, solve_type;
 
 from pyclustering.utils import euclidean_distance;
-from pyclustering.cluster import cluster_visualizer
 
 
 class syncnet_analyser(sync_dynamic):
@@ -83,8 +86,21 @@ class syncnet_analyser(sync_dynamic):
         """
         
         return self.allocate_sync_ensembles(eps, indexes, iteration);
-    
-    
+
+
+    def get_cluster_encoding(self):
+        """!
+        @brief Returns clustering result representation type that indicate how clusters are encoded.
+        
+        @return (type_encoding) Clustering result representation.
+        
+        @see get_clusters()
+        
+        """
+        
+        return type_encoding.CLUSTER_INDEX_LIST_SEPARATION;
+
+
     def allocate_noise(self):
         """!
         @brief Returns allocated noise.

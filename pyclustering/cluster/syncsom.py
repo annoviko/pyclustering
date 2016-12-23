@@ -25,10 +25,12 @@
 
 """
 
+
+from pyclustering.cluster.encoder import type_encoding;
+from pyclustering.cluster.syncnet import syncnet;
+
 from pyclustering.nnet.som import som, type_conn;
 from pyclustering.nnet import initial_type;
-
-from pyclustering.cluster.syncnet import syncnet;
 
 from pyclustering.utils import euclidean_distance_sqrt;
 
@@ -238,6 +240,19 @@ class syncsom:
             clusters.append(cluster);
         
         return clusters;
+
+
+    def get_cluster_encoding(self):
+        """!
+        @brief Returns clustering result representation type that indicate how clusters are encoded.
+        
+        @return (type_encoding) Clustering result representation.
+        
+        @see get_clusters()
+        
+        """
+        
+        return type_encoding.CLUSTER_INDEX_LIST_SEPARATION;
 
 
     def show_som_layer(self):

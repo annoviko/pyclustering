@@ -25,11 +25,15 @@
 
 """
 
+
+from pyclustering.cluster.encoder import type_encoding;
+
 from pyclustering.utils import euclidean_distance;
 
 from pyclustering.container.kdtree import kdtree;
 
 import pyclustering.core.cure_wrapper as wrapper;
+
 
 class cure_cluster:
     """!
@@ -230,10 +234,10 @@ class cure:
     
     def get_representors(self):
         """!
-        @brief Returns list of representors of each cluster.
-        @details Cluster index should be used for navigation between lists of representors.
+        @brief Returns list of point-representors of each cluster.
+        @details Cluster index should be used for navigation between lists of point-representors.
         
-        @return (list) List of representors of each cluster.
+        @return (list) List of point-representors of each cluster.
         
         @see get_clusters()
         @see get_means()
@@ -256,6 +260,22 @@ class cure:
         """
         
         return self.__means;
+    
+    
+    def get_cluster_encoding(self):
+        """!
+        @brief Returns clustering result representation type that indicate how clusters are encoded.
+        
+        @return (type_encoding) Clustering result representation.
+        
+        @see get_clusters()
+        
+        """
+        
+        if (self.__ccore is True):
+            return type_encoding.CLUSTER_INDEX_LIST_SEPARATION;
+        else:
+            return type_encoding.CLUSTER_OBJECT_LIST_SEPARATION;
     
     
     def __insert_cluster(self, cluster):

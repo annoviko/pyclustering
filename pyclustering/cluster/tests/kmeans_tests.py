@@ -25,6 +25,7 @@
 
 import unittest;
 
+from pyclustering.cluster.encoder import type_encoding, cluster_encoder;
 from pyclustering.cluster.kmeans import kmeans;
 
 from pyclustering.utils import read_sample;
@@ -156,6 +157,28 @@ class Test(unittest.TestCase):
     def testClusterAllocationOneDimensionDataByCore(self):
         self.templateClusterAllocationOneDimensionData(True);
 
+
+    def templateEncoderProcedures(self, sample, initial_centers, number_clusters, ccore_flag):
+        sample = read_sample(sample);
+        
+        cure_instance = kmeans(sample, initial_centers, 0.025, ccore_flag);
+        cure_instance.process();
+        
+        clusters = cure_instance.get_clusters();
+        encoding = cure_instance.get_cluster_encoding();
+        
+        encoder = cluster_encoder(encoding, clusters, sample);
+        encoder.set_encoding(type_encoding.CLUSTER_INDEX_LABELING);
+        encoder.set_encoding(type_encoding.CLUSTER_OBJECT_LIST_SEPARATION);
+        encoder.set_encoding(type_encoding.CLUSTER_INDEX_LIST_SEPARATION);
+        
+        assert number_clusters == len(clusters);
+
+    def testEncoderProcedureSampleSimple4(self):
+        self.templateEncoderProcedures(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, [[1.5, 0.0], [1.5, 2.0], [1.5, 4.0], [1.5, 6.0], [1.5, 8.0]], 5, False);
+
+    def testEncoderProcedureSampleSimple4ByCore(self):
+        self.templateEncoderProcedures(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, [[1.5, 0.0], [1.5, 2.0], [1.5, 4.0], [1.5, 6.0], [1.5, 8.0]], 5, True);
 
 
 if __name__ == "__main__":

@@ -25,7 +25,10 @@
 
 """
 
+
 from enum import IntEnum;
+
+from pyclustering.cluster.encoder import type_encoding;
 
 from pyclustering.utils import euclidean_distance_sqrt;
 
@@ -131,6 +134,19 @@ class agglomerative:
         """
         
         return self.__clusters;
+    
+    
+    def get_cluster_encoding(self):
+        """!
+        @brief Returns clustering result representation type that indicate how clusters are encoded.
+        
+        @return (type_encoding) Clustering result representation.
+        
+        @see get_clusters()
+        
+        """
+        
+        return type_encoding.CLUSTER_INDEX_LIST_SEPARATION;
     
     
     def __merge_similar_clusters(self):

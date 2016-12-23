@@ -25,11 +25,15 @@
 
 """
 
+
 from pyclustering.utils import linear_sum, square_sum;
+
+from pyclustering.cluster.encoder import type_encoding;
 
 from pyclustering.container.cftree import cftree, cfentry, measurement_type;
 
 from copy import copy;
+
 
 class birch:
     """!
@@ -156,8 +160,21 @@ class birch:
         """
         
         return self.__noise;
-    
-    
+
+
+    def get_cluster_encoding(self):
+        """!
+        @brief Returns clustering result representation type that indicate how clusters are encoded.
+        
+        @return (type_encoding) Clustering result representation.
+        
+        @see get_clusters()
+        
+        """
+        
+        return type_encoding.CLUSTER_INDEX_LIST_SEPARATION;
+
+
     def __extract_features(self):
         """!
         @brief Extracts features and outlier features from CF-tree cluster.
