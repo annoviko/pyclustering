@@ -44,43 +44,44 @@ E-Mail: pyclustering@yandex.ru
 ###What is implemented in the project.###
 
 **Clustering algorithms (module pyclustering.cluster):**
-- Agglomerative [Python, C++]
-- BIRCH [Python]
-- CLARANS [Python]
-- CURE [Python, C++]
-- DBSCAN [Python, C++]
-- HSyncNet [Python, C++]
-- K-Means [Python, C++]
-- K-Medians [Python, C++]
-- K-Medoids [Python, C++]
-- OPTICS [Python]
-- ROCK [Python, C++]
-- SyncNet [Python, C++]
-- SyncSom [Python]
-- X-Means [Python, C++]
+- Agglomerative [Python, C++] each object is treated as a single cluster and are then merged (agglomerate) http://nlp.stanford.edu/IR-book/html/htmledition/hierarchical-agglomerative-clustering-1.html
+- BIRCH [Python] balanced iterative reducing and clustering using hierarchies https://en.wikipedia.org/wiki/BIRCH_(data_clustering)
+- CLARANS [Python] Clustering Large Applications based on RAN-
+domized   Search http://www.cs.ecu.edu/~dingq/CSCI6905/readings/CLARANS.pdf
+- CURE [Python, C++] Clustering Using REpresentatives https://en.wikipedia.org/wiki/CURE_data_clustering_algorithm
+- DBSCAN [Python, C++] Density-based spatial clustering of applications with noise https://en.wikipedia.org/wiki/DBSCAN
+- HSyncNet [Python, C++]  Hierarchical Sync (Synchronization-Inspired Partitioning and Hierarchical Clustering) https://www.computer.org/csdl/trans/tk/2013/04/ttk2013040893-abs.html 
+- K-Means [Python, C++]  to partition n observations into k clusters in which each observation belongs to the cluster with the nearest mean, serving as a prototype of the cluster https://en.wikipedia.org/wiki/K-means_algorithm 
+- K-Medians [Python, C++] uses the median in each dimension instead of the mean https://en.wikipedia.org/wiki/K-medians_clustering
+- K-Medoids [Python, C++] https://en.wikipedia.org/wiki/K-medoids Mediods are representative objects of a data set or a cluster with a data set whose average dissimilarity to all the objects in the cluster is minimal https://en.wikipedia.org/wiki/Medoids
+- OPTICS [Python]  Ordering points to identify the clustering structure (OPTICS) https://en.wikipedia.org/wiki/OPTICS_algorithm
+- ROCK [Python, C++] ROCK: A Robust Clustering Algorithm for Categorical Attributes http://www.cis.upenn.edu/%7Esudipto/mypapers/categorical.pdf
+- SyncNet [Python, C++] SyncNet is bio-inspired algorithm that is based on oscillatory network that uses modified Kuramoto https://annoviko.wordpress.com/2016/07/08/oscillatory-networks-based-on-kuramoto-model-1-introduction/
+- SyncSom [Python] Double-layer oscillatory network for cluster analysis https://www.researchgate.net/publication/274066759_SYNC-SOM_Double-layer_oscillatory_network_for_cluster_analysis
+- X-Means [Python, C++] The X-Means clustering algorithm (Pelleg & Moore, 2000) is an extension of the K-Means clustering algorithm http://cse-wiki.unl.edu/wiki/index.php/Clustering_Techniques#X-Means_Clustering
 
 **Oscillatory networks and neural networks (module pyclustering.nnet):**
-- CNN (Chaotic Neural Network) [Python]
-- HHN (Oscillatory network based on Hodgkin-Huxley model) [Python]
-- Hysteresis Oscillatory Network [Python]
-- LEGION (Local Excitatory Global Inhibitory Oscillatory Network) [Python, C++]
-- PCNN (Pulse-Coupled Neural Network) [Python, C++]
-- SOM (Self-Organized Map) [Python, C++]
-- Sync (Oscillatory network based on Kuramoto model) [Python, C++]
-- SyncPR (Oscillatory network for pattern recognition) [Python, C++]
-- SyncSegm (Oscillatory network for image segmentation) [Python, C++]
+- CNN (Chaotic Neural Network) [Python] https://www.researchgate.net/publication/221053550_Clustering_by_Chaotic_Neural_Networks_with_Mean_Field_Calculated_Via_Delaunay_Triangulation and https://www.researchgate.net/publication/225675697_Large-dimension_image_clustering_by_means_of_fragmentary_synchronization_in_chaotic_systems 
+- HHN (Oscillatory network based on Hodgkin-Huxley model) [Python] https://www.researchgate.net/publication/24193858_Selective_attention_model_with_spiking_elements
+- Hysteresis Oscillatory Network [Python] https://www.researchgate.net/publication/3952789_Oscillatory_hysteresis_associative_memory
+- LEGION (Local Excitatory Global Inhibitory Oscillatory Network) [Python, C++] https://www.researchgate.net/publication/3301932_Locally_excitatory_globally_inhibitory_oscillator_networks_IEEE_Trans_Neural_Netw_6283-286
+- PCNN (Pulse-Coupled Neural Network) [Python, C++] https://www.researchgate.net/publication/220693457_Image_processing_using_pulse-coupled_neural_networks
+- SOM (Self-Organized Map) [Python, C++] is a type of artificial neural network (ANN) that is trained using unsupervised learning to produce a low-dimensional (typically two-dimensional), discretized representation of the input space of the training samples, called a map. https://en.wikipedia.org/wiki/Self-organizing_map
+- Sync (Oscillatory network based on Kuramoto model) [Python, C++] http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.313.1857 
+- SyncPR (Oscillatory network for pattern recognition) [Python, C++] https://www.researchgate.net/publication/264902330_Phase_Oscillatory_Network_and_Visual_Pattern_Recognition
+- SyncSegm (Oscillatory network for image segmentation) [Python, C++] https://www.researchgate.net/publication/283803971_Oscillatory_Network_Based_on_Kuramoto_Model_for_Image_Segmentation
 
 **Graph Coloring Algorithms (module pyclustering.gcolor):**
-- DSatur [Python]
-- Hysteresis [Python]
-- GColorSync [Python]
+- DSatur [Python] https://www.researchgate.net/publication/213877046_New_methods_to_color_the_vertices_of_a_graph
+- Hysteresis [Python] https://www.researchgate.net/publication/221374466_Dynamical_hysteresis_neural_networks_for_graph_coloring_problem
+- GColorSync [Python] https://www.researchgate.net/publication/232384859_Clustering_dynamics_of_nonlinear_oscillator_network_Application_to_graph_coloring_problem
 
 **Travelling Salesman Problem Algorithms (module pyclustering.tsp):**
-- AntColony [Python, C++]
+- AntColony [Python, C++] https://www.researchgate.net/publication/13987583_Ant_Colonies_for_the_Traveling_Salesman_Problem
 
 **Containers (module pyclustering.container):**
-- KD Tree [Python, C++]
-- CF Tree [Python]
+- KD Tree [Python, C++] https://en.wikipedia.org/wiki/Kd-tree
+- CF Tree [Python] CF tree is a height-balanced tree that stores the clustering features for a hierarchical clustering  https://en.wikipedia.org/wiki/BIRCH_(data_clustering)
 
 ------------------------------------------------
 
