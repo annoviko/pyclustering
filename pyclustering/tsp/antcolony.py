@@ -6,7 +6,7 @@
          - [2] J.Yang, X.Shi, M.Marchese, Y.Liang. An ant colony optimization method for generalized TSP problem. 2008.
 
 @authors Alexey Kukushkin (pyclustering@yandex.ru)
-@date 2014-2016
+@date 2014-2017
 @copyright GNU Public License
 
 @cond GNU_PUBLIC_LICENSE

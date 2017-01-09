@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2016    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -47,7 +47,7 @@ public:
     * @brief    Default constructor that creates empty clustering data.
     *
     */
-    dbscan_data(void);
+    dbscan_data(void) = default;
 
     /**
     *
@@ -56,7 +56,7 @@ public:
     * @param[in] p_other: another clustering data.
     *
     */
-    dbscan_data(const dbscan_data & p_other);
+    dbscan_data(const dbscan_data & p_other) = default;
 
     /**
     *
@@ -65,14 +65,14 @@ public:
     * @param[in] p_other: another clustering data.
     *
     */
-    dbscan_data(dbscan_data && p_other);
+    dbscan_data(dbscan_data && p_other) = default;
 
     /**
     *
     * @brief    Default destructor that destroys clustering data.
     *
     */
-    virtual ~dbscan_data(void);
+    virtual ~dbscan_data(void) = default;
 
 public:
     /**
@@ -80,7 +80,7 @@ public:
     * @brief    Returns shared pointer to noise.
     *
     */
-    noise_ptr noise(void);
+    inline noise_ptr noise(void) { return m_noise; }
 };
 
 

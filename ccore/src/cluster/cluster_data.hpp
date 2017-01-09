@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2016    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -86,13 +86,6 @@ public:
     *
     */
     cluster_sequence_ptr clusters(void);
-
-    /**
-    *
-    * @brief    Resize the internal collection (m_clusters)
-    *
-    */
-    void resize_clusters(std::size_t p_count_clusters, std::size_t p_count_data);
 
     /**
     *

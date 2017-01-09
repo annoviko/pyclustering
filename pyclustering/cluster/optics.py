@@ -5,7 +5,7 @@
          - M.Ankerst, M.Breunig, H.Kriegel, J.Sander. OPTICS: Ordering Points To Identify the Clustering Structure. 1999.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
-@date 2014-2016
+@date 2014-2017
 @copyright GNU Public License
 
 @cond GNU_PUBLIC_LICENSE
@@ -162,7 +162,7 @@ class optics_descriptor:
     @brief Object description that used by OPTICS algorithm for cluster analysis.
     
     """
-    
+
     def __init__(self, index, core_distance = None, reachability_distance = None):
         """!
         @brief Constructor of object description in optics terms.
@@ -184,7 +184,7 @@ class optics_descriptor:
         
         ## True is object has been already traversed.
         self.processed = False;
-        
+
     def __repr__(self):
         """!
         @brief Returns string representation of the optics descriptor.

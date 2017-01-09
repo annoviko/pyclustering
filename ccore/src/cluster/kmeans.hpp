@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2016    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -72,7 +72,7 @@ public:
     * @brief    Default destructor of the algorithm.
     *
     */
-    ~kmeans(void);
+    virtual ~kmeans(void);
 
 public:
     /**
@@ -83,7 +83,7 @@ public:
     * @param[out] p_result: clustering result of an input data.
     *
     */
-    void process(const dataset & data, cluster_data & output_result);
+    virtual void process(const dataset & data, cluster_data & output_result) override;
 
 private:
     void update_clusters(const dataset & centers, cluster_sequence & clusters);

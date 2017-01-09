@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2016    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -44,21 +44,23 @@ typedef struct differential_result {
 
 inline double pi(void) { return (double) 3.14159265358979323846; }
 
+
 inline double heaviside(const double value) {
 	if (value >= 0.0) { return 1.0; }
 	return 0.0;
 }
 
-/***********************************************************************************************
+
+/**
  *
  * @brief   Calculates square of Euclidean distance between points.
  *
- * @param   (in) point1     - point #1 that is represented by coordinates.
- *          (in) point2     - point #2 that is represented by coordinates.
+ * @param[in] point1: pointer to point #1 that is represented by coordinates.
+ * @param[in] point2: pointer to point #2 that is represented by coordinates.
  *
  * @return  Returns square of Euclidean distance between points.
  *
- ***********************************************************************************************/
+ */
 inline double euclidean_distance_sqrt(const std::vector<double> * const point1, const std::vector<double> * const point2) {
 	double distance = 0.0;
 	/* assert(point1->size() != point1->size()); */
@@ -70,25 +72,53 @@ inline double euclidean_distance_sqrt(const std::vector<double> * const point1, 
 	return distance;
 }
 
-/***********************************************************************************************
+/**
+ *
+ * @brief   Calculates square of Euclidean distance between points.
+ *
+ * @param[in] point1: point #1 that is represented by coordinates.
+ * @param[in] point2: point #2 that is represented by coordinates.
+ *
+ * @return  Returns square of Euclidean distance between points.
+ *
+ */
+inline double euclidean_distance_sqrt(const std::vector<double> & const point1, const std::vector<double> & const point2) {
+    return euclidean_distance_sqrt(&point1, &point2);
+}
+
+/**
  *
  * @brief   Calculates Euclidean distance between points.
  *
- * @param   (in) point1     - point #1 that is represented by coordinates.
- *          (in) point2     - point #2 that is represented by coordinates.
+ * @param[in] point1: pointer to point #1 that is represented by coordinates.
+ * @param[in] point2: pointer to point #2 that is represented by coordinates.
  *
  * @return  Returns Euclidean distance between points.
  *
- ***********************************************************************************************/
+ */
 inline double euclidean_distance(const std::vector<double> * const point1, const std::vector<double> * const point2) {
 	double distance = 0.0;
-	/* assert(point1->size() != point1->size()); */
+
 	for (unsigned int dimension = 0; dimension < point1->size(); dimension++) {
 		double difference = (point1->data()[dimension] - point2->data()[dimension]);
 		distance += difference * difference;
 	}
 
 	return std::sqrt(distance);
+}
+
+/**
+ *
+ * @brief   Calculates Euclidean distance between points.
+ *
+ * @param[in] point1: point #1 that is represented by coordinates.
+ * @param[in] point2: point #2 that is represented by coordinates.
+ *
+ * @return  Returns Euclidean distance between points.
+ *
+ */
+inline double euclidean_distance(const std::vector<double> & const point1, const std::vector<double> & const point2) {
+    euclidean_distance(&point1, &point2);
 }
 
 /***********************************************************************************************

@@ -3,7 +3,7 @@
 @brief Unit-tests for ant colony based algorithm for travelling salesman problem.
 
 @authors Andrei Novikov, Alexey Kukushkin (pyclustering@yandex.ru)
-@date 2014-2016
+@date 2014-2017
 @copyright GNU Public License
 
 @cond GNU_PUBLIC_LICENSE

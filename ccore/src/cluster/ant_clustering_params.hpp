@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2016    Aleksey Kukushkin (pyclustering@yandex.ru)
+* Copyright (C) 2014-2017    Aleksey Kukushkin (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify

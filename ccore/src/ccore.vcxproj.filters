@@ -127,9 +127,6 @@
     <ClCompile Include="cluster\cure_data.cpp">
       <Filter>Source Files\cluster</Filter>
     </ClCompile>
-    <ClCompile Include="cluster\dbscan_data.cpp">
-      <Filter>Source Files\cluster</Filter>
-    </ClCompile>
     <ClCompile Include="cluster\kmedians_data.cpp">
       <Filter>Source Files\cluster</Filter>
     </ClCompile>
@@ -159,6 +156,9 @@
     </ClCompile>
     <ClCompile Include="interface\som_interface.cpp">
       <Filter>Source Files\interface</Filter>
+    </ClCompile>
+    <ClCompile Include="cluster\optics.cpp">
+      <Filter>Source Files\cluster</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -329,6 +329,12 @@
     </ClInclude>
     <ClInclude Include="interface\som_interface.h">
       <Filter>Source Files\interface</Filter>
+    </ClInclude>
+    <ClInclude Include="cluster\optics.hpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="cluster\optics_data.hpp">
+      <Filter>Source Files\cluster</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
