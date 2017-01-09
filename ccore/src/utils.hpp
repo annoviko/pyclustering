@@ -82,7 +82,7 @@ inline double euclidean_distance_sqrt(const std::vector<double> * const point1, 
  * @return  Returns square of Euclidean distance between points.
  *
  */
-inline double euclidean_distance_sqrt(const std::vector<double> & const point1, const std::vector<double> & const point2) {
+inline double euclidean_distance_sqrt(const std::vector<double> & point1, const std::vector<double> & point2) {
     return euclidean_distance_sqrt(&point1, &point2);
 }
 
@@ -117,7 +117,7 @@ inline double euclidean_distance(const std::vector<double> * const point1, const
  * @return  Returns Euclidean distance between points.
  *
  */
-inline double euclidean_distance(const std::vector<double> & const point1, const std::vector<double> & const point2) {
+inline double euclidean_distance(const std::vector<double> & point1, const std::vector<double> & point2) {
     euclidean_distance(&point1, &point2);
 }
 

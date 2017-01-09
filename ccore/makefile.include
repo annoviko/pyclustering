@@ -31,7 +31,6 @@ SOURCES += $(SOURCE_PATH)/cluster/cluster_data.cpp
 SOURCES += $(SOURCE_PATH)/cluster/cure.cpp
 SOURCES += $(SOURCE_PATH)/cluster/cure_data.cpp
 SOURCES += $(SOURCE_PATH)/cluster/dbscan.cpp
-SOURCES += $(SOURCE_PATH)/cluster/dbscan_data.cpp
 SOURCES += $(SOURCE_PATH)/cluster/hsyncnet.cpp
 SOURCES += $(SOURCE_PATH)/cluster/kmeans_data.cpp
 SOURCES += $(SOURCE_PATH)/cluster/kmeans.cpp
