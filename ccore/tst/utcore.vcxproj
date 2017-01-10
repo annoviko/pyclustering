@@ -93,7 +93,6 @@
     <ClCompile Include="..\src\cluster\cure.cpp" />
     <ClCompile Include="..\src\cluster\cure_data.cpp" />
     <ClCompile Include="..\src\cluster\dbscan.cpp" />
-    <ClCompile Include="..\src\cluster\dbscan_data.cpp" />
     <ClCompile Include="..\src\cluster\hsyncnet.cpp" />
     <ClCompile Include="..\src\cluster\kmeans.cpp" />
     <ClCompile Include="..\src\cluster\kmeans_data.cpp" />

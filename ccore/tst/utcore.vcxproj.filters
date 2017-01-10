@@ -131,9 +131,6 @@
     <ClCompile Include="..\src\cluster\dbscan.cpp">
       <Filter>Tested Code\cluster</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\cluster\dbscan_data.cpp">
-      <Filter>Tested Code\cluster</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\cluster\kmeans.cpp">
       <Filter>Tested Code\cluster</Filter>
     </ClCompile>
