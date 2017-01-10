@@ -39,7 +39,7 @@ namespace cluster_analysis {
 */
 class dbscan_data : public cluster_data {
 private:
-    noise_ptr       m_noise;
+    noise_ptr       m_noise = std::make_shared<cluster_analysis::noise>();
 
 public:
     /**
