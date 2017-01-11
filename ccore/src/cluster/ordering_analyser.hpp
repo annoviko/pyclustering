@@ -39,7 +39,7 @@ public:
 
 	ordering_analyser(ordering_analyser && p_other) = default;
 
-	ordering_analyser(ordering_ptr & p_ordering);
+	ordering_analyser(const ordering_ptr & p_ordering);
 
 	~ordering_analyser(void) = default;
 

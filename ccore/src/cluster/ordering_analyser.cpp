@@ -29,7 +29,7 @@
 namespace cluster_analysis {
 
 
-ordering_analyser::ordering_analyser(ordering_ptr & p_ordering) : m_ordering(p_ordering) { }
+ordering_analyser::ordering_analyser(const ordering_ptr & p_ordering) : m_ordering(p_ordering) { }
 
 
 double ordering_analyser::calculate_connvectivity_radius(const std::size_t p_amount_clusters) const {

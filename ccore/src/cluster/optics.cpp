@@ -197,10 +197,6 @@ void optics::update_order_seed(const optics_descriptor & p_object, const std::ve
 
 
 void optics::extract_clusters(void) {
-	m_result_ptr->clusters()->clear();
-	m_result_ptr->noise()->clear();
-	m_result_ptr->ordering()->clear();
-
 	cluster_sequence_ptr clusters = m_result_ptr->clusters();
 	noise_ptr noise = m_result_ptr->noise();
 
@@ -224,6 +220,10 @@ void optics::extract_clusters(void) {
 		else {
 			clusters->at(index_current_cluster).push_back(optics_object->m_index);
 		}
+	}
+
+	if (clusters->back().empty()) {
+		clusters->pop_back();
 	}
 }
 
