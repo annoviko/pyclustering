@@ -22,31 +22,34 @@
 #pragma once
 
 
-#include "cluster/dbscan_data.hpp"
+#include "optics_data.hpp"
 
 
 namespace cluster_analysis {
 
 
-using ordering = std::vector<double>;
-using ordering_ptr = std::shared_ptr<ordering>;
-
-
-class optics_data : public dbscan_data {
+class ordering_analyser {
 private:
-    ordering_ptr     m_ordering = std::make_shared<cluster_analysis::ordering>();
+	ordering_ptr	m_ordering;
 
 public:
-    optics_data(void) = default;
+	ordering_analyser(void) = default;
 
-    optics_data(const optics_data & p_other) = default;
+	ordering_analyser(const ordering_analyser & p_other) = default;
 
-    optics_data(optics_data && p_other) = default;
+	ordering_analyser(ordering_analyser && p_other) = default;
 
-    virtual ~optics_data(void) = default;
+	ordering_analyser(ordering_ptr & p_ordering);
+
+	~ordering_analyser(void) = default;
 
 public:
-    inline ordering_ptr ordering(void) { return m_ordering; }
+	double calculate_connvectivity_radius(const std::size_t p_amount_clusters) const;
+
+	std::size_t extract_cluster_amount(const double p_radius) const;
+
+public:
+	inline ordering_ptr ordering(void) const { return m_ordering; }
 };
 
 

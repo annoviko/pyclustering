@@ -49,11 +49,14 @@ public:
     optics_descriptor(const std::size_t p_index, const double p_core_distance, const double p_reachability_distance);
 
     ~optics_descriptor(void) = default;
+
+public:
+	void clear(void);
 };
 
 
 class optics : public cluster_algorithm  {
-private:
+public:
 	static const double	NONE_DISTANCE;
 
 private:
@@ -99,6 +102,10 @@ private:
     void get_neighbors(const std::size_t p_index, std::vector< std::tuple<std::size_t, double> > & p_neighbors);
 
 	void update_order_seed(const optics_descriptor & p_object, const std::vector< std::tuple<std::size_t, double> > & neighbors, std::list<optics_descriptor *> & order_seed);
+
+	void calculate_ordering(void);
+
+	void calculate_cluster_result(void);
 };
 
 

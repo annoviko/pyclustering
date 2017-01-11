@@ -100,6 +100,8 @@
     <ClCompile Include="..\src\cluster\kmedians_data.cpp" />
     <ClCompile Include="..\src\cluster\kmedoids.cpp" />
     <ClCompile Include="..\src\cluster\kmedoids_data.cpp" />
+    <ClCompile Include="..\src\cluster\optics.cpp" />
+    <ClCompile Include="..\src\cluster\ordering_analyser.cpp" />
     <ClCompile Include="..\src\cluster\rock.cpp" />
     <ClCompile Include="..\src\cluster\syncnet.cpp" />
     <ClCompile Include="..\src\cluster\xmeans.cpp" />
@@ -141,6 +143,9 @@
     <ClInclude Include="..\src\cluster\kmedians_data.hpp" />
     <ClInclude Include="..\src\cluster\kmedoids.hpp" />
     <ClInclude Include="..\src\cluster\kmedoids_data.hpp" />
+    <ClInclude Include="..\src\cluster\optics.hpp" />
+    <ClInclude Include="..\src\cluster\optics_data.hpp" />
+    <ClInclude Include="..\src\cluster\ordering_analyser.hpp" />
     <ClInclude Include="..\src\cluster\rock.hpp" />
     <ClInclude Include="..\src\cluster\syncnet.hpp" />
     <ClInclude Include="..\src\cluster\xmeans.hpp" />
@@ -190,6 +195,7 @@
     <ClInclude Include="utest-kmedians.hpp" />
     <ClInclude Include="utest-kmedoids.hpp" />
     <ClInclude Include="utest-legion.hpp" />
+    <ClInclude Include="utest-optics.hpp" />
     <ClInclude Include="utest-pcnn.hpp" />
     <ClInclude Include="utest-rock.hpp" />
     <ClInclude Include="utest-som.hpp" />

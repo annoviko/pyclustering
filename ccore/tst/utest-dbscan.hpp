@@ -33,19 +33,22 @@
 using namespace cluster_analysis;
 
 
-static void
+static std::shared_ptr<dbscan_data>
 template_length_process_data(const std::shared_ptr<dataset> & p_data,
         const double p_radius,
         const size_t p_neighbors,
         const std::vector<size_t> & p_expected_cluster_length) {
 
-    dbscan_data output_result;
+    std::shared_ptr<dbscan_data> ptr_output_result = std::make_shared<dbscan_data>();
     dbscan solver(p_radius, p_neighbors);
-    solver.process(*p_data, output_result);
+    solver.process(*p_data, *ptr_output_result);
 
     const dataset & data = *p_data;
-    const cluster_sequence & actual_clusters = *(output_result.clusters());
+    const cluster_sequence & actual_clusters = *(ptr_output_result->clusters());
+
     ASSERT_CLUSTER_SIZES(data, actual_clusters, p_expected_cluster_length);
+
+	return ptr_output_result;
 }
 
 
@@ -100,6 +103,38 @@ TEST(utest_dbscan, allocation_sample_simple_07) {
 TEST(utest_dbscan, allocation_sample_simple_08) {
     const std::vector<size_t> expected_clusters_length = { 15, 30, 20, 80 };
     template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_08), 0.5, 3, expected_clusters_length);
+}
+
+
+static std::shared_ptr<dbscan_data>
+template_noise_allocation(const std::shared_ptr<dataset> & p_data,
+        const double p_radius,
+        const size_t p_neighbors,
+        const std::vector<size_t> & p_expected_cluster_length,
+	    const std::size_t p_noise_length) {
+
+    std::shared_ptr<dbscan_data> ptr_output_result = template_length_process_data(p_data, p_radius, p_neighbors, p_expected_cluster_length);
+	EXPECT_EQ(p_noise_length, ptr_output_result->noise()->size());
+
+	return ptr_output_result;
+}
+
+
+TEST(utest_dbscan, noise_allocation_sample_simple_01) {
+    const std::vector<size_t> expected_clusters_length = { };
+    template_noise_allocation(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), 10.0, 20, expected_clusters_length, 10);
+}
+
+
+TEST(utest_dbscan, noise_allocation_sample_simple_02) {
+    const std::vector<size_t> expected_clusters_length = { };
+    template_noise_allocation(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02), 0.5, 20, expected_clusters_length, 23);
+}
+
+
+TEST(utest_dbscan, noise_cluster_allocation_sample_simple_02) {
+    const std::vector<size_t> expected_clusters_length = { 10 };
+    template_noise_allocation(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02), 2.0, 9, expected_clusters_length, 13);
 }
 
 

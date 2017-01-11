@@ -143,6 +143,12 @@
     <ClCompile Include="..\src\cluster\kmeans_data.cpp">
       <Filter>Tested Code\cluster</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\cluster\optics.cpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\cluster\ordering_analyser.cpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\tools\gtest\gtest.h">
@@ -363,6 +369,18 @@
     </ClInclude>
     <ClInclude Include="utest-kmeans.hpp">
       <Filter>Unit Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cluster\optics_data.hpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cluster\optics.hpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="utest-optics.hpp">
+      <Filter>Unit Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cluster\ordering_analyser.hpp">
+      <Filter>Tested Code\cluster</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
