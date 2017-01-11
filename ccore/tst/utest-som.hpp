@@ -106,7 +106,7 @@ static void template_award_neurons(const std::shared_ptr<dataset> & data,
         total_capture_points += captured_objects[i].size();
     }
 
-    size_t expected_capture_points = std::accumulate(expected_result.begin(), expected_result.end(), 0);
+    size_t expected_capture_points = std::accumulate(expected_result.begin(), expected_result.end(), (std::size_t) 0);
     ASSERT_EQ(expected_capture_points, total_capture_points);
 }
 
@@ -244,7 +244,7 @@ TEST(utest_som, double_training) {
     som_award_sequence awards;
     som_map.allocate_awards(awards);
 
-    size_t number_awards = std::accumulate(awards.begin(), awards.end(), 0);
+    size_t number_awards = std::accumulate(awards.begin(), awards.end(), (std::size_t) 0);
 
     ASSERT_EQ(sample_simple_01->size(), number_awards);
 }

@@ -63,9 +63,9 @@ run_valgrind_ccore_job() {
 	echo "- Memory leakage detection by valgrind."
 	
 	# install requirements for the job
-	sudo apt-get install -qq g++-4.8
+	sudo apt-get install -qq g++-5
 	sudo apt-get install -qq valgrind
-	sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 50
+	sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-5 50
 	
 	# build and run unit-test project under valgrind to check memory leakage
 	cd ccore/

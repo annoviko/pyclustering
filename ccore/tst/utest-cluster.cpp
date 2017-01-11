@@ -47,7 +47,7 @@ void ASSERT_CLUSTER_SIZES(const dataset & p_data, const cluster_sequence & p_act
     }
 
     if (!p_expected_cluster_length.empty()) {
-		std::size_t expected_total_size = std::accumulate(p_expected_cluster_length.cbegin(), p_expected_cluster_length.cend(), 0);
+		std::size_t expected_total_size = std::accumulate(p_expected_cluster_length.cbegin(), p_expected_cluster_length.cend(), (std::size_t) 0);
 
 		ASSERT_EQ(expected_total_size, total_size);
 
