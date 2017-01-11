@@ -5,8 +5,8 @@ addons:
     sources:
     - ubuntu-toolchain-r-test
     packages:
-    - g++-4.8
-    - gcc-4.8
+    - g++-5
+    - gcc-5
     - python3
 
 install:

@@ -6,8 +6,8 @@ run_build_ccore_job() {
 	echo "- Build CCORE library."
 	
 	#install requirement for the job
-	sudo apt-get install -qq g++-4.8
-	sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 50
+	sudo apt-get install -qq g++-5
+	sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-5 50
 	
 	# build ccore library
 	cd ccore/
@@ -31,9 +31,9 @@ run_ut_ccore_job() {
 	echo "- Run CCORE library unit-tests."
 	
 	# install requirements for the job
-	sudo apt-get install -qq g++-4.8
-	sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 50
-	sudo update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-4.8 50
+	sudo apt-get install -qq g++-5
+	sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-5 50
+	sudo update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-5 50
   
 	pip install cpp-coveralls
 	
