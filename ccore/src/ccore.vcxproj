@@ -35,6 +35,7 @@
     <ClCompile Include="cluster\kmedoids.cpp" />
     <ClCompile Include="cluster\kmedoids_data.cpp" />
     <ClCompile Include="cluster\optics.cpp" />
+    <ClCompile Include="cluster\ordering_analyser.cpp" />
     <ClCompile Include="cluster\rock.cpp" />
     <ClCompile Include="cluster\syncnet.cpp" />
     <ClCompile Include="cluster\xmeans.cpp" />
@@ -52,6 +53,7 @@
     <ClCompile Include="interface\kmeans_interface.cpp" />
     <ClCompile Include="interface\kmedians_interface.cpp" />
     <ClCompile Include="interface\kmedoids_interface.cpp" />
+    <ClCompile Include="interface\optics_interface.cpp" />
     <ClCompile Include="interface\pcnn_interface.cpp" />
     <ClCompile Include="interface\pyclustering_package.cpp" />
     <ClCompile Include="interface\rock_interface.cpp" />
@@ -85,6 +87,7 @@
     <ClInclude Include="cluster\kmedoids_data.hpp" />
     <ClInclude Include="cluster\optics.hpp" />
     <ClInclude Include="cluster\optics_data.hpp" />
+    <ClInclude Include="cluster\ordering_analyser.hpp" />
     <ClInclude Include="cluster\rock.hpp" />
     <ClInclude Include="cluster\syncnet.hpp" />
     <ClInclude Include="cluster\xmeans.hpp" />
@@ -109,6 +112,7 @@
     <ClInclude Include="interface\kmeans_interface.h" />
     <ClInclude Include="interface\kmedians_interface.h" />
     <ClInclude Include="interface\kmedoids_interface.h" />
+    <ClInclude Include="interface\optics_interface.h" />
     <ClInclude Include="interface\pcnn_interface.h" />
     <ClInclude Include="interface\pyclustering_package.hpp" />
     <ClInclude Include="interface\rock_interface.h" />

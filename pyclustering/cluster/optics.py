@@ -32,6 +32,8 @@ from pyclustering.utils import euclidean_distance;
 
 import matplotlib.pyplot as plt;
 
+import pyclustering.core.optics_wrapper as wrapper;
+
 
 class ordering_visualizer:
     """!
@@ -248,7 +250,7 @@ class optics:
     
     """
     
-    def __init__(self, sample, eps, minpts, amount_clusters = None):
+    def __init__(self, sample, eps, minpts, amount_clusters = None, ccore = False):
         """!
         @brief Constructor of clustering algorithm OPTICS.
         
@@ -258,6 +260,7 @@ class optics:
         @param[in] amount_clusters (uint): Optional parameter where amount of clusters that should be allocated is specified.
                     In case of usage 'amount_clusters' connectivity radius can be greater than real, in other words, there is place for mistake
                     in connectivity radius usage.
+        @param[in] ccore (bool): if True than DLL CCORE (C++ solution) will be used for solving the problem.
         
         """
         
@@ -265,9 +268,12 @@ class optics:
         self.__eps = eps;                   # Algorithm parameter - connectivity radius between object for establish links between object.
         self.__minpts = minpts;             # Algorithm parameter - minimum number of neighbors that is required for establish links between object.
         self.__amount_clusters = amount_clusters;
-        self.__ordering = None;
         
-        self.__initialize(sample);
+        self.__ordering = None;
+        self.__clusters = None;
+        self.__noise = None;
+        
+        self.__ccore = ccore;
 
 
     def process(self):
@@ -282,15 +288,18 @@ class optics:
         
         """
         
-        self.__allocate_clusters();
+        if (self.__ccore is True):
+            (self.__clusters, self.__noise, self.__ordering, self.__eps) = wrapper.optics(self.__sample_pointer, self.__eps, self.__minpts, self.__amount_clusters);
         
-        if ( (self.__amount_clusters is not None) and (self.__amount_clusters != len(self.get_clusters())) ):
-            analyser = ordering_analyser(self.get_ordering());
-            radius = analyser.calculate_connvectivity_radius(self.__amount_clusters);
-            if (radius is not None):
-                self.__eps = radius;
-                self.__initialize(self.__sample_pointer);
-                self.__allocate_clusters();
+        else:
+            self.__allocate_clusters();
+            
+            if ( (self.__amount_clusters is not None) and (self.__amount_clusters != len(self.get_clusters())) ):
+                analyser = ordering_analyser(self.get_ordering());
+                radius = analyser.calculate_connvectivity_radius(self.__amount_clusters);
+                if (radius is not None):
+                    self.__eps = radius;
+                    self.__allocate_clusters();
 
 
     def __initialize(self, sample):
@@ -312,6 +321,8 @@ class optics:
         @brief Performs cluster allocation and builds ordering diagram that is based on reachability-distances.
         
         """
+        
+        self.__initialize(self.__sample_pointer);
         
         for optic_object in self.__optics_objects:
             if (optic_object.processed is False):

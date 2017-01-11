@@ -39,7 +39,7 @@ class Test(unittest.TestCase):
     def templateClusteringResults(self, path, radius, neighbors, amount_clusters, expected_length_clusters, ccore):
         sample = read_sample(path);
         
-        optics_instance = optics(sample, radius, neighbors, amount_clusters);
+        optics_instance = optics(sample, radius, neighbors, amount_clusters, ccore);
         optics_instance.process();
         
         clusters = optics_instance.get_clusters();
@@ -54,50 +54,83 @@ class Test(unittest.TestCase):
             analyser = ordering_analyser(optics_instance.get_ordering());
             assert len(analyser) > 0;
             assert analyser.extract_cluster_amount(optics_instance.get_radius()) == len(expected_length_clusters);
-    
-    
+
+
     def testClusteringSampleSimple1(self):
         self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 0.4, 2, None, [5, 5], False);
-    
+     
+    def testClusteringSampleSimple1ByCore(self):
+        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 0.4, 2, None, [5, 5], True);
+     
     def testClusteringSampleSimple2(self):
         self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 1, 2, None, [5, 8, 10], False);
-
+ 
+    def testClusteringSampleSimple2ByCore(self):
+        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 1, 2, None, [5, 8, 10], True);
+ 
     def testClusteringSampleSimple3(self):
         self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 0.7, 3, None, [10, 10, 10, 30], False);
-        
+ 
+    def testClusteringSampleSimple3ByCore(self):
+        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 0.7, 3, None, [10, 10, 10, 30], True);
+ 
     def testClusteringSampleSimple4(self):
         self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 0.7, 3, None, [15, 15, 15, 15, 15], False);
-
+ 
+    def testClusteringSampleSimple4ByCore(self):
+        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 0.7, 3, None, [15, 15, 15, 15, 15], True);
+ 
     def testClusteringSampleSimple5(self):
         self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 0.7, 3, None, [15, 15, 15, 15], False);
-        
+ 
+    def testClusteringSampleSimple5ByCore(self):
+        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 0.7, 3, None, [15, 15, 15, 15], True);
+ 
     def testClusteringHepta(self):
         self.templateClusteringResults(FCPS_SAMPLES.SAMPLE_HEPTA, 1, 3, None, [30, 30, 30, 30, 30, 30, 32], False);
-    
+ 
     def testClusteringOneDimensionDataSampleSimple7(self):
         self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE7, 2.0, 2, None, [10, 10], False);
-    
+ 
+    def testClusteringHeptaByCore(self):
+        self.templateClusteringResults(FCPS_SAMPLES.SAMPLE_HEPTA, 1, 3, None, [30, 30, 30, 30, 30, 30, 32], True);
+ 
     def testClusteringOneDimensionDataSampleSimple9(self):
         self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 3.0, 3, None, [10, 20], False);
-    
+ 
+    def testClusteringOneDimensionDataSampleSimple9ByCore(self):
+        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 3.0, 3, None, [10, 20], True);
+ 
     def testClusteringSampleSimple2RadiusGreater(self):
         self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 5.0, 2, 3, [5, 8, 10], False);
-    
+ 
+    def testClusteringSampleSimple2RadiusGreaterByCore(self):
+        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 5.0, 2, 3, [5, 8, 10], True);
+ 
     def testClusteringSampleSimple3RadiusGreater(self):
         self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 5.0, 3, 4, [10, 10, 10, 30], False);
-    
+ 
+    def testClusteringSampleSimple3RadiusGreaterByCore(self):
+        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 5.0, 3, 4, [10, 10, 10, 30], True);
+ 
     def testClusteringSampleSimple4RadiusGreater(self):
         self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 6.0, 3, 5, [15, 15, 15, 15, 15], False);
-    
+ 
+    def testClusteringSampleSimple4RadiusGreaterByCore(self):
+        self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 6.0, 3, 5, [15, 15, 15, 15, 15], True);
+ 
     def testClusteringLsunRadiusGreater(self):
         self.templateClusteringResults(FCPS_SAMPLES.SAMPLE_LSUN, 1.0, 3, 3, [99, 100, 202], False);
-    
+ 
+    def testClusteringLsunRadiusGreaterByCore(self):
+        self.templateClusteringResults(FCPS_SAMPLES.SAMPLE_LSUN, 1.0, 3, 3, [99, 100, 202], True);
+ 
     def testClusteringOrderVisualizer(self):
         sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE4);
-        
+         
         optics_instance = optics(sample, 6.0, 3, 5);
         optics_instance.process();
-        
+         
         analyser = ordering_analyser(optics_instance.get_ordering());
         ordering_visualizer.show_ordering_diagram(analyser);
     

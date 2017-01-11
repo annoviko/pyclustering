@@ -22,37 +22,10 @@
 #pragma once
 
 
-#include "cluster/dbscan_data.hpp"
+#include "interface/pyclustering_package.hpp"
+
+#include "definitions.hpp"
+#include "utils.hpp"
 
 
-namespace cluster_analysis {
-
-
-using ordering = std::vector<double>;
-using ordering_ptr = std::shared_ptr<ordering>;
-
-
-class optics_data : public dbscan_data {
-private:
-    ordering_ptr     m_ordering = std::make_shared<cluster_analysis::ordering>();
-	double			 m_radius = 0;
-
-public:
-    optics_data(void) = default;
-
-    optics_data(const optics_data & p_other) = default;
-
-    optics_data(optics_data && p_other) = default;
-
-    virtual ~optics_data(void) = default;
-
-public:
-    inline ordering_ptr ordering(void) const { return m_ordering; }
-
-	inline double get_radius(void) const { return m_radius; }
-
-	inline void set_radius(const double p_radius) { m_radius = p_radius; }
-};
-
-
-}
+extern "C" DECLARATION pyclustering_package * optics_algorithm(const data_representation * const p_sample, const double p_radius, const size_t p_minumum_neighbors, const size_t p_amount_clusters);

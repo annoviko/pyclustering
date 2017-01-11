@@ -160,6 +160,12 @@
     <ClCompile Include="cluster\optics.cpp">
       <Filter>Source Files\cluster</Filter>
     </ClCompile>
+    <ClCompile Include="interface\optics_interface.cpp">
+      <Filter>Source Files\interface</Filter>
+    </ClCompile>
+    <ClCompile Include="cluster\ordering_analyser.cpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cluster\agglomerative.hpp">
@@ -334,6 +340,12 @@
       <Filter>Source Files\cluster</Filter>
     </ClInclude>
     <ClInclude Include="cluster\optics_data.hpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\optics_interface.h">
+      <Filter>Source Files\interface</Filter>
+    </ClInclude>
+    <ClInclude Include="cluster\ordering_analyser.hpp">
       <Filter>Source Files\cluster</Filter>
     </ClInclude>
   </ItemGroup>

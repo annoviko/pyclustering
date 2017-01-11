@@ -74,6 +74,8 @@ void optics::process(const dataset & p_data, cluster_data & p_result) {
 		}
 	}
 
+	m_result_ptr->set_radius(m_radius);
+
     m_data_ptr = nullptr;
     m_result_ptr = nullptr;
 }
@@ -103,9 +105,6 @@ void optics::initialize(void) {
 
 	m_result_ptr->clusters()->clear();
 	m_result_ptr->noise()->clear();
-	m_result_ptr->ordering()->clear();
-
-
 }
 
 
@@ -247,6 +246,8 @@ void optics::get_neighbors(const size_t p_index, std::vector< std::tuple<std::si
 
 
 void optics::calculate_ordering(void) {
+	if (!m_result_ptr->ordering()->empty()) { return; }
+
 	ordering_ptr ordering = m_result_ptr->ordering();
 	cluster_sequence_ptr clusters = m_result_ptr->clusters();
 

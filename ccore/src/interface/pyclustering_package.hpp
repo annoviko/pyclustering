@@ -24,6 +24,7 @@
 
 #include <cstddef>
 #include <vector>
+#include <type_traits>
 
 #include "definitions.hpp"
 
@@ -57,25 +58,33 @@ public:
 } pyclustering_package;
 
 
-template <typename TypeValue>
-pyclustering_package * create_package(const std::vector<TypeValue> * const data) {
+//template <class TypeContainer>
+//pyclustering_package * create_package(const TypeContainer & data) {
+//	return create_package(&data);
+//}
+
+
+template <class TypeContainer>
+pyclustering_package * create_package(const TypeContainer * const data) {
+	using contaner_data_t = typename TypeContainer::value_type;
+
     pyclustering_type_data type_package = PYCLUSTERING_TYPE_UNDEFINED;
-    if (std::is_same<TypeValue, int>::value) {
+    if (std::is_same<contaner_data_t, int>::value) {
         type_package = pyclustering_type_data::PYCLUSTERING_TYPE_INT;
     }
-    else if (std::is_same<TypeValue, unsigned int>::value) {
+    else if (std::is_same<contaner_data_t, unsigned int>::value) {
         type_package = pyclustering_type_data::PYCLUSTERING_TYPE_UNSIGNED_INT;
     }
-    else if (std::is_same<TypeValue, float>::value) {
+    else if (std::is_same<contaner_data_t, float>::value) {
         type_package = pyclustering_type_data::PYCLUSTERING_TYPE_FLOAT;
     }
-    else if (std::is_same<TypeValue, double>::value) {
+    else if (std::is_same<contaner_data_t, double>::value) {
         type_package = pyclustering_type_data::PYCLUSTERING_TYPE_DOUBLE;
     }
-    else if (std::is_same<TypeValue, long>::value) {
+    else if (std::is_same<contaner_data_t, long>::value) {
         type_package = pyclustering_type_data::PYCLUSTERING_TYPE_LONG;
     }
-    else if (std::is_same<TypeValue, size_t>::value) {
+    else if (std::is_same<contaner_data_t, size_t>::value) {
         type_package = pyclustering_type_data::PYCLUSTERING_TYPE_SIZE_T;
     }
     else {
@@ -85,11 +94,12 @@ pyclustering_package * create_package(const std::vector<TypeValue> * const data)
     pyclustering_package * package = new pyclustering_package((unsigned int) type_package);
 
     package->size = data->size();
-    package->data = (void *) new TypeValue[package->size];
+    package->data = (void *) new contaner_data_t[package->size];
 
-    for (size_t i = 0; i < data->size(); i++) {
-        ((TypeValue *) package->data)[i] = (*data)[i];
-    }
+	std::size_t index = 0;
+	for (auto iter = std::begin(*data); iter != std::end(*data); iter++, index++) {
+		( (contaner_data_t *) package->data)[index] = *iter;
+	}
 
     return package;
 }

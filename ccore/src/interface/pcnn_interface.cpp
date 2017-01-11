@@ -21,8 +21,8 @@
 #include "interface/pcnn_interface.h"
 
 
-void * pcnn_create(const unsigned int size, const unsigned int connection_type, const unsigned int height, const unsigned width, const void * const parameters) {
-    pcnn * pcnn_network = new pcnn(size, (connection_t) connection_type, height, width, *((pcnn_parameters *) parameters));
+void * pcnn_create(const unsigned int p_size, const unsigned int p_connection_type, const unsigned int p_height, const unsigned int p_width, const void * const p_parameters) {
+    pcnn * pcnn_network = new pcnn(p_size, (connection_t) p_connection_type, p_height, p_width, *((pcnn_parameters *) p_parameters));
     return (void *) pcnn_network;
 }
 

@@ -25,6 +25,7 @@
 #include "gtest/gtest.h"
 
 #include "cluster/optics.hpp"
+#include "cluster/ordering_analyser.hpp"
 
 #include "samples.hpp"
 #include "utest-cluster.hpp"
@@ -45,6 +46,10 @@ template_optics_length_process_data(const std::shared_ptr<dataset> & p_data,
     const cluster_sequence & actual_clusters = *(ptr_output_result->clusters());
 
     ASSERT_CLUSTER_SIZES(data, actual_clusters, p_expected_cluster_length);
+	if (p_amount_clusters > 0) {
+		ordering_analyser analyser(ptr_output_result->ordering());
+		EXPECT_EQ(p_expected_cluster_length.size(), analyser.extract_cluster_amount(ptr_output_result->get_radius()));
+	}
 
 	return ptr_output_result;
 }
