@@ -32,26 +32,74 @@ using ordering = std::vector<double>;
 using ordering_ptr = std::shared_ptr<ordering>;
 
 
+/**
+*
+* @brief    Clustering results of OPTICS algorithm that consists of information about allocated
+*           clusters and noise (points that are not related to any cluster), ordering (that represents
+*           density-based clustering structure) and proper radius.
+*
+*/
 class optics_data : public dbscan_data {
 private:
     ordering_ptr     m_ordering = std::make_shared<cluster_analysis::ordering>();
-	double			 m_radius = 0;
+    double           m_radius = 0;
 
 public:
+    /**
+    *
+    * @brief    Default constructor that creates empty clustering data.
+    *
+    */
     optics_data(void) = default;
 
+    /**
+    *
+    * @brief    Default copy constructor.
+    *
+    * @param[in] p_other: another clustering data.
+    *
+    */
     optics_data(const optics_data & p_other) = default;
 
+    /**
+    *
+    * @brief    Default move constructor.
+    *
+    * @param[in] p_other: another clustering data.
+    *
+    */
     optics_data(optics_data && p_other) = default;
 
+    /**
+    *
+    * @brief    Default destructor that destroys clustering data..
+    *
+    */
     virtual ~optics_data(void) = default;
 
 public:
+    /**
+    *
+    * @brief    Returns cluster-ordering that represents density-based clustering structure.
+    *
+    */
     inline ordering_ptr ordering(void) const { return m_ordering; }
 
-	inline double get_radius(void) const { return m_radius; }
+    /**
+    *
+    * @brief    Returns connectivity radius that can be differ from input parameter.
+    * @details  It may be changed by OPTICS ('optics') algorithm if there is requirement to
+    *           allocate specified amount of clusters.
+    *
+    */
+    inline double get_radius(void) const { return m_radius; }
 
-	inline void set_radius(const double p_radius) { m_radius = p_radius; }
+    /**
+    *
+    * @brief    Set new value for connectivity radius.
+    *
+    */
+    inline void set_radius(const double p_radius) { m_radius = p_radius; }
 };
 
 

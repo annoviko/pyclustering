@@ -28,4 +28,20 @@
 #include "utils.hpp"
 
 
+/**
+ *
+ * @brief   Clustering algorithm OPTICS returns allocated clusters, noise, ordering and proper connectivity radius.
+ * @details Caller should destroy returned result in 'pyclustering_package'.
+ *
+ * @param[in] p_sample: input data for clustering.
+ * @param[in] p_radius: connectivity radius between points, points may be connected if distance
+ *             between them less then the radius.
+ * @param[in] p_minumum_neighbors: minimum number of shared neighbors that is required for
+ *             establish links between points.
+ *
+ * @return  Returns result of clustering - array that consists of four general clustering results that are represented by arrays too:
+ *          [ [allocated clusters], [noise], [ordering], [connectivity radius] ]. It is important to note that connectivity radius
+ *          is also placed into array.
+ *
+ */
 extern "C" DECLARATION pyclustering_package * optics_algorithm(const data_representation * const p_sample, const double p_radius, const size_t p_minumum_neighbors, const size_t p_amount_clusters);

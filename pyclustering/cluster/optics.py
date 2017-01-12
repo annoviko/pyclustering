@@ -87,6 +87,8 @@ class ordering_analyser:
         """!
         @brief Calculates connectivity radius of allocation specified amount of clusters using ordering diagram.
         
+        @param[in] amount_clusters(uint): amount of clusters that should be allocated by calculated connectivity radius.
+        
         @return (double) Value of connectivity radius.
         
         """
@@ -122,7 +124,6 @@ class ordering_analyser:
                  than pick is detected and after that recession is observed until new growth (that means end of the
                  current cluster and start of a new one) or end of diagram.
         
-        @param[in] ordering (list): list of reachability-distances of optics objects.
         @param[in] radius (double): connectivity radius that is used for cluster allocation.
         
         
