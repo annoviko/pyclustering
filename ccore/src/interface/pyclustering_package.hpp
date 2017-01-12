@@ -58,12 +58,6 @@ public:
 } pyclustering_package;
 
 
-//template <class TypeContainer>
-//pyclustering_package * create_package(const TypeContainer & data) {
-//	return create_package(&data);
-//}
-
-
 template <class TypeContainer>
 pyclustering_package * create_package(const TypeContainer * const data) {
 	using contaner_data_t = typename TypeContainer::value_type;
@@ -120,8 +114,8 @@ pyclustering_package * create_package(const std::vector< std::vector<TypeObject>
 }
 
 
-template <class type_object>
-pyclustering_package * create_package(const std::vector< std::vector<type_object> * > * const data) {
+template <class TypeObject>
+pyclustering_package * create_package(const std::vector< std::vector<TypeObject> * > * const data) {
    pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
 
    package->size = data->size();

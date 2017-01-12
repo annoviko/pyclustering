@@ -124,7 +124,7 @@ size_t rock::calculate_links(const cluster & cluster1, const cluster & cluster2)
 }
 
 double rock::calculate_goodness(const cluster & cluster1, const cluster & cluster2) const {
-    const double number_links = calculate_links(cluster1, cluster2);
+    const double number_links = (double) calculate_links(cluster1, cluster2);
 
     const double size_cluster1 = (double) cluster1.size();
     const double size_cluster2 = (double) cluster2.size();

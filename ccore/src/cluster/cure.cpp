@@ -361,7 +361,7 @@ void cure::process(const dataset & p_data, cluster_data & p_result) {
     queue = new cure_queue(&p_data);
     data = &p_data;
 
-    unsigned int allocated_clusters = queue->size();
+    std::size_t allocated_clusters = queue->size();
     while(allocated_clusters > number_clusters) {
         cure_cluster * cluster1 = *(queue->begin());
         cure_cluster * cluster2 = cluster1->closest;

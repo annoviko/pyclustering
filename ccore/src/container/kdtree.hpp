@@ -97,7 +97,7 @@ inline bool operator == (const std::vector<double> & point, const kdnode & node)
 class kdtree {
 private:
 	kdnode *		root;
-	unsigned int	dimension;
+	std::size_t		dimension;
 
 private:
 	/***********************************************************************************************
