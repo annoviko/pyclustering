@@ -203,7 +203,9 @@ class optics:
     @details OPTICS is a density-based algorithm. Purpose of the algorithm is to provide explicit clusters, but create clustering-ordering representation of the input data. 
              Clustering-ordering information contains information about internal structures of data set in terms of density and proper connectivity radius can be obtained
              for allocation required amount of clusters using this diagram. In case of usage additional input parameter 'amount of clusters' connectivity radius should be
-             bigger than real - because it will be calculated by the algorithms.
+             bigger than real - because it will be calculated by the algorithms if requested amount of clusters is not allocated.
+
+    @image html optics_cluster_allocation.png "Scheme how does OPTICS works. At the beginning only one cluster is allocated, but two is requested. At the second step OPTICS calculates connectivity radius using cluster-ordering and performs final cluster allocation."
 
     Example:
     @code
