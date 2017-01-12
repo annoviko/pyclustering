@@ -84,6 +84,10 @@ E-Mail: pyclustering@yandex.ru
 
 ------------------------------------------------
 
+![alt tag](https://github.com/annoviko/pyclustering/blob/master/docs/html/fcps_cluster_analysis.png)
+
+------------------------------------------------
+
 ###Code examples:###
 
 **Data clustering by CURE algorithm**
