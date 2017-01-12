@@ -84,7 +84,7 @@ E-Mail: pyclustering@yandex.ru
 
 ------------------------------------------------
 
-![alt tag](https://github.com/annoviko/pyclustering/blob/master/docs/html/fcps_cluster_analysis.png)
+![alt tag](https://github.com/annoviko/pyclustering/blob/master/docs/html/fcps_cluster_analysis.png =250x)
 
 ------------------------------------------------
 
