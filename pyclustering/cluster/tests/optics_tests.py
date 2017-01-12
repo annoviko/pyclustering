@@ -132,7 +132,7 @@ class Test(unittest.TestCase):
         optics_instance.process();
          
         analyser = ordering_analyser(optics_instance.get_ordering());
-        ordering_visualizer.show_ordering_diagram(analyser);
+        ordering_visualizer.show_ordering_diagram(analyser, 5);
     
     
 if __name__ == "__main__":

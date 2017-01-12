@@ -37,22 +37,53 @@ import pyclustering.core.optics_wrapper as wrapper;
 
 class ordering_visualizer:
     """!
-    @brief Cluster ordering diagram visualizer that represents dataset graphically.
+    @brief Cluster ordering diagram visualizer that represents dataset graphically as density-based clustering structure.
+    
+    @see ordering_analyser
     
     """
     
     @staticmethod
-    def show_ordering_diagram(analyser):
+    def show_ordering_diagram(analyser, amount_clusters = None):
+        """!
+        @brief Display cluster-ordering diagram.
+        
+        @param[in] analyser (ordering_analyser): cluster-ordering analyser whose ordering diagram should be displayed.
+        @param[in] amount_clusters (uint): if it is not 'None' then it displays connectivity radius line that can used for allocation of specified amount of clusters.
+        
+        Example demonstrates general abilities of 'ordering_visualizer' class:
+        @code
+        # Display cluster-ordering diagram with connectivity radius is used for allocation of three clusters.
+        ordering_visualizer.show_ordering_diagram(analyser, 3);
+        
+        # Display cluster-ordering diagram without radius.
+        ordering_visualizer.show_ordering_diagram(analyser);
+        @endcode
+        
+        """
         ordering = analyser.cluster_ordering;
         indexes = [i for i in range(0, len(ordering))];
         
-        plt.bar(indexes, ordering);
+        axis = plt.subplot(111);
+        axis.bar(indexes, ordering, color = 'black');
+        plt.xlim([0, len(ordering)]);
+        
+        if (amount_clusters is not None):
+            radius = analyser.calculate_connvectivity_radius(amount_clusters);
+            plt.axhline(y = analyser.calculate_connvectivity_radius(amount_clusters), linewidth = 2, color = 'b');
+            plt.text(0, radius + radius * 0.03, " Radius:   " + str(round(radius, 4)) + ";\n Clusters: " + str(amount_clusters), color = 'b', fontsize = 10);
+        
         plt.show();
 
 
 class ordering_analyser:
     """!
     @brief Analyser of cluster ordering diagram.
+    @details Using cluster-ordering it is able to connectivity radius for allocation of specified amount of clusters and
+              calculate amount of clusters using specified connectivity radius. Cluster-ordering is formed by OPTICS algorithm
+              during cluster analysis.
+    
+    @see optics
     
     """
     
@@ -87,7 +118,7 @@ class ordering_analyser:
         """!
         @brief Calculates connectivity radius of allocation specified amount of clusters using ordering diagram.
         
-        @param[in] amount_clusters(uint): amount of clusters that should be allocated by calculated connectivity radius.
+        @param[in] amount_clusters (uint): amount of clusters that should be allocated by calculated connectivity radius.
         
         @return (double) Value of connectivity radius.
         

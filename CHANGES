@@ -1,7 +1,10 @@
 Change notes for 0.7.dev0 (started Jun 01, 2016)
 
 GENERAL CHANGES (pyclustering):
-- Implemented feature to use CCORE implementation of OPTICS algorithm to take advance in performance (pyclustering.cluster.optics).
+- Feature to display connectivity radius on cluster-ordering diagram by ordering_visualizer (pyclustering.cluster.optics).
+  See: https://github.com/annoviko/pyclustering/issues/314
+
+- Feature to use CCORE implementation of OPTICS algorithm to take advance in performance (pyclustering.cluster.optics).
   See: https://github.com/annoviko/pyclustering/issues/120
 
 - Implemented feature to shows animation of pattern recognition process that has been performed by the SyncPR oscillatory network. Method 'animate_pattern_recognition()' of class 'syncpr_visualizer' (pyclustering.nnet.syncpr).
