@@ -134,6 +134,19 @@ class Test(unittest.TestCase):
         analyser = ordering_analyser(optics_instance.get_ordering());
         ordering_visualizer.show_ordering_diagram(analyser, 5);
     
-    
+#     def testClusterOrderingOneClusterExtraction(self):
+#         analyser = ordering_analyser([5.0, 5.0, 5.0, 5.0, 5.0, 5.0]);
+#         assert 1 == analyser.extract_cluster_amount(6.5);
+#         assert 0 == analyser.extract_cluster_amount(4.5);
+#     
+#     def testImpossibleClusterOrderingAllocationHomogeneous(self):
+#         analyser = ordering_analyser([5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0]);
+#         assert None == analyser.calculate_connvectivity_radius(2);
+#     
+#     def testImpossibleClusterOrderingAllocationGeterogeneous(self):
+#         analyser = ordering_analyser([5.0, 5.0, 5.0, 5.0, 6.0, 8.0, 6.0, 5.0, 5.0, 5.0]);
+#         assert None == analyser.calculate_connvectivity_radius(3);
+
+
 if __name__ == "__main__":
     unittest.main();
