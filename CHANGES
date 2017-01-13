@@ -52,6 +52,16 @@ CORRECTED MAJOR BUGS:
 - Bug with CURE: always finds max two representative points (pyclustering.cluster.cure).
   See: https://github.com/annoviko/pyclustering/issues/310
 
+- Bug with infinite loop in case of incorrect number of clusters 'ordering_analyser' (pyclustering.cluster.optics).
+  See: https://github.com/annoviko/pyclustering/issues/317
+
+- Bug with incorrect connectivity radius for allocation specified amount of clusters 'ordering_analyser' (pyclustering.cluster.optics).
+  See: https://github.com/annoviko/pyclustering/issues/316
+
+- Bug with clusters are allocated in the homogeneous ordering 'ordering_analyser' (pyclustering.cluster.optics).
+  See: https://github.com/annoviko/pyclustering/issues/315
+
+
 
 ------------------------------------------------------------------------
 

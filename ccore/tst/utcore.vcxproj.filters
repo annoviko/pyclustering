@@ -382,5 +382,8 @@
     <ClInclude Include="..\src\cluster\ordering_analyser.hpp">
       <Filter>Tested Code\cluster</Filter>
     </ClInclude>
+    <ClInclude Include="utest_ordering_analyser.hpp">
+      <Filter>Unit Tests</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

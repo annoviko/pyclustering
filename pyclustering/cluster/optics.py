@@ -114,13 +114,14 @@ class ordering_analyser:
         return len(self.__ordering);
     
     
-    def calculate_connvectivity_radius(self, amount_clusters):
+    def calculate_connvectivity_radius(self, amount_clusters, maximum_iterations = 100):
         """!
         @brief Calculates connectivity radius of allocation specified amount of clusters using ordering diagram.
         
         @param[in] amount_clusters (uint): amount of clusters that should be allocated by calculated connectivity radius.
+        @param[in] maximum_iterations (uint): maximum number of iteration for searching connectivity radius to allocated specified amount of clusters (by default it is restricted by 100 iterations).
         
-        @return (double) Value of connectivity radius.
+        @return (double) Value of connectivity radius, it may be 'None' if connectivity radius hasn't been found for the specified amount of iterations.
         
         """
         
@@ -132,11 +133,11 @@ class ordering_analyser:
         radius = None;
         
         if (self.extract_cluster_amount(maximum_distance) <= amount_clusters):
-            while(True):
+            for _ in range(maximum_iterations):
                 radius = (lower_distance + upper_distance) / 2.0;
                 
                 amount = self.extract_cluster_amount(radius);
-                if (amount == amount_clusters):
+                if ( (amount == amount_clusters) or (amount_clusters == 0)):
                     break;
                 
                 elif (amount > amount_clusters):
@@ -166,7 +167,9 @@ class ordering_analyser:
         
         cluster_start = False;
         cluster_pick = False;
-        previous_distance = 0.0;
+        total_similarity = True;
+        previous_cluster_distance = None;
+        previous_distance = None;
         
         for distance in self.__ordering:
             if (distance >= radius):
@@ -175,18 +178,26 @@ class ordering_analyser:
                     amount_clusters += 1;
                 
                 else:
-                    if ((distance < previous_distance) and (cluster_pick is False)):
+                    if ((distance < previous_cluster_distance) and (cluster_pick is False)):
                         cluster_pick = True;
                     
-                    elif ((distance > previous_distance) and (cluster_pick is True)):
+                    elif ((distance > previous_cluster_distance) and (cluster_pick is True)):
                         cluster_pick = False;
                         amount_clusters += 1;
                 
-                previous_distance = distance;
+                previous_cluster_distance = distance;
             
             else:
                 cluster_start = False;
                 cluster_pick = False;
+            
+            if ( (previous_distance is not None) and (distance != previous_distance) ):
+                total_similarity = False;
+            
+            previous_distance = distance;
+        
+        if ( (total_similarity is True) and (previous_distance > radius) ):
+            amount_clusters = 0;
         
         return amount_clusters;
 

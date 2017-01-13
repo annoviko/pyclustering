@@ -204,6 +204,7 @@
     <ClInclude Include="utest-syncpr.hpp" />
     <ClInclude Include="utest-xmeans.hpp" />
     <ClInclude Include="utest_adjacency_connector.hpp" />
+    <ClInclude Include="utest_ordering_analyser.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

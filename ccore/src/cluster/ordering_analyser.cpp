@@ -32,7 +32,7 @@ namespace cluster_analysis {
 ordering_analyser::ordering_analyser(const ordering_ptr & p_ordering) : m_ordering(p_ordering) { }
 
 
-double ordering_analyser::calculate_connvectivity_radius(const std::size_t p_amount_clusters) const {
+double ordering_analyser::calculate_connvectivity_radius(const std::size_t p_amount_clusters, const std::size_t p_maximum_iterations) const {
 	const double maximum_distance = *std::max_element(m_ordering->cbegin(), m_ordering->cend());
 
 	double upper_distance = maximum_distance;
@@ -41,11 +41,11 @@ double ordering_analyser::calculate_connvectivity_radius(const std::size_t p_amo
 	double radius = -1.0;
 	
 	if (extract_cluster_amount(maximum_distance) <= p_amount_clusters) {
-		while(true) {
+		for(std::size_t i = 0; i < p_maximum_iterations; i++) {
 			radius = (lower_distance + upper_distance) / 2.0;
 
 			std::size_t amount = extract_cluster_amount(radius);
-			if (amount == p_amount_clusters) {
+			if ( (amount == p_amount_clusters) && (amount == std::numeric_limits<std::size_t>::max()) ) {
 				break;
 			}
 			else if (amount > p_amount_clusters) {
@@ -66,8 +66,10 @@ std::size_t ordering_analyser::extract_cluster_amount(const double p_radius) con
 
 	bool cluster_start = false;
 	bool cluster_pick = false;
+	bool total_similariry = true;
 
-	double previous_distance = 0.0;
+	double previous_cluster_distance = 0.0;
+	double previous_distance = -1.0;
 
 	for (auto & distance : *m_ordering) {
 		if (distance >= p_radius) {
@@ -76,21 +78,29 @@ std::size_t ordering_analyser::extract_cluster_amount(const double p_radius) con
 				amount_clusters++;
 			}
 			else {
-				if ( (distance < previous_distance) && (!cluster_pick) ) {
+				if ( (distance < previous_cluster_distance) && (!cluster_pick) ) {
 					cluster_pick = true;
 				}
-				else if ( (distance > previous_distance) && (cluster_pick) ) {
+				else if ( (distance > previous_cluster_distance) && (cluster_pick) ) {
 					cluster_pick = false;
 					amount_clusters += 1;
 				}
 			}
 
-			previous_distance = distance;
+			previous_cluster_distance = distance;
 		}
 		else {
 			cluster_start = false;
 			cluster_pick = false;
 		}
+
+		if ( (previous_distance >= 0) && (previous_distance != distance) ) {
+			total_similariry = false;
+		}
+	}
+
+	if ( (total_similariry) && (previous_distance > p_radius) ) {
+		amount_clusters = 0;
 	}
 
 	return amount_clusters;
