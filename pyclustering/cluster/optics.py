@@ -131,13 +131,18 @@ class ordering_analyser:
         lower_distance = 0.0;
         
         radius = None;
+        result = None;
         
         if (self.extract_cluster_amount(maximum_distance) <= amount_clusters):
             for _ in range(maximum_iterations):
                 radius = (lower_distance + upper_distance) / 2.0;
                 
                 amount = self.extract_cluster_amount(radius);
-                if ( (amount == amount_clusters) or (amount_clusters == 0)):
+                if (amount == amount_clusters):
+                    result = radius;
+                    break;
+                
+                elif (amount == 0):
                     break;
                 
                 elif (amount > amount_clusters):
@@ -146,7 +151,7 @@ class ordering_analyser:
                 elif (amount < amount_clusters):
                     upper_distance = radius;
         
-        return radius;
+        return result;
     
     
     def extract_cluster_amount(self, radius):
