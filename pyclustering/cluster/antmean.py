@@ -4,7 +4,7 @@
 @details Implementation based on article:
          - T.Zhang, R.Ramakrishnan, M.Livny. BIRCH: An Efficient Data Clustering Method for Very Large Databases. 1996.
          
-@authors Aleksey Kukushkin (pyclustering@yandex.ru)
+@authors Andrei Novikov, Aleksey Kukushkin (pyclustering@yandex.ru)
 @date 2014-2017
 @copyright GNU Public License
 
@@ -25,11 +25,10 @@
 
 """
 
-import pyclustering.core.ant_mean_clustering_wrapper as wrapper
+import pyclustering.core.antmean_wrapper as wrapper
 
 
-class ant_mean_clustering_params:
-    
+class antmean_clustering_params:
     def __init__(self):
         
         ## used for pheramone evaporation
@@ -45,20 +44,18 @@ class ant_mean_clustering_params:
         self.count_ants         = 20
         
         
-class ant_mean:
-    
+class antmean:
     def __init__(self, parameters):
         
         self.__parameters = None
         
         if (parameters is None):
-            self.__parameters = ant_mean_clustering_params();
+            self.__parameters = antmean_clustering_params();
         else:
             self.__parameters = parameters;
             
     
     def process(self, count_clusters, samples):
-
-        return wrapper.ant_mean_clustering_process(self.__parameters, count_clusters, samples)
+        return wrapper.antmean_clustering_process(self.__parameters, count_clusters, samples)
         
         

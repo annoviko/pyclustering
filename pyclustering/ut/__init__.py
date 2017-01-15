@@ -38,6 +38,7 @@ matplotlib.use('Agg');
 
 # Test suits that are used for testing of python implementation.
 from pyclustering.cluster.tests                  import agglomerative_tests as cluster_agglomerative_unit_tests;
+from pyclustering.cluster.tests                  import antmean_tests       as cluster_antmean_unit_tests;
 from pyclustering.cluster.tests                  import birch_tests         as cluster_birch_unit_tests;
 from pyclustering.cluster.tests                  import clarans_tests       as cluster_clarans_unit_tests;
 from pyclustering.cluster.tests                  import cure_tests          as cluster_cure_unit_tests;
@@ -81,6 +82,7 @@ if __name__ == "__main__":
     suite = unittest.TestSuite();
     
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_agglomerative_unit_tests));
+    suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_antmean_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_birch_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_clarans_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_cure_unit_tests));
