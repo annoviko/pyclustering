@@ -96,6 +96,56 @@ def rgb2gray(image_rgb_array):
     return image_gray_array;
 
 
+def stretch_pattern(image_source):
+    wsize, hsize = image_source.size;
+    
+    # Crop digit exactly
+    (ws, hs, we, he) = gray_pattern_borders(image_source);
+    image_source = image_source.crop((ws, hs, we, he));
+    
+    # Stretch it to initial sizes
+    image_source = image_source.resize((wsize, hsize), Image.ANTIALIAS);
+    
+    # Transform image to simple array
+    data = [pixel for pixel in image_source.getdata()];
+    image_pattern = rgb2gray(data);
+    
+    return (image_pattern, image_source);
+
+
+def gray_pattern_borders(image):
+    width, height = image.size;
+    
+    width_start = width;
+    width_end = 0;
+    height_start = height;
+    height_end = 0;
+    
+    row, col = 0, 0;
+    for pixel in image.getdata():
+        value = float(pixel[0]) * 0.2989 + float(pixel[1]) * 0.5870 + float(pixel[2]) * 0.1140;
+        
+        if (value < 128):
+            if (width_end < col): 
+                width_end = col;
+            
+            if (height_end < row):
+                height_end = row;
+        
+            if (width_start > col):
+                width_start = col;
+            
+            if (height_start > row):
+                height_start = row;
+        
+        col += 1;
+        if (col >= width):
+            col = 0;
+            row += 1;
+
+    return (width_start, height_start, width_end + 1, height_end + 1);
+
+
 def average_neighbor_distance(points, num_neigh):
     """!
     @brief Returns average distance for establish links between specified number of nearest neighbors.
