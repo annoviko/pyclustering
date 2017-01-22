@@ -97,6 +97,14 @@ def rgb2gray(image_rgb_array):
 
 
 def stretch_pattern(image_source):
+    """!
+    @brief Returns stretched content as 1-dimension (gray colored) matrix with size of input image.
+    
+    @param[in] image_source (Image): PIL Image instance.
+    
+    @return (list, Image) Stretched image as gray colored matrix and source image.
+    
+    """
     wsize, hsize = image_source.size;
     
     # Crop digit exactly
@@ -114,6 +122,15 @@ def stretch_pattern(image_source):
 
 
 def gray_pattern_borders(image):
+    """!
+    @brief Returns coordinates of gray image content on the input image.
+    
+    @param[in] image (Image): PIL Image instance that is processed.
+    
+    @return (tuple) Returns coordinates of gray image content as (width_start, height_start, width_end, height_end).
+    
+    """
+    
     width, height = image.size;
     
     width_start = width;
