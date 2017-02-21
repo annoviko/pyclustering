@@ -95,7 +95,9 @@ In case of any questions, proposals or bugs related to the pyclustering please c
 The library contains examples for each algorithm and oscillatory network model:
 
 **Clustering examples:** `pyclustering/cluster/examples`
+
 **Graph coloring examples:** `pyclustering/gcolor/examples`
+
 **Oscillatory network examples:** `pyclustering/nnet/examples`
 
 ![alt text](https://github.com/annoviko/pyclustering/blob/master/docs/img/example_cluster_place.png "Where are examples?")
