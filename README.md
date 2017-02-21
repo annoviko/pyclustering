@@ -98,28 +98,27 @@ The library contains examples for each algorithm and oscillatory network model:
 **Graph coloring examples:** `pyclustering/gcolor/examples`
 **Oscillatory network examples:** `pyclustering/nnet/examples`
 
-<br>
-<img src="https://github.com/annoviko/pyclustering/blob/master/docs/img/example_cluster_place.png">
+![alt text](https://github.com/annoviko/pyclustering/blob/master/docs/img/example_cluster_place.png "Where are examples?")
 
 ------------------------------------------------
 
 ###Illustrations:###
 
 **Cluster allocation on FCPS dataset collection by DBSCAN:**
-<br>
-<img src="https://github.com/annoviko/pyclustering/blob/master/docs/img/fcps_cluster_analysis.png" height="250">
+
+![alt text](https://github.com/annoviko/pyclustering/blob/master/docs/img/fcps_cluster_analysis.png "Clustering by DBSCAN")
 
 **Cluster allocation by OPTICS using cluster-ordering diagram:**
-<br>
-<img src="https://github.com/annoviko/pyclustering/blob/master/docs/img/optics_example_clustering.png" height="175">
+
+![alt text](https://github.com/annoviko/pyclustering/blob/master/docs/img/optics_example_clustering.png "Clustering by OPTICS")
 
 **Image segmentation by Sync-SOM algorithm:**
-<br>
-<img src="https://github.com/annoviko/pyclustering/blob/master/docs/img/sync_som_image_segmentation.png">
+
+![alt text](https://github.com/annoviko/pyclustering/blob/master/docs/img/sync_som_image_segmentation.png "Image segmentation by Sync-SOM")
 
 **Partial synchronization (clustering) in Sync oscillatory network:**
-<br>
-<img src="https://github.com/annoviko/pyclustering/blob/master/docs/img/sync_partial_synchronization.png" height="175">
+
+![alt text](https://github.com/annoviko/pyclustering/blob/master/docs/img/sync_partial_synchronization.png "Partial synchronization in Sync oscillatory network")
 
 ------------------------------------------------
 
