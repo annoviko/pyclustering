@@ -122,6 +122,10 @@ The library contains examples for each algorithm and oscillatory network model:
 
 ![alt text](https://github.com/annoviko/pyclustering/blob/master/docs/img/sync_partial_synchronization.png "Partial synchronization in Sync oscillatory network")
 
+**Cluster visualization by SOM (Self-Organized Feature Map)**
+
+![alt text](https://github.com/annoviko/pyclustering/blob/master/docs/img/target_som_processing.png "Cluster visualization by SOM")
+
 ------------------------------------------------
 
 ###Code examples:###

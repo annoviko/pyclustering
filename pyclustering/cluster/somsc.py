@@ -1,0 +1,64 @@
+"""!
+
+@brief Cluster analysis algorithm: SOM-SC (Self-Organized Feature Map for Simple Clustering)
+@details Based on article description:
+         - no reference
+
+@authors Andrei Novikov (pyclustering@yandex.ru)
+@date 2014-2017
+@copyright GNU Public License
+
+@cond GNU_PUBLIC_LICENSE
+    PyClustering is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    PyClustering is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+@endcond
+
+"""
+
+
+from pyclustering.nnet.som import som;
+from pyclustering.nnet.som import type_conn;
+
+
+class somsc:
+    """!
+    @brief Class represents simple clustering algorithm based on self-organized feature map. 
+    @details This algorithm uses amount of clusters that should be allocated as a size of SOM map. Captured objects by neurons are clusters.
+             Algorithm is able to process data with Gaussian distribution that has spherical forms.
+    
+    """
+    def __init__(self, data, amount_clusters, epouch = 100, ccore = False):
+        self.__data_pointer = data;
+        self.__amount_clusters = amount_clusters;
+        self.__epouch = epouch;
+        self.__ccore = ccore;
+        
+        self.__network = None;
+
+
+    def process(self):
+        """!
+        @brief Performs cluster analysis in line with rules of K-Means algorithm.
+        
+        @remark Results of clustering can be obtained using corresponding get methods.
+        
+        @see get_clusters()
+        
+        """
+        
+        self.__network = som(1, self.__amount_clusters, type_conn.grid_four, None, self.__ccore);
+        self.__network.train(self.__data_pointer, self.__epouch, True);
+
+
+    def get_clusters(self):
+        return self.__network.capture_objects;
