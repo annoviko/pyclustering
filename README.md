@@ -111,15 +111,15 @@ The library contains examples for each algorithm and oscillatory network model:
 
 **Cluster allocation by OPTICS using cluster-ordering diagram:**
 <br>
-<img src="https://github.com/annoviko/pyclustering/blob/master/docs/img/optics_example_clustering.png" height="250">
+<img src="https://github.com/annoviko/pyclustering/blob/master/docs/img/optics_example_clustering.png" height="125">
 
 **Image segmentation by Sync-SOM algorithm:**
 <br>
-<img src="https://github.com/annoviko/pyclustering/blob/master/docs/img/sync_som_image_segmentation.png" height="250">
+<img src="https://github.com/annoviko/pyclustering/blob/master/docs/img/sync_som_image_segmentation.png" height="125">
 
 **Partial synchronization (clustering) in Sync oscillatory network:**
 <br>
-<img src="https://github.com/annoviko/pyclustering/blob/master/docs/img/sync_partial_synchronization.png" height="250">
+<img src="https://github.com/annoviko/pyclustering/blob/master/docs/img/sync_partial_synchronization.png" height="125">
 
 ------------------------------------------------
 
