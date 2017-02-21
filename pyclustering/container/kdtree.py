@@ -25,7 +25,6 @@
 
 """
 
-import numpy;
 
 from pyclustering.utils import euclidean_distance_sqrt;
 

@@ -137,7 +137,7 @@ double kmedians::update_medians(cluster_sequence & clusters, dataset & medians) 
             size_t relative_index_median = (size_t) floor(current_cluster.size() / 2.0);
             size_t index_median = current_cluster[relative_index_median];
 
-            if ( (current_cluster.size() % 2) && (relative_index_median + 1 < current_cluster.size()) ) {
+            if (current_cluster.size() % 2 == 0) {
                 size_t index_median_second = current_cluster[relative_index_median + 1];
                 medians[index_cluster][index_dimension] = (data[index_median][index_dimension] + data[index_median_second][index_dimension]) / 2.0;
             }

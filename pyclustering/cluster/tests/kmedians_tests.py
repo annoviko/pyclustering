@@ -101,12 +101,18 @@ class Test(unittest.TestCase):
     def testClusterOneAllocationSampleSimple5Core(self):
         self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [[0.0, 0.0]], [60], True);
  
-    def testClusterAllocationSample1WrongInitialNumberCenters(self):
+    def testClusterAllocationSample1WrongInitialNumberCenters1(self):
         self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[2.8, 9.5], [3.5, 6.6], [1.3, 4.0]], None);
- 
-    def testClusterAllocationSample1WrongInitialNumberCentersCore(self):
+
+    def testClusterAllocationSample1WrongInitialNumberCenters2(self):
+        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[2.8, 9.5], [3.5, 6.6], [1.3, 4.0], [1.2, 4.5]], None);
+
+    def testClusterAllocationSample1WrongInitialNumberCenters1Core(self):
         self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[2.8, 9.5], [3.5, 6.6], [1.3, 4.0]], None, True);
- 
+
+    def testClusterAllocationSample1WrongInitialNumberCenters2Core(self):
+        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[2.8, 9.5], [3.5, 6.6], [1.3, 4.0], [1.2, 4.5]], None, True);
+
     def testClusterAllocationSample2WrongInitialNumberCenters(self):
         self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [[3.5, 4.8], [6.9, 7], [7.5, 0.5], [7.3, 4.5], [3.1, 5.4]], None);
  

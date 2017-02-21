@@ -1189,4 +1189,3 @@ def list_math_multiplication(a, b):
     
     """        
     return [a[i] * b[i] for i in range(len(a))];
- 

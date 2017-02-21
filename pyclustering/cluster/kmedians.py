@@ -192,7 +192,7 @@ class kmedians:
                 relative_index_median = math.floor(length_cluster / 2);
                 index_median = sorted_cluster[relative_index_median];
                 
-                if ( (length_cluster % 2) and (relative_index_median + 1 < len(sorted_cluster)) ):
+                if ( (length_cluster % 2) == 0 ):
                     index_median_second = sorted_cluster[relative_index_median + 1];
                     medians[index][index_dimension] =  (self.__pointer_data[index_median][index_dimension] + self.__pointer_data[index_median_second][index_dimension]) / 2.0;
                     

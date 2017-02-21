@@ -84,6 +84,9 @@ E-Mail: pyclustering@yandex.ru
 
 ------------------------------------------------
 
+###Illustrations:###
+
+**Cluster allocation on FCPS dataset collection**
 <img src="https://github.com/annoviko/pyclustering/blob/master/docs/html/fcps_cluster_analysis.png" height="250">
 
 ------------------------------------------------
