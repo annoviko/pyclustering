@@ -6,7 +6,13 @@ License: GNU General Public License
 
 E-Mail: pyclustering@yandex.ru
 
--------------------------------------------------
+------------------------------------------------
+
+###Proposals, questions, bugs:###
+
+In case of any questions, proposals or bugs related to the pyclustering please contact to pyclustering@yandex.ru or create an issue here.
+
+------------------------------------------------
 
 ###PyClustering CI:###
 
@@ -84,10 +90,31 @@ E-Mail: pyclustering@yandex.ru
 
 ------------------------------------------------
 
+###Examples:###
+
+The library contains examples for each algorithm and oscillatory network model:
+
+**Clustering examples:** `pyclustering/cluster/examples`
+**Graph coloring examples:** `pyclustering/gcolor/examples`
+**Oscillatory network examples:** `pyclustering/nnet/examples`
+
+<img src="https://github.com/annoviko/pyclustering/blob/master/docs/img/example_cluster_place.png" height="250">
+
+------------------------------------------------
+
 ###Illustrations:###
 
-**Cluster allocation on FCPS dataset collection**
-<img src="https://github.com/annoviko/pyclustering/blob/master/docs/html/fcps_cluster_analysis.png" height="250">
+**Cluster allocation on FCPS dataset collection by DBSCAN:**
+<img src="https://github.com/annoviko/pyclustering/blob/master/docs/img/fcps_cluster_analysis.png" height="250">
+
+**Cluster allocation by OPTICS using cluster-ordering diagram:**
+<img src="https://github.com/annoviko/pyclustering/blob/master/docs/img/optics_example_clustering.png" height="250">
+
+**Image segmentation by Sync-SOM algorithm:**
+<img src="https://github.com/annoviko/pyclustering/blob/master/docs/img/sync_som_image_segmentation.png" height="250">
+
+**Partial synchronization (clustering) in Sync oscillatory network:**
+<img src="https://github.com/annoviko/pyclustering/blob/master/docs/img/sync_partial_synchronization.png" height="250">
 
 ------------------------------------------------
 
@@ -198,15 +225,3 @@ cnn_visualizer.show_output_dynamic(output_dynamic);
 cnn_visualizer.show_dynamic_matrix(output_dynamic);
 cnn_visualizer.show_observation_matrix(output_dynamic); 
 ```
-
-**Examples for each algorithm or model can be found in following modules of the library:**
-- Cluster analysis examples: `pyclustering/cluster/examples/`
-- Graph coloring examples: `pyclustering/gcolor/examples/`
-- Oscillatory or neural network examples: `pyclustering/nnet/examples/`
-- Travelling salesman problem examples: `/pyclustering/tsp/examples/`
-
-------------------------------------------------
-
-###Proposals, questions, bugs:###
-
-In case of any questions, proposals or bugs related to the pyclustering please contact to pyclustering@yandex.ru or create an issue here.

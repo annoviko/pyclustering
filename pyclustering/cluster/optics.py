@@ -252,7 +252,7 @@ class optics:
              for allocation required amount of clusters using this diagram. In case of usage additional input parameter 'amount of clusters' connectivity radius should be
              bigger than real - because it will be calculated by the algorithms if requested amount of clusters is not allocated.
 
-    @image html optics_cluster_allocation.png "Scheme how does OPTICS works. At the beginning only one cluster is allocated, but two is requested. At the second step OPTICS calculates connectivity radius using cluster-ordering and performs final cluster allocation."
+    @image html optics_example_clustering.png "Scheme how does OPTICS works. At the beginning only one cluster is allocated, but two is requested. At the second step OPTICS calculates connectivity radius using cluster-ordering and performs final cluster allocation."
 
     Example:
     @code
