@@ -21,7 +21,7 @@
 #include <gtest/gtest.h>
 
 #include "utest-adjacency_bit_matrix.hpp"
-#include "utest_adjacency_connector.hpp"
+#include "utest-adjacency_connector.hpp"
 #include "utest-adjacency_list.hpp"
 #include "utest-adjacency_matrix.hpp"
 #include "utest-adjacency_weight_list.hpp"
@@ -38,6 +38,7 @@
 #include "utest-kmedoids.hpp"
 #include "utest-legion.hpp"
 #include "utest-optics.hpp"
+#include "utest-ordering_analyser.hpp"
 #include "utest-pcnn.hpp"
 #include "utest-rock.hpp"
 #include "utest-som.hpp"

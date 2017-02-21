@@ -35,7 +35,7 @@ static std::shared_ptr<optics_data>
 template_optics_length_process_data(const std::shared_ptr<dataset> & p_data,
         const double p_radius,
         const size_t p_neighbors,
-		const size_t p_amount_clusters,
+        const size_t p_amount_clusters,
         const std::vector<size_t> & p_expected_cluster_length) {
 
     std::shared_ptr<optics_data> ptr_output_result = std::make_shared<optics_data>();
@@ -46,12 +46,12 @@ template_optics_length_process_data(const std::shared_ptr<dataset> & p_data,
     const cluster_sequence & actual_clusters = *(ptr_output_result->clusters());
 
     ASSERT_CLUSTER_SIZES(data, actual_clusters, p_expected_cluster_length);
-	if (p_amount_clusters > 0) {
-		ordering_analyser analyser(ptr_output_result->ordering());
-		EXPECT_EQ(p_expected_cluster_length.size(), analyser.extract_cluster_amount(ptr_output_result->get_radius()));
-	}
+    if (p_amount_clusters > 0) {
+        ordering_analyser analyser(ptr_output_result->ordering());
+        EXPECT_EQ(p_expected_cluster_length.size(), analyser.extract_cluster_amount(ptr_output_result->get_radius()));
+    }
 
-	return ptr_output_result;
+    return ptr_output_result;
 }
 
 

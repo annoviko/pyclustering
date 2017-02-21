@@ -38,7 +38,7 @@ class Test(unittest.TestCase):
     def templatesyncsegmSegmentation(self, image_source, radius_color, radius_object, noise_size, expected_color_segments, expected_object_segments, collect_dynamic):
         result_testing = False;
         
-        for _ in range(0, 3, 1):
+        for _ in range(0, 5, 1):
             algorithm = syncsegm(radius_color, radius_object, noise_size);
             analyser = algorithm.process(image_source, collect_dynamic, 0.9995, 0.9995);
             

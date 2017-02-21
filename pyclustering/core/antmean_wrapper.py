@@ -1,8 +1,27 @@
-'''
-Created on Jul 1, 2016
+"""!
 
-@author: alex
-'''
+@brief CCORE Wrapper for clustering Ant Means algorithm.
+
+@authors Andrei Novikov (pyclustering@yandex.ru)
+@date 2014-2017
+@copyright GNU Public License
+
+@cond GNU_PUBLIC_LICENSE
+    PyClustering is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    PyClustering is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+@endcond
+
+"""
 
 
 from pyclustering.core.wrapper import *;
@@ -22,10 +41,9 @@ class c_antcolony_clustering_parameters(Structure):
                 ("pheramone_init"          , c_double),
                 ("iterations"               , c_uint),
                 ("count_ants"               , c_uint)    ];
-    
 
 
-def ant_mean_clustering_process(params, count_clusters, samples):
+def antmean_clustering_process(params, count_clusters, samples):
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     
     algorithm_params = c_antcolony_clustering_parameters();
@@ -57,19 +75,3 @@ def ant_mean_clustering_process(params, count_clusters, samples):
             pyResult[i].append(pointer_data[i].pointer_objects[j])
 
     return pyResult
-    
-    
-#res = ant_mean_clustering_process(ant_mean_clustering(), 2, [[ 0,0 ],[ 1,1 ],[ 10,10 ],[ 11,11 ],[ -2, -2 ],[ 0.55, -1.26 ],[ 13.25, 12.12 ]])
-#print(res)
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
