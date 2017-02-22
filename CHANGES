@@ -32,6 +32,9 @@ GENERAL CHANGES (pyclustering):
 - Implemented feature for cluster visualizer: cluster attributes (pyclustering.cluster).
   See: https://github.com/annoviko/pyclustering/issues/295
 
+- Implemented SOM-SC algorithm (SOM Simple Clustering) (pyclustering.cluster.somsc).
+  See: https://github.com/annoviko/pyclustering/issues/321
+
 
 GENERAL CHANGES (ccore):
 - Implemented OPTICS algorithm and interface for client that results all clustering results (ccore.cluster.optics).

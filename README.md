@@ -61,8 +61,9 @@ In case of any questions, proposals or bugs related to the pyclustering please c
 - K-Medoids [Python, C++]
 - OPTICS [Python, C++]
 - ROCK [Python, C++]
+- SOM-SC [Python, C++]
 - SyncNet [Python, C++]
-- SyncSom [Python]
+- Sync-SOM [Python]
 - X-Means [Python, C++]
 
 **Oscillatory networks and neural networks (module pyclustering.nnet):**

@@ -51,6 +51,7 @@ from pyclustering.cluster.tests                  import kmedians_tests      as c
 from pyclustering.cluster.tests                  import kmedoids_tests      as cluster_kmedoids_unit_tests;
 from pyclustering.cluster.tests                  import optics_tests        as cluster_optics_unit_tests;
 from pyclustering.cluster.tests                  import rock_tests          as cluster_rock_unit_tests;
+from pyclustering.cluster.tests                  import somsc_tests         as cluster_somsc_unit_tests;
 from pyclustering.cluster.tests                  import syncnet_tests       as cluster_syncnet_unit_tests;
 from pyclustering.cluster.tests                  import syncsom_tests       as cluster_syncsom_unit_tests;
 from pyclustering.cluster.tests                  import xmeans_tests        as cluster_xmeans_unit_tests;
@@ -80,7 +81,7 @@ from pyclustering.utils.tests                    import utils_tests         as u
 
 if __name__ == "__main__":
     suite = unittest.TestSuite();
-    
+
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_agglomerative_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_antmean_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_birch_unit_tests));
@@ -94,14 +95,15 @@ if __name__ == "__main__":
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_kmedoids_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_optics_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_rock_unit_tests));
+    suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_somsc_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_syncnet_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_syncsom_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_xmeans_unit_tests));
-      
+
     suite.addTests(unittest.TestLoader().loadTestsFromModule(gcolor_dsatur_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(gcolor_hysteresis_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(gcolor_sync_unit_tests));
-  
+
     suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_cnn_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_hhn_unit_tests));
@@ -112,16 +114,16 @@ if __name__ == "__main__":
     suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_sync_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_syncpr_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_syncsegm_unit_tests));
-     
+
     suite.addTests(unittest.TestLoader().loadTestsFromModule(container_cftree_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(container_kdtree_unit_tests));
-    
+
     suite.addTests(unittest.TestLoader().loadTestsFromModule(tsp_antcolony_unit_tests));
-    
+
     suite.addTests(unittest.TestLoader().loadTestsFromModule(utils_unit_tests));
-    
+
     result = unittest.TextTestRunner(verbosity = 2).run(suite);
-    
+
     # Get execution result
     execution_testing_result = 0;
     
@@ -131,4 +133,4 @@ if __name__ == "__main__":
         execution_testing_result = 1;
     
     exit(execution_testing_result);
-    
+

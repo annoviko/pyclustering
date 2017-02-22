@@ -44,6 +44,7 @@ from pyclustering.cluster.tests               import kmedians_tests      as clus
 from pyclustering.cluster.tests               import kmedoids_tests      as cluster_kmedoids_unit_tests;
 from pyclustering.cluster.tests               import optics_tests        as cluster_optics_unit_tests;
 from pyclustering.cluster.tests               import rock_tests          as cluster_rock_unit_tests;
+from pyclustering.cluster.tests               import somsc_tests         as cluster_somsc_unit_tests;
 from pyclustering.cluster.tests               import syncnet_tests       as cluster_syncnet_unit_tests;
 from pyclustering.cluster.tests               import syncsom_tests       as cluster_syncsom_unit_tests;
 from pyclustering.cluster.tests               import xmeans_tests        as cluster_xmeans_unit_tests;
@@ -51,7 +52,7 @@ from pyclustering.cluster.tests               import xmeans_tests        as clus
 
 if __name__ == "__main__":
     suite = unittest.TestSuite();
-    
+
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_agglomerative_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_antmean_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_birch_unit_tests));
@@ -65,8 +66,9 @@ if __name__ == "__main__":
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_kmedoids_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_optics_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_rock_unit_tests));
+    suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_somsc_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_syncnet_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_syncsom_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_xmeans_unit_tests));
-    
+
     unittest.TextTestRunner(verbosity = 2).run(suite);
