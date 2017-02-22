@@ -43,7 +43,7 @@ using medoid_sequence_ptr = std::shared_ptr<medoid_sequence>;
 */
 class kmedoids_data : public cluster_data {
 private:
-    medoid_sequence_ptr     m_medoids;
+    medoid_sequence_ptr     m_medoids = std::make_shared<medoid_sequence>();
 
 public:
     /**
@@ -51,7 +51,7 @@ public:
     * @brief    Default constructor that creates empty clustering data.
     *
     */
-    kmedoids_data(void);
+    kmedoids_data(void) = default;
 
     /**
     *
@@ -60,7 +60,7 @@ public:
     * @param[in] p_other: another clustering data.
     *
     */
-    kmedoids_data(const kmedoids_data & p_other);
+    kmedoids_data(const kmedoids_data & p_other) = default;
 
     /**
     *
@@ -69,14 +69,14 @@ public:
     * @param[in] p_other: another clustering data.
     *
     */
-    kmedoids_data(kmedoids_data && p_other);
+    kmedoids_data(kmedoids_data && p_other) = default;
 
     /**
     *
     * @brief    Default destructor that destroys clustering data.
     *
     */
-    virtual ~kmedoids_data(void);
+    virtual ~kmedoids_data(void) = default;
 
 public:
     /**
@@ -84,7 +84,7 @@ public:
     * @brief    Returns shared pointer to medoids that corresponds to allocated clusters.
     *
     */
-    medoid_sequence_ptr medoids(void);
+    inline medoid_sequence_ptr medoids(void) { return m_medoids; }
 };
 
 

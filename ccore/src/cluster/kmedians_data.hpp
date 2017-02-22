@@ -41,7 +41,7 @@ namespace cluster_analysis {
 */
 class kmedians_data : public cluster_data {
 private:
-    dataset_ptr       m_medians;
+    dataset_ptr       m_medians = std::make_shared<dataset>();
 
 public:
     /**
@@ -49,7 +49,7 @@ public:
     * @brief    Default constructor that creates empty clustering data.
     *
     */
-    kmedians_data(void);
+    kmedians_data(void) = default;
 
     /**
     *
@@ -58,7 +58,7 @@ public:
     * @param[in] p_other: another clustering data.
     *
     */
-    kmedians_data(const kmedians_data & p_other);
+    kmedians_data(const kmedians_data & p_other) = default;
 
     /**
     *
@@ -67,14 +67,14 @@ public:
     * @param[in] p_other: another clustering data.
     *
     */
-    kmedians_data(kmedians_data && p_other);
+    kmedians_data(kmedians_data && p_other) = default;
 
     /**
     *
     * @brief    Default destructor that destroys clustering data.
     *
     */
-    virtual ~kmedians_data(void);
+    virtual ~kmedians_data(void) = default;
 
 public:
     /**
@@ -82,7 +82,7 @@ public:
     * @brief    Returns shared pointer to medians that correspond to allocated clusters.
     *
     */
-    dataset_ptr medians(void);
+    inline dataset_ptr medians(void) { return m_medians; }
 };
 
 

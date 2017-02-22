@@ -91,15 +91,11 @@
     <ClCompile Include="..\src\cluster\cluster_algorithm.cpp" />
     <ClCompile Include="..\src\cluster\cluster_data.cpp" />
     <ClCompile Include="..\src\cluster\cure.cpp" />
-    <ClCompile Include="..\src\cluster\cure_data.cpp" />
     <ClCompile Include="..\src\cluster\dbscan.cpp" />
     <ClCompile Include="..\src\cluster\hsyncnet.cpp" />
     <ClCompile Include="..\src\cluster\kmeans.cpp" />
-    <ClCompile Include="..\src\cluster\kmeans_data.cpp" />
     <ClCompile Include="..\src\cluster\kmedians.cpp" />
-    <ClCompile Include="..\src\cluster\kmedians_data.cpp" />
     <ClCompile Include="..\src\cluster\kmedoids.cpp" />
-    <ClCompile Include="..\src\cluster\kmedoids_data.cpp" />
     <ClCompile Include="..\src\cluster\optics.cpp" />
     <ClCompile Include="..\src\cluster\ordering_analyser.cpp" />
     <ClCompile Include="..\src\cluster\rock.cpp" />

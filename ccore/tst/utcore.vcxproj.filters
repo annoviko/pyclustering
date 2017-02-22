@@ -113,9 +113,6 @@
     <ClCompile Include="..\src\cluster\kmedoids.cpp">
       <Filter>Tested Code\cluster</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\cluster\kmedoids_data.cpp">
-      <Filter>Tested Code\cluster</Filter>
-    </ClCompile>
     <ClCompile Include="utest-cluster.cpp">
       <Filter>Unit Tests</Filter>
     </ClCompile>
@@ -125,22 +122,13 @@
     <ClCompile Include="..\src\cluster\cure.cpp">
       <Filter>Tested Code\cluster</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\cluster\cure_data.cpp">
-      <Filter>Tested Code\cluster</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\cluster\dbscan.cpp">
       <Filter>Tested Code\cluster</Filter>
     </ClCompile>
     <ClCompile Include="..\src\cluster\kmeans.cpp">
       <Filter>Tested Code\cluster</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\cluster\kmedians_data.cpp">
-      <Filter>Tested Code\cluster</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\cluster\rock.cpp">
-      <Filter>Tested Code\cluster</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\cluster\kmeans_data.cpp">
       <Filter>Tested Code\cluster</Filter>
     </ClCompile>
     <ClCompile Include="..\src\cluster\optics.cpp">

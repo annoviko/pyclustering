@@ -41,7 +41,7 @@ namespace cluster_analysis {
 */
 class kmeans_data : public cluster_data {
 private:
-    dataset_ptr       m_centers;
+    dataset_ptr       m_centers = std::make_shared<dataset>();
 
 public:
     /**
@@ -49,7 +49,7 @@ public:
     * @brief    Default constructor that creates empty clustering data.
     *
     */
-    kmeans_data(void);
+    kmeans_data(void) = default;
 
     /**
     *
@@ -58,7 +58,7 @@ public:
     * @param[in] p_other: another clustering data.
     *
     */
-    kmeans_data(const kmeans_data & p_other);
+    kmeans_data(const kmeans_data & p_other) = default;
 
     /**
     *
@@ -67,14 +67,14 @@ public:
     * @param[in] p_other: another clustering data.
     *
     */
-    kmeans_data(kmeans_data && p_other);
+    kmeans_data(kmeans_data && p_other) = default;
 
     /**
     *
     * @brief    Default destructor that destroys clustering data.
     *
     */
-    virtual ~kmeans_data(void);
+    virtual ~kmeans_data(void) = default;
 
 public:
     /**
@@ -82,7 +82,7 @@ public:
     * @brief    Returns shared pointer to centers that correspond to allocated clusters.
     *
     */
-    dataset_ptr centers(void);
+    inline dataset_ptr centers(void) { return m_centers; }
 };
 
 

@@ -25,9 +25,9 @@ using representor_sequence_ptr = std::shared_ptr<representor_sequence>;
 */
 class cure_data : public cluster_data {
 private:
-    representor_sequence_ptr    m_representative_sequence;
+    representor_sequence_ptr    m_representative_sequence = std::make_shared<representor_sequence>();
 
-    dataset_ptr                 m_mean_sequence;
+    dataset_ptr                 m_mean_sequence = std::make_shared<dataset>();
 
 public:
     /**
@@ -35,7 +35,7 @@ public:
     * @brief    Default constructor that creates empty clustering data.
     *
     */
-    cure_data(void);
+    cure_data(void) = default;
 
     /**
     *
@@ -44,7 +44,7 @@ public:
     * @param[in] p_other: another clustering data.
     *
     */
-    cure_data(const cure_data & p_other);
+    cure_data(const cure_data & p_other) = default;
 
     /**
     *
@@ -53,14 +53,14 @@ public:
     * @param[in] p_other: another clustering data.
     *
     */
-    cure_data(cure_data && p_other);
+    cure_data(cure_data && p_other) = default;
 
     /**
     *
     * @brief    Default destructor that destroys clustering data.
     *
     */
-    virtual ~cure_data(void);
+    virtual ~cure_data(void) = default;
 
 public:
     /**
@@ -75,7 +75,7 @@ public:
     * @return   Shared pointer to representative points of each cluster.
     *
     */
-    representor_sequence_ptr representors(void);
+    inline representor_sequence_ptr representors(void) { return m_representative_sequence; }
 
     /**
     *
@@ -88,7 +88,7 @@ public:
     * @return   Shared pointer to mean point of each cluster.
     *
     */
-    dataset_ptr means(void);
+    inline dataset_ptr means(void) { return m_mean_sequence; }
 
 
 };
