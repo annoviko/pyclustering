@@ -63,11 +63,11 @@ def cluster_sample3():
     
 def cluster_sample4():
     start_centers = [[1.5, 0.0], [1.5, 2.0], [1.5, 4.0], [1.5, 6.0], [1.5, 8.0]];
-    template_clustering(start_centers, SIMPLE_SAMPLES.SAMPLE_SIMPLE4);    
+    template_clustering(start_centers, SIMPLE_SAMPLES.SAMPLE_SIMPLE4);
     
 def cluster_sample5():
     start_centers = [[0.0, 1.0], [0.0, 0.0], [1.0, 1.0], [1.0, 0.0]];
-    template_clustering(start_centers, SIMPLE_SAMPLES.SAMPLE_SIMPLE5);    
+    template_clustering(start_centers, SIMPLE_SAMPLES.SAMPLE_SIMPLE5);
 
 def cluster_sample7():
     start_centers = [[-3.0], [2.5]];
@@ -85,16 +85,16 @@ def cluster_elongate():
 def cluster_lsun():
     "Not so applicable for this sample"
     start_centers = [[1.0, 3.5], [2.0, 0.5], [3.0, 3.0]];
-    template_clustering(start_centers, FCPS_SAMPLES.SAMPLE_LSUN);  
+    template_clustering(start_centers, FCPS_SAMPLES.SAMPLE_LSUN);
     
 def cluster_target():
     "Not so applicable for this sample"
     start_centers = [[0.2, 0.2], [0.0, -2.0], [3.0, -3.0], [3.0, 3.0], [-3.0, 3.0], [-3.0, -3.0]];
-    template_clustering(start_centers, FCPS_SAMPLES.SAMPLE_TARGET);     
+    template_clustering(start_centers, FCPS_SAMPLES.SAMPLE_TARGET);
 
 def cluster_two_diamonds():
     start_centers = [[0.8, 0.2], [3.0, 0.0]];
-    template_clustering(start_centers, FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS);  
+    template_clustering(start_centers, FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS);
 
 def cluster_wing_nut():
     "Almost good!"
@@ -103,7 +103,7 @@ def cluster_wing_nut():
     
 def cluster_chainlink():
     start_centers = [[1.1, -1.7, 1.1], [-1.4, 2.5, -1.2]];
-    template_clustering(start_centers, FCPS_SAMPLES.SAMPLE_CHAINLINK);     
+    template_clustering(start_centers, FCPS_SAMPLES.SAMPLE_CHAINLINK);
     
 def cluster_hepta():
     start_centers = [[0.0, 0.0, 0.0], [3.0, 0.0, 0.0], [-2.0, 0.0, 0.0], [0.0, 3.0, 0.0], [0.0, -3.0, 0.0], [0.0, 0.0, 2.5], [0.0, 0.0, -2.5]];
@@ -111,7 +111,7 @@ def cluster_hepta():
     
 def cluster_tetra():
     start_centers = [[1, 0, 0], [0, 1, 0], [0, -1, 0], [-1, 0, 0]];
-    template_clustering(start_centers, FCPS_SAMPLES.SAMPLE_TETRA);    
+    template_clustering(start_centers, FCPS_SAMPLES.SAMPLE_TETRA);
     
 def cluster_engy_time():
     start_centers = [[0.5, 0.5], [2.3, 2.9]];
@@ -125,7 +125,7 @@ def experiment_execution_time(ccore = False):
     template_clustering([[0.0, 1.0], [0.0, 0.0], [1.0, 1.0], [1.0, 0.0]], SIMPLE_SAMPLES.SAMPLE_SIMPLE5, ccore);
     template_clustering([[1.0, 4.5], [3.1, 2.7]], SIMPLE_SAMPLES.SAMPLE_ELONGATE, ccore);
     template_clustering([[1.0, 3.5], [2.0, 0.5], [3.0, 3.0]], FCPS_SAMPLES.SAMPLE_LSUN, ccore);
-    template_clustering([[0.2, 0.2], [0.0, -2.0], [3.0, -3.0], [3.0, 3.0], [-3.0, 3.0], [-3.0, -3.0]], FCPS_SAMPLES.SAMPLE_TARGET, ccore);    
+    template_clustering([[0.2, 0.2], [0.0, -2.0], [3.0, -3.0], [3.0, 3.0], [-3.0, 3.0], [-3.0, -3.0]], FCPS_SAMPLES.SAMPLE_TARGET, ccore);
     template_clustering([[0.8, 0.2], [3.0, 0.0]], FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, ccore);  
     template_clustering([[-1.5, 1.5], [1.5, 1.5]], FCPS_SAMPLES.SAMPLE_WING_NUT, ccore); 
     template_clustering([[1.1, -1.7, 1.1], [-1.4, 2.5, -1.2]], FCPS_SAMPLES.SAMPLE_CHAINLINK, ccore);  

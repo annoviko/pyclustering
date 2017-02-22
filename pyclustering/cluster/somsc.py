@@ -26,6 +26,8 @@
 """
 
 
+from pyclustering.cluster.encoder import type_encoding;
+
 from pyclustering.nnet.som import som;
 from pyclustering.nnet.som import type_conn;
 
@@ -36,8 +38,21 @@ class somsc:
     @details This algorithm uses amount of clusters that should be allocated as a size of SOM map. Captured objects by neurons are clusters.
              Algorithm is able to process data with Gaussian distribution that has spherical forms.
     
+    Example:
+    @code
+        # load list of points for cluster analysis
+        sample = read_sample(path);
+        
+        # create instance of SOM-SC algorithm to allocated two clusters
+        somsc_instance = somsc(sample, 2);
+        
+        # run cluster analysis and obtain results
+        somsc_instance.process();
+        somsc_instance.get_clusters();
+    @endcode
     """
     def __init__(self, data, amount_clusters, epouch = 100, ccore = False):
+        
         self.__data_pointer = data;
         self.__amount_clusters = amount_clusters;
         self.__epouch = epouch;
@@ -48,7 +63,7 @@ class somsc:
 
     def process(self):
         """!
-        @brief Performs cluster analysis in line with rules of K-Means algorithm.
+        @brief Performs cluster analysis by competition between neurons of SOM.
         
         @remark Results of clustering can be obtained using corresponding get methods.
         
@@ -61,4 +76,24 @@ class somsc:
 
 
     def get_clusters(self):
+        """!
+        @brief Returns list of allocated clusters, each cluster contains indexes of objects in list of data.
+        
+        @see process()
+        
+        """
+        
         return self.__network.capture_objects;
+
+
+    def get_cluster_encoding(self):
+        """!
+        @brief Returns clustering result representation type that indicate how clusters are encoded.
+        
+        @return (type_encoding) Clustering result representation.
+        
+        @see get_clusters()
+        
+        """
+        
+        return type_encoding.CLUSTER_INDEX_LIST_SEPARATION;

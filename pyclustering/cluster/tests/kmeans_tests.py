@@ -53,13 +53,13 @@ class Test(unittest.TestCase):
     
     def testClusterAllocationSampleSimple1(self):
         self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5]);
-    
+
     def testClusterAllocationSampleSimple1ByCore(self):
         self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], True);
-    
+
     def testClusterOneAllocationSampleSimple1(self):
         self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[1.0, 2.5]], [10]);
-        
+
     def testClusterOneAllocationSampleSimple1ByCore(self):
         self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[1.0, 2.5]], [10], True);
 
