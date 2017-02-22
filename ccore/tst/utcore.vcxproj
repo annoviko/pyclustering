@@ -99,6 +99,7 @@
     <ClCompile Include="..\src\cluster\optics.cpp" />
     <ClCompile Include="..\src\cluster\ordering_analyser.cpp" />
     <ClCompile Include="..\src\cluster\rock.cpp" />
+    <ClCompile Include="..\src\cluster\somsc.cpp" />
     <ClCompile Include="..\src\cluster\syncnet.cpp" />
     <ClCompile Include="..\src\cluster\xmeans.cpp" />
     <ClCompile Include="..\src\container\adjacency_bit_matrix.cpp" />
@@ -143,6 +144,8 @@
     <ClInclude Include="..\src\cluster\optics_data.hpp" />
     <ClInclude Include="..\src\cluster\ordering_analyser.hpp" />
     <ClInclude Include="..\src\cluster\rock.hpp" />
+    <ClInclude Include="..\src\cluster\somsc.hpp" />
+    <ClInclude Include="..\src\cluster\somsc_data.hpp" />
     <ClInclude Include="..\src\cluster\syncnet.hpp" />
     <ClInclude Include="..\src\cluster\xmeans.hpp" />
     <ClInclude Include="..\src\container\adjacency.hpp" />
@@ -195,6 +198,7 @@
     <ClInclude Include="utest-pcnn.hpp" />
     <ClInclude Include="utest-rock.hpp" />
     <ClInclude Include="utest-som.hpp" />
+    <ClInclude Include="utest-somsc.hpp" />
     <ClInclude Include="utest-sync.hpp" />
     <ClInclude Include="utest-syncnet.hpp" />
     <ClInclude Include="utest-syncpr.hpp" />

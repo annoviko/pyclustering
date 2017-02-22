@@ -43,13 +43,15 @@ class Test(unittest.TestCase):
         somsc_instance.process();
         
         clusters = somsc_instance.get_clusters();
-    
+
         obtained_cluster_sizes = [len(cluster) for cluster in clusters];
         assert len(sample) == sum(obtained_cluster_sizes);
         
         if (expected_cluster_length != None):
             obtained_cluster_sizes.sort();
             expected_cluster_length.sort();
+            if (obtained_cluster_sizes != expected_cluster_length):
+                print 
             assert obtained_cluster_sizes == expected_cluster_length;
 
     def testClusterAllocationSampleSimple1(self):
@@ -105,12 +107,24 @@ class Test(unittest.TestCase):
 
     def testClusterAllocationSampleSimple5ByCore(self):
         self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 4, [15, 15, 15, 15], True);
-  
+
     def testClusterOneAllocationSampleSimple5(self):
         self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 1, [60]);
 
     def testClusterOneAllocationSampleSimple5ByCore(self):
         self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 1, [60], True);
+
+    def testClusterOneDimensionSampleSimple7(self):
+        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE7, 2, [10, 10]);
+
+    def testClusterOneDimensionSampleSimple7ByCore(self):
+        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE7, 2, [10, 10], True);
+
+    def testClusterOneDimensionSampleSimple8(self):
+        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE8, 4, None);
+
+    def testClusterOneDimensionSampleSimple8ByCore(self):
+        self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE8, 4, None, True);
 
     def testWrongNumberOfCentersSimpleSample1(self):
         self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 3, None);
@@ -126,18 +140,18 @@ class Test(unittest.TestCase):
 
     def templateClusterAllocationOneDimensionData(self, ccore_flag):
         input_data = [ [random()] for i in range(10) ] + [ [random() + 3] for i in range(10) ] + [ [random() + 5] for i in range(10) ] + [ [random() + 8] for i in range(10) ];
-        
+
         somsc_instance = somsc(input_data, 4, 100, ccore_flag);
         somsc_instance.process();
         clusters = somsc_instance.get_clusters();
-        
+
         assert len(clusters) == 4;
         for cluster in clusters:
             assert len(cluster) == 10;
-                
+
     def testClusterAllocationOneDimensionData(self):
         self.templateClusterAllocationOneDimensionData(False);
-        
+
     def testClusterAllocationOneDimensionDataByCore(self):
         self.templateClusterAllocationOneDimensionData(True);
 

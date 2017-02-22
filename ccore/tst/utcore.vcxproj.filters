@@ -137,6 +137,9 @@
     <ClCompile Include="..\src\cluster\ordering_analyser.cpp">
       <Filter>Tested Code\cluster</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\cluster\somsc.cpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\tools\gtest\gtest.h">
@@ -371,6 +374,15 @@
       <Filter>Tested Code\cluster</Filter>
     </ClInclude>
     <ClInclude Include="utest_ordering_analyser.hpp">
+      <Filter>Unit Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cluster\somsc.hpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cluster\somsc_data.hpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="utest-somsc.hpp">
       <Filter>Unit Tests</Filter>
     </ClInclude>
   </ItemGroup>

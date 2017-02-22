@@ -68,175 +68,175 @@ class Test(unittest.TestCase):
     def testTwoNeuronsTwoClusters(self):
         self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, 2, 100, [5, 5]);
         self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, 1, 100, [5, 5]);
-    
-    
+     
+     
     def testTwoNeuronsTwoClustersByCore(self):
         self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, 2, 100, [5, 5], False, True);
         self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, 1, 100, [5, 5], False, True);
-         
-         
+          
+          
     def testAutostopTwoNeuronsTwoClusters(self):
         self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, 2, 100, [5, 5], True);
         self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, 1, 100, [5, 5], True);
-           
-           
+            
+            
     def testAutostopTwoNeuronsTwoClustersByCore(self):
         self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, 2, 100, [5, 5], True, True);
         self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, 1, 100, [5, 5], True, True);
+                 
                 
-               
     def testThreeNeuronsThreeClusters(self):
         self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 1, 3, 100, [5, 8, 10]);
         self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 3, 1, 100, [5, 8, 10]);
-            
-                    
+             
+                     
     def testThreeNeuronsThreeClustersByCore(self):
         self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 1, 3, 100, [5, 8, 10], False, True);
         self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 3, 1, 100, [5, 8, 10], False, True);
-            
-            
+             
+             
     def testAutostopThreeNeuronsThreeClusters(self):
         self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 1, 3, 100, [5, 8, 10], True);
         self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 3, 1, 100, [5, 8, 10], True);
-            
-            
+             
+             
     def testAutostopThreeNeuronsThreeClustersByCore(self):
         self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 1, 3, 100, [5, 8, 10], True, True);
         self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 3, 1, 100, [5, 8, 10], True, True);
-                
-            
+                 
+             
     def testFourNeuronsFourClusters(self):
         self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 1, 4, 100, [10, 10, 10, 30]);
         self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 2, 2, 100, [10, 10, 10, 30]);
-          
-          
+           
+           
     def testFourNeuronsFourClustersByCore(self):
         self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 1, 4, 100, [10, 10, 10, 30], False, True);
         self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 2, 2, 100, [10, 10, 10, 30], False, True);
-            
-            
+             
+             
     def testAutostopFourNeuronsFourClusters(self):
         self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 1, 4, 100, [10, 10, 10, 30], True);
         self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 2, 2, 100, [10, 10, 10, 30], True);
-      
-      
+       
+       
     def testAutostopFourNeuronsFourClustersByCore(self):
         self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 1, 4, 100, [10, 10, 10, 30], True, True);
         self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 2, 2, 100, [10, 10, 10, 30], True, True);
-      
-            
+       
+             
     def testTwoNeuronsFourClusters(self):
         self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 1, 2, 100, [30, 30]); 
-            
-            
+             
+             
     def testTwoNeuronsFourClustersByCore(self):
         self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 1, 2, 100, [30, 30], False, True); 
-              
-              
+               
+               
     def testAutostopTwoNeuronsFourClusters(self):
         self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 1, 2, 100, [30, 30], True); 
-          
-          
+           
+           
     def testAutostopTwoNeuronsFourClustersByCore(self):
         self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 1, 2, 100, [30, 30], True, True); 
-            
-          
+             
+           
     def testSevenNeuronsHeptaClusters(self):
         self.templateTestAwardNeurons(FCPS_SAMPLES.SAMPLE_HEPTA, 1, 7, 100, [30, 30, 30, 30, 30, 30, 32]); 
-            
-          
+             
+           
     def testSevenNeuronsHeptaClustersByCore(self):
         self.templateTestAwardNeurons(FCPS_SAMPLES.SAMPLE_HEPTA, 1, 7, 100, [30, 30, 30, 30, 30, 30, 32], False, True); 
-          
-            
+           
+             
     def testAutostopSevenNeuronsHeptaClusters(self):
         self.templateTestAwardNeurons(FCPS_SAMPLES.SAMPLE_HEPTA, 1, 7, 100, [30, 30, 30, 30, 30, 30, 32], True); 
-          
-          
+           
+           
     def testAutostopSevenNeuronsHeptaClustersByCore(self):
         self.templateTestAwardNeurons(FCPS_SAMPLES.SAMPLE_HEPTA, 1, 7, 100, [30, 30, 30, 30, 30, 30, 32], True, True);
-            
-            
+             
+             
     def testFourNeuronsTetraClusters(self):
         self.templateTestAwardNeurons(FCPS_SAMPLES.SAMPLE_TETRA, 1, 4, 100, [100, 100, 100, 100]);
-          
-          
+           
+           
     def testFourNeuronsTetraClustersByCore(self):
         self.templateTestAwardNeurons(FCPS_SAMPLES.SAMPLE_TETRA, 1, 4, 100, [100, 100, 100, 100], False, True); 
-            
-          
+             
+           
     def testAutostopFourNeuronsTetraClusters(self):
         self.templateTestAwardNeurons(FCPS_SAMPLES.SAMPLE_TETRA, 1, 4, 100, [100, 100, 100, 100], True);
-          
-          
+           
+           
     def testAutostopFourNeuronsTetraClustersByCore(self):
         self.templateTestAwardNeurons(FCPS_SAMPLES.SAMPLE_TETRA, 1, 4, 100, [100, 100, 100, 100], True, True);
-            
-            
+             
+             
     def testTwoNeuronsTwoDiamondsClusters(self):
         self.templateTestAwardNeurons(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, 1, 2, 100, [400, 400]);
-            
-            
+             
+             
     def testTwoNeuronsTwoDiamondsClustersByCore(self):
         self.templateTestAwardNeurons(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, 1, 2, 100, [400, 400], False, True);
-               
-               
+                
+                
     def testAutostopTwoNeuronsTwoDiamondsClusters(self):
         self.templateTestAwardNeurons(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, 1, 2, 100, [400, 400], True);
-          
-          
+           
+           
     def testAutostopTwoNeuronsTwoDiamondsClustersByCore(self):
         self.templateTestAwardNeurons(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, 1, 2, 100, [400, 400], True, True);
-            
-          
+             
+           
     def testFiveNeuronsFiveClusters(self):
         self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 1, 5, 100, [15, 15, 15, 15, 15]);      
-          
-          
+           
+           
     def testFiveNeuronsFiveClustersByCore(self):
         self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 1, 5, 100, [15, 15, 15, 15, 15], False, True);  
-          
-          
+           
+           
     def testAutostopFiveNeuronsFiveClusters(self):
         self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 1, 5, 100, [15, 15, 15, 15, 15], True);
-      
-      
+       
+       
     def testAutostopFiveNeuronsFiveClustersByCore(self):
         self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 1, 5, 100, [15, 15, 15, 15, 15], True, True);      
-      
-            
+       
+             
     def testFourNeuronsSquareClusters(self):
         self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 2, 2, 100, [15, 15, 15, 15]);
         self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 1, 4, 100, [15, 15, 15, 15]);
-          
-          
+           
+           
     def testFourNeuronsSquareClustersByCore(self):
         self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 2, 2, 100, [15, 15, 15, 15], False, True);
         self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 1, 4, 100, [15, 15, 15, 15], False, True);    
-            
-          
+             
+           
     def testAutostopFourNeuronsSquareClusters(self):
         self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 2, 2, 100, [15, 15, 15, 15], True);
         self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 1, 4, 100, [15, 15, 15, 15], True);
-          
-          
+           
+           
     def testAutostopFourNeuronsSquareClustersByCore(self):
         self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 2, 2, 100, [15, 15, 15, 15], True, True);
         self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 1, 4, 100, [15, 15, 15, 15], True, True);
-         
-         
+          
+          
     def testOneDimensionSampleSimple7Cluster(self):
         parameters = som_parameters();
         parameters.init_type = type_init.random_surface;
         self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE7, 2, 1, 100, [10, 10], True, False, parameters);
-   
-   
+    
+    
     def testOneDimensionSampleSimple7ClusterByCore(self):
         parameters = som_parameters();
         parameters.init_type = type_init.random_surface;
         self.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE7, 2, 1, 100, [10, 10], True, True, parameters);
-           
-         
+
+
     def testHighEpochs(self):
         # This test requires too much time for execution
         epochs = 1000;

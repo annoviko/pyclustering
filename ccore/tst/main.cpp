@@ -41,6 +41,7 @@
 #include "utest-ordering_analyser.hpp"
 #include "utest-pcnn.hpp"
 #include "utest-rock.hpp"
+#include "utest-somsc.hpp"
 #include "utest-som.hpp"
 #include "utest-sync.hpp"
 #include "utest-syncnet.hpp"

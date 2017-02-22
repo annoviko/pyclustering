@@ -81,8 +81,8 @@ static void template_award_neurons(const std::shared_ptr<dataset> & data,
                                    const std::vector<unsigned int> & expected_result) {
 
     som_parameters params;
-	som som_map(rows, cols, conn_type, params);
-	som_map.train(*data.get(), epouchs, autostop);
+    som som_map(rows, cols, conn_type, params);
+    som_map.train(*data.get(), epouchs, autostop);
 
     size_t winners = som_map.get_winner_number();
     ASSERT_EQ(expected_result.size(), winners);
