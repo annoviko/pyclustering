@@ -10,8 +10,13 @@ CFLAGS = -O3 -MMD -MP -std=c++1y -fPIC
 LFLAGS = -static-libstdc++ -shared
 
 
+# Executable library file
+EXECUTABLE_DIRECTORY = ../pyclustering/core/x64/linux
+EXECUTABLE = ../pyclustering/core/x64/linux/ccore.so
+
+
 # Project sources
-MODULES = cluster container differential interface nnet tsp
+MODULES = . cluster container differential interface nnet tsp
 
 SOURCES_DIRECTORY = src
 SOURCES_DIRECTORIES = $(addprefix $(SOURCES_DIRECTORY)/, $(MODULES))
@@ -21,33 +26,50 @@ INCLUDES = -I$(SOURCES_DIRECTORY)
 
 
 # Project objects
-OBJECTS = $(SOURCES:.cpp=.o)
+OBJECTS_DIRECTORY = obj/ccore
+OBJECTS_DIRECTORIES = $(addprefix $(OBJECTS_DIRECTORY)/, $(MODULES)) $(EXECUTABLE_DIRECTORY)
+OBJECTS = $(patsubst $(SOURCES_DIRECTORY)/%.cpp, $(OBJECTS_DIRECTORY)/%.o, $(SOURCES))
 
 
-# The dependency file names
-DEPS = $(OBJECTS:.o=.d)
+# Dependencies
+DEPENDENCIES = $(OBJECTS:.o=.d)
 
 
-# Executable library file
-EXECUTABLE = ../pyclustering/core/x64/linux/ccore.so
-
-
+# Targets
 .PHONY: ccore
-ccore: $(EXECUTABLE)
+ccore: mkdirs $(EXECUTABLE)
+
+
+.PHONY: mkdirs
+mkdirs: $(OBJECTS_DIRECTORIES)
 
 
 .PHONY:
 clean:
-	$(RM) ccore/*o ccore.so
+	$(RM) $(OBJECTS_DIRECTORY) $(EXECUTABLE)
 
 
+# Build targets
 $(EXECUTABLE): $(OBJECTS)
-	$(LD) $(LFLAGS) $(OBJECTS) $(INCLUDES) -o $@
+	$(LD) $(LFLAGS) $^ -o $@
 
 
-.cpp.o:
-	$(CC) $(CFLAGS) $(INCLUDES) $< -o $@
+$(OBJECTS_DIRECTORIES):
+	$(MKDIR) $@
 
 
--include $(DEPS)
+vpath %.cpp $(SOURCES_DIRECTORIES)
+
+
+define make-objects
+$1/%.o: %.cpp
+	$(CC) $(CFLAGS) $(INCLUDES) $$< -o $$@
+endef
+
+
+$(foreach OBJDIR, $(OBJECTS_DIRECTORIES), $(eval $(call make-objects, $(OBJDIR))))
+
+
+# Include dependencies
+-include $(DEPENDENCIES)
 

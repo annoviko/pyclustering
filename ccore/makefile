@@ -5,8 +5,12 @@ MKFLAG = -f
 default:
 	@echo "List of targets:"
 	@echo "ccore       - to build release CCORE library for pyclustering."
+	@echo "ccore_clean - to clean build files of CCORE library."
+	@echo " "
 	@echo "ut          - to build release unit-tests for CCORE library."
 	@echo "utrun       - to run unit-tests of CCORE library."
+	@echo "utclean     - to clean build files of unit-tests of CCORE library."
+	@echo " "
 	@echo "valgrind    - to build and run unit-tests for memory leak checking of CCORE library."
 	@echo " "
 	@echo "clean       - to clean everything."
@@ -14,9 +18,12 @@ default:
 
 .PHONY: ccore
 ccore:
-	rm -rf ../pyclustering/core/x64/linux
-	mkdir ../pyclustering/core/x64/linux
 	$(MAKE) $(MKFLAG) ccore.mk
+
+
+.PHONY: ccore_clean
+ccore_clean:
+	$(MAKE) $(MKFLAG) ccore.mk clean
 
 
 .PHONY: ut
@@ -29,6 +36,11 @@ utrun:
 	cd tst/ && ./utcore.exe
 
 
+.PHONY: utclean
+utclean:
+	$(MAKE) $(MKFLAG) utcore.mk clean
+
+
 .PHONE: valgrind
 valgrind:
 	$(MAKE) $(MKFLAG) utcore.mk ARGS="valgrind"
@@ -37,7 +49,7 @@ valgrind:
 
 .PHONY: clean
 clean:
+	$(MAKE) $(MKFLAG) ccore.mk clean
 	find src/ tst/ -name "*.d" -or -name "*.o" -or -name "*.gcda" -or -name "*.gcno" | xargs rm -rf
-	rm -f ../pyclustering/core/x64/linux/ccore.so
 	rm -f tst/utcore.exe
 
