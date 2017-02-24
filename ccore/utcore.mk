@@ -1,53 +1,94 @@
-# Unit-test project for CCORE PyClustering library
-
-include makefile.include
-
-CC = g++
+# Tools
+CC = g++ -c
 LD = g++
+RM = rm -rf
+MKDIR = mkdir -p
+
 
 # Toolchain arguments
 ifeq ($(ARGS), valgrind)
-	CFLAGS = -MMD -MP -std=c++1y -fPIC -g -c
+	CFLAGS = -MMD -MP -std=c++1y -fPIC -g
 	LFLAGS = -pthread
 else
-	CFLAGS = -O3 -MMD -MP -std=c++1y -fPIC -fprofile-arcs -ftest-coverage -c
-	LFLAGS = -O3 -pthread -fprofile-arcs -ftest-coverage
+	CFLAGS = -O3 -MMD -MP -std=c++1y -fPIC -fprofile-arcs -ftest-coverage
+	LFLAGS = -pthread -fprofile-arcs -ftest-coverage
 endif
 
 
+# Output name of executable file
+EXECUTABLE_DIRECTORY = tst
+EXECUTABLE = $(EXECUTABLE_DIRECTORY)/utcore.exe
+
+
+# Environment
+SOURCES_DIRECTORY = src
+UTEST_DIRECTORY = tst
+TOOLS_DIRECTORY = tools
+
+
 # Project sources
-SOURCES += tst/main.cpp
-SOURCES += tst/samples.cpp
-SOURCES += tst/utest-cluster.cpp
-SOURCES += tools/gtest/gtest-all.cpp
+SOURCES_MODULES = . cluster container differential interface nnet tsp
+UTEST_MODULES = .
+TOOLS_MODULES = gtest
 
-OBJECTS = $(SOURCES:.cpp=.o)
+SOURCES_DIRECTORIES = $(addprefix $(SOURCES_DIRECTORY)/, $(SOURCES_MODULES))
+SOURCES_DIRECTORIES += $(addprefix $(UTEST_DIRECTORY)/, $(UTEST_MODULES))
+SOURCES_DIRECTORIES += $(addprefix $(TOOLS_DIRECTORY)/, $(TOOLS_MODULES))
 
-INCLUDES += -I./ -Itst/ -Itools/
+SOURCES = $(foreach SUBDIR, $(SOURCES_DIRECTORIES), $(wildcard $(SUBDIR)/*.cpp))
+
+INCLUDES = -I$(SOURCES_DIRECTORY) -I$(UTEST_DIRECTORY) -I$(TOOLS_DIRECTORY)
+
+
+# Project objects
+OBJECTS_DIRECTORY = obj/ut
+
+OBJECTS_DIRECTORIES = $(addprefix $(OBJECTS_DIRECTORY)/$(SOURCES_DIRECTORY)/, $(SOURCES_MODULES))
+OBJECTS_DIRECTORIES += $(addprefix $(OBJECTS_DIRECTORY)/$(UTEST_DIRECTORY)/, $(UTEST_MODULES))
+OBJECTS_DIRECTORIES += $(addprefix $(OBJECTS_DIRECTORY)/$(TOOLS_DIRECTORY)/, $(TOOLS_MODULES))
+
+OBJECTS = $(patsubst %.cpp, $(OBJECTS_DIRECTORY)/%.o, $(SOURCES)) 
 
 
 # The dependency file names
-DEPS = $(OBJECTS:.o=.d)
+DEPENDENCIES = $(OBJECTS:.o=.d)
 
 
-# Output name of executable file
-EXECUTABLE = tst/utcore.exe
+# Targets
+.PHONY: ut
+ut: mkdirs $(EXECUTABLE)
 
 
-utcore: $(EXECUTABLE)
+.PHONY: mkdirs
+mkdirs: $(OBJECTS_DIRECTORIES)
 
 
+.PHONY: clean
 clean:
-	rm utcore/*.o tst/utcore.exe
+	$(RM) $(EXECUTABLE) $(OBJECTS_DIRECTORY)
 
 
+# Build targets
 $(EXECUTABLE): $(OBJECTS)
-	$(LD) $(OBJECTS) $(LFLAGS) -o $(EXECUTABLE)
+	$(LD) $(LFLAGS) $^ -o $@
 
 
-.cpp.o:
-	$(CC) $(CFLAGS) $(INCLUDES) $< -o $@
+$(OBJECTS_DIRECTORIES):
+	$(MKDIR) $@
 
 
--include $(DEPS)
+vpath %.cpp $(SOURCES_DIRECTORIES)
+
+
+define make-objects
+$1/%.o: %.cpp
+	$(CC) $(CFLAGS) $(INCLUDES) $$< -o $$@
+endef
+
+
+$(foreach OBJDIR, $(OBJECTS_DIRECTORIES), $(eval $(call make-objects, $(OBJDIR))))
+
+
+# Include dependencies
+-include $(DEPENDENCIES)
 

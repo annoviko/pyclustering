@@ -12,7 +12,7 @@ LFLAGS = -static-libstdc++ -shared
 
 # Executable library file
 EXECUTABLE_DIRECTORY = ../pyclustering/core/x64/linux
-EXECUTABLE = ../pyclustering/core/x64/linux/ccore.so
+EXECUTABLE = $(EXECUTABLE_DIRECTORY)/ccore.so
 
 
 # Project sources
