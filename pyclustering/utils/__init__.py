@@ -163,6 +163,34 @@ def gray_pattern_borders(image):
     return (width_start, height_start, width_end + 1, height_end + 1);
 
 
+def knearest(points, k):
+    """!
+    @brief Calculates k-nearest graph.
+    
+    @param[in] points (list): Input data, list of points where each point represented by list.
+    @param[in] k (uint): Minimum number of neighbors for each point.
+    
+    @return (list) k-nearest graph.
+    
+    """
+    
+    graph = [];
+    for i in range(len(points)):
+        candidates = [];
+        for j in range(i + i, len(points), 1):
+            distance = euclidean_distance_sqrt(points[i], points[j]);
+            if (len(candidates) < k):
+                candidates.append((j, distance));
+            else:
+                index_loser, value_loser = max(candidates, key = lambda value: value[1]);
+                if (value_loser[1] > distance):
+                    candidates[index_loser] = (j, distance);
+    
+        graph.append(candidates);
+    
+    return graph;
+
+
 def average_neighbor_distance(points, num_neigh):
     """!
     @brief Returns average distance for establish links between specified number of nearest neighbors.
