@@ -27,17 +27,18 @@
 
 
 import numpy;
-import math;
 import random;
 
 from enum import IntEnum;
+
+from math import log;
 
 from pyclustering.cluster.encoder import type_encoding;
 
 import pyclustering.core.wrapper as wrapper;
 
-from pyclustering.utils import euclidean_distance, euclidean_distance_sqrt;
-from pyclustering.utils import list_math_addition_number, list_math_addition, list_math_multiplication, list_math_division_number, list_math_subtraction;
+from pyclustering.utils import euclidean_distance_sqrt;
+from pyclustering.utils import list_math_addition_number, list_math_addition, list_math_division_number;
 
 
 class splitting_type(IntEnum):
@@ -46,16 +47,34 @@ class splitting_type(IntEnum):
     
     """
     
-    ## Bayesian information criterion to approximate the correct number of clusters.
+    ## Bayesian information criterion (BIC) to approximate the correct number of clusters.
+    ## Kass's formula is used to calculate BIC:
+    ## \f[BIC(\theta) = L(D) - \frac{1}{2}pln(N)\f]
+    ##
+    ## The number of free parameters \f$p\f$ is simply the sum of \f$K - 1\f$ class probabilities, \f$MK\f$ centroid coordinates, and one variance estimate:
+    ## \f[p = (K - 1) + MK + 1\f]
+    ##
+    ## The log-likelihood of the data:
+    ## \f[L(D) = n_jln(n_j) - n_jln(N) - \frac{n_j}{2}ln(2\pi) - \frac{n_jd}{2}ln(\hat{\sigma}^2) - \frac{n_j - K}{2}\f]
+    ##
+    ## The maximum likelihood estimate (MLE) for the variance:
+    ## \f[\hat{\sigma}^2 = \frac{1}{N - K}\sum\limits_{j}\sum\limits_{i}||x_{ij} - \hat{C}_j||^2\f]
     BAYESIAN_INFORMATION_CRITERION = 0;
     
-    ## Minimum noiseless description length to approximate the correct number of clusters.
+    ## Minimum noiseless description length (MNDL) to approximate the correct number of clusters.
+    ## Beheshti's formula is used to calculate upper bound:
+    ## \f[Z = \frac{\sigma^2 \sqrt{2K} }{N}(\sqrt{2K} + \beta) + W - \sigma^2 + \frac{2\alpha\sigma}{\sqrt{N}}\sqrt{\frac{\alpha^2\sigma^2}{N} + W - \left(1 - \frac{K}{N}\right)\frac{\sigma^2}{2}} + \frac{2\alpha^2\sigma^2}{N}\f]
+    ##
+    ## where \f$\alpha\f$ and \f$\beta\f$ represent the parameters for validation probability and confidence probability.
     MINIMUM_NOISELESS_DESCRIPTION_LENGTH = 1;
 
 
 class xmeans:
     """!
     @brief Class represents clustering algorithm X-Means.
+    @details X-means clustering method starts with the assumption of having a minimum number of clusters, 
+             and then dynamically increases them. X-means uses specified splitting criterion to control 
+             the process of splitting clusters.
     
     Example:
     @code
@@ -188,13 +207,13 @@ class xmeans:
         @return (list) List of allocated clusters, each cluster contains indexes of objects in list of data.
         
         """
-        
+
         changes = numpy.Inf;
-        
+
         stop_condition = self.__tolerance * self.__tolerance; # Fast solution
-          
+
         clusters = [];
-          
+
         while (changes > stop_condition):
             clusters = self.__update_clusters(centers, available_indexes);
             clusters = [ cluster for cluster in clusters if len(cluster) > 0 ]; 
@@ -240,13 +259,15 @@ class xmeans:
               
                 split_require = False;
                 
-                # Reallocate number of centers (clusters) in line with scores        
+                # Reallocate number of centers (clusters) in line with scores
                 if (self.__criterion == splitting_type.BAYESIAN_INFORMATION_CRITERION):
                     if (parent_scores < child_scores): split_require = True;
                     
                 elif (self.__criterion == splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH):
+                    # If its score for the split structure with two children is smaller than that for the parent structure, 
+                    # then representing the data samples with two clusters is more accurate in comparison to a single parent cluster.
                     if (parent_scores > child_scores): split_require = True;
-                    
+                
                 if (split_require is True):
                     allocated_centers.append(parent_child_centers[0]);
                     allocated_centers.append(parent_child_centers[1]);
@@ -282,8 +303,8 @@ class xmeans:
         
         else:
             assert 0;
- 
-    
+
+
     def __minimum_noiseless_description_length(self, clusters, centers):
         """!
         @brief Calculates splitting criterion for input clusters using minimum noiseless description length criterion.
@@ -297,8 +318,8 @@ class xmeans:
         @see __bayesian_information_criterion(clusters, centers)
         
         """
-                
-        scores = [0.0] * len(clusters);
+        
+        scores = 0.0;
         
         W = 0.0;
         K = len(clusters);
@@ -308,40 +329,29 @@ class xmeans:
         
         alpha = 0.9;
         betta = 0.9;
-                
+        
         for index_cluster in range(0, len(clusters), 1):
+            Ni = len(clusters[index_cluster]);
+            Wi = 0.0;
             for index_object in clusters[index_cluster]:
-                delta_vector = list_math_subtraction(self.__pointer_data[index_object], centers[index_cluster]);
-                delta_sqrt = sum(list_math_multiplication(delta_vector, delta_vector));
-                
-                W += delta_sqrt;
-                sigma_sqrt += delta_sqrt;
+                Wi += euclidean_distance_sqrt(self.__pointer_data[index_object], centers[index_cluster]);
             
-            N += len(clusters[index_cluster]);     
+            sigma_sqrt += Wi;
+            W += Wi / Ni;
+            N += Ni;
         
         if (N - K != 0):
-            W /= N;
-            
             sigma_sqrt /= (N - K);
             sigma = sigma_sqrt ** 0.5;
             
-            for index_cluster in range(0, len(clusters), 1):
-                Kw = (1.0 - K / N) * sigma_sqrt;
-                Ks = ( 2.0 * alpha * sigma / (N ** 0.5) ) + ( (alpha ** 2.0) * sigma_sqrt / N + W - Kw / 2.0 ) ** 0.5;
-                U = W - Kw + 2.0 * (alpha ** 2.0) * sigma_sqrt / N + Ks;
-                
-                Z = K * sigma_sqrt / N + U + betta * ( (2.0 * K) ** 0.5 ) * sigma_sqrt / N;
-                
-                if (Z == 0.0):
-                    scores[index_cluster] = float("inf");
-                else:
-                    scores[index_cluster] = Z;
-                
-        else:
-            scores = [float("inf")] * len(clusters);
+            Kw = (1.0 - K / N) * sigma_sqrt;
+            Ks = ( 2.0 * alpha * sigma / (N ** 0.5) ) * ( (alpha ** 2.0) * sigma_sqrt / N + W - Kw / 2.0 ) ** 0.5;
+            
+            scores = sigma_sqrt * (2 * K)**0.5 * ((2 * K)**0.5 + betta) / N + W - sigma_sqrt + Ks + 2 * alpha**0.5 * sigma_sqrt / N
         
-        return sum(scores);
- 
+        return scores;
+
+
     def __bayesian_information_criterion(self, clusters, centers):
         """!
         @brief Calculates splitting criterion for input clusters using bayesian information criterion.
@@ -350,36 +360,39 @@ class xmeans:
         @param[in] centers (list): Centers of the clusters.
         
         @return (double) Splitting criterion in line with bayesian information criterion.
-                High value of splitting cretion means that current structure is much better.
+                High value of splitting criterion means that current structure is much better.
                 
         @see __minimum_noiseless_description_length(clusters, centers)
         
         """
 
-        scores = [0.0] * len(clusters)     # splitting criterion
+        scores = [float('inf')] * len(clusters)     # splitting criterion
         dimension = len(self.__pointer_data[0]);
           
         # estimation of the noise variance in the data set
-        sigma = 0.0;
+        sigma_sqrt = 0.0;
         K = len(clusters);
         N = 0.0;
           
         for index_cluster in range(0, len(clusters), 1):
             for index_object in clusters[index_cluster]:
-                sigma += (euclidean_distance(self.__pointer_data[index_object], centers[index_cluster]));  # It works
+                sigma_sqrt += euclidean_distance_sqrt(self.__pointer_data[index_object], centers[index_cluster]);
 
             N += len(clusters[index_cluster]);
       
         if (N - K != 0):
-            sigma /= (N - K);
-        
+            sigma_sqrt /= (N - K);
+            p = (K - 1) + dimension * K + 1;
+            
             # splitting criterion    
             for index_cluster in range(0, len(clusters), 1):
                 n = len(clusters[index_cluster]);
                 
-                if (sigma > 0.0):
-                    scores[index_cluster] = n * math.log(n) - n * math.log(N) - n * math.log(2.0 * numpy.pi) / 2.0 - n * dimension * math.log(sigma) / 2.0 - (n - K) / 2.0;
-                  
+                L = n * log(n) - n * log(N) - n * 0.5 * log(2.0 * numpy.pi) - n * dimension * 0.5 * log(sigma_sqrt) - (n - K) * 0.5;
+                
+                # BIC calculation
+                scores[index_cluster] = L - p * 0.5 * log(N);
+                
         return sum(scores);
  
  

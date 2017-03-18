@@ -218,7 +218,7 @@ class cluster_visualizer:
             self.append_cluster(cluster, data, canvas, marker, markersize);
     
     
-    def set_canvas_title(self, text, canvas):
+    def set_canvas_title(self, text, canvas = 0):
         """!
         @brief Set title for specified canvas.
         
