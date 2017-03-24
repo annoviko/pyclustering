@@ -22,7 +22,7 @@ In case of any questions, proposals or bugs related to the pyclustering please c
 
 ------------------------------------------------
 
-###Based on:
+### Based on:
 
 - Python >= 3.4 windows 64-bit
 - Python >= 3.4 linux 64-bit
@@ -30,7 +30,7 @@ In case of any questions, proposals or bugs related to the pyclustering please c
 
 ------------------------------------------------
 
-###Required packages:
+### Required packages:
 
 - scipy, matplotlib, numpy, PIL
 
@@ -47,7 +47,7 @@ In case of any questions, proposals or bugs related to the pyclustering please c
 
 ------------------------------------------------
 
-###What is implemented in the project.
+### What is implemented in the project.
 
 **Clustering algorithms (module pyclustering.cluster):**
 - Agglomerative [Python, C++]
@@ -91,7 +91,7 @@ In case of any questions, proposals or bugs related to the pyclustering please c
 
 ------------------------------------------------
 
-###Examples:
+### Examples:
 
 The library contains examples for each algorithm and oscillatory network model:
 
@@ -105,7 +105,7 @@ The library contains examples for each algorithm and oscillatory network model:
 
 ------------------------------------------------
 
-###Illustrations:
+### Illustrations:
 
 **Cluster allocation on FCPS dataset collection by DBSCAN:**
 
@@ -129,7 +129,7 @@ The library contains examples for each algorithm and oscillatory network model:
 
 ------------------------------------------------
 
-###Code examples:
+### Code examples:
 
 **Data clustering by CURE algorithm**
 ```python
