@@ -25,9 +25,11 @@
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
 
+from pyclustering.cluster import cluster_visualizer;
 from pyclustering.cluster.xmeans import xmeans, splitting_type;
 
-from pyclustering.utils import draw_clusters, read_sample, timedcall;
+from pyclustering.utils import read_sample, timedcall;
+
 
 def template_clustering(start_centers, path, tolerance = 0.025, criterion = splitting_type.BAYESIAN_INFORMATION_CRITERION, ccore = False):
     sample = read_sample(path);
@@ -36,15 +38,20 @@ def template_clustering(start_centers, path, tolerance = 0.025, criterion = spli
     (ticks, result) = timedcall(xmeans_instance.process);
     
     clusters = xmeans_instance.get_clusters();
+    centers = xmeans_instance.get_centers();
 
     criterion_string = "UNKNOWN";
-    if (criterion == splitting_type.BAYESIAN_INFORMATION_CRITERION): criterion_string = "BAYESIAN_INFORMATION_CRITERION";
-    elif (criterion == splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH): criterion_string = "MINIMUM_NOISELESS_DESCRIPTION_LENGTH";
+    if (criterion == splitting_type.BAYESIAN_INFORMATION_CRITERION): criterion_string = "BAYESIAN INFORMATION CRITERION";
+    elif (criterion == splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH): criterion_string = "MINIMUM NOISELESS DESCRIPTION_LENGTH";
     
     print("Sample: ", path, "\nInitial centers: '", (start_centers is not None), "', Execution time: '", ticks, "', Number of clusters:", len(clusters), ",", criterion_string, "\n");
 
-    draw_clusters(sample, clusters);
-    
+    visualizer = cluster_visualizer();
+    visualizer.set_canvas_title(criterion_string);
+    visualizer.append_clusters(clusters, sample);
+    visualizer.append_cluster(centers, None, marker = '*');
+    visualizer.show();
+
 
 def cluster_sample1():
     "Start with wrong number of clusters."
