@@ -25,15 +25,11 @@
     <ClCompile Include="cluster\cluster_algorithm.cpp" />
     <ClCompile Include="cluster\cluster_data.cpp" />
     <ClCompile Include="cluster\cure.cpp" />
-    <ClCompile Include="cluster\cure_data.cpp" />
     <ClCompile Include="cluster\dbscan.cpp" />
     <ClCompile Include="cluster\hsyncnet.cpp" />
     <ClCompile Include="cluster\kmeans.cpp" />
-    <ClCompile Include="cluster\kmeans_data.cpp" />
     <ClCompile Include="cluster\kmedians.cpp" />
-    <ClCompile Include="cluster\kmedians_data.cpp" />
     <ClCompile Include="cluster\kmedoids.cpp" />
-    <ClCompile Include="cluster\kmedoids_data.cpp" />
     <ClCompile Include="cluster\optics.cpp" />
     <ClCompile Include="cluster\ordering_analyser.cpp" />
     <ClCompile Include="cluster\rock.cpp" />
@@ -214,6 +210,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;CCORE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(SolutionDir)src\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
