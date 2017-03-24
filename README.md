@@ -1,4 +1,4 @@
-###Project: PyClustering
+### Project: PyClustering
 
 Version: 0.7.dev0
 
@@ -8,13 +8,13 @@ E-Mail: pyclustering@yandex.ru
 
 ------------------------------------------------
 
-###Proposals, questions, bugs:
+### Proposals, questions, bugs:
 
 In case of any questions, proposals or bugs related to the pyclustering please contact to pyclustering@yandex.ru or create an issue here.
 
 ------------------------------------------------
 
-###PyClustering CI:
+### PyClustering CI:
 
 [![Build Status](https://travis-ci.org/annoviko/pyclustering.svg?branch=master)](https://travis-ci.org/annoviko/pyclustering)
 [![Coverage Status](https://coveralls.io/repos/github/annoviko/pyclustering/badge.svg?branch=master)](https://coveralls.io/github/annoviko/pyclustering?branch=master)
