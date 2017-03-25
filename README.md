@@ -6,6 +6,8 @@ License: GNU General Public License
 
 E-Mail: pyclustering@yandex.ru
 
+PyClustering Wiki: https://github.com/annoviko/pyclustering/wiki
+
 ------------------------------------------------
 
 ### Proposals, questions, bugs:
