@@ -45,6 +45,9 @@ GENERAL CHANGES (ccore):
 
 
 CORRECTED MAJOR BUGS:
+- Bug with calculation BIC splitting criterion for X-Means algorithm (pyclustering.cluster.xmeans).
+  See: https://github.com/annoviko/pyclustering/issues/326
+
 - Bug with calculation MNDL splitting criterion for X-Means algorithm (pyclustering.cluster.xmeans).
   See: https://github.com/annoviko/pyclustering/issues/328
 
