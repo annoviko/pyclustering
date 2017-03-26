@@ -142,7 +142,7 @@ class xmeans:
         """
         
         if (self.__ccore is True):
-            self.__clusters = wrapper.xmeans(self.__pointer_data, self.__centers, self.__kmax, self.__tolerance);
+            self.__clusters = wrapper.xmeans(self.__pointer_data, self.__centers, self.__kmax, self.__tolerance, self.__criterion);
             self.__clusters = [ cluster for cluster in self.__clusters if len(cluster) > 0 ]; 
             
             self.__centers = self.__update_centers(self.__clusters);

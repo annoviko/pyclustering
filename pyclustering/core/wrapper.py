@@ -160,7 +160,7 @@ def extract_pyclustering_package(ccore_package_pointer):
 
 
 # Implemented algorithms.
-def xmeans(sample, centers, kmax, tolerance):
+def xmeans(sample, centers, kmax, tolerance, criterion):
     "Clustering algorithm X-Means returns allocated clusters. Calculation is performed via CCORE."
     
     "(in) data        - input data that is presented as list of points (objects), each point should be represented by list or tuple."
@@ -173,7 +173,7 @@ def xmeans(sample, centers, kmax, tolerance):
     pointer_centers = create_pointer_data(centers);
     
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
-    result = ccore.xmeans_algorithm(pointer_data, pointer_centers, c_uint(kmax), c_double(tolerance));
+    result = ccore.xmeans_algorithm(pointer_data, pointer_centers, c_uint(kmax), c_double(tolerance), c_uint(criterion));
     
     list_of_clusters = extract_clusters(result);
     

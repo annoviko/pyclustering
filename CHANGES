@@ -40,7 +40,10 @@ GENERAL CHANGES (pyclustering):
 
 
 GENERAL CHANGES (ccore):
-- Implemented OPTICS algorithm and interface for client that results all clustering results (ccore.cluster.optics).
+- Implemented MNDL splitting crinterion for X-Means algorithm (ccore.cluster_analysis.xmeans).
+  See: https://github.com/annoviko/pyclustering/issues/159
+
+- Implemented OPTICS algorithm and interface for client that results all clustering results (ccore.cluster_analysis.optics).
   See: https://github.com/annoviko/pyclustering/issues/120
 
 

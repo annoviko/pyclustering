@@ -87,11 +87,11 @@ void free_pyclustering_package(pyclustering_package * package) {
 }
 
 
-clustering_result * xmeans_algorithm(const data_representation * const sample, const data_representation * const initial_centers, const unsigned int kmax, const double tolerance) {
+clustering_result * xmeans_algorithm(const data_representation * const sample, const data_representation * const initial_centers, const unsigned int kmax, const double tolerance, const unsigned int p_criterion) {
 	std::vector<std::vector<double> > * dataset = read_sample(sample);
 	std::vector<std::vector<double> > * centers = read_sample(initial_centers);
 
-	xmeans solver(*dataset, *centers, kmax, tolerance);
+	xmeans solver(*dataset, *centers, kmax, tolerance, (splitting_type) p_criterion);
 	solver.process();
 
 	std::vector<std::vector<unsigned int> > output_clusters;
