@@ -135,16 +135,16 @@ def experiment_execution_time():
     template_clustering(FCPS_SAMPLES.SAMPLE_ATOM, 30, 3, 2, False);
 
 
-# cluster_sample1();
-# cluster_sample2();
-# cluster_sample3();
-# cluster_sample4();
-# cluster_sample5();
-# cluster_sample6();
-# cluster_elongate();
-# cluster_densities1();
-# cluster_densities2();
-# cluster_lsun();
+cluster_sample1();
+cluster_sample2();
+cluster_sample3();
+cluster_sample4();
+cluster_sample5();
+cluster_sample6();
+cluster_elongate();
+cluster_densities1();
+cluster_densities2();
+cluster_lsun();
 cluster_lsun_radius_calculation();
 cluster_target();
 cluster_target_radius_calculation();

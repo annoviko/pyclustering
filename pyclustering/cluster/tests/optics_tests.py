@@ -53,7 +53,10 @@ class Test(unittest.TestCase):
         if (amount_clusters is not None):
             analyser = ordering_analyser(optics_instance.get_ordering());
             assert len(analyser) > 0;
-            assert analyser.extract_cluster_amount(optics_instance.get_radius()) == len(expected_length_clusters);
+            
+            amount_clusters, borders = analyser.extract_cluster_amount(optics_instance.get_radius());
+            assert amount_clusters == len(expected_length_clusters);
+            assert len(borders) == amount_clusters - 1;
 
 
     def testClusteringSampleSimple1(self):
@@ -127,25 +130,35 @@ class Test(unittest.TestCase):
   
     def testClusteringOrderVisualizer(self):
         sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE4);
-          
+           
         optics_instance = optics(sample, 6.0, 3, 5);
         optics_instance.process();
-          
+           
         analyser = ordering_analyser(optics_instance.get_ordering());
         ordering_visualizer.show_ordering_diagram(analyser, 5);
-    
+     
     def testClusterOrderingOneClusterExtraction(self):
         analyser = ordering_analyser([5.0, 5.0, 5.0, 5.0, 5.0, 5.0]);
-        assert 1 == analyser.extract_cluster_amount(6.5);
-        assert 0 == analyser.extract_cluster_amount(4.5);
-     
+        
+        amount_clusters, borders = analyser.extract_cluster_amount(6.5);
+        assert 1 == amount_clusters;
+        assert 0 == len(borders);
+        
+        amount_clusters, borders = analyser.extract_cluster_amount(4.5);
+        assert 0 == amount_clusters;
+        assert 0 == len(borders);
+      
     def testImpossibleClusterOrderingAllocationHomogeneous(self):
         analyser = ordering_analyser([5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0]);
-        assert None == analyser.calculate_connvectivity_radius(2);
-     
+        amount_clusters, borders = analyser.calculate_connvectivity_radius(2);
+        assert None == amount_clusters;
+        assert 0 == len(borders);
+      
     def testImpossibleClusterOrderingAllocationGeterogeneous(self):
         analyser = ordering_analyser([5.0, 5.0, 5.0, 5.0, 6.0, 8.0, 6.0, 5.0, 5.0, 5.0]);
-        assert None == analyser.calculate_connvectivity_radius(3);
+        amount_clusters, borders = analyser.calculate_connvectivity_radius(3);
+        assert None == amount_clusters;
+        assert 0 == len(borders);
 
 
 if __name__ == "__main__":

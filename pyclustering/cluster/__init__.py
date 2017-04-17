@@ -28,6 +28,8 @@ import matplotlib.gridspec as gridspec;
 
 import math;
 
+from pyclustering.utils.color import color as color_list;
+
 
 class canvas_cluster_descr:
     """!
@@ -70,14 +72,6 @@ class cluster_visualizer:
     @brief Common visualizer of clusters on 2D or 3D surface.
     
     """
-    
-    __colors = [ 'red', 'blue', 'darkgreen', 'brown', 'violet', 
-                 'deepskyblue', 'darkgrey', 'lightsalmon', 'deeppink', 'yellow',
-                 'black', 'mediumspringgreen', 'orange', 'darkviolet', 'darkblue',
-                 'silver', 'lime', 'pink', 'gold', 'bisque',
-                 'dimgray', 'firebrick', 'darksalmon', 'chartreuse', 'skyblue',
-                 'purple', 'fuchsia', 'palegoldenrod', 'coral', 'hotpink' ];
-    
 
     def __init__(self, number_canvases = 1, size_row = 1):
         """!
@@ -153,8 +147,8 @@ class cluster_visualizer:
             raise NameError('Canvas does ' + canvas + ' not exists.');
         
         if (color is None):
-            index_color = len(self.__canvas_clusters[canvas]) % len(self.__colors);
-            color = self.__colors[index_color];
+            index_color = len(self.__canvas_clusters[canvas]) % len(color_list.TITLES);
+            color = color_list.TITLES[index_color];
         
         added_canvas_descriptor = canvas_cluster_descr(cluster, data, marker, markersize, color);
         self.__canvas_clusters[canvas].append( added_canvas_descriptor );

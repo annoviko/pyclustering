@@ -29,6 +29,7 @@
 from pyclustering.cluster.encoder import type_encoding;
 
 from pyclustering.utils import euclidean_distance;
+from pyclustering.utils.color import color as color_list;
 
 import matplotlib.pyplot as plt;
 
@@ -46,10 +47,11 @@ class ordering_visualizer:
     @staticmethod
     def show_ordering_diagram(analyser, amount_clusters = None):
         """!
-        @brief Display cluster-ordering diagram.
+        @brief Display cluster-ordering (reachability-plot) diagram.
         
         @param[in] analyser (ordering_analyser): cluster-ordering analyser whose ordering diagram should be displayed.
-        @param[in] amount_clusters (uint): if it is not 'None' then it displays connectivity radius line that can used for allocation of specified amount of clusters.
+        @param[in] amount_clusters (uint): if it is not 'None' then it displays connectivity radius line that can used for allocation of specified amount of clusters
+                    and colorize diagram by corresponding cluster colors.
         
         Example demonstrates general abilities of 'ordering_visualizer' class:
         @code
@@ -62,16 +64,28 @@ class ordering_visualizer:
         
         """
         ordering = analyser.cluster_ordering;
-        indexes = [i for i in range(0, len(ordering))];
-        
         axis = plt.subplot(111);
-        axis.bar(indexes, ordering, color = 'black');
-        plt.xlim([0, len(ordering)]);
         
         if (amount_clusters is not None):
-            radius = analyser.calculate_connvectivity_radius(amount_clusters);
-            plt.axhline(y = analyser.calculate_connvectivity_radius(amount_clusters), linewidth = 2, color = 'b');
+            radius, borders = analyser.calculate_connvectivity_radius(amount_clusters);
+        
+            # divide into cluster groups to visualize by colors
+            left_index_border = 0;
+            for index_border in range(len(borders)):
+                right_index_border = borders[index_border];
+                axis.bar(range(left_index_border, right_index_border), ordering[left_index_border:right_index_border], width = 1.0, color = color_list.TITLES[index_border]);
+                left_index_border = right_index_border;
+            
+            axis.bar(range(left_index_border, len(ordering)), ordering[left_index_border:len(ordering)], width = 1.0, color = color_list.TITLES[index_border + 1]);
+            
+            plt.xlim([0, len(ordering)]);
+            
+            plt.axhline(y = radius, linewidth = 2, color = 'black');
             plt.text(0, radius + radius * 0.03, " Radius:   " + str(round(radius, 4)) + ";\n Clusters: " + str(amount_clusters), color = 'b', fontsize = 10);
+            
+        else:
+            axis.bar(range(0, len(ordering)), ordering[0:len(ordering)], width = 1.0, color = 'black');
+            plt.xlim([0, len(ordering)]);
         
         plt.show();
 
@@ -116,12 +130,14 @@ class ordering_analyser:
     
     def calculate_connvectivity_radius(self, amount_clusters, maximum_iterations = 100):
         """!
-        @brief Calculates connectivity radius of allocation specified amount of clusters using ordering diagram.
+        @brief Calculates connectivity radius of allocation specified amount of clusters using ordering diagram and marks borders of clusters using indexes of values of ordering diagram.
+        @details Parameter 'maximum_iterations' is used to protect from hanging when it is impossible to allocate specified number of clusters.
         
         @param[in] amount_clusters (uint): amount of clusters that should be allocated by calculated connectivity radius.
         @param[in] maximum_iterations (uint): maximum number of iteration for searching connectivity radius to allocated specified amount of clusters (by default it is restricted by 100 iterations).
         
-        @return (double) Value of connectivity radius, it may be 'None' if connectivity radius hasn't been found for the specified amount of iterations.
+        @return (double, list) Value of connectivity radius and borders of clusters like (radius, borders), radius may be 'None' as well as borders may be '[]'
+                                if connectivity radius hasn't been found for the specified amount of iterations.
         
         """
         
@@ -133,11 +149,12 @@ class ordering_analyser:
         radius = None;
         result = None;
         
-        if (self.extract_cluster_amount(maximum_distance) <= amount_clusters):
+        amount, borders = self.extract_cluster_amount(maximum_distance);
+        if (amount <= amount_clusters):
             for _ in range(maximum_iterations):
                 radius = (lower_distance + upper_distance) / 2.0;
                 
-                amount = self.extract_cluster_amount(radius);
+                amount, borders = self.extract_cluster_amount(radius);
                 if (amount == amount_clusters):
                     result = radius;
                     break;
@@ -151,20 +168,20 @@ class ordering_analyser:
                 elif (amount < amount_clusters):
                     upper_distance = radius;
         
-        return result;
+        return result, borders;
     
     
     def extract_cluster_amount(self, radius):
         """!
-        @brief Obtains amount of clustering that can be allocated by using specified radius for ordering diagram.
+        @brief Obtains amount of clustering that can be allocated by using specified radius for ordering diagram and borders between them.
         @details When growth of reachability-distances is detected than it is considered as a start point of cluster, 
                  than pick is detected and after that recession is observed until new growth (that means end of the
                  current cluster and start of a new one) or end of diagram.
         
         @param[in] radius (double): connectivity radius that is used for cluster allocation.
         
-        
-        @return (unit) Amount of clusters that can be allocated by the connectivity radius on ordering diagram.
+        @return (unit, list) Amount of clusters that can be allocated by the connectivity radius on ordering diagram and borders between them using indexes
+                 from ordering diagram (amount_clusters, border_clusters).
         
         """
         
@@ -176,11 +193,17 @@ class ordering_analyser:
         previous_cluster_distance = None;
         previous_distance = None;
         
-        for distance in self.__ordering:
+        cluster_borders = [];
+        
+        for index_ordering in range(len(self.__ordering)):
+            distance = self.__ordering[index_ordering];
             if (distance >= radius):
                 if (cluster_start is False):
                     cluster_start = True;
                     amount_clusters += 1;
+                    
+                    if (index_ordering != 0):
+                        cluster_borders.append(index_ordering);
                 
                 else:
                     if ((distance < previous_cluster_distance) and (cluster_pick is False)):
@@ -189,6 +212,9 @@ class ordering_analyser:
                     elif ((distance > previous_cluster_distance) and (cluster_pick is True)):
                         cluster_pick = False;
                         amount_clusters += 1;
+                        
+                        if (index_ordering != 0):
+                            cluster_borders.append(index_ordering);
                 
                 previous_cluster_distance = distance;
             
@@ -203,8 +229,8 @@ class ordering_analyser:
         
         if ( (total_similarity is True) and (previous_distance > radius) ):
             amount_clusters = 0;
-        
-        return amount_clusters;
+
+        return amount_clusters, cluster_borders;
 
 
 class optics_descriptor:
@@ -346,7 +372,7 @@ class optics:
             
             if ( (self.__amount_clusters is not None) and (self.__amount_clusters != len(self.get_clusters())) ):
                 analyser = ordering_analyser(self.get_ordering());
-                radius = analyser.calculate_connvectivity_radius(self.__amount_clusters);
+                radius, borders = analyser.calculate_connvectivity_radius(self.__amount_clusters);
                 if (radius is not None):
                     self.__eps = radius;
                     self.__allocate_clusters();
