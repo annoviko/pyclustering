@@ -6,6 +6,8 @@ License: GNU General Public License
 
 E-Mail: pyclustering@yandex.ru
 
+PyClustering Wiki: https://github.com/annoviko/pyclustering/wiki
+
 ------------------------------------------------
 
 ### Proposals, questions, bugs:
@@ -26,7 +28,7 @@ In case of any questions, proposals or bugs related to the pyclustering please c
 
 - Python >= 3.4 windows 64-bit
 - Python >= 3.4 linux 64-bit
-- C++ 11 (MVS, GCC compilers)
+- C++ 14 (MVS, GCC compilers)
 
 ------------------------------------------------
 

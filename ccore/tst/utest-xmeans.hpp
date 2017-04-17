@@ -35,8 +35,9 @@ static void
 template_length_process_data(const std::shared_ptr<dataset> & data,
                              const std::vector<std::vector<double> > & start_centers,
                              const unsigned int kmax,
-                             const std::vector<unsigned int> & expected_cluster_length) {
-    xmeans solver(*data.get(), start_centers, kmax, 0.0001);
+                             const std::vector<unsigned int> & expected_cluster_length,
+                             const splitting_type criterion) {
+    xmeans solver(*data.get(), start_centers, kmax, 0.0001, criterion);
     solver.process();
 
     std::vector<std::vector<unsigned int> > results;
@@ -62,22 +63,59 @@ template_length_process_data(const std::shared_ptr<dataset> & data,
 }
 
 
-TEST(utest_xmeans, allocation_sample_simple_01) {
+TEST(utest_xmeans, allocation_bic_sample_simple_01) {
     std::vector<std::vector<double> > start_centers = { {3.7, 5.5}, {6.7, 7.5} };
     std::vector<unsigned int> expected_clusters_length = {5, 5};
-    template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_centers, 20, expected_clusters_length);
+    template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_centers, 20, expected_clusters_length, splitting_type::BAYESIAN_INFORMATION_CRITERION);
 }
 
-TEST(utest_xmeans, allocation_sample_simple_02) {
+
+TEST(utest_xmeans, allocation_mndl_sample_simple_01) {
+    std::vector<std::vector<double> > start_centers = { {3.7, 5.5}, {6.7, 7.5} };
+    std::vector<unsigned int> expected_clusters_length = {5, 5};
+    template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_centers, 20, expected_clusters_length, splitting_type::MINIMUM_NOISELESS_DESCRIPTION_LENGTH);
+}
+
+
+TEST(utest_xmeans, allocation_bic_sample_simple_02) {
     std::vector<std::vector<double> > start_centers = { {3.5, 4.8}, {6.9, 7.0}, {7.5, 0.5} };
     std::vector<unsigned int> expected_clusters_length = {10, 5, 8};
-    template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02), start_centers, 20, expected_clusters_length);
+    template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02), start_centers, 20, expected_clusters_length, splitting_type::BAYESIAN_INFORMATION_CRITERION);
 }
 
-TEST(utest_xmeans, allocation_sample_simple_03) {
+
+TEST(utest_xmeans, allocation_mndl_sample_simple_02) {
+    std::vector<std::vector<double> > start_centers = { {3.5, 4.8}, {6.9, 7.0}, {7.5, 0.5} };
+    std::vector<unsigned int> expected_clusters_length = {10, 5, 8};
+    template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02), start_centers, 20, expected_clusters_length, splitting_type::MINIMUM_NOISELESS_DESCRIPTION_LENGTH);
+}
+
+
+TEST(utest_xmeans, allocation_bic_sample_simple_03) {
     std::vector<std::vector<double> > start_centers = { {0.2, 0.1}, {4.0, 1.0}, {2.0, 2.0}, {2.3, 3.9} };
     std::vector<unsigned int> expected_clusters_length = {10, 10, 10, 30};
-    template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_03), start_centers, 20, expected_clusters_length);
+    template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_03), start_centers, 20, expected_clusters_length, splitting_type::BAYESIAN_INFORMATION_CRITERION);
+}
+
+
+TEST(utest_xmeans, allocation_mndl_sample_simple_03) {
+    std::vector<std::vector<double> > start_centers = { {0.2, 0.1}, {4.0, 1.0}, {2.0, 2.0}, {2.3, 3.9} };
+    std::vector<unsigned int> expected_clusters_length = {10, 10, 10, 30};
+    template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_03), start_centers, 20, expected_clusters_length, splitting_type::MINIMUM_NOISELESS_DESCRIPTION_LENGTH);
+}
+
+
+TEST(utest_xmeans, allocation_bic_sample_simple_04) {
+    std::vector<std::vector<double> > start_centers = { {1.5, 0.0}, {1.5, 2.0}, {1.5, 4.0}, {1.5, 6.0}, {1.5, 8.0} };
+    std::vector<unsigned int> expected_clusters_length = {15, 15, 15, 15, 15};
+    template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_04), start_centers, 20, expected_clusters_length, splitting_type::BAYESIAN_INFORMATION_CRITERION);
+}
+
+
+TEST(utest_xmeans, allocation_mndl_sample_simple_04) {
+    std::vector<std::vector<double> > start_centers = { {1.5, 0.0}, {1.5, 2.0}, {1.5, 4.0}, {1.5, 6.0}, {1.5, 8.0} };
+    std::vector<unsigned int> expected_clusters_length = {15, 15, 15, 15, 15};
+    template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_04), start_centers, 20, expected_clusters_length, splitting_type::MINIMUM_NOISELESS_DESCRIPTION_LENGTH);
 }
 
 #endif

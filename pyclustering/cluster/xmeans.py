@@ -37,7 +37,7 @@ from pyclustering.cluster.encoder import type_encoding;
 
 import pyclustering.core.wrapper as wrapper;
 
-from pyclustering.utils import euclidean_distance_sqrt;
+from pyclustering.utils import euclidean_distance_sqrt, euclidean_distance;
 from pyclustering.utils import list_math_addition_number, list_math_addition, list_math_division_number;
 
 
@@ -66,6 +66,10 @@ class splitting_type(IntEnum):
     ## \f[Z = \frac{\sigma^2 \sqrt{2K} }{N}(\sqrt{2K} + \beta) + W - \sigma^2 + \frac{2\alpha\sigma}{\sqrt{N}}\sqrt{\frac{\alpha^2\sigma^2}{N} + W - \left(1 - \frac{K}{N}\right)\frac{\sigma^2}{2}} + \frac{2\alpha^2\sigma^2}{N}\f]
     ##
     ## where \f$\alpha\f$ and \f$\beta\f$ represent the parameters for validation probability and confidence probability.
+    ##
+    ## To improve clustering results some contradiction is introduced:
+    ## \f[W = \frac{1}{n_j}\sum\limits_{i}||x_{ij} - \hat{C}_j||\f]
+    ## \f[\hat{\sigma}^2 = \frac{1}{N - K}\sum\limits_{j}\sum\limits_{i}||x_{ij} - \hat{C}_j||\f]
     MINIMUM_NOISELESS_DESCRIPTION_LENGTH = 1;
 
 
@@ -138,7 +142,7 @@ class xmeans:
         """
         
         if (self.__ccore is True):
-            self.__clusters = wrapper.xmeans(self.__pointer_data, self.__centers, self.__kmax, self.__tolerance);
+            self.__clusters = wrapper.xmeans(self.__pointer_data, self.__centers, self.__kmax, self.__tolerance, self.__criterion);
             self.__clusters = [ cluster for cluster in self.__clusters if len(cluster) > 0 ]; 
             
             self.__centers = self.__update_centers(self.__clusters);
@@ -319,7 +323,7 @@ class xmeans:
         
         """
         
-        scores = 0.0;
+        scores = float('inf');
         
         W = 0.0;
         K = len(clusters);
@@ -332,15 +336,20 @@ class xmeans:
         
         for index_cluster in range(0, len(clusters), 1):
             Ni = len(clusters[index_cluster]);
+            if (Ni == 0): 
+                return float('inf');
+            
             Wi = 0.0;
             for index_object in clusters[index_cluster]:
-                Wi += euclidean_distance_sqrt(self.__pointer_data[index_object], centers[index_cluster]);
+                # euclidean_distance_sqrt should be used in line with paper, but in this case results are
+                # very poor, therefore square root is used to improved.
+                Wi += euclidean_distance(self.__pointer_data[index_object], centers[index_cluster]);
             
             sigma_sqrt += Wi;
             W += Wi / Ni;
             N += Ni;
         
-        if (N - K != 0):
+        if (N - K > 0):
             sigma_sqrt /= (N - K);
             sigma = sigma_sqrt ** 0.5;
             
@@ -380,7 +389,7 @@ class xmeans:
 
             N += len(clusters[index_cluster]);
       
-        if (N - K != 0):
+        if (N - K > 0):
             sigma_sqrt /= (N - K);
             p = (K - 1) + dimension * K + 1;
             

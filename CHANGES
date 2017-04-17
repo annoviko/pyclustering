@@ -1,6 +1,9 @@
 Change notes for 0.7.dev0 (started Jun 01, 2016)
 
 GENERAL CHANGES (pyclustering):
+- Improved clustering results in case of usage MNDL splitting criterion for small datasets.
+  See: https://github.com/annoviko/pyclustering/issues/328
+
 - Feature to display connectivity radius on cluster-ordering diagram by ordering_visualizer (pyclustering.cluster.optics).
   See: https://github.com/annoviko/pyclustering/issues/314
 
@@ -37,11 +40,19 @@ GENERAL CHANGES (pyclustering):
 
 
 GENERAL CHANGES (ccore):
-- Implemented OPTICS algorithm and interface for client that results all clustering results (ccore.cluster.optics).
+- Implemented MNDL splitting crinterion for X-Means algorithm (ccore.cluster_analysis.xmeans).
+  See: https://github.com/annoviko/pyclustering/issues/159
+
+- Implemented OPTICS algorithm and interface for client that results all clustering results (ccore.cluster_analysis.optics).
   See: https://github.com/annoviko/pyclustering/issues/120
 
 
 CORRECTED MAJOR BUGS:
+- Bug with calculation BIC splitting criterion for X-Means algorithm (pyclustering.cluster.xmeans).
+  See: https://github.com/annoviko/pyclustering/issues/326
+
+- Bug with calculation MNDL splitting criterion for X-Means algorithm (pyclustering.cluster.xmeans).
+  See: https://github.com/annoviko/pyclustering/issues/328
 
 - Bug with loss of CF-nodes in CF-tree during inserting that leads unbalanced CF-tree (pyclustering.container.cftree).
   See: https://github.com/annoviko/pyclustering/issues/304
