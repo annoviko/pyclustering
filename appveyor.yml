@@ -13,29 +13,13 @@ install: []
 
 environment:
   matrix:
-  - CI_JOB: BUILD_CORE
-  - CI_JOB: UT_CORE
+  - SOLUTION_TARGET: ccore\ccore.sln
+  - SOLUTION_TARGET: ccore\utcore.sln
 
- 
+
 build_script:
-- ps: |
-  if ($env:CI_JOB -eq "BUILD_CORE") {
-    msbuild ccore\ccore.sln /p:configuration=Release
-  }
-  
-  if ($env:CI_JOB -eq "UT_CORE") {
-    msbuild ccore\utcore.sln /p:configuration=Release
-  }
+  - msbuild %SOLUTION_TARGET% /p:configuration=Release
 
 
 test_script:
-- ps: |
-  if ($env:CI_JOB -eq "BUILD_CORE") {
-    return
-  }
-  
-  if ($env:CI_JOB -eq "UT_CORE") {
-    cd ccore
-    return
-  }
-  
+  - IF "%SOLUTION_TARGET%"=="ccore\utcore.sln" ( cd ccore\Release && utcore.exe )
