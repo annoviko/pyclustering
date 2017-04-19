@@ -8,4 +8,4 @@ init: []
 install: []
 
 build_script:
-  - msbuild ccore.sln /p:configuration=Release
+  - msbuild ccore\ccore.sln /p:configuration=Release
