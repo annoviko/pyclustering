@@ -8,6 +8,8 @@ E-Mail: pyclustering@yandex.ru
 
 PyClustering Wiki: https://github.com/annoviko/pyclustering/wiki
 
+Documentation: [![Documentation](https://codedocs.xyz/annoviko/pyclustering.svg)](https://codedocs.xyz/annoviko/pyclustering/)
+
 ------------------------------------------------
 
 ### Proposals, questions, bugs:
