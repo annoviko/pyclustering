@@ -1,16 +1,45 @@
 version: '{build}'
 
+
 os:
   - Visual Studio 2015
 
+
 init: []
+
 
 install: []
 
+
 environment:
   matrix:
-  - SOLUTION_TARGET: ccore\ccore.sln
-  - SOLUTION_TARGET: ccore\utcore.sln
+  - CI_JOB: BUILD_CORE
+  - CI_JOB: UT_CORE
 
+ 
 build_script:
-  - msbuild %SOLUTION_TARGET% /p:configuration=Release
+- ps: |
+  if ($env:CI_JOB -eq "BUILD_CORE")
+  {
+    msbuild ccore\ccore.sln /p:configuration=Release
+  }
+  
+  if ($env:CI_JOB -eq "UT_CORE")
+  {
+    msbuild ccore\utcore.sln /p:configuration=Release
+  }
+
+
+test_script:
+- ps: |
+  if ($env:CI_JOB -eq "BUILD_CORE")
+  {
+    return
+  }
+  
+  if ($env:CI_JOB -eq "UT_CORE")
+  {
+    cd ccore
+    return
+  }
+  
