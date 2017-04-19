@@ -32,8 +32,6 @@ from pyclustering.cluster.encoder import type_encoding;
 
 from pyclustering.container.cftree import cftree, cfentry, measurement_type;
 
-from copy import copy;
-
 
 class birch:
     """!
@@ -56,7 +54,7 @@ class birch:
     
     """
     
-    def __init__(self, data, number_clusters, branching_factor = 5, max_node_entries = 5, initial_diameter = 0.1, type_measurement = measurement_type.CENTROID_EUCLIDIAN_DISTANCE, entry_size_limit = 200, diameter_multiplier = 1.5, outlier_detector = 0, ccore = False):
+    def __init__(self, data, number_clusters, branching_factor = 5, max_node_entries = 5, initial_diameter = 0.1, type_measurement = measurement_type.CENTROID_EUCLIDIAN_DISTANCE, entry_size_limit = 200, diameter_multiplier = 1.5, ccore = False):
         """!
         @brief Constructor of clustering algorithm BIRCH.
         
@@ -68,7 +66,6 @@ class birch:
         @param[in] type_measurement (measurement_type): Type measurement used for calculation distance metrics.
         @param[in] entry_size_limit (uint): Maximum number of entries that can be stored in CF-Tree, if it is exceeded during creation then diameter is increased and CF-Tree is rebuilt.
         @param[in] diameter_multiplier (double): Multiplier that is used for increasing diameter when entry_size_limit is exceeded.
-        @param[in] outlier_detector (uint): Minimum number of data points that should be contained by node to be considered as non-outlier node.
         @param[in] ccore (bool): If True than DLL CCORE (C++ solution) will be used for solving the problem.
         
         @remark Despite eight arguments only the first two is mandatory, others can be ommitted. In this case default values are used for instance creation.
@@ -91,7 +88,6 @@ class birch:
         self.__measurement_type = type_measurement;
         self.__entry_size_limit = entry_size_limit;
         self.__diameter_multiplier = diameter_multiplier;
-        self.__outlier_detector = outlier_detector;
         self.__ccore = ccore;
         
         self.__features = None;
@@ -108,7 +104,6 @@ class birch:
         @remark Results of clustering can be obtained using corresponding gets methods.
         
         @see get_clusters()
-        @see get_noise()
         
         """
         
@@ -144,22 +139,6 @@ class birch:
         """
         
         return self.__clusters;
-    
-    
-    def get_noise(self):
-        """!
-        @brief Returns allocated noise.
-        
-        @remark Allocated noise can be returned only after data processing (use method process() before). Otherwise empty list is returned.
-        
-        @return (list) List of indexes that are marked as a noise.
-        
-        @see process()
-        @see get_clusters()
-        
-        """
-        
-        return self.__noise;
 
 
     def get_cluster_encoding(self):
@@ -177,27 +156,21 @@ class birch:
 
     def __extract_features(self):
         """!
-        @brief Extracts features and outlier features from CF-tree cluster.
+        @brief Extracts features from CF-tree cluster.
         
         """
         
         self.__features = [];
-        self.__outlier_features = [];
         
         if (len(self.__tree.leafes) == 1):
             # parameters are too general, copy all entries
             for entry in self.__tree.leafes[0].entries:
-                if (self.__outlier_detector < entry.number_points):
-                    self.__features.append(entry);
-                else:
-                    self.__outlier_features.append(entry);
+                self.__features.append(entry);
+
         else:
             # copy all leaf clustering features
             for node in self.__tree.leafes:
-                if (self.__outlier_detector < node.feature.number_points):
-                    self.__features.append(node.feature);
-                else:
-                    self.__outlier_features.append(node.feature);
+                self.__features.append(node.feature);
     
     
     def __decode_data(self):
@@ -210,13 +183,9 @@ class birch:
         self.__noise = [];
         
         for index_point in range(0, len(self.__pointer_data)):
-            (cluster_distance, cluster_index) = self.__get_nearest_feature(self.__pointer_data[index_point], self.__features);
-            (outlier_distance, _) = self.__get_nearest_feature(self.__pointer_data[index_point], self.__outlier_features);
+            (_, cluster_index) = self.__get_nearest_feature(self.__pointer_data[index_point], self.__features);
             
-            if (cluster_distance < outlier_distance):
-                self.__clusters[cluster_index].append(index_point);
-            else:
-                self.__noise.append(index_point);
+            self.__clusters[cluster_index].append(index_point);
     
     
     def __insert_data(self):

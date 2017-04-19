@@ -20,9 +20,6 @@ GENERAL CHANGES (pyclustering):
 - Implemented feature to obtain nodes of specified level of CF-tree. Method 'get_level_nodes()' of class 'cftree' (pyclustering.container.cftree).
   See: no reference.
 
-- Implemented feature to extract noise using BIRCH algorithm (pyclustering.cluster.birch).
-  See: https://github.com/annoviko/pyclustering/issues/258
-
 - Implemented feature to allocate/display/animate phase matrix: 'allocate_phase_matrix()', 'show_phase_matrix()', 'animate_phase_matrix()' (pyclustering.nnet.sync).
   See: no reference.
 
