@@ -19,26 +19,22 @@ environment:
  
 build_script:
 - ps: |
-  if ($CI_JOB -eq "BUILD_CORE")
-  {
+  if ($env:CI_JOB -eq "BUILD_CORE") {
     msbuild ccore\ccore.sln /p:configuration=Release
   }
   
-  if ($CI_JOB -eq "UT_CORE")
-  {
+  if ($env:CI_JOB -eq "UT_CORE") {
     msbuild ccore\utcore.sln /p:configuration=Release
   }
 
 
 test_script:
 - ps: |
-  if ($CI_JOB -eq "BUILD_CORE")
-  {
+  if ($env:CI_JOB -eq "BUILD_CORE") {
     return
   }
   
-  if ($CI_JOB -eq "UT_CORE")
-  {
+  if ($env:CI_JOB -eq "UT_CORE") {
     cd ccore
     return
   }
