@@ -7,5 +7,10 @@ init: []
 
 install: []
 
+environment:
+  matrix:
+  - SOLUTION_TARGET: ccore\ccore.sln
+  - SOLUTION_TARGET: ccore\utcore.sln
+
 build_script:
-  - msbuild ccore\ccore.sln /p:configuration=Release
+  - msbuild %SOLUTION_TARGET% /p:configuration=Release

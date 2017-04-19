@@ -19,6 +19,7 @@ In case of any questions, proposals or bugs related to the pyclustering please c
 ### PyClustering CI:
 
 [![Build Status](https://travis-ci.org/annoviko/pyclustering.svg?branch=master)](https://travis-ci.org/annoviko/pyclustering)
+[![Build status](https://ci.appveyor.com/api/projects/status/4uly2exfp49emwn0?svg=true)](https://ci.appveyor.com/project/annoviko/pyclustering)
 [![Coverage Status](https://coveralls.io/repos/github/annoviko/pyclustering/badge.svg?branch=master)](https://coveralls.io/github/annoviko/pyclustering?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/annoviko/pyclustering/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/annoviko/pyclustering/?branch=master)
 
