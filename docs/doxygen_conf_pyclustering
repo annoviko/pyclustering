@@ -4,7 +4,7 @@
 # Project related configuration options
 #---------------------------------------------------------------------------
 DOXYFILE_ENCODING      = UTF-8
-PROJECT_NAME           = PyClustering
+PROJECT_NAME           = PyClustering (Developer Master Branch)
 PROJECT_NUMBER         =
 PROJECT_BRIEF          = "pyclustring is a python data mining library"
 PROJECT_LOGO           =
@@ -149,7 +149,7 @@ EXCLUDE_SYMBOLS        =
 EXAMPLE_PATH           =
 EXAMPLE_PATTERNS       =
 EXAMPLE_RECURSIVE      = NO
-IMAGE_PATH             = docs/images/
+IMAGE_PATH             = docs/img/
 INPUT_FILTER           =
 FILTER_PATTERNS        =
 FILTER_SOURCE_FILES    = NO
