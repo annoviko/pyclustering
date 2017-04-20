@@ -99,51 +99,45 @@ WARN_LOGFILE           =
 #---------------------------------------------------------------------------
 # Configuration options related to the input files
 #---------------------------------------------------------------------------
-INPUT                  = pyclustering/__init__.py
-
-INPUT                 += pyclustering/cluster/__init__.py
-INPUT                 += pyclustering/cluster/agglomerative.py
-INPUT                 += pyclustering/cluster/birch.py
-INPUT                 += pyclustering/cluster/clarans.py
-INPUT                 += pyclustering/cluster/cure.py
-INPUT                 += pyclustering/cluster/dbscan.py
-INPUT                 += pyclustering/cluster/hsyncnet.py
-INPUT                 += pyclustering/cluster/kmeans.py
-INPUT                 += pyclustering/cluster/kmedians.py
-INPUT                 += pyclustering/cluster/kmedoids.py
-INPUT                 += pyclustering/cluster/optics.py
-INPUT                 += pyclustering/cluster/rock.py
-INPUT                 += pyclustering/cluster/somsc.py
-INPUT                 += pyclustering/cluster/syncnet.py
-INPUT                 += pyclustering/cluster/syncsom.py
-INPUT                 += pyclustering/cluster/xmeans.py
-
-INPUT                 += pyclustering/container/__init__.py
-INPUT                 += pyclustering/container/cftree.py
-INPUT                 += pyclustering/container/kdtree.py
-
-INPUT                 += pyclustering/gcolor/__init__.py
-INPUT                 += pyclustering/gcolor/dsatur.py
-INPUT                 += pyclustering/gcolor/hysteresis.py
-INPUT                 += pyclustering/gcolor/sync.py
-
-INPUT                 += pyclustering/nnet/__init__.py
-INPUT                 += pyclustering/nnet/cnn.py
-INPUT                 += pyclustering/nnet/hhn.py
-INPUT                 += pyclustering/nnet/hysteresis.py
-INPUT                 += pyclustering/nnet/legion.py
-INPUT                 += pyclustering/nnet/pcnn.py
-INPUT                 += pyclustering/nnet/som.py
-INPUT                 += pyclustering/nnet/sync.py
-INPUT                 += pyclustering/nnet/syncpr.py
-INPUT                 += pyclustering/nnet/syncsegm.py
-
-INPUT                 += pyclustering/tsp/__init__.py
-INPUT                 += pyclustering/tsp/antcolony.py
-
-INPUT                 += pyclustering/utils/__init__.py
-INPUT                 += pyclustering/utils/color.py
-INPUT                 += pyclustering/utils/graph.py
+INPUT                  = pyclustering/__init__.py \
+                         pyclustering/cluster/__init__.py \
+                         pyclustering/cluster/agglomerative.py \
+                         pyclustering/cluster/birch.py \
+                         pyclustering/cluster/clarans.py \
+                         pyclustering/cluster/cure.py \
+                         pyclustering/cluster/dbscan.py \
+                         pyclustering/cluster/hsyncnet.py \
+                         pyclustering/cluster/kmeans.py \
+                         pyclustering/cluster/kmedians.py \
+                         pyclustering/cluster/kmedoids.py \
+                         pyclustering/cluster/optics.py \
+                         pyclustering/cluster/rock.py \
+                         pyclustering/cluster/somsc.py \
+                         pyclustering/cluster/syncnet.py \
+                         pyclustering/cluster/syncsom.py \
+                         pyclustering/cluster/xmeans.py \
+                         pyclustering/container/__init__.py \
+                         pyclustering/container/cftree.py \
+                         pyclustering/container/kdtree.py \
+                         pyclustering/gcolor/__init__.py \
+                         pyclustering/gcolor/dsatur.py \
+                         pyclustering/gcolor/hysteresis.py \
+                         pyclustering/gcolor/sync.py \
+                         pyclustering/nnet/__init__.py \
+                         pyclustering/nnet/cnn.py \
+                         pyclustering/nnet/hhn.py \
+                         pyclustering/nnet/hysteresis.py \
+                         pyclustering/nnet/legion.py \
+                         pyclustering/nnet/pcnn.py \
+                         pyclustering/nnet/som.py \
+                         pyclustering/nnet/sync.py \
+                         pyclustering/nnet/syncpr.py \
+                         pyclustering/nnet/syncsegm.py \
+                         pyclustering/tsp/__init__.py \
+                         pyclustering/tsp/antcolony.py \
+                         pyclustering/utils/__init__.py \
+                         pyclustering/utils/color.py \
+                         pyclustering/utils/graph.py
 
 INPUT_ENCODING         = UTF-8
 FILE_PATTERNS          = 
