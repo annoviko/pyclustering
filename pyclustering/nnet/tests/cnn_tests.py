@@ -43,6 +43,8 @@ class Test(unittest.TestCase):
         
         for _ in range(3):
             network_instance = cnn_network(len(stimulus), connection, amount_neighbors);
+            assert len(stimulus) == len(network_instance);
+            
             output_dynamic = network_instance.simulate(steps, stimulus);
             
             ensembles = output_dynamic.allocate_sync_ensembles(analysed_iterations);
