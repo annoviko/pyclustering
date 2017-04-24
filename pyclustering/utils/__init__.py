@@ -74,7 +74,9 @@ def read_image(filename):
 def rgb2gray(image_rgb_array):
     """!
     @brief Returns image as 1-dimension (gray colored) matrix, where one element of list describes pixel.
-    @details Luma coding is used for transformation.
+    @details Luma coding is used for transformation and that is calculated directly from gamma-compressed primary intensities as a weighted sum:
+    
+    \f[Y = 0.2989R + 0.587G + 0.114B\f]
     
     @param[in] image_rgb_array (list): Image represented by RGB list.
     
@@ -280,7 +282,7 @@ def median(points, indexes = None):
             index_median = index_candidate;
     
     return index_median;
-    
+
 
 def euclidean_distance(a, b):
     """!

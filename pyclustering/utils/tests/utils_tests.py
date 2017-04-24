@@ -21,13 +21,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import unittest;
 
+import math;
+
 from pyclustering.utils import euclidean_distance;
 from pyclustering.utils import average_neighbor_distance;
 from pyclustering.utils import read_sample;
 from pyclustering.utils import data_corners;
 from pyclustering.utils import norm_vector;
+from pyclustering.utils import rgb2gray;
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES;
+
 
 class Test(unittest.TestCase):
 
@@ -90,6 +94,15 @@ class Test(unittest.TestCase):
         assert 10 == norm_vector([6, 8]);
         assert self.float_comparasion(4.219, norm_vector([2.2, 3.6]), 0.001);
         assert self.float_comparasion(5.280, norm_vector([-4.8, -2.2]), 0.001);
+
+    def testRgbToGray(self):
+        rgb_pixels = [ [127, 127, 127], [255, 255, 255], [0, 0, 0] ];
+        result = rgb2gray(rgb_pixels);
+
+        assert 3 == len(result);
+        assert 127 == round(result[0]);
+        assert 255 == round(result[1]);
+        assert 0 == round(result[2]);
 
 
 if __name__ == "__main__":
