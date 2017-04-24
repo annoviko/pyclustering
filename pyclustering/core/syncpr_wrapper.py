@@ -40,6 +40,8 @@ def pack_pattern(pattern):
 
 def syncpr_create(num_osc, increase_strength1, increase_strength2):
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
+    
+    ccore.syncpr_create.restype = POINTER(c_void_p);
     pointer_network = ccore.syncpr_create(c_uint(num_osc), c_double(increase_strength1), c_double(increase_strength2));
     
     return pointer_network;
@@ -52,7 +54,7 @@ def syncpr_destroy(pointer_network):
 
 def syncpr_get_size(pointer_network):
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
-    ccore.syncpr_dynamic_get_size.restype = c_uint;
+    ccore.syncpr_get_size.restype = c_uint;
     return ccore.syncpr_get_size(pointer_network);
     
 
@@ -68,13 +70,14 @@ def syncpr_train(pointer_network, patterns):
     package.data = cast(c_patterns, POINTER(c_void_p));
     
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
-    ccore.syncpr_train(pointer_network, pointer(package));    
+    ccore.syncpr_train(pointer_network, pointer(package));
     
     
 def syncpr_simulate_static(pointer_network, steps, time, pattern, solution, collect_dynamic):
     package_pattern = pack_pattern(pattern);
     
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
+    ccore.syncpr_simulate_static.restype = POINTER(c_void_p);
     return ccore.syncpr_simulate_static(pointer_network, c_uint(steps), c_double(time), pointer(package_pattern), c_uint(solution), c_bool(collect_dynamic));
 
 
@@ -82,6 +85,7 @@ def syncpr_simulate_dynamic(pointer_network, pattern, order, solution, collect_d
     package_pattern = pack_pattern(pattern);
     
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
+    ccore.syncpr_simulate_dynamic.restype = POINTER(c_void_p);
     return ccore.syncpr_simulate_dynamic(pointer_network, pointer(package_pattern), c_double(order), c_uint(solution), c_bool(collect_dynamic), c_double(step));
 
 
