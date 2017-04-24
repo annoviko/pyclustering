@@ -52,6 +52,9 @@ GENERAL CHANGES (ccore):
 
 
 CORRECTED MAJOR BUGS:
+- Bug with visualization of CNN network in case 3D data (pyclustering.nnet.cnn).
+  See: https://github.com/annoviko/pyclustering/issues/338
+
 - Bug with CCORE wrapper crashing after returning value from CCORE (pyclustering.core).
   See: https://github.com/annoviko/pyclustering/issues/337
 

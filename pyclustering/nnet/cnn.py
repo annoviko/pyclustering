@@ -456,7 +456,7 @@ class cnn_network:
             elif (dimension == 3):
                 axes.scatter(self.__location[i][0], self.__location[i][1], self.__location[i][2], c = 'b', marker = 'o');
                 
-                for j in range(i, self._num_osc, 1):    # draw connection between two points only one time
+                for j in range(i, self.__num_osc, 1):    # draw connection between two points only one time
                     if (self.__weights[i][j] > 0.0):
                         axes.plot([self.__location[i][0], self.__location[j][0]], [self.__location[i][1], self.__location[j][1]], [self.__location[i][2], self.__location[j][2]], 'b-', linewidth = 0.5);
                 

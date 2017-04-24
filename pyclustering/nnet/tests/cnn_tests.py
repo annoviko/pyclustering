@@ -100,11 +100,23 @@ class Test(unittest.TestCase):
         stimulus = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE5);
         self.templateSyncEnsembleAllocation(stimulus, 100, type_conn.ALL_TO_ALL, 5, 10, [15, 15, 15, 15]);
 
-    def testChaoticNeuralNetworkVisualization(self):
+    def testChaoticNeuralNetwork2DVisualization(self):
         stimulus = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1);
         network_instance = cnn_network(len(stimulus));
         
         output_dynamic = network_instance.simulate(100, stimulus);
+        
+        network_instance.show_network();
+        
+        cnn_visualizer.show_dynamic_matrix(output_dynamic);
+        cnn_visualizer.show_observation_matrix(output_dynamic);
+        cnn_visualizer.show_output_dynamic(output_dynamic);
+
+    def testChaoticNeuralNetwork3DVisualization(self):
+        stimulus = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE11);
+        network_instance = cnn_network(len(stimulus));
+        
+        output_dynamic = network_instance.simulate(10, stimulus);
         
         network_instance.show_network();
         
