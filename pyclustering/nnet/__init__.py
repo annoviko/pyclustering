@@ -183,8 +183,15 @@ class network:
         
         """
         return self._num_osc;
-    
-    
+
+
+    def __create_connection(self, index1, index2):
+        if (self.__conn_represent == conn_represent.MATRIX):
+            self.__osc_conn[index1][index2] = True;
+        else:
+            self.__osc_conn[index1].append(index2);
+
+
     def __create_all_to_all_connections(self):
         """!
         @brief Creates connections between all oscillators.
@@ -199,8 +206,8 @@ class network:
         elif (self.__conn_represent == conn_represent.LIST):
             for index in range(0, self._num_osc, 1):
                 self.__osc_conn.append([neigh for neigh in range(0, self._num_osc, 1) if index != neigh]); 
-          
-            
+
+
     def __create_grid_four_connections(self):
         """!
         @brief Creates network with connections that make up four grid structure.
@@ -224,28 +231,16 @@ class network:
             
             node_row_index = math.ceil(index / side_size);
             if (upper_index >= 0):
-                if (self.__conn_represent == conn_represent.MATRIX):
-                    self.__osc_conn[index][upper_index] = True;
-                else:
-                    self.__osc_conn[index].append(upper_index);
+                self.__create_connection(index, upper_index);
             
             if (lower_index < self._num_osc):
-                if (self.__conn_represent == conn_represent.MATRIX):
-                    self.__osc_conn[index][lower_index] = True;
-                else:
-                    self.__osc_conn[index].append(lower_index);
+                self.__create_connection(index, lower_index);
             
             if ( (left_index >= 0) and (math.ceil(left_index / side_size) == node_row_index) ):
-                if (self.__conn_represent == conn_represent.MATRIX):
-                    self.__osc_conn[index][left_index] = True;
-                else:
-                    self.__osc_conn[index].append(left_index);
+                self.__create_connection(index, left_index);
             
             if ( (right_index < self._num_osc) and (math.ceil(right_index / side_size) == node_row_index) ):
-                if (self.__conn_represent == conn_represent.MATRIX):
-                    self.__osc_conn[index][right_index] = True;
-                else:
-                    self.__osc_conn[index].append(right_index);  
+                self.__create_connection(index, right_index);
     
     
     def __create_grid_eight_connections(self):
@@ -270,28 +265,16 @@ class network:
             lower_row_index = node_row_index + 1;
             
             if ( (upper_left_index >= 0) and (math.floor(upper_left_index / side_size) == upper_row_index) ):
-                if (self.__conn_represent == conn_represent.MATRIX):
-                    self.__osc_conn[index][upper_left_index] = True;
-                else:
-                    self.__osc_conn[index].append(upper_left_index);
+                self.__create_connection(index, upper_left_index);
             
             if ( (upper_right_index >= 0) and (math.floor(upper_right_index / side_size) == upper_row_index) ):
-                if (self.__conn_represent == conn_represent.MATRIX):
-                    self.__osc_conn[index][upper_right_index] = True;
-                else:
-                    self.__osc_conn[index].append(upper_right_index);
+                self.__create_connection(index, upper_right_index);
                 
             if ( (lower_left_index < self._num_osc) and (math.floor(lower_left_index / side_size) == lower_row_index) ):
-                if (self.__conn_represent == conn_represent.MATRIX):
-                    self.__osc_conn[index][lower_left_index] = True;
-                else:
-                    self.__osc_conn[index].append(lower_left_index);
+                self.__create_connection(index, lower_left_index);
                 
             if ( (lower_right_index < self._num_osc) and (math.floor(lower_right_index / side_size) == lower_row_index) ):
-                if (self.__conn_represent == conn_represent.MATRIX):
-                    self.__osc_conn[index][lower_right_index] = True;
-                else:
-                    self.__osc_conn[index].append(lower_right_index);     
+                self.__create_connection(index, lower_right_index);
     
     
     def __create_list_bidir_connections(self):
@@ -327,10 +310,10 @@ class network:
         
         """
         if (self.__conn_represent == conn_represent.MATRIX):
-            for index in range(0, self._num_osc, 1):
+            for _ in range(0, self._num_osc, 1):
                 self.__osc_conn.append([False] * self._num_osc);   
         elif (self.__conn_represent == conn_represent.LIST):
-            self.__osc_conn = [[] for index in range(0, self._num_osc, 1)];
+            self.__osc_conn = [[] for _ in range(0, self._num_osc, 1)];
 
     
     def __create_dynamic_connection(self):
@@ -339,10 +322,10 @@ class network:
         
         """   
         if (self.__conn_represent == conn_represent.MATRIX):
-            for index in range(0, self._num_osc, 1):
+            for _ in range(0, self._num_osc, 1):
                 self.__osc_conn.append([False] * self._num_osc);   
         elif (self.__conn_represent == conn_represent.LIST):
-            self.__osc_conn = [[] for index in range(0, self._num_osc, 1)];
+            self.__osc_conn = [[] for _ in range(0, self._num_osc, 1)];
         
     
     def _create_structure(self, type_conn = conn_type.ALL_TO_ALL):
