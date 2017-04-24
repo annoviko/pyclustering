@@ -24,9 +24,9 @@
 """
 
 
-from ctypes import cdll, c_double;
+from ctypes import cdll, c_double, POINTER;
 
-from pyclustering.core.wrapper import PATH_DLL_CCORE_64, create_pointer_data, extract_pyclustering_package;
+from pyclustering.core.wrapper import PATH_DLL_CCORE_64, create_pointer_data, extract_pyclustering_package, pyclustering_package;
 
 
 def kmedians(sample, centers, tolerance):
@@ -34,6 +34,8 @@ def kmedians(sample, centers, tolerance):
     pointer_centers = create_pointer_data(centers);
     
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
+    
+    ccore.kmedians_algorithm.restype = POINTER(pyclustering_package);
     package = ccore.kmedians_algorithm(pointer_data, pointer_centers, c_double(tolerance));
     
     result = extract_pyclustering_package(package);

@@ -149,10 +149,12 @@ def antcolony_tsp_process(cities, params, citiesDistRepresent = CITIES_DISTANCE_
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
      
     if citiesDistRepresent == CITIES_DISTANCE_SET_BY_MATRIX:
-        cities_coord = antcolony_tsp_prepare_matrix(cities)
+        cities_coord = antcolony_tsp_prepare_matrix(cities);
+        ccore.ant_colony_tsp_process_by_matrix.restype = POINTER(c_antcolony_tsp_result);
         result_pointer = ccore.ant_colony_tsp_process_by_matrix(cities_coord, algorithm_params);
     else:
-        cities_coord = antcolony_tsp_prepare_cities_list(cities)
+        cities_coord = antcolony_tsp_prepare_cities_list(cities);
+        ccore.ant_colony_tsp_process.restype = POINTER(c_antcolony_tsp_result);
         result_pointer = ccore.ant_colony_tsp_process(cities_coord, algorithm_params);
     
     result = cast(result_pointer, POINTER(c_antcolony_tsp_result))[0];

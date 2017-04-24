@@ -173,6 +173,7 @@ def xmeans(sample, centers, kmax, tolerance, criterion):
     pointer_centers = create_pointer_data(centers);
     
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
+    ccore.xmeans_algorithm.restype = POINTER(pyclustering_package);
     result = ccore.xmeans_algorithm(pointer_data, pointer_centers, c_uint(kmax), c_double(tolerance), c_uint(criterion));
     
     list_of_clusters = extract_clusters(result);
@@ -187,6 +188,7 @@ def hsyncnet_create_network(sample, number_clusters, initial_phases, initial_nei
     pointer_data = create_pointer_data(sample);
     
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
+    ccore.hsyncnet_create_network.restype = POINTER(c_void_p);
     pointer_network = ccore.hsyncnet_create_network(pointer_data, c_uint(number_clusters), c_uint(initial_phases), c_uint(initial_neighbors), c_double(increase_persent));
     
     return pointer_network;
@@ -199,10 +201,11 @@ def hsyncnet_destroy_network(pointer_network):
 
 def hsyncnet_process(network_pointer, order, solution, collect_dynamic):
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
-    return ccore.hsyncnet_process(network_pointer, c_double(order), c_uint(solution), c_bool(collect_dynamic));  
+    ccore.hsyncnet_process.restype = POINTER(c_void_p);
+    return ccore.hsyncnet_process(network_pointer, c_double(order), c_uint(solution), c_bool(collect_dynamic));
 
 
 def hsyncnet_analyser_destroy(pointer_analyser):
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
-    ccore.syncnet_analyser_destroy(pointer_analyser);     
+    ccore.syncnet_analyser_destroy(pointer_analyser);
 

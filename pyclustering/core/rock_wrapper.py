@@ -23,9 +23,9 @@
 
 """
 
-from ctypes import cdll, c_double, c_size_t;
+from ctypes import cdll, c_double, c_size_t, POINTER;
 
-from pyclustering.core.wrapper import PATH_DLL_CCORE_64, create_pointer_data, extract_pyclustering_package;
+from pyclustering.core.wrapper import PATH_DLL_CCORE_64, create_pointer_data, extract_pyclustering_package, pyclustering_package;
 
 
 def rock(sample, eps, number_clusters, threshold):
@@ -45,6 +45,8 @@ def rock(sample, eps, number_clusters, threshold):
     pointer_data = create_pointer_data(sample);
     
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
+    
+    ccore.rock_algorithm.restype = POINTER(pyclustering_package);
     package = ccore.rock_algorithm(pointer_data, c_double(eps), c_size_t(number_clusters), c_double(threshold));
 
     list_of_clusters = extract_pyclustering_package(package);

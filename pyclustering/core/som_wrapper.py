@@ -23,9 +23,10 @@
 
 """
 
-from ctypes import cdll, Structure, c_uint, c_double, pointer;
+from ctypes import cdll, Structure, c_uint, c_size_t, c_double, c_void_p, pointer, POINTER;
 
-from pyclustering.core.wrapper import PATH_DLL_CCORE_64, create_pointer_data, extract_pyclustering_package;
+from pyclustering.core.wrapper import PATH_DLL_CCORE_64, create_pointer_data, extract_pyclustering_package, pyclustering_package;
+
 
 class c_som_parameters(Structure):
     "Description of SOM parameters in memory"
@@ -62,6 +63,7 @@ def som_create(rows, cols, conn_type, parameters):
     c_params.init_learn_rate = parameters.init_learn_rate;
     c_params.adaptation_threshold = parameters.adaptation_threshold;
     
+    ccore.som_create.restype = POINTER(c_void_p);
     som_pointer = ccore.som_create(c_uint(rows), c_uint(cols), c_uint(conn_type), pointer(c_params));
     
     return som_pointer;
@@ -94,6 +96,7 @@ def som_train(som_pointer, data, epochs, autostop):
     pointer_data = create_pointer_data(data);
     
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
+    ccore.som_train.restype = c_size_t;
     return ccore.som_train(som_pointer, pointer_data, c_uint(epochs), autostop);
 
 
@@ -112,6 +115,7 @@ def som_simulate(som_pointer, pattern):
     pointer_data = create_pointer_data(pattern);
     
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
+    ccore.som_simulate.restype = c_size_t;
     return ccore.som_simulate(som_pointer, pointer_data);
 
 
@@ -124,6 +128,7 @@ def som_get_winner_number(som_pointer):
     """
     
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
+    ccore.som_get_winner_number.restype = c_size_t;
     return ccore.som_get_winner_number(som_pointer);
 
 def som_get_size(som_pointer):
@@ -135,6 +140,7 @@ def som_get_size(som_pointer):
     """
     
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
+    ccore.som_get_size.restype = c_size_t;
     return ccore.som_get_size(som_pointer);
 
 
@@ -147,6 +153,8 @@ def som_get_capture_objects(som_pointer):
     """
     
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
+    
+    ccore.som_get_capture_objects.restype = POINTER(pyclustering_package);
     package = ccore.som_get_capture_objects(som_pointer);
     
     result = extract_pyclustering_package(package);
@@ -162,6 +170,8 @@ def som_get_weights(som_pointer):
     """
     
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
+    
+    ccore.som_get_weights.restype = POINTER(pyclustering_package);
     package = ccore.som_get_weights(som_pointer);
     
     result = extract_pyclustering_package(package);
@@ -177,6 +187,8 @@ def som_get_awards(som_pointer):
     """
     
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
+    
+    ccore.som_get_awards.restype = POINTER(pyclustering_package);
     package = ccore.som_get_awards(som_pointer);
     
     result = extract_pyclustering_package(package);
@@ -192,6 +204,8 @@ def som_get_neighbors(som_pointer):
     """
     
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
+    
+    ccore.som_get_neighbors.restype = POINTER(pyclustering_package);
     package = ccore.som_get_neighbors(som_pointer);
     
     result = extract_pyclustering_package(package);

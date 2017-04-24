@@ -25,7 +25,6 @@
 
 import unittest;
 
-from pyclustering.cluster.encoder import type_encoding, cluster_encoder;
 from pyclustering.cluster.somsc import somsc;
 
 from pyclustering.utils import read_sample;

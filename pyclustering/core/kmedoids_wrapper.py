@@ -41,6 +41,8 @@ def kmedoids(sample, medoids, tolerance):
     medoids_package.data = cast(c_medoids, POINTER(c_void_p));
     
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
+    
+    ccore.kmedoids_algorithm.restype = POINTER(pyclustering_package);
     package = ccore.kmedoids_algorithm(pointer_data, pointer(medoids_package), c_double(tolerance));
     
     result = extract_pyclustering_package(package);

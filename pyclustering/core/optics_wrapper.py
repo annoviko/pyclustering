@@ -23,9 +23,9 @@
 
 """
 
-from ctypes import cdll, c_double, c_size_t;
+from ctypes import cdll, c_double, c_size_t, POINTER;
 
-from pyclustering.core.wrapper import PATH_DLL_CCORE_64, create_pointer_data, extract_pyclustering_package;
+from pyclustering.core.wrapper import PATH_DLL_CCORE_64, create_pointer_data, extract_pyclustering_package,pyclustering_package;
 
 
 class optics_package_indexer:
@@ -43,6 +43,8 @@ def optics(sample, radius, minimum_neighbors, amount_clusters):
     pointer_data = create_pointer_data(sample);
     
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
+    
+    ccore.optics_algorithm.restype = POINTER(pyclustering_package);
     package = ccore.optics_algorithm(pointer_data, c_double(radius), c_size_t(minimum_neighbors), c_size_t(amount));
 
     results = extract_pyclustering_package(package);

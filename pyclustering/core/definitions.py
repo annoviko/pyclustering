@@ -70,9 +70,9 @@ class clustering_result(Structure):
 
 class data_representation(Structure):
     "Description of input data"
-    " - unsigned int number_object"
-    " - unsigned int dimension"
-    " - double ** pointer_objects"
+    " - unsigned int     number_object"
+    " - unsigned int     dimension"
+    " - double **        pointer_objects"
     
     _fields_ = [("number_objects", c_uint), 
                 ("dimension", c_uint), 
@@ -81,10 +81,10 @@ class data_representation(Structure):
 
 class dynamic_result(Structure):
     "Description of output dynamic in memory"
-    " - unsigned int size_dynamic"
-    " - unsigned int size_network"
-    " - double * times"
-    " - double ** dynamic"
+    " - unsigned int     size_dynamic"
+    " - unsigned int     size_network"
+    " - double *         times"
+    " - double **        dynamic"
     
     _fields_ = [("size_dynamic", c_uint), 
                 ("size_network", c_uint),
@@ -94,9 +94,9 @@ class dynamic_result(Structure):
 
 class pyclustering_package(Structure):
     "Description of output dynamic in memory"
-    " - unsigned int size"
-    " - unsigned int type"
-    " - void * data"
+    " - std::size_t      size"
+    " - unsigned int     type"
+    " - void *           data"
     
     _fields_ = [("size", c_size_t),
                 ("type", c_uint),

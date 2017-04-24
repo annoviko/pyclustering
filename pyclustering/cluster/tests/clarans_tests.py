@@ -26,7 +26,7 @@
 
 import unittest;
 
-from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
+from pyclustering.samples.definitions import SIMPLE_SAMPLES;
 
 from pyclustering.utils import read_sample;
 

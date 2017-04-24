@@ -25,6 +25,7 @@
 
 from pyclustering.core.wrapper import *;
 
+
 def pack_pattern(pattern):
     c_pattern = (c_int * len(pattern))();
     c_pattern[:] = pattern[:];
@@ -51,6 +52,7 @@ def syncpr_destroy(pointer_network):
 
 def syncpr_get_size(pointer_network):
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
+    ccore.syncpr_dynamic_get_size.restype = c_uint;
     return ccore.syncpr_get_size(pointer_network);
     
 
@@ -94,6 +96,7 @@ def syncpr_memory_order(pointer_network, pattern):
 
 def syncpr_dynamic_get_size(pointer_dynamic):
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
+    ccore.syncpr_dynamic_get_size.restype = c_uint;
     return ccore.syncpr_dynamic_get_size(pointer_dynamic);
 
 
@@ -104,6 +107,8 @@ def syncpr_dynamic_destroy(pointer_dynamic):
 
 def syncpr_dynamic_allocate_sync_ensembles(pointer_dynamic, tolerance):
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
+    
+    ccore.syncpr_dynamic_allocate_sync_ensembles.restype = POINTER(pyclustering_package);
     package = ccore.syncpr_dynamic_allocate_sync_ensembles(pointer_dynamic, c_double(tolerance));
     
     result = extract_pyclustering_package(package);
@@ -114,6 +119,8 @@ def syncpr_dynamic_allocate_sync_ensembles(pointer_dynamic, tolerance):
 
 def syncpr_dynamic_get_output(pointer_dynamic):
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
+    
+    ccore.syncpr_dynamic_get_output.restype = POINTER(pyclustering_package);
     package = ccore.syncpr_dynamic_get_output(pointer_dynamic);
     
     result = extract_pyclustering_package(package);
@@ -124,6 +131,8 @@ def syncpr_dynamic_get_output(pointer_dynamic):
 
 def syncpr_dynamic_get_time(pointer_dynamic):
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
+    
+    ccore.syncpr_dynamic_get_time.restype = POINTER(pyclustering_package);
     package = ccore.syncpr_dynamic_get_time(pointer_dynamic);
     
     result = extract_pyclustering_package(package);
