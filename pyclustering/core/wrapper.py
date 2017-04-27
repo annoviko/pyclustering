@@ -160,28 +160,6 @@ def extract_pyclustering_package(ccore_package_pointer):
 
 
 # Implemented algorithms.
-def xmeans(sample, centers, kmax, tolerance, criterion):
-    "Clustering algorithm X-Means returns allocated clusters. Calculation is performed via CCORE."
-    
-    "(in) data        - input data that is presented as list of points (objects), each point should be represented by list or tuple."
-    "(in) centers     - initial coordinates of centers of clusters that are represented by list: [center1, center2, ...]."
-    "(in) kmax        - maximum number of clusters that can be allocated."
-    
-    "Returns list of allocated clusters, each cluster contains indexes of objects in list of data."
-    
-    pointer_data = create_pointer_data(sample);
-    pointer_centers = create_pointer_data(centers);
-    
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
-    ccore.xmeans_algorithm.restype = POINTER(pyclustering_package);
-    result = ccore.xmeans_algorithm(pointer_data, pointer_centers, c_uint(kmax), c_double(tolerance), c_uint(criterion));
-    
-    list_of_clusters = extract_clusters(result);
-    
-    ccore.free_clustering_result(result);
-    return list_of_clusters;
-
-
 "CCORE Interface for HSYNCNET oscillatory network"
 
 def hsyncnet_create_network(sample, number_clusters, initial_phases, initial_neighbors, increase_persent):

@@ -32,7 +32,9 @@ namespace cluster_analysis {
 using noise = std::vector<size_t>;
 using noise_ptr = std::shared_ptr<noise>;
 
-using cluster = std::vector<size_t>;
+using index_sequence = std::vector<std::size_t>;
+
+using cluster = std::vector<std::size_t>;
 using cluster_sequence = std::vector<cluster>;
 using cluster_sequence_ptr = std::shared_ptr<cluster_sequence>;
 

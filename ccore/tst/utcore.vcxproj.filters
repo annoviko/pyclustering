@@ -30,6 +30,9 @@
     <Filter Include="Tested Code\tsp">
       <UniqueIdentifier>{0f0225d8-7891-4f28-88d6-240d7244d119}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tested Code\interface">
+      <UniqueIdentifier>{5b5b6ac0-dc7c-434f-af9f-84ad933180f0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\tools\gtest\gtest-all.cpp">
@@ -139,6 +142,12 @@
     </ClCompile>
     <ClCompile Include="..\src\cluster\somsc.cpp">
       <Filter>Tested Code\cluster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\interface\xmeans_interface.cpp">
+      <Filter>Tested Code\interface</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\interface\pyclustering_package.cpp">
+      <Filter>Tested Code\interface</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -384,6 +393,15 @@
     </ClInclude>
     <ClInclude Include="utest-somsc.hpp">
       <Filter>Unit Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="utest-interface-xmeans.hpp">
+      <Filter>Unit Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\interface\xmeans_interface.h">
+      <Filter>Tested Code\interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\interface\pyclustering_package.hpp">
+      <Filter>Tested Code\interface</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -87,24 +87,6 @@ void free_pyclustering_package(pyclustering_package * package) {
 }
 
 
-clustering_result * xmeans_algorithm(const data_representation * const sample, const data_representation * const initial_centers, const unsigned int kmax, const double tolerance, const unsigned int p_criterion) {
-	std::vector<std::vector<double> > * dataset = read_sample(sample);
-	std::vector<std::vector<double> > * centers = read_sample(initial_centers);
-
-	xmeans solver(*dataset, *centers, kmax, tolerance, (splitting_type) p_criterion);
-	solver.process();
-
-	std::vector<std::vector<unsigned int> > output_clusters;
-	solver.get_clusters(output_clusters);
-
-	clustering_result * result = create_clustering_result(output_clusters);
-
-	delete dataset; dataset = NULL;
-	delete centers; centers = NULL;
-
-	return result;	
-}
-
 void * sync_create_network(const unsigned int size, const double weight_factor, const double frequency_factor, const unsigned int connection_type, const unsigned int initial_phases) {
 	return (void *) new sync_network(size, weight_factor, frequency_factor, (connection_t) connection_type, (initial_type) initial_phases);
 }

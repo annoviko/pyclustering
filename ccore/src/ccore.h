@@ -87,21 +87,6 @@ extern "C" DECLARATION void free_pyclustering_package(pyclustering_package * pac
 
 /***********************************************************************************************
  *
- * @brief   Clustering algorithm X-Means returns allocated clusters.
- *
- * @param   (in) sample             - input data for clustering.
- *          (in) initial_centers    - initial coordinates of centers of clusters.
- *          (in) kmax               - maximum number of clusters that can be allocated.
- *          (in) tolerance          - stop condition for local parameter improvement.
- *          (in) p_criterion        - cluster splitting criterion.
- *
- * @return	Returns result of clustering - array of allocated clusters.
- *
- ***********************************************************************************************/
-extern "C" DECLARATION clustering_result * xmeans_algorithm(const data_representation * const sample, const data_representation * const initial_centers, const unsigned int kmax, const double tolerance, const unsigned int p_criterion);
-
-/***********************************************************************************************
- *
  * @brief   Create oscillatory network Sync that is based on Kuramoto model.
  *
  * @param   (in) size				- number of oscillators in the network.
