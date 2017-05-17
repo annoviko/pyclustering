@@ -37,6 +37,7 @@ import matplotlib.pyplot as plt;
 import pyclustering.core.som_wrapper as wrapper;
 
 from pyclustering.utils import euclidean_distance_sqrt;
+from pyclustering.utils.dimension import dimension_info;
 
 from enum import IntEnum;
 
@@ -349,31 +350,15 @@ class som:
         
         """
         
-        dimension = len(self._data[0]);
+        dim_info = dimension_info(self._data);
         
-        maximum_dimension = [self._data[0][i] for i in range(dimension)];
-        minimum_dimension = [self._data[0][i] for i in range(dimension)];
-        for i in range(len(self._data)):
-            for dim in range(dimension):
-                if (maximum_dimension[dim] < self._data[i][dim]):
-                    maximum_dimension[dim] = self._data[i][dim];
-                elif (minimum_dimension[dim] > self._data[i][dim]):
-                    minimum_dimension[dim] = self._data[i][dim];
-                     
-        # Increase border
-        width_dimension = [0] * dimension;
-        center_dimension = [0] * dimension;
-        for dim in range(dimension):            
-            width_dimension[dim] = maximum_dimension[dim] - minimum_dimension[dim];
-            center_dimension[dim] = (maximum_dimension[dim] + minimum_dimension[dim]) / 2;
-        
-        step_x = center_dimension[0];
-        if (self._rows > 1): step_x = width_dimension[0] / (self._rows - 1);
+        step_x = dim_info.get_center()[0];
+        if (self._rows > 1): step_x = dim_info.get_width()[0] / (self._rows - 1);
         
         step_y = 0.0;
-        if (dimension > 1):
-            step_y = center_dimension[1];
-            if (self._cols > 1): step_y = width_dimension[1] / (self._cols - 1); 
+        if (dim_info.get_dimensions() > 1):
+            step_y = dim_info.get_center()[1];
+            if (self._cols > 1): step_y = dim_info.get_width()[1] / (self._cols - 1); 
                       
         # generate weights (topological coordinates)
         random.seed();
@@ -381,35 +366,35 @@ class som:
         # Feature SOM 0002: Uniform grid.
         if (init_type == type_init.uniform_grid):
             # Predefined weights in line with input data.
-            self._weights = [ [ [] for i in range(dimension) ] for j in range(self._size)];
+            self._weights = [ [ [] for i in range(dim_info.get_dimensions()) ] for j in range(self._size)];
             for i in range(self._size):
                 location = self._location[i];
-                for dim in range(dimension):
+                for dim in range(dim_info.get_dimensions()):
                     if (dim == 0):
                         if (self._rows > 1):
-                            self._weights[i][dim] = minimum_dimension[dim] + step_x * location[dim];
+                            self._weights[i][dim] = dim_info.get_minimum_coordinate()[dim] + step_x * location[dim];
                         else:
-                            self._weights[i][dim] = center_dimension[dim];
+                            self._weights[i][dim] = dim_info.get_center()[dim];
                             
                     elif (dim == 1):
                         if (self._cols > 1):
-                            self._weights[i][dim] = minimum_dimension[dim] + step_y * location[dim];
+                            self._weights[i][dim] = dim_info.get_minimum_coordinate()[dim] + step_y * location[dim];
                         else:
-                            self._weights[i][dim] = center_dimension[dim];
+                            self._weights[i][dim] = dim_info.get_center()[dim];
                     else:
-                        self._weights[i][dim] = center_dimension[dim];
+                        self._weights[i][dim] = dim_info.get_center()[dim];
         
-        elif (init_type == type_init.random_surface):    
+        elif (init_type == type_init.random_surface):
             # Random weights at the full surface.
-            self._weights = [ [random.uniform(minimum_dimension[i], maximum_dimension[i]) for i in range(dimension)] for j in range(self._size) ];
-            
+            self._weights = [ [random.uniform(dim_info.get_minimum_coordinate()[i], dim_info.get_maximum_coordinate()[i]) for i in range(dim_info.get_dimensions())] for _ in range(self._size) ];
+        
         elif (init_type == type_init.random_centroid):
             # Random weights at the center of input data.
-            self._weights = [ [(random.random() + center_dimension[i])  for i in range(dimension)] for j in range(self._size) ];        
+            self._weights = [ [(random.random() + dim_info.get_center()[i])  for i in range(dim_info.get_dimensions())] for _ in range(self._size) ];
         
         else:
             # Random weights of input data.
-            self._weights = [ [random.random()  for i in range(dimension)] for j in range(self._size) ]; 
+            self._weights = [ [random.random()  for i in range(dim_info.get_dimensions())] for _ in range(self._size) ]; 
 
 
     def _create_connections(self, conn_type):

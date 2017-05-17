@@ -26,6 +26,7 @@
 import unittest;
 
 from pyclustering.utils.tests                   import utils_tests        as utils_unit_tests;
+from pyclustering.utils.tests                   import dimension_tests    as dimension_unit_tests;
 
 if __name__ == "__main__":
     suite = unittest.TestSuite();
