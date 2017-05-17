@@ -71,12 +71,14 @@ class ordering_visualizer:
         
             # divide into cluster groups to visualize by colors
             left_index_border = 0;
+            current_index_border = 0;
             for index_border in range(len(borders)):
                 right_index_border = borders[index_border];
                 axis.bar(range(left_index_border, right_index_border), ordering[left_index_border:right_index_border], width = 1.0, color = color_list.TITLES[index_border]);
                 left_index_border = right_index_border;
+                current_index_border = index_border;
             
-            axis.bar(range(left_index_border, len(ordering)), ordering[left_index_border:len(ordering)], width = 1.0, color = color_list.TITLES[index_border + 1]);
+            axis.bar(range(left_index_border, len(ordering)), ordering[left_index_border:len(ordering)], width = 1.0, color = color_list.TITLES[current_index_border + 1]);
             
             plt.xlim([0, len(ordering)]);
             
@@ -372,7 +374,7 @@ class optics:
             
             if ( (self.__amount_clusters is not None) and (self.__amount_clusters != len(self.get_clusters())) ):
                 analyser = ordering_analyser(self.get_ordering());
-                radius, borders = analyser.calculate_connvectivity_radius(self.__amount_clusters);
+                radius, _ = analyser.calculate_connvectivity_radius(self.__amount_clusters);
                 if (radius is not None):
                     self.__eps = radius;
                     self.__allocate_clusters();
