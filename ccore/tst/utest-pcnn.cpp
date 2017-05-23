@@ -23,6 +23,7 @@
 
 #include "nnet/pcnn.hpp"
 
+#include <algorithm>
 #include <unordered_set>
 
 
