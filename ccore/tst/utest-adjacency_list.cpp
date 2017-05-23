@@ -18,9 +18,6 @@
 *
 */
 
-#ifndef _UTEST_ADJACENCY_LIST_H_
-#define _UTEST_ADJACENCY_LIST_H_
-
 
 #include "gtest/gtest.h"
 
@@ -178,6 +175,3 @@ TEST(utest_adjacency_list, get_neighbors_after_erase) {
 	adjacency_list matrix(17);
 	template_get_neighbors_after_erase(matrix);
 }
-
-
-#endif

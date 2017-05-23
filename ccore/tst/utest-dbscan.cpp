@@ -18,9 +18,6 @@
 *
 */
 
-#ifndef TST_UTEST_DBSCAN_HPP_
-#define TST_UTEST_DBSCAN_HPP_
-
 
 #include "gtest/gtest.h"
 
@@ -136,6 +133,3 @@ TEST(utest_dbscan, noise_cluster_allocation_sample_simple_02) {
     const std::vector<size_t> expected_clusters_length = { 10 };
     template_noise_allocation(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02), 2.0, 9, expected_clusters_length, 13);
 }
-
-
-#endif

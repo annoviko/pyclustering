@@ -24,9 +24,9 @@
 
 
 void ASSERT_CLUSTER_SIZES(const dataset & p_data, const cluster_sequence & p_actual_clusters, const std::vector<size_t> & p_expected_cluster_length) {
-	if (p_expected_cluster_length.empty() && p_actual_clusters.empty()) {
-		return;
-	}
+    if (p_expected_cluster_length.empty() && p_actual_clusters.empty()) {
+        return;
+    }
 
     std::vector<size_t> obtained_cluster_length;
     std::vector<bool> unique_objects(p_data.size(), false);
@@ -47,9 +47,9 @@ void ASSERT_CLUSTER_SIZES(const dataset & p_data, const cluster_sequence & p_act
     }
 
     if (!p_expected_cluster_length.empty()) {
-		std::size_t expected_total_size = std::accumulate(p_expected_cluster_length.cbegin(), p_expected_cluster_length.cend(), (std::size_t) 0);
+        std::size_t expected_total_size = std::accumulate(p_expected_cluster_length.cbegin(), p_expected_cluster_length.cend(), (std::size_t) 0);
 
-		ASSERT_EQ(expected_total_size, total_size);
+        ASSERT_EQ(expected_total_size, total_size);
 
         std::sort(obtained_cluster_length.begin(), obtained_cluster_length.end());
 
@@ -60,7 +60,7 @@ void ASSERT_CLUSTER_SIZES(const dataset & p_data, const cluster_sequence & p_act
             ASSERT_EQ(obtained_cluster_length[i], sorted_expected_cluster_length[i]);
         }
     }
-	else {
-		ASSERT_EQ(p_data.size(), total_size);
-	}
+    else {
+        ASSERT_EQ(p_data.size(), total_size);
+    }
 }

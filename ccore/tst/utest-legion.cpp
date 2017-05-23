@@ -18,9 +18,6 @@
 *
 */
 
-#ifndef _UTEST_LEGION_
-#define _UTEST_LEGION_
-
 
 #include "gtest/gtest.h"
 
@@ -82,5 +79,3 @@ TEST(utest_legion, dynamic_simulation_grid_four_rk4) {
 TEST(utest_legion, dynamic_simulation_grid_eight_rk4) {
 	template_dynamic_simulation({ 1, 1, 1, 0, 0, 0, 1, 1, 1 }, connection_t::CONNECTION_GRID_EIGHT, solve_type::RK4, 10, 100);
 }
-
-#endif

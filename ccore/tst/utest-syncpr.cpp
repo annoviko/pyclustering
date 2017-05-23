@@ -18,9 +18,6 @@
 *
 */
 
-#ifndef _UTEST_SYNCPR_
-#define _UTEST_SYNCPR_
-
 
 #include "gtest/gtest.h"
 
@@ -209,5 +206,3 @@ TEST(utest_syncpr, sync_global_order) {
     global_order = network.sync_order();
     ASSERT_TRUE((global_order > 0.0) && (global_order < 1.0));
 }
-
-#endif

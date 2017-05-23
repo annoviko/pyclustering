@@ -18,9 +18,6 @@
 *
 */
 
-#ifndef _UTEST_KMEDIANS_
-#define _UTEST_KMEDIANS_
-
 
 #include "gtest/gtest.h"
 
@@ -105,6 +102,3 @@ TEST(utest_kmedians, rough_medians_sample_simple_10) {
     std::vector<size_t> expected_clusters_length;   /* pass empty */
     template_kmedians_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_10), start_medians, expected_clusters_length);
 }
-
-
-#endif

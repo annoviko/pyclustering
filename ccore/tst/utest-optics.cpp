@@ -19,9 +19,6 @@
 */
 
 
-#pragma once
-
-
 #include "gtest/gtest.h"
 
 #include "cluster/optics.hpp"

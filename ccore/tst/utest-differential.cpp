@@ -18,9 +18,6 @@
 *
 */
 
-#ifndef _UTEST_DIFFERENTIAL_
-#define _UTEST_DIFFERENTIAL_
-
 
 #include "differential/differ_state.hpp"
 
@@ -147,6 +144,3 @@ TEST(utest_differential, assign_operations) {
 	state1 = state2;
 	ASSERT_TRUE(state1 == state2);
 }
-
-
-#endif

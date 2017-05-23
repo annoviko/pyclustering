@@ -18,9 +18,6 @@
 *
 */
 
-#ifndef _UTEST_AGGLOMERATIVE_
-#define _UTEST_AGGLOMERATIVE_
-
 
 #include "gtest/gtest.h"
 
@@ -29,8 +26,6 @@
 
 #include <algorithm>
 
-
-using namespace container;
 
 
 static void
@@ -184,5 +179,3 @@ TEST(utest_agglomerative, clustering_sampl_simple_03_one_cluster_link_single) {
     std::vector<size_t> expected_clusters_length_2 = {60};
     template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_03), 1, cluster_analysis::type_link::SINGLE_LINK, expected_clusters_length_2);
 }
-
-#endif

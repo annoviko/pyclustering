@@ -18,9 +18,6 @@
 *
 */
 
-#ifndef _UTEST_SOM_
-#define _UTEST_SOM_
-
 
 #include "gtest/gtest.h"
 
@@ -248,5 +245,3 @@ TEST(utest_som, double_training) {
 
     ASSERT_EQ(sample_simple_01->size(), number_awards);
 }
-
-#endif

@@ -18,7 +18,6 @@
 *
 */
 
-#pragma once
 
 #include "gtest/gtest.h"
 
@@ -26,9 +25,6 @@
 #include "tsp/distance_matrix.hpp"
 
 #include "utils.hpp"
-
-
-using namespace container;
 
 
 const double EPS = 0.0000001; 

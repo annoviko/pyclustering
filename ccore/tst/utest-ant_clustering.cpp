@@ -18,7 +18,6 @@
 *
 */
 
-#pragma once
 
 #include "gtest/gtest.h"
 
@@ -28,8 +27,6 @@
 
 #include "utils.hpp"
 
-
-using namespace container;
 
 void test_equal_clusters(cluster_analysis::cluster_data &res, std::vector<std::size_t> idx)
 {

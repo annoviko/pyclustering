@@ -116,9 +116,6 @@
     <ClCompile Include="..\src\cluster\kmedoids.cpp">
       <Filter>Tested Code\cluster</Filter>
     </ClCompile>
-    <ClCompile Include="utest-cluster.cpp">
-      <Filter>Unit Tests</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\cluster\ant_clustering_mean.cpp">
       <Filter>Tested Code\cluster</Filter>
     </ClCompile>
@@ -148,6 +145,96 @@
     </ClCompile>
     <ClCompile Include="..\src\interface\pyclustering_package.cpp">
       <Filter>Tested Code\interface</Filter>
+    </ClCompile>
+    <ClCompile Include="utest-adjacency.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="utest-adjacency_bit_matrix.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="utest-adjacency_connector.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="utest-adjacency_list.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="utest-adjacency_matrix.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="utest-adjacency_weight_list.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="utest-agglomerative.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="utest-ant_clustering.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="utest-ant_colony.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="utest-cluster.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="utest-cure.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="utest-dbscan.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="utest-differential.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="utest-hsyncnet.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="utest-interface-xmeans.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="utest-kdtree.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="utest-kmeans.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="utest-kmedians.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="utest-kmedoids.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="utest-legion.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="utest-optics.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="utest-ordering_analyser.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="utest-pcnn.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="utest-rock.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="utest-som.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="utest-somsc.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="utest-sync.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="utest-syncnet.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="utest-syncpr.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="utest-xmeans.cpp">
+      <Filter>Unit Tests</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -238,63 +325,6 @@
     <ClInclude Include="..\src\tsp\params_container.hpp">
       <Filter>Tested Code\tsp</Filter>
     </ClInclude>
-    <ClInclude Include="utest_adjacency_connector.hpp">
-      <Filter>Unit Tests</Filter>
-    </ClInclude>
-    <ClInclude Include="utest-adjacency.hpp">
-      <Filter>Unit Tests</Filter>
-    </ClInclude>
-    <ClInclude Include="utest-adjacency_bit_matrix.hpp">
-      <Filter>Unit Tests</Filter>
-    </ClInclude>
-    <ClInclude Include="utest-adjacency_list.hpp">
-      <Filter>Unit Tests</Filter>
-    </ClInclude>
-    <ClInclude Include="utest-adjacency_matrix.hpp">
-      <Filter>Unit Tests</Filter>
-    </ClInclude>
-    <ClInclude Include="utest-adjacency_weight_list.hpp">
-      <Filter>Unit Tests</Filter>
-    </ClInclude>
-    <ClInclude Include="utest-agglomerative.hpp">
-      <Filter>Unit Tests</Filter>
-    </ClInclude>
-    <ClInclude Include="utest-ant_colony.hpp">
-      <Filter>Unit Tests</Filter>
-    </ClInclude>
-    <ClInclude Include="utest-differential.hpp">
-      <Filter>Unit Tests</Filter>
-    </ClInclude>
-    <ClInclude Include="utest-hsyncnet.hpp">
-      <Filter>Unit Tests</Filter>
-    </ClInclude>
-    <ClInclude Include="utest-kdtree.hpp">
-      <Filter>Unit Tests</Filter>
-    </ClInclude>
-    <ClInclude Include="utest-kmedians.hpp">
-      <Filter>Unit Tests</Filter>
-    </ClInclude>
-    <ClInclude Include="utest-legion.hpp">
-      <Filter>Unit Tests</Filter>
-    </ClInclude>
-    <ClInclude Include="utest-pcnn.hpp">
-      <Filter>Unit Tests</Filter>
-    </ClInclude>
-    <ClInclude Include="utest-som.hpp">
-      <Filter>Unit Tests</Filter>
-    </ClInclude>
-    <ClInclude Include="utest-sync.hpp">
-      <Filter>Unit Tests</Filter>
-    </ClInclude>
-    <ClInclude Include="utest-syncnet.hpp">
-      <Filter>Unit Tests</Filter>
-    </ClInclude>
-    <ClInclude Include="utest-syncpr.hpp">
-      <Filter>Unit Tests</Filter>
-    </ClInclude>
-    <ClInclude Include="utest-xmeans.hpp">
-      <Filter>Unit Tests</Filter>
-    </ClInclude>
     <ClInclude Include="samples.hpp">
       <Filter>Source Files</Filter>
     </ClInclude>
@@ -318,12 +348,6 @@
     </ClInclude>
     <ClInclude Include="..\src\definitions.hpp">
       <Filter>Tested Code</Filter>
-    </ClInclude>
-    <ClInclude Include="utest-cluster.hpp">
-      <Filter>Unit Tests</Filter>
-    </ClInclude>
-    <ClInclude Include="utest-kmedoids.hpp">
-      <Filter>Unit Tests</Filter>
     </ClInclude>
     <ClInclude Include="..\src\cluster\ant_clustering_mean.hpp">
       <Filter>Tested Code\cluster</Filter>
@@ -352,23 +376,8 @@
     <ClInclude Include="..\src\cluster\rock.hpp">
       <Filter>Tested Code\cluster</Filter>
     </ClInclude>
-    <ClInclude Include="utest-ant_clustering.hpp">
-      <Filter>Unit Tests</Filter>
-    </ClInclude>
-    <ClInclude Include="utest-cure.hpp">
-      <Filter>Unit Tests</Filter>
-    </ClInclude>
-    <ClInclude Include="utest-dbscan.hpp">
-      <Filter>Unit Tests</Filter>
-    </ClInclude>
-    <ClInclude Include="utest-rock.hpp">
-      <Filter>Unit Tests</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\cluster\kmeans_data.hpp">
       <Filter>Tested Code\cluster</Filter>
-    </ClInclude>
-    <ClInclude Include="utest-kmeans.hpp">
-      <Filter>Unit Tests</Filter>
     </ClInclude>
     <ClInclude Include="..\src\cluster\optics_data.hpp">
       <Filter>Tested Code\cluster</Filter>
@@ -376,14 +385,8 @@
     <ClInclude Include="..\src\cluster\optics.hpp">
       <Filter>Tested Code\cluster</Filter>
     </ClInclude>
-    <ClInclude Include="utest-optics.hpp">
-      <Filter>Unit Tests</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\cluster\ordering_analyser.hpp">
       <Filter>Tested Code\cluster</Filter>
-    </ClInclude>
-    <ClInclude Include="utest_ordering_analyser.hpp">
-      <Filter>Unit Tests</Filter>
     </ClInclude>
     <ClInclude Include="..\src\cluster\somsc.hpp">
       <Filter>Tested Code\cluster</Filter>
@@ -391,17 +394,17 @@
     <ClInclude Include="..\src\cluster\somsc_data.hpp">
       <Filter>Tested Code\cluster</Filter>
     </ClInclude>
-    <ClInclude Include="utest-somsc.hpp">
-      <Filter>Unit Tests</Filter>
-    </ClInclude>
-    <ClInclude Include="utest-interface-xmeans.hpp">
-      <Filter>Unit Tests</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\interface\xmeans_interface.h">
       <Filter>Tested Code\interface</Filter>
     </ClInclude>
     <ClInclude Include="..\src\interface\pyclustering_package.hpp">
       <Filter>Tested Code\interface</Filter>
+    </ClInclude>
+    <ClInclude Include="utest-cluster.hpp">
+      <Filter>Unit Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="utest-adjacency.hpp">
+      <Filter>Unit Tests</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

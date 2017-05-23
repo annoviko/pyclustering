@@ -18,9 +18,6 @@
 *
 */
 
-#ifndef _UTEST_ADJACENCY_BIT_MATRIX_H_
-#define _UTEST_ADJACENCY_BIT_MATRIX_H_
-
 
 #include "gtest/gtest.h"
 
@@ -127,57 +124,54 @@ TEST(utest_adjacency_bit_matrix, move_matrix) {
 
 
 TEST(utest_adjacency_bit_matrix, has_no_connection) {
-	adjacency_bit_matrix matrix(30);
-	template_has_no_connection(matrix);
+    adjacency_bit_matrix matrix(30);
+    template_has_no_connection(matrix);
 }
 
 
 TEST(utest_adjacency_bit_matrix, has_all_connection) {
-	adjacency_bit_matrix matrix(25);
-	template_has_all_connection(matrix);
+    adjacency_bit_matrix matrix(25);
+    template_has_all_connection(matrix);
 }
 
 
 TEST(utest_adjacency_bit_matrix, set_get_connection) {
     adjacency_bit_matrix matrix(100);
-	template_set_connection(matrix);
+    template_set_connection(matrix);
 }
 
 
 TEST(utest_adjacency_bit_matrix, erase_get_connection) {
     adjacency_bit_matrix matrix(20);
-	template_erase_connection(matrix);
+    template_erase_connection(matrix);
 }
 
 
 TEST(utest_adjacency_bit_matrix, get_neighbors_sizes) {
     adjacency_bit_matrix matrix(20);
-	template_get_neighbors_sizes(matrix);
+    template_get_neighbors_sizes(matrix);
 }
 
 
 TEST(utest_adjacency_bit_matrix, get_neighbors_indexes) {
     adjacency_bit_matrix matrix(20);
-	template_get_neighbors_indexes(matrix);
+    template_get_neighbors_indexes(matrix);
 }
 
 
 TEST(utest_adjacency_bit_matrix, no_get_neighbors) {
-	adjacency_bit_matrix matrix(41);
-	template_no_get_neighbors(matrix);
+    adjacency_bit_matrix matrix(41);
+    template_no_get_neighbors(matrix);
 }
 
 
 TEST(utest_adjacency_bit_matrix, all_get_neighbors) {
-	adjacency_bit_matrix matrix(9);
-	template_all_get_neighbors(matrix);
+    adjacency_bit_matrix matrix(9);
+    template_all_get_neighbors(matrix);
 }
 
 
 TEST(utest_adjacency_bit_matrix, get_neighbors_after_erase) {
-	adjacency_bit_matrix matrix(18);
-	template_get_neighbors_after_erase(matrix);
+    adjacency_bit_matrix matrix(18);
+    template_get_neighbors_after_erase(matrix);
 }
-
-
-#endif

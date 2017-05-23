@@ -18,15 +18,15 @@
 *
 */
 
-#ifndef _UTEST_KDTREE_
-#define _UTEST_KDTREE_
-
 
 #include "gtest/gtest.h"
 
 #include "container/kdtree.hpp"
 
 #include <algorithm>
+
+
+using namespace container;
 
 
 class utest_kdtree : public ::testing::Test {
@@ -224,5 +224,3 @@ TEST_F(utest_kdtree, insert_remove_permutation_vector) {
 	DestroyPoints(test_sample_point_vector);
 	delete permutated_point_vector;
 }
-
-#endif

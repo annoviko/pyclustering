@@ -18,9 +18,6 @@
 *
 */
 
-#ifndef _UTEST_PCNN_
-#define _UTEST_PCNN_
-
 
 #include "gtest/gtest.h"
 
@@ -315,5 +312,3 @@ TEST(utest_pcnn, ensemble_allocation_fast_linking) {
 	template_ensemble_allocation(partial_stimulus.size(), 50, connection_t::CONNECTION_ALL_TO_ALL, partial_stimulus, &params);
 	template_ensemble_allocation(no_stimulus.size(), 50, connection_t::CONNECTION_ALL_TO_ALL, no_stimulus, &params);
 }
-
-#endif

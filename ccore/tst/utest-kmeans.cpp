@@ -18,9 +18,6 @@
 *
 */
 
-#ifndef _UTEST_KMEANS_
-#define _UTEST_KMEANS_
-
 
 #include "gtest/gtest.h"
 
@@ -110,6 +107,3 @@ TEST(utest_kmeans, one_dimension_sample_simple_08) {
     std::vector<size_t> expected_clusters_length = { 15, 30, 20, 80 };
     template_kmeans_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_08), start_centers, expected_clusters_length);
 }
-
-
-#endif

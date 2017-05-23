@@ -18,9 +18,6 @@
 *
 */
 
-#ifndef _UTEST_HSYNCNET_
-#define _UTEST_HSYNCNET_
-
 
 #include "gtest/gtest.h"
 
@@ -66,5 +63,3 @@ TEST(utest_hsyncnet, allocation_2_clusters) {
 TEST(utest_hsyncnet, allocation_1_clusters) {
 	template_cluster_allocation(1);
 }
-
-#endif

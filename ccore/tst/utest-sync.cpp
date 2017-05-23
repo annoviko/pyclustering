@@ -18,9 +18,6 @@
 *
 */
 
-#ifndef _UTEST_SYNC_
-#define _UTEST_SYNC_
-
 
 #include "gtest/gtest.h"
 
@@ -244,6 +241,3 @@ TEST(utest_sync, correlation_matrix_not_similar_2) {
 TEST(utest_sync, correlation_matrix_one_oscillator) {
     template_correlation_matrix(sync_network_state(0, {1.0}));
 }
-
-
-#endif

@@ -18,9 +18,6 @@
 *
 */
 
-#ifndef TST_UTEST_KMEDOIDS_HPP_
-#define TST_UTEST_KMEDOIDS_HPP_
-
 
 #include "gtest/gtest.h"
 
@@ -123,6 +120,3 @@ TEST(utest_kmedoids, allocation_wrong_initial_medoids_sample_simple_04) {
     const std::vector<size_t> expected_clusters_length;     /* empty - just check index point existence */
     template_kmedoids_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_04), start_medoids, expected_clusters_length);
 }
-
-
-#endif

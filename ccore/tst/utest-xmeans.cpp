@@ -18,9 +18,6 @@
 *
 */
 
-#ifndef _UTEST_XMEANS_
-#define _UTEST_XMEANS_
-
 
 #include "gtest/gtest.h"
 
@@ -29,6 +26,9 @@
 #include "cluster/xmeans.hpp"
 
 #include <algorithm>
+
+
+using namespace cluster_analysis;
 
 
 static void
@@ -118,5 +118,3 @@ TEST(utest_xmeans, allocation_mndl_sample_simple_04) {
     std::vector<unsigned int> expected_clusters_length = {15, 15, 15, 15, 15};
     template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_04), start_centers, 20, expected_clusters_length, splitting_type::MINIMUM_NOISELESS_DESCRIPTION_LENGTH);
 }
-
-#endif

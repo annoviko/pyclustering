@@ -18,9 +18,6 @@
 *
 */
 
-#ifndef _UTEST_SYNCNET_
-#define _UTEST_SYNCNET_
-
 
 #include "gtest/gtest.h"
 
@@ -135,5 +132,3 @@ TEST(utest_syncnet, two_clusters_rk4_solver_without_collection) {
 TEST(utest_syncnet, two_clusters_rkf45_solver_without_collection) {
 	template_two_cluster_allocation(solve_type::RKF45, false);
 }
-
-#endif
