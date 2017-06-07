@@ -28,7 +28,7 @@
 
 #if defined (__GNUC__) && defined(__unix__)
     #define DECLARATION __attribute__ ((__visibility__("default")))
-#elif defined (WIN32)
+#elif defined (WIN32) || (_WIN64)
     #define DECLARATION __declspec(dllexport)
 #else
     #error Unsupported platform
