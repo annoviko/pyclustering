@@ -852,6 +852,12 @@ def draw_dynamics(t, dyn, x_title = None, y_title = None, x_lim = None, y_lim = 
          
     number_lines = 0;
     
+    stage_xlim = None;
+    if (x_lim is not None):
+        stage_xlim = x_lim;
+    elif (len(t) > 0):
+        stage_xlim = [0, t[len(t) - 1]];
+    
     if ( (isinstance(separate, bool) is True) and (separate is True) ):
         if (isinstance(dyn[0], list) is True):
             number_lines = len(dyn[0]);
@@ -893,14 +899,14 @@ def draw_dynamics(t, dyn, x_title = None, y_title = None, x_lim = None, y_lim = 
                         axes[index_stage].get_xaxis().set_visible(False);
                               
                     axes[index_stage].plot(t, y, 'b-', linewidth = 0.5); 
-                    set_ax_param(axes[index_stage], x_title, y_title, x_lim, y_lim, x_labels, y_labels, True);
+                    set_ax_param(axes[index_stage], x_title, y_title, stage_xlim, y_lim, x_labels, y_labels, True);
                 
             else:
                 axes.plot(t, y, 'b-', linewidth = 0.5);
-                set_ax_param(axes, x_title, y_title, x_lim, y_lim, x_labels, y_labels, True);
+                set_ax_param(axes, x_title, y_title, stage_xlim, y_lim, x_labels, y_labels, True);
     else:
-        axes.plot(t, dyn, 'b-', linewidth = 0.5);     
-        set_ax_param(axes, x_title, y_title, x_lim, y_lim, x_labels, y_labels, True);
+        axes.plot(t, dyn, 'b-', linewidth = 0.5);
+        set_ax_param(axes, x_title, y_title, stage_xlim, y_lim, x_labels, y_labels, True);
     
     if (dysplay_result is True):
         plt.show();
