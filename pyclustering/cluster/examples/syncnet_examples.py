@@ -57,6 +57,8 @@ def template_clustering(file, radius, order, show_dyn = False, show_conn = False
         clusters = analyser.allocate_clusters(tolerance);
         print("amout of clusters: ", len(clusters));
         draw_clusters(sample, clusters);
+    
+    return (sample, clusters);
      
      
 def cluster_simple1():
@@ -171,8 +173,22 @@ def animation_cluster_allocation_lsun():
  
 def animation_cluster_allocation_target():
     template_animated_clustering(FCPS_SAMPLES.SAMPLE_TARGET, 0.95, 0.9999, 6);
- 
- 
+
+def display_fcps_clustering_results():
+    (simple4, simple4_clusters) = template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 1, 0.999, show_dyn = False, show_conn = False, ccore_flag = True);
+    (simple_elongate, simple_elongate_clusters) = template_clustering(SIMPLE_SAMPLES.SAMPLE_ELONGATE, 0.5, 0.999, show_dyn = False, show_conn = False, ccore_flag = True);
+    (lsun, lsun_clusters) = template_clustering(FCPS_SAMPLES.SAMPLE_LSUN, 0.45, 0.9995, show_dyn = False, show_conn = False, ccore_flag = True, tolerance = 0.2);
+
+    visualizer = cluster_visualizer(1, 3);
+    visualizer.append_clusters(simple4_clusters, simple4, 0);
+    visualizer.append_clusters(simple_elongate_clusters, simple_elongate, 1);
+    visualizer.append_clusters(lsun_clusters, lsun, 2);
+
+    visualizer.show();
+
+
+display_fcps_clustering_results();
+
 cluster_simple1();
 cluster_simple2();
 cluster_simple3();
