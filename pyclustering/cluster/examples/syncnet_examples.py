@@ -59,48 +59,48 @@ def template_clustering(file, radius, order, show_dyn = False, show_conn = False
         draw_clusters(sample, clusters);
     
     return (sample, clusters);
-     
-     
+
+
 def cluster_simple1():
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, 0.999, show_dyn = True, show_conn = True);
-     
+
 def cluster_simple2():
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 1, 0.999, show_dyn = True, show_conn = True);
-     
+
 def cluster_simple3():
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 1, 0.999, show_dyn = True, show_conn = True);
- 
+
 def cluster_simple4():
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 1, 0.999, show_dyn = True, show_conn = True);
-     
+
 def cluster_simple5():
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 1, 0.999, show_dyn = True, show_conn = True);
- 
+
 def cluster_elongate():
     template_clustering(SIMPLE_SAMPLES.SAMPLE_ELONGATE, 0.5, 0.999, show_dyn = True, show_conn = True);
- 
+
 def cluster_lsun():
     template_clustering(FCPS_SAMPLES.SAMPLE_LSUN, 0.45, 0.9995, show_dyn = True, show_conn = True);
- 
+
 def cluster_target():
     template_clustering(FCPS_SAMPLES.SAMPLE_TARGET, 0.95, 0.99995, show_dyn = False, show_conn = True);
- 
+
 def cluster_hepta():
     template_clustering(FCPS_SAMPLES.SAMPLE_HEPTA, 1, 0.999, show_dyn = True, show_conn = True);
-     
+
 def cluster_chainlink():
     template_clustering(FCPS_SAMPLES.SAMPLE_CHAINLINK, 0.8, 0.999, show_dyn = True, show_conn = True);
- 
+
 def cluster_two_diamonds():
     template_clustering(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, 0.3, 0.999, show_dyn = False, show_conn = False);  
- 
+
 def cluster_atom():
     template_clustering(FCPS_SAMPLES.SAMPLE_ATOM, 25, 0.999, show_dyn = False, show_conn = False); 
-     
+
 def cluster_wing_nut():
     template_clustering(FCPS_SAMPLES.SAMPLE_WING_NUT, 0.28, 0.999, show_dyn = False, show_conn = False); 
- 
- 
+
+
 def experiment_execution_time(show_dyn = False, ccore = False):
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, 0.999, show_dyn, False, True, False, ccore);
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 1, 0.999, show_dyn, False, True, False, ccore);
@@ -117,24 +117,24 @@ def experiment_execution_time(show_dyn = False, ccore = False):
     template_clustering(FCPS_SAMPLES.SAMPLE_HEPTA, 1, 0.98, show_dyn, False, True, False, ccore);
     template_clustering(FCPS_SAMPLES.SAMPLE_TETRA, 0.3, 0.98, show_dyn, False, True, False, ccore);
     template_clustering(FCPS_SAMPLES.SAMPLE_ATOM, 25, 0.98, show_dyn, False, True, False, ccore);
- 
+
 def cluster_simple1_conn_weight():
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, 0.999, show_dyn = True, show_conn = True, ena_conn_weight = True); 
-     
+
 def cluster_simple2_conn_weight():
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 2, 0.999, show_dyn = True, show_conn = True, ena_conn_weight = True);   
- 
+
 def cluster_simple3_conn_weight():
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 2, 0.999, show_dyn = True, show_conn = True, ena_conn_weight = True);
- 
+
 def cluster_simple4_conn_weight():
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 10, 0.999, show_dyn = True, show_conn = True, ena_conn_weight = True);
- 
+
 def cluster_simple5_conn_weight():
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 10, 0.999, show_dyn = True, show_conn = True, ena_conn_weight = True);
- 
- 
-def template_animated_clustering(file, radius, order, expected_cluster_amount):
+
+
+def template_animated_clustering(file, radius, order, expected_cluster_amount, title_animation = None):
     sample = read_sample(file);
     expected_result_obtained = False;
      
@@ -157,7 +157,7 @@ def template_animated_clustering(file, radius, order, expected_cluster_amount):
         else:
             print("Expected result is NOT obtained - rendering is NOT started ( actual:", len(clusters), ")...");
      
-    syncnet_visualizer.animate_cluster_allocation(sample, analyser, tolerance = 0.1, save_movie = "clustering_animation.mp4");
+    syncnet_visualizer.animate_cluster_allocation(sample, analyser, tolerance = 0.1, save_movie = "clustering_animation.mp4", title = title_animation);
  
 def animation_cluster_allocation_sample_simple3():
     template_animated_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 1.0, 0.999, 4);
@@ -174,6 +174,10 @@ def animation_cluster_allocation_lsun():
 def animation_cluster_allocation_target():
     template_animated_clustering(FCPS_SAMPLES.SAMPLE_TARGET, 0.95, 0.9999, 6);
 
+def animation_cluster_allocation_hepta():
+    template_animated_clustering(FCPS_SAMPLES.SAMPLE_HEPTA, 1, 0.995, 7, "Sync clustering\nOscillatory based algorithm");
+
+
 def display_fcps_clustering_results():
     (simple4, simple4_clusters) = template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 1, 0.999, show_dyn = False, show_conn = False, ccore_flag = True);
     (simple_elongate, simple_elongate_clusters) = template_clustering(SIMPLE_SAMPLES.SAMPLE_ELONGATE, 0.5, 0.999, show_dyn = False, show_conn = False, ccore_flag = True);
@@ -186,8 +190,6 @@ def display_fcps_clustering_results():
 
     visualizer.show();
 
-
-display_fcps_clustering_results();
 
 cluster_simple1();
 cluster_simple2();
@@ -210,6 +212,7 @@ cluster_simple3_conn_weight();
 cluster_simple4_conn_weight();
 cluster_simple5_conn_weight();
 
+
 experiment_execution_time(False, False);
 experiment_execution_time(False, True);
 
@@ -219,3 +222,7 @@ animation_cluster_allocation_sample_simple5();
 animation_cluster_allocation_elongate();
 animation_cluster_allocation_lsun();
 animation_cluster_allocation_target();
+animation_cluster_allocation_hepta();
+
+
+display_fcps_clustering_results();
