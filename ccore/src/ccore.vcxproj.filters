@@ -157,6 +157,9 @@
     <ClCompile Include="interface\xmeans_interface.cpp">
       <Filter>Source Files\interface</Filter>
     </ClCompile>
+    <ClCompile Include="interface\sync_interface.cpp">
+      <Filter>Source Files\interface</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cluster\agglomerative.hpp">
@@ -344,6 +347,9 @@
     </ClInclude>
     <ClInclude Include="cluster\xmeans_data.hpp">
       <Filter>Source Files\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\sync_interface.h">
+      <Filter>Source Files\interface</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

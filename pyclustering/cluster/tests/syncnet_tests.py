@@ -29,6 +29,7 @@ import unittest;
 import matplotlib;
 matplotlib.use('Agg');
 
+
 from pyclustering.nnet import initial_type, conn_represent, solve_type;
 
 from pyclustering.cluster.syncnet import syncnet, syncnet_visualizer;
@@ -37,7 +38,7 @@ from pyclustering.utils import read_sample;
 
 from numpy import pi;
 
-from pyclustering.samples.definitions import SIMPLE_SAMPLES;
+from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES
 
 
 class Test(unittest.TestCase):
@@ -222,6 +223,23 @@ class Test(unittest.TestCase):
         analyser = network.process(0.998, solve_type.FAST, True);
         
         syncnet_visualizer.animate_cluster_allocation(sample, analyser);
+
+
+    def templateShowNetwork(self, file, radius, ccore_flag):
+        sample = read_sample(file);
+        network = syncnet(sample, radius, ccore = ccore_flag);
+        network.show_network();
+
+    def testShowNetwork2Dimension(self):
+        self.templateShowNetwork(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1.0, False);
+        self.templateShowNetwork(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 2.0, False);
+
+    def testShowNetwork2DimensionByCore(self):
+        self.templateShowNetwork(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1.0, True);
+        self.templateShowNetwork(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 2.0, True);
+ 
+    def testShowNetwork3DimensionByCore(self):
+        self.templateShowNetwork(FCPS_SAMPLES.SAMPLE_HEPTA, 1.0, True);
 
 
 if __name__ == "__main__":

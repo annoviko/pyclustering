@@ -66,9 +66,21 @@ def sync_local_order(pointer_network):
     return ccore.sync_local_order(pointer_network);
 
 
+def sync_connectivity_matrix(pointer_network):
+    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
+    ccore.sync_connectivity_matrix.restype = POINTER(pyclustering_package);
+    
+    package = ccore.sync_connectivity_matrix(pointer_network);
+    
+    connectivity_matrix = extract_pyclustering_package(package);
+    ccore.free_pyclustering_package(package);
+    
+    return connectivity_matrix;
+
+
 def sync_dynamic_get_size(pointer_dynamic):
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
-    ccore.sync_dynamic_get_time.restype = c_uint;
+    ccore.sync_dynamic_get_time.restype = c_size_t;
     return ccore.sync_dynamic_get_size(pointer_dynamic);
 
 

@@ -35,14 +35,14 @@ from pyclustering.samples.definitions import FCPS_SAMPLES;
 from pyclustering.utils import draw_clusters;
 from pyclustering.utils import read_sample;
 from pyclustering.utils import timedcall;
- 
- 
+
+
 def template_clustering(file, radius, order, show_dyn = False, show_conn = False, show_clusters = True, ena_conn_weight = False, ccore_flag = True, tolerance = 0.1):
     sample = read_sample(file);
     network = syncnet(sample, radius, enable_conn_weight = ena_conn_weight, ccore = ccore_flag);
      
     (ticks, analyser) = timedcall(network.process, order, solve_type.FAST, show_dyn);
-    print("Sample: ", file, "\t\tExecution time: ", ticks, "\n");
+    print("Sample: ", file, "\t\tExecution time: ", ticks);
      
     if (show_dyn == True):
         sync_visualizer.show_output_dynamic(analyser);
@@ -50,14 +50,15 @@ def template_clustering(file, radius, order, show_dyn = False, show_conn = False
         #sync_visualizer.animate_output_dynamic(analyser);
         #sync_visualizer.animate_correlation_matrix(analyser, colormap = 'hsv');
      
-    if ( (show_conn == True) and (ccore_flag == False) ):
+    if (show_conn == True):
         network.show_network();
      
     if (show_clusters == True):
         clusters = analyser.allocate_clusters(tolerance);
-        print("amout of clusters: ", len(clusters));
+        print("Amount of allocated clusters: ", len(clusters));
         draw_clusters(sample, clusters);
     
+    print("----------------------------\n");
     return (sample, clusters);
 
 

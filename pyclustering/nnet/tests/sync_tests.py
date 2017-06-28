@@ -29,6 +29,7 @@ import unittest;
 import matplotlib;
 matplotlib.use('Agg');
 
+
 from pyclustering.nnet import *;
 from pyclustering.nnet.sync import sync_network, sync_dynamic, sync_visualizer;
 
@@ -43,7 +44,7 @@ class Test(unittest.TestCase):
      
     def testCreationDeletionByCore(self):
         # Crash occurs in case of memory leak
-        for iteration in range(0, 15):
+        for _ in range(0, 15):
             network = sync_network(4096, 1, type_conn = conn_type.ALL_TO_ALL, ccore = True);
             del network;
        

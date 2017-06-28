@@ -35,6 +35,7 @@ from pyclustering.cluster.encoder import type_encoding;
 from pyclustering.cluster import cluster_visualizer;
 
 from pyclustering.core.syncnet_wrapper import syncnet_create_network, syncnet_process, syncnet_destroy_network, syncnet_analyser_destroy;
+from pyclustering.core.sync_wrapper import sync_connectivity_matrix;
 
 from pyclustering.nnet.sync import sync_dynamic, sync_network, sync_visualizer;
 from pyclustering.nnet import conn_represent, initial_type, conn_type, solve_type;
@@ -218,12 +219,17 @@ class syncnet(sync_network):
         
         if (ccore is True):
             self.__ccore_network_pointer = syncnet_create_network(sample, radius, initial_phases, enable_conn_weight);
+            
+            # Fill context that used in case of CCORE.
+            self._osc_loc = sample;
+            self._num_osc = len(sample);
+            self._conn_represent = conn_represent.MATRIX;
+
         else:
             super().__init__(len(sample), 1, 0, conn_type.DYNAMIC, initial_phases);
             
             self._conn_weight = None;
             self._ena_conn_weight = enable_conn_weight;
-            self._osc_loc = sample;
             self._conn_represent = conn_repr;
             
             # Create connections.
@@ -240,8 +246,6 @@ class syncnet(sync_network):
         if (self.__ccore_network_pointer is not None):
             syncnet_destroy_network(self.__ccore_network_pointer);
             self.__ccore_network_pointer = None;
-        else:
-            self._osc_loc = None;   # pointer to external object
 
 
     def _create_connections(self, radius):
@@ -345,8 +349,8 @@ class syncnet(sync_network):
         
         """
         
-        if (self.__ccore_network_pointer is not None):
-            raise NameError("Not supported for CCORE");
+        if ( (self.__ccore_network_pointer is not None) and (self._osc_conn is None) ):
+            self._osc_conn = sync_connectivity_matrix(self.__ccore_network_pointer);
         
         dimension = len(self._osc_loc[0]);
         if ( (dimension != 3) and (dimension != 2) ):

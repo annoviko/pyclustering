@@ -18,8 +18,7 @@
 *
 */
 
-#ifndef SRC_INTERFACE_PYCLUSTERING_PACKAGE_HPP_
-#define SRC_INTERFACE_PYCLUSTERING_PACKAGE_HPP_
+#pragma once
 
 
 #include <cstddef>
@@ -44,7 +43,7 @@ typedef enum pyclustering_type_data {
 
 typedef struct pyclustering_package {
 public:
-    size_t          size;
+    size_t          size;      /* size of data in elements */
     unsigned int    type;      /* pyclustering type data    */
     void            * data;    /* pointer to data           */
 
@@ -60,7 +59,7 @@ public:
 
 template <class TypeContainer>
 pyclustering_package * create_package(const TypeContainer * const data) {
-	using contaner_data_t = typename TypeContainer::value_type;
+    using contaner_data_t = typename TypeContainer::value_type;
 
     pyclustering_type_data type_package = PYCLUSTERING_TYPE_UNDEFINED;
     if (std::is_same<contaner_data_t, int>::value) {
@@ -90,10 +89,10 @@ pyclustering_package * create_package(const TypeContainer * const data) {
     package->size = data->size();
     package->data = (void *) new contaner_data_t[package->size];
 
-	std::size_t index = 0;
-	for (auto iter = std::begin(*data); iter != std::end(*data); iter++, index++) {
-		( (contaner_data_t *) package->data)[index] = *iter;
-	}
+    std::size_t index = 0;
+    for (auto iter = std::begin(*data); iter != std::end(*data); iter++, index++) {
+        ( (contaner_data_t *) package->data)[index] = *iter;
+    }
 
     return package;
 }
@@ -127,6 +126,3 @@ pyclustering_package * create_package(const std::vector< std::vector<TypeObject>
 
    return package;
 }
-
-
-#endif

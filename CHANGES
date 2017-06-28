@@ -5,6 +5,9 @@ CHANGE NOTES FOR 0.7.dev0 (STARTED Jun 01, 2016)
 ------------------------------------------------------------------------
 
 GENERAL CHANGES (pyclustering):
+- Implemented feature to show network structure of Sync family oscillatory networks in case 'ccore' usage.
+  See: https://github.com/annoviko/pyclustering/issues/344
+
 - Implemented feature to colorize OPTICS ordering diagram when amount of clusters is specified.
   See: no reference.
 
@@ -49,6 +52,9 @@ GENERAL CHANGES (ccore):
 
 - Implemented OPTICS algorithm and interface for client that results all clustering results (ccore.cluster_analysis.optics).
   See: https://github.com/annoviko/pyclustering/issues/120
+
+- Implmeneted packing of connectivity matrix of Sync family oscillatory networks (ccore.interface.sync_interface).
+  See: https://github.com/annoviko/pyclustering/issues/344
 
 
 CORRECTED MAJOR BUGS:
