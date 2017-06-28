@@ -216,21 +216,20 @@ class syncnet(sync_network):
         """
         
         self.__ccore_network_pointer = None;
+        self._osc_loc = sample;
+        self._num_osc = len(sample);
         
         if (ccore is True):
             self.__ccore_network_pointer = syncnet_create_network(sample, radius, initial_phases, enable_conn_weight);
             
-            # Fill context that used in case of CCORE.
-            self._osc_loc = sample;
-            self._num_osc = len(sample);
+            # Default representation that is returned by CCORE is matrix.
             self._conn_represent = conn_represent.MATRIX;
 
         else:
-            super().__init__(len(sample), 1, 0, conn_type.DYNAMIC, initial_phases);
+            super().__init__(len(sample), 1, 0, conn_type.DYNAMIC, conn_repr, initial_phases, False);
             
             self._conn_weight = None;
             self._ena_conn_weight = enable_conn_weight;
-            self._conn_represent = conn_repr;
             
             # Create connections.
             if (radius is not None):
