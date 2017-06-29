@@ -48,6 +48,7 @@ def template_clustering(file, number_clusters, arg_order = 0.999, arg_collect_dy
 
 def cluster_sample1():
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2);
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, ccore_flag = True);
     
 def cluster_sample2():
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 3);

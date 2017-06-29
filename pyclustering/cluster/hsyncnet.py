@@ -134,13 +134,12 @@ class hsyncnet(syncnet):
         
             analyser = self.simulate_dynamic(order, solution, collect_dynamic);
             if (collect_dynamic == True):
-                dyn_phase += analyser.output;
+                if (len(dyn_phase) == 0):
+                    dyn_time.append(0);
+                    dyn_phase.append(analyser.output[0]);
                 
-                if (len(dyn_time) > 0):
-                    point_time_last = dyn_time[len(dyn_time) - 1];
-                    dyn_time += [time_point + point_time_last for time_point in analyser.time];
-                else:
-                    dyn_time += analyser.time;
+                dyn_phase.append(analyser.output[len(analyser.output) - 1]);
+                dyn_time.append(len(dyn_time));
             
             clusters = analyser.allocate_sync_ensembles(0.05);
             
