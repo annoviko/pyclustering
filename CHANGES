@@ -58,6 +58,12 @@ GENERAL CHANGES (ccore):
 
 
 CORRECTED MAJOR BUGS:
+- Bug with loosing of the initial state of hSync output dynamic in case of CCORE usage (ccore.cluster.hsyncnet).
+  See: https://github.com/annoviko/pyclustering/issues/346
+
+- Bug with hSync output dynamic that was displayed with discontinous parts as a set of rectangles (pyclustering.cluster.hsyncnet).
+  See: https://github.com/annoviko/pyclustering/issues/345
+
 - Bug with visualization of CNN network in case 3D data (pyclustering.nnet.cnn).
   See: https://github.com/annoviko/pyclustering/issues/338
 

@@ -38,13 +38,13 @@ namespace container {
 template <typename network_dynamic_type>
 class dynamic_data {
 public:
-    typedef network_dynamic_type				value_type;
-    typedef std::vector<value_type>				output_dynamic;
+    typedef network_dynamic_type                value_type;
+    typedef std::vector<value_type>             output_dynamic;
 
-    typedef typename output_dynamic::iterator					iterator;
-    typedef typename output_dynamic::const_iterator				const_iterator;
-    typedef typename output_dynamic::reverse_iterator			reverse_iterator;
-    typedef typename output_dynamic::const_reverse_iterator		const_reverse_iterator;
+    typedef typename output_dynamic::iterator                   iterator;
+    typedef typename output_dynamic::const_iterator             const_iterator;
+    typedef typename output_dynamic::reverse_iterator           reverse_iterator;
+    typedef typename output_dynamic::const_reverse_iterator     const_reverse_iterator;
 
 public:
     dynamic_data(void) : m_dynamic(new output_dynamic()), m_number_oscillators(0) { };

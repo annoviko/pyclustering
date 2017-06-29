@@ -18,40 +18,48 @@
 *
 */
 
-#ifndef _HSYNCNET_H_
-#define _HSYNCNET_H_
+#pragma once
+
 
 #include <vector>
 
 #include "cluster/syncnet.hpp"
 
 
-typedef std::vector<unsigned int>			hsyncnet_cluster;
-typedef ensemble_data<hsyncnet_cluster>		hsyncnet_cluster_data;
-typedef syncnet_analyser					hsyncnet_analyser;
+typedef std::vector<unsigned int>           hsyncnet_cluster;
+typedef ensemble_data<hsyncnet_cluster>     hsyncnet_cluster_data;
+typedef syncnet_analyser                    hsyncnet_analyser;
 
 
 class hsyncnet: public syncnet {
 private:
-	unsigned int m_number_clusters;
-    unsigned int m_initial_neighbors;
+    std::size_t m_number_clusters;
+    std::size_t m_initial_neighbors;
     double m_increase_persent;
+    double m_time;
+
+private:
+    const static double         DEFAULT_TIME_STEP;
+    const static std::size_t    DEFAULT_INCREASE_STEP;
 
 public:
-	hsyncnet(std::vector<std::vector<double> > * input_data, 
-        const unsigned int cluster_number, 
+    hsyncnet(std::vector<std::vector<double> > * input_data, 
+        const std::size_t cluster_number, 
         const initial_type initial_phases);
 
     hsyncnet(std::vector<std::vector<double> > * input_data,
-        const unsigned int cluster_number,
+        const std::size_t cluster_number,
         const initial_type initial_phasesconst,
-        const unsigned int initial_neighbors,
+        const std::size_t initial_neighbors,
         const double increase_persent);
-	
-	virtual ~hsyncnet(void);
 
-	virtual void process(const double order, const solve_type solver, const bool collect_dynamic, hsyncnet_analyser & analyser);
+    virtual ~hsyncnet(void);
+
+public:
+    virtual void process(const double order, const solve_type solver, const bool collect_dynamic, hsyncnet_analyser & analyser) override;
+
+private:
+    void store_state(sync_network_state & state, hsyncnet_analyser & analyser);
+
+    double calculate_radius(const double radius, const std::size_t amount_neighbors) const;
 };
-
-
-#endif

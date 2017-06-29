@@ -59,8 +59,8 @@ class syncnet_analyser(sync_dynamic):
         
         """
         super().__init__(phase, time, pointer_sync_analyser);
-    
-    
+
+
     def __del__(self):
         """!
         @brief Desctructor of the analyser.

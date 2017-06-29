@@ -30,12 +30,12 @@ typedef ensemble_data<syncnet_cluster>		syncnet_cluster_data;
 
 class syncnet_analyser: public sync_dynamic {
 public:
-	syncnet_analyser(void) : sync_dynamic() { }
+    syncnet_analyser(void) : sync_dynamic() { }
 
-	~syncnet_analyser(void) { }
+    virtual ~syncnet_analyser(void) { }
 
 public:
-	void allocate_clusters(const double eps, syncnet_cluster_data & data) { allocate_sync_ensembles(eps, data); }
+    inline void allocate_clusters(const double eps, syncnet_cluster_data & data) { allocate_sync_ensembles(eps, data); }
 };
 
 

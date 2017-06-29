@@ -96,5 +96,36 @@ class Test(unittest.TestCase):
         self.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE7, 2, [10, 10], solve_type.FAST, 5, 0.3, True, True);
 
 
+    def templateDynamicLength(self, path, number_clusters, expected_length, initial_neighbors, increase_persent, collect_dynamic_flag, ccore_flag):
+        sample = read_sample(path);
+        network = hsyncnet(sample, number_clusters, initial_type.EQUIPARTITION, initial_neighbors, increase_persent, ccore = ccore_flag);
+        
+        analyser = network.process(order = 0.995, solution = solve_type.FAST, collect_dynamic = collect_dynamic_flag);
+        
+        assert len(analyser) != 0;
+        
+        if (collect_dynamic_flag is True):
+            assert len(analyser) >= 1;
+            if (expected_length is None):
+                assert len(analyser) > 1;
+            else:
+                assert len(analyser) == expected_length;
+        
+        else:
+            assert len(analyser) == 1;
+
+    def testDynamicLengthCollecting(self):
+        self.templateDynamicLength(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, None, 5, 0.3, True, False);
+    
+    def testDynamicLengthCollectingByCore(self):
+        self.templateDynamicLength(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, None, 5, 0.3, True, True);
+    
+    def testDynamicLengthWithoutCollecting(self):
+        self.templateDynamicLength(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, None, 5, 0.3, False, False);
+    
+    def testDynamicLengthWithoutCollectingByCore(self):
+        self.templateDynamicLength(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, None, 5, 0.3, False, True);
+
+
 if __name__ == "__main__":
     unittest.main();
