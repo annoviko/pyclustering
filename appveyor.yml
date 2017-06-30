@@ -12,14 +12,18 @@ install: []
 
 
 environment:
+  global:
+  - CCORE_LIBRARY: ccore\src\ccore.vcxproj
+  - CCORE_TESTS: ccore\tst\utcore.vcxproj
+
   matrix:
-  - SOLUTION_TARGET: ccore\ccore.sln
-  - SOLUTION_TARGET: ccore\utcore.sln
+  - PROJECT_TARGET: "%CCORE_LIBRARY%"
+  - PROJECT_TARGET: "%CCORE_TESTS%"
 
 
 build_script:
-  - msbuild %SOLUTION_TARGET% /p:configuration=Release
+  - msbuild %PROJECT_TARGET% /p:configuration=Release
 
 
 test_script:
-  - IF "%SOLUTION_TARGET%"=="ccore\utcore.sln" ( cd ccore\Release && utcore.exe )
+  - IF "%PROJECT_TARGET%"=="%CCORE_TESTS%" ( cd ccore\Release && utcore.exe )

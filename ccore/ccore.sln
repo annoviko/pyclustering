@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Blend for Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ccore", "src\ccore.vcxproj", "{DBEBB335-D398-45F8-899A-503AFC64ACFE}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "utcore", "tst\utcore.vcxproj", "{8075CCCA-4283-485B-9D76-80AFE5987A3A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "unit-tests", "unit-tests", "{EBC8DC68-5B2D-42D7-8E1F-20F04371BCD0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,8 +25,17 @@ Global
 		{DBEBB335-D398-45F8-899A-503AFC64ACFE}.Release|x64.Build.0 = Release|x64
 		{DBEBB335-D398-45F8-899A-503AFC64ACFE}.Release|x86.ActiveCfg = Release|Win32
 		{DBEBB335-D398-45F8-899A-503AFC64ACFE}.Release|x86.Build.0 = Release|Win32
+		{8075CCCA-4283-485B-9D76-80AFE5987A3A}.Debug|x64.ActiveCfg = Debug|Win32
+		{8075CCCA-4283-485B-9D76-80AFE5987A3A}.Debug|x86.ActiveCfg = Debug|Win32
+		{8075CCCA-4283-485B-9D76-80AFE5987A3A}.Debug|x86.Build.0 = Debug|Win32
+		{8075CCCA-4283-485B-9D76-80AFE5987A3A}.Release|x64.ActiveCfg = Release|Win32
+		{8075CCCA-4283-485B-9D76-80AFE5987A3A}.Release|x86.ActiveCfg = Release|Win32
+		{8075CCCA-4283-485B-9D76-80AFE5987A3A}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8075CCCA-4283-485B-9D76-80AFE5987A3A} = {EBC8DC68-5B2D-42D7-8E1F-20F04371BCD0}
 	EndGlobalSection
 EndGlobal
