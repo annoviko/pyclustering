@@ -18,8 +18,8 @@ environment:
 
 
 build_script:
-  - msbuild ccore.sln /t:%PROJECT_TARGET%:Build /p:configuration=Release
+  - msbuild ccore.sln /t:ccore:Rebuild /p:configuration=Release
 
 
 test_script:
-  - IF "%PROJECT_TARGET%"=="ccore" ( cd ccore\Release && utcore.exe )
+  - IF "%PROJECT_TARGET%"=="utcore" ( cd ccore\Release && utcore.exe )
