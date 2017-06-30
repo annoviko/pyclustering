@@ -12,9 +12,8 @@ install: []
 
 
 environment:
-  global:
-  - CCORE_LIBRARY: ccore\src\ccore.vcxproj
-  - CCORE_TESTS: ccore\tst\utcore.vcxproj
+  CCORE_LIBRARY: ccore\src\ccore.vcxproj
+  CCORE_TESTS: ccore\tst\utcore.vcxproj
 
   matrix:
   - PROJECT_TARGET: "%CCORE_LIBRARY%"
