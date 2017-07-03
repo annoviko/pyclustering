@@ -135,11 +135,9 @@ class hsyncnet(syncnet):
             analyser = self.simulate_dynamic(order, solution, collect_dynamic);
             if (collect_dynamic == True):
                 if (len(dyn_phase) == 0):
-                    dyn_time.append(0);
-                    dyn_phase.append(analyser.output[0]);
+                    self.__store_dynamic(dyn_phase, dyn_time, analyser, True);
                 
-                dyn_phase.append(analyser.output[len(analyser.output) - 1]);
-                dyn_time.append(len(dyn_time));
+                self.__store_dynamic(dyn_phase, dyn_time, analyser, False);
             
             clusters = analyser.allocate_sync_ensembles(0.05);
             
@@ -150,14 +148,46 @@ class hsyncnet(syncnet):
             number_neighbors += increase_step;
             
             # Update connectivity radius and check if average function can be used anymore
-            if (number_neighbors >= len(self._osc_loc)):
-                radius = radius * self.__increase_persent + radius;
-            else:
-                radius = average_neighbor_distance(self._osc_loc, number_neighbors);
+            radius = self.__calculate_radius(number_neighbors, radius);
         
         if (collect_dynamic != True):
-            dyn_phase = analyser.output;
-            dyn_time = analyser.time;
+            self.__store_dynamic(dyn_phase, dyn_time, analyser, False);
         
         return syncnet_analyser(dyn_phase, dyn_time, None);
-    
+
+
+    def __calculate_radius(self, number_neighbors, radius):
+        """!
+        @brief Calculate new connectivity radius.
+        
+        @param[in] number_neighbors: Average amount of neighbors that should be connected by new radius.
+        @param[in] radius: Current connectivity radius.
+        
+        @return New connectivity radius.
+        
+        """
+        
+        if (number_neighbors >= len(self._osc_loc)):
+            return radius * self.__increase_persent + radius;
+        
+        return average_neighbor_distance(self._osc_loc, number_neighbors);
+
+
+    def __store_dynamic(self, dyn_phase, dyn_time, analyser, begin_state):
+        """!
+        @brief Store specified state of Sync network to hSync.
+        
+        @param[in] dyn_phase: Output dynamic of hSync where state should be stored.
+        @param[in] dyn_time: Time points that correspond to output dynamic where new time point should be stored.
+        @param[in] analyser: Sync analyser where Sync states are stored.
+        @param[in] begin_state: If True the first state of Sync network is stored, otherwise the last state is stored.
+        
+        """
+        
+        if (begin_state is True):
+            dyn_time.append(0);
+            dyn_phase.append(analyser.output[0]);
+        
+        else:
+            dyn_phase.append(analyser.output[len(analyser.output) - 1]);
+            dyn_time.append(len(dyn_time));

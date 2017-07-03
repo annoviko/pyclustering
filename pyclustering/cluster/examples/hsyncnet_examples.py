@@ -44,7 +44,7 @@ def template_clustering(file, number_clusters, arg_order = 0.999, arg_collect_dy
             sync_visualizer.show_output_dynamic(analyser);
         
         draw_clusters(sample, clusters);
-        
+
 
 def cluster_sample1():
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2);
@@ -84,7 +84,7 @@ def cluster_wing_nut():
     template_clustering(FCPS_SAMPLES.SAMPLE_WING_NUT, 2, arg_collect_dynamic = False);
     
 def cluster_two_diamonds():
-    template_clustering(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, 2, arg_collect_dynamic = False);    
+    template_clustering(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, 2, arg_collect_dynamic = False);
 
 def experiment_execution_time(show_dyn = False, ccore = False):
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, 0.999, show_dyn, ccore);
