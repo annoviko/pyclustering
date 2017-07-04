@@ -28,22 +28,22 @@
 
 #include "tsp/params_container.hpp"
 
+
 namespace ant
 {
 
-enum class params_name_TSP : std::size_t
-{
-    Q           // [double]
-    , RO        // [double]
-    , ALPHA     // [double]
-    , BETA      // [double]
-    , GAMMA     // [double]
-    , INITIAL_PHERAMONE // [double]
+enum class params_name_TSP : std::size_t {
+    Q,                  // [double]
+    RO,                 // [double]
+    ALPHA,              // [double]
+    BETA,               // [double]
+    GAMMA,              // [double]
+    INITIAL_PHERAMONE,  // [double]
 
-    , ITERATIONS // [unsigned]
-    , COUNT_ANTS_IN_ITERATION // [unsigned]
+    ITERATIONS,         // [unsigned]
+    COUNT_ANTS_IN_ITERATION, // [unsigned]
 
-    , LAST_ELEM // should be always last
+    LAST_ELEM,  // should be always last
                 // using to check all params are set
 };
 

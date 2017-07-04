@@ -173,188 +173,188 @@ void som::create_connections(const som_conn_type type) {
 
 
 void som::create_initial_weights(const som_init_type type) {
-	size_t dimension = (*data)[0].size();
+    size_t dimension = (*data)[0].size();
 
-	m_weights.resize(m_size, std::vector<double>(dimension, 0.0));
+    m_weights.resize(m_size, std::vector<double>(dimension, 0.0));
 
-	std::vector<double> maximum_value_dimension(dimension, -std::numeric_limits<double>::max());
-	std::vector<double> minimum_value_dimension(dimension, std::numeric_limits<double>::max());
+    std::vector<double> maximum_value_dimension(dimension, -std::numeric_limits<double>::max());
+    std::vector<double> minimum_value_dimension(dimension, std::numeric_limits<double>::max());
 
-	for (size_t i = 0; i < data->size(); i++) {
-		for (size_t dim = 0; dim < dimension; dim++) {
-			if (maximum_value_dimension[dim] < (*data)[i][dim]) {
-				maximum_value_dimension[dim] = (*data)[i][dim];
-			}
+    for (size_t i = 0; i < data->size(); i++) {
+        for (size_t dim = 0; dim < dimension; dim++) {
+            if (maximum_value_dimension[dim] < (*data)[i][dim]) {
+                maximum_value_dimension[dim] = (*data)[i][dim];
+            }
 
-			if (minimum_value_dimension[dim] > (*data)[i][dim]) {
-				minimum_value_dimension[dim] = (*data)[i][dim];
-			}
-		}
-	}
+            if (minimum_value_dimension[dim] > (*data)[i][dim]) {
+                minimum_value_dimension[dim] = (*data)[i][dim];
+            }
+        }
+    }
 
-	std::vector<double> width_value_dimension(dimension, 0);
-	std::vector<double> center_value_dimension(dimension, 0);
+    std::vector<double> width_value_dimension(dimension, 0);
+    std::vector<double> center_value_dimension(dimension, 0);
 
-	for (size_t dim = 0; dim < dimension; dim++) {
-		width_value_dimension[dim] = maximum_value_dimension[dim] - minimum_value_dimension[dim];
-		center_value_dimension[dim] = (maximum_value_dimension[dim] + minimum_value_dimension[dim]) / 2.0;
-	}
+    for (size_t dim = 0; dim < dimension; dim++) {
+        width_value_dimension[dim] = maximum_value_dimension[dim] - minimum_value_dimension[dim];
+        center_value_dimension[dim] = (maximum_value_dimension[dim] + minimum_value_dimension[dim]) / 2.0;
+    }
 
-	double step_x = center_value_dimension[0];
-	double step_y = 0.0;
-	if (dimension > 1) {
-		step_y = center_value_dimension[1];
-		if (m_cols > 1) { step_y = width_value_dimension[1] / (m_cols - 1.0); }
-	}
+    double step_x = center_value_dimension[0];
+    double step_y = 0.0;
+    if (dimension > 1) {
+        step_y = center_value_dimension[1];
+        if (m_cols > 1) { step_y = width_value_dimension[1] / (m_cols - 1.0); }
+    }
 
-	if (m_rows > 1) { step_x = width_value_dimension[0] / (m_rows - 1.0); }
+    if (m_rows > 1) { step_x = width_value_dimension[0] / (m_rows - 1.0); }
 
-	/* generate weights (topological coordinates) */
-	std::random_device device;
-	std::default_random_engine generator(device());
+    /* generate weights (topological coordinates) */
+    std::random_device device;
+    std::default_random_engine generator(device());
 
-	switch (type) {
-		/* Feature SOM 0002: Uniform grid. */
-		case som_init_type::SOM_UNIFORM_GRID: {
-			for (size_t i = 0; i < m_size; i++) {
-				std::vector<double> & neuron_location = m_location[i];
-				std::vector<double> & neuron_weight = m_weights[i];
+    switch (type) {
+        /* Feature SOM 0002: Uniform grid. */
+        case som_init_type::SOM_UNIFORM_GRID: {
+            for (size_t i = 0; i < m_size; i++) {
+                std::vector<double> & neuron_location = m_location[i];
+                std::vector<double> & neuron_weight = m_weights[i];
 
-				for (size_t dim = 0; dim < dimension; dim++) {
-					if (dim == 0) {
-						if (m_rows > 1) {
-							neuron_weight[dim] = minimum_value_dimension[dim] + step_x * neuron_location[dim];
-						}
-						else {
-							neuron_weight[dim] = center_value_dimension[dim];
-						}
-					}
-					else if (dim == 1) {
-						if (m_cols > 1) {
-							neuron_weight[dim] = minimum_value_dimension[dim] + step_y * neuron_location[dim];
-						}
-						else {
-							neuron_weight[dim] = center_value_dimension[dim];
-						}
-					}
-					else {
-						neuron_weight[dim] = center_value_dimension[dim];
-					}
-				}
-			}
+                for (size_t dim = 0; dim < dimension; dim++) {
+                    if (dim == 0) {
+                        if (m_rows > 1) {
+                            neuron_weight[dim] = minimum_value_dimension[dim] + step_x * neuron_location[dim];
+                        }
+                        else {
+                            neuron_weight[dim] = center_value_dimension[dim];
+                        }
+                    }
+                    else if (dim == 1) {
+                        if (m_cols > 1) {
+                            neuron_weight[dim] = minimum_value_dimension[dim] + step_y * neuron_location[dim];
+                        }
+                        else {
+                            neuron_weight[dim] = center_value_dimension[dim];
+                        }
+                    }
+                    else {
+                        neuron_weight[dim] = center_value_dimension[dim];
+                    }
+                }
+            }
 
-			break;
-		}
+            break;
+        }
 
-		case som_init_type::SOM_RANDOM_SURFACE: {
-			/* Random weights at the full surface. */
-			for (size_t i = 0; i < m_size; i++) {
-				std::vector<double> & neuron_weight = m_weights[i];
+        case som_init_type::SOM_RANDOM_SURFACE: {
+            /* Random weights at the full surface. */
+            for (size_t i = 0; i < m_size; i++) {
+                std::vector<double> & neuron_weight = m_weights[i];
 
-				for (size_t dim = 0; dim < dimension; dim++) {
-					std::uniform_real_distribution<double> position_distribution(minimum_value_dimension[dim], maximum_value_dimension[dim]);
-					neuron_weight[dim] = position_distribution(generator);
-				}
-			}
+                for (size_t dim = 0; dim < dimension; dim++) {
+                    std::uniform_real_distribution<double> position_distribution(minimum_value_dimension[dim], maximum_value_dimension[dim]);
+                    neuron_weight[dim] = position_distribution(generator);
+                }
+            }
 
-			break;
-		}
+            break;
+        }
 
-		case som_init_type::SOM_RANDOM_CENTROID: {
-			/* Random weights at the center of input data. */
-			std::uniform_real_distribution<double> position_distribution(-0.5, 0.5);
+        case som_init_type::SOM_RANDOM_CENTROID: {
+            /* Random weights at the center of input data. */
+            std::uniform_real_distribution<double> position_distribution(-0.5, 0.5);
 
-			for (size_t i = 0; i < m_size; i++) {
-				std::vector<double> & neuron_weight = m_weights[i];
+            for (size_t i = 0; i < m_size; i++) {
+                std::vector<double> & neuron_weight = m_weights[i];
 
-				for (size_t dim = 0; dim < dimension; dim++) {
-					neuron_weight[dim] = position_distribution(generator);
-				}
-			}
+                for (size_t dim = 0; dim < dimension; dim++) {
+                    neuron_weight[dim] = position_distribution(generator);
+                }
+            }
 
-			break;
-		}
+            break;
+        }
 
-		case som_init_type::SOM_RANDOM: {
-			/* Random weights of input data. */
-			std::uniform_real_distribution<double> position_distribution(-0.5, 0.5);
+        case som_init_type::SOM_RANDOM: {
+            /* Random weights of input data. */
+            std::uniform_real_distribution<double> position_distribution(-0.5, 0.5);
 
-			for (size_t i = 0; i < m_size; i++) {
-				std::vector<double> & neuron_weight = m_weights[i];
+            for (size_t i = 0; i < m_size; i++) {
+                std::vector<double> & neuron_weight = m_weights[i];
 
-				for (size_t dim = 0; dim < dimension; dim++) {
-					neuron_weight[dim] = position_distribution(generator);
-				}
-			}
+                for (size_t dim = 0; dim < dimension; dim++) {
+                    neuron_weight[dim] = position_distribution(generator);
+                }
+            }
 
-			break;
-		}
-	}
+            break;
+        }
+    }
 
-	m_previous_weights = m_weights;
+    m_previous_weights = m_weights;
 }
 
 
 size_t som::competition(const pattern & input_pattern) const {
-	size_t index = 0;
-	double minimum = euclidean_distance_sqrt(&m_weights[0], &input_pattern);
+    size_t index = 0;
+    double minimum = euclidean_distance_sqrt(&m_weights[0], &input_pattern);
 
-	for (size_t i = 1; i < m_size; i++) {
-		double candidate = euclidean_distance_sqrt(&m_weights[i], &input_pattern);
-		if (candidate < minimum) {
-			index = i;
-			minimum = candidate;
-		}
-	}
+    for (size_t i = 1; i < m_size; i++) {
+        double candidate = euclidean_distance_sqrt(&m_weights[i], &input_pattern);
+        if (candidate < minimum) {
+            index = i;
+            minimum = candidate;
+        }
+    }
 
-	return index;
+    return index;
 }
 
 
 size_t som::adaptation(const size_t index_winner, const pattern & input_pattern) {
-	size_t dimensions = m_weights[0].size();
-	size_t number_adapted_neurons = 0;
+    size_t dimensions = m_weights[0].size();
+    size_t number_adapted_neurons = 0;
 
-	if (m_conn_type == som_conn_type::SOM_FUNC_NEIGHBOR) {
-		for (size_t neuron_index = 0; neuron_index < m_size; neuron_index++) {
-			double distance = m_sqrt_distances[index_winner][neuron_index];
+    if (m_conn_type == som_conn_type::SOM_FUNC_NEIGHBOR) {
+        for (size_t neuron_index = 0; neuron_index < m_size; neuron_index++) {
+            double distance = m_sqrt_distances[index_winner][neuron_index];
 
-			if (distance < m_local_radius) {
-				double influence = std::exp( -( distance / (2.0 * m_local_radius) ) );
+            if (distance < m_local_radius) {
+                double influence = std::exp( -( distance / (2.0 * m_local_radius) ) );
 
-				std::vector<double> & neuron_weight = m_weights[neuron_index];
-				for (size_t dim = 0; dim < dimensions; dim++) {
-					neuron_weight[dim] += m_learn_rate * influence * (input_pattern[dim] - m_weights[neuron_index][dim]);
-				}
+                std::vector<double> & neuron_weight = m_weights[neuron_index];
+                for (size_t dim = 0; dim < dimensions; dim++) {
+                    neuron_weight[dim] += m_learn_rate * influence * (input_pattern[dim] - m_weights[neuron_index][dim]);
+                }
 
-				number_adapted_neurons++;
-			}
-		}
-	}
-	else {
-		std::vector<double> & neuron_winner_weight = m_weights[index_winner];
-		for (size_t dim = 0; dim < dimensions; dim++) {
-			neuron_winner_weight[dim] += m_learn_rate * (input_pattern[dim] - neuron_winner_weight[dim] );
-		}
+                number_adapted_neurons++;
+            }
+        }
+    }
+    else {
+        std::vector<double> & neuron_winner_weight = m_weights[index_winner];
+        for (size_t dim = 0; dim < dimensions; dim++) {
+            neuron_winner_weight[dim] += m_learn_rate * (input_pattern[dim] - neuron_winner_weight[dim] );
+        }
 
-		std::vector<size_t> & winner_neighbors = m_neighbors[index_winner];
-		for (std::vector<size_t>::iterator neighbor_index = winner_neighbors.begin(); neighbor_index != winner_neighbors.end(); neighbor_index++) {
-			double distance = m_sqrt_distances[index_winner][*neighbor_index];
+        std::vector<size_t> & winner_neighbors = m_neighbors[index_winner];
+        for (std::vector<size_t>::iterator neighbor_index = winner_neighbors.begin(); neighbor_index != winner_neighbors.end(); neighbor_index++) {
+            double distance = m_sqrt_distances[index_winner][*neighbor_index];
 
-			if (distance < m_local_radius) {
-				double influence = std::exp( -( distance / (2.0 * m_local_radius) ) );
+            if (distance < m_local_radius) {
+                double influence = std::exp( -( distance / (2.0 * m_local_radius) ) );
 
-				std::vector<double> & neighbor_weight = m_weights[*neighbor_index];
-				for (size_t dim = 0; dim < dimensions; dim++) {
-					neighbor_weight[dim] += m_learn_rate * influence * (input_pattern[dim] - neighbor_weight[dim]);
-				}
+                std::vector<double> & neighbor_weight = m_weights[*neighbor_index];
+                for (size_t dim = 0; dim < dimensions; dim++) {
+                    neighbor_weight[dim] += m_learn_rate * influence * (input_pattern[dim] - neighbor_weight[dim]);
+                }
 
-				number_adapted_neurons++;
-			}
-		}
-	}
+                number_adapted_neurons++;
+            }
+        }
+    }
 
-	return number_adapted_neurons;
+    return number_adapted_neurons;
 }
 
 
@@ -364,97 +364,97 @@ size_t som::train(const dataset & input_data, const size_t num_epochs, bool auto
         m_awards[i] = 0;
     }
 
-	/* number of epouch */
-	m_epouchs = num_epochs;
+    /* number of epouch */
+    m_epouchs = num_epochs;
 
-	/* store pointer to data (we are not owners, we don't need them after training) */
-	data = &input_data;
+    /* store pointer to data (we are not owners, we don't need them after training) */
+    data = &input_data;
 
-	/* create weights */
-	create_initial_weights(m_params.init_type);
+    /* create weights */
+    create_initial_weights(m_params.init_type);
 
-	size_t epouch = 1;
-	for ( ; epouch < (m_epouchs + 1); epouch++) {
-		/* Depression term of coupling */
-		m_local_radius = std::pow( ( m_params.init_radius * std::exp(-( (double) epouch / (double) m_epouchs)) ), 2);
-		m_learn_rate = m_params.init_learn_rate * std::exp(-( (double) epouch / (double) m_epouchs));
+    size_t epouch = 1;
+    for ( ; epouch < (m_epouchs + 1); epouch++) {
+        /* Depression term of coupling */
+        m_local_radius = std::pow( ( m_params.init_radius * std::exp(-( (double) epouch / (double) m_epouchs)) ), 2);
+        m_learn_rate = m_params.init_learn_rate * std::exp(-( (double) epouch / (double) m_epouchs));
 
-		/* Feature SOM 0003: Clear statistics */
-		if (autostop == true) {
-			for (size_t i = 0; i < m_size; i++) {
-				m_awards[i] = 0;
-				m_capture_objects[i].clear();
-			}
-		}
+        /* Feature SOM 0003: Clear statistics */
+        if (autostop == true) {
+            for (size_t i = 0; i < m_size; i++) {
+                m_awards[i] = 0;
+                m_capture_objects[i].clear();
+            }
+        }
 
-		for (size_t i = 0; i < data->size(); i++) {
-			/* Step 1: Competition */
-			size_t index_winner = competition((*data)[i]);
+        for (size_t i = 0; i < data->size(); i++) {
+            /* Step 1: Competition */
+            size_t index_winner = competition((*data)[i]);
 
-			/* Step 2: Adaptation */
-			adaptation(index_winner, (*data)[i]);
+            /* Step 2: Adaptation */
+            adaptation(index_winner, (*data)[i]);
 
-			/* Update statistics */
-			if ( (autostop == true) || (epouch == m_epouchs) ) {
-				m_awards[index_winner]++;
-				m_capture_objects[index_winner].push_back(i);
-			}
-		}
+            /* Update statistics */
+            if ( (autostop == true) || (epouch == m_epouchs) ) {
+                m_awards[index_winner]++;
+                m_capture_objects[index_winner].push_back(i);
+            }
+        }
 
-		/* Feature SOM 0003: Check requirement of stopping */
-		if (autostop == true) {
-			double maximal_adaptation = calculate_maximal_adaptation();
-			if (maximal_adaptation < m_params.adaptation_threshold) {
-				return epouch;
-			}
+        /* Feature SOM 0003: Check requirement of stopping */
+        if (autostop == true) {
+            double maximal_adaptation = calculate_maximal_adaptation();
+            if (maximal_adaptation < m_params.adaptation_threshold) {
+                return epouch;
+            }
 
-			for (size_t i = 0; i < m_weights.size(); i++) {
-				std::copy(m_weights[i].begin(), m_weights[i].end(), m_previous_weights[i].begin());
-			}
-		}
-	}
+            for (size_t i = 0; i < m_weights.size(); i++) {
+                std::copy(m_weights[i].begin(), m_weights[i].end(), m_previous_weights[i].begin());
+            }
+        }
+    }
 
-	return epouch;
+    return epouch;
 }
 
 
 size_t som::simulate(const pattern & input_pattern) const {
-	return competition(input_pattern);
+    return competition(input_pattern);
 }
 
 
 double som::calculate_maximal_adaptation() const {
-	size_t dimensions = (*data)[0].size();
-	double maximal_adaptation = 0;
+    size_t dimensions = (*data)[0].size();
+    double maximal_adaptation = 0;
 
-	for (size_t neuron_index = 0; neuron_index < m_size; neuron_index++) {
-		const std::vector<double> & neuron_weight = m_weights[neuron_index];
-		const std::vector<double> & previous_neuron_weight = m_previous_weights[neuron_index];
+    for (size_t neuron_index = 0; neuron_index < m_size; neuron_index++) {
+        const std::vector<double> & neuron_weight = m_weights[neuron_index];
+        const std::vector<double> & previous_neuron_weight = m_previous_weights[neuron_index];
 
-		for (size_t dim = 0; dim < dimensions; dim++) {
-			double current_adaptation = previous_neuron_weight[dim] - neuron_weight[dim];
+        for (size_t dim = 0; dim < dimensions; dim++) {
+            double current_adaptation = previous_neuron_weight[dim] - neuron_weight[dim];
 
-			if (current_adaptation < 0) { current_adaptation = -current_adaptation; }
+            if (current_adaptation < 0) { current_adaptation = -current_adaptation; }
 
-			if (maximal_adaptation < current_adaptation) {
-				maximal_adaptation = current_adaptation;
-			}
-		}
-	}
+            if (maximal_adaptation < current_adaptation) {
+                maximal_adaptation = current_adaptation;
+            }
+        }
+    }
 
-	return maximal_adaptation;
+    return maximal_adaptation;
 }
 
 
-size_t som::get_winner_number(void) const {
-	size_t winner_number = 0;
-	for (size_t i = 0; i < m_size; i++) {
-		if (m_awards[i] > 0) {
-			winner_number++;
-		}
-	}
+std::size_t som::get_winner_number(void) const {
+    std::size_t winner_number = 0;
+    for (std::size_t i = 0; i < m_size; i++) {
+        if (m_awards[i] > 0) {
+            winner_number++;
+        }
+    }
 
-	return winner_number;
+    return winner_number;
 }
 
 

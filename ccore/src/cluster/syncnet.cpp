@@ -30,21 +30,21 @@ sync_network(input_data->size(), 1, 0, connection_t::CONNECTION_NONE, initial_ty
 {
     set_callback_solver(&syncnet::adapter_phase_kuramoto);
 
-	oscillator_locations = new std::vector<std::vector<double> >(*input_data);
-	create_connections(connectivity_radius, enable_conn_weight);
+    oscillator_locations = new std::vector<std::vector<double> >(*input_data);
+    create_connections(connectivity_radius, enable_conn_weight);
 }
 
 
 syncnet::~syncnet() {
-	if (oscillator_locations != NULL) {
-		delete oscillator_locations;
-		oscillator_locations = NULL;
-	}
+    if (oscillator_locations != nullptr) {
+        delete oscillator_locations;
+        oscillator_locations = NULL;
+    }
 
-	if (distance_conn_weights != NULL) {
-		delete distance_conn_weights;
-		distance_conn_weights = NULL;
-	}
+    if (distance_conn_weights != nullptr) {
+        delete distance_conn_weights;
+        distance_conn_weights = NULL;
+    }
 }
 
 
