@@ -32,8 +32,11 @@ static void template_pyclustering_package(const TypeContainer & container) {
     pyclustering_package * package = create_package(&container);
 
     ASSERT_EQ(container.size(), package->size);
-    for (std::size_t index = 0; index < container.size(); index++) {
-        ASSERT_EQ(container[index], package->at<container_data_t>(index));
+
+    if (package->type != PYCLUSTERING_TYPE_LIST) {
+        for (std::size_t index = 0; index < container.size(); index++) {
+            ASSERT_EQ(container[index], package->at<container_data_t>(index));
+        }
     }
 
     delete package;
@@ -72,5 +75,11 @@ TEST(utest_pyclustering, package_size_t) {
 
 TEST(utest_pyclustering, package_empty) {
     std::vector<int> container = { };
+    template_pyclustering_package(container);
+}
+
+
+TEST(utest_pyclustering, package_list) {
+    std::vector<std::vector<int>> container = { { 1, 2 }, { 1, 2, 3, 4 } };
     template_pyclustering_package(container);
 }
