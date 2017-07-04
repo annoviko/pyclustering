@@ -58,6 +58,9 @@ GENERAL CHANGES (ccore):
 
 
 CORRECTED MAJOR BUGS:
+- Memory leakage in destructor of 'pyclustering_package' - exchange mechanism between ccore and pyclustering (ccore.interface.pyclustering_package').
+  See: https://github.com/annoviko/pyclustering/issues/347
+
 - Bug with loosing of the initial state of hSync output dynamic in case of CCORE usage (ccore.cluster.hsyncnet).
   See: https://github.com/annoviko/pyclustering/issues/346
 
