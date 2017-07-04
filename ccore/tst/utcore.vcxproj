@@ -147,6 +147,7 @@
     <ClCompile Include="utest-optics.cpp" />
     <ClCompile Include="utest-ordering_analyser.cpp" />
     <ClCompile Include="utest-pcnn.cpp" />
+    <ClCompile Include="utest-pyclustering.cpp" />
     <ClCompile Include="utest-rock.cpp" />
     <ClCompile Include="utest-som.cpp" />
     <ClCompile Include="utest-somsc.cpp" />

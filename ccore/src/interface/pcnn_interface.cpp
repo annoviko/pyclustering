@@ -57,7 +57,7 @@ pyclustering_package * pcnn_dynamic_allocate_sync_ensembles(const void * pointer
     ensemble_data<pcnn_ensemble> sync_ensembles;
     ((pcnn_dynamic *) pointer)->allocate_sync_ensembles(sync_ensembles);
 
-    pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
+    pyclustering_package * package = new pyclustering_package(pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
     package->size = sync_ensembles.size();
     package->data = new pyclustering_package * [package->size];
 
@@ -73,7 +73,7 @@ pyclustering_package * pcnn_dynamic_allocate_spike_ensembles(const void * pointe
     ensemble_data<pcnn_ensemble> spike_ensembles;
     ((pcnn_dynamic *) pointer)->allocate_spike_ensembles(spike_ensembles);
 
-    pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
+    pyclustering_package * package = new pyclustering_package(pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
     package->size = spike_ensembles.size();
     package->data = new pyclustering_package * [package->size];
 
@@ -98,7 +98,7 @@ pyclustering_package * pcnn_dynamic_allocate_time_signal(const void * pointer) {
 pyclustering_package * pcnn_dynamic_get_output(const void * pointer) {
     pcnn_dynamic & dynamic = *((pcnn_dynamic *) pointer);
 
-    pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
+    pyclustering_package * package = new pyclustering_package(pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
     package->size = dynamic.size();
     package->data = new pyclustering_package * [package->size];
 
@@ -113,7 +113,7 @@ pyclustering_package * pcnn_dynamic_get_output(const void * pointer) {
 pyclustering_package * pcnn_dynamic_get_time(const void * pointer) {
     pcnn_dynamic & dynamic = *((pcnn_dynamic *) pointer);
 
-    pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_DOUBLE);
+    pyclustering_package * package = new pyclustering_package(pyclustering_type_data::PYCLUSTERING_TYPE_DOUBLE);
     package->size = dynamic.size();
     package->data = new double[package->size];
 

@@ -30,7 +30,7 @@ pyclustering_package::pyclustering_package(void) :
 { }
 
 
-pyclustering_package::pyclustering_package(unsigned int package_type) :
+pyclustering_package::pyclustering_package(const pyclustering_type_data package_type) :
     size(0),
     type(package_type),
     data(nullptr)

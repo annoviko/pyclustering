@@ -41,7 +41,7 @@ pyclustering_package * optics_algorithm(const data_representation * const p_samp
     cluster_analysis::optics_data output_result;
     solver.process(*input_dataset, output_result);
 
-	pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
+	pyclustering_package * package = new pyclustering_package(pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
 	package->size = OPTICS_PACKAGE_SIZE;
 	package->data = new pyclustering_package * [OPTICS_PACKAGE_SIZE];
 

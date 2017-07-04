@@ -22,8 +22,11 @@
 
 
 #include <cstddef>
-#include <vector>
+#include <stdexcept>
+#include <sstream>
+#include <string>
 #include <type_traits>
+#include <vector>
 
 #include "definitions.hpp"
 
@@ -43,17 +46,26 @@ typedef enum pyclustering_type_data {
 
 typedef struct pyclustering_package {
 public:
-    size_t          size;      /* size of data in elements */
+    std::size_t     size;      /* size of data in elements  */
     unsigned int    type;      /* pyclustering type data    */
     void            * data;    /* pointer to data           */
 
 public:
     pyclustering_package(void);
 
-    pyclustering_package(unsigned int package_type);
+    pyclustering_package(const pyclustering_type_data package_type);
 
-    ~pyclustering_package(void);
+    virtual ~pyclustering_package(void);
 
+public:
+    template <class TypeValue>
+    auto & at(const std::size_t index) {
+        if (size <= index) {
+            throw std::range_error("pyclustering_package::at() [" + std::to_string(__LINE__) + "]: index '" + std::to_string(index) + "' out of range (size: '" + std::to_string(size) + "').");
+        }
+
+        return ((TypeValue *) data)[index];
+    }
 } pyclustering_package;
 
 
@@ -84,7 +96,7 @@ pyclustering_package * create_package(const TypeContainer * const data) {
         return nullptr;
     }
 
-    pyclustering_package * package = new pyclustering_package((unsigned int) type_package);
+    pyclustering_package * package = new pyclustering_package(type_package);
 
     package->size = data->size();
     package->data = (void *) new contaner_data_t[package->size];
@@ -95,21 +107,6 @@ pyclustering_package * create_package(const TypeContainer * const data) {
     }
 
     return package;
-}
-
-
-template <class TypeObject>
-pyclustering_package * create_package(const std::vector< std::vector<TypeObject> > * const data) {
-   pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
-
-   package->size = data->size();
-   package->data = new pyclustering_package * [package->size];
-
-   for (size_t i = 0; i < package->size; i++) {
-           ((pyclustering_package **) package->data)[i] = create_package(&(*data)[i]);
-   }
-
-   return package;
 }
 
 

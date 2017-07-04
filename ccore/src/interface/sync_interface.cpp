@@ -69,12 +69,12 @@ double sync_local_order(const void * pointer_network) {
 pyclustering_package * sync_connectivity_matrix(const void * pointer_network) {
     std::shared_ptr<adjacency_collection> connections = ((sync_network *) pointer_network)->connections();
 
-    pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
+    pyclustering_package * package = new pyclustering_package(pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
     package->size = ((sync_network *) pointer_network)->size();
     package->data = new pyclustering_package * [package->size];
 
     for (std::size_t i = 0; i < package->size; i++) {
-        pyclustering_package * subpackage = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_DOUBLE);
+        pyclustering_package * subpackage = new pyclustering_package(pyclustering_type_data::PYCLUSTERING_TYPE_DOUBLE);
         subpackage->size = ((sync_network *) pointer_network)->size();
         subpackage->data = (void *) new double * [subpackage->size];
 
@@ -104,7 +104,7 @@ pyclustering_package * sync_dynamic_allocate_sync_ensembles(const void * pointer
 
     ((sync_dynamic *) pointer)->allocate_sync_ensembles(tolerance, iteration, ensembles);
 
-    pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
+    pyclustering_package * package = new pyclustering_package(pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
     package->size = ensembles.size();
     package->data = new pyclustering_package * [package->size];
 
@@ -120,7 +120,7 @@ pyclustering_package * sync_dynamic_allocate_correlation_matrix(const void * poi
     sync_corr_matrix matrix;
     ((sync_dynamic *) pointer_dynamic)->allocate_correlation_matrix(iteration, matrix);
 
-    pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
+    pyclustering_package * package = new pyclustering_package(pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
     package->size = matrix.size();
     package->data = new pyclustering_package * [package->size];
 
@@ -135,7 +135,7 @@ pyclustering_package * sync_dynamic_allocate_correlation_matrix(const void * poi
 pyclustering_package * sync_dynamic_get_time(const void * pointer) {
     sync_dynamic & dynamic = *((sync_dynamic *) pointer);
 
-    pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_DOUBLE);
+    pyclustering_package * package = new pyclustering_package(pyclustering_type_data::PYCLUSTERING_TYPE_DOUBLE);
     package->size = dynamic.size();
     package->data = new double[package->size];
 
@@ -150,7 +150,7 @@ pyclustering_package * sync_dynamic_get_time(const void * pointer) {
 pyclustering_package * sync_dynamic_get_output(const void * pointer) {
     sync_dynamic & dynamic = *((sync_dynamic *) pointer);
 
-    pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
+    pyclustering_package * package = new pyclustering_package(pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
     package->size = dynamic.size();
     package->data = new pyclustering_package * [package->size];
 

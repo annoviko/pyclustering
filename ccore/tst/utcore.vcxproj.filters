@@ -236,6 +236,9 @@
     <ClCompile Include="utest-xmeans.cpp">
       <Filter>Unit Tests</Filter>
     </ClCompile>
+    <ClCompile Include="utest-pyclustering.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\tools\gtest\gtest.h">

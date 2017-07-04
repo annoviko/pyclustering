@@ -160,8 +160,8 @@ class hsyncnet(syncnet):
         """!
         @brief Calculate new connectivity radius.
         
-        @param[in] number_neighbors: Average amount of neighbors that should be connected by new radius.
-        @param[in] radius: Current connectivity radius.
+        @param[in] number_neighbors (uint): Average amount of neighbors that should be connected by new radius.
+        @param[in] radius (double): Current connectivity radius.
         
         @return New connectivity radius.
         
@@ -177,10 +177,10 @@ class hsyncnet(syncnet):
         """!
         @brief Store specified state of Sync network to hSync.
         
-        @param[in] dyn_phase: Output dynamic of hSync where state should be stored.
-        @param[in] dyn_time: Time points that correspond to output dynamic where new time point should be stored.
-        @param[in] analyser: Sync analyser where Sync states are stored.
-        @param[in] begin_state: If True the first state of Sync network is stored, otherwise the last state is stored.
+        @param[in] dyn_phase (list): Output dynamic of hSync where state should be stored.
+        @param[in] dyn_time (list): Time points that correspond to output dynamic where new time point should be stored.
+        @param[in] analyser (syncnet_analyser): Sync analyser where Sync states are stored.
+        @param[in] begin_state (bool): If True the first state of Sync network is stored, otherwise the last state is stored.
         
         """
         

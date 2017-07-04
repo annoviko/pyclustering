@@ -423,7 +423,7 @@ void legion_dynamic_destroy(const void * pointer) {
 pyclustering_package * legion_dynamic_get_output(const void * pointer) {
 	legion_dynamic & dynamic = *((legion_dynamic *) pointer);
 
-	pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
+	pyclustering_package * package = new pyclustering_package(pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
 	package->size = dynamic.size();
 	package->data = new pyclustering_package * [package->size];
 
@@ -437,7 +437,7 @@ pyclustering_package * legion_dynamic_get_output(const void * pointer) {
 pyclustering_package * legion_dynamic_get_inhibitory_output(const void * pointer) {
 	legion_dynamic & dynamic = *((legion_dynamic *) pointer);
 
-	pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_DOUBLE);
+	pyclustering_package * package = new pyclustering_package(pyclustering_type_data::PYCLUSTERING_TYPE_DOUBLE);
 	package->size = dynamic.size();
 	package->data = new double[package->size];
 
@@ -451,7 +451,7 @@ pyclustering_package * legion_dynamic_get_inhibitory_output(const void * pointer
 pyclustering_package * legion_dynamic_get_time(const void * pointer) {
 	legion_dynamic & dynamic = *((legion_dynamic *) pointer);
 
-	pyclustering_package * package = new pyclustering_package((unsigned int) pyclustering_type_data::PYCLUSTERING_TYPE_DOUBLE);
+	pyclustering_package * package = new pyclustering_package(pyclustering_type_data::PYCLUSTERING_TYPE_DOUBLE);
 	package->size = dynamic.size();
 	package->data = new double[package->size];
 
