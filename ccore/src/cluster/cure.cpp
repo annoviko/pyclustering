@@ -31,7 +31,7 @@
 namespace cluster_analysis {
 
 
-cure_cluster::cure_cluster(void) : closest(nullptr), distance_closest(0), mean(nullptr) {
+cure_cluster::cure_cluster(void) : mean(nullptr), closest(nullptr), distance_closest(0) {
     points = new std::vector< std::vector<double> * >();
     rep = new std::vector< std::vector<double> * >();
 }

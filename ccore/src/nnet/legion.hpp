@@ -46,29 +46,29 @@ typedef std::vector<double>				legion_stimulus;
 
 typedef struct legion_network_state {
 public:
-	std::vector<double> m_output;
-	double				m_inhibitor;
-	double				m_time;
+    std::vector<double> m_output;
+    double              m_inhibitor;
+    double              m_time;
 
 public:
-	legion_network_state(void) : m_inhibitor(0.0), m_time(0.0) { }
+    legion_network_state(void) : m_inhibitor(0.0), m_time(0.0) { }
 
-	legion_network_state(const unsigned int size) : m_output(size, 0.0), m_inhibitor(0.0), m_time(0.0) { }
+    legion_network_state(const unsigned int size) : m_output(size, 0.0), m_inhibitor(0.0), m_time(0.0) { }
 
 public:
-	inline size_t size(void) const { return m_output.size(); }
+    inline std::size_t size(void) const { return m_output.size(); }
 
-	inline legion_network_state & operator=(const legion_network_state & other) {
-		if (this != &other) {
-			m_output.resize(other.size());
-			std::copy(other.m_output.cbegin(), other.m_output.cend(), m_output.begin());
+    inline legion_network_state & operator=(const legion_network_state & other) {
+        if (this != &other) {
+            m_output.resize(other.size());
+            std::copy(other.m_output.cbegin(), other.m_output.cend(), m_output.begin());
 
-			m_inhibitor = other.m_inhibitor;
-			m_time = other.m_time;
-		}
+            m_inhibitor = other.m_inhibitor;
+            m_time = other.m_time;
+        }
 
-		return *this;
-	}
+        return *this;
+    }
 } legion_network_state;
 
 

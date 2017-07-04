@@ -51,8 +51,8 @@ public:
     std::vector< std::vector<double> * > * points;
     std::vector< std::vector<double> * > * rep;
 
-    cure_cluster *			closest;
-    double					distance_closest;
+    cure_cluster *          closest;
+    double                  distance_closest;
 
 public:
     /**

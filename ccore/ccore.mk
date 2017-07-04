@@ -6,7 +6,7 @@ MKDIR = mkdir -p
 
 
 # Toolchain arguments.
-CFLAGS = -O3 -MMD -MP -std=c++1y -fPIC
+CFLAGS = -O3 -MMD -MP -std=c++1y -fPIC -Werror -Wall
 LFLAGS = -static-libstdc++ -shared
 
 
