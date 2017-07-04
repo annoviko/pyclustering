@@ -28,11 +28,12 @@
 
 template <class TypeContainer>
 static void template_pyclustering_package(const TypeContainer & container) {
+    using container_data_t = typename TypeContainer::value_type;
     pyclustering_package * package = create_package(&container);
 
     ASSERT_EQ(container.size(), package->size);
     for (std::size_t index = 0; index < container.size(); index++) {
-        ASSERT_EQ(container[index], package->at<TypeContainer::value_type>(index));
+        ASSERT_EQ(container[index], package->at<container_data_t>(index));
     }
 
     delete package;
