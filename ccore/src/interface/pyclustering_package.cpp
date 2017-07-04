@@ -31,9 +31,9 @@ pyclustering_package::pyclustering_package(void) :
 
 
 pyclustering_package::pyclustering_package(const pyclustering_type_data package_type) :
-    size(0),
-    type((unsigned int) package_type),
-    data(nullptr)
+        size(0),
+        type((unsigned int) package_type),
+        data(nullptr)
 { }
 
 
@@ -70,9 +70,11 @@ pyclustering_package::~pyclustering_package(void) {
         }
     }
     else {
-        for (unsigned int i = 0; i < size; i++) {
+        for (std::size_t i = 0; i < size; i++) {
             pyclustering_package * package = ((pyclustering_package **) data)[i];
             delete package;
         }
+
+        delete [] (pyclustering_package **) data;
     }
 }

@@ -1,5 +1,3 @@
-#pragma once
-
 #include "gtest/gtest.h"
 
 #include "interface/xmeans_interface.h"

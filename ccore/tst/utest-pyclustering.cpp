@@ -83,3 +83,11 @@ TEST(utest_pyclustering, package_list) {
     std::vector<std::vector<int>> container = { { 1, 2 }, { 1, 2, 3, 4 } };
     template_pyclustering_package(container);
 }
+
+
+TEST(utest_pyclustering, package_pointer_list) {
+    std::vector<std::vector<int> *> container;
+    container.push_back(new std::vector<int>({ 1, 2, 3, 4, 5}));
+    template_pyclustering_package(container);
+    delete container[0];
+}
