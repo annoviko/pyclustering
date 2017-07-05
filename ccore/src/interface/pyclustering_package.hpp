@@ -61,10 +61,48 @@ public:
     template <class TypeValue>
     auto & at(const std::size_t index) {
         if (size <= index) {
-            throw std::range_error("pyclustering_package::at() [" + std::to_string(__LINE__) + "]: index '" + std::to_string(index) + "' out of range (size: '" + std::to_string(size) + "').");
+            throw std::out_of_range("pyclustering_package::at() [" + std::to_string(__LINE__) + "]: index '" + std::to_string(index) + "' out of range (size: '" + std::to_string(size) + "').");
         }
 
         return ((TypeValue *) data)[index];
+    }
+
+    template <class TypeValue>
+    auto & at(const std::size_t index_row, const std::size_t index_column) {
+        if (size <= index_row) {
+            throw std::out_of_range("pyclustering_package::at() [" + std::to_string(__LINE__) + "]: index '" + std::to_string(index_row) + "' out of range (size: '" + std::to_string(size) + "').");
+        }
+
+        pyclustering_package * package = at<pyclustering_package *>(index_row);
+        return ((TypeValue *) package->data)[index_column];
+    }
+
+
+    template <class TypeValue>
+    void extract(std::vector<TypeValue> & container) {
+        extract(container, this);
+    }
+
+
+    template <class TypeValue>
+    void extract(std::vector<std::vector<TypeValue>> & container) {
+        if (type != PYCLUSTERING_TYPE_LIST) {
+            throw std::invalid_argument("pyclustering_package::extract() [" + std::to_string(__LINE__) + "]: argument is not 'PYCLUSTERING_TYPE_LIST').");
+        }
+
+        for (std::size_t i = 0; i < size; i++) {
+            std::vector<TypeValue> subcontainer = { };
+            extract(subcontainer, at<pyclustering_package *>(i));
+            container.push_back(subcontainer);
+        }
+    }
+
+private:
+    template <class TypeValue>
+    void extract(std::vector<TypeValue> & container, pyclustering_package * package) {
+        for (std::size_t i = 0; i < package->size; i++) {
+            container.push_back(package->at<TypeValue>(i));
+        }
     }
 } pyclustering_package;
 

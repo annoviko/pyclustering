@@ -5,12 +5,20 @@ RM = rm -rf
 MKDIR = mkdir -p
 
 
+# C++ standard depending on operating system
+ifeq ($(shell uname -o), Cygwin)
+	CPLUS_STANDARD = gnu++1y
+else
+	CPLUS_STANDARD = c++1y
+endif
+
+
 # Toolchain arguments
 ifeq ($(ARGS), valgrind)
-	CFLAGS = -MMD -MP -std=c++1y -fPIC -g
+	CFLAGS = -MMD -MP -std=$(CPLUS_STANDARD) -fPIC -g
 	LFLAGS = -pthread
 else
-	CFLAGS = -O3 -MMD -MP -std=c++1y -fPIC -fprofile-arcs -ftest-coverage
+	CFLAGS = -O3 -MMD -MP -std=$(CPLUS_STANDARD) -fPIC -fprofile-arcs -ftest-coverage
 	LFLAGS = -pthread -fprofile-arcs -ftest-coverage
 endif
 

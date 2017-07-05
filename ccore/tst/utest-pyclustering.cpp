@@ -91,3 +91,76 @@ TEST(utest_pyclustering, package_pointer_list) {
     template_pyclustering_package(container);
     delete container[0];
 }
+
+
+template <class TypeContainer>
+static void template_two_dimension_pyclustering_package(const TypeContainer & container) {
+    using sub_container_t   = typename TypeContainer::value_type;
+    using container_data_t  = typename sub_container_t::value_type;
+
+    pyclustering_package * package = create_package(&container);
+
+    ASSERT_EQ(container.size(), package->size);
+
+    for (std::size_t i = 0; i < container.size(); i++) {
+        pyclustering_package * sub_package = package->at<pyclustering_package *>(i);
+        ASSERT_EQ(container[i].size(), sub_package->size);
+
+        for (std::size_t j = 0; j < container[i].size(); j++) {
+            ASSERT_EQ(container[i][j], package->at<container_data_t>(i, j));
+        }
+    }
+
+    delete package;
+}
+
+
+TEST(utest_pyclustering, package_two_dimension_integer) {
+    std::vector<std::vector<int>> container = { { 1, 2, 3 }, { 4, 5 }, { 6, 7, 8, 9 } };
+    template_two_dimension_pyclustering_package(container);
+}
+
+
+TEST(utest_pyclustering, package_two_dimension_double) {
+    std::vector<std::vector<double>> container = { { 1.0, 2.5, 3.0 }, { 4.5, 5.5 }, { 6.1, 7.2, 8.3, 9.4 } };
+    template_two_dimension_pyclustering_package(container);
+}
+
+
+TEST(utest_pyclustering, package_two_dimension_empty) {
+    std::vector<std::vector<long>> container = { { }, { 4, 5 }, { }, { 6 } };
+    template_two_dimension_pyclustering_package(container);
+}
+
+
+template <class Container>
+static void template_pack_unpack(const Container & container) {
+    pyclustering_package * package = create_package(&container);
+
+    Container unpack_container;
+    package->extract(unpack_container);
+
+    ASSERT_EQ(container, unpack_container);
+
+    delete package;
+}
+
+
+TEST(utest_pyclustering, package_unpack_int) {
+    template_pack_unpack(std::vector<int>({ 1, 2, 3, 4 }));
+}
+
+
+TEST(utest_pyclustering, package_unpack_long) {
+    template_pack_unpack(std::vector<long>({ 1, 2, 3, 4, 5, 6 }));
+}
+
+
+TEST(utest_pyclustering, package_unpack_empty) {
+    template_pack_unpack(std::vector<float>({ }));
+}
+
+
+TEST(utest_pyclustering, package_unpack_two_dimension) {
+    template_pack_unpack(std::vector<std::vector<double>>({ { 1.2, 2.4 }, { 3.6, 4.8, 5.0 }, { 6.0 } }));
+}
