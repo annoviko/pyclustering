@@ -109,6 +109,43 @@ def extract_dynamics(ccore_result):
         
     return (times, dynamic);
 
+
+def create_pyclustering_package(dataset):
+    dataset_package = pyclustering_package();
+    
+    c_data_type = None;
+    dataset_package.size = len(dataset);
+    
+    if (isinstance(dataset[0], list)):
+        dataset_package.type = pyclustering_type_data.PYCLUSTERING_TYPE_LIST;
+        c_data_type = POINTER(pyclustering_package);
+    
+    elif (isinstance(dataset[0], int)):
+        dataset_package.type = pyclustering_type_data.PYCLUSTERING_TYPE_INT;
+        c_data_type = c_int;
+    
+    elif (isinstance(dataset[0], long)):
+        dataset_package.type = pyclustering_type_data.PYCLUSTERING_TYPE_LONG;
+        c_data_type = c_long;
+    
+    elif (isinstance(dataset[0], float)):
+        dataset_package.type = pyclustering_type_data.PYCLUSTERING_TYPE_FLOAT;
+        c_data_type = c_float;
+    
+    else:
+        raise NameError("Not supported type of pyclustering package.");
+
+    if (dataset_package.type == pyclustering_type_data.PYCLUSTERING_TYPE_LIST):
+        dataset_package.data = (POINTER(c_data_type) * len(dataset))();
+        for index in range(len(dataset)):
+            dataset_package.data[index] = create_pyclustering_package(dataset[index]);
+    else:
+        array_object = (c_data_type * len(dataset))(*dataset);
+        dataset_package.data = cast(array_object, POINTER(c_void_p));
+    
+    return pointer(dataset_package);
+
+
 def extract_pyclustering_package(ccore_package_pointer):
     if (ccore_package_pointer == 0):
         return [];

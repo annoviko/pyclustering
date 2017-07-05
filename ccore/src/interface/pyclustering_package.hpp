@@ -59,7 +59,7 @@ public:
 
 public:
     template <class TypeValue>
-    auto & at(const std::size_t index) {
+    auto & at(const std::size_t index) const {
         if (size <= index) {
             throw std::out_of_range("pyclustering_package::at() [" + std::to_string(__LINE__) + "]: index '" + std::to_string(index) + "' out of range (size: '" + std::to_string(size) + "').");
         }
@@ -68,7 +68,7 @@ public:
     }
 
     template <class TypeValue>
-    auto & at(const std::size_t index_row, const std::size_t index_column) {
+    auto & at(const std::size_t index_row, const std::size_t index_column) const {
         if (size <= index_row) {
             throw std::out_of_range("pyclustering_package::at() [" + std::to_string(__LINE__) + "]: index '" + std::to_string(index_row) + "' out of range (size: '" + std::to_string(size) + "').");
         }
@@ -79,13 +79,13 @@ public:
 
 
     template <class TypeValue>
-    void extract(std::vector<TypeValue> & container) {
+    void extract(std::vector<TypeValue> & container) const {
         extract(container, this);
     }
 
 
     template <class TypeValue>
-    void extract(std::vector<std::vector<TypeValue>> & container) {
+    void extract(std::vector<std::vector<TypeValue>> & container) const {
         if (type != PYCLUSTERING_TYPE_LIST) {
             throw std::invalid_argument("pyclustering_package::extract() [" + std::to_string(__LINE__) + "]: argument is not 'PYCLUSTERING_TYPE_LIST').");
         }
@@ -99,7 +99,7 @@ public:
 
 private:
     template <class TypeValue>
-    void extract(std::vector<TypeValue> & container, pyclustering_package * package) {
+    void extract(std::vector<TypeValue> & container, pyclustering_package * package) const {
         for (std::size_t i = 0; i < package->size; i++) {
             container.push_back(package->at<TypeValue>(i));
         }

@@ -32,6 +32,7 @@ from sys import platform as _platform;
 # Path to DLL.
 PATH_DLL_CCORE_64 = None;
 
+
 if (_platform == "linux") or (_platform == "linux2"):
     PATH_DLL_CCORE_64 = core.__path__[0] + os.sep + "x64" + os.sep + "linux" + os.sep + "ccore.so";
 elif (_platform == "win32"):
@@ -47,6 +48,7 @@ class pyclustering_type_data:
     PYCLUSTERING_TYPE_UNSIGNED_LONG = 5;
     PYCLUSTERING_TYPE_LIST          = 6;
     PYCLUSTERING_TYPE_SIZE_T        = 7;
+    PYCLUSTERING_TYPE_UNDEFINED     = 8;
 
 
 # Structures that are required for exchaging with DLL.
