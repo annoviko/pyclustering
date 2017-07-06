@@ -59,6 +59,8 @@ def antmean_clustering_process(params, count_clusters, samples):
     """
         Run algorithm
     """
+    
+    ccore.ant_mean_clustering.restype = POINTER(clustering_result);
     res = ccore.ant_mean_clustering(p_samples, algorithm_params, count_clusters)
     res = cast(res, POINTER(clustering_result));
     
