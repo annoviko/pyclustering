@@ -24,14 +24,15 @@
 #include "utils.hpp"
 
 
-pyclustering_package * xmeans_algorithm(const data_representation * const p_sample, const data_representation * const p_centers, const std::size_t p_kmax, const double p_tolerance, const unsigned int p_criterion) {
-    std::unique_ptr<dataset> data(read_sample(p_sample));
-    std::unique_ptr<dataset> centers(read_sample(p_centers));
+pyclustering_package * xmeans_algorithm(const pyclustering_package * const p_sample, const pyclustering_package * const p_centers, const std::size_t p_kmax, const double p_tolerance, const unsigned int p_criterion) {
+    dataset data, centers;
+    p_sample->extract(data);
+    p_centers->extract(centers);
 
-    cluster_analysis::xmeans solver(*centers, p_kmax, p_tolerance, (cluster_analysis::splitting_type) p_criterion);
+    cluster_analysis::xmeans solver(centers, p_kmax, p_tolerance, (cluster_analysis::splitting_type) p_criterion);
 
     cluster_analysis::xmeans_data output_result;
-    solver.process(*data, output_result);
+    solver.process(data, output_result);
 
     pyclustering_package * package = create_package(output_result.clusters().get());
     return package;

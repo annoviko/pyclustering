@@ -38,4 +38,4 @@
 * @return  Returns result of clustering - array of allocated clusters in the pyclustering package.
 *
 */
-extern "C" DECLARATION pyclustering_package * xmeans_algorithm(const data_representation * const p_sample, const data_representation * const p_centers, const std::size_t p_kmax, const double p_tolerance, const unsigned int p_criterion);
+extern "C" DECLARATION pyclustering_package * xmeans_algorithm(const pyclustering_package * const p_sample, const pyclustering_package * const p_centers, const std::size_t p_kmax, const double p_tolerance, const unsigned int p_criterion);
