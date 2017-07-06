@@ -112,17 +112,17 @@ public:
 	void allocate_time_signal(pcnn_time_signal & time_signal) const;
 
 public:
-    /***********************************************************************************************
-    *
-    * @brief   Returns dynamic state of oscillator of the pulse-coupled neural network at the
-    *          specified iteration step.
-    *
-    * @param[in] iteration: number of iteration at which oscillator state is required.
-    * @param[in] index_oscillator: index of oscillator whose state is required.
-    *
-    * @return dynamic state of the oscillator at the specified iteration.
-    *
-    ***********************************************************************************************/
+    /**
+     *
+     * @brief   Returns dynamic state of oscillator of the pulse-coupled neural network at the
+     *          specified iteration step.
+     *
+     * @param[in] iteration: number of iteration at which oscillator state is required.
+     * @param[in] index_oscillator: index of oscillator whose state is required.
+     *
+     * @return dynamic state of the oscillator at the specified iteration.
+     *
+     */
     inline double dynamic_oscillator_at(const size_t iteration, const size_t index_oscillator) const { 
         return dynamic_at(iteration).m_output[index_oscillator]; 
     }

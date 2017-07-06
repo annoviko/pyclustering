@@ -335,19 +335,6 @@ class pcnn_network(network):
     
     """
     
-    # Protected members:
-    _name = "Pulse Coupled Neural Network";
-    _outputs = None;            # list of outputs of oscillors.
-    
-    _feeding = None;            # feeding compartment of each oscillator.    
-    _linking = None;            # linking compartment of each oscillator. 
-    _threshold = None;          # threshold of each oscillator.
-    
-    _params = None;
-    
-    __ccore_pcnn_pointer = None;
-    
-    
     __OUTPUT_TRUE = 1;    # fire value for oscillators.
     __OUTPUT_FALSE = 0;   # rest value for oscillators.
     
@@ -366,6 +353,16 @@ class pcnn_network(network):
         @param[in] ccore (bool): If True then all interaction with object will be performed via CCORE library (C++ implementation of pyclustering).
         
         """
+        
+        self._outputs = None;            # list of outputs of oscillors.
+    
+        self._feeding = None;            # feeding compartment of each oscillator.    
+        self._linking = None;            # linking compartment of each oscillator. 
+        self._threshold = None;          # threshold of each oscillator.
+        
+        self._params = None;
+        
+        self.__ccore_pcnn_pointer = None;
         
         # set parameters of the network
         if (parameters is not None):
@@ -395,8 +392,8 @@ class pcnn_network(network):
             
             self._outputs = [0.0] * self._num_osc;
             
-            self._feeding = [0.0] * self._num_osc;    
-            self._linking = [0.0] * self._num_osc;        
+            self._feeding = [0.0] * self._num_osc;
+            self._linking = [0.0] * self._num_osc;
             self._threshold = [ random.random() for i in range(self._num_osc) ];
     
     
@@ -407,6 +404,7 @@ class pcnn_network(network):
         """
         if (self.__ccore_pcnn_pointer is not None):
             wrapper.pcnn_destroy(self.__ccore_pcnn_pointer);
+            self.__ccore_pcnn_pointer = None;
     
     
     def __len__(self):

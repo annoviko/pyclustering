@@ -57,7 +57,7 @@ class Test(unittest.TestCase):
 
 
     def testSimpleTwoClusters(self):
-        self.templateClustering([[ 0,0 ],[ 1,1 ],[ 10,10 ],[ 11,11 ],[ -2, -2 ],[ 0.55, -1.26 ],[ 13.25, 12.12 ]], [[0, 1, 4, 5], [2, 3, 6]])
+        self.templateClustering([[ 0, 0 ],[ 1, 1 ],[ 10, 10 ],[ 11, 11 ],[ -2, -2 ],[ 0.55, -1.26 ],[ 13.25, 12.12 ]], [[0, 1, 4, 5], [2, 3, 6]])
 
 
 if __name__ == "__main__":

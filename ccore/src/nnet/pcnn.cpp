@@ -30,16 +30,16 @@
 const size_t pcnn::MAXIMUM_MATRIX_REPRESENTATION_SIZE = 4096;
 
 
-pcnn::pcnn(void) : m_oscillators(0), m_connection(nullptr), m_params() { }
+pcnn::pcnn(void) : m_oscillators(0), m_connection(), m_params() { }
 
 
 pcnn::pcnn(const size_t p_size, const connection_t p_structure, const pcnn_parameters & p_parameters) {
-	initilize(p_size, p_structure, 0, 0, p_parameters);
+    initilize(p_size, p_structure, 0, 0, p_parameters);
 }
 
 
 pcnn::pcnn(const size_t p_size, const connection_t p_structure, const size_t p_height, const size_t p_width, const pcnn_parameters & p_parameters) {
-	initilize(p_size, p_structure, p_height, p_width, p_parameters);
+    initilize(p_size, p_structure, p_height, p_width, p_parameters);
 }
 
 

@@ -43,7 +43,7 @@ void * pcnn_simulate(const void * pointer, const unsigned int steps, const void 
 }
 
 
-size_t pcnn_get_size(const void * pointer) {
+std::size_t pcnn_get_size(const void * pointer) {
     return ((pcnn *) pointer)->size();
 }
 

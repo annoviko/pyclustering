@@ -24,23 +24,27 @@
 """
 
 from pyclustering.core.wrapper import *;
+from pyclustering.core.pyclustering_package import package_builder, package_extractor, pyclustering_package;
+
 
 class c_pcnn_parameters(Structure):   
-    _fields_ = [("VF", c_double),
-                ("VL", c_double),
-                ("VT", c_double),
-                ("AF", c_double),
-                ("AL", c_double),
-                ("AT", c_double),
-                ("W", c_double),
-                ("M", c_double),
-                ("B", c_double),
-                ("FAST_LINKING", c_bool)];
+    _fields_ = [
+        ("VF", c_double),
+        ("VL", c_double),
+        ("VT", c_double),
+        ("AF", c_double),
+        ("AL", c_double),
+        ("AT", c_double),
+        ("W", c_double),
+        ("M", c_double),
+        ("B", c_double),
+        ("FAST_LINKING", c_bool)
+    ];
 
 
 def pcnn_create(size, conn_type, height, width, params):
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
-    
+
     c_parameters = c_pcnn_parameters();
     c_parameters.VF = params.VF;
     c_parameters.VL = params.VL;
@@ -51,7 +55,8 @@ def pcnn_create(size, conn_type, height, width, params):
     c_parameters.W = params.W;
     c_parameters.M = params.M;
     c_parameters.FAST_LINKING = params.FAST_LINKING;
-    
+
+    ccore.pcnn_create.restype = POINTER(c_void_p);
     pcnn_pointer = ccore.pcnn_create(c_uint(size), c_uint(conn_type), c_uint(height), c_uint(width), pointer(c_parameters));
     return pcnn_pointer;
     
@@ -64,15 +69,9 @@ def pcnn_destroy(network_pointer):
 def pcnn_simulate(network_pointer, steps, stimulus):
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     
-    c_stimulus = (c_double * len(stimulus))();
-    c_stimulus[:] = stimulus[:];
-    
-    package = pyclustering_package();
-    package.size = len(stimulus);
-    package.type = pyclustering_type_data.PYCLUSTERING_TYPE_DOUBLE;
-    package.data = cast(c_stimulus, POINTER(c_void_p));
-    
-    return ccore.pcnn_simulate(network_pointer, c_uint(steps), pointer(package));
+    c_stimulus = package_builder(stimulus, c_double).create();
+    ccore.pcnn_simulate.restype = POINTER(c_void_p);
+    return ccore.pcnn_simulate(network_pointer, c_uint(steps), c_stimulus);
 
 
 def pcnn_get_size(network_pointer):
@@ -92,7 +91,7 @@ def pcnn_dynamic_allocate_sync_ensembles(dynamic_pointer):
     ccore.pcnn_dynamic_allocate_sync_ensembles.restype = POINTER(pyclustering_package);
     package = ccore.pcnn_dynamic_allocate_sync_ensembles(dynamic_pointer);
     
-    result = extract_pyclustering_package(package);
+    result = package_extractor(package).extract();
     ccore.free_pyclustering_package(package);
     
     return result;
@@ -104,7 +103,7 @@ def pcnn_dynamic_allocate_spike_ensembles(dynamic_pointer):
     ccore.pcnn_dynamic_allocate_spike_ensembles.restype = POINTER(pyclustering_package);
     package = ccore.pcnn_dynamic_allocate_spike_ensembles(dynamic_pointer);
     
-    result = extract_pyclustering_package(package);
+    result = package_extractor(package).extract();
     ccore.free_pyclustering_package(package);
     
     return result;
@@ -116,7 +115,7 @@ def pcnn_dynamic_allocate_time_signal(dynamic_pointer):
     ccore.pcnn_dynamic_allocate_time_signal.restype = POINTER(pyclustering_package);
     package = ccore.pcnn_dynamic_allocate_time_signal(dynamic_pointer);
     
-    result = extract_pyclustering_package(package);
+    result = package_extractor(package).extract();
     ccore.free_pyclustering_package(package);
     
     return result;
@@ -128,7 +127,7 @@ def pcnn_dynamic_get_output(dynamic_pointer):
     ccore.pcnn_dynamic_get_output.restype = POINTER(pyclustering_package);
     package = ccore.pcnn_dynamic_get_output(dynamic_pointer);
     
-    result = extract_pyclustering_package(package);
+    result = package_extractor(package).extract();
     ccore.free_pyclustering_package(package);
     
     return result;
@@ -140,7 +139,7 @@ def pcnn_dynamic_get_time(dynamic_pointer):
     ccore.pcnn_dynamic_get_time.restype = POINTER(pyclustering_package);
     package = ccore.pcnn_dynamic_get_time(dynamic_pointer);
     
-    result = extract_pyclustering_package(package);
+    result = package_extractor(package).extract();
     ccore.free_pyclustering_package(package);
     
     return result;

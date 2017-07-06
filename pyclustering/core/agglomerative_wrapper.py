@@ -25,7 +25,8 @@
 
 from ctypes import cdll, c_size_t, POINTER;
 
-from pyclustering.core.wrapper import PATH_DLL_CCORE_64, create_pointer_data, pyclustering_package, extract_pyclustering_package;
+from pyclustering.core.wrapper import PATH_DLL_CCORE_64, create_pointer_data;
+from pyclustering.core.pyclustering_package import pyclustering_package, package_extractor;
 
 def agglomerative_algorithm(data, number_clusters, link):
     pointer_data = create_pointer_data(data);
@@ -34,7 +35,7 @@ def agglomerative_algorithm(data, number_clusters, link):
     ccore.agglomerative_algorithm.restype = POINTER(pyclustering_package);
     package = ccore.agglomerative_algorithm(pointer_data, c_size_t(number_clusters), c_size_t(link));
 
-    result = extract_pyclustering_package(package);
+    result = package_extractor(package).extract();
     ccore.free_pyclustering_package(package);
 
     return result;

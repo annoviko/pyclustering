@@ -26,7 +26,8 @@
 
 from ctypes import cdll, c_double, c_size_t, c_uint, POINTER;
 
-from pyclustering.core.wrapper import PATH_DLL_CCORE_64, create_pointer_data, extract_pyclustering_package, pyclustering_package;
+from pyclustering.core.wrapper import PATH_DLL_CCORE_64, create_pointer_data;
+from pyclustering.core.pyclustering_package import pyclustering_package, package_extractor;
 
 
 def xmeans(sample, centers, kmax, tolerance, criterion):
@@ -38,7 +39,7 @@ def xmeans(sample, centers, kmax, tolerance, criterion):
     ccore.xmeans_algorithm.restype = POINTER(pyclustering_package);
     package = ccore.xmeans_algorithm(pointer_data, pointer_centers, c_size_t(kmax), c_double(tolerance), c_uint(criterion));
     
-    result = extract_pyclustering_package(package);
+    result = package_extractor(package).extract();
     ccore.free_pyclustering_package(package);
     
     return result;

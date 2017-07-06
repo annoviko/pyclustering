@@ -24,7 +24,8 @@
 
 
 pyclustering_package * kmedoids_algorithm(const data_representation * const sample, const pyclustering_package * const package_medoids, const double tolerance) {
-    cluster_analysis::medoid_sequence medoids((size_t *) package_medoids->data, ((size_t *) package_medoids->data) + package_medoids->size);
+    cluster_analysis::medoid_sequence medoids;
+    package_medoids->extract(medoids);
 
     cluster_analysis::kmedoids algorithm(medoids, tolerance);
 

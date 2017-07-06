@@ -25,7 +25,8 @@
 
 from ctypes import cdll, c_double, c_size_t, POINTER, c_void_p
 
-from pyclustering.core.wrapper import PATH_DLL_CCORE_64, create_pointer_data, extract_pyclustering_package, pyclustering_package;
+from pyclustering.core.wrapper import PATH_DLL_CCORE_64, create_pointer_data;
+from pyclustering.core.pyclustering_package import pyclustering_package, package_extractor;
 
 
 def cure_algorithm(sample, number_clusters, number_represent_points, compression):
@@ -49,7 +50,7 @@ def cure_get_clusters(cure_data_pointer):
     ccore.cure_get_clusters.restype = POINTER(pyclustering_package);
     package = ccore.cure_get_clusters(cure_data_pointer);
     
-    result = extract_pyclustering_package(package);
+    result = package_extractor(package).extract();
     ccore.free_pyclustering_package(package);
     
     return result;
@@ -61,7 +62,7 @@ def cure_get_representors(cure_data_pointer):
     ccore.cure_get_representors.restype = POINTER(pyclustering_package);
     package = ccore.cure_get_representors(cure_data_pointer);
     
-    result = extract_pyclustering_package(package);
+    result = package_extractor(package).extract();
     ccore.free_pyclustering_package(package);
     
     return result;
@@ -73,7 +74,7 @@ def cure_get_means(cure_data_pointer):
     ccore.cure_get_means.restype = POINTER(pyclustering_package);
     package = ccore.cure_get_means(cure_data_pointer);
     
-    result = extract_pyclustering_package(package);
+    result = package_extractor(package).extract();
     ccore.free_pyclustering_package(package);
     
     return result;

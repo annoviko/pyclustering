@@ -23,7 +23,9 @@
 
 """
 
+
 from pyclustering.core.wrapper import *;
+from pyclustering.core.pyclustering_package import pyclustering_package, package_extractor;
 
 
 def sync_create_network(num_osc, weight, frequency, type_conn, initial_phases):
@@ -72,7 +74,7 @@ def sync_connectivity_matrix(pointer_network):
     
     package = ccore.sync_connectivity_matrix(pointer_network);
     
-    connectivity_matrix = extract_pyclustering_package(package);
+    connectivity_matrix = package_extractor(package).extract();
     ccore.free_pyclustering_package(package);
     
     return connectivity_matrix;
@@ -98,7 +100,7 @@ def sync_dynamic_allocate_sync_ensembles(pointer_dynamic, tolerance, iteration):
     ccore.sync_dynamic_allocate_sync_ensembles.restype = POINTER(pyclustering_package);
     package = ccore.sync_dynamic_allocate_sync_ensembles(pointer_dynamic, c_double(tolerance), c_size_t(iteration));
     
-    result = extract_pyclustering_package(package);
+    result = package_extractor(package).extract();
     ccore.free_pyclustering_package(package);
     
     return result;
@@ -114,7 +116,7 @@ def sync_dynamic_allocate_correlation_matrix(pointer_dynamic, iteration):
     ccore.sync_dynamic_allocate_correlation_matrix.restype = POINTER(pyclustering_package);
     package = ccore.sync_dynamic_allocate_correlation_matrix(pointer_dynamic, c_uint(analyse_iteration));
     
-    result = extract_pyclustering_package(package);
+    result = package_extractor(package).extract();
     ccore.free_pyclustering_package(package);
     
     return result;
@@ -126,7 +128,7 @@ def sync_dynamic_get_output(pointer_dynamic):
     ccore.sync_dynamic_get_output.restype = POINTER(pyclustering_package);
     package = ccore.sync_dynamic_get_output(pointer_dynamic);
     
-    result = extract_pyclustering_package(package);
+    result = package_extractor(package).extract();
     ccore.free_pyclustering_package(package);
     
     return result;
@@ -138,7 +140,7 @@ def sync_dynamic_get_time(pointer_dynamic):
     ccore.sync_dynamic_get_time.restype = POINTER(pyclustering_package);
     package = ccore.sync_dynamic_get_time(pointer_dynamic);
     
-    result = extract_pyclustering_package(package);
+    result = package_extractor(package).extract();
     ccore.free_pyclustering_package(package);
     
     return result;

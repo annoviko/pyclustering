@@ -25,7 +25,8 @@
 
 from ctypes import cdll, Structure, c_uint, c_size_t, c_double, c_void_p, pointer, POINTER;
 
-from pyclustering.core.wrapper import PATH_DLL_CCORE_64, create_pointer_data, extract_pyclustering_package, pyclustering_package;
+from pyclustering.core.wrapper import PATH_DLL_CCORE_64, create_pointer_data;
+from pyclustering.core.pyclustering_package import pyclustering_package, package_extractor;
 
 
 class c_som_parameters(Structure):
@@ -157,7 +158,7 @@ def som_get_capture_objects(som_pointer):
     ccore.som_get_capture_objects.restype = POINTER(pyclustering_package);
     package = ccore.som_get_capture_objects(som_pointer);
     
-    result = extract_pyclustering_package(package);
+    result = package_extractor(package).extract();
     return result;
 
 
@@ -174,7 +175,7 @@ def som_get_weights(som_pointer):
     ccore.som_get_weights.restype = POINTER(pyclustering_package);
     package = ccore.som_get_weights(som_pointer);
     
-    result = extract_pyclustering_package(package);
+    result = package_extractor(package).extract();
     return result;   
 
 
@@ -191,7 +192,7 @@ def som_get_awards(som_pointer):
     ccore.som_get_awards.restype = POINTER(pyclustering_package);
     package = ccore.som_get_awards(som_pointer);
     
-    result = extract_pyclustering_package(package);
+    result = package_extractor(package).extract();
     return result;  
 
 
@@ -208,5 +209,5 @@ def som_get_neighbors(som_pointer):
     ccore.som_get_neighbors.restype = POINTER(pyclustering_package);
     package = ccore.som_get_neighbors(som_pointer);
     
-    result = extract_pyclustering_package(package);
+    result = package_extractor(package).extract();
     return result;  

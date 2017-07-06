@@ -82,7 +82,7 @@ extern "C" DECLARATION void * pcnn_simulate(const void * p_pointer, const unsign
 * @return   Size of the oscillatory network.
 *
 */
-extern "C" DECLARATION size_t pcnn_get_size(const void * p_pointer);
+extern "C" DECLARATION std::size_t pcnn_get_size(const void * p_pointer);
 
 /**
 *

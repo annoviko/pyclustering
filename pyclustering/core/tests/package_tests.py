@@ -27,19 +27,71 @@
 import unittest;
 
 
-from pyclustering.core.wrapper import create_pyclustering_package, extract_pyclustering_package;
+from pyclustering.core.pyclustering_package import package_builder, package_extractor;
+from ctypes import c_ulong, c_size_t, c_double, c_uint
 
 
 class Test(unittest.TestCase):
-    def templatePackUnpack(self, dataset):
-        package_pointer = create_pyclustering_package(dataset);
-        unpacked_package = extract_pyclustering_package(package_pointer);
+    def templatePackUnpack(self, dataset, c_type_data = None):
+        package_pointer = package_builder(dataset, c_type_data).create();
+        unpacked_package = package_extractor(package_pointer).extract();
         
         assert dataset == unpacked_package;
-    
-    
+
+
     def testListInteger(self):
         self.templatePackUnpack([1, 2, 3, 4, 5]);
+
+    def testListIntegerSingle(self):
+        self.templatePackUnpack([2]);
+
+    def testListIntegerNegative(self):
+        self.templatePackUnpack([-1, -2, -10, -20]);
+
+    def testListIntegerNegativeAndPositive(self):
+        self.templatePackUnpack([-1, 26, -10, -20, 13]);
+
+    def testListFloat(self):
+        self.templatePackUnpack([1.1, 1.2, 1.3, 1.4, 1.5, 1.6]);
+
+    def testListFloatNegativeAndPositive(self):
+        self.templatePackUnpack([1.1, -1.2, -1.3, -1.4, 1.5, -1.6]);
+
+    def testListLong(self):
+        self.templatePackUnpack([100000000, 2000000000]);
+
+    def testListEmpty(self):
+        self.templatePackUnpack([]);
+
+    def testListOfListInteger(self):
+        self.templatePackUnpack([ [1, 2, 3], [4, 5, 6], [7, 8, 9] ]);
+
+    def testListOfListDouble(self):
+        self.templatePackUnpack([ [1.1, 5.4], [1.3], [1.4, -9.4] ]);
+
+    def testListOfListWithGaps(self):
+        self.templatePackUnpack([ [], [1, 2, 3], [], [4], [], [5, 6, 7] ]);
+
+    def testListSpecifyUnsignedLong(self):
+        self.templatePackUnpack([1, 2, 3, 4, 5], c_ulong);
+
+    def testListSpecifyUnsignedSizeT(self):
+        self.templatePackUnpack([1, 2, 3, 4, 5], c_size_t);
+
+    def testListSpecifyDouble(self):
+        self.templatePackUnpack([1.1, 1.6, -7.8], c_double);
+
+    def testListOfListSpecifySizeT(self):
+        self.templatePackUnpack([ [1, 2, 3], [4, 5] ], c_size_t);
+
+    def testListOfListSpecifyUnsignedIntWithGaps(self):
+        self.templatePackUnpack([ [1, 2, 3], [], [4, 5], [], [] ], c_uint);
+
+    def testListOfListEmpty(self):
+        self.templatePackUnpack([ [], [], [] ]);
+
+    def testListOfListOfListInteger(self):
+        self.templatePackUnpack([ [ [1], [2] ], [ [3], [4] ], [ [5, 6], [7, 8] ] ]);
 
 
 if __name__ == "__main__":

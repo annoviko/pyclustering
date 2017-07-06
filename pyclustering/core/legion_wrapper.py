@@ -24,27 +24,30 @@
 """
 
 from pyclustering.core.wrapper import *;
+from pyclustering.core.pyclustering_package import pyclustering_package, package_extractor, package_builder;
 
 
 class c_legion_parameters(Structure):   
-    _fields_ = [("eps", c_double),
-                ("alpha", c_double),
-                ("gamma", c_double),
-                ("betta", c_double),
-                ("lamda", c_double),
-                ("teta", c_double),
-                ("teta_x", c_double),
-                ("teta_p", c_double),
-                ("teta_xz", c_double),
-                ("teta_zx", c_double),
-                ("T", c_double),
-                ("mu", c_double),
-                ("Wz", c_double),
-                ("Wt", c_double),
-                ("fi", c_double),
-                ("ro", c_double),
-                ("I", c_double),
-                ("ENABLE_POTENTIONAL", c_bool)];
+    _fields_ = [
+        ("eps", c_double),
+        ("alpha", c_double),
+        ("gamma", c_double),
+        ("betta", c_double),
+        ("lamda", c_double),
+        ("teta", c_double),
+        ("teta_x", c_double),
+        ("teta_p", c_double),
+        ("teta_xz", c_double),
+        ("teta_zx", c_double),
+        ("T", c_double),
+        ("mu", c_double),
+        ("Wz", c_double),
+        ("Wt", c_double),
+        ("fi", c_double),
+        ("ro", c_double),
+        ("I", c_double),
+        ("ENABLE_POTENTIONAL", c_bool)
+    ];
 
 
 def legion_create(size, conn_type, params):
@@ -83,16 +86,10 @@ def legion_destroy(legion_network_pointer):
 def legion_simulate(legion_network_pointer, steps, time, solver, collect_dynamic, stimulus):
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     
-    c_stimulus = (c_double * len(stimulus))();
-    c_stimulus[:] = stimulus[:];
-    
-    package = pyclustering_package();
-    package.size = len(stimulus);
-    package.type = pyclustering_type_data.PYCLUSTERING_TYPE_DOUBLE;
-    package.data = cast(c_stimulus, POINTER(c_void_p));
+    c_stimulus = package_builder(stimulus, c_double).create();
     
     ccore.legion_simulate.restype = POINTER(c_void_p);
-    return ccore.legion_simulate(legion_network_pointer, c_uint(steps), c_double(time), c_uint(solver), c_uint(collect_dynamic), pointer(package));
+    return ccore.legion_simulate(legion_network_pointer, c_uint(steps), c_double(time), c_uint(solver), c_uint(collect_dynamic), c_stimulus);
 
 
 def legion_get_size(legion_network_pointer):
@@ -112,7 +109,7 @@ def legion_dynamic_get_output(legion_dynamic_pointer):
     ccore.legion_dynamic_get_output.restype = POINTER(pyclustering_package);
     package = ccore.legion_dynamic_get_output(legion_dynamic_pointer);
     
-    result = extract_pyclustering_package(package);
+    result = package_extractor(package).extract();
     ccore.free_pyclustering_package(package);
     
     return result;
@@ -124,7 +121,7 @@ def legion_dynamic_get_inhibitory_output(legion_dynamic_pointer):
     ccore.legion_dynamic_get_inhibitory_output.restype = POINTER(pyclustering_package);
     package = ccore.legion_dynamic_get_inhibitory_output(legion_dynamic_pointer);
     
-    result = extract_pyclustering_package(package);
+    result = package_extractor(package).extract();
     ccore.free_pyclustering_package(package);
     
     return result;
@@ -136,7 +133,7 @@ def legion_dynamic_get_time(legion_dynamic_pointer):
     ccore.legion_dynamic_get_time.restype = POINTER(pyclustering_package);
     package = ccore.legion_dynamic_get_time(legion_dynamic_pointer);
     
-    result = extract_pyclustering_package(package);
+    result = package_extractor(package).extract();
     ccore.free_pyclustering_package(package);
     
     return result;

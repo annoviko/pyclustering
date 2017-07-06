@@ -24,28 +24,23 @@
 """
 
 
-from ctypes import cdll, c_double, c_size_t, c_void_p, cast, pointer, POINTER;
+from ctypes import cdll, c_double, c_size_t, POINTER;
 
-from pyclustering.core.wrapper import PATH_DLL_CCORE_64, create_pointer_data, pyclustering_package, pyclustering_type_data, extract_pyclustering_package;
+from pyclustering.core.wrapper import PATH_DLL_CCORE_64, create_pointer_data;
+from pyclustering.core.pyclustering_package import pyclustering_package, package_extractor, package_builder;
 
 
 def kmedoids(sample, medoids, tolerance):
     pointer_data = create_pointer_data(sample);
     
-    c_medoids = (c_size_t * len(medoids))();
-    c_medoids[:] = medoids[:];
-    
-    medoids_package = pyclustering_package();
-    medoids_package.size = len(medoids);
-    medoids_package.type = pyclustering_type_data.PYCLUSTERING_TYPE_SIZE_T;
-    medoids_package.data = cast(c_medoids, POINTER(c_void_p));
+    medoids_package = package_builder(medoids, c_size_t).create();
     
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     
     ccore.kmedoids_algorithm.restype = POINTER(pyclustering_package);
-    package = ccore.kmedoids_algorithm(pointer_data, pointer(medoids_package), c_double(tolerance));
+    package = ccore.kmedoids_algorithm(pointer_data, medoids_package, c_double(tolerance));
     
-    result = extract_pyclustering_package(package);
+    result = package_extractor(package).extract();
     ccore.free_pyclustering_package(package);
 
     return result;
