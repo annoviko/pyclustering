@@ -131,9 +131,9 @@ class package_builder:
         return self.__create_package(self.__dataset);
 
 
-    def __get_type(self, pyclustering_type_data):
+    def __get_type(self, pyclustering_data_type):
         if (self.__c_data_type is None):
-            return pyclustering_type_data;
+            return pyclustering_data_type;
         
         return self.__c_data_type;
 
