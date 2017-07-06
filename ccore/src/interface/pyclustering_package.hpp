@@ -99,7 +99,7 @@ public:
 
 private:
     template <class TypeValue>
-    void extract(std::vector<TypeValue> & container, pyclustering_package * package) const {
+    void extract(std::vector<TypeValue> & container, const pyclustering_package * const package) const {
         for (std::size_t i = 0; i < package->size; i++) {
             container.push_back(package->at<TypeValue>(i));
         }
