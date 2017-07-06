@@ -249,36 +249,9 @@ class package_extractor:
 
     def __unpack_pointer_data(self, pointer_package):
         type_package = pointer_package[0].type;
-        pointer_data = None;
         
         if (pointer_package[0].size == 0):
             return [];
         
-        if (type_package == pyclustering_type_data.PYCLUSTERING_TYPE_INT):
-            pointer_data = cast(pointer_package[0].data, POINTER(c_int));
-        
-        elif (type_package == pyclustering_type_data.PYCLUSTERING_TYPE_UNSIGNED_INT):
-            pointer_data = cast(pointer_package[0].data, POINTER(c_uint));
-        
-        elif (type_package == pyclustering_type_data.PYCLUSTERING_TYPE_FLOAT):
-            pointer_data = cast(pointer_package[0].data, POINTER(c_float));
-        
-        elif (type_package == pyclustering_type_data.PYCLUSTERING_TYPE_DOUBLE):
-            pointer_data = cast(pointer_package[0].data, POINTER(c_double));
-        
-        elif (type_package == pyclustering_type_data.PYCLUSTERING_TYPE_LONG):
-            pointer_data = cast(pointer_package[0].data, POINTER(c_long));
-        
-        elif (type_package == pyclustering_type_data.PYCLUSTERING_TYPE_UNSIGNED_LONG):
-            pointer_data = cast(pointer_package[0].data, POINTER(c_ulong));
-        
-        elif (type_package == pyclustering_type_data.PYCLUSTERING_TYPE_SIZE_T):
-            pointer_data = cast(pointer_package[0].data, POINTER(c_size_t));
-        
-        elif (type_package == pyclustering_type_data.PYCLUSTERING_TYPE_LIST):
-            pointer_data = cast(pointer_package[0].data, POINTER(POINTER(pyclustering_package)));
-    
-        else:
-            raise NameError("Not supported type of pyclustering package.");
-        
+        pointer_data = cast(pointer_package[0].data, POINTER(pyclustering_type_data.get_ctype(type_package)));
         return self.__unpack_data(pointer_package, pointer_data, type_package);
