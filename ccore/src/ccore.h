@@ -28,8 +28,8 @@
 
 
 typedef struct cluster_representation {
-	unsigned int			size;
-	unsigned int			* objects;
+    unsigned int            size;
+    unsigned int        * objects;
 } cluster_representation;
 
 
@@ -83,7 +83,6 @@ extern "C" DECLARATION void free_clustering_result(clustering_result * pointer);
  ***********************************************************************************************/
 extern "C" DECLARATION void free_dynamic_result(dynamic_result * pointer);
 
-extern "C" DECLARATION void free_pyclustering_package(pyclustering_package * package);
 
 extern "C" DECLARATION void * syncpr_create(const unsigned int num_osc, 
                                             const double increase_strength1, 

@@ -143,6 +143,9 @@
     <ClCompile Include="..\src\interface\xmeans_interface.cpp">
       <Filter>Tested Code\interface</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\interface\pyclustering_interface.cpp">
+      <Filter>Tested Code\interface</Filter>
+    </ClCompile>
     <ClCompile Include="..\src\interface\pyclustering_package.cpp">
       <Filter>Tested Code\interface</Filter>
     </ClCompile>
@@ -400,6 +403,9 @@
     <ClInclude Include="..\src\interface\xmeans_interface.h">
       <Filter>Tested Code\interface</Filter>
     </ClInclude>
+    <ClCompile Include="..\src\interface\pyclustering_interface.h">
+      <Filter>Tested Code\interface</Filter>
+    </ClCompile>
     <ClInclude Include="..\src\interface\pyclustering_package.hpp">
       <Filter>Tested Code\interface</Filter>
     </ClInclude>

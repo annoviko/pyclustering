@@ -83,10 +83,6 @@ void free_dynamic_result(dynamic_result * pointer) {
 	}
 }
 
-void free_pyclustering_package(pyclustering_package * package) {
-    delete package;
-}
-
 
 /***********************************************************************************************
 *
