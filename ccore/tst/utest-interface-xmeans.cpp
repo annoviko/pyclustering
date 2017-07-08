@@ -6,13 +6,6 @@
 #include <memory>
 
 
-extern "C" DECLARATION pyclustering_package * xmeans_algorithm(const pyclustering_package * const p_sample,
-        const pyclustering_package * const p_centers,
-        const std::size_t p_kmax,
-        const double p_tolerance,
-        const unsigned int p_criterion);
-
-
 template <class ContainerType>
 static std::shared_ptr<pyclustering_package> pack(const ContainerType & container) {
     pyclustering_package * package = create_package(&container);
