@@ -44,7 +44,7 @@
  *           allocated clusters, representative points and means of each cluster.
  *
  */
-extern "C" DECLARATION void * cure_algorithm(const data_representation * const sample, const size_t number_clusters, const size_t number_repr_points, const double compression);
+extern "C" DECLARATION void * cure_algorithm(const pyclustering_package * const sample, const size_t number_clusters, const size_t number_repr_points, const double compression);
 
 /**
  *

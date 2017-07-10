@@ -44,7 +44,7 @@
  *          array is noise.
  *
  */
-extern "C" DECLARATION pyclustering_package * dbscan_algorithm(const data_representation * const p_sample, const double p_radius, const size_t p_minumum_neighbors);
+extern "C" DECLARATION pyclustering_package * dbscan_algorithm(const pyclustering_package * const p_sample, const double p_radius, const size_t p_minumum_neighbors);
 
 
 #endif

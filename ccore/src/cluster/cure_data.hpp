@@ -89,8 +89,6 @@ public:
     *
     */
     inline dataset_ptr means(void) { return m_mean_sequence; }
-
-
 };
 
 

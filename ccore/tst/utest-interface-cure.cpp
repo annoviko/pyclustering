@@ -20,7 +20,7 @@
 
 #include "gtest/gtest.h"
 
-#include "interface/xmeans_interface.h"
+#include "interface/cure_interface.h"
 #include "interface/pyclustering_package.hpp"
 
 #include "utenv-utils.hpp"
@@ -28,12 +28,20 @@
 #include <memory>
 
 
-TEST(utest_interface_xmeans, xmeans_algorithm) {
+TEST(utest_interface_cure, cure_api) {
     std::shared_ptr<pyclustering_package> sample = pack(dataset({ { 1 }, { 2 }, { 3 }, { 10 }, { 11 }, { 12 } }));
-    std::shared_ptr<pyclustering_package> centers = pack(dataset({ { 1 }, { 2 } }));
 
-    pyclustering_package * result = xmeans_algorithm(sample.get(), centers.get(), 5, 0.01, 0);
-    ASSERT_EQ(2, result->size);
+    void * cure_result = cure_algorithm(sample.get(), 2, 1, 0.5);
+    ASSERT_NE(nullptr, cure_result);
 
-    delete result;
+    std::shared_ptr<pyclustering_package> clusters(cure_get_clusters(cure_result));
+    ASSERT_EQ(2, clusters->size);
+
+    std::shared_ptr<pyclustering_package> representors(cure_get_representors(cure_result));
+    ASSERT_EQ(2, representors->size);
+
+    std::shared_ptr<pyclustering_package> means(cure_get_means(cure_result));
+    ASSERT_EQ(2, means->size);
+
+    cure_data_destroy(cure_result);
 }

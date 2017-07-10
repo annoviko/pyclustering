@@ -143,9 +143,6 @@
     <ClCompile Include="..\src\interface\xmeans_interface.cpp">
       <Filter>Tested Code\interface</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\interface\pyclustering_interface.cpp">
-      <Filter>Tested Code\interface</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\interface\pyclustering_package.cpp">
       <Filter>Tested Code\interface</Filter>
     </ClCompile>
@@ -241,6 +238,24 @@
     </ClCompile>
     <ClCompile Include="utest-pyclustering.cpp">
       <Filter>Unit Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="utest-interface-cure.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="utenv-utils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="utest-interface-dbscan.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\interface\cure_interface.cpp">
+      <Filter>Tested Code\interface</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\interface\dbscan_interface.cpp">
+      <Filter>Tested Code\interface</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\interface\pyclustering_interface.cpp">
+      <Filter>Tested Code\interface</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -403,9 +418,6 @@
     <ClInclude Include="..\src\interface\xmeans_interface.h">
       <Filter>Tested Code\interface</Filter>
     </ClInclude>
-    <ClCompile Include="..\src\interface\pyclustering_interface.h">
-      <Filter>Tested Code\interface</Filter>
-    </ClCompile>
     <ClInclude Include="..\src\interface\pyclustering_package.hpp">
       <Filter>Tested Code\interface</Filter>
     </ClInclude>
@@ -414,6 +426,18 @@
     </ClInclude>
     <ClInclude Include="utest-adjacency.hpp">
       <Filter>Unit Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="utenv-utils.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\interface\cure_interface.h">
+      <Filter>Tested Code\interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\interface\dbscan_interface.h">
+      <Filter>Tested Code\interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\interface\pyclustering_interface.h">
+      <Filter>Tested Code\interface</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -23,13 +23,14 @@
 #include "cluster/cure.hpp"
 
 
-void * cure_algorithm(const data_representation * const sample, const size_t number_clusters, const size_t number_repr_points, const double compression) {
-    std::unique_ptr<dataset> input_dataset(read_sample(sample));
+void * cure_algorithm(const pyclustering_package * const sample, const size_t number_clusters, const size_t number_repr_points, const double compression) {
+    dataset input_dataset;
+    sample->extract(input_dataset);
 
     cluster_analysis::cure solver(number_clusters, number_repr_points, compression);
 
     cluster_analysis::cure_data * output_result = new cluster_analysis::cure_data();
-    solver.process(*input_dataset, *output_result);
+    solver.process(input_dataset, *output_result);
 
     return output_result;
 }

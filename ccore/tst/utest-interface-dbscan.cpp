@@ -18,21 +18,21 @@
 *
 */
 
-#include "interface/agglomerative_interface.h"
+#include "gtest/gtest.h"
 
-#include "cluster/agglomerative.hpp"
+#include "interface/dbscan_interface.h"
+#include "interface/pyclustering_package.hpp"
+
+#include "utenv-utils.hpp"
+
+#include <memory>
 
 
-pyclustering_package * agglomerative_algorithm(const pyclustering_package * const p_sample, const size_t p_number_clusters, const size_t p_link) {
-    cluster_analysis::agglomerative algorithm(p_number_clusters, (cluster_analysis::type_link) p_link);
+TEST(utest_interface_dbscan, dbscan_algorithm) {
+    std::shared_ptr<pyclustering_package> sample = pack(dataset({ { 1.0, 1.0 }, { 1.1, 1.0 }, { 1.2, 1.4 }, { 10.0, 10.3 }, { 10.1, 10.2 }, { 10.2, 10.4 } }));
 
-    dataset data;
-    p_sample->extract(data);
+    pyclustering_package * result = dbscan_algorithm(sample.get(), 4, 2);
+    ASSERT_EQ(3, result->size); /* allocated clustes + noise */
 
-    cluster_analysis::cluster_data result;
-    algorithm.process(data, result);
-
-    pyclustering_package * package = create_package(result.clusters().get());
-
-    return package;
+    delete result;
 }

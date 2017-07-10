@@ -26,11 +26,11 @@
 from ctypes import cdll, c_double, c_size_t, POINTER;
 
 from pyclustering.core.wrapper import PATH_DLL_CCORE_64, create_pointer_data;
-from pyclustering.core.pyclustering_package import pyclustering_package, package_extractor;
+from pyclustering.core.pyclustering_package import pyclustering_package, package_extractor, package_builder;
 
 
 def dbscan(sample, eps, min_neighbors, return_noise = False):
-    pointer_data = create_pointer_data(sample);
+    pointer_data = package_builder(sample).create();
     
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     

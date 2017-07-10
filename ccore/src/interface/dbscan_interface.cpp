@@ -23,14 +23,15 @@
 #include "cluster/dbscan.hpp"
 
 
-pyclustering_package * dbscan_algorithm(const data_representation * const sample, const double radius, const size_t minumum_neighbors) {
-    std::unique_ptr<dataset> input_dataset(read_sample(sample));
+pyclustering_package * dbscan_algorithm(const pyclustering_package * const sample, const double radius, const size_t minumum_neighbors) {
+    dataset input_dataset;
+    sample->extract(input_dataset);
 
     cluster_analysis::dbscan solver(radius, minumum_neighbors);
 
     cluster_analysis::dbscan_data output_result;
 
-    solver.process(*input_dataset, output_result);
+    solver.process(input_dataset, output_result);
 
     pyclustering_package * package = new pyclustering_package(pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
     package->size = output_result.size() + 1;   /* the last for noise */

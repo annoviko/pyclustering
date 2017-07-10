@@ -41,7 +41,7 @@
  *          array is noise.
  *
  */
-extern "C" DECLARATION pyclustering_package * agglomerative_algorithm(const data_representation * const p_sample, const size_t p_number_clusters, const size_t p_link);
+extern "C" DECLARATION pyclustering_package * agglomerative_algorithm(const pyclustering_package * const p_sample, const size_t p_number_clusters, const size_t p_link);
 
 
 #endif

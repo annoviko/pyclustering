@@ -18,21 +18,17 @@
 *
 */
 
-#include "interface/agglomerative_interface.h"
-
-#include "cluster/agglomerative.hpp"
+#pragma once
 
 
-pyclustering_package * agglomerative_algorithm(const pyclustering_package * const p_sample, const size_t p_number_clusters, const size_t p_link) {
-    cluster_analysis::agglomerative algorithm(p_number_clusters, (cluster_analysis::type_link) p_link);
+#include "interface/pyclustering_package.hpp"
 
-    dataset data;
-    p_sample->extract(data);
 
-    cluster_analysis::cluster_data result;
-    algorithm.process(data, result);
+template <class ContainerType>
+static std::shared_ptr<pyclustering_package> pack(const ContainerType & container) {
+    pyclustering_package * package = create_package(&container);
 
-    pyclustering_package * package = create_package(result.clusters().get());
+    std::shared_ptr<pyclustering_package> shared_package(package);
 
-    return package;
+    return shared_package;
 }
