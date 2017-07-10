@@ -312,7 +312,7 @@ void sync_dynamic::allocate_sync_ensembles(const double tolerance, const size_t 
 
     sync_dynamic::const_iterator last_state_dynamic = cbegin() + iteration;
 
-    for (unsigned int i = 1; i < number_oscillators(); i++) {
+    for (unsigned int i = 1; i < oscillators(); i++) {
         bool cluster_allocated = false;
         ensemble_data<sync_ensemble>::iterator last_sync_ensemble_element = ensembles.end();
 
@@ -366,12 +366,12 @@ void sync_dynamic::allocate_correlation_matrix(const size_t p_iteration, sync_co
         return;
     }
 
-    p_matrix.resize(number_oscillators(), sync_corr_row(number_oscillators(), 0.0));
+    p_matrix.resize(oscillators(), sync_corr_row(oscillators(), 0.0));
 
-    for (size_t i = 0; i < number_oscillators(); i++) {
-        for (size_t j = i + 1; j < number_oscillators(); j++) {
-            const double phase1 = dynamic_at(p_iteration).m_phase[i];
-            const double phase2 = dynamic_at(p_iteration).m_phase[j];
+    for (size_t i = 0; i < oscillators(); i++) {
+        for (size_t j = i + 1; j < oscillators(); j++) {
+            const double phase1 = at(p_iteration).m_phase[i];
+            const double phase2 = at(p_iteration).m_phase[j];
 
             p_matrix[i][j] = std::abs(std::sin(phase1 - phase2));
             p_matrix[j][i] = p_matrix[i][j];

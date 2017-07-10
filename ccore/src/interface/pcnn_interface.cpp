@@ -57,14 +57,7 @@ pyclustering_package * pcnn_dynamic_allocate_sync_ensembles(const void * pointer
     ensemble_data<pcnn_ensemble> sync_ensembles;
     ((pcnn_dynamic *) pointer)->allocate_sync_ensembles(sync_ensembles);
 
-    pyclustering_package * package = new pyclustering_package(pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
-    package->size = sync_ensembles.size();
-    package->data = new pyclustering_package * [package->size];
-
-    for (unsigned int i = 0; i < package->size; i++) {
-        ((pyclustering_package **) package->data)[i] = create_package(&sync_ensembles[i]);
-    }
-
+    pyclustering_package * package = create_package(&sync_ensembles);
     return package;
 }
 
@@ -73,14 +66,7 @@ pyclustering_package * pcnn_dynamic_allocate_spike_ensembles(const void * pointe
     ensemble_data<pcnn_ensemble> spike_ensembles;
     ((pcnn_dynamic *) pointer)->allocate_spike_ensembles(spike_ensembles);
 
-    pyclustering_package * package = new pyclustering_package(pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
-    package->size = spike_ensembles.size();
-    package->data = new pyclustering_package * [package->size];
-
-    for (unsigned int i = 0; i < package->size; i++) {
-        ((pyclustering_package **) package->data)[i] = create_package(&spike_ensembles[i]);
-    }
-
+    pyclustering_package * package = create_package(&spike_ensembles);
     return package;
 }
 
@@ -90,7 +76,6 @@ pyclustering_package * pcnn_dynamic_allocate_time_signal(const void * pointer) {
     ((pcnn_dynamic *) pointer)->allocate_time_signal(time_signal);
 
     pyclustering_package * package = create_package(&time_signal);
-
     return package;
 }
 

@@ -113,8 +113,8 @@
     <ClInclude Include="interface\kmedians_interface.h" />
     <ClInclude Include="interface\kmedoids_interface.h" />
     <ClInclude Include="interface\optics_interface.h" />
-    <ClCompile Include="interface\pyclustering_interface.h" />
     <ClInclude Include="interface\pcnn_interface.h" />
+    <ClInclude Include="interface\pyclustering_interface.h" />
     <ClInclude Include="interface\pyclustering_package.hpp" />
     <ClInclude Include="interface\rock_interface.h" />
     <ClInclude Include="interface\som_interface.h" />

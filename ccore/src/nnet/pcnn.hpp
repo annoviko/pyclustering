@@ -124,7 +124,7 @@ public:
      *
      */
     inline double dynamic_oscillator_at(const size_t iteration, const size_t index_oscillator) const { 
-        return dynamic_at(iteration).m_output[index_oscillator]; 
+        return at(iteration).m_output[index_oscillator]; 
     }
 };
 

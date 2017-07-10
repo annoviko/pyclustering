@@ -5,8 +5,18 @@ RM = rm -rf
 MKDIR = mkdir -p
 
 
+# C++ standard depending on operating system
+ifeq ($(shell uname -o), Cygwin)
+	CPLUS_STANDARD = gnu++1y
+	PIC_FLAG = 
+else
+	CPLUS_STANDARD = c++1y
+	PIC_FLAG = -fPIC
+endif
+
+
 # Toolchain arguments.
-CFLAGS = -O3 -MMD -MP -std=c++1y -fPIC -Werror -Wall
+CFLAGS = -O3 -MMD -MP -std=$(CPLUS_STANDARD) $(PIC_FLAG) -Werror -Wall
 LFLAGS = -static-libstdc++ -shared
 
 

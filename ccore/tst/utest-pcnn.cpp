@@ -41,7 +41,7 @@ static void template_dynamic_generation_runner(
     /* check that each iteration of output dynamic has states for the same number of oscillators */
     for (unsigned int index = 0; index < network.size(); index++) {
         ASSERT_EQ(network.size(), dynamic[index].m_output.size());
-        ASSERT_EQ(network.size(), dynamic.dynamic_at(index).size());
+        ASSERT_EQ(network.size(), dynamic.at(index).size());
     }
 
     pcnn_time_signal time_signal;

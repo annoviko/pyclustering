@@ -118,9 +118,6 @@
     <ClCompile Include="interface\pyclustering_package.cpp">
       <Filter>Source Files\interface</Filter>
     </ClCompile>
-    <ClCompile Include="interface\pyclustering_interface.cpp">
-      <Filter>Source Files\interface</Filter>
-    </ClCompile>
     <ClCompile Include="cluster\ant_clustering_mean.cpp">
       <Filter>Source Files\cluster</Filter>
     </ClCompile>
@@ -161,6 +158,9 @@
       <Filter>Source Files\interface</Filter>
     </ClCompile>
     <ClCompile Include="interface\sync_interface.cpp">
+      <Filter>Source Files\interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\pyclustering_interface.cpp">
       <Filter>Source Files\interface</Filter>
     </ClCompile>
   </ItemGroup>
@@ -291,9 +291,6 @@
     <ClInclude Include="interface\pyclustering_package.hpp">
       <Filter>Source Files\interface</Filter>
     </ClInclude>
-    <ClInclude Include="interface\pyclustering_interface.h">
-      <Filter>Source Files\interface</Filter>
-    </ClInclude>
     <ClInclude Include="cluster\ant_clustering_mean.hpp">
       <Filter>Source Files\cluster</Filter>
     </ClInclude>
@@ -355,6 +352,9 @@
       <Filter>Source Files\cluster</Filter>
     </ClInclude>
     <ClInclude Include="interface\sync_interface.h">
+      <Filter>Source Files\interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\pyclustering_interface.h">
       <Filter>Source Files\interface</Filter>
     </ClInclude>
   </ItemGroup>

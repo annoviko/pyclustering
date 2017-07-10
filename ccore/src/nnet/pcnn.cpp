@@ -203,13 +203,13 @@ pcnn_dynamic::pcnn_dynamic(const unsigned int number_oscillators, const unsigned
 
 void pcnn_dynamic::allocate_sync_ensembles(ensemble_data<pcnn_ensemble> & ensembles) const {
 	std::unordered_set<unsigned int> traverse_oscillators;
-	traverse_oscillators.reserve(number_oscillators());
+	traverse_oscillators.reserve(oscillators());
 
 	for (const_reverse_iterator iter_state = crbegin(); iter_state != crend(); iter_state++) {
 		pcnn_ensemble ensemble;
 		const pcnn_network_state & state_network = (*iter_state);
 
-		for (unsigned int i = 0; i < number_oscillators(); i++) {
+		for (unsigned int i = 0; i < oscillators(); i++) {
 			if (state_network.m_output[i] == OUTPUT_ACTIVE_STATE) {
 				if (traverse_oscillators.find(i) == traverse_oscillators.end()) {
 					ensemble.push_back(i);
@@ -226,20 +226,20 @@ void pcnn_dynamic::allocate_sync_ensembles(ensemble_data<pcnn_ensemble> & ensemb
 
 
 void pcnn_dynamic::allocate_spike_ensembles(ensemble_data<pcnn_ensemble> & ensembles) const {
-	for (const_iterator iter_state = cbegin(); iter_state != cend(); iter_state++) {
-		pcnn_ensemble ensemble;
-		const pcnn_network_state & state_network = (*iter_state);
+    for (const_iterator iter_state = cbegin(); iter_state != cend(); iter_state++) {
+        pcnn_ensemble ensemble;
+        const pcnn_network_state & state_network = (*iter_state);
 
-		for (unsigned int i = 0; i < number_oscillators(); i++) {
-			if (state_network.m_output[i] == OUTPUT_ACTIVE_STATE) {
-				ensemble.push_back(i);
-			}
-		}
+        for (unsigned int i = 0; i < oscillators(); i++) {
+            if (state_network.m_output[i] == OUTPUT_ACTIVE_STATE) {
+                ensemble.push_back(i);
+            }
+        }
 
-		if (!ensemble.empty()) {
-			ensembles.push_back(ensemble);
-		}
-	}
+        if (!ensemble.empty()) {
+            ensembles.push_back(ensemble);
+        }
+    }
 }
 
 
@@ -249,7 +249,7 @@ void pcnn_dynamic::allocate_time_signal(pcnn_time_signal & time_signal) const {
 	for (size_t t = 0; t < size(); t++) {
 		const pcnn_network_state & state_network = (*this)[t];
 
-		for (unsigned int i = 0; i < number_oscillators(); i++) {
+		for (unsigned int i = 0; i < oscillators(); i++) {
 			if (state_network.m_output[i] == OUTPUT_ACTIVE_STATE) {
 				time_signal[t]++;
 			}

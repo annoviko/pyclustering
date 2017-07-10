@@ -108,63 +108,63 @@ TEST(utest_sync, dynamic_convergance_5_oscillators_list_bidir) {
 
 
 static void template_static_convergence(const unsigned int number_oscillators, const solve_type solver, const connection_t type, const initial_type initial) {
-	sync_network network(number_oscillators, 1.0, 0, type, initial);
+    sync_network network(number_oscillators, 1.0, 0, type, initial);
 
-	sync_dynamic output_dynamic;
-	network.simulate_static(25, 10, solver, false, output_dynamic);
+    sync_dynamic output_dynamic;
+    network.simulate_static(25, 10, solver, false, output_dynamic);
 
-	ensemble_data<sync_ensemble> ensembles;
-	output_dynamic.allocate_sync_ensembles(0.1, ensembles);
+    ensemble_data<sync_ensemble> ensembles;
+    output_dynamic.allocate_sync_ensembles(0.1, ensembles);
 
-	ASSERT_EQ(1, ensembles.size());
+    ASSERT_EQ(1, ensembles.size());
 }
 
 TEST(utest_sync, static_convergance_10_oscillators_all_to_all) {
-	template_static_convergence(10, solve_type::FAST, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION);
+    template_static_convergence(10, solve_type::FAST, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION);
 }
 
 TEST(utest_sync, static_convergance_20_oscillators_all_to_all) {
-	template_static_convergence(10, solve_type::FAST, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION);
+    template_static_convergence(10, solve_type::FAST, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION);
 }
 
 TEST(utest_sync, static_convergance_9_oscillators_grid_four) {
-	template_static_convergence(9, solve_type::FAST, connection_t::CONNECTION_GRID_FOUR, initial_type::EQUIPARTITION);
+    template_static_convergence(9, solve_type::FAST, connection_t::CONNECTION_GRID_FOUR, initial_type::EQUIPARTITION);
 }
 
 TEST(utest_sync, static_convergance_9_oscillators_grid_eight) {
-	template_static_convergence(9, solve_type::FAST, connection_t::CONNECTION_GRID_EIGHT, initial_type::EQUIPARTITION);
+    template_static_convergence(9, solve_type::FAST, connection_t::CONNECTION_GRID_EIGHT, initial_type::EQUIPARTITION);
 }
 
 TEST(utest_sync, static_convergance_3_oscillators_list_bidir) {
-	template_static_convergence(3, solve_type::FAST, connection_t::CONNECTION_LIST_BIDIRECTIONAL, initial_type::EQUIPARTITION);
+    template_static_convergence(3, solve_type::FAST, connection_t::CONNECTION_LIST_BIDIRECTIONAL, initial_type::EQUIPARTITION);
 }
 
 
 TEST(utest_sync, static_simulation_runge_kutta_4) {
-	template_static_convergence(2, solve_type::RK4, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION);
+    template_static_convergence(2, solve_type::RK4, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION);
 }
 
 TEST(utest_sync, static_simulation_runge_kutta_fehlberg_45) {
-	template_static_convergence(2, solve_type::RKF45, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION);
+    template_static_convergence(2, solve_type::RKF45, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION);
 }
 
 TEST(utest_sync, dynamic_simulation_runge_kutta_4) {
-	template_dynamic_convergence(2, solve_type::RK4, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION);
+    template_dynamic_convergence(2, solve_type::RK4, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION);
 }
 
 TEST(utest_sync, dynamic_simulation_runge_kutta_fehlberg_45) {
-	template_dynamic_convergence(2, solve_type::RKF45, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION);
+    template_dynamic_convergence(2, solve_type::RKF45, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION);
 }
 
 
 static void template_static_collecting_dynamic(const unsigned int steps) {
-	sync_network network(10, 1, 0, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION);
+    sync_network network(10, 1, 0, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION);
 
-	sync_dynamic output_dynamic;
-	network.simulate_static(steps, 0.1, solve_type::FAST, true, output_dynamic);
+    sync_dynamic output_dynamic;
+    network.simulate_static(steps, 0.1, solve_type::FAST, true, output_dynamic);
 
-	ASSERT_EQ(10, output_dynamic.number_oscillators());
-	ASSERT_EQ(steps + 1, output_dynamic.size());
+    ASSERT_EQ(10, output_dynamic.oscillators());
+    ASSERT_EQ(steps + 1, output_dynamic.size());
 }
 
 TEST(utest_sync, static_collecting_dynamic_25_oscillators) {
@@ -177,13 +177,13 @@ TEST(utest_sync, static_collecting_dynamic_100_oscillators) {
 }
 
 TEST(utest_sync, dynamic_collecting_dynamic) {
-	sync_network network(10, 1, 0, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION);
+    sync_network network(10, 1, 0, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION);
 
-	sync_dynamic output_dynamic;
-	network.simulate_dynamic(0.998, 0.1, solve_type::FAST, true, output_dynamic);
-	
-	ASSERT_EQ(10, output_dynamic.number_oscillators());
-	ASSERT_GT(output_dynamic.size(), 1);
+    sync_dynamic output_dynamic;
+    network.simulate_dynamic(0.998, 0.1, solve_type::FAST, true, output_dynamic);
+
+    ASSERT_EQ(10, output_dynamic.oscillators());
+    ASSERT_GT(output_dynamic.size(), 1);
 }
 
 TEST(utest_sync, dynamic_around_zero) {

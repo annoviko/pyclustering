@@ -8,17 +8,19 @@ MKDIR = mkdir -p
 # C++ standard depending on operating system
 ifeq ($(shell uname -o), Cygwin)
 	CPLUS_STANDARD = gnu++1y
+	PIC_FLAG = 
 else
 	CPLUS_STANDARD = c++1y
+	PIC_FLAG = -fPIC
 endif
 
 
 # Toolchain arguments
 ifeq ($(ARGS), valgrind)
-	CFLAGS = -MMD -MP -std=$(CPLUS_STANDARD) -fPIC -g
+	CFLAGS = -MMD -MP -std=$(CPLUS_STANDARD) $(PIC_FLAG) -g
 	LFLAGS = -pthread
 else
-	CFLAGS = -O3 -MMD -MP -std=$(CPLUS_STANDARD) -fPIC -fprofile-arcs -ftest-coverage
+	CFLAGS = -O3 -MMD -MP -std=$(CPLUS_STANDARD) $(PIC_FLAG) -fprofile-arcs -ftest-coverage
 	LFLAGS = -pthread -fprofile-arcs -ftest-coverage
 endif
 
