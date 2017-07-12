@@ -149,8 +149,34 @@ extern "C" DECLARATION void sync_dynamic_destroy(const void * pointer);
  */
 extern "C" DECLARATION pyclustering_package * sync_dynamic_allocate_sync_ensembles(const void * pointer_dynamic, const double tolerance, const size_t iteration);
 
+/**
+ *
+ * @brief   Allocate correlation matrix between oscillators at the specified step of simulation.
+ * @details Caller should destroy returned result in 'pyclustering_package'.
+ *
+ * @param[in] pointer_network: pointer to the output dynamic.
+ *
+ * @return  Package where matrix is stored.
+ *
+ */
 extern "C" DECLARATION pyclustering_package * sync_dynamic_allocate_correlation_matrix(const void * pointer_dynamic, const unsigned int iteration);
 
+/**
+ *
+ * @brief   Returns time points of simulation process that corresponds to phases.
+ * @details Returned package should deallocated by 'free_pyclustering_package'.
+ *
+ * @param[in] pointer: Pointer to output dynamic.
+ *
+ */
 extern "C" DECLARATION pyclustering_package * sync_dynamic_get_time(const void * pointer);
 
+/**
+ *
+ * @brief   Returns phases of each oscillator during simulation process that corresponds to time points.
+ * @details Returned package should deallocated by 'free_pyclustering_package'.
+ *
+ * @param[in] pointer: Pointer to output dynamic.
+ *
+ */
 extern "C" DECLARATION pyclustering_package * sync_dynamic_get_output(const void * pointer);

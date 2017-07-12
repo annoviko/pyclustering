@@ -26,13 +26,12 @@
 
 from ctypes import cdll, c_double, c_size_t, POINTER;
 
-from pyclustering.core.wrapper import PATH_DLL_CCORE_64, create_pointer_data;
+from pyclustering.core.wrapper import PATH_DLL_CCORE_64;
 from pyclustering.core.pyclustering_package import pyclustering_package, package_extractor, package_builder;
 
 
 def kmedoids(sample, medoids, tolerance):
-    pointer_data = create_pointer_data(sample);
-    
+    pointer_data = package_builder(sample).create();
     medoids_package = package_builder(medoids, c_size_t).create();
     
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);

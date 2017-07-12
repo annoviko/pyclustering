@@ -23,14 +23,16 @@
 #include "cluster/kmedians.hpp"
 
 
-pyclustering_package * kmedians_algorithm(const data_representation * const sample, const data_representation * const initial_medians, const double tolerance) {
-    std::unique_ptr<dataset> data(read_sample(sample));
-    std::unique_ptr<dataset> medians(read_sample(initial_medians));
+pyclustering_package * kmedians_algorithm(const pyclustering_package * const p_sample, const pyclustering_package * const p_initial_medians, const double p_tolerance) {
+    dataset data, medians;
 
-    cluster_analysis::kmedians algorithm(*medians, tolerance);
+    p_sample->extract(data);
+    p_initial_medians->extract(medians);
+
+    cluster_analysis::kmedians algorithm(medians, p_tolerance);
 
     cluster_analysis::kmedians_data output_result;
-    algorithm.process(*data, output_result);
+    algorithm.process(data, output_result);
 
     pyclustering_package * package = create_package(output_result.clusters().get());
     return package;

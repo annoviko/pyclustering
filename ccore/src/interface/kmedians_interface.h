@@ -18,8 +18,7 @@
 *
 */
 
-#ifndef SRC_INTERFACE_KMEDIANS_INTERFACE_H_
-#define SRC_INTERFACE_KMEDIANS_INTERFACE_H_
+#pragma once
 
 
 #include "interface/pyclustering_package.hpp"
@@ -40,7 +39,4 @@
  * @return  Returns result of clustering - array of allocated clusters.
  *
  */
-extern "C" DECLARATION pyclustering_package * kmedians_algorithm(const data_representation * const p_sample, const data_representation * const p_medians, const double p_tolerance);
-
-
-#endif
+extern "C" DECLARATION pyclustering_package * kmedians_algorithm(const pyclustering_package * const p_sample, const pyclustering_package * const p_medians, const double p_tolerance);

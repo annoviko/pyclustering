@@ -18,8 +18,7 @@
 *
 */
 
-#ifndef SRC_INTERFACE_AGGLOMERATIVE_INTERFACE_H_
-#define SRC_INTERFACE_AGGLOMERATIVE_INTERFACE_H_
+#pragma once
 
 
 #include "interface/pyclustering_package.hpp"
@@ -42,6 +41,3 @@
  *
  */
 extern "C" DECLARATION pyclustering_package * agglomerative_algorithm(const pyclustering_package * const p_sample, const size_t p_number_clusters, const size_t p_link);
-
-
-#endif

@@ -33,14 +33,14 @@
  * @brief   Clustering algorithm K-Medoids returns allocated clusters.
  * @details Caller should destroy returned result that is in 'pyclustering_package'.
  *
- * @param[in] sample: input data for clustering.
- * @param[in] medoids: initial medoids of clusters.
- * @param[in] tolerance: stop condition - when changes of medians are less then tolerance value.
+ * @param[in] p_sample: input data for clustering.
+ * @param[in] p_medoids: initial medoids of clusters.
+ * @param[in] p_tolerance: stop condition - when changes of medians are less then tolerance value.
  *
  * @return  Returns result of clustering - array of allocated clusters.
  *
  */
-extern "C" DECLARATION pyclustering_package * kmedoids_algorithm(const data_representation * const sample, const pyclustering_package * const medoids, const double tolerance);
+extern "C" DECLARATION pyclustering_package * kmedoids_algorithm(const pyclustering_package * const p_sample, const pyclustering_package * const p_medoids, const double p_tolerance);
 
 
 #endif

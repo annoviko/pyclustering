@@ -18,25 +18,21 @@
 *
 */
 
-#pragma once
+#include "gtest/gtest.h"
 
-
+#include "interface/agglomerative_interface.h"
 #include "interface/pyclustering_package.hpp"
 
-#include "definitions.hpp"
-#include "utils.hpp"
+#include "utenv-utils.hpp"
+
+#include <memory>
 
 
-/**
- *
- * @brief   Clustering algorithm K-Means returns allocated clusters.
- * @details Caller should destroy returned result in 'pyclustering_package'.
- *
- * @param[in] p_sample: input data for clustering.
- * @param[in] p_centers: initial cluster centers.
- * @param[in] p_tolerance: stop condition - when changes of medians are less then tolerance value.
- *
- * @return  Returns result of clustering - array of allocated clusters.
- *
- */
-extern "C" DECLARATION pyclustering_package * kmeans_algorithm(const pyclustering_package * const p_sample, const pyclustering_package * const p_centers, const double p_tolerance);
+TEST(utest_interface_agglomerative, agglomerative_api) {
+    std::shared_ptr<pyclustering_package> sample = pack(dataset({ { 1 }, { 2 }, { 3 }, { 10 }, { 11 }, { 12 } }));
+
+    pyclustering_package * agglomerative_result = agglomerative_algorithm(sample.get(), 2, 0);
+    ASSERT_NE(nullptr, agglomerative_result);
+
+    delete agglomerative_result;
+}

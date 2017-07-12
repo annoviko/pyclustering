@@ -18,8 +18,7 @@
 *
 */
 
-#ifndef _ADJACENCY_CONNECTOR_H_
-#define _ADJACENCY_CONNECTOR_H_
+#pragma once
 
 
 #include <memory>
@@ -38,11 +37,11 @@ namespace container {
 *
 */
 enum class connection_t {
-	/*!< Connections does not exists. */
-	CONNECTION_NONE = 0,
+    /*!< Connections does not exists. */
+    CONNECTION_NONE = 0,
 
-	/*!< Each node is connected with all nodes except itself. */
-	CONNECTION_ALL_TO_ALL = 1,
+    /*!< Each node is connected with all nodes except itself. */
+    CONNECTION_ALL_TO_ALL = 1,
 
     /*!< Each node is connected with four neighbors: left, upper, right and lower. */
     CONNECTION_GRID_FOUR = 2,
@@ -181,14 +180,14 @@ public:
         create_none_connections(output_adjacency_collection);
 
         for (size_t i = 0; i < output_adjacency_collection.size(); i++) {
-		    if (i > 0) {
-			    m_connector(i, i - 1, output_adjacency_collection);
-		    }
+            if (i > 0) {
+                m_connector(i, i - 1, output_adjacency_collection);
+            }
 
-		    if (i < (output_adjacency_collection.size() - 1)) {
-			    m_connector(i, i + 1, output_adjacency_collection);
-		    }
-	    }
+            if (i < (output_adjacency_collection.size() - 1)) {
+                m_connector(i, i + 1, output_adjacency_collection);
+            }
+        }
     }
 
     /**
@@ -229,29 +228,29 @@ public:
 
         create_none_connections(output_adjacency_collection);
 
-	    for (int index = 0; index < (int) output_adjacency_collection.size(); index++) {
+      for (int index = 0; index < (int) output_adjacency_collection.size(); index++) {
             const int upper_index = index - (int) width;
             const int lower_index = index + (int) width;
-		    const int left_index = index - 1;
-		    const int right_index = index + 1;
+            const int left_index = index - 1;
+            const int right_index = index + 1;
 
             const int node_row_index = (int) std::ceil(index / width);
-		    if (upper_index >= 0) {
-			    m_connector(index, upper_index, output_adjacency_collection);
-		    }
+            if (upper_index >= 0) {
+                m_connector(index, upper_index, output_adjacency_collection);
+            }
 
-		    if (lower_index < (int) output_adjacency_collection.size()) {
-			    m_connector(index, lower_index, output_adjacency_collection);
-		    }
+            if (lower_index < (int) output_adjacency_collection.size()) {
+                m_connector(index, lower_index, output_adjacency_collection);
+            }
 
             if ((left_index >= 0) && (std::ceil(left_index / width) == node_row_index)) {
-			    m_connector(index, left_index, output_adjacency_collection);
-		    }
+                m_connector(index, left_index, output_adjacency_collection);
+            }
 
             if ((right_index < (int) output_adjacency_collection.size()) && (std::ceil(right_index / width) == node_row_index)) {
-			    m_connector(index, right_index, output_adjacency_collection);
-		    }
-	    }
+                m_connector(index, right_index, output_adjacency_collection);
+            }
+        }
     }
 
     /**
@@ -272,7 +271,7 @@ public:
         }
 
         const size_t edge = (size_t) conv_side_size;
-		create_grid_eight_connections(edge, edge, output_adjacency_collection);
+        create_grid_eight_connections(edge, edge, output_adjacency_collection);
     }
 
     /**
@@ -286,9 +285,9 @@ public:
     *
     */
     virtual void create_grid_eight_connections(const size_t width, const size_t height, TypeCollection & output_adjacency_collection) {
-	    create_grid_four_connections(width, height, output_adjacency_collection);	/* create connection with right, upper, left, lower neighbor */
+        create_grid_four_connections(width, height, output_adjacency_collection);	/* create connection with right, upper, left, lower neighbor */
 
-	    for (int index = 0; index < (int) output_adjacency_collection.size(); index++) {
+        for (int index = 0; index < (int) output_adjacency_collection.size(); index++) {
             const int upper_left_index = index - 1 - (int) width;
             const int upper_right_index = index + 1 - (int) width;
             
@@ -300,48 +299,48 @@ public:
             const int lower_row_index = node_row_index + 1;
 
             if ((upper_left_index >= 0) && (std::floor(upper_left_index / width) == upper_row_index)) {
-			    m_connector(index, upper_left_index, output_adjacency_collection);
-		    }
+                m_connector(index, upper_left_index, output_adjacency_collection);
+            }
 
             if ((upper_right_index >= 0) && (std::floor(upper_right_index / width) == upper_row_index)) {
-			    m_connector(index, upper_right_index, output_adjacency_collection);
-		    }
+                m_connector(index, upper_right_index, output_adjacency_collection);
+            }
 
             if ((lower_left_index < (int) output_adjacency_collection.size()) && (std::floor(lower_left_index / width) == lower_row_index)) {
-			    m_connector(index, lower_left_index, output_adjacency_collection);
-		    }
+                m_connector(index, lower_left_index, output_adjacency_collection);
+            }
 
             if ((lower_right_index < (int) output_adjacency_collection.size()) && (std::floor(lower_right_index / width) == lower_row_index)) {
-			    m_connector(index, lower_right_index, output_adjacency_collection);
-		    }
-	    }
+                m_connector(index, lower_right_index, output_adjacency_collection);
+            }
+        }
     }
 
-	/**
-	*
-	* @brief   Creates rectangle grid structure in line with specify type of connections.
-	* @details It throws exception if non-grid structures is specify as a grid type.
-	*
-	* @param[in] p_grid: type of grid structure (for example, four grid or eight grid).
-	* @param[in] p_width: width of created grid structure that is defined by amount of nodes in a column.
-	* @param[in] p_height: height of created grid structure that is defined by amount of nodes in a row.
-	* @param[out] p_output_adjacency_collection: adjacency collection whose connections should be updated.
-	*
-	*/
-	virtual void create_grid_structure(const connection_t p_grid, const size_t p_width, const size_t p_height, TypeCollection & p_output_adjacency_collection) {
-		switch (p_grid) {
-		case connection_t::CONNECTION_GRID_FOUR:
-			create_grid_four_connections(p_width, p_height, p_output_adjacency_collection);
-			break;
+    /**
+    *
+    * @brief   Creates rectangle grid structure in line with specify type of connections.
+    * @details It throws exception if non-grid structures is specify as a grid type.
+    *
+    * @param[in] p_grid: type of grid structure (for example, four grid or eight grid).
+    * @param[in] p_width: width of created grid structure that is defined by amount of nodes in a column.
+    * @param[in] p_height: height of created grid structure that is defined by amount of nodes in a row.
+    * @param[out] p_output_adjacency_collection: adjacency collection whose connections should be updated.
+    *
+    */
+    virtual void create_grid_structure(const connection_t p_grid, const size_t p_width, const size_t p_height, TypeCollection & p_output_adjacency_collection) {
+        switch (p_grid) {
+            case connection_t::CONNECTION_GRID_FOUR:
+                create_grid_four_connections(p_width, p_height, p_output_adjacency_collection);
+                break;
 
-		case connection_t::CONNECTION_GRID_EIGHT:
-			create_grid_eight_connections(p_width, p_height, p_output_adjacency_collection);
-			break;
+            case connection_t::CONNECTION_GRID_EIGHT:
+                create_grid_eight_connections(p_width, p_height, p_output_adjacency_collection);
+                break;
 
-		default:
-			throw std::runtime_error("Grid structure of connection is expected");
-		}
-	}
+            default:
+                throw std::runtime_error("Grid structure of connection is expected");
+        }
+    }
 };
 
 
@@ -393,6 +392,3 @@ public:
 };
 
 }
-
-
-#endif

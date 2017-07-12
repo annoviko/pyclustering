@@ -257,6 +257,24 @@
     <ClCompile Include="..\src\interface\pyclustering_interface.cpp">
       <Filter>Tested Code\interface</Filter>
     </ClCompile>
+    <ClCompile Include="utest-interface-pcnn.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\interface\pcnn_interface.cpp">
+      <Filter>Tested Code\interface</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\interface\agglomerative_interface.cpp">
+      <Filter>Tested Code\interface</Filter>
+    </ClCompile>
+    <ClCompile Include="utest-interface-agglomerative.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\interface\kmeans_interface.cpp">
+      <Filter>Tested Code\interface</Filter>
+    </ClCompile>
+    <ClCompile Include="utest-interface-kmeans.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\tools\gtest\gtest.h">
@@ -437,6 +455,15 @@
       <Filter>Tested Code\interface</Filter>
     </ClInclude>
     <ClInclude Include="..\src\interface\pyclustering_interface.h">
+      <Filter>Tested Code\interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\interface\pcnn_interface.h">
+      <Filter>Tested Code\interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\interface\agglomerative_interface.h">
+      <Filter>Tested Code\interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\interface\kmeans_interface.h">
       <Filter>Tested Code\interface</Filter>
     </ClInclude>
   </ItemGroup>

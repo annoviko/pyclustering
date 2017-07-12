@@ -23,16 +23,17 @@
 #include "cluster/kmedoids.hpp"
 
 
-pyclustering_package * kmedoids_algorithm(const data_representation * const sample, const pyclustering_package * const package_medoids, const double tolerance) {
+pyclustering_package * kmedoids_algorithm(const pyclustering_package * const p_sample, const pyclustering_package * const p_package_medoids, const double p_tolerance) {
     cluster_analysis::medoid_sequence medoids;
-    package_medoids->extract(medoids);
+    p_package_medoids->extract(medoids);
 
-    cluster_analysis::kmedoids algorithm(medoids, tolerance);
+    cluster_analysis::kmedoids algorithm(medoids, p_tolerance);
 
-    std::unique_ptr<dataset> input_dataset(read_sample(sample));
+    dataset input_dataset;
+    p_sample->extract(input_dataset);
 
     cluster_analysis::kmedoids_data output_result;
-    algorithm.process(*input_dataset, output_result);
+    algorithm.process(input_dataset, output_result);
 
     pyclustering_package * package = create_package(output_result.clusters().get());
     return package;

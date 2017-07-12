@@ -23,14 +23,16 @@
 #include "cluster/kmeans.hpp"
 
 
-pyclustering_package * kmeans_algorithm(const data_representation * const sample, const data_representation * const initial_centers, const double tolerance) {
-    std::unique_ptr<dataset> data(read_sample(sample));
-    std::unique_ptr<dataset> centers(read_sample(initial_centers));
+pyclustering_package * kmeans_algorithm(const pyclustering_package * const p_sample, const pyclustering_package * const p_initial_centers, const double p_tolerance) {
+    dataset data, centers;
 
-    cluster_analysis::kmeans algorithm(*centers, tolerance);
+    p_sample->extract(data);
+    p_initial_centers->extract(centers);
+
+    cluster_analysis::kmeans algorithm(centers, p_tolerance);
 
     cluster_analysis::kmeans_data output_result;
-    algorithm.process(*data, output_result);
+    algorithm.process(data, output_result);
 
     pyclustering_package * package = create_package(output_result.clusters().get());
     return package;

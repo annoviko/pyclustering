@@ -18,8 +18,7 @@
 *
 */
 
-#ifndef SRC_INTERFACE_DBSCAN_INTERFACE_H_
-#define SRC_INTERFACE_DBSCAN_INTERFACE_H_
+#pragma once
 
 
 #include "interface/pyclustering_package.hpp"
@@ -46,5 +45,3 @@
  */
 extern "C" DECLARATION pyclustering_package * dbscan_algorithm(const pyclustering_package * const p_sample, const double p_radius, const size_t p_minumum_neighbors);
 
-
-#endif

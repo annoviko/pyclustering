@@ -111,8 +111,11 @@
     <ClCompile Include="..\src\container\adjacency_weight_list.cpp" />
     <ClCompile Include="..\src\container\kdtree.cpp" />
     <ClCompile Include="..\src\differential\differ_factor.cpp" />
+    <ClCompile Include="..\src\interface\agglomerative_interface.cpp" />
     <ClCompile Include="..\src\interface\cure_interface.cpp" />
     <ClCompile Include="..\src\interface\dbscan_interface.cpp" />
+    <ClCompile Include="..\src\interface\kmeans_interface.cpp" />
+    <ClCompile Include="..\src\interface\pcnn_interface.cpp" />
     <ClCompile Include="..\src\interface\pyclustering_interface.cpp" />
     <ClCompile Include="..\src\interface\pyclustering_package.cpp" />
     <ClCompile Include="..\src\interface\xmeans_interface.cpp" />
@@ -141,8 +144,11 @@
     <ClCompile Include="utest-dbscan.cpp" />
     <ClCompile Include="utest-differential.cpp" />
     <ClCompile Include="utest-hsyncnet.cpp" />
+    <ClCompile Include="utest-interface-agglomerative.cpp" />
     <ClCompile Include="utest-interface-cure.cpp" />
     <ClCompile Include="utest-interface-dbscan.cpp" />
+    <ClCompile Include="utest-interface-kmeans.cpp" />
+    <ClCompile Include="utest-interface-pcnn.cpp" />
     <ClCompile Include="utest-interface-xmeans.cpp" />
     <ClCompile Include="utest-kdtree.cpp" />
     <ClCompile Include="utest-kmeans.cpp" />
@@ -202,8 +208,11 @@
     <ClInclude Include="..\src\differential\differ_state.hpp" />
     <ClInclude Include="..\src\differential\runge_kutta_4.hpp" />
     <ClInclude Include="..\src\differential\runge_kutta_fehlberg_45.hpp" />
+    <ClInclude Include="..\src\interface\agglomerative_interface.h" />
     <ClInclude Include="..\src\interface\cure_interface.h" />
     <ClInclude Include="..\src\interface\dbscan_interface.h" />
+    <ClInclude Include="..\src\interface\kmeans_interface.h" />
+    <ClInclude Include="..\src\interface\pcnn_interface.h" />
     <ClInclude Include="..\src\interface\pyclustering_interface.h" />
     <ClInclude Include="..\src\interface\pyclustering_package.hpp" />
     <ClInclude Include="..\src\interface\xmeans_interface.h" />

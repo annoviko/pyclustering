@@ -84,43 +84,6 @@ extern "C" DECLARATION void free_clustering_result(clustering_result * pointer);
 extern "C" DECLARATION void free_dynamic_result(dynamic_result * pointer);
 
 
-extern "C" DECLARATION void * syncpr_create(const unsigned int num_osc, 
-                                            const double increase_strength1, 
-                                            const double increase_strength2);
-
-extern "C" DECLARATION void syncpr_destroy(const void * pointer_network);
-
-extern "C" DECLARATION unsigned int syncpr_get_size(const void * pointer);
-
-extern "C" DECLARATION void syncpr_train(const void * pointer_network, 
-                                         const void * const patterns);
-
-extern "C" DECLARATION void * syncpr_simulate_static(const void * pointer_network, 
-                                                     unsigned int steps, 
-                                                     const double time, 
-                                                     const void * const pattern,
-                                                     const unsigned int solver, 
-                                                     const bool collect_dynamic);
-
-extern "C" DECLARATION void * syncpr_simulate_dynamic(const void * pointer_network, 
-                                                      const void * const pattern, 
-                                                      const double order, 
-                                                      const unsigned int solver, 
-                                                      const bool collect_dynamic, 
-                                                      const double step);
-
-extern "C" DECLARATION double syncpr_memory_order(const void * pointer_network, 
-                                                  const void * const pattern);
-
-extern "C" DECLARATION void syncpr_dynamic_destroy(const void * pointer);
-
-extern "C" DECLARATION pyclustering_package * syncpr_dynamic_allocate_sync_ensembles(const void * pointer_dynamic, 
-                                                                                     const double tolerance);
-
-extern "C" DECLARATION pyclustering_package * syncpr_dynamic_get_time(const void * pointer);
-
-extern "C" DECLARATION pyclustering_package * syncpr_dynamic_get_output(const void * pointer);
-
 
 /***********************************************************************************************
  *

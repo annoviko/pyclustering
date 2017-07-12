@@ -163,6 +163,9 @@
     <ClCompile Include="interface\pyclustering_interface.cpp">
       <Filter>Source Files\interface</Filter>
     </ClCompile>
+    <ClCompile Include="interface\syncpr_interface.cpp">
+      <Filter>Source Files\interface</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cluster\agglomerative.hpp">
@@ -355,6 +358,9 @@
       <Filter>Source Files\interface</Filter>
     </ClInclude>
     <ClInclude Include="interface\pyclustering_interface.h">
+      <Filter>Source Files\interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\syncpr_interface.h">
       <Filter>Source Files\interface</Filter>
     </ClInclude>
   </ItemGroup>
