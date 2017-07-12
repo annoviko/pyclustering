@@ -66,4 +66,7 @@ TEST(utest_interface_pcnn, pcnn_api) {
 
     std::size_t size_dynamic = pcnn_dynamic_get_size(dynamic);
     ASSERT_GT(size_dynamic, 0);
+
+    pcnn_dynamic_destroy(dynamic);
+    pcnn_destroy(pcnn_network);
 }
