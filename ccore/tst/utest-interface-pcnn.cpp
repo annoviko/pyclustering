@@ -37,17 +37,17 @@ static void CHECK_FREE_PACKAGE(pyclustering_package * package) {
 
 
 TEST(utest_interface_pcnn, pcnn_api) {
-    std::shared_ptr<pyclustering_package> stimulus = pack(pcnn_stimulus({ 1, 0, 1, 1, 0, 1, 1, 1 }));
+    std::shared_ptr<pyclustering_package> stimulus = pack(pcnn_stimulus({ 1, 0, 1, 1, 0, 1, 1, 1, 1, 1 }));
     pcnn_parameters parameters;
 
-    void * pcnn_network = pcnn_create(25, (unsigned int) connection_t::CONNECTION_GRID_FOUR, 5, 5, (void *) &parameters);
+    void * pcnn_network = pcnn_create(10, (unsigned int) connection_t::CONNECTION_ALL_TO_ALL, 0, 0, (void *) &parameters);
     ASSERT_NE(nullptr, pcnn_network);
 
     void * dynamic = pcnn_simulate(pcnn_network, 10, stimulus.get());
     ASSERT_NE(nullptr, dynamic);
 
     std::size_t size_network = pcnn_get_size(pcnn_network);
-    ASSERT_EQ(25, size_network);
+    ASSERT_EQ(10, size_network);
 
     pyclustering_package * package = pcnn_dynamic_allocate_sync_ensembles(dynamic);
     CHECK_FREE_PACKAGE(package);
