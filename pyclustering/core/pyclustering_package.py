@@ -109,7 +109,7 @@ class package_builder:
     @brief Package builder provides service to create 'pyclustering_package' from data that is stored in 'list' container.
 
     """
-    def __init__(self, dataset, c_data_type = None):
+    def __init__(self, dataset, c_data_type):
         """!
         @brief Initialize package builder object by dataset.
         
