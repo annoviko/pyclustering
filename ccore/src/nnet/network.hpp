@@ -18,21 +18,18 @@
 *
 */
 
-#ifndef _INTERFACE_NETWORK_H_
-#define _INTERFACE_NETWORK_H_
+#pragma once
 
 typedef enum initial_type {
-	RANDOM_GAUSSIAN,
-	EQUIPARTITION,
-	TOTAL_NUMBER_INITIAL_TYPES
+    RANDOM_GAUSSIAN,
+    EQUIPARTITION,
+    TOTAL_NUMBER_INITIAL_TYPES
 } initial_type;
 
 
 typedef enum solve_type {
-	FAST,
-	RK4,
-	RKF45,
-	TOTAL_NUMBER_SOLVE_TYPES
+    FAST,
+    RK4,
+    RKF45,
+    TOTAL_NUMBER_SOLVE_TYPES
 } solve_type;
-
-#endif

@@ -43,12 +43,8 @@ void syncpr_train(const void * pointer_network, const void * const patterns) {
     syncpr * network = (syncpr *)pointer_network;
 
     const pyclustering_package * const package_patterns = (const pyclustering_package * const)patterns;
-    std::vector<syncpr_pattern> external_patterns(package_patterns->size, syncpr_pattern(network->size(), 0));
-
-    for (size_t i = 0; i < package_patterns->size; i++) {
-        const pyclustering_package * const package_pattern = ((pyclustering_package **)package_patterns->data)[i];
-        std::copy((int *)package_pattern->data, ((int *)package_pattern->data) + package_pattern->size, external_patterns[i].begin());
-    }
+    std::vector<syncpr_pattern> external_patterns;
+    package_patterns->extract(external_patterns);
 
     network->train(external_patterns);
 }

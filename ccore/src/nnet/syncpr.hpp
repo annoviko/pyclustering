@@ -18,8 +18,8 @@
 *
 */
 
-#ifndef _SYNCPR_H_
-#define _SYNCPR_H_
+#pragma once
+
 
 #include "nnet/sync.hpp"
 
@@ -63,7 +63,7 @@ public:
     void train(const std::vector<syncpr_pattern> & patterns);
 
     void simulate_static(const unsigned int steps, 
-		                 const double time, 
+                         const double time, 
                          const syncpr_pattern & input_pattern,
                          const solve_type solver, 
                          const bool collect_dynamic, 
@@ -90,5 +90,3 @@ private:
 
     static void adapter_phase_kuramoto(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs);
 };
-
-#endif

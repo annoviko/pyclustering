@@ -118,6 +118,8 @@
     <ClCompile Include="..\src\interface\pcnn_interface.cpp" />
     <ClCompile Include="..\src\interface\pyclustering_interface.cpp" />
     <ClCompile Include="..\src\interface\pyclustering_package.cpp" />
+    <ClCompile Include="..\src\interface\syncpr_interface.cpp" />
+    <ClCompile Include="..\src\interface\sync_interface.cpp" />
     <ClCompile Include="..\src\interface\xmeans_interface.cpp" />
     <ClCompile Include="..\src\nnet\legion.cpp" />
     <ClCompile Include="..\src\nnet\pcnn.cpp" />
@@ -149,6 +151,7 @@
     <ClCompile Include="utest-interface-dbscan.cpp" />
     <ClCompile Include="utest-interface-kmeans.cpp" />
     <ClCompile Include="utest-interface-pcnn.cpp" />
+    <ClCompile Include="utest-interface-syncpr.cpp" />
     <ClCompile Include="utest-interface-xmeans.cpp" />
     <ClCompile Include="utest-kdtree.cpp" />
     <ClCompile Include="utest-kmeans.cpp" />
@@ -215,6 +218,8 @@
     <ClInclude Include="..\src\interface\pcnn_interface.h" />
     <ClInclude Include="..\src\interface\pyclustering_interface.h" />
     <ClInclude Include="..\src\interface\pyclustering_package.hpp" />
+    <ClInclude Include="..\src\interface\syncpr_interface.h" />
+    <ClInclude Include="..\src\interface\sync_interface.h" />
     <ClInclude Include="..\src\interface\xmeans_interface.h" />
     <ClInclude Include="..\src\nnet\legion.hpp" />
     <ClInclude Include="..\src\nnet\network.hpp" />
