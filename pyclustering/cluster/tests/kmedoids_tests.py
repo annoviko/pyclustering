@@ -158,6 +158,11 @@ class Test(unittest.TestCase):
     def testClusterAllocationTheSameObjectsThreeInitialMedoidsByCore(self):
         self.templateClusterAllocationTheSameObjects(25, 3, True);
 
+    def testCoreInterfaceIntInputData(self):
+        kmedoids_instance = kmedoids([ [1], [2], [3], [20], [21], [22] ], [ 2, 5 ], 0.025, True);
+        kmedoids_instance.process();
+        assert len(kmedoids_instance.get_clusters()) == 2;
+
 
 if __name__ == "__main__":
     unittest.main();

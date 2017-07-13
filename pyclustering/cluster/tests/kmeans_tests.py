@@ -180,6 +180,11 @@ class Test(unittest.TestCase):
     def testEncoderProcedureSampleSimple4ByCore(self):
         self.templateEncoderProcedures(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, [[1.5, 0.0], [1.5, 2.0], [1.5, 4.0], [1.5, 6.0], [1.5, 8.0]], 5, True);
 
+    def testCoreInterfaceIntInputData(self):
+        kmeans_instance = kmeans([ [1], [2], [3], [20], [21], [22] ], [ [2], [21] ], 0.025, True);
+        kmeans_instance.process();
+        assert len(kmeans_instance.get_clusters()) == 2;
+
 
 if __name__ == "__main__":
     unittest.main();

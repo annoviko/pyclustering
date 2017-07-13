@@ -202,6 +202,11 @@ class Test(unittest.TestCase):
     def testClusterAllocationOneDimensionDataByCore(self):
         self.templateClusterAllocationOneDimensionData(True);
 
+    def testCoreInterfaceIntInputData(self):
+        xmeans_instance = xmeans([ [1], [2], [3], [20], [21], [22] ], [ [2], [21] ], 5, ccore = True);
+        xmeans_instance.process();
+        assert len(xmeans_instance.get_clusters()) == 2;
+
 
 if __name__ == "__main__":
     unittest.main();

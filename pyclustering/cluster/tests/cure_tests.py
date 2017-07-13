@@ -104,7 +104,6 @@ class Test(unittest.TestCase):
         self.template_cluster_allocation(FCPS_SAMPLES.SAMPLE_LSUN, [100, 101, 202], 3, 5, 0.3, True);
  
     def testOneClusterAllocation(self):
-        # Bug with one cluster allocation (issue #122).
         self.template_cluster_allocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [10], 1);
         self.template_cluster_allocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [23], 1);
         self.template_cluster_allocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [60], 1);
@@ -112,7 +111,6 @@ class Test(unittest.TestCase):
         self.template_cluster_allocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [60], 1);
  
     def testOneClusterAllocationByCore(self):
-        # Bug with one cluster allocation (issue #123).
         self.template_cluster_allocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [10], 1, 5, 0.5, True);
         self.template_cluster_allocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [10], 1, 5, 0.5, True);
         self.template_cluster_allocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [23], 1, 5, 0.5, True);
@@ -160,6 +158,11 @@ class Test(unittest.TestCase):
 
     def testEncoderProcedureByCore(self):
         self.templateEncoderProcedures(True);
+
+    def testCoreInterfaceIntInputData(self):
+        cure_instance = cure([ [1], [2], [3], [20], [21], [22] ], 2, ccore = True);
+        cure_instance.process();
+        assert len(cure_instance.get_clusters()) == 2;
 
 
 if __name__ == "__main__":

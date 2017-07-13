@@ -240,6 +240,11 @@ class Test(unittest.TestCase):
     def testTwoClusterAllocationTheSameObjectLinkSingleByCore(self):
         self.templateClusterAllocationTheSameObjects(10, 2, type_link.SINGLE_LINK, True);
 
+    def testCoreInterfaceIntInputData(self):
+        agglomerative_instance = agglomerative([ [1], [2], [3], [20], [21], [22] ], 2, type_link.SINGLE_LINK, True);
+        agglomerative_instance.process();
+        assert len(agglomerative_instance.get_clusters()) == 2;
+
 
 if __name__ == "__main__":
     unittest.main();

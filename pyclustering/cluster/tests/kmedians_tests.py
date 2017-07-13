@@ -192,6 +192,11 @@ class Test(unittest.TestCase):
         initial_medians = [[0.0772944481804071, 0.05224990900863469], [1.6021689021213712, 1.0347579135245601], [2.3341008076636096, 1.280022869739064]];
         self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE10, initial_medians, None, True);
 
+    def testCoreInterfaceIntInputData(self):
+        kmedians_instance = kmedians([ [1], [2], [3], [20], [21], [22] ], [ [2], [21] ], True);
+        kmedians_instance.process();
+        assert len(kmedians_instance.get_clusters()) == 2;
+
 
 if __name__ == "__main__":
     unittest.main();

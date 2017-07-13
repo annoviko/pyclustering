@@ -94,7 +94,7 @@ class Test(unittest.TestCase):
         self.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 0.7, 0, [15, 15, 15, 15], True);
 
     def templateLengthProcessData(self, path_to_file, radius, min_number_neighbors, max_number_neighbors, ccore = False):
-        for number_neighbors in range(min_number_neighbors, max_number_neighbors, 1):
+        for _ in range(min_number_neighbors, max_number_neighbors, 1):
             sample = read_sample(path_to_file);
              
             dbscan_instance = dbscan(sample, radius, min_number_neighbors, ccore);
@@ -162,6 +162,10 @@ class Test(unittest.TestCase):
     def testClusterAllocationOneDimensionDataByCore(self):
         self.templateClusterAllocationOneDimensionData(True);
 
+    def testCoreInterfaceIntInputData(self):
+        dbscan_instance = dbscan([ [1], [2], [3], [20], [21], [22] ], 3, 2, True);
+        dbscan_instance.process();
+        assert len(dbscan_instance.get_clusters()) == 2;
 
 
 if __name__ == "__main__":

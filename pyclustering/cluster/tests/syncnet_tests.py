@@ -241,6 +241,17 @@ class Test(unittest.TestCase):
     def testShowNetwork3DimensionByCore(self):
         self.templateShowNetwork(FCPS_SAMPLES.SAMPLE_HEPTA, 1.0, True);
 
+    def testCoreInterfaceIntInputData(self):
+        result = False;
+        for _ in range(0, 20, 1):
+            synccnet_instance = syncnet([ [1], [2], [3], [20], [21], [22] ], 3, 0.999, solve_type.FAST, initial_type.EQUIPARTITION, ccore = True);
+            analyser = synccnet_instance.process();
+            
+            result = (len(analyser.allocate_clusters(0.1)) == 2);
+            if (result is True): break;
+        
+        assert True == result;
+
 
 if __name__ == "__main__":
     unittest.main();

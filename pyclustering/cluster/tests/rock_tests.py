@@ -84,14 +84,14 @@ class Test(unittest.TestCase):
         self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 1, 5, 0.5, [15, 15, 15, 15, 15], True);
         self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 1.5, 5, 0.5, [15, 15, 15, 15, 15], True);
         self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 1, 4, 0.5, [15, 15, 15, 15], True); 
-    
+
     def testClusterAllocationIncorrectNumberClusters(self):
         self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 1, 4, 0.5, [15, 15, 15, 15, 15]);
-    
+
     def testClusterAllocationByCoreIncorrectNumberOfClusters(self):
         self.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 1, 4, 0.5, [15, 15, 15, 15, 15], True);
-    
-    
+
+
     def templateClusterAllocationOneDimensionData(self, ccore_flag):
         input_data = [ [random()] for i in range(10) ] + [ [random() + 3] for i in range(10) ] + [ [random() + 5] for i in range(10) ] + [ [random() + 8] for i in range(10) ];
         
@@ -102,13 +102,18 @@ class Test(unittest.TestCase):
         assert len(clusters) == 4;
         for cluster in clusters:
             assert len(cluster) == 10;
-                
+
     def testClusterAllocationOneDimensionData(self):
         self.templateClusterAllocationOneDimensionData(False);
-        
+
     def testClusterAllocationOneDimensionDataByCore(self):
         self.templateClusterAllocationOneDimensionData(True);
-        
+
+    def testCoreInterfaceIntInputData(self):
+        optics_instance = rock([ [1], [2], [3], [20], [21], [22] ], 3, 2, 0.5, True);
+        optics_instance.process();
+        assert len(optics_instance.get_clusters()) == 2;
+
 
 if __name__ == "__main__":
     unittest.main();

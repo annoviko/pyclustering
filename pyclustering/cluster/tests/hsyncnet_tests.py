@@ -126,6 +126,11 @@ class Test(unittest.TestCase):
     def testDynamicLengthWithoutCollectingByCore(self):
         self.templateDynamicLength(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, None, 5, 0.3, False, True);
 
+    def testCoreInterfaceIntInputData(self):
+        hsyncnet_instance = hsyncnet([ [1], [2], [3], [20], [21], [22] ], 2, initial_type.EQUIPARTITION, ccore = True);
+        analyser = hsyncnet_instance.process();
+        assert len(analyser.allocate_clusters(0.1)) == 2;
+
 
 if __name__ == "__main__":
     unittest.main();

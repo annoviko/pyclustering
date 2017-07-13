@@ -38,7 +38,7 @@ class Test(unittest.TestCase):
         result_testing = False;
         
         # it's randomized algorithm therefore attempts are required
-        for attempt in range(0, 5, 1):
+        for _ in range(0, 5, 1):
             sample = read_sample(path);
             
             clarans_instance = clarans(sample, number_clusters, iterations, maxneighbors);

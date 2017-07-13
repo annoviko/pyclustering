@@ -124,10 +124,10 @@ class Test(unittest.TestCase):
   
     def testClusteringLsunRadiusGreater(self):
         self.templateClusteringResults(FCPS_SAMPLES.SAMPLE_LSUN, 1.0, 3, 3, [99, 100, 202], False);
-  
+
     def testClusteringLsunRadiusGreaterByCore(self):
         self.templateClusteringResults(FCPS_SAMPLES.SAMPLE_LSUN, 1.0, 3, 3, [99, 100, 202], True);
-  
+
     def testClusteringOrderVisualizer(self):
         sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE4);
            
@@ -136,7 +136,7 @@ class Test(unittest.TestCase):
            
         analyser = ordering_analyser(optics_instance.get_ordering());
         ordering_visualizer.show_ordering_diagram(analyser, 5);
-     
+
     def testClusterOrderingOneClusterExtraction(self):
         analyser = ordering_analyser([5.0, 5.0, 5.0, 5.0, 5.0, 5.0]);
         
@@ -147,18 +147,23 @@ class Test(unittest.TestCase):
         amount_clusters, borders = analyser.extract_cluster_amount(4.5);
         assert 0 == amount_clusters;
         assert 0 == len(borders);
-      
+
     def testImpossibleClusterOrderingAllocationHomogeneous(self):
         analyser = ordering_analyser([5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0]);
         amount_clusters, borders = analyser.calculate_connvectivity_radius(2);
         assert None == amount_clusters;
         assert 0 == len(borders);
-      
+
     def testImpossibleClusterOrderingAllocationGeterogeneous(self):
         analyser = ordering_analyser([5.0, 5.0, 5.0, 5.0, 6.0, 8.0, 6.0, 5.0, 5.0, 5.0]);
         amount_clusters, borders = analyser.calculate_connvectivity_radius(3);
         assert None == amount_clusters;
         assert 0 == len(borders);
+
+    def testCoreInterfaceIntInputData(self):
+        optics_instance = optics([ [1], [2], [3], [20], [21], [22] ], 3, 2, 2, True);
+        optics_instance.process();
+        assert len(optics_instance.get_clusters()) == 2;
 
 
 if __name__ == "__main__":
