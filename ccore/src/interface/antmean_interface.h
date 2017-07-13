@@ -24,24 +24,18 @@
 #include "interface/pyclustering_package.hpp"
 
 #include "definitions.hpp"
-#include "utils.hpp"
-
 
 /**
  *
- * @brief   Clustering algorithm DBSCAN returns allocated clusters and noise that are consisted
- *          from input data.
- * @details Caller should destroy returned result by 'free_pyclustering_package'.
+ * @brief   Clustering algorithm antmean returns allocated clusters.
+ * @details Caller should destroy returned clustering data using 'free_pyclustering_package' when
+ *           it is not required anymore.
  *
  * @param[in] p_sample: input data for clustering.
- * @param[in] p_radius: connectivity radius between points, points may be connected if distance
- *             between them less then the radius.
- * @param[in] p_minumum_neighbors: minimum number of shared neighbors that is required for
- *             establish links between points.
+ * @param[in] p_params: ant colony parameters for clustering.
+ * @param[in] p_clusters: amount of clusters that should be allocated.
  *
- * @return  Returns result of clustering - array of allocated clusters. The last cluster in the
- *          array is noise.
+ * @return  Returns pointer to pyclustering package where results (allocated clusters) are stored.
  *
  */
-extern "C" DECLARATION pyclustering_package * dbscan_algorithm(const pyclustering_package * const p_sample, const double p_radius, const size_t p_minumum_neighbors);
-
+extern "C" DECLARATION pyclustering_package * antmean_algorithm(const pyclustering_package * const p_sample, const void * p_params, unsigned int p_clusters);

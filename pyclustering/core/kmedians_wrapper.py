@@ -31,8 +31,8 @@ from pyclustering.core.pyclustering_package import pyclustering_package, package
 
 
 def kmedians(sample, centers, tolerance):
-    pointer_data = package_builder(sample).create();
-    pointer_centers = package_builder(centers).create();
+    pointer_data = package_builder(sample, c_double).create();
+    pointer_centers = package_builder(centers, c_double).create();
     
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     

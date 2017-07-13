@@ -21,7 +21,7 @@
 
 #include "gtest/gtest.h"
 
-#include "cluster/ant_clustering_mean.hpp"
+#include "cluster/antmean.hpp"
 #include "cluster/cluster_data.hpp"
 #include "cluster/cluster_algorithm.hpp"
 

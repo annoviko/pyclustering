@@ -20,7 +20,7 @@
 
 #include <ctime>
 
-#include "cluster/ant_clustering_mean.hpp"
+#include "cluster/antmean.hpp"
 
 
 namespace ant {

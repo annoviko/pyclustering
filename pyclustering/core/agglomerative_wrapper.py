@@ -23,13 +23,13 @@
 
 """
 
-from ctypes import cdll, c_size_t, POINTER;
+from ctypes import cdll, c_size_t, c_double, POINTER;
 
-from pyclustering.core.wrapper import PATH_DLL_CCORE_64, create_pointer_data;
+from pyclustering.core.wrapper import PATH_DLL_CCORE_64;
 from pyclustering.core.pyclustering_package import pyclustering_package, package_extractor, package_builder;
 
 def agglomerative_algorithm(data, number_clusters, link):
-    pointer_data = package_builder(data).create();
+    pointer_data = package_builder(data, c_double).create();
 
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
     ccore.agglomerative_algorithm.restype = POINTER(pyclustering_package);

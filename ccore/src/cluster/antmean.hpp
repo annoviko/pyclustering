@@ -22,7 +22,7 @@
 
 #include <vector>
 
-#include "cluster/ant_clustering_params.hpp"
+#include "cluster/antmean_params.hpp"
 #include "cluster/cluster_data.hpp"
 #include "cluster/cluster_algorithm.hpp"
 

@@ -33,20 +33,6 @@ typedef struct cluster_representation {
 } cluster_representation;
 
 
-typedef struct clustering_result {
-	unsigned int			size;
-	cluster_representation	* clusters;
-} clustering_result;
-
-
-typedef struct dynamic_result {
-	unsigned int			size_dynamic;
-	unsigned int			size_network;
-	double					* times;
-	double					** dynamic;
-} dynamic_result;
-
-
 typedef struct tsp_result {
 	unsigned int			size;
 	double					path_length;
@@ -64,26 +50,6 @@ typedef struct tsp_matrix {
     unsigned int            size;
     double                  ** data;
 } tsp_matrix;
-
-/***********************************************************************************************
- *
- * @brief   Free clustering results that have been provided by CCORE to client.
- *
- * @param   (in) pointer            - pointer to clustering results.
- *
- ***********************************************************************************************/
-extern "C" DECLARATION void free_clustering_result(clustering_result * pointer);
-
-/***********************************************************************************************
- *
- * @brief   Free dynamic that have been provided by CCORE to client.
- *
- * @param   (in) pointer            - pointer to dynamic.
- *
- ***********************************************************************************************/
-extern "C" DECLARATION void free_dynamic_result(dynamic_result * pointer);
-
-
 
 /***********************************************************************************************
  *
@@ -211,9 +177,6 @@ extern "C" DECLARATION void ant_colony_tsp_destroy(const void * pointer);
  *
  *
  */
-
-extern "C" DECLARATION clustering_result * ant_mean_clustering(const data_representation * const sample, const void * p_ant_clustering_params, unsigned int count_clusters);
-
 
 extern "C" DECLARATION void * legion_create(const unsigned int size, const unsigned int connection_type, const void * const parameters);
 

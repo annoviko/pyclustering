@@ -18,8 +18,7 @@
 *
 */
 
-#ifndef SRC_INTERFACE_CURE_INTERFACE_H_
-#define SRC_INTERFACE_CURE_INTERFACE_H_
+#pragma once
 
 
 #include "interface/pyclustering_package.hpp"
@@ -90,6 +89,3 @@ extern "C" DECLARATION pyclustering_package * cure_get_representors(void * point
  *
  */
 extern "C" DECLARATION pyclustering_package * cure_get_means(void * pointer_cure_data);
-
-
-#endif

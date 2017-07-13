@@ -116,9 +116,6 @@
     <ClCompile Include="..\src\cluster\kmedoids.cpp">
       <Filter>Tested Code\cluster</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\cluster\ant_clustering_mean.cpp">
-      <Filter>Tested Code\cluster</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\cluster\cure.cpp">
       <Filter>Tested Code\cluster</Filter>
     </ClCompile>
@@ -165,9 +162,6 @@
       <Filter>Unit Tests</Filter>
     </ClCompile>
     <ClCompile Include="utest-agglomerative.cpp">
-      <Filter>Unit Tests</Filter>
-    </ClCompile>
-    <ClCompile Include="utest-ant_clustering.cpp">
       <Filter>Unit Tests</Filter>
     </ClCompile>
     <ClCompile Include="utest-ant_colony.cpp">
@@ -284,6 +278,12 @@
     <ClCompile Include="..\src\interface\sync_interface.cpp">
       <Filter>Tested Code\interface</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\cluster\antmean.cpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClCompile>
+    <ClCompile Include="utest-antmean.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\tools\gtest\gtest.h">
@@ -397,12 +397,6 @@
     <ClInclude Include="..\src\definitions.hpp">
       <Filter>Tested Code</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\cluster\ant_clustering_mean.hpp">
-      <Filter>Tested Code\cluster</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\cluster\ant_clustering_params.hpp">
-      <Filter>Tested Code\cluster</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\cluster\cure.hpp">
       <Filter>Tested Code\cluster</Filter>
     </ClInclude>
@@ -480,6 +474,12 @@
     </ClInclude>
     <ClInclude Include="..\src\interface\sync_interface.h">
       <Filter>Tested Code\interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cluster\antmean.hpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cluster\antmean_params.hpp">
+      <Filter>Tested Code\cluster</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

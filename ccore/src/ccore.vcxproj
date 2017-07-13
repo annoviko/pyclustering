@@ -21,7 +21,7 @@
   <ItemGroup>
     <ClCompile Include="ccore.cpp" />
     <ClCompile Include="cluster\agglomerative.cpp" />
-    <ClCompile Include="cluster\ant_clustering_mean.cpp" />
+    <ClCompile Include="cluster\antmean.cpp" />
     <ClCompile Include="cluster\cluster_algorithm.cpp" />
     <ClCompile Include="cluster\cluster_data.cpp" />
     <ClCompile Include="cluster\cure.cpp" />
@@ -44,6 +44,7 @@
     <ClCompile Include="container\kdtree.cpp" />
     <ClCompile Include="differential\differ_factor.cpp" />
     <ClCompile Include="interface\agglomerative_interface.cpp" />
+    <ClCompile Include="interface\antmean_interface.cpp" />
     <ClCompile Include="interface\cure_interface.cpp" />
     <ClCompile Include="interface\dbscan_interface.cpp" />
     <ClCompile Include="interface\kmeans_interface.cpp" />
@@ -70,8 +71,8 @@
   <ItemGroup>
     <ClInclude Include="ccore.h" />
     <ClInclude Include="cluster\agglomerative.hpp" />
-    <ClInclude Include="cluster\ant_clustering_mean.hpp" />
-    <ClInclude Include="cluster\ant_clustering_params.hpp" />
+    <ClInclude Include="cluster\antmean.hpp" />
+    <ClInclude Include="cluster\antmean_params.hpp" />
     <ClInclude Include="cluster\cluster_algorithm.hpp" />
     <ClInclude Include="cluster\cluster_data.hpp" />
     <ClInclude Include="cluster\cure.hpp" />
@@ -108,6 +109,7 @@
     <ClInclude Include="differential\runge_kutta_4.hpp" />
     <ClInclude Include="differential\runge_kutta_fehlberg_45.hpp" />
     <ClInclude Include="interface\agglomerative_interface.h" />
+    <ClInclude Include="interface\antmean_interface.h" />
     <ClInclude Include="interface\cure_interface.h" />
     <ClInclude Include="interface\dbscan_interface.h" />
     <ClInclude Include="interface\kmeans_interface.h" />

@@ -55,61 +55,6 @@ def create_pointer_data(sample):
     return input_data;
 
 
-def extract_clusters(ccore_result):
-    "Parse clustering result that is provided by the CCORE. Return Python list of clusters."
-    
-    "(in) ccore_result    - pointer to clustering result that has been returned by CCORE."
-    
-    "Returns Python list of clusters."
-    
-    pointer_clustering_result = cast(ccore_result, POINTER(clustering_result));    # clustering_result * clusters
-    number_clusters = pointer_clustering_result[0].number_clusters;
-    
-    list_of_clusters = [];
-    
-    for index_cluster in range(0, number_clusters):
-        clusters = cast(pointer_clustering_result[0].pointer_clusters, POINTER(cluster_representation));  # cluster_representation * cluster
-        
-        objects = cast(clusters[index_cluster].pointer_objects, POINTER(c_uint));   # cluster->objects (unsigned int *)
-        
-        list_of_clusters.append([]);
-        pointer_container = list_of_clusters[index_cluster];
-
-        for index_object in range(0, clusters[index_cluster].number_objects):
-            pointer_container.append(objects[index_object]);
-    
-    return list_of_clusters;
-
-
-def extract_dynamics(ccore_result):
-    "Parse dynamic result that is provided by the CCORE. Return Python tuple that represent dynamics (times, dynamic)."
-    
-    "(in) ccore_result    - pointer to dynamic result that has been returned by CCORE."
-    
-    "Returns Python tuple dynamic (times, dynamic)."
-    
-    pointer_dynamic_result = cast(ccore_result, POINTER(dynamic_result));   # dynamic_result * pointer_dynamic_result
-    size_dynamic = pointer_dynamic_result[0].size_dynamic;
-    size_network = pointer_dynamic_result[0].size_network;
-    
-    pointer_time = cast(pointer_dynamic_result[0].times, POINTER(c_double));
-    pointer_pointer_dynamic = cast(pointer_dynamic_result[0].dynamic, POINTER(POINTER(c_double)));
-    
-    times = [];
-    dynamic = [];
-    
-    for index in range(0, size_dynamic):
-        times.append(pointer_time[index]);
-        dynamic.append([]);
-        
-        pointer_dynamic = cast(pointer_pointer_dynamic[index], POINTER(c_double));
-        
-        for object_dynamic in range(0, size_network):
-            dynamic[index].append(pointer_dynamic[object_dynamic]);
-        
-    return (times, dynamic);
-
-
 # Implemented algorithms.
 "CCORE Interface for HSYNCNET oscillatory network"
 

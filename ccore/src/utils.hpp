@@ -145,43 +145,6 @@ std::vector<std::vector<double> > * read_sample(const data_representation * cons
 
 /***********************************************************************************************
  *
- * @brief   Converts representation of cluster to standard type of CCORE interface.
- *
- * @param   (in) clusters   - input clusters for converting.
- *
- * @return  Returns standard type of representation of clusters.
- *
- ***********************************************************************************************/
-template <typename T>
-clustering_result * create_clustering_result(const std::vector<std::vector<T> > & clusters) {
-    clustering_result * result = new clustering_result();
-
-    result->size = clusters.size();
-    result->clusters = new cluster_representation[result->size];
-
-    for (unsigned int index_cluster = 0; index_cluster < result->size; index_cluster++) {
-        result->clusters[index_cluster].size = clusters[index_cluster].size();
-        if (result->clusters[index_cluster].size > 0) {
-            result->clusters[index_cluster].objects = new unsigned int[result->clusters[index_cluster].size];
-
-            for (unsigned int index_object = 0; index_object < result->clusters[index_cluster].size; index_object++) {
-                result->clusters[index_cluster].objects[index_object] = clusters[index_cluster][index_object];
-            }
-        }
-        else {
-            result->clusters[index_cluster].objects = NULL;
-        }
-    }
-
-    return result;
-}
-
-
-clustering_result * create_clustering_result(const std::vector<std::vector<unsigned int> *> * const clusters);
-
-
-/***********************************************************************************************
- *
  * @brief   Returns average distance for establish links between specified number of neighbors.
  *
  * @param   (in) points         - input data.

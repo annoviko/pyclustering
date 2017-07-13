@@ -31,7 +31,7 @@ from pyclustering.core.pyclustering_package import pyclustering_package, package
 
 
 def kmedoids(sample, medoids, tolerance):
-    pointer_data = package_builder(sample).create();
+    pointer_data = package_builder(sample, c_double).create();
     medoids_package = package_builder(medoids, c_size_t).create();
     
     ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);

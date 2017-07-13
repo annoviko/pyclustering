@@ -28,7 +28,6 @@
 #include "cluster/hsyncnet.hpp"
 #include "cluster/syncnet.hpp"
 #include "cluster/xmeans.hpp"
-#include "cluster/ant_clustering_mean.hpp"
 
 #include "interface/sync_interface.h"
 
@@ -40,47 +39,6 @@
 
 
 using namespace container;
-
-
-void free_clustering_result(clustering_result * pointer) {
-	if (pointer != NULL) {
-		if (pointer->clusters != NULL) {
-		    for (size_t i = 0; i < pointer->size; i++) {
-		        delete [] pointer->clusters[i].objects;
-		    }
-
-			delete [] pointer->clusters;
-			pointer->clusters = NULL;
-		}
-
-		delete pointer;
-		pointer = NULL;
-	}
-}
-
-void free_dynamic_result(dynamic_result * pointer) {
-	if (pointer != NULL) {
-		if (pointer->times != NULL) {
-			delete [] pointer->times;
-			pointer->times = NULL;
-		}
-
-		if (pointer->dynamic != NULL) {
-			for (unsigned int index_object = 0; index_object < pointer->size_dynamic; index_object++) {
-				if (pointer->dynamic[index_object] != NULL) {
-					delete [] pointer->dynamic[index_object];
-					pointer->dynamic[index_object] = NULL;
-				}
-			}
-
-			delete [] pointer->dynamic;
-			pointer->dynamic = NULL;
-		}
-
-		delete pointer;
-		pointer = NULL;
-	}
-}
 
 
 /***********************************************************************************************
@@ -236,44 +194,6 @@ void ant_colony_tsp_destroy(const void * result) {
 //
 //                  End Ant colony functions
 /////////////////////////////////////////////////////////////////////////////
-
-
-////////////////////////////////////////////////////////////////////////////
-//
-//          Ant clustering algorithm
-
-clustering_result * ant_mean_clustering(const data_representation * const sample, const void * p_ant_clustering_params, unsigned int count_clusters)
-{
-    const ant::s_ant_clustering_params * algorithm_params = (const ant::s_ant_clustering_params *) p_ant_clustering_params;
-
-    using AntCAPI = ant::ant_colony_clustering_params_initializer;
-
-    auto params_ant_clustering = ant::ant_clustering_params::make_param(
-        AntCAPI::RO_t(algorithm_params->ro)
-        , AntCAPI::Pheramone_init_t(algorithm_params->pheramone_init)
-        , AntCAPI::Iterations_t(algorithm_params->iterations)
-        , AntCAPI::Count_ants_t(algorithm_params->count_ants)
-        );
-
-    dataset input_points(sample->size);
-
-    for (std::size_t i = 0; i < input_points.size(); ++i)
-    {
-        for (std::size_t j = 0; j < sample->dimension; ++j)
-        {
-            input_points[i].push_back(sample->objects[i][j]);
-        }
-    }
-
-    cluster_analysis::cluster_data result;
-
-    ant::ant_clustering_mean ant_mean_clustering{ params_ant_clustering, count_clusters };
-    ant_mean_clustering.process(input_points, result);
-
-    clustering_result * pack_result = create_clustering_result( *(result.clusters().get()) );
-
-    return pack_result;
-}
 
 
 void * legion_create(const unsigned int size, const unsigned int connection_type, const void * const parameters) {

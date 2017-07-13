@@ -25,8 +25,7 @@
 
 
 from pyclustering.core.wrapper import *;
-
-import types;
+from pyclustering.core.pyclustering_package import pyclustering_package, package_builder, package_extractor;
 
 
 class c_antcolony_clustering_parameters(Structure):
@@ -54,26 +53,12 @@ def antmean_clustering_process(params, count_clusters, samples):
     
     algorithm_params = pointer(algorithm_params);
     
-    p_samples = create_pointer_data(samples)
+    sample_package = package_builder(samples, c_double).create();
     
-    """
-        Run algorithm
-    """
+    ccore.antmean_algorithm.restype = POINTER(pyclustering_package);
+    package = ccore.antmean_algorithm(sample_package, algorithm_params, count_clusters);
     
-    ccore.ant_mean_clustering.restype = POINTER(clustering_result);
-    res = ccore.ant_mean_clustering(p_samples, algorithm_params, count_clusters)
-    res = cast(res, POINTER(clustering_result));
+    result = package_extractor(package).extract();
+    ccore.free_pyclustering_package(package);
     
-    """
-        Cast result to python view
-    """
-    pointer_data = cast(res[0].pointer_clusters, POINTER(cluster_representation))
-    num_clusters = res[0].number_clusters
-    
-    pyResult = [[] for i in range(num_clusters)]
-    
-    for i in range(num_clusters):
-        for j in range(pointer_data[i].number_objects):
-            pyResult[i].append(pointer_data[i].pointer_objects[j])
-
-    return pyResult
+    return result;

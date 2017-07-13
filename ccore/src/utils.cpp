@@ -66,136 +66,24 @@ std::vector<std::vector<double> > * read_sample(const data_representation * cons
 }
 
 
-
-
-//template <typename T>
-//clustering_result * create_clustering_result(const std::vector<std::vector<T> *> * const clusters) {
-//    clustering_result * result = new clustering_result();
-//
-//    if (clusters == NULL) {
-//        result->size = 0;
-//        result->clusters = NULL;
-//    }
-//    else {
-//        result->size = clusters->size();
-//        result->clusters = new cluster_representation[result->size];
-//    }
-//
-//    for (unsigned int index_cluster = 0; index_cluster < result->size; index_cluster++) {
-//        result->clusters[index_cluster].size = (*clusters)[index_cluster]->size();
-//        if (result->clusters[index_cluster].size > 0) {
-//            result->clusters[index_cluster].objects = new unsigned int[result->clusters[index_cluster].size];
-//
-//            for (unsigned int index_object = 0; index_object < result->clusters[index_cluster].size; index_object++) {
-//                result->clusters[index_cluster].objects[index_object] = (*(*clusters)[index_cluster])[index_object];
-//            }
-//        }
-//        else {
-//            result->clusters[index_cluster].objects = NULL;
-//        }
-//    }
-//
-//    return result;
-//}
-
-
-
-clustering_result * create_clustering_result(const std::vector<std::vector<unsigned int> *> * const clusters) {
-	clustering_result * result = new clustering_result();
-
-	if (clusters == NULL) {
-		result->size = 0;
-		result->clusters = NULL;
-	}
-	else {
-		result->size = clusters->size();
-		result->clusters = new cluster_representation[result->size];
-	}
-
-	for (unsigned int index_cluster = 0; index_cluster < result->size; index_cluster++) {
-		result->clusters[index_cluster].size = (*clusters)[index_cluster]->size();
-		if (result->clusters[index_cluster].size > 0) {
-			result->clusters[index_cluster].objects = new unsigned int[result->clusters[index_cluster].size];
-
-			for (unsigned int index_object = 0; index_object < result->clusters[index_cluster].size; index_object++) {
-				result->clusters[index_cluster].objects[index_object] = (*(*clusters)[index_cluster])[index_object];
-			}
-		}
-		else {
-			result->clusters[index_cluster].objects = NULL;
-		}
-	}
-
-	return result;
-}
-
-
-
-//clustering_result * create_clustering_result(const std::vector<std::vector<unsigned int> > & clusters) {
-//	clustering_result * result = new clustering_result();
-//
-//	result->size = clusters.size();
-//	result->clusters = new cluster_representation[result->size];
-//
-//	for (unsigned int index_cluster = 0; index_cluster < result->size; index_cluster++) {
-//		result->clusters[index_cluster].size = clusters[index_cluster].size();
-//		if (result->clusters[index_cluster].size > 0) {
-//			result->clusters[index_cluster].objects = new unsigned int[result->clusters[index_cluster].size];
-//
-//			for (unsigned int index_object = 0; index_object < result->clusters[index_cluster].size; index_object++) {
-//				result->clusters[index_cluster].objects[index_object] = clusters[index_cluster][index_object];
-//			}
-//		}
-//		else {
-//			result->clusters[index_cluster].objects = NULL;
-//		}
-//	}
-//
-//	return result;
-//}
-//
-//
-//clustering_result * create_clustering_result(const std::vector<std::vector<std::size_t> > & clusters) {
-//    clustering_result * result = new clustering_result();
-//
-//    result->size = clusters.size();
-//    result->clusters = new cluster_representation[result->size];
-//
-//    for (unsigned int index_cluster = 0; index_cluster < result->size; index_cluster++) {
-//        result->clusters[index_cluster].size = clusters[index_cluster].size();
-//        if (result->clusters[index_cluster].size > 0) {
-//            result->clusters[index_cluster].objects = new unsigned int[result->clusters[index_cluster].size];
-//
-//            for (unsigned int index_object = 0; index_object < result->clusters[index_cluster].size; index_object++) {
-//                result->clusters[index_cluster].objects[index_object] = clusters[index_cluster][index_object];
-//            }
-//        }
-//        else {
-//            result->clusters[index_cluster].objects = NULL;
-//        }
-//    }
-//
-//    return result;
-//}
-
-
 double average_neighbor_distance(const std::vector<std::vector<double> > * points, const unsigned int num_neigh) {
-	std::vector<std::vector<double> > dist_matrix( points->size(), std::vector<double>(points->size(), 0.0) );
-	for (unsigned int i = 0; i < points->size(); i++) {
-		for (unsigned int j = i + 1; j < points->size(); j++) {
-			double distance = euclidean_distance( &(*points)[i], &(*points)[j] );
-			dist_matrix[i][j] = distance;
-			dist_matrix[j][i] = distance;
-		}
-		std::sort(dist_matrix[i].begin(), dist_matrix[i].end());
-	}
+    std::vector<std::vector<double> > dist_matrix( points->size(), std::vector<double>(points->size(), 0.0) );
+    for (std::size_t i = 0; i < points->size(); i++) {
+        for (std::size_t j = i + 1; j < points->size(); j++) {
+            double distance = euclidean_distance( &(*points)[i], &(*points)[j] );
+            dist_matrix[i][j] = distance;
+            dist_matrix[j][i] = distance;
+        }
 
-	double total_distance = 0.0;
-	for (unsigned int i = 0; i < points->size(); i++) {
-		for (unsigned int j = 0; j < num_neigh; j++) {
-			total_distance += dist_matrix[i][j + 1];
-		}
-	}
+        std::sort(dist_matrix[i].begin(), dist_matrix[i].end());
+    }
 
-	return total_distance / ( (double) num_neigh * (double) points->size() );
+    double total_distance = 0.0;
+    for (std::size_t i = 0; i < points->size(); i++) {
+        for (std::size_t j = 0; j < num_neigh; j++) {
+            total_distance += dist_matrix[i][j + 1];
+        }
+    }
+
+    return total_distance / ( (double) num_neigh * (double) points->size() );
 }
