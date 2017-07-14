@@ -332,7 +332,7 @@ class legion_network(network):
         @param[in] time (double): Time of simulation.
         @param[in] stimulus (list): Stimulus for oscillators, number of stimulus should be equal to number of oscillators,
                    example of stimulus for 5 oscillators [0, 0, 1, 1, 0], value of stimulus is defined by parameter 'I'.
-        @param[in] solution (solve_type): Type of solution (solving).
+        @param[in] solution (solve_type): Method that is used for differential equation.
         @param[in] collect_dynamic (bool): If True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics.
         
         @return (list) Dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,

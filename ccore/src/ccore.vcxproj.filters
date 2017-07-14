@@ -169,6 +169,9 @@
     <ClCompile Include="cluster\antmean.cpp">
       <Filter>Source Files\cluster</Filter>
     </ClCompile>
+    <ClCompile Include="interface\legion_interface.cpp">
+      <Filter>Source Files\interface</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cluster\agglomerative.hpp">
@@ -368,6 +371,9 @@
     </ClInclude>
     <ClInclude Include="cluster\antmean_params.hpp">
       <Filter>Source Files\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\legion_interface.h">
+      <Filter>Source Files\interface</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

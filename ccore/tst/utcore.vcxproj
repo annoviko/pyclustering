@@ -115,6 +115,7 @@
     <ClCompile Include="..\src\interface\cure_interface.cpp" />
     <ClCompile Include="..\src\interface\dbscan_interface.cpp" />
     <ClCompile Include="..\src\interface\kmeans_interface.cpp" />
+    <ClCompile Include="..\src\interface\legion_interface.cpp" />
     <ClCompile Include="..\src\interface\pcnn_interface.cpp" />
     <ClCompile Include="..\src\interface\pyclustering_interface.cpp" />
     <ClCompile Include="..\src\interface\pyclustering_package.cpp" />
@@ -150,6 +151,7 @@
     <ClCompile Include="utest-interface-cure.cpp" />
     <ClCompile Include="utest-interface-dbscan.cpp" />
     <ClCompile Include="utest-interface-kmeans.cpp" />
+    <ClCompile Include="utest-interface-legion.cpp" />
     <ClCompile Include="utest-interface-pcnn.cpp" />
     <ClCompile Include="utest-interface-syncpr.cpp" />
     <ClCompile Include="utest-interface-xmeans.cpp" />
@@ -215,6 +217,7 @@
     <ClInclude Include="..\src\interface\cure_interface.h" />
     <ClInclude Include="..\src\interface\dbscan_interface.h" />
     <ClInclude Include="..\src\interface\kmeans_interface.h" />
+    <ClInclude Include="..\src\interface\legion_interface.h" />
     <ClInclude Include="..\src\interface\pcnn_interface.h" />
     <ClInclude Include="..\src\interface\pyclustering_interface.h" />
     <ClInclude Include="..\src\interface\pyclustering_package.hpp" />
