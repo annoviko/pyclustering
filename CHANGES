@@ -58,6 +58,9 @@ GENERAL CHANGES (ccore):
 
 
 CORRECTED MAJOR BUGS:
+- Memory leakage in LEGION in case of CCORE usage - API function 'legion_destroy()' was not called (pyclustering.nnet.legion).
+  See: no reference.
+
 - Bug with crash of antmeans algorithm for python version 3.6.0:414df79263a11, Dec 23 2016 [MSC v.1900 64 bit (AMD64)] (pyclustering.cluster.antmeans).
   See: https://github.com/annoviko/pyclustering/issues/350
 

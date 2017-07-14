@@ -277,8 +277,30 @@ class legion_network(network):
                 
             # generate first noises
             self._noise = [random.random() * self._params.ro for i in range(self._num_osc)];
-    
-    
+
+
+    def __del__(self):
+        """!
+        @brief Default destructor of LEGION.
+        
+        """
+        if (self.__ccore_legion_pointer is not None):
+            wrapper.legion_destroy(self.__ccore_legion_pointer);
+            self.__ccore_legion_pointer = None;
+
+
+    def __len__(self):
+        """!
+        @brief (uint) Returns size of LEGION.
+        
+        """
+        
+        if (self.__ccore_legion_pointer is not None):
+            return wrapper.legion_get_size(self.__ccore_legion_pointer);
+        
+        return self._num_osc;
+
+
     def __create_stimulus(self, stimulus):
         """!
         @brief Create stimulus for oscillators in line with stimulus map and parameters.
