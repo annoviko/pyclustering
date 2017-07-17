@@ -263,7 +263,7 @@ class legion_network(network):
             super().__init__(num_osc, type_conn, type_conn_represent);
                 
             # initial states
-            self._excitatory = [ random.random() for i in range(self._num_osc) ];
+            self._excitatory = [ random.random() for _ in range(self._num_osc) ];
             self._inhibitory = [0.0] * self._num_osc;
             self._potential = [0.0] * self._num_osc;
             

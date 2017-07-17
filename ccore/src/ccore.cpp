@@ -25,10 +25,7 @@
 #include "ccore.h"
 
 #include "cluster/hsyncnet.hpp"
-#include "cluster/syncnet.hpp"
 #include "cluster/xmeans.hpp"
-
-#include "interface/sync_interface.h"
 
 #include "tsp/ant_colony.hpp"
 
@@ -36,42 +33,6 @@
 
 
 using namespace container;
-
-
-/***********************************************************************************************
-*
-* @brief syncnet - phase oscillatory network (for cluster analysis) interface implementation.
-*
-***********************************************************************************************/
-void * syncnet_create_network(const data_representation * const sample, const double connectivity_radius, const bool enable_conn_weight, const unsigned int initial_phases) {
-	std::vector<std::vector<double> > * dataset = read_sample(sample);	/* belongs to syncnet */
-	return (void *) new syncnet(dataset, connectivity_radius, enable_conn_weight, (initial_type) initial_phases);
-}
-
-void syncnet_destroy_network(const void * pointer_network) {
-	if (pointer_network != NULL) {
-		delete (syncnet *) pointer_network;
-	}
-}
-
-void * syncnet_process(const void * pointer_network, const double order, const unsigned int solver, const bool collect_dynamic) {
-	syncnet * network = (syncnet *) pointer_network;
-	
-	syncnet_analyser * analyser = new syncnet_analyser();
-	network->process(order, (solve_type) solver, collect_dynamic, (*analyser));
-
-	ensemble_data<sync_ensemble> ensembles;
-	analyser->allocate_sync_ensembles(0.1, ensembles);
-
-	return analyser;
-}
-
-void syncnet_analyser_destroy(const void * pointer_analyser) {
-	if (pointer_analyser != NULL) {
-		delete (syncnet_analyser *) pointer_analyser;
-	}
-}
-
 
 
 void * hsyncnet_create_network(const data_representation * const sample, 

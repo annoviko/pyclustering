@@ -51,51 +51,6 @@ typedef struct tsp_matrix {
     double                  ** data;
 } tsp_matrix;
 
-/***********************************************************************************************
- *
- * @brief   Create oscillatory network SYNC for cluster analysis.
- *
- * @param   (in) sample                - input data for clustering.
- * @param   (in) connectivity_radius   - connectivity radius between points.
- * @param   (in) enable_conn_weight    - if True - enable mode when strength between oscillators 
- *                                       depends on distance between two oscillators. Otherwise
- *                                       all connection between oscillators have the same strength.
- * @param   (in) initial_phases        - type of initialization of initial phases of oscillators.
- *
- ***********************************************************************************************/
-extern "C" DECLARATION void * syncnet_create_network(const data_representation * const sample, 
-                                                     const double connectivity_radius, 
-                                                     const bool enable_conn_weight, 
-                                                     const unsigned int initial_phases);
-
-/***********************************************************************************************
- *
- * @brief   Destroy SyncNet (calls destructor).
- *
- * @param   (in) pointer_network       - pointer to the SyncNet network.
- *
- ***********************************************************************************************/
-extern "C" DECLARATION void syncnet_destroy_network(const void * pointer_network);
-
-/***********************************************************************************************
- *
- * @brief   Simulate oscillatory network SYNC until clustering problem is not resolved.
- *
- * @param   (in) order             - order of synchronization that is used as indication for 
- *                                   stopping processing.
- * @param   (in) solver            - specified type of solving diff. equation. 
- * @param   (in) collect_dynamic   - specified requirement to collect whole dynamic of the network.
- *
- * @return  Returns analyser of output dynamic.
- *
- ***********************************************************************************************/
-extern "C" DECLARATION void * syncnet_process(const void * pointer_network, 
-                                              const double order, 
-                                              const unsigned int solver, 
-                                              const bool collect_dynamic);
-
-extern "C" DECLARATION void syncnet_analyser_destroy(const void * pointer_analyser);
-
 
 /***********************************************************************************************
  *

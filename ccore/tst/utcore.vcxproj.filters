@@ -290,6 +290,24 @@
     <ClCompile Include="utest-interface-legion.cpp">
       <Filter>Unit Tests</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\interface\kmedians_interface.cpp">
+      <Filter>Tested Code\interface</Filter>
+    </ClCompile>
+    <ClCompile Include="utest-interface-kmedians.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\interface\kmedoids_interface.cpp">
+      <Filter>Tested Code\interface</Filter>
+    </ClCompile>
+    <ClCompile Include="utest-interface-kmedoids.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\interface\syncnet_interface.cpp">
+      <Filter>Tested Code\interface</Filter>
+    </ClCompile>
+    <ClCompile Include="utest-interface-syncnet.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\tools\gtest\gtest.h">
@@ -488,6 +506,15 @@
       <Filter>Tested Code\cluster</Filter>
     </ClInclude>
     <ClInclude Include="..\src\interface\legion_interface.h">
+      <Filter>Tested Code\interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\interface\kmedians_interface.h">
+      <Filter>Tested Code\interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\interface\kmedoids_interface.h">
+      <Filter>Tested Code\interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\interface\syncnet_interface.h">
       <Filter>Tested Code\interface</Filter>
     </ClInclude>
   </ItemGroup>

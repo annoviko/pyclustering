@@ -155,6 +155,8 @@ extern "C" DECLARATION pyclustering_package * sync_dynamic_allocate_sync_ensembl
  * @details Caller should destroy returned result in 'pyclustering_package'.
  *
  * @param[in] pointer_network: pointer to the output dynamic.
+ * @param[in] tolerance: maximum error for allocation of synchronous ensemble oscillators.
+ * @param[in] iteration: iteration number of simulation that should be used for allocation.
  *
  * @return  Package where matrix is stored.
  *

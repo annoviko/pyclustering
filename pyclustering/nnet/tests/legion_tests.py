@@ -182,5 +182,22 @@ class Test(unittest.TestCase):
         self.templateSyncEnsembleAllocation([1, 0, 1], None, conn_type.LIST_BIDIR, 1500, 1500, [[0, 2], [1]], True);
 
 
+    def templateOutputDynamicInformation(self, stimulus, params, type_conn, sim_steps, sim_time, ccore_flag):
+        legion_instance = legion_network(len(stimulus), params, type_conn, ccore = ccore_flag);
+        dynamic = legion_instance.simulate(sim_steps, sim_time, stimulus);
+        
+        assert len(dynamic.output) > 0;
+        assert len(dynamic.inhibitor) > 0;
+        assert len(dynamic.time) > 0;
+
+
+    def testOutputDynamicInformation(self):
+        self.templateOutputDynamicInformation([1, 0, 1], legion_parameters(), conn_type.LIST_BIDIR, 100, 100, False);
+
+
+    def testOutputDynamicInformationByCore(self):
+        self.templateOutputDynamicInformation([1, 0, 1], legion_parameters(), conn_type.LIST_BIDIR, 100, 100, True);
+
+
 if __name__ == "__main__":
     unittest.main();
