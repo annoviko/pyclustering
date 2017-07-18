@@ -47,6 +47,7 @@
     <ClCompile Include="interface\antmean_interface.cpp" />
     <ClCompile Include="interface\cure_interface.cpp" />
     <ClCompile Include="interface\dbscan_interface.cpp" />
+    <ClCompile Include="interface\hsyncnet_interface.cpp" />
     <ClCompile Include="interface\kmeans_interface.cpp" />
     <ClCompile Include="interface\kmedians_interface.cpp" />
     <ClCompile Include="interface\kmedoids_interface.cpp" />
@@ -114,6 +115,7 @@
     <ClInclude Include="interface\antmean_interface.h" />
     <ClInclude Include="interface\cure_interface.h" />
     <ClInclude Include="interface\dbscan_interface.h" />
+    <ClInclude Include="interface\hsyncnet_interface.h" />
     <ClInclude Include="interface\kmeans_interface.h" />
     <ClInclude Include="interface\kmedians_interface.h" />
     <ClInclude Include="interface\kmedoids_interface.h" />

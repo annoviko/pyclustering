@@ -28,15 +28,39 @@ import unittest;
 
 
 from pyclustering.core.pyclustering_package import package_builder, package_extractor;
-from ctypes import c_ulong, c_size_t, c_double, c_uint
+from ctypes import c_ulong, c_size_t, c_double, c_uint, c_float;
 
 
 class Test(unittest.TestCase):
     def templatePackUnpack(self, dataset, c_type_data = None):
         package_pointer = package_builder(dataset, c_type_data).create();
         unpacked_package = package_extractor(package_pointer).extract();
+
+        assert self.compare_containers(dataset, unpacked_package);
+
+
+    def compare_containers(self, container1, container2):
+        def is_container(container):
+            return (isinstance(container, list) or isinstance(container, tuple));
         
-        assert dataset == unpacked_package;
+        if (len(container1) == 0 and len(container2) == 0):
+            return True;
+        
+        if (len(container1) != len(container2)):
+            return False;
+        
+        for index in range(len(container1)):
+            if (is_container(container1[index]) and is_container(container2[index])):
+                return self.compare_containers(container1[index], container2[index]);
+            
+            elif (is_container(container1[index]) == is_container(container2[index])):
+                if (container1[index] != container2[index]):
+                    return False;
+            
+            else:
+                return False;
+            
+            return True;
 
 
     def testListInteger(self):
@@ -92,6 +116,15 @@ class Test(unittest.TestCase):
 
     def testListOfListOfListInteger(self):
         self.templatePackUnpack([ [ [1], [2] ], [ [3], [4] ], [ [5, 6], [7, 8] ] ]);
+
+    def testTupleInterger(self):
+        self.templatePackUnpack([ (1, 2, 3), (4, 5), (6, 7, 8, 9) ], c_uint);
+
+    def testTupleFloat(self):
+        self.templatePackUnpack([ (1.0, 2.0, 3.8), (4.6, 5.0), (6.8, 7.4, 8.5, 9.6) ], c_float);
+
+    def testTupleEmpty(self):
+        self.templatePackUnpack([ (), (), () ]);
 
 
 if __name__ == "__main__":

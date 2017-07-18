@@ -53,33 +53,3 @@ def create_pointer_data(sample):
     input_data = pointer(input_data);
     
     return input_data;
-
-
-# Implemented algorithms.
-"CCORE Interface for HSYNCNET oscillatory network"
-
-def hsyncnet_create_network(sample, number_clusters, initial_phases, initial_neighbors, increase_persent):
-    pointer_data = create_pointer_data(sample);
-    
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
-    ccore.hsyncnet_create_network.restype = POINTER(c_void_p);
-    pointer_network = ccore.hsyncnet_create_network(pointer_data, c_uint(number_clusters), c_uint(initial_phases), c_uint(initial_neighbors), c_double(increase_persent));
-    
-    return pointer_network;
-
-
-def hsyncnet_destroy_network(pointer_network):
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
-    ccore.hsyncnet_destroy_network(pointer_network);
-
-
-def hsyncnet_process(network_pointer, order, solution, collect_dynamic):
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
-    ccore.hsyncnet_process.restype = POINTER(c_void_p);
-    return ccore.hsyncnet_process(network_pointer, c_double(order), c_uint(solution), c_bool(collect_dynamic));
-
-
-def hsyncnet_analyser_destroy(pointer_analyser):
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
-    ccore.syncnet_analyser_destroy(pointer_analyser);
-

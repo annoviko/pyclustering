@@ -26,7 +26,7 @@
 """
 
 
-import pyclustering.core.wrapper as wrapper;
+import pyclustering.core.hsyncnet_wrapper as wrapper;
 
 from pyclustering.nnet import initial_type, solve_type;
 

@@ -131,6 +131,13 @@ class package_builder:
         return self.__create_package(self.__dataset);
 
 
+    def __is_container_type(self, value):
+        if (isinstance(value, list) or isinstance(value, tuple)):
+            return True;
+        
+        return False;
+
+
     def __get_type(self, pyclustering_data_type):
         if (self.__c_data_type is None):
             return pyclustering_data_type;
@@ -156,7 +163,7 @@ class package_builder:
 
 
     def __fill_dataset_type(self, dataset_package, dataset):
-        if (isinstance(dataset[0], list)):
+        if (self.__is_container_type(dataset[0])):
             dataset_package.type = pyclustering_type_data.PYCLUSTERING_TYPE_LIST;
         
         elif (isinstance(dataset[0], int)):
@@ -177,7 +184,7 @@ class package_builder:
 
 
     def __fill_type(self, dataset_package, dataset):
-        if (isinstance(dataset[0], list)):
+        if (self.__is_container_type(dataset[0])):
             dataset_package.type = pyclustering_type_data.PYCLUSTERING_TYPE_LIST;
             return None;
         

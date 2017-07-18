@@ -54,53 +54,6 @@ typedef struct tsp_matrix {
 
 /***********************************************************************************************
  *
- * @brief   Create oscillatory network HSyncNet (hierarchical Sync) for cluster analysis.
- *
- * @param[in] sample:            Input data for clustering.
- * @param[in] number_clusters:   Number of clusters that should be allocated.
- * @param[in] initial_phases:    Type of initialization of initial phases of oscillators.
- * @param[in] initial_neighbors: Defines initial radius connectivity by calculation average distance 
- *                               to connect specify number of oscillators.
- * @param[in] increase_persent:  Percent of increasing of radius connectivity on each step (input 
- *                               values in range (0.0; 1.0) correspond to (0%; 100%)).
- *
- * @return Pointer of hsyncnet network. Caller should free it by 'hsyncnet_destroy_network'.
- *
- ***********************************************************************************************/
-extern "C" DECLARATION void * hsyncnet_create_network(const data_representation * const sample, 
-                                                      const unsigned int number_clusters, 
-                                                      const unsigned int initial_phases,
-                                                      const unsigned int initial_neighbors,
-                                                      const double increase_persent);
-
-/***********************************************************************************************
- *
- * @brief   Destroy oscillatory network HSyncNet (calls destructor).
- *
- * @param   (in) pointer_network      - pointer to HSyncNet oscillatory network.
- *
- ***********************************************************************************************/
-extern "C" DECLARATION void hsyncnet_destroy_network(const void * pointer_network);
-
-/***********************************************************************************************
- *
- * @brief   Simulate oscillatory network hierarchical SYNC until clustering problem is not resolved.
- *
- * @param   (in) order             - order of synchronization that is used as indication for 
- *                                   stopping processing.
- * @param   (in) solver            - specified type of solving diff. equation. 
- * @param   (in) collect_dynamic   - specified requirement to collect whole dynamic of the network.
- *
- * @return  Return pointer to hsyncnet analyser of output dynamic
- *
- ***********************************************************************************************/
-extern "C" DECLARATION void * hsyncnet_process(const void * pointer_network, const double order, const unsigned int solver, const bool collect_dynamic);
-
-extern "C" DECLARATION void hsyncnet_analyser_destroy(const void * pointer_analyser);
-
-
-/***********************************************************************************************
- *
  * @brief   Creates and runs ant colony algorithm for TSP.
  *
  * @param[in] objects_coord			 - pointer to array with objects.

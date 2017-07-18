@@ -308,6 +308,12 @@
     <ClCompile Include="utest-interface-syncnet.cpp">
       <Filter>Unit Tests</Filter>
     </ClCompile>
+    <ClCompile Include="utest-interface-hsyncnet.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\interface\hsyncnet_interface.cpp">
+      <Filter>Tested Code\interface</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\tools\gtest\gtest.h">
@@ -515,6 +521,9 @@
       <Filter>Tested Code\interface</Filter>
     </ClInclude>
     <ClInclude Include="..\src\interface\syncnet_interface.h">
+      <Filter>Tested Code\interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\interface\hsyncnet_interface.h">
       <Filter>Tested Code\interface</Filter>
     </ClInclude>
   </ItemGroup>

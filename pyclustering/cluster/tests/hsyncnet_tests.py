@@ -33,6 +33,7 @@ from pyclustering.cluster.hsyncnet import hsyncnet;
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES;
 
+
 class Test(unittest.TestCase):
     def templateClustering(self, path, number_clusters, expected_length_clusters, solver, initial_neighbors, increase_persent, collect_dynamic_flag, ccore_flag):
         result_testing = False;

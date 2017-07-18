@@ -35,38 +35,6 @@
 using namespace container;
 
 
-void * hsyncnet_create_network(const data_representation * const sample, 
-                               const unsigned int number_clusters, 
-                               const unsigned int initial_phases,
-                               const unsigned int initial_neighbors,
-                               const double increase_persent) {
-
-	std::vector<std::vector<double> > * dataset = read_sample(sample);	/* belongs to hsyncnet */
-	return (void *) new hsyncnet(dataset, number_clusters, (initial_type) initial_phases, initial_neighbors, increase_persent);
-}
-
-void hsyncnet_destroy_network(const void * pointer_network) {
-	if (pointer_network != NULL) {
-		delete (hsyncnet *) pointer_network;
-	}
-}
-
-void * hsyncnet_process(const void * pointer_network, const double order, const unsigned int solver, const bool collect_dynamic) {
-	hsyncnet * network = (hsyncnet *) pointer_network;
-
-	hsyncnet_analyser * analyser = new hsyncnet_analyser();
-	network->process(order, (solve_type) solver, collect_dynamic, *analyser);
-
-	return (void *) analyser;
-}
-
-void hsyncnet_analyser_destroy(const void * pointer_analyser) {
-	if (pointer_analyser != NULL) {
-		delete (hsyncnet_analyser *) pointer_analyser;
-	}
-}
-
-
 /////////////////////////////////////////////////////////////////////////////
 //                  Ant Colony functions
 //
