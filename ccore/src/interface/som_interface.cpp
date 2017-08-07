@@ -31,17 +31,21 @@ void som_destroy(const void * pointer) {
 }
 
 
-size_t som_train(const void * pointer, const data_representation * const sample, const size_t epochs, const bool autostop) {
-    std::unique_ptr<dataset> input_dataset(read_sample(sample));
-    size_t result = ((som *) pointer)->train(*input_dataset, epochs, autostop);
+size_t som_train(const void * pointer, const pyclustering_package * const sample, const size_t epochs, const bool autostop) {
+    dataset input_dataset;
+    sample->extract(input_dataset);
+
+    size_t result = ((som *) pointer)->train(input_dataset, epochs, autostop);
 
     return result;
 }
 
 
-size_t som_simulate(const void * pointer, const data_representation * const pattern) {
-    std::unique_ptr<dataset> input_pattern(read_sample(pattern));
-    return ((som *) pointer)->simulate( (*input_pattern)[0] );
+size_t som_simulate(const void * pointer, const pyclustering_package * const pattern) {
+    dataset input_pattern;
+    pattern->extract(input_pattern);
+
+    return ((som *) pointer)->simulate( (input_pattern)[0] );
 }
 
 

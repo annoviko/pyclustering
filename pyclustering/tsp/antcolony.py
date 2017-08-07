@@ -5,7 +5,7 @@
          - [1] M.Dorigo, L.M.Gambardella. Ant colonies for the traveling salesman problem. 1996.
          - [2] J.Yang, X.Shi, M.Marchese, Y.Liang. An ant colony optimization method for generalized TSP problem. 2008.
 
-@authors Alexey Kukushkin (pyclustering@yandex.ru)
+@authors Andrey Novikov, Alexey Kukushkin (pyclustering@yandex.ru)
 @date 2014-2017
 @copyright GNU Public License
 
@@ -96,8 +96,8 @@ class antcolony:
             self.__parameters = antcolony_parameters();
         else:
             self.__parameters = parameters;
-    
-    
+
+
     def process(self, object_locations):
         """!
         @brief Perform simulation of ant colony to solve travelling salesman problem.
@@ -107,19 +107,16 @@ class antcolony:
         @return (list) The shortest path that consists of all objects.
         
         """
-        
-        (result_address, c_pointer_tsp_result) = wrapper.antcolony_tsp_process(object_locations, self.__parameters);
+
+        output_result = wrapper.antcolony_tsp_process(object_locations, self.__parameters);
         
         result = tsp_result();
-        
-        result.shortest_length = c_pointer_tsp_result.path_length;
-        for i in range(c_pointer_tsp_result.size):
-            result.object_sequence.append(c_pointer_tsp_result.object_sequence[i]);
-        
-        wrapper.antcolony_tsp_destroy(result_address);
+        result.shortest_length = output_result[0][0];
+        result.object_sequence = output_result[1];
         
         return result;
-    
+
+
     def process_by_matrix(self, matrix):
         """!
         @brief Perform simulation of ant colony to solve travelling salesman problem.
@@ -129,14 +126,11 @@ class antcolony:
         @return (list) The shortest path that consists of all objects.
         
         """
-        (result_address, c_pointer_tsp_result) = wrapper.antcolony_tsp_process(matrix, self.__parameters, wrapper.CITIES_DISTANCE_SET_BY_MATRIX);
+
+        output_result = wrapper.antcolony_tsp_process(matrix, self.__parameters, wrapper.CITIES_DISTANCE_SET_BY_MATRIX);
         
         result = tsp_result();
-        
-        result.shortest_length = c_pointer_tsp_result.path_length;
-        for i in range(c_pointer_tsp_result.size):
-            result.object_sequence.append(c_pointer_tsp_result.object_sequence[i]);
-        
-        wrapper.antcolony_tsp_destroy(result_address);
+        result.shortest_length = output_result[0][0];
+        result.object_sequence = output_result[1];
         
         return result;

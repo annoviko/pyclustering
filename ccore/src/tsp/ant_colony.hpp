@@ -81,7 +81,7 @@ public:
 
 private:
 
-    using AntAPI = ant::ant_colony_TSP_params_initializer;
+    using ant_api = ant::ant_colony_TSP_params_initializer;
     using cities_t = std::vector<int>;
 
 
@@ -171,22 +171,22 @@ private:
     std::size_t get_count_city()                const { return distance->m_matrix.size(); }
     unsigned get_random_number(unsigned max)    const { return (std::rand() % max); }
 
-    const AntAPI::base_param_type<params_name_TSP::COUNT_ANTS_IN_ITERATION>
+    const ant_api::base_param_type<params_name_TSP::COUNT_ANTS_IN_ITERATION>
             get_count_ants_in_iteration()const { return params->get<params_name_TSP::COUNT_ANTS_IN_ITERATION>().get(); }
 
-    const AntAPI::base_param_type<params_name_TSP::INITIAL_PHERAMONE>
+    const ant_api::base_param_type<params_name_TSP::INITIAL_PHERAMONE>
             get_initial_pheromone()     const { return params->get<params_name_TSP::INITIAL_PHERAMONE>().get(); }
 
-    const AntAPI::base_param_type<params_name_TSP::ITERATIONS>
+    const ant_api::base_param_type<params_name_TSP::ITERATIONS>
             get_count_iterations()      const { return params->get<params_name_TSP::ITERATIONS>().get(); }
 
-    const AntAPI::base_param_type<params_name_TSP::RO>
+    const ant_api::base_param_type<params_name_TSP::RO>
             get_param_ro()              const { return params->get<params_name_TSP::RO>().get(); }
 
-    const AntAPI::base_param_type<params_name_TSP::Q>
+    const ant_api::base_param_type<params_name_TSP::Q>
             get_param_Q()                   const { return params->get<params_name_TSP::Q>().get(); }
 
-    const AntAPI::base_param_type<params_name_TSP::ALPHA>
+    const ant_api::base_param_type<params_name_TSP::ALPHA>
             get_param_alpha()               const { return params->get<params_name_TSP::ALPHA>().get(); }
 #endif
 

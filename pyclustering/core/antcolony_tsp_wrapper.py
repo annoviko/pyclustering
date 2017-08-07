@@ -23,9 +23,12 @@
 
 """
 
+
 from pyclustering.core.wrapper import *;
 
 import types;
+from pyclustering.core.pyclustering_package import pyclustering_package,\
+    package_builder, package_extractor
 
 
 CITIES_DISTANCE_SET_BY_MATRIX = True
@@ -90,7 +93,6 @@ class c_antcolony_tsp_result(Structure):
 
 
 def get_algo_params(params):
-    
     algorithm_params = c_antcolony_tsp_parameters();
     algorithm_params.q          = c_double(params.q);
     algorithm_params.ro         = c_double(params.ro);
@@ -146,22 +148,19 @@ def antcolony_tsp_prepare_cities_list(cities):
 def antcolony_tsp_process(cities, params, citiesDistRepresent = CITIES_DISTANCE_SET_BY_LIST_OF_COORDINATES):
     algorithm_params = get_algo_params(params)
     
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
+    ccore = load_core();
      
     if citiesDistRepresent == CITIES_DISTANCE_SET_BY_MATRIX:
-        cities_coord = antcolony_tsp_prepare_matrix(cities);
-        ccore.ant_colony_tsp_process_by_matrix.restype = POINTER(c_antcolony_tsp_result);
-        result_pointer = ccore.ant_colony_tsp_process_by_matrix(cities_coord, algorithm_params);
+        cities_coord = package_builder(cities, c_double).create(); # antcolony_tsp_prepare_matrix(cities);
+        ccore.antcolony_tsp_process_by_matrix.restype = POINTER(pyclustering_package);
+        result_package = ccore.antcolony_tsp_process_by_matrix(cities_coord, algorithm_params);
     else:
-        cities_coord = antcolony_tsp_prepare_cities_list(cities);
-        ccore.ant_colony_tsp_process.restype = POINTER(c_antcolony_tsp_result);
-        result_pointer = ccore.ant_colony_tsp_process(cities_coord, algorithm_params);
+        cities_coord = package_builder(cities, c_double).create(); # antcolony_tsp_prepare_cities_list(cities);
+        ccore.antcolony_tsp_process.restype = POINTER(pyclustering_package);
+        result_package = ccore.antcolony_tsp_process(cities_coord, algorithm_params);
     
-    result = cast(result_pointer, POINTER(c_antcolony_tsp_result))[0];
+    result = package_extractor(result_package).extract();
+    ccore.free_pyclustering_package(result_package);
     
-    return (result_pointer, result);
+    return result;
 
-
-def antcolony_tsp_destroy(tsp_result_pointer):
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
-    ccore.ant_colony_tsp_destroy(tsp_result_pointer);

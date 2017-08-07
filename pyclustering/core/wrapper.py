@@ -23,33 +23,21 @@
 
 """
 
+
+import os;
+import sys;
+
 from ctypes import *;
 
 from pyclustering.core.definitions import *;
 
 
-# API that is required for interaction with DLL.
-def create_pointer_data(sample):
-    "Allocates memory for representing input data for processing that is described by structure 'data_representation' and returns pointer this structure."
-    
-    "(in) sample    - dataset for processing."
-    
-    "Returns pointer to the data for processing."
-    
-    input_data = data_representation();
-    input_data.number_objects = len(sample);
-    input_data.dimension = len(sample[0]);
-    
-    pointer_objects = (POINTER(c_double) * input_data.number_objects)();
+def load_core():
+    if (PATH_PYCLUSTERING_CCORE_LIBRARY is None):
+        raise NameError("The pyclustering core is not supported for platform '" + sys.platform + "'.");
 
-    for index in range(0, input_data.number_objects):
-        point = (c_double * input_data.dimension)();
-        for dimension in range(0, input_data.dimension):
-            point[dimension] = sample[index][dimension];
-            
-        pointer_objects[index] = cast(point, POINTER(c_double));
-       
-    input_data.pointer_objects = cast(pointer_objects, POINTER(POINTER(c_double)));
-    input_data = pointer(input_data);
+    if (os.path.exists(PATH_PYCLUSTERING_CCORE_LIBRARY) is False):
+        raise NameError("The pyclustering core is not found (expected core location: '" + PATH_PYCLUSTERING_CCORE_LIBRARY + "'). Probably pyclustering library has not been successfully installed.");
     
-    return input_data;
+    return cdll.LoadLibrary(PATH_PYCLUSTERING_CCORE_LIBRARY);
+

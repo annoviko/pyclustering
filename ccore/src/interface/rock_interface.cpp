@@ -23,13 +23,14 @@
 #include "cluster/rock.hpp"
 
 
-pyclustering_package * rock_algorithm(const data_representation * const sample, const double radius, const size_t number_clusters, const double threshold) {
-    std::unique_ptr<dataset> input_dataset(read_sample(sample));
+pyclustering_package * rock_algorithm(const pyclustering_package * const p_sample, const double p_radius, const size_t p_number_clusters, const double p_threshold) {
+    dataset input_dataset;
+    p_sample->extract(input_dataset);
 
-    cluster_analysis::rock solver(radius, number_clusters, threshold);
+    cluster_analysis::rock solver(p_radius, p_number_clusters, p_threshold);
 
     cluster_analysis::rock_data output_result;
-    solver.process(*input_dataset, output_result);
+    solver.process(input_dataset, output_result);
 
     pyclustering_package * package = create_package(output_result.clusters().get());
     return package;

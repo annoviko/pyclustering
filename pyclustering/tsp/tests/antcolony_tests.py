@@ -62,11 +62,10 @@ class Test(unittest.TestCase):
             result = algorithm.process_by_matrix(object_locations);
         else:
             result = algorithm.process(object_locations);
-        
+
         assert result.shortest_length == expected_length;
-        
         assert len(result.object_sequence) == len(object_locations);
-        
+
         current_distance = self.getCityDistance(result, object_locations, citiesDistRepresent)
         assert current_distance == expected_length;
         

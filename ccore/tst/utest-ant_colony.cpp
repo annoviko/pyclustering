@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Aleksey Kukushkin (pyclustering@yandex.ru)
+* Copyright (C) 2014-2017    Andrey Novikov, Aleksey Kukushkin (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -41,17 +41,16 @@ TEST(utest_ant_colony, city_distance_calculation) {
 }
 
 void template_smallest_distance_test(const std::shared_ptr<city_distance::distance_matrix> & coordinates, const double expected_result) {
-    using AntAPI = ant::ant_colony_TSP_params_initializer;
+    using ant_api = ant::ant_colony_TSP_params_initializer;
     auto sp_algo_params_2 = ant::ant_colony_TSP_params::make_param
-        (AntAPI::Q_t{ 1.5 },
-                 AntAPI::Ro_t{ 0.7 }, 
-                 AntAPI::Alpha_t{ 1.0 }, 
-                 AntAPI::Beta_t{ 1.0 }, 
-                 AntAPI::Gamma_t{ 2.0 }, 
-                 AntAPI::InitialPheramone_t{ 0.1 }, 
-                 AntAPI::Iterations_t{ 50 }, 
-                 AntAPI::CountAntsInIteration_t{ 10 }
-    );
+        ( ant_api::Q_t{ 1.5 },
+          ant_api::Ro_t{ 0.7 }, 
+          ant_api::Alpha_t{ 1.0 }, 
+          ant_api::Beta_t{ 1.0 }, 
+          ant_api::Gamma_t{ 2.0 }, 
+          ant_api::InitialPheramone_t{ 0.1 }, 
+          ant_api::Iterations_t{ 50 }, 
+          ant_api::CountAntsInIteration_t{ 10 } );
 
     ant::ant_colony ant_algo{ coordinates, sp_algo_params_2 };
     auto res = ant_algo.process();
@@ -186,17 +185,16 @@ TEST(utest_ant_colony, no_ants_for_processing) {
 
     auto dist = city_distance::distance_matrix::make_city_distance_matrix({ One, Two });
 
-    using AntAPI = ant::ant_colony_TSP_params_initializer;
+    using ant_api = ant::ant_colony_TSP_params_initializer;
     auto sp_algo_params_2 = ant::ant_colony_TSP_params::make_param
-            (AntAPI::Q_t{ 1.5 },
-                 AntAPI::Ro_t{ 0.7 },
-                 AntAPI::Alpha_t{ 1.0 },
-                 AntAPI::Beta_t{ 1.0 },
-                 AntAPI::Gamma_t{ 2.0 },
-                 AntAPI::InitialPheramone_t{ 0.1 },
-                 AntAPI::Iterations_t{ 50 },
-                 AntAPI::CountAntsInIteration_t{ 0 }
-    );
+            ( ant_api::Q_t{ 1.5 },
+              ant_api::Ro_t{ 0.7 },
+              ant_api::Alpha_t{ 1.0 },
+              ant_api::Beta_t{ 1.0 },
+              ant_api::Gamma_t{ 2.0 },
+              ant_api::InitialPheramone_t{ 0.1 },
+              ant_api::Iterations_t{ 50 },
+              ant_api::CountAntsInIteration_t{ 0 } );
 
     ant::ant_colony ant_algo{ dist, sp_algo_params_2 };
     auto res = ant_algo.process();
@@ -211,17 +209,16 @@ TEST(utest_ant_colony, no_iterations_for_processing) {
 
     auto dist = city_distance::distance_matrix::make_city_distance_matrix({ One, Two });
 
-    using AntAPI = ant::ant_colony_TSP_params_initializer;
+    using ant_api = ant::ant_colony_TSP_params_initializer;
     auto sp_algo_params_2 = ant::ant_colony_TSP_params::make_param
-            (AntAPI::Q_t{ 1.5 },
-                 AntAPI::Ro_t{ 0.7 },
-                 AntAPI::Alpha_t{ 1.0 },
-                 AntAPI::Beta_t{ 1.0 },
-                 AntAPI::Gamma_t{ 2.0 },
-                 AntAPI::InitialPheramone_t{ 0.1 },
-                 AntAPI::Iterations_t{ 0 },
-                 AntAPI::CountAntsInIteration_t{ 10 }
-    );
+            ( ant_api::Q_t{ 1.5 },
+              ant_api::Ro_t{ 0.7 },
+              ant_api::Alpha_t{ 1.0 },
+              ant_api::Beta_t{ 1.0 },
+              ant_api::Gamma_t{ 2.0 },
+              ant_api::InitialPheramone_t{ 0.1 },
+              ant_api::Iterations_t{ 0 },
+              ant_api::CountAntsInIteration_t{ 10 } );
 
     ant::ant_colony ant_algo{ dist, sp_algo_params_2 };
     auto res = ant_algo.process();

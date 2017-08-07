@@ -23,16 +23,16 @@
 
 """
 
-from ctypes import cdll, c_double, c_size_t, POINTER;
+from ctypes import c_double, c_size_t, POINTER;
 
-from pyclustering.core.wrapper import PATH_DLL_CCORE_64;
+from pyclustering.core.wrapper import load_core;
 from pyclustering.core.pyclustering_package import pyclustering_package, package_extractor, package_builder;
 
 
 def dbscan(sample, eps, min_neighbors, return_noise = False):
     pointer_data = package_builder(sample, c_double).create();
     
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
+    ccore = load_core();
     
     ccore.dbscan_algorithm.restype = POINTER(pyclustering_package);
     package = ccore.dbscan_algorithm(pointer_data, c_double(eps), c_size_t(min_neighbors));

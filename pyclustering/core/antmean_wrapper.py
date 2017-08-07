@@ -43,7 +43,7 @@ class c_antcolony_clustering_parameters(Structure):
 
 
 def antmean_clustering_process(params, count_clusters, samples):
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
+    ccore = load_core();
     
     algorithm_params = c_antcolony_clustering_parameters();
     algorithm_params.ro                         = c_double(params.ro);

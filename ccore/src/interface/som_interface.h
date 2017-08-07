@@ -71,7 +71,7 @@ extern "C" DECLARATION void som_destroy(const void * pointer);
 * @return  Returns number of learining iterations.
 *
 */
-extern "C" DECLARATION size_t som_train(const void * pointer, const data_representation * const sample, const size_t num_epochs, const bool autostop);
+extern "C" DECLARATION size_t som_train(const void * pointer, const pyclustering_package * const sample, const size_t num_epochs, const bool autostop);
 
 /**
 *

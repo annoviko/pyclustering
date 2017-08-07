@@ -30,7 +30,7 @@ from pyclustering.core.pyclustering_package import package_builder
 def syncnet_create_network(sample, radius, initial_phases, enable_conn_weight):
     package_data = package_builder(sample, c_double).create();
     
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
+    ccore = load_core();
     ccore.syncnet_create_network.restype = POINTER(c_void_p);
     pointer_network = ccore.syncnet_create_network(package_data, c_double(radius), c_uint(initial_phases), c_bool(enable_conn_weight));
     
@@ -38,17 +38,17 @@ def syncnet_create_network(sample, radius, initial_phases, enable_conn_weight):
 
 
 def syncnet_destroy_network(pointer_network):
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
+    ccore = load_core();
     ccore.syncnet_destroy_network(pointer_network);
 
 
 def syncnet_process(network_pointer, order, solution, collect_dynamic):
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
+    ccore = load_core();
     ccore.syncnet_process.restype = POINTER(c_void_p);
     return ccore.syncnet_process(network_pointer, c_double(order), c_uint(solution), c_bool(collect_dynamic));
 
 
 def syncnet_analyser_destroy(pointer_analyser):
-    ccore = cdll.LoadLibrary(PATH_DLL_CCORE_64);
+    ccore = load_core();
     ccore.syncnet_analyser_destroy(pointer_analyser);
     

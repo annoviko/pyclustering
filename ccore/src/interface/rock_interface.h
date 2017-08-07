@@ -18,8 +18,7 @@
 *
 */
 
-#ifndef SRC_INTERFACE_ROCK_INTERFACE_H_
-#define SRC_INTERFACE_ROCK_INTERFACE_H_
+#pragma once
 
 
 #include "interface/pyclustering_package.hpp"
@@ -42,7 +41,4 @@
  * @return  Returns result of clustering - array of allocated clusters in the pyclustering package.
  *
  */
-extern "C" DECLARATION pyclustering_package * rock_algorithm(const data_representation * const sample, const double radius, const size_t number_clusters, const double threshold);
-
-
-#endif
+extern "C" DECLARATION pyclustering_package * rock_algorithm(const pyclustering_package * const sample, const double radius, const size_t number_clusters, const double threshold);

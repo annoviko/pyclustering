@@ -32,7 +32,6 @@
 #include <cmath>
 #include <algorithm>
 
-#include "ccore.h"
 #include "nnet/network.hpp"
 
 
@@ -120,28 +119,6 @@ inline double euclidean_distance(const std::vector<double> * const point1, const
 inline double euclidean_distance(const std::vector<double> & point1, const std::vector<double> & point2) {
     return euclidean_distance(&point1, &point2);
 }
-
-/***********************************************************************************************
- *
- * @brief   Reads sample (input data) from the specified file.
- *
- * @param   (in) path_file  - path to the file with data.
- *
- * @return  Returns internal type of representation of input data.
- *
- ***********************************************************************************************/
-std::vector<std::vector<double> > * read_sample(const char * const path_file);
-
-/***********************************************************************************************
- *
- * @brief   Converts representation of data from CCORE standard to internal.
- *
- * @param   (in) sample     - input data (sample) for converting.
- *
- * @return  Returns internal type of representation of input data.
- *
- ***********************************************************************************************/
-std::vector<std::vector<double> > * read_sample(const data_representation * const sample);
 
 /***********************************************************************************************
  *

@@ -94,9 +94,6 @@
     <ClCompile Include="tsp\distance_matrix.cpp">
       <Filter>Source Files\tsp</Filter>
     </ClCompile>
-    <ClCompile Include="ccore.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -176,6 +173,9 @@
       <Filter>Source Files\interface</Filter>
     </ClCompile>
     <ClCompile Include="interface\hsyncnet_interface.cpp">
+      <Filter>Source Files\interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\antcolony_tsp_interface.cpp">
       <Filter>Source Files\interface</Filter>
     </ClCompile>
   </ItemGroup>
@@ -266,9 +266,6 @@
     </ClInclude>
     <ClInclude Include="tsp\params_container.hpp">
       <Filter>Source Files\tsp</Filter>
-    </ClInclude>
-    <ClInclude Include="ccore.h">
-      <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="utils.hpp">
       <Filter>Source Files</Filter>
@@ -385,6 +382,9 @@
       <Filter>Source Files\interface</Filter>
     </ClInclude>
     <ClInclude Include="interface\hsyncnet_interface.h">
+      <Filter>Source Files\interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\antcolony_tsp_interface.h">
       <Filter>Source Files\interface</Filter>
     </ClInclude>
   </ItemGroup>

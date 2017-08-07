@@ -74,21 +74,21 @@ public:
 
 private:
 
-    using AntAPI = ant::ant_colony_clustering_params_initializer;
+    using ant_api = ant::ant_colony_clustering_params_initializer;
 
     /*
     *    Wrappers to get parameters value
     */
-    const AntAPI::base_param_type<params_name_clustering::RO>
+    const ant_api::base_param_type<params_name_clustering::RO>
         get_ro()const { return params->get<params_name_clustering::RO>().get(); }
 
-    const AntAPI::base_param_type<params_name_clustering::PHERAMONE_INIT>
+    const ant_api::base_param_type<params_name_clustering::PHERAMONE_INIT>
         get_pheramone_init()const { return params->get<params_name_clustering::PHERAMONE_INIT>().get(); }
 
-    const AntAPI::base_param_type<params_name_clustering::ITERATIONS>
+    const ant_api::base_param_type<params_name_clustering::ITERATIONS>
         get_iterations()const { return params->get<params_name_clustering::ITERATIONS>().get(); }
 
-    const AntAPI::base_param_type<params_name_clustering::COUNT_ANTS>
+    const ant_api::base_param_type<params_name_clustering::COUNT_ANTS>
         get_count_ants()const { return params->get<params_name_clustering::COUNT_ANTS>().get(); }
 
     bool check_params();

@@ -20,51 +20,6 @@
 
 #include "utils.hpp"
 
-std::vector<std::vector<double> > * read_sample(const char * const path_file) {
-	std::string filename(path_file);
-
-	std::ifstream file_stream(filename.c_str(), std::fstream::in);
-	if (!file_stream.is_open()) {
-		return NULL;
-	}
-
-	std::string line;
-
-	std::vector<std::vector<double> > * dataset = new std::vector<std::vector<double> >();
-
-	while(std::getline(file_stream, line)) {
-		std::istringstream parser(line);
-		std::vector<double> point;
-
-		double coordinate = 0.0;
-		while(parser >> coordinate) {
-			point.push_back(coordinate);
-		}
-
-		dataset->push_back(point);
-	}
-
-	file_stream.close();
-
-	return dataset;
-}
-
-
-std::vector<std::vector<double> > * read_sample(const data_representation * const sample) {
-	std::vector<double> point(sample->dimension, 0);
-	std::vector<std::vector<double> > * dataset = new std::vector<std::vector<double> >(sample->size, point);
-
-	for (unsigned int index = 0; index < sample->size; index++) {
-		for (unsigned int dimension = 0; dimension < sample->dimension; dimension++) {
-			point[dimension] = sample->objects[index][dimension];
-		}
-
-		(*dataset)[index] = point;
-	}
-
-	return dataset;
-}
-
 
 double average_neighbor_distance(const std::vector<std::vector<double> > * points, const unsigned int num_neigh) {
     std::vector<std::vector<double> > dist_matrix( points->size(), std::vector<double>(points->size(), 0.0) );

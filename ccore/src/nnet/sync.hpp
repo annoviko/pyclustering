@@ -21,8 +21,6 @@
 #pragma once
 
 
-#include "ccore.h"
-
 #include <vector>
 #include <memory>
 
