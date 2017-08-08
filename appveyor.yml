@@ -25,7 +25,7 @@ install:
 
 build_script:
   - IF "%PLATFORM_TARGET%"=="windows" ( msbuild ccore/ccore.sln /t:%PROJECT_TARGET%:Rebuild /p:configuration=Release )
-  - IF "%PLATFORM_TARGET%"=="cygwin" ( %CYGWIN_PATH% -lc "cd ccore; make ccore" )
+  - IF "%PLATFORM_TARGET%"=="cygwin" ( %CYGWIN_PATH% -lc "cd $APPVEYOR_BUILD_FOLDER; cd ccore; make ccore" )
 
 
 test_script:
