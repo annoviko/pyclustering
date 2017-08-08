@@ -5,6 +5,10 @@ CHANGE NOTES FOR 0.7.dev (STARTED Jun 01, 2016)
 ------------------------------------------------------------------------
 
 GENERAL CHANGES (pyclustering):
+- Optimization of pyclustering client to core library 'CCORE' library (pyclustering.core).
+  See: https://github.com/annoviko/pyclustering/issues/289
+  See: https://github.com/annoviko/pyclustering/issues/351
+
 - Implemented feature to show network structure of Sync family oscillatory networks in case 'ccore' usage.
   See: https://github.com/annoviko/pyclustering/issues/344
 
@@ -47,6 +51,9 @@ GENERAL CHANGES (pyclustering):
 
 
 GENERAL CHANGES (ccore):
+- Optimization of CCORE library interface (ccore.interface).
+  See: https://github.com/annoviko/pyclustering/issues/289
+
 - Implemented MNDL splitting crinterion for X-Means algorithm (ccore.cluster_analysis.xmeans).
   See: https://github.com/annoviko/pyclustering/issues/159
 

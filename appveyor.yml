@@ -8,18 +8,25 @@ os:
 init: []
 
 
-install: []
-
-
 environment:
   matrix:
   - PROJECT_TARGET: ccore
+    PLATFORM: windows
   - PROJECT_TARGET: utcore
+    PLATFORM: windows
+  - PROJECT_TARGET: ccore
+    PLATFORM: cygwin
+    CYGWIN_PATH: C:\cygwin64\bin\bash
+
+
+install:
+  - IF "%PLATFORM%"=="cygwin" ( '%CYGWIN_PATH% -lc "cygcheck -dc cygwin"' )
 
 
 build_script:
-  - msbuild ccore/ccore.sln /t:%PROJECT_TARGET%:Rebuild /p:configuration=Release
+  - IF "%PLATFORM%"=="windows" ( msbuild ccore/ccore.sln /t:%PROJECT_TARGET%:Rebuild /p:configuration=Release )
+  - IF "%PLATFORM%"=="cygwin" ( '%CYG_BASH% -lc "cd ccore; make ccore"' )
 
 
 test_script:
-  - IF "%PROJECT_TARGET%"=="utcore" ( cd ccore\Release && utcore.exe )
+  - IF "%PROJECT_TARGET%"=="utcore" ( IF "%PLATFORM%"=="windows" ( cd ccore\Release && utcore.exe ) )
