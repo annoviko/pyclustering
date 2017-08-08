@@ -13,19 +13,19 @@ environment:
   - PROJECT_TARGET: ccore
     PLATFORM_TARGET: windows
   - PROJECT_TARGET: utcore
-    TARGET: windows
+    PLATFORM_TARGET: windows
   - PROJECT_TARGET: ccore
-    TARGET: cygwin
+    PLATFORM_TARGET: cygwin
     CYGWIN_PATH: C:\cygwin64\bin\bash
 
 
 install:
-  - IF "%PLATFORM_TARGET%"=="cygwin" ( '%CYGWIN_PATH% -lc "cygcheck -dc cygwin"' )
+  - IF "%PLATFORM_TARGET%"=="cygwin" ( %CYGWIN_PATH% -lc "cygcheck -dc cygwin" )
 
 
 build_script:
   - IF "%PLATFORM_TARGET%"=="windows" ( msbuild ccore/ccore.sln /t:%PROJECT_TARGET%:Rebuild /p:configuration=Release )
-  - IF "%PLATFORM_TARGET%"=="cygwin" ( '%CYGWIN_PATH% -lc "cd ccore; make ccore"' )
+  - IF "%PLATFORM_TARGET%"=="cygwin" ( %CYGWIN_PATH% -lc "cd ccore; make ccore" )
 
 
 test_script:
