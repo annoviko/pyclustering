@@ -9,6 +9,7 @@ init: []
 
 
 environment:
+  CYGWIN_PATH: C:\cygwin64\bin\bash
   matrix:
   - PROJECT_TARGET: ccore
     PLATFORM_TARGET: windows
@@ -16,7 +17,8 @@ environment:
     PLATFORM_TARGET: windows
   - PROJECT_TARGET: ccore
     PLATFORM_TARGET: cygwin
-    CYGWIN_PATH: C:\cygwin64\bin\bash
+  - PROJECT_TARGET: ut
+    PLATFORM_TARGET: cygwin
 
 
 install:
@@ -25,8 +27,9 @@ install:
 
 build_script:
   - IF "%PLATFORM_TARGET%"=="windows" ( msbuild ccore/ccore.sln /t:%PROJECT_TARGET%:Rebuild /p:configuration=Release )
-  - IF "%PLATFORM_TARGET%"=="cygwin" ( %CYGWIN_PATH% -lc "cd $APPVEYOR_BUILD_FOLDER; cd ccore; make ccore" )
+  - IF "%PLATFORM_TARGET%"=="cygwin" ( %CYGWIN_PATH% -lc "cd $APPVEYOR_BUILD_FOLDER; cd ccore; make %PROJECT_TARGET%" )
 
 
 test_script:
   - IF "%PROJECT_TARGET%"=="utcore" ( IF "%PLATFORM_TARGET%"=="windows" ( cd ccore\Release && utcore.exe ) )
+  - IF "%PROJECT_TARGET%"=="ut" ( IF "%PLATFORM_TARGET%"=="cygwin" ( %CYGWIN_PATH% -lc "cd $APPVEYOR_BUILD_FOLDER; cd ccore; make utrun ) )
