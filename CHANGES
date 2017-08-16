@@ -51,6 +51,9 @@ GENERAL CHANGES (pyclustering):
 
 
 GENERAL CHANGES (ccore):
+- Cygwin x64 platform is supported (ccore).
+  See: https://github.com/annoviko/pyclustering/issues/353
+
 - Optimization of CCORE library interface (ccore.interface).
   See: https://github.com/annoviko/pyclustering/issues/289
 

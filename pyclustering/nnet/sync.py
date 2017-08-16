@@ -31,17 +31,16 @@
 import matplotlib.pyplot as plt;
 import matplotlib.animation as animation;
 
+import math;
 import numpy;
 import random;
 
 import pyclustering.core.sync_wrapper as wrapper;
 
-from scipy import pi;
 from scipy.integrate import odeint;
 
-from pyclustering.nnet import *;
-
-from pyclustering.utils import draw_dynamics, draw_dynamics_set;
+from pyclustering.nnet import network, conn_represent, conn_type, initial_type, solve_type;
+from pyclustering.utils import pi, draw_dynamics, draw_dynamics_set;
 
 
 class sync_dynamic:
@@ -53,7 +52,7 @@ class sync_dynamic:
     @property
     def output(self):
         """!
-        @brief (list) Returns outputs of oscillator during simulation.
+        @brief (list) Returns output dynamic of the Sync network (phase coordinates of each oscillator in the network) during simulation.
         
         """
         if ( (self._ccore_sync_dynamic_pointer is not None) and ( (self._dynamic is None) or (len(self._dynamic) == 0) ) ):
@@ -273,7 +272,7 @@ class sync_visualizer:
     @brief Visualizer of output dynamic of sync network (Sync).
     
     """
-        
+
     @staticmethod
     def show_output_dynamic(sync_output_dynamic):
         """!
@@ -319,9 +318,8 @@ class sync_visualizer:
         
         plt.imshow(correlation_matrix, cmap = plt.get_cmap('cool'), interpolation='kaiser', vmin = 0.0, vmax = 1.0); 
         plt.show();
-        
-    
-    
+
+
     @staticmethod
     def show_phase_matrix(sync_output_dynamic, grid_width = None, grid_height = None, iteration = None):
         """!
@@ -572,8 +570,8 @@ class sync_network(network):
         average_phase = math.expm1( abs(1j * (average_phase / self._num_osc)) );
         
         return abs(average_phase) / abs(exp_amount);    
-    
-    
+
+
     def sync_local_order(self):
         """!
         @brief Calculates level of local (partial) synchronization in the network.
@@ -600,8 +598,8 @@ class sync_network(network):
             num_neigh = 1;
         
         return exp_amount / num_neigh;
-    
-    
+
+
     def _phase_kuramoto(self, teta, t, argv):
         """!
         @brief Returns result of phase calculation for specified oscillator in the network.
@@ -621,8 +619,8 @@ class sync_network(network):
                 phase += math.sin(self._phases[k] - teta);
             
         return ( self._freq[index] + (phase * self._weight / self._num_osc) );
-        
-    
+
+
     def simulate(self, steps, time, solution = solve_type.FAST, collect_dynamic = True):
         """!
         @brief Performs static simulation of Sync oscillatory network.
@@ -681,7 +679,7 @@ class sync_network(network):
             dyn_time.append(0);
         
         # Execute until sync state will be reached
-        while (current_order < order):                
+        while (current_order < order):
             # update states of oscillators
             self._phases = self._calculate_phases(solution, time_counter, step, int_step);
             
@@ -755,7 +753,7 @@ class sync_network(network):
             dyn_time.append(time);
                         
         output_sync_dynamic = sync_dynamic(dyn_phase, dyn_time);
-        return output_sync_dynamic;     
+        return output_sync_dynamic;
 
 
     def _calculate_phases(self, solution, t, step, int_step):
@@ -771,7 +769,7 @@ class sync_network(network):
         
         """
         
-        next_phases = [0] * self._num_osc;    # new oscillator _phases
+        next_phases = [0.0] * self._num_osc;    # new oscillator _phases
         
         for index in range (0, self._num_osc, 1):
             if (solution == solve_type.FAST):
@@ -797,7 +795,7 @@ class sync_network(network):
         @return (double) Normalized phase.
         
         """
-        
+
         norm_teta = teta;
         while (norm_teta > (2.0 * pi)) or (norm_teta < 0):
             if (norm_teta > (2.0 * pi)):

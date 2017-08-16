@@ -33,7 +33,14 @@ import matplotlib.pyplot as plt;
 from mpl_toolkits.mplot3d import Axes3D;
 
 from sys import platform as _platform;
-    
+
+
+"""!
+@brief The number \f$pi$ is a mathematical constant, the ratio of a circle's circumference to its diameter.
+
+"""
+pi = 3.1415926535;
+
 
 def read_sample(filename):
     """!

@@ -44,13 +44,13 @@ def template_clustering(start_centers, path, tolerance = 0.25, ccore = True):
 
     visualizer = cluster_visualizer();
     visualizer.append_clusters(clusters, sample);
-    visualizer.append_cluster(start_centers, marker = '*', markersize = 20);
-    visualizer.append_cluster(centers, marker = '*', markersize = 20);
+    visualizer.append_cluster(start_centers, marker = '*', markersize = 15);
+    visualizer.append_cluster(centers, marker = '*', markersize = 15);
     visualizer.show();
     
     
 def cluster_sample1():
-    start_centers = [[3.7, 5.5], [6.7, 7.5]];
+    start_centers = [[4.7, 5.9], [5.7, 6.5]];
     template_clustering(start_centers, SIMPLE_SAMPLES.SAMPLE_SIMPLE1);
     
 def cluster_sample2():

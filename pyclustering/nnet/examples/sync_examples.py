@@ -40,7 +40,7 @@ def template_dynamic_sync(num_osc, k = 1, sim_arg = None, conn = conn_type.ALL_T
     sync_visualizer.animate_output_dynamic(sync_output_dynamic);
     sync_visualizer.animate_correlation_matrix(sync_output_dynamic);
     return network;
-    
+
 
 # Positive connections
 def trivial_dynamic_sync():
