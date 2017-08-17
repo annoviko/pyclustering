@@ -32,8 +32,7 @@ matplotlib.use('Agg');
 
 from pyclustering.nnet import *;
 from pyclustering.nnet.sync import sync_network, sync_dynamic, sync_visualizer;
-
-from scipy import pi;
+from pyclustering.utils import pi;
 
 
 class Test(unittest.TestCase):

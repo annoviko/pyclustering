@@ -23,21 +23,37 @@
 
 """
 
-from pyclustering.nnet import solve_type, conn_type;
+from pyclustering.nnet import conn_type;
 from pyclustering.nnet.fsync import fsync_network, fsync_visualizer;
 
 
-def template_dynamic_sync(num_osc, steps, time, conn = conn_type.ALL_TO_ALL, type_solution = solve_type.RK4, collect_dyn = True):
-    network = fsync_network(num_osc, type_conn = conn);
+def template_dynamic_sync(num_osc, steps, time, frequency = 1.0, radius = 1.0, coupling = 1.0, conn = conn_type.ALL_TO_ALL, collect_dyn = True):
+    network = fsync_network(num_osc, frequency, radius, coupling, type_conn = conn);
 
-    fsync_output_dynamic = network.simulate_static(steps, time, collect_dynamic = collect_dyn, solution = type_solution);
+    fsync_output_dynamic = network.simulate_static(steps, time, collect_dynamic = collect_dyn);
 
     fsync_visualizer.show_output_dynamic(fsync_output_dynamic);
     return network;
 
 
-def all_to_all_10_oscillators():
-    template_dynamic_sync(10, 100, 5);
+def one_landau_stuart_oscillators():
+    template_dynamic_sync(1, 100, 20, 1.0, 1.0, 1.0);
+
+def five_oscillators_all_to_all_structure():
+    template_dynamic_sync(5, 100, 20, 1.0, 1.0, 1.0, conn_type.ALL_TO_ALL);
+
+def twenty_oscillators_all_to_all_structure():
+    template_dynamic_sync(20, 100, 20, 1.0, 1.0, 1.0, conn_type.ALL_TO_ALL);
+
+def five_oscillators_grid_four_structure():
+    template_dynamic_sync(9, 100, 20, 1.0, 1.0, 1.0, conn_type.GRID_FOUR);
+
+def five_oscillators_bidir_structure():
+    template_dynamic_sync(5, 100, 20, 1.0, 1.0, 1.0, conn_type.LIST_BIDIR);
 
 
-all_to_all_10_oscillators();
+one_landau_stuart_oscillators();
+five_oscillators_all_to_all_structure();
+twenty_oscillators_all_to_all_structure();
+five_oscillators_grid_four_structure();
+five_oscillators_bidir_structure();

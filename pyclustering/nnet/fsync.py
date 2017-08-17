@@ -31,7 +31,7 @@ import random;
 
 from scipy.integrate import odeint;
 
-from pyclustering.nnet import network, conn_type, conn_represent, solve_type;
+from pyclustering.nnet import network, conn_type, conn_represent;
 from pyclustering.utils import draw_dynamics, draw_dynamics_set;
 
 
@@ -81,7 +81,7 @@ class fsync_dynamic:
         
         """
         
-        return len(self.__dynamic);
+        return len(self.__amplitude);
 
 
 
@@ -137,7 +137,7 @@ class fsync_network(network):
     __DEFAULT_COUPLING_STRENGTH = 1.0;
 
 
-    def __init__(self, num_osc, type_conn = conn_type.ALL_TO_ALL, representation = conn_represent.MATRIX):
+    def __init__(self, num_osc, factor_frequency = 1.0, factor_radius = 1.0, factor_coupling = 1.0, type_conn = conn_type.ALL_TO_ALL, representation = conn_represent.MATRIX):
         """!
         @brief Constructor of oscillatory network based on synchronization Kuramoto model and Landau-Stuart oscillator.
         
@@ -149,21 +149,22 @@ class fsync_network(network):
         
         super().__init__(num_osc, type_conn, representation);
         
-        self.__frequency = fsync_network.__DEFAULT_FREQUENCY_VALUE;
-        self.__radius = fsync_network.__DEFAULT_RADIUS_VALUE;
-        self.__coupling_strength = fsync_network.__DEFAULT_COUPLING_STRENGTH;
+        self.__frequency = fsync_network.__DEFAULT_FREQUENCY_VALUE * factor_frequency;
+        self.__radius = fsync_network.__DEFAULT_RADIUS_VALUE * factor_radius;
+        self.__coupling_strength = fsync_network.__DEFAULT_COUPLING_STRENGTH * factor_coupling;
+        
+        self.__landau_contant = numpy.array(1j * self.__frequency + self.__radius**2, dtype = numpy.complex128, ndmin = 1);
         
         random.seed();
         self.__amplitude = [ random.random() for _ in range(num_osc) ];
 
 
-    def simulate_static(self, steps, time, solution = solve_type.FAST, collect_dynamic = False):
+    def simulate_static(self, steps, time, collect_dynamic = False):
         """!
         @brief Performs static simulation of oscillatory network.
         
         @param[in] steps (uint): Number simulation steps.
         @param[in] time (double): Time of simulation.
-        @param[in] solution (solve_type): Type of method that is used to solve differential equation.
         @param[in] collect_dynamic (bool): If True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics.
         
         @return (list) Dynamic of oscillatory network. If argument 'collect_dynamic' is True, than return dynamic for the whole simulation time,
@@ -180,25 +181,24 @@ class fsync_network(network):
         int_step = step / 10.0;
         
         for t in numpy.arange(step, time + step, step):
-            self.__amplitude = self.__calculate(solution, t, step, int_step);
+            self.__amplitude = self.__calculate(t, step, int_step);
             
             if (collect_dynamic == True):
-                dynamic_amplitude.append(self.__amplitude);
+                dynamic_amplitude.append([ numpy.real(amplitude) for amplitude in self.__amplitude ]);
                 dynamic_time.append(t);
         
         if (collect_dynamic != True):
-            dynamic_amplitude.append(self.__amplitude);
+            dynamic_amplitude.append([ numpy.real(amplitude) for amplitude in self.__amplitude ]);
             dynamic_time.append(time);
 
         output_sync_dynamic = fsync_dynamic(dynamic_amplitude, dynamic_time);
         return output_sync_dynamic;
 
 
-    def __calculate(self, solution, t, step, int_step):
+    def __calculate(self, t, step, int_step):
         """!
         @brief Calculates new amplitudes for oscillators in the network in line with current step.
         
-        @param[in] solution (solve_type): Type solver of the differential equation.
         @param[in] t (double): Time of simulation.
         @param[in] step (double): Step of solution at the end of which states of oscillators should be calculated.
         @param[in] int_step (double): Step differentiation that is used for solving differential equation.
@@ -210,15 +210,9 @@ class fsync_network(network):
         next_amplitudes = [0.0] * self._num_osc;
         
         for index in range (0, self._num_osc, 1):
-            if (solution == solve_type.FAST):
-                next_amplitudes[index] = self.__amplitude[index] + self.__calculate_amplitude(self.__amplitude[index], 0, index);
-                
-            elif (solution == solve_type.RK4):
-                result = odeint(self.__calculate_amplitude, self.__amplitude[index], numpy.arange(t - step, t, int_step), (index , ));
-                next_amplitudes[index] = result[len(result) - 1][0];
-            
-            else:
-                raise NameError("Solver '" + solution + "' is not supported");
+            z = numpy.array(self.__amplitude[index], dtype = numpy.complex128, ndmin = 1);
+            result = odeint(self.__calculate_amplitude, z.view(numpy.float64), numpy.arange(t - step, t, int_step), (index , ));
+            next_amplitudes[index] = (result[len(result) - 1]).view(numpy.complex128);
         
         return next_amplitudes;
 
@@ -234,7 +228,7 @@ class fsync_network(network):
         
         """
         
-        return (self.__frequency + self.__radius**2 - abs(amplitude)**2) * amplitude;
+        return (self.__landau_contant - numpy.absolute(amplitude) ** 2) * amplitude;
 
 
     def __synchronization_mechanism(self, amplitude, index):
@@ -252,7 +246,8 @@ class fsync_network(network):
         
         for k in range(self._num_osc):
             if (self.has_connection(index, k) == True):
-                sync_influence += amplitude - self.__amplitude[k];
+                amplitude_neighbor = numpy.array(self.__amplitude[k], dtype = numpy.complex128, ndmin = 1);
+                sync_influence += amplitude_neighbor - amplitude;
         
         return sync_influence * self.__coupling_strength / self._num_osc;
 
@@ -269,4 +264,8 @@ class fsync_network(network):
         @return (double) New amplitude of the oscillator.
         
         """
-        return self.__landau_stuart(amplitude, argv) + self.__synchronization_mechanism(amplitude, argv);
+        
+        z = amplitude.view(numpy.complex);
+        dzdt = self.__landau_stuart(z, argv) + self.__synchronization_mechanism(z, argv);
+        
+        return dzdt.view(numpy.float64);
