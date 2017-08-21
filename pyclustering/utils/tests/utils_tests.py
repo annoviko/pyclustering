@@ -29,6 +29,7 @@ from pyclustering.utils import read_sample;
 from pyclustering.utils import data_corners;
 from pyclustering.utils import norm_vector;
 from pyclustering.utils import rgb2gray;
+from pyclustering.utils import extract_number_oscillations;
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES;
 
@@ -103,6 +104,50 @@ class Test(unittest.TestCase):
         assert 127 == round(result[0]);
         assert 255 == round(result[1]);
         assert 0 == round(result[2]);
+
+    def testExtractNumberOscillationsMonotonicDown(self):
+        value = [ [10.0], [9.5], [9.0], [8.5], [8.0], [7.5], [7.0], [6.5], [6.0], [5.5], [5.0] ];
+        assert extract_number_oscillations(value, 0, 8.0) == 0;
+
+    def testExtractNumberOscillationsMonotonicUp(self):
+        value = [ [1.0], [1.5], [2.0], [2.5], [3.0], [3.5], [4.0], [4.5], [5.0], [5.5], [6.0] ];
+        assert extract_number_oscillations(value, 0, 4.0) == 0;
+
+    def testExtractNumberOscillationsMonotonicUpSlightlyDown(self):
+        value = [ [1.0], [1.5], [2.0], [2.5], [3.0], [3.5], [4.0], [4.5], [5.0], [4.5], [4.0] ];
+        assert extract_number_oscillations(value, 0, 2.0) == 0;
+
+    def testExtractNumberOscillationsMonotonicDownSlightlyUp(self):
+        value = [ [10.0], [9.5], [9.0], [8.5], [8.0], [7.5], [7.0], [6.5], [7.0], [7.1], [7.3] ];
+        assert extract_number_oscillations(value, 0, 7.5) == 0;
+
+    def testExtractNumberOscillationsOnePeriod(self):
+        value = [ [0.0], [1.0], [0.0] ];
+        assert extract_number_oscillations(value, 0, 0.5) == 1;
+
+    def testExtractNumberOscillationsOnePeriodWithHalf(self):
+        value = [ [0.0], [1.0], [0.0], [1.0] ];
+        assert extract_number_oscillations(value, 0, 0.5) == 1;
+
+    def testExtractNumberOscillationsTwoPeriods(self):
+        value = [ [0.0], [1.0], [0.0], [1.0], [0.0] ];
+        assert extract_number_oscillations(value, 0, 0.5) == 2;
+
+    def testExtractNumberOscillationsThreePeriods(self):
+        value = [ [0.0], [1.0], [0.0], [1.0], [0.0], [1.0], [0.0] ];
+        assert extract_number_oscillations(value, 0, 0.5) == 3;
+
+    def testExtractNumberOscillationsFourPeriods(self):
+        value = [ [0.0], [1.0], [0.0], [1.0], [0.0], [1.0], [0.0], [1.0], [0.0] ];
+        assert extract_number_oscillations(value, 0, 0.5) == 4;
+
+    def testExtractNumberOscillationsFourPeriodsOnThreshold(self):
+        value = [ [0.0], [1.0], [0.0], [1.0], [0.0], [1.0], [0.0], [1.0], [0.0] ];
+        assert extract_number_oscillations(value, 0, 1.0) == 4;
+
+    def testExtractNumberOscillationsFourPeriodsUnderThreshold(self):
+        value = [ [0.0], [1.0], [0.0], [1.0], [0.0], [1.0], [0.0], [1.0], [0.0] ];
+        assert extract_number_oscillations(value, 0, 1.5) == 0;
 
 
 if __name__ == "__main__":

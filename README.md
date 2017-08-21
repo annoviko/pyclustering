@@ -75,6 +75,7 @@ In case of any questions, proposals or bugs related to the pyclustering please c
 
 **Oscillatory networks and neural networks (module pyclustering.nnet):**
 - CNN (Chaotic Neural Network) [Python]
+- fSync (Oscillatory network based on Landau-Stuart equation and Kuramoto model) [Python]
 - HHN (Oscillatory network based on Hodgkin-Huxley model) [Python]
 - Hysteresis Oscillatory Network [Python]
 - LEGION (Local Excitatory Global Inhibitory Oscillatory Network) [Python, C++]

@@ -39,22 +39,22 @@ class Test(unittest.TestCase):
         net = legion_network(1, type_conn = conn_type.NONE, parameters = params);
         dynamic = net.simulate(1000, 200, [0]);
          
-        assert extract_number_oscillations(dynamic.output) == 1;
-         
-         
+        assert extract_number_oscillations(dynamic.output) == 0;
+
+
     def testStimulatedOscillatorWithoutLateralPotential(self):
         params = legion_parameters();
         params.teta = 0;    # because no neighbors at all
          
         net = legion_network(1, type_conn = conn_type.NONE, parameters = params);
-        dynamic = net.simulate(1000, 200, [1]);
-         
+        dynamic = net.simulate(2000, 400, [1]);
+        
         assert extract_number_oscillations(dynamic.output) > 1;
- 
- 
+
+
     def testStimulatedOscillatorWithLateralPotential(self):
         net = legion_network(1, type_conn = conn_type.NONE);
-        dynamic = net.simulate(1000, 200, [1]);
+        dynamic = net.simulate(2000, 400, [1]);
          
         assert extract_number_oscillations(dynamic.output) == 1;
          

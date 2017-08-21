@@ -618,24 +618,36 @@ def extract_number_oscillations(osc_dyn, index = 0, amplitude_threshold = 1.0):
     
     @param[in] osc_dyn (list): Dynamic of oscillators.
     @param[in] index (uint): Index of oscillator in dynamic.
-    @param[in] amplitude_threshold (double): Amplitude threshold, when oscillator value is greater than threshold then
-               oscillation is incremented.
+    @param[in] amplitude_threshold (double): Amplitude threshold when oscillation is taken into account, for example,
+                when oscillator amplitude is greater than threshold then oscillation is incremented.
     
     @return (uint) Number of oscillations of specified oscillator.
     
     """
     
     number_oscillations = 0;
-    high_level_trigger = False;
+    waiting_differential = False;
+    threshold_passed = False;
+    high_level_trigger = True if (osc_dyn[0][index] > amplitude_threshold) else False;
     
     for values in osc_dyn:
-        if ( (values[index] > amplitude_threshold) and (high_level_trigger is False) ):
-            number_oscillations += 1;
+        if ( (values[index] >= amplitude_threshold) and (high_level_trigger is False) ):
             high_level_trigger = True;
+            threshold_passed = True;
         
         elif ( (values[index] < amplitude_threshold) and (high_level_trigger is True) ):
             high_level_trigger = False;
-            
+            threshold_passed = True;
+        
+        if (threshold_passed is True):
+            threshold_passed = False;
+            if (waiting_differential is True):
+                number_oscillations += 1;
+                waiting_differential = False;
+
+            else:
+                waiting_differential = True;
+        
     return number_oscillations;
 
 
@@ -980,10 +992,12 @@ def draw_dynamics_set(dynamics, xtitle = None, ytitle = None, xlim = None, ylim 
     """
     # Calculate edge for confortable representation.
     number_dynamics = len(dynamics);
+    if (number_dynamics == 1):
+        draw_dynamics(dynamics[0][0], dynamics[0][1], xtitle, ytitle, xlim, ylim, xlabels, ylabels);
+        return;
     
     number_cols = int(numpy.ceil(number_dynamics ** 0.5));
     number_rows = int(numpy.ceil(number_dynamics / number_cols));
-    
 
     real_index = 0, 0;
     double_indexer = True;
@@ -991,7 +1005,7 @@ def draw_dynamics_set(dynamics, xtitle = None, ytitle = None, xlim = None, ylim 
         real_index = 0;
         double_indexer = False;
     
-    (fig, axarr) = plt.subplots(number_rows, number_cols);
+    (_, axarr) = plt.subplots(number_rows, number_cols);
     #plt.setp([ax for ax in axarr], visible = False);
     
     for dynamic in dynamics:

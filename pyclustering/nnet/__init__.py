@@ -166,7 +166,7 @@ class network:
             else:
                 side_size = self._num_osc ** (0.5);
                 if (side_size - math.floor(side_size) > 0):
-                    raise NameError('Invalid number of oscillators in the network in case of grid structure');
+                    raise NameError("Invalid number of oscillators '" + str(num_osc) + "' in the network in case of grid structure (root square should be extractable for the number of oscillators).");
                 
                 self.__height = int(side_size);
                 self.__width = self.__height;

@@ -5,6 +5,9 @@ CHANGE NOTES FOR 0.7.dev (STARTED Jun 01, 2016)
 ------------------------------------------------------------------------
 
 GENERAL CHANGES (pyclustering):
+- Implemented fSync oscillatory network that is based on Landau-Stuart equation and Kuramoto model (pyclustering.nnet.fsync).
+  See: https://github.com/annoviko/pyclustering/issues/168
+
 - Optimization of pyclustering client to core library 'CCORE' library (pyclustering.core).
   See: https://github.com/annoviko/pyclustering/issues/289
   See: https://github.com/annoviko/pyclustering/issues/351
@@ -68,6 +71,9 @@ GENERAL CHANGES (ccore):
 
 
 CORRECTED MAJOR BUGS:
+- Bug with calculation of number of oscillations for output dynamics.
+  See: no reference.
+
 - Memory leakage in LEGION in case of CCORE usage - API function 'legion_destroy()' was not called (pyclustering.nnet.legion).
   See: no reference.
 

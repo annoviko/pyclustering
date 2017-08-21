@@ -28,11 +28,11 @@
 
 import numpy;
 import random;
+import pyclustering.utils;
 
 from scipy.integrate import odeint;
 
 from pyclustering.nnet import network, conn_type, conn_represent;
-from pyclustering.utils import draw_dynamics, draw_dynamics_set;
 
 
 class fsync_dynamic:
@@ -84,6 +84,49 @@ class fsync_dynamic:
         return len(self.__amplitude);
 
 
+    def __getitem__(self, index):
+        """!
+        @brief Indexing of the dynamic.
+        
+        """
+        if (index is 0):
+            return self.__time;
+        
+        elif (index is 1):
+            return self.__amplitude;
+        
+        else:
+            raise NameError('Out of range ' + index + ': only indexes 0 and 1 are supported.');
+
+
+    def allocate_sync_ensembles(self, tolerance = 0.1):
+        """!
+        @brief Allocate clusters in line with ensembles of synchronous oscillators where each synchronous ensemble corresponds to only one cluster.
+        
+        @param[in] tolerance (double): Maximum error for allocation of synchronous ensemble oscillators.
+        
+        @return (list) Grours of indexes of synchronous oscillators, for example, [ [index_osc1, index_osc3], [index_osc2], [index_osc4, index_osc5] ].
+        
+        """
+        
+        return pyclustering.utils.allocate_sync_ensembles(self.__amplitude, tolerance);
+
+
+    def extract_number_oscillations(self, index, amplitude_threshold):
+        """!
+        @brief Extracts number of oscillations of specified oscillator.
+        
+        @param[in] index (uint): Index of oscillator whose dynamic is considered.
+        @param[in] amplitude_threshold (double): Amplitude threshold when oscillation is taken into account, for example,
+                    when oscillator amplitude is greater than threshold then oscillation is incremented.
+        
+        @return (uint) Number of oscillations of specified oscillator.
+        
+        """
+        
+        return pyclustering.utils.extract_number_oscillations(self.__amplitude, index, amplitude_threshold);
+
+
 
 class fsync_visualizer:
     """!
@@ -102,33 +145,57 @@ class fsync_visualizer:
         
         """
         
-        draw_dynamics(fsync_output_dynamic.time, fsync_output_dynamic.output, x_title = "t", y_title = "amplitude");
+        pyclustering.utils.draw_dynamics(fsync_output_dynamic.time, fsync_output_dynamic.output, x_title = "t", y_title = "amplitude");
 
 
     @staticmethod
-    def show_output_dynamics(sync_output_dynamics):
+    def show_output_dynamics(fsync_output_dynamics):
         """!
         @brief Shows several output dynamics (output of each oscillator) during simulation.
         @details Each dynamic is presented on separate plot.
         
-        @param[in] sync_output_dynamics (list): list of output dynamics 'fsync_dynamic' of the fSync network.
+        @param[in] fsync_output_dynamics (list): list of output dynamics 'fsync_dynamic' of the fSync network.
         
         @see show_output_dynamic
         
         """
         
-        draw_dynamics_set(sync_output_dynamics, "t", "amplitude", None, None, False, False);
+        pyclustering.utils.draw_dynamics_set(fsync_output_dynamics, "t", "amplitude", None, None, False, False);
 
 
 
 class fsync_network(network):
     """!
     @brief Model of oscillatory network that uses Landau-Stuart oscillator and Kuramoto model as a synchronization mechanism.
-    @details Dynamic of each oscillator in the network is described by following differential equation:
+    @details Dynamic of each oscillator in the network is described by following differential Landau-Stuart equation with feedback:
     
     \f[
-    \dot{z}_{i} = (i\omega_{i} + \rho^{2}_{i} - |z_{i}|^{2} )z_{i} + \sum_{j=0}^{N}k_{ij}(z_{j} - z_{i})
+    \dot{z}_{i} = (i\omega_{i} + \rho^{2}_{i} - |z_{i}|^{2} )z_{i} + \frac{1}{N}\sum_{j=0}^{N}k_{ij}(z_{j} - z_{i});
     \f]
+    
+    Where left part of the equation is Landau-Stuart equation and the right is a Kuramoto model for synchronization.
+    For solving this equation Runge-Kutta 4 method is used by default.
+    
+    Example:
+    @code
+        # Prepare oscillatory network parameters.
+        amount_oscillators = 3;
+        frequency = 1.0;
+        radiuses = [1.0, 2.0, 3.0];
+        coupling_strength = 1.0;
+        
+        # Create oscillatory network
+        oscillatory_network = fsync_network(amount_oscillators, frequency, radiuses, coupling_strength);
+        
+        # Simulate network during 200 steps on 10 time-units of time-axis.
+        output_dynamic = oscillatory_network.simulate(200, 10, True);    # True is to collect whole output dynamic.
+        
+        # Visualize output result
+        fsync_visualizer.show_output_dynamic(output_dynamic);
+    @endcode
+    
+    Example of output dynamic of the network:
+    @image html fsync_sync_examples.png
     
     """
     
@@ -142,6 +209,11 @@ class fsync_network(network):
         @brief Constructor of oscillatory network based on synchronization Kuramoto model and Landau-Stuart oscillator.
         
         @param[in] num_osc (uint): Amount oscillators in the network.
+        @param[in] factor_frequency (double|list): Frequency of oscillators, it can be specified as common value for all oscillators by
+                    single double value and for each separately by list.
+        @param[in] factor_radius (double|list): Radius of oscillators that affects amplitude, it can be specified as common value for all oscillators by
+                    single double value and for each separately by list.
+        @param[in] factor_coupling (double): Coupling strength between oscillators.
         @param[in] type_conn (conn_type): Type of connection between oscillators in the network (all-to-all, grid, bidirectional list, etc.).
         @param[in] representation (conn_represent): Internal representation of connection in the network: matrix or list.
         
@@ -149,17 +221,16 @@ class fsync_network(network):
         
         super().__init__(num_osc, type_conn, representation);
         
-        self.__frequency = fsync_network.__DEFAULT_FREQUENCY_VALUE * factor_frequency;
-        self.__radius = fsync_network.__DEFAULT_RADIUS_VALUE * factor_radius;
+        self.__frequency = factor_frequency if isinstance(factor_frequency, list) else [ fsync_network.__DEFAULT_FREQUENCY_VALUE * factor_frequency for _ in range(num_osc) ];
+        self.__radius = factor_radius if isinstance(factor_radius, list) else [ fsync_network.__DEFAULT_RADIUS_VALUE * factor_radius for _ in range(num_osc) ];
         self.__coupling_strength = fsync_network.__DEFAULT_COUPLING_STRENGTH * factor_coupling;
-        
-        self.__landau_contant = numpy.array(1j * self.__frequency + self.__radius**2, dtype = numpy.complex128, ndmin = 1);
+        self.__properties = [ self.__oscillator_property(index) for index in range(self._num_osc) ];
         
         random.seed();
         self.__amplitude = [ random.random() for _ in range(num_osc) ];
 
 
-    def simulate_static(self, steps, time, collect_dynamic = False):
+    def simulate(self, steps, time, collect_dynamic = False):
         """!
         @brief Performs static simulation of oscillatory network.
         
@@ -168,7 +239,7 @@ class fsync_network(network):
         @param[in] collect_dynamic (bool): If True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics.
         
         @return (list) Dynamic of oscillatory network. If argument 'collect_dynamic' is True, than return dynamic for the whole simulation time,
-                otherwise returns only last values (last step of simulation) of output dynamic.
+                 otherwise returns only last values (last step of simulation) of output dynamic.
         
         @see simulate()
         @see simulate_dynamic()
@@ -184,11 +255,11 @@ class fsync_network(network):
             self.__amplitude = self.__calculate(t, step, int_step);
             
             if (collect_dynamic == True):
-                dynamic_amplitude.append([ numpy.real(amplitude) for amplitude in self.__amplitude ]);
+                dynamic_amplitude.append([ numpy.real(amplitude)[0] for amplitude in self.__amplitude ]);
                 dynamic_time.append(t);
         
         if (collect_dynamic != True):
-            dynamic_amplitude.append([ numpy.real(amplitude) for amplitude in self.__amplitude ]);
+            dynamic_amplitude.append([ numpy.real(amplitude)[0] for amplitude in self.__amplitude ]);
             dynamic_time.append(time);
 
         output_sync_dynamic = fsync_dynamic(dynamic_amplitude, dynamic_time);
@@ -217,6 +288,19 @@ class fsync_network(network):
         return next_amplitudes;
 
 
+    def __oscillator_property(self, index):
+        """!
+        @brief Calculate Landau-Stuart oscillator constant property that is based on frequency and radius.
+        
+        @param[in] index (uint): Oscillator index whose property is calculated.
+        
+        @return (double) Oscillator property.
+        
+        """
+        
+        return numpy.array(1j * self.__frequency[index] + self.__radius[index]**2, dtype = numpy.complex128, ndmin = 1);
+
+
     def __landau_stuart(self, amplitude, index):
         """!
         @brief Calculate Landau-Stuart state.
@@ -228,7 +312,7 @@ class fsync_network(network):
         
         """
         
-        return (self.__landau_contant - numpy.absolute(amplitude) ** 2) * amplitude;
+        return (self.__properties[index] - numpy.absolute(amplitude) ** 2) * amplitude;
 
 
     def __synchronization_mechanism(self, amplitude, index):
