@@ -29,7 +29,7 @@ install:
     )
   - IF "%PLATFORM_TARGET%"=="windows" (
       IF "%PROJECT_TARGET%"=="python" (
-        set PATH=%MINICONDA_PATH%;%MINICONDA_PATH%\\Scripts;%PATH%
+        "set PATH=%MINICONDA_PATH%;%MINICONDA_PATH%\\Scripts;%PATH%"
         
         conda config --set always_yes yes --set changeps1 no
         conda update -q conda
