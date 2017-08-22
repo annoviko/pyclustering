@@ -11,6 +11,7 @@ init: []
 environment:
   CYGWIN_PATH: C:\cygwin64\bin\bash
   PYTHON_PATH: C:\Python34-x64
+  PYTHON_VERSION: 3.4
   MINICONDA_PATH: C:\Miniconda3-x64
   matrix:
   - PROJECT_TARGET: ccore
@@ -29,7 +30,7 @@ install:
     )
   - IF "%PLATFORM_TARGET%"=="windows" (
       IF "%PROJECT_TARGET%"=="python" (
-        set "PATH=%MINICONDA_PATH%;%MINICONDA_PATH%\Scripts;%PATH%"
+        "set PATH=%MINICONDA_PATH%;%MINICONDA_PATH%\Scripts;%PATH%"
         
         conda config --set always_yes yes --set changeps1 no
         conda update -q conda
