@@ -28,18 +28,18 @@ import unittest;
 from pyclustering.nnet.legion import legion_network, legion_parameters;
 from pyclustering.nnet import *;
 
-from pyclustering.utils import extract_number_oscillations;
+from pyclustering.utils import extract_number_oscillations, draw_dynamics;
 
 
 class Test(unittest.TestCase):   
     def testUstimulatedOscillatorWithoutLateralPotential(self):
         params = legion_parameters();
         params.teta = 0;    # because no neighbors at all
-     
+      
         net = legion_network(1, type_conn = conn_type.NONE, parameters = params);
         dynamic = net.simulate(1000, 200, [0]);
          
-        assert extract_number_oscillations(dynamic.output) == 0;
+        assert extract_number_oscillations(dynamic.output, amplitude_threshold = 0.0) == 0;
 
 
     def testStimulatedOscillatorWithoutLateralPotential(self):
@@ -48,7 +48,7 @@ class Test(unittest.TestCase):
          
         net = legion_network(1, type_conn = conn_type.NONE, parameters = params);
         dynamic = net.simulate(2000, 400, [1]);
-        
+         
         assert extract_number_oscillations(dynamic.output) > 1;
 
 
@@ -56,50 +56,49 @@ class Test(unittest.TestCase):
         net = legion_network(1, type_conn = conn_type.NONE);
         dynamic = net.simulate(2000, 400, [1]);
          
-        assert extract_number_oscillations(dynamic.output) == 1;
-         
-     
+        assert extract_number_oscillations(dynamic.output, amplitude_threshold = 0.0) >= 1;
+
     def testStimulatedTwoOscillators(self):
         net = legion_network(2, type_conn = conn_type.LIST_BIDIR);
         dynamic = net.simulate(1000, 2000, [1, 1]);
-         
+           
         assert extract_number_oscillations(dynamic.output, 0) > 1;
         assert extract_number_oscillations(dynamic.output, 1) > 1;
-        
-         
+
+
     def testMixStimulatedThreeOscillators(self):
         net = legion_network(3, type_conn = conn_type.LIST_BIDIR);
         dynamic = net.simulate(1000, 2000, [1, 0, 1]);
-         
+          
         assert extract_number_oscillations(dynamic.output, 0) > 1; 
         assert extract_number_oscillations(dynamic.output, 2) > 1;
-    
-    
+
+
     def testMixStimulatedThreeOscillatorsByCore(self):
         net = legion_network(3, type_conn = conn_type.LIST_BIDIR, ccore = True);
         dynamic = net.simulate(1000, 2000, [1, 0, 1]);
-         
+          
         assert extract_number_oscillations(dynamic.output, 0) > 1; 
         assert extract_number_oscillations(dynamic.output, 2) > 1;
- 
- 
+
+
     def testListConnectionRepresentation(self):
         net = legion_network(3, type_conn = conn_type.LIST_BIDIR, type_conn_represent = conn_represent.LIST);
         dynamic = net.simulate(1000, 2000, [1, 0, 1]);
- 
+  
         assert extract_number_oscillations(dynamic.output, 0) > 1;  
         assert extract_number_oscillations(dynamic.output, 2) > 1;  
-         
-         
+
+
     # Tests regarded to various structures that can be used.
     def templateOscillationsWithStructures(self, type_conn, ccore_flag = False):
         net = legion_network(4, type_conn = conn_type.LIST_BIDIR, ccore = ccore_flag);
         dynamic = net.simulate(500, 1000, [1, 1, 1, 1]);
-         
+          
         for i in range(len(net)):
             assert extract_number_oscillations(dynamic.output, i) > 1;
- 
- 
+
+
     def testStimulatedOscillatorListStructure(self):
         self.templateOscillationsWithStructures(conn_type.LIST_BIDIR);
 
@@ -126,8 +125,8 @@ class Test(unittest.TestCase):
 
     def testStimulatedOscillatorGridEightStructureByCore(self):
         self.templateOscillationsWithStructures(conn_type.GRID_EIGHT, True);
-
-
+ 
+ 
     def testStimulatedOscillatorAllToAllStructureByCore(self):
         self.templateOscillationsWithStructures(conn_type.ALL_TO_ALL, True);
 
@@ -135,18 +134,18 @@ class Test(unittest.TestCase):
     # Tests regarded to synchronous ensembles allocation.
     def templateSyncEnsembleAllocation(self, stimulus, params, type_conn, sim_steps, sim_time, expected_clusters, ccore_flag = False):
         result_testing = False;
-        
+         
         for _ in range(0, 5, 1):
             net = legion_network(len(stimulus), params, type_conn, ccore = ccore_flag);
             dynamic = net.simulate(sim_steps, sim_time, stimulus);
-            
+             
             ensembles = dynamic.allocate_sync_ensembles(0.1);
             if (ensembles != expected_clusters):
                 continue;
-            
+             
             result_testing = True;
             break;
-        
+         
         assert result_testing;
 
 
@@ -168,8 +167,8 @@ class Test(unittest.TestCase):
 
     def testSyncEnsembleAllocationThreeStimulatedOscillatorsByCore(self):
         self.templateSyncEnsembleAllocation([1, 1, 1], None, conn_type.LIST_BIDIR, 1500, 1500, [[0, 1, 2]], True);
-
-
+ 
+ 
     def testSyncEnsembleAllocationThreeMixStimulatedOscillators(self):
         parameters = legion_parameters();
         parameters.Wt = 4.0;
@@ -185,7 +184,7 @@ class Test(unittest.TestCase):
     def templateOutputDynamicInformation(self, stimulus, params, type_conn, sim_steps, sim_time, ccore_flag):
         legion_instance = legion_network(len(stimulus), params, type_conn, ccore = ccore_flag);
         dynamic = legion_instance.simulate(sim_steps, sim_time, stimulus);
-        
+         
         assert len(dynamic.output) > 0;
         assert len(dynamic.inhibitor) > 0;
         assert len(dynamic.time) > 0;

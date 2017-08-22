@@ -641,7 +641,7 @@ def extract_number_oscillations(osc_dyn, index = 0, amplitude_threshold = 1.0):
         
         if (threshold_passed is True):
             threshold_passed = False;
-            if (waiting_differential is True):
+            if (waiting_differential is True and high_level_trigger is False):
                 number_oscillations += 1;
                 waiting_differential = False;
 

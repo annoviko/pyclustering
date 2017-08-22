@@ -149,6 +149,14 @@ class Test(unittest.TestCase):
         value = [ [0.0], [1.0], [0.0], [1.0], [0.0], [1.0], [0.0], [1.0], [0.0] ];
         assert extract_number_oscillations(value, 0, 1.5) == 0;
 
+    def testExtractNumberOscillationsUpDownUp(self):
+        value = [ [1.0], [0.0], [1.0] ];
+        assert extract_number_oscillations(value, 0, 0.5) == 0;
+
+    def testExtractNumberOscillationsDownUpDown(self):
+        value = [ [0.0], [1.0], [0.0] ];
+        assert extract_number_oscillations(value, 0, 0.5) == 1;
+
 
 if __name__ == "__main__":
     unittest.main();
