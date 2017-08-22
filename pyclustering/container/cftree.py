@@ -215,7 +215,7 @@ class cfentry:
                 
         tolerance = 0.00001;
         
-        result = (self.number_points() == entry.number_points());
+        result = (self.__number_points == entry.number_points);
         result &= ( (self.square_sum + tolerance > entry.square_sum) and (self.square_sum - tolerance < entry.square_sum) );
         
         for index_dimension in range(0, len(self.linear_sum)):
