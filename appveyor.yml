@@ -10,6 +10,8 @@ init: []
 
 environment:
   CYGWIN_PATH: C:\cygwin64\bin\bash
+  PYTHON_PATH: C:\Python34-x64
+  MINICONDA_PATH: C:\Miniconda
   matrix:
   - PROJECT_TARGET: ccore
     PLATFORM_TARGET: windows
@@ -22,14 +24,43 @@ environment:
 
 
 install:
-  - IF "%PLATFORM_TARGET%"=="cygwin" ( %CYGWIN_PATH% -lc "cygcheck -dc cygwin" )
+  - IF "%PLATFORM_TARGET%"=="cygwin" ( 
+      %CYGWIN_PATH% -lc "cygcheck -dc cygwin" 
+    )
+  - IF "%PLATFORM_TARGET%"=="windows" (
+      IF "%PROJECT_TARGET%"=="python" (
+        set PATH=%MINICONDA_PATH%;%MINICONDA_PATH%\\Scripts;%PATH%
+        
+        conda config --set always_yes yes --set changeps1 no
+        conda update -q conda
+        
+        conda install libgfortran
+        conda create -q -n test-environment python=3.4 numpy scipy matplotlib Pillow
+      )
+    )
 
 
 build_script:
-  - IF "%PLATFORM_TARGET%"=="windows" ( msbuild ccore/ccore.sln /t:%PROJECT_TARGET%:Rebuild /p:configuration=Release )
-  - IF "%PLATFORM_TARGET%"=="cygwin" ( %CYGWIN_PATH% -lc "cd $APPVEYOR_BUILD_FOLDER; cd ccore; make %PROJECT_TARGET%" )
+  - IF "%PLATFORM_TARGET%"=="windows" (
+      echo Build CCORE library using Microsoft Visual Studio for Windows platform.
+      msbuild ccore/ccore.sln /t:%PROJECT_TARGET%:Rebuild /p:configuration=Release 
+    )
+  - IF "%PLATFORM_TARGET%"=="cygwin" (
+      echo Build CCORE library using gcc for Cygwin platform.
+      %CYGWIN_PATH% -lc "cd $APPVEYOR_BUILD_FOLDER; cd ccore; make %PROJECT_TARGET%" 
+    )
 
 
 test_script:
-  - IF "%PROJECT_TARGET%"=="utcore" ( IF "%PLATFORM_TARGET%"=="windows" ( cd ccore\Release && utcore.exe ) )
-  - IF "%PROJECT_TARGET%"=="ut" ( IF "%PLATFORM_TARGET%"=="cygwin" ( %CYGWIN_PATH% -lc "cd $APPVEYOR_BUILD_FOLDER; cd ccore; make utrun" ) )
+  - IF "%PROJECT_TARGET%"=="utcore" ( 
+      IF "%PLATFORM_TARGET%"=="windows" ( 
+        echo Run CCORE unit-tests for Windows platform.
+        cd ccore\Release && utcore.exe 
+      ) 
+    )
+  - IF "%PROJECT_TARGET%"=="ut" ( 
+      IF "%PLATFORM_TARGET%"=="cygwin" (
+        echo Run CCORE unit-tests for Cygwin platform.
+        %CYGWIN_PATH% -lc "cd $APPVEYOR_BUILD_FOLDER; cd ccore; make utrun" 
+      ) 
+    )
