@@ -22,6 +22,8 @@ environment:
     PLATFORM_TARGET: cygwin
   - PROJECT_TARGET: ut
     PLATFORM_TARGET: cygwin
+  - PROJECT_TARGET: python
+    PLATFORM_TARGET: windows
 
 
 install:
@@ -37,3 +39,4 @@ build_script:
 test_script:
   - IF "%PROJECT_TARGET%"=="utcore" ( IF "%PLATFORM_TARGET%"=="windows" ( cd ccore\Release && utcore.exe ) )
   - IF "%PROJECT_TARGET%"=="ut" ( IF "%PLATFORM_TARGET%"=="cygwin" ( %CYGWIN_PATH% -lc "cd $APPVEYOR_BUILD_FOLDER; cd ccore; make utrun" ) )
+  - IF "%PROJECT_TARGET%"=="python" ( echo Here pyclustering tests will be run )
