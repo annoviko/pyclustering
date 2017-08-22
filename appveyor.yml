@@ -28,17 +28,6 @@ install:
   - IF "%PLATFORM_TARGET%"=="cygwin" ( 
       %CYGWIN_PATH% -lc "cygcheck -dc cygwin" 
     )
-  - IF "%PLATFORM_TARGET%"=="windows" (
-      IF "%PROJECT_TARGET%"=="python" (
-        "set PATH=%MINICONDA_PATH%;%MINICONDA_PATH%\Scripts;%PATH%"
-        
-        conda config --set always_yes yes --set changeps1 no
-        conda update -q conda
-        
-        conda install libgfortran
-        conda create -q -n test-environment python=3.4 numpy scipy matplotlib Pillow
-      )
-    )
 
 
 build_script:
