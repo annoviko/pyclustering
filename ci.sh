@@ -101,12 +101,20 @@ run_ut_pyclustering_job() {
 
 run_doxygen_job() {
     echo "[CI Job]: DOXYGEN (documentation generation)."
+    
+    # install requirements for the job
+    sudo apt-get install doxygen
+    
+    # generate doxygen documentation
     doxygen docs/doxygen_conf_pyclustering > /dev/null 2> doxygen_problems.txt
     
     problems_amount=$(cat doxygen_problems.txt | wc -l)
     printf "Total amount of doxygen errors and warnings: '%d'\n"  "$problems_amount"
     
     if [ $problems_amount -ne 0 ] ; then
+        echo "List of warnings and errors:"
+        cat doxygen_problems.txt
+        
         echo "Building doxygen documentation: FAILURE."
         exit 1
     else
