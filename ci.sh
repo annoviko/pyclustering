@@ -104,6 +104,7 @@ run_doxygen_job() {
     
     # install requirements for the job
     sudo apt-get install doxygen
+    sudo apt-get install graphviz
     
     # generate doxygen documentation
     doxygen docs/doxygen_conf_pyclustering > /dev/null 2> doxygen_problems.txt
