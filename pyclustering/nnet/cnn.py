@@ -70,7 +70,7 @@ class cnn_dynamic:
         """!
         @brief Costructor of the chaotic neural network output dynamic.
 
-        @param[in] phase (list): Dynamic of oscillators on each step of simulation.
+        @param[in] output (list): Dynamic of oscillators on each step of simulation.
         @param[in] time (list): Simulation time.
         
         """

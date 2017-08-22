@@ -328,6 +328,7 @@ class sync_visualizer:
                   amount of oscillators otherwise exception is thrown. If grid_width or grid_height are not specified than phase matrix size 
                   will by calculated automatically by square root.
         
+        @param[in] sync_output_dynamic (sync_dynamic): Output dynamic of the Sync network whose phase matrix should be shown.
         @param[in] grid_width (uint): Width of the phase matrix.
         @param[in] grid_height (uint): Height of the phase matrix.
         @param[in] iteration (uint): Number of iteration of simulation for which correlation matrix should be allocated.

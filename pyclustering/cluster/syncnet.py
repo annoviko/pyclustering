@@ -132,6 +132,7 @@ class syncnet_visualizer(sync_visualizer):
         @param[in] animation_velocity (uint): Interval between frames in milliseconds.
         @param[in] tolerance (double): Tolerance level that define maximal difference between phases of oscillators in one cluster.
         @param[in] save_movie (string): If it is specified then animation will be stored to file that is specified in this parameter.
+        @param[in] title (string): If it is specified then title will be displayed on the animation plot.
         
         """
         

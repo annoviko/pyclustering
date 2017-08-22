@@ -50,8 +50,19 @@ class somsc:
         somsc_instance.process();
         somsc_instance.get_clusters();
     @endcode
+    
     """
+    
     def __init__(self, data, amount_clusters, epouch = 100, ccore = False):
+        """!
+        @brief Creates SOM-SC (Self Organized Map for Simple Clustering) algorithm for clustering analysis.
+        
+        @param[in] data (list): List of points that are used for processing.
+        @param[in] amount_clusters (uint): Amount of clusters that should be allocated.
+        @param[in] epouch (uint): Number of epochs for training of SOM.
+        @param[in] ccore (bool): If it is True then CCORE implementation will be used for clustering analysis.
+        
+        """
         
         self.__data_pointer = data;
         self.__amount_clusters = amount_clusters;

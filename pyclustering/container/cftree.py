@@ -80,17 +80,6 @@ class cfnode_type(IntEnum):
     CFNODE_NONLEAF  = 2;
 
 
-class cftree_insert_status(IntEnum):
-    """!
-    
-    """
-    CFTREE_INSERT_ABSORB         = 0;
-    
-    CFTREE_INSERT_NODE_SPLITTED  = 1;
-    
-    CFTREE_INSERT_IGNORED        = 2;
-
-
 class cfentry:
     """!
     @brief Clustering feature representation.
@@ -226,7 +215,7 @@ class cfentry:
                 
         tolerance = 0.00001;
         
-        result = (self.number_points == entry.number_points);
+        result = (self.number_points() == entry.number_points());
         result &= ( (self.square_sum + tolerance > entry.square_sum) and (self.square_sum - tolerance < entry.square_sum) );
         
         for index_dimension in range(0, len(self.linear_sum)):
@@ -1229,6 +1218,13 @@ class cftree:
     
     
     def show_feature_destibution(self, data = None):
+        """!
+        @brief Shows feature distribution.
+        @details Only features in 1D, 2D, 3D space can be visualized.
+        
+        @param[in] data (list): List of points that will be used for visualization, if it not specified than feature will be displayed only.
+        
+        """
         visualizer = cluster_visualizer();
         
         print("amount of nodes: ", self.__amount_nodes);
