@@ -14,7 +14,8 @@ install:
   - sudo apt-get update
   - chmod u+x ci.sh
   
-script: ./ci.sh
+script:
+  - ./ci/travis-ci.sh
   
 env:
   - CI_JOB=BUILD_CCORE

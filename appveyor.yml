@@ -9,34 +9,17 @@ init: []
 
 
 environment:
-  PYTHON_VERSION: 3.4
   CYGWIN_PATH: C:\cygwin64\bin\bash
   PYTHON_PATH: C:\Python34-x64
   MINICONDA_PATH: C:\Miniconda3-x64
   matrix:
-  - PROJECT_TARGET: ccore
-    PLATFORM_TARGET: windows
-  - PROJECT_TARGET: utcore
-    PLATFORM_TARGET: windows
-  - PROJECT_TARGET: ccore
-    PLATFORM_TARGET: cygwin
-  - PROJECT_TARGET: ut
-    PLATFORM_TARGET: cygwin
-  - PROJECT_TARGET: python
-    PLATFORM_TARGET: windows
+  - CI_JOB: "BUILD_WINDOWS_CCORE"
+  - CI_JOB: "UT_WINDOWS_CCORE"
+  - CI_JOB: "BUILD_CYGWIN_CCORE"
+  - CI_JOB: "UT_CYGWIN_CCORE"
+  - CI_JOB: "PYCLUSTERING_WINDOWS"
+  - CI_JOB: "PYCLUSTERING_CYGWIN"
 
-
-install:
-  - IF "%PLATFORM_TARGET%"=="cygwin" ( %CYGWIN_PATH% -lc "cygcheck -dc cygwin" )
-  - set PATH=%MINICONDA_PATH%;%MINICONDA_PATH%\Scripts;%PATH%
-  - IF "%PLATFORM_TARGET%"=="python" ( conda config --set always_yes yes --set changeps1 no; conda update -q conda; conda create -q -n test-environment python=3.4 numpy scipy matplotlib Pillow )
 
 build_script:
-  - IF "%PLATFORM_TARGET%"=="windows" ( msbuild ccore/ccore.sln /t:%PROJECT_TARGET%:Rebuild /p:configuration=Release )
-  - IF "%PLATFORM_TARGET%"=="cygwin" ( %CYGWIN_PATH% -lc "cd $APPVEYOR_BUILD_FOLDER; cd ccore; make %PROJECT_TARGET%" )
-
-
-test_script:
-  - IF "%PROJECT_TARGET%"=="utcore" ( IF "%PLATFORM_TARGET%"=="windows" ( cd ccore\Release && utcore.exe ) )
-  - IF "%PROJECT_TARGET%"=="ut" ( IF "%PLATFORM_TARGET%"=="cygwin" ( %CYGWIN_PATH% -lc "cd $APPVEYOR_BUILD_FOLDER; cd ccore; make utrun" ) )
-  - IF "%PROJECT_TARGET%"=="python" ( echo Here pyclustering tests will be run )
+  - ps: ./ci/appveyor-ci.ps1
