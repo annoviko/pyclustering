@@ -1,4 +1,6 @@
-param([string]$CI_JOB)
+$CI_JOB = $env:CI_JOB
+$APPVEYOR_BUILD_FOLDER = $env:APPVEYOR_BUILD_FOLDER
+#param([string]$CI_JOB)
 
 
 function job_build_windows_ccore() {
