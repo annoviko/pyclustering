@@ -12,7 +12,7 @@ addons:
 
 install:
   - sudo apt-get update
-  - chmod u+x ci.sh
+  - chmod u+x ci/ci.sh
   
 script:
   - ./ci/travis-ci.sh

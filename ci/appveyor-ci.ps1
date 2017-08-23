@@ -1,3 +1,6 @@
+param([string]$CI_JOB)
+
+
 function job_build_windows_ccore() {
     echo "[CI Job] CCORE building using Visual Studio on Windows platform."
 
@@ -84,7 +87,7 @@ switch ($CI_JOB)
             break;
         }
         default {
-            echo "[CI Job] Unknown target $CI_JOB";
+            echo "[CI Job] Unknown target '$CI_JOB'";
             exit 1;
         }
     }
