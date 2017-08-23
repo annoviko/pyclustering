@@ -22,4 +22,4 @@ environment:
 
 
 build_script:
-  - ps: ./ci/appveyor-ci.ps1 %CI_JOB%
+  - ps: ./ci/appveyor-ci.ps1 $CI_JOB
