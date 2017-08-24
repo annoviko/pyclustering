@@ -1,21 +1,41 @@
-$CI_JOB = $env:CI_JOB
+$CI_JOB                = $env:CI_JOB
 $APPVEYOR_BUILD_FOLDER = $env:APPVEYOR_BUILD_FOLDER
-#param([string]$CI_JOB)
+$CYGWIN_PATH           = $env:CYGWIN_PATH
+$MINICONDA_PATH        = $env:MINICONDA_PATH
 
 
 function job_build_windows_ccore() {
-    echo "[CI Job] CCORE building using Visual Studio on Windows platform."
+    echo "[CI Job] CCORE building using Visual Studio on Windows platform.";
 
-    msbuild ccore\ccore.sln /t:ccore:Rebuild /p:configuration=Release
+    msbuild ccore\ccore.sln /t:ccore:Rebuild /p:configuration=Release;
+    if ($LastExitCode -ne 0) {
+        echo "Building CCORE library for WINDOWS platform: FAILURE.";
+        exit 1;
+    }
+    
+    echo "Building CCORE library for WINDOWS platform: SUCCESS.";
 }
 
 
 function job_ut_windows_ccore() {
-    echo "[CI Job] CCORE unit-test building and running using Visual Studio on Windows platform."
+    echo "[CI Job] CCORE unit-test building and running using Visual Studio on Windows platform.";
 
-    msbuild ccore\ccore.sln /t:utcore:Rebuild /p:configuration=Release
+    msbuild ccore\ccore.sln /t:utcore:Rebuild /p:configuration=Release;
+    if ($LastExitCode -ne 0) {
+        echo "Building of CCORE unit-test project for WINDOWS platform: FAILURE.";
+        exit 1;
+    }
+    
+    echo "Building of CCORE unit-test project for WINDOWS platform: SUCCESS.";
+    
     cd ccore\Release;
     .\utcore.exe;
+    if ($LastExitCode -ne 0) {
+        echo "Unit-testing CCORE library for WINDOWS platform: FAILURE.";
+        exit 1;
+    }
+    
+    echo "Unit-testing CCORE library for WINDOWS platform: SUCCESS.";
 }
 
 
@@ -23,7 +43,13 @@ function job_build_cygwin_ccore() {
     echo "[CI Job] CCORE building using GCC on Cygwin platform.";
 
     & $CYGWIN_PATH -lc "cygcheck -dc cygwin";
-    & $CYGWIN_PATH -lc "cd $APPVEYOR_BUILD_FOLDER; cd ccore; make $PROJECT_TARGET";
+    & $CYGWIN_PATH -lc "cd $APPVEYOR_BUILD_FOLDER; cd ccore; make ccore";
+    if ($LastExitCode -ne 0) {
+        echo "Building CCORE library for CYGWIN platform: FAILURE.";
+        echo 1;
+    }
+    
+    echo "Building CCORE library for CYGWIN platform: SUCCESS.";
 }
 
 
@@ -31,6 +57,12 @@ function job_ut_cygwin_ccore() {
     echo "[CI Job] CCORE unit-test building and running using Visual Studio on Windows platform.";
     
     & $CYGWIN_PATH -lc "cd $APPVEYOR_BUILD_FOLDER; cd ccore; make utrun";
+    if ($LastExitCode -ne 0) {
+        echo "Unit-testing CCORE library for WINDOWS platform: FAILURE.";
+        exit 1;
+    }
+    
+    echo "Unit-testing CCORE library for CYGWIN platform: SUCCESS.";
 }
 
 
@@ -44,6 +76,12 @@ function job_pyclustering_windows() {
     job_build_windows_ccore;
 
     & $PYTHON_PATH\python.exe pyclustering\ut\__init__.py
+    if ($LastExitCode -ne 0) {
+        echo "Integration testing pyclustering <-> ccore for WINDOWS platform: FAILURE.";
+        exit 1;
+    }
+    
+    echo "Integration testing pyclustering <-> ccore for WINDOWS platform: SUCCESS.";
 }
 
 
