@@ -2,7 +2,6 @@ $CI_JOB                = $env:CI_JOB
 $APPVEYOR_BUILD_FOLDER = $env:APPVEYOR_BUILD_FOLDER
 $CYGWIN_PATH           = $env:CYGWIN_PATH
 $MINICONDA_PATH        = $env:MINICONDA_PATH
-$PYTHON_PATH           = $env:PYTHON_PATH
 
 
 function job_build_windows_ccore() {
@@ -76,7 +75,7 @@ function job_pyclustering_windows() {
 
     job_build_windows_ccore;
 
-    & $PYTHON_PATH pyclustering\ut\__init__.py
+    & python pyclustering\ut\__init__.py
     if ($LastExitCode -ne 0) {
         echo "Integration testing pyclustering <-> ccore for WINDOWS platform: FAILURE.";
         exit 1;
