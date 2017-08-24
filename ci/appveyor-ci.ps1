@@ -2,6 +2,7 @@ $CI_JOB                = $env:CI_JOB
 $APPVEYOR_BUILD_FOLDER = $env:APPVEYOR_BUILD_FOLDER
 $CYGWIN_PATH           = $env:CYGWIN_PATH
 $MINICONDA_PATH        = $env:MINICONDA_PATH
+$PYTHON_PATH           = $env:PYTHON_PATH
 
 
 function job_build_windows_ccore() {
@@ -56,7 +57,7 @@ function job_build_cygwin_ccore() {
 function job_ut_cygwin_ccore() {
     echo "[CI Job] CCORE unit-test building and running using Visual Studio on Windows platform.";
     
-    & $CYGWIN_PATH -lc "cd $APPVEYOR_BUILD_FOLDER; cd ccore; make utrun";
+    & $CYGWIN_PATH -lc "cd $APPVEYOR_BUILD_FOLDER; cd ccore; make ut; make utrun";
     if ($LastExitCode -ne 0) {
         echo "Unit-testing CCORE library for WINDOWS platform: FAILURE.";
         exit 1;
@@ -75,7 +76,7 @@ function job_pyclustering_windows() {
 
     job_build_windows_ccore;
 
-    & $PYTHON_PATH\python.exe pyclustering\ut\__init__.py
+    & $PYTHON_PATH pyclustering\ut\__init__.py
     if ($LastExitCode -ne 0) {
         echo "Integration testing pyclustering <-> ccore for WINDOWS platform: FAILURE.";
         exit 1;
