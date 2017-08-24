@@ -44,10 +44,10 @@ function job_build_cygwin_ccore() {
     echo "[CI Job] CCORE building using GCC on Cygwin platform.";
 
     & $CYGWIN_PATH -lc "cygcheck -dc cygwin";
-    & $CYGWIN_PATH -lc "cd $APPVEYOR_BUILD_FOLDER; cd ccore; make ccore";
+    & $CYGWIN_PATH -lc "cd '$APPVEYOR_BUILD_FOLDER'; cd ccore; make ccore";
     if ($LastExitCode -ne 0) {
         echo "Building CCORE library for CYGWIN platform: FAILURE.";
-        echo 1;
+        exit 1;
     }
     
     echo "Building CCORE library for CYGWIN platform: SUCCESS.";
@@ -57,7 +57,7 @@ function job_build_cygwin_ccore() {
 function job_ut_cygwin_ccore() {
     echo "[CI Job] CCORE unit-test building and running using Visual Studio on Windows platform.";
     
-    & $CYGWIN_PATH -lc "cd $APPVEYOR_BUILD_FOLDER; cd ccore; make ut; make utrun";
+    & $CYGWIN_PATH -lc "cd '$APPVEYOR_BUILD_FOLDER'; cd ccore; make ut; make utrun";
     if ($LastExitCode -ne 0) {
         echo "Unit-testing CCORE library for WINDOWS platform: FAILURE.";
         exit 1;
