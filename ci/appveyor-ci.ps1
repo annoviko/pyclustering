@@ -95,11 +95,15 @@ function job_pyclustering_cygwin() {
 function install_miniconda() {
     $env:PATH="$env:PATH;$MINICONDA_PATH;$MINICONDA_PATH\Scripts";
     
+    echo "Starting process of installation of miniconda.";
+    
     conda config --set always_yes yes --set changeps1 no;
     conda update -q conda;
+    conda config --add channels bashtage;
     conda create -q -n test-environment python=3.4 numpy scipy matplotlib Pillow;
+    activate test-environment;
     
-    echo "Python information:";
+    echo "Python information after installation of miniconda:";
     python --version;
     Get-Command python | Select-Object -ExpandProperty Definition;
 }
