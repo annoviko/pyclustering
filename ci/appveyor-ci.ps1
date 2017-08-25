@@ -76,7 +76,9 @@ function job_pyclustering_windows() {
 
     job_build_windows_ccore;
 
-    & python pyclustering\ut\__init__.py
+    echo "Starting integration testing.";
+    
+    & $MINICONDA_PATH\python pyclustering\ut\__init__.py
     if ($LastExitCode -ne 0) {
         echo "Integration testing pyclustering <-> ccore for WINDOWS platform: FAILURE.";
         exit 1;
@@ -104,8 +106,8 @@ function install_miniconda() {
     activate test-environment;
     
     echo "Python information after installation of miniconda:";
-    python --version;
-    Get-Command python | Select-Object -ExpandProperty Definition;
+    & $MINICONDA_PATH\python --version;
+    Get-Command $MINICONDA_PATH\python | Select-Object -ExpandProperty Definition;
 }
 
 
