@@ -9,8 +9,8 @@ init: []
 
 
 environment:
+  PYTHON_VERSION: 3.4
   CYGWIN_PATH: C:\cygwin64\bin\bash
-  PYTHON_PATH: C:\Python34-x64\python
   MINICONDA_PATH: C:\Miniconda3-x64
   matrix:
   - CI_JOB: "BUILD_WINDOWS_CCORE"
