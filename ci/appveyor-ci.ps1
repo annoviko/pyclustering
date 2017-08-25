@@ -103,7 +103,9 @@ function install_miniconda() {
     conda update -q conda;
     conda config --add channels bashtage;
     conda create -q -n test-environment python=3.4 numpy scipy matplotlib Pillow;
-    source activate test-environment;
+    
+    echo "Activating created test-environment."
+    activate test-environment;
     
     echo "Python information after installation of miniconda:";
     & $MINICONDA_PATH\python.exe --version;
