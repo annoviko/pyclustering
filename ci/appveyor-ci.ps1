@@ -104,8 +104,8 @@ function install_miniconda() {
     conda info -a;
     conda create -q -n test-environment python=3.4 numpy scipy matplotlib Pillow;
     
-    echo "Activating created test-environment."
     activate test-environment;
+    conda install -n test-environment;
     
     echo "Python information after installation of miniconda:";
     python --version;
