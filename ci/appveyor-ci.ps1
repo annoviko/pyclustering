@@ -78,7 +78,7 @@ function job_pyclustering_windows() {
 
     echo "Starting integration testing.";
     
-    & $MINICONDA_PATH\python pyclustering\ut\__init__.py
+    & $MINICONDA_PATH\python.exe pyclustering\ut\__init__.py
     if ($LastExitCode -ne 0) {
         echo "Integration testing pyclustering <-> ccore for WINDOWS platform: FAILURE.";
         exit 1;
@@ -103,11 +103,10 @@ function install_miniconda() {
     conda update -q conda;
     conda config --add channels bashtage;
     conda create -q -n test-environment python=3.4 numpy scipy matplotlib Pillow;
-    activate test-environment;
+    source activate test-environment;
     
     echo "Python information after installation of miniconda:";
-    & $MINICONDA_PATH\python --version;
-    Get-Command $MINICONDA_PATH\python | Select-Object -ExpandProperty Definition;
+    & $MINICONDA_PATH\python.exe --version;
 }
 
 
