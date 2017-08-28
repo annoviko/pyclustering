@@ -1,10 +1,3 @@
-$CI_JOB                = $env:CI_JOB
-$APPVEYOR_BUILD_FOLDER = $env:APPVEYOR_BUILD_FOLDER
-$CYGWIN_PATH           = $env:CYGWIN_PATH
-$MINICONDA_PATH        = $env:MINICONDA_PATH
-$PYTHON_VERSION        = $env:PYTHON_VERSION
-
-
 function job_build_windows_ccore() {
     echo "[CI Job] CCORE building using Visual Studio on Windows platform.";
 
@@ -43,8 +36,8 @@ function job_ut_windows_ccore() {
 function job_build_cygwin_ccore() {
     echo "[CI Job] CCORE building using GCC on Cygwin platform.";
 
-    & $CYGWIN_PATH -lc "cygcheck -dc cygwin";
-    & $CYGWIN_PATH -lc "cd '$APPVEYOR_BUILD_FOLDER'; cd ccore; make ccore";
+    & $env:CYGWIN_PATH -lc "cygcheck -dc cygwin";
+    & $env:CYGWIN_PATH -lc "cd '$env:APPVEYOR_BUILD_FOLDER'; cd ccore; make ccore";
     if ($LastExitCode -ne 0) {
         echo "Building CCORE library for CYGWIN platform: FAILURE.";
         exit 1;
@@ -57,7 +50,7 @@ function job_build_cygwin_ccore() {
 function job_ut_cygwin_ccore() {
     echo "[CI Job] CCORE unit-test building and running using Visual Studio on Windows platform.";
     
-    & $CYGWIN_PATH -lc "cd '$APPVEYOR_BUILD_FOLDER'; cd ccore; make ut; make utrun";
+    & $env:CYGWIN_PATH -lc "cd '$env:APPVEYOR_BUILD_FOLDER'; cd ccore; make ut; make utrun";
     if ($LastExitCode -ne 0) {
         echo "Unit-testing CCORE library for WINDOWS platform: FAILURE.";
         exit 1;
@@ -69,16 +62,17 @@ function job_ut_cygwin_ccore() {
 
 function job_pyclustering_windows() {
     echo "[CI Job] Testing interaction between pyclustering and CCORE on Windows platform.";
-
+	
     install_miniconda;
 
-    $env:PATH="$env:PATH;$pwd.Path";
+	echo "Set path '$env:APPVEYOR_BUILD_FOLDER' to tested pyclustering library."
+	$env:PYTHONPATH = "$env:APPVEYOR_BUILD_FOLDER";
 
     job_build_windows_ccore;
 
     echo "Starting integration testing.";
     
-    python pyclustering\ut\__init__.py
+    & python pyclustering\ut\__init__.py
     if ($LastExitCode -ne 0) {
         echo "Integration testing pyclustering <-> ccore for WINDOWS platform: FAILURE.";
         exit 1;
@@ -95,24 +89,24 @@ function job_pyclustering_cygwin() {
 
 
 function install_miniconda() {
-    $env:PATH="$env:PATH;$MINICONDA_PATH;$MINICONDA_PATH\Scripts";
+    $env:PATH="$env:PATH;$env:MINICONDA_PATH\Scripts";
     
     echo "Starting process of installation of miniconda.";
     
     conda config --set always_yes yes --set changeps1 no;
     conda update -q conda;
-    conda info -a;
     conda create -q -n test-environment python=3.4 numpy scipy matplotlib Pillow;
     
-    activate test-environment;
-    conda install -n test-environment;
+    echo "Activating environment for powershell manually."
+	$env:PATH="env:MINICONDA_PATH\env\test-environment;$env:PATH"
     
-    echo "Python information after installation of miniconda:";
+    echo "Miniconda environment information after installation of miniconda:";
+	conda info -a;
     python --version;
 }
 
 
-switch ($CI_JOB) {
+switch ($env:CI_JOB) {
     "BUILD_WINDOWS_CCORE" {
         job_build_windows_ccore;
         break; 

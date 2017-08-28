@@ -22,7 +22,6 @@ environment:
   - CI_JOB: "BUILD_CYGWIN_CCORE"
   - CI_JOB: "UT_CYGWIN_CCORE"
   - CI_JOB: "PYCLUSTERING_WINDOWS"
-  - CI_JOB: "PYCLUSTERING_CYGWIN"
 
 
 build_script:
