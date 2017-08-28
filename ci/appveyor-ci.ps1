@@ -66,13 +66,13 @@ function job_pyclustering_windows() {
     install_miniconda;
 
     echo "Set path '$env:APPVEYOR_BUILD_FOLDER' to tested pyclustering library."
-    $env:PYTHONPATH = "$env:APPVEYOR_BUILD_FOLDER";
+    $env:PYTHONPATH = "$env:APPVEYOR_BUILD_FOLDER;$env:PYTHONPATH";
 
     job_build_windows_ccore;
 
     echo "Starting integration testing.";
     
-    & python pyclustering\ut\__init__.py
+    & $env:PYTHON_INTERPRETER pyclustering\ut\__init__.py
     if ($LastExitCode -ne 0) {
         echo "Integration testing pyclustering <-> ccore for WINDOWS platform: FAILURE.";
         exit 1;
@@ -98,11 +98,14 @@ function install_miniconda() {
     conda create -q -n test-environment python=3.4 numpy scipy matplotlib Pillow;
     
     echo "Activating environment for powershell manually."
-    $env:PATH="$env:MINICONDA_PATH\env\test-environment;$env:PATH"
+    $env:PYTHON_INTERPRETER="$env:MINICONDA_PATH\envs\test-environment\python.exe";
+    $env:PYTHONPATH="$env:MINICONDA_PATH\envs\test-environment"
     
     echo "Miniconda environment information after installation of miniconda:";
     conda info -a;
-    python --version;
+    
+    echo "Python interpreter information after installation of miniconda:"
+    & $env:PYTHON_INTERPRETER --version;
 }
 
 
