@@ -62,11 +62,11 @@ function job_ut_cygwin_ccore() {
 
 function job_pyclustering_windows() {
     echo "[CI Job] Testing interaction between pyclustering and CCORE on Windows platform.";
-	
+
     install_miniconda;
 
-	echo "Set path '$env:APPVEYOR_BUILD_FOLDER' to tested pyclustering library."
-	$env:PYTHONPATH = "$env:APPVEYOR_BUILD_FOLDER";
+    echo "Set path '$env:APPVEYOR_BUILD_FOLDER' to tested pyclustering library."
+    $env:PYTHONPATH = "$env:APPVEYOR_BUILD_FOLDER";
 
     job_build_windows_ccore;
 
@@ -98,10 +98,10 @@ function install_miniconda() {
     conda create -q -n test-environment python=3.4 numpy scipy matplotlib Pillow;
     
     echo "Activating environment for powershell manually."
-	$env:PATH="env:MINICONDA_PATH\env\test-environment;$env:PATH"
+    $env:PATH="$env:MINICONDA_PATH\env\test-environment;$env:PATH"
     
     echo "Miniconda environment information after installation of miniconda:";
-	conda info -a;
+    conda info -a;
     python --version;
 }
 
