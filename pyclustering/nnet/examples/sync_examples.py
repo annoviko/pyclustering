@@ -37,8 +37,10 @@ def template_dynamic_sync(num_osc, k = 1, sim_arg = None, conn = conn_type.ALL_T
         sync_output_dynamic = network.simulate_dynamic(collect_dynamic = collect_dyn, solution = type_solution);
 
     sync_visualizer.show_output_dynamic(sync_output_dynamic);
+    sync_visualizer.show_order_parameter(sync_output_dynamic);
     sync_visualizer.animate_output_dynamic(sync_output_dynamic);
     sync_visualizer.animate_correlation_matrix(sync_output_dynamic);
+
     return network;
 
 

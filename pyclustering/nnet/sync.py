@@ -40,7 +40,7 @@ import pyclustering.core.sync_wrapper as wrapper;
 from scipy.integrate import odeint;
 
 from pyclustering.nnet import network, conn_represent, conn_type, initial_type, solve_type;
-from pyclustering.utils import pi, draw_dynamics, draw_dynamics_set;
+from pyclustering.utils import pi, draw_dynamics, draw_dynamics_set, set_ax_param;
 
 
 class sync_dynamic:
@@ -267,6 +267,78 @@ class sync_dynamic:
         return affinity_matrix;
 
 
+    def calculate_order_parameter(self, start_iteration = None, stop_iteration = None):
+        """!
+        @brief Calculates level of global synchorization (order parameter).
+        @details This parameter is tend 1.0 when the oscillatory network close to global synchronization and it tend to 0.0 when 
+                  desynchronization is observed in the network. Order parameter is calculated using following equation:
+                  
+                  \f[
+                  r_{c}=\frac{1}{Ne^{i\varphi }}\sum_{j=0}^{N}e^{i\theta_{j}};
+                  \f]
+                  
+                  where \f$\varphi\f$ is a average phase coordinate in the network, \f$N\f$ is an amount of oscillators in the network.
+        
+        @param[in] start_iteration (uint): The first iteration that is used for calculation, if 'None' then the last iteration is used.
+        @param[in] stop_iteration (uint): The last iteration that is used for calculation, if 'None' then 'start_iteration' + 1 is used.
+        
+        Example:
+        @code
+            oscillatory_network = sync(16, type_conn = conn_type.ALL_TO_ALL);
+            output_dynamic = oscillatory_network.simulate_static(100, 10);
+            
+            print("Order parameter at the last step: ", output_dynamic.calculate_order_parameter());
+            print("Order parameter at the first step:", output_dynamic.calculate_order_parameter(0));
+            print("Order parameter evolution between 40 and 50 steps:", output_dynamic.calculate_order_parameter(40, 50));
+        @endcode
+        
+        @return (list) List of levels of global synchronization (order parameter evolution).
+        
+        @see calculate_sync_order()
+        
+        """
+        
+        if (start_iteration is None):
+            start_iteration = len(self._dynamic) - 1;
+        
+        if (stop_iteration is None):
+            stop_iteration = start_iteration + 1;
+        
+        sequence_order = [];
+        for index in range(start_iteration, stop_iteration):
+            sequence_order.append(sync_dynamic.calculate_sync_order(self._dynamic[index]));
+        
+        return sequence_order;
+
+
+    @staticmethod
+    def calculate_sync_order(oscillator_phases):
+        """!
+        @brief Calculates level of global synchorization (order parameter) for input phases.
+        @details This parameter is tend 1.0 when the oscillatory network close to global synchronization and it tend to 0.0 when 
+                  desynchronization is observed in the network.
+        
+        @param[in] oscillator_phases (list): List of oscillator phases that are used for level of global synchronization.
+        
+        @return (double) Level of global synchronization (order parameter).
+        
+        @see calculate_order_parameter()
+        
+        """
+        
+        exp_amount = 0.0;
+        average_phase = 0.0;
+
+        for phase in oscillator_phases:
+            exp_amount += math.expm1( abs(1j * phase) );
+            average_phase += phase;
+        
+        exp_amount /= len(oscillator_phases);
+        average_phase = math.expm1( abs(1j * (average_phase / len(oscillator_phases))) );
+        
+        return abs(average_phase) / abs(exp_amount);
+
+
 class sync_visualizer:
     """!
     @brief Visualizer of output dynamic of sync network (Sync).
@@ -341,8 +413,33 @@ class sync_visualizer:
         
         plt.imshow(phase_matrix, cmap = plt.get_cmap('jet'), interpolation='kaiser', vmin = 0.0, vmax = 2.0 * math.pi); 
         plt.show();
-    
-    
+
+
+    @staticmethod
+    def show_order_parameter(sync_output_dynamic, start_iteration = None, stop_iteration = None):
+        """!
+        @brief Shows evolution of order parameter (level of global synchronization in the network).
+        
+        @param[in] sync_output_dynamic (sync_dynamic): Output dynamic of the Sync network whose evolution of global synchronization should be visualized.
+        @param[in] start_iteration (uint): The first iteration that is used for calculation, if 'None' then the first is used
+        @param[in] stop_iteration (uint): The last iteration that is used for calculation, if 'None' then the last is used.
+        
+        """
+        
+        if (start_iteration is None):
+            start_iteration = 0;
+        
+        if (stop_iteration is None):
+            stop_iteration = len(sync_output_dynamic);
+        
+        order_parameter = sync_output_dynamic.calculate_order_parameter(start_iteration, stop_iteration);
+        axis = plt.subplot(111);
+        plt.plot(sync_output_dynamic.time[start_iteration:stop_iteration], order_parameter, 'b-', linewidth = 2.0);
+        set_ax_param(axis, "t", "R (order parameter)", None, [0.0, 1.05]);
+        
+        plt.show();
+
+
     @staticmethod
     def animate_output_dynamic(sync_output_dynamic, animation_velocity = 75, save_movie = None):
         """!
@@ -493,6 +590,7 @@ class sync_visualizer:
             plt.show();
 
 
+
 class sync_network(network):
     """!
     @brief Model of oscillatory network that is based on the Kuramoto model of synchronization.
@@ -549,7 +647,7 @@ class sync_network(network):
     
     def sync_order(self):
         """!
-        @brief Calculates level of global synchorization (order parameter) in the network.
+        @brief Calculates current level of global synchorization (order parameter) in the network.
         @details This parameter is tend 1.0 when the oscillatory network close to global synchronization and it tend to 0.0 when 
                   desynchronization is observed in the network. Order parameter is calculated using following equation:
                   
@@ -577,22 +675,12 @@ class sync_network(network):
         if (self._ccore_network_pointer is not None):
             return wrapper.sync_order(self._ccore_network_pointer);
         
-        exp_amount = 0;
-        average_phase = 0;
-        
-        for index in range(0, self._num_osc, 1):
-            exp_amount += math.expm1( abs(1j * self._phases[index]) );
-            average_phase += self._phases[index];
-        
-        exp_amount /= self._num_osc;
-        average_phase = math.expm1( abs(1j * (average_phase / self._num_osc)) );
-        
-        return abs(average_phase) / abs(exp_amount);
+        return sync_dynamic.calculate_sync_order(self._phases);
 
 
     def sync_local_order(self):
         """!
-        @brief Calculates level of local (partial) synchronization in the network.
+        @brief Calculates current level of local (partial) synchronization in the network.
         
         @return (double) Level of local (partial) synchronization.
         

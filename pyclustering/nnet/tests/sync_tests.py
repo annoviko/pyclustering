@@ -263,8 +263,16 @@ class Test(unittest.TestCase):
         
         matrix = output_dynamic.allocate_correlation_matrix();
         assert matrix == [];
-    
-    
+
+    def testOutputDynamicCalculateOrderParameter(self):
+        net = sync_network(5);
+        output_dynamic = net.simulate_static(20, 10, solution = solve_type.FAST, collect_dynamic = True);
+        
+        assert len(output_dynamic.calculate_order_parameter(0, 20)) == 20;
+        assert len(output_dynamic.calculate_order_parameter()) == 1;
+        assert len(output_dynamic.calculate_order_parameter(5)) == 1;
+        assert len(output_dynamic.calculate_order_parameter(5, 10)) == 5;
+
     def templateVisualizerNoFailures(self, size, velocity, ccore_flag):
         net = sync_network(size, ccore = ccore_flag);
         output_dynamic = net.simulate_dynamic(solution = solve_type.FAST, collect_dynamic = True);
@@ -276,7 +284,17 @@ class Test(unittest.TestCase):
         sync_visualizer.show_correlation_matrix(output_dynamic);
         sync_visualizer.show_output_dynamic(output_dynamic);
         sync_visualizer.show_phase_matrix(output_dynamic, 1, size);
-    
+        sync_visualizer.show_order_parameter(output_dynamic);
+
+    def testVisualizerOrderParameterNoFailures(self):
+        net = sync_network(10, ccore = False);
+        output_dynamic = net.simulate_static(20, 10, solution = solve_type.FAST, collect_dynamic = True);
+        
+        sync_visualizer.show_order_parameter(output_dynamic);
+        sync_visualizer.show_order_parameter(output_dynamic, 0);
+        sync_visualizer.show_order_parameter(output_dynamic, 5);
+        sync_visualizer.show_order_parameter(output_dynamic, 5, 20);
+
     def testVisualizerNoFailures(self):
         self.templateVisualizerNoFailures(5, 10, False);
 
