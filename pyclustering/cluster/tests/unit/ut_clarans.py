@@ -33,7 +33,7 @@ from pyclustering.utils import read_sample;
 from pyclustering.cluster.clarans import clarans;
 
 
-class Test(unittest.TestCase):
+class ClaransUnitTest(unittest.TestCase):
     def templateClusterAllocation(self, path, cluster_sizes, number_clusters, iterations, maxneighbors):
         result_testing = False;
         

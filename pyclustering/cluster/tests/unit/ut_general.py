@@ -46,7 +46,7 @@ class Test(unittest.TestCase):
     def testVisualize1DClustersOneCanvas(self):
         sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE8);
  
-        dbscan_instance = dbscan(sample, 1.0, 3, True);
+        dbscan_instance = dbscan(sample, 1.0, 3, False);
         dbscan_instance.process();
         clusters = dbscan_instance.get_clusters();
           
@@ -74,7 +74,7 @@ class Test(unittest.TestCase):
     def testVisualize3DClustersOneCanvas(self):
         sample = read_sample(FCPS_SAMPLES.SAMPLE_HEPTA);
           
-        dbscan_instance = dbscan(sample, 0.5, 3, True);
+        dbscan_instance = dbscan(sample, 0.5, 3, False);
         dbscan_instance.process();
         clusters = dbscan_instance.get_clusters();
           

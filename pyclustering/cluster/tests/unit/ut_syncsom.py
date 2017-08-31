@@ -23,6 +23,7 @@
 
 """
 
+
 import unittest;
 
 # Generate images without having a window appear.
@@ -36,7 +37,7 @@ from pyclustering.utils import read_sample;
 from pyclustering.samples.definitions import SIMPLE_SAMPLES;
 
 
-class Test(unittest.TestCase):
+class SyncsomUnitTest(unittest.TestCase):
     def templateLengthSomCluster(self, file, som_map_size, radius, eps):
         sample = read_sample(file);
         

@@ -28,7 +28,7 @@ import unittest;
 from pyclustering.cluster.antmean import antmean;
 
 
-class Test(unittest.TestCase):
+class AntmeanIntegrationTest(unittest.TestCase):
     def templateClustering(self, samples, clusters):
         algo = antmean(None)
         res = algo.process(len(clusters), samples)

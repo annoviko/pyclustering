@@ -37,24 +37,7 @@ matplotlib.use('Agg');
 
 
 # Test suits that are used for testing of python implementation.
-from pyclustering.cluster.tests                  import agglomerative_tests as cluster_agglomerative_unit_tests;
-from pyclustering.cluster.tests                  import antmean_tests       as cluster_antmean_unit_tests;
-from pyclustering.cluster.tests                  import birch_tests         as cluster_birch_unit_tests;
-from pyclustering.cluster.tests                  import clarans_tests       as cluster_clarans_unit_tests;
-from pyclustering.cluster.tests                  import cure_tests          as cluster_cure_unit_tests;
-from pyclustering.cluster.tests                  import dbscan_tests        as cluster_dbscan_unit_tests;
-from pyclustering.cluster.tests                  import encoder_tests       as cluster_encoder_unit_tests;
-from pyclustering.cluster.tests                  import general_tests       as cluster_general_unit_tests;
-from pyclustering.cluster.tests                  import hsyncnet_tests      as cluster_hsyncnet_unit_tests;
-from pyclustering.cluster.tests                  import kmeans_tests        as cluster_kmeans_unit_tests;
-from pyclustering.cluster.tests                  import kmedians_tests      as cluster_kmedians_unit_tests;
-from pyclustering.cluster.tests                  import kmedoids_tests      as cluster_kmedoids_unit_tests;
-from pyclustering.cluster.tests                  import optics_tests        as cluster_optics_unit_tests;
-from pyclustering.cluster.tests                  import rock_tests          as cluster_rock_unit_tests;
-from pyclustering.cluster.tests                  import somsc_tests         as cluster_somsc_unit_tests;
-from pyclustering.cluster.tests                  import syncnet_tests       as cluster_syncnet_unit_tests;
-from pyclustering.cluster.tests                  import syncsom_tests       as cluster_syncsom_unit_tests;
-from pyclustering.cluster.tests                  import xmeans_tests        as cluster_xmeans_unit_tests;
+from pyclustering.cluster.tests                  import clustering_tests;
 
 from pyclustering.gcolor.tests                   import dsatur_tests        as gcolor_dsatur_unit_tests;
 from pyclustering.gcolor.tests                   import hysteresis_tests    as gcolor_hysteresis_unit_tests;
@@ -85,23 +68,7 @@ from pyclustering.utils.tests                    import utils_tests         as u
 if __name__ == "__main__":
     suite = unittest.TestSuite();
 
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_agglomerative_unit_tests));
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_antmean_unit_tests));
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_birch_unit_tests));
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_clarans_unit_tests));
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_cure_unit_tests));
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_dbscan_unit_tests));
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_general_unit_tests));
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_hsyncnet_unit_tests));
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_kmeans_unit_tests));
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_kmedians_unit_tests));
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_kmedoids_unit_tests));
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_optics_unit_tests));
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_rock_unit_tests));
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_somsc_unit_tests));
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_syncnet_unit_tests));
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_syncsom_unit_tests));
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_xmeans_unit_tests));
+    clustering_tests.fill_suite(suite);
 
     suite.addTests(unittest.TestLoader().loadTestsFromModule(gcolor_dsatur_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(gcolor_hysteresis_unit_tests));

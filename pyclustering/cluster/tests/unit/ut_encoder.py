@@ -25,13 +25,8 @@
 
 import unittest;
 
-from pyclustering.cluster.dbscan import dbscan;
 from pyclustering.cluster.encoder import cluster_encoder;
 from pyclustering.cluster.encoder import type_encoding;
-
-from pyclustering.utils import read_sample;
-
-from pyclustering.samples.definitions import SIMPLE_SAMPLES;
 
 
 class Test(unittest.TestCase): 

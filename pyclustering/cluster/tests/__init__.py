@@ -1,6 +1,6 @@
 """!
 
-@brief Unit-test runner for tests of clustering algorithms.
+@brief Unit-test runner for integration tests and unit-tests for cluster analysis module
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2017
@@ -30,45 +30,30 @@ import matplotlib;
 matplotlib.use('Agg');
 
 
-from pyclustering.cluster.tests               import agglomerative_tests as cluster_agglomerative_unit_tests;
-from pyclustering.cluster.tests               import antmean_tests       as cluster_antmean_unit_tests;
-from pyclustering.cluster.tests               import birch_tests         as cluster_birch_unit_tests;
-from pyclustering.cluster.tests               import clarans_tests       as cluster_clarans_unit_tests;
-from pyclustering.cluster.tests               import cure_tests          as cluster_cure_unit_tests;
-from pyclustering.cluster.tests               import dbscan_tests        as cluster_dbscan_unit_tests;
-from pyclustering.cluster.tests               import encoder_tests       as cluster_encoder_unit_tests;
-from pyclustering.cluster.tests               import general_tests       as cluster_general_unit_tests;
-from pyclustering.cluster.tests               import hsyncnet_tests      as cluster_hsyncnet_unit_tests;
-from pyclustering.cluster.tests               import kmeans_tests        as cluster_kmeans_unit_tests;
-from pyclustering.cluster.tests               import kmedians_tests      as cluster_kmedians_unit_tests;
-from pyclustering.cluster.tests               import kmedoids_tests      as cluster_kmedoids_unit_tests;
-from pyclustering.cluster.tests               import optics_tests        as cluster_optics_unit_tests;
-from pyclustering.cluster.tests               import rock_tests          as cluster_rock_unit_tests;
-from pyclustering.cluster.tests               import somsc_tests         as cluster_somsc_unit_tests;
-from pyclustering.cluster.tests               import syncnet_tests       as cluster_syncnet_unit_tests;
-from pyclustering.cluster.tests               import syncsom_tests       as cluster_syncsom_unit_tests;
-from pyclustering.cluster.tests               import xmeans_tests        as cluster_xmeans_unit_tests;
+from pyclustering.cluster.tests.integration import clustering_integration_tests;
+from pyclustering.cluster.tests.unit import clustering_unit_tests;
+
+
+class clustering_tests:
+    def __init__(self):
+        self.__suite = unittest.TestSuite();
+        clustering_integration_tests.fill_suite(self.__suite);
+        clustering_unit_tests.fill_suite(self.__suite);
+
+
+    def get_suite(self):
+        return self.__suite;
+
+
+    def run(self):
+        unittest.TextTestRunner(verbosity = 2).run(self.__suite);
+
+
+    @staticmethod
+    def fill_suite(cluster_suite):
+        clustering_integration_tests.fill_suite(cluster_suite);
+        clustering_unit_tests.fill_suite(cluster_suite);
 
 
 if __name__ == "__main__":
-    suite = unittest.TestSuite();
-
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_agglomerative_unit_tests));
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_antmean_unit_tests));
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_birch_unit_tests));
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_clarans_unit_tests));
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_cure_unit_tests));
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_dbscan_unit_tests));
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_general_unit_tests));
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_hsyncnet_unit_tests));
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_kmeans_unit_tests));
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_kmedians_unit_tests));
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_kmedoids_unit_tests));
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_optics_unit_tests));
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_rock_unit_tests));
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_somsc_unit_tests));
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_syncnet_unit_tests));
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_syncsom_unit_tests));
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_xmeans_unit_tests));
-
-    unittest.TextTestRunner(verbosity = 2).run(suite);
+    clustering_tests().run();
