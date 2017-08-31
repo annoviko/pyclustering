@@ -37,7 +37,7 @@ from pyclustering.cluster.syncnet import syncnet;
 
 from numpy import pi;
 
-from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
+from pyclustering.samples.definitions import SIMPLE_SAMPLES;
 
 
 class SyncnetIntegrationTest(unittest.TestCase):
@@ -121,7 +121,7 @@ class SyncnetIntegrationTest(unittest.TestCase):
         SyncnetTestTemplates.templateShowNetwork(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 2.0, True);
  
     def testShowNetwork3DimensionByCore(self):
-        SyncnetTestTemplates.templateShowNetwork(FCPS_SAMPLES.SAMPLE_HEPTA, 1.0, True);
+        SyncnetTestTemplates.templateShowNetwork(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, 1.0, True);
 
     def testCoreInterfaceIntInputData(self):
         result = False;

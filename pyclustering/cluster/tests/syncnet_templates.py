@@ -27,6 +27,7 @@
 from pyclustering.cluster.syncnet import syncnet;
 
 from pyclustering.utils import read_sample;
+from pyclustering.nnet import conn_represent;
 
 
 class SyncnetTestTemplates:
@@ -61,7 +62,8 @@ class SyncnetTestTemplates:
 
 
     @staticmethod
-    def templateShowNetwork(file, radius, ccore_flag):
+    def templateShowNetwork(file, radius, ccore_flag, connection_storage_type = conn_represent.MATRIX):
         sample = read_sample(file);
-        network = syncnet(sample, radius, ccore = ccore_flag);
+        network = syncnet(sample, radius, conn_repr = connection_storage_type, ccore = ccore_flag);
+
         network.show_network();

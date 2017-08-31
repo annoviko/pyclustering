@@ -33,7 +33,7 @@ matplotlib.use('Agg');
 from pyclustering.nnet import initial_type, conn_represent, solve_type;
 
 from pyclustering.cluster.tests.syncnet_templates import SyncnetTestTemplates;
-from pyclustering.cluster.syncnet import syncnet;
+from pyclustering.cluster.syncnet import syncnet, syncnet_visualizer;
 
 from pyclustering.utils import read_sample;
 
@@ -121,14 +121,27 @@ class SyncnetUnitTest(unittest.TestCase):
         SyncnetTestTemplates.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 2, 0.999, solve_type.FAST, initial_type.EQUIPARTITION, True, False, 0.05, conn_represent.MATRIX, [20, 10], False);
 
 
-    def templateShowNetwork(self, file, radius, ccore_flag):
-        sample = read_sample(file);
-        network = syncnet(sample, radius, ccore = ccore_flag);
-        network.show_network();
+    def testShowNetwork2DimensionMatrixRepr(self):
+        SyncnetTestTemplates.templateShowNetwork(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1.0, conn_represent.MATRIX, False);
+        SyncnetTestTemplates.templateShowNetwork(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 2.0, conn_represent.MATRIX, False);
 
-    def testShowNetwork2Dimension(self):
-        SyncnetTestTemplates.templateShowNetwork(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1.0, False);
-        SyncnetTestTemplates.templateShowNetwork(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 2.0, False);
+    def testShowNetwork2DimensionListRepr(self):
+        SyncnetTestTemplates.templateShowNetwork(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1.0, conn_represent.LIST, False);
+        SyncnetTestTemplates.templateShowNetwork(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 2.0, conn_represent.LIST, False);
+
+    def testShowNetwork3DimensionMatrixRepr(self):
+        SyncnetTestTemplates.templateShowNetwork(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, 1.0, conn_represent.MATRIX, False);
+
+    def testShowNetwork3DimensionListRepr(self):
+        SyncnetTestTemplates.templateShowNetwork(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, 1.0, conn_represent.LIST, False);
+
+
+    def testVisualizerNoFailure(self):
+        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1);
+        network = syncnet(sample, 1.0, ccore = False);
+
+        analyser = network.simulate(25, 5, solve_type.FAST, True);
+        syncnet_visualizer.animate_cluster_allocation(sample, analyser);
 
 
 if __name__ == "__main__":

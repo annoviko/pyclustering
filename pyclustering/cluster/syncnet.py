@@ -80,9 +80,7 @@ class syncnet_analyser(sync_dynamic):
         @param[in] indexes (list): List of real object indexes and it should be equal to amount of oscillators (in case of 'None' - indexes are in range [0; amount_oscillators]).
         @param[in] iteration (uint): Iteration of simulation that should be used for allocation.
         
-        @return (list) List of clusters, for example [ [cluster1], [cluster2], ... ].
-        
-        @see allocate_noise()
+        @return (list) List of clusters, for example [ [cluster1], [cluster2], ... ].)
         
         """
         
@@ -100,20 +98,6 @@ class syncnet_analyser(sync_dynamic):
         """
         
         return type_encoding.CLUSTER_INDEX_LIST_SEPARATION;
-
-
-    def allocate_noise(self):
-        """!
-        @brief Returns allocated noise.
-        
-        @remark Allocated noise can be returned only after data processing (use method process() before). Otherwise empty list is returned.
-        
-        @return (list) List of indexes that are marked as a noise.
-        
-        @see allocate_clusters()
-        
-        """         
-        return [];
 
 
 class syncnet_visualizer(sync_visualizer):

@@ -50,7 +50,9 @@ run_ut_ccore_job() {
 
     # run unit-tests and obtain code coverage
     make utrun
-    coveralls --exclude tst/ --exclude tools/ --gcov-options '\-lp'
+    
+    # step back to have full path to files in coverage reports
+    coveralls --root ../ --build-root . --exclude ccore/tst/ --exclude ccore/tools/ --gcov-options '\-lp'
 
     # return back (keep current folder)
     cd ../
