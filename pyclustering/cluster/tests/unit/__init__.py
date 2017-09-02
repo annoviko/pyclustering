@@ -30,23 +30,24 @@ import matplotlib;
 matplotlib.use('Agg');
 
 
-from pyclustering.cluster.tests.unit               import ut_agglomerative as cluster_agglomerative_unit_tests;
-from pyclustering.cluster.tests.unit               import ut_birch         as cluster_birch_unit_tests;
-from pyclustering.cluster.tests.unit               import ut_clarans       as cluster_clarans_unit_tests;
-from pyclustering.cluster.tests.unit               import ut_cure          as cluster_cure_unit_tests;
-from pyclustering.cluster.tests.unit               import ut_dbscan        as cluster_dbscan_unit_tests;
-from pyclustering.cluster.tests.unit               import ut_encoder       as cluster_encoder_unit_tests;
-from pyclustering.cluster.tests.unit               import ut_general       as cluster_general_unit_tests;
-from pyclustering.cluster.tests.unit               import ut_hsyncnet      as cluster_hsyncnet_unit_tests;
-from pyclustering.cluster.tests.unit               import ut_kmeans        as cluster_kmeans_unit_tests;
-from pyclustering.cluster.tests.unit               import ut_kmedians      as cluster_kmedians_unit_tests;
-from pyclustering.cluster.tests.unit               import ut_kmedoids      as cluster_kmedoids_unit_tests;
-from pyclustering.cluster.tests.unit               import ut_optics        as cluster_optics_unit_tests;
-from pyclustering.cluster.tests.unit               import ut_rock          as cluster_rock_unit_tests;
-from pyclustering.cluster.tests.unit               import ut_somsc         as cluster_somsc_unit_tests;
-from pyclustering.cluster.tests.unit               import ut_syncnet       as cluster_syncnet_unit_tests;
-from pyclustering.cluster.tests.unit               import ut_syncsom       as cluster_syncsom_unit_tests;
-from pyclustering.cluster.tests.unit               import ut_xmeans        as cluster_xmeans_unit_tests;
+from pyclustering.cluster.tests.unit               import ut_agglomerative      as cluster_agglomerative_unit_tests;
+from pyclustering.cluster.tests.unit               import ut_birch              as cluster_birch_unit_tests;
+from pyclustering.cluster.tests.unit               import ut_center_initializer as cluster_center_initializer_unit_tests;
+from pyclustering.cluster.tests.unit               import ut_clarans            as cluster_clarans_unit_tests;
+from pyclustering.cluster.tests.unit               import ut_cure               as cluster_cure_unit_tests;
+from pyclustering.cluster.tests.unit               import ut_dbscan             as cluster_dbscan_unit_tests;
+from pyclustering.cluster.tests.unit               import ut_encoder            as cluster_encoder_unit_tests;
+from pyclustering.cluster.tests.unit               import ut_general            as cluster_general_unit_tests;
+from pyclustering.cluster.tests.unit               import ut_hsyncnet           as cluster_hsyncnet_unit_tests;
+from pyclustering.cluster.tests.unit               import ut_kmeans             as cluster_kmeans_unit_tests;
+from pyclustering.cluster.tests.unit               import ut_kmedians           as cluster_kmedians_unit_tests;
+from pyclustering.cluster.tests.unit               import ut_kmedoids           as cluster_kmedoids_unit_tests;
+from pyclustering.cluster.tests.unit               import ut_optics             as cluster_optics_unit_tests;
+from pyclustering.cluster.tests.unit               import ut_rock               as cluster_rock_unit_tests;
+from pyclustering.cluster.tests.unit               import ut_somsc              as cluster_somsc_unit_tests;
+from pyclustering.cluster.tests.unit               import ut_syncnet            as cluster_syncnet_unit_tests;
+from pyclustering.cluster.tests.unit               import ut_syncsom            as cluster_syncsom_unit_tests;
+from pyclustering.cluster.tests.unit               import ut_xmeans             as cluster_xmeans_unit_tests;
 
 
 class clustering_unit_tests:
@@ -67,6 +68,7 @@ class clustering_unit_tests:
     def fill_suite(unit_cluster_suite):
         unit_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_agglomerative_unit_tests));
         unit_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_birch_unit_tests));
+        unit_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_center_initializer_unit_tests));
         unit_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_clarans_unit_tests));
         unit_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_cure_unit_tests));
         unit_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_dbscan_unit_tests));

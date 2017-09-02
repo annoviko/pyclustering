@@ -6,6 +6,8 @@ License: GNU General Public License
 
 E-Mail: pyclustering@yandex.ru
 
+Gitter: [![Chat on Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg)](https://gitter.im/pyclustering/pyclustering?utm_source=share-link&utm_medium=link&utm_campaign=share-link)
+
 PyClustering Wiki: https://github.com/annoviko/pyclustering/wiki
 
 Documentation: [![Documentation](https://codedocs.xyz/annoviko/pyclustering.svg)](https://codedocs.xyz/annoviko/pyclustering/)
@@ -64,6 +66,7 @@ In case of any questions, proposals or bugs related to the pyclustering please c
 - DBSCAN [Python, C++]
 - HSyncNet [Python, C++]
 - K-Means [Python, C++]
+- K-Means++ [Python]
 - K-Medians [Python, C++]
 - K-Medoids [Python, C++]
 - OPTICS [Python, C++]

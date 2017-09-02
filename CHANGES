@@ -5,6 +5,9 @@ CHANGE NOTES FOR 0.7.dev (STARTED Jun 01, 2016)
 ------------------------------------------------------------------------
 
 GENERAL CHANGES (pyclustering):
+- Implemented K-Means++ method for initialization of initial centers for algorithms like K-Means or X-Means (pyclustering.cluster.center_initializer).
+  See: https://github.com/annoviko/pyclustering/issues/354
+
 - Implemented fSync oscillatory network that is based on Landau-Stuart equation and Kuramoto model (pyclustering.nnet.fsync).
   See: https://github.com/annoviko/pyclustering/issues/168
 

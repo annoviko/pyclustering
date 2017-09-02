@@ -31,7 +31,7 @@ use python.h interface to communicate with python code due to requirement to sav
 
 PyClustering consists of six general modules where the algorithms, models, tools are placed:
 
-Cluster analysis algorithms (module pyclustering.cluster):
+Cluster analysis algorithms and methods (module pyclustering.cluster):
 - Agglomerative (pyclustering.cluster.agglomerative);
 - BIRCH (pyclustering.cluster.birch);
 - CLARANS (pyclustering.cluster.clarans);
@@ -39,6 +39,7 @@ Cluster analysis algorithms (module pyclustering.cluster):
 - DBSCAN (pyclustering.cluster.dbscan);
 - HSyncNet (bio-inspired algorithm pyclustering.cluster.hsyncnet);
 - K-Means (pyclustering.cluster.kmeans);
+- K-Means++ (pyclustering.cluster.center_initializer);
 - K-Medians (pyclustering.cluster.kmedians);
 - K-Medoids (pyclustering.cluster.kmedoids);
 - OPTICS (pyclustering.cluster.optics);
@@ -49,6 +50,7 @@ Cluster analysis algorithms (module pyclustering.cluster):
 
 Oscillatory and neural network models (module pyclustering.nnet):
 - Oscillatory network based on Hodgkin-Huxley model (pyclustering.nnet.hhn);
+- fSync: Oscillatory Network based on Landau-Stuart equation and Kuramoto model (pyclustering.nnet.fsync);
 - Hysteresis Oscillatory Network (pyclustering.nnet.hysteresis);
 - LEGION: Local Excitatory Global Inhibitory Oscillatory Network (pyclustering.nnet.legion);
 - PCNN: Pulse-Coupled Neural Network (pyclustering.nnet.pcnn);

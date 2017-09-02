@@ -78,7 +78,7 @@ class xmeans:
     @brief Class represents clustering algorithm X-Means.
     @details X-means clustering method starts with the assumption of having a minimum number of clusters, 
              and then dynamically increases them. X-means uses specified splitting criterion to control 
-             the process of splitting clusters.
+             the process of splitting clusters. Method K-Means++ can be used for calculation of initial centers.
     
     Example:
     @code
@@ -86,8 +86,9 @@ class xmeans:
         sample = read_sample(path_to_sample);
         
         # create object of X-Means algorithm that uses CCORE for processing
-        # initial centers - optional parameter, if it is None, then random center will be used by the algorithm
-        initial_centers = [ [0.0, 0.5] ];
+        # initial centers - optional parameter, if it is None, then random centers will be used by the algorithm.
+        # let's avoid random initial centers and initialize them using K-Means++ method:
+        initial_centers = kmeans_plusplus_initializer(sample, 2).initialize();
         xmeans_instance = xmeans(sample, initial_centers, ccore = True);
         
         # run cluster analysis
@@ -99,6 +100,8 @@ class xmeans:
         # display allocated clusters
         draw_clusters(sample, clusters);
     @endcode
+    
+    @see center_initializer
     
     """
     

@@ -37,7 +37,7 @@ class kmeans:
     """!
     @brief Class represents clustering algorithm K-Means.
     
-    Example:
+    Example #1 - Trivial clustering:
     @code
         # load list of points for cluster analysis
         sample = read_sample(path);
@@ -47,18 +47,41 @@ class kmeans:
         
         # run cluster analysis and obtain results
         kmeans_instance.process();
-        kmeans_instance.get_clusters();    
+        clusters = kmeans_instance.get_clusters();
     @endcode
+    
+    Example #2 - Clustering using K-Means++ for initialization:
+    @code
+        # load list of points for cluster analysis
+        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE2);
+        
+        # initialize initial centers using K-Means++ method
+        initial_centers = kmeans_plusplus_initializer(sample, 3).initialize();
+        
+        # create instance of K-Means algorithm with prepared centers
+        kmeans_instance = kmeans(sample, initial_centers);
+        
+        # run cluster analysis and obtain results
+        kmeans_instance.process();
+        clusters = kmeans_instance.get_clusters();
+        final_centers = kmeans_instance.get_centers();
+    @endcode
+    
+    @see center_initializer
+    
     """
     
     def __init__(self, data, initial_centers, tolerance = 0.25, ccore = False):
         """!
         @brief Constructor of clustering algorithm K-Means.
+        @details For initial centers initializer can be used, for example, K-Means++ method.
         
         @param[in] data (list): Input data that is presented as list of points (objects), each point should be represented by list or tuple.
         @param[in] initial_centers (list): Initial coordinates of centers of clusters that are represented by list: [center1, center2, ...].
         @param[in] tolerance (double): Stop condition: if maximum value of change of centers of clusters is less than tolerance than algorithm will stop processing
         @param[in] ccore (bool): Defines should be CCORE library (C++ pyclustering library) used instead of Python code or not.
+        
+        @see center_initializer
         
         """
         self.__pointer_data = data;

@@ -28,6 +28,11 @@ from enum import IntEnum;
 
 
 class type_encoding(IntEnum):
+    """!
+    @brief Enumeration of encoding types (index labeling, index list separation, object list separation).
+    
+    """
+    
     ## Results are represented by list of indexes and belonging to the cluster is defined by cluster index and element's position corresponds to object's position in input data, for example [0, 0, 1, 1, 1, 0].
     CLUSTER_INDEX_LABELING = 0;
     

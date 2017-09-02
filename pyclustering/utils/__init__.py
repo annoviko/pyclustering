@@ -290,7 +290,14 @@ def median(points, indexes = None):
 
 def euclidean_distance(a, b):
     """!
-    @brief Calculate Euclidian distance between vector a and b. 
+    @brief Calculate Euclidean distance between vector a and b. 
+    @details The Euclidean between vectors (points) a and b is calculated by following formula:
+    
+    \f[
+    dist(a, b) = \sqrt{ \sum_{i=0}^{N}(b_{i} - a_{i})^{2}) };
+    \f]
+    
+    Where N is a length of each vector.
     
     @param[in] a (list): The first vector.
     @param[in] b (list): The second vector.
@@ -318,12 +325,9 @@ def euclidean_distance_sqrt(a, b):
     
     if ( ((type(a) == float) and (type(b) == float)) or ((type(a) == int) and (type(b) == int)) ):
         return (a - b)**2.0;
-        
-    dimension = len(a);
-    # assert len(a) == len(b);
     
     distance = 0.0;
-    for i in range(0, dimension):
+    for i in range(0, len(a)):
         distance += (a[i] - b[i])**2.0;
         
     return distance;
