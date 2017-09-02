@@ -116,6 +116,11 @@ class SyncnetIntegrationTest(unittest.TestCase):
         SyncnetTestTemplates.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 2, 0.999, solve_type.FAST, initial_type.EQUIPARTITION, True, False, 0.05, conn_represent.MATRIX, [20, 10], True);
 
 
+    def testConnectionApiByCore(self):
+        SyncnetTestTemplates.templateConnectionApi(conn_represent.MATRIX, True);
+        SyncnetTestTemplates.templateConnectionApi(conn_represent.LIST, True);
+
+
     def testShowNetwork2DimensionByCore(self):
         SyncnetTestTemplates.templateShowNetwork(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1.0, True);
         SyncnetTestTemplates.templateShowNetwork(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 2.0, True);

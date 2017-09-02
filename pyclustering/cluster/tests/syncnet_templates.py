@@ -27,6 +27,7 @@
 from pyclustering.cluster.syncnet import syncnet;
 
 from pyclustering.utils import read_sample;
+from pyclustering.samples.definitions import SIMPLE_SAMPLES;
 from pyclustering.nnet import conn_represent;
 
 
@@ -67,3 +68,19 @@ class SyncnetTestTemplates:
         network = syncnet(sample, radius, conn_repr = connection_storage_type, ccore = ccore_flag);
 
         network.show_network();
+
+
+    @staticmethod
+    def templateConnectionApi(connection_storage_type, ccore_flag):
+        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1);
+        network = syncnet(sample, 15, conn_repr = connection_storage_type, ccore = ccore_flag);
+        
+        for i in range(len(network)):
+            neighbors = network.get_neighbors(i);
+            
+            assert len(neighbors) == len(network) - 1;
+            assert i not in neighbors;
+            
+            for j in range(len(network)):
+                if (i != j):
+                    assert network.has_connection(i, j) == True;

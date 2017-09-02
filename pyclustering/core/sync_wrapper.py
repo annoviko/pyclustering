@@ -37,6 +37,12 @@ def sync_create_network(num_osc, weight, frequency, type_conn, initial_phases):
     return pointer_network;
 
 
+def sync_get_size(pointer_network):
+    ccore = load_core();
+    ccore.sync_get_size.restype = c_size_t;
+    return ccore.sync_get_size(pointer_network);
+
+
 def sync_destroy_network(pointer_network):
     ccore = load_core();
     ccore.sync_destroy_network(pointer_network);

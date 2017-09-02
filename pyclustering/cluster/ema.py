@@ -29,3 +29,12 @@
 class ema:
     def __init__(self):
         pass;
+
+    def process(self):
+        pass;
+
+    def get_clusters(self):
+        pass;
+
+    def get_probabilities(self):
+        pass;

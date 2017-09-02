@@ -46,6 +46,15 @@ extern "C" DECLARATION void * sync_create_network(const unsigned int size, const
 
 /**
  *
+ * @brief   Returns size of the Sync oscillatory network that is defined by amount of oscillators.
+ *
+ * @param[in] pointer_network: pointer to the Sync network.
+ *
+ */
+extern "C" DECLARATION std::size_t sync_get_size(const void * pointer_network);
+
+/**
+ *
  * @brief   Destroy sync_network (calls destructor).
  *
  * @param[in] pointer_network: pointer to the Sync network.

@@ -29,6 +29,11 @@ void * sync_create_network(const unsigned int size, const double weight_factor, 
 }
 
 
+std::size_t sync_get_size(const void * pointer_network) {
+    return ((sync_network *) pointer_network)->size();
+}
+
+
 void sync_destroy_network(const void * pointer_network) {
     if (pointer_network != NULL) {
         delete (sync_network *) pointer_network;

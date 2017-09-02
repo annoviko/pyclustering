@@ -298,15 +298,11 @@ class sync_dynamic:
         
         """
         
-        if (start_iteration is None):
-            start_iteration = len(self._dynamic) - 1;
-        
-        if (stop_iteration is None):
-            stop_iteration = start_iteration + 1;
+        (start_iteration, stop_iteration) = self.__get_start_stop_iterations(start_iteration, stop_iteration);
         
         sequence_order = [];
         for index in range(start_iteration, stop_iteration):
-            sequence_order.append(sync_dynamic.calculate_sync_order(self._dynamic[index]));
+            sequence_order.append(sync_dynamic.calculate_sync_order(self.output[index]));
         
         return sequence_order;
 
@@ -337,6 +333,83 @@ class sync_dynamic:
         average_phase = math.expm1( abs(1j * (average_phase / len(oscillator_phases))) );
         
         return abs(average_phase) / abs(exp_amount);
+
+
+    def calculate_local_order_parameter(self, oscillatory_network, start_iteration = None, stop_iteration = None):
+        """!
+        @brief Calculates local order parameter.
+        @details Local order parameter or so-called level of local or partial synchronization is calculated by following expression:
+        
+        \f[
+        r_{c}=\left | \sum_{i=0}^{N} \frac{1}{N_{i}} \sum_{j=0}e^{ \theta_{j} - \theta_{i} } \right |;
+        \f]
+        
+        where N - total amount of oscillators in the network and \f$N_{i}\f$ - amount of neighbors of oscillator with index \f$i\f$.
+        
+        @param[in] oscillatory_network (sync): Sync oscillatory network whose structure of connections is required for calculation.
+        @param[in] start_iteration (uint): The first iteration that is used for calculation, if 'None' then the last iteration is used.
+        @param[in] stop_iteration (uint): The last iteration that is used for calculation, if 'None' then 'start_iteration' + 1 is used.
+        
+        @return (list) List of levels of local (partial) synchronization (local order parameter evolution).
+        
+        """
+
+        (start_iteration, stop_iteration) = self.__get_start_stop_iterations(start_iteration, stop_iteration);
+        
+        sequence_local_order = [];
+        for index in range(start_iteration, stop_iteration):
+            sequence_local_order.append(sync_dynamic.calculate_local_sync_order(self.output[index], oscillatory_network));
+        
+        return sequence_local_order;
+
+
+    @staticmethod
+    def calculate_local_sync_order(oscillator_phases, oscillatory_network):
+        """!
+        @brief Calculates level of local synchorization (local order parameter) for input phases for the specified network.
+        @details This parameter is tend 1.0 when the oscillatory network close to local synchronization and it tend to 0.0 when 
+                  desynchronization is observed in the network.
+        
+        @param[in] oscillator_phases (list): List of oscillator phases that are used for level of local (partial) synchronization.
+        @param[in] oscillatory_network (sync): Instance of oscillatory network whose connections are required for calculation.
+        
+        @return (double) Level of local synchronization (local order parameter).
+        
+        """
+        
+        exp_amount = 0.0;
+        num_neigh = 0.0;
+        
+        for i in range(0, len(oscillatory_network), 1):
+            for j in range(0, len(oscillatory_network), 1):
+                if (oscillatory_network.has_connection(i, j) == True):
+                    exp_amount += math.exp(-abs(oscillator_phases[j] - oscillator_phases[i]));
+                    num_neigh += 1.0;
+        
+        if (num_neigh == 0):
+            num_neigh = 1.0;
+        
+        return exp_amount / num_neigh;
+
+
+    def __get_start_stop_iterations(self, start_iteration, stop_iteration):
+        """!
+        @brief Aplly rules for start_iteration and stop_iteration parameters.
+
+        @param[in] start_iteration (uint): The first iteration that is used for calculation.
+        @param[in] stop_iteration (uint): The last iteration that is used for calculation.
+        
+        @return (tuple) New the first iteration and the last.
+        
+        """
+        if (start_iteration is None):
+            start_iteration = len(self._dynamic) - 1;
+        
+        if (stop_iteration is None):
+            stop_iteration = start_iteration + 1;
+        
+        return (start_iteration, stop_iteration);
+
 
 
 class sync_visualizer:
@@ -426,16 +499,33 @@ class sync_visualizer:
         
         """
         
-        if (start_iteration is None):
-            start_iteration = 0;
-        
-        if (stop_iteration is None):
-            stop_iteration = len(sync_output_dynamic);
+        (start_iteration, stop_iteration) = sync_visualizer.__get_start_stop_iterations(sync_output_dynamic, start_iteration, stop_iteration);
         
         order_parameter = sync_output_dynamic.calculate_order_parameter(start_iteration, stop_iteration);
         axis = plt.subplot(111);
         plt.plot(sync_output_dynamic.time[start_iteration:stop_iteration], order_parameter, 'b-', linewidth = 2.0);
         set_ax_param(axis, "t", "R (order parameter)", None, [0.0, 1.05]);
+        
+        plt.show();
+
+
+    @staticmethod
+    def show_local_order_parameter(sync_output_dynamic, oscillatory_network, start_iteration = None, stop_iteration = None):
+        """!
+        @brief Shows evolution of local order parameter (level of local synchronization in the network).
+        
+        @param[in] sync_output_dynamic (sync_dynamic): Output dynamic of the Sync network whose evolution of global synchronization should be visualized.
+        @param[in] oscillatory_network (sync): Sync oscillatory network whose structure of connections is required for calculation.
+        @param[in] start_iteration (uint): The first iteration that is used for calculation, if 'None' then the first is used
+        @param[in] stop_iteration (uint): The last iteration that is used for calculation, if 'None' then the last is used.
+        
+        """
+        (start_iteration, stop_iteration) = sync_visualizer.__get_start_stop_iterations(sync_output_dynamic, start_iteration, stop_iteration);
+        
+        order_parameter = sync_output_dynamic.calculate_local_order_parameter(oscillatory_network, start_iteration, stop_iteration);
+        axis = plt.subplot(111);
+        plt.plot(sync_output_dynamic.time[start_iteration:stop_iteration], order_parameter, 'b-', linewidth = 2.0);
+        set_ax_param(axis, "t", "R (local order parameter)", None, [0.0, 1.05]);
         
         plt.show();
 
@@ -545,6 +635,26 @@ class sync_visualizer:
             plt.show();
 
 
+    @staticmethod
+    def __get_start_stop_iterations(sync_output_dynamic, start_iteration, stop_iteration):
+        """!
+        @brief Apply rule of preparation for start iteration and stop iteration values.
+        
+        @param[in] sync_output_dynamic (sync_dynamic): Output dynamic of the Sync network.
+        @param[in] start_iteration (uint): The first iteration that is used for calculation.
+        @param[in] stop_iteration (uint): The last iteration that is used for calculation.
+        
+        @return (tuple) New values of start and stop iterations.
+        
+        """
+        if (start_iteration is None):
+            start_iteration = 0;
+        
+        if (stop_iteration is None):
+            stop_iteration = len(sync_output_dynamic);
+        
+        return (start_iteration, stop_iteration);
+
 
     @staticmethod
     def animate(sync_output_dynamic, title = None, save_movie = None):
@@ -615,6 +725,9 @@ class sync_network(network):
         
         if (ccore is True):
             self._ccore_network_pointer = wrapper.sync_create_network(num_osc, weight, frequency, type_conn, initial_phases);
+            self._num_osc = num_osc;
+            self._conn_represent = conn_represent.MATRIX;
+        
         else:   
             super().__init__(num_osc, type_conn, representation);
             
@@ -643,8 +756,8 @@ class sync_network(network):
         if (self._ccore_network_pointer is not None):
             wrapper.sync_destroy_network(self._ccore_network_pointer);
             self._ccore_network_pointer = None;
-    
-    
+
+
     def sync_order(self):
         """!
         @brief Calculates current level of global synchorization (order parameter) in the network.
@@ -691,19 +804,7 @@ class sync_network(network):
         if (self._ccore_network_pointer is not None):
             return wrapper.sync_local_order(self._ccore_network_pointer);
         
-        exp_amount = 0.0;
-        num_neigh = 0;
-        
-        for i in range(0, self._num_osc, 1):
-            for j in range(0, self._num_osc, 1):
-                if (self.has_connection(i, j) == True):
-                    exp_amount += math.exp(-abs(self._phases[j] - self._phases[i]));
-                    num_neigh += 1;
-        
-        if (num_neigh == 0):
-            num_neigh = 1;
-        
-        return exp_amount / num_neigh;
+        return sync_dynamic.calculate_local_sync_order(self._phases, self);
 
 
     def _phase_kuramoto(self, teta, t, argv):
@@ -890,7 +991,7 @@ class sync_network(network):
                 raise NameError("Solver '" + solution + "' is not supported");
         
         return next_phases;
-        
+
 
     def _phase_normalization(self, teta):
         """!
@@ -910,3 +1011,34 @@ class sync_network(network):
                 norm_teta += 2.0 * pi;
         
         return norm_teta;
+
+
+    def get_neighbors(self, index):
+        """!
+        @brief Finds neighbors of the oscillator with specified index.
+        
+        @param[in] index (uint): index of oscillator for which neighbors should be found in the network.
+        
+        @return (list) Indexes of neighbors of the specified oscillator.
+        
+        """
+        
+        if ( (self._ccore_network_pointer is not None) and (self._osc_conn is None) ):
+            self._osc_conn = wrapper.sync_connectivity_matrix(self._ccore_network_pointer);
+            
+        return super().get_neighbors(index);
+
+
+    def has_connection(self, i, j):
+        """!
+        @brief Returns True if there is connection between i and j oscillators and False - if connection doesn't exist.
+        
+        @param[in] i (uint): index of an oscillator in the network.
+        @param[in] j (uint): index of an oscillator in the network.
+        
+        """
+        
+        if ( (self._ccore_network_pointer is not None) and (self._osc_conn is None) ):
+            self._osc_conn = wrapper.sync_connectivity_matrix(self._ccore_network_pointer);
+        
+        return super().has_connection(i, j);

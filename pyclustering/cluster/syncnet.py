@@ -200,12 +200,12 @@ class syncnet(sync_network):
         
         """
         
-        self.__ccore_network_pointer = None;
+        self._ccore_network_pointer = None;
         self._osc_loc = sample;
         self._num_osc = len(sample);
         
         if (ccore is True):
-            self.__ccore_network_pointer = syncnet_create_network(sample, radius, initial_phases, enable_conn_weight);
+            self._ccore_network_pointer = syncnet_create_network(sample, radius, initial_phases, enable_conn_weight);
             
             # Default representation that is returned by CCORE is matrix.
             self._conn_represent = conn_represent.MATRIX;
@@ -219,7 +219,7 @@ class syncnet(sync_network):
             # Create connections.
             if (radius is not None):
                 self._create_connections(radius);
-    
+
 
     def __del__(self):
         """!
@@ -227,9 +227,9 @@ class syncnet(sync_network):
         
         """
         
-        if (self.__ccore_network_pointer is not None):
-            syncnet_destroy_network(self.__ccore_network_pointer);
-            self.__ccore_network_pointer = None;
+        if (self._ccore_network_pointer is not None):
+            syncnet_destroy_network(self._ccore_network_pointer);
+            self._ccore_network_pointer = None;
 
 
     def _create_connections(self, radius):
@@ -241,7 +241,7 @@ class syncnet(sync_network):
         """
         
         if (self._ena_conn_weight is True):
-            self._conn_weight = [[0] * self._num_osc for index in range(0, self._num_osc, 1)];
+            self._conn_weight = [[0] * self._num_osc for _ in range(0, self._num_osc, 1)];
         
         maximum_distance = 0;
         minimum_distance = float('inf');
@@ -289,8 +289,8 @@ class syncnet(sync_network):
         
         """
         
-        if (self.__ccore_network_pointer is not None):
-            pointer_output_dynamic = syncnet_process(self.__ccore_network_pointer, order, solution, collect_dynamic);
+        if (self._ccore_network_pointer is not None):
+            pointer_output_dynamic = syncnet_process(self._ccore_network_pointer, order, solution, collect_dynamic);
             return syncnet_analyser(None, None, pointer_output_dynamic);
         else:
             output_sync_dynamic = self.simulate_dynamic(order, solution, collect_dynamic);
@@ -333,8 +333,8 @@ class syncnet(sync_network):
         
         """
         
-        if ( (self.__ccore_network_pointer is not None) and (self._osc_conn is None) ):
-            self._osc_conn = sync_connectivity_matrix(self.__ccore_network_pointer);
+        if ( (self._ccore_network_pointer is not None) and (self._osc_conn is None) ):
+            self._osc_conn = sync_connectivity_matrix(self._ccore_network_pointer);
         
         dimension = len(self._osc_loc[0]);
         if ( (dimension != 3) and (dimension != 2) ):
@@ -385,4 +385,3 @@ class syncnet(sync_network):
                                
         plt.grid();
         plt.show();
-    

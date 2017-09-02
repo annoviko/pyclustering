@@ -36,18 +36,47 @@ from pyclustering.utils import pi;
 
 
 class Test(unittest.TestCase):
-    def testCreate(self):
-        network = sync_network(10, 1);
-        assert len(network) == 10;
-     
-     
+    def templateCreateNetwork(self, size, ccore_flag):
+        network = sync_network(size, 1, ccore = ccore_flag);
+        assert len(network) == size;
+
+    def testCreateNetwork(self):
+        self.templateCreateNetwork(1, False);
+        self.templateCreateNetwork(10, False);
+        self.templateCreateNetwork(55, False);
+
+    def testCreateNetworkByCore(self):
+        self.templateCreateNetwork(1, True);
+        self.templateCreateNetwork(10, True);
+        self.templateCreateNetwork(55, True);
+
     def testCreationDeletionByCore(self):
         # Crash occurs in case of memory leak
         for _ in range(0, 15):
             network = sync_network(4096, 1, type_conn = conn_type.ALL_TO_ALL, ccore = True);
             del network;
-       
-     
+
+
+    def templateConnectionsApi(self, size, ccore_flag):
+        network = sync_network(size, 1, type_conn = conn_type.ALL_TO_ALL, ccore = ccore_flag);
+        for i in range(len(network)):
+            for j in range(len(network)):
+                if (i != j):
+                    assert network.has_connection(i, j) == True;
+                    assert len(network.get_neighbors(i)) == size - 1, str(network.get_neighbors(i));
+                    assert len(network.get_neighbors(j)) == size - 1;
+
+    def testConnectionsApi(self):
+        self.templateConnectionsApi(1, False);
+        self.templateConnectionsApi(5, False);
+        self.templateConnectionsApi(10, False);
+
+    def testConnectionsApiByCore(self):
+        self.templateConnectionsApi(1, True);
+        self.templateConnectionsApi(5, True);
+        self.templateConnectionsApi(10, True);
+
+
     def testSyncOrderSingleOscillator(self):
         # Check for order parameter of network with one oscillator
         network = sync_network(1, 1);
@@ -264,14 +293,39 @@ class Test(unittest.TestCase):
         matrix = output_dynamic.allocate_correlation_matrix();
         assert matrix == [];
 
-    def testOutputDynamicCalculateOrderParameter(self):
-        net = sync_network(5);
+    def templateOutputDynamicCalculateOrderParameter(self, ccore_flag):
+        net = sync_network(5, ccore = ccore_flag);
         output_dynamic = net.simulate_static(20, 10, solution = solve_type.FAST, collect_dynamic = True);
         
         assert len(output_dynamic.calculate_order_parameter(0, 20)) == 20;
         assert len(output_dynamic.calculate_order_parameter()) == 1;
         assert len(output_dynamic.calculate_order_parameter(5)) == 1;
         assert len(output_dynamic.calculate_order_parameter(5, 10)) == 5;
+        assert output_dynamic.calculate_order_parameter(20)[0] > 0.9;
+
+    def testOutputDynamicCalculateOrderParameter(self):
+        self.templateOutputDynamicCalculateOrderParameter(False);
+
+    def testOutputDynamicCalculateOrderParameterByCore(self):
+        self.templateOutputDynamicCalculateOrderParameter(True);
+
+
+    def templateOutputDynamicCalculateLocalOrderParameter(self, ccore_flag):
+        net = sync_network(5, ccore = ccore_flag);
+        output_dynamic = net.simulate_static(20, 10, solution = solve_type.FAST, collect_dynamic = True);
+        
+        assert len(output_dynamic.calculate_local_order_parameter(net, 0, 20)) == 20;
+        assert len(output_dynamic.calculate_local_order_parameter(net)) == 1;
+        assert len(output_dynamic.calculate_local_order_parameter(net, 5)) == 1;
+        assert len(output_dynamic.calculate_local_order_parameter(net, 5, 10)) == 5;
+        assert output_dynamic.calculate_local_order_parameter(net, 20)[0] > 0.9;
+
+    def testOutputDynamicCalculateLocalOrderParameter(self):
+        self.templateOutputDynamicCalculateLocalOrderParameter(False);
+
+    def testOutputDynamicCalculateLocalOrderParameterByCore(self):
+        self.templateOutputDynamicCalculateLocalOrderParameter(True);
+
 
     def templateVisualizerNoFailures(self, size, velocity, ccore_flag):
         net = sync_network(size, ccore = ccore_flag);
@@ -285,6 +339,7 @@ class Test(unittest.TestCase):
         sync_visualizer.show_output_dynamic(output_dynamic);
         sync_visualizer.show_phase_matrix(output_dynamic, 1, size);
         sync_visualizer.show_order_parameter(output_dynamic);
+        sync_visualizer.show_local_order_parameter(output_dynamic, net);
 
     def testVisualizerOrderParameterNoFailures(self):
         net = sync_network(10, ccore = False);
@@ -294,6 +349,15 @@ class Test(unittest.TestCase):
         sync_visualizer.show_order_parameter(output_dynamic, 0);
         sync_visualizer.show_order_parameter(output_dynamic, 5);
         sync_visualizer.show_order_parameter(output_dynamic, 5, 20);
+
+    def testVisualizeLocalOrderParameterNoFailures(self):
+        net = sync_network(10, ccore = False);
+        output_dynamic = net.simulate_static(20, 10, solution = solve_type.FAST, collect_dynamic = True);
+
+        sync_visualizer.show_local_order_parameter(output_dynamic, net);
+        sync_visualizer.show_local_order_parameter(output_dynamic, net, 0);
+        sync_visualizer.show_local_order_parameter(output_dynamic, net, 5);
+        sync_visualizer.show_local_order_parameter(output_dynamic, net, 5, 20);
 
     def testVisualizerNoFailures(self):
         self.templateVisualizerNoFailures(5, 10, False);

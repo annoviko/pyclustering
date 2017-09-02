@@ -268,7 +268,7 @@ public:
      * @brief   Performs dynamic simulation of oscillatory network until stop condition is not
      *          reached. Stop condition is defined by input argument 'order'.
      *
-     * @param[in]  order: order of process synchronization, destributed 0..1.
+     * @param[in]  order: order of process synchronization, distributed 0..1.
      * @param[in]  step: time step of one iteration of simulation.
      * @param[in]  solver: type of solver for simulation.
      * @param[in]  collect_dynamic: if true - returns whole dynamic of oscillatory network,
@@ -287,14 +287,14 @@ public:
 
     /**
      *
-     * @brief   Returns size of the oscillatory network that is defined by amout of oscillators.
+     * @brief   Returns size of the oscillatory network that is defined by amount of oscillators.
      *
      */
     inline size_t size(void) const { return m_oscillators.size(); }
 
     /**
      *
-     * @brief   Returns connections represented by choosen adjacency collection.
+     * @brief   Returns connections represented by chosen adjacency collection.
      *
      */
     inline std::shared_ptr<adjacency_collection> connections(void) const { return m_connections; }

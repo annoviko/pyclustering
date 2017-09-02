@@ -136,6 +136,11 @@ class SyncnetUnitTest(unittest.TestCase):
         SyncnetTestTemplates.templateShowNetwork(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, 1.0, conn_represent.LIST, False);
 
 
+    def testConnectionApi(self):
+        SyncnetTestTemplates.templateConnectionApi(conn_represent.MATRIX, False);
+        SyncnetTestTemplates.templateConnectionApi(conn_represent.LIST, False);
+
+
     def testVisualizerNoFailure(self):
         sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1);
         network = syncnet(sample, 1.0, ccore = False);
