@@ -27,10 +27,10 @@
 
 
 static void template_create_delete(const connection_t type, const initial_type initial) {
-	sync_network * network = new sync_network(25, 1, 1, type, initial);
+    sync_network * network = new sync_network(25, 1, 1, type, initial);
 
-	ASSERT_EQ(25, network->size());
-	delete network;
+    ASSERT_EQ(25, network->size());
+    delete network;
 }
 
 TEST(utest_sync, create_delete_all_to_all_equipatition) {
@@ -240,4 +240,119 @@ TEST(utest_sync, correlation_matrix_not_similar_2) {
 
 TEST(utest_sync, correlation_matrix_one_oscillator) {
     template_correlation_matrix(sync_network_state(0, {1.0}));
+}
+
+
+static void template_sync_ordering(const std::size_t p_size, const std::size_t p_steps, const double p_time) {
+    sync_network network(p_size, 1, 0, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION);
+
+    sync_dynamic output_dynamic;
+    network.simulate_static(p_steps, p_time, solve_type::FAST, true, output_dynamic);
+
+    double order_parameter = sync_ordering::calculate_sync_order(output_dynamic[0].m_phase);
+    double local_order_parameter = sync_ordering::calculate_local_sync_order(network.connections(), output_dynamic[0].m_phase);
+
+    ASSERT_GT(0.8, order_parameter);
+    ASSERT_GT(0.8, local_order_parameter);
+
+    order_parameter = sync_ordering::calculate_sync_order(output_dynamic.back().m_phase);
+    local_order_parameter = sync_ordering::calculate_local_sync_order(network.connections(), output_dynamic.back().m_phase);
+
+    ASSERT_LT(0.9, order_parameter);
+    ASSERT_LT(0.9, local_order_parameter);
+}
+
+TEST(utest_sync, sync_ordering_20_steps) {
+    template_sync_ordering(10, 20, 5.0);
+}
+
+TEST(utest_sync, sync_ordering_50_steps) {
+    template_sync_ordering(10, 50, 5.0);
+}
+
+
+static void template_sync_order_sequence(
+        const std::size_t p_size,
+        const std::size_t p_steps,
+        const double p_time,
+        const std::size_t p_start,
+        const std::size_t p_stop,
+        const bool p_check_result) {
+
+    sync_network network(p_size, 1, 0, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION);
+
+    sync_dynamic output_dynamic;
+    network.simulate_static(p_steps, p_time, solve_type::FAST, true, output_dynamic);
+
+    std::vector<double> order_sequence;
+    std::vector<double> local_order_sequence;
+
+    output_dynamic.calculate_order_parameter(p_start, p_stop, order_sequence);
+    output_dynamic.calculate_local_order_parameter(network.connections(), p_start, p_stop, local_order_sequence);
+
+    ASSERT_EQ(p_stop - p_start, order_sequence.size());
+    ASSERT_EQ(p_stop - p_start, local_order_sequence.size());
+
+    ASSERT_EQ(p_steps + 1, output_dynamic.size());
+    ASSERT_GE(output_dynamic.size(), order_sequence.size());
+
+    if (p_check_result) {
+        ASSERT_GT(0.8, order_sequence.front());
+        ASSERT_GT(0.8, local_order_sequence.front());
+
+        ASSERT_LT(0.9, order_sequence.back());
+        ASSERT_LT(0.9, local_order_sequence.back());
+    }
+}
+
+TEST(utest_sync, sync_sequence_ordering_10_steps_full) {
+    template_sync_order_sequence(10, 10, 5.0, 0, 11 /* the initial state of the network */, true);
+}
+
+TEST(utest_sync, sync_sequence_ordering_10_steps_20_size_full) {
+    template_sync_order_sequence(20, 10, 5.0, 0, 11 /* the initial state of the network */, true);
+}
+
+TEST(utest_sync, sync_sequence_ordering_10_steps_100_size_full) {
+    template_sync_order_sequence(100, 10, 5.0, 0, 11 /* the initial state of the network */, true);
+}
+
+TEST(utest_sync, sync_sequence_ordering_30_steps_200_size_full) {
+    template_sync_order_sequence(200, 30, 5.0, 0, 11 /* the initial state of the network */, true);
+}
+
+TEST(utest_sync, sync_sequence_ordering_20_steps_full) {
+    template_sync_order_sequence(10, 20, 5.0, 0, 21 /* the initial state of the network */, true);
+}
+
+TEST(utest_sync, sync_sequence_ordering_50_steps_full) {
+    template_sync_order_sequence(10, 50, 5.0, 0, 51 /* the initial state of the network */, true);
+}
+
+TEST(utest_sync, sync_sequence_ordering_200_steps_full) {
+    template_sync_order_sequence(10, 200, 5.0, 0, 201 /* the initial state of the network */, true);
+}
+
+TEST(utest_sync, sync_sequence_ordering_10_oscillators_partial) {
+    template_sync_order_sequence(10, 20, 5.0, 10, 15, false);
+}
+
+TEST(utest_sync, sync_sequence_ordering_20_oscillators_partial) {
+    template_sync_order_sequence(20, 20, 5.0, 10, 15, false);
+}
+
+TEST(utest_sync, sync_sequence_ordering_40_oscillators_partial) {
+    template_sync_order_sequence(40, 20, 5.0, 10, 15, false);
+}
+
+TEST(utest_sync, sync_sequence_ordering_one_back) {
+    template_sync_order_sequence(10, 20, 5.0, 10, 11, false);
+}
+
+TEST(utest_sync, sync_sequence_ordering_one_front) {
+    template_sync_order_sequence(10, 20, 5.0, 0, 1, false);
+}
+
+TEST(utest_sync, sync_sequence_ordering_one_middle) {
+    template_sync_order_sequence(10, 20, 5.0, 5, 6, false);
 }

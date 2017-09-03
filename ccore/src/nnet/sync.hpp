@@ -60,31 +60,137 @@ typedef std::vector<double>           sync_corr_row;
 typedef std::vector<sync_corr_row>    sync_corr_matrix;
 
 
+/**
+ *
+ * @brief   Oscillatory network state where oscillator phases and corresponding time-point are stored.
+ *
+ */
 typedef struct sync_network_state {
 public:
-    std::vector<double> m_phase;
-    double m_time;
+    std::vector<double>     m_phase = { };
+    double                  m_time = 0.0;
 
 public:
-    sync_network_state(void) : m_time(0.0) { }
+    sync_network_state(void) = default;
 
-    sync_network_state(const unsigned int size) : m_phase(size, 0.0), m_time(0.0) { }
+    sync_network_state(const sync_network_state & p_other) = default;
 
-    sync_network_state(double time, std::vector<double> phases) : m_phase(phases), m_time(time) { }
+    sync_network_state(sync_network_state && p_other) = default;
 
-    inline size_t size(void) const { return m_phase.size(); }
+    sync_network_state(const std::size_t size) :
+        m_phase(size, 0.0), m_time(0.0) { }
 
-    inline sync_network_state & operator=(const sync_network_state & other) {
-        if (this != &other) {
-            m_phase.resize(other.size());
-            std::copy(other.m_phase.cbegin(), other.m_phase.cend(), m_phase.begin());
+    sync_network_state(const double time, const std::vector<double> & phases) :
+        m_phase(phases), m_time(time) { }
 
-            m_time = other.m_time;
-        }
+    sync_network_state(const double time, const std::initializer_list<double> & initializer) :
+        m_phase(initializer), m_time(time) { }
 
-        return *this;
-    }
+public:
+    inline std::size_t size(void) const { return m_phase.size(); }
+
+public:
+    sync_network_state & operator=(const sync_network_state & other) = default;
+
+    sync_network_state & operator=(sync_network_state && other) = default;
 } sync_network_state;
+
+
+/**
+ *
+ * @brief   Provides methods related to calculation of ordering parameters.
+ *
+ */
+class sync_ordering {
+private:
+    using phase_getter = std::function<double(std::size_t)>;
+
+public:
+    /**
+     *
+     * @brief   Default constructor is forbidden.
+     *
+     */
+    sync_ordering(void) = delete;
+
+    /**
+     *
+     * @brief   Default destructor is forbidden.
+     *
+     */
+    ~sync_ordering(void) = delete;
+
+public:
+    /**
+     *
+     * @brief    Calculates level of global synchronization (order parameter) for input phases.
+     * @details  This parameter is tend 1.0 when the oscillatory network close to global synchronization and it
+     *            tend to 0.0 when desynchronization is observed in the network.
+     *
+     * @param[in]  p_phases: Oscillator phases that are used for calculation.
+     *
+     * @return  Order parameter for the specified state.
+     *
+     */
+    static double calculate_sync_order(const std::vector<double> & p_phases);
+
+    /**
+     *
+     * @brief    Calculates level of global synchronization (order parameter) for input phases.
+     * @details  This parameter is tend 1.0 when the oscillatory network close to global synchronization and it
+     *            tend to 0.0 when desynchronization is observed in the network.
+     *
+     * @param[in]  p_oscillators: Network oscillators that are used for calculation.
+     *
+     * @return  Order parameter for the specified state.
+     *
+     */
+    static double calculate_sync_order(const std::vector<sync_oscillator> & p_oscillators);
+
+    /**
+     *
+     * @brief    Calculates level of local synchronization (order parameter) for input phases.
+     * @details  This parameter is tend 1.0 when the oscillatory network close to global synchronization and it
+     *            tend to 0.0 when desynchronization is observed in the network.
+     *
+     * @param[in]  p_connections: Connections between oscillators in the network for which calculation is performed.
+     * @param[in]  p_phases: Oscillator phases that are used for calculation.
+     *
+     * @return  Order parameter for the specified state.
+     *
+     */
+    static double calculate_local_sync_order(
+            const std::shared_ptr<adjacency_collection> p_connections,
+            const std::vector<double> & p_phases);
+
+    /**
+     *
+     * @brief    Calculates level of local synchronization (order parameter) for input phases.
+     * @details  This parameter is tend 1.0 when the oscillatory network close to global synchronization and it
+     *            tend to 0.0 when desynchronization is observed in the network.
+     *
+     * @param[in]  p_connections: Connections between oscillators in the network for which calculation is performed.
+     * @param[in]  p_oscillators: Network oscillators that are used for calculation.
+     *
+     * @return  Order parameter for the specified state.
+     *
+     */
+    static double calculate_local_sync_order(
+            const std::shared_ptr<adjacency_collection> p_connections,
+            const std::vector<sync_oscillator> & p_oscillators);
+
+private:
+    template <class TypeContainer>
+    static double calculate_sync_order_parameter(
+            const TypeContainer & p_container,
+            const phase_getter & p_getter);
+
+    template <class TypeContainer>
+    static double calculate_local_sync_order_parameter(
+            const std::shared_ptr<adjacency_collection> p_connections,
+            const TypeContainer & p_container,
+            const phase_getter & p_getter);
+};
 
 
 /**
@@ -126,7 +232,7 @@ public:
      *              indexes of oscillators that are synchronous to each other.
      *
      */
-    void allocate_sync_ensembles(const double tolerance, const size_t iteration, ensemble_data<sync_ensemble> & ensembles) const;
+    void allocate_sync_ensembles(const double tolerance, const std::size_t iteration, ensemble_data<sync_ensemble> & ensembles) const;
 
     /**
      *
@@ -146,7 +252,37 @@ public:
      * @param[out] p_matrix: correlation matrix between oscillators on specified iteration.
      *
      */
-    void allocate_correlation_matrix(const size_t p_iteration, sync_corr_matrix & p_matrix) const;
+    void allocate_correlation_matrix(const std::size_t p_iteration, sync_corr_matrix & p_matrix) const;
+
+    /**
+     *
+     * @brief Calculates evolution of level of global synchronization (order parameter).
+     *
+     * @param[in] start_iteration: The first iteration that is used for calculation.
+     * @param[in] stop_iteration: The last iteration that is used for calculation.
+     * @param[out] sequence_order: Evolution of order parameter.
+     *
+     */
+    void calculate_order_parameter(
+            const std::size_t start_iteration,
+            const std::size_t stop_iteration,
+            std::vector<double> & sequence_order) const;
+
+    /**
+     *
+     * @brief Calculates evolution of level of partial synchronization (local order parameter).
+     *
+     * @param[in] connections: Connections of Sync oscillatory network.
+     * @param[in] start_iteration: The first iteration that is used for calculation.
+     * @param[in] stop_iteration: The last iteration that is used for calculation.
+     * @param[out] sequence_order: Evolution of local order parameter.
+     *
+     */
+    void calculate_local_order_parameter(
+            const std::shared_ptr<adjacency_collection> & connections,
+            const std::size_t start_iteration,
+            const std::size_t stop_iteration,
+            std::vector<double> & sequence_local_order) const;
 };
 
 
@@ -206,12 +342,12 @@ public:
     * @param[in] initial_phases: type of initialization of initial phases of oscillators.
     *
     */
-    sync_network(const size_t size,
+    sync_network(const std::size_t size,
         const double weight_factor,
         const double frequency_factor,
         const connection_t connection_type,
-        const size_t height,
-        const size_t width,
+        const std::size_t height,
+        const std::size_t width,
         const initial_type initial_phases);
 
     /**
@@ -223,21 +359,20 @@ public:
 
 
 public:
-
     /**
      *
-     * @brief   Calculates level of global synchorization in the network.
+     * @brief   Calculates level of global synchronization in the network.
      *
-     * @return  Return level of global synchorization in the network.
+     * @return  Return level of global synchronization in the network.
      *
      */
     virtual double sync_order(void) const;
 
     /**
      *
-     * @brief   Calculates level of local (partial) synchorization in the network.
+     * @brief   Calculates level of local (partial) synchronization in the network.
      *
-     * @return  Return level of local (partial) synchorization in the network.
+     * @return  Return level of local (partial) synchronization in the network.
      *
      */
     virtual double sync_local_order(void) const;
@@ -245,6 +380,9 @@ public:
     /**
      *
      * @brief   Performs static simulation of oscillatory network.
+     * @details In case 'collect_dynamic = True' output dynamic will consists all steps of simulation
+     *           and the initial state of the network, for example, in case of 20 steps, length of
+     *           output dynamic will be 21 (20 simulation steps + 1 initial state).
      *
      * @param[in]  steps: number steps of simulations during simulation.
      * @param[in]  time: time of simulation.
@@ -257,7 +395,7 @@ public:
      *
      */
     virtual void simulate_static(
-        const unsigned int steps,
+        const std::size_t steps,
         const double time,
         const solve_type solver,
         const bool collect_dynamic,
@@ -266,7 +404,10 @@ public:
     /**
      *
      * @brief   Performs dynamic simulation of oscillatory network until stop condition is not
-     *          reached. Stop condition is defined by input argument 'order'.
+     *           reached. Stop condition is defined by input argument 'order'.
+     * @details In case 'collect_dynamic = True' output dynamic will consists all steps of simulation
+     *           and the initial state of the network, for example, in case of 20 steps, length of
+     *           output dynamic will be 21 (20 simulation steps + 1 initial state).
      *
      * @param[in]  order: order of process synchronization, distributed 0..1.
      * @param[in]  step: time step of one iteration of simulation.
@@ -290,7 +431,7 @@ public:
      * @brief   Returns size of the oscillatory network that is defined by amount of oscillators.
      *
      */
-    inline size_t size(void) const { return m_oscillators.size(); }
+    inline std::size_t size(void) const { return m_oscillators.size(); }
 
     /**
      *
@@ -300,7 +441,6 @@ public:
     inline std::shared_ptr<adjacency_collection> connections(void) const { return m_connections; }
 
 protected:
-
     /**
      *
      * @brief   Normalization of phase of oscillator that should be placed between [0; 2 * pi].

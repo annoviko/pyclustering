@@ -20,7 +20,6 @@
 
 #include "nnet/sync.hpp"
 
-#include <iostream>
 #include <cmath>
 #include <random>
 #include <complex>
@@ -44,6 +43,78 @@ using namespace differential;
 const size_t sync_network::MAXIMUM_MATRIX_REPRESENTATION_SIZE = 4096;
 
 
+
+double sync_ordering::calculate_sync_order(const std::vector<double> & p_phases) {
+    phase_getter getter = [&p_phases](std::size_t index){ return p_phases[index]; };
+    return calculate_sync_order_parameter(p_phases, getter);
+}
+
+
+double sync_ordering::calculate_sync_order(const std::vector<sync_oscillator> & p_oscillators) {
+    phase_getter getter = [&p_oscillators](std::size_t index){ return p_oscillators[index].phase; };
+    return calculate_sync_order_parameter(p_oscillators, getter);
+}
+
+
+template <class TypeContainer>
+double sync_ordering::calculate_sync_order_parameter(const TypeContainer & p_container, const phase_getter & p_getter) {
+    double exp_amount = 0.0;
+    double average_phase = 0.0;
+
+    for (std::size_t index = 0; index < p_container.size(); index++) {
+        const double phase = p_getter(index);
+
+        exp_amount += std::exp( std::abs( std::complex<double>(0, 1) * phase ) );
+        average_phase += phase;
+    }
+
+    exp_amount /= p_container.size();
+    average_phase = std::exp( std::abs( std::complex<double>(0, 1) * (average_phase / p_container.size()) ) );
+
+    return std::abs(average_phase) / std::abs(exp_amount);
+}
+
+
+double sync_ordering::calculate_local_sync_order(const std::shared_ptr<adjacency_collection> p_connections, const std::vector<double> & p_phases) {
+    phase_getter getter = [&p_phases](std::size_t index){ return p_phases[index]; };
+    return calculate_local_sync_order_parameter(p_connections, p_phases, getter);
+}
+
+
+double sync_ordering::calculate_local_sync_order(const std::shared_ptr<adjacency_collection> p_connections, const std::vector<sync_oscillator> & p_oscillators) {
+    phase_getter getter = [&p_oscillators](std::size_t index){ return p_oscillators[index].phase; };
+    return calculate_local_sync_order_parameter(p_connections, p_oscillators, getter);
+}
+
+
+template <class TypeContainer>
+double sync_ordering::calculate_local_sync_order_parameter(const std::shared_ptr<adjacency_collection> p_connections, const TypeContainer & p_container, const phase_getter & p_getter) {
+    double exp_amount = 0.0;
+    double number_neighbors = 0.0;
+
+    for (std::size_t i = 0; i < p_container.size(); i++) {
+        double phase = p_getter(i);
+
+        std::vector<std::size_t> neighbors;
+        p_connections->get_neighbors(i, neighbors);
+
+        for (auto & index_neighbor : neighbors) {
+            double phase_neighbor = p_getter(index_neighbor);
+            exp_amount += std::exp( -std::abs( phase_neighbor - phase ) );
+        }
+
+        number_neighbors += neighbors.size();
+    }
+
+    if (number_neighbors == 0.0) {
+        number_neighbors = 1.0;
+    }
+
+    return exp_amount / number_neighbors;
+}
+
+
+
 sync_network::sync_network(const size_t size, const double weight_factor, const double frequency_factor, const connection_t connection_type, const initial_type initial_phases) {
     initialize(size, weight_factor, frequency_factor, connection_type, 0, 0, initial_phases);
 }
@@ -57,7 +128,7 @@ sync_network::sync_network(const size_t size, const double weight_factor,  const
 sync_network::~sync_network(void) { }
 
 
-void sync_network::initialize(const size_t size, const double weight_factor, const double frequency_factor, const connection_t connection_type, const size_t height, const size_t width, const initial_type initial_phases) {
+void sync_network::initialize(const std::size_t size, const double weight_factor, const double frequency_factor, const connection_t connection_type, const std::size_t height, const std::size_t width, const initial_type initial_phases) {
     m_oscillators = std::vector<sync_oscillator>(size, sync_oscillator());
     
     if (size > MAXIMUM_MATRIX_REPRESENTATION_SIZE) {
@@ -85,7 +156,7 @@ void sync_network::initialize(const size_t size, const double weight_factor, con
     std::uniform_real_distribution<double>	phase_distribution(0.0, 2.0 * pi());
     std::uniform_real_distribution<double>	frequency_distribution(0.0, 1.0);
 
-    for (unsigned int index = 0; index < size; index++) {
+    for (std::size_t index = 0; index < size; index++) {
         sync_oscillator & oscillator_context = m_oscillators[index];
 
         switch (initial_phases) {
@@ -104,43 +175,13 @@ void sync_network::initialize(const size_t size, const double weight_factor, con
 }
 
 
-double sync_network::sync_order() const {
-	double exp_amount = 0;
-	double average_phase = 0;
-
-	for (unsigned int index = 0; index < size(); index++) {
-		exp_amount += std::exp( std::abs( std::complex<double>(0, 1) * m_oscillators[index].phase ) );
-		average_phase += m_oscillators[index].phase;
-	}
-
-	exp_amount /= size();
-	average_phase = std::exp( std::abs( std::complex<double>(0, 1) * (average_phase / size()) ) );
-
-	return std::abs(average_phase) / std::abs(exp_amount);
+double sync_network::sync_order(void) const {
+    return sync_ordering::calculate_sync_order(m_oscillators);
 }
 
 
-double sync_network::sync_local_order() const {
-	double			exp_amount = 0.0;
-	double			number_neighbors = 0;
-
-	for (unsigned int i = 0; i < size(); i++) {
-        std::vector<size_t> neighbors;
-        m_connections->get_neighbors(i, neighbors);
-
-        for (std::vector<size_t>::const_iterator iter_index = neighbors.begin(); iter_index != neighbors.cend(); iter_index++) {
-			unsigned int index_neighbor = *(iter_index);
-			exp_amount += std::exp( -std::abs( m_oscillators[index_neighbor].phase - m_oscillators[i].phase ) );	
-		}
-
-		number_neighbors += neighbors.size();
-	}
-
-	if (number_neighbors == 0.0) {
-		number_neighbors = 1.0;
-	}
-	
-	return exp_amount / number_neighbors;
+double sync_network::sync_local_order(void) const {
+    return sync_ordering::calculate_local_sync_order(m_connections, m_oscillators);
 }
 
 
@@ -150,149 +191,151 @@ void sync_network::set_callback_solver(sync_callback_solver solver) {
 
 
 void sync_network::adapter_phase_kuramoto(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs) {
-	outputs.resize(1);
-	outputs[0] = ((sync_network *) argv[0])->phase_kuramoto(t, inputs[0], argv);
+    outputs.resize(1);
+    outputs[0] = ((sync_network *) argv[0])->phase_kuramoto(t, inputs[0], argv);
 }
 
 
 double sync_network::phase_kuramoto(const double t, const double teta, const std::vector<void *> & argv) const {
-    unsigned int index = *(unsigned int *) argv[1];
-	double phase = 0.0;
+    std::size_t index = *(std::size_t *) argv[1];
+    double phase = 0.0;
 
     std::vector<size_t> neighbors;
     m_connections->get_neighbors(index, neighbors);
 
-    for (std::vector<size_t>::const_iterator index_iterator = neighbors.cbegin(); index_iterator != neighbors.cend(); index_iterator++) {
-		unsigned int index_neighbor = (*index_iterator);
-		phase += std::sin(m_oscillators[index_neighbor].phase - teta);
-	}
+    for (auto & index_neighbor : neighbors) {
+        phase += std::sin(m_oscillators[index_neighbor].phase - teta);
+    }
 
-	phase = m_oscillators[index].frequency + (phase * weight / size());
-	return phase;
+    phase = m_oscillators[index].frequency + (phase * weight / size());
+    return phase;
 }
 
 
-void sync_network::simulate_static(const unsigned int steps, const double time,  const solve_type solver, const bool collect_dynamic, sync_dynamic & output_dynamic) {
+void sync_network::simulate_static(const std::size_t steps, const double time, const solve_type solver, const bool collect_dynamic, sync_dynamic & output_dynamic) {
     output_dynamic.clear();
 
     const double step = time / (double) steps;
     const double int_step = step / 10.0;
 
-    store_dynamic(0.0, collect_dynamic, output_dynamic);	/* store initial state */
+    store_dynamic(0.0, collect_dynamic, output_dynamic);    /* store initial state */
 
-    for (double cur_time = step; cur_time < (time + step); cur_time += step) {
+    double cur_time = step;
+    for (std::size_t cur_step = 0; cur_step < steps; cur_step++) {
         calculate_phases(solver, cur_time, step, int_step);
 
-        store_dynamic(cur_time, collect_dynamic, output_dynamic);	/* store initial state */
+        store_dynamic(cur_time, collect_dynamic, output_dynamic);
+
+        cur_time += step;
     }
 }
 
 
 void sync_network::simulate_dynamic(const double order, const double step, const solve_type solver, const bool collect_dynamic, sync_dynamic & output_dynamic) {
-	output_dynamic.clear();
+    output_dynamic.clear();
 
-	double previous_order = 0.0;
-	double current_order = sync_local_order();
+    store_dynamic(0, collect_dynamic, output_dynamic);     /* store initial state */
 
-	double integration_step = step / 10;
+    double previous_order = 0.0;
+    double current_order = sync_local_order();
 
-	store_dynamic(0, collect_dynamic, output_dynamic);     /* store initial state */
+    double integration_step = step / 10;
 
-	for (double time_counter = step; current_order < order; time_counter += step) {
-		calculate_phases(solver, time_counter, step, integration_step);
+    for (double time_counter = step; current_order < order; time_counter += step) {
+        calculate_phases(solver, time_counter, step, integration_step);
 
-		store_dynamic(time_counter, collect_dynamic, output_dynamic);
+        store_dynamic(time_counter, collect_dynamic, output_dynamic);
 
-		previous_order = current_order;
-		current_order = sync_local_order();
+        previous_order = current_order;
+        current_order = sync_local_order();
 
-		if (std::abs(current_order - previous_order) < 0.000001) {
-			// std::cout << "Warning: sync_network::simulate_dynamic - simulation is aborted due to low level of convergence rate (order = " << current_order << ")." << std::endl;
-			break;
-		}
-	}
+        if (std::abs(current_order - previous_order) < 0.000001) {
+            // std::cout << "Warning: sync_network::simulate_dynamic - simulation is aborted due to low level of convergence rate (order = " << current_order << ")." << std::endl;
+            break;
+        }
+    }
 }
 
 
 void sync_network::store_dynamic(const double time, const bool collect_dynamic, sync_dynamic & output_dynamic) const {
-	sync_network_state state(size());
+    sync_network_state state(size());
 
-	for (unsigned int index = 0; index < size(); index++) {
-		state.m_phase[index] = m_oscillators[index].phase;
-	}
+    for (std::size_t index = 0; index < size(); index++) {
+        state.m_phase[index] = m_oscillators[index].phase;
+    }
 
-	state.m_time = time;
-	
-	if ( (collect_dynamic == false) && (!output_dynamic.empty()) ) {
-		output_dynamic[0] = state;
-	}
-	else {
-		output_dynamic.push_back(state);
-	}
+    state.m_time = time;
+
+    if ( (collect_dynamic == false) && (!output_dynamic.empty()) ) {
+        output_dynamic[0] = state;
+    }
+    else {
+        output_dynamic.push_back(state);
+    }
 }
 
 
 void sync_network::calculate_phases(const solve_type solver, const double t, const double step, const double int_step) {
-	std::vector<double> next_phases(size(), 0);
-	std::vector<void *> argv(2, NULL);
+    std::vector<double> next_phases(size(), 0);
+    std::vector<void *> argv(2, NULL);
 
-	argv[0] = (void *) this;
+    argv[0] = (void *) this;
 
-	unsigned int number_int_steps = (unsigned int) (step / int_step);
+    std::size_t number_int_steps = (std::size_t) (step / int_step);
 
-	for (unsigned int index = 0; index < size(); index++) {
-		argv[1] = (void *) &index;
+    for (std::size_t index = 0; index < size(); index++) {
+        argv[1] = (void *) &index;
 
-		switch(solver) {
-			case solve_type::FAST: {
-				double result = m_oscillators[index].phase + phase_kuramoto(t, m_oscillators[index].phase, argv);
-				next_phases[index] = phase_normalization(result);
-				break;
-			}
-			case solve_type::RK4: {
-				differ_state<double> inputs(1, m_oscillators[index].phase);
-				differ_result<double> outputs;
+        switch(solver) {
+            case solve_type::FAST: {
+                double result = m_oscillators[index].phase + phase_kuramoto(t, m_oscillators[index].phase, argv);
+                next_phases[index] = phase_normalization(result);
+                break;
+            }
+            case solve_type::RK4: {
+                differ_state<double> inputs(1, m_oscillators[index].phase);
+                differ_result<double> outputs;
 
-				runge_kutta_4(m_callback_solver, inputs, t, t + step, number_int_steps, false, argv, outputs);
-				next_phases[index] = phase_normalization( outputs[0].state[0] );
+                runge_kutta_4(m_callback_solver, inputs, t, t + step, number_int_steps, false, argv, outputs);
+                next_phases[index] = phase_normalization( outputs[0].state[0] );
 
-				break;
-			}
-			case solve_type::RKF45: {
-				differ_state<double> inputs(1, m_oscillators[index].phase);
-				differ_result<double> outputs;
+                break;
+            }
+            case solve_type::RKF45: {
+                differ_state<double> inputs(1, m_oscillators[index].phase);
+                differ_result<double> outputs;
 
-				runge_kutta_fehlberg_45(m_callback_solver, inputs, t, t + step, 0.00001, false, argv, outputs);
-				next_phases[index] = phase_normalization( outputs[0].state[0] );
+                runge_kutta_fehlberg_45(m_callback_solver, inputs, t, t + step, 0.00001, false, argv, outputs);
+                next_phases[index] = phase_normalization( outputs[0].state[0] );
 
-				break;
-			}
-			default: {
-				throw std::runtime_error("Unknown type of solver");
-			}
-		}
-	}
+                break;
+            }
+            default: {
+                throw std::runtime_error("Unknown type of solver");
+            }
+        }
+    }
 
-	/* store result */
-	for (unsigned int index = 0; index < size(); index++) {
-		m_oscillators[index].phase = next_phases[index];
-	}
+    /* store result */
+    for (std::size_t index = 0; index < size(); index++) {
+        m_oscillators[index].phase = next_phases[index];
+    }
 }
 
 
 double sync_network::phase_normalization(const double teta) const {
-	double norm_teta = teta;
+    double norm_teta = teta;
 
-	while ( (norm_teta > 2.0 * pi()) || (norm_teta < 0.0) ) {
-		if (norm_teta > 2.0 * pi()) {
-			norm_teta -= 2.0 * pi();
-		}
-		else {
-			norm_teta += 2.0 * pi();
-		}
-	}
+    while ( (norm_teta > 2.0 * pi()) || (norm_teta < 0.0) ) {
+        if (norm_teta > 2.0 * pi()) {
+            norm_teta -= 2.0 * pi();
+        }
+        else {
+            norm_teta += 2.0 * pi();
+        }
+    }
 
-	return norm_teta;
+    return norm_teta;
 }
 
 
@@ -376,5 +419,25 @@ void sync_dynamic::allocate_correlation_matrix(const size_t p_iteration, sync_co
             p_matrix[i][j] = std::abs(std::sin(phase1 - phase2));
             p_matrix[j][i] = p_matrix[i][j];
         }
+    }
+}
+
+
+void sync_dynamic::calculate_order_parameter(const std::size_t start_iteration, const std::size_t stop_iteration, std::vector<double> & sequence_order) const {
+    sequence_order.resize(stop_iteration - start_iteration, 0.0);
+
+    for (std::size_t i = start_iteration; i < stop_iteration; i++) {
+        const double order_value =  sync_ordering::calculate_sync_order(at(i).m_phase);
+        sequence_order[i - start_iteration] = order_value;
+    }
+}
+
+
+void sync_dynamic::calculate_local_order_parameter(const std::shared_ptr<adjacency_collection> & connections, const std::size_t start_iteration, const std::size_t stop_iteration, std::vector<double> & sequence_local_order) const {
+    sequence_local_order.resize(stop_iteration - start_iteration, 0.0);
+
+    for (std::size_t i = start_iteration; i < stop_iteration; i++) {
+        const double order_value =  sync_ordering::calculate_local_sync_order(connections, at(i).m_phase);
+        sequence_local_order[i - start_iteration] = order_value;
     }
 }

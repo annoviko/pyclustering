@@ -43,6 +43,70 @@ from pyclustering.nnet import network, conn_represent, conn_type, initial_type, 
 from pyclustering.utils import pi, draw_dynamics, draw_dynamics_set, set_ax_param;
 
 
+class order_estimator:
+    """!
+    @brief Provides services to calculate order parameter and local order parameter that are used
+            for synchronization level estimation.
+
+    """
+    @staticmethod
+    def calculate_sync_order(oscillator_phases):
+        """!
+        @brief Calculates level of global synchronization (order parameter) for input phases.
+        @details This parameter is tend 1.0 when the oscillatory network close to global synchronization and it tend to 0.0 when 
+                  desynchronization is observed in the network.
+        
+        @param[in] oscillator_phases (list): List of oscillator phases that are used for level of global synchronization.
+        
+        @return (double) Level of global synchronization (order parameter).
+        
+        @see calculate_order_parameter()
+        
+        """
+        
+        exp_amount = 0.0;
+        average_phase = 0.0;
+
+        for phase in oscillator_phases:
+            exp_amount += math.expm1( abs(1j * phase) );
+            average_phase += phase;
+        
+        exp_amount /= len(oscillator_phases);
+        average_phase = math.expm1( abs(1j * (average_phase / len(oscillator_phases))) );
+        
+        return abs(average_phase) / abs(exp_amount);
+
+
+    @staticmethod
+    def calculate_local_sync_order(oscillator_phases, oscillatory_network):
+        """!
+        @brief Calculates level of local synchorization (local order parameter) for input phases for the specified network.
+        @details This parameter is tend 1.0 when the oscillatory network close to local synchronization and it tend to 0.0 when 
+                  desynchronization is observed in the network.
+        
+        @param[in] oscillator_phases (list): List of oscillator phases that are used for level of local (partial) synchronization.
+        @param[in] oscillatory_network (sync): Instance of oscillatory network whose connections are required for calculation.
+        
+        @return (double) Level of local synchronization (local order parameter).
+        
+        """
+        
+        exp_amount = 0.0;
+        num_neigh = 0.0;
+        
+        for i in range(0, len(oscillatory_network), 1):
+            for j in range(0, len(oscillatory_network), 1):
+                if (oscillatory_network.has_connection(i, j) == True):
+                    exp_amount += math.exp(-abs(oscillator_phases[j] - oscillator_phases[i]));
+                    num_neigh += 1.0;
+        
+        if (num_neigh == 0):
+            num_neigh = 1.0;
+        
+        return exp_amount / num_neigh;
+
+
+
 class sync_dynamic:
     """!
     @brief Represents output dynamic of Sync.
@@ -294,7 +358,7 @@ class sync_dynamic:
         
         @return (list) List of levels of global synchronization (order parameter evolution).
         
-        @see calculate_sync_order()
+        @see order_estimator
         
         """
         
@@ -302,37 +366,9 @@ class sync_dynamic:
         
         sequence_order = [];
         for index in range(start_iteration, stop_iteration):
-            sequence_order.append(sync_dynamic.calculate_sync_order(self.output[index]));
+            sequence_order.append(order_estimator.calculate_sync_order(self.output[index]));
         
         return sequence_order;
-
-
-    @staticmethod
-    def calculate_sync_order(oscillator_phases):
-        """!
-        @brief Calculates level of global synchorization (order parameter) for input phases.
-        @details This parameter is tend 1.0 when the oscillatory network close to global synchronization and it tend to 0.0 when 
-                  desynchronization is observed in the network.
-        
-        @param[in] oscillator_phases (list): List of oscillator phases that are used for level of global synchronization.
-        
-        @return (double) Level of global synchronization (order parameter).
-        
-        @see calculate_order_parameter()
-        
-        """
-        
-        exp_amount = 0.0;
-        average_phase = 0.0;
-
-        for phase in oscillator_phases:
-            exp_amount += math.expm1( abs(1j * phase) );
-            average_phase += phase;
-        
-        exp_amount /= len(oscillator_phases);
-        average_phase = math.expm1( abs(1j * (average_phase / len(oscillator_phases))) );
-        
-        return abs(average_phase) / abs(exp_amount);
 
 
     def calculate_local_order_parameter(self, oscillatory_network, start_iteration = None, stop_iteration = None):
@@ -358,38 +394,9 @@ class sync_dynamic:
         
         sequence_local_order = [];
         for index in range(start_iteration, stop_iteration):
-            sequence_local_order.append(sync_dynamic.calculate_local_sync_order(self.output[index], oscillatory_network));
+            sequence_local_order.append(order_estimator.calculate_local_sync_order(self.output[index], oscillatory_network));
         
         return sequence_local_order;
-
-
-    @staticmethod
-    def calculate_local_sync_order(oscillator_phases, oscillatory_network):
-        """!
-        @brief Calculates level of local synchorization (local order parameter) for input phases for the specified network.
-        @details This parameter is tend 1.0 when the oscillatory network close to local synchronization and it tend to 0.0 when 
-                  desynchronization is observed in the network.
-        
-        @param[in] oscillator_phases (list): List of oscillator phases that are used for level of local (partial) synchronization.
-        @param[in] oscillatory_network (sync): Instance of oscillatory network whose connections are required for calculation.
-        
-        @return (double) Level of local synchronization (local order parameter).
-        
-        """
-        
-        exp_amount = 0.0;
-        num_neigh = 0.0;
-        
-        for i in range(0, len(oscillatory_network), 1):
-            for j in range(0, len(oscillatory_network), 1):
-                if (oscillatory_network.has_connection(i, j) == True):
-                    exp_amount += math.exp(-abs(oscillator_phases[j] - oscillator_phases[i]));
-                    num_neigh += 1.0;
-        
-        if (num_neigh == 0):
-            num_neigh = 1.0;
-        
-        return exp_amount / num_neigh;
 
 
     def __get_start_stop_iterations(self, start_iteration, stop_iteration):
@@ -788,7 +795,7 @@ class sync_network(network):
         if (self._ccore_network_pointer is not None):
             return wrapper.sync_order(self._ccore_network_pointer);
         
-        return sync_dynamic.calculate_sync_order(self._phases);
+        return order_estimator.calculate_sync_order(self._phases);
 
 
     def sync_local_order(self):
@@ -804,7 +811,7 @@ class sync_network(network):
         if (self._ccore_network_pointer is not None):
             return wrapper.sync_local_order(self._ccore_network_pointer);
         
-        return sync_dynamic.calculate_local_sync_order(self._phases, self);
+        return order_estimator.calculate_local_sync_order(self._phases, self);
 
 
     def _phase_kuramoto(self, teta, t, argv):
