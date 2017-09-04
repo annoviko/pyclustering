@@ -81,7 +81,7 @@ pyclustering_package * sync_connectivity_matrix(const void * pointer_network) {
     for (std::size_t i = 0; i < package->size; i++) {
         pyclustering_package * subpackage = new pyclustering_package(pyclustering_type_data::PYCLUSTERING_TYPE_DOUBLE);
         subpackage->size = ((sync_network *) pointer_network)->size();
-        subpackage->data = (void *) new double * [subpackage->size];
+        subpackage->data = (void *) new double[subpackage->size];
 
         for (std::size_t j = 0; j < subpackage->size; j++) {
             ((double *) subpackage->data)[j] = connections->has_connection(i, j);
@@ -109,14 +109,7 @@ pyclustering_package * sync_dynamic_allocate_sync_ensembles(const void * pointer
 
     ((sync_dynamic *) pointer)->allocate_sync_ensembles(tolerance, iteration, ensembles);
 
-    pyclustering_package * package = new pyclustering_package(pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
-    package->size = ensembles.size();
-    package->data = new pyclustering_package * [package->size];
-
-    for (unsigned int i = 0; i < package->size; i++) {
-        ((pyclustering_package **) package->data)[i] = create_package(&ensembles[i]);
-    }
-
+    pyclustering_package * package = create_package(&ensembles);
     return package;
 }
 
@@ -125,14 +118,7 @@ pyclustering_package * sync_dynamic_allocate_correlation_matrix(const void * poi
     sync_corr_matrix matrix;
     ((sync_dynamic *) pointer_dynamic)->allocate_correlation_matrix(iteration, matrix);
 
-    pyclustering_package * package = new pyclustering_package(pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
-    package->size = matrix.size();
-    package->data = new pyclustering_package * [package->size];
-
-    for (unsigned int i = 0; i < package->size; i++) {
-        ((pyclustering_package **) package->data)[i] = create_package(&matrix[i]);
-    }
-
+    pyclustering_package * package = create_package(&matrix);
     return package;
 }
 
@@ -163,5 +149,28 @@ pyclustering_package * sync_dynamic_get_output(const void * pointer) {
         ((pyclustering_package **) package->data)[i] = create_package(&dynamic[i].m_phase);
     }
 
+    return package;
+}
+
+
+pyclustering_package * sync_dynamic_calculate_order(const void * p_pointer, const std::size_t p_start, const std::size_t p_stop) {
+    sync_dynamic & dynamic = *((sync_dynamic *) p_pointer);
+
+    std::vector<double> order_evolution;
+    dynamic.calculate_order_parameter(p_start, p_stop, order_evolution);
+
+    pyclustering_package * package = create_package(&order_evolution);
+    return package;
+}
+
+
+pyclustering_package * sync_dynamic_calculate_local_order(const void * p_dynamic_pointer, const void * p_network_pointer, const std::size_t p_start, const std::size_t p_stop) {
+    sync_dynamic & dynamic = *((sync_dynamic *) p_dynamic_pointer);
+    sync_network & network = *((sync_network *) p_network_pointer);
+
+    std::vector<double> local_order_evolution;
+    dynamic.calculate_local_order_parameter(network.connections(), p_start, p_stop, local_order_evolution);
+
+    pyclustering_package * package = create_package(&local_order_evolution);
     return package;
 }

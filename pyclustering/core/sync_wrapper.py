@@ -150,3 +150,27 @@ def sync_dynamic_get_time(pointer_dynamic):
     ccore.free_pyclustering_package(package);
     
     return result;
+
+
+def sync_dynamic_calculate_order(pointer_dynamic, start_iteration, stop_iteration):
+    ccore = load_core();
+    
+    ccore.sync_dynamic_calculate_order.restype = POINTER(pyclustering_package);
+    package = ccore.sync_dynamic_calculate_order(pointer_dynamic, start_iteration, stop_iteration);
+    
+    result = package_extractor(package).extract();
+    ccore.free_pyclustering_package(package);
+    
+    return result;
+
+
+def sync_dynamic_calculate_local_order(pointer_dynamic, pointer_network, start_iteration, stop_iteration):
+    ccore = load_core();
+
+    ccore.sync_dynamic_calculate_local_order.restype = POINTER(pyclustering_package);
+    package = ccore.sync_dynamic_calculate_local_order(pointer_dynamic, pointer_network, c_size_t(start_iteration), c_size_t(stop_iteration));
+    
+    result = package_extractor(package).extract();
+    ccore.free_pyclustering_package(package);
+    
+    return result;

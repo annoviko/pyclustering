@@ -163,7 +163,7 @@ class Test(unittest.TestCase):
         assert len(output_sync_dynamic.allocate_sync_ensembles(0.2)) == 1;
         assert len(output_sync_dynamic.allocate_sync_ensembles(0.1)) == 1;
         
-        phase = [ [ 1.02, 1.05, 1.52, 5.87, 5.98, 5.14] ];
+        phases = [ [ 1.02, 1.05, 1.52, 5.87, 5.98, 5.14] ];
         
         output_sync_dynamic = sync_dynamic(phases, time, None);
         

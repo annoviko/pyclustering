@@ -34,76 +34,76 @@ static void template_create_delete(const connection_t type, const initial_type i
 }
 
 TEST(utest_sync, create_delete_all_to_all_equipatition) {
-	template_create_delete(connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION);
+    template_create_delete(connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION);
 }
 
 TEST(utest_sync, create_delete_all_to_all_gaussian) {
-	template_create_delete(connection_t::CONNECTION_ALL_TO_ALL, initial_type::RANDOM_GAUSSIAN);
+    template_create_delete(connection_t::CONNECTION_ALL_TO_ALL, initial_type::RANDOM_GAUSSIAN);
 }
 
 TEST(utest_sync, create_delete_list_bidir_equipatition) {
-	template_create_delete(connection_t::CONNECTION_LIST_BIDIRECTIONAL, initial_type::EQUIPARTITION);
+    template_create_delete(connection_t::CONNECTION_LIST_BIDIRECTIONAL, initial_type::EQUIPARTITION);
 }
 
 TEST(utest_sync, create_delete_list_bidir_gaussian) {
-	template_create_delete(connection_t::CONNECTION_LIST_BIDIRECTIONAL, initial_type::RANDOM_GAUSSIAN);
+    template_create_delete(connection_t::CONNECTION_LIST_BIDIRECTIONAL, initial_type::RANDOM_GAUSSIAN);
 }
 
 TEST(utest_sync, create_delete_grid_four_equipatition) {
-	template_create_delete(connection_t::CONNECTION_GRID_FOUR, initial_type::EQUIPARTITION);
+    template_create_delete(connection_t::CONNECTION_GRID_FOUR, initial_type::EQUIPARTITION);
 }
 
 TEST(utest_sync, create_delete_grid_four_gaussian) {
-	template_create_delete(connection_t::CONNECTION_GRID_FOUR, initial_type::RANDOM_GAUSSIAN);
+    template_create_delete(connection_t::CONNECTION_GRID_FOUR, initial_type::RANDOM_GAUSSIAN);
 }
 
 TEST(utest_sync, create_delete_grid_eight_equipatition) {
-	template_create_delete(connection_t::CONNECTION_GRID_EIGHT, initial_type::EQUIPARTITION);
+    template_create_delete(connection_t::CONNECTION_GRID_EIGHT, initial_type::EQUIPARTITION);
 }
 
 TEST(utest_sync, create_delete_grid_eight_gaussian) {
-	template_create_delete(connection_t::CONNECTION_GRID_EIGHT, initial_type::RANDOM_GAUSSIAN);
+    template_create_delete(connection_t::CONNECTION_GRID_EIGHT, initial_type::RANDOM_GAUSSIAN);
 }
 
 TEST(utest_sync, create_delete_none_equipatition) {
-	template_create_delete(connection_t::CONNECTION_NONE, initial_type::EQUIPARTITION);
+    template_create_delete(connection_t::CONNECTION_NONE, initial_type::EQUIPARTITION);
 }
 
 TEST(utest_sync, create_delete_none_gaussian) {
-	template_create_delete(connection_t::CONNECTION_NONE, initial_type::RANDOM_GAUSSIAN);
+    template_create_delete(connection_t::CONNECTION_NONE, initial_type::RANDOM_GAUSSIAN);
 }
 
 
 static void template_dynamic_convergence(const unsigned int number_oscillators, const solve_type solver, const connection_t type, const initial_type initial) {
-	sync_network network(number_oscillators, 1, 0, type, initial);
+    sync_network network(number_oscillators, 1, 0, type, initial);
 
-	sync_dynamic output_dynamic;
-	network.simulate_dynamic(0.998, 0.1, solver, false, output_dynamic);
+    sync_dynamic output_dynamic;
+    network.simulate_dynamic(0.998, 0.1, solver, false, output_dynamic);
 
-	ensemble_data<sync_ensemble> ensembles;
-	output_dynamic.allocate_sync_ensembles(0.1, ensembles);
+    ensemble_data<sync_ensemble> ensembles;
+    output_dynamic.allocate_sync_ensembles(0.1, ensembles);
 
-	ASSERT_EQ(1, ensembles.size());
+    ASSERT_EQ(1, ensembles.size());
 }
 
 TEST(utest_sync, dynamic_convergance_10_oscillators_all_to_all) {
-	template_dynamic_convergence(10, solve_type::FAST, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION);
+    template_dynamic_convergence(10, solve_type::FAST, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION);
 }
 
 TEST(utest_sync, dynamic_convergance_20_oscillators_all_to_all) {
-	template_dynamic_convergence(10, solve_type::FAST, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION);
+    template_dynamic_convergence(10, solve_type::FAST, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION);
 }
 
 TEST(utest_sync, dynamic_convergance_16_oscillators_grid_four) {
-	template_dynamic_convergence(16, solve_type::FAST, connection_t::CONNECTION_GRID_FOUR, initial_type::EQUIPARTITION);
+    template_dynamic_convergence(16, solve_type::FAST, connection_t::CONNECTION_GRID_FOUR, initial_type::EQUIPARTITION);
 }
 
 TEST(utest_sync, dynamic_convergance_16_oscillators_grid_eight) {
-	template_dynamic_convergence(16, solve_type::FAST, connection_t::CONNECTION_GRID_EIGHT, initial_type::EQUIPARTITION);
+    template_dynamic_convergence(16, solve_type::FAST, connection_t::CONNECTION_GRID_EIGHT, initial_type::EQUIPARTITION);
 }
 
 TEST(utest_sync, dynamic_convergance_5_oscillators_list_bidir) {
-	template_dynamic_convergence(5, solve_type::FAST, connection_t::CONNECTION_LIST_BIDIRECTIONAL, initial_type::EQUIPARTITION);
+    template_dynamic_convergence(5, solve_type::FAST, connection_t::CONNECTION_LIST_BIDIRECTIONAL, initial_type::EQUIPARTITION);
 }
 
 
