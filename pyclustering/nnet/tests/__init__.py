@@ -1,6 +1,6 @@
 """!
 
-@brief Unit-test runner for tests of oscillatory and neural networks.
+@brief Test runner for unit and integration tests of oscillatory and neural networks.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2017
@@ -25,32 +25,34 @@
 
 import unittest;
 
-from pyclustering.nnet.tests        import cnn_tests             as nnet_cnn_unit_tests;
-from pyclustering.nnet.tests        import fsync_tests           as nnet_fsync_unit_tests;
-from pyclustering.nnet.tests        import hhn_tests             as nnet_hhn_unit_tests;
-from pyclustering.nnet.tests        import hysteresis_tests      as nnet_hysteresis_unit_tests;
-from pyclustering.nnet.tests        import legion_tests          as nnet_legion_unit_tests;
-from pyclustering.nnet.tests        import nnet_tests            as nnet_unit_tests;
-from pyclustering.nnet.tests        import pcnn_tests            as nnet_pcnn_unit_tests;
-from pyclustering.nnet.tests        import som_tests             as nnet_som_unit_tests;
-from pyclustering.nnet.tests        import sync_tests            as nnet_sync_unit_tests;
-from pyclustering.nnet.tests        import syncpr_tests          as nnet_syncpr_unit_tests;
-from pyclustering.nnet.tests        import syncsegm_tests        as nnet_syncsegm_unit_tests;
+# Generate images without having a window appear.
+import matplotlib;
+matplotlib.use('Agg');
+
+from pyclustering.nnet.tests.integration import nnet_integration_tests;
+from pyclustering.nnet.tests.unit import nnet_unit_tests;
+
+
+class nnet_tests:
+    def __init__(self):
+        self.__suite = unittest.TestSuite();
+        nnet_integration_tests.fill_suite(self.__suite);
+        nnet_unit_tests.fill_suite(self.__suite);
+
+
+    def get_suite(self):
+        return self.__suite;
+
+
+    def run(self):
+        unittest.TextTestRunner(verbosity = 2).run(self.__suite);
+
+
+    @staticmethod
+    def fill_suite(nnet_suite):
+        nnet_integration_tests.fill_suite(nnet_suite);
+        nnet_unit_tests.fill_suite(nnet_suite);
 
 
 if __name__ == "__main__":
-    suite = unittest.TestSuite();
-
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_cnn_unit_tests));
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_fsync_unit_tests));
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_hhn_unit_tests));
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_hysteresis_unit_tests));
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_legion_unit_tests));
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_unit_tests));
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_pcnn_unit_tests));
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_som_unit_tests));
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_sync_unit_tests));
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_syncpr_unit_tests));
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_syncsegm_unit_tests));
-    
-    unittest.TextTestRunner(verbosity = 2).run(suite);
+    nnet_tests().run();

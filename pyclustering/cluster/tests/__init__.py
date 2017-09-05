@@ -1,6 +1,6 @@
 """!
 
-@brief Unit-test runner for integration tests and unit-tests for cluster analysis module
+@brief Test runner for integration tests and unit-tests for cluster analysis module
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2017

@@ -23,6 +23,7 @@
 
 """
 
+
 import unittest;
 
 # Generate images without having a window appear.
@@ -34,7 +35,7 @@ from pyclustering.nnet.syncsegm import syncsegm, syncsegm_visualizer;
 from pyclustering.samples.definitions import IMAGE_SIMPLE_SAMPLES;
 
 
-class Test(unittest.TestCase):
+class SyncsegmUnitTest(unittest.TestCase):
     def templatesyncsegmSegmentation(self, image_source, radius_color, radius_object, noise_size, expected_color_segments, expected_object_segments, collect_dynamic):
         result_testing = False;
         
@@ -56,16 +57,17 @@ class Test(unittest.TestCase):
             break;
         
         assert result_testing;
-    
-    
+
+
     def testImageSegmentationSimple13(self):
         self.templatesyncsegmSegmentation(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE13, 225, 5, 0, 2, 4, False);
-    
+
     def testImageSegmentationSimple15(self):
         self.templatesyncsegmSegmentation(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE15, 225, 6, 0, 2, 3, False);
-    
+
     def testImageSegmentationSimple16(self):
         self.templatesyncsegmSegmentation(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE16, 225, 2, 0, 2, 3, True);
-    
+
+
 if __name__ == "__main__":
     unittest.main();

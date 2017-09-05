@@ -1,6 +1,6 @@
 """!
 
-@brief Unit-test runner that runs all unit-tests in the project.
+@brief Test runner for unit and integration tests in the project.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2017
@@ -43,17 +43,7 @@ from pyclustering.gcolor.tests                   import dsatur_tests        as g
 from pyclustering.gcolor.tests                   import hysteresis_tests    as gcolor_hysteresis_unit_tests;
 from pyclustering.gcolor.tests                   import sync_tests          as gcolor_sync_unit_tests;
 
-from pyclustering.nnet.tests                     import cnn_tests           as nnet_cnn_unit_tests;
-from pyclustering.nnet.tests                     import fsync_tests         as nnet_fsync_unit_tests;
-from pyclustering.nnet.tests                     import hhn_tests           as nnet_hhn_unit_tests;
-from pyclustering.nnet.tests                     import hysteresis_tests    as nnet_hysteresis_unit_tests;
-from pyclustering.nnet.tests                     import legion_tests        as nnet_legion_unit_tests;
-from pyclustering.nnet.tests                     import nnet_tests          as nnet_unit_tests;
-from pyclustering.nnet.tests                     import pcnn_tests          as nnet_pcnn_unit_tests;
-from pyclustering.nnet.tests                     import som_tests           as nnet_som_unit_tests;
-from pyclustering.nnet.tests                     import sync_tests          as nnet_sync_unit_tests;
-from pyclustering.nnet.tests                     import syncpr_tests        as nnet_syncpr_unit_tests;
-from pyclustering.nnet.tests                     import syncsegm_tests      as nnet_syncsegm_unit_tests;
+from pyclustering.nnet.tests                     import nnet_tests;
 
 from pyclustering.container.tests                import cftree_tests        as container_cftree_unit_tests;
 from pyclustering.container.tests                import kdtree_tests        as container_kdtree_unit_tests;
@@ -74,17 +64,7 @@ if __name__ == "__main__":
     suite.addTests(unittest.TestLoader().loadTestsFromModule(gcolor_hysteresis_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(gcolor_sync_unit_tests));
 
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_unit_tests));
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_cnn_unit_tests));
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_fsync_unit_tests))
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_hhn_unit_tests));
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_hysteresis_unit_tests));
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_legion_unit_tests));
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_pcnn_unit_tests));
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_som_unit_tests));
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_sync_unit_tests));
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_syncpr_unit_tests));
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_syncsegm_unit_tests));
+    nnet_tests.fill_suite(suite);
 
     suite.addTests(unittest.TestLoader().loadTestsFromModule(container_cftree_unit_tests));
     suite.addTests(unittest.TestLoader().loadTestsFromModule(container_kdtree_unit_tests));

@@ -1,0 +1,88 @@
+"""!
+
+@brief Templates for tests of Self-Organization Map (SOM).
+
+@authors Andrei Novikov (pyclustering@yandex.ru)
+@date 2014-2017
+@copyright GNU Public License
+
+@cond GNU_PUBLIC_LICENSE
+    PyClustering is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    PyClustering is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+@endcond
+
+"""
+
+
+# Generate images without having a window appear.
+import matplotlib;
+matplotlib.use('Agg');
+
+from pyclustering.nnet.som import som, type_conn, som_parameters;
+
+from pyclustering.utils import read_sample;
+
+from pyclustering.samples.definitions import SIMPLE_SAMPLES;
+
+
+class SomTestTemplates:
+    @staticmethod
+    def templateTestAwardNeurons(file, rows, cols, time, expected_result, autostop = False, ccore_flag = False, parameters = None):
+        types = [type_conn.func_neighbor, type_conn.grid_eight, type_conn.grid_four, type_conn.honeycomb];
+        sample = read_sample(file);
+         
+        if (parameters is None):
+            parameters = som_parameters();
+         
+        for stucture in types:
+            network = som(rows, cols, stucture, parameters, ccore = ccore_flag);
+            network.train(sample, time, autostop);
+            
+            winners = network.get_winner_number();
+            assert winners == len(expected_result);
+            
+            if (sorted(network.awards) != expected_result):
+                network.show_network(awards = True);
+                print(sorted(network.awards));
+                assert sorted(network.awards) == expected_result;
+             
+            total_capture_points = 0;
+            for points in network.capture_objects:
+                total_capture_points += len(points);
+             
+            assert total_capture_points == sum(expected_result);
+         
+            del network;
+
+
+    @staticmethod
+    def templateTestWinners(ccore_flag):
+        types = [type_conn.func_neighbor, type_conn.grid_eight, type_conn.grid_four, type_conn.honeycomb];
+        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE3);
+                
+        for stucture in types:
+            network = som(5, 5, stucture, ccore = ccore_flag);
+            network.train(sample, 100);
+                    
+            assert sum(network.awards) == 60;
+                    
+            points = list();
+            for i in range(network.size):
+                if (network.awards[i] > 0):
+                    points += network.capture_objects[i];
+                    
+            assert len(points) == len(sample);
+                    
+            points = sorted(points);
+            for i in range(len(points)):
+                assert points[i] == i;

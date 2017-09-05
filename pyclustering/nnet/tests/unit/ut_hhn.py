@@ -23,18 +23,18 @@
 
 """
 
+
 import unittest;
 
-from pyclustering.utils import extract_number_oscillations;
+from pyclustering.nnet.hhn import hhn_network;
 
-from pyclustering.nnet.hhn import hhn_network, hhn_parameters;
 
-class Test(unittest.TestCase):
+class HhnUnitTest(unittest.TestCase):
     # Tests regarded to synchronous ensembles allocation.
     def templateSyncEnsembleAllocation(self, stimulus, params, sim_steps, sim_time, expected_clusters):
         result_testing = False;
         
-        for attempt in range(0, 2, 1):
+        for _ in range(0, 2, 1):
             net = hhn_network(len(stimulus), stimulus, params);
             (t, x) = net.simulate(sim_steps, sim_time);
             

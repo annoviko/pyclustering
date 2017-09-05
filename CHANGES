@@ -5,6 +5,9 @@ CHANGE NOTES FOR 0.7.dev (STARTED Jun 01, 2016)
 ------------------------------------------------------------------------
 
 GENERAL CHANGES (pyclustering):
+- Implemented feature to obtain and visualize evolution of order parameter and local order parameter for Sync network and Sync-based algorithms (pyclustering.nnet.sync).
+  See: https://github.com/annoviko/pyclustering/issues/355
+
 - Implemented K-Means++ method for initialization of initial centers for algorithms like K-Means or X-Means (pyclustering.cluster.center_initializer).
   See: https://github.com/annoviko/pyclustering/issues/354
 
@@ -57,6 +60,9 @@ GENERAL CHANGES (pyclustering):
 
 
 GENERAL CHANGES (ccore):
+- Implemented feature to obtain and visualize evolution of order parameter and local order parameter for Sync network and Sync-based algorithms (ccore.nnet.sync).
+  See: https://github.com/annoviko/pyclustering/issues/355
+
 - Cygwin x64 platform is supported (ccore).
   See: https://github.com/annoviko/pyclustering/issues/353
 
@@ -74,6 +80,9 @@ GENERAL CHANGES (ccore):
 
 
 CORRECTED MAJOR BUGS:
+- Bug with getting neighbors and getting information about connections in Sync-based network and algorithms in case of usage CCORE.
+  See: no reference.
+
 - Bug with calculation of number of oscillations for output dynamics.
   See: no reference.
 
