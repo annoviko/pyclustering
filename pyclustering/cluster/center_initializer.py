@@ -144,8 +144,6 @@ class kmeans_plusplus_initializer:
                 break;
 
         if res_idx is None:
-            # print('Random number : ', random_num);
-            # print('Probabilities : ', probabilities);
             raise AttributeError("List 'probabilities' should contain 1 as the end of last segment(s)");
 
         return res_idx
