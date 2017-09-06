@@ -37,7 +37,7 @@ from pyclustering.samples.definitions import SIMPLE_SAMPLES;
 from pyclustering.utils import read_sample;
 
 
-class Test(unittest.TestCase):
+class CnnUnitTest(unittest.TestCase):
     def templateSyncEnsembleAllocation(self, stimulus, steps, connection, amount_neighbors, analysed_iterations, expected_length_ensembles):
         testing_result = True;
         

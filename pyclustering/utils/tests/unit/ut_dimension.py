@@ -24,7 +24,7 @@ import unittest;
 from pyclustering.utils.dimension import dimension_info;
 
 
-class Test(unittest.TestCase):
+class DimensionUnitTest(unittest.TestCase):
     def testGetDimension(self):
         info = dimension_info([ [1], [2], [3], [4], [5] ]);
         assert 1 == info.get_dimensions();

@@ -1,6 +1,6 @@
 """!
 
-@brief Unit-test runner for tests of travelling salesman problem algorithms.
+@brief Test runner for unit and integration tests of travelling salesman problem algorithms.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2017
@@ -23,14 +23,28 @@
 
 """
 
+
 import unittest;
 
-from pyclustering.tsp.tests        import antcolony_tests             as tsp_antcolony_unit_tests;
+from pyclustering.tests.suite_holder import suite_holder;
+
+# Generate images without having a window appear.
+import matplotlib;
+matplotlib.use('Agg');
+
+from pyclustering.tsp.tests.integration import tsp_integration_tests;
+
+
+class tsp_tests(suite_holder):
+    def __init__(self):
+        super().__init__();
+        tsp_integration_tests.fill_suite(self.get_suite());
+
+
+    @staticmethod
+    def fill_suite(tsp_suite):
+        tsp_integration_tests.fill_suite(tsp_suite);
 
 
 if __name__ == "__main__":
-    suite = unittest.TestSuite();
-
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(tsp_antcolony_unit_tests));
-    
-    unittest.TextTestRunner(verbosity = 2).run(suite);
+    tsp_tests().run();

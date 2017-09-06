@@ -34,7 +34,7 @@ from pyclustering.nnet import conn_type, conn_represent;
 from pyclustering.nnet.fsync import fsync_network, fsync_visualizer;
 
 
-class Test(unittest.TestCase):
+class FsyncUnitTest(unittest.TestCase):
     def templateCreateNetwork(self, network_size):
         oscillatory_network = fsync_network(network_size);
         assert len(oscillatory_network) == network_size;

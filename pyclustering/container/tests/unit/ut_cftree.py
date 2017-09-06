@@ -38,7 +38,7 @@ from pyclustering.utils import linear_sum, square_sum;
 from pyclustering.utils import euclidean_distance_sqrt, manhattan_distance, average_inter_cluster_distance, average_intra_cluster_distance, variance_increase_distance;
 
 
-class Test(unittest.TestCase):
+class CftreeUnitTest(unittest.TestCase):
     def templateCfClusterRepresentation(self, cluster, centroid, radius, diameter, tolerance):
         entry = cfentry(len(cluster), linear_sum(cluster), square_sum(cluster));
            

@@ -24,6 +24,7 @@
 """
 
 import unittest;
+from pyclustering.tests.suite_holder import suite_holder;
 
 # Generate images without having a window appear.
 import matplotlib;
@@ -33,9 +34,15 @@ matplotlib.use('Agg');
 from pyclustering.core.tests            import package_tests as core_package_unit_tests;
 
 
+class core_tests(suite_holder):
+    def __init__(self):
+        super().__init__();
+        core_tests.fill_suite(self.get_suite());
+
+    @staticmethod
+    def fill_suite(core_suite):
+        core_suite.addTests(unittest.TestLoader().loadTestsFromModule(core_package_unit_tests));
+
+
 if __name__ == "__main__":
-    suite = unittest.TestSuite();
-
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(core_package_unit_tests));
-
-    unittest.TextTestRunner(verbosity = 2).run(suite);
+    core_tests().run();

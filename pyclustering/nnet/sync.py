@@ -364,6 +364,9 @@ class sync_dynamic:
         
         (start_iteration, stop_iteration) = self.__get_start_stop_iterations(start_iteration, stop_iteration);
         
+        if (self._ccore_sync_dynamic_pointer is not None):
+            return wrapper.sync_dynamic_calculate_order(self._ccore_sync_dynamic_pointer, start_iteration, stop_iteration);
+        
         sequence_order = [];
         for index in range(start_iteration, stop_iteration):
             sequence_order.append(order_estimator.calculate_sync_order(self.output[index]));
@@ -392,6 +395,10 @@ class sync_dynamic:
 
         (start_iteration, stop_iteration) = self.__get_start_stop_iterations(start_iteration, stop_iteration);
         
+        if (self._ccore_sync_dynamic_pointer is not None):
+            network_pointer = oscillatory_network._ccore_network_pointer;
+            return wrapper.sync_dynamic_calculate_local_order(self._ccore_sync_dynamic_pointer, network_pointer, start_iteration, stop_iteration);
+        
         sequence_local_order = [];
         for index in range(start_iteration, stop_iteration):
             sequence_local_order.append(order_estimator.calculate_local_sync_order(self.output[index], oscillatory_network));
@@ -410,7 +417,7 @@ class sync_dynamic:
         
         """
         if (start_iteration is None):
-            start_iteration = len(self._dynamic) - 1;
+            start_iteration = len(self) - 1;
         
         if (stop_iteration is None):
             stop_iteration = start_iteration + 1;

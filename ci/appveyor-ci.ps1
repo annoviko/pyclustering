@@ -72,7 +72,7 @@ function job_pyclustering_windows() {
 
     echo "Starting integration testing.";
     
-    & $env:PYTHON_INTERPRETER pyclustering\ut\__init__.py
+    & $env:PYTHON_INTERPRETER pyclustering\tests\tests_runner.py --integration
     if ($LastExitCode -ne 0) {
         echo "Integration testing pyclustering <-> ccore for WINDOWS platform: FAILURE.";
         exit 1;

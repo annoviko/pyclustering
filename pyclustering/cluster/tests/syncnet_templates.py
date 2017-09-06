@@ -78,9 +78,12 @@ class SyncnetTestTemplates:
         for i in range(len(network)):
             neighbors = network.get_neighbors(i);
             
+            assert len(sample) == len(network);
             assert len(neighbors) == len(network) - 1;
             assert i not in neighbors;
             
             for j in range(len(network)):
                 if (i != j):
                     assert network.has_connection(i, j) == True;
+                else:
+                    assert network.has_connection(i, j) == False;

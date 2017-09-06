@@ -191,3 +191,34 @@ extern "C" DECLARATION pyclustering_package * sync_dynamic_get_time(const void *
  *
  */
 extern "C" DECLARATION pyclustering_package * sync_dynamic_get_output(const void * pointer);
+
+
+/**
+ *
+ * @brief   Returns order parameter evolution for output dynamic in specified range.
+ * @details Returned package should deallocated by 'free_pyclustering_package'.
+ *
+ * @param[in] p_pointer: Pointer to output dynamic.
+ * @param[in] p_start: Iteration from which evolution should be calculated.
+ * @param[in] p_stop: Iteration where evolution calculation should be stopped.
+ *
+ * @return Package where evolution order parameter (estimation of global synchronization) is stored.
+ *
+ */
+extern "C" DECLARATION pyclustering_package * sync_dynamic_calculate_order(const void * p_pointer, const std::size_t p_start, const std::size_t p_stop);
+
+
+/**
+ *
+ * @brief   Returns local order parameter evolution for output dynamic in specified range.
+ * @details Returned package should deallocated by 'free_pyclustering_package'.
+ *
+ * @param[in] p_pointer_pointer: Pointer to output dynamic of the Sync network.
+ * @param[in] p_network_pointer: Sync network connections that are used for calculation.
+ * @param[in] p_start: Iteration from which evolution should be calculated.
+ * @param[in] p_stop: Iteration where evolution calculation should be stopped.
+ *
+ * @return Package where evolution local order parameter (estimation of partial synchronization) is stored.
+ *
+ */
+extern "C" DECLARATION pyclustering_package * sync_dynamic_calculate_local_order(const void * p_dynamic_pointer, const void * p_network_pointer, const std::size_t p_start, const std::size_t p_stop);

@@ -26,6 +26,8 @@
 
 class dimension_info:
     """!
+    @brief Analyse input data to extract general information about data dimension.
+    
     """
     
     def __init__(self, data):
