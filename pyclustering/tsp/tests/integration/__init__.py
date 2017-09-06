@@ -1,6 +1,6 @@
 """!
 
-@brief Test runner for unit and integration tests of oscillatory and neural networks.
+@brief Integration-test runner for tests of travelling salesman problem algorithms.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2017
@@ -25,26 +25,21 @@
 
 
 import unittest;
+
 from pyclustering.tests.suite_holder import suite_holder;
 
-# Generate images without having a window appear.
-import matplotlib;
-matplotlib.use('Agg');
-
-from pyclustering.nnet.tests.integration import nnet_integration_tests;
-from pyclustering.nnet.tests.unit import nnet_unit_tests;
+from pyclustering.tsp.tests.integration        import it_antcolony             as tsp_antcolony_integration_tests;
 
 
-class nnet_tests(suite_holder):
+class tsp_integration_tests(suite_holder):
     def __init__(self):
         super().__init__();
-        nnet_tests.fill_suite(self.get_suite());
+        tsp_integration_tests.fill_suite(self.get_suite());
 
     @staticmethod
-    def fill_suite(nnet_suite):
-        nnet_integration_tests.fill_suite(nnet_suite);
-        nnet_unit_tests.fill_suite(nnet_suite);
+    def fill_suite(integration_tsp_suite):
+        integration_tsp_suite.addTests(unittest.TestLoader().loadTestsFromModule(tsp_antcolony_integration_tests));
 
 
 if __name__ == "__main__":
-    nnet_tests().run();
+    tsp_integration_tests().run();

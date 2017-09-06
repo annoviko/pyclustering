@@ -28,7 +28,7 @@ import itertools;
 
 from pyclustering.container.kdtree import kdtree;
 
-class Test(unittest.TestCase):
+class KdtreeUnitTest(unittest.TestCase):
     def testKDTreeCreateWithoutPayload(self):
         # Create k-d tree without any payload
         array = [ [4, 3], [3, 4], [5, 8], [3, 3], [3, 9], [6, 4], [5, 9] ];

@@ -23,15 +23,22 @@
 
 """
 
-import unittest;
 
-from pyclustering.container.tests                   import cftree_tests        as container_cftree_unit_tests;
-from pyclustering.container.tests                   import kdtree_tests        as container_kdtree_unit_tests;
+import unittest;
+from pyclustering.tests.suite_holder import suite_holder;
+
+from pyclustering.container.tests.unit          import container_unit_tests;
+
+
+class container_tests(suite_holder):
+    def __init__(self):
+        super().__init__();
+        container_unit_tests.fill_suite(self.get_suite());
+
+    @staticmethod
+    def fill_suite(container_suite):
+        container_unit_tests.fill_suite(container_suite);
+
 
 if __name__ == "__main__":
-    suite = unittest.TestSuite();
-
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(container_cftree_unit_tests));
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(container_kdtree_unit_tests));
-    
-    unittest.TextTestRunner(verbosity = 2).run(suite);
+    container_tests().run();

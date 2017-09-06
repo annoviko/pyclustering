@@ -1,6 +1,6 @@
 """!
 
-@brief Unit-test runner for utils module.
+@brief Test runner for unit and integration tests of utils module.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2017
@@ -25,12 +25,21 @@
 
 import unittest;
 
-from pyclustering.utils.tests                   import utils_tests        as utils_unit_tests;
-from pyclustering.utils.tests                   import dimension_tests    as dimension_unit_tests;
+from pyclustering.tests.suite_holder import suite_holder;
+
+from pyclustering.utils.tests.unit import utils_unit_tests;
+
+
+class utils_tests(suite_holder):
+    def __init__(self):
+        super().__init__();
+        utils_tests.fill_suite(self.get_suite());
+
+
+    @staticmethod
+    def fill_suite(tsp_suite):
+        utils_unit_tests.fill_suite(tsp_suite);
+
 
 if __name__ == "__main__":
-    suite = unittest.TestSuite();
-
-    suite.addTests(unittest.TestLoader().loadTestsFromModule(utils_unit_tests));
-    
-    unittest.TextTestRunner(verbosity = 2).run(suite);
+    utils_tests().run();

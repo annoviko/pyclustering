@@ -23,7 +23,7 @@
 
 """
 
-import pyclustering.utils as utils;
+import pyclustering.tests as utils;
 
 from pyclustering.cluster.agglomerative import agglomerative;
 from pyclustering.samples.definitions import SIMPLE_SAMPLES;

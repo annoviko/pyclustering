@@ -96,7 +96,7 @@ run_ut_pyclustering_job() {
     run_build_ccore_job
 
     # run unit-tests and obtain coverage results
-    coverage run --source=pyclustering --omit='pyclustering/*/tests/*,pyclustering/*/examples/*,pyclustering/ut/*' pyclustering/ut/__init__.py
+    coverage run --source=pyclustering --omit='pyclustering/*/tests/*,pyclustering/*/examples/*,pyclustering/tests/*' pyclustering/tests/tests_runner.py
     coveralls
 }
 

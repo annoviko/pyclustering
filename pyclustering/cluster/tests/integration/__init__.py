@@ -24,6 +24,7 @@
 """
 
 import unittest;
+from pyclustering.tests.suite_holder import suite_holder;
 
 # Generate images without having a window appear.
 import matplotlib;
@@ -45,19 +46,10 @@ from pyclustering.cluster.tests.integration               import it_syncnet     
 from pyclustering.cluster.tests.integration               import it_xmeans        as cluster_xmeans_integration_tests;
 
 
-class clustering_integration_tests:
+class clustering_integration_tests(suite_holder):
     def __init__(self):
-        self.__suite = unittest.TestSuite();
-        self.fill_suite(self.__suite);
-
-
-    def get_suite(self):
-        return self.__suite;
-
-
-    def run(self):
-        unittest.TextTestRunner(verbosity = 2).run(self.__suite);
-
+        super().__init__();
+        self.fill_suite(self.get_suite());
 
     @staticmethod
     def fill_suite(integration_cluster_suite):

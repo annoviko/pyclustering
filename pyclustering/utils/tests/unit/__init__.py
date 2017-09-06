@@ -1,6 +1,6 @@
 """!
 
-@brief Test runner for unit and integration tests of oscillatory and neural networks.
+@brief Unit-test runner for utils module.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2017
@@ -23,28 +23,25 @@
 
 """
 
-
 import unittest;
+
 from pyclustering.tests.suite_holder import suite_holder;
 
-# Generate images without having a window appear.
-import matplotlib;
-matplotlib.use('Agg');
-
-from pyclustering.nnet.tests.integration import nnet_integration_tests;
-from pyclustering.nnet.tests.unit import nnet_unit_tests;
+from pyclustering.utils.tests.unit                   import ut_utils        as utils_general_unit_tests;
+from pyclustering.utils.tests.unit                   import ut_dimension    as dimension_unit_tests;
 
 
-class nnet_tests(suite_holder):
+class utils_unit_tests(suite_holder):
     def __init__(self):
         super().__init__();
-        nnet_tests.fill_suite(self.get_suite());
+        utils_unit_tests.fill_suite(self.get_suite());
+
 
     @staticmethod
-    def fill_suite(nnet_suite):
-        nnet_integration_tests.fill_suite(nnet_suite);
-        nnet_unit_tests.fill_suite(nnet_suite);
+    def fill_suite(utils_suite):
+        utils_suite.addTests(unittest.TestLoader().loadTestsFromModule(utils_general_unit_tests));
+        utils_suite.addTests(unittest.TestLoader().loadTestsFromModule(dimension_unit_tests));
 
 
 if __name__ == "__main__":
-    nnet_tests().run();
+    utils_unit_tests().run();
