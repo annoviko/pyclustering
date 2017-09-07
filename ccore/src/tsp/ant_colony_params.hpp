@@ -109,7 +109,7 @@ public:
     //
     #define STATIC_ASSERT_TUPLE_TYPES(params_name_TSP, className)                             \
         static_assert(params_container::get_elem_type<cast_name<params_name_TSP>::val, className>::res::value                   \
-                , "paramName(className) param has error placement in tuple");
+                , "paramName(className) param has error placement in tuple")
 
     STATIC_ASSERT_TUPLE_TYPES(params_name_TSP::Q, Q_t);
     STATIC_ASSERT_TUPLE_TYPES(params_name_TSP::RO, Ro_t);

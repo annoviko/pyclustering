@@ -111,7 +111,7 @@ public:
     //
     #define STATIC_ASSERT_TUPLE_TYPES(params_name, className)                             \
         static_assert(params_container::get_elem_type<cast_name<params_name>::val, className>::res::value                   \
-                , "paramName(className) param has error placement in tuple");
+                , "paramName(className) param has error placement in tuple")
 
     STATIC_ASSERT_TUPLE_TYPES(params_name_clustering::RO, RO_t);
     STATIC_ASSERT_TUPLE_TYPES(params_name_clustering::PHERAMONE_INIT, Pheramone_init_t);

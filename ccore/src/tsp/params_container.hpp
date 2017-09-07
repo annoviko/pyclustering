@@ -32,7 +32,7 @@
                 explicit name(type init)                    \
                 :Base_t(init)                               \
                 {}                                          \
-            };
+            }
 
 
 
