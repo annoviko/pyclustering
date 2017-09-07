@@ -40,8 +40,8 @@ using namespace container;
 using namespace differential;
 
 
-typedef std::vector<unsigned int>		legion_ensemble;
-typedef std::vector<double>				legion_stimulus;
+typedef std::vector<unsigned int>   legion_ensemble;
+typedef std::vector<double>         legion_stimulus;
 
 
 typedef struct legion_network_state {
@@ -53,7 +53,7 @@ public:
 public:
     legion_network_state(void) : m_inhibitor(0.0), m_time(0.0) { }
 
-    legion_network_state(const unsigned int size) : m_output(size, 0.0), m_inhibitor(0.0), m_time(0.0) { }
+    legion_network_state(const std::size_t size) : m_output(size, 0.0), m_inhibitor(0.0), m_time(0.0) { }
 
 public:
     inline std::size_t size(void) const { return m_output.size(); }

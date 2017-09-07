@@ -34,7 +34,7 @@ void syncpr_destroy(const void * pointer_network) {
 }
 
 
-unsigned int syncpr_get_size(const void * pointer_network) {
+std::size_t syncpr_get_size(const void * pointer_network) {
     return ((syncpr *)pointer_network)->size();
 }
 
@@ -96,7 +96,7 @@ double syncpr_memory_order(const void * pointer_network, const void * const patt
 }
 
 
-unsigned int syncpr_dynamic_get_size(const void * pointer_network) {
+std::size_t syncpr_dynamic_get_size(const void * pointer_network) {
     return ((syncpr_dynamic *)pointer_network)->size();
 }
 

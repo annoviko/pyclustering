@@ -21,7 +21,7 @@
 #include "utils.hpp"
 
 
-double average_neighbor_distance(const std::vector<std::vector<double> > * points, const unsigned int num_neigh) {
+double average_neighbor_distance(const std::vector<std::vector<double> > * points, const std::size_t num_neigh) {
     std::vector<std::vector<double> > dist_matrix( points->size(), std::vector<double>(points->size(), 0.0) );
     for (std::size_t i = 0; i < points->size(); i++) {
         for (std::size_t j = i + 1; j < points->size(); j++) {

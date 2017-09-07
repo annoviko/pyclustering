@@ -59,7 +59,7 @@ extern "C" DECLARATION void syncpr_destroy(const void * pointer_network);
  * @param[in] pointer_network: Pointer to the instance of the Sync-PR oscillatory network.
  *
  */
-extern "C" DECLARATION unsigned int syncpr_get_size(const void * pointer_network);
+extern "C" DECLARATION std::size_t syncpr_get_size(const void * pointer_network);
 
 /**
  *
@@ -126,6 +126,15 @@ extern "C" DECLARATION void * syncpr_simulate_dynamic(const void * pointer_netwo
  */
 extern "C" DECLARATION double syncpr_memory_order(const void * pointer_network, 
                                                   const void * const pattern);
+
+/**
+ *
+ * @brief   Returns size of output SyncPR dynamic.
+ *
+ * @param[in] pointer_network: Pointer to the instance of the Sync-PR oscillatory network.
+ *
+ */
+extern "C" DECLARATION std::size_t syncpr_dynamic_get_size(const void * pointer_network);
 
 /**
  *

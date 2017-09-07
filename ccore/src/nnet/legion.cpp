@@ -249,8 +249,7 @@ void legion_network::neuron_states(const double t, const differ_state<double> & 
 
     double potential = 0.0;
 
-    for (std::vector<size_t>::const_iterator index_iterator = neighbors.begin(); index_iterator != neighbors.end(); index_iterator++) {
-        unsigned int index_neighbor = *index_iterator;
+    for (auto index_neighbor : neighbors) {
         potential += m_params.T * heaviside(m_oscillators[index_neighbor].m_excitatory - m_params.teta_x);
     }
 

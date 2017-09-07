@@ -169,7 +169,7 @@ void xmeans::update_clusters(cluster_sequence & analysed_clusters, const dataset
 }
 
 
-unsigned int xmeans::find_proper_cluster(const dataset & analysed_centers, const point & p_point) const {
+std::size_t xmeans::find_proper_cluster(const dataset & analysed_centers, const point & p_point) const {
     std::size_t index_optimum = 0;
     double distance_optimum = std::numeric_limits<double>::max();
 
@@ -259,7 +259,7 @@ double xmeans::minimum_noiseless_description_length(const cluster_sequence & clu
     double score = std::numeric_limits<double>::max();
 
     double W = 0.0;
-    double K = clusters.size();
+    double K = (double) clusters.size();
     double N = 0.0;
 
     double sigma_sqrt = 0.0;
@@ -271,7 +271,7 @@ double xmeans::minimum_noiseless_description_length(const cluster_sequence & clu
             return std::numeric_limits<double>::max();
         }
 
-        double Ni = clusters[index_cluster].size();
+        double Ni = (double) clusters[index_cluster].size();
         double Wi = 0.0;
         for (auto & index_object : clusters[index_cluster]) {
             /* euclidean_distance_sqrt should be used in line with paper, but in this case results are

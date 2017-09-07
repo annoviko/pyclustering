@@ -94,7 +94,7 @@ def legion_simulate(legion_network_pointer, steps, time, solver, collect_dynamic
 
 def legion_get_size(legion_network_pointer):
     ccore = load_core();
-    ccore.legion_get_size.restype = c_uint;
+    ccore.legion_get_size.restype = c_size_t;
     return ccore.legion_get_size(legion_network_pointer);
 
 
@@ -141,6 +141,6 @@ def legion_dynamic_get_time(legion_dynamic_pointer):
 
 def legion_dynamic_get_size(legion_dynamic_pointer):
     ccore = load_core();
-    ccore.legion_dynamic_get_size.restype = c_uint;
+    ccore.legion_dynamic_get_size.restype = c_size_t;
     return ccore.legion_dynamic_get_size(legion_dynamic_pointer);
     

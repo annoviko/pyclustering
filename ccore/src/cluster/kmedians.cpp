@@ -129,7 +129,7 @@ double kmedians::update_medians(cluster_sequence & clusters, dataset & medians) 
         for (size_t index_dimension = 0; index_dimension < dimension; index_dimension++) {
             cluster & current_cluster = clusters[index_cluster];
             std::sort(current_cluster.begin(), current_cluster.end(), 
-                [this](unsigned int index_object1, unsigned int index_object2) 
+                [this](std::size_t index_object1, std::size_t index_object2) 
             {
                 return (*m_ptr_data)[index_object1] > (*m_ptr_data)[index_object2];
             });

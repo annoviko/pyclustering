@@ -18,8 +18,7 @@
 *
 */
 
-#ifndef CCORE_DIFFERENTIAL_RUNGE_KUTTA_4_HPP_
-#define CCORE_DIFFERENTIAL_RUNGE_KUTTA_4_HPP_
+#pragma once
 
 
 #include "differential/differ_state.hpp"
@@ -32,7 +31,7 @@ void runge_kutta_4(void (*function_pointer)(const double t, const differ_state<s
                    const differ_state<state_type> &     inputs,
                    const double                         time_start,
                    const double                         time_end,
-                   const unsigned int                   steps,
+                   const std::size_t                    steps,
                    const bool                           flag_collect,
                    const differ_extra<extra_type> &     argv,
                    differ_result<state_type> &          outputs) {
@@ -82,6 +81,3 @@ void runge_kutta_4(void (*function_pointer)(const double t, const differ_state<s
 }
 
 }
-
-
-#endif

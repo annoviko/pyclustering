@@ -51,7 +51,7 @@ void * legion_simulate( const void * pointer,
 }
 
 
-unsigned int legion_get_size(const void * pointer) {
+std::size_t legion_get_size(const void * pointer) {
     return ((legion_network *) pointer)->size();
 }
 
@@ -106,6 +106,6 @@ pyclustering_package * legion_dynamic_get_time(const void * pointer) {
 }
 
 
-unsigned int legion_dynamic_get_size(const void * pointer) {
+std::size_t legion_dynamic_get_size(const void * pointer) {
     return ((legion_dynamic *) pointer)->size();
 }

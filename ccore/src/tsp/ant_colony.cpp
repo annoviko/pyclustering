@@ -61,7 +61,7 @@ std::vector<ant_colony::object_probability> ant_colony::calc_probability(const a
 }
 
 
-int ant_colony::realize_probability(const ant_t& ant, const std::vector<object_probability>& prob)
+std::size_t ant_colony::realize_probability(const ant_t& ant, const std::vector<object_probability>& prob)
 {
     double reailized = static_cast<double>(get_random_number(RAND_MAX)) / RAND_MAX;
     double commulated_prob = 0;
@@ -129,7 +129,7 @@ void ant_colony::update_pheramones(pheramone& pheramone, const std::vector<ant_t
 
 void ant_colony::update_shortes_path(cities_t& shortes_path, const std::vector<ant_t>& ants)
 {
-    int antWithShortesPath = -1;
+    std::size_t antWithShortesPath = (std::size_t) -1;
     double curShortesLength = -1;
 
     for (std::size_t ant_num = 0; ant_num < ants.size(); ++ant_num)
@@ -154,7 +154,6 @@ void ant_colony::update_shortes_path(cities_t& shortes_path, const std::vector<a
             shortes_path = ants[antWithShortesPath].visited;
         }
     }
-
 }
 
 
@@ -169,7 +168,7 @@ std::shared_ptr<ant_colony_result> ant_colony::process()
     // initialize random number generator
     std::srand(static_cast<unsigned>(std::time(0)));
 
-    const unsigned cityCount = get_count_city();
+    const std::size_t cityCount = get_count_city();
     cities_t shortestPath;
 
     // initiate pheramones to value from params
@@ -183,7 +182,7 @@ std::shared_ptr<ant_colony_result> ant_colony::process()
         place_ants_randomly(v_ants);
 
         // Ants should go throw all cities
-        for (unsigned step = 0; step < cityCount; ++step)
+        for (std::size_t step = 0; step < cityCount; ++step)
         {
             for (auto & ant : v_ants)
             {
@@ -191,7 +190,7 @@ std::shared_ptr<ant_colony_result> ant_colony::process()
 
                 if (prob.size() == 0) continue;
 
-                int next_city = realize_probability(ant, prob);
+                std::size_t next_city = realize_probability(ant, prob);
 
                 // refresh an ant state
                 ant.curState = next_city;

@@ -49,7 +49,7 @@ public:
         : path_length{0}
     {}
 
-    std::vector<int> shortest_path;
+    std::vector<std::size_t> shortest_path;
     double path_length;
 };
 
@@ -82,7 +82,7 @@ public:
 private:
 
     using ant_api = ant::ant_colony_TSP_params_initializer;
-    using cities_t = std::vector<int>;
+    using cities_t = std::vector<std::size_t>;
 
 
     /*********************************************************
@@ -92,7 +92,7 @@ private:
     struct ant_t
     {
         cities_t visited;
-        int curState;
+        std::size_t curState;
     };
 
 
@@ -104,21 +104,21 @@ private:
     class object_probability
     {
     public:
-        object_probability(int city_num, double prob)
+        object_probability(std::size_t city_num, double prob)
             :value(city_num, prob)
-        {}
+        { }
 
     #ifdef __CPP_14_ENABLED__
         decltype(auto) get_city_num() const { return value.first; }
         decltype(auto) get_probability() const { return value.second; }
     #else
-        int get_city_num() const { return value.first; }
+        std::size_t get_city_num() const { return value.first; }
         double get_probability() const { return value.second; }
     #endif
         void divide_by(double divider) { value.second /= divider; }
 
     private:
-        std::pair<int, double> value;
+        std::pair<std::size_t, double> value;
     };
 
 
@@ -147,7 +147,7 @@ private:
 
     std::vector<object_probability> calc_probability(const ant_t& ant, const pheramone& pheramone);
 
-    int realize_probability(const ant_t& ant, const std::vector<object_probability>& prob);
+    std::size_t realize_probability(const ant_t& ant, const std::vector<object_probability>& prob);
 
     double calc_path_length(const cities_t& cities);
 
@@ -169,7 +169,7 @@ private:
 #else
 
     std::size_t get_count_city()                const { return distance->m_matrix.size(); }
-    unsigned get_random_number(unsigned max)    const { return (std::rand() % max); }
+    unsigned get_random_number(std::size_t max) const { return (std::rand() % max); }
 
     const ant_api::base_param_type<params_name_TSP::COUNT_ANTS_IN_ITERATION>
             get_count_ants_in_iteration()const { return params->get<params_name_TSP::COUNT_ANTS_IN_ITERATION>().get(); }

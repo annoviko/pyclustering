@@ -46,12 +46,14 @@ TEST(utest_interface_som, som_api) {
     void * network = som_create(1, 3, 0, &params);
     ASSERT_NE(nullptr, network);
 
-    pyclustering_package * package_dataset = create_package(&dataset({ {1.0}, {1.2}, {1.3}, {3.2}, {3.5}, {3.2} }));
+    dataset input_data = { {1.0}, {1.2}, {1.3}, {3.2}, {3.5}, {3.2} };
+    pyclustering_package * package_dataset = create_package(&input_data);
     size_t iterations = som_train(network, package_dataset, 100, true);
     ASSERT_LT(0, iterations);
     free_pyclustering_package(package_dataset);
 
-    pyclustering_package * package_pattern = create_package(&pattern({2.3}));
+    pattern input_pattern = {2.3};
+    pyclustering_package * package_pattern = create_package(&input_pattern);
     size_t index_winner = som_simulate(network, package_pattern);
     ASSERT_LE(0, index_winner);
     ASSERT_GT(3, index_winner);

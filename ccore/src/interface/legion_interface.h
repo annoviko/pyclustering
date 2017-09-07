@@ -79,7 +79,7 @@ extern "C" DECLARATION void * legion_simulate(const void * p_network_pointer,
  * @param[in] p_network_pointer: Pointer to instance of LEGION.
  *
  */
-extern "C" DECLARATION unsigned int legion_get_size(const void * p_network_pointer);
+extern "C" DECLARATION std::size_t legion_get_size(const void * p_network_pointer);
 
 /**
  *
@@ -127,4 +127,4 @@ extern "C" DECLARATION pyclustering_package * legion_dynamic_get_time(const void
  * @param[in] p_dynamic_pointer: Pointer to output dynamic.
  *
  */
-extern "C" DECLARATION unsigned int legion_dynamic_get_size(const void * p_dynamic_pointer);
+extern "C" DECLARATION std::size_t legion_dynamic_get_size(const void * p_dynamic_pointer);

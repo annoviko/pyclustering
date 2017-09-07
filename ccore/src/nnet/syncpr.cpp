@@ -182,7 +182,7 @@ double syncpr::calculate_memory_order(const syncpr_pattern & input_pattern) cons
         order += std::complex<double>(input_pattern[i], 0) * std::exp(std::complex<double>(0, 1) * m_oscillators[i].phase);
     }
 
-    order /= std::complex<double>(size(), 0);
+    order /= std::complex<double>((double) size(), 0);
     return std::abs(order);
 }
 

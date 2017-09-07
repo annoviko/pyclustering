@@ -18,8 +18,7 @@
 *
 */
 
-#ifndef _SUPPORT_H_
-#define _SUPPORT_H_
+#pragma once
 
 #include <stdexcept>
 
@@ -36,8 +35,8 @@
 
 
 typedef struct differential_result {
-	double time;
-	double value;
+    double time;
+    double value;
 } differential_result;
 
 
@@ -45,8 +44,8 @@ inline double pi(void) { return (double) 3.14159265358979323846; }
 
 
 inline double heaviside(const double value) {
-	if (value >= 0.0) { return 1.0; }
-	return 0.0;
+    if (value >= 0.0) { return 1.0; }
+    return 0.0;
 }
 
 
@@ -61,14 +60,14 @@ inline double heaviside(const double value) {
  *
  */
 inline double euclidean_distance_sqrt(const std::vector<double> * const point1, const std::vector<double> * const point2) {
-	double distance = 0.0;
-	/* assert(point1->size() != point1->size()); */
-	for (unsigned int dimension = 0; dimension < point1->size(); dimension++) {
-		double difference = (point1->data()[dimension] - point2->data()[dimension]);
-		distance += difference * difference;
-	}
+    double distance = 0.0;
+    /* assert(point1->size() != point1->size()); */
+    for (std::size_t dimension = 0; dimension < point1->size(); dimension++) {
+        double difference = (point1->data()[dimension] - point2->data()[dimension]);
+        distance += difference * difference;
+    }
 
-	return distance;
+  return distance;
 }
 
 /**
@@ -96,14 +95,14 @@ inline double euclidean_distance_sqrt(const std::vector<double> & point1, const 
  *
  */
 inline double euclidean_distance(const std::vector<double> * const point1, const std::vector<double> * const point2) {
-	double distance = 0.0;
+    double distance = 0.0;
 
-	for (unsigned int dimension = 0; dimension < point1->size(); dimension++) {
-		double difference = (point1->data()[dimension] - point2->data()[dimension]);
-		distance += difference * difference;
-	}
+    for (std::size_t dimension = 0; dimension < point1->size(); dimension++) {
+        double difference = (point1->data()[dimension] - point2->data()[dimension]);
+        distance += difference * difference;
+    }
 
-	return std::sqrt(distance);
+    return std::sqrt(distance);
 }
 
 /**
@@ -120,16 +119,14 @@ inline double euclidean_distance(const std::vector<double> & point1, const std::
     return euclidean_distance(&point1, &point2);
 }
 
-/***********************************************************************************************
+/**
  *
  * @brief   Returns average distance for establish links between specified number of neighbors.
  *
- * @param   (in) points         - input data.
- * @param   (in) num_neigh      - number of neighbors.
+ * @param[in] points:    Input data.
+ * @param[in] num_neigh: Number of neighbors.
  *
  * @return  Returns average distance for establish links between 'num_neigh' in data set 'points'.
  *
- ***********************************************************************************************/
-double average_neighbor_distance(const std::vector<std::vector<double> > * points, const unsigned int num_neigh);
-
-#endif
+ */
+double average_neighbor_distance(const std::vector<std::vector<double> > * points, const std::size_t num_neigh);

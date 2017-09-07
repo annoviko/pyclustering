@@ -45,7 +45,7 @@ private:
 
     const dataset   * m_ptr_data;     /* used only during processing */
 
-    unsigned int    m_maximum_clusters;
+    std::size_t     m_maximum_clusters;
 
     double          m_tolerance;
 
@@ -95,7 +95,7 @@ private:
 
     double splitting_criterion(const cluster_sequence & clusters, const dataset & centers) const;
 
-    unsigned int find_proper_cluster(const dataset & analysed_centers, const point & p_point) const;
+    std::size_t find_proper_cluster(const dataset & analysed_centers, const point & p_point) const;
 
     double bayesian_information_criterion(const cluster_sequence & clusters, const dataset & centers) const;
 

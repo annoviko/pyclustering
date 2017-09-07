@@ -47,7 +47,7 @@ def syncpr_destroy(pointer_network):
 
 def syncpr_get_size(pointer_network):
     ccore = load_core();
-    ccore.syncpr_get_size.restype = c_uint;
+    ccore.syncpr_get_size.restype = c_size_t;
     return ccore.syncpr_get_size(pointer_network);
     
 
