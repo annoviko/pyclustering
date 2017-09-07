@@ -76,4 +76,6 @@ TEST(utest_interface_som, som_api) {
 
     pyclustering_package * neighbors = som_get_neighbors(network);
     CHECK_FREE_PACKAGE(neighbors, 3);
+
+    som_destroy(network);
 }
