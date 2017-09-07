@@ -73,23 +73,21 @@ enum class som_init_type {
 * @brief   Parameters of self-organized feature map.
 *
 */
-typedef struct som_parameters {
-    som_init_type init_type;
-    double init_radius;
-    double init_learn_rate;
-    double adaptation_threshold;
+struct som_parameters {
+    som_init_type init_type       = som_init_type::SOM_UNIFORM_GRID;
+    double init_radius            = 0.0;
+    double init_learn_rate        = 0.1;
+    double adaptation_threshold   = 0.01;
 
-    /**
-    *
-    * @brief   Default constructor of parameters of self-organized feature map.
-    *
-    */
-    som_parameters() :
-        init_type(som_init_type::SOM_UNIFORM_GRID),
-        init_radius(0.0),
-        init_learn_rate(0.1),
-        adaptation_threshold(0.001) { }
-} som_parameters;
+public:
+    som_parameters(void) = default;
+
+    som_parameters(som_parameters && p_other) = default;
+
+    som_parameters(const som_parameters & p_other) = default;
+
+    ~som_parameters(void) = default;
+};
 
 
 using som_award_sequence    = std::vector<size_t>;

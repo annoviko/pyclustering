@@ -86,3 +86,22 @@ class SomTestTemplates:
             points = sorted(points);
             for i in range(len(points)):
                 assert points[i] == i;
+
+
+    @staticmethod
+    def templateTestSimulate(connections, ccore_flag):
+        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1);
+        
+        network = som(1, 2, connections, ccore = ccore_flag);
+        network.train(sample, 100);
+        
+        expected_winners = [0, 1];
+        for i in range(len(sample)):
+            index_winner = network.simulate(sample[i]);
+            if ( (i == 0) and (index_winner == 1)):
+                expected_winners = [1, 0];
+            
+            if (i < 5):
+                assert expected_winners[0] == index_winner;
+            else:
+                assert expected_winners[1] == index_winner;

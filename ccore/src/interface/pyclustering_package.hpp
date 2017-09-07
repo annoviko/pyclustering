@@ -44,14 +44,14 @@ typedef enum pyclustering_type_data {
 } pyclustering_type_data;
 
 
-typedef struct pyclustering_package {
+struct pyclustering_package {
 public:
-    std::size_t     size;      /* size of data in elements  */
-    unsigned int    type;      /* pyclustering type data    */
-    void            * data;    /* pointer to data           */
+    std::size_t     size      = 0;
+    unsigned int    type      = (unsigned int) PYCLUSTERING_TYPE_UNDEFINED;
+    void            * data    = nullptr;
 
 public:
-    pyclustering_package(void);
+    pyclustering_package(void) = default;
 
     pyclustering_package(const pyclustering_type_data package_type);
 
@@ -104,7 +104,7 @@ private:
             container.push_back(package->at<TypeValue>(i));
         }
     }
-} pyclustering_package;
+};
 
 
 template <class TypeContainer>

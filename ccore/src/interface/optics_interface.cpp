@@ -24,15 +24,6 @@
 #include "cluster/optics.hpp"
 
 
-enum optics_package_indexer {
-    OPTICS_PACKAGE_INDEX_CLUSTERS = 0,
-    OPTICS_PACKAGE_INDEX_NOISE,
-    OPTICS_PACKAGE_INDEX_ORDERING,
-    OPTICS_PACKAGE_INDEX_RADIUS,
-    OPTICS_PACKAGE_SIZE
-};
-
-
 pyclustering_package * optics_algorithm(const pyclustering_package * const p_sample, const double p_radius, const size_t p_minumum_neighbors, const size_t p_amount_clusters) {
     dataset input_dataset;
     p_sample->extract(input_dataset);

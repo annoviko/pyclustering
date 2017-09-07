@@ -66,7 +66,7 @@ TEST(utest_interface_sync, sync_api) {
 
     pyclustering_package * package = sync_connectivity_matrix(network_pointer);
     CHECK_FREE_PACKAGE(package, 10);
-#if 0
+
     package = sync_dynamic_allocate_sync_ensembles(dynamic_pointer, 0.01, dynamic_size - 1);
     CHECK_FREE_PACKAGE(package, 1);
 
@@ -74,10 +74,10 @@ TEST(utest_interface_sync, sync_api) {
     CHECK_FREE_PACKAGE(package, 10);
 
     package = sync_dynamic_get_time(dynamic_pointer);
-    CHECK_FREE_PACKAGE(package, 20);
+    CHECK_FREE_PACKAGE(package, 21);
 
     package = sync_dynamic_get_output(dynamic_pointer);
-    CHECK_FREE_PACKAGE(package, 20);
+    CHECK_FREE_PACKAGE(package, 21);
 
     package = sync_dynamic_calculate_order(dynamic_pointer, 0, dynamic_size);
     CHECK_FREE_PACKAGE(package, dynamic_size);
@@ -85,7 +85,6 @@ TEST(utest_interface_sync, sync_api) {
     package = sync_dynamic_calculate_local_order(dynamic_pointer, network_pointer, 0, dynamic_size);
     CHECK_FREE_PACKAGE(package, dynamic_size);
 
-#endif
     sync_dynamic_destroy(dynamic_pointer);
     sync_destroy_network(network_pointer);
 }

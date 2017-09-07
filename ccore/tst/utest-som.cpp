@@ -30,42 +30,42 @@
 
 
 static void template_create_delete(const unsigned int rows, const unsigned int cols, const som_conn_type conn_type, const som_init_type init_type) {
-	som_parameters params;
-	params.init_type = init_type;
+    som_parameters params;
+    params.init_type = init_type;
 
-	som * som_map = new som(rows, cols, conn_type, params);
-	ASSERT_EQ(rows * cols, som_map->get_size());
+    som * som_map = new som(rows, cols, conn_type, params);
+    ASSERT_EQ(rows * cols, som_map->get_size());
 
-	delete som_map;
+    delete som_map;
 }
 
 
 TEST(utest_som, create_delete_conn_func_neighbor) {
-	template_create_delete(10, 10, som_conn_type::SOM_FUNC_NEIGHBOR, som_init_type::SOM_RANDOM);
+    template_create_delete(10, 10, som_conn_type::SOM_FUNC_NEIGHBOR, som_init_type::SOM_RANDOM);
 }
 
 TEST(utest_som, create_delete_conn_grid_eight) {
-	template_create_delete(10, 10, som_conn_type::SOM_GRID_EIGHT, som_init_type::SOM_RANDOM);
+    template_create_delete(10, 10, som_conn_type::SOM_GRID_EIGHT, som_init_type::SOM_RANDOM);
 }
 
 TEST(utest_som, create_delete_conn_grid_four) {
-	template_create_delete(10, 10, som_conn_type::SOM_GRID_FOUR, som_init_type::SOM_RANDOM);
+    template_create_delete(10, 10, som_conn_type::SOM_GRID_FOUR, som_init_type::SOM_RANDOM);
 }
 
 TEST(utest_som, create_delete_conn_honeycomb) {
-	template_create_delete(10, 10, som_conn_type::SOM_HONEYCOMB, som_init_type::SOM_RANDOM);
+  template_create_delete(10, 10, som_conn_type::SOM_HONEYCOMB, som_init_type::SOM_RANDOM);
 }
 
 TEST(utest_som, create_delete_init_centroid) {
-	template_create_delete(10, 10, som_conn_type::SOM_FUNC_NEIGHBOR, som_init_type::SOM_RANDOM_CENTROID);
+    template_create_delete(10, 10, som_conn_type::SOM_FUNC_NEIGHBOR, som_init_type::SOM_RANDOM_CENTROID);
 }
 
 TEST(utest_som, create_delete_init_surface) {
-	template_create_delete(10, 10, som_conn_type::SOM_FUNC_NEIGHBOR, som_init_type::SOM_RANDOM_SURFACE);
+    template_create_delete(10, 10, som_conn_type::SOM_FUNC_NEIGHBOR, som_init_type::SOM_RANDOM_SURFACE);
 }
 
 TEST(utest_som, create_delete_init_uniform_grid) {
-	template_create_delete(10, 10, som_conn_type::SOM_FUNC_NEIGHBOR, som_init_type::SOM_UNIFORM_GRID);
+    template_create_delete(10, 10, som_conn_type::SOM_FUNC_NEIGHBOR, som_init_type::SOM_UNIFORM_GRID);
 }
 
 
@@ -221,11 +221,11 @@ TEST(utest_som, awards_clusters_honeycomb_simple_sample_03) {
 
 TEST(utest_som, double_training) {
     som_parameters params;
-	som som_map(2, 2, som_conn_type::SOM_GRID_EIGHT, params);
+    som som_map(2, 2, som_conn_type::SOM_GRID_EIGHT, params);
 
     std::shared_ptr<dataset> sample_simple_01 = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01);
 
-	som_map.train(*sample_simple_01.get(), 100, false);
+    som_map.train(*sample_simple_01.get(), 100, false);
     som_map.train(*sample_simple_01.get(), 100, false);
 
     som_gain_sequence captured_objects;
@@ -244,4 +244,59 @@ TEST(utest_som, double_training) {
     size_t number_awards = std::accumulate(awards.begin(), awards.end(), (std::size_t) 0);
 
     ASSERT_EQ(sample_simple_01->size(), number_awards);
+}
+
+
+static void template_simulate_check_winners(const som_conn_type conn_type, const bool autostop) {
+    som_parameters params;
+    std::shared_ptr<dataset> sample_simple_01 = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01);
+
+    som som_map(1, 2, conn_type, params);
+    som_map.train(*sample_simple_01.get(), 100, autostop);
+
+    std::vector<std::size_t> expected_winners = { 0, 1 };
+    for (int i = 0; i < sample_simple_01->size(); i++) {
+        std::size_t index_winner = som_map.simulate(sample_simple_01->at(i));
+        if ( (i == 0) && (index_winner != 0) ) {
+            expected_winners = { 1, 0 };
+        }
+
+        if (i < 5)
+            EXPECT_EQ(expected_winners[0], index_winner);
+        else
+            EXPECT_EQ(expected_winners[1], index_winner);
+    }
+}
+
+
+TEST(utest_som, simulate_func_neighbors_autostop) {
+    template_simulate_check_winners(som_conn_type::SOM_FUNC_NEIGHBOR, true);
+}
+
+TEST(utest_som, simulate_grid_four_autostop) {
+    template_simulate_check_winners(som_conn_type::SOM_GRID_FOUR, true);
+}
+
+TEST(utest_som, simulate_grid_eight_autostop) {
+    template_simulate_check_winners(som_conn_type::SOM_GRID_EIGHT, true);
+}
+
+TEST(utest_som, simulate_honeycomb_autostop) {
+    template_simulate_check_winners(som_conn_type::SOM_HONEYCOMB, true);
+}
+
+TEST(utest_som, simulate_func_neighbors_without_autostop) {
+    template_simulate_check_winners(som_conn_type::SOM_FUNC_NEIGHBOR, false);
+}
+
+TEST(utest_som, simulate_grid_four_without_autostop) {
+    template_simulate_check_winners(som_conn_type::SOM_GRID_FOUR, false);
+}
+
+TEST(utest_som, simulate_grid_eight_without_autostop) {
+    template_simulate_check_winners(som_conn_type::SOM_GRID_EIGHT, false);
+}
+
+TEST(utest_som, simulate_honeycomb_without_autostop) {
+    template_simulate_check_winners(som_conn_type::SOM_HONEYCOMB, false);
 }

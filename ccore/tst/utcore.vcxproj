@@ -119,9 +119,11 @@
     <ClCompile Include="..\src\interface\kmedians_interface.cpp" />
     <ClCompile Include="..\src\interface\kmedoids_interface.cpp" />
     <ClCompile Include="..\src\interface\legion_interface.cpp" />
+    <ClCompile Include="..\src\interface\optics_interface.cpp" />
     <ClCompile Include="..\src\interface\pcnn_interface.cpp" />
     <ClCompile Include="..\src\interface\pyclustering_interface.cpp" />
     <ClCompile Include="..\src\interface\pyclustering_package.cpp" />
+    <ClCompile Include="..\src\interface\som_interface.cpp" />
     <ClCompile Include="..\src\interface\syncnet_interface.cpp" />
     <ClCompile Include="..\src\interface\syncpr_interface.cpp" />
     <ClCompile Include="..\src\interface\sync_interface.cpp" />
@@ -159,7 +161,9 @@
     <ClCompile Include="utest-interface-kmedians.cpp" />
     <ClCompile Include="utest-interface-kmedoids.cpp" />
     <ClCompile Include="utest-interface-legion.cpp" />
+    <ClCompile Include="utest-interface-optics.cpp" />
     <ClCompile Include="utest-interface-pcnn.cpp" />
+    <ClCompile Include="utest-interface-som.cpp" />
     <ClCompile Include="utest-interface-syncnet.cpp" />
     <ClCompile Include="utest-interface-syncpr.cpp" />
     <ClCompile Include="utest-interface-xmeans.cpp" />
@@ -230,9 +234,11 @@
     <ClInclude Include="..\src\interface\kmedians_interface.h" />
     <ClInclude Include="..\src\interface\kmedoids_interface.h" />
     <ClInclude Include="..\src\interface\legion_interface.h" />
+    <ClInclude Include="..\src\interface\optics_interface.h" />
     <ClInclude Include="..\src\interface\pcnn_interface.h" />
     <ClInclude Include="..\src\interface\pyclustering_interface.h" />
     <ClInclude Include="..\src\interface\pyclustering_package.hpp" />
+    <ClInclude Include="..\src\interface\som_interface.h" />
     <ClInclude Include="..\src\interface\syncnet_interface.h" />
     <ClInclude Include="..\src\interface\syncpr_interface.h" />
     <ClInclude Include="..\src\interface\sync_interface.h" />

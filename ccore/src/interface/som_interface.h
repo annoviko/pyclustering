@@ -18,8 +18,7 @@
 *
 */
 
-#ifndef SRC_INTERFACE_SOM_INTERFACE_H_
-#define SRC_INTERFACE_SOM_INTERFACE_H_
+#pragma once
 
 
 #include <cstddef>
@@ -86,7 +85,7 @@ extern "C" DECLARATION size_t som_train(const void * pointer, const pyclustering
 * @see som_get_capture_objects()
 *
 */
-extern "C" DECLARATION size_t som_simulate(const void * pointer, const data_representation * const input_pattern);
+extern "C" DECLARATION size_t som_simulate(const void * pointer, const pyclustering_package * const input_pattern);
 
 /**
 *
@@ -155,6 +154,3 @@ extern "C" DECLARATION pyclustering_package * som_get_awards(const void * pointe
 *
 */
 extern "C" DECLARATION pyclustering_package * som_get_neighbors(const void * pointer);
-
-
-#endif

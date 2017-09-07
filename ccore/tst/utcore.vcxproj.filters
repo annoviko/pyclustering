@@ -317,6 +317,18 @@
     <ClCompile Include="utest-interface-sync.cpp">
       <Filter>Unit Tests</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\interface\som_interface.cpp">
+      <Filter>Tested Code\interface</Filter>
+    </ClCompile>
+    <ClCompile Include="utest-interface-som.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="utest-interface-optics.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\interface\optics_interface.cpp">
+      <Filter>Tested Code\interface</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\tools\gtest\gtest.h">
@@ -527,6 +539,12 @@
       <Filter>Tested Code\interface</Filter>
     </ClInclude>
     <ClInclude Include="..\src\interface\hsyncnet_interface.h">
+      <Filter>Tested Code\interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\interface\som_interface.h">
+      <Filter>Tested Code\interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\interface\optics_interface.h">
       <Filter>Tested Code\interface</Filter>
     </ClInclude>
   </ItemGroup>

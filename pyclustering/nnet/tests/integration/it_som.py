@@ -142,6 +142,19 @@ class SomIntegrationTest(unittest.TestCase):
         network.show_density_matrix();
 
 
+    def testSimulateCheckWinnerFuncNeighborByCore(self):
+        SomTestTemplates.templateTestSimulate(type_conn.func_neighbor, True);
+
+    def testSimulateCheckWinnerGridFourByCore(self):
+        SomTestTemplates.templateTestSimulate(type_conn.grid_four, True);
+
+    def testSimulateCheckWinnerGridEightByCore(self):
+        SomTestTemplates.templateTestSimulate(type_conn.grid_eight, True);
+
+    def testSimulateCheckWinnerHoneycombByCore(self):
+        SomTestTemplates.templateTestSimulate(type_conn.honeycomb, True);
+
+
 if __name__ == "__main__":
     unittest.main();
     

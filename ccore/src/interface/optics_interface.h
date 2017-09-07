@@ -30,6 +30,21 @@
 
 /**
  *
+ * @brief   OPTICS result is returned by pyclustering_package that consist sub-packages and this enumerator provides
+ *           named indexes for sub-packages.
+ *
+ */
+enum optics_package_indexer {
+    OPTICS_PACKAGE_INDEX_CLUSTERS = 0,
+    OPTICS_PACKAGE_INDEX_NOISE,
+    OPTICS_PACKAGE_INDEX_ORDERING,
+    OPTICS_PACKAGE_INDEX_RADIUS,
+    OPTICS_PACKAGE_SIZE
+};
+
+
+/**
+ *
  * @brief   Clustering algorithm OPTICS returns allocated clusters, noise, ordering and proper connectivity radius.
  * @details Caller should destroy returned result in 'pyclustering_package'.
  *

@@ -279,7 +279,7 @@ class som:
         
         """
         
-        return self.size;
+        return self._size;
     
     
     def __initialize_initial_radius(self, rows, cols):
@@ -612,7 +612,7 @@ class som:
         """
                 
         if (self.__ccore_som_pointer is not None):
-            return wrapper.som_simulate(self.__ccore_som_pointer, [ input_pattern ]);
+            return wrapper.som_simulate(self.__ccore_som_pointer, input_pattern);
             
         return self._competition(input_pattern);
     

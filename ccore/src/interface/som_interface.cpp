@@ -41,11 +41,11 @@ size_t som_train(const void * pointer, const pyclustering_package * const sample
 }
 
 
-size_t som_simulate(const void * pointer, const pyclustering_package * const pattern) {
-    dataset input_pattern;
-    pattern->extract(input_pattern);
+size_t som_simulate(const void * pointer, const pyclustering_package * const p_pattern) {
+    pattern input_pattern;
+    p_pattern->extract(input_pattern);
 
-    return ((som *) pointer)->simulate( (input_pattern)[0] );
+    return ((som *) pointer)->simulate(input_pattern);
 }
 
 

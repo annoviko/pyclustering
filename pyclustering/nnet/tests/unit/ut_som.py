@@ -126,13 +126,9 @@ class SomUnitTest(unittest.TestCase):
         SomTestTemplates.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE7, 2, 1, 100, [10, 10], True, False, parameters);
 
 
-
     def testHighEpochs(self):
-        # This test requires too much time for execution
         epochs = 1000;
         SomTestTemplates.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, 2, epochs, [5, 5]);
-        SomTestTemplates.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, 1, epochs, [5, 5]);
-        SomTestTemplates.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 1, 4, epochs, [10, 10, 10, 30]);
         SomTestTemplates.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 2, 2, epochs, [10, 10, 10, 30]);
 
 
@@ -156,6 +152,19 @@ class SomUnitTest(unittest.TestCase):
             total_capture_points += len(points);
          
         assert total_capture_points == len(sample);
+
+
+    def testSimulateCheckWinnerFuncNeighbor(self):
+        SomTestTemplates.templateTestSimulate(type_conn.func_neighbor, False);
+
+    def testSimulateCheckWinnerGridFour(self):
+        SomTestTemplates.templateTestSimulate(type_conn.grid_four, False);
+
+    def testSimulateCheckWinnerGridEight(self):
+        SomTestTemplates.templateTestSimulate(type_conn.grid_eight, False);
+
+    def testSimulateCheckWinnerHoneycomb(self):
+        SomTestTemplates.templateTestSimulate(type_conn.honeycomb, False);
 
 
 if __name__ == "__main__":

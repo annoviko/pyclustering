@@ -24,6 +24,7 @@
 """
 
 
+import sys;
 import unittest;
 
 
@@ -35,7 +36,7 @@ class suite_holder:
         return self.__suite;
 
     def run(self):
-        return unittest.TextTestRunner(verbosity = 2).run(self.__suite);
+        return unittest.TextTestRunner(stream = sys.stdout, verbosity = 2).run(self.__suite);
 
     @staticmethod
     def fill_suite(test_suite):
