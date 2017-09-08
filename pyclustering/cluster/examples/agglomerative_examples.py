@@ -36,11 +36,11 @@ def template_clustering(number_clusters, path, links):
     clusters_complete_link = None;
     clusters_average_link = None;
     
-    visualizer = cluster_visualizer(len(links));
+    visualizer = cluster_visualizer(len(links), len(links));
     index_canvas = 0;
     
     if (type_link.CENTROID_LINK in links):
-        agglomerative_centroid_link = agglomerative(sample, number_clusters, type_link.CENTROID_LINK);
+        agglomerative_centroid_link = agglomerative(sample, number_clusters, type_link.CENTROID_LINK, True);
         
         (ticks, result) = timedcall(agglomerative_centroid_link.process);
         clusters_centroid_link = agglomerative_centroid_link.get_clusters();

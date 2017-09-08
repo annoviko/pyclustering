@@ -57,8 +57,10 @@ class type_link(IntEnum):
 class agglomerative:
     """!
     @brief Class represents agglomerative algorithm for cluster analysis.
+    @details Agglomerative algorithm considers each data point (object) as a separate cluster at the beggining and
+              step by step finds the best pair of clusters for merge until required amount of clusters is obtained.
     
-    Example:
+    Example of agglomerative algorithm where centroid link is used:
     @code
         # sample for cluster analysis (represented by list)
         sample = read_sample(path_to_sample);
@@ -72,6 +74,29 @@ class agglomerative:
         # obtain results of clustering
         clusters = agglomerative_instance.get_clusters();  
     @endcode
+    
+    Algorithm performance can be improved if 'ccore' flag is on. In this case C++ library will be called for clustering.
+    There is example of clustering 'LSUN' sample when usage of single or complete link will take a lot of resources and
+    when core usage is prefereble.
+    @code
+        # sample Lsun for cluster analysis
+        lsun_sample = read_sample(FCPS_SAMPLES.SAMPLE_LSUN);
+        
+        # create instance of the algorithm that will use ccore library (the last argument)
+        agglomerative_instance = agglomerative(lsun_sample, 3, link_type.SINGLE_LINK, True);
+        
+        # start processing
+        agglomerative_instance.process();
+        
+        # get result and visualize it
+        lsun_clusters = agglomerative_instance.get_clusters();
+        visualizer = cluster_visualizer();
+        visualizer.append_clusters(lsun_clusters, lsun_sample);
+        visualizer.show();
+    @endcode
+    
+    Example of clustering for different links:
+    @image html agglomerative_lsun_clustering_single_link.png
     
     """
     

@@ -44,6 +44,7 @@ Cluster analysis algorithms and methods (module pyclustering.cluster):
 - K-Medoids (pyclustering.cluster.kmedoids);
 - OPTICS (pyclustering.cluster.optics);
 - ROCK (pyclustering.cluster.rock);
+- SOM-SC (pyclustering.cluster.somsc);
 - SyncNet (bio-inspired algorithm pyclustering.cluster.syncnet)
 - SyncSOM (bio-inspired algorithm pyclustering.cluster.syncsom)
 - X-Means (pyclustering.cluster.xmeans);
