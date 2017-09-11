@@ -10,54 +10,35 @@ class GAMath:
     def get_centres(chromosomes, data, count_clusters):
         """ """
 
-        # Initialize centres
-        centres = np.zeros((len(chromosomes), count_clusters, len(data[0])))
-
-        # Calc centers for next chromosome
-        for _idx in range(len(chromosomes)):
-            centres[_idx] = GAMath.calc_centers_for_chromosome(chromosomes[_idx], data, count_clusters)
+        centres = GAMath.calc_centers(chromosomes, data, count_clusters)
 
         return centres
 
     @staticmethod
-    def calc_centers_for_chromosome(chromosome, data, count_clusters):
-        """ """
-
-        # Initialize centers
-        centers = np.zeros((count_clusters, len(data[0])))
-
-        # Next cluster
-        for _idx_cluster in range(count_clusters):
-            centers[_idx_cluster] = GAMath.calc_center(chromosome, data, _idx_cluster)
-
-        return centers
-
-    @staticmethod
-    def calc_center(chromosome, data, cluster_num):
+    def calc_centers(chromosomes, data, count_clusters):
         """ """
 
         # Initialize center
-        center = np.zeros(len(data[0]))
+        centers = np.zeros(shape=(len(chromosomes), count_clusters, len(data[0])))
 
-        # Get count data in clusters
-        count_data_in_cluster = 0
+        for _idx_chromosome in range(len(chromosomes)):
 
-        # Next data point
-        for _idx in range(len(chromosome)):
+            # Get count data in clusters
+            count_data_in_cluster = np.zeros(count_clusters)
 
-            # If data associated with current cluster
-            if chromosome[_idx] == cluster_num:
-                center += data[_idx]
-                count_data_in_cluster += 1
+            # Next data point
+            for _idx in range(len(chromosomes[_idx_chromosome])):
 
-        # If has no data in cluster
-        if count_data_in_cluster == 0:
-            return center
+                cluster_num = chromosomes[_idx_chromosome][_idx]
 
-        # Normalize center
-        center /= count_data_in_cluster
+                centers[_idx_chromosome][cluster_num] += data[_idx]
+                count_data_in_cluster[cluster_num] += 1
 
-        return center
+            for _idx_cluster in range(count_clusters):
+                if count_data_in_cluster[_idx_cluster] != 0:
+                    centers[_idx_chromosome][_idx_cluster] /= count_data_in_cluster[_idx_cluster]
+
+        return centers
 
     @staticmethod
     def calc_probability_vector(fitness):
@@ -108,7 +89,7 @@ class GAMath:
         last_val = probabilities[back_idx]
 
         # for all elements or if a elem not equal to the last elem
-        for _idx in range(-1, -len(probabilities) - 1):
+        for _ in range(-1, -len(probabilities) - 1):
             if probabilities[back_idx] == last_val:
                 probabilities[back_idx] = 1
             else:

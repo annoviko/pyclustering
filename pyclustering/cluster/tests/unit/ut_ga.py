@@ -82,8 +82,8 @@ class GeneticAlgorithmClusteringUnitTest(unittest.TestCase):
 
         self.assertEqual(best_ff, 16.0)
 
-    @unittest.skip("unstable test (or long : 3 - 5s)")
-    def DISABLED4Center16DataClustering(self):
+    # @unittest.skip("unstable test (or long : 3 - 5s)")
+    def test4Center16DataClustering(self):
 
         data = []
         data.extend([[0, 0], [1, 0], [0, 1], [1, 1]])
@@ -91,9 +91,9 @@ class GeneticAlgorithmClusteringUnitTest(unittest.TestCase):
         data.extend([[0, 5], [1, 5], [0, 6], [1, 6]])
         data.extend([[4, 4], [7, 4], [4, 7], [7, 7]])
 
-        count_chromosomes = 100
+        count_chromosomes = 20
         count_clusters = 4
-        count_populations = 150
+        count_populations = 100
         count_mutations_gen = 1
 
         _, best_ff = GeneticAlgorithm(data=data,

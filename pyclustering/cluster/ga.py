@@ -35,7 +35,7 @@ class GeneticAlgorithm:
     """
 
     def __init__(self, data, count_clusters,  chromosome_count, population_count, count_mutation_gens=2,
-                 coeff_mutation_count=0.25):
+                 coeff_mutation_count=0.25, select_coeff=1.0):
 
         # Initialize random
         np.random.seed()
@@ -64,6 +64,9 @@ class GeneticAlgorithm:
         # Count of chromosome for mutation (range [0, 1])
         self.coeff_mutation_count = coeff_mutation_count
 
+        # Exponential coeff for selection
+        self.select_coeff = select_coeff
+
     def clustering(self):
         """
 
@@ -80,7 +83,7 @@ class GeneticAlgorithm:
         for _ in range(self.population_count):
 
             # Select
-            chromosomes = self._select(chromosomes, self.data, self.count_clusters)
+            chromosomes = self._select(chromosomes, self.data, self.count_clusters, self.select_coeff)
 
             # Crossover
             self._crossover(chromosomes)
@@ -99,7 +102,7 @@ class GeneticAlgorithm:
         return best_chromosome, best_ff
 
     @staticmethod
-    def _select(chromosomes, data, count_clusters):
+    def _select(chromosomes, data, count_clusters, select_coeff):
         """  """
 
         # Calc centers
@@ -108,11 +111,14 @@ class GeneticAlgorithm:
         # Calc fitness functions
         fitness = GeneticAlgorithm._calc_fitness_function(centres, data, chromosomes)
 
+        for _idx in range(len(fitness)):
+            fitness[_idx] = math.exp(1 + fitness[_idx] * select_coeff)
+
         # Calc probability vector
         probabilities = GAMath.calc_probability_vector(fitness)
 
         # Select P chromosomes with probabilities
-        new_chromosomes = np.zeros(chromosomes.shape)
+        new_chromosomes = np.zeros(chromosomes.shape, dtype=np.int)
 
         # Selecting
         for _idx in range(len(chromosomes)):
@@ -222,7 +228,6 @@ class GeneticAlgorithm:
 
         # Get count of chromosomes and clusters
         count_chromosome = len(chromosomes)
-        count_clusters = len(centres[0])
 
         # Initialize fitness function values
         fitness_function = np.zeros(count_chromosome)
@@ -230,23 +235,14 @@ class GeneticAlgorithm:
         # Calc fitness function for each chromosome
         for _idx_chromosome in range(count_chromosome):
 
-            # Calc fitness function for each cluster in a chromosome
-            for _idx_cluster in range(count_clusters):
+            # Get centers for a selected chromosome
+            centres_data = np.zeros(data.shape)
 
-                # Initialize ff for a cluster
-                ff_cluster = 0
+            # Fill data centres
+            for _idx in range(len(data)):
+                centres_data[_idx] = centres[_idx_chromosome][chromosomes[_idx_chromosome][_idx]]
 
-                # For each input points
-                for _idx_data in range(len(data)):
-
-                    # If a data belong to current cluster
-                    if chromosomes[_idx_chromosome][_idx_data] == _idx_cluster:
-
-                        # Calc Manhattan distance
-                        data_diff = data[_idx_data] - centres[_idx_chromosome][_idx_cluster]
-                        ff_cluster += abs(data_diff[0]) + abs(data_diff[1])
-
-                # Accumulate fitness function values
-                fitness_function[_idx_chromosome] += ff_cluster
+            # Get City Block distance for a chromosome
+            fitness_function[_idx_chromosome] += np.sum(abs(data - centres_data))
 
         return fitness_function
