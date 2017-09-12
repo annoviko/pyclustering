@@ -2,6 +2,7 @@
 
 @brief Clustering by Genetic Algorithm
 
+@authors Aleksey Kukushkin (pyclustering@yandex.ru)
 @date 2014-2017
 @copyright GNU Public License
 

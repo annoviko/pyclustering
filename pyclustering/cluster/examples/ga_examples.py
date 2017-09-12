@@ -123,6 +123,14 @@ def cluster_sample7():
                         count_mutation_gens=1)
 
 
+def cluster_sample11():
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE11,
+                        count_clusters=2,
+                        chromosome_count=20,
+                        population_count=30,
+                        count_mutation_gens=1)
+
+
 # def cluster_sample8():
 #     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE8,
 #                         count_clusters=4,
@@ -141,3 +149,4 @@ cluster_sample5()
 cluster_sample6()
 cluster_sample7()
 # cluster_sample8()
+cluster_sample11();
