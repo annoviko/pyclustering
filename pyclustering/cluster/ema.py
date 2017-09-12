@@ -89,7 +89,6 @@ class ema:
             previous_likelihood = current_likelihood;
             current_likelihood = self.__log_likelihood();
             self.__stop = self.__get_stop_flag();
-            print(previous_likelihood, current_likelihood);
 
 
     def get_clusters(self):
@@ -145,7 +144,6 @@ class ema:
         for index_cluster in range(self.__amount_clusters):
             for index_point in range(len(self.__data)):
                 self.__rc[index_cluster][index_point] = self.__probabilities(index_cluster, index_point);
-            print(self.__rc[index_cluster]);
 
 
     def __maximization_step(self):
@@ -160,7 +158,6 @@ class ema:
 
     def __get_stop_flag(self):
         for covariance in self.__variances:
-            print(covariance[0])
             if (min(covariance[0]) == 0):
                 return True;
         
@@ -188,10 +185,15 @@ class ema:
 
     def __get_random_covariances(self, data, amount):
         covariances = [];
+        covariance_appendixes = [];
         data_covariance = numpy.cov(data, rowvar = False);
         for _ in range(amount):
-            random_appendix = numpy.min(data_covariance) * 0.2 * numpy.random.random();
-            covariances.append(data_covariance + random_appendix);
+            random_appendix = numpy.min(data_covariance) * 0.5 * numpy.random.random();
+            while(random_appendix in covariance_appendixes):
+                random_appendix = numpy.min(data_covariance) * 0.5 * numpy.random.random();
+            
+            covariance_appendixes.append(random_appendix)
+            covariances.append(data_covariance - random_appendix);
          
         return covariances;
 
@@ -202,25 +204,9 @@ class ema:
         for _ in range(amount):
             random_index = numpy.random.randint(0, len(data));
             while(random_index in mean_indexes):
-                mean_indexes.append(random_index);
                 random_index = numpy.random.randint(0, len(data));
             
+            mean_indexes.append(random_index);
             means.append(numpy.array(data[random_index]));
         
         return means;
-
-
-
-# from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
-# from pyclustering.utils import read_sample;
-#   
-# # sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE9);
-# # ema_instance = ema(sample, 2);
-# 
-# sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE2);
-# ema_instance = ema(sample, 3);
-# 
-# ema_instance.process();
-# clusters = ema_instance.get_clusters();
-#   
-# print(clusters);
