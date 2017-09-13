@@ -10,6 +10,8 @@ from pyclustering.utils import timedcall
 
 import time
 
+import matplotlib.pyplot as plt
+
 
 def template_clustering(path,
                         count_clusters,
@@ -25,7 +27,7 @@ def template_clustering(path,
                                      population_count, count_mutation_gens, coeff_mutation_count)
 
     start_time = time.time()
-    best_chromosome, best_ff = algo_instance.clustering()
+    best_chromosome, best_ff, arr_best_ff = algo_instance.clustering()
 
     print("Sample: ", path, "\t\tExecution time: ", time.time() - start_time, "\n")
 
@@ -43,12 +45,15 @@ def template_clustering(path,
     visualizer.append_clusters(clusters, sample)
     visualizer.show()
 
+    plt.plot(arr_best_ff)
+    plt.show()
+
 
 def cluster_sample1():
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1,
                         count_clusters=2,
                         chromosome_count=20,
-                        population_count=30,
+                        population_count=20,
                         count_mutation_gens=2)
 
 
@@ -63,9 +68,11 @@ def cluster_sample2():
 def cluster_sample3():
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE3,
                         count_clusters=4,
-                        chromosome_count=150,
-                        population_count=250,
-                        count_mutation_gens=2)
+                        chromosome_count=100,
+                        population_count=150,
+                        count_mutation_gens=1,
+                        coeff_mutation_count=1.0,
+                        select_coeff=0.3)
 
 
 def cluster_sample4():
@@ -110,11 +117,11 @@ def cluster_sample7():
 #                         select_coeff=1.0)
 
 
-cluster_sample1()
-cluster_sample2()
-# cluster_sample3()
-cluster_sample4()
-cluster_sample5()
-cluster_sample6()
-cluster_sample7()
+# cluster_sample1()
+# cluster_sample2()
+cluster_sample3()
+# cluster_sample4()
+# cluster_sample5()
+# cluster_sample6()
+# cluster_sample7()
 # cluster_sample8()

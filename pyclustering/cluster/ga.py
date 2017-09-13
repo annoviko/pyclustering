@@ -79,8 +79,13 @@ class GeneticAlgorithm:
         # Initialize the Best solution
         best_chromosome, best_ff = self._get_best_chromosome(chromosomes, self.data, self.count_clusters)
 
+        # Accumulate best_ff
+        arr_best_ff = np.zeros(self.population_count)
+
         # Next population
-        for _ in range(self.population_count):
+        for _idx in range(self.population_count):
+
+            arr_best_ff[_idx] = best_ff
 
             # Select
             chromosomes = self._select(chromosomes, self.data, self.count_clusters, self.select_coeff)
@@ -99,7 +104,7 @@ class GeneticAlgorithm:
                 best_ff = new_best_ff
                 best_chromosome = new_best_chromosome
 
-        return best_chromosome, best_ff
+        return best_chromosome, best_ff, arr_best_ff
 
     @staticmethod
     def _select(chromosomes, data, count_clusters, select_coeff):
