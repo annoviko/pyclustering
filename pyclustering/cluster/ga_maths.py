@@ -2,7 +2,7 @@
 import numpy as np
 
 
-class GAMath:
+class ga_math:
     """
     """
 
@@ -10,7 +10,7 @@ class GAMath:
     def get_centres(chromosomes, data, count_clusters):
         """ """
 
-        centres = GAMath.calc_centers(chromosomes, data, count_clusters)
+        centres = ga_math.calc_centers(chromosomes, data, count_clusters)
 
         return centres
 
@@ -71,7 +71,7 @@ class GAMath:
         # Normalize
         prob /= prob[-1]
 
-        GAMath.set_last_value_to_one(prob)
+        ga_math.set_last_value_to_one(prob)
 
         return prob
 

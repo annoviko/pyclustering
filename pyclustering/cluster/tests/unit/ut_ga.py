@@ -26,7 +26,7 @@
 import unittest;
 
 from pyclustering.utils import read_sample;
-from pyclustering.cluster.ga import GeneticAlgorithm;
+from pyclustering.cluster.ga import genetic_algorithm;
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES;
 
@@ -42,11 +42,11 @@ class GeneticAlgorithmClusteringUnitTest(unittest.TestCase):
         count_populations = 10
         count_mutations_gen = 1
 
-        _, best_ff = GeneticAlgorithm(data=data,
+        _, best_ff = genetic_algorithm(data=data,
                                       count_clusters=count_clusters,
                                       chromosome_count=count_chromosomes,
                                       population_count=count_populations,
-                                      count_mutation_gens=count_mutations_gen).clustering()
+                                      count_mutation_gens=count_mutations_gen).process()
 
         self.assertEqual(best_ff, 2.0)
 
@@ -59,11 +59,11 @@ class GeneticAlgorithmClusteringUnitTest(unittest.TestCase):
         count_populations = 10
         count_mutations_gen = 1
 
-        _, best_ff = GeneticAlgorithm(data=data,
+        _, best_ff = genetic_algorithm(data=data,
                                       count_clusters=count_clusters,
                                       chromosome_count=count_chromosomes,
                                       population_count=count_populations,
-                                      count_mutation_gens=count_mutations_gen).clustering()
+                                      count_mutation_gens=count_mutations_gen).process()
 
         self.assertEqual(best_ff, 8.0)
 
@@ -77,11 +77,11 @@ class GeneticAlgorithmClusteringUnitTest(unittest.TestCase):
         count_populations = 50
         count_mutations_gen = 1
 
-        _, best_ff = GeneticAlgorithm(data=data,
+        _, best_ff = genetic_algorithm(data=data,
                                       count_clusters=count_clusters,
                                       chromosome_count=count_chromosomes,
                                       population_count=count_populations,
-                                      count_mutation_gens=count_mutations_gen).clustering()
+                                      count_mutation_gens=count_mutations_gen).process()
 
         self.assertEqual(best_ff, 16.0)
 
@@ -101,11 +101,11 @@ class GeneticAlgorithmClusteringUnitTest(unittest.TestCase):
             count_populations = 100
             count_mutations_gen = 1
     
-            _, best_ff = GeneticAlgorithm(data=data,
+            _, best_ff = genetic_algorithm(data=data,
                                           count_clusters=count_clusters,
                                           chromosome_count=count_chromosomes,
                                           population_count=count_populations,
-                                          count_mutation_gens=count_mutations_gen).clustering()
+                                          count_mutation_gens=count_mutations_gen).process()
     
             if (best_ff != 24.0):
                 continue;
@@ -127,10 +127,10 @@ class GeneticAlgorithmClusteringUnitTest(unittest.TestCase):
         for _ in range(3):
             sample = read_sample(sample_path);
             
-            ga_instance = GeneticAlgorithm(sample, amount_clusters, chromosome_count,
+            ga_instance = genetic_algorithm(sample, amount_clusters, chromosome_count,
                                     population_count, count_mutation_gens, coeff_mutation_count);
             
-            best_chromosome, _ = ga_instance.clustering();
+            best_chromosome, _ = ga_instance.process();
             
             clusters = [[] for _ in range(amount_clusters)]
             for _idx in range(len(best_chromosome)):

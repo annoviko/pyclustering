@@ -26,7 +26,7 @@
 from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES
 
 from pyclustering.cluster import cluster_visualizer
-from pyclustering.cluster.ga import GeneticAlgorithm
+from pyclustering.cluster.ga import genetic_algorithm
 
 from pyclustering.utils import read_sample
 from pyclustering.utils import timedcall
@@ -44,11 +44,11 @@ def template_clustering(path,
 
     sample = read_sample(path)
 
-    algo_instance = GeneticAlgorithm(sample, count_clusters, chromosome_count,
+    algo_instance = genetic_algorithm(sample, count_clusters, chromosome_count,
                                      population_count, count_mutation_gens, coeff_mutation_count)
 
     start_time = time.time()
-    best_chromosome, best_ff = algo_instance.clustering()
+    best_chromosome, best_ff = algo_instance.process();
 
     print("Sample: ", path, "\t\tExecution time: ", time.time() - start_time, "\n")
 
