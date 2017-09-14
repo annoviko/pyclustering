@@ -1,9 +1,34 @@
+"""!
 
+@brief Examples of usage and demonstration of abilities of genetic algorithm for cluster analysis.
+
+@authors Aleksey Kukushkin (pyclustering@yandex.ru)
+@date 2014-2017
+@copyright GNU Public License
+
+@cond GNU_PUBLIC_LICENSE
+    PyClustering is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    PyClustering is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+@endcond
+
+"""
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES
 
 from pyclustering.cluster import cluster_visualizer
-from pyclustering.cluster.ga import GeneticAlgorithm
+from pyclustering.cluster.ga import genetic_algorithm
+from pyclustering.cluster.ga_maths import ga_math
+from pyclustering.cluster.ga_observer import genetic_algorithm_observer
 
 from pyclustering.utils import read_sample
 from pyclustering.utils import timedcall
@@ -23,29 +48,35 @@ def template_clustering(path,
 
     sample = read_sample(path)
 
-    algo_instance = GeneticAlgorithm(sample, count_clusters, chromosome_count,
-                                     population_count, count_mutation_gens, coeff_mutation_count)
+    algo_instance = genetic_algorithm(data=sample,
+                                      count_clusters=count_clusters,
+                                      chromosome_count=chromosome_count,
+                                      population_count=population_count,
+                                      count_mutation_gens=count_mutation_gens,
+                                      coeff_mutation_count=coeff_mutation_count,
+                                      select_coeff=select_coeff,
+                                      observer=genetic_algorithm_observer(True, True, True))
 
     start_time = time.time()
-    best_chromosome, best_ff, arr_best_ff = algo_instance.clustering()
+
+    best_chromosome, best_ff = algo_instance.process()
 
     print("Sample: ", path, "\t\tExecution time: ", time.time() - start_time, "\n")
 
-    # clusters = kmeans_instance.get_clusters()
-    # centers = kmeans_instance.get_centers()
+    # f = plt.figure(121)
+    # ax = f.get_axes()
+    f, ax = plt.subplots(2)
 
-    # print("Sample: ", path, "\t\tExecution time: ", ticks, "\n")
+    visualizer = cluster_visualizer(1)
+    visualizer.append_clusters(ga_math.get_clusters_representation(best_chromosome), sample, canvas=0)
+    visualizer.show(f, display=False)
 
-    clusters = [[] for _ in range(count_clusters)]
+    observer = algo_instance.get_observer()
 
-    for _idx in range(len(best_chromosome)):
-        clusters[best_chromosome[_idx]].append(_idx)
-
-    visualizer = cluster_visualizer()
-    visualizer.append_clusters(clusters, sample)
-    visualizer.show()
-
-    plt.plot(arr_best_ff)
+    # plt.hold(True)
+    ax[0].plot(observer.get_global_best()['fitness_function'], 'r')
+    ax[0].plot(observer.get_population_best()['fitness_function'], 'k')
+    ax[0].plot(observer.get_mean_fitness_function(), 'c')
     plt.show()
 
 
@@ -70,8 +101,8 @@ def cluster_sample3():
                         count_clusters=4,
                         chromosome_count=100,
                         population_count=150,
-                        count_mutation_gens=1,
-                        coeff_mutation_count=1.0,
+                        count_mutation_gens=2,
+                        coeff_mutation_count=0.8,
                         select_coeff=0.3)
 
 
@@ -107,6 +138,14 @@ def cluster_sample7():
                         count_mutation_gens=1)
 
 
+def cluster_sample11():
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE11,
+                        count_clusters=2,
+                        chromosome_count=20,
+                        population_count=30,
+                        count_mutation_gens=2)
+
+
 # def cluster_sample8():
 #     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE8,
 #                         count_clusters=4,
@@ -117,11 +156,12 @@ def cluster_sample7():
 #                         select_coeff=1.0)
 
 
-# cluster_sample1()
+cluster_sample1()
 # cluster_sample2()
-cluster_sample3()
+# cluster_sample3()
 # cluster_sample4()
 # cluster_sample5()
 # cluster_sample6()
 # cluster_sample7()
 # cluster_sample8()
+# cluster_sample11()

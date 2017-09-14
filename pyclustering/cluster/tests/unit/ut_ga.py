@@ -26,7 +26,7 @@
 import unittest
 import inspect
 
-from pyclustering.cluster.ga import GeneticAlgorithm
+from pyclustering.cluster.ga import genetic_algorithm
 
 
 class GeneticAlgorithmClusteringUnitTest(unittest.TestCase):
@@ -43,11 +43,11 @@ class GeneticAlgorithmClusteringUnitTest(unittest.TestCase):
         # Several attempts for randomize algorithm
         for _attempt in range(GeneticAlgorithmClusteringUnitTest.attempts):
 
-            _, best_ff, _ = GeneticAlgorithm(data=data,
-                                             count_clusters=count_clusters,
-                                             chromosome_count=count_chromosomes,
-                                             population_count=count_populations,
-                                             count_mutation_gens=count_mutations_gen).clustering()
+            _, best_ff, = genetic_algorithm(data=data,
+                                            count_clusters=count_clusters,
+                                            chromosome_count=count_chromosomes,
+                                            population_count=count_populations,
+                                            count_mutation_gens=count_mutations_gen).process()
 
             # Check result for attempt
             if best_ff == result_should_be:
@@ -95,7 +95,6 @@ class GeneticAlgorithmClusteringUnitTest(unittest.TestCase):
                                  count_mutations_gen=1,
                                  result_should_be=16.0)
 
-    # @unittest.skip("unstable test (or long : 3 - 5s)")
     def test4Center16DataClustering(self):
 
         data = []
@@ -111,3 +110,7 @@ class GeneticAlgorithmClusteringUnitTest(unittest.TestCase):
                                  count_populations=100,
                                  count_mutations_gen=1,
                                  result_should_be=24.0)
+
+
+if __name__ == "__main__":
+    unittest.main()

@@ -50,7 +50,7 @@ class kmeans:
         clusters = kmeans_instance.get_clusters();
     @endcode
     
-    Example #2 - Clustering using K-Means++ for initialization:
+    Example #2 - Clustering using K-Means++ for center initialization:
     @code
         # load list of points for cluster analysis
         sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE2);

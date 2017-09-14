@@ -38,6 +38,7 @@ from pyclustering.cluster.tests.unit               import ut_clarans            
 from pyclustering.cluster.tests.unit               import ut_cure               as cluster_cure_unit_tests;
 from pyclustering.cluster.tests.unit               import ut_dbscan             as cluster_dbscan_unit_tests;
 from pyclustering.cluster.tests.unit               import ut_encoder            as cluster_encoder_unit_tests;
+from pyclustering.cluster.tests.unit               import ut_ga                 as cluster_ga_unit_tests;
 from pyclustering.cluster.tests.unit               import ut_general            as cluster_general_unit_tests;
 from pyclustering.cluster.tests.unit               import ut_hsyncnet           as cluster_hsyncnet_unit_tests;
 from pyclustering.cluster.tests.unit               import ut_kmeans             as cluster_kmeans_unit_tests;
@@ -64,6 +65,7 @@ class clustering_unit_tests(suite_holder):
         unit_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_clarans_unit_tests));
         unit_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_cure_unit_tests));
         unit_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_dbscan_unit_tests));
+        unit_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_ga_unit_tests));
         unit_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_general_unit_tests));
         unit_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_hsyncnet_unit_tests));
         unit_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_kmeans_unit_tests));

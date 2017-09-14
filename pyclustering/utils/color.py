@@ -31,9 +31,9 @@ class color:
     """
     
     ## List of color titles that are used by pyclustering for visualization.
-    TITLES = [  'red', 'blue', 'darkgreen', 'brown', 'violet', 
+    TITLES = [  'red', 'blue', 'darkgreen', 'gold', 'violet', 
                 'deepskyblue', 'darkgrey', 'lightsalmon', 'deeppink', 'yellow',
                 'black', 'mediumspringgreen', 'orange', 'darkviolet', 'darkblue',
-                'silver', 'lime', 'pink', 'gold', 'bisque',
+                'silver', 'lime', 'pink', 'brown', 'bisque',
                 'dimgray', 'firebrick', 'darksalmon', 'chartreuse', 'skyblue',
                 'purple', 'fuchsia', 'palegoldenrod', 'coral', 'hotpink'                ];

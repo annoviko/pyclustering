@@ -37,7 +37,8 @@ import pyclustering.core.cure_wrapper as wrapper;
 
 class cure_cluster:
     """!
-    @brief Represents data cluster in CURE term. CURE cluster is described by points of cluster, representation points of the cluster and by the cluster center.
+    @brief Represents data cluster in CURE term. 
+    @details CURE cluster is described by points of cluster, representation points of the cluster and by the cluster center.
     
     """
     

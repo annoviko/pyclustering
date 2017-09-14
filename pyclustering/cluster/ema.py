@@ -34,71 +34,31 @@ import matplotlib.pyplot as plt;
 from _operator import index
 
 
-def gaussion_multivariable(data, mean = None, covariance = None):
+def gaussian(data, mean = None, covariance = None):
     dimension = len(data[0]);
-
+ 
     if (mean is None):
         mean = numpy.mean(data);
-    
+     
     if (covariance is None):
-        covariance = numpy.cov(data);
-    
+        covariance = numpy.cov(data, rowvar = False);
+     
     inv_variance = numpy.linalg.inv(covariance);
     right_const = 1.0 / ( (pi * 2.0) ** (dimension / 2.0) * numpy.linalg.norm(covariance) ** 0.5 );
-    
+     
     result = [];
-    
+     
     for point in data:
         mean_delta = point - mean;
-        point_gaussian = right_const * numpy.exp(-0.5 * mean_delta.T * inv_variance * mean_delta);
+        point_gaussian = right_const * numpy.exp( -0.5 * mean_delta.dot(inv_variance).dot(numpy.transpose(mean_delta)) );
         result.append(point_gaussian);
-    
+     
     return result;
-
-
-def gaussian_singlevariable(data, mean = None, variance = None):
-    if (mean is None):
-        mean = numpy.mean(data);
-    
-    if (variance is None):
-        variance = numpy.var(data, ddof = 1);
-
-    right_const = 1.0 / ( 2.0 * pi * variance ) ** 0.5;
-    result = [];
-    
-    for point in data:
-        mean_delta = point - mean;
-        point_gaussian = right_const * numpy.exp(-mean_delta ** 2.0 / (2.0 * variance) );
-        result.append(point_gaussian);
-    
-    return result;
-
-
-def gaussian(data, mean = None, variance = None):
-    try: dimension = len(data[0]);
-    except: dimension = 1;
-    
-    if (dimension == 1):
-        return gaussian_singlevariable(data, mean, variance);
-    else:
-        return gaussion_multivariable(data, mean, variance);
-
-
-# data = numpy.random.normal(0, 0.1, 100);
-# one_gaussian = gaussian(data);
-# one_gaussian.sort();
-# 
-# print(one_gaussian);
-# 
-# axis = plt.subplot(111);
-# plt.plot(one_gaussian, 'b-', linewidth = 2.0);
-# plt.show();
-
 
 
 class ema:
     def __init__(self, data, amount_clusters, means = None, variances = None):
-        self.__data = data;
+        self.__data = numpy.array(data);
         self.__amount_clusters = amount_clusters;
         
         self.__means = means;
@@ -113,22 +73,46 @@ class ema:
         self.__pic = [1.0] * amount_clusters;
         self.__clusters = [];
         self.__gaussians = [ [] for _ in range(amount_clusters) ];
+        self.__stop = False;
 
 
     def process(self):
-        previous_likelihood = -1000.0;
-        current_likelihood = 0.0;
+        self.__clusters = None;
         
-        while(abs(previous_likelihood - current_likelihood) > 0.1):
+        previous_likelihood = -10000500;
+        current_likelihood = -10000000;
+        
+        while((self.__stop is False) and (abs(numpy.min(previous_likelihood) - numpy.min(current_likelihood)) > 0.00001) and (current_likelihood < 0.0)):
             self.__expectation_step();
             self.__maximization_step();
             
             previous_likelihood = current_likelihood;
             current_likelihood = self.__log_likelihood();
+            self.__stop = self.__get_stop_flag();
 
 
     def get_clusters(self):
+        if (self.__clusters is not None):
+            return self.__clusters;
+        
+        self.__clusters= [];
+        for index_cluster in range(self.__amount_clusters):
+            cluster = [];
+            for index_point in range(len(self.__data)):
+                if (self.__rc[index_cluster][index_point] >= 0.5):
+                    cluster.append(index_point);
+            
+            self.__clusters.append(cluster);
+        
         return self.__clusters;
+
+
+    def get_centers(self):
+        return self.__means;
+
+
+    def get_covariances(self):
+        return self.__variances;
 
 
     def __log_likelihood(self):
@@ -158,7 +142,7 @@ class ema:
             self.__gaussians[index] = gaussian(self.__data, self.__means[index], self.__variances[index]);
         
         for index_cluster in range(self.__amount_clusters):
-            for index_point in range(self.__data):
+            for index_point in range(len(self.__data)):
                 self.__rc[index_cluster][index_point] = self.__probabilities(index_cluster, index_point);
 
 
@@ -168,17 +152,26 @@ class ema:
             
             self.__pic[index_cluster] = mc / len(self.__data);
             self.__means[index_cluster] = self.__update_mean(index_cluster, mc);
-            self.__variances[index_cluster] = self.__update_variance(index_cluster, mc);
+            
+            self.__variances[index_cluster] = self.__update_covariance(index_cluster, mc);
 
 
-    def __update_variance(self, index_cluster, mc):
-        variance = 0.0;
-        for index_point in range(len(self.__data)):
-            deviation = self.__data[index_point] - self.__means[index_cluster];
-            variance += self.__rc[index_cluster][index_point] * deviation.T * deviation;
+    def __get_stop_flag(self):
+        for covariance in self.__variances:
+            if (min(covariance[0]) == 0):
+                return True;
         
-        variance = variance / mc;
-        return variance;
+        return False;
+
+
+    def __update_covariance(self, index_cluster, mc):
+        covariance = 0.0;
+        for index_point in range(len(self.__data)):
+            deviation = numpy.array( [ self.__data[index_point] - self.__means[index_cluster] ]);
+            covariance += self.__rc[index_cluster][index_point] * deviation.T.dot(deviation);
+        
+        covariance = covariance / mc;
+        return covariance;
 
 
     def __update_mean(self, index_cluster, mc):
@@ -192,40 +185,28 @@ class ema:
 
     def __get_random_covariances(self, data, amount):
         covariances = [];
-        data_covariance = numpy.cov(data);
+        covariance_appendixes = [];
+        data_covariance = numpy.cov(data, rowvar = False);
         for _ in range(amount):
-            random_appendix = numpy.min(data_covariance) * 0.2 * numpy.random.random();
-            covariances.append(data_covariance + random_appendix);
-        
+            random_appendix = numpy.min(data_covariance) * 0.5 * numpy.random.random();
+            while(random_appendix in covariance_appendixes):
+                random_appendix = numpy.min(data_covariance) * 0.5 * numpy.random.random();
+            
+            covariance_appendixes.append(random_appendix)
+            covariances.append(data_covariance - random_appendix);
+         
         return covariances;
-
-
-    def __get_random_variances(self, data, amount):
-        variances = [];
-        data_variance = numpy.var(data, ddof = 1);
-        for _ in range(amount):
-            random_appendix = data_variance * 0.1 * numpy.random.random();
-            variances.append(random_appendix + variances);
-        
-        return variances;
 
 
     def __get_random_means(self, data, amount):
         means = [];
+        mean_indexes = [];
         for _ in range(amount):
             random_index = numpy.random.randint(0, len(data));
+            while(random_index in mean_indexes):
+                random_index = numpy.random.randint(0, len(data));
+            
+            mean_indexes.append(random_index);
             means.append(numpy.array(data[random_index]));
         
         return means;
-    
-
-
-# from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
-# from pyclustering.utils import read_sample;
-# 
-# sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1);
-# ema_instance = ema(sample, 2);
-# ema_instance.process();
-# clusters = ema_instance.get_clusters();
-# 
-# print(clusters);

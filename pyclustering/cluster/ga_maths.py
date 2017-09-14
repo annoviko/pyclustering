@@ -2,21 +2,47 @@
 import numpy as np
 
 
-class GAMath:
+class ga_math:
     """
     """
+
+    @staticmethod
+    def calc_count_centers(chromosome):
+        return chromosome[chromosome.argmax()] + 1
+
+    @staticmethod
+    def get_clusters_representation(chromosome, count_clusters=None):
+        """ Convert chromosome to cluster representation:
+                chromosome : [0, 1, 1, 0, 2, 3, 3]
+                clusters: [[0, 3], [1, 2], [4], [5, 6]]
+        """
+
+        if count_clusters is None:
+            count_clusters = ga_math.calc_count_centers(chromosome)
+
+        # Initialize empty clusters
+        clusters = [[] for _ in range(count_clusters)]
+
+        # Fill clusters with index of data
+        for _idx_data in range(len(chromosome)):
+            clusters[chromosome[_idx_data]].append(_idx_data)
+
+        return clusters
 
     @staticmethod
     def get_centres(chromosomes, data, count_clusters):
         """ """
 
-        centres = GAMath.calc_centers(chromosomes, data, count_clusters)
+        centres = ga_math.calc_centers(chromosomes, data, count_clusters)
 
         return centres
 
     @staticmethod
-    def calc_centers(chromosomes, data, count_clusters):
+    def calc_centers(chromosomes, data, count_clusters=None):
         """ """
+
+        if count_clusters is None:
+            count_clusters = ga_math.calc_count_centers(chromosomes[0])
 
         # Initialize center
         centers = np.zeros(shape=(len(chromosomes), count_clusters, len(data[0])))
@@ -71,7 +97,7 @@ class GAMath:
         # Normalize
         prob /= prob[-1]
 
-        GAMath.set_last_value_to_one(prob)
+        ga_math.set_last_value_to_one(prob)
 
         return prob
 

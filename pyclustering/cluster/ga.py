@@ -1,7 +1,8 @@
 """!
 
-@brief Clustering by Genetic Algorithm
+@brief Cluster analysis algorithm: Genetic clustering algorithm (GA).
 
+@authors Aleksey Kukushkin (pyclustering@yandex.ru)
 @date 2014-2017
 @copyright GNU Public License
 
@@ -25,18 +26,36 @@
 import numpy as np
 import math
 
-from pyclustering.cluster.ga_maths import GAMath
+from pyclustering.cluster.ga_maths import ga_math
+from pyclustering.cluster.ga_observer import genetic_algorithm_observer
 
 
-class GeneticAlgorithm:
+class genetic_algorithm:
     """!
-    @brief Class represents Genetic clustering algorithm
+    @brief Class represents Genetic clustering algorithm.
+    @details The searching capability of genetic algorithms is exploited in order to search for appropriate
+             cluster centres.
 
     """
 
-    def __init__(self, data, count_clusters,  chromosome_count, population_count, count_mutation_gens=2,
-                 coeff_mutation_count=0.25, select_coeff=1.0):
-
+    def __init__(self, data, count_clusters, chromosome_count, population_count, count_mutation_gens=2,
+                 coeff_mutation_count=0.25, select_coeff=1.0, observer=genetic_algorithm_observer()):
+        """!
+        @brief Initialize genetic clustering algorithm for cluster analysis.
+        
+        @param[in] data (numpy.array|list): Input data for clustering that is represented by two dimensional array
+                    where each row is a point, for example, [[0.0, 2.1], [0.1, 2.0], [-0.2, 2.4]].
+        @param[in] count_clusters (uint): Amount of clusters that should be allocated in the data.
+        @param[in] chromosome_count (uint): Amount of chromosomes in each population.
+        @param[in] population_count (uint): Amount of populations.
+        @param[in] count_mutation_gens (uint): Amount of genes in chromosome that is mutated on each step.
+        @param[in] coeff_mutation_count (float): Percent of chromosomes for mutation, destributed in range (0, 1] and
+                    thus amount of chromosomes is defined as follows: 'chromosome_count' * 'coeff_mutation_count'.
+        @param[in] select_coeff (float): Exponential coefficient for selection procedure that is used as follows:
+                   math.exp(1 + fitness(chromosome) * select_coeff).
+        
+        """
+        
         # Initialize random
         np.random.seed()
 
@@ -67,25 +86,35 @@ class GeneticAlgorithm:
         # Exponential coeff for selection
         self.select_coeff = select_coeff
 
-    def clustering(self):
-        """
+        # Result of clustering : best chromosome
+        self.result_clustering = {'best_chromosome': [],
+                                  'best_fitness_function': 0.0}
 
-        :return:
+        # Observer
+        self.observer = observer
+
+    def process(self):
+        """!
+        @brief Perform clustering procedure in line with rule of genetic clustering algorithm.
+        
+        @see get_clusters()
+        
         """
 
         # Initialize population
         chromosomes = self._init_population(self.count_clusters, len(self.data), self.chromosome_count)
 
         # Initialize the Best solution
-        best_chromosome, best_ff = self._get_best_chromosome(chromosomes, self.data, self.count_clusters)
+        best_chromosome, best_ff, first_fitness_functions \
+            = self._get_best_chromosome(chromosomes, self.data, self.count_clusters)
 
-        # Accumulate best_ff
-        arr_best_ff = np.zeros(self.population_count)
+        # Save best result into observer
+        self.observer.collect_global_best(best_chromosome, best_ff)
+        self.observer.collect_population_best(best_chromosome, best_ff)
+        self.observer.collect_mean(first_fitness_functions)
 
         # Next population
         for _idx in range(self.population_count):
-
-            arr_best_ff[_idx] = best_ff
 
             # Select
             chromosomes = self._select(chromosomes, self.data, self.count_clusters, self.select_coeff)
@@ -97,43 +126,76 @@ class GeneticAlgorithm:
             self._mutation(chromosomes, self.count_clusters, self.count_mutation_gens, self.coeff_mutation_count)
 
             # Update the Best Solution
-            new_best_chromosome, new_best_ff = self._get_best_chromosome(chromosomes, self.data, self.count_clusters)
+            new_best_chromosome, new_best_ff, fitness_functions \
+                = self._get_best_chromosome(chromosomes, self.data, self.count_clusters)
 
             # Get best chromosome
             if new_best_ff < best_ff:
                 best_ff = new_best_ff
                 best_chromosome = new_best_chromosome
 
-        return best_chromosome, best_ff, arr_best_ff
+            # Save best result into observer
+            self.observer.collect_global_best(best_chromosome, best_ff)
+            self.observer.collect_population_best(new_best_chromosome, new_best_ff)
+            self.observer.collect_mean(fitness_functions)
+
+        # Save result
+        self.result_clustering['best_chromosome'] = best_chromosome
+        self.result_clustering['best_fitness_function'] = best_ff
+
+        return best_chromosome, best_ff
+
+    def get_observer(self):
+        return self.observer
+
+    def get_clusters(self):
+        """!
+        @brief Returns list of allocated clusters, each cluster contains indexes of objects from the data.
+        
+        @return (list) List of allocated clusters.
+        
+        @see process()
+        
+        """
+
+        return ga_math.get_clusters_representation(self.result_clustering['best_chromosome'], self.count_clusters)
 
     @staticmethod
     def _select(chromosomes, data, count_clusters, select_coeff):
-        """  """
+        """!
+        @brief Performs selection procedure where new chromosomes are calculated.
+        
+        @param[in] chromosomes (numpy.array): Chromosomes 
+        
+        """
 
         # Calc centers
-        centres = GAMath.get_centres(chromosomes, data, count_clusters)
+        centres = ga_math.get_centres(chromosomes, data, count_clusters)
 
         # Calc fitness functions
-        fitness = GeneticAlgorithm._calc_fitness_function(centres, data, chromosomes)
+        fitness = genetic_algorithm._calc_fitness_function(centres, data, chromosomes)
 
         for _idx in range(len(fitness)):
             fitness[_idx] = math.exp(1 + fitness[_idx] * select_coeff)
 
         # Calc probability vector
-        probabilities = GAMath.calc_probability_vector(fitness)
+        probabilities = ga_math.calc_probability_vector(fitness)
 
         # Select P chromosomes with probabilities
         new_chromosomes = np.zeros(chromosomes.shape, dtype=np.int)
 
         # Selecting
         for _idx in range(len(chromosomes)):
-            new_chromosomes[_idx] = chromosomes[GAMath.get_uniform(probabilities)]
+            new_chromosomes[_idx] = chromosomes[ga_math.get_uniform(probabilities)]
 
         return new_chromosomes
 
     @staticmethod
     def _crossover(chromosomes):
-        """  """
+        """!
+        @brief Crossover procedure.
+        
+        """
 
         # Get pairs to Crossover
         pairs_to_crossover = np.array(range(len(chromosomes)))
@@ -148,16 +210,19 @@ class GeneticAlgorithm:
         for _idx in range(offset_in_pair):
 
             # Generate random mask for crossover
-            crossover_mask = GeneticAlgorithm._get_crossover_mask(len(chromosomes[_idx]))
+            crossover_mask = genetic_algorithm._get_crossover_mask(len(chromosomes[_idx]))
 
             # Crossover a pair
-            GeneticAlgorithm._crossover_a_pair(chromosomes[pairs_to_crossover[_idx]],
-                                               chromosomes[pairs_to_crossover[_idx + offset_in_pair]],
-                                               crossover_mask)
+            genetic_algorithm._crossover_a_pair(chromosomes[pairs_to_crossover[_idx]],
+                                                chromosomes[pairs_to_crossover[_idx + offset_in_pair]],
+                                                crossover_mask)
 
     @staticmethod
     def _mutation(chromosomes, count_clusters, count_gen_for_mutation, coeff_mutation_count):
-        """  """
+        """!
+        @brief Mutation procedure.
+        
+        """
 
         # Count gens in Chromosome
         count_gens = len(chromosomes[0])
@@ -180,7 +245,14 @@ class GeneticAlgorithm:
 
     @staticmethod
     def _crossover_a_pair(chromosome_1, chromosome_2, mask):
-        """  """
+        """!
+        @brief Crossovers a pair of chromosomes.
+        
+        @param[in] chromosome_1 (numpy.array): The first chromosome for crossover.
+        @param[in] chromosome_2 (numpy.array): The second chromosome for crossover.
+        @param[in] mask (numpy.array): Crossover mask that defines which genes should be swapped.
+        
+        """
 
         for _idx in range(len(chromosome_1)):
 
@@ -190,7 +262,12 @@ class GeneticAlgorithm:
 
     @staticmethod
     def _get_crossover_mask(mask_length):
-        """  """
+        """!
+        @brief Crossover mask to crossover a pair of chromosomes.
+        
+        @param[in] mask_length (uint): Length of the mask.
+        
+        """
 
         # Initialize mask
         mask = np.zeros(mask_length)
@@ -205,7 +282,14 @@ class GeneticAlgorithm:
 
     @staticmethod
     def _init_population(count_clusters, count_data, chromosome_count):
-        """ Returns first population as a uniform random choice """
+        """!
+        @brief Returns first population as a uniform random choice.
+        
+        @param[in] count_clusters (uint):
+        @param[in] count_data (uint):
+        @param[in] chromosome_count (uint): 
+        
+        """
 
         population = np.random.randint(count_clusters, size=(chromosome_count, count_data))
 
@@ -213,23 +297,29 @@ class GeneticAlgorithm:
 
     @staticmethod
     def _get_best_chromosome(chromosomes, data, count_clusters):
-        """  """
+        """!
+        @brief 
+        
+        """
 
         # Calc centers
-        centres = GAMath.get_centres(chromosomes, data, count_clusters)
+        centres = ga_math.get_centres(chromosomes, data, count_clusters)
 
         # Calc Fitness functions
-        fitness_function = GeneticAlgorithm._calc_fitness_function(centres, data, chromosomes)
+        fitness_functions = genetic_algorithm._calc_fitness_function(centres, data, chromosomes)
 
         # Index of the best chromosome
-        best_chromosome_idx = fitness_function.argmin()
+        best_chromosome_idx = fitness_functions.argmin()
 
         # Get chromosome with the best fitness function
-        return chromosomes[best_chromosome_idx], fitness_function[best_chromosome_idx]
+        return chromosomes[best_chromosome_idx], fitness_functions[best_chromosome_idx], fitness_functions
 
     @staticmethod
     def _calc_fitness_function(centres, data, chromosomes):
-        """  """
+        """!
+        @brief 
+        
+        """
 
         # Get count of chromosomes and clusters
         count_chromosome = len(chromosomes)
