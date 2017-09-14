@@ -28,22 +28,23 @@
 
 import numpy;
 
+from pyclustering.cluster import cluster_visualizer;
 from pyclustering.utils import pi;
 
 import matplotlib.pyplot as plt;
+from matplotlib.patches import Ellipse;
 from _operator import index
 
 
-def gaussian(data, mean = None, covariance = None):
+
+def gaussian(data, mean, covariance):
     dimension = len(data[0]);
  
-    if (mean is None):
-        mean = numpy.mean(data);
-     
-    if (covariance is None):
-        covariance = numpy.cov(data, rowvar = False);
-     
-    inv_variance = numpy.linalg.inv(covariance);
+    if (dimension != 1):
+        inv_variance = numpy.linalg.inv(covariance);
+    else:
+        inv_variance = 1.0 / covariance;
+    
     right_const = 1.0 / ( (pi * 2.0) ** (dimension / 2.0) * numpy.linalg.norm(covariance) ** 0.5 );
      
     result = [];
@@ -54,6 +55,37 @@ def gaussian(data, mean = None, covariance = None):
         result.append(point_gaussian);
      
     return result;
+
+
+
+class ema_observer:
+    def __init__(self):
+        self.__means = [];
+        self.__covariances = [];
+
+    def get_iterations(self):
+        return len(self.__means);
+
+    def get_means(self):
+        return self.__means;
+
+    def get_covariances(self):
+        return self.__covariances;
+
+    def notify(self, means, covariances):
+        self.__means.append(means);
+        self.__covariances.append(covariances);
+
+
+
+class ema_visualizer:
+    @staticmethod
+    def show_clusters(self, clusters, sample, covariances):
+        visualizer = cluster_visualizer();
+        visualizer.append_clusters(clusters, sample);
+        figure = visualizer.show(display = False);
+        
+        # TODO: draw ellipes for each cluster using covariance matrix
 
 
 class ema:
@@ -89,21 +121,11 @@ class ema:
             previous_likelihood = current_likelihood;
             current_likelihood = self.__log_likelihood();
             self.__stop = self.__get_stop_flag();
+        
+        self.__extract_clusters();
 
 
     def get_clusters(self):
-        if (self.__clusters is not None):
-            return self.__clusters;
-        
-        self.__clusters= [];
-        for index_cluster in range(self.__amount_clusters):
-            cluster = [];
-            for index_point in range(len(self.__data)):
-                if (self.__rc[index_cluster][index_point] >= 0.5):
-                    cluster.append(index_point);
-            
-            self.__clusters.append(cluster);
-        
         return self.__clusters;
 
 
@@ -113,6 +135,19 @@ class ema:
 
     def get_covariances(self):
         return self.__variances;
+
+
+    def __extract_clusters(self):
+        self.__clusters = [];
+        for index_cluster in range(self.__amount_clusters):
+            cluster = [];
+            for index_point in range(len(self.__data)):
+                if (self.__rc[index_cluster][index_point] >= 0.5):
+                    cluster.append(index_point);
+            
+            self.__clusters.append(cluster);
+        
+        return self.__clusters;
 
 
     def __log_likelihood(self):

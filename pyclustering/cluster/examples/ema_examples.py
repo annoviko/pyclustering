@@ -68,20 +68,26 @@ def template_clustering(sample_file_path, amount_clusters, kmeans_initializer = 
     visualizer.show();
 
 
-def cluster_sample1():
+def cluster_sample01():
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2);
 
-def cluster_sample2():
+def cluster_sample02():
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 3);
 
-def cluster_sample3():
+def cluster_sample03():
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 4);
 
-def cluster_sample4():
+def cluster_sample04():
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 5);
 
-def cluster_sample5():
+def cluster_sample05():
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 4);
+
+def cluster_sample08():
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE8, 4);
+
+def cluster_sample11():
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, 2);
 
 def cluster_elongate():
     template_clustering(SIMPLE_SAMPLES.SAMPLE_ELONGATE, 2);
@@ -90,10 +96,13 @@ def cluster_lsun():
     template_clustering(FCPS_SAMPLES.SAMPLE_LSUN, 3);
 
 
-cluster_sample1();
-cluster_sample2();
-cluster_sample3();
-cluster_sample4();
-cluster_sample5();
+
+cluster_sample01();
+cluster_sample02();
+cluster_sample03();
+cluster_sample04();
+cluster_sample05();
+cluster_sample08();
+cluster_sample11();
 cluster_elongate();
 cluster_lsun();
