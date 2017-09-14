@@ -23,19 +23,14 @@
 
 """
 
-from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES
 
-from pyclustering.cluster import cluster_visualizer
-from pyclustering.cluster.ga import genetic_algorithm
-from pyclustering.cluster.ga_maths import ga_math
-from pyclustering.cluster.ga_observer import genetic_algorithm_observer
+from pyclustering.samples.definitions import SIMPLE_SAMPLES;
 
-from pyclustering.utils import read_sample
-from pyclustering.utils import timedcall
+from pyclustering.cluster.ga import genetic_algorithm, ga_observer, ga_visualizer;
 
-import time
+from pyclustering.utils import read_sample;
 
-import matplotlib.pyplot as plt
+import time;
 
 
 def template_clustering(path,
@@ -44,9 +39,10 @@ def template_clustering(path,
                         population_count,
                         count_mutation_gens,
                         coeff_mutation_count=0.25,
-                        select_coeff=1.0):
+                        select_coeff=1.0,
+                        animation=False):
 
-    sample = read_sample(path)
+    sample = read_sample(path);
 
     algo_instance = genetic_algorithm(data=sample,
                                       count_clusters=count_clusters,
@@ -55,29 +51,21 @@ def template_clustering(path,
                                       count_mutation_gens=count_mutation_gens,
                                       coeff_mutation_count=coeff_mutation_count,
                                       select_coeff=select_coeff,
-                                      observer=genetic_algorithm_observer(True, True, True))
+                                      observer=ga_observer(True, True, True))
 
-    start_time = time.time()
+    start_time = time.time();
 
-    best_chromosome, best_ff = algo_instance.process()
+    algo_instance.process();
 
-    print("Sample: ", path, "\t\tExecution time: ", time.time() - start_time, "\n")
+    print("Sample: ", path, "\t\tExecution time: ", time.time() - start_time, "\n");
 
-    # f = plt.figure(121)
-    # ax = f.get_axes()
-    f, ax = plt.subplots(2)
-
-    visualizer = cluster_visualizer(1)
-    visualizer.append_clusters(ga_math.get_clusters_representation(best_chromosome), sample, canvas=0)
-    visualizer.show(f, display=False)
-
-    observer = algo_instance.get_observer()
-
-    # plt.hold(True)
-    ax[0].plot(observer.get_global_best()['fitness_function'], 'r')
-    ax[0].plot(observer.get_population_best()['fitness_function'], 'k')
-    ax[0].plot(observer.get_mean_fitness_function(), 'c')
-    plt.show()
+    observer = algo_instance.get_observer();
+    
+    ga_visualizer.show_clusters(sample, observer);
+    
+    if (animation is True):
+        ga_visualizer.animate_cluster_allocation(sample, observer, save_movie="clustering_animation.mp4");
+#         ga_visualizer.animate_cluster_allocation(sample, observer);
 
 
 def cluster_sample1():
@@ -146,22 +134,32 @@ def cluster_sample11():
                         count_mutation_gens=2)
 
 
-# def cluster_sample8():
-#     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE8,
-#                         count_clusters=4,
-#                         chromosome_count=50,
-#                         population_count=200,
-#                         count_mutation_gens=2,
-#                         coeff_mutation_count=0.15,
-#                         select_coeff=1.0)
+def cluster_sample8():
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE8,
+                        count_clusters=4,
+                        chromosome_count=50,
+                        population_count=200,
+                        count_mutation_gens=2,
+                        coeff_mutation_count=0.15,
+                        select_coeff=1.0)
 
 
-cluster_sample1()
-# cluster_sample2()
-# cluster_sample3()
-# cluster_sample4()
-# cluster_sample5()
-# cluster_sample6()
-# cluster_sample7()
-# cluster_sample8()
-# cluster_sample11()
+def animation_cluster_sample1():
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1,
+                        count_clusters=2,
+                        chromosome_count=20,
+                        population_count=20,
+                        count_mutation_gens=2,
+                        animation=True)
+
+
+cluster_sample1();
+cluster_sample2();
+cluster_sample3();
+cluster_sample4();
+cluster_sample5();
+cluster_sample6();
+cluster_sample7();
+cluster_sample11();
+
+animation_cluster_sample1();

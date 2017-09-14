@@ -2,7 +2,7 @@
 
 @brief Cluster analysis algorithm: Genetic clustering algorithm (GA).
 
-@authors Aleksey Kukushkin (pyclustering@yandex.ru)
+@authors Andrey Novikov, Aleksey Kukushkin (pyclustering@yandex.ru)
 @date 2014-2017
 @copyright GNU Public License
 
@@ -23,11 +23,163 @@
 
 """
 
-import numpy as np
-import math
 
-from pyclustering.cluster.ga_maths import ga_math
-from pyclustering.cluster.ga_observer import genetic_algorithm_observer
+import numpy as np;
+import math;
+
+import matplotlib.pyplot as plt;
+import matplotlib.animation as animation;
+
+from pyclustering.cluster import cluster_visualizer;
+from pyclustering.cluster.ga_maths import ga_math;
+
+
+
+class ga_observer:
+    """!
+
+    """
+
+    def __init__(self, need_global_best=False, need_population_best=False, need_mean_ff=False):
+        """ """
+
+        # Global best chromosome and fitness function for each population
+        self._global_best_result = {'chromosome': [], 'fitness_function': []};
+
+        # Best chromosome and fitness function on a population
+        self._best_population_result = {'chromosome': [], 'fitness_function': []};
+
+        # Mean fitness function on each population
+        self._mean_ff_result = [];
+
+        # Flags to collect
+        self._need_global_best = need_global_best;
+        self._need_population_best = need_population_best;
+        self._need_mean_ff = need_mean_ff;
+
+
+    def __len__(self):
+        return len(self._global_best_result['chromosome']);
+
+
+    def collect_global_best(self, best_chromosome, best_fitness_function):
+        """ """
+
+        if not self._need_global_best:
+            return;
+
+        self._global_best_result['chromosome'].append(best_chromosome);
+        self._global_best_result['fitness_function'].append(best_fitness_function);
+
+
+    def collect_population_best(self, best_chromosome, best_fitness_function):
+        """ """
+
+        if not self._need_population_best:
+            return;
+
+        self._best_population_result['chromosome'].append(best_chromosome);
+        self._best_population_result['fitness_function'].append(best_fitness_function);
+
+
+    def collect_mean(self, fitness_functions):
+        """ """
+
+        if not self._need_mean_ff:
+            return;
+
+        self._mean_ff_result.append(np.mean(fitness_functions));
+
+
+    def get_global_best(self):
+        return self._global_best_result;
+
+
+    def get_population_best(self):
+        return self._best_population_result;
+
+
+    def get_mean_fitness_function(self):
+        return self._mean_ff_result;
+
+
+
+class ga_visualizer:
+    @staticmethod
+    def show_evolution(observer, start_iteration = 0, stop_iteration = None, ax = None, display = True):
+        if (ax is None):
+            _, ax = plt.subplots(1);
+            ax.set_title("Evolution");
+        
+        if (stop_iteration is None):
+            stop_iteration = len(observer);
+        
+        line_best, = ax.plot(observer.get_global_best()['fitness_function'][start_iteration:stop_iteration], 'r');
+        line_current, = ax.plot(observer.get_population_best()['fitness_function'][start_iteration:stop_iteration], 'k');
+        line_mean, = ax.plot(observer.get_mean_fitness_function()[start_iteration:stop_iteration], 'c');
+
+        ax.set_xlabel("Iteration");
+        ax.set_ylabel("Fitness function");
+        ax.legend([line_best, line_current, line_mean], ["The best pop.", "Cur. best pop.", "Average"], prop={'size': 10});
+        ax.grid();
+
+        print(start_iteration, stop_iteration);
+        if (display is True):
+            plt.show();
+
+
+    @staticmethod
+    def show_clusters(data, observer, marker = '.', markersize = None):
+        figure = plt.figure();
+        ax1 = figure.add_subplot(121);
+        
+        clusters = ga_math.get_clusters_representation(observer.get_global_best()['chromosome'][-1]);
+        
+        visualizer = cluster_visualizer(1, 2);
+        visualizer.append_clusters(clusters, data, 0, marker, markersize);
+        visualizer.show(figure, display = False);
+        
+        ga_visualizer.show_evolution(observer, 0, None, ax1, True);
+
+
+    @staticmethod
+    def animate_cluster_allocation(data, observer, animation_velocity = 75, save_movie = None):
+        figure = plt.figure();
+        
+        def init_frame():
+            return frame_generation(0);
+
+        def frame_generation(index_iteration):
+            figure.clf();
+            
+            figure.suptitle("Clustering genetic algorithm (iteration: " + str(index_iteration) +")", fontsize = 20, fontweight = 'bold');
+            
+            visualizer = cluster_visualizer(4, 2, ["Population #" + str(index_iteration), "The best population"]);
+            
+            local_minimum_clusters = ga_math.get_clusters_representation(observer.get_population_best()['chromosome'][index_iteration]);
+            visualizer.append_clusters(local_minimum_clusters, data, 0);
+            
+            global_minimum_clusters = ga_math.get_clusters_representation(observer.get_global_best()['chromosome'][index_iteration]);
+            visualizer.append_clusters(global_minimum_clusters, data, 1);
+            
+            ax1 = plt.subplot2grid((2, 2), (1, 0), colspan = 2);
+            ga_visualizer.show_evolution(observer, 0, index_iteration + 1, ax1, False);
+            
+            visualizer.show(figure, shift = 0, display = False);
+            figure.subplots_adjust(top = 0.85);
+            
+            return [ figure.gca() ];
+        
+        iterations = len(observer);
+        cluster_animation = animation.FuncAnimation(figure, frame_generation, iterations, interval = animation_velocity, init_func = init_frame, repeat_delay = 5000);
+
+        if (save_movie is not None):
+#             plt.rcParams['animation.ffmpeg_path'] = 'D:\\Program Files\\ffmpeg-3.3.1-win64-static\\bin\\ffmpeg.exe';
+#             ffmpeg_writer = animation.FFMpegWriter(fps = 15);
+#             cluster_animation.save(save_movie, writer = ffmpeg_writer);
+            cluster_animation.save(save_movie, writer = 'ffmpeg', fps = 15, bitrate = 1500);
+        else:
+            plt.show();
 
 
 class genetic_algorithm:
@@ -39,7 +191,7 @@ class genetic_algorithm:
     """
 
     def __init__(self, data, count_clusters, chromosome_count, population_count, count_mutation_gens=2,
-                 coeff_mutation_count=0.25, select_coeff=1.0, observer=genetic_algorithm_observer()):
+                 coeff_mutation_count=0.25, select_coeff=1.0, observer=ga_observer()):
         """!
         @brief Initialize genetic clustering algorithm for cluster analysis.
         
@@ -145,8 +297,14 @@ class genetic_algorithm:
 
         return best_chromosome, best_ff
 
+
     def get_observer(self):
+        """!
+        @brief Returns genetic algorithm observer.
+        
+        """
         return self.observer
+
 
     def get_clusters(self):
         """!
@@ -159,6 +317,7 @@ class genetic_algorithm:
         """
 
         return ga_math.get_clusters_representation(self.result_clustering['best_chromosome'], self.count_clusters)
+
 
     @staticmethod
     def _select(chromosomes, data, count_clusters, select_coeff):
@@ -190,6 +349,7 @@ class genetic_algorithm:
 
         return new_chromosomes
 
+
     @staticmethod
     def _crossover(chromosomes):
         """!
@@ -217,6 +377,7 @@ class genetic_algorithm:
                                                 chromosomes[pairs_to_crossover[_idx + offset_in_pair]],
                                                 crossover_mask)
 
+
     @staticmethod
     def _mutation(chromosomes, count_clusters, count_gen_for_mutation, coeff_mutation_count):
         """!
@@ -243,6 +404,7 @@ class genetic_algorithm:
                 # Set random cluster
                 chromosomes[random_idx_chromosomes[_idx_chromosome]][gen_num] = np.random.randint(count_clusters)
 
+
     @staticmethod
     def _crossover_a_pair(chromosome_1, chromosome_2, mask):
         """!
@@ -259,6 +421,7 @@ class genetic_algorithm:
             if mask[_idx] == 1:
                 # Swap values
                 chromosome_1[_idx], chromosome_2[_idx] = chromosome_2[_idx], chromosome_1[_idx]
+
 
     @staticmethod
     def _get_crossover_mask(mask_length):
@@ -280,6 +443,7 @@ class genetic_algorithm:
 
         return mask
 
+
     @staticmethod
     def _init_population(count_clusters, count_data, chromosome_count):
         """!
@@ -294,6 +458,7 @@ class genetic_algorithm:
         population = np.random.randint(count_clusters, size=(chromosome_count, count_data))
 
         return population
+
 
     @staticmethod
     def _get_best_chromosome(chromosomes, data, count_clusters):
@@ -313,6 +478,7 @@ class genetic_algorithm:
 
         # Get chromosome with the best fitness function
         return chromosomes[best_chromosome_idx], fitness_functions[best_chromosome_idx], fitness_functions
+
 
     @staticmethod
     def _calc_fitness_function(centres, data, chromosomes):

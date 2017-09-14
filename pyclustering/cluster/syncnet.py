@@ -100,6 +100,7 @@ class syncnet_analyser(sync_dynamic):
         return type_encoding.CLUSTER_INDEX_LIST_SEPARATION;
 
 
+
 class syncnet_visualizer(sync_visualizer):
     """!
     @brief Visualizer of output dynamic of oscillatory network 'syncnet' for cluster analysis.

@@ -73,12 +73,13 @@ class cluster_visualizer:
     
     """
 
-    def __init__(self, number_canvases = 1, size_row = 1):
+    def __init__(self, number_canvases = 1, size_row = 1, titles = None):
         """!
         @brief Constructor of cluster visualizer.
         
         @param[in] number_canvases (uint): Number of canvases that is used for visualization.
         @param[in] size_row (uint): Amount of canvases that can be placed in one row.
+        @param[in] titles (list): List of canvas's titles.
         
         Example:
         @code
@@ -120,6 +121,9 @@ class cluster_visualizer:
         self.__canvas_clusters = [ [] for _ in range(number_canvases) ];
         self.__canvas_dimensions = [ None for _ in range(number_canvases) ];
         self.__canvas_titles = [ None for _ in range(number_canvases) ];
+        
+        if (titles is not None):
+            self.__canvas_titles = titles;
         
         self.__default_2d_marker_size = 5;
         self.__default_3d_marker_size = 30;
@@ -239,7 +243,7 @@ class cluster_visualizer:
         self.__canvas_titles[canvas] = text;
     
     
-    def show(self, figure = None, visible_axis = True, visible_grid = True, display = True):
+    def show(self, figure = None, visible_axis = True, visible_grid = True, display = True, shift = None):
         """!
         @brief Shows clusters (visualize).
         
@@ -247,26 +251,33 @@ class cluster_visualizer:
         @param[in] visible_axis (bool): Defines visibility of axes on each canvas, if True - axes are invisible.
         @param[in] visible_grid (bool): Defines visibility of axes on each canvas, if True - grid is displayed.
         @param[in] display (bool): Defines requirement to display clusters on a stage, if True - clusters are displayed, if False - plt.show() should be called by user."
+        @param[in] shift (uint): Force canvas shift value - defines canvas index from which custers should be visualized.
         
         @return (fig) Figure where clusters are shown.
         
         """
+
         
-        canvas_shift = 0;
         cluster_figure = None;
         if (figure is not None):
-            canvas_shift = len(figure.get_axes());
             cluster_figure = figure;
         else:
             cluster_figure = plt.figure();
+        
+        canvas_shift = shift;
+        if (canvas_shift is None):
+            canvas_shift = len(figure.get_axes());
         
         maximum_cols = self.__size_row;
         maximum_rows = math.ceil( (self.__number_canvases + canvas_shift) / maximum_cols);
         
         grid_spec = gridspec.GridSpec(maximum_rows, maximum_cols);
-        
+
         for index_canvas in range(len(self.__canvas_clusters)):
             canvas_data = self.__canvas_clusters[index_canvas];
+            if (len(canvas_data) == 0):
+                continue;
+        
             dimension = self.__canvas_dimensions[index_canvas];
             
             #ax = axes[real_index];
