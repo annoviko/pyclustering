@@ -39,11 +39,14 @@ def template_clustering(start_medoids, path, tolerance = 0.25, show = True):
     (ticks, result) = timedcall(kmedoids_instance.process);
     
     clusters = kmedoids_instance.get_clusters();
+    medoids = kmedoids_instance.get_medoids();
     print("Sample: ", path, "\t\tExecution time: ", ticks, "\n");
 
     if (show is True):
         visualizer = cluster_visualizer(1);
         visualizer.append_clusters(clusters, sample, 0);
+        visualizer.append_cluster([ sample[index] for index in start_medoids ], marker = '*', markersize = 15);
+        visualizer.append_cluster(medoids, marker = '*', markersize = 15);
         visualizer.show();
     
     return (sample, clusters);

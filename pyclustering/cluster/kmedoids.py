@@ -166,11 +166,8 @@ class kmedoids:
                 if ( (dist < dist_optim) or (index is 0)):
                     index_optim = index;
                     dist_optim = dist;
-                
+            
             clusters[index_optim].append(index_point);
-        
-        # If cluster is not able to capture object it should be removed
-        clusters = [cluster for cluster in clusters if len(cluster) > 0];
         
         return clusters;
     
