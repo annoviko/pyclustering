@@ -37,11 +37,19 @@ from pyclustering.cluster.ga_maths import ga_math;
 
 class ga_observer:
     """!
-
+    @brief Genetic algorithm observer that is used to collect information about clustering process on each iteration.
+    
     """
 
     def __init__(self, need_global_best=False, need_population_best=False, need_mean_ff=False):
-        """ """
+        """!
+        @brief Constructs genetic algorithm observer to collect specific information.
+        
+        @param[in] need_global_best (bool): If 'True' then the best chromosomes (global optimum) are stored.
+        @param[in] need_population_best (bool):
+        @param[in] need_mean_ff (bool):
+        
+        """
 
         # Global best chromosome and fitness function for each population
         self._global_best_result = {'chromosome': [], 'fitness_function': []};
@@ -59,11 +67,21 @@ class ga_observer:
 
 
     def __len__(self):
+        """!
+        @brief Returns amount of iterations that genetic algorithm was observed.
+        
+        """
         return len(self._global_best_result['chromosome']);
 
 
     def collect_global_best(self, best_chromosome, best_fitness_function):
-        """ """
+        """!
+        @brief
+        
+        @param[in] best_chromosome ():
+        @param[in] best_fitness_function ():
+        
+        """
 
         if not self._need_global_best:
             return;
@@ -73,7 +91,13 @@ class ga_observer:
 
 
     def collect_population_best(self, best_chromosome, best_fitness_function):
-        """ """
+        """!
+        @brief
+        
+        @param[in] best_chromosome ():
+        @param[in] best_fitness_function ():
+        
+        """
 
         if not self._need_population_best:
             return;
@@ -83,7 +107,12 @@ class ga_observer:
 
 
     def collect_mean(self, fitness_functions):
-        """ """
+        """!
+        @brief
+        
+        @param[in] fitness_functions ():
+        
+        """
 
         if not self._need_mean_ff:
             return;
@@ -92,14 +121,26 @@ class ga_observer:
 
 
     def get_global_best(self):
+        """!
+        @brief
+        
+        """
         return self._global_best_result;
 
 
     def get_population_best(self):
+        """!
+        @brief 
+        
+        """
         return self._best_population_result;
 
 
     def get_mean_fitness_function(self):
+        """!
+        @brief 
+        
+        """
         return self._mean_ff_result;
 
 
@@ -126,7 +167,6 @@ class ga_visualizer:
         ax.legend([line_best, line_current, line_mean], ["The best pop.", "Cur. best pop.", "Average"], prop={'size': 10});
         ax.grid();
 
-        print(start_iteration, stop_iteration);
         if (display is True):
             plt.show();
 

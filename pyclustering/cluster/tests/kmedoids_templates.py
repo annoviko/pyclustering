@@ -30,7 +30,7 @@ from pyclustering.cluster.kmedoids import kmedoids;
 
 from pyclustering.utils import read_sample;
 
-from random import random;
+from random import random, randint;
 
 
 class KmedoidsTestTemplates:
@@ -62,6 +62,29 @@ class KmedoidsTestTemplates:
         assert len(clusters) == 4;
         for cluster in clusters:
             assert len(cluster) == 10;
+
+
+    @staticmethod
+    def templateAllocateRequestedClusterAmount(data, amount_clusters, initial_medoids = None, ccore_flag = False):
+        if (initial_medoids is None):
+            initial_medoids = [];
+            for _ in range(amount_clusters):
+                index_point = randint(0, len(data) - 1);
+                while (index_point in initial_medoids):
+                    index_point = randint(0, len(data) - 1);
+                
+                initial_medoids.append(index_point);
+            
+        kmedoids_instance = kmedoids(data, initial_medoids, 0.025, ccore = True);
+        kmedoids_instance.process();
+        clusters = kmedoids_instance.get_clusters();
+        
+        assert len(clusters) == amount_clusters;
+        amount_objects = 0;
+        for cluster in clusters:
+            amount_objects += len(cluster);
+        
+        assert amount_objects == len(data);
 
 
     @staticmethod

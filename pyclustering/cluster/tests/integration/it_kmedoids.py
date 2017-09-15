@@ -26,10 +26,15 @@
 
 import unittest;
 
+# Generate images without having a window appear.
+import matplotlib;
+matplotlib.use('Agg');
+
 from pyclustering.cluster.tests.kmedoids_templates import KmedoidsTestTemplates;
 from pyclustering.cluster.kmedoids import kmedoids;
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES;
+from pyclustering.utils import read_sample;
 
 
 class KmedoidsIntegrationTest(unittest.TestCase):
@@ -71,6 +76,31 @@ class KmedoidsIntegrationTest(unittest.TestCase):
         kmedoids_instance = kmedoids([ [1], [2], [3], [20], [21], [22] ], [ 2, 5 ], 0.025, True);
         kmedoids_instance.process();
         assert len(kmedoids_instance.get_clusters()) == 2;
+
+
+    def testAllocatedRequestedClustersSampleSimple04ByCore(self):
+        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE4);
+        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 10, None, True);
+        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 25, None, True);
+        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 40, None, True);
+
+    @unittest.skip("Bug issue #366")
+    def testAllocatedRequestedClustersWithTheSamePointsByCore(self):
+        # Bug issue #366 - Kmedoids returns incorrect number of clusters.
+        sample = [ [0.0, 0.0], [0.1, 0.1], [0.0, 0.0], [0.1, 0.2] ];
+        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 4, None, True);
+        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 3, None, True);
+        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 2, None, True);
+        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 1, None, True);
+
+    @unittest.skip("Bug issue #366")
+    def testAllocatedRequestedClustersWithTotallyTheSamePointsByCore(self):
+        # Bug issue #366 - Kmedoids returns incorrect number of clusters.
+        sample = [ [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0] ];
+        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 4, None, True);
+        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 3, None, True);
+        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 2, None, True);
+        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 1, None, True);
 
 
 if __name__ == "__main__":

@@ -47,11 +47,11 @@ class kmedoids:
         sample = read_sample(path);
         
         # create instance of K-Medoids algorithm
-        kmedians_instance = kmedians(sample, [1, 10]);
+        kmedoids_instance = kmedoids(sample, [1, 10]);
         
         # run cluster analysis and obtain results
-        kmedians_instance.process();
-        kmedians_instance.get_clusters();    
+        kmedoids_instance.process();
+        kmedoids_instance.get_clusters();
     @endcode
     
     """
@@ -69,7 +69,8 @@ class kmedoids:
         """
         self.__pointer_data = data;
         self.__clusters = [];
-        self.__medoids = initial_index_medoids;
+        self.__medoids = [ data[medoid_index] for medoid_index in initial_index_medoids ];
+        self.__medoid_indexes = initial_index_medoids;
         self.__tolerance = tolerance;
         self.__ccore = ccore;
 
@@ -86,12 +87,10 @@ class kmedoids:
         """
         
         if (self.__ccore is True):
-            self.__clusters = wrapper.kmedoids(self.__pointer_data, self.__medoids, self.__tolerance);
-            self.__medoids = self.__update_medoids();
+            self.__clusters = wrapper.kmedoids(self.__pointer_data, self.__medoid_indexes, self.__tolerance);
+            self.__medoids, self.__medoid_indexes = self.__update_medoids();
         
         else:
-            self.__medoids = [ self.__pointer_data[medoid_index] for medoid_index in self.__medoids ];
-            
             changes = float('inf');
              
             stop_condition = self.__tolerance * self.__tolerance;   # Fast solution
@@ -99,11 +98,12 @@ class kmedoids:
              
             while (changes > stop_condition):
                 self.__clusters = self.__update_clusters();
-                updated_medoids = self.__update_medoids();  # changes should be calculated before asignment
+                updated_medoids, update_medoid_indexes = self.__update_medoids();  # changes should be calculated before asignment
              
                 changes = max([euclidean_distance_sqrt(self.__medoids[index], updated_medoids[index]) for index in range(len(updated_medoids))]);    # Fast solution
                  
                 self.__medoids = updated_medoids;
+                self.__medoid_indexes = update_medoid_indexes;
 
 
     def get_clusters(self):
@@ -152,18 +152,21 @@ class kmedoids:
         
         """
         
-        clusters = [[] for i in range(len(self.__medoids))];
+        clusters = [[self.__medoid_indexes[i]] for i in range(len(self.__medoids))];
         for index_point in range(len(self.__pointer_data)):
+            if (index_point in self.__medoid_indexes):
+                continue;
+
             index_optim = -1;
-            dist_optim = 0.0;
-             
+            dist_optim = float('Inf');
+            
             for index in range(len(self.__medoids)):
                 dist = euclidean_distance_sqrt(self.__pointer_data[index_point], self.__medoids[index]);
-                 
+                
                 if ( (dist < dist_optim) or (index is 0)):
                     index_optim = index;
                     dist_optim = dist;
-             
+                
             clusters[index_optim].append(index_point);
         
         # If cluster is not able to capture object it should be removed
@@ -180,10 +183,12 @@ class kmedoids:
         
         """
          
-        medoids = [[] for i in range(len(self.__clusters))];
+        medoids = [[] for _ in range(len(self.__clusters))];
+        medoid_indexes = [-1] * len(self.__clusters);
         
         for index in range(len(self.__clusters)):
             medoid_index = median(self.__pointer_data, self.__clusters[index]);
             medoids[index] = self.__pointer_data[medoid_index];
+            medoid_indexes[index] = medoid_index;
              
-        return medoids;
+        return medoids, medoid_indexes;

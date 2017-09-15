@@ -28,9 +28,9 @@ from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
 from pyclustering.cluster import cluster_visualizer;
 from pyclustering.cluster.kmedoids import kmedoids;
 
-from pyclustering.utils import draw_clusters;
 from pyclustering.utils import read_sample;
 from pyclustering.utils import timedcall;
+
 
 def template_clustering(start_medoids, path, tolerance = 0.25, show = True):
     sample = read_sample(path);

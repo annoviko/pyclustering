@@ -26,9 +26,14 @@
 
 import unittest;
 
+# Generate images without having a window appear.
+import matplotlib;
+matplotlib.use('Agg');
+
 from pyclustering.cluster.tests.kmedoids_templates import KmedoidsTestTemplates;
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES;
+from pyclustering.utils import read_sample;
 
 
 class KmedoidsUnitTest(unittest.TestCase):
@@ -69,6 +74,54 @@ class KmedoidsUnitTest(unittest.TestCase):
 
     def testClusterAllocationTheSameObjectsThreeInitialMedoids(self):
         KmedoidsTestTemplates.templateClusterAllocationTheSameObjects(25, 3, False);
+
+
+    def testAllocatedRequestedClustersSampleSimple01(self):
+        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1);
+        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 1, None, False);
+        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 2, None, False);
+        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 3, None, False);
+        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 4, None, False);
+        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 5, None, False);
+
+    def testAllocatedRequestedClustersSampleSimple02(self):
+        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE2);
+        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 1, None, False);
+        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 2, None, False);
+        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 3, None, False);
+        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 4, None, False);
+        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 5, None, False);
+
+    def testAllocatedRequestedClustersSampleSimple03(self):
+        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE3);
+        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 2, None, False);
+        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 5, None, False);
+        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 8, None, False);
+        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 10, None, False);
+        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 15, None, False);
+
+    def testAllocatedRequestedClustersSampleSimple04(self):
+        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE4);
+        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 10, None, False);
+        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 25, None, False);
+        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 40, None, False);
+
+    def testAllocatedRequestedClustersWithTheSamePoints(self):
+        # Bug issue #366 - Kmedoids returns incorrect number of clusters.
+        sample = [ [0.0, 0.0], [0.1, 0.1], [0.0, 0.0], [0.1, 0.2] ];
+        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 4, None, False);
+        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 3, None, False);
+        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 2, None, False);
+        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 1, None, False);
+
+
+    def testAllocatedRequestedClustersWithTotallyTheSamePoints(self):
+        # Bug issue #366 - Kmedoids returns incorrect number of clusters.
+        sample = [ [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0] ];
+        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 4, None, False);
+        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 3, None, False);
+        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 2, None, False);
+        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 1, None, False);
 
 
 if __name__ == "__main__":
