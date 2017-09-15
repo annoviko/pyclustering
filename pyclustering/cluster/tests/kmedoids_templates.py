@@ -75,7 +75,7 @@ class KmedoidsTestTemplates:
                 
                 initial_medoids.append(index_point);
             
-        kmedoids_instance = kmedoids(data, initial_medoids, 0.025, ccore = True);
+        kmedoids_instance = kmedoids(data, initial_medoids, 0.025, ccore = ccore_flag);
         kmedoids_instance.process();
         clusters = kmedoids_instance.get_clusters();
         
