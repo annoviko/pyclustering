@@ -46,28 +46,28 @@ class antcolony_parameters:
         
         """
         
-        # Used to scalability distance in calculation pheromone.
+        ## Used to scalability distance in calculation pheromone.
         self.q = 1.5
 
-        # Is a pheromone decay parameter in (1-ro) * ph.
+        ## Is a pheromone decay parameter in (1-ro) * ph.
         self.ro = 0.7
 
-        # Used to control the relative importance degree of pheromone concentration and the length of path [2].
+        ## Used to control the relative importance degree of pheromone concentration and the length of path [2].
         self.alpha = 1.0
         
-        # Used to control the relative importance degree of pheromone concentration and the length of path [2].
+        ## Used to control the relative importance degree of pheromone concentration and the length of path [2].
         self.beta = 1.0
         
-        # Currently unused.
+        ## Currently unused.
         self.gamma = 2.0
         
-        # Initial value for pheramones.
+        ## Initial value for pheramones.
         self.qinit_pheramone = 0.1
         
-        # Amount of ants that is used on each iteration.
+        ## Amount of ants that is used on each iteration.
         self.ants_per_iteration = 10
         
-        # Amount of iterations that is used for solving TSP.
+        ## Amount of iterations that is used for solving TSP.
         self.iterations = 50
 
 
