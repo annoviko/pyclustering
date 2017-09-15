@@ -118,6 +118,9 @@ class ga_visualizer:
         line_current, = ax.plot(observer.get_population_best()['fitness_function'][start_iteration:stop_iteration], 'k');
         line_mean, = ax.plot(observer.get_mean_fitness_function()[start_iteration:stop_iteration], 'c');
 
+        if (start_iteration < (stop_iteration - 1)):
+            ax.set_xlim([start_iteration, (stop_iteration - 1)]);
+        
         ax.set_xlabel("Iteration");
         ax.set_ylabel("Fitness function");
         ax.legend([line_best, line_current, line_mean], ["The best pop.", "Cur. best pop.", "Average"], prop={'size': 10});
@@ -143,7 +146,7 @@ class ga_visualizer:
 
 
     @staticmethod
-    def animate_cluster_allocation(data, observer, animation_velocity = 75, save_movie = None):
+    def animate_cluster_allocation(data, observer, animation_velocity = 75, movie_fps = 5, save_movie = None):
         figure = plt.figure();
         
         def init_frame():
@@ -152,9 +155,9 @@ class ga_visualizer:
         def frame_generation(index_iteration):
             figure.clf();
             
-            figure.suptitle("Clustering genetic algorithm (iteration: " + str(index_iteration) +")", fontsize = 20, fontweight = 'bold');
+            figure.suptitle("Clustering genetic algorithm (iteration: " + str(index_iteration) +")", fontsize = 18, fontweight = 'bold');
             
-            visualizer = cluster_visualizer(4, 2, ["Population #" + str(index_iteration), "The best population"]);
+            visualizer = cluster_visualizer(4, 2, ["The best pop. on step #" + str(index_iteration), "The best population"]);
             
             local_minimum_clusters = ga_math.get_clusters_representation(observer.get_population_best()['chromosome'][index_iteration]);
             visualizer.append_clusters(local_minimum_clusters, data, 0);
@@ -174,10 +177,7 @@ class ga_visualizer:
         cluster_animation = animation.FuncAnimation(figure, frame_generation, iterations, interval = animation_velocity, init_func = init_frame, repeat_delay = 5000);
 
         if (save_movie is not None):
-#             plt.rcParams['animation.ffmpeg_path'] = 'D:\\Program Files\\ffmpeg-3.3.1-win64-static\\bin\\ffmpeg.exe';
-#             ffmpeg_writer = animation.FFMpegWriter(fps = 15);
-#             cluster_animation.save(save_movie, writer = ffmpeg_writer);
-            cluster_animation.save(save_movie, writer = 'ffmpeg', fps = 15, bitrate = 1500);
+            cluster_animation.save(save_movie, writer = 'ffmpeg', fps = movie_fps, bitrate = 1500);
         else:
             plt.show();
 

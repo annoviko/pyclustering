@@ -40,6 +40,7 @@ def template_clustering(path,
                         count_mutation_gens,
                         coeff_mutation_count=0.25,
                         select_coeff=1.0,
+                        fps=15,
                         animation=False):
 
     sample = read_sample(path);
@@ -64,7 +65,7 @@ def template_clustering(path,
     ga_visualizer.show_clusters(sample, observer);
     
     if (animation is True):
-        ga_visualizer.animate_cluster_allocation(sample, observer, save_movie="clustering_animation.mp4");
+        ga_visualizer.animate_cluster_allocation(sample, observer, movie_fps=fps, save_movie="clustering_animation.mp4");
 #         ga_visualizer.animate_cluster_allocation(sample, observer);
 
 
@@ -147,9 +148,42 @@ def cluster_sample8():
 def animation_cluster_sample1():
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1,
                         count_clusters=2,
-                        chromosome_count=20,
-                        population_count=20,
+                        chromosome_count=10,
+                        population_count=50,
                         count_mutation_gens=2,
+                        select_coeff=0.02,
+                        fps=5,
+                        animation=True);
+
+def animation_cluster_sample2():
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2,
+                        count_clusters=3,
+                        chromosome_count=30,
+                        population_count=150,
+                        count_mutation_gens=2,
+                        select_coeff=0.02,
+                        fps=8,
+                        animation=True)
+
+def animation_cluster_sample3():
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE3,
+                        count_clusters=4,
+                        chromosome_count=100,
+                        population_count=150,
+                        count_mutation_gens=2,
+                        coeff_mutation_count=0.8,
+                        select_coeff=0.3,
+                        fps=5,
+                        animation=True);
+
+def animation_cluster_sample4():
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE4,
+                        count_clusters=5,
+                        chromosome_count=50,
+                        population_count=500,
+                        count_mutation_gens=2,
+                        select_coeff=0.1,
+                        fps=15,
                         animation=True)
 
 
@@ -163,3 +197,6 @@ cluster_sample7();
 cluster_sample11();
 
 animation_cluster_sample1();
+animation_cluster_sample2();
+animation_cluster_sample3();
+animation_cluster_sample4();
