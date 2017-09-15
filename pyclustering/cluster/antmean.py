@@ -29,33 +29,27 @@ import pyclustering.core.antmean_wrapper as wrapper
 
 
 class antmean_clustering_params:
+
     def __init__(self):
         
-        ## used for pheramone evaporation
-        self.ro                 = 0.9
+        # used for pheramone evaporation
+        self.ro = 0.9
         
-        ## initial value for pheramones
-        self.pheramone_init     = 0.1
+        # initial value for pheramones
+        self.pheramone_init = 0.1
         
-        ## amount of iterations that is used for solving
-        self.iterations         = 50
+        # amount of iterations that is used for solving
+        self.iterations = 50
         
-        ## amount of ants that is used on each iteration
-        self.count_ants         = 20
-        
-        
+        # amount of ants that is used on each iteration
+        self.count_ants = 20
+
+
 class antmean:
+
     def __init__(self, parameters):
-        
-        self.__parameters = None
-        
-        if (parameters is None):
-            self.__parameters = antmean_clustering_params();
-        else:
-            self.__parameters = parameters;
-            
+
+        self.__parameters = parameters if parameters is not None else antmean_clustering_params()
     
     def process(self, count_clusters, samples):
         return wrapper.antmean_clustering_process(self.__parameters, count_clusters, samples)
-        
-        

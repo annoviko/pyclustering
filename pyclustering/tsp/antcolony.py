@@ -46,29 +46,29 @@ class antcolony_parameters:
         
         """
         
-        ## Used to scalability distance in calculation pheromone.
-        self.q                   = 1.5;
+        # Used to scalability distance in calculation pheromone.
+        self.q = 1.5
+
+        # Is a pheromone decay parameter in (1-ro) * ph.
+        self.ro = 0.7
+
+        # Used to control the relative importance degree of pheromone concentration and the length of path [2].
+        self.alpha = 1.0
         
-        ## Is a pheromone decay parameter in (1-ro) * ph.
-        self.ro                  = 0.7;
+        # Used to control the relative importance degree of pheromone concentration and the length of path [2].
+        self.beta = 1.0
         
-        ## Used to control the relative importance degree of pheromone concentration and the length of path [2].
-        self.alpha               = 1.0;
+        # Currently unused.
+        self.gamma = 2.0
         
-        ## Used to control the relative importance degree of pheromone concentration and the length of path [2].
-        self.beta                = 1.0;
+        # Initial value for pheramones.
+        self.qinit_pheramone = 0.1
         
-        ## Currently unused.
-        self.gamma               = 2.0;
+        # Amount of ants that is used on each iteration.
+        self.ants_per_iteration = 10
         
-        ## Initial value for pheramones.
-        self.qinit_pheramone     = 0.1;
-        
-        ## Amount of ants that is used on each iteration.
-        self.ants_per_iteration  = 10;
-        
-        ## Amount of iterations that is used for solving TSP.
-        self.iterations          = 50;
+        # Amount of iterations that is used for solving TSP.
+        self.iterations = 50
 
 
 class antcolony:
@@ -90,13 +90,12 @@ class antcolony:
         
         """
         
-        self.__parameters = None;
+        self.__parameters = None
         
-        if (parameters is None):
-            self.__parameters = antcolony_parameters();
+        if parameters is None:
+            self.__parameters = antcolony_parameters()
         else:
-            self.__parameters = parameters;
-
+            self.__parameters = parameters
 
     def process(self, object_locations):
         """!
@@ -108,14 +107,13 @@ class antcolony:
         
         """
 
-        output_result = wrapper.antcolony_tsp_process(object_locations, self.__parameters);
+        output_result = wrapper.antcolony_tsp_process(object_locations, self.__parameters)
         
-        result = tsp_result();
-        result.shortest_length = output_result[0][0];
-        result.object_sequence = output_result[1];
+        result = tsp_result()
+        result.shortest_length = output_result[0][0]
+        result.object_sequence = output_result[1]
         
-        return result;
-
+        return result
 
     def process_by_matrix(self, matrix):
         """!
@@ -127,10 +125,10 @@ class antcolony:
         
         """
 
-        output_result = wrapper.antcolony_tsp_process(matrix, self.__parameters, wrapper.CITIES_DISTANCE_SET_BY_MATRIX);
+        output_result = wrapper.antcolony_tsp_process(matrix, self.__parameters, wrapper.CITIES_DISTANCE_SET_BY_MATRIX)
         
-        result = tsp_result();
-        result.shortest_length = output_result[0][0];
-        result.object_sequence = output_result[1];
+        result = tsp_result()
+        result.shortest_length = output_result[0][0]
+        result.object_sequence = output_result[1]
         
-        return result;
+        return result

@@ -23,16 +23,20 @@
 
 """
 
-import unittest;
+import unittest
 
-from pyclustering.cluster.antmean import antmean;
+from pyclustering.cluster.antmean import antmean
 
 
 class AntmeanIntegrationTest(unittest.TestCase):
+    """ """
+
     def templateClustering(self, samples, clusters):
+        """ """
+
         algo = antmean(None)
         res = algo.process(len(clusters), samples)
-        
+
         """
             Testing clusters
         """
@@ -41,24 +45,25 @@ class AntmeanIntegrationTest(unittest.TestCase):
         
         for i in range(len(clusters)):
             clusters[i].sort()
-            
+
             for j in range(len(res)):
-                foundCl = True
-                
+
+                found_cl = True
+
                 for k in range(len(clusters[i])):
-                    if (clusters[i][k] != res[j][k]):
-                        foundCl = False
-                        break;
+                    if clusters[i][k] != res[j][k]:
+                        found_cl = False
+                        break
                 
-                if (foundCl):
+                if found_cl:
                     break
             
-            assert (foundCl)
-
+            assert found_cl
 
     def testSimpleTwoClusters(self):
-        self.templateClustering([[ 0, 0 ],[ 1, 1 ],[ 10, 10 ],[ 11, 11 ],[ -2, -2 ],[ 0.55, -1.26 ],[ 13.25, 12.12 ]], [[0, 1, 4, 5], [2, 3, 6]])
+        self.templateClustering([[0, 0], [1, 1], [10, 10], [11, 11], [-2, -2], [0.55, -1.26], [13.25, 12.12]],
+                                [[0, 1, 4, 5], [2, 3, 6]])
 
 
 if __name__ == "__main__":
-    unittest.main();
+    unittest.main()

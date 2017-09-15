@@ -24,8 +24,8 @@
 """
 
 
-from pyclustering.core.wrapper import *;
-from pyclustering.core.pyclustering_package import pyclustering_package, package_builder, package_extractor;
+from pyclustering.core.wrapper import *
+from pyclustering.core.pyclustering_package import pyclustering_package, package_builder, package_extractor
 
 
 class c_antcolony_clustering_parameters(Structure):
@@ -36,29 +36,31 @@ class c_antcolony_clustering_parameters(Structure):
     unsigned int            count_ants;
     
     """
-    _fields_ = [("ro"       , c_double),
-                ("pheramone_init"          , c_double),
-                ("iterations"               , c_uint),
-                ("count_ants"               , c_uint)    ];
+    _fields_ = [("ro", c_double),
+                ("pheramone_init", c_double),
+                ("iterations", c_uint),
+                ("count_ants", c_uint)]
 
 
 def antmean_clustering_process(params, count_clusters, samples):
-    ccore = load_core();
+    """ """
+
+    ccore = load_core()
     
-    algorithm_params = c_antcolony_clustering_parameters();
-    algorithm_params.ro                         = c_double(params.ro);
-    algorithm_params.pheramone_init             = c_double(params.pheramone_init);
-    algorithm_params.iterations                 = c_uint(params.iterations);
-    algorithm_params.count_ants                 = c_uint(params.count_ants);
+    algorithm_params = c_antcolony_clustering_parameters()
+    algorithm_params.ro = c_double(params.ro)
+    algorithm_params.pheramone_init = c_double(params.pheramone_init)
+    algorithm_params.iterations = c_uint(params.iterations)
+    algorithm_params.count_ants = c_uint(params.count_ants)
     
-    algorithm_params = pointer(algorithm_params);
+    algorithm_params = pointer(algorithm_params)
     
-    sample_package = package_builder(samples, c_double).create();
+    sample_package = package_builder(samples, c_double).create()
     
-    ccore.antmean_algorithm.restype = POINTER(pyclustering_package);
-    package = ccore.antmean_algorithm(sample_package, algorithm_params, count_clusters);
+    ccore.antmean_algorithm.restype = POINTER(pyclustering_package)
+    package = ccore.antmean_algorithm(sample_package, algorithm_params, count_clusters)
     
-    result = package_extractor(package).extract();
-    ccore.free_pyclustering_package(package);
-    
-    return result;
+    result = package_extractor(package).extract()
+    ccore.free_pyclustering_package(package)
+
+    return result
