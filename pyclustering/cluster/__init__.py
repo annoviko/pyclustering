@@ -259,14 +259,18 @@ class cluster_visualizer:
 
         
         cluster_figure = None;
+        
+        canvas_shift = shift;
+        if (canvas_shift is None):
+            if (figure is not None):
+                canvas_shift = len(figure.get_axes());
+            else:
+                canvas_shift = 0;
+            
         if (figure is not None):
             cluster_figure = figure;
         else:
             cluster_figure = plt.figure();
-        
-        canvas_shift = shift;
-        if (canvas_shift is None):
-            canvas_shift = len(figure.get_axes());
         
         maximum_cols = self.__size_row;
         maximum_rows = math.ceil( (self.__number_canvases + canvas_shift) / maximum_cols);
