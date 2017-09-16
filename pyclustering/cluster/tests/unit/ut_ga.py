@@ -1,6 +1,6 @@
 """!
 
-@brief Unit-tests for center-initializer set.
+@brief Unit-tests for genetic clustering algorithm.
 
 @authors Andrei Novikov, Aleksey Kukushkin (pyclustering@yandex.ru)
 @date 2014-2017
@@ -23,10 +23,18 @@
 
 """
 
-import unittest
-import inspect
+import unittest;
+import inspect;
 
-from pyclustering.cluster.ga import genetic_algorithm
+# Generate images without having a window appear.
+import matplotlib;
+matplotlib.use('Agg');
+
+from pyclustering.samples.definitions import SIMPLE_SAMPLES;
+
+from pyclustering.cluster.ga import genetic_algorithm, ga_observer, ga_visualizer;
+from pyclustering.cluster.ga_maths import ga_math;
+from pyclustering.utils import read_sample;
 
 
 class GeneticAlgorithmClusteringUnitTest(unittest.TestCase):
@@ -110,6 +118,157 @@ class GeneticAlgorithmClusteringUnitTest(unittest.TestCase):
                                  count_populations=100,
                                  count_mutations_gen=1,
                                  result_should_be=24.0)
+
+
+    def templateDataClustering(self, sample_path,
+                                     amount_clusters,
+                                     chromosome_count,
+                                     population_count,
+                                     count_mutation_gens,
+                                     coeff_mutation_count,
+                                     expected_clusters_sizes):
+        testing_result = False;
+        
+        for _ in range(3):
+            sample = read_sample(sample_path);
+            
+            ga_instance = genetic_algorithm(sample, amount_clusters, chromosome_count,
+                                    population_count, count_mutation_gens, coeff_mutation_count);
+            
+            ga_instance.process();
+            clusters = ga_instance.get_clusters();
+            
+            obtained_cluster_sizes = [len(cluster) for cluster in clusters];
+            if (len(sample) != sum(obtained_cluster_sizes)):
+                continue;
+            
+            if (expected_clusters_sizes != None):
+                obtained_cluster_sizes.sort();
+                expected_clusters_sizes.sort();
+                if (obtained_cluster_sizes != expected_clusters_sizes):
+                    continue;
+            
+            testing_result = True;
+            break;
+        
+        assert testing_result == True;
+    
+    
+    def testClusteringTwoDimensionalData(self):
+        self.templateDataClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, 20, 30, 2, 0.25, [5, 5]);
+
+    def testClusteringTwoDimensionalDataWrongAllocation(self):
+        self.templateDataClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, 20, 30, 2, 0.25, [10]);
+
+    def testClusteringOneDimensionalData(self):
+        self.templateDataClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE7, 2, 20, 30, 2, 0.25, [10, 10]);
+
+    def testClusteringOneDimensionalDataWrongAllocation(self):
+        self.templateDataClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE7, 1, 20, 30, 2, 0.25, [20]);
+
+    def testClusteringThreeDimensionalData(self):
+        self.templateDataClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, 2, 20, 30, 2, 0.25, [10, 10]);
+
+    def testClusteringThreeDimensionalDataWrongAllocation(self):
+        self.templateDataClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, 1, 20, 30, 2, 0.25, [20]);
+
+    def testTwoClustersTotallySimilarObjects(self):
+        self.templateDataClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 2, 20, 30, 2, 0.25, None);
+
+    def testFiveClustersTotallySimilarObjects(self):
+        self.templateDataClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 5, 20, 30, 2, 0.25, None);
+
+    def testTenClustersTotallySimilarObjects(self):
+        self.templateDataClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 10, 20, 30, 2, 0.25, None);
+
+
+    def templateTestObserverCollecting(self, amount_clusters, iterations, global_optimum, local_optimum, average):
+        testing_result = False;
+        
+        observer_instance = None;
+        sample = None;
+        
+        for _ in range(3):
+            observer_instance = ga_observer(global_optimum, local_optimum, average);
+            
+            assert len(observer_instance) == 0;
+            
+            sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1);
+            
+            ga_instance = genetic_algorithm(sample, amount_clusters, 20, iterations, 2, 0.25, observer=observer_instance);
+            ga_instance.process();
+            
+            assert observer_instance == ga_instance.get_observer();
+            
+            expected_length = 0;
+            if (global_optimum is True):
+                expected_length = iterations + 1;
+                assert expected_length == len(observer_instance);
+            
+            assert expected_length == len(observer_instance.get_global_best()['chromosome']);
+            assert expected_length == len(observer_instance.get_global_best()['fitness_function']);
+
+            expected_length = 0;
+            if (local_optimum is True):
+                expected_length = iterations + 1;
+                assert expected_length == len(observer_instance);
+            
+            assert expected_length == len(observer_instance.get_population_best()['chromosome']);
+            assert expected_length == len(observer_instance.get_population_best()['fitness_function']);
+            
+            expected_length = 0;
+            if (average is True):
+                expected_length = iterations + 1;
+                assert expected_length == len(observer_instance);
+            
+            assert expected_length == len(observer_instance.get_mean_fitness_function());
+            
+            if (global_optimum is True):
+                clusters = ga_math.get_clusters_representation(observer_instance.get_global_best()['chromosome'][-1]);
+                if (amount_clusters != len(clusters)):
+                    continue;
+            
+            testing_result = True;
+            break;
+        
+        assert testing_result == True;
+        return sample, observer_instance;
+
+
+    def testObserveGlobalOptimum(self):
+        self.templateTestObserverCollecting(2, 10, True, False, False);
+
+    def testObserveLocalOptimum(self):
+        self.templateTestObserverCollecting(2, 11, False, True, False);
+
+    def testObserveAverage(self):
+        self.templateTestObserverCollecting(2, 12, False, False, True);
+
+    def testObserveAllParameters(self):
+        self.templateTestObserverCollecting(2, 9, True, True, True);
+
+    def testObserveNoCollecting(self):
+        self.templateTestObserverCollecting(2, 9, False, False, False);
+
+    def testObserveParameterCombinations(self):
+        self.templateTestObserverCollecting(3, 10, True, True, False);
+        self.templateTestObserverCollecting(4, 10, True, False, True);
+        self.templateTestObserverCollecting(1, 10, False, True, True);
+
+
+    def testNoFailureVisualizationApi(self):
+        sample, observer = self.templateTestObserverCollecting(2, 10, True, True, True);
+        
+        ga_visualizer.show_evolution(observer);
+        ga_visualizer.show_clusters(sample, observer);
+        ga_visualizer.animate_cluster_allocation(sample, observer);
+
+    def testNoFailureShowEvolution(self):
+        _, observer = self.templateTestObserverCollecting(2, 10, True, True, True);
+        
+        ga_visualizer.show_evolution(observer, 2, 5);
+        ga_visualizer.show_evolution(observer, 2, len(observer));
+        ga_visualizer.show_evolution(observer, 2, len(observer), display = False);
 
 
 if __name__ == "__main__":

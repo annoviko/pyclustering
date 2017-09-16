@@ -45,9 +45,9 @@ class ga_observer:
         """!
         @brief Constructs genetic algorithm observer to collect specific information.
         
-        @param[in] need_global_best (bool): If 'True' then the best chromosomes (global optimum) are stored.
-        @param[in] need_population_best (bool):
-        @param[in] need_mean_ff (bool):
+        @param[in] need_global_best (bool): If 'True' then the best chromosomes and its fitness function value (global optimum) for each iteration are stored.
+        @param[in] need_population_best (bool): If 'True' then current (on each iteration) best chromosomes and its fitness function value (local optimum) are stored.
+        @param[in] need_mean_ff (bool): If 'True' then average value of fitness function on each iteration is stored.
         
         """
 
@@ -71,15 +71,19 @@ class ga_observer:
         @brief Returns amount of iterations that genetic algorithm was observed.
         
         """
-        return len(self._global_best_result['chromosome']);
+        global_length = len(self._global_best_result['chromosome']);
+        local_length = len(self._best_population_result['chromosome']);
+        average_length = len(self._mean_ff_result);
+        
+        return max(global_length, local_length, average_length);
 
 
     def collect_global_best(self, best_chromosome, best_fitness_function):
         """!
-        @brief
+        @brief Stores the best chromosome and its fitness function's value.
         
-        @param[in] best_chromosome ():
-        @param[in] best_fitness_function ():
+        @param[in] best_chromosome (list): The best chromosome that were observed.
+        @param[in] best_fitness_function (float): Fitness function value of the best chromosome.
         
         """
 
@@ -92,10 +96,10 @@ class ga_observer:
 
     def collect_population_best(self, best_chromosome, best_fitness_function):
         """!
-        @brief
+        @brief Stores the best chromosome for current specific iteration and its fitness function's value.
         
-        @param[in] best_chromosome ():
-        @param[in] best_fitness_function ():
+        @param[in] best_chromosome (list): The best chromosome on specific iteration.
+        @param[in] best_fitness_function (float): Fitness function value of the chromosome.
         
         """
 
@@ -108,9 +112,9 @@ class ga_observer:
 
     def collect_mean(self, fitness_functions):
         """!
-        @brief
+        @brief Stores average value of fitness function among chromosomes on specific iteration.
         
-        @param[in] fitness_functions ():
+        @param[in] fitness_functions (float): Average value of fitness functions among chromosomes.
         
         """
 
@@ -122,7 +126,8 @@ class ga_observer:
 
     def get_global_best(self):
         """!
-        @brief
+        @return (dict) Returns dictionary with keys 'chromosome' and 'fitness_function' where evolution of the best chromosome
+                 and its fitness function's value (evolution of global optimum) are stored in lists.
         
         """
         return self._global_best_result;
@@ -130,7 +135,8 @@ class ga_observer:
 
     def get_population_best(self):
         """!
-        @brief 
+        @brief (dict) Returns dictionary with keys 'chromosome' and 'fitness_function' where evolution of the current best chromosome
+                 and its fitness function's value (evolution of local optimum) are stored in lists.
         
         """
         return self._best_population_result;
@@ -138,7 +144,7 @@ class ga_observer:
 
     def get_mean_fitness_function(self):
         """!
-        @brief 
+        @brief (list) Returns fitness function's values on each iteration.
         
         """
         return self._mean_ff_result;
@@ -146,8 +152,56 @@ class ga_observer:
 
 
 class ga_visualizer:
+    """!
+    @brief Genetic algorithm visualizer is used to show clustering results that are specific for
+            this particular algorithm: clusters, evolution of global and local optimum.
+    @details The visualizer requires 'ga_observer' that collects evolution of clustering process in
+              genetic algorithm. The observer is created by user and passed to genetic algorithm. There
+              is usage example of the visualizer using the observer:
+    @code
+        # Read data for clustering 
+        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1);
+        
+        # Create instance of observer that will collect all information:
+        observer_instance = ga_observer(True, True, True);
+        
+        # Create genetic algorithm where observer will collect information:
+        ga_instance = genetic_algorithm(data=sample,
+                                      count_clusters=2,
+                                      chromosome_count=20,
+                                      population_count=20,
+                                      count_mutation_gens=1,
+                                      observer=observer_instance);
+        
+        # Start processing
+        ga_instance.process();
+        
+        # Show cluster using observer:
+        ga_visualizer.show_clusters(sample, observer_instance);
+    @endcode
+    
+    @see cluster_visualizer
+    
+    """
+    
     @staticmethod
     def show_evolution(observer, start_iteration = 0, stop_iteration = None, ax = None, display = True):
+        """!
+        @brief Displays evolution of fitness function for the best chromosome, for the current best chromosome and
+                average value among all chromosomes.
+        
+        @param[in] observer (ga_observer): Genetic algorithm observer that was used for collecting evolution in the algorithm and
+                    where whole required information for visualization is stored.
+        @param[in] start_iteration (uint): Iteration from that evolution should be shown.
+        @param[in] stop_iteration (uint): Iteration after that evolution shouldn't be shown.
+        @param[in] ax (Axes): Canvas where evolution should be displayed.
+        @param[in] display (bool): If 'True' then visualization of the evolution will be shown by the function.
+                    This argument should be 'False' if you want to add something else to the canvas and display it later.
+        
+        @return (Axis) Canvas where evolution was shown.
+        
+        """
+        
         if (ax is None):
             _, ax = plt.subplots(1);
             ax.set_title("Evolution");
@@ -169,10 +223,26 @@ class ga_visualizer:
 
         if (display is True):
             plt.show();
+        
+        return ax;
 
 
     @staticmethod
     def show_clusters(data, observer, marker = '.', markersize = None):
+        """!
+        @brief Shows allocated clusters by the genetic algorithm.
+        
+        @param[in] data (list): Input data that was used for clustering process by the algorithm.
+        @param[in] observer (ga_observer): Observer that was used for collection information about clustering process.
+        @param[in] marker (char): Type of marker that should be used for object (point) representation.
+        @param[in] markersize (uint): Size of the marker that is used for object (point) representation.
+        
+        @note If you have clusters instead of observer then 'cluster_visualizer' can be used for visualization purposes.
+        
+        @see cluster_visualizer
+        
+        """
+        
         figure = plt.figure();
         ax1 = figure.add_subplot(121);
         
@@ -187,6 +257,19 @@ class ga_visualizer:
 
     @staticmethod
     def animate_cluster_allocation(data, observer, animation_velocity = 75, movie_fps = 5, save_movie = None):
+        """!
+        @brief Animate clustering process of genetic clustering algorithm.
+        @details This method can be also used for rendering movie of clustering process and 'ffmpeg' is required for that purpuse.
+        
+        @param[in] data (list): Input data that was used for clustering process by the algorithm.
+        @param[in] observer (ga_observer): Observer that was used for collection information about clustering process.
+                    Be sure that whole information was collected by the observer.
+        @param[in] animation_velocity (uint): Interval between frames in milliseconds (for run-time animation only).
+        @param[in] movie_fps (uint): Defines frames per second (for rendering movie only).
+        @param[in] save_movie (string): If it is specified then animation will be stored to file that is specified in this parameter.
+        
+        """
+        
         figure = plt.figure();
         
         def init_frame():
@@ -227,6 +310,34 @@ class genetic_algorithm:
     @brief Class represents Genetic clustering algorithm.
     @details The searching capability of genetic algorithms is exploited in order to search for appropriate
              cluster centres.
+    
+    Example of clustering using genetic algorithm:
+    @code
+        # Read input data for clustering
+        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE4);
+        
+        # Create genetic algorithm for clustering
+        ga_instance = genetic_algorithm(data=sample,
+                                      count_clusters=4,
+                                      chromosome_count=100,
+                                      population_count=200,
+                                      count_mutation_gens=1);
+        
+        # Start clustering process
+        ga_instance.process();
+        
+        # Extract extracted clusters by the algorithm
+        clusters = ga_instance.get_clusters();
+        print(clusters);
+    @endcode
+
+    There is an example of clustering results (fitness function evolution and allocated clusters) that were 
+    visualized by 'ga_visualizer':
+    
+    @image html ga_clustering_sample_simple_04.png
+
+    @see ga_visualizer
+    @see ga_observer
 
     """
 
@@ -245,6 +356,7 @@ class genetic_algorithm:
                     thus amount of chromosomes is defined as follows: 'chromosome_count' * 'coeff_mutation_count'.
         @param[in] select_coeff (float): Exponential coefficient for selection procedure that is used as follows:
                    math.exp(1 + fitness(chromosome) * select_coeff).
+        @param[in] observer (ga_observer): Observer that is used for collecting information of about clustering process on each step.
         
         """
         
@@ -253,37 +365,37 @@ class genetic_algorithm:
 
         # Clustering data
         if type(data) is list:
-            self.data = np.array(data)
+            self._data = np.array(data)
         else:
-            self.data = data
+            self._data = data
 
         # Count clusters
-        self.count_clusters = count_clusters
+        self._count_clusters = count_clusters
 
         # Home many chromosome in population
-        self.chromosome_count = chromosome_count
+        self._chromosome_count = chromosome_count
 
         # How many populations
-        self.population_count = population_count
+        self._population_count = population_count
 
         # Count mutation genes
-        self.count_mutation_gens = count_mutation_gens
+        self._count_mutation_gens = count_mutation_gens
 
         # Crossover rate
-        self.crossover_rate = 1.0
+        self._crossover_rate = 1.0
 
         # Count of chromosome for mutation (range [0, 1])
-        self.coeff_mutation_count = coeff_mutation_count
+        self._coeff_mutation_count = coeff_mutation_count
 
         # Exponential coeff for selection
-        self.select_coeff = select_coeff
+        self._select_coeff = select_coeff
 
         # Result of clustering : best chromosome
-        self.result_clustering = {'best_chromosome': [],
+        self._result_clustering = {'best_chromosome': [],
                                   'best_fitness_function': 0.0}
 
         # Observer
-        self.observer = observer
+        self._observer = observer
 
     def process(self):
         """!
@@ -294,32 +406,32 @@ class genetic_algorithm:
         """
 
         # Initialize population
-        chromosomes = self._init_population(self.count_clusters, len(self.data), self.chromosome_count)
+        chromosomes = self._init_population(self._count_clusters, len(self._data), self._chromosome_count)
 
         # Initialize the Best solution
         best_chromosome, best_ff, first_fitness_functions \
-            = self._get_best_chromosome(chromosomes, self.data, self.count_clusters)
+            = self._get_best_chromosome(chromosomes, self._data, self._count_clusters)
 
         # Save best result into observer
-        self.observer.collect_global_best(best_chromosome, best_ff)
-        self.observer.collect_population_best(best_chromosome, best_ff)
-        self.observer.collect_mean(first_fitness_functions)
+        self._observer.collect_global_best(best_chromosome, best_ff)
+        self._observer.collect_population_best(best_chromosome, best_ff)
+        self._observer.collect_mean(first_fitness_functions)
 
         # Next population
-        for _idx in range(self.population_count):
+        for _idx in range(self._population_count):
 
             # Select
-            chromosomes = self._select(chromosomes, self.data, self.count_clusters, self.select_coeff)
+            chromosomes = self._select(chromosomes, self._data, self._count_clusters, self._select_coeff)
 
             # Crossover
             self._crossover(chromosomes)
 
             # Mutation
-            self._mutation(chromosomes, self.count_clusters, self.count_mutation_gens, self.coeff_mutation_count)
+            self._mutation(chromosomes, self._count_clusters, self._count_mutation_gens, self._coeff_mutation_count)
 
             # Update the Best Solution
             new_best_chromosome, new_best_ff, fitness_functions \
-                = self._get_best_chromosome(chromosomes, self.data, self.count_clusters)
+                = self._get_best_chromosome(chromosomes, self._data, self._count_clusters)
 
             # Get best chromosome
             if new_best_ff < best_ff:
@@ -327,13 +439,13 @@ class genetic_algorithm:
                 best_chromosome = new_best_chromosome
 
             # Save best result into observer
-            self.observer.collect_global_best(best_chromosome, best_ff)
-            self.observer.collect_population_best(new_best_chromosome, new_best_ff)
-            self.observer.collect_mean(fitness_functions)
+            self._observer.collect_global_best(best_chromosome, best_ff)
+            self._observer.collect_population_best(new_best_chromosome, new_best_ff)
+            self._observer.collect_mean(fitness_functions)
 
         # Save result
-        self.result_clustering['best_chromosome'] = best_chromosome
-        self.result_clustering['best_fitness_function'] = best_ff
+        self._result_clustering['best_chromosome'] = best_chromosome
+        self._result_clustering['best_fitness_function'] = best_ff
 
         return best_chromosome, best_ff
 
@@ -343,7 +455,7 @@ class genetic_algorithm:
         @brief Returns genetic algorithm observer.
         
         """
-        return self.observer
+        return self._observer
 
 
     def get_clusters(self):
@@ -356,7 +468,7 @@ class genetic_algorithm:
         
         """
 
-        return ga_math.get_clusters_representation(self.result_clustering['best_chromosome'], self.count_clusters)
+        return ga_math.get_clusters_representation(self._result_clustering['best_chromosome'], self._count_clusters)
 
 
     @staticmethod
@@ -489,9 +601,9 @@ class genetic_algorithm:
         """!
         @brief Returns first population as a uniform random choice.
         
-        @param[in] count_clusters (uint):
-        @param[in] count_data (uint):
-        @param[in] chromosome_count (uint): 
+        @param[in] count_clusters (uint): Amount of clusters that should be allocated.
+        @param[in] count_data (uint): Data size that is used for clustering process.
+        @param[in] chromosome_count (uint):Amount of chromosome that is used for clustering.
         
         """
 
@@ -503,7 +615,14 @@ class genetic_algorithm:
     @staticmethod
     def _get_best_chromosome(chromosomes, data, count_clusters):
         """!
-        @brief 
+        @brief Returns the current best chromosome.
+        
+        @param[in] chromosomes (list): Chromosomes that are used for searching.
+        @param[in] data (list): Input data that is used for clustering process.
+        @param[in] count_clusters (uint): Amount of clusters that should be allocated.
+        
+        @return (list, float, list) The best chromosome, its fitness function value and fitness function values for
+                 all chromosomes.
         
         """
 
@@ -523,7 +642,13 @@ class genetic_algorithm:
     @staticmethod
     def _calc_fitness_function(centres, data, chromosomes):
         """!
-        @brief 
+        @brief Calculate fitness function values for chromosomes.
+        
+        @param[in] centres (list): Cluster centers.
+        @param[in] data (list): Input data that is used for clustering process.
+        @param[in] chromosomes (list): Chromosomes whose fitness function's values are calculated.
+        
+        @return (list) Fitness function value for each chromosome correspondingly.
         
         """
 

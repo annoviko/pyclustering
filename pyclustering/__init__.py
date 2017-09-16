@@ -37,6 +37,7 @@ Cluster analysis algorithms and methods (module pyclustering.cluster):
 - CLARANS (pyclustering.cluster.clarans);
 - CURE (pyclustering.cluster.cure);
 - DBSCAN (pyclustering.cluster.dbscan);
+- GA (genetic algorithm pyclustering.cluster.ga);
 - HSyncNet (bio-inspired algorithm pyclustering.cluster.hsyncnet);
 - K-Means (pyclustering.cluster.kmeans);
 - K-Means++ (pyclustering.cluster.center_initializer);

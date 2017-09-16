@@ -57,7 +57,7 @@ def read_sample(filename):
     
     file = open(filename, 'r');
 
-    sample = [[float(val) for val in line.split()] for line in file];
+    sample = [[float(val) for val in line.split()] for line in file if len(line.strip()) > 0];
     
     file.close();
     return sample;

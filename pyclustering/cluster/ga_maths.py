@@ -1,9 +1,36 @@
+"""!
 
-import numpy as np
+@brief Genetic algorithm math API.
+
+@authors Aleksey Kukushkin (pyclustering@yandex.ru)
+@date 2014-2017
+@copyright GNU Public License
+
+@cond GNU_PUBLIC_LICENSE
+    PyClustering is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    PyClustering is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+@endcond
+
+"""
+
+
+import numpy as np;
 
 
 class ga_math:
     """
+    @brief Genetic algorithm math API.
+    
     """
 
     @staticmethod
@@ -31,7 +58,8 @@ class ga_math:
 
     @staticmethod
     def get_centres(chromosomes, data, count_clusters):
-        """ """
+        """!
+        """
 
         centres = ga_math.calc_centers(chromosomes, data, count_clusters)
 
@@ -39,7 +67,8 @@ class ga_math:
 
     @staticmethod
     def calc_centers(chromosomes, data, count_clusters=None):
-        """ """
+        """!
+        """
 
         if count_clusters is None:
             count_clusters = ga_math.calc_count_centers(chromosomes[0])
@@ -68,7 +97,8 @@ class ga_math:
 
     @staticmethod
     def calc_probability_vector(fitness):
-        """  """
+        """!
+        """
 
         if len(fitness) == 0:
             raise AttributeError("Has no any fitness functions.")
@@ -106,6 +136,7 @@ class ga_math:
         """!
         @brief Update the last same probabilities to one.
         @details All values of probability list equals to the last element are set to 1.
+        
         """
 
         # Start from the last elem

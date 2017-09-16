@@ -89,7 +89,7 @@ def cluster_sample3():
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE3,
                         count_clusters=4,
                         chromosome_count=100,
-                        population_count=150,
+                        population_count=200,
                         count_mutation_gens=2,
                         coeff_mutation_count=0.8,
                         select_coeff=0.3)

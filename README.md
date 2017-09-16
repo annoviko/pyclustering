@@ -64,6 +64,7 @@ In case of any questions, proposals or bugs related to the pyclustering please c
 - CLARANS [Python]
 - CURE [Python, C++]
 - DBSCAN [Python, C++]
+- GA (Genetic Algorithm) [Python, C++]
 - HSyncNet [Python, C++]
 - K-Means [Python, C++]
 - K-Means++ [Python]

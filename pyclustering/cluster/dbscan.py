@@ -50,7 +50,7 @@ class dbscan:
         
         # obtain results of clustering
         clusters = dbscan_instance.get_clusters();
-        noise = dbscan_instance.get_noise();    
+        noise = dbscan_instance.get_noise();
     @endcode
     
     """
