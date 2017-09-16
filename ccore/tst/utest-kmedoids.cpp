@@ -31,7 +31,7 @@ using namespace cluster_analysis;
 
 
 static void
-template_kmedoids_length_process_data(const dataset_ptr & p_data,
+template_kmedoids_length_process_data(const dataset_ptr p_data,
         const medoid_sequence & p_start_medians,
         const std::vector<size_t> & p_expected_cluster_length) {
 
@@ -125,7 +125,7 @@ TEST(utest_kmedoids, allocation_wrong_initial_medoids_sample_simple_04) {
 
 
 TEST(utest_kmedoids, totally_similar_data) {
-    const dataset_ptr dataset = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_04);
+    const dataset_ptr dataset = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_12);
     const std::vector<size_t> expected_clusters_length;     /* empty - just check index point existence */
 
     medoid_sequence start_medoids = { 0, 2, 5, 7, 10, 12 };

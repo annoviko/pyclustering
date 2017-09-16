@@ -45,6 +45,8 @@ const std::string simple_sample_factory::PATH_SAMPLE_SIMPLE_07 = PATH_SAMPLE_SIM
 const std::string simple_sample_factory::PATH_SAMPLE_SIMPLE_08 = PATH_SAMPLE_SIMPLE_FOLDER + separator + "SampleSimple08.txt";
 const std::string simple_sample_factory::PATH_SAMPLE_SIMPLE_09 = PATH_SAMPLE_SIMPLE_FOLDER + separator + "SampleSimple09.txt";
 const std::string simple_sample_factory::PATH_SAMPLE_SIMPLE_10 = PATH_SAMPLE_SIMPLE_FOLDER + separator + "SampleSimple10.txt";
+const std::string simple_sample_factory::PATH_SAMPLE_SIMPLE_11 = PATH_SAMPLE_SIMPLE_FOLDER + separator + "SampleSimple11.txt";
+const std::string simple_sample_factory::PATH_SAMPLE_SIMPLE_12 = PATH_SAMPLE_SIMPLE_FOLDER + separator + "SampleSimple12.txt";
 
 
 const simple_sample_factory::map_sample simple_sample_factory::m_sample_table = {
@@ -58,6 +60,8 @@ const simple_sample_factory::map_sample simple_sample_factory::m_sample_table = 
     { SAMPLE_SIMPLE::SAMPLE_SIMPLE_08, simple_sample_factory::PATH_SAMPLE_SIMPLE_08 },
     { SAMPLE_SIMPLE::SAMPLE_SIMPLE_09, simple_sample_factory::PATH_SAMPLE_SIMPLE_09 },
     { SAMPLE_SIMPLE::SAMPLE_SIMPLE_10, simple_sample_factory::PATH_SAMPLE_SIMPLE_10 },
+    { SAMPLE_SIMPLE::SAMPLE_SIMPLE_11, simple_sample_factory::PATH_SAMPLE_SIMPLE_11 },
+    { SAMPLE_SIMPLE::SAMPLE_SIMPLE_12, simple_sample_factory::PATH_SAMPLE_SIMPLE_12 },
 };
 
 
@@ -72,6 +76,9 @@ std::shared_ptr<dataset> simple_sample_factory::create_sample(const SAMPLE_SIMPL
         std::string file_line;
 
         while(std::getline(file_sample, file_line)) {
+            if (file_line.empty())
+                continue;
+
             double value = 0.0;
             point sample_point;
 
