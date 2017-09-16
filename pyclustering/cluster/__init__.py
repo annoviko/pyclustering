@@ -241,8 +241,16 @@ class cluster_visualizer:
             raise NameError('Canvas does ' + canvas + ' not exists.');
         
         self.__canvas_titles[canvas] = text;
-    
-    
+
+
+    def get_cluster_color(self, index_cluster, index_canvas):
+        """!
+        @brief Returns cluster color on specified canvas.
+        
+        """
+        return self.__canvas_clusters[index_canvas][index_cluster].color;
+
+
     def show(self, figure = None, visible_axis = True, visible_grid = True, display = True, shift = None):
         """!
         @brief Shows clusters (visualize).

@@ -26,10 +26,9 @@
 
 import numpy;
 
-from pyclustering.cluster import cluster_visualizer;
 from pyclustering.cluster.center_initializer import kmeans_plusplus_initializer;
 from pyclustering.cluster.kmeans import kmeans;
-from pyclustering.cluster.ema import ema;
+from pyclustering.cluster.ema import ema, ema_visualizer;
 
 from pyclustering.utils import read_sample;
 
@@ -62,10 +61,10 @@ def template_clustering(sample_file_path, amount_clusters, kmeans_initializer = 
     ema_instance.process();
     
     clusters = ema_instance.get_clusters();
+    covariances = ema_instance.get_covariances();
+    means = ema_instance.get_centers();
 
-    visualizer = cluster_visualizer();
-    visualizer.append_clusters(clusters, sample);
-    visualizer.show();
+    ema_visualizer.show_clusters(clusters, sample, covariances, means);
 
 
 def cluster_sample01():
@@ -94,7 +93,6 @@ def cluster_elongate():
 
 def cluster_lsun():
     template_clustering(FCPS_SAMPLES.SAMPLE_LSUN, 3);
-
 
 
 cluster_sample01();

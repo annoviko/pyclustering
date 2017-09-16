@@ -29,23 +29,23 @@
 import numpy;
 
 from pyclustering.cluster import cluster_visualizer;
-from pyclustering.utils import pi;
+from pyclustering.utils import pi, calculate_ellipse_description;
 
 import matplotlib.pyplot as plt;
-from matplotlib.patches import Ellipse;
-from _operator import index
+from matplotlib import patches;
 
 
 
 def gaussian(data, mean, covariance):
-    dimension = len(data[0]);
+    dimension = float(len(data[0]));
  
-    if (dimension != 1):
-        inv_variance = numpy.linalg.inv(covariance);
+    if (dimension != 1.0):
+        inv_variance = numpy.linalg.pinv(covariance);
     else:
         inv_variance = 1.0 / covariance;
     
-    right_const = 1.0 / ( (pi * 2.0) ** (dimension / 2.0) * numpy.linalg.norm(covariance) ** 0.5 );
+    divider = (pi * 2.0) ** (dimension / 2.0) * numpy.sqrt(numpy.linalg.norm(covariance));
+    right_const = 1.0 / divider;
      
     result = [];
      
@@ -60,38 +60,73 @@ def gaussian(data, mean, covariance):
 
 class ema_observer:
     def __init__(self):
-        self.__means = [];
-        self.__covariances = [];
+        self.__means_evolution = [];
+        self.__covariances_evolution = [];
+        self.__clusters_evolution = [];
+
 
     def get_iterations(self):
         return len(self.__means);
 
+
     def get_means(self):
-        return self.__means;
+        return self.__means_evolution;
+
 
     def get_covariances(self):
-        return self.__covariances;
+        return self.__covariances_evolution;
 
-    def notify(self, means, covariances):
-        self.__means.append(means);
-        self.__covariances.append(covariances);
+
+    def notify(self, means, covariances, clusters):
+        self.__means_evolution.append(means);
+        self.__covariances_evolution.append(covariances);
+        self.__clusters_evolution.append(clusters);
 
 
 
 class ema_visualizer:
     @staticmethod
-    def show_clusters(self, clusters, sample, covariances):
+    def show_clusters(clusters, sample, covariances, means, display = True):
         visualizer = cluster_visualizer();
         visualizer.append_clusters(clusters, sample);
         figure = visualizer.show(display = False);
         
-        # TODO: draw ellipes for each cluster using covariance matrix
+        if (len(sample[0]) == 2):
+            ema_visualizer.__draw_ellipses(figure, visualizer, clusters, covariances, means);
+
+        if (display is True): 
+            plt.show();
+
+        return figure;
+
+
+    @staticmethod
+    def __draw_ellipses(figure, visualizer, clusters, covariances, means):
+        print(len(clusters));
+        print([len(cluster) for cluster in clusters]);
+        print(clusters);
+        
+        ax = figure.get_axes()[0];
+        
+        for index in range(len(clusters)):
+            angle, width, height = calculate_ellipse_description(covariances[index]);
+            color = visualizer.get_cluster_color(index, 0);
+            
+            ema_visualizer.__draw_ellipse(ax, means[index][0], means[index][1], angle, width, height, color);
+
+
+    @staticmethod
+    def __draw_ellipse(ax, x, y, angle, width, height, color):
+        ellipse = patches.Ellipse((x, y), width, height, alpha=0.2, angle=angle, linewidth=2, fill=True, zorder=2, color=color);
+        ax.add_patch(ellipse);
 
 
 class ema:
-    def __init__(self, data, amount_clusters, means = None, variances = None):
+    def __init__(self, data, amount_clusters, means = None, variances = None, observer = None, tolerance = 0.00001):
         self.__data = numpy.array(data);
         self.__amount_clusters = amount_clusters;
+        self.__tolerance = tolerance;
+        self.__observer = observer;
         
         self.__means = means;
         if (means is None):
@@ -111,18 +146,18 @@ class ema:
     def process(self):
         self.__clusters = None;
         
-        previous_likelihood = -10000500;
-        current_likelihood = -10000000;
+        previous_likelihood = -200000;
+        current_likelihood = -100000;
         
-        while((self.__stop is False) and (abs(numpy.min(previous_likelihood) - numpy.min(current_likelihood)) > 0.00001) and (current_likelihood < 0.0)):
+        while( (self.__stop is False) and (abs(previous_likelihood - current_likelihood) > self.__tolerance) ):
             self.__expectation_step();
             self.__maximization_step();
             
             previous_likelihood = current_likelihood;
             current_likelihood = self.__log_likelihood();
-            self.__stop = self.__get_stop_flag();
+            self.__stop = self.__get_stop_condition();
         
-        self.__extract_clusters();
+        self.__clusters = self.__extract_clusters();
 
 
     def get_clusters(self):
@@ -137,17 +172,24 @@ class ema:
         return self.__variances;
 
 
+    def __notify(self):
+        if (self.__observer is not None):
+            clusters = self.__extract_clusters();
+            self.__notify(self.__means, self.__variances, clusters);
+
+
     def __extract_clusters(self):
-        self.__clusters = [];
-        for index_cluster in range(self.__amount_clusters):
-            cluster = [];
-            for index_point in range(len(self.__data)):
-                if (self.__rc[index_cluster][index_point] >= 0.5):
-                    cluster.append(index_point);
+        clusters = [ [] for _ in range(self.__amount_clusters) ];
+        for index_point in range(len(self.__data)):
+            candidates = [];
+            for index_cluster in range(self.__amount_clusters):
+                candidates.append((index_cluster, self.__rc[index_cluster][index_point]));
             
-            self.__clusters.append(cluster);
+            index_winner = max(candidates, key = lambda candidate : candidate[1])[0];
+            clusters[index_winner].append(index_point);
         
-        return self.__clusters;
+        clusters = [ cluster for cluster in clusters if len(cluster) > 0 ];
+        return clusters;
 
 
     def __log_likelihood(self):
@@ -182,37 +224,48 @@ class ema:
 
 
     def __maximization_step(self):
+        self.__pic = [];
+        self.__means = [];
+        self.__variances = [];
+        
+        amount_impossible_clusters = 0;
+        
         for index_cluster in range(self.__amount_clusters):
             mc = numpy.sum(self.__rc[index_cluster]);
             
-            self.__pic[index_cluster] = mc / len(self.__data);
-            self.__means[index_cluster] = self.__update_mean(index_cluster, mc);
+            if (mc == 0.0):
+                amount_impossible_clusters += 1;
+                continue;
             
-            self.__variances[index_cluster] = self.__update_covariance(index_cluster, mc);
+            self.__pic.append( mc / len(self.__data) );
+            self.__means.append( self.__update_mean(self.__rc[index_cluster], mc) );
+            self.__variances.append( self.__update_covariance(self.__means[-1], self.__rc[index_cluster], mc) );
+        
+        self.__amount_clusters -= amount_impossible_clusters;
 
 
-    def __get_stop_flag(self):
+    def __get_stop_condition(self):
         for covariance in self.__variances:
-            if (min(covariance[0]) == 0):
+            if (numpy.linalg.norm(covariance) == 0.0):
                 return True;
         
         return False;
 
 
-    def __update_covariance(self, index_cluster, mc):
+    def __update_covariance(self, means, rc, mc):
         covariance = 0.0;
         for index_point in range(len(self.__data)):
-            deviation = numpy.array( [ self.__data[index_point] - self.__means[index_cluster] ]);
-            covariance += self.__rc[index_cluster][index_point] * deviation.T.dot(deviation);
+            deviation = numpy.array( [ self.__data[index_point] - means ]);
+            covariance += rc[index_point] * deviation.T.dot(deviation);
         
         covariance = covariance / mc;
         return covariance;
 
 
-    def __update_mean(self, index_cluster, mc):
+    def __update_mean(self, rc, mc):
         mean = 0.0;
         for index_point in range(len(self.__data)):
-            mean += self.__rc[index_cluster][index_point] * self.__data[index_point];
+            mean += rc[index_point] * self.__data[index_point];
         
         mean = mean / mc;
         return mean;
