@@ -31,7 +31,7 @@ from pyclustering.samples.definitions import SIMPLE_SAMPLES;
 from pyclustering.samples.definitions import FCPS_SAMPLES;
 
 
-class DbscsanUnitTest(unittest.TestCase):  
+class DbscsanUnitTest(unittest.TestCase):
     def testClusteringSampleSimple1(self):
         DbscanTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 0.4, 2, [5, 5], False);
         DbscanTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 10, 2, [10], False);

@@ -29,6 +29,9 @@
 import numpy;
 
 from pyclustering.cluster import cluster_visualizer;
+from pyclustering.cluster.center_initializer import kmeans_plusplus_initializer;
+from pyclustering.cluster.kmeans import kmeans;
+
 from pyclustering.utils import pi, calculate_ellipse_description;
 
 import matplotlib.pyplot as plt;
@@ -129,12 +132,8 @@ class ema:
         self.__observer = observer;
         
         self.__means = means;
-        if (means is None):
-            self.__means = self.__get_random_means(data, amount_clusters);
-
-        self.__variances = variances;
-        if (variances is None):
-            self.__variances = self.__get_random_covariances(data, amount_clusters);
+        if ((means is None) or (variances is None)):
+            self.__means, self.__variances = self.__get_initial_parameters(data, amount_clusters);
         
         self.__rc = [ [0.0] * len(self.__data) for _ in range(amount_clusters) ];
         self.__pic = [1.0] * amount_clusters;
@@ -271,30 +270,17 @@ class ema:
         return mean;
 
 
-    def __get_random_covariances(self, data, amount):
-        covariances = [];
-        covariance_appendixes = [];
-        data_covariance = numpy.cov(data, rowvar = False);
-        for _ in range(amount):
-            random_appendix = numpy.min(data_covariance) * 0.5 * numpy.random.random();
-            while(random_appendix in covariance_appendixes):
-                random_appendix = numpy.min(data_covariance) * 0.5 * numpy.random.random();
-            
-            covariance_appendixes.append(random_appendix)
-            covariances.append(data_covariance - random_appendix);
-         
-        return covariances;
-
-
-    def __get_random_means(self, data, amount):
-        means = [];
-        mean_indexes = [];
-        for _ in range(amount):
-            random_index = numpy.random.randint(0, len(data));
-            while(random_index in mean_indexes):
-                random_index = numpy.random.randint(0, len(data));
-            
-            mean_indexes.append(random_index);
-            means.append(numpy.array(data[random_index]));
+    def __get_initial_parameters(self, sample, amount_clusters):
+        initial_centers = kmeans_plusplus_initializer(sample, amount_clusters).initialize();
+        kmeans_instance = kmeans(sample, initial_centers, ccore = True);
+        kmeans_instance.process();
         
-        return means;
+        means = kmeans_instance.get_centers();
+        
+        covariances = [];
+        initial_clusters = kmeans_instance.get_clusters();
+        for initial_cluster in initial_clusters:
+            cluster_sample = [ sample[index_point] for index_point in initial_cluster ];
+            covariances.append(numpy.cov(cluster_sample, rowvar = False));
+        
+        return means, covariances;

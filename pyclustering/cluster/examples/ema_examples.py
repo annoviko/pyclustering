@@ -35,29 +35,10 @@ from pyclustering.utils import read_sample;
 from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
 
 
-def template_clustering(sample_file_path, amount_clusters, kmeans_initializer = True):
+def template_clustering(sample_file_path, amount_clusters):
     sample = read_sample(sample_file_path);
     
-    means = None;
-    covariances = None;
-    
-    if (kmeans_initializer is True):
-        initial_centers = kmeans_plusplus_initializer(sample, amount_clusters).initialize();
-        kmeans_instance = kmeans(sample, initial_centers, ccore = True);
-        kmeans_instance.process();
-        
-        means = kmeans_instance.get_centers();
-        
-        covariances = [];
-        initial_clusters = kmeans_instance.get_clusters();
-        for initial_cluster in initial_clusters:
-            cluster_sample = [];
-            for index_point in initial_cluster:
-                cluster_sample.append(sample[index_point]);
-            
-            covariances.append(numpy.cov(cluster_sample, rowvar = False));
-    
-    ema_instance = ema(sample, amount_clusters, means, covariances);
+    ema_instance = ema(sample, amount_clusters);
     ema_instance.process();
     
     clusters = ema_instance.get_clusters();
