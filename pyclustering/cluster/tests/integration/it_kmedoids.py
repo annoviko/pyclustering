@@ -84,7 +84,7 @@ class KmedoidsIntegrationTest(unittest.TestCase):
         KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 25, None, True);
         KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 40, None, True);
 
-    @unittest.skip("Bug issue #366")
+
     def testAllocatedRequestedClustersWithTheSamePointsByCore(self):
         # Bug issue #366 - Kmedoids returns incorrect number of clusters.
         sample = [ [0.0, 0.0], [0.1, 0.1], [0.0, 0.0], [0.1, 0.2] ];
@@ -93,7 +93,6 @@ class KmedoidsIntegrationTest(unittest.TestCase):
         KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 2, None, True);
         KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 1, None, True);
 
-    @unittest.skip("Bug issue #366")
     def testAllocatedRequestedClustersWithTotallyTheSamePointsByCore(self):
         # Bug issue #366 - Kmedoids returns incorrect number of clusters.
         sample = [ [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0] ];

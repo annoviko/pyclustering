@@ -68,7 +68,7 @@ In case of any questions, proposals or bugs related to the pyclustering please c
 - K-Means [Python, C++]
 - K-Means++ [Python]
 - K-Medians [Python, C++]
-- K-Medoids [Python, C++]
+- K-Medoids (PAM) [Python, C++]
 - OPTICS [Python, C++]
 - ROCK [Python, C++]
 - SOM-SC [Python, C++]

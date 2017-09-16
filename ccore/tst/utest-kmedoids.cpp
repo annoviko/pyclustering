@@ -41,6 +41,8 @@ template_kmedoids_length_process_data(const dataset_ptr & p_data,
 
     const dataset & data = *p_data;
     const cluster_sequence & actual_clusters = *(output_result.clusters());
+
+    ASSERT_EQ(p_start_medians.size(), actual_clusters.size());
     ASSERT_CLUSTER_SIZES(data, actual_clusters, p_expected_cluster_length);
 }
 
@@ -119,4 +121,19 @@ TEST(utest_kmedoids, allocation_wrong_initial_medoids_sample_simple_04) {
     const medoid_sequence start_medoids = { 2, 7, 15, 22, 30, 37, 40, 52, 62, 67 };
     const std::vector<size_t> expected_clusters_length;     /* empty - just check index point existence */
     template_kmedoids_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_04), start_medoids, expected_clusters_length);
+}
+
+
+TEST(utest_kmedoids, totally_similar_data) {
+    const dataset_ptr dataset = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_04);
+    const std::vector<size_t> expected_clusters_length;     /* empty - just check index point existence */
+
+    medoid_sequence start_medoids = { 0, 2, 5, 7, 10, 12 };
+    template_kmedoids_length_process_data(dataset, start_medoids, expected_clusters_length);
+
+    start_medoids = { 0, 2, 4, 5, 7, 9, 10, 12, 14 };
+    template_kmedoids_length_process_data(dataset, start_medoids, expected_clusters_length);
+
+    start_medoids = { 0, 1, 2, 3, 4 };
+    template_kmedoids_length_process_data(dataset, start_medoids, expected_clusters_length);
 }

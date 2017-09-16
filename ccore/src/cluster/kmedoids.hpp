@@ -96,15 +96,6 @@ private:
 
     /**
     *
-    * @brief    Erases clusters that do not have any points.
-    *
-    * @param[in|out] p_clusters: clusters that should be analyzed and modified.
-    *
-    */
-    void erase_empty_clusters(cluster_sequence & p_clusters);
-
-    /**
-    *
     * @brief    Calculates medoids in line with current clusters.
     *
     * @param[out] p_medoids: calculated medoids for current clusters.

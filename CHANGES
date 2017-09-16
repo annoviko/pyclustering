@@ -80,6 +80,10 @@ GENERAL CHANGES (ccore):
 
 
 CORRECTED MAJOR BUGS:
+- Bug with amount of allocated clusters by K-Medoids algorithm in Python implementation and CCORE (pyclustering.cluster.kmedoids, ccore.cluster.medoids).
+  See: https://github.com/annoviko/pyclustering/issues/366
+  See: https://github.com/annoviko/pyclustering/issues/367
+
 - Bug with getting neighbors and getting information about connections in Sync-based network and algorithms in case of usage CCORE.
   See: no reference.
 

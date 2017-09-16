@@ -36,7 +36,7 @@ import pyclustering.core.kmedoids_wrapper as wrapper;
 
 class kmedoids:
     """!
-    @brief Class represents clustering algorithm K-Medoids (another one title is PAM - Parti).
+    @brief Class represents clustering algorithm K-Medoids (another one title is PAM - Partitioning Around Medoids).
     @details The algorithm is less sensitive to outliers tham K-Means. The principle difference between K-Medoids and K-Medians is that
              K-Medoids uses existed points from input data space as medoids, but median in K-Medians can be unreal object (not from
              input data space).
@@ -46,12 +46,18 @@ class kmedoids:
         # load list of points for cluster analysis
         sample = read_sample(path);
         
+        # set random initial medoids
+        initial_medoids = [1, 10];
+        
         # create instance of K-Medoids algorithm
-        kmedoids_instance = kmedoids(sample, [1, 10]);
+        kmedoids_instance = kmedoids(sample, initial_medoids);
         
         # run cluster analysis and obtain results
         kmedoids_instance.process();
-        kmedoids_instance.get_clusters();
+        clusters = kmedoids_instance.get_clusters();
+        
+        # show allocated clusters
+        print(clusters);
     @endcode
     
     """

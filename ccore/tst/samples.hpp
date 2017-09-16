@@ -18,8 +18,7 @@
 *
 */
 
-#ifndef _SAMPLES_H_
-#define _SAMPLES_H_
+#pragma once
 
 
 #include <string>
@@ -73,6 +72,8 @@ private:
     const static std::string PATH_SAMPLE_SIMPLE_08;
     const static std::string PATH_SAMPLE_SIMPLE_09;
     const static std::string PATH_SAMPLE_SIMPLE_10;
+    const static std::string PATH_SAMPLE_SIMPLE_11;
+    const static std::string PATH_SAMPLE_SIMPLE_12;
 
 public:
     /***********************************************************************************************
@@ -87,5 +88,3 @@ public:
     static std::shared_ptr<dataset> create_sample(const SAMPLE_SIMPLE sample);
 };
 
-
-#endif

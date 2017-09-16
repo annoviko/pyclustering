@@ -79,7 +79,15 @@ void kmedoids::update_clusters(void) {
     clusters.clear();
     clusters.resize(medoids.size());
 
+    for (std::size_t i = 0; i < medoids.size(); i++) {
+        clusters[i].push_back(medoids[i]);
+    }
+
     for (size_t index_point = 0; index_point < m_data_ptr->size(); index_point++) {
+        if (std::find(medoids.begin(), medoids.end(), index_point) != medoids.cend()) {
+            continue;
+        }
+
         size_t index_optim = 0;
         double dist_optim = 0.0;
 
@@ -94,17 +102,6 @@ void kmedoids::update_clusters(void) {
         }
 
         clusters[index_optim].push_back(index_point);
-    }
-
-    erase_empty_clusters(clusters);
-}
-
-
-void kmedoids::erase_empty_clusters(cluster_sequence & p_clusters) {
-    for (size_t index_cluster = p_clusters.size() - 1; index_cluster != (size_t) -1; index_cluster--) {
-        if (p_clusters[index_cluster].empty()) {
-            p_clusters.erase(p_clusters.begin() + index_cluster);
-        }
     }
 }
 
