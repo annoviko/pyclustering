@@ -20,12 +20,26 @@ install:
   - sudo apt-get update
   - chmod u+x ci/travis-ci.sh
 
-script:
-  - ./ci/travis-ci.sh
-
 env:
   - CI_JOB=BUILD_CCORE
   - CI_JOB=UT_CCORE
   - CI_JOB=VALGRIND_CCORE
   - CI_JOB=UT_PYCLUSTERING
   - CI_JOB=DOCUMENTATION
+
+matrix:
+  exclude:
+    - os:  osx
+      env: CI_JOB=UT_CCORE
+
+    - os:  osx
+      env: CI_JOB=VALGRIND_CCORE
+
+    - os:  osx
+      env: CI_JOB=UT_PYCLUSTERING
+
+    - os:  osx
+      env: CI_JOB=DOCUMENTATION
+
+script:
+  - ./ci/travis-ci.sh
