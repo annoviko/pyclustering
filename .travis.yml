@@ -1,5 +1,11 @@
-language: python
-dist: trusty
+dist:       trusty
+sudo:       required
+
+language:   python
+
+os:
+  - linux
+  - osx
 
 addons:
   apt:
@@ -13,10 +19,10 @@ addons:
 install:
   - sudo apt-get update
   - chmod u+x ci/travis-ci.sh
-  
+
 script:
   - ./ci/travis-ci.sh
-  
+
 env:
   - CI_JOB=BUILD_CCORE
   - CI_JOB=UT_CCORE
