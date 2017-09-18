@@ -25,5 +25,10 @@ env:
   - CI_JOB=UT_PYCLUSTERING
   - CI_JOB=DOCUMENTATION
 
+matrix:
+  include:
+    - os:  osx
+      env: CI_JOB=BUILD_CCORE
+
 script:
   - ./ci/travis-ci.sh
