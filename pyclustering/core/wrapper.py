@@ -37,7 +37,9 @@ def load_core():
         raise NameError("The pyclustering core is not supported for platform '" + sys.platform + "'.");
 
     if (os.path.exists(PATH_PYCLUSTERING_CCORE_LIBRARY) is False):
-        raise NameError("The pyclustering core is not found (expected core location: '" + PATH_PYCLUSTERING_CCORE_LIBRARY + "'). Probably pyclustering library has not been successfully installed.");
-    
+        raise NameError("The pyclustering core is not found (expected core location: '" + PATH_PYCLUSTERING_CCORE_LIBRARY + "').\n" + 
+                        "Probably pyclustering library has not been successfully installed.\n" + 
+                        "Please, contact to 'pyclustering@yandex.ru'.");
+
     return cdll.LoadLibrary(PATH_PYCLUSTERING_CCORE_LIBRARY);
 

@@ -33,7 +33,7 @@ from sys import platform as _platform;
 PATH_PYCLUSTERING_CCORE_LIBRARY = None;
 
 
-if (_platform == "linux") or (_platform == "linux2"):
+if (_platform == "linux") or (_platform == "linux2") or (_platform == "cygwin"):
     PATH_PYCLUSTERING_CCORE_LIBRARY = core.__path__[0] + os.sep + "x64" + os.sep + "linux" + os.sep + "ccore.so";
 
 elif (_platform == "win32"):
