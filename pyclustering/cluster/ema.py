@@ -27,6 +27,7 @@
 
 
 import numpy;
+import random;
 
 from pyclustering.cluster import cluster_visualizer;
 from pyclustering.cluster.center_initializer import kmeans_plusplus_initializer;
@@ -34,7 +35,10 @@ from pyclustering.cluster.kmeans import kmeans;
 
 from pyclustering.utils import pi, calculate_ellipse_description;
 
+from enum import IntEnum;
+
 import matplotlib.pyplot as plt;
+import matplotlib.animation as animation;
 from matplotlib import patches;
 
 
@@ -61,6 +65,64 @@ def gaussian(data, mean, covariance):
 
 
 
+class ema_init_type(IntEnum):
+    RANDOM_INITIALIZATION = 0;
+    KMEANS_INITIALIZATION = 1;
+
+
+
+class ema_initializer():
+    def __init__(self, sample, amount):
+        self.__sample = sample;
+        self.__amount = amount;
+
+
+    def initialize(self, init_type = ema_init_type.KMEANS_INITIALIZATION):
+        if (init_type == ema_init_type.KMEANS_INITIALIZATION):
+            return self.__initialize_kmeans();
+        
+        elif (init_type == ema_init_type.RANDOM_INITIALIZATION):
+            return self.__initialize_random();
+        
+        raise NameError("Unknown type of EM algorithm initialization is specified.");
+
+
+    def __initialize_random(self):
+        initial_means = [];
+        initial_covariance = [];
+        
+        for _ in range(self.__amount):
+            mean = self.__sample[ random.randint(0, len(self.__sample)) - 1 ];
+            while (mean in initial_means):
+                mean = self.__sample[ random.randint(0, len(self.__sample)) - 1 ];
+            
+            initial_means.append(mean);
+            
+            covariance = numpy.cov(self.__sample, rowvar = False);
+            covariance = numpy.divide(covariance, self.__amount + 1);
+        
+            initial_covariance.append(covariance);
+        
+        return initial_means, initial_covariance;
+
+
+    def __initialize_kmeans(self):
+        initial_centers = kmeans_plusplus_initializer(self.__sample, self.__amount).initialize();
+        kmeans_instance = kmeans(self.__sample, initial_centers, ccore = True);
+        kmeans_instance.process();
+        
+        means = kmeans_instance.get_centers();
+        
+        covariances = [];
+        initial_clusters = kmeans_instance.get_clusters();
+        for initial_cluster in initial_clusters:
+            cluster_sample = [ self.__sample[index_point] for index_point in initial_cluster ];
+            covariances.append(numpy.cov(cluster_sample, rowvar = False));
+        
+        return means, covariances;
+
+
+
 class ema_observer:
     def __init__(self):
         self.__means_evolution = [];
@@ -68,16 +130,24 @@ class ema_observer:
         self.__clusters_evolution = [];
 
 
+    def __len__(self):
+        return len(self.__means_evolution);
+
+
     def get_iterations(self):
-        return len(self.__means);
+        return len(self.__means_evolution);
 
 
-    def get_means(self):
+    def get_evolution_means(self):
         return self.__means_evolution;
 
 
-    def get_covariances(self):
+    def get_evolution_covariances(self):
         return self.__covariances_evolution;
+
+
+    def get_evolution_clusters(self):
+        return self.__clusters_evolution;
 
 
     def notify(self, means, covariances, clusters):
@@ -89,10 +159,14 @@ class ema_observer:
 
 class ema_visualizer:
     @staticmethod
-    def show_clusters(clusters, sample, covariances, means, display = True):
+    def show_clusters(clusters, sample, covariances, means, figure = None, display = True):
         visualizer = cluster_visualizer();
         visualizer.append_clusters(clusters, sample);
-        figure = visualizer.show(display = False);
+        
+        if (figure is None):
+            figure = visualizer.show(display = False);
+        else:
+            visualizer.show(figure = figure, display = False);
         
         if (len(sample[0]) == 2):
             ema_visualizer.__draw_ellipses(figure, visualizer, clusters, covariances, means);
@@ -101,6 +175,36 @@ class ema_visualizer:
             plt.show();
 
         return figure;
+
+
+    @staticmethod
+    def animate_cluster_allocation(data, observer, animation_velocity = 75, movie_fps = 1, save_movie = None):
+        figure = plt.figure();
+        
+        def init_frame():
+            return frame_generation(0);
+        
+        def frame_generation(index_iteration):
+            figure.clf();
+            
+            figure.suptitle("Expectation maximixation algorithm (iteration: " + str(index_iteration) +")", fontsize = 18, fontweight = 'bold');
+            
+            clusters = observer.get_evolution_clusters()[index_iteration];
+            covariances = observer.get_evolution_covariances()[index_iteration];
+            means = observer.get_evolution_means()[index_iteration];
+            
+            ema_visualizer.show_clusters(clusters, data, covariances, means, figure, False);
+            figure.subplots_adjust(top = 0.85);
+            
+            return [ figure.gca() ];
+
+        iterations = len(observer);
+        cluster_animation = animation.FuncAnimation(figure, frame_generation, iterations, interval = animation_velocity, init_func = init_frame, repeat_delay = 5000);
+
+        if (save_movie is not None):
+            cluster_animation.save(save_movie, writer = 'ffmpeg', fps = movie_fps, bitrate = 1500);
+        else:
+            plt.show();
 
 
     @staticmethod
@@ -124,14 +228,18 @@ class ema_visualizer:
         ax.add_patch(ellipse);
 
 
+
 class ema:
-    def __init__(self, data, amount_clusters, means = None, variances = None, observer = None, tolerance = 0.00001):
+    def __init__(self, data, amount_clusters, means = None, variances = None, observer = None, tolerance = 0.00001, iterations = 100):
         self.__data = numpy.array(data);
         self.__amount_clusters = amount_clusters;
         self.__tolerance = tolerance;
+        self.__iterations = iterations;
         self.__observer = observer;
         
         self.__means = means;
+        self.__variances = variances;
+        
         if ((means is None) or (variances is None)):
             self.__means, self.__variances = self.__get_initial_parameters(data, amount_clusters);
         
@@ -148,13 +256,19 @@ class ema:
         previous_likelihood = -200000;
         current_likelihood = -100000;
         
-        while( (self.__stop is False) and (abs(previous_likelihood - current_likelihood) > self.__tolerance) ):
+        current_iteration = 0;
+        while( (self.__stop is False) and (abs(previous_likelihood - current_likelihood) > self.__tolerance) and (current_iteration < self.__iterations) ):
             self.__expectation_step();
             self.__maximization_step();
             
             previous_likelihood = current_likelihood;
             current_likelihood = self.__log_likelihood();
             self.__stop = self.__get_stop_condition();
+            
+            current_iteration += 1;
+
+            if (self.__observer is not None):
+                self.__observer.notify(self.__means, self.__variances, self.__extract_clusters());
         
         self.__clusters = self.__extract_clusters();
 
@@ -187,7 +301,6 @@ class ema:
             index_winner = max(candidates, key = lambda candidate : candidate[1])[0];
             clusters[index_winner].append(index_point);
         
-        clusters = [ cluster for cluster in clusters if len(cluster) > 0 ];
         return clusters;
 
 
@@ -214,9 +327,11 @@ class ema:
 
 
     def __expectation_step(self):
+        self.__gaussians = [ [] for _ in range(self.__amount_clusters) ];
         for index in range(self.__amount_clusters):
             self.__gaussians[index] = gaussian(self.__data, self.__means[index], self.__variances[index]);
         
+        self.__rc = [ [0.0] * len(self.__data) for _ in range(self.__amount_clusters) ];
         for index_cluster in range(self.__amount_clusters):
             for index_point in range(len(self.__data)):
                 self.__rc[index_cluster][index_point] = self.__probabilities(index_cluster, index_point);
@@ -271,16 +386,4 @@ class ema:
 
 
     def __get_initial_parameters(self, sample, amount_clusters):
-        initial_centers = kmeans_plusplus_initializer(sample, amount_clusters).initialize();
-        kmeans_instance = kmeans(sample, initial_centers, ccore = True);
-        kmeans_instance.process();
-        
-        means = kmeans_instance.get_centers();
-        
-        covariances = [];
-        initial_clusters = kmeans_instance.get_clusters();
-        for initial_cluster in initial_clusters:
-            cluster_sample = [ sample[index_point] for index_point in initial_cluster ];
-            covariances.append(numpy.cov(cluster_sample, rowvar = False));
-        
-        return means, covariances;
+        return ema_initializer(sample, amount_clusters).initialize(ema_init_type.KMEANS_INITIALIZATION);
