@@ -109,6 +109,9 @@ class KmeansPlusPlusInitializerUnitTest(unittest.TestCase):
     def testInitializerForKmeansSampleSimple01(self):
         self.templateKmeansPlusPlusForClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, [5, 5]);
 
+    def testInitializerForKmeansSampleSimple01TenCenters(self):
+        self.templateKmeansPlusPlusForClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 10, None);
+
     def testInitializerForKmeansSampleSimple02(self):
         self.templateKmeansPlusPlusForClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 3, [10, 5, 8]);
 
@@ -118,6 +121,14 @@ class KmeansPlusPlusInitializerUnitTest(unittest.TestCase):
     def testInitializerForKmeansSampleSimple04(self):
         self.templateKmeansPlusPlusForClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 5, [15, 15, 15, 15, 15]);
 
+    def testInitializerForKmeansTotallySimilarObjectsTwoCenters(self):
+        self.templateKmeansPlusPlusForClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 2, None);
+
+    def testInitializerForKmeansTotallySimilarObjectsFiveCenters(self):
+        self.templateKmeansPlusPlusForClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 5, None);
+
+    def testInitializerForKmeansTotallySimilarObjectsTenCenters(self):
+        self.templateKmeansPlusPlusForClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 10, None);
 
     def testCalcDistanceToNearestCenter(self):
         # Test Data

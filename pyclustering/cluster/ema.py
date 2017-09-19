@@ -116,8 +116,12 @@ class ema_initializer():
         covariances = [];
         initial_clusters = kmeans_instance.get_clusters();
         for initial_cluster in initial_clusters:
-            cluster_sample = [ self.__sample[index_point] for index_point in initial_cluster ];
-            covariances.append(numpy.cov(cluster_sample, rowvar = False));
+            if (len(initial_cluster) > 1):
+                cluster_sample = [ self.__sample[index_point] for index_point in initial_cluster ];
+                covariances.append(numpy.cov(cluster_sample, rowvar = False));
+            else:
+                dimension = len(self.__sample[0]);
+                covariances.append(numpy.zeros((dimension, dimension))  + random.random());
         
         return means, covariances;
 
@@ -209,10 +213,6 @@ class ema_visualizer:
 
     @staticmethod
     def __draw_ellipses(figure, visualizer, clusters, covariances, means):
-        print(len(clusters));
-        print([len(cluster) for cluster in clusters]);
-        print(clusters);
-        
         ax = figure.get_axes()[0];
         
         for index in range(len(clusters)):
@@ -241,7 +241,10 @@ class ema:
         self.__variances = variances;
         
         if ((means is None) or (variances is None)):
-            self.__means, self.__variances = self.__get_initial_parameters(data, amount_clusters);
+            self.__means, self.__variances = ema_initializer(data, amount_clusters).initialize(ema_init_type.KMEANS_INITIALIZATION);
+            
+            if (len(self.__means) != amount_clusters):
+                self.__amount_clusters = len(self.__means);
         
         self.__rc = [ [0.0] * len(self.__data) for _ in range(amount_clusters) ];
         self.__pic = [1.0] * amount_clusters;
@@ -312,9 +315,6 @@ class ema:
             self.__clusters[index_winner].append(index_point);
         
         self.__erase_empty_clusters();
-        
-        print("Amount clusters:", len(self.__clusters));
-        print("Cluster length:", [len(cluster) for cluster in self.__clusters]);
 
 
     def __log_likelihood(self):
@@ -396,7 +396,3 @@ class ema:
         
         mean = mean / mc;
         return mean;
-
-
-    def __get_initial_parameters(self, sample, amount_clusters):
-        return ema_initializer(sample, amount_clusters).initialize(ema_init_type.KMEANS_INITIALIZATION);

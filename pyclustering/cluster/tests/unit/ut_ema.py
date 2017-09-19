@@ -29,20 +29,27 @@ import unittest;
 import matplotlib;
 matplotlib.use('Agg');
 
-from pyclustering.cluster.ema import ema, ema_observer, ema_visualizer;
+from pyclustering.cluster.ema import ema, ema_observer, ema_initializer, ema_init_type, ema_visualizer;
 from pyclustering.utils import read_sample;
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
 
 
 class EmaUnitTest(unittest.TestCase):
-    def templateDataClustering(self, sample_path, amount_clusters, expected_clusters_sizes):
+    def templateDataClustering(self, sample_path, 
+                               amount_clusters, 
+                               expected_clusters_sizes, 
+                               init_type = ema_init_type.KMEANS_INITIALIZATION):
         testing_result = False;
         
         for _ in range(3):
             sample = read_sample(sample_path);
             
-            ema_instance = ema(sample, amount_clusters);
+            means, variances = None, None;
+            if (init_type is not ema_init_type.KMEANS_INITIALIZATION):
+                means, variances = ema_initializer().initialize(init_type);
+            
+            ema_instance = ema(sample, amount_clusters, means, variances);
             ema_instance.process();
             
             clusters = ema_instance.get_clusters();
@@ -69,11 +76,12 @@ class EmaUnitTest(unittest.TestCase):
     def testClusteringSampleSimple01OneCluster(self):
         self.templateDataClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, [10]);
 
-    @unittest.skip("Hang algorithm")
     def testClusteringSampleSimple01ThreeCluster(self):
         self.templateDataClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 3, None);
 
-    @unittest.skip("Hang algorithm")
+    def testClusteringSampleSimple01TenCluster(self):
+        self.templateDataClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 10, None);
+
     def testClusteringSampleSimple01SevenCluster(self):
         self.templateDataClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 7, None);
 
@@ -83,7 +91,6 @@ class EmaUnitTest(unittest.TestCase):
     def testClusteringSampleSimple02OneCluster(self):
         self.templateDataClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 1, [23]);
 
-    @unittest.skip("Hang algorithm")
     def testClusteringSampleSimple02ThreeCluster(self):
         self.templateDataClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 3, None);
 
@@ -119,6 +126,13 @@ class EmaUnitTest(unittest.TestCase):
 
     def testClusteringTotallySimilarObjects(self):
         self.templateDataClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 1, None);
+
+    def testClusteringTotallySimilarObjectsTwoClusters(self):
+        self.templateDataClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 2, None);
+
+    @unittest.skip("Wait for correction in kmeans++")
+    def testClusteringTotallySimilarObjectsFiveClusters(self):
+        self.templateDataClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 5, None);
 
 
 if __name__ == "__main__":
