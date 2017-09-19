@@ -251,8 +251,6 @@ class ema:
 
 
     def process(self):
-        self.__clusters = None;
-        
         previous_likelihood = -200000;
         current_likelihood = -100000;
         
@@ -266,11 +264,9 @@ class ema:
             self.__stop = self.__get_stop_condition();
             
             current_iteration += 1;
-
-            if (self.__observer is not None):
-                self.__observer.notify(self.__means, self.__variances, self.__extract_clusters());
-        
-        self.__clusters = self.__extract_clusters();
+            
+            self.__extract_clusters();
+            self.__notify();
 
 
     def get_clusters(self):
@@ -285,23 +281,40 @@ class ema:
         return self.__variances;
 
 
+    def __erase_empty_clusters(self):
+        clusters, means, variances, pic = [], [], [], [];
+
+        for index_cluster in range(len(self.__clusters)):
+            if (len(self.__clusters[index_cluster]) > 0):
+                clusters.append(self.__clusters[index_cluster]);
+                means.append(self.__means[index_cluster]);
+                variances.append(self.__variances[index_cluster]);
+                pic.append(self.__pic[index_cluster]);
+        
+        if (len(self.__clusters) != len(clusters)):
+            self.__clusters, self.__means, self.__variances, self.__pic = clusters, means, variances, pic;
+            self.__amount_clusters = len(self.__clusters);
+
+
     def __notify(self):
         if (self.__observer is not None):
-            clusters = self.__extract_clusters();
-            self.__notify(self.__means, self.__variances, clusters);
+            self.__observer.notify(self.__means, self.__variances, self.__clusters);
 
 
     def __extract_clusters(self):
-        clusters = [ [] for _ in range(self.__amount_clusters) ];
+        self.__clusters = [ [] for _ in range(self.__amount_clusters) ];
         for index_point in range(len(self.__data)):
             candidates = [];
             for index_cluster in range(self.__amount_clusters):
                 candidates.append((index_cluster, self.__rc[index_cluster][index_point]));
             
             index_winner = max(candidates, key = lambda candidate : candidate[1])[0];
-            clusters[index_winner].append(index_point);
+            self.__clusters[index_winner].append(index_point);
         
-        return clusters;
+        self.__erase_empty_clusters();
+        
+        print("Amount clusters:", len(self.__clusters));
+        print("Cluster length:", [len(cluster) for cluster in self.__clusters]);
 
 
     def __log_likelihood(self):

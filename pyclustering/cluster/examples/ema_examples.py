@@ -39,7 +39,7 @@ def template_clustering(sample_file_path, amount_clusters, random_values = False
     
     observer = ema_observer();
     
-    initial_means, initial_covariance = ema_initializer(sample, amount_clusters).initialize(ema_init_type.KMEANS_INITIALIZATION);
+    initial_means, initial_covariance = ema_initializer(sample, amount_clusters).initialize(ema_init_type.RANDOM_INITIALIZATION);
     print(initial_means, initial_covariance);
     
     ema_instance = ema(sample, amount_clusters, initial_means, initial_covariance, observer=observer);
@@ -50,7 +50,7 @@ def template_clustering(sample_file_path, amount_clusters, random_values = False
     means = ema_instance.get_centers();
 
     ema_visualizer.show_clusters(clusters, sample, covariances, means);
-    #ema_visualizer.animate_cluster_allocation(sample, observer, movie_fps=1, save_movie="ema_target.mp4");
+    ema_visualizer.animate_cluster_allocation(sample, observer, movie_fps=1, save_movie="ema_target.mp4");
 
 
 def cluster_sample01():
