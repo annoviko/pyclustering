@@ -73,12 +73,11 @@ def read_image(filename):
     
     """
     
-    image_source = Image.open(filename);
-    data = [pixel for pixel in image_source.getdata()];
+    with Image.open(filename) as image_source:
+        data = [pixel for pixel in image_source.getdata()];
+        return data;
     
-    del image_source;
-    image_source = None;
-    return data;
+    return [];
 
 
 def rgb2gray(image_rgb_array):

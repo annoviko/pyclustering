@@ -5,6 +5,8 @@ language:   python
 os:
   - linux
 
+
+
 addons:
   apt:
     sources:
@@ -28,6 +30,7 @@ env:
 matrix:
   include:
     - os:  osx
+      osx_image: xcode9
       env: CI_JOB=BUILD_CCORE
 
 script:

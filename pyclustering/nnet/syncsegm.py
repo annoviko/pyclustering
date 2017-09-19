@@ -31,7 +31,7 @@ from PIL import Image;
 
 from pyclustering.cluster.syncnet import syncnet;
 
-from pyclustering.nnet import solve_type;
+from pyclustering.nnet import solve_type, initial_type;
 from pyclustering.nnet.sync import sync_visualizer;
 
 from pyclustering.utils import read_image;
@@ -232,7 +232,7 @@ class syncsegm:
         
         """
         
-        network = syncnet(image_source, self.__color_radius, ccore = True);
+        network = syncnet(image_source, self.__color_radius, initial_phases = initial_type.EQUIPARTITION, ccore = True);
         analyser = network.process(self.__order_color, solve_type.FAST, collect_dynamic);
         
         return analyser;
@@ -282,7 +282,7 @@ class syncsegm:
         if (len(coordinates) < self.__noise_size):
             return None;
         
-        network = syncnet(coordinates, self.__object_radius, ccore = True);
+        network = syncnet(coordinates, self.__object_radius, initial_phases = initial_type.EQUIPARTITION, ccore = True);
         analyser = network.process(self.__order_object, solve_type.FAST, collect_dynamic);
         
         return analyser;
