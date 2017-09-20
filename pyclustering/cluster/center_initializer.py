@@ -29,6 +29,7 @@
 """
 
 import random;
+import copy
 
 from pyclustering.utils import euclidean_distance;
 
@@ -221,19 +222,16 @@ class kmeans_plusplus_initializer:
         @param[in] probabilities (list): List of minimum distances from each point to nearest center.
         
         """
-        # Start from the last elem
-        back_idx = - 1;
 
         # All values equal to the last elem should be set to 1
-        last_val = probabilities[back_idx];
+        last_val = probabilities[-1];
 
         # for all elements or if a elem not equal to the last elem
-        for _idx in range(-1, -len(probabilities) - 1):
-            if probabilities[back_idx] == last_val:
-                probabilities[back_idx] = 1;
+        for _idx in range(-1, -len(probabilities) - 1, -1):
+            if probabilities[_idx] == last_val:
+                probabilities[_idx] = 1.0;
             else:
                 break;
-
 
     def __get_probabilities_from_distance(self, distance):
         """!
@@ -264,7 +262,8 @@ class kmeans_plusplus_initializer:
         #   p[idx] = D[idx]^2 / sum_2
         #       where sum_2 = D[0]^2 + D[1]^2 + ...
         for _dist in distance:
-            prev_value = (_dist ** 2) / sum_for_normalize + prev_value;
+            if sum_for_normalize > 0.0:
+                prev_value = (_dist ** 2) / sum_for_normalize + prev_value;
             probabilities.append(prev_value);
 
         # Set last value to 1
