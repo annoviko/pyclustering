@@ -33,7 +33,7 @@ from pyclustering.cluster import cluster_visualizer;
 from pyclustering.cluster.center_initializer import kmeans_plusplus_initializer;
 from pyclustering.cluster.kmeans import kmeans;
 
-from pyclustering.utils import pi, calculate_ellipse_description;
+from pyclustering.utils import pi, calculate_ellipse_description, euclidean_distance_sqrt;
 
 from enum import IntEnum;
 
@@ -87,9 +87,45 @@ class ema_initializer():
         raise NameError("Unknown type of EM algorithm initialization is specified.");
 
 
+    def __calculate_initial_clusters(self, centers):
+        """!
+        @brief Calculate Euclidean distance to each point from the each cluster. 
+        @brief Nearest points are captured by according clusters and as a result clusters are updated.
+        
+        @return (list) updated clusters as list of clusters. Each cluster contains indexes of objects from data.
+        
+        """
+        
+        clusters = [[] for _ in range(len(centers))];
+        for index_point in range(len(self.__sample)):
+            index_optim, dist_optim = -1, 0.0;
+             
+            for index in range(len(centers)):
+                dist = euclidean_distance_sqrt(self.__sample[index_point], centers[index]);
+                 
+                if ( (dist < dist_optim) or (index is 0)):
+                    index_optim, dist_optim = index, dist;
+             
+            clusters[index_optim].append(index_point);
+        
+        return clusters;
+
+
+    def __calculate_initial_covariances(self, initial_clusters):
+        covariances = [];
+        for initial_cluster in initial_clusters:
+            if (len(initial_cluster) > 1):
+                cluster_sample = [ self.__sample[index_point] for index_point in initial_cluster ];
+                covariances.append(numpy.cov(cluster_sample, rowvar = False));
+            else:
+                dimension = len(self.__sample[0]);
+                covariances.append(numpy.zeros((dimension, dimension))  + random.random());
+        
+        return covariances;
+
+
     def __initialize_random(self):
         initial_means = [];
-        initial_covariance = [];
         
         for _ in range(self.__amount):
             mean = self.__sample[ random.randint(0, len(self.__sample)) - 1 ];
@@ -98,10 +134,12 @@ class ema_initializer():
             
             initial_means.append(mean);
             
-            covariance = numpy.cov(self.__sample, rowvar = False);
-            covariance = numpy.divide(covariance, self.__amount + 1);
+            #covariance = numpy.cov(self.__sample, rowvar = False);
+            #covariance = numpy.divide(covariance, self.__amount * 10.0);
+            #initial_covariance.append(covariance);
         
-            initial_covariance.append(covariance);
+        initial_clusters = self.__calculate_initial_clusters(initial_means);
+        initial_covariance = self.__calculate_initial_covariances(initial_clusters);
         
         return initial_means, initial_covariance;
 

@@ -24,9 +24,6 @@
 """
 
 
-import random;
-import numpy;
-
 from pyclustering.cluster.ema import ema, ema_initializer, ema_observer, ema_visualizer, ema_init_type;
 
 from pyclustering.utils import read_sample;
@@ -50,7 +47,8 @@ def template_clustering(sample_file_path, amount_clusters, random_values = False
     means = ema_instance.get_centers();
 
     ema_visualizer.show_clusters(clusters, sample, covariances, means);
-    ema_visualizer.animate_cluster_allocation(sample, observer, movie_fps=1, save_movie="ema_target.mp4");
+    ema_visualizer.animate_cluster_allocation(sample, observer);
+    #ema_visualizer.animate_cluster_allocation(sample, observer, movie_fps=1, save_movie="ema_target.mp4");
 
 
 def cluster_sample01():
@@ -78,7 +76,7 @@ def cluster_elongate():
     template_clustering(SIMPLE_SAMPLES.SAMPLE_ELONGATE, 2);
 
 def cluster_lsun():
-    template_clustering(FCPS_SAMPLES.SAMPLE_LSUN, 6);
+    template_clustering(FCPS_SAMPLES.SAMPLE_LSUN, 3);
 
 def cluster_target():
     template_clustering(FCPS_SAMPLES.SAMPLE_TARGET, 12);
