@@ -32,7 +32,7 @@ matplotlib.use('Agg');
 from pyclustering.cluster.ema import ema, ema_observer, ema_initializer, ema_init_type, ema_visualizer;
 from pyclustering.utils import read_sample;
 
-from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
+from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES, COMMON_SAMPLES;
 
 
 class EmaUnitTest(unittest.TestCase):
@@ -41,18 +41,27 @@ class EmaUnitTest(unittest.TestCase):
                                expected_clusters_sizes, 
                                init_type = ema_init_type.KMEANS_INITIALIZATION):
         testing_result = False;
+        if (init_type != ema_init_type.KMEANS_INITIALIZATION):
+            attempts = 10;
+        else:
+            attempts = 5;
         
-        for _ in range(3):
+        for _ in range(attempts):
             sample = read_sample(sample_path);
             
             means, variances = None, None;
             if (init_type is not ema_init_type.KMEANS_INITIALIZATION):
-                means, variances = ema_initializer().initialize(init_type);
+                means, variances = ema_initializer(sample, amount_clusters).initialize(init_type);
             
             ema_instance = ema(sample, amount_clusters, means, variances);
             ema_instance.process();
             
             clusters = ema_instance.get_clusters();
+            centers = ema_instance.get_centers();
+            covariances = ema_instance.get_covariances();
+            
+            assert len(centers) == len(clusters);
+            assert len(covariances) == len(clusters);
             
             obtained_cluster_sizes = [len(cluster) for cluster in clusters];
             if (len(sample) != sum(obtained_cluster_sizes)):
@@ -73,11 +82,20 @@ class EmaUnitTest(unittest.TestCase):
     def testClusteringSampleSimple01(self):
         self.templateDataClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, [5, 5]);
 
+    def testClusteringSampleSimple01RandomInit(self):
+        self.templateDataClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, [5, 5], ema_init_type.RANDOM_INITIALIZATION);
+
     def testClusteringSampleSimple01OneCluster(self):
         self.templateDataClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, [10]);
 
+    def testClusteringSampleSimple01OneClusterRandomInit(self):
+        self.templateDataClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, [10], ema_init_type.RANDOM_INITIALIZATION);
+
     def testClusteringSampleSimple01ThreeCluster(self):
         self.templateDataClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 3, None);
+
+    def testClusteringSampleSimple01ThreeClusterRandomInit(self):
+        self.templateDataClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 3, None, ema_init_type.RANDOM_INITIALIZATION);
 
     def testClusteringSampleSimple01TenCluster(self):
         self.templateDataClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 10, None);
@@ -112,8 +130,17 @@ class EmaUnitTest(unittest.TestCase):
     def testClusteringSampleSimple05OneCluster(self):
         self.templateDataClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 1, [60]);
 
+    def testClusteringCommonOldFaithful(self):
+        self.templateDataClustering(COMMON_SAMPLES.SAMPLE_OLD_FAITHFUL, 2, [97, 175]);
+
+    def testClusteringFcpsLsun(self):
+        self.templateDataClustering(FCPS_SAMPLES.SAMPLE_LSUN, 3, [100, 101, 202]);
+
     def testClusteringOneDimensionalData(self):
         self.templateDataClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE7, 2, [10, 10]);
+
+    def testClusteringOneDimensionalDataRandomInit(self):
+        self.templateDataClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE7, 2, [10, 10], ema_init_type.RANDOM_INITIALIZATION);
 
     def testClusteringOneDimensionalDataOneCluster(self):
         self.templateDataClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE7, 1, [20]);
@@ -130,9 +157,48 @@ class EmaUnitTest(unittest.TestCase):
     def testClusteringTotallySimilarObjectsTwoClusters(self):
         self.templateDataClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 2, None);
 
-    @unittest.skip("Wait for correction in kmeans++")
+    def testClusteringTotallySimilarObjectsTwoClustersRandonInit(self):
+        self.templateDataClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 2, None, ema_init_type.RANDOM_INITIALIZATION);
+
     def testClusteringTotallySimilarObjectsFiveClusters(self):
         self.templateDataClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 5, None);
+
+    def testClusteringTotallySimilarObjectsFiveClustersRandomInit(self):
+        self.templateDataClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 5, None, ema_init_type.RANDOM_INITIALIZATION);
+
+
+    def testObserver(self):
+        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE2);
+        
+        means, variances = ema_initializer(sample, 3).initialize(ema_init_type.RANDOM_INITIALIZATION);
+        
+        observer_instance = ema_observer();
+        ema_instance = ema(sample, 3, means, variances, observer_instance);
+        ema_instance.process();
+        
+        observer_length = len(observer_instance);
+        assert observer_length > 0;
+        assert observer_length == len(observer_instance.get_evolution_clusters());
+        assert observer_length == len(observer_instance.get_evolution_covariances());
+        assert observer_length == len(observer_instance.get_evolution_means());
+        assert observer_length == observer_instance.get_iterations();
+
+
+    def testVisualizerNoFailures(self):
+        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE3);
+        
+        means, variances = ema_initializer(sample, 4).initialize(ema_init_type.RANDOM_INITIALIZATION);
+        
+        observer_instance = ema_observer();
+        ema_instance = ema(sample, 4, means, variances, observer_instance);
+        ema_instance.process();
+        
+        clusters = ema_instance.get_clusters();
+        means = ema_instance.get_centers();
+        covariances = ema_instance.get_covariances();
+        
+        ema_visualizer.show_clusters(clusters, sample, covariances, means);
+        ema_visualizer.animate_cluster_allocation(sample, observer_instance);
 
 
 if __name__ == "__main__":

@@ -413,9 +413,10 @@ class genetic_algorithm:
             = self._get_best_chromosome(chromosomes, self._data, self._count_clusters)
 
         # Save best result into observer
-        self._observer.collect_global_best(best_chromosome, best_ff)
-        self._observer.collect_population_best(best_chromosome, best_ff)
-        self._observer.collect_mean(first_fitness_functions)
+        if (self._observer is not None):
+            self._observer.collect_global_best(best_chromosome, best_ff)
+            self._observer.collect_population_best(best_chromosome, best_ff)
+            self._observer.collect_mean(first_fitness_functions)
 
         # Next population
         for _idx in range(self._population_count):
@@ -439,9 +440,10 @@ class genetic_algorithm:
                 best_chromosome = new_best_chromosome
 
             # Save best result into observer
-            self._observer.collect_global_best(best_chromosome, best_ff)
-            self._observer.collect_population_best(new_best_chromosome, new_best_ff)
-            self._observer.collect_mean(fitness_functions)
+            if (self._observer is not None):
+                self._observer.collect_global_best(best_chromosome, best_ff)
+                self._observer.collect_population_best(new_best_chromosome, new_best_ff)
+                self._observer.collect_mean(fitness_functions)
 
         # Save result
         self._result_clustering['best_chromosome'] = best_chromosome

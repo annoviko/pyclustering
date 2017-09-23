@@ -25,7 +25,7 @@
 
 from pyclustering.utils.graph import read_graph, draw_graph;
 
-from pyclustering.samples.definitions import GRAPH_SIMPLE_SAMPLES, GRAPH_DSJC_SAMPLES;
+from pyclustering.samples.definitions import GRAPH_SIMPLE_SAMPLES;
 
 from pyclustering.gcolor.dsatur import dsatur;
 
@@ -58,14 +58,5 @@ def run_all_graph_simple_samples():
     template_graph_coloring(GRAPH_SIMPLE_SAMPLES.GRAPH_SIMPLE2);
     template_graph_coloring(GRAPH_SIMPLE_SAMPLES.GRAPH_SIMPLE3);
 
-def run_all_graph_dsjc_samples():
-    template_graph_coloring(GRAPH_DSJC_SAMPLES.DSJC_250_5);
-    template_graph_coloring(GRAPH_DSJC_SAMPLES.DSJC_500_1);
-    template_graph_coloring(GRAPH_DSJC_SAMPLES.DSJC_500_5);
-    template_graph_coloring(GRAPH_DSJC_SAMPLES.DSJC_500_9);
-    template_graph_coloring(GRAPH_DSJC_SAMPLES.DSJC_1000_1);
-    template_graph_coloring(GRAPH_DSJC_SAMPLES.DSJC_1000_5);
-    template_graph_coloring(GRAPH_DSJC_SAMPLES.DSJC_1000_9);
 
 run_all_graph_simple_samples();
-run_all_graph_dsjc_samples();

@@ -30,7 +30,7 @@ from pyclustering.nnet import *;
 from pyclustering.utils import draw_dynamics;
 from pyclustering.utils.graph import read_graph, draw_graph;
 
-from pyclustering.samples.definitions import GRAPH_SIMPLE_SAMPLES, GRAPH_DSJC_SAMPLES;
+from pyclustering.samples.definitions import GRAPH_SIMPLE_SAMPLES;
 
 
 def template_graph_coloring(positive_weight, negative_weight, filename, reduction = None, title = None):
@@ -79,11 +79,6 @@ def run_all_graph_simple_samples():
     template_graph_coloring(0, -1, GRAPH_SIMPLE_SAMPLES.GRAPH_SIMPLE1, None, "Simple 1"); 
     template_graph_coloring(0, -1, GRAPH_SIMPLE_SAMPLES.GRAPH_SIMPLE2, None, "Simple 2");
     template_graph_coloring(0, -1, GRAPH_SIMPLE_SAMPLES.GRAPH_SIMPLE3, None, "Simple 3");  
-        
-def run_all_graph_dsjc_samples():
-    template_graph_coloring(0, -1, GRAPH_DSJC_SAMPLES.DSJC_250_5, None, None); 
-
 
 
 run_all_graph_simple_samples();
-run_all_graph_dsjc_samples();

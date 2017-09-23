@@ -1,8 +1,6 @@
 """!
 
-@brief Cluster analysis algorithm: Expectation-Maximization Algorithm (EMA).
-@details Implementation based on article:
-         - 
+@brief Cluster analysis algorithm: Expectation-Maximization Algorithm for Gaussian Mixture Model.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2017
@@ -52,15 +50,18 @@ def gaussian(data, mean, covariance):
         inv_variance = 1.0 / covariance;
     
     divider = (pi * 2.0) ** (dimension / 2.0) * numpy.sqrt(numpy.linalg.norm(covariance));
-    right_const = 1.0 / divider;
-     
+    if (divider != 0.0):
+        right_const = 1.0 / divider;
+    else:
+        right_const = float('inf');
+    
     result = [];
-     
+    
     for point in data:
         mean_delta = point - mean;
         point_gaussian = right_const * numpy.exp( -0.5 * mean_delta.dot(inv_variance).dot(numpy.transpose(mean_delta)) );
         result.append(point_gaussian);
-     
+    
     return result;
 
 
@@ -72,6 +73,8 @@ class ema_init_type(IntEnum):
 
 
 class ema_initializer():
+    __MAX_GENERATION_ATTEPTS = 10;
+    
     def __init__(self, sample, amount):
         self.__sample = sample;
         self.__amount = amount;
@@ -119,7 +122,7 @@ class ema_initializer():
                 covariances.append(numpy.cov(cluster_sample, rowvar = False));
             else:
                 dimension = len(self.__sample[0]);
-                covariances.append(numpy.zeros((dimension, dimension))  + random.random());
+                covariances.append(numpy.zeros((dimension, dimension))  + random.random() / 10.0);
         
         return covariances;
 
@@ -129,14 +132,15 @@ class ema_initializer():
         
         for _ in range(self.__amount):
             mean = self.__sample[ random.randint(0, len(self.__sample)) - 1 ];
-            while (mean in initial_means):
+            attempts = 0;
+            while ( (mean in initial_means) and (attempts < ema_initializer.__MAX_GENERATION_ATTEPTS) ):
                 mean = self.__sample[ random.randint(0, len(self.__sample)) - 1 ];
+                attempts += 1;
+            
+            if (attempts == ema_initializer.__MAX_GENERATION_ATTEPTS):
+                mean = [ value + (random.random() - 0.5) * value * 0.2 for value in mean ];
             
             initial_means.append(mean);
-            
-            #covariance = numpy.cov(self.__sample, rowvar = False);
-            #covariance = numpy.divide(covariance, self.__amount * 10.0);
-            #initial_covariance.append(covariance);
         
         initial_clusters = self.__calculate_initial_clusters(initial_means);
         initial_covariance = self.__calculate_initial_covariances(initial_clusters);
@@ -159,7 +163,7 @@ class ema_initializer():
                 covariances.append(numpy.cov(cluster_sample, rowvar = False));
             else:
                 dimension = len(self.__sample[0]);
-                covariances.append(numpy.zeros((dimension, dimension))  + random.random());
+                covariances.append(numpy.zeros((dimension, dimension))  + random.random() / 10.0);
         
         return means, covariances;
 
@@ -256,14 +260,15 @@ class ema_visualizer:
         for index in range(len(clusters)):
             angle, width, height = calculate_ellipse_description(covariances[index]);
             color = visualizer.get_cluster_color(index, 0);
-            
+
             ema_visualizer.__draw_ellipse(ax, means[index][0], means[index][1], angle, width, height, color);
 
 
     @staticmethod
     def __draw_ellipse(ax, x, y, angle, width, height, color):
-        ellipse = patches.Ellipse((x, y), width, height, alpha=0.2, angle=angle, linewidth=2, fill=True, zorder=2, color=color);
-        ax.add_patch(ellipse);
+        if ((width > 0.0) and (height > 0.0)):
+            ellipse = patches.Ellipse((x, y), width, height, alpha=0.2, angle=angle, linewidth=2, fill=True, zorder=2, color=color);
+            ax.add_patch(ellipse);
 
 
 
@@ -300,14 +305,14 @@ class ema:
             self.__expectation_step();
             self.__maximization_step();
             
-            previous_likelihood = current_likelihood;
-            current_likelihood = self.__log_likelihood();
-            self.__stop = self.__get_stop_condition();
-            
             current_iteration += 1;
             
             self.__extract_clusters();
             self.__notify();
+            
+            previous_likelihood = current_likelihood;
+            current_likelihood = self.__log_likelihood();
+            self.__stop = self.__get_stop_condition();
 
 
     def get_clusters(self):
@@ -323,7 +328,7 @@ class ema:
 
 
     def __erase_empty_clusters(self):
-        clusters, means, variances, pic = [], [], [], [];
+        clusters, means, variances, pic, gaussians, rc = [], [], [], [], [], [];
 
         for index_cluster in range(len(self.__clusters)):
             if (len(self.__clusters[index_cluster]) > 0):
@@ -331,9 +336,12 @@ class ema:
                 means.append(self.__means[index_cluster]);
                 variances.append(self.__variances[index_cluster]);
                 pic.append(self.__pic[index_cluster]);
+                gaussians.append(self.__gaussians[index_cluster]);
+                rc.append(self.__rc[index_cluster]);
         
         if (len(self.__clusters) != len(clusters)):
             self.__clusters, self.__means, self.__variances, self.__pic = clusters, means, variances, pic;
+            self.__gaussians, self.__rc = gaussians, rc;
             self.__amount_clusters = len(self.__clusters);
 
 
@@ -373,8 +381,10 @@ class ema:
         for i in range(self.__amount_clusters):
             divider += self.__pic[i] * self.__gaussians[i][index_point];
         
-        rc = self.__pic[index_cluster] * self.__gaussians[index_cluster][index_point] / divider;
-        return rc;
+        if ( (divider != 0.0) and (divider != float('inf')) ):
+            return self.__pic[index_cluster] * self.__gaussians[index_cluster][index_point] / divider;
+        
+        return float('nan');
 
 
     def __expectation_step(self):

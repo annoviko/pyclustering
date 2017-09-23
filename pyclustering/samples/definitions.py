@@ -26,35 +26,43 @@
 import pyclustering.samples as samples;
 import os;
 
+
+DEFAULT_SAMPLE_PATH = samples.__path__[0] + os.sep + "samples" + os.sep;
+
+
 class SIMPLE_SAMPLES:
-    SAMPLE_SIMPLE1          = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleSimple01.txt";
-    SAMPLE_SIMPLE2          = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleSimple02.txt";
-    SAMPLE_SIMPLE3          = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleSimple03.txt";
-    SAMPLE_SIMPLE4          = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleSimple04.txt";
-    SAMPLE_SIMPLE5          = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleSimple05.txt";
-    SAMPLE_SIMPLE6          = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleSimple06.txt";
-    SAMPLE_SIMPLE7          = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleSimple07.txt";
-    SAMPLE_SIMPLE8          = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleSimple08.txt";
-    SAMPLE_SIMPLE9          = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleSimple09.txt";
-    SAMPLE_SIMPLE10         = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleSimple10.txt";
-    SAMPLE_SIMPLE11         = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleSimple11.txt";
-    SAMPLE_SIMPLE12         = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleSimple12.txt";
-    SAMPLE_ELONGATE         = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleElongate.txt";
-    SAMPLE_DENSITIES1       = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleDensities1.txt";
-    SAMPLE_DENSITIES2       = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleDensities2.txt";
+    SAMPLE_SIMPLE1          = DEFAULT_SAMPLE_PATH + "SampleSimple01.txt";
+    SAMPLE_SIMPLE2          = DEFAULT_SAMPLE_PATH + "SampleSimple02.txt";
+    SAMPLE_SIMPLE3          = DEFAULT_SAMPLE_PATH + "SampleSimple03.txt";
+    SAMPLE_SIMPLE4          = DEFAULT_SAMPLE_PATH + "SampleSimple04.txt";
+    SAMPLE_SIMPLE5          = DEFAULT_SAMPLE_PATH + "SampleSimple05.txt";
+    SAMPLE_SIMPLE6          = DEFAULT_SAMPLE_PATH + "SampleSimple06.txt";
+    SAMPLE_SIMPLE7          = DEFAULT_SAMPLE_PATH + "SampleSimple07.txt";
+    SAMPLE_SIMPLE8          = DEFAULT_SAMPLE_PATH + "SampleSimple08.txt";
+    SAMPLE_SIMPLE9          = DEFAULT_SAMPLE_PATH + "SampleSimple09.txt";
+    SAMPLE_SIMPLE10         = DEFAULT_SAMPLE_PATH + "SampleSimple10.txt";
+    SAMPLE_SIMPLE11         = DEFAULT_SAMPLE_PATH + "SampleSimple11.txt";
+    SAMPLE_SIMPLE12         = DEFAULT_SAMPLE_PATH + "SampleSimple12.txt";
+    SAMPLE_ELONGATE         = DEFAULT_SAMPLE_PATH + "SampleElongate.txt";
+    SAMPLE_DENSITIES1       = DEFAULT_SAMPLE_PATH + "SampleDensities1.txt";
+    SAMPLE_DENSITIES2       = DEFAULT_SAMPLE_PATH + "SampleDensities2.txt";
 
 
 class FCPS_SAMPLES:
-    SAMPLE_ATOM             = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleAtom.txt";
-    SAMPLE_CHAINLINK        = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleChainlink.txt";
-    SAMPLE_ENGY_TIME        = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleEngyTime.txt";
-    SAMPLE_GOLF_BALL        = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleGolfBall.txt";
-    SAMPLE_HEPTA            = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleHepta.txt";
-    SAMPLE_LSUN             = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleLsun.txt";
-    SAMPLE_TARGET           = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleTarget.txt";
-    SAMPLE_TETRA            = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleTetra.txt";
-    SAMPLE_TWO_DIAMONDS     = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleTwoDiamonds.txt";
-    SAMPLE_WING_NUT         = samples.__path__[0] + os.sep + "samples" + os.sep + "SampleWingNut.txt";
+    SAMPLE_ATOM             = DEFAULT_SAMPLE_PATH + "SampleAtom.txt";
+    SAMPLE_CHAINLINK        = DEFAULT_SAMPLE_PATH + "SampleChainlink.txt";
+    SAMPLE_ENGY_TIME        = DEFAULT_SAMPLE_PATH + "SampleEngyTime.txt";
+    SAMPLE_GOLF_BALL        = DEFAULT_SAMPLE_PATH + "SampleGolfBall.txt";
+    SAMPLE_HEPTA            = DEFAULT_SAMPLE_PATH + "SampleHepta.txt";
+    SAMPLE_LSUN             = DEFAULT_SAMPLE_PATH + "SampleLsun.txt";
+    SAMPLE_TARGET           = DEFAULT_SAMPLE_PATH + "SampleTarget.txt";
+    SAMPLE_TETRA            = DEFAULT_SAMPLE_PATH + "SampleTetra.txt";
+    SAMPLE_TWO_DIAMONDS     = DEFAULT_SAMPLE_PATH + "SampleTwoDiamonds.txt";
+    SAMPLE_WING_NUT         = DEFAULT_SAMPLE_PATH + "SampleWingNut.txt";
+
+
+class COMMON_SAMPLES:
+    SAMPLE_OLD_FAITHFUL     = DEFAULT_SAMPLE_PATH + "SampleOldFaithful.txt";
 
 
 class GRAPH_SIMPLE_SAMPLES:
@@ -73,18 +81,8 @@ class GRAPH_SIMPLE_SAMPLES:
     GRAPH_SIMPLE1                   = samples.__path__[0] + os.sep + "graphs" + os.sep + "GraphSimple1.grpr"
     GRAPH_SIMPLE2                   = samples.__path__[0] + os.sep + "graphs" + os.sep + "GraphSimple2.grpr"
     GRAPH_SIMPLE3                   = samples.__path__[0] + os.sep + "graphs" + os.sep + "GraphSimple3.grpr"
-    
-    
-class GRAPH_DSJC_SAMPLES:
-    DSJC_250_5                      = samples.__path__[0] + os.sep + "graphs" + os.sep + "DSJC250.5.grpr";
-    DSJC_500_1                      = samples.__path__[0] + os.sep + "graphs" + os.sep + "DSJC500.1.grpr";
-    DSJC_500_5                      = samples.__path__[0] + os.sep + "graphs" + os.sep + "DSJC500.5.grpr";
-    DSJC_500_9                      = samples.__path__[0] + os.sep + "graphs" + os.sep + "DSJC500.9.grpr";
-    DSJC_1000_1                     = samples.__path__[0] + os.sep + "graphs" + os.sep + "DSJC1000.1.grpr";
-    DSJC_1000_5                     = samples.__path__[0] + os.sep + "graphs" + os.sep + "DSJC1000.5.grpr";
-    DSJC_1000_9                     = samples.__path__[0] + os.sep + "graphs" + os.sep + "DSJC1000.9.grpr";
-    
-    
+
+
 class IMAGE_SIMPLE_SAMPLES:
     IMAGE_SIMPLE01                  = samples.__path__[0] + os.sep + "images" + os.sep + "ImageSimple01.png";
     IMAGE_SIMPLE02                  = samples.__path__[0] + os.sep + "images" + os.sep + "ImageSimple02.png";

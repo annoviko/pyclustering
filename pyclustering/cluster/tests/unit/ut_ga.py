@@ -271,5 +271,12 @@ class GeneticAlgorithmClusteringUnitTest(unittest.TestCase):
         ga_visualizer.show_evolution(observer, 2, len(observer), display = False);
 
 
+    def testNoneObserver(self):
+        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1);
+        ga_instance = genetic_algorithm(sample, 2, 20, 20, 2, 0.25, observer=None);
+        ga_instance.process();
+        assert None == ga_instance.get_observer();
+
+
 if __name__ == "__main__":
     unittest.main()
