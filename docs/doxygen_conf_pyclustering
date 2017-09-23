@@ -106,6 +106,7 @@ INPUT                  = pyclustering/__init__.py \
                          pyclustering/cluster/cure.py \
                          pyclustering/cluster/dbscan.py \
                          pyclustering/cluster/encoder.py \
+                         pyclustering/cluster/ema.py \
                          pyclustering/cluster/ga.py \
                          pyclustering/cluster/hsyncnet.py \
                          pyclustering/cluster/kmeans.py \

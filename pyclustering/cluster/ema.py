@@ -42,6 +42,17 @@ from matplotlib import patches;
 
 
 def gaussian(data, mean, covariance):
+    """!
+    @brief Calculates gaussian for dataset using specified mean (mathematical expectation) and variance or covariance in case
+            multi-dimensional data.
+    
+    @param[in] data (list): Data that is used for gaussian calculation.
+    @param[in] mean (float|numpy.array): Mathematical expectation used for calculation.
+    @param[in] covariance (float|numpy.array): Variance or covariance matrix for calculation.
+    
+    @return (list) Value of gaussian function for each point in dataset.
+    
+    """
     dimension = float(len(data[0]));
  
     if (dimension != 1.0):
@@ -67,20 +78,68 @@ def gaussian(data, mean, covariance):
 
 
 class ema_init_type(IntEnum):
+    """!
+    @brief Enumeration of initialization types for Expectation-Maximization algorithm.
+    
+    """
+    
+    ## Means are randomly taken from input dataset and variance or covariance is calculated based on
+    ## spherical data that belongs to the chosen means.
     RANDOM_INITIALIZATION = 0;
+    
+    ## Two step initialization. The first is calculation of initial centers using K-Means++ method.
+    ## The second is K-Means clustering using obtained centers in the first step. Obtained clusters
+    ## and its centers are used for calculation of variance (covariance in case of multi-dimensional)
+    ## data.
     KMEANS_INITIALIZATION = 1;
 
 
 
 class ema_initializer():
+    """!
+    @brief Provides servies for preparing initial means and covariances for Expectation-Maximization algorithm.
+    @details Initialization strategy is defined by enumerator 'ema_init_type': random initialization and 
+              kmeans with kmeans++ initialization. Here an example of initialization using kmeans strategy:
+    
+    @code
+        from pyclustering.utils import read_sample;
+        from pyclustering.samples.definitions import COMMON_SAMPLES;
+        from pyclustering.cluster.ema import ema_initializer;
+        
+        sample = read_sample(COMMON_SAMPLES.SAMPLE_OLD_FAITHFUL);
+        amount_clusters = 2;
+        
+        initial_means, initial_covariance = ema_initializer(sample, amount_clusters).initialize(initializer);
+        print(initial_means);
+        print(initial_covariance);
+    @endcode
+    
+    """
+    
     __MAX_GENERATION_ATTEPTS = 10;
     
     def __init__(self, sample, amount):
+        """!
+        @brief Constructs EM initializer.
+        
+        @param[in] sample (list): Data that will be used by the EM algorithm.
+        @param[in] amount (uint): Amount of clusters that should be allocated by the EM algorithm.
+        
+        """
         self.__sample = sample;
         self.__amount = amount;
 
 
     def initialize(self, init_type = ema_init_type.KMEANS_INITIALIZATION):
+        """!
+        @brief Calculates initial parameters for EM algorithm: means and covariances using
+                specified strategy.
+        
+        @param[in] init_type (ema_init_type): Strategy for initialization.
+        
+        @return (float|list, float|numpy.array) Initial means and variance (covariance matrix in case multi-dimensional data).
+        
+        """
         if (init_type == ema_init_type.KMEANS_INITIALIZATION):
             return self.__initialize_kmeans();
         
@@ -170,33 +229,103 @@ class ema_initializer():
 
 
 class ema_observer:
+    """!
+    @brief Observer of EM algorithm for collecting algorithm state on each step.
+    @details It can be used to obtain whole picture about clustering process of EM algorithm. Allocated clusters,
+              means and covariances are stored in observer on each step. Here an example of usage:
+    
+    @code
+        from pyclustering.cluster.ema import ema, ema_observer;
+        from pyclustering.utils import read_sample;
+        from pyclustering.samples.definitions import SIMPLE_SAMPLES;
+        
+        # Read data from text file
+        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE3);
+        
+        # Create EM observer
+        observer = ema_observer();
+        
+        # Create EM algorithm to allocated four clusters and pass observer to it
+        ema_instance = ema(sample, 4, observer=observer);
+        
+        # Run clustering process
+        ema_instance.process();
+        
+        # Print amount of steps that were done by the algorithm
+        print("EMA steps:", observer.get_iterations());
+        
+        # Print evolution of means and covariances
+        print("Means evolution:", observer.get_evolution_means());
+        print("Covariances evolution:", observer.get_evolution_covariances());
+        
+        # Print evolution of clusters
+        print("Clusters evolution:", observer.get_evolution_clusters());
+        
+        # Print final clusters
+        print("Allocated clusters:", observer.get_evolution_clusters()[-1]);
+    @endcode
+    
+    """
     def __init__(self):
+        """!
+        @brief Initializes EM observer.
+        
+        """
         self.__means_evolution = [];
         self.__covariances_evolution = [];
         self.__clusters_evolution = [];
 
 
     def __len__(self):
+        """!
+        @return (uint) Amount of iterations that were done by the EM algorithm.
+        
+        """
         return len(self.__means_evolution);
 
 
     def get_iterations(self):
+        """!
+        @return (uint) Amount of iterations that were done by the EM algorithm.
+        
+        """
         return len(self.__means_evolution);
 
 
     def get_evolution_means(self):
+        """!
+        @return (list) Mean of each cluster on each step of clustering.
+        
+        """
         return self.__means_evolution;
 
 
     def get_evolution_covariances(self):
+        """!
+        @return (list) Covariance matrix (or variance in case of one-dimensional data) of each cluster on each step of clustering.
+        
+        """
         return self.__covariances_evolution;
 
 
     def get_evolution_clusters(self):
+        """!
+        @return (list) Allocated clusters on each step of clustering.
+        
+        """
         return self.__clusters_evolution;
 
 
     def notify(self, means, covariances, clusters):
+        """!
+        @brief This method is used by the algorithm to notify observer about changes where the algorithm
+                should provide new values: means, covariances and allocated clusters.
+        
+        @param[in] means (list): Mean of each cluster on currect step.
+        @param[in] covariances (list): Covariances of each cluster on current step.
+        @param[in] clusters (list): Allocated cluster on current step.
+        
+        """
         self.__means_evolution.append(means);
         self.__covariances_evolution.append(covariances);
         self.__clusters_evolution.append(clusters);
@@ -204,8 +333,31 @@ class ema_observer:
 
 
 class ema_visualizer:
+    """!
+    @brief Visualizer of EM algorithm's results.
+    @details Provides services for visualization of particular features of the algorithm, for example,
+              in case of two-dimensional dataset it shows covariance ellipses.
+    
+    """
+    
     @staticmethod
     def show_clusters(clusters, sample, covariances, means, figure = None, display = True):
+        """!
+        @brief Draws clusters and in case of two-dimensional dataset draws their ellipses.
+        
+        @param[in] clusters (list): Clusters that were allocated by the algorithm.
+        @param[in] sample (list): Dataset that were used for clustering.
+        @param[in] covariances (list): Covariances of the clusters.
+        @param[in] means (list): Means of the clusters.
+        @param[in] figure (figure): If 'None' then new is figure is creater, otherwise specified figure is used
+                    for visualization.
+        @param[in] display (bool): If 'True' then figure will be shown by the method, otherwise it should be
+                    shown manually using matplotlib function 'plt.show()'.
+        
+        @return (figure) Figure where clusters were drawn.
+        
+        """
+        
         visualizer = cluster_visualizer();
         visualizer.append_clusters(clusters, sample);
         
@@ -225,6 +377,17 @@ class ema_visualizer:
 
     @staticmethod
     def animate_cluster_allocation(data, observer, animation_velocity = 75, movie_fps = 1, save_movie = None):
+        """!
+        @brief Animates clustering process that is performed by EM algorithm.
+        
+        @param[in] data (list): Dataset that is used for clustering.
+        @param[in] observer (ema_observer): EM observer that was used for collection information about clustering process.
+        @param[in] animation_velocity (uint): Interval between frames in milliseconds (for run-time animation only).
+        @param[in] movie_fps (uint): Defines frames per second (for rendering movie only).
+        @param[in] save_movie (string): If it is specified then animation will be stored to file that is specified in this parameter.
+        
+        """
+        
         figure = plt.figure();
         
         def init_frame():
@@ -273,7 +436,67 @@ class ema_visualizer:
 
 
 class ema:
+    """!
+    @brief Expectation-Maximization clustering algorithm for Gaussian Mixture Model (GMM).
+    @details The algorithm provides only clustering services (unsupervise learning).
+              Here an example of data clustering process:
+    @code
+        # Read dataset from text file
+        sample = read_sample(COMMON_SAMPLES.);
+        
+        # Amount of cluster that should be allocated
+        amount = 2;
+        
+        # Prepare initial means and covariances using K-Means initializer
+        initializer = ema_init_type.KMEANS_INITIALIZATION;
+        initial_means, initial_covariance = ema_initializer(sample, amount).initialize(initializer);
+        
+        # Lets create observer to see clustering process
+        observer = ema_observer();
+        
+        # Create instance of the EM algorithm
+        ema_instance = ema(sample, amount, initial_means, initial_covariance, observer=observer);
+        
+        # Run clustering process
+        ema_instance.process();
+        
+        # Extract clusters
+        clusters = ema_instance.get_clusters();
+        print("Obtained clusters:", clusters);
+        
+        # Display allocated clusters using visualizer
+        covariances = ema_instance.get_covariances();
+        means = ema_instance.get_centers();
+        ema_visualizer.show_clusters(clusters, sample, covariances, means);
+        
+        # Show animation process
+        ema_visualizer.animate_cluster_allocation(sample, observer);
+        
+    @endcode
+    
+    @see ema_visualizer
+    @see ema_observer
+    
+    """
     def __init__(self, data, amount_clusters, means = None, variances = None, observer = None, tolerance = 0.00001, iterations = 100):
+        """!
+        @brief Initializes Expectation-Maximization algorithm for cluster analysis.
+        
+        @param[in] data (list): Dataset that should be analysed and where each point (object) is represented by the list of coordinates.
+        @param[in] amount_clusters (uint): Amount of clusters that should be allocated.
+        @param[in] means (list): Initial means of clusters (amount of means should be equal to amount of clusters for allocation).
+                    If this parameter is 'None' then K-Means algorithm with K-Means++ method will be used for initialization by default.
+        @param[in] variances (list): Initial cluster variances (or covariances in case of multi-dimensional data). Amount of
+                    covariances should be equal to amount of clusters that should be allocated. If this parameter is 'None' then
+                    K-Means algorithm with K-Means++ method will be used for initialization by default.
+        @param[in] observer (ema_observer): Observer for gathering information about clustering process.
+        @param[in] tolerance (float): Defines stop condition of the algorithm (when difference between current and
+                    previous log-likelihood estimation is less then 'tolerance' then clustering is over).
+        @param[in] iterations (uint): Additional stop condition parameter that defines maximum number of steps that can be
+                    performed by the algorithm during clustering process.
+        
+        """
+        
         self.__data = numpy.array(data);
         self.__amount_clusters = amount_clusters;
         self.__tolerance = tolerance;
@@ -297,6 +520,12 @@ class ema:
 
 
     def process(self):
+        """!
+        @brief Run clustering process of the algorithm.
+        @details This method should be called before call 'get_clusters()'.
+        
+        """
+        
         previous_likelihood = -200000;
         current_likelihood = -100000;
         
@@ -316,14 +545,29 @@ class ema:
 
 
     def get_clusters(self):
+        """!
+        @return (list) Allocated clusters where each cluster is represented by list of indexes of points from dataset,
+                        for example, two cluster may have following representation [[0, 1, 4], [2, 3, 5, 6]].
+        
+        """
         return self.__clusters;
 
 
     def get_centers(self):
+        """!
+        @return (list) Corresponding centers (means) of clusters.
+        
+        """
+        
         return self.__means;
 
 
     def get_covariances(self):
+        """!
+        @return (list) Corresponding variances (or covariances in case of multi-dimensional data) of clusters.
+        
+        """
+        
         return self.__variances;
 
 
