@@ -430,7 +430,7 @@ class ema_visualizer:
     @staticmethod
     def __draw_ellipse(ax, x, y, angle, width, height, color):
         if ((width > 0.0) and (height > 0.0)):
-            ellipse = patches.Ellipse((x, y), width, height, alpha=0.2, angle=angle, linewidth=2, fill=True, zorder=2, color=color);
+            ellipse = patches.Ellipse((x, y), width, height, alpha=0.2, angle=-angle, linewidth=2, fill=True, zorder=2, color=color);
             ax.add_patch(ellipse);
 
 
@@ -473,6 +473,11 @@ class ema:
         ema_visualizer.animate_cluster_allocation(sample, observer);
         
     @endcode
+    
+    Here is clustering results of the Expectation-Maximization clustering algorithm where popular sample 'OldFaithful' was used.
+    Initial random means and covariances were used in the example. The first step is presented on the left side of the figure and
+    final result (the last step) is on the right side:
+    @image html ema_old_faithful_clustering.png
     
     @see ema_visualizer
     @see ema_observer

@@ -147,7 +147,10 @@ class som:
         # show self-organized map.
         network.show_network();
     @endcode
-        
+    
+    There is a visualization of 'Target' sample that was done by the self-organized feature map:
+    @image html target_som_processing.png
+    
     """
 
 

@@ -51,6 +51,7 @@ def template_clustering(sample_file_path, amount_clusters, initializer, show_ani
     print("Data '" + sample_file_path + "'");
     print("Clusters: " + str(len(clusters)) + ", Length:" + str(cluster_length));
 
+    ema_visualizer.show_clusters(observer.get_evolution_clusters()[0], sample, observer.get_evolution_covariances()[0], observer.get_evolution_means()[0]);
     ema_visualizer.show_clusters(clusters, sample, covariances, means);
     
     if (show_animation is True):

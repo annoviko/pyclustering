@@ -5,6 +5,9 @@ CHANGE NOTES FOR 0.7.dev (STARTED Jun 01, 2016)
 ------------------------------------------------------------------------
 
 GENERAL CHANGES (pyclustering):
+- Implemented Expectation-Maximization clustering algorithm for Gaussian Mixute Model and clustering visualizer for this particular algorithm (pyclustering.cluster.ema)
+  See: https://github.com/annoviko/pyclustering/issues/16
+
 - Implemented Genetic Clustering Algorithm (GCA) and clustering visualizer for this particular algorithm (pyclustering.cluster.ga)
   See: https://github.com/annoviko/pyclustering/issues/360
 
