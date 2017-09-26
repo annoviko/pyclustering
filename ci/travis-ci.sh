@@ -181,7 +181,8 @@ case $CI_JOB in
         run_doxygen_job ;;
 
     DEPLOY)
-        echo "[CI Job] Deploy job is disabled"
+        echo "[CI Job] Deploy job is disabled" ;;
+#        run_deploy_job ;;
 
     *)
         echo "[CI Job] Unknown target $CI_JOB"
