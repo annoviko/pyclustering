@@ -20,6 +20,8 @@
 
 #include "cluster/optics.hpp"
 
+#include <limits>
+
 #include "ordering_analyser.hpp"
 #include "utils.hpp"
 
@@ -36,13 +38,13 @@ optics_descriptor::optics_descriptor(const std::size_t p_index, const double p_c
 
 
 void optics_descriptor::clear(void) {
-	m_core_distance = optics::NONE_DISTANCE;
-	m_reachability_distance = optics::NONE_DISTANCE;
-	m_processed = false;
+    m_core_distance = optics::NONE_DISTANCE;
+    m_reachability_distance = optics::NONE_DISTANCE;
+    m_processed = false;
 }
 
 
-const double optics::NONE_DISTANCE = -1.0;
+const double optics::NONE_DISTANCE = std::numeric_limits<double>::max();
 
 
 optics::optics(const double p_radius, const std::size_t p_neighbors) : optics() { 
@@ -199,30 +201,21 @@ void optics::extract_clusters(void) {
     cluster_sequence_ptr clusters = m_result_ptr->clusters();
     noise_ptr noise = m_result_ptr->noise();
 
-    std::size_t index_current_cluster = 0;
-    clusters->push_back(cluster());
+    cluster * current_cluster = (cluster *) noise.get();
 
     for (auto optics_object : m_ordered_database) {
         if ( (optics_object->m_reachability_distance == optics::NONE_DISTANCE) || (optics_object->m_reachability_distance > m_radius) ) {
             if ( (optics_object->m_core_distance != optics::NONE_DISTANCE) && (optics_object->m_core_distance <= m_radius) ) {
-                if (clusters->at(index_current_cluster).size() > 0) {
-                    index_current_cluster++;
-                    clusters->push_back(cluster());
-                }
-
-                clusters->at(index_current_cluster).push_back(optics_object->m_index);
+                clusters->push_back({ optics_object->m_index });
+                current_cluster = &clusters->back();
             }
             else {
                 noise->push_back(optics_object->m_index);
             }
         }
         else {
-            clusters->at(index_current_cluster).push_back(optics_object->m_index);
+            current_cluster->push_back(optics_object->m_index);
         }
-    }
-
-    if (clusters->back().empty()) {
-        clusters->pop_back();
     }
 }
 
