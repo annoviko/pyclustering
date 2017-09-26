@@ -1,6 +1,9 @@
 #!/bin/bash
 
 
+CCORE_X64_BINARY_PATH=pyclustering/core/x64/linux/ccore.so
+
+
 run_build_ccore_job() {
     echo "[CI Job] CCORE (C++ code building):"
     echo "- Build CCORE library."
@@ -78,11 +81,11 @@ run_valgrind_ccore_job() {
 }
 
 
-run_ut_pyclustering_job() {
-    echo "[CI Job]: UT PYCLUSTERING (Python code unit-testing):"
+run_test_pyclustering_job() {
+    echo "[CI Job]: TEST PYCLUSTERING (unit and integration testing):"
     echo "- Rebuilt CCORE library."
-    echo "- Run unit-tests of pyclustering."
-    echo "- Measure code coverage."
+    echo "- Run unit and integration tests of pyclustering."
+    echo "- Measure code coverage for python code."
 
     # install requirements for the job
     install_miniconda
@@ -127,6 +130,19 @@ run_doxygen_job() {
 }
 
 
+run_deploy_job() {
+    echo "[CI_JOB]: Deploy (upload linux binary file to github)"
+    
+    git config --global user.email "travis@travis-ci.org"
+    git config --global user.name "Travis CI"
+    
+    git checkout . -b $TRAVIS_BRANCH
+    git add pyclustering/core/linux/ccore.so
+    git commit . -m "[travis-ci build] push new ccore version '$TRAVIS_BUILD_NUMBER'"
+    git push
+}
+
+
 install_miniconda() {
     wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
 
@@ -158,11 +174,14 @@ case $CI_JOB in
     VALGRIND_CCORE)
         run_valgrind_ccore_job ;;
 
-    UT_PYCLUSTERING) 
-        run_ut_pyclustering_job ;;
+    TEST_PYCLUSTERING) 
+        run_test_pyclustering_job ;;
 
     DOCUMENTATION)
         run_doxygen_job ;;
+
+    DEPLOY)
+        echo "[CI Job] Deploy job is disabled"
 
     *)
         echo "[CI Job] Unknown target $CI_JOB"

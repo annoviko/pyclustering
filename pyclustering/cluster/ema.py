@@ -430,6 +430,7 @@ class ema_visualizer:
     @staticmethod
     def __draw_ellipse(ax, x, y, angle, width, height, color):
         if ((width > 0.0) and (height > 0.0)):
+            ax.plot(x, y, color=color, marker='x', markersize=6);
             ellipse = patches.Ellipse((x, y), width, height, alpha=0.2, angle=-angle, linewidth=2, fill=True, zorder=2, color=color);
             ax.add_patch(ellipse);
 
@@ -442,7 +443,7 @@ class ema:
               Here an example of data clustering process:
     @code
         # Read dataset from text file
-        sample = read_sample(COMMON_SAMPLES.);
+        sample = read_sample(COMMON_SAMPLES.SAMPLE_OLD_FAITHFUL);
         
         # Amount of cluster that should be allocated
         amount = 2;

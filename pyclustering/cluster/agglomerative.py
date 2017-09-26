@@ -41,10 +41,10 @@ class type_link(IntEnum):
     
     """
 
-    ## Nearest objects in clusters is considered as a link.
+    ## The nearest objects in clusters is considered as a link.
     SINGLE_LINK = 0;
     
-    ## Farthest objects in clusters is considered as a link.
+    ## The farthest objects in clusters is considered as a link.
     COMPLETE_LINK = 1;
     
     ## Average distance between objects in clusters is considered as a link.
@@ -95,7 +95,7 @@ class agglomerative:
         visualizer.show();
     @endcode
     
-    Example of clustering for different links:
+    Example of agglomerative clustering using different links:
     @image html agglomerative_lsun_clustering_single_link.png
     
     """
@@ -104,10 +104,11 @@ class agglomerative:
         """!
         @brief Constructor of agglomerative hierarchical algorithm.
         
-        @param[in] data (list): Input data that is presented as a list of points (objects), each point should be represented by a list or tuple.
+        @param[in] data (list): Input data that is presented as a list of points (objects), each point should be represented by list, for example
+                    [[0.1, 0.2], [0.4, 0.5], [1.3, 0.9]].
         @param[in] number_clusters (uint): Number of clusters that should be allocated.
         @param[in] link (type_link): Link type that is used for calculation similarity between objects and clusters, if it is not specified centroid link will be used by default.
-        @param[in] ccore (bool): Defines should be CCORE (C++ pyclustering library) used instead of Python code or not.
+        @param[in] ccore (bool): Defines should be CCORE (C++ pyclustering library) used instead of Python code or not (by default it is 'False').
         
         """  
         

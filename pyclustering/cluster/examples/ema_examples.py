@@ -51,7 +51,9 @@ def template_clustering(sample_file_path, amount_clusters, initializer, show_ani
     print("Data '" + sample_file_path + "'");
     print("Clusters: " + str(len(clusters)) + ", Length:" + str(cluster_length));
 
-    ema_visualizer.show_clusters(observer.get_evolution_clusters()[0], sample, observer.get_evolution_covariances()[0], observer.get_evolution_means()[0]);
+    if (observer is True):
+        ema_visualizer.show_clusters(observer.get_evolution_clusters()[0], sample, observer.get_evolution_covariances()[0], observer.get_evolution_means()[0]);
+    
     ema_visualizer.show_clusters(clusters, sample, covariances, means);
     
     if (show_animation is True):
@@ -150,6 +152,7 @@ def cluster_lsun_more_gaussians():
 
 def cluster_target_more_gaussians():
     template_clustering(FCPS_SAMPLES.SAMPLE_TARGET, 12, ema_init_type.KMEANS_INITIALIZATION);
+
 
 
 cluster_sample01_init_random();

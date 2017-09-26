@@ -86,6 +86,9 @@ GENERAL CHANGES (ccore):
 
 
 CORRECTED MAJOR BUGS:
+- Bug with sending the first element to cluster in OPTICS even if it is noise element.
+  See: no reference.
+
 - Bug with amount of allocated clusters by K-Medoids algorithm in Python implementation and CCORE (pyclustering.cluster.kmedoids, ccore.cluster.medoids).
   See: https://github.com/annoviko/pyclustering/issues/366
   See: https://github.com/annoviko/pyclustering/issues/367
