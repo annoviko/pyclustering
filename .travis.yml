@@ -40,9 +40,9 @@ jobs:
       script: ./ci/travis-ci.sh UT_CCORE
     - stage: build and test
       script: ./ci/travis-ci.sh VALGRIND_CCORE
-    - stage build and test
+    - stage: build and test
       script: ./ci/travis-ci.sh TEST_PYCLUSTERING
-    - stage deploy
+    - stage: deploy
       script: ./ci/travis-ci.sh DOCUMENTATION
     - stage: deploy
       script: ./ci/travis-ci-deploy.sh
