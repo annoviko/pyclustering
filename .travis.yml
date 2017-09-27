@@ -27,17 +27,13 @@ environment:
     secure: MegbZ1DpMKXx/lRQfPJjCeMWq21AJwB/9c0yEuTwGIHV7Uu4T4iQ/yrux3UmvJ64lnNqhr733LhM6ISSidoL5f/K6tBBpjzCgkGsu5ofmUHWjaai9NNcXEarOQH3xWSgtmBRNT8qOFwDTaU7HIeLu4mcKW8ixGZXbf6NNh0nlYyyg5D41fnGkHGekFX65kjJlRTORWNyw1+NlB9bqFvR1o6Be0towCbi05hIzOgeA44zkvm/hTtShQFrEIetchBCZiKv6HSsAptlAt7KKA/jlATt8ECzTBOAwS5/zDYVq1F50zvjaIw2k53CZg0xkJoIIJcFOjyNDwyDJwTLF+d4KIjlTHw1ip2Nb83EFsTJ874LySyiYngBCMSSR+0kJPRznidYa4T6w/LbBR87BsMkTnld3xQe84A3GuNZhRXmL+WWCHmmFWV2+CMV59TFKKLsP3/gjF0act3ZmfNk+r/7+buQXs490wbdWEEuOZCu37Yn+h2/yBpyije3K2QUD/ijZU2adxyNYhvFKB9U7FJNKBGXmlSt5y/C2XdpT8kvsV4N64OSVjnEGeR/pqBV41N1Tx1iEjJ9tRHnOJGpP0B/idCB8GPPIFXWAUlnVSXcuMAg4pGDhFacGIjlIJBo9kAtdUn9KCM1Sgjvf9gdv867UCvOrvpd/L+oLOsPkYY+yP0=
 
 
-env:
-  - CI_JOB=BUILD_CCORE
-  - CI_JOB=UT_CCORE
-  - CI_JOB=VALGRIND_CCORE
-  - CI_JOB=TEST_PYCLUSTERING
-  - CI_JOB=DOCUMENTATION
-
-
-script:
-  - ./ci/travis-ci.sh
-
-
-deploy:
-  - ./ci/travis-ci-deploy.sh
+jobs:
+  include:
+    - stage: test
+      script: ./ci/travis-ci.sh BUILD_CCORE
+      script: ./ci/travis-ci.sh UT_CCORE
+      script: ./ci/travis-ci.sh VALGRIND_CCORE
+      script: ./ci/travis-ci.sh TEST_PYCLUSTERING
+      script: ./ci/travis-ci.sh DOCUMENTATION
+    - state: deploy
+      script: ./ci/travis-ci-deploy.sh
