@@ -1,6 +1,3 @@
-#!/bin/bash
-
-
 CCORE_X64_BINARY_PATH=pyclustering/core/x64/linux/ccore.so
 
 

@@ -39,5 +39,5 @@ script:
   - ./ci/travis-ci.sh
 
 
-after_success:
+deploy:
   - ./ci/travis-ci-deploy.sh
