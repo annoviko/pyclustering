@@ -130,19 +130,6 @@ run_doxygen_job() {
 }
 
 
-run_deploy_job() {
-    echo "[CI_JOB]: Deploy (upload linux binary file to github)"
-    
-    git config --global user.email "travis@travis-ci.org"
-    git config --global user.name "Travis CI"
-    
-    git checkout . -b $TRAVIS_BRANCH
-    git add pyclustering/core/linux/ccore.so
-    git commit . -m "[travis-ci build] push new ccore version '$TRAVIS_BUILD_NUMBER'"
-    git push
-}
-
-
 install_miniconda() {
     wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
 
@@ -179,10 +166,6 @@ case $CI_JOB in
 
     DOCUMENTATION)
         run_doxygen_job ;;
-
-    DEPLOY)
-        echo "[CI Job] Deploy job is disabled" ;;
-#        run_deploy_job ;;
 
     *)
         echo "[CI Job] Unknown target $CI_JOB"
