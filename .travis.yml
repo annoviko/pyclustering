@@ -35,5 +35,5 @@ jobs:
       script: ./ci/travis-ci.sh VALGRIND_CCORE
       script: ./ci/travis-ci.sh TEST_PYCLUSTERING
       script: ./ci/travis-ci.sh DOCUMENTATION
-    - state: deploy
+    - stage: deploy
       script: ./ci/travis-ci-deploy.sh
