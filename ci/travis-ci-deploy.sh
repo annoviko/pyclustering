@@ -1,9 +1,12 @@
 run_deploy_job() {
     echo "[DEPLOY]: Deploy (upload linux binary file to github)"
     
-    
     git config --global user.email "travis@travis-ci.org"
     git config --global user.name "Travis CI"
+    
+    ls -la
+    git status
+    git checkout $TRAVIS_BRANCH
     
     mkdir pyclustering/core/x64/linux
     echo "linux ccore x64 build version: '$TRAVIS_BUILD_NUMBER'" > pyclustering/core/x64/linux/.linux.info
