@@ -148,15 +148,6 @@ set -e
 set -x
 
 
-if [$# -ne 1] ; then
-    echo "Illegal number of arguments";
-    exit 1
-fi
-
-
-CI_JOB=$1
-
-
 case $CI_JOB in
     BUILD_CCORE) 
         run_build_ccore_job ;;
