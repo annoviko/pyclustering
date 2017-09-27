@@ -35,15 +35,15 @@ env:
   - CI_JOB=DOCUMENTATION
 
 
+script: ./ci/travis-ci.sh
+
+
 stages:
-  - test
   - deploy
 
 
 jobs:
   include:
-    - stage: test
-      script: ./ci/travis-ci.sh
     - stage: deploy
       env: CI_JOB=BUILD_CCORE
       script: ./ci/travis-ci-deploy.sh
