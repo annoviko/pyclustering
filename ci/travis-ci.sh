@@ -148,7 +148,7 @@ set -e
 set -x
 
 
-case $CI_JOB in
+case $1 in
     BUILD_CCORE) 
         run_build_ccore_job ;;
         
@@ -165,6 +165,6 @@ case $CI_JOB in
         run_doxygen_job ;;
 
     *)
-        echo "[CI Job] Unknown target $CI_JOB"
+        echo "[CI Job] Unknown target $1"
         exit 1 ;;
 esac
