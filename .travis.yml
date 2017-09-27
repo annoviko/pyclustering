@@ -35,6 +35,11 @@ env:
   - CI_JOB=DOCUMENTATION
 
 
+stages:
+  - test
+  - deploy
+
+
 jobs:
   include:
     - stage: test

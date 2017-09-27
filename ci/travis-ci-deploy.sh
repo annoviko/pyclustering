@@ -1,12 +1,6 @@
 run_deploy_job() {
     echo "[DEPLOY]: Deploy (upload linux binary file to github)"
     
-    if [ $TRAVIS_TEST_RESULT -ne 0 ] ; then
-        echo "[DEPLOY]: Build has failed - deploy is canceled"
-        exit 1
-    fi
-
-    
     
     git config --global user.email "travis@travis-ci.org"
     git config --global user.name "Travis CI"
