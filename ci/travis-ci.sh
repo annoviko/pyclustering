@@ -90,7 +90,7 @@ run_test_pyclustering_job() {
 
     # install requirements for the job
     install_miniconda
-    pip3 install coveralls
+    pip install coveralls
 
     # set path to the tested library
     PYTHONPATH=`pwd`
