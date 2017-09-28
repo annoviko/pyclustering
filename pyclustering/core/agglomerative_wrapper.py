@@ -35,6 +35,8 @@ def agglomerative_algorithm(data, number_clusters, link):
     ccore.agglomerative_algorithm.restype = POINTER(pyclustering_package);
     package = ccore.agglomerative_algorithm(pointer_data, c_size_t(number_clusters), c_size_t(link));
 
+    print("Package address:", package);
+
     result = package_extractor(package).extract();
     ccore.free_pyclustering_package(package);
 

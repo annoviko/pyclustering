@@ -9,6 +9,10 @@ run_build_ccore_job() {
     sudo apt-get install -qq g++-5
     sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-5 50
 
+    # show info
+    g++ --version
+    gcc --version
+
     # build ccore library
     cd ccore/
     make ccore
@@ -94,6 +98,10 @@ run_test_pyclustering_job() {
 
     # build ccore library
     run_build_ccore_job
+
+    # show info
+    python --version
+    python3 --version
 
     # run unit-tests and obtain coverage results
     coverage run --source=pyclustering --omit='pyclustering/*/tests/*,pyclustering/*/examples/*,pyclustering/tests/*' pyclustering/tests/tests_runner.py
