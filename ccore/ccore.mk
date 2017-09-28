@@ -17,7 +17,7 @@ endif
 
 # Toolchain arguments.
 CFLAGS = -O3 -MMD -MP -std=$(CPLUS_STANDARD) $(PIC_FLAG) -Werror -Wall -Wpedantic
-LFLAGS = -static-libstdc++ -shared
+LFLAGS = -shared
 
 
 # Executable library file

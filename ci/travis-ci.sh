@@ -90,7 +90,7 @@ run_test_pyclustering_job() {
 
     # install requirements for the job
     install_miniconda
-    pip install coveralls
+    pip3 install coveralls
 
     # set path to the tested library
     PYTHONPATH=`pwd`
@@ -103,9 +103,23 @@ run_test_pyclustering_job() {
     python --version
     python3 --version
 
-    # run unit-tests and obtain coverage results
+    # run unit and integration tests and obtain coverage results
     coverage run --source=pyclustering --omit='pyclustering/*/tests/*,pyclustering/*/examples/*,pyclustering/tests/*' pyclustering/tests/tests_runner.py
     coveralls
+}
+
+
+run_integration_test_job() {
+    PYTHON_VERSION=$1
+
+    # install requirements for the job
+    install_miniconda $PYTHON_VERSION
+
+    # build ccore library
+    run_build_ccore_job
+
+    # run integration tests
+    python pyclustering/tests/tests_runner.py --integration
 }
 
 
@@ -136,6 +150,11 @@ run_doxygen_job() {
 
 
 install_miniconda() {
+    PYTHON_VERSION=3.4
+    if [ $# -eq 1 ]; then
+        PYTHON_VERSION=$1
+    fi
+
     wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
 
     bash miniconda.sh -b -p $HOME/miniconda
@@ -159,7 +178,7 @@ set -x
 case $1 in
     BUILD_CCORE) 
         run_build_ccore_job ;;
-        
+
     UT_CCORE) 
         run_ut_ccore_job ;;
 
@@ -168,6 +187,9 @@ case $1 in
 
     TEST_PYCLUSTERING) 
         run_test_pyclustering_job ;;
+
+    IT_CCORE)
+        run_integration_test_job $2 ;;
 
     DOCUMENTATION)
         run_doxygen_job ;;
