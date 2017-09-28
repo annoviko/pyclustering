@@ -26,6 +26,9 @@
 
 import unittest;
 
+import matplotlib;
+matplotlib.use('Agg');
+
 from pyclustering.cluster.tests.agglomerative_templates import AgglomerativeTestTemplates;
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES;

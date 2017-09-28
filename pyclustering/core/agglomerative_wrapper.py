@@ -23,7 +23,7 @@
 
 """
 
-from ctypes import c_size_t, c_double, POINTER;
+from ctypes import c_size_t, c_double, c_void_p, cast, POINTER;
 
 from pyclustering.core.wrapper import load_core;
 from pyclustering.core.pyclustering_package import pyclustering_package, package_extractor, package_builder;
@@ -32,10 +32,9 @@ def agglomerative_algorithm(data, number_clusters, link):
     pointer_data = package_builder(data, c_double).create();
 
     ccore = load_core();
-    ccore.agglomerative_algorithm.restype = POINTER(pyclustering_package);
+    ccore.agglomerative_algorithm.restype = c_void_p;
     package = ccore.agglomerative_algorithm(pointer_data, c_size_t(number_clusters), c_size_t(link));
-
-    print("Package address:", package);
+    cast(package, POINTER(pyclustering_package));
 
     result = package_extractor(package).extract();
     ccore.free_pyclustering_package(package);

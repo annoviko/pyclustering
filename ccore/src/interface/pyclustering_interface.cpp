@@ -20,9 +20,8 @@
 
 
 #include "interface/pyclustering_interface.h"
-#include <iostream>
+
 
 void free_pyclustering_package(pyclustering_package * package) {
-    std::cout << "Package address: " << std::hex << package << std::endl;
     delete package;
 }
