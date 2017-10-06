@@ -110,6 +110,8 @@ run_test_pyclustering_job() {
 
 
 run_integration_test_job() {
+    echo "[CI Job]: Integration testing ('ccore' <-> 'pyclustering')."
+
     PYTHON_VERSION=$1
 
     # install requirements for the job

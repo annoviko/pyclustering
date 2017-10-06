@@ -28,7 +28,7 @@ from pyclustering.cluster.ema import ema, ema_initializer, ema_observer, ema_vis
 
 from pyclustering.utils import read_sample;
 
-from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES, COMMON_SAMPLES;
+from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES, FAMOUS_SAMPLES;
 
 
 def template_clustering(sample_file_path, amount_clusters, initializer, show_animation = True):
@@ -141,10 +141,10 @@ def cluster_engy_time_init_random():
 
 
 def cluster_old_faithful_init_kmeans():
-    template_clustering(COMMON_SAMPLES.SAMPLE_OLD_FAITHFUL, 2, ema_init_type.KMEANS_INITIALIZATION, True);
+    template_clustering(FAMOUS_SAMPLES.SAMPLE_OLD_FAITHFUL, 2, ema_init_type.KMEANS_INITIALIZATION, True);
 
 def cluster_old_faithful_init_random():
-    template_clustering(COMMON_SAMPLES.SAMPLE_OLD_FAITHFUL, 2, ema_init_type.RANDOM_INITIALIZATION, True);
+    template_clustering(FAMOUS_SAMPLES.SAMPLE_OLD_FAITHFUL, 2, ema_init_type.RANDOM_INITIALIZATION, True);
 
 
 def cluster_lsun_more_gaussians():

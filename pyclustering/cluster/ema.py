@@ -103,10 +103,10 @@ class ema_initializer():
     
     @code
         from pyclustering.utils import read_sample;
-        from pyclustering.samples.definitions import COMMON_SAMPLES;
+        from pyclustering.samples.definitions import FAMOUS_SAMPLES;
         from pyclustering.cluster.ema import ema_initializer;
         
-        sample = read_sample(COMMON_SAMPLES.SAMPLE_OLD_FAITHFUL);
+        sample = read_sample(FAMOUS_SAMPLES.SAMPLE_OLD_FAITHFUL);
         amount_clusters = 2;
         
         initial_means, initial_covariance = ema_initializer(sample, amount_clusters).initialize(initializer);
@@ -443,7 +443,7 @@ class ema:
               Here an example of data clustering process:
     @code
         # Read dataset from text file
-        sample = read_sample(COMMON_SAMPLES.SAMPLE_OLD_FAITHFUL);
+        sample = read_sample(FAMOUS_SAMPLES.SAMPLE_OLD_FAITHFUL);
         
         # Amount of cluster that should be allocated
         amount = 2;

@@ -19,10 +19,11 @@ run_deploy_job() {
     echo "linux ccore x64 build version: '$TRAVIS_BUILD_NUMBER'" > pyclustering/core/x64/linux/.linux.info
     git add pyclustering/core/x64/linux/.linux.info
     git status
+    git diff
     
     echo "[DEPLOY]: Push changes to github repository"
     git commit . -m "[travis-ci][ci skip] push new ccore version '$TRAVIS_BUILD_NUMBER'"
-    git push
+    git push --quiet
 }
 
 

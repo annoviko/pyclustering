@@ -32,21 +32,27 @@
 #endif
 
 
-const std::string simple_sample_factory::PATH_SAMPLE_SIMPLE_FOLDER = ".." + separator + ".." + separator + "pyclustering" + separator + "samples" + separator + "samples";
+const std::string simple_sample_factory::PATH_SAMPLE_SIMPLE_FOLDER =
+    ".." + separator +
+    ".." + separator +
+    "pyclustering" + separator +
+    "samples" + separator +
+    "samples" + separator +
+    "simple" + separator;
 
 
-const std::string simple_sample_factory::PATH_SAMPLE_SIMPLE_01 = PATH_SAMPLE_SIMPLE_FOLDER + separator + "SampleSimple01.txt";
-const std::string simple_sample_factory::PATH_SAMPLE_SIMPLE_02 = PATH_SAMPLE_SIMPLE_FOLDER + separator + "SampleSimple02.txt";
-const std::string simple_sample_factory::PATH_SAMPLE_SIMPLE_03 = PATH_SAMPLE_SIMPLE_FOLDER + separator + "SampleSimple03.txt";
-const std::string simple_sample_factory::PATH_SAMPLE_SIMPLE_04 = PATH_SAMPLE_SIMPLE_FOLDER + separator + "SampleSimple04.txt";
-const std::string simple_sample_factory::PATH_SAMPLE_SIMPLE_05 = PATH_SAMPLE_SIMPLE_FOLDER + separator + "SampleSimple05.txt";
-const std::string simple_sample_factory::PATH_SAMPLE_SIMPLE_06 = PATH_SAMPLE_SIMPLE_FOLDER + separator + "SampleSimple06.txt";
-const std::string simple_sample_factory::PATH_SAMPLE_SIMPLE_07 = PATH_SAMPLE_SIMPLE_FOLDER + separator + "SampleSimple07.txt";
-const std::string simple_sample_factory::PATH_SAMPLE_SIMPLE_08 = PATH_SAMPLE_SIMPLE_FOLDER + separator + "SampleSimple08.txt";
-const std::string simple_sample_factory::PATH_SAMPLE_SIMPLE_09 = PATH_SAMPLE_SIMPLE_FOLDER + separator + "SampleSimple09.txt";
-const std::string simple_sample_factory::PATH_SAMPLE_SIMPLE_10 = PATH_SAMPLE_SIMPLE_FOLDER + separator + "SampleSimple10.txt";
-const std::string simple_sample_factory::PATH_SAMPLE_SIMPLE_11 = PATH_SAMPLE_SIMPLE_FOLDER + separator + "SampleSimple11.txt";
-const std::string simple_sample_factory::PATH_SAMPLE_SIMPLE_12 = PATH_SAMPLE_SIMPLE_FOLDER + separator + "SampleSimple12.txt";
+const std::string simple_sample_factory::PATH_SAMPLE_SIMPLE_01 = PATH_SAMPLE_SIMPLE_FOLDER + "Simple01.data";
+const std::string simple_sample_factory::PATH_SAMPLE_SIMPLE_02 = PATH_SAMPLE_SIMPLE_FOLDER + "Simple02.data";
+const std::string simple_sample_factory::PATH_SAMPLE_SIMPLE_03 = PATH_SAMPLE_SIMPLE_FOLDER + "Simple03.data";
+const std::string simple_sample_factory::PATH_SAMPLE_SIMPLE_04 = PATH_SAMPLE_SIMPLE_FOLDER + "Simple04.data";
+const std::string simple_sample_factory::PATH_SAMPLE_SIMPLE_05 = PATH_SAMPLE_SIMPLE_FOLDER + "Simple05.data";
+const std::string simple_sample_factory::PATH_SAMPLE_SIMPLE_06 = PATH_SAMPLE_SIMPLE_FOLDER + "Simple06.data";
+const std::string simple_sample_factory::PATH_SAMPLE_SIMPLE_07 = PATH_SAMPLE_SIMPLE_FOLDER + "Simple07.data";
+const std::string simple_sample_factory::PATH_SAMPLE_SIMPLE_08 = PATH_SAMPLE_SIMPLE_FOLDER + "Simple08.data";
+const std::string simple_sample_factory::PATH_SAMPLE_SIMPLE_09 = PATH_SAMPLE_SIMPLE_FOLDER + "Simple09.data";
+const std::string simple_sample_factory::PATH_SAMPLE_SIMPLE_10 = PATH_SAMPLE_SIMPLE_FOLDER + "Simple10.data";
+const std::string simple_sample_factory::PATH_SAMPLE_SIMPLE_11 = PATH_SAMPLE_SIMPLE_FOLDER + "Simple11.data";
+const std::string simple_sample_factory::PATH_SAMPLE_SIMPLE_12 = PATH_SAMPLE_SIMPLE_FOLDER + "Simple12.data";
 
 
 const simple_sample_factory::map_sample simple_sample_factory::m_sample_table = {

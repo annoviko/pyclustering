@@ -32,7 +32,7 @@ matplotlib.use('Agg');
 from pyclustering.cluster.ema import ema, ema_observer, ema_initializer, ema_init_type, ema_visualizer;
 from pyclustering.utils import read_sample;
 
-from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES, COMMON_SAMPLES;
+from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES, FAMOUS_SAMPLES;
 
 
 class EmaUnitTest(unittest.TestCase):
@@ -131,7 +131,7 @@ class EmaUnitTest(unittest.TestCase):
         self.templateDataClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 1, [60]);
 
     def testClusteringCommonOldFaithful(self):
-        self.templateDataClustering(COMMON_SAMPLES.SAMPLE_OLD_FAITHFUL, 2, [97, 175]);
+        self.templateDataClustering(FAMOUS_SAMPLES.SAMPLE_OLD_FAITHFUL, 2, [97, 175]);
 
     def testClusteringFcpsLsun(self):
         self.templateDataClustering(FCPS_SAMPLES.SAMPLE_LSUN, 3, [100, 101, 202]);

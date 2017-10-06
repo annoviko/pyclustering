@@ -31,38 +31,66 @@ DEFAULT_SAMPLE_PATH = samples.__path__[0] + os.sep + "samples" + os.sep;
 
 
 class SIMPLE_SAMPLES:
-    SAMPLE_SIMPLE1          = DEFAULT_SAMPLE_PATH + "SampleSimple01.txt";
-    SAMPLE_SIMPLE2          = DEFAULT_SAMPLE_PATH + "SampleSimple02.txt";
-    SAMPLE_SIMPLE3          = DEFAULT_SAMPLE_PATH + "SampleSimple03.txt";
-    SAMPLE_SIMPLE4          = DEFAULT_SAMPLE_PATH + "SampleSimple04.txt";
-    SAMPLE_SIMPLE5          = DEFAULT_SAMPLE_PATH + "SampleSimple05.txt";
-    SAMPLE_SIMPLE6          = DEFAULT_SAMPLE_PATH + "SampleSimple06.txt";
-    SAMPLE_SIMPLE7          = DEFAULT_SAMPLE_PATH + "SampleSimple07.txt";
-    SAMPLE_SIMPLE8          = DEFAULT_SAMPLE_PATH + "SampleSimple08.txt";
-    SAMPLE_SIMPLE9          = DEFAULT_SAMPLE_PATH + "SampleSimple09.txt";
-    SAMPLE_SIMPLE10         = DEFAULT_SAMPLE_PATH + "SampleSimple10.txt";
-    SAMPLE_SIMPLE11         = DEFAULT_SAMPLE_PATH + "SampleSimple11.txt";
-    SAMPLE_SIMPLE12         = DEFAULT_SAMPLE_PATH + "SampleSimple12.txt";
-    SAMPLE_ELONGATE         = DEFAULT_SAMPLE_PATH + "SampleElongate.txt";
-    SAMPLE_DENSITIES1       = DEFAULT_SAMPLE_PATH + "SampleDensities1.txt";
-    SAMPLE_DENSITIES2       = DEFAULT_SAMPLE_PATH + "SampleDensities2.txt";
+    """!
+    @brief The Simple Suite offers a variety of simple clustering problems.
+    @details The samples are supposed to use for unit-testing and common algorithm abilities to found out
+              run-time problems.
+    
+    """
+    
+    COLLECTION_PATH         = DEFAULT_SAMPLE_PATH + "simple" + os.sep;
+
+    SAMPLE_SIMPLE1          = COLLECTION_PATH + "Simple01.data";
+    SAMPLE_SIMPLE2          = COLLECTION_PATH + "Simple02.data";
+    SAMPLE_SIMPLE3          = COLLECTION_PATH + "Simple03.data";
+    SAMPLE_SIMPLE4          = COLLECTION_PATH + "Simple04.data";
+    SAMPLE_SIMPLE5          = COLLECTION_PATH + "Simple05.data";
+    SAMPLE_SIMPLE6          = COLLECTION_PATH + "Simple06.data";
+    SAMPLE_SIMPLE7          = COLLECTION_PATH + "Simple07.data";
+    SAMPLE_SIMPLE8          = COLLECTION_PATH + "Simple08.data";
+    SAMPLE_SIMPLE9          = COLLECTION_PATH + "Simple09.data";
+    SAMPLE_SIMPLE10         = COLLECTION_PATH + "Simple10.data";
+    SAMPLE_SIMPLE11         = COLLECTION_PATH + "Simple11.data";
+    SAMPLE_SIMPLE12         = COLLECTION_PATH + "Simple12.data";
+    SAMPLE_ELONGATE         = COLLECTION_PATH + "Elongate.data";
 
 
 class FCPS_SAMPLES:
-    SAMPLE_ATOM             = DEFAULT_SAMPLE_PATH + "SampleAtom.txt";
-    SAMPLE_CHAINLINK        = DEFAULT_SAMPLE_PATH + "SampleChainlink.txt";
-    SAMPLE_ENGY_TIME        = DEFAULT_SAMPLE_PATH + "SampleEngyTime.txt";
-    SAMPLE_GOLF_BALL        = DEFAULT_SAMPLE_PATH + "SampleGolfBall.txt";
-    SAMPLE_HEPTA            = DEFAULT_SAMPLE_PATH + "SampleHepta.txt";
-    SAMPLE_LSUN             = DEFAULT_SAMPLE_PATH + "SampleLsun.txt";
-    SAMPLE_TARGET           = DEFAULT_SAMPLE_PATH + "SampleTarget.txt";
-    SAMPLE_TETRA            = DEFAULT_SAMPLE_PATH + "SampleTetra.txt";
-    SAMPLE_TWO_DIAMONDS     = DEFAULT_SAMPLE_PATH + "SampleTwoDiamonds.txt";
-    SAMPLE_WING_NUT         = DEFAULT_SAMPLE_PATH + "SampleWingNut.txt";
+    """!
+    @brief The Fundamental Clustering Problems Suite (FCPS) offers a variety of clustering problems any algorithm 
+            shall be able to handle when facing real world data.
+    @details FCPS serves as an elementary benchmark for clustering algorithms. FCPS consists of data sets with known 
+              a priori classifications that are to be reproduced by the algorithm. All data sets are intentionally created 
+              to be simple and might be visualized in two or three dimensions.
+    
+    """
+
+    COLLECTION_PATH         = DEFAULT_SAMPLE_PATH + "fcps" + os.sep;
+
+    SAMPLE_ATOM             = COLLECTION_PATH + "Atom.data";
+    SAMPLE_CHAINLINK        = COLLECTION_PATH + "Chainlink.data";
+    SAMPLE_ENGY_TIME        = COLLECTION_PATH + "EngyTime.data";
+    SAMPLE_GOLF_BALL        = COLLECTION_PATH + "GolfBall.data";
+    SAMPLE_HEPTA            = COLLECTION_PATH + "Hepta.data";
+    SAMPLE_LSUN             = COLLECTION_PATH + "Lsun.data";
+    SAMPLE_TARGET           = COLLECTION_PATH + "Target.data";
+    SAMPLE_TETRA            = COLLECTION_PATH + "Tetra.data";
+    SAMPLE_TWO_DIAMONDS     = COLLECTION_PATH + "TwoDiamonds.data";
+    SAMPLE_WING_NUT         = COLLECTION_PATH + "WingNut.data";
 
 
-class COMMON_SAMPLES:
-    SAMPLE_OLD_FAITHFUL     = DEFAULT_SAMPLE_PATH + "SampleOldFaithful.txt";
+class FAMOUS_SAMPLES:
+    """!
+    @brief The famous suite offers a variety of popular dataset that are mentioned in articles, book, etc.
+    
+    """
+    COLLECTION_PATH         = DEFAULT_SAMPLE_PATH + "famous" + os.sep;
+
+    SAMPLE_OLD_FAITHFUL     = COLLECTION_PATH + "OldFaithful.data";
+    SAMPLE_IRIS             = COLLECTION_PATH + "Iris.data";
+
+    ANSWER_IRIS             = COLLECTION_PATH + "Iris.answer";
+
 
 
 class GRAPH_SIMPLE_SAMPLES:
@@ -107,20 +135,20 @@ class IMAGE_SIMPLE_SAMPLES:
     IMAGE_THIN_BLACK_LINES01        = samples.__path__[0] + os.sep + "images" + os.sep + "ImageThinBlackLines01.png";
     IMAGE_THIN_BLACK_LINES02        = samples.__path__[0] + os.sep + "images" + os.sep + "ImageThinBlackLines02.png";
     IMAGE_THIN_BLACK_LINES03        = samples.__path__[0] + os.sep + "images" + os.sep + "ImageThinBlackLines03.png";
-    
-    
+
+
 class IMAGE_MAP_SAMPLES:
     IMAGE_WHITE_SEA                 = samples.__path__[0] + os.sep + "images" + os.sep + "ImageWhiteSea.png";
     IMAGE_WHITE_SEA_SMALL           = samples.__path__[0] + os.sep + "images" + os.sep + "ImageWhiteSeaSmall.png";
     IMAGE_NILE                      = samples.__path__[0] + os.sep + "images" + os.sep + "ImageNile.png";
     IMAGE_NILE_SMALL                = samples.__path__[0] + os.sep + "images" + os.sep + "ImageNileSmall.png";
     IMAGE_BUILDINGS                 = samples.__path__[0] + os.sep + "images" + os.sep + "ImageBuildings.png";
-    
+
 
 class IMAGE_REAL_SAMPLES:
     IMAGE_FIELD_FLOWER              = samples.__path__[0] + os.sep + "images" + os.sep + "ImageFieldFlower.png";
     IMAGE_FIELD_TREE                = samples.__path__[0] + os.sep + "images" + os.sep + "ImageFieldTree.png";
-    
+
 
 class IMAGE_SYMBOL_SAMPLES:
     @staticmethod
@@ -163,8 +191,8 @@ class IMAGE_SYMBOL_SAMPLES:
     LIST_IMAGES_SYMBOL_X            = GET_LIST_IMAGE_SAMPLES.__func__('X');
     LIST_IMAGES_SYMBOL_Y            = GET_LIST_IMAGE_SAMPLES.__func__('Y');
     LIST_IMAGES_SYMBOL_Z            = GET_LIST_IMAGE_SAMPLES.__func__('Z');
-    
-    
+
+
 class IMAGE_DIGIT_SAMPLES:    
     @staticmethod
     def GET_LIST_IMAGE_SAMPLES(digit):
@@ -190,4 +218,3 @@ class IMAGE_DIGIT_SAMPLES:
     LIST_IMAGES_DIGIT_7             = GET_LIST_IMAGE_SAMPLES.__func__(7);
     LIST_IMAGES_DIGIT_8             = GET_LIST_IMAGE_SAMPLES.__func__(8);
     LIST_IMAGES_DIGIT_9             = GET_LIST_IMAGE_SAMPLES.__func__(9);
-    

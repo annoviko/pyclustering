@@ -86,6 +86,9 @@ GENERAL CHANGES (ccore):
 
 
 CORRECTED MAJOR BUGS:
+- Bug with segmentation fault during 'free()' on some linux operating systems.
+  See: no reference.
+
 - Bug with sending the first element to cluster in OPTICS even if it is noise element.
   See: no reference.
 
