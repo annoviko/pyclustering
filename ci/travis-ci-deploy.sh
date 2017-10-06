@@ -25,27 +25,15 @@ run_deploy_job() {
 
     git config credential.helper "store --file=.git/credentials"
     echo "https://${GH_TOKEN}:@github.com" > .git/credentials
-    echo ${GH_TOKEN}
-    echo $GITHUB_TOKEN
+    echo "Token = '${GH_TOKEN}'"
+    echo "Token = '$GITHUB_TOKEN'"
 
-    local remote=origin
-    if [[ $GITHUB_TOKEN ]]; then
-        remote=https://$GITHUB_TOKEN@github.com/$TRAVIS_REPO_SLUG
-    fi
-#    if [[ $TRAVIS_BRANCH != master ]]; then
-#        msg "not pushing updates to branch $TRAVIS_BRANCH"
-#        return 0
-#    fi
-    if ! git push --quiet --follow-tags "$remote" "$TRAVIS_BRANCH" > /dev/null 2>&1; then
-        echo "[DEPLOY]: Failed to push git changes"
-        return 1
-    fi
-#    echo "[DEPLOY]: Switch to branch '$TRAVIS_BRANCH'"
-#    git checkout $TRAVIS_BRANCH
+    echo "[DEPLOY]: Switch to branch '$TRAVIS_BRANCH'"
+    git checkout $TRAVIS_BRANCH
 
 
-#    echo "[DEPLOY]: Pull changes to make push clean"
-#    git pull
+    echo "[DEPLOY]: Pull changes to make push clean"
+    git pull
 
 
     echo "[DEPLOY]: Prepare changes and commit them"
