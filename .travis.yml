@@ -41,13 +41,14 @@ jobs:
       env: TITLE="Run unit-tests for CCORE."
       script: ./ci/travis-ci.sh UT_CCORE
     - stage: build and test
-      env: TITLE="Memory leak tests for CCORE."
+      env: TITLE="Run memory leak analyser (valgrind) for CCORE."
       script: ./ci/travis-ci.sh VALGRIND_CCORE
     - stage: build and test
-      env: TITLE="Unit and integration testing."
+      env: TITLE="PyClustering unit and integration testing."
       script: ./ci/travis-ci.sh TEST_PYCLUSTERING
     - stage: build and test
       env: TITLE="Build documentation."
       script: ./ci/travis-ci.sh DOCUMENTATION
     - stage: deploy
+      env: TITLE="Deploy CCORE"
       script: ./ci/travis-ci-deploy.sh
