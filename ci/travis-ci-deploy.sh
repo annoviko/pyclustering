@@ -24,8 +24,7 @@ run_deploy_job() {
     git config --global user.name "Travis-CI"
 
     git config credential.helper "store --file=.git/credentials"
-    echo "https://${GH_TOKEN}:@github.com" > .git/credentials
-    echo "Token = '${GH_TOKEN}'"
+    echo "https://${GITHUB_TOKEN}:@github.com" > .git/credentials
     echo "Token = '$GITHUB_TOKEN'"
 
     echo "[DEPLOY]: Switch to branch '$TRAVIS_BRANCH'"
@@ -51,5 +50,6 @@ run_deploy_job() {
     git push
 }
 
+GITHUB_TOKEN="CkWsTm14Emy0YneXlLuWOm8iWOlGVmYYNAdu0+oebuul34fXnhB63Fhq5aqIi6VwX8EA71ZkwcgnpQaKDzCKWL/u7IwPzu6wQcarxX6tET4rLj2dzQEFRBDmObPqSl73CnBBUxCGp4Ypc685QEZz2k3zMiGFR2zcx6TKg7TBiXivxITMy7OMR8b+il85oplBvF/Q8LL8kg8oU/KyW9BClHVeJfM0tlNKiZn4g2soiIQAIPz73xvyj/+NPVjYVrDTvtbJIa+DsZpwGEqZ4YIWXSj1SlX+XOg1LI2zO6JzK02yMKwnSCrMhwAXiLPjAOW7pNk2XqMtQVHJueo+QL30gdWh3DNR7seXkqptA/7pZsnjxl3MfRzoW673J04kkZZ/NDo384Es8xGLVeM2gjsKYgtV6fcx4RmKG9a4n7BT5skAt5HdHvAFcCfW5mLdBiSgK3K5n7j11USp++J9GKU7Qzz7Q073jnjtgGB3Rog1/uz3PJ96FyxqOUxw4pvqWJv4XiEyEuSK6JuCkUIyrtVVU5oglHgtetLO8kPlDIenj5ktE8su8BU9gAYXJ9pKSyOTewBykcfrGaUqeJ6D/Lo8N49NjhEkOAVhT1ZQ2UB41i0fn1mUeEWrv2gP1QI/MM3fVjyc01Wg7DDPfCl42i+/p8Vc2HKUUJyzOZnCbIm5goo="
 
 run_deploy_job
