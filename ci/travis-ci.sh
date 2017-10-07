@@ -173,10 +173,14 @@ install_miniconda() {
 }
 
 
+upload_binary() {
+    echo "[CI Job]: Upload binary files to storage."
+}
+
+
 set -e
 set -x
 
-exit 0
 
 case $1 in
     BUILD_CCORE) 
