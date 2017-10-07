@@ -1,11 +1,7 @@
-dist:       trusty
-language:   python
-
-
+dist: trusty
+language: python
 os:
-  - linux
-
-
+- linux
 addons:
   apt:
     sources:
@@ -14,41 +10,37 @@ addons:
     - g++-5
     - gcc-5
     - python3
-
-
 install:
-  - sudo apt-get update
-  - chmod u+x ci/travis-ci.sh
-  - chmod u+x ci/travis-ci-deploy.sh
-
-
+- sudo apt-get update
+- chmod u+x ci/travis-ci.sh
+- chmod u+x ci/travis-ci-deploy.sh
 envt:
   global:
-    secure: "CkWsTm14Emy0YneXlLuWOm8iWOlGVmYYNAdu0+oebuul34fXnhB63Fhq5aqIi6VwX8EA71ZkwcgnpQaKDzCKWL/u7IwPzu6wQcarxX6tET4rLj2dzQEFRBDmObPqSl73CnBBUxCGp4Ypc685QEZz2k3zMiGFR2zcx6TKg7TBiXivxITMy7OMR8b+il85oplBvF/Q8LL8kg8oU/KyW9BClHVeJfM0tlNKiZn4g2soiIQAIPz73xvyj/+NPVjYVrDTvtbJIa+DsZpwGEqZ4YIWXSj1SlX+XOg1LI2zO6JzK02yMKwnSCrMhwAXiLPjAOW7pNk2XqMtQVHJueo+QL30gdWh3DNR7seXkqptA/7pZsnjxl3MfRzoW673J04kkZZ/NDo384Es8xGLVeM2gjsKYgtV6fcx4RmKG9a4n7BT5skAt5HdHvAFcCfW5mLdBiSgK3K5n7j11USp++J9GKU7Qzz7Q073jnjtgGB3Rog1/uz3PJ96FyxqOUxw4pvqWJv4XiEyEuSK6JuCkUIyrtVVU5oglHgtetLO8kPlDIenj5ktE8su8BU9gAYXJ9pKSyOTewBykcfrGaUqeJ6D/Lo8N49NjhEkOAVhT1ZQ2UB41i0fn1mUeEWrv2gP1QI/MM3fVjyc01Wg7DDPfCl42i+/p8Vc2HKUUJyzOZnCbIm5goo="
-
+    secure: "wfln46zny1pbK12ZkicS/t/Fv/xDUiuwYF52uKWwoNJTDaTZ2nJlw7nr6kmSc/MoGBNvdsse2oSRqvWakOvsY+m3urNCqkzsaLILiumGsAy8zZOfEHrAXQJRmyvxdk+EQB3NJwVU41TYOAlmIKV85Dja1cnoDTfUt0gPFdgUCslZPvNFZT7jgiKnycjaveJjAdClENL0EHesqLh46Nml2UFoZRjRnMooqfxKNxdlStkzozHG9mrf7+sJSDWD0iByhaEK1RiIv7AJ7DS4gGNekoUET07EdvE9kg9Qq8O9T+9kOefYQf+1erg94cSbCV6ht2OmzlUDAlsZ7Gco4/PtgqNlWIShHlEuHsjfqz5dmyAHZsX+ICsaNTGqWnUVci/Eq09U80q2SSes2RbYvtmR9Be4X8FQ8effDrrTU9t4tpHB8/qnZj9nTjIZMH6yyprKSz+hDnNjuvYAx0LyBES/mGOKZx1LXhdZViknokwvquDtExL3dIXJDpnlr0z/nCmTdZMr8A4H09YvWnYVus2sWXbA8xO/yAenA719MTDcd4DiPzgZNtRNbWmW6M1M9UapVP8a/bSB5gMmfsLZtz34jTHO0TOKmPuANmepydurwniSh3S/0SoR8AR0/7M3RbDiODcttH9TY868UVPKj/oAe36VOEZuIYeIFU0Sv5z/Hz8="
 
 stages:
-  - build and test
-  - deploy
-
-
+- build and test
+- deploy
 jobs:
   include:
-    - stage: build and test
-      env: TITLE="Build CCORE."
-      script: ./ci/travis-ci.sh BUILD_CCORE
-    - stage: build and test
-      env: TITLE="Run unit-tests for CCORE."
-      script: ./ci/travis-ci.sh UT_CCORE
-    - stage: build and test
-      env: TITLE="Run memory leak analyser (valgrind) for CCORE."
-      script: ./ci/travis-ci.sh VALGRIND_CCORE
-    - stage: build and test
-      env: TITLE="PyClustering unit and integration testing."
-      script: ./ci/travis-ci.sh TEST_PYCLUSTERING
-    - stage: build and test
-      env: TITLE="Build documentation."
-      script: ./ci/travis-ci.sh DOCUMENTATION
-    - stage: deploy
-      env: TITLE="Deploy CCORE"
-      script: ./ci/travis-ci-deploy.sh
+  - stage: build and test
+    env: TITLE="Build CCORE."
+    script: ./ci/travis-ci.sh BUILD_CCORE
+  - stage: build and test
+    env: TITLE="Run unit-tests for CCORE."
+    script: ./ci/travis-ci.sh UT_CCORE
+  - stage: build and test
+    env: TITLE="Run memory leak analyser (valgrind) for CCORE."
+    script: ./ci/travis-ci.sh VALGRIND_CCORE
+  - stage: build and test
+    env: TITLE="PyClustering unit and integration testing."
+    script: ./ci/travis-ci.sh TEST_PYCLUSTERING
+  - stage: build and test
+    env: TITLE="Build documentation."
+    script: ./ci/travis-ci.sh DOCUMENTATION
+  - stage: deploy
+    env: TITLE="Deploy CCORE"
+    script: ./ci/travis-ci-deploy.sh
+env:
+  global:
+    secure: iQSqyFNKZVjJlSZJmch8IcrOGeqbVkcTNgZZOqD9K3izdSiZTd3lJCl8H0hhdyPrqw95qF+ugplgfhgDjkvLjtABo51hKqE8/clriR2lQYDcLirqvWTv9FI5To66N4LPK0eBbxujus8SyTsCIPyviMksRzkuvdzP7pfCHndQSb905gjUV1QfpX8yay8c9dgpUvWNcCIbr9k5z1XV8LZx/oNhSlV1X11kqkgoFDFg2DVR0GfDGMIzF2xKLJsQZnsUazTiqtcm9W3TjHtoJot/87JQe/QGKbYmz9IuepETdRrcp5Wslimf/VesLcQwfoAJUwKwA0ru6zC22WFVcI1ngx6UmrScNDhQ7yG5AQ++kf17/rkXHZ0zNncGl1ZSCp8GNZYvNHsxmfyYBk+AQIBYm6fVnGxRNF0FZxM/ywd6wkGUrU2EE3dDIop72zZo4NT/pWHUxZ+DUmW3Xg/asZ/e6MuE4FbGpO4sWPM6BH7T1NeCX8wILaqbmf9HQmywc/zSNon736MPVBkS7nbkGNBc+Xf9GuZq3rFMuMEvlsfjUItxXMyHVl2khB3wI6lAvL5TPMZ1yD3/jim1yQjnohyU3oIagUkI5GlOfjqYRTJ6tHMfnlkeNWtr5+0/mlmhiERpItPEBIXC+Qe28LvzW00Nv9TvIAFQyfwihT+wFai9noc=
