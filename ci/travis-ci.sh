@@ -176,6 +176,7 @@ install_miniconda() {
 set -e
 set -x
 
+exit 0
 
 case $1 in
     BUILD_CCORE) 
