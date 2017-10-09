@@ -186,7 +186,7 @@ upload_binary() {
 
     # Obtain link for uploading
     BINARY_FILENAME=ccore.so
-    UPLOAD_LINK=`curl -s -H "Authorization: OAuth $YANDEX_DISK_TOKEN" -X GET https://cloud-api.yandex.net:443/v1/disk/resources/upload?path=625%2F$BINARY_FILENAME |\
+    UPLOAD_LINK=`curl -s -H "Authorization: OAuth $YANDEX_DISK_TOKEN" -X GET https://cloud-api.yandex.net:443/v1/disk/resources/upload?path=$BINARY_FOLDER%2F$BINARY_FILENAME |\
         python3 -c "import sys, json; print(json.load(sys.stdin)['href'])"`
 
     curl -H "Authorization: OAuth $YANDEX_DISK_TOKEN" -X PUT $UPLOAD_LINK --upload-file $CCORE_X64_BINARY_PATH
