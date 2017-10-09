@@ -4,8 +4,8 @@ run_deploy_job() {
     git config --global user.email "pyclustering@yandex.ru"
     git config --global user.name "Travis-CI"
 
-	git config credential.helper "store --file=.git/credentials"
-  	echo "https://${GH_TOKEN}:@github.com" > .git/credentials
+    git config credential.helper "store --file=.git/credentials"
+    echo "https://${GH_TOKEN}:@github.com" > .git/credentials
     git config credential.helper "store --file=.git/credentials"
 
 
