@@ -22,6 +22,12 @@ install:
 - chmod u+x ci/travis-ci-deploy.sh
 
 
+env:
+  global:
+    - secure: "wfln46zny1pbK12ZkicS/t/Fv/xDUiuwYF52uKWwoNJTDaTZ2nJlw7nr6kmSc/MoGBNvdsse2oSRqvWakOvsY+m3urNCqkzsaLILiumGsAy8zZOfEHrAXQJRmyvxdk+EQB3NJwVU41TYOAlmIKV85Dja1cnoDTfUt0gPFdgUCslZPvNFZT7jgiKnycjaveJjAdClENL0EHesqLh46Nml2UFoZRjRnMooqfxKNxdlStkzozHG9mrf7+sJSDWD0iByhaEK1RiIv7AJ7DS4gGNekoUET07EdvE9kg9Qq8O9T+9kOefYQf+1erg94cSbCV6ht2OmzlUDAlsZ7Gco4/PtgqNlWIShHlEuHsjfqz5dmyAHZsX+ICsaNTGqWnUVci/Eq09U80q2SSes2RbYvtmR9Be4X8FQ8effDrrTU9t4tpHB8/qnZj9nTjIZMH6yyprKSz+hDnNjuvYAx0LyBES/mGOKZx1LXhdZViknokwvquDtExL3dIXJDpnlr0z/nCmTdZMr8A4H09YvWnYVus2sWXbA8xO/yAenA719MTDcd4DiPzgZNtRNbWmW6M1M9UapVP8a/bSB5gMmfsLZtz34jTHO0TOKmPuANmepydurwniSh3S/0SoR8AR0/7M3RbDiODcttH9TY868UVPKj/oAe36VOEZuIYeIFU0Sv5z/Hz8="
+    - secure: "MlG1NaREINYp2vPAyOZNpN3KsbczdJwAdpzHmHmPNfxG14eEZSbEeLmVNfZm9rfOE12IKUsfQn0tLEfpQJA5AAuDr5pG+0HuWC9Kx4VZUQID+H5V9t5C3KxfPl4ESfEnsKbXWOAqnyhL+G7KqUhHLt7KCxk3/UCC//whum9SjrpjBQqx19fb48k8ylqN5Etwk3VtHPlKEHiD3FErfsLXp/F87ZDTGenl/GYFFFajHZT9SXWxOavoaeJRsP+f3vbKC6Sd/tsKyuJ9i9bQV91EOEf1QhInfNBCVoFZpGt1nAQglcnbpj7hvsWeI1ajm/GNUYIddDhwPWaibgBnu3Kw2AiKxHZKHsFu3uQ0aN8TjPGvFH9xrcCkwP/x66KIR01VQjeVvp8MPtttZm4PZChWnD8ydBooYCVTh78rIlm4LCOpKXVWSKBYFBRhecS1bxwQFtlHIiQzuJbFMVLJNMkknNeikIdMlHOSsioOU63bjH/maL0vtfIhuqCAAe1MA/KI/C9+mqTZUqDhOwSs91zkhwxyW+FZCRDlKr8LVREJnP0Tecn45Jr2yXGPTOWGPf912J5GEb2ttTy3Q/HYKyBIcfDv7NAijNQjjVuwxYpH9evQceoTaR/hmpxMYp5NiTKGSZjB1lNdMXYAzpIx+j3QGB1PHplOzYv5spTrTMncNuA="
+
+
 stages:
 - build and test
 - deploy
@@ -31,7 +37,6 @@ jobs:
   include:
   - stage: build and test
     env: TITLE="Build CCORE."
-    secure: "MlG1NaREINYp2vPAyOZNpN3KsbczdJwAdpzHmHmPNfxG14eEZSbEeLmVNfZm9rfOE12IKUsfQn0tLEfpQJA5AAuDr5pG+0HuWC9Kx4VZUQID+H5V9t5C3KxfPl4ESfEnsKbXWOAqnyhL+G7KqUhHLt7KCxk3/UCC//whum9SjrpjBQqx19fb48k8ylqN5Etwk3VtHPlKEHiD3FErfsLXp/F87ZDTGenl/GYFFFajHZT9SXWxOavoaeJRsP+f3vbKC6Sd/tsKyuJ9i9bQV91EOEf1QhInfNBCVoFZpGt1nAQglcnbpj7hvsWeI1ajm/GNUYIddDhwPWaibgBnu3Kw2AiKxHZKHsFu3uQ0aN8TjPGvFH9xrcCkwP/x66KIR01VQjeVvp8MPtttZm4PZChWnD8ydBooYCVTh78rIlm4LCOpKXVWSKBYFBRhecS1bxwQFtlHIiQzuJbFMVLJNMkknNeikIdMlHOSsioOU63bjH/maL0vtfIhuqCAAe1MA/KI/C9+mqTZUqDhOwSs91zkhwxyW+FZCRDlKr8LVREJnP0Tecn45Jr2yXGPTOWGPf912J5GEb2ttTy3Q/HYKyBIcfDv7NAijNQjjVuwxYpH9evQceoTaR/hmpxMYp5NiTKGSZjB1lNdMXYAzpIx+j3QGB1PHplOzYv5spTrTMncNuA="
     script: ./ci/travis-ci.sh BUILD_CCORE
   - stage: build and test
     env: TITLE="Run unit-tests for CCORE."
@@ -47,6 +52,5 @@ jobs:
     script: ./ci/travis-ci.sh DOCUMENTATION
   - stage: deploy
     env: TITLE="Deploy CCORE"
-    secure: "wfln46zny1pbK12ZkicS/t/Fv/xDUiuwYF52uKWwoNJTDaTZ2nJlw7nr6kmSc/MoGBNvdsse2oSRqvWakOvsY+m3urNCqkzsaLILiumGsAy8zZOfEHrAXQJRmyvxdk+EQB3NJwVU41TYOAlmIKV85Dja1cnoDTfUt0gPFdgUCslZPvNFZT7jgiKnycjaveJjAdClENL0EHesqLh46Nml2UFoZRjRnMooqfxKNxdlStkzozHG9mrf7+sJSDWD0iByhaEK1RiIv7AJ7DS4gGNekoUET07EdvE9kg9Qq8O9T+9kOefYQf+1erg94cSbCV6ht2OmzlUDAlsZ7Gco4/PtgqNlWIShHlEuHsjfqz5dmyAHZsX+ICsaNTGqWnUVci/Eq09U80q2SSes2RbYvtmR9Be4X8FQ8effDrrTU9t4tpHB8/qnZj9nTjIZMH6yyprKSz+hDnNjuvYAx0LyBES/mGOKZx1LXhdZViknokwvquDtExL3dIXJDpnlr0z/nCmTdZMr8A4H09YvWnYVus2sWXbA8xO/yAenA719MTDcd4DiPzgZNtRNbWmW6M1M9UapVP8a/bSB5gMmfsLZtz34jTHO0TOKmPuANmepydurwniSh3S/0SoR8AR0/7M3RbDiODcttH9TY868UVPKj/oAe36VOEZuIYeIFU0Sv5z/Hz8="
     script: ./ci/travis-ci-deploy.sh
 
