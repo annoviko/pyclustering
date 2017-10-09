@@ -26,9 +26,6 @@ run_build_ccore_job() {
 
     # return back (keep current folder)
     cd ../
-
-    # upload binary to storage
-    upload_binary
 }
 
 
@@ -121,7 +118,7 @@ run_integration_test_job() {
     install_miniconda $PYTHON_VERSION
 
     # build ccore library
-    run_build_ccore_job
+    run_build_ccore_job no-upload
 
     # run integration tests
     python pyclustering/tests/tests_runner.py --integration
@@ -199,7 +196,8 @@ set -x
 
 case $1 in
     BUILD_CCORE) 
-        run_build_ccore_job ;;
+        run_build_ccore_job
+        upload_binary ;;
 
     UT_CCORE) 
         run_ut_ccore_job ;;
@@ -217,6 +215,6 @@ case $1 in
         run_doxygen_job ;;
 
     *)
-        echo "[CI Job] Unknown target $1"
+        echo "[CI Job] Unknown target '$1'"
         exit 1 ;;
 esac
