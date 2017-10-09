@@ -24,11 +24,11 @@ run_build_ccore_job() {
         exit 1
     fi
 
-    # upload binary to storage
-    upload_binary
-
     # return back (keep current folder)
     cd ../
+
+    # upload binary to storage
+    upload_binary
 }
 
 
