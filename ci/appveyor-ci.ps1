@@ -1,4 +1,4 @@
-$env:CCORE_X64_BINARY_PATH=pyclustering\core\x64\win\ccore.dll
+$env:CCORE_X64_BINARY_PATH = "pyclustering\core\x64\win\ccore.dll"
 
 
 function job_build_windows_ccore() {
@@ -154,33 +154,33 @@ function download_binary() {
     echo "[DEPLOY]: Download binary file"
 
     # Obtain link for download
-    $env:BUILD_FOLDER=windows
+    $env:BUILD_FOLDER="windows"
     $env:BINARY_FOLDER=$env:APPVEYOR_BUILD_NUMBER;
     $env:BINARY_FILEPATH="$env:APPVEYOR_REPO_BRANCH%2F$env:APPVEYOR_REPO_BRANCH%2F$env:BINARY_FOLDER%2Fccore.dll"
 
-    $env:DOWNLOAD_LINK=curl -s -H "Authorization: OAuth $env:YANDEX_DISK_TOKEN" -X GET "https://cloud-api.yandex.net:443/v1/disk/resources/download?path=$env:BINARY_FILEPATH" | & $env:PYTHON_INTERPRETER -c "import sys, json; print(json.load(sys.stdin)['href'])"
+    $env:DOWNLOAD_LINK=curl.exe -s -H "Authorization: OAuth $env:YANDEX_DISK_TOKEN" -X GET "https://cloud-api.yandex.net:443/v1/disk/resources/download?path=$env:BINARY_FILEPATH" | & $env:PYTHON_INTERPRETER -c "import sys, json; print(json.load(sys.stdin)['href'])"
 
     # Download binary
-    curl -s -H "Authorization: OAuth $env:YANDEX_DISK_TOKEN" -X GET $env:DOWNLOAD_LINK > pyclustering\core\x64\win\ccore.dll
+    curl.exe -s -H "Authorization: OAuth $env:YANDEX_DISK_TOKEN" -X GET $env:DOWNLOAD_LINK > pyclustering\core\x64\win\ccore.dll
 }
 
 
 function upload_binary() {
     echo "[CI Job]: Upload binary files to storage.";
 
-    $env:BUILD_FOLDER=windows;
+    $env:BUILD_FOLDER="windows";
     $env:BINARY_FOLDER=$env:APPVEYOR_BUILD_NUMBER;
 
     # Create folder for uploaded binary file
-    curl -H "Authorization: OAuth $env:YANDEX_DISK_TOKEN" -X PUT "https://cloud-api.yandex.net:443/v1/disk/resources?path=$env:APPVEYOR_REPO_BRANCH";
-    curl -H "Authorization: OAuth $env:YANDEX_DISK_TOKEN" -X PUT "https://cloud-api.yandex.net:443/v1/disk/resources?path=$env:APPVEYOR_REPO_BRANCH%2F$env:BUILD_FOLDER";
-    curl -H "Authorization: OAuth $env:YANDEX_DISK_TOKEN" -X PUT "https://cloud-api.yandex.net:443/v1/disk/resources?path=$env:APPVEYOR_REPO_BRANCH%2F$env:BUILD_FOLDER%2F$env:BINARY_FOLDER";
+    curl.exe -H "Authorization: OAuth $env:YANDEX_DISK_TOKEN" -X PUT "https://cloud-api.yandex.net:443/v1/disk/resources?path=$env:APPVEYOR_REPO_BRANCH";
+    curl.exe -H "Authorization: OAuth $env:YANDEX_DISK_TOKEN" -X PUT "https://cloud-api.yandex.net:443/v1/disk/resources?path=$env:APPVEYOR_REPO_BRANCH%2F$env:BUILD_FOLDER";
+    curl.exe -H "Authorization: OAuth $env:YANDEX_DISK_TOKEN" -X PUT "https://cloud-api.yandex.net:443/v1/disk/resources?path=$env:APPVEYOR_REPO_BRANCH%2F$env:BUILD_FOLDER%2F$env:BINARY_FOLDER";
 
     # Obtain link for uploading
     $env:BINARY_FILEPATH="$env:APPVEYOR_REPO_BRANCH%2F$env:APPVEYOR_REPO_BRANCH%2F$env:BINARY_FOLDER%2Fccore.dll"
-    $env:UPLOAD_LINK=`curl -s -H "Authorization: OAuth $env:YANDEX_DISK_TOKEN" -X GET https://cloud-api.yandex.net:443/v1/disk/resources/upload?path=$env:BINARY_FILEPATH | python3 -c "import sys, json; print(json.load(sys.stdin)['href'])"`
+    $env:UPLOAD_LINK=curl.exe -s -H "Authorization: OAuth $env:YANDEX_DISK_TOKEN" -X GET https://cloud-api.yandex.net:443/v1/disk/resources/upload?path=$env:BINARY_FILEPATH | & $env:PYTHON_INTERPRETER -c "import sys, json; print(json.load(sys.stdin)['href'])"
 
-    curl -H "Authorization: OAuth $env:YANDEX_DISK_TOKEN" -X PUT $env:UPLOAD_LINK --upload-file $env:CCORE_X64_BINARY_PATH
+    curl.exe -H "Authorization: OAuth $env:YANDEX_DISK_TOKEN" -X PUT $env:UPLOAD_LINK --upload-file $env:CCORE_X64_BINARY_PATH
 }
 
 
