@@ -47,10 +47,8 @@ download_binary() {
     DOWNLOAD_LINK=`curl -s -H "Authorization: OAuth $YANDEX_DISK_TOKEN" -X GET https://cloud-api.yandex.net:443/v1/disk/resources/download?path=$BUILD_FOLDER%2F$BINARY_FOLDER%2F$BINARY_FILENAME |\
         python3 -c "import sys, json; print(json.load(sys.stdin)['href'])"`
 
-    curl -H "Authorization: OAuth $YANDEX_DISK_TOKEN" -o $DOWNLOAD_LINK
-
-    # Copy to binary folder
-    mv ccore.so pyclustering/core/x64/linux/ccore.so
+    # Download binary
+    curl -s -H "Authorization: OAuth $YANDEX_DISK_TOKEN" -X GET $DOWNLOAD_LINK > pyclustering/core/x64/linux/ccore.so
 }
 
 
