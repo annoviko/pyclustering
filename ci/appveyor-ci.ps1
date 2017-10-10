@@ -139,8 +139,8 @@ function install_miniconda() {
     conda create -q -n test-environment python=3.4 numpy scipy matplotlib Pillow;
     
     echo "Activating environment for powershell manually."
-    $env:PYTHON_INTERPRETER="$env:MINICONDA_PATH\envs\test-environment\python.exe";
-    $env:PYTHONPATH="$env:MINICONDA_PATH\envs\test-environment"
+    $env:PYTHON_INTERPRETER = "$env:MINICONDA_PATH\envs\test-environment\python.exe";
+    $env:PYTHONPATH = "$env:MINICONDA_PATH\envs\test-environment"
     
     echo "Miniconda environment information after installation of miniconda:";
     conda info -a;
@@ -154,11 +154,12 @@ function download_binary() {
     echo "[DEPLOY]: Download binary file"
 
     # Obtain link for download
-    $env:BUILD_FOLDER="windows"
-    $env:BINARY_FOLDER=$env:APPVEYOR_BUILD_NUMBER;
-    $env:BINARY_FILEPATH="$env:APPVEYOR_REPO_BRANCH%2F$env:APPVEYOR_REPO_BRANCH%2F$env:BINARY_FOLDER%2Fccore.dll"
+    $env:BUILD_FOLDER = "windows"
+    $env:BINARY_FOLDER = $env:APPVEYOR_BUILD_NUMBER;
+    $env:BINARY_FILEPATH = "$env:APPVEYOR_REPO_BRANCH%2F$env:APPVEYOR_REPO_BRANCH%2F$env:BINARY_FOLDER%2Fccore.dll"
 
-    $env:DOWNLOAD_LINK=curl.exe -s -H "Authorization: OAuth $env:YANDEX_DISK_TOKEN" -X GET "https://cloud-api.yandex.net:443/v1/disk/resources/download?path=$env:BINARY_FILEPATH" | & $env:PYTHON_INTERPRETER -c "import sys, json; print(json.load(sys.stdin)['href'])"
+    $env:RESPONSE = curl.exe -s -H "Authorization: OAuth $env:YANDEX_DISK_TOKEN" -X GET "https://cloud-api.yandex.net:443/v1/disk/resources/download?path=$env:BINARY_FILEPATH" | ConvertFrom-Json
+    $env:DOWNLOAD_LINK = $env:RESPONSE.href;
 
     # Download binary
     curl.exe -s -H "Authorization: OAuth $env:YANDEX_DISK_TOKEN" -X GET $env:DOWNLOAD_LINK > pyclustering\core\x64\win\ccore.dll
@@ -168,8 +169,8 @@ function download_binary() {
 function upload_binary() {
     echo "[CI Job]: Upload binary files to storage.";
 
-    $env:BUILD_FOLDER="windows";
-    $env:BINARY_FOLDER=$env:APPVEYOR_BUILD_NUMBER;
+    $env:BUILD_FOLDER = "windows";
+    $env:BINARY_FOLDER = $env:APPVEYOR_BUILD_NUMBER;
 
     # Create folder for uploaded binary file
     curl.exe -H "Authorization: OAuth $env:YANDEX_DISK_TOKEN" -X PUT "https://cloud-api.yandex.net:443/v1/disk/resources?path=$env:APPVEYOR_REPO_BRANCH";
@@ -177,8 +178,9 @@ function upload_binary() {
     curl.exe -H "Authorization: OAuth $env:YANDEX_DISK_TOKEN" -X PUT "https://cloud-api.yandex.net:443/v1/disk/resources?path=$env:APPVEYOR_REPO_BRANCH%2F$env:BUILD_FOLDER%2F$env:BINARY_FOLDER";
 
     # Obtain link for uploading
-    $env:BINARY_FILEPATH="$env:APPVEYOR_REPO_BRANCH%2F$env:APPVEYOR_REPO_BRANCH%2F$env:BINARY_FOLDER%2Fccore.dll"
-    $env:UPLOAD_LINK=curl.exe -s -H "Authorization: OAuth $env:YANDEX_DISK_TOKEN" -X GET https://cloud-api.yandex.net:443/v1/disk/resources/upload?path=$env:BINARY_FILEPATH | & $env:PYTHON_INTERPRETER -c "import sys, json; print(json.load(sys.stdin)['href'])"
+    $env:BINARY_FILEPATH = "$env:APPVEYOR_REPO_BRANCH%2F$env:APPVEYOR_REPO_BRANCH%2F$env:BINARY_FOLDER%2Fccore.dll"
+    $env:RESPONSE = curl.exe -s -H "Authorization: OAuth $env:YANDEX_DISK_TOKEN" -X GET https://cloud-api.yandex.net:443/v1/disk/resources/upload?path=$env:BINARY_FILEPATH | ConvertFrom-Json
+    $env:UPLOAD_LINK = $env:RESPONSE.href;
 
     curl.exe -H "Authorization: OAuth $env:YANDEX_DISK_TOKEN" -X PUT $env:UPLOAD_LINK --upload-file $env:CCORE_X64_BINARY_PATH
 }
