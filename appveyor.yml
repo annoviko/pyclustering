@@ -16,12 +16,17 @@ environment:
   PYTHON_VERSION: 3.4
   CYGWIN_PATH: C:\cygwin64\bin\bash
   MINICONDA_PATH: C:\Miniconda3-x64
+  GITHUB_TOKEN:
+    secure: gzN7IIwlku2+7LB0SO+41zfT04Iir7WgCypBx/lwniP5JbxFl4dtjjMN/jj7sQZ1
+  YANDEX_DISK_TOKEN:
+    secure: R//j8C73CXwMBOyzobmPYGMUz/uPo9QyQrYXpJyvPIR5EeaX7f054/z1uddYdYux
   matrix:
   - CI_JOB: "BUILD_WINDOWS_CCORE"
   - CI_JOB: "UT_WINDOWS_CCORE"
   - CI_JOB: "BUILD_CYGWIN_CCORE"
   - CI_JOB: "UT_CYGWIN_CCORE"
   - CI_JOB: "PYCLUSTERING_WINDOWS"
+  - CI_JOB: "DEPLOY"
 
 
 build_script:

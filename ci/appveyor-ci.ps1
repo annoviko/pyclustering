@@ -1,3 +1,6 @@
+$env:CCORE_X64_BINARY_PATH=pyclustering\core\x64\win\ccore.dll
+
+
 function job_build_windows_ccore() {
     echo "[CI Job] CCORE building using Visual Studio on Windows platform.";
 
@@ -88,6 +91,44 @@ function job_pyclustering_cygwin() {
 }
 
 
+function job_deploy() {
+    echo "[DEPLOY]: Deploy (upload windows binary file to github)";
+    
+    git config --global user.email "pyclustering@yandex.ru";
+    git config --global user.name "AppVeyor";
+
+    git config credential.helper "store --file=.git\credentials";
+    echo "https://$env:GITHUB_TOKEN:@github.com" > .git\credentials;
+    git config credential.helper "store --file=.git\credentials";
+
+
+    echo "[DEPLOY]: Prepare copy for pushing (reset, checkout, pull)";
+    git reset --hard;
+    git checkout $env:APPVEYOR_REPO_BRANCH;
+    git pull;
+
+
+    echo "[DEPLOY]: Prepare binary folder";
+    mkdir pyclustering\core\x64\win;
+
+    download_binary;
+
+    echo "[DEPLOY]: Add changes for commit";
+    echo "windows ccore x64 build version: '$env:APPVEYOR_BUILD_NUMBER'" > pyclustering\core\x64\win\.win.info;
+    git add pyclustering\core\x64\win\.win.info;
+    git add pyclustering\core\x64\win\ccore.dll;
+
+
+    echo "[DEPLOY]: Display status and changes";
+    git status;
+
+
+    echo "[DEPLOY]: Push changes to github repository";
+    git commit . -m "[appveyor][ci skip] push new ccore version '$env:APPVEYOR_BUILD_NUMBER'";
+    git push;
+}
+
+
 function install_miniconda() {
     $env:PATH="$env:PATH;$env:MINICONDA_PATH\Scripts";
     
@@ -109,9 +150,46 @@ function install_miniconda() {
 }
 
 
+function download_binary() {
+    echo "[DEPLOY]: Download binary file"
+
+    # Obtain link for download
+    $env:BUILD_FOLDER=windows
+    $env:BINARY_FOLDER=$env:APPVEYOR_BUILD_NUMBER;
+    $env:BINARY_FILEPATH=$env:APPVEYOR_REPO_BRANCH%2F$env:APPVEYOR_REPO_BRANCH%2F$env:BINARY_FOLDER%2Fccore.dll
+
+    $env:DOWNLOAD_LINK=`curl -s -H "Authorization: OAuth $env:YANDEX_DISK_TOKEN" -X GET https://cloud-api.yandex.net:443/v1/disk/resources/download?path=$env:BINARY_FILEPATH |\
+        python3 -c "import sys, json; print(json.load(sys.stdin)['href'])"`
+
+    # Download binary
+    curl -s -H "Authorization: OAuth $env:YANDEX_DISK_TOKEN" -X GET $env:DOWNLOAD_LINK > pyclustering\core\x64\win\ccore.dll
+}
+
+
+function upload_binary() {
+    echo "[CI Job]: Upload binary files to storage.";
+
+    $env:BUILD_FOLDER=windows;
+    $env:BINARY_FOLDER=$env:APPVEYOR_BUILD_NUMBER;
+
+    # Create folder for uploaded binary file
+    curl -H "Authorization: OAuth $env:YANDEX_DISK_TOKEN" -X PUT https://cloud-api.yandex.net:443/v1/disk/resources?path=$env:APPVEYOR_REPO_BRANCH;
+    curl -H "Authorization: OAuth $env:YANDEX_DISK_TOKEN" -X PUT https://cloud-api.yandex.net:443/v1/disk/resources?path=$env:APPVEYOR_REPO_BRANCH%2F$env:BUILD_FOLDER;
+    curl -H "Authorization: OAuth $env:YANDEX_DISK_TOKEN" -X PUT https://cloud-api.yandex.net:443/v1/disk/resources?path=$env:APPVEYOR_REPO_BRANCH%2F$env:BUILD_FOLDER%2F$env:BINARY_FOLDER;
+
+    # Obtain link for uploading
+    $env:BINARY_FILEPATH=$env:APPVEYOR_REPO_BRANCH%2F$env:APPVEYOR_REPO_BRANCH%2F$env:BINARY_FOLDER%2Fccore.dll
+    $env:UPLOAD_LINK=`curl -s -H "Authorization: OAuth $env:YANDEX_DISK_TOKEN" -X GET https://cloud-api.yandex.net:443/v1/disk/resources/upload?path=$env:BINARY_FILEPATH |\
+        python3 -c "import sys, json; print(json.load(sys.stdin)['href'])"`
+
+    curl -H "Authorization: OAuth $env:YANDEX_DISK_TOKEN" -X PUT $env:UPLOAD_LINK --upload-file $env:CCORE_X64_BINARY_PATH
+}
+
+
 switch ($env:CI_JOB) {
     "BUILD_WINDOWS_CCORE" {
         job_build_windows_ccore;
+        upload_binary;
         break; 
     }
     "UT_WINDOWS_CCORE" {
@@ -132,6 +210,10 @@ switch ($env:CI_JOB) {
     }
     "PYCLUSTERING_CYGWIN" {
         job_pyclustering_cygwin;
+        break;
+    }
+    "DEPLOY" {
+        job_deploy;
         break;
     }
     default {
