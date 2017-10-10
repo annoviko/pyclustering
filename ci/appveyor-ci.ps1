@@ -156,7 +156,7 @@ function download_binary() {
     # Obtain link for download
     $env:BUILD_FOLDER = "windows"
     $env:BINARY_FOLDER = $env:APPVEYOR_BUILD_NUMBER;
-    $env:BINARY_FILEPATH = "$env:APPVEYOR_REPO_BRANCH%2F$env:APPVEYOR_REPO_BRANCH%2F$env:BINARY_FOLDER%2Fccore.dll"
+    $env:BINARY_FILEPATH = "$env:APPVEYOR_REPO_BRANCH%2F$env:BUILD_FOLDER%2F$env:BINARY_FOLDER%2Fccore.dll"
 
     $env:RESPONSE = curl.exe -s -H "Authorization: OAuth $env:YANDEX_DISK_TOKEN" -X GET "https://cloud-api.yandex.net:443/v1/disk/resources/download?path=$env:BINARY_FILEPATH" | ConvertFrom-Json
     $env:DOWNLOAD_LINK = $env:RESPONSE.href;
@@ -178,7 +178,7 @@ function upload_binary() {
     curl.exe -H "Authorization: OAuth $env:YANDEX_DISK_TOKEN" -X PUT "https://cloud-api.yandex.net:443/v1/disk/resources?path=$env:APPVEYOR_REPO_BRANCH%2F$env:BUILD_FOLDER%2F$env:BINARY_FOLDER";
 
     # Obtain link for uploading
-    $env:BINARY_FILEPATH = "$env:APPVEYOR_REPO_BRANCH%2F$env:APPVEYOR_REPO_BRANCH%2F$env:BINARY_FOLDER%2Fccore.dll"
+    $env:BINARY_FILEPATH = "$env:APPVEYOR_REPO_BRANCH%2F$env:BUILD_FOLDER%2F$env:BINARY_FOLDER%2Fccore.dll"
     $env:RESPONSE = curl.exe -s -H "Authorization: OAuth $env:YANDEX_DISK_TOKEN" -X GET https://cloud-api.yandex.net:443/v1/disk/resources/upload?path=$env:BINARY_FILEPATH | ConvertFrom-Json
     $env:UPLOAD_LINK = $env:RESPONSE.href;
 
