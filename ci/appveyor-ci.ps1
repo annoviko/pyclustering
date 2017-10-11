@@ -1,5 +1,8 @@
 $env:CCORE_X64_BINARY_PATH = "pyclustering\core\x64\win\ccore.dll"
 
+$env:RESULT_SUCCESS = "Success";
+$env:RESULT_FAILURE = "Failure";
+
 
 function job_build_windows_ccore() {
     echo "[CI Job] CCORE building using Visual Studio on Windows platform.";
@@ -7,6 +10,7 @@ function job_build_windows_ccore() {
     msbuild ccore\ccore.sln /t:ccore:Rebuild /p:configuration=Release;
     if ($LastExitCode -ne 0) {
         echo "Building CCORE library for WINDOWS platform: FAILURE.";
+        $env:TESTING_RESULT = $env:RESULT_FAILURE;
         exit 1;
     }
     
@@ -29,6 +33,7 @@ function job_ut_windows_ccore() {
     .\utcore.exe;
     if ($LastExitCode -ne 0) {
         echo "Unit-testing CCORE library for WINDOWS platform: FAILURE.";
+        $env:TESTING_RESULT = $env:RESULT_FAILURE;
         exit 1;
     }
     
@@ -43,6 +48,7 @@ function job_build_cygwin_ccore() {
     & $env:CYGWIN_PATH -lc "cd '$env:APPVEYOR_BUILD_FOLDER'; cd ccore; make ccore";
     if ($LastExitCode -ne 0) {
         echo "Building CCORE library for CYGWIN platform: FAILURE.";
+        $env:TESTING_RESULT = $env:RESULT_FAILURE;
         exit 1;
     }
     
@@ -56,6 +62,7 @@ function job_ut_cygwin_ccore() {
     & $env:CYGWIN_PATH -lc "cd '$env:APPVEYOR_BUILD_FOLDER'; cd ccore; make ut; make utrun";
     if ($LastExitCode -ne 0) {
         echo "Unit-testing CCORE library for WINDOWS platform: FAILURE.";
+        $env:TESTING_RESULT = $env:RESULT_FAILURE;
         exit 1;
     }
     
@@ -78,6 +85,7 @@ function job_pyclustering_windows() {
     & $env:PYTHON_INTERPRETER pyclustering\tests\tests_runner.py --integration
     if ($LastExitCode -ne 0) {
         echo "Integration testing pyclustering <-> ccore for WINDOWS platform: FAILURE.";
+        $env:TESTING_RESULT = $env:RESULT_FAILURE;
         exit 1;
     }
     
@@ -93,6 +101,10 @@ function job_pyclustering_cygwin() {
 
 function job_deploy() {
     echo "[DEPLOY]: Deploy (upload windows binary file to github)";
+    if ($env:TESTING_RESULT -ne $env:RESULT_SUCCESS) {
+        echo "[DEPLOY]: One of the build/testing job is failed - cancel deployment."
+        exit 0;
+    }
 
     git.exe config --global credential.helper store
     Add-Content "$env:USERPROFILE\.git-credentials" "https://$($env:GITHUB_TOKEN):x-oauth-basic@github.com`n"
