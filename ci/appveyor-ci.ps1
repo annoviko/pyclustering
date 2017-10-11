@@ -94,18 +94,18 @@ function job_pyclustering_cygwin() {
 function job_deploy() {
     echo "[DEPLOY]: Deploy (upload windows binary file to github)";
     
-    git config --global user.email "pyclustering@yandex.ru";
-    git config --global user.name "AppVeyor";
+    git.exe config --global user.email "pyclustering@yandex.ru";
+    git.exe config --global user.name "AppVeyor";
 
-    git config credential.helper "store --file=.git\credentials";
+    git.exe config credential.helper "store --file=.git\credentials";
     echo "https://$env:GITHUB_TOKEN:@github.com" > .git\credentials;
-    git config credential.helper "store --file=.git\credentials";
+    git.exe config credential.helper "store --file=.git\credentials";
 
 
     echo "[DEPLOY]: Prepare copy for pushing (reset, checkout, pull)";
-    git reset --hard;
-    git checkout $env:APPVEYOR_REPO_BRANCH;
-    git pull;
+    git.exe reset --hard;
+    git.exe checkout $env:APPVEYOR_REPO_BRANCH;
+    git.exe pull;
 
 
     echo "[DEPLOY]: Prepare binary folder";
@@ -115,17 +115,17 @@ function job_deploy() {
 
     echo "[DEPLOY]: Add changes for commit";
     echo "windows ccore x64 build version: '$env:APPVEYOR_BUILD_NUMBER'" > pyclustering\core\x64\win\.win.info;
-    git add pyclustering\core\x64\win\.win.info;
-    git add pyclustering\core\x64\win\ccore.dll;
+    git.exe add pyclustering\core\x64\win\.win.info;
+    git.exe add pyclustering\core\x64\win\ccore.dll;
 
 
     echo "[DEPLOY]: Display status and changes";
-    git status;
+    git.exe status;
 
 
     echo "[DEPLOY]: Push changes to github repository";
-    git commit . -m "[appveyor][ci skip] push new ccore version '$env:APPVEYOR_BUILD_NUMBER'";
-    git push;
+    git.exe commit -m "[appveyor][ci skip] push new ccore version '$env:APPVEYOR_BUILD_NUMBER'";
+    git.exe push;
 }
 
 
