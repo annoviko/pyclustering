@@ -99,6 +99,7 @@ function job_deploy() {
 
     git.exe config credential.helper "store --file=.git\credentials";
     echo "https://$env:GITHUB_TOKEN:@github.com" > .git\credentials;
+    echo "[credential]`nhelper = wincred" >> .git\credentials;
     git.exe config credential.helper "store --file=.git\credentials";
 
 
