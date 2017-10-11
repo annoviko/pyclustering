@@ -97,9 +97,9 @@ function job_deploy() {
     git.exe config --global user.email "pyclustering@yandex.ru";
     git.exe config --global user.name "AppVeyor";
 
+    git.exe config --global credential.helper wincred
     git.exe config credential.helper "store --file=.git\credentials";
     echo "https://$env:GITHUB_TOKEN:@github.com" > .git\credentials;
-    echo "[credential]`r`nhelper = wincred" >> .git\credentials;
     git.exe config credential.helper "store --file=.git\credentials";
 
 
