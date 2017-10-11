@@ -93,15 +93,12 @@ function job_pyclustering_cygwin() {
 
 function job_deploy() {
     echo "[DEPLOY]: Deploy (upload windows binary file to github)";
-    
+
+    git.exe config --global credential.helper store
+    Add-Content "$env:USERPROFILE\.git-credentials" "https://$($env:GITHUB_TOKEN):x-oauth-basic@github.com`n"
+
     git.exe config --global user.email "pyclustering@yandex.ru";
     git.exe config --global user.name "AppVeyor";
-
-    git.exe config --global credential.helper wincred
-    git.exe config credential.helper "store --file=.git\credentials";
-    echo "https://$env:GITHUB_TOKEN:@github.com" > .git\credentials;
-    git.exe config credential.helper "store --file=.git\credentials";
-
 
     echo "[DEPLOY]: Prepare copy for pushing (reset, checkout, pull)";
     git.exe reset --hard;
