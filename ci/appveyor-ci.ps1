@@ -171,7 +171,8 @@ function download_binary() {
     $env:DOWNLOAD_LINK = (curl.exe -H "Authorization: OAuth $env:YANDEX_DISK_TOKEN" -X GET "https://cloud-api.yandex.net:443/v1/disk/resources/download?path=$env:BINARY_FILEPATH" | ConvertFrom-Json).href
 
     # Download binary
-    curl.exe -s -H "Authorization: OAuth $env:YANDEX_DISK_TOKEN" -X GET $env:DOWNLOAD_LINK > pyclustering\core\x64\win\ccore.dll
+    #curl.exe -s -H "Authorization: OAuth $env:YANDEX_DISK_TOKEN" -X GET $env:DOWNLOAD_LINK > pyclustering\core\x64\win\ccore.dll
+    curl.exe $env:DOWNLOAD_LINK -o pyclustering\core\x64\win\ccore.dll;
 }
 
 

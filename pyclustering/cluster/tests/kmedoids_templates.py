@@ -97,7 +97,7 @@ class KmedoidsTestTemplates:
         for i in range(number_clusters):
             initial_medoids.append(i * step);
         
-        kmedoids_instance = kmedoids(input_data, initial_medoids);
+        kmedoids_instance = kmedoids(input_data, initial_medoids, ccore=ccore_flag);
         kmedoids_instance.process();
         clusters = kmedoids_instance.get_clusters();
         

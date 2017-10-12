@@ -232,6 +232,8 @@ class som:
         
         self._learn_rate = 0.0;
         
+        self.__ccore_som_pointer = None;
+        
         if (parameters is not None):
             self._params = parameters;
         else:
@@ -244,8 +246,6 @@ class som:
             self.__ccore_som_pointer = wrapper.som_create(rows, cols, conn_type, self._params);
             
         else:
-            self.__ccore_som_pointer = None;
-            
             # location
             self._location = self.__initialize_locations(rows, cols);
             

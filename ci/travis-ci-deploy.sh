@@ -48,7 +48,8 @@ download_binary() {
         python3 -c "import sys, json; print(json.load(sys.stdin)['href'])"`
 
     # Download binary
-    curl -s -H "Authorization: OAuth $YANDEX_DISK_TOKEN" -X GET $DOWNLOAD_LINK > pyclustering/core/x64/linux/ccore.so
+    #curl -s -H "Authorization: OAuth $YANDEX_DISK_TOKEN" -X GET $DOWNLOAD_LINK > pyclustering/core/x64/linux/ccore.so
+    curl $env:DOWNLOAD_LINK -o pyclustering/core/x64/linux/ccore.so;
 }
 
 

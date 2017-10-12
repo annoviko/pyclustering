@@ -74,7 +74,7 @@ class KmediansTestTemplates:
         for i in range(number_clusters):
             initial_centers.append([ random() ]);
          
-        kmedians_instance = kmedians(input_data, initial_centers, ccore_flag);
+        kmedians_instance = kmedians(input_data, initial_centers, ccore=ccore_flag);
         kmedians_instance.process();
         clusters = kmedians_instance.get_clusters();
          

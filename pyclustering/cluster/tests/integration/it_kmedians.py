@@ -86,7 +86,7 @@ class KmediansIntegrationTest(unittest.TestCase):
         KmediansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE10, initial_medians, None, True);
 
     def testCoreInterfaceIntInputData(self):
-        kmedians_instance = kmedians([ [1], [2], [3], [20], [21], [22] ], [ [2], [21] ], True);
+        kmedians_instance = kmedians([ [1], [2], [3], [20], [21], [22] ], [ [2], [21] ], ccore=True);
         kmedians_instance.process();
         assert len(kmedians_instance.get_clusters()) == 2;
 
