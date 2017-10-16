@@ -1,6 +1,6 @@
 """!
 @authors Andrei Novikov (pyclustering@yandex.ru)
-@date 2014-2016
+@date 2014-2017
 @copyright GNU Public License
 @cond GNU_PUBLIC_LICENSE
     PyClustering is free software: you can redistribute it and/or modify
@@ -17,6 +17,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 @endcond
 """
+
 
 import os;
 
@@ -47,7 +48,7 @@ class ccore_install(install):
 setup(
       name = 'pyclustering',
       packages = find_packages(),
-      version = '0.7.dev0',
+      version = '0.7.0',
       description = 'pyclustring is a python data mining library',
       url = 'https://github.com/annoviko/pyclustering',
       license = 'GNU Public License',
@@ -59,7 +60,7 @@ setup(
                      'Intended Audience :: Science/Research',
                      'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
                      'Natural Language :: English',
-                     'Operating System :: Microsoft :: Windows :: Windows 7',
+                     'Operating System :: Microsoft :: Windows :: Windows 7 :: Windows 10',
                      'Operating System :: POSIX :: Linux',
                      'Operating System :: Unix',
                      'Programming Language :: C',
@@ -74,14 +75,13 @@ setup(
                      'Topic :: Scientific/Engineering :: Information Analysis',
                      'Topic :: Scientific/Engineering :: Visualization'
                      ],
-      keywords = 'pyclustering data mining cluster analysis neural oscillatory networks',
+      keywords = 'pyclustering data-mining clustering cluster-analysis neural-network oscillatory-network',
       author = 'Andrei Novikov',
       author_email = 'pyclustering@yandex.ru',
       
       package_data = {
-                      'pyclustering.samples': ['samples/*.txt', 'graphs/*.grpr', 'images/*.png', 'images/digits/*.png'],
-                      'pyclustering.core': ['x64/linux/ccore.so', 'x64/win/ccore.dll'],
-                
+                      'pyclustering.samples': ['samples/famous/*.data', 'samples/fcps/*.data', 'samples/simple/*.data', 'graphs/*.grpr', 'images/*.png', 'images/digits/*.png'],
+                      'pyclustering.core': ['x64/linux/ccore.so', 'x64/linux/.linux.info', 'x64/win/ccore.dll', 'x64/win/.win.info'],
                      },
       
       cmdclass = { 'install': ccore_install },
