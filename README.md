@@ -1,19 +1,25 @@
-[![Build Status](https://travis-ci.org/annoviko/pyclustering.svg?branch=master)](https://travis-ci.org/annoviko/pyclustering) [![Build status](https://ci.appveyor.com/api/projects/status/4uly2exfp49emwn0/branch/master?svg=true)](https://ci.appveyor.com/project/annoviko/pyclustering/branch/master) [![Coverage Status](https://coveralls.io/repos/github/annoviko/pyclustering/badge.svg?branch=master&ts=1)](https://coveralls.io/github/annoviko/pyclustering?branch=master) [![Documentation](https://codedocs.xyz/annoviko/pyclustering.svg)](https://codedocs.xyz/annoviko/pyclustering/) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1018998.svg)](https://doi.org/10.5281/zenodo.1018998)
+[![Build Status](https://travis-ci.org/annoviko/pyclustering.svg?branch=master)](https://travis-ci.org/annoviko/pyclustering) [![Build status](https://ci.appveyor.com/api/projects/status/4uly2exfp49emwn0/branch/master?svg=true)](https://ci.appveyor.com/project/annoviko/pyclustering/branch/master) [![Coverage Status](https://coveralls.io/repos/github/annoviko/pyclustering/badge.svg?branch=master&ts=1)](https://coveralls.io/github/annoviko/pyclustering?branch=master) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/annoviko/pyclustering/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/annoviko/pyclustering/?branch=master) [![Documentation](https://codedocs.xyz/annoviko/pyclustering.svg)](https://codedocs.xyz/annoviko/pyclustering/) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1018998.svg)](https://doi.org/10.5281/zenodo.1018998)
 ### PyClustering
 ------------------------------------------------
 
 pyclustering is a Python, C++ data mining library (clustering algorithm, oscillatory networks, neural networks). The library provides Python and C++ implementations (via CCORE library) of each algorithm or model. CCORE library is a part of pyclustering and supported only for 64-bit Linux and 64-bit Windows operating systems.
 
 Version: 0.7.x
+
 License: GNU General Public License
+
 E-Mail: pyclustering@yandex.ru
+
 PyClustering Wiki: https://github.com/annoviko/pyclustering/wiki
 
 ------------------------------------------------
 
 ### Dependencies
+
 Required packages: scipy, matplotlib, numpy, PIL
+
 Python >= 3.4 (64-bit)
+
 C++ >= 14 (64-bit)
 
 ------------------------------------------------
