@@ -1,24 +1,57 @@
-### Project: PyClustering
+[![Build Status](https://travis-ci.org/annoviko/pyclustering.svg?branch=master)](https://travis-ci.org/annoviko/pyclustering) [![Build status](https://ci.appveyor.com/api/projects/status/4uly2exfp49emwn0/branch/master?svg=true)](https://ci.appveyor.com/project/annoviko/pyclustering/branch/master) [![Coverage Status](https://coveralls.io/repos/github/annoviko/pyclustering/badge.svg?branch=master&ts=1)](https://coveralls.io/github/annoviko/pyclustering?branch=master) [![Documentation](https://codedocs.xyz/annoviko/pyclustering.svg)](https://codedocs.xyz/annoviko/pyclustering/) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1018998.svg)](https://doi.org/10.5281/zenodo.1018998)
+### PyClustering
+------------------------------------------------
 
-Version: 0.7.dev0
+pyclustering is a Python, C++ data mining library (clustering algorithm, oscillatory networks, neural networks). The library provides Python and C++ implementations (via CCORE library) of each algorithm or model. CCORE library is a part of pyclustering and supported only for 64-bit Linux and 64-bit Windows operating systems.
 
+Version: 0.7.x
 License: GNU General Public License
-
 E-Mail: pyclustering@yandex.ru
-
 PyClustering Wiki: https://github.com/annoviko/pyclustering/wiki
-
-Documentation: [![Documentation](https://codedocs.xyz/annoviko/pyclustering.svg)](https://codedocs.xyz/annoviko/pyclustering/)
 
 ------------------------------------------------
 
-### Proposals, questions, bugs:
+### Dependencies
+Required packages: scipy, matplotlib, numpy, PIL
+Python >= 3.4 (64-bit)
+C++ >= 14 (64-bit)
+
+------------------------------------------------
+
+### Installation
+Installation using pip3 tool:
+```bash
+$ pip3 install pyclustering
+```
+
+Manual installation:
+```bash
+# get sources of the pyclustering library, for example, from repository
+$ mkdir pyclustering
+$ cd pyclustering/
+$ git clone https://github.com/annoviko/pyclustering.git .
+
+# compile CCORE library (core of the pyclustering library).
+$ cd pyclustering/ccore
+$ make ccore
+
+# return to parent folder of the pyclustering library
+cd ../
+
+# add current folder to python path
+PYTHONPATH=`pwd`
+export PYTHONPATH=${PYTHONPATH}
+```
+
+------------------------------------------------
+
+### Proposals, Questions, Bugs
 
 In case of any questions, proposals or bugs related to the pyclustering please contact to pyclustering@yandex.ru or create an issue here.
 
 ------------------------------------------------
 
-### PyClustering Status:
+### PyClustering Status
 
 | Branch        | master | 0.7.dev  |
 | ------------- |------- | -------- |
@@ -29,32 +62,7 @@ In case of any questions, proposals or bugs related to the pyclustering please c
 
 ------------------------------------------------
 
-### Based on:
-
-- Python >= 3.4 windows 64-bit
-- Python >= 3.4 linux 64-bit
-- C++ 14 (MVS, GCC compilers)
-
-------------------------------------------------
-
-### Required packages:
-
-- scipy, matplotlib, numpy, PIL
-
-
-**Index of packages for Windows:**
-
-- http://www.lfd.uci.edu/~gohlke/pythonlibs/
-
-**Index of packages for Linux:**
-- sudo apt-get install python3-numpy
-- sudo apt-get install python3-scipy
-- sudo apt-get install python3-matplotlib
-- sudo apt-get install python3-pil
-
-------------------------------------------------
-
-### What is implemented in the project.
+### Brief Overview of the Library Content
 
 **Clustering algorithms (module pyclustering.cluster):**
 - Agglomerative [Python, C++]
@@ -140,7 +148,7 @@ The library contains examples for each algorithm and oscillatory network model:
 
 ------------------------------------------------
 
-### Code examples:
+### Code Examples:
 
 **Data clustering by CURE algorithm**
 ```python
