@@ -121,5 +121,5 @@ Library Content
    :target: https://scrutinizer-ci.com/g/annoviko/pyclustering/?branch=master
 .. |Documentation| image:: https://codedocs.xyz/annoviko/pyclustering.svg
    :target: https://codedocs.xyz/annoviko/pyclustering/
-.. |DOI| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.1018998.svg
-   :target: https://doi.org/10.5281/zenodo.1018998
+.. |DOI| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.1026162.svg
+   :target: https://doi.org/10.5281/zenodo.1026162
