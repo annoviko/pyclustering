@@ -1,5 +1,5 @@
 |Build Status Linux| |Build Status Win| |Coverage Status| |Code
-Quality| |Documentation| |DOI| 
+Quality| |Documentation| |PyPi| |DOI|
 
 PyClustering
 ============
@@ -318,6 +318,8 @@ Code Examples:
    :target: https://codedocs.xyz/annoviko/pyclustering/
 .. |DOI| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.1026162.svg
    :target: https://doi.org/10.5281/zenodo.1026162
+.. |PyPi| image:: https://badge.fury.io/py/pyclustering.svg
+   :target: https://badge.fury.io/py/pyclustering
 .. |Build Status Linux 0.7| image:: https://travis-ci.org/annoviko/pyclustering.svg?branch=0.7.dev
    :target: https://travis-ci.org/annoviko/pyclustering
 .. |Build Status Win 0.7| image:: https://ci.appveyor.com/api/projects/status/4uly2exfp49emwn0/branch/0.7.dev?svg=true
