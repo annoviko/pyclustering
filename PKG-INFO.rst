@@ -111,3 +111,15 @@ Library Content
 - **KD-Tree** (pyclustering.container.kdtree);
 
 
+.. |Build Status Linux| image:: https://travis-ci.org/annoviko/pyclustering.svg?branch=master
+   :target: https://travis-ci.org/annoviko/pyclustering
+.. |Build Status Win| image:: https://ci.appveyor.com/api/projects/status/4uly2exfp49emwn0/branch/master?svg=true
+   :target: https://ci.appveyor.com/project/annoviko/pyclustering/branch/master
+.. |Coverage Status| image:: https://coveralls.io/repos/github/annoviko/pyclustering/badge.svg?branch=master&ts=1
+   :target: https://coveralls.io/github/annoviko/pyclustering?branch=master
+.. |Code Quality| image:: https://scrutinizer-ci.com/g/annoviko/pyclustering/badges/quality-score.png?b=master
+   :target: https://scrutinizer-ci.com/g/annoviko/pyclustering/?branch=master
+.. |Documentation| image:: https://codedocs.xyz/annoviko/pyclustering.svg
+   :target: https://codedocs.xyz/annoviko/pyclustering/
+.. |DOI| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.1018998.svg
+   :target: https://doi.org/10.5281/zenodo.1018998
