@@ -16,6 +16,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 @endcond
+
 """
 
 
@@ -45,11 +46,17 @@ class ccore_install(install):
         install.run(self);
 
 
+def load_readme():
+    with open('PKG-INFO.rst') as file_descr:
+        return file_descr.read();
+
+
 setup(
       name = 'pyclustering',
       packages = find_packages(),
       version = '0.7.0',
       description = 'pyclustring is a python data mining library',
+      long_description = load_readme(),
       url = 'https://github.com/annoviko/pyclustering',
       license = 'GNU Public License',
       classifiers = [
@@ -60,7 +67,9 @@ setup(
                      'Intended Audience :: Science/Research',
                      'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
                      'Natural Language :: English',
-                     'Operating System :: Microsoft :: Windows :: Windows 7 :: Windows 10',
+                     'Operating System :: Microsoft :: Windows :: Windows 7',
+                     'Operating System :: Microsoft :: Windows :: Windows 8',
+                     'Operating System :: Microsoft :: Windows :: Windows 10',
                      'Operating System :: POSIX :: Linux',
                      'Operating System :: Unix',
                      'Programming Language :: C',
@@ -68,6 +77,7 @@ setup(
                      'Programming Language :: Python :: 3.4',
                      'Programming Language :: Python :: 3.5',
                      'Programming Language :: Python :: 3.6',
+                     'Programming Language :: Python :: 3.7',
                      'Topic :: Education',
                      'Topic :: Scientific/Engineering :: Artificial Intelligence',
                      'Topic :: Scientific/Engineering :: Bio-Informatics',
