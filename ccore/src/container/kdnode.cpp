@@ -1,0 +1,171 @@
+/**
+*
+* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+*
+* GNU_PUBLIC_LICENSE
+*   pyclustering is free software: you can redistribute it and/or modify
+*   it under the terms of the GNU General Public License as published by
+*   the Free Software Foundation, either version 3 of the License, or
+*   (at your option) any later version.
+*
+*   pyclustering is distributed in the hope that it will be useful,
+*   but WITHOUT ANY WARRANTY; without even the implied warranty of
+*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*   GNU General Public License for more details.
+*
+*   You should have received a copy of the GNU General Public License
+*   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*
+*/
+
+
+#include "kdnode.hpp"
+
+
+namespace container {
+
+
+kdnode::kdnode(const std::vector<double> & p_data, void * p_payload,  kdnode::ptr p_left, kdnode::ptr p_right, kdnode::ptr p_parent, std::size_t p_disc) :
+    m_data(p_data),
+    m_payload(p_payload),
+    m_left(p_left),
+    m_right(p_right),
+    m_parent(p_parent),
+    m_discriminator(p_disc)
+{ }
+
+
+void kdnode::set_left(kdnode::ptr p_node) {
+    m_left = p_node;
+}
+
+
+void kdnode::set_right(kdnode::ptr p_node) {
+    m_right = p_node;
+}
+
+
+void kdnode::set_parent(kdnode::ptr p_node) {
+    m_parent = p_node;
+}
+
+
+void kdnode::set_discriminator(const std::size_t disc) {
+    m_discriminator = disc;
+}
+
+
+kdnode::ptr kdnode::get_left(void) {
+    return m_left;
+}
+
+
+kdnode::ptr kdnode::get_right(void) {
+    return m_right;
+}
+
+
+kdnode::ptr kdnode::get_parent(void) {
+    return m_parent;
+}
+
+
+void * kdnode::get_payload(void) {
+    return m_payload;
+}
+
+
+const std::vector<double> & kdnode::get_data(void) const {
+    return m_data;
+}
+
+
+std::vector<double> & kdnode::get_data(void) {
+    return m_data;
+}
+
+
+double kdnode::get_value(void) const {
+    return m_data[m_discriminator];
+}
+
+
+double kdnode::get_value(const std::size_t discr) const {
+    return m_data[discr];
+}
+
+
+std::size_t kdnode::get_discriminator(void) const {
+    return m_discriminator;
+}
+
+
+std::size_t kdnode::get_dimension(void) const {
+    return m_data.size();
+}
+
+
+void kdnode::get_children(std::vector<kdnode::ptr> & p_children) {
+    p_children.clear();
+
+    if (m_left != nullptr) { 
+        p_children.push_back(m_left); 
+    }
+
+    if (m_right != nullptr) {
+        p_children.push_back(m_right);
+    }
+}
+
+
+bool operator < (const kdnode & node, const std::vector<double> & point) {
+    return node.get_value() < point[node.get_discriminator()];
+}
+
+
+bool operator < (const std::vector<double> & point, const kdnode & node) {
+    return point[node.get_discriminator()] < node.get_value();
+}
+
+
+bool operator > (const kdnode & node, const std::vector<double> & point) {
+    return point[node.get_discriminator()] < node.get_value();
+}
+
+
+bool operator > (const std::vector<double> & point, const kdnode & node) {
+    return node.get_value() < point[node.get_discriminator()];
+}
+
+
+bool operator <= (const kdnode & node, const std::vector<double> & point) {
+    return !(node.get_value() > point[node.get_discriminator()]);
+}
+
+
+bool operator <= (const std::vector<double> & point, const kdnode & node) {
+    return !(point[node.get_discriminator()] > node.get_value());
+}
+
+
+bool operator >= (const kdnode & node, const std::vector<double> & point) {
+    return !(node.get_value() < point[node.get_discriminator()]);
+}
+
+
+bool operator >= (const std::vector<double> & point, const kdnode & node) {
+    return !(point[node.get_discriminator()] < node.get_value());
+}
+
+
+bool operator == (const kdnode & node, const std::vector<double> & point) {
+    return node.get_value() == point[node.get_discriminator()];
+}
+
+
+bool operator == (const std::vector<double> & point, const kdnode & node) {
+    return node == point;
+}
+
+
+}
