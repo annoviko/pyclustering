@@ -45,10 +45,10 @@ private:
     std::vector<double>           m_data    = { };
     void *                        m_payload = nullptr;
 
-    kdnode::ptr     m_left    = nullptr;
-    kdnode::ptr     m_right   = nullptr;
-    kdnode::ptr     m_parent  = nullptr;    /* TODO: memory leakage here */
-    std::size_t     m_discriminator = 0;
+    kdnode::ptr         m_left    = nullptr;
+    kdnode::ptr         m_right   = nullptr;
+    kdnode::weak_ptr    m_parent  = kdnode::weak_ptr();
+    std::size_t         m_discriminator = 0;
 
 public:
     kdnode(void) = default;

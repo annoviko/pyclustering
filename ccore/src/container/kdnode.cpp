@@ -66,7 +66,7 @@ kdnode::ptr kdnode::get_right(void) {
 
 
 kdnode::ptr kdnode::get_parent(void) {
-    return m_parent;
+    return m_parent.lock();
 }
 
 

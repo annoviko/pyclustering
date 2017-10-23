@@ -77,6 +77,9 @@ protected:
             tree.remove(p_data[index]);
             ASSERT_EQ(tree.get_size(), p_data.size() - index - 1);
         }
+
+        ASSERT_EQ(tree.get_size(), 0);
+        ASSERT_EQ(tree.get_root(), nullptr);
     }
 
 protected:
