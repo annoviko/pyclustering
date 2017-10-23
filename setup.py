@@ -98,7 +98,7 @@ setup(
                       'pyclustering.core': ['x64/linux/ccore.so', 'x64/linux/.linux.info', 'x64/win/ccore.dll', 'x64/win/.win.info'],
                      },
 
-      data_files = [ ('', ['LICENSE', 'CHANGES', 'README.rst']) ],
+      data_files = [ ('', ['LICENSE', 'CHANGES', 'README.rst', 'PKG-INFO.rst']) ],
       
       cmdclass = { 'install': ccore_install },
     );
