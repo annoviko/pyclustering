@@ -329,6 +329,9 @@
     <ClCompile Include="..\src\interface\optics_interface.cpp">
       <Filter>Tested Code\interface</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\container\kdnode.cpp">
+      <Filter>Tested Code\container</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\tools\gtest\gtest.h">
@@ -546,6 +549,9 @@
     </ClInclude>
     <ClInclude Include="..\src\interface\optics_interface.h">
       <Filter>Tested Code\interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\container\kdnode.hpp">
+      <Filter>Tested Code\container</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

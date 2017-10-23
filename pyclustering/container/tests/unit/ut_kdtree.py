@@ -23,12 +23,18 @@
 
 """
 
+
 import unittest;
-import itertools;
+import math;
 
-from pyclustering.container.kdtree import kdtree;
+from pyclustering.container.kdtree import kdtree, kdtree_text_visualizer;
 
-class KdtreeUnitTest(unittest.TestCase):
+from pyclustering.samples.definitions import SIMPLE_SAMPLES;
+
+from pyclustering.utils import read_sample;
+
+
+class KDTreeUnitTest(unittest.TestCase):
     def testKDTreeCreateWithoutPayload(self):
         # Create k-d tree without any payload
         array = [ [4, 3], [3, 4], [5, 8], [3, 3], [3, 9], [6, 4], [5, 9] ];
@@ -41,8 +47,8 @@ class KdtreeUnitTest(unittest.TestCase):
             assert node != None;            # node should exist in the tree.
             assert node.payload == None;    # because we have created tree without any payloads.
             assert node.data == item;       # check for valid data.
-    
-    
+
+
     def testKDTreeCreateWithPayload(self):
         # Create k-d tree with payload
         array = [ [4, 3], [3, 4], [5, 8], [3, 3], [3, 9], [6, 4], [5, 9] ];
@@ -66,8 +72,8 @@ class KdtreeUnitTest(unittest.TestCase):
         assert len(tree.traverse()) == len(array);
         for item in array:
             assert tree.find_node(item).data == item;
-    
-    
+
+
     def testKDTreeInsertNodes(self):
         "Create empty k-d tree and insert nodes"
         array = [ [4, 3], [3, 4], [5, 8], [3, 3], [3, 9], [6, 4], [5, 9] ];
@@ -83,8 +89,8 @@ class KdtreeUnitTest(unittest.TestCase):
             assert node != None;
             assert node.payload == payload[index];
             assert node.data == array[index];
-            
-    
+
+
     def testKDTreeParentSearch(self):
         "Check for right parents"
         array = [ [4, 3], [3, 4], [5, 8], [3, 3], [3, 9], [6, 4], [5, 9] ];
@@ -110,8 +116,8 @@ class KdtreeUnitTest(unittest.TestCase):
         
         node = tree.find_node([3, 9]);
         assert node.parent.data == [3, 4];
-    
-    
+
+
     def testKDTreeInsertRemoveNode1(self):
         "Create empty k-d tree and insert nodes and after that remove all nodes"
         array = [ [4, 3], [3, 4], [5, 8], [3, 3], [3, 9], [6, 4], [5, 9] ];
@@ -137,8 +143,8 @@ class KdtreeUnitTest(unittest.TestCase):
                 
                 assert node.data == array[k];
                 assert node.payload == payload[k];
-                
-    
+
+
     def testKDTreeInsertRemoveNode2(self):
         # This test simulates situation when a bug (16.01.2014) with removing was occuring
         array = [ [9, 9], [3, 3], [4, 4] ];
@@ -152,12 +158,12 @@ class KdtreeUnitTest(unittest.TestCase):
         
         assert None == tree.remove([3, 3]);
         assert len(tree.traverse()) == 0;
-            
-    
+
+
     def testKDTreeRemoveLongBranch(self):
         # Create only one branch - worth case and remove it
         array = [ [5, 5], [6, 5], [6, 6], [7, 6], [7, 7] ];
-        tree = kdtree(array);    
+        tree = kdtree(array);
         
         assert len(tree.traverse()) == len(array);
         #tree.show();
@@ -171,8 +177,8 @@ class KdtreeUnitTest(unittest.TestCase):
         for index in range(len(array)):
             node = tree.remove(array[len(array) - index - 1]);
             assert len(tree.traverse()) == len(array) - index - 1;
-    
-    
+
+
     def testKDTreeNearestNodeTrivial1(self):
         array = [ [4, 3], [3, 4], [5, 8], [3, 3], [3, 9], [6, 4], [6, 9], [4, 9] ];
         tree = kdtree(array);
@@ -188,7 +194,7 @@ class KdtreeUnitTest(unittest.TestCase):
         assert tree.find_nearest_dist_node([6, 12], 0) == None;
         assert tree.find_nearest_dist_node([6, 12], 1) == None;
         assert tree.find_nearest_dist_node([6, 12], 3).data == [6, 9];
-    
+
 
     def testKDTreeNearestNodeTrivial2(self):
         arrays = [ 
@@ -204,26 +210,36 @@ class KdtreeUnitTest(unittest.TestCase):
             for item in array:
                 for distance in distances:
                     assert tree.find_nearest_dist_node(item, distance).data == item;
-    
-    # Verification test, so it is required too much time for testing.
-    #def testVerificationKdTree1(self):
-    #    array = [ [5, 5], [4, 5], [4, 4], [3, 4], [3, 3], [6, 6], [8, 8], [7, 7], [9, 9]];
-    #    self.template_verification_insert_remove_kdtree_test(array);
-                    
-    def templateVerificationInsertRemoveKDTreeTest(self, array):
-        for perm_array in itertools.permutations(array):
-            tree = kdtree(array);
-            length = len(array);
-            
-            for index in range(len(perm_array)):
-                #tree.show();
-                
-                node = tree.remove(perm_array[index]);
 
-                if ( index + 1 < length ):
-                    assert node is not None;
-                    
-                assert len(tree.traverse()) == length - index - 1;
+
+    def templateTextTreeRepresentation(self, sample_path):
+        sample = read_sample(sample_path);
+        tree = kdtree(sample);
+        
+        representation = kdtree_text_visualizer(tree).visualize(False);
+        assert representation != None;
+        assert len(representation) > 0;
+        
+        amount_lines = representation.count("\n");
+        expected_lower_edge = math.log2(len(sample)) * len(sample[0]);
+        
+        assert expected_lower_edge <= amount_lines;
+
+
+    def testVisualizeSampleSimple01(self):
+        self.templateTextTreeRepresentation(SIMPLE_SAMPLES.SAMPLE_SIMPLE1);
+
+    def testVisualizeSampleSimple02(self):
+        self.templateTextTreeRepresentation(SIMPLE_SAMPLES.SAMPLE_SIMPLE2);
+
+    def testVisualizeSampleSimple05(self):
+        self.templateTextTreeRepresentation(SIMPLE_SAMPLES.SAMPLE_SIMPLE5);
+
+    def testVisualizeOneDimensional(self):
+        self.templateTextTreeRepresentation(SIMPLE_SAMPLES.SAMPLE_SIMPLE7);
+
+    def testVisualizeThreeDimensional(self):
+        self.templateTextTreeRepresentation(SIMPLE_SAMPLES.SAMPLE_SIMPLE11);
 
 
 if __name__ == "__main__":

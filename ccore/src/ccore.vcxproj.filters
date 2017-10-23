@@ -178,6 +178,9 @@
     <ClCompile Include="interface\antcolony_tsp_interface.cpp">
       <Filter>Source Files\interface</Filter>
     </ClCompile>
+    <ClCompile Include="container\kdnode.cpp">
+      <Filter>Source Files\container</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cluster\agglomerative.hpp">
@@ -386,6 +389,9 @@
     </ClInclude>
     <ClInclude Include="interface\antcolony_tsp_interface.h">
       <Filter>Source Files\interface</Filter>
+    </ClInclude>
+    <ClInclude Include="container\kdnode.hpp">
+      <Filter>Source Files\container</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

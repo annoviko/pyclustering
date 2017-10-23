@@ -109,6 +109,7 @@
     <ClCompile Include="..\src\container\adjacency_list.cpp" />
     <ClCompile Include="..\src\container\adjacency_matrix.cpp" />
     <ClCompile Include="..\src\container\adjacency_weight_list.cpp" />
+    <ClCompile Include="..\src\container\kdnode.cpp" />
     <ClCompile Include="..\src\container\kdtree.cpp" />
     <ClCompile Include="..\src\differential\differ_factor.cpp" />
     <ClCompile Include="..\src\interface\agglomerative_interface.cpp" />
@@ -220,6 +221,7 @@
     <ClInclude Include="..\src\container\adjacency_weight_list.hpp" />
     <ClInclude Include="..\src\container\dynamic_data.hpp" />
     <ClInclude Include="..\src\container\ensemble_data.hpp" />
+    <ClInclude Include="..\src\container\kdnode.hpp" />
     <ClInclude Include="..\src\container\kdtree.hpp" />
     <ClInclude Include="..\src\definitions.hpp" />
     <ClInclude Include="..\src\differential\differ_factor.hpp" />

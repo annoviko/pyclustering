@@ -28,6 +28,68 @@
 
 from pyclustering.utils import euclidean_distance_sqrt;
 
+
+class kdtree_text_visualizer:
+    """!
+    @brief KD-tree text visualizer that provides service to diplay tree structure using text representation.
+    
+    """
+
+    def __init__(self, kdtree_instance):
+        """!
+        @brief Initialize KD-tree text visualizer.
+        
+        @param[in] kdtree_instance (kdtree): Instance of KD-Tree that should be visualized.
+        
+        """
+        self.__kdtree_instance = kdtree_instance;
+        
+        self.__tree_level_text  = "";
+        self.__tree_text        = "";
+
+    def visualize(self, display=True):
+        """!
+        @brief Display KD-tree to console.
+        
+        @param[in] display (bool): If 'True' then tree will be shown in console.
+        
+        @return (string) Text representation of the KD-tree.
+        
+        """
+        
+        nodes = self.__get_nodes();
+        level = nodes[0];
+        
+        for node in nodes:
+            self.__print_node(level, node)
+
+        self.__tree_text += self.__tree_level_text;
+        if (display is True):
+            print(self.__tree_text);
+        
+        return self.__tree_text;
+
+
+    def __print_node(self, level, node):
+        if (level == node[0]):
+            self.__tree_level_text += str(node[1]) + "\t";
+
+        else:
+            self.__tree_text += self.__tree_level_text + "\n";
+            level = node[0];
+            self.__tree_level_text = str(node[1]) + "\t";
+
+
+    def __get_nodes(self):
+        nodes = self.__kdtree_instance.traverse();
+        if (nodes == []):
+            return;
+        
+        nodes.sort(key = lambda item: item[0]);
+        return nodes;
+
+
+
 class node:
     """!
     @brief Represents node of KD-Tree.
@@ -79,7 +141,7 @@ class node:
         if (self.right is not None):
             right = self.right.data;
         
-        return 'Node (%s, [%s %s])' % (self.data, left, right);
+        return "(%s: [L:'%s', R:'%s'])" % (self.data, left, right);
     
     def __str__(self):
         """!
@@ -119,8 +181,8 @@ class kdtree:
             # Case when payload is specified.
             for index in range(0, len(data_list)):
                 self.insert(data_list[index], payload_list[index]);
-            
-                    
+
+
     def insert(self, point, payload):
         """!
         @brief Insert new point with payload to kd-tree.
@@ -238,8 +300,8 @@ class kdtree:
             minimal_node.left.parent = minimal_node;
         
         return minimal_node;
-        
-    
+
+
     def find_minimal_node(self, node_head, discriminator):
         """!
         @brief Find minimal node in line with coordinate that is defined by discriminator.
@@ -389,8 +451,8 @@ class kdtree:
             yield node_parent.left;
         if (node_parent.right is not None):
             yield node_parent.right;
-            
-    
+
+
     def traverse(self, start_node = None, level = None):
         """!
         @brief Traverses all nodes of subtree that is defined by node specified in input parameter.
@@ -409,36 +471,9 @@ class kdtree:
         if (start_node is None):
             return [];
         
-        items = [ (level, start_node) ];        
+        items = [ (level, start_node) ];
         for child in self.children(start_node):
             if child is not None:
                 items += self.traverse(child, level + 1);
         
         return items;
-            
-    
-    def show(self):
-        """!
-        @brief Display tree on the console using text representation.
-        
-        """
-        
-        nodes = self.traverse();
-        if (nodes == []):
-            return;
-        
-        nodes.sort(key = lambda item: item[0]);
-        
-        level = nodes[0];
-        string = "";
-        for item in nodes:
-            if (level == item[0]):
-                string += str(item[1]) + "\t";
-                
-            else:
-                print(string);
-                level = item[0];
-                string = str(item[1]) + "\t";
-                
-        print(string);
-    

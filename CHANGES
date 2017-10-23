@@ -1,5 +1,39 @@
 ------------------------------------------------------------------------
 
+CHANGE NOTES FOR 0.7.3 (STARTED Oct 23, 2017)
+
+------------------------------------------------------------------------
+
+CORRECTED MAJOR BUGS:
+- Corrected bug with returned nullptr in method 'kdtree_searcher::find_nearest_node()' (ccore.container.kdtree)
+  See: no reference.
+
+
+
+------------------------------------------------------------------------
+
+CHANGE NOTES FOR 0.7.2 (STARTED Oct 19, 2017), (RELEASED: Oct 23, 2017)
+
+------------------------------------------------------------------------
+
+GENERAL CHANGES:
+- Correction for setup failure with PKG-INFO.rst.
+
+
+
+------------------------------------------------------------------------
+
+CHANGE NOTES FOR 0.7.1 (STARTED Oct 16, 2017), (RELEASED: Oct 19, 2017)
+
+------------------------------------------------------------------------
+
+GENERAL CHANGES:
+- Metadata and description of the pyclustering package is updated.
+
+
+
+------------------------------------------------------------------------
+
 CHANGE NOTES FOR 0.7.0 (STARTED Jun 01, 2016), (RELEASED: Oct 16, 2017)
 
 ------------------------------------------------------------------------
