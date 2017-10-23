@@ -21,6 +21,8 @@
 
 #include "gtest/gtest.h"
 
+#include "samples.hpp"
+
 #include "cluster/syncnet.hpp"
 
 
@@ -52,7 +54,7 @@ TEST(utest_syncnet, create_delete_network_100) {
 TEST(utest_syncnet, one_cluster) {
     bool result_testing = false;
 
-    for (unsigned int attempt = 0; attempt < 3; attempt++) {
+    for (std::size_t attempt = 0; attempt < 3; attempt++) {
         std::vector<std::vector<double> > sample;
 
         sample.push_back( { 0.1, 0.1 } );
@@ -80,7 +82,7 @@ TEST(utest_syncnet, one_cluster) {
 static void template_two_cluster_allocation(const solve_type solver, const bool collect_dynamic, const bool ena_conn_weight) {
     bool result_testing = false;
 
-    for (unsigned int attempt = 0; attempt < 3; attempt++) {
+    for (std::size_t attempt = 0; attempt < 3; attempt++) {
         std::vector<std::vector<double> > sample;
 
         sample.push_back( { 0.1, 0.1 } );
@@ -91,7 +93,7 @@ static void template_two_cluster_allocation(const solve_type solver, const bool 
         sample.push_back( { 2.3, 2.0 } );
         sample.push_back( { 2.1, 2.4 } );
 
-        syncnet network(&sample, 0.5, false, initial_type::EQUIPARTITION);
+        syncnet network(&sample, 0.5, ena_conn_weight, initial_type::EQUIPARTITION);
 
         syncnet_analyser analyser;
         network.process(0.995, solver, true, analyser);
@@ -134,5 +136,5 @@ TEST(utest_syncnet, two_clusters_rkf45_solver_without_collection) {
 }
 
 TEST(utest_syncnet, two_clusters_fast_solver_conn_weight) {
-    template_two_cluster_allocation(solve_type::FAST, true, true);
+    template_two_cluster_allocation(solve_type::FAST, false, true);
 }
