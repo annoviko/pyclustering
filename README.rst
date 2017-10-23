@@ -316,8 +316,8 @@ Code Examples:
    :target: https://scrutinizer-ci.com/g/annoviko/pyclustering/?branch=master
 .. |Documentation| image:: https://codedocs.xyz/annoviko/pyclustering.svg
    :target: https://codedocs.xyz/annoviko/pyclustering/
-.. |DOI| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.1026162.svg
-   :target: https://doi.org/10.5281/zenodo.1026162
+.. |DOI| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.1035022.svg
+   :target: https://doi.org/10.5281/zenodo.1035022
 .. |PyPi| image:: https://badge.fury.io/py/pyclustering.svg
    :target: https://badge.fury.io/py/pyclustering
 .. |Build Status Linux 0.7| image:: https://travis-ci.org/annoviko/pyclustering.svg?branch=0.7.dev
