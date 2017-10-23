@@ -108,8 +108,8 @@ std::size_t kdnode::get_dimension(void) const {
 void kdnode::get_children(std::vector<kdnode::ptr> & p_children) {
     p_children.clear();
 
-    if (m_left != nullptr) { 
-        p_children.push_back(m_left); 
+    if (m_left != nullptr) {
+        p_children.push_back(m_left);
     }
 
     if (m_right != nullptr) {

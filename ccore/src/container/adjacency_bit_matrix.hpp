@@ -18,8 +18,7 @@
 *
 */
 
-#ifndef _ADJACENCY_BIT_MATRIX_
-#define _ADJACENCY_BIT_MATRIX_
+#pragma once
 
 #include "container/adjacency.hpp"
 
@@ -63,7 +62,7 @@ public:
     * @param[in]  another_matrix: adjacency matrix that should be copied.
     *
     */
-    adjacency_bit_matrix(const adjacency_bit_matrix & another_matrix);
+    adjacency_bit_matrix(const adjacency_bit_matrix & another_matrix) = default;
 
     /**
     *
@@ -72,7 +71,7 @@ public:
     * @param[in]  another_matrix: adjacency matrix that should be moved.
     *
     */
-    adjacency_bit_matrix(adjacency_bit_matrix && another_matrix);
+    adjacency_bit_matrix(adjacency_bit_matrix && another_matrix) = default;
 
     /**
     *
@@ -197,6 +196,3 @@ public:
 };
 
 }
-
-#endif
-

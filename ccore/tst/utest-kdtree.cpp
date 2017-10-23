@@ -47,6 +47,9 @@ protected:
 
     virtual void TemplateTestInsertSearchRemove(const dataset & p_data) {
         tree = kdtree();
+
+        ASSERT_EQ(nullptr, tree.get_root());
+
         for (std::size_t index = 0; index < p_data.size(); index++) {
             ASSERT_EQ(tree.get_size(), index);
 
@@ -91,6 +94,12 @@ TEST_F(utest_kdtree, creation_without_payload) {
     std::vector< std::vector<double> > test_sample_point_vector = { {4, 3}, {3, 4}, {5, 8}, {3, 3}, {3, 9}, {6, 4}, {5, 9} };
 
     InitTestObject(test_sample_point_vector);
+
+    std::vector<kdnode::ptr> children;
+    tree.get_root()->get_children(children);
+
+    ASSERT_NE(nullptr, children[0]);
+    ASSERT_NE(nullptr, children[1]);
 
     for (auto & point : test_sample_point_vector) {
         kdnode::ptr node = tree.find_node(point);

@@ -39,6 +39,8 @@ friend class kdtree;
 
 public:
   using ptr         = std::shared_ptr<kdnode>;
+
+private:
   using weak_ptr    = std::weak_ptr<kdnode>;
 
 private:

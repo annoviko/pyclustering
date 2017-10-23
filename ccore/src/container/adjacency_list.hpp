@@ -18,8 +18,9 @@
 *
 */
 
-#ifndef _ADJACENCY_LIST_H_
-#define _ADJACENCY_LIST_H_
+
+#pragma once
+
 
 #include <unordered_set>
 #include "container/adjacency.hpp"
@@ -65,7 +66,7 @@ public:
     * @param[in]  another_matrix: adjacency matrix that should be copied.
     *
     */
-    adjacency_list(const adjacency_list & another_matrix);
+    adjacency_list(const adjacency_list & another_matrix) = default;
 
     /**
     *
@@ -74,7 +75,7 @@ public:
     * @param[in]  another_matrix: adjacency matrix that should be moved.
     *
     */
-    adjacency_list(adjacency_list && another_matrix);
+    adjacency_list(adjacency_list && another_matrix) = default;
 
     /**
     *
@@ -171,5 +172,3 @@ public:
 };
 
 }
-
-#endif

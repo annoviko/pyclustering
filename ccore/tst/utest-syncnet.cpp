@@ -25,110 +25,114 @@
 
 
 static void template_create_delete(const unsigned int size) {
-	std::vector<std::vector<double> > sample;
-	for (unsigned int i = 0; i < size; i++) {
-		sample.push_back( { 0.0 + (double) i } );
-	}
+    std::vector<std::vector<double> > sample;
+    for (unsigned int i = 0; i < size; i++) {
+        sample.push_back( { 0.0 + (double) i } );
+    }
 
-	syncnet * network = new syncnet(&sample, 2.0, false, initial_type::EQUIPARTITION);
+    syncnet * network = new syncnet(&sample, 2.0, false, initial_type::EQUIPARTITION);
 
-	ASSERT_EQ(size, network->size());
+    ASSERT_EQ(size, network->size());
 
-	delete network;
+    delete network;
 }
 
 TEST(utest_syncnet, create_delete_network_1) {
-	template_create_delete(1);
+    template_create_delete(1);
 }
 
 TEST(utest_syncnet, create_delete_network_10) {
-	template_create_delete(10);
+    template_create_delete(10);
 }
 
 TEST(utest_syncnet, create_delete_network_100) {
-	template_create_delete(100);
+    template_create_delete(100);
 }
 
 TEST(utest_syncnet, one_cluster) {
-	bool result_testing = false;
+    bool result_testing = false;
 
-	for (unsigned int attempt = 0; attempt < 3; attempt++) {
-		std::vector<std::vector<double> > sample;
+    for (unsigned int attempt = 0; attempt < 3; attempt++) {
+        std::vector<std::vector<double> > sample;
 
-		sample.push_back( { 0.1, 0.1 } );
-		sample.push_back( { 0.2, 0.1 } );
-		sample.push_back( { 0.0, 0.0 } );
+        sample.push_back( { 0.1, 0.1 } );
+        sample.push_back( { 0.2, 0.1 } );
+        sample.push_back( { 0.0, 0.0 } );
 
-		syncnet network(&sample, 0.5, false, initial_type::EQUIPARTITION);
+        syncnet network(&sample, 0.5, false, initial_type::EQUIPARTITION);
 
-		syncnet_analyser analyser;
-		network.process(0.998, solve_type::FAST, true, analyser);
+        syncnet_analyser analyser;
+        network.process(0.998, solve_type::FAST, true, analyser);
 
-		syncnet_cluster_data clusters;
-		analyser.allocate_clusters(0.1, clusters);
+        syncnet_cluster_data clusters;
+        analyser.allocate_clusters(0.1, clusters);
 
-		if (1 != clusters.size()) {
-			continue;
-		}
+        if (1 != clusters.size()) {
+            continue;
+        }
 
-		result_testing = true;
-	}
+        result_testing = true;
+    }
 
-	ASSERT_TRUE(result_testing);
+    ASSERT_TRUE(result_testing);
 }
 
-static void template_two_cluster_allocation(const solve_type solver, const bool collect_dynamic) {
-	bool result_testing = false;
+static void template_two_cluster_allocation(const solve_type solver, const bool collect_dynamic, const bool ena_conn_weight) {
+    bool result_testing = false;
 
-	for (unsigned int attempt = 0; attempt < 3; attempt++) {
-		std::vector<std::vector<double> > sample;
+    for (unsigned int attempt = 0; attempt < 3; attempt++) {
+        std::vector<std::vector<double> > sample;
 
-		sample.push_back( { 0.1, 0.1 } );
-		sample.push_back( { 0.2, 0.1 } );
-		sample.push_back( { 0.0, 0.0 } );
+        sample.push_back( { 0.1, 0.1 } );
+        sample.push_back( { 0.2, 0.1 } );
+        sample.push_back( { 0.0, 0.0 } );
 
-		sample.push_back( { 2.2, 2.1 } );
-		sample.push_back( { 2.3, 2.0 } );
-		sample.push_back( { 2.1, 2.4 } );
+        sample.push_back( { 2.2, 2.1 } );
+        sample.push_back( { 2.3, 2.0 } );
+        sample.push_back( { 2.1, 2.4 } );
 
-		syncnet network(&sample, 0.5, false, initial_type::EQUIPARTITION);
+        syncnet network(&sample, 0.5, false, initial_type::EQUIPARTITION);
 
-		syncnet_analyser analyser;
-		network.process(0.995, solver, true, analyser);
+        syncnet_analyser analyser;
+        network.process(0.995, solver, true, analyser);
 
-		ensemble_data<syncnet_cluster> ensembles;
-		analyser.allocate_clusters(0.1, ensembles);
+        ensemble_data<syncnet_cluster> ensembles;
+        analyser.allocate_clusters(0.1, ensembles);
 
-		if (2 != ensembles.size()) {
-			continue;
-		}
+        if (2 != ensembles.size()) {
+            continue;
+        }
 
-		result_testing = true;
-	}
+        result_testing = true;
+    }
 
-	ASSERT_TRUE(result_testing);
+    ASSERT_TRUE(result_testing);
 }
 
 TEST(utest_syncnet, two_clusters_fast_solver_with_collection) {
-	template_two_cluster_allocation(solve_type::FAST, true);
+    template_two_cluster_allocation(solve_type::FAST, true, false);
 }
 
 TEST(utest_syncnet, two_clusters_rk4_solver_with_collection) {
-	template_two_cluster_allocation(solve_type::RK4, true);
+    template_two_cluster_allocation(solve_type::RK4, true, false);
 }
 
 TEST(utest_syncnet, two_clusters_rkf45_solver_with_collection) {
-	template_two_cluster_allocation(solve_type::RKF45, true);
+    template_two_cluster_allocation(solve_type::RKF45, true, false);
 }
 
 TEST(utest_syncnet, two_clusters_fast_solver_without_collection) {
-	template_two_cluster_allocation(solve_type::FAST, false);
+    template_two_cluster_allocation(solve_type::FAST, false, false);
 }
 
 TEST(utest_syncnet, two_clusters_rk4_solver_without_collection) {
-	template_two_cluster_allocation(solve_type::RK4, false);
+    template_two_cluster_allocation(solve_type::RK4, false, false);
 }
 
 TEST(utest_syncnet, two_clusters_rkf45_solver_without_collection) {
-	template_two_cluster_allocation(solve_type::RKF45, false);
+    template_two_cluster_allocation(solve_type::RKF45, false, false);
+}
+
+TEST(utest_syncnet, two_clusters_fast_solver_conn_weight) {
+    template_two_cluster_allocation(solve_type::FAST, true, true);
 }

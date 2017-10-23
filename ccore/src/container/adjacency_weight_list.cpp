@@ -28,16 +28,6 @@ const double adjacency_weight_list::DEFAULT_EXISTANCE_CONNECTION_VALUE = 1.0;
 const double adjacency_weight_list::DEFAULT_NON_EXISTANCE_CONNECTION_VALUE = 0.0;
 
 
-adjacency_weight_list::adjacency_weight_list(const adjacency_weight_list & another_matrix) {
-    m_adjacency = another_matrix.m_adjacency;
-}
-
-
-adjacency_weight_list::adjacency_weight_list(adjacency_weight_list && another_matrix) {
-    m_adjacency = std::move(another_matrix.m_adjacency);
-}
-
-
 adjacency_weight_list::adjacency_weight_list(const size_t node_amount) : m_adjacency(node_amount) { }
 
 

@@ -26,22 +26,9 @@
 
 namespace container {
 
+
 const size_t adjacency_bit_matrix::DEFAULT_EXISTANCE_CONNECTION_VALUE = 0x01;
 const size_t adjacency_bit_matrix::DEFAULT_NON_EXISTANCE_CONNECTION_VALUE = 0x00;
-
-
-adjacency_bit_matrix::adjacency_bit_matrix(const adjacency_bit_matrix & another_matrix) {
-    m_adjacency = another_matrix.m_adjacency;
-    m_size = another_matrix.m_size;
-}
-
-
-adjacency_bit_matrix::adjacency_bit_matrix(adjacency_bit_matrix && another_matrix) {
-    m_adjacency = std::move(another_matrix.m_adjacency);
-    m_size = std::move(another_matrix.m_size);
-
-    another_matrix.m_size = 0;
-}
 
 
 adjacency_bit_matrix::adjacency_bit_matrix(const size_t node_amount) { 

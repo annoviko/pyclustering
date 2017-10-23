@@ -32,16 +32,6 @@ adjacency_matrix::adjacency_matrix(void) {
 }
 
 
-adjacency_matrix::adjacency_matrix(const adjacency_matrix & another_matrix) {
-    m_adjacency = another_matrix.m_adjacency;
-}
-
-
-adjacency_matrix::adjacency_matrix(adjacency_matrix && another_matrix) {
-    m_adjacency = std::move(another_matrix.m_adjacency);
-}
-
-
 adjacency_matrix::adjacency_matrix(const size_t node_amount) : m_adjacency(node_amount, std::vector<double>(node_amount, DEFAULT_NON_EXISTANCE_CONNECTION_VALUE)) { }
 
 

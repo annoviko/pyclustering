@@ -18,8 +18,7 @@
 *
 */
 
-#ifndef _ADJACENCY_FACTORY_H_
-#define _ADJACENCY_FACTORY_H_
+#pragma once
 
 
 #include <memory>
@@ -106,5 +105,3 @@ public:
 };
 
 }
-
-#endif
