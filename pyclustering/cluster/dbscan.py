@@ -26,9 +26,9 @@
 """
 
 
-from pyclustering.cluster.encoder import type_encoding;
+from pyclustering.container.kdtree import kdtree;
 
-from pyclustering.utils import euclidean_distance_sqrt;
+from pyclustering.cluster.encoder import type_encoding;
 
 import pyclustering.core.dbscan_wrapper as wrapper;
 
@@ -65,7 +65,9 @@ class dbscan:
         @param[in] ccore (bool): if True than DLL CCORE (C++ solution) will be used for solving the problem.
         
         """
+        
         self.__pointer_data = data;
+        self.__kdtree = None;
         self.__eps = eps;
         self.__sqrt_eps = eps * eps;
         self.__neighbors = neighbors;
@@ -92,6 +94,7 @@ class dbscan:
             (self.__clusters, self.__noise) = wrapper.dbscan(self.__pointer_data, self.__eps, self.__neighbors, True);
             
         else:
+            self.__kdtree = kdtree(self.__pointer_data, range(len(self.__pointer_data)));
             for i in range(0, len(self.__pointer_data)):
                 if (self.__visited[i] == False):
                      
@@ -185,15 +188,17 @@ class dbscan:
              
         return cluster;
 
-    def __neighbor_indexes(self, point):
+    def __neighbor_indexes(self, index_point):
         """!
         @brief Return list of indexes of neighbors of specified point for the data.
         
-        @param[in] point (list): An index of a point for which potential neighbors should be returned in line with connectivity radius.
+        @param[in] index_point (list): An index of a point for which potential neighbors should be returned in line with connectivity radius.
         
         @return (list) Return list of indexes of neighbors in line the connectivity radius.
         
         """
         
-        # return [i for i in range(0, len(data)) if euclidean_distance(data[point], data[i]) <= eps and data[i] != data[point]];    # Slow mode
-        return [i for i in range(0, len(self.__pointer_data)) if euclidean_distance_sqrt(self.__pointer_data[point], self.__pointer_data[i]) <= self.__sqrt_eps and (i != point) ]; # Fast mode
+        kdnodes = self.__kdtree.find_nearest_dist_nodes(self.__pointer_data[index_point], self.__eps);
+        return [node_tuple[1].payload for node_tuple in kdnodes if node_tuple[1].payload != index_point];
+
+        #return [i for i in range(0, len(self.__pointer_data)) if euclidean_distance_sqrt(self.__pointer_data[index_point], self.__pointer_data[i]) <= self.__sqrt_eps and (i != index_point) ]; # Fast mode

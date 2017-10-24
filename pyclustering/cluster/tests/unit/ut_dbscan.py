@@ -25,6 +25,10 @@
 
 import unittest;
 
+# Generate images without having a window appear.
+import matplotlib;
+matplotlib.use('Agg');
+
 from pyclustering.cluster.tests.dbscan_templates import DbscanTestTemplates;
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES;
