@@ -126,7 +126,8 @@ class node:
         
         ## Parent node of the node.
         self.parent = parent;
-    
+
+
     def __repr__(self):
         """!
         @return (string) Default representation of the node.
@@ -375,7 +376,8 @@ class kdtree:
         @param[in] distance (double): Maximum distance where neighbors are searched.
         @param[in] retdistance (bool): If True - returns neighbors with distances to them, otherwise only neighbors is returned.
         
-        @return (list) Neighbors, if redistance is True then neighbors with distances to them will be returned.
+        @return (node|list) Nearest neighbor if 'retdistance' is False and list with two elements [node, distance] if 'retdistance' is True,
+                 where the first element is pointer to node and the second element is distance to it.
         
         """
         
@@ -402,10 +404,11 @@ class kdtree:
         @return (list) Neighbors in area that is specified by point (center) and distance (radius).
         
         """
-        
+
         best_nodes = [];
-        self.__recursive_nearest_nodes(point, distance, distance ** 2, self.__root, best_nodes);
-        
+        if (self.__root is not None):
+            self.__recursive_nearest_nodes(point, distance, distance ** 2, self.__root, best_nodes);
+
         return best_nodes;
     
     
@@ -420,23 +423,22 @@ class kdtree:
         @param[in|out] best_nodes (list): List of founded nodes.
         
         """
-        
-        minimum = node_head.data[node_head.disc] - distance;
-        maximum = node_head.data[node_head.disc] + distance;
-        
+
         if (node_head.right is not None):
+            minimum = node_head.data[node_head.disc] - distance;
             if (point[node_head.disc] >= minimum):
                 self.__recursive_nearest_nodes(point, distance, sqrt_distance, node_head.right, best_nodes);
         
         if (node_head.left is not None):
+            maximum = node_head.data[node_head.disc] + distance;
             if (point[node_head.disc] < maximum):
                 self.__recursive_nearest_nodes(point, distance, sqrt_distance, node_head.left, best_nodes);
         
         candidate_distance = euclidean_distance_sqrt(point, node_head.data);
         if (candidate_distance <= sqrt_distance):
             best_nodes.append( (candidate_distance, node_head) );
-    
-    
+
+
     def children(self, node_parent):
         """!
         @brief Returns list of children of node.

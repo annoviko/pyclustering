@@ -29,7 +29,7 @@ import math;
 
 from pyclustering.container.kdtree import kdtree, kdtree_text_visualizer;
 
-from pyclustering.samples.definitions import SIMPLE_SAMPLES;
+from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
 
 from pyclustering.utils import read_sample;
 
@@ -210,6 +210,46 @@ class KDTreeUnitTest(unittest.TestCase):
             for item in array:
                 for distance in distances:
                     assert tree.find_nearest_dist_node(item, distance).data == item;
+
+
+    def templateSeachInTree(self, sample_path):
+        sample = read_sample(sample_path);
+        tree = kdtree();
+        
+        for point in sample:
+            node = tree.find_nearest_dist_node(point, 0.0);
+            assert node == None;
+
+            tree.insert(point, None);
+
+            node = tree.find_nearest_dist_node(point, 0.0);
+            assert node != None;
+            assert node.data == point;
+
+
+    def testSearchNodesInSampleSimple01(self):
+        self.templateSeachInTree(SIMPLE_SAMPLES.SAMPLE_SIMPLE1);
+
+    def testSearchNodesInSampleSimple02(self):
+        self.templateSeachInTree(SIMPLE_SAMPLES.SAMPLE_SIMPLE2);
+
+    def testSearchNodesInSampleSimple03(self):
+        self.templateSeachInTree(SIMPLE_SAMPLES.SAMPLE_SIMPLE3);
+
+    def testSearchNodesInSampleSimple04(self):
+        self.templateSeachInTree(SIMPLE_SAMPLES.SAMPLE_SIMPLE4);
+
+    def testSearchNodesInSampleSimple05(self):
+        self.templateSeachInTree(SIMPLE_SAMPLES.SAMPLE_SIMPLE5);
+
+    def testSearchNodesInLsun(self):
+        self.templateSeachInTree(FCPS_SAMPLES.SAMPLE_LSUN);
+
+    def testSearchNodesInTetra(self):
+        self.templateSeachInTree(FCPS_SAMPLES.SAMPLE_TETRA);
+
+    def testSearchNodesInHepta(self):
+        self.templateSeachInTree(FCPS_SAMPLES.SAMPLE_HEPTA);
 
 
     def templateTextTreeRepresentation(self, sample_path):
