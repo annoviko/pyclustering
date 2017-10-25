@@ -26,9 +26,10 @@
 """
 
 
+from pyclustering.container.kdtree import kdtree;
+
 from pyclustering.cluster.encoder import type_encoding;
 
-from pyclustering.utils import euclidean_distance;
 from pyclustering.utils.color import color as color_list;
 
 import matplotlib.pyplot as plt;
@@ -351,6 +352,7 @@ class optics:
         self.__clusters = None;
         self.__noise = None;
         
+        self.__kdtree = None;
         self.__ccore = ccore;
 
 
@@ -370,6 +372,7 @@ class optics:
             (self.__clusters, self.__noise, self.__ordering, self.__eps) = wrapper.optics(self.__sample_pointer, self.__eps, self.__minpts, self.__amount_clusters);
         
         else:
+            self.__kdtree = kdtree(self.__sample_pointer, range(len(self.__sample_pointer)));
             self.__allocate_clusters();
             
             if ( (self.__amount_clusters is not None) and (self.__amount_clusters != len(self.get_clusters())) ):
@@ -607,15 +610,6 @@ class optics:
         @return (list) List of indexes of neighbors in line the connectivity radius.
         
         """
-              
-        neighbor_description = [];
         
-        for index in range(0, len(self.__sample_pointer), 1):
-            if (index == optic_object.index_object):
-                continue;
-            
-            distance = euclidean_distance(self.__sample_pointer[optic_object.index_object], self.__sample_pointer[index]);
-            if (distance <= self.__eps):
-                neighbor_description.append( [index, distance] );
-            
-        return neighbor_description;
+        kdnodes = self.__kdtree.find_nearest_dist_nodes(self.__sample_pointer[optic_object.index_object], self.__eps);
+        return [ [node_tuple[1].payload, node_tuple[0]] for node_tuple in kdnodes if node_tuple[1].payload != optic_object.index_object];

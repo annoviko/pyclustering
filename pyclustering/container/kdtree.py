@@ -432,8 +432,8 @@ class kdtree:
             self.__recursive_nearest_nodes(point, distance, distance ** 2, self.__root, best_nodes);
 
         return best_nodes;
-    
-    
+
+
     def __recursive_nearest_nodes(self, point, distance, sqrt_distance, node_head, best_nodes):
         """!
         @brief Returns list of neighbors such as tuple (distance, node) that is located in area that is covered by distance.

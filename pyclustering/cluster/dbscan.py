@@ -31,11 +31,12 @@ from pyclustering.container.kdtree import kdtree;
 from pyclustering.cluster.encoder import type_encoding;
 
 import pyclustering.core.dbscan_wrapper as wrapper;
-from pyclustering.utils import euclidean_distance_sqrt;
+
 
 class dbscan:
     """!
     @brief Class represents clustering algorithm DBSCAN.
+    @details This algorithm is KD-tree optimized.
     
     Example:
     @code
