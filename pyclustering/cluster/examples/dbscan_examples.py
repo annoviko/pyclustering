@@ -44,7 +44,7 @@ def template_clustering(radius, neighb, path, invisible_axes = False, ccore = Tr
     clusters = dbscan_instance.get_clusters();
     noise = dbscan_instance.get_noise();
     
-    if (show is True):
+    if (False):
         visualizer = cluster_visualizer();
         visualizer.append_clusters(clusters, sample);
         visualizer.append_cluster(noise, sample, marker = 'x');
@@ -177,10 +177,21 @@ def display_fcps_dependence_clustering_results():
 def clustering_random_points(amount, ccore):
     sample = [ [ random.random(), random.random() ] for _ in range(amount) ];
     
-    dbscan_instance = dbscan(sample, 0.1, 20, ccore);
+    dbscan_instance = dbscan(sample, 0.05, 20, ccore);
     (ticks, _) = timedcall(dbscan_instance.process);
     
     print("Execution time ("+ str(amount) +" 2D-points):", ticks);
+
+
+def performance_measure_random_points(ccore):
+    clustering_random_points(1000, ccore);
+    clustering_random_points(2000, ccore);
+    clustering_random_points(3000, ccore);
+    clustering_random_points(4000, ccore);
+    clustering_random_points(5000, ccore);
+    clustering_random_points(10000, ccore);
+    clustering_random_points(20000, ccore);
+
 
 
 cluster_sample1();
@@ -208,8 +219,5 @@ experiment_execution_time(True);    # C++ code + Python env.
 display_fcps_clustering_results();
 display_fcps_dependence_clustering_results();
 
-clustering_random_points(1000, False);
-clustering_random_points(2000, False);
-clustering_random_points(3000, False);
-clustering_random_points(4000, False);
-clustering_random_points(5000, False);
+performance_measure_random_points(False);
+performance_measure_random_points(True);

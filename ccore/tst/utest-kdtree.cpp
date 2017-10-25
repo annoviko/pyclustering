@@ -53,25 +53,30 @@ protected:
         for (std::size_t index = 0; index < p_data.size(); index++) {
             ASSERT_EQ(tree.get_size(), index);
 
-            tree.insert(p_data[index]);
+            tree.insert(p_data[index], (void *) index);
             ASSERT_EQ(tree.get_size(), index + 1);
 
-            kdtree_searcher searcher(p_data[index], tree.get_root(), 10.0);
-            kdnode::ptr nearest_node = searcher.find_nearest_node();
+            searcher = kdtree_searcher(p_data[index], tree.get_root(), 10.0);
 
-            ASSERT_EQ(nearest_node->get_data(), p_data[index]);
+            /* Find the nearest node */
+            FindNearestNode(p_data, index);
 
+            /* Find the nearest neighbors */
+            FindNearestNeighbors(p_data, index);
 
-            std::vector<double> nearest_distances;
-            std::vector<kdnode::ptr> nearest_nodes;
-            searcher.find_nearest_nodes(nearest_distances, nearest_nodes);
+            /* Find nearest using user-specific rule to store result */
+            std::vector<std::size_t> index_points;
+            kdtree_searcher::rule_store rule = [&index, &index_points](const kdnode::ptr node) 
+                { 
+                    if (index != (std::size_t) node->get_payload()) {
+                        index_points.push_back((std::size_t) node->get_payload());
+                    }
+                };
 
-            ASSERT_EQ(tree.get_size(), nearest_distances.size());
-            ASSERT_EQ(tree.get_size(), nearest_nodes.size());
+            searcher.find_nearest(rule);
 
-            for (auto & found_kdnode : nearest_nodes) {
-                ASSERT_NE(nullptr, found_kdnode);
-            }
+            ASSERT_EQ(tree.get_size() - 1, index_points.size());
+            ASSERT_TRUE(std::find(index_points.begin(), index_points.end(), index) == index_points.end());
         }
 
         for (std::size_t index = 0; index < p_data.size(); index++) {
@@ -85,8 +90,30 @@ protected:
         ASSERT_EQ(tree.get_root(), nullptr);
     }
 
+private:
+    void FindNearestNode(const dataset & p_data, const std::size_t p_index) {
+        kdnode::ptr nearest_node = searcher.find_nearest_node();
+
+        ASSERT_EQ(nearest_node->get_data(), p_data[p_index]);
+        ASSERT_EQ((std::size_t) nearest_node->get_payload(), p_index);
+    }
+
+    void FindNearestNeighbors(const dataset & p_data, const std::size_t p_index) {
+        std::vector<double> nearest_distances;
+        std::vector<kdnode::ptr> nearest_nodes;
+        searcher.find_nearest_nodes(nearest_distances, nearest_nodes);
+
+        ASSERT_EQ(tree.get_size(), nearest_distances.size());
+        ASSERT_EQ(tree.get_size(), nearest_nodes.size());
+
+        for (auto & found_kdnode : nearest_nodes) {
+            ASSERT_NE(nullptr, found_kdnode);
+        }
+    }
+
 protected:
-    kdtree tree;
+    kdtree_searcher     searcher;
+    kdtree              tree;
 };
 
 

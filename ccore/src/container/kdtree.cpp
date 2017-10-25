@@ -20,6 +20,9 @@
 
 #include "container/kdtree.hpp"
 
+#include <limits>
+#include <iostream>
+
 #include "utils.hpp"
 
 
@@ -273,6 +276,7 @@ kdtree & kdtree::operator=(const kdtree & p_other) {
     if (this != &p_other) {
         m_root      = p_other.m_root;
         m_dimension = p_other.m_dimension;
+        m_size      = p_other.m_size;
     }
 
     return *this;
@@ -283,6 +287,7 @@ kdtree & kdtree::operator=(kdtree && p_other) {
     if (this != &p_other) {
         m_root      = std::move(p_other.m_root);
         m_dimension = std::move(p_other.m_dimension);
+        m_size      = std::move(p_other.m_size);
     }
 
     return *this;
@@ -296,70 +301,102 @@ kdtree_searcher::kdtree_searcher(const std::vector<double> & point, const kdnode
 
 
 void kdtree_searcher::initialize(const std::vector<double> & point, const kdnode::ptr node, const double radius_search) {
-    distance = radius_search;
-    sqrt_distance = radius_search * radius_search;
+    m_distance = radius_search;
+    m_sqrt_distance = radius_search * radius_search;
 
-    initial_node = node;
-    search_point = point;
+    m_initial_node = node;
+    m_search_point = point;
 }
 
 
-void kdtree_searcher::recursive_nearest_nodes(kdnode::ptr node) {
-    double minimum = node->get_value() - distance;
-    double maximum = node->get_value() + distance;
+void kdtree_searcher::recursive_nearest_nodes(const kdnode::ptr node) const {
+    double minimum = node->get_value() - m_distance;
+    double maximum = node->get_value() + m_distance;
 
     if (node->get_right() != nullptr) {
-        if (search_point[node->get_discriminator()] >= minimum) {
+        if (m_search_point[node->get_discriminator()] >= minimum) {
             recursive_nearest_nodes(node->get_right());
         }
     }
 
     if (node->get_left() != nullptr) {
-        if (search_point[node->get_discriminator()] < maximum) {
+        if (m_search_point[node->get_discriminator()] < maximum) {
             recursive_nearest_nodes(node->get_left());
         }
     }
 
-    double candidate_distance = euclidean_distance_sqrt(&search_point, &node->get_data());
-    if (candidate_distance <= sqrt_distance) {
-        nearest_nodes.push_back(node);
-        nodes_distance.push_back(candidate_distance);
+    m_rule(node);
+}
+
+
+void kdtree_searcher::store_if_reachable(const kdnode::ptr node) const {
+    double candidate_distance = euclidean_distance_sqrt(&m_search_point, &node->get_data());
+    if (candidate_distance <= m_sqrt_distance) {
+        m_nearest_nodes.push_back(node);
+        m_nodes_distance.push_back(candidate_distance);
     }
 }
 
 
-void kdtree_searcher::find_nearest_nodes(std::vector<double> & p_distances, std::vector<kdnode::ptr> & p_nearest_nodes) {
-    recursive_nearest_nodes(initial_node);
-
-    p_distances = std::move(nodes_distance);
-    p_nearest_nodes = std::move(nearest_nodes);
-
-    nodes_distance.clear();
-    nearest_nodes.clear();
+void kdtree_searcher::store_best_if_reachable(const kdnode::ptr node) const {
+    double candidate_distance = euclidean_distance_sqrt(&m_search_point, &node->get_data());
+    if (candidate_distance <= m_nodes_distance[0]) {
+        m_nearest_nodes[0] = node;
+        m_nodes_distance[0] = candidate_distance;
+    }
 }
 
 
-kdnode::ptr kdtree_searcher::find_nearest_node() {
-    kdnode::ptr node = nullptr;
-
-    recursive_nearest_nodes(initial_node);
-
-    if (nodes_distance.size() > 0) {
-        double minimal_distance = nodes_distance[0];
-        node = nearest_nodes[0];
-
-        for (std::size_t index = 1; index < nodes_distance.size(); index++) {
-            if (nodes_distance[index] < minimal_distance) {
-                minimal_distance = nodes_distance[index];
-                node = nearest_nodes[index];
-            }
-        }
+void kdtree_searcher::store_user_nodes_if_reachable(const kdnode::ptr node) const {
+    double candidate_distance = euclidean_distance_sqrt(&m_search_point, &node->get_data());
+    if (candidate_distance <= m_sqrt_distance) {
+        m_user_rule(node);
     }
+}
 
-    nodes_distance.clear();
-    nearest_nodes.clear();
+
+void kdtree_searcher::find_nearest_nodes(std::vector<double> & p_distances, std::vector<kdnode::ptr> & p_nearest_nodes) const {
+    m_rule = std::bind(&kdtree_searcher::store_if_reachable, this, std::placeholders::_1);
+    recursive_nearest_nodes(m_initial_node);
+
+    p_distances = std::move(m_nodes_distance);
+    p_nearest_nodes = std::move(m_nearest_nodes);
+
+    clear();
+}
+
+
+void kdtree_searcher::find_nearest(const rule_store & p_additional_condition) const {
+    m_rule = std::bind(&kdtree_searcher::store_user_nodes_if_reachable, this, std::placeholders::_1);
+    m_user_rule = p_additional_condition;
+    recursive_nearest_nodes(m_initial_node);
+
+    clear();
+}
+
+
+kdnode::ptr kdtree_searcher::find_nearest_node() const {
+    m_nearest_nodes     = { nullptr };
+    m_nodes_distance    = { std::numeric_limits<double>::max() };
+
+    m_rule = std::bind(&kdtree_searcher::store_best_if_reachable, this, std::placeholders::_1);
+    recursive_nearest_nodes(m_initial_node);
+
+    kdnode::ptr node = m_nearest_nodes.front();
+
+    clear();
 
     return node;
+}
+
+
+void kdtree_searcher::clear(void) const {
+    m_nodes_distance    = { };
+    m_nearest_nodes     = { };
+    m_nearest_points    = { };
+
+    m_user_rule = nullptr;
+    m_rule      = nullptr;
 }
 
 

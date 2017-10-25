@@ -18,6 +18,7 @@
 *
 */
 
+
 #include "cluster/dbscan.hpp"
 
 #include "utils.hpp"
@@ -26,32 +27,22 @@
 namespace cluster_analysis {
 
 
-dbscan::dbscan(void) :
-        m_data_ptr(nullptr),
-        m_result_ptr(nullptr),
-        m_visited(std::vector<bool>()),
-        m_belong(std::vector<bool>()),
-        m_radius(0.0),
-        m_neighbors(0)
-{ }
-
-
 dbscan::dbscan(const double p_radius_connectivity, const size_t p_minimum_neighbors) :
         m_data_ptr(nullptr),
         m_result_ptr(nullptr),
         m_visited(std::vector<bool>()),
         m_belong(std::vector<bool>()),
+        m_initial_radius(p_radius_connectivity),
         m_radius(p_radius_connectivity * p_radius_connectivity),
         m_neighbors(p_minimum_neighbors)
 { }
 
 
-dbscan::~dbscan(void) { }
-
-
 void dbscan::process(const dataset & p_data, cluster_data & p_result) {
     m_data_ptr = &p_data;
-
+#if defined(ENABLE_KD_TREE_OPTIMIZATION)
+    create_kdtree(*m_data_ptr);
+#endif
     m_visited = std::vector<bool>(m_data_ptr->size(), false);
     m_belong = std::vector<bool>(m_data_ptr->size(), false);
 
@@ -121,10 +112,18 @@ void dbscan::process(const dataset & p_data, cluster_data & p_result) {
 
 
 void dbscan::get_neighbors(const size_t p_index, std::vector<size_t> & p_neighbors) {
-    for (size_t index = 0; index < m_data_ptr->size(); index++) {
-        if ( ( p_index != index ) && ( euclidean_distance_sqrt(&((*m_data_ptr)[index]), &((*m_data_ptr)[p_index])) <= m_radius ) ) {
-            p_neighbors.push_back(index);
-        }
+    container::kdtree_searcher searcher((*m_data_ptr)[p_index], m_kdtree.get_root(), m_initial_radius);
+    searcher.find_nearest([&p_index, &p_neighbors](const container::kdnode::ptr & node) {
+            if (p_index != (std::size_t) node->get_payload()) {
+                p_neighbors.push_back((std::size_t) node->get_payload());
+            }
+        });
+}
+
+
+void dbscan::create_kdtree(const dataset & p_data) {
+    for (std::size_t index = 0; index < p_data.size(); index++) {
+        m_kdtree.insert(p_data[index], (void *) index);
     }
 }
 

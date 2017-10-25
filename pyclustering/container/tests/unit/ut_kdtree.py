@@ -166,7 +166,6 @@ class KDTreeUnitTest(unittest.TestCase):
         tree = kdtree(array);
         
         assert len(tree.traverse()) == len(array);
-        #tree.show();
         
         for index in range(len(array)):
             node = tree.remove(array[index]);
@@ -212,7 +211,7 @@ class KDTreeUnitTest(unittest.TestCase):
                     assert tree.find_nearest_dist_node(item, distance).data == item;
 
 
-    def templateSeachInTree(self, sample_path):
+    def templateSeachNearestNodeInTree(self, sample_path):
         sample = read_sample(sample_path);
         tree = kdtree();
         
@@ -227,29 +226,56 @@ class KDTreeUnitTest(unittest.TestCase):
             assert node.data == point;
 
 
-    def testSearchNodesInSampleSimple01(self):
-        self.templateSeachInTree(SIMPLE_SAMPLES.SAMPLE_SIMPLE1);
+    def testSearchNearestNodeInSampleSimple01(self):
+        self.templateSeachNearestNodeInTree(SIMPLE_SAMPLES.SAMPLE_SIMPLE1);
 
-    def testSearchNodesInSampleSimple02(self):
-        self.templateSeachInTree(SIMPLE_SAMPLES.SAMPLE_SIMPLE2);
+    def testSearchNearestNodeInSampleSimple02(self):
+        self.templateSeachNearestNodeInTree(SIMPLE_SAMPLES.SAMPLE_SIMPLE2);
 
-    def testSearchNodesInSampleSimple03(self):
-        self.templateSeachInTree(SIMPLE_SAMPLES.SAMPLE_SIMPLE3);
+    def testSearchNearestNodeInSampleSimple03(self):
+        self.templateSeachNearestNodeInTree(SIMPLE_SAMPLES.SAMPLE_SIMPLE3);
 
-    def testSearchNodesInSampleSimple04(self):
-        self.templateSeachInTree(SIMPLE_SAMPLES.SAMPLE_SIMPLE4);
+    def testSearchNearestNodeInSampleSimple04(self):
+        self.templateSeachNearestNodeInTree(SIMPLE_SAMPLES.SAMPLE_SIMPLE4);
 
-    def testSearchNodesInSampleSimple05(self):
-        self.templateSeachInTree(SIMPLE_SAMPLES.SAMPLE_SIMPLE5);
+    def testSearchNearestNodeInSampleSimple05(self):
+        self.templateSeachNearestNodeInTree(SIMPLE_SAMPLES.SAMPLE_SIMPLE5);
 
-    def testSearchNodesInLsun(self):
-        self.templateSeachInTree(FCPS_SAMPLES.SAMPLE_LSUN);
+    def testSearchNearestNodeInLsun(self):
+        self.templateSeachNearestNodeInTree(FCPS_SAMPLES.SAMPLE_LSUN);
 
-    def testSearchNodesInTetra(self):
-        self.templateSeachInTree(FCPS_SAMPLES.SAMPLE_TETRA);
+    def testSearchNearestNodeInTetra(self):
+        self.templateSeachNearestNodeInTree(FCPS_SAMPLES.SAMPLE_TETRA);
 
-    def testSearchNodesInHepta(self):
-        self.templateSeachInTree(FCPS_SAMPLES.SAMPLE_HEPTA);
+    def testSearchNearestNodeInHepta(self):
+        self.templateSeachNearestNodeInTree(FCPS_SAMPLES.SAMPLE_HEPTA);
+
+
+    def templateSeachNearestNodesInTree(self, sample_path, search_radius, length = None):
+        sample = read_sample(sample_path);
+        tree = kdtree(sample);
+        
+        for point in sample:
+            nodes = tree.find_nearest_dist_nodes(point, search_radius);
+            assert nodes != [];
+            
+            if (length is None):
+                assert len(nodes) > 1;
+            else:
+                assert len(nodes) == length;
+
+
+    def testSeachNearestNodesInSampleSimple01(self):
+        self.templateSeachNearestNodesInTree(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 0.5);
+
+    def testSeachNearestNodesInSampleSimple02(self):
+        self.templateSeachNearestNodesInTree(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 0.5);
+
+    def testSeachNearestNodesInSampleSimple03(self):
+        self.templateSeachNearestNodesInTree(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 0.5);
+
+    def testSeachNearestNodesInSampleSimple03OneNode(self):
+        self.templateSeachNearestNodesInTree(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 0.0, 1);
 
 
     def templateTextTreeRepresentation(self, sample_path):
