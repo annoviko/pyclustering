@@ -154,7 +154,29 @@ class node:
 
 class kdtree:
     """!
-    @brief Represents KD Tree.
+    @brief Represents KD Tree that is a space-partitioning data structure for organizing points in a k-dimensional space.
+    
+    Examples:
+    @code
+        # Import required modules
+        from pyclustering.samples.definitions import SIMPLE_SAMPLES;
+        from pyclustering.container.kdtree import kdtree;
+        from pyclustering.utils import read_sample;
+        
+        # Read data from text file
+        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE3);
+        
+        # Create instance of KD-tree and initialize (fill) it by read data.
+        tree_instance = kdtree(sample);
+        
+        # Search for nearest point
+        search_distance = 0.3;
+        nearest_node = tree_instance.find_nearest_dist_node([1.12, 4.31], search_distance);
+        
+        # Search for nearest point in radius 0.3
+        nearest_nodes = tree_instance.find_nearest_dist_nodes([1.12, 4.31], search_distance);
+        print("Nearest nodes:", nearest_nodes);
+    @endcode
     
     """
     

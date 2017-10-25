@@ -23,6 +23,9 @@
 
 """
 
+
+import random;
+
 from pyclustering.cluster import cluster_visualizer;
 from pyclustering.cluster.dbscan import dbscan;
 
@@ -30,6 +33,7 @@ from pyclustering.utils import read_sample;
 from pyclustering.utils import timedcall;
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
+
 
 def template_clustering(radius, neighb, path, invisible_axes = False, ccore = True, show = True):
     sample = read_sample(path);
@@ -76,14 +80,14 @@ def cluster_elongate():
     template_clustering(0.5, 3, SIMPLE_SAMPLES.SAMPLE_ELONGATE);
 
 def cluster_lsun():
-    template_clustering(0.5, 3, FCPS_SAMPLES.SAMPLE_LSUN);    
+    template_clustering(0.5, 3, FCPS_SAMPLES.SAMPLE_LSUN);
 
 def cluster_target():
-    template_clustering(0.5, 2, FCPS_SAMPLES.SAMPLE_TARGET);    
+    template_clustering(0.5, 2, FCPS_SAMPLES.SAMPLE_TARGET);
 
 def cluster_two_diamonds():
     "It's hard to choose properly parameters, but it's OK"
-    template_clustering(0.15, 7, FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS);   
+    template_clustering(0.15, 7, FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS);
 
 def cluster_wing_nut():
     "It's hard to choose properly parameters, but it's OK"
@@ -170,6 +174,15 @@ def display_fcps_dependence_clustering_results():
     visualizer.show();
 
 
+def clustering_random_points(amount, ccore):
+    sample = [ [ random.random(), random.random() ] for _ in range(amount) ];
+    
+    dbscan_instance = dbscan(sample, 0.1, 20, ccore);
+    (ticks, _) = timedcall(dbscan_instance.process);
+    
+    print("Execution time ("+ str(amount) +" 2D-points):", ticks);
+
+
 cluster_sample1();
 cluster_sample2();
 cluster_sample3();
@@ -194,3 +207,9 @@ experiment_execution_time(True);    # C++ code + Python env.
 
 display_fcps_clustering_results();
 display_fcps_dependence_clustering_results();
+
+clustering_random_points(1000, False);
+clustering_random_points(2000, False);
+clustering_random_points(3000, False);
+clustering_random_points(4000, False);
+clustering_random_points(5000, False);

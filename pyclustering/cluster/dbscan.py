@@ -31,7 +31,7 @@ from pyclustering.container.kdtree import kdtree;
 from pyclustering.cluster.encoder import type_encoding;
 
 import pyclustering.core.dbscan_wrapper as wrapper;
-
+from pyclustering.utils import euclidean_distance_sqrt;
 
 class dbscan:
     """!
@@ -201,4 +201,4 @@ class dbscan:
         kdnodes = self.__kdtree.find_nearest_dist_nodes(self.__pointer_data[index_point], self.__eps);
         return [node_tuple[1].payload for node_tuple in kdnodes if node_tuple[1].payload != index_point];
 
-        #return [i for i in range(0, len(self.__pointer_data)) if euclidean_distance_sqrt(self.__pointer_data[index_point], self.__pointer_data[i]) <= self.__sqrt_eps and (i != index_point) ]; # Fast mode
+        # return [i for i in range(0, len(self.__pointer_data)) if euclidean_distance_sqrt(self.__pointer_data[index_point], self.__pointer_data[i]) <= self.__sqrt_eps and (i != index_point) ]; # Fast mode

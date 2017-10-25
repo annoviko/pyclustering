@@ -4,6 +4,10 @@ CHANGE NOTES FOR 0.7.3 (STARTED Oct 23, 2017)
 
 ------------------------------------------------------------------------
 
+GENERAL CHANGES:
+- Optimization of DBSCAN algorithm using KD-tree for searching nearest neighbors (pyclustering.cluster.dbscan)
+  See: https://github.com/annoviko/pyclustering/issues/369
+
 CORRECTED MAJOR BUGS:
 - Corrected bug with returned nullptr in method 'kdtree_searcher::find_nearest_node()' (ccore.container.kdtree)
   See: no reference.
