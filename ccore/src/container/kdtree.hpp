@@ -176,7 +176,10 @@ public:
  */
 class kdtree_searcher {
 public:
-    using rule_store = std::function<void(const kdnode::ptr)>;
+    using rule_store = std::function<void(const kdnode::ptr, const double)>;
+
+private:
+    using proc_store = std::function<void(const kdnode::ptr)>;
 
 private:
     mutable std::vector<double>        m_nodes_distance     = { };
@@ -184,7 +187,7 @@ private:
     mutable dataset                    m_nearest_points     = { };
 
     mutable rule_store                 m_user_rule          = nullptr;
-    mutable rule_store                 m_rule               = nullptr;
+    mutable proc_store                 m_proc               = nullptr;
 
     double                  m_distance            = -1;
     double                  m_sqrt_distance       = -1;

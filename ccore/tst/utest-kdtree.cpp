@@ -66,7 +66,7 @@ protected:
 
             /* Find nearest using user-specific rule to store result */
             std::vector<std::size_t> index_points;
-            kdtree_searcher::rule_store rule = [&index, &index_points](const kdnode::ptr node) 
+            kdtree_searcher::rule_store rule = [&index, &index_points](const kdnode::ptr node, const double distance) 
                 { 
                     if (index != (std::size_t) node->get_payload()) {
                         index_points.push_back((std::size_t) node->get_payload());

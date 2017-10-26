@@ -58,9 +58,9 @@ TEST(utest_optics, allocation_sample_simple_01) {
 }
 
 
-TEST(utest_optics, allocation_sample_one_allocation_simple_01) {
+TEST(utest_optics, allocation_one_allocation_simple_01) {
     const std::vector<size_t> expected_clusters_length = { 10 };
-    template_optics_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), 10.0, 2, 0, expected_clusters_length);
+    template_optics_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), 10.0, 1, 0, expected_clusters_length);
 }
 
 
@@ -72,7 +72,7 @@ TEST(utest_optics, allocation_sample_simple_02) {
 
 TEST(utest_optics, allocation_one_allocation_sample_simple_02) {
     const std::vector<size_t> expected_clusters_length = { 23 };
-    template_optics_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02), 5.0, 2, 0, expected_clusters_length);
+    template_optics_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02), 5.0, 1, 0, expected_clusters_length);
 }
 
 
@@ -122,14 +122,14 @@ static std::shared_ptr<optics_data>
 template_optics_noise_allocation(const std::shared_ptr<dataset> & p_data,
         const double p_radius,
         const size_t p_neighbors,
-		const size_t p_amount_clusters,
+        const size_t p_amount_clusters,
         const std::vector<size_t> & p_expected_cluster_length,
-	    const std::size_t p_noise_length) {
+        const std::size_t p_noise_length) {
 
     std::shared_ptr<optics_data> ptr_output_result = template_optics_length_process_data(p_data, p_radius, p_neighbors, p_amount_clusters, p_expected_cluster_length);
-	EXPECT_EQ(p_noise_length, ptr_output_result->noise()->size());
+    EXPECT_EQ(p_noise_length, ptr_output_result->noise()->size());
 
-	return ptr_output_result;
+    return ptr_output_result;
 }
 
 

@@ -40,9 +40,9 @@ dbscan::dbscan(const double p_radius_connectivity, const size_t p_minimum_neighb
 
 void dbscan::process(const dataset & p_data, cluster_data & p_result) {
     m_data_ptr = &p_data;
-#if defined(ENABLE_KD_TREE_OPTIMIZATION)
+
     create_kdtree(*m_data_ptr);
-#endif
+
     m_visited = std::vector<bool>(m_data_ptr->size(), false);
     m_belong = std::vector<bool>(m_data_ptr->size(), false);
 
@@ -113,7 +113,7 @@ void dbscan::process(const dataset & p_data, cluster_data & p_result) {
 
 void dbscan::get_neighbors(const size_t p_index, std::vector<size_t> & p_neighbors) {
     container::kdtree_searcher searcher((*m_data_ptr)[p_index], m_kdtree.get_root(), m_initial_radius);
-    searcher.find_nearest([&p_index, &p_neighbors](const container::kdnode::ptr & node) {
+    searcher.find_nearest([&p_index, &p_neighbors](const container::kdnode::ptr & node, const double distance) {
             if (p_index != (std::size_t) node->get_payload()) {
                 p_neighbors.push_back((std::size_t) node->get_payload());
             }

@@ -23,6 +23,9 @@
 
 """
 
+
+import random;
+
 from pyclustering.cluster import cluster_visualizer;
 from pyclustering.cluster.optics import optics, ordering_analyser, ordering_visualizer;
 
@@ -129,6 +132,25 @@ def experiment_execution_time(ccore):
     template_clustering(FCPS_SAMPLES.SAMPLE_ATOM, 30, 3, 2, False, ccore);
 
 
+def clustering_random_points(amount, ccore):
+    sample = [ [ random.random(), random.random() ] for _ in range(amount) ];
+    
+    optics_instance = optics(sample, 0.05, 20, None, ccore);
+    (ticks, _) = timedcall(optics_instance.process);
+    
+    print("Execution time ("+ str(amount) +" 2D-points):", ticks);
+
+
+def performance_measure_random_points(ccore):
+    clustering_random_points(1000, ccore);
+    clustering_random_points(2000, ccore);
+    clustering_random_points(3000, ccore);
+    clustering_random_points(4000, ccore);
+    clustering_random_points(5000, ccore);
+    clustering_random_points(10000, ccore);
+    clustering_random_points(20000, ccore);
+
+
 cluster_sample1();
 cluster_sample2();
 cluster_sample3();
@@ -154,3 +176,6 @@ cluster_engy_time();
 
 experiment_execution_time(False);
 experiment_execution_time(True);
+ 
+performance_measure_random_points(False);
+performance_measure_random_points(True);

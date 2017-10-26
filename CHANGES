@@ -5,7 +5,7 @@ CHANGE NOTES FOR 0.7.3 (STARTED Oct 23, 2017)
 ------------------------------------------------------------------------
 
 GENERAL CHANGES:
-- Optimization of OPTICS algorithm using KD-tree for searching nearest neighbors (pyclustering.cluster.optics)
+- Optimization of OPTICS algorithm using KD-tree for searching nearest neighbors (pyclustering.cluster.optics, ccore.optics)
   See: https://github.com/annoviko/pyclustering/issues/370
 
 - Optimization of DBSCAN algorithm using KD-tree for searching nearest neighbors (pyclustering.cluster.dbscan, ccore.dbscan)

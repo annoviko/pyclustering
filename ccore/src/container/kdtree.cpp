@@ -325,7 +325,7 @@ void kdtree_searcher::recursive_nearest_nodes(const kdnode::ptr node) const {
         }
     }
 
-    m_rule(node);
+    m_proc(node);
 }
 
 
@@ -350,13 +350,13 @@ void kdtree_searcher::store_best_if_reachable(const kdnode::ptr node) const {
 void kdtree_searcher::store_user_nodes_if_reachable(const kdnode::ptr node) const {
     double candidate_distance = euclidean_distance_sqrt(&m_search_point, &node->get_data());
     if (candidate_distance <= m_sqrt_distance) {
-        m_user_rule(node);
+        m_user_rule(node, candidate_distance);
     }
 }
 
 
 void kdtree_searcher::find_nearest_nodes(std::vector<double> & p_distances, std::vector<kdnode::ptr> & p_nearest_nodes) const {
-    m_rule = std::bind(&kdtree_searcher::store_if_reachable, this, std::placeholders::_1);
+    m_proc = std::bind(&kdtree_searcher::store_if_reachable, this, std::placeholders::_1);
     recursive_nearest_nodes(m_initial_node);
 
     p_distances = std::move(m_nodes_distance);
@@ -367,7 +367,7 @@ void kdtree_searcher::find_nearest_nodes(std::vector<double> & p_distances, std:
 
 
 void kdtree_searcher::find_nearest(const rule_store & p_additional_condition) const {
-    m_rule = std::bind(&kdtree_searcher::store_user_nodes_if_reachable, this, std::placeholders::_1);
+    m_proc = std::bind(&kdtree_searcher::store_user_nodes_if_reachable, this, std::placeholders::_1);
     m_user_rule = p_additional_condition;
     recursive_nearest_nodes(m_initial_node);
 
@@ -379,7 +379,7 @@ kdnode::ptr kdtree_searcher::find_nearest_node() const {
     m_nearest_nodes     = { nullptr };
     m_nodes_distance    = { std::numeric_limits<double>::max() };
 
-    m_rule = std::bind(&kdtree_searcher::store_best_if_reachable, this, std::placeholders::_1);
+    m_proc = std::bind(&kdtree_searcher::store_best_if_reachable, this, std::placeholders::_1);
     recursive_nearest_nodes(m_initial_node);
 
     kdnode::ptr node = m_nearest_nodes.front();
@@ -396,7 +396,7 @@ void kdtree_searcher::clear(void) const {
     m_nearest_points    = { };
 
     m_user_rule = nullptr;
-    m_rule      = nullptr;
+    m_proc      = nullptr;
 }
 
 

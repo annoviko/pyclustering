@@ -91,6 +91,8 @@ void optics::calculate_cluster_result(void) {
 
 
 void optics::initialize(void) {
+    create_kdtree();
+
     if (m_optics_objects.empty()) {
         m_optics_objects.reserve(m_data_ptr->size());
 
@@ -221,20 +223,17 @@ void optics::extract_clusters(void) {
 
 
 void optics::get_neighbors(const size_t p_index, std::vector< std::tuple<std::size_t, double> > & p_neighbors) {
-	p_neighbors.clear();
+    p_neighbors.clear();
 
-    for (size_t index = 0; index < m_data_ptr->size(); index++) {
-		if (index == p_index) { continue; }
+    container::kdtree_searcher searcher((*m_data_ptr)[p_index], m_kdtree.get_root(), m_radius);
 
-        point object1 = (*m_data_ptr)[index];
-        point object2 = (*m_data_ptr)[p_index];
+    container::kdtree_searcher::rule_store rule = [&p_index, &p_neighbors](const container::kdnode::ptr & p_node, const double p_distance) {
+            if (p_index != (std::size_t) p_node->get_payload()) {
+                p_neighbors.push_back(std::make_tuple((std::size_t) p_node->get_payload(), std::sqrt(p_distance)));
+            }
+        };
 
-        const double distance = euclidean_distance(object1, object2);
-
-        if (distance <= m_radius) {
-            p_neighbors.push_back(std::make_tuple(index, distance));
-        }
-    }
+    searcher.find_nearest(rule);
 }
 
 
@@ -251,6 +250,15 @@ void optics::calculate_ordering(void) {
                 ordering->push_back(optics_object.m_reachability_distance);
             }
         }
+    }
+}
+
+
+void optics::create_kdtree(void) {
+    m_kdtree = container::kdtree();
+
+    for (std::size_t index = 0; index < m_data_ptr->size(); index++) {
+        m_kdtree.insert((*m_data_ptr)[index], (void *) index);
     }
 }
 
