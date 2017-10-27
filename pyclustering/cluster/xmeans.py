@@ -132,7 +132,8 @@ class xmeans:
         self.__criterion = criterion;
          
         self.__ccore = ccore;
-         
+
+
     def process(self):
         """!
         @brief Performs cluster analysis in line with rules of X-Means algorithm.
@@ -161,8 +162,8 @@ class xmeans:
                     break;
                 else:
                     self.__centers = allocated_centers;
-                    
-     
+
+
     def get_clusters(self):
         """!
         @brief Returns list of allocated clusters, each cluster contains indexes of objects in list of data.
@@ -173,10 +174,10 @@ class xmeans:
         @see get_centers()
         
         """
-         
+
         return self.__clusters;
-     
-     
+
+
     def get_centers(self):
         """!
         @brief Returns list of centers for allocated clusters.

@@ -36,7 +36,7 @@ import pyclustering.core.dbscan_wrapper as wrapper;
 class dbscan:
     """!
     @brief Class represents clustering algorithm DBSCAN.
-    @details This algorithm is KD-tree optimized.
+    @details This DBSCAN algorithm is KD-tree optimized.
     
     Example:
     @code

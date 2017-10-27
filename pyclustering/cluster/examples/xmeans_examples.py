@@ -23,6 +23,10 @@
 
 """
 
+
+import ntpath;
+import random;
+
 from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
 
 from pyclustering.cluster import cluster_visualizer;
@@ -44,7 +48,7 @@ def template_clustering(start_centers, path, tolerance = 0.025, criterion = spli
     if (criterion == splitting_type.BAYESIAN_INFORMATION_CRITERION): criterion_string = "BAYESIAN INFORMATION CRITERION";
     elif (criterion == splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH): criterion_string = "MINIMUM NOISELESS DESCRIPTION_LENGTH";
     
-    print("Sample: ", path, "\nInitial centers: '", (start_centers is not None), "', Execution time: '", ticks, "', Number of clusters:", len(clusters), ",", criterion_string, "\n");
+    print("Sample: ", ntpath.basename(path), "\nInitial centers: '", (start_centers is not None), "', Execution time: '", ticks, "', Number of clusters:", len(clusters), ",", criterion_string, "\n");
 
     visualizer = cluster_visualizer();
     visualizer.set_canvas_title(criterion_string);
@@ -150,22 +154,62 @@ def cluster_tetra():
     start_centers = [[1, 0, 0], [0, 1, 0], [0, -1, 0], [-1, 0, 0]];
     template_clustering(start_centers, FCPS_SAMPLES.SAMPLE_TETRA, criterion = splitting_type.BAYESIAN_INFORMATION_CRITERION);
     template_clustering(start_centers, FCPS_SAMPLES.SAMPLE_TETRA, criterion = splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH);
+
+
+def template_clustering_performance(start_centers, path, tolerance = 0.025, criterion = splitting_type.BAYESIAN_INFORMATION_CRITERION, ccore = False):
+    sample = read_sample(path);
     
+    xmeans_instance = xmeans(sample, start_centers, 20, tolerance, criterion, ccore);
+    (ticks, result) = timedcall(xmeans_instance.process);
+
+    criterion_string = "UNKNOWN";
+    if (criterion == splitting_type.BAYESIAN_INFORMATION_CRITERION): criterion_string = "BAYESIAN INFORMATION CRITERION";
+    elif (criterion == splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH): criterion_string = "MINIMUM NOISELESS DESCRIPTION_LENGTH";
+    
+    print("Sample: ", ntpath.basename(path), "', Execution time: '", ticks, "',", criterion_string, "\n");
+
+
+def template_clustering_random_points_performance(cluster_length, amount_clusters, ccore_flag):
+    sample = [ [ random.random(), random.random() ] for _ in range(cluster_length) ];
+    for index in range(1, amount_clusters):
+        default_offset = 5;
+        sample += [ [ random.random() + default_offset * index, random.random() + default_offset * index ] for _ in range(cluster_length) ];
+    
+    initial_center = [ [ random.random(), random.random() ], [ random.random(), random.random() ] ];
+    xmeans_instance = xmeans(sample, initial_center, 20, 0.25, splitting_type.BAYESIAN_INFORMATION_CRITERION, ccore_flag);
+    (ticks, _) = timedcall(xmeans_instance.process);
+    
+    print("Random sample: (size:" + str(len(sample)) + ") ', Execution time: '", ticks,);
+
+
 def experiment_execution_time(ccore_flag = False):
-    template_clustering([[3.7, 5.5]], SIMPLE_SAMPLES.SAMPLE_SIMPLE1, ccore = ccore_flag);
-    template_clustering([[3.5, 4.8], [2.6, 2.5]], SIMPLE_SAMPLES.SAMPLE_SIMPLE2, ccore = ccore_flag);
-    template_clustering([[0.2, 0.1], [4.0, 1.0]], SIMPLE_SAMPLES.SAMPLE_SIMPLE3, ccore = ccore_flag);
-    template_clustering([[1.5, 0.0], [1.5, 2.0], [1.5, 4.0], [1.5, 6.0], [1.5, 8.0]], SIMPLE_SAMPLES.SAMPLE_SIMPLE4, ccore = ccore_flag);
-    template_clustering([[0.0, 1.0], [0.0, 0.0]], SIMPLE_SAMPLES.SAMPLE_SIMPLE5, ccore = ccore_flag);
-    template_clustering([[1.0, 4.5], [3.1, 2.7]], SIMPLE_SAMPLES.SAMPLE_ELONGATE, ccore = ccore_flag);
-    template_clustering([[1.0, 3.5], [2.0, 0.5], [3.0, 3.0]], FCPS_SAMPLES.SAMPLE_LSUN, ccore = ccore_flag);
-    template_clustering([[0.2, 0.2], [0.0, -2.0], [3.0, -3.0], [3.0, 3.0], [-3.0, 3.0], [-3.0, -3.0]], FCPS_SAMPLES.SAMPLE_TARGET, ccore = ccore_flag);
-    template_clustering([[0.8, 0.2]], FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, ccore = ccore_flag);
-    template_clustering([[-1.5, 1.5], [1.5, 1.5]], FCPS_SAMPLES.SAMPLE_WING_NUT, ccore = ccore_flag);
-    template_clustering([[1.1, -1.7, 1.1], [-1.4, 2.5, -1.2]], FCPS_SAMPLES.SAMPLE_CHAINLINK, ccore = ccore_flag);
-    template_clustering([[0.0, 0.0, 0.0], [3.0, 0.0, 0.0], [-2.0, 0.0, 0.0], [0.0, 3.0, 0.0], [0.0, -3.0, 0.0], [0.0, 0.0, 2.5]], FCPS_SAMPLES.SAMPLE_HEPTA, ccore = ccore_flag)
-    template_clustering([[1, 0, 0], [0, 1, 0], [0, -1, 0], [-1, 0, 0]], FCPS_SAMPLES.SAMPLE_TETRA, ccore = ccore_flag);
-    template_clustering([[1, 0, 0], [0, 1, 0], [0, -1, 0], [-1, 0, 0]], FCPS_SAMPLES.SAMPLE_ATOM);
+    template_clustering_performance([[3.7, 5.5]], SIMPLE_SAMPLES.SAMPLE_SIMPLE1, ccore = ccore_flag);
+    template_clustering_performance([[3.5, 4.8], [2.6, 2.5]], SIMPLE_SAMPLES.SAMPLE_SIMPLE2, ccore = ccore_flag);
+    template_clustering_performance([[0.2, 0.1], [4.0, 1.0]], SIMPLE_SAMPLES.SAMPLE_SIMPLE3, ccore = ccore_flag);
+    template_clustering_performance([[1.5, 0.0], [1.5, 2.0], [1.5, 4.0], [1.5, 6.0], [1.5, 8.0]], SIMPLE_SAMPLES.SAMPLE_SIMPLE4, ccore = ccore_flag);
+    template_clustering_performance([[0.0, 1.0], [0.0, 0.0]], SIMPLE_SAMPLES.SAMPLE_SIMPLE5, ccore = ccore_flag);
+    template_clustering_performance([[1.0, 4.5], [3.1, 2.7]], SIMPLE_SAMPLES.SAMPLE_ELONGATE, ccore = ccore_flag);
+    template_clustering_performance([[1.0, 3.5], [2.0, 0.5], [3.0, 3.0]], FCPS_SAMPLES.SAMPLE_LSUN, ccore = ccore_flag);
+    template_clustering_performance([[0.2, 0.2], [0.0, -2.0], [3.0, -3.0], [3.0, 3.0], [-3.0, 3.0], [-3.0, -3.0]], FCPS_SAMPLES.SAMPLE_TARGET, ccore = ccore_flag);
+    template_clustering_performance([[0.8, 0.2]], FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, ccore = ccore_flag);
+    template_clustering_performance([[-1.5, 1.5], [1.5, 1.5]], FCPS_SAMPLES.SAMPLE_WING_NUT, ccore = ccore_flag);
+    template_clustering_performance([[1.1, -1.7, 1.1], [-1.4, 2.5, -1.2]], FCPS_SAMPLES.SAMPLE_CHAINLINK, ccore = ccore_flag);
+    template_clustering_performance([[0.0, 0.0, 0.0], [3.0, 0.0, 0.0], [-2.0, 0.0, 0.0], [0.0, 3.0, 0.0], [0.0, -3.0, 0.0], [0.0, 0.0, 2.5]], FCPS_SAMPLES.SAMPLE_HEPTA, ccore = ccore_flag)
+    template_clustering_performance([[1, 0, 0], [0, 1, 0], [0, -1, 0], [-1, 0, 0]], FCPS_SAMPLES.SAMPLE_TETRA, ccore = ccore_flag);
+    template_clustering_performance([[1, 0, 0], [0, 1, 0], [0, -1, 0], [-1, 0, 0]], FCPS_SAMPLES.SAMPLE_ATOM);
+    
+    template_clustering_random_points_performance(1000, 6, ccore_flag);
+    template_clustering_random_points_performance(2000, 6, ccore_flag);
+    template_clustering_random_points_performance(4000, 6, ccore_flag);
+    template_clustering_random_points_performance(6000, 6, ccore_flag);
+    template_clustering_random_points_performance(8000, 6, ccore_flag);
+    template_clustering_random_points_performance(10000, 6, ccore_flag);
+    template_clustering_random_points_performance(15000, 6, ccore_flag);
+    template_clustering_random_points_performance(30000, 6, ccore_flag);
+    template_clustering_random_points_performance(45000, 6, ccore_flag);
+    template_clustering_random_points_performance(100000, 6, ccore_flag);
+    template_clustering_random_points_performance(200000, 6, ccore_flag);
+    template_clustering_random_points_performance(300000, 6, ccore_flag);
 
 
 cluster_sample1();
@@ -188,6 +232,6 @@ cluster_sample3_without_initial_centers();
 cluster_sample4_without_initial_centers();
 cluster_sample5_without_initial_centers();
 cluster_two_diamonds_without_initial_centers();
- 
+
 experiment_execution_time(False);   # Python code
 experiment_execution_time(True);    # C++ code + Python env.

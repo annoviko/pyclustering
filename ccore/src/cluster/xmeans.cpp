@@ -202,8 +202,8 @@ double xmeans::update_centers(const cluster_sequence & analysed_clusters, datase
         }
 
         /* average for each dimension */
-        for (point::iterator dimension_iterator = total.begin(); dimension_iterator != total.end(); dimension_iterator++) {
-            *dimension_iterator = *dimension_iterator / analysed_clusters[index_cluster].size();
+        for (auto & dimension : total) {
+            dimension = dimension / analysed_clusters[index_cluster].size();
         }
 
         double distance = euclidean_distance_sqrt( &(analysed_centers[index_cluster]), &total );

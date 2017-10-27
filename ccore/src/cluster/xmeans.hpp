@@ -18,8 +18,8 @@
 *
 */
 
-#ifndef _XMEANS_H_
-#define _XMEANS_H_
+
+#pragma once
 
 
 #include <vector>
@@ -105,5 +105,3 @@ private:
 
 }
 
-
-#endif
