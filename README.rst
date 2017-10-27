@@ -93,6 +93,7 @@ Brief Overview of the Library Content
 **Clustering algorithms (module pyclustering.cluster):** 
 
 - Agglomerative [Python, C++]
+- AntMean [Python, C++]
 - BIRCH [Python]
 - CLARANS [Python]
 - CURE [Python, C++]

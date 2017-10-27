@@ -1,39 +1,55 @@
+"""!
 
+@brief Integration-tests for Ant-Mean algorithm.
 
-from pyclustering.cluster.antmean import antmean
+@authors Andrei Novikov, Kukushkin Aleksey (pyclustering@yandex.ru)
+@date 2014-2017
+@copyright GNU Public License
 
-from pyclustering.samples.definitions import SIMPLE_SAMPLES
+@cond GNU_PUBLIC_LICENSE
+    PyClustering is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    PyClustering is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+@endcond
 
-from pyclustering.cluster import cluster_visualizer
-from pyclustering.cluster.antmean import antmean
-from pyclustering.cluster.antmean import antmean_clustering_params
+"""
 
-from pyclustering.utils import read_sample
+from pyclustering.cluster.antmean import antmean;
 
-import time
+from pyclustering.samples.definitions import SIMPLE_SAMPLES;
 
-import matplotlib.pyplot as plt
+from pyclustering.cluster import cluster_visualizer;
+from pyclustering.cluster.antmean import antmean_clustering_params;
+
+from pyclustering.utils import read_sample;
+
+import time;
 
 
 def template_clustering(path, count_clusters, iterations=50, count_ants=20, pheramone_init=0.1, ro=0.9):
-    """ """
-
     params = antmean_clustering_params()
     params.iterations = iterations
     params.count_ants = count_ants
     params.pheramone_init = pheramone_init
     params.ro = ro
 
-    #
-    algo = antmean(params)
-
-    #
     sample = read_sample(path)
+    algo = antmean(sample, count_clusters, params)
 
     start_time = time.time()
 
     # Clustering ...
-    res = algo.process(count_clusters, sample)
+    algo.process()
+    res = algo.get_clusters();
 
     print("Sample: ", path, "\t\tExecution time: ", time.time() - start_time, "\n")
 
@@ -108,6 +124,7 @@ def cluster_sample11():
                         count_ants=200,
                         pheramone_init=0.1,
                         ro=0.9)
+
 
 cluster_sample1()
 cluster_sample2()
