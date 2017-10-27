@@ -34,39 +34,8 @@ from pyclustering.utils import read_sample;
 
 
 class AntmeanIntegrationTest(unittest.TestCase):
-    def templateClustering(self, samples, clusters):
-        algo = antmean(samples, len(clusters), None);
-        algo.process();
-        res = algo.get_clusters();
-
-
-        for i in range(len(res)):
-            res[i].sort()
-        
-        for i in range(len(clusters)):
-            clusters[i].sort()
-
-            for j in range(len(res)):
-
-                found_cl = True
-
-                for k in range(len(clusters[i])):
-                    if clusters[i][k] != res[j][k]:
-                        found_cl = False
-                        break
-                
-                if found_cl:
-                    break
-            
-            assert found_cl
-
-    def testSimpleTwoClusters(self):
-        self.templateClustering([[0, 0], [1, 1], [10, 10], [11, 11], [-2, -2], [0.55, -1.26], [13.25, 12.12]],
-                                [[0, 1, 4, 5], [2, 3, 6]]);
-
-
     def templateSimpleClustering(self, path, count_clusters, expected_length_clusters, iterations, count_ants, pheramone_init, ro):
-        attempts = 10;
+        attempts = 15;
 
         params = antmean_clustering_params();
         params.iterations = iterations;
@@ -102,13 +71,13 @@ class AntmeanIntegrationTest(unittest.TestCase):
 
 
     def testClusteringSampleSimple01(self):
-        self.templateSimpleClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, [5, 5], 50, 40, 0.1, 0.9);
+        self.templateSimpleClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, [5, 5], 50, 100, 0.1, 0.9);
 
     def testClusteringSampleSimple02(self):
-        self.templateSimpleClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 3, [5, 8, 10], 400, 300, 0.1, 0.9);
+        self.templateSimpleClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 3, [5, 8, 10], 400, 500, 0.1, 0.9);
 
     def testClusteringOneDimensionalData(self):
-        self.templateSimpleClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE7, 2, [10, 10], 400, 300, 0.1, 0.9);
+        self.templateSimpleClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE7, 2, [10, 10], 400, 500, 0.1, 0.9);
 
 
 if __name__ == "__main__":
