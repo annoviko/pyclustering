@@ -44,6 +44,8 @@ def template_clustering(radius, neighb, path, invisible_axes = False, ccore = Tr
     clusters = dbscan_instance.get_clusters();
     noise = dbscan_instance.get_noise();
     
+    print([len(cluster) for cluster in clusters]);
+    
     if (False):
         visualizer = cluster_visualizer();
         visualizer.append_clusters(clusters, sample);

@@ -67,16 +67,51 @@ const simple_sample_factory::map_sample simple_sample_factory::m_sample_table = 
     { SAMPLE_SIMPLE::SAMPLE_SIMPLE_09, simple_sample_factory::PATH_SAMPLE_SIMPLE_09 },
     { SAMPLE_SIMPLE::SAMPLE_SIMPLE_10, simple_sample_factory::PATH_SAMPLE_SIMPLE_10 },
     { SAMPLE_SIMPLE::SAMPLE_SIMPLE_11, simple_sample_factory::PATH_SAMPLE_SIMPLE_11 },
-    { SAMPLE_SIMPLE::SAMPLE_SIMPLE_12, simple_sample_factory::PATH_SAMPLE_SIMPLE_12 },
+    { SAMPLE_SIMPLE::SAMPLE_SIMPLE_12, simple_sample_factory::PATH_SAMPLE_SIMPLE_12 }
 };
 
 
-std::shared_ptr<dataset> simple_sample_factory::create_sample(const SAMPLE_SIMPLE sample) {
+
+const std::string fcps_sample_factory::PATH_FCPS_SAMPLE_FOLDER = 
+    ".." + separator +
+    ".." + separator +
+    "pyclustering" + separator +
+    "samples" + separator +
+    "samples" + separator +
+    "fcps" + separator;
+
+
+const std::string fcps_sample_factory::PATH_SAMPLE_ATOM         = PATH_FCPS_SAMPLE_FOLDER + "Atom.data";
+const std::string fcps_sample_factory::PATH_SAMPLE_CHAINLINK    = PATH_FCPS_SAMPLE_FOLDER + "Chainlink.data";
+const std::string fcps_sample_factory::PATH_SAMPLE_ENGY_TIME    = PATH_FCPS_SAMPLE_FOLDER + "EngyTime.data";
+const std::string fcps_sample_factory::PATH_SAMPLE_GOLF_BALL    = PATH_FCPS_SAMPLE_FOLDER + "GolfBall.data";
+const std::string fcps_sample_factory::PATH_SAMPLE_HEPTA        = PATH_FCPS_SAMPLE_FOLDER + "Hepta.data";
+const std::string fcps_sample_factory::PATH_SAMPLE_LSUN         = PATH_FCPS_SAMPLE_FOLDER + "Lsun.data";
+const std::string fcps_sample_factory::PATH_SAMPLE_TARGET       = PATH_FCPS_SAMPLE_FOLDER + "Target.data";
+const std::string fcps_sample_factory::PATH_SAMPLE_TETRA        = PATH_FCPS_SAMPLE_FOLDER + "Tetra.data";
+const std::string fcps_sample_factory::PATH_SAMPLE_TWO_DIAMONDS = PATH_FCPS_SAMPLE_FOLDER + "TwoDiamonds.data";
+const std::string fcps_sample_factory::PATH_SAMPLE_WING_NUT     = PATH_FCPS_SAMPLE_FOLDER + "WingNut.data";
+
+
+const fcps_sample_factory::map_sample fcps_sample_factory::m_sample_table = {
+    { FCPS_SAMPLE::ATOM,            fcps_sample_factory::PATH_SAMPLE_ATOM           },
+    { FCPS_SAMPLE::CHAINLINK,       fcps_sample_factory::PATH_SAMPLE_CHAINLINK      },
+    { FCPS_SAMPLE::ENGY_TIME,       fcps_sample_factory::PATH_SAMPLE_ENGY_TIME      },
+    { FCPS_SAMPLE::GOLF_BALL,       fcps_sample_factory::PATH_SAMPLE_GOLF_BALL      },
+    { FCPS_SAMPLE::HEPTA,           fcps_sample_factory::PATH_SAMPLE_HEPTA          },
+    { FCPS_SAMPLE::LSUN,            fcps_sample_factory::PATH_SAMPLE_LSUN           },
+    { FCPS_SAMPLE::TARGET,          fcps_sample_factory::PATH_SAMPLE_TARGET         },
+    { FCPS_SAMPLE::TETRA,           fcps_sample_factory::PATH_SAMPLE_TETRA          },
+    { FCPS_SAMPLE::TWO_DIAMONDS,    fcps_sample_factory::PATH_SAMPLE_TWO_DIAMONDS   },
+    { FCPS_SAMPLE::WING_NUT,        fcps_sample_factory::PATH_SAMPLE_WING_NUT       }
+};
+
+
+
+std::shared_ptr<dataset> generic_sample_factory::create_sample(const std::string & path_sample) {
     std::shared_ptr<dataset> sample_data(new dataset);
     size_t sample_dimension = 0;
 
-    const std::string path_sample = m_sample_table.at(sample);
-    
     std::ifstream file_sample(path_sample);
     if (file_sample.is_open()) {
         std::string file_line;
@@ -108,4 +143,16 @@ std::shared_ptr<dataset> simple_sample_factory::create_sample(const SAMPLE_SIMPL
     }
 
     return sample_data;
+}
+
+
+std::shared_ptr<dataset> simple_sample_factory::create_sample(const SAMPLE_SIMPLE sample) {
+    const std::string path_sample = m_sample_table.at(sample);
+    return generic_sample_factory::create_sample(path_sample);
+}
+
+
+std::shared_ptr<dataset> fcps_sample_factory::create_sample(const FCPS_SAMPLE sample) {
+    const std::string path_sample = m_sample_table.at(sample);
+    return generic_sample_factory::create_sample(path_sample);
 }

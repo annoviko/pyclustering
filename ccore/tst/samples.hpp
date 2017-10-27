@@ -29,11 +29,26 @@
 #include "definitions.hpp"
 
 
-/***********************************************************************************************
+class generic_sample_factory {
+public:
+    /**
+    *
+    * @brief   Creates sample for cluster analysis.
+    *
+    * @param[in] sample: sample that should be created.
+    *
+    * @return  Smart pointer to created dataset.
+    *
+    */
+    static std::shared_ptr<dataset> create_sample(const std::string & path_sample);
+};
+
+
+/**
 *
-* @brief   Sample from set SIMPLE SAMPLE that is used for easy testing of clustering algorithms.
+* @brief   Samples from set SIMPLE SAMPLE that is used for easy testing of clustering algorithms.
 *
-***********************************************************************************************/
+*/
 enum class SAMPLE_SIMPLE {
     SAMPLE_SIMPLE_01,
     SAMPLE_SIMPLE_02,
@@ -50,11 +65,11 @@ enum class SAMPLE_SIMPLE {
 };
 
 
-/***********************************************************************************************
+/**
 *
 * @brief   Factory of samples from SIMPLE SAMPLE set.
 *
-***********************************************************************************************/
+*/
 class simple_sample_factory {
 private:
     typedef std::map<SAMPLE_SIMPLE, std::string>    map_sample;
@@ -88,5 +103,63 @@ public:
     *
     */
     static std::shared_ptr<dataset> create_sample(const SAMPLE_SIMPLE sample);
+};
+
+
+/**
+*
+* @brief   Samples from set FCPS that is used for functional testing of clustering algorithms.
+*
+*/
+enum class FCPS_SAMPLE {
+    ATOM,
+    CHAINLINK,
+    ENGY_TIME,
+    GOLF_BALL,
+    HEPTA,
+    LSUN,
+    TARGET,
+    TETRA,
+    TWO_DIAMONDS,
+    WING_NUT
+};
+
+
+/**
+*
+* @brief   Factory of samples from SIMPLE SAMPLE set.
+*
+*/
+class fcps_sample_factory {
+private:
+    typedef std::map<FCPS_SAMPLE, std::string>    map_sample;
+
+private:
+    const static map_sample  m_sample_table;
+
+private:
+    const static std::string PATH_FCPS_SAMPLE_FOLDER;
+    const static std::string PATH_SAMPLE_ATOM;
+    const static std::string PATH_SAMPLE_CHAINLINK;
+    const static std::string PATH_SAMPLE_ENGY_TIME;
+    const static std::string PATH_SAMPLE_GOLF_BALL;
+    const static std::string PATH_SAMPLE_HEPTA;
+    const static std::string PATH_SAMPLE_LSUN;
+    const static std::string PATH_SAMPLE_TARGET;
+    const static std::string PATH_SAMPLE_TETRA;
+    const static std::string PATH_SAMPLE_TWO_DIAMONDS;
+    const static std::string PATH_SAMPLE_WING_NUT;
+
+public:
+    /**
+    *
+    * @brief   Creates sample for cluster analysis.
+    *
+    * @param[in] sample: sample that should be created.
+    *
+    * @return  Smart pointer to created dataset.
+    *
+    */
+    static std::shared_ptr<dataset> create_sample(const FCPS_SAMPLE sample);
 };
 

@@ -26,10 +26,13 @@
 """
 
 
+import math;
+
 from pyclustering.container.kdtree import kdtree;
 
 from pyclustering.cluster.encoder import type_encoding;
 
+from pyclustering.utils import euclidean_distance;
 from pyclustering.utils.color import color as color_list;
 
 import matplotlib.pyplot as plt;
@@ -612,4 +615,16 @@ class optics:
         """
         
         kdnodes = self.__kdtree.find_nearest_dist_nodes(self.__sample_pointer[optic_object.index_object], self.__eps);
-        return [ [node_tuple[1].payload, node_tuple[0]] for node_tuple in kdnodes if node_tuple[1].payload != optic_object.index_object];
+        return [ [node_tuple[1].payload, math.sqrt(node_tuple[0]) ] for node_tuple in kdnodes if node_tuple[1].payload != optic_object.index_object];
+
+#         neighbor_description = [];
+#         
+#         for index in range(0, len(self.__sample_pointer), 1):
+#             if (index == optic_object.index_object):
+#                 continue;
+#             
+#             distance = euclidean_distance(self.__sample_pointer[optic_object.index_object], self.__sample_pointer[index]);
+#             if (distance <= self.__eps):
+#                 neighbor_description.append( [index, distance] );
+#             
+#         return neighbor_description;

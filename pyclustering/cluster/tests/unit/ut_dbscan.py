@@ -61,7 +61,7 @@ class DbscsanUnitTest(unittest.TestCase):
         DbscanTestTemplates.templateClusteringResults(FCPS_SAMPLES.SAMPLE_HEPTA, 5, 3, [212], False);
 
 
-    def testLengthProcessedSampleSimple1(self):    
+    def testLengthProcessedSampleSimple1(self):
         DbscanTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 0.7, 0, 10);
         DbscanTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 0.5, 0, 10); 
          
