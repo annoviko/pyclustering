@@ -31,17 +31,23 @@
 #include "utils.hpp"
 
 
+#define XMEANS_PARALLEL_OPTIMIZATION
+
+
 namespace cluster_analysis {
 
 
-const std::size_t        xmeans::DEFAULT_AMOUNT_THREADS = 10;
+const double             xmeans::DEFAULT_SPLIT_DIFFERENCE                = 0.001;
+const std::size_t        xmeans::DEFAULT_DATA_SIZE_PARALLEL_PROCESSING   = 100000;
 
 
 xmeans::xmeans(const dataset & p_centers, const std::size_t p_kmax, const double p_tolerance, const splitting_type p_criterion) :
     m_centers(p_centers),
     m_maximum_clusters(p_kmax),
     m_tolerance(p_tolerance * p_tolerance),
-    m_criterion(p_criterion)
+    m_criterion(p_criterion),
+    m_parallel_processing(false),
+    m_parallel_trigger(DEFAULT_DATA_SIZE_PARALLEL_PROCESSING)
 { }
 
 
@@ -50,6 +56,10 @@ xmeans::~xmeans(void) { }
 
 void xmeans::process(const dataset & data, cluster_data & output_result) {
     m_ptr_data = &data;
+
+    if (m_ptr_data->size() >= m_parallel_trigger) {
+        m_parallel_processing = true;
+    }
 
     output_result = xmeans_data();
     m_ptr_result = (xmeans_data *)&output_result;
@@ -72,6 +82,11 @@ void xmeans::process(const dataset & data, cluster_data & output_result) {
 }
 
 
+void xmeans::set_parallel_processing_trigger(const std::size_t p_data_size) {
+    m_parallel_trigger = p_data_size;
+}
+
+
 void xmeans::improve_parameters(cluster_sequence & improved_clusters, dataset & improved_centers, const index_sequence & available_indexes) {
     double current_change = std::numeric_limits<double>::max();
 
@@ -83,59 +98,81 @@ void xmeans::improve_parameters(cluster_sequence & improved_clusters, dataset & 
 
 
 void xmeans::improve_structure() {
-    const double difference = 0.001;
     dataset allocated_centers;
 
-    for (std::size_t index = 0; index < m_ptr_result->clusters()->size(); index++) {
-        cluster & current_cluster = (*(m_ptr_result->clusters()))[index];
+    if (m_parallel_processing) {
+        std::vector< std::future<void> > pool_improve_futures;
+        for (std::size_t index = 0; index < m_ptr_result->clusters()->size(); index++) {
+            auto improve_functor = std::bind(&xmeans::improve_region_structure, this, 
+                std::cref((*(m_ptr_result->clusters()))[index]), 
+                std::cref(m_centers[index]),
+                std::ref(allocated_centers));
 
-        dataset parent_child_centers;
-        parent_child_centers.push_back( m_centers[index] );     /* the first child      */
-        parent_child_centers.push_back( m_centers[index] );     /* the second child     */
-
-        /* change location of each child (total number of children is two) */
-        for (std::size_t dimension = 0; dimension < parent_child_centers[0].size(); dimension++) {
-            parent_child_centers[0][dimension] -= difference;
-            parent_child_centers[1][dimension] += difference;
+            pool_improve_futures.emplace_back(std::async(std::launch::async, improve_functor));
         }
 
-        /* solve k-means problem for children where data of parent are used */
-        cluster_sequence parent_child_clusters(2, cluster());
-
-        improve_parameters(parent_child_clusters, parent_child_centers, current_cluster);
-
-        /* splitting criterion */
-        cluster_sequence parent_cluster(1, current_cluster);
-        dataset parent_center(1, m_centers[index]);
-
-        double parent_scores = splitting_criterion(parent_cluster, parent_center);
-        double child_scores = splitting_criterion(parent_child_clusters, parent_child_centers);
-
-        if (m_criterion == splitting_type::BAYESIAN_INFORMATION_CRITERION) {
-            /* take the best representation of the considered data */
-            if (parent_scores > child_scores) {
-                allocated_centers.push_back(m_centers[index]);
-            }
-            else {
-                allocated_centers.push_back(parent_child_centers[0]);
-                allocated_centers.push_back(parent_child_centers[1]);
-            }
-        }
-        else if (m_criterion == splitting_type::MINIMUM_NOISELESS_DESCRIPTION_LENGTH) {
-            if (parent_scores < child_scores) {
-                allocated_centers.push_back(m_centers[index]);
-            }
-            else {
-                allocated_centers.push_back(parent_child_centers[0]);
-                allocated_centers.push_back(parent_child_centers[1]);
-            }
+        for (auto & improve_future : pool_improve_futures) {
+            improve_future.get();
         }
     }
+    else {
+        for (std::size_t index = 0; index < m_ptr_result->clusters()->size(); index++) {
+            improve_region_structure((*(m_ptr_result->clusters()))[index], m_centers[index], allocated_centers);
+        }
+    }
+
 
     /* update current centers */
     m_centers.clear();
     for (std::size_t index = 0; index < allocated_centers.size(); index++) {
         m_centers.push_back(allocated_centers[index]);
+    }
+}
+
+
+void xmeans::improve_region_structure(const cluster & p_cluster, const point & p_center, dataset & p_allocated_centers) {
+    dataset parent_child_centers;
+
+    parent_child_centers.push_back( p_center );     /* the first child      */
+    parent_child_centers.push_back( p_center );     /* the second child     */
+
+    /* change location of each child (total number of children is two) */
+    for (std::size_t dimension = 0; dimension < parent_child_centers[0].size(); dimension++) {
+        parent_child_centers[0][dimension] -= DEFAULT_SPLIT_DIFFERENCE;
+        parent_child_centers[1][dimension] += DEFAULT_SPLIT_DIFFERENCE;
+    }
+
+    /* solve k-means problem for children where data of parent are used */
+    cluster_sequence parent_child_clusters(2, cluster());
+
+    improve_parameters(parent_child_clusters, parent_child_centers, p_cluster);
+
+    /* splitting criterion */
+    cluster_sequence parent_cluster(1, p_cluster);
+    dataset parent_center(1, p_center);
+
+    double parent_scores = splitting_criterion(parent_cluster, parent_center);
+    double child_scores = splitting_criterion(parent_child_clusters, parent_child_centers);
+
+    bool divide_descision = false;
+
+    if (m_criterion == splitting_type::BAYESIAN_INFORMATION_CRITERION) {
+        divide_descision = (parent_scores <= child_scores);
+    }
+    else if (m_criterion == splitting_type::MINIMUM_NOISELESS_DESCRIPTION_LENGTH) {
+        divide_descision = (parent_scores >= child_scores);
+    }
+
+    if (m_parallel_processing) {
+        std::lock_guard<std::mutex> locker(m_mutex);
+    }
+
+    if (divide_descision) {
+        p_allocated_centers.push_back(parent_child_centers[0]);
+        p_allocated_centers.push_back(parent_child_centers[1]);
+    }
+    else {
+        p_allocated_centers.push_back(p_center);
     }
 }
 
@@ -166,9 +203,9 @@ void xmeans::update_clusters(cluster_sequence & analysed_clusters, const dataset
         }
     }
     else {
-        for (index_sequence::const_iterator index_object = available_indexes.begin(); index_object != available_indexes.end(); index_object++) {
-            std::size_t index_cluster = find_proper_cluster(analysed_centers, (*m_ptr_data)[*index_object]);
-            analysed_clusters[index_cluster].push_back(*index_object);
+        for (auto & index_object : available_indexes) {
+            std::size_t index_cluster = find_proper_cluster(analysed_centers, (*m_ptr_data)[index_object]);
+            analysed_clusters[index_cluster].push_back(index_object);
         }
     }
 }
@@ -190,25 +227,31 @@ std::size_t xmeans::find_proper_cluster(const dataset & analysed_centers, const 
     return index_optimum;
 }
 
-double xmeans::foo(cluster & p) {
-    return 0.0;
-}
 
 double xmeans::update_centers(const cluster_sequence & analysed_clusters, dataset & analysed_centers) {
     double maximum_change = 0;
 
-    /* for each cluster */
-    std::vector<std::future<double>> pool_update_futures;
+    if (m_parallel_processing) {
+        std::vector< std::future<double> > pool_update_futures;
+        for (std::size_t index_cluster = 0; index_cluster < analysed_clusters.size(); index_cluster++) {
+            auto update_functor = std::bind(&xmeans::update_center, this, std::cref(analysed_clusters[index_cluster]), std::ref(analysed_centers[index_cluster]));
+            pool_update_futures.emplace_back(std::async(std::launch::async, update_functor));
+        }
 
-    for (std::size_t index_cluster = 0; index_cluster < analysed_clusters.size(); index_cluster++) {
-        auto update_functor = std::bind(&xmeans::update_center, this, std::cref(analysed_clusters[index_cluster]), std::ref(analysed_centers[index_cluster]));
-        pool_update_futures.emplace_back(std::async(std::launch::async, update_functor));
+        for (auto & update_future : pool_update_futures) {
+            double distance = update_future.get();
+            if (distance > maximum_change) {
+                maximum_change = distance;
+            }
+        }
     }
+    else {
+        for (std::size_t index_cluster = 0; index_cluster < analysed_clusters.size(); index_cluster++) {
+            double distance = update_center(analysed_clusters[index_cluster], analysed_centers[index_cluster]);
 
-    for (auto & update_future : pool_update_futures) {
-        double distance = update_future.get();
-        if (distance > maximum_change) {
-            maximum_change = distance;
+            if (distance > maximum_change) {
+                maximum_change = distance;
+            }
         }
     }
 

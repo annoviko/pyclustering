@@ -255,7 +255,7 @@ static void template_simulate_check_winners(const som_conn_type conn_type, const
     som_map.train(*sample_simple_01.get(), 100, autostop);
 
     std::vector<std::size_t> expected_winners = { 0, 1 };
-    for (int i = 0; i < sample_simple_01->size(); i++) {
+    for (std::size_t i = 0; i < sample_simple_01->size(); i++) {
         std::size_t index_winner = som_map.simulate(sample_simple_01->at(i));
         if ( (i == 0) && (index_winner != 0) ) {
             expected_winners = { 1, 0 };

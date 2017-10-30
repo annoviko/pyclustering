@@ -103,6 +103,18 @@ public:
     *
     */
     static std::shared_ptr<dataset> create_sample(const SAMPLE_SIMPLE sample);
+
+    /**
+    *
+    * @brief   Creates random (uniform distribution) sample for cluster analysis.
+    *
+    * @param[in] p_cluster_size: size of each cluster in dataset.
+    * @param[in] p_clusters: amount of clusters in dataset.
+    *
+    * @return  Smart pointer to created dataset.
+    *
+    */
+    static std::shared_ptr<dataset> create_random_sample(const std::size_t p_cluster_size, const std::size_t p_clusters);
 };
 
 
@@ -162,4 +174,3 @@ public:
     */
     static std::shared_ptr<dataset> create_sample(const FCPS_SAMPLE sample);
 };
-

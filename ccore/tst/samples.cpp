@@ -18,11 +18,13 @@
 *
 */
 
+
 #include "samples.hpp"
 
 #include <fstream>
-#include <sstream>
 #include <iostream>
+#include <random>
+#include <sstream>
 
 
 #if defined _WIN32 || defined __CYGWIN__
@@ -150,6 +152,26 @@ std::shared_ptr<dataset> simple_sample_factory::create_sample(const SAMPLE_SIMPL
     const std::string path_sample = m_sample_table.at(sample);
     return generic_sample_factory::create_sample(path_sample);
 }
+
+
+std::shared_ptr<dataset> simple_sample_factory::create_random_sample(const std::size_t p_cluster_size, const std::size_t p_clusters) {
+    std::shared_ptr<dataset> sample_data(new dataset);
+
+    std::random_device device;
+    std::mt19937 generator(device());
+
+    for (std::size_t index_cluster = 0; index_cluster < p_clusters; index_cluster++) {
+        for (std::size_t index_point = 0; index_point < p_cluster_size; index_point++) {
+            sample_data->push_back({ 
+                std::generate_canonical<double, 32>(generator) + index_point * 5, 
+                std::generate_canonical<double, 32>(generator) + index_point * 5
+            });
+        }
+    }
+
+    return sample_data;
+}
+
 
 
 std::shared_ptr<dataset> fcps_sample_factory::create_sample(const FCPS_SAMPLE sample) {

@@ -36,7 +36,8 @@ template_length_process_data(const std::shared_ptr<dataset> & data,
                              const dataset & start_centers,
                              const unsigned int kmax,
                              const std::vector<unsigned int> & expected_cluster_length,
-                             const splitting_type criterion) {
+                             const splitting_type criterion,
+                             const std::size_t parallel_processing_trigger = xmeans::DEFAULT_DATA_SIZE_PARALLEL_PROCESSING) {
     cluster_analysis::xmeans solver(start_centers, kmax, 0.0001, criterion);
 
     cluster_analysis::xmeans_data output_result;
@@ -45,21 +46,29 @@ template_length_process_data(const std::shared_ptr<dataset> & data,
     cluster_analysis::cluster_sequence & results = *(output_result.clusters());
 
     /* Check number of clusters */
-    ASSERT_EQ(expected_cluster_length.size(), results.size());
+    if (!expected_cluster_length.empty()) {
+        ASSERT_EQ(expected_cluster_length.size(), results.size());
+    }
 
     /* Check cluster sizes */
     std::vector<size_t> obtained_cluster_length;
+    std::size_t total_size = 0;
     for (size_t i = 0; i < results.size(); i++) {
         obtained_cluster_length.push_back(results[i].size());
+        total_size += results[i].size();
     }
 
-    std::sort(obtained_cluster_length.begin(), obtained_cluster_length.end());
+    ASSERT_EQ(data->size(), total_size);
 
-    std::vector<unsigned int> sorted_expected_cluster_length(expected_cluster_length);
-    std::sort(sorted_expected_cluster_length.begin(), sorted_expected_cluster_length.end());
+    if (!expected_cluster_length.empty()) {
+        std::sort(obtained_cluster_length.begin(), obtained_cluster_length.end());
 
-    for (size_t i = 0; i < obtained_cluster_length.size(); i++) {
-        ASSERT_EQ(obtained_cluster_length[i], sorted_expected_cluster_length[i]);
+        std::vector<unsigned int> sorted_expected_cluster_length(expected_cluster_length);
+        std::sort(sorted_expected_cluster_length.begin(), sorted_expected_cluster_length.end());
+
+        for (size_t i = 0; i < obtained_cluster_length.size(); i++) {
+            ASSERT_EQ(obtained_cluster_length[i], sorted_expected_cluster_length[i]);
+        }
     }
 }
 
@@ -117,4 +126,24 @@ TEST(utest_xmeans, allocation_mndl_sample_simple_04) {
     dataset start_centers = { {1.5, 0.0}, {1.5, 2.0}, {1.5, 4.0}, {1.5, 6.0}, {1.5, 8.0} };
     std::vector<unsigned int> expected_clusters_length = {15, 15, 15, 15, 15};
     template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_04), start_centers, 20, expected_clusters_length, splitting_type::MINIMUM_NOISELESS_DESCRIPTION_LENGTH);
+}
+
+
+TEST(utest_xmeans, parallel_processing_bic) {
+    dataset start_centers = { {0.25, 0.25}, {0.75, 0.65}, {0.95, 0.5} };
+    std::size_t parallel_processing_trigger = 100;
+
+    std::shared_ptr<dataset> trigger_parallel_data = simple_sample_factory::create_random_sample(parallel_processing_trigger, 5);
+
+    template_length_process_data(trigger_parallel_data, start_centers, 20, { }, splitting_type::BAYESIAN_INFORMATION_CRITERION, parallel_processing_trigger);
+}
+
+
+TEST(utest_xmeans, parallel_processing_mndl) {
+    dataset start_centers = { {0.25, 0.25}, {0.75, 0.65}, {0.95, 0.5} };
+    std::size_t parallel_processing_trigger = 100;
+
+    std::shared_ptr<dataset> trigger_parallel_data = simple_sample_factory::create_random_sample(parallel_processing_trigger, 5);
+
+    template_length_process_data(trigger_parallel_data, start_centers, 20, { }, splitting_type::MINIMUM_NOISELESS_DESCRIPTION_LENGTH, parallel_processing_trigger);
 }
