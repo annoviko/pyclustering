@@ -21,6 +21,7 @@
 
 
 #include <cmath>
+#include <future>
 #include <iostream>
 #include <limits>
 #include <numeric>
@@ -31,6 +32,9 @@
 
 
 namespace cluster_analysis {
+
+
+const std::size_t        xmeans::DEFAULT_AMOUNT_THREADS = 10;
 
 
 xmeans::xmeans(const dataset & p_centers, const std::size_t p_kmax, const double p_tolerance, const splitting_type p_criterion) :
@@ -66,6 +70,7 @@ void xmeans::process(const dataset & data, cluster_data & output_result) {
         current_number_clusters = m_centers.size();
     }
 }
+
 
 void xmeans::improve_parameters(cluster_sequence & improved_clusters, dataset & improved_centers, const index_sequence & available_indexes) {
     double current_change = std::numeric_limits<double>::max();
@@ -185,37 +190,53 @@ std::size_t xmeans::find_proper_cluster(const dataset & analysed_centers, const 
     return index_optimum;
 }
 
+double xmeans::foo(cluster & p) {
+    return 0.0;
+}
 
 double xmeans::update_centers(const cluster_sequence & analysed_clusters, dataset & analysed_centers) {
     double maximum_change = 0;
 
     /* for each cluster */
-    for (unsigned int index_cluster = 0; index_cluster < analysed_clusters.size(); index_cluster++) {
-        std::vector<double> total(analysed_centers[index_cluster].size(), 0);
+    std::vector<std::future<double>> pool_update_futures;
 
-        /* for each object in cluster */
-        for (cluster::const_iterator object_index_iterator = analysed_clusters[index_cluster].begin(); object_index_iterator < analysed_clusters[index_cluster].end(); object_index_iterator++) {
-            /* for each dimension */
-            for (std::size_t dimension = 0; dimension < total.size(); dimension++) {
-                total[dimension] += (*m_ptr_data)[*object_index_iterator][dimension];
-            }
-        }
+    for (std::size_t index_cluster = 0; index_cluster < analysed_clusters.size(); index_cluster++) {
+        auto update_functor = std::bind(&xmeans::update_center, this, std::cref(analysed_clusters[index_cluster]), std::ref(analysed_centers[index_cluster]));
+        pool_update_futures.emplace_back(std::async(std::launch::async, update_functor));
+    }
 
-        /* average for each dimension */
-        for (auto & dimension : total) {
-            dimension = dimension / analysed_clusters[index_cluster].size();
-        }
-
-        double distance = euclidean_distance_sqrt( &(analysed_centers[index_cluster]), &total );
-
+    for (auto & update_future : pool_update_futures) {
+        double distance = update_future.get();
         if (distance > maximum_change) {
             maximum_change = distance;
         }
-
-        std::copy(total.begin(), total.end(), analysed_centers[index_cluster].begin());
     }
 
     return maximum_change;
+}
+
+
+double xmeans::update_center(const cluster & p_cluster, point & p_center) {
+    std::vector<double> total(p_center.size(), 0);
+
+    /* for each object in cluster */
+    for (auto & object_index : p_cluster) {
+        /* for each dimension */
+        for (std::size_t dimension = 0; dimension < total.size(); dimension++) {
+            total[dimension] += (*m_ptr_data)[object_index][dimension];
+        }
+    }
+
+    /* average for each dimension */
+    for (auto & dimension : total) {
+        dimension = dimension / p_cluster.size();
+    }
+
+    double distance = euclidean_distance_sqrt( &p_center, &total );
+
+    std::copy(total.begin(), total.end(), p_center.begin());
+
+    return distance;
 }
 
 

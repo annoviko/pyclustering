@@ -22,6 +22,7 @@
 #pragma once
 
 
+#include <mutex>
 #include <vector>
 
 #include "cluster/cluster_algorithm.hpp"
@@ -39,6 +40,9 @@ enum class splitting_type {
 
 class xmeans : public cluster_algorithm {
 private:
+    const static std::size_t        DEFAULT_AMOUNT_THREADS;
+
+private:
     dataset         m_centers;
 
     xmeans_data     * m_ptr_result;   /* temporary pointer to output result */
@@ -50,6 +54,8 @@ private:
     double          m_tolerance;
 
     splitting_type  m_criterion;
+
+    std::mutex      m_mutex;
 
 public:
     /**
@@ -89,7 +95,13 @@ private:
 
     double update_centers(const cluster_sequence & clusters, dataset & centers);
 
+    double update_center(const cluster & p_cluster, point & p_center);
+
+    double foo(cluster & p);
+
     void improve_structure(void);
+
+    void improve_region_structure(void);
 
     void improve_parameters(cluster_sequence & clusters, dataset & centers, const index_sequence & available_indexes);
 
