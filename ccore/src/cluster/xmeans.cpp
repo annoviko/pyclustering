@@ -46,8 +46,8 @@ xmeans::xmeans(const dataset & p_centers, const std::size_t p_kmax, const double
     m_maximum_clusters(p_kmax),
     m_tolerance(p_tolerance * p_tolerance),
     m_criterion(p_criterion),
-    m_parallel_processing(false),
-    m_parallel_trigger(DEFAULT_DATA_SIZE_PARALLEL_PROCESSING)
+    m_parallel_trigger(DEFAULT_DATA_SIZE_PARALLEL_PROCESSING),
+    m_parallel_processing(false)
 { }
 
 
