@@ -29,7 +29,7 @@ std::size_t task::get_id(void) const {
 
 
 std::size_t task::generate_task_id(void) {
-    if (++STATIC_TASK_ID_GENERATOR == task::STATIC_TASK_ID_GENERATOR) {
+    if (++STATIC_TASK_ID_GENERATOR == task::INVALID_TASK_ID) {
         return STATIC_TASK_ID_GENERATOR;
     }
 

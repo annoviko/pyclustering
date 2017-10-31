@@ -37,7 +37,7 @@ TOOLS_DIRECTORY = tools
 
 
 # Project sources
-SOURCES_MODULES = . cluster container differential interface nnet tsp
+SOURCES_MODULES = . cluster container differential interface nnet parallel tsp
 UTEST_MODULES = .
 TOOLS_MODULES = gtest
 

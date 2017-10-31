@@ -17,8 +17,8 @@ public:
 
 private:
     task::ptr               m_task          = nullptr;
-    std::atomic<bool>       m_idle          = true;
-    std::atomic<bool>       m_stop          = false;
+    std::atomic<bool>       m_idle          { true };
+    std::atomic<bool>       m_stop          { false };
 
     observer                m_callback      = nullptr;
 

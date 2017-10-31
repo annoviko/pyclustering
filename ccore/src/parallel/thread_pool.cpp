@@ -1,5 +1,7 @@
 #include "thread_pool.hpp"
 
+#include "task.hpp"
+
 
 thread_pool::thread_pool(const std::size_t p_size) : thread_pool() {
     thread_executor::observer observer = std::bind(&thread_pool::task_done, this, std::placeholders::_1);
@@ -11,18 +13,19 @@ thread_pool::thread_pool(const std::size_t p_size) : thread_pool() {
 
 
 std::size_t thread_pool::add_task(task::proc & p_raw_task) {
-    task::ptr task(new task(p_raw_task));
+    task::ptr client_task(new task(p_raw_task));
 
     for(auto & executor : m_pool) {
         if (executor->is_idle()) {
-            executor->execute(task);
+            executor->execute(client_task);
             m_free--;
 
-            return task->get_id();
+            return client_task->get_id();
         }
     }
 
-    m_queue.push_back(task);
+    m_queue.push_back(client_task);
+    return task::INVALID_TASK_ID;
 }
 
 
