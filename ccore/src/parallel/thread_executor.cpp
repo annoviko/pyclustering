@@ -1,11 +1,35 @@
+/**
+*
+* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+*
+* GNU_PUBLIC_LICENSE
+*   pyclustering is free software: you can redistribute it and/or modify
+*   it under the terms of the GNU General Public License as published by
+*   the Free Software Foundation, either version 3 of the License, or
+*   (at your option) any later version.
+*
+*   pyclustering is distributed in the hope that it will be useful,
+*   but WITHOUT ANY WARRANTY; without even the implied warranty of
+*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*   GNU General Public License for more details.
+*
+*   You should have received a copy of the GNU General Public License
+*   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*
+*/
+
+
 #include "thread_executor.hpp"
 
-
+#include <exception>
 #include <iostream>
 
 
-thread_executor::thread_executor(const observer & p_callback) : thread_executor() {
-    m_callback = p_callback;
+namespace parallel {
+
+
+thread_executor::thread_executor(const task_conveyor & p_conveyor) : thread_executor() {
+    m_conveyor  = p_conveyor;
 }
 
 
@@ -15,6 +39,8 @@ thread_executor::~thread_executor(void) {
 
 
 bool thread_executor::execute(const task::ptr p_task) {
+    std::unique_lock<std::mutex> lock_event(m_block);
+
     if ((m_task != nullptr) || !m_idle.load()) {
         return false;
     }
@@ -35,28 +61,23 @@ bool thread_executor::is_idle(void) const {
 
 void thread_executor::run(void) {
     while(!m_stop.load()) {
-        std::cout << "New life cycle is started of the thread '" << std::this_thread::get_id() << "'." << std::endl;
-
-        if (m_task != nullptr) {
-            std::cout << "Start task processing '" << std::this_thread::get_id() << "'." << std::endl;
-
+        while (m_task != nullptr) {
+            //std::cout << "Task Processing " << std::this_thread::get_id() << std::endl;
             (*m_task)();
 
             m_task->set_status(task_status::READY);
 
-            if (m_callback) {
-                m_callback(m_task);
-            }
-
-            m_task = nullptr;
-            m_idle.store(true);
+            m_conveyor(m_task, m_task);
         }
 
+        m_idle.store(true);
+
+        //std::cout << "Thread is Idle " << std::this_thread::get_id() << std::endl;
 
         std::unique_lock<std::mutex> lock_event(m_block);
         m_event_arrive.wait(lock_event, [this]{ return (m_stop.load()) || (m_task != nullptr); });
 
-        std::cout << "Event is received by '" << std::this_thread::get_id() << "'." << std::endl;
+        //std::cout << "Thread is Waken Up " << std::this_thread::get_id() << std::endl;
     }
 }
 
@@ -64,6 +85,13 @@ void thread_executor::run(void) {
 void thread_executor::stop(void) {
     m_stop.store(true);
 
+    //std::cout << "Thread Termination is Started  " << std::this_thread::get_id() << std::endl;
+
     m_event_arrive.notify_one();
     m_executor.join();
+
+    //std::cout << "Thread is Terminated " << std::this_thread::get_id() << std::endl;
+}
+
+
 }

@@ -68,6 +68,9 @@
     <ClCompile Include="nnet\som.cpp" />
     <ClCompile Include="nnet\sync.cpp" />
     <ClCompile Include="nnet\syncpr.cpp" />
+    <ClCompile Include="parallel\task.cpp" />
+    <ClCompile Include="parallel\thread_executor.cpp" />
+    <ClCompile Include="parallel\thread_pool.cpp" />
     <ClCompile Include="tsp\ant_colony.cpp" />
     <ClCompile Include="tsp\distance_matrix.cpp" />
     <ClCompile Include="utils.cpp" />
@@ -138,6 +141,9 @@
     <ClInclude Include="nnet\som.hpp" />
     <ClInclude Include="nnet\sync.hpp" />
     <ClInclude Include="nnet\syncpr.hpp" />
+    <ClInclude Include="parallel\task.hpp" />
+    <ClInclude Include="parallel\thread_executor.hpp" />
+    <ClInclude Include="parallel\thread_pool.hpp" />
     <ClInclude Include="tsp\ant_colony.hpp" />
     <ClInclude Include="tsp\ant_colony_params.hpp" />
     <ClInclude Include="tsp\distance_matrix.hpp" />

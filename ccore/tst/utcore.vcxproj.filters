@@ -33,6 +33,9 @@
     <Filter Include="Tested Code\interface">
       <UniqueIdentifier>{5b5b6ac0-dc7c-434f-af9f-84ad933180f0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tested Code\parallel">
+      <UniqueIdentifier>{89fa589a-cf54-4435-bfe7-13fb0a840d39}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\tools\gtest\gtest-all.cpp">
@@ -332,6 +335,18 @@
     <ClCompile Include="..\src\container\kdnode.cpp">
       <Filter>Tested Code\container</Filter>
     </ClCompile>
+    <ClCompile Include="utest-thread_pool.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\parallel\task.cpp">
+      <Filter>Tested Code\parallel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\parallel\thread_executor.cpp">
+      <Filter>Tested Code\parallel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\parallel\thread_pool.cpp">
+      <Filter>Tested Code\parallel</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\tools\gtest\gtest.h">
@@ -552,6 +567,15 @@
     </ClInclude>
     <ClInclude Include="..\src\container\kdnode.hpp">
       <Filter>Tested Code\container</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\parallel\task.hpp">
+      <Filter>Tested Code\parallel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\parallel\thread_executor.hpp">
+      <Filter>Tested Code\parallel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\parallel\thread_pool.hpp">
+      <Filter>Tested Code\parallel</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

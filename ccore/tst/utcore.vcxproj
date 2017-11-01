@@ -134,6 +134,9 @@
     <ClCompile Include="..\src\nnet\som.cpp" />
     <ClCompile Include="..\src\nnet\sync.cpp" />
     <ClCompile Include="..\src\nnet\syncpr.cpp" />
+    <ClCompile Include="..\src\parallel\task.cpp" />
+    <ClCompile Include="..\src\parallel\thread_executor.cpp" />
+    <ClCompile Include="..\src\parallel\thread_pool.cpp" />
     <ClCompile Include="..\src\tsp\ant_colony.cpp" />
     <ClCompile Include="..\src\tsp\distance_matrix.cpp" />
     <ClCompile Include="..\src\utils.cpp" />
@@ -185,6 +188,7 @@
     <ClCompile Include="utest-syncnet.cpp" />
     <ClCompile Include="utest-syncpr.cpp" />
     <ClCompile Include="utenv-utils.cpp" />
+    <ClCompile Include="utest-thread_pool.cpp" />
     <ClCompile Include="utest-xmeans.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -251,6 +255,9 @@
     <ClInclude Include="..\src\nnet\som.hpp" />
     <ClInclude Include="..\src\nnet\sync.hpp" />
     <ClInclude Include="..\src\nnet\syncpr.hpp" />
+    <ClInclude Include="..\src\parallel\task.hpp" />
+    <ClInclude Include="..\src\parallel\thread_executor.hpp" />
+    <ClInclude Include="..\src\parallel\thread_pool.hpp" />
     <ClInclude Include="..\src\tsp\ant_colony.hpp" />
     <ClInclude Include="..\src\tsp\ant_colony_params.hpp" />
     <ClInclude Include="..\src\tsp\distance_matrix.hpp" />

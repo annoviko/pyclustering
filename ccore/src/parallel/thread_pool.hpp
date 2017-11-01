@@ -1,11 +1,35 @@
+/**
+*
+* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+*
+* GNU_PUBLIC_LICENSE
+*   pyclustering is free software: you can redistribute it and/or modify
+*   it under the terms of the GNU General Public License as published by
+*   the Free Software Foundation, either version 3 of the License, or
+*   (at your option) any later version.
+*
+*   pyclustering is distributed in the hope that it will be useful,
+*   but WITHOUT ANY WARRANTY; without even the implied warranty of
+*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*   GNU General Public License for more details.
+*
+*   You should have received a copy of the GNU General Public License
+*   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*
+*/
+
+
 #pragma once
 
 
-#include <vector>
+#include <atomic>
 #include <deque>
+#include <vector>
 
 #include "thread_executor.hpp"
 
+
+namespace parallel {
 
 
 class thread_pool {
@@ -16,12 +40,16 @@ private:
     thread_container                m_pool  = { };
 
     std::deque<task::ptr>           m_queue = { };
-    std::deque<task::ptr>           m_done  = { };
+    //std::mutex                      m_queue_mutex;
 
-    std::mutex                      m_mutex;
+    std::deque<task::ptr>           m_done  = { };
+    //std::mutex                      m_done_mutex;
+
+    std::mutex                      m_general_mutex;
+
     std::condition_variable         m_event;
 
-    std::size_t                     m_free  = 0;
+    std::atomic<std::size_t>        m_free    { 0 };
 
 public:
     thread_pool(void) = default;
@@ -39,6 +67,11 @@ public:
 
     std::size_t pop_complete_task(void);
 
+    std::size_t size(void) const;
+
 private:
-    void task_done(const task::ptr p_task);
+    void task_conveyor(const task::ptr p_task, task::ptr & p_next_task);
 };
+
+
+}
