@@ -22,7 +22,6 @@
 #include "thread_executor.hpp"
 
 #include <exception>
-#include <iostream>
 
 
 namespace parallel {
@@ -62,7 +61,6 @@ bool thread_executor::is_idle(void) const {
 void thread_executor::run(void) {
     while(!m_stop.load()) {
         while (m_task != nullptr) {
-            //std::cout << "Task Processing " << std::this_thread::get_id() << std::endl;
             (*m_task)();
 
             m_task->set_status(task_status::READY);
@@ -72,12 +70,8 @@ void thread_executor::run(void) {
 
         m_idle.store(true);
 
-        //std::cout << "Thread is Idle " << std::this_thread::get_id() << std::endl;
-
         std::unique_lock<std::mutex> lock_event(m_block);
         m_event_arrive.wait(lock_event, [this]{ return (m_stop.load()) || (m_task != nullptr); });
-
-        //std::cout << "Thread is Waken Up " << std::this_thread::get_id() << std::endl;
     }
 }
 
@@ -85,12 +79,8 @@ void thread_executor::run(void) {
 void thread_executor::stop(void) {
     m_stop.store(true);
 
-    //std::cout << "Thread Termination is Started  " << std::this_thread::get_id() << std::endl;
-
     m_event_arrive.notify_one();
     m_executor.join();
-
-    //std::cout << "Thread is Terminated " << std::this_thread::get_id() << std::endl;
 }
 
 

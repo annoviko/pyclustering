@@ -28,10 +28,10 @@
 
 #include "cluster/xmeans.hpp"
 
+#include "parallel/thread_pool.hpp"
+
 #include "utils.hpp"
 
-
-#define XMEANS_PARALLEL_OPTIMIZATION
 
 
 namespace cluster_analysis {

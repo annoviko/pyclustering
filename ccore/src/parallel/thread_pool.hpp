@@ -40,10 +40,8 @@ private:
     thread_container                m_pool  = { };
 
     std::deque<task::ptr>           m_queue = { };
-    //std::mutex                      m_queue_mutex;
 
     std::deque<task::ptr>           m_done  = { };
-    //std::mutex                      m_done_mutex;
 
     std::mutex                      m_general_mutex;
 

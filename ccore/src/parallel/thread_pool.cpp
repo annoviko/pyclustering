@@ -22,7 +22,7 @@
 #include "thread_pool.hpp"
 
 #include "task.hpp"
-#include <iostream>
+
 
 namespace parallel {
 
