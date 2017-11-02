@@ -221,26 +221,26 @@ def experiment_execution_time(ccore_flag = False):
     template_clustering_random_points_performance(1000000, 6, ccore_flag);
 
 
-# cluster_sample1();
-# cluster_sample2();
-# cluster_sample3();
-# cluster_sample4();
-# cluster_sample5();
-# cluster_elongate();
-# cluster_lsun();
-# cluster_target();
-# cluster_two_diamonds();
-# cluster_wing_nut();
-# cluster_chainlink();
-# cluster_hepta();
-# cluster_tetra();
+cluster_sample1();
+cluster_sample2();
+cluster_sample3();
+cluster_sample4();
+cluster_sample5();
+cluster_elongate();
+cluster_lsun();
+cluster_target();
+cluster_two_diamonds();
+cluster_wing_nut();
+cluster_chainlink();
+cluster_hepta();
+cluster_tetra();
 
-# cluster_sample1_without_initial_centers();
-# cluster_sample2_without_initial_centers();
-# cluster_sample3_without_initial_centers();
-# cluster_sample4_without_initial_centers();
-# cluster_sample5_without_initial_centers();
-# cluster_two_diamonds_without_initial_centers();
+cluster_sample1_without_initial_centers();
+cluster_sample2_without_initial_centers();
+cluster_sample3_without_initial_centers();
+cluster_sample4_without_initial_centers();
+cluster_sample5_without_initial_centers();
+cluster_two_diamonds_without_initial_centers();
 
-# experiment_execution_time(False);   # Python code
+experiment_execution_time(False);   # Python code
 experiment_execution_time(True);    # C++ code + Python env.

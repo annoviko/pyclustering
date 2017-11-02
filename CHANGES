@@ -5,6 +5,12 @@ CHANGE NOTES FOR 0.7.3 (STARTED Oct 23, 2017)
 ------------------------------------------------------------------------
 
 GENERAL CHANGES:
+- Implemented parallel processing for X-Means algorithm (ccore.xmeans)
+  See: https://github.com/annoviko/pyclustering/issues/372
+
+- Implemented pool threads for parallel processing (ccore.parallel)
+  See: https://github.com/annoviko/pyclustering/issues/383
+
 - Implemented AntMean clustering algorithm (pyclustering.cluster.antmean, ccore.antmean)
   See: https://github.com/annoviko/pyclustering/issues/278
 
