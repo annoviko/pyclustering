@@ -48,6 +48,8 @@ download_binary() {
     BINARY_FOLDER=$TRAVIS_BUILD_NUMBER
     BINARY_FILEPATH=$TRAVIS_BRANCH%2F$BUILD_FOLDER%2F$BINARY_FOLDER%2Fccore.so
 
+    echo "[DEPLOY]: Download binary using binary path: '$BINARY_FILEPATH'"
+
     DOWNLOAD_LINK=`curl -s -H "Authorization: OAuth $YANDEX_DISK_TOKEN" -X GET https://cloud-api.yandex.net:443/v1/disk/resources/download?path=$BINARY_FILEPATH |\
         python3 -c "import sys, json; print(json.load(sys.stdin)['href'])"`
 
