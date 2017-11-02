@@ -28,6 +28,68 @@
 
 from pyclustering.utils import euclidean_distance_sqrt;
 
+
+class kdtree_text_visualizer:
+    """!
+    @brief KD-tree text visualizer that provides service to diplay tree structure using text representation.
+    
+    """
+
+    def __init__(self, kdtree_instance):
+        """!
+        @brief Initialize KD-tree text visualizer.
+        
+        @param[in] kdtree_instance (kdtree): Instance of KD-Tree that should be visualized.
+        
+        """
+        self.__kdtree_instance = kdtree_instance;
+        
+        self.__tree_level_text  = "";
+        self.__tree_text        = "";
+
+    def visualize(self, display=True):
+        """!
+        @brief Display KD-tree to console.
+        
+        @param[in] display (bool): If 'True' then tree will be shown in console.
+        
+        @return (string) Text representation of the KD-tree.
+        
+        """
+        
+        nodes = self.__get_nodes();
+        level = nodes[0];
+        
+        for node in nodes:
+            self.__print_node(level, node)
+
+        self.__tree_text += self.__tree_level_text;
+        if (display is True):
+            print(self.__tree_text);
+        
+        return self.__tree_text;
+
+
+    def __print_node(self, level, node):
+        if (level == node[0]):
+            self.__tree_level_text += str(node[1]) + "\t";
+
+        else:
+            self.__tree_text += self.__tree_level_text + "\n";
+            level = node[0];
+            self.__tree_level_text = str(node[1]) + "\t";
+
+
+    def __get_nodes(self):
+        nodes = self.__kdtree_instance.traverse();
+        if (nodes == []):
+            return;
+        
+        nodes.sort(key = lambda item: item[0]);
+        return nodes;
+
+
+
 class node:
     """!
     @brief Represents node of KD-Tree.
@@ -64,7 +126,8 @@ class node:
         
         ## Parent node of the node.
         self.parent = parent;
-    
+
+
     def __repr__(self):
         """!
         @return (string) Default representation of the node.
@@ -79,7 +142,7 @@ class node:
         if (self.right is not None):
             right = self.right.data;
         
-        return 'Node (%s, [%s %s])' % (self.data, left, right);
+        return "(%s: [L:'%s', R:'%s'])" % (self.data, left, right);
     
     def __str__(self):
         """!
@@ -91,7 +154,29 @@ class node:
 
 class kdtree:
     """!
-    @brief Represents KD Tree.
+    @brief Represents KD Tree that is a space-partitioning data structure for organizing points in a k-dimensional space.
+    
+    Examples:
+    @code
+        # Import required modules
+        from pyclustering.samples.definitions import SIMPLE_SAMPLES;
+        from pyclustering.container.kdtree import kdtree;
+        from pyclustering.utils import read_sample;
+        
+        # Read data from text file
+        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE3);
+        
+        # Create instance of KD-tree and initialize (fill) it by read data.
+        tree_instance = kdtree(sample);
+        
+        # Search for nearest point
+        search_distance = 0.3;
+        nearest_node = tree_instance.find_nearest_dist_node([1.12, 4.31], search_distance);
+        
+        # Search for nearest point in radius 0.3
+        nearest_nodes = tree_instance.find_nearest_dist_nodes([1.12, 4.31], search_distance);
+        print("Nearest nodes:", nearest_nodes);
+    @endcode
     
     """
     
@@ -119,8 +204,8 @@ class kdtree:
             # Case when payload is specified.
             for index in range(0, len(data_list)):
                 self.insert(data_list[index], payload_list[index]);
-            
-                    
+
+
     def insert(self, point, payload):
         """!
         @brief Insert new point with payload to kd-tree.
@@ -238,8 +323,8 @@ class kdtree:
             minimal_node.left.parent = minimal_node;
         
         return minimal_node;
-        
-    
+
+
     def find_minimal_node(self, node_head, discriminator):
         """!
         @brief Find minimal node in line with coordinate that is defined by discriminator.
@@ -313,7 +398,8 @@ class kdtree:
         @param[in] distance (double): Maximum distance where neighbors are searched.
         @param[in] retdistance (bool): If True - returns neighbors with distances to them, otherwise only neighbors is returned.
         
-        @return (list) Neighbors, if redistance is True then neighbors with distances to them will be returned.
+        @return (node|list) Nearest neighbor if 'retdistance' is False and list with two elements [node, distance] if 'retdistance' is True,
+                 where the first element is pointer to node and the second element is distance to it.
         
         """
         
@@ -340,13 +426,14 @@ class kdtree:
         @return (list) Neighbors in area that is specified by point (center) and distance (radius).
         
         """
-        
+
         best_nodes = [];
-        self.__recursive_nearest_nodes(point, distance, distance ** 2, self.__root, best_nodes);
-        
+        if (self.__root is not None):
+            self.__recursive_nearest_nodes(point, distance, distance ** 2, self.__root, best_nodes);
+
         return best_nodes;
-    
-    
+
+
     def __recursive_nearest_nodes(self, point, distance, sqrt_distance, node_head, best_nodes):
         """!
         @brief Returns list of neighbors such as tuple (distance, node) that is located in area that is covered by distance.
@@ -358,23 +445,22 @@ class kdtree:
         @param[in|out] best_nodes (list): List of founded nodes.
         
         """
-        
-        minimum = node_head.data[node_head.disc] - distance;
-        maximum = node_head.data[node_head.disc] + distance;
-        
+
         if (node_head.right is not None):
+            minimum = node_head.data[node_head.disc] - distance;
             if (point[node_head.disc] >= minimum):
                 self.__recursive_nearest_nodes(point, distance, sqrt_distance, node_head.right, best_nodes);
         
         if (node_head.left is not None):
+            maximum = node_head.data[node_head.disc] + distance;
             if (point[node_head.disc] < maximum):
                 self.__recursive_nearest_nodes(point, distance, sqrt_distance, node_head.left, best_nodes);
         
         candidate_distance = euclidean_distance_sqrt(point, node_head.data);
         if (candidate_distance <= sqrt_distance):
             best_nodes.append( (candidate_distance, node_head) );
-    
-    
+
+
     def children(self, node_parent):
         """!
         @brief Returns list of children of node.
@@ -389,8 +475,8 @@ class kdtree:
             yield node_parent.left;
         if (node_parent.right is not None):
             yield node_parent.right;
-            
-    
+
+
     def traverse(self, start_node = None, level = None):
         """!
         @brief Traverses all nodes of subtree that is defined by node specified in input parameter.
@@ -409,36 +495,9 @@ class kdtree:
         if (start_node is None):
             return [];
         
-        items = [ (level, start_node) ];        
+        items = [ (level, start_node) ];
         for child in self.children(start_node):
             if child is not None:
                 items += self.traverse(child, level + 1);
         
         return items;
-            
-    
-    def show(self):
-        """!
-        @brief Display tree on the console using text representation.
-        
-        """
-        
-        nodes = self.traverse();
-        if (nodes == []):
-            return;
-        
-        nodes.sort(key = lambda item: item[0]);
-        
-        level = nodes[0];
-        string = "";
-        for item in nodes:
-            if (level == item[0]):
-                string += str(item[1]) + "\t";
-                
-            else:
-                print(string);
-                level = item[0];
-                string = str(item[1]) + "\t";
-                
-        print(string);
-    

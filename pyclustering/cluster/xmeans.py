@@ -79,6 +79,10 @@ class xmeans:
     @details X-means clustering method starts with the assumption of having a minimum number of clusters, 
              and then dynamically increases them. X-means uses specified splitting criterion to control 
              the process of splitting clusters. Method K-Means++ can be used for calculation of initial centers.
+             
+             CCORE option can be used to use the pyclustering core - C/C++ shared library for processing that significantly increases performance.
+             
+             CCORE implementation of the algorithm uses thread pool to parallelize the clustering process.
     
     Example:
     @code
@@ -132,7 +136,8 @@ class xmeans:
         self.__criterion = criterion;
          
         self.__ccore = ccore;
-         
+
+
     def process(self):
         """!
         @brief Performs cluster analysis in line with rules of X-Means algorithm.
@@ -161,8 +166,8 @@ class xmeans:
                     break;
                 else:
                     self.__centers = allocated_centers;
-                    
-     
+
+
     def get_clusters(self):
         """!
         @brief Returns list of allocated clusters, each cluster contains indexes of objects in list of data.
@@ -173,10 +178,10 @@ class xmeans:
         @see get_centers()
         
         """
-         
+
         return self.__clusters;
-     
-     
+
+
     def get_centers(self):
         """!
         @brief Returns list of centers for allocated clusters.

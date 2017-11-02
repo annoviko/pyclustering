@@ -10,6 +10,8 @@ Python and C++ implementations (via CCORE library) of each algorithm or
 model. CCORE library is a part of pyclustering and supported only for
 64-bit Linux and 64-bit Windows operating systems.
 
+Official repository: https://github.com/annoviko/pyclustering/
+
 Dependencies
 ============
 
@@ -18,6 +20,17 @@ Dependencies
 **Python version**: >=3.4 (64-bit)
 
 **C++ version**: >= 14 (64-bit)
+
+Performance
+===========
+
+Each algorithm is implemented using Python and C/C++ language, thus performance can be significantly increase by **ccore** flag, for example:
+
+.. code:: python
+
+    xmeans_instance = xmeans(data_points, start_centers, 20, ccore = True);
+
+**ccore** option runs ccore shared library (core of the pyclustering library). The core is maintained for Linux x64 and Windows x64.
 
 Installation
 ============
@@ -55,7 +68,7 @@ Proposals, Questions, Bugs
 In case of any questions, proposals or bugs related to the pyclustering
 please contact to pyclustering@yandex.ru.
 
-Issue tracker: https://github.com/annoviko/pyclustering
+Issue tracker: https://github.com/annoviko/pyclustering/issues
 
 
 Library Content

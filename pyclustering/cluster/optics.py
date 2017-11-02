@@ -26,9 +26,12 @@
 """
 
 
+import math;
+
+from pyclustering.container.kdtree import kdtree;
+
 from pyclustering.cluster.encoder import type_encoding;
 
-from pyclustering.utils import euclidean_distance;
 from pyclustering.utils.color import color as color_list;
 
 import matplotlib.pyplot as plt;
@@ -39,6 +42,7 @@ import pyclustering.core.optics_wrapper as wrapper;
 class ordering_visualizer:
     """!
     @brief Cluster ordering diagram visualizer that represents dataset graphically as density-based clustering structure.
+    @details This OPTICS algorithm is KD-tree optimized.
     
     @see ordering_analyser
     
@@ -55,11 +59,11 @@ class ordering_visualizer:
         
         Example demonstrates general abilities of 'ordering_visualizer' class:
         @code
-        # Display cluster-ordering diagram with connectivity radius is used for allocation of three clusters.
-        ordering_visualizer.show_ordering_diagram(analyser, 3);
+            # Display cluster-ordering diagram with connectivity radius is used for allocation of three clusters.
+            ordering_visualizer.show_ordering_diagram(analyser, 3);
         
-        # Display cluster-ordering diagram without radius.
-        ordering_visualizer.show_ordering_diagram(analyser);
+            # Display cluster-ordering diagram without radius.
+            ordering_visualizer.show_ordering_diagram(analyser);
         @endcode
         
         """
@@ -274,11 +278,13 @@ class optics_descriptor:
 
 class optics:
     """!
-    @brief Class represents clustering algorithm OPTICS (Ordering Points To Identify Clustering Structure).
+    @brief Class represents clustering algorithm OPTICS (Ordering Points To Identify Clustering Structure) with KD-tree optimization (ccore options is supported).
     @details OPTICS is a density-based algorithm. Purpose of the algorithm is to provide explicit clusters, but create clustering-ordering representation of the input data. 
              Clustering-ordering information contains information about internal structures of data set in terms of density and proper connectivity radius can be obtained
              for allocation required amount of clusters using this diagram. In case of usage additional input parameter 'amount of clusters' connectivity radius should be
              bigger than real - because it will be calculated by the algorithms if requested amount of clusters is not allocated.
+             
+             CCORE option can be used to use the pyclustering core - C/C++ shared library for processing that significantly increases performance.
 
     @image html optics_example_clustering.png "Scheme how does OPTICS works. At the beginning only one cluster is allocated, but two is requested. At the second step OPTICS calculates connectivity radius using cluster-ordering and performs final cluster allocation."
 
@@ -351,6 +357,7 @@ class optics:
         self.__clusters = None;
         self.__noise = None;
         
+        self.__kdtree = None;
         self.__ccore = ccore;
 
 
@@ -370,6 +377,7 @@ class optics:
             (self.__clusters, self.__noise, self.__ordering, self.__eps) = wrapper.optics(self.__sample_pointer, self.__eps, self.__minpts, self.__amount_clusters);
         
         else:
+            self.__kdtree = kdtree(self.__sample_pointer, range(len(self.__sample_pointer)));
             self.__allocate_clusters();
             
             if ( (self.__amount_clusters is not None) and (self.__amount_clusters != len(self.get_clusters())) ):
@@ -607,15 +615,6 @@ class optics:
         @return (list) List of indexes of neighbors in line the connectivity radius.
         
         """
-              
-        neighbor_description = [];
         
-        for index in range(0, len(self.__sample_pointer), 1):
-            if (index == optic_object.index_object):
-                continue;
-            
-            distance = euclidean_distance(self.__sample_pointer[optic_object.index_object], self.__sample_pointer[index]);
-            if (distance <= self.__eps):
-                neighbor_description.append( [index, distance] );
-            
-        return neighbor_description;
+        kdnodes = self.__kdtree.find_nearest_dist_nodes(self.__sample_pointer[optic_object.index_object], self.__eps);
+        return [ [node_tuple[1].payload, math.sqrt(node_tuple[0]) ] for node_tuple in kdnodes if node_tuple[1].payload != optic_object.index_object];

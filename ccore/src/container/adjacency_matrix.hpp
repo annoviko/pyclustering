@@ -18,8 +18,7 @@
 *
 */
 
-#ifndef _ADJACENCY_MATRIX_H_
-#define _ADJACENCY_MATRIX_H_
+#pragma once
 
 
 #include "container/adjacency.hpp"
@@ -62,7 +61,7 @@ public:
     * @param[in]  another_matrix: adjacency matrix that should be copied.
     *
     */
-    adjacency_matrix(const adjacency_matrix & another_matrix);
+    adjacency_matrix(const adjacency_matrix & another_matrix) = default;
 
     /**
     *
@@ -71,7 +70,7 @@ public:
     * @param[in]  another_matrix: adjacency matrix that should be moved.
     *
     */
-    adjacency_matrix(adjacency_matrix && another_matrix);
+    adjacency_matrix(adjacency_matrix && another_matrix) = default;
 
     /**
     *
@@ -207,11 +206,9 @@ public:
     virtual void clear(void);
 
 public:
-	adjacency_matrix & operator=(const adjacency_matrix & another_collection);
+    adjacency_matrix & operator=(const adjacency_matrix & another_collection);
 
-	adjacency_matrix & operator=(adjacency_matrix && another_collection);
+    adjacency_matrix & operator=(adjacency_matrix && another_collection);
 };
 
 }
-
-#endif

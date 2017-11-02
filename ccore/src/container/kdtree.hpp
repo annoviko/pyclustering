@@ -18,309 +18,295 @@
 *
 */
 
-#ifndef _KDTREE_H_
-#define _KDTREE_H_
+#pragma once
 
 
+#include "kdnode.hpp"
+
+#include <functional>
+#include <memory>
 #include <vector>
+
+#include "definitions.hpp"
 
 
 namespace container {
 
-/***********************************************************************************************
- *
- * @brief   Node of KD Tree.
- *
- ***********************************************************************************************/
-class kdnode {
-private:
-	const std::vector<double> * 	data;
-	void * 							payload;
 
-	kdnode  *		left;
-	kdnode  *		right;
-	kdnode  *		parent;
-	unsigned int	discriminator;
-
-public:
-	kdnode(std::vector<double> * p_data, void * p_payload,  kdnode * p_left, kdnode * p_right, kdnode * p_parent, unsigned int disc);
-
-	~kdnode(void);
-
-	inline void set_left(kdnode * node) { left = node; }
-	inline void set_right(kdnode * node) { right = node; }
-	inline void set_parent(kdnode * node) { parent = node; }
-	inline void set_discriminator(const unsigned int disc) { discriminator = disc; }
-
-	inline kdnode * get_left(void) { return left; }
-	inline kdnode * get_right(void) { return right; }
-	inline kdnode * get_parent(void) { return parent; }
-
-	inline void * get_payload(void) { return payload; }
-	inline const std::vector<double> * get_data(void) { return data; }
-
-	inline double get_value(void) const { return (*data)[discriminator]; }
-	inline double get_value(const unsigned int discr) { return (*data)[discr]; }
-	inline unsigned int get_discriminator(void) const { return discriminator; }
-
-	inline std::vector<kdnode *> * get_children(void) {
-		std::vector<kdnode *> * children = new std::vector<kdnode *>();
-		if (left != nullptr) { children->push_back(left); }
-		if (right != nullptr) { children->push_back(right); }
-
-		return children;
-	}
-};
-
-
-inline bool operator < (const kdnode & node, const std::vector<double> & point) { return node.get_value() < point[node.get_discriminator()]; }
-inline bool operator < (const std::vector<double> & point, const kdnode & node) { return point[node.get_discriminator()] < node.get_value(); }
-
-inline bool operator > (const kdnode & node, const std::vector<double> & point) { return point[node.get_discriminator()] < node.get_value(); }
-inline bool operator > (const std::vector<double> & point, const kdnode & node) { return node.get_value() < point[node.get_discriminator()]; }
-
-inline bool operator <= (const kdnode & node, const std::vector<double> & point) { return !(node.get_value() > point[node.get_discriminator()]); }
-inline bool operator <= (const std::vector<double> & point, const kdnode & node) { return !(point[node.get_discriminator()] > node.get_value()); }
-
-inline bool operator >= (const kdnode & node, const std::vector<double> & point) { return !(node.get_value() < point[node.get_discriminator()]); }
-inline bool operator >= (const std::vector<double> & point, const kdnode & node) { return !(point[node.get_discriminator()] < node.get_value()); }
-
-inline bool operator == (const kdnode & node, const std::vector<double> & point) { return node.get_value() == point[node.get_discriminator()]; }
-inline bool operator == (const std::vector<double> & point, const kdnode & node) { return node == point; }
-
-
-/***********************************************************************************************
+/**
  *
  * @brief   KD Tree - structure for storing data where fast distance searching is required.
  *
- ***********************************************************************************************/
+ */
 class kdtree {
 private:
-	kdnode *		root;
-	std::size_t		dimension;
+    kdnode::ptr     m_root          = nullptr;
+    std::size_t     m_dimension     = 0;
+
+    std::size_t     m_size          = 0;
 
 private:
-	/***********************************************************************************************
-	*
-	* @brief   Recursive remove of node in tree.
-	*
-	* @param   node            - node that should be removed.
-	*
-	* @return  Node that should replace removed node (if it's not leaf).
-	*
-	***********************************************************************************************/
-	kdnode * recursive_remove(kdnode * node);
+    /**
+    *
+    * @brief   Recursive remove of node in tree.
+    *
+    * @param   node            - node that should be removed.
+    *
+    * @return  Node that should replace removed node (if it's not leaf).
+    *
+    */
+    kdnode::ptr recursive_remove(kdnode::ptr node);
 
-	/***********************************************************************************************
-	*
-	* @brief   Recursive destroy tree (used by destructor).
-	*
-	* @param   node            - node that should be destroyed.
-	*
-	***********************************************************************************************/
-	void recursive_destroy(kdnode * node);
-
-	/***********************************************************************************************
-	*
-	* @brief   Find minimal node in subtree in line with specified discriminator.
-	*
-	* @param   node            - root of subtree where searching should be performed.
-	* @param   discriminator   - discriminator that is used for comparison of nodes.
-	*
-	* @return  Return the smallest node in specified subtree in line with discriminator.
-	*
-	***********************************************************************************************/
-	kdnode * find_minimal_node(kdnode * cur_node, unsigned int discriminator);
+    /**
+    *
+    * @brief   Find minimal node in subtree in line with specified discriminator.
+    *
+    * @param   node            - root of subtree where searching should be performed.
+    * @param   discriminator   - discriminator that is used for comparison of nodes.
+    *
+    * @return  Return the smallest node in specified subtree in line with discriminator.
+    *
+    */
+    kdnode::ptr find_minimal_node(const kdnode::ptr p_cur_node, const std::size_t p_discriminator);
 
 public:
-	/***********************************************************************************************
-	*
-	* @brief   Default constructor.
-	*
-	***********************************************************************************************/
-	kdtree(void);
+    kdtree(void) = default;
 
-	/***********************************************************************************************
-	*
-	* @brief   Constructor of kd tree with pre-defined information.
-	*
-	* @param   data               - coordinates that describe nodes in tree.
-	* @param   payloads           - payloads of nodes (can be nullptr if it's not required).
-	*
-	***********************************************************************************************/
-	kdtree(const std::vector< std::vector<double> *> * data, const std::vector<void *> * payloads);
+    kdtree(const kdtree & p_other) = default;
 
-	/***********************************************************************************************
-	*
-	* @brief   Default destructor.
-	*
-	***********************************************************************************************/
-	~kdtree(void);
+    kdtree(kdtree && p_other) = default;
 
-	/***********************************************************************************************
-	*
-	* @brief   Insert new node in the tree.
-	*
-	* @param   point              - coordinates that describe node in tree.
-	* @param   payload            - payloads of node (can be nullptr if it's not required).
-	*
-	* @return  Pointer to added node in the tree.
-	*
-	***********************************************************************************************/
-	kdnode * insert(std::vector<double> * point, void * payload);
+    virtual ~kdtree(void) = default;
 
-	/***********************************************************************************************
-	*
-	* @brief   Remove point with specified coordinates.
-	*
-	* @param   point              - coordinates that describe node in tree.
-	*
-	***********************************************************************************************/
-	void remove(std::vector<double> * point);
+public:
+    /**
+    *
+    * @brief   Insert new node in the tree.
+    *
+    * @param   point              - coordinates that describe node in tree.
+    * @param   payload            - payloads of node (can be nullptr if it's not required).
+    *
+    * @return  Pointer to added node in the tree.
+    *
+    */
+    kdnode::ptr insert(const std::vector<double> & p_point, void * p_payload = nullptr);
 
-	/***********************************************************************************************
-	*
-	* @brief   Remove node from the tree.
-	*
-	* @param   node_for_remove    - pointer to node that is located in tree.
-	*
-	***********************************************************************************************/
-	void remove(kdnode * node_for_remove);
+    /**
+    *
+    * @brief   Remove point with specified coordinates.
+    *
+    * @param   point              - coordinates that describe node in tree.
+    *
+    */
+    void remove(const std::vector<double> & p_point);
 
-	/***********************************************************************************************
-	*
-	* @brief   Find node in tree using coordinates.
-	*
-	* @param   point              - coordinates of searched node.
-	*
-	* @return  Pointer to found node in tree.
-	*
-	***********************************************************************************************/
-	kdnode * find_node(std::vector<double> * point);
+    /**
+    *
+    * @brief   Remove node from the tree.
+    *
+    * @param   node_for_remove    - pointer to node that is located in tree.
+    *
+    */
+    void remove(kdnode::ptr p_node_for_remove);
 
-	/***********************************************************************************************
-	*
-	* @brief   Find node in tree using coordinates in subtree.
-	*
-	* @param   point              - coordinates of searched node.
-	* @param   cur_node           - root of subtree.
-	*
-	* @return  Pointer to found node in tree.
-	*
-	***********************************************************************************************/
-	kdnode * find_node(std::vector<double> * point, kdnode * cur_node);
+    /**
+    *
+    * @brief   Find node in tree using coordinates.
+    *
+    * @param   point              - coordinates of searched node.
+    *
+    * @return  Pointer to found node in tree.
+    *
+    */
+    kdnode::ptr find_node(const std::vector<double> & p_point) const;
 
-	/***********************************************************************************************
-	*
-	* @brief   Traverse tree from specified node and returns number of nodes in subtree.
-	*
-	* @param   node               - pointer to node of tree.
-	*
-	* @return  Returns number of nodes in subtree.
-	*
-	***********************************************************************************************/
-	unsigned int traverse(kdnode * node);
+    /**
+    *
+    * @brief   Find node in tree using coordinates in subtree.
+    *
+    * @param   point              - coordinates of searched node.
+    * @param   cur_node           - root of subtree.
+    *
+    * @return  Pointer to found node in tree.
+    *
+    */
+    kdnode::ptr find_node(const std::vector<double> & p_point, kdnode::ptr p_cur_node) const;
 
-	/***********************************************************************************************
-	*
-	* @brief   Return root of the tree.
-	*
-	* @return  Returns pointer to root of the tree.
-	*
-	***********************************************************************************************/
-	inline kdnode * get_root(void) { return root; }
+    /**
+    *
+    * @brief   Traverse tree from specified node and returns number of nodes in subtree.
+    *
+    * @param   node               - pointer to node of tree.
+    *
+    * @return  Returns number of nodes in subtree.
+    *
+    */
+    std::size_t traverse(const kdnode::ptr p_node);
+
+    /**
+    *
+    * @brief   Return root of the tree.
+    *
+    * @return  Returns pointer to root of the tree.
+    *
+    */
+    kdnode::ptr get_root(void);
+
+    /**
+    *
+    * @brief   Return size of KD-tree.
+    *
+    * @return  Returns amount of nodes in KD-tree.
+    *
+    */
+    std::size_t get_size(void) const;
+
+public:
+    kdtree & operator=(const kdtree & p_other);
+
+    kdtree & operator=(kdtree && p_other);
 };
 
 
-/***********************************************************************************************
+
+/**
  *
  * @brief   Searcher in KD Tree provides services related to searching in KD Tree.
  *
- ***********************************************************************************************/
+ */
 class kdtree_searcher {
-private:
-	std::vector<double>	*	nodes_distance;
-	std::vector<kdnode *> * nearest_nodes;
-
-	double					distance;
-	double					sqrt_distance;
-	kdnode *				initial_node;
-	std::vector<double> *	search_point;
+public:
+    using rule_store = std::function<void(const kdnode::ptr, const double)>;
 
 private:
-	/***********************************************************************************************
-	*
-	* @brief   Recursive method for searching nodes that satisfy the request.
-	*
-	* @param   node               - initial node in tree from which searching should performed.
-	*
-	***********************************************************************************************/
-	void recursive_nearest_nodes(kdnode * node);
+    using proc_store = std::function<void(const kdnode::ptr)>;
 
-	/***********************************************************************************************
-	*
-	* @brief   Prepare storages that are required for searching.
-	*
-	***********************************************************************************************/
-	void prepare_storages(void);
+private:
+    mutable std::vector<double>        m_nodes_distance     = { };
+    mutable std::vector<kdnode::ptr>   m_nearest_nodes      = { };
+    mutable dataset                    m_nearest_points     = { };
+
+    mutable rule_store                 m_user_rule          = nullptr;
+    mutable proc_store                 m_proc               = nullptr;
+
+    double                  m_distance            = -1;
+    double                  m_sqrt_distance       = -1;
+    kdnode::ptr             m_initial_node        = nullptr;
+    std::vector<double>     m_search_point        = { };
 
 public:
-	/***********************************************************************************************
-	*
-	* @brief   Default constructor. Search will not be performed until it's initialized.
-	*
-	***********************************************************************************************/
-	kdtree_searcher(void);
+    /**
+    *
+    * @brief   Default constructor. Search will not be performed until it's initialized.
+    *
+    */
+    kdtree_searcher(void) = default;
 
-	/***********************************************************************************************
-	*
-	* @brief   Constructor of searcher with request for searching.
-	*
-	* @param   (in) point              - point for which nearest nodes should be found.
-	* @param   (in) node               - initial node in tree from which searching should started.
-	* @param   (in) radius_search      - allowable distance for searching from the point.
-	*
-	***********************************************************************************************/
-	kdtree_searcher(std::vector<double> * point, kdnode * node, const double radius_search);
+    /**
+    *
+    * @brief   Constructor of searcher with request for searching.
+    *
+    * @param[in] point: point for which nearest nodes should be found.
+    * @param[in] node: initial node in tree from which searching should started.
+    * @param[in] radius_search: allowable distance for searching from the point.
+    *
+    */
+    kdtree_searcher(const std::vector<double> & point, const kdnode::ptr node, const double radius_search);
 
-	/***********************************************************************************************
-	*
-	* @brief   Default destructor.
-	*
-	***********************************************************************************************/
-	~kdtree_searcher(void);
+    /**
+    *
+    * @brief   Default destructor.
+    *
+    */
+    ~kdtree_searcher(void) = default;
 
-	/***********************************************************************************************
-	*
-	* @brief   Initialization of new request for searching.
-	*
-	* @param   (in) point              - point for which nearest nodes should be found.
-	* @param   (in) node               - initial node in tree from which searching should started.
-	* @param   (in) radius_search      - allowable distance for searching from the point.
-	*
-	***********************************************************************************************/
-	void initialize(std::vector<double> * point, kdnode * node, const double radius_search);
+public:
+    /**
+    *
+    * @brief   Search nodes that are located in specified distance from specified point.
+    *
+    * @param[out] p_distances: distances from the point to nodes in the location (that are radius-reachable).
+    * @param[out] p_nearest_nodes: nodes in the location (radius-reachable).
+    *
+    * @return  Return vector of found nodes in kd tree that satisfy the request. If distances are
+    *          specified then it will be filled by corresponding distances.
+    *
+    */
+    void find_nearest_nodes(std::vector<double> & p_distances, std::vector<kdnode::ptr> & p_nearest_nodes) const;
 
-	/***********************************************************************************************
-	*
-	* @brief   Search nodes that are located in specified distance from specified point.
-	*
-	* @return  Return vector of found nodes in kd tree that satisfy the request. If distances are
-	*          specified then it will be filled by corresponding distances.
-	*
-	***********************************************************************************************/
-	std::vector<kdnode *> * find_nearest_nodes(std::vector<double> * distances = nullptr);
+    /**
+    *
+    * @brief   Search the nearest node in specified location for specified point in the request.
+    *
+    * @return  Return pointer to the nearest node in kd tree that satisfy the request.
+    *
+    */
+    kdnode::ptr find_nearest_node(void) const;
 
-	/***********************************************************************************************
-	*
-	* @brief   Search the nearest node in specified location for specified point in the request.
-	*
-	* @return  Return pointer to the nearest node in kd tree that satisfy the request.
-	*
-	***********************************************************************************************/
-	kdnode * find_nearest_node(void);
+    /**
+    *
+    * @brief   Search the nearest nodes and store information about found node using user-defined way.
+    *
+    * @param[in]  p_store_rule: defines how to store KD-node.
+    *
+    */
+    void find_nearest(const rule_store & p_store_rule) const;
+
+private:
+    /**
+    *
+    * @brief   Initialization of new request for searching.
+    *
+    * @param[in] point: point for which nearest nodes should be found.
+    * @param[in] node: initial node in tree from which searching should started.
+    * @param[in] radius_search: allowable distance for searching from the point.
+    *
+    */
+    void initialize(const std::vector<double> & point, const kdnode::ptr node, const double radius_search);
+
+    /**
+    *
+    * @brief   Clear internal temporary structures.
+    *
+    */
+    void clear(void) const;
+
+    /**
+    *
+    * @brief   Recursive method for searching nodes that satisfy the request.
+    *
+    * @param[in] node: initial node in tree from which searching should performed.
+    *
+    */
+    void recursive_nearest_nodes(const kdnode::ptr node) const;
+
+    /**
+    *
+    * @brief   Append to storage reachable node and distance to it.
+    *
+    * @param[in] node: node that should be added to best collection if it is reachable.
+    *
+    */
+    void store_if_reachable(const kdnode::ptr node) const;
+
+    /**
+    *
+    * @brief   Store only one node in collection if it the best node.
+    *
+    * @param[in] node: node that should be added to best collection if it is reachable.
+    *
+    */
+    void store_best_if_reachable(const kdnode::ptr node) const;
+
+    /**
+    *
+    * @brief   Store nodes using user-defined rule.
+    *
+    * @param[in] node: node that should be added to best collection if it is reachable.
+    *
+    */
+    void store_user_nodes_if_reachable(const kdnode::ptr node) const;
 };
 
-}
 
-#endif
+}

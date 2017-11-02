@@ -101,6 +101,11 @@ function job_pyclustering_cygwin() {
 
 function job_deploy() {
     echo "[DEPLOY]: Deploy (upload windows binary file to github)";
+    if ($env:APPVEYOR_REPO_COMMIT_MESSAGE -NotMatch "\[publish\]") {
+        echo "[DEPLOY]: Binary files will not be published to github repository (keyword '[publish]' is not specified).";
+        exit 0;
+    }
+    
     if ($env:TESTING_RESULT -ne $env:RESULT_SUCCESS) {
         echo "[DEPLOY]: One of the build/testing job is failed - cancel deployment."
         exit 0;

@@ -108,12 +108,12 @@ template_noise_allocation(const std::shared_ptr<dataset> & p_data,
         const double p_radius,
         const size_t p_neighbors,
         const std::vector<size_t> & p_expected_cluster_length,
-	    const std::size_t p_noise_length) {
+        const std::size_t p_noise_length) {
 
     std::shared_ptr<dbscan_data> ptr_output_result = template_length_process_data(p_data, p_radius, p_neighbors, p_expected_cluster_length);
-	EXPECT_EQ(p_noise_length, ptr_output_result->noise()->size());
+    EXPECT_EQ(p_noise_length, ptr_output_result->noise()->size());
 
-	return ptr_output_result;
+    return ptr_output_result;
 }
 
 

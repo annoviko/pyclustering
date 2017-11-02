@@ -100,6 +100,7 @@ WARN_LOGFILE           =
 INPUT                  = pyclustering/__init__.py \
                          pyclustering/cluster/__init__.py \
                          pyclustering/cluster/agglomerative.py \
+                         pyclustering/cluster/antmean.py \
                          pyclustering/cluster/birch.py \
                          pyclustering/cluster/center_initializer.py \
                          pyclustering/cluster/clarans.py \

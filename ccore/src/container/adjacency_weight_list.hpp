@@ -18,8 +18,7 @@
 *
 */
 
-#ifndef _ADJACENCY_WEIGHT_LIST_H_
-#define _ADJACENCY_WEIGHT_LIST_H_
+#pragma once
 
 
 #include <unordered_map>
@@ -68,7 +67,7 @@ public:
     * @param[in]  another_matrix: adjacency matrix that should be copied.
     *
     */
-    adjacency_weight_list(const adjacency_weight_list & another_matrix);
+    adjacency_weight_list(const adjacency_weight_list & another_matrix) = default;
 
     /**
     *
@@ -77,7 +76,7 @@ public:
     * @param[in]  another_matrix: adjacency matrix that should be moved.
     *
     */
-    adjacency_weight_list(adjacency_weight_list && another_matrix);
+    adjacency_weight_list(adjacency_weight_list && another_matrix) = default;
 
     /**
     *
@@ -211,11 +210,9 @@ public:
     virtual void clear(void);
 
 public:
-	adjacency_weight_list & operator=(const adjacency_weight_list & another_collection);
+    adjacency_weight_list & operator=(const adjacency_weight_list & another_collection);
 
-	adjacency_weight_list & operator=(adjacency_weight_list && another_collection);
+    adjacency_weight_list & operator=(adjacency_weight_list && another_collection);
 };
 
 }
-
-#endif

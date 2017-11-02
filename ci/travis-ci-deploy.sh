@@ -1,5 +1,9 @@
 run_deploy_job() {
     echo "[DEPLOY]: Deploy (upload linux binary file to github)"
+    if [[ $TRAVIS_COMMIT_MESSAGE != *"[publish]"* ]]; then 
+        echo "[DEPLOY]: Binary files will not be published to github repository (keyword '[publish]' is not specified)."
+        exit 0
+    fi
     
     git config --global user.email "pyclustering@yandex.ru"
     git config --global user.name "Travis-CI"

@@ -18,12 +18,13 @@
 *
 */
 
-#ifndef _DBSCAN_H_
-#define _DBSCAN_H_
+#pragma once
 
 
 #include <cmath>
 #include <algorithm>
+
+#include "container/kdtree.hpp"
 
 #include "cluster/cluster_algorithm.hpp"
 #include "cluster/dbscan_data.hpp"
@@ -40,17 +41,21 @@ namespace cluster_analysis {
 */
 class dbscan {
 private:
-    const dataset       * m_data_ptr;         /* temporary pointer to input data that is used only during processing */
+    const dataset       * m_data_ptr      = nullptr;       /* temporary pointer to input data that is used only during processing */
 
-    dbscan_data         * m_result_ptr;       /* temporary pointer to clustering result that is used only during processing */
+    dbscan_data         * m_result_ptr    = nullptr;       /* temporary pointer to clustering result that is used only during processing */
 
-    std::vector<bool>   m_visited;
+    std::vector<bool>   m_visited         = { };
 
-    std::vector<bool>   m_belong;
+    std::vector<bool>   m_belong          = { };
 
-    double              m_radius;
+    double              m_initial_radius  = 0.0;    /* original radius that was specified by user */
 
-    size_t              m_neighbors;
+    double              m_radius          = 0.0;    /* square of the original radius to improve performance */
+
+    size_t              m_neighbors       = 0;
+
+    container::kdtree   m_kdtree          = container::kdtree();
 
 public:
     /**
@@ -58,7 +63,7 @@ public:
     * @brief    Default constructor of clustering algorithm.
     *
     */
-    dbscan(void);
+    dbscan(void) = default;
 
     /**
     *
@@ -77,7 +82,7 @@ public:
     * @brief    Default destructor of the algorithm.
     *
     */
-    virtual ~dbscan(void);
+    virtual ~dbscan(void) = default;
 
 public:
     /**
@@ -100,10 +105,10 @@ private:
     *
     */
     void get_neighbors(const size_t p_index, std::vector<size_t> & p_neighbors);
+
+
+    void create_kdtree(const dataset & p_data);
 };
 
 
 }
-
-
-#endif

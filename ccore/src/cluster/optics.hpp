@@ -25,6 +25,8 @@
 #include <list>
 #include <tuple>
 
+#include "container/kdtree.hpp"
+
 #include "cluster/cluster_algorithm.hpp"
 #include "cluster/optics_data.hpp"
 
@@ -109,19 +111,21 @@ public:
     static const double NONE_DISTANCE;
 
 private:
-    const dataset       * m_data_ptr;
+    const dataset       * m_data_ptr        = nullptr;
 
-    optics_data         * m_result_ptr;
+    optics_data         * m_result_ptr      = nullptr;
 
-    double              m_radius;
+    double              m_radius            = 0.0;
 
-    std::size_t         m_neighbors;
+    std::size_t         m_neighbors         = 0;
 
-    std::size_t         m_amount_clusters;
+    std::size_t         m_amount_clusters   = 0;
 
-    std::vector<optics_descriptor>      m_optics_objects;
+    container::kdtree   m_kdtree            = container::kdtree();
 
-    std::vector<optics_descriptor *>    m_ordered_database;
+    std::vector<optics_descriptor>      m_optics_objects    = { };
+
+    std::vector<optics_descriptor *>    m_ordered_database  = { };
 
 public:
     /**
@@ -198,11 +202,13 @@ private:
 
     void get_neighbors(const std::size_t p_index, std::vector< std::tuple<std::size_t, double> > & p_neighbors);
 
-	void update_order_seed(const optics_descriptor & p_object, const std::vector< std::tuple<std::size_t, double> > & neighbors, std::list<optics_descriptor *> & order_seed);
+    void update_order_seed(const optics_descriptor & p_object, const std::vector< std::tuple<std::size_t, double> > & neighbors, std::list<optics_descriptor *> & order_seed);
 
-	void calculate_ordering(void);
+    void calculate_ordering(void);
 
-	void calculate_cluster_result(void);
+    void calculate_cluster_result(void);
+
+    void create_kdtree(void);
 };
 
 

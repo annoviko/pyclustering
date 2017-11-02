@@ -31,6 +31,19 @@ Dependencies
 
 
 
+Performance
+===========
+
+Each algorithm is implemented using Python and C/C++ language, thus performance can be significantly increase by **ccore** flag, for example:
+
+.. code:: python
+
+    xmeans_instance = xmeans(data_points, start_centers, 20, ccore = True);
+
+**ccore** option runs ccore shared library (core of the pyclustering library). The core is maintained for Linux x64 and Windows x64.
+
+
+
 Installation
 ============
 
@@ -93,6 +106,7 @@ Brief Overview of the Library Content
 **Clustering algorithms (module pyclustering.cluster):** 
 
 - Agglomerative [Python, C++]
+- AntMean [Python, C++]
 - BIRCH [Python]
 - CLARANS [Python]
 - CURE [Python, C++]

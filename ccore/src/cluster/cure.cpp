@@ -51,14 +51,14 @@ cure_cluster::~cure_cluster() {
         mean = nullptr;
     }
 
-    delete points;	/* only storage, we are not owners of points */
+    delete points;  /* only storage, we are not owners of points */
     points = nullptr;
 
     for (auto point_ptr : *rep) {
         delete point_ptr;
     }
 
-    delete rep;		/* only storage, we are not owners of points */
+    delete rep;     /* only storage, we are not owners of points */
     rep = nullptr;
 }
 
@@ -75,9 +75,9 @@ cure_queue::cure_queue(const std::vector< std::vector<double> > * data) {
 
     tree = new kdtree();
 
-    for (cure_queue::const_iterator cluster = queue->begin(); cluster != queue->end(); cluster++) {
-        for (std::vector<std::vector<double> *>::const_iterator point = (*cluster)->rep->begin(); point != (*cluster)->rep->end(); point++) {
-            tree->insert(*point, *cluster);
+    for (auto & cluster : *queue) {
+        for (auto & point : *(cluster->rep)) {
+            tree->insert(*point, cluster);
         }
     }
 }
@@ -263,20 +263,18 @@ void cure_queue::merge(cure_cluster * cluster1, cure_cluster * cluster2, const s
                     double nearest_distance = std::numeric_limits<double>::max();
 
                     for (std::vector<std::vector<double> * >::iterator point = (*cluster)->rep->begin(); point != (*cluster)->rep->end(); point++) {
-                        kdtree_searcher searcher(*point, tree->get_root(), distance);
+                        kdtree_searcher searcher(**point, tree->get_root(), distance);
 
-                        std::vector<double> * nearest_node_distances = new std::vector<double>();
-                        std::vector<kdnode *> * nearest_nodes = searcher.find_nearest_nodes(nearest_node_distances);
+                        std::vector<double> nearest_node_distances;
+                        std::vector<kdnode::ptr> nearest_nodes;
+                        searcher.find_nearest_nodes(nearest_node_distances, nearest_nodes);
 
-                        for (unsigned int index = 0; index < nearest_nodes->size(); index++) {
-                            if ( ((*nearest_node_distances)[index] < nearest_distance) && ( (*nearest_nodes)[index]->get_payload() != (*cluster) ) ) {
-                                nearest_distance = (*nearest_node_distances)[index];
-                                nearest_cluster = (cure_cluster *) (*nearest_nodes)[index]->get_payload();
+                        for (std::size_t index = 0; index < nearest_nodes.size(); index++) {
+                            if ( (nearest_node_distances[index] < nearest_distance) && ( nearest_nodes[index]->get_payload() != (*cluster) ) ) {
+                                nearest_distance = nearest_node_distances[index];
+                                nearest_cluster = (cure_cluster *) nearest_nodes[index]->get_payload();
                             }
                         }
-
-                        delete nearest_nodes;
-                        delete nearest_node_distances;
                     }
 
                     if (nearest_cluster == nullptr) {
@@ -330,14 +328,14 @@ void cure_queue::insert_cluster(cure_cluster * inserted_cluster) {
 
 
 void cure_queue::remove_representative_points(cure_cluster * cluster) {
-    for (std::vector<std::vector<double> *>::const_iterator point = cluster->rep->begin(); point != cluster->rep->end(); point++) {
+    for (auto & point : *(cluster->rep)) {
         tree->remove(*point);
     }
 }
 
 
 void cure_queue::insert_representative_points(cure_cluster * cluster) {
-    for (std::vector<std::vector<double> *>::iterator point = cluster->rep->begin(); point != cluster->rep->end(); point++) {
+    for (auto & point : *(cluster->rep)) {
         tree->insert(*point, cluster);
     }
 }

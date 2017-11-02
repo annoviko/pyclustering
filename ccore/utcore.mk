@@ -20,7 +20,7 @@ ifeq ($(ARGS), valgrind)
 	CFLAGS = -MMD -MP -std=$(CPLUS_STANDARD) $(PIC_FLAG) -g
 	LFLAGS = -pthread
 else
-	CFLAGS = -O3 -MMD -MP -std=$(CPLUS_STANDARD) $(PIC_FLAG) -fprofile-arcs -ftest-coverage
+	CFLAGS = -O3 -MMD -MP -std=$(CPLUS_STANDARD) $(PIC_FLAG) -fprofile-arcs -ftest-coverage -Werror
 	LFLAGS = -pthread -fprofile-arcs -ftest-coverage
 endif
 
@@ -37,7 +37,7 @@ TOOLS_DIRECTORY = tools
 
 
 # Project sources
-SOURCES_MODULES = . cluster container differential interface nnet tsp
+SOURCES_MODULES = . cluster container differential interface nnet parallel tsp
 UTEST_MODULES = .
 TOOLS_MODULES = gtest
 

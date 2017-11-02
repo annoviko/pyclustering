@@ -116,6 +116,8 @@ class som:
              of high-dimensional data. It converts complex, nonlinear statistical relationships between
              high-dimensional data into simple geometric relationships on a low-dimensional display.
     
+    @details CCORE option can be used to use the pyclustering core - C/C++ shared library for processing that significantly increases performance.
+    
     Example:
     @code
         # sample for training

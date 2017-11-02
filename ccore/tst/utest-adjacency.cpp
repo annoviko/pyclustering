@@ -32,16 +32,16 @@ using namespace container;
 void template_set_connection(adjacency_collection & collection) {
     for (size_t i = 0; i < collection.size(); i++) {
         for (size_t j = i + 1; j < collection.size(); j++) {
-            ASSERT_EQ(false, collection.has_connection(i, j));
+            ASSERT_FALSE(collection.has_connection(i, j));
 
             collection.set_connection(i, j);
 
-            ASSERT_EQ(true, collection.has_connection(i, j));
-            ASSERT_EQ(false, collection.has_connection(j, i));
+            ASSERT_TRUE(collection.has_connection(i, j));
+            ASSERT_FALSE(collection.has_connection(j, i));
 
             collection.set_connection(j, i);
 
-            ASSERT_EQ(true, collection.has_connection(j, i));
+            ASSERT_TRUE(collection.has_connection(j, i));
         }
     }
 }
@@ -50,7 +50,7 @@ void template_set_connection(adjacency_collection & collection) {
 void template_has_no_connection(adjacency_collection & collection) {
     for (size_t i = 0; i < collection.size(); i++) {
         for (size_t j = 0; j < collection.size(); j++) {
-            ASSERT_EQ(false, collection.has_connection(i, j));
+            ASSERT_FALSE(collection.has_connection(i, j));
         }
     }
 }
@@ -65,7 +65,7 @@ void template_has_all_connection(adjacency_collection & collection) {
 
     for (size_t i = 0; i < collection.size(); i++) {
         for (size_t j = 0; j < collection.size(); j++) {
-            ASSERT_EQ(true, collection.has_connection(i, j));
+            ASSERT_TRUE(collection.has_connection(i, j));
         }
     }
 }
@@ -81,18 +81,18 @@ void template_erase_connection(adjacency_collection & collection) {
 
     for (size_t i = 0; i < collection.size(); i++) {
         for (size_t j = i + 1; j < collection.size(); j++) {
-            ASSERT_EQ(true, collection.has_connection(i, j));
-            ASSERT_EQ(true, collection.has_connection(j, i));
+            ASSERT_TRUE(collection.has_connection(i, j));
+            ASSERT_TRUE(collection.has_connection(j, i));
 
             collection.erase_connection(i, j);
 
-            ASSERT_EQ(false, collection.has_connection(i, j));
-            ASSERT_EQ(true, collection.has_connection(j, i));
+            ASSERT_FALSE(collection.has_connection(i, j));
+            ASSERT_TRUE(collection.has_connection(j, i));
 
             collection.erase_connection(j, i);
 
-            ASSERT_EQ(false, collection.has_connection(i, j));
-            ASSERT_EQ(false, collection.has_connection(j, i));
+            ASSERT_FALSE(collection.has_connection(i, j));
+            ASSERT_FALSE(collection.has_connection(j, i));
         }
     }
 }
@@ -138,10 +138,10 @@ void template_get_neighbors_indexes(adjacency_collection & collection) {
 
         for (size_t j = 0; j < node_neighbors.size(); j++) {
             if (i != j) {
-                ASSERT_EQ(true, index_neighbor_checker[j]);
+                ASSERT_TRUE(index_neighbor_checker[j]);
             }
             else {
-                ASSERT_EQ(false, index_neighbor_checker[i]);
+                ASSERT_FALSE(index_neighbor_checker[i]);
             }
         }
     }
@@ -210,13 +210,13 @@ void template_set_weight_connection(adjacency_weight_collection & collection) {
     for (size_t i = 0; i < collection.size(); i++) {
         for (size_t j = 0; j < collection.size(); j++) {
             ASSERT_EQ(0.0, collection.get_connection_weight(i, j));
-            ASSERT_EQ(false, collection.has_connection(i, j));
+            ASSERT_FALSE(collection.has_connection(i, j));
 
             const double weight = (double) i + (double) j / 10.0 + 1.0;
             collection.set_connection_weight(i, j, weight);
 
             ASSERT_EQ(weight, collection.get_connection_weight(i, j));
-            ASSERT_EQ(true, collection.has_connection(i, j));
+            ASSERT_TRUE(collection.has_connection(i, j));
         }
     }
 }
@@ -226,12 +226,12 @@ void template_set_default_weight_connection(adjacency_weight_collection & collec
     for (size_t i = 0; i < collection.size(); i++) {
         for (size_t j = 0; j < collection.size(); j++) {
             ASSERT_EQ(0.0, collection.get_connection_weight(i, j));
-            ASSERT_EQ(false, collection.has_connection(i, j));
+            ASSERT_FALSE(collection.has_connection(i, j));
 
             collection.set_connection(i, j);
 
             ASSERT_NE(0.0, collection.get_connection_weight(i, j));
-            ASSERT_EQ(true, collection.has_connection(i, j));
+            ASSERT_TRUE(collection.has_connection(i, j));
         }
     }
 }
@@ -241,12 +241,12 @@ void template_set_negative_weight(adjacency_weight_collection & collection) {
     for (size_t i = 0; i < collection.size(); i++) {
         for (size_t j = 0; j < collection.size(); j++) {
             ASSERT_EQ(0.0, collection.get_connection_weight(i, j));
-            ASSERT_EQ(false, collection.has_connection(i, j));
+            ASSERT_FALSE(collection.has_connection(i, j));
 
             collection.set_connection_weight(i, j, -1.0);
 
             ASSERT_EQ(-1.0, collection.get_connection_weight(i, j));
-            ASSERT_EQ(true, collection.has_connection(i, j));
+            ASSERT_TRUE(collection.has_connection(i, j));
         }
     }
 }

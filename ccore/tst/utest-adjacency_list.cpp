@@ -38,7 +38,7 @@ TEST(utest_adjacency_list, create_delete) {
 
     for (size_t i = 0; i < matrix->size(); i++) {
         for (size_t j = i + 1; j < matrix->size(); j++) {
-            ASSERT_EQ(false, matrix->has_connection(i, j));
+            ASSERT_FALSE(matrix->has_connection(i, j));
         }
     }
 
@@ -78,10 +78,10 @@ TEST(utest_adjacency_list, copy_matrix) {
 
     ASSERT_EQ(10, matrix_first.size());
     ASSERT_EQ(10, matrix_second.size());
-    ASSERT_EQ(false, matrix_first.has_connection(1, 2));
-    ASSERT_EQ(false, matrix_first.has_connection(2, 3));
-    ASSERT_EQ(true, matrix_first.has_connection(2, 1));
-    ASSERT_EQ(true, matrix_first.has_connection(4, 7));
+    ASSERT_FALSE(matrix_first.has_connection(1, 2));
+    ASSERT_FALSE(matrix_first.has_connection(2, 3));
+    ASSERT_TRUE(matrix_first.has_connection(2, 1));
+    ASSERT_TRUE(matrix_first.has_connection(4, 7));
 }
 
 
@@ -97,13 +97,13 @@ TEST(utest_adjacency_list, move_matrix) {
         for (size_t j = i + 1; j < matrix_first.size(); j++) {
             if ((i % 2) == 0) {
                 matrix_first.set_connection(i, j);
-                ASSERT_EQ(true, matrix_first.has_connection(i, j));
-                ASSERT_EQ(false, matrix_second.has_connection(i, j));
+                ASSERT_TRUE(matrix_first.has_connection(i, j));
+                ASSERT_FALSE(matrix_second.has_connection(i, j));
             }
             else {
                 matrix_second.set_connection(i, j);
-                ASSERT_EQ(false, matrix_first.has_connection(i, j));
-                ASSERT_EQ(true, matrix_second.has_connection(i, j));
+                ASSERT_FALSE(matrix_first.has_connection(i, j));
+                ASSERT_TRUE(matrix_second.has_connection(i, j));
             }
         }
     }
@@ -116,7 +116,7 @@ TEST(utest_adjacency_list, move_matrix) {
     for (size_t i = 0; i < matrix_first.size(); i++) {
         for (size_t j = i + 1; j < matrix_first.size(); j++) {
             if ((i % 2) != 0) {
-                ASSERT_EQ(true, matrix_first.has_connection(i, j));
+                ASSERT_TRUE(matrix_first.has_connection(i, j));
             }
         }
     }

@@ -28,7 +28,7 @@
 
 import numpy;
 import random;
-import pyclustering.tests;
+import pyclustering.utils;
 
 from scipy.integrate import odeint;
 

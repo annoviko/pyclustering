@@ -33,6 +33,7 @@ PyClustering consists of six general modules where the algorithms, models, tools
 
 Cluster analysis algorithms and methods (module pyclustering.cluster):
 - Agglomerative (pyclustering.cluster.agglomerative);
+- AntMean (pyclustering.cluster.antmean);
 - BIRCH (pyclustering.cluster.birch);
 - CLARANS (pyclustering.cluster.clarans);
 - CURE (pyclustering.cluster.cure);

@@ -73,6 +73,7 @@ class OpticsUnitTest(unittest.TestCase):
         OpticsTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 6.0, 3, 5, [15, 15, 15, 15, 15], False);
 
     def testClusteringLsunRadiusGreater(self):
+        # Two points are noise after recalculation
         OpticsTestTemplates.templateClusteringResults(FCPS_SAMPLES.SAMPLE_LSUN, 1.0, 3, 3, [99, 100, 202], False);
 
     def testClusteringOrderVisualizer(self):

@@ -40,7 +40,7 @@ void ASSERT_CLUSTER_SIZES(const dataset & p_data, const cluster_sequence & p_act
         for (size_t j = 0; j < cluster_length; j++) {
             size_t index_object = p_actual_clusters[i][j];
 
-            ASSERT_EQ(false, unique_objects[index_object]);
+            ASSERT_FALSE(unique_objects[index_object]);
 
             unique_objects[index_object] = true;
         }

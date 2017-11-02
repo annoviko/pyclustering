@@ -36,6 +36,7 @@ from pyclustering.utils import euclidean_distance_sqrt, list_math_addition, list
 class kmeans:
     """!
     @brief Class represents clustering algorithm K-Means.
+    @details CCORE option can be used to use the pyclustering core - C/C++ shared library for processing that significantly increases performance.
     
     Example #1 - Trivial clustering:
     @code

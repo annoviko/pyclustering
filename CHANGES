@@ -1,5 +1,34 @@
 ------------------------------------------------------------------------
 
+CHANGE NOTES FOR 0.7.3 (STARTED Oct 23, 2017)
+
+------------------------------------------------------------------------
+
+GENERAL CHANGES:
+- Implemented parallel processing for X-Means algorithm (ccore.xmeans)
+  See: https://github.com/annoviko/pyclustering/issues/372
+
+- Implemented pool threads for parallel processing (ccore.parallel)
+  See: https://github.com/annoviko/pyclustering/issues/383
+
+- Implemented AntMean clustering algorithm (pyclustering.cluster.antmean, ccore.antmean)
+  See: https://github.com/annoviko/pyclustering/issues/278
+
+- Optimization of OPTICS algorithm using KD-tree for searching nearest neighbors (pyclustering.cluster.optics, ccore.optics)
+  See: https://github.com/annoviko/pyclustering/issues/370
+
+- Optimization of DBSCAN algorithm using KD-tree for searching nearest neighbors (pyclustering.cluster.dbscan, ccore.dbscan)
+  See: https://github.com/annoviko/pyclustering/issues/369
+
+
+CORRECTED MAJOR BUGS:
+- Corrected bug with returned nullptr in method 'kdtree_searcher::find_nearest_node()' (ccore.container.kdtree)
+  See: no reference.
+
+
+
+------------------------------------------------------------------------
+
 CHANGE NOTES FOR 0.7.2 (STARTED Oct 19, 2017), (RELEASED: Oct 23, 2017)
 
 ------------------------------------------------------------------------

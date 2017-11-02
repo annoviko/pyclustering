@@ -23,6 +23,9 @@
     <Filter Include="Source Files\interface">
       <UniqueIdentifier>{5a874dd2-576d-4bcf-b7d4-6a05ffc32138}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\parallel">
+      <UniqueIdentifier>{365c5d13-b65a-4bc5-bdfe-63b4ecd03660}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cluster\agglomerative.cpp">
@@ -177,6 +180,18 @@
     </ClCompile>
     <ClCompile Include="interface\antcolony_tsp_interface.cpp">
       <Filter>Source Files\interface</Filter>
+    </ClCompile>
+    <ClCompile Include="container\kdnode.cpp">
+      <Filter>Source Files\container</Filter>
+    </ClCompile>
+    <ClCompile Include="parallel\task.cpp">
+      <Filter>Source Files\parallel</Filter>
+    </ClCompile>
+    <ClCompile Include="parallel\thread_executor.cpp">
+      <Filter>Source Files\parallel</Filter>
+    </ClCompile>
+    <ClCompile Include="parallel\thread_pool.cpp">
+      <Filter>Source Files\parallel</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -386,6 +401,18 @@
     </ClInclude>
     <ClInclude Include="interface\antcolony_tsp_interface.h">
       <Filter>Source Files\interface</Filter>
+    </ClInclude>
+    <ClInclude Include="container\kdnode.hpp">
+      <Filter>Source Files\container</Filter>
+    </ClInclude>
+    <ClInclude Include="parallel\task.hpp">
+      <Filter>Source Files\parallel</Filter>
+    </ClInclude>
+    <ClInclude Include="parallel\thread_executor.hpp">
+      <Filter>Source Files\parallel</Filter>
+    </ClInclude>
+    <ClInclude Include="parallel\thread_pool.hpp">
+      <Filter>Source Files\parallel</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

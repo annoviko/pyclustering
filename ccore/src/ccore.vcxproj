@@ -40,6 +40,7 @@
     <ClCompile Include="container\adjacency_list.cpp" />
     <ClCompile Include="container\adjacency_matrix.cpp" />
     <ClCompile Include="container\adjacency_weight_list.cpp" />
+    <ClCompile Include="container\kdnode.cpp" />
     <ClCompile Include="container\kdtree.cpp" />
     <ClCompile Include="differential\differ_factor.cpp" />
     <ClCompile Include="interface\agglomerative_interface.cpp" />
@@ -67,6 +68,9 @@
     <ClCompile Include="nnet\som.cpp" />
     <ClCompile Include="nnet\sync.cpp" />
     <ClCompile Include="nnet\syncpr.cpp" />
+    <ClCompile Include="parallel\task.cpp" />
+    <ClCompile Include="parallel\thread_executor.cpp" />
+    <ClCompile Include="parallel\thread_pool.cpp" />
     <ClCompile Include="tsp\ant_colony.cpp" />
     <ClCompile Include="tsp\distance_matrix.cpp" />
     <ClCompile Include="utils.cpp" />
@@ -104,6 +108,7 @@
     <ClInclude Include="container\adjacency_weight_list.hpp" />
     <ClInclude Include="container\dynamic_data.hpp" />
     <ClInclude Include="container\ensemble_data.hpp" />
+    <ClInclude Include="container\kdnode.hpp" />
     <ClInclude Include="container\kdtree.hpp" />
     <ClInclude Include="definitions.hpp" />
     <ClInclude Include="differential\differ_factor.hpp" />
@@ -136,6 +141,9 @@
     <ClInclude Include="nnet\som.hpp" />
     <ClInclude Include="nnet\sync.hpp" />
     <ClInclude Include="nnet\syncpr.hpp" />
+    <ClInclude Include="parallel\task.hpp" />
+    <ClInclude Include="parallel\thread_executor.hpp" />
+    <ClInclude Include="parallel\thread_pool.hpp" />
     <ClInclude Include="tsp\ant_colony.hpp" />
     <ClInclude Include="tsp\ant_colony_params.hpp" />
     <ClInclude Include="tsp\distance_matrix.hpp" />

@@ -18,8 +18,7 @@
 *
 */
 
-#ifndef _ADJACENCY_H_
-#define _ADJACENCY_H_
+#pragma once
 
 
 #include <vector>
@@ -140,5 +139,3 @@ public:
 };
 
 }
-
-#endif

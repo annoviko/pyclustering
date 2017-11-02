@@ -78,7 +78,7 @@ class antcolony:
     @details Ants of the artificial colony are able to generate successively shorter feasible tours by using information accumulated 
              in the form of a pheromone trail deposited on the edges of the TSP graph.
     
-    @warning Solution is performed only via CCORE library (C/C++ implementation of the library).
+    @warning Solution is performed only via CCORE library (pyclustering core - C/C++ shared library for processing that significantly increases performance).
 
     """  
     
