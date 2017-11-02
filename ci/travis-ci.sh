@@ -186,6 +186,9 @@ upload_binary() {
 
     # Obtain link for uploading
     BINARY_FILEPATH=$TRAVIS_BRANCH%2F$BUILD_FOLDER%2F$BINARY_FOLDER%2Fccore.so
+    
+    echo "[CI Job]: Upload binary using path '$BINARY_FILEPATH'."
+    
     UPLOAD_LINK=`curl -s -H "Authorization: OAuth $YANDEX_DISK_TOKEN" -X GET https://cloud-api.yandex.net:443/v1/disk/resources/upload?path=$BINARY_FILEPATH |\
         python3 -c "import sys, json; print(json.load(sys.stdin)['href'])"`
 
