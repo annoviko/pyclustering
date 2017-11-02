@@ -28,6 +28,11 @@
 #include "cluster/cluster_algorithm.hpp"
 #include "cluster/xmeans_data.hpp"
 
+#include "parallel/thread_pool.hpp"
+
+
+
+using namespace parallel;
 
 
 namespace cluster_analysis {
@@ -42,6 +47,8 @@ enum class splitting_type {
 class xmeans : public cluster_algorithm {
 public:
     const static std::size_t        DEFAULT_DATA_SIZE_PARALLEL_PROCESSING;
+
+    const static std::size_t        DEFAULT_THREAD_POOL_SIZE;
 
 private:
     const static double             DEFAULT_SPLIT_DIFFERENCE;
@@ -64,6 +71,8 @@ private:
     bool            m_parallel_processing   = false;
 
     std::mutex      m_mutex;
+
+    thread_pool     m_pool                  { DEFAULT_THREAD_POOL_SIZE };
 
 public:
     /**
