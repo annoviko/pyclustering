@@ -58,6 +58,8 @@ class antmean:
     """!
     @brief The ant colony clustering algorithm is a swarm-intelligent method used for clustering problems that is inspired 
            by the behavior of ant colonies that cluster their corpses and sort their larvae.
+           
+           This algorithm uses CCORE by default - C/C++ shared library due to lack Python implementation of the algorithm.
     
     @details
     

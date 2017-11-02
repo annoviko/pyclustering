@@ -36,6 +36,7 @@ import pyclustering.core.rock_wrapper as wrapper;
 class rock:
     """!
     @brief Class represents clustering algorithm ROCK.
+    @details CCORE option can be used to use the pyclustering core - C/C++ shared library for processing that significantly increases performance.
 
     Example:
     @code

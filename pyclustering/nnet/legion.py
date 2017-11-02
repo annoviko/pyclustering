@@ -27,7 +27,6 @@
 """
 
 import numpy;
-import math;
 import random;
 
 import pyclustering.core.legion_wrapper as wrapper;
@@ -213,6 +212,8 @@ class legion_network(network):
            based on Van der Pol model. 
            
     @details The model uses global inhibitor to de-synchronize synchronous ensembles of oscillators.
+             
+             CCORE option can be used to use the pyclustering core - C/C++ shared library for processing that significantly increases performance.
     
     Example:
     @code

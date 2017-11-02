@@ -719,6 +719,8 @@ class sync_network(network):
     """!
     @brief Model of oscillatory network that is based on the Kuramoto model of synchronization.
     
+    @details CCORE option can be used to use the pyclustering core - C/C++ shared library for processing that significantly increases performance.
+    
     """
 
     def __init__(self, num_osc, weight = 1, frequency = 0, type_conn = conn_type.ALL_TO_ALL, representation = conn_represent.MATRIX, initial_phases = initial_type.RANDOM_GAUSSIAN, ccore = False):

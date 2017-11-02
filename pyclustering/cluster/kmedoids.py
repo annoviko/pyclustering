@@ -40,6 +40,8 @@ class kmedoids:
     @details The algorithm is less sensitive to outliers tham K-Means. The principle difference between K-Medoids and K-Medians is that
              K-Medoids uses existed points from input data space as medoids, but median in K-Medians can be unreal object (not from
              input data space).
+             
+             CCORE option can be used to use core pyclustering - C/C++ shared library for processing that significantly increases performance.
     
     Example:
     @code

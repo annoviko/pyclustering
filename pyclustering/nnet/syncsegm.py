@@ -154,6 +154,8 @@ class syncsegm:
     @details syncsegm is a bio-inspired algorithm that is based on double-layer oscillatory network that uses modified Kuramoto model.
              Algorithm extracts colors and colored objects. It uses only CCORE (C++ implementation of pyclustering) parts to implement the algorithm.
     
+             CCORE option is True by default to use sync network in the pyclustering core - C/C++ shared library for processing that significantly increases performance.
+    
     Example:
     @code
         # create oscillatory for image segmentaion - extract colors (radius 128) and objects (radius 4), 

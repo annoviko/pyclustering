@@ -37,6 +37,8 @@ class dbscan:
     """!
     @brief Class represents clustering algorithm DBSCAN.
     @details This DBSCAN algorithm is KD-tree optimized.
+             
+             CCORE option can be used to use the pyclustering core - C/C++ shared library for processing that significantly increases performance.
     
     Example:
     @code

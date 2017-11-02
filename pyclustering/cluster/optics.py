@@ -59,11 +59,11 @@ class ordering_visualizer:
         
         Example demonstrates general abilities of 'ordering_visualizer' class:
         @code
-        # Display cluster-ordering diagram with connectivity radius is used for allocation of three clusters.
-        ordering_visualizer.show_ordering_diagram(analyser, 3);
+            # Display cluster-ordering diagram with connectivity radius is used for allocation of three clusters.
+            ordering_visualizer.show_ordering_diagram(analyser, 3);
         
-        # Display cluster-ordering diagram without radius.
-        ordering_visualizer.show_ordering_diagram(analyser);
+            # Display cluster-ordering diagram without radius.
+            ordering_visualizer.show_ordering_diagram(analyser);
         @endcode
         
         """
@@ -278,11 +278,13 @@ class optics_descriptor:
 
 class optics:
     """!
-    @brief Class represents clustering algorithm OPTICS (Ordering Points To Identify Clustering Structure).
+    @brief Class represents clustering algorithm OPTICS (Ordering Points To Identify Clustering Structure) with KD-tree optimization (ccore options is supported).
     @details OPTICS is a density-based algorithm. Purpose of the algorithm is to provide explicit clusters, but create clustering-ordering representation of the input data. 
              Clustering-ordering information contains information about internal structures of data set in terms of density and proper connectivity radius can be obtained
              for allocation required amount of clusters using this diagram. In case of usage additional input parameter 'amount of clusters' connectivity radius should be
              bigger than real - because it will be calculated by the algorithms if requested amount of clusters is not allocated.
+             
+             CCORE option can be used to use the pyclustering core - C/C++ shared library for processing that significantly increases performance.
 
     @image html optics_example_clustering.png "Scheme how does OPTICS works. At the beginning only one cluster is allocated, but two is requested. At the second step OPTICS calculates connectivity radius using cluster-ordering and performs final cluster allocation."
 

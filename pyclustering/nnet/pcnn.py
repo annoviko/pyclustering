@@ -308,6 +308,8 @@ class pcnn_network(network):
     """!
     @brief Model of oscillatory network that is based on the Eckhorn model.
     
+    @details CCORE option can be used to use the pyclustering core - C/C++ shared library for processing that significantly increases performance.
+    
     Example:
     @code
         # Create pulse-coupled neural network:

@@ -203,23 +203,25 @@ class syncpr(sync_network):
     """!
     @brief Model of phase oscillatory network for pattern recognition that is based on the Kuramoto model.
     @details The model uses second-order and third-order modes of the Fourier components.
-    
+             
+             CCORE option can be used to use the pyclustering core - C/C++ shared library for processing that significantly increases performance.
+             
     Example:
     @code
-    # Network size should be equal to size of pattern for learning.
-    net = syncpr(size_network, 0.3, 0.3);
-    
-    # Train network using list of patterns (input images).
-    net.train(image_samples);
-    
-    # Recognize image using 10 steps during 10 seconds of simulation.
-    sync_output_dynamic = net.simulate(10, 10, pattern, solve_type.RK4, True);
-    
-    # Display output dynamic.
-    syncpr_visualizer.show_output_dynamic(sync_output_dynamic);
-    
-    # Display evolution of recognition of the pattern.
-    syncpr_visualizer.show_pattern(sync_output_dynamic, image_height, image_width);
+        # Network size should be equal to size of pattern for learning.
+        net = syncpr(size_network, 0.3, 0.3);
+        
+        # Train network using list of patterns (input images).
+        net.train(image_samples);
+        
+        # Recognize image using 10 steps during 10 seconds of simulation.
+        sync_output_dynamic = net.simulate(10, 10, pattern, solve_type.RK4, True);
+        
+        # Display output dynamic.
+        syncpr_visualizer.show_output_dynamic(sync_output_dynamic);
+        
+        # Display evolution of recognition of the pattern.
+        syncpr_visualizer.show_pattern(sync_output_dynamic, image_height, image_width);
     
     @endcode
     

@@ -80,7 +80,8 @@ class cure_cluster:
 
 class cure:
     """!
-    @brief Class represents clustering algorithm CURE.
+    @brief Class represents clustering algorithm CURE with KD-tree optimization.
+    @details CCORE option can be used to use the pyclustering core - C/C++ shared library for processing that significantly increases performance.
     
     Example:
     @code
