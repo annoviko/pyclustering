@@ -41,7 +41,7 @@ run_deploy_job() {
 
 
 download_binary() {
-    echo "[DEPLOY]: Download binary file"
+    echo "[DEPLOY]: Download binary file from cloud"
 
     # Obtain link for download
     BUILD_FOLDER=linux
