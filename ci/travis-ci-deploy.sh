@@ -53,8 +53,7 @@ download_binary() {
 
     echo "[DEPLOY]: Download link '$DOWNLOAD_LINK'"
 
-    # Download binary
-    #curl -s -H "Authorization: OAuth $YANDEX_DISK_TOKEN" -X GET $DOWNLOAD_LINK > pyclustering/core/x64/linux/ccore.so
+    # Download binary to specific folder
     curl $DOWNLOAD_LINK -o pyclustering/core/x64/linux/ccore.so;
 }
 
