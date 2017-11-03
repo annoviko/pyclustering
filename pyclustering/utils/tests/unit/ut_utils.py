@@ -21,7 +21,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import unittest;
 
-import math;
+# Generate images without having a window appear.
+import matplotlib;
+matplotlib.use('Agg');
+
+from pyclustering.cluster.kmeans import kmeans;
+from pyclustering.cluster.center_initializer import kmeans_plusplus_initializer;
 
 from pyclustering.utils import euclidean_distance;
 from pyclustering.utils import average_neighbor_distance;
@@ -30,6 +35,7 @@ from pyclustering.utils import data_corners;
 from pyclustering.utils import norm_vector;
 from pyclustering.utils import rgb2gray;
 from pyclustering.utils import extract_number_oscillations;
+from pyclustering.utils import draw_clusters;
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES;
 
@@ -156,6 +162,36 @@ class Test(unittest.TestCase):
     def testExtractNumberOscillationsDownUpDown(self):
         value = [ [0.0], [1.0], [0.0] ];
         assert extract_number_oscillations(value, 0, 0.5) == 1;
+
+    def templateDrawClustersNoFailure(self, data_path, amount_clusters):
+        sample = read_sample(data_path);
+        
+        initial_centers = kmeans_plusplus_initializer(sample, amount_clusters).initialize();
+        kmeans_instance = kmeans(sample, initial_centers, amount_clusters);
+        
+        kmeans_instance.process();
+        clusters = kmeans_instance.get_clusters();
+        
+        ax = draw_clusters(sample, clusters);
+        assert None != ax;
+
+    def testDrawClustersOneCluster(self):
+        self.templateDrawClustersNoFailure(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1);
+
+    def testDrawClustersTwoClusters(self):
+        self.templateDrawClustersNoFailure(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2);
+
+    def testDrawClustersThreeClusters(self):
+        self.templateDrawClustersNoFailure(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 3);
+
+    def testDrawClustersOneDimension(self):
+        self.templateDrawClustersNoFailure(SIMPLE_SAMPLES.SAMPLE_SIMPLE7, 2);
+
+    def testDrawClustersTwoDimensions(self):
+        self.templateDrawClustersNoFailure(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2);
+
+    def testDrawClustersThreeDimensions(self):
+        self.templateDrawClustersNoFailure(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, 2);
 
 
 if __name__ == "__main__":

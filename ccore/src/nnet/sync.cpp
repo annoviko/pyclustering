@@ -153,8 +153,8 @@ void sync_network::initialize(const std::size_t size, const double weight_factor
 
     std::random_device                      device;
     std::default_random_engine              generator(device());
-    std::uniform_real_distribution<double>	phase_distribution(0.0, 2.0 * pi());
-    std::uniform_real_distribution<double>	frequency_distribution(0.0, 1.0);
+    std::uniform_real_distribution<double>  phase_distribution(0.0, 2.0 * pi());
+    std::uniform_real_distribution<double>  frequency_distribution(0.0, 1.0);
 
     for (std::size_t index = 0; index < size; index++) {
         sync_oscillator & oscillator_context = m_oscillators[index];
