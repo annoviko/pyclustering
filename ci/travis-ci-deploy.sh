@@ -54,7 +54,7 @@ download_binary() {
     echo "[DEPLOY]: Download link '$DOWNLOAD_LINK'"
 
     # Download binary to specific folder
-    curl $DOWNLOAD_LINK -o pyclustering/core/x64/linux/ccore.so
+    curl -L "$DOWNLOAD_LINK" -o pyclustering/core/x64/linux/ccore.so
     
     echo "[DEPLOY]: Content of the binary folder"
     ls pyclustering/core/x64/linux/ -la

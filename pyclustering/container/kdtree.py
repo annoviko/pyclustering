@@ -155,6 +155,8 @@ class node:
 class kdtree:
     """!
     @brief Represents KD Tree that is a space-partitioning data structure for organizing points in a k-dimensional space.
+    @details In the term k-d tree, k denotes the dimensionality of the space being represented. Each data point is represented 
+              as a node in the k-d tree in the form of a record of type node.
     
     Examples:
     @code
