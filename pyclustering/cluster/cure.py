@@ -42,16 +42,20 @@ class cure_cluster:
     
     """
     
-    def __init__(self, point = None):
+    def __init__(self, point, index):
         """!
         @brief Constructor of CURE cluster.
         
         @param[in] point (list): Point represented by list of coordinates.
+        @param[in] index (uint): Index point in dataset.
         
         """
         
         ## List of points that make up cluster.
         self.points = [ ];
+        
+        ## Point indexes in dataset.
+        self.indexes = -1;
         
         ## Mean of points that make up cluster.
         self.mean = None;
@@ -61,6 +65,7 @@ class cure_cluster:
         
         if (point is not None):
             self.points = [ point ];
+            self.indexes = [ index ];
             self.mean = point;
             self.rep = [ point ];
         
@@ -214,7 +219,7 @@ class cure:
                     self.__relocate_cluster(item);
         
             # Change cluster representation
-            self.__clusters = [ cure_cluster_unit.points for cure_cluster_unit in self.__queue ];
+            self.__clusters = [ cure_cluster_unit.indexes for cure_cluster_unit in self.__queue ];
             self.__representors = [ cure_cluster_unit.rep for cure_cluster_unit in self.__queue ];
             self.__means = [ cure_cluster_unit.mean for cure_cluster_unit in self.__queue ];
     
@@ -231,7 +236,7 @@ class cure:
         
         """
         
-        return self.__clusters;  
+        return self.__clusters;
     
     
     def get_representors(self):
@@ -274,10 +279,7 @@ class cure:
         
         """
         
-        if (self.__ccore is True):
-            return type_encoding.CLUSTER_INDEX_LIST_SEPARATION;
-        else:
-            return type_encoding.CLUSTER_OBJECT_LIST_SEPARATION;
+        return type_encoding.CLUSTER_INDEX_LIST_SEPARATION;
     
     
     def __insert_cluster(self, cluster):
@@ -293,7 +295,7 @@ class cure:
                 self.__queue.insert(index, cluster);
                 return;
     
-        self.__queue.append(cluster);        
+        self.__queue.append(cluster);
 
 
     def __relocate_cluster(self, cluster):
@@ -368,9 +370,10 @@ class cure:
         
         """
         
-        merged_cluster = cure_cluster();
+        merged_cluster = cure_cluster(None, None);
         
         merged_cluster.points = cluster1.points + cluster2.points;
+        merged_cluster.indexes = cluster1.indexes + cluster2.indexes;
         
         # merged_cluster.mean = ( len(cluster1.points) * cluster1.mean + len(cluster2.points) * cluster2.mean ) / ( len(cluster1.points) + len(cluster2.points) );
         dimension = len(cluster1.mean);
@@ -423,7 +426,7 @@ class cure:
         
         """
         
-        self.__queue = [cure_cluster(point) for point in self.__pointer_data];
+        self.__queue = [cure_cluster(self.__pointer_data[index_point], index_point) for index_point in range(len(self.__pointer_data))];
         
         # set closest clusters
         for i in range(0, len(self.__queue)):
