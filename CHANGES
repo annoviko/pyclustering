@@ -5,6 +5,9 @@ CHANGE NOTES FOR 0.7.3 (STARTED Oct 23, 2017)
 ------------------------------------------------------------------------
 
 GENERAL CHANGES:
+- Python implementation of CURE algorithm method 'get_clusters()' returns list of indexes (pyclustering.cluster.cure)
+  See: https://github.com/annoviko/pyclustering/issues/384
+
 - Implemented parallel processing for X-Means algorithm (ccore.xmeans)
   See: https://github.com/annoviko/pyclustering/issues/372
 

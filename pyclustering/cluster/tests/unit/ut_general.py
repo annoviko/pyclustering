@@ -212,7 +212,7 @@ class Test(unittest.TestCase):
         means = cure_instance.get_means();
         
         visualizer = cluster_visualizer();
-        visualizer.append_clusters(clusters, None);
+        visualizer.append_clusters(clusters, sample);
         
         for cluster_index in range(len(clusters)):
             visualizer.append_cluster_attribute(0, cluster_index, representors[cluster_index], '*', 10);
