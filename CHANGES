@@ -8,27 +8,33 @@ GENERAL CHANGES:
 - Implemented method 'get_probabilities()' for obtaining belong probability in EM-algorithm (pyclustering.cluster.ema).
   See: https://github.com/annoviko/pyclustering/issues/387
 
-- Python implementation of CURE algorithm method 'get_clusters()' returns list of indexes (pyclustering.cluster.cure)
+- Python implementation of CURE algorithm method 'get_clusters()' returns list of indexes (pyclustering.cluster.cure).
   See: https://github.com/annoviko/pyclustering/issues/384
 
-- Implemented parallel processing for X-Means algorithm (ccore.xmeans)
+- Implemented parallel processing for X-Means algorithm (ccore.xmeans).
   See: https://github.com/annoviko/pyclustering/issues/372
 
-- Implemented pool threads for parallel processing (ccore.parallel)
+- Implemented pool threads for parallel processing (ccore.parallel).
   See: https://github.com/annoviko/pyclustering/issues/383
 
-- Implemented AntMean clustering algorithm (pyclustering.cluster.antmean, ccore.antmean)
+- Implemented AntMean clustering algorithm (pyclustering.cluster.antmean, ccore.antmean).
   See: https://github.com/annoviko/pyclustering/issues/278
 
-- Optimization of OPTICS algorithm using KD-tree for searching nearest neighbors (pyclustering.cluster.optics, ccore.optics)
+- Optimization of OPTICS algorithm using KD-tree for searching nearest neighbors (pyclustering.cluster.optics, ccore.optics).
   See: https://github.com/annoviko/pyclustering/issues/370
 
-- Optimization of DBSCAN algorithm using KD-tree for searching nearest neighbors (pyclustering.cluster.dbscan, ccore.dbscan)
+- Optimization of DBSCAN algorithm using KD-tree for searching nearest neighbors (pyclustering.cluster.dbscan, ccore.dbscan).
   See: https://github.com/annoviko/pyclustering/issues/369
 
 
 CORRECTED MAJOR BUGS:
-- Corrected bug with returned nullptr in method 'kdtree_searcher::find_nearest_node()' (ccore.container.kdtree)
+- Amount of allocated clusters can be differ from amount of centers in X-Means algorithm (ccore.xmeans).
+  See: https://github.com/annoviko/pyclustering/issues/389
+
+- Amount of allocated clusters can be bigger than kmax in X-Means algorithm (pyclustering.cluster.xmeans, ccore.xmeans).
+  See: https://github.com/annoviko/pyclustering/issues/388
+
+- Corrected bug with returned nullptr in method 'kdtree_searcher::find_nearest_node()' (ccore.container.kdtree).
   See: no reference.
 
 
@@ -62,10 +68,10 @@ CHANGE NOTES FOR 0.7.0 (STARTED Jun 01, 2016), (RELEASED: Oct 16, 2017)
 ------------------------------------------------------------------------
 
 GENERAL CHANGES (pyclustering):
-- Implemented Expectation-Maximization clustering algorithm for Gaussian Mixute Model and clustering visualizer for this particular algorithm (pyclustering.cluster.ema)
+- Implemented Expectation-Maximization clustering algorithm for Gaussian Mixute Model and clustering visualizer for this particular algorithm (pyclustering.cluster.ema).
   See: https://github.com/annoviko/pyclustering/issues/16
 
-- Implemented Genetic Clustering Algorithm (GCA) and clustering visualizer for this particular algorithm (pyclustering.cluster.ga)
+- Implemented Genetic Clustering Algorithm (GCA) and clustering visualizer for this particular algorithm (pyclustering.cluster.ga).
   See: https://github.com/annoviko/pyclustering/issues/360
 
 - Implemented feature to obtain and visualize evolution of order parameter and local order parameter for Sync network and Sync-based algorithms (pyclustering.nnet.sync).

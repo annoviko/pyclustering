@@ -42,4 +42,4 @@ def xmeans(sample, centers, kmax, tolerance, criterion):
     result = package_extractor(package).extract();
     ccore.free_pyclustering_package(package);
     
-    return result;
+    return result[0], result[1];

@@ -37,7 +37,7 @@ pyclustering_package * dbscan_algorithm(const pyclustering_package * const sampl
     package->size = output_result.size() + 1;   /* the last for noise */
     package->data = new pyclustering_package * [package->size + 1];
 
-    for (unsigned int i = 0; i < package->size - 1; i++) {
+    for (std::size_t i = 0; i < package->size - 1; i++) {
         ((pyclustering_package **) package->data)[i] = create_package(&output_result[i]);
     }
 

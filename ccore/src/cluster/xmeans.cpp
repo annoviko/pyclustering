@@ -69,7 +69,7 @@ void xmeans::process(const dataset & data, cluster_data & output_result) {
     size_t current_number_clusters = m_ptr_result->centers()->size();
     const index_sequence dummy;
 
-    while (current_number_clusters < m_maximum_clusters) {
+    while (current_number_clusters <= m_maximum_clusters) {
         improve_parameters(*(m_ptr_result->clusters()), m_centers, dummy);
         improve_structure();
 
@@ -79,6 +79,8 @@ void xmeans::process(const dataset & data, cluster_data & output_result) {
 
         current_number_clusters = m_centers.size();
     }
+
+    *(m_ptr_result->centers().get()) = std::move(m_centers);
 }
 
 
@@ -98,10 +100,10 @@ void xmeans::improve_parameters(cluster_sequence & improved_clusters, dataset & 
 
 
 void xmeans::improve_structure() {
-    if (m_parallel_processing) {
-        cluster_sequence & clusters = *(m_ptr_result->clusters());
-        std::vector<dataset> region_allocated_centers(m_ptr_result->clusters()->size(), dataset());
+    cluster_sequence & clusters = *(m_ptr_result->clusters());
+    std::vector<dataset> region_allocated_centers(m_ptr_result->clusters()->size(), dataset());
 
+    if (m_parallel_processing) {
         for (std::size_t index = 0; index < m_ptr_result->clusters()->size(); index++) {
             task::proc improve_proc = [this, index, &clusters, &region_allocated_centers](){
                     improve_region_structure(clusters[index], m_centers[index], region_allocated_centers[index]);
@@ -113,28 +115,34 @@ void xmeans::improve_structure() {
         for (std::size_t i = 0; i < m_ptr_result->clusters()->size(); i++) {
             m_pool.pop_complete_task();
         }
-
-        /* update current centers */
-        m_centers.clear();
-        for (auto & centers : region_allocated_centers) {
-            for (auto & center : centers) {
-                m_centers.push_back(center);
-            }
-        }
     }
     else {
         dataset allocated_centers;
 
         for (std::size_t index = 0; index < m_ptr_result->clusters()->size(); index++) {
-            improve_region_structure((*(m_ptr_result->clusters()))[index], m_centers[index], allocated_centers);
-        }
-
-        /* update current centers */
-        m_centers.clear();
-        for (std::size_t index = 0; index < allocated_centers.size(); index++) {
-            m_centers.push_back(allocated_centers[index]);
+            improve_region_structure((*(m_ptr_result->clusters()))[index], m_centers[index], region_allocated_centers[index]);
         }
     }
+
+    /* update current centers */
+    dataset allocated_centers = { };
+    std::size_t amount_free_centers = m_maximum_clusters - clusters.size();
+
+    for (std::size_t index_cluster = 0; index_cluster < region_allocated_centers.size(); index_cluster++) {
+        dataset & centers = region_allocated_centers[index_cluster];
+        if ( (centers.size() > 1) && (amount_free_centers > 0) ) {
+            /* separate cluster */
+            allocated_centers.push_back(centers[0]);
+            allocated_centers.push_back(centers[1]);
+
+            amount_free_centers--;
+        }
+        else {
+            allocated_centers.push_back(m_centers[index_cluster]);
+        }
+    }
+
+    m_centers = std::move(allocated_centers);
 }
 
 

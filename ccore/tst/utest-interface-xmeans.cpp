@@ -35,5 +35,11 @@ TEST(utest_interface_xmeans, xmeans_algorithm) {
     pyclustering_package * result = xmeans_algorithm(sample.get(), centers.get(), 5, 0.01, 0);
     ASSERT_EQ(2, result->size);
 
+    pyclustering_package * obtained_clusters = ((pyclustering_package **) result->data)[0];
+    ASSERT_EQ(2, obtained_clusters->size);
+
+    pyclustering_package * obtained_centers = ((pyclustering_package **) result->data)[1];
+    ASSERT_EQ(2, obtained_centers->size);
+
     delete result;
 }

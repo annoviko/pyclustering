@@ -122,7 +122,7 @@ class xmeans:
         @param[in] ccore (bool): Defines should be CCORE (C++ pyclustering library) used instead of Python code or not.
         
         """
-           
+        
         self.__pointer_data = data;
         self.__clusters = [];
         
@@ -150,22 +150,23 @@ class xmeans:
         """
         
         if (self.__ccore is True):
-            self.__clusters = wrapper.xmeans(self.__pointer_data, self.__centers, self.__kmax, self.__tolerance, self.__criterion);
-            self.__clusters = [ cluster for cluster in self.__clusters if len(cluster) > 0 ]; 
-            
-            self.__centers = self.__update_centers(self.__clusters);
+            self.__clusters, self.__centers = wrapper.xmeans(self.__pointer_data, self.__centers, self.__kmax, self.__tolerance, self.__criterion);
+
         else:
             self.__clusters = [];
-            while ( len(self.__centers) < self.__kmax ):
+            while ( len(self.__centers) <= self.__kmax ):
                 current_cluster_number = len(self.__centers);
-                 
-                (self.__clusters, self.__centers) = self.__improve_parameters(self.__centers);
+                
+                self.__clusters, self.__centers = self.__improve_parameters(self.__centers);
                 allocated_centers = self.__improve_structure(self.__clusters, self.__centers);
                 
-                if ( (current_cluster_number == len(allocated_centers)) ):
+                if (current_cluster_number == len(allocated_centers)):
+                #if ( (current_cluster_number == len(allocated_centers)) or (len(allocated_centers) > self.__kmax) ):
                     break;
                 else:
                     self.__centers = allocated_centers;
+            
+            self.__clusters, self.__centers = self.__improve_parameters(self.__centers);
 
 
     def get_clusters(self):
@@ -235,7 +236,7 @@ class xmeans:
             changes = max([euclidean_distance_sqrt(centers[index], updated_centers[index]) for index in range(len(updated_centers))]);    # Fast solution
               
             centers = updated_centers;
-          
+        
         return (clusters, centers);
      
      
@@ -253,7 +254,8 @@ class xmeans:
         difference = 0.001;
           
         allocated_centers = [];
-          
+        amount_free_centers = self.__kmax - len(centers);
+
         for index_cluster in range(len(clusters)):
             # split cluster into two child clusters
             parent_child_centers = [];
@@ -280,9 +282,11 @@ class xmeans:
                     # then representing the data samples with two clusters is more accurate in comparison to a single parent cluster.
                     if (parent_scores > child_scores): split_require = True;
                 
-                if (split_require is True):
+                if ( (split_require is True) and (amount_free_centers > 0) ):
                     allocated_centers.append(parent_child_centers[0]);
                     allocated_centers.append(parent_child_centers[1]);
+                    
+                    amount_free_centers -= 1;
                 else:
                     allocated_centers.append(centers[index_cluster]);
 
@@ -431,7 +435,7 @@ class xmeans:
         else:
             bypass = available_indexes;
           
-        clusters = [[] for i in range(len(centers))];
+        clusters = [[] for _ in range(len(centers))];
         for index_point in bypass:
             index_optim = -1;
             dist_optim = 0.0;
@@ -459,7 +463,7 @@ class xmeans:
         
         """
          
-        centers = [[] for i in range(len(clusters))];
+        centers = [[] for _ in range(len(clusters))];
         dimension = len(self.__pointer_data[0])
           
         for index in range(len(clusters)):

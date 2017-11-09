@@ -60,6 +60,8 @@ template_length_process_data(const std::shared_ptr<dataset> & data,
     }
 
     ASSERT_EQ(data->size(), total_size);
+    ASSERT_EQ(output_result.centers()->size(), output_result.clusters()->size());
+    ASSERT_GE(kmax, output_result.centers()->size());
 
     if (!expected_cluster_length.empty()) {
         std::sort(obtained_cluster_length.begin(), obtained_cluster_length.end());
@@ -106,6 +108,27 @@ TEST(utest_xmeans, allocation_bic_sample_simple_03) {
     dataset start_centers = { {0.2, 0.1}, {4.0, 1.0}, {2.0, 2.0}, {2.3, 3.9} };
     std::vector<unsigned int> expected_clusters_length = {10, 10, 10, 30};
     template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_03), start_centers, 20, expected_clusters_length, splitting_type::BAYESIAN_INFORMATION_CRITERION);
+}
+
+
+TEST(utest_xmeans, allocation_wrong_initial_bic_sample_simple_03) {
+    dataset start_centers = { {4.0, 1.0}, {2.0, 2.0}, {2.3, 3.9} };
+    std::vector<unsigned int> expected_clusters_length = {10, 10, 10, 30};
+    template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_03), start_centers, 20, expected_clusters_length, splitting_type::BAYESIAN_INFORMATION_CRITERION);
+}
+
+
+TEST(utest_xmeans, allocation_kmax_less_real_bic_sample_simple_03) {
+    dataset start_centers = { {4.0, 1.0}, {2.0, 2.0}, {2.3, 3.9} };
+    std::vector<unsigned int> expected_clusters_length = { };
+    template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_03), start_centers, 3, expected_clusters_length, splitting_type::BAYESIAN_INFORMATION_CRITERION);
+}
+
+
+TEST(utest_xmeans, allocation_one_cluster_bic_sample_simple_03) {
+    dataset start_centers = { {2.0, 2.0} };
+    std::vector<unsigned int> expected_clusters_length = { 60 };
+    template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_03), start_centers, 1, expected_clusters_length, splitting_type::BAYESIAN_INFORMATION_CRITERION);
 }
 
 
