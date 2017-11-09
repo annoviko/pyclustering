@@ -59,9 +59,21 @@ class EmaUnitTest(unittest.TestCase):
             clusters = ema_instance.get_clusters();
             centers = ema_instance.get_centers();
             covariances = ema_instance.get_covariances();
+            probabilities = ema_instance.get_probabilities();
             
             assert len(centers) == len(clusters);
             assert len(covariances) == len(clusters);
+            assert len(probabilities) == len(clusters);
+            
+            for cluster_probability in probabilities:
+                assert len(cluster_probability) == len(sample);
+            
+            for index_point in range(len(sample)):
+                total_probability = 0.0;
+                for cluster_probability in probabilities:
+                    total_probability += cluster_probability[index_point];
+                
+                assert abs(total_probability - 1.0) <= 0.00001;
             
             obtained_cluster_sizes = [len(cluster) for cluster in clusters];
             if (len(sample) != sum(obtained_cluster_sizes)):

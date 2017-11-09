@@ -31,7 +31,7 @@ from pyclustering.utils import read_sample;
 from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES, FAMOUS_SAMPLES;
 
 
-def template_clustering(sample_file_path, amount_clusters, initializer, show_animation = True):
+def template_clustering(sample_file_path, amount_clusters, initializer, show_animation = False):
     sample = read_sample(sample_file_path);
     
     observer = None;
@@ -58,7 +58,7 @@ def template_clustering(sample_file_path, amount_clusters, initializer, show_ani
     
     if (show_animation is True):
         ema_visualizer.animate_cluster_allocation(sample, observer);
-    #ema_visualizer.animate_cluster_allocation(sample, observer, movie_fps=1, save_movie="ema_target.mp4");
+        #ema_visualizer.animate_cluster_allocation(sample, observer, movie_fps=2, save_movie="ema_target.mp4");
 
 
 def cluster_sample01_init_random():

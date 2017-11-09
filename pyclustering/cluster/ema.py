@@ -396,7 +396,7 @@ class ema_visualizer:
         def frame_generation(index_iteration):
             figure.clf();
             
-            figure.suptitle("Expectation maximixation algorithm (iteration: " + str(index_iteration) +")", fontsize = 18, fontweight = 'bold');
+            figure.suptitle("EM algorithm (iteration: " + str(index_iteration) +")", fontsize = 18, fontweight = 'bold');
             
             clusters = observer.get_evolution_clusters()[index_iteration];
             covariances = observer.get_evolution_covariances()[index_iteration];
@@ -548,6 +548,8 @@ class ema:
             previous_likelihood = current_likelihood;
             current_likelihood = self.__log_likelihood();
             self.__stop = self.__get_stop_condition();
+        
+        self.__normalize_probabilities();
 
 
     def get_clusters(self):
@@ -575,6 +577,28 @@ class ema:
         """
         
         return self.__variances;
+
+
+    def get_probabilities(self):
+        """!
+        @brief Returns 2-dimensional list with belong probability of each object from data to cluster correspondingly,
+                where that first index is for cluster and the second is for point.
+        
+        @code
+            # Get belong probablities
+            probabilities = ema_instance.get_probabilities();
+            
+            # Show porbability of the fifth element in the first and in the second cluster
+            index_point = 5;
+            print("Probability in the first cluster:", probabilities[0][index_point]);
+            print("Probability in the first cluster:", probabilities[1][index_point]);
+        @endcode
+        
+        @return (list) 2-dimensional list with belong probability of each object from data to cluster.
+        
+        """
+        
+        return self.__rc;
 
 
     def __erase_empty_clusters(self):
@@ -634,7 +658,7 @@ class ema:
         if ( (divider != 0.0) and (divider != float('inf')) ):
             return self.__pic[index_cluster] * self.__gaussians[index_cluster][index_point] / divider;
         
-        return float('nan');
+        return 1.0;
 
 
     def __expectation_step(self):
@@ -694,3 +718,23 @@ class ema:
         
         mean = mean / mc;
         return mean;
+
+
+    def __normalize_probabilities(self):
+        for index_point in range(len(self.__data)):
+            probability = 0.0;
+            for index_cluster in range(len(self.__clusters)):
+                probability += self.__rc[index_cluster][index_point];
+            
+            if (abs(probability - 1.0) > 0.000001):
+                self.__normalize_probability(index_point, probability);
+
+
+    def __normalize_probability(self, index_point, probability):
+        if (probability == 0.0):
+            return;
+        
+        normalization = 1.0 / probability;
+
+        for index_cluster in range(len(self.__clusters)):
+            self.__rc[index_cluster][index_point] *= normalization;
