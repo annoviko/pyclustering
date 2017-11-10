@@ -109,6 +109,36 @@ class XmeansUnitTest(unittest.TestCase):
     def testMndlWrongStartClusterAllocationSampleSimple5(self):
         XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [[0.0, 1.0], [0.0, 0.0]], [15, 15, 15, 15], splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH, 20, False);
 
+    def testBicClusterAllocationSampleSimple6(self):
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE6, [[3.5, 3.5], [3.7, 3.7]], [20, 21], splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, False);
+
+    def testBicClusterAllocationSampleSimple6WithoutInitial(self):
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE6, None, [20, 21], splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, False);
+
+    def testBicClusterAllocationSampleSimple7(self):
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE7, [[1], [2]], [10, 10], splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, False);
+
+    def testBicClusterAllocationSampleSimple7WithoutInitial(self):
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE7, None, [10, 10], splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, False);
+
+    def testBicClusterAllocationSampleSimple8(self):
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE8, [[-2.0], [3.0], [6.0], [12.0]], [15, 30, 20, 80], splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, False);
+
+    def testBicClusterAllocationSampleSimple8WrongAmountCenters(self):
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE8, [[3.0], [6.0]], [15, 30, 20, 80], splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, False);
+
+    def testBicClusterAllocationSampleSimple9(self):
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, [[3.0], [6.0]], [10, 20], splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, False);
+
+    def testBicClusterAllocationSampleSimple9WithoutInitial(self):
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, None, [10, 20], splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, False);
+
+    def testBicClusterAllocationSampleSimple10(self):
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE10, [[0.0, 0.3], [4.5, 3.4], [10.1, 10.6]], [11, 11, 11], splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, False);
+
+    def testBicClusterAllocationSampleSimple10WithoutInitial(self):
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE10, None, [11, 11, 11], splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, False);
+
     def testBicClusterAllocationSampleTwoDiamonds(self):
         XmeansTestTemplates.templateLengthProcessData(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, [[0.8, 0.2], [3.0, 0.0]], [400, 400], splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, False);
 

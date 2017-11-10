@@ -66,8 +66,11 @@ class XmeansTestTemplates:
         xmeans_instance.process();
         
         clusters = xmeans_instance.get_clusters();
+        centers = xmeans_instance.get_centers();
 
         assert len(clusters) == 4;
+        assert len(centers) == len(clusters);
+        
         assert len(clusters) <= 20;
         for cluster in clusters:
             assert len(cluster) == 10;
