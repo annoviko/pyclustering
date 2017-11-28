@@ -152,7 +152,7 @@ function install_miniconda() {
     conda config --set always_yes yes --set changeps1 no;
     conda update -q conda;
     
-    conda create -q -n test-environment python=3.4 numpy=1.11.3 scipy=0.18.1 matplotlib Pillow;
+    conda create -q -n test-environment numpy=1.11.3 scipy=0.18.1 matplotlib Pillow;
     
     echo "[CI Job] Activating environment for powershell manually.";
     $env:PYTHON_INTERPRETER = "$env:MINICONDA_PATH\envs\test-environment\python.exe";
