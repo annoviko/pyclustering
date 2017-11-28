@@ -14,7 +14,6 @@ init: []
 
 environment:
   PYTHON_VERSION: 3.4
-  PYTHON_ARCH: "64"
   CYGWIN_PATH: C:\cygwin64\bin\bash
   MINICONDA_PATH: C:\Miniconda3-x64
   TESTING_RESULT: "Success"
