@@ -23,21 +23,21 @@ function job_ut_windows_ccore() {
 
     msbuild ccore\ccore.sln /t:utcore:Rebuild /p:configuration=Release;
     if ($LastExitCode -ne 0) {
-        echo "Building of CCORE unit-test project for WINDOWS platform: FAILURE.";
+        echo "[CI Job] Building of CCORE unit-test project for WINDOWS platform: FAILURE.";
         exit 1;
     }
     
-    echo "Building of CCORE unit-test project for WINDOWS platform: SUCCESS.";
+    echo "[CI Job] Building of CCORE unit-test project for WINDOWS platform: SUCCESS.";
     
     cd ccore\Release;
     .\utcore.exe;
     if ($LastExitCode -ne 0) {
-        echo "Unit-testing CCORE library for WINDOWS platform: FAILURE.";
+        echo "[CI Job] Unit-testing CCORE library for WINDOWS platform: FAILURE.";
         $env:TESTING_RESULT = $env:RESULT_FAILURE;
         exit 1;
     }
     
-    echo "Unit-testing CCORE library for WINDOWS platform: SUCCESS.";
+    echo "[CI Job] Unit-testing CCORE library for WINDOWS platform: SUCCESS.";
 }
 
 
@@ -47,12 +47,12 @@ function job_build_cygwin_ccore() {
     & $env:CYGWIN_PATH -lc "cygcheck -dc cygwin";
     & $env:CYGWIN_PATH -lc "cd '$env:APPVEYOR_BUILD_FOLDER'; cd ccore; make ccore";
     if ($LastExitCode -ne 0) {
-        echo "Building CCORE library for CYGWIN platform: FAILURE.";
+        echo "[CI Job] Building CCORE library for CYGWIN platform: FAILURE.";
         $env:TESTING_RESULT = $env:RESULT_FAILURE;
         exit 1;
     }
     
-    echo "Building CCORE library for CYGWIN platform: SUCCESS.";
+    echo "[CI Job] Building CCORE library for CYGWIN platform: SUCCESS.";
 }
 
 
@@ -75,21 +75,21 @@ function job_pyclustering_windows() {
 
     install_miniconda;
 
-    echo "Set path '$env:APPVEYOR_BUILD_FOLDER' to tested pyclustering library."
+    echo "[CI Job] Set path '$env:APPVEYOR_BUILD_FOLDER' to tested pyclustering library."
     $env:PYTHONPATH = "$env:APPVEYOR_BUILD_FOLDER;$env:PYTHONPATH";
 
     job_build_windows_ccore;
 
-    echo "Starting integration testing.";
+    echo "[CI Job] Starting integration testing using interpreter '$env:PYTHON_INTERPRETER'.";
     
     & $env:PYTHON_INTERPRETER pyclustering\tests\tests_runner.py --integration
     if ($LastExitCode -ne 0) {
-        echo "Integration testing pyclustering <-> ccore for WINDOWS platform: FAILURE.";
+        echo "[CI Job] Integration testing pyclustering <-> ccore for WINDOWS platform: FAILURE.";
         $env:TESTING_RESULT = $env:RESULT_FAILURE;
         exit 1;
     }
     
-    echo "Integration testing pyclustering <-> ccore for WINDOWS platform: SUCCESS.";
+    echo "[CI Job] Integration testing pyclustering <-> ccore for WINDOWS platform: SUCCESS.";
 }
 
 
