@@ -147,22 +147,21 @@ function job_deploy() {
 function install_miniconda() {
     $env:PATH="$env:PATH;$env:MINICONDA_PATH\Scripts";
     
-    echo "Starting process of installation of miniconda.";
+    echo "[CI Job] Starting process of installation of miniconda.";
     
     conda config --set always_yes yes --set changeps1 no;
-    conda update -q conda;
+    # conda update -q conda;
     
-    conda install libgfortran;
-    conda create -q -n test-environment python=3.4 numpy scipy matplotlib Pillow;
+    conda create -q -n test-environment python=3.4 numpy scipy=1.0.0 matplotlib Pillow;
     
-    echo "Activating environment for powershell manually.";
+    echo "[CI Job] Activating environment for powershell manually.";
     $env:PYTHON_INTERPRETER = "$env:MINICONDA_PATH\envs\test-environment\python.exe";
     $env:PYTHONPATH = "$env:MINICONDA_PATH\envs\test-environment";
     
-    echo "Miniconda environment information after installation of miniconda:";
+    echo "[CI Job] Miniconda environment information after installation of miniconda:";
     conda info -a;
     
-    echo "Python interpreter information after installation of miniconda:";
+    echo "[CI Job] Python interpreter information after installation of miniconda:";
     & $env:PYTHON_INTERPRETER --version;
 }
 
