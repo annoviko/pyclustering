@@ -206,13 +206,11 @@ function install_miniconda() {
     echo "[CI Job] Starting process of installation of miniconda.";
     
     download_miniconda;
-    
+
     conda config --set always_yes true;
-    
-    conda install -q conda;
-    
+
     conda create -q -n test-environment python=3.4;
-    conda install -q -n test-environment numpy scipy matplotlib Pillow;
+    conda install -q -n test-environment numpy=1.11.3 scipy=0.19.1 matplotlib Pillow;
 
     
     echo "[CI Job] Activating environment for powershell manually (activate does not work).";
