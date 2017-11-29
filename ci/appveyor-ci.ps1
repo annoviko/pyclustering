@@ -150,27 +150,52 @@ function download_miniconda() {
     $webclient = New-Object System.Net.WebClient;
     
     $filename = "Miniconda3-4.3.27-Windows-x86_64.exe";
-    $filepath = "$pwd.Path\$filename";
+    $filepath = $pwd.Path + "\" + $filename
     
     $url = "https://repo.continuum.io/miniconda/" + $filename;
+
+
+    echo "[CI Job] Start downloading process from link '$url' to '$filepath'.";
+
+    $retry_attempts = 3
+    for($i = 0; $i -lt $retry_attempts; $i++){
+        try {
+            $webclient.DownloadFile($url, $filepath);
+            break;
+        }
+        Catch [Exception]{
+            Start-Sleep 1;
+        }
+    }
     
-    echo "[CI Job] Start download process from link '$url'.";
-    $webclient.DownloadFile($url, $filepath);
-    
-    $env:MINICONDA_PATH = "C:/Software/Miniconda/";
-    $args = "/InstallationType=AllUsers /S /AddToPath=1 /RegisterPython=1 /D=C:\Software\Miniconda\";
-    
-    Start-Process -FilePath $filepath -ArgumentList $args -Wait -Passthru
-    
-    if (Test-Path $python_home) {
-        echo "[CI Job] Miniconda is successfully installed.";
+    if (Test-Path $filepath) {
+        echo "[CI Job] Installation file has been download to '$filepath'.";
     }
     else {
-        echo "[CI Job] Miniconda is not installed.";
+        echo "[CI Job] Miniconda has not been downloaded."
+        Exit 1;
+    }
+    
+    
+    
+    echo "[CI Job] Start installing process using '$filepath'.";
+    
+    $env:MINICONDA_PATH = "C:/Software/Miniconda/";
+    $args = "/InstallationType=AllUsers /S /AddToPath=1 /RegisterPython=1 /D=$env:MINICONDA_PATH";
+    
+    Start-Process -FilePath $filepath -ArgumentList $args -Wait -Passthru;
+    
+    if (Test-Path $env:MINICONDA_PATH) {
+        echo "[CI Job] Miniconda has been successfully installed to '$env:MINICONDA_PATH'.";
+    }
+    else {
+        echo "[CI Job] Miniconda has not been installed.";
         Exit 1;
     }
 
     
+    
+    echo "[CI Job] Set miniconda to PATH.";
     $env:PATH = "$env:PATH;$env:MINICONDA_PATH\Scripts";
 }
 
