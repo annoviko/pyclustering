@@ -211,7 +211,8 @@ function install_miniconda() {
     
     conda install -q conda;
     
-    conda create -q -n test-environment python=3.4 numpy=1.11.3 scipy=0.18.1 matplotlib Pillow;
+    conda create -q -n test-environment python=3.4;
+    conda install -q -n test-environment numpy scipy matplotlib Pillow;
 
     
     echo "[CI Job] Activating environment for powershell manually (activate does not work).";
