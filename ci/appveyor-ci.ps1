@@ -149,22 +149,36 @@ function install_miniconda() {
     
     echo "[CI Job] Starting process of installation of miniconda.";
     
-    conda config --set always_yes yes --set changeps1 no;
-    conda update -q conda;
+    conda config --set always_yes true;
+    checkLastExitCode;
+    
+    conda config --add channels defaults;
+    checkLastExitCode;
+    
+    conda install -q conda;
+    checkLastExitCode;
     
     conda create -q -n test-environment python=3.4 numpy=1.11.3 scipy=0.18.1 matplotlib Pillow;
+    checkLastExitCode;
     
-    echo "[CI Job] Activating environment for powershell manually.";
+    echo "[CI Job] Activating environment for powershell manually (activate does not work).";
+    activate test-environment;
+    checkLastExitCode;
+    
     $env:PYTHON_INTERPRETER = "$env:MINICONDA_PATH\envs\test-environment\python.exe";
     $env:PYTHONPATH = "$env:MINICONDA_PATH\envs\test-environment";
     
     $env:PATH = "$env:MINICONDA_PATH\envs\test-environment;$env:PATH";
+    $env:PATH = "$env:MINICONDA_PATH\envs\test-environment\Scripts;$env:PATH";
+    $env:PATH = "$env:MINICONDA_PATH\envs\test-environment\Library\bin;$env:PATH";
     
     echo "[CI Job] Miniconda environment information after installation of miniconda:";
     conda info -a;
+    checkLastExitCode;
     
     echo "[CI Job] Python interpreter information after installation of miniconda:";
     & $env:PYTHON_INTERPRETER --version;
+    checkLastExitCode;
 }
 
 
