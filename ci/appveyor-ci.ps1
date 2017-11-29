@@ -82,7 +82,7 @@ function job_pyclustering_windows() {
 
     echo "[CI Job] Starting integration testing using interpreter '$env:PYTHON_INTERPRETER'.";
     
-    & $env:PYTHON_INTERPRETER pyclustering\tests\tests_runner.py --integration
+    python pyclustering\tests\tests_runner.py --integration
     if ($LastExitCode -ne 0) {
         echo "[CI Job] Integration testing pyclustering <-> ccore for WINDOWS platform: FAILURE.";
         $env:TESTING_RESULT = $env:RESULT_FAILURE;
@@ -180,7 +180,7 @@ function download_miniconda() {
     
     echo "[CI Job] Start installing process using '$filepath'.";
     
-    $env:MINICONDA_PATH = "C:\Specific-Miniconda\";
+    $env:MINICONDA_PATH = "C:\Specific-Miniconda";
     $args = "/InstallationType=AllUsers /S /AddToPath=1 /RegisterPython=1 /D=$env:MINICONDA_PATH";
     
     Start-Process -FilePath $filepath -ArgumentList $args -Wait -Passthru;
@@ -230,7 +230,7 @@ function install_miniconda() {
     conda info -a;
 
     echo "[CI Job] Python interpreter information after installation of miniconda:";
-    & $env:PYTHON_INTERPRETER --version;
+    python --version;
 }
 
 
