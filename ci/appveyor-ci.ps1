@@ -180,13 +180,15 @@ function download_miniconda() {
     
     echo "[CI Job] Start installing process using '$filepath'.";
     
-    $env:MINICONDA_PATH = "C:/Software/Miniconda/";
+    $env:MINICONDA_PATH = "C:\Specific-Miniconda\";
     $args = "/InstallationType=AllUsers /S /AddToPath=1 /RegisterPython=1 /D=$env:MINICONDA_PATH";
     
     Start-Process -FilePath $filepath -ArgumentList $args -Wait -Passthru;
     
     if (Test-Path $env:MINICONDA_PATH) {
         echo "[CI Job] Miniconda has been successfully installed to '$env:MINICONDA_PATH'.";
+        
+        Remove-Item $filepath;
     }
     else {
         echo "[CI Job] Miniconda has not been installed.";
@@ -195,7 +197,7 @@ function download_miniconda() {
 
     
     
-    echo "[CI Job] Set miniconda to PATH.";
+    echo "[CI Job] Set miniconda to PATH variable.";
     $env:PATH = "$env:PATH;$env:MINICONDA_PATH\Scripts";
 }
 
