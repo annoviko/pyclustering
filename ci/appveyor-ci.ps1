@@ -144,26 +144,49 @@ function job_deploy() {
 }
 
 
-function install_miniconda() {
-    $env:PATH = "$env:PATH;$env:MINICONDA_PATH\Scripts";
+function dowload_miniconda() {
+    echo "[CI Job] Download Miniconda.";
     
+    $webclient = New-Object System.Net.WebClient;
+    
+    $filename = "Miniconda3-4.3.27-Windows-x86_64.exe";
+    $filepath = "$pwd.Path\$filename";
+    
+    $url = "https://repo.continuum.io/miniconda/" + $filename;
+    
+    echo "[CI Job] Start download process from link '$url'.";
+    $webclient.DownloadFile($url, $filepath);
+    
+    $env:MINICONDA_PATH = "C:/Software/Miniconda/";
+    $args = "/InstallationType=AllUsers /S /AddToPath=1 /RegisterPython=1 /D=C:\Software\Miniconda\";
+    
+    Start-Process -FilePath $filepath -ArgumentList $args -Wait -Passthru
+    
+    if (Test-Path $python_home) {
+        echo "[CI Job] Miniconda is successfully installed.";
+    }
+    else {
+        echo "[CI Job] Miniconda is not installed.";
+        Exit 1;
+    }
+
+    
+    $env:PATH = "$env:PATH;$env:MINICONDA_PATH\Scripts";
+}
+
+
+function install_miniconda() {    
     echo "[CI Job] Starting process of installation of miniconda.";
     
     conda config --set always_yes true;
-    checkLastExitCode;
-    
-    conda config --add channels defaults;
-    checkLastExitCode;
     
     conda install -q conda;
-    checkLastExitCode;
     
     conda create -q -n test-environment python=3.4 numpy=1.11.3 scipy=0.18.1 matplotlib Pillow;
-    checkLastExitCode;
+
     
     echo "[CI Job] Activating environment for powershell manually (activate does not work).";
     activate test-environment;
-    checkLastExitCode;
     
     $env:PYTHON_INTERPRETER = "$env:MINICONDA_PATH\envs\test-environment\python.exe";
     $env:PYTHONPATH = "$env:MINICONDA_PATH\envs\test-environment";
@@ -171,14 +194,13 @@ function install_miniconda() {
     $env:PATH = "$env:MINICONDA_PATH\envs\test-environment;$env:PATH";
     $env:PATH = "$env:MINICONDA_PATH\envs\test-environment\Scripts;$env:PATH";
     $env:PATH = "$env:MINICONDA_PATH\envs\test-environment\Library\bin;$env:PATH";
-    
+
+
     echo "[CI Job] Miniconda environment information after installation of miniconda:";
     conda info -a;
-    checkLastExitCode;
-    
+
     echo "[CI Job] Python interpreter information after installation of miniconda:";
     & $env:PYTHON_INTERPRETER --version;
-    checkLastExitCode;
 }
 
 
