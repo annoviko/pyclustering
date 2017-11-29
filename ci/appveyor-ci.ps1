@@ -82,7 +82,7 @@ function job_pyclustering_windows() {
 
     echo "[CI Job] Starting integration testing using interpreter '$env:PYTHON_INTERPRETER'.";
     
-    python pyclustering\tests\tests_runner.py --integration
+    & $env:PYTHON_INTERPRETER pyclustering\tests\tests_runner.py --integration
     if ($LastExitCode -ne 0) {
         echo "[CI Job] Integration testing pyclustering <-> ccore for WINDOWS platform: FAILURE.";
         $env:TESTING_RESULT = $env:RESULT_FAILURE;
@@ -206,11 +206,13 @@ function install_miniconda() {
     echo "[CI Job] Starting process of installation of miniconda.";
     
     download_miniconda;
-
+    
     conda config --set always_yes true;
-
+    
+    conda install -q conda;
+    
     conda create -q -n test-environment python=3.4;
-    conda install -q -n test-environment numpy=1.11.3 scipy=0.19.1 matplotlib Pillow;
+    conda install -q -n test-environment mkl numpy scipy matplotlib Pillow;
 
     
     echo "[CI Job] Activating environment for powershell manually (activate does not work).";
@@ -228,7 +230,7 @@ function install_miniconda() {
     conda info -a;
 
     echo "[CI Job] Python interpreter information after installation of miniconda:";
-    python --version;
+    & $env:PYTHON_INTERPRETER --version;
 }
 
 
