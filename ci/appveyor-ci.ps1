@@ -144,7 +144,7 @@ function job_deploy() {
 }
 
 
-function dowload_miniconda() {
+function download_miniconda() {
     echo "[CI Job] Download Miniconda.";
     
     $webclient = New-Object System.Net.WebClient;
@@ -178,7 +178,7 @@ function dowload_miniconda() {
 function install_miniconda() {
     echo "[CI Job] Starting process of installation of miniconda.";
     
-    dowload_miniconda;
+    download_miniconda;
     
     conda config --set always_yes true;
     
