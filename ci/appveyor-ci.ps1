@@ -175,8 +175,10 @@ function dowload_miniconda() {
 }
 
 
-function install_miniconda() {    
+function install_miniconda() {
     echo "[CI Job] Starting process of installation of miniconda.";
+    
+    dowload_miniconda;
     
     conda config --set always_yes true;
     
