@@ -211,7 +211,7 @@ function install_miniconda() {
     
     conda install -q conda;
     
-    conda create -q -n test-environment python=3.4;
+    conda create -q -n test-environment python=3.5;
     conda install -q -n test-environment mkl numpy scipy matplotlib Pillow;
 
     
