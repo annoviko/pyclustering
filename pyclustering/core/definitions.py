@@ -38,7 +38,7 @@ core_architecture = None;
 if (platform.architecture()[0] == "64bit"):
     core_architecture = "x64";
 else:
-    core_architecture = "x32";
+    core_architecture = "x86";
 
 
 if (_platform == "linux") or (_platform == "linux2") or (_platform == "cygwin"):
