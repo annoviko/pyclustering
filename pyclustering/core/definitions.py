@@ -25,29 +25,25 @@
 
 import pyclustering.core as core;
 import os;
+import platform;
 
-from ctypes import Structure, c_uint, c_double, POINTER;
 from sys import platform as _platform;
+
 
 # Path to CCORE library - pyclustering core.
 PATH_PYCLUSTERING_CCORE_LIBRARY = None;
 
 
+core_architecture = None;
+if (platform.architecture()[0] == "64bit"):
+    core_architecture = "x64";
+else:
+    core_architecture = "x32";
+
+
 if (_platform == "linux") or (_platform == "linux2") or (_platform == "cygwin"):
-    PATH_PYCLUSTERING_CCORE_LIBRARY = core.__path__[0] + os.sep + "x64" + os.sep + "linux" + os.sep + "ccore.so";
+    PATH_PYCLUSTERING_CCORE_LIBRARY = core.__path__[0] + os.sep + core_architecture + os.sep + "linux" + os.sep + "ccore.so";
 
 elif (_platform == "win32"):
-    PATH_PYCLUSTERING_CCORE_LIBRARY = core.__path__[0] + os.sep + "x64" + os.sep + "win" + os.sep + "ccore.dll";
-
-
-# Structures that are required for exchaging with DLL.
-class data_representation(Structure):
-    "Description of input data"
-    " - unsigned int     number_object"
-    " - unsigned int     dimension"
-    " - double **        pointer_objects"
-    
-    _fields_ = [("number_objects", c_uint), 
-                ("dimension", c_uint), 
-                ("pointer_objects", POINTER(POINTER(c_double)))];
+    PATH_PYCLUSTERING_CCORE_LIBRARY = core.__path__[0] + os.sep + core_architecture + os.sep + "win" + os.sep + "ccore.dll";
 
