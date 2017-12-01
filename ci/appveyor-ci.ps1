@@ -7,7 +7,7 @@ $env:RESULT_FAILURE = "Failure";
 
 
 function build_ccore_library($platform_version) {
-    Write-Host "Building CCORE library for WINDOWS platform ($platform_version)." -ForegroundColor Green;
+    Write-Host "[CI Job] Building CCORE library for WINDOWS platform ($platform_version)." -ForegroundColor Green;
 
     msbuild ccore\ccore.sln /t:ccore:Rebuild /p:configuration=Release /p:platform=$platform_version;
 
@@ -17,7 +17,7 @@ function build_ccore_library($platform_version) {
         Exit 1;
     }
 
-    Write-Host "Building CCORE library for WINDOWS platform ($platform_version): SUCCESS." -ForegroundColor Green;
+    Write-Host "[CI Job] Building CCORE library for WINDOWS platform ($platform_version): SUCCESS." -ForegroundColor Green;
 }
 
 
@@ -181,10 +181,10 @@ function download_miniconda($platform_version) {
     
     $filename = "";
     if ($platform_version -eq "x86") {
-        $filename = "Miniconda3-4.3.27-Windows-x86_64.exe";
+        $filename = "Miniconda3-4.3.27-Windows-x86.exe";
     }
     elseif ($platform_version -eq "x64") {
-        $filename = "Miniconda3-4.3.27-Windows-x86.exe";
+        $filename = "Miniconda3-4.3.27-Windows-x86_64.exe";
     }
     else {
         Write-Error -Message "[CI Job] Unknown platform of Miniconda is specified '$platform_version'." -Category InvalidArgument;
@@ -231,13 +231,13 @@ function download_miniconda($platform_version) {
         Remove-Item $filepath;
     }
     else {
-        echo "[CI Job] Miniconda has not been installed.";
+        Write-Host "[CI Job] Miniconda has not been installed." -ForegroundColor Green;
         Exit 1;
     }
 
     
     
-    echo "[CI Job] Set miniconda to PATH variable.";
+    Write-Host "[CI Job] Set miniconda to PATH variable." -ForegroundColor Green;
     $env:PATH = "$env:PATH;$env:MINICONDA_PATH\Scripts";
 }
 
@@ -301,7 +301,8 @@ function upload_binary($platform_version, $binary_path) {
     # Create folder for uploaded binary file
     curl.exe -H "Authorization: OAuth $env:YANDEX_DISK_TOKEN" -X PUT "https://cloud-api.yandex.net:443/v1/disk/resources?path=$env:APPVEYOR_REPO_BRANCH";
     curl.exe -H "Authorization: OAuth $env:YANDEX_DISK_TOKEN" -X PUT "https://cloud-api.yandex.net:443/v1/disk/resources?path=$env:APPVEYOR_REPO_BRANCH%2F$env:BUILD_FOLDER";
-    curl.exe -H "Authorization: OAuth $env:YANDEX_DISK_TOKEN" -X PUT "https://cloud-api.yandex.net:443/v1/disk/resources?path=$env:APPVEYOR_REPO_BRANCH%2F$env:BUILD_FOLDER%2F$env:BINARY_FOLDER";
+    curl.exe -H "Authorization: OAuth $env:YANDEX_DISK_TOKEN" -X PUT "https://cloud-api.yandex.net:443/v1/disk/resources?path=$env:APPVEYOR_REPO_BRANCH%2F$env:BUILD_FOLDER%2F$platform_version";
+    curl.exe -H "Authorization: OAuth $env:YANDEX_DISK_TOKEN" -X PUT "https://cloud-api.yandex.net:443/v1/disk/resources?path=$env:APPVEYOR_REPO_BRANCH%2F$env:BUILD_FOLDER%2F$platform_version%2F$env:BINARY_FOLDER";
 
     # Obtain link for uploading
     $env:BINARY_FILEPATH = "$env:APPVEYOR_REPO_BRANCH%2F$env:BUILD_FOLDER%2F$platform_version%2F$env:BINARY_FOLDER%2Fccore.dll";
