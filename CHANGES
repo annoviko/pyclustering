@@ -5,6 +5,9 @@ CHANGE NOTES FOR 0.7.3 (STARTED Oct 23, 2017)
 ------------------------------------------------------------------------
 
 GENERAL CHANGES:
+- 32-bit platform is supported for Windows OS.
+  See: https://github.com/annoviko/pyclustering/issues/253
+
 - Implemented method 'get_probabilities()' for obtaining belong probability in EM-algorithm (pyclustering.cluster.ema).
   See: https://github.com/annoviko/pyclustering/issues/387
 
