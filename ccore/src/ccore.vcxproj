@@ -208,7 +208,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>..\..\pyclustering\core\x32\win\</OutDir>
+    <OutDir>..\..\pyclustering\core\x86\win\</OutDir>
     <IncludePath>.;src\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
