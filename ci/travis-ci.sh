@@ -33,7 +33,7 @@ build_ccore() {
     if [ "$1" == "x64" ]; then
         make ccore_x64
         check_failure "Building CCORE (x64): FAILURE."
-    elif [ "$1" == "x86" ]
+    elif [ "$1" == "x86" ]; then
         make ccore_x86
         check_failure "Building CCORE (x86): FAILURE."
     else
