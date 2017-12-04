@@ -8,20 +8,27 @@ MKDIR = mkdir -p
 # C++ standard depending on operating system
 ifeq ($(shell uname -o), Cygwin)
 	CPLUS_STANDARD = gnu++1y
-	PIC_FLAG = 
+	CFLAG_PIC = 
 else
 	CPLUS_STANDARD = c++1y
-	PIC_FLAG = -fPIC
+	CFLAG_PIC = -fPIC
+endif
+
+
+# Target flag depending on platform
+ifeq ($(PLATFORM), x86)
+	CFLAG_PLATFORM = -m32
+	LFLAG_PLATFORM = -m32
 endif
 
 
 # Toolchain arguments.
-CFLAGS = -O3 -MMD -MP -std=$(CPLUS_STANDARD) $(PIC_FLAG) -Werror -Wall -Wpedantic
-LFLAGS = -shared
+CFLAGS = -O2 -MMD -MP -std=$(CPLUS_STANDARD) $(CFLAG_PIC) $(CFLAG_PLATFORM) -Wall -Wpedantic
+LFLAGS = -shared $(LFLAG_PLATFORM)
 
 
 # Executable library file
-EXECUTABLE_DIRECTORY = ../pyclustering/core/x64/linux
+EXECUTABLE_DIRECTORY = ../pyclustering/core/$(PLATFORM)/linux
 EXECUTABLE = $(EXECUTABLE_DIRECTORY)/ccore.so
 
 
@@ -36,7 +43,7 @@ INCLUDES = -I$(SOURCES_DIRECTORY)
 
 
 # Project objects
-OBJECTS_DIRECTORY = obj/ccore
+OBJECTS_DIRECTORY = obj/ccore/$(PLATFORM)
 OBJECTS_DIRECTORIES = $(addprefix $(OBJECTS_DIRECTORY)/, $(MODULES)) $(EXECUTABLE_DIRECTORY)
 OBJECTS = $(patsubst $(SOURCES_DIRECTORY)/%.cpp, $(OBJECTS_DIRECTORY)/%.o, $(SOURCES))
 
@@ -46,6 +53,11 @@ DEPENDENCIES = $(OBJECTS:.o=.d)
 
 
 # Targets
+.PHONY: cppcheck
+cppcheck:
+	cppcheck --error-exitcode=1 --enable=warning --enable=style --enable=performance --enable=information --enable=portability $(SOURCES_DIRECTORY)
+
+
 .PHONY: ccore
 ccore: mkdirs $(EXECUTABLE)
 
