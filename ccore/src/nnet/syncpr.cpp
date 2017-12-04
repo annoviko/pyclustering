@@ -66,8 +66,8 @@ syncpr::~syncpr() { }
 
 
 void syncpr::train(const std::vector<syncpr_pattern> & patterns) {
-    for (std::vector<syncpr_pattern>::const_iterator iter = patterns.begin(); iter != patterns.end(); iter++) {
-        validate_pattern( (*iter) );
+    for (auto & pattern : patterns) {
+        validate_pattern(pattern);
     }
 
     for (size_t i = 0; i < size(); i++) {
@@ -133,7 +133,6 @@ void syncpr::simulate_dynamic(const syncpr_pattern & input_pattern,
 
     output_dynamic.clear();
 
-    double previous_order = 0.0;
     double current_order = calculate_memory_order(input_pattern);
 
     double integration_step = step / 10;
@@ -145,7 +144,7 @@ void syncpr::simulate_dynamic(const syncpr_pattern & input_pattern,
 
         store_dynamic(time_counter, collect_dynamic, output_dynamic);
 
-        previous_order = current_order;
+        double previous_order = current_order;
         current_order = calculate_memory_order(input_pattern);
 
         if (std::abs(current_order - previous_order) < 0.000001) {

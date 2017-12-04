@@ -55,7 +55,7 @@ private:
 public:
     kdnode(void) = default;
 
-    kdnode(const std::vector<double> & p_data, void * p_payload,  kdnode::ptr p_left, kdnode::ptr p_right, kdnode::ptr p_parent, std::size_t disc);
+    kdnode(const std::vector<double> & p_data, void * p_payload, const kdnode::ptr & p_left, const kdnode::ptr & p_right, const kdnode::ptr & p_parent, std::size_t disc);
 
     kdnode(const kdnode & p_other) = default;
 
@@ -64,11 +64,11 @@ public:
     virtual ~kdnode(void) = default;
 
 private:
-    void set_left(kdnode::ptr p_node);
+    void set_left(const kdnode::ptr & p_node);
 
-    void set_right(kdnode::ptr p_node);
+    void set_right(const kdnode::ptr & p_node);
 
-    void set_parent(kdnode::ptr p_node);
+    void set_parent(const kdnode::ptr & p_node);
 
     void set_discriminator(const std::size_t disc);
 

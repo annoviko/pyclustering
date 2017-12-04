@@ -18,8 +18,7 @@
 *
 */
 
-#ifndef SRC_INTERFACE_PCNN_INTERFACE_H_
-#define SRC_INTERFACE_PCNN_INTERFACE_H_
+#pragma once
 
 
 #include "nnet/pcnn.hpp"
@@ -164,6 +163,3 @@ extern "C" DECLARATION pyclustering_package * pcnn_dynamic_get_time(const void *
 *
 */
 extern "C" DECLARATION size_t pcnn_dynamic_get_size(const void * pointer);
-
-
-#endif

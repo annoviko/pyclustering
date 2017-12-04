@@ -57,7 +57,7 @@ private:
 public:
     task(void) = default;
 
-    task(const proc & p_task);
+    explicit task(const proc & p_task);
 
     task(const task & p_other) = default;
 

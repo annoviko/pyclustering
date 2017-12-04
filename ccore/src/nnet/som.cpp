@@ -338,13 +338,13 @@ size_t som::adaptation(const size_t index_winner, const pattern & input_pattern)
         }
 
         std::vector<size_t> & winner_neighbors = m_neighbors[index_winner];
-        for (std::vector<size_t>::iterator neighbor_index = winner_neighbors.begin(); neighbor_index != winner_neighbors.end(); neighbor_index++) {
-            double distance = m_sqrt_distances[index_winner][*neighbor_index];
+        for (auto & neighbor_index : winner_neighbors) {
+            double distance = m_sqrt_distances[index_winner][neighbor_index];
 
             if (distance < m_local_radius) {
                 double influence = std::exp( -( distance / (2.0 * m_local_radius) ) );
 
-                std::vector<double> & neighbor_weight = m_weights[*neighbor_index];
+                std::vector<double> & neighbor_weight = m_weights[neighbor_index];
                 for (size_t dim = 0; dim < dimensions; dim++) {
                     neighbor_weight[dim] += m_learn_rate * influence * (input_pattern[dim] - neighbor_weight[dim]);
                 }

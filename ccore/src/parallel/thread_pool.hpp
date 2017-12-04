@@ -52,7 +52,7 @@ private:
 public:
     thread_pool(void) = default;
 
-    thread_pool(const std::size_t p_size);
+    explicit thread_pool(const std::size_t p_size);
 
     thread_pool(const thread_pool & p_pool) = delete;
 

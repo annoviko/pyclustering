@@ -85,8 +85,8 @@ void legion_network::create_dynamic_connections(const legion_stimulus & stimulus
         if (neighbors.size() > 0 && stimulus[i] > 0) {
             int number_stimulated_neighbors = 0;
 
-            for (std::vector<size_t>::iterator index_iterator = neighbors.begin(); index_iterator != neighbors.end(); index_iterator++) {
-                if (stimulus[*index_iterator] > 0) {
+            for (auto & index_neighbor : neighbors) {
+                if (stimulus[index_neighbor] > 0) {
                     number_stimulated_neighbors++;
                 }
             }
@@ -94,8 +94,8 @@ void legion_network::create_dynamic_connections(const legion_stimulus & stimulus
             if (number_stimulated_neighbors > 0) {
                 double dynamic_weight = m_params.Wt / (double) number_stimulated_neighbors;
 
-                for (std::vector<size_t>::iterator index_iterator = neighbors.begin(); index_iterator != neighbors.end(); index_iterator++) {
-                    m_dynamic_connections[i][*index_iterator] = dynamic_weight;
+                for (auto & index_neighbor : neighbors) {
+                    m_dynamic_connections[i][index_neighbor] = dynamic_weight;
                 }
             }
         }
@@ -173,8 +173,8 @@ void legion_network::calculate_states(const legion_stimulus & stimulus, const so
 
         double coupling = 0.0;
 
-        for (std::vector<size_t>::const_iterator index_neighbor_iterator = neighbors.begin(); index_neighbor_iterator != neighbors.end(); index_neighbor_iterator++) {
-            coupling += m_dynamic_connections[index][*index_neighbor_iterator] * heaviside(m_oscillators[*index_neighbor_iterator].m_excitatory - m_params.teta_x);
+        for (auto & index_neighbor : neighbors) {
+            coupling += m_dynamic_connections[index][index_neighbor] * heaviside(m_oscillators[index_neighbor].m_excitatory - m_params.teta_x);
         }
 
         m_oscillators[index].m_buffer_coupling_term = coupling - m_params.Wz * heaviside(m_global_inhibitor - m_params.teta_xz);

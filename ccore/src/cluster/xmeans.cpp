@@ -289,8 +289,8 @@ double xmeans::bayesian_information_criterion(const cluster_sequence & analysed_
     std::size_t N = 0;
 
     for (std::size_t index_cluster = 0; index_cluster < analysed_clusters.size(); index_cluster++) {
-        for (cluster::const_iterator index_object = analysed_clusters[index_cluster].begin(); index_object != analysed_clusters[index_cluster].end(); index_object++) {
-            sigma += euclidean_distance_sqrt( &(*m_ptr_data)[*index_object], &(analysed_centers[index_cluster]) );
+        for (auto & index_object : analysed_clusters[index_cluster]) {
+            sigma += euclidean_distance_sqrt( &(*m_ptr_data)[index_object], &(analysed_centers[index_cluster]) );
         }
 
         N += analysed_clusters[index_cluster].size();

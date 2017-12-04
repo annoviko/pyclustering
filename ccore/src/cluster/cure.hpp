@@ -150,6 +150,17 @@ private:
         queue->remove(removed_cluster);
     }
 
+    /**
+    *
+    * @brief   Checks if all elements of a merged cluster are same.
+    *
+    * @param[in] merged_cluster: pointer to cure merged_cluster.
+    *
+    * @return  Returns true if all the elements in the cluster were found to be same.
+    *
+    */
+    bool are_all_elements_same(cure_cluster * merged_cluster);
+
 public:
     typedef std::list<cure_cluster *>::iterator iterator;
 
@@ -201,17 +212,6 @@ public:
     *
     */
     void merge(cure_cluster * cluster1, cure_cluster * cluster2, const size_t number_repr_points, const double compression);
-
-    /**
-    *
-    * @brief   Checks if all elements of a merged cluster are same.
-    *
-    * @param[in] merged_cluster: pointer to cure merged_cluster.
-    *
-    * @return  Returns true if all the elements in the cluster were found to be same.
-    *
-    */
-    bool are_all_elements_same(cure_cluster * merged_cluster);
 
     /**
     *

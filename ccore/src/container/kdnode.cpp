@@ -25,7 +25,7 @@
 namespace container {
 
 
-kdnode::kdnode(const std::vector<double> & p_data, void * p_payload,  kdnode::ptr p_left, kdnode::ptr p_right, kdnode::ptr p_parent, std::size_t p_disc) :
+kdnode::kdnode(const std::vector<double> & p_data, void * p_payload, const kdnode::ptr & p_left, const kdnode::ptr & p_right, const kdnode::ptr & p_parent, std::size_t p_disc) :
     m_data(p_data),
     m_payload(p_payload),
     m_left(p_left),
@@ -35,17 +35,17 @@ kdnode::kdnode(const std::vector<double> & p_data, void * p_payload,  kdnode::pt
 { }
 
 
-void kdnode::set_left(kdnode::ptr p_node) {
+void kdnode::set_left(const kdnode::ptr & p_node) {
     m_left = p_node;
 }
 
 
-void kdnode::set_right(kdnode::ptr p_node) {
+void kdnode::set_right(const kdnode::ptr & p_node) {
     m_right = p_node;
 }
 
 
-void kdnode::set_parent(kdnode::ptr p_node) {
+void kdnode::set_parent(const kdnode::ptr & p_node) {
     m_parent = p_node;
 }
 

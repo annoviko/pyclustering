@@ -236,7 +236,6 @@ void sync_network::simulate_dynamic(const double order, const double step, const
 
     store_dynamic(0, collect_dynamic, output_dynamic);     /* store initial state */
 
-    double previous_order = 0.0;
     double current_order = sync_local_order();
 
     double integration_step = step / 10;
@@ -246,7 +245,7 @@ void sync_network::simulate_dynamic(const double order, const double step, const
 
         store_dynamic(time_counter, collect_dynamic, output_dynamic);
 
-        previous_order = current_order;
+        double previous_order = current_order;
         current_order = sync_local_order();
 
         if (std::abs(current_order - previous_order) < 0.000001) {
@@ -359,12 +358,10 @@ void sync_dynamic::allocate_sync_ensembles(const double tolerance, const size_t 
         bool cluster_allocated = false;
         ensemble_data<sync_ensemble>::iterator last_sync_ensemble_element = ensembles.end();
 
-        for (ensemble_data<sync_ensemble>::iterator cluster = ensembles.begin(); cluster != last_sync_ensemble_element; cluster++) {
-            sync_ensemble::const_iterator last_cluster_element = (*cluster).cend();
+        for (auto & cluster : ensembles) {
+            sync_ensemble::const_iterator last_cluster_element = cluster.cend();
 
-            for (sync_ensemble::const_iterator iter_neuron_index = (*cluster).cbegin(); iter_neuron_index != last_cluster_element; iter_neuron_index++) {
-                unsigned int index = (*iter_neuron_index);
-
+            for (auto & index : cluster) {
                 double phase_first = (*last_state_dynamic).m_phase[i];
                 double phase_second = (*last_state_dynamic).m_phase[index];
 
@@ -374,7 +371,7 @@ void sync_dynamic::allocate_sync_ensembles(const double tolerance, const size_t 
                     ((phase_shifted < (phase_second + tolerance)) && (phase_shifted >(phase_second - tolerance)))) {
 
                     cluster_allocated = true;
-                    (*cluster).push_back(i);
+                    cluster.push_back(i);
 
                     break;
                 }
