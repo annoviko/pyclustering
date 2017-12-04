@@ -30,6 +30,8 @@ check_failure() {
 
 
 build_ccore() {
+    cd $TRAVIS_BUILD_DIR/ccore/
+
     if [ "$1" == "x64" ]; then
         make ccore_x64
         check_failure "Building CCORE (x64): FAILURE."
@@ -40,6 +42,8 @@ build_ccore() {
         print_error "Unknown CCORE platform is specified."
         exit 1
     fi
+
+    cd -
 }
 
 
@@ -60,16 +64,11 @@ run_build_ccore_job() {
     gcc --version
 
     # build ccore library
-    cd ccore/
-
     build_ccore x64
     build_ccore x86
 
     upload_binary x64
     upload_binary x86
-
-    # return back (keep current folder)
-    cd ../
 }
 
 
@@ -87,9 +86,6 @@ run_analyse_ccore_job() {
 
     make cppcheck
     check_failure "C/C++ static analysis: FAILURE."
-
-    # return back (keep current folder)
-    cd ../
 }
 
 
@@ -117,9 +113,6 @@ run_ut_ccore_job() {
     
     # step back to have full path to files in coverage reports
     coveralls --root ../ --build-root . --exclude ccore/tst/ --exclude ccore/tools/ --gcov-options '\-lp'
-
-    # return back (keep current folder)
-    cd ../
 }
 
 
@@ -138,9 +131,6 @@ run_valgrind_ccore_job() {
 
     make valgrind
     check_failure "CCORE memory leakage status: FAILURE."
-
-    # return back (keep current folder)
-    cd ../
 }
 
 
