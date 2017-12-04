@@ -19,6 +19,9 @@ endif
 ifeq ($(PLATFORM), x86)
 	CFLAG_PLATFORM = -m32
 	LFLAG_PLATFORM = -m32
+else
+	CFLAG_PLATFORM = -m64
+	LFLAG_PLATFORM = -m64     
 endif
 
 

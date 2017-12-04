@@ -29,6 +29,20 @@ check_failure() {
 }
 
 
+build_ccore() {
+    if [ "$1" == "x64" ]; then
+        make ccore_x64
+        check_failure "Building CCORE (x64): FAILURE."
+    elif [ "$1" == "x86" ]
+        make ccore_x86
+        check_failure "Building CCORE (x86): FAILURE."
+    else
+        print_error "Unknown CCORE platform is specified."
+        exit 1
+    fi
+}
+
+
 run_build_ccore_job() {
     print_info "CCORE (C++ code building):"
     print_info "- Build CCORE library for x64 platform."
@@ -38,7 +52,7 @@ run_build_ccore_job() {
     print_info "Install requirement for CCORE building."
 
     sudo apt-get install -qq g++-5
-    sudo apt-get install -qq g++-multilib
+    sudo apt-get install -qq g++-5-multilib
     sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-5 50
 
     # show info
@@ -48,11 +62,11 @@ run_build_ccore_job() {
     # build ccore library
     cd ccore/
 
-    make ccore_x64
-    check_failure "Building CCORE (x64): FAILURE."
+    build_ccore x64
+    build_ccore x86
 
-    make ccore_x86
-    check_failure "Building CCORE (x86): FAILURE."
+    upload_binary x64
+    upload_binary x86
 
     # return back (keep current folder)
     cd ../
@@ -145,7 +159,7 @@ run_test_pyclustering_job() {
     export PYTHONPATH=${PYTHONPATH}
 
     # build ccore library
-    run_build_ccore_job
+    build_ccore x64
 
     # show info
     python --version
@@ -168,7 +182,7 @@ run_integration_test_job() {
     install_miniconda $PYTHON_VERSION
 
     # build ccore library
-    run_build_ccore_job no-upload
+    build_ccore x64
 
     # run integration tests
     python pyclustering/tests/tests_runner.py --integration
@@ -271,9 +285,7 @@ set -x
 
 case $1 in
     BUILD_CCORE) 
-        run_build_ccore_job
-        upload_binary x64
-        upload_binary x86 ;;
+        run_build_ccore_job ;;
 
     ANALYSE_CCORE)
         run_analyse_ccore_job ;;
