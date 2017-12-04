@@ -123,6 +123,7 @@ run_valgrind_ccore_job() {
 
     # install requirements for the job
     sudo apt-get install -qq g++-5
+    sudo apt-get install -qq g++-5-multilib
     sudo apt-get install -qq valgrind
     sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-5 50
 
@@ -143,6 +144,10 @@ run_test_pyclustering_job() {
     # install requirements for the job
     install_miniconda
     pip install coveralls
+
+    sudo apt-get install -qq g++-5
+    sudo apt-get install -qq g++-5-multilib
+    sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-5 50
 
     # set path to the tested library
     PYTHONPATH=`pwd`
@@ -170,6 +175,10 @@ run_integration_test_job() {
 
     # install requirements for the job
     install_miniconda $PYTHON_VERSION
+
+    sudo apt-get install -qq g++-5
+    sudo apt-get install -qq g++-5-multilib
+    sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-5 50
 
     # build ccore library
     build_ccore x64
