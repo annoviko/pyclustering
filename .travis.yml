@@ -9,6 +9,10 @@ addons:
   apt:
     sources:
     - ubuntu-toolchain-r-test
+    packages:
+    - g++-5
+    - gcc-5
+    - python3
 
 
 install:
@@ -53,4 +57,3 @@ jobs:
   - stage: deploy
     env: TITLE="Deploy CCORE"
     script: ./ci/travis-ci.sh DEPLOY
-
