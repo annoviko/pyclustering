@@ -106,7 +106,6 @@ Brief Overview of the Library Content
 **Clustering algorithms (module pyclustering.cluster):** 
 
 - Agglomerative [Python, C++]
-- AntMean [Python, C++]
 - BIRCH [Python]
 - CLARANS [Python]
 - CURE [Python, C++]
@@ -144,10 +143,6 @@ Brief Overview of the Library Content
 - DSatur [Python]
 - Hysteresis [Python]
 - GColorSync [Python]
-
-**Travelling Salesman Problem Algorithms (module pyclustering.tsp):**
-
-- AntColony [Python, C++]
 
 **Containers (module pyclustering.container):**
 

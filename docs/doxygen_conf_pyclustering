@@ -100,7 +100,6 @@ WARN_LOGFILE           =
 INPUT                  = pyclustering/__init__.py \
                          pyclustering/cluster/__init__.py \
                          pyclustering/cluster/agglomerative.py \
-                         pyclustering/cluster/antmean.py \
                          pyclustering/cluster/birch.py \
                          pyclustering/cluster/center_initializer.py \
                          pyclustering/cluster/clarans.py \
@@ -137,8 +136,6 @@ INPUT                  = pyclustering/__init__.py \
                          pyclustering/nnet/sync.py \
                          pyclustering/nnet/syncpr.py \
                          pyclustering/nnet/syncsegm.py \
-                         pyclustering/tsp/__init__.py \
-                         pyclustering/tsp/antcolony.py \
                          pyclustering/utils/__init__.py \
                          pyclustering/utils/color.py \
                          pyclustering/utils/graph.py

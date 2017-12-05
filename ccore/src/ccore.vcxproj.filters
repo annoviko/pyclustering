@@ -11,9 +11,6 @@
     <Filter Include="Source Files\cluster">
       <UniqueIdentifier>{cc2cb47d-4c92-4c11-82a5-9d78abf6ebf6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\tsp">
-      <UniqueIdentifier>{b6c60a7c-ec29-4363-a123-f210e0eea235}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\nnet">
       <UniqueIdentifier>{749e2e3a-5a11-4f48-93bf-20968207d439}</UniqueIdentifier>
     </Filter>
@@ -91,12 +88,6 @@
     <ClCompile Include="nnet\syncpr.cpp">
       <Filter>Source Files\nnet</Filter>
     </ClCompile>
-    <ClCompile Include="tsp\ant_colony.cpp">
-      <Filter>Source Files\tsp</Filter>
-    </ClCompile>
-    <ClCompile Include="tsp\distance_matrix.cpp">
-      <Filter>Source Files\tsp</Filter>
-    </ClCompile>
     <ClCompile Include="utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -163,12 +154,6 @@
     <ClCompile Include="interface\syncpr_interface.cpp">
       <Filter>Source Files\interface</Filter>
     </ClCompile>
-    <ClCompile Include="interface\antmean_interface.cpp">
-      <Filter>Source Files\interface</Filter>
-    </ClCompile>
-    <ClCompile Include="cluster\antmean.cpp">
-      <Filter>Source Files\cluster</Filter>
-    </ClCompile>
     <ClCompile Include="interface\legion_interface.cpp">
       <Filter>Source Files\interface</Filter>
     </ClCompile>
@@ -176,9 +161,6 @@
       <Filter>Source Files\interface</Filter>
     </ClCompile>
     <ClCompile Include="interface\hsyncnet_interface.cpp">
-      <Filter>Source Files\interface</Filter>
-    </ClCompile>
-    <ClCompile Include="interface\antcolony_tsp_interface.cpp">
       <Filter>Source Files\interface</Filter>
     </ClCompile>
     <ClCompile Include="container\kdnode.cpp">
@@ -269,18 +251,6 @@
     </ClInclude>
     <ClInclude Include="nnet\syncpr.hpp">
       <Filter>Source Files\nnet</Filter>
-    </ClInclude>
-    <ClInclude Include="tsp\ant_colony.hpp">
-      <Filter>Source Files\tsp</Filter>
-    </ClInclude>
-    <ClInclude Include="tsp\ant_colony_params.hpp">
-      <Filter>Source Files\tsp</Filter>
-    </ClInclude>
-    <ClInclude Include="tsp\distance_matrix.hpp">
-      <Filter>Source Files\tsp</Filter>
-    </ClInclude>
-    <ClInclude Include="tsp\params_container.hpp">
-      <Filter>Source Files\tsp</Filter>
     </ClInclude>
     <ClInclude Include="utils.hpp">
       <Filter>Source Files</Filter>
@@ -381,15 +351,6 @@
     <ClInclude Include="interface\syncpr_interface.h">
       <Filter>Source Files\interface</Filter>
     </ClInclude>
-    <ClInclude Include="interface\antmean_interface.h">
-      <Filter>Source Files\interface</Filter>
-    </ClInclude>
-    <ClInclude Include="cluster\antmean.hpp">
-      <Filter>Source Files\cluster</Filter>
-    </ClInclude>
-    <ClInclude Include="cluster\antmean_params.hpp">
-      <Filter>Source Files\cluster</Filter>
-    </ClInclude>
     <ClInclude Include="interface\legion_interface.h">
       <Filter>Source Files\interface</Filter>
     </ClInclude>
@@ -397,9 +358,6 @@
       <Filter>Source Files\interface</Filter>
     </ClInclude>
     <ClInclude Include="interface\hsyncnet_interface.h">
-      <Filter>Source Files\interface</Filter>
-    </ClInclude>
-    <ClInclude Include="interface\antcolony_tsp_interface.h">
       <Filter>Source Files\interface</Filter>
     </ClInclude>
     <ClInclude Include="container\kdnode.hpp">

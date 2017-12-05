@@ -32,7 +32,6 @@ matplotlib.use('Agg');
 
 
 from pyclustering.cluster.tests.integration               import it_agglomerative as cluster_agglomerative_integration_tests;
-from pyclustering.cluster.tests.integration               import it_antmean       as cluster_antmean_integration_tests;
 from pyclustering.cluster.tests.integration               import it_cure          as cluster_cure_integration_tests;
 from pyclustering.cluster.tests.integration               import it_dbscan        as cluster_dbscan_integration_tests;
 from pyclustering.cluster.tests.integration               import it_hsyncnet      as cluster_hsyncnet_integration_tests;
@@ -54,7 +53,6 @@ class clustering_integration_tests(suite_holder):
     @staticmethod
     def fill_suite(integration_cluster_suite):
         integration_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_agglomerative_integration_tests));
-        integration_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_antmean_integration_tests));
         integration_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_cure_integration_tests));
         integration_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_dbscan_integration_tests));
         integration_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_hsyncnet_integration_tests));

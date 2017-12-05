@@ -114,10 +114,6 @@ Library Content
 - **Hysteresis Oscillatory Network for graph coloring** (pyclustering.gcolor.hysteresis);
 - **Sync: Oscillatory Network based on Kuramoto model for graph coloring** (pyclustering.gcolor.sync);
 
-**Travelling Salesman Problem Algorithms (module pyclustering.tsp):**
-
-- **AntColony** (pyclustering.tsp.antcolony);
-
 **Containers (module pyclustering.container):**
 
 - **CF-Tree** (pyclustering.container.cftree);
