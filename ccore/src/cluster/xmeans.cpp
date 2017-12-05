@@ -323,8 +323,6 @@ double xmeans::minimum_noiseless_description_length(const cluster_sequence & clu
     double N = 0.0;
 
     double sigma_sqrt = 0.0;
-    const double alpha = 0.9;
-    const double betta = 0.9;
 
     for (std::size_t index_cluster = 0; index_cluster < clusters.size(); index_cluster++) {
         if (clusters[index_cluster].empty()) {
@@ -345,6 +343,9 @@ double xmeans::minimum_noiseless_description_length(const cluster_sequence & clu
     }
 
     if (N - K > 0) {
+        const double alpha = 0.9;
+        const double betta = 0.9;
+
         sigma_sqrt /= (N - K);
         double sigma = std::sqrt(sigma_sqrt);
 

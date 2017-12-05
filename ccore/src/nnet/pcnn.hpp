@@ -69,9 +69,9 @@ typedef struct pcnn_parameters {
 } pcnn_parameters;
 
 
-typedef std::vector<unsigned int>   pcnn_ensemble;
-typedef std::vector<double>         pcnn_stimulus;
-typedef std::vector<unsigned int>   pcnn_time_signal;
+typedef std::vector<std::size_t>      pcnn_ensemble;
+typedef std::vector<double>           pcnn_stimulus;
+typedef std::vector<std::size_t>      pcnn_time_signal;
 
 typedef struct pcnn_network_state {
 public:

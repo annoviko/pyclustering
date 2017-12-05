@@ -165,7 +165,7 @@ void pcnn::store_dynamic(const std::size_t step, pcnn_dynamic & dynamic) {
     pcnn_network_state & current_state = (pcnn_network_state &) dynamic[step];
     current_state.m_output.resize(size());
 
-    current_state.m_time = step;
+    current_state.m_time = (double) step;
     for (size_t i = 0; i < m_oscillators.size(); i++) {
         current_state.m_output[i] = m_oscillators[i].output;
     }

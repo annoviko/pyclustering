@@ -58,7 +58,7 @@ DEPENDENCIES = $(OBJECTS:.o=.d)
 # Targets
 .PHONY: cppcheck
 cppcheck:
-	cppcheck --error-exitcode=1 --enable=warning --enable=style --enable=performance --enable=information --enable=portability $(SOURCES_DIRECTORY)
+	cppcheck --error-exitcode=1 --std=c++14 --std=c++11 --enable=warning --enable=style --enable=performance --enable=information --enable=portability --include=$(SOURCES_DIRECTORY) $(SOURCES_DIRECTORY)
 
 
 .PHONY: ccore
