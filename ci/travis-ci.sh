@@ -140,12 +140,16 @@ run_test_pyclustering_job() {
     install_miniconda x64
     pip install coveralls
 
+    sudo apt-get install -qq g++-5
+    sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-5 50
+    sudo update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-5 50
+
     # set path to the tested library
     PYTHONPATH=`pwd`
     export PYTHONPATH=${PYTHONPATH}
 
     # build ccore library
-    download_binary x64
+    build_ccore x64
 
     # run unit and integration tests and obtain coverage results
     coverage run --source=pyclustering --omit='pyclustering/*/tests/*,pyclustering/*/examples/*,pyclustering/tests/*' pyclustering/tests/tests_runner.py
@@ -163,8 +167,12 @@ run_integration_test_job() {
     # install requirements for the job
     install_miniconda $PLATFORM_TARGET
 
+    sudo apt-get install -qq g++-5
+    sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-5 50
+    sudo update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-5 50
+
     # build ccore library
-    download_binary $PLATFORM_TARGET
+    build_ccore $PLATFORM_TARGET
 
     # run integration tests
     python pyclustering/tests/tests_runner.py --integration
@@ -253,10 +261,10 @@ run_deploy_job() {
 
 install_miniconda() {
     PLATFORM_TARGET=$1
-    if [ "$PLATFORM_TARGET" -eq "x64" ]; then
+    if [ "$PLATFORM_TARGET" == "x64" ]; then
         print_info "Download '$PLATFORM_TARGET' Miniconda."
         wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
-    elif [ "$PLATFORM_TARGET" -eq "x86" ]; then
+    elif [ "$PLATFORM_TARGET" == "x86" ]; then
         print_info "Download '$PLATFORM_TARGET' Miniconda."
         wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86.sh -O miniconda.sh
     else

@@ -1,5 +1,4 @@
 dist: trusty
-language: python
 
 
 os:
@@ -10,10 +9,6 @@ addons:
   apt:
     sources:
     - ubuntu-toolchain-r-test
-    packages:
-    - g++-5
-    - gcc-5
-    - python3
 
 
 install:
@@ -28,32 +23,31 @@ env:
 
 
 stages:
-- build
-- test
+- build and test
 - deploy
 
 
 jobs:
   include:
-  - stage: build
+  - stage: build and test
     env: TITLE="Build CCORE."
     script: ./ci/travis-ci.sh BUILD_CCORE
-  - state: test
+  - state: test and test
     env: TITLE="Run C/C++ static code analyser."
     script: ./ci/travis-ci.sh ANALYSE_CCORE
-  - stage: test
+  - stage: test and test
     env: TITLE="Run unit-tests for CCORE."
     script: ./ci/travis-ci.sh UT_CCORE
-  - stage: test
+  - stage: test and test
     env: TITLE="Run memory leak analyser (valgrind) for CCORE."
     script: ./ci/travis-ci.sh VALGRIND_CCORE
-  - stage: test
+  - stage: test and test
     env: TITLE="PyClustering unit and integration testing (x64)."
     script: ./ci/travis-ci.sh TEST_PYCLUSTERING
-  - stage: test
+  - stage: test and test
     env: TITLE="Integration testing (x86)."
     script: ./ci/travis-ci.sh IT_CCORE_X86
-  - stage: test
+  - stage: test and test
     env: TITLE="Build documentation."
     script: ./ci/travis-ci.sh DOCUMENTATION
   - stage: deploy
