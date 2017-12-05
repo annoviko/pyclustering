@@ -356,11 +356,8 @@ void sync_dynamic::allocate_sync_ensembles(const double tolerance, const size_t 
 
     for (unsigned int i = 1; i < oscillators(); i++) {
         bool cluster_allocated = false;
-        ensemble_data<sync_ensemble>::iterator last_sync_ensemble_element = ensembles.end();
 
         for (auto & cluster : ensembles) {
-            sync_ensemble::const_iterator last_cluster_element = cluster.cend();
-
             for (auto & index : cluster) {
                 double phase_first = (*last_state_dynamic).m_phase[i];
                 double phase_second = (*last_state_dynamic).m_phase[index];

@@ -18,8 +18,7 @@
 *
 */
 
-#ifndef SRC_CLUSTER_CLUSTER_DATA_HPP_
-#define SRC_CLUSTER_CLUSTER_DATA_HPP_
+#pragma once
 
 
 #include <vector>
@@ -87,7 +86,7 @@ public:
     * @brief    Returns direct access to encapsulated clusters.
     *
     */
-    cluster_sequence_ptr clusters(void);
+    cluster_sequence_ptr clusters(void) const;
 
     /**
     *
@@ -158,6 +157,3 @@ public:
 
 
 }
-
-
-#endif

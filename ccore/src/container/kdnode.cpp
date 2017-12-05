@@ -25,13 +25,13 @@
 namespace container {
 
 
-kdnode::kdnode(const std::vector<double> & p_data, void * p_payload, const kdnode::ptr & p_left, const kdnode::ptr & p_right, const kdnode::ptr & p_parent, std::size_t p_disc) :
+kdnode::kdnode(const std::vector<double> & p_data, void * p_payload, const kdnode::ptr & p_left, const kdnode::ptr & p_right, const kdnode::ptr & p_parent, const std::size_t p_desc) :
     m_data(p_data),
     m_payload(p_payload),
     m_left(p_left),
     m_right(p_right),
     m_parent(p_parent),
-    m_discriminator(p_disc)
+    m_discriminator(p_desc)
 { }
 
 
@@ -55,17 +55,17 @@ void kdnode::set_discriminator(const std::size_t disc) {
 }
 
 
-kdnode::ptr kdnode::get_left(void) {
+kdnode::ptr kdnode::get_left(void) const {
     return m_left;
 }
 
 
-kdnode::ptr kdnode::get_right(void) {
+kdnode::ptr kdnode::get_right(void) const {
     return m_right;
 }
 
 
-kdnode::ptr kdnode::get_parent(void) {
+kdnode::ptr kdnode::get_parent(void) const {
     return m_parent.lock();
 }
 
@@ -90,8 +90,8 @@ double kdnode::get_value(void) const {
 }
 
 
-double kdnode::get_value(const std::size_t discr) const {
-    return m_data[discr];
+double kdnode::get_value(const std::size_t p_descr) const {
+    return m_data[p_descr];
 }
 
 

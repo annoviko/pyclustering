@@ -2,18 +2,13 @@ CCORE_X64_BINARY_PATH=pyclustering/core/x64/linux/ccore.so
 CCORE_X86_BINARY_PATH=pyclustering/core/x86/linux/ccore.so
 
 
-INF_COLOR_CODE='\033[0;32m'
-ERR_COLOR_CODE='\033[0;31m'
-RST_COLOR_CODE='\033[0m'
-
-
 print_error() {
-    echo $ERR_COLOR_CODE"ERROR: $1"$RST_COLOR_CODE
+    echo "ERROR: $1"
 }
 
 
 print_info() {
-    echo $INF_COLOR_CODE"$1"$RST_COLOR_CODE
+    echo "INFO: $1"
 }
 
 

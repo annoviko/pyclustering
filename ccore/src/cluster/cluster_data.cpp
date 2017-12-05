@@ -36,7 +36,7 @@ cluster_data::cluster_data(cluster_data && p_other) : m_clusters(std::move(p_oth
 cluster_data::~cluster_data(void) { }
 
 
-cluster_sequence_ptr cluster_data::clusters(void) { return m_clusters; }
+cluster_sequence_ptr cluster_data::clusters(void) const { return m_clusters; }
 
 
 size_t cluster_data::size(void) const { return m_clusters->size(); }
