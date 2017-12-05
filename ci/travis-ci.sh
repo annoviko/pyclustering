@@ -3,12 +3,12 @@ CCORE_X86_BINARY_PATH=pyclustering/core/x86/linux/ccore.so
 
 
 print_error() {
-    echo "ERROR: $1"
+    echo "[PYCLUSTERING CI] ERROR: $1"
 }
 
 
 print_info() {
-    echo "INFO: $1"
+    echo "[PYCLUSTERING CI] INFO: $1"
 }
 
 
@@ -275,7 +275,6 @@ install_miniconda() {
     fi
     
     print_info "Installing Miniconda."
-    mkdir $HOME/miniconda
     bash miniconda.sh -b -p $HOME/miniconda
 
     export PATH="$HOME/miniconda/bin:$PATH"
