@@ -28,31 +28,32 @@ env:
 
 
 stages:
-- build and test
+- build
+- test
 - deploy
 
 
 jobs:
   include:
-  - stage: build and test
+  - stage: build
     env: TITLE="Build CCORE."
     script: ./ci/travis-ci.sh BUILD_CCORE
-  - state: build and test
+  - state: test
     env: TITLE="Run C/C++ static code analyser."
     script: ./ci/travis-ci.sh ANALYSE_CCORE
-  - stage: build and test
+  - stage: test
     env: TITLE="Run unit-tests for CCORE."
     script: ./ci/travis-ci.sh UT_CCORE
-  - stage: build and test
+  - stage: test
     env: TITLE="Run memory leak analyser (valgrind) for CCORE."
     script: ./ci/travis-ci.sh VALGRIND_CCORE
-  - stage: build and test
+  - stage: test
     env: TITLE="PyClustering unit and integration testing (x64)."
     script: ./ci/travis-ci.sh TEST_PYCLUSTERING
-  - stage: build and test
+  - stage: test
     env: TITLE="Integration testing (x86)."
     script: ./ci/travis-ci.sh IT_CCORE_X86
-  - stage: build and test
+  - stage: test
     env: TITLE="Build documentation."
     script: ./ci/travis-ci.sh DOCUMENTATION
   - stage: deploy
