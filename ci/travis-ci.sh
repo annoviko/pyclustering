@@ -165,11 +165,11 @@ run_integration_test_job() {
     PLATFORM_TARGET=$1
 
     # install requirements for the job
-    install_miniconda $PLATFORM_TARGET
-
     sudo apt-get install -qq g++-5
     sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-5 50
     sudo update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-5 50
+
+    install_miniconda $PLATFORM_TARGET
 
     # build ccore library
     build_ccore $PLATFORM_TARGET
@@ -260,23 +260,29 @@ run_deploy_job() {
 
 
 install_miniconda() {
+    print_info "Start downloading process of Miniconda."
+    
     PLATFORM_TARGET=$1
     if [ "$PLATFORM_TARGET" == "x64" ]; then
-        print_info "Download '$PLATFORM_TARGET' Miniconda."
-        wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
+        print_info "Download Miniconda for platform '$PLATFORM_TARGET'."
+        wget https://repo.continuum.io/miniconda/Miniconda3-4.3.27-Linux-x86_64.sh -O miniconda.sh
     elif [ "$PLATFORM_TARGET" == "x86" ]; then
-        print_info "Download '$PLATFORM_TARGET' Miniconda."
-        wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86.sh -O miniconda.sh
+        print_info "Download Miniconda for platform '$PLATFORM_TARGET'"
+        wget https://repo.continuum.io/miniconda/Miniconda3-4.3.27-Linux-x86.sh -O miniconda.sh
     else
-        print_error "Unknown platform is specified for Miniconda."
+        print_error "Unknown platform '$PLATFORM_TARGET' is specified for Miniconda."
         exit 1
     fi
     
+    print_info "Installing Miniconda."
+    mkdir $HOME/miniconda
     bash miniconda.sh -b -p $HOME/miniconda
 
     export PATH="$HOME/miniconda/bin:$PATH"
     hash -r
 
+    print_info "Configuring Miniconda."
+    
     conda config --set always_yes yes
 
     conda install -q libgfortran
