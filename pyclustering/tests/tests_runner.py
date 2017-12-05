@@ -59,7 +59,6 @@ class pyclustering_integration_tests(suite_holder):
     def fill_suite(integration_suite):
         clustering_integration_tests.fill_suite(integration_suite);
         nnet_integration_tests.fill_suite(integration_suite);
-        tsp_integration_tests.fill_suite(integration_suite);
 
 
 
