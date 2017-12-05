@@ -262,7 +262,8 @@ install_miniconda() {
     else
         print_error "Unknown platform is specified for Miniconda."
         exit 1
-
+    fi
+    
     bash miniconda.sh -b -p $HOME/miniconda
 
     export PATH="$HOME/miniconda/bin:$PATH"
@@ -326,7 +327,7 @@ download_binary() {
     else
         print_error "Unkown platform is specified impossible to identify where to place binary."
         exit 1
-    
+    fi
 
     # Obtain link for download
     BUILD_FOLDER=linux
