@@ -131,29 +131,21 @@ run_valgrind_ccore_job() {
 
 
 run_test_pyclustering_job() {
-    print_info "TEST PYCLUSTERING (unit and integration testing):"
-    print_info "- Rebuilt CCORE library."
+    print_info "TEST PYCLUSTERING (unit and integration testing for x64):"
+    print_info "- Download CCORE library."
     print_info "- Run unit and integration tests of pyclustering."
     print_info "- Measure code coverage for python code."
 
     # install requirements for the job
-    install_miniconda
+    install_miniconda x64
     pip install coveralls
-
-    sudo apt-get install -qq g++-5
-    sudo apt-get install -qq g++-5-multilib
-    sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-5 50
 
     # set path to the tested library
     PYTHONPATH=`pwd`
     export PYTHONPATH=${PYTHONPATH}
 
     # build ccore library
-    build_ccore x64
-
-    # show info
-    python --version
-    python3 --version
+    download_binary x64
 
     # run unit and integration tests and obtain coverage results
     coverage run --source=pyclustering --omit='pyclustering/*/tests/*,pyclustering/*/examples/*,pyclustering/tests/*' pyclustering/tests/tests_runner.py
@@ -162,21 +154,17 @@ run_test_pyclustering_job() {
 
 
 run_integration_test_job() {
-    print_info "INTEGRATION TESTING ('ccore' <-> 'pyclustering')."
+    print_info "INTEGRATION TESTING ('ccore' <-> 'pyclustering' for platform '$1')."
     print_info "- Build CCORE library."
     print_info "- Run integration tests of pyclustering."
 
-    PYTHON_VERSION=$1
+    PLATFORM_TARGET=$1
 
     # install requirements for the job
-    install_miniconda $PYTHON_VERSION
-
-    sudo apt-get install -qq g++-5
-    sudo apt-get install -qq g++-5-multilib
-    sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-5 50
+    install_miniconda $PLATFORM_TARGET
 
     # build ccore library
-    build_ccore x64
+    download_binary $PLATFORM_TARGET
 
     # run integration tests
     python pyclustering/tests/tests_runner.py --integration
@@ -216,24 +204,76 @@ run_doxygen_job() {
 }
 
 
-install_miniconda() {
-    PYTHON_VERSION=3.4
-    if [ $# -eq 1 ]; then
-        PYTHON_VERSION=$1
+run_deploy_job() {
+    print_info "Deploy (upload linux binary file to github)"
+    if [[ $TRAVIS_COMMIT_MESSAGE != *"[publish]"* ]]; then 
+        print_info "Binary files will not be published to github repository (keyword '[publish]' is not specified)."
+        exit 0
     fi
+    
+    git config --global user.email "pyclustering@yandex.ru"
+    git config --global user.name "Travis-CI"
 
-    wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
+    git config credential.helper "store --file=.git/credentials"
+    echo "https://${GH_TOKEN}:@github.com" > .git/credentials
+    git config credential.helper "store --file=.git/credentials"
+
+
+    print_info "Prepare copy for pushing (reset, checkout, pull)"
+    git reset --hard
+    git checkout $TRAVIS_BRANCH
+    git pull
+
+
+    print_info "Prepare binary folder"
+    mkdir pyclustering/core/x64/linux
+    mkdir pyclustering/core/x86/linux
+
+    download_binary x64
+    download_binary x86
+
+    print_info "Add changes for commit"
+    echo "linux ccore $PLATFORM_TARGET build version: '$TRAVIS_BUILD_NUMBER'" > pyclustering/core/x64/linux/.linux.info
+    echo "linux ccore $PLATFORM_TARGET build version: '$TRAVIS_BUILD_NUMBER'" > pyclustering/core/x86/linux/.linux.info
+    git add pyclustering/core/x64/linux/.linux.info
+    git add pyclustering/core/x86/linux/.linux.info
+    git add pyclustering/core/x64/linux/ccore.so 
+    git add pyclustering/core/x86/linux/ccore.so
+
+
+    print_info "Display status and changes"
+    git status
+
+
+    print_info "Push changes to github repository"
+    git commit . -m "[travis-ci][ci skip] push new ccore version '$TRAVIS_BUILD_NUMBER'"
+    git push
+}
+
+
+install_miniconda() {
+    PLATFORM_TARGET=$1
+    if [ "$PLATFORM_TARGET" -eq "x64" ]; then
+        print_info "Download '$PLATFORM_TARGET' Miniconda."
+        wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
+    elif [ "$PLATFORM_TARGET" -eq "x86" ]; then
+        print_info "Download '$PLATFORM_TARGET' Miniconda."
+        wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86.sh -O miniconda.sh
+    else
+        print_error "Unknown platform is specified for Miniconda."
+        exit 1
 
     bash miniconda.sh -b -p $HOME/miniconda
 
     export PATH="$HOME/miniconda/bin:$PATH"
     hash -r
 
-    conda config --set always_yes yes --set changeps1 no
-    conda update -q conda
+    conda config --set always_yes yes
 
-    conda install libgfortran
+    conda install -q libgfortran
+
     conda create -q -n test-environment python=3.4 numpy scipy matplotlib Pillow
+
     source activate test-environment
 }
 
@@ -245,7 +285,7 @@ upload_binary() {
     BUILD_PLATFORM=$1
     BINARY_FOLDER=$TRAVIS_BUILD_NUMBER
 
-    CCORE_BINARY_PATH=
+    LOCAL_BINARY_PATH=
     if [ "$BUILD_PLATFORM" == "x64" ]; then
         LOCAL_BINARY_PATH=$CCORE_X64_BINARY_PATH
     elif [ "$BUILD_PLATFORM" == "x86" ]; then
@@ -273,6 +313,40 @@ upload_binary() {
 }
 
 
+download_binary() {
+    print_info "Download CCORE binary (platform: '$1') file from cloud."
+
+    BUILD_PLATFORM=$1
+    
+    LOCAL_BINARY_PATH=
+    if [ "$BUILD_PLATFORM" -eq "x64" ]; then
+        LOCAL_BINARY_PATH=$CCORE_X64_BINARY_PATH
+    elif [ "$BUILD_PLATFORM" -eq "x86" ]; then
+        LOCAL_BINARY_PATH=$CCORE_X86_BINARY_PATH
+    else
+        print_error "Unkown platform is specified impossible to identify where to place binary."
+        exit 1
+    
+
+    # Obtain link for download
+    BUILD_FOLDER=linux
+    BINARY_FOLDER=$TRAVIS_BUILD_NUMBER
+    BINARY_FILEPATH=$TRAVIS_BRANCH%2F$BUILD_FOLDER%2F$BUILD_PLATFORM%2F$BINARY_FOLDER%2Fccore.so
+
+    DOWNLOAD_LINK=`curl -s -H "Authorization: OAuth $YANDEX_DISK_TOKEN" -X GET https://cloud-api.yandex.net:443/v1/disk/resources/download?path=$BINARY_FILEPATH |\
+        python3 -c "import sys, json; print(json.load(sys.stdin)['href'])"`
+
+    print_info "Download link '$DOWNLOAD_LINK'."
+
+    # Download binary to specific folder
+    curl -L "$DOWNLOAD_LINK" -o $LOCAL_BINARY_PATH
+    
+    print_info "Content of the binary folder."
+    ls $LOCAL_BINARY_PATH -la
+}
+
+
+
 set -e
 set -x
 
@@ -293,11 +367,17 @@ case $1 in
     TEST_PYCLUSTERING) 
         run_test_pyclustering_job ;;
 
-    IT_CCORE)
-        run_integration_test_job $2 ;;
+    IT_CCORE_X86)
+        run_integration_test_job x86 ;;
+
+    IT_CCORE_X64)
+        run_integration_test_job x64 ;;
 
     DOCUMENTATION)
         run_doxygen_job ;;
+
+    DEPLOY)
+        run_deploy_job ;;
 
     *)
         print_error "Unknown target is specified: '$1'"
