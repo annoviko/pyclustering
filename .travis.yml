@@ -19,7 +19,6 @@ addons:
 install:
 - sudo apt-get update
 - chmod u+x ci/travis-ci.sh
-- chmod u+x ci/travis-ci-deploy.sh
 
 
 env:
