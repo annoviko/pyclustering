@@ -135,7 +135,7 @@ function job_deploy() {
     }
 
     git.exe config --global credential.helper store
-    Add-Content "$env:USERPROFILE\.git-credentials" "https://$($env:GITHUB_TOKEN):x-oauth-basic@github.com"
+    Add-Content "$env:USERPROFILE\.git-credentials" "https://$($env:GITHUB_TOKEN):x-oauth-basic@github.com`n"
 
     git.exe config --global user.email "pyclustering@yandex.ru";
     git.exe config --global user.name "AppVeyor";
