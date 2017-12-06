@@ -1,5 +1,8 @@
-CCORE_X64_BINARY_PATH=pyclustering/core/x64/linux/ccore.so
-CCORE_X86_BINARY_PATH=pyclustering/core/x86/linux/ccore.so
+CCORE_X64_BINARY_FOLDER=pyclustering/core/x64/linux
+CCORE_X64_BINARY_PATH=$CCORE_X64_BINARY_FOLDER/ccore.so
+
+CCORE_X86_BINARY_FOLDER=pyclustering/core/x86/linux
+CCORE_X86_BINARY_PATH=$CCORE_X86_BINARY_FOLDER/ccore.so
 
 
 print_error() {
@@ -235,24 +238,23 @@ run_deploy_job() {
 
 
     print_info "Prepare binary folder"
-    mkdir pyclustering/core/x64/linux
-    mkdir pyclustering/core/x86/linux
+    [ ! -d $CCORE_X64_BINARY_FOLDER ] && mkdir $CCORE_X64_BINARY_FOLDER
+    [ ! -d $CCORE_X86_BINARY_FOLDER ] && mkdir $CCORE_X86_BINARY_FOLDER
 
     download_binary x64
     download_binary x86
 
     print_info "Add changes for commit"
-    echo "linux ccore $PLATFORM_TARGET build version: '$TRAVIS_BUILD_NUMBER'" > pyclustering/core/x64/linux/.linux.info
-    echo "linux ccore $PLATFORM_TARGET build version: '$TRAVIS_BUILD_NUMBER'" > pyclustering/core/x86/linux/.linux.info
-    git add pyclustering/core/x64/linux/.linux.info
-    git add pyclustering/core/x86/linux/.linux.info
-    git add pyclustering/core/x64/linux/ccore.so 
-    git add pyclustering/core/x86/linux/ccore.so
+    echo "linux ccore $PLATFORM_TARGET build version: '$TRAVIS_BUILD_NUMBER'" > $CCORE_X64_BINARY_FOLDER/.linux.info
+    echo "linux ccore $PLATFORM_TARGET build version: '$TRAVIS_BUILD_NUMBER'" > $CCORE_X86_BINARY_FOLDER/.linux.info
+    git add $CCORE_X64_BINARY_FOLDER/.linux.info
+    git add $CCORE_X86_BINARY_FOLDER/.linux.info
+    git add $CCORE_X64_BINARY_FOLDER/ccore.so 
+    git add $CCORE_X86_BINARY_FOLDER/ccore.so
 
 
     print_info "Display status and changes"
     git status
-
 
     print_info "Push changes to github repository"
     git commit . -m "[travis-ci][ci skip] push new ccore version '$TRAVIS_BUILD_NUMBER'"
