@@ -134,7 +134,7 @@ run_valgrind_ccore_job() {
 
 
 run_test_pyclustering_job() {
-    print_info "TEST PYCLUSTERING (unit and integration testing for x64):"
+    print_info "TEST PYCLUSTERING (unit and integration testing):"
     print_info "- Download CCORE library."
     print_info "- Run unit and integration tests of pyclustering."
     print_info "- Measure code coverage for python code."
