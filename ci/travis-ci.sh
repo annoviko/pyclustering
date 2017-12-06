@@ -167,7 +167,8 @@ run_integration_test_job() {
     # install requirements for the job
     install_miniconda $PLATFORM_TARGET
 
-    sudo apt-get install -qq g++-5
+    sudo apt-get install -qq g++-5 gcc-5
+    sudo apt-get install -qq g++-5-multilib gcc-5-multilib
     sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-5 50
     sudo update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-5 50
 
@@ -275,7 +276,7 @@ install_miniconda() {
     fi
     
     print_info "Installing Miniconda."
-    sudo bash miniconda.sh -b -p $HOME/miniconda
+    bash miniconda.sh -b -p $HOME/miniconda
 
     export PATH="$HOME/miniconda/bin:$PATH"
     hash -r
