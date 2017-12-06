@@ -8,7 +8,7 @@ PyClustering
 algorithm, oscillatory networks, neural networks). The library provides
 Python and C++ implementations (via CCORE library) of each algorithm or
 model. CCORE library is a part of pyclustering and supported only for
-64-bit Linux and 32, 64-bit Windows operating systems.
+32, 64-bit Linux and 32, 64-bit Windows operating systems.
 
 **Version**: 0.7.x
 
@@ -40,7 +40,7 @@ Each algorithm is implemented using Python and C/C++ language, thus performance 
 
     xmeans_instance = xmeans(data_points, start_centers, 20, ccore = True);
 
-**ccore** option runs ccore shared library (core of the pyclustering library). The core is maintained for Linux x64 and Windows x86, x64.
+**ccore** option runs ccore shared library (core of the pyclustering library). The core is maintained for Linux 32, 64-bit and Windows 32, 64-bit.
 
 
 

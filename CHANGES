@@ -8,7 +8,10 @@ GENERAL CHANGES:
 - Performance optimization for CCORE on linux platform.
   See: no reference.
 
-- 32-bit platform is supported for Windows OS.
+- 32-bit platform of CCORE is supported for Linux OS.
+  See: https://github.com/annoviko/pyclustering/issues/253
+
+- 32-bit platform of CCORE is supported for Windows OS.
   See: https://github.com/annoviko/pyclustering/issues/253
 
 - Implemented method 'get_probabilities()' for obtaining belong probability in EM-algorithm (pyclustering.cluster.ema).
