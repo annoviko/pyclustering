@@ -336,9 +336,9 @@ download_binary() {
     BUILD_PLATFORM=$1
     
     LOCAL_BINARY_PATH=
-    if [ "$BUILD_PLATFORM" -eq "x64" ]; then
+    if [ "$BUILD_PLATFORM" == "x64" ]; then
         LOCAL_BINARY_PATH=$CCORE_X64_BINARY_PATH
-    elif [ "$BUILD_PLATFORM" -eq "x86" ]; then
+    elif [ "$BUILD_PLATFORM" == "x86" ]; then
         LOCAL_BINARY_PATH=$CCORE_X86_BINARY_PATH
     else
         print_error "Unkown platform is specified impossible to identify where to place binary."
