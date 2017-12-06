@@ -101,27 +101,27 @@ cure_queue::~cure_queue() {
 
 
 void cure_queue::create_queue(const std::vector< std::vector<double> > * data) {
-    for (std::vector< std::vector<double> >::const_iterator iter = data->begin(); iter != data->end(); iter++) {
-        cure_cluster * cluster = new cure_cluster((std::vector<double> *) &(*iter));
+    for (auto & data_point : (*data)) {
+        cure_cluster * cluster = new cure_cluster((std::vector<double> *) &data_point);
         queue->push_back(cluster);
     }
 
-    for (std::list<cure_cluster *>::iterator first_cluster = queue->begin(); first_cluster != queue->end(); first_cluster++) {
+    for (auto & first_cluster : *queue) {
         double minimal_distance = std::numeric_limits<double>::max();
         cure_cluster * closest_cluster = nullptr;
 
-        for (std::list<cure_cluster *>::iterator second_cluster = queue->begin(); second_cluster != queue->end(); second_cluster++) {
-            if (*first_cluster != *second_cluster) {
-                double dist = get_distance(*first_cluster, *second_cluster);
+        for (auto & second_cluster : *queue) {
+            if (first_cluster != second_cluster) {
+                double dist = get_distance(first_cluster, second_cluster);
                 if (dist < minimal_distance) {
                     minimal_distance = dist;
-                    closest_cluster = *second_cluster;
+                    closest_cluster = second_cluster;
                 }
             }
         }
 
-        (*first_cluster)->closest = closest_cluster;
-        (*first_cluster)->distance_closest = minimal_distance;
+        first_cluster->closest = closest_cluster;
+        first_cluster->distance_closest = minimal_distance;
     }
 
     auto distance_comparison = [](cure_cluster * cluster1, cure_cluster * cluster2) { return cluster1->distance_closest < cluster2->distance_closest; };
@@ -131,9 +131,9 @@ void cure_queue::create_queue(const std::vector< std::vector<double> > * data) {
 
 double cure_queue::get_distance(cure_cluster * cluster1, cure_cluster * cluster2) {
     double distance = std::numeric_limits<double>::max();
-    for (std::vector<std::vector<double> *>::const_iterator point1 = cluster1->rep->begin(); point1 != cluster1->rep->end(); point1++) {
-        for (std::vector<std::vector<double> *>::const_iterator point2 = cluster2->rep->begin(); point2 != cluster2->rep->end(); point2++) {
-            double candidate_distance = euclidean_distance(*point1, *point2);
+    for (auto & point1 : *(cluster1->rep)) {
+        for (auto & point2 : *(cluster2->rep)) {
+            double candidate_distance = euclidean_distance(point1, point2);
             if (candidate_distance < distance) {
                 distance = candidate_distance;
             }
@@ -145,21 +145,16 @@ double cure_queue::get_distance(cure_cluster * cluster1, cure_cluster * cluster2
 
 
 bool cure_queue::are_all_elements_same(cure_cluster * merged_cluster) {
-    std::vector< std::vector<double> * > * points;
-    points = merged_cluster->points;
-    bool are_all_same = true;
-    std::vector<double> *first_point;
-    first_point = points->front();
-    std::vector<double> *point;
-    for (unsigned int i = 0; i < points->size(); i++) {
-        point = (*points)[i];
-        if (*point != *first_point) {
-            are_all_same = false;
-            break;
+    auto & data_points = *(merged_cluster->points);
+    auto & first_point = data_points.front();
+
+    for (std::size_t i = 1; i < data_points.size(); i++) {
+        if (data_points[i] != first_point) {
+          return false;
         }
     }
 
-    return are_all_same;
+    return true;
 }
 
 
@@ -191,19 +186,19 @@ void cure_queue::merge(cure_cluster * cluster1, cure_cluster * cluster2, const s
 
     std::set<std::vector<double> *> * temporary = new std::set<std::vector<double> *>();
 
-    for (unsigned int index = 0; index < number_repr_points; index++) {
+    for (std::size_t index = 0; index < number_repr_points; index++) {
         double maximal_distance = 0;
         std::vector<double> * maximal_point = nullptr;
 
-        for (std::vector<std::vector<double> *>::const_iterator point = merged_cluster->points->begin(); point != merged_cluster->points->end(); point++) {
+        for (auto & point : *(merged_cluster->points)) {
             double minimal_distance = 0;
             if (index == 0) {
-                minimal_distance = euclidean_distance(*point, merged_cluster->mean);
+                minimal_distance = euclidean_distance(point, merged_cluster->mean);
             }
             else {
                 double temp_minimal_distance = std::numeric_limits<double>::max();
                 for (auto p : (*temporary)) {
-                    double minimal_candidate = euclidean_distance(*point, p);
+                    double minimal_candidate = euclidean_distance(point, p);
                     if (minimal_candidate < temp_minimal_distance) {
                         temp_minimal_distance = minimal_candidate;
                     }
@@ -214,7 +209,7 @@ void cure_queue::merge(cure_cluster * cluster1, cure_cluster * cluster2, const s
 
             if (minimal_distance >= maximal_distance) {
                 maximal_distance = minimal_distance;
-                maximal_point = *point;
+                maximal_point = point;
             }
         }
 
@@ -223,10 +218,10 @@ void cure_queue::merge(cure_cluster * cluster1, cure_cluster * cluster2, const s
         }
     }
 
-    for (std::set<std::vector<double> *>::iterator point = temporary->begin(); point != temporary->end(); point++) {
-        std::vector<double> * representative_point = new std::vector<double>((*point)->size(), 0);
-        for (unsigned int index = 0; index < (*point)->size(); index++) {
-            (*representative_point)[index] = (*(*point))[index] + compression * ( (*merged_cluster->mean)[index] - (*(*point))[index] );
+    for (auto & point : *temporary) {
+        std::vector<double> * representative_point = new std::vector<double>(point->size(), 0);
+        for (std::size_t index = 0; index < point->size(); index++) {
+            (*representative_point)[index] = (*point)[index] + compression * ( (*merged_cluster->mean)[index] - (*point)[index] );
         }
 
         merged_cluster->rep->push_back(representative_point);
@@ -246,31 +241,31 @@ void cure_queue::merge(cure_cluster * cluster1, cure_cluster * cluster2, const s
         /* relocation request */
         relocation_request = new std::list<cure_cluster *>();
 
-        for (cure_queue::iterator cluster = queue->begin(); cluster != queue->end(); cluster++) {
-            double distance = get_distance(merged_cluster, *cluster);
+        for (auto & cluster : *(queue)) {
+            double distance = get_distance(merged_cluster, cluster);
 
             /* Check if distance between new cluster and current is the best than now. */
             if (distance < merged_cluster->distance_closest) {
-                merged_cluster->closest = *cluster;
+                merged_cluster->closest = cluster;
                 merged_cluster->distance_closest = distance;
             }
 
             /* Check if current cluster has removed neighbor. */
-            if ( ((*cluster)->closest == cluster1) || ((*cluster)->closest == cluster2) ) {
+            if ( (cluster->closest == cluster1) || (cluster->closest == cluster2) ) {
                 /* If previous distance was less then distance to new cluster then nearest cluster should be found in the tree. */
-                if ((*cluster)->distance_closest < distance) {
+                if (cluster->distance_closest < distance) {
                     cure_cluster * nearest_cluster = nullptr;
                     double nearest_distance = std::numeric_limits<double>::max();
 
-                    for (std::vector<std::vector<double> * >::iterator point = (*cluster)->rep->begin(); point != (*cluster)->rep->end(); point++) {
-                        kdtree_searcher searcher(**point, tree->get_root(), distance);
+                    for (auto & point : *(cluster->rep)) {
+                        kdtree_searcher searcher(*point, tree->get_root(), distance);
 
                         std::vector<double> nearest_node_distances;
                         std::vector<kdnode::ptr> nearest_nodes;
                         searcher.find_nearest_nodes(nearest_node_distances, nearest_nodes);
 
                         for (std::size_t index = 0; index < nearest_nodes.size(); index++) {
-                            if ( (nearest_node_distances[index] < nearest_distance) && ( nearest_nodes[index]->get_payload() != (*cluster) ) ) {
+                            if ( (nearest_node_distances[index] < nearest_distance) && ( nearest_nodes[index]->get_payload() != cluster ) ) {
                                 nearest_distance = nearest_node_distances[index];
                                 nearest_cluster = (cure_cluster *) nearest_nodes[index]->get_payload();
                             }
@@ -278,20 +273,20 @@ void cure_queue::merge(cure_cluster * cluster1, cure_cluster * cluster2, const s
                     }
 
                     if (nearest_cluster == nullptr) {
-                        (*cluster)->closest = merged_cluster;
-                        (*cluster)->distance_closest = distance;
+                        cluster->closest = merged_cluster;
+                        cluster->distance_closest = distance;
                     }
                     else {
-                        (*cluster)->closest = nearest_cluster;
-                        (*cluster)->distance_closest = nearest_distance;
+                        cluster->closest = nearest_cluster;
+                        cluster->distance_closest = nearest_distance;
                     }
                 }
                 else {
-                    (*cluster)->closest = merged_cluster;
-                    (*cluster)->distance_closest = distance;
+                    cluster->closest = merged_cluster;
+                    cluster->distance_closest = distance;
                 }
 
-                relocation_request->push_back((*cluster));
+                relocation_request->push_back(cluster);
             }
         }
     }
@@ -304,9 +299,9 @@ void cure_queue::merge(cure_cluster * cluster1, cure_cluster * cluster2, const s
 
     /* relocate requested clusters */
     if (relocation_request != nullptr) {
-        for (cure_queue::iterator cluster = relocation_request->begin(); cluster != relocation_request->end(); cluster++) {
-            remove_cluster(*cluster);
-            insert_cluster(*cluster);
+      for (auto & cluster : *relocation_request) {
+            remove_cluster(cluster);
+            insert_cluster(cluster);
         }
 
         delete relocation_request;
@@ -316,7 +311,7 @@ void cure_queue::merge(cure_cluster * cluster1, cure_cluster * cluster2, const s
 
 
 void cure_queue::insert_cluster(cure_cluster * inserted_cluster) {
-    for (cure_queue::iterator cluster = queue->begin(); cluster != queue->end(); cluster++) {
+    for (auto cluster = queue->begin(); cluster != queue->end(); ++cluster) {
         if ( inserted_cluster->distance_closest < (*cluster)->distance_closest ) {
             queue->insert(cluster, inserted_cluster);
             return;
@@ -377,9 +372,9 @@ void cure::process(const dataset & p_data, cluster_data & p_result) {
     cluster_sequence_ptr clusters = result.clusters();
     clusters->resize(queue->size());
     size_t cluster_index = 0;
-    for (cure_queue::const_iterator cure_cluster = queue->begin(); cure_cluster != queue->end(); cure_cluster++, cluster_index++) {
+    for (auto cure_cluster = queue->begin(); cure_cluster != queue->end(); ++cure_cluster, cluster_index++) {
         cluster & standard_cluster = (*clusters)[cluster_index];
-        for (std::vector<std::vector<double> * >::const_iterator point = (*cure_cluster)->points->begin(); point != (*cure_cluster)->points->end(); point++) {
+        for (auto point = (*cure_cluster)->points->begin(); point != (*cure_cluster)->points->end(); ++point) {
             size_t index_point = (size_t) (*point - &(*(data->begin())));
             standard_cluster.push_back(index_point);
         }

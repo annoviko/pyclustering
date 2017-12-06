@@ -45,7 +45,6 @@ from pyclustering.container.tests                import container_unit_tests;
 from pyclustering.core.tests                     import core_tests;
 from pyclustering.gcolor.tests                   import gcolor_tests;
 from pyclustering.nnet.tests                     import nnet_unit_tests, nnet_integration_tests;
-from pyclustering.tsp.tests                      import tsp_integration_tests;
 from pyclustering.utils.tests                    import utils_unit_tests;
 
 
@@ -60,7 +59,6 @@ class pyclustering_integration_tests(suite_holder):
     def fill_suite(integration_suite):
         clustering_integration_tests.fill_suite(integration_suite);
         nnet_integration_tests.fill_suite(integration_suite);
-        tsp_integration_tests.fill_suite(integration_suite);
 
 
 

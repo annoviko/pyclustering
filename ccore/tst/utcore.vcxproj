@@ -88,7 +88,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\src\cluster\agglomerative.cpp" />
-    <ClCompile Include="..\src\cluster\antmean.cpp" />
     <ClCompile Include="..\src\cluster\cluster_algorithm.cpp" />
     <ClCompile Include="..\src\cluster\cluster_data.cpp" />
     <ClCompile Include="..\src\cluster\cure.cpp" />
@@ -137,8 +136,6 @@
     <ClCompile Include="..\src\parallel\task.cpp" />
     <ClCompile Include="..\src\parallel\thread_executor.cpp" />
     <ClCompile Include="..\src\parallel\thread_pool.cpp" />
-    <ClCompile Include="..\src\tsp\ant_colony.cpp" />
-    <ClCompile Include="..\src\tsp\distance_matrix.cpp" />
     <ClCompile Include="..\src\utils.cpp" />
     <ClCompile Include="..\tools\gtest\gtest-all.cpp" />
     <ClCompile Include="main.cpp" />
@@ -150,8 +147,6 @@
     <ClCompile Include="utest-adjacency_matrix.cpp" />
     <ClCompile Include="utest-adjacency_weight_list.cpp" />
     <ClCompile Include="utest-agglomerative.cpp" />
-    <ClCompile Include="utest-antmean.cpp" />
-    <ClCompile Include="utest-ant_colony.cpp" />
     <ClCompile Include="utest-cluster.cpp" />
     <ClCompile Include="utest-cure.cpp" />
     <ClCompile Include="utest-dbscan.cpp" />
@@ -193,8 +188,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\cluster\agglomerative.hpp" />
-    <ClInclude Include="..\src\cluster\antmean.hpp" />
-    <ClInclude Include="..\src\cluster\antmean_params.hpp" />
     <ClInclude Include="..\src\cluster\cluster_algorithm.hpp" />
     <ClInclude Include="..\src\cluster\cluster_data.hpp" />
     <ClInclude Include="..\src\cluster\cure.hpp" />
@@ -258,10 +251,6 @@
     <ClInclude Include="..\src\parallel\task.hpp" />
     <ClInclude Include="..\src\parallel\thread_executor.hpp" />
     <ClInclude Include="..\src\parallel\thread_pool.hpp" />
-    <ClInclude Include="..\src\tsp\ant_colony.hpp" />
-    <ClInclude Include="..\src\tsp\ant_colony_params.hpp" />
-    <ClInclude Include="..\src\tsp\distance_matrix.hpp" />
-    <ClInclude Include="..\src\tsp\params_container.hpp" />
     <ClInclude Include="..\src\utils.hpp" />
     <ClInclude Include="..\tools\gtest\gtest.h" />
     <ClInclude Include="samples.hpp" />

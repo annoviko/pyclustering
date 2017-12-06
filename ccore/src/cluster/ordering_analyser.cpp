@@ -38,27 +38,28 @@ double ordering_analyser::calculate_connvectivity_radius(const std::size_t p_amo
     double upper_distance = maximum_distance;
     double lower_distance = 0.0;
 
-    double radius = -1.0;
     double result = -1.0;
 
-    if (extract_cluster_amount(maximum_distance) <= p_amount_clusters) {
-        for(std::size_t i = 0; i < p_maximum_iterations; i++) {
-            radius = (lower_distance + upper_distance) / 2.0;
+    if (extract_cluster_amount(maximum_distance) > p_amount_clusters) {
+        return result;
+    }
 
-            std::size_t amount = extract_cluster_amount(radius);
-            if (amount == p_amount_clusters) {
-                result = radius;
-                break;
-            }
-            else if (amount == 0) {
-                break;
-            }
-            else if (amount > p_amount_clusters) {
-                lower_distance = radius;
-            }
-            else if (amount < p_amount_clusters) {
-                upper_distance = radius;
-            }
+    for(std::size_t i = 0; i < p_maximum_iterations; i++) {
+        double radius = (lower_distance + upper_distance) / 2.0;
+
+        std::size_t amount = extract_cluster_amount(radius);
+        if (amount == p_amount_clusters) {
+            result = radius;
+            break;
+        }
+        else if (amount == 0) {
+            break;
+        }
+        else if (amount > p_amount_clusters) {
+            lower_distance = radius;
+        }
+        else if (amount < p_amount_clusters) {
+            upper_distance = radius;
         }
     }
 

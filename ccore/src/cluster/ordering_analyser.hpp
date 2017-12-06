@@ -64,7 +64,7 @@ public:
     * @brief    Creates ordering analyser using specified cluster-ordering.
     *
     */
-    ordering_analyser(const ordering_ptr & p_ordering);
+    explicit ordering_analyser(const ordering_ptr & p_ordering);
 
     /**
     *

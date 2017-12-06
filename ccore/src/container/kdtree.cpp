@@ -170,7 +170,6 @@ kdnode::ptr kdtree::recursive_remove(kdnode::ptr node) {
 
 
 kdnode::ptr kdtree::find_minimal_node(kdnode::ptr node, std::size_t discriminator) {
-
     std::stack<kdnode::ptr> stack;
     kdnode::ptr minimal_node = node;
     std::vector<kdnode::ptr> candidates;
@@ -182,7 +181,7 @@ kdnode::ptr kdtree::find_minimal_node(kdnode::ptr node, std::size_t discriminato
             node = node->get_left();
         }
         else {
-            if (stack.size() != 0) {
+            if (!stack.empty()) {
                 node = stack.top();
                 candidates.push_back(node);
                 stack.pop();

@@ -289,8 +289,8 @@ double xmeans::bayesian_information_criterion(const cluster_sequence & analysed_
     std::size_t N = 0;
 
     for (std::size_t index_cluster = 0; index_cluster < analysed_clusters.size(); index_cluster++) {
-        for (cluster::const_iterator index_object = analysed_clusters[index_cluster].begin(); index_object != analysed_clusters[index_cluster].end(); index_object++) {
-            sigma += euclidean_distance_sqrt( &(*m_ptr_data)[*index_object], &(analysed_centers[index_cluster]) );
+        for (auto & index_object : analysed_clusters[index_cluster]) {
+            sigma += euclidean_distance_sqrt( &(*m_ptr_data)[index_object], &(analysed_centers[index_cluster]) );
         }
 
         N += analysed_clusters[index_cluster].size();
@@ -323,8 +323,6 @@ double xmeans::minimum_noiseless_description_length(const cluster_sequence & clu
     double N = 0.0;
 
     double sigma_sqrt = 0.0;
-    const double alpha = 0.9;
-    const double betta = 0.9;
 
     for (std::size_t index_cluster = 0; index_cluster < clusters.size(); index_cluster++) {
         if (clusters[index_cluster].empty()) {
@@ -345,6 +343,9 @@ double xmeans::minimum_noiseless_description_length(const cluster_sequence & clu
     }
 
     if (N - K > 0) {
+        const double alpha = 0.9;
+        const double betta = 0.9;
+
         sigma_sqrt /= (N - K);
         double sigma = std::sqrt(sigma_sqrt);
 

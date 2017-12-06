@@ -20,7 +20,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cluster\agglomerative.cpp" />
-    <ClCompile Include="cluster\antmean.cpp" />
     <ClCompile Include="cluster\cluster_algorithm.cpp" />
     <ClCompile Include="cluster\cluster_data.cpp" />
     <ClCompile Include="cluster\cure.cpp" />
@@ -44,8 +43,6 @@
     <ClCompile Include="container\kdtree.cpp" />
     <ClCompile Include="differential\differ_factor.cpp" />
     <ClCompile Include="interface\agglomerative_interface.cpp" />
-    <ClCompile Include="interface\antcolony_tsp_interface.cpp" />
-    <ClCompile Include="interface\antmean_interface.cpp" />
     <ClCompile Include="interface\cure_interface.cpp" />
     <ClCompile Include="interface\dbscan_interface.cpp" />
     <ClCompile Include="interface\hsyncnet_interface.cpp" />
@@ -71,14 +68,10 @@
     <ClCompile Include="parallel\task.cpp" />
     <ClCompile Include="parallel\thread_executor.cpp" />
     <ClCompile Include="parallel\thread_pool.cpp" />
-    <ClCompile Include="tsp\ant_colony.cpp" />
-    <ClCompile Include="tsp\distance_matrix.cpp" />
     <ClCompile Include="utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cluster\agglomerative.hpp" />
-    <ClInclude Include="cluster\antmean.hpp" />
-    <ClInclude Include="cluster\antmean_params.hpp" />
     <ClInclude Include="cluster\cluster_algorithm.hpp" />
     <ClInclude Include="cluster\cluster_data.hpp" />
     <ClInclude Include="cluster\cure.hpp" />
@@ -116,8 +109,6 @@
     <ClInclude Include="differential\runge_kutta_4.hpp" />
     <ClInclude Include="differential\runge_kutta_fehlberg_45.hpp" />
     <ClInclude Include="interface\agglomerative_interface.h" />
-    <ClInclude Include="interface\antcolony_tsp_interface.h" />
-    <ClInclude Include="interface\antmean_interface.h" />
     <ClInclude Include="interface\cure_interface.h" />
     <ClInclude Include="interface\dbscan_interface.h" />
     <ClInclude Include="interface\hsyncnet_interface.h" />
@@ -144,10 +135,6 @@
     <ClInclude Include="parallel\task.hpp" />
     <ClInclude Include="parallel\thread_executor.hpp" />
     <ClInclude Include="parallel\thread_pool.hpp" />
-    <ClInclude Include="tsp\ant_colony.hpp" />
-    <ClInclude Include="tsp\ant_colony_params.hpp" />
-    <ClInclude Include="tsp\distance_matrix.hpp" />
-    <ClInclude Include="tsp\params_container.hpp" />
     <ClInclude Include="utils.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -208,6 +195,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <OutDir>..\..\pyclustering\core\x86\win\</OutDir>
+    <IncludePath>.;src\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>

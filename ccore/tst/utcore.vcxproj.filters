@@ -27,9 +27,6 @@
     <Filter Include="Tested Code\nnet">
       <UniqueIdentifier>{27e24ed9-e9c4-43ab-ac00-726835a7e1be}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Tested Code\tsp">
-      <UniqueIdentifier>{0f0225d8-7891-4f28-88d6-240d7244d119}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Tested Code\interface">
       <UniqueIdentifier>{5b5b6ac0-dc7c-434f-af9f-84ad933180f0}</UniqueIdentifier>
     </Filter>
@@ -91,12 +88,6 @@
     </ClCompile>
     <ClCompile Include="..\src\nnet\syncpr.cpp">
       <Filter>Tested Code\nnet</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\tsp\ant_colony.cpp">
-      <Filter>Tested Code\tsp</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\tsp\distance_matrix.cpp">
-      <Filter>Tested Code\tsp</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
@@ -165,9 +156,6 @@
       <Filter>Unit Tests</Filter>
     </ClCompile>
     <ClCompile Include="utest-agglomerative.cpp">
-      <Filter>Unit Tests</Filter>
-    </ClCompile>
-    <ClCompile Include="utest-ant_colony.cpp">
       <Filter>Unit Tests</Filter>
     </ClCompile>
     <ClCompile Include="utest-cluster.cpp">
@@ -280,12 +268,6 @@
     </ClCompile>
     <ClCompile Include="..\src\interface\sync_interface.cpp">
       <Filter>Tested Code\interface</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\cluster\antmean.cpp">
-      <Filter>Tested Code\cluster</Filter>
-    </ClCompile>
-    <ClCompile Include="utest-antmean.cpp">
-      <Filter>Unit Tests</Filter>
     </ClCompile>
     <ClCompile Include="..\src\interface\legion_interface.cpp">
       <Filter>Tested Code\interface</Filter>
@@ -424,18 +406,6 @@
     <ClInclude Include="..\src\nnet\syncpr.hpp">
       <Filter>Tested Code\nnet</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\tsp\ant_colony.hpp">
-      <Filter>Tested Code\tsp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\tsp\ant_colony_params.hpp">
-      <Filter>Tested Code\tsp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\tsp\distance_matrix.hpp">
-      <Filter>Tested Code\tsp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\tsp\params_container.hpp">
-      <Filter>Tested Code\tsp</Filter>
-    </ClInclude>
     <ClInclude Include="samples.hpp">
       <Filter>Source Files</Filter>
     </ClInclude>
@@ -537,12 +507,6 @@
     </ClInclude>
     <ClInclude Include="..\src\interface\sync_interface.h">
       <Filter>Tested Code\interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\cluster\antmean.hpp">
-      <Filter>Tested Code\cluster</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\cluster\antmean_params.hpp">
-      <Filter>Tested Code\cluster</Filter>
     </ClInclude>
     <ClInclude Include="..\src\interface\legion_interface.h">
       <Filter>Tested Code\interface</Filter>

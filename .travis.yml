@@ -19,7 +19,6 @@ addons:
 install:
 - sudo apt-get update
 - chmod u+x ci/travis-ci.sh
-- chmod u+x ci/travis-ci-deploy.sh
 
 
 env:
@@ -38,6 +37,9 @@ jobs:
   - stage: build and test
     env: TITLE="Build CCORE."
     script: ./ci/travis-ci.sh BUILD_CCORE
+  - state: build and test
+    env: TITLE="Run C/C++ static code analyser."
+    script: ./ci/travis-ci.sh ANALYSE_CCORE
   - stage: build and test
     env: TITLE="Run unit-tests for CCORE."
     script: ./ci/travis-ci.sh UT_CCORE
@@ -52,5 +54,4 @@ jobs:
     script: ./ci/travis-ci.sh DOCUMENTATION
   - stage: deploy
     env: TITLE="Deploy CCORE"
-    script: ./ci/travis-ci-deploy.sh
-
+    script: ./ci/travis-ci.sh DEPLOY

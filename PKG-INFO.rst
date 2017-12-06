@@ -8,7 +8,7 @@ PyClustering
 algorithm, oscillatory networks, neural networks). The library provides
 Python and C++ implementations (via CCORE library) of each algorithm or
 model. CCORE library is a part of pyclustering and supported only for
-64-bit Linux and 64-bit Windows operating systems.
+32, 64-bit Linux and 32, 64-bit Windows operating systems.
 
 Official repository: https://github.com/annoviko/pyclustering/
 
@@ -17,9 +17,9 @@ Dependencies
 
 **Required packages**: scipy, matplotlib, numpy, PIL
 
-**Python version**: >=3.4 (64-bit)
+**Python version**: >=3.4 (32-bit, 64-bit)
 
-**C++ version**: >= 14 (64-bit)
+**C++ version**: >= 14 (32-bit, 64-bit)
 
 Performance
 ===========
@@ -113,10 +113,6 @@ Library Content
 - **DSATUR** (pyclustering.gcolor.dsatur);
 - **Hysteresis Oscillatory Network for graph coloring** (pyclustering.gcolor.hysteresis);
 - **Sync: Oscillatory Network based on Kuramoto model for graph coloring** (pyclustering.gcolor.sync);
-
-**Travelling Salesman Problem Algorithms (module pyclustering.tsp):**
-
-- **AntColony** (pyclustering.tsp.antcolony);
 
 **Containers (module pyclustering.container):**
 

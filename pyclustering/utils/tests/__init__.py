@@ -37,8 +37,8 @@ class utils_tests(suite_holder):
 
 
     @staticmethod
-    def fill_suite(tsp_suite):
-        utils_unit_tests.fill_suite(tsp_suite);
+    def fill_suite(utils_suite):
+        utils_unit_tests.fill_suite(utils_suite);
 
 
 if __name__ == "__main__":

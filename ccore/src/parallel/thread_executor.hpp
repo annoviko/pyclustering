@@ -52,7 +52,7 @@ private:
 public:
     thread_executor(void) = default;
 
-    thread_executor(const task_conveyor & p_conveyor);
+    explicit thread_executor(const task_conveyor & p_conveyor);
 
     thread_executor(const thread_executor & p_other) = delete;
 

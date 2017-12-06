@@ -32,6 +32,9 @@ from ctypes import *;
 from pyclustering.core.definitions import *;
 
 
+ccore_library_instance = None;
+
+
 def load_core():
     if (PATH_PYCLUSTERING_CCORE_LIBRARY is None):
         raise NameError("The pyclustering core is not supported for platform '" + sys.platform + "'.");
@@ -41,5 +44,6 @@ def load_core():
                         "Probably pyclustering library has not been successfully installed.\n" + 
                         "Please, contact to 'pyclustering@yandex.ru'.");
 
-    return cdll.LoadLibrary(PATH_PYCLUSTERING_CCORE_LIBRARY);
+    ccore_library_instance = cdll.LoadLibrary(PATH_PYCLUSTERING_CCORE_LIBRARY);
+    return ccore_library_instance;
 

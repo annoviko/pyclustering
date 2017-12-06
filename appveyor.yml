@@ -11,10 +11,7 @@ init: []
 
 
 environment:
-  PYTHON_VERSION: 3.4
-  PYTHON_ARCH: "64"
   CYGWIN_PATH: C:\cygwin64\bin\bash
-  MINICONDA_PATH: C:\Miniconda3-x64
   TESTING_RESULT: "Success"
   GITHUB_TOKEN:
     secure: gzN7IIwlku2+7LB0SO+41zfT04Iir7WgCypBx/lwniP5JbxFl4dtjjMN/jj7sQZ1
@@ -25,7 +22,8 @@ environment:
   - CI_JOB: "UT_WINDOWS_CCORE"
   - CI_JOB: "BUILD_CYGWIN_CCORE"
   - CI_JOB: "UT_CYGWIN_CCORE"
-  - CI_JOB: "PYCLUSTERING_WINDOWS"
+  - CI_JOB: "PYCLUSTERING_WINDOWS_X86"
+  - CI_JOB: "PYCLUSTERING_WINDOWS_X64"
   - CI_JOB: "DEPLOY"
 
 

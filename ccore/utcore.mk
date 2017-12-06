@@ -20,7 +20,7 @@ ifeq ($(ARGS), valgrind)
 	CFLAGS = -MMD -MP -std=$(CPLUS_STANDARD) $(PIC_FLAG) -g
 	LFLAGS = -pthread
 else
-	CFLAGS = -O3 -MMD -MP -std=$(CPLUS_STANDARD) $(PIC_FLAG) -fprofile-arcs -ftest-coverage -Werror
+	CFLAGS = -O2 -MMD -MP -std=$(CPLUS_STANDARD) $(PIC_FLAG) -fprofile-arcs -ftest-coverage -Werror
 	LFLAGS = -pthread -fprofile-arcs -ftest-coverage
 endif
 
