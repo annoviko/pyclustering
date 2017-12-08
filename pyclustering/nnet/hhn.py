@@ -145,11 +145,8 @@ class central_element:
         ## Inactivaton conductance of the sodium channel (h).
         self.inactive_cond_sodium    = 0.0;
         
-        ## Inactivaton conductance of the sodium channel (h)
+        ## Activaton conductance of the sodium channel (h).
         self.active_cond_potassium   = 0.0;
-        
-        ## Times of pulse generation by central neuron.
-        self.pulse_generation_time = None;
         
         ## Spike generation of central neuron.
         self.pulse_generation = False;

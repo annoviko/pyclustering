@@ -34,19 +34,30 @@
 #include "nnet/network.hpp"
 
 
-typedef struct differential_result {
-    double time;
-    double value;
-} differential_result;
+namespace utils {
 
 
-inline double pi(void) { return (double) 3.14159265358979323846; }
+/**
+ *
+ * @brief   Mathematical constant pi.
+ *
+ */
+const double pi = 3.14159265358979323846;
 
-
-inline double heaviside(const double value) {
-    if (value >= 0.0) { return 1.0; }
-    return 0.0;
 }
+
+
+/**
+ *
+ * @brief   Calculates Heaviside function.
+ * @details If value >= 0.0 then 1.0 is returned, otherwise 0.0 is returned.
+ *
+ * @param[in] value: Input argument of the Heaviside function.
+ *
+ * @return  Returns result of Heaviside function.
+ *
+ */
+double heaviside(const double value);
 
 
 /**
@@ -59,16 +70,7 @@ inline double heaviside(const double value) {
  * @return  Returns square of Euclidean distance between points.
  *
  */
-inline double euclidean_distance_sqrt(const std::vector<double> * const point1, const std::vector<double> * const point2) {
-    double distance = 0.0;
-    /* assert(point1->size() != point1->size()); */
-    for (std::size_t dimension = 0; dimension < point1->size(); dimension++) {
-        double difference = (point1->data()[dimension] - point2->data()[dimension]);
-        distance += difference * difference;
-    }
-
-  return distance;
-}
+double euclidean_distance_sqrt(const std::vector<double> * const point1, const std::vector<double> * const point2);
 
 /**
  *
@@ -80,9 +82,8 @@ inline double euclidean_distance_sqrt(const std::vector<double> * const point1, 
  * @return  Returns square of Euclidean distance between points.
  *
  */
-inline double euclidean_distance_sqrt(const std::vector<double> & point1, const std::vector<double> & point2) {
-    return euclidean_distance_sqrt(&point1, &point2);
-}
+double euclidean_distance_sqrt(const std::vector<double> & point1, const std::vector<double> & point2);
+
 
 /**
  *
@@ -94,16 +95,8 @@ inline double euclidean_distance_sqrt(const std::vector<double> & point1, const 
  * @return  Returns Euclidean distance between points.
  *
  */
-inline double euclidean_distance(const std::vector<double> * const point1, const std::vector<double> * const point2) {
-    double distance = 0.0;
+double euclidean_distance(const std::vector<double> * const point1, const std::vector<double> * const point2);
 
-    for (std::size_t dimension = 0; dimension < point1->size(); dimension++) {
-        double difference = (point1->data()[dimension] - point2->data()[dimension]);
-        distance += difference * difference;
-    }
-
-    return std::sqrt(distance);
-}
 
 /**
  *
@@ -115,9 +108,8 @@ inline double euclidean_distance(const std::vector<double> * const point1, const
  * @return  Returns Euclidean distance between points.
  *
  */
-inline double euclidean_distance(const std::vector<double> & point1, const std::vector<double> & point2) {
-    return euclidean_distance(&point1, &point2);
-}
+double euclidean_distance(const std::vector<double> & point1, const std::vector<double> & point2);
+
 
 /**
  *
@@ -130,3 +122,26 @@ inline double euclidean_distance(const std::vector<double> & point1, const std::
  *
  */
 double average_neighbor_distance(const std::vector<std::vector<double> > * points, const std::size_t num_neigh);
+
+
+namespace utils {
+
+namespace random {
+
+
+/**
+ *
+ * @brief   Returns random value using specified mean and deviation using normal distribution.
+ *
+ * @param[in] p_mean: Mean.
+ * @param[in] p_dev:  Standard deviation.
+ *
+ * @return  Returns random variable.
+ *
+ */
+double generate_normal_random(const double p_mean = 0.0, const double p_dev = 1.0);
+
+
+}
+
+}

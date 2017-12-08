@@ -153,7 +153,7 @@ void sync_network::initialize(const std::size_t size, const double weight_factor
 
     std::random_device                      device;
     std::default_random_engine              generator(device());
-    std::uniform_real_distribution<double>  phase_distribution(0.0, 2.0 * pi());
+    std::uniform_real_distribution<double>  phase_distribution(0.0, 2.0 * utils::pi);
     std::uniform_real_distribution<double>  frequency_distribution(0.0, 1.0);
 
     for (std::size_t index = 0; index < size; index++) {
@@ -164,7 +164,7 @@ void sync_network::initialize(const std::size_t size, const double weight_factor
             oscillator_context.phase = phase_distribution(generator);
             break;
         case initial_type::EQUIPARTITION:
-            oscillator_context.phase = (pi() / size * index);
+            oscillator_context.phase = (utils::pi / size * index);
             break;
         default:
             throw std::runtime_error("Unknown type of initialization");
@@ -325,12 +325,12 @@ void sync_network::calculate_phases(const solve_type solver, const double t, con
 double sync_network::phase_normalization(const double teta) const {
     double norm_teta = teta;
 
-    while ( (norm_teta > 2.0 * pi()) || (norm_teta < 0.0) ) {
-        if (norm_teta > 2.0 * pi()) {
-            norm_teta -= 2.0 * pi();
+    while ( (norm_teta > 2.0 * utils::pi) || (norm_teta < 0.0) ) {
+        if (norm_teta > 2.0 * utils::pi) {
+            norm_teta -= 2.0 * utils::pi;
         }
         else {
-            norm_teta += 2.0 * pi();
+            norm_teta += 2.0 * utils::pi;
         }
     }
 
@@ -362,7 +362,7 @@ void sync_dynamic::allocate_sync_ensembles(const double tolerance, const size_t 
                 double phase_first = (*last_state_dynamic).m_phase[i];
                 double phase_second = (*last_state_dynamic).m_phase[index];
 
-                double phase_shifted = std::abs((*last_state_dynamic).m_phase[i] - 2 * pi());
+                double phase_shifted = std::abs((*last_state_dynamic).m_phase[i] - 2 * utils::pi);
 
                 if (((phase_first < (phase_second + tolerance)) && (phase_first >(phase_second - tolerance))) ||
                     ((phase_shifted < (phase_second + tolerance)) && (phase_shifted >(phase_second - tolerance)))) {
