@@ -42,7 +42,6 @@
     <ClCompile Include="container\kdnode.cpp" />
     <ClCompile Include="container\kdtree.cpp" />
     <ClCompile Include="differential\differ_factor.cpp" />
-    <ClCompile Include="hhn.cpp" />
     <ClCompile Include="interface\agglomerative_interface.cpp" />
     <ClCompile Include="interface\cure_interface.cpp" />
     <ClCompile Include="interface\dbscan_interface.cpp" />
@@ -61,6 +60,7 @@
     <ClCompile Include="interface\syncpr_interface.cpp" />
     <ClCompile Include="interface\sync_interface.cpp" />
     <ClCompile Include="interface\xmeans_interface.cpp" />
+    <ClCompile Include="nnet\hhn.cpp" />
     <ClCompile Include="nnet\legion.cpp" />
     <ClCompile Include="nnet\pcnn.cpp" />
     <ClCompile Include="nnet\som.cpp" />
@@ -109,7 +109,6 @@
     <ClInclude Include="differential\differ_state.hpp" />
     <ClInclude Include="differential\runge_kutta_4.hpp" />
     <ClInclude Include="differential\runge_kutta_fehlberg_45.hpp" />
-    <ClInclude Include="hhn.h" />
     <ClInclude Include="interface\agglomerative_interface.h" />
     <ClInclude Include="interface\cure_interface.h" />
     <ClInclude Include="interface\dbscan_interface.h" />
@@ -128,6 +127,7 @@
     <ClInclude Include="interface\syncpr_interface.h" />
     <ClInclude Include="interface\sync_interface.h" />
     <ClInclude Include="interface\xmeans_interface.h" />
+    <ClInclude Include="nnet\hhn.h" />
     <ClInclude Include="nnet\legion.hpp" />
     <ClInclude Include="nnet\network.hpp" />
     <ClInclude Include="nnet\pcnn.hpp" />

@@ -175,7 +175,7 @@
     <ClCompile Include="parallel\thread_pool.cpp">
       <Filter>Source Files\parallel</Filter>
     </ClCompile>
-    <ClCompile Include="hhn.cpp">
+    <ClCompile Include="nnet\hhn.cpp">
       <Filter>Source Files\nnet</Filter>
     </ClCompile>
   </ItemGroup>
@@ -375,7 +375,7 @@
     <ClInclude Include="parallel\thread_pool.hpp">
       <Filter>Source Files\parallel</Filter>
     </ClInclude>
-    <ClInclude Include="hhn.h">
+    <ClInclude Include="nnet\hhn.h">
       <Filter>Source Files\nnet</Filter>
     </ClInclude>
   </ItemGroup>
