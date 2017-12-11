@@ -65,7 +65,7 @@ void legion_network::simulate(const unsigned int steps,
     const double step = time / (double) steps;
     const double int_step = step / 10.0;
 
-    store_dynamic(0.0, collect_dynamic, output_dynamic);	/* store initial state */
+    store_dynamic(0.0, collect_dynamic, output_dynamic);  /* store initial state */
 
     for (double cur_time = step; cur_time < time; cur_time += step) {
         calculate_states(stimulus, solver, cur_time, step, int_step);

@@ -24,6 +24,9 @@
 
 #include "utils.hpp"
 
+#include <memory>
+#include <unordered_map>
+
 
 struct hnn_parameters {
 public:
@@ -59,6 +62,7 @@ public:
 };
 
 
+
 struct central_element {
 public:
     double m_membrane_potential      = 0.0;     /* Membrane potential of cenral neuron (V)                */
@@ -69,6 +73,7 @@ public:
     bool m_pulse_generation         = false;            /* Spike generation of central neuron   */
     std::vector<double> m_pulse_generation_time = { };  /* Timestamps of generated pulses       */
 };
+
 
 
 struct hhn_oscillator {
@@ -88,6 +93,107 @@ struct hhn_oscillator {
 };
 
 
-class hhn_network {
 
+class hhn_dynamic {
+public:
+    enum class collect {
+        MEMBRANE_POTENTIAL,
+        ACTIVE_COND_SODIUM,
+        INACTIVE_COND_SODIUM,
+        ACTIVE_COND_POTASSIUM,
+    };
+
+
+public:
+    using value_dynamic       = std::vector<double>;
+    using value_dynamic_ptr   = std::shared_ptr<value_dynamic>;
+
+    using evolution_dynamic   = std::vector<value_dynamic>;
+
+    using network_dynamic     = std::unordered_map<hhn_dynamic::collect, evolution_dynamic>;
+    using network_dynamic_ptr = std::shared_ptr<network_dynamic>;
+
+
+private:
+    std::unordered_map<hhn_dynamic::collect, bool>   m_enable = 
+    { { collect::MEMBRANE_POTENTIAL,    true  },
+      { collect::ACTIVE_COND_SODIUM,    false },
+      { collect::INACTIVE_COND_SODIUM,  false },
+      { collect::ACTIVE_COND_POTASSIUM, false } };
+
+    std::size_t         m_amount_collections  = 1;
+
+    network_dynamic_ptr m_peripheral_dynamic  = std::make_shared<network_dynamic>();
+    network_dynamic_ptr m_central_dynamic     = std::make_shared<network_dynamic>();
+
+    value_dynamic_ptr   m_time                = std::make_shared<value_dynamic>();
+
+
+public:
+    hhn_dynamic(void) = default;
+
+    ~hhn_dynamic(void) = default;
+
+
+public:
+    void enable(const hhn_dynamic::collect p_state);
+
+    void enable_all(void);
+
+    void disable(const hhn_dynamic::collect p_state);
+
+    void disable_all(void);
+
+    void store(const std::vector<hhn_oscillator> & p_peripheral, const std::vector<central_element> & p_central);
+
+    void reserve(const std::size_t p_dynamic_size);
+
+    network_dynamic_ptr get_peripheral_dynamic(void) const;
+
+    network_dynamic_ptr get_central_dynamic(void) const;
+
+
+private:
+    void reserve_collection(const hhn_dynamic::collect p_state, const std::size_t p_size);
+
+    void store_membrane_potential(const std::vector<hhn_oscillator> & p_peripheral, const std::vector<central_element> & p_central);
+
+    void store_active_cond_sodium(const std::vector<hhn_oscillator> & p_peripheral, const std::vector<central_element> & p_central);
+
+    void store_inactive_cond_sodium(const std::vector<hhn_oscillator> & p_peripheral, const std::vector<central_element> & p_central);
+
+    void store_active_cond_potassium(const std::vector<hhn_oscillator> & p_peripheral, const std::vector<central_element> & p_central);
+};
+
+
+
+class hhn_network {
+public:
+    using hhn_stimulus        = std::vector<double>;
+    using hhn_stimulus_ptr    = std::shared_ptr<hhn_stimulus>;
+
+private:
+    std::vector<hhn_oscillator>   m_peripheral  = { };
+    std::vector<central_element>  m_central     = { };
+
+    hhn_stimulus_ptr              m_stimulus    = nullptr;
+
+    hnn_parameters                m_parameters;
+
+public:
+    hhn_network(void) = default;
+
+    hhn_network(const std::size_t     p_size,
+                const hnn_parameters  p_parameters);
+
+    ~hhn_network(void) = default;
+
+public:
+    void simulate(const std::size_t         p_steps,
+                  const double              p_time,
+                  const solve_type          p_solver,
+                  const hhn_stimulus_ptr &  p_stimulus,
+                  hhn_dynamic &             p_output_dynamic);
+
+    size_t size(void) const;
 };
