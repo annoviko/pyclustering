@@ -48,11 +48,11 @@ TEST(utest_interface_sync, sync_api) {
     std::size_t network_size = sync_get_size(network_pointer);
     ASSERT_EQ(10, network_size);
 
-    void * dynamic_pointer = sync_simulate_static(network_pointer, 20, 10, (unsigned int) solve_type::FAST, true);
+    void * dynamic_pointer = sync_simulate_static(network_pointer, 20, 10, (unsigned int) solve_type::FORWARD_EULER, true);
     ASSERT_NE(nullptr, dynamic_pointer);
 
-    void * dynamic_flexi_pointer = sync_simulate_dynamic(network_pointer, 0.99, (unsigned int) solve_type::FAST, true, 0.1, 0.01, 0.01);
-    ASSERT_GT(sync_dynamic_get_size(dynamic_flexi_pointer), 0);
+    void * dynamic_flexi_pointer = sync_simulate_dynamic(network_pointer, 0.99, (unsigned int) solve_type::FORWARD_EULER, true, 0.1, 0.01, 0.01);
+    ASSERT_GT(sync_dynamic_get_size(dynamic_flexi_pointer), 0U);
     sync_dynamic_destroy(dynamic_flexi_pointer);
 
     double order_parameter = sync_order(network_pointer);

@@ -44,7 +44,7 @@ TEST(utest_interface_legion, legion_api) {
     void * legion_network = legion_create(10, (unsigned int) connection_t::CONNECTION_ALL_TO_ALL, (void *) &parameters);
     ASSERT_NE(nullptr, legion_network);
 
-    void * dynamic = legion_simulate(legion_network, 10, 10, (unsigned) solve_type::RK4, true, stimulus.get());
+    void * dynamic = legion_simulate(legion_network, 10, 10, (unsigned) solve_type::RUNGE_KUTTA_4, true, stimulus.get());
     ASSERT_NE(nullptr, dynamic);
 
     std::size_t size_network = legion_get_size(legion_network);
@@ -60,7 +60,7 @@ TEST(utest_interface_legion, legion_api) {
     CHECK_FREE_PACKAGE(package);
 
     std::size_t size_dynamic = legion_dynamic_get_size(dynamic);
-    ASSERT_GT(size_dynamic, 0);
+    ASSERT_GT(size_dynamic, 0U);
 
     legion_dynamic_destroy(dynamic);
     legion_destroy(legion_network);

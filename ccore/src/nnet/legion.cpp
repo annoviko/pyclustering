@@ -137,11 +137,11 @@ void legion_network::calculate_states(const legion_stimulus & stimulus, const so
         }
 
         switch(solver) {
-            case solve_type::FAST: {
+            case solve_type::FORWARD_EULER: {
                 throw std::runtime_error("Forward Euler first-order method is not supported due to low accuracy.");
             }
 
-            case solve_type::RK4: {
+            case solve_type::RUNGE_KUTTA_4: {
                 if (m_params.ENABLE_POTENTIAL) {
                     runge_kutta_4(&legion_network::adapter_neuron_states, inputs, t, t + step, number_int_steps, false /* only last states */, argv, next_states[index]);
                 }
@@ -152,7 +152,7 @@ void legion_network::calculate_states(const legion_stimulus & stimulus, const so
                 break;
             }
 
-            case solve_type::RKF45: {
+            case solve_type::RUNGE_KUTTA_FEHLBERG_45: {
                 if (m_params.ENABLE_POTENTIAL) {
                     runge_kutta_fehlberg_45(&legion_network::adapter_neuron_states, inputs, t, t + step, 0.00001, false /* only last states */, argv, next_states[index]);
                 }
@@ -184,11 +184,11 @@ void legion_network::calculate_states(const legion_stimulus & stimulus, const so
     differ_state<double> inhibitor_input { m_global_inhibitor };
 
     switch (solver) {
-        case solve_type::RK4: {
+        case solve_type::RUNGE_KUTTA_4: {
             runge_kutta_4(&legion_network::adapter_inhibitor_state, inhibitor_input, t, t + step, number_int_steps, false /* only last states */, argv, inhibitor_next_state);
             break;
         }
-        case solve_type::RKF45: {
+        case solve_type::RUNGE_KUTTA_FEHLBERG_45: {
             runge_kutta_fehlberg_45(&legion_network::adapter_inhibitor_state, inhibitor_input, t, t + step, 0.00001, false /* only last states */, argv, inhibitor_next_state);
             break;
         }

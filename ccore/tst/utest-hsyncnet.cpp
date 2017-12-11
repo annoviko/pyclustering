@@ -41,7 +41,7 @@ static void template_cluster_allocation(const unsigned int number_clusters) {
         hsyncnet network(&sample, number_clusters, initial_type::EQUIPARTITION);
 
         hsyncnet_analyser analyser;
-        network.process(0.998, solve_type::FAST, true, analyser);
+        network.process(0.998, solve_type::FORWARD_EULER, true, analyser);
 
         hsyncnet_cluster_data ensembles;
         analyser.allocate_clusters(0.1, ensembles);

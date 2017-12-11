@@ -43,7 +43,7 @@ TEST(utest_interface_syncnet, syncnet_api) {
     void * network_pointer = syncnet_create_network(sample.get(), 3, false, 0);
     ASSERT_NE(nullptr, network_pointer);
 
-    void * analyser_pointer = syncnet_process(network_pointer, 0.995, solve_type::FAST, true);
+    void * analyser_pointer = syncnet_process(network_pointer, 0.995, (unsigned int) solve_type::FORWARD_EULER, true);
     ASSERT_NE(nullptr, analyser_pointer);
 
     pyclustering_package * package = sync_dynamic_allocate_sync_ensembles(analyser_pointer, 0.1, sync_dynamic_get_size(analyser_pointer) - 1);

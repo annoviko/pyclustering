@@ -19,7 +19,7 @@
 */
 
 
-#include "hhn.h"
+#include "hhn.hpp"
 
 
 void hhn_dynamic::enable(const hhn_dynamic::collect p_state) {
@@ -56,7 +56,7 @@ void hhn_dynamic::disable_all(void) {
 }
 
 
-void hhn_dynamic::store(const std::vector<hhn_oscillator> & p_peripheral, const std::vector<central_element> & p_central) {
+void hhn_dynamic::store(const double p_time, const std::vector<hhn_oscillator> & p_peripheral, const std::vector<central_element> & p_central) {
     if (!m_amount_collections) {
         return;
     }
@@ -64,6 +64,20 @@ void hhn_dynamic::store(const std::vector<hhn_oscillator> & p_peripheral, const 
     if (m_enable[collect::MEMBRANE_POTENTIAL]) {
         store_membrane_potential(p_peripheral, p_central);
     }
+
+    if (m_enable[collect::ACTIVE_COND_POTASSIUM]) {
+        store_active_cond_potassium(p_peripheral, p_central);
+    }
+
+    if (m_enable[collect::ACTIVE_COND_SODIUM]) {
+        store_active_cond_sodium(p_peripheral, p_central);
+    }
+
+    if (m_enable[collect::INACTIVE_COND_SODIUM]) {
+        store_inactive_cond_sodium(p_peripheral, p_central);
+    }
+
+    m_time->push_back(p_time);
 }
 
 
@@ -97,8 +111,9 @@ hhn_dynamic::network_dynamic_ptr hhn_dynamic::get_central_dynamic(void) const {
 
 
 void hhn_dynamic::reserve_collection(const hhn_dynamic::collect p_state, const std::size_t p_size) {
-    (*m_peripheral_dynamic)[p_state].reserve(p_size);
-    (*m_central_dynamic)[p_state].reserve(p_size);
+    m_peripheral_dynamic->at(p_state).reserve(p_size);
+    m_peripheral_dynamic->at(p_state).reserve(p_size);
+    m_time->reserve(p_size);
 }
 
 
@@ -108,14 +123,14 @@ void hhn_dynamic::store_membrane_potential(const std::vector<hhn_oscillator> & p
         peripheral_membrane_values[index] = p_peripheral[index].m_membrane_potential;
     }
 
-    (*m_peripheral_dynamic)[collect::MEMBRANE_POTENTIAL].emplace_back(std::move(peripheral_membrane_values));
+    m_peripheral_dynamic->at(collect::MEMBRANE_POTENTIAL).emplace_back(std::move(peripheral_membrane_values));
 
     std::vector<double> central_membrane_values(p_central.size(), 0.0);
     for (std::size_t index = 0; index < p_central.size(); index++) {
         central_membrane_values[index] = p_central[index].m_membrane_potential;
     }
 
-    (*m_central_dynamic)[collect::MEMBRANE_POTENTIAL].emplace_back(std::move(central_membrane_values));
+    m_central_dynamic->at(collect::MEMBRANE_POTENTIAL).emplace_back(std::move(central_membrane_values));
 }
 
 
@@ -125,14 +140,14 @@ void hhn_dynamic::store_active_cond_sodium(const std::vector<hhn_oscillator> & p
         peripheral_active_sodium[index] = p_peripheral[index].m_active_cond_sodium;
     }
 
-    (*m_peripheral_dynamic)[collect::ACTIVE_COND_SODIUM].emplace_back(std::move(peripheral_active_sodium));
+    m_peripheral_dynamic->at(collect::ACTIVE_COND_SODIUM).emplace_back(std::move(peripheral_active_sodium));
 
     std::vector<double> central_active_sodium(p_central.size(), 0.0);
     for (std::size_t index = 0; index < p_central.size(); index++) {
         central_active_sodium[index] = p_central[index].m_active_cond_sodium;
     }
 
-    (*m_central_dynamic)[collect::ACTIVE_COND_SODIUM].emplace_back(std::move(central_active_sodium));
+    m_central_dynamic->at(collect::ACTIVE_COND_SODIUM).emplace_back(std::move(central_active_sodium));
 }
 
 
@@ -142,14 +157,14 @@ void hhn_dynamic::store_inactive_cond_sodium(const std::vector<hhn_oscillator> &
         peripheral_inactive_sodium[index] = p_peripheral[index].m_inactive_cond_sodium;
     }
 
-    (*m_peripheral_dynamic)[collect::INACTIVE_COND_SODIUM].emplace_back(std::move(peripheral_inactive_sodium));
+    m_peripheral_dynamic->at(collect::INACTIVE_COND_SODIUM).emplace_back(std::move(peripheral_inactive_sodium));
 
     std::vector<double> central_inactive_sodium(p_central.size(), 0.0);
     for (std::size_t index = 0; index < p_central.size(); index++) {
         central_inactive_sodium[index] = p_central[index].m_inactive_cond_sodium;
     }
 
-    (*m_central_dynamic)[collect::INACTIVE_COND_SODIUM].emplace_back(std::move(central_inactive_sodium));
+    m_central_dynamic->at(collect::INACTIVE_COND_SODIUM).emplace_back(std::move(central_inactive_sodium));
 }
 
 
@@ -159,14 +174,14 @@ void hhn_dynamic::store_active_cond_potassium(const std::vector<hhn_oscillator> 
         peripheral_active_potassium[index] = p_peripheral[index].m_active_cond_potassium;
     }
 
-    (*m_peripheral_dynamic)[collect::ACTIVE_COND_POTASSIUM].emplace_back(std::move(peripheral_active_potassium));
+    m_peripheral_dynamic->at(collect::ACTIVE_COND_POTASSIUM).emplace_back(std::move(peripheral_active_potassium));
 
     std::vector<double> central_active_potassium(p_central.size(), 0.0);
     for (std::size_t index = 0; index < p_central.size(); index++) {
         central_active_potassium[index] = p_central[index].m_active_cond_potassium;
     }
 
-    (*m_central_dynamic)[collect::ACTIVE_COND_POTASSIUM].emplace_back(std::move(central_active_potassium));
+    m_central_dynamic->at(collect::ACTIVE_COND_POTASSIUM).emplace_back(std::move(central_active_potassium));
 }
 
 
@@ -187,14 +202,29 @@ void hhn_network::simulate(const std::size_t p_steps, const double p_time, const
     const double step = p_time / (double) p_steps;
     const double int_step = step / 10.0;
 
-    (void) int_step;
+    store_dynamic(0.0, p_output_dynamic);
 
     for (double cur_time = step; cur_time < p_time; cur_time += step) {
-
+        calculate_states(p_solver, cur_time, step, int_step);
     }
 }
 
 
 size_t hhn_network::size(void) const {
     return m_peripheral.size();
+}
+
+
+void hhn_network::store_dynamic(const double p_time, hhn_dynamic & p_dynamic) {
+    p_dynamic.store(p_time, m_peripheral, m_central);
+}
+
+
+void hhn_network::calculate_states(const solve_type p_solver, const double p_time, const double p_step, const double p_int_step) {
+    (void) p_solver;
+    (void) p_time;
+    (void) p_step;
+    (void) p_int_step;
+
+    /* Wait for refactoring of differential part */
 }

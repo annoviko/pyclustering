@@ -144,7 +144,7 @@ public:
 
     void disable_all(void);
 
-    void store(const std::vector<hhn_oscillator> & p_peripheral, const std::vector<central_element> & p_central);
+    void store(const double p_time, const std::vector<hhn_oscillator> & p_peripheral, const std::vector<central_element> & p_central);
 
     void reserve(const std::size_t p_dynamic_size);
 
@@ -196,4 +196,9 @@ public:
                   hhn_dynamic &             p_output_dynamic);
 
     size_t size(void) const;
+
+private:
+    void store_dynamic(const double p_time, hhn_dynamic & p_dynamic);
+
+    void calculate_states(const solve_type p_solver, const double p_time, const double p_step, const double p_int_step);
 };

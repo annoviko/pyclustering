@@ -127,7 +127,7 @@
     <ClInclude Include="interface\syncpr_interface.h" />
     <ClInclude Include="interface\sync_interface.h" />
     <ClInclude Include="interface\xmeans_interface.h" />
-    <ClInclude Include="nnet\hhn.h" />
+    <ClInclude Include="nnet\hhn.hpp" />
     <ClInclude Include="nnet\legion.hpp" />
     <ClInclude Include="nnet\network.hpp" />
     <ClInclude Include="nnet\pcnn.hpp" />

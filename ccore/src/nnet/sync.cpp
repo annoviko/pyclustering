@@ -286,12 +286,12 @@ void sync_network::calculate_phases(const solve_type solver, const double t, con
         argv[1] = (void *) &index;
 
         switch(solver) {
-            case solve_type::FAST: {
+            case solve_type::FORWARD_EULER: {
                 double result = m_oscillators[index].phase + phase_kuramoto(t, m_oscillators[index].phase, argv);
                 next_phases[index] = phase_normalization(result);
                 break;
             }
-            case solve_type::RK4: {
+            case solve_type::RUNGE_KUTTA_4: {
                 differ_state<double> inputs(1, m_oscillators[index].phase);
                 differ_result<double> outputs;
 
@@ -300,7 +300,7 @@ void sync_network::calculate_phases(const solve_type solver, const double t, con
 
                 break;
             }
-            case solve_type::RKF45: {
+            case solve_type::RUNGE_KUTTA_FEHLBERG_45: {
                 differ_state<double> inputs(1, m_oscillators[index].phase);
                 differ_result<double> outputs;
 

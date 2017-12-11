@@ -329,6 +329,12 @@
     <ClCompile Include="..\src\parallel\thread_pool.cpp">
       <Filter>Tested Code\parallel</Filter>
     </ClCompile>
+    <ClCompile Include="utest-hhn.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\nnet\hhn.cpp">
+      <Filter>Tested Code\nnet</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\tools\gtest\gtest.h">
@@ -540,6 +546,9 @@
     </ClInclude>
     <ClInclude Include="..\src\parallel\thread_pool.hpp">
       <Filter>Tested Code\parallel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\nnet\hhn.hpp">
+      <Filter>Tested Code\nnet</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
