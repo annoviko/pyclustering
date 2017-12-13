@@ -18,27 +18,29 @@
 *
 */
 
-#ifndef CCORE_DIFFERENTIAL_RUNGE_KUTTA_FEHLBERG_45_HPP_
-#define CCORE_DIFFERENTIAL_RUNGE_KUTTA_FEHLBERG_45_HPP_
+
+#pragma once
 
 
 #include <cmath>
 
 #include "differential/differ_factor.hpp"
 #include "differential/differ_state.hpp"
+#include "differential/equation.hpp"
 
 
 namespace differential {
 
 template <typename state_type, typename extra_type = void *>
-void runge_kutta_fehlberg_45(void (*function_pointer)(const double t, const differ_state<state_type> & inputs, const differ_extra<extra_type> & argv, differ_state<state_type> & outputs),
-                   const differ_state<state_type> &     inputs,
-                   const double                         time_start,
-                   const double                         time_end,
-                   const double                         tolerance,
-                   const bool                           flag_collect,
-                   const differ_extra<extra_type> &     argv,
-                   differ_result<state_type> &          outputs) {
+void runge_kutta_fehlberg_45(
+                   const equation<state_type, extra_type> & func,
+                   const differ_state<state_type> &         inputs,
+                   const double                             time_start,
+                   const double                             time_end,
+                   const double                             tolerance,
+                   const bool                               flag_collect,
+                   const differ_extra<extra_type> &         argv,
+                   differ_result<state_type> &              outputs) {
 
     if (flag_collect) {
         outputs.clear();
@@ -72,27 +74,27 @@ void runge_kutta_fehlberg_45(void (*function_pointer)(const double t, const diff
         differ_state<state_type> k1, k2, k3, k4, k5, k6;
         differ_state<state_type> y2, y3, y4, y5, y6;
 
-        function_pointer(current_time, current_value, argv, fp1);
+        func(current_time, current_value, argv, fp1);
         k1 = h * fp1;
         y2 = current_value + factor::B2 * k1;
 
-        function_pointer(current_time + factor::A2 * h, y2, argv, fp2);
+        func(current_time + factor::A2 * h, y2, argv, fp2);
         k2 = h * fp2;
         y3 = current_value + factor::B3 * k1 + factor::C3 * k2;
 
-        function_pointer(current_time + factor::A3 * h, y3, argv, fp3);
+        func(current_time + factor::A3 * h, y3, argv, fp3);
         k3 = h * fp3;
         y4 = current_value + factor::B4 * k1 + factor::C4 * k2 + factor::D4 * k3;
 
-        function_pointer(current_time + factor::A4 * h, y4, argv, fp4);
+        func(current_time + factor::A4 * h, y4, argv, fp4);
         k4 = h * fp4;
         y5 = current_value + factor::B5 * k1 + factor::C5 * k2 + factor::D5 * k3 + factor::E5 * k4;
 
-        function_pointer(current_time + factor::A5 * h, y5, argv, fp5);
+        func(current_time + factor::A5 * h, y5, argv, fp5);
         k5 = h * fp5;
         y6 = current_value + factor::B6 * k1 + factor::C6 * k2 + factor::D6 * k3 + factor::E6 * k4 + factor::F6 * k5;
 
-        function_pointer(current_time + factor::A6 * h, y6, argv, fp6);
+        func(current_time + factor::A6 * h, y6, argv, fp6);
         k6 = h * fp6;
 
         /* Calculate error (difference between Runge-Kutta 4 and Runge-Kutta 5) and new value. */
@@ -149,6 +151,3 @@ void runge_kutta_fehlberg_45(void (*function_pointer)(const double t, const diff
 }
 
 }
-
-
-#endif

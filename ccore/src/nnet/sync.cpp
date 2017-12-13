@@ -39,6 +39,8 @@
 using namespace container;
 using namespace differential;
 
+using namespace std::placeholders;
+
 
 const size_t sync_network::MAXIMUM_MATRIX_REPRESENTATION_SIZE = 4096;
 
@@ -149,7 +151,7 @@ void sync_network::initialize(const std::size_t size, const double weight_factor
 
     weight = weight_factor;
 
-    m_callback_solver = &sync_network::adapter_phase_kuramoto;
+    m_equation = std::bind(&sync_network::phase_kuramoto_equation, this, _1, _2, _3, _4);
 
     std::random_device                      device;
     std::default_random_engine              generator(device());
@@ -185,19 +187,19 @@ double sync_network::sync_local_order(void) const {
 }
 
 
-void sync_network::set_callback_solver(sync_callback_solver solver) {
-    m_callback_solver = solver;
+void sync_network::set_equation(equation<double> & solver) {
+    m_equation = solver;
 }
 
 
-void sync_network::adapter_phase_kuramoto(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs) {
+void sync_network::phase_kuramoto_equation(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs) const {
     outputs.resize(1);
-    outputs[0] = ((sync_network *) argv[0])->phase_kuramoto(t, inputs[0], argv);
+    outputs[0] = phase_kuramoto(t, inputs[0], argv);
 }
 
 
 double sync_network::phase_kuramoto(const double t, const double teta, const std::vector<void *> & argv) const {
-    std::size_t index = *(std::size_t *) argv[1];
+    std::size_t index = *(std::size_t *) argv[0];
     double phase = 0.0;
 
     std::vector<size_t> neighbors;
@@ -276,26 +278,25 @@ void sync_network::store_dynamic(const double time, const bool collect_dynamic, 
 
 void sync_network::calculate_phases(const solve_type solver, const double t, const double step, const double int_step) {
     std::vector<double> next_phases(size(), 0);
-    std::vector<void *> argv(2, NULL);
-
-    argv[0] = (void *) this;
 
     std::size_t number_int_steps = (std::size_t) (step / int_step);
 
     for (std::size_t index = 0; index < size(); index++) {
-        argv[1] = (void *) &index;
+        std::vector<void *> argv(1, nullptr);
+        argv[0] = (void *) &index;
 
         switch(solver) {
             case solve_type::FORWARD_EULER: {
                 double result = m_oscillators[index].phase + phase_kuramoto(t, m_oscillators[index].phase, argv);
                 next_phases[index] = phase_normalization(result);
+
                 break;
             }
             case solve_type::RUNGE_KUTTA_4: {
                 differ_state<double> inputs(1, m_oscillators[index].phase);
                 differ_result<double> outputs;
 
-                runge_kutta_4(m_callback_solver, inputs, t, t + step, number_int_steps, false, argv, outputs);
+                runge_kutta_4(m_equation, inputs, t, t + step, number_int_steps, false, argv, outputs);
                 next_phases[index] = phase_normalization( outputs[0].state[0] );
 
                 break;
@@ -304,7 +305,7 @@ void sync_network::calculate_phases(const solve_type solver, const double t, con
                 differ_state<double> inputs(1, m_oscillators[index].phase);
                 differ_result<double> outputs;
 
-                runge_kutta_fehlberg_45(m_callback_solver, inputs, t, t + step, 0.00001, false, argv, outputs);
+                runge_kutta_fehlberg_45(m_equation, inputs, t, t + step, 0.00001, false, argv, outputs);
                 next_phases[index] = phase_normalization( outputs[0].state[0] );
 
                 break;

@@ -550,5 +550,8 @@
     <ClInclude Include="..\src\nnet\hhn.hpp">
       <Filter>Tested Code\nnet</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\differential\equation.hpp">
+      <Filter>Tested Code\differential</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

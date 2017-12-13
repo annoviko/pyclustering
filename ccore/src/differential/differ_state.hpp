@@ -18,8 +18,7 @@
 *
 */
 
-#ifndef CCORE_DIFFERENTIAL_DIFFER_STATE_HPP_
-#define CCORE_DIFFERENTIAL_DIFFER_STATE_HPP_
+#pragma once
 
 
 #include <vector>
@@ -27,6 +26,7 @@
 
 
 namespace differential {
+
 
 template <typename state_type>
 class differ_state {
@@ -341,17 +341,23 @@ private:
 };
 
 
-template <typename extra_type> using differ_extra = std::vector<extra_type>;
+template <typename extra_type> 
+using differ_extra = std::vector<extra_type>;
 
 
-template <typename state_type> struct differ_output {
+template <typename state_type> 
+struct differ_output {
     double                    time;
     differ_state<state_type>  state;
 };
 
 
-template <typename state_type> using differ_result = std::vector<differ_output<state_type> >;
+template <typename state_type> 
+using differ_result = std::vector< differ_output<state_type> >;
+
+
+template <typename state_type>
+using differ_result_ptr = std::shared_ptr< differ_result<state_type> >;
+
 
 }
-
-#endif

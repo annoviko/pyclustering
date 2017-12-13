@@ -107,6 +107,7 @@
     <ClInclude Include="definitions.hpp" />
     <ClInclude Include="differential\differ_factor.hpp" />
     <ClInclude Include="differential\differ_state.hpp" />
+    <ClInclude Include="differential\equation.hpp" />
     <ClInclude Include="differential\runge_kutta_4.hpp" />
     <ClInclude Include="differential\runge_kutta_fehlberg_45.hpp" />
     <ClInclude Include="interface\agglomerative_interface.h" />

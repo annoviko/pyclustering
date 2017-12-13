@@ -29,6 +29,9 @@
 #include "utils.hpp"
 
 
+using namespace std::placeholders;
+
+
 const size_t legion_network::MAXIMUM_MATRIX_REPRESENTATION_SIZE = 4096;
 
 
@@ -121,15 +124,13 @@ void legion_network::store_dynamic(const double time, const bool collect_dynamic
 }
 
 void legion_network::calculate_states(const legion_stimulus & stimulus, const solve_type solver, const double t, const double step, const double int_step) {
-    std::vector<void *> argv(2, NULL);
-    std::vector<differ_result<double> > next_states(size());
-
-    argv[0] = (void *) this;
+    std::vector< differ_result<double> > next_states(size());
+    std::vector<void *> argv(1, nullptr);
 
     unsigned int number_int_steps = (unsigned int) (step / int_step);
 
     for (std::size_t index = 0; index < size(); index++) {
-        argv[1] = (void *) &index;
+        argv[0] = (void *) &index;
 
         differ_state<double> inputs { m_oscillators[index].m_excitatory, m_oscillators[index].m_inhibitory };
         if (m_params.ENABLE_POTENTIAL) {
@@ -143,10 +144,12 @@ void legion_network::calculate_states(const legion_stimulus & stimulus, const so
 
             case solve_type::RUNGE_KUTTA_4: {
                 if (m_params.ENABLE_POTENTIAL) {
-                    runge_kutta_4(&legion_network::adapter_neuron_states, inputs, t, t + step, number_int_steps, false /* only last states */, argv, next_states[index]);
+                    equation<double> neuron_equation = std::bind(&legion_network::neuron_states, this, _1, _2, _3, _4);
+                    runge_kutta_4(neuron_equation, inputs, t, t + step, number_int_steps, false /* only last states */, argv, next_states[index]);
                 }
                 else {
-                    runge_kutta_4(&legion_network::adapter_neuron_simplify_states, inputs, t, t + step, number_int_steps, false /* only last states */, argv, next_states[index]);
+                    equation<double> neuron_simplify_equation = std::bind(&legion_network::neuron_simplify_states, this, _1, _2, _3, _4);
+                    runge_kutta_4(neuron_simplify_equation, inputs, t, t + step, number_int_steps, false /* only last states */, argv, next_states[index]);
                 }
 
                 break;
@@ -154,10 +157,12 @@ void legion_network::calculate_states(const legion_stimulus & stimulus, const so
 
             case solve_type::RUNGE_KUTTA_FEHLBERG_45: {
                 if (m_params.ENABLE_POTENTIAL) {
-                    runge_kutta_fehlberg_45(&legion_network::adapter_neuron_states, inputs, t, t + step, 0.00001, false /* only last states */, argv, next_states[index]);
+                    equation<double> neuron_equation = std::bind(&legion_network::neuron_states, this, _1, _2, _3, _4);
+                    runge_kutta_fehlberg_45(neuron_equation, inputs, t, t + step, 0.00001, false /* only last states */, argv, next_states[index]);
                 }
                 else {
-                    runge_kutta_fehlberg_45(&legion_network::adapter_neuron_simplify_states, inputs, t, t + step, 0.00001, false /* only last states */, argv, next_states[index]);
+                    equation<double> neuron_simplify_equation = std::bind(&legion_network::neuron_simplify_states, this, _1, _2, _3, _4);
+                    runge_kutta_fehlberg_45(neuron_simplify_equation, inputs, t, t + step, 0.00001, false /* only last states */, argv, next_states[index]);
                 }
 
                 break;
@@ -183,13 +188,15 @@ void legion_network::calculate_states(const legion_stimulus & stimulus, const so
     differ_result<double> inhibitor_next_state;
     differ_state<double> inhibitor_input { m_global_inhibitor };
 
+    equation<double> inhibitor_equation = std::bind(&legion_network::inhibitor_state, this, _1, _2, _3, _4);
+
     switch (solver) {
         case solve_type::RUNGE_KUTTA_4: {
-            runge_kutta_4(&legion_network::adapter_inhibitor_state, inhibitor_input, t, t + step, number_int_steps, false /* only last states */, argv, inhibitor_next_state);
+            runge_kutta_4(inhibitor_equation, inhibitor_input, t, t + step, number_int_steps, false /* only last states */, argv, inhibitor_next_state);
             break;
         }
         case solve_type::RUNGE_KUTTA_FEHLBERG_45: {
-            runge_kutta_fehlberg_45(&legion_network::adapter_inhibitor_state, inhibitor_input, t, t + step, 0.00001, false /* only last states */, argv, inhibitor_next_state);
+            runge_kutta_fehlberg_45(inhibitor_equation, inhibitor_input, t, t + step, 0.00001, false /* only last states */, argv, inhibitor_next_state);
             break;
         }
         default:
@@ -212,23 +219,8 @@ void legion_network::calculate_states(const legion_stimulus & stimulus, const so
 }
 
 
-void legion_network::adapter_neuron_states(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs) {
-    ((legion_network *) argv[0])->neuron_states(t, inputs, argv, outputs);
-}
-
-
-void legion_network::adapter_neuron_simplify_states(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs) {
-    ((legion_network *) argv[0])->neuron_simplify_states(t, inputs, argv, outputs);
-}
-
-
-void legion_network::adapter_inhibitor_state(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs) {
-    ((legion_network *) argv[0])->inhibitor_state(t, inputs, argv, outputs);
-}
-
-
 void legion_network::neuron_states(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs) {
-    unsigned int index = *(unsigned int *) argv[1];
+    unsigned int index = *(unsigned int *) argv[0];
 
     const double x = inputs[0];
     const double y = inputs[1];
@@ -262,7 +254,7 @@ void legion_network::neuron_states(const double t, const differ_state<double> & 
 }
 
 void legion_network::neuron_simplify_states(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs) {
-    unsigned int index = *(unsigned int *) argv[1];
+    unsigned int index = *(unsigned int *) argv[0];
 
     const double x = inputs[0];
     const double y = inputs[1];

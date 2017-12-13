@@ -225,6 +225,7 @@
     <ClInclude Include="..\src\definitions.hpp" />
     <ClInclude Include="..\src\differential\differ_factor.hpp" />
     <ClInclude Include="..\src\differential\differ_state.hpp" />
+    <ClInclude Include="..\src\differential\equation.hpp" />
     <ClInclude Include="..\src\differential\runge_kutta_4.hpp" />
     <ClInclude Include="..\src\differential\runge_kutta_fehlberg_45.hpp" />
     <ClInclude Include="..\src\interface\agglomerative_interface.h" />

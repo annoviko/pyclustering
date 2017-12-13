@@ -18,11 +18,12 @@
 *
 */
 
-#ifndef CCORE_DIFFERENTIAL_DIFFER_FACTOR_HPP_
-#define CCORE_DIFFERENTIAL_DIFFER_FACTOR_HPP_
+
+#pragma once
 
 
 namespace differential {
+
 
 class factor {
 public:
@@ -63,6 +64,6 @@ public:
     const static double R6;
 };
 
+
 }
 
-#endif

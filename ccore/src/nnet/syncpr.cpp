@@ -26,6 +26,9 @@
 #include "utils.hpp"
 
 
+using namespace std::placeholders;
+
+
 syncpr_invalid_pattern::syncpr_invalid_pattern(void) :
 runtime_error("invalid pattern is used") { }
 
@@ -43,7 +46,8 @@ syncpr::syncpr(const unsigned int num_osc,
     m_increase_strength2(increase_strength2),
     m_coupling(num_osc, std::vector<double>(num_osc, 0.0))
 {
-    set_callback_solver(&syncpr::adapter_phase_kuramoto);
+    equation<double> oscillator_equation = std::bind(&syncpr::phase_kuramoto_equation, this, _1, _2, _3, _4);
+    set_equation(oscillator_equation);
 }
 
 
@@ -58,7 +62,8 @@ syncpr::syncpr(const unsigned int num_osc,
     m_increase_strength2(increase_strength2),
     m_coupling(num_osc, std::vector<double>(num_osc, 0.0))
 {
-    set_callback_solver(&syncpr::adapter_phase_kuramoto);
+    equation<double> oscillator_equation = std::bind(&syncpr::phase_kuramoto_equation, this, _1, _2, _3, _4);
+    set_equation(oscillator_equation);
 }
 
 
@@ -186,8 +191,8 @@ double syncpr::calculate_memory_order(const syncpr_pattern & input_pattern) cons
 }
 
 
-double syncpr::phase_kuramoto(const double t, const double teta, const std::vector<void *> & argv) {
-    size_t oscillator_index = *(unsigned int *)argv[1];
+double syncpr::phase_kuramoto(const double t, const double teta, const std::vector<void *> & argv) const {
+    size_t oscillator_index = *(unsigned int *)argv[0];
 
     double phase = 0.0;
     double term = 0.0;
@@ -209,6 +214,12 @@ double syncpr::phase_kuramoto(const double t, const double teta, const std::vect
 }
 
 
+void syncpr::phase_kuramoto_equation(const double t, const differ_state<double> & inputs,  const differ_extra<void *> & argv, differ_state<double> & outputs) const {
+    outputs.resize(1);
+    outputs[0] = phase_kuramoto(t, inputs[0], argv);
+}
+
+
 void syncpr::validate_pattern(const syncpr_pattern & sample) const {
     if (sample.size() != size()) {
         throw syncpr_invalid_pattern("invalid size of the pattern, it should be the same as network size");
@@ -219,10 +230,4 @@ void syncpr::validate_pattern(const syncpr_pattern & sample) const {
             throw syncpr_invalid_pattern("invalid value in the pattern, pattern value should be +1 or -1");
         }
     }
-}
-
-
-void syncpr::adapter_phase_kuramoto(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs) {
-    outputs.resize(1);
-    outputs[0] = ((syncpr *) argv[0])->phase_kuramoto(t, inputs[0], argv);
 }

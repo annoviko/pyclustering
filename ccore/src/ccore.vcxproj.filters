@@ -378,5 +378,8 @@
     <ClInclude Include="nnet\hhn.hpp">
       <Filter>Source Files\nnet</Filter>
     </ClInclude>
+    <ClInclude Include="differential\equation.hpp">
+      <Filter>Source Files\differential</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

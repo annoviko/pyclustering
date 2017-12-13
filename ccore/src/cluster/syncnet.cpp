@@ -27,6 +27,10 @@
 
 
 
+using namespace std::placeholders;
+
+
+
 void syncnet_analyser::allocate_clusters(const double eps, syncnet_cluster_data & data) {
     allocate_sync_ensembles(eps, data);
 }
@@ -36,7 +40,8 @@ void syncnet_analyser::allocate_clusters(const double eps, syncnet_cluster_data 
 syncnet::syncnet(std::vector<std::vector<double> > * input_data, const double connectivity_radius, const bool enable_conn_weight, const initial_type initial_phases) :
 sync_network(input_data->size(), 1, 0, connection_t::CONNECTION_NONE, initial_type::RANDOM_GAUSSIAN)
 {
-    set_callback_solver(&syncnet::adapter_phase_kuramoto);
+    equation<double> oscillator_equation = std::bind(&syncnet::phase_kuramoto_equation, this, _1, _2, _3, _4);
+    set_equation(oscillator_equation);
 
     oscillator_locations = new std::vector<std::vector<double> >(*input_data);
     create_connections(connectivity_radius, enable_conn_weight);
@@ -46,12 +51,12 @@ sync_network(input_data->size(), 1, 0, connection_t::CONNECTION_NONE, initial_ty
 syncnet::~syncnet() {
     if (oscillator_locations != nullptr) {
         delete oscillator_locations;
-        oscillator_locations = NULL;
+        oscillator_locations = nullptr;
     }
 
     if (distance_conn_weights != nullptr) {
         delete distance_conn_weights;
-        distance_conn_weights = NULL;
+        distance_conn_weights = nullptr;
     }
 }
 
@@ -115,8 +120,8 @@ void syncnet::create_connections(const double connectivity_radius, const bool en
 }
 
 
-double syncnet::phase_kuramoto(const double t, const double teta, const std::vector<void *> & argv) {
-    std::size_t index = *(unsigned int *) argv[1];
+double syncnet::phase_kuramoto(const double t, const double teta, const std::vector<void *> & argv) const {
+    std::size_t index = *(unsigned int *) argv[0];
     std::size_t num_neighbors = 0;
     double phase = 0;
 
@@ -135,7 +140,7 @@ double syncnet::phase_kuramoto(const double t, const double teta, const std::vec
                 phase += std::sin( m_oscillators[k].phase - teta );
                 num_neighbors++;
             }
-        }    
+        }
     }
 
     if (num_neighbors == 0) {
@@ -147,12 +152,12 @@ double syncnet::phase_kuramoto(const double t, const double teta, const std::vec
 }
 
 
-void syncnet::process(const double order, const solve_type solver, const bool collect_dynamic, syncnet_analyser & analyser) {
-    simulate_dynamic(order, 0.1, solver, collect_dynamic, analyser);
+void syncnet::phase_kuramoto_equation(const double t, const differ_state<double> & inputs,  const differ_extra<void *> & argv, differ_state<double> & outputs) const {
+    outputs.resize(1);
+    outputs[0] = phase_kuramoto(t, inputs[0], argv);
 }
 
 
-void syncnet::adapter_phase_kuramoto(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs) {
-    outputs.resize(1);
-    outputs[0] = ((syncnet *) argv[0])->phase_kuramoto(t, inputs[0], argv);
+void syncnet::process(const double order, const solve_type solver, const bool collect_dynamic, syncnet_analyser & analyser) {
+    simulate_dynamic(order, 0.1, solver, collect_dynamic, analyser);
 }

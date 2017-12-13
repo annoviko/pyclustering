@@ -79,7 +79,9 @@ public:
     double memory_order(const syncpr_pattern & input_pattern) const;
 
 protected:
-    double phase_kuramoto(const double t, const double teta, const std::vector<void *> & argv);
+    double phase_kuramoto(const double t, const double teta, const std::vector<void *> & argv) const;
+
+    void phase_kuramoto_equation(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs) const;
 
 private:
     void validate_pattern(const syncpr_pattern & sample) const;
@@ -87,6 +89,4 @@ private:
     void initialize_phases(const syncpr_pattern & sample);
 
     double calculate_memory_order(const syncpr_pattern & input_pattern) const;
-
-    static void adapter_phase_kuramoto(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs);
 };
