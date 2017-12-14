@@ -36,6 +36,12 @@ namespace ccore {
 namespace nnet {
 
 
+hhn_dynamic::hhn_dynamic(void) {
+    initialize_collection(*m_peripheral_dynamic);
+    initialize_collection(*m_central_dynamic);
+}
+
+
 void hhn_dynamic::enable(const hhn_dynamic::collect p_state) {
     if (m_enable[p_state] != true) {
         m_enable[p_state] = true;
@@ -67,6 +73,16 @@ void hhn_dynamic::disable_all(void) {
     }
 
     m_amount_collections = 0;
+}
+
+
+void hhn_dynamic::get_enabled(std::set<hhn_dynamic::collect> & p_enabled) const {
+    get_collected_types(true, p_enabled);
+}
+
+
+void hhn_dynamic::get_disabled(std::set<hhn_dynamic::collect> & p_disabled) const {
+    get_collected_types(false, p_disabled);
 }
 
 
@@ -124,10 +140,41 @@ hhn_dynamic::network_dynamic_ptr hhn_dynamic::get_central_dynamic(void) const {
 }
 
 
+void hhn_dynamic::initialize_collection(network_dynamic & p_dynamic) {
+    p_dynamic[hhn_dynamic::collect::MEMBRANE_POTENTIAL]     = evolution_dynamic();
+    p_dynamic[hhn_dynamic::collect::ACTIVE_COND_SODIUM]     = evolution_dynamic();
+    p_dynamic[hhn_dynamic::collect::INACTIVE_COND_SODIUM]   = evolution_dynamic();
+    p_dynamic[hhn_dynamic::collect::ACTIVE_COND_POTASSIUM]  = evolution_dynamic();
+}
+
+
+void hhn_dynamic::get_collected_types(const bool p_enabled, std::set<hhn_dynamic::collect> & p_types) const {
+    for (const auto & p_collect_element : m_enable) {
+        if (p_collect_element.second == p_enabled) {
+            p_types.insert(p_collect_element.first);
+        }
+    }
+}
+
+
 void hhn_dynamic::reserve_collection(const hhn_dynamic::collect p_state, const std::size_t p_size) {
-    m_peripheral_dynamic->at(p_state).reserve(p_size);
-    m_peripheral_dynamic->at(p_state).reserve(p_size);
+    reserve_dynamic_collection(p_state, p_size, *m_peripheral_dynamic);
+    reserve_dynamic_collection(p_state, p_size, *m_central_dynamic);
+
     m_time->reserve(p_size);
+}
+
+
+void hhn_dynamic::reserve_dynamic_collection(const hhn_dynamic::collect p_state, const std::size_t p_size, network_dynamic & p_dynamic) {
+    if (p_dynamic.find(p_state) != p_dynamic.end()) {
+        p_dynamic.at(p_state).reserve(p_size);
+    }
+    else {
+        evolution_dynamic dynamic;
+        dynamic.reserve(p_size);
+
+        p_dynamic[p_state] = std::move(dynamic);
+    }
 }
 
 
@@ -202,14 +249,14 @@ void hhn_dynamic::store_active_cond_potassium(const std::vector<hhn_oscillator> 
 
 hhn_network::hhn_network(const std::size_t p_size, const hnn_parameters p_parameters) :
     m_peripheral(p_size),
-    m_central(p_size),
+    m_central(2),
     m_stimulus(nullptr),
     m_params(p_parameters)
 { }
 
 
 void hhn_network::simulate(const std::size_t p_steps, const double p_time, const solve_type p_solver, const hhn_stimulus_ptr & p_stimulus, hhn_dynamic & p_output_dynamic) {
-    p_output_dynamic.reserve(p_steps + 1);  /* initial state is not taken into account */
+    p_output_dynamic.reserve(p_steps + 1);
 
     m_stimulus = p_stimulus;
 
@@ -220,12 +267,15 @@ void hhn_network::simulate(const std::size_t p_steps, const double p_time, const
 
     store_dynamic(0.0, p_output_dynamic);
 
-    for (double cur_time = step; cur_time < p_time; cur_time += step) {
+    double cur_time = step;
+    for (std::size_t cur_step = 0; cur_step < p_steps; cur_step++) {
         calculate_states(p_solver, cur_time, step, int_step);
 
         update_peripheral_current();
 
         store_dynamic(cur_time, p_output_dynamic);
+
+        cur_time += step;
     }
 }
 
@@ -336,10 +386,10 @@ void hhn_network::neuron_states(const double t, const differ_state<double> & inp
         Isyn = peripheral_synaptic_current(index, t, v);
     }
     else {
-        std::size_t central_index = size() - index;
+        std::size_t central_index = index - size();
         Iext = m_central[central_index].m_Iext;
         if (central_index == 0) {
-            Isyn = central_first_synaptic_current(index, t, v);
+            Isyn = central_first_synaptic_current(t, v);
         }
     }
 
@@ -384,10 +434,10 @@ double hhn_network::peripheral_synaptic_current(const std::size_t p_index, const
 }
 
 
-double hhn_network::central_first_synaptic_current(const std::size_t p_index, const double p_time, const double p_membrane) const {
+double hhn_network::central_first_synaptic_current(const double p_time, const double p_membrane) const {
     double memory_impact = 0.0;
     for (std::size_t index_oscillator = 0; index_oscillator < size(); index_oscillator++) {
-        for (auto & pulse_time : m_central[index_oscillator].m_pulse_generation_time) {
+        for (auto & pulse_time : m_peripheral[index_oscillator].m_pulse_generation_time) {
             memory_impact += alpha_function(p_time - pulse_time, m_params.m_alfa_excitatory, m_params.m_betta_excitatory);
         }
     }

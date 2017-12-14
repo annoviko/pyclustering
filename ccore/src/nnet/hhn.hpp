@@ -28,6 +28,7 @@
 #include <memory>
 #include <tuple>
 #include <vector>
+#include <set>
 #include <unordered_map>
 
 #include "differential/differ_state.hpp"
@@ -146,10 +147,9 @@ private:
 
 
 public:
-    hhn_dynamic(void) = default;
+    hhn_dynamic(void);
 
     ~hhn_dynamic(void) = default;
-
 
 public:
     void enable(const hhn_dynamic::collect p_state);
@@ -159,6 +159,10 @@ public:
     void disable(const hhn_dynamic::collect p_state);
 
     void disable_all(void);
+
+    void get_enabled(std::set<hhn_dynamic::collect> & p_enabled) const;
+
+    void get_disabled(std::set<hhn_dynamic::collect> & p_disabled) const;
 
     void store(const double p_time, const std::vector<hhn_oscillator> & p_peripheral, const std::vector<central_element> & p_central);
 
@@ -170,7 +174,13 @@ public:
 
 
 private:
+    void initialize_collection(network_dynamic & p_dynamic);
+
+    void get_collected_types(const bool p_enabled, std::set<hhn_dynamic::collect> & p_types) const;
+
     void reserve_collection(const hhn_dynamic::collect p_state, const std::size_t p_size);
+
+    void reserve_dynamic_collection(const hhn_dynamic::collect p_state, const std::size_t p_size, network_dynamic & p_dynamic);
 
     void store_membrane_potential(const std::vector<hhn_oscillator> & p_peripheral, const std::vector<central_element> & p_central);
 
@@ -182,12 +192,11 @@ private:
 };
 
 
+using hhn_stimulus        = std::vector<double>;
+using hhn_stimulus_ptr    = std::shared_ptr<hhn_stimulus>;
+
 
 class hhn_network {
-public:
-    using hhn_stimulus        = std::vector<double>;
-    using hhn_stimulus_ptr    = std::shared_ptr<hhn_stimulus>;
-
 private:
     using hhn_state           = differ_result<double>;
     using hhn_states          = std::vector< hhn_state >;
@@ -235,7 +244,7 @@ private:
 
     double peripheral_synaptic_current(const std::size_t p_index, const double p_time, const double p_membrane) const;
 
-    double central_first_synaptic_current(const std::size_t p_index, const double p_time, const double p_membrane) const;
+    double central_first_synaptic_current(const double p_time, const double p_membrane) const;
 
     double alpha_function(const double p_time, const double p_alfa, const double p_betta) const;
 

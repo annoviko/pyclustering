@@ -57,7 +57,7 @@ TEST(utest_legion, create_10_oscillators_all_to_all_conn) {
 }
 
 
-static void template_dynamic_simulation(const legion_stimulus & stimulus, const connection_t type, const solve_type solver, const unsigned int steps, const double time) {
+static void template_simulation(const legion_stimulus & stimulus, const connection_t type, const solve_type solver, const unsigned int steps, const double time) {
     legion_parameters parameters;
     legion_network network(stimulus.size(), type, parameters);
 
@@ -68,17 +68,17 @@ static void template_dynamic_simulation(const legion_stimulus & stimulus, const 
 }
 
 TEST(utest_legion, one_unstimulated_oscillator_rk4) {
-    template_dynamic_simulation({ 0 }, connection_t::CONNECTION_NONE, solve_type::RUNGE_KUTTA_4, 10, 100);
+    template_simulation({ 0 }, connection_t::CONNECTION_NONE, solve_type::RUNGE_KUTTA_4, 10, 100);
 }
 
 TEST(utest_legion, one_stimulated_oscillator_rk4) {
-    template_dynamic_simulation({ 1 }, connection_t::CONNECTION_GRID_FOUR, solve_type::RUNGE_KUTTA_4, 10, 100);
+    template_simulation({ 1 }, connection_t::CONNECTION_GRID_FOUR, solve_type::RUNGE_KUTTA_4, 10, 100);
 }
 
 TEST(utest_legion, dynamic_simulation_grid_four_rk4) {
-    template_dynamic_simulation({ 1, 1, 1, 0, 0, 0, 1, 1, 1 }, connection_t::CONNECTION_GRID_FOUR, solve_type::RUNGE_KUTTA_4, 10, 100);
+    template_simulation({ 1, 1, 1, 0, 0, 0, 1, 1, 1 }, connection_t::CONNECTION_GRID_FOUR, solve_type::RUNGE_KUTTA_4, 10, 100);
 }
 
 TEST(utest_legion, dynamic_simulation_grid_eight_rk4) {
-    template_dynamic_simulation({ 1, 1, 1, 0, 0, 0, 1, 1, 1 }, connection_t::CONNECTION_GRID_EIGHT, solve_type::RUNGE_KUTTA_4, 10, 100);
+    template_simulation({ 1, 1, 1, 0, 0, 0, 1, 1, 1 }, connection_t::CONNECTION_GRID_EIGHT, solve_type::RUNGE_KUTTA_4, 10, 100);
 }
