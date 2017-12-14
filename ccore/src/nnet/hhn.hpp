@@ -120,6 +120,13 @@ public:
         ACTIVE_COND_POTASSIUM,
     };
 
+    struct collect_hash {
+        std::size_t operator()(hhn_dynamic::collect t) const
+        {
+            return static_cast<std::size_t>(t);
+        }
+    };
+
 
 public:
     using value_dynamic       = std::vector<double>;
@@ -127,16 +134,18 @@ public:
 
     using evolution_dynamic   = std::vector<value_dynamic>;
 
-    using network_dynamic     = std::unordered_map<hhn_dynamic::collect, evolution_dynamic>;
+    using network_collector   = std::unordered_map<hhn_dynamic::collect, bool, hhn_dynamic::collect_hash>;
+    
+    using network_dynamic     = std::unordered_map<hhn_dynamic::collect, evolution_dynamic, hhn_dynamic::collect_hash>;
     using network_dynamic_ptr = std::shared_ptr<network_dynamic>;
 
 
 private:
-    std::unordered_map<hhn_dynamic::collect, bool>   m_enable = 
-    { { collect::MEMBRANE_POTENTIAL,    true  },
-      { collect::ACTIVE_COND_SODIUM,    false },
-      { collect::INACTIVE_COND_SODIUM,  false },
-      { collect::ACTIVE_COND_POTASSIUM, false } };
+    network_collector   m_enable = 
+        { { collect::MEMBRANE_POTENTIAL,    true  },
+          { collect::ACTIVE_COND_SODIUM,    false },
+          { collect::INACTIVE_COND_SODIUM,  false },
+          { collect::ACTIVE_COND_POTASSIUM, false } };
 
     std::size_t         m_amount_collections  = 1;
 
