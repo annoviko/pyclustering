@@ -21,6 +21,7 @@
 #include "cluster/kmedians.hpp"
 
 #include <algorithm>
+#include <cmath>
 
 #include "utils/metric.hpp"
 

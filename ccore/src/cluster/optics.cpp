@@ -21,6 +21,7 @@
 #include "cluster/optics.hpp"
 
 #include <algorithm>
+#include <cmath>
 #include <limits>
 
 #include "ordering_analyser.hpp"

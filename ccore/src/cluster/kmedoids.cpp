@@ -20,6 +20,7 @@
 
 #include "cluster/kmedoids.hpp"
 
+#include <algorithm>
 #include <limits>
 
 #include "utils/metric.hpp"

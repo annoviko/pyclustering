@@ -19,12 +19,10 @@
 */
 
 
-#pragma once
-
-
 #include "metric.hpp"
 
 #include <algorithm>
+#include <cmath>
 
 
 namespace ccore {
