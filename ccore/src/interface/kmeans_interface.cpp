@@ -29,9 +29,9 @@ pyclustering_package * kmeans_algorithm(const pyclustering_package * const p_sam
     p_sample->extract(data);
     p_initial_centers->extract(centers);
 
-    cluster_analysis::kmeans algorithm(centers, p_tolerance);
+    ccore::clst::kmeans algorithm(centers, p_tolerance);
 
-    cluster_analysis::kmeans_data output_result;
+    ccore::clst::kmeans_data output_result;
     algorithm.process(data, output_result);
 
     pyclustering_package * package = create_package(output_result.clusters().get());

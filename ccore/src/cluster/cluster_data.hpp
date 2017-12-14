@@ -25,7 +25,9 @@
 #include <memory>
 
 
-namespace cluster_analysis {
+namespace ccore {
+
+namespace clst {
 
 
 using noise = std::vector<size_t>;
@@ -155,5 +157,7 @@ public:
     bool operator!=(const cluster_data & p_other) const;
 };
 
+
+}
 
 }

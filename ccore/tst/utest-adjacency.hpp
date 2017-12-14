@@ -25,7 +25,7 @@
 #include "container/adjacency.hpp"
 
 
-using namespace container;
+using namespace ccore::container;
 
 
 void template_set_connection(adjacency_collection & collection);

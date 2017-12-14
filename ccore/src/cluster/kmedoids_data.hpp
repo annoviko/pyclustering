@@ -18,9 +18,7 @@
 *
 */
 
-#ifndef SRC_CLUSTER_KMEDOIDS_DATA_HPP_
-#define SRC_CLUSTER_KMEDOIDS_DATA_HPP_
-
+#pragma once
 
 #include <memory>
 #include <vector>
@@ -28,7 +26,9 @@
 #include "cluster/cluster_data.hpp"
 
 
-namespace cluster_analysis {
+namespace ccore {
+
+namespace clst {
 
 
 using medoid_sequence = std::vector<size_t>;
@@ -90,5 +90,4 @@ public:
 
 }
 
-
-#endif
+}

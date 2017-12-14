@@ -29,7 +29,7 @@
 #include <utility>
 
 
-using namespace container;
+using namespace ccore::container;
 
 
 TEST(utest_adjacency_bit_matrix, create_delete) {

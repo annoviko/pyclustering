@@ -26,6 +26,8 @@
 #include "container/adjacency.hpp"
 
 
+namespace ccore {
+
 namespace container {
 
 /**
@@ -170,5 +172,8 @@ public:
 
     adjacency_list & operator=(adjacency_list && another_collection);
 };
+
+
+}
 
 }

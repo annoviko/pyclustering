@@ -24,6 +24,8 @@
 #include "task.hpp"
 
 
+namespace ccore {
+
 namespace parallel {
 
 
@@ -98,5 +100,7 @@ void thread_pool::task_conveyor(const task::ptr p_task, task::ptr & p_next_task)
     }
 }
 
+
+}
 
 }

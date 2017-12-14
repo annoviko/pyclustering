@@ -27,6 +27,8 @@
 #include "container/adjacency_connector.hpp"
 
 
+namespace ccore {
+
 namespace container {
 
 /**
@@ -103,5 +105,8 @@ public:
                                                                           const connection_t structure_type = connection_t::CONNECTION_NONE, 
                                                                           const std::function<double(void)> & weight_value_generator = nullptr);
 };
+
+
+}
 
 }

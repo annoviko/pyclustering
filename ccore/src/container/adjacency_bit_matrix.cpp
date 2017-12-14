@@ -24,6 +24,8 @@
 #include <stdexcept>
 
 
+namespace ccore {
+
 namespace container {
 
 
@@ -115,10 +117,12 @@ adjacency_bit_matrix & adjacency_bit_matrix::operator=(adjacency_bit_matrix && a
         m_adjacency = std::move(another_matrix.m_adjacency);
         m_size = std::move(another_matrix.m_size);
 
-        another_matrix.m_size = 0;    
+        another_matrix.m_size = 0;
     }
 
     return *this;
+}
+
 }
 
 }

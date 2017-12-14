@@ -26,6 +26,9 @@
 #include "cluster/syncnet.hpp"
 
 
+using namespace ccore::clst;
+
+
 static void template_create_delete(const unsigned int size) {
     std::vector<std::vector<double> > sample;
     for (unsigned int i = 0; i < size; i++) {

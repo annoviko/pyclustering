@@ -29,7 +29,7 @@
 #include <utility>
 
 
-using namespace container;
+using namespace ccore::container;
 
 
 TEST(utest_adjacency_list, create_delete) {

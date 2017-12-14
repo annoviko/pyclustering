@@ -18,8 +18,7 @@
 *
 */
 
-#ifndef TST_UTEST_CLUSTER_HPP_
-#define TST_UTEST_CLUSTER_HPP_
+#pragma once
 
 
 #include <algorithm>
@@ -31,7 +30,7 @@
 #include "cluster/cluster_algorithm.hpp"
 
 
-using namespace cluster_analysis;
+using namespace ccore::clst;
 
 
 /***********************************************************************************************
@@ -49,6 +48,3 @@ using namespace cluster_analysis;
 void ASSERT_CLUSTER_SIZES(const dataset & p_data,
         const cluster_sequence & p_actual_clusters,
         const std::vector<size_t> & p_expected_cluster_length);
-
-
-#endif

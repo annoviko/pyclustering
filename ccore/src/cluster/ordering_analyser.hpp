@@ -25,7 +25,9 @@
 #include "optics_data.hpp"
 
 
-namespace cluster_analysis {
+namespace ccore {
+
+namespace clst {
 
 
 /**
@@ -107,5 +109,7 @@ public:
     inline ordering_ptr ordering(void) const { return m_ordering; }
 };
 
+
+}
 
 }

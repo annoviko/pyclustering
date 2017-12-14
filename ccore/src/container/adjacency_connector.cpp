@@ -21,6 +21,8 @@
 #include "container/adjacency_connector.hpp"
 
 
+namespace ccore {
+
 namespace container {
 
 std::ostream & operator<<(std::ostream & p_stream, const connection_t & p_structure) {
@@ -51,6 +53,9 @@ std::ostream & operator<<(std::ostream & p_stream, const connection_t & p_struct
     }
 
     return p_stream;
+}
+
+
 }
 
 }

@@ -29,6 +29,9 @@
 #include <numeric>
 
 
+using namespace ccore::nnet;
+
+
 static void template_create_delete(const unsigned int rows, const unsigned int cols, const som_conn_type conn_type, const som_init_type init_type) {
     som_parameters params;
     params.init_type = init_type;

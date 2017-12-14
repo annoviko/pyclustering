@@ -36,8 +36,13 @@
 #include "nnet/network.hpp"
 
 
-using namespace container;
-using namespace differential;
+using namespace ccore::container;
+using namespace ccore::differential;
+
+
+namespace ccore {
+
+namespace nnet {
 
 
 typedef std::vector<unsigned int>   legion_ensemble;
@@ -193,3 +198,8 @@ private:
         const size_t width,
         const legion_parameters & params);
 };
+
+
+}
+
+}

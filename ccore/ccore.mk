@@ -36,7 +36,7 @@ EXECUTABLE = $(EXECUTABLE_DIRECTORY)/ccore.so
 
 
 # Project sources
-MODULES = . cluster container differential interface nnet parallel tsp
+MODULES = . cluster container differential interface nnet parallel utils
 
 SOURCES_DIRECTORY = src
 SOURCES_DIRECTORIES = $(addprefix $(SOURCES_DIRECTORY)/, $(MODULES))

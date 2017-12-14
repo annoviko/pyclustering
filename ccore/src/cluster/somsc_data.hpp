@@ -25,10 +25,14 @@
 #include "cluster/cluster_data.hpp"
 
 
-namespace cluster_analysis {
+namespace ccore {
+
+namespace clst {
 
 
 using somsc_data = cluster_data;
 
+
+}
 
 }

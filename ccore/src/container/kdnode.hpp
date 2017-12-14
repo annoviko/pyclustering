@@ -26,6 +26,8 @@
 #include <vector>
 
 
+namespace ccore {
+
 namespace container {
 
 /**
@@ -111,5 +113,8 @@ bool operator >= (const std::vector<double> & point, const kdnode & node);
 
 bool operator == (const kdnode & node, const std::vector<double> & point);
 bool operator == (const std::vector<double> & point, const kdnode & node);
+
+
+}
 
 }

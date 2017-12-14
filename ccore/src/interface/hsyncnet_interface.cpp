@@ -23,6 +23,10 @@
 #include "cluster/hsyncnet.hpp"
 
 
+using namespace ccore::clst;
+using namespace ccore::nnet;
+
+
 void * hsyncnet_create_network(const pyclustering_package * const p_sample, 
                                const unsigned int p_number_clusters, 
                                const unsigned int p_initial_phases,

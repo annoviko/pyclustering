@@ -29,6 +29,8 @@
 #include "task.hpp"
 
 
+namespace ccore {
+
 namespace parallel {
 
 
@@ -71,5 +73,7 @@ private:
     void stop(void);
 };
 
+
+}
 
 }

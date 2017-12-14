@@ -137,7 +137,9 @@
     <ClCompile Include="..\src\parallel\task.cpp" />
     <ClCompile Include="..\src\parallel\thread_executor.cpp" />
     <ClCompile Include="..\src\parallel\thread_pool.cpp" />
-    <ClCompile Include="..\src\utils.cpp" />
+    <ClCompile Include="..\src\utils\math.cpp" />
+    <ClCompile Include="..\src\utils\metric.cpp" />
+    <ClCompile Include="..\src\utils\random.cpp" />
     <ClCompile Include="..\tools\gtest\gtest-all.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="samples.cpp" />
@@ -255,7 +257,9 @@
     <ClInclude Include="..\src\parallel\task.hpp" />
     <ClInclude Include="..\src\parallel\thread_executor.hpp" />
     <ClInclude Include="..\src\parallel\thread_pool.hpp" />
-    <ClInclude Include="..\src\utils.hpp" />
+    <ClInclude Include="..\src\utils\math.hpp" />
+    <ClInclude Include="..\src\utils\metric.hpp" />
+    <ClInclude Include="..\src\utils\random.hpp" />
     <ClInclude Include="..\tools\gtest\gtest.h" />
     <ClInclude Include="samples.hpp" />
     <ClInclude Include="utest-adjacency.hpp" />

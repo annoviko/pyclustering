@@ -22,14 +22,17 @@
 #pragma once
 
 
+namespace ccore {
+
+namespace nnet {
+
+
 enum class initial_type {
     RANDOM_GAUSSIAN,
     EQUIPARTITION,
 };
 
 
-enum class solve_type {
-    FORWARD_EULER,
-    RUNGE_KUTTA_4,
-    RUNGE_KUTTA_FEHLBERG_45,
-};
+}
+
+}

@@ -26,6 +26,11 @@
 #include "cluster/syncnet.hpp"
 
 
+namespace ccore {
+
+namespace clst {
+
+
 typedef std::vector<unsigned int>           hsyncnet_cluster;
 typedef ensemble_data<hsyncnet_cluster>     hsyncnet_cluster_data;
 typedef syncnet_analyser                    hsyncnet_analyser;
@@ -63,3 +68,8 @@ private:
 
     double calculate_radius(const double radius, const std::size_t amount_neighbors) const;
 };
+
+
+}
+
+}

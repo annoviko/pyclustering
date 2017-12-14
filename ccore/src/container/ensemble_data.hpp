@@ -18,12 +18,13 @@
 *
 */
 
-#ifndef _ENSEMBLE_DATA_H_
-#define _ENSEMBLE_DATA_H_
+#pragma once
 
 
 #include <vector>
 
+
+namespace ccore {
 
 namespace container {
 
@@ -34,4 +35,4 @@ using ensemble_data = std::vector<sync_ensemble_type>;
 
 }
 
-#endif
+}

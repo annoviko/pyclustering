@@ -29,6 +29,9 @@
 #include <memory>
 
 
+using namespace ccore::nnet;
+
+
 static void CHECK_FREE_PACKAGE(pyclustering_package * package, const std::size_t size = 0) {
     ASSERT_NE(nullptr, package);
     if (size > 0)

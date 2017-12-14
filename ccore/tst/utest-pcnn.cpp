@@ -27,6 +27,9 @@
 #include <unordered_set>
 
 
+using namespace ccore::nnet;
+
+
 static void template_dynamic_generation_runner(
     pcnn & network,
     const unsigned int steps,

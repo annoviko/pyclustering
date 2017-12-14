@@ -25,10 +25,16 @@
 
 #include "cluster/cure.hpp"
 
-#include "utils.hpp"
+#include "utils/metric.hpp"
 
 
-namespace cluster_analysis {
+using namespace ccore::container;
+using namespace ccore::utils::metric;
+
+
+namespace ccore {
+
+namespace clst {
 
 
 cure_cluster::cure_cluster(void) : mean(nullptr), closest(nullptr), distance_closest(0) {
@@ -396,5 +402,7 @@ void cure::process(const dataset & p_data, cluster_data & p_result) {
     queue = nullptr;
 }
 
+
+}
 
 }

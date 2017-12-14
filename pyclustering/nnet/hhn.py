@@ -456,12 +456,10 @@ class hhn_network(network):
             
             memory_impact1 = 0.0;
             for i in range(0, len(self._central_element[0].pulse_generation_time)):
-                # TODO: alfa function shouldn't be calculated here (long procedure)
                 memory_impact1 += self.__alfa_function(t - self._central_element[0].pulse_generation_time[i], self._params.alfa_inhibitory, self._params.betta_inhibitory);
             
             memory_impact2 = 0.0;
             for i in range(0, len(self._central_element[1].pulse_generation_time)):
-                # TODO: alfa function shouldn't be calculated here (long procedure)
                 memory_impact2 += self.__alfa_function(t - self._central_element[1].pulse_generation_time[i], self._params.alfa_inhibitory, self._params.betta_inhibitory);        
     
             Isyn = self._params.w2 * (v - self._params.Vsyninh) * memory_impact1 + self._link_weight3[index] * (v - self._params.Vsyninh) * memory_impact2;            
@@ -474,7 +472,6 @@ class hhn_network(network):
                 memory_impact = 0.0;
                 for index_oscillator in range(0, self._num_osc):
                     for index_generation in range(0, len(self._pulse_generation_time[index_oscillator])):
-                        # TODO: alfa function shouldn't be calculated here (long procedure)
                         memory_impact += self.__alfa_function(t - self._pulse_generation_time[index_oscillator][index_generation], self._params.alfa_excitatory, self._params.betta_excitatory);
                  
                 Isyn = self._params.w1 * (v - self._params.Vsynexc) * memory_impact;

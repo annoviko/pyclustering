@@ -25,6 +25,8 @@
 #include <cstdlib>
 
 
+namespace ccore {
+
 namespace container {
 
 /**
@@ -137,5 +139,7 @@ public:
     */
     virtual double get_connection_weight(const size_t node_index1, const size_t node_index2) const = 0;
 };
+
+}
 
 }

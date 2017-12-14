@@ -26,10 +26,18 @@
 #include "container/adjacency_connector.hpp"
 #include "container/adjacency_matrix.hpp"
 
-#include "utils.hpp"
+#include "utils/math.hpp"
+#include "utils/metric.hpp"
 
 
 using namespace std::placeholders;
+
+using namespace ccore::utils::math;
+
+
+namespace ccore {
+
+namespace nnet {
 
 
 const size_t legion_network::MAXIMUM_MATRIX_REPRESENTATION_SIZE = 4096;
@@ -139,7 +147,7 @@ void legion_network::calculate_states(const legion_stimulus & stimulus, const so
 
         switch(solver) {
             case solve_type::FORWARD_EULER: {
-                throw std::runtime_error("Forward Euler first-order method is not supported due to low accuracy.");
+                throw std::invalid_argument("Forward Euler first-order method is not supported due to low accuracy.");
             }
 
             case solve_type::RUNGE_KUTTA_4: {
@@ -253,6 +261,7 @@ void legion_network::neuron_states(const double t, const differ_state<double> & 
     outputs.push_back(dp);
 }
 
+
 void legion_network::neuron_simplify_states(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs) {
     unsigned int index = *(unsigned int *) argv[0];
 
@@ -320,4 +329,9 @@ void legion_network::initialize(const size_t num_osc, const connection_t connect
     else {
         connector.create_structure(connection_type, *m_static_connections);
     }
+}
+
+
+}
+
 }

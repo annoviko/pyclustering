@@ -31,6 +31,7 @@
     <ClCompile Include="cluster\optics.cpp" />
     <ClCompile Include="cluster\ordering_analyser.cpp" />
     <ClCompile Include="cluster\rock.cpp" />
+    <ClCompile Include="cluster\somsc.cpp" />
     <ClCompile Include="cluster\syncnet.cpp" />
     <ClCompile Include="cluster\xmeans.cpp" />
     <ClCompile Include="container\adjacency_bit_matrix.cpp" />
@@ -69,7 +70,9 @@
     <ClCompile Include="parallel\task.cpp" />
     <ClCompile Include="parallel\thread_executor.cpp" />
     <ClCompile Include="parallel\thread_pool.cpp" />
-    <ClCompile Include="utils.cpp" />
+    <ClCompile Include="utils\math.cpp" />
+    <ClCompile Include="utils\metric.cpp" />
+    <ClCompile Include="utils\random.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cluster\agglomerative.hpp" />
@@ -90,6 +93,8 @@
     <ClInclude Include="cluster\optics_data.hpp" />
     <ClInclude Include="cluster\ordering_analyser.hpp" />
     <ClInclude Include="cluster\rock.hpp" />
+    <ClInclude Include="cluster\somsc.hpp" />
+    <ClInclude Include="cluster\somsc_data.hpp" />
     <ClInclude Include="cluster\syncnet.hpp" />
     <ClInclude Include="cluster\xmeans.hpp" />
     <ClInclude Include="cluster\xmeans_data.hpp" />
@@ -110,6 +115,7 @@
     <ClInclude Include="differential\equation.hpp" />
     <ClInclude Include="differential\runge_kutta_4.hpp" />
     <ClInclude Include="differential\runge_kutta_fehlberg_45.hpp" />
+    <ClInclude Include="differential\solve_type.hpp" />
     <ClInclude Include="interface\agglomerative_interface.h" />
     <ClInclude Include="interface\cure_interface.h" />
     <ClInclude Include="interface\dbscan_interface.h" />
@@ -138,7 +144,9 @@
     <ClInclude Include="parallel\task.hpp" />
     <ClInclude Include="parallel\thread_executor.hpp" />
     <ClInclude Include="parallel\thread_pool.hpp" />
-    <ClInclude Include="utils.hpp" />
+    <ClInclude Include="utils\math.hpp" />
+    <ClInclude Include="utils\metric.hpp" />
+    <ClInclude Include="utils\random.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{DBEBB335-D398-45F8-899A-503AFC64ACFE}</ProjectGuid>

@@ -23,6 +23,8 @@
 #include "container/adjacency.hpp"
 
 
+namespace ccore {
+
 namespace container {
 
 /**
@@ -194,5 +196,8 @@ public:
     */
     adjacency_bit_matrix & operator=(adjacency_bit_matrix && another_matrix);
 };
+
+
+}
 
 }

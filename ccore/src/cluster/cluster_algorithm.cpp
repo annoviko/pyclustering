@@ -22,10 +22,14 @@
 #include "cluster_algorithm.hpp"
 
 
-namespace cluster_analysis {
+namespace ccore {
+
+namespace clst {
 
 
 cluster_algorithm::~cluster_algorithm(void) { }
 
+
+}
 
 }

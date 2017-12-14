@@ -26,6 +26,14 @@
 #include "nnet/sync.hpp"
 
 
+using namespace ccore::nnet;
+
+
+namespace ccore {
+
+namespace clst {
+
+
 using syncnet_cluster       = std::vector<unsigned int>;
 using syncnet_cluster_data  = ensemble_data<syncnet_cluster>;
 
@@ -124,3 +132,8 @@ protected:
      */
     void create_connections(const double connectivity_radius, const bool enable_conn_weight);
 };
+
+
+}
+
+}

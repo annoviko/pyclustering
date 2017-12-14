@@ -23,12 +23,18 @@
 
 #include <limits>
 
-#include "utils.hpp"
+#include "utils/metric.hpp"
 
 
+using namespace ccore::utils::metric;
+using namespace ccore::nnet;
 
 using namespace std::placeholders;
 
+
+namespace ccore {
+
+namespace clst {
 
 
 void syncnet_analyser::allocate_clusters(const double eps, syncnet_cluster_data & data) {
@@ -160,4 +166,9 @@ void syncnet::phase_kuramoto_equation(const double t, const differ_state<double>
 
 void syncnet::process(const double order, const solve_type solver, const bool collect_dynamic, syncnet_analyser & analyser) {
     simulate_dynamic(order, 0.1, solver, collect_dynamic, analyser);
+}
+
+
+}
+
 }

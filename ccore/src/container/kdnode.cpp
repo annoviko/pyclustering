@@ -22,6 +22,8 @@
 #include "kdnode.hpp"
 
 
+namespace ccore {
+
 namespace container {
 
 
@@ -167,5 +169,7 @@ bool operator == (const std::vector<double> & point, const kdnode & node) {
     return node == point;
 }
 
+
+}
 
 }

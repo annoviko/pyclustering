@@ -26,6 +26,8 @@
 #include "container/adjacency.hpp"
 
 
+namespace ccore {
+
 namespace container {
 
 /**
@@ -214,5 +216,8 @@ public:
 
     adjacency_weight_list & operator=(adjacency_weight_list && another_collection);
 };
+
+
+}
 
 }

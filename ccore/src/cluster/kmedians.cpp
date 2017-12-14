@@ -20,10 +20,17 @@
 
 #include "cluster/kmedians.hpp"
 
-#include "utils.hpp"
+#include <algorithm>
+
+#include "utils/metric.hpp"
 
 
-namespace cluster_analysis {
+using namespace ccore::utils::metric;
+
+
+namespace ccore {
+
+namespace clst {
 
 
 kmedians::kmedians(void) :
@@ -155,5 +162,7 @@ double kmedians::update_medians(cluster_sequence & clusters, dataset & medians) 
     return maximum_change;
 }
 
+
+}
 
 }

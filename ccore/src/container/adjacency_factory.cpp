@@ -26,7 +26,10 @@
 #include "container/adjacency_weight_list.hpp"
 
 
+namespace ccore {
+
 namespace container {
+
 
 std::shared_ptr<adjacency_collection> adjacency_unweight_factory::create_collection(const size_t amount_nodes, const adjacency_unweight_t storing_type, const connection_t structure_type) {
     adjacency_collection * collection = nullptr;
@@ -77,6 +80,9 @@ std::shared_ptr<adjacency_weight_collection> adjacency_weight_factory::create_co
     connector.create_structure(structure_type, *collection);
 
     return std::shared_ptr<adjacency_weight_collection>(collection);
+}
+
+
 }
 
 }

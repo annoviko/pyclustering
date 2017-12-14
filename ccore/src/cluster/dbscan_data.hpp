@@ -18,8 +18,7 @@
 *
 */
 
-#ifndef SRC_CLUSTER_DBSCAN_DATA_HPP_
-#define SRC_CLUSTER_DBSCAN_DATA_HPP_
+#pragma once
 
 
 #include <memory>
@@ -28,7 +27,9 @@
 #include "cluster/cluster_data.hpp"
 
 
-namespace cluster_analysis {
+namespace ccore {
+
+namespace clst {
 
 
 /**
@@ -39,7 +40,7 @@ namespace cluster_analysis {
 */
 class dbscan_data : public cluster_data {
 private:
-    noise_ptr       m_noise = std::make_shared<cluster_analysis::noise>();
+    noise_ptr       m_noise = std::make_shared<clst::noise>();
 
 public:
     /**
@@ -86,5 +87,4 @@ public:
 
 }
 
-
-#endif
+}

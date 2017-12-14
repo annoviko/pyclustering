@@ -26,6 +26,9 @@
 #include <cmath>
 
 
+using namespace ccore::nnet;
+
+
 static void template_create_delete(const connection_t type, const initial_type initial) {
     sync_network * network = new sync_network(25, 1, 1, type, initial);
 

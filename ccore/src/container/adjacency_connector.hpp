@@ -29,6 +29,8 @@
 #include "container/adjacency.hpp"
 
 
+namespace ccore {
+
 namespace container {
 
 /**
@@ -390,5 +392,8 @@ public:
         }
     }
 };
+
+
+}
 
 }

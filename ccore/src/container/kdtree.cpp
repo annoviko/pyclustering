@@ -22,9 +22,15 @@
 
 #include <limits>
 #include <iostream>
+#include <stack>
 
-#include "utils.hpp"
+#include "utils/metric.hpp"
 
+
+using namespace ccore::utils::metric;
+
+
+namespace ccore {
 
 namespace container {
 
@@ -398,5 +404,7 @@ void kdtree_searcher::clear(void) const {
     m_proc      = nullptr;
 }
 
+
+}
 
 }

@@ -30,7 +30,9 @@
 #include "cluster/dbscan_data.hpp"
 
 
-namespace cluster_analysis {
+namespace ccore {
+
+namespace clst {
 
 
 /**
@@ -110,5 +112,7 @@ private:
     void create_kdtree(const dataset & p_data);
 };
 
+
+}
 
 }

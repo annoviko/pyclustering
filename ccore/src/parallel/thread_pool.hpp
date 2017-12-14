@@ -29,6 +29,8 @@
 #include "thread_executor.hpp"
 
 
+namespace ccore {
+
 namespace parallel {
 
 
@@ -71,5 +73,7 @@ private:
     void task_conveyor(const task::ptr p_task, task::ptr & p_next_task);
 };
 
+
+}
 
 }

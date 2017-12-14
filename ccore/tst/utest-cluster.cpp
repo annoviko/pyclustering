@@ -23,6 +23,9 @@
 #include <numeric>
 
 
+using namespace ccore::clst;
+
+
 void ASSERT_CLUSTER_SIZES(const dataset & p_data, const cluster_sequence & p_actual_clusters, const std::vector<size_t> & p_expected_cluster_length) {
     if (p_expected_cluster_length.empty() && p_actual_clusters.empty()) {
         return;

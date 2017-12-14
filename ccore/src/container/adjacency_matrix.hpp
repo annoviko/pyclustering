@@ -24,7 +24,10 @@
 #include "container/adjacency.hpp"
 
 
+namespace ccore {
+
 namespace container {
+
 
 /**
 *
@@ -210,5 +213,8 @@ public:
 
     adjacency_matrix & operator=(adjacency_matrix && another_collection);
 };
+
+
+}
 
 }

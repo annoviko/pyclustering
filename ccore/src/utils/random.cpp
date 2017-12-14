@@ -18,24 +18,30 @@
 *
 */
 
-#include "interface/kmedoids_interface.h"
+#include "random.hpp"
 
-#include "cluster/kmedoids.hpp"
+#include <chrono>
+#include <random>
 
 
-pyclustering_package * kmedoids_algorithm(const pyclustering_package * const p_sample, const pyclustering_package * const p_package_medoids, const double p_tolerance) {
-    ccore::clst::medoid_sequence medoids;
-    p_package_medoids->extract(medoids);
+namespace ccore {
 
-    ccore::clst::kmedoids algorithm(medoids, p_tolerance);
+namespace utils {
 
-    dataset input_dataset;
-    p_sample->extract(input_dataset);
+namespace random {
 
-    ccore::clst::kmedoids_data output_result;
-    algorithm.process(input_dataset, output_result);
 
-    pyclustering_package * package = create_package(output_result.clusters().get());
-    return package;
+double generate_normal_random(const double p_from, const double p_to) {
+    unsigned seed = (unsigned) std::chrono::system_clock::now().time_since_epoch().count();
+    std::default_random_engine generator(seed);
+
+    std::normal_distribution<double> distribution(p_from, p_to);
+    return distribution(generator);
 }
 
+
+}
+
+}
+
+}

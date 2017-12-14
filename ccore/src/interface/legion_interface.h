@@ -24,7 +24,7 @@
 #include "interface/pyclustering_package.hpp"
 
 #include "definitions.hpp"
-#include "utils.hpp"
+
 
 /**
  *

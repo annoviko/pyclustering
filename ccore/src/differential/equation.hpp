@@ -25,7 +25,10 @@
 #include <functional>
 
 #include "differ_state.hpp"
+#include "solve_type.hpp"
 
+
+namespace ccore {
 
 namespace differential {
 
@@ -33,5 +36,7 @@ namespace differential {
 template <class state_type, class extra_type = void *>
 using equation = std::function<void (double, const differ_state<state_type> &, const differ_extra<extra_type> &, differ_state<state_type> &) >;
 
+
+}
 
 }

@@ -24,6 +24,8 @@
 #include <exception>
 
 
+namespace ccore {
+
 namespace parallel {
 
 
@@ -83,5 +85,7 @@ void thread_executor::stop(void) {
     m_executor.join();
 }
 
+
+}
 
 }

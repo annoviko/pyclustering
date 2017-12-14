@@ -18,24 +18,26 @@
 *
 */
 
-#include "interface/kmedoids_interface.h"
 
-#include "cluster/kmedoids.hpp"
+#include "math.hpp"
 
 
-pyclustering_package * kmedoids_algorithm(const pyclustering_package * const p_sample, const pyclustering_package * const p_package_medoids, const double p_tolerance) {
-    ccore::clst::medoid_sequence medoids;
-    p_package_medoids->extract(medoids);
 
-    ccore::clst::kmedoids algorithm(medoids, p_tolerance);
+namespace ccore {
 
-    dataset input_dataset;
-    p_sample->extract(input_dataset);
+namespace utils {
 
-    ccore::clst::kmedoids_data output_result;
-    algorithm.process(input_dataset, output_result);
+namespace math {
 
-    pyclustering_package * package = create_package(output_result.clusters().get());
-    return package;
+
+double heaviside(const double value) {
+    if (value >= 0.0) { return 1.0; }
+    return 0.0;
 }
 
+
+}
+
+}
+
+}

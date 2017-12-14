@@ -31,7 +31,7 @@
 #include <container/adjacency_weight_list.hpp>
 
 
-using namespace container;
+using namespace ccore::container;
 
 
 enum class grid_t { GRID_FOUR, GRID_EIGHT };

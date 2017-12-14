@@ -18,24 +18,32 @@
 *
 */
 
-#include "interface/kmedoids_interface.h"
 
-#include "cluster/kmedoids.hpp"
+#pragma once
 
 
-pyclustering_package * kmedoids_algorithm(const pyclustering_package * const p_sample, const pyclustering_package * const p_package_medoids, const double p_tolerance) {
-    ccore::clst::medoid_sequence medoids;
-    p_package_medoids->extract(medoids);
+namespace ccore {
 
-    ccore::clst::kmedoids algorithm(medoids, p_tolerance);
+namespace utils {
 
-    dataset input_dataset;
-    p_sample->extract(input_dataset);
+namespace random {
 
-    ccore::clst::kmedoids_data output_result;
-    algorithm.process(input_dataset, output_result);
 
-    pyclustering_package * package = create_package(output_result.clusters().get());
-    return package;
+/**
+ *
+ * @brief   Returns random value using specified mean and deviation using normal distribution.
+ *
+ * @param[in] p_mean: Mean.
+ * @param[in] p_dev:  Standard deviation.
+ *
+ * @return  Returns random variable.
+ *
+ */
+double generate_normal_random(const double p_mean = 0.0, const double p_dev = 1.0);
+
+
 }
 
+}
+
+}

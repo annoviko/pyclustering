@@ -18,8 +18,7 @@
 *
 */
 
-#ifndef _AGGLOMERATIVE_HPP_
-#define _AGGLOMERATIVE_HPP_
+#pragma once
 
 
 #include <vector>
@@ -29,7 +28,9 @@
 #include "definitions.hpp"
 
 
-namespace cluster_analysis {
+namespace ccore {
+
+namespace clst {
 
 
 using agglomerative_data = cluster_data;
@@ -153,4 +154,4 @@ private:
 
 }
 
-#endif
+}

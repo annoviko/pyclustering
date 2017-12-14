@@ -28,6 +28,11 @@
 #include "definitions.hpp"
 
 
+namespace ccore {
+
+namespace nnet {
+
+
 /**
 *
 * @brief   Connection structures that can be established in self-organized feature map.
@@ -301,3 +306,8 @@ private:
     */
     double calculate_init_radius(const size_t p_rows, const size_t p_cols) const;
 };
+
+
+}
+
+}

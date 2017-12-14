@@ -27,7 +27,7 @@
 #include "utest-cluster.hpp"
 
 
-using namespace cluster_analysis;
+using namespace ccore::clst;
 
 
 static void

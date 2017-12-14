@@ -23,10 +23,19 @@
 #include <complex>
 #include <cmath>
 
-#include "utils.hpp"
+#include "utils/math.hpp"
+#include "utils/metric.hpp"
 
 
 using namespace std::placeholders;
+
+using namespace ccore::utils::math;
+using namespace ccore::utils::metric;
+
+
+namespace ccore {
+
+namespace nnet {
 
 
 syncpr_invalid_pattern::syncpr_invalid_pattern(void) :
@@ -108,7 +117,7 @@ void syncpr::simulate_static(const unsigned int steps,
             m_oscillators[i].phase = 0.0;
         }
         else {
-            m_oscillators[i].phase = utils::pi / 2.0;
+            m_oscillators[i].phase = pi / 2.0;
         }
     }
 
@@ -166,7 +175,7 @@ void syncpr::initialize_phases(const syncpr_pattern & sample) {
             m_oscillators[i].phase = 0.0;
         }
         else {
-            m_oscillators[i].phase = utils::pi / 2.0;
+            m_oscillators[i].phase = pi / 2.0;
         }
     }
 }
@@ -230,4 +239,9 @@ void syncpr::validate_pattern(const syncpr_pattern & sample) const {
             throw syncpr_invalid_pattern("invalid value in the pattern, pattern value should be +1 or -1");
         }
     }
+}
+
+
+}
+
 }

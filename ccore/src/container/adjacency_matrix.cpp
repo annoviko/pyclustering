@@ -21,7 +21,10 @@
 #include "container/adjacency_matrix.hpp"
 
 
+namespace ccore {
+
 namespace container {
+
 
 const double adjacency_matrix::DEFAULT_EXISTANCE_CONNECTION_VALUE = 1.0;
 const double adjacency_matrix::DEFAULT_NON_EXISTANCE_CONNECTION_VALUE = 0.0;
@@ -98,6 +101,9 @@ adjacency_matrix & adjacency_matrix::operator=(adjacency_matrix && another_colle
     }
 
     return *this;
+}
+
+
 }
 
 }

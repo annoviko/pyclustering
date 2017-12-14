@@ -21,11 +21,14 @@
 #pragma once
 
 
-#include "differential/differ_state.hpp"
-#include "differential/equation.hpp"
+#include "differ_state.hpp"
+#include "equation.hpp"
+#include "solve_type.hpp"
 
 #include <functional>
 
+
+namespace ccore {
 
 namespace differential {
 
@@ -84,5 +87,7 @@ void runge_kutta_4(const equation<state_type, extra_type> & func,
     }
 }
 
+
+}
 
 }

@@ -28,7 +28,7 @@
 #include <algorithm>
 
 
-using namespace container;
+using namespace ccore::container;
 
 
 class utest_kdtree : public ::testing::Test {

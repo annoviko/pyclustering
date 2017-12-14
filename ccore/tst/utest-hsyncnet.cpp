@@ -24,6 +24,9 @@
 #include "cluster/hsyncnet.hpp"
 
 
+using namespace ccore::clst;
+
+
 static void template_cluster_allocation(const unsigned int number_clusters) {
     bool result_testing = false;
 

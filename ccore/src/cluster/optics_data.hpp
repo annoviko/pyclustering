@@ -25,7 +25,9 @@
 #include "cluster/dbscan_data.hpp"
 
 
-namespace cluster_analysis {
+namespace ccore {
+
+namespace clst {
 
 
 using ordering = std::vector<double>;
@@ -41,7 +43,7 @@ using ordering_ptr = std::shared_ptr<ordering>;
 */
 class optics_data : public dbscan_data {
 private:
-    ordering_ptr     m_ordering = std::make_shared<cluster_analysis::ordering>();
+    ordering_ptr     m_ordering = std::make_shared<clst::ordering>();
     double           m_radius = 0;
 
 public:
@@ -102,5 +104,7 @@ public:
     inline void set_radius(const double p_radius) { m_radius = p_radius; }
 };
 
+
+}
 
 }

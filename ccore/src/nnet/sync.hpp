@@ -35,8 +35,13 @@
 #include "nnet/network.hpp"
 
 
-using namespace container;
-using namespace differential;
+using namespace ccore::container;
+using namespace ccore::differential;
+
+
+namespace ccore {
+
+namespace nnet {
 
 
 typedef struct sync_oscillator {
@@ -535,3 +540,8 @@ private:
         const size_t width,
         const initial_type initial_phases);
 };
+
+
+}
+
+}

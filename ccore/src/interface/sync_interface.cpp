@@ -24,6 +24,9 @@
 #include "nnet/sync.hpp"
 
 
+using namespace ccore::nnet;
+
+
 void * sync_create_network(const unsigned int size, const double weight_factor, const double frequency_factor, const unsigned int connection_type, const unsigned int initial_phases) {
     return (void *) new sync_network(size, weight_factor, frequency_factor, (connection_t) connection_type, (initial_type) initial_phases);
 }

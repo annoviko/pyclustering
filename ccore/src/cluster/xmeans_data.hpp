@@ -18,8 +18,7 @@
 *
 */
 
-#ifndef SRC_CLUSTER_XMEANS_DATA_HPP_
-#define SRC_CLUSTER_XMEANS_DATA_HPP_
+#pragma once
 
 
 #include <memory>
@@ -31,7 +30,9 @@
 #include "definitions.hpp"
 
 
-namespace cluster_analysis {
+namespace ccore {
+
+namespace clst {
 
 
 using xmeans_data       = kmeans_data;
@@ -39,5 +40,4 @@ using xmeans_data       = kmeans_data;
 
 }
 
-
-#endif
+}

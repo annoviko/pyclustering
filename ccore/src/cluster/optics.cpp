@@ -20,13 +20,15 @@
 
 #include "cluster/optics.hpp"
 
+#include <algorithm>
 #include <limits>
 
 #include "ordering_analyser.hpp"
-#include "utils.hpp"
 
 
-namespace cluster_analysis {
+namespace ccore {
+
+namespace clst {
 
 
 optics_descriptor::optics_descriptor(const std::size_t p_index, const double p_core_distance, const double p_reachability_distance) :
@@ -262,5 +264,7 @@ void optics::create_kdtree(void) {
     }
 }
 
+
+}
 
 }

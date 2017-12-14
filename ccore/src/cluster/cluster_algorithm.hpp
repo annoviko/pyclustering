@@ -18,8 +18,7 @@
 *
 */
 
-#ifndef SRC_CLUSTER_CLUSTER_ALGORITHM_HPP_
-#define SRC_CLUSTER_CLUSTER_ALGORITHM_HPP_
+#pragma once
 
 
 #include <vector>
@@ -29,7 +28,9 @@
 #include "definitions.hpp"
 
 
-namespace cluster_analysis {
+namespace ccore {
+
+namespace clst {
 
 
 /**
@@ -61,5 +62,4 @@ public:
 
 }
 
-
-#endif
+}

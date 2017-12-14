@@ -21,6 +21,8 @@
 #include "container/adjacency_weight_list.hpp"
 
 
+namespace ccore {
+
 namespace container {
 
 
@@ -114,5 +116,7 @@ adjacency_weight_list & adjacency_weight_list::operator=(adjacency_weight_list &
     return *this;
 }
 
+
+}
 
 }

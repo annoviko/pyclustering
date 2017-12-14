@@ -91,7 +91,7 @@ def cluster_wing_nut():
     template_clustering(2, FCPS_SAMPLES.SAMPLE_WING_NUT, 1, 1);
     
 def cluster_chainlink():
-    template_clustering(2, FCPS_SAMPLES.SAMPLE_CHAINLINK);
+    template_clustering(2, FCPS_SAMPLES.SAMPLE_CHAINLINK, 30, 0.2);
     
 def cluster_hepta():
     template_clustering(7, FCPS_SAMPLES.SAMPLE_HEPTA); 

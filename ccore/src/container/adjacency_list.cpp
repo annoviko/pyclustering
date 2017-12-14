@@ -24,6 +24,8 @@
 #include <stdexcept>
 
 
+namespace ccore {
+
 namespace container {
 
 
@@ -89,6 +91,9 @@ adjacency_list & adjacency_list::operator=(adjacency_list && another_collection)
     }
 
     return *this;
+}
+
+
 }
 
 }

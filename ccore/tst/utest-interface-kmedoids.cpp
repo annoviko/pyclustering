@@ -30,9 +30,12 @@
 #include <memory>
 
 
+using namespace ccore::clst;
+
+
 TEST(utest_interface_kmedoids, kmedoids_api) {
     std::shared_ptr<pyclustering_package> sample = pack(dataset({ { 1 }, { 2 }, { 3 }, { 10 }, { 11 }, { 12 } }));
-    std::shared_ptr<pyclustering_package> medoids = pack(cluster_analysis::medoid_sequence({ 2, 4 }));
+    std::shared_ptr<pyclustering_package> medoids = pack(medoid_sequence({ 2, 4 }));
 
     pyclustering_package * kmedoids_result = kmedoids_algorithm(sample.get(), medoids.get(), 0.1);
     ASSERT_NE(nullptr, kmedoids_result);

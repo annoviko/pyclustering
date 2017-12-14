@@ -23,6 +23,9 @@
     <Filter Include="Source Files\parallel">
       <UniqueIdentifier>{365c5d13-b65a-4bc5-bdfe-63b4ecd03660}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\utils">
+      <UniqueIdentifier>{348cf7ab-8c40-440d-ab36-cf1a431c5990}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cluster\agglomerative.cpp">
@@ -87,9 +90,6 @@
     </ClCompile>
     <ClCompile Include="nnet\syncpr.cpp">
       <Filter>Source Files\nnet</Filter>
-    </ClCompile>
-    <ClCompile Include="utils.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="differential\differ_factor.cpp">
       <Filter>Source Files\differential</Filter>
@@ -178,6 +178,18 @@
     <ClCompile Include="nnet\hhn.cpp">
       <Filter>Source Files\nnet</Filter>
     </ClCompile>
+    <ClCompile Include="utils\random.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\metric.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\math.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="cluster\somsc.cpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cluster\agglomerative.hpp">
@@ -254,9 +266,6 @@
     </ClInclude>
     <ClInclude Include="nnet\syncpr.hpp">
       <Filter>Source Files\nnet</Filter>
-    </ClInclude>
-    <ClInclude Include="utils.hpp">
-      <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="differential\differ_factor.hpp">
       <Filter>Source Files\differential</Filter>
@@ -380,6 +389,24 @@
     </ClInclude>
     <ClInclude Include="differential\equation.hpp">
       <Filter>Source Files\differential</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\random.hpp">
+      <Filter>Source Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\metric.hpp">
+      <Filter>Source Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\math.hpp">
+      <Filter>Source Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="differential\solve_type.hpp">
+      <Filter>Source Files\differential</Filter>
+    </ClInclude>
+    <ClInclude Include="cluster\somsc.hpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="cluster\somsc_data.hpp">
+      <Filter>Source Files\cluster</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

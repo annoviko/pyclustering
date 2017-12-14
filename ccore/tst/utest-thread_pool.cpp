@@ -29,7 +29,7 @@
 #include <vector>
 
 
-using namespace parallel;
+using namespace ccore::parallel;
 
 
 static void template_create_delete_test(const std::size_t p_size) {

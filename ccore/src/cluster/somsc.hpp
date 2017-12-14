@@ -28,7 +28,9 @@
 #include "nnet/som.hpp"
 
 
-namespace cluster_analysis {
+namespace ccore {
+
+namespace clst {
 
 
 class somsc : public cluster_algorithm {
@@ -88,5 +90,7 @@ public:
     virtual void process(const dataset & p_data, cluster_data & p_result) override;
 };
 
+
+}
 
 }

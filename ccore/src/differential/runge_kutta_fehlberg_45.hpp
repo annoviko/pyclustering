@@ -24,12 +24,16 @@
 
 #include <cmath>
 
-#include "differential/differ_factor.hpp"
-#include "differential/differ_state.hpp"
-#include "differential/equation.hpp"
+#include "differ_factor.hpp"
+#include "differ_state.hpp"
+#include "equation.hpp"
+#include "solve_type.hpp"
 
+
+namespace ccore {
 
 namespace differential {
+
 
 template <typename state_type, typename extra_type = void *>
 void runge_kutta_fehlberg_45(
@@ -148,6 +152,9 @@ void runge_kutta_fehlberg_45(
             break;
         }
     }
+}
+
+
 }
 
 }

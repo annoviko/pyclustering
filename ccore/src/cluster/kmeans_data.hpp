@@ -18,8 +18,7 @@
 *
 */
 
-#ifndef SRC_CLUSTER_KMEANS_DATA_HPP_
-#define SRC_CLUSTER_KMEANS_DATA_HPP_
+#pragma once
 
 
 #include <memory>
@@ -30,7 +29,9 @@
 #include "definitions.hpp"
 
 
-namespace cluster_analysis {
+namespace ccore {
+
+namespace clst {
 
 
 /**
@@ -88,5 +89,4 @@ public:
 
 }
 
-
-#endif
+}

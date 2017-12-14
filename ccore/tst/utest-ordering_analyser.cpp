@@ -27,6 +27,9 @@
 #include "utest-cluster.hpp"
 
 
+using namespace ccore::clst;
+
+
 TEST(utest_ordering, cluster_allocation_identical_ordering) {
     ordering_ptr cluster_ordering = std::shared_ptr<ordering>(new ordering({5.0, 5.0, 5.0, 5.0, 5.0, 5.0}));
     ordering_analyser analyser(cluster_ordering);

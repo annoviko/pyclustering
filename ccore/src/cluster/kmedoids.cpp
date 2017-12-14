@@ -20,12 +20,17 @@
 
 #include "cluster/kmedoids.hpp"
 
-#include "utils.hpp"
-
 #include <limits>
 
+#include "utils/metric.hpp"
 
-namespace cluster_analysis {
+
+using namespace ccore::utils::metric;
+
+
+namespace ccore {
+
+namespace clst {
 
 
 kmedoids::kmedoids(void) :
@@ -153,5 +158,7 @@ double kmedoids::calculate_changes(const medoid_sequence & p_medoids) const {
     return maximum_difference;
 }
 
+
+}
 
 }

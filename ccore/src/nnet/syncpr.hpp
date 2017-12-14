@@ -24,6 +24,11 @@
 #include "nnet/sync.hpp"
 
 
+namespace ccore {
+
+namespace nnet {
+
+
 typedef std::vector<std::vector<double> >   matrix;
 typedef std::vector<int>                    syncpr_pattern;
 
@@ -90,3 +95,8 @@ private:
 
     double calculate_memory_order(const syncpr_pattern & input_pattern) const;
 };
+
+
+}
+
+}

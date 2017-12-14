@@ -22,10 +22,15 @@
 
 #include <algorithm>
 
-#include "utils.hpp"
+#include "utils/metric.hpp"
 
 
-namespace cluster_analysis {
+using namespace ccore::utils::metric;
+
+
+namespace ccore {
+
+namespace clst {
 
 
 agglomerative::agglomerative(void) :
@@ -244,5 +249,7 @@ void agglomerative::calculate_center(const cluster & cluster, point & center) {
     }
 }
 
+
+}
 
 }

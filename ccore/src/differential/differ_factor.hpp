@@ -22,6 +22,8 @@
 #pragma once
 
 
+namespace ccore {
+
 namespace differential {
 
 
@@ -67,3 +69,4 @@ public:
 
 }
 
+}

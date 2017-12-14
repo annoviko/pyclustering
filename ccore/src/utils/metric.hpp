@@ -18,46 +18,18 @@
 *
 */
 
+
 #pragma once
 
-#include <stdexcept>
 
-#include <string>
-#include <fstream>
-#include <sstream>
-
-#include <stack>
 #include <vector>
-#include <cmath>
-#include <algorithm>
 
-#include "nnet/network.hpp"
 
+namespace ccore {
 
 namespace utils {
 
-
-/**
- *
- * @brief   Mathematical constant pi.
- *
- */
-const double pi = 3.14159265358979323846;
-
-}
-
-
-/**
- *
- * @brief   Calculates Heaviside function.
- * @details If value >= 0.0 then 1.0 is returned, otherwise 0.0 is returned.
- *
- * @param[in] value: Input argument of the Heaviside function.
- *
- * @return  Returns result of Heaviside function.
- *
- */
-double heaviside(const double value);
+namespace metric {
 
 
 /**
@@ -124,23 +96,7 @@ double euclidean_distance(const std::vector<double> & point1, const std::vector<
 double average_neighbor_distance(const std::vector<std::vector<double> > * points, const std::size_t num_neigh);
 
 
-namespace utils {
-
-namespace random {
-
-
-/**
- *
- * @brief   Returns random value using specified mean and deviation using normal distribution.
- *
- * @param[in] p_mean: Mean.
- * @param[in] p_dev:  Standard deviation.
- *
- * @return  Returns random variable.
- *
- */
-double generate_normal_random(const double p_mean = 0.0, const double p_dev = 1.0);
-
+}
 
 }
 

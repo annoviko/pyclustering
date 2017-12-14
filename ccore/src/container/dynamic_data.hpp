@@ -24,6 +24,8 @@
 #include <vector>
 
 
+namespace ccore {
+
 namespace container {
 
 /**
@@ -103,5 +105,8 @@ private:
 
     using std::vector<DynamicType>::data;
 };
+
+
+}
 
 }

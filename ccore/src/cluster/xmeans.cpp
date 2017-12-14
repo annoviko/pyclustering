@@ -28,10 +28,16 @@
 
 #include "cluster/xmeans.hpp"
 
-#include "utils.hpp"
+#include "utils/math.hpp"
+#include "utils/metric.hpp"
 
 
-namespace cluster_analysis {
+using namespace ccore::utils::metric;
+
+
+namespace ccore {
+
+namespace clst {
 
 
 const double             xmeans::DEFAULT_SPLIT_DIFFERENCE                = 0.001;
@@ -303,7 +309,7 @@ double xmeans::bayesian_information_criterion(const cluster_sequence & analysed_
         /* splitting criterion */
         for (std::size_t index_cluster = 0; index_cluster < analysed_centers.size(); index_cluster++) {
             double n = (double) analysed_clusters[index_cluster].size();
-            double L = n * std::log(n) - n * std::log(N) - n * std::log(2.0 * utils::pi) / 2.0 - n * dimension * std::log(sigma) / 2.0 - (n - K) / 2.0;
+            double L = n * std::log(n) - n * std::log(N) - n * std::log(2.0 * utils::math::pi) / 2.0 - n * dimension * std::log(sigma) / 2.0 - (n - K) / 2.0;
 
             scores[index_cluster] = L - p * 0.5 * std::log(N);
         }
@@ -358,5 +364,7 @@ double xmeans::minimum_noiseless_description_length(const cluster_sequence & clu
     return score;
 }
 
+
+}
 
 }

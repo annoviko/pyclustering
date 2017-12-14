@@ -26,6 +26,9 @@
 #include <algorithm>
 
 
+using namespace ccore::nnet;
+
+
 static void template_syncpr_create_delete(const unsigned int size) {
     syncpr * network = new syncpr(size, 0.5, 0.5);
     ASSERT_EQ(size, network->size());

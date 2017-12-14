@@ -21,6 +21,9 @@
 #include "interface/pcnn_interface.h"
 
 
+using namespace ccore::nnet;
+
+
 void * pcnn_create(const unsigned int p_size, const unsigned int p_connection_type, const unsigned int p_height, const unsigned int p_width, const void * const p_parameters) {
     pcnn * pcnn_network = new pcnn(p_size, (connection_t) p_connection_type, p_height, p_width, *((pcnn_parameters *) p_parameters));
     return (void *) pcnn_network;

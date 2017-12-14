@@ -21,7 +21,12 @@
 #include "cluster/somsc.hpp"
 
 
-namespace cluster_analysis {
+using namespace ccore::nnet;
+
+
+namespace ccore {
+
+namespace clst {
 
 
 somsc::somsc(const std::size_t p_amount_clusters, const std::size_t p_epoch) :
@@ -40,5 +45,7 @@ void somsc::process(const dataset & data, cluster_data & output_result) {
     som_map.allocate_capture_objects((som_gain_sequence &) *(output_result.clusters()));
 }
 
+
+}
 
 }

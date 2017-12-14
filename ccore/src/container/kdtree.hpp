@@ -30,6 +30,8 @@
 #include "definitions.hpp"
 
 
+namespace ccore {
+
 namespace container {
 
 
@@ -308,5 +310,7 @@ private:
     void store_user_nodes_if_reachable(const kdnode::ptr node) const;
 };
 
+
+}
 
 }

@@ -32,10 +32,12 @@
 
 
 
-using namespace parallel;
+using namespace ccore::parallel;
 
 
-namespace cluster_analysis {
+namespace ccore {
+
+namespace clst {
 
 
 enum class splitting_type {
@@ -142,3 +144,4 @@ private:
 
 }
 
+}

@@ -28,6 +28,9 @@
 #include "utest-cluster.hpp"
 
 
+using namespace ccore::clst;
+
+
 static std::shared_ptr<optics_data>
 template_optics_length_process_data(const std::shared_ptr<dataset> & p_data,
         const double p_radius,

@@ -19,7 +19,21 @@
 */
 
 
-#include "hhn.hpp"
+#include "nnet/hhn.hpp"
+
+#include "differential/differ_state.hpp"
+#include "differential/runge_kutta_4.hpp"
+#include "differential/runge_kutta_fehlberg_45.hpp"
+
+
+using namespace std::placeholders;
+
+using namespace ccore::utils::random;
+
+
+namespace ccore {
+
+namespace nnet {
 
 
 void hhn_dynamic::enable(const hhn_dynamic::collect p_state) {
@@ -190,7 +204,7 @@ hhn_network::hhn_network(const std::size_t p_size, const hnn_parameters p_parame
     m_peripheral(p_size),
     m_central(p_size),
     m_stimulus(nullptr),
-    m_parameters(p_parameters)
+    m_params(p_parameters)
 { }
 
 
@@ -202,15 +216,21 @@ void hhn_network::simulate(const std::size_t p_steps, const double p_time, const
     const double step = p_time / (double) p_steps;
     const double int_step = step / 10.0;
 
+    initialize_current();
+
     store_dynamic(0.0, p_output_dynamic);
 
     for (double cur_time = step; cur_time < p_time; cur_time += step) {
         calculate_states(p_solver, cur_time, step, int_step);
+
+        update_peripheral_current();
+
+        store_dynamic(cur_time, p_output_dynamic);
     }
 }
 
 
-size_t hhn_network::size(void) const {
+std::size_t hhn_network::size(void) const {
     return m_peripheral.size();
 }
 
@@ -221,10 +241,181 @@ void hhn_network::store_dynamic(const double p_time, hhn_dynamic & p_dynamic) {
 
 
 void hhn_network::calculate_states(const solve_type p_solver, const double p_time, const double p_step, const double p_int_step) {
-    (void) p_solver;
-    (void) p_time;
-    (void) p_step;
-    (void) p_int_step;
+    hhn_states next_peripheral_states(m_peripheral.size());
+    calculate_peripheral_states(p_solver, p_time, p_step, p_int_step, next_peripheral_states);
 
-    /* Wait for refactoring of differential part */
+    hhn_states next_central_states(m_central.size());
+    calculate_central_states(p_solver, p_time, p_step, p_int_step, next_central_states);
+}
+
+
+void hhn_network::calculate_peripheral_states(const solve_type p_solver, const double p_time, const double p_step, const double p_int_step, hhn_states & p_next_states) {
+    std::vector<void *> argv(1, nullptr);
+
+    for (std::size_t index = 0; index < m_peripheral.size(); index++) {
+        argv[0] = (void *) &index;
+
+        differ_state<double> inputs { 
+            m_peripheral[index].m_membrane_potential,
+            m_peripheral[index].m_active_cond_sodium,
+            m_peripheral[index].m_inactive_cond_sodium,
+            m_peripheral[index].m_active_cond_potassium
+        };
+
+        perform_calculation(p_solver, p_time, p_step, p_int_step, inputs, argv, p_next_states[index]);
+    }
+}
+
+
+void hhn_network::calculate_central_states(const solve_type p_solver, const double p_time, const double p_step, const double p_int_step, hhn_states & p_next_states) {
+    std::vector<void *> argv(1, nullptr);
+
+    for (std::size_t index = 0; index < m_central.size(); index++) {
+        std::size_t index_central = index + m_peripheral.size();
+        argv[0] = (void *) &index_central;
+
+        differ_state<double> inputs { 
+            m_central[index].m_membrane_potential,
+            m_central[index].m_active_cond_sodium,
+            m_central[index].m_inactive_cond_sodium,
+            m_central[index].m_active_cond_potassium
+        };
+
+        perform_calculation(p_solver, p_time, p_step, p_int_step, inputs, argv, p_next_states[index]);
+    }
+}
+
+
+void hhn_network::perform_calculation(const solve_type p_solver, const double p_time, const double p_step, const double p_int_step, const differ_state<double> & p_inputs, const differ_extra<> & p_extra, hhn_state & p_next_states) {
+    equation<double> peripheral_equation = std::bind(&hhn_network::neuron_states, this, _1, _2, _3, _4);
+
+    switch(p_solver) {
+        case solve_type::FORWARD_EULER: {
+            throw std::invalid_argument("Forward Euler first-order method is not supported due to low accuracy.");
+        }
+
+        case solve_type::RUNGE_KUTTA_4: {
+            std::size_t number_int_steps = (std::size_t) (p_step / p_int_step);
+            runge_kutta_4(peripheral_equation, p_inputs, p_time, p_time + p_step, number_int_steps, false, p_extra, p_next_states);
+            break;
+        }
+
+        case solve_type::RUNGE_KUTTA_FEHLBERG_45: {
+            runge_kutta_fehlberg_45(peripheral_equation, p_inputs, p_time, p_time + p_step, 0.00001, false, p_extra, p_next_states);
+            break;
+        }
+
+        default: {
+            throw std::invalid_argument("Specified differential solver is not supported.");
+        }
+    }
+}
+
+
+void hhn_network::neuron_states(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs) {
+    std::size_t index = *(std::size_t *) argv[0];
+
+    double v = inputs[0];       /* membrane potential (v)                               */
+    double m = inputs[1];       /* activation conductance of the sodium channel (m)     */
+    double h = inputs[2];       /* inactivaton conductance of the sodium channel (h)    */
+    double n = inputs[3];       /* activation conductance of the potassium channel (n)  */
+
+    /* Calculate ion current */
+    double active_sodium_part = m_params.m_gNa * std::pow(m, 3) * h * (v - m_params.m_vNa);
+    double inactive_sodium_part = m_params.m_gK * std::pow(n, 4) * (v - m_params.m_vK);
+    double active_potassium_part = m_params.m_gL * (v - m_params.m_vL);
+
+    double Iion = active_sodium_part + inactive_sodium_part + active_potassium_part;
+
+    double Iext = 0.0;
+    double Isyn = 0.0;
+
+    /* External and internal currents */
+    if (index < size()) {
+        Iext = m_peripheral[index].m_Iext;
+        Isyn = peripheral_synaptic_current(index, t, v);
+    }
+    else {
+        std::size_t central_index = size() - index;
+        Iext = m_central[central_index].m_Iext;
+        if (central_index == 0) {
+            Isyn = central_first_synaptic_current(index, t, v);
+        }
+    }
+
+    /* Membrane potential */
+    double dv = -Iion + Iext - Isyn;
+
+    /* Calculate variables */
+    double potential = v - m_params.m_vRest;
+    double am = (2.5 - 0.1 * potential) / (std::exp(2.5 - 0.1 * potential) - 1.0);
+    double ah = 0.07 * std::exp(-potential / 20.0);
+    double an = (0.1 - 0.01 * potential) / (std::exp(1.0 - 0.1 * potential) - 1.0);
+
+    double bm = 4.0 * std::exp(-potential / 18.0);
+    double bh = 1.0 / (std::exp(3.0 - 0.1 * potential) + 1.0);
+    double bn = 0.125 * std::exp(-potential / 80.0);
+
+    double dm = am * (1.0 - m) - bm * m;
+    double dh = ah * (1.0 - h) - bh * h;
+    double dn = an * (1.0 - n) - bn * n;
+
+    outputs = { dv, dm, dh, dn };
+}
+
+
+double hhn_network::peripheral_external_current(const std::size_t p_index) const {
+    return (*m_stimulus)[p_index] * generate_normal_random(0.5, 0.5);
+}
+
+
+double hhn_network::peripheral_synaptic_current(const std::size_t p_index, const double p_time, const double p_membrane) const {
+    double memory_impact1 = 0.0;
+    for (auto & pulse_time : m_central[0].m_pulse_generation_time) {
+        memory_impact1 += alpha_function(p_time - pulse_time, m_params.m_alfa_inhibitory, m_params.m_betta_inhibitory);
+    }
+
+    double memory_impact2 = 0.0;
+    for (auto & pulse_time : m_central[1].m_pulse_generation_time) {
+        memory_impact2 += alpha_function(p_time - pulse_time, m_params.m_alfa_inhibitory, m_params.m_betta_inhibitory);
+    }
+
+    return m_params.m_w2 * (p_membrane - m_params.m_Vsyninh) * memory_impact1 + m_peripheral[p_index].m_link_weight3 * (p_membrane - m_params.m_Vsyninh) * memory_impact2;
+}
+
+
+double hhn_network::central_first_synaptic_current(const std::size_t p_index, const double p_time, const double p_membrane) const {
+    double memory_impact = 0.0;
+    for (std::size_t index_oscillator = 0; index_oscillator < size(); index_oscillator++) {
+        for (auto & pulse_time : m_central[index_oscillator].m_pulse_generation_time) {
+            memory_impact += alpha_function(p_time - pulse_time, m_params.m_alfa_excitatory, m_params.m_betta_excitatory);
+        }
+    }
+
+    return m_params.m_w1 * (p_membrane - m_params.m_Vsynexc) * memory_impact;
+}
+
+
+double hhn_network::alpha_function(const double p_time, const double p_alfa, const double p_betta) const {
+    return p_alfa * p_time * std::exp(-p_betta * p_time);
+}
+
+
+void hhn_network::initialize_current(void) {
+    update_peripheral_current();
+
+    m_central[0].m_Iext = m_params.m_Icn1;
+    m_central[1].m_Iext = m_params.m_Icn2;
+}
+
+
+void hhn_network::update_peripheral_current(void) {
+    for (std::size_t index = 0; index < m_peripheral.size(); index++) {
+        m_peripheral[index].m_Iext = (*m_stimulus)[index] * generate_normal_random(0.5, 0.5);
+    }
+}
+
+
+}
+
 }

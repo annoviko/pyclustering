@@ -22,15 +22,29 @@
 #pragma once
 
 
-#include "utils.hpp"
+#include "utils/metric.hpp"
+#include "utils/random.hpp"
 
 #include <memory>
+#include <tuple>
+#include <vector>
 #include <unordered_map>
+
+#include "differential/differ_state.hpp"
+
+
+using namespace ccore::differential;
+using namespace ccore::utils::random;
+
+
+namespace ccore {
+
+namespace nnet {
 
 
 struct hnn_parameters {
 public:
-    double m_nu       = utils::random::generate_normal_random(0.5, 0.5);     /* Intrinsic noise      */
+    double m_nu       = generate_normal_random(0.5, 0.5);     /* Intrinsic noise      */
 
     double m_gNa      = 120.0 * (1 + 0.02 * m_nu);    /* Maximal conductivity for sodium current     */
     double m_gK       = 36.0 * (1 + 0.02 * m_nu);     /* Maximal conductivity for potassium current  */
@@ -72,6 +86,8 @@ public:
 
     bool m_pulse_generation         = false;            /* Spike generation of central neuron   */
     std::vector<double> m_pulse_generation_time = { };  /* Timestamps of generated pulses       */
+
+    double m_Iext   = 0.0;
 };
 
 
@@ -89,7 +105,7 @@ struct hhn_oscillator {
     bool m_pulse_generation                     = false;
     std::vector<double> m_pulse_generation_time = { };
 
-    double m_noise = utils::random::generate_normal_random(0.5, 0.5);
+    double m_Iext   = 0.0;
 };
 
 
@@ -173,12 +189,17 @@ public:
     using hhn_stimulus_ptr    = std::shared_ptr<hhn_stimulus>;
 
 private:
+    using hhn_state           = differ_result<double>;
+    using hhn_states          = std::vector< hhn_state >;
+
+private:
     std::vector<hhn_oscillator>   m_peripheral  = { };
+
     std::vector<central_element>  m_central     = { };
 
     hhn_stimulus_ptr              m_stimulus    = nullptr;
 
-    hnn_parameters                m_parameters;
+    hnn_parameters                m_params;
 
 public:
     hhn_network(void) = default;
@@ -195,10 +216,35 @@ public:
                   const hhn_stimulus_ptr &  p_stimulus,
                   hhn_dynamic &             p_output_dynamic);
 
-    size_t size(void) const;
+    std::size_t size(void) const;
 
 private:
     void store_dynamic(const double p_time, hhn_dynamic & p_dynamic);
 
     void calculate_states(const solve_type p_solver, const double p_time, const double p_step, const double p_int_step);
+
+    void calculate_peripheral_states(const solve_type p_solver, const double p_time, const double p_step, const double p_int_step, hhn_states & p_next_states);
+
+    void calculate_central_states(const solve_type p_solver, const double p_time, const double p_step, const double p_int_step, hhn_states & p_next_states);
+
+    void perform_calculation(const solve_type p_solver, const double p_time, const double p_step, const double p_int_step, const differ_state<double> & p_inputs, const differ_extra<> & p_extra, hhn_state & p_next_states);
+
+    void neuron_states(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs);
+
+    double peripheral_external_current(const std::size_t p_index) const;
+
+    double peripheral_synaptic_current(const std::size_t p_index, const double p_time, const double p_membrane) const;
+
+    double central_first_synaptic_current(const std::size_t p_index, const double p_time, const double p_membrane) const;
+
+    double alpha_function(const double p_time, const double p_alfa, const double p_betta) const;
+
+    void initialize_current(void);
+
+    void update_peripheral_current(void);
 };
+
+
+}
+
+}

@@ -18,24 +18,39 @@
 *
 */
 
-#include "interface/kmedoids_interface.h"
-
-#include "cluster/kmedoids.hpp"
+#pragma once
 
 
-pyclustering_package * kmedoids_algorithm(const pyclustering_package * const p_sample, const pyclustering_package * const p_package_medoids, const double p_tolerance) {
-    ccore::clst::medoid_sequence medoids;
-    p_package_medoids->extract(medoids);
+namespace ccore {
 
-    ccore::clst::kmedoids algorithm(medoids, p_tolerance);
+namespace utils {
 
-    dataset input_dataset;
-    p_sample->extract(input_dataset);
+namespace math {
 
-    ccore::clst::kmedoids_data output_result;
-    algorithm.process(input_dataset, output_result);
 
-    pyclustering_package * package = create_package(output_result.clusters().get());
-    return package;
+/**
+ *
+ * @brief   Mathematical constant pi.
+ *
+ */
+const double pi = 3.14159265358979323846;
+
+
+/**
+ *
+ * @brief   Calculates Heaviside function.
+ * @details If value >= 0.0 then 1.0 is returned, otherwise 0.0 is returned.
+ *
+ * @param[in] value: Input argument of the Heaviside function.
+ *
+ * @return  Returns result of Heaviside function.
+ *
+ */
+double heaviside(const double value);
+
+
 }
 
+}
+
+}

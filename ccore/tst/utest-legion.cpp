@@ -24,6 +24,9 @@
 #include "nnet/legion.hpp"
 
 
+using namespace ccore::nnet;
+
+
 static void template_create_delete(const unsigned int num_osc, const connection_t type) {
     legion_parameters parameters;
     legion_network * network = new legion_network(num_osc, type, parameters);

@@ -22,6 +22,8 @@
 #include "task.hpp"
 
 
+namespace ccore {
+
 namespace parallel {
 
 
@@ -65,5 +67,7 @@ void task::operator()() {
     m_task();
 }
 
+
+}
 
 }

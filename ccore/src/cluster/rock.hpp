@@ -18,8 +18,7 @@
 *
 */
 
-#ifndef _ROCK_H_
-#define _ROCK_H_
+#pragma once
 
 
 #include <vector>
@@ -32,10 +31,12 @@
 #include "definitions.hpp"
 
 
-using namespace container;
+using namespace ccore::container;
 
 
-namespace cluster_analysis {
+namespace ccore {
+
+namespace clst {
 
 
 using rock_data = cluster_data;
@@ -142,5 +143,4 @@ private:
 
 }
 
-
-#endif
+}

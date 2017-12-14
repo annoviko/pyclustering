@@ -27,6 +27,8 @@
 #include <memory>
 
 
+namespace ccore {
+
 namespace parallel {
 
 
@@ -79,5 +81,7 @@ public:
     void operator()();
 };
 
+
+}
 
 }

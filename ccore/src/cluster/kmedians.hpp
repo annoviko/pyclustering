@@ -18,8 +18,7 @@
 *
 */
 
-#ifndef _KMEDIANS_H_
-#define _KMEDIANS_H_
+#pragma once
 
 
 #include <memory>
@@ -28,7 +27,9 @@
 #include "cluster/kmedians_data.hpp"
 
 
-namespace cluster_analysis {
+namespace ccore {
+
+namespace clst {
 
 
 /**
@@ -119,5 +120,4 @@ private:
 
 }
 
-
-#endif
+}

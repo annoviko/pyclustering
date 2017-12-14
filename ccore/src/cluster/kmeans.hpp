@@ -18,8 +18,7 @@
 *
 */
 
-#ifndef _KMEANS_H_
-#define _KMEANS_H_
+#pragma once
 
 
 #include <vector>
@@ -28,7 +27,9 @@
 #include "cluster/kmeans_data.hpp"
 
 
-namespace cluster_analysis {
+namespace ccore {
+
+namespace clst {
 
 
 /**
@@ -103,5 +104,4 @@ private:
 
 }
 
-
-#endif
+}
