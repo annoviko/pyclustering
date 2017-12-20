@@ -109,7 +109,7 @@ class fsync_dynamic:
         
         """
         
-        return pyclustering.utils.allocate_sync_ensembles(self.__amplitude, tolerance);
+        return pyclustering.utils.allocate_sync_ensembles(self.__amplitude, tolerance, 0.0);
 
 
     def extract_number_oscillations(self, index, amplitude_threshold):

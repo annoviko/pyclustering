@@ -190,6 +190,9 @@
     <ClCompile Include="cluster\somsc.cpp">
       <Filter>Source Files\cluster</Filter>
     </ClCompile>
+    <ClCompile Include="nnet\dynamic_analyser.cpp">
+      <Filter>Source Files\nnet</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cluster\agglomerative.hpp">
@@ -407,6 +410,9 @@
     </ClInclude>
     <ClInclude Include="cluster\somsc_data.hpp">
       <Filter>Source Files\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="nnet\dynamic_analyser.hpp">
+      <Filter>Source Files\nnet</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

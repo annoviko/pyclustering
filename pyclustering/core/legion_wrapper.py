@@ -101,8 +101,8 @@ def legion_get_size(legion_network_pointer):
 def legion_dynamic_destroy(legion_dynamic_pointer):
     ccore = load_core();
     ccore.legion_dynamic_destroy(legion_dynamic_pointer);
-    
-    
+
+
 def legion_dynamic_get_output(legion_dynamic_pointer):
     ccore = load_core();
     

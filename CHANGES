@@ -37,6 +37,12 @@ GENERAL CHANGES:
 
 
 CORRECTED MAJOR BUGS:
+- Amplitude threshold is ignored during synchronous ensembles allocation for amplitude output dynamic 'allocate_sync_ensembles' - affect HNN, LEGION (pyclustering.utils).
+  See: no reference.
+
+- Wrong indexes can be returned during synchronous ensembles allocation for amplitude output dynamic 'allocate_sync_ensembles' - affect HNN, LEGION (pyclustering.utils).
+  See: no reference.
+
 - Amount of allocated clusters can be differ from amount of centers in X-Means algorithm (ccore.xmeans).
   See: https://github.com/annoviko/pyclustering/issues/389
 
