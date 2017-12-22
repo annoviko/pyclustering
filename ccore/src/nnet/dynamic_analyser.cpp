@@ -80,21 +80,21 @@ bool spike::compare(const spike & p_other, const double p_tolerance) const {
 
 
 
-const std::size_t basic_dynamic_analyser::INVALID_ITERATION = std::numeric_limits<std::size_t>::max();
+const std::size_t dynamic_analyser::INVALID_ITERATION = std::numeric_limits<std::size_t>::max();
 
-const std::size_t basic_dynamic_analyser::DEFAULT_AMOUNT_SPIKES = 1;
+const std::size_t dynamic_analyser::DEFAULT_AMOUNT_SPIKES = 1;
 
-const double basic_dynamic_analyser::DEFAULT_TOLERANCE = 0.1;
+const double dynamic_analyser::DEFAULT_TOLERANCE = 0.1;
 
 
-basic_dynamic_analyser::basic_dynamic_analyser(const double p_threshold, const double p_tolerance, const std::size_t p_spikes) :
+dynamic_analyser::dynamic_analyser(const double p_threshold, const double p_tolerance, const std::size_t p_spikes) :
     m_threshold(p_threshold),
     m_spikes(p_spikes),
     m_tolerance(p_tolerance)
 { }
 
 
-bool basic_dynamic_analyser::is_sync_spikes(const spike_collection & p_spikes1, const spike_collection & p_spikes2) const {
+bool dynamic_analyser::is_sync_spikes(const spike_collection & p_spikes1, const spike_collection & p_spikes2) const {
     if (p_spikes1.size() != p_spikes2.size()) {
         return false;
     }

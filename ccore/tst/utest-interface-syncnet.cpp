@@ -28,7 +28,7 @@
 
 #include "cluster/syncnet.hpp"
 
-#include "utenv-utils.hpp"
+#include "utenv_utils.hpp"
 
 
 static void CHECK_FREE_PACKAGE(pyclustering_package * package) {

@@ -82,11 +82,6 @@ public:
     legion_dynamic(void) { }
 
     virtual ~legion_dynamic(void) { }
-
-public:
-    void allocate_sync_ensembles(const double amplitude, ensemble_data<legion_ensemble> & sync_ensembles) const;
-
-    void allocate_spike_ensembles(const double amplitude, ensemble_data<legion_ensemble> & spike_ensembles) const;
 };
 
 

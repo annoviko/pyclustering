@@ -158,9 +158,6 @@
     <ClCompile Include="utest-agglomerative.cpp">
       <Filter>Unit Tests</Filter>
     </ClCompile>
-    <ClCompile Include="utest-cluster.cpp">
-      <Filter>Unit Tests</Filter>
-    </ClCompile>
     <ClCompile Include="utest-cure.cpp">
       <Filter>Unit Tests</Filter>
     </ClCompile>
@@ -226,9 +223,6 @@
     </ClCompile>
     <ClCompile Include="utest-interface-cure.cpp">
       <Filter>Unit Tests</Filter>
-    </ClCompile>
-    <ClCompile Include="utenv-utils.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="utest-interface-dbscan.cpp">
       <Filter>Unit Tests</Filter>
@@ -349,6 +343,12 @@
     </ClCompile>
     <ClCompile Include="..\src\nnet\dynamic_analyser.cpp">
       <Filter>Tested Code\nnet</Filter>
+    </ClCompile>
+    <ClCompile Include="utenv_check.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="utenv_utils.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -493,14 +493,8 @@
     <ClInclude Include="..\src\interface\pyclustering_package.hpp">
       <Filter>Tested Code\interface</Filter>
     </ClInclude>
-    <ClInclude Include="utest-cluster.hpp">
-      <Filter>Unit Tests</Filter>
-    </ClInclude>
     <ClInclude Include="utest-adjacency.hpp">
       <Filter>Unit Tests</Filter>
-    </ClInclude>
-    <ClInclude Include="utenv-utils.hpp">
-      <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="..\src\interface\cure_interface.h">
       <Filter>Tested Code\interface</Filter>
@@ -576,6 +570,12 @@
     </ClInclude>
     <ClInclude Include="..\src\nnet\dynamic_analyser.hpp">
       <Filter>Tested Code\nnet</Filter>
+    </ClInclude>
+    <ClInclude Include="utenv_check.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utenv_utils.hpp">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

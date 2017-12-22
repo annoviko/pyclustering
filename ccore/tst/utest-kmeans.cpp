@@ -24,7 +24,7 @@
 #include "samples.hpp"
 
 #include "cluster/kmeans.hpp"
-#include "utest-cluster.hpp"
+#include "utenv_check.hpp"
 
 
 using namespace ccore::clst;

@@ -66,7 +66,7 @@ public:
 };
 
 
-class basic_dynamic_analyser {
+class dynamic_analyser {
 private:
     using spike_collection      = std::vector<spike>;
 
@@ -81,9 +81,9 @@ private:
     double                    m_tolerance     = DEFAULT_TOLERANCE;
 
 public:
-    basic_dynamic_analyser(void) = default;
+    dynamic_analyser(void) = default;
 
-    basic_dynamic_analyser(const double p_threshold, const double p_tolerance = DEFAULT_TOLERANCE, const std::size_t p_spikes = DEFAULT_AMOUNT_SPIKES);
+    dynamic_analyser(const double p_threshold, const double p_tolerance = DEFAULT_TOLERANCE, const std::size_t p_spikes = DEFAULT_AMOUNT_SPIKES);
 
     template<class DynamicType, class EnsemblesType>
     void allocate_sync_ensembles(const DynamicType & p_dynamic, EnsemblesType & p_ensembles, typename EnsemblesType::value_type & p_dead) const;
@@ -107,7 +107,7 @@ private:
 
 
 template<class DynamicType, class EnsemblesType>
-void basic_dynamic_analyser::allocate_sync_ensembles(const DynamicType & p_dynamic, EnsemblesType & p_ensembles, typename EnsemblesType::value_type & p_dead) const {
+void dynamic_analyser::allocate_sync_ensembles(const DynamicType & p_dynamic, EnsemblesType & p_ensembles, typename EnsemblesType::value_type & p_dead) const {
     std::vector<spike_collection> oscillations;
     extract_oscillations(p_dynamic, oscillations);
     extract_ensembles(oscillations, p_ensembles, p_dead);
@@ -115,7 +115,7 @@ void basic_dynamic_analyser::allocate_sync_ensembles(const DynamicType & p_dynam
 
 
 template<class DynamicType>
-void basic_dynamic_analyser::extract_oscillations(const DynamicType & p_dynamic, std::vector<spike_collection> & p_oscillations) const {
+void dynamic_analyser::extract_oscillations(const DynamicType & p_dynamic, std::vector<spike_collection> & p_oscillations) const {
     std::size_t amount_oscillators = p_dynamic[0].size();
     p_oscillations = std::vector<spike_collection>(amount_oscillators);
 
@@ -127,7 +127,7 @@ void basic_dynamic_analyser::extract_oscillations(const DynamicType & p_dynamic,
 
 
 template<class DynamicType>
-void basic_dynamic_analyser::extract_spikes(const DynamicType & p_dynamic, const std::size_t p_index, spike_collection & p_spikes) const {
+void dynamic_analyser::extract_spikes(const DynamicType & p_dynamic, const std::size_t p_index, spike_collection & p_spikes) const {
     std::size_t position = p_dynamic.size() - 1;
     for (std::size_t cur_spike = 0; (cur_spike < m_spikes) && (position > 0); cur_spike++) {
         std::size_t stop = find_spike_end(p_dynamic, p_index, position);
@@ -144,11 +144,11 @@ void basic_dynamic_analyser::extract_spikes(const DynamicType & p_dynamic, const
 
 
 template<class DynamicType>
-std::size_t basic_dynamic_analyser::find_spike_end(const DynamicType & p_dynamic, const std::size_t p_index, const std::size_t p_position) const {
+std::size_t dynamic_analyser::find_spike_end(const DynamicType & p_dynamic, const std::size_t p_index, const std::size_t p_position) const {
     std::size_t time_stop_simulation = p_position;
     bool spike_fired = false;
 
-    if (p_dynamic[time_stop_simulation][p_index] > m_threshold) {
+    if (p_dynamic[time_stop_simulation][p_index] >= m_threshold) {
         spike_fired = true;
     }
 
@@ -167,7 +167,7 @@ std::size_t basic_dynamic_analyser::find_spike_end(const DynamicType & p_dynamic
 
 
 template<class EnsemblesType>
-void basic_dynamic_analyser::extract_ensembles(const std::vector<spike_collection> & p_oscillations, EnsemblesType & p_ensembles, typename EnsemblesType::value_type & p_dead) const {
+void dynamic_analyser::extract_ensembles(const std::vector<spike_collection> & p_oscillations, EnsemblesType & p_ensembles, typename EnsemblesType::value_type & p_dead) const {
     if (p_oscillations.empty()) {
         return;
     }

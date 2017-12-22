@@ -202,7 +202,6 @@ private:
 
 
 using hhn_stimulus        = std::vector<double>;
-using hhn_stimulus_ptr    = std::shared_ptr<hhn_stimulus>;
 
 
 class hhn_network {
@@ -215,7 +214,7 @@ private:
 
     std::vector<central_element>  m_central     = { };
 
-    hhn_stimulus_ptr              m_stimulus    = nullptr;
+    hhn_stimulus *                m_stimulus    = nullptr;
 
     hnn_parameters                m_params;
 
@@ -231,7 +230,7 @@ public:
     void simulate(const std::size_t         p_steps,
                   const double              p_time,
                   const solve_type          p_solver,
-                  const hhn_stimulus_ptr &  p_stimulus,
+                  const hhn_stimulus &      p_stimulus,
                   hhn_dynamic &             p_output_dynamic);
 
     std::size_t size(void) const;

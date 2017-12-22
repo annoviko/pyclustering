@@ -144,6 +144,7 @@
     <ClCompile Include="..\tools\gtest\gtest-all.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="samples.cpp" />
+    <ClCompile Include="utenv_check.cpp" />
     <ClCompile Include="utest-adjacency.cpp" />
     <ClCompile Include="utest-adjacency_bit_matrix.cpp" />
     <ClCompile Include="utest-adjacency_connector.cpp" />
@@ -151,7 +152,6 @@
     <ClCompile Include="utest-adjacency_matrix.cpp" />
     <ClCompile Include="utest-adjacency_weight_list.cpp" />
     <ClCompile Include="utest-agglomerative.cpp" />
-    <ClCompile Include="utest-cluster.cpp" />
     <ClCompile Include="utest-cure.cpp" />
     <ClCompile Include="utest-dbscan.cpp" />
     <ClCompile Include="utest-differential.cpp" />
@@ -188,7 +188,7 @@
     <ClCompile Include="utest-sync.cpp" />
     <ClCompile Include="utest-syncnet.cpp" />
     <ClCompile Include="utest-syncpr.cpp" />
-    <ClCompile Include="utenv-utils.cpp" />
+    <ClCompile Include="utenv_utils.cpp" />
     <ClCompile Include="utest-thread_pool.cpp" />
     <ClCompile Include="utest-xmeans.cpp" />
   </ItemGroup>
@@ -265,9 +265,9 @@
     <ClInclude Include="..\src\utils\random.hpp" />
     <ClInclude Include="..\tools\gtest\gtest.h" />
     <ClInclude Include="samples.hpp" />
+    <ClInclude Include="utenv_check.hpp" />
     <ClInclude Include="utest-adjacency.hpp" />
-    <ClInclude Include="utest-cluster.hpp" />
-    <ClInclude Include="utenv-utils.hpp" />
+    <ClInclude Include="utenv_utils.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

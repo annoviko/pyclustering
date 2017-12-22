@@ -255,10 +255,10 @@ hhn_network::hhn_network(const std::size_t p_size, const hnn_parameters p_parame
 { }
 
 
-void hhn_network::simulate(const std::size_t p_steps, const double p_time, const solve_type p_solver, const hhn_stimulus_ptr & p_stimulus, hhn_dynamic & p_output_dynamic) {
+void hhn_network::simulate(const std::size_t p_steps, const double p_time, const solve_type p_solver, const hhn_stimulus & p_stimulus, hhn_dynamic & p_output_dynamic) {
     p_output_dynamic.reserve(p_steps + 1);
 
-    m_stimulus = p_stimulus;
+    m_stimulus = (hhn_stimulus *) &p_stimulus;
 
     const double step = p_time / (double) p_steps;
     const double int_step = step / 10.0;

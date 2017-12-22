@@ -21,8 +21,7 @@
 
 #include "gtest/gtest.h"
 
-#include <algorithm>
-#include <set>
+#include "utenv_check.hpp"
 
 #include "nnet/dynamic_analyser.hpp"
 
@@ -34,46 +33,6 @@ using network_dynamic = std::vector<std::vector<double>>;
 using ensemble_collection = std::vector<std::vector<std::size_t>>;
 
 
-template <typename EnsemblesType>
-static void CHECK_SYNC_ENSEMBLES(EnsemblesType & p_ensembles,
-                                 EnsemblesType & p_expected_ensembles,
-                                 typename EnsemblesType::value_type & p_dead,
-                                 typename EnsemblesType::value_type & p_expected_dead)
-{
-    /* compare dead neurons */
-    std::sort(p_dead.begin(), p_dead.end());
-    std::sort(p_expected_dead.begin(), p_expected_dead.end());
-
-    ASSERT_EQ(p_expected_dead, p_dead);
-
-
-    /* compare ensembles */
-    ASSERT_EQ(p_expected_ensembles.size(), p_ensembles.size());
-
-    /* sort indexes in ensembles */
-    for (auto & ensemble : p_ensembles) {
-        std::sort(ensemble.begin(), ensemble.end());
-    }
-
-    for (auto & ensemble : p_expected_ensembles) {
-        std::sort(ensemble.begin(), ensemble.end());
-    }
-
-    /* compare */
-    bool ensemble_found = false;
-    for (auto & ensemble : p_ensembles) {
-        for (auto & expected_ensemble : p_expected_ensembles) {
-            if (ensemble == expected_ensemble) {
-                ensemble_found = true;
-                break;
-            }
-        }
-
-        ASSERT_TRUE(ensemble_found);
-    }
-}
-
-
 template <class DynamicType, class EnsemblesType>
 static void template_sync_ensembles(const double p_amplitude,
                                     const double p_tolerance,
@@ -83,10 +42,10 @@ static void template_sync_ensembles(const double p_amplitude,
                                     typename EnsemblesType::value_type & p_expected_dead)
 {
     EnsemblesType ensembles;
-    EnsemblesType::value_type dead;
-    basic_dynamic_analyser(p_amplitude, p_tolerance, p_spikes).allocate_sync_ensembles(p_dynamic, ensembles, dead);
+    typename EnsemblesType::value_type dead;
+    dynamic_analyser(p_amplitude, p_tolerance, p_spikes).allocate_sync_ensembles(p_dynamic, ensembles, dead);
 
-    CHECK_SYNC_ENSEMBLES(ensembles, p_expected_ensembles, dead, p_expected_dead);
+    ASSERT_SYNC_ENSEMBLES(ensembles, p_expected_ensembles, dead, p_expected_dead);
 }
 
 
@@ -214,4 +173,120 @@ TEST(utest_dynamic_analyser, two_sync_ensembles) {
     ensemble_collection::value_type expected_dead = { };
 
     template_sync_ensembles(1.0, 0.0, 2, dynamic, expected_ensembles, expected_dead);
+}
+
+TEST(utest_dynamic_analyser, three_sync_ensembles) {
+    network_dynamic dynamic = { { 0.0, 0.0, 1.0, 1.0, 0.0, 0.0 },
+                                { 1.0, 1.0, 0.0, 0.0, 1.0, 1.0 },
+                                { 0.0, 0.0, 1.0, 1.0, 0.0, 0.0 },
+                                { 1.0, 1.0, 0.0, 0.0, 0.0, 0.0 },
+                                { 0.0, 0.0, 1.0, 1.0, 1.0, 1.0 },
+                                { 1.0, 1.0, 0.0, 0.0, 0.0, 0.0 } };
+    ensemble_collection             expected_ensembles = { { 0, 1 }, { 2, 3 }, { 4, 5 } };
+    ensemble_collection::value_type expected_dead = { };
+
+    template_sync_ensembles(1.0, 0.0, 2, dynamic, expected_ensembles, expected_dead);
+}
+
+TEST(utest_dynamic_analyser, incomplete_spike_at_end) {
+    network_dynamic dynamic = { { 0.0, 0.0 }, { 0.0, 0.0 }, { 0.0, 0.0 }, { 1.0, 1.0 }, { 1.0, 1.0 } };
+    ensemble_collection             expected_ensembles = { };
+    ensemble_collection::value_type expected_dead = { 0, 1 };
+
+    template_sync_ensembles(1.0, 0.0, 1, dynamic, expected_ensembles, expected_dead);
+}
+
+TEST(utest_dynamic_analyser, incomplete_spike_at_begin) {
+    network_dynamic dynamic = { { 1.0, 1.0 }, { 1.0, 1.0 }, { 0.0, 0.0 }, { 0.0, 0.0 }, { 0.0, 0.0 } };
+    ensemble_collection             expected_ensembles = { };
+    ensemble_collection::value_type expected_dead = { 0, 1 };
+
+    template_sync_ensembles(1.0, 0.0, 1, dynamic, expected_ensembles, expected_dead);
+}
+
+TEST(utest_dynamic_analyser, incomplete_spike_at_begin_and_end) {
+    network_dynamic dynamic = { { 1.0, 1.0 }, { 1.0, 1.0 }, { 0.0, 0.0 }, { 0.0, 0.0 }, { 1.0, 1.0 } };
+    ensemble_collection             expected_ensembles = { };
+    ensemble_collection::value_type expected_dead = { 0, 1 };
+
+    template_sync_ensembles(1.0, 0.0, 1, dynamic, expected_ensembles, expected_dead);
+}
+
+TEST(utest_dynamic_analyser, two_sync_with_incomplete) {
+    network_dynamic dynamic = { { 0.0, 0.0 }, { 1.0, 1.0 }, { 0.0, 0.0 }, { 1.0, 1.0 }, { 1.0, 1.0 } };
+    ensemble_collection             expected_ensembles = { { 0, 1 } };
+    ensemble_collection::value_type expected_dead = { };
+
+    template_sync_ensembles(1.0, 0.0, 1, dynamic, expected_ensembles, expected_dead);
+}
+
+TEST(utest_dynamic_analyser, two_sync_with_async_incomplete) {
+    network_dynamic dynamic = { { 0.0, 0.0 }, { 1.0, 1.0 }, { 0.0, 0.0 }, { 0.0, 1.0 }, { 1.0, 1.0 } };
+    ensemble_collection             expected_ensembles = { { 0, 1 } };
+    ensemble_collection::value_type expected_dead = { };
+
+    template_sync_ensembles(1.0, 0.0, 1, dynamic, expected_ensembles, expected_dead);
+}
+
+TEST(utest_dynamic_analyser, sync_after_time_one_spike) {
+    network_dynamic dynamic = { { 0.0, 0.0 }, { 1.0, 0.0 }, { 0.0, 1.0 }, { 1.0, 0.0 }, { 1.0, 1.0 },
+                                { 0.0, 0.0 }, { 1.0, 1.0 }, { 0.0, 0.0 }, { 1.0, 1.0 }, { 0.0, 0.0 } };
+    ensemble_collection             expected_ensembles = { { 0, 1 } };
+    ensemble_collection::value_type expected_dead = { };
+
+    template_sync_ensembles(1.0, 0.0, 1, dynamic, expected_ensembles, expected_dead);
+}
+
+TEST(utest_dynamic_analyser, sync_after_time_two_spikes) {
+    network_dynamic dynamic = { { 0.0, 0.0 }, { 1.0, 0.0 }, { 0.0, 1.0 }, { 1.0, 0.0 }, { 1.0, 1.0 },
+                                { 0.0, 0.0 }, { 1.0, 1.0 }, { 0.0, 0.0 }, { 1.0, 1.0 }, { 0.0, 0.0 } };
+    ensemble_collection             expected_ensembles = { { 0, 1 } };
+    ensemble_collection::value_type expected_dead = { };
+
+    template_sync_ensembles(1.0, 0.0, 2, dynamic, expected_ensembles, expected_dead);
+}
+
+TEST(utest_dynamic_analyser, sync_after_time_three_spikes) {
+    network_dynamic dynamic = { { 0.0, 0.0 }, { 1.0, 0.0 }, { 0.0, 1.0 }, { 1.0, 0.0 }, { 1.0, 1.0 },
+                                { 0.0, 0.0 }, { 1.0, 1.0 }, { 0.0, 0.0 }, { 1.0, 1.0 }, { 0.0, 0.0 } };
+    ensemble_collection             expected_ensembles = { { 0 }, { 1 } };
+    ensemble_collection::value_type expected_dead = { };
+
+    template_sync_ensembles(1.0, 0.0, 3, dynamic, expected_ensembles, expected_dead);
+}
+
+TEST(utest_dynamic_analyser, sync_with_tolerance_01) {
+    network_dynamic dynamic = { { 0.0, 0.0 }, { 0.0, 1.0 }, { 1.0, 1.0 }, { 1.0, 1.0 }, { 1.0, 1.0 },
+                                { 1.0, 1.0 }, { 1.0, 1.0 }, { 1.0, 0.0 }, { 0.0, 0.0 }, { 0.0, 0.0 } };
+
+    ensemble_collection             expected_ensembles = { { 0, 1 } };
+    ensemble_collection::value_type expected_dead = { };
+
+    template_sync_ensembles(1.0, 0.5, 1, dynamic, expected_ensembles, expected_dead);
+}
+
+TEST(utest_dynamic_analyser, sync_with_tolerance_02) {
+    network_dynamic dynamic = { { 0.0, 0.0 }, { 0.0, 1.0 }, { 1.0, 1.0 }, { 1.0, 1.0 }, { 1.0, 1.0 },
+                                { 1.0, 1.0 }, { 1.0, 1.0 }, { 0.0, 0.0 }, { 0.0, 0.0 }, { 0.0, 0.0 } };
+
+    ensemble_collection             expected_ensembles = { { 0, 1 } };
+    ensemble_collection::value_type expected_dead = { };
+
+    template_sync_ensembles(1.0, 0.25, 1, dynamic, expected_ensembles, expected_dead);
+}
+
+TEST(utest_dynamic_analyser, one_neuron_oscillation) {
+    network_dynamic dynamic = { { 0.0 }, { 1.0 }, { 0.0 }, { 1.0 }, { 0.0 } };
+    ensemble_collection             expected_ensembles = { { 0 } };
+    ensemble_collection::value_type expected_dead = { };
+
+    template_sync_ensembles(1.0, 0.25, 2, dynamic, expected_ensembles, expected_dead);
+}
+
+TEST(utest_dynamic_analyser, one_neuron_no_oscillation_01) {
+    network_dynamic dynamic = { { 0.0 }, { 0.0 }, { 0.0 }, { 0.0 }, { 0.0 } };
+    ensemble_collection             expected_ensembles = { };
+    ensemble_collection::value_type expected_dead = { 0 };
+
+    template_sync_ensembles(1.0, 0.25, 2, dynamic, expected_ensembles, expected_dead);
 }

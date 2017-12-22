@@ -21,6 +21,11 @@
 
 #include "gtest/gtest.h"
 
+#include "utenv_check.hpp"
+
+#include "container/ensemble_data.hpp"
+
+#include "nnet/dynamic_analyser.hpp"
 #include "nnet/hhn.hpp"
 
 
@@ -54,7 +59,7 @@ TEST(utest_hhn, create_200_oscillators) {
 
 static void template_collect_dynamic(const std::size_t p_num_osc,
                                      const std::size_t p_steps,
-                                     const hhn_stimulus_ptr & p_stimulus,
+                                     const hhn_stimulus & p_stimulus,
                                      const std::vector<hhn_dynamic::collect> & collect) {
     hnn_parameters parameters;
     hhn_network network(p_num_osc, parameters);
@@ -89,32 +94,32 @@ static void template_collect_dynamic(const std::size_t p_num_osc,
 
 
 TEST(utest_hhn, collect_membran_size_1_steps_10_unstimulated) {
-    hhn_stimulus_ptr stimulus(new hhn_stimulus( { 0 } ));
+    hhn_stimulus stimulus({ 0 });
     template_collect_dynamic(1, 10, stimulus, { hhn_dynamic::collect::MEMBRANE_POTENTIAL });
 }
 
 TEST(utest_hhn, collect_membran_size_1_steps_10_stimulated) {
-    hhn_stimulus_ptr stimulus(new hhn_stimulus( { 1 } ));
+    hhn_stimulus stimulus({ 1 });
     template_collect_dynamic(1, 10, stimulus, { hhn_dynamic::collect::MEMBRANE_POTENTIAL });
 }
 
 TEST(utest_hhn, collect_active_potassium) {
-    hhn_stimulus_ptr stimulus(new hhn_stimulus( { 1 } ));
+    hhn_stimulus stimulus({ 1 });
     template_collect_dynamic(1, 10, stimulus, { hhn_dynamic::collect::ACTIVE_COND_POTASSIUM });
 }
 
 TEST(utest_hhn, collect_active_sodium) {
-    hhn_stimulus_ptr stimulus(new hhn_stimulus( { 1 } ));
+    hhn_stimulus stimulus({ 1 });
     template_collect_dynamic(1, 10, stimulus, { hhn_dynamic::collect::ACTIVE_COND_SODIUM });
 }
 
 TEST(utest_hhn, collect_inactive_sodium) {
-    hhn_stimulus_ptr stimulus(new hhn_stimulus( { 1 } ));
+    hhn_stimulus stimulus({ 1 });
     template_collect_dynamic(1, 10, stimulus, { hhn_dynamic::collect::INACTIVE_COND_SODIUM });
 }
 
 TEST(utest_hhn, collect_all_parameters) {
-    hhn_stimulus_ptr stimulus(new hhn_stimulus( { 1 } ));
+    hhn_stimulus stimulus({ 1 });
     template_collect_dynamic(1, 10, stimulus, { hhn_dynamic::collect::MEMBRANE_POTENTIAL,
                                                 hhn_dynamic::collect::ACTIVE_COND_SODIUM,
                                                 hhn_dynamic::collect::INACTIVE_COND_SODIUM,
@@ -122,22 +127,53 @@ TEST(utest_hhn, collect_all_parameters) {
 }
 
 TEST(utest_hhn, collect_membran_size_1_steps_50) {
-    hhn_stimulus_ptr stimulus(new hhn_stimulus( { 1 } ));
+    hhn_stimulus stimulus({ 1 });
     template_collect_dynamic(1, 50, stimulus, { hhn_dynamic::collect::MEMBRANE_POTENTIAL });
 }
 
 TEST(utest_hhn, collect_membran_size_1_steps_200) {
-    hhn_stimulus_ptr stimulus(new hhn_stimulus( { 1 } ));
+    hhn_stimulus stimulus({ 1 });
     template_collect_dynamic(1, 200, stimulus, { hhn_dynamic::collect::MEMBRANE_POTENTIAL });
 }
 
 
 TEST(utest_hhn, collect_membran_size_5_steps_20) {
-    hhn_stimulus_ptr stimulus(new hhn_stimulus( { 10, 10, 10, 50, 50 } ));
+    hhn_stimulus stimulus({ 10, 10, 10, 50, 50 });
     template_collect_dynamic(5, 20, stimulus, { hhn_dynamic::collect::MEMBRANE_POTENTIAL });
 }
 
 TEST(utest_hhn, collect_membran_size_5_steps_50) {
-    hhn_stimulus_ptr stimulus(new hhn_stimulus( { 50, 50, 0, 10, 10 } ));
+    hhn_stimulus stimulus({ 50, 50, 0, 10, 10 });
     template_collect_dynamic(5, 50, stimulus, { hhn_dynamic::collect::MEMBRANE_POTENTIAL });
+}
+
+
+
+static void template_ensemble_generation(const std::size_t p_num_osc,
+                                         const std::size_t p_steps,
+                                         const std::size_t p_time,
+                                         const hhn_stimulus & p_stimulus,
+                                         basic_ensemble_data & p_expected_ensembles,
+                                         basic_ensemble & p_expected_dead_neurons) {
+    hnn_parameters parameters;
+    hhn_network network(p_num_osc, parameters);
+
+    hhn_dynamic output_dynamic;
+    output_dynamic.enable(hhn_dynamic::collect::MEMBRANE_POTENTIAL);
+
+    /* simulate and check collected outputs */
+    network.simulate(p_steps, p_time, solve_type::RUNGE_KUTTA_4, p_stimulus, output_dynamic);
+
+    basic_ensemble_data   ensembles;
+    basic_ensemble        dead_neurons;
+    //dynamic_analyser(1.0).allocate_sync_ensembles(output_dynamic, ensembles, dead_neurons);
+
+    //ASSERT_SYNC_ENSEMBLES(ensembles, p_expected_ensembles, dead_neurons, p_expected_dead_neurons);
+}
+
+TEST(utest_hhn, two_sync_ensembles) {
+    basic_ensemble_data expected_ensembles = { { 0, 1 }, { 2, 3 } };
+    basic_ensemble      dead_neurons = { };
+
+    template_ensemble_generation(4, 400, 200, { 25, 25, 50, 50 }, expected_ensembles, dead_neurons);
 }
