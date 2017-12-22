@@ -344,6 +344,12 @@
     <ClCompile Include="..\src\utils\random.cpp">
       <Filter>Tested Code\utils</Filter>
     </ClCompile>
+    <ClCompile Include="utest-dynamic_analyser.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\nnet\dynamic_analyser.cpp">
+      <Filter>Tested Code\nnet</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\tools\gtest\gtest.h">
@@ -567,6 +573,9 @@
     </ClInclude>
     <ClInclude Include="..\src\utils\random.hpp">
       <Filter>Tested Code\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\nnet\dynamic_analyser.hpp">
+      <Filter>Tested Code\nnet</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

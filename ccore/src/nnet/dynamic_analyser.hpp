@@ -61,10 +61,11 @@ public:
     std::size_t get_duration(void) const;
 
     std::size_t get_stop(void) const;
+
+    bool compare(const spike & p_other, const double p_tolerance) const;
 };
 
 
-template<class DynamicType, class EnsembleType>
 class basic_dynamic_analyser {
 private:
     using spike_collection      = std::vector<spike>;
@@ -72,61 +73,49 @@ private:
 private:
     const static std::size_t  INVALID_ITERATION;
     const static std::size_t  DEFAULT_AMOUNT_SPIKES;
-    const static double       DEFAULT_TOLERANCE_PERCENT;
+    const static double       DEFAULT_TOLERANCE;
 
 private:
     double                    m_threshold     = -1;
     std::size_t               m_spikes        = DEFAULT_AMOUNT_SPIKES;
-    double                    m_tolerance     = DEFAULT_TOLERANCE_PERCENT;
+    double                    m_tolerance     = DEFAULT_TOLERANCE;
 
 public:
     basic_dynamic_analyser(void) = default;
 
-    basic_dynamic_analyser(const double p_threshold, const double p_tolerance, const std::size_t p_spikes = DEFAULT_AMOUNT_SPIKES);
+    basic_dynamic_analyser(const double p_threshold, const double p_tolerance = DEFAULT_TOLERANCE, const std::size_t p_spikes = DEFAULT_AMOUNT_SPIKES);
 
-    void allocate_sync_ensembles(const DynamicType & p_dynamic, EnsembleType & p_ensembles) const;
+    template<class DynamicType, class EnsemblesType>
+    void allocate_sync_ensembles(const DynamicType & p_dynamic, EnsemblesType & p_ensembles, typename EnsemblesType::value_type & p_dead) const;
 
 private:
+    template<class DynamicType>
     void extract_oscillations(const DynamicType & p_dynamic, std::vector<spike_collection> & p_oscillations) const;
 
+    template<class DynamicType>
     void extract_spikes(const DynamicType & p_dynamic, const std::size_t p_index, spike_collection & p_spikes) const;
 
-    void extract_ensembles(const std::vector<spike_collection> & p_oscillations, EnsembleType & p_ensembles) const;
+    template<class EnsemblesType>
+    void extract_ensembles(const std::vector<spike_collection> & p_oscillations, EnsemblesType & p_ensembles, typename EnsemblesType::value_type & p_dead) const;
 
+    template<class DynamicType>
     std::size_t find_spike_end(const DynamicType & p_dynamic, const std::size_t p_index, const std::size_t p_position) const;
+
+    bool is_sync_spikes(const spike_collection & p_spikes1, const spike_collection & p_spikes2) const;
 };
 
 
-template<class DynamicType, class EnsembleType>
-const std::size_t basic_dynamic_analyser<DynamicType, EnsembleType>::INVALID_ITERATION = std::numeric_limits<std::size_t>::max();
 
-
-template<class DynamicType, class EnsembleType>
-const std::size_t basic_dynamic_analyser<DynamicType, EnsembleType>::DEFAULT_AMOUNT_SPIKES = 1;
-
-
-template<class DynamicType, class EnsembleType>
-const double basic_dynamic_analyser<DynamicType, EnsembleType>::DEFAULT_TOLERANCE_PERCENT = 0.1;
-
-
-template<class DynamicType, class EnsembleType>
-basic_dynamic_analyser<DynamicType, EnsembleType>::basic_dynamic_analyser(const double p_threshold, const double p_tolerance, const std::size_t p_spikes) :
-    m_threshold(p_threshold),
-    m_spikes(p_spikes),
-    m_tolerance(p_tolerance)
-{ }
-
-
-template<class DynamicType, class EnsembleType>
-void basic_dynamic_analyser<DynamicType, EnsembleType>::allocate_sync_ensembles(const DynamicType & p_dynamic, EnsembleType & p_ensembles) const {
+template<class DynamicType, class EnsemblesType>
+void basic_dynamic_analyser::allocate_sync_ensembles(const DynamicType & p_dynamic, EnsemblesType & p_ensembles, typename EnsemblesType::value_type & p_dead) const {
     std::vector<spike_collection> oscillations;
     extract_oscillations(p_dynamic, oscillations);
-    extract_ensembles(oscillations, p_ensembles);
+    extract_ensembles(oscillations, p_ensembles, p_dead);
 }
 
 
-template<class DynamicType, class EnsembleType>
-void basic_dynamic_analyser<DynamicType, EnsembleType>::extract_oscillations(const DynamicType & p_dynamic, std::vector<spike_collection> & p_oscillations) const {
+template<class DynamicType>
+void basic_dynamic_analyser::extract_oscillations(const DynamicType & p_dynamic, std::vector<spike_collection> & p_oscillations) const {
     std::size_t amount_oscillators = p_dynamic[0].size();
     p_oscillations = std::vector<spike_collection>(amount_oscillators);
 
@@ -137,31 +126,25 @@ void basic_dynamic_analyser<DynamicType, EnsembleType>::extract_oscillations(con
 }
 
 
-template<class DynamicType, class EnsembleType>
-void basic_dynamic_analyser<DynamicType, EnsembleType>::extract_spikes(const DynamicType & p_dynamic, const std::size_t p_index, spike_collection & p_spikes) const {
-    spike_collection spikes = { };
-
-    std::size_t position = p_dynamic[p_index].size() - 1;
+template<class DynamicType>
+void basic_dynamic_analyser::extract_spikes(const DynamicType & p_dynamic, const std::size_t p_index, spike_collection & p_spikes) const {
+    std::size_t position = p_dynamic.size() - 1;
     for (std::size_t cur_spike = 0; (cur_spike < m_spikes) && (position > 0); cur_spike++) {
         std::size_t stop = find_spike_end(p_dynamic, p_index, position);
         if (stop == INVALID_ITERATION) {
             return;
         }
 
-        for (; (position > 0) && (p_dynamic[position][p_index] > m_threshold); position--) { }
+        for (position = stop; (position > 0) && (p_dynamic[position][p_index] >= m_threshold); position--) { }
         if (p_dynamic[position][p_index] < m_threshold) {
-            spikes.emplace_back(position, stop);
+            p_spikes.emplace_back(position, stop);
         }
-    }
-
-    if (spikes.size() == m_spikes) {
-        p_spikes = std::move(spikes);
     }
 }
 
 
-template<class DynamicType, class EnsembleType>
-std::size_t basic_dynamic_analyser<DynamicType, EnsembleType>::find_spike_end(const DynamicType & p_dynamic, const std::size_t p_index, const std::size_t p_position) const {
+template<class DynamicType>
+std::size_t basic_dynamic_analyser::find_spike_end(const DynamicType & p_dynamic, const std::size_t p_index, const std::size_t p_position) const {
     std::size_t time_stop_simulation = p_position;
     bool spike_fired = false;
 
@@ -171,7 +154,7 @@ std::size_t basic_dynamic_analyser<DynamicType, EnsembleType>::find_spike_end(co
 
     /* if active state is detected, it means we don't have whole oscillatory period for the considered oscillator, should be skipped */
     if (spike_fired) {
-        for (; (p_dynamic[time_stop_simulation][p_index] > m_threshold) && (time_stop_simulation > 0); time_stop_simulation--) { }
+        for (; (p_dynamic[time_stop_simulation][p_index] >= m_threshold) && (time_stop_simulation > 0); time_stop_simulation--) { }
 
         if (time_stop_simulation == 0) {
             return INVALID_ITERATION;
@@ -183,9 +166,43 @@ std::size_t basic_dynamic_analyser<DynamicType, EnsembleType>::find_spike_end(co
 }
 
 
-template<class DynamicType, class EnsembleType>
-void basic_dynamic_analyser<DynamicType, EnsembleType>::extract_ensembles(const std::vector<spike_collection> & p_oscillations, EnsembleType & p_ensembles) const {
+template<class EnsemblesType>
+void basic_dynamic_analyser::extract_ensembles(const std::vector<spike_collection> & p_oscillations, EnsemblesType & p_ensembles, typename EnsemblesType::value_type & p_dead) const {
+    if (p_oscillations.empty()) {
+        return;
+    }
 
+    for (std::size_t index_neuron = 0; index_neuron < p_oscillations.size(); index_neuron++) {
+        /* if oscillator does not have enough spikes than it's dead neuron */
+        if (p_oscillations[index_neuron].size() < m_spikes) {
+            p_dead.push_back(index_neuron);
+            continue;
+        }
+
+        if (p_ensembles.empty()) {
+            p_ensembles.push_back({ index_neuron });
+            continue;
+        }
+
+        const spike_collection & neuron_spikes = p_oscillations[index_neuron];
+        bool ensemble_found = false;
+
+        for (auto & ensemble : p_ensembles) {
+            const std::size_t anchour_neuron_index = ensemble[0];
+            const spike_collection & ensemble_anchor_spikes = p_oscillations[anchour_neuron_index];
+
+            if (is_sync_spikes(neuron_spikes, ensemble_anchor_spikes)) {
+                ensemble.push_back(index_neuron);
+                ensemble_found = true;
+
+                break;
+            }
+        }
+
+        if (!ensemble_found) {
+            p_ensembles.push_back({ index_neuron });
+        }
+    }
 }
 
 

@@ -128,6 +128,7 @@
     <ClCompile Include="..\src\interface\syncpr_interface.cpp" />
     <ClCompile Include="..\src\interface\sync_interface.cpp" />
     <ClCompile Include="..\src\interface\xmeans_interface.cpp" />
+    <ClCompile Include="..\src\nnet\dynamic_analyser.cpp" />
     <ClCompile Include="..\src\nnet\hhn.cpp" />
     <ClCompile Include="..\src\nnet\legion.cpp" />
     <ClCompile Include="..\src\nnet\pcnn.cpp" />
@@ -154,6 +155,7 @@
     <ClCompile Include="utest-cure.cpp" />
     <ClCompile Include="utest-dbscan.cpp" />
     <ClCompile Include="utest-differential.cpp" />
+    <ClCompile Include="utest-dynamic_analyser.cpp" />
     <ClCompile Include="utest-hhn.cpp" />
     <ClCompile Include="utest-hsyncnet.cpp" />
     <ClCompile Include="utest-interface-agglomerative.cpp" />
@@ -247,6 +249,7 @@
     <ClInclude Include="..\src\interface\syncpr_interface.h" />
     <ClInclude Include="..\src\interface\sync_interface.h" />
     <ClInclude Include="..\src\interface\xmeans_interface.h" />
+    <ClInclude Include="..\src\nnet\dynamic_analyser.hpp" />
     <ClInclude Include="..\src\nnet\hhn.hpp" />
     <ClInclude Include="..\src\nnet\legion.hpp" />
     <ClInclude Include="..\src\nnet\network.hpp" />
