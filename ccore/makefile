@@ -12,6 +12,7 @@ default:
 	@echo "cppcheck         - to perform static analysis of source code."
 	@echo " "
 	@echo "ut               - to build release unit-tests for CCORE library."
+	@echo "utdbg            - to build debug unit-tests for CCORE library."
 	@echo "utrun            - to run unit-tests of CCORE library."
 	@echo "utclean          - to clean build files of unit-tests of CCORE library."
 	@echo " "
@@ -50,6 +51,11 @@ ut:
 	$(MAKE) $(MKFLAG) utcore.mk ut
 
 
+.PHONY: utdbg
+utdbg:
+	$(MAKE) $(MKFLAG) utcore.mk ut CONFIG="debug"
+
+
 .PHONY: utrun
 utrun:
 	cd tst/ && ./utcore.exe
@@ -62,7 +68,7 @@ utclean:
 
 .PHONE: valgrind
 valgrind:
-	$(MAKE) $(MKFLAG) utcore.mk ut ARGS="valgrind"
+	$(MAKE) $(MKFLAG) utcore.mk ut CONFIG="valgrind"
 	cd tst/ && valgrind --leak-check=full --leak-check=yes --error-exitcode=1 ./utcore.exe
 
 

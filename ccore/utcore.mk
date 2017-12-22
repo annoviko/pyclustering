@@ -16,8 +16,11 @@ endif
 
 
 # Toolchain arguments
-ifeq ($(ARGS), valgrind)
+ifeq ($(CONFIG), valgrind)
 	CFLAGS = -MMD -MP -std=$(CPLUS_STANDARD) $(PIC_FLAG) -g
+	LFLAGS = -pthread
+else ifeq ($(CONFIG), debug)
+	CFLAGS = -O0 -MMD -MP -std=$(CPLUS_STANDARD) $(PIC_FLAG) -ggdb
 	LFLAGS = -pthread
 else
 	CFLAGS = -O2 -MMD -MP -std=$(CPLUS_STANDARD) $(PIC_FLAG) -fprofile-arcs -ftest-coverage -Werror
