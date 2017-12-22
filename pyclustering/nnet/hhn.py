@@ -369,7 +369,7 @@ class hhn_network(network):
         
         for index in range(0, self._num_osc):
             if (self._pulse_generation[index] is False):
-                if (self._membrane_potential[index] > 0.0):
+                if (self._membrane_potential[index] >= 0.0):
                     self._pulse_generation[index] = True;
                     self._pulse_generation_time[index].append(t);
             else:
@@ -378,7 +378,7 @@ class hhn_network(network):
             
             # Update connection from CN2 to PN
             if (self._link_weight3[index] == 0.0):
-                if ( (self._membrane_potential[index] > self._params.threshold) and (self._membrane_potential[index] > self._params.threshold) ):
+                if (self._membrane_potential[index] > self._params.threshold):
                     self._link_pulse_counter[index] += step;
                 
                     if (self._link_pulse_counter[index] >= 1 / self._params.eps):
@@ -409,7 +409,7 @@ class hhn_network(network):
             self._central_element[index].active_cond_potassium = next_cn_active_potassium[index];
             
             if (self._central_element[index].pulse_generation is False):
-                if (self._central_element[index].membrane_potential > 0.0):
+                if (self._central_element[index].membrane_potential >= 0.0):
                     self._central_element[index].pulse_generation = True;
                     self._central_element[index].pulse_generation_time.append(t);
             else:

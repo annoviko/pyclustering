@@ -130,8 +130,18 @@ void hhn_dynamic::reserve(const std::size_t p_dynamic_size) {
 }
 
 
+hhn_dynamic::evolution_dynamic & hhn_dynamic::get_peripheral_dynamic(const hhn_dynamic::collect & p_type) {
+    return (*m_peripheral_dynamic)[p_type];
+}
+
+
 hhn_dynamic::network_dynamic_ptr hhn_dynamic::get_peripheral_dynamic(void) const {
     return m_peripheral_dynamic;
+}
+
+
+hhn_dynamic::evolution_dynamic & hhn_dynamic::get_central_dynamic(const hhn_dynamic::collect & p_type) {
+    return (*m_central_dynamic)[p_type];
 }
 
 
@@ -247,6 +257,16 @@ void hhn_dynamic::store_active_cond_potassium(const std::vector<hhn_oscillator> 
 
 
 
+
+const std::size_t hhn_network::POSITION_MEMBRAN_POTENTIAL       = 0;
+
+const std::size_t hhn_network::POSITION_ACTIVE_COND_SODIUM      = 1;
+
+const std::size_t hhn_network::POSITION_INACTIVE_COND_SODIUM    = 2;
+
+const std::size_t hhn_network::POSITION_ACTIVE_COND_POTASSIUM   = 3;
+
+
 hhn_network::hhn_network(const std::size_t p_size, const hnn_parameters p_parameters) :
     m_peripheral(p_size),
     m_central(2),
@@ -271,8 +291,6 @@ void hhn_network::simulate(const std::size_t p_steps, const double p_time, const
     for (std::size_t cur_step = 0; cur_step < p_steps; cur_step++) {
         calculate_states(p_solver, cur_time, step, int_step);
 
-        update_peripheral_current();
-
         store_dynamic(cur_time, p_output_dynamic);
 
         cur_time += step;
@@ -296,6 +314,57 @@ void hhn_network::calculate_states(const solve_type p_solver, const double p_tim
 
     hhn_states next_central_states(m_central.size());
     calculate_central_states(p_solver, p_time, p_step, p_int_step, next_central_states);
+
+    assign_neuron_states(p_time, p_step, next_peripheral_states, next_central_states);
+}
+
+
+void hhn_network::assign_neuron_states(const double p_time, const double p_step, const hhn_states & p_next_peripheral, const hhn_states & p_next_central) {
+    for (std::size_t index = 0; index < m_peripheral.size(); index++) {
+        m_peripheral[index].m_membrane_potential      = p_next_peripheral[index][0].state[POSITION_MEMBRAN_POTENTIAL];
+        m_peripheral[index].m_active_cond_sodium      = p_next_peripheral[index][0].state[POSITION_ACTIVE_COND_SODIUM];
+        m_peripheral[index].m_inactive_cond_sodium    = p_next_peripheral[index][0].state[POSITION_INACTIVE_COND_SODIUM];
+        m_peripheral[index].m_active_cond_potassium   = p_next_peripheral[index][0].state[POSITION_ACTIVE_COND_POTASSIUM];
+
+        hhn_oscillator & oscillator = m_peripheral[index];
+        if ( (!oscillator.m_pulse_generation) && (oscillator.m_membrane_potential >= 0.0)) {
+            oscillator.m_pulse_generation = true;
+            oscillator.m_pulse_generation_time.push_back(p_time);
+        }
+        else if (oscillator.m_membrane_potential < 0.0) {
+            oscillator.m_pulse_generation = false;
+        }
+
+        if ( (oscillator.m_link_weight3 == 0.0) && (oscillator.m_membrane_potential > m_params.m_threshold) ) {
+            oscillator.m_link_pulse_counter += p_step;
+
+            if (oscillator.m_link_pulse_counter >= (1.0 / m_params.m_eps)) {
+                oscillator.m_link_weight3 = m_params.m_w3;
+                oscillator.m_link_activation_time = p_time;
+            }
+        }
+        else if ( !((oscillator.m_link_activation_time < p_time) && (p_time < oscillator.m_link_activation_time + m_params.m_deltah)) ) {
+            oscillator.m_link_weight3 = 0.0;
+            oscillator.m_link_pulse_counter = 0.0;
+        }
+    }
+
+
+    for (std::size_t index = 0; index < m_central.size(); index++) {
+        m_central[index].m_membrane_potential      = p_next_central[index][0].state[POSITION_MEMBRAN_POTENTIAL];
+        m_central[index].m_active_cond_sodium      = p_next_central[index][0].state[POSITION_ACTIVE_COND_SODIUM];
+        m_central[index].m_inactive_cond_sodium    = p_next_central[index][0].state[POSITION_INACTIVE_COND_SODIUM];
+        m_central[index].m_active_cond_potassium   = p_next_central[index][0].state[POSITION_ACTIVE_COND_POTASSIUM];
+
+        central_element & elem = m_central[index];
+        if ( (!elem.m_pulse_generation) && (elem.m_membrane_potential >= 0.0) ) {
+            elem.m_pulse_generation = true;
+            elem.m_pulse_generation_time.push_back(p_time);
+        }
+        else if (elem.m_membrane_potential < 0.0) {
+            elem.m_pulse_generation = false;
+        }
+    }
 }
 
 
@@ -365,10 +434,10 @@ void hhn_network::perform_calculation(const solve_type p_solver, const double p_
 void hhn_network::neuron_states(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs) {
     std::size_t index = *(std::size_t *) argv[0];
 
-    double v = inputs[0];       /* membrane potential (v)                               */
-    double m = inputs[1];       /* activation conductance of the sodium channel (m)     */
-    double h = inputs[2];       /* inactivaton conductance of the sodium channel (h)    */
-    double n = inputs[3];       /* activation conductance of the potassium channel (n)  */
+    double v = inputs[POSITION_MEMBRAN_POTENTIAL];       /* membrane potential (v)                               */
+    double m = inputs[POSITION_ACTIVE_COND_SODIUM];      /* activation conductance of the sodium channel (m)     */
+    double h = inputs[POSITION_INACTIVE_COND_SODIUM];    /* inactivaton conductance of the sodium channel (h)    */
+    double n = inputs[POSITION_ACTIVE_COND_POTASSIUM];   /* activation conductance of the potassium channel (n)  */
 
     /* Calculate ion current */
     double active_sodium_part = m_params.m_gNa * std::pow(m, 3) * h * (v - m_params.m_vNa);
@@ -415,7 +484,7 @@ void hhn_network::neuron_states(const double t, const differ_state<double> & inp
 
 
 double hhn_network::peripheral_external_current(const std::size_t p_index) const {
-    return (*m_stimulus)[p_index] * generate_normal_random(0.5, 0.5);
+    return (*m_stimulus)[p_index] * (1.0 + 0.01 * generate_uniform_random(-1.0, 1.0));
 }
 
 
@@ -461,7 +530,7 @@ void hhn_network::initialize_current(void) {
 
 void hhn_network::update_peripheral_current(void) {
     for (std::size_t index = 0; index < m_peripheral.size(); index++) {
-        m_peripheral[index].m_Iext = (*m_stimulus)[index] * generate_normal_random(0.5, 0.5);
+        m_peripheral[index].m_Iext = peripheral_external_current(index);
     }
 }
 

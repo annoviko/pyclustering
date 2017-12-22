@@ -45,7 +45,7 @@ namespace nnet {
 
 struct hnn_parameters {
 public:
-    double m_nu       = generate_normal_random(0.5, 0.5);     /* Intrinsic noise      */
+    double m_nu       = generate_uniform_random(-1.0, 1.0);     /* Intrinsic noise      */
 
     double m_gNa      = 120.0 * (1 + 0.02 * m_nu);    /* Maximal conductivity for sodium current     */
     double m_gK       = 36.0 * (1 + 0.02 * m_nu);     /* Maximal conductivity for potassium current  */
@@ -177,9 +177,13 @@ public:
 
     void reserve(const std::size_t p_dynamic_size);
 
+    evolution_dynamic & get_peripheral_dynamic(const hhn_dynamic::collect & p_type);
+
     network_dynamic_ptr get_peripheral_dynamic(void) const;
 
     network_dynamic_ptr get_central_dynamic(void) const;
+
+    evolution_dynamic & get_central_dynamic(const hhn_dynamic::collect & p_type);
 
 
 private:
@@ -205,6 +209,12 @@ using hhn_stimulus        = std::vector<double>;
 
 
 class hhn_network {
+private:
+    const static std::size_t POSITION_MEMBRAN_POTENTIAL;
+    const static std::size_t POSITION_ACTIVE_COND_SODIUM;
+    const static std::size_t POSITION_INACTIVE_COND_SODIUM;
+    const static std::size_t POSITION_ACTIVE_COND_POTASSIUM;
+
 private:
     using hhn_state           = differ_result<double>;
     using hhn_states          = std::vector< hhn_state >;
@@ -259,6 +269,8 @@ private:
     void initialize_current(void);
 
     void update_peripheral_current(void);
+
+    void assign_neuron_states(const double p_time, const double p_step, const hhn_states & p_next_peripheral, const hhn_states & p_next_central);
 };
 
 

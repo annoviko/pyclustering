@@ -70,7 +70,7 @@ bool spike::compare(const spike & p_other, const double p_tolerance) const {
         return false;
     }
 
-    double difference = absolute_difference(p_other.get_start(), get_start()) + absolute_difference(p_other.get_stop(), get_stop());
+    double difference = (double) absolute_difference(p_other.get_start(), get_start()) + absolute_difference(p_other.get_stop(), get_stop());
     if (difference > delta) {
         return false;
     }

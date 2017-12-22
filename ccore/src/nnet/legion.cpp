@@ -213,7 +213,7 @@ void legion_network::calculate_states(const legion_stimulus & stimulus, const so
 
     m_global_inhibitor = inhibitor_next_state[0].state[0];
 
-    for (unsigned int i = 0; i < size(); i++) {
+    for (std::size_t i = 0; i < size(); i++) {
         m_oscillators[i].m_excitatory = next_states[i][0].state[0];
         m_oscillators[i].m_inhibitory = next_states[i][0].state[1];
 
@@ -244,7 +244,7 @@ void legion_network::neuron_states(const double t, const differ_state<double> & 
     double dx = 3.0 * x - std::pow(x, 3) + 2.0 - y + stumulus * potential_influence + m_oscillators[index].m_coupling_term + m_oscillators[index].m_noise;
     double dy = m_params.eps * (m_params.gamma * (1.0 + std::tanh(x / m_params.betta)) - y);
 
-    std::vector<size_t> neighbors;
+    std::vector<std::size_t> neighbors;
     m_static_connections->get_neighbors(index, neighbors);
 
     double potential = 0.0;

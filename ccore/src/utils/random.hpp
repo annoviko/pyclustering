@@ -31,15 +31,15 @@ namespace random {
 
 /**
  *
- * @brief   Returns random value using specified mean and deviation using normal distribution.
+ * @brief   Returns random value in specified range using uniform distribution.
  *
- * @param[in] p_mean: Mean.
- * @param[in] p_dev:  Standard deviation.
+ * @param[in] p_from: Mean.
+ * @param[in] p_to:   Standard deviation.
  *
  * @return  Returns random variable.
  *
  */
-double generate_normal_random(const double p_mean = 0.0, const double p_dev = 1.0);
+double generate_uniform_random(const double p_from = 0.0, const double p_to = 1.0);
 
 
 }

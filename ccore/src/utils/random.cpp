@@ -31,11 +31,11 @@ namespace utils {
 namespace random {
 
 
-double generate_normal_random(const double p_from, const double p_to) {
+double generate_uniform_random(const double p_from, const double p_to) {
     unsigned seed = (unsigned) std::chrono::system_clock::now().time_since_epoch().count();
     std::default_random_engine generator(seed);
 
-    std::normal_distribution<double> distribution(p_from, p_to);
+    std::uniform_real_distribution<double> distribution(p_from, p_to);
     return distribution(generator);
 }
 
