@@ -452,7 +452,7 @@ class hhn_network(network):
         Isyn = 0.0;
         if (index < self._num_osc): 
             # PN - peripheral neuron - calculation of external current and synaptic current.
-            Iext = self._stimulus[index] * self._noise[index];    # probably noise can be pre-defined for reducting compexity            
+            Iext = self._stimulus[index] * self._noise[index];    # probably noise can be pre-defined for reducting compexity
             
             memory_impact1 = 0.0;
             for i in range(0, len(self._central_element[0].pulse_generation_time)):
@@ -460,9 +460,9 @@ class hhn_network(network):
             
             memory_impact2 = 0.0;
             for i in range(0, len(self._central_element[1].pulse_generation_time)):
-                memory_impact2 += self.__alfa_function(t - self._central_element[1].pulse_generation_time[i], self._params.alfa_inhibitory, self._params.betta_inhibitory);        
+                memory_impact2 += self.__alfa_function(t - self._central_element[1].pulse_generation_time[i], self._params.alfa_inhibitory, self._params.betta_inhibitory);
     
-            Isyn = self._params.w2 * (v - self._params.Vsyninh) * memory_impact1 + self._link_weight3[index] * (v - self._params.Vsyninh) * memory_impact2;            
+            Isyn = self._params.w2 * (v - self._params.Vsyninh) * memory_impact1 + self._link_weight3[index] * (v - self._params.Vsyninh) * memory_impact2;
         else:
             # CN - central element.
             central_index = index - self._num_osc;

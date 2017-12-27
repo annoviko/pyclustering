@@ -287,13 +287,14 @@ void hhn_network::simulate(const std::size_t p_steps, const double p_time, const
 
     store_dynamic(0.0, p_output_dynamic);
 
-    double cur_time = step;
+    double cur_time = 0.0;
     for (std::size_t cur_step = 0; cur_step < p_steps; cur_step++) {
         calculate_states(p_solver, cur_time, step, int_step);
 
-        store_dynamic(cur_time, p_output_dynamic);
-
         cur_time += step;
+
+        store_dynamic(cur_time + step, p_output_dynamic);
+        /* update_peripheral_current(); */
     }
 }
 
@@ -321,12 +322,10 @@ void hhn_network::calculate_states(const solve_type p_solver, const double p_tim
 
 void hhn_network::assign_neuron_states(const double p_time, const double p_step, const hhn_states & p_next_peripheral, const hhn_states & p_next_central) {
     for (std::size_t index = 0; index < m_peripheral.size(); index++) {
-        m_peripheral[index].m_membrane_potential      = p_next_peripheral[index][0].state[POSITION_MEMBRAN_POTENTIAL];
-        m_peripheral[index].m_active_cond_sodium      = p_next_peripheral[index][0].state[POSITION_ACTIVE_COND_SODIUM];
-        m_peripheral[index].m_inactive_cond_sodium    = p_next_peripheral[index][0].state[POSITION_INACTIVE_COND_SODIUM];
-        m_peripheral[index].m_active_cond_potassium   = p_next_peripheral[index][0].state[POSITION_ACTIVE_COND_POTASSIUM];
-
         hhn_oscillator & oscillator = m_peripheral[index];
+
+        unpack_equation_output(p_next_peripheral[index], oscillator);
+
         if ( (!oscillator.m_pulse_generation) && (oscillator.m_membrane_potential >= 0.0)) {
             oscillator.m_pulse_generation = true;
             oscillator.m_pulse_generation_time.push_back(p_time);
@@ -349,12 +348,32 @@ void hhn_network::assign_neuron_states(const double p_time, const double p_step,
         }
     }
 
+    /*
+        for index in range(0, self._num_osc):
+            if (self._pulse_generation[index] is False):
+                if (self._membrane_potential[index] >= 0.0):
+                    self._pulse_generation[index] = True;
+                    self._pulse_generation_time[index].append(t);
+            else:
+                if (self._membrane_potential[index] < 0.0):
+                    self._pulse_generation[index] = False;
+            
+            # Update connection from CN2 to PN
+            if (self._link_weight3[index] == 0.0):
+                if (self._membrane_potential[index] > self._params.threshold):
+                    self._link_pulse_counter[index] += step;
+                
+                    if (self._link_pulse_counter[index] >= 1 / self._params.eps):
+                        self._link_weight3[index] = self._params.w3;
+                        self._link_activation_time[index] = t;
+            else:
+                if ( not ((self._link_activation_time[index] < t) and (t < self._link_activation_time[index] + self._params.deltah)) ):
+                    self._link_weight3[index] = 0.0;
+                    self._link_pulse_counter[index] = 0.0;
+    */
 
     for (std::size_t index = 0; index < m_central.size(); index++) {
-        m_central[index].m_membrane_potential      = p_next_central[index][0].state[POSITION_MEMBRAN_POTENTIAL];
-        m_central[index].m_active_cond_sodium      = p_next_central[index][0].state[POSITION_ACTIVE_COND_SODIUM];
-        m_central[index].m_inactive_cond_sodium    = p_next_central[index][0].state[POSITION_INACTIVE_COND_SODIUM];
-        m_central[index].m_active_cond_potassium   = p_next_central[index][0].state[POSITION_ACTIVE_COND_POTASSIUM];
+        unpack_equation_output(p_next_central[index], m_central[index]);
 
         central_element & elem = m_central[index];
         if ( (!elem.m_pulse_generation) && (elem.m_membrane_potential >= 0.0) ) {
@@ -374,12 +393,8 @@ void hhn_network::calculate_peripheral_states(const solve_type p_solver, const d
     for (std::size_t index = 0; index < m_peripheral.size(); index++) {
         argv[0] = (void *) &index;
 
-        differ_state<double> inputs { 
-            m_peripheral[index].m_membrane_potential,
-            m_peripheral[index].m_active_cond_sodium,
-            m_peripheral[index].m_inactive_cond_sodium,
-            m_peripheral[index].m_active_cond_potassium
-        };
+        differ_state<double> inputs;
+        pack_equation_input(m_peripheral[index], inputs);
 
         perform_calculation(p_solver, p_time, p_step, p_int_step, inputs, argv, p_next_states[index]);
     }
@@ -393,12 +408,8 @@ void hhn_network::calculate_central_states(const solve_type p_solver, const doub
         std::size_t index_central = index + m_peripheral.size();
         argv[0] = (void *) &index_central;
 
-        differ_state<double> inputs { 
-            m_central[index].m_membrane_potential,
-            m_central[index].m_active_cond_sodium,
-            m_central[index].m_inactive_cond_sodium,
-            m_central[index].m_active_cond_potassium
-        };
+        differ_state<double> inputs;
+        pack_equation_input(m_central[index], inputs);
 
         perform_calculation(p_solver, p_time, p_step, p_int_step, inputs, argv, p_next_states[index]);
     }

@@ -44,7 +44,10 @@ def one_oscillator_stimulated():
     
 def three_oscillators_stimulated():
     template_dynamic_hhn(3, 750, 100, [25] * 3, separate_representation = True);
-    
+
+def two_sync_ensembles():
+    template_dynamic_hhn(4, 400, 200, [25, 25, 50, 50], separate_representation = True);
+
 def ten_oscillators_stimulated_desync():
     params = hhn_parameters();
     params.w1 = 0;
@@ -87,6 +90,7 @@ def six_oscillators_mix_3_stimulated():
 one_oscillator_unstimulated();
 one_oscillator_stimulated();
 three_oscillators_stimulated();
+two_sync_ensembles();
 ten_oscillators_stimulated_desync();
 ten_oscillators_stimulated_sync();
 ten_oscillators_stimulated_partial_sync();

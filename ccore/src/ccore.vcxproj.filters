@@ -193,6 +193,9 @@
     <ClCompile Include="nnet\dynamic_analyser.cpp">
       <Filter>Source Files\nnet</Filter>
     </ClCompile>
+    <ClCompile Include="interface\hhn_interface.cpp">
+      <Filter>Source Files\interface</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cluster\agglomerative.hpp">
@@ -413,6 +416,9 @@
     </ClInclude>
     <ClInclude Include="nnet\dynamic_analyser.hpp">
       <Filter>Source Files\nnet</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\hhn_interface.h">
+      <Filter>Source Files\interface</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -47,9 +47,9 @@ struct hnn_parameters {
 public:
     double m_nu       = generate_uniform_random(-1.0, 1.0);     /* Intrinsic noise      */
 
-    double m_gNa      = 120.0 * (1 + 0.02 * m_nu);    /* Maximal conductivity for sodium current     */
-    double m_gK       = 36.0 * (1 + 0.02 * m_nu);     /* Maximal conductivity for potassium current  */
-    double m_gL       = 0.3 * (1 + 0.02 * m_nu);      /* Maximal conductivity for leakage current    */
+    double m_gNa      = 120.0 * (1.0 + 0.02 * m_nu);    /* Maximal conductivity for sodium current     */
+    double m_gK       = 36.0 * (1.0 + 0.02 * m_nu);     /* Maximal conductivity for potassium current  */
+    double m_gL       = 0.3 * (1.0 + 0.02 * m_nu);      /* Maximal conductivity for leakage current    */
 
     double m_vNa      = 50.0;                         /* Reverse potential of sodium current [mV]    */
     double m_vK       = -77.0;                        /* Reverse potential of potassium current [mV] */
@@ -61,6 +61,7 @@ public:
 
     double m_Vsyninh          = -80.0;  /* Synaptic reversal potential [mV] for inhibitory effects   */
     double m_Vsynexc          = 0.0;    /* Synaptic reversal potential [mV] for exciting effects     */
+
     double m_alfa_inhibitory  = 6.0;    /* Alfa-parameter for alfa-function for inhibitory effect    */
     double m_betta_inhibitory = 0.3;    /* Betta-parameter for alfa-function for inhibitory effect   */
 
@@ -271,7 +272,32 @@ private:
     void update_peripheral_current(void);
 
     void assign_neuron_states(const double p_time, const double p_step, const hhn_states & p_next_peripheral, const hhn_states & p_next_central);
+
+    template <class NeuronType>
+    void pack_equation_input(const NeuronType & p_neuron, differ_state<double> & p_inputs) const;
+
+    template <class NeuronType>
+    void unpack_equation_output(const hhn_state & p_outputs, NeuronType & p_neuron) const;
 };
+
+
+template <class NeuronType>
+void hhn_network::pack_equation_input(const NeuronType & p_neuron, differ_state<double> & p_inputs) const {
+    p_inputs.resize(4);
+    p_inputs[POSITION_MEMBRAN_POTENTIAL]      = p_neuron.m_membrane_potential;
+    p_inputs[POSITION_ACTIVE_COND_SODIUM]     = p_neuron.m_active_cond_sodium;
+    p_inputs[POSITION_INACTIVE_COND_SODIUM]   = p_neuron.m_inactive_cond_sodium;
+    p_inputs[POSITION_ACTIVE_COND_POTASSIUM]  = p_neuron.m_active_cond_potassium;
+}
+
+
+template <class NeuronType>
+void hhn_network::unpack_equation_output(const hhn_state & p_outputs, NeuronType & p_neuron) const {
+    p_neuron.m_membrane_potential      = p_outputs[0].state[POSITION_MEMBRAN_POTENTIAL];
+    p_neuron.m_active_cond_sodium      = p_outputs[0].state[POSITION_ACTIVE_COND_SODIUM];
+    p_neuron.m_inactive_cond_sodium    = p_outputs[0].state[POSITION_INACTIVE_COND_SODIUM];
+    p_neuron.m_active_cond_potassium   = p_outputs[0].state[POSITION_ACTIVE_COND_POTASSIUM];
+}
 
 
 }

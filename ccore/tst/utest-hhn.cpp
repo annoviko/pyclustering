@@ -173,6 +173,20 @@ static void template_ensemble_generation(const std::size_t p_num_osc,
     ASSERT_SYNC_ENSEMBLES(ensembles, p_expected_ensembles, dead_neurons, p_expected_dead_neurons);
 }
 
+TEST(utest_hhn, one_without_stimulation) {
+    basic_ensemble_data expected_ensembles = { };
+    basic_ensemble      dead_neurons = { 0 };
+
+    template_ensemble_generation(1, 400, 100, { 0 }, expected_ensembles, dead_neurons);
+}
+
+TEST(utest_hhn, one_with_stimulation) {
+    basic_ensemble_data expected_ensembles = { { 0 } };
+    basic_ensemble      dead_neurons = { };
+
+    template_ensemble_generation(1, 400, 100, { 25 }, expected_ensembles, dead_neurons);
+}
+
 TEST(utest_hhn, global_sync) {
     basic_ensemble_data expected_ensembles = { { 0, 1, 2 } };
     basic_ensemble      dead_neurons = { };
@@ -180,9 +194,30 @@ TEST(utest_hhn, global_sync) {
     template_ensemble_generation(3, 300, 50, { 27, 27, 27 }, expected_ensembles, dead_neurons);
 }
 
+TEST(utest_hhn, without_stimulation) {
+    basic_ensemble_data expected_ensembles = { };
+    basic_ensemble      dead_neurons = { 0, 1, 2 };
+
+    template_ensemble_generation(3, 400, 100, { 0, 0, 0 }, expected_ensembles, dead_neurons);
+}
+
+TEST(utest_hhn, one_with_one_without_stimulation) {
+    basic_ensemble_data expected_ensembles = { { 1 } };
+    basic_ensemble      dead_neurons = { 0 };
+
+    template_ensemble_generation(2, 400, 100, { 0, 25 }, expected_ensembles, dead_neurons);
+}
+
 TEST(utest_hhn, two_sync_ensembles) {
     basic_ensemble_data expected_ensembles = { { 0, 1 }, { 2, 3 } };
     basic_ensemble      dead_neurons = { };
 
-//    template_ensemble_generation(4, 400, 200, { 25, 25, 50, 50 }, expected_ensembles, dead_neurons);
+    template_ensemble_generation(4, 300, 100, { 25, 25, 50, 50 }, expected_ensembles, dead_neurons);
+}
+
+TEST(utest_hhn, three_sync_ensembles) {
+    basic_ensemble_data expected_ensembles = { { 0, 1 }, { 2, 3 }, { 4, 5 } };
+    basic_ensemble      dead_neurons = { };
+
+    template_ensemble_generation(6, 800, 200, { 20, 20, 50, 50, 80, 80 }, expected_ensembles, dead_neurons);
 }
