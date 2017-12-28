@@ -27,7 +27,7 @@ from pyclustering.core.wrapper import *;
 from pyclustering.core.pyclustering_package import pyclustering_package, package_extractor, package_builder;
 
 
-class c_legion_parameters(Structure):   
+class c_legion_parameters(Structure):
     _fields_ = [
         ("eps", c_double),
         ("alpha", c_double),

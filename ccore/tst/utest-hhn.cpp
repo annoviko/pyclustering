@@ -212,7 +212,7 @@ TEST(utest_hhn, two_sync_ensembles) {
     basic_ensemble_data expected_ensembles = { { 0, 1 }, { 2, 3 } };
     basic_ensemble      dead_neurons = { };
 
-    template_ensemble_generation(4, 300, 100, { 25, 25, 50, 50 }, expected_ensembles, dead_neurons);
+    template_ensemble_generation(4, 400, 100, { 25, 25, 50, 50 }, expected_ensembles, dead_neurons);
 }
 
 TEST(utest_hhn, three_sync_ensembles) {

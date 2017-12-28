@@ -184,6 +184,8 @@ public:
 
     network_dynamic_ptr get_central_dynamic(void) const;
 
+    value_dynamic_ptr get_time(void) const;
+
     evolution_dynamic & get_central_dynamic(const hhn_dynamic::collect & p_type);
 
 

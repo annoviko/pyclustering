@@ -583,5 +583,8 @@
     <ClInclude Include="..\src\interface\hhn_interface.h">
       <Filter>Tested Code\interface</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\differential\solve_type.hpp">
+      <Filter>Tested Code\differential</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

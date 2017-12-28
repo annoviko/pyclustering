@@ -28,8 +28,8 @@ from pyclustering.utils import draw_dynamics;
 
 from pyclustering.nnet.hhn import hhn_network, hhn_parameters;
 
-def template_dynamic_hhn(num_osc, steps, time, stimulus = None, params = None, separate_representation = False):
-    net = hhn_network(num_osc, stimulus, params);
+def template_dynamic_hhn(num_osc, steps, time, stimulus = None, params = None, separate_representation = False, ccore_flag = False):
+    net = hhn_network(num_osc, stimulus, params, ccore = ccore_flag);
 
     (t, dyn) = net.simulate(steps, time);
 

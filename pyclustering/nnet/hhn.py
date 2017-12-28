@@ -25,9 +25,11 @@
 
 """
 
-from pyclustering.nnet import *;
-
 from scipy.integrate import odeint;
+
+import pyclustering.core.hhn_wrapper as wrapper;
+
+from pyclustering.nnet import *;
 
 from pyclustering.utils import allocate_sync_ensembles;
 
@@ -187,7 +189,7 @@ class hhn_network(network):
     
     """
     
-    def __init__(self, num_osc, stimulus = None, parameters = None, type_conn = None, type_conn_represent = conn_represent.MATRIX):
+    def __init__(self, num_osc, stimulus = None, parameters = None, type_conn = None, type_conn_represent = conn_represent.MATRIX, ccore = False):
         """!
         @brief Constructor of oscillatory network based on Hodgkin-Huxley meuron model.
         
@@ -201,25 +203,8 @@ class hhn_network(network):
           
         super().__init__(num_osc, conn_type.NONE, type_conn_represent);
         
-        self._membrane_dynamic_pointer = None;        # final result is stored here.
-        
-        self._membrane_potential        = [0.0] * self._num_osc;
-        self._active_cond_sodium        = [0.0] * self._num_osc;
-        self._inactive_cond_sodium      = [0.0] * self._num_osc;
-        self._active_cond_potassium     = [0.0] * self._num_osc;
-        self._link_activation_time      = [0.0] * self._num_osc;
-        self._link_pulse_counter        = [0.0] * self._num_osc;
-        self._link_deactivation_time    = [0.0] * self._num_osc;
-        self._link_weight3              = [0.0] * self._num_osc;
-        self._pulse_generation_time     = [ [] for i in range(self._num_osc) ];
-        self._pulse_generation          = [False] * self._num_osc;
-        
-        self._noise = [random.random() * 2.0 - 1.0 for i in range(self._num_osc)];
-        
-        self._central_element = [central_element(), central_element()];
-        
         if (stimulus is None):
-            self._stimulus = [0.0] * self._num_osc;
+            self._stimulus = [0.0] * num_osc;
         else:
             self._stimulus = stimulus;
         
@@ -227,55 +212,81 @@ class hhn_network(network):
             self._params = parameters;
         else:
             self._params = hhn_parameters();
-    
-    
-    def simulate(self, steps, time, solution = solve_type.RK4, collect_dynamic = True):
+        
+        self.__ccore_hhn_pointer = None;
+        self.__ccore_hhn_dynamic_pointer = None;
+        
+        if (ccore is not False):
+            self.__ccore_hhn_pointer = wrapper.hhn_create(num_osc, self._params);
+        else:
+            self._membrane_dynamic_pointer = None;        # final result is stored here.
+            
+            self._membrane_potential        = [0.0] * self._num_osc;
+            self._active_cond_sodium        = [0.0] * self._num_osc;
+            self._inactive_cond_sodium      = [0.0] * self._num_osc;
+            self._active_cond_potassium     = [0.0] * self._num_osc;
+            self._link_activation_time      = [0.0] * self._num_osc;
+            self._link_pulse_counter        = [0.0] * self._num_osc;
+            self._link_deactivation_time    = [0.0] * self._num_osc;
+            self._link_weight3              = [0.0] * self._num_osc;
+            self._pulse_generation_time     = [ [] for i in range(self._num_osc) ];
+            self._pulse_generation          = [False] * self._num_osc;
+            
+            self._noise = [random.random() * 2.0 - 1.0 for i in range(self._num_osc)];
+            
+            self._central_element = [central_element(), central_element()];
+
+
+    def simulate(self, steps, time, solution = solve_type.RK4):
         """!
         @brief Performs static simulation of oscillatory network based on Hodgkin-Huxley neuron model.
         
         @param[in] steps (uint): Number steps of simulations during simulation.
         @param[in] time (double): Time of simulation.
         @param[in] solution (solve_type): Type of solver for differential equations.
-        @param[in] collect_dynamic (bool): If True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics.
         
-        @return (list) Dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,
-                otherwise returns only last values (last step of simulation) of dynamic.
+        @return (list) Dynamic of oscillatory network.
         
         """
         
-        return self.simulate_static(steps, time, solution, collect_dynamic);
+        return self.simulate_static(steps, time, solution);
     
     
-    def simulate_static(self, steps, time, solution = solve_type.RK4, collect_dynamic = False):
+    def simulate_static(self, steps, time, solution = solve_type.RK4):
         """!
         @brief Performs static simulation of oscillatory network based on Hodgkin-Huxley neuron model.
         
         @param[in] steps (uint): Number steps of simulations during simulation.
         @param[in] time (double): Time of simulation.
         @param[in] solution (solve_type): Type of solver for differential equations.
-        @param[in] collect_dynamic (bool): If True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics.
         
-        @return (list) Dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,
-                otherwise returns only last values (last step of simulation) of dynamic.
+        @return (list) Dynamic of oscillatory network.
         
         """
-        
-        self._membrane_dynamic_pointer = None;
         
         # Check solver before simulation
         if (solution == solve_type.FAST):
             raise NameError("Solver FAST is not support due to low accuracy that leads to huge error.");
-        elif (solution == solve_type.RKF45):
+        
+        self._membrane_dynamic_pointer = None;
+        
+        if (self.__ccore_hhn_pointer is not None):
+            self.__ccore_hhn_dynamic_pointer = wrapper.hhn_dynamic_create(True, False, False, False);
+            wrapper.hhn_simulate(self.__ccore_hhn_pointer, steps, time, solution, self._stimulus, self.__ccore_hhn_dynamic_pointer);
+            
+            peripheral_membrane_potential = wrapper.hhn_dynamic_get_peripheral_evolution(self.__ccore_hhn_dynamic_pointer, 0);
+            central_membrane_potential = wrapper.hhn_dynamic_get_central_evolution(self.__ccore_hhn_dynamic_pointer, 0);
+            dynamic_time = wrapper.hhn_dynamic_get_time(self.__ccore_hhn_dynamic_pointer);
+            
+            self._membrane_dynamic_pointer = peripheral_membrane_potential;
+            
+            return (dynamic_time, peripheral_membrane_potential + central_membrane_potential);
+        
+        if (solution == solve_type.RKF45):
             raise NameError("Solver RKF45 is not support in python version.");
         
-        dyn_memb = None;
-        dyn_time = None;
+        dyn_memb, dyn_time = [], [];
         
-        # Store only excitatory of the oscillator
-        if (collect_dynamic == True):
-            dyn_memb = [];
-            dyn_time = [];
-            
         step = time / steps;
         int_step = step / 10.0;
         
@@ -284,12 +295,8 @@ class hhn_network(network):
             memb = self._calculate_states(solution, t, step, int_step);
             
             # update states of oscillators
-            if (collect_dynamic == True):
-                dyn_memb.append(memb);
-                dyn_time.append(t);
-            else:
-                dyn_memb = memb;
-                dyn_time = t;
+            dyn_memb.append(memb);
+            dyn_time.append(t);
         
         self._membrane_dynamic_pointer = dyn_memb;
         return (dyn_time, dyn_memb);

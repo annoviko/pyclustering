@@ -61,7 +61,7 @@ extern "C" DECLARATION void hhn_destroy(const void * p_network_pointer);
  * @return Pointer to HHN dynamic.
  *
  */
-extern "C" DECLARATION void * hhn_create_dynamic(bool p_collect_membrane,
+extern "C" DECLARATION void * hhn_dynamic_create(bool p_collect_membrane,
                                                  bool p_collect_active_cond_sodium,
                                                  bool p_collect_inactive_cond_sodium,
                                                  bool p_collect_active_cond_potassium);
@@ -73,7 +73,7 @@ extern "C" DECLARATION void * hhn_create_dynamic(bool p_collect_membrane,
  * @param[in] p_dynamic: Pointer to HHN dynamic.
  *
  */
-extern "C" DECLARATION void hhn_destroy_dynamic(const void * p_dynamic);
+extern "C" DECLARATION void hhn_dynamic_destroy(const void * p_dynamic);
 
 /**
  *
@@ -111,7 +111,7 @@ extern "C" DECLARATION void hhn_simulate(const void * p_network_pointer,
  * @return Pointer to pyclustering package where dynamic evolution of peripheral neurons is stored.
  *
  */
-extern "C" DECLARATION pyclustering_package * hhn_get_peripheral_evolution(const void * p_output_dynamic, const std::size_t p_collection_index);
+extern "C" DECLARATION pyclustering_package * hhn_dynamic_get_peripheral_evolution(const void * p_output_dynamic, const std::size_t p_collection_index);
 
 /**
  *
@@ -128,4 +128,16 @@ extern "C" DECLARATION pyclustering_package * hhn_get_peripheral_evolution(const
  * param[in] p_collection_index: Index of collection that should be returned.
  *
  */
-extern "C" DECLARATION pyclustering_package * hhn_get_central_evolution(const void * p_output_dynamic, const std::size_t p_collection_index);
+extern "C" DECLARATION pyclustering_package * hhn_dynamic_get_central_evolution(const void * p_output_dynamic, const std::size_t p_collection_index);
+
+/**
+ *
+ * @brief   Returns time points of simulation process that corresponds to amplitude.
+ * @details Returned package should deallocated by 'free_pyclustering_package'.
+ *
+ * param[in] p_output_dynamic: Pointer to HHN dynamic.
+ *
+ * @return Pyclustering package where simulation time points are stored.
+ *
+ */
+extern "C" DECLARATION pyclustering_package * hhn_dynamic_get_time(const void * p_output_dynamic);

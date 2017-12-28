@@ -28,7 +28,6 @@
 
 using namespace std::placeholders;
 
-using namespace ccore::utils::random;
 
 
 namespace ccore {
@@ -147,6 +146,11 @@ hhn_dynamic::evolution_dynamic & hhn_dynamic::get_central_dynamic(const hhn_dyna
 
 hhn_dynamic::network_dynamic_ptr hhn_dynamic::get_central_dynamic(void) const {
     return m_central_dynamic;
+}
+
+
+hhn_dynamic::value_dynamic_ptr hhn_dynamic::get_time(void) const {
+    return m_time;
 }
 
 

@@ -21,6 +21,8 @@
 
 #include "interface/hhn_interface.h"
 
+#include "differential/solve_type.hpp"
+
 #include "nnet/hhn.hpp"
 
 
@@ -38,7 +40,7 @@ void hhn_destroy(const void * p_network_pointer) {
 }
 
 
-void * hhn_create_dynamic(bool p_collect_membrane, bool p_collect_active_cond_sodium, bool p_collect_inactive_cond_sodium, bool p_collect_active_cond_potassium) {
+void * hhn_dynamic_create(bool p_collect_membrane, bool p_collect_active_cond_sodium, bool p_collect_inactive_cond_sodium, bool p_collect_active_cond_potassium) {
     hhn_dynamic * output_dynamic = new hhn_dynamic();
     output_dynamic->disable_all();
 
@@ -62,7 +64,7 @@ void * hhn_create_dynamic(bool p_collect_membrane, bool p_collect_active_cond_so
 }
 
 
-void hhn_destroy_dynamic(const void * p_dynamic) {
+void hhn_dynamic_destroy(const void * p_dynamic) {
     delete (hhn_dynamic *) p_dynamic;
 }
 
@@ -80,11 +82,11 @@ void hhn_simulate(const void * p_network_pointer,
     const pyclustering_package * const package_stimulus = (const pyclustering_package * const) p_stimulus;
     hhn_stimulus stimulus_vector((double *) package_stimulus->data, ((double *) package_stimulus->data) + package_stimulus->size);
 
-    network->simulate(p_steps, p_time, solve_type::RUNGE_KUTTA_4, stimulus_vector, *dynamic);
+    network->simulate(p_steps, p_time, (solve_type) p_solver, stimulus_vector, *dynamic);
 }
 
 
-pyclustering_package * hhn_get_peripheral_evolution(const void * p_output_dynamic, const std::size_t p_collection_index) {
+pyclustering_package * hhn_dynamic_get_peripheral_evolution(const void * p_output_dynamic, const std::size_t p_collection_index) {
     hhn_dynamic * dynamic = (hhn_dynamic *) p_output_dynamic;
     hhn_dynamic::evolution_dynamic & evolution = dynamic->get_peripheral_dynamic((hhn_dynamic::collect) p_collection_index);
 
@@ -93,10 +95,19 @@ pyclustering_package * hhn_get_peripheral_evolution(const void * p_output_dynami
 }
 
 
-pyclustering_package * hhn_get_central_evolution(const void * p_output_dynamic, const std::size_t p_collection_index) {
+pyclustering_package * hhn_dynamic_get_central_evolution(const void * p_output_dynamic, const std::size_t p_collection_index) {
     hhn_dynamic * dynamic = (hhn_dynamic *) p_output_dynamic;
     hhn_dynamic::evolution_dynamic & evolution = dynamic->get_central_dynamic((hhn_dynamic::collect) p_collection_index);
 
     pyclustering_package * package = create_package(&evolution);
+    return package;
+}
+
+
+pyclustering_package * hhn_dynamic_get_time(const void * p_output_dynamic) {
+    hhn_dynamic * dynamic = (hhn_dynamic *) p_output_dynamic;
+    hhn_dynamic::value_dynamic_ptr evolution = dynamic->get_time();
+
+    pyclustering_package * package = create_package(evolution.get());
     return package;
 }

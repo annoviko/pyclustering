@@ -233,6 +233,7 @@
     <ClInclude Include="..\src\differential\equation.hpp" />
     <ClInclude Include="..\src\differential\runge_kutta_4.hpp" />
     <ClInclude Include="..\src\differential\runge_kutta_fehlberg_45.hpp" />
+    <ClInclude Include="..\src\differential\solve_type.hpp" />
     <ClInclude Include="..\src\interface\agglomerative_interface.h" />
     <ClInclude Include="..\src\interface\cure_interface.h" />
     <ClInclude Include="..\src\interface\dbscan_interface.h" />
