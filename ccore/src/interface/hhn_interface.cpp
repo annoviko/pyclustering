@@ -28,59 +28,75 @@ using namespace ccore::nnet;
 
 
 void * hhn_create(const std::size_t p_size, const void * const p_params) {
-    (void) p_size;
-    (void) p_params;
-
-    return nullptr;
+    hhn_network * network = new hhn_network(p_size, *((hnn_parameters *) p_params));
+    return network;
 }
 
 
 void hhn_destroy(const void * p_network_pointer) {
-    (void) p_network_pointer;
+    delete (hhn_network *) p_network_pointer;
 }
 
 
-void * hhn_create_dynamic(bool p_collect_membrane,
-                          bool p_collect_active_cond_sodium,
-                          bool p_collect_inactive_cond_sodium,
-                          bool p_collect_active_cond_potassium)
+void * hhn_create_dynamic(bool p_collect_membrane, bool p_collect_active_cond_sodium, bool p_collect_inactive_cond_sodium, bool p_collect_active_cond_potassium) {
+    hhn_dynamic * output_dynamic = new hhn_dynamic();
+    output_dynamic->disable_all();
+
+    if (p_collect_membrane) {
+        output_dynamic->enable(hhn_dynamic::collect::MEMBRANE_POTENTIAL);
+    }
+
+    if (p_collect_active_cond_sodium) {
+        output_dynamic->enable(hhn_dynamic::collect::ACTIVE_COND_SODIUM);
+    }
+
+    if (p_collect_inactive_cond_sodium) {
+        output_dynamic->enable(hhn_dynamic::collect::INACTIVE_COND_SODIUM);
+    }
+
+    if (p_collect_active_cond_potassium) {
+        output_dynamic->enable(hhn_dynamic::collect::ACTIVE_COND_POTASSIUM);
+    }
+
+    return output_dynamic;
+}
+
+
+void hhn_destroy_dynamic(const void * p_dynamic) {
+    delete (hhn_dynamic *) p_dynamic;
+}
+
+
+void hhn_simulate(const void * p_network_pointer,
+                  const std::size_t p_steps,
+                  const double p_time,
+                  const std::size_t p_solver,
+                  const pyclustering_package * const p_stimulus,
+                  const void * p_output_dynamic)
 {
-    (void) p_collect_membrane;
-    (void) p_collect_active_cond_sodium;
-    (void) p_collect_inactive_cond_sodium;
-    (void) p_collect_active_cond_potassium;
+    hhn_network * network = (hhn_network *) p_network_pointer;
+    hhn_dynamic * dynamic = (hhn_dynamic *) p_output_dynamic;
 
-    return nullptr;
+    const pyclustering_package * const package_stimulus = (const pyclustering_package * const) p_stimulus;
+    hhn_stimulus stimulus_vector((double *) package_stimulus->data, ((double *) package_stimulus->data) + package_stimulus->size);
+
+    network->simulate(p_steps, p_time, solve_type::RUNGE_KUTTA_4, stimulus_vector, *dynamic);
 }
 
 
-void * hhn_destroy_dynamic(const void * p_dynamic) {
-    (void) p_dynamic;
+pyclustering_package * hhn_get_peripheral_evolution(const void * p_output_dynamic, const std::size_t p_collection_index) {
+    hhn_dynamic * dynamic = (hhn_dynamic *) p_output_dynamic;
+    hhn_dynamic::evolution_dynamic & evolution = dynamic->get_peripheral_dynamic((hhn_dynamic::collect) p_collection_index);
 
-    return nullptr;
+    pyclustering_package * package = create_package(&evolution);
+    return package;
 }
 
 
-void * hhn_simulate(const void * p_network_pointer,
-                    const std::size_t p_steps,
-                    const double p_time,
-                    const std::size_t p_solver,
-                    const pyclustering_package * const p_stimulus,
-                    const void * p_output_dynamic)
-{
-    (void) p_network_pointer;
-    (void) p_steps;
-    (void) p_time;
-    (void) p_solver;
-    (void) p_stimulus;
-    (void) p_output_dynamic;
+pyclustering_package * hhn_get_central_evolution(const void * p_output_dynamic, const std::size_t p_collection_index) {
+    hhn_dynamic * dynamic = (hhn_dynamic *) p_output_dynamic;
+    hhn_dynamic::evolution_dynamic & evolution = dynamic->get_central_dynamic((hhn_dynamic::collect) p_collection_index);
 
-    return nullptr;
-}
-
-
-void * hhn_get_dynamic_evolution(const std::size_t p_collection_index) {
-    (void) p_collection_index;
-
-    return nullptr;
+    pyclustering_package * package = create_package(&evolution);
+    return package;
 }

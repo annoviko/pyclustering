@@ -350,6 +350,9 @@
     <ClCompile Include="utenv_utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\interface\hhn_interface.cpp">
+      <Filter>Tested Code\interface</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\tools\gtest\gtest.h">
@@ -576,6 +579,9 @@
     </ClInclude>
     <ClInclude Include="utenv_utils.hpp">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\interface\hhn_interface.h">
+      <Filter>Tested Code\interface</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

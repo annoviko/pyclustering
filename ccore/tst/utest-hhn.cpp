@@ -167,7 +167,7 @@ static void template_ensemble_generation(const std::size_t p_num_osc,
     basic_ensemble_data   ensembles;
     basic_ensemble        dead_neurons;
 
-    hhn_dynamic::evolution_dynamic membrane_dynamic = output_dynamic.get_peripheral_dynamic(hhn_dynamic::collect::MEMBRANE_POTENTIAL);
+    hhn_dynamic::evolution_dynamic & membrane_dynamic = output_dynamic.get_peripheral_dynamic(hhn_dynamic::collect::MEMBRANE_POTENTIAL);
     dynamic_analyser(0.0).allocate_sync_ensembles(membrane_dynamic, ensembles, dead_neurons);
 
     ASSERT_SYNC_ENSEMBLES(ensembles, p_expected_ensembles, dead_neurons, p_expected_dead_neurons);

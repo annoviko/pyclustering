@@ -114,6 +114,7 @@
     <ClCompile Include="..\src\interface\agglomerative_interface.cpp" />
     <ClCompile Include="..\src\interface\cure_interface.cpp" />
     <ClCompile Include="..\src\interface\dbscan_interface.cpp" />
+    <ClCompile Include="..\src\interface\hhn_interface.cpp" />
     <ClCompile Include="..\src\interface\hsyncnet_interface.cpp" />
     <ClCompile Include="..\src\interface\kmeans_interface.cpp" />
     <ClCompile Include="..\src\interface\kmedians_interface.cpp" />
@@ -235,6 +236,7 @@
     <ClInclude Include="..\src\interface\agglomerative_interface.h" />
     <ClInclude Include="..\src\interface\cure_interface.h" />
     <ClInclude Include="..\src\interface\dbscan_interface.h" />
+    <ClInclude Include="..\src\interface\hhn_interface.h" />
     <ClInclude Include="..\src\interface\hsyncnet_interface.h" />
     <ClInclude Include="..\src\interface\kmeans_interface.h" />
     <ClInclude Include="..\src\interface\kmedians_interface.h" />
