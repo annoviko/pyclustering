@@ -1,10 +1,13 @@
 ------------------------------------------------------------------------
 
-CHANGE NOTES FOR 0.7.3 (STARTED Oct 23, 2017)
+CHANGE NOTES FOR 0.8.0 (STARTED Oct 23, 2017)
 
 ------------------------------------------------------------------------
 
 GENERAL CHANGES:
+- Implemented C/C++ Hodgkin-Huxley oscillatory network for image segmentation in CCORE to increase performance (ccore.hhn, pyclustering.nnet.hhn).
+  See: https://github.com/annoviko/pyclustering/issues/217
+
 - Performance optimization for CCORE on linux platform.
   See: no reference.
 

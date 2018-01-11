@@ -5,7 +5,7 @@
          - K-Means++: The Advantages of careful seeding. D. Arthur, S. Vassilvitskii. 2007.
          
 @authors Andrei Novikov, Aleksey Kukushkin (pyclustering@yandex.ru)
-@date 2014-2017
+@date 2014-2018
 @copyright GNU Public License
 
 @see kmeans
