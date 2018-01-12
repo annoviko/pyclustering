@@ -29,24 +29,24 @@ from pyclustering.core.pyclustering_package import pyclustering_package, package
 
 class c_legion_parameters(Structure):
     _fields_ = [
-        ("eps", c_double),
-        ("alpha", c_double),
-        ("gamma", c_double),
-        ("betta", c_double),
-        ("lamda", c_double),
-        ("teta", c_double),
-        ("teta_x", c_double),
-        ("teta_p", c_double),
-        ("teta_xz", c_double),
-        ("teta_zx", c_double),
-        ("T", c_double),
-        ("mu", c_double),
-        ("Wz", c_double),
-        ("Wt", c_double),
-        ("fi", c_double),
-        ("ro", c_double),
-        ("I", c_double),
-        ("ENABLE_POTENTIONAL", c_bool)
+        ("eps",                 c_double),
+        ("alpha",               c_double),
+        ("gamma",               c_double),
+        ("betta",               c_double),
+        ("lamda",               c_double),
+        ("teta",                c_double),
+        ("teta_x",              c_double),
+        ("teta_p",              c_double),
+        ("teta_xz",             c_double),
+        ("teta_zx",             c_double),
+        ("T",                   c_double),
+        ("mu",                  c_double),
+        ("Wz",                  c_double),
+        ("Wt",                  c_double),
+        ("fi",                  c_double),
+        ("ro",                  c_double),
+        ("I",                   c_double),
+        ("ENABLE_POTENTIONAL",  c_bool)
     ];
 
 

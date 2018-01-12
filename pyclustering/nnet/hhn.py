@@ -97,10 +97,10 @@ class hhn_parameters:
         self.betta_inhibitory    = 0.3;
         
         
-        ## Alfa-parameter for alfa-function for excitatoty effect.
+        ## Alfa-parameter for alfa-function for excitatory effect.
         self.alfa_excitatory     = 40.0;
         
-        ## Betta-parameter for alfa-function for excitatoty effect.
+        ## Betta-parameter for alfa-function for excitatory effect.
         self.betta_excitatory    = 2.0;
         
         
@@ -191,7 +191,7 @@ class hhn_network(network):
     
     def __init__(self, num_osc, stimulus = None, parameters = None, type_conn = None, type_conn_represent = conn_represent.MATRIX, ccore = False):
         """!
-        @brief Constructor of oscillatory network based on Hodgkin-Huxley meuron model.
+        @brief Constructor of oscillatory network based on Hodgkin-Huxley neuron model.
         
         @param[in] num_osc (uint): Number of peripheral oscillators in the network.
         @param[in] stimulus (list): List of stimulus for oscillators, number of stimulus should be equal to number of peripheral oscillators.
@@ -238,6 +238,15 @@ class hhn_network(network):
             self._central_element = [central_element(), central_element()];
 
 
+    def __del__(self):
+        """!
+        @brief Destroy dynamically allocated oscillatory network instance in case of CCORE usage.
+
+        """
+        if self.__ccore_hhn_pointer:
+            wrapper.hhn_destroy(self.__ccore_hhn_pointer)
+
+
     def simulate(self, steps, time, solution = solve_type.RK4):
         """!
         @brief Performs static simulation of oscillatory network based on Hodgkin-Huxley neuron model.
@@ -280,6 +289,8 @@ class hhn_network(network):
             dynamic_time = wrapper.hhn_dynamic_get_time(self.__ccore_hhn_dynamic_pointer);
             
             self._membrane_dynamic_pointer = peripheral_membrane_potential;
+
+            wrapper.hhn_dynamic_destroy(self.__ccore_hhn_dynamic_pointer);
             
             return (dynamic_time, peripheral_membrane_potential, central_membrane_potential);
         

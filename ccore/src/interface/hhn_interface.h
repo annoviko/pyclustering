@@ -84,7 +84,7 @@ extern "C" DECLARATION void hhn_dynamic_destroy(const void * p_dynamic);
  * @param[in] p_time: Time of simulation.
  * @param[in] p_solver: Method that is used for differential equation.
  * @param[in] p_stimulus: Stimulus for oscillators, number of stimulus should be equal to number of oscillators.
- * @param[in] p_output_dynamic: Pointer to HHN dynamic where collected results are stored.
+ * @param[in|out] p_output_dynamic: Pointer to HHN dynamic where collected results are stored.
  *
  */
 extern "C" DECLARATION void hhn_simulate(const void * p_network_pointer,
