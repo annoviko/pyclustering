@@ -36,7 +36,7 @@ class HhnUnitTest(unittest.TestCase):
         
         for _ in range(0, 2, 1):
             net = hhn_network(len(stimulus), stimulus, params);
-            (t, x) = net.simulate(sim_steps, sim_time);
+            net.simulate(sim_steps, sim_time);
             
             ensembles = net.allocate_sync_ensembles(1.0);
             if (ensembles != expected_clusters):

@@ -352,30 +352,6 @@ void hhn_network::assign_neuron_states(const double p_time, const double p_step,
         }
     }
 
-    /*
-        for index in range(0, self._num_osc):
-            if (self._pulse_generation[index] is False):
-                if (self._membrane_potential[index] >= 0.0):
-                    self._pulse_generation[index] = True;
-                    self._pulse_generation_time[index].append(t);
-            else:
-                if (self._membrane_potential[index] < 0.0):
-                    self._pulse_generation[index] = False;
-            
-            # Update connection from CN2 to PN
-            if (self._link_weight3[index] == 0.0):
-                if (self._membrane_potential[index] > self._params.threshold):
-                    self._link_pulse_counter[index] += step;
-                
-                    if (self._link_pulse_counter[index] >= 1 / self._params.eps):
-                        self._link_weight3[index] = self._params.w3;
-                        self._link_activation_time[index] = t;
-            else:
-                if ( not ((self._link_activation_time[index] < t) and (t < self._link_activation_time[index] + self._params.deltah)) ):
-                    self._link_weight3[index] = 0.0;
-                    self._link_pulse_counter[index] = 0.0;
-    */
-
     for (std::size_t index = 0; index < m_central.size(); index++) {
         unpack_equation_output(p_next_central[index], m_central[index]);
 

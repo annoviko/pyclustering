@@ -280,26 +280,27 @@ class hhn_network(network):
             
             self._membrane_dynamic_pointer = peripheral_membrane_potential;
             
-            return (dynamic_time, peripheral_membrane_potential + central_membrane_potential);
+            return (dynamic_time, peripheral_membrane_potential, central_membrane_potential);
         
         if (solution == solve_type.RKF45):
             raise NameError("Solver RKF45 is not support in python version.");
         
-        dyn_memb, dyn_time = [], [];
+        dyn_peripheral, dyn_central, dyn_time = [], [], [];
         
         step = time / steps;
         int_step = step / 10.0;
         
         for t in numpy.arange(step, time + step, step):
             # update states of oscillators
-            memb = self._calculate_states(solution, t, step, int_step);
+            (memb_peripheral, memb_central) = self._calculate_states(solution, t, step, int_step);
             
             # update states of oscillators
-            dyn_memb.append(memb);
+            dyn_peripheral.append(memb_peripheral);
+            dyn_central.append(memb_central);
             dyn_time.append(t);
         
-        self._membrane_dynamic_pointer = dyn_memb;
-        return (dyn_time, dyn_memb);
+        self._membrane_dynamic_pointer = dyn_peripheral;
+        return (dyn_time, dyn_peripheral, dyn_central);
     
     
     def _calculate_states(self, solution, t, step, int_step):
@@ -353,7 +354,7 @@ class hhn_network(network):
         # Updation states of CN
         self.__update_central_neurons(t, next_cn_membrane, next_cn_active_sodium, next_cn_inactive_sodium, next_cn_active_potassium);
         
-        return next_membrane + next_cn_membrane;
+        return (next_membrane, next_cn_membrane);
     
     
     def __update_peripheral_neurons(self, t, step, next_membrane, next_active_sodium, next_inactive_sodium, next_active_potassium):
@@ -521,12 +522,7 @@ class hhn_network(network):
         
         """
         
-        ignore = set();
-        
-        ignore.add(self._num_osc);
-        ignore.add(self._num_osc + 1);
-        
-        return allocate_sync_ensembles(self._membrane_dynamic_pointer, tolerance, 20.0, ignore);
+        return allocate_sync_ensembles(self._membrane_dynamic_pointer, tolerance, 20.0, None);
     
     
     def __alfa_function(self, time, alfa, betta):

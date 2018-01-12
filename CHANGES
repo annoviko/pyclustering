@@ -5,6 +5,9 @@ CHANGE NOTES FOR 0.8.0 (STARTED Oct 23, 2017)
 ------------------------------------------------------------------------
 
 GENERAL CHANGES:
+- Implemented dynamic visualizer for oscillatory networks (pyclustering.nnet.dynamic_visualizer).
+  See: no reference.
+
 - Implemented C/C++ Hodgkin-Huxley oscillatory network for image segmentation in CCORE to increase performance (ccore.hhn, pyclustering.nnet.hhn).
   See: https://github.com/annoviko/pyclustering/issues/217
 

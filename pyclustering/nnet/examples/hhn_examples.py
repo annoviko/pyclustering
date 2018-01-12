@@ -24,29 +24,47 @@
 
 """
 
-from pyclustering.utils import draw_dynamics;
+
+from pyclustering.nnet.dynamic_visualizer import dynamic_visualizer;
 
 from pyclustering.nnet.hhn import hhn_network, hhn_parameters;
+
 
 def template_dynamic_hhn(num_osc, steps, time, stimulus = None, params = None, separate_representation = False, ccore_flag = False):
     net = hhn_network(num_osc, stimulus, params, ccore = ccore_flag);
 
-    (t, dyn) = net.simulate(steps, time);
+    (t, dyn_peripheral, dyn_central) = net.simulate(steps, time);
 
-    draw_dynamics(t, dyn, x_title = "Time", y_title = "V", y_labels = False, separate = separate_representation);
+    amount_canvases = 1;
+    if (isinstance(separate_representation, list)):
+        amount_canvases = len(separate_representation) + 2;
+    elif (separate_representation is True):
+        amount_canvases = len(dyn_peripheral[0]) + 2;
+    
+    print(len(dyn_peripheral));
+    print(len(dyn_central));
+    
+    visualizer = dynamic_visualizer(amount_canvases, x_title = "Time", y_title = "V", y_labels = False);
+    visualizer.append_dynamics(t, dyn_peripheral, 0, separate_representation);
+    visualizer.append_dynamics(t, dyn_central, amount_canvases - 2, separate_representation);
+    visualizer.show();
 
 
 def one_oscillator_unstimulated():
-    template_dynamic_hhn(1, 750, 100, separate_representation = True);
+    template_dynamic_hhn(1, 750, 100, separate_representation = True, ccore_flag = False);
+    template_dynamic_hhn(1, 750, 100, separate_representation = True, ccore_flag = True);
 
 def one_oscillator_stimulated():
-    template_dynamic_hhn(1, 750, 100, [25], separate_representation = True);
-    
+    template_dynamic_hhn(1, 750, 100, [25], separate_representation = True, ccore_flag = False);
+    template_dynamic_hhn(1, 750, 100, [25], separate_representation = True, ccore_flag = True);
+
 def three_oscillators_stimulated():
-    template_dynamic_hhn(3, 750, 100, [25] * 3, separate_representation = True);
+    template_dynamic_hhn(3, 750, 100, [25] * 3, separate_representation = True, ccore_flag = False);
+    template_dynamic_hhn(3, 750, 100, [25] * 3, separate_representation = True, ccore_flag = True);
 
 def two_sync_ensembles():
-    template_dynamic_hhn(4, 400, 200, [25, 25, 50, 50], separate_representation = True);
+    template_dynamic_hhn(4, 400, 200, [25, 25, 50, 50], separate_representation = True, ccore_flag = False);
+    template_dynamic_hhn(4, 400, 200, [25, 25, 50, 50], separate_representation = True, ccore_flag = True);
 
 def ten_oscillators_stimulated_desync():
     params = hhn_parameters();
@@ -87,9 +105,9 @@ def six_oscillators_mix_3_stimulated():
     template_dynamic_hhn(6, 1200, 600, [0, 0, 25, 25, 47, 47], params, separate_representation = True);
 
 
-one_oscillator_unstimulated();
-one_oscillator_stimulated();
-three_oscillators_stimulated();
+# one_oscillator_unstimulated();
+# one_oscillator_stimulated();
+# three_oscillators_stimulated();
 two_sync_ensembles();
 ten_oscillators_stimulated_desync();
 ten_oscillators_stimulated_sync();
