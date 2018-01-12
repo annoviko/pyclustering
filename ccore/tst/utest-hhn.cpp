@@ -152,6 +152,7 @@ TEST(utest_hhn, collect_membran_size_5_steps_50) {
 static void template_ensemble_generation(const std::size_t p_num_osc,
                                          const std::size_t p_steps,
                                          const std::size_t p_time,
+                                         const double p_tolerance,
                                          const hhn_stimulus & p_stimulus,
                                          basic_ensemble_data & p_expected_ensembles,
                                          basic_ensemble & p_expected_dead_neurons) {
@@ -168,7 +169,7 @@ static void template_ensemble_generation(const std::size_t p_num_osc,
     basic_ensemble        dead_neurons;
 
     hhn_dynamic::evolution_dynamic & membrane_dynamic = output_dynamic.get_peripheral_dynamic(hhn_dynamic::collect::MEMBRANE_POTENTIAL);
-    dynamic_analyser(0.0).allocate_sync_ensembles(membrane_dynamic, ensembles, dead_neurons);
+    dynamic_analyser(p_tolerance).allocate_sync_ensembles(membrane_dynamic, ensembles, dead_neurons);
 
     ASSERT_SYNC_ENSEMBLES(ensembles, p_expected_ensembles, dead_neurons, p_expected_dead_neurons);
 }
@@ -177,47 +178,47 @@ TEST(utest_hhn, one_without_stimulation) {
     basic_ensemble_data expected_ensembles = { };
     basic_ensemble      dead_neurons = { 0 };
 
-    template_ensemble_generation(1, 400, 100, { 0 }, expected_ensembles, dead_neurons);
+    template_ensemble_generation(1, 400, 100, 0.0, { 0 }, expected_ensembles, dead_neurons);
 }
 
 TEST(utest_hhn, one_with_stimulation) {
     basic_ensemble_data expected_ensembles = { { 0 } };
     basic_ensemble      dead_neurons = { };
 
-    template_ensemble_generation(1, 400, 100, { 25 }, expected_ensembles, dead_neurons);
+    template_ensemble_generation(1, 400, 100, 0.0, { 25 }, expected_ensembles, dead_neurons);
 }
 
 TEST(utest_hhn, global_sync) {
     basic_ensemble_data expected_ensembles = { { 0, 1, 2 } };
     basic_ensemble      dead_neurons = { };
 
-    template_ensemble_generation(3, 300, 50, { 27, 27, 27 }, expected_ensembles, dead_neurons);
+    template_ensemble_generation(3, 300, 50, 0.0, { 27, 27, 27 }, expected_ensembles, dead_neurons);
 }
 
 TEST(utest_hhn, without_stimulation) {
     basic_ensemble_data expected_ensembles = { };
     basic_ensemble      dead_neurons = { 0, 1, 2 };
 
-    template_ensemble_generation(3, 400, 100, { 0, 0, 0 }, expected_ensembles, dead_neurons);
+    template_ensemble_generation(3, 400, 100, 0.0, { 0, 0, 0 }, expected_ensembles, dead_neurons);
 }
 
 TEST(utest_hhn, one_with_one_without_stimulation) {
     basic_ensemble_data expected_ensembles = { { 1 } };
     basic_ensemble      dead_neurons = { 0 };
 
-    template_ensemble_generation(2, 400, 100, { 0, 25 }, expected_ensembles, dead_neurons);
+    template_ensemble_generation(2, 400, 100, 0.0, { 0, 25 }, expected_ensembles, dead_neurons);
 }
 
-TEST(utest_hhn, two_sync_ensembles) {
+TEST(utest_hhn, two_sync_ensembles_01) {
     basic_ensemble_data expected_ensembles = { { 0, 1 }, { 2, 3 } };
     basic_ensemble      dead_neurons = { };
 
-    template_ensemble_generation(4, 400, 100, { 25, 25, 50, 50 }, expected_ensembles, dead_neurons);
+    template_ensemble_generation(4, 800, 200, 0.1, { 20, 20, 80, 80 }, expected_ensembles, dead_neurons);
 }
 
-TEST(utest_hhn, three_sync_ensembles) {
-    basic_ensemble_data expected_ensembles = { { 0, 1 }, { 2, 3 }, { 4, 5 } };
+TEST(utest_hhn, two_sync_ensembles_02) {
+    basic_ensemble_data expected_ensembles = { { 0, 1, 2 }, { 3, 4, 5 } };
     basic_ensemble      dead_neurons = { };
 
-    template_ensemble_generation(6, 800, 200, { 20, 20, 50, 50, 80, 80 }, expected_ensembles, dead_neurons);
+    template_ensemble_generation(6, 800, 200, 0.1, { 20, 20, 20, 50, 50, 50 }, expected_ensembles, dead_neurons);
 }

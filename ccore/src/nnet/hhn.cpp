@@ -298,7 +298,8 @@ void hhn_network::simulate(const std::size_t p_steps, const double p_time, const
         cur_time += step;
 
         store_dynamic(cur_time + step, p_output_dynamic);
-        /* update_peripheral_current(); */
+
+        update_peripheral_current();
     }
 }
 
@@ -330,20 +331,24 @@ void hhn_network::assign_neuron_states(const double p_time, const double p_step,
 
         unpack_equation_output(p_next_peripheral[index], oscillator);
 
-        if ( (!oscillator.m_pulse_generation) && (oscillator.m_membrane_potential >= 0.0)) {
-            oscillator.m_pulse_generation = true;
-            oscillator.m_pulse_generation_time.push_back(p_time);
+        if (!oscillator.m_pulse_generation) {
+            if (oscillator.m_membrane_potential >= 0.0) {
+                oscillator.m_pulse_generation = true;
+                oscillator.m_pulse_generation_time.push_back(p_time);
+            }
         }
         else if (oscillator.m_membrane_potential < 0.0) {
             oscillator.m_pulse_generation = false;
         }
 
-        if ( (oscillator.m_link_weight3 == 0.0) && (oscillator.m_membrane_potential > m_params.m_threshold) ) {
-            oscillator.m_link_pulse_counter += p_step;
+        if (oscillator.m_link_weight3 == 0.0) {
+            if (oscillator.m_membrane_potential >= m_params.m_threshold) {
+                oscillator.m_link_pulse_counter += p_step;
 
-            if (oscillator.m_link_pulse_counter >= (1.0 / m_params.m_eps)) {
-                oscillator.m_link_weight3 = m_params.m_w3;
-                oscillator.m_link_activation_time = p_time;
+                if (oscillator.m_link_pulse_counter >= (1.0 / m_params.m_eps)) {
+                    oscillator.m_link_weight3 = m_params.m_w3;
+                    oscillator.m_link_activation_time = p_time;
+                }
             }
         }
         else if ( !((oscillator.m_link_activation_time < p_time) && (p_time < oscillator.m_link_activation_time + m_params.m_deltah)) ) {
@@ -356,9 +361,11 @@ void hhn_network::assign_neuron_states(const double p_time, const double p_step,
         unpack_equation_output(p_next_central[index], m_central[index]);
 
         central_element & elem = m_central[index];
-        if ( (!elem.m_pulse_generation) && (elem.m_membrane_potential >= 0.0) ) {
-            elem.m_pulse_generation = true;
-            elem.m_pulse_generation_time.push_back(p_time);
+        if (!elem.m_pulse_generation) {
+            if (elem.m_membrane_potential >= 0.0) {
+                elem.m_pulse_generation = true;
+                elem.m_pulse_generation_time.push_back(p_time);
+            }
         }
         else if (elem.m_membrane_potential < 0.0) {
             elem.m_pulse_generation = false;
@@ -431,8 +438,8 @@ void hhn_network::neuron_states(const double t, const differ_state<double> & inp
     double n = inputs[POSITION_ACTIVE_COND_POTASSIUM];   /* activation conductance of the potassium channel (n)  */
 
     /* Calculate ion current */
-    double active_sodium_part = m_params.m_gNa * std::pow(m, 3) * h * (v - m_params.m_vNa);
-    double inactive_sodium_part = m_params.m_gK * std::pow(n, 4) * (v - m_params.m_vK);
+    double active_sodium_part = m_params.m_gNa * std::pow(m, 3.0) * h * (v - m_params.m_vNa);
+    double inactive_sodium_part = m_params.m_gK * std::pow(n, 4.0) * (v - m_params.m_vK);
     double active_potassium_part = m_params.m_gL * (v - m_params.m_vL);
 
     double Iion = active_sodium_part + inactive_sodium_part + active_potassium_part;

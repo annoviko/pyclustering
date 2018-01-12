@@ -198,6 +198,7 @@ class hhn_network(network):
         @param[in] parameters (hhn_parameters): Parameters of the network.
         @param[in] type_conn (conn_type): Type of connections between oscillators in the network (ignored for this type of network).
         @param[in] type_conn_represent (conn_represent): Internal representation of connection in the network: matrix or list.
+        @param[in] ccore (bool): If 'True' then CCORE is used (C/C++ implementation of the model).
         
         """
           
@@ -380,9 +381,8 @@ class hhn_network(network):
                 if (self._membrane_potential[index] >= 0.0):
                     self._pulse_generation[index] = True;
                     self._pulse_generation_time[index].append(t);
-            else:
-                if (self._membrane_potential[index] < 0.0):
-                    self._pulse_generation[index] = False;
+            elif (self._membrane_potential[index] < 0.0):
+                self._pulse_generation[index] = False;
             
             # Update connection from CN2 to PN
             if (self._link_weight3[index] == 0.0):
@@ -392,10 +392,9 @@ class hhn_network(network):
                     if (self._link_pulse_counter[index] >= 1 / self._params.eps):
                         self._link_weight3[index] = self._params.w3;
                         self._link_activation_time[index] = t;
-            else:
-                if ( not ((self._link_activation_time[index] < t) and (t < self._link_activation_time[index] + self._params.deltah)) ):
-                    self._link_weight3[index] = 0.0;
-                    self._link_pulse_counter[index] = 0.0;
+            elif ( not ((self._link_activation_time[index] < t) and (t < self._link_activation_time[index] + self._params.deltah)) ):
+                self._link_weight3[index] = 0.0;
+                self._link_pulse_counter[index] = 0.0;
     
     
     def __update_central_neurons(self, t, next_cn_membrane, next_cn_active_sodium, next_cn_inactive_sodium, next_cn_active_potassium):
@@ -420,9 +419,8 @@ class hhn_network(network):
                 if (self._central_element[index].membrane_potential >= 0.0):
                     self._central_element[index].pulse_generation = True;
                     self._central_element[index].pulse_generation_time.append(t);
-            else:
-                if (self._central_element[index].membrane_potential < 0.0):
-                    self._central_element[index].pulse_generation = False;
+            elif (self._central_element[index].membrane_potential < 0.0):
+                self._central_element[index].pulse_generation = False;
     
     
     def hnn_state(self, inputs, t, argv):

@@ -109,8 +109,8 @@ def six_oscillators_mix_3_stimulated():
 # one_oscillator_stimulated();
 # three_oscillators_stimulated();
 two_sync_ensembles();
-ten_oscillators_stimulated_desync();
-ten_oscillators_stimulated_sync();
-ten_oscillators_stimulated_partial_sync();
-six_oscillators_mix_2_stimulated();
-six_oscillators_mix_3_stimulated();
+# ten_oscillators_stimulated_desync();
+# ten_oscillators_stimulated_sync();
+# ten_oscillators_stimulated_partial_sync();
+# six_oscillators_mix_2_stimulated();
+# six_oscillators_mix_3_stimulated();
