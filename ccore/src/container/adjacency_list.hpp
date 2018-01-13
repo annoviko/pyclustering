@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -25,6 +25,8 @@
 #include <unordered_set>
 #include "container/adjacency.hpp"
 
+
+namespace ccore {
 
 namespace container {
 
@@ -170,5 +172,8 @@ public:
 
     adjacency_list & operator=(adjacency_list && another_collection);
 };
+
+
+}
 
 }

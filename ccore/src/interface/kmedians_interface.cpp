@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -29,9 +29,9 @@ pyclustering_package * kmedians_algorithm(const pyclustering_package * const p_s
     p_sample->extract(data);
     p_initial_medians->extract(medians);
 
-    cluster_analysis::kmedians algorithm(medians, p_tolerance);
+    ccore::clst::kmedians algorithm(medians, p_tolerance);
 
-    cluster_analysis::kmedians_data output_result;
+    ccore::clst::kmedians_data output_result;
     algorithm.process(data, output_result);
 
     pyclustering_package * package = create_package(output_result.clusters().get());

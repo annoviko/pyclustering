@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -18,14 +18,12 @@
 *
 */
 
-#ifndef SRC_INTERFACE_KMEDOIDS_INTERFACE_H_
-#define SRC_INTERFACE_KMEDOIDS_INTERFACE_H_
+#pragma once
 
 
 #include "interface/pyclustering_package.hpp"
 
 #include "definitions.hpp"
-#include "utils.hpp"
 
 
 /**
@@ -41,6 +39,3 @@
  *
  */
 extern "C" DECLARATION pyclustering_package * kmedoids_algorithm(const pyclustering_package * const p_sample, const pyclustering_package * const p_medoids, const double p_tolerance);
-
-
-#endif

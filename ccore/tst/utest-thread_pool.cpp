@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -29,7 +29,7 @@
 #include <vector>
 
 
-using namespace parallel;
+using namespace ccore::parallel;
 
 
 static void template_create_delete_test(const std::size_t p_size) {

@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -19,6 +19,9 @@
 */
 
 #include "interface/som_interface.h"
+
+
+using namespace ccore::nnet;
 
 
 void * som_create(const size_t num_rows, const size_t num_cols, const size_t type_conn, const void * parameters) {

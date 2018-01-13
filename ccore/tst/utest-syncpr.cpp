@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -24,6 +24,9 @@
 #include "nnet/syncpr.hpp"
 
 #include <algorithm>
+
+
+using namespace ccore::nnet;
 
 
 static void template_syncpr_create_delete(const unsigned int size) {
@@ -63,31 +66,31 @@ static void template_simulation_static(const unsigned int steps,
 }
 
 TEST(utest_syncpr, static_simulation_10_FAST) {
-    template_simulation_static(10, solve_type::FAST, true);
+    template_simulation_static(10, solve_type::FORWARD_EULER, true);
 }
 
 TEST(utest_syncpr, static_simulation_100_FAST) {
-    template_simulation_static(100, solve_type::FAST, true);
+    template_simulation_static(100, solve_type::FORWARD_EULER, true);
 }
 
 TEST(utest_syncpr, static_simulation_5_RK4) {
-    template_simulation_static(5, solve_type::RK4, true);
+    template_simulation_static(5, solve_type::RUNGE_KUTTA_4, true);
 }
 
 TEST(utest_syncpr, static_simulation_6_RKF45) {
-    template_simulation_static(6, solve_type::RKF45, true);
+    template_simulation_static(6, solve_type::RUNGE_KUTTA_FEHLBERG_45, true);
 }
 
 TEST(utest_syncpr, static_simulation_FAST_no_collecting) {
-    template_simulation_static(5, solve_type::FAST, false);
+    template_simulation_static(5, solve_type::FORWARD_EULER, false);
 }
 
 TEST(utest_syncpr, static_simulation_RK4_no_collecting) {
-    template_simulation_static(5, solve_type::RK4, false);
+    template_simulation_static(5, solve_type::RUNGE_KUTTA_4, false);
 }
 
 TEST(utest_syncpr, static_simulation_RKF45_no_collecting) {
-    template_simulation_static(5, solve_type::RKF45, false);
+    template_simulation_static(5, solve_type::RUNGE_KUTTA_FEHLBERG_45, false);
 }
 
 
@@ -108,27 +111,27 @@ static void template_simulation_dynamic(const solve_type solver,
 }
 
 TEST(utest_syncpr, dynamic_simulation_FAST) {
-    template_simulation_dynamic(solve_type::FAST, true);
+    template_simulation_dynamic(solve_type::FORWARD_EULER, true);
 }
 
 TEST(utest_syncpr, dynamic_simulation_RK4) {
-    template_simulation_dynamic(solve_type::RK4, true);
+    template_simulation_dynamic(solve_type::RUNGE_KUTTA_4, true);
 }
 
 TEST(utest_syncpr, dynamic_simulation_RKF45) {
-    template_simulation_dynamic(solve_type::RKF45, true);
+    template_simulation_dynamic(solve_type::RUNGE_KUTTA_FEHLBERG_45, true);
 }
 
 TEST(utest_syncpr, dynamic_simulation_FAST_no_collecting) {
-    template_simulation_dynamic(solve_type::FAST, false);
+    template_simulation_dynamic(solve_type::FORWARD_EULER, false);
 }
 
 TEST(utest_syncpr, dynamic_simulation_RK4_no_collecting) {
-    template_simulation_dynamic(solve_type::RK4, false);
+    template_simulation_dynamic(solve_type::RUNGE_KUTTA_4, false);
 }
 
 TEST(utest_syncpr, dynamic_simulation_RKF45_no_collecting) {
-    template_simulation_dynamic(solve_type::RKF45, false);
+    template_simulation_dynamic(solve_type::RUNGE_KUTTA_FEHLBERG_45, false);
 }
 
 TEST(utest_syncpr, train_and_recognize_pattern) {
@@ -151,7 +154,7 @@ TEST(utest_syncpr, train_and_recognize_pattern) {
     /* recognize it */
     for (size_t i = 0; i < patterns.size(); i++) {
         syncpr_dynamic output_dynamic;
-        network.simulate_static(20, 10, patterns[i], solve_type::RK4, true, output_dynamic);
+        network.simulate_static(20, 10, patterns[i], solve_type::RUNGE_KUTTA_4, true, output_dynamic);
 
         double memory_order = network.memory_order(patterns[i]);
         ASSERT_TRUE(memory_order > 0.995);

@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -26,7 +26,18 @@
 #include "container/adjacency_connector.hpp"
 #include "container/adjacency_matrix.hpp"
 
-#include "utils.hpp"
+#include "utils/math.hpp"
+#include "utils/metric.hpp"
+
+
+using namespace std::placeholders;
+
+using namespace ccore::utils::math;
+
+
+namespace ccore {
+
+namespace nnet {
 
 
 const size_t legion_network::MAXIMUM_MATRIX_REPRESENTATION_SIZE = 4096;
@@ -65,7 +76,7 @@ void legion_network::simulate(const unsigned int steps,
     const double step = time / (double) steps;
     const double int_step = step / 10.0;
 
-    store_dynamic(0.0, collect_dynamic, output_dynamic);	/* store initial state */
+    store_dynamic(0.0, collect_dynamic, output_dynamic);  /* store initial state */
 
     for (double cur_time = step; cur_time < time; cur_time += step) {
         calculate_states(stimulus, solver, cur_time, step, int_step);
@@ -121,15 +132,13 @@ void legion_network::store_dynamic(const double time, const bool collect_dynamic
 }
 
 void legion_network::calculate_states(const legion_stimulus & stimulus, const solve_type solver, const double t, const double step, const double int_step) {
-    std::vector<void *> argv(2, NULL);
-    std::vector<differ_result<double> > next_states(size());
-
-    argv[0] = (void *) this;
+    std::vector< differ_result<double> > next_states(size());
+    std::vector<void *> argv(1, nullptr);
 
     unsigned int number_int_steps = (unsigned int) (step / int_step);
 
     for (std::size_t index = 0; index < size(); index++) {
-        argv[1] = (void *) &index;
+        argv[0] = (void *) &index;
 
         differ_state<double> inputs { m_oscillators[index].m_excitatory, m_oscillators[index].m_inhibitory };
         if (m_params.ENABLE_POTENTIAL) {
@@ -137,27 +146,31 @@ void legion_network::calculate_states(const legion_stimulus & stimulus, const so
         }
 
         switch(solver) {
-            case solve_type::FAST: {
-                throw std::runtime_error("Forward Euler first-order method is not supported due to low accuracy.");
+            case solve_type::FORWARD_EULER: {
+                throw std::invalid_argument("Forward Euler first-order method is not supported due to low accuracy.");
             }
 
-            case solve_type::RK4: {
+            case solve_type::RUNGE_KUTTA_4: {
                 if (m_params.ENABLE_POTENTIAL) {
-                    runge_kutta_4(&legion_network::adapter_neuron_states, inputs, t, t + step, number_int_steps, false /* only last states */, argv, next_states[index]);
+                    equation<double> neuron_equation = std::bind(&legion_network::neuron_states, this, _1, _2, _3, _4);
+                    runge_kutta_4(neuron_equation, inputs, t, t + step, number_int_steps, false /* only last states */, argv, next_states[index]);
                 }
                 else {
-                    runge_kutta_4(&legion_network::adapter_neuron_simplify_states, inputs, t, t + step, number_int_steps, false /* only last states */, argv, next_states[index]);
+                    equation<double> neuron_simplify_equation = std::bind(&legion_network::neuron_simplify_states, this, _1, _2, _3, _4);
+                    runge_kutta_4(neuron_simplify_equation, inputs, t, t + step, number_int_steps, false /* only last states */, argv, next_states[index]);
                 }
 
                 break;
             }
 
-            case solve_type::RKF45: {
+            case solve_type::RUNGE_KUTTA_FEHLBERG_45: {
                 if (m_params.ENABLE_POTENTIAL) {
-                    runge_kutta_fehlberg_45(&legion_network::adapter_neuron_states, inputs, t, t + step, 0.00001, false /* only last states */, argv, next_states[index]);
+                    equation<double> neuron_equation = std::bind(&legion_network::neuron_states, this, _1, _2, _3, _4);
+                    runge_kutta_fehlberg_45(neuron_equation, inputs, t, t + step, 0.00001, false /* only last states */, argv, next_states[index]);
                 }
                 else {
-                    runge_kutta_fehlberg_45(&legion_network::adapter_neuron_simplify_states, inputs, t, t + step, 0.00001, false /* only last states */, argv, next_states[index]);
+                    equation<double> neuron_simplify_equation = std::bind(&legion_network::neuron_simplify_states, this, _1, _2, _3, _4);
+                    runge_kutta_fehlberg_45(neuron_simplify_equation, inputs, t, t + step, 0.00001, false /* only last states */, argv, next_states[index]);
                 }
 
                 break;
@@ -183,13 +196,15 @@ void legion_network::calculate_states(const legion_stimulus & stimulus, const so
     differ_result<double> inhibitor_next_state;
     differ_state<double> inhibitor_input { m_global_inhibitor };
 
+    equation<double> inhibitor_equation = std::bind(&legion_network::inhibitor_state, this, _1, _2, _3, _4);
+
     switch (solver) {
-        case solve_type::RK4: {
-            runge_kutta_4(&legion_network::adapter_inhibitor_state, inhibitor_input, t, t + step, number_int_steps, false /* only last states */, argv, inhibitor_next_state);
+        case solve_type::RUNGE_KUTTA_4: {
+            runge_kutta_4(inhibitor_equation, inhibitor_input, t, t + step, number_int_steps, false /* only last states */, argv, inhibitor_next_state);
             break;
         }
-        case solve_type::RKF45: {
-            runge_kutta_fehlberg_45(&legion_network::adapter_inhibitor_state, inhibitor_input, t, t + step, 0.00001, false /* only last states */, argv, inhibitor_next_state);
+        case solve_type::RUNGE_KUTTA_FEHLBERG_45: {
+            runge_kutta_fehlberg_45(inhibitor_equation, inhibitor_input, t, t + step, 0.00001, false /* only last states */, argv, inhibitor_next_state);
             break;
         }
         default:
@@ -198,7 +213,7 @@ void legion_network::calculate_states(const legion_stimulus & stimulus, const so
 
     m_global_inhibitor = inhibitor_next_state[0].state[0];
 
-    for (unsigned int i = 0; i < size(); i++) {
+    for (std::size_t i = 0; i < size(); i++) {
         m_oscillators[i].m_excitatory = next_states[i][0].state[0];
         m_oscillators[i].m_inhibitory = next_states[i][0].state[1];
 
@@ -212,23 +227,8 @@ void legion_network::calculate_states(const legion_stimulus & stimulus, const so
 }
 
 
-void legion_network::adapter_neuron_states(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs) {
-    ((legion_network *) argv[0])->neuron_states(t, inputs, argv, outputs);
-}
-
-
-void legion_network::adapter_neuron_simplify_states(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs) {
-    ((legion_network *) argv[0])->neuron_simplify_states(t, inputs, argv, outputs);
-}
-
-
-void legion_network::adapter_inhibitor_state(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs) {
-    ((legion_network *) argv[0])->inhibitor_state(t, inputs, argv, outputs);
-}
-
-
 void legion_network::neuron_states(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs) {
-    unsigned int index = *(unsigned int *) argv[1];
+    unsigned int index = *(unsigned int *) argv[0];
 
     const double x = inputs[0];
     const double y = inputs[1];
@@ -244,7 +244,7 @@ void legion_network::neuron_states(const double t, const differ_state<double> & 
     double dx = 3.0 * x - std::pow(x, 3) + 2.0 - y + stumulus * potential_influence + m_oscillators[index].m_coupling_term + m_oscillators[index].m_noise;
     double dy = m_params.eps * (m_params.gamma * (1.0 + std::tanh(x / m_params.betta)) - y);
 
-    std::vector<size_t> neighbors;
+    std::vector<std::size_t> neighbors;
     m_static_connections->get_neighbors(index, neighbors);
 
     double potential = 0.0;
@@ -261,8 +261,9 @@ void legion_network::neuron_states(const double t, const differ_state<double> & 
     outputs.push_back(dp);
 }
 
+
 void legion_network::neuron_simplify_states(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs) {
-    unsigned int index = *(unsigned int *) argv[1];
+    unsigned int index = *(unsigned int *) argv[0];
 
     const double x = inputs[0];
     const double y = inputs[1];
@@ -328,4 +329,9 @@ void legion_network::initialize(const size_t num_osc, const connection_t connect
     else {
         connector.create_structure(connection_type, *m_static_connections);
     }
+}
+
+
+}
+
 }

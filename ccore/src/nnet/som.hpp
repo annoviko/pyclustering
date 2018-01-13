@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -26,6 +26,11 @@
 #include <cstddef>
 
 #include "definitions.hpp"
+
+
+namespace ccore {
+
+namespace nnet {
 
 
 /**
@@ -301,3 +306,8 @@ private:
     */
     double calculate_init_radius(const size_t p_rows, const size_t p_cols) const;
 };
+
+
+}
+
+}

@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -24,6 +24,9 @@
 #include "cluster/hsyncnet.hpp"
 
 
+using namespace ccore::clst;
+
+
 static void template_cluster_allocation(const unsigned int number_clusters) {
     bool result_testing = false;
 
@@ -41,7 +44,7 @@ static void template_cluster_allocation(const unsigned int number_clusters) {
         hsyncnet network(&sample, number_clusters, initial_type::EQUIPARTITION);
 
         hsyncnet_analyser analyser;
-        network.process(0.998, solve_type::FAST, true, analyser);
+        network.process(0.998, solve_type::FORWARD_EULER, true, analyser);
 
         hsyncnet_cluster_data ensembles;
         analyser.allocate_clusters(0.1, ensembles);

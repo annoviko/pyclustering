@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -27,7 +27,7 @@
 
 #include "cluster/hsyncnet.hpp"
 
-#include "utenv-utils.hpp"
+#include "utenv_utils.hpp"
 
 
 static void CHECK_FREE_PACKAGE(pyclustering_package * package) {
@@ -42,7 +42,7 @@ TEST(utest_interface_hsyncnet, hsyncnet_api) {
     void * network_pointer = hsyncnet_create_network(sample.get(), 3, (unsigned int) initial_type::EQUIPARTITION, 3, 0.1);
     ASSERT_NE(nullptr, network_pointer);
 
-    void * analyser_pointer = hsyncnet_process(network_pointer, 0.995, solve_type::FAST, true);
+    void * analyser_pointer = hsyncnet_process(network_pointer, 0.995, (unsigned int) solve_type::FORWARD_EULER, true);
     ASSERT_NE(nullptr, analyser_pointer);
 
     pyclustering_package * package = sync_dynamic_allocate_sync_ensembles(analyser_pointer, 0.1, sync_dynamic_get_size(analyser_pointer) - 1);

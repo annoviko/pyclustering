@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -22,6 +22,9 @@
 #include "interface/syncpr_interface.h"
 
 #include "nnet/syncpr.hpp"
+
+
+using namespace ccore::nnet;
 
 
 void * syncpr_create(const unsigned int num_osc, const double increase_strength1, const double increase_strength2) {

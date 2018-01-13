@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -18,8 +18,7 @@
 *
 */
 
-#ifndef SRC_CLUSTER_KMEDIANS_DATA_HPP_
-#define SRC_CLUSTER_KMEDIANS_DATA_HPP_
+#pragma once
 
 
 #include <memory>
@@ -30,7 +29,9 @@
 #include "definitions.hpp"
 
 
-namespace cluster_analysis {
+namespace ccore {
+
+namespace clst {
 
 
 /**
@@ -88,5 +89,4 @@ public:
 
 }
 
-
-#endif
+}

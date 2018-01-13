@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -18,8 +18,8 @@
 *
 */
 
-#ifndef TST_UTEST_CLUSTER_HPP_
-#define TST_UTEST_CLUSTER_HPP_
+
+#pragma once
 
 
 #include <algorithm>
@@ -31,10 +31,10 @@
 #include "cluster/cluster_algorithm.hpp"
 
 
-using namespace cluster_analysis;
+using namespace ccore::clst;
 
 
-/***********************************************************************************************
+/**
 *
 * @brief    Checks that clusters have all allocated objects together from input data and that
 *           sizes of allocated clusters are expected.
@@ -45,10 +45,47 @@ using namespace cluster_analysis;
 * @param[in] p_actual_clusters: allocated clusters.
 * @param[in] p_expected_cluster_length: expected clusters length - can be empty.
 *
-***********************************************************************************************/
+*/
 void ASSERT_CLUSTER_SIZES(const dataset & p_data,
         const cluster_sequence & p_actual_clusters,
         const std::vector<size_t> & p_expected_cluster_length);
 
 
-#endif
+template <typename EnsemblesType>
+void ASSERT_SYNC_ENSEMBLES(EnsemblesType & p_ensembles,
+                           EnsemblesType & p_expected_ensembles,
+                           typename EnsemblesType::value_type & p_dead,
+                           typename EnsemblesType::value_type & p_expected_dead)
+{
+    /* compare dead neurons */
+    std::sort(p_dead.begin(), p_dead.end());
+    std::sort(p_expected_dead.begin(), p_expected_dead.end());
+
+    ASSERT_EQ(p_expected_dead, p_dead);
+
+
+    /* compare ensembles */
+    ASSERT_EQ(p_expected_ensembles.size(), p_ensembles.size());
+
+    /* sort indexes in ensembles */
+    for (auto & ensemble : p_ensembles) {
+        std::sort(ensemble.begin(), ensemble.end());
+    }
+
+    for (auto & ensemble : p_expected_ensembles) {
+        std::sort(ensemble.begin(), ensemble.end());
+    }
+
+    /* compare */
+    bool ensemble_found = false;
+    for (auto & ensemble : p_ensembles) {
+        for (auto & expected_ensemble : p_expected_ensembles) {
+            if (ensemble == expected_ensemble) {
+                ensemble_found = true;
+                break;
+            }
+        }
+
+        ASSERT_TRUE(ensemble_found);
+    }
+}

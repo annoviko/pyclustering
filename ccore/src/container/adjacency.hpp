@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -24,6 +24,8 @@
 #include <vector>
 #include <cstdlib>
 
+
+namespace ccore {
 
 namespace container {
 
@@ -137,5 +139,7 @@ public:
     */
     virtual double get_connection_weight(const size_t node_index1, const size_t node_index2) const = 0;
 };
+
+}
 
 }

@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -21,6 +21,10 @@
 #include "interface/hsyncnet_interface.h"
 
 #include "cluster/hsyncnet.hpp"
+
+
+using namespace ccore::clst;
+using namespace ccore::nnet;
 
 
 void * hsyncnet_create_network(const pyclustering_package * const p_sample, 

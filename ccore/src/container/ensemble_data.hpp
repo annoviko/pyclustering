@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -18,12 +18,13 @@
 *
 */
 
-#ifndef _ENSEMBLE_DATA_H_
-#define _ENSEMBLE_DATA_H_
+#pragma once
 
 
 #include <vector>
 
+
+namespace ccore {
 
 namespace container {
 
@@ -32,6 +33,10 @@ template <typename sync_ensemble_type>
 using ensemble_data = std::vector<sync_ensemble_type>;
 
 
+using basic_ensemble        = std::vector<std::size_t>;
+using basic_ensemble_data   = std::vector<basic_ensemble>;
+
+
 }
 
-#endif
+}

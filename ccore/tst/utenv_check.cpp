@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -18,9 +18,14 @@
 *
 */
 
-#include "utest-cluster.hpp"
 
+#include "utenv_check.hpp"
+
+#include <algorithm>
 #include <numeric>
+
+
+using namespace ccore::clst;
 
 
 void ASSERT_CLUSTER_SIZES(const dataset & p_data, const cluster_sequence & p_actual_clusters, const std::vector<size_t> & p_expected_cluster_length) {

@@ -3,7 +3,7 @@
 @brief Unit-tests for oscillatory network based on Hodgkin-Huxley model of neuron.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
-@date 2014-2017
+@date 2014-2018
 @copyright GNU Public License
 
 @cond GNU_PUBLIC_LICENSE
@@ -26,35 +26,19 @@
 
 import unittest;
 
-from pyclustering.nnet.hhn import hhn_network;
+from pyclustering.nnet.tests.hhn_templates import HhnTestTemplates;
 
 
 class HhnUnitTest(unittest.TestCase):
-    # Tests regarded to synchronous ensembles allocation.
-    def templateSyncEnsembleAllocation(self, stimulus, params, sim_steps, sim_time, expected_clusters):
-        result_testing = False;
-        
-        for _ in range(0, 2, 1):
-            net = hhn_network(len(stimulus), stimulus, params);
-            (t, x) = net.simulate(sim_steps, sim_time);
-            
-            ensembles = net.allocate_sync_ensembles(1.0);
-            if (ensembles != expected_clusters):
-                continue;
-            
-            result_testing = True;
-            break;
-        
-        assert result_testing;
-
     def testGlobalSyncWithSameStimulus(self):
-        self.templateSyncEnsembleAllocation([27, 27, 27], None, 300, 50, [[0, 1, 2]]);
-          
+        HhnTestTemplates.templateSyncEnsembleAllocation([27, 27, 27], None, 600, 50, [[0, 1, 2]], False);
+
     def testGlobalSyncWithVariousStimulus(self):
-        self.templateSyncEnsembleAllocation([26, 26, 27, 27, 26, 25], None, 300, 50, [[0, 1, 2, 3, 4, 5]]);
-    
+        HhnTestTemplates.templateSyncEnsembleAllocation([26, 26, 27, 27, 26, 25], None, 600, 50, [[0, 1, 2, 3, 4, 5]], False);
+
     def testPartialSync(self):
-        self.templateSyncEnsembleAllocation([25, 25, 50, 50], None, 400, 200, [ [0, 1], [2, 3] ]);
+        HhnTestTemplates.templateSyncEnsembleAllocation([25, 25, 50, 50], None, 800, 200, [[0, 1], [2, 3]], False);
+
 
 if __name__ == "__main__":
     unittest.main();

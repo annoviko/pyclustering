@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -18,8 +18,7 @@
 *
 */
 
-#ifndef _CURE_H_
-#define _CURE_H_
+#pragma once
 
 
 #include <vector>
@@ -31,13 +30,13 @@
 #include "cluster/cluster_algorithm.hpp"
 #include "cluster/cure_data.hpp"
 
-#include "utils.hpp"
+
+using namespace ccore::container;
 
 
-using namespace container;
+namespace ccore {
 
-
-namespace cluster_analysis {
+namespace clst {
 
 
 /**
@@ -308,5 +307,4 @@ public:
 
 }
 
-
-#endif
+}

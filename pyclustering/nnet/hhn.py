@@ -5,7 +5,7 @@
          - D.Chik, R.Borisyuk, Y.Kazanovich. Selective attention model with spiking elements. 2009.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
-@date 2014-2017
+@date 2014-2018
 @copyright GNU Public License
 
 @cond GNU_PUBLIC_LICENSE
@@ -25,9 +25,11 @@
 
 """
 
-from pyclustering.nnet import *;
-
 from scipy.integrate import odeint;
+
+import pyclustering.core.hhn_wrapper as wrapper;
+
+from pyclustering.nnet import *;
 
 from pyclustering.utils import allocate_sync_ensembles;
 
@@ -95,10 +97,10 @@ class hhn_parameters:
         self.betta_inhibitory    = 0.3;
         
         
-        ## Alfa-parameter for alfa-function for excitatoty effect.
+        ## Alfa-parameter for alfa-function for excitatory effect.
         self.alfa_excitatory     = 40.0;
         
-        ## Betta-parameter for alfa-function for excitatoty effect.
+        ## Betta-parameter for alfa-function for excitatory effect.
         self.betta_excitatory    = 2.0;
         
         
@@ -145,11 +147,8 @@ class central_element:
         ## Inactivaton conductance of the sodium channel (h).
         self.inactive_cond_sodium    = 0.0;
         
-        ## Inactivaton conductance of the sodium channel (h)
+        ## Activaton conductance of the sodium channel (h).
         self.active_cond_potassium   = 0.0;
-        
-        ## Times of pulse generation by central neuron.
-        self.pulse_generation_time = None;
         
         ## Spike generation of central neuron.
         self.pulse_generation = False;
@@ -170,9 +169,11 @@ class hhn_network(network):
     @brief Oscillatory Neural Network with central element based on Hodgkin-Huxley neuron model. Interaction between oscillators is performed via
            central element (no connection between oscillators that are called as peripheral). Peripheral oscillators receive external stimulus.
            Central element consist of two oscillators: the first is used for synchronization some ensemble of oscillators and the second controls
-           synchronization of the first cental oscillator with verious ensembles.
+           synchronization of the first cental oscillator with various ensembles.
     
-    Example:
+    Usage example where oscillatory network with 6 oscillators is used for simulation. The first two oscillators
+    has the same stimulus, as well as the third and fourth oscillators and the the last two. Thus three synchronous
+    ensembles are expected after simulation.
     @code
         # change period of time when high strength value of synaptic connection exists from CN2 to PN.
         params = hhn_parameters();
@@ -184,45 +185,45 @@ class hhn_network(network):
         # simulate network
         (t, dyn) = net.simulate(1200, 600);
         
-        # draw network output during simulation
-        draw_dynamics(t, dyn, x_title = "Time", y_title = "V", separate = True);
+        # draw network output during simulation (membrane potential of peripheral and central neurons).
+        amount_canvases = 6 + 2; # 6 peripheral oscillator + 2 central elements
+        visualizer = dynamic_visualizer(amount_canvases, x_title="Time", y_title="V", y_labels=False);
+        visualizer.append_dynamics(t, dyn_peripheral, 0, separate);
+        visualizer.append_dynamics(t, dyn_central, amount_canvases - 2, True);
+        visualizer.show();
     @endcode
+
+    To increase performance CCORE can be used, for that purpose special flag should be specified when network is
+    constructed:
+    @code
+        # create oscillatory network with stimulus using CCORE
+        net = hhn_network(6, [0, 0, 25, 25, 47, 47], params, ccore=True);
+    @endcode
+
+    There is visualized results of simulation where three synchronous ensembles of oscillators can be observed. The
+    first and the second forms the first ensemble, the third and the fourth forms the second ensemble and the last
+    two oscillators forms the third ensemble.
+    @image html hhn_three_ensembles.png
     
     """
     
-    def __init__(self, num_osc, stimulus = None, parameters = None, type_conn = None, type_conn_represent = conn_represent.MATRIX):
+    def __init__(self, num_osc, stimulus = None, parameters = None, type_conn = None, type_conn_represent = conn_represent.MATRIX, ccore = False):
         """!
-        @brief Constructor of oscillatory network based on Hodgkin-Huxley meuron model.
+        @brief Constructor of oscillatory network based on Hodgkin-Huxley neuron model.
         
         @param[in] num_osc (uint): Number of peripheral oscillators in the network.
         @param[in] stimulus (list): List of stimulus for oscillators, number of stimulus should be equal to number of peripheral oscillators.
         @param[in] parameters (hhn_parameters): Parameters of the network.
         @param[in] type_conn (conn_type): Type of connections between oscillators in the network (ignored for this type of network).
         @param[in] type_conn_represent (conn_represent): Internal representation of connection in the network: matrix or list.
+        @param[in] ccore (bool): If 'True' then CCORE is used (C/C++ implementation of the model).
         
         """
           
         super().__init__(num_osc, conn_type.NONE, type_conn_represent);
         
-        self._membrane_dynamic_pointer = None;        # final result is stored here.
-        
-        self._membrane_potential        = [0.0] * self._num_osc;
-        self._active_cond_sodium        = [0.0] * self._num_osc;
-        self._inactive_cond_sodium      = [0.0] * self._num_osc;
-        self._active_cond_potassium     = [0.0] * self._num_osc;
-        self._link_activation_time      = [0.0] * self._num_osc;
-        self._link_pulse_counter        = [0.0] * self._num_osc;
-        self._link_deactivation_time    = [0.0] * self._num_osc;
-        self._link_weight3              = [0.0] * self._num_osc;
-        self._pulse_generation_time     = [ [] for i in range(self._num_osc) ];
-        self._pulse_generation          = [False] * self._num_osc;
-        
-        self._noise = [random.random() * 2.0 - 1.0 for i in range(self._num_osc)];
-        
-        self._central_element = [central_element(), central_element()];
-        
         if (stimulus is None):
-            self._stimulus = [0.0] * self._num_osc;
+            self._stimulus = [0.0] * num_osc;
         else:
             self._stimulus = stimulus;
         
@@ -230,72 +231,118 @@ class hhn_network(network):
             self._params = parameters;
         else:
             self._params = hhn_parameters();
-    
-    
-    def simulate(self, steps, time, solution = solve_type.RK4, collect_dynamic = True):
+        
+        self.__ccore_hhn_pointer = None;
+        self.__ccore_hhn_dynamic_pointer = None;
+        
+        if (ccore is not False):
+            self.__ccore_hhn_pointer = wrapper.hhn_create(num_osc, self._params);
+        else:
+            self._membrane_dynamic_pointer = None;        # final result is stored here.
+            
+            self._membrane_potential        = [0.0] * self._num_osc;
+            self._active_cond_sodium        = [0.0] * self._num_osc;
+            self._inactive_cond_sodium      = [0.0] * self._num_osc;
+            self._active_cond_potassium     = [0.0] * self._num_osc;
+            self._link_activation_time      = [0.0] * self._num_osc;
+            self._link_pulse_counter        = [0.0] * self._num_osc;
+            self._link_deactivation_time    = [0.0] * self._num_osc;
+            self._link_weight3              = [0.0] * self._num_osc;
+            self._pulse_generation_time     = [ [] for i in range(self._num_osc) ];
+            self._pulse_generation          = [False] * self._num_osc;
+            
+            self._noise = [random.random() * 2.0 - 1.0 for i in range(self._num_osc)];
+            
+            self._central_element = [central_element(), central_element()];
+
+
+    def __del__(self):
+        """!
+        @brief Destroy dynamically allocated oscillatory network instance in case of CCORE usage.
+
+        """
+        if self.__ccore_hhn_pointer:
+            wrapper.hhn_destroy(self.__ccore_hhn_pointer)
+
+
+    def simulate(self, steps, time, solution = solve_type.RK4):
         """!
         @brief Performs static simulation of oscillatory network based on Hodgkin-Huxley neuron model.
-        
+        @details Output dynamic is sensible to amount of steps of simulation and solver of differential equation.
+                  Python implementation uses 'odeint' from 'scipy', CCORE uses classical RK4 and RFK45 methods,
+                  therefore in case of CCORE HHN (Hodgkin-Huxley network) amount of steps should be greater than in
+                  case of Python HHN.
+
         @param[in] steps (uint): Number steps of simulations during simulation.
         @param[in] time (double): Time of simulation.
         @param[in] solution (solve_type): Type of solver for differential equations.
-        @param[in] collect_dynamic (bool): If True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics.
         
-        @return (list) Dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,
-                otherwise returns only last values (last step of simulation) of dynamic.
+        @return (tuple) Dynamic of oscillatory network represented by (time, peripheral neurons dynamic, central elements
+                dynamic), where types are (list, list, list).
         
         """
         
-        return self.simulate_static(steps, time, solution, collect_dynamic);
+        return self.simulate_static(steps, time, solution);
     
     
-    def simulate_static(self, steps, time, solution = solve_type.RK4, collect_dynamic = False):
+    def simulate_static(self, steps, time, solution = solve_type.RK4):
         """!
         @brief Performs static simulation of oscillatory network based on Hodgkin-Huxley neuron model.
-        
+        @details Output dynamic is sensible to amount of steps of simulation and solver of differential equation.
+                  Python implementation uses 'odeint' from 'scipy', CCORE uses classical RK4 and RFK45 methods,
+                  therefore in case of CCORE HHN (Hodgkin-Huxley network) amount of steps should be greater than in
+                  case of Python HHN.
+
         @param[in] steps (uint): Number steps of simulations during simulation.
         @param[in] time (double): Time of simulation.
         @param[in] solution (solve_type): Type of solver for differential equations.
-        @param[in] collect_dynamic (bool): If True - returns whole dynamic of oscillatory network, otherwise returns only last values of dynamics.
         
-        @return (list) Dynamic of oscillatory network. If argument 'collect_dynamic' = True, than return dynamic for the whole simulation time,
-                otherwise returns only last values (last step of simulation) of dynamic.
+        @return (tuple) Dynamic of oscillatory network represented by (time, peripheral neurons dynamic, central elements
+                dynamic), where types are (list, list, list).
         
         """
-        
-        self._membrane_dynamic_pointer = None;
         
         # Check solver before simulation
         if (solution == solve_type.FAST):
             raise NameError("Solver FAST is not support due to low accuracy that leads to huge error.");
-        elif (solution == solve_type.RKF45):
+        
+        self._membrane_dynamic_pointer = None;
+        
+        if (self.__ccore_hhn_pointer is not None):
+            self.__ccore_hhn_dynamic_pointer = wrapper.hhn_dynamic_create(True, False, False, False);
+            wrapper.hhn_simulate(self.__ccore_hhn_pointer, steps, time, solution, self._stimulus, self.__ccore_hhn_dynamic_pointer);
+            
+            peripheral_membrane_potential = wrapper.hhn_dynamic_get_peripheral_evolution(self.__ccore_hhn_dynamic_pointer, 0);
+            central_membrane_potential = wrapper.hhn_dynamic_get_central_evolution(self.__ccore_hhn_dynamic_pointer, 0);
+            dynamic_time = wrapper.hhn_dynamic_get_time(self.__ccore_hhn_dynamic_pointer);
+            
+            self._membrane_dynamic_pointer = peripheral_membrane_potential;
+
+            wrapper.hhn_dynamic_destroy(self.__ccore_hhn_dynamic_pointer);
+            
+            return (dynamic_time, peripheral_membrane_potential, central_membrane_potential);
+        
+        if (solution == solve_type.RKF45):
             raise NameError("Solver RKF45 is not support in python version.");
         
-        dyn_memb = None;
-        dyn_time = None;
+        dyn_peripheral = [ self._membrane_potential[:] ];
+        dyn_central = [ [0.0, 0.0] ];
+        dyn_time = [ 0.0 ];
         
-        # Store only excitatory of the oscillator
-        if (collect_dynamic == True):
-            dyn_memb = [];
-            dyn_time = [];
-            
         step = time / steps;
         int_step = step / 10.0;
         
         for t in numpy.arange(step, time + step, step):
             # update states of oscillators
-            memb = self._calculate_states(solution, t, step, int_step);
+            (memb_peripheral, memb_central) = self._calculate_states(solution, t, step, int_step);
             
             # update states of oscillators
-            if (collect_dynamic == True):
-                dyn_memb.append(memb);
-                dyn_time.append(t);
-            else:
-                dyn_memb = memb;
-                dyn_time = t;
+            dyn_peripheral.append(memb_peripheral);
+            dyn_central.append(memb_central);
+            dyn_time.append(t);
         
-        self._membrane_dynamic_pointer = dyn_memb;
-        return (dyn_time, dyn_memb);
+        self._membrane_dynamic_pointer = dyn_peripheral;
+        return (dyn_time, dyn_peripheral, dyn_central);
     
     
     def _calculate_states(self, solution, t, step, int_step):
@@ -349,7 +396,7 @@ class hhn_network(network):
         # Updation states of CN
         self.__update_central_neurons(t, next_cn_membrane, next_cn_active_sodium, next_cn_inactive_sodium, next_cn_active_potassium);
         
-        return next_membrane + next_cn_membrane;
+        return (next_membrane, next_cn_membrane);
     
     
     def __update_peripheral_neurons(self, t, step, next_membrane, next_active_sodium, next_inactive_sodium, next_active_potassium):
@@ -372,25 +419,23 @@ class hhn_network(network):
         
         for index in range(0, self._num_osc):
             if (self._pulse_generation[index] is False):
-                if (self._membrane_potential[index] > 0.0):
+                if (self._membrane_potential[index] >= 0.0):
                     self._pulse_generation[index] = True;
                     self._pulse_generation_time[index].append(t);
-            else:
-                if (self._membrane_potential[index] < 0.0):
-                    self._pulse_generation[index] = False;
+            elif (self._membrane_potential[index] < 0.0):
+                self._pulse_generation[index] = False;
             
             # Update connection from CN2 to PN
             if (self._link_weight3[index] == 0.0):
-                if ( (self._membrane_potential[index] > self._params.threshold) and (self._membrane_potential[index] > self._params.threshold) ):
+                if (self._membrane_potential[index] > self._params.threshold):
                     self._link_pulse_counter[index] += step;
                 
                     if (self._link_pulse_counter[index] >= 1 / self._params.eps):
                         self._link_weight3[index] = self._params.w3;
                         self._link_activation_time[index] = t;
-            else:
-                if ( not ((self._link_activation_time[index] < t) and (t < self._link_activation_time[index] + self._params.deltah)) ):
-                    self._link_weight3[index] = 0.0;
-                    self._link_pulse_counter[index] = 0.0;
+            elif ( not ((self._link_activation_time[index] < t) and (t < self._link_activation_time[index] + self._params.deltah)) ):
+                self._link_weight3[index] = 0.0;
+                self._link_pulse_counter[index] = 0.0;
     
     
     def __update_central_neurons(self, t, next_cn_membrane, next_cn_active_sodium, next_cn_inactive_sodium, next_cn_active_potassium):
@@ -412,12 +457,11 @@ class hhn_network(network):
             self._central_element[index].active_cond_potassium = next_cn_active_potassium[index];
             
             if (self._central_element[index].pulse_generation is False):
-                if (self._central_element[index].membrane_potential > 0.0):
+                if (self._central_element[index].membrane_potential >= 0.0):
                     self._central_element[index].pulse_generation = True;
                     self._central_element[index].pulse_generation_time.append(t);
-            else:
-                if (self._central_element[index].membrane_potential < 0.0):
-                    self._central_element[index].pulse_generation = False;
+            elif (self._central_element[index].membrane_potential < 0.0):
+                self._central_element[index].pulse_generation = False;
     
     
     def hnn_state(self, inputs, t, argv):
@@ -455,19 +499,17 @@ class hhn_network(network):
         Isyn = 0.0;
         if (index < self._num_osc): 
             # PN - peripheral neuron - calculation of external current and synaptic current.
-            Iext = self._stimulus[index] * self._noise[index];    # probably noise can be pre-defined for reducting compexity            
+            Iext = self._stimulus[index] * self._noise[index];    # probably noise can be pre-defined for reducting compexity
             
             memory_impact1 = 0.0;
             for i in range(0, len(self._central_element[0].pulse_generation_time)):
-                # TODO: alfa function shouldn't be calculated here (long procedure)
                 memory_impact1 += self.__alfa_function(t - self._central_element[0].pulse_generation_time[i], self._params.alfa_inhibitory, self._params.betta_inhibitory);
             
             memory_impact2 = 0.0;
             for i in range(0, len(self._central_element[1].pulse_generation_time)):
-                # TODO: alfa function shouldn't be calculated here (long procedure)
-                memory_impact2 += self.__alfa_function(t - self._central_element[1].pulse_generation_time[i], self._params.alfa_inhibitory, self._params.betta_inhibitory);        
+                memory_impact2 += self.__alfa_function(t - self._central_element[1].pulse_generation_time[i], self._params.alfa_inhibitory, self._params.betta_inhibitory);
     
-            Isyn = self._params.w2 * (v - self._params.Vsyninh) * memory_impact1 + self._link_weight3[index] * (v - self._params.Vsyninh) * memory_impact2;            
+            Isyn = self._params.w2 * (v - self._params.Vsyninh) * memory_impact1 + self._link_weight3[index] * (v - self._params.Vsyninh) * memory_impact2;
         else:
             # CN - central element.
             central_index = index - self._num_osc;
@@ -477,7 +519,6 @@ class hhn_network(network):
                 memory_impact = 0.0;
                 for index_oscillator in range(0, self._num_osc):
                     for index_generation in range(0, len(self._pulse_generation_time[index_oscillator])):
-                        # TODO: alfa function shouldn't be calculated here (long procedure)
                         memory_impact += self.__alfa_function(t - self._pulse_generation_time[index_oscillator][index_generation], self._params.alfa_excitatory, self._params.betta_excitatory);
                  
                 Isyn = self._params.w1 * (v - self._params.Vsynexc) * memory_impact;
@@ -520,12 +561,7 @@ class hhn_network(network):
         
         """
         
-        ignore = set();
-        
-        ignore.add(self._num_osc);
-        ignore.add(self._num_osc + 1);
-        
-        return allocate_sync_ensembles(self._membrane_dynamic_pointer, tolerance, 20.0, ignore);
+        return allocate_sync_ensembles(self._membrane_dynamic_pointer, tolerance, 20.0, None);
     
     
     def __alfa_function(self, time, alfa, betta):

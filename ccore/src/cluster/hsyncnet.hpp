@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -24,6 +24,11 @@
 #include <vector>
 
 #include "cluster/syncnet.hpp"
+
+
+namespace ccore {
+
+namespace clst {
 
 
 typedef std::vector<unsigned int>           hsyncnet_cluster;
@@ -63,3 +68,8 @@ private:
 
     double calculate_radius(const double radius, const std::size_t amount_neighbors) const;
 };
+
+
+}
+
+}

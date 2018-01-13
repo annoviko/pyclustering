@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -25,7 +25,7 @@
 #include "container/adjacency.hpp"
 
 
-using namespace container;
+using namespace ccore::container;
 
 
 void template_set_connection(adjacency_collection & collection);

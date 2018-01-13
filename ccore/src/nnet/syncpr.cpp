@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -23,7 +23,19 @@
 #include <complex>
 #include <cmath>
 
-#include "utils.hpp"
+#include "utils/math.hpp"
+#include "utils/metric.hpp"
+
+
+using namespace std::placeholders;
+
+using namespace ccore::utils::math;
+using namespace ccore::utils::metric;
+
+
+namespace ccore {
+
+namespace nnet {
 
 
 syncpr_invalid_pattern::syncpr_invalid_pattern(void) :
@@ -43,7 +55,8 @@ syncpr::syncpr(const unsigned int num_osc,
     m_increase_strength2(increase_strength2),
     m_coupling(num_osc, std::vector<double>(num_osc, 0.0))
 {
-    set_callback_solver(&syncpr::adapter_phase_kuramoto);
+    equation<double> oscillator_equation = std::bind(&syncpr::phase_kuramoto_equation, this, _1, _2, _3, _4);
+    set_equation(oscillator_equation);
 }
 
 
@@ -58,7 +71,8 @@ syncpr::syncpr(const unsigned int num_osc,
     m_increase_strength2(increase_strength2),
     m_coupling(num_osc, std::vector<double>(num_osc, 0.0))
 {
-    set_callback_solver(&syncpr::adapter_phase_kuramoto);
+    equation<double> oscillator_equation = std::bind(&syncpr::phase_kuramoto_equation, this, _1, _2, _3, _4);
+    set_equation(oscillator_equation);
 }
 
 
@@ -103,7 +117,7 @@ void syncpr::simulate_static(const unsigned int steps,
             m_oscillators[i].phase = 0.0;
         }
         else {
-            m_oscillators[i].phase = pi() / 2.0;
+            m_oscillators[i].phase = pi / 2.0;
         }
     }
 
@@ -161,7 +175,7 @@ void syncpr::initialize_phases(const syncpr_pattern & sample) {
             m_oscillators[i].phase = 0.0;
         }
         else {
-            m_oscillators[i].phase = pi() / 2.0;
+            m_oscillators[i].phase = pi / 2.0;
         }
     }
 }
@@ -186,8 +200,8 @@ double syncpr::calculate_memory_order(const syncpr_pattern & input_pattern) cons
 }
 
 
-double syncpr::phase_kuramoto(const double t, const double teta, const std::vector<void *> & argv) {
-    size_t oscillator_index = *(unsigned int *)argv[1];
+double syncpr::phase_kuramoto(const double t, const double teta, const std::vector<void *> & argv) const {
+    size_t oscillator_index = *(unsigned int *)argv[0];
 
     double phase = 0.0;
     double term = 0.0;
@@ -209,6 +223,12 @@ double syncpr::phase_kuramoto(const double t, const double teta, const std::vect
 }
 
 
+void syncpr::phase_kuramoto_equation(const double t, const differ_state<double> & inputs,  const differ_extra<void *> & argv, differ_state<double> & outputs) const {
+    outputs.resize(1);
+    outputs[0] = phase_kuramoto(t, inputs[0], argv);
+}
+
+
 void syncpr::validate_pattern(const syncpr_pattern & sample) const {
     if (sample.size() != size()) {
         throw syncpr_invalid_pattern("invalid size of the pattern, it should be the same as network size");
@@ -222,7 +242,6 @@ void syncpr::validate_pattern(const syncpr_pattern & sample) const {
 }
 
 
-void syncpr::adapter_phase_kuramoto(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs) {
-    outputs.resize(1);
-    outputs[0] = ((syncpr *) argv[0])->phase_kuramoto(t, inputs[0], argv);
+}
+
 }

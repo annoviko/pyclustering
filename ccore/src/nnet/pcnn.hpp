@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -31,7 +31,12 @@
 #include "nnet/network.hpp"
 
 
-using namespace container;
+using namespace ccore::container;
+
+
+namespace ccore {
+
+namespace nnet {
 
 
 #define OUTPUT_ACTIVE_STATE       (double) 1.0
@@ -173,3 +178,7 @@ private:
   void fast_linking(const std::vector<double> & feeding, std::vector<double> & linking, std::vector<double> & output);
 };
 
+
+}
+
+}

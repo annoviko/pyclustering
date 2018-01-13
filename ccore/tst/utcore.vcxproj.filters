@@ -33,6 +33,9 @@
     <Filter Include="Tested Code\parallel">
       <UniqueIdentifier>{89fa589a-cf54-4435-bfe7-13fb0a840d39}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tested Code\utils">
+      <UniqueIdentifier>{74e6578f-f3e3-42b5-81f6-3c12a3435e94}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\tools\gtest\gtest-all.cpp">
@@ -98,9 +101,6 @@
     <ClCompile Include="..\src\cluster\hsyncnet.cpp">
       <Filter>Tested Code\cluster</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\utils.cpp">
-      <Filter>Tested Code</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\cluster\cluster_algorithm.cpp">
       <Filter>Tested Code\cluster</Filter>
     </ClCompile>
@@ -156,9 +156,6 @@
       <Filter>Unit Tests</Filter>
     </ClCompile>
     <ClCompile Include="utest-agglomerative.cpp">
-      <Filter>Unit Tests</Filter>
-    </ClCompile>
-    <ClCompile Include="utest-cluster.cpp">
       <Filter>Unit Tests</Filter>
     </ClCompile>
     <ClCompile Include="utest-cure.cpp">
@@ -226,9 +223,6 @@
     </ClCompile>
     <ClCompile Include="utest-interface-cure.cpp">
       <Filter>Unit Tests</Filter>
-    </ClCompile>
-    <ClCompile Include="utenv-utils.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="utest-interface-dbscan.cpp">
       <Filter>Unit Tests</Filter>
@@ -329,6 +323,36 @@
     <ClCompile Include="..\src\parallel\thread_pool.cpp">
       <Filter>Tested Code\parallel</Filter>
     </ClCompile>
+    <ClCompile Include="utest-hhn.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\nnet\hhn.cpp">
+      <Filter>Tested Code\nnet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\utils\math.cpp">
+      <Filter>Tested Code\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\utils\metric.cpp">
+      <Filter>Tested Code\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\utils\random.cpp">
+      <Filter>Tested Code\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="utest-dynamic_analyser.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\nnet\dynamic_analyser.cpp">
+      <Filter>Tested Code\nnet</Filter>
+    </ClCompile>
+    <ClCompile Include="utenv_check.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="utenv_utils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\interface\hhn_interface.cpp">
+      <Filter>Tested Code\interface</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\tools\gtest\gtest.h">
@@ -412,9 +436,6 @@
     <ClInclude Include="..\src\cluster\hsyncnet.hpp">
       <Filter>Tested Code\cluster</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\utils.hpp">
-      <Filter>Tested Code</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\cluster\cluster_algorithm.hpp">
       <Filter>Tested Code\cluster</Filter>
     </ClInclude>
@@ -475,14 +496,8 @@
     <ClInclude Include="..\src\interface\pyclustering_package.hpp">
       <Filter>Tested Code\interface</Filter>
     </ClInclude>
-    <ClInclude Include="utest-cluster.hpp">
-      <Filter>Unit Tests</Filter>
-    </ClInclude>
     <ClInclude Include="utest-adjacency.hpp">
       <Filter>Unit Tests</Filter>
-    </ClInclude>
-    <ClInclude Include="utenv-utils.hpp">
-      <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="..\src\interface\cure_interface.h">
       <Filter>Tested Code\interface</Filter>
@@ -540,6 +555,36 @@
     </ClInclude>
     <ClInclude Include="..\src\parallel\thread_pool.hpp">
       <Filter>Tested Code\parallel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\nnet\hhn.hpp">
+      <Filter>Tested Code\nnet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\differential\equation.hpp">
+      <Filter>Tested Code\differential</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\utils\math.hpp">
+      <Filter>Tested Code\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\utils\metric.hpp">
+      <Filter>Tested Code\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\utils\random.hpp">
+      <Filter>Tested Code\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\nnet\dynamic_analyser.hpp">
+      <Filter>Tested Code\nnet</Filter>
+    </ClInclude>
+    <ClInclude Include="utenv_check.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utenv_utils.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\interface\hhn_interface.h">
+      <Filter>Tested Code\interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\differential\solve_type.hpp">
+      <Filter>Tested Code\differential</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

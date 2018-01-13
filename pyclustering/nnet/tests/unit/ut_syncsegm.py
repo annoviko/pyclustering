@@ -3,7 +3,7 @@
 @brief Unit-test for double-layer oscillatory network 'syncsegm' for image segmentation based on Kuramoto model.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
-@date 2014-2017
+@date 2014-2018
 @copyright GNU Public License
 
 @cond GNU_PUBLIC_LICENSE

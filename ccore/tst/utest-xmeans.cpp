@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -28,7 +28,7 @@
 #include <algorithm>
 
 
-using namespace cluster_analysis;
+using namespace ccore::clst;
 
 
 static void
@@ -38,13 +38,13 @@ template_length_process_data(const std::shared_ptr<dataset> & data,
                              const std::vector<unsigned int> & expected_cluster_length,
                              const splitting_type criterion,
                              const std::size_t parallel_processing_trigger = xmeans::DEFAULT_DATA_SIZE_PARALLEL_PROCESSING) {
-    cluster_analysis::xmeans solver(start_centers, kmax, 0.0001, criterion);
+    xmeans solver(start_centers, kmax, 0.0001, criterion);
     solver.set_parallel_processing_trigger(parallel_processing_trigger);
 
-    cluster_analysis::xmeans_data output_result;
+    xmeans_data output_result;
     solver.process(*data.get(), output_result);
 
-    cluster_analysis::cluster_sequence & results = *(output_result.clusters());
+    cluster_sequence & results = *(output_result.clusters());
 
     /* Check number of clusters */
     if (!expected_cluster_length.empty()) {

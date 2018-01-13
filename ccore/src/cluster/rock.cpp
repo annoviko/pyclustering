@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -24,10 +24,16 @@
 #include <climits>
 #include <iostream>
 
-#include "utils.hpp"
+#include "utils/metric.hpp"
 
 
-namespace cluster_analysis {
+using namespace ccore::utils::metric;
+using namespace ccore::container;
+
+
+namespace ccore {
+
+namespace clst {
 
 
 rock::rock(void) :
@@ -134,5 +140,7 @@ double rock::calculate_goodness(const cluster & cluster1, const cluster & cluste
         std::pow( size_cluster2, m_degree_normalization ) );
 }
 
+
+}
 
 }

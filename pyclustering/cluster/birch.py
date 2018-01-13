@@ -5,7 +5,7 @@
          - T.Zhang, R.Ramakrishnan, M.Livny. BIRCH: An Efficient Data Clustering Method for Very Large Databases. 1996.
          
 @authors Andrei Novikov (pyclustering@yandex.ru)
-@date 2014-2017
+@date 2014-2018
 @copyright GNU Public License
 
 @cond GNU_PUBLIC_LICENSE

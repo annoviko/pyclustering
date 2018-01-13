@@ -3,7 +3,7 @@
 @brief CCORE Wrapper for Local Excitatory Global Inhibitory Oscillatory Network (LEGION)
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
-@date 2014-2017
+@date 2014-2018
 @copyright GNU Public License
 
 @cond GNU_PUBLIC_LICENSE
@@ -27,26 +27,26 @@ from pyclustering.core.wrapper import *;
 from pyclustering.core.pyclustering_package import pyclustering_package, package_extractor, package_builder;
 
 
-class c_legion_parameters(Structure):   
+class c_legion_parameters(Structure):
     _fields_ = [
-        ("eps", c_double),
-        ("alpha", c_double),
-        ("gamma", c_double),
-        ("betta", c_double),
-        ("lamda", c_double),
-        ("teta", c_double),
-        ("teta_x", c_double),
-        ("teta_p", c_double),
-        ("teta_xz", c_double),
-        ("teta_zx", c_double),
-        ("T", c_double),
-        ("mu", c_double),
-        ("Wz", c_double),
-        ("Wt", c_double),
-        ("fi", c_double),
-        ("ro", c_double),
-        ("I", c_double),
-        ("ENABLE_POTENTIONAL", c_bool)
+        ("eps",                 c_double),
+        ("alpha",               c_double),
+        ("gamma",               c_double),
+        ("betta",               c_double),
+        ("lamda",               c_double),
+        ("teta",                c_double),
+        ("teta_x",              c_double),
+        ("teta_p",              c_double),
+        ("teta_xz",             c_double),
+        ("teta_zx",             c_double),
+        ("T",                   c_double),
+        ("mu",                  c_double),
+        ("Wz",                  c_double),
+        ("Wt",                  c_double),
+        ("fi",                  c_double),
+        ("ro",                  c_double),
+        ("I",                   c_double),
+        ("ENABLE_POTENTIONAL",  c_bool)
     ];
 
 
@@ -101,8 +101,8 @@ def legion_get_size(legion_network_pointer):
 def legion_dynamic_destroy(legion_dynamic_pointer):
     ccore = load_core();
     ccore.legion_dynamic_destroy(legion_dynamic_pointer);
-    
-    
+
+
 def legion_dynamic_get_output(legion_dynamic_pointer):
     ccore = load_core();
     

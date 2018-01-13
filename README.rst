@@ -10,7 +10,7 @@ Python and C++ implementations (via CCORE library) of each algorithm or
 model. CCORE library is a part of pyclustering and supported only for
 32, 64-bit Linux and 32, 64-bit Windows operating systems.
 
-**Version**: 0.7.x
+**Version**: 0.8.x
 
 **License**: GNU General Public License
 
@@ -129,7 +129,7 @@ Brief Overview of the Library Content
 
 - CNN (Chaotic Neural Network) [Python] 
 - fSync (Oscillatory network based on Landau-Stuart equation and Kuramoto model) [Python] 
-- HHN (Oscillatory network based on Hodgkin-Huxley model) [Python]
+- HHN (Oscillatory network based on Hodgkin-Huxley model) [Python,C++]
 - Hysteresis Oscillatory Network [Python]
 - LEGION (Local Excitatory Global Inhibitory Oscillatory Network) [Python, C++]
 - PCNN (Pulse-Coupled Neural Network) [Python, C++]

@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -33,11 +33,21 @@
 #include "differential/runge_kutta_4.hpp"
 #include "differential/runge_kutta_fehlberg_45.hpp"
 
-#include "utils.hpp"
+#include "utils/math.hpp"
+#include "utils/metric.hpp"
 
 
-using namespace container;
-using namespace differential;
+using namespace ccore::container;
+using namespace ccore::differential;
+using namespace ccore::utils::math;
+using namespace ccore::utils::metric;
+
+using namespace std::placeholders;
+
+
+namespace ccore {
+
+namespace nnet {
 
 
 const size_t sync_network::MAXIMUM_MATRIX_REPRESENTATION_SIZE = 4096;
@@ -149,11 +159,11 @@ void sync_network::initialize(const std::size_t size, const double weight_factor
 
     weight = weight_factor;
 
-    m_callback_solver = &sync_network::adapter_phase_kuramoto;
+    m_equation = std::bind(&sync_network::phase_kuramoto_equation, this, _1, _2, _3, _4);
 
     std::random_device                      device;
     std::default_random_engine              generator(device());
-    std::uniform_real_distribution<double>  phase_distribution(0.0, 2.0 * pi());
+    std::uniform_real_distribution<double>  phase_distribution(0.0, 2.0 * pi);
     std::uniform_real_distribution<double>  frequency_distribution(0.0, 1.0);
 
     for (std::size_t index = 0; index < size; index++) {
@@ -164,7 +174,7 @@ void sync_network::initialize(const std::size_t size, const double weight_factor
             oscillator_context.phase = phase_distribution(generator);
             break;
         case initial_type::EQUIPARTITION:
-            oscillator_context.phase = (pi() / size * index);
+            oscillator_context.phase = (pi / size * index);
             break;
         default:
             throw std::runtime_error("Unknown type of initialization");
@@ -185,19 +195,19 @@ double sync_network::sync_local_order(void) const {
 }
 
 
-void sync_network::set_callback_solver(sync_callback_solver solver) {
-    m_callback_solver = solver;
+void sync_network::set_equation(equation<double> & solver) {
+    m_equation = solver;
 }
 
 
-void sync_network::adapter_phase_kuramoto(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs) {
+void sync_network::phase_kuramoto_equation(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs) const {
     outputs.resize(1);
-    outputs[0] = ((sync_network *) argv[0])->phase_kuramoto(t, inputs[0], argv);
+    outputs[0] = phase_kuramoto(t, inputs[0], argv);
 }
 
 
 double sync_network::phase_kuramoto(const double t, const double teta, const std::vector<void *> & argv) const {
-    std::size_t index = *(std::size_t *) argv[1];
+    std::size_t index = *(std::size_t *) argv[0];
     double phase = 0.0;
 
     std::vector<size_t> neighbors;
@@ -276,35 +286,34 @@ void sync_network::store_dynamic(const double time, const bool collect_dynamic, 
 
 void sync_network::calculate_phases(const solve_type solver, const double t, const double step, const double int_step) {
     std::vector<double> next_phases(size(), 0);
-    std::vector<void *> argv(2, NULL);
-
-    argv[0] = (void *) this;
 
     std::size_t number_int_steps = (std::size_t) (step / int_step);
 
     for (std::size_t index = 0; index < size(); index++) {
-        argv[1] = (void *) &index;
+        std::vector<void *> argv(1, nullptr);
+        argv[0] = (void *) &index;
 
         switch(solver) {
-            case solve_type::FAST: {
+            case solve_type::FORWARD_EULER: {
                 double result = m_oscillators[index].phase + phase_kuramoto(t, m_oscillators[index].phase, argv);
                 next_phases[index] = phase_normalization(result);
+
                 break;
             }
-            case solve_type::RK4: {
+            case solve_type::RUNGE_KUTTA_4: {
                 differ_state<double> inputs(1, m_oscillators[index].phase);
                 differ_result<double> outputs;
 
-                runge_kutta_4(m_callback_solver, inputs, t, t + step, number_int_steps, false, argv, outputs);
+                runge_kutta_4(m_equation, inputs, t, t + step, number_int_steps, false, argv, outputs);
                 next_phases[index] = phase_normalization( outputs[0].state[0] );
 
                 break;
             }
-            case solve_type::RKF45: {
+            case solve_type::RUNGE_KUTTA_FEHLBERG_45: {
                 differ_state<double> inputs(1, m_oscillators[index].phase);
                 differ_result<double> outputs;
 
-                runge_kutta_fehlberg_45(m_callback_solver, inputs, t, t + step, 0.00001, false, argv, outputs);
+                runge_kutta_fehlberg_45(m_equation, inputs, t, t + step, 0.00001, false, argv, outputs);
                 next_phases[index] = phase_normalization( outputs[0].state[0] );
 
                 break;
@@ -325,12 +334,12 @@ void sync_network::calculate_phases(const solve_type solver, const double t, con
 double sync_network::phase_normalization(const double teta) const {
     double norm_teta = teta;
 
-    while ( (norm_teta > 2.0 * pi()) || (norm_teta < 0.0) ) {
-        if (norm_teta > 2.0 * pi()) {
-            norm_teta -= 2.0 * pi();
+    while ( (norm_teta > 2.0 * pi) || (norm_teta < 0.0) ) {
+        if (norm_teta > 2.0 * pi) {
+            norm_teta -= 2.0 * pi;
         }
         else {
-            norm_teta += 2.0 * pi();
+            norm_teta += 2.0 * pi;
         }
     }
 
@@ -362,7 +371,7 @@ void sync_dynamic::allocate_sync_ensembles(const double tolerance, const size_t 
                 double phase_first = (*last_state_dynamic).m_phase[i];
                 double phase_second = (*last_state_dynamic).m_phase[index];
 
-                double phase_shifted = std::abs((*last_state_dynamic).m_phase[i] - 2 * pi());
+                double phase_shifted = std::abs((*last_state_dynamic).m_phase[i] - 2 * pi);
 
                 if (((phase_first < (phase_second + tolerance)) && (phase_first >(phase_second - tolerance))) ||
                     ((phase_shifted < (phase_second + tolerance)) && (phase_shifted >(phase_second - tolerance)))) {
@@ -434,4 +443,9 @@ void sync_dynamic::calculate_local_order_parameter(const std::shared_ptr<adjacen
         const double order_value =  sync_ordering::calculate_local_sync_order(connections, at(i).m_phase);
         sequence_local_order[i - start_iteration] = order_value;
     }
+}
+
+
+}
+
 }

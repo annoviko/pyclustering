@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -20,13 +20,16 @@
 
 #include "cluster/optics.hpp"
 
+#include <algorithm>
+#include <cmath>
 #include <limits>
 
 #include "ordering_analyser.hpp"
-#include "utils.hpp"
 
 
-namespace cluster_analysis {
+namespace ccore {
+
+namespace clst {
 
 
 optics_descriptor::optics_descriptor(const std::size_t p_index, const double p_core_distance, const double p_reachability_distance) :
@@ -262,5 +265,7 @@ void optics::create_kdtree(void) {
     }
 }
 
+
+}
 
 }

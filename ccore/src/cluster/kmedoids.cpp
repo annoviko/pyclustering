@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -20,12 +20,18 @@
 
 #include "cluster/kmedoids.hpp"
 
-#include "utils.hpp"
-
+#include <algorithm>
 #include <limits>
 
+#include "utils/metric.hpp"
 
-namespace cluster_analysis {
+
+using namespace ccore::utils::metric;
+
+
+namespace ccore {
+
+namespace clst {
 
 
 kmedoids::kmedoids(void) :
@@ -153,5 +159,7 @@ double kmedoids::calculate_changes(const medoid_sequence & p_medoids) const {
     return maximum_difference;
 }
 
+
+}
 
 }

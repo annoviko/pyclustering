@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -22,10 +22,15 @@
 
 #include <algorithm>
 
-#include "utils.hpp"
+#include "utils/metric.hpp"
 
 
-namespace cluster_analysis {
+using namespace ccore::utils::metric;
+
+
+namespace ccore {
+
+namespace clst {
 
 
 agglomerative::agglomerative(void) :
@@ -244,5 +249,7 @@ void agglomerative::calculate_center(const cluster & cluster, point & center) {
     }
 }
 
+
+}
 
 }

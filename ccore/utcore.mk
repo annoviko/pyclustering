@@ -16,8 +16,11 @@ endif
 
 
 # Toolchain arguments
-ifeq ($(ARGS), valgrind)
+ifeq ($(CONFIG), valgrind)
 	CFLAGS = -MMD -MP -std=$(CPLUS_STANDARD) $(PIC_FLAG) -g
+	LFLAGS = -pthread
+else ifeq ($(CONFIG), debug)
+	CFLAGS = -Og -MMD -MP -std=$(CPLUS_STANDARD) $(PIC_FLAG) -g3 -ggdb3
 	LFLAGS = -pthread
 else
 	CFLAGS = -O2 -MMD -MP -std=$(CPLUS_STANDARD) $(PIC_FLAG) -fprofile-arcs -ftest-coverage -Werror
@@ -37,7 +40,7 @@ TOOLS_DIRECTORY = tools
 
 
 # Project sources
-SOURCES_MODULES = . cluster container differential interface nnet parallel tsp
+SOURCES_MODULES = . cluster container differential interface nnet parallel utils
 UTEST_MODULES = .
 TOOLS_MODULES = gtest
 

@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -29,6 +29,8 @@
 #include "thread_executor.hpp"
 
 
+namespace ccore {
+
 namespace parallel {
 
 
@@ -43,11 +45,13 @@ private:
 
     std::deque<task::ptr>           m_done  = { };
 
-    std::mutex                      m_general_mutex;
+    mutable std::mutex              m_common_mutex;
 
-    std::condition_variable         m_event;
+    std::condition_variable         m_queue_not_empty_cond;
+    std::condition_variable         m_done_not_empty_cond;
 
-    std::atomic<std::size_t>        m_free    { 0 };
+    std::size_t                     m_free = 0;
+    bool                            m_stop = false;
 
 public:
     thread_pool(void) = default;
@@ -58,7 +62,7 @@ public:
 
     thread_pool(thread_pool && p_pool) = delete;
 
-    ~thread_pool(void) = default;
+    ~thread_pool(void);
 
 public:
     std::size_t add_task(task::proc & p_raw_task);
@@ -68,8 +72,12 @@ public:
     std::size_t size(void) const;
 
 private:
-    void task_conveyor(const task::ptr p_task, task::ptr & p_next_task);
+    void done_task(const task::ptr & p_task);
+
+    void get_task(task::ptr & p_task);
 };
 
+
+}
 
 }

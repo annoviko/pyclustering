@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -29,47 +29,45 @@
 #include "task.hpp"
 
 
+namespace ccore {
+
 namespace parallel {
 
 
 class thread_executor {
 public:
-    using task_conveyor = std::function<void(task::ptr, task::ptr &)>;
+    using task_getter   = std::function<void(task::ptr &)>;
+    using task_notifier = std::function<void(const task::ptr &)>;
 
     using ptr           = std::shared_ptr<thread_executor>;
 
 private:
-    task::ptr               m_task          = nullptr;
-    std::atomic<bool>       m_idle          { true };
-    std::atomic<bool>       m_stop          { false };
+    bool                    m_stop            = true;
 
-    task_conveyor           m_conveyor      = nullptr;
+    task_getter             m_getter          = nullptr;
+    task_notifier           m_notifier        = nullptr;
 
-    std::condition_variable m_event_arrive;
-    std::mutex              m_block;
-    std::thread             m_executor      = std::thread(&thread_executor::run, this);
+    std::thread             m_executor;
 
 public:
     thread_executor(void) = default;
 
-    explicit thread_executor(const task_conveyor & p_conveyor);
+    explicit thread_executor(const task_getter & p_getter, const task_notifier & p_reporter);
 
     thread_executor(const thread_executor & p_other) = delete;
 
     thread_executor(thread_executor && p_other) = delete;
 
-    ~thread_executor(void);
+    ~thread_executor(void) = default;
 
 public:
-    bool execute(const task::ptr p_task);
-
-    bool is_idle(void) const;
+    void stop(void);
 
 private:
     void run(void);
-
-    void stop(void);
 };
 
+
+}
 
 }

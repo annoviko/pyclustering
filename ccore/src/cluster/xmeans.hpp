@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -32,10 +32,12 @@
 
 
 
-using namespace parallel;
+using namespace ccore::parallel;
 
 
-namespace cluster_analysis {
+namespace ccore {
+
+namespace clst {
 
 
 enum class splitting_type {
@@ -142,3 +144,4 @@ private:
 
 }
 
+}

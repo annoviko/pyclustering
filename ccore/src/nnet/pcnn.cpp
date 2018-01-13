@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -26,6 +26,11 @@
 #include "container/adjacency_bit_matrix.hpp"
 #include "container/adjacency_connector.hpp"
 #include "container/adjacency_matrix.hpp"
+
+
+namespace ccore {
+
+namespace nnet {
 
 
 const size_t pcnn::MAXIMUM_MATRIX_REPRESENTATION_SIZE = 4096;
@@ -256,4 +261,9 @@ void pcnn_dynamic::allocate_time_signal(pcnn_time_signal & time_signal) const {
             }
         }
     }
+}
+
+
+}
+
 }

@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -21,10 +21,10 @@
 
 #include "cluster/dbscan.hpp"
 
-#include "utils.hpp"
 
+namespace ccore {
 
-namespace cluster_analysis {
+namespace clst {
 
 
 dbscan::dbscan(const double p_radius_connectivity, const size_t p_minimum_neighbors) :
@@ -127,5 +127,7 @@ void dbscan::create_kdtree(const dataset & p_data) {
     }
 }
 
+
+}
 
 }

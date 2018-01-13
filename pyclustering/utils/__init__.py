@@ -3,7 +3,7 @@
 @brief Utils that are used by modules of pyclustering.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
-@date 2014-2017
+@date 2014-2018
 @copyright GNU Public License
 
 @cond GNU_PUBLIC_LICENSE
@@ -665,7 +665,7 @@ def allocate_sync_ensembles(dynamic, tolerance = 0.1, threshold = 1.0, ignore = 
             
     """
     
-    descriptors = [] * len(dynamic);
+    descriptors = [ [] for _ in range(len(dynamic[0])) ];
     
     # Check from the end for obtaining result
     for index_dyn in range(0, len(dynamic[0]), 1):
@@ -692,10 +692,10 @@ def allocate_sync_ensembles(dynamic, tolerance = 0.1, threshold = 1.0, ignore = 
         
         desc = [0, 0, 0]; # end, start, average time of oscillation
         for t in range(time_stop_simulation, 0, -1):
-            if ( (dynamic[t][index_dyn] > 0) and (active_state is False) ):
+            if ( (dynamic[t][index_dyn] > threshold) and (active_state is False) ):
                 desc[0] = t;
                 active_state = True;
-            elif ( (dynamic[t][index_dyn] < 0) and (active_state is True) ):
+            elif ( (dynamic[t][index_dyn] < threshold) and (active_state is True) ):
                 desc[1] = t;
                 active_state = False;
                 
@@ -705,8 +705,8 @@ def allocate_sync_ensembles(dynamic, tolerance = 0.1, threshold = 1.0, ignore = 
             continue;
         
         desc[2] = desc[1] + (desc[0] - desc[1]) / 2.0;
-        descriptors.append(desc);
-        
+        descriptors[index_dyn] = desc;
+    
     
     # Cluster allocation
     sync_ensembles = [];

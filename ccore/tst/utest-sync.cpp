@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -24,6 +24,9 @@
 #include "nnet/sync.hpp"
 
 #include <cmath>
+
+
+using namespace ccore::nnet;
 
 
 static void template_create_delete(const connection_t type, const initial_type initial) {
@@ -87,23 +90,23 @@ static void template_dynamic_convergence(const unsigned int number_oscillators, 
 }
 
 TEST(utest_sync, dynamic_convergance_10_oscillators_all_to_all) {
-    template_dynamic_convergence(10, solve_type::FAST, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION);
+    template_dynamic_convergence(10, solve_type::FORWARD_EULER, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION);
 }
 
 TEST(utest_sync, dynamic_convergance_20_oscillators_all_to_all) {
-    template_dynamic_convergence(10, solve_type::FAST, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION);
+    template_dynamic_convergence(10, solve_type::FORWARD_EULER, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION);
 }
 
 TEST(utest_sync, dynamic_convergance_16_oscillators_grid_four) {
-    template_dynamic_convergence(16, solve_type::FAST, connection_t::CONNECTION_GRID_FOUR, initial_type::EQUIPARTITION);
+    template_dynamic_convergence(16, solve_type::FORWARD_EULER, connection_t::CONNECTION_GRID_FOUR, initial_type::EQUIPARTITION);
 }
 
 TEST(utest_sync, dynamic_convergance_16_oscillators_grid_eight) {
-    template_dynamic_convergence(16, solve_type::FAST, connection_t::CONNECTION_GRID_EIGHT, initial_type::EQUIPARTITION);
+    template_dynamic_convergence(16, solve_type::FORWARD_EULER, connection_t::CONNECTION_GRID_EIGHT, initial_type::EQUIPARTITION);
 }
 
 TEST(utest_sync, dynamic_convergance_5_oscillators_list_bidir) {
-    template_dynamic_convergence(5, solve_type::FAST, connection_t::CONNECTION_LIST_BIDIRECTIONAL, initial_type::EQUIPARTITION);
+    template_dynamic_convergence(5, solve_type::FORWARD_EULER, connection_t::CONNECTION_LIST_BIDIRECTIONAL, initial_type::EQUIPARTITION);
 }
 
 
@@ -120,40 +123,40 @@ static void template_static_convergence(const unsigned int number_oscillators, c
 }
 
 TEST(utest_sync, static_convergance_10_oscillators_all_to_all) {
-    template_static_convergence(10, solve_type::FAST, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION);
+    template_static_convergence(10, solve_type::FORWARD_EULER, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION);
 }
 
 TEST(utest_sync, static_convergance_20_oscillators_all_to_all) {
-    template_static_convergence(10, solve_type::FAST, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION);
+    template_static_convergence(10, solve_type::FORWARD_EULER, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION);
 }
 
 TEST(utest_sync, static_convergance_9_oscillators_grid_four) {
-    template_static_convergence(9, solve_type::FAST, connection_t::CONNECTION_GRID_FOUR, initial_type::EQUIPARTITION);
+    template_static_convergence(9, solve_type::FORWARD_EULER, connection_t::CONNECTION_GRID_FOUR, initial_type::EQUIPARTITION);
 }
 
 TEST(utest_sync, static_convergance_9_oscillators_grid_eight) {
-    template_static_convergence(9, solve_type::FAST, connection_t::CONNECTION_GRID_EIGHT, initial_type::EQUIPARTITION);
+    template_static_convergence(9, solve_type::FORWARD_EULER, connection_t::CONNECTION_GRID_EIGHT, initial_type::EQUIPARTITION);
 }
 
 TEST(utest_sync, static_convergance_3_oscillators_list_bidir) {
-    template_static_convergence(3, solve_type::FAST, connection_t::CONNECTION_LIST_BIDIRECTIONAL, initial_type::EQUIPARTITION);
+    template_static_convergence(3, solve_type::FORWARD_EULER, connection_t::CONNECTION_LIST_BIDIRECTIONAL, initial_type::EQUIPARTITION);
 }
 
 
 TEST(utest_sync, static_simulation_runge_kutta_4) {
-    template_static_convergence(2, solve_type::RK4, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION);
+    template_static_convergence(2, solve_type::RUNGE_KUTTA_4, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION);
 }
 
 TEST(utest_sync, static_simulation_runge_kutta_fehlberg_45) {
-    template_static_convergence(2, solve_type::RKF45, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION);
+    template_static_convergence(2, solve_type::RUNGE_KUTTA_FEHLBERG_45, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION);
 }
 
 TEST(utest_sync, dynamic_simulation_runge_kutta_4) {
-    template_dynamic_convergence(2, solve_type::RK4, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION);
+    template_dynamic_convergence(2, solve_type::RUNGE_KUTTA_4, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION);
 }
 
 TEST(utest_sync, dynamic_simulation_runge_kutta_fehlberg_45) {
-    template_dynamic_convergence(2, solve_type::RKF45, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION);
+    template_dynamic_convergence(2, solve_type::RUNGE_KUTTA_FEHLBERG_45, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION);
 }
 
 
@@ -161,7 +164,7 @@ static void template_static_collecting_dynamic(const unsigned int steps) {
     sync_network network(10, 1, 0, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION);
 
     sync_dynamic output_dynamic;
-    network.simulate_static(steps, 0.1, solve_type::FAST, true, output_dynamic);
+    network.simulate_static(steps, 0.1, solve_type::FORWARD_EULER, true, output_dynamic);
 
     ASSERT_EQ(10, output_dynamic.oscillators());
     ASSERT_EQ(steps + 1, output_dynamic.size());
@@ -180,10 +183,10 @@ TEST(utest_sync, dynamic_collecting_dynamic) {
     sync_network network(10, 1, 0, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION);
 
     sync_dynamic output_dynamic;
-    network.simulate_dynamic(0.998, 0.1, solve_type::FAST, true, output_dynamic);
+    network.simulate_dynamic(0.998, 0.1, solve_type::FORWARD_EULER, true, output_dynamic);
 
     ASSERT_EQ(10, output_dynamic.oscillators());
-    ASSERT_GT(output_dynamic.size(), 1);
+    ASSERT_GT(output_dynamic.size(), (std::size_t) 1);
 }
 
 TEST(utest_sync, dynamic_around_zero) {
@@ -247,7 +250,7 @@ static void template_sync_ordering(const std::size_t p_size, const std::size_t p
     sync_network network(p_size, 1, 0, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION);
 
     sync_dynamic output_dynamic;
-    network.simulate_static(p_steps, p_time, solve_type::FAST, true, output_dynamic);
+    network.simulate_static(p_steps, p_time, solve_type::FORWARD_EULER, true, output_dynamic);
 
     double order_parameter = sync_ordering::calculate_sync_order(output_dynamic[0].m_phase);
     double local_order_parameter = sync_ordering::calculate_local_sync_order(network.connections(), output_dynamic[0].m_phase);
@@ -282,7 +285,7 @@ static void template_sync_order_sequence(
     sync_network network(p_size, 1, 0, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION);
 
     sync_dynamic output_dynamic;
-    network.simulate_static(p_steps, p_time, solve_type::FAST, true, output_dynamic);
+    network.simulate_static(p_steps, p_time, solve_type::FORWARD_EULER, true, output_dynamic);
 
     std::vector<double> order_sequence;
     std::vector<double> local_order_sequence;

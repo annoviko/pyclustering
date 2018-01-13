@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -21,7 +21,9 @@
 #include "cluster_data.hpp"
 
 
-namespace cluster_analysis {
+namespace ccore {
+
+namespace clst {
 
 
 cluster_data::cluster_data(void) : m_clusters(new cluster_sequence()) { }
@@ -75,5 +77,7 @@ bool cluster_data::operator!=(const cluster_data & p_other) const {
     return !(*this == p_other);
 }
 
+
+}
 
 }

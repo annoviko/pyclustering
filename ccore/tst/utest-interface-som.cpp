@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -24,9 +24,12 @@
 #include "interface/pyclustering_interface.h"
 #include "interface/pyclustering_package.hpp"
 
-#include "utenv-utils.hpp"
+#include "utenv_utils.hpp"
 
 #include <memory>
+
+
+using namespace ccore::nnet;
 
 
 static void CHECK_FREE_PACKAGE(pyclustering_package * package, const std::size_t size = 0) {
@@ -49,21 +52,21 @@ TEST(utest_interface_som, som_api) {
     dataset input_data = { {1.0}, {1.2}, {1.3}, {3.2}, {3.5}, {3.2} };
     pyclustering_package * package_dataset = create_package(&input_data);
     size_t iterations = som_train(network, package_dataset, 100, true);
-    ASSERT_LT(0, iterations);
+    ASSERT_LT(0U, iterations);
     free_pyclustering_package(package_dataset);
 
     pattern input_pattern = {2.3};
     pyclustering_package * package_pattern = create_package(&input_pattern);
     size_t index_winner = som_simulate(network, package_pattern);
-    ASSERT_LE(0, index_winner);
-    ASSERT_GT(3, index_winner);
+    ASSERT_LE(0U, index_winner);
+    ASSERT_GT(3U, index_winner);
     free_pyclustering_package(package_pattern);
 
     size_t amount_winners = som_get_winner_number(network);
-    ASSERT_LE(0, amount_winners);
+    ASSERT_LE(0U, amount_winners);
 
     size_t network_size = som_get_size(network);
-    ASSERT_EQ(3, network_size);
+    ASSERT_EQ(3U, network_size);
 
     pyclustering_package * weights = som_get_weights(network);
     CHECK_FREE_PACKAGE(weights, 3);

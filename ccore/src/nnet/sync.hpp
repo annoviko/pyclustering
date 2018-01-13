@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -35,8 +35,13 @@
 #include "nnet/network.hpp"
 
 
-using namespace container;
-using namespace differential;
+using namespace ccore::container;
+using namespace ccore::differential;
+
+
+namespace ccore {
+
+namespace nnet {
 
 
 typedef struct sync_oscillator {
@@ -50,10 +55,7 @@ typedef struct sync_oscillator {
 } sync_oscillator;
 
 
-typedef std::vector<unsigned int>   sync_ensemble;
-
-
-typedef void (*sync_callback_solver)(const double, const differ_state<double> &, const differ_extra<void *> &, differ_state<double> &);
+typedef std::vector<unsigned int>     sync_ensemble;
 
 
 typedef std::vector<double>           sync_corr_row;
@@ -301,7 +303,7 @@ protected:
 
 
 private:
-    sync_callback_solver m_callback_solver;
+    equation<double>  m_equation;
 
 
 private:
@@ -468,6 +470,13 @@ protected:
         const double teta, 
         const std::vector<void *> & argv) const;
 
+
+    virtual void phase_kuramoto_equation(
+        const double t, 
+        const differ_state<double> & inputs, 
+        const differ_extra<void *> & argv, 
+        differ_state<double> & outputs) const;
+
     /**
      *
      * @brief   Calculates new phases for oscillators in the network in line with current step.
@@ -502,26 +511,9 @@ protected:
         const bool collect_dynamic, 
         sync_dynamic & dynamic) const;
 
-    virtual void set_callback_solver(sync_callback_solver solver);
+    virtual void set_equation(equation<double> & solver);
 
 private:
-    /**
-     *
-     * @brief   Adapter for solving differential equation for calculation of oscillator phase.
-     *
-     * @param[in] t: current time.
-     * @param[in] inputs: phase of oscillator whose new state should be calculated.
-     * @param[in] argv: pointer to the network 'argv[0]' and index of oscillator whose phase represented 
-     *             by argument teta 'argv[1]'.
-     * @param[out] outputs: new value of phase of oscillator that is specified in index 'argv[1]'.
-     *
-     */
-    static void adapter_phase_kuramoto(
-        const double t, 
-        const differ_state<double> & inputs, 
-        const differ_extra<void *> & argv, 
-        differ_state<double> & outputs);
-
     /**
     *
     * @brief   Initializer of the oscillatory network SYNC based on Kuramoto model.
@@ -548,3 +540,8 @@ private:
         const size_t width,
         const initial_type initial_phases);
 };
+
+
+}
+
+}

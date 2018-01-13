@@ -6,7 +6,7 @@
          - E.N.Benderskaya, S.V.Zhukova. Clustering by Chaotic Neural Networks with Mean Field Calculated Via Delaunay Triangulation. 2008.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
-@date 2014-2017
+@date 2014-2018
 @copyright GNU Public License
 
 @cond GNU_PUBLIC_LICENSE

@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -24,6 +24,14 @@
 #include <vector>
 
 #include "nnet/sync.hpp"
+
+
+using namespace ccore::nnet;
+
+
+namespace ccore {
+
+namespace clst {
 
 
 using syncnet_cluster       = std::vector<unsigned int>;
@@ -106,7 +114,9 @@ public:
      * @return  Return new value of phase of oscillator with index 'argv'.
      *
      */
-    virtual double phase_kuramoto(const double t, const double teta, const std::vector<void *> & argv);
+    virtual double phase_kuramoto(const double t, const double teta, const std::vector<void *> & argv) const;
+
+    virtual void phase_kuramoto_equation(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs) const;
 
 protected:
     /**
@@ -121,7 +131,9 @@ protected:
      *
      */
     void create_connections(const double connectivity_radius, const bool enable_conn_weight);
-
-private:
-    static void adapter_phase_kuramoto(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs);
 };
+
+
+}
+
+}

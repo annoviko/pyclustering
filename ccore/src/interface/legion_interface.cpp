@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -23,9 +23,12 @@
 #include "nnet/legion.hpp"
 
 
+using namespace ccore::nnet;
+
+
 void * legion_create(const unsigned int size, const unsigned int connection_type, const void * const parameters) {
-    legion_network * pcnn_network = new legion_network(size, (connection_t) connection_type, *((legion_parameters *) parameters));
-    return (void *) pcnn_network;
+    legion_network * network = new legion_network(size, (connection_t) connection_type, *((legion_parameters *) parameters));
+    return (void *) network;
 }
 
 

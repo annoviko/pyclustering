@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -18,8 +18,7 @@
 *
 */
 
-#ifndef _AGGLOMERATIVE_HPP_
-#define _AGGLOMERATIVE_HPP_
+#pragma once
 
 
 #include <vector>
@@ -29,7 +28,9 @@
 #include "definitions.hpp"
 
 
-namespace cluster_analysis {
+namespace ccore {
+
+namespace clst {
 
 
 using agglomerative_data = cluster_data;
@@ -153,4 +154,4 @@ private:
 
 }
 
-#endif
+}

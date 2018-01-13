@@ -3,7 +3,7 @@
 @brief Integration-test runner for tests of oscillatory and neural networks.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
-@date 2014-2017
+@date 2014-2018
 @copyright GNU Public License
 
 @cond GNU_PUBLIC_LICENSE
@@ -31,6 +31,7 @@ from pyclustering.tests.suite_holder import suite_holder;
 import matplotlib;
 matplotlib.use('Agg');
 
+from pyclustering.nnet.tests.integration        import it_hhn             as nnet_hhn_integration_tests;
 from pyclustering.nnet.tests.integration        import it_legion          as nnet_legion_integration_tests;
 from pyclustering.nnet.tests.integration        import it_pcnn            as nnet_pcnn_integration_tests;
 from pyclustering.nnet.tests.integration        import it_som             as nnet_som_integration_tests;
@@ -45,6 +46,7 @@ class nnet_integration_tests(suite_holder):
 
     @staticmethod
     def fill_suite(integration_nnet_suite):
+        integration_nnet_suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_hhn_integration_tests));
         integration_nnet_suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_legion_integration_tests));
         integration_nnet_suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_pcnn_integration_tests));
         integration_nnet_suite.addTests(unittest.TestLoader().loadTestsFromModule(nnet_som_integration_tests));

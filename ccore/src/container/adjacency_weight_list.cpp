@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -20,6 +20,8 @@
 
 #include "container/adjacency_weight_list.hpp"
 
+
+namespace ccore {
 
 namespace container {
 
@@ -114,5 +116,7 @@ adjacency_weight_list & adjacency_weight_list::operator=(adjacency_weight_list &
     return *this;
 }
 
+
+}
 
 }

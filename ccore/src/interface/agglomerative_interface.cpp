@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -24,12 +24,12 @@
 
 
 pyclustering_package * agglomerative_algorithm(const pyclustering_package * const p_sample, const size_t p_number_clusters, const size_t p_link) {
-    cluster_analysis::agglomerative algorithm(p_number_clusters, (cluster_analysis::type_link) p_link);
+    ccore::clst::agglomerative algorithm(p_number_clusters, (ccore::clst::type_link) p_link);
 
     dataset data;
     p_sample->extract(data);
 
-    cluster_analysis::cluster_data result;
+    ccore::clst::cluster_data result;
     algorithm.process(data, result);
 
     pyclustering_package * package = create_package(result.clusters().get());

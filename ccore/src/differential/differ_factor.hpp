@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -18,11 +18,14 @@
 *
 */
 
-#ifndef CCORE_DIFFERENTIAL_DIFFER_FACTOR_HPP_
-#define CCORE_DIFFERENTIAL_DIFFER_FACTOR_HPP_
 
+#pragma once
+
+
+namespace ccore {
 
 namespace differential {
+
 
 class factor {
 public:
@@ -63,6 +66,7 @@ public:
     const static double R6;
 };
 
+
 }
 
-#endif
+}

@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -25,7 +25,10 @@
 #include "interface/pyclustering_interface.h"
 #include "interface/pyclustering_package.hpp"
 
-#include "utenv-utils.hpp"
+#include "utenv_utils.hpp"
+
+
+using namespace ccore::nnet;
 
 
 static void CHECK_FREE_PACKAGE(pyclustering_package * package) {
@@ -65,7 +68,7 @@ TEST(utest_interface_pcnn, pcnn_api) {
     CHECK_FREE_PACKAGE(package);
 
     std::size_t size_dynamic = pcnn_dynamic_get_size(dynamic);
-    ASSERT_GT(size_dynamic, 0);
+    ASSERT_GT(size_dynamic, 0U);
 
     pcnn_dynamic_destroy(dynamic);
     pcnn_destroy(pcnn_network);

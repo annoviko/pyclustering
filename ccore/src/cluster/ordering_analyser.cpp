@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -26,7 +26,9 @@
 #include <limits>
 
 
-namespace cluster_analysis {
+namespace ccore {
+
+namespace clst {
 
 
 ordering_analyser::ordering_analyser(const ordering_ptr & p_ordering) : m_ordering(p_ordering) { }
@@ -114,5 +116,7 @@ std::size_t ordering_analyser::extract_cluster_amount(const double p_radius) con
     return amount_clusters;
 }
 
+
+}
 
 }

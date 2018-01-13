@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -20,7 +20,11 @@
 
 #include "differential/differ_factor.hpp"
 
+
+namespace ccore {
+
 namespace differential {
+
 
 const double factor::A2 = 1.0 / 4.0;
 const double factor::B2 = 1.0 / 4.0;
@@ -57,5 +61,8 @@ const double factor::R3 = -128.0 / 4275.0;
 const double factor::R4 = -2197.0 / 75240.0;
 const double factor::R5 = 1.0 / 50.0;
 const double factor::R6 = 2.0 / 55.0;
+
+
+}
 
 }

@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -20,6 +20,8 @@
 
 #include "container/adjacency_connector.hpp"
 
+
+namespace ccore {
 
 namespace container {
 
@@ -51,6 +53,9 @@ std::ostream & operator<<(std::ostream & p_stream, const connection_t & p_struct
     }
 
     return p_stream;
+}
+
+
 }
 
 }

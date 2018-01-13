@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -24,64 +24,45 @@
 #include <exception>
 
 
+namespace ccore {
+
 namespace parallel {
 
 
-thread_executor::thread_executor(const task_conveyor & p_conveyor) : thread_executor() {
-    m_conveyor  = p_conveyor;
-}
+thread_executor::thread_executor(const task_getter & p_getter, const task_notifier & p_notifier) {
+    m_stop        = false;
 
-
-thread_executor::~thread_executor(void) {
-    stop();
-}
-
-
-bool thread_executor::execute(const task::ptr p_task) {
-    std::unique_lock<std::mutex> lock_event(m_block);
-
-    if ((m_task != nullptr) || !m_idle.load()) {
-        return false;
-    }
-
-    m_task = p_task;
-    m_idle.store(false);
-
-    m_event_arrive.notify_one();
-
-    return true;
-}
-
-
-bool thread_executor::is_idle(void) const {
-    return m_idle.load();
+    m_getter      = p_getter;
+    m_notifier    = p_notifier;
+    m_executor    = std::thread(&thread_executor::run, this);
 }
 
 
 void thread_executor::run(void) {
-    while(!m_stop.load()) {
-        while (m_task != nullptr) {
-            (*m_task)();
+    while(!m_stop) {
+        task::ptr task = nullptr;
+        m_getter(task);
 
-            m_task->set_status(task_status::READY);
+        if (task) {
+            task->set_status(task_status::PROCESSING);
+            (*task)();
+            task->set_status(task_status::READY);
 
-            m_conveyor(m_task, m_task);
+            m_notifier(task);
         }
-
-        m_idle.store(true);
-
-        std::unique_lock<std::mutex> lock_event(m_block);
-        m_event_arrive.wait(lock_event, [this]{ return (m_stop.load()) || (m_task != nullptr); });
+        else {
+            m_stop = true;
+        }
     }
 }
 
 
 void thread_executor::stop(void) {
-    m_stop.store(true);
-
-    m_event_arrive.notify_one();
+    m_stop = true;
     m_executor.join();
 }
 
+
+}
 
 }

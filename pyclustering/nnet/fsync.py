@@ -5,7 +5,7 @@
          - Y.Kuramoto. Chemical Oscillations, Waves, and Turbulence. 1984.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
-@date 2014-2017
+@date 2014-2018
 @copyright GNU Public License
 
 @cond GNU_PUBLIC_LICENSE
@@ -109,7 +109,7 @@ class fsync_dynamic:
         
         """
         
-        return pyclustering.utils.allocate_sync_ensembles(self.__amplitude, tolerance);
+        return pyclustering.utils.allocate_sync_ensembles(self.__amplitude, tolerance, 0.0);
 
 
     def extract_number_oscillations(self, index, amplitude_threshold):

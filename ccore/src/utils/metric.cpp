@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -18,7 +18,51 @@
 *
 */
 
-#include "utils.hpp"
+
+#include "metric.hpp"
+
+#include <algorithm>
+#include <cmath>
+
+
+namespace ccore {
+
+namespace utils {
+
+namespace metric {
+
+
+double euclidean_distance_sqrt(const std::vector<double> * const point1, const std::vector<double> * const point2) {
+    double distance = 0.0;
+    for (std::size_t dimension = 0; dimension < point1->size(); dimension++) {
+        double difference = (point1->data()[dimension] - point2->data()[dimension]);
+        distance += difference * difference;
+    }
+
+  return distance;
+}
+
+
+double euclidean_distance_sqrt(const std::vector<double> & point1, const std::vector<double> & point2) {
+    return euclidean_distance_sqrt(&point1, &point2);
+}
+
+
+double euclidean_distance(const std::vector<double> * const point1, const std::vector<double> * const point2) {
+    double distance = 0.0;
+
+    for (std::size_t dimension = 0; dimension < point1->size(); dimension++) {
+        double difference = (point1->data()[dimension] - point2->data()[dimension]);
+        distance += difference * difference;
+    }
+
+    return std::sqrt(distance);
+}
+
+
+double euclidean_distance(const std::vector<double> & point1, const std::vector<double> & point2) {
+    return euclidean_distance(&point1, &point2);
+}
 
 
 double average_neighbor_distance(const std::vector<std::vector<double> > * points, const std::size_t num_neigh) {
@@ -41,4 +85,11 @@ double average_neighbor_distance(const std::vector<std::vector<double> > * point
     }
 
     return total_distance / ( (double) num_neigh * (double) points->size() );
+}
+
+
+}
+
+}
+
 }

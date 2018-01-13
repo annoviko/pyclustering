@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -24,7 +24,15 @@
 #include <climits>
 #include <random>
 
-#include "utils.hpp"
+#include "utils/metric.hpp"
+
+
+using namespace ccore::utils::metric;
+
+
+namespace ccore {
+
+namespace nnet {
 
 
 som::som(const size_t num_rows, const size_t num_cols, const som_conn_type type_conn, const som_parameters & parameters) :
@@ -468,4 +476,9 @@ double som::calculate_init_radius(const size_t p_rows, const size_t p_cols) cons
     else {
         return 1.0;
     }
+}
+
+
+}
+
 }

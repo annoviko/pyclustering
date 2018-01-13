@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -18,18 +18,21 @@
 *
 */
 
+
 #pragma once
 
-typedef enum initial_type {
+
+namespace ccore {
+
+namespace nnet {
+
+
+enum class initial_type {
     RANDOM_GAUSSIAN,
     EQUIPARTITION,
-    TOTAL_NUMBER_INITIAL_TYPES
-} initial_type;
+};
 
 
-typedef enum solve_type {
-    FAST,
-    RK4,
-    RKF45,
-    TOTAL_NUMBER_SOLVE_TYPES
-} solve_type;
+}
+
+}

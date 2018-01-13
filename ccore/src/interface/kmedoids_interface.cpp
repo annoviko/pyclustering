@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -24,15 +24,15 @@
 
 
 pyclustering_package * kmedoids_algorithm(const pyclustering_package * const p_sample, const pyclustering_package * const p_package_medoids, const double p_tolerance) {
-    cluster_analysis::medoid_sequence medoids;
+    ccore::clst::medoid_sequence medoids;
     p_package_medoids->extract(medoids);
 
-    cluster_analysis::kmedoids algorithm(medoids, p_tolerance);
+    ccore::clst::kmedoids algorithm(medoids, p_tolerance);
 
     dataset input_dataset;
     p_sample->extract(input_dataset);
 
-    cluster_analysis::kmedoids_data output_result;
+    ccore::clst::kmedoids_data output_result;
     algorithm.process(input_dataset, output_result);
 
     pyclustering_package * package = create_package(output_result.clusters().get());

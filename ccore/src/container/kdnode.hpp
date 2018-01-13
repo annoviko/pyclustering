@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -25,6 +25,8 @@
 #include <memory>
 #include <vector>
 
+
+namespace ccore {
 
 namespace container {
 
@@ -111,5 +113,8 @@ bool operator >= (const std::vector<double> & point, const kdnode & node);
 
 bool operator == (const kdnode & node, const std::vector<double> & point);
 bool operator == (const std::vector<double> & point, const kdnode & node);
+
+
+}
 
 }

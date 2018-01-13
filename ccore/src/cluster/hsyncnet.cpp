@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -23,7 +23,16 @@
 #include <limits>
 #include <cmath>
 
-#include "utils.hpp"
+#include "utils/metric.hpp"
+
+
+using namespace ccore::utils::metric;
+using namespace ccore::nnet;
+
+
+namespace ccore {
+
+namespace clst {
 
 
 const double        hsyncnet::DEFAULT_TIME_STEP         = 1.0;
@@ -116,4 +125,9 @@ double hsyncnet::calculate_radius(const double radius, const std::size_t amount_
     }
 
     return next_radius;
+}
+
+
+}
+
 }

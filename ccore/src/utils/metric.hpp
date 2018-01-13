@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -18,35 +18,18 @@
 *
 */
 
+
 #pragma once
 
-#include <stdexcept>
 
-#include <string>
-#include <fstream>
-#include <sstream>
-
-#include <stack>
 #include <vector>
-#include <cmath>
-#include <algorithm>
-
-#include "nnet/network.hpp"
 
 
-typedef struct differential_result {
-    double time;
-    double value;
-} differential_result;
+namespace ccore {
 
+namespace utils {
 
-inline double pi(void) { return (double) 3.14159265358979323846; }
-
-
-inline double heaviside(const double value) {
-    if (value >= 0.0) { return 1.0; }
-    return 0.0;
-}
+namespace metric {
 
 
 /**
@@ -59,16 +42,7 @@ inline double heaviside(const double value) {
  * @return  Returns square of Euclidean distance between points.
  *
  */
-inline double euclidean_distance_sqrt(const std::vector<double> * const point1, const std::vector<double> * const point2) {
-    double distance = 0.0;
-    /* assert(point1->size() != point1->size()); */
-    for (std::size_t dimension = 0; dimension < point1->size(); dimension++) {
-        double difference = (point1->data()[dimension] - point2->data()[dimension]);
-        distance += difference * difference;
-    }
-
-  return distance;
-}
+double euclidean_distance_sqrt(const std::vector<double> * const point1, const std::vector<double> * const point2);
 
 /**
  *
@@ -80,9 +54,8 @@ inline double euclidean_distance_sqrt(const std::vector<double> * const point1, 
  * @return  Returns square of Euclidean distance between points.
  *
  */
-inline double euclidean_distance_sqrt(const std::vector<double> & point1, const std::vector<double> & point2) {
-    return euclidean_distance_sqrt(&point1, &point2);
-}
+double euclidean_distance_sqrt(const std::vector<double> & point1, const std::vector<double> & point2);
+
 
 /**
  *
@@ -94,16 +67,8 @@ inline double euclidean_distance_sqrt(const std::vector<double> & point1, const 
  * @return  Returns Euclidean distance between points.
  *
  */
-inline double euclidean_distance(const std::vector<double> * const point1, const std::vector<double> * const point2) {
-    double distance = 0.0;
+double euclidean_distance(const std::vector<double> * const point1, const std::vector<double> * const point2);
 
-    for (std::size_t dimension = 0; dimension < point1->size(); dimension++) {
-        double difference = (point1->data()[dimension] - point2->data()[dimension]);
-        distance += difference * difference;
-    }
-
-    return std::sqrt(distance);
-}
 
 /**
  *
@@ -115,9 +80,8 @@ inline double euclidean_distance(const std::vector<double> * const point1, const
  * @return  Returns Euclidean distance between points.
  *
  */
-inline double euclidean_distance(const std::vector<double> & point1, const std::vector<double> & point2) {
-    return euclidean_distance(&point1, &point2);
-}
+double euclidean_distance(const std::vector<double> & point1, const std::vector<double> & point2);
+
 
 /**
  *
@@ -130,3 +94,10 @@ inline double euclidean_distance(const std::vector<double> & point1, const std::
  *
  */
 double average_neighbor_distance(const std::vector<std::vector<double> > * points, const std::size_t num_neigh);
+
+
+}
+
+}
+
+}

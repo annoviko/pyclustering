@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -24,6 +24,9 @@
 #include "samples.hpp"
 
 #include "cluster/syncnet.hpp"
+
+
+using namespace ccore::clst;
 
 
 static void template_create_delete(const unsigned int size) {
@@ -64,7 +67,7 @@ TEST(utest_syncnet, one_cluster) {
         syncnet network(&sample, 0.5, false, initial_type::EQUIPARTITION);
 
         syncnet_analyser analyser;
-        network.process(0.998, solve_type::FAST, true, analyser);
+        network.process(0.998, solve_type::FORWARD_EULER, true, analyser);
 
         syncnet_cluster_data clusters;
         analyser.allocate_clusters(0.1, clusters);
@@ -112,29 +115,29 @@ static void template_two_cluster_allocation(const solve_type solver, const bool 
 }
 
 TEST(utest_syncnet, two_clusters_fast_solver_with_collection) {
-    template_two_cluster_allocation(solve_type::FAST, true, false);
+    template_two_cluster_allocation(solve_type::FORWARD_EULER, true, false);
 }
 
 TEST(utest_syncnet, two_clusters_rk4_solver_with_collection) {
-    template_two_cluster_allocation(solve_type::RK4, true, false);
+    template_two_cluster_allocation(solve_type::RUNGE_KUTTA_4, true, false);
 }
 
 TEST(utest_syncnet, two_clusters_rkf45_solver_with_collection) {
-    template_two_cluster_allocation(solve_type::RKF45, true, false);
+    template_two_cluster_allocation(solve_type::RUNGE_KUTTA_FEHLBERG_45, true, false);
 }
 
 TEST(utest_syncnet, two_clusters_fast_solver_without_collection) {
-    template_two_cluster_allocation(solve_type::FAST, false, false);
+    template_two_cluster_allocation(solve_type::FORWARD_EULER, false, false);
 }
 
 TEST(utest_syncnet, two_clusters_rk4_solver_without_collection) {
-    template_two_cluster_allocation(solve_type::RK4, false, false);
+    template_two_cluster_allocation(solve_type::RUNGE_KUTTA_4, false, false);
 }
 
 TEST(utest_syncnet, two_clusters_rkf45_solver_without_collection) {
-    template_two_cluster_allocation(solve_type::RKF45, false, false);
+    template_two_cluster_allocation(solve_type::RUNGE_KUTTA_FEHLBERG_45, false, false);
 }
 
 TEST(utest_syncnet, two_clusters_fast_solver_conn_weight) {
-    template_two_cluster_allocation(solve_type::FAST, false, true);
+    template_two_cluster_allocation(solve_type::FORWARD_EULER, false, true);
 }

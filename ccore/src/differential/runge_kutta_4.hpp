@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -21,20 +21,27 @@
 #pragma once
 
 
-#include "differential/differ_state.hpp"
+#include "differ_state.hpp"
+#include "equation.hpp"
+#include "solve_type.hpp"
 
+#include <functional>
+
+
+namespace ccore {
 
 namespace differential {
 
-template <typename state_type, typename extra_type = void *>
-void runge_kutta_4(void (*function_pointer)(const double t, const differ_state<state_type> & inputs, const differ_extra<extra_type> & argv, differ_state<state_type> & outputs),
-                   const differ_state<state_type> &     inputs,
-                   const double                         time_start,
-                   const double                         time_end,
-                   const std::size_t                    steps,
-                   const bool                           flag_collect,
-                   const differ_extra<extra_type> &     argv,
-                   differ_result<state_type> &          outputs) {
+
+template <class state_type, class extra_type = void *>
+void runge_kutta_4(const equation<state_type, extra_type> & func,
+                   const differ_state<state_type> &         inputs,
+                   const double                             time_start,
+                   const double                             time_end,
+                   const std::size_t                        steps,
+                   const bool                               flag_collect,
+                   const differ_extra<extra_type> &         argv,           /* additional arguments that are used in the equation */
+                   differ_result<state_type> &              outputs) {
 
     const double step = (time_end - time_start) / (double) steps;
 
@@ -49,20 +56,20 @@ void runge_kutta_4(void (*function_pointer)(const double t, const differ_state<s
     current_result.time = time_start;
     current_result.state = inputs;
 
-    for (unsigned int i = 0; i < steps; i++) {
+    for (std::size_t i = 0; i < steps; i++) {
         differ_state<state_type> fp1, fp2, fp3, fp4;
         differ_state<state_type> k1, k2, k3, k4;
 
-        function_pointer(current_result.time, current_result.state, argv, fp1);
+        func(current_result.time, current_result.state, argv, fp1);
         k1 = fp1 * step;
 
-        function_pointer(current_result.time + step / 2.0, current_result.state + k1 / 2.0, argv, fp2);
+        func(current_result.time + step / 2.0, current_result.state + k1 / 2.0, argv, fp2);
         k2 = fp2 * step;
 
-        function_pointer(current_result.time + step / 2.0, current_result.state + k2 / 2.0, argv, fp3);
+        func(current_result.time + step / 2.0, current_result.state + k2 / 2.0, argv, fp3);
         k3 = fp3 * step;
 
-        function_pointer(current_result.time + step, current_result.state + k3, argv, fp4);
+        func(current_result.time + step, current_result.state + k3, argv, fp4);
         k4 = fp4 * step;
 
         current_result.state += (k1 + 2.0 * k2 + 2.0 * k3 + k4) / 6.0;
@@ -78,6 +85,9 @@ void runge_kutta_4(void (*function_pointer)(const double t, const differ_state<s
         outputs[0].time = current_result.time;
         outputs[0].state = current_result.state;
     }
+}
+
+
 }
 
 }

@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2014-2017    Andrei Novikov (pyclustering@yandex.ru)
+* Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
 *
 * GNU_PUBLIC_LICENSE
 *   pyclustering is free software: you can redistribute it and/or modify
@@ -18,17 +18,21 @@
 *
 */
 
-#ifndef CCORE_DIFFERENTIAL_DIFFER_STATE_HPP_
-#define CCORE_DIFFERENTIAL_DIFFER_STATE_HPP_
+#pragma once
 
 
 #include <vector>
 #include <memory>
 
+#include "solve_type.hpp"
+
+
+namespace ccore {
 
 namespace differential {
 
-template <typename state_type>
+
+template <class state_type>
 class differ_state {
 public:
     typedef state_type                          value_type;
@@ -341,17 +345,25 @@ private:
 };
 
 
-template <typename extra_type> using differ_extra = std::vector<extra_type>;
+template <class extra_type = void *>
+using differ_extra = std::vector<extra_type>;
 
 
-template <typename state_type> struct differ_output {
+template <class state_type = double>
+struct differ_output {
     double                    time;
     differ_state<state_type>  state;
 };
 
 
-template <typename state_type> using differ_result = std::vector<differ_output<state_type> >;
+template <class state_type> 
+using differ_result = std::vector< differ_output<state_type> >;
+
+
+template <class state_type>
+using differ_result_ptr = std::shared_ptr< differ_result<state_type> >;
+
 
 }
 
-#endif
+}
