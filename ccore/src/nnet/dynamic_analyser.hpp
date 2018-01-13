@@ -42,9 +42,9 @@ public:
     using ptr = std::shared_ptr<spike>;
 
 private:
-    std::size_t    m_begin;
-    std::size_t    m_duration;
-    std::size_t    m_end;
+    std::size_t    m_begin          = 0;
+    std::size_t    m_duration       = 0;
+    std::size_t    m_end            = 0;
 
 public:
     spike(void) = default;

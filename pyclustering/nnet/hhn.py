@@ -169,9 +169,11 @@ class hhn_network(network):
     @brief Oscillatory Neural Network with central element based on Hodgkin-Huxley neuron model. Interaction between oscillators is performed via
            central element (no connection between oscillators that are called as peripheral). Peripheral oscillators receive external stimulus.
            Central element consist of two oscillators: the first is used for synchronization some ensemble of oscillators and the second controls
-           synchronization of the first cental oscillator with verious ensembles.
+           synchronization of the first cental oscillator with various ensembles.
     
-    Example:
+    Usage example where oscillatory network with 6 oscillators is used for simulation. The first two oscillators
+    has the same stimulus, as well as the third and fourth oscillators and the the last two. Thus three synchronous
+    ensembles are expected after simulation.
     @code
         # change period of time when high strength value of synaptic connection exists from CN2 to PN.
         params = hhn_parameters();
@@ -183,9 +185,25 @@ class hhn_network(network):
         # simulate network
         (t, dyn) = net.simulate(1200, 600);
         
-        # draw network output during simulation
-        draw_dynamics(t, dyn, x_title = "Time", y_title = "V", separate = True);
+        # draw network output during simulation (membrane potential of peripheral and central neurons).
+        amount_canvases = 6 + 2; # 6 peripheral oscillator + 2 central elements
+        visualizer = dynamic_visualizer(amount_canvases, x_title="Time", y_title="V", y_labels=False);
+        visualizer.append_dynamics(t, dyn_peripheral, 0, separate);
+        visualizer.append_dynamics(t, dyn_central, amount_canvases - 2, True);
+        visualizer.show();
     @endcode
+
+    To increase performance CCORE can be used, for that purpose special flag should be specified when network is
+    constructed:
+    @code
+        # create oscillatory network with stimulus using CCORE
+        net = hhn_network(6, [0, 0, 25, 25, 47, 47], params, ccore=True);
+    @endcode
+
+    There is visualized results of simulation where three synchronous ensembles of oscillators can be observed. The
+    first and the second forms the first ensemble, the third and the fourth forms the second ensemble and the last
+    two oscillators forms the third ensemble.
+    @image html hhn_three_ensembles.png
     
     """
     
@@ -250,12 +268,17 @@ class hhn_network(network):
     def simulate(self, steps, time, solution = solve_type.RK4):
         """!
         @brief Performs static simulation of oscillatory network based on Hodgkin-Huxley neuron model.
-        
+        @details Output dynamic is sensible to amount of steps of simulation and solver of differential equation.
+                  Python implementation uses 'odeint' from 'scipy', CCORE uses classical RK4 and RFK45 methods,
+                  therefore in case of CCORE HHN (Hodgkin-Huxley network) amount of steps should be greater than in
+                  case of Python HHN.
+
         @param[in] steps (uint): Number steps of simulations during simulation.
         @param[in] time (double): Time of simulation.
         @param[in] solution (solve_type): Type of solver for differential equations.
         
-        @return (list) Dynamic of oscillatory network.
+        @return (tuple) Dynamic of oscillatory network represented by (time, peripheral neurons dynamic, central elements
+                dynamic), where types are (list, list, list).
         
         """
         
@@ -265,12 +288,17 @@ class hhn_network(network):
     def simulate_static(self, steps, time, solution = solve_type.RK4):
         """!
         @brief Performs static simulation of oscillatory network based on Hodgkin-Huxley neuron model.
-        
+        @details Output dynamic is sensible to amount of steps of simulation and solver of differential equation.
+                  Python implementation uses 'odeint' from 'scipy', CCORE uses classical RK4 and RFK45 methods,
+                  therefore in case of CCORE HHN (Hodgkin-Huxley network) amount of steps should be greater than in
+                  case of Python HHN.
+
         @param[in] steps (uint): Number steps of simulations during simulation.
         @param[in] time (double): Time of simulation.
         @param[in] solution (solve_type): Type of solver for differential equations.
         
-        @return (list) Dynamic of oscillatory network.
+        @return (tuple) Dynamic of oscillatory network represented by (time, peripheral neurons dynamic, central elements
+                dynamic), where types are (list, list, list).
         
         """
         
@@ -297,7 +325,9 @@ class hhn_network(network):
         if (solution == solve_type.RKF45):
             raise NameError("Solver RKF45 is not support in python version.");
         
-        dyn_peripheral, dyn_central, dyn_time = [], [], [];
+        dyn_peripheral = [ self._membrane_potential[:] ];
+        dyn_central = [ [0.0, 0.0] ];
+        dyn_time = [ 0.0 ];
         
         step = time / steps;
         int_step = step / 10.0;

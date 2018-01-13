@@ -127,6 +127,7 @@ INPUT                  = pyclustering/__init__.py \
                          pyclustering/gcolor/sync.py \
                          pyclustering/nnet/__init__.py \
                          pyclustering/nnet/cnn.py \
+                         pyclustering/nnet/dynamic_visualizer.py \
                          pyclustering/nnet/fsync.py \
                          pyclustering/nnet/hhn.py \
                          pyclustering/nnet/hysteresis.py \

@@ -222,3 +222,4 @@ TEST(utest_hhn, two_sync_ensembles_02) {
 
     template_ensemble_generation(6, 800, 200, 0.1, { 20, 20, 20, 50, 50, 50 }, expected_ensembles, dead_neurons);
 }
+
