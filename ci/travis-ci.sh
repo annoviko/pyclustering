@@ -44,7 +44,8 @@ check_error_log_file() {
 build_ccore() {
     cd $TRAVIS_BUILD_DIR/ccore/
 
-    rm stderr.log stdout.log
+    [ -f stderr.log ] && rm stderr.log
+    [ -f stdout.log ] && rm stdout.log
     
     if [ "$1" == "x64" ]; then
         make ccore_x64 > >(tee -a stdout.log) 2> >(tee -a stderr.log >&2)
