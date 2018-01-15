@@ -27,15 +27,31 @@ check_failure() {
 }
 
 
+check_error_log_file() {
+    problems_amount=$(cat $1 | wc -l)
+    printf "Total amount of errors and warnings: '%d'\n"  "$problems_amount"
+    
+    if [ $problems_amount -ne 0 ] ; then
+        print_info "List of warnings and errors:"
+        cat $1
+        
+        print_error $2
+        exit 1
+    fi
+}
+
+
 build_ccore() {
     cd $TRAVIS_BUILD_DIR/ccore/
 
+    rm stderr.log stdout.log
+    
     if [ "$1" == "x64" ]; then
-        make ccore_x64
-        check_failure "Building CCORE (x64): FAILURE."
+        make ccore_x64 > >(tee -a stdout.log) 2> >(tee -a stderr.log >&2)
+        check_error_log_file stderr.log "Building CCORE (x64): FAILURE."
     elif [ "$1" == "x86" ]; then
-        make ccore_x86
-        check_failure "Building CCORE (x86): FAILURE."
+        make ccore_x86 > >(tee -a stdout.log) 2> >(tee -a stderr.log >&2)
+        check_error_log_file stderr.log "Building CCORE (x86): FAILURE."
     else
         print_error "Unknown CCORE platform is specified."
         exit 1
@@ -199,19 +215,9 @@ run_doxygen_job() {
     # generate doxygen documentation
     print_info "Generate documentation."
 
-    doxygen docs/doxygen_conf_pyclustering > /dev/null 2> doxygen_problems.txt
+    doxygen docs/doxygen_conf_pyclustering > /dev/null 2> doxygen_problems.log
     
-    problems_amount=$(cat doxygen_problems.txt | wc -l)
-    printf "Total amount of doxygen errors and warnings: '%d'\n"  "$problems_amount"
-    
-    if [ $problems_amount -ne 0 ] ; then
-        print_info "List of warnings and errors:"
-        cat doxygen_problems.txt
-        
-        print_error "Building doxygen documentation: FAILURE."
-        exit 1
-    fi
-
+    check_error_log_file doxygen_problems.log "Building doxygen documentation: FAILURE."
     print_info "Building doxygen documentation: SUCCESS."
 }
 

@@ -7,10 +7,10 @@ MKDIR = mkdir -p
 
 # C++ standard depending on operating system
 ifeq ($(shell uname -o), Cygwin)
-	CPLUS_STANDARD = gnu++1y
+	CPLUS_STANDARD = gnu++14
 	CFLAG_PIC = 
 else
-	CPLUS_STANDARD = c++1y
+	CPLUS_STANDARD = c++14
 	CFLAG_PIC = -fPIC
 endif
 
@@ -25,8 +25,12 @@ else
 endif
 
 
+# Warnings.
+WARNING_FLAGS = -Wall -Wpedantic
+
+
 # Toolchain arguments.
-CFLAGS = -O2 -MMD -MP -std=$(CPLUS_STANDARD) $(CFLAG_PIC) $(CFLAG_PLATFORM) -Wall -Wpedantic
+CFLAGS = -O2 -MMD -MP -std=$(CPLUS_STANDARD) $(CFLAG_PIC) $(CFLAG_PLATFORM) $(WARNING_FLAGS)
 LFLAGS = -shared $(LFLAG_PLATFORM)
 
 

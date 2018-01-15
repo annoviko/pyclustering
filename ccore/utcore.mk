@@ -7,10 +7,10 @@ MKDIR = mkdir -p
 
 # C++ standard depending on operating system
 ifeq ($(shell uname -o), Cygwin)
-	CPLUS_STANDARD = gnu++1y
+	CPLUS_STANDARD = gnu++14
 	PIC_FLAG = 
 else
-	CPLUS_STANDARD = c++1y
+	CPLUS_STANDARD = c++14
 	PIC_FLAG = -fPIC
 endif
 
