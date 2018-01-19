@@ -5,6 +5,9 @@ CHANGE NOTES FOR 0.8.0 (STARTED Oct 23, 2017)
 ------------------------------------------------------------------------
 
 GENERAL CHANGES:
+- Optimization of python implementation of the K-Means algorithm using numpy (pyclustering.cluster.kmeans).
+  See: https://github.com/annoviko/pyclustering/issues/403
+
 - Implemented dynamic visualizer for oscillatory networks (pyclustering.nnet.dynamic_visualizer).
   See: no reference.
 

@@ -26,11 +26,11 @@
 """
 
 
+import numpy;
+
 import pyclustering.core.kmeans_wrapper as wrapper;
 
 from pyclustering.cluster.encoder import type_encoding;
-
-from pyclustering.utils import euclidean_distance_sqrt, list_math_addition, list_math_division_number;
 
 
 class kmeans:
@@ -72,7 +72,7 @@ class kmeans:
     
     """
     
-    def __init__(self, data, initial_centers, tolerance = 0.25, ccore = False):
+    def __init__(self, data, initial_centers, tolerance = 0.001, ccore = False):
         """!
         @brief Constructor of clustering algorithm K-Means.
         @details For initial centers initializer can be used, for example, K-Means++ method.
@@ -85,9 +85,9 @@ class kmeans:
         @see center_initializer
         
         """
-        self.__pointer_data = data;
+        self.__pointer_data = numpy.matrix(data);
         self.__clusters = [];
-        self.__centers = initial_centers[:];     # initial centers shouldn't be chaged
+        self.__centers = numpy.matrix(initial_centers);
         self.__tolerance = tolerance;
         
         self.__ccore = ccore;
@@ -108,7 +108,7 @@ class kmeans:
             self.__clusters = wrapper.kmeans(self.__pointer_data, self.__centers, self.__tolerance);
             self.__centers = self.__update_centers();
         else: 
-            changes = float('inf');
+            maximum_change = float('inf');
              
             stop_condition = self.__tolerance * self.__tolerance;   # Fast solution
             #stop_condition = self.__tolerance;              # Slow solution
@@ -117,13 +117,17 @@ class kmeans:
             if (len(self.__pointer_data[0]) != len(self.__centers[0])):
                 raise NameError('Dimension of the input data and dimension of the initial cluster centers must be equal.');
              
-            while (changes > stop_condition):
+            while (maximum_change > stop_condition):
                 self.__clusters = self.__update_clusters();
                 updated_centers = self.__update_centers();  # changes should be calculated before asignment
-             
-                #changes = max([euclidean_distance(self.__centers[index], updated_centers[index]) for index in range(len(self.__centers))]);        # Slow solution
-                changes = max([euclidean_distance_sqrt(self.__centers[index], updated_centers[index]) for index in range(len(updated_centers))]);    # Fast solution
-                 
+                
+                if (len(self.__centers) != len(updated_centers)):
+                    maximum_change = float('inf');
+                
+                else:
+                    changes = numpy.sum(numpy.square(self.__centers - updated_centers), axis=1);
+                    maximum_change = numpy.max(changes);
+                
                 self.__centers = updated_centers;
 
 
@@ -148,7 +152,7 @@ class kmeans:
         
         """
 
-        return self.__centers;
+        return self.__centers.tolist();
 
 
     def get_cluster_encoding(self):
@@ -172,22 +176,17 @@ class kmeans:
         
         """
         
-        clusters = [[] for i in range(len(self.__centers))];
-        for index_point in range(len(self.__pointer_data)):
-            index_optim = -1;
-            dist_optim = 0.0;
-             
-            for index in range(len(self.__centers)):
-                # dist = euclidean_distance(data[index_point], centers[index]);         # Slow solution
-                dist = euclidean_distance_sqrt(self.__pointer_data[index_point], self.__centers[index]);      # Fast solution
-                 
-                if ( (dist < dist_optim) or (index is 0)):
-                    index_optim = index;
-                    dist_optim = dist;
-             
-            clusters[index_optim].append(index_point);
+        clusters = [[] for _ in range(len(self.__centers))];
         
-        # If cluster is not able to capture object it should be removed
+        dataset_differences = numpy.zeros((len(clusters), len(self.__pointer_data)));
+        for index_center in range(len(self.__centers)):
+            dataset_differences[index_center] = numpy.sum(numpy.square(self.__pointer_data - self.__centers[index_center]), axis=1).T;
+        
+        optimum_indexes = numpy.argmin(dataset_differences, axis=0);
+        for index_point in range(len(optimum_indexes)):
+            index_cluster = optimum_indexes[index_point];
+            clusters[index_cluster].append(index_point);
+        
         clusters = [cluster for cluster in clusters if len(cluster) > 0];
         
         return clusters;
@@ -197,18 +196,15 @@ class kmeans:
         """!
         @brief Calculate centers of clusters in line with contained objects.
         
-        @return (list) Updated centers as list of centers.
+        @return (numpy.matrix) Updated centers as list of centers.
         
         """
-         
-        centers = [[] for i in range(len(self.__clusters))];
-         
+        
+        dimension = self.__pointer_data.shape[1];
+        centers = numpy.zeros((len(self.__clusters), dimension));
+        
         for index in range(len(self.__clusters)):
-            point_sum = [0] * len(self.__pointer_data[0]);
-             
-            for index_point in self.__clusters[index]:
-                point_sum = list_math_addition(point_sum, self.__pointer_data[index_point]);
-            
-            centers[index] = list_math_division_number(point_sum, len(self.__clusters[index]));
-             
-        return centers;
+            cluster_points = self.__pointer_data[self.__clusters[index], :];
+            centers[index] = cluster_points.mean(axis=0);
+
+        return numpy.matrix(centers);

@@ -34,7 +34,7 @@ from pyclustering.utils import read_sample;
 from pyclustering.utils import timedcall;
 
 
-def template_clustering(start_centers, path, tolerance = 0.25, ccore = True):
+def template_clustering(start_centers, path, tolerance = 0.25, ccore = False):
     sample = read_sample(path);
     
     kmeans_instance = kmeans(sample, start_centers, tolerance, ccore);
