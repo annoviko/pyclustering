@@ -28,7 +28,7 @@ import unittest;
 from pyclustering.cluster.tests.agglomerative_templates import AgglomerativeTestTemplates;
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES;
-from pyclustering.cluster.agglomerative import agglomerative, type_link;
+from pyclustering.cluster.agglomerative import type_link;
 
 
 class AgglomerativeUnitTests(unittest.TestCase):

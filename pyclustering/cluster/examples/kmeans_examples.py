@@ -23,6 +23,8 @@
 
 """
 
+import random;
+
 from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
 
 from pyclustering.cluster import cluster_visualizer;
@@ -30,6 +32,7 @@ from pyclustering.cluster.kmeans import kmeans;
 
 from pyclustering.utils import read_sample;
 from pyclustering.utils import timedcall;
+
 
 def template_clustering(start_centers, path, tolerance = 0.25, ccore = True):
     sample = read_sample(path);
@@ -47,8 +50,8 @@ def template_clustering(start_centers, path, tolerance = 0.25, ccore = True):
     visualizer.append_cluster(start_centers, marker = '*', markersize = 15);
     visualizer.append_cluster(centers, marker = '*', markersize = 15);
     visualizer.show();
-    
-    
+
+
 def cluster_sample1():
     start_centers = [[4.7, 5.9], [5.7, 6.5]];
     template_clustering(start_centers, SIMPLE_SAMPLES.SAMPLE_SIMPLE1);
@@ -100,23 +103,23 @@ def cluster_wing_nut():
     "Almost good!"
     start_centers = [[-1.5, 1.5], [1.5, 1.5]];
     template_clustering(start_centers, FCPS_SAMPLES.SAMPLE_WING_NUT); 
-    
+
 def cluster_chainlink():
     start_centers = [[1.1, -1.7, 1.1], [-1.4, 2.5, -1.2]];
     template_clustering(start_centers, FCPS_SAMPLES.SAMPLE_CHAINLINK);
-    
+
 def cluster_hepta():
     start_centers = [[0.0, 0.0, 0.0], [3.0, 0.0, 0.0], [-2.0, 0.0, 0.0], [0.0, 3.0, 0.0], [0.0, -3.0, 0.0], [0.0, 0.0, 2.5], [0.0, 0.0, -2.5]];
     template_clustering(start_centers, FCPS_SAMPLES.SAMPLE_HEPTA); 
-    
+
 def cluster_tetra():
     start_centers = [[1, 0, 0], [0, 1, 0], [0, -1, 0], [-1, 0, 0]];
     template_clustering(start_centers, FCPS_SAMPLES.SAMPLE_TETRA);
-    
+
 def cluster_engy_time():
     start_centers = [[0.5, 0.5], [2.3, 2.9]];
     template_clustering(start_centers, FCPS_SAMPLES.SAMPLE_ENGY_TIME);
-    
+
 def experiment_execution_time(ccore = False):
     template_clustering([[3.7, 5.5], [6.7, 7.5]], SIMPLE_SAMPLES.SAMPLE_SIMPLE1, ccore);
     template_clustering([[3.5, 4.8], [6.9, 7], [7.5, 0.5]], SIMPLE_SAMPLES.SAMPLE_SIMPLE2, ccore);
@@ -134,6 +137,24 @@ def experiment_execution_time(ccore = False):
     template_clustering([[-0.5, -0.5, -0.5], [0.5, 0.5, 0.5]], FCPS_SAMPLES.SAMPLE_ATOM, ccore);
     template_clustering([[0.5, 0.5], [2.3, 2.9]], FCPS_SAMPLES.SAMPLE_ENGY_TIME, ccore);
 
+def clustering_random_points(amount_points, amount_centers, ccore):
+    sample = [ [ random.random(), random.random() ] for _ in range(amount_points) ];
+    centers = [ [ random.random(), random.random() ] for _ in range(amount_centers) ];
+    
+    kmeans_instance = kmeans(sample, centers, 0.0001, ccore);
+    (ticks, _) = timedcall(kmeans_instance.process);
+    
+    print("Execution time ("+ str(amount_points) +" 2D-points):", ticks);
+
+
+def performance_measure_random_points(ccore):
+    clustering_random_points(1000, 5, ccore);
+    clustering_random_points(2000, 5, ccore);
+    clustering_random_points(3000, 5, ccore);
+    clustering_random_points(4000, 5, ccore);
+    clustering_random_points(5000, 5, ccore);
+    clustering_random_points(10000, 5, ccore);
+    clustering_random_points(20000, 5, ccore);
 
 cluster_sample1();
 cluster_sample2();
@@ -151,6 +172,8 @@ cluster_chainlink();
 cluster_hepta();
 cluster_tetra();
 cluster_engy_time();
-  
+
 experiment_execution_time(False);   # Python code
 experiment_execution_time(True);    # C++ code + Python env.
+
+performance_measure_random_points(False);

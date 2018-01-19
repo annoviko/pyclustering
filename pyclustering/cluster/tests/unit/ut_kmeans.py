@@ -26,6 +26,10 @@
 
 import unittest;
 
+# Generate images without having a window appear.
+import matplotlib;
+matplotlib.use('Agg');
+
 from pyclustering.cluster.tests.kmeans_templates import KmeansTestTemplates;
 
 from pyclustering.cluster.kmeans import kmeans;
@@ -76,9 +80,18 @@ class KmeansUnitTest(unittest.TestCase):
     def testWrongNumberOfCentersSimpleSample2(self):
         KmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [[1.3, 1.5], [5.2, 8.5], [5.0, 7.8], [11.0, -3.0]], None);
 
+    def testWrongNumberOfCentersSimpleSample3(self):
+        KmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [[4.5, 3.4], [-1.7, 4.3], [1.5, 1.0], [11.3, 1.2], [-4.6, -5.2]], None);
+
+    def testWrongNumberOfCentersSimpleSample4(self):
+        KmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, [[2.4, -1.4], [-5.2, -8.5], [-5.0, 3.1], [6.2, 1.4], [7.9, 2.4]], None);
+
+    def testWrongNumberOfCentersSimpleSample5(self):
+        KmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [[-1.9, 3.2], [1.2, 34.5], [15.2, 34.8], [192, 234], [-32.3, -106]], None);
+
     def testDifferentDimensions(self):
         kmeans_instance = kmeans([ [0, 1, 5], [0, 2, 3] ], [ [0, 3] ]);
-        self.assertRaises(NameError, kmeans_instance.process);
+        self.assertRaises(ValueError, kmeans_instance.process);
 
 
     def testClusterAllocationOneDimensionData(self):
