@@ -19,6 +19,8 @@
 */
 
 
+#include <fstream>
+
 #include "gtest/gtest.h"
 
 #include "utenv_check.hpp"
@@ -221,5 +223,75 @@ TEST(utest_hhn, two_sync_ensembles_02) {
     basic_ensemble      dead_neurons = { };
 
     template_ensemble_generation(6, 800, 200, 0.1, { 20, 20, 20, 50, 50, 50 }, expected_ensembles, dead_neurons);
+}
+
+
+static void template_write_read_dynamic(const std::size_t p_num_osc,
+                                        const std::size_t p_steps,
+                                        const std::size_t p_time,
+                                        const hhn_stimulus & p_stimulus,
+                                        const std::vector<hhn_dynamic::collect> & p_enables)
+{
+    hnn_parameters parameters;
+    hhn_network network(p_num_osc, parameters);
+
+    hhn_dynamic output_dynamic;
+    output_dynamic.disable_all();
+    output_dynamic.enable(p_enables);
+
+    /* simulate and check collected outputs */
+    network.simulate(p_steps, p_time, solve_type::RUNGE_KUTTA_4, p_stimulus, output_dynamic);
+
+    const std::string filename = "utest_dynamic_storage.txt";
+    std::ofstream output_file(filename);
+    output_file << output_dynamic;
+    output_file.close();
+
+    hhn_dynamic loaded_dynamic;
+    hhn_dynamic_reader(filename).read(loaded_dynamic);
+
+    ASSERT_EQ(output_dynamic.size_dynamic(), loaded_dynamic.size_dynamic());
+    ASSERT_EQ(output_dynamic.size_network(), loaded_dynamic.size_network());
+
+    std::stringstream text_dynamic_original;
+    std::stringstream text_dynamic_obtained;
+
+    text_dynamic_original << output_dynamic;
+    text_dynamic_obtained << loaded_dynamic;
+
+    ASSERT_EQ(text_dynamic_original.str(), text_dynamic_obtained.str());
+}
+
+TEST(utest_hhn, wr_one_oscillator) {
+    std::vector<hhn_dynamic::collect> enables = { hhn_dynamic::collect::MEMBRANE_POTENTIAL };
+    template_write_read_dynamic(1, 20, 1, { 40 }, enables);
+}
+
+TEST(utest_hhn, wr_two_oscillators) {
+    std::vector<hhn_dynamic::collect> enables = { hhn_dynamic::collect::MEMBRANE_POTENTIAL };
+    template_write_read_dynamic(2, 30, 1, { 40, 20 }, enables);
+}
+
+TEST(utest_hhn, wr_ten_oscillators) {
+    std::vector<hhn_dynamic::collect> enables = { hhn_dynamic::collect::MEMBRANE_POTENTIAL };
+    template_write_read_dynamic(10, 100, 10, { 10, 10, 10, 12, 12, 12, 20, 20, 20, 20 }, enables);
+}
+
+TEST(utest_hhn, wr_full_dynamic_collection) {
+    std::vector<hhn_dynamic::collect> enables = {
+            hhn_dynamic::collect::MEMBRANE_POTENTIAL,
+            hhn_dynamic::collect::ACTIVE_COND_SODIUM,
+            hhn_dynamic::collect::INACTIVE_COND_SODIUM,
+            hhn_dynamic::collect::ACTIVE_COND_POTASSIUM
+    };
+    template_write_read_dynamic(2, 50, 2, { 40, 20 }, enables);
+}
+
+TEST(utest_hhn, wr_specific_dynamic_collection) {
+    std::vector<hhn_dynamic::collect> enables = {
+            hhn_dynamic::collect::MEMBRANE_POTENTIAL,
+            hhn_dynamic::collect::ACTIVE_COND_POTASSIUM
+    };
+    template_write_read_dynamic(4, 50, 3, { 40, 20, 70, 120 }, enables);
 }
 

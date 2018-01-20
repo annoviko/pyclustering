@@ -19,6 +19,8 @@
 */
 
 
+#include <fstream>
+
 #include "interface/hhn_interface.h"
 
 #include "differential/solve_type.hpp"
@@ -110,4 +112,19 @@ pyclustering_package * hhn_dynamic_get_time(const void * p_output_dynamic) {
 
     pyclustering_package * package = create_package(evolution.get());
     return package;
+}
+
+
+void hhn_dynamic_write(const void * p_output_dynamic, const char * p_filename) {
+    hhn_dynamic * dynamic = (hhn_dynamic *) p_output_dynamic;
+    std::ofstream file_stream(p_filename);
+    file_stream << *dynamic;
+    file_stream.close();
+}
+
+
+void * hhn_dynamic_read(const char * p_filename) {
+    hhn_dynamic * output_dynamic = new hhn_dynamic();
+    hhn_dynamic_reader(p_filename).read(*output_dynamic);
+    return output_dynamic;
 }
