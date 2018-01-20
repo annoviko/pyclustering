@@ -154,3 +154,21 @@ def hhn_dynamic_get_time(ccore_hhn_dynamic_pointer):
     ccore.free_pyclustering_package(dynamic_package);
 
     return result;
+
+
+def hhn_dynamic_write(ccore_hhn_dynamic_pointer, filename):
+    ccore = load_core();
+
+    byte_filename = filename.encode('utf-8');
+    ccore.hhn_dynamic_write(ccore_hhn_dynamic_pointer, c_char_p(byte_filename));
+
+
+def hhn_dynamic_read(filename):
+    ccore = load_core();
+
+    byte_filename = filename.encode('utf-8');
+
+    ccore.hhn_dynamic_read,restype = POINTER(c_void_p);
+    hhn_dynamic_pointer = ccore.hhn_dynamic_read(byte_filename);
+
+    return hhn_dynamic_pointer;

@@ -77,9 +77,9 @@ class kmeans:
         @brief Constructor of clustering algorithm K-Means.
         @details For initial centers initializer can be used, for example, K-Means++ method.
         
-        @param[in] data (list): Input data that is presented as list of points (objects), each point should be represented by list or tuple.
-        @param[in] initial_centers (list): Initial coordinates of centers of clusters that are represented by list: [center1, center2, ...].
-        @param[in] tolerance (double): Stop condition: if maximum value of change of centers of clusters is less than tolerance than algorithm will stop processing
+        @param[in] data (array_like): Input data that is presented as array of points (objects), each point should be represented by array_like data structure.
+        @param[in] initial_centers (array_like): Initial coordinates of centers of clusters that are represented by array_like data structure: [center1, center2, ...].
+        @param[in] tolerance (double): Stop condition: if maximum value of change of centers of clusters is less than tolerance then algorithm stops processing.
         @param[in] ccore (bool): Defines should be CCORE library (C++ pyclustering library) used instead of Python code or not.
         
         @see center_initializer

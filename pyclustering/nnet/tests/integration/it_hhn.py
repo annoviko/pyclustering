@@ -26,6 +26,8 @@
 
 import unittest;
 
+from pyclustering.nnet.hhn import hhn_network;
+
 from pyclustering.nnet.tests.hhn_templates import HhnTestTemplates;
 
 

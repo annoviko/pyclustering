@@ -70,7 +70,7 @@ class hhn_parameters:
         ## Reverse potential of potassium current [mV].
         self.vK      = -77.0;
         
-        ## Reverse potantial of leakage current [mV].
+        ## Reverse potential of leakage current [mV].
         self.vL      = -54.4;
         
         ## Rest potential [mV].
@@ -169,10 +169,10 @@ class hhn_network(network):
     @brief Oscillatory Neural Network with central element based on Hodgkin-Huxley neuron model. Interaction between oscillators is performed via
            central element (no connection between oscillators that are called as peripheral). Peripheral oscillators receive external stimulus.
            Central element consist of two oscillators: the first is used for synchronization some ensemble of oscillators and the second controls
-           synchronization of the first cental oscillator with various ensembles.
+           synchronization of the first central oscillator with various ensembles.
     
     Usage example where oscillatory network with 6 oscillators is used for simulation. The first two oscillators
-    has the same stimulus, as well as the third and fourth oscillators and the the last two. Thus three synchronous
+    have the same stimulus, as well as the third and fourth oscillators and the last two. Thus three synchronous
     ensembles are expected after simulation.
     @code
         # change period of time when high strength value of synaptic connection exists from CN2 to PN.
@@ -200,9 +200,9 @@ class hhn_network(network):
         net = hhn_network(6, [0, 0, 25, 25, 47, 47], params, ccore=True);
     @endcode
 
-    There is visualized results of simulation where three synchronous ensembles of oscillators can be observed. The
-    first and the second forms the first ensemble, the third and the fourth forms the second ensemble and the last
-    two oscillators forms the third ensemble.
+    There is visualized result of simulation where three synchronous ensembles of oscillators can be observed. The
+    first and the second oscillators form the first ensemble, the third and the fourth form the second ensemble and
+    the last two oscillators form the third ensemble.
     @image html hhn_three_ensembles.png
     
     """

@@ -456,10 +456,10 @@ void hhn_dynamic_reader::extract_dynamic(const std::string & p_line, double & p_
 
     std::size_t counter_filling = p_peripheral.size() + 2;
 
-    bool extract_status = (bool) std::getline(string_stream, item, ' ');
+    std::getline(string_stream, item, ' ');
     p_time = std::stod(item);
 
-    extract_status = (bool) std::getline(string_stream, item, ' ');
+    bool extract_status = (bool) std::getline(string_stream, item, ' ');
     for (std::size_t item_index = 0; extract_status; item_index++) {
         if (item == "[") {
             if (item_index < p_peripheral.size()) {
@@ -717,9 +717,9 @@ void hhn_network::neuron_states(const double t, const differ_state<double> & inp
 
     /* Calculate variables */
     double potential = v - m_params.m_vRest;
-    double am = (2.5 - 0.1 * potential) / (std::exp(2.5 - 0.1 * potential) - 1.0);
+    double am = (2.5 - 0.1 * potential) / (std::expm1(2.5 - 0.1 * potential)); /* 'exp(x) - 1' can be replaced by 'expm1(x)' */
     double ah = 0.07 * std::exp(-potential / 20.0);
-    double an = (0.1 - 0.01 * potential) / (std::exp(1.0 - 0.1 * potential) - 1.0);
+    double an = (0.1 - 0.01 * potential) / (std::expm1(1.0 - 0.1 * potential)); /* 'exp(x) - 1' can be replaced by 'expm1(x)' */
 
     double bm = 4.0 * std::exp(-potential / 18.0);
     double bh = 1.0 / (std::exp(3.0 - 0.1 * potential) + 1.0);
