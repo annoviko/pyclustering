@@ -57,7 +57,7 @@ void runge_kutta_fehlberg_45(
     current_result.time = time_start;
     current_result.state = inputs;
 
-    double h = (time_end - time_start) / 10.0;      /* default number of steps */
+    double h = (time_end - time_start) / 10.0;      /* default number of steps  */
     const double hmin = h / 1000.0; /* default multiplier for maximum step size */
     const double hmax = 1000.0 * h; /* default multiplier for minimum step size */
 
