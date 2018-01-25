@@ -24,8 +24,14 @@
 """
 
 
+import numpy;
 import os.path;
 import pickle;
+
+from PIL import Image;
+
+import matplotlib.pyplot as plt;
+import matplotlib.animation as animation;
 
 from pyclustering.cluster.dbscan import dbscan;
 
@@ -35,6 +41,41 @@ from pyclustering.nnet.hhn import hhn_network, hhn_parameters;
 from pyclustering.samples.definitions import IMAGE_SIMPLE_SAMPLES;
 
 from pyclustering.utils import read_image, rgb2gray, draw_image_mask_segments;
+
+
+
+def animate_segmentation(output_dynamic, image, delay = 200):
+    image_source = Image.open(image);
+    image_size = image_source.size;
+    
+    figure = plt.figure();
+    
+    spike_animation = [];
+    image_pixel_fired = [-1] * (image_size[0] * image_size[1]);
+    for t in range(len(output_dynamic)):
+        #figure.suptitle("HHN Segmentation (iteration: " + str(t) +")", fontsize = 18, fontweight = 'bold');
+        
+        image_color_segments = [(255, 255, 255)] * (image_size[0] * image_size[1]);
+        for index_pixel in range(len(image_pixel_fired)):
+            fire_time = image_pixel_fired[index_pixel];
+            if ( (fire_time > 0) and (t - fire_time < delay) ):
+                color_value = 0 + (t - fire_time);
+                image_color_segments[index_pixel] = (color_value, color_value, color_value);
+        
+        for index_oscillator in range(len(output_dynamic[t])):
+            if (output_dynamic[t][index_oscillator] > 0):
+                image_color_segments[index_oscillator] = (0, 0, 0);
+                image_pixel_fired[index_oscillator] = t;
+        
+        stage = numpy.array(image_color_segments, numpy.uint8);
+        stage = numpy.reshape(stage, image_size + ((3),)); # ((3),) it's size of RGB - third dimension.
+        image_cluster = Image.fromarray(stage, 'RGB');
+        
+        spike_animation.append( [ plt.imshow(image_cluster, interpolation = 'none') ] );
+    
+    
+    im_ani = animation.ArtistAnimation(figure, spike_animation, interval = 3, repeat_delay = 3000, blit = True)
+    plt.show();
 
 
 def template_image_segmentation(image_file, steps, time, dynamic_file_prefix):
@@ -86,16 +127,19 @@ def template_image_segmentation(image_file, steps, time, dynamic_file_prefix):
         with open (dynamic_file_prefix + 'dynamic_dyn_central.txt', 'rb') as file_descriptor:
             dyn_central = pickle.load(file_descriptor);
 
-    # just for checking correctness of results - let's use classical algorithm
-    dbscan_instance = dbscan(image, 3, 4, True);
-    dbscan_instance.process();
-    trustable_clusters = dbscan_instance.get_clusters();
+    animate_segmentation(dyn_peripheral, image_file, 200);
 
-    amount_canvases = len(trustable_clusters) + 2;
-    visualizer = dynamic_visualizer(amount_canvases, x_title = "Time", y_title = "V", y_labels = False);
-    visualizer.append_dynamics(t, dyn_peripheral, 0, trustable_clusters);
-    visualizer.append_dynamics(t, dyn_central, amount_canvases - 2, True);
-    visualizer.show();
+    # just for checking correctness of results - let's use classical algorithm
+    if (False):
+        dbscan_instance = dbscan(image, 3, 4, True);
+        dbscan_instance.process();
+        trustable_clusters = dbscan_instance.get_clusters();
+    
+        amount_canvases = len(trustable_clusters) + 2;
+        visualizer = dynamic_visualizer(amount_canvases, x_title = "Time", y_title = "V", y_labels = False);
+        visualizer.append_dynamics(t, dyn_peripheral, 0, trustable_clusters);
+        visualizer.append_dynamics(t, dyn_central, amount_canvases - 2, True);
+        visualizer.show();
 
 
 def segmentation_image_simple1():
