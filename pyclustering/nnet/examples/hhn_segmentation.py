@@ -40,42 +40,110 @@ from pyclustering.nnet.hhn import hhn_network, hhn_parameters;
 
 from pyclustering.samples.definitions import IMAGE_SIMPLE_SAMPLES;
 
-from pyclustering.utils import read_image, rgb2gray, draw_image_mask_segments;
+from pyclustering.utils import read_image, rgb2gray;
 
 
 
-def animate_segmentation(output_dynamic, image, delay = 200):
+def animate_segmentation(dyn_time, dyn_peripheral, image, delay_mask=100, step=5, movie_file=None):
     image_source = Image.open(image);
     image_size = image_source.size;
     
     figure = plt.figure();
-    
-    spike_animation = [];
+
     image_pixel_fired = [-1] * (image_size[0] * image_size[1]);
-    for t in range(len(output_dynamic)):
-        #figure.suptitle("HHN Segmentation (iteration: " + str(t) +")", fontsize = 18, fontweight = 'bold');
-        
-        image_color_segments = [(255, 255, 255)] * (image_size[0] * image_size[1]);
-        for index_pixel in range(len(image_pixel_fired)):
-            fire_time = image_pixel_fired[index_pixel];
-            if ( (fire_time > 0) and (t - fire_time < delay) ):
-                color_value = 0 + (t - fire_time);
-                image_color_segments[index_pixel] = (color_value, color_value, color_value);
-        
-        for index_oscillator in range(len(output_dynamic[t])):
-            if (output_dynamic[t][index_oscillator] > 0):
-                image_color_segments[index_oscillator] = (0, 0, 0);
-                image_pixel_fired[index_oscillator] = t;
-        
-        stage = numpy.array(image_color_segments, numpy.uint8);
-        stage = numpy.reshape(stage, image_size + ((3),)); # ((3),) it's size of RGB - third dimension.
-        image_cluster = Image.fromarray(stage, 'RGB');
-        
-        spike_animation.append( [ plt.imshow(image_cluster, interpolation = 'none') ] );
     
+    basic_transparence_value = 255;
+
+    y_global_max = float('-Inf');
+    y_global_min = float('+Inf');
+    for dyn in dyn_peripheral:
+        y_max = max(dyn);
+        if (y_global_max < y_max):
+            y_global_max = y_max;
+        
+        y_min = min(dyn);
+        if (y_global_min > y_min):
+            y_global_min = y_min;
+
+    print(y_global_min, y_global_max);
+    ylim = [y_global_min - abs(y_global_min) * 0.1, y_global_max + abs(y_global_max) * 0.05];
+
+    def init_frame():
+        return frame_generation(0);
+
+    def frame_generation(index_iteration):
+        print(index_iteration);
+        
+        figure.clf();
+        
+        figure.suptitle("Hodgkin-Huxley Network (iteration: " + str(index_iteration) +")", fontsize = 18, fontweight = 'bold');
+        
+        ax1 = figure.add_subplot(121);
+        ax2 = figure.add_subplot(122);
+        
+        end_iteration = index_iteration;
+        if (end_iteration > len(dyn_peripheral)):
+            end_iteration = len(dyn_peripheral);
+        
+        dynamic_length = 100;
+        begin_iteration = end_iteration - dynamic_length;
+        if (begin_iteration < 0):
+            begin_iteration = 0;
+        
+        # Display output dynamic
+        xlim = [dyn_time[begin_iteration], dyn_time[begin_iteration + dynamic_length]];
+        visualizer = dynamic_visualizer(1, x_title="Time", y_title="V", x_lim=xlim, y_lim=ylim);
+        
+        dyn_time_segment = [ dyn_time[i] for i in range(begin_iteration, end_iteration, 1) ];
+        dyn_peripheral_segment = [ dyn_peripheral[i] for i in range(begin_iteration, end_iteration, 1) ];
+        
+        visualizer.append_dynamic(dyn_time_segment, dyn_peripheral_segment);
+        visualizer.show(ax1, False);
+        
+        visualize_segmenetation(end_iteration, ax2, step);
+        
+        return [ figure.gca() ];
     
-    im_ani = animation.ArtistAnimation(figure, spike_animation, interval = 3, repeat_delay = 3000, blit = True)
-    plt.show();
+    def visualize_segmenetation(t, segm_axis, step):
+        image_result = image_source.copy();
+        image_cluster = None;
+        
+        if (t > step):
+            t -= step;
+        
+        for _ in range(step):
+            image_color_segments = [(255, 255, 255, 0)] * (image_size[0] * image_size[1]);
+            for index_pixel in range(len(image_pixel_fired)):
+                fire_time = image_pixel_fired[index_pixel];
+                if ( (fire_time > 0) and (t - fire_time < delay_mask) ):
+                    color_value = 0 + (t - fire_time);
+                    transparence = basic_transparence_value - (t - fire_time);
+                    if (transparence < 0):
+                        transparence = 0;
+                    
+                    image_color_segments[index_pixel] = (color_value, color_value, color_value, transparence);
+            
+            for index_oscillator in range(len(dyn_peripheral[t])):
+                if (dyn_peripheral[t][index_oscillator] > 0):
+                    image_color_segments[index_oscillator] = (0, 0, 0, basic_transparence_value);
+                    image_pixel_fired[index_oscillator] = t;
+            
+            stage = numpy.array(image_color_segments, numpy.uint8);
+            stage = numpy.reshape(stage, image_size + ((4),)); # ((3),) it's size of RGB - third dimension.
+            
+            image_cluster = Image.fromarray(stage, 'RGBA');
+            t += 1;
+            
+        image_result.paste(image_cluster, (0, 0), image_cluster);
+        return segm_axis.imshow(image_result);
+    
+    iterations = range(1, len(dyn_peripheral), step);
+    segmentation_animation = animation.FuncAnimation(figure, frame_generation, iterations, init_func=None, interval = 1, repeat_delay = 3000);
+    
+    if (not movie_file):
+        segmentation_animation.save(movie_file, writer = 'ffmpeg', fps = 20, bitrate = 3000);
+    else:
+        plt.show();
 
 
 def template_image_segmentation(image_file, steps, time, dynamic_file_prefix):
@@ -127,7 +195,7 @@ def template_image_segmentation(image_file, steps, time, dynamic_file_prefix):
         with open (dynamic_file_prefix + 'dynamic_dyn_central.txt', 'rb') as file_descriptor:
             dyn_central = pickle.load(file_descriptor);
 
-    animate_segmentation(dyn_peripheral, image_file, 200);
+    animate_segmentation(t, dyn_peripheral, image_file, 200);
 
     # just for checking correctness of results - let's use classical algorithm
     if (False):
