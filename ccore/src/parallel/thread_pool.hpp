@@ -35,6 +35,9 @@ namespace parallel {
 
 
 class thread_pool {
+public:
+    using ptr              = std::shared_ptr<thread_pool>;
+
 private:
     using thread_container = std::vector<thread_executor::ptr>;
 

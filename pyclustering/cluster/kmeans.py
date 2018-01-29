@@ -38,6 +38,11 @@ class kmeans:
     @brief Class represents clustering algorithm K-Means.
     @details CCORE option can be used to use the pyclustering core - C/C++ shared library for processing that significantly increases performance.
     
+             CCORE implementation of the algorithm uses thread pool to parallelize the clustering process.
+             
+             K-Means clustering results depend on initial centers. Algorithm K-Means++ can used for initialization 
+             initial centers from module 'pyclustering.cluster.center_initializer'.
+    
     Example #1 - Trivial clustering:
     @code
         # load list of points for cluster analysis
@@ -75,7 +80,7 @@ class kmeans:
     def __init__(self, data, initial_centers, tolerance = 0.001, ccore = False):
         """!
         @brief Constructor of clustering algorithm K-Means.
-        @details For initial centers initializer can be used, for example, K-Means++ method.
+        @details Center initializer can be used for creating initial centers, for example, K-Means++ method.
         
         @param[in] data (array_like): Input data that is presented as array of points (objects), each point should be represented by array_like data structure.
         @param[in] initial_centers (array_like): Initial coordinates of centers of clusters that are represented by array_like data structure: [center1, center2, ...].

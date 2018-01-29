@@ -34,18 +34,23 @@ namespace ccore {
 namespace clst {
 
 
-kmeans::kmeans(void) :
-    m_tolerance(0.025),
-    m_initial_centers(0, point()),
-    m_ptr_result(nullptr),
-    m_ptr_data(nullptr) { }
+const double             kmeans::DEFAULT_TOLERANCE                       = 0.025;
+
+const std::size_t        kmeans::DEFAULT_DATA_SIZE_PARALLEL_PROCESSING   = 200000;
+
+const std::size_t        kmeans::DEFAULT_MAX_THREAD_POOL_SIZE            = 15;
 
 
 kmeans::kmeans(const dataset & p_initial_centers, const double p_tolerance) :
     m_tolerance(p_tolerance * p_tolerance),
     m_initial_centers(p_initial_centers),
     m_ptr_result(nullptr),
-    m_ptr_data(nullptr) { }
+    m_ptr_data(nullptr),
+    m_parallel_trigger(DEFAULT_DATA_SIZE_PARALLEL_PROCESSING),
+    m_parallel_processing(false),
+    m_mutex(),
+    m_pool(nullptr)
+{ }
 
 
 kmeans::~kmeans(void) { }
@@ -61,6 +66,16 @@ void kmeans::process(const dataset & data, cluster_data & output_result) {
         throw std::runtime_error("CCORE [kmeans]: dimension of the input data and dimension of the initial cluster centers must be equal.");
     }
 
+    m_parallel_processing = (m_ptr_data->size() >= m_parallel_trigger);
+    if (m_parallel_processing) {
+        std::size_t pool_size = m_initial_centers.size();
+        if (pool_size > DEFAULT_MAX_THREAD_POOL_SIZE) {
+            pool_size = DEFAULT_MAX_THREAD_POOL_SIZE;
+        }
+
+        m_pool = std::make_shared<thread_pool>(pool_size);
+    }
+
     m_ptr_result->centers()->assign(m_initial_centers.begin(), m_initial_centers.end());
 
     double current_change = std::numeric_limits<double>::max();
@@ -69,6 +84,11 @@ void kmeans::process(const dataset & data, cluster_data & output_result) {
         update_clusters(*m_ptr_result->centers(), *m_ptr_result->clusters());
         current_change = update_centers(*m_ptr_result->clusters(), *m_ptr_result->centers());
     }
+}
+
+
+void kmeans::set_parallel_processing_trigger(const std::size_t p_data_size) {
+    m_parallel_trigger = p_data_size;
 }
 
 
@@ -114,38 +134,57 @@ double kmeans::update_centers(const cluster_sequence & clusters, dataset & cente
 
     double maximum_change = 0;
 
-    dataset updated_clusters(clusters.size(), point(dimension, 0.0));
+    dataset calculated_clusters(clusters.size(), point(dimension, 0.0));
+    std::vector<double> changes(clusters.size(), 0.0);
 
-    /* for each cluster */
-    for (size_t index_cluster = 0; index_cluster < clusters.size(); index_cluster++) {
-        point total(centers[index_cluster].size(), 0.0);
+    if (m_parallel_processing) {
+        for (size_t index_cluster = 0; index_cluster < clusters.size(); index_cluster++) {
+            calculated_clusters[index_cluster] = centers[index_cluster];
 
-        /* for each object in cluster */
-        for (auto object_index : clusters[index_cluster]) {
-            /* for each dimension */
-            for (size_t dimension = 0; dimension < total.size(); dimension++) {
-                total[dimension] += data[object_index][dimension];
-            }
+            task::proc update_proc = [this, index_cluster, &clusters, &calculated_clusters, &changes]() {
+                changes[index_cluster] = update_center(clusters[index_cluster], calculated_clusters[index_cluster]);
+            };
+
+            m_pool->add_task(update_proc);
         }
 
-        /* average for each dimension */
-        for (size_t dimension = 0; dimension < total.size(); dimension++) {
-            total[dimension] = total[dimension] / clusters[index_cluster].size();
+        for (std::size_t index_cluster = 0; index_cluster < clusters.size(); index_cluster++) {
+            m_pool->pop_complete_task();
         }
-
-        double distance = euclidean_distance_sqrt(&centers[index_cluster], &total);
-
-        if (distance > maximum_change) {
-            maximum_change = distance;
+    }
+    else {
+        for (size_t index_cluster = 0; index_cluster < clusters.size(); index_cluster++) {
+            calculated_clusters[index_cluster] = centers[index_cluster];
+            changes[index_cluster] = update_center(clusters[index_cluster], calculated_clusters[index_cluster]);
         }
-
-        updated_clusters[index_cluster] = std::move(total);
     }
 
-    centers.clear();
-    centers = std::move(updated_clusters);
+    centers = std::move(calculated_clusters);
 
-    return maximum_change;
+    return *(std::max(changes.begin(), changes.end()));
+}
+
+
+double kmeans::update_center(const cluster & p_cluster, point & p_center) {
+    point total(p_center.size(), 0.0);
+
+    /* for each object in cluster */
+    for (auto object_index : p_cluster) {
+        /* for each dimension */
+        for (size_t dimension = 0; dimension < total.size(); dimension++) {
+            total[dimension] += (*m_ptr_data)[object_index][dimension];
+        }
+    }
+
+    /* average for each dimension */
+    for (size_t dimension = 0; dimension < total.size(); dimension++) {
+        total[dimension] = total[dimension] / p_cluster.size();
+    }
+
+    double change = euclidean_distance_sqrt(&p_center, &total);
+
+    p_center = std::move(total);
+    return change;
 }
 
 

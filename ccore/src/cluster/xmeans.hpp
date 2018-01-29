@@ -56,25 +56,25 @@ private:
     const static double             DEFAULT_SPLIT_DIFFERENCE;
 
 private:
-    dataset         m_centers;
+    dataset           m_centers;
 
-    xmeans_data     * m_ptr_result;   /* temporary pointer to output result */
+    xmeans_data       * m_ptr_result;   /* temporary pointer to output result */
 
-    const dataset   * m_ptr_data;     /* used only during processing */
+    const dataset     * m_ptr_data;     /* used only during processing */
 
-    std::size_t     m_maximum_clusters;
+    std::size_t       m_maximum_clusters;
 
-    double          m_tolerance;
+    double            m_tolerance;
 
-    splitting_type  m_criterion;
+    splitting_type    m_criterion;
 
-    std::size_t     m_parallel_trigger      = DEFAULT_DATA_SIZE_PARALLEL_PROCESSING;
+    std::size_t       m_parallel_trigger      = DEFAULT_DATA_SIZE_PARALLEL_PROCESSING;
 
-    bool            m_parallel_processing   = false;
+    bool              m_parallel_processing   = false;
 
-    std::mutex      m_mutex;
+    std::mutex        m_mutex;
 
-    thread_pool     m_pool                  { DEFAULT_THREAD_POOL_SIZE };
+    thread_pool::ptr  m_pool                  = nullptr;
 
 public:
     /**
