@@ -132,8 +132,6 @@ double kmeans::update_centers(const cluster_sequence & clusters, dataset & cente
     const dataset & data = *m_ptr_data;
     const size_t dimension = data[0].size();
 
-    double maximum_change = 0;
-
     dataset calculated_clusters(clusters.size(), point(dimension, 0.0));
     std::vector<double> changes(clusters.size(), 0.0);
 
@@ -161,7 +159,7 @@ double kmeans::update_centers(const cluster_sequence & clusters, dataset & cente
 
     centers = std::move(calculated_clusters);
 
-    return *(std::max(changes.begin(), changes.end()));
+    return *(std::max_element(changes.begin(), changes.end()));
 }
 
 
