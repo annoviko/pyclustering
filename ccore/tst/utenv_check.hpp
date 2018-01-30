@@ -52,17 +52,6 @@ void ASSERT_CLUSTER_SIZES(const dataset & p_data,
 
 
 template <typename EnsemblesType>
-void ASSERT_SYNC_ENSEMBLES(EnsemblesType & p_ensembles,
-                           EnsemblesType & p_expected_ensembles,
-                           typename EnsemblesType::value_type & p_dead,
-                           typename EnsemblesType::value_type & p_expected_dead)
-{
-    ASSERT_TRUE(COMPARE_SYNC_ENSEMBLES(p_ensembles, p_expected_ensembles, p_dead, p_expected_dead));
-}
-
-
-
-template <typename EnsemblesType>
 bool COMPARE_SYNC_ENSEMBLES(EnsemblesType & p_ensembles,
                             EnsemblesType & p_expected_ensembles,
                             typename EnsemblesType::value_type & p_dead,
@@ -107,4 +96,14 @@ bool COMPARE_SYNC_ENSEMBLES(EnsemblesType & p_ensembles,
     }
 
     return true;
+}
+
+
+template <typename EnsemblesType>
+void ASSERT_SYNC_ENSEMBLES(EnsemblesType & p_ensembles,
+                           EnsemblesType & p_expected_ensembles,
+                           typename EnsemblesType::value_type & p_dead,
+                           typename EnsemblesType::value_type & p_expected_dead)
+{
+    ASSERT_TRUE(COMPARE_SYNC_ENSEMBLES(p_ensembles, p_expected_ensembles, p_dead, p_expected_dead));
 }
