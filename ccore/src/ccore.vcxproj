@@ -61,6 +61,7 @@
     <ClCompile Include="interface\syncnet_interface.cpp" />
     <ClCompile Include="interface\syncpr_interface.cpp" />
     <ClCompile Include="interface\sync_interface.cpp" />
+    <ClCompile Include="interface\interface_property.cpp" />
     <ClCompile Include="interface\xmeans_interface.cpp" />
     <ClCompile Include="nnet\dynamic_analyser.cpp" />
     <ClCompile Include="nnet\hhn.cpp" />
@@ -136,6 +137,7 @@
     <ClInclude Include="interface\syncnet_interface.h" />
     <ClInclude Include="interface\syncpr_interface.h" />
     <ClInclude Include="interface\sync_interface.h" />
+    <ClInclude Include="interface\interface_property.h" />
     <ClInclude Include="interface\xmeans_interface.h" />
     <ClInclude Include="nnet\dynamic_analyser.hpp" />
     <ClInclude Include="nnet\hhn.hpp" />

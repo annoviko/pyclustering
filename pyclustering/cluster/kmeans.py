@@ -30,6 +30,8 @@ import numpy;
 
 import pyclustering.core.kmeans_wrapper as wrapper;
 
+from pyclustering.core.wrapper import ccore_library;
+
 from pyclustering.cluster.encoder import type_encoding;
 
 
@@ -96,6 +98,8 @@ class kmeans:
         self.__tolerance = tolerance;
         
         self.__ccore = ccore;
+        if (self.__ccore):
+            self.__ccore = ccore_library.workable();
 
 
     def process(self):

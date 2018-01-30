@@ -34,6 +34,9 @@ import numpy;
 from PIL import Image;
 
 from pyclustering.nnet import *;
+
+from pyclustering.core.wrapper import ccore_library;
+
 import pyclustering.core.pcnn_wrapper as wrapper;
 
 from pyclustering.utils import draw_dynamics;
@@ -372,7 +375,7 @@ class pcnn_network(network):
         else:
             self._params = pcnn_parameters();
         
-        if (ccore is True):
+        if ( (ccore is True) and ccore_library.workable() ):
             network_height = height;
             network_width = width;
             

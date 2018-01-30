@@ -36,6 +36,7 @@ from pyclustering.cluster import cluster_visualizer;
 
 from pyclustering.core.syncnet_wrapper import syncnet_create_network, syncnet_process, syncnet_destroy_network, syncnet_analyser_destroy;
 from pyclustering.core.sync_wrapper import sync_connectivity_matrix;
+from pyclustering.core.wrapper import ccore_library;
 
 from pyclustering.nnet.sync import sync_dynamic, sync_network, sync_visualizer;
 from pyclustering.nnet import conn_represent, initial_type, conn_type, solve_type;
@@ -207,7 +208,7 @@ class syncnet(sync_network):
         self._osc_loc = sample;
         self._num_osc = len(sample);
         
-        if (ccore is True):
+        if ( (ccore is True) and ccore_library.workable() ):
             self._ccore_network_pointer = syncnet_create_network(sample, radius, initial_phases, enable_conn_weight);
             
             # Default representation that is returned by CCORE is matrix.

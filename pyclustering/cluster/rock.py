@@ -30,6 +30,8 @@ from pyclustering.cluster.encoder import type_encoding;
 
 from pyclustering.utils import euclidean_distance;
 
+from pyclustering.core.wrapper import ccore_library;
+
 import pyclustering.core.rock_wrapper as wrapper;
 
 
@@ -76,6 +78,8 @@ class rock:
         self.__clusters = None;
         
         self.__ccore = ccore;
+        if (self.__ccore):
+            self.__ccore = ccore_library.workable();
         
         self.__degree_normalization = 1.0 + 2.0 * ( (1.0 - threshold) / (1.0 + threshold) );
         

@@ -31,6 +31,8 @@ import random;
 
 import pyclustering.core.legion_wrapper as wrapper;
 
+from pyclustering.core.wrapper import ccore_library;
+
 from pyclustering.nnet import *;
 
 from pyclustering.utils import heaviside, allocate_sync_ensembles;
@@ -257,7 +259,7 @@ class legion_network(network):
         if (self._params is None):
             self._params = legion_parameters();
         
-        if (ccore is True):
+        if ( (ccore is True) and ccore_library.workable() ):
             self.__ccore_legion_pointer = wrapper.legion_create(num_osc, type_conn, self._params);
             
         else: 

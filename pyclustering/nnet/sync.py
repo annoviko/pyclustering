@@ -37,6 +37,8 @@ import random;
 
 import pyclustering.core.sync_wrapper as wrapper;
 
+from pyclustering.core.wrapper import ccore_library;
+
 from scipy.integrate import odeint;
 
 from pyclustering.nnet import network, conn_represent, conn_type, initial_type, solve_type;
@@ -739,7 +741,7 @@ class sync_network(network):
         
         self._ccore_network_pointer = None;      # Pointer to CCORE Sync implementation of the network.
         
-        if (ccore is True):
+        if ( (ccore is True) and ccore_library.workable() ):
             self._ccore_network_pointer = wrapper.sync_create_network(num_osc, weight, frequency, type_conn, initial_phases);
             self._num_osc = num_osc;
             self._conn_represent = conn_represent.MATRIX;
@@ -999,12 +1001,12 @@ class sync_network(network):
                 result = self._phases[index] + self._phase_kuramoto(self._phases[index], 0, index);
                 next_phases[index] = self._phase_normalization(result);
                 
-            elif (solution == solve_type.RK4):
+            elif ( (solution == solve_type.RK4) or (solution == solve_type.RKF45) ):
                 result = odeint(self._phase_kuramoto, self._phases[index], numpy.arange(t - step, t, int_step), (index , ));
                 next_phases[index] = self._phase_normalization(result[len(result) - 1][0]);
             
             else:
-                raise NameError("Solver '" + solution + "' is not supported");
+                raise NameError("Solver '" + str(solution) + "' is not supported");
         
         return next_phases;
 

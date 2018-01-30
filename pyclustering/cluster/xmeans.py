@@ -35,6 +35,8 @@ from math import log;
 
 from pyclustering.cluster.encoder import type_encoding;
 
+from pyclustering.core.wrapper import ccore_library;
+
 import pyclustering.core.xmeans_wrapper as wrapper;
 
 from pyclustering.utils import euclidean_distance_sqrt, euclidean_distance;
@@ -136,6 +138,8 @@ class xmeans:
         self.__criterion = criterion;
          
         self.__ccore = ccore;
+        if (self.__ccore):
+            self.__ccore = ccore_library.workable();
 
 
     def process(self):

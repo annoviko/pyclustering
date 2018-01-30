@@ -31,6 +31,8 @@ from pyclustering.cluster.encoder import type_encoding;
 
 from pyclustering.utils import euclidean_distance_sqrt, median;
 
+from pyclustering.core.wrapper import ccore_library;
+
 import pyclustering.core.kmedoids_wrapper as wrapper;
 
 
@@ -81,6 +83,9 @@ class kmedoids:
         self.__medoid_indexes = initial_index_medoids;
         self.__tolerance = tolerance;
         self.__ccore = ccore;
+        
+        if (self.__ccore):
+            self.__ccore = ccore_library.workable();
 
 
     def process(self):

@@ -30,6 +30,8 @@ from pyclustering.nnet.sync     import sync_network, sync_dynamic, sync_visualiz
 
 import pyclustering.core.syncpr_wrapper as wrapper;
 
+from pyclustering.core.wrapper import ccore_library;
+
 from PIL import Image;
 
 import matplotlib.pyplot as plt;
@@ -238,7 +240,7 @@ class syncpr(sync_network):
         
         """
         
-        if (ccore is True):
+        if ( (ccore is True) and ccore_library.workable() ):
             self._ccore_network_pointer = wrapper.syncpr_create(num_osc, increase_strength1, increase_strength2);
             
         else:

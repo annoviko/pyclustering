@@ -43,7 +43,7 @@ class c_pcnn_parameters(Structure):
 
 
 def pcnn_create(size, conn_type, height, width, params):
-    ccore = load_core();
+    ccore = ccore_library.get();
 
     c_parameters = c_pcnn_parameters();
     c_parameters.VF = params.VF;
@@ -62,12 +62,12 @@ def pcnn_create(size, conn_type, height, width, params):
     
 
 def pcnn_destroy(network_pointer):
-    ccore = load_core();
+    ccore = ccore_library.get();
     ccore.pcnn_destroy(network_pointer);
 
 
 def pcnn_simulate(network_pointer, steps, stimulus):
-    ccore = load_core();
+    ccore = ccore_library.get();
     
     c_stimulus = package_builder(stimulus, c_double).create();
     ccore.pcnn_simulate.restype = POINTER(c_void_p);
@@ -75,18 +75,18 @@ def pcnn_simulate(network_pointer, steps, stimulus):
 
 
 def pcnn_get_size(network_pointer):
-    ccore = load_core();
+    ccore = ccore_library.get();
     ccore.pcnn_get_size.restype = c_size_t;
     return ccore.pcnn_get_size(network_pointer);
 
 
 def pcnn_dynamic_destroy(dynamic_pointer):
-    ccore = load_core();
+    ccore = ccore_library.get();
     ccore.pcnn_dynamic_destroy(dynamic_pointer);
     
 
 def pcnn_dynamic_allocate_sync_ensembles(dynamic_pointer):
-    ccore = load_core();
+    ccore = ccore_library.get();
     
     ccore.pcnn_dynamic_allocate_sync_ensembles.restype = POINTER(pyclustering_package);
     package = ccore.pcnn_dynamic_allocate_sync_ensembles(dynamic_pointer);
@@ -98,7 +98,7 @@ def pcnn_dynamic_allocate_sync_ensembles(dynamic_pointer):
 
 
 def pcnn_dynamic_allocate_spike_ensembles(dynamic_pointer):
-    ccore = load_core();
+    ccore = ccore_library.get();
     
     ccore.pcnn_dynamic_allocate_spike_ensembles.restype = POINTER(pyclustering_package);
     package = ccore.pcnn_dynamic_allocate_spike_ensembles(dynamic_pointer);
@@ -110,7 +110,7 @@ def pcnn_dynamic_allocate_spike_ensembles(dynamic_pointer):
 
 
 def pcnn_dynamic_allocate_time_signal(dynamic_pointer):
-    ccore = load_core();
+    ccore = ccore_library.get();
     
     ccore.pcnn_dynamic_allocate_time_signal.restype = POINTER(pyclustering_package);
     package = ccore.pcnn_dynamic_allocate_time_signal(dynamic_pointer);
@@ -122,7 +122,7 @@ def pcnn_dynamic_allocate_time_signal(dynamic_pointer):
 
 
 def pcnn_dynamic_get_output(dynamic_pointer):
-    ccore = load_core();
+    ccore = ccore_library.get();
     
     ccore.pcnn_dynamic_get_output.restype = POINTER(pyclustering_package);
     package = ccore.pcnn_dynamic_get_output(dynamic_pointer);
@@ -134,7 +134,7 @@ def pcnn_dynamic_get_output(dynamic_pointer):
 
 
 def pcnn_dynamic_get_time(dynamic_pointer):
-    ccore = load_core();
+    ccore = ccore_library.get();
     
     ccore.pcnn_dynamic_get_time.restype = POINTER(pyclustering_package);
     package = ccore.pcnn_dynamic_get_time(dynamic_pointer);
@@ -146,6 +146,6 @@ def pcnn_dynamic_get_time(dynamic_pointer):
 
 
 def pcnn_dynamic_get_size(dynamic_pointer):
-    ccore = load_core();
+    ccore = ccore_library.get();
     ccore.pcnn_dynamic_get_time.restype = c_size_t;
     return ccore.pcnn_dynamic_get_size(dynamic_pointer);

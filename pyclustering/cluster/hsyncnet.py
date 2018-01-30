@@ -28,6 +28,8 @@
 
 import pyclustering.core.hsyncnet_wrapper as wrapper;
 
+from pyclustering.core.wrapper import ccore_library;
+
 from pyclustering.nnet import initial_type, solve_type;
 
 from pyclustering.cluster.syncnet import syncnet, syncnet_analyser;
@@ -78,7 +80,7 @@ class hsyncnet(syncnet):
         if (initial_neighbors >= len(source_data)):
             initial_neighbors = len(source_data) - 1;
         
-        if (ccore is True):
+        if ( (ccore is True) and ccore_library.workable() ):
             self.__ccore_network_pointer = wrapper.hsyncnet_create_network(source_data, number_clusters, osc_initial_phases, initial_neighbors, increase_persent);
         else: 
             super().__init__(source_data, 0, initial_phases = osc_initial_phases);

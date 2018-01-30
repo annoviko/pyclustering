@@ -80,7 +80,7 @@ def hhn_create(size, params):
     c_params.threshold          = params.threshold;
     c_params.eps                = params.eps;
 
-    ccore = load_core();
+    ccore = ccore_library.get();
 
     ccore.hhn_create.restype = POINTER(c_void_p);
     hhn_network_pointer = ccore.hhn_create(c_size_t(size), pointer(c_params));
@@ -88,12 +88,12 @@ def hhn_create(size, params):
 
 
 def hhn_destroy(hhn_network_pointer):
-    ccore = load_core();
+    ccore = ccore_library.get();
     ccore.hhn_destroy(hhn_network_pointer);
 
 
 def hhn_dynamic_create(collect_membrane, collect_active_cond_sodium, collect_inactive_cond_sodium, collect_active_cond_potassium):
-    ccore = load_core();
+    ccore = ccore_library.get();
 
     ccore.hhn_dynamic_create.restype = POINTER(c_void_p);
     hhn_dynamic_pointer = ccore.hhn_dynamic_create(c_bool(collect_membrane),
@@ -104,12 +104,12 @@ def hhn_dynamic_create(collect_membrane, collect_active_cond_sodium, collect_ina
 
 
 def hhn_dynamic_destroy(hhn_dynamic_pointer):
-    ccore = load_core();
+    ccore = ccore_library.get();
     ccore.hhn_dynamic_destroy(hhn_dynamic_pointer);
 
 
 def hhn_simulate(hhn_network_pointer, steps, time, solution, stimulus, ccore_hhn_dynamic_pointer):
-    ccore = load_core();
+    ccore = ccore_library.get();
 
     c_stimulus = package_builder(stimulus, c_double).create();
     ccore.hhn_simulate(hhn_network_pointer,
@@ -121,7 +121,7 @@ def hhn_simulate(hhn_network_pointer, steps, time, solution, stimulus, ccore_hhn
 
 
 def hhn_dynamic_get_peripheral_evolution(ccore_hhn_dynamic_pointer, index_collection):
-    ccore = load_core();
+    ccore = ccore_library.get();
 
     ccore.hhn_dynamic_get_peripheral_evolution.restype = POINTER(pyclustering_package);
     dynamic_package = ccore.hhn_dynamic_get_peripheral_evolution(ccore_hhn_dynamic_pointer, c_size_t(index_collection));
@@ -133,7 +133,7 @@ def hhn_dynamic_get_peripheral_evolution(ccore_hhn_dynamic_pointer, index_collec
 
 
 def hhn_dynamic_get_central_evolution(ccore_hhn_dynamic_pointer, index_collection):
-    ccore = load_core();
+    ccore = ccore_library.get();
 
     ccore.hhn_dynamic_get_central_evolution.restype = POINTER(pyclustering_package);
     dynamic_package = ccore.hhn_dynamic_get_central_evolution(ccore_hhn_dynamic_pointer, c_size_t(index_collection));
@@ -145,7 +145,7 @@ def hhn_dynamic_get_central_evolution(ccore_hhn_dynamic_pointer, index_collectio
 
 
 def hhn_dynamic_get_time(ccore_hhn_dynamic_pointer):
-    ccore = load_core();
+    ccore = ccore_library.get();
 
     ccore.hhn_dynamic_get_time.restype = POINTER(pyclustering_package);
     dynamic_package = ccore.hhn_dynamic_get_time(ccore_hhn_dynamic_pointer);
@@ -157,18 +157,18 @@ def hhn_dynamic_get_time(ccore_hhn_dynamic_pointer):
 
 
 def hhn_dynamic_write(ccore_hhn_dynamic_pointer, filename):
-    ccore = load_core();
+    ccore = ccore_library.get();
 
     byte_filename = filename.encode('utf-8');
     ccore.hhn_dynamic_write(ccore_hhn_dynamic_pointer, c_char_p(byte_filename));
 
 
 def hhn_dynamic_read(filename):
-    ccore = load_core();
+    ccore = ccore_library.get();
 
     byte_filename = filename.encode('utf-8');
 
-    ccore.hhn_dynamic_read,restype = POINTER(c_void_p);
+    ccore.hhn_dynamic_read.restype = POINTER(c_void_p);
     hhn_dynamic_pointer = ccore.hhn_dynamic_read(byte_filename);
 
     return hhn_dynamic_pointer;

@@ -36,6 +36,8 @@ import matplotlib.pyplot as plt;
 
 import pyclustering.core.som_wrapper as wrapper;
 
+from pyclustering.core.wrapper import ccore_library;
+
 from pyclustering.utils import euclidean_distance_sqrt;
 from pyclustering.utils.dimension import dimension_info;
 
@@ -244,7 +246,7 @@ class som:
         if (self._params.init_radius is None):
             self._params.init_radius = self.__initialize_initial_radius(rows, cols);
         
-        if (ccore is True):
+        if ( (ccore is True) and ccore_library.workable() ):
             self.__ccore_som_pointer = wrapper.som_create(rows, cols, conn_type, self._params);
             
         else:

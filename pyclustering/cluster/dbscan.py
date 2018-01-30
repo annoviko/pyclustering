@@ -30,6 +30,8 @@ from pyclustering.container.kdtree import kdtree;
 
 from pyclustering.cluster.encoder import type_encoding;
 
+from pyclustering.core.wrapper import ccore_library;
+
 import pyclustering.core.dbscan_wrapper as wrapper;
 
 
@@ -82,6 +84,8 @@ class dbscan:
         self.__noise = [];
         
         self.__ccore = ccore;
+        if (self.__ccore):
+            self.__ccore = ccore_library.workable();
 
 
     def process(self):

@@ -27,6 +27,8 @@
 
 from scipy.integrate import odeint;
 
+from pyclustering.core.wrapper import ccore_library;
+
 import pyclustering.core.hhn_wrapper as wrapper;
 
 from pyclustering.nnet import *;
@@ -235,7 +237,7 @@ class hhn_network(network):
         self.__ccore_hhn_pointer = None;
         self.__ccore_hhn_dynamic_pointer = None;
         
-        if (ccore is not False):
+        if ( (ccore is True) and ccore_library.workable() ):
             self.__ccore_hhn_pointer = wrapper.hhn_create(num_osc, self._params);
         else:
             self._membrane_dynamic_pointer = None;        # final result is stored here.

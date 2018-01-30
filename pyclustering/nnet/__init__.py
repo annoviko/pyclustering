@@ -141,13 +141,13 @@ class network:
         return self.__conn_type;
    
    
-    def __init__(self, num_osc, type_conn = conn_type.ALL_TO_ALL, conn_represent = conn_represent.MATRIX, height = None, width = None):
+    def __init__(self, num_osc, type_conn = conn_type.ALL_TO_ALL, conn_repr = conn_represent.MATRIX, height = None, width = None):
         """!
         @brief Constructor of the network.
         
         @param[in] num_osc (uint): Number of oscillators in the network that defines size of the network.
         @param[in] type_conn (conn_type): Type of connections that are used in the network between oscillators.
-        @param[in] conn_represent (conn_represent): Type of representation of connections.
+        @param[in] conn_repr (conn_represent): Type of representation of connections.
         @param[in] height (uint): Number of oscillators in column of the network, this argument is used 
                     only for network with grid structure (GRID_FOUR, GRID_EIGHT), for other types this argument is ignored.
         @param[in] width (uint): Number of oscillotors in row of the network, this argument is used only 
@@ -156,8 +156,11 @@ class network:
         """
         
         self._num_osc = num_osc;
-        self._conn_represent = conn_represent;
+        self._conn_represent = conn_repr;
         self.__conn_type = type_conn;
+        
+        if (conn_repr is None):
+            self._conn_represent = conn_represent.MATRIX;
         
         if ( (type_conn == conn_type.GRID_EIGHT) or (type_conn == conn_type.GRID_FOUR) ):
             if ( (height is not None) and (width is not None) ):

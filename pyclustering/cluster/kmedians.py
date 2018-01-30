@@ -32,6 +32,8 @@ from pyclustering.cluster.encoder import type_encoding;
 
 from pyclustering.utils import euclidean_distance_sqrt;
 
+from pyclustering.core.wrapper import ccore_library;
+
 import pyclustering.core.kmedians_wrapper as wrapper;
 
 
@@ -72,6 +74,9 @@ class kmedians:
         self.__medians = initial_centers[:];
         self.__tolerance = tolerance;
         self.__ccore = ccore;
+        
+        if (self.__ccore):
+            self.__ccore = ccore_library.workable();
 
 
     def process(self):
