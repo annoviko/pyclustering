@@ -157,23 +157,35 @@ static void template_ensemble_generation(const std::size_t p_num_osc,
                                          const double p_tolerance,
                                          const hhn_stimulus & p_stimulus,
                                          basic_ensemble_data & p_expected_ensembles,
-                                         basic_ensemble & p_expected_dead_neurons) {
-    hnn_parameters parameters;
-    hhn_network network(p_num_osc, parameters);
+                                         basic_ensemble & p_expected_dead_neurons)
+{
+    const std::size_t attempts  = 3;
+    bool result                 = false;
 
-    hhn_dynamic output_dynamic;
-    output_dynamic.enable(hhn_dynamic::collect::MEMBRANE_POTENTIAL);
+    for (std::size_t i = 0; (i < attempts) && (result != true); i++) {
+        hnn_parameters parameters;
+        hhn_network network(p_num_osc, parameters);
 
-    /* simulate and check collected outputs */
-    network.simulate(p_steps, p_time, solve_type::RUNGE_KUTTA_4, p_stimulus, output_dynamic);
+        hhn_dynamic output_dynamic;
+        output_dynamic.enable(hhn_dynamic::collect::MEMBRANE_POTENTIAL);
 
-    basic_ensemble_data   ensembles;
-    basic_ensemble        dead_neurons;
+        /* simulate and check collected outputs */
+        network.simulate(p_steps, p_time, solve_type::RUNGE_KUTTA_4, p_stimulus, output_dynamic);
 
-    hhn_dynamic::evolution_dynamic & membrane_dynamic = output_dynamic.get_peripheral_dynamic(hhn_dynamic::collect::MEMBRANE_POTENTIAL);
-    dynamic_analyser(p_tolerance).allocate_sync_ensembles(membrane_dynamic, ensembles, dead_neurons);
+        basic_ensemble_data   ensembles;
+        basic_ensemble        dead_neurons;
 
-    ASSERT_SYNC_ENSEMBLES(ensembles, p_expected_ensembles, dead_neurons, p_expected_dead_neurons);
+        hhn_dynamic::evolution_dynamic & membrane_dynamic = output_dynamic.get_peripheral_dynamic(hhn_dynamic::collect::MEMBRANE_POTENTIAL);
+        dynamic_analyser(p_tolerance).allocate_sync_ensembles(membrane_dynamic, ensembles, dead_neurons);
+
+        if ( !COMPARE_SYNC_ENSEMBLES(ensembles, p_expected_ensembles, dead_neurons, p_expected_dead_neurons) ) {
+            continue;
+        }
+
+        result = true;
+    }
+
+    EXPECT_TRUE(result);
 }
 
 TEST(utest_hhn, one_without_stimulation) {

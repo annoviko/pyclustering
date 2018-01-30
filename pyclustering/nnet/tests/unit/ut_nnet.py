@@ -58,15 +58,15 @@ class NnetUnitTest(unittest.TestCase):
         self.templateAllToAllConnectionsTest(net);
 
     def testAllToAll1ConnectionsListRepresentation(self):
-        net = network(1, type_conn = conn_type.ALL_TO_ALL, conn_represent = conn_represent.LIST);
+        net = network(1, type_conn = conn_type.ALL_TO_ALL, conn_repr = conn_represent.LIST);
         self.templateAllToAllConnectionsTest(net);      
 
     def testAllToAll10ConnectionsListRepresentation(self):
-        net = network(10, type_conn = conn_type.ALL_TO_ALL, conn_represent = conn_represent.LIST);
+        net = network(10, type_conn = conn_type.ALL_TO_ALL, conn_repr = conn_represent.LIST);
         self.templateAllToAllConnectionsTest(net);
 
     def testAllToAll25ConnectionsListRepresentation(self):
-        net = network(25, type_conn = conn_type.ALL_TO_ALL, conn_represent = conn_represent.LIST);
+        net = network(25, type_conn = conn_type.ALL_TO_ALL, conn_repr = conn_represent.LIST);
         self.templateAllToAllConnectionsTest(net);
 
 
@@ -84,7 +84,7 @@ class NnetUnitTest(unittest.TestCase):
         self.templateNoneConnectionsTest(net);
 
     def testNoneConnectionsListRepresentation(self):
-        net = network(10, type_conn = conn_type.NONE, conn_represent = conn_represent.LIST);
+        net = network(10, type_conn = conn_type.NONE, conn_repr = conn_represent.LIST);
         self.templateNoneConnectionsTest(net);
 
     
@@ -106,7 +106,7 @@ class NnetUnitTest(unittest.TestCase):
         self.templateBidirListConnectionsTest(net);
     
     def testBidirListConnectionsListRepresentation(self):
-        net = network(10, type_conn = conn_type.LIST_BIDIR, conn_represent = conn_represent.LIST);
+        net = network(10, type_conn = conn_type.LIST_BIDIR, conn_repr = conn_represent.LIST);
         self.templateBidirListConnectionsTest(net);     
 
 
@@ -142,7 +142,7 @@ class NnetUnitTest(unittest.TestCase):
         self.templateGridFourConnectionsTest(net);
     
     def testGridFourConnectionsListRepresentation(self):
-        net = network(25, type_conn = conn_type.GRID_FOUR, conn_represent = conn_represent.LIST);
+        net = network(25, type_conn = conn_type.GRID_FOUR, conn_repr = conn_represent.LIST);
         self.templateGridFourConnectionsTest(net);
 
     def testGridFourConnections1MatrixRepresentation(self):
@@ -150,49 +150,49 @@ class NnetUnitTest(unittest.TestCase):
         self.templateGridFourConnectionsTest(net);
     
     def testGridFourConnections1ListRepresentation(self):
-        net = network(1, type_conn = conn_type.GRID_FOUR, conn_represent = conn_represent.LIST);
+        net = network(1, type_conn = conn_type.GRID_FOUR, conn_repr = conn_represent.LIST);
         self.templateGridFourConnectionsTest(net);
 
     def testGridFourConnectionsRectange40MatrixRepresentation(self):
-        net = network(40, type_conn = conn_type.GRID_FOUR, conn_represent = conn_represent.MATRIX, height = 4, width = 10);
+        net = network(40, type_conn = conn_type.GRID_FOUR, conn_repr = conn_represent.MATRIX, height = 4, width = 10);
         self.templateGridFourConnectionsTest(net);
         
-        net = network(40, type_conn = conn_type.GRID_FOUR, conn_represent = conn_represent.MATRIX, height = 10, width = 4);
+        net = network(40, type_conn = conn_type.GRID_FOUR, conn_repr = conn_represent.MATRIX, height = 10, width = 4);
         self.templateGridFourConnectionsTest(net);
         
     def testGridFourConnectionsRectangeList40Representation(self):
-        net = network(40, type_conn = conn_type.GRID_FOUR, conn_represent = conn_represent.LIST, height = 4, width = 10);        
+        net = network(40, type_conn = conn_type.GRID_FOUR, conn_repr = conn_represent.LIST, height = 4, width = 10);        
         self.templateGridFourConnectionsTest(net);
         
-        net = network(40, type_conn = conn_type.GRID_FOUR, conn_represent = conn_represent.LIST, height = 10, width = 4);
+        net = network(40, type_conn = conn_type.GRID_FOUR, conn_repr = conn_represent.LIST, height = 10, width = 4);
         self.templateGridFourConnectionsTest(net);        
 
     def testGridFourConnectionsRectange10MatrixRepresentation(self):
-        net = network(10, type_conn = conn_type.GRID_FOUR, conn_represent = conn_represent.MATRIX, height = 1, width = 10);
+        net = network(10, type_conn = conn_type.GRID_FOUR, conn_repr = conn_represent.MATRIX, height = 1, width = 10);
         self.templateGridFourConnectionsTest(net);
         
-        net = network(10, type_conn = conn_type.GRID_FOUR, conn_represent = conn_represent.MATRIX, height = 10, width = 1);
+        net = network(10, type_conn = conn_type.GRID_FOUR, conn_repr = conn_represent.MATRIX, height = 10, width = 1);
         self.templateGridFourConnectionsTest(net);
         
     def testGridFourConnectionsRectangeList10Representation(self):
-        net = network(10, type_conn = conn_type.GRID_FOUR, conn_represent = conn_represent.LIST, height = 1, width = 10);
+        net = network(10, type_conn = conn_type.GRID_FOUR, conn_repr = conn_represent.LIST, height = 1, width = 10);
         self.templateGridFourConnectionsTest(net);
         
-        net = network(10, type_conn = conn_type.GRID_FOUR, conn_represent = conn_represent.LIST, height = 10, width = 1);
+        net = network(10, type_conn = conn_type.GRID_FOUR, conn_repr = conn_represent.LIST, height = 10, width = 1);
         self.templateGridFourConnectionsTest(net);
 
     def testGridFourConnectionsRectange1MatrixRepresentation(self):
-        net = network(1, type_conn = conn_type.GRID_FOUR, conn_represent = conn_represent.MATRIX, height = 1, width = 1);
+        net = network(1, type_conn = conn_type.GRID_FOUR, conn_repr = conn_represent.MATRIX, height = 1, width = 1);
         self.templateGridFourConnectionsTest(net);
         
-        net = network(1, type_conn = conn_type.GRID_FOUR, conn_represent = conn_represent.MATRIX, height = 1, width = 1);
+        net = network(1, type_conn = conn_type.GRID_FOUR, conn_repr = conn_represent.MATRIX, height = 1, width = 1);
         self.templateGridFourConnectionsTest(net);
         
     def testGridFourConnectionsRectangeList1Representation(self):
-        net = network(1, type_conn = conn_type.GRID_FOUR, conn_represent = conn_represent.LIST, height = 1, width = 1);
+        net = network(1, type_conn = conn_type.GRID_FOUR, conn_repr = conn_represent.LIST, height = 1, width = 1);
         self.templateGridFourConnectionsTest(net);
         
-        net = network(1, type_conn = conn_type.GRID_FOUR, conn_represent = conn_represent.LIST, height = 1, width = 1);
+        net = network(1, type_conn = conn_type.GRID_FOUR, conn_repr = conn_represent.LIST, height = 1, width = 1);
         self.templateGridFourConnectionsTest(net);
     
     # Grid four connection suite
@@ -255,7 +255,7 @@ class NnetUnitTest(unittest.TestCase):
         self.templateGridEightConnectionsTest(net);
     
     def testGridEightConnectionsListRepresentation(self):
-        net = network(25, type_conn = conn_type.GRID_EIGHT, conn_represent = conn_represent.LIST);        
+        net = network(25, type_conn = conn_type.GRID_EIGHT, conn_repr = conn_represent.LIST);
         self.templateGridEightConnectionsTest(net);
 
     def testGridEightConnections1MatrixRepresentation(self):
@@ -263,69 +263,69 @@ class NnetUnitTest(unittest.TestCase):
         self.templateGridEightConnectionsTest(net);
     
     def testGridEightConnections1ListRepresentation(self):
-        net = network(1, type_conn = conn_type.GRID_EIGHT, conn_represent = conn_represent.LIST);        
+        net = network(1, type_conn = conn_type.GRID_EIGHT, conn_repr = conn_represent.LIST);
         self.templateGridEightConnectionsTest(net);
 
     def testGridEightConnectionsRectange40MatrixRepresentation(self):
-        net = network(40, type_conn = conn_type.GRID_EIGHT, conn_represent = conn_represent.MATRIX, height = 4, width = 10);
+        net = network(40, type_conn = conn_type.GRID_EIGHT, conn_repr = conn_represent.MATRIX, height = 4, width = 10);
         self.templateGridEightConnectionsTest(net);
         
-        net = network(40, type_conn = conn_type.GRID_EIGHT, conn_represent = conn_represent.MATRIX, height = 10, width = 4);
+        net = network(40, type_conn = conn_type.GRID_EIGHT, conn_repr = conn_represent.MATRIX, height = 10, width = 4);
         self.templateGridEightConnectionsTest(net);
         
     def testGridEightConnectionsRectangeList40Representation(self):
-        net = network(40, type_conn = conn_type.GRID_EIGHT, conn_represent = conn_represent.LIST, height = 4, width = 10);
+        net = network(40, type_conn = conn_type.GRID_EIGHT, conn_repr = conn_represent.LIST, height = 4, width = 10);
         self.templateGridEightConnectionsTest(net);
         
-        net = network(40, type_conn = conn_type.GRID_EIGHT, conn_represent = conn_represent.LIST, height = 10, width = 4);
+        net = network(40, type_conn = conn_type.GRID_EIGHT, conn_repr = conn_represent.LIST, height = 10, width = 4);
         self.templateGridEightConnectionsTest(net);        
 
     def testGridEightConnectionsRectange10MatrixRepresentation(self):
-        net = network(10, type_conn = conn_type.GRID_EIGHT, conn_represent = conn_represent.MATRIX, height = 1, width = 10);
+        net = network(10, type_conn = conn_type.GRID_EIGHT, conn_repr = conn_represent.MATRIX, height = 1, width = 10);
         self.templateGridEightConnectionsTest(net);
         
-        net = network(10, type_conn = conn_type.GRID_EIGHT, conn_represent = conn_represent.MATRIX, height = 10, width = 1);
+        net = network(10, type_conn = conn_type.GRID_EIGHT, conn_repr = conn_represent.MATRIX, height = 10, width = 1);
         self.templateGridEightConnectionsTest(net);
         
     def testGridEightConnectionsRectangeList10Representation(self):
-        net = network(10, type_conn = conn_type.GRID_EIGHT, conn_represent = conn_represent.LIST, height = 1, width = 10);
+        net = network(10, type_conn = conn_type.GRID_EIGHT, conn_repr = conn_represent.LIST, height = 1, width = 10);
         self.templateGridEightConnectionsTest(net);
         
-        net = network(10, type_conn = conn_type.GRID_EIGHT, conn_represent = conn_represent.LIST, height = 10, width = 1);
+        net = network(10, type_conn = conn_type.GRID_EIGHT, conn_repr = conn_represent.LIST, height = 10, width = 1);
         self.templateGridEightConnectionsTest(net);
 
     def testGridEightConnectionsRectange1MatrixRepresentation(self):
-        net = network(1, type_conn = conn_type.GRID_EIGHT, conn_represent = conn_represent.MATRIX, height = 1, width = 1);
+        net = network(1, type_conn = conn_type.GRID_EIGHT, conn_repr = conn_represent.MATRIX, height = 1, width = 1);
         self.templateGridEightConnectionsTest(net);
         
-        net = network(1, type_conn = conn_type.GRID_EIGHT, conn_represent = conn_represent.MATRIX, height = 1, width = 1);
+        net = network(1, type_conn = conn_type.GRID_EIGHT, conn_repr = conn_represent.MATRIX, height = 1, width = 1);
         self.templateGridEightConnectionsTest(net);
         
     def testGridEightConnectionsRectangeList1Representation(self):
-        net = network(1, type_conn = conn_type.GRID_EIGHT, conn_represent = conn_represent.LIST, height = 1, width = 1);
+        net = network(1, type_conn = conn_type.GRID_EIGHT, conn_repr = conn_represent.LIST, height = 1, width = 1);
         self.templateGridEightConnectionsTest(net);
         
-        net = network(1, type_conn = conn_type.GRID_EIGHT, conn_represent = conn_represent.LIST, height = 1, width = 1);
+        net = network(1, type_conn = conn_type.GRID_EIGHT, conn_repr = conn_represent.LIST, height = 1, width = 1);
         self.templateGridEightConnectionsTest(net);
     
     
     def testGridFourStructure1GridProperty(self):
-        net = network(1, type_conn = conn_type.GRID_FOUR, conn_represent = conn_represent.LIST, height = 1, width = 1);
+        net = network(1, type_conn = conn_type.GRID_FOUR, conn_repr = conn_represent.LIST, height = 1, width = 1);
         assert(net.height == 1);
         assert(net.width == 1);
         
     def testGridEightStructure1GridProperty(self):
-        net = network(1, type_conn = conn_type.GRID_EIGHT, conn_represent = conn_represent.LIST, height = 1, width = 1);
+        net = network(1, type_conn = conn_type.GRID_EIGHT, conn_repr = conn_represent.LIST, height = 1, width = 1);
         assert(net.height == 1);
         assert(net.width == 1);
     
     def testGridFourStructure40GridProperty(self):
-        net = network(40, type_conn = conn_type.GRID_FOUR, conn_represent = conn_represent.LIST, height = 20, width = 2);
+        net = network(40, type_conn = conn_type.GRID_FOUR, conn_repr = conn_represent.LIST, height = 20, width = 2);
         assert(net.height == 20);
         assert(net.width == 2);
         
     def testGridEightStructure40GridProperty(self):
-        net = network(40, type_conn = conn_type.GRID_EIGHT, conn_represent = conn_represent.LIST, height = 20, width = 2);
+        net = network(40, type_conn = conn_type.GRID_EIGHT, conn_repr = conn_represent.LIST, height = 20, width = 2);
         assert(net.height == 20);
         assert(net.width == 2);
     
