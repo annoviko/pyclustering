@@ -51,7 +51,7 @@ class SyncTestTemplates:
 
 
     @staticmethod
-    def templateSimulateTest(nodes = 10, weight = 1, solution = solve_type.FAST, ccore_flag = False):
+    def templateSimulateTest(nodes, weight, solution, ccore_flag):
         sim_time = 20;
         sim_steps = 50;
         tolerance = 0.01;
@@ -73,11 +73,11 @@ class SyncTestTemplates:
 
 
     @staticmethod
-    def templateDynamicSimulationConnectionTypeTest(num_osc, weight, connection_type):
+    def templateDynamicSimulationConnectionTypeTest(num_osc, weight, connection_type, ccore_flag):
         testing_result = False;
         
         for _ in range(3):
-            network = sync_network(num_osc, weight, type_conn = connection_type);
+            network = sync_network(num_osc, weight, type_conn = connection_type, ccore = ccore_flag);
             output_dynamic = network.simulate_dynamic(collect_dynamic = False);  # Just current state of network is required
             
             clusters = output_dynamic.allocate_sync_ensembles(0.1);

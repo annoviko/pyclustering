@@ -33,7 +33,7 @@ from random import random;
 
 class RockTestTemplates:
     @staticmethod
-    def templateLengthProcessData(path_to_file, radius, cluster_numbers, threshold, expected_cluster_length, ccore = False):
+    def templateLengthProcessData(path_to_file, radius, cluster_numbers, threshold, expected_cluster_length, ccore):
         sample = read_sample(path_to_file);
         
         rock_instance = rock(sample, radius, cluster_numbers, threshold, ccore);

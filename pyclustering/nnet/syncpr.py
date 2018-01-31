@@ -25,7 +25,7 @@
 
 """
 
-from pyclustering.nnet          import solve_type, initial_type, conn_type;
+from pyclustering.nnet          import solve_type, initial_type, conn_type,conn_represent;
 from pyclustering.nnet.sync     import sync_network, sync_dynamic, sync_visualizer;
 
 import pyclustering.core.syncpr_wrapper as wrapper;
@@ -247,8 +247,8 @@ class syncpr(sync_network):
             self._increase_strength1 = increase_strength1;
             self._increase_strength2 = increase_strength2;
             self._coupling = [ [0.0 for i in range(num_osc)] for j in range(num_osc) ];
-        
-            super().__init__(num_osc, 1, 0, conn_type.ALL_TO_ALL, initial_type.RANDOM_GAUSSIAN);
+
+            super().__init__(num_osc, 1, 0, conn_type.ALL_TO_ALL, conn_represent.MATRIX, initial_type.RANDOM_GAUSSIAN, ccore)
     
     
     def __del__(self):

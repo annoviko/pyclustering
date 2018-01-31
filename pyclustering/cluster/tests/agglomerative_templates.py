@@ -32,7 +32,7 @@ from random import random;
 
 class AgglomerativeTestTemplates:
     @staticmethod
-    def templateClusteringResults(path, number_clusters, link, expected_length_clusters, ccore_flag = False):
+    def templateClusteringResults(path, number_clusters, link, expected_length_clusters, ccore_flag):
         sample = read_sample(path);
         
         agglomerative_instance = agglomerative(sample, number_clusters, link, ccore_flag);
@@ -45,7 +45,7 @@ class AgglomerativeTestTemplates:
         assert sorted([len(cluster) for cluster in clusters]) == expected_length_clusters;
 
     @staticmethod
-    def templateClusterAllocationOneDimensionData(link, ccore_flag = False):
+    def templateClusterAllocationOneDimensionData(link, ccore_flag):
         input_data = [ [random()] for i in range(10) ] + [ [random() + 3] for i in range(10) ] + [ [random() + 5] for i in range(10) ] + [ [random() + 8] for i in range(10) ];
         
         agglomerative_instance = agglomerative(input_data, 4, link, ccore_flag);
@@ -57,7 +57,7 @@ class AgglomerativeTestTemplates:
             assert len(cluster) == 10;
 
     @staticmethod
-    def templateClusterAllocationTheSameObjects(number_objects, number_clusters, link, ccore_flag = False):
+    def templateClusterAllocationTheSameObjects(number_objects, number_clusters, link, ccore_flag):
         input_data = [ [random()] ] * number_objects;
         
         agglomerative_instance = agglomerative(input_data, number_clusters, link, ccore_flag);

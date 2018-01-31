@@ -99,7 +99,7 @@ class syncsom:
         self._data = data;
         self._radius = radius * radius;
         
-        self._som = som(rows, cols, conn_type = type_conn.grid_four);   # The first (input) later - SOM layer.
+        self._som = som(rows, cols, conn_type = type_conn.grid_four, ccore = False);   # The first (input) later - SOM layer.
         self._som_osc_table = list();
         
         self._sync = None;       # The second (output) layer - Sync layer.
@@ -150,7 +150,7 @@ class syncsom:
         @return (syncnet) Second layer of the network.
         
         """
-        sync_layer = syncnet(weights, 0.0, initial_phases = initial_type.RANDOM_GAUSSIAN);
+        sync_layer = syncnet(weights, 0.0, initial_phases = initial_type.RANDOM_GAUSSIAN, ccore = False);
         
         for oscillator_index1 in range(0, len(sync_layer)):
             for oscillator_index2 in range(oscillator_index1 + 1, len(sync_layer)):

@@ -29,6 +29,7 @@ from pyclustering.nnet import *;
 from pyclustering.nnet.sync import sync_network;
 from pyclustering.nnet.sync import sync_dynamic;
 
+
 class syncgcolor_analyser(sync_dynamic):
     """!
     @brief Analyser of output dynamic of the oscillatory network syncgcolor.
@@ -100,7 +101,7 @@ class syncgcolor(sync_network):
         
         """
         number_oscillators = len(graph_matrix);
-        super().__init__(number_oscillators, type_conn = conn_type.DYNAMIC);
+        super().__init__(number_oscillators, type_conn = conn_type.DYNAMIC, ccore = False);
         
         if (reduction == None):
             self._reduction = self._num_osc;

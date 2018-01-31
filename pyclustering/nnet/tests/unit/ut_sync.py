@@ -51,12 +51,12 @@ class SyncUnitTest(unittest.TestCase):
 
     def testSyncOrderSingleOscillator(self):
         # Check for order parameter of network with one oscillator
-        network = sync_network(1, 1);
+        network = sync_network(1, 1, ccore=False);
         assert network.sync_order() == 1;
 
     def testSyncOrderNetwork(self):
         # Check for order parameter of network with several oscillators
-        network = sync_network(2, 1);
+        network = sync_network(2, 1, ccore=False);
             
         sync_state = 1;
         tolerance = 0.1;
@@ -70,7 +70,7 @@ class SyncUnitTest(unittest.TestCase):
 
 
     def testOutputNormalization(self):
-        network = sync_network(20, 1);
+        network = sync_network(20, 1, ccore=False);
           
         output_dynamic = network.simulate(50, 20, solve_type.RK4);
          
@@ -86,15 +86,15 @@ class SyncUnitTest(unittest.TestCase):
 
     def testFastSolution(self):
         # Check for convergence when solution using fast way of calculation of derivative
-        SyncTestTemplates.templateSimulateTest(10, 1, solve_type.FAST);
+        SyncTestTemplates.templateSimulateTest(10, 1, solve_type.FAST, False);
 
     def testRK4Solution(self):
         # Check for convergence when solution using RK4 function of calculation of derivative
-        SyncTestTemplates.templateSimulateTest(10, 1, solve_type.RK4);   
+        SyncTestTemplates.templateSimulateTest(10, 1, solve_type.RK4, False);
 
     def testLargeNetwork(self):
         # Check for convergence of phases in large network - network that contains large number of oscillators
-        SyncTestTemplates.templateSimulateTest(128, 1, solve_type.FAST);
+        SyncTestTemplates.templateSimulateTest(128, 1, solve_type.FAST, False);
 
     def testOutputDynamicAroundZero(self):
         phases = [ [ 0.01, 0.02, 0.04, 6.27, 6.28, 6.25, 0.03] ];
@@ -114,20 +114,20 @@ class SyncUnitTest(unittest.TestCase):
 
 
     def testDynamicSimulationAllToAll(self):
-        SyncTestTemplates.templateDynamicSimulationConnectionTypeTest(10, 1, conn_type.ALL_TO_ALL);
-        SyncTestTemplates.templateDynamicSimulationConnectionTypeTest(50, 1, conn_type.ALL_TO_ALL);
+        SyncTestTemplates.templateDynamicSimulationConnectionTypeTest(10, 1, conn_type.ALL_TO_ALL, False);
+        SyncTestTemplates.templateDynamicSimulationConnectionTypeTest(50, 1, conn_type.ALL_TO_ALL, False);
            
     def testDynamicSimulationGridFour(self):
-        SyncTestTemplates.templateDynamicSimulationConnectionTypeTest(9, 1, conn_type.GRID_FOUR);
-        SyncTestTemplates.templateDynamicSimulationConnectionTypeTest(25, 1, conn_type.GRID_FOUR);
+        SyncTestTemplates.templateDynamicSimulationConnectionTypeTest(9, 1, conn_type.GRID_FOUR, False);
+        SyncTestTemplates.templateDynamicSimulationConnectionTypeTest(25, 1, conn_type.GRID_FOUR, False);
    
     def testDynamicSimulationGridEight(self):
-        SyncTestTemplates.templateDynamicSimulationConnectionTypeTest(9, 1, conn_type.GRID_FOUR);
-        SyncTestTemplates.templateDynamicSimulationConnectionTypeTest(25, 1, conn_type.GRID_FOUR);
+        SyncTestTemplates.templateDynamicSimulationConnectionTypeTest(9, 1, conn_type.GRID_FOUR, False);
+        SyncTestTemplates.templateDynamicSimulationConnectionTypeTest(25, 1, conn_type.GRID_FOUR, False);
    
     def testDynamicSimulationBidir(self):
-        SyncTestTemplates.templateDynamicSimulationConnectionTypeTest(5, 1, conn_type.LIST_BIDIR);
-        SyncTestTemplates.templateDynamicSimulationConnectionTypeTest(10, 1, conn_type.LIST_BIDIR);
+        SyncTestTemplates.templateDynamicSimulationConnectionTypeTest(5, 1, conn_type.LIST_BIDIR, False);
+        SyncTestTemplates.templateDynamicSimulationConnectionTypeTest(10, 1, conn_type.LIST_BIDIR, False);
 
 
     def testTwoOscillatorDynamic(self):
@@ -150,31 +150,31 @@ class SyncUnitTest(unittest.TestCase):
 
 
     def testOutputDynamicLengthSimulation(self):
-        net = sync_network(5);
+        net = sync_network(5, ccore=False);
         output_dynamic = net.simulate(10, 10, solution = solve_type.FAST, collect_dynamic = True);
          
         assert len(output_dynamic) == 11; # 10 steps without initial values.
 
     def testOutputDynamicLengthStaticSimulation(self):
-        net = sync_network(5);
+        net = sync_network(5, ccore=False);
         output_dynamic = net.simulate_static(10, 10, solution = solve_type.FAST, collect_dynamic = True);
          
         assert len(output_dynamic) == 11; # 10 steps without initial values.    
 
     def testOutputDynamicLengthStaticSimulationWithouCollecting(self):
-        net = sync_network(5);
+        net = sync_network(5, ccore=False);
         output_dynamic = net.simulate_static(10, 10, solution = solve_type.FAST, collect_dynamic = False);
          
         assert len(output_dynamic) == 1; # 10 steps without initial values.    
 
     def testOutputDynamicLengthDynamicSimulation(self):
-        net = sync_network(5);
+        net = sync_network(5, ccore=False);
         output_dynamic = net.simulate_dynamic(solution = solve_type.FAST, collect_dynamic = True);
          
         assert len(output_dynamic) > 1; 
 
     def testOutputDynamicLengthDynamicSimulationWithoutCollecting(self):
-        net = sync_network(5);
+        net = sync_network(5, ccore=False);
         output_dynamic = net.simulate_dynamic(solution = solve_type.FAST, collect_dynamic = False);
          
         assert len(output_dynamic) == 1;

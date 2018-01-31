@@ -83,7 +83,7 @@ class hsyncnet(syncnet):
         if ( (ccore is True) and ccore_library.workable() ):
             self.__ccore_network_pointer = wrapper.hsyncnet_create_network(source_data, number_clusters, osc_initial_phases, initial_neighbors, increase_persent);
         else: 
-            super().__init__(source_data, 0, initial_phases = osc_initial_phases);
+            super().__init__(source_data, 0, initial_phases = osc_initial_phases, ccore=False);
             
             self.__initial_neighbors = initial_neighbors;
             self.__increase_persent = increase_persent;

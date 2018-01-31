@@ -33,7 +33,7 @@ from pyclustering.utils import read_sample;
 
 class XmeansTestTemplates:
     @staticmethod
-    def templateLengthProcessData(path_to_file, start_centers, expected_cluster_length, type_splitting, kmax, ccore = False):
+    def templateLengthProcessData(path_to_file, start_centers, expected_cluster_length, type_splitting, kmax, ccore):
         sample = read_sample(path_to_file);
         
         #clusters = xmeans(sample, start_centers, 20, ccore);

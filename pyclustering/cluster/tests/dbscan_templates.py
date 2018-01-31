@@ -32,7 +32,7 @@ from random import random;
 
 class DbscanTestTemplates:
     @staticmethod
-    def templateClusteringResults(path, radius, neighbors, expected_length_clusters, ccore = False):
+    def templateClusteringResults(path, radius, neighbors, expected_length_clusters, ccore):
         sample = read_sample(path);
          
         dbscan_instance = dbscan(sample, radius, neighbors, ccore);
@@ -47,7 +47,7 @@ class DbscanTestTemplates:
 
 
     @staticmethod
-    def templateLengthProcessData(path_to_file, radius, min_number_neighbors, max_number_neighbors, ccore = False):
+    def templateLengthProcessData(path_to_file, radius, min_number_neighbors, max_number_neighbors, ccore):
         for _ in range(min_number_neighbors, max_number_neighbors, 1):
             sample = read_sample(path_to_file);
              

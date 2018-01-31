@@ -35,7 +35,7 @@ from random import random, randint;
 
 class KmedoidsTestTemplates:
     @staticmethod
-    def templateLengthProcessData(path_to_file, initial_medoids, expected_cluster_length, ccore_flag = False):
+    def templateLengthProcessData(path_to_file, initial_medoids, expected_cluster_length, ccore_flag):
         sample = read_sample(path_to_file);
          
         kmedoids_instance = kmedoids(sample, initial_medoids, 0.025, ccore_flag);
@@ -52,10 +52,10 @@ class KmedoidsTestTemplates:
 
 
     @staticmethod
-    def templateClusterAllocationOneDimensionData():
+    def templateClusterAllocationOneDimensionData(ccore_flag):
         input_data = [ [random()] for i in range(10) ] + [ [random() + 3] for i in range(10) ] + [ [random() + 5] for i in range(10) ] + [ [random() + 8] for i in range(10) ];
          
-        kmedoids_instance = kmedoids(input_data, [ 5, 15, 25, 35 ], 0.025);
+        kmedoids_instance = kmedoids(input_data, [ 5, 15, 25, 35 ], 0.025, ccore_flag);
         kmedoids_instance.process();
         clusters = kmedoids_instance.get_clusters();
          
@@ -65,7 +65,7 @@ class KmedoidsTestTemplates:
 
 
     @staticmethod
-    def templateAllocateRequestedClusterAmount(data, amount_clusters, initial_medoids = None, ccore_flag = False):
+    def templateAllocateRequestedClusterAmount(data, amount_clusters, initial_medoids, ccore_flag):
         if (initial_medoids is None):
             initial_medoids = [];
             for _ in range(amount_clusters):

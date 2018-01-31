@@ -34,7 +34,7 @@ from pyclustering.nnet.syncpr import syncpr, syncpr_visualizer;
 
 class SyncprTestTemplates:
     @staticmethod
-    def templateOutputDynamic(solver, ccore = False):
+    def templateOutputDynamic(solver, ccore):
         net = syncpr(5, 0.1, 0.1, ccore);
         output_dynamic = net.simulate(10, 10, [-1, 1, -1, 1, -1], solver, True);
          
@@ -64,8 +64,8 @@ class SyncprTestTemplates:
 
 
     @staticmethod
-    def templateIncorrectPatternForSimulation(pattern):
-        net = syncpr(10, 0.1, 0.1);
+    def templateIncorrectPatternForSimulation(pattern, ccore_flag):
+        net = syncpr(10, 0.1, 0.1, ccore=ccore_flag);
         try: net.simulate(10, 10, pattern);
         except: return;
         assert False;

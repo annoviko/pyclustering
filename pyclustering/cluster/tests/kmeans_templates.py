@@ -34,7 +34,7 @@ from random import random;
 
 class KmeansTestTemplates:
     @staticmethod
-    def templateLengthProcessData(path_to_file, start_centers, expected_cluster_length, ccore = False):
+    def templateLengthProcessData(path_to_file, start_centers, expected_cluster_length, ccore):
         sample = read_sample(path_to_file);
         
         kmeans_instance = kmeans(sample, start_centers, 0.025, ccore);

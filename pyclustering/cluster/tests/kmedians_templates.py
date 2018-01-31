@@ -33,7 +33,7 @@ from random import random;
 
 class KmediansTestTemplates:
     @staticmethod
-    def templateLengthProcessData(path_to_file, start_centers, expected_cluster_length, ccore = False):
+    def templateLengthProcessData(path_to_file, start_centers, expected_cluster_length, ccore):
         sample = read_sample(path_to_file);
         
         kmedians_instance = kmedians(sample, start_centers, 0.025, ccore);
@@ -53,7 +53,7 @@ class KmediansTestTemplates:
 
 
     @staticmethod
-    def templateClusterAllocationOneDimensionData(ccore = False):
+    def templateClusterAllocationOneDimensionData(ccore):
         input_data = [ [random()] for i in range(10) ] + [ [random() + 3] for i in range(10) ] + [ [random() + 5] for i in range(10) ] + [ [random() + 8] for i in range(10) ];
          
         kmedians_instance = kmedians(input_data, [ [0.0], [3.0], [5.0], [8.0] ], 0.025, ccore);
@@ -66,7 +66,7 @@ class KmediansTestTemplates:
 
 
     @staticmethod
-    def templateClusterAllocationTheSameObjects(number_objects, number_clusters, ccore_flag = False):
+    def templateClusterAllocationTheSameObjects(number_objects, number_clusters, ccore_flag):
         value = random();
         input_data = [ [value] ] * number_objects;
          

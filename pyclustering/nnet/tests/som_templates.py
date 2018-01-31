@@ -37,7 +37,7 @@ from pyclustering.samples.definitions import SIMPLE_SAMPLES;
 
 class SomTestTemplates:
     @staticmethod
-    def templateTestAwardNeurons(file, rows, cols, time, expected_result, autostop = False, ccore_flag = False, parameters = None):
+    def templateTestAwardNeurons(file, rows, cols, time, expected_result, autostop, ccore_flag, parameters = None):
         types = [type_conn.func_neighbor, type_conn.grid_eight, type_conn.grid_four, type_conn.honeycomb];
         sample = read_sample(file);
          
