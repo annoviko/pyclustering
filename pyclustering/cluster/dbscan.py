@@ -60,7 +60,7 @@ class dbscan:
     
     """
     
-    def __init__(self, data, eps, neighbors, ccore = False):
+    def __init__(self, data, eps, neighbors, ccore = True):
         """!
         @brief Constructor of clustering algorithm DBSCAN.
         

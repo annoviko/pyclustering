@@ -32,6 +32,8 @@ from pyclustering.nnet import solve_type;
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES;
 
+from pyclustering.core.tests import remove_library;
+
 
 class HsyncnetIntegrationTest(unittest.TestCase):
     def testClusteringSampleSimple1WithoutCollectingByCore(self):
@@ -58,6 +60,11 @@ class HsyncnetIntegrationTest(unittest.TestCase):
 
     def testDynamicLengthWithoutCollectingByCore(self):
         HsyncnetTestTemplates.templateDynamicLength(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, None, 5, 0.3, False, True);
+
+
+    @remove_library
+    def testProcessingWhenLibraryCoreCorrupted(self):
+        HsyncnetTestTemplates.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, [5, 5], solve_type.FAST, 5, 0.3, False, True);
 
 
 if __name__ == "__main__":

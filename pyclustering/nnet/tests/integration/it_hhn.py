@@ -26,9 +26,9 @@
 
 import unittest;
 
-from pyclustering.nnet.hhn import hhn_network;
-
 from pyclustering.nnet.tests.hhn_templates import HhnTestTemplates;
+
+from pyclustering.core.tests import remove_library;
 
 
 class HhnIntegrationTest(unittest.TestCase):
@@ -43,3 +43,7 @@ class HhnIntegrationTest(unittest.TestCase):
 
     def testThreeEnsembles(self):
         HhnTestTemplates.templateSyncEnsembleAllocation([0, 0, 25, 25, 47, 47], None, 2400, 600, [[0, 1], [2, 3], [4, 5]], True);
+
+    @remove_library
+    def testProcessingWhenLibraryCoreCorrupted(self):
+        HhnTestTemplates.templateSyncEnsembleAllocation([27, 27, 27], None, 600, 50, [[0, 1, 2]], True);

@@ -104,7 +104,7 @@ class agglomerative:
     
     """
     
-    def __init__(self, data, number_clusters, link = None, ccore = False):
+    def __init__(self, data, number_clusters, link = None, ccore = True):
         """!
         @brief Constructor of agglomerative hierarchical algorithm.
         

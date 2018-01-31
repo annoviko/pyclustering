@@ -79,7 +79,7 @@ class kmeans:
     
     """
     
-    def __init__(self, data, initial_centers, tolerance = 0.001, ccore = False):
+    def __init__(self, data, initial_centers, tolerance = 0.001, ccore = True):
         """!
         @brief Constructor of clustering algorithm K-Means.
         @details Center initializer can be used for creating initial centers, for example, K-Means++ method.

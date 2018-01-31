@@ -30,9 +30,11 @@ import matplotlib;
 matplotlib.use('Agg');
 
 from pyclustering.cluster.tests.agglomerative_templates import AgglomerativeTestTemplates;
+from pyclustering.cluster.agglomerative import agglomerative, type_link;
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES;
-from pyclustering.cluster.agglomerative import agglomerative, type_link;
+
+from pyclustering.core.tests import remove_library, corrupt_library;
 
 
 class AgglomerativeIntegrationTest(unittest.TestCase):
@@ -98,6 +100,14 @@ class AgglomerativeIntegrationTest(unittest.TestCase):
         agglomerative_instance = agglomerative([ [1], [2], [3], [20], [21], [22] ], 2, type_link.SINGLE_LINK, True);
         agglomerative_instance.process();
         assert len(agglomerative_instance.get_clusters()) == 2;
+
+    @remove_library
+    def testProcessingWhenLibraryCoreRemoved(self):
+        AgglomerativeTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, type_link.AVERAGE_LINK, [5, 5], True);
+
+    @corrupt_library
+    def testProcessingWhenLibraryCoreCorrupted(self):
+        AgglomerativeTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, type_link.AVERAGE_LINK, [5, 5], True);
 
 
 if __name__ == "__main__":

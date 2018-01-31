@@ -27,10 +27,11 @@
 import unittest;
 
 from pyclustering.cluster.tests.kmedians_templates import KmediansTestTemplates;
-
 from pyclustering.cluster.kmedians import kmedians;
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES;
+
+from pyclustering.core.tests import remove_library;
 
 
 class KmediansIntegrationTest(unittest.TestCase):
@@ -89,6 +90,11 @@ class KmediansIntegrationTest(unittest.TestCase):
         kmedians_instance = kmedians([ [1], [2], [3], [20], [21], [22] ], [ [2], [21] ], ccore=True);
         kmedians_instance.process();
         assert len(kmedians_instance.get_clusters()) == 2;
+
+
+    @remove_library
+    def testProcessingWhenLibraryCoreCorrupted(self):
+        KmediansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], True);
 
 
 if __name__ == "__main__":

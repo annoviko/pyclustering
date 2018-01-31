@@ -229,7 +229,7 @@ class syncpr(sync_network):
     
     """
 
-    def __init__(self, num_osc, increase_strength1, increase_strength2, ccore = False):
+    def __init__(self, num_osc, increase_strength1, increase_strength2, ccore = True):
         """!
         @brief Constructor of oscillatory network for pattern recognition based on Kuramoto model.
         

@@ -25,6 +25,8 @@
 
 import unittest;
 
+from numpy import pi;
+
 # Generate images without having a window appear.
 import matplotlib;
 matplotlib.use('Agg');
@@ -35,9 +37,9 @@ from pyclustering.nnet import initial_type, conn_represent, solve_type;
 from pyclustering.cluster.tests.syncnet_templates import SyncnetTestTemplates;
 from pyclustering.cluster.syncnet import syncnet;
 
-from numpy import pi;
-
 from pyclustering.samples.definitions import SIMPLE_SAMPLES;
+
+from pyclustering.core.tests import remove_library;
 
 
 class SyncnetIntegrationTest(unittest.TestCase):
@@ -138,6 +140,11 @@ class SyncnetIntegrationTest(unittest.TestCase):
             if (result is True): break;
         
         assert True == result;
+
+
+    @remove_library
+    def testProcessingWhenLibraryCoreCorrupted(self):
+        SyncnetTestTemplates.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, 0.999, solve_type.FAST, initial_type.RANDOM_GAUSSIAN, True, False, 0.05, None, [5, 5], True);
 
 
 if __name__ == "__main__":

@@ -67,7 +67,7 @@ class kmedoids:
     """
     
     
-    def __init__(self, data, initial_index_medoids, tolerance = 0.25, ccore = False):
+    def __init__(self, data, initial_index_medoids, tolerance = 0.25, ccore = True):
         """!
         @brief Constructor of clustering algorithm K-Medoids.
         

@@ -58,7 +58,7 @@ class rock:
        
     """
     
-    def __init__(self, data, eps, number_clusters, threshold = 0.5, ccore = False):
+    def __init__(self, data, eps, number_clusters, threshold = 0.5, ccore = True):
         """!
         @brief Constructor of clustering algorithm ROCK.
         

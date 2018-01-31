@@ -207,7 +207,7 @@ class som:
         return self._capture_objects;
     
     
-    def __init__(self, rows, cols, conn_type = type_conn.grid_eight, parameters = None, ccore = False):
+    def __init__(self, rows, cols, conn_type = type_conn.grid_eight, parameters = None, ccore = True):
         """!
         @brief Constructor of self-organized map.
         

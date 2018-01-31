@@ -111,7 +111,7 @@ class xmeans:
     
     """
     
-    def __init__(self, data, initial_centers = None, kmax = 20, tolerance = 0.025, criterion = splitting_type.BAYESIAN_INFORMATION_CRITERION, ccore = False):
+    def __init__(self, data, initial_centers = None, kmax = 20, tolerance = 0.025, criterion = splitting_type.BAYESIAN_INFORMATION_CRITERION, ccore = True):
         """!
         @brief Constructor of clustering algorithm X-Means.
         

@@ -62,7 +62,7 @@ class hsyncnet(syncnet):
     @endcode
     """
     
-    def __init__(self, source_data, number_clusters, osc_initial_phases = initial_type.RANDOM_GAUSSIAN, initial_neighbors = 3, increase_persent = 0.15, ccore = False):
+    def __init__(self, source_data, number_clusters, osc_initial_phases = initial_type.RANDOM_GAUSSIAN, initial_neighbors = 3, increase_persent = 0.15, ccore = True):
         """!
         @brief Costructor of the oscillatory network hSyncNet for cluster analysis.
 

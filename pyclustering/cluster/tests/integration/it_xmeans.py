@@ -35,6 +35,8 @@ from pyclustering.cluster.xmeans import xmeans, splitting_type;
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
 
+from pyclustering.core.tests import remove_library;
+
 
 class XmeansIntegrationTest(unittest.TestCase):
     def testBicClusterAllocationSampleSimple1ByCore(self):
@@ -181,6 +183,11 @@ class XmeansIntegrationTest(unittest.TestCase):
 
     def testKmax05Amount01Offset01Initial04(self):
         XmeansTestTemplates.templateMaxAllocatedClusters(True, 1, 1000, 1, 4, 5);
+
+
+    @remove_library
+    def testProcessingWhenLibraryCoreCorrupted(self):
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, True);
 
 
 if __name__ == "__main__":

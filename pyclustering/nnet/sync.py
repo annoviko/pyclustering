@@ -725,7 +725,7 @@ class sync_network(network):
     
     """
 
-    def __init__(self, num_osc, weight = 1, frequency = 0, type_conn = conn_type.ALL_TO_ALL, representation = conn_represent.MATRIX, initial_phases = initial_type.RANDOM_GAUSSIAN, ccore = False):
+    def __init__(self, num_osc, weight = 1, frequency = 0, type_conn = conn_type.ALL_TO_ALL, representation = conn_represent.MATRIX, initial_phases = initial_type.RANDOM_GAUSSIAN, ccore = True):
         """!
         @brief Constructor of oscillatory network is based on Kuramoto model.
         

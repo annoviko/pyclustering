@@ -108,7 +108,7 @@ class cure:
     
     """
     
-    def __init__(self, data, number_cluster, number_represent_points = 5, compression = 0.5, ccore = False):
+    def __init__(self, data, number_cluster, number_represent_points = 5, compression = 0.5, ccore = True):
         """!
         @brief Constructor of clustering algorithm CURE.
         

@@ -336,7 +336,7 @@ class optics:
     
     """
     
-    def __init__(self, sample, eps, minpts, amount_clusters = None, ccore = False):
+    def __init__(self, sample, eps, minpts, amount_clusters = None, ccore = True):
         """!
         @brief Constructor of clustering algorithm OPTICS.
         

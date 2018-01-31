@@ -209,7 +209,7 @@ class hhn_network(network):
     
     """
     
-    def __init__(self, num_osc, stimulus = None, parameters = None, type_conn = None, type_conn_represent = conn_represent.MATRIX, ccore = False):
+    def __init__(self, num_osc, stimulus = None, parameters = None, type_conn = None, type_conn_represent = conn_represent.MATRIX, ccore = True):
         """!
         @brief Constructor of oscillatory network based on Hodgkin-Huxley neuron model.
         

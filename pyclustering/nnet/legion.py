@@ -238,7 +238,7 @@ class legion_network(network):
     
     """
 
-    def __init__(self, num_osc, parameters = None, type_conn = conn_type.ALL_TO_ALL, type_conn_represent = conn_represent.MATRIX, ccore = False):
+    def __init__(self, num_osc, parameters = None, type_conn = conn_type.ALL_TO_ALL, type_conn_represent = conn_represent.MATRIX, ccore = True):
         """!
         @brief Constructor of oscillatory network LEGION (local excitatory global inhibitory oscillatory network).
         

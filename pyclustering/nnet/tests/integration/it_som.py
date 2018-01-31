@@ -37,6 +37,8 @@ from pyclustering.utils import read_sample;
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
 
+from pyclustering.core.tests import remove_library;
+
 
 class SomIntegrationTest(unittest.TestCase):
     def testTwoNeuronsTwoClustersByCore(self):
@@ -153,6 +155,11 @@ class SomIntegrationTest(unittest.TestCase):
 
     def testSimulateCheckWinnerHoneycombByCore(self):
         SomTestTemplates.templateTestSimulate(type_conn.honeycomb, True);
+
+
+    @remove_library
+    def testProcessingWhenLibraryCoreCorrupted(self):
+        SomTestTemplates.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, 2, 100, [5, 5], False, True);
 
 
 if __name__ == "__main__":

@@ -190,7 +190,7 @@ class syncnet(sync_network):
     
     """
     
-    def __init__(self, sample, radius, conn_repr = conn_represent.MATRIX, initial_phases = initial_type.RANDOM_GAUSSIAN, enable_conn_weight = False, ccore = False):
+    def __init__(self, sample, radius, conn_repr = conn_represent.MATRIX, initial_phases = initial_type.RANDOM_GAUSSIAN, enable_conn_weight = False, ccore = True):
         """!
         @brief Contructor of the oscillatory network SYNC for cluster analysis.
         

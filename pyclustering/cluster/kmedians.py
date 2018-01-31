@@ -59,7 +59,7 @@ class kmedians:
     
     """
     
-    def __init__(self, data, initial_centers, tolerance = 0.25, ccore = False):
+    def __init__(self, data, initial_centers, tolerance = 0.25, ccore = True):
         """!
         @brief Constructor of clustering algorithm K-Medians.
         

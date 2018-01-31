@@ -31,6 +31,8 @@ from pyclustering.cluster.rock import rock;
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES;
 
+from pyclustering.core.tests import remove_library;
+
 
 class RockIntegrationTest(unittest.TestCase):  
     def testClusterAllocationByCore(self):
@@ -55,6 +57,11 @@ class RockIntegrationTest(unittest.TestCase):
         optics_instance = rock([ [1], [2], [3], [20], [21], [22] ], 3, 2, 0.5, True);
         optics_instance.process();
         assert len(optics_instance.get_clusters()) == 2;
+
+
+    @remove_library
+    def testProcessingWhenLibraryCoreCorrupted(self):
+        RockTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, 2, 0.5, [5, 5], True);
 
 
 if __name__ == "__main__":

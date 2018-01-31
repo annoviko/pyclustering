@@ -55,7 +55,7 @@ class somsc:
     
     """
     
-    def __init__(self, data, amount_clusters, epouch = 100, ccore = False):
+    def __init__(self, data, amount_clusters, epouch = 100, ccore = True):
         """!
         @brief Creates SOM-SC (Self Organized Map for Simple Clustering) algorithm for clustering analysis.
         

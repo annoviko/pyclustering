@@ -33,6 +33,8 @@ from pyclustering.nnet import conn_type;
 
 from pyclustering.utils import extract_number_oscillations;
 
+from pyclustering.core.tests import remove_library;
+
 
 class LegionIntergrationTest(unittest.TestCase):   
     def testMixStimulatedThreeOscillatorsByCore(self):
@@ -42,22 +44,17 @@ class LegionIntergrationTest(unittest.TestCase):
         assert extract_number_oscillations(dynamic.output, 0) > 1; 
         assert extract_number_oscillations(dynamic.output, 2) > 1;
 
-
     def testStimulatedOscillatorListStructureByCore(self):
         LegionTestTemplates.templateOscillationsWithStructures(conn_type.LIST_BIDIR, True);
-
 
     def testStimulatedOscillatorGridFourStructureByCore(self):
         LegionTestTemplates.templateOscillationsWithStructures(conn_type.GRID_FOUR, True);
 
-
     def testStimulatedOscillatorGridEightStructureByCore(self):
         LegionTestTemplates.templateOscillationsWithStructures(conn_type.GRID_EIGHT, True);
  
- 
     def testStimulatedOscillatorAllToAllStructureByCore(self):
         LegionTestTemplates.templateOscillationsWithStructures(conn_type.ALL_TO_ALL, True);
-
 
 
     def testSyncEnsembleAllocationOneStimulatedOscillatorByCore(self):
@@ -65,10 +62,8 @@ class LegionIntergrationTest(unittest.TestCase):
         params.teta = 0; # due to no neighbors
         LegionTestTemplates.templateSyncEnsembleAllocation([1], params, conn_type.NONE, 2000, 500, [[0]], True);
 
-
     def testSyncEnsembleAllocationThreeStimulatedOscillatorsByCore(self):
         LegionTestTemplates.templateSyncEnsembleAllocation([1, 1, 1], None, conn_type.LIST_BIDIR, 1500, 1500, [[0, 1, 2]], True);
-
 
     def testSyncEnsembleAllocationThreeMixStimulatedOscillatorsByCore(self):
         parameters = legion_parameters();
@@ -76,9 +71,13 @@ class LegionIntergrationTest(unittest.TestCase):
         LegionTestTemplates.templateSyncEnsembleAllocation([1, 0, 1], None, conn_type.LIST_BIDIR, 1500, 1500, [[0, 2], [1]], True);
 
 
-
     def testOutputDynamicInformationByCore(self):
         LegionTestTemplates.templateOutputDynamicInformation([1, 0, 1], legion_parameters(), conn_type.LIST_BIDIR, 100, 100, True);
+
+
+    @remove_library
+    def testProcessingWhenLibraryCoreCorrupted(self):
+        LegionTestTemplates.templateOscillationsWithStructures(conn_type.LIST_BIDIR, True);
 
 
 if __name__ == "__main__":

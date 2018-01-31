@@ -29,8 +29,9 @@ import unittest;
 from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
 
 from pyclustering.cluster.cure import cure;
-
 from pyclustering.cluster.tests.cure_templates import CureTestTemplates;
+
+from pyclustering.core.tests import remove_library;
 
 
 class CureIntegrationTest(unittest.TestCase):
@@ -76,6 +77,11 @@ class CureIntegrationTest(unittest.TestCase):
         cure_instance = cure([ [1], [2], [3], [20], [21], [22] ], 2, ccore = True);
         cure_instance.process();
         assert len(cure_instance.get_clusters()) == 2;
+
+
+    @remove_library
+    def testProcessingWhenLibraryCoreCorrupted(self):
+        CureTestTemplates.template_cluster_allocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [5, 5], 2, 5, 0.5, True);
 
 
 if __name__ == "__main__":

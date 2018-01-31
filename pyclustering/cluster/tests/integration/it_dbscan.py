@@ -26,11 +26,12 @@
 import unittest;
 
 from pyclustering.cluster.tests.dbscan_templates import DbscanTestTemplates;
-
 from pyclustering.cluster.dbscan import dbscan;
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES;
 from pyclustering.samples.definitions import FCPS_SAMPLES;
+
+from pyclustering.core.tests import remove_library;
 
 
 class DbscanIntegrationTest(unittest.TestCase):  
@@ -73,6 +74,11 @@ class DbscanIntegrationTest(unittest.TestCase):
         dbscan_instance = dbscan([ [1], [2], [3], [20], [21], [22] ], 3, 2, True);
         dbscan_instance.process();
         assert len(dbscan_instance.get_clusters()) == 2;
+
+
+    @remove_library
+    def testProcessingWhenLibraryCoreCorrupted(self):
+        DbscanTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 0.4, 2, [5, 5], True);
 
 
 if __name__ == "__main__":
