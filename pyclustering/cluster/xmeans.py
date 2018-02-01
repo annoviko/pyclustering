@@ -408,12 +408,19 @@ class xmeans:
         if (N - K > 0):
             sigma_sqrt /= (N - K);
             p = (K - 1) + dimension * K + 1;
+
+            # in case of the same points, sigma_sqrt can be zero (issue: #407)
+            sigma_multiplier = 0.0;
+            if (sigma_sqrt <= 0.0):
+                sigma_multiplier = float('-inf');
+            else:
+                sigma_multiplier = dimension * 0.5 * log(sigma_sqrt);
             
             # splitting criterion    
             for index_cluster in range(0, len(clusters), 1):
                 n = len(clusters[index_cluster]);
-                
-                L = n * log(n) - n * log(N) - n * 0.5 * log(2.0 * numpy.pi) - n * dimension * 0.5 * log(sigma_sqrt) - (n - K) * 0.5;
+
+                L = n * log(n) - n * log(N) - n * 0.5 * log(2.0 * numpy.pi) - n * sigma_multiplier - (n - K) * 0.5;
                 
                 # BIC calculation
                 scores[index_cluster] = L - p * 0.5 * log(N);

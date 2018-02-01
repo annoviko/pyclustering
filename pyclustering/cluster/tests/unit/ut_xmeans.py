@@ -148,6 +148,13 @@ class XmeansUnitTest(unittest.TestCase):
     def testMndlClusterAllocationSampleTwoDiamonds(self):
         XmeansTestTemplates.templateLengthProcessData(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, [[0.8, 0.2], [3.0, 0.0]], [400, 400], splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH, 20, False);
 
+    def testMathErrorDomainBic(self):
+        # This is test for bug that was found in #407: 0.0 under logarithm function.
+        XmeansTestTemplates.templateLengthProcessData([[0], [0], [10], [10], [20], [20]], [[5], [20]], [2, 2, 2], splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, False);
+
+    def testMathErrorDomainMndl(self):
+        XmeansTestTemplates.templateLengthProcessData([[0], [0], [10], [10], [20], [20]], [[5], [20]], [2, 2, 2], splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH, 20, False);
+
 
     def testClusterAllocationOneDimensionData(self):
         XmeansTestTemplates.templateClusterAllocationOneDimensionData(False);
