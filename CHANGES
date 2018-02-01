@@ -46,6 +46,9 @@ GENERAL CHANGES:
 
 
 CORRECTED MAJOR BUGS:
+- Zero value of sigma under logarithm function in Python version of pyclustering (pyclustering.cluster.xmeans).
+  See: https://github.com/annoviko/pyclustering/issues/407
+
 - Amplitude threshold is ignored during synchronous ensembles allocation for amplitude output dynamic 'allocate_sync_ensembles' - affect HNN, LEGION (pyclustering.utils).
   See: no reference.
 
