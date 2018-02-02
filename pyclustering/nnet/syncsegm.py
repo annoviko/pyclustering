@@ -176,7 +176,7 @@ class syncsegm:
     
     """
     
-    def __init__(self, color_radius, object_radius, noise_size = 0):
+    def __init__(self, color_radius, object_radius, noise_size = 0, ccore = True):
         """!
         @brief Contructor of the oscillatory network SYNC for cluster analysis.
         
@@ -184,6 +184,7 @@ class syncsegm:
         @param[in] object_radius (double): Radius of object connectivity (object similarity) for the second layer,
                    if 'None' then object segmentation is not performed (only color segmentation).
         @param[in] noise_size (double): Size of segment that should be considered as a noise and ignored by the second layer.
+        @param[in] ccore (bool): If 'True' then C/C++ implementation is used to increase performance.
         
         """
         
@@ -194,7 +195,8 @@ class syncsegm:
         self.__order_color      = 0.9995;
         self.__order_object     = 0.999;
         
-        self.__network = None;
+        self.__network  = None;
+        self.__ccore    = ccore;
     
     
     def process(self, image_source, collect_dynamic = False, order_color = 0.9995, order_object = 0.999):
@@ -210,7 +212,7 @@ class syncsegm:
         
         """
         
-        self.__color_radius = order_color;
+        self.__order_color  = order_color;
         self.__order_object = order_object;
         
         data = read_image(image_source);
@@ -223,18 +225,18 @@ class syncsegm:
         return syncsegm_analyser(color_analyser, object_segment_analysers);
     
     
-    def __analyse_colors(self, image_source, collect_dynamic):
+    def __analyse_colors(self, image_data, collect_dynamic):
         """!
         @brief Performs color segmentation by the first layer.
         
-        @param[in] image_source (string): Path to image file that should be processed.
+        @param[in] image_data (array_like): Image sample as a array-like structure.
         @param[in] collect_dynamic (bool): If 'True' then whole dynamic of the first layer of the network is collected.
         
         @return (syncnet_analyser) Analyser of color segmentation results of the first layer.
         
         """
         
-        network = syncnet(image_source, self.__color_radius, initial_phases = initial_type.EQUIPARTITION, ccore = True);
+        network = syncnet(image_data, self.__color_radius, initial_phases = initial_type.RANDOM_GAUSSIAN, ccore = self.__ccore);
         analyser = network.process(self.__order_color, solve_type.FAST, collect_dynamic);
         
         return analyser;
@@ -265,6 +267,7 @@ class syncsegm:
             if (object_analyser is not None):
                 object_analysers.append( { 'color_segment': segment, 'analyser': object_analyser } );
     
+        pointer_image.close();
         return object_analysers;
     
     

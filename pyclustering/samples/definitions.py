@@ -128,6 +128,8 @@ class IMAGE_SIMPLE_SAMPLES:
     IMAGE_SIMPLE14                  = samples.__path__[0] + os.sep + "images" + os.sep + "ImageSimple14.png";
     IMAGE_SIMPLE15                  = samples.__path__[0] + os.sep + "images" + os.sep + "ImageSimple15.png";
     IMAGE_SIMPLE16                  = samples.__path__[0] + os.sep + "images" + os.sep + "ImageSimple16.png";
+    IMAGE_SIMPLE17                  = samples.__path__[0] + os.sep + "images" + os.sep + "ImageSimple17.png";
+    IMAGE_SIMPLE18                  = samples.__path__[0] + os.sep + "images" + os.sep + "ImageSimple18.png";
     IMAGE_SIMPLE_BEACH              = samples.__path__[0] + os.sep + "images" + os.sep + "ImageSimpleBeach.png";
     IMAGE_SIMPLE_BUILDING           = samples.__path__[0] + os.sep + "images" + os.sep + "ImageSimpleBuilding.png";
     IMAGE_SIMPLE_FRUITS             = samples.__path__[0] + os.sep + "images" + os.sep + "ImageSimpleFruits.png";

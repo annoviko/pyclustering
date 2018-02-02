@@ -220,7 +220,6 @@ def experiment_execution_time(ccore_flag = False):
     template_clustering_random_points_performance(300000, 6, ccore_flag);
     template_clustering_random_points_performance(1000000, 6, ccore_flag);
 
-
 cluster_sample1();
 cluster_sample2();
 cluster_sample3();
