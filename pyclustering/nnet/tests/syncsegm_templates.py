@@ -28,12 +28,14 @@
 import matplotlib;
 matplotlib.use('Agg');
 
-from pyclustering.nnet.syncsegm import syncsegm;
+from pyclustering.nnet.syncsegm import syncsegm, syncsegm_visualizer;
+
+from pyclustering.utils import draw_image_mask_segments;
 
 
 class SyncsegmTestTemplates:
     @staticmethod
-    def templatesyncsegmSegmentation(image_source, radius_color, radius_object, noise_size, expected_color_segments, expected_object_segments, collect_dynamic, ccore_flag):
+    def templateSyncsegmSegmentation(image_source, radius_color, radius_object, noise_size, expected_color_segments, expected_object_segments, collect_dynamic, ccore_flag):
         result_testing = False;
         
         for _ in range(0, 10, 1):
@@ -50,3 +52,18 @@ class SyncsegmTestTemplates:
             break;
         
         assert result_testing;
+
+
+    @staticmethod
+    def templateSyncsegmVisulizationNoFailure(image_source, radius_color, radius_object, noise_size, expected_color_segments, expected_object_segments, collect_dynamic, ccore_flag):
+        algorithm = syncsegm(radius_color, radius_object, noise_size, ccore=ccore_flag);
+        analyser = algorithm.process(image_source, collect_dynamic, 0.9995, 0.9995);
+        
+        color_segments = analyser.allocate_colors(0.01, noise_size);
+        draw_image_mask_segments(image_source, color_segments);
+        
+        object_segments = analyser.allocate_objects(0.01, noise_size);
+        draw_image_mask_segments(image_source, object_segments);
+        
+        syncsegm_visualizer.show_first_layer_dynamic(analyser);
+        syncsegm_visualizer.show_second_layer_dynamic(analyser);

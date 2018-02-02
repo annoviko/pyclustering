@@ -37,11 +37,28 @@ from pyclustering.samples.definitions import IMAGE_SIMPLE_SAMPLES;
 
 class SyncsegmUnitTest(unittest.TestCase):
     def testImageSegmentationSimple17(self):
-        SyncsegmTestTemplates.templatesyncsegmSegmentation(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE17, 225, 1, 0, 3, 3, False, False);
+        SyncsegmTestTemplates.templateSyncsegmSegmentation(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE17, 225, 1, 0, 3, 3, False, False);
+
+    def testImageSegmentationSimple17OneObjectDetection(self):
+        SyncsegmTestTemplates.templateSyncsegmSegmentation(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE17, 225, 5, 0, 3, 3, False, False);
+
+    def testImageSegmentationSimple17OneColorDetection(self):
+        SyncsegmTestTemplates.templateSyncsegmSegmentation(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE17, float('Inf'), 1, 0, 1, 1, False, False);
 
     def testImageSegmentationSimple18(self):
-        SyncsegmTestTemplates.templatesyncsegmSegmentation(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE18, 225, 1, 0, 2, 3, True, False);
+        SyncsegmTestTemplates.templateSyncsegmSegmentation(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE18, 225, 1, 0, 2, 3, False, False);
 
+    def testImageSegmentationSimple18OneObjectDetection(self):
+        SyncsegmTestTemplates.templateSyncsegmSegmentation(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE18, 225, 5, 0, 2, 2, False, False);
+
+    def testImageSegmentationSimple18OneColorDetection(self):
+        SyncsegmTestTemplates.templateSyncsegmSegmentation(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE18, float('Inf'), 2, 0, 1, 1, False, False);
+
+    def testVisualizeSimple17NoFailure(self):
+        SyncsegmTestTemplates.templateSyncsegmSegmentation(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE17, 225, 1, 0, 3, 3, False, False);
+
+    def testVisualizeSimple18NoFailure(self):
+        SyncsegmTestTemplates.templateSyncsegmSegmentation(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE18, 225, 1, 0, 2, 3, False, False);
 
 if __name__ == "__main__":
     unittest.main();
