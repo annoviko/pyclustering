@@ -44,7 +44,7 @@ static void template_grid_connections(const grid_t p_connections, const size_t p
     adjacency_connector<TypeCollection> connector;
     switch (p_connections) {
         case grid_t::GRID_FOUR:
-            if ((p_width != 0) && (p_height != 0)) {
+            if ((p_width != 0U) && (p_height != 0U)) {
                 connector.create_grid_four_connections(p_width, p_height, collection);
             }
             else {
@@ -54,7 +54,7 @@ static void template_grid_connections(const grid_t p_connections, const size_t p
             break;
 
         case grid_t::GRID_EIGHT:
-            if ((p_width != 0) && (p_height != 0)) {
+            if ((p_width != 0U) && (p_height != 0U)) {
                 connector.create_grid_eight_connections(p_width, p_height, collection);
             }
             else {
@@ -129,7 +129,7 @@ static void template_grid_connections(const grid_t p_connections, const size_t p
                 ASSERT_TRUE(neighbors.cend() != std::find(neighbors.cbegin(), neighbors.cend(), (size_t) lower_right_index));
             }
 
-            for (std::size_t j = 0; j < collection.size(); j++) {
+            for (int j = 0; j < collection.size(); j++) {
                 if ((j != index) &&
                     (j != upper_index) && (j != lower_index) && (j != left_index) && (j != right_index) &&
                     (j != upper_left_index) && (j != upper_right_index) && (j != lower_left_index) && (j != lower_right_index)) {

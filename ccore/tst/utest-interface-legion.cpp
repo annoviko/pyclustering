@@ -51,7 +51,7 @@ TEST(utest_interface_legion, legion_api) {
     ASSERT_NE(nullptr, dynamic);
 
     std::size_t size_network = legion_get_size(legion_network);
-    ASSERT_EQ(10, size_network);
+    ASSERT_EQ(10U, size_network);
 
     pyclustering_package * package = legion_dynamic_get_output(dynamic);
     CHECK_FREE_PACKAGE(package);

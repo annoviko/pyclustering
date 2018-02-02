@@ -61,7 +61,7 @@ static void template_simulation_static(const unsigned int steps,
         ASSERT_TRUE(output_dynamic.size() > steps);
     }
     else {
-        ASSERT_EQ(1, output_dynamic.size());
+        ASSERT_EQ(1U, output_dynamic.size());
     }
 }
 
@@ -106,7 +106,7 @@ static void template_simulation_dynamic(const solve_type solver,
         ASSERT_TRUE(output_dynamic.size() > 1);
     }
     else {
-        ASSERT_EQ(1, output_dynamic.size());
+        ASSERT_EQ(1U, output_dynamic.size());
     }
 }
 

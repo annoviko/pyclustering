@@ -35,13 +35,13 @@ TEST(utest_interface_cure, cure_api) {
     ASSERT_NE(nullptr, cure_result);
 
     std::shared_ptr<pyclustering_package> clusters(cure_get_clusters(cure_result));
-    ASSERT_EQ(2, clusters->size);
+    ASSERT_EQ(2U, clusters->size);
 
     std::shared_ptr<pyclustering_package> representors(cure_get_representors(cure_result));
-    ASSERT_EQ(2, representors->size);
+    ASSERT_EQ(2U, representors->size);
 
     std::shared_ptr<pyclustering_package> means(cure_get_means(cure_result));
-    ASSERT_EQ(2, means->size);
+    ASSERT_EQ(2U, means->size);
 
     cure_data_destroy(cure_result);
 }

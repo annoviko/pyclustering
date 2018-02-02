@@ -69,7 +69,7 @@ ccore:
 
 
 .PHONY: ccore_clean
-ccore:
+ccore_clean:
 	$(MAKE) $(MKFLAG) ccore.mk clean PLATFORM="x64"
 	$(MAKE) $(MKFLAG) ccore.mk clean PLATFORM="x86"
 

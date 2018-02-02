@@ -34,7 +34,7 @@ using namespace ccore::container;
 
 TEST(utest_adjacency_bit_matrix, create_delete) {
     adjacency_bit_matrix * matrix = new adjacency_bit_matrix(10);
-    ASSERT_EQ(10, matrix->size());
+    ASSERT_EQ(10U, matrix->size());
 
     for (size_t i = 0; i < matrix->size(); i++) {
         for (size_t j = i + 1; j < matrix->size(); j++) {

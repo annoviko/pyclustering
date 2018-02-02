@@ -50,7 +50,7 @@ TEST(utest_interface_pcnn, pcnn_api) {
     ASSERT_NE(nullptr, dynamic);
 
     std::size_t size_network = pcnn_get_size(pcnn_network);
-    ASSERT_EQ(10, size_network);
+    ASSERT_EQ(10U, size_network);
 
     pyclustering_package * package = pcnn_dynamic_allocate_sync_ensembles(dynamic);
     CHECK_FREE_PACKAGE(package);

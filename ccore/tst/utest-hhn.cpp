@@ -90,7 +90,7 @@ static void template_collect_dynamic(const std::size_t p_num_osc,
     }
 
     for (auto & data_type : not_collected_types) {
-        ASSERT_EQ(0, output_dynamic.get_central_dynamic()->at(data_type).size());
+        ASSERT_EQ(0U, output_dynamic.get_central_dynamic()->at(data_type).size());
     }
 }
 

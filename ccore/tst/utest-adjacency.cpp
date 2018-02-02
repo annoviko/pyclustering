@@ -153,7 +153,7 @@ void template_no_get_neighbors(adjacency_collection & collection) {
 
     for (size_t i = 0; i < collection.size(); i++) {
         collection.get_neighbors(i, node_neighbors);
-        ASSERT_EQ(0, node_neighbors.size());
+        ASSERT_EQ(0U, node_neighbors.size());
     }
 }
 
@@ -201,7 +201,7 @@ void template_get_neighbors_after_erase(adjacency_collection & collection) {
         std::vector<size_t> node_neighbors;
         collection.get_neighbors(i, node_neighbors);
 
-        ASSERT_EQ(0, node_neighbors.size());
+        ASSERT_EQ(0U, node_neighbors.size());
     }
 }
 
