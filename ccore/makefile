@@ -27,6 +27,8 @@ default:
 	@echo "ccore_x64_clean  - to clean build files of CCORE library (platform x64)."
 	@echo "ccore_x86        - to build release CCORE library for pyclustering (platform x86)."
 	@echo "ccore_x86_clean  - to clean build files of CCORE library (platform x86)."
+	@echo "ccore            - to build all releases of CCORE library for pyclustering."
+	@echo "ccore_clean      - to clean all build files of CCORE library."
 	@echo " "
 	@echo "cppcheck         - to perform static analysis of source code."
 	@echo " "
@@ -57,6 +59,18 @@ ccore_x86:
 
 .PHONY: ccore_x86_clean
 ccore_x86_clean:
+	$(MAKE) $(MKFLAG) ccore.mk clean PLATFORM="x86"
+
+
+.PHONY: ccore
+ccore:
+	$(MAKE) $(MKFLAG) ccore.mk ccore PLATFORM="x64"
+	$(MAKE) $(MKFLAG) ccore.mk ccore PLATFORM="x86"
+
+
+.PHONY: ccore_clean
+ccore:
+	$(MAKE) $(MKFLAG) ccore.mk clean PLATFORM="x64"
 	$(MAKE) $(MKFLAG) ccore.mk clean PLATFORM="x86"
 
 
