@@ -32,7 +32,7 @@ from pyclustering.utils import extract_number_oscillations;
 
 class LegionTestTemplates:
     @staticmethod
-    def templateOscillationsWithStructures(type_conn, ccore_flag = False):
+    def templateOscillationsWithStructures(type_conn, ccore_flag):
         net = legion_network(4, type_conn = conn_type.LIST_BIDIR, ccore = ccore_flag);
         dynamic = net.simulate(500, 1000, [1, 1, 1, 1]);
           
@@ -41,7 +41,7 @@ class LegionTestTemplates:
 
 
     @staticmethod
-    def templateSyncEnsembleAllocation(stimulus, params, type_conn, sim_steps, sim_time, expected_clusters, ccore_flag = False):
+    def templateSyncEnsembleAllocation(stimulus, params, type_conn, sim_steps, sim_time, expected_clusters, ccore_flag):
         result_testing = False;
          
         for _ in range(0, 5, 1):

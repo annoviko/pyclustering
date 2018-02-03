@@ -25,10 +25,12 @@
 
 """
 
-from pyclustering.nnet          import solve_type, initial_type, conn_type;
+from pyclustering.nnet          import solve_type, initial_type, conn_type,conn_represent;
 from pyclustering.nnet.sync     import sync_network, sync_dynamic, sync_visualizer;
 
 import pyclustering.core.syncpr_wrapper as wrapper;
+
+from pyclustering.core.wrapper import ccore_library;
 
 from PIL import Image;
 
@@ -227,7 +229,7 @@ class syncpr(sync_network):
     
     """
 
-    def __init__(self, num_osc, increase_strength1, increase_strength2, ccore = False):
+    def __init__(self, num_osc, increase_strength1, increase_strength2, ccore = True):
         """!
         @brief Constructor of oscillatory network for pattern recognition based on Kuramoto model.
         
@@ -238,15 +240,15 @@ class syncpr(sync_network):
         
         """
         
-        if (ccore is True):
+        if ( (ccore is True) and ccore_library.workable() ):
             self._ccore_network_pointer = wrapper.syncpr_create(num_osc, increase_strength1, increase_strength2);
             
         else:
             self._increase_strength1 = increase_strength1;
             self._increase_strength2 = increase_strength2;
             self._coupling = [ [0.0 for i in range(num_osc)] for j in range(num_osc) ];
-        
-            super().__init__(num_osc, 1, 0, conn_type.ALL_TO_ALL, initial_type.RANDOM_GAUSSIAN);
+
+            super().__init__(num_osc, 1, 0, conn_type.ALL_TO_ALL, conn_represent.MATRIX, initial_type.RANDOM_GAUSSIAN, ccore)
     
     
     def __del__(self):

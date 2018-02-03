@@ -1,3 +1,22 @@
+#
+# Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
+#
+# GNU_PUBLIC_LICENSE
+#   pyclustering is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   pyclustering is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+
 # Tools
 CC = g++ -c
 LD = g++
@@ -7,10 +26,10 @@ MKDIR = mkdir -p
 
 # C++ standard depending on operating system
 ifeq ($(shell uname -o), Cygwin)
-	CPLUS_STANDARD = gnu++1y
+	CPLUS_STANDARD = gnu++14
 	CFLAG_PIC = 
 else
-	CPLUS_STANDARD = c++1y
+	CPLUS_STANDARD = c++14
 	CFLAG_PIC = -fPIC
 endif
 
@@ -25,8 +44,12 @@ else
 endif
 
 
+# Warnings.
+WARNING_FLAGS = -Wall -Wpedantic
+
+
 # Toolchain arguments.
-CFLAGS = -O2 -MMD -MP -std=$(CPLUS_STANDARD) $(CFLAG_PIC) $(CFLAG_PLATFORM) -Wall -Wpedantic
+CFLAGS = -O2 -MMD -MP -std=$(CPLUS_STANDARD) $(CFLAG_PIC) $(CFLAG_PLATFORM) $(WARNING_FLAGS)
 LFLAGS = -shared $(LFLAG_PLATFORM)
 
 

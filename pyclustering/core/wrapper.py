@@ -35,15 +35,68 @@ from pyclustering.core.definitions import *;
 ccore_library_instance = None;
 
 
-def load_core():
-    if (PATH_PYCLUSTERING_CCORE_LIBRARY is None):
-        raise NameError("The pyclustering core is not supported for platform '" + sys.platform + "'.");
+class ccore_library:
+    __library           = None;
+    __workable          = False;
+    __initialized       = False;
 
-    if (os.path.exists(PATH_PYCLUSTERING_CCORE_LIBRARY) is False):
-        raise NameError("The pyclustering core is not found (expected core location: '" + PATH_PYCLUSTERING_CCORE_LIBRARY + "').\n" + 
-                        "Probably pyclustering library has not been successfully installed.\n" + 
-                        "Please, contact to 'pyclustering@yandex.ru'.");
+    @staticmethod
+    def get():
+        if (not ccore_library.__library):
+            ccore_library.initialize();
 
-    ccore_library_instance = cdll.LoadLibrary(PATH_PYCLUSTERING_CCORE_LIBRARY);
-    return ccore_library_instance;
+        return ccore_library.__library;
+
+
+    @staticmethod
+    def workable():
+        if (not ccore_library.__initialized):
+            ccore_library.get();
+
+        return ccore_library.__workable;
+
+
+    @staticmethod
+    def initialize():
+        ccore_library.__initialized = True;
+        
+        if (PATH_PYCLUSTERING_CCORE_LIBRARY is None):
+            print("The pyclustering core is not supported for platform '" + sys.platform + "' (" + platform.architecture()[0] + ").\n" + 
+                  "Please, contact to 'pyclustering@yandex.ru'.");
+            
+            return None;
+    
+        if (os.path.exists(PATH_PYCLUSTERING_CCORE_LIBRARY) is False):
+            print("The pyclustering core is not found (expected core location: '" + PATH_PYCLUSTERING_CCORE_LIBRARY + "').\n" + 
+                  "Probably library has not been successfully installed ('" + sys.platform + "', '" + platform.architecture()[0] + "').\n" + 
+                  "Please, contact to 'pyclustering@yandex.ru'.");
+            
+            return None;
+
+        ccore_library.__library = cdll.LoadLibrary(PATH_PYCLUSTERING_CCORE_LIBRARY);
+        if (ccore_library.__check_library_integrity() is False):
+            print("Impossible to mark core as workable due to compitability troubles " +
+                  "('" + sys.platform + "', '" + platform.architecture()[0] + "').\n" + 
+                  "Please, contact to 'pyclustering@yandex.ru'");
+            
+            return None;
+        
+        return ccore_library.__library;
+
+
+    @staticmethod
+    def __check_library_integrity():
+        try:
+            ccore_library.__library.get_interface_description.restype = c_char_p;
+            result = ccore_library.__library.get_interface_description();
+            
+            if (len(result) > 0):
+                ccore_library.__workable = True;
+            
+            return True;
+        
+        except:
+            ccore_library.__workable = False;
+        
+        return False;
 

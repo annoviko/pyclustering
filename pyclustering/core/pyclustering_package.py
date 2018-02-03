@@ -27,6 +27,9 @@
 
 from ctypes import *;
 
+import collections;
+import numpy;
+
 
 
 class pyclustering_package(Structure):
@@ -132,10 +135,7 @@ class package_builder:
 
 
     def __is_container_type(self, value):
-        if (isinstance(value, list) or isinstance(value, tuple)):
-            return True;
-        
-        return False;
+        return isinstance(value, collections.Iterable);
 
 
     def __get_type(self, pyclustering_data_type):
@@ -147,6 +147,9 @@ class package_builder:
 
     def __create_package(self, dataset):
         dataset_package = pyclustering_package();
+        
+        if (isinstance(dataset, numpy.matrix)):
+            return self.__create_package_numpy_matrix(dataset_package, dataset);
         
         dataset_package.size = len(dataset);
     
@@ -204,6 +207,29 @@ class package_builder:
         else:
             array_object = (c_data_type * len(dataset))(*dataset);
             dataset_package.data = cast(array_object, POINTER(c_void_p));
+
+
+    def __create_package_numpy_matrix(self, dataset_package, dataset):
+        (rows, cols) = dataset.shape;
+        
+        dataset_package.size = rows;
+        dataset_package.type = pyclustering_type_data.PYCLUSTERING_TYPE_LIST;
+        
+        package_data = (POINTER(pyclustering_package) * rows)();
+        for row_index in range(rows):
+            array_package = pyclustering_package();
+            array_package.size = cols;
+            array_package.type = pyclustering_type_data.get_pyclustering_type(self.__c_data_type);
+            
+            array_object = (self.__c_data_type * cols)();
+            for col_index in range(cols):
+                array_object[col_index] = self.__c_data_type(dataset[row_index, col_index]);
+        
+            array_package.data = cast(array_object, POINTER(c_void_p));
+            package_data[row_index] = pointer(array_package);
+            
+        dataset_package.data = cast(package_data, POINTER(c_void_p));
+        return pointer(dataset_package);
 
 
 

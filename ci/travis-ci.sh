@@ -1,3 +1,22 @@
+#
+# Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
+#
+# GNU_PUBLIC_LICENSE
+#   pyclustering is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   pyclustering is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+
 CCORE_X64_BINARY_FOLDER=pyclustering/core/x64/linux
 CCORE_X64_BINARY_PATH=$CCORE_X64_BINARY_FOLDER/ccore.so
 
@@ -27,15 +46,32 @@ check_failure() {
 }
 
 
+check_error_log_file() {
+    problems_amount=$(cat $1 | wc -l)
+    printf "Total amount of errors and warnings: '%d'\n"  "$problems_amount"
+    
+    if [ $problems_amount -ne 0 ] ; then
+        print_info "List of warnings and errors:"
+        cat $1
+        
+        print_error $2
+        exit 1
+    fi
+}
+
+
 build_ccore() {
     cd $TRAVIS_BUILD_DIR/ccore/
 
+    [ -f stderr.log ] && rm stderr.log
+    [ -f stdout.log ] && rm stdout.log
+    
     if [ "$1" == "x64" ]; then
-        make ccore_x64
-        check_failure "Building CCORE (x64): FAILURE."
+        make ccore_x64 > >(tee -a stdout.log) 2> >(tee -a stderr.log >&2)
+        check_error_log_file stderr.log "Building CCORE (x64): FAILURE."
     elif [ "$1" == "x86" ]; then
-        make ccore_x86
-        check_failure "Building CCORE (x86): FAILURE."
+        make ccore_x86 > >(tee -a stdout.log) 2> >(tee -a stderr.log >&2)
+        check_error_log_file stderr.log "Building CCORE (x86): FAILURE."
     else
         print_error "Unknown CCORE platform is specified."
         exit 1
@@ -102,8 +138,8 @@ run_ut_ccore_job() {
     # build unit-test project
     cd ccore/
 
-    make ut
-    check_failure "Building CCORE unit-tests: FAILURE."
+    make ut > >(tee -a stdout.log) 2> >(tee -a stderr.log >&2)
+    check_error_log_file stderr.log "Building CCORE unit-tests: FAILURE."
 
     # run unit-tests and obtain code coverage
     make utrun
@@ -199,19 +235,9 @@ run_doxygen_job() {
     # generate doxygen documentation
     print_info "Generate documentation."
 
-    doxygen docs/doxygen_conf_pyclustering > /dev/null 2> doxygen_problems.txt
+    doxygen docs/doxygen_conf_pyclustering > /dev/null 2> doxygen_problems.log
     
-    problems_amount=$(cat doxygen_problems.txt | wc -l)
-    printf "Total amount of doxygen errors and warnings: '%d'\n"  "$problems_amount"
-    
-    if [ $problems_amount -ne 0 ] ; then
-        print_info "List of warnings and errors:"
-        cat doxygen_problems.txt
-        
-        print_error "Building doxygen documentation: FAILURE."
-        exit 1
-    fi
-
+    check_error_log_file doxygen_problems.log "Building doxygen documentation: FAILURE."
     print_info "Building doxygen documentation: SUCCESS."
 }
 

@@ -130,6 +130,28 @@ def three_sync_ensembles():
     template_dynamic_hhn(num_osc, 2400, 600, stimulus, params, separate=separate, ccore_flag=True);
 
 
+def two_ensembles_80_oscillators():
+    params = hhn_parameters();
+    params.deltah = 650;
+    params.w1 = 0.1;
+    params.w2 = 9.0;
+    params.w3 = 5.0;
+    params.threshold = -10;
+    
+    expected_ensembles = [];
+    stimulus = [];
+    
+    base_stimulus = 10;
+    step_stimulus = 10;
+    amount_ensebles = 4;
+    region_size = 20;
+    for i in range(amount_ensebles):
+        expected_ensembles += [ [i for i in range(region_size * i, region_size * i + region_size)] ];
+        stimulus += [ base_stimulus + step_stimulus * i ] * region_size;
+    
+    template_dynamic_hhn(len(stimulus), 4000, 1000, stimulus, params, separate=expected_ensembles, ccore_flag=True);
+
+
 one_oscillator_unstimulated();
 one_oscillator_stimulated();
 three_oscillators_stimulated();
@@ -140,3 +162,4 @@ ten_oscillators_stimulated_partial_sync();
 six_oscillators_mix_2_stimulated();
 six_oscillators_mix_3_stimulated();
 three_sync_ensembles();
+two_ensembles_80_oscillators();

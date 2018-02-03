@@ -34,8 +34,8 @@ TEST(utest_ordering, cluster_allocation_identical_ordering) {
     ordering_ptr cluster_ordering = std::shared_ptr<ordering>(new ordering({5.0, 5.0, 5.0, 5.0, 5.0, 5.0}));
     ordering_analyser analyser(cluster_ordering);
 
-    EXPECT_EQ(1, analyser.extract_cluster_amount(6.5));
-    EXPECT_EQ(0, analyser.extract_cluster_amount(4.5));
+    EXPECT_EQ(1U, analyser.extract_cluster_amount(6.5));
+    EXPECT_EQ(0U, analyser.extract_cluster_amount(4.5));
 }
 
 

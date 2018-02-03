@@ -33,7 +33,7 @@ from random import random;
 
 class SyncnetTestTemplates:
     @staticmethod
-    def templateLengthProcessData(path_to_file, amount_clusters, expected_cluster_length, ccore = False):
+    def templateLengthProcessData(path_to_file, amount_clusters, expected_cluster_length, ccore):
         sample = read_sample(path_to_file);
         
         somsc_instance = somsc(sample, amount_clusters, 100, ccore);

@@ -49,13 +49,15 @@ const std::size_t        xmeans::DEFAULT_THREAD_POOL_SIZE                = 15;
 
 xmeans::xmeans(const dataset & p_centers, const std::size_t p_kmax, const double p_tolerance, const splitting_type p_criterion) :
     m_centers(p_centers),
+    m_ptr_result(nullptr),
+    m_ptr_data(nullptr),
     m_maximum_clusters(p_kmax),
     m_tolerance(p_tolerance * p_tolerance),
     m_criterion(p_criterion),
     m_parallel_trigger(DEFAULT_DATA_SIZE_PARALLEL_PROCESSING),
     m_parallel_processing(false),
     m_mutex(),
-    m_pool(DEFAULT_THREAD_POOL_SIZE)
+    m_pool(nullptr)
 { }
 
 
@@ -66,6 +68,9 @@ void xmeans::process(const dataset & data, cluster_data & output_result) {
     m_ptr_data = &data;
 
     m_parallel_processing = (m_ptr_data->size() >= m_parallel_trigger);
+    if (m_parallel_processing) {
+        m_pool = std::make_shared<thread_pool>(DEFAULT_THREAD_POOL_SIZE);
+    }
 
     output_result = xmeans_data();
     m_ptr_result = (xmeans_data *)&output_result;
@@ -115,11 +120,11 @@ void xmeans::improve_structure() {
                     improve_region_structure(clusters[index], m_centers[index], region_allocated_centers[index]);
                 };
 
-            m_pool.add_task(improve_proc);
+            m_pool->add_task(improve_proc);
         }
 
         for (std::size_t i = 0; i < m_ptr_result->clusters()->size(); i++) {
-            m_pool.pop_complete_task();
+            m_pool->pop_complete_task();
         }
     }
     else {

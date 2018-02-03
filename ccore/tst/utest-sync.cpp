@@ -32,7 +32,7 @@ using namespace ccore::nnet;
 static void template_create_delete(const connection_t type, const initial_type initial) {
     sync_network * network = new sync_network(25, 1, 1, type, initial);
 
-    ASSERT_EQ(25, network->size());
+    ASSERT_EQ(25U, network->size());
     delete network;
 }
 
@@ -86,7 +86,7 @@ static void template_dynamic_convergence(const unsigned int number_oscillators, 
     ensemble_data<sync_ensemble> ensembles;
     output_dynamic.allocate_sync_ensembles(0.1, ensembles);
 
-    ASSERT_EQ(1, ensembles.size());
+    ASSERT_EQ(1U, ensembles.size());
 }
 
 TEST(utest_sync, dynamic_convergance_10_oscillators_all_to_all) {
@@ -119,7 +119,7 @@ static void template_static_convergence(const unsigned int number_oscillators, c
     ensemble_data<sync_ensemble> ensembles;
     output_dynamic.allocate_sync_ensembles(0.1, ensembles);
 
-    ASSERT_EQ(1, ensembles.size());
+    ASSERT_EQ(1U, ensembles.size());
 }
 
 TEST(utest_sync, static_convergance_10_oscillators_all_to_all) {
@@ -166,7 +166,7 @@ static void template_static_collecting_dynamic(const unsigned int steps) {
     sync_dynamic output_dynamic;
     network.simulate_static(steps, 0.1, solve_type::FORWARD_EULER, true, output_dynamic);
 
-    ASSERT_EQ(10, output_dynamic.oscillators());
+    ASSERT_EQ(10U, output_dynamic.oscillators());
     ASSERT_EQ(steps + 1, output_dynamic.size());
 }
 
@@ -185,7 +185,7 @@ TEST(utest_sync, dynamic_collecting_dynamic) {
     sync_dynamic output_dynamic;
     network.simulate_dynamic(0.998, 0.1, solve_type::FORWARD_EULER, true, output_dynamic);
 
-    ASSERT_EQ(10, output_dynamic.oscillators());
+    ASSERT_EQ(10U, output_dynamic.oscillators());
     ASSERT_GT(output_dynamic.size(), (std::size_t) 1);
 }
 
@@ -196,18 +196,18 @@ TEST(utest_sync, dynamic_around_zero) {
     ensemble_data<sync_ensemble> ensembles;
     output_dynamic.allocate_sync_ensembles(0.1, ensembles);
 
-    ASSERT_EQ(1, ensembles.size());
+    ASSERT_EQ(1U, ensembles.size());
 
     output_dynamic.allocate_sync_ensembles(0.2, ensembles);
 
-    ASSERT_EQ(1, ensembles.size());
+    ASSERT_EQ(1U, ensembles.size());
 
     output_dynamic.clear();
     output_dynamic.push_back(sync_network_state(20.0, { 1.02, 1.05, 1.52, 5.87, 5.98, 5.14 }));
 
     output_dynamic.allocate_sync_ensembles(2.0, ensembles);
 
-    ASSERT_EQ(1, ensembles.size());
+    ASSERT_EQ(1U, ensembles.size());
 }
 
 

@@ -25,7 +25,7 @@
 
 from ctypes import c_double, c_size_t, POINTER;
 
-from pyclustering.core.wrapper import load_core;
+from pyclustering.core.wrapper import ccore_library;
 from pyclustering.core.pyclustering_package import pyclustering_package, package_builder, package_extractor;
 
 
@@ -43,7 +43,7 @@ def optics(sample, radius, minimum_neighbors, amount_clusters):
 
     pointer_data = package_builder(sample, c_double).create();
     
-    ccore = load_core();
+    ccore = ccore_library.get();
     
     ccore.optics_algorithm.restype = POINTER(pyclustering_package);
     package = ccore.optics_algorithm(pointer_data, c_double(radius), c_size_t(minimum_neighbors), c_size_t(amount));

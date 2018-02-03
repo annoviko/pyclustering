@@ -30,6 +30,8 @@ from pyclustering.cluster.tests.somsc_templates import SyncnetTestTemplates;
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES;
 
+from pyclustering.core.tests import remove_library;
+
 
 class SomscIntegrationTest(unittest.TestCase):
     def testClusterAllocationSampleSimple1ByCore(self):
@@ -77,6 +79,11 @@ class SomscIntegrationTest(unittest.TestCase):
 
     def testClusterAllocationOneDimensionDataByCore(self):
         SyncnetTestTemplates.templateClusterAllocationOneDimensionData(True);
+
+
+    @remove_library
+    def testProcessingWhenLibraryCoreCorrupted(self):
+        SyncnetTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, [5, 5], True);
 
 
 if __name__ == "__main__":

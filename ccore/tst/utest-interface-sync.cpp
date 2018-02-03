@@ -49,7 +49,7 @@ TEST(utest_interface_sync, sync_api) {
     ASSERT_NE(nullptr, network_pointer);
 
     std::size_t network_size = sync_get_size(network_pointer);
-    ASSERT_EQ(10, network_size);
+    ASSERT_EQ(10U, network_size);
 
     void * dynamic_pointer = sync_simulate_static(network_pointer, 20, 10, (unsigned int) solve_type::FORWARD_EULER, true);
     ASSERT_NE(nullptr, dynamic_pointer);
@@ -65,7 +65,7 @@ TEST(utest_interface_sync, sync_api) {
     ASSERT_LT(0.9, local_order_parameter);
 
     std::size_t dynamic_size = sync_dynamic_get_size(dynamic_pointer);
-    ASSERT_EQ(21, dynamic_size);
+    ASSERT_EQ(21U, dynamic_size);
 
     pyclustering_package * package = sync_connectivity_matrix(network_pointer);
     CHECK_FREE_PACKAGE(package, 10);

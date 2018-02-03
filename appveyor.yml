@@ -24,7 +24,6 @@ environment:
   - CI_JOB: "UT_CYGWIN_CCORE"
   - CI_JOB: "PYCLUSTERING_WINDOWS_X86"
   - CI_JOB: "PYCLUSTERING_WINDOWS_X64"
-  - CI_JOB: "DEPLOY"
 
 
 build_script:

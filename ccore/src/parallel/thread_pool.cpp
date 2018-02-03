@@ -29,14 +29,13 @@ namespace ccore {
 namespace parallel {
 
 
-thread_pool::thread_pool(const std::size_t p_size) {
-    m_pool  = { };
-    m_queue = { };
-    m_done  = { };
-
-    m_free = 0;
-    m_stop = false;
-
+thread_pool::thread_pool(const std::size_t p_size) :
+        m_pool(),
+        m_queue(),
+        m_done(),
+        m_free(0),
+        m_stop(false)
+{
     thread_executor::task_getter getter = std::bind(&thread_pool::get_task, this, std::placeholders::_1);
     thread_executor::task_notifier notifier = std::bind(&thread_pool::done_task, this, std::placeholders::_1);
 

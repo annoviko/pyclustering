@@ -1,3 +1,22 @@
+#
+# Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
+#
+# GNU_PUBLIC_LICENSE
+#   pyclustering is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   pyclustering is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+
 MAKE = make
 MKFLAG = -f
 
@@ -8,6 +27,8 @@ default:
 	@echo "ccore_x64_clean  - to clean build files of CCORE library (platform x64)."
 	@echo "ccore_x86        - to build release CCORE library for pyclustering (platform x86)."
 	@echo "ccore_x86_clean  - to clean build files of CCORE library (platform x86)."
+	@echo "ccore            - to build all releases of CCORE library for pyclustering."
+	@echo "ccore_clean      - to clean all build files of CCORE library."
 	@echo " "
 	@echo "cppcheck         - to perform static analysis of source code."
 	@echo " "
@@ -38,6 +59,18 @@ ccore_x86:
 
 .PHONY: ccore_x86_clean
 ccore_x86_clean:
+	$(MAKE) $(MKFLAG) ccore.mk clean PLATFORM="x86"
+
+
+.PHONY: ccore
+ccore:
+	$(MAKE) $(MKFLAG) ccore.mk ccore PLATFORM="x64"
+	$(MAKE) $(MKFLAG) ccore.mk ccore PLATFORM="x86"
+
+
+.PHONY: ccore_clean
+ccore_clean:
+	$(MAKE) $(MKFLAG) ccore.mk clean PLATFORM="x64"
 	$(MAKE) $(MKFLAG) ccore.mk clean PLATFORM="x86"
 
 

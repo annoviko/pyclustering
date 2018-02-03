@@ -1,6 +1,6 @@
 """!
 
-@brief Unit-test for double-layer oscillatory network 'syncsegm' for image segmentation based on Kuramoto model.
+@brief Unit-tests for double-layer oscillatory network 'syncsegm' for image segmentation based on Kuramoto model.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2018
@@ -30,44 +30,35 @@ import unittest;
 import matplotlib;
 matplotlib.use('Agg');
 
-from pyclustering.nnet.syncsegm import syncsegm, syncsegm_visualizer;
+from pyclustering.nnet.tests.syncsegm_templates import SyncsegmTestTemplates;
 
 from pyclustering.samples.definitions import IMAGE_SIMPLE_SAMPLES;
 
 
 class SyncsegmUnitTest(unittest.TestCase):
-    def templatesyncsegmSegmentation(self, image_source, radius_color, radius_object, noise_size, expected_color_segments, expected_object_segments, collect_dynamic):
-        result_testing = False;
-        
-        for _ in range(0, 10, 1):
-            algorithm = syncsegm(radius_color, radius_object, noise_size);
-            analyser = algorithm.process(image_source, collect_dynamic, 0.9995, 0.9995);
-            
-            color_segments = analyser.allocate_colors();
-            object_segments = analyser.allocate_objects(0.2);
-            
-            if ( (len(color_segments) != expected_color_segments) or (len(object_segments) != expected_object_segments) ):
-                continue;
-            
-            if (collect_dynamic is True):
-                syncsegm_visualizer.show_first_layer_dynamic(analyser);
-                syncsegm_visualizer.show_second_layer_dynamic(analyser);
-            
-            result_testing = True;
-            break;
-        
-        assert result_testing;
+    def testImageSegmentationSimple17(self):
+        SyncsegmTestTemplates.templateSyncsegmSegmentation(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE17, 225, 1, 0, 3, 3, False, False);
 
+    def testImageSegmentationSimple17OneObjectDetection(self):
+        SyncsegmTestTemplates.templateSyncsegmSegmentation(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE17, 225, 5, 0, 3, 3, False, False);
 
-    def testImageSegmentationSimple13(self):
-        self.templatesyncsegmSegmentation(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE13, 225, 5, 0, 2, 4, False);
+    def testImageSegmentationSimple17OneColorDetection(self):
+        SyncsegmTestTemplates.templateSyncsegmSegmentation(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE17, float('Inf'), 1, 0, 1, 1, False, False);
 
-    def testImageSegmentationSimple15(self):
-        self.templatesyncsegmSegmentation(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE15, 225, 6, 0, 2, 3, False);
+    def testImageSegmentationSimple18(self):
+        SyncsegmTestTemplates.templateSyncsegmSegmentation(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE18, 225, 1, 0, 2, 3, False, False);
 
-    def testImageSegmentationSimple16(self):
-        self.templatesyncsegmSegmentation(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE16, 225, 2, 0, 2, 3, True);
+    def testImageSegmentationSimple18OneObjectDetection(self):
+        SyncsegmTestTemplates.templateSyncsegmSegmentation(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE18, 225, 5, 0, 2, 2, False, False);
 
+    def testImageSegmentationSimple18OneColorDetection(self):
+        SyncsegmTestTemplates.templateSyncsegmSegmentation(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE18, float('Inf'), 2, 0, 1, 1, False, False);
+
+    def testVisualizeSimple17NoFailure(self):
+        SyncsegmTestTemplates.templateSyncsegmSegmentation(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE17, 225, 1, 0, 3, 3, False, False);
+
+    def testVisualizeSimple18NoFailure(self):
+        SyncsegmTestTemplates.templateSyncsegmSegmentation(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE18, 225, 1, 0, 2, 3, False, False);
 
 if __name__ == "__main__":
     unittest.main();

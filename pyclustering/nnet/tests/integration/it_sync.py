@@ -34,6 +34,8 @@ from pyclustering.nnet.tests.sync_templates import SyncTestTemplates;
 from pyclustering.nnet import conn_type, solve_type;
 from pyclustering.nnet.sync import sync_network;
 
+from pyclustering.core.tests import remove_library;
+
 
 class SyncIntegrationTest(unittest.TestCase):
     def testCreateNetworkByCore(self):
@@ -93,6 +95,11 @@ class SyncIntegrationTest(unittest.TestCase):
 
     def testVisualizerNoFailuresByCore(self):
         SyncTestTemplates.templateVisualizerNoFailures(5, 10, True);
+
+
+    @remove_library
+    def testProcessingWhenLibraryCoreCorrupted(self):
+        SyncTestTemplates.templateSimulateTest(10, 1, solve_type.FAST, ccore_flag = True);
 
 
 if __name__ == "__main__":

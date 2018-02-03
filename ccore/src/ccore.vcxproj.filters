@@ -196,6 +196,9 @@
     <ClCompile Include="interface\hhn_interface.cpp">
       <Filter>Source Files\interface</Filter>
     </ClCompile>
+    <ClCompile Include="interface\interface_property.cpp">
+      <Filter>Source Files\interface</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cluster\agglomerative.hpp">
@@ -418,6 +421,9 @@
       <Filter>Source Files\nnet</Filter>
     </ClInclude>
     <ClInclude Include="interface\hhn_interface.h">
+      <Filter>Source Files\interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\interface_property.h">
       <Filter>Source Files\interface</Filter>
     </ClInclude>
   </ItemGroup>

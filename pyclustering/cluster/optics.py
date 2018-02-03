@@ -28,13 +28,15 @@
 
 import math;
 
+import matplotlib.pyplot as plt;
+
 from pyclustering.container.kdtree import kdtree;
 
 from pyclustering.cluster.encoder import type_encoding;
 
 from pyclustering.utils.color import color as color_list;
 
-import matplotlib.pyplot as plt;
+from pyclustering.core.wrapper import ccore_library;
 
 import pyclustering.core.optics_wrapper as wrapper;
 
@@ -334,7 +336,7 @@ class optics:
     
     """
     
-    def __init__(self, sample, eps, minpts, amount_clusters = None, ccore = False):
+    def __init__(self, sample, eps, minpts, amount_clusters = None, ccore = True):
         """!
         @brief Constructor of clustering algorithm OPTICS.
         
@@ -359,6 +361,9 @@ class optics:
         
         self.__kdtree = None;
         self.__ccore = ccore;
+        
+        if (self.__ccore):
+            self.__ccore = ccore_library.workable();
 
 
     def process(self):

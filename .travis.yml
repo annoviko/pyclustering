@@ -52,6 +52,3 @@ jobs:
   - stage: build and test
     env: TITLE="Build documentation."
     script: ./ci/travis-ci.sh DOCUMENTATION
-  - stage: deploy
-    env: TITLE="Deploy CCORE"
-    script: ./ci/travis-ci.sh DEPLOY

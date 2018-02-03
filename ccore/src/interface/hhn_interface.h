@@ -105,8 +105,8 @@ extern "C" DECLARATION void hhn_simulate(const void * p_network_pointer,
  *
  * Returned package should deallocated by 'free_pyclustering_package'.
  *
- * param[in] p_output_dynamic: Pointer to HHN dynamic.
- * param[in] p_collection_index: Index of collection that should be returned.
+ * @param[in] p_output_dynamic: Pointer to HHN dynamic.
+ * @param[in] p_collection_index: Index of collection that should be returned.
  *
  * @return Pointer to pyclustering package where dynamic evolution of peripheral neurons is stored.
  *
@@ -124,8 +124,8 @@ extern "C" DECLARATION pyclustering_package * hhn_dynamic_get_peripheral_evoluti
  *
  * Returned package should deallocated by 'free_pyclustering_package'.
  *
- * param[in] p_output_dynamic: Pointer to HHN dynamic.
- * param[in] p_collection_index: Index of collection that should be returned.
+ * @param[in] p_output_dynamic: Pointer to HHN dynamic.
+ * @param[in] p_collection_index: Index of collection that should be returned.
  *
  */
 extern "C" DECLARATION pyclustering_package * hhn_dynamic_get_central_evolution(const void * p_output_dynamic, const std::size_t p_collection_index);
@@ -135,9 +135,31 @@ extern "C" DECLARATION pyclustering_package * hhn_dynamic_get_central_evolution(
  * @brief   Returns time points of simulation process that corresponds to amplitude.
  * @details Returned package should deallocated by 'free_pyclustering_package'.
  *
- * param[in] p_output_dynamic: Pointer to HHN dynamic.
+ * @param[in] p_output_dynamic: Pointer to HHN dynamic.
  *
  * @return Pyclustering package where simulation time points are stored.
  *
  */
 extern "C" DECLARATION pyclustering_package * hhn_dynamic_get_time(const void * p_output_dynamic);
+
+/**
+ *
+ * @brief   Write out output dynamic to specified file in human-readable text format.
+ *
+ * @param[in] p_output_dynamic: Pointer to HHN dynamic.
+ * @param[in] p_file: Output text file where output dynamic should be stored.
+ *
+ */
+extern "C" DECLARATION void hhn_dynamic_write(const void * p_output_dynamic, const char * p_filename);
+
+/**
+ *
+ * @brief   Read and construct HHN output dynamic from specified file.
+ * @details Returned HHN output dynamic should be freed by 'hhn_dynamic_destroy'.
+ *
+ * @param[in] p_file: File where output dynamic is stored.
+ *
+ * @return  HHN output dynamic with values from file.
+ *
+ */
+extern "C" DECLARATION void * hhn_dynamic_read(const char * p_filename);

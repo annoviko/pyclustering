@@ -19,6 +19,8 @@
 */
 
 
+#include <fstream>
+
 #include "gtest/gtest.h"
 
 #include "utenv_check.hpp"
@@ -88,7 +90,7 @@ static void template_collect_dynamic(const std::size_t p_num_osc,
     }
 
     for (auto & data_type : not_collected_types) {
-        ASSERT_EQ(0, output_dynamic.get_central_dynamic()->at(data_type).size());
+        ASSERT_EQ(0U, output_dynamic.get_central_dynamic()->at(data_type).size());
     }
 }
 
@@ -155,23 +157,35 @@ static void template_ensemble_generation(const std::size_t p_num_osc,
                                          const double p_tolerance,
                                          const hhn_stimulus & p_stimulus,
                                          basic_ensemble_data & p_expected_ensembles,
-                                         basic_ensemble & p_expected_dead_neurons) {
-    hnn_parameters parameters;
-    hhn_network network(p_num_osc, parameters);
+                                         basic_ensemble & p_expected_dead_neurons)
+{
+    const std::size_t attempts  = 3;
+    bool result                 = false;
 
-    hhn_dynamic output_dynamic;
-    output_dynamic.enable(hhn_dynamic::collect::MEMBRANE_POTENTIAL);
+    for (std::size_t i = 0; (i < attempts) && (result != true); i++) {
+        hnn_parameters parameters;
+        hhn_network network(p_num_osc, parameters);
 
-    /* simulate and check collected outputs */
-    network.simulate(p_steps, p_time, solve_type::RUNGE_KUTTA_4, p_stimulus, output_dynamic);
+        hhn_dynamic output_dynamic;
+        output_dynamic.enable(hhn_dynamic::collect::MEMBRANE_POTENTIAL);
 
-    basic_ensemble_data   ensembles;
-    basic_ensemble        dead_neurons;
+        /* simulate and check collected outputs */
+        network.simulate(p_steps, p_time, solve_type::RUNGE_KUTTA_4, p_stimulus, output_dynamic);
 
-    hhn_dynamic::evolution_dynamic & membrane_dynamic = output_dynamic.get_peripheral_dynamic(hhn_dynamic::collect::MEMBRANE_POTENTIAL);
-    dynamic_analyser(p_tolerance).allocate_sync_ensembles(membrane_dynamic, ensembles, dead_neurons);
+        basic_ensemble_data   ensembles;
+        basic_ensemble        dead_neurons;
 
-    ASSERT_SYNC_ENSEMBLES(ensembles, p_expected_ensembles, dead_neurons, p_expected_dead_neurons);
+        hhn_dynamic::evolution_dynamic & membrane_dynamic = output_dynamic.get_peripheral_dynamic(hhn_dynamic::collect::MEMBRANE_POTENTIAL);
+        dynamic_analyser(p_tolerance).allocate_sync_ensembles(membrane_dynamic, ensembles, dead_neurons);
+
+        if ( !COMPARE_SYNC_ENSEMBLES(ensembles, p_expected_ensembles, dead_neurons, p_expected_dead_neurons) ) {
+            continue;
+        }
+
+        result = true;
+    }
+
+    EXPECT_TRUE(result);
 }
 
 TEST(utest_hhn, one_without_stimulation) {
@@ -221,5 +235,75 @@ TEST(utest_hhn, two_sync_ensembles_02) {
     basic_ensemble      dead_neurons = { };
 
     template_ensemble_generation(6, 800, 200, 0.1, { 20, 20, 20, 50, 50, 50 }, expected_ensembles, dead_neurons);
+}
+
+
+static void template_write_read_dynamic(const std::size_t p_num_osc,
+                                        const std::size_t p_steps,
+                                        const std::size_t p_time,
+                                        const hhn_stimulus & p_stimulus,
+                                        const std::vector<hhn_dynamic::collect> & p_enables)
+{
+    hnn_parameters parameters;
+    hhn_network network(p_num_osc, parameters);
+
+    hhn_dynamic output_dynamic;
+    output_dynamic.disable_all();
+    output_dynamic.enable(p_enables);
+
+    /* simulate and check collected outputs */
+    network.simulate(p_steps, p_time, solve_type::RUNGE_KUTTA_4, p_stimulus, output_dynamic);
+
+    const std::string filename = "utest_dynamic_storage.txt";
+    std::ofstream output_file(filename);
+    output_file << output_dynamic;
+    output_file.close();
+
+    hhn_dynamic loaded_dynamic;
+    hhn_dynamic_reader(filename).read(loaded_dynamic);
+
+    ASSERT_EQ(output_dynamic.size_dynamic(), loaded_dynamic.size_dynamic());
+    ASSERT_EQ(output_dynamic.size_network(), loaded_dynamic.size_network());
+
+    std::stringstream text_dynamic_original;
+    std::stringstream text_dynamic_obtained;
+
+    text_dynamic_original << output_dynamic;
+    text_dynamic_obtained << loaded_dynamic;
+
+    ASSERT_EQ(text_dynamic_original.str(), text_dynamic_obtained.str());
+}
+
+TEST(utest_hhn, wr_one_oscillator) {
+    std::vector<hhn_dynamic::collect> enables = { hhn_dynamic::collect::MEMBRANE_POTENTIAL };
+    template_write_read_dynamic(1, 20, 1, { 40 }, enables);
+}
+
+TEST(utest_hhn, wr_two_oscillators) {
+    std::vector<hhn_dynamic::collect> enables = { hhn_dynamic::collect::MEMBRANE_POTENTIAL };
+    template_write_read_dynamic(2, 30, 1, { 40, 20 }, enables);
+}
+
+TEST(utest_hhn, wr_ten_oscillators) {
+    std::vector<hhn_dynamic::collect> enables = { hhn_dynamic::collect::MEMBRANE_POTENTIAL };
+    template_write_read_dynamic(10, 100, 10, { 10, 10, 10, 12, 12, 12, 20, 20, 20, 20 }, enables);
+}
+
+TEST(utest_hhn, wr_full_dynamic_collection) {
+    std::vector<hhn_dynamic::collect> enables = {
+            hhn_dynamic::collect::MEMBRANE_POTENTIAL,
+            hhn_dynamic::collect::ACTIVE_COND_SODIUM,
+            hhn_dynamic::collect::INACTIVE_COND_SODIUM,
+            hhn_dynamic::collect::ACTIVE_COND_POTASSIUM
+    };
+    template_write_read_dynamic(2, 50, 2, { 40, 20 }, enables);
+}
+
+TEST(utest_hhn, wr_specific_dynamic_collection) {
+    std::vector<hhn_dynamic::collect> enables = {
+            hhn_dynamic::collect::MEMBRANE_POTENTIAL,
+            hhn_dynamic::collect::ACTIVE_COND_POTASSIUM
+    };
+    template_write_read_dynamic(4, 50, 3, { 40, 20, 70, 120 }, enables);
 }
 

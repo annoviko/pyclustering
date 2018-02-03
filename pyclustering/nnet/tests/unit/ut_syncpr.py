@@ -37,24 +37,24 @@ from pyclustering.nnet.syncpr import syncpr;
 
 class SyncprUnitTest(unittest.TestCase):
     def testCreateTenOscillatorsNetwork(self):
-        net = syncpr(10, 0.1, 0.1);
+        net = syncpr(10, 0.1, 0.1, ccore=False);
         assert len(net) == 10;
 
 
     def testCreateHundredOscillatorsNetwork(self):
-        net = syncpr(100, 0.1, 0.1);
+        net = syncpr(100, 0.1, 0.1, ccore=False);
         assert len(net) == 100;
 
 
     def testOutputDynamicFastSolver(self):
-        SyncprTestTemplates.templateOutputDynamic(solve_type.FAST);
+        SyncprTestTemplates.templateOutputDynamic(solve_type.FAST, False);
 
 
     def testOutputDynamicRK4Solver(self):
-        SyncprTestTemplates.templateOutputDynamic(solve_type.RK4);
+        SyncprTestTemplates.templateOutputDynamic(solve_type.RK4, False);
 
     def testOutputDinamicLengthSimulation(self):
-        net = syncpr(5, 0.1, 0.1);
+        net = syncpr(5, 0.1, 0.1, ccore=False);
         output_dynamic = net.simulate(10, 10, [-1, 1, -1, 1, -1], solution = solve_type.FAST, collect_dynamic = True);
          
         assert len(output_dynamic) == 11; # 10 steps without initial values.
@@ -93,12 +93,12 @@ class SyncprUnitTest(unittest.TestCase):
     def testIncorrectSmallPatternSizeSimulation(self):
         pattern = [1, 1, 1, 1, 1, -1];
          
-        SyncprTestTemplates.templateIncorrectPatternForSimulation(pattern);
+        SyncprTestTemplates.templateIncorrectPatternForSimulation(pattern, False);
 
     def testIncorrectLargePatternSizeSimulation(self):
         pattern = [1, 1, 1, 1, 1, -1, -1, -1, -1, -1, 1];
          
-        SyncprTestTemplates.templateIncorrectPatternForSimulation(pattern);
+        SyncprTestTemplates.templateIncorrectPatternForSimulation(pattern, False);
 
 
     def testPatternVisualizerCollectDynamic(self):

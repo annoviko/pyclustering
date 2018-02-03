@@ -87,15 +87,15 @@ PyClustering Status
 ===================
 
 +-----------------+------------------------------+--------------------------------+
-| Branch          | master                       | 0.7.dev                        |
+| Branch          | master                       | 0.8.dev                        |
 +=================+==============================+================================+
-| Build (Linux)   | |Build Status Linux|         | |Build Status Linux 0.7|       |
+| Build (Linux)   | |Build Status Linux|         | |Build Status Linux 0.8|       |
 +-----------------+------------------------------+--------------------------------+
-| Build (Win)     | |Build Status Win|           | |Build Status Win 0.7|         |
+| Build (Win)     | |Build Status Win|           | |Build Status Win 0.8|         |
 +-----------------+------------------------------+--------------------------------+
-| Code Coverage   | |Coverage Status|            | |Coverage Status 0.7|          |
+| Code Coverage   | |Coverage Status|            | |Coverage Status 0.8|          |
 +-----------------+------------------------------+--------------------------------+
-| Code Quality    | |Code Quality|               | |Code Quality 0.7|             |
+| Code Quality    | |Code Quality|               | |Code Quality 0.8|             |
 +-----------------+------------------------------+--------------------------------+
 
 
@@ -329,11 +329,11 @@ Code Examples:
    :target: https://doi.org/10.5281/zenodo.1035022
 .. |PyPi| image:: https://badge.fury.io/py/pyclustering.svg
    :target: https://badge.fury.io/py/pyclustering
-.. |Build Status Linux 0.7| image:: https://travis-ci.org/annoviko/pyclustering.svg?branch=0.7.dev
+.. |Build Status Linux 0.8| image:: https://travis-ci.org/annoviko/pyclustering.svg?branch=0.8.dev
    :target: https://travis-ci.org/annoviko/pyclustering
-.. |Build Status Win 0.7| image:: https://ci.appveyor.com/api/projects/status/4uly2exfp49emwn0/branch/0.7.dev?svg=true
-   :target: https://ci.appveyor.com/project/annoviko/pyclustering/branch/0.7.dev
-.. |Coverage Status 0.7| image:: https://coveralls.io/repos/github/annoviko/pyclustering/badge.svg?branch=0.7.dev&ts=1
-   :target: https://coveralls.io/github/annoviko/pyclustering?branch=0.7.dev
-.. |Code Quality 0.7| image:: https://scrutinizer-ci.com/g/annoviko/pyclustering/badges/quality-score.png?b=0.7.dev
-   :target: https://scrutinizer-ci.com/g/annoviko/pyclustering/?branch=0.7.dev
+.. |Build Status Win 0.8| image:: https://ci.appveyor.com/api/projects/status/4uly2exfp49emwn0/branch/0.8.dev?svg=true
+   :target: https://ci.appveyor.com/project/annoviko/pyclustering/branch/0.8.dev
+.. |Coverage Status 0.8| image:: https://coveralls.io/repos/github/annoviko/pyclustering/badge.svg?branch=0.8.dev&ts=1
+   :target: https://coveralls.io/github/annoviko/pyclustering?branch=0.8.dev
+.. |Code Quality 0.8| image:: https://scrutinizer-ci.com/g/annoviko/pyclustering/badges/quality-score.png?b=0.8.dev
+   :target: https://scrutinizer-ci.com/g/annoviko/pyclustering/?branch=0.8.dev

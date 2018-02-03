@@ -32,6 +32,8 @@ from pyclustering.cluster.encoder import type_encoding;
 
 from pyclustering.utils import euclidean_distance_sqrt;
 
+from pyclustering.core.wrapper import ccore_library
+
 import pyclustering.core.agglomerative_wrapper as wrapper;
 
 
@@ -102,7 +104,7 @@ class agglomerative:
     
     """
     
-    def __init__(self, data, number_clusters, link = None, ccore = False):
+    def __init__(self, data, number_clusters, link = None, ccore = True):
         """!
         @brief Constructor of agglomerative hierarchical algorithm.
         
@@ -123,6 +125,8 @@ class agglomerative:
         
         self.__clusters = [];
         self.__ccore = ccore;
+        if (self.__ccore):
+            self.__ccore = ccore_library.workable();
         
         if (self.__similarity == type_link.CENTROID_LINK):
             self.__centers = self.__pointer_data.copy();    # used in case of usage of centroid links

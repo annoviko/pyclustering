@@ -27,6 +27,8 @@
 
 from scipy.integrate import odeint;
 
+from pyclustering.core.wrapper import ccore_library;
+
 import pyclustering.core.hhn_wrapper as wrapper;
 
 from pyclustering.nnet import *;
@@ -70,7 +72,7 @@ class hhn_parameters:
         ## Reverse potential of potassium current [mV].
         self.vK      = -77.0;
         
-        ## Reverse potantial of leakage current [mV].
+        ## Reverse potential of leakage current [mV].
         self.vL      = -54.4;
         
         ## Rest potential [mV].
@@ -169,10 +171,10 @@ class hhn_network(network):
     @brief Oscillatory Neural Network with central element based on Hodgkin-Huxley neuron model. Interaction between oscillators is performed via
            central element (no connection between oscillators that are called as peripheral). Peripheral oscillators receive external stimulus.
            Central element consist of two oscillators: the first is used for synchronization some ensemble of oscillators and the second controls
-           synchronization of the first cental oscillator with various ensembles.
+           synchronization of the first central oscillator with various ensembles.
     
     Usage example where oscillatory network with 6 oscillators is used for simulation. The first two oscillators
-    has the same stimulus, as well as the third and fourth oscillators and the the last two. Thus three synchronous
+    have the same stimulus, as well as the third and fourth oscillators and the last two. Thus three synchronous
     ensembles are expected after simulation.
     @code
         # change period of time when high strength value of synaptic connection exists from CN2 to PN.
@@ -200,14 +202,14 @@ class hhn_network(network):
         net = hhn_network(6, [0, 0, 25, 25, 47, 47], params, ccore=True);
     @endcode
 
-    There is visualized results of simulation where three synchronous ensembles of oscillators can be observed. The
-    first and the second forms the first ensemble, the third and the fourth forms the second ensemble and the last
-    two oscillators forms the third ensemble.
+    There is visualized result of simulation where three synchronous ensembles of oscillators can be observed. The
+    first and the second oscillators form the first ensemble, the third and the fourth form the second ensemble and
+    the last two oscillators form the third ensemble.
     @image html hhn_three_ensembles.png
     
     """
     
-    def __init__(self, num_osc, stimulus = None, parameters = None, type_conn = None, type_conn_represent = conn_represent.MATRIX, ccore = False):
+    def __init__(self, num_osc, stimulus = None, parameters = None, type_conn = None, type_conn_represent = conn_represent.MATRIX, ccore = True):
         """!
         @brief Constructor of oscillatory network based on Hodgkin-Huxley neuron model.
         
@@ -235,7 +237,7 @@ class hhn_network(network):
         self.__ccore_hhn_pointer = None;
         self.__ccore_hhn_dynamic_pointer = None;
         
-        if (ccore is not False):
+        if ( (ccore is True) and ccore_library.workable() ):
             self.__ccore_hhn_pointer = wrapper.hhn_create(num_osc, self._params);
         else:
             self._membrane_dynamic_pointer = None;        # final result is stored here.

@@ -35,6 +35,8 @@ from math import log;
 
 from pyclustering.cluster.encoder import type_encoding;
 
+from pyclustering.core.wrapper import ccore_library;
+
 import pyclustering.core.xmeans_wrapper as wrapper;
 
 from pyclustering.utils import euclidean_distance_sqrt, euclidean_distance;
@@ -109,7 +111,7 @@ class xmeans:
     
     """
     
-    def __init__(self, data, initial_centers = None, kmax = 20, tolerance = 0.025, criterion = splitting_type.BAYESIAN_INFORMATION_CRITERION, ccore = False):
+    def __init__(self, data, initial_centers = None, kmax = 20, tolerance = 0.025, criterion = splitting_type.BAYESIAN_INFORMATION_CRITERION, ccore = True):
         """!
         @brief Constructor of clustering algorithm X-Means.
         
@@ -136,6 +138,8 @@ class xmeans:
         self.__criterion = criterion;
          
         self.__ccore = ccore;
+        if (self.__ccore):
+            self.__ccore = ccore_library.workable();
 
 
     def process(self):
@@ -404,12 +408,19 @@ class xmeans:
         if (N - K > 0):
             sigma_sqrt /= (N - K);
             p = (K - 1) + dimension * K + 1;
+
+            # in case of the same points, sigma_sqrt can be zero (issue: #407)
+            sigma_multiplier = 0.0;
+            if (sigma_sqrt <= 0.0):
+                sigma_multiplier = float('-inf');
+            else:
+                sigma_multiplier = dimension * 0.5 * log(sigma_sqrt);
             
             # splitting criterion    
             for index_cluster in range(0, len(clusters), 1):
                 n = len(clusters[index_cluster]);
-                
-                L = n * log(n) - n * log(N) - n * 0.5 * log(2.0 * numpy.pi) - n * dimension * 0.5 * log(sigma_sqrt) - (n - K) * 0.5;
+
+                L = n * log(n) - n * log(N) - n * 0.5 * log(2.0 * numpy.pi) - n * sigma_multiplier - (n - K) * 0.5;
                 
                 # BIC calculation
                 scores[index_cluster] = L - p * 0.5 * log(N);

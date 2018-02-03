@@ -26,8 +26,10 @@
 
 import unittest;
 
+import numpy;
 
 from pyclustering.core.pyclustering_package import package_builder, package_extractor;
+
 from ctypes import c_ulong, c_size_t, c_double, c_uint, c_float;
 
 
@@ -36,7 +38,11 @@ class Test(unittest.TestCase):
         package_pointer = package_builder(dataset, c_type_data).create();
         unpacked_package = package_extractor(package_pointer).extract();
 
-        assert self.compare_containers(dataset, unpacked_package);
+        packing_data = dataset;
+        if (isinstance(packing_data, numpy.matrix)):
+            packing_data = dataset.tolist();
+
+        assert self.compare_containers(packing_data, unpacked_package);
 
 
     def compare_containers(self, container1, container2):
@@ -125,6 +131,15 @@ class Test(unittest.TestCase):
 
     def testTupleEmpty(self):
         self.templatePackUnpack([ (), (), () ]);
+
+    def testNumpyMatrixOneColumn(self):
+        self.templatePackUnpack(numpy.matrix([[1.0], [2.0], [3.0]]), c_double);
+
+    def testNumpyMatrixTwoColumns(self):
+        self.templatePackUnpack(numpy.matrix([[1.0, 1.0], [2.0, 2.0]]), c_double);
+
+    def testNumpyMatrixThreeColumns(self):
+        self.templatePackUnpack(numpy.matrix([[1.1, 2.2, 3.3], [2.2, 3.3, 4.4], [3.3, 4.4, 5.5]]), c_double);
 
 
 if __name__ == "__main__":

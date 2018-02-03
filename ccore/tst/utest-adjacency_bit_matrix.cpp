@@ -34,7 +34,7 @@ using namespace ccore::container;
 
 TEST(utest_adjacency_bit_matrix, create_delete) {
     adjacency_bit_matrix * matrix = new adjacency_bit_matrix(10);
-    ASSERT_EQ(10, matrix->size());
+    ASSERT_EQ(10U, matrix->size());
 
     for (size_t i = 0; i < matrix->size(); i++) {
         for (size_t j = i + 1; j < matrix->size(); j++) {
@@ -48,16 +48,16 @@ TEST(utest_adjacency_bit_matrix, create_delete) {
 
 TEST(utest_adjacency_bit_matrix, null_size) {
     adjacency_bit_matrix matrix(0);
-    ASSERT_EQ(0, matrix.size());
+    ASSERT_EQ(0U, matrix.size());
 }
 
 
 TEST(utest_adjacency_bit_matrix, create_clear) {
     adjacency_bit_matrix matrix(10);
-    ASSERT_EQ(10, matrix.size());
+    ASSERT_EQ(10U, matrix.size());
 
     matrix.clear();
-    ASSERT_EQ(0, matrix.size());
+    ASSERT_EQ(0U, matrix.size());
 }
 
 
@@ -65,8 +65,8 @@ TEST(utest_adjacency_bit_matrix, copy_matrix) {
     adjacency_bit_matrix matrix_first(20);
     adjacency_bit_matrix matrix_second(10);
 
-    ASSERT_EQ(20, matrix_first.size());
-    ASSERT_EQ(10, matrix_second.size());
+    ASSERT_EQ(20U, matrix_first.size());
+    ASSERT_EQ(10U, matrix_second.size());
 
     matrix_first.set_connection(1, 2);
     matrix_first.set_connection(2, 3);
@@ -76,8 +76,8 @@ TEST(utest_adjacency_bit_matrix, copy_matrix) {
 
     matrix_first = matrix_second;
 
-    ASSERT_EQ(10, matrix_first.size());
-    ASSERT_EQ(10, matrix_second.size());
+    ASSERT_EQ(10U, matrix_first.size());
+    ASSERT_EQ(10U, matrix_second.size());
     ASSERT_FALSE(matrix_first.has_connection(1, 2));
     ASSERT_FALSE(matrix_first.has_connection(2, 3));
     ASSERT_TRUE(matrix_first.has_connection(2, 1));
@@ -90,8 +90,8 @@ TEST(utest_adjacency_bit_matrix, move_matrix) {
     adjacency_bit_matrix matrix_second(40);
 
     ASSERT_TRUE(matrix_first.size() == matrix_second.size());
-    ASSERT_EQ(40, matrix_first.size());
-    ASSERT_EQ(40, matrix_second.size());
+    ASSERT_EQ(40U, matrix_first.size());
+    ASSERT_EQ(40U, matrix_second.size());
 
     for (size_t i = 0; i < matrix_first.size(); i++) {
         for (size_t j = i + 1; j < matrix_first.size(); j++) {
@@ -110,8 +110,8 @@ TEST(utest_adjacency_bit_matrix, move_matrix) {
 
     matrix_first = std::move(matrix_second);
 
-    ASSERT_EQ(40, matrix_first.size());
-    ASSERT_EQ(0, matrix_second.size());
+    ASSERT_EQ(40U, matrix_first.size());
+    ASSERT_EQ(0U, matrix_second.size());
 
     for (size_t i = 0; i < matrix_first.size(); i++) {
         for (size_t j = i + 1; j < matrix_first.size(); j++) {

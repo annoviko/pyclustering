@@ -27,10 +27,11 @@
 import unittest;
 
 from pyclustering.cluster.tests.kmeans_templates import KmeansTestTemplates;
-
 from pyclustering.cluster.kmeans import kmeans;
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES;
+
+from pyclustering.core.tests import remove_library;
 
 
 class KmeansIntegrationTest(unittest.TestCase):
@@ -88,6 +89,11 @@ class KmeansIntegrationTest(unittest.TestCase):
         kmeans_instance = kmeans([ [1], [2], [3], [20], [21], [22] ], [ [2], [21] ], 0.025, True);
         kmeans_instance.process();
         assert len(kmeans_instance.get_clusters()) == 2;
+
+
+    @remove_library
+    def testProcessingWhenLibraryCoreCorrupted(self):
+        KmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], True);
 
 
 if __name__ == "__main__":

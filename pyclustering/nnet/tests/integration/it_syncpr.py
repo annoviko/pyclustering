@@ -34,6 +34,8 @@ from pyclustering.nnet.tests.syncpr_templates import SyncprTestTemplates;
 from pyclustering.nnet import solve_type;
 from pyclustering.nnet.syncpr import syncpr;
 
+from pyclustering.core.tests import remove_library;
+
 
 class SyncprIntegrationTest(unittest.TestCase):
     def testCreateTenOscillatorsNetworkByCore(self):
@@ -104,6 +106,11 @@ class SyncprIntegrationTest(unittest.TestCase):
 
     def testLocalSyncOrderByCore(self):
         SyncprTestTemplates.templateLocalSyncOrder(True);
+
+
+    @remove_library
+    def testProcessingWhenLibraryCoreCorrupted(self):
+        SyncprTestTemplates.templateOutputDynamic(solve_type.FAST, True);
 
 
 if __name__ == "__main__":

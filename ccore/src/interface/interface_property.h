@@ -18,21 +18,17 @@
 *
 */
 
-#include "gtest/gtest.h"
-
-#include "interface/dbscan_interface.h"
-#include "interface/pyclustering_package.hpp"
-
-#include "utenv_utils.hpp"
-
-#include <memory>
+#pragma once
 
 
-TEST(utest_interface_dbscan, dbscan_algorithm) {
-    std::shared_ptr<pyclustering_package> sample = pack(dataset({ { 1.0, 1.0 }, { 1.1, 1.0 }, { 1.2, 1.4 }, { 10.0, 10.3 }, { 10.1, 10.2 }, { 10.2, 10.4 } }));
+#include "definitions.hpp"
 
-    pyclustering_package * result = dbscan_algorithm(sample.get(), 4, 2);
-    ASSERT_EQ(3U, result->size); /* allocated clustes + noise */
 
-    delete result;
-}
+/**
+ *
+ * @brief   Returns text description of the library
+ *
+ * @returns Returns const char pointer to text library description.
+ *
+ */
+extern "C" DECLARATION void * get_interface_description(void);

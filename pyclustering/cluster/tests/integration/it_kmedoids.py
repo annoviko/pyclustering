@@ -36,6 +36,8 @@ from pyclustering.cluster.kmedoids import kmedoids;
 from pyclustering.samples.definitions import SIMPLE_SAMPLES;
 from pyclustering.utils import read_sample;
 
+from pyclustering.core.tests import remove_library;
+
 
 class KmedoidsIntegrationTest(unittest.TestCase):
     def testClusterAllocationSampleSimple1ByCore(self):
@@ -100,6 +102,11 @@ class KmedoidsIntegrationTest(unittest.TestCase):
         KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 3, None, True);
         KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 2, None, True);
         KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 1, None, True);
+
+
+    @remove_library
+    def testProcessingWhenLibraryCoreCorrupted(self):
+        KmedoidsTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], True);
 
 
 if __name__ == "__main__":

@@ -22,14 +22,17 @@
 #pragma once
 
 
-#include "utils/metric.hpp"
-#include "utils/random.hpp"
-
+#include <fstream>
 #include <memory>
+#include <ostream>
+#include <set>
+#include <sstream>
 #include <tuple>
 #include <vector>
-#include <set>
 #include <unordered_map>
+
+#include "utils/metric.hpp"
+#include "utils/random.hpp"
 
 #include "differential/differ_state.hpp"
 
@@ -79,7 +82,7 @@ public:
 
 
 
-struct central_element {
+struct basic_neuron_state {
 public:
     double m_membrane_potential      = 0.0;     /* Membrane potential of cenral neuron (V)                */
     double m_active_cond_sodium      = 0.0;     /* Activation conductance of the sodium channel (m)       */
@@ -93,21 +96,15 @@ public:
 };
 
 
+struct central_element : public basic_neuron_state { };
 
-struct hhn_oscillator {
-    double m_membrane_potential       = 0.0;
-    double m_active_cond_sodium       = 0.0;
-    double m_inactive_cond_sodium     = 0.0;
-    double m_active_cond_potassium    = 0.0;
+
+
+struct hhn_oscillator : public basic_neuron_state {
     double m_link_activation_time     = 0.0;
     double m_link_pulse_counter       = 0.0;
     double m_link_deactivation_time   = 0.0;
     double m_link_weight3             = 0.0;
-
-    bool m_pulse_generation                     = false;
-    std::vector<double> m_pulse_generation_time = { };
-
-    double m_Iext   = 0.0;
 };
 
 
@@ -130,25 +127,29 @@ public:
 
 
 public:
+    using ptr                 = std::shared_ptr<hhn_dynamic>;
+
     using value_dynamic       = std::vector<double>;
     using value_dynamic_ptr   = std::shared_ptr<value_dynamic>;
 
     using evolution_dynamic   = std::vector<value_dynamic>;
 
     using network_collector   = std::unordered_map<hhn_dynamic::collect, bool, hhn_dynamic::collect_hash>;
-    
+
     using network_dynamic     = std::unordered_map<hhn_dynamic::collect, evolution_dynamic, hhn_dynamic::collect_hash>;
     using network_dynamic_ptr = std::shared_ptr<network_dynamic>;
 
 
 private:
-    network_collector   m_enable = 
+    network_collector   m_enable =
         { { collect::MEMBRANE_POTENTIAL,    true  },
           { collect::ACTIVE_COND_SODIUM,    false },
           { collect::INACTIVE_COND_SODIUM,  false },
           { collect::ACTIVE_COND_POTASSIUM, false } };
 
     std::size_t         m_amount_collections  = 1;
+    std::size_t         m_size_dynamic        = 0;
+    std::size_t         m_size_network        = 0;
 
     network_dynamic_ptr m_peripheral_dynamic  = std::make_shared<network_dynamic>();
     network_dynamic_ptr m_central_dynamic     = std::make_shared<network_dynamic>();
@@ -162,11 +163,21 @@ public:
     ~hhn_dynamic(void) = default;
 
 public:
+    std::size_t size_dynamic(void) const;
+
+    std::size_t size_network(void) const;
+
     void enable(const hhn_dynamic::collect p_state);
+
+    template <class ContainerType>
+    void enable(const ContainerType & p_types);
 
     void enable_all(void);
 
     void disable(const hhn_dynamic::collect p_state);
+
+    template <class ContainerType>
+    void disable(const ContainerType & p_types);
 
     void disable_all(void);
 
@@ -188,6 +199,10 @@ public:
 
     evolution_dynamic & get_central_dynamic(const hhn_dynamic::collect & p_type);
 
+    double get_peripheral_value(const std::size_t p_iteration, const std::size_t p_index, const hhn_dynamic::collect p_type) const;
+
+    double get_central_value(const std::size_t p_iteration, const std::size_t p_index, const hhn_dynamic::collect p_type) const;
+
 
 private:
     void initialize_collection(network_dynamic & p_dynamic);
@@ -205,10 +220,70 @@ private:
     void store_inactive_cond_sodium(const std::vector<hhn_oscillator> & p_peripheral, const std::vector<central_element> & p_central);
 
     void store_active_cond_potassium(const std::vector<hhn_oscillator> & p_peripheral, const std::vector<central_element> & p_central);
+
+public:
+    bool operator==(const hhn_dynamic & p_other) const;
+
+    friend std::ostream& operator<<(std::ostream & p_stream, const hhn_dynamic & p_dynamic);
 };
 
 
+template <class ContainerType>
+void hhn_dynamic::enable(const ContainerType & p_types) {
+    for (auto & type : p_types) {
+        enable(type);
+    }
+}
+
+
+template <class ContainerType>
+void hhn_dynamic::disable(const ContainerType & p_types) {
+    for (auto & type : p_types) {
+        disable(type);
+    }
+}
+
+
+
+class hhn_dynamic_reader {
+private:
+    std::string     m_filename;
+
+    hhn_dynamic *                       m_dynamic       = nullptr;
+    std::ifstream                       m_file_stream;
+    std::vector<hhn_dynamic::collect>   m_order         = { };
+    std::size_t                         m_size_network  = 0;
+
+public:
+    hhn_dynamic_reader(void) = default;
+
+    hhn_dynamic_reader(const std::string & p_filename);
+
+    ~hhn_dynamic_reader(void);
+
+public:
+    void read(hhn_dynamic & p_dynamic);
+
+private:
+    void parse_size_header(void);
+
+    void extract_size_header(const std::string & p_line, std::size_t & p_size_dynamic, std::size_t & p_size_network);
+
+    void parse_enable_header(void);
+
+    void extract_enable_header(const std::string & p_line, std::vector<hhn_dynamic::collect> & p_collect);
+
+    void parse_dynamic(void);
+
+    void extract_dynamic(const std::string & p_line, double & p_time, std::vector<hhn_oscillator> & p_peripheral, std::vector<central_element> & p_central);
+
+    void extract_state(std::istringstream & p_stream, basic_neuron_state & p_state);
+};
+
+
+
 using hhn_stimulus        = std::vector<double>;
+
 
 
 class hhn_network {

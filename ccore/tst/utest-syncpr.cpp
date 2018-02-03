@@ -61,7 +61,7 @@ static void template_simulation_static(const unsigned int steps,
         ASSERT_TRUE(output_dynamic.size() > steps);
     }
     else {
-        ASSERT_EQ(1, output_dynamic.size());
+        ASSERT_EQ(1U, output_dynamic.size());
     }
 }
 
@@ -106,7 +106,7 @@ static void template_simulation_dynamic(const solve_type solver,
         ASSERT_TRUE(output_dynamic.size() > 1);
     }
     else {
-        ASSERT_EQ(1, output_dynamic.size());
+        ASSERT_EQ(1U, output_dynamic.size());
     }
 }
 
@@ -162,7 +162,7 @@ TEST(utest_syncpr, train_and_recognize_pattern) {
         ensemble_data<sync_ensemble> sync_ensembles;
         output_dynamic.allocate_sync_ensembles(0.1, sync_ensembles);
 
-        ASSERT_EQ(2, sync_ensembles.size());
+        ASSERT_EQ(2U, sync_ensembles.size());
 
         for (sync_ensemble & ensemble : sync_ensembles) {
             std::sort(ensemble.begin(), ensemble.end());

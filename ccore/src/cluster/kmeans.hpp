@@ -21,16 +21,21 @@
 #pragma once
 
 
+#include <mutex>
 #include <vector>
 
 #include "cluster/cluster_algorithm.hpp"
 #include "cluster/kmeans_data.hpp"
 
+#include "parallel/thread_pool.hpp"
+
+
+using namespace ccore::parallel;
+
 
 namespace ccore {
 
 namespace clst {
-
 
 /**
 *
@@ -39,14 +44,29 @@ namespace clst {
 *
 */
 class kmeans : public cluster_algorithm {
+public:
+    const static double             DEFAULT_TOLERANCE;
+
+    const static std::size_t        DEFAULT_DATA_SIZE_PARALLEL_PROCESSING;
+
+    const static std::size_t        DEFAULT_MAX_THREAD_POOL_SIZE;
+
 private:
-    double          m_tolerance;
+    double            m_tolerance             = DEFAULT_TOLERANCE;
 
-    dataset         m_initial_centers;
+    dataset           m_initial_centers       = { };
 
-    kmeans_data     * m_ptr_result;   /* temporary pointer to output result */
+    kmeans_data       * m_ptr_result          = nullptr;      /* temporary pointer to output result */
 
-    const dataset   * m_ptr_data;     /* used only during processing */
+    const dataset     * m_ptr_data            = nullptr;      /* used only during processing */
+
+    std::size_t       m_parallel_trigger      = DEFAULT_DATA_SIZE_PARALLEL_PROCESSING;
+
+    bool              m_parallel_processing   = false;
+
+    std::mutex        m_mutex;
+
+    thread_pool::ptr  m_pool                  = nullptr;
 
 public:
     /**
@@ -54,7 +74,7 @@ public:
     * @brief    Default constructor of clustering algorithm.
     *
     */
-    kmeans(void);
+    kmeans(void) = default;
 
     /**
     *
@@ -86,10 +106,32 @@ public:
     */
     virtual void process(const dataset & data, cluster_data & output_result) override;
 
+    /**
+    *
+    * @brief    Set custom trigger (that is defined by data size) for parallel processing,
+    *            by default this value is defined by static constant DEFAULT_DATA_SIZE_PARALLEL_PROCESSING.
+    *
+    * @param[in]  p_data_size: data size that triggers parallel processing.
+    *
+    */
+    void set_parallel_processing_trigger(const std::size_t p_data_size);
+
 private:
     void update_clusters(const dataset & centers, cluster_sequence & clusters);
 
     double update_centers(const cluster_sequence & clusters, dataset & centers);
+
+    /**
+    *
+    * @brief    Calculate new center for specified cluster.
+    *
+    * @param[in] p_cluster: cluster whose center should be calculated.
+    * @param[in|out] p_center: cluster's center that should calculated.
+    *
+    * @return Difference between old and new cluster's center.
+    *
+    */
+    double update_center(const cluster & p_cluster, point & p_center);
 
     /**
     *

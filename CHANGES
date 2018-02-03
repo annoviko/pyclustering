@@ -5,6 +5,15 @@ CHANGE NOTES FOR 0.8.0 (STARTED Oct 23, 2017)
 ------------------------------------------------------------------------
 
 GENERAL CHANGES:
+- C/C++ implementation is used by default to increase performance.
+  See: https://github.com/annoviko/pyclustering/issues/393
+
+- Ignore 'ccore' flag to use C/C++ if platform is not supported (pyclustering.core).
+  See: https://github.com/annoviko/pyclustering/issues/393
+
+- Optimization of python implementation of the K-Means algorithm using numpy (pyclustering.cluster.kmeans).
+  See: https://github.com/annoviko/pyclustering/issues/403
+
 - Implemented dynamic visualizer for oscillatory networks (pyclustering.nnet.dynamic_visualizer).
   See: no reference.
 
@@ -43,6 +52,12 @@ GENERAL CHANGES:
 
 
 CORRECTED MAJOR BUGS:
+- Incorrect segmentation by Python version of syncsegm - oscillatory network based on sync for image segmentation (pyclustering.nnet.syncsegm).
+  See: https://github.com/annoviko/pyclustering/issues/409
+
+- Zero value of sigma under logarithm function in Python version of pyclustering X-Means algorithm (pyclustering.cluster.xmeans).
+  See: https://github.com/annoviko/pyclustering/issues/407
+
 - Amplitude threshold is ignored during synchronous ensembles allocation for amplitude output dynamic 'allocate_sync_ensembles' - affect HNN, LEGION (pyclustering.utils).
   See: no reference.
 

@@ -240,19 +240,26 @@ class dynamic_visualizer:
         self.__update_canvas_xlim(description.time, description.separate);
 
 
-    def show(self):
+    def show(self, axis=None, display=True):
         """!
         @brief Draw and show output dynamics.
 
+        @param[in] axis (axis): If is not 'None' then user specified axis is used to display output dynamic.
+        @param[in] display (bool): Whether output dynamic should be displayed or not, if not, then user
+                    should call 'plt.show()' by himself.
+
         """
-        (_, axis) = plt.subplots(self.__size, 1);
+        
+        if (not axis):
+            (_, axis) = plt.subplots(self.__size, 1);
         
         self.__format_canvases(axis);
         
         for dynamic in self.__dynamic_storage:
             self.__display_dynamic(axis, dynamic);
         
-        plt.show();
+        if (display):
+            plt.show();
 
 
     def __display_dynamic(self, axis, dyn_descr):

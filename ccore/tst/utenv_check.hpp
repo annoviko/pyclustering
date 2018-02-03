@@ -52,20 +52,24 @@ void ASSERT_CLUSTER_SIZES(const dataset & p_data,
 
 
 template <typename EnsemblesType>
-void ASSERT_SYNC_ENSEMBLES(EnsemblesType & p_ensembles,
-                           EnsemblesType & p_expected_ensembles,
-                           typename EnsemblesType::value_type & p_dead,
-                           typename EnsemblesType::value_type & p_expected_dead)
+bool COMPARE_SYNC_ENSEMBLES(EnsemblesType & p_ensembles,
+                            EnsemblesType & p_expected_ensembles,
+                            typename EnsemblesType::value_type & p_dead,
+                            typename EnsemblesType::value_type & p_expected_dead)
 {
     /* compare dead neurons */
     std::sort(p_dead.begin(), p_dead.end());
     std::sort(p_expected_dead.begin(), p_expected_dead.end());
 
-    ASSERT_EQ(p_expected_dead, p_dead);
+    if (p_expected_dead != p_dead) {
+        return false;
+    }
 
 
     /* compare ensembles */
-    ASSERT_EQ(p_expected_ensembles.size(), p_ensembles.size());
+    if (p_expected_ensembles.size() != p_ensembles.size()) {
+        return false;
+    }
 
     /* sort indexes in ensembles */
     for (auto & ensemble : p_ensembles) {
@@ -86,6 +90,20 @@ void ASSERT_SYNC_ENSEMBLES(EnsemblesType & p_ensembles,
             }
         }
 
-        ASSERT_TRUE(ensemble_found);
+        if (!ensemble_found) {
+            return false;
+        }
     }
+
+    return true;
+}
+
+
+template <typename EnsemblesType>
+void ASSERT_SYNC_ENSEMBLES(EnsemblesType & p_ensembles,
+                           EnsemblesType & p_expected_ensembles,
+                           typename EnsemblesType::value_type & p_dead,
+                           typename EnsemblesType::value_type & p_expected_dead)
+{
+    ASSERT_TRUE(COMPARE_SYNC_ENSEMBLES(p_ensembles, p_expected_ensembles, p_dead, p_expected_dead));
 }

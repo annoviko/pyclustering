@@ -41,6 +41,16 @@ hhn_dynamic::hhn_dynamic(void) {
 }
 
 
+std::size_t hhn_dynamic::size_dynamic(void) const {
+    return m_size_dynamic;
+}
+
+
+std::size_t hhn_dynamic::size_network(void) const {
+    return m_size_network;
+}
+
+
 void hhn_dynamic::enable(const hhn_dynamic::collect p_state) {
     if (m_enable[p_state] != true) {
         m_enable[p_state] = true;
@@ -107,6 +117,17 @@ void hhn_dynamic::store(const double p_time, const std::vector<hhn_oscillator> &
     }
 
     m_time->push_back(p_time);
+
+    if (m_size_network != 0) {
+        if (m_size_network != p_peripheral.size()) {
+            throw std::invalid_argument("Amount of neurons on each iteration should be the same.");
+        }
+    }
+    else {
+        m_size_network = p_peripheral.size();
+    }
+
+    m_size_dynamic++;
 }
 
 
@@ -151,6 +172,16 @@ hhn_dynamic::network_dynamic_ptr hhn_dynamic::get_central_dynamic(void) const {
 
 hhn_dynamic::value_dynamic_ptr hhn_dynamic::get_time(void) const {
     return m_time;
+}
+
+
+double hhn_dynamic::get_peripheral_value(const std::size_t p_iteration, const std::size_t p_index, const hhn_dynamic::collect p_type) const {
+    return (*m_peripheral_dynamic)[p_type][p_iteration][p_index];
+}
+
+
+double hhn_dynamic::get_central_value(const std::size_t p_iteration, const std::size_t p_index, const hhn_dynamic::collect p_type) const {
+    return (*m_central_dynamic)[p_type][p_iteration][p_index];
 }
 
 
@@ -259,6 +290,227 @@ void hhn_dynamic::store_active_cond_potassium(const std::vector<hhn_oscillator> 
     m_central_dynamic->at(collect::ACTIVE_COND_POTASSIUM).emplace_back(std::move(central_active_potassium));
 }
 
+
+bool hhn_dynamic::operator==(const hhn_dynamic & p_other) const {
+    if ( (m_amount_collections == p_other.m_amount_collections) &&
+         (*m_peripheral_dynamic == *(p_other.m_peripheral_dynamic)) &&
+         (*m_central_dynamic == *(p_other.m_central_dynamic)) &&
+         (*m_time == *(p_other.m_time)) )
+    {
+        return true;
+    }
+
+    return false;
+}
+
+
+std::ostream& operator<<(std::ostream & p_stream, const hhn_dynamic & p_dynamic) {
+    const hhn_dynamic::network_dynamic_ptr peripheral = p_dynamic.get_peripheral_dynamic();
+    const hhn_dynamic::network_dynamic_ptr central = p_dynamic.get_central_dynamic();
+
+    std::set<hhn_dynamic::collect> enabled;
+    p_dynamic.get_enabled(enabled);
+
+    std::vector<hhn_dynamic::collect> order_types = {
+            hhn_dynamic::collect::MEMBRANE_POTENTIAL,
+            hhn_dynamic::collect::ACTIVE_COND_SODIUM,
+            hhn_dynamic::collect::INACTIVE_COND_SODIUM,
+            hhn_dynamic::collect::ACTIVE_COND_POTASSIUM
+    };
+
+    p_stream << p_dynamic.size_dynamic() << " " << p_dynamic.size_network() << "\n";
+    for (std::size_t index_order = 0; index_order < order_types.size(); index_order++) {
+        if (enabled.find(order_types[index_order]) != enabled.cend()) {
+            p_stream << index_order << " ";
+        }
+    }
+    p_stream << "\n";
+
+    for (std::size_t iter = 0; iter < p_dynamic.size_dynamic(); iter++) {
+        p_stream << p_dynamic.get_time()->at(iter);
+        for (std::size_t neuron_index = 0; neuron_index < p_dynamic.size_network() + 2; neuron_index++) {
+            p_stream << " [ ";
+
+            for (auto & type : order_types) {
+                if (enabled.find(type) == enabled.cend()) {
+                    continue;
+                }
+
+                if (neuron_index < p_dynamic.size_network()) {
+                    p_stream << p_dynamic.get_peripheral_value(iter, neuron_index, type) << " ";
+                }
+                else {
+                    std::size_t central_index = neuron_index - p_dynamic.size_network();
+                    p_stream << p_dynamic.get_central_value(iter, central_index, type) << " ";
+                }
+            }
+
+            p_stream << "]";
+        }
+
+        p_stream << "\n";
+    }
+
+    return p_stream;
+}
+
+
+
+hhn_dynamic_reader::hhn_dynamic_reader(const std::string & p_filename) :
+        m_filename(p_filename),
+        m_dynamic(nullptr),
+        m_file_stream()
+{ }
+
+
+hhn_dynamic_reader::~hhn_dynamic_reader(void) {
+    if (m_file_stream.is_open()) {
+        m_file_stream.close();
+    }
+}
+
+
+void hhn_dynamic_reader::read(hhn_dynamic & p_dynamic) {
+    m_file_stream.open(m_filename.c_str(), std::ifstream::in);
+    m_dynamic = &p_dynamic;
+
+    parse_size_header();
+    parse_enable_header();
+    parse_dynamic();
+
+    m_file_stream.close();
+}
+
+
+void hhn_dynamic_reader::parse_size_header(void) {
+    std::string line;
+    std::size_t dynamic_size, dynamic_network;
+
+    std::getline(m_file_stream, line);
+    extract_size_header(line, dynamic_size, dynamic_network);
+
+    m_size_network = dynamic_network;
+    m_dynamic->reserve(dynamic_size);
+}
+
+
+void hhn_dynamic_reader::extract_size_header(const std::string & p_line, std::size_t & p_size_dynamic, std::size_t & p_size_network) {
+    std::istringstream string_stream(p_line);
+    std::string item;
+
+    if (!std::getline(string_stream, item, ' ')) {
+        throw std::invalid_argument("Impossible parse size dynamic from line header: " + p_line);
+    }
+
+    p_size_dynamic = (std::size_t) std::stoll(item);
+
+    if (!std::getline(string_stream, item, '\n')) {
+        throw std::invalid_argument("Impossible parse size network from line header: " + p_line);
+    }
+
+    p_size_network = (std::size_t) std::stoll(item);
+}
+
+
+void hhn_dynamic_reader::parse_enable_header(void) {
+    std::string line;
+
+    std::getline(m_file_stream, line);
+
+    extract_enable_header(line, m_order);
+
+    m_dynamic->disable_all();
+    m_dynamic->enable(m_order);
+}
+
+
+void hhn_dynamic_reader::extract_enable_header(const std::string & p_line, std::vector<hhn_dynamic::collect> & p_collect) {
+    std::istringstream string_stream(p_line);
+    std::string item;
+    while (std::getline(string_stream, item, ' ')) {
+        /* Each collection type has whitespace after itself */
+        p_collect.push_back((hhn_dynamic::collect) std::stoll(item));
+    }
+}
+
+
+void hhn_dynamic_reader::parse_dynamic(void) {
+    for (std::string line; std::getline(m_file_stream, line); ) {
+        double time = -1;
+        std::vector<hhn_oscillator>     peripheral = { };
+        std::vector<central_element>    central    = { };
+
+        extract_dynamic(line, time, peripheral, central);
+
+        m_dynamic->store(time, peripheral, central);
+    }
+}
+
+
+void hhn_dynamic_reader::extract_dynamic(const std::string & p_line, double & p_time, std::vector<hhn_oscillator> & p_peripheral, std::vector<central_element> & p_central) {
+    std::istringstream string_stream(p_line);
+    std::string item;
+
+    p_peripheral.resize(m_size_network);
+    p_central.resize(2);
+
+    std::size_t counter_filling = p_peripheral.size() + 2;
+
+    std::getline(string_stream, item, ' ');
+    p_time = std::stod(item);
+
+    bool extract_status = (bool) std::getline(string_stream, item, ' ');
+    for (std::size_t item_index = 0; extract_status; item_index++) {
+        if (item == "[") {
+            if (item_index < p_peripheral.size()) {
+                extract_state(string_stream, p_peripheral[item_index]);
+            }
+            else {
+                std::size_t index_central = item_index - p_peripheral.size();
+                extract_state(string_stream, p_central[index_central]);
+            }
+        }
+
+        counter_filling--;
+
+        extract_status = (bool) std::getline(string_stream, item, ' ');
+        if (!extract_status) {
+            extract_status = (bool) std::getline(string_stream, item, '\n');
+        }
+    }
+
+    if (counter_filling != 0) {
+        throw std::invalid_argument("Incorrect format of HHN output dynamic: not all neuron states are found.");
+    }
+}
+
+
+void hhn_dynamic_reader::extract_state(std::istringstream & p_stream, basic_neuron_state & p_state) {
+    std::string item;
+    for (std::size_t item_index = 0; std::getline(p_stream, item, ' '); item_index++) {
+        if (item == "]") {
+            return;
+        }
+
+        hhn_dynamic::collect type_value = m_order[item_index];
+        switch(type_value) {
+            case hhn_dynamic::collect::MEMBRANE_POTENTIAL:
+                p_state.m_membrane_potential = std::stod(item);
+                break;
+            case hhn_dynamic::collect::ACTIVE_COND_SODIUM:
+                p_state.m_active_cond_sodium = std::stod(item);
+                break;
+            case hhn_dynamic::collect::INACTIVE_COND_SODIUM:
+                p_state.m_inactive_cond_sodium = std::stod(item);
+                break;
+            case hhn_dynamic::collect::ACTIVE_COND_POTASSIUM:
+                p_state.m_active_cond_potassium = std::stod(item);
+                break;
+            default:
+                throw std::invalid_argument("Invalid type of value is detected '" + std::to_string((std::size_t) type_value) + "'");
+        }
+    }
+}
 
 
 
@@ -465,9 +717,9 @@ void hhn_network::neuron_states(const double t, const differ_state<double> & inp
 
     /* Calculate variables */
     double potential = v - m_params.m_vRest;
-    double am = (2.5 - 0.1 * potential) / (std::exp(2.5 - 0.1 * potential) - 1.0);
+    double am = (2.5 - 0.1 * potential) / (std::expm1(2.5 - 0.1 * potential)); /* 'exp(x) - 1' can be replaced by 'expm1(x)' */
     double ah = 0.07 * std::exp(-potential / 20.0);
-    double an = (0.1 - 0.01 * potential) / (std::exp(1.0 - 0.1 * potential) - 1.0);
+    double an = (0.1 - 0.01 * potential) / (std::expm1(1.0 - 0.1 * potential)); /* 'exp(x) - 1' can be replaced by 'expm1(x)' */
 
     double bm = 4.0 * std::exp(-potential / 18.0);
     double bh = 1.0 / (std::exp(3.0 - 0.1 * potential) + 1.0);

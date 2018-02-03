@@ -34,6 +34,9 @@ import numpy;
 from PIL import Image;
 
 from pyclustering.nnet import *;
+
+from pyclustering.core.wrapper import ccore_library;
+
 import pyclustering.core.pcnn_wrapper as wrapper;
 
 from pyclustering.utils import draw_dynamics;
@@ -340,7 +343,7 @@ class pcnn_network(network):
     __OUTPUT_TRUE = 1;    # fire value for oscillators.
     __OUTPUT_FALSE = 0;   # rest value for oscillators.
     
-    def __init__(self, num_osc, parameters = None, type_conn = conn_type.ALL_TO_ALL, type_conn_represent = conn_represent.MATRIX, height = None, width = None, ccore = False):
+    def __init__(self, num_osc, parameters = None, type_conn = conn_type.ALL_TO_ALL, type_conn_represent = conn_represent.MATRIX, height = None, width = None, ccore = True):
         """!
         @brief Constructor of oscillatory network is based on Kuramoto model.
         
@@ -372,7 +375,7 @@ class pcnn_network(network):
         else:
             self._params = pcnn_parameters();
         
-        if (ccore is True):
+        if ( (ccore is True) and ccore_library.workable() ):
             network_height = height;
             network_width = width;
             

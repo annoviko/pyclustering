@@ -32,6 +32,8 @@ from pyclustering.utils import euclidean_distance;
 
 from pyclustering.container.kdtree import kdtree;
 
+from pyclustering.core.wrapper import ccore_library
+
 import pyclustering.core.cure_wrapper as wrapper;
 
 
@@ -106,7 +108,7 @@ class cure:
     
     """
     
-    def __init__(self, data, number_cluster, number_represent_points = 5, compression = 0.5, ccore = False):
+    def __init__(self, data, number_cluster, number_represent_points = 5, compression = 0.5, ccore = True):
         """!
         @brief Constructor of clustering algorithm CURE.
         
@@ -129,8 +131,10 @@ class cure:
         self.__compression = compression;
         
         self.__ccore = ccore;
+        if (self.__ccore):
+            self.__ccore = ccore_library.workable();
         
-        if (ccore is False):
+        if (self.__ccore is False):
             self.__create_queue();      # queue
             self.__create_kdtree();     # create k-d tree
 

@@ -54,7 +54,7 @@ class birch:
     
     """
     
-    def __init__(self, data, number_clusters, branching_factor = 5, max_node_entries = 5, initial_diameter = 0.1, type_measurement = measurement_type.CENTROID_EUCLIDIAN_DISTANCE, entry_size_limit = 200, diameter_multiplier = 1.5, ccore = False):
+    def __init__(self, data, number_clusters, branching_factor = 5, max_node_entries = 5, initial_diameter = 0.1, type_measurement = measurement_type.CENTROID_EUCLIDIAN_DISTANCE, entry_size_limit = 200, diameter_multiplier = 1.5, ccore = True):
         """!
         @brief Constructor of clustering algorithm BIRCH.
         

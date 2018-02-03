@@ -30,6 +30,8 @@ from pyclustering.nnet.tests.pcnn_templates import PcnnTestTemplates;
 
 from pyclustering.nnet import conn_type;
 
+from pyclustering.core.tests import remove_library;
+
 
 class PcnnIntegrationTest(unittest.TestCase):
     def testDynamicLengthNoneConnectionByCore(self):
@@ -82,6 +84,11 @@ class PcnnIntegrationTest(unittest.TestCase):
 
     def testAllocationInRectangleEightStructureByCore(self):
         PcnnTestTemplates.templateAllocationInRectangleStructure(30, 6, 5, 20, conn_type.GRID_EIGHT, None, [0] * 30, True);
+
+
+    @remove_library
+    def testProcessingWhenLibraryCoreCorrupted(self):
+        PcnnTestTemplates.templateDynamicLength(10, 20, conn_type.NONE, None, [0] * 10, True);
 
 
 if __name__ == "__main__":
