@@ -44,8 +44,6 @@ const double             xmeans::DEFAULT_SPLIT_DIFFERENCE                = 0.001
 
 const std::size_t        xmeans::DEFAULT_DATA_SIZE_PARALLEL_PROCESSING   = 100000;
 
-const std::size_t        xmeans::DEFAULT_THREAD_POOL_SIZE                = 15;
-
 
 xmeans::xmeans(const dataset & p_centers, const std::size_t p_kmax, const double p_tolerance, const splitting_type p_criterion) :
     m_centers(p_centers),
@@ -69,7 +67,7 @@ void xmeans::process(const dataset & data, cluster_data & output_result) {
 
     m_parallel_processing = (m_ptr_data->size() >= m_parallel_trigger);
     if (m_parallel_processing) {
-        m_pool = std::make_shared<thread_pool>(DEFAULT_THREAD_POOL_SIZE);
+        m_pool = std::make_shared<thread_pool>();
     }
 
     output_result = xmeans_data();

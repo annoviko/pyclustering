@@ -29,22 +29,17 @@ namespace ccore {
 namespace parallel {
 
 
-thread_pool::thread_pool(const std::size_t p_size) :
-        m_pool(),
-        m_queue(),
-        m_done(),
-        m_free(0),
-        m_stop(false)
-{
-    thread_executor::task_getter getter = std::bind(&thread_pool::get_task, this, std::placeholders::_1);
-    thread_executor::task_notifier notifier = std::bind(&thread_pool::done_task, this, std::placeholders::_1);
+const std::size_t   thread_pool::DEFAULT_POOL_SIZE =
+        (std::thread::hardware_concurrency() != 0) ? std::thread::hardware_concurrency() : 4;
 
-    std::lock_guard<std::mutex> lock_common(m_common_mutex);
 
-    for (std::size_t index = 0; index < p_size; index++) {
-        m_pool.emplace_back(new thread_executor(getter, notifier));
-        m_free++;
-    }
+thread_pool::thread_pool(void) {
+    initialize(DEFAULT_POOL_SIZE);
+}
+
+
+thread_pool::thread_pool(const std::size_t p_size) {
+    initialize(p_size);
 }
 
 
@@ -100,6 +95,23 @@ std::size_t thread_pool::pop_complete_task(void) {
         m_done.pop_front();
 
         return complete_task_id;
+    }
+}
+
+
+void thread_pool::initialize(const std::size_t p_size) {
+    m_pool  = { };
+    m_queue = { };
+    m_done  = { };
+    m_free  = 0;
+    m_stop  = false;
+
+    thread_executor::task_getter getter = std::bind(&thread_pool::get_task, this, std::placeholders::_1);
+    thread_executor::task_notifier notifier = std::bind(&thread_pool::done_task, this, std::placeholders::_1);
+
+    for (std::size_t index = 0; index < p_size; index++) {
+        m_pool.emplace_back(new thread_executor(getter, notifier));
+        m_free++;
     }
 }
 

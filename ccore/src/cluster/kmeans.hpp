@@ -49,8 +49,6 @@ public:
 
     const static std::size_t        DEFAULT_DATA_SIZE_PARALLEL_PROCESSING;
 
-    const static std::size_t        DEFAULT_MAX_THREAD_POOL_SIZE;
-
 private:
     double            m_tolerance             = DEFAULT_TOLERANCE;
 

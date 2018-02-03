@@ -38,8 +38,6 @@ const double             kmeans::DEFAULT_TOLERANCE                       = 0.025
 
 const std::size_t        kmeans::DEFAULT_DATA_SIZE_PARALLEL_PROCESSING   = 200000;
 
-const std::size_t        kmeans::DEFAULT_MAX_THREAD_POOL_SIZE            = 15;
-
 
 kmeans::kmeans(const dataset & p_initial_centers, const double p_tolerance) :
     m_tolerance(p_tolerance * p_tolerance),
@@ -68,12 +66,7 @@ void kmeans::process(const dataset & data, cluster_data & output_result) {
 
     m_parallel_processing = (m_ptr_data->size() >= m_parallel_trigger);
     if (m_parallel_processing) {
-        std::size_t pool_size = m_initial_centers.size();
-        if (pool_size > DEFAULT_MAX_THREAD_POOL_SIZE) {
-            pool_size = DEFAULT_MAX_THREAD_POOL_SIZE;
-        }
-
-        m_pool = std::make_shared<thread_pool>(pool_size);
+        m_pool = std::make_shared<thread_pool>();
     }
 
     m_ptr_result->centers()->assign(m_initial_centers.begin(), m_initial_centers.end());
