@@ -129,7 +129,7 @@ static void template_grid_connections(const grid_t p_connections, const size_t p
                 ASSERT_TRUE(neighbors.cend() != std::find(neighbors.cbegin(), neighbors.cend(), (size_t) lower_right_index));
             }
 
-            for (int j = 0; j < collection.size(); j++) {
+            for (int j = 0; j < (int) collection.size(); j++) {
                 if ((j != index) &&
                     (j != upper_index) && (j != lower_index) && (j != left_index) && (j != right_index) &&
                     (j != upper_left_index) && (j != upper_right_index) && (j != lower_left_index) && (j != lower_right_index)) {
@@ -140,7 +140,7 @@ static void template_grid_connections(const grid_t p_connections, const size_t p
             }
         }
         else {
-            for (std::size_t j = 0; j < collection.size(); j++) {
+            for (int j = 0; j < (int) collection.size(); j++) {
                 if ((j != index) && (j != upper_index) && (j != lower_index) && (j != left_index) && (j != right_index)) {
                     ASSERT_FALSE(collection.has_connection(index, j));
                     ASSERT_TRUE(neighbors.cend() == std::find(neighbors.cbegin(), neighbors.cend(), (size_t) j));
@@ -282,7 +282,7 @@ static void template_list_connection(const size_t p_elements) {
             ASSERT_TRUE(neighbors.cend() != std::find(neighbors.cbegin(), neighbors.cend(), (size_t) i + 1));
         }
 
-        for (unsigned int j = 0; j < p_elements; j++) {
+        for (std::size_t j = 0; j < p_elements; j++) {
             if ((i != j) && (j != (i + 1)) && (j != (i - 1))) {
                 ASSERT_FALSE(collection.has_connection(i, j));
                 ASSERT_TRUE(neighbors.cend() == std::find(neighbors.cbegin(), neighbors.cend(), (size_t) j));

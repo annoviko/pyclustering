@@ -58,9 +58,9 @@ private:
 private:
     dataset           m_centers;
 
-    xmeans_data       * m_ptr_result;   /* temporary pointer to output result */
+    xmeans_data       * m_ptr_result        = nullptr;   /* temporary pointer to output result */
 
-    const dataset     * m_ptr_data;     /* used only during processing */
+    const dataset     * m_ptr_data          = nullptr;     /* used only during processing */
 
     std::size_t       m_maximum_clusters;
 

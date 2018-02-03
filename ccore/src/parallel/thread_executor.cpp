@@ -59,7 +59,10 @@ void thread_executor::run(void) {
 
 void thread_executor::stop(void) {
     m_stop = true;
-    m_executor.join();
+
+    if (m_executor.joinable()) {
+        m_executor.join();
+    }
 }
 
 

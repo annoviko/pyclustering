@@ -138,8 +138,8 @@ run_ut_ccore_job() {
     # build unit-test project
     cd ccore/
 
-    make ut
-    check_failure "Building CCORE unit-tests: FAILURE."
+    make ut > >(tee -a stdout.log) 2> >(tee -a stderr.log >&2)
+    check_error_log_file stderr.log "Building CCORE unit-tests: FAILURE."
 
     # run unit-tests and obtain code coverage
     make utrun

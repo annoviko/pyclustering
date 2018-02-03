@@ -49,6 +49,8 @@ const std::size_t        xmeans::DEFAULT_THREAD_POOL_SIZE                = 15;
 
 xmeans::xmeans(const dataset & p_centers, const std::size_t p_kmax, const double p_tolerance, const splitting_type p_criterion) :
     m_centers(p_centers),
+    m_ptr_result(nullptr),
+    m_ptr_data(nullptr),
     m_maximum_clusters(p_kmax),
     m_tolerance(p_tolerance * p_tolerance),
     m_criterion(p_criterion),
