@@ -34,13 +34,14 @@ from enum import IntEnum;
 from math import log;
 
 from pyclustering.cluster.encoder import type_encoding;
+from pyclustering.cluster.kmeans import kmeans;
 
 from pyclustering.core.wrapper import ccore_library;
 
 import pyclustering.core.xmeans_wrapper as wrapper;
 
 from pyclustering.utils import euclidean_distance_sqrt, euclidean_distance;
-from pyclustering.utils import list_math_addition_number, list_math_addition, list_math_division_number;
+from pyclustering.utils import list_math_addition_number;
 
 
 class splitting_type(IntEnum):
@@ -225,25 +226,30 @@ class xmeans:
         
         """
 
-        changes = numpy.Inf;
-
-        stop_condition = self.__tolerance * self.__tolerance; # Fast solution
-
-        clusters = [];
-
-        while (changes > stop_condition):
-            clusters = self.__update_clusters(centers, available_indexes);
-            clusters = [ cluster for cluster in clusters if len(cluster) > 0 ]; 
-            
-            updated_centers = self.__update_centers(clusters);
-          
-            changes = max([euclidean_distance_sqrt(centers[index], updated_centers[index]) for index in range(len(updated_centers))]);    # Fast solution
-              
-            centers = updated_centers;
+        local_data = self.__pointer_data;
+        if (available_indexes):
+            local_data = [ self.__pointer_data[i] for i in available_indexes ];
         
-        return (clusters, centers);
-     
-     
+        kmeans_instance = kmeans(local_data, centers, tolerance=self.__tolerance, ccore=False);
+        kmeans_instance.process();
+        
+        local_clusters = kmeans_instance.get_clusters();
+        local_centers = kmeans_instance.get_centers();
+        
+        clusters = [];
+        if (available_indexes):
+            for local_cluster in local_clusters:
+                current_cluster = [];
+                for index_point in local_cluster:
+                    current_cluster.append(available_indexes[index_point]);
+                    
+                clusters.append(current_cluster);
+        else:
+            clusters = local_clusters;
+        
+        return (clusters, local_centers);
+    
+    
     def __improve_structure(self, clusters, centers):
         """!
         @brief Check for best structure: divides each cluster into two and checks for best results using splitting criterion.
@@ -426,63 +432,3 @@ class xmeans:
                 scores[index_cluster] = L - p * 0.5 * log(N);
                 
         return sum(scores);
- 
- 
-    def __update_clusters(self, centers, available_indexes = None):
-        """!
-        @brief Calculates Euclidean distance to each point from the each cluster.
-               Nearest points are captured by according clusters and as a result clusters are updated.
-               
-        @param[in] centers (list): Coordinates of centers of clusters that are represented by list: [center1, center2, ...].
-        @param[in] available_indexes (list): Indexes that defines which points can be used from imput data, if None - then all points are used.
-        
-        @return (list) Updated clusters.
-        
-        """
-            
-        bypass = None;
-        if (available_indexes is None):
-            bypass = range(len(self.__pointer_data));
-        else:
-            bypass = available_indexes;
-          
-        clusters = [[] for _ in range(len(centers))];
-        for index_point in bypass:
-            index_optim = -1;
-            dist_optim = 0.0;
-              
-            for index in range(len(centers)):
-                # dist = euclidean_distance(data[index_point], centers[index]);         # Slow solution
-                dist = euclidean_distance_sqrt(self.__pointer_data[index_point], centers[index]);      # Fast solution
-                  
-                if ( (dist < dist_optim) or (index is 0)):
-                    index_optim = index;
-                    dist_optim = dist;
-              
-            clusters[index_optim].append(index_point);
-              
-        return clusters;
-             
-     
-    def __update_centers(self, clusters):
-        """!
-        @brief Updates centers of clusters in line with contained objects.
-        
-        @param[in] clusters (list): Clusters that contain indexes of objects from data.
-        
-        @return (list) Updated centers.
-        
-        """
-         
-        centers = [[] for _ in range(len(clusters))];
-        dimension = len(self.__pointer_data[0])
-          
-        for index in range(len(clusters)):
-            point_sum = [0.0] * dimension;
-              
-            for index_point in clusters[index]:
-                point_sum = list_math_addition(point_sum, self.__pointer_data[index_point]);
-            
-            centers[index] = list_math_division_number(point_sum, len(clusters[index]));
-              
-        return centers;
