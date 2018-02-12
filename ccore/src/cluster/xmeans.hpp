@@ -70,8 +70,6 @@ private:
 
     bool              m_parallel_processing   = false;
 
-    std::mutex        m_mutex;
-
     thread_pool::ptr  m_pool                  = nullptr;
 
 public:

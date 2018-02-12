@@ -34,9 +34,12 @@
 
 #include "nnet/network.hpp"
 
+#include "parallel/thread_pool.hpp"
+
 
 using namespace ccore::container;
 using namespace ccore::differential;
+using namespace ccore::parallel;
 
 
 namespace ccore {
@@ -294,6 +297,15 @@ public:
  *
  */
 class sync_network {
+public:
+    const static std::size_t DEFAULT_DATA_SIZE_PARALLEL_PROCESSING;
+
+private:
+    const static std::size_t MAXIMUM_MATRIX_REPRESENTATION_SIZE;
+
+private:
+    using iterator = std::vector<sync_oscillator>::iterator;
+
 protected:
     std::vector<sync_oscillator> m_oscillators;
 
@@ -301,13 +313,14 @@ protected:
 
     double weight;
 
+    thread_pool::ptr m_pool         = nullptr;
+
+    bool m_parallel_processing      = false;
+
+    std::size_t m_parallel_trigger  = DEFAULT_DATA_SIZE_PARALLEL_PROCESSING;
 
 private:
     equation<double>  m_equation;
-
-
-private:
-    const static size_t MAXIMUM_MATRIX_REPRESENTATION_SIZE;
 
 public:
     /**
@@ -458,8 +471,8 @@ protected:
      *
      * @brief   Calculation of oscillator phase using Kuramoto model.
      *
-     * @param[in] t: current value of phase.
-     * @param[in] teta: time (can be ignored).
+     * @param[in] t: time (can be ignored).
+     * @param[in] teta: current value of phase.
      * @param[in] argv: index of oscillator whose phase represented by argument teta.
      *
      * @return  Return new value of phase of oscillator with index 'argv[1]'.
@@ -470,7 +483,17 @@ protected:
         const double teta, 
         const std::vector<void *> & argv) const;
 
-
+    /**
+     *
+     * @brief   Calculates state of phase oscillator using classic Kuramoto synchonization model.
+     *
+     * @param[in] t: time (can be ignored).
+     * @param[in] inputs: current state of the oscillator (current phase).
+     * @param[in] argv: additional parameters that are used by the oscillator's equation (index of oscillator 
+                   whose phase represented by argument teta).
+     * @param[out] outputs: new states of the oscillator (new phase value).
+     *
+     */
     virtual void phase_kuramoto_equation(
         const double t, 
         const differ_state<double> & inputs, 
@@ -494,6 +517,15 @@ protected:
         const double step, 
         const double int_step);
 
+    virtual void calculate_phases(
+        const solve_type solver, 
+        const double t, 
+        const double step, 
+        const double int_step,
+        const iterator p_begin,
+        const iterator p_end,
+        std::vector<double> & p_next_phases);
+
     /**
     *
     * @brief   Stores dynamic of oscillators. Type of saving depends on argument 'collect_dynamic',
@@ -511,6 +543,13 @@ protected:
         const bool collect_dynamic, 
         sync_dynamic & dynamic) const;
 
+    /**
+    *
+    * @brief   Set phase oscillator equation that is used to calculate state of each oscillator in the network.
+    *
+    * @param[in]  solver: equation of phase oscillator.
+    *
+    */
     virtual void set_equation(equation<double> & solver);
 
 private:
