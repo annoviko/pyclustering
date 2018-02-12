@@ -30,7 +30,7 @@ namespace parallel {
 
 
 const std::size_t   thread_pool::DEFAULT_POOL_SIZE =
-        (std::thread::hardware_concurrency() != 0) ? std::thread::hardware_concurrency() : 4;
+        (std::thread::hardware_concurrency() > 1) ? std::thread::hardware_concurrency() : 4;
 
 
 thread_pool::thread_pool(void) {

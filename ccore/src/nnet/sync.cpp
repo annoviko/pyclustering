@@ -232,6 +232,8 @@ void sync_network::simulate_static(const std::size_t steps, const double time, c
 
     store_dynamic(0.0, collect_dynamic, output_dynamic);    /* store initial state */
 
+    check_parallel_condition();
+
     double cur_time = step;
     for (std::size_t cur_step = 0; cur_step < steps; cur_step++) {
         calculate_phases(solver, cur_time, step, int_step);
@@ -251,6 +253,8 @@ void sync_network::simulate_dynamic(const double order, const double step, const
     double current_order = sync_local_order();
 
     double integration_step = step / 10;
+
+    check_parallel_condition();
 
     for (double time_counter = step; current_order < order; time_counter += step) {
         calculate_phases(solver, time_counter, step, integration_step);
@@ -390,6 +394,17 @@ double sync_network::phase_normalization(const double teta) const {
 
     return norm_teta;
 }
+
+
+void sync_network::check_parallel_condition(void) {
+    m_parallel_processing = (m_oscillators.size() >= m_parallel_trigger);
+    if (m_parallel_processing) {
+        /* current thread also participates in processing (on a weak hardware machine one thread from pool and
+           one is current is used for processing if hardware threads are supported)         */
+        m_pool = std::make_shared<thread_pool>(thread_pool::DEFAULT_POOL_SIZE - 1);
+    }
+}
+
 
 
 sync_dynamic::~sync_dynamic(void) { }

@@ -517,6 +517,20 @@ protected:
         const double step, 
         const double int_step);
 
+    /**
+     *
+     * @brief   Calculates new phases for specific range of oscillators in the network in line with current step.
+     *
+     * @param[in] solver: type solver of the differential equation.
+     * @param[in] t: time of simulation.
+     * @param[in] step: step of solution at the end of which states of oscillators should be calculated.
+     * @param[in] int_step: step differentiation that is used for solving differential equation (can 
+     *             be ignored in case of solvers when integration step is defined by solver itself).
+     * @param[in] p_begin: interator to the first oscillator from the range.
+     * @param[in] p_end: iterator to the last oscillator from the range.
+     * @param[in|out] p_next_phases: container where new oscillator phases from the range are placed.
+     *
+     */
     virtual void calculate_phases(
         const solve_type solver, 
         const double t, 
@@ -578,6 +592,14 @@ private:
         const size_t height,
         const size_t width,
         const initial_type initial_phases);
+
+    /**
+    *
+    * @brief   Check if parallel processing should be used for network simulation and if it is required then
+    *          initialize thread pool for that purpose.
+    *
+    */
+    void check_parallel_condition(void);
 };
 
 
