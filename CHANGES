@@ -5,6 +5,9 @@ CHANGE NOTES FOR 0.8.0 (STARTED Oct 23, 2017)
 ------------------------------------------------------------------------
 
 GENERAL CHANGES:
+- Parallel implementation of Sync-family algorithms for C/C++ implementation (CCORE) only (ccore.sync).
+  See: https://github.com/annoviko/pyclustering/issues/170
+
 - C/C++ implementation is used by default to increase performance.
   See: https://github.com/annoviko/pyclustering/issues/393
 

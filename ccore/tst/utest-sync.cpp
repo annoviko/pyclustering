@@ -128,6 +128,7 @@ TEST(utest_sync, dynamic_convergance_36_oscillators_grid_four_parallel) {
     template_dynamic_convergence(36, solve_type::FORWARD_EULER, connection_t::CONNECTION_GRID_FOUR, initial_type::EQUIPARTITION, 0);
 }
 
+
 static void template_static_convergence(const unsigned int number_oscillators, const solve_type solver, const connection_t type, const initial_type initial, const std::size_t p_trigger) {
     sync_network network(number_oscillators, 1.0, 0, type, initial);
 

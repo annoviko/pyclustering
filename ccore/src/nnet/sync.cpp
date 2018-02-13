@@ -50,7 +50,7 @@ namespace ccore {
 namespace nnet {
 
 
-const std::size_t sync_network::DEFAULT_DATA_SIZE_PARALLEL_PROCESSING   = 200;
+const std::size_t sync_network::DEFAULT_DATA_SIZE_PARALLEL_PROCESSING   = 800;
 
 const std::size_t sync_network::MAXIMUM_MATRIX_REPRESENTATION_SIZE      = 4096;
 
