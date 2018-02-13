@@ -272,6 +272,11 @@ void sync_network::simulate_dynamic(const double order, const double step, const
 }
 
 
+void sync_network::set_parallel_processing_trigger(const std::size_t p_network_size) {
+    m_parallel_trigger = p_network_size;
+}
+
+
 void sync_network::store_dynamic(const double time, const bool collect_dynamic, sync_dynamic & output_dynamic) const {
     sync_network_state state(size());
 
@@ -341,7 +346,7 @@ void sync_network::calculate_phases(const solve_type solver,
 {
     std::size_t number_int_steps = (std::size_t) (step / int_step);
 
-    for (iterator iter = p_begin; iter != p_end; iter++) {
+    for (iterator iter = p_begin; iter != p_end; ++iter) {
         std::size_t index = std::distance(m_oscillators.begin(), iter);
 
         std::vector<void *> argv(1, nullptr);

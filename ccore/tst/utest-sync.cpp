@@ -26,6 +26,9 @@
 #include <cmath>
 
 
+#define SEQUENTIAL        std::size_t (-1)
+
+
 using namespace ccore::nnet;
 
 
@@ -77,8 +80,12 @@ TEST(utest_sync, create_delete_none_gaussian) {
 }
 
 
-static void template_dynamic_convergence(const unsigned int number_oscillators, const solve_type solver, const connection_t type, const initial_type initial) {
+static void template_dynamic_convergence(const unsigned int number_oscillators, const solve_type solver, const connection_t type, const initial_type initial, const std::size_t p_trigger) {
     sync_network network(number_oscillators, 1, 0, type, initial);
+
+    if (p_trigger != SEQUENTIAL) {
+        network.set_parallel_processing_trigger(p_trigger);
+    }
 
     sync_dynamic output_dynamic;
     network.simulate_dynamic(0.998, 0.1, solver, false, output_dynamic);
@@ -90,31 +97,46 @@ static void template_dynamic_convergence(const unsigned int number_oscillators, 
 }
 
 TEST(utest_sync, dynamic_convergance_10_oscillators_all_to_all) {
-    template_dynamic_convergence(10, solve_type::FORWARD_EULER, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION);
+    template_dynamic_convergence(10, solve_type::FORWARD_EULER, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION, SEQUENTIAL);
 }
 
 TEST(utest_sync, dynamic_convergance_20_oscillators_all_to_all) {
-    template_dynamic_convergence(10, solve_type::FORWARD_EULER, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION);
+    template_dynamic_convergence(10, solve_type::FORWARD_EULER, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION, SEQUENTIAL);
 }
 
 TEST(utest_sync, dynamic_convergance_16_oscillators_grid_four) {
-    template_dynamic_convergence(16, solve_type::FORWARD_EULER, connection_t::CONNECTION_GRID_FOUR, initial_type::EQUIPARTITION);
+    template_dynamic_convergence(16, solve_type::FORWARD_EULER, connection_t::CONNECTION_GRID_FOUR, initial_type::EQUIPARTITION, SEQUENTIAL);
 }
 
 TEST(utest_sync, dynamic_convergance_16_oscillators_grid_eight) {
-    template_dynamic_convergence(16, solve_type::FORWARD_EULER, connection_t::CONNECTION_GRID_EIGHT, initial_type::EQUIPARTITION);
+    template_dynamic_convergence(16, solve_type::FORWARD_EULER, connection_t::CONNECTION_GRID_EIGHT, initial_type::EQUIPARTITION, SEQUENTIAL);
 }
 
 TEST(utest_sync, dynamic_convergance_5_oscillators_list_bidir) {
-    template_dynamic_convergence(5, solve_type::FORWARD_EULER, connection_t::CONNECTION_LIST_BIDIRECTIONAL, initial_type::EQUIPARTITION);
+    template_dynamic_convergence(5, solve_type::FORWARD_EULER, connection_t::CONNECTION_LIST_BIDIRECTIONAL, initial_type::EQUIPARTITION, SEQUENTIAL);
 }
 
+TEST(utest_sync, dynamic_convergance_16_oscillators_grid_four_parallel) {
+    template_dynamic_convergence(16, solve_type::FORWARD_EULER, connection_t::CONNECTION_GRID_FOUR, initial_type::EQUIPARTITION, 0);
+}
 
-static void template_static_convergence(const unsigned int number_oscillators, const solve_type solver, const connection_t type, const initial_type initial) {
+TEST(utest_sync, dynamic_convergance_25_oscillators_grid_four_parallel) {
+    template_dynamic_convergence(25, solve_type::FORWARD_EULER, connection_t::CONNECTION_GRID_FOUR, initial_type::EQUIPARTITION, 0);
+}
+
+TEST(utest_sync, dynamic_convergance_36_oscillators_grid_four_parallel) {
+    template_dynamic_convergence(36, solve_type::FORWARD_EULER, connection_t::CONNECTION_GRID_FOUR, initial_type::EQUIPARTITION, 0);
+}
+
+static void template_static_convergence(const unsigned int number_oscillators, const solve_type solver, const connection_t type, const initial_type initial, const std::size_t p_trigger) {
     sync_network network(number_oscillators, 1.0, 0, type, initial);
 
+    if (p_trigger != SEQUENTIAL) {
+        network.set_parallel_processing_trigger(p_trigger);
+    }
+
     sync_dynamic output_dynamic;
-    network.simulate_static(25, 10, solver, false, output_dynamic);
+    network.simulate_static(50, 10, solver, false, output_dynamic);
 
     ensemble_data<sync_ensemble> ensembles;
     output_dynamic.allocate_sync_ensembles(0.1, ensembles);
@@ -123,40 +145,53 @@ static void template_static_convergence(const unsigned int number_oscillators, c
 }
 
 TEST(utest_sync, static_convergance_10_oscillators_all_to_all) {
-    template_static_convergence(10, solve_type::FORWARD_EULER, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION);
+    template_static_convergence(10, solve_type::FORWARD_EULER, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION, SEQUENTIAL);
 }
 
 TEST(utest_sync, static_convergance_20_oscillators_all_to_all) {
-    template_static_convergence(10, solve_type::FORWARD_EULER, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION);
+    template_static_convergence(10, solve_type::FORWARD_EULER, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION, SEQUENTIAL);
 }
 
 TEST(utest_sync, static_convergance_9_oscillators_grid_four) {
-    template_static_convergence(9, solve_type::FORWARD_EULER, connection_t::CONNECTION_GRID_FOUR, initial_type::EQUIPARTITION);
+    template_static_convergence(9, solve_type::FORWARD_EULER, connection_t::CONNECTION_GRID_FOUR, initial_type::EQUIPARTITION, SEQUENTIAL);
 }
 
 TEST(utest_sync, static_convergance_9_oscillators_grid_eight) {
-    template_static_convergence(9, solve_type::FORWARD_EULER, connection_t::CONNECTION_GRID_EIGHT, initial_type::EQUIPARTITION);
+    template_static_convergence(9, solve_type::FORWARD_EULER, connection_t::CONNECTION_GRID_EIGHT, initial_type::EQUIPARTITION, SEQUENTIAL);
 }
 
 TEST(utest_sync, static_convergance_3_oscillators_list_bidir) {
-    template_static_convergence(3, solve_type::FORWARD_EULER, connection_t::CONNECTION_LIST_BIDIRECTIONAL, initial_type::EQUIPARTITION);
+    template_static_convergence(3, solve_type::FORWARD_EULER, connection_t::CONNECTION_LIST_BIDIRECTIONAL, initial_type::EQUIPARTITION, SEQUENTIAL);
 }
+
+TEST(utest_sync, static_convergance_10_oscillators_all_to_all_parallel) {
+    template_static_convergence(10, solve_type::FORWARD_EULER, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION, 0);
+}
+
+TEST(utest_sync, static_convergance_9_oscillators_grid_four_parallel) {
+    template_static_convergence(9, solve_type::FORWARD_EULER, connection_t::CONNECTION_GRID_FOUR, initial_type::EQUIPARTITION, 0);
+}
+
+TEST(utest_sync, static_convergance_16_oscillators_grid_four_parallel) {
+    template_static_convergence(16, solve_type::FORWARD_EULER, connection_t::CONNECTION_GRID_FOUR, initial_type::EQUIPARTITION, 0);
+}
+
 
 
 TEST(utest_sync, static_simulation_runge_kutta_4) {
-    template_static_convergence(2, solve_type::RUNGE_KUTTA_4, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION);
+    template_static_convergence(2, solve_type::RUNGE_KUTTA_4, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION, SEQUENTIAL);
 }
 
 TEST(utest_sync, static_simulation_runge_kutta_fehlberg_45) {
-    template_static_convergence(2, solve_type::RUNGE_KUTTA_FEHLBERG_45, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION);
+    template_static_convergence(2, solve_type::RUNGE_KUTTA_FEHLBERG_45, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION, SEQUENTIAL);
 }
 
 TEST(utest_sync, dynamic_simulation_runge_kutta_4) {
-    template_dynamic_convergence(2, solve_type::RUNGE_KUTTA_4, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION);
+    template_dynamic_convergence(2, solve_type::RUNGE_KUTTA_4, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION, SEQUENTIAL);
 }
 
 TEST(utest_sync, dynamic_simulation_runge_kutta_fehlberg_45) {
-    template_dynamic_convergence(2, solve_type::RUNGE_KUTTA_FEHLBERG_45, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION);
+    template_dynamic_convergence(2, solve_type::RUNGE_KUTTA_FEHLBERG_45, connection_t::CONNECTION_ALL_TO_ALL, initial_type::EQUIPARTITION, SEQUENTIAL);
 }
 
 

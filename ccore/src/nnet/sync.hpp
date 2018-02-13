@@ -442,6 +442,16 @@ public:
         sync_dynamic & output_dynamic);
 
     /**
+    *
+    * @brief    Set custom trigger (that is defined by network size) for parallel processing,
+    *            by default this value is defined by static constant DEFAULT_DATA_SIZE_PARALLEL_PROCESSING.
+    *
+    * @param[in]  p_data_size: network size that triggers parallel processing.
+    *
+    */
+    virtual void set_parallel_processing_trigger(const std::size_t p_network_size);
+
+    /**
      *
      * @brief   Returns size of the oscillatory network that is defined by amount of oscillators.
      *
