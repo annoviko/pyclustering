@@ -100,7 +100,17 @@ void kdtree::remove(const std::vector<double> & p_point) {
 }
 
 
-void kdtree::remove(kdnode::ptr node_for_remove) {
+void kdtree::remove(const std::vector<double> & p_point, const void * p_payload) {
+    kdnode::ptr node_for_remove = find_node(p_point, p_payload);
+    if (node_for_remove == nullptr) {
+        return;
+    }
+
+    remove(node_for_remove);
+}
+
+
+void kdtree::remove(kdnode::ptr & node_for_remove) {
     kdnode::ptr parent = node_for_remove->get_parent();
     kdnode::ptr node = recursive_remove(node_for_remove);
 
@@ -130,7 +140,7 @@ void kdtree::remove(kdnode::ptr node_for_remove) {
 }
 
 
-kdnode::ptr kdtree::recursive_remove(kdnode::ptr node) {
+kdnode::ptr kdtree::recursive_remove(kdnode::ptr & node) {
     if ( (node->get_right() == nullptr) && (node->get_left() == nullptr) ) {
         return nullptr;
     }
@@ -210,19 +220,35 @@ kdnode::ptr kdtree::find_minimal_node(kdnode::ptr node, std::size_t discriminato
 
 
 kdnode::ptr kdtree::find_node(const std::vector<double> & point) const {
+    search_node_rule rule = [&point](const kdnode::ptr & p_node) { return point == p_node->get_data(); };
     return find_node(point, m_root);
 }
 
 
-kdnode::ptr kdtree::find_node(const std::vector<double> & point, kdnode::ptr node) const {
-    kdnode::ptr req_node = nullptr;
-    kdnode::ptr cur_node = node;
+kdnode::ptr kdtree::find_node(const std::vector<double> & p_point, const void * p_payload) const {
+    search_node_rule rule = [&p_point, p_payload](const kdnode::ptr & p_node) { 
+        return ( p_point == p_node->get_data() ) && ( p_payload == p_node->get_payload() );
+    };
 
-    if (node == nullptr) { return nullptr; }
+    return find_node_by_rule(p_point, m_root, rule);
+}
+
+
+kdnode::ptr kdtree::find_node(const std::vector<double> & point, const kdnode::ptr & node) const {
+    search_node_rule rule = [&point](const kdnode::ptr & p_node) { return point == p_node->get_data(); };
+    return find_node_by_rule(point, m_root, rule);
+}
+
+
+kdnode::ptr kdtree::find_node_by_rule(const std::vector<double> & p_point, const kdnode::ptr & p_cur_node, const search_node_rule & p_rule) const {
+    kdnode::ptr req_node = nullptr;
+    kdnode::ptr cur_node = p_cur_node;
+
+    if (p_cur_node == nullptr) { return nullptr; }
 
     while(true) {
-        if (*cur_node <= point) {
-            if (cur_node->get_data() == point) {
+        if (*cur_node <= p_point) {
+            if (p_rule(cur_node)) {
                 req_node = cur_node;
                 break;
             }
@@ -248,7 +274,7 @@ kdnode::ptr kdtree::find_node(const std::vector<double> & point, kdnode::ptr nod
 }
 
 
-std::size_t kdtree::traverse(kdnode::ptr node) {
+std::size_t kdtree::traverse(const kdnode::ptr & node) {
     std::size_t number_nodes = 0;
 
     if (node != nullptr) {

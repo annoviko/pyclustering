@@ -25,6 +25,10 @@
 
 import unittest;
 
+# Generate images without having a window appear.
+import matplotlib;
+matplotlib.use('Agg');
+
 from pyclustering.cluster.tests.agglomerative_templates import AgglomerativeTestTemplates;
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES;
@@ -112,6 +116,38 @@ class AgglomerativeUnitTests(unittest.TestCase):
         AgglomerativeTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 4, type_link.SINGLE_LINK, [15, 15, 15, 15], False);
         AgglomerativeTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 1, type_link.SINGLE_LINK, [60], False); 
 
+
+    def testClusteringTheSameData1LinkAverage(self):
+        AgglomerativeTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 2, type_link.AVERAGE_LINK, [10, 20], False);
+        AgglomerativeTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 1, type_link.AVERAGE_LINK, [30], False); 
+
+    def testClusteringTheSameData1LinkCentroid(self):
+        AgglomerativeTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 2, type_link.CENTROID_LINK, [10, 20], False);
+        AgglomerativeTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 1, type_link.CENTROID_LINK, [30], False); 
+
+    def testClusteringTheSameData1LinkComplete(self):
+        AgglomerativeTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 2, type_link.COMPLETE_LINK, [10, 20], False);
+        AgglomerativeTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 1, type_link.COMPLETE_LINK, [30], False); 
+
+    def testClusteringTheSameData1LinkSingle(self):
+        AgglomerativeTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 2, type_link.SINGLE_LINK, [10, 20], False);
+        AgglomerativeTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 1, type_link.SINGLE_LINK, [30], False); 
+
+    def testClusteringTheSameData2LinkAverage(self):
+        AgglomerativeTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 2, type_link.AVERAGE_LINK, [5, 10], False);
+        AgglomerativeTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 1, type_link.AVERAGE_LINK, [15], False); 
+
+    def testClusteringTheSameData2LinkCentroid(self):
+        AgglomerativeTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 2, type_link.CENTROID_LINK, [5, 10], False);
+        AgglomerativeTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 1, type_link.CENTROID_LINK, [15], False); 
+
+    def testClusteringTheSameData2LinkComplete(self):
+        AgglomerativeTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 2, type_link.COMPLETE_LINK, [5, 10], False);
+        AgglomerativeTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 1, type_link.COMPLETE_LINK, [15], False); 
+
+    def testClusteringTheSameData2LinkSingle(self):
+        AgglomerativeTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 2, type_link.SINGLE_LINK, [5, 10], False);
+        AgglomerativeTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 1, type_link.SINGLE_LINK, [15], False); 
 
 
     def testClusterAllocationOneDimensionDataLinkAverage(self):

@@ -54,6 +54,8 @@ class HsyncnetIntegrationTest(unittest.TestCase):
     def testClusteringOneDimensionDataSampleSimple7ByCore(self):
         HsyncnetTestTemplates.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE7, 2, [10, 10], solve_type.FAST, 5, 0.3, True, True);
 
+    def testClusteringTheSameData1ByCore(self):
+        HsyncnetTestTemplates.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 3, [5, 5, 5], solve_type.FAST, 5, 0.3, True, True);
 
     def testDynamicLengthCollectingByCore(self):
         HsyncnetTestTemplates.templateDynamicLength(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, None, 5, 0.3, True, True);

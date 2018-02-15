@@ -26,6 +26,10 @@
 
 import unittest;
 
+# Generate images without having a window appear.
+import matplotlib;
+matplotlib.use('Agg');
+
 from pyclustering.cluster.tests.kmedians_templates import KmediansTestTemplates;
 
 from pyclustering.cluster.kmedians import kmedians;
@@ -66,6 +70,12 @@ class KmediansUnitTest(unittest.TestCase):
 
     def testClusterAllocationSample2WrongInitialNumberCenters(self):
         KmediansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [[3.5, 4.8], [6.9, 7], [7.5, 0.5], [7.3, 4.5], [3.1, 5.4]], None, False);
+
+    def testClusterTheSameData1(self):
+        KmediansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, [ [4.1], [7.3] ], [10, 20], False);
+
+    def testClusterTheSameData2(self):
+        KmediansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, [ [1.1, 1.0], [3.0, 3.1], [5.0, 4.9] ], [5, 5, 5], False);
 
     def testDifferentDimensions(self):
         kmedians_instance = kmedians([ [0, 1, 5], [0, 2, 3] ], [ [0, 3] ], ccore=False);

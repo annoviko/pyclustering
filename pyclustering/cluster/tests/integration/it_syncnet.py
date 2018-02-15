@@ -78,6 +78,13 @@ class SyncnetIntegrationTest(unittest.TestCase):
         SyncnetTestTemplates.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 0.7, 0.999, solve_type.FAST, initial_type.RANDOM_GAUSSIAN, True, False, 2 * pi, None, [60], True);
 
 
+    def testClusteringTheSameData1ByCore(self):
+        SyncnetTestTemplates.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 1, 0.999, solve_type.FAST, initial_type.RANDOM_GAUSSIAN, True, False, 0.05, conn_represent.MATRIX, [10, 20], True);
+
+    def testClusteringTheSameData2ByCore(self):
+        SyncnetTestTemplates.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 1, 0.999, solve_type.FAST, initial_type.RANDOM_GAUSSIAN, True, False, 0.05, conn_represent.MATRIX, [5, 5, 5], True);
+
+
     def testClusterAllocationConnWeightSampleSimple1ByCore(self):
         SyncnetTestTemplates.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, 0.999, solve_type.FAST, initial_type.RANDOM_GAUSSIAN, True, True, 0.05, None, [5, 5], True);
         SyncnetTestTemplates.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 10, 0.999, solve_type.FAST, initial_type.RANDOM_GAUSSIAN, True, True, 0.05, None, [10], True);

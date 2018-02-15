@@ -26,6 +26,10 @@
 
 import unittest;
 
+# Generate images without having a window appear.
+import matplotlib;
+matplotlib.use('Agg');
+
 from pyclustering.cluster.tests.hsyncnet_templates import HsyncnetTestTemplates;
 
 from pyclustering.nnet import solve_type;
@@ -52,6 +56,8 @@ class HsyncnetUnitTest(unittest.TestCase):
     def testClusteringOneDimensionDataSampleSimple7(self):
         HsyncnetTestTemplates.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE7, 2, [10, 10], solve_type.FAST, 5, 0.3, True, False);
 
+    def testClusteringTheSameData1(self):
+        HsyncnetTestTemplates.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 3, [5, 5, 5], solve_type.FAST, 5, 0.3, True, False);
 
     def testDynamicLengthCollecting(self):
         HsyncnetTestTemplates.templateDynamicLength(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, None, 5, 0.3, True, False);

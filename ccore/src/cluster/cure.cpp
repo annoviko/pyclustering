@@ -81,8 +81,8 @@ cure_queue::cure_queue(const std::vector< std::vector<double> > * data) {
 
     tree = new kdtree();
 
-    for (auto & cluster : *queue) {
-        for (auto & point : *(cluster->rep)) {
+    for (auto cluster : *queue) {
+        for (auto point : *(cluster->rep)) {
             tree->insert(*point, cluster);
         }
     }
@@ -124,6 +124,10 @@ void cure_queue::create_queue(const std::vector< std::vector<double> > * data) {
                     closest_cluster = second_cluster;
                 }
             }
+        }
+
+        if (closest_cluster == nullptr) {
+          std::cout << "bad" << std::endl;
         }
 
         first_cluster->closest = closest_cluster;
@@ -330,7 +334,7 @@ void cure_queue::insert_cluster(cure_cluster * inserted_cluster) {
 
 void cure_queue::remove_representative_points(cure_cluster * cluster) {
     for (auto & point : *(cluster->rep)) {
-        tree->remove(*point);
+        tree->remove(*point, (void *) cluster);
     }
 }
 

@@ -68,6 +68,12 @@ class KmediansIntegrationTest(unittest.TestCase):
     def testClusterAllocationSample2WrongInitialNumberCentersCore(self):
         KmediansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [[3.5, 4.8], [6.9, 7], [7.5, 0.5], [7.3, 4.5], [3.1, 5.4]], None, True);
 
+    def testClusterTheSameData1Core(self):
+        KmediansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, [ [4.1], [7.3] ], [10, 20], True);
+
+    def testClusterTheSameData2Core(self):
+        KmediansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, [ [1.1, 1.0], [3.0, 3.1], [5.0, 4.9] ], [5, 5, 5], True);
+
 
     def testClusterAllocationOneDimensionDataCore(self):
         KmediansTestTemplates.templateClusterAllocationOneDimensionData(True);

@@ -89,6 +89,12 @@ class KmeansUnitTest(unittest.TestCase):
     def testWrongNumberOfCentersSimpleSample5(self):
         KmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [[-1.9, 3.2], [1.2, 34.5], [15.2, 34.8], [192, 234], [-32.3, -106]], None, False);
 
+    def testTheSameData1(self):
+        KmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, [ [4.0], [8.0] ], [10, 20], False);
+
+    def testTheSameData2(self):
+        KmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, [ [1.0, 1.0], [2.5, 2.5], [4.0, 4.0] ], [5, 5, 5], False);
+
     def testDifferentDimensions(self):
         kmeans_instance = kmeans([ [0, 1, 5], [0, 2, 3] ], [ [0, 3] ], ccore=False);
         self.assertRaises(ValueError, kmeans_instance.process);

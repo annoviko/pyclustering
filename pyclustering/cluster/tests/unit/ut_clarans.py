@@ -81,5 +81,12 @@ class ClaransUnitTest(unittest.TestCase):
         self.templateClusterAllocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE8, [15, 30, 20, 80], 4, 15, 5);
 
 
+    def testClusterAllocationTheSameData1(self):
+        self.templateClusterAllocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, [10, 20], 2, 15, 5);
+
+    def testClusterAllocationTheSameData2(self):
+        self.templateClusterAllocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, [5, 10], 2, 15, 5);
+
+
 if __name__ == "__main__":
     unittest.main();

@@ -26,6 +26,10 @@
 
 import unittest;
 
+# Generate images without having a window appear.
+import matplotlib;
+matplotlib.use('Agg');
+
 from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
 
 from pyclustering.cluster.cure import cure;
@@ -56,14 +60,29 @@ class CureIntegrationTest(unittest.TestCase):
     def testClusterAllocationSampleLsunByCore(self):
         CureTestTemplates.template_cluster_allocation(FCPS_SAMPLES.SAMPLE_LSUN, [100, 101, 202], 3, 5, 0.3, True);
  
-    def testOneClusterAllocationByCore(self):
+    def testOneClusterAllocationSampleSimple1ByCore(self):
         CureTestTemplates.template_cluster_allocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [10], 1, 5, 0.5, True);
-        CureTestTemplates.template_cluster_allocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [10], 1, 5, 0.5, True);
+
+    def testOneClusterAllocationSampleSimple2ByCore(self):
         CureTestTemplates.template_cluster_allocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [23], 1, 5, 0.5, True);
+
+    def testOneClusterAllocationSampleSimple3ByCore(self):
         CureTestTemplates.template_cluster_allocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [60], 1, 5, 0.5, True);
+
+    def testOneClusterAllocationSampleSimple4ByCore(self):
         CureTestTemplates.template_cluster_allocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, [75], 1, 5, 0.5, True);
+
+    def testOneClusterAllocationSampleSimple5ByCore(self):
         CureTestTemplates.template_cluster_allocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [60], 1, 5, 0.5, True);
- 
+
+
+    def testClusterAllocationTheSameData1ByCore(self):
+        CureTestTemplates.template_cluster_allocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, [10, 20], 2, 5, 0.3, True);
+
+    def testClusterAllocationTheSameData2ByCore(self):
+        CureTestTemplates.template_cluster_allocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, [5, 5, 5], 3, 5, 0.3, True);
+        CureTestTemplates.template_cluster_allocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, [5, 10], 2, 5, 0.3, True);
+
 
     def testClusterAllocationOneDimensionDataByCore(self):
         CureTestTemplates.templateClusterAllocationOneDimensionData(True);

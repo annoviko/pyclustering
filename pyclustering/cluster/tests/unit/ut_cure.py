@@ -57,16 +57,32 @@ class CureUnitTest(unittest.TestCase):
     def testClusterAllocationSampleLsun(self):
         CureTestTemplates.template_cluster_allocation(FCPS_SAMPLES.SAMPLE_LSUN, [100, 101, 202], 3, 5, 0.3);
 
-    def testOneClusterAllocation(self):
+    def testOneClusterAllocationSampleSimple1(self):
         CureTestTemplates.template_cluster_allocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [10], 1);
+
+    def testOneClusterAllocationSampleSimple2(self):
         CureTestTemplates.template_cluster_allocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [23], 1);
+
+    def testOneClusterAllocationSampleSimple3(self):
         CureTestTemplates.template_cluster_allocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [60], 1);
+
+    def testOneClusterAllocationSampleSimple4(self):
         CureTestTemplates.template_cluster_allocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, [75], 1);
+
+    def testOneClusterAllocationSampleSimple5(self):
         CureTestTemplates.template_cluster_allocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [60], 1);
 
 
     def testClusterAllocationOneDimensionData(self):
         CureTestTemplates.templateClusterAllocationOneDimensionData(False);
+
+
+    def testClusterAllocationTheSameData1(self):
+        CureTestTemplates.template_cluster_allocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, [10, 20], 2, 5, 0.3);
+
+    def testClusterAllocationTheSameData2(self):
+        CureTestTemplates.template_cluster_allocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, [5, 5, 5], 3, 5, 0.3);
+        CureTestTemplates.template_cluster_allocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, [5, 10], 2, 5, 0.3);
 
 
     def testEncoderProcedure(self):

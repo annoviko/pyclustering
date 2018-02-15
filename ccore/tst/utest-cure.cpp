@@ -117,3 +117,9 @@ TEST(utest_cure, allocation_sample_simple_08) {
     const std::vector<size_t> expected_clusters_length = { 15, 30, 20, 80 };
     template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_08), 4, 5, 0.5, expected_clusters_length);
 }
+
+
+TEST(utest_cure, allocation_sample_simple_09) {
+    const std::vector<size_t> expected_clusters_length = { 10, 20 };
+    template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_09), 2, 5, 0.3, expected_clusters_length);
+}

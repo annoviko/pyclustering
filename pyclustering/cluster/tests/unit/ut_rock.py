@@ -26,6 +26,10 @@
 
 import unittest;
 
+# Generate images without having a window appear.
+import matplotlib;
+matplotlib.use('Agg');
+
 from pyclustering.cluster.tests.rock_templates import RockTestTemplates;
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES;
@@ -54,7 +58,13 @@ class RockUnitTest(unittest.TestCase):
 
     def testClusterAllocationSampleSimple5(self):
         RockTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 1, 4, 0.5, [15, 15, 15, 15], False);
- 
+
+    def testClusterTheSameData1(self):
+        RockTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 1, 2, 0.5, [10, 20], False);
+
+    def testClusterTheSameData2(self):
+        RockTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 1, 2, 0.5, [5, 5, 5], False);
+
 
     def testClusterAllocationIncorrectNumberClusters(self):
         RockTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 1, 4, 0.5, [15, 15, 15, 15, 15], False);

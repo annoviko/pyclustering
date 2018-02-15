@@ -55,6 +55,9 @@ GENERAL CHANGES:
 
 
 CORRECTED MAJOR BUGS:
+- Segmentation fault in CURE algorithm in some cases with data that have a lot of identical points (ccore.cure).
+  See: no reference.
+
 - Incorrect segmentation by Python version of syncsegm - oscillatory network based on sync for image segmentation (pyclustering.nnet.syncsegm).
   See: https://github.com/annoviko/pyclustering/issues/409
 

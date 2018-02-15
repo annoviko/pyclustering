@@ -76,6 +76,12 @@ class SomscIntegrationTest(unittest.TestCase):
     def testWrongNumberOfCentersSimpleSample2ByCore(self):
         SyncnetTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 4, None, True);
 
+    def testClusterTheSameData1ByCore(self):
+        SyncnetTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 2, [10, 20], True);
+
+    def testClusterTheSameData2ByCore(self):
+        SyncnetTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 3, [5, 5, 5], True);
+
 
     def testClusterAllocationOneDimensionDataByCore(self):
         SyncnetTestTemplates.templateClusterAllocationOneDimensionData(True);
