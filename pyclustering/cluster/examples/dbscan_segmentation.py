@@ -63,7 +63,7 @@ def template_segmentation_image(source, color_radius, color_neighbors, object_ra
     for cluster in clusters:
         coordinates = [];
         for index in cluster:
-            y = floor(index / image_size[0]);
+            y = int(floor(index / image_size[0]));
             x = index - y * image_size[0];
             
             coordinates.append([x, y]);

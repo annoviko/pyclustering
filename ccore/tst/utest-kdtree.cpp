@@ -324,3 +324,11 @@ TEST_F(utest_kdtree, insert_search_remove_with_payload_identical_data_4) {
 
     TemplateInsertFindRemoveByCoordinatesAndPayload(data, payloads);
 }
+
+
+TEST_F(utest_kdtree, insert_search_remove_with_payload_identical_data_5) {
+    dataset data = { {75, 75}, {75, 75}, {75, 75}, {75, 75}, {75, 75}, {75, 75}, {75, 75}, {75, 75} };
+    std::vector<std::size_t> payloads = { 0, 1, 2, 3, 4, 5, 6, 7 };
+
+    TemplateInsertFindRemoveByCoordinatesAndPayload(data, payloads);
+}

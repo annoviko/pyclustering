@@ -196,7 +196,7 @@ class kmedians:
             for index_dimension in range(len(self.__pointer_data[0])):
                 sorted_cluster = sorted(self.__clusters[index], key = lambda x: self.__pointer_data[x][index_dimension]);
                 
-                relative_index_median = math.floor(length_cluster / 2);
+                relative_index_median = int(math.floor(length_cluster / 2));
                 index_median = sorted_cluster[relative_index_median];
                 
                 if ( (length_cluster % 2) == 0 ):

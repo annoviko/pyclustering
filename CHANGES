@@ -5,7 +5,7 @@ CHANGE NOTES FOR 0.8.0 (STARTED Oct 23, 2017)
 ------------------------------------------------------------------------
 
 GENERAL CHANGES:
-- Parallel implementation of Sync-family algorithms for C/C++ implementation (CCORE) only (ccore.sync).
+- Implemented parallel Sync-family algorithms for C/C++ implementation (CCORE) only (ccore.sync).
   See: https://github.com/annoviko/pyclustering/issues/170
 
 - C/C++ implementation is used by default to increase performance.
@@ -55,7 +55,16 @@ GENERAL CHANGES:
 
 
 CORRECTED MAJOR BUGS:
-- Segmentation fault in CURE algorithm in some cases with data that have a lot of identical points (ccore.cure).
+- Incorrect type of medoid's index in K-Medians algorithm in case of Python 2.x (pyclustering.cluster.kmedoids).
+  See: https://github.com/annoviko/pyclustering/issues/415
+
+- Hanging of method 'find_node' in KD-tree if it does not contain node with specified point and payload (pyclustering.container.kdtree).
+  See: no reference.
+
+- Incorrect clustering by CURE algorithm in some cases when data have a lot of identical points (pyclustering.cluster.cure).
+  See: https://github.com/annoviko/pyclustering/issues/414
+
+- Segmentation fault in CURE algorithm in some cases when data have a lot of identical points (ccore.cure).
   See: no reference.
 
 - Incorrect segmentation by Python version of syncsegm - oscillatory network based on sync for image segmentation (pyclustering.nnet.syncsegm).

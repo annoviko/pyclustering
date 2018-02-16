@@ -93,7 +93,7 @@ class KmedoidsTestTemplates:
         input_data = [ [value] ] * number_objects;
         
         initial_medoids = [];
-        step = math.floor(number_objects / number_clusters);
+        step = int(math.floor(number_objects / number_clusters));
         for i in range(number_clusters):
             initial_medoids.append(i * step);
         

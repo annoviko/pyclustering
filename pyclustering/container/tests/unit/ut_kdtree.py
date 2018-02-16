@@ -308,5 +308,41 @@ class KDTreeUnitTest(unittest.TestCase):
         self.templateTextTreeRepresentation(SIMPLE_SAMPLES.SAMPLE_SIMPLE11);
 
 
+    def templateTheSameDataSearchAndRemove(self, points, payloads):
+        tree = kdtree();
+        
+        inserted_node = [];
+        for i in range(len(points)):
+            inserted_node.append( tree.insert(points[i], payloads[i]) );
+        
+        for node in inserted_node:
+            found_node = tree.find_node_with_payload(node.data, node.payload);
+            assert node == found_node;
+        
+        for i in range(len(inserted_node)):
+            tree.remove(inserted_node[i].data, payload=inserted_node[i].payload);
+            found_node = tree.find_node_with_payload(inserted_node[i].data, inserted_node[i].payload);
+            assert None == found_node;
+            
+            for j in range(i + 1, len(inserted_node)):
+                found_node = tree.find_node_with_payload(inserted_node[j].data, inserted_node[j].payload);
+                assert inserted_node[j] == found_node;
+    
+    def testTheSameDataSearchAndRemove1(self):
+        self.templateTheSameDataSearchAndRemove([ [2], [2], [2], [2], [2] ], [ 1, 2, 3, 4, 5 ]);
+
+    def testTheSameDataSearchAndRemove2(self):
+        self.templateTheSameDataSearchAndRemove([ [-2.3], [-2.3], [-2.3], [-2.3], [-2.3] ], [ 10, 11, 12, 13, 14 ]);
+
+    def testTheSameDataSearchAndRemove3(self):
+        self.templateTheSameDataSearchAndRemove([ [1.1, 2.1], [1.1, 2.1], [1.1, 2.1] ], [ 'qwe', 'asd', 'zxc' ]);
+
+    def testTheSameDataSearchAndRemove4(self):
+        self.templateTheSameDataSearchAndRemove([ [1.0, 2.0, 3.0, 4.0], [1.0, 2.0, 3.0, 4.0] ], [ 'qwe', None ]);
+
+    def testTheSameDataSearchAndRemove5(self):
+        self.templateTheSameDataSearchAndRemove([ [2] ], [ None ]);
+
+
 if __name__ == "__main__":
     unittest.main();
