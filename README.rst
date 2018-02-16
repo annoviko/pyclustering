@@ -16,6 +16,8 @@ model. CCORE library is a part of pyclustering and supported only for
 
 **E-Mail**: pyclustering@yandex.ru
 
+**Gitter**: https://gitter.im/pyclustering/pyclustering
+
 **PyClustering Wiki**: https://github.com/annoviko/pyclustering/wiki
 
 
@@ -53,7 +55,7 @@ Installation using pip3 tool:
 
     $ pip3 install pyclustering
 
-Manual installation:
+Manual installation using GCC:
 
 .. code:: bash
 
@@ -62,9 +64,10 @@ Manual installation:
     $ cd pyclustering/
     $ git clone https://github.com/annoviko/pyclustering.git .
 
-    # compile CCORE library (core of the pyclustering library).
+    # compile CCORE library (core of the pyclustering library)
+    # you can specify platform (32-bit: 'ccore_x86', 64-bit: 'ccore_x64')
     $ cd pyclustering/ccore
-    $ make ccore
+    $ make ccore        # compile CCORE for both platforms
 
     # return to parent folder of the pyclustering library
     cd ../
@@ -73,13 +76,21 @@ Manual installation:
     PYTHONPATH=`pwd`
     export PYTHONPATH=${PYTHONPATH}
 
+Manual installation using Visual Studio:
+
+1. Clone repository from: https://github.com/annoviko/pyclustering.git
+2. Open folder pyclustering/ccore
+3. Open Visual Studio project ccore.sln
+4. Select solution platform: 'x86' or 'x64'
+5. Build 'ccore' project.
+6. Add pyclustering folder to python path.
+
 
 
 Proposals, Questions, Bugs
 ==========================
 
-In case of any questions, proposals or bugs related to the pyclustering
-please contact to pyclustering@yandex.ru or create an issue here.
+In case of any questions, proposals or bugs related to the pyclustering please contact to pyclustering@yandex.ru or create an issue here.
 
 
 

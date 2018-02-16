@@ -28,6 +28,8 @@ matplotlib.use('Agg');
 from pyclustering.cluster.kmeans import kmeans;
 from pyclustering.cluster.center_initializer import kmeans_plusplus_initializer;
 
+import pyclustering.utils as utils;
+
 from pyclustering.utils import euclidean_distance;
 from pyclustering.utils import average_neighbor_distance;
 from pyclustering.utils import read_sample;
@@ -37,7 +39,7 @@ from pyclustering.utils import rgb2gray;
 from pyclustering.utils import extract_number_oscillations;
 from pyclustering.utils import draw_clusters;
 
-from pyclustering.samples.definitions import SIMPLE_SAMPLES;
+from pyclustering.samples.definitions import SIMPLE_SAMPLES, IMAGE_SIMPLE_SAMPLES;
 
 
 class Test(unittest.TestCase):
@@ -192,6 +194,16 @@ class Test(unittest.TestCase):
 
     def testDrawClustersThreeDimensions(self):
         self.templateDrawClustersNoFailure(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, 2);
+
+    def testDrawSegmentationResultNoFailure(self):
+        data = utils.read_image(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE01);
+    
+        kmeans_instance = kmeans(data, [[255, 0, 0], [0, 0, 255], [180, 136, 0], [255, 255, 255]]);
+        kmeans_instance.process();
+        
+        clusters = kmeans_instance.get_clusters();
+        utils.draw_image_mask_segments(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE01, clusters);
+        utils.draw_image_color_segments(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE01, clusters);
 
 
 if __name__ == "__main__":
