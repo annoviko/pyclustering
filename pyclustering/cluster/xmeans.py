@@ -228,7 +228,7 @@ class xmeans:
         """
 
         local_data = self.__pointer_data;
-        if (available_indexes):
+        if available_indexes:
             local_data = [ self.__pointer_data[i] for i in available_indexes ];
 
         local_centers = centers;
@@ -237,23 +237,37 @@ class xmeans:
 
         kmeans_instance = kmeans(local_data, local_centers, tolerance=self.__tolerance, ccore=False);
         kmeans_instance.process();
-        
-        local_clusters = kmeans_instance.get_clusters();
+
         local_centers = kmeans_instance.get_centers();
         
-        clusters = [];
+        clusters = kmeans_instance.get_clusters();
         if (available_indexes):
-            for local_cluster in local_clusters:
-                current_cluster = [];
-                for index_point in local_cluster:
-                    current_cluster.append(available_indexes[index_point]);
-                    
-                clusters.append(current_cluster);
-        else:
-            clusters = local_clusters;
+            clusters = self.__local_to_global_clusters(clusters, available_indexes);
         
         return (clusters, local_centers);
-    
+
+
+    def __local_to_global_clusters(self, local_clusters, available_indexes):
+        """!
+        @brief Converts clusters in local region define by 'available_indexes' to global clusters.
+
+        @param[in] local_clusters (list): Local clusters in specific region.
+        @param[in] available_indexes (list): Map between local and global point's indexes.
+
+        @return Global clusters.
+
+        """
+
+        clusters = [];
+        for local_cluster in local_clusters:
+            current_cluster = [];
+            for index_point in local_cluster:
+                current_cluster.append(available_indexes[index_point]);
+
+            clusters.append(current_cluster);
+
+        return clusters;
+
     
     def __improve_structure(self, clusters, centers):
         """!
