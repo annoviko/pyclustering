@@ -5,6 +5,9 @@ CHANGE NOTES FOR 0.8.0 (STARTED Oct 23, 2017)
 ------------------------------------------------------------------------
 
 GENERAL CHANGES:
+- Optimization of X-Means clustering process by using KMeans++ for initial centers of split regions (pyclustering.cluster.xmeans).
+  See: https://github.com/annoviko/pyclustering/issues/382
+
 - Implemented parallel Sync-family algorithms for C/C++ implementation (CCORE) only (ccore.sync).
   See: https://github.com/annoviko/pyclustering/issues/170
 

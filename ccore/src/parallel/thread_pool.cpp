@@ -57,7 +57,7 @@ thread_pool::~thread_pool(void) {
 }
 
 
-std::size_t thread_pool::add_task(task::proc & p_raw_task) {
+task::id thread_pool::add_task(task::proc & p_raw_task) {
     std::size_t task_id = task::INVALID_TASK_ID;
 
     {
@@ -80,7 +80,7 @@ std::size_t thread_pool::size(void) const {
 }
 
 
-std::size_t thread_pool::pop_complete_task(void) {
+task::id thread_pool::pop_complete_task(void) {
     std::unique_lock<std::mutex> lock_common(m_common_mutex);
 
     if ( (m_free == m_pool.size()) && m_done.empty() && m_queue.empty() ) {

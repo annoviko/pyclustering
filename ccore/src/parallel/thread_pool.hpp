@@ -71,9 +71,9 @@ public:
     ~thread_pool(void);
 
 public:
-    std::size_t add_task(task::proc & p_raw_task);
+    task::id add_task(task::proc & p_raw_task);
 
-    std::size_t pop_complete_task(void);
+    task::id pop_complete_task(void);
 
     std::size_t size(void) const;
 

@@ -35,6 +35,7 @@ from math import log;
 
 from pyclustering.cluster.encoder import type_encoding;
 from pyclustering.cluster.kmeans import kmeans;
+from pyclustering.cluster.center_initializer import kmeans_plusplus_initializer;
 
 from pyclustering.core.wrapper import ccore_library;
 
@@ -229,8 +230,12 @@ class xmeans:
         local_data = self.__pointer_data;
         if (available_indexes):
             local_data = [ self.__pointer_data[i] for i in available_indexes ];
-        
-        kmeans_instance = kmeans(local_data, centers, tolerance=self.__tolerance, ccore=False);
+
+        local_centers = centers;
+        if centers is None:
+            local_centers = kmeans_plusplus_initializer(local_data, 2).initialize();
+
+        kmeans_instance = kmeans(local_data, local_centers, tolerance=self.__tolerance, ccore=False);
         kmeans_instance.process();
         
         local_clusters = kmeans_instance.get_clusters();
@@ -260,20 +265,13 @@ class xmeans:
         @return (list) Allocated centers for clustering.
         
         """
-         
-        difference = 0.001;
-          
+
         allocated_centers = [];
         amount_free_centers = self.__kmax - len(centers);
 
         for index_cluster in range(len(clusters)):
-            # split cluster into two child clusters
-            parent_child_centers = [];
-            parent_child_centers.append(list_math_addition_number(centers[index_cluster], -difference));
-            parent_child_centers.append(list_math_addition_number(centers[index_cluster], difference));
-          
             # solve k-means problem for children where data of parent are used.
-            (parent_child_clusters, parent_child_centers) = self.__improve_parameters(parent_child_centers, clusters[index_cluster]);
+            (parent_child_clusters, parent_child_centers) = self.__improve_parameters(None, clusters[index_cluster]);
               
             # If it's possible to split current data
             if (len(parent_child_clusters) > 1):

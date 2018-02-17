@@ -27,9 +27,9 @@ namespace ccore {
 namespace parallel {
 
 
-const std::size_t    task::INVALID_TASK_ID              = (std::size_t) -1;
+const task::id    task::INVALID_TASK_ID              = (task::id) -1;
 
-std::size_t          task::STATIC_TASK_ID_GENERATOR     = 0;
+task::id          task::STATIC_TASK_ID_GENERATOR     = 0;
 
 
 task::task(const proc & p_task) :
@@ -49,12 +49,12 @@ task_status task::get_status(void) const {
 }
 
 
-std::size_t task::get_id(void) const {
+task::id task::get_id(void) const {
     return m_id;
 }
 
 
-std::size_t task::generate_task_id(void) {
+task::id task::generate_task_id(void) {
     if (++STATIC_TASK_ID_GENERATOR != task::INVALID_TASK_ID) {
         return STATIC_TASK_ID_GENERATOR;
     }

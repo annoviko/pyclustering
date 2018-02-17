@@ -106,19 +106,19 @@ static void template_add_task_test(const std::size_t p_pool_size, const std::siz
     ASSERT_EQ(p_task_amount, task_ids.size());
 
     for (std::size_t i = 0; i < p_task_amount; i++) {
-        std::size_t id = pool->pop_complete_task();
+        task::id id = pool->pop_complete_task();
 
         ASSERT_NE(task::INVALID_TASK_ID, id);
         ASSERT_TRUE(task_ids.find(id) != task_ids.end());
 
-        std::size_t task_index = task_ids[id];
+        task::id task_index = task_ids[id];
         double obtained_result = results[task_index];
         double expected_result = expected_results[task_index];
 
         ASSERT_EQ(expected_result, obtained_result);
     }
 
-    std::size_t id = pool->pop_complete_task();
+    task::id id = pool->pop_complete_task();
     ASSERT_EQ(task::INVALID_TASK_ID, id);
 }
 
