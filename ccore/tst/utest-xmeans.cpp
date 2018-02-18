@@ -153,6 +153,22 @@ TEST(utest_xmeans, allocation_mndl_sample_simple_04) {
 }
 
 
+TEST(utest_xmeans, same_size_data_and_centers_bic) {
+    dataset_ptr data = dataset_ptr( new dataset({ {1.0}, {2.0}, {3.0}, {4.0} }) );
+    dataset start_centers = { {1.0}, {2.0}, {3.0}, {4.0} };
+
+    template_length_process_data(data, start_centers, 20, { 1, 1, 1, 1 }, splitting_type::BAYESIAN_INFORMATION_CRITERION);
+}
+
+
+TEST(utest_xmeans, same_size_data_and_centers_mndl) {
+    dataset_ptr data = dataset_ptr( new dataset({ {1.0}, {2.0}, {3.0}, {4.0} }) );
+    dataset start_centers = { {1.0}, {2.0}, {3.0}, {4.0} };
+
+    template_length_process_data(data, start_centers, 20, { 1, 1, 1, 1 }, splitting_type::MINIMUM_NOISELESS_DESCRIPTION_LENGTH);
+}
+
+
 TEST(utest_xmeans, parallel_processing_bic) {
     dataset start_centers = { {0.25, 0.25}, {0.75, 0.65}, {0.95, 0.5} };
     std::size_t parallel_processing_trigger = 100;

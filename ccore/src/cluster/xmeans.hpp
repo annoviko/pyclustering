@@ -135,6 +135,8 @@ private:
     double bayesian_information_criterion(const cluster_sequence & clusters, const dataset & centers) const;
 
     double minimum_noiseless_description_length(const cluster_sequence & clusters, const dataset & centers) const;
+
+    void erase_empty_clusters(cluster_sequence & p_clusters);
 };
 
 
