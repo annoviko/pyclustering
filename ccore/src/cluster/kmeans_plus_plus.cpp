@@ -24,6 +24,7 @@
 #include <algorithm>
 #include <exception>
 #include <random>
+#include <string>
 
 
 namespace ccore {
@@ -40,7 +41,7 @@ kmeans_plus_plus::kmeans_plus_plus(const std::size_t p_amount) :
 }
 
 
-kmeans_plus_plus::kmeans_plus_plus(const std::size_t p_amount, const distance_solver & p_functor) :
+kmeans_plus_plus::kmeans_plus_plus(const std::size_t p_amount, const metric & p_functor) :
         m_amount(p_amount),
         m_dist_func(p_functor)
 { }

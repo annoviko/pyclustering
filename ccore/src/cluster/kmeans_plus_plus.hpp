@@ -36,19 +36,19 @@ namespace clst {
 
 
 class kmeans_plus_plus {
-private:
-    using distance_solver = distance_functor< std::vector<double> >;
+public:
+    using metric = distance_functor< std::vector<double> >;
 
 private:
     std::size_t         m_amount        = 0;
-    distance_solver     m_dist_func;
+    metric              m_dist_func;
 
 public:
     kmeans_plus_plus(void) = default;
 
     kmeans_plus_plus(const std::size_t p_amount);
 
-    kmeans_plus_plus(const std::size_t p_amount, const distance_solver & p_functor);
+    kmeans_plus_plus(const std::size_t p_amount, const metric & p_functor);
 
     kmeans_plus_plus(const kmeans_plus_plus & p_other) = default;
 

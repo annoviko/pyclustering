@@ -169,3 +169,39 @@ TEST(utest_kmeans_plus_plus, allocation_sample_simple_04) {
     dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_04);
     template_initialize_kmeans(data, 5, { 15, 15, 15, 15, 15 });
 }
+
+
+static void
+template_kmeans_plus_plus_metric(const dataset_ptr & p_data,
+                                 const std::size_t p_amount,
+                                 const kmeans_plus_plus::metric & solver)
+{
+    kmeans_plus_plus initializer(p_amount, solver);
+
+    dataset centers;
+    initializer.initialize(*p_data, centers);
+
+    ASSERT_EQ(p_amount, centers.size());
+    for (auto & center : centers) {
+        auto object = std::find(p_data->begin(), p_data->end(), center);
+        ASSERT_NE(p_data->cend(), object);
+    }
+}
+
+TEST(utest_kmeans_plus_plus, metric_manhattan) {
+    dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01);
+    kmeans_plus_plus::metric metric = [](const point & p1, const point & p2) {
+        return ccore::utils::metric::manhattan_distance(p1, p2);
+    };
+
+    template_kmeans_plus_plus_metric(data, 2, metric);
+}
+
+TEST(utest_kmeans_plus_plus, metric_euclidean) {
+    dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01);
+    kmeans_plus_plus::metric metric = [](const point & p1, const point & p2) {
+        return ccore::utils::metric::euclidean_distance(p1, p2);
+    };
+
+    template_kmeans_plus_plus_metric(data, 2, metric);
+}
