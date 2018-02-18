@@ -644,8 +644,9 @@ class ema:
             particle = 0.0;
             for index_cluster in range(self.__amount_clusters):
                 particle += self.__pic[index_cluster] * self.__gaussians[index_cluster][index_point];
-            
-            likelihood += numpy.log(particle);
+
+            if particle > 0.0:
+                likelihood += numpy.log(particle);
         
         return likelihood;
 

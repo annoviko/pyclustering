@@ -35,11 +35,13 @@
 #endif
 
 
-using pattern       = std::vector<double>;
-using pattern_ptr   = std::shared_ptr<pattern>;
+using pattern           = std::vector<double>;
+using pattern_ptr       = std::shared_ptr<pattern>;
 
-using point         = std::vector<double>;
-using point_ptr     = std::shared_ptr<point>;
+using point             = std::vector<double>;
+using point_ptr         = std::shared_ptr<point>;
 
-using dataset       = std::vector<point>;
-using dataset_ptr   = std::shared_ptr<dataset>;
+using dataset           = std::vector<point>;
+using dataset_ptr       = std::shared_ptr<dataset>;
+
+using index_sequence    = std::vector<std::size_t>;

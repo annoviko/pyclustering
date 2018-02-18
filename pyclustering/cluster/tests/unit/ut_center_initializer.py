@@ -24,7 +24,11 @@
 """
 
 
-import unittest
+import unittest;
+
+# Generate images without having a window appear.
+import matplotlib;
+matplotlib.use('Agg');
 
 from pyclustering.cluster.tests.kmeans_templates import KmeansTestTemplates;
 
@@ -41,7 +45,9 @@ class RandomCenterInitializerUnitTest(unittest.TestCase):
         centers = random_center_initializer(data, amount).initialize();
 
         self.assertEqual(amount, len(centers));
-        self.assertEqual(len(data[0]), len(centers[0]));
+
+        for center in centers:
+            self.assertEqual(len(data[0]), len(center));
 
     def test1DimensionDataOneCenter(self):
         self.templateRandomCenterInitializer([[0.0], [1.0], [2.0], [3.0]], 1);
@@ -67,7 +73,9 @@ class KmeansPlusPlusInitializerUnitTest(unittest.TestCase):
         centers = kmeans_plusplus_initializer(data, amount).initialize();
 
         self.assertEqual(amount, len(centers));
-        self.assertEqual(len(data[0]), len(centers[0]));
+
+        for center in centers:
+            self.assertEqual(len(data[0]), len(center));
 
         return centers;
 

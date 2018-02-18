@@ -35,8 +35,18 @@ namespace ccore {
 namespace clst {
 
 
+/**
+ *
+ * @brief K-Means++ center initializer algorithm.
+ *
+ */
 class kmeans_plus_plus {
 public:
+    /**
+     *
+     * @brief Metric that is used for distance calculation between two points.
+     *
+     */
     using metric = distance_functor< std::vector<double> >;
 
 private:
@@ -44,29 +54,133 @@ private:
     metric              m_dist_func;
 
 public:
+    /**
+     *
+     * @brief Default constructor to create initializer algorithm K-Means++.
+     *
+     */
     kmeans_plus_plus(void) = default;
 
-    kmeans_plus_plus(const std::size_t p_amount);
+    /**
+    *
+    * @brief    Constructor of center initializer algorithm K-Means++.
+    *
+    * @param[in] p_amount: amount of centers that should initialized.
+    *
+    */
+    kmeans_plus_plus(const std::size_t p_amount) noexcept;
 
-    kmeans_plus_plus(const std::size_t p_amount, const metric & p_functor);
+    /**
+    *
+    * @brief    Constructor of center initializer algorithm K-Means++.
+    * @details  By default algorithm uses square Euclidean distance as a metric.
+    *
+    * @param[in] p_amount: amount of centers that should initialized.
+    * @param[in] p_metric: metric for distance calculation between points.
+    *
+    */
+    kmeans_plus_plus(const std::size_t p_amount, const metric & p_metric) noexcept;
 
+    /**
+     *
+     * @brief Default copy constructor to create initializer algorithm K-Means++.
+     *
+     */
     kmeans_plus_plus(const kmeans_plus_plus & p_other) = default;
 
+    /**
+     *
+     * @brief Default move constructor to create initializer algorithm K-Means++.
+     *
+     */
     kmeans_plus_plus(kmeans_plus_plus && p_other) = default;
 
+    /**
+     *
+     * @brief Default destructor to destroy initializer algorithm K-Means++.
+     *
+     */
     ~kmeans_plus_plus(void) = default;
 
 public:
+    /**
+    *
+    * @brief    Performs center initialization process in line algorithm configuration.
+    *
+    * @param[in]  p_data: data for that centers are calculated.
+    * @param[out] p_centers: initialized centers for the specified data.
+    *
+    */
     void initialize(const dataset & p_data, dataset & p_centers) const;
 
+    /**
+    *
+    * @brief    Performs center initialization process in line algorithm configuration for
+    *           specific range of points.
+    *
+    * @param[in]  p_data: data for that centers are calculated.
+    * @param[in]  p_indexes: point indexes from data that are defines which points should be considered
+    *              during calculation process. If empty then all data points are considered.
+    * @param[out] p_centers: initialized centers for the specified data.
+    *
+    */
+    void initialize(const dataset & p_data, const index_sequence & p_indexes, dataset & p_centers) const;
+
 private:
-    point get_first_center(const dataset & p_data) const;
+    /**
+    *
+    * @brief    Calculates the first initial center using uniform distribution.
+    *
+    * @param[in]  p_data: data for that centers are calculated.
+    * @param[in]  p_indexes: point indexes from data that are defines which points should be
+    *              considered during calculation process.
+    *
+    * @return   The first initialized center.
+    *
+    */
+    point get_first_center(const dataset & p_data, const index_sequence & p_indexes) const;
 
-    point get_next_center(const dataset & p_data, const dataset & p_centers) const;
+    /**
+    *
+    * @brief    Calculates the next most probable center in line with weighted distribution.
+    *
+    * @param[in]  p_data: data for that centers are calculated.
+    * @param[in]  p_centers: already initialized centers.
+    * @param[in]  p_indexes: point indexes from data that are defines which points should be
+    *              considered during calculation process.
+    *
+    * @return   The next initialized center.
+    *
+    */
+    point get_next_center(const dataset & p_data,
+                          const dataset & p_centers,
+                          const index_sequence & p_indexes) const;
 
+    /**
+    *
+    * @brief    Calculates distances from each point to closest center.
+    *
+    * @param[in]  p_data: data for that centers are calculated.
+    * @param[in]  p_centers: already initialized centers.
+    * @param[in]  p_indexes: point indexes from data that are defines which points should be
+    *              considered during calculation process.
+    * @param[out] p_distances: the shortest distances from each point to center.
+    *
+    */
     void calculate_shortest_distances(const dataset & p_data,
                                       const dataset & p_centers,
+                                      const index_sequence & p_indexes,
                                       std::vector<double> & p_distances) const;
+
+    /**
+    *
+    * @brief    Calculates distance from the specified point to the closest center.
+    *
+    * @param[in]  p_point: point for that the shortest distance is calculated.
+    * @param[in]  p_centers: already initialized centers.
+    *
+    */
+    double get_shortest_distance(const point & p_point, const dataset & p_centers) const;
 };
 
 

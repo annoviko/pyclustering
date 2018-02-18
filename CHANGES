@@ -5,7 +5,10 @@ CHANGE NOTES FOR 0.8.0 (STARTED Oct 23, 2017)
 ------------------------------------------------------------------------
 
 GENERAL CHANGES:
-- Optimization of X-Means clustering process by using KMeans++ for initial centers of split regions (pyclustering.cluster.xmeans).
+- Implemented K-Means++ initializer for CCORE (ccore.clst.kmeans_plus_plus).
+  See: https://github.com/annoviko/pyclustering/issues/382
+
+- Optimization of X-Means clustering process by using KMeans++ for initial centers of split regions (pyclustering.cluster.xmeans, ccore.clst.xmeans).
   See: https://github.com/annoviko/pyclustering/issues/382
 
 - Implemented parallel Sync-family algorithms for C/C++ implementation (CCORE) only (ccore.sync).
@@ -41,14 +44,11 @@ GENERAL CHANGES:
 - Python implementation of CURE algorithm method 'get_clusters()' returns list of indexes (pyclustering.cluster.cure).
   See: https://github.com/annoviko/pyclustering/issues/384
 
-- Implemented parallel processing for X-Means algorithm (ccore.xmeans).
+- Implemented parallel processing for X-Means algorithm (ccore.clst.xmeans).
   See: https://github.com/annoviko/pyclustering/issues/372
 
 - Implemented pool threads for parallel processing (ccore.parallel).
   See: https://github.com/annoviko/pyclustering/issues/383
-
-- Implemented AntMean clustering algorithm (pyclustering.cluster.antmean, ccore.antmean).
-  See: https://github.com/annoviko/pyclustering/issues/278
 
 - Optimization of OPTICS algorithm using KD-tree for searching nearest neighbors (pyclustering.cluster.optics, ccore.optics).
   See: https://github.com/annoviko/pyclustering/issues/370
@@ -67,7 +67,7 @@ CORRECTED MAJOR BUGS:
 - Incorrect clustering by CURE algorithm in some cases when data have a lot of identical points (pyclustering.cluster.cure).
   See: https://github.com/annoviko/pyclustering/issues/414
 
-- Segmentation fault in CURE algorithm in some cases when data have a lot of identical points (ccore.cure).
+- Segmentation fault in CURE algorithm in some cases when data have a lot of identical points (ccore.clst.cure).
   See: no reference.
 
 - Incorrect segmentation by Python version of syncsegm - oscillatory network based on sync for image segmentation (pyclustering.nnet.syncsegm).
@@ -82,10 +82,10 @@ CORRECTED MAJOR BUGS:
 - Wrong indexes can be returned during synchronous ensembles allocation for amplitude output dynamic 'allocate_sync_ensembles' - affect HNN, LEGION (pyclustering.utils).
   See: no reference.
 
-- Amount of allocated clusters can be differ from amount of centers in X-Means algorithm (ccore.xmeans).
+- Amount of allocated clusters can be differ from amount of centers in X-Means algorithm (ccore.clst.xmeans).
   See: https://github.com/annoviko/pyclustering/issues/389
 
-- Amount of allocated clusters can be bigger than kmax in X-Means algorithm (pyclustering.cluster.xmeans, ccore.xmeans).
+- Amount of allocated clusters can be bigger than kmax in X-Means algorithm (pyclustering.cluster.xmeans, ccore.clst.xmeans).
   See: https://github.com/annoviko/pyclustering/issues/388
 
 - Corrected bug with returned nullptr in method 'kdtree_searcher::find_nearest_node()' (ccore.container.kdtree).

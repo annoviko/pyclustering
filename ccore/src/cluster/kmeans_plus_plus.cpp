@@ -32,7 +32,7 @@ namespace ccore {
 namespace clst {
 
 
-kmeans_plus_plus::kmeans_plus_plus(const std::size_t p_amount) :
+kmeans_plus_plus::kmeans_plus_plus(const std::size_t p_amount) noexcept :
         m_amount(p_amount)
 {
     m_dist_func = [](const point &p1, const point &p2) {
@@ -41,13 +41,21 @@ kmeans_plus_plus::kmeans_plus_plus(const std::size_t p_amount) :
 }
 
 
-kmeans_plus_plus::kmeans_plus_plus(const std::size_t p_amount, const metric & p_functor) :
+kmeans_plus_plus::kmeans_plus_plus(const std::size_t p_amount, const metric & p_functor) noexcept :
         m_amount(p_amount),
         m_dist_func(p_functor)
 { }
 
 
 void kmeans_plus_plus::initialize(const dataset & p_data, dataset & p_centers) const {
+    initialize(p_data, { }, p_centers);
+}
+
+
+void kmeans_plus_plus::initialize(const dataset & p_data,
+                                  const index_sequence & p_indexes,
+                                  dataset & p_centers) const
+{
     p_centers.clear();
 
     if (!m_amount) { return; }
@@ -59,55 +67,80 @@ void kmeans_plus_plus::initialize(const dataset & p_data, dataset & p_centers) c
     }
 
     if (p_data.size() < m_amount) {
-        throw std::invalid_argument("Amount of object ("
-                + std::to_string(p_data.size()) +
-                ") should be equal or greater then amount of initialized centers ("
-                + std::to_string(m_amount) + ").");
+        throw std::invalid_argument("Amount of objects should be equal or greater then amount of initialized centers.");
     }
 
-    p_centers.push_back(get_first_center(p_data));
+    if (!p_indexes.empty() && p_indexes.size() < m_amount) {
+        throw std::invalid_argument("Amount of objects defined by range should be equal or greater then amount of initialized centers.");
+    }
+
+    p_centers.push_back(get_first_center(p_data, p_indexes));
 
     for (std::size_t i = 1; i < m_amount; i++) {
-        p_centers.push_back(get_next_center(p_data, p_centers));
+        p_centers.push_back(get_next_center(p_data, p_centers, p_indexes));
     }
 }
 
 
-point kmeans_plus_plus::get_first_center(const dataset & p_data) const {
+point kmeans_plus_plus::get_first_center(const dataset & p_data, const index_sequence & p_indexes) const {
+    std::size_t length = p_indexes.empty() ? p_data.size() : p_indexes.size();
+
     std::default_random_engine generator;
-    std::uniform_int_distribution<std::size_t> distribution(0, p_data.size() - 1);
-    return p_data[ distribution(generator) ];
+    std::uniform_int_distribution<std::size_t> distribution(0, length - 1);
+
+    std::size_t index = distribution(generator);
+    return p_indexes.empty() ? p_data[index] : p_data[ p_indexes[index] ];
 }
 
 
-point kmeans_plus_plus::get_next_center(const dataset & p_data, const dataset & p_centers) const {
+point kmeans_plus_plus::get_next_center(const dataset & p_data,
+                                        const dataset & p_centers,
+                                        const index_sequence & p_indexes) const
+{
     std::vector<double> distances;
-    calculate_shortest_distances(p_data, p_centers, distances);
+    calculate_shortest_distances(p_data, p_centers, p_indexes, distances);
 
     auto iter = std::max_element(distances.begin(), distances.end());
     std::size_t index = std::distance(distances.begin(), iter);
 
-    return p_data[index];
+    return p_indexes.empty() ? p_data[index] : p_data[ p_indexes[index] ];
 }
 
 
 void kmeans_plus_plus::calculate_shortest_distances(const dataset & p_data,
                                                     const dataset & p_centers,
+                                                    const index_sequence & p_indexes,
                                                     std::vector<double> & p_distances) const
 {
     p_distances.reserve(p_data.size());
 
-    for (auto & point : p_data) {
-        double shortest_distance = std::numeric_limits<double>::max();
-        for (auto & center : p_centers) {
-            double distance = m_dist_func(point, center);
-            if (distance < shortest_distance) {
-                shortest_distance = distance;
-            }
+    if (p_indexes.empty())
+    {
+        for (auto & point : p_data) {
+            double shortest_distance = get_shortest_distance(point, p_centers);
+            p_distances.push_back(shortest_distance);
         }
-
-        p_distances.push_back(shortest_distance * shortest_distance);
     }
+    else {
+        for (auto index : p_indexes) {
+            double shortest_distance = get_shortest_distance(p_data[index], p_centers);
+            p_distances.push_back(shortest_distance);
+        }
+    }
+
+}
+
+
+double kmeans_plus_plus::get_shortest_distance(const point & p_point, const dataset & p_centers) const {
+    double shortest_distance = std::numeric_limits<double>::max();
+    for (auto & center : p_centers) {
+        double distance = m_dist_func(p_point, center);
+        if (distance < shortest_distance) {
+            shortest_distance = distance;
+        }
+    }
+
+    return shortest_distance;
 }
 
 

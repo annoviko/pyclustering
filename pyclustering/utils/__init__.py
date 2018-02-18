@@ -501,7 +501,10 @@ def calculate_ellipse_description(covariance, scale = 2.0):
     
     values, vectors = eigh_values[order], eigh_vectors[order];
     angle = numpy.degrees(numpy.arctan2(*vectors[:,0][::-1]));
-    
+
+    if (0.0 in values):
+        return 0, 0, 0;
+
     width, height = 2.0 * scale * numpy.sqrt(values);
     return angle, width, height;
 

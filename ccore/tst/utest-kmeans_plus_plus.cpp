@@ -205,3 +205,44 @@ TEST(utest_kmeans_plus_plus, metric_euclidean) {
 
     template_kmeans_plus_plus_metric(data, 2, metric);
 }
+
+
+
+static void
+template_kmeans_plus_plus_initialization_range(const dataset_ptr & p_data,
+                                               const std::size_t p_amount,
+                                               const index_sequence & p_indexes)
+{
+    kmeans_plus_plus initializer(p_amount);
+
+    dataset centers;
+    initializer.initialize(*p_data, p_indexes, centers);
+
+    ASSERT_EQ(p_amount, centers.size());
+    for (auto & center : centers) {
+        auto iter_object = std::find(p_data->begin(), p_data->end(), center);
+        ASSERT_NE(p_data->cend(), iter_object);
+
+        std::size_t index = std::distance(p_data->begin(), iter_object);
+        auto iter_index = std::find(p_indexes.begin(), p_indexes.end(), index);
+        ASSERT_NE(p_indexes.cend(), iter_index);
+    }
+}
+
+TEST(utest_kmeans_plus_plus, range_sample_simple_01) {
+    index_sequence range = { 0, 1, 2, 5, 6, 7 };
+    dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01);
+    template_kmeans_plus_plus_initialization_range(data, 2, range);
+}
+
+TEST(utest_kmeans_plus_plus, range_sample_simple_02) {
+    index_sequence range = { 0, 1, 2, 5, 6, 7, 10, 11, 12 };
+    dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02);
+    template_kmeans_plus_plus_initialization_range(data, 3, range);
+}
+
+TEST(utest_kmeans_plus_plus, indexes_less_than_centers) {
+    index_sequence range = { 0 };
+    dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01);
+    ASSERT_THROW(template_kmeans_plus_plus_initialization_range(data, 2, range), std::invalid_argument);
+}

@@ -28,6 +28,9 @@
 
 #include "cluster/xmeans.hpp"
 
+#include "cluster/kmeans.hpp"
+#include "cluster/kmeans_plus_plus.hpp"
+
 #include "utils/math.hpp"
 #include "utils/metric.hpp"
 
@@ -155,16 +158,9 @@ void xmeans::improve_structure() {
 
 
 void xmeans::improve_region_structure(const cluster & p_cluster, const point & p_center, dataset & p_allocated_centers) {
+    /* initialize initial center using k-means++ */
     dataset parent_child_centers;
-
-    parent_child_centers.push_back( p_center );     /* the first child      */
-    parent_child_centers.push_back( p_center );     /* the second child     */
-
-    /* change location of each child (total number of children is two) */
-    for (std::size_t dimension = 0; dimension < parent_child_centers[0].size(); dimension++) {
-        parent_child_centers[0][dimension] -= DEFAULT_SPLIT_DIFFERENCE;
-        parent_child_centers[1][dimension] += DEFAULT_SPLIT_DIFFERENCE;
-    }
+    kmeans_plus_plus(2).initialize(*m_ptr_data, p_cluster, parent_child_centers);
 
     /* solve k-means problem for children where data of parent are used */
     cluster_sequence parent_child_clusters(2, cluster());
