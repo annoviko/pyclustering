@@ -43,6 +43,9 @@
     <ClCompile Include="cluster\kmeans.cpp">
       <Filter>Source Files\cluster</Filter>
     </ClCompile>
+    <ClCompile Include="cluster\kmeans_plus_plus.cpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClCompile>
     <ClCompile Include="cluster\kmedians.cpp">
       <Filter>Source Files\cluster</Filter>
     </ClCompile>
@@ -214,6 +217,9 @@
       <Filter>Source Files\cluster</Filter>
     </ClInclude>
     <ClInclude Include="cluster\kmeans.hpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="cluster\kmeans_plus_plus.hpp">
       <Filter>Source Files\cluster</Filter>
     </ClInclude>
     <ClInclude Include="cluster\kmedians.hpp">

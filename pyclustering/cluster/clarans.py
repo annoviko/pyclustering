@@ -30,7 +30,7 @@ import random;
 
 from pyclustering.cluster.encoder import type_encoding;
 
-from pyclustering.utils import euclidean_distance_sqrt;
+from pyclustering.utils import euclidean_distance_square;
 
 
 class clarans:
@@ -148,7 +148,7 @@ class clarans:
             dist_optim = 0.0;
              
             for index in range(len(medoids)):
-                dist = euclidean_distance_sqrt(self.__pointer_data[index_point], self.__pointer_data[medoids[index]]);
+                dist = euclidean_distance_square(self.__pointer_data[index_point], self.__pointer_data[medoids[index]]);
                  
                 if ( (dist < dist_optim) or (index is 0)):
                     index_optim = index;
@@ -191,15 +191,15 @@ class clarans:
                     
                     # for optimization calculate all required distances
                     # from the point to current medoid
-                    distance_current = euclidean_distance_sqrt(self.__pointer_data[point_index], self.__pointer_data[current_medoid_index]);
+                    distance_current = euclidean_distance_square(self.__pointer_data[point_index], self.__pointer_data[current_medoid_index]);
                     
                     # from the point to candidate median
-                    distance_candidate = euclidean_distance_sqrt(self.__pointer_data[point_index], self.__pointer_data[candidate_medoid_index]);
+                    distance_candidate = euclidean_distance_square(self.__pointer_data[point_index], self.__pointer_data[candidate_medoid_index]);
                     
                     # from the point to nearest (own) medoid
                     distance_nearest = float('inf');
                     if ( (point_medoid_index != candidate_medoid_index) and (point_medoid_index != current_medoid_cluster_index) ):
-                        distance_nearest = euclidean_distance_sqrt(self.__pointer_data[point_index], self.__pointer_data[point_medoid_index]);
+                        distance_nearest = euclidean_distance_square(self.__pointer_data[point_index], self.__pointer_data[point_medoid_index]);
                     
                     # apply rules for cost calculation
                     if (point_cluster_index == current_medoid_cluster_index):
@@ -248,7 +248,7 @@ class clarans:
         other_distance_nearest = float('inf');
         for index_medoid in self.__current:
             if (index_medoid != current_medoid_index):
-                other_distance_candidate = euclidean_distance_sqrt(self.__pointer_data[point_index], self.__pointer_data[current_medoid_index]);
+                other_distance_candidate = euclidean_distance_square(self.__pointer_data[point_index], self.__pointer_data[current_medoid_index]);
                 
                 if (other_distance_candidate < other_distance_nearest):
                     other_distance_nearest = other_distance_candidate;
@@ -270,6 +270,6 @@ class clarans:
             cluster = self.__clusters[index_cluster];
             index_medoid = self.__current[index_cluster];
             for index_point in cluster:
-                estimation += euclidean_distance_sqrt(self.__pointer_data[index_point], self.__pointer_data[index_medoid]);
+                estimation += euclidean_distance_square(self.__pointer_data[index_point], self.__pointer_data[index_medoid]);
         
         return estimation;

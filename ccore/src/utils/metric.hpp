@@ -22,6 +22,9 @@
 #pragma once
 
 
+#include <exception>
+#include <functional>
+#include <cmath>
 #include <vector>
 
 
@@ -34,15 +37,12 @@ namespace metric {
 
 /**
  *
- * @brief   Calculates square of Euclidean distance between points.
- *
- * @param[in] point1: pointer to point #1 that is represented by coordinates.
- * @param[in] point2: pointer to point #2 that is represented by coordinates.
- *
- * @return  Returns square of Euclidean distance between points.
+ * @brief   Encapsulates distance calculation function between two objects.
  *
  */
-double euclidean_distance_sqrt(const std::vector<double> * const point1, const std::vector<double> * const point2);
+template <typename TypeContainer>
+using distance_functor = std::function<double(const TypeContainer &, const TypeContainer &)>;
+
 
 /**
  *
@@ -54,20 +54,26 @@ double euclidean_distance_sqrt(const std::vector<double> * const point1, const s
  * @return  Returns square of Euclidean distance between points.
  *
  */
-double euclidean_distance_sqrt(const std::vector<double> & point1, const std::vector<double> & point2);
+template <typename TypeContainer>
+double euclidean_distance_square(const TypeContainer & point1, const TypeContainer & point2) {
+    if (point1.size() != point2.size()) {
+        throw std::invalid_argument("Impossible to calculate distance between object with different sizes ("
+                + std::to_string(point1.size()) + ", "
+                + std::to_string(point2.size()) + ").");
+    }
 
+    double distance = 0.0;
+    typename TypeContainer::const_iterator iter_point1 = point1.begin();
 
-/**
- *
- * @brief   Calculates Euclidean distance between points.
- *
- * @param[in] point1: pointer to point #1 that is represented by coordinates.
- * @param[in] point2: pointer to point #2 that is represented by coordinates.
- *
- * @return  Returns Euclidean distance between points.
- *
- */
-double euclidean_distance(const std::vector<double> * const point1, const std::vector<double> * const point2);
+    for (auto & dim_point2 : point2) {
+        double difference = (*iter_point1 - dim_point2);
+        distance += difference * difference;
+
+        iter_point1++;
+    }
+
+  return distance;
+}
 
 
 /**
@@ -80,7 +86,10 @@ double euclidean_distance(const std::vector<double> * const point1, const std::v
  * @return  Returns Euclidean distance between points.
  *
  */
-double euclidean_distance(const std::vector<double> & point1, const std::vector<double> & point2);
+template <typename TypeContainer>
+double euclidean_distance(const TypeContainer & point1, const TypeContainer & point2) {
+    return std::sqrt(euclidean_distance_square(point1, point2));
+}
 
 
 /**

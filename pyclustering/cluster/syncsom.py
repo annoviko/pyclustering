@@ -32,7 +32,7 @@ from pyclustering.cluster.syncnet import syncnet;
 from pyclustering.nnet.som import som, type_conn;
 from pyclustering.nnet import initial_type;
 
-from pyclustering.utils import euclidean_distance_sqrt;
+from pyclustering.utils import euclidean_distance_square;
 
 
 class syncsom:
@@ -175,7 +175,7 @@ class syncsom:
         
         for index_object1 in self._som.capture_objects[som_neuron_index1]:
             for index_object2 in self._som.capture_objects[som_neuron_index2]:
-                distance = euclidean_distance_sqrt(self._data[index_object1], self._data[index_object2]);
+                distance = euclidean_distance_square(self._data[index_object1], self._data[index_object2]);
                 if (distance <= self._radius):
                     return True;
         

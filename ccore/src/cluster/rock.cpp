@@ -78,7 +78,7 @@ void rock::create_adjacency_matrix(const dataset & p_data) {
     m_adjacency_matrix = adjacency_matrix(p_data.size());
     for (size_t i = 0; i < m_adjacency_matrix.size(); i++) {
         for (size_t j = i + 1; j < m_adjacency_matrix.size(); j++) {
-            double distance = euclidean_distance_sqrt(&p_data[i], &p_data[j]);
+            double distance = euclidean_distance_square(p_data[i], p_data[j]);
 
             if (distance < m_radius) {
                 m_adjacency_matrix.set_connection(i, j);

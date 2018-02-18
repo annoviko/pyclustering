@@ -97,7 +97,7 @@ void kmeans::update_clusters(const dataset & centers, cluster_sequence & cluster
         size_t    suitable_index_cluster = 0;
 
         for (size_t index_cluster = 0; index_cluster < clusters.size(); index_cluster++) {
-            double distance = euclidean_distance_sqrt(&centers[index_cluster], &data[index_object]);
+            double distance = euclidean_distance_square(centers[index_cluster], data[index_object]);
 
             if (distance < minimum_distance) {
                 minimum_distance = distance;
@@ -172,7 +172,7 @@ double kmeans::update_center(const cluster & p_cluster, point & p_center) {
         total[dimension] = total[dimension] / p_cluster.size();
     }
 
-    double change = euclidean_distance_sqrt(&p_center, &total);
+    double change = euclidean_distance_square(p_center, total);
 
     p_center = std::move(total);
     return change;

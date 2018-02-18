@@ -78,9 +78,10 @@ class random_center_initializer:
 class kmeans_plusplus_initializer:
     """!
     @brief K-Means++ is an algorithm for choosing the initial centers for algorithms like K-Means or X-Means.
-    @details Clustering results are depends on initial centers in case of K-Means algorithm and even in case of X-Means.
-              This method is used to find out optimal initial centers. There is an example of initial centers that were
-              calculated by the K-Means++ method:
+    @details K-Means++ algorithm guarantees an approximation ratio O(log k). Clustering results are depends on
+              initial centers in case of K-Means algorithm and even in case of X-Means. This method is used to find
+              out optimal initial centers. There is an example of initial centers that were calculated by the
+              K-Means++ method:
     
     @image html kmeans_plusplus_initializer_results.png
     
@@ -128,8 +129,11 @@ class kmeans_plusplus_initializer:
         """!
         @brief Returns index in probabilities.
         
-        @param[in] probabilities (list): List with segments in increasing sequence with val in [0, 1], for example, [0 0.1 0.2 0.3 1.0].
-        
+        @param[in] probabilities (list): List with segments in increasing sequence with val in [0, 1],
+                    for example, [0.0, 0.1, 0.2, 0.3, ..., 1.0].
+
+        @return (uint) Index in probabilities.
+
         """
 
         # Initialize return value
@@ -280,7 +284,7 @@ class kmeans_plusplus_initializer:
         
         """
         # Initialize result list by the first centers
-        centers = [self.__get_first_center()];
+        centers = [random.randint(0, len(self.__data) - 1)];
 
         # For each next center
         for _ in range(1, self.__amount):

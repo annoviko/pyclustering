@@ -30,7 +30,7 @@ from enum import IntEnum;
 
 from pyclustering.cluster.encoder import type_encoding;
 
-from pyclustering.utils import euclidean_distance_sqrt;
+from pyclustering.utils import euclidean_distance_square;
 
 from pyclustering.core.wrapper import ccore_library
 
@@ -218,7 +218,7 @@ class agglomerative:
                 candidate_average_distance = 0.0;
                 for index_object1 in self.__clusters[index_cluster1]:
                     for index_object2 in self.__clusters[index_cluster2]:
-                        candidate_average_distance += euclidean_distance_sqrt(self.__pointer_data[index_object1], self.__pointer_data[index_object2]);
+                        candidate_average_distance += euclidean_distance_square(self.__pointer_data[index_object1], self.__pointer_data[index_object2]);
                 
                 candidate_average_distance /= (len(self.__clusters[index_cluster1]) + len(self.__clusters[index_cluster2]));
                 
@@ -241,7 +241,7 @@ class agglomerative:
         
         for index1 in range(0, len(self.__centers)):
             for index2 in range(index1 + 1, len(self.__centers)):
-                distance = euclidean_distance_sqrt(self.__centers[index1], self.__centers[index2]);
+                distance = euclidean_distance_square(self.__centers[index1], self.__centers[index2]);
                 if (distance < minimum_centroid_distance):
                     minimum_centroid_distance = distance;
                     indexes = [index1, index2];
@@ -287,7 +287,7 @@ class agglomerative:
         candidate_maximum_distance = 0.0;
         for index_object1 in self.__clusters[index_cluster1]:
             for index_object2 in self.__clusters[index_cluster2]:
-                distance = euclidean_distance_sqrt(self.__pointer_data[index_object1], self.__pointer_data[index_object2]);
+                distance = euclidean_distance_square(self.__pointer_data[index_object1], self.__pointer_data[index_object2]);
                 
                 if (distance > candidate_maximum_distance):
                     candidate_maximum_distance = distance;
@@ -330,7 +330,7 @@ class agglomerative:
         
         for index_object1 in self.__clusters[index_cluster1]:
             for index_object2 in self.__clusters[index_cluster2]:
-                distance = euclidean_distance_sqrt(self.__pointer_data[index_object1], self.__pointer_data[index_object2]);
+                distance = euclidean_distance_square(self.__pointer_data[index_object1], self.__pointer_data[index_object2]);
                 if (distance < candidate_minimum_distance):
                     candidate_minimum_distance = distance;
         

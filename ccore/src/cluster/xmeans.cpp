@@ -236,7 +236,7 @@ std::size_t xmeans::find_proper_cluster(const dataset & analysed_centers, const 
     double distance_optimum = std::numeric_limits<double>::max();
 
     for (std::size_t index_cluster = 0; index_cluster < analysed_centers.size(); index_cluster++) {
-        double distance = euclidean_distance_sqrt( &p_point, &(analysed_centers[index_cluster]) );
+        double distance = euclidean_distance_square( p_point, (analysed_centers[index_cluster]) );
 
         if (distance < distance_optimum) {
             index_optimum = index_cluster;
@@ -279,7 +279,7 @@ double xmeans::update_center(const cluster & p_cluster, point & p_center) {
         dimension = dimension / p_cluster.size();
     }
 
-    double distance = euclidean_distance_sqrt( &p_center, &total );
+    double distance = euclidean_distance_square( p_center, total );
 
     std::copy(total.begin(), total.end(), p_center.begin());
 
@@ -298,7 +298,7 @@ double xmeans::bayesian_information_criterion(const cluster_sequence & analysed_
 
     for (std::size_t index_cluster = 0; index_cluster < analysed_clusters.size(); index_cluster++) {
         for (auto & index_object : analysed_clusters[index_cluster]) {
-            sigma += euclidean_distance_sqrt( &(*m_ptr_data)[index_object], &(analysed_centers[index_cluster]) );
+            sigma += euclidean_distance_square( (*m_ptr_data)[index_object], analysed_centers[index_cluster] );
         }
 
         N += analysed_clusters[index_cluster].size();
@@ -340,7 +340,7 @@ double xmeans::minimum_noiseless_description_length(const cluster_sequence & clu
         double Ni = (double) clusters[index_cluster].size();
         double Wi = 0.0;
         for (auto & index_object : clusters[index_cluster]) {
-            /* euclidean_distance_sqrt should be used in line with paper, but in this case results are
+            /* euclidean_distance_square should be used in line with paper, but in this case results are
              * very poor, therefore square root is used to improved. */
             Wi += euclidean_distance((*m_ptr_data)[index_object], centers[index_cluster]);
         }

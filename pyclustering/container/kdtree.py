@@ -26,7 +26,7 @@
 """
 
 
-from pyclustering.utils import euclidean_distance_sqrt;
+from pyclustering.utils import euclidean_distance_square;
 
 
 class kdtree_text_visualizer:
@@ -506,7 +506,7 @@ class kdtree:
             if (point[node_head.disc] < maximum):
                 self.__recursive_nearest_nodes(point, distance, sqrt_distance, node_head.left, best_nodes);
         
-        candidate_distance = euclidean_distance_sqrt(point, node_head.data);
+        candidate_distance = euclidean_distance_square(point, node_head.data);
         if (candidate_distance <= sqrt_distance):
             best_nodes.append( (candidate_distance, node_head) );
 

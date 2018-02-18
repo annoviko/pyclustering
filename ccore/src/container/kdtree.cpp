@@ -361,7 +361,7 @@ void kdtree_searcher::recursive_nearest_nodes(const kdnode::ptr node) const {
 
 
 void kdtree_searcher::store_if_reachable(const kdnode::ptr node) const {
-    double candidate_distance = euclidean_distance_sqrt(&m_search_point, &node->get_data());
+    double candidate_distance = euclidean_distance_square(m_search_point, node->get_data());
     if (candidate_distance <= m_sqrt_distance) {
         m_nearest_nodes.push_back(node);
         m_nodes_distance.push_back(candidate_distance);
@@ -370,7 +370,7 @@ void kdtree_searcher::store_if_reachable(const kdnode::ptr node) const {
 
 
 void kdtree_searcher::store_best_if_reachable(const kdnode::ptr node) const {
-    double candidate_distance = euclidean_distance_sqrt(&m_search_point, &node->get_data());
+    double candidate_distance = euclidean_distance_square(m_search_point, node->get_data());
     if (candidate_distance <= m_nodes_distance[0]) {
         m_nearest_nodes[0] = node;
         m_nodes_distance[0] = candidate_distance;
@@ -379,7 +379,7 @@ void kdtree_searcher::store_best_if_reachable(const kdnode::ptr node) const {
 
 
 void kdtree_searcher::store_user_nodes_if_reachable(const kdnode::ptr node) const {
-    double candidate_distance = euclidean_distance_sqrt(&m_search_point, &node->get_data());
+    double candidate_distance = euclidean_distance_square(m_search_point, node->get_data());
     if (candidate_distance <= m_sqrt_distance) {
         m_user_rule(node, candidate_distance);
     }

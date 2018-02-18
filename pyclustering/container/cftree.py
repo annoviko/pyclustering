@@ -29,7 +29,7 @@ from copy import copy;
 
 from pyclustering.cluster import cluster_visualizer;
 
-from pyclustering.utils import euclidean_distance_sqrt;
+from pyclustering.utils import euclidean_distance_square;
 from pyclustering.utils import manhattan_distance;
 from pyclustering.utils import list_math_addition, list_math_subtraction, list_math_multiplication;
 from pyclustering.utils import linear_sum, square_sum;
@@ -240,7 +240,7 @@ class cfentry:
         """
         
         if (type_measurement is measurement_type.CENTROID_EUCLIDIAN_DISTANCE):
-            return euclidean_distance_sqrt(entry.get_centroid(), self.get_centroid());
+            return euclidean_distance_square(entry.get_centroid(), self.get_centroid());
         
         elif (type_measurement is measurement_type.CENTROID_MANHATTAN_DISTANCE):
             return manhattan_distance(entry.get_centroid(), self.get_centroid());

@@ -41,7 +41,7 @@ from pyclustering.core.wrapper import ccore_library;
 
 import pyclustering.core.xmeans_wrapper as wrapper;
 
-from pyclustering.utils import euclidean_distance_sqrt, euclidean_distance;
+from pyclustering.utils import euclidean_distance_square, euclidean_distance;
 from pyclustering.utils import list_math_addition_number;
 
 
@@ -375,7 +375,7 @@ class xmeans:
             
             Wi = 0.0;
             for index_object in clusters[index_cluster]:
-                # euclidean_distance_sqrt should be used in line with paper, but in this case results are
+                # euclidean_distance_square should be used in line with paper, but in this case results are
                 # very poor, therefore square root is used to improved.
                 Wi += euclidean_distance(self.__pointer_data[index_object], centers[index_cluster]);
             
@@ -419,7 +419,7 @@ class xmeans:
           
         for index_cluster in range(0, len(clusters), 1):
             for index_object in clusters[index_cluster]:
-                sigma_sqrt += euclidean_distance_sqrt(self.__pointer_data[index_object], centers[index_cluster]);
+                sigma_sqrt += euclidean_distance_square(self.__pointer_data[index_object], centers[index_cluster]);
 
             N += len(clusters[index_cluster]);
       
