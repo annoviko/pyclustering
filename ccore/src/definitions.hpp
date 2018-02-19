@@ -43,5 +43,3 @@ using point_ptr         = std::shared_ptr<point>;
 
 using dataset           = std::vector<point>;
 using dataset_ptr       = std::shared_ptr<dataset>;
-
-using index_sequence    = std::vector<std::size_t>;

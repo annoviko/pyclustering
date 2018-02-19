@@ -24,6 +24,7 @@
 
 #include "definitions.hpp"
 
+#include "cluster/cluster_data.hpp"
 #include "utils/metric.hpp"
 
 
