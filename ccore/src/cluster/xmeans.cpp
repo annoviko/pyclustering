@@ -168,7 +168,7 @@ void xmeans::improve_region_structure(const cluster & p_cluster, const point & p
 
     /* initialize initial center using k-means++ */
     dataset parent_child_centers;
-    kmeans_plus_plus(2U).initialize(*m_ptr_data, p_cluster, parent_child_centers);
+    kmeans_plus_plus(2U, kmeans_plus_plus::FARTHEST_CENTER_CANDIDATE).initialize(*m_ptr_data, p_cluster, parent_child_centers);
 
     /* solve k-means problem for children where data of parent are used */
     cluster_sequence parent_child_clusters(2, cluster());

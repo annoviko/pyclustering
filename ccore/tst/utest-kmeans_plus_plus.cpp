@@ -32,9 +32,9 @@ using namespace ccore::clst;
 
 
 static void
-template_kmeans_plus_plus_initialization(const dataset_ptr & p_data, const std::size_t p_amount)
+template_kmeans_plus_plus_initialization(const dataset_ptr & p_data, const std::size_t p_amount, const std::size_t p_candidates)
 {
-    kmeans_plus_plus initializer(p_amount);
+    kmeans_plus_plus initializer(p_amount, p_candidates);
 
     dataset centers;
     initializer.initialize(*p_data, centers);
@@ -49,91 +49,92 @@ template_kmeans_plus_plus_initialization(const dataset_ptr & p_data, const std::
 
 TEST(utest_kmeans_plus_plus, no_center_sample_simple_01) {
     dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01);
-    template_kmeans_plus_plus_initialization(data, 0);
+    template_kmeans_plus_plus_initialization(data, 0, kmeans_plus_plus::FARTHEST_CENTER_CANDIDATE);
 }
 
 TEST(utest_kmeans_plus_plus, one_center_sample_simple_01) {
     dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01);
-    template_kmeans_plus_plus_initialization(data, 1);
+    template_kmeans_plus_plus_initialization(data, 1, kmeans_plus_plus::FARTHEST_CENTER_CANDIDATE);
 }
 
 TEST(utest_kmeans_plus_plus, two_centers_sample_simple_01) {
     dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01);
-    template_kmeans_plus_plus_initialization(data, 2);
+    template_kmeans_plus_plus_initialization(data, 2, kmeans_plus_plus::FARTHEST_CENTER_CANDIDATE);
 }
 
 TEST(utest_kmeans_plus_plus, three_center_sample_simple_01) {
     dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01);
-    template_kmeans_plus_plus_initialization(data, 3);
+    template_kmeans_plus_plus_initialization(data, 3, kmeans_plus_plus::FARTHEST_CENTER_CANDIDATE);
 }
 
 TEST(utest_kmeans_plus_plus, max_centers_sample_simple_01) {
     dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01);
-    template_kmeans_plus_plus_initialization(data, data->size());
+    template_kmeans_plus_plus_initialization(data, data->size(), kmeans_plus_plus::FARTHEST_CENTER_CANDIDATE);
 }
 
 TEST(utest_kmeans_plus_plus, one_center_identical_data_01) {
     dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_09);
-    template_kmeans_plus_plus_initialization(data, 1);
+    template_kmeans_plus_plus_initialization(data, 1, kmeans_plus_plus::FARTHEST_CENTER_CANDIDATE);
 }
 
 TEST(utest_kmeans_plus_plus, three_centers_identical_data_01) {
     dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_09);
-    template_kmeans_plus_plus_initialization(data, 3);
+    template_kmeans_plus_plus_initialization(data, 3, kmeans_plus_plus::FARTHEST_CENTER_CANDIDATE);
 }
 
 TEST(utest_kmeans_plus_plus, max_centers_identical_data_01) {
     dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_09);
-    template_kmeans_plus_plus_initialization(data, data->size());
+    template_kmeans_plus_plus_initialization(data, data->size(), kmeans_plus_plus::FARTHEST_CENTER_CANDIDATE);
 }
 
 TEST(utest_kmeans_plus_plus, one_center_identical_data_02) {
     dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_12);
-    template_kmeans_plus_plus_initialization(data, 1);
+    template_kmeans_plus_plus_initialization(data, 1, kmeans_plus_plus::FARTHEST_CENTER_CANDIDATE);
 }
 
 TEST(utest_kmeans_plus_plus, three_centers_identical_data_02) {
     dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_12);
-    template_kmeans_plus_plus_initialization(data, 3);
+    template_kmeans_plus_plus_initialization(data, 3, kmeans_plus_plus::FARTHEST_CENTER_CANDIDATE);
 }
 
 TEST(utest_kmeans_plus_plus, max_centers_identical_data_02) {
     dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_12);
-    template_kmeans_plus_plus_initialization(data, data->size());
+    template_kmeans_plus_plus_initialization(data, data->size(), kmeans_plus_plus::FARTHEST_CENTER_CANDIDATE);
 }
 
 TEST(utest_kmeans_plus_plus, one_center_totally_identical_data) {
     dataset_ptr data = dataset_ptr( new dataset( { { 1.4 }, { 1.4 }, { 1.4 }, { 1.4 } } ) );
-    template_kmeans_plus_plus_initialization(data, 1);
+    template_kmeans_plus_plus_initialization(data, 1, kmeans_plus_plus::FARTHEST_CENTER_CANDIDATE);
 }
 
 TEST(utest_kmeans_plus_plus, two_centers_totally_identical_data) {
     dataset_ptr data = dataset_ptr( new dataset( { { 1.4 }, { 1.4 }, { 1.4 }, { 1.4 } } ) );
-    template_kmeans_plus_plus_initialization(data, 2);
+    template_kmeans_plus_plus_initialization(data, 2, kmeans_plus_plus::FARTHEST_CENTER_CANDIDATE);
 }
 
 TEST(utest_kmeans_plus_plus, max_centers_totally_identical_data) {
     dataset_ptr data = dataset_ptr( new dataset( { { 1.4 }, { 1.4 }, { 1.4 }, { 1.4 } } ) );
-    template_kmeans_plus_plus_initialization(data, data->size());
+    template_kmeans_plus_plus_initialization(data, data->size(), kmeans_plus_plus::FARTHEST_CENTER_CANDIDATE);
 }
 
 TEST(utest_kmeans_plus_plus, points_less_than_centers) {
     dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01);
-    ASSERT_THROW(template_kmeans_plus_plus_initialization(data, data->size() + 1), std::invalid_argument);
+    ASSERT_THROW(template_kmeans_plus_plus_initialization(data, data->size() + 1, kmeans_plus_plus::FARTHEST_CENTER_CANDIDATE), std::invalid_argument);
 }
 
 TEST(utest_kmeans_plus_plus, empty_data) {
     dataset_ptr data = dataset_ptr( new dataset() );
-    ASSERT_THROW(template_kmeans_plus_plus_initialization(data, data->size() + 1), std::invalid_argument);
+    ASSERT_THROW(template_kmeans_plus_plus_initialization(data, data->size() + 1, kmeans_plus_plus::FARTHEST_CENTER_CANDIDATE), std::invalid_argument);
 }
 
 
 static void
 template_initialize_kmeans(const dataset_ptr & p_data,
                            const std::size_t p_amount,
+                           const std::size_t p_candidate,
                            const std::vector<std::size_t> & p_expected_cluster_length)
 {
-    kmeans_plus_plus initializer(p_amount);
+    kmeans_plus_plus initializer(p_amount, p_candidate);
 
     dataset centers;
     initializer.initialize(*p_data, centers);
@@ -152,31 +153,32 @@ template_initialize_kmeans(const dataset_ptr & p_data,
 
 TEST(utest_kmeans_plus_plus, allocation_sample_simple_01) {
     dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01);
-    template_initialize_kmeans(data, 2, { 5, 5 });
+    template_initialize_kmeans(data, 2, kmeans_plus_plus::FARTHEST_CENTER_CANDIDATE, { 5, 5 });
 }
 
 TEST(utest_kmeans_plus_plus, allocation_sample_simple_02) {
     dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02);
-    template_initialize_kmeans(data, 3, { 10, 5, 8 });
+    template_initialize_kmeans(data, 3, kmeans_plus_plus::FARTHEST_CENTER_CANDIDATE, { 10, 5, 8 });
 }
 
 TEST(utest_kmeans_plus_plus, allocation_sample_simple_03) {
     dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_03);
-    template_initialize_kmeans(data, 4, { 10, 10, 10, 30 });
+    template_initialize_kmeans(data, 4, kmeans_plus_plus::FARTHEST_CENTER_CANDIDATE, { 10, 10, 10, 30 });
 }
 
 TEST(utest_kmeans_plus_plus, allocation_sample_simple_04) {
     dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_04);
-    template_initialize_kmeans(data, 5, { 15, 15, 15, 15, 15 });
+    template_initialize_kmeans(data, 5, kmeans_plus_plus::FARTHEST_CENTER_CANDIDATE, { 15, 15, 15, 15, 15 });
 }
 
 
 static void
 template_kmeans_plus_plus_metric(const dataset_ptr & p_data,
                                  const std::size_t p_amount,
+                                 const std::size_t p_candidate,
                                  const kmeans_plus_plus::metric & solver)
 {
-    kmeans_plus_plus initializer(p_amount, solver);
+    kmeans_plus_plus initializer(p_amount, p_candidate, solver);
 
     dataset centers;
     initializer.initialize(*p_data, centers);
@@ -194,7 +196,7 @@ TEST(utest_kmeans_plus_plus, metric_manhattan) {
         return ccore::utils::metric::manhattan_distance(p1, p2);
     };
 
-    template_kmeans_plus_plus_metric(data, 2, metric);
+    template_kmeans_plus_plus_metric(data, 2, kmeans_plus_plus::FARTHEST_CENTER_CANDIDATE, metric);
 }
 
 TEST(utest_kmeans_plus_plus, metric_euclidean) {
@@ -203,7 +205,7 @@ TEST(utest_kmeans_plus_plus, metric_euclidean) {
         return ccore::utils::metric::euclidean_distance(p1, p2);
     };
 
-    template_kmeans_plus_plus_metric(data, 2, metric);
+    template_kmeans_plus_plus_metric(data, 2, kmeans_plus_plus::FARTHEST_CENTER_CANDIDATE, metric);
 }
 
 
@@ -211,9 +213,10 @@ TEST(utest_kmeans_plus_plus, metric_euclidean) {
 static void
 template_kmeans_plus_plus_initialization_range(const dataset_ptr & p_data,
                                                const std::size_t p_amount,
+                                               const std::size_t p_candidate,
                                                const index_sequence & p_indexes)
 {
-    kmeans_plus_plus initializer(p_amount);
+    kmeans_plus_plus initializer(p_amount, p_candidate);
 
     dataset centers;
     initializer.initialize(*p_data, p_indexes, centers);
@@ -232,17 +235,17 @@ template_kmeans_plus_plus_initialization_range(const dataset_ptr & p_data,
 TEST(utest_kmeans_plus_plus, range_sample_simple_01) {
     index_sequence range = { 0, 1, 2, 5, 6, 7 };
     dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01);
-    template_kmeans_plus_plus_initialization_range(data, 2, range);
+    template_kmeans_plus_plus_initialization_range(data, 2, kmeans_plus_plus::FARTHEST_CENTER_CANDIDATE, range);
 }
 
 TEST(utest_kmeans_plus_plus, range_sample_simple_02) {
     index_sequence range = { 0, 1, 2, 5, 6, 7, 10, 11, 12 };
     dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02);
-    template_kmeans_plus_plus_initialization_range(data, 3, range);
+    template_kmeans_plus_plus_initialization_range(data, 3, kmeans_plus_plus::FARTHEST_CENTER_CANDIDATE, range);
 }
 
 TEST(utest_kmeans_plus_plus, indexes_less_than_centers) {
     index_sequence range = { 0 };
     dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01);
-    ASSERT_THROW(template_kmeans_plus_plus_initialization_range(data, 2, range), std::invalid_argument);
+    ASSERT_THROW(template_kmeans_plus_plus_initialization_range(data, 2, kmeans_plus_plus::FARTHEST_CENTER_CANDIDATE, range), std::invalid_argument);
 }

@@ -45,6 +45,14 @@ class kmeans_plus_plus {
 public:
     /**
      *
+     * @brief Denotes that the farthest center candidate (with highest probability) should be used as a center.
+     *
+     */
+    static const std::size_t FARTHEST_CENTER_CANDIDATE;
+
+public:
+    /**
+     *
      * @brief Metric that is used for distance calculation between two points.
      *
      */
@@ -52,6 +60,7 @@ public:
 
 private:
     std::size_t         m_amount        = 0;
+    std::size_t         m_candidates    = 0;
     metric              m_dist_func;
 
 public:
@@ -67,9 +76,14 @@ public:
     * @brief    Constructor of center initializer algorithm K-Means++.
     *
     * @param[in] p_amount: amount of centers that should initialized.
+    * @param[in] p_candidates: amount of candidates that are considered to find the best center, if
+    *             the farthest candidate is required (with highest probability) than static constant
+    *             FARTHEST_CENTER_CANDIDATE can be specified.
+    *
+    * @see FARTHEST_CENTER_CANDIDATE
     *
     */
-    kmeans_plus_plus(const std::size_t p_amount) noexcept;
+    kmeans_plus_plus(const std::size_t p_amount, const std::size_t p_candidates) noexcept;
 
     /**
     *
@@ -77,10 +91,15 @@ public:
     * @details  By default algorithm uses square Euclidean distance as a metric.
     *
     * @param[in] p_amount: amount of centers that should initialized.
+    * @param[in] p_candidates: amount of candidates that are considered to find the best center, if
+    *             the farthest candidate is required (with highest probability) than static constant
+    *             FARTHEST_CENTER_CANDIDATE can be specified.
     * @param[in] p_metric: metric for distance calculation between points.
     *
+    * @see FARTHEST_CENTER_CANDIDATE
+    *
     */
-    kmeans_plus_plus(const std::size_t p_amount, const metric & p_metric) noexcept;
+    kmeans_plus_plus(const std::size_t p_amount, const std::size_t p_candidates, const metric & p_metric) noexcept;
 
     /**
      *
