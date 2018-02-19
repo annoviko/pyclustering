@@ -32,7 +32,7 @@ class HhnTestTemplates:
     def templateSyncEnsembleAllocation(stimulus, params, sim_steps, sim_time, expected_clusters, ccore):
         result_testing = False;
 
-        for _ in range(0, 2, 1):
+        for _ in range(0, 5, 1):
             net = hhn_network(len(stimulus), stimulus, params, ccore=ccore);
             (t, dyn_p, dyn_c) = net.simulate(sim_steps, sim_time);
 
