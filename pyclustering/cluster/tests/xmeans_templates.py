@@ -30,6 +30,8 @@ from pyclustering.cluster.center_initializer import random_center_initializer;
 
 from pyclustering.utils import read_sample;
 
+from pyclustering.tests.assertion import assertion;
+
 
 class XmeansTestTemplates:
     @staticmethod
@@ -95,4 +97,4 @@ class XmeansTestTemplates:
         
         assert kmax >= len(clusters);
         assert kmax >= len(centers);
-        assert len(clusters) == len(centers);
+        assertion.eq(len(clusters), len(centers));
