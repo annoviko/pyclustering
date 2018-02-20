@@ -24,6 +24,7 @@
 #include <algorithm>
 #include <exception>
 #include <limits>
+#include <numeric>
 #include <random>
 #include <string>
 
@@ -63,11 +64,23 @@ void kmeans_plus_plus::initialize(const dataset & p_data,
                                   dataset & p_centers) const
 {
     p_centers.clear();
+    p_centers.reserve(m_amount);
 
     if (!m_amount) { return; }
 
-    p_centers.reserve(m_amount);
+    store_temporal_params(p_data, p_indexes, p_centers);
 
+    p_centers.push_back(get_first_center());
+
+    for (std::size_t i = 1; i < m_amount; i++) {
+        p_centers.push_back(get_next_center());
+    }
+
+    free_temporal_params();
+}
+
+
+void kmeans_plus_plus::store_temporal_params(const dataset & p_data, const index_sequence & p_indexes, const dataset & p_centers) const {
     if (p_data.empty()) {
         throw std::invalid_argument("Input data is empty.");
     }
@@ -80,56 +93,65 @@ void kmeans_plus_plus::initialize(const dataset & p_data,
         throw std::invalid_argument("Amount of objects defined by range should be equal or greater then amount of initialized centers.");
     }
 
-    p_centers.push_back(get_first_center(p_data, p_indexes));
-
-    for (std::size_t i = 1; i < m_amount; i++) {
-        p_centers.push_back(get_next_center(p_data, p_centers, p_indexes));
-    }
+    m_data_ptr      = (dataset *) &p_data;
+    m_indexes_ptr   = (index_sequence *) &p_indexes;
+    m_centers_ptr   = (dataset *) &p_centers;
 }
 
 
-point kmeans_plus_plus::get_first_center(const dataset & p_data, const index_sequence & p_indexes) const {
-    std::size_t length = p_indexes.empty() ? p_data.size() : p_indexes.size();
+void kmeans_plus_plus::free_temporal_params(void) const {
+    m_data_ptr      = nullptr;
+    m_indexes_ptr   = nullptr;
+    m_centers_ptr   = nullptr;
+}
+
+
+point kmeans_plus_plus::get_first_center(void) const {
+    std::size_t length = m_indexes_ptr->empty() ? m_data_ptr->size() : m_indexes_ptr->size();
 
     std::default_random_engine generator;
     std::uniform_int_distribution<std::size_t> distribution(0, length - 1);
 
     std::size_t index = distribution(generator);
-    return p_indexes.empty() ? p_data[index] : p_data[ p_indexes[index] ];
+    return m_indexes_ptr->empty() ? (*m_data_ptr)[index] : (*m_data_ptr)[ (*m_indexes_ptr)[index] ];
 }
 
 
-point kmeans_plus_plus::get_next_center(const dataset & p_data,
-                                        const dataset & p_centers,
-                                        const index_sequence & p_indexes) const
+point kmeans_plus_plus::get_next_center(void) const
 {
     std::vector<double> distances;
-    calculate_shortest_distances(p_data, p_centers, p_indexes, distances);
+    calculate_shortest_distances(distances);
 
-    auto iter = std::max_element(distances.begin(), distances.end());
-    std::size_t index = std::distance(distances.begin(), iter);
+    std::size_t index = 0;
+    if (m_candidates == FARTHEST_CENTER_CANDIDATE) {
+        auto iter = std::max_element(distances.begin(), distances.end());
+        index = std::distance(distances.begin(), iter);
+    }
+    else {
+        std::vector<double> probabilities;
+        calculate_probabilities(distances, probabilities);
+        index = get_probable_center(distances, probabilities);
+    }
 
-    return p_indexes.empty() ? p_data[index] : p_data[ p_indexes[index] ];
+
+    return m_indexes_ptr->empty() ? (*m_data_ptr)[index] : (*m_data_ptr)[ (*m_indexes_ptr)[index] ];
 }
 
 
-void kmeans_plus_plus::calculate_shortest_distances(const dataset & p_data,
-                                                    const dataset & p_centers,
-                                                    const index_sequence & p_indexes,
-                                                    std::vector<double> & p_distances) const
+void kmeans_plus_plus::calculate_shortest_distances(std::vector<double> & p_distances) const
 {
-    p_distances.reserve(p_data.size());
+    p_distances.reserve(m_data_ptr->size());
 
-    if (p_indexes.empty())
+    if (m_indexes_ptr->empty())
     {
-        for (auto & point : p_data) {
-            double shortest_distance = get_shortest_distance(point, p_centers);
+        for (auto & point : (*m_data_ptr)) {
+            double shortest_distance = get_shortest_distance(point);
             p_distances.push_back(shortest_distance);
         }
     }
     else {
-        for (auto index : p_indexes) {
-            double shortest_distance = get_shortest_distance(p_data[index], p_centers);
+        for (auto index : (*m_indexes_ptr)) {
+            double shortest_distance = get_shortest_distance((*m_data_ptr)[index]);
             p_distances.push_back(shortest_distance);
         }
     }
@@ -137,16 +159,60 @@ void kmeans_plus_plus::calculate_shortest_distances(const dataset & p_data,
 }
 
 
-double kmeans_plus_plus::get_shortest_distance(const point & p_point, const dataset & p_centers) const {
+double kmeans_plus_plus::get_shortest_distance(const point & p_point) const {
     double shortest_distance = std::numeric_limits<double>::max();
-    for (auto & center : p_centers) {
-        double distance = m_dist_func(p_point, center);
+    for (auto & center : (*m_centers_ptr)) {
+        double distance = std::abs(m_dist_func(p_point, center));
         if (distance < shortest_distance) {
             shortest_distance = distance;
         }
     }
 
     return shortest_distance;
+}
+
+
+void kmeans_plus_plus::calculate_probabilities(const std::vector<double> & p_distances, std::vector<double> & p_probabilities) const {
+    double sum = std::accumulate(p_distances.begin(), p_distances.end(), 0.0);
+
+    p_probabilities.reserve(m_data_ptr->size());
+    double previous_probability = 0.0;
+    for (auto distance : p_distances) {
+        double current_probability = distance / sum;
+
+        p_probabilities.push_back( current_probability + previous_probability );
+
+        previous_probability += current_probability;
+    }
+
+    p_probabilities.back() = 1.0;
+}
+
+
+std::size_t kmeans_plus_plus::get_probable_center(const std::vector<double> & p_distances, const std::vector<double> & p_probabilities) const {
+    std::default_random_engine generator;
+    std::uniform_real_distribution<double> distribution(0.0, 1.0);
+
+    std::size_t best_index_candidate = 0;
+    for (std::size_t i = 0; i < m_candidates; i++) {
+        std::size_t current_index_candidate = 0;
+        double candidate_probability = distribution(generator);
+        for (std::size_t j = 0; j < p_probabilities.size(); j++) {
+            if (candidate_probability < p_probabilities[j]) {
+                current_index_candidate = j;
+                break;
+            }
+        }
+
+        if (i == 0) {
+            best_index_candidate = current_index_candidate;
+        }
+        else if (p_distances[current_index_candidate] > p_distances[best_index_candidate]) {
+            best_index_candidate = current_index_candidate;
+        }
+    }
+
+    return best_index_candidate;
 }
 
 

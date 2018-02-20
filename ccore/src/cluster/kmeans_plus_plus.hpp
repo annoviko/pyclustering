@@ -63,6 +63,11 @@ private:
     std::size_t         m_candidates    = 0;
     metric              m_dist_func;
 
+    /* temporal members that are used only during initialization */
+    mutable dataset const *           m_data_ptr      = nullptr;
+    mutable index_sequence const *    m_indexes_ptr   = nullptr;
+    mutable dataset const *           m_centers_ptr   = nullptr;
+
 public:
     /**
      *
@@ -149,58 +154,81 @@ public:
 private:
     /**
     *
-    * @brief    Calculates the first initial center using uniform distribution.
+    * @brief    Store pointers to data, indexes and centers to avoiding passing them between class methods.
+    * @details  Pointers are reseted when center initialization is over.
     *
     * @param[in]  p_data: data for that centers are calculated.
     * @param[in]  p_indexes: point indexes from data that are defines which points should be
     *              considered during calculation process.
+    * @param[in]  p_centers: initialized centers for the specified data.
     *
     * @return   The first initialized center.
     *
     */
-    point get_first_center(const dataset & p_data, const index_sequence & p_indexes) const;
+    void store_temporal_params(const dataset & p_data, const index_sequence & p_indexes, const dataset & p_centers) const;
+
+    /**
+    *
+    * @brief    Reset (fill by nullptr) temporal points.
+    *
+    */
+    void free_temporal_params(void) const;
+
+    /**
+    *
+    * @brief    Calculates the first initial center using uniform distribution.
+    *
+    * @return   The first initialized center.
+    *
+    */
+    point get_first_center(void) const;
 
     /**
     *
     * @brief    Calculates the next most probable center in line with weighted distribution.
     *
-    * @param[in]  p_data: data for that centers are calculated.
-    * @param[in]  p_centers: already initialized centers.
-    * @param[in]  p_indexes: point indexes from data that are defines which points should be
-    *              considered during calculation process.
-    *
     * @return   The next initialized center.
     *
     */
-    point get_next_center(const dataset & p_data,
-                          const dataset & p_centers,
-                          const index_sequence & p_indexes) const;
+    point get_next_center(void) const;
 
     /**
     *
     * @brief    Calculates distances from each point to closest center.
     *
-    * @param[in]  p_data: data for that centers are calculated.
-    * @param[in]  p_centers: already initialized centers.
-    * @param[in]  p_indexes: point indexes from data that are defines which points should be
-    *              considered during calculation process.
     * @param[out] p_distances: the shortest distances from each point to center.
     *
     */
-    void calculate_shortest_distances(const dataset & p_data,
-                                      const dataset & p_centers,
-                                      const index_sequence & p_indexes,
-                                      std::vector<double> & p_distances) const;
+    void calculate_shortest_distances(std::vector<double> & p_distances) const;
 
     /**
     *
     * @brief    Calculates distance from the specified point to the closest center.
     *
     * @param[in]  p_point: point for that the shortest distance is calculated.
-    * @param[in]  p_centers: already initialized centers.
     *
     */
-    double get_shortest_distance(const point & p_point, const dataset & p_centers) const;
+    double get_shortest_distance(const point & p_point) const;
+
+    /**
+    *
+    * @brief    Calculates center probability for each point using distances to closest centers.
+    *
+    * @param[in]  p_distances: distances from each point to closest center.
+    * @param[out] p_probabilities: probability of each point to be next center.
+    *
+    */
+    void calculate_probabilities(const std::vector<double> & p_distances, std::vector<double> & p_probabilities) const;
+
+    /**
+    *
+    * @brief    Calculates most probable center.
+    *
+    * @param[in]  p_distances: distances from each point to closest center.
+    * @param[in] p_probabilities: probability of each point to be next center.
+    *
+    */
+    std::size_t get_probable_center(const std::vector<double> & p_distances, const std::vector<double> & p_probabilities) const;
 };
 
 

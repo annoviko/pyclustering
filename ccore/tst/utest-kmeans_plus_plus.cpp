@@ -44,6 +44,14 @@ template_kmeans_plus_plus_initialization(const dataset_ptr & p_data, const std::
         auto object = std::find(p_data->begin(), p_data->end(), center);
         ASSERT_NE(p_data->cend(), object);
     }
+
+    dataset copy_data = *p_data;
+    std::unique(copy_data.begin(), copy_data.end());
+
+    if (copy_data.size() == p_data->size()) {
+        std::unique(centers.begin(), centers.end());
+        ASSERT_EQ(p_amount, centers.size());
+    }
 }
 
 
@@ -52,9 +60,29 @@ TEST(utest_kmeans_plus_plus, no_center_sample_simple_01) {
     template_kmeans_plus_plus_initialization(data, 0, kmeans_plus_plus::FARTHEST_CENTER_CANDIDATE);
 }
 
+TEST(utest_kmeans_plus_plus, no_center_sample_simple_01_one_candidate) {
+    dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01);
+    template_kmeans_plus_plus_initialization(data, 0, 1);
+}
+
+TEST(utest_kmeans_plus_plus, no_center_sample_simple_01_two_candidates) {
+    dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01);
+    template_kmeans_plus_plus_initialization(data, 0, 2);
+}
+
 TEST(utest_kmeans_plus_plus, one_center_sample_simple_01) {
     dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01);
     template_kmeans_plus_plus_initialization(data, 1, kmeans_plus_plus::FARTHEST_CENTER_CANDIDATE);
+}
+
+TEST(utest_kmeans_plus_plus, one_center_sample_simple_01_one_candidate) {
+    dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01);
+    template_kmeans_plus_plus_initialization(data, 1, 1);
+}
+
+TEST(utest_kmeans_plus_plus, one_center_sample_simple_01_two_candidates) {
+    dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01);
+    template_kmeans_plus_plus_initialization(data, 1, 2);
 }
 
 TEST(utest_kmeans_plus_plus, two_centers_sample_simple_01) {
@@ -67,14 +95,44 @@ TEST(utest_kmeans_plus_plus, three_center_sample_simple_01) {
     template_kmeans_plus_plus_initialization(data, 3, kmeans_plus_plus::FARTHEST_CENTER_CANDIDATE);
 }
 
+TEST(utest_kmeans_plus_plus, three_center_sample_simple_01_one_candidate) {
+    dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01);
+    template_kmeans_plus_plus_initialization(data, 3, 1);
+}
+
+TEST(utest_kmeans_plus_plus, three_center_sample_simple_01_three_candidates) {
+    dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01);
+    template_kmeans_plus_plus_initialization(data, 3, 3);
+}
+
 TEST(utest_kmeans_plus_plus, max_centers_sample_simple_01) {
     dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01);
     template_kmeans_plus_plus_initialization(data, data->size(), kmeans_plus_plus::FARTHEST_CENTER_CANDIDATE);
 }
 
+TEST(utest_kmeans_plus_plus, max_centers_sample_simple_01_one_candidate) {
+    dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01);
+    template_kmeans_plus_plus_initialization(data, data->size(), 1);
+}
+
+TEST(utest_kmeans_plus_plus, max_centers_sample_simple_01_two_candidates) {
+    dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01);
+    template_kmeans_plus_plus_initialization(data, data->size(), 2);
+}
+
+TEST(utest_kmeans_plus_plus, max_centers_sample_simple_01_max_candidates) {
+    dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01);
+    template_kmeans_plus_plus_initialization(data, data->size(), data->size());
+}
+
 TEST(utest_kmeans_plus_plus, one_center_identical_data_01) {
     dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_09);
     template_kmeans_plus_plus_initialization(data, 1, kmeans_plus_plus::FARTHEST_CENTER_CANDIDATE);
+}
+
+TEST(utest_kmeans_plus_plus, one_center_identical_data_01_one_candidate) {
+    dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_09);
+    template_kmeans_plus_plus_initialization(data, 1, 1);
 }
 
 TEST(utest_kmeans_plus_plus, three_centers_identical_data_01) {
@@ -188,6 +246,14 @@ template_kmeans_plus_plus_metric(const dataset_ptr & p_data,
         auto object = std::find(p_data->begin(), p_data->end(), center);
         ASSERT_NE(p_data->cend(), object);
     }
+
+    dataset copy_data = *p_data;
+    std::unique(copy_data.begin(), copy_data.end());
+
+    if (copy_data.size() == p_data->size()) {
+        std::unique(centers.begin(), centers.end());
+        ASSERT_EQ(p_amount, centers.size());
+    }
 }
 
 TEST(utest_kmeans_plus_plus, metric_manhattan) {
@@ -229,6 +295,14 @@ template_kmeans_plus_plus_initialization_range(const dataset_ptr & p_data,
         std::size_t index = std::distance(p_data->begin(), iter_object);
         auto iter_index = std::find(p_indexes.begin(), p_indexes.end(), index);
         ASSERT_NE(p_indexes.cend(), iter_index);
+    }
+
+    dataset copy_data = *p_data;
+    std::unique(copy_data.begin(), copy_data.end());
+
+    if (copy_data.size() == p_data->size()) {
+        std::unique(centers.begin(), centers.end());
+        ASSERT_EQ(p_amount, centers.size());
     }
 }
 
