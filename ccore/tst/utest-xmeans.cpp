@@ -228,7 +228,7 @@ TEST(utest_xmeans, custom_allocation_bic_01) {
     dataset_ptr data = dataset_ptr(new dataset({{0.0, 0.0}, {0.1363766466758196, 1.1783713695419944}, {3.214688621356828, 1.476853479793315}, {2.138463480518565, 4.081574609797002}, {0.7396242774728039, 2.87928051726698}, {4.392971847058702, 9.373294690055928}, {0.9201540078170818, 1.58388176369988}, {4.314084965826241, 1.2011928104209428}, {11.734694885255871, 7.357322102302481}, {3.536693195144401, 7.985381380225232}}));
     dataset start_centers = {{0.5370863032832184, 0.11587434446400902}, {0.88032361344512, 0.1499414823211892}, {0.32937175324286194, 0.1591103849511586}};
 
-    std::vector<size_t> expected_clusters_length = { };
+    std::vector<unsigned int> expected_clusters_length = { };
 
     template_length_process_data(data, start_centers, 5, expected_clusters_length, splitting_type::BAYESIAN_INFORMATION_CRITERION);
 }
