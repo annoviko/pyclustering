@@ -29,7 +29,6 @@
 """
 
 
-import math;
 import numpy;
 import random;
 
@@ -152,7 +151,7 @@ class kmeans_plusplus_initializer:
             raise AttributeError("Data is empty.")
 
 
-    def __calc_distance_to_nearest_center(self, data, centers):
+    def __calculate_shortest_distances(self, data, centers):
         """!
         @brief Calculates distance from each data point to nearest center.
         
@@ -176,16 +175,64 @@ class kmeans_plusplus_initializer:
         """!
         @brief Calculates the next center for the data.
 
-        @param[in] centers (list): Current initialized centers.
+        @param[in] centers (array_like): Current initialized centers.
 
-        @return (list) Next initialized center.
+        @return (array_like) Next initialized center.
 
         """
 
-        distance_data = self.__calc_distance_to_nearest_center(data=self.__data, centers=centers);
-        center_index = numpy.argmax(distance_data);
+        distances = self.__calculate_shortest_distances(data=self.__data, centers=centers);
+
+        if self.__candidates == kmeans_plusplus_initializer.FARTHEST_CENTER_CANDIDATE:
+            center_index = numpy.argmax(distances);
+        else:
+            probabilities = self.__calculate_probabilities(distances);
+            center_index = self.__get_probable_center(distances, probabilities);
 
         return self.__data[center_index];
+
+
+    def __calculate_probabilities(self, distances):
+        """!
+        @brief Calculates cumulative probabilities of being center of each point.
+
+        @param[in] distances (array_like): Distances from each point to closest center.
+
+        @return (array_like) Cumulative probabilities of being center of each point.
+
+        """
+
+        probabilities = distances / numpy.sum(distances);
+        return numpy.cumsum(probabilities);
+
+
+    def __get_probable_center(self, distances, probabilities):
+        """!
+        @brief Calculates the next probable center considering amount candidates.
+
+        @param[in] distances (array_like): Distances from each point to closest center.
+        @param[in] probabilities (array_like): Cumulative probabilities of being center of each point.
+
+        @return (uint) Index point that is next initialized center.
+
+        """
+
+        index_best_candidate = -1;
+        for _ in range(self.__candidates):
+            candidate_probability = random.random();
+            index_candidate = 0;
+
+            for index_object in range(len(probabilities)):
+                if candidate_probability < probabilities[index_object]:
+                    index_candidate = index_object;
+                    break;
+
+            if index_best_candidate == -1:
+                index_best_candidate = index_object;
+            elif distances[index_best_candidate] < distances[index_object]:
+                index_best_candidate = index_object;
+
+        return index_best_candidate;
 
 
     def initialize(self):
