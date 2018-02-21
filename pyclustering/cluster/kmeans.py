@@ -116,7 +116,7 @@ class kmeans:
         if (self.__ccore is True):
             self.__clusters = wrapper.kmeans(self.__pointer_data, self.__centers, self.__tolerance);
             self.__centers = self.__update_centers();
-        else: 
+        else:
             maximum_change = float('inf');
              
             stop_condition = self.__tolerance * self.__tolerance;   # Fast solution

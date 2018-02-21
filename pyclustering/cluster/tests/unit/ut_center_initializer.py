@@ -138,28 +138,6 @@ class KmeansPlusPlusInitializerUnitTest(unittest.TestCase):
     def testInitializerForKmeansTotallySimilarObjectsTenCenters(self):
         self.templateKmeansPlusPlusForClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 10, None);
 
-    def testCalcDistanceToNearestCenter(self):
-        # Test Data
-        data_set_1 = [];
-        data_set_1.extend([[0, 0], [1, 0], [0, 1], [1, 1]]);
-        data_set_1.extend([[5, 0], [6, 0], [5, 1], [6, 1]]);
-        data_set_1.extend([[0, 5], [1, 5], [0, 6], [1, 6]]);
-        data_set_1.extend([[4, 4], [7, 4], [4, 7], [7, 7]]);
-
-        # Centers
-        centers = [[0.5, 0.5], [5.5, 0.5], [0.5, 5.5], [5.5, 5.5]];
-
-        # Result
-        initializer = kmeans_plusplus_initializer(data_set_1, 4);
-        res_1 = initializer._kmeans_plusplus_initializer__calc_distance_to_nearest_center(data_set_1, centers)
-
-        # Asserts
-        for _idx in range(12):
-            self.assertAlmostEqual(res_1[_idx], 0.7071067, places=4);
-
-        for _idx in range(12, 16):
-            self.assertAlmostEqual(res_1[_idx], 2.12132034, places=4);
-
 
 if __name__ == "__main__":
     unittest.main();

@@ -28,8 +28,10 @@
 
 """
 
+
+import math;
+import numpy;
 import random;
-import copy
 
 from pyclustering.utils import euclidean_distance;
 
@@ -108,51 +110,82 @@ class kmeans_plusplus_initializer:
     @endcode
     
     """
-    
-    def __init__(self, data, amount_centers):
+
+
+    ## Constant denotes that only points with highest probabilities should be considered as centers.
+    FARTHEST_CENTER_CANDIDATE = "farthest";
+
+
+    def __init__(self, data, amount_centers, amount_candidates = 2):
         """!
         @brief Creates K-Means++ center initializer instance.
         
-        @param[in] data (list): List of points where each point is represented by list of coordinates.
-        @param[in] amount_centers (unit): Amount of centers that should be initialized.
-        
+        @param[in] data (array_like): List of points where each point is represented by list of coordinates.
+        @param[in] amount_centers (uint): Amount of centers that should be initialized.
+        @param[in] amount_candidates (uint): Amount of candidates that is considered as a center, if the farthest points (with the highest probability) should
+                    be considered as centers then special constant should be used 'FARTHEST_CENTER_CANDIDATE'.
+
+        @see FARTHEST_CENTER_CANDIDATE
+
         """
         
-        self.__data = data;
+        self.__data = numpy.array(data);
         self.__amount = amount_centers;
-        
-        if self.__amount <= 0:
-            raise AttributeError("Amount of cluster centers should be at least 1.");
+        self.__candidates = amount_candidates;
+
+        self.__check_parameters();
+
+
+    def __check_parameters(self):
+        """!
+        @brief Checks input parameters of the algorithm and if something wrong then corresponding exception is thrown.
+
+        """
+        if (self.__amount <= 0) or (self.__amount > len(self.__data)):
+            raise AttributeError("Amount of cluster centers should be at least 1 and should be less or equal to amount of points in data.");
+
+        if self.__candidates != kmeans_plusplus_initializer.FARTHEST_CENTER_CANDIDATE:
+            if (self.__candidates <= 0) or (self.__candidates > len(self.__data)):
+                raise AttributeError("Amount of candidates centers should be at least 1 and should be less or equal to amount of points in data.");
+
+        if len(self.__data) == 0:
+            raise AttributeError("Data is empty.")
 
 
     def __calc_distance_to_nearest_center(self, data, centers):
         """!
         @brief Calculates distance from each data point to nearest center.
         
-        @param[in] data (list): List of points where each point is represented by list of coordinates.
-        @param[in] centers (list): List of points that represents centers and where each center is represented by list of coordinates.
+        @param[in] data (numpy.array): Array of points for that initialization is performed.
+        @param[in] centers (numpy.array): Array of points that represents centers.
         
-        @return (list) List of distances to closest center for each data point.
+        @return (numpy.array) List of distances to closest center for each data point.
         
         """
 
-        # Initialize
-        distance_data = [];
+        dataset_differences = numpy.zeros((len(centers), len(data)));
+        for index_center in range(len(centers)):
+            dataset_differences[index_center] = numpy.sum(
+                numpy.square(data - centers[index_center]), axis=1).T;
 
-        # For each data point x, compute D(x), the distance between x and the nearest center
-        for _point in data:
+        shortest_distances = numpy.min(dataset_differences, axis=0);
+        return shortest_distances;
 
-            # Min dist to nearest center
-            min_dist = float('inf');
 
-            # For each center
-            for _center in centers:
-                min_dist = min(min_dist, euclidean_distance(_center, _point));
+    def __get_next_center(self, centers):
+        """!
+        @brief Calculates the next center for the data.
 
-            # Add distance to nearest center into result list
-            distance_data.append(min_dist);
+        @param[in] centers (list): Current initialized centers.
 
-        return distance_data;
+        @return (list) Next initialized center.
+
+        """
+
+        distance_data = self.__calc_distance_to_nearest_center(data=self.__data, centers=centers);
+        center_index = numpy.argmax(distance_data);
+
+        return self.__data[center_index];
 
 
     def initialize(self):
@@ -162,22 +195,14 @@ class kmeans_plusplus_initializer:
         @return (list) List of initialized initial centers.
         
         """
+
         # Initialize result list by the first centers
         index_center = random.randint(0, len(self.__data) - 1);
         centers = [ self.__data[ index_center ] ];
 
         # For each next center
         for _ in range(1, self.__amount):
-            # Calc Distance for each data
-            distance_data = self.__calc_distance_to_nearest_center(data = self.__data, centers = centers);
-
-            center_index = 0;
-            longest_distance = 0.0;
-            for index_distance in range(len(distance_data)):
-                if (longest_distance < distance_data[index_distance]):
-                    center_index = index_distance;
-                    longest_distance = distance_data[index_distance];
-
-            centers.append(self.__data[center_index]);
+            next_center = self.__get_next_center(centers);
+            centers.append(next_center);
 
         return centers;
