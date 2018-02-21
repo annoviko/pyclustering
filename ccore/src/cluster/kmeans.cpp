@@ -54,13 +54,19 @@ kmeans::kmeans(const dataset & p_initial_centers, const double p_tolerance) :
 kmeans::~kmeans(void) { }
 
 
-void kmeans::process(const dataset & data, cluster_data & output_result) {
-    m_ptr_data = &data;
+void kmeans::process(const dataset & p_data, cluster_data & p_result) {
+    process(p_data, { }, p_result);
+}
 
-    output_result = kmeans_data();
-    m_ptr_result = (kmeans_data *) &output_result;
 
-    if (data[0].size() != m_initial_centers[0].size()) {
+void kmeans::process(const dataset & p_data, const index_sequence & p_indexes, cluster_data & p_result) {
+    m_ptr_data = &p_data;
+    m_ptr_indexes = &p_indexes;
+
+    p_result = kmeans_data();
+    m_ptr_result = (kmeans_data *) &p_result;
+
+    if (p_data[0].size() != m_initial_centers[0].size()) {
         throw std::runtime_error("CCORE [kmeans]: dimension of the input data and dimension of the initial cluster centers must be equal.");
     }
 
@@ -85,30 +91,42 @@ void kmeans::set_parallel_processing_trigger(const std::size_t p_data_size) {
 }
 
 
-void kmeans::update_clusters(const dataset & centers, cluster_sequence & clusters) {
+void kmeans::update_clusters(const dataset & p_centers, cluster_sequence & p_clusters) {
     const dataset & data = *m_ptr_data;
 
-    clusters.clear();
-    clusters.resize(centers.size());
+    p_clusters.clear();
+    p_clusters.resize(p_centers.size());
 
     /* fill clusters again in line with centers. */
-    for (size_t index_object = 0; index_object < data.size(); index_object++) {
-        double    minimum_distance = std::numeric_limits<double>::max();
-        size_t    suitable_index_cluster = 0;
-
-        for (size_t index_cluster = 0; index_cluster < clusters.size(); index_cluster++) {
-            double distance = euclidean_distance_square(centers[index_cluster], data[index_object]);
-
-            if (distance < minimum_distance) {
-                minimum_distance = distance;
-                suitable_index_cluster = index_cluster;
-            }
+    if (m_ptr_indexes->empty()) {
+        for (size_t index_object = 0; index_object < data.size(); index_object++) {
+            assign_point_to_cluster(index_object, p_centers, p_clusters);
         }
-
-        clusters[suitable_index_cluster].push_back(index_object);
+    }
+    else {
+        for (size_t index_object : *m_ptr_indexes) {
+            assign_point_to_cluster(index_object, p_centers, p_clusters);
+        }
     }
 
-    erase_empty_clusters(clusters);
+    erase_empty_clusters(p_clusters);
+}
+
+
+void kmeans::assign_point_to_cluster(const std::size_t p_index_point, const dataset & p_centers, cluster_sequence & p_clusters) {
+    double    minimum_distance = std::numeric_limits<double>::max();
+    size_t    suitable_index_cluster = 0;
+
+    for (size_t index_cluster = 0; index_cluster < p_centers.size(); index_cluster++) {
+        double distance = euclidean_distance_square(p_centers[index_cluster], (*m_ptr_data)[p_index_point]);
+
+        if (distance < minimum_distance) {
+            minimum_distance = distance;
+            suitable_index_cluster = index_cluster;
+        }
+    }
+
+    p_clusters[suitable_index_cluster].push_back(p_index_point);
 }
 
 

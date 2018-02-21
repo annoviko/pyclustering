@@ -94,7 +94,11 @@ class XmeansTestTemplates:
         
         clusters = xmeans_instance.get_clusters();
         centers = xmeans_instance.get_centers();
-        
-        assert kmax >= len(clusters);
-        assert kmax >= len(centers);
+
+        if (len(clusters) != len(centers)):
+            print(input_data);
+            print(initial_centers);
+
+        assertion.ge(kmax, len(clusters));
+        assertion.ge(kmax, len(centers));
         assertion.eq(len(clusters), len(centers));

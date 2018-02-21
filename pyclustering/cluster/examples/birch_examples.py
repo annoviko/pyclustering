@@ -54,7 +54,7 @@ def template_clustering(number_clusters, path, branching_factor = 5, max_node_en
 
 def cluster_sample1():
     template_clustering(2, SIMPLE_SAMPLES.SAMPLE_SIMPLE1);
-    template_clustering(2, SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 5, 5, 0.1, measurement_type.CENTROID_EUCLIDIAN_DISTANCE, 2);      # only two entries available
+    template_clustering(2, SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 5, 5, 0.1, measurement_type.CENTROID_EUCLIDEAN_DISTANCE, 2);      # only two entries available
 
 def cluster_sample2():
     template_clustering(3, SIMPLE_SAMPLES.SAMPLE_SIMPLE2);
@@ -91,7 +91,7 @@ def cluster_two_diamonds():
 
 def cluster_wing_nut():
     template_clustering(2, FCPS_SAMPLES.SAMPLE_WING_NUT);
-    template_clustering(2, FCPS_SAMPLES.SAMPLE_WING_NUT, 5, 5, 0.1, measurement_type.CENTROID_EUCLIDIAN_DISTANCE, 800);     # not correct, but almost good result
+    template_clustering(2, FCPS_SAMPLES.SAMPLE_WING_NUT, 5, 5, 0.1, measurement_type.CENTROID_EUCLIDEAN_DISTANCE, 800);     # not correct, but almost good result
 
 def cluster_chainlink():
     template_clustering(2, FCPS_SAMPLES.SAMPLE_CHAINLINK);

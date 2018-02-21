@@ -50,21 +50,23 @@ public:
     const static std::size_t        DEFAULT_DATA_SIZE_PARALLEL_PROCESSING;
 
 private:
-    double            m_tolerance             = DEFAULT_TOLERANCE;
+    double                  m_tolerance             = DEFAULT_TOLERANCE;
 
-    dataset           m_initial_centers       = { };
+    dataset                 m_initial_centers       = { };
 
-    kmeans_data       * m_ptr_result          = nullptr;      /* temporary pointer to output result */
+    kmeans_data             * m_ptr_result          = nullptr;      /* temporary pointer to output result */
 
-    const dataset     * m_ptr_data            = nullptr;      /* used only during processing */
+    const dataset           * m_ptr_data            = nullptr;      /* used only during processing */
 
-    std::size_t       m_parallel_trigger      = DEFAULT_DATA_SIZE_PARALLEL_PROCESSING;
+    const index_sequence    * m_ptr_indexes         = nullptr;      /* temporary pointer to indexes */
 
-    bool              m_parallel_processing   = false;
+    std::size_t             m_parallel_trigger      = DEFAULT_DATA_SIZE_PARALLEL_PROCESSING;
 
-    std::mutex        m_mutex;
+    bool                    m_parallel_processing   = false;
 
-    thread_pool::ptr  m_pool                  = nullptr;
+    std::mutex              m_mutex;
+
+    thread_pool::ptr        m_pool                  = nullptr;
 
 public:
     /**
@@ -102,7 +104,9 @@ public:
     * @param[out] p_result: clustering result of an input data.
     *
     */
-    virtual void process(const dataset & data, cluster_data & output_result) override;
+    virtual void process(const dataset & p_data, cluster_data & p_result) override;
+
+    virtual void process(const dataset & p_data, const index_sequence & p_indexes, cluster_data & p_result);
 
     /**
     *
@@ -118,6 +122,8 @@ private:
     void update_clusters(const dataset & centers, cluster_sequence & clusters);
 
     double update_centers(const cluster_sequence & clusters, dataset & centers);
+
+    void assign_point_to_cluster(const std::size_t p_index_point, const dataset & p_centers, cluster_sequence & p_clusters);
 
     /**
     *

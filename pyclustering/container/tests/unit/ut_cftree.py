@@ -70,16 +70,16 @@ class CftreeUnitTest(unittest.TestCase):
         assert ( (value - tolerance < distance) and (value + tolerance > distance) );
            
     def testCfEntryTwoPoints1(self):
-        self.templateCfEntryValueDistance([[0.0]], [[1.0]], 1.0, 0.0000001, measurement_type.CENTROID_EUCLIDIAN_DISTANCE);
+        self.templateCfEntryValueDistance([[0.0]], [[1.0]], 1.0, 0.0000001, measurement_type.CENTROID_EUCLIDEAN_DISTANCE);
    
     def testCfEntryTwoPoints2(self):
-        self.templateCfEntryValueDistance([[0.0]], [[0.0]], 0.0, 0.0000001, measurement_type.CENTROID_EUCLIDIAN_DISTANCE);
+        self.templateCfEntryValueDistance([[0.0]], [[0.0]], 0.0, 0.0000001, measurement_type.CENTROID_EUCLIDEAN_DISTANCE);
            
     def testCfEntryTwoPoints3(self):
-        self.templateCfEntryValueDistance([[-1.0]], [[0.0]], 1.0, 0.0000001, measurement_type.CENTROID_EUCLIDIAN_DISTANCE);
+        self.templateCfEntryValueDistance([[-1.0]], [[0.0]], 1.0, 0.0000001, measurement_type.CENTROID_EUCLIDEAN_DISTANCE);
            
     def testCfEntryTwoPoints4(self):
-        self.templateCfEntryValueDistance([[1.0, 0.0]], [[0.0, 1.0]], 2.0, 0.0000001, measurement_type.CENTROID_EUCLIDIAN_DISTANCE);
+        self.templateCfEntryValueDistance([[1.0, 0.0]], [[0.0, 1.0]], 2.0, 0.0000001, measurement_type.CENTROID_EUCLIDEAN_DISTANCE);
        
        
     def testCfEntryIncrease(self):
@@ -118,7 +118,7 @@ class CftreeUnitTest(unittest.TestCase):
         assert distance23 < distance13;
        
     def testCfDistanceCentroidEuclidian(self):
-        self.templateCfEntryDistance(measurement_type.CENTROID_EUCLIDIAN_DISTANCE);
+        self.templateCfEntryDistance(measurement_type.CENTROID_EUCLIDEAN_DISTANCE);
            
     def testCfDistanceCentroidManhatten(self):
         self.templateCfEntryDistance(measurement_type.CENTROID_MANHATTAN_DISTANCE);
@@ -145,7 +145,7 @@ class CftreeUnitTest(unittest.TestCase):
         
         # check with utils calculation
         float_delta = 0.0000001;
-        if (type_measurement == measurement_type.CENTROID_EUCLIDIAN_DISTANCE):
+        if (type_measurement == measurement_type.CENTROID_EUCLIDEAN_DISTANCE):
             assert distance12 == euclidean_distance_square(entry1.get_centroid(), entry2.get_centroid());
         
         elif (type_measurement == measurement_type.CENTROID_MANHATTAN_DISTANCE):
@@ -167,7 +167,7 @@ class CftreeUnitTest(unittest.TestCase):
         self.templateDistanceCalculation(cluster1, cluster2, type_measurement);
     
     def testDistanceCalculationTheSimplestSampleCentroidEuclidian(self):
-        self.templateDistanceCalculationTheSimplestSample(measurement_type.CENTROID_EUCLIDIAN_DISTANCE);
+        self.templateDistanceCalculationTheSimplestSample(measurement_type.CENTROID_EUCLIDEAN_DISTANCE);
 
     def testDistanceCalculationTheSimplestSampleCentroidManhattan(self):
         self.templateDistanceCalculationTheSimplestSample(measurement_type.CENTROID_MANHATTAN_DISTANCE);
