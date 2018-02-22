@@ -227,13 +227,17 @@ class xmeans:
         
         """
 
+        if (available_indexes and len(available_indexes) == 1):
+            index_center = available_indexes[0];
+            return ([ available_indexes ], self.__pointer_data[index_center]);
+
         local_data = self.__pointer_data;
         if available_indexes:
             local_data = [ self.__pointer_data[i] for i in available_indexes ];
 
         local_centers = centers;
         if centers is None:
-            local_centers = kmeans_plusplus_initializer(local_data, 2).initialize();
+            local_centers = kmeans_plusplus_initializer(local_data, 2, kmeans_plusplus_initializer.FARTHEST_CENTER_CANDIDATE).initialize();
 
         kmeans_instance = kmeans(local_data, local_centers, tolerance=self.__tolerance, ccore=False);
         kmeans_instance.process();

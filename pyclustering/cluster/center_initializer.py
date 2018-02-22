@@ -202,8 +202,12 @@ class kmeans_plusplus_initializer:
 
         """
 
-        probabilities = distances / numpy.sum(distances);
-        return numpy.cumsum(probabilities);
+        total_distance = numpy.sum(distances);
+        if total_distance != 0.0:
+            probabilities = distances / numpy.sum(distances);
+            return numpy.cumsum(probabilities);
+        else:
+            return numpy.zeros(len(distances));
 
 
     def __get_probable_center(self, distances, probabilities):
