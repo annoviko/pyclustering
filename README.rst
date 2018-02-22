@@ -125,7 +125,7 @@ Brief Overview of the Library Content
 - GA (Genetic Algorithm) [Python, C++]
 - HSyncNet [Python, C++]
 - K-Means [Python, C++]
-- K-Means++ [Python]
+- K-Means++ [Python, C++]
 - K-Medians [Python, C++]
 - K-Medoids (PAM) [Python, C++]
 - OPTICS [Python, C++]
@@ -140,7 +140,7 @@ Brief Overview of the Library Content
 
 - CNN (Chaotic Neural Network) [Python] 
 - fSync (Oscillatory network based on Landau-Stuart equation and Kuramoto model) [Python] 
-- HHN (Oscillatory network based on Hodgkin-Huxley model) [Python,C++]
+- HHN (Oscillatory network based on Hodgkin-Huxley model) [Python, C++]
 - Hysteresis Oscillatory Network [Python]
 - LEGION (Local Excitatory Global Inhibitory Oscillatory Network) [Python, C++]
 - PCNN (Pulse-Coupled Neural Network) [Python, C++]

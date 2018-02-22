@@ -5,6 +5,9 @@ CHANGE NOTES FOR 0.8.0 (STARTED Oct 23, 2017)
 ------------------------------------------------------------------------
 
 GENERAL CHANGES:
+- Optimization K-Means++ algorithm using numpy (pyclustering.cluster.center_initializer).
+  See: no reference.
+
 - Implemented K-Means++ initializer for CCORE (ccore.clst.kmeans_plus_plus).
   See: https://github.com/annoviko/pyclustering/issues/382
 
