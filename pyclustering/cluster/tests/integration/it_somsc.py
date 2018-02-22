@@ -26,6 +26,9 @@
 
 import unittest;
 
+import matplotlib;
+matplotlib.use('Agg');
+
 from pyclustering.cluster.tests.somsc_templates import SyncnetTestTemplates;
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES;

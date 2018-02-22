@@ -81,12 +81,36 @@ class kmeans_plusplus_initializer:
     @brief K-Means++ is an algorithm for choosing the initial centers for algorithms like K-Means or X-Means.
     @details K-Means++ algorithm guarantees an approximation ratio O(log k). Clustering results are depends on
               initial centers in case of K-Means algorithm and even in case of X-Means. This method is used to find
-              out optimal initial centers. There is an example of initial centers that were calculated by the
-              K-Means++ method:
-    
+              out optimal initial centers.
+
+    Algorithm can be divided into three steps. The first center is chosen from input data randomly with
+    uniform distribution at the first step. At the second, probability to being center is calculated for each point:
+    \f[p_{i}=\frac{D(x_{i})}{\sum_{j=0}^{N}D(x_{j})}\f]
+    where \f$D(x_{i})\f$ is a distance from point \f$i\f$ to the closest center. Using this probabilities next center
+    is chosen. The last step is repeated until required amount of centers is initialized.
+
+    Pyclustering implementation of the algorithm provides feature to consider several candidates on the second
+    step, for example:
+
+    @code
+        amount_centers = 4;
+        amount_candidates = 3;
+        initializer = kmeans_plusplus_initializer(sample, amount_centers, amount_candidates);
+    @endcode
+
+    If the farthest points should be used as centers then special constant 'FARTHEST_CENTER_CANDIDATE' should be used
+    for that purpose, for example:
+    @code
+        amount_centers = 4;
+        amount_candidates = kmeans_plusplus_initializer.FARTHEST_CENTER_CANDIDATE;
+        initializer = kmeans_plusplus_initializer(sample, amount_centers, amount_candidates);
+    @endcode
+
+    There is an example of initial centers that were calculated by the K-Means++ method:
+
     @image html kmeans_plusplus_initializer_results.png
     
-    Code example:
+    Code example where initial centers are prepared for K-Means algorithm:
     @code
         # Read data 'SampleSimple3' from Simple Sample collection.
         sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE3);
@@ -115,7 +139,7 @@ class kmeans_plusplus_initializer:
     FARTHEST_CENTER_CANDIDATE = "farthest";
 
 
-    def __init__(self, data, amount_centers, amount_candidates = 2):
+    def __init__(self, data, amount_centers, amount_candidates = 1):
         """!
         @brief Creates K-Means++ center initializer instance.
         
@@ -204,7 +228,7 @@ class kmeans_plusplus_initializer:
 
         total_distance = numpy.sum(distances);
         if total_distance != 0.0:
-            probabilities = distances / numpy.sum(distances);
+            probabilities = distances / total_distance;
             return numpy.cumsum(probabilities);
         else:
             return numpy.zeros(len(distances));
@@ -247,7 +271,6 @@ class kmeans_plusplus_initializer:
         
         """
 
-        # Initialize result list by the first centers
         index_center = random.randint(0, len(self.__data) - 1);
         centers = [ self.__data[ index_center ] ];
 

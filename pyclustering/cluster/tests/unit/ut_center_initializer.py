@@ -39,6 +39,8 @@ from pyclustering.samples.definitions import SIMPLE_SAMPLES;
 
 from pyclustering.utils import read_sample;
 
+from pyclustering.tests.assertion import assertion;
+
 
 class RandomCenterInitializerUnitTest(unittest.TestCase):
     def templateRandomCenterInitializer(self, data, amount):
@@ -72,10 +74,10 @@ class KmeansPlusPlusInitializerUnitTest(unittest.TestCase):
     def templateKmeasPlusPlusCenterInitializer(self, data, amount):
         centers = kmeans_plusplus_initializer(data, amount).initialize();
 
-        self.assertEqual(amount, len(centers));
+        assertion.eq(amount, len(centers));
 
         for center in centers:
-            self.assertEqual(len(data[0]), len(center));
+            assertion.eq(len(data[0]), len(center));
 
         return centers;
 
@@ -97,6 +99,17 @@ class KmeansPlusPlusInitializerUnitTest(unittest.TestCase):
     def testGenerateTwoCentersIntData(self):
         self.templateKmeasPlusPlusCenterInitializer([[0], [-1], [-2], [-3]], 2);
 
+    def testGenerateCentersIdenticalData1(self):
+        self.templateKmeasPlusPlusCenterInitializer([[1.2], [1.2], [1.2], [1.2]], 2);
+
+    def testGenerateCentersIdenticalData2(self):
+        self.templateKmeasPlusPlusCenterInitializer([[1.2], [1.2], [1.2], [1.2]], 4);
+
+    def testGenerateCentersThreeDimensionalData(self):
+        self.templateKmeasPlusPlusCenterInitializer([[1.2, 1.3, 1.4], [1.2, 1.3, 1.4], [2.3, 2.3, 2.4], [2.1, 4.2, 1.1]], 3);
+
+    def testGenerateCentersOnePoint(self):
+        self.templateKmeasPlusPlusCenterInitializer([[1.2, 1.3, 1.4]], 1);
 
     def templateKmeansPlusPlusForClustering(self, path_sample, amount, expected_clusters_length):
         result_success = True;

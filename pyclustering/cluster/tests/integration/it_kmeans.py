@@ -26,6 +26,9 @@
 
 import unittest;
 
+import matplotlib;
+matplotlib.use('Agg');
+
 from pyclustering.cluster.tests.kmeans_templates import KmeansTestTemplates;
 from pyclustering.cluster.kmeans import kmeans;
 

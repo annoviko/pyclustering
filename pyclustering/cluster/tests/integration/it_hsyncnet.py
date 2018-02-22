@@ -26,6 +26,9 @@
 
 import unittest;
 
+import matplotlib;
+matplotlib.use('Agg');
+
 from pyclustering.cluster.tests.hsyncnet_templates import HsyncnetTestTemplates;
 
 from pyclustering.nnet import solve_type;

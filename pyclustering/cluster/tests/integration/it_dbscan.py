@@ -25,6 +25,9 @@
 
 import unittest;
 
+import matplotlib;
+matplotlib.use('Agg');
+
 from pyclustering.cluster.tests.dbscan_templates import DbscanTestTemplates;
 from pyclustering.cluster.dbscan import dbscan;
 

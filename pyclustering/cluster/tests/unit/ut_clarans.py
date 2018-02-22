@@ -26,6 +26,9 @@
 
 import unittest;
 
+import matplotlib;
+matplotlib.use('Agg');
+
 from pyclustering.samples.definitions import SIMPLE_SAMPLES;
 
 from pyclustering.utils import read_sample;

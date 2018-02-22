@@ -147,7 +147,23 @@ class AgglomerativeUnitTests(unittest.TestCase):
 
     def testClusteringTheSameData2LinkSingle(self):
         AgglomerativeTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 2, type_link.SINGLE_LINK, [5, 10], False);
-        AgglomerativeTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 1, type_link.SINGLE_LINK, [15], False); 
+        AgglomerativeTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 1, type_link.SINGLE_LINK, [15], False);
+
+    def testClusteringThreeDimensionalData1LinkAverage(self):
+        AgglomerativeTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, 2, type_link.AVERAGE_LINK, [10, 10], False);
+        AgglomerativeTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, 1, type_link.AVERAGE_LINK, [20], False);
+
+    def testClusteringThreeDimensionalData1LinkCentroid(self):
+        AgglomerativeTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, 2, type_link.CENTROID_LINK, [10, 10], False);
+        AgglomerativeTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, 1, type_link.CENTROID_LINK, [20], False);
+
+    def testClusteringThreeDimensionalData1LinkComplete(self):
+        AgglomerativeTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, 2, type_link.COMPLETE_LINK, [10, 10], False);
+        AgglomerativeTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, 1, type_link.COMPLETE_LINK, [20], False);
+
+    def testClusteringThreeDimensionalData1LinkSingle(self):
+        AgglomerativeTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, 2, type_link.SINGLE_LINK, [10, 10], False);
+        AgglomerativeTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, 1, type_link.SINGLE_LINK, [20], False);
 
 
     def testClusterAllocationOneDimensionDataLinkAverage(self):

@@ -26,6 +26,9 @@
 
 import unittest;
 
+import matplotlib;
+matplotlib.use('Agg');
+
 from pyclustering.cluster.tests.rock_templates import RockTestTemplates;
 from pyclustering.cluster.rock import rock;
 
