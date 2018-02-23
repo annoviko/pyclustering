@@ -360,7 +360,7 @@ class cure:
         """
         
         for point in cluster.rep:
-            self.__tree.remove(point);
+            self.__tree.remove(point, payload=cluster);
 
 
     def __merge_clusters(self, cluster1, cluster2):

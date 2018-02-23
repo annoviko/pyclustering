@@ -54,6 +54,15 @@ class OpticsUnitTest(unittest.TestCase):
     def testClusteringSampleSimple5(self):
         OpticsTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 0.7, 3, None, [15, 15, 15, 15], False);
 
+    def testClusteringTheSameData1(self):
+        OpticsTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 1.0, 3, None, [10, 20], False);
+
+    def testClusteringTheSameData2(self):
+        OpticsTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 1.0, 2, None, [5, 5, 5], False);
+
+    def testClusteringTheSameData2OneCluster(self):
+        OpticsTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 20.0, 2, None, [15], False);
+
     def testClusteringHepta(self):
         OpticsTestTemplates.templateClusteringResults(FCPS_SAMPLES.SAMPLE_HEPTA, 1, 3, None, [30, 30, 30, 30, 30, 30, 32], False);
   

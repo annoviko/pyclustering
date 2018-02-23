@@ -115,7 +115,7 @@ void agglomerative::merge_by_average_link(void) {
 
             for (auto index_object1 : (*m_ptr_clusters)[index_cluster1]) {
                 for (auto index_object2 : (*m_ptr_clusters)[index_cluster2]) {
-                    candidate_average_distance += euclidean_distance_sqrt(&data[index_object1], &data[index_object2]);
+                    candidate_average_distance += euclidean_distance_square(data[index_object1], data[index_object2]);
                 }
             }
 
@@ -143,7 +143,7 @@ void agglomerative::merge_by_centroid_link(void) {
 
     for (size_t index1 = 0; index1 < m_centers.size(); index1++) {
         for (size_t index2 = index1 + 1; index2 < m_centers.size(); index2++) {
-            double distance = euclidean_distance_sqrt(&m_centers[index1], &m_centers[index2]);
+            double distance = euclidean_distance_square(m_centers[index1], m_centers[index2]);
             if (distance < minimum_average_distance) {
                 minimum_average_distance = distance;
 
@@ -175,7 +175,7 @@ void agglomerative::merge_by_complete_link(void) {
 
             for (auto index_object1 : (*m_ptr_clusters)[index_cluster1]) {
                 for (auto index_object2 : (*m_ptr_clusters)[index_cluster2]) {
-                    double distance = euclidean_distance_sqrt(&data[index_object1], &data[index_object2]);
+                    double distance = euclidean_distance_square(data[index_object1], data[index_object2]);
                     if (distance > candidate_maximum_distance) {
                         candidate_maximum_distance = distance;
                     }
@@ -210,7 +210,7 @@ void agglomerative::merge_by_signle_link(void) {
 
             for (auto index_object1 : (*m_ptr_clusters)[index_cluster1]) {
                 for (auto index_object2 : (*m_ptr_clusters)[index_cluster2]) {
-                    double distance = euclidean_distance_sqrt(&data[index_object1], &data[index_object2]);
+                    double distance = euclidean_distance_square(data[index_object1], data[index_object2]);
                     if (distance < candidate_minimum_distance) {
                         candidate_minimum_distance = distance;
                     }

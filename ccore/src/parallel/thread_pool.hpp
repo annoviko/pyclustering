@@ -41,6 +41,9 @@ public:
 private:
     using thread_container = std::vector<thread_executor::ptr>;
 
+public:
+    static const std::size_t        DEFAULT_POOL_SIZE;
+
 private:
     thread_container                m_pool  = { };
 
@@ -57,7 +60,7 @@ private:
     bool                            m_stop = false;
 
 public:
-    thread_pool(void) = default;
+    thread_pool(void);
 
     explicit thread_pool(const std::size_t p_size);
 
@@ -68,13 +71,15 @@ public:
     ~thread_pool(void);
 
 public:
-    std::size_t add_task(task::proc & p_raw_task);
+    task::id add_task(task::proc & p_raw_task);
 
-    std::size_t pop_complete_task(void);
+    task::id pop_complete_task(void);
 
     std::size_t size(void) const;
 
 private:
+    void initialize(const std::size_t p_size);
+
     void done_task(const task::ptr & p_task);
 
     void get_task(task::ptr & p_task);

@@ -90,6 +90,32 @@ protected:
         ASSERT_EQ(tree.get_root(), nullptr);
     }
 
+    virtual void TemplateInsertFindRemoveByCoordinatesAndPayload(const dataset & p_data, const std::vector<std::size_t> & p_payloads) {
+        tree = kdtree();
+
+        std::vector<kdnode::ptr> nodes = { };
+        for (std::size_t i = 0; i < p_data.size(); i++) {
+            nodes.push_back( tree.insert(p_data[i], (void *) &(p_payloads[i])) );
+        }
+
+        for (auto & node : nodes) {
+            kdnode::ptr found_node = tree.find_node(node->get_data(), node->get_payload());
+            ASSERT_EQ(node, found_node);
+        }
+
+        for (std::size_t i = 0; i < nodes.size(); i++) {
+            tree.remove(nodes[i]->get_data(), nodes[i]->get_payload());
+
+            kdnode::ptr found_node = tree.find_node(nodes[i]->get_data(), nodes[i]->get_payload());
+            ASSERT_EQ(nullptr, found_node);
+
+            for (std::size_t j = i + 1; j < nodes.size(); j++) {
+                found_node = tree.find_node(nodes[j]->get_data(), nodes[j]->get_payload());
+                ASSERT_EQ(nodes[j], found_node);
+            }
+        }
+    }
+
 private:
     void FindNearestNode(const dataset & p_data, const std::size_t p_index) {
         kdnode::ptr nearest_node = searcher.find_nearest_node();
@@ -266,4 +292,43 @@ TEST_F(utest_kdtree, insert_search_remove_simple_06) {
 TEST_F(utest_kdtree, insert_search_remove_simple_07) {
     auto sample = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_07);
     TemplateTestInsertSearchRemove(*sample);
+}
+
+
+TEST_F(utest_kdtree, insert_search_remove_with_payload_identical_data_1) {
+    dataset data = { {0.1}, {0.1}, {0.1}, {0.1}, {0.2}, {0.2} };
+    std::vector<std::size_t> payloads = { 0, 1, 2, 3, 4, 5 };
+
+    TemplateInsertFindRemoveByCoordinatesAndPayload(data, payloads);
+}
+
+
+TEST_F(utest_kdtree, insert_search_remove_with_payload_identical_data_2) {
+    dataset data = { {0.1}, {0.1}, {0.1}, {0.1}, {0.1}, {0.1} };
+    std::vector<std::size_t> payloads = { 0, 1, 2, 3, 4, 5 };
+
+    TemplateInsertFindRemoveByCoordinatesAndPayload(data, payloads);
+}
+
+TEST_F(utest_kdtree, insert_search_remove_with_payload_identical_data_3) {
+    dataset data = { {0.1}, {0.1}, {0.1}, {0.1}, {0.2}, {0.2} };
+    std::vector<std::size_t> payloads = { 0, 1, 2, 3, 4, 5 };
+
+    TemplateInsertFindRemoveByCoordinatesAndPayload(data, payloads);
+}
+
+
+TEST_F(utest_kdtree, insert_search_remove_with_payload_identical_data_4) {
+    dataset data = { {1.2}, {1.2}, {1.3}, {1.3}, {1.4}, {1.4} };
+    std::vector<std::size_t> payloads = { 0, 1, 2, 3, 4, 5 };
+
+    TemplateInsertFindRemoveByCoordinatesAndPayload(data, payloads);
+}
+
+
+TEST_F(utest_kdtree, insert_search_remove_with_payload_identical_data_5) {
+    dataset data = { {75, 75}, {75, 75}, {75, 75}, {75, 75}, {75, 75}, {75, 75}, {75, 75}, {75, 75} };
+    std::vector<std::size_t> payloads = { 0, 1, 2, 3, 4, 5, 6, 7 };
+
+    TemplateInsertFindRemoveByCoordinatesAndPayload(data, payloads);
 }

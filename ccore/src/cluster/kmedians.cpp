@@ -99,7 +99,7 @@ void kmedians::update_clusters(const dataset & medians, cluster_sequence & clust
         double distance_optim = std::numeric_limits<double>::max();
 
         for (size_t index_cluster = 0; index_cluster < medians.size(); index_cluster++) {
-            double distance = euclidean_distance_sqrt(&data[index_point], &medians[index_cluster]);
+            double distance = euclidean_distance_square(data[index_point], medians[index_cluster]);
             if (distance < distance_optim) {
                 index_cluster_optim = index_cluster;
                 distance_optim = distance;
@@ -154,7 +154,7 @@ double kmedians::update_medians(cluster_sequence & clusters, dataset & medians) 
             }
         }
 
-        double change = euclidean_distance_sqrt(&prev_medians[index_cluster], &medians[index_cluster]);
+        double change = euclidean_distance_square(prev_medians[index_cluster], medians[index_cluster]);
         if (change > maximum_change) {
             maximum_change = change;
         }

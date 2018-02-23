@@ -25,6 +25,9 @@
 
 import unittest;
 
+import matplotlib;
+matplotlib.use('Agg');
+
 from pyclustering.cluster.tests.dbscan_templates import DbscanTestTemplates;
 from pyclustering.cluster.dbscan import dbscan;
 
@@ -48,6 +51,12 @@ class DbscanIntegrationTest(unittest.TestCase):
         DbscanTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 10, 3, [60], True);        
         DbscanTestTemplates.templateClusteringResults(FCPS_SAMPLES.SAMPLE_HEPTA, 1, 3, [30, 30, 30, 30, 30, 30, 32], True);
         DbscanTestTemplates.templateClusteringResults(FCPS_SAMPLES.SAMPLE_HEPTA, 5, 3, [212], True);
+
+    def testClusteringTheSameData1ByCore(self):
+        DbscanTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 1.0, 3, [10, 20], True);
+
+    def testClusteringTheSameData2ByCore(self):
+        DbscanTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 1.0, 2, [5, 5, 5], True);
 
     def testClusteringSimple5WithoutNeighborsByCore(self):
         DbscanTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 0.7, 0, [15, 15, 15, 15], True);

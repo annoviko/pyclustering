@@ -64,6 +64,12 @@ class KmedoidsIntegrationTest(unittest.TestCase):
     def testClusterOneAllocationSampleSimple5ByCore(self):
         KmedoidsTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [35], [60], True);
 
+    def testClusterTheSameData1ByCore(self):
+        KmedoidsTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, [2, 20], [10, 20], True);
+
+    def testClusterTheSameData2ByCore(self):
+        KmedoidsTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, [2, 7, 12], [5, 5, 5], True);
+
 
     def testClusterAllocationTheSameObjectsOneInitialMedoidByCore(self):
         KmedoidsTestTemplates.templateClusterAllocationTheSameObjects(20, 1, True);

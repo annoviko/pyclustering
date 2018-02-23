@@ -69,7 +69,7 @@ som::som(const size_t num_rows, const size_t num_cols, const som_conn_type type_
 
     for (size_t i = 0; i < m_size; i++) {
         for (size_t j = i; j < m_size; j++) {
-            double distance = euclidean_distance_sqrt(&m_location[i], &m_location[j]);
+            double distance = euclidean_distance_square(m_location[i], m_location[j]);
             m_sqrt_distances[i][j] = distance;
             m_sqrt_distances[j][i] = distance;
         }
@@ -305,10 +305,10 @@ void som::create_initial_weights(const som_init_type type) {
 
 size_t som::competition(const pattern & input_pattern) const {
     size_t index = 0;
-    double minimum = euclidean_distance_sqrt(&m_weights[0], &input_pattern);
+    double minimum = euclidean_distance_square(m_weights[0], input_pattern);
 
     for (size_t i = 1; i < m_size; i++) {
-        double candidate = euclidean_distance_sqrt(&m_weights[i], &input_pattern);
+        double candidate = euclidean_distance_square(m_weights[i], input_pattern);
         if (candidate < minimum) {
             index = i;
             minimum = candidate;

@@ -31,7 +31,7 @@ from pyclustering.cluster import cluster_visualizer;
 from pyclustering.cluster.center_initializer import kmeans_plusplus_initializer;
 from pyclustering.cluster.kmeans import kmeans;
 
-from pyclustering.utils import pi, calculate_ellipse_description, euclidean_distance_sqrt;
+from pyclustering.utils import pi, calculate_ellipse_description, euclidean_distance_square;
 
 from enum import IntEnum;
 
@@ -163,7 +163,7 @@ class ema_initializer():
             index_optim, dist_optim = -1, 0.0;
              
             for index in range(len(centers)):
-                dist = euclidean_distance_sqrt(self.__sample[index_point], centers[index]);
+                dist = euclidean_distance_square(self.__sample[index_point], centers[index]);
                  
                 if ( (dist < dist_optim) or (index is 0)):
                     index_optim, dist_optim = index, dist;
@@ -644,8 +644,9 @@ class ema:
             particle = 0.0;
             for index_cluster in range(self.__amount_clusters):
                 particle += self.__pic[index_cluster] * self.__gaussians[index_cluster][index_point];
-            
-            likelihood += numpy.log(particle);
+
+            if particle > 0.0:
+                likelihood += numpy.log(particle);
         
         return likelihood;
 

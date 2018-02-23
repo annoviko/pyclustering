@@ -25,6 +25,9 @@
 
 import unittest;
 
+import matplotlib;
+matplotlib.use('Agg');
+
 from pyclustering.cluster.encoder import cluster_encoder;
 from pyclustering.cluster.encoder import type_encoding;
 

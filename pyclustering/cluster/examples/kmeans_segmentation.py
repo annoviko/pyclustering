@@ -30,7 +30,7 @@ from pyclustering.samples.definitions import IMAGE_SIMPLE_SAMPLES, IMAGE_MAP_SAM
 from pyclustering.cluster.kmeans import kmeans;
 
 
-def template_segmentation_image(source, start_centers):    
+def template_segmentation_image(source, start_centers):
     data = read_image(source);
 
     kmeans_instance = kmeans(data, start_centers);

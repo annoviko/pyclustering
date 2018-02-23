@@ -47,6 +47,7 @@ public:
 public:
     using proc      = std::function<void(void)>;
     using ptr       = std::shared_ptr<task>;
+    using id        = std::size_t;
 
 private:
     static std::size_t          STATIC_TASK_ID_GENERATOR;
@@ -72,10 +73,10 @@ public:
 
     task_status get_status(void) const;
 
-    std::size_t get_id(void) const;
+    task::id get_id(void) const;
 
 private:
-    static std::size_t generate_task_id(void);
+    static task::id generate_task_id(void);
 
 public:
     void operator()();

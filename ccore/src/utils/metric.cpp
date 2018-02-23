@@ -22,7 +22,6 @@
 #include "metric.hpp"
 
 #include <algorithm>
-#include <cmath>
 
 
 namespace ccore {
@@ -32,44 +31,11 @@ namespace utils {
 namespace metric {
 
 
-double euclidean_distance_sqrt(const std::vector<double> * const point1, const std::vector<double> * const point2) {
-    double distance = 0.0;
-    for (std::size_t dimension = 0; dimension < point1->size(); dimension++) {
-        double difference = (point1->data()[dimension] - point2->data()[dimension]);
-        distance += difference * difference;
-    }
-
-  return distance;
-}
-
-
-double euclidean_distance_sqrt(const std::vector<double> & point1, const std::vector<double> & point2) {
-    return euclidean_distance_sqrt(&point1, &point2);
-}
-
-
-double euclidean_distance(const std::vector<double> * const point1, const std::vector<double> * const point2) {
-    double distance = 0.0;
-
-    for (std::size_t dimension = 0; dimension < point1->size(); dimension++) {
-        double difference = (point1->data()[dimension] - point2->data()[dimension]);
-        distance += difference * difference;
-    }
-
-    return std::sqrt(distance);
-}
-
-
-double euclidean_distance(const std::vector<double> & point1, const std::vector<double> & point2) {
-    return euclidean_distance(&point1, &point2);
-}
-
-
 double average_neighbor_distance(const std::vector<std::vector<double> > * points, const std::size_t num_neigh) {
     std::vector<std::vector<double> > dist_matrix( points->size(), std::vector<double>(points->size(), 0.0) );
     for (std::size_t i = 0; i < points->size(); i++) {
         for (std::size_t j = i + 1; j < points->size(); j++) {
-            double distance = euclidean_distance( &(*points)[i], &(*points)[j] );
+            double distance = euclidean_distance( (*points)[i], (*points)[j] );
             dist_matrix[i][j] = distance;
             dist_matrix[j][i] = distance;
         }

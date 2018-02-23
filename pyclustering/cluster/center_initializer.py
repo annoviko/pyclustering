@@ -28,8 +28,9 @@
 
 """
 
+
+import numpy;
 import random;
-import copy
 
 from pyclustering.utils import euclidean_distance;
 
@@ -78,13 +79,38 @@ class random_center_initializer:
 class kmeans_plusplus_initializer:
     """!
     @brief K-Means++ is an algorithm for choosing the initial centers for algorithms like K-Means or X-Means.
-    @details Clustering results are depends on initial centers in case of K-Means algorithm and even in case of X-Means.
-              This method is used to find out optimal initial centers. There is an example of initial centers that were
-              calculated by the K-Means++ method:
-    
+    @details K-Means++ algorithm guarantees an approximation ratio O(log k). Clustering results are depends on
+              initial centers in case of K-Means algorithm and even in case of X-Means. This method is used to find
+              out optimal initial centers.
+
+    Algorithm can be divided into three steps. The first center is chosen from input data randomly with
+    uniform distribution at the first step. At the second, probability to being center is calculated for each point:
+    \f[p_{i}=\frac{D(x_{i})}{\sum_{j=0}^{N}D(x_{j})}\f]
+    where \f$D(x_{i})\f$ is a distance from point \f$i\f$ to the closest center. Using this probabilities next center
+    is chosen. The last step is repeated until required amount of centers is initialized.
+
+    Pyclustering implementation of the algorithm provides feature to consider several candidates on the second
+    step, for example:
+
+    @code
+        amount_centers = 4;
+        amount_candidates = 3;
+        initializer = kmeans_plusplus_initializer(sample, amount_centers, amount_candidates);
+    @endcode
+
+    If the farthest points should be used as centers then special constant 'FARTHEST_CENTER_CANDIDATE' should be used
+    for that purpose, for example:
+    @code
+        amount_centers = 4;
+        amount_candidates = kmeans_plusplus_initializer.FARTHEST_CENTER_CANDIDATE;
+        initializer = kmeans_plusplus_initializer(sample, amount_centers, amount_candidates);
+    @endcode
+
+    There is an example of initial centers that were calculated by the K-Means++ method:
+
     @image html kmeans_plusplus_initializer_results.png
     
-    Code example:
+    Code example where initial centers are prepared for K-Means algorithm:
     @code
         # Read data 'SampleSimple3' from Simple Sample collection.
         sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE3);
@@ -107,169 +133,134 @@ class kmeans_plusplus_initializer:
     @endcode
     
     """
-    
-    def __init__(self, data, amount_centers):
+
+
+    ## Constant denotes that only points with highest probabilities should be considered as centers.
+    FARTHEST_CENTER_CANDIDATE = "farthest";
+
+
+    def __init__(self, data, amount_centers, amount_candidates = 1):
         """!
         @brief Creates K-Means++ center initializer instance.
         
-        @param[in] data (list): List of points where each point is represented by list of coordinates.
-        @param[in] amount_centers (unit): Amount of centers that should be initialized.
-        
+        @param[in] data (array_like): List of points where each point is represented by list of coordinates.
+        @param[in] amount_centers (uint): Amount of centers that should be initialized.
+        @param[in] amount_candidates (uint): Amount of candidates that is considered as a center, if the farthest points (with the highest probability) should
+                    be considered as centers then special constant should be used 'FARTHEST_CENTER_CANDIDATE'.
+
+        @see FARTHEST_CENTER_CANDIDATE
+
         """
         
-        self.__data = data;
+        self.__data = numpy.array(data);
         self.__amount = amount_centers;
-        
-        if self.__amount <= 0:
-            raise AttributeError("Amount of cluster centers should be at least 1.");
-    
-    
-    def __get_uniform(self, probabilities):
+        self.__candidates = amount_candidates;
+
+        self.__check_parameters();
+
+
+    def __check_parameters(self):
         """!
-        @brief Returns index in probabilities.
-        
-        @param[in] probabilities (list): List with segments in increasing sequence with val in [0, 1], for example, [0 0.1 0.2 0.3 1.0].
-        
+        @brief Checks input parameters of the algorithm and if something wrong then corresponding exception is thrown.
+
         """
+        if (self.__amount <= 0) or (self.__amount > len(self.__data)):
+            raise AttributeError("Amount of cluster centers should be at least 1 and should be less or equal to amount of points in data.");
 
-        # Initialize return value
-        res_idx = None;
+        if self.__candidates != kmeans_plusplus_initializer.FARTHEST_CENTER_CANDIDATE:
+            if (self.__candidates <= 0) or (self.__candidates > len(self.__data)):
+                raise AttributeError("Amount of candidates centers should be at least 1 and should be less or equal to amount of points in data.");
 
-        # Get random num in range [0, 1)
-        random_num = random.random();
-
-        # Find segment with  val1 < random_num < val2
-        for _idx in range(len(probabilities)):
-            if random_num < probabilities[_idx]:
-                res_idx = _idx;
-                break;
-
-        if res_idx is None:
-            raise AttributeError("List 'probabilities' should contain 1 as the end of last segment(s)");
-
-        return res_idx
+        if len(self.__data) == 0:
+            raise AttributeError("Data is empty.")
 
 
-    def __get_first_center(self):
-        """!
-        @brief Returns first center chosen uniformly at random from data.
-        
-        """
-
-        # Initialize list with uniform probabilities
-        probabilities = [];
-
-        # Fill probability list
-        for i in range(len(self.__data)):
-            probabilities.append((i + 1) / len(self.__data));
-
-        return self.__data[self.__get_uniform(probabilities)];
-
-
-    def __calc_distance_to_nearest_center(self, data, centers):
+    def __calculate_shortest_distances(self, data, centers):
         """!
         @brief Calculates distance from each data point to nearest center.
         
-        @param[in] data (list): List of points where each point is represented by list of coordinates.
-        @param[in] centers (list): List of points that represents centers and where each center is represented by list of coordinates.
+        @param[in] data (numpy.array): Array of points for that initialization is performed.
+        @param[in] centers (numpy.array): Array of points that represents centers.
         
-        @return (list) List of distances to closest center for each data point.
+        @return (numpy.array) List of distances to closest center for each data point.
         
         """
 
-        # Initialize
-        distance_data = [];
+        dataset_differences = numpy.zeros((len(centers), len(data)));
+        for index_center in range(len(centers)):
+            dataset_differences[index_center] = numpy.sum(
+                numpy.square(data - centers[index_center]), axis=1).T;
 
-        # For each data point x, compute D(x), the distance between x and the nearest center
-        for _point in data:
-
-            # Min dist to nearest center
-            min_dist = float('inf');
-
-            # For each center
-            for _center in centers:
-                min_dist = min(min_dist, euclidean_distance(_center, _point));
-
-            # Add distance to nearest center into result list
-            distance_data.append(min_dist);
-
-        return distance_data;
+        shortest_distances = numpy.min(dataset_differences, axis=0);
+        return shortest_distances;
 
 
-    def __get_sum_for_normalize_distance(self, distance):
+    def __get_next_center(self, centers):
         """!
-        @brief Calculates square sum distance that is used for normalization.
-        
-        @param[in] distance (list): List of minimum distances from each point to nearest center.
-        
-        @return (float) Square sum distance.
-        
+        @brief Calculates the next center for the data.
+
+        @param[in] centers (array_like): Current initialized centers.
+
+        @return (array_like) Next initialized center.
+
         """
 
-        sum_distance = 0.0;
+        distances = self.__calculate_shortest_distances(data=self.__data, centers=centers);
 
-        for _dist in distance:
-            sum_distance += _dist ** 2;
+        if self.__candidates == kmeans_plusplus_initializer.FARTHEST_CENTER_CANDIDATE:
+            center_index = numpy.argmax(distances);
+        else:
+            probabilities = self.__calculate_probabilities(distances);
+            center_index = self.__get_probable_center(distances, probabilities);
 
-        return sum_distance;
+        return self.__data[center_index];
 
 
-    def __set_last_value_to_one(self, probabilities):
+    def __calculate_probabilities(self, distances):
         """!
-        @brief Update probabilities for all points.
-        @details All values of probability list equals to the last element are set to 1.
-        
-        @param[in] probabilities (list): List of minimum distances from each point to nearest center.
-        
+        @brief Calculates cumulative probabilities of being center of each point.
+
+        @param[in] distances (array_like): Distances from each point to closest center.
+
+        @return (array_like) Cumulative probabilities of being center of each point.
+
         """
 
-        # All values equal to the last elem should be set to 1
-        last_val = probabilities[-1];
+        total_distance = numpy.sum(distances);
+        if total_distance != 0.0:
+            probabilities = distances / total_distance;
+            return numpy.cumsum(probabilities);
+        else:
+            return numpy.zeros(len(distances));
 
-        # for all elements or if a elem not equal to the last elem
-        for _idx in range(-1, -len(probabilities) - 1, -1):
-            if probabilities[_idx] == last_val:
-                probabilities[_idx] = 1.0;
-            else:
-                break;
 
-    def __get_probabilities_from_distance(self, distance):
+    def __get_probable_center(self, distances, probabilities):
         """!
-        @brief Calculates probabilities from distance.
-        @details Probabilities are filled by following expression:
-        
-        \f[
-        p[i]=\frac{dist_{i}^2}{\sum_{i=0}^{N}dist_{i}};
-        \f]
-        
-        @param[in] distance (list): List of minimum distances from each point to nearest center.
-        
-        @return (list) Weighted belonging probability for each point to its nearest center.
-        
+        @brief Calculates the next probable center considering amount candidates.
+
+        @param[in] distances (array_like): Distances from each point to closest center.
+        @param[in] probabilities (array_like): Cumulative probabilities of being center of each point.
+
+        @return (uint) Index point that is next initialized center.
+
         """
-        # Normalize distance
-        sum_for_normalize = self.__get_sum_for_normalize_distance(distance);
 
-        # Create list with probabilities
+        index_best_candidate = -1;
+        for _ in range(self.__candidates):
+            candidate_probability = random.random();
+            index_candidate = 0;
 
-        # Initialize list with probabilities
-        probabilities = [];
+            for index_object in range(len(probabilities)):
+                if candidate_probability < probabilities[index_object]:
+                    index_candidate = index_object;
+                    break;
 
-        # Variable to accumulate probabilities
-        prev_value = 0;
+            if index_best_candidate == -1:
+                index_best_candidate = index_object;
+            elif distances[index_best_candidate] < distances[index_object]:
+                index_best_candidate = index_object;
 
-        # Fill probabilities as :
-        #   p[idx] = D[idx]^2 / sum_2
-        #       where sum_2 = D[0]^2 + D[1]^2 + ...
-        for _dist in distance:
-            if sum_for_normalize > 0.0:
-                prev_value = (_dist ** 2) / sum_for_normalize + prev_value;
-            probabilities.append(prev_value);
-
-        # Set last value to 1
-        self.__set_last_value_to_one(probabilities);
-
-        return probabilities;
+        return index_best_candidate;
 
 
     def initialize(self):
@@ -279,24 +270,13 @@ class kmeans_plusplus_initializer:
         @return (list) List of initialized initial centers.
         
         """
-        # Initialize result list by the first centers
-        centers = [self.__get_first_center()];
+
+        index_center = random.randint(0, len(self.__data) - 1);
+        centers = [ self.__data[ index_center ] ];
 
         # For each next center
         for _ in range(1, self.__amount):
+            next_center = self.__get_next_center(centers);
+            centers.append(next_center);
 
-            # Calc Distance for each data
-            distance_data = self.__calc_distance_to_nearest_center(data = self.__data, centers = centers);
-
-            # Create list with probabilities
-            probabilities = self.__get_probabilities_from_distance(distance_data);
-            # print('Probability : ', probabilities);
-
-            # Choose one new data point at random as a new center, using a weighted probability distribution
-            ret_idx = self.__get_uniform(probabilities);
-
-            # Add new center
-            centers.append(self.__data[ret_idx]);
-
-        # Is all centers are initialized
         return centers;

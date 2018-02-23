@@ -26,6 +26,9 @@
 
 import unittest;
 
+import matplotlib;
+matplotlib.use('Agg');
+
 from pyclustering.cluster.tests.somsc_templates import SyncnetTestTemplates;
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES;
@@ -75,6 +78,12 @@ class SomscIntegrationTest(unittest.TestCase):
 
     def testWrongNumberOfCentersSimpleSample2ByCore(self):
         SyncnetTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 4, None, True);
+
+    def testClusterTheSameData1ByCore(self):
+        SyncnetTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 2, [10, 20], True);
+
+    def testClusterTheSameData2ByCore(self):
+        SyncnetTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 3, [5, 5, 5], True);
 
 
     def testClusterAllocationOneDimensionDataByCore(self):

@@ -83,7 +83,7 @@ void syncnet::create_connections(const double connectivity_radius, const bool en
 
     for (std::size_t i = 0; i < size(); i++) {
         for (std::size_t j = i + 1; j < size(); j++) {
-            double distance = euclidean_distance_sqrt( &(*oscillator_locations)[i], &(*oscillator_locations)[j] );
+            double distance = euclidean_distance_square( (*oscillator_locations)[i], (*oscillator_locations)[j] );
 
             if (distance <= sqrt_connectivity_radius) {
                 m_connections->set_connection(j, i);

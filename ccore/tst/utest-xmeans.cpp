@@ -104,6 +104,13 @@ TEST(utest_xmeans, allocation_mndl_sample_simple_02) {
 }
 
 
+TEST(utest_xmeans, allocation_wrong_initial_bic_sample_simple_02) {
+    dataset start_centers = { {3.5, 4.8}, {6.9, 7.0} };
+    std::vector<unsigned int> expected_clusters_length = {10, 5, 8};
+    template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02), start_centers, 20, expected_clusters_length, splitting_type::BAYESIAN_INFORMATION_CRITERION);
+}
+
+
 TEST(utest_xmeans, allocation_bic_sample_simple_03) {
     dataset start_centers = { {0.2, 0.1}, {4.0, 1.0}, {2.0, 2.0}, {2.3, 3.9} };
     std::vector<unsigned int> expected_clusters_length = {10, 10, 10, 30};
@@ -153,6 +160,22 @@ TEST(utest_xmeans, allocation_mndl_sample_simple_04) {
 }
 
 
+TEST(utest_xmeans, same_size_data_and_centers_bic) {
+    dataset_ptr data = dataset_ptr( new dataset({ {1.0}, {2.0}, {3.0}, {4.0} }) );
+    dataset start_centers = { {1.0}, {2.0}, {3.0}, {4.0} };
+
+    template_length_process_data(data, start_centers, 20, { 1, 1, 1, 1 }, splitting_type::BAYESIAN_INFORMATION_CRITERION);
+}
+
+
+TEST(utest_xmeans, same_size_data_and_centers_mndl) {
+    dataset_ptr data = dataset_ptr( new dataset({ {1.0}, {2.0}, {3.0}, {4.0} }) );
+    dataset start_centers = { {1.0}, {2.0}, {3.0}, {4.0} };
+
+    template_length_process_data(data, start_centers, 20, { 1, 1, 1, 1 }, splitting_type::MINIMUM_NOISELESS_DESCRIPTION_LENGTH);
+}
+
+
 TEST(utest_xmeans, parallel_processing_bic) {
     dataset start_centers = { {0.25, 0.25}, {0.75, 0.65}, {0.95, 0.5} };
     std::size_t parallel_processing_trigger = 100;
@@ -184,4 +207,28 @@ TEST(utest_xmeans, parallel_processing_sample_simple_02) {
     dataset start_centers = { {3.5, 4.8}, {6.9, 7.0}, {7.5, 0.5} };
     std::vector<unsigned int> expected_clusters_length = {10, 5, 8};
     template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02), start_centers, 20, expected_clusters_length, splitting_type::BAYESIAN_INFORMATION_CRITERION, 0);
+}
+
+
+TEST(utest_xmeans, allocation_bic_identical_data_01) {
+    dataset start_centers = { {3.0}, {6.0} };
+    std::vector<unsigned int> expected_clusters_length = {10, 20};
+    template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_09), start_centers, 20, expected_clusters_length, splitting_type::BAYESIAN_INFORMATION_CRITERION);
+}
+
+
+TEST(utest_xmeans, allocation_mndl_identical_data_01) {
+    dataset start_centers = { {3.0}, {6.0} };
+    std::vector<unsigned int> expected_clusters_length = {10, 20};
+    template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_09), start_centers, 20, expected_clusters_length, splitting_type::MINIMUM_NOISELESS_DESCRIPTION_LENGTH);
+}
+
+
+TEST(utest_xmeans, custom_allocation_bic_01) {
+    dataset_ptr data = dataset_ptr(new dataset({{0.0, 0.0}, {0.1363766466758196, 1.1783713695419944}, {3.214688621356828, 1.476853479793315}, {2.138463480518565, 4.081574609797002}, {0.7396242774728039, 2.87928051726698}, {4.392971847058702, 9.373294690055928}, {0.9201540078170818, 1.58388176369988}, {4.314084965826241, 1.2011928104209428}, {11.734694885255871, 7.357322102302481}, {3.536693195144401, 7.985381380225232}}));
+    dataset start_centers = {{0.5370863032832184, 0.11587434446400902}, {0.88032361344512, 0.1499414823211892}, {0.32937175324286194, 0.1591103849511586}};
+
+    std::vector<unsigned int> expected_clusters_length = { };
+
+    template_length_process_data(data, start_centers, 5, expected_clusters_length, splitting_type::BAYESIAN_INFORMATION_CRITERION);
 }

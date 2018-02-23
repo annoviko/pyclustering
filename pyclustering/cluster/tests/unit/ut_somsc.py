@@ -26,6 +26,10 @@
 
 import unittest;
 
+# Generate images without having a window appear.
+import matplotlib;
+matplotlib.use('Agg');
+
 from pyclustering.cluster.tests.somsc_templates import SyncnetTestTemplates;
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES;
@@ -74,6 +78,11 @@ class SomscUnitTest(unittest.TestCase):
     def testWrongNumberOfCentersSimpleSample2(self):
         SyncnetTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 4, None, False);
 
+    def testClusterTheSameData1(self):
+        SyncnetTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 2, [10, 20], False);
+
+    def testClusterTheSameData2(self):
+        SyncnetTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 3, [5, 5, 5], False);
 
     def testClusterAllocationOneDimensionData(self):
         SyncnetTestTemplates.templateClusterAllocationOneDimensionData(False);

@@ -50,7 +50,9 @@ namespace ccore {
 namespace nnet {
 
 
-const size_t sync_network::MAXIMUM_MATRIX_REPRESENTATION_SIZE = 4096;
+const std::size_t sync_network::DEFAULT_DATA_SIZE_PARALLEL_PROCESSING   = 800;
+
+const std::size_t sync_network::MAXIMUM_MATRIX_REPRESENTATION_SIZE      = 4096;
 
 
 
@@ -230,6 +232,8 @@ void sync_network::simulate_static(const std::size_t steps, const double time, c
 
     store_dynamic(0.0, collect_dynamic, output_dynamic);    /* store initial state */
 
+    check_parallel_condition();
+
     double cur_time = step;
     for (std::size_t cur_step = 0; cur_step < steps; cur_step++) {
         calculate_phases(solver, cur_time, step, int_step);
@@ -250,6 +254,8 @@ void sync_network::simulate_dynamic(const double order, const double step, const
 
     double integration_step = step / 10;
 
+    check_parallel_condition();
+
     for (double time_counter = step; current_order < order; time_counter += step) {
         calculate_phases(solver, time_counter, step, integration_step);
 
@@ -263,6 +269,11 @@ void sync_network::simulate_dynamic(const double order, const double step, const
             break;
         }
     }
+}
+
+
+void sync_network::set_parallel_processing_trigger(const std::size_t p_network_size) {
+    m_parallel_trigger = p_network_size;
 }
 
 
@@ -287,16 +298,64 @@ void sync_network::store_dynamic(const double time, const bool collect_dynamic, 
 void sync_network::calculate_phases(const solve_type solver, const double t, const double step, const double int_step) {
     std::vector<double> next_phases(size(), 0);
 
+    if (m_parallel_processing) {
+        const std::size_t threads     = m_pool->size() + 1;
+        const std::size_t batch_size  = m_oscillators.size() / threads;
+
+        iterator iter_begin           = m_oscillators.begin();
+        iterator iter_end             = iter_begin;
+
+        for (std::size_t i = 0; i < threads; i++) {
+            std::advance(iter_end, batch_size);
+
+            task::proc improve_proc = [this, &solver, t, step, int_step, iter_begin, iter_end, &next_phases]() {
+                calculate_phases(solver, t, step, int_step, iter_begin, iter_end, next_phases);
+            };
+
+            m_pool->add_task(improve_proc);
+
+            iter_begin = iter_end;
+        }
+
+        /* current thread is also used for processing */
+        calculate_phases(solver, t, step, int_step, iter_begin, m_oscillators.end(), next_phases);
+
+        /* wait for other threads */
+        for (std::size_t i = 0; i < threads; i++) {
+            m_pool->pop_complete_task();
+        }
+    }
+    else {
+        calculate_phases(solver, t, step, int_step, m_oscillators.begin(), m_oscillators.end(), next_phases);
+    }
+
+    /* store result */
+    for (std::size_t index = 0; index < size(); index++) {
+        m_oscillators[index].phase = next_phases[index];
+    }
+}
+
+
+void sync_network::calculate_phases(const solve_type solver,
+                                    const double t,
+                                    const double step,
+                                    const double int_step,
+                                    const iterator p_begin,
+                                    const iterator p_end,
+                                    std::vector<double> & p_next_phases)
+{
     std::size_t number_int_steps = (std::size_t) (step / int_step);
 
-    for (std::size_t index = 0; index < size(); index++) {
+    for (iterator iter = p_begin; iter != p_end; ++iter) {
+        std::size_t index = std::distance(m_oscillators.begin(), iter);
+
         std::vector<void *> argv(1, nullptr);
         argv[0] = (void *) &index;
 
         switch(solver) {
             case solve_type::FORWARD_EULER: {
                 double result = m_oscillators[index].phase + phase_kuramoto(t, m_oscillators[index].phase, argv);
-                next_phases[index] = phase_normalization(result);
+                p_next_phases[index] = phase_normalization(result);
 
                 break;
             }
@@ -305,7 +364,7 @@ void sync_network::calculate_phases(const solve_type solver, const double t, con
                 differ_result<double> outputs;
 
                 runge_kutta_4(m_equation, inputs, t, t + step, number_int_steps, false, argv, outputs);
-                next_phases[index] = phase_normalization( outputs[0].state[0] );
+                p_next_phases[index] = phase_normalization( outputs[0].state[0] );
 
                 break;
             }
@@ -314,7 +373,7 @@ void sync_network::calculate_phases(const solve_type solver, const double t, con
                 differ_result<double> outputs;
 
                 runge_kutta_fehlberg_45(m_equation, inputs, t, t + step, 0.00001, false, argv, outputs);
-                next_phases[index] = phase_normalization( outputs[0].state[0] );
+                p_next_phases[index] = phase_normalization( outputs[0].state[0] );
 
                 break;
             }
@@ -322,11 +381,6 @@ void sync_network::calculate_phases(const solve_type solver, const double t, con
                 throw std::runtime_error("Unknown type of solver");
             }
         }
-    }
-
-    /* store result */
-    for (std::size_t index = 0; index < size(); index++) {
-        m_oscillators[index].phase = next_phases[index];
     }
 }
 
@@ -345,6 +399,17 @@ double sync_network::phase_normalization(const double teta) const {
 
     return norm_teta;
 }
+
+
+void sync_network::check_parallel_condition(void) {
+    m_parallel_processing = (m_oscillators.size() >= m_parallel_trigger);
+    if (m_parallel_processing) {
+        /* current thread also participates in processing (on a weak hardware machine one thread from pool and
+           one is current is used for processing if hardware threads are supported)         */
+        m_pool = std::make_shared<thread_pool>(thread_pool::DEFAULT_POOL_SIZE - 1);
+    }
+}
+
 
 
 sync_dynamic::~sync_dynamic(void) { }

@@ -24,6 +24,7 @@
 #include "parallel/thread_pool.hpp"
 
 #include <algorithm>
+#include <limits>
 #include <numeric>
 #include <map>
 #include <vector>
@@ -32,10 +33,22 @@
 using namespace ccore::parallel;
 
 
-static void template_create_delete_test(const std::size_t p_size) {
-    thread_pool * pool = new thread_pool(p_size);
+std::size_t AUTO_POOL_SIZE = std::numeric_limits<std::size_t>::max();
 
-    ASSERT_EQ(p_size, pool->size());
+
+static void template_create_delete_test(const std::size_t p_size) {
+    thread_pool * pool          = nullptr;
+    std::size_t expected_size   = p_size;
+
+    if (p_size == AUTO_POOL_SIZE) {
+        pool = new thread_pool();
+        expected_size = thread_pool::DEFAULT_POOL_SIZE;
+    }
+    else {
+        pool = new thread_pool(p_size);
+    }
+
+    ASSERT_EQ(expected_size, pool->size());
     ASSERT_EQ(task::INVALID_TASK_ID, pool->pop_complete_task());
 
     delete pool;
@@ -54,9 +67,19 @@ TEST(utest_thread_pool, create_delete_size_20) {
     template_create_delete_test(20);
 }
 
+TEST(utest_thread_pool, auto_size_pool) {
+    template_create_delete_test(AUTO_POOL_SIZE);
+}
+
 
 static void template_add_task_test(const std::size_t p_pool_size, const std::size_t p_task_amount) {
-    thread_pool pool(p_pool_size);
+    std::unique_ptr<thread_pool> pool = nullptr;
+    if (p_pool_size == AUTO_POOL_SIZE) {
+        pool = std::unique_ptr<thread_pool>(new thread_pool());
+    }
+    else {
+        pool = std::unique_ptr<thread_pool>(new thread_pool(p_pool_size));
+    }
 
     std::vector<double> results(p_task_amount, 0.0);
 
@@ -72,7 +95,7 @@ static void template_add_task_test(const std::size_t p_pool_size, const std::siz
                 results[task_index] = task_index + 1.0;
             };
         
-        std::size_t id = pool.add_task(user_proc);
+        std::size_t id = pool->add_task(user_proc);
 
         ASSERT_NE(task::INVALID_TASK_ID, id);
         ASSERT_TRUE(task_ids.find(id) == task_ids.end());
@@ -83,19 +106,19 @@ static void template_add_task_test(const std::size_t p_pool_size, const std::siz
     ASSERT_EQ(p_task_amount, task_ids.size());
 
     for (std::size_t i = 0; i < p_task_amount; i++) {
-        std::size_t id = pool.pop_complete_task();
+        task::id id = pool->pop_complete_task();
 
         ASSERT_NE(task::INVALID_TASK_ID, id);
         ASSERT_TRUE(task_ids.find(id) != task_ids.end());
 
-        std::size_t task_index = task_ids[id];
+        task::id task_index = task_ids[id];
         double obtained_result = results[task_index];
         double expected_result = expected_results[task_index];
 
         ASSERT_EQ(expected_result, obtained_result);
     }
 
-    std::size_t id = pool.pop_complete_task();
+    task::id id = pool->pop_complete_task();
     ASSERT_EQ(task::INVALID_TASK_ID, id);
 }
 
@@ -172,4 +195,24 @@ TEST(utest_thread_pool, continious_pool_5_threads_50_tasks) {
     for (std::size_t i = 0; i < 100; i++) {
         template_add_task_test(5, 50);
     }
+}
+
+TEST(utest_thread_pool, pool_auto_size_1_tasks) {
+    template_add_task_test(AUTO_POOL_SIZE, 20);
+}
+
+TEST(utest_thread_pool, pool_auto_size_10_tasks) {
+    template_add_task_test(AUTO_POOL_SIZE, 10);
+}
+
+TEST(utest_thread_pool, pool_auto_size_20_tasks) {
+    template_add_task_test(AUTO_POOL_SIZE, 20);
+}
+
+TEST(utest_thread_pool, pool_auto_size_50_tasks) {
+    template_add_task_test(AUTO_POOL_SIZE, 20);
+}
+
+TEST(utest_thread_pool, pool_auto_size_100_tasks) {
+    template_add_task_test(AUTO_POOL_SIZE, 20);
 }

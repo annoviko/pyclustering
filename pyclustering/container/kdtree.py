@@ -26,7 +26,7 @@
 """
 
 
-from pyclustering.utils import euclidean_distance_sqrt;
+from pyclustering.utils import euclidean_distance_square;
 
 
 class kdtree_text_visualizer:
@@ -213,7 +213,10 @@ class kdtree:
         @brief Insert new point with payload to kd-tree.
         
         @param[in] point (list): Coordinates of the point of inserted node.
-        @param[in] payload (*): Payload of inserted node.
+        @param[in] payload (any-type): Payload of inserted node. It can be identificator of the node or
+                    some useful payload that belongs to the point.
+        
+        @return (node) Inserted node to the kd-tree.
         
         """
         
@@ -250,18 +253,29 @@ class kdtree:
                     cur_node = cur_node.left;
     
     
-    def remove(self, point):
+    def remove(self, point, **kwargs):
         """!
         @brief Remove specified point from kd-tree.
+        @details It removes the first found node that satisfy to the input parameters. Make sure that
+                  pair (point, payload) is unique for each node, othewise the first found is removed.
         
         @param[in] point (list): Coordinates of the point of removed node.
+        @param[in] **kwargs: Arbitrary keyword arguments (payload).
+        
+        Keyword Args:
+            payload (any): Payload of the node that should be removed.
         
         @return (node) Root if node has been successfully removed, otherwise None.
         
         """
         
         # Get required node
-        node_for_remove = self.find_node(point);
+        node_for_remove = None;
+        if ('payload' in kwargs):
+            node_for_remove = self.find_node_with_payload(point, kwargs['payload'], None);
+        else:
+            node_for_remove = self.find_node(point, None);
+        
         if (node_for_remove is None):
             return None;
         
@@ -357,15 +371,17 @@ class kdtree:
         return min(candidates, key = min_key);
     
     
-    def find_node(self, point, cur_node = None):
+    def __find_node_by_rule(self, point, search_rule, cur_node):
         """!
-        @brief Find node with coordinates that are defined by specified point.
-        @details If node does not exist then None will be returned. Otherwise required node will be returned.
+        @brief Search node that satisfy to parameters in search rule.
+        @details If node with specified parameters does not exist then None will be returned, 
+                  otherwise required node will be returned.
         
         @param[in] point (list): Coordinates of the point whose node should be found.
+        @param[in] search_rule (lambda): Rule that is called to check whether node satisfies to search parameter.
         @param[in] cur_node (node): Node from which search should be started.
         
-        @return (node) Node in case of existance of node with specified coordinates, otherwise it return None.
+        @return (node) Node if it satisfies to input parameters, otherwise it return None.
         
         """
         
@@ -374,22 +390,54 @@ class kdtree:
         if (cur_node is None):
             cur_node = self.__root;
         
-        while True:
+        while cur_node:
             if (cur_node.data[cur_node.disc] <= point[cur_node.disc]):
                 # Check if it's required node
-                if (cur_node.data == point):
+                if (search_rule(cur_node)):
                     req_node = cur_node;
                     break;
                 
-                if (cur_node.right is not None):
-                    cur_node = cur_node.right;
+                cur_node = cur_node.right;
             
             else:
-                if (cur_node.left is not None):
-                    cur_node = cur_node.left;
-                
+                cur_node = cur_node.left;
+        
         return req_node;
-    
+
+
+    def find_node_with_payload(self, point, payload, cur_node = None):
+        """!
+        @brief Find node with specified coordinates and payload.
+        @details If node with specified parameters does not exist then None will be returned, 
+                  otherwise required node will be returned.
+        
+        @param[in] point (list): Coordinates of the point whose node should be found.
+        @param[in] payload (any): Payload of the node that is searched in the tree.
+        @param[in] cur_node (node): Node from which search should be started.
+        
+        @return (node) Node if it satisfies to input parameters, otherwise it return None.
+        
+        """
+        
+        rule_search = lambda node, point=point, payload=payload: node.data == point and node.payload == payload;
+        return self.__find_node_by_rule(point, rule_search, cur_node);
+
+
+    def find_node(self, point, cur_node = None):
+        """!
+        @brief Find node with coordinates that are defined by specified point.
+        @details If node with specified parameters does not exist then None will be returned, 
+                  otherwise required node will be returned.
+        
+        @param[in] point (list): Coordinates of the point whose node should be found.
+        @param[in] cur_node (node): Node from which search should be started.
+        
+        @return (node) Node if it satisfies to input parameters, otherwise it return None.
+        
+        """
+        
+        rule_search = lambda node, point=point: node.data == point;
+        return self.__find_node_by_rule(point, rule_search, cur_node);
     
     
     def find_nearest_dist_node(self, point, distance, retdistance = False):
@@ -458,7 +506,7 @@ class kdtree:
             if (point[node_head.disc] < maximum):
                 self.__recursive_nearest_nodes(point, distance, sqrt_distance, node_head.left, best_nodes);
         
-        candidate_distance = euclidean_distance_sqrt(point, node_head.data);
+        candidate_distance = euclidean_distance_square(point, node_head.data);
         if (candidate_distance <= sqrt_distance):
             best_nodes.append( (candidate_distance, node_head) );
 

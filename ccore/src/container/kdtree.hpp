@@ -42,7 +42,11 @@ namespace container {
  */
 class kdtree {
 private:
+    using search_node_rule = std::function< bool(const kdnode::ptr &) >;
+
+private:
     kdnode::ptr     m_root          = nullptr;
+
     std::size_t     m_dimension     = 0;
 
     std::size_t     m_size          = 0;
@@ -52,24 +56,37 @@ private:
     *
     * @brief   Recursive remove of node in tree.
     *
-    * @param   node            - node that should be removed.
+    * @param[in] p_node: node that should be removed.
     *
     * @return  Node that should replace removed node (if it's not leaf).
     *
     */
-    kdnode::ptr recursive_remove(kdnode::ptr node);
+    kdnode::ptr recursive_remove(kdnode::ptr & p_node);
 
     /**
     *
     * @brief   Find minimal node in subtree in line with specified discriminator.
     *
-    * @param   node            - root of subtree where searching should be performed.
-    * @param   discriminator   - discriminator that is used for comparison of nodes.
+    * @param[in] p_cur_node: root of subtree where searching should be performed.
+    * @param[in] p_discriminator: discriminator that is used for comparison of nodes.
     *
     * @return  Return the smallest node in specified subtree in line with discriminator.
     *
     */
     kdnode::ptr find_minimal_node(const kdnode::ptr p_cur_node, const std::size_t p_discriminator);
+
+    /**
+    *
+    * @brief   Find node using specified rule, it returns the first node that satisfy search rule.
+    *
+    * @param[in] p_point: coordinates of searched node.
+    * @param[in] p_cur_node: node from which search is performed.
+    * @param[in] p_rule: rule that should be satisfied by searched node.
+    *
+    * @return  Return the smallest node in specified subtree in line with discriminator.
+    *
+    */
+    kdnode::ptr find_node_by_rule(const std::vector<double> & p_point, const kdnode::ptr & p_cur_node, const search_node_rule & p_rule) const;
 
 public:
     kdtree(void) = default;
@@ -85,8 +102,8 @@ public:
     *
     * @brief   Insert new node in the tree.
     *
-    * @param   point              - coordinates that describe node in tree.
-    * @param   payload            - payloads of node (can be nullptr if it's not required).
+    * @param[in] p_point: coordinates that describe node in tree.
+    * @param[in] p_payload: payloads of node (can be nullptr if it's not required).
     *
     * @return  Pointer to added node in the tree.
     *
@@ -97,25 +114,38 @@ public:
     *
     * @brief   Remove point with specified coordinates.
     *
-    * @param   point              - coordinates that describe node in tree.
+    * @param[in] point: coordinates that describe node in tree.
     *
     */
     void remove(const std::vector<double> & p_point);
 
     /**
     *
-    * @brief   Remove node from the tree.
+    * @brief   Remove point with specified coordinates and specific payload.
+    * @details This remove is useful when points with the same coordinates are located
+    *           in the tree and but only one of them should be removed with specific payload where
+    *           node ID or other unique information is stored.
     *
-    * @param   node_for_remove    - pointer to node that is located in tree.
+    * @param[in] p_point: coordinates that describe node in tree.
+    * @param[in] p_payload: payload that is used to identify node.
     *
     */
-    void remove(kdnode::ptr p_node_for_remove);
+    void remove(const std::vector<double> & p_point, const void * p_payload);
+
+    /**
+    *
+    * @brief   Remove node from the tree.
+    *
+    * @param[in] p_node_for_remove: pointer to node that is located in tree.
+    *
+    */
+    void remove(kdnode::ptr & p_node_for_remove);
 
     /**
     *
     * @brief   Find node in tree using coordinates.
     *
-    * @param   point              - coordinates of searched node.
+    * @param[in] p_point: coordinates of searched node.
     *
     * @return  Pointer to found node in tree.
     *
@@ -124,26 +154,39 @@ public:
 
     /**
     *
-    * @brief   Find node in tree using coordinates in subtree.
+    * @brief   Find node in tree using coordinates.
     *
-    * @param   point              - coordinates of searched node.
-    * @param   cur_node           - root of subtree.
+    * @param[in] p_point: coordinates of searched node.
+    * @param[in] p_payload: payload that is used to identify node.
     *
     * @return  Pointer to found node in tree.
     *
     */
-    kdnode::ptr find_node(const std::vector<double> & p_point, kdnode::ptr p_cur_node) const;
+    kdnode::ptr find_node(const std::vector<double> & p_point, const void * p_payload) const;
+
+    /**
+    *
+    * @brief   Find node in tree using coordinates in subtree, the first founded node with
+    *           specified coordinates is returned.
+    *
+    * @param[in] p_point: coordinates of searched node.
+    * @param[in] p_cur_node: root of subtree.
+    *
+    * @return  Pointer to found node in tree.
+    *
+    */
+    kdnode::ptr find_node(const std::vector<double> & p_point, const kdnode::ptr & p_cur_node) const;
 
     /**
     *
     * @brief   Traverse tree from specified node and returns number of nodes in subtree.
     *
-    * @param   node               - pointer to node of tree.
+    * @param[in] p_node: pointer to node of tree.
     *
     * @return  Returns number of nodes in subtree.
     *
     */
-    std::size_t traverse(const kdnode::ptr p_node);
+    std::size_t traverse(const kdnode::ptr & p_node);
 
     /**
     *

@@ -169,8 +169,8 @@ class EmaUnitTest(unittest.TestCase):
     def testClusteringTotallySimilarObjectsTwoClusters(self):
         self.templateDataClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 2, None);
 
-    def testClusteringTotallySimilarObjectsTwoClustersRandonInit(self):
-        self.templateDataClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 2, None, ema_init_type.RANDOM_INITIALIZATION);
+    def testClusteringTotallySimilarObjectsThreeClustersRandonInit(self):
+        self.templateDataClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 3, None, ema_init_type.RANDOM_INITIALIZATION);
 
     def testClusteringTotallySimilarObjectsFiveClusters(self):
         self.templateDataClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 5, None);

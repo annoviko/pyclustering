@@ -26,6 +26,7 @@
     <ClCompile Include="cluster\dbscan.cpp" />
     <ClCompile Include="cluster\hsyncnet.cpp" />
     <ClCompile Include="cluster\kmeans.cpp" />
+    <ClCompile Include="cluster\kmeans_plus_plus.cpp" />
     <ClCompile Include="cluster\kmedians.cpp" />
     <ClCompile Include="cluster\kmedoids.cpp" />
     <ClCompile Include="cluster\optics.cpp" />
@@ -88,6 +89,7 @@
     <ClInclude Include="cluster\hsyncnet.hpp" />
     <ClInclude Include="cluster\kmeans.hpp" />
     <ClInclude Include="cluster\kmeans_data.hpp" />
+    <ClInclude Include="cluster\kmeans_plus_plus.hpp" />
     <ClInclude Include="cluster\kmedians.hpp" />
     <ClInclude Include="cluster\kmedians_data.hpp" />
     <ClInclude Include="cluster\kmedoids.hpp" />

@@ -26,6 +26,9 @@
 
 import unittest;
 
+import matplotlib;
+matplotlib.use('Agg');
+
 from pyclustering.cluster.tests.rock_templates import RockTestTemplates;
 from pyclustering.cluster.rock import rock;
 
@@ -49,6 +52,11 @@ class RockIntegrationTest(unittest.TestCase):
     def testClusterAllocationByCoreIncorrectNumberOfClusters(self):
         RockTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 1, 4, 0.5, [15, 15, 15, 15, 15], True);
 
+    def testClusterTheSameData1ByCore(self):
+        RockTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 1, 2, 0.5, [10, 20], True);
+
+    def testClusterTheSameData2ByCore(self):
+        RockTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 1, 2, 0.5, [5, 5, 5], True);
 
     def testClusterAllocationOneDimensionDataByCore(self):
         RockTestTemplates.templateClusterAllocationOneDimensionData(True);

@@ -25,16 +25,16 @@
 
 """
 
-from copy import copy;
+from copy import copy
 
-from pyclustering.cluster import cluster_visualizer;
+from pyclustering.cluster import cluster_visualizer
 
-from pyclustering.utils import euclidean_distance_sqrt;
-from pyclustering.utils import manhattan_distance;
-from pyclustering.utils import list_math_addition, list_math_subtraction, list_math_multiplication;
-from pyclustering.utils import linear_sum, square_sum;
+from pyclustering.utils import euclidean_distance_square
+from pyclustering.utils import manhattan_distance
+from pyclustering.utils import list_math_addition, list_math_subtraction, list_math_multiplication
+from pyclustering.utils import linear_sum, square_sum
 
-from enum import IntEnum;
+from enum import IntEnum
 
 
 class measurement_type(IntEnum):
@@ -46,7 +46,7 @@ class measurement_type(IntEnum):
     """
     
     ## Euclidian distance between centroids of clustering features.
-    CENTROID_EUCLIDIAN_DISTANCE     = 0;
+    CENTROID_EUCLIDEAN_DISTANCE     = 0;
     
     ## Manhattan distance between centroids of clustering features.
     CENTROID_MANHATTAN_DISTANCE     = 1;
@@ -239,8 +239,8 @@ class cfentry:
         
         """
         
-        if (type_measurement is measurement_type.CENTROID_EUCLIDIAN_DISTANCE):
-            return euclidean_distance_sqrt(entry.get_centroid(), self.get_centroid());
+        if (type_measurement is measurement_type.CENTROID_EUCLIDEAN_DISTANCE):
+            return euclidean_distance_square(entry.get_centroid(), self.get_centroid());
         
         elif (type_measurement is measurement_type.CENTROID_MANHATTAN_DISTANCE):
             return manhattan_distance(entry.get_centroid(), self.get_centroid());
@@ -407,7 +407,7 @@ class cfnode:
         
         ## Clustering feature of the node.
         self.feature = copy(feature);
-        
+
         ## Pointer to the parent node (None for root).
         self.parent = parent;
         
@@ -848,7 +848,7 @@ class cftree:
         return self.__type_measurement;
     
     
-    def __init__(self, branch_factor, max_entries, threshold, type_measurement = measurement_type.CENTROID_EUCLIDIAN_DISTANCE):
+    def __init__(self, branch_factor, max_entries, threshold, type_measurement = measurement_type.CENTROID_EUCLIDEAN_DISTANCE):
         """!
         @brief Create CF-tree.
         

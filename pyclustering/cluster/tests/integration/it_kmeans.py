@@ -26,6 +26,9 @@
 
 import unittest;
 
+import matplotlib;
+matplotlib.use('Agg');
+
 from pyclustering.cluster.tests.kmeans_templates import KmeansTestTemplates;
 from pyclustering.cluster.kmeans import kmeans;
 
@@ -77,6 +80,11 @@ class KmeansIntegrationTest(unittest.TestCase):
     def testWrongNumberOfCentersSimpleSample2ByCore(self):
         KmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [[1.3, 1.5], [5.2, 8.5], [5.0, 7.8], [11.0, -3.0]], None, True);
 
+    def testTheSameData1ByCore(self):
+        KmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, [ [4.0], [8.0] ], [10, 20], True);
+
+    def testTheSameData2ByCore(self):
+        KmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, [ [1.0, 1.0], [2.5, 2.5], [4.0, 4.0] ], [5, 5, 5], True);
 
     def testClusterAllocationOneDimensionDataByCore(self):
         KmeansTestTemplates.templateClusterAllocationOneDimensionData(True);

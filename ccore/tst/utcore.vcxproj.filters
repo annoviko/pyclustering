@@ -353,6 +353,15 @@
     <ClCompile Include="..\src\interface\hhn_interface.cpp">
       <Filter>Tested Code\interface</Filter>
     </ClCompile>
+    <ClCompile Include="utest-interface-hhn.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="utest-kmeans_plus_plus.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\cluster\kmeans_plus_plus.cpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\tools\gtest\gtest.h">
@@ -585,6 +594,9 @@
     </ClInclude>
     <ClInclude Include="..\src\differential\solve_type.hpp">
       <Filter>Tested Code\differential</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cluster\kmeans_plus_plus.hpp">
+      <Filter>Tested Code\cluster</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

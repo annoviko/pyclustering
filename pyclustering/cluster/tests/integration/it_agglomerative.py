@@ -71,6 +71,39 @@ class AgglomerativeIntegrationTest(unittest.TestCase):
         AgglomerativeTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 1, type_link.SINGLE_LINK, [23], True);
 
 
+    def testClusteringTheSameData1LinkAverageByCore(self):
+        AgglomerativeTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 2, type_link.AVERAGE_LINK, [10, 20], True);
+        AgglomerativeTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 1, type_link.AVERAGE_LINK, [30], True); 
+
+    def testClusteringTheSameData1LinkCentroidByCore(self):
+        AgglomerativeTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 2, type_link.CENTROID_LINK, [10, 20], True);
+        AgglomerativeTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 1, type_link.CENTROID_LINK, [30], True); 
+
+    def testClusteringTheSameData1LinkCompleteByCore(self):
+        AgglomerativeTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 2, type_link.COMPLETE_LINK, [10, 20], True);
+        AgglomerativeTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 1, type_link.COMPLETE_LINK, [30], True); 
+
+    def testClusteringTheSameData1LinkSingleByCore(self):
+        AgglomerativeTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 2, type_link.SINGLE_LINK, [10, 20], True);
+        AgglomerativeTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 1, type_link.SINGLE_LINK, [30], True); 
+
+    def testClusteringTheSameData2LinkAverageByCore(self):
+        AgglomerativeTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 2, type_link.AVERAGE_LINK, [5, 10], True);
+        AgglomerativeTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 1, type_link.AVERAGE_LINK, [15], True); 
+
+    def testClusteringTheSameData2LinkCentroidByCore(self):
+        AgglomerativeTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 2, type_link.CENTROID_LINK, [5, 10], True);
+        AgglomerativeTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 1, type_link.CENTROID_LINK, [15], True); 
+
+    def testClusteringTheSameData2LinkCompleteByCore(self):
+        AgglomerativeTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 2, type_link.COMPLETE_LINK, [5, 10], True);
+        AgglomerativeTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 1, type_link.COMPLETE_LINK, [15], True); 
+
+    def testClusteringTheSameData2LinkSingleByCore(self):
+        AgglomerativeTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 2, type_link.SINGLE_LINK, [5, 10], True);
+        AgglomerativeTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 1, type_link.SINGLE_LINK, [15], True); 
+
+
     def testClusterAllocationOneDimensionDataLinkAverageByCore(self):
         AgglomerativeTestTemplates.templateClusterAllocationOneDimensionData(type_link.AVERAGE_LINK, True);
 

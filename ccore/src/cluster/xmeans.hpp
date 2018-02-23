@@ -50,8 +50,6 @@ class xmeans : public cluster_algorithm {
 public:
     const static std::size_t        DEFAULT_DATA_SIZE_PARALLEL_PROCESSING;
 
-    const static std::size_t        DEFAULT_THREAD_POOL_SIZE;
-
 private:
     const static double             DEFAULT_SPLIT_DIFFERENCE;
 
@@ -71,8 +69,6 @@ private:
     std::size_t       m_parallel_trigger      = DEFAULT_DATA_SIZE_PARALLEL_PROCESSING;
 
     bool              m_parallel_processing   = false;
-
-    std::mutex        m_mutex;
 
     thread_pool::ptr  m_pool                  = nullptr;
 
@@ -139,6 +135,8 @@ private:
     double bayesian_information_criterion(const cluster_sequence & clusters, const dataset & centers) const;
 
     double minimum_noiseless_description_length(const cluster_sequence & clusters, const dataset & centers) const;
+
+    void erase_empty_clusters(cluster_sequence & p_clusters);
 };
 
 

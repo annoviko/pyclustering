@@ -1,5 +1,4 @@
-|Build Status Linux| |Build Status Win| |Coverage Status| |Code
-Quality| |Documentation| |DOI| 
+|Documentation| |DOI|
 
 PyClustering
 ============
@@ -24,13 +23,13 @@ Dependencies
 Performance
 ===========
 
-Each algorithm is implemented using Python and C/C++ language, thus performance can be significantly increase by **ccore** flag, for example:
+Each algorithm is implemented using Python and C/C++ language, if your platform is not supported then Python
+implementation is used otherwise C/C++. Implementation can be chosen by **ccore** flag (by default it is always
+'True' and it means that C/C++ implementation is used), for example:
 
 .. code:: python
 
     xmeans_instance = xmeans(data_points, start_centers, 20, ccore = True);
-
-**ccore** option runs ccore shared library (core of the pyclustering library). The core is maintained for Linux x64 and Windows x64.
 
 Installation
 ============
@@ -41,7 +40,7 @@ Installation using pip3 tool:
 
     $ pip3 install pyclustering
 
-Manual installation from official repository:
+Manual installation from official repository using GCC:
 
 .. code:: bash
 
@@ -52,7 +51,10 @@ Manual installation from official repository:
 
     # compile CCORE library (core of the pyclustering library).
     $ cd pyclustering/ccore
-    $ make ccore
+    $ make ccore_x64        # build for 64-bit OS
+
+    # $ make ccore_x86      # build for 32-bit OS
+    # $ make ccore          # build for both (32 and 64-bit)
 
     # return to parent folder of the pyclustering library
     cd ../
@@ -60,6 +62,15 @@ Manual installation from official repository:
     # add current folder to python path
     PYTHONPATH=`pwd`
     export PYTHONPATH=${PYTHONPATH}
+
+Manual installation using Visual Studio:
+
+1. Clone repository from: https://github.com/annoviko/pyclustering.git
+2. Open folder pyclustering/ccore
+3. Open Visual Studio project ccore.sln
+4. Select solution platform: 'x86' or 'x64'
+5. Build 'ccore' project.
+6. Add pyclustering folder to python path.
 
 
 Proposals, Questions, Bugs
@@ -120,14 +131,6 @@ Library Content
 - **KD-Tree** (pyclustering.container.kdtree);
 
 
-.. |Build Status Linux| image:: https://travis-ci.org/annoviko/pyclustering.svg?branch=master
-   :target: https://travis-ci.org/annoviko/pyclustering
-.. |Build Status Win| image:: https://ci.appveyor.com/api/projects/status/4uly2exfp49emwn0/branch/master?svg=true
-   :target: https://ci.appveyor.com/project/annoviko/pyclustering/branch/master
-.. |Coverage Status| image:: https://coveralls.io/repos/github/annoviko/pyclustering/badge.svg?branch=master&ts=1
-   :target: https://coveralls.io/github/annoviko/pyclustering?branch=master
-.. |Code Quality| image:: https://scrutinizer-ci.com/g/annoviko/pyclustering/badges/quality-score.png?b=master
-   :target: https://scrutinizer-ci.com/g/annoviko/pyclustering/?branch=master
 .. |Documentation| image:: https://codedocs.xyz/annoviko/pyclustering.svg
    :target: https://codedocs.xyz/annoviko/pyclustering/
 .. |DOI| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.1026162.svg

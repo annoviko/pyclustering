@@ -35,9 +35,9 @@ namespace clst {
 
 class somsc : public cluster_algorithm {
 private:
-    std::size_t         m_amount_clusters;
+    std::size_t         m_amount_clusters   = 0;
 
-    std::size_t         m_epoch;
+    std::size_t         m_epoch             = 0;
 
 public:
     /**

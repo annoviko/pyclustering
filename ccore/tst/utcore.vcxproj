@@ -95,6 +95,7 @@
     <ClCompile Include="..\src\cluster\dbscan.cpp" />
     <ClCompile Include="..\src\cluster\hsyncnet.cpp" />
     <ClCompile Include="..\src\cluster\kmeans.cpp" />
+    <ClCompile Include="..\src\cluster\kmeans_plus_plus.cpp" />
     <ClCompile Include="..\src\cluster\kmedians.cpp" />
     <ClCompile Include="..\src\cluster\kmedoids.cpp" />
     <ClCompile Include="..\src\cluster\optics.cpp" />
@@ -163,6 +164,7 @@
     <ClCompile Include="utest-interface-agglomerative.cpp" />
     <ClCompile Include="utest-interface-cure.cpp" />
     <ClCompile Include="utest-interface-dbscan.cpp" />
+    <ClCompile Include="utest-interface-hhn.cpp" />
     <ClCompile Include="utest-interface-hsyncnet.cpp" />
     <ClCompile Include="utest-interface-kmeans.cpp" />
     <ClCompile Include="utest-interface-kmedians.cpp" />
@@ -176,6 +178,7 @@
     <ClCompile Include="utest-interface-xmeans.cpp" />
     <ClCompile Include="utest-kdtree.cpp" />
     <ClCompile Include="utest-kmeans.cpp" />
+    <ClCompile Include="utest-kmeans_plus_plus.cpp" />
     <ClCompile Include="utest-kmedians.cpp" />
     <ClCompile Include="utest-kmedoids.cpp" />
     <ClCompile Include="utest-legion.cpp" />
@@ -205,6 +208,7 @@
     <ClInclude Include="..\src\cluster\hsyncnet.hpp" />
     <ClInclude Include="..\src\cluster\kmeans.hpp" />
     <ClInclude Include="..\src\cluster\kmeans_data.hpp" />
+    <ClInclude Include="..\src\cluster\kmeans_plus_plus.hpp" />
     <ClInclude Include="..\src\cluster\kmedians.hpp" />
     <ClInclude Include="..\src\cluster\kmedians_data.hpp" />
     <ClInclude Include="..\src\cluster\kmedoids.hpp" />
