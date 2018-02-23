@@ -24,8 +24,8 @@ Performance
 ===========
 
 Each algorithm is implemented using Python and C/C++ language, if your platform is not supported then Python
-implementation is used otherwise C/C++. Implementation can be chosen by **ccore** flag (by default it is always
-'True' and it means that C/C++ implementation is used), for example:
+implementation is used, otherwise C/C++. Implementation can be chosen by **ccore** flag (by default it is always
+'True' and it means that C/C++ is used), for example:
 
 .. code:: python
 

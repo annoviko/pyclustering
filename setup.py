@@ -95,8 +95,8 @@ setup(
       
       package_data = {
                       'pyclustering.samples': ['samples/famous/*.data', 'samples/fcps/*.data', 'samples/simple/*.data', 'graphs/*.grpr', 'images/*.png', 'images/digits/*.png'],
-                      'pyclustering.core': [ 'x64/linux/ccore.so', 'x64/linux/.linux.info', 
-                                             'x64/win/ccore.dll', 'x64/win/.win.info', 'x86/win/ccore.dll', 'x86/win/.win.info' ],
+                      'pyclustering.core': [ 'x64/linux/ccore.so', 'x86/linux/ccore.so',
+                                             'x64/win/ccore.dll', 'x86/win/ccore.dll' ],
                      },
 
       data_files = [ ('', ['LICENSE', 'CHANGES', 'README.rst', 'PKG-INFO.rst']) ],
