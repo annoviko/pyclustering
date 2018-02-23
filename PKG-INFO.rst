@@ -133,5 +133,5 @@ Library Content
 
 .. |Documentation| image:: https://codedocs.xyz/annoviko/pyclustering.svg
    :target: https://codedocs.xyz/annoviko/pyclustering/
-.. |DOI| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.1026162.svg
-   :target: https://doi.org/10.5281/zenodo.1026162
+.. |DOI| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.1183636.svg
+   :target: https://doi.org/10.5281/zenodo.1183636
