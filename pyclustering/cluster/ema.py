@@ -369,7 +369,7 @@ class ema_visualizer:
         if (len(sample[0]) == 2):
             ema_visualizer.__draw_ellipses(figure, visualizer, clusters, covariances, means);
 
-        if (display is True): 
+        if (display is True):
             plt.show();
 
         return figure;

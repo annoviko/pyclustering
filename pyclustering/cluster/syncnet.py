@@ -367,12 +367,12 @@ class syncnet(sync_network):
                 if (self._conn_represent == conn_represent.MATRIX):
                     for j in range(i, self._num_osc, 1):    # draw connection between two points only one time
                         if (self.has_connection(i, j) == True):
-                            axes.plot([self._osc_loc[i][0], self._osc_loc[j][0]], [self._osc_loc[i][1], self._osc_loc[j][1]], 'b-', linewidth = 0.5);    
+                            axes.plot([self._osc_loc[i][0], self._osc_loc[j][0]], [self._osc_loc[i][1], self._osc_loc[j][1]], 'b-', linewidth = 0.5);
                             
                 else:
                     for j in self.get_neighbors(i):
                         if ( (self.has_connection(i, j) == True) and (i > j) ):     # draw connection between two points only one time
-                            axes.plot([self._osc_loc[i][0], self._osc_loc[j][0]], [self._osc_loc[i][1], self._osc_loc[j][1]], 'b-', linewidth = 0.5);    
+                            axes.plot([self._osc_loc[i][0], self._osc_loc[j][0]], [self._osc_loc[i][1], self._osc_loc[j][1]], 'b-', linewidth = 0.5);
             
             elif (dimension == 3):
                 axes.scatter(self._osc_loc[i][0], self._osc_loc[i][1], self._osc_loc[i][2], c = 'b', marker = 'o');
