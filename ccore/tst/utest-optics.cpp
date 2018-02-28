@@ -47,7 +47,7 @@ template_optics_length_process_data(const std::shared_ptr<dataset> & p_data,
 
     ASSERT_CLUSTER_SIZES(data, actual_clusters, p_expected_cluster_length);
     if (p_amount_clusters > 0) {
-        EXPECT_EQ(p_expected_cluster_length.size(), ordering_analyser::extract_cluster_amount(ptr_output_result->ordering(), ptr_output_result->get_radius()));
+        EXPECT_EQ(p_expected_cluster_length.size(), ordering_analyser::extract_cluster_amount(ptr_output_result->cluster_ordering(), ptr_output_result->get_radius()));
     }
 
     return ptr_output_result;

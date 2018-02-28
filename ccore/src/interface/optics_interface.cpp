@@ -39,7 +39,7 @@ pyclustering_package * optics_algorithm(const pyclustering_package * const p_sam
 
     ((pyclustering_package **) package->data)[OPTICS_PACKAGE_INDEX_CLUSTERS] = create_package(&output_result.clusters());
     ((pyclustering_package **) package->data)[OPTICS_PACKAGE_INDEX_NOISE] = create_package(&output_result.noise());
-    ((pyclustering_package **) package->data)[OPTICS_PACKAGE_INDEX_ORDERING] = create_package(&output_result.ordering());
+    ((pyclustering_package **) package->data)[OPTICS_PACKAGE_INDEX_ORDERING] = create_package(&output_result.cluster_ordering());
 
     std::vector<double> radius_storage(1, output_result.get_radius());
     ((pyclustering_package **) package->data)[OPTICS_PACKAGE_INDEX_RADIUS] = create_package(&radius_storage);

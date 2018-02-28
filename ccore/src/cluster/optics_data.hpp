@@ -85,14 +85,14 @@ public:
     * @brief    Returns reference to cluster-ordering that represents density-based clustering structure.
     *
     */
-    ccore::clst::ordering & ordering(void) { return m_ordering; }
+    ordering & cluster_ordering(void) { return m_ordering; }
 
     /**
     *
     * @brief    Returns const reference to cluster-ordering that represents density-based clustering structure.
     *
     */
-    const ccore::clst::ordering & ordering(void) const { return m_ordering; }
+    const ordering & cluster_ordering(void) const { return m_ordering; }
 
     /**
     *

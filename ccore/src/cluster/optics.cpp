@@ -70,7 +70,7 @@ void optics::process(const dataset & p_data, cluster_data & p_result) {
     calculate_cluster_result();
 
     if ( (m_amount_clusters > 0) && (m_amount_clusters != m_result_ptr->clusters().size()) ) {
-        double radius = ordering_analyser::calculate_connvectivity_radius(m_result_ptr->ordering(), m_amount_clusters);
+        double radius = ordering_analyser::calculate_connvectivity_radius(m_result_ptr->cluster_ordering(), m_amount_clusters);
 
         if (radius > 0) {
             m_radius = radius;
@@ -240,9 +240,9 @@ void optics::get_neighbors(const size_t p_index, std::vector< std::tuple<std::si
 
 
 void optics::calculate_ordering(void) {
-    if (!m_result_ptr->ordering().empty()) { return; }
+    if (!m_result_ptr->cluster_ordering().empty()) { return; }
 
-    ordering & ordering = m_result_ptr->ordering();
+    ordering & ordering = m_result_ptr->cluster_ordering();
     cluster_sequence & clusters = m_result_ptr->clusters();
 
     for (auto & cluster : clusters) {
