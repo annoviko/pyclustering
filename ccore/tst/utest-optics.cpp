@@ -43,12 +43,11 @@ template_optics_length_process_data(const std::shared_ptr<dataset> & p_data,
     solver.process(*p_data, *ptr_output_result);
 
     const dataset & data = *p_data;
-    const cluster_sequence & actual_clusters = *(ptr_output_result->clusters());
+    const cluster_sequence & actual_clusters = ptr_output_result->clusters();
 
     ASSERT_CLUSTER_SIZES(data, actual_clusters, p_expected_cluster_length);
     if (p_amount_clusters > 0) {
-        ordering_analyser analyser(ptr_output_result->ordering());
-        EXPECT_EQ(p_expected_cluster_length.size(), analyser.extract_cluster_amount(ptr_output_result->get_radius()));
+        EXPECT_EQ(p_expected_cluster_length.size(), ordering_analyser::extract_cluster_amount(ptr_output_result->ordering(), ptr_output_result->get_radius()));
     }
 
     return ptr_output_result;
@@ -149,7 +148,7 @@ template_optics_noise_allocation(const std::shared_ptr<dataset> & p_data,
         const std::size_t p_noise_length) {
 
     std::shared_ptr<optics_data> ptr_output_result = template_optics_length_process_data(p_data, p_radius, p_neighbors, p_amount_clusters, p_expected_cluster_length);
-    EXPECT_EQ(p_noise_length, ptr_output_result->noise()->size());
+    EXPECT_EQ(p_noise_length, ptr_output_result->noise().size());
 
     return ptr_output_result;
 }

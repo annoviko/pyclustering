@@ -41,7 +41,7 @@ pyclustering_package * dbscan_algorithm(const pyclustering_package * const sampl
         ((pyclustering_package **) package->data)[i] = create_package(&output_result[i]);
     }
 
-    ((pyclustering_package **) package->data)[package->size - 1] = create_package(output_result.noise().get());
+    ((pyclustering_package **) package->data)[package->size - 1] = create_package(&output_result.noise());
 
     return package;
 }

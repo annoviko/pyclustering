@@ -98,10 +98,10 @@ void dbscan::process(const dataset & p_data, cluster_data & p_result) {
         }
 
         if (allocated_cluster.empty() != true) {
-            m_result_ptr->clusters()->push_back(allocated_cluster);
+            m_result_ptr->clusters().push_back(allocated_cluster);
         }
         else {
-            m_result_ptr->noise()->push_back(i);
+            m_result_ptr->noise().push_back(i);
             m_belong[i] = true;
         }
     }

@@ -67,7 +67,7 @@ void rock::process(const dataset & p_data, cluster_data & p_result) {
 
     /* copy results to the output result (it much more optimal to store in list representation for ROCK algorithm) */
     p_result = rock_data();
-    p_result.clusters()->insert(p_result.clusters()->begin(), m_clusters.begin(), m_clusters.end());
+    p_result.clusters().insert(p_result.clusters().begin(), m_clusters.begin(), m_clusters.end());
 
     m_clusters.clear();         /* no need it anymore - clear to save memory */
     m_adjacency_matrix.clear(); /* no need it anymore - clear to save memory */

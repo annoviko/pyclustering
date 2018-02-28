@@ -31,25 +31,22 @@ namespace ccore {
 namespace clst {
 
 
-ordering_analyser::ordering_analyser(const ordering_ptr & p_ordering) : m_ordering(p_ordering) { }
-
-
-double ordering_analyser::calculate_connvectivity_radius(const std::size_t p_amount_clusters, const std::size_t p_maximum_iterations) const {
-    const double maximum_distance = *std::max_element(m_ordering->cbegin(), m_ordering->cend());
+double ordering_analyser::calculate_connvectivity_radius(const ordering & p_ordering, const std::size_t p_amount_clusters, const std::size_t p_maximum_iterations) {
+    const double maximum_distance = *std::max_element(p_ordering.cbegin(), p_ordering.cend());
 
     double upper_distance = maximum_distance;
     double lower_distance = 0.0;
 
     double result = -1.0;
 
-    if (extract_cluster_amount(maximum_distance) > p_amount_clusters) {
+    if (extract_cluster_amount(p_ordering, maximum_distance) > p_amount_clusters) {
         return result;
     }
 
     for(std::size_t i = 0; i < p_maximum_iterations; i++) {
         double radius = (lower_distance + upper_distance) / 2.0;
 
-        std::size_t amount = extract_cluster_amount(radius);
+        std::size_t amount = extract_cluster_amount(p_ordering, radius);
         if (amount == p_amount_clusters) {
             result = radius;
             break;
@@ -69,7 +66,7 @@ double ordering_analyser::calculate_connvectivity_radius(const std::size_t p_amo
 }
 
 
-std::size_t ordering_analyser::extract_cluster_amount(const double p_radius) const {
+std::size_t ordering_analyser::extract_cluster_amount(const ordering & p_ordering, const double p_radius) {
     std::size_t amount_clusters = 1;
 
     bool cluster_start = false;
@@ -79,7 +76,7 @@ std::size_t ordering_analyser::extract_cluster_amount(const double p_radius) con
     double previous_cluster_distance = 0.0;
     double previous_distance = -1.0;
 
-    for (auto & distance : *m_ordering) {
+    for (auto & distance : p_ordering) {
         if (distance >= p_radius) {
             if (!cluster_start) {
                 cluster_start = true;

@@ -59,7 +59,7 @@ void kmedians::process(const dataset & data, cluster_data & output_result) {
         throw std::runtime_error("CCORE [kmedians]: dimension of the input data and dimension of the initial cluster medians must be equal.");
     }
 
-    m_ptr_result->medians()->assign(m_initial_medians.begin(), m_initial_medians.end());
+    m_ptr_result->medians() = m_initial_medians;
 
     double stop_condition = m_tolerance * m_tolerance;
     double changes = 0.0;
@@ -68,8 +68,8 @@ void kmedians::process(const dataset & data, cluster_data & output_result) {
     size_t counter_repeaters = 0;
 
     do {
-        update_clusters(*m_ptr_result->medians(), *m_ptr_result->clusters());
-        changes = update_medians(*m_ptr_result->clusters(), *m_ptr_result->medians());
+        update_clusters(m_ptr_result->medians(), m_ptr_result->clusters());
+        changes = update_medians(m_ptr_result->clusters(), m_ptr_result->medians());
 
         double change_difference = abs(changes - prev_changes);
         if (change_difference < 0.000001) {

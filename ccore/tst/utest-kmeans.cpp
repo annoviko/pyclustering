@@ -51,8 +51,8 @@ template_kmeans_length_process_data_range(const dataset_ptr & p_data,
 
     const dataset & data = *p_data;
     const std::size_t dimension = data[0].size();
-    const cluster_sequence & actual_clusters = *(output_result.clusters());
-    const dataset & centers = *(output_result.centers());
+    const cluster_sequence & actual_clusters = output_result.clusters();
+    const dataset & centers = output_result.centers();
 
     ASSERT_CLUSTER_SIZES(data, actual_clusters, p_expected_cluster_length);
 

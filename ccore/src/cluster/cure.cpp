@@ -376,28 +376,29 @@ void cure::process(const dataset & p_data, cluster_data & p_result) {
     }
 
     p_result = cure_data();
-    cure_data result = (cure_data &) p_result;
+    cure_data & result = (cure_data &) p_result;
 
     /* prepare standard representation of clusters */
-    cluster_sequence_ptr clusters = result.clusters();
-    clusters->resize(queue->size());
+    cluster_sequence & clusters = result.clusters();
+    representor_sequence & representors = result.representors();
+
+    clusters.resize(queue->size());
+    representors.resize(queue->size());
+
     size_t cluster_index = 0;
     for (auto cure_cluster = queue->begin(); cure_cluster != queue->end(); ++cure_cluster, cluster_index++) {
-        cluster & standard_cluster = (*clusters)[cluster_index];
+        cluster & standard_cluster = clusters[cluster_index];
         for (auto point = (*cure_cluster)->points->begin(); point != (*cure_cluster)->points->end(); ++point) {
             size_t index_point = (size_t) (*point - &(*(data->begin())));
             standard_cluster.push_back(index_point);
         }
 
-        representor_sequence_ptr representors = result.representors();
-        representors->resize(queue->size());
-
-        dataset & cluster_representors = (*representors)[cluster_index];
+        dataset & cluster_representors = representors[cluster_index];
         for (auto point : *(*cure_cluster)->rep) {
             cluster_representors.push_back(*point);
         }
 
-        result.means()->push_back((*(*cure_cluster)->mean));
+        result.means().push_back((*(*cure_cluster)->mean));
     }
 
     p_result = result;

@@ -75,23 +75,23 @@ void xmeans::process(const dataset & data, cluster_data & output_result) {
     output_result = xmeans_data();
     m_ptr_result = (xmeans_data *)&output_result;
 
-    m_ptr_result->centers()->assign(m_centers.begin(), m_centers.end());
+    m_ptr_result->centers() = m_centers;
 
-    size_t current_number_clusters = m_ptr_result->centers()->size();
+    size_t current_number_clusters = m_ptr_result->centers().size();
     const index_sequence dummy;
 
     while (current_number_clusters <= m_maximum_clusters) {
-        improve_parameters(*(m_ptr_result->clusters()), (*m_ptr_result->centers()), dummy);
+        improve_parameters(m_ptr_result->clusters(), m_ptr_result->centers(), dummy);
         improve_structure();
 
-        if (current_number_clusters == m_ptr_result->centers()->size()) {
+        if (current_number_clusters == m_ptr_result->centers().size()) {
             break;
         }
 
-        current_number_clusters = m_ptr_result->centers()->size();
+        current_number_clusters = m_ptr_result->centers().size();
     }
 
-    improve_parameters(*(m_ptr_result->clusters()), (*m_ptr_result->centers()), dummy);
+    improve_parameters(m_ptr_result->clusters(), m_ptr_result->centers(), dummy);
 }
 
 
@@ -104,19 +104,19 @@ void xmeans::improve_parameters(cluster_sequence & improved_clusters, dataset & 
     kmeans_data result;
     kmeans(improved_centers, m_tolerance).process((*m_ptr_data), available_indexes, result);
 
-    improved_centers = *(result.centers());
-    improved_clusters = *(result.clusters());
+    improved_centers = result.centers();
+    improved_clusters = result.clusters();
 }
 
 
 void xmeans::improve_structure() {
-    cluster_sequence & clusters = *(m_ptr_result->clusters());
-    dataset & current_centers = (*m_ptr_result->centers());
+    cluster_sequence & clusters = m_ptr_result->clusters();
+    dataset & current_centers = m_ptr_result->centers();
 
-    std::vector<dataset> region_allocated_centers(m_ptr_result->clusters()->size(), dataset());
+    std::vector<dataset> region_allocated_centers(m_ptr_result->clusters().size(), dataset());
 
     if (m_parallel_processing) {
-        for (std::size_t index = 0; index < m_ptr_result->clusters()->size(); index++) {
+        for (std::size_t index = 0; index < m_ptr_result->clusters().size(); index++) {
             task::proc improve_proc = [this, index, &clusters, &current_centers, &region_allocated_centers](){
                     improve_region_structure(clusters[index], current_centers[index], region_allocated_centers[index]);
                 };
@@ -124,15 +124,15 @@ void xmeans::improve_structure() {
             m_pool->add_task(improve_proc);
         }
 
-        for (std::size_t i = 0; i < m_ptr_result->clusters()->size(); i++) {
+        for (std::size_t i = 0; i < m_ptr_result->clusters().size(); i++) {
             m_pool->pop_complete_task();
         }
     }
     else {
         dataset allocated_centers;
 
-        for (std::size_t index = 0; index < m_ptr_result->clusters()->size(); index++) {
-            improve_region_structure((*(m_ptr_result->clusters()))[index], current_centers[index], region_allocated_centers[index]);
+        for (std::size_t index = 0; index < m_ptr_result->clusters().size(); index++) {
+            improve_region_structure(m_ptr_result->clusters()[index], current_centers[index], region_allocated_centers[index]);
         }
     }
 

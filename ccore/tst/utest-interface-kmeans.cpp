@@ -32,7 +32,13 @@ TEST(utest_interface_kmeans, kmeans_api) {
     std::shared_ptr<pyclustering_package> sample = pack(dataset({ { 1 }, { 2 }, { 3 }, { 10 }, { 11 }, { 12 } }));
     std::shared_ptr<pyclustering_package> centers = pack(dataset({ { 1 }, { 10 } }));
 
-    pyclustering_package * kmeans_result = kmeans_algorithm(sample.get(), centers.get(), 0.1);
+    pyclustering_package * kmeans_result = kmeans_algorithm(sample.get(), centers.get(), 0.1, false);
+    ASSERT_NE(nullptr, kmeans_result);
+
+    delete kmeans_result;
+    kmeans_result = nullptr;
+
+    kmeans_result = kmeans_algorithm(sample.get(), centers.get(), 0.1, true);
     ASSERT_NE(nullptr, kmeans_result);
 
     delete kmeans_result;

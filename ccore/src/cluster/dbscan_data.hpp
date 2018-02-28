@@ -40,7 +40,7 @@ namespace clst {
 */
 class dbscan_data : public cluster_data {
 private:
-    noise_ptr       m_noise = std::make_shared<clst::noise>();
+    clst::noise       m_noise;
 
 public:
     /**
@@ -78,10 +78,17 @@ public:
 public:
     /**
     *
-    * @brief    Returns shared pointer to noise.
+    * @brief    Returns reference to noise.
     *
     */
-    inline noise_ptr noise(void) { return m_noise; }
+    clst::noise & noise(void) { return m_noise; }
+
+    /**
+    *
+    * @brief    Returns constant reference to noise.
+    *
+    */
+    const clst::noise & noise(void) const { return m_noise; }
 };
 
 

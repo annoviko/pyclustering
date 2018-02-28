@@ -26,6 +26,7 @@
     <ClCompile Include="cluster\dbscan.cpp" />
     <ClCompile Include="cluster\hsyncnet.cpp" />
     <ClCompile Include="cluster\kmeans.cpp" />
+    <ClCompile Include="cluster\kmeans_data.cpp" />
     <ClCompile Include="cluster\kmeans_plus_plus.cpp" />
     <ClCompile Include="cluster\kmedians.cpp" />
     <ClCompile Include="cluster\kmedoids.cpp" />

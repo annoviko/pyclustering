@@ -36,9 +36,6 @@ namespace clst {
 *
 */
 class ordering_analyser {
-private:
-    ordering_ptr    m_ordering;
-
 public:
     /**
     *
@@ -63,13 +60,6 @@ public:
 
     /**
     *
-    * @brief    Creates ordering analyser using specified cluster-ordering.
-    *
-    */
-    explicit ordering_analyser(const ordering_ptr & p_ordering);
-
-    /**
-    *
     * @brief    Default destructor.
     *
     */
@@ -80,33 +70,27 @@ public:
     *
     * @brief    Calculates connectivity radius of allocation specified amount of clusters using ordering diagram.
     *
+    * @param[in] p_ordering: clustering ordering that is used for analysis.
     * @param[in] p_amount_clusters: amount of clusters that should be allocated by calculated connectivity radius.
-	* @param[in] p_maximum_iterations: maximum number of iteration for searching connectivity radius to allocated 
-	*             specified amount of clusters (by default it is restricted by 100 iterations).
+    * @param[in] p_maximum_iterations: maximum number of iteration for searching connectivity radius to allocated 
+    *             specified amount of clusters (by default it is restricted by 100 iterations).
     *
     * @return   Value of connectivity radius, it may return value < 0 if connectivity radius hasn't been found for the specified amount of iterations.
     *
     */
-    double calculate_connvectivity_radius(const std::size_t p_amount_clusters, const std::size_t p_maximum_iterations = 100) const;
+    static double calculate_connvectivity_radius(const ordering & p_ordering, const std::size_t p_amount_clusters, const std::size_t p_maximum_iterations = 100);
 
     /**
     *
     * @brief    Obtains amount of clustering that can be allocated by using specified radius for ordering diagram
     *
+    * @param[in] p_ordering: clustering ordering that is used for analysis.
     * @param[in] p_radius: connectivity radius that is used for cluster allocation.
     *
     * @return   Amount of clusters that can be allocated by the connectivity radius on ordering diagram.
     *
     */
-    std::size_t extract_cluster_amount(const double p_radius) const;
-
-public:
-    /**
-    *
-    * @brief    Returns cluster-ordering sequence that used for analysis.
-    *
-    */
-    inline ordering_ptr ordering(void) const { return m_ordering; }
+    static std::size_t extract_cluster_amount(const ordering & p_ordering, const double p_radius);
 };
 
 

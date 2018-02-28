@@ -46,9 +46,12 @@ class kmeans_observer:
     
     """
     
-    def __init__(self):
+    def __init__(self, evolution_clusters = [], evolution_centers = []):
         """!
         @brief Initializer of observer of K-Means algorithm.
+        
+        @param[in] evolution_clusters (array_like): Evolution of clusters changes during clustering process.
+        @param[in] evolution_centers (array_like): Evolution of centers changes during clustering process.
         
         """
         self.__evolution_clusters   = [];
@@ -101,18 +104,30 @@ class kmeans_observer:
 
 
 class kmeans_visualizer:
+    """!
+    @brief Visualizer of K-Means algorithm's results.
+    @details K-Means visualizer provides visualization services that are specific for K-Means algorithm.
+    
+    """
+    
+    __default_2d_marker_size = 15;
+    __default_3d_marker_size = 70;
+    
+    
     @staticmethod
-    def show_clusters(sample, clusters, centers, figure = None, display = True):
+    def show_clusters(sample, clusters, centers, initial_centers = None, **kwargs):
         """!
         @brief 
         
         @param[in] sample (list): Dataset that were used for clustering.
         @param[in] clusters (array_like): Clusters that were allocated by the algorithm.
         @param[in] centers (array_like): Centers that were allocated by the algorithm.
-        @param[in] figure (figure): If 'None' then new is figure is creater, otherwise specified figure is used
-                    for visualization.
-        @param[in] display (bool): If 'True' then figure will be shown by the method, otherwise it should be
-                    shown manually using matplotlib function 'plt.show()'.
+        @param[in] initial_centers (array_like): Initial centers that were used by the algorithm, if 'None' then initial centers are not displyed.
+        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'figure', 'display').
+        
+        Keyword Args:
+            figure (figure): If 'None' then new is figure is creater, otherwise specified figure is used for visualization.
+            display (bool): If 'True' then figure will be shown by the method, otherwise it should be shown manually using matplotlib function 'plt.show()'.
         
         @return (figure) Figure where clusters were drawn.
         
@@ -121,14 +136,15 @@ class kmeans_visualizer:
         visualizer = cluster_visualizer();
         visualizer.append_clusters(clusters, sample);
         
-        if (figure is None):
+        if (kmeans_visualizer.__get_argument('figure', None, **kwargs) is None):
             figure = visualizer.show(display = False);
         else:
             visualizer.show(figure = figure, display = False);
         
-        kmeans_visualizer.__draw_rays(figure, visualizer, sample, clusters, centers)
+        kmeans_visualizer.__draw_centers(figure, visualizer, centers, initial_centers);
+        kmeans_visualizer.__draw_rays(figure, visualizer, sample, clusters, centers);
         
-        if (display is True):
+        if (kmeans_visualizer.__get_argument('display', True, **kwargs) is True):
             plt.show();
 
         return figure;
@@ -140,20 +156,8 @@ class kmeans_visualizer:
         
         for index_cluster in range(len(clusters)):
             color = visualizer.get_cluster_color(index_cluster, 0);
-            kmeans_visualizer.__draw_center(ax, color, centers[index_cluster]);
             kmeans_visualizer.__draw_cluster_rays(ax, color, sample, clusters[index_cluster], centers[index_cluster])
 
-
-    @staticmethod
-    def __draw_center(ax, color, center):
-        dimension = len(center);
-        
-        if (dimension == 1):
-            ax.plot(center[0], 0.0, color = color, marker = '*', markersize = 15);
-        elif (dimension == 2):
-            ax.plot(center[0], center[1], color = color, marker = '*', markersize = 15);
-        elif (dimension == 3):
-            ax.scatter(center[0], center[1], center[2], c = color, marker = '*', s = 70);
 
     @staticmethod
     def __draw_cluster_rays(ax, color, sample, cluster, center):
@@ -161,10 +165,45 @@ class kmeans_visualizer:
         
         for index_point in cluster:
             point = sample[index_point];
-            if (dimension == 2):
+            if (dimension == 1):
+                ax.plot([point[0], center[0]], [0.0, 0.0], '-', color=color, linewidth=0.5);
+            elif (dimension == 2):
                 ax.plot([point[0], center[0]], [point[1], center[1]], '-', color=color, linewidth=0.5);
             elif (dimension == 3):
                 ax.plot([point[0], center[0]], [point[1], center[1]], [point[2], center[2]], '-', color=color, linewidth=0.5)
+
+
+    @staticmethod
+    def __draw_center(ax, center, color, marker, alpha):
+        dimension = len(center);
+        
+        if (dimension == 1):
+            ax.plot(center[0], 0.0, color=color, alpha=alpha, marker=marker, markersize=kmeans_visualizer.__default_2d_marker_size);
+        elif (dimension == 2):
+            ax.plot(center[0], center[1], color=color, alpha=alpha, marker=marker, markersize=kmeans_visualizer.__default_2d_marker_size);
+        elif (dimension == 3):
+            ax.scatter(center[0], center[1], center[2], c=color, alpha=alpha, marker=marker, s=kmeans_visualizer.__default_3d_marker_size);
+
+
+    @staticmethod
+    def __draw_centers(figure, visualizer, centers, initial_centers):
+        ax = figure.get_axes()[0];
+        
+        for index_center in range(len(centers)):
+            color = visualizer.get_cluster_color(index_center, 0);
+            kmeans_visualizer.__draw_center(ax, centers[index_center], color, '*', 1.0);
+            
+            if initial_centers:
+                kmeans_visualizer.__draw_center(ax, initial_centers[index_center], color, '*', 0.4);
+
+
+    @staticmethod
+    def __get_argument(argument_name, default_value, **kwargs):
+        if (argument_name in kwargs):
+            return kwargs[argument_name];
+        
+        return default_value;
+
 
 
 class kmeans:
@@ -254,8 +293,12 @@ class kmeans:
         """
         
         if (self.__ccore is True):
-            self.__clusters = wrapper.kmeans(self.__pointer_data, self.__centers, self.__tolerance);
-            self.__centers = self.__update_centers();
+            results = wrapper.kmeans(self.__pointer_data, self.__centers, self.__tolerance, (self.__observer is not None));
+            self.__clusters = results[0];
+            self.__centers  = results[1];
+            
+            if self.__observer:
+                self.__observer = kmeans_observer(results[2], results[3]);
         else:
             maximum_change = float('inf');
              

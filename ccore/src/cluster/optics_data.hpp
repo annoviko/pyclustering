@@ -43,8 +43,8 @@ using ordering_ptr = std::shared_ptr<ordering>;
 */
 class optics_data : public dbscan_data {
 private:
-    ordering_ptr     m_ordering = std::make_shared<clst::ordering>();
-    double           m_radius = 0;
+    ordering         m_ordering = { };
+    double           m_radius   = 0;
 
 public:
     /**
@@ -82,10 +82,17 @@ public:
 public:
     /**
     *
-    * @brief    Returns cluster-ordering that represents density-based clustering structure.
+    * @brief    Returns reference to cluster-ordering that represents density-based clustering structure.
     *
     */
-    inline ordering_ptr ordering(void) const { return m_ordering; }
+    ccore::clst::ordering & ordering(void) { return m_ordering; }
+
+    /**
+    *
+    * @brief    Returns const reference to cluster-ordering that represents density-based clustering structure.
+    *
+    */
+    const ccore::clst::ordering & ordering(void) const { return m_ordering; }
 
     /**
     *
@@ -94,14 +101,14 @@ public:
     *           allocate specified amount of clusters.
     *
     */
-    inline double get_radius(void) const { return m_radius; }
+    double get_radius(void) const { return m_radius; }
 
     /**
     *
     * @brief    Set new value for connectivity radius.
     *
     */
-    inline void set_radius(const double p_radius) { m_radius = p_radius; }
+    void set_radius(const double p_radius) { m_radius = p_radius; }
 };
 
 

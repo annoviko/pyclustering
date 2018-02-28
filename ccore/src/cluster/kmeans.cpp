@@ -75,13 +75,18 @@ void kmeans::process(const dataset & p_data, const index_sequence & p_indexes, c
         m_pool = std::make_shared<thread_pool>();
     }
 
-    m_ptr_result->centers()->assign(m_initial_centers.begin(), m_initial_centers.end());
+    m_ptr_result->centers().assign(m_initial_centers.begin(), m_initial_centers.end());
 
     double current_change = std::numeric_limits<double>::max();
 
     while(current_change > m_tolerance) {
-        update_clusters(*m_ptr_result->centers(), *m_ptr_result->clusters());
-        current_change = update_centers(*m_ptr_result->clusters(), *m_ptr_result->centers());
+        update_clusters(m_ptr_result->centers(), m_ptr_result->clusters());
+        current_change = update_centers(m_ptr_result->clusters(), m_ptr_result->centers());
+
+        if (m_ptr_result->is_observed()) {
+            m_ptr_result->evolution_centers().push_back(m_ptr_result->centers());
+            m_ptr_result->evolution_clusters().push_back(m_ptr_result->clusters());
+        }
     }
 }
 

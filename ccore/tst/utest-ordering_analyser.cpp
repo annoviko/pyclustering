@@ -31,25 +31,22 @@ using namespace ccore::clst;
 
 
 TEST(utest_ordering, cluster_allocation_identical_ordering) {
-    ordering_ptr cluster_ordering = std::shared_ptr<ordering>(new ordering({5.0, 5.0, 5.0, 5.0, 5.0, 5.0}));
-    ordering_analyser analyser(cluster_ordering);
+    ordering cluster_ordering = {5.0, 5.0, 5.0, 5.0, 5.0, 5.0};
 
-    EXPECT_EQ(1U, analyser.extract_cluster_amount(6.5));
-    EXPECT_EQ(0U, analyser.extract_cluster_amount(4.5));
+    EXPECT_EQ(1U, ordering_analyser::extract_cluster_amount(cluster_ordering, 6.5));
+    EXPECT_EQ(0U, ordering_analyser::extract_cluster_amount(cluster_ordering, 4.5));
 }
 
 
 TEST(utest_ordering, impossible_calculate_radius_identical_ordering) {
-    ordering_ptr cluster_ordering = std::shared_ptr<ordering>(new ordering({5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0}));
-    ordering_analyser analyser(cluster_ordering);
+    ordering cluster_ordering = {5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0};
 
-    EXPECT_TRUE(analyser.calculate_connvectivity_radius(2) < 0);
+    EXPECT_TRUE(ordering_analyser::calculate_connvectivity_radius(cluster_ordering, 2) < 0);
 }
 
 
 TEST(utest_ordering, impossible_calculate_radius_geterogeneous_ordering) {
-    ordering_ptr cluster_ordering = std::shared_ptr<ordering>(new ordering({5.0, 5.0, 5.0, 5.0, 6.0, 8.0, 6.0, 5.0, 5.0, 5.0}));
-    ordering_analyser analyser(cluster_ordering);
+    ordering cluster_ordering = {5.0, 5.0, 5.0, 5.0, 6.0, 8.0, 6.0, 5.0, 5.0, 5.0};
 
-    EXPECT_TRUE(analyser.calculate_connvectivity_radius(3) < 0);
+    EXPECT_TRUE(ordering_analyser().calculate_connvectivity_radius(cluster_ordering, 3) < 0);
 }

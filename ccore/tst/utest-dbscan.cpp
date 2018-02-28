@@ -41,7 +41,7 @@ template_length_process_data(const std::shared_ptr<dataset> & p_data,
     solver.process(*p_data, *ptr_output_result);
 
     const dataset & data = *p_data;
-    const cluster_sequence & actual_clusters = *(ptr_output_result->clusters());
+    const cluster_sequence & actual_clusters = ptr_output_result->clusters();
 
     ASSERT_CLUSTER_SIZES(data, actual_clusters, p_expected_cluster_length);
 
@@ -111,7 +111,7 @@ template_noise_allocation(const std::shared_ptr<dataset> & p_data,
         const std::size_t p_noise_length) {
 
     std::shared_ptr<dbscan_data> ptr_output_result = template_length_process_data(p_data, p_radius, p_neighbors, p_expected_cluster_length);
-    EXPECT_EQ(p_noise_length, ptr_output_result->noise()->size());
+    EXPECT_EQ(p_noise_length, ptr_output_result->noise().size());
 
     return ptr_output_result;
 }

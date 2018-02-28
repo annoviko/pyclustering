@@ -41,7 +41,7 @@ template_length_process_data(const std::shared_ptr<dataset> & data,
     cluster_data results_data;
     solver.process(*data.get(), results_data);
 
-    cluster_sequence & results = *results_data.clusters();
+    cluster_sequence & results = results_data.clusters();
 
     /* Check number of clusters */
     ASSERT_EQ(expected_cluster_length.size(), results.size());

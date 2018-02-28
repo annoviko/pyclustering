@@ -69,9 +69,8 @@ void optics::process(const dataset & p_data, cluster_data & p_result) {
 
     calculate_cluster_result();
 
-    if ( (m_amount_clusters > 0) && (m_amount_clusters != m_result_ptr->clusters()->size()) ) {
-        ordering_analyser analyser(m_result_ptr->ordering());
-        double radius = analyser.calculate_connvectivity_radius(m_amount_clusters);
+    if ( (m_amount_clusters > 0) && (m_amount_clusters != m_result_ptr->clusters().size()) ) {
+        double radius = ordering_analyser::calculate_connvectivity_radius(m_result_ptr->ordering(), m_amount_clusters);
 
         if (radius > 0) {
             m_radius = radius;
@@ -110,8 +109,8 @@ void optics::initialize(void) {
 
     m_ordered_database.clear();
 
-    m_result_ptr->clusters()->clear();
-    m_result_ptr->noise()->clear();
+    m_result_ptr->clusters().clear();
+    m_result_ptr->noise().clear();
 }
 
 
@@ -203,19 +202,19 @@ void optics::update_order_seed(const optics_descriptor & p_object, const std::ve
 
 
 void optics::extract_clusters(void) {
-    cluster_sequence_ptr clusters = m_result_ptr->clusters();
-    noise_ptr noise = m_result_ptr->noise();
+    cluster_sequence & clusters = m_result_ptr->clusters();
+    clst::noise & noise = m_result_ptr->noise();
 
-    cluster * current_cluster = (cluster *) noise.get();
+    cluster * current_cluster = (cluster *) &noise;
 
     for (auto optics_object : m_ordered_database) {
         if ( (optics_object->m_reachability_distance == optics::NONE_DISTANCE) || (optics_object->m_reachability_distance > m_radius) ) {
             if ( (optics_object->m_core_distance != optics::NONE_DISTANCE) && (optics_object->m_core_distance <= m_radius) ) {
-                clusters->push_back({ optics_object->m_index });
-                current_cluster = &clusters->back();
+                clusters.push_back({ optics_object->m_index });
+                current_cluster = &clusters.back();
             }
             else {
-                noise->push_back(optics_object->m_index);
+                noise.push_back(optics_object->m_index);
             }
         }
         else {
@@ -241,16 +240,16 @@ void optics::get_neighbors(const size_t p_index, std::vector< std::tuple<std::si
 
 
 void optics::calculate_ordering(void) {
-    if (!m_result_ptr->ordering()->empty()) { return; }
+    if (!m_result_ptr->ordering().empty()) { return; }
 
-    ordering_ptr ordering = m_result_ptr->ordering();
-    cluster_sequence_ptr clusters = m_result_ptr->clusters();
+    ordering & ordering = m_result_ptr->ordering();
+    cluster_sequence & clusters = m_result_ptr->clusters();
 
-    for (auto & cluster : *clusters) {
+    for (auto & cluster : clusters) {
         for (auto index_object : cluster) {
             const optics_descriptor & optics_object = m_optics_objects[index_object];
             if (optics_object.m_reachability_distance != optics::NONE_DISTANCE) {
-                ordering->push_back(optics_object.m_reachability_distance);
+                ordering.push_back(optics_object.m_reachability_distance);
             }
         }
     }

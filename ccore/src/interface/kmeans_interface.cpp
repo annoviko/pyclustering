@@ -23,7 +23,7 @@
 #include "cluster/kmeans.hpp"
 
 
-pyclustering_package * kmeans_algorithm(const pyclustering_package * const p_sample, const pyclustering_package * const p_initial_centers, const double p_tolerance) {
+pyclustering_package * kmeans_algorithm(const pyclustering_package * const p_sample, const pyclustering_package * const p_initial_centers, const double p_tolerance, const bool p_observe) {
     dataset data, centers;
 
     p_sample->extract(data);
@@ -31,9 +31,17 @@ pyclustering_package * kmeans_algorithm(const pyclustering_package * const p_sam
 
     ccore::clst::kmeans algorithm(centers, p_tolerance);
 
-    ccore::clst::kmeans_data output_result;
+    ccore::clst::kmeans_data output_result(p_observe);
     algorithm.process(data, output_result);
 
-    pyclustering_package * package = create_package(output_result.clusters().get());
+    pyclustering_package * package = new pyclustering_package(pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
+    package->size = KMEANS_PACKAGE_SIZE;
+    package->data = new pyclustering_package * [KMEANS_PACKAGE_SIZE];
+
+    ((pyclustering_package **) package->data)[KMEANS_PACKAGE_INDEX_CLUSTERS] = create_package(&output_result.clusters());
+    ((pyclustering_package **) package->data)[KMEANS_PACKAGE_INDEX_CENTERS] = create_package(&output_result.centers());
+    ((pyclustering_package **) package->data)[KMEANS_PACKAGE_INDEX_EVOLUTION_CLUSTERS] = create_package(&output_result.evolution_clusters());
+    ((pyclustering_package **) package->data)[KMEANS_PACKAGE_INDEX_EVOLUTION_CENTERS] = create_package(&output_result.evolution_centers());
+
     return package;
 }
