@@ -117,7 +117,7 @@ class kmeans_visualizer:
     @staticmethod
     def show_clusters(sample, clusters, centers, initial_centers = None, **kwargs):
         """!
-        @brief 
+        @brief Display K-Means clustering results.
         
         @param[in] sample (list): Dataset that were used for clustering.
         @param[in] clusters (array_like): Clusters that were allocated by the algorithm.
@@ -347,6 +347,9 @@ class kmeans:
         
         """
 
+        if isinstance(self.__centers, list):
+            return self.__centers;
+        
         return self.__centers.tolist();
 
 
