@@ -128,6 +128,7 @@ class kmeans_visualizer:
         Keyword Args:
             figure (figure): If 'None' then new is figure is creater, otherwise specified figure is used for visualization.
             display (bool): If 'True' then figure will be shown by the method, otherwise it should be shown manually using matplotlib function 'plt.show()'.
+            offset (uint): Specify axes index on the figure where results should be drawn (only if argument 'figure' is specified).
         
         @return (figure) Figure where clusters were drawn.
         
@@ -136,13 +137,15 @@ class kmeans_visualizer:
         visualizer = cluster_visualizer();
         visualizer.append_clusters(clusters, sample);
         
+        offset = kmeans_visualizer.__get_argument('offset', 0, **kwargs);
+        
         if (kmeans_visualizer.__get_argument('figure', None, **kwargs) is None):
             figure = visualizer.show(display = False);
         else:
             visualizer.show(figure = figure, display = False);
         
-        kmeans_visualizer.__draw_centers(figure, visualizer, centers, initial_centers);
-        kmeans_visualizer.__draw_rays(figure, visualizer, sample, clusters, centers);
+        kmeans_visualizer.__draw_centers(figure, offset, visualizer, centers, initial_centers);
+        kmeans_visualizer.__draw_rays(figure, offset, visualizer, sample, clusters, centers);
         
         if (kmeans_visualizer.__get_argument('display', True, **kwargs) is True):
             plt.show();
@@ -151,8 +154,8 @@ class kmeans_visualizer:
 
 
     @staticmethod
-    def __draw_rays(figure, visualizer, sample, clusters, centers):
-        ax = figure.get_axes()[0];
+    def __draw_rays(figure, offset, visualizer, sample, clusters, centers):
+        ax = figure.get_axes()[offset];
         
         for index_cluster in range(len(clusters)):
             color = visualizer.get_cluster_color(index_cluster, 0);
@@ -186,8 +189,8 @@ class kmeans_visualizer:
 
 
     @staticmethod
-    def __draw_centers(figure, visualizer, centers, initial_centers):
-        ax = figure.get_axes()[0];
+    def __draw_centers(figure, offset, visualizer, centers, initial_centers):
+        ax = figure.get_axes()[offset];
         
         for index_center in range(len(centers)):
             color = visualizer.get_cluster_color(index_center, 0);
