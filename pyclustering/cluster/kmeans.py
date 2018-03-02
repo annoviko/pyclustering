@@ -79,7 +79,7 @@ class kmeans_observer:
         """!
         @brief Set evolution of changes of centers during clustering process.
         
-        @param[in] evolution_clusters (array_like): Evolution of changes of centers during clustering process.
+        @param[in] evolution_centers (array_like): Evolution of changes of centers during clustering process.
         
         """
         self.__evolution_centers = evolution_centers;
@@ -101,7 +101,7 @@ class kmeans_observer:
         """!
         @brief Set evolution of changes of centers during clustering process.
         
-        @param[in] evolution_centers (array_like): Evolution of changes of clusters during clustering process.
+        @param[in] evolution_clusters (array_like): Evolution of changes of clusters during clustering process.
         
         """
         self.__evolution_clusters = evolution_clusters;
