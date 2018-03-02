@@ -23,33 +23,35 @@
 
 #include <algorithm>
 #include <numeric>
+#include <unordered_map>
 
 
 using namespace ccore::clst;
 
 
-void ASSERT_CLUSTER_SIZES(const dataset & p_data, const cluster_sequence & p_actual_clusters, const std::vector<size_t> & p_expected_cluster_length) {
+void ASSERT_CLUSTER_SIZES(const dataset & p_data, 
+                          const cluster_sequence & p_actual_clusters, 
+                          const std::vector<size_t> & p_expected_cluster_length,
+                          const index_sequence & p_indexes) {
     if (p_expected_cluster_length.empty() && p_actual_clusters.empty()) {
         return;
     }
 
-    std::vector<size_t> obtained_cluster_length;
-    std::vector<bool> unique_objects(p_data.size(), false);
-    size_t total_size = 0;
-    for (size_t i = 0; i < p_actual_clusters.size(); i++) {
-        size_t cluster_length = p_actual_clusters[i].size();
+    std::size_t total_size = 0;
+    std::unordered_map<std::size_t, bool> unique_objects;
+    std::vector<std::size_t> obtained_cluster_length;
 
-        obtained_cluster_length.push_back(cluster_length);
-        total_size += cluster_length;
+    for (auto & cluster : p_actual_clusters) {
+        total_size += cluster.size();
 
-        for (size_t j = 0; j < cluster_length; j++) {
-            size_t index_object = p_actual_clusters[i][j];
+        obtained_cluster_length.push_back(cluster.size());
 
-            ASSERT_FALSE(unique_objects[index_object]);
-
-            unique_objects[index_object] = true;
+        for (auto index_object : cluster) {
+            unique_objects[index_object] = false;
         }
     }
+
+    ASSERT_EQ(total_size, unique_objects.size());
 
     if (!p_expected_cluster_length.empty()) {
         std::size_t expected_total_size = std::accumulate(p_expected_cluster_length.cbegin(), p_expected_cluster_length.cend(), (std::size_t) 0);
@@ -65,7 +67,17 @@ void ASSERT_CLUSTER_SIZES(const dataset & p_data, const cluster_sequence & p_act
             ASSERT_EQ(obtained_cluster_length[i], sorted_expected_cluster_length[i]);
         }
     }
-    else {
-        ASSERT_EQ(p_data.size(), total_size);
+    else
+    {
+        if (!p_indexes.empty()) {
+            ASSERT_EQ(p_indexes.size(), unique_objects.size());
+
+            for (auto index : p_indexes) {
+                ASSERT_TRUE( unique_objects.find(index) != unique_objects.cend() );
+            }
+        }
+        else {
+            ASSERT_EQ(p_data.size(), total_size);
+        }
     }
 }

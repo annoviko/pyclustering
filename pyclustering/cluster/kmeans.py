@@ -46,12 +46,9 @@ class kmeans_observer:
     
     """
     
-    def __init__(self, evolution_clusters = [], evolution_centers = []):
+    def __init__(self):
         """!
         @brief Initializer of observer of K-Means algorithm.
-        
-        @param[in] evolution_clusters (array_like): Evolution of clusters changes during clustering process.
-        @param[in] evolution_centers (array_like): Evolution of centers changes during clustering process.
         
         """
         self.__evolution_clusters   = [];
@@ -75,7 +72,17 @@ class kmeans_observer:
         
         """
         self.__evolution_clusters.append(clusters);
-        self.__evolution_clusters.append(centers);
+        self.__evolution_centers.append(centers);
+
+
+    def set_evolution_centers(self, evolution_centers):
+        """!
+        @brief Set evolution of changes of centers during clustering process.
+        
+        @param[in] evolution_clusters (array_like): Evolution of changes of centers during clustering process.
+        
+        """
+        self.__evolution_centers = evolution_centers;
 
 
     def get_centers(self, iteration):
@@ -88,6 +95,16 @@ class kmeans_observer:
         
         """
         return self.__evolution_centers[iteration];
+
+
+    def set_evolution_clusters(self, evolution_clusters):
+        """!
+        @brief Set evolution of changes of centers during clustering process.
+        
+        @param[in] evolution_centers (array_like): Evolution of changes of clusters during clustering process.
+        
+        """
+        self.__evolution_clusters = evolution_clusters;
 
 
     def get_clusters(self, iteration):
@@ -219,6 +236,8 @@ class kmeans:
              K-Means clustering results depend on initial centers. Algorithm K-Means++ can used for initialization 
              initial centers from module 'pyclustering.cluster.center_initializer'.
     
+    @image html kmeans_example_clustering.png "K-Means clustering results. At the left - 'Simple03.data' sample, at the right - 'Lsun.data' sample."
+    
     Example #1 - Trivial clustering:
     @code
         # load list of points for cluster analysis
@@ -295,29 +314,27 @@ class kmeans:
         
         """
         
+        if (len(self.__pointer_data[0]) != len(self.__centers[0])):
+            raise NameError('Dimension of the input data and dimension of the initial cluster centers must be equal.');
+        
         if (self.__ccore is True):
             results = wrapper.kmeans(self.__pointer_data, self.__centers, self.__tolerance, (self.__observer is not None));
             self.__clusters = results[0];
             self.__centers  = results[1];
             
-            if self.__observer:
-                self.__observer = kmeans_observer(results[2], results[3]);
+            if self.__observer is not None:
+                self.__observer.set_evolution_clusters(results[2]);
+                self.__observer.set_evolution_centers(results[3]);
         else:
             maximum_change = float('inf');
-             
-            stop_condition = self.__tolerance * self.__tolerance;   # Fast solution
-            #stop_condition = self.__tolerance;              # Slow solution
-             
-            # Check for dimension
-            if (len(self.__pointer_data[0]) != len(self.__centers[0])):
-                raise NameError('Dimension of the input data and dimension of the initial cluster centers must be equal.');
+            stop_condition = self.__tolerance * self.__tolerance;
              
             while (maximum_change > stop_condition):
                 self.__clusters = self.__update_clusters();
                 updated_centers = self.__update_centers();  # changes should be calculated before asignment
                 
-                if self.__observer:
-                    self.__observer.notify(self.__clusters, updated_centers);
+                if self.__observer is not None:
+                    self.__observer.notify(self.__clusters, updated_centers.tolist());
                 
                 if (len(self.__centers) != len(updated_centers)):
                     maximum_change = float('inf');
@@ -326,7 +343,7 @@ class kmeans:
                     changes = numpy.sum(numpy.square(self.__centers - updated_centers), axis=1);
                     maximum_change = numpy.max(changes);
                 
-                self.__centers = updated_centers;
+                self.__centers = updated_centers.tolist();
 
 
     def get_clusters(self):

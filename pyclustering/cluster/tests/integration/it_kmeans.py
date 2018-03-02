@@ -99,6 +99,16 @@ class KmeansIntegrationTest(unittest.TestCase):
         assert len(kmeans_instance.get_clusters()) == 2;
 
 
+    def testObserveSampleSimple1ByCore(self):
+        KmeansTestTemplates.templateCollectEvolution(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.5, 5.6], [6.8, 7.4]], [5, 5], True);
+
+    def testObserveSampleSimple1OneClusterByCore(self):
+        KmeansTestTemplates.templateCollectEvolution(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.3, 5.4]], [10], True);
+
+    def testObserveSampleSimple2ByCore(self):
+        KmeansTestTemplates.templateCollectEvolution(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [[3.4, 4.9], [6.8, 7.1], [7.6, 0.4]], [10, 5, 8], True);
+
+
     @remove_library
     def testProcessingWhenLibraryCoreCorrupted(self):
         KmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], True);

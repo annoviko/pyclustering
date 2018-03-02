@@ -63,7 +63,6 @@ void kmeans::process(const dataset & p_data, const index_sequence & p_indexes, c
     m_ptr_data = &p_data;
     m_ptr_indexes = &p_indexes;
 
-    p_result = kmeans_data();
     m_ptr_result = (kmeans_data *) &p_result;
 
     if (p_data[0].size() != m_initial_centers[0].size()) {
