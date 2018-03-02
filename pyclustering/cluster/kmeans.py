@@ -228,13 +228,13 @@ class kmeans_visualizer:
 
 class kmeans:
     """!
-    @brief Class represents clustering algorithm K-Means.
+    @brief Class represents K-Means clustering algorithm.
     @details CCORE option can be used to use the pyclustering core - C/C++ shared library for processing that significantly increases performance.
     
-             CCORE implementation of the algorithm uses thread pool to parallelize the clustering process.
-             
-             K-Means clustering results depend on initial centers. Algorithm K-Means++ can used for initialization 
-             initial centers from module 'pyclustering.cluster.center_initializer'.
+    CCORE implementation of the algorithm uses thread pool to parallelize the clustering process.
+    
+    K-Means clustering results depend on initial centers. Algorithm K-Means++ can used for initialization 
+    initial centers from module 'pyclustering.cluster.center_initializer'.
     
     @image html kmeans_example_clustering.png "K-Means clustering results. At the left - 'Simple03.data' sample, at the right - 'Lsun.data' sample."
     
