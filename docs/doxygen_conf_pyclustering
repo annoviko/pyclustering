@@ -4,10 +4,10 @@
 # Project related configuration options
 #---------------------------------------------------------------------------
 DOXYFILE_ENCODING      = UTF-8
-PROJECT_NAME           = PyClustering
+PROJECT_NAME           =
 PROJECT_NUMBER         =
-PROJECT_BRIEF          = "pyclustring is a python data mining library"
-PROJECT_LOGO           =
+PROJECT_BRIEF          =
+PROJECT_LOGO           = docs/logo/pyclustering_logo_01_small.png
 OUTPUT_DIRECTORY       = doxygen_docs
 CREATE_SUBDIRS         = YES
 OUTPUT_LANGUAGE        = English

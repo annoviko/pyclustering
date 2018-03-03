@@ -1,6 +1,17 @@
 ------------------------------------------------------------------------
 
-CHANGE NOTES FOR 0.8.0 (STARTED Oct 23, 2017)
+CHANGE NOTES FOR 0.8.1 (STARTED Feb 23, 2018)
+
+------------------------------------------------------------------------
+
+GENERAL CHANGES:
+- Implemented K-Means observer and visualizer to visualize and animate clustering results (pyclustering.cluster.kmeans, ccore.clst.kmeans).
+  See: no reference.
+
+
+------------------------------------------------------------------------
+
+CHANGE NOTES FOR 0.8.0 (STARTED Oct 23, 2017), (RELEASED: Feb 23, 2018)
 
 ------------------------------------------------------------------------
 

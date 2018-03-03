@@ -360,36 +360,53 @@ class kmeans:
             raise NameError('Dimension of the input data and dimension of the initial cluster centers must be equal.');
 
         if (self.__ccore is True):
-            results = wrapper.kmeans(self.__pointer_data, self.__centers, self.__tolerance, (self.__observer is not None));
-            self.__clusters = results[0];
-            self.__centers  = results[1];
-            
-            if self.__observer is not None:
-                self.__observer.set_evolution_clusters(results[2]);
-                self.__observer.set_evolution_centers(results[3]);
+            self.__process_by_ccore();
         else:
-            maximum_change = float('inf');
-            stop_condition = self.__tolerance * self.__tolerance;
+            self.__process_by_python();
 
-            if (self.__observer is not None):
-                initial_clusters = self.__update_clusters();
-                self.__observer.notify(initial_clusters, self.__centers.tolist());
-             
-            while (maximum_change > stop_condition):
-                self.__clusters = self.__update_clusters();
-                updated_centers = self.__update_centers();  # changes should be calculated before assignment
-                
-                if self.__observer is not None:
-                    self.__observer.notify(self.__clusters, updated_centers.tolist());
-                
-                if (len(self.__centers) != len(updated_centers)):
-                    maximum_change = float('inf');
-                
-                else:
-                    changes = numpy.sum(numpy.square(self.__centers - updated_centers), axis=1);
-                    maximum_change = numpy.max(changes);
-                
-                self.__centers = updated_centers.tolist();
+
+    def __process_by_ccore(self):
+        """!
+        @brief Performs cluster analysis using CCORE (C/C++ part of pyclustering library).
+
+        """
+        results = wrapper.kmeans(self.__pointer_data, self.__centers, self.__tolerance, (self.__observer is not None));
+        self.__clusters = results[0];
+        self.__centers = results[1];
+
+        if self.__observer is not None:
+            self.__observer.set_evolution_clusters(results[2]);
+            self.__observer.set_evolution_centers(results[3]);
+
+
+    def __process_by_python(self):
+        """!
+        @brief Performs cluster analysis using python code.
+
+        """
+
+        maximum_change = float('inf');
+        stop_condition = self.__tolerance * self.__tolerance;
+
+        if (self.__observer is not None):
+            initial_clusters = self.__update_clusters();
+            self.__observer.notify(initial_clusters, self.__centers.tolist());
+
+        while (maximum_change > stop_condition):
+            self.__clusters = self.__update_clusters();
+            updated_centers = self.__update_centers();  # changes should be calculated before assignment
+
+            if self.__observer is not None:
+                self.__observer.notify(self.__clusters, updated_centers.tolist());
+
+            if (len(self.__centers) != len(updated_centers)):
+                maximum_change = float('inf');
+
+            else:
+                changes = numpy.sum(numpy.square(self.__centers - updated_centers), axis=1);
+                maximum_change = numpy.max(changes);
+
+            self.__centers = updated_centers.tolist();
 
 
     def get_clusters(self):
