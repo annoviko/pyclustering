@@ -28,6 +28,7 @@ from pyclustering.utils import draw_image_mask_segments, read_image;
 from pyclustering.samples.definitions import IMAGE_SIMPLE_SAMPLES, IMAGE_MAP_SAMPLES;
 
 from pyclustering.cluster.kmeans import kmeans;
+from pyclustering.cluster.center_initializer import kmeans_plusplus_initializer;
 
 
 def template_segmentation_image(source, start_centers):
@@ -38,7 +39,19 @@ def template_segmentation_image(source, start_centers):
     
     clusters = kmeans_instance.get_clusters();
     draw_image_mask_segments(source, clusters);
-    
+
+
+def template_segmentation_image_amount_colors(source, amount):
+    data = read_image(source);
+
+    centers = kmeans_plusplus_initializer(data, amount, kmeans_plusplus_initializer.FARTHEST_CENTER_CANDIDATE).initialize();
+    kmeans_instance = kmeans(data, centers);
+    kmeans_instance.process();
+
+    clusters = kmeans_instance.get_clusters();
+    draw_image_mask_segments(source, clusters);
+
+
     
 def segmentation_image_simple1():
     template_segmentation_image(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE01, [[255, 0, 0], [0, 0, 255], [180, 136, 0], [255, 255, 255]]);
@@ -68,8 +81,8 @@ def segmentation_image_nil():
     template_segmentation_image(IMAGE_MAP_SAMPLES.IMAGE_NILE_SMALL, [[54, 64, 39], [193, 171, 134], [26, 71, 128]]);
 
 def segmentation_image_map_buildings():
-    template_segmentation_image(IMAGE_MAP_SAMPLES.IMAGE_BUILDINGS, [[134, 179, 166], [73, 95, 74], [75, 84, 80]]);   
-    
+    template_segmentation_image(IMAGE_MAP_SAMPLES.IMAGE_BUILDINGS, [[134, 179, 166], [73, 95, 74], [75, 84, 80]]);
+
 segmentation_image_simple1();
 segmentation_image_simple2();
 segmentation_image_simple3();

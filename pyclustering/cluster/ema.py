@@ -116,7 +116,7 @@ class ema_initializer():
     
     """
     
-    __MAX_GENERATION_ATTEPTS = 10;
+    __MAX_GENERATION_ATTEMPTS = 10;
     
     def __init__(self, sample, amount):
         """!
@@ -192,11 +192,11 @@ class ema_initializer():
         for _ in range(self.__amount):
             mean = self.__sample[ random.randint(0, len(self.__sample)) - 1 ];
             attempts = 0;
-            while ( (mean in initial_means) and (attempts < ema_initializer.__MAX_GENERATION_ATTEPTS) ):
+            while ( (mean in initial_means) and (attempts < ema_initializer.__MAX_GENERATION_ATTEMPTS)):
                 mean = self.__sample[ random.randint(0, len(self.__sample)) - 1 ];
                 attempts += 1;
             
-            if (attempts == ema_initializer.__MAX_GENERATION_ATTEPTS):
+            if (attempts == ema_initializer.__MAX_GENERATION_ATTEMPTS):
                 mean = [ value + (random.random() - 0.5) * value * 0.2 for value in mean ];
             
             initial_means.append(mean);
