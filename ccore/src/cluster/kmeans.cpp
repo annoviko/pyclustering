@@ -76,6 +76,14 @@ void kmeans::process(const dataset & p_data, const index_sequence & p_indexes, c
 
     m_ptr_result->centers().assign(m_initial_centers.begin(), m_initial_centers.end());
 
+    if (m_ptr_result->is_observed()) {
+        cluster_sequence sequence;
+        update_clusters(m_initial_centers, sequence);
+
+        m_ptr_result->evolution_centers().push_back(m_initial_centers);
+        m_ptr_result->evolution_clusters().push_back(sequence);
+    }
+
     double current_change = std::numeric_limits<double>::max();
 
     while(current_change > m_tolerance) {

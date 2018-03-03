@@ -439,7 +439,7 @@ class ema_visualizer:
 class ema:
     """!
     @brief Expectation-Maximization clustering algorithm for Gaussian Mixture Model (GMM).
-    @details The algorithm provides only clustering services (unsupervise learning).
+    @details The algorithm provides only clustering services (unsupervised learning).
               Here an example of data clustering process:
     @code
         # Read dataset from text file

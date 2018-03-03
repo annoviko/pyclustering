@@ -109,6 +109,33 @@ class KmeansIntegrationTest(unittest.TestCase):
         KmeansTestTemplates.templateCollectEvolution(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [[3.4, 4.9], [6.8, 7.1], [7.6, 0.4]], [10, 5, 8], True);
 
 
+    def testShowResultsSampleSimple01(self):
+        KmeansTestTemplates.templateShowClusteringResultNoFailure(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.5, 5.6], [6.8, 7.4]], True);
+
+    def testShowResultsSampleSimple02(self):
+        KmeansTestTemplates.templateShowClusteringResultNoFailure(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [[3.4, 4.9], [6.8, 7.1], [7.6, 0.4]], True);
+
+    def testShowResultsOneDimensionalData(self):
+        KmeansTestTemplates.templateShowClusteringResultNoFailure(SIMPLE_SAMPLES.SAMPLE_SIMPLE8, [[-2.0], [3.0], [6.0], [12.0]], True);
+
+    def testShowResultsThreeDimensionalData(self):
+        KmeansTestTemplates.templateShowClusteringResultNoFailure(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, [[1.0, 0.6, 0.8], [4.1, 4.2, 4.3]], True);
+
+
+    def testAnimateResultsSampleSimple01(self):
+        KmeansTestTemplates.templateAnimateClusteringResultNoFailure(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.5, 5.6], [6.8, 7.4]], True);
+
+    def testAnimateResultsSampleSimple02(self):
+        KmeansTestTemplates.templateAnimateClusteringResultNoFailure(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [[3.4, 4.9], [6.8, 7.1], [7.6, 0.4]], True);
+
+    def testAnimateResultsOneDimensionalData(self):
+        KmeansTestTemplates.templateAnimateClusteringResultNoFailure(SIMPLE_SAMPLES.SAMPLE_SIMPLE8, [[-2.0], [3.0], [6.0], [12.0]], True);
+
+    def testAnimateResultsThreeDimensionalData(self):
+        KmeansTestTemplates.templateAnimateClusteringResultNoFailure(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, [[1.0, 0.6, 0.8], [4.1, 4.2, 4.3]], True);
+
+
+
     @remove_library
     def testProcessingWhenLibraryCoreCorrupted(self):
         KmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], True);

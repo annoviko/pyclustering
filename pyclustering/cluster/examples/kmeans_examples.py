@@ -25,7 +25,7 @@
 
 import random;
 
-from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
+from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES, FAMOUS_SAMPLES;
 
 from pyclustering.cluster.kmeans import kmeans, kmeans_observer, kmeans_visualizer;
 
@@ -46,6 +46,7 @@ def template_clustering(start_centers, path, tolerance = 0.25, ccore = True):
     print("Sample: ", path, "\t\tExecution time: ", ticks, "\n");
 
     kmeans_visualizer.show_clusters(sample, clusters, centers, start_centers);
+    kmeans_visualizer.animate_cluster_allocation(sample, observer);
 
 
 
@@ -152,6 +153,7 @@ def performance_measure_random_points(ccore):
     clustering_random_points(5000, 5, ccore);
     clustering_random_points(10000, 5, ccore);
     clustering_random_points(20000, 5, ccore);
+
 
 cluster_sample1();
 cluster_sample2();

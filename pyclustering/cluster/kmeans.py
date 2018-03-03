@@ -29,6 +29,7 @@
 import numpy;
 
 import matplotlib.pyplot as plt;
+import matplotlib.animation as animation;
 
 import pyclustering.core.kmeans_wrapper as wrapper;
 
@@ -53,6 +54,7 @@ class kmeans_observer:
         """
         self.__evolution_clusters   = [];
         self.__evolution_centers    = [];
+        self.__initial_centers      = [];
 
 
     def __len__(self):
@@ -155,8 +157,8 @@ class kmeans_visualizer:
         visualizer.append_clusters(clusters, sample);
         
         offset = kmeans_visualizer.__get_argument('offset', 0, **kwargs);
-        
-        if (kmeans_visualizer.__get_argument('figure', None, **kwargs) is None):
+        figure = kmeans_visualizer.__get_argument('figure', None, **kwargs);
+        if (figure is None):
             figure = visualizer.show(display = False);
         else:
             visualizer.show(figure = figure, display = False);
@@ -213,7 +215,7 @@ class kmeans_visualizer:
             color = visualizer.get_cluster_color(index_center, 0);
             kmeans_visualizer.__draw_center(ax, centers[index_center], color, '*', 1.0);
             
-            if initial_centers:
+            if initial_centers is not None:
                 kmeans_visualizer.__draw_center(ax, initial_centers[index_center], color, '*', 0.4);
 
 
@@ -223,6 +225,46 @@ class kmeans_visualizer:
             return kwargs[argument_name];
         
         return default_value;
+
+
+    @staticmethod
+    def animate_cluster_allocation(data, observer, animation_velocity = 500, movie_fps = 1, save_movie = None):
+        """!
+        @brief Animates clustering process that is performed by K-Means algorithm.
+
+        @param[in] data (list): Dataset that is used for clustering.
+        @param[in] observer (kmeans_observer): EM observer that was used for collection information about clustering process.
+        @param[in] animation_velocity (uint): Interval between frames in milliseconds (for run-time animation only).
+        @param[in] movie_fps (uint): Defines frames per second (for rendering movie only).
+        @param[in] save_movie (string): If it is specified then animation will be stored to file that is specified in this parameter.
+
+        """
+        figure = plt.figure();
+
+        def init_frame():
+            return frame_generation(0);
+
+        def frame_generation(index_iteration):
+            figure.clf();
+
+            figure.suptitle("K-Means algorithm (iteration: " + str(index_iteration) + ")", fontsize=18, fontweight='bold');
+
+            clusters = observer.get_clusters(index_iteration);
+            centers = observer.get_centers(index_iteration);
+            kmeans_visualizer.show_clusters(data, clusters, centers, None, figure=figure, display=False);
+
+            figure.subplots_adjust(top=0.85);
+
+            return [figure.gca()];
+
+        iterations = len(observer);
+        cluster_animation = animation.FuncAnimation(figure, frame_generation, iterations, interval=animation_velocity,
+                                                    init_func=init_frame, repeat_delay=5000);
+
+        if (save_movie is not None):
+            cluster_animation.save(save_movie, writer='ffmpeg', fps=movie_fps, bitrate=3000);
+        else:
+            plt.show();
 
 
 
@@ -299,7 +341,7 @@ class kmeans:
             self.__observer = kwargs['observer'];
         
         self.__ccore = ccore;
-        if (self.__ccore):
+        if (self.__ccore is True):
             self.__ccore = ccore_library.workable();
 
 
@@ -313,10 +355,10 @@ class kmeans:
         @see get_centers()
         
         """
-        
+
         if (len(self.__pointer_data[0]) != len(self.__centers[0])):
             raise NameError('Dimension of the input data and dimension of the initial cluster centers must be equal.');
-        
+
         if (self.__ccore is True):
             results = wrapper.kmeans(self.__pointer_data, self.__centers, self.__tolerance, (self.__observer is not None));
             self.__clusters = results[0];
@@ -328,10 +370,14 @@ class kmeans:
         else:
             maximum_change = float('inf');
             stop_condition = self.__tolerance * self.__tolerance;
+
+            if (self.__observer is not None):
+                initial_clusters = self.__update_clusters();
+                self.__observer.notify(initial_clusters, self.__centers.tolist());
              
             while (maximum_change > stop_condition):
                 self.__clusters = self.__update_clusters();
-                updated_centers = self.__update_centers();  # changes should be calculated before asignment
+                updated_centers = self.__update_centers();  # changes should be calculated before assignment
                 
                 if self.__observer is not None:
                     self.__observer.notify(self.__clusters, updated_centers.tolist());

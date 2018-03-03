@@ -27,7 +27,7 @@
 from pyclustering.tests.assertion import assertion;
 
 from pyclustering.cluster.encoder import type_encoding, cluster_encoder;
-from pyclustering.cluster.kmeans import kmeans, kmeans_observer;
+from pyclustering.cluster.kmeans import kmeans, kmeans_observer, kmeans_visualizer;
 
 from pyclustering.utils import read_sample;
 
@@ -104,3 +104,27 @@ class KmeansTestTemplates:
                 assertion.eq(len(sample[0]), len(center));
             
             assertion.le(1, len(observer.get_clusters(i)));
+
+
+    @staticmethod
+    def templateShowClusteringResultNoFailure(filename, initial_centers, ccore_flag):
+        sample = read_sample(filename);
+
+        kmeans_instance = kmeans(sample, initial_centers, 0.025, ccore_flag);
+        kmeans_instance.process();
+
+        clusters = kmeans_instance.get_clusters();
+        centers = kmeans_instance.get_centers();
+
+        kmeans_visualizer.show_clusters(sample, clusters, centers, initial_centers);
+
+
+    @staticmethod
+    def templateAnimateClusteringResultNoFailure(filename, initial_centers, ccore_flag):
+        sample = read_sample(filename);
+
+        observer = kmeans_observer();
+        kmeans_instance = kmeans(sample, initial_centers, 0.025, ccore_flag, observer=observer);
+        kmeans_instance.process();
+
+        kmeans_visualizer.animate_cluster_allocation(sample, observer);
