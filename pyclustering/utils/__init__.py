@@ -63,6 +63,20 @@ def read_sample(filename):
     return sample;
 
 
+def calculate_distance_matrix(sample):
+    """!
+    @brief Calculates distance matrix for data sample (sequence of points) using Euclidean distance as a metric.
+
+    @param[in] sample (array_like): Data points that are used for distance calculation.
+
+    @return (list) Matrix distance between data points.
+
+    """
+
+    amount_rows = len(sample);
+    return [ [ euclidean_distance(sample[i], sample[j]) for j in range(amount_rows) ] for i in range(amount_rows) ];
+
+
 def read_image(filename):
     """!
     @brief Returns image as N-dimension (depends on the input image) matrix, where one element of list describes pixel.
@@ -612,6 +626,23 @@ def timedcall(executable_function, *args):
     time_end = time.clock();
     
     return (time_end - time_start, result);
+
+
+def get_argument(argument_name, default_value, **kwargs):
+    """!
+    @brief Extract argument value without exception using default value in case of lack argument with specified name.
+
+    @param[in] argument_name (string): Argument name (key in **kwargs) whose value is required.
+    @param[in] default_value (any): Value that is returned if argument is not found in **kwargs.
+    @param[in] **kwargs: Arbitrary keyword arguments.
+
+    @return (any) Extracted argument if argument is contained by **kwargs, otherwise default value.
+
+    """
+    if (argument_name in kwargs):
+        return kwargs[argument_name];
+
+    return default_value;
 
 
 def extract_number_oscillations(osc_dyn, index = 0, amplitude_threshold = 1.0):
