@@ -165,7 +165,8 @@ class sync_dynamic:
     
     def __len__(self):
         """!
-        @brief (uint) Returns number of simulation steps that are stored in dynamic.
+        @brief Returns number of simulation steps that are stored in dynamic.
+        @return (uint) Number of simulation steps that are stored in dynamic.
         
         """
         if (self._ccore_sync_dynamic_pointer is not None):

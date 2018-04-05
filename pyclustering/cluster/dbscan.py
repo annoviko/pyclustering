@@ -26,13 +26,31 @@
 """
 
 
+from enum import IntEnum;
+
 from pyclustering.container.kdtree import kdtree;
 
 from pyclustering.cluster.encoder import type_encoding;
 
 from pyclustering.core.wrapper import ccore_library;
 
+from pyclustering.utils import get_argument;
+
 import pyclustering.core.dbscan_wrapper as wrapper;
+
+
+
+class dbscan_data_type(IntEnum):
+    """!
+    @brief Enumeration of DBSCAN input data types that is used for processing: points, adjacency matrix.
+
+    """
+
+    ## Input data is represented by points that are contained by array like container, for example, by list.
+    POINTS = 0;
+
+    ## Input data is represented by distance matrix between points.
+    DISTANCE_MATRIX = 1;
 
 
 class dbscan:
@@ -60,7 +78,7 @@ class dbscan:
     
     """
     
-    def __init__(self, data, eps, neighbors, ccore = True):
+    def __init__(self, data, eps, neighbors, ccore = True, **kwargs):
         """!
         @brief Constructor of clustering algorithm DBSCAN.
         
@@ -68,6 +86,10 @@ class dbscan:
         @param[in] eps (double): Connectivity radius between points, points may be connected if distance between them less then the radius.
         @param[in] neighbors (uint): minimum number of shared neighbors that is required for establish links between points.
         @param[in] ccore (bool): if True than DLL CCORE (C++ solution) will be used for solving the problem.
+        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'data_type').
+
+        Keyword Args:
+            data_type (dbscan_data_type): Data type of input sample 'data' that is processed by the algorithm (simple sequence of points or distance matrix).
         
         """
         
@@ -79,7 +101,9 @@ class dbscan:
         
         self.__visited = [False] * len(self.__pointer_data);
         self.__belong = [False] * len(self.__pointer_data);
-        
+
+        self.__data_type = get_argument('data_type', dbscan_data_type.POINTS, **kwargs);
+
         self.__clusters = [];
         self.__noise = [];
         
@@ -97,16 +121,18 @@ class dbscan:
         
         """
         
-        if (self.__ccore is True):
-            (self.__clusters, self.__noise) = wrapper.dbscan(self.__pointer_data, self.__eps, self.__neighbors, True);
+        if self.__ccore is True:
+            (self.__clusters, self.__noise) = wrapper.dbscan(self.__pointer_data, self.__eps, self.__neighbors, self.__data_type);
             
         else:
-            self.__kdtree = kdtree(self.__pointer_data, range(len(self.__pointer_data)));
+            if self.__data_type == dbscan_data_type.POINTS:
+                self.__kdtree = kdtree(self.__pointer_data, range(len(self.__pointer_data)));
+
             for i in range(0, len(self.__pointer_data)):
-                if (self.__visited[i] == False):
+                if self.__visited[i] is False:
                      
-                    cluster = self.__expand_cluster(i);    # Fast mode
-                    if (cluster != None):
+                    cluster = self.__expand_cluster(i);
+                    if cluster is not None:
                         self.__clusters.append(cluster);
                     else:
                         self.__noise.append(i);
@@ -158,38 +184,36 @@ class dbscan:
         return type_encoding.CLUSTER_INDEX_LIST_SEPARATION;
 
 
-    def __expand_cluster(self, point):
+    def __expand_cluster(self, index_point):
         """!
         @brief Expands cluster from specified point in the input data space.
         
-        @param[in] point (list): Index of a point from the data.
+        @param[in] index_point (list): Index of a point from the data.
 
         @return (list) Return tuple of list of indexes that belong to the same cluster and list of points that are marked as noise: (cluster, noise), or None if nothing has been expanded.
         
         """
         
         cluster = None;
-        self.__visited[point] = True;
-        neighbors = self.__neighbor_indexes(point);
+        self.__visited[index_point] = True;
+        neighbors = self.__neighbor_indexes(index_point);
          
-        if (len(neighbors) >=self.__neighbors):
+        if len(neighbors) >= self.__neighbors:
+            cluster = [ index_point ];
              
-            cluster = [];
-            cluster.append(point);
-             
-            self.__belong[point] = True;
+            self.__belong[index_point] = True;
              
             for i in neighbors:
-                if (self.__visited[i] == False):
+                if self.__visited[i] is False:
                     self.__visited[i] = True;
                     next_neighbors = self.__neighbor_indexes(i);
                      
-                    if (len(next_neighbors) >= self.__neighbors):
+                    if len(next_neighbors) >= self.__neighbors:
                         # if some node has less then minimal number of neighbors than we shouldn't look at them
                         # because maybe it's a noise.
                         neighbors += [k for k in next_neighbors if ( (k in neighbors) == False)];
                  
-                if (self.__belong[i] == False):
+                if self.__belong[i] is False:
                     cluster.append(i);
                     self.__belong[i] = True;
              
@@ -204,8 +228,12 @@ class dbscan:
         @return (list) Return list of indexes of neighbors in line the connectivity radius.
         
         """
-        
-        kdnodes = self.__kdtree.find_nearest_dist_nodes(self.__pointer_data[index_point], self.__eps);
-        return [node_tuple[1].payload for node_tuple in kdnodes if node_tuple[1].payload != index_point];
 
-        # return [i for i in range(0, len(self.__pointer_data)) if euclidean_distance_sqrt(self.__pointer_data[index_point], self.__pointer_data[i]) <= self.__sqrt_eps and (i != index_point) ]; # Fast mode
+        if self.__data_type == dbscan_data_type.POINTS:
+            kdnodes = self.__kdtree.find_nearest_dist_nodes(self.__pointer_data[index_point], self.__eps);
+            return [node_tuple[1].payload for node_tuple in kdnodes if node_tuple[1].payload != index_point];
+
+        else:
+            distances = self.__pointer_data[index_point];
+            return [ index_neighbor for index_neighbor in range(len(distances))
+                     if ( (distances[index_neighbor] <= self.__eps) and (index_neighbor != index_point) ) ];

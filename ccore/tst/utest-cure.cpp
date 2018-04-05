@@ -42,18 +42,18 @@ template_length_process_data(const std::shared_ptr<dataset> & p_data,
     solver.process(*p_data, output_result);
 
     const dataset & data = *p_data;
-    const cluster_sequence & actual_clusters = *(output_result.clusters());
+    const cluster_sequence & actual_clusters = output_result.clusters();
     ASSERT_CLUSTER_SIZES(data, actual_clusters, p_expected_cluster_length);
 
-    ASSERT_EQ(p_amount_clusters, output_result.representors()->size());
-    for (auto cluster_representors : *output_result.representors()) {
+    ASSERT_EQ(p_amount_clusters, output_result.representors().size());
+    for (auto cluster_representors : output_result.representors()) {
         ASSERT_TRUE(cluster_representors.size() > 0);
     }
 
     const size_t dimension = (*p_data)[0].size();
 
-    ASSERT_EQ(p_amount_clusters, output_result.means()->size());
-    for (auto cluster_mean : *output_result.means()) {
+    ASSERT_EQ(p_amount_clusters, output_result.means().size());
+    for (auto cluster_mean : output_result.means()) {
         ASSERT_EQ(dimension, cluster_mean.size());
     }
 }

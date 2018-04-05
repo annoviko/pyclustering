@@ -24,8 +24,10 @@
 """
 
 
+from pyclustering.tests.assertion import assertion;
+
 from pyclustering.cluster.encoder import type_encoding, cluster_encoder;
-from pyclustering.cluster.kmeans import kmeans;
+from pyclustering.cluster.kmeans import kmeans, kmeans_observer, kmeans_visualizer;
 
 from pyclustering.utils import read_sample;
 
@@ -41,42 +43,88 @@ class KmeansTestTemplates:
         kmeans_instance.process();
         
         clusters = kmeans_instance.get_clusters();
+        centers = kmeans_instance.get_centers();
     
         obtained_cluster_sizes = [len(cluster) for cluster in clusters];
-        assert len(sample) == sum(obtained_cluster_sizes);
+        assertion.eq(len(sample), sum(obtained_cluster_sizes));
+        
+        assertion.eq(len(clusters), len(centers));
+        for center in centers:
+            assertion.eq(len(sample[0]), len(center));
         
         if (expected_cluster_length != None):
             obtained_cluster_sizes.sort();
             expected_cluster_length.sort();
-            assert obtained_cluster_sizes == expected_cluster_length;
+            assertion.eq(obtained_cluster_sizes, expected_cluster_length);
 
 
     @staticmethod
     def templateClusterAllocationOneDimensionData(ccore_flag):
-        input_data = [ [random()] for i in range(10) ] + [ [random() + 3] for i in range(10) ] + [ [random() + 5] for i in range(10) ] + [ [random() + 8] for i in range(10) ];
+        input_data = [ [random()] for _ in range(10) ] + [ [random() + 3] for _ in range(10) ] + [ [random() + 5] for _ in range(10) ] + [ [random() + 8] for _ in range(10) ];
         
         kmeans_instance = kmeans(input_data, [ [0.0], [3.0], [5.0], [8.0] ], 0.025, ccore_flag);
         kmeans_instance.process();
         clusters = kmeans_instance.get_clusters();
         
-        assert len(clusters) == 4;
+        assertion.eq(4, len(clusters));
         for cluster in clusters:
-            assert len(cluster) == 10;
+            assertion.eq(10, len(cluster));
 
 
     @staticmethod
-    def templateEncoderProcedures(sample, initial_centers, number_clusters, ccore_flag):
-        sample = read_sample(sample);
+    def templateEncoderProcedures(filename, initial_centers, number_clusters, ccore_flag):
+        sample = read_sample(filename);
         
-        cure_instance = kmeans(sample, initial_centers, 0.025, ccore_flag);
-        cure_instance.process();
+        kmeans_instance = kmeans(sample, initial_centers, 0.025, ccore_flag);
+        kmeans_instance.process();
         
-        clusters = cure_instance.get_clusters();
-        encoding = cure_instance.get_cluster_encoding();
+        clusters = kmeans_instance.get_clusters();
+        encoding = kmeans_instance.get_cluster_encoding();
         
         encoder = cluster_encoder(encoding, clusters, sample);
         encoder.set_encoding(type_encoding.CLUSTER_INDEX_LABELING);
         encoder.set_encoding(type_encoding.CLUSTER_OBJECT_LIST_SEPARATION);
         encoder.set_encoding(type_encoding.CLUSTER_INDEX_LIST_SEPARATION);
         
-        assert number_clusters == len(clusters);
+        assertion.eq(number_clusters, len(clusters));
+
+
+    @staticmethod
+    def templateCollectEvolution(filename, initial_centers, number_clusters, ccore_flag):
+        sample = read_sample(filename);
+        
+        observer = kmeans_observer();
+        kmeans_instance = kmeans(sample, initial_centers, 0.025, ccore_flag, observer=observer);
+        kmeans_instance.process();
+        
+        assertion.le(1, len(observer));
+        for i in range(len(observer)):
+            assertion.le(1, len(observer.get_centers(i)));
+            for center in observer.get_centers(i):
+                assertion.eq(len(sample[0]), len(center));
+            
+            assertion.le(1, len(observer.get_clusters(i)));
+
+
+    @staticmethod
+    def templateShowClusteringResultNoFailure(filename, initial_centers, ccore_flag):
+        sample = read_sample(filename);
+
+        kmeans_instance = kmeans(sample, initial_centers, 0.025, ccore_flag);
+        kmeans_instance.process();
+
+        clusters = kmeans_instance.get_clusters();
+        centers = kmeans_instance.get_centers();
+
+        kmeans_visualizer.show_clusters(sample, clusters, centers, initial_centers);
+
+
+    @staticmethod
+    def templateAnimateClusteringResultNoFailure(filename, initial_centers, ccore_flag):
+        sample = read_sample(filename);
+
+        observer = kmeans_observer();
+        kmeans_instance = kmeans(sample, initial_centers, 0.025, ccore_flag, observer=observer);
+        kmeans_instance.process();
+
+        kmeans_visualizer.animate_cluster_allocation(sample, observer);

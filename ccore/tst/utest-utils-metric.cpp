@@ -18,20 +18,23 @@
 *
 */
 
-#include "interface/rock_interface.h"
 
-#include "cluster/rock.hpp"
+#include "gtest/gtest.h"
+
+#include "definitions.hpp"
+
+#include "utils/metric.hpp"
+
+#include "utenv_check.hpp"
 
 
-pyclustering_package * rock_algorithm(const pyclustering_package * const p_sample, const double p_radius, const size_t p_number_clusters, const double p_threshold) {
-    dataset input_dataset;
-    p_sample->extract(input_dataset);
+TEST(utest_metric, calculate_distance_matrix_01) {
+    dataset points = { {0}, {2}, {4} };
+    dataset distance_matrix;
 
-    ccore::clst::rock solver(p_radius, p_number_clusters, p_threshold);
+    ccore::utils::metric::distance_matrix(points, distance_matrix);
 
-    ccore::clst::rock_data output_result;
-    solver.process(input_dataset, output_result);
+    dataset distance_matrix_expected = { { 0.0, 2.0, 4.0 }, { 2.0, 0.0, 2.0 }, { 4.0, 2.0, 0.0 } };
 
-    pyclustering_package * package = create_package(&output_result.clusters());
-    return package;
+    ASSERT_EQ(distance_matrix, distance_matrix_expected);
 }

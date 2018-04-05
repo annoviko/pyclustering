@@ -52,14 +52,35 @@ class DbscanIntegrationTest(unittest.TestCase):
         DbscanTestTemplates.templateClusteringResults(FCPS_SAMPLES.SAMPLE_HEPTA, 1, 3, [30, 30, 30, 30, 30, 30, 32], True);
         DbscanTestTemplates.templateClusteringResults(FCPS_SAMPLES.SAMPLE_HEPTA, 5, 3, [212], True);
 
+    def testClusteringDistanceMatrixByCore(self):
+        DbscanTestTemplates.templateClusteringDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 0.4, 2, [5, 5], True);
+        DbscanTestTemplates.templateClusteringDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 10, 2, [10], True);
+        DbscanTestTemplates.templateClusteringDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 1, 2, [5, 8, 10], True);
+        DbscanTestTemplates.templateClusteringDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 5, 2, [23], True);
+        DbscanTestTemplates.templateClusteringDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 0.7, 3, [10, 10, 10, 30], True);
+        DbscanTestTemplates.templateClusteringDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 5, 3, [60], True);
+        DbscanTestTemplates.templateClusteringDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 0.7, 3, [15, 15, 15, 15, 15], True);
+        DbscanTestTemplates.templateClusteringDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 2, 3, [75], True);
+        DbscanTestTemplates.templateClusteringDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 0.7, 3, [15, 15, 15, 15], True);
+        DbscanTestTemplates.templateClusteringDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 10, 3, [60], True);
+
     def testClusteringTheSameData1ByCore(self):
         DbscanTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 1.0, 3, [10, 20], True);
+
+    def testClusteringTheSameData1DistanceMatrixByCore(self):
+        DbscanTestTemplates.templateClusteringDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 1.0, 3, [10, 20], True);
 
     def testClusteringTheSameData2ByCore(self):
         DbscanTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 1.0, 2, [5, 5, 5], True);
 
+    def testClusteringTheSameData2DistanceMatrixByCore(self):
+        DbscanTestTemplates.templateClusteringDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 1.0, 2, [5, 5, 5], True);
+
     def testClusteringSimple5WithoutNeighborsByCore(self):
         DbscanTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 0.7, 0, [15, 15, 15, 15], True);
+
+    def testClusteringSimple5WithoutNeighborsDistanceMatrixByCore(self):
+        DbscanTestTemplates.templateClusteringDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 0.7, 0, [15, 15, 15, 15], True);
 
 
     def testLengthProcessedByCore(self):
@@ -78,6 +99,9 @@ class DbscanIntegrationTest(unittest.TestCase):
 
     def testClusterAllocationOneDimensionDataByCore(self):
         DbscanTestTemplates.templateClusterAllocationOneDimensionData(True);
+
+    def testClusterAllocationOneDimensionDataDistanceMatrixByCore(self):
+        DbscanTestTemplates.templateClusterAllocationOneDimensionDistanceMatrix(True);
 
     def testCoreInterfaceIntInputData(self):
         dbscan_instance = dbscan([ [1], [2], [3], [20], [21], [22] ], 3, 2, True);

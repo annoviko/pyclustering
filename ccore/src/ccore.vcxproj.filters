@@ -202,6 +202,9 @@
     <ClCompile Include="interface\interface_property.cpp">
       <Filter>Source Files\interface</Filter>
     </ClCompile>
+    <ClCompile Include="cluster\kmeans_data.cpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cluster\agglomerative.hpp">

@@ -113,8 +113,44 @@ class KmeansUnitTest(unittest.TestCase):
         KmeansTestTemplates.templateClusterAllocationOneDimensionData(False);
 
 
+    def testObserveSampleSimple1(self):
+        KmeansTestTemplates.templateCollectEvolution(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.5, 5.6], [6.8, 7.4]], [5, 5], False);
+
+    def testObserveSampleSimple1OneCluster(self):
+        KmeansTestTemplates.templateCollectEvolution(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.3, 5.4]], [10], False);
+
+    def testObserveSampleSimple2(self):
+        KmeansTestTemplates.templateCollectEvolution(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [[3.4, 4.9], [6.8, 7.1], [7.6, 0.4]], [10, 5, 8], False);
+
+
     def testEncoderProcedureSampleSimple4(self):
         KmeansTestTemplates.templateEncoderProcedures(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, [[1.5, 0.0], [1.5, 2.0], [1.5, 4.0], [1.5, 6.0], [1.5, 8.0]], 5, False);
+
+
+    def testShowResultsSampleSimple01(self):
+        KmeansTestTemplates.templateShowClusteringResultNoFailure(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.5, 5.6], [6.8, 7.4]], False);
+
+    def testShowResultsSampleSimple02(self):
+        KmeansTestTemplates.templateShowClusteringResultNoFailure(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [[3.4, 4.9], [6.8, 7.1], [7.6, 0.4]], False);
+
+    def testShowResultsOneDimensionalData(self):
+        KmeansTestTemplates.templateShowClusteringResultNoFailure(SIMPLE_SAMPLES.SAMPLE_SIMPLE8, [[-2.0], [3.0], [6.0], [12.0]], False);
+
+    def testShowResultsThreeDimensionalData(self):
+        KmeansTestTemplates.templateShowClusteringResultNoFailure(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, [[1.0, 0.6, 0.8], [4.1, 4.2, 4.3]], False);
+
+
+    def testAnimateResultsSampleSimple01(self):
+        KmeansTestTemplates.templateAnimateClusteringResultNoFailure(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.5, 5.6], [6.8, 7.4]], False);
+
+    def testAnimateResultsSampleSimple02(self):
+        KmeansTestTemplates.templateAnimateClusteringResultNoFailure(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [[3.4, 4.9], [6.8, 7.1], [7.6, 0.4]], False);
+
+    def testAnimateResultsOneDimensionalData(self):
+        KmeansTestTemplates.templateAnimateClusteringResultNoFailure(SIMPLE_SAMPLES.SAMPLE_SIMPLE8, [[-2.0], [3.0], [6.0], [12.0]], False);
+
+    def testAnimateResultsThreeDimensionalData(self):
+        KmeansTestTemplates.templateAnimateClusteringResultNoFailure(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, [[1.0, 0.6, 0.8], [4.1, 4.2, 4.3]], False);
 
 
 if __name__ == "__main__":

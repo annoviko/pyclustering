@@ -32,7 +32,7 @@ pyclustering_package * agglomerative_algorithm(const pyclustering_package * cons
     ccore::clst::cluster_data result;
     algorithm.process(data, result);
 
-    pyclustering_package * package = create_package(result.clusters().get());
+    pyclustering_package * package = create_package(&result.clusters());
 
     return package;
 }

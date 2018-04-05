@@ -44,7 +44,7 @@ template_length_process_data(const std::shared_ptr<dataset> & data,
     xmeans_data output_result;
     solver.process(*data.get(), output_result);
 
-    cluster_sequence & results = *(output_result.clusters());
+    cluster_sequence & results = output_result.clusters();
 
     /* Check number of clusters */
     if (!expected_cluster_length.empty()) {
@@ -60,8 +60,8 @@ template_length_process_data(const std::shared_ptr<dataset> & data,
     }
 
     ASSERT_EQ(data->size(), total_size);
-    ASSERT_EQ(output_result.centers()->size(), output_result.clusters()->size());
-    ASSERT_GE(kmax, output_result.centers()->size());
+    ASSERT_EQ(output_result.centers().size(), output_result.clusters().size());
+    ASSERT_GE(kmax, output_result.centers().size());
 
     if (!expected_cluster_length.empty()) {
         std::sort(obtained_cluster_length.begin(), obtained_cluster_length.end());

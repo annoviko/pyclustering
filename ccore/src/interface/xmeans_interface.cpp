@@ -37,8 +37,8 @@ pyclustering_package * xmeans_algorithm(const pyclustering_package * const p_sam
     package->size = 2;   /* cluster package + center package */
     package->data = new pyclustering_package * [2];
 
-    ((pyclustering_package **) package->data)[0] = create_package(output_result.clusters().get());
-    ((pyclustering_package **) package->data)[1] = create_package(output_result.centers().get());
+    ((pyclustering_package **) package->data)[0] = create_package(&output_result.clusters());
+    ((pyclustering_package **) package->data)[1] = create_package(&output_result.centers());
 
     return package;
 }

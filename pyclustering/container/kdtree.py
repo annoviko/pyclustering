@@ -260,7 +260,7 @@ class kdtree:
                   pair (point, payload) is unique for each node, othewise the first found is removed.
         
         @param[in] point (list): Coordinates of the point of removed node.
-        @param[in] **kwargs: Arbitrary keyword arguments (payload).
+        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'payload').
         
         Keyword Args:
             payload (any): Payload of the node that should be removed.

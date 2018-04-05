@@ -362,6 +362,12 @@
     <ClCompile Include="..\src\cluster\kmeans_plus_plus.cpp">
       <Filter>Tested Code\cluster</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\cluster\kmeans_data.cpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClCompile>
+    <ClCompile Include="utest-utils-metric.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\tools\gtest\gtest.h">

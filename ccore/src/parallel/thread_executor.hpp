@@ -52,7 +52,7 @@ private:
 public:
     thread_executor(void) = default;
 
-    explicit thread_executor(const task_getter & p_getter, const task_notifier & p_reporter);
+    explicit thread_executor(const task_getter & p_getter, const task_notifier & p_notifier);
 
     thread_executor(const thread_executor & p_other) = delete;
 

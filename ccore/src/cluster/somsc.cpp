@@ -42,7 +42,7 @@ void somsc::process(const dataset & data, cluster_data & output_result) {
     som som_map(1, m_amount_clusters, som_conn_type::SOM_GRID_FOUR, params);
     som_map.train(data, m_epoch, true);
 
-    som_map.allocate_capture_objects((som_gain_sequence &) *(output_result.clusters()));
+    som_map.allocate_capture_objects((som_gain_sequence &) output_result.clusters());
 }
 
 

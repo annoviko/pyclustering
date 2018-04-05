@@ -47,7 +47,7 @@ using cluster_sequence_ptr = std::shared_ptr<cluster_sequence>;
 */
 class cluster_data {
 protected:
-    cluster_sequence_ptr    m_clusters;
+    cluster_sequence      m_clusters;
 
 public:
     /**
@@ -55,7 +55,7 @@ public:
     * @brief    Default constructor that creates empty clustering data.
     *
     */
-    cluster_data(void);
+    cluster_data(void) = default;
 
     /**
     *
@@ -64,7 +64,7 @@ public:
     * @param[in] p_other: another clustering data.
     *
     */
-    cluster_data(const cluster_data & p_other);
+    cluster_data(const cluster_data & p_other) = default;
 
     /**
     *
@@ -73,22 +73,29 @@ public:
     * @param[in] p_other: another clustering data.
     *
     */
-    cluster_data(cluster_data && p_other);
+    cluster_data(cluster_data && p_other) = default;
 
     /**
     *
     * @brief    Default destructor that destroy clustering data.
     *
     */
-    virtual ~cluster_data(void);
+    virtual ~cluster_data(void) = default;
 
 public:
     /**
     *
-    * @brief    Returns direct access to encapsulated clusters.
+    * @brief    Returns reference to clusters.
     *
     */
-    cluster_sequence_ptr clusters(void) const;
+    cluster_sequence & clusters(void);
+
+    /**
+    *
+    * @brief    Returns constant reference to clusters.
+    *
+    */
+    const cluster_sequence & clusters(void) const;
 
     /**
     *

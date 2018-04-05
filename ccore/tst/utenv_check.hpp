@@ -44,11 +44,13 @@ using namespace ccore::clst;
 * @param[in] p_data: data that has been processed.
 * @param[in] p_actual_clusters: allocated clusters.
 * @param[in] p_expected_cluster_length: expected clusters length - can be empty.
+* @param[in] p_indexes: specific object indexes that are used for clustering.
 *
 */
 void ASSERT_CLUSTER_SIZES(const dataset & p_data,
         const cluster_sequence & p_actual_clusters,
-        const std::vector<size_t> & p_expected_cluster_length);
+        const std::vector<size_t> & p_expected_cluster_length,
+        const index_sequence & p_indexes = { });
 
 
 template <typename EnsemblesType>

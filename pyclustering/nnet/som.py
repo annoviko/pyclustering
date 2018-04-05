@@ -122,32 +122,54 @@ class som:
     
     Example:
     @code
-        # sample for training
-        sample_train = read_sample(file_train_sample);
-        
-        # create self-organized feature map with size 5x5
-        network = som(5, 5, sample_train, 100);
-        
-        # train network
-        network.train();
-        
-        # simulate using another sample
-        sample = read_sample(file_sample);
-        index_winner = network.simulate(sample);
-        
-        # check what it is.
+        import random;
+
+        from pyclustering.utils import read_sample;
+
+        from pyclustering.nnet.som import som, type_conn, type_init, som_parameters;
+
+        from pyclustering.samples.definitions import FCPS_SAMPLES;
+
+        # read sample 'Lsun' from file
+        sample = read_sample(FCPS_SAMPLES.SAMPLE_LSUN);
+
+        # create SOM parameters
+        parameters = som_parameters();
+
+        # create self-organized feature map with size 7x7
+        rows = 10;  # five rows
+        cols = 10;  # five columns
+        structure = type_conn.grid_four;  # each neuron has max. four neighbors.
+        network = som(rows, cols, structure, parameters);
+
+        # train network on 'Lsun' sample during 100 epouchs.
+        network.train(sample, 100);
+
+        # simulate trained network using randomly modified point from input dataset.
+        index_point = random.randint(0, len(sample) - 1);
+        point = sample[index_point];  # obtain randomly point from data
+        point[0] += random.random() * 0.2;  # change randomly X-coordinate
+        point[1] += random.random() * 0.2;  # change randomly Y-coordinate
+        index_winner = network.simulate(point);
+
+        # check what are objects from input data are much close to randomly modified.
         index_similar_objects = network.capture_objects[index_winner];
-        
+
+        # neuron contains information of encoded objects
+        print("Point '%s' is similar to objects with indexes '%s'." % (str(point), str(index_similar_objects)));
+        print("Coordinates of similar objects:");
+        for index in index_similar_objects: print("\tPoint:", sample[index]);
+
         # result visualization:
         # show distance matrix (U-matrix).
         network.show_distance_matrix();
-        
+
         # show density matrix (P-matrix).
         network.show_density_matrix();
-        
+
         # show winner matrix.
         network.show_winner_matrix();
-        
+
         # show self-organized map.
         network.show_network();
     @endcode
@@ -161,6 +183,8 @@ class som:
     @property
     def size(self):
         """!
+        @brief Return size of self-organized map that is defined by total number of neurons.
+
         @return (uint) Size of self-organized map (number of neurons).
         
         """
@@ -173,6 +197,8 @@ class som:
     @property
     def weights(self):
         """!
+        @brief Return weight of each neuron.
+
         @return (list) Weights of each neuron.
         
         """
@@ -185,7 +211,11 @@ class som:
     @property
     def awards(self):
         """!
-        @return (list) Numbers of captured objects by each neuron.
+        @brief Return amount of captured objects by each neuron after training.
+
+        @return (list) Amount of captured objects by each neuron.
+
+        @see train()
         
         """
         
@@ -197,6 +227,11 @@ class som:
     @property
     def capture_objects(self):
         """!
+        @brief Returns indexes of captured objects by each neuron.
+        @details For example, network with size 2x2 has been trained on 5 sample, we neuron #1 has won one object with
+                  index '1', neuron #2 - objects with indexes '0', '3', '4', neuron #3 - nothing, neuron #4 - object
+                  with index '2'. Thus, output is [ [1], [0, 3, 4], [], [2] ].
+
         @return (list) Indexes of captured objects by each neuron.
         
         """
@@ -282,7 +317,9 @@ class som:
     
     def __len__(self):
         """!
-        @return (uint) Size of self-organized map (number of neurons).
+        @brief Returns size of the network that defines by amount of neuron in it.
+
+        @return (uint) Size of self-organized map (amount of neurons).
         
         """
         

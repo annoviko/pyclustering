@@ -40,7 +40,7 @@ const std::vector<size_t> & p_expected_cluster_length)
     solver.process(*p_data, output_result);
 
     const dataset & data = *p_data;
-    const cluster_sequence & actual_clusters = *(output_result.clusters());
+    const cluster_sequence & actual_clusters = output_result.clusters();
     ASSERT_CLUSTER_SIZES(data, actual_clusters, p_expected_cluster_length);
 }
 

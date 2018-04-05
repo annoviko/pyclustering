@@ -205,6 +205,10 @@ class Test(unittest.TestCase):
         utils.draw_image_mask_segments(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE01, clusters);
         utils.draw_image_color_segments(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE01, clusters);
 
+    def testCalculateMatrixDistance(self):
+        data = [ [0], [2], [4] ];
+        matrix = utils.calculate_distance_matrix(data);
+        assert matrix == [ [0.0, 2.0, 4.0], [2.0, 0.0, 2.0], [4.0, 2.0, 0.0] ];
 
 if __name__ == "__main__":
     unittest.main();

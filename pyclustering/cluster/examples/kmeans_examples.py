@@ -25,31 +25,29 @@
 
 import random;
 
-from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
+from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES, FAMOUS_SAMPLES;
 
-from pyclustering.cluster import cluster_visualizer;
-from pyclustering.cluster.kmeans import kmeans;
+from pyclustering.cluster.kmeans import kmeans, kmeans_observer, kmeans_visualizer;
 
 from pyclustering.utils import read_sample;
 from pyclustering.utils import timedcall;
 
 
-def template_clustering(start_centers, path, tolerance = 0.25, ccore = False):
+def template_clustering(start_centers, path, tolerance = 0.25, ccore = True):
     sample = read_sample(path);
     
-    kmeans_instance = kmeans(sample, start_centers, tolerance, ccore);
-    (ticks, result) = timedcall(kmeans_instance.process);
+    observer = kmeans_observer();
+    kmeans_instance = kmeans(sample, start_centers, tolerance, ccore, observer=observer);
+    (ticks, _) = timedcall(kmeans_instance.process);
     
     clusters = kmeans_instance.get_clusters();
     centers = kmeans_instance.get_centers();
     
     print("Sample: ", path, "\t\tExecution time: ", ticks, "\n");
 
-    visualizer = cluster_visualizer();
-    visualizer.append_clusters(clusters, sample);
-    visualizer.append_cluster(start_centers, marker = '*', markersize = 15);
-    visualizer.append_cluster(centers, marker = '*', markersize = 15);
-    visualizer.show();
+    kmeans_visualizer.show_clusters(sample, clusters, centers, start_centers);
+    kmeans_visualizer.animate_cluster_allocation(sample, observer);
+
 
 
 def cluster_sample1():
@@ -155,6 +153,7 @@ def performance_measure_random_points(ccore):
     clustering_random_points(5000, 5, ccore);
     clustering_random_points(10000, 5, ccore);
     clustering_random_points(20000, 5, ccore);
+
 
 cluster_sample1();
 cluster_sample2();

@@ -56,7 +56,7 @@ agglomerative::~agglomerative(void) { }
 
 void agglomerative::process(const dataset & data, cluster_data & result) {
     m_ptr_data = &data;
-    m_ptr_clusters = result.clusters().get();
+    m_ptr_clusters = &result.clusters();
 
     m_centers.clear();
     m_ptr_clusters->clear();

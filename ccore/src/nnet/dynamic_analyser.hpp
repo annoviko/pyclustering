@@ -49,7 +49,7 @@ private:
 public:
     spike(void) = default;
 
-    spike(const std::size_t m_begin, const std::size_t p_end);
+    spike(const std::size_t p_begin, const std::size_t p_end);
 
     spike(const spike & p_other) = default;
 

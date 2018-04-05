@@ -47,15 +47,21 @@ enum optics_package_indexer {
  * @brief   Clustering algorithm OPTICS returns allocated clusters, noise, ordering and proper connectivity radius.
  * @details Caller should destroy returned result in 'pyclustering_package'.
  *
- * @param[in] p_sample: input data for clustering.
+ * @param[in] p_sample: input data for clustering that is represented by points or distance matrix (see p_data_type argument).
  * @param[in] p_radius: connectivity radius between points, points may be connected if distance
  *             between them less then the radius.
  * @param[in] p_minumum_neighbors: minimum number of shared neighbors that is required for
  *             establish links between points.
+ * @param[in] p_amount_clusters: amount of clusters that should be allocated.
+ * @param[in] p_data_type: defines data type that is used for clustering process ('0' - points, '1' - distance matrix).
  *
  * @return  Returns result of clustering - array that consists of four general clustering results that are represented by arrays too:
  *          [ [allocated clusters], [noise], [ordering], [connectivity radius] ]. It is important to note that connectivity radius
  *          is also placed into array.
  *
  */
-extern "C" DECLARATION pyclustering_package * optics_algorithm(const pyclustering_package * const p_sample, const double p_radius, const size_t p_minumum_neighbors, const size_t p_amount_clusters);
+extern "C" DECLARATION pyclustering_package * optics_algorithm(const pyclustering_package * const p_sample, 
+                                                               const double p_radius, 
+                                                               const size_t p_minumum_neighbors, 
+                                                               const size_t p_amount_clusters,
+                                                               const size_t p_data_type);

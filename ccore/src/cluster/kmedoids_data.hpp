@@ -43,7 +43,7 @@ using medoid_sequence_ptr = std::shared_ptr<medoid_sequence>;
 */
 class kmedoids_data : public cluster_data {
 private:
-    medoid_sequence_ptr     m_medoids = std::make_shared<medoid_sequence>();
+    medoid_sequence     m_medoids = { };
 
 public:
     /**
@@ -84,7 +84,9 @@ public:
     * @brief    Returns shared pointer to medoids that corresponds to allocated clusters.
     *
     */
-    inline medoid_sequence_ptr medoids(void) { return m_medoids; }
+    medoid_sequence & medoids(void) { return m_medoids; }
+
+    const medoid_sequence & medoids(void) const { return m_medoids; }
 };
 
 

@@ -23,7 +23,11 @@
 #include "cluster/dbscan.hpp"
 
 
-pyclustering_package * dbscan_algorithm(const pyclustering_package * const sample, const double radius, const size_t minumum_neighbors) {
+pyclustering_package * dbscan_algorithm(const pyclustering_package * const sample, 
+                                        const double radius, 
+                                        const size_t minumum_neighbors,
+                                        const size_t p_data_type)
+{
     dataset input_dataset;
     sample->extract(input_dataset);
 
@@ -31,7 +35,7 @@ pyclustering_package * dbscan_algorithm(const pyclustering_package * const sampl
 
     ccore::clst::dbscan_data output_result;
 
-    solver.process(input_dataset, output_result);
+    solver.process(input_dataset, (ccore::clst::dbscan_data_type) p_data_type, output_result);
 
     pyclustering_package * package = new pyclustering_package(pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
     package->size = output_result.size() + 1;   /* the last for noise */
@@ -41,7 +45,7 @@ pyclustering_package * dbscan_algorithm(const pyclustering_package * const sampl
         ((pyclustering_package **) package->data)[i] = create_package(&output_result[i]);
     }
 
-    ((pyclustering_package **) package->data)[package->size - 1] = create_package(output_result.noise().get());
+    ((pyclustering_package **) package->data)[package->size - 1] = create_package(&output_result.noise());
 
     return package;
 }

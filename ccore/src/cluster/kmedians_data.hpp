@@ -42,7 +42,7 @@ namespace clst {
 */
 class kmedians_data : public cluster_data {
 private:
-    dataset_ptr       m_medians = std::make_shared<dataset>();
+    dataset       m_medians = { };
 
 public:
     /**
@@ -80,10 +80,17 @@ public:
 public:
     /**
     *
-    * @brief    Returns shared pointer to medians that correspond to allocated clusters.
+    * @brief    Returns reference to medians that correspond to allocated clusters.
     *
     */
-    inline dataset_ptr medians(void) { return m_medians; }
+    dataset & medians(void) { return m_medians; }
+
+    /**
+    *
+    * @brief    Returns constant reference to medians that correspond to allocated clusters.
+    *
+    */
+    const dataset & medians(void) const { return m_medians; }
 };
 
 

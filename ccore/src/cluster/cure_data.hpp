@@ -47,9 +47,9 @@ using representor_sequence_ptr = std::shared_ptr<representor_sequence>;
 */
 class cure_data : public cluster_data {
 private:
-    representor_sequence_ptr    m_representative_sequence = std::make_shared<representor_sequence>();
+    representor_sequence       m_representative_sequence = { };
 
-    dataset_ptr                 m_mean_sequence = std::make_shared<dataset>();
+    dataset                    m_mean_sequence = { };
 
 public:
     /**
@@ -87,7 +87,7 @@ public:
 public:
     /**
     *
-    * @brief    Returns shared pointer to representative points of each cluster.
+    * @brief    Returns reference to representative points of each cluster.
     * @details  Cluster index should be used to navigate in collections of representative points.
     *           An example of representative points of two clusters:
     *           { {{ 1.0, 2.0 }, { 3.4, 4.0 }}, {{ 7.5, 6.3 }, { -1.4, -4.7 }} }
@@ -97,11 +97,18 @@ public:
     * @return   Shared pointer to representative points of each cluster.
     *
     */
-    inline representor_sequence_ptr representors(void) { return m_representative_sequence; }
+    representor_sequence & representors(void) { return m_representative_sequence; }
 
     /**
     *
-    * @brief    Returns shared pointer to mean point of each cluster.
+    * @brief    Returns constant reference to representative points of each cluster.
+    *
+    */
+    const representor_sequence & representors(void) const { return m_representative_sequence; }
+
+    /**
+    *
+    * @brief    Returns reference to mean point of each cluster.
     * @details  Cluster index should be used to navigate in collections of mean points.
     *           An example of mean points of three clusters: { { 1.0, 2.0 }, { 3.4, 4.0 }, { 7.0, 9.1 } }
     *           where { 1.0, 2.0 } is mean of the first cluster, { 3.4, 4.0 } - mean of the second and
@@ -110,7 +117,14 @@ public:
     * @return   Shared pointer to mean point of each cluster.
     *
     */
-    inline dataset_ptr means(void) { return m_mean_sequence; }
+    dataset & means(void) { return m_mean_sequence; }
+
+    /**
+    *
+    * @brief    Returns constant reference to mean point of each cluster.
+    *
+    */
+    const dataset & means(void) const { return m_mean_sequence; }
 };
 
 

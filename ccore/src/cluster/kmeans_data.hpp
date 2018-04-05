@@ -42,7 +42,12 @@ namespace clst {
 */
 class kmeans_data : public cluster_data {
 private:
-    dataset_ptr       m_centers = std::make_shared<dataset>();
+    dataset       m_centers   = { };
+
+    bool          m_observed  = false;
+
+    std::vector<dataset> m_evolution_centers            = { };
+    std::vector<cluster_sequence> m_evolution_clusters  = { };
 
 public:
     /**
@@ -51,6 +56,15 @@ public:
     *
     */
     kmeans_data(void) = default;
+
+    /**
+    *
+    * @brief    Constructor that provides flag to specify that clusters and centers changes are stored on each step.
+    *
+    * @param[in] p_iteration_observe: if 'true' then cluster and centers changes on each iteration are collected.
+    *
+    */
+    kmeans_data(const bool p_iteration_observe);
 
     /**
     *
@@ -80,10 +94,54 @@ public:
 public:
     /**
     *
-    * @brief    Returns shared pointer to centers that correspond to allocated clusters.
+    * @brief    Returns reference to centers that correspond to allocated clusters.
     *
     */
-    inline dataset_ptr centers(void) { return m_centers; }
+    dataset & centers(void) { return m_centers; }
+
+    /**
+    *
+    * @brief    Returns constant reference to centers that correspond to allocated clusters.
+    *
+    */
+    const dataset & centers(void) const { return m_centers; };
+
+    /**
+    *
+    * @brief    Returns 'true' if clusters and centers are collected during process of clustering.
+    *
+    */
+    bool is_observed(void) const { return m_observed; }
+
+    /**
+    *
+    * @brief    Returns reference to evolution of centers.
+    * @details  The evolution does not contain initial centers.
+    *
+    */
+    std::vector<dataset> & evolution_centers(void) { return m_evolution_centers; }
+
+    /**
+    *
+    * @brief    Returns constant reference to evolution of centers.
+    * @details  The evolution does not contain initial centers.
+    *
+    */
+    const std::vector<dataset> & evolution_centers(void) const { return m_evolution_centers; }
+
+    /**
+    *
+    * @brief    Returns reference to evolution of clusters.
+    *
+    */
+    std::vector<cluster_sequence> & evolution_clusters(void) { return m_evolution_clusters; }
+
+    /**
+    *
+    * @brief    Returns constant reference to evolution of clusters.
+    *
+    */
+    const std::vector<cluster_sequence> & evolution_clusters(void) const { return m_evolution_clusters; }
 };
 
 

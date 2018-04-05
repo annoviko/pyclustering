@@ -44,7 +44,7 @@ void cure_data_destroy(void * pointer_cure_data) {
 pyclustering_package * cure_get_clusters(void * pointer_cure_data) {
     ccore::clst::cure_data & output_result = (ccore::clst::cure_data &) *((ccore::clst::cure_data *)pointer_cure_data);
 
-    pyclustering_package * package = create_package(output_result.clusters().get());
+    pyclustering_package * package = create_package(&output_result.clusters());
     return package;
 }
 
@@ -52,7 +52,7 @@ pyclustering_package * cure_get_clusters(void * pointer_cure_data) {
 pyclustering_package * cure_get_representors(void * pointer_cure_data) {
     ccore::clst::cure_data & output_result = (ccore::clst::cure_data &) *((ccore::clst::cure_data *)pointer_cure_data);
 
-    pyclustering_package * package = create_package(output_result.representors().get());
+    pyclustering_package * package = create_package(&output_result.representors());
     return package;
 }
 
@@ -60,6 +60,6 @@ pyclustering_package * cure_get_representors(void * pointer_cure_data) {
 pyclustering_package * cure_get_means(void * pointer_cure_data) {
     ccore::clst::cure_data & output_result = (ccore::clst::cure_data &) *((ccore::clst::cure_data *)pointer_cure_data);
 
-    pyclustering_package * package = create_package(output_result.means().get());
+    pyclustering_package * package = create_package(&output_result.means());
     return package;
 }

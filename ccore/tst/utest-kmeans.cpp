@@ -31,16 +31,17 @@ using namespace ccore::clst;
 
 
 static void
-template_kmeans_length_process_data_range(const dataset_ptr & p_data,
+template_kmeans_length_process_data_common(const dataset_ptr & p_data,
     const dataset & p_start_centers,
     const std::vector<size_t> & p_expected_cluster_length,
     const index_sequence & p_indexes,
-    const std::size_t parallel_processing_trigger = kmeans::DEFAULT_DATA_SIZE_PARALLEL_PROCESSING)
+    const bool p_observe,
+    const std::size_t p_parallel_processing_trigger)
 {
-    kmeans_data output_result;
+    kmeans_data output_result(p_observe);
     kmeans solver(p_start_centers, 0.0001);
 
-    solver.set_parallel_processing_trigger(parallel_processing_trigger);
+    solver.set_parallel_processing_trigger(p_parallel_processing_trigger);
 
     if (p_indexes.empty()) {
         solver.process(*p_data, output_result);
@@ -51,16 +52,37 @@ template_kmeans_length_process_data_range(const dataset_ptr & p_data,
 
     const dataset & data = *p_data;
     const std::size_t dimension = data[0].size();
-    const cluster_sequence & actual_clusters = *(output_result.clusters());
-    const dataset & centers = *(output_result.centers());
+    const cluster_sequence & actual_clusters = output_result.clusters();
+    const dataset & centers = output_result.centers();
 
-    ASSERT_CLUSTER_SIZES(data, actual_clusters, p_expected_cluster_length);
+    ASSERT_CLUSTER_SIZES(data, actual_clusters, p_expected_cluster_length, p_indexes);
 
     for (auto center : centers) {
         ASSERT_EQ(dimension, center.size());
     }
 
     ASSERT_EQ(centers.size(), actual_clusters.size());
+
+    ASSERT_EQ(p_observe, output_result.is_observed());
+    if (output_result.is_observed()) {
+        ASSERT_LE(1U, output_result.evolution_centers().size());
+        ASSERT_LE(1U, output_result.evolution_clusters().size());
+
+        for (auto & cluster : output_result.evolution_clusters()) {
+            ASSERT_CLUSTER_SIZES(data, cluster, { }, p_indexes);
+        }
+    }
+}
+
+
+static void
+template_kmeans_length_process_data_range(const dataset_ptr & p_data,
+    const dataset & p_start_centers,
+    const std::vector<size_t> & p_expected_cluster_length,
+    const index_sequence & p_indexes,
+    const std::size_t p_parallel_processing_trigger = kmeans::DEFAULT_DATA_SIZE_PARALLEL_PROCESSING)
+{
+    template_kmeans_length_process_data_common(p_data, p_start_centers, p_expected_cluster_length, p_indexes, false, p_parallel_processing_trigger);
 }
 
 
@@ -71,6 +93,16 @@ template_kmeans_length_process_data(const dataset_ptr & p_data,
     const std::size_t parallel_processing_trigger = kmeans::DEFAULT_DATA_SIZE_PARALLEL_PROCESSING)
 {
     template_kmeans_length_process_data_range(p_data, p_start_centers, p_expected_cluster_length, { }, parallel_processing_trigger);
+}
+
+
+static void
+template_kmeans_observer(const dataset_ptr & p_data,
+    const dataset & p_start_centers,
+    const index_sequence & p_indexes,
+    const std::vector<size_t> & p_expected_cluster_length)
+{
+    template_kmeans_length_process_data_common(p_data, p_start_centers, p_expected_cluster_length, p_indexes, true, kmeans::DEFAULT_DATA_SIZE_PARALLEL_PROCESSING);
 }
 
 
@@ -180,4 +212,33 @@ TEST(utest_kmeans, parallel_processing_sample_simple_02) {
     dataset start_centers = { { 3.5, 4.8 },{ 6.9, 7.0 },{ 7.5, 0.5 } };
     std::vector<size_t> expected_clusters_length = { 10, 5, 8 };
     template_kmeans_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02), start_centers, expected_clusters_length, 0);
+}
+
+
+TEST(utest_kmeans, collect_evolution_sample_simple_01) {
+    dataset start_centers = { { 3.7, 5.5 },{ 6.7, 7.5 } };
+    std::vector<size_t> expected_clusters_length = { 5, 5 };
+    template_kmeans_observer(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_centers, { }, expected_clusters_length);
+}
+
+
+TEST(utest_kmeans, collect_evolution_sample_simple_01_one_cluster) {
+    dataset start_centers = { { 1.0, 2.5 } };
+    std::vector<size_t> expected_clusters_length = { 10 };
+    template_kmeans_observer(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_centers, { }, expected_clusters_length);
+}
+
+
+TEST(utest_kmeans, collect_evolution_sample_simple_01_range) {
+    dataset start_centers = { { 3.7, 5.5 },{ 6.7, 7.5 } };
+    std::vector<size_t> expected_clusters_length = { 3, 3 };
+    index_sequence range = { 0, 1, 2, 5, 6, 7 };
+    template_kmeans_observer(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_centers, range, expected_clusters_length);
+}
+
+
+TEST(utest_kmeans, collect_evolution_sample_simple_02) {
+    dataset start_centers = { { 3.5, 4.8 },{ 6.9, 7.0 },{ 7.5, 0.5 } };
+    std::vector<size_t> expected_clusters_length = { 10, 5, 8 };
+    template_kmeans_observer(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02), start_centers, { }, expected_clusters_length);
 }

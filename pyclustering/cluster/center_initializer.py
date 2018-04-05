@@ -256,9 +256,9 @@ class kmeans_plusplus_initializer:
                     break;
 
             if index_best_candidate == -1:
-                index_best_candidate = index_object;
+                index_best_candidate = index_candidate;
             elif distances[index_best_candidate] < distances[index_object]:
-                index_best_candidate = index_object;
+                index_best_candidate = index_candidate;
 
         return index_best_candidate;
 

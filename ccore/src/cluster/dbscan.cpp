@@ -21,6 +21,8 @@
 
 #include "cluster/dbscan.hpp"
 
+#include <string>
+
 
 namespace ccore {
 
@@ -39,9 +41,17 @@ dbscan::dbscan(const double p_radius_connectivity, const size_t p_minimum_neighb
 
 
 void dbscan::process(const dataset & p_data, cluster_data & p_result) {
-    m_data_ptr = &p_data;
+    process(p_data, dbscan_data_type::POINTS, p_result);
+}
 
-    create_kdtree(*m_data_ptr);
+
+void dbscan::process(const dataset & p_data, const dbscan_data_type p_type, cluster_data & p_result) {
+    m_data_ptr  = &p_data;
+    m_type      = p_type;
+
+    if (m_type == dbscan_data_type::POINTS) {
+        create_kdtree(*m_data_ptr);
+    }
 
     m_visited = std::vector<bool>(m_data_ptr->size(), false);
     m_belong = std::vector<bool>(m_data_ptr->size(), false);
@@ -98,10 +108,10 @@ void dbscan::process(const dataset & p_data, cluster_data & p_result) {
         }
 
         if (allocated_cluster.empty() != true) {
-            m_result_ptr->clusters()->push_back(allocated_cluster);
+            m_result_ptr->clusters().push_back(allocated_cluster);
         }
         else {
-            m_result_ptr->noise()->push_back(i);
+            m_result_ptr->noise().push_back(i);
             m_belong[i] = true;
         }
     }
@@ -112,12 +122,39 @@ void dbscan::process(const dataset & p_data, cluster_data & p_result) {
 
 
 void dbscan::get_neighbors(const size_t p_index, std::vector<size_t> & p_neighbors) {
+    switch(m_type) {
+    case dbscan_data_type::POINTS:
+        get_neighbors_from_points(p_index, p_neighbors);
+        break;
+
+    case dbscan_data_type::DISTANCE_MATRIX:
+        get_neighbors_from_distance_matrix(p_index, p_neighbors);
+        break;
+
+    default:
+        throw std::invalid_argument("Incorrect input data type is specified '" + std::to_string((unsigned) m_type) + "'");
+    }
+}
+
+
+void dbscan::get_neighbors_from_points(const size_t p_index, std::vector<size_t> & p_neighbors) {
     container::kdtree_searcher searcher((*m_data_ptr)[p_index], m_kdtree.get_root(), m_initial_radius);
     searcher.find_nearest([&p_index, &p_neighbors](const container::kdnode::ptr & node, const double distance) {
             if (p_index != (std::size_t) node->get_payload()) {
                 p_neighbors.push_back((std::size_t) node->get_payload());
             }
         });
+}
+
+
+void dbscan::get_neighbors_from_distance_matrix(const size_t p_index, std::vector<size_t> & p_neighbors) {
+    const auto & distances = m_data_ptr->at(p_index);
+    for (std::size_t index_neighbor = 0; index_neighbor < distances.size(); index_neighbor++) {
+        const double candidate_distance = distances[index_neighbor];
+        if ( (candidate_distance <= m_initial_radius) && (index_neighbor != p_index) ) {
+            p_neighbors.push_back(index_neighbor);
+        }
+    }
 }
 
 
