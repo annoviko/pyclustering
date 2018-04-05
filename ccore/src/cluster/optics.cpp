@@ -23,6 +23,7 @@
 #include <algorithm>
 #include <cmath>
 #include <limits>
+#include <string>
 
 #include "ordering_analyser.hpp"
 
@@ -64,8 +65,14 @@ optics::optics(const double p_radius, const std::size_t p_neighbors, const std::
 
 
 void optics::process(const dataset & p_data, cluster_data & p_result) {
-    m_data_ptr = &p_data;
-    m_result_ptr = (optics_data *) &p_result;
+    process(p_data, optics_data_type::POINTS, p_result);
+}
+
+
+void optics::process(const dataset & p_data, const optics_data_type p_type, cluster_data & p_result) {
+    m_data_ptr    = &p_data;
+    m_result_ptr  = (optics_data *) &p_result;
+    m_type        = p_type;
 
     calculate_cluster_result();
 
@@ -80,8 +87,8 @@ void optics::process(const dataset & p_data, cluster_data & p_result) {
 
     m_result_ptr->set_radius(m_radius);
 
-    m_data_ptr = nullptr;
-    m_result_ptr = nullptr;
+    m_data_ptr    = nullptr;
+    m_result_ptr  = nullptr;
 }
 
 
@@ -93,7 +100,9 @@ void optics::calculate_cluster_result(void) {
 
 
 void optics::initialize(void) {
-    create_kdtree();
+    if (m_type == optics_data_type::POINTS) {
+        create_kdtree();
+    }
 
     if (m_optics_objects.empty()) {
         m_optics_objects.reserve(m_data_ptr->size());
@@ -169,8 +178,8 @@ void optics::expand_cluster_order(optics_descriptor & p_object) {
 }
 
 
-void optics::update_order_seed(const optics_descriptor & p_object, const std::vector< std::tuple<std::size_t, double> > & neighbors, std::list<optics_descriptor *> & order_seed) {
-    for (auto & descriptor : neighbors) {
+void optics::update_order_seed(const optics_descriptor & p_object, const neighbors_collection & p_neighbors, std::list<optics_descriptor *> & order_seed) {
+    for (auto & descriptor : p_neighbors) {
         std::size_t index_neighbor = std::get<0>(descriptor);
         double current_reachability_distance = std::get<1>(descriptor);
 
@@ -224,7 +233,23 @@ void optics::extract_clusters(void) {
 }
 
 
-void optics::get_neighbors(const size_t p_index, std::vector< std::tuple<std::size_t, double> > & p_neighbors) {
+void optics::get_neighbors(const size_t p_index, neighbors_collection & p_neighbors) {
+    switch(m_type) {
+    case optics_data_type::POINTS:
+        get_neighbors_from_points(p_index, p_neighbors);
+        break;
+
+    case optics_data_type::DISTANCE_MATRIX:
+        get_neighbors_from_distance_matrix(p_index, p_neighbors);
+        break;
+
+    default:
+        throw std::invalid_argument("Incorrect input data type is specified '" + std::to_string((unsigned) m_type) + "'");
+    }
+}
+
+
+void optics::get_neighbors_from_points(const std::size_t p_index, neighbors_collection & p_neighbors) {
     p_neighbors.clear();
 
     container::kdtree_searcher searcher((*m_data_ptr)[p_index], m_kdtree.get_root(), m_radius);
@@ -236,6 +261,19 @@ void optics::get_neighbors(const size_t p_index, std::vector< std::tuple<std::si
         };
 
     searcher.find_nearest(rule);
+}
+
+
+void optics::get_neighbors_from_distance_matrix(const std::size_t p_index, neighbors_collection & p_neighbors) {
+    p_neighbors.clear();
+
+    const auto & distances = m_data_ptr->at(p_index);
+    for (std::size_t index_neighbor = 0; index_neighbor < distances.size(); index_neighbor++) {
+        const double candidate_distance = distances[index_neighbor];
+        if ( (candidate_distance <= m_radius) && (index_neighbor != p_index) ) {
+            p_neighbors.push_back(std::make_tuple(index_neighbor, candidate_distance));
+        }
+    }
 }
 
 

@@ -18,21 +18,23 @@
 *
 */
 
+
 #include "gtest/gtest.h"
 
-#include "interface/optics_interface.h"
-#include "interface/pyclustering_package.hpp"
+#include "definitions.hpp"
 
-#include "utenv_utils.hpp"
+#include "utils/metric.hpp"
 
-#include <memory>
+#include "utenv_check.hpp"
 
 
-TEST(utest_interface_dbscan, optics_algorithm) {
-    std::shared_ptr<pyclustering_package> sample = pack(dataset({ { 1.0, 1.0 }, { 1.1, 1.0 }, { 1.2, 1.4 }, { 10.0, 10.3 }, { 10.1, 10.2 }, { 10.2, 10.4 } }));
+TEST(utest_metric, calculate_distance_matrix_01) {
+    dataset points = { {0}, {2}, {4} };
+    dataset distance_matrix;
 
-    pyclustering_package * result = optics_algorithm(sample.get(), 4, 2, 2, 0);
-    ASSERT_EQ((std::size_t) OPTICS_PACKAGE_SIZE, result->size);
+    ccore::utils::metric::distance_matrix(points, distance_matrix);
 
-    delete result;
+    dataset distance_matrix_expected = { { 0.0, 2.0, 4.0 }, { 2.0, 0.0, 2.0 }, { 4.0, 2.0, 0.0 } };
+
+    ASSERT_EQ(distance_matrix, distance_matrix_expected);
 }

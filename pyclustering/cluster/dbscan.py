@@ -26,7 +26,7 @@
 """
 
 
-from enum import Enum;
+from enum import IntEnum;
 
 from pyclustering.container.kdtree import kdtree;
 
@@ -40,7 +40,7 @@ import pyclustering.core.dbscan_wrapper as wrapper;
 
 
 
-class dbscan_data_type(Enum):
+class dbscan_data_type(IntEnum):
     """!
     @brief Enumeration of DBSCAN input data types that is used for processing: points, adjacency matrix.
 
@@ -122,7 +122,7 @@ class dbscan:
         """
         
         if self.__ccore is True:
-            (self.__clusters, self.__noise) = wrapper.dbscan(self.__pointer_data, self.__eps, self.__neighbors, True);
+            (self.__clusters, self.__noise) = wrapper.dbscan(self.__pointer_data, self.__eps, self.__neighbors, self.__data_type);
             
         else:
             if self.__data_type == dbscan_data_type.POINTS:

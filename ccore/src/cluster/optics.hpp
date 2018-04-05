@@ -38,6 +38,17 @@ namespace clst {
 
 /**
  *
+ * @brief Enumeration of input data type that are processed by OPTICS algorithm.
+ *
+ */
+enum class optics_data_type {
+    POINTS,
+    DISTANCE_MATRIX
+};
+
+
+/**
+ *
  * @brief Object description that used by OPTICS algorithm for cluster analysis.
  *
  */
@@ -113,6 +124,9 @@ public:
     static const double NONE_DISTANCE;
 
 private:
+    using neighbors_collection = std::vector< std::tuple<std::size_t, double> >;
+
+private:
     const dataset       * m_data_ptr        = nullptr;
 
     optics_data         * m_result_ptr      = nullptr;
@@ -122,6 +136,8 @@ private:
     std::size_t         m_neighbors         = 0;
 
     std::size_t         m_amount_clusters   = 0;
+
+    optics_data_type    m_type              = optics_data_type::POINTS;
 
     container::kdtree   m_kdtree            = container::kdtree();
 
@@ -193,6 +209,19 @@ public:
     */
     virtual void process(const dataset & p_data, cluster_data & p_result) override;
 
+    /**
+    *
+    * @brief    Performs cluster analysis of specific input data (points or distance matrix) that is defined by the
+    *            'p_type' argument.
+    *
+    * @param[in]  p_data: input data for cluster analysis.
+    * @param[in]  p_type: type of input data (points or distance matrix).
+    * @param[out] p_result: clustering result of an input data (consists of allocated clusters,
+    *              cluster-ordering, noise and proper connectivity radius).
+    *
+    */
+    virtual void process(const dataset & p_data, const optics_data_type p_type, cluster_data & p_result);
+
 private:
     void initialize(void);
 
@@ -202,9 +231,13 @@ private:
 
     void extract_clusters(void);
 
-    void get_neighbors(const std::size_t p_index, std::vector< std::tuple<std::size_t, double> > & p_neighbors);
+    void get_neighbors(const std::size_t p_index, neighbors_collection & p_neighbors);
 
-    void update_order_seed(const optics_descriptor & p_object, const std::vector< std::tuple<std::size_t, double> > & neighbors, std::list<optics_descriptor *> & order_seed);
+    void get_neighbors_from_points(const std::size_t p_index, neighbors_collection & p_neighbors);
+
+    void get_neighbors_from_distance_matrix(const std::size_t p_index, neighbors_collection & p_neighbors);
+
+    void update_order_seed(const optics_descriptor & p_object, const neighbors_collection & neighbors, std::list<optics_descriptor *> & order_seed);
 
     void calculate_ordering(void);
 

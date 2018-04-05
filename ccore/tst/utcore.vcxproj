@@ -196,6 +196,7 @@
     <ClCompile Include="utest-syncpr.cpp" />
     <ClCompile Include="utenv_utils.cpp" />
     <ClCompile Include="utest-thread_pool.cpp" />
+    <ClCompile Include="utest-utils-metric.cpp" />
     <ClCompile Include="utest-xmeans.cpp" />
   </ItemGroup>
   <ItemGroup>

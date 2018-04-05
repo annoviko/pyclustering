@@ -35,6 +35,12 @@ namespace ccore {
 namespace clst {
 
 
+enum class dbscan_data_type {
+    POINTS,
+    DISTANCE_MATRIX
+};
+
+
 /**
 *
 * @brief    Represents DBSCAN clustering algorithm for cluster analysis.
@@ -56,6 +62,8 @@ private:
     double              m_radius          = 0.0;    /* square of the original radius to improve performance */
 
     size_t              m_neighbors       = 0;
+
+    dbscan_data_type    m_type            = dbscan_data_type::POINTS;
 
     container::kdtree   m_kdtree          = container::kdtree();
 
@@ -91,11 +99,22 @@ public:
     *
     * @brief    Performs cluster analysis of an input data.
     *
-    * @param[in]  p_data: input data for cluster analysis.
+    * @param[in]  p_data: input data (points) for cluster analysis.
     * @param[out] p_result: clustering result of an input data.
     *
     */
     virtual void process(const dataset & p_data, cluster_data & p_result);
+
+    /**
+    *
+    * @brief    Performs cluster analysis of an input data of specific type.
+    *
+    * @param[in]  p_data: input data for cluster analysis.
+    * @param[in]  p_type: type of an input data that should be processed.
+    * @param[out] p_result: clustering result of an input data.
+    *
+    */
+    virtual void process(const dataset & p_data, const dbscan_data_type p_type, cluster_data & p_result);
 
 private:
     /**
@@ -108,6 +127,9 @@ private:
     */
     void get_neighbors(const size_t p_index, std::vector<size_t> & p_neighbors);
 
+    void get_neighbors_from_points(const size_t p_index, std::vector<size_t> & p_neighbors);
+
+    void get_neighbors_from_distance_matrix(const size_t p_index, std::vector<size_t> & p_neighbors);
 
     void create_kdtree(const dataset & p_data);
 };

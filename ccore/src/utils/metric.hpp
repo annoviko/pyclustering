@@ -135,6 +135,30 @@ double manhattan_distance(const TypeContainer & point1, const TypeContainer & po
 
 /**
  *
+ * @brief   Calculates distance matrix using points container.
+ *
+ * @param[in]  p_points: input data that is represented by points.
+ * @param[out] p_distance_matrix: output distance matrix of points.
+ *
+ */
+template <typename TypeContainer>
+void distance_matrix(const TypeContainer & p_points, TypeContainer & p_distance_matrix) {
+    using TypeElement = typename TypeContainer::value_type;
+    
+    p_distance_matrix = TypeContainer(p_points.size(), TypeElement(p_points.size(), 0.0));
+
+    for (std::size_t i = 0; i < p_points.size(); i++) {
+        for (std::size_t j = i + 1; j < p_points.size(); j++) {
+            const double distance = euclidean_distance(p_points.at(i), p_points.at(j));
+            p_distance_matrix[i][j] = distance;
+            p_distance_matrix[j][i] = distance;
+        }
+    }
+}
+
+
+/**
+ *
  * @brief   Returns average distance for establish links between specified number of neighbors.
  *
  * @param[in] points:    Input data.

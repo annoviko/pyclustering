@@ -30,7 +30,7 @@ import math;
 
 import matplotlib.pyplot as plt;
 
-from enum import Enum;
+from enum import IntEnum;
 
 from pyclustering.container.kdtree import kdtree;
 
@@ -44,7 +44,7 @@ from pyclustering.core.wrapper import ccore_library;
 import pyclustering.core.optics_wrapper as wrapper;
 
 
-class optics_data_type(Enum):
+class optics_data_type(IntEnum):
     """!
     @brief Enumeration of OPTICS input data types that is used for processing: points, adjacency matrix.
 
@@ -400,8 +400,8 @@ class optics:
         
         """
         
-        if (self.__ccore is True):
-            (self.__clusters, self.__noise, self.__ordering, self.__eps) = wrapper.optics(self.__sample_pointer, self.__eps, self.__minpts, self.__amount_clusters);
+        if self.__ccore is True:
+            (self.__clusters, self.__noise, self.__ordering, self.__eps) = wrapper.optics(self.__sample_pointer, self.__eps, self.__minpts, self.__amount_clusters, self.__data_type);
         
         else:
             if self.__data_type == optics_data_type.POINTS:
@@ -412,7 +412,7 @@ class optics:
             if ( (self.__amount_clusters is not None) and (self.__amount_clusters != len(self.get_clusters())) ):
                 analyser = ordering_analyser(self.get_ordering());
                 radius, _ = analyser.calculate_connvectivity_radius(self.__amount_clusters);
-                if (radius is not None):
+                if radius is not None:
                     self.__eps = radius;
                     self.__allocate_clusters();
 
@@ -440,7 +440,7 @@ class optics:
         self.__initialize(self.__sample_pointer);
         
         for optic_object in self.__optics_objects:
-            if (optic_object.processed is False):
+            if optic_object.processed is False:
                 self.__expand_cluster_order(optic_object);
         
         self.__extract_clusters();
