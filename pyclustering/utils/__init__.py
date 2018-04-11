@@ -34,6 +34,8 @@ from mpl_toolkits.mplot3d import Axes3D;
 
 from sys import platform as _platform;
 
+from pyclustering.utils.metric import calculate_metric, type_metric;
+
 
 ## The number \f$pi\f$ is a mathematical constant, the ratio of a circle's circumference to its diameter.
 pi = 3.1415926535;
@@ -247,22 +249,29 @@ def centroid(points, indexes = None):
     return centroid_value;
 
 
-def median(points, indexes = None):
+def median(points, indexes = None, **kwargs):
     """!
     @brief Calculate geometric median of input set of points using Euclidian distance. 
     
     @param[in] points (list): Set of points for median calculation.
     @param[in] indexes (list): Indexes of objects in input set of points that will be taken into account during median calculation.
-    
+    @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'metric', 'func').
+
+    Keyword Args:
+        metric (type_metric): Metric that is used for distance calculation between two points.
+        func (callable): Callable object with two arguments (point #1 and point #2) that is used only if metric is 'type_metric.USER_DEFINED'.
+
     @return (uint) index of point in input set that corresponds to median.
     
     """
     
     index_median = None;
     distance = float('Inf');
-    
-    range_points = None;
-    if (indexes is None):
+
+    metric = get_argument("metric", type_metric.EUCLIDEAN_SQUARE, **kwargs);
+    func = get_argument("func", None, **kwargs);
+
+    if indexes is None:
         range_points = range(len(points));
     else:
         range_points = indexes;
@@ -270,9 +279,9 @@ def median(points, indexes = None):
     for index_candidate in range_points:
         distance_candidate = 0.0;
         for index in range_points:
-            distance_candidate += euclidean_distance_square(points[index_candidate], points[index]);
+            distance_candidate += calculate_metric(points[index_candidate], points[index], metric, func);
         
-        if (distance_candidate < distance):
+        if distance_candidate < distance:
             distance = distance_candidate;
             index_median = index_candidate;
     

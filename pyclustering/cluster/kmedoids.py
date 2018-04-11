@@ -29,7 +29,8 @@
 
 from pyclustering.cluster.encoder import type_encoding;
 
-from pyclustering.utils import euclidean_distance_square, median;
+from pyclustering.utils import get_argument, median;
+from pyclustering.utils.metric import calculate_metric, type_metric;
 
 from pyclustering.core.wrapper import ccore_library;
 
@@ -67,7 +68,7 @@ class kmedoids:
     """
     
     
-    def __init__(self, data, initial_index_medoids, tolerance = 0.25, ccore = True):
+    def __init__(self, data, initial_index_medoids, tolerance = 0.25, ccore = True, **kwargs):
         """!
         @brief Constructor of clustering algorithm K-Medoids.
         
@@ -75,13 +76,20 @@ class kmedoids:
         @param[in] initial_index_medoids (list): Indexes of intial medoids (indexes of points in input data).
         @param[in] tolerance (double): Stop condition: if maximum value of distance change of medoids of clusters is less than tolerance than algorithm will stop processing.
         @param[in] ccore (bool): If specified than CCORE library (C++ pyclustering library) is used for clustering instead of Python code.
-        
+        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'metric', 'func').
+
+        Keyword Args:
+            metric (type_metric): Metric that is used for distance calculation between two points.
+            func (callable): Callable object with two arguments (point #1 and point #2) that is used only if metric is 'type_metric.USER_DEFINED'.
+
         """
         self.__pointer_data = data;
         self.__clusters = [];
         self.__medoids = [ data[medoid_index] for medoid_index in initial_index_medoids ];
         self.__medoid_indexes = initial_index_medoids;
         self.__tolerance = tolerance;
+        self.__metric = get_argument("metric", type_metric.EUCLIDEAN_SQUARE, **kwargs);
+        self.__func = get_argument("func", None, **kwargs);
         self.__ccore = ccore;
         
         if (self.__ccore):
@@ -106,14 +114,13 @@ class kmedoids:
         else:
             changes = float('inf');
              
-            stop_condition = self.__tolerance * self.__tolerance;   # Fast solution
-            #stop_condition = self.__tolerance;              # Slow solution
+            stop_condition = self.__tolerance * self.__tolerance;
              
-            while (changes > stop_condition):
+            while changes > stop_condition:
                 self.__clusters = self.__update_clusters();
-                updated_medoids, update_medoid_indexes = self.__update_medoids();  # changes should be calculated before asignment
+                updated_medoids, update_medoid_indexes = self.__update_medoids();
              
-                changes = max([euclidean_distance_square(self.__medoids[index], updated_medoids[index]) for index in range(len(updated_medoids))]);    # Fast solution
+                changes = max([calculate_metric(self.__medoids[index], updated_medoids[index], type_metric.EUCLIDEAN_SQUARE) for index in range(len(updated_medoids))]);    # Fast solution
                  
                 self.__medoids = updated_medoids;
                 self.__medoid_indexes = update_medoid_indexes;
@@ -167,14 +174,14 @@ class kmedoids:
         
         clusters = [[self.__medoid_indexes[i]] for i in range(len(self.__medoids))];
         for index_point in range(len(self.__pointer_data)):
-            if (index_point in self.__medoid_indexes):
+            if index_point in self.__medoid_indexes:
                 continue;
 
             index_optim = -1;
             dist_optim = float('Inf');
             
             for index in range(len(self.__medoids)):
-                dist = euclidean_distance_square(self.__pointer_data[index_point], self.__medoids[index]);
+                dist = calculate_metric(self.__pointer_data[index_point], self.__medoids[index], self.__metric, self.__func);
                 
                 if ( (dist < dist_optim) or (index is 0)):
                     index_optim = index;
