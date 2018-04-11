@@ -352,7 +352,7 @@ upload_binary() {
     
     print_info "Upload binary using path '$REMOTE_BINARY_FILEPATH'."
 
-    UPLOAD_LINK=`curl -s -H "Authorization: OAuth $YANDEX_DISK_TOKEN" -X GET https://cloud-api.yandex.net:443/v1/disk/resources/upload?path=$REMOTE_BINARY_FILEPATH&overwrite=true |\
+    UPLOAD_LINK=`curl -s -H "Authorization: OAuth $YANDEX_DISK_TOKEN" -X GET https://cloud-api.yandex.net:443/v1/disk/resources/upload?path=$REMOTE_BINARY_FILEPATH |\
         python3 -c "import sys, json; print(json.load(sys.stdin)['href'])"`
 
     curl -H "Authorization: OAuth $YANDEX_DISK_TOKEN" -X PUT $UPLOAD_LINK --upload-file $LOCAL_BINARY_PATH

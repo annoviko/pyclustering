@@ -69,7 +69,7 @@ template_optics_length_process_distance_matrix(const std::shared_ptr<dataset> & 
 
     dataset matrix;
     distance_matrix(*p_data, matrix);
-    solver.process(matrix, optics_data_type::DISTANCE_MATRIX, *ptr_output_result);
+    solver.process(matrix, optics_data_t::DISTANCE_MATRIX, *ptr_output_result);
 
     const dataset & data = *p_data;
     const cluster_sequence & actual_clusters = ptr_output_result->clusters();

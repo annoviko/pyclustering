@@ -41,7 +41,7 @@ namespace clst {
  * @brief Enumeration of input data type that are processed by OPTICS algorithm.
  *
  */
-enum class optics_data_type {
+enum class optics_data_t {
     POINTS,
     DISTANCE_MATRIX
 };
@@ -137,7 +137,7 @@ private:
 
     std::size_t         m_amount_clusters   = 0;
 
-    optics_data_type    m_type              = optics_data_type::POINTS;
+    optics_data_t       m_type              = optics_data_t::POINTS;
 
     container::kdtree   m_kdtree            = container::kdtree();
 
@@ -220,7 +220,7 @@ public:
     *              cluster-ordering, noise and proper connectivity radius).
     *
     */
-    virtual void process(const dataset & p_data, const optics_data_type p_type, cluster_data & p_result);
+    virtual void process(const dataset & p_data, const optics_data_t p_type, cluster_data & p_result);
 
 private:
     void initialize(void);

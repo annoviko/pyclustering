@@ -187,11 +187,11 @@ class kmeans_visualizer:
         
         for index_point in cluster:
             point = sample[index_point];
-            if (dimension == 1):
+            if dimension == 1:
                 ax.plot([point[0], center[0]], [0.0, 0.0], '-', color=color, linewidth=0.5);
-            elif (dimension == 2):
+            elif dimension == 2:
                 ax.plot([point[0], center[0]], [point[1], center[1]], '-', color=color, linewidth=0.5);
-            elif (dimension == 3):
+            elif dimension == 3:
                 ax.plot([point[0], center[0]], [point[1], center[1]], [point[2], center[2]], '-', color=color, linewidth=0.5)
 
 
@@ -199,11 +199,11 @@ class kmeans_visualizer:
     def __draw_center(ax, center, color, marker, alpha):
         dimension = len(center);
         
-        if (dimension == 1):
+        if dimension == 1:
             ax.plot(center[0], 0.0, color=color, alpha=alpha, marker=marker, markersize=kmeans_visualizer.__default_2d_marker_size);
-        elif (dimension == 2):
+        elif dimension == 2:
             ax.plot(center[0], center[1], color=color, alpha=alpha, marker=marker, markersize=kmeans_visualizer.__default_2d_marker_size);
-        elif (dimension == 3):
+        elif dimension == 3:
             ax.scatter(center[0], center[1], center[2], c=color, alpha=alpha, marker=marker, s=kmeans_visualizer.__default_3d_marker_size);
 
 
@@ -221,7 +221,7 @@ class kmeans_visualizer:
 
     @staticmethod
     def __get_argument(argument_name, default_value, **kwargs):
-        if (argument_name in kwargs):
+        if argument_name in kwargs:
             return kwargs[argument_name];
         
         return default_value;
@@ -261,7 +261,7 @@ class kmeans_visualizer:
         cluster_animation = animation.FuncAnimation(figure, frame_generation, iterations, interval=animation_velocity,
                                                     init_func=init_frame, repeat_delay=5000);
 
-        if (save_movie is not None):
+        if save_movie is not None:
             cluster_animation.save(save_movie, writer='ffmpeg', fps=movie_fps, bitrate=3000);
         else:
             plt.show();
@@ -341,7 +341,7 @@ class kmeans:
             self.__observer = kwargs['observer'];
         
         self.__ccore = ccore;
-        if (self.__ccore is True):
+        if self.__ccore is True:
             self.__ccore = ccore_library.workable();
 
 
@@ -356,10 +356,10 @@ class kmeans:
         
         """
 
-        if (len(self.__pointer_data[0]) != len(self.__centers[0])):
+        if len(self.__pointer_data[0]) != len(self.__centers[0]):
             raise NameError('Dimension of the input data and dimension of the initial cluster centers must be equal.');
 
-        if (self.__ccore is True):
+        if self.__ccore is True:
             self.__process_by_ccore();
         else:
             self.__process_by_python();
@@ -388,18 +388,18 @@ class kmeans:
         maximum_change = float('inf');
         stop_condition = self.__tolerance * self.__tolerance;
 
-        if (self.__observer is not None):
+        if self.__observer is not None:
             initial_clusters = self.__update_clusters();
             self.__observer.notify(initial_clusters, self.__centers.tolist());
 
-        while (maximum_change > stop_condition):
+        while maximum_change > stop_condition:
             self.__clusters = self.__update_clusters();
             updated_centers = self.__update_centers();  # changes should be calculated before assignment
 
             if self.__observer is not None:
                 self.__observer.notify(self.__clusters, updated_centers.tolist());
 
-            if (len(self.__centers) != len(updated_centers)):
+            if len(self.__centers) != len(updated_centers):
                 maximum_change = float('inf');
 
             else:
