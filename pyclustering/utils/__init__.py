@@ -34,7 +34,7 @@ from mpl_toolkits.mplot3d import Axes3D;
 
 from sys import platform as _platform;
 
-from pyclustering.utils.metric import calculate_metric, type_metric;
+from pyclustering.utils.metric import distance_metric, type_metric;
 
 
 ## The number \f$pi\f$ is a mathematical constant, the ratio of a circle's circumference to its diameter.
@@ -92,8 +92,6 @@ def read_image(filename):
     with Image.open(filename) as image_source:
         data = [pixel for pixel in image_source.getdata()];
         return data;
-    
-    return [];
 
 
 def rgb2gray(image_rgb_array):
@@ -258,8 +256,7 @@ def median(points, indexes = None, **kwargs):
     @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'metric', 'func').
 
     Keyword Args:
-        metric (type_metric): Metric that is used for distance calculation between two points.
-        func (callable): Callable object with two arguments (point #1 and point #2) that is used only if metric is 'type_metric.USER_DEFINED'.
+        metric (distance_metric): Metric that is used for distance calculation between two points.
 
     @return (uint) index of point in input set that corresponds to median.
     
@@ -269,7 +266,6 @@ def median(points, indexes = None, **kwargs):
     distance = float('Inf');
 
     metric = get_argument("metric", type_metric.EUCLIDEAN_SQUARE, **kwargs);
-    func = get_argument("func", None, **kwargs);
 
     if indexes is None:
         range_points = range(len(points));
@@ -279,7 +275,7 @@ def median(points, indexes = None, **kwargs):
     for index_candidate in range_points:
         distance_candidate = 0.0;
         for index in range_points:
-            distance_candidate += calculate_metric(points[index_candidate], points[index], metric, func);
+            distance_candidate += metric(points[index_candidate], points[index]);
         
         if distance_candidate < distance:
             distance = distance_candidate;

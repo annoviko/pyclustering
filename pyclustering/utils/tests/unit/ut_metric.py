@@ -31,37 +31,38 @@ import pyclustering.utils.metric as metric;
 
 class MetricUnitTest(unittest.TestCase):
     def testCalculateMetric(self):
-        assertion.eq(1.0, metric.calculate_metric([0.0, 1.0], [0.0, 0.0], metric.type_metric.EUCLIDEAN));
-        assertion.eq(4.0, metric.calculate_metric([2.0, 2.0], [4.0, 2.0], metric.type_metric.EUCLIDEAN_SQUARE));
-        assertion.eq(4.0, metric.calculate_metric([1.0, 1.0], [-1.0, -1.0], metric.type_metric.MANHATTAN));
-        assertion.eq(2.0, metric.calculate_metric([2.0, -2.0], [0.0, 0.0], metric.type_metric.CHEBYSHEV));
-        assertion.eq(4.0, metric.calculate_metric([2.0, 2.0], [4.0, 2.0], metric.type_metric.USER_DEFINED, metric.euclidean_distance_square));
+        assertion.eq(1.0, metric.distance_metric(metric.type_metric.EUCLIDEAN)([0.0, 1.0], [0.0, 0.0]));
+        assertion.eq(4.0, metric.distance_metric(metric.type_metric.EUCLIDEAN_SQUARE)([2.0, 2.0], [4.0, 2.0]));
+        assertion.eq(4.0, metric.distance_metric(metric.type_metric.MANHATTAN)([1.0, 1.0], [-1.0, -1.0]));
+        assertion.eq(2.0, metric.distance_metric(metric.type_metric.CHEBYSHEV)([2.0, -2.0], [0.0, 0.0]));
+        assertion.eq(2.0, metric.distance_metric(metric.type_metric.MINKOWSKI)([-3.0, -3.0], [-5.0, -3.0]));
+        assertion.eq(2.0, metric.distance_metric(metric.type_metric.MINKOWSKI, degree=2)([-3.0, -3.0], [-5.0, -3.0]));
+        assertion.eq(4.0, metric.distance_metric(metric.type_metric.USER_DEFINED, func=metric.euclidean_distance_square)([2.0, 2.0], [4.0, 2.0]));
 
 
     def testEuclideanDistance(self):
-        assertion.eq(0.0, metric.euclidean_distance(0, 0));
         assertion.eq(0.0, metric.euclidean_distance([0], [0]));
         assertion.eq(1.0, metric.euclidean_distance([0.0, 1.0], [0.0, 0.0]));
         assertion.eq(2.0, metric.euclidean_distance([3.0, 3.0], [5.0, 3.0]));
+        assertion.eq(2.0, metric.euclidean_distance([-3.0, -3.0], [-5.0, -3.0]));
 
 
     def testEuclideanDistanceSquare(self):
-        assertion.eq(0.0, metric.euclidean_distance_square(0, 0));
         assertion.eq(0.0, metric.euclidean_distance_square([0], [0]));
         assertion.eq(1.0, metric.euclidean_distance_square([0.0, 1.0], [0.0, 0.0]));
         assertion.eq(4.0, metric.euclidean_distance_square([2.0, 2.0], [4.0, 2.0]));
+        assertion.eq(4.0, metric.euclidean_distance_square([-2.0, 2.0], [-4.0, 2.0]));
 
 
     def testManhattanDistance(self):
-        assertion.eq(0.0, metric.manhattan_distance(0, 0));
         assertion.eq(0.0, metric.manhattan_distance([0], [0]));
         assertion.eq(1.0, metric.manhattan_distance([0.0, 1.0], [0.0, 0.0]));
         assertion.eq(2.0, metric.manhattan_distance([1.0, 1.0], [0.0, 0.0]));
         assertion.eq(4.0, metric.manhattan_distance([1.0, 1.0], [-1.0, -1.0]));
+        assertion.eq(2.0, metric.manhattan_distance([-1.0, -1.0], [-2.0, -2.0]));
 
 
     def testChebyshevDistance(self):
-        assertion.eq(0.0, metric.chebyshev_distance(0, 0));
         assertion.eq(0.0, metric.chebyshev_distance([0], [0]));
         assertion.eq(1.0, metric.chebyshev_distance([1.0, 0.0], [0.0, 0.0]));
         assertion.eq(1.0, metric.chebyshev_distance([1.0, 1.0], [0.0, 0.0]));
@@ -69,6 +70,15 @@ class MetricUnitTest(unittest.TestCase):
         assertion.eq(2.0, metric.chebyshev_distance([2.0, 0.0], [0.0, 0.0]));
         assertion.eq(2.0, metric.chebyshev_distance([2.0, 1.0], [0.0, 0.0]));
         assertion.eq(2.0, metric.chebyshev_distance([2.0, -2.0], [0.0, 0.0]));
+        assertion.eq(3.0, metric.chebyshev_distance([2.0, -2.0], [-1.0, -1.0]));
+
+
+    def testMinkowskiDistance(self):
+        assertion.eq(0.0, metric.minkowski_distance([0], [0]));
+        assertion.eq(0.0, metric.minkowski_distance([0], [0], 2));
+        assertion.eq(-2.0, metric.minkowski_distance([3.0, 3.0], [5.0, 3.0], 1));
+        assertion.eq(2.0, metric.minkowski_distance([3.0, 3.0], [5.0, 3.0], 2));
+        assertion.eq(2.0, metric.minkowski_distance([3.0, 3.0], [5.0, 3.0], 4));
 
 
 if __name__ == "__main__":

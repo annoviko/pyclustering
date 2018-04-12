@@ -26,8 +26,6 @@
 
 from enum import IntEnum;
 
-import collections;
-
 
 class type_metric(IntEnum):
     """!
@@ -47,137 +45,200 @@ class type_metric(IntEnum):
     ## Chebyshev distance, for more information see function 'chebyshev_distance'.
     CHEBYSHEV = 3;
 
+    ## Minkowski distance, for more information see function 'minkowski_distance'.
+    MINKOWSKI = 4;
+
     ## User defined function for distance calculation between two points.
     USER_DEFINED = 1000;
 
 
-def calculate_metric(point1, point2, metric, func=None):
+class distance_metric:
     """!
-    @brief Calculates metric between two points in line with specified metric function.
-
-    @param[in] point1 (numeric|list): The first point.
-    @param[in] point2 (numeric|list): The second point.
-    @param[in] metric (type_metric): Metric that is used for distance calculation between two points.
-    @param[in] func (callable): Used only if metric is 'type_metric.USER_DEFINED' and represents callable object
-                with two arguments: 'point1' and 'point2', notation is: 'func(point1, point2)'.
-
-    @return (double) Distance between two points.
+    @brief
 
     """
-    if metric == type_metric.EUCLIDEAN:
-        return euclidean_distance(point1, point2);
+    def __init__(self, type, **kwargs):
+        """!
+        @brief Creates distance metric instance for calculation distance between two points.
 
-    elif metric == type_metric.EUCLIDEAN_SQUARE:
-        return euclidean_distance_square(point1, point2);
+        @param[in] type (type_metric):
+        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'func' and corresponding additional argument for
+                    for specific metric types).
 
-    elif metric == type_metric.MANHATTAN:
-        return manhattan_distance(point1, point2);
+        Keyword Args:
+            func (callable): Callable object with two arguments (point #1 and point #2) that is used only if metric is 'type_metric.USER_DEFINED'.
+            degree (numeric): Only for 'type_metric.MINKOWSKI' - degree of Minkowski equation.
 
-    elif metric == type_metric.CHEBYSHEV:
-        return chebyshev_distance(point1, point2);
+        """
+        self.__type = type;
+        self.__args = kwargs;
+        self.__func = self.__get('func', None, self.__args);
 
-    elif metric == type_metric.USER_DEFINED:
-        return func(point1, point2);
 
-    else:
-        raise ValueError("Unknown type of metric: '%d'", metric);
+    def __call__(self, point1, point2):
+        """!
+        @brief Calculates distance between two points.
+
+        @param[in] point1 (list): The first point.
+        @param[in] point2 (list): The second point.
+
+        @return (double) Distance between two points.
+
+        """
+        if self.__type == type_metric.EUCLIDEAN:
+            return euclidean_distance(point1, point2);
+
+        elif self.__type == type_metric.EUCLIDEAN_SQUARE:
+            return euclidean_distance_square(point1, point2);
+
+        elif self.__type == type_metric.MANHATTAN:
+            return manhattan_distance(point1, point2);
+
+        elif self.__type == type_metric.CHEBYSHEV:
+            return chebyshev_distance(point1, point2);
+
+        elif self.__type == type_metric.MINKOWSKI:
+            return minkowski_distance(point1, point2, self.__get('degree', 2, self.__args));
+
+        elif self.__type == type_metric.USER_DEFINED:
+            return self.__func(point1, point2);
+
+        else:
+            raise ValueError("Unknown type of metric: '%d'", self.__type);
+
+
+    def __get(self, key, default_value, container):
+        """!
+        @brief Returns value from container by key if key is contained by 'container' otherwise default value.
+
+        @param[in] key (string): Argument name (key in 'container') whose value is required.
+        @param[in] default_value (any): Value that is returned if argument is not found in 'container'.
+        @param[in] container (dict): Dictionary with arguments (key, value).
+
+        @return (any) Value from container by key if key is contained by 'container' otherwise default value.
+
+        """
+        if key in container:
+            return container[key];
+
+        return default_value;
 
 
 def euclidean_distance(point1, point2):
     """!
-    @brief Calculate Euclidean distance between vectors.
+    @brief Calculate Euclidean distance between two vectors.
     @details The Euclidean between vectors (points) a and b is calculated by following formula:
 
     \f[
-    dist(a, b) = \sqrt{ \sum_{i=0}^{N}(a_{i} - b_{i})^{2}) };
+    dist(a, b) = \sqrt{ \sum_{i=0}^{N}(a_{i} - b_{i})^{2} };
     \f]
 
     Where N is a length of each vector.
 
-    @param[in] point1 (numeric|list): The first vector.
-    @param[in] point2 (numeric|list): The second vector.
+    @param[in] point1 (list): The first vector.
+    @param[in] point2 (list): The second vector.
 
     @return (double) Euclidean distance between two vectors.
 
-    """
+    @see euclidean_distance_square, manhattan_distance, chebyshev_distance
 
+    """
     distance = euclidean_distance_square(point1, point2);
     return distance ** 0.5;
 
 
 def euclidean_distance_square(point1, point2):
     """!
-    @brief Calculate square Euclidean distance between vectors.
+    @brief Calculate square Euclidean distance between two vectors.
 
     \f[
-    dist(a, b) = \sum_{i=0}^{N}(a_{i} - b_{i})^{2});
+    dist(a, b) = \sum_{i=0}^{N}(a_{i} - b_{i})^{2};
     \f]
 
-    @param[in] point1 (numeric|list): The first vector.
-    @param[in] point2 (numeric|list): The second vector.
+    @param[in] point1 (list): The first vector.
+    @param[in] point2 (list): The second vector.
 
     @return (double) Square Euclidean distance between two vectors.
 
+    @see euclidean_distance, manhattan_distance, chebyshev_distance
+
     """
+    distance = 0.0;
+    for i in range(len(point1)):
+        distance += (point1[i] - point2[i]) ** 2.0;
 
-    if isinstance(point1, collections.Iterable):
-        distance = 0.0;
-        for i in range(len(point1)):
-            distance += (point1[i] - point2[i]) ** 2.0;
-
-        return distance;
-
-    return (point1 - point2) ** 2.0;
+    return distance;
 
 
 def manhattan_distance(point1, point2):
     """!
-    @brief Calculate Manhattan distance between vector a and b.
+    @brief Calculate Manhattan distance between between two vectors.
 
     \f[
     dist(a, b) = \sum_{i=0}^{N}\left | a_{i} - b_{i} \right |;
     \f]
 
-    @param[in] point1 (numeric|list): The first vector.
-    @param[in] point2 (numeric|list): The second vector.
+    @param[in] point1 (list): The first vector.
+    @param[in] point2 (list): The second vector.
 
     @return (double) Manhattan distance between two vectors.
 
+    @see euclidean_distance_square, euclidean_distance, chebyshev_distance
+
     """
+    distance = 0.0;
+    dimension = len(point1);
 
-    if isinstance(point1, collections.Iterable):
-        distance = 0.0;
-        dimension = len(point1);
+    for i in range(dimension):
+        distance += abs(point1[i] - point2[i]);
 
-        for i in range(dimension):
-            distance += abs(point1[i] - point2[i]);
-
-        return distance;
-
-    return abs(point1 - point2);
+    return distance;
 
 
 def chebyshev_distance(point1, point2):
     """!
-    @brief Calculate Chebyshev distance between vector a and b.
+    @brief Calculate Chebyshev distance between between two vectors.
 
     \f[
     dist(a, b) = \max_{}i\left (\left | a_{i} - b_{i} \right |\right );
     \f]
 
-    @param[in] point1 (numeric|list): The first vector.
-    @param[in] point2 (numeric|list): The second vector.
+    @param[in] point1 (list): The first vector.
+    @param[in] point2 (list): The second vector.
 
     @return (double) Chebyshev distance between two vectors.
 
+    @see euclidean_distance_square, euclidean_distance, minkowski_distance
+
     """
-    if isinstance(point1, collections.Iterable):
-        distance = 0.0;
-        dimension = len(point1);
+    distance = 0.0;
+    dimension = len(point1);
 
-        for i in range(dimension):
-            distance = max(distance, abs(point1[i] - point2[i]));
+    for i in range(dimension):
+        distance = max(distance, abs(point1[i] - point2[i]));
 
-        return distance;
+    return distance;
 
-    return abs(point1 - point2);
+
+def minkowski_distance(point1, point2, degree=2):
+    """!
+    @brief Calculate Minkowski distance between two vectors.
+
+    \f[
+    dist(a, b) = \sqrt[p]{ \sum_{i=0}^{N}\left(a_{i} - b_{i}\right)^{p} };
+    \f]
+
+    @param[in] point1 (list): The first vector.
+    @param[in] point2 (list): The second vector.
+    @param[in] degree (numeric): Degree of that is used for Minkowski distance.
+
+    @return (double) Minkowski distance between two vectors.
+
+    @see euclidean_distance
+
+    """
+    distance = 0.0;
+    for i in range(len(point1)):
+        distance += (point1[i] - point2[i]) ** degree;
+
+    return distance ** (1.0 / degree);

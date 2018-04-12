@@ -21,7 +21,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 """
 
+
 import unittest;
+
 
 from pyclustering.utils.dimension import dimension_info;
 
