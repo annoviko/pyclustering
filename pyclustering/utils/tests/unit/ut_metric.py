@@ -39,6 +39,9 @@ class MetricUnitTest(unittest.TestCase):
         assertion.eq(2.0, metric.distance_metric(metric.type_metric.MINKOWSKI, degree=2)([-3.0, -3.0], [-5.0, -3.0]));
         assertion.eq(4.0, metric.distance_metric(metric.type_metric.USER_DEFINED, func=metric.euclidean_distance_square)([2.0, 2.0], [4.0, 2.0]));
 
+        user_function = lambda point1, point2: point1[0] + point2[0] + 2;
+        assertion.eq(5.0, metric.distance_metric(metric.type_metric.USER_DEFINED, func=user_function)([2.0, 3.0], [1.0, 3.0]));
+
 
     def testEuclideanDistance(self):
         assertion.eq(0.0, metric.euclidean_distance([0], [0]));

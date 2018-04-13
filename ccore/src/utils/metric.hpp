@@ -38,11 +38,220 @@ namespace metric {
 
 /**
  *
- * @brief   Encapsulates distance calculation function between two objects.
+ * @brief   Encapsulates distance metric calculation function between two objects.
  *
  */
 template <typename TypeContainer>
 using distance_functor = std::function<double(const TypeContainer &, const TypeContainer &)>;
+
+
+/**
+ *
+ * @brief   Basic distance metric provides interface for calculation distance between objects in line with
+ *           specific metric.
+ *
+ */
+template <typename TypeContainer>
+class distance_metric {
+protected:
+    distance_functor<TypeContainer> m_functor = nullptr;
+
+public:
+    distance_metric(void) = default;
+
+    distance_metric(const distance_functor<TypeContainer> & p_functor) : m_functor(p_functor) { }
+
+    distance_metric(const distance_metric & p_other) = default;
+
+    distance_metric(distance_metric && p_other) = default;
+
+    virtual ~distance_metric(void) = default;
+
+public:
+   /**
+    *
+    * @brief   Performs calculation of distance metric between two points.
+    *
+    * @param[in] p_point1: the first iterable point.
+    * @param[in] p_point2: the second iterable point.
+    *
+    * @return  Calculated distance between two points.
+    *
+    */
+    double operator()(const TypeContainer & p_point1, const TypeContainer & p_point2) const {
+        return m_functor(p_point1, p_point2);
+    }
+
+public:
+    operator bool() const {
+        return m_functor != nullptr;
+    }
+
+    distance_metric<TypeContainer>& operator=(const distance_metric<TypeContainer>& p_other) {
+        if (this != &p_other) {
+            m_functor = p_other.m_functor;
+        }
+
+        return *this;
+    }
+};
+
+
+/**
+ *
+ * @brief   Euclidean distance metric calculator between two points.
+ *
+ */
+template <typename TypeContainer>
+class euclidean_distance_metric : public distance_metric<TypeContainer> {
+public:
+    euclidean_distance_metric(void) :
+        distance_metric<TypeContainer>(std::bind(euclidean_distance<TypeContainer>, std::placeholders::_1, std::placeholders::_2))
+    { }
+};
+
+
+/**
+ *
+ * @brief   Square Euclidean distance metric calculator between two points.
+ *
+ */
+template <typename TypeContainer>
+class euclidean_distance_square_metric : public distance_metric<TypeContainer> {
+public:
+    euclidean_distance_square_metric(void) :
+        distance_metric<TypeContainer>(std::bind(euclidean_distance_square<TypeContainer>, std::placeholders::_1, std::placeholders::_2))
+    { }
+};
+
+
+/**
+ *
+ * @brief   Manhattan distance metric calculator between two points.
+ *
+ */
+template <typename TypeContainer>
+class manhattan_distance_metric : public distance_metric<TypeContainer> {
+public:
+    manhattan_distance_metric(void) :
+        distance_metric<TypeContainer>(std::bind(manhattan_distance<TypeContainer>, std::placeholders::_1, std::placeholders::_2))
+    { }
+};
+
+
+/**
+ *
+ * @brief   Chebyshev distance metric calculator between two points.
+ *
+ */
+template <typename TypeContainer>
+class chebyshev_distance_metric : public distance_metric<TypeContainer> {
+public:
+    chebyshev_distance_metric(void) :
+        distance_metric<TypeContainer>(std::bind(chebyshev_distance<TypeContainer>, std::placeholders::_1, std::placeholders::_2))
+    { }
+};
+
+
+/**
+ *
+ * @brief   Minkowski distance metric calculator between two points.
+ *
+ */
+template <typename TypeContainer>
+class minkowski_distance_metric : public distance_metric<TypeContainer> {
+public:
+  /**
+   *
+   * @brief   Constructor of Minkowski distance metric.
+   *
+   * @param[in] p_degree: degree of Minkowski equation.
+   *
+   */
+    minkowski_distance_metric(const double p_degree) :
+        distance_metric<TypeContainer>(std::bind(minkowski_distance<TypeContainer>, std::placeholders::_1, std::placeholders::_2, p_degree))
+    { }
+};
+
+
+/**
+ *
+ * @brief   Distance metric factory provides services for creation available metric in the 'ccore::utils::metric' and also user-defined.
+ *
+ */
+template <typename TypeContainer>
+class distance_metric_factory {
+public:
+  /**
+   *
+   * @brief   Creates Euclidean distance metric.
+   *
+   * @return  Euclidean distance metric.
+   *
+   */
+    static distance_metric<TypeContainer> euclidean(void) {
+        return euclidean_distance_metric<TypeContainer>();
+    }
+
+   /**
+   *
+   * @brief   Creates square Euclidean distance metric.
+   *
+   * @return  Square Euclidean distance metric
+   *
+   */
+    static distance_metric<TypeContainer> euclidean_square(void) {
+        return euclidean_distance_square_metric<TypeContainer>();
+    }
+
+   /**
+   *
+   * @brief   Creates Manhattan distance metric.
+   *
+   * @return  Manhattan distance metric.
+   *
+   */
+    static distance_metric<TypeContainer> manhattan(void) {
+        return manhattan_distance_metric<TypeContainer>();
+    }
+
+   /**
+   *
+   * @brief   Creates Chebyshev distance metric.
+   *
+   * @return  Chebyshev distance metric.
+   *
+   */
+    static distance_metric<TypeContainer> chebyshev(void) {
+        return chebyshev_distance_metric<TypeContainer>();
+    }
+
+   /**
+   *
+   * @brief   Creates Minkowski distance metric.
+   *
+   * @param[in] p_degree: degree of Minkowski equation.
+   *
+   * @return  Minkowski distance metric.
+   *
+   */
+    static distance_metric<TypeContainer> minkowski(const double p_degree) {
+        return minkowski_distance_metric<TypeContainer>(p_degree);
+    }
+
+   /**
+   *
+   * @brief   Creates user-defined distance metric.
+   *
+   * @param[in] p_functor: user-defined metric for calculation distance between two points.
+   *
+   * @return  User-defined distance metric.
+   *
+   */
+    static distance_metric<TypeContainer> user_defined(const distance_functor<TypeContainer> & p_functor) {
+        return distance_metric<TypeContainer>(p_functor);
+    }
+};
 
 
 /**
@@ -130,6 +339,61 @@ double manhattan_distance(const TypeContainer & point1, const TypeContainer & po
     }
 
     return distance;
+}
+
+
+/**
+ *
+ * @brief   Calculates Chebyshev distance between points.
+ *
+ * @param[in] point1: point #1 that is represented by coordinates.
+ * @param[in] point2: point #2 that is represented by coordinates.
+ *
+ * @return  Returns Chebyshev distance between points.
+ *
+ */
+template <typename TypeContainer>
+double chebyshev_distance(const TypeContainer & point1, const TypeContainer & point2) {
+    check_common_distance_arguments(point1, point2);
+
+    double distance = 0.0;
+    typename TypeContainer::const_iterator iter_point1 = point1.begin();
+
+    for (auto & dim_point2 : point2) {
+        distance = std::max(distance, std::abs(*iter_point1 - dim_point2));
+        iter_point1++;
+    }
+
+    return distance;
+}
+
+
+/**
+ *
+ * @brief   Calculates square of Minkowski distance between points.
+ *
+ * @param[in] p_point1: point #1 that is represented by coordinates.
+ * @param[in] p_point2: point #2 that is represented by coordinates.
+ * @param[in] p_degree: degree of Minkownski equation.
+ *
+ * @return  Returns square of Minkowski distance between points.
+ *
+ */
+template <typename TypeContainer>
+double minkowski_distance(const TypeContainer & p_point1, const TypeContainer & p_point2, const double p_degree) {
+    check_common_distance_arguments(p_point1, p_point2);
+
+    double distance = 0.0;
+    typename TypeContainer::const_iterator iter_point1 = p_point1.begin();
+
+    for (auto & dim_point2 : p_point2) {
+        double difference = (*iter_point1 - dim_point2);
+        distance += std::pow(difference, p_degree);
+
+        iter_point1++;
+    }
+
+    return std::pow(distance, 1.0 / p_degree);
 }
 
 

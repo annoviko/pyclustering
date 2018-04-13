@@ -1,6 +1,6 @@
 """!
 
-@brief Module provides various metrics - abstraction of the notion of distance in a metric space.
+@brief Module provides various distance metrics - abstraction of the notion of distance in a metric space.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2018
@@ -54,7 +54,30 @@ class type_metric(IntEnum):
 
 class distance_metric:
     """!
-    @brief
+    @brief Distance metric performs distance calculation between two points in line with encapsulated function, for
+            example, euclidean distance or chebyshev distance, or even user-defined.
+
+    @details
+
+    Example of Euclidean distance metric:
+    @code
+        metric = distance_metric(type_metric.EUCLIDEAN);
+        distance = metric([1.0, 2.5], [-1.2, 3.4]);
+    @endcode
+
+    In following example additional argument should be specified (generally, 'degree' is a optional argument that is
+     equal to '2' by default) that is specific for Minkowski distance:
+    @code
+        metric = distance_metric(type_metric.MINKOWSKI, degree=4);
+        distance = metric([4.0, 9.2, 1.0], [3.4, 2.5, 6.2]);
+    @endcode
+
+    User may define its own function for distance calculation:
+    @code
+        user_function = lambda point1, point2: point1[0] + point2[0] + 2;
+        metric = distance_metric(type_metric.USER_DEFINED, func=user_function);
+        distance = metric([2.0, 3.0], [1.0, 3.0]);
+    @endcode
 
     """
     def __init__(self, type, **kwargs):
@@ -72,7 +95,7 @@ class distance_metric:
         """
         self.__type = type;
         self.__args = kwargs;
-        self.__func = self.__get('func', None, self.__args);
+        self.__func = self.__args.get('func', None);
 
 
     def __call__(self, point1, point2):
@@ -98,30 +121,13 @@ class distance_metric:
             return chebyshev_distance(point1, point2);
 
         elif self.__type == type_metric.MINKOWSKI:
-            return minkowski_distance(point1, point2, self.__get('degree', 2, self.__args));
+            return minkowski_distance(point1, point2, self.__args.get('degree', 2));
 
         elif self.__type == type_metric.USER_DEFINED:
             return self.__func(point1, point2);
 
         else:
             raise ValueError("Unknown type of metric: '%d'", self.__type);
-
-
-    def __get(self, key, default_value, container):
-        """!
-        @brief Returns value from container by key if key is contained by 'container' otherwise default value.
-
-        @param[in] key (string): Argument name (key in 'container') whose value is required.
-        @param[in] default_value (any): Value that is returned if argument is not found in 'container'.
-        @param[in] container (dict): Dictionary with arguments (key, value).
-
-        @return (any) Value from container by key if key is contained by 'container' otherwise default value.
-
-        """
-        if key in container:
-            return container[key];
-
-        return default_value;
 
 
 def euclidean_distance(point1, point2):
