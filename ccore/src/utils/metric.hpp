@@ -47,6 +47,173 @@ using distance_functor = std::function<double(const TypeContainer &, const TypeC
 
 /**
  *
+ * @brief   Private function that is used to check input arguments that are used for distance calculation.
+ *
+ * @param[in] point1: point #1 that is represented by coordinates.
+ * @param[in] point2: point #2 that is represented by coordinates.
+ *
+ */
+template <typename TypeContainer>
+static void check_common_distance_arguments(const TypeContainer & point1, const TypeContainer & point2) {
+    if (point1.size() != point2.size()) {
+        throw std::invalid_argument("Impossible to calculate distance between object with different sizes ("
+                + std::to_string(point1.size()) + ", "
+                + std::to_string(point2.size()) + ").");
+    }
+}
+
+
+/**
+ *
+ * @brief   Calculates square of Euclidean distance between points.
+ *
+ * @param[in] point1: point #1 that is represented by coordinates.
+ * @param[in] point2: point #2 that is represented by coordinates.
+ *
+ * @return  Returns square of Euclidean distance between points.
+ *
+ */
+template <typename TypeContainer>
+double euclidean_distance_square(const TypeContainer & point1, const TypeContainer & point2) {
+    check_common_distance_arguments(point1, point2);
+
+    double distance = 0.0;
+    typename TypeContainer::const_iterator iter_point1 = point1.begin();
+
+    for (auto & dim_point2 : point2) {
+        double difference = (*iter_point1 - dim_point2);
+        distance += difference * difference;
+
+        iter_point1++;
+    }
+
+    return distance;
+}
+
+
+/**
+ *
+ * @brief   Calculates Euclidean distance between points.
+ *
+ * @param[in] point1: point #1 that is represented by coordinates.
+ * @param[in] point2: point #2 that is represented by coordinates.
+ *
+ * @return  Returns Euclidean distance between points.
+ *
+ */
+template <typename TypeContainer>
+double euclidean_distance(const TypeContainer & point1, const TypeContainer & point2) {
+    return std::sqrt(euclidean_distance_square(point1, point2));
+}
+
+
+/**
+ *
+ * @brief   Calculates Manhattan distance between points.
+ *
+ * @param[in] point1: point #1 that is represented by coordinates.
+ * @param[in] point2: point #2 that is represented by coordinates.
+ *
+ * @return  Returns Manhattan distance between points.
+ *
+ */
+template <typename TypeContainer>
+double manhattan_distance(const TypeContainer & point1, const TypeContainer & point2) {
+    check_common_distance_arguments(point1, point2);
+
+    double distance = 0.0;
+    typename TypeContainer::const_iterator iter_point1 = point1.begin();
+
+    for (auto & dim_point2 : point2) {
+        distance += std::abs(*iter_point1 - dim_point2);
+        iter_point1++;
+    }
+
+    return distance;
+}
+
+
+/**
+ *
+ * @brief   Calculates Chebyshev distance between points.
+ *
+ * @param[in] point1: point #1 that is represented by coordinates.
+ * @param[in] point2: point #2 that is represented by coordinates.
+ *
+ * @return  Returns Chebyshev distance between points.
+ *
+ */
+template <typename TypeContainer>
+double chebyshev_distance(const TypeContainer & point1, const TypeContainer & point2) {
+    check_common_distance_arguments(point1, point2);
+
+    double distance = 0.0;
+    typename TypeContainer::const_iterator iter_point1 = point1.begin();
+
+    for (auto & dim_point2 : point2) {
+        distance = std::max(distance, std::abs(*iter_point1 - dim_point2));
+        iter_point1++;
+    }
+
+    return distance;
+}
+
+
+/**
+ *
+ * @brief   Calculates square of Minkowski distance between points.
+ *
+ * @param[in] p_point1: point #1 that is represented by coordinates.
+ * @param[in] p_point2: point #2 that is represented by coordinates.
+ * @param[in] p_degree: degree of Minkownski equation.
+ *
+ * @return  Returns square of Minkowski distance between points.
+ *
+ */
+template <typename TypeContainer>
+double minkowski_distance(const TypeContainer & p_point1, const TypeContainer & p_point2, const double p_degree) {
+    check_common_distance_arguments(p_point1, p_point2);
+
+    double distance = 0.0;
+    typename TypeContainer::const_iterator iter_point1 = p_point1.begin();
+
+    for (auto & dim_point2 : p_point2) {
+        double difference = (*iter_point1 - dim_point2);
+        distance += std::pow(difference, p_degree);
+
+        iter_point1++;
+    }
+
+    return std::pow(distance, 1.0 / p_degree);
+}
+
+
+/**
+ *
+ * @brief   Calculates distance matrix using points container.
+ *
+ * @param[in]  p_points: input data that is represented by points.
+ * @param[out] p_distance_matrix: output distance matrix of points.
+ *
+ */
+template <typename TypeContainer>
+void distance_matrix(const TypeContainer & p_points, TypeContainer & p_distance_matrix) {
+    using TypeElement = typename TypeContainer::value_type;
+    
+    p_distance_matrix = TypeContainer(p_points.size(), TypeElement(p_points.size(), 0.0));
+
+    for (std::size_t i = 0; i < p_points.size(); i++) {
+        for (std::size_t j = i + 1; j < p_points.size(); j++) {
+            const double distance = euclidean_distance(p_points.at(i), p_points.at(j));
+            p_distance_matrix[i][j] = distance;
+            p_distance_matrix[j][i] = distance;
+        }
+    }
+}
+
+
+/**
+ *
  * @brief   Basic distance metric provides interface for calculation distance between objects in line with
  *           specific metric.
  *
@@ -252,173 +419,6 @@ public:
         return distance_metric<TypeContainer>(p_functor);
     }
 };
-
-
-/**
- *
- * @brief   Private function that is used to check input arguments that are used for distance calculation.
- *
- * @param[in] point1: point #1 that is represented by coordinates.
- * @param[in] point2: point #2 that is represented by coordinates.
- *
- */
-template <typename TypeContainer>
-static void check_common_distance_arguments(const TypeContainer & point1, const TypeContainer & point2) {
-    if (point1.size() != point2.size()) {
-        throw std::invalid_argument("Impossible to calculate distance between object with different sizes ("
-                + std::to_string(point1.size()) + ", "
-                + std::to_string(point2.size()) + ").");
-    }
-}
-
-
-/**
- *
- * @brief   Calculates square of Euclidean distance between points.
- *
- * @param[in] point1: point #1 that is represented by coordinates.
- * @param[in] point2: point #2 that is represented by coordinates.
- *
- * @return  Returns square of Euclidean distance between points.
- *
- */
-template <typename TypeContainer>
-double euclidean_distance_square(const TypeContainer & point1, const TypeContainer & point2) {
-    check_common_distance_arguments(point1, point2);
-
-    double distance = 0.0;
-    typename TypeContainer::const_iterator iter_point1 = point1.begin();
-
-    for (auto & dim_point2 : point2) {
-        double difference = (*iter_point1 - dim_point2);
-        distance += difference * difference;
-
-        iter_point1++;
-    }
-
-    return distance;
-}
-
-
-/**
- *
- * @brief   Calculates Euclidean distance between points.
- *
- * @param[in] point1: point #1 that is represented by coordinates.
- * @param[in] point2: point #2 that is represented by coordinates.
- *
- * @return  Returns Euclidean distance between points.
- *
- */
-template <typename TypeContainer>
-double euclidean_distance(const TypeContainer & point1, const TypeContainer & point2) {
-    return std::sqrt(euclidean_distance_square(point1, point2));
-}
-
-
-/**
- *
- * @brief   Calculates Manhattan distance between points.
- *
- * @param[in] point1: point #1 that is represented by coordinates.
- * @param[in] point2: point #2 that is represented by coordinates.
- *
- * @return  Returns Manhattan distance between points.
- *
- */
-template <typename TypeContainer>
-double manhattan_distance(const TypeContainer & point1, const TypeContainer & point2) {
-    check_common_distance_arguments(point1, point2);
-
-    double distance = 0.0;
-    typename TypeContainer::const_iterator iter_point1 = point1.begin();
-
-    for (auto & dim_point2 : point2) {
-        distance += std::abs(*iter_point1 - dim_point2);
-        iter_point1++;
-    }
-
-    return distance;
-}
-
-
-/**
- *
- * @brief   Calculates Chebyshev distance between points.
- *
- * @param[in] point1: point #1 that is represented by coordinates.
- * @param[in] point2: point #2 that is represented by coordinates.
- *
- * @return  Returns Chebyshev distance between points.
- *
- */
-template <typename TypeContainer>
-double chebyshev_distance(const TypeContainer & point1, const TypeContainer & point2) {
-    check_common_distance_arguments(point1, point2);
-
-    double distance = 0.0;
-    typename TypeContainer::const_iterator iter_point1 = point1.begin();
-
-    for (auto & dim_point2 : point2) {
-        distance = std::max(distance, std::abs(*iter_point1 - dim_point2));
-        iter_point1++;
-    }
-
-    return distance;
-}
-
-
-/**
- *
- * @brief   Calculates square of Minkowski distance between points.
- *
- * @param[in] p_point1: point #1 that is represented by coordinates.
- * @param[in] p_point2: point #2 that is represented by coordinates.
- * @param[in] p_degree: degree of Minkownski equation.
- *
- * @return  Returns square of Minkowski distance between points.
- *
- */
-template <typename TypeContainer>
-double minkowski_distance(const TypeContainer & p_point1, const TypeContainer & p_point2, const double p_degree) {
-    check_common_distance_arguments(p_point1, p_point2);
-
-    double distance = 0.0;
-    typename TypeContainer::const_iterator iter_point1 = p_point1.begin();
-
-    for (auto & dim_point2 : p_point2) {
-        double difference = (*iter_point1 - dim_point2);
-        distance += std::pow(difference, p_degree);
-
-        iter_point1++;
-    }
-
-    return std::pow(distance, 1.0 / p_degree);
-}
-
-
-/**
- *
- * @brief   Calculates distance matrix using points container.
- *
- * @param[in]  p_points: input data that is represented by points.
- * @param[out] p_distance_matrix: output distance matrix of points.
- *
- */
-template <typename TypeContainer>
-void distance_matrix(const TypeContainer & p_points, TypeContainer & p_distance_matrix) {
-    using TypeElement = typename TypeContainer::value_type;
-    
-    p_distance_matrix = TypeContainer(p_points.size(), TypeElement(p_points.size(), 0.0));
-
-    for (std::size_t i = 0; i < p_points.size(); i++) {
-        for (std::size_t j = i + 1; j < p_points.size(); j++) {
-            const double distance = euclidean_distance(p_points.at(i), p_points.at(j));
-            p_distance_matrix[i][j] = distance;
-            p_distance_matrix[j][i] = distance;
-        }
-    }
-}
 
 
 /**
