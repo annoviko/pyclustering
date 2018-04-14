@@ -60,3 +60,7 @@ class metric_wrapper:
 
         ccore.metric_calculate.restype = c_double;
         return ccore.metric_calculate(self.__pointer, point_package1, point_package2);
+
+
+    def get_pointer(self):
+        return self.__pointer;

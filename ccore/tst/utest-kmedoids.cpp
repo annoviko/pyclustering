@@ -23,6 +23,8 @@
 
 #include "cluster/kmedoids.hpp"
 
+#include "utils/metric.hpp"
+
 #include "samples.hpp"
 #include "utenv_check.hpp"
 
@@ -33,10 +35,11 @@ using namespace ccore::clst;
 static void
 template_kmedoids_length_process_data(const dataset_ptr p_data,
         const medoid_sequence & p_start_medians,
-        const std::vector<size_t> & p_expected_cluster_length) {
+        const std::vector<size_t> & p_expected_cluster_length,
+        const distance_metric<point> & p_metric = distance_metric_factory<point>::euclidean_square()) {
 
     kmedoids_data output_result;
-    kmedoids solver(p_start_medians, 0.0001);
+    kmedoids solver(p_start_medians, 0.0001, p_metric);
     solver.process(*p_data, output_result);
 
     const dataset & data = *p_data;
@@ -51,6 +54,51 @@ TEST(utest_kmedoids, allocation_sample_simple_01) {
     const medoid_sequence start_medoids = { 1, 5 };
     const std::vector<size_t> expected_clusters_length = { 5, 5 };
     template_kmedoids_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_medoids, expected_clusters_length);
+}
+
+
+TEST(utest_kmedoids, allocation_sample_simple_01_euclidean) {
+    const medoid_sequence start_medoids = { 1, 5 };
+    const std::vector<size_t> expected_clusters_length = { 5, 5 };
+    template_kmedoids_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_medoids, expected_clusters_length, distance_metric_factory<point>::euclidean());
+}
+
+
+TEST(utest_kmedoids, allocation_sample_simple_01_euclidean_square) {
+    const medoid_sequence start_medoids = { 1, 5 };
+    const std::vector<size_t> expected_clusters_length = { 5, 5 };
+    template_kmedoids_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_medoids, expected_clusters_length, distance_metric_factory<point>::euclidean_square());
+}
+
+
+TEST(utest_kmedoids, allocation_sample_simple_01_manhattan) {
+    const medoid_sequence start_medoids = { 1, 5 };
+    const std::vector<size_t> expected_clusters_length = { 5, 5 };
+    template_kmedoids_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_medoids, expected_clusters_length, distance_metric_factory<point>::manhattan());
+}
+
+
+TEST(utest_kmedoids, allocation_sample_simple_01_chebyshev) {
+    const medoid_sequence start_medoids = { 1, 5 };
+    const std::vector<size_t> expected_clusters_length = { 5, 5 };
+    template_kmedoids_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_medoids, expected_clusters_length, distance_metric_factory<point>::chebyshev());
+}
+
+
+TEST(utest_kmedoids, allocation_sample_simple_01_minkowski) {
+    const medoid_sequence start_medoids = { 1, 5 };
+    const std::vector<size_t> expected_clusters_length = { 5, 5 };
+    template_kmedoids_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_medoids, expected_clusters_length, distance_metric_factory<point>::minkowski(2.0));
+}
+
+
+TEST(utest_kmedoids, allocation_sample_simple_01_user_defined) {
+    const medoid_sequence start_medoids = { 1, 5 };
+    const std::vector<size_t> expected_clusters_length = { 5, 5 };
+
+    auto user_metric = [](const point & p1, const point & p2) { return euclidean_distance(p1, p2); };
+
+    template_kmedoids_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_medoids, expected_clusters_length, distance_metric_factory<point>::user_defined(user_metric));
 }
 
 

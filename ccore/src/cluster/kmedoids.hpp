@@ -26,6 +26,11 @@
 #include "cluster/cluster_algorithm.hpp"
 #include "cluster/kmedoids_data.hpp"
 
+#include "utils/metric.hpp"
+
+
+using namespace ccore::utils::metric;
+
 
 namespace ccore {
 
@@ -41,13 +46,15 @@ namespace clst {
 */
 class kmedoids : public cluster_algorithm {
 private:
-    const dataset                   * m_data_ptr;         /* temporary pointer to input data that is used only during processing */
+    const dataset                   * m_data_ptr;   /* temporary pointer to input data that is used only during processing */
 
-    kmedoids_data                   * m_result_ptr;       /* temporary pointer to clustering result that is used only during processing */
+    kmedoids_data                   * m_result_ptr; /* temporary pointer to clustering result that is used only during processing */
 
     medoid_sequence                 m_initial_medoids;
 
     double                          m_tolerance;
+
+    distance_metric<point>          m_metric;
 
 public:
     /**
@@ -65,9 +72,12 @@ public:
     * @param[in] p_initial_medoids: initial medoids that are used for processing.
     * @param[in] p_tolerance: stop condition in following way: when maximum value of distance change of
     *             medoids of clusters is less than tolerance than algorithm will stop processing.
+    * @param[in] p_metric: distance metric calculator for two points.
     *
     */
-    kmedoids(const medoid_sequence & p_initial_medoids, const double p_tolerance = 0.25);
+    kmedoids(const medoid_sequence & p_initial_medoids,
+             const double p_tolerance = 0.01,
+             const distance_metric<point> & p_metric = distance_metric_factory<point>::euclidean_square());
 
     /**
     *

@@ -5,6 +5,9 @@ CHANGE NOTES FOR 0.8.1 (STARTED Feb 23, 2018)
 ------------------------------------------------------------------------
 
 GENERAL CHANGES:
+- Implemented distance metric collection (pyclustering.utils.metric, ccore.utils.metric).
+  See: no reference.
+
 - Supported new type of input data for OPTICS - distance matrix (pyclustering.cluster.optics, ccore.clst.optics).
   See: https://github.com/annoviko/pyclustering/issues/412
 
