@@ -25,6 +25,10 @@
 
 import unittest;
 
+# Generate images without having a window appear.
+import matplotlib;
+matplotlib.use('Agg');
+
 from pyclustering.tests.suite_holder import suite_holder;
 
 from pyclustering.utils.tests.unit                   import ut_dimension    as dimension_unit_tests;

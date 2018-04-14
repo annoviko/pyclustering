@@ -45,7 +45,7 @@ from pyclustering.container.tests                import container_unit_tests;
 from pyclustering.core.tests                     import core_tests;
 from pyclustering.gcolor.tests                   import gcolor_tests;
 from pyclustering.nnet.tests                     import nnet_unit_tests, nnet_integration_tests;
-from pyclustering.utils.tests                    import utils_unit_tests;
+from pyclustering.utils.tests                    import utils_unit_tests, utils_integration_tests;
 
 
 
