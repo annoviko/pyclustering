@@ -30,6 +30,7 @@ from pyclustering.core.pyclustering_package import package_builder, package_extr
 
 from ctypes import c_double, c_size_t, POINTER, c_void_p, CFUNCTYPE;
 
+from pyclustering.utils.metric import type_metric;
 
 metric_callback = CFUNCTYPE(c_double, POINTER(pyclustering_package), POINTER(pyclustering_package));
 
@@ -48,8 +49,9 @@ class metric_wrapper:
 
 
     def __del__(self):
-        ccore = ccore_library.get();
-        ccore.metric_destroy(self.__pointer);
+        if self.__pointer:
+            ccore = ccore_library.get();
+            ccore.metric_destroy(self.__pointer);
 
 
     def __call__(self, point1, point2):
@@ -64,3 +66,14 @@ class metric_wrapper:
 
     def get_pointer(self):
         return self.__pointer;
+
+
+    @staticmethod
+    def create_instance(metric):
+        mtype = metric.get_type();
+        arguments = [];
+
+        if mtype == type_metric.MINKOWSKI:
+            arguments = [ metric.get_arguments().get('degree') ];
+
+        return metric_wrapper(mtype, arguments, metric.get_function());

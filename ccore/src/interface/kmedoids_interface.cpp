@@ -22,12 +22,23 @@
 
 #include "cluster/kmedoids.hpp"
 
+#include "utils/metric.hpp"
 
-pyclustering_package * kmedoids_algorithm(const pyclustering_package * const p_sample, const pyclustering_package * const p_package_medoids, const double p_tolerance) {
+
+using namespace ccore::utils::metric;
+
+
+pyclustering_package * kmedoids_algorithm(const pyclustering_package * const p_sample,
+                                          const pyclustering_package * const p_package_medoids,
+                                          const double p_tolerance,
+                                          const void * const p_metric)
+{
     ccore::clst::medoid_sequence medoids;
     p_package_medoids->extract(medoids);
 
-    ccore::clst::kmedoids algorithm(medoids, p_tolerance);
+    distance_metric<point> * metric = ((distance_metric<point> *) p_metric);
+
+    ccore::clst::kmedoids algorithm(medoids, p_tolerance, *metric);
 
     dataset input_dataset;
     p_sample->extract(input_dataset);

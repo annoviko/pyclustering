@@ -29,12 +29,14 @@
 
 from pyclustering.cluster.encoder import type_encoding;
 
-from pyclustering.utils import get_argument, median;
+from pyclustering.utils import median;
 from pyclustering.utils.metric import distance_metric, type_metric;
 
 from pyclustering.core.wrapper import ccore_library;
 
 import pyclustering.core.kmedoids_wrapper as wrapper;
+
+from pyclustering.core.metric_wrapper import metric_wrapper;
 
 
 class kmedoids:
@@ -87,10 +89,13 @@ class kmedoids:
         self.__medoids = [ data[medoid_index] for medoid_index in initial_index_medoids ];
         self.__medoid_indexes = initial_index_medoids;
         self.__tolerance = tolerance;
-        self.__metric = get_argument("metric", distance_metric(type_metric.EUCLIDEAN_SQUARE), **kwargs);
+        self.__metric = kwargs.get('metric', distance_metric(type_metric.EUCLIDEAN_SQUARE));
         self.__ccore = ccore;
-        
-        if (self.__ccore):
+
+        if not self.__metric:
+            self.__metric = distance_metric(type_metric.EUCLIDEAN_SQUARE);
+
+        if self.__ccore:
             self.__ccore = ccore_library.workable();
 
 
@@ -106,7 +111,9 @@ class kmedoids:
         """
         
         if (self.__ccore is True):
-            self.__clusters = wrapper.kmedoids(self.__pointer_data, self.__medoid_indexes, self.__tolerance);
+            ccore_metric = metric_wrapper.create_instance(self.__metric);
+
+            self.__clusters = wrapper.kmedoids(self.__pointer_data, self.__medoid_indexes, self.__tolerance, ccore_metric.get_pointer());
             self.__medoids, self.__medoid_indexes = self.__update_medoids();
         
         else:

@@ -52,6 +52,7 @@ class type_metric(IntEnum):
     USER_DEFINED = 1000;
 
 
+
 class distance_metric:
     """!
     @brief Distance metric performs distance calculation between two points in line with encapsulated function, for
@@ -128,6 +129,37 @@ class distance_metric:
 
         else:
             raise ValueError("Unknown type of metric: '%d'", self.__type);
+
+
+    def get_type(self):
+        """!
+        @brief Return type of distance metric that is used.
+
+        @return (type_metric) Type of distance metric.
+
+        """
+        return self.__type;
+
+
+    def get_arguments(self):
+        """!
+        @brief Return additional arguments that are used by distance metric.
+
+        @return (dict) Additional arguments.
+
+        """
+        return self.__args;
+
+
+    def get_function(self):
+        """!
+        @brief Return user-defined function for calculation distance metric.
+
+        @return (callable): User-defined distance metric function.
+
+        """
+        return self.__func;
+
 
 
 def euclidean_distance(point1, point2):

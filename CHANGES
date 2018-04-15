@@ -5,6 +5,9 @@ CHANGE NOTES FOR 0.8.1 (STARTED Feb 23, 2018)
 ------------------------------------------------------------------------
 
 GENERAL CHANGES:
+- Implemented feature to use specific metric for distance calculation in K-Medoids algorithm (pyclustering.cluster.kmedoids, ccore.clst.kmedoids).
+  See: https://github.com/annoviko/pyclustering/issues/417
+
 - Implemented distance metric collection (pyclustering.utils.metric, ccore.utils.metric).
   See: no reference.
 

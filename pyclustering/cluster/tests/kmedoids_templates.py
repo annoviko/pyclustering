@@ -26,6 +26,8 @@
 
 import math;
 
+from pyclustering.tests.assertion import assertion;
+
 from pyclustering.cluster.kmedoids import kmedoids;
 
 from pyclustering.utils import read_sample;
@@ -36,19 +38,24 @@ from random import random, randint;
 class KmedoidsTestTemplates:
     @staticmethod
     def templateLengthProcessData(path_to_file, initial_medoids, expected_cluster_length, ccore_flag):
+        KmedoidsTestTemplates.templateLengthProcessWithMetric(path_to_file, initial_medoids, expected_cluster_length, None, ccore_flag);
+
+
+    @staticmethod
+    def templateLengthProcessWithMetric(path_to_file, initial_medoids, expected_cluster_length, metric, ccore_flag):
         sample = read_sample(path_to_file);
-         
-        kmedoids_instance = kmedoids(sample, initial_medoids, 0.025, ccore_flag);
+
+        kmedoids_instance = kmedoids(sample, initial_medoids, 0.025, ccore_flag, metric=metric);
         kmedoids_instance.process();
-         
+
         clusters = kmedoids_instance.get_clusters();
-     
+
         obtained_cluster_sizes = [len(cluster) for cluster in clusters];
-        assert len(sample) == sum(obtained_cluster_sizes);
-         
+        assertion.eq(len(sample), sum(obtained_cluster_sizes));
+
         obtained_cluster_sizes.sort();
         expected_cluster_length.sort();
-        assert obtained_cluster_sizes == expected_cluster_length;
+        assertion.eq(obtained_cluster_sizes, expected_cluster_length);
 
 
     @staticmethod
@@ -59,9 +66,9 @@ class KmedoidsTestTemplates:
         kmedoids_instance.process();
         clusters = kmedoids_instance.get_clusters();
          
-        assert len(clusters) == 4;
+        assertion.eq(4, len(clusters));
         for cluster in clusters:
-            assert len(cluster) == 10;
+            assertion.eq(10, len(cluster));
 
 
     @staticmethod
@@ -79,12 +86,12 @@ class KmedoidsTestTemplates:
         kmedoids_instance.process();
         clusters = kmedoids_instance.get_clusters();
         
-        assert len(clusters) == amount_clusters;
+        assertion.eq(len(clusters), amount_clusters);
         amount_objects = 0;
         for cluster in clusters:
             amount_objects += len(cluster);
         
-        assert amount_objects == len(data);
+        assertion.eq(amount_objects, len(data));
 
 
     @staticmethod
@@ -106,9 +113,9 @@ class KmedoidsTestTemplates:
         
         for cluster in clusters:
             for index_object in cluster: 
-                assert (object_mark[index_object] == False);    # one object can be in only one cluster.
+                assertion.eq(False, object_mark[index_object]);    # one object can be in only one cluster.
                 
                 object_mark[index_object] = True;
                 allocated_number_objects += 1;
             
-        assert (number_objects == allocated_number_objects);    # number of allocated objects should be the same.
+        assertion.eq(number_objects, allocated_number_objects);    # number of allocated objects should be the same.

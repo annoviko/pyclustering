@@ -22,6 +22,7 @@
 #pragma once
 
 
+#include <algorithm>
 #include <cmath>
 #include <exception>
 #include <functional>
