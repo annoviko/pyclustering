@@ -66,6 +66,12 @@ class distance_metric:
         distance = metric([1.0, 2.5], [-1.2, 3.4]);
     @endcode
 
+    Example of Chebyshev distance metric:
+    @code
+        metric = distance_metric(type_metric.CHEBYSHEV);
+        distance = metric([0.0, 0.0], [2.5, 6.0]);
+    @endcode
+
     In following example additional argument should be specified (generally, 'degree' is a optional argument that is
      equal to '2' by default) that is specific for Minkowski distance:
     @code

@@ -48,7 +48,7 @@ class kmedoids:
              
              CCORE option can be used to use core pyclustering - C/C++ shared library for processing that significantly increases performance.
     
-    Example:
+    Clustering example:
     @code
         # load list of points for cluster analysis
         sample = read_sample(path);
@@ -65,6 +65,21 @@ class kmedoids:
         
         # show allocated clusters
         print(clusters);
+    @endcode
+
+    Metric foc calculation distance between points can be specified by parameter additional 'metric':
+    @code
+        from pyclustering.utils.metric import type_metric, distance_metric;
+
+        # create Minkowski distance metric with degree equals to '2'
+        metric = distance_metric(type_metric.MINKOWSKI, degree=2);
+
+        # create K-Medoids algorithm with specific distance metric
+        kmedoids_instance = kmedoids(sample, initial_medoids, metric=metric);
+
+        # run cluster analysis and obtain results
+        kmedoids_instance.process();
+        clusters = kmedoids_instance.get_clusters();
     @endcode
     
     """
@@ -90,10 +105,11 @@ class kmedoids:
         self.__medoid_indexes = initial_index_medoids;
         self.__tolerance = tolerance;
         self.__metric = kwargs.get('metric', distance_metric(type_metric.EUCLIDEAN_SQUARE));
-        self.__ccore = ccore;
 
-        if not self.__metric:
+        if self.__metric is None:
             self.__metric = distance_metric(type_metric.EUCLIDEAN_SQUARE);
+
+        self.__ccore = ccore and self.__metric.get_type() != type_metric.USER_DEFINED;
 
         if self.__ccore:
             self.__ccore = ccore_library.workable();
