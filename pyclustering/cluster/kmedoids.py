@@ -29,11 +29,14 @@
 
 from pyclustering.cluster.encoder import type_encoding;
 
-from pyclustering.utils import euclidean_distance_square, median;
+from pyclustering.utils import median;
+from pyclustering.utils.metric import distance_metric, type_metric;
 
 from pyclustering.core.wrapper import ccore_library;
 
 import pyclustering.core.kmedoids_wrapper as wrapper;
+
+from pyclustering.core.metric_wrapper import metric_wrapper;
 
 
 class kmedoids:
@@ -45,7 +48,7 @@ class kmedoids:
              
              CCORE option can be used to use core pyclustering - C/C++ shared library for processing that significantly increases performance.
     
-    Example:
+    Clustering example:
     @code
         # load list of points for cluster analysis
         sample = read_sample(path);
@@ -63,11 +66,26 @@ class kmedoids:
         # show allocated clusters
         print(clusters);
     @endcode
+
+    Metric foc calculation distance between points can be specified by parameter additional 'metric':
+    @code
+        from pyclustering.utils.metric import type_metric, distance_metric;
+
+        # create Minkowski distance metric with degree equals to '2'
+        metric = distance_metric(type_metric.MINKOWSKI, degree=2);
+
+        # create K-Medoids algorithm with specific distance metric
+        kmedoids_instance = kmedoids(sample, initial_medoids, metric=metric);
+
+        # run cluster analysis and obtain results
+        kmedoids_instance.process();
+        clusters = kmedoids_instance.get_clusters();
+    @endcode
     
     """
     
     
-    def __init__(self, data, initial_index_medoids, tolerance = 0.25, ccore = True):
+    def __init__(self, data, initial_index_medoids, tolerance = 0.25, ccore = True, **kwargs):
         """!
         @brief Constructor of clustering algorithm K-Medoids.
         
@@ -75,16 +93,25 @@ class kmedoids:
         @param[in] initial_index_medoids (list): Indexes of intial medoids (indexes of points in input data).
         @param[in] tolerance (double): Stop condition: if maximum value of distance change of medoids of clusters is less than tolerance than algorithm will stop processing.
         @param[in] ccore (bool): If specified than CCORE library (C++ pyclustering library) is used for clustering instead of Python code.
-        
+        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'metric').
+
+        Keyword Args:
+            metric (distance_metric): Metric that is used for distance calculation between two points.
+
         """
         self.__pointer_data = data;
         self.__clusters = [];
         self.__medoids = [ data[medoid_index] for medoid_index in initial_index_medoids ];
         self.__medoid_indexes = initial_index_medoids;
         self.__tolerance = tolerance;
-        self.__ccore = ccore;
-        
-        if (self.__ccore):
+        self.__metric = kwargs.get('metric', distance_metric(type_metric.EUCLIDEAN_SQUARE));
+
+        if self.__metric is None:
+            self.__metric = distance_metric(type_metric.EUCLIDEAN_SQUARE);
+
+        self.__ccore = ccore and self.__metric.get_type() != type_metric.USER_DEFINED;
+
+        if self.__ccore:
             self.__ccore = ccore_library.workable();
 
 
@@ -100,20 +127,21 @@ class kmedoids:
         """
         
         if (self.__ccore is True):
-            self.__clusters = wrapper.kmedoids(self.__pointer_data, self.__medoid_indexes, self.__tolerance);
+            ccore_metric = metric_wrapper.create_instance(self.__metric);
+
+            self.__clusters = wrapper.kmedoids(self.__pointer_data, self.__medoid_indexes, self.__tolerance, ccore_metric.get_pointer());
             self.__medoids, self.__medoid_indexes = self.__update_medoids();
         
         else:
             changes = float('inf');
              
-            stop_condition = self.__tolerance * self.__tolerance;   # Fast solution
-            #stop_condition = self.__tolerance;              # Slow solution
+            stop_condition = self.__tolerance * self.__tolerance;
              
-            while (changes > stop_condition):
+            while changes > stop_condition:
                 self.__clusters = self.__update_clusters();
-                updated_medoids, update_medoid_indexes = self.__update_medoids();  # changes should be calculated before asignment
+                updated_medoids, update_medoid_indexes = self.__update_medoids();
              
-                changes = max([euclidean_distance_square(self.__medoids[index], updated_medoids[index]) for index in range(len(updated_medoids))]);    # Fast solution
+                changes = max([distance_metric(type_metric.EUCLIDEAN_SQUARE)(self.__medoids[index], updated_medoids[index]) for index in range(len(updated_medoids))]);    # Fast solution
                  
                 self.__medoids = updated_medoids;
                 self.__medoid_indexes = update_medoid_indexes;
@@ -167,16 +195,16 @@ class kmedoids:
         
         clusters = [[self.__medoid_indexes[i]] for i in range(len(self.__medoids))];
         for index_point in range(len(self.__pointer_data)):
-            if (index_point in self.__medoid_indexes):
+            if index_point in self.__medoid_indexes:
                 continue;
 
             index_optim = -1;
             dist_optim = float('Inf');
             
             for index in range(len(self.__medoids)):
-                dist = euclidean_distance_square(self.__pointer_data[index_point], self.__medoids[index]);
+                dist = self.__metric(self.__pointer_data[index_point], self.__medoids[index]);
                 
-                if ( (dist < dist_optim) or (index is 0)):
+                if (dist < dist_optim) or (index is 0):
                     index_optim = index;
                     dist_optim = dist;
             
@@ -197,7 +225,7 @@ class kmedoids:
         medoid_indexes = [-1] * len(self.__clusters);
         
         for index in range(len(self.__clusters)):
-            medoid_index = median(self.__pointer_data, self.__clusters[index]);
+            medoid_index = median(self.__pointer_data, self.__clusters[index], metric=self.__metric);
             medoids[index] = self.__pointer_data[medoid_index];
             medoid_indexes[index] = medoid_index;
              

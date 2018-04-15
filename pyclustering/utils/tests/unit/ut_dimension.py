@@ -2,7 +2,9 @@
 
 Unit-tests for dimension analyser.
 
-Copyright (C) 2015    Andrei Novikov (pyclustering@yandex.ru)
+@authors Andrei Novikov (pyclustering@yandex.ru)
+@date 2014-2018
+@copyright GNU Public License
 
 pyclustering is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -19,7 +21,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 """
 
+
 import unittest;
+
+# Generate images without having a window appear.
+import matplotlib;
+matplotlib.use('Agg');
 
 from pyclustering.utils.dimension import dimension_info;
 

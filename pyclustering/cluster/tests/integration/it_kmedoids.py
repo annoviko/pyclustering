@@ -34,7 +34,9 @@ from pyclustering.cluster.tests.kmedoids_templates import KmedoidsTestTemplates;
 from pyclustering.cluster.kmedoids import kmedoids;
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES;
+
 from pyclustering.utils import read_sample;
+from pyclustering.utils.metric import type_metric, distance_metric;
 
 from pyclustering.core.tests import remove_library;
 
@@ -42,6 +44,30 @@ from pyclustering.core.tests import remove_library;
 class KmedoidsIntegrationTest(unittest.TestCase):
     def testClusterAllocationSampleSimple1ByCore(self):
         KmedoidsTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], True);
+
+    def testClusterAllocationSampleSimple1Euclidean(self):
+        metric = distance_metric(type_metric.EUCLIDEAN);
+        KmedoidsTestTemplates.templateLengthProcessWithMetric(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], metric, True);
+
+    def testClusterAllocationSampleSimple1SquareEuclidean(self):
+        metric = distance_metric(type_metric.EUCLIDEAN_SQUARE);
+        KmedoidsTestTemplates.templateLengthProcessWithMetric(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], metric, True);
+
+    def testClusterAllocationSampleSimple1Manhattan(self):
+        metric = distance_metric(type_metric.MANHATTAN);
+        KmedoidsTestTemplates.templateLengthProcessWithMetric(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], metric, True);
+
+    def testClusterAllocationSampleSimple1Chebyshev(self):
+        metric = distance_metric(type_metric.CHEBYSHEV);
+        KmedoidsTestTemplates.templateLengthProcessWithMetric(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], metric, True);
+
+    def testClusterAllocationSampleSimple1Minkowski(self):
+        metric = distance_metric(type_metric.MINKOWSKI, degree=2.0);
+        KmedoidsTestTemplates.templateLengthProcessWithMetric(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], metric, True);
+
+    def testClusterAllocationSampleSimple1UserDefined(self):
+        metric = distance_metric(type_metric.USER_DEFINED, func=distance_metric(type_metric.EUCLIDEAN));
+        KmedoidsTestTemplates.templateLengthProcessWithMetric(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], metric, True);
 
     def testClusterOneAllocationSampleSimple1ByCore(self):
         KmedoidsTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [5], [10], True);

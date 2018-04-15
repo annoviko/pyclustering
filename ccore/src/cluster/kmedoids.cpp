@@ -23,11 +23,6 @@
 #include <algorithm>
 #include <limits>
 
-#include "utils/metric.hpp"
-
-
-using namespace ccore::utils::metric;
-
 
 namespace ccore {
 
@@ -38,15 +33,19 @@ kmedoids::kmedoids(void) :
         m_data_ptr(nullptr),
         m_result_ptr(nullptr),
         m_initial_medoids(std::vector<size_t>()),
-        m_tolerance(0.0)
+        m_tolerance(0.0),
+        m_metric(nullptr)
 { }
 
 
-kmedoids::kmedoids(const std::vector<size_t> & p_initial_medoids, const double p_tolerance) :
+kmedoids::kmedoids(const std::vector<size_t> & p_initial_medoids,
+                   const double p_tolerance,
+                   const distance_metric<point> & p_metric) :
         m_data_ptr(nullptr),
         m_result_ptr(nullptr),
         m_initial_medoids(p_initial_medoids),
-        m_tolerance(p_tolerance)
+        m_tolerance(p_tolerance),
+        m_metric(p_metric)
 { }
 
 
@@ -99,7 +98,7 @@ void kmedoids::update_clusters(void) {
 
         for (size_t index = 0; index < medoids.size(); index++) {
             const size_t index_medoid = medoids[index];
-            const double distance = euclidean_distance_square((*m_data_ptr)[index_point], (*m_data_ptr)[index_medoid]);
+            const double distance = m_metric((*m_data_ptr)[index_point], (*m_data_ptr)[index_medoid]);
 
             if ( (distance < dist_optim) || (index == 0) ) {
                 index_optim = index;
@@ -131,7 +130,7 @@ size_t kmedoids::calculate_cluster_medoid(const cluster & p_cluster) const {
     for (auto index_candidate : p_cluster) {
         double distance_candidate = 0.0;
         for (auto index_point : p_cluster) {
-            distance_candidate += euclidean_distance_square( (*m_data_ptr)[index_point], (*m_data_ptr)[index_candidate] );
+            distance_candidate += m_metric( (*m_data_ptr)[index_point], (*m_data_ptr)[index_candidate] );
         }
 
         if (distance_candidate < distance) {
@@ -150,7 +149,7 @@ double kmedoids::calculate_changes(const medoid_sequence & p_medoids) const {
         const size_t index_point1 = p_medoids[index];
         const size_t index_point2 = m_result_ptr->medoids()[index];
 
-        const double distance = euclidean_distance_square( (*m_data_ptr)[index_point1], (*m_data_ptr)[index_point2] );
+        const double distance = m_metric( (*m_data_ptr)[index_point1], (*m_data_ptr)[index_point2] );
         if (distance > maximum_difference) {
             maximum_difference = distance;
         }

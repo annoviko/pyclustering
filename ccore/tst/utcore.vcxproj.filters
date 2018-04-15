@@ -269,6 +269,9 @@
     <ClCompile Include="utest-interface-legion.cpp">
       <Filter>Unit Tests</Filter>
     </ClCompile>
+    <ClCompile Include="utest-interface-metric.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
     <ClCompile Include="..\src\interface\kmedians_interface.cpp">
       <Filter>Tested Code\interface</Filter>
     </ClCompile>
@@ -367,6 +370,9 @@
     </ClCompile>
     <ClCompile Include="utest-utils-metric.cpp">
       <Filter>Unit Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\interface\metric_interface.cpp">
+      <Filter>Tested Code\interface</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -603,6 +609,9 @@
     </ClInclude>
     <ClInclude Include="..\src\cluster\kmeans_plus_plus.hpp">
       <Filter>Tested Code\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\interface\metric_interface.h">
+      <Filter>Tested Code\interface</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

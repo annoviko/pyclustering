@@ -35,7 +35,7 @@ namespace ccore {
 namespace clst {
 
 
-enum class dbscan_data_type {
+enum class dbscan_data_t {
     POINTS,
     DISTANCE_MATRIX
 };
@@ -63,7 +63,7 @@ private:
 
     size_t              m_neighbors       = 0;
 
-    dbscan_data_type    m_type            = dbscan_data_type::POINTS;
+    dbscan_data_t    m_type               = dbscan_data_t::POINTS;
 
     container::kdtree   m_kdtree          = container::kdtree();
 
@@ -114,7 +114,7 @@ public:
     * @param[out] p_result: clustering result of an input data.
     *
     */
-    virtual void process(const dataset & p_data, const dbscan_data_type p_type, cluster_data & p_result);
+    virtual void process(const dataset & p_data, const dbscan_data_t p_type, cluster_data & p_result);
 
 private:
     /**

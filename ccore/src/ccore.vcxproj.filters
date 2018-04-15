@@ -205,6 +205,9 @@
     <ClCompile Include="cluster\kmeans_data.cpp">
       <Filter>Source Files\cluster</Filter>
     </ClCompile>
+    <ClCompile Include="interface\metric_interface.cpp">
+      <Filter>Source Files\interface</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cluster\agglomerative.hpp">
@@ -433,6 +436,9 @@
       <Filter>Source Files\interface</Filter>
     </ClInclude>
     <ClInclude Include="interface\interface_property.h">
+      <Filter>Source Files\interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\metric_interface.h">
       <Filter>Source Files\interface</Filter>
     </ClInclude>
   </ItemGroup>

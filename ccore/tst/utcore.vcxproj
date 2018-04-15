@@ -123,6 +123,7 @@
     <ClCompile Include="..\src\interface\kmedians_interface.cpp" />
     <ClCompile Include="..\src\interface\kmedoids_interface.cpp" />
     <ClCompile Include="..\src\interface\legion_interface.cpp" />
+    <ClCompile Include="..\src\interface\metric_interface.cpp" />
     <ClCompile Include="..\src\interface\optics_interface.cpp" />
     <ClCompile Include="..\src\interface\pcnn_interface.cpp" />
     <ClCompile Include="..\src\interface\pyclustering_interface.cpp" />
@@ -171,6 +172,7 @@
     <ClCompile Include="utest-interface-kmedians.cpp" />
     <ClCompile Include="utest-interface-kmedoids.cpp" />
     <ClCompile Include="utest-interface-legion.cpp" />
+    <ClCompile Include="utest-interface-metric.cpp" />
     <ClCompile Include="utest-interface-optics.cpp" />
     <ClCompile Include="utest-interface-pcnn.cpp" />
     <ClCompile Include="utest-interface-som.cpp" />
@@ -250,6 +252,7 @@
     <ClInclude Include="..\src\interface\kmedians_interface.h" />
     <ClInclude Include="..\src\interface\kmedoids_interface.h" />
     <ClInclude Include="..\src\interface\legion_interface.h" />
+    <ClInclude Include="..\src\interface\metric_interface.h" />
     <ClInclude Include="..\src\interface\optics_interface.h" />
     <ClInclude Include="..\src\interface\pcnn_interface.h" />
     <ClInclude Include="..\src\interface\pyclustering_interface.h" />

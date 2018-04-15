@@ -34,8 +34,13 @@
  * @param[in] p_sample: input data for clustering.
  * @param[in] p_medoids: initial medoids of clusters.
  * @param[in] p_tolerance: stop condition - when changes of medians are less then tolerance value.
+ * @param[in] p_metric: pointer to distance metric 'distance_metric' that is used for distance calculation between two points.
  *
- * @return  Returns result of clustering - array of allocated clusters.
+ * @return  Returns result of clustering - array of allocated clusters in pyclustering package.
  *
  */
-extern "C" DECLARATION pyclustering_package * kmedoids_algorithm(const pyclustering_package * const p_sample, const pyclustering_package * const p_medoids, const double p_tolerance);
+extern "C" DECLARATION pyclustering_package * kmedoids_algorithm(const pyclustering_package * const p_sample,
+                                                                 const pyclustering_package * const p_medoids,
+                                                                 const double p_tolerance,
+                                                                 const void * const p_metric);
+

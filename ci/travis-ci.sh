@@ -101,7 +101,10 @@ run_build_ccore_job() {
     build_ccore x64
     build_ccore x86
 
+    print_info "Upload ccore x64 binary."
     upload_binary x64
+    
+    print_info "Upload ccore x86 binary."
     upload_binary x86
 }
 
