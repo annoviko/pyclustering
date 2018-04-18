@@ -36,11 +36,30 @@ class bsas:
     @brief Class represents BSAS clustering algorithm - basic sequential algorithmic scheme.
     @details Algorithm has two mandatory parameters: maximum allowable number of clusters and threshold
               of dissimilarity or in other words maximum distance between points. Distance metric also can
-              be specified using 'metric' parameters. BSAS using following rule for updating cluster representative:
+              be specified using 'metric' parameters, by default 'Manhattan' distance is used.
+              BSAS using following rule for updating cluster representative:
 
     \f[
     \vec{m}_{C_{k}}^{new}=\frac{ \left ( n_{C_{k}^{new}} - 1 \right )\vec{m}_{C_{k}}^{old} + \vec{x} }{n_{C_{k}^{new}}}
     \f]
+
+    Example:
+    @code
+        # Read data sample from 'Simple02.data'.
+        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE2);
+
+        # Prepare algorithm's parameters.
+        max_clusters = 2;
+        threshold = 1.0;
+
+        # Create instance of BSAS algorithm.
+        bsas_instance = bsas(sample, max_clusters, threshold);
+        bsas_instance.process();
+
+        # Get clustering results.
+        clusters = bsas_instance.get_clusters();
+        representatives = bsas_instance.get_representatives();
+    @endcode
 
     @see pyclustering.cluster.mbsas, pyclustering.cluster.ttsas
 
@@ -65,7 +84,7 @@ class bsas:
         self.__amount = maximum_clusters;
         self.__threshold = threshold;
         self.__ccore = ccore;
-        self.__metric = kwargs.get('metric', distance_metric(type_metric.EUCLIDEAN));
+        self.__metric = kwargs.get('metric', distance_metric(type_metric.MANHATTAN));
 
         self.__clusters = [];
         self.__representatives = [];
