@@ -138,7 +138,7 @@ class kmeans_visualizer:
         """!
         @brief Display K-Means clustering results.
         
-        @param[in] sample (list): Dataset that were used for clustering.
+        @param[in] sample (list): Dataset that was used for clustering.
         @param[in] clusters (array_like): Clusters that were allocated by the algorithm.
         @param[in] centers (array_like): Centers that were allocated by the algorithm.
         @param[in] initial_centers (array_like): Initial centers that were used by the algorithm, if 'None' then initial centers are not displyed.
@@ -156,8 +156,10 @@ class kmeans_visualizer:
         visualizer = cluster_visualizer();
         visualizer.append_clusters(clusters, sample);
         
-        offset = kmeans_visualizer.__get_argument('offset', 0, **kwargs);
-        figure = kmeans_visualizer.__get_argument('figure', None, **kwargs);
+        offset = kwargs.get('offset', 0);
+        figure = kwargs.get('figure', None);
+        display = kwargs.get('display', True);
+
         if (figure is None):
             figure = visualizer.show(display = False);
         else:
@@ -166,7 +168,7 @@ class kmeans_visualizer:
         kmeans_visualizer.__draw_centers(figure, offset, visualizer, centers, initial_centers);
         kmeans_visualizer.__draw_rays(figure, offset, visualizer, sample, clusters, centers);
         
-        if (kmeans_visualizer.__get_argument('display', True, **kwargs) is True):
+        if (display is True):
             plt.show();
 
         return figure;
@@ -217,14 +219,6 @@ class kmeans_visualizer:
             
             if initial_centers is not None:
                 kmeans_visualizer.__draw_center(ax, initial_centers[index_center], color, '*', 0.4);
-
-
-    @staticmethod
-    def __get_argument(argument_name, default_value, **kwargs):
-        if argument_name in kwargs:
-            return kwargs[argument_name];
-        
-        return default_value;
 
 
     @staticmethod

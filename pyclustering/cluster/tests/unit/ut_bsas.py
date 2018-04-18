@@ -31,7 +31,7 @@ matplotlib.use('Agg');
 
 from pyclustering.tests.assertion import assertion;
 
-from pyclustering.cluster.bsas import bsas;
+from pyclustering.cluster.bsas import bsas, bsas_visualizer;
 
 from pyclustering.utils import read_sample;
 from pyclustering.utils.metric import type_metric, distance_metric;
@@ -70,6 +70,16 @@ class BsasTestTemplate:
         obtained_cluster_length.sort();
 
         assertion.eq(expected, obtained_cluster_length);
+
+
+    @staticmethod
+    def visualizing(path, amount, threshold):
+        sample = read_sample(path);
+        bsas_instance = bsas(sample, amount, threshold);
+        bsas_instance.process();
+
+        bsas_visualizer.show_clusters(sample, bsas_instance.get_clusters(), bsas_instance.get_representatives());
+
 
 
 class BsasUnitTest(unittest.TestCase):
@@ -126,6 +136,11 @@ class BsasUnitTest(unittest.TestCase):
     def testTheSamePoints2(self):
         BsasTestTemplate.clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 3, 1.0, [10, 20], False);
         BsasTestTemplate.clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 3, 10.0, [30], False);
+
+    def testVisulizeNoFailure(self):
+        BsasTestTemplate.visualizing(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, 1.0);
+        BsasTestTemplate.visualizing(SIMPLE_SAMPLES.SAMPLE_SIMPLE7, 2, 1.0);
+        BsasTestTemplate.visualizing(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, 2, 1.0);
 
 
 

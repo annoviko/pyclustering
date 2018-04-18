@@ -26,9 +26,43 @@
 """
 
 
+from pyclustering.cluster import cluster_visualizer;
 from pyclustering.cluster.encoder import type_encoding;
 
 from pyclustering.utils.metric import type_metric, distance_metric;
+
+
+class bsas_visualizer:
+    """!
+    @brief Visualizer of BSAS algorithm's results.
+    @details BSAS visualizer provides visualization services that are specific for BSAS algorithm.
+
+    """
+
+    @staticmethod
+    def show_clusters(sample, clusters, representatives, **kwargs):
+        """!
+        @brief Display BSAS clustering results.
+
+        @param[in] sample (list): Dataset that was used for clustering.
+        @param[in] clusters (array_like): Clusters that were allocated by the algorithm.
+        @param[in] representatives (array_like): Allocated representatives correspond to clusters.
+
+        @return (figure) Figure where clusters were drawn.
+
+        """
+
+        figure = kwargs.get('figure', None);
+        display = kwargs.get('display', True);
+        offset = kwargs.get('offset', 0);
+
+        visualizer = cluster_visualizer();
+        visualizer.append_clusters(clusters, sample, canvas=offset);
+
+        for cluster_index in range(len(clusters)):
+            visualizer.append_cluster_attribute(offset, cluster_index, [representatives[cluster_index]], '*', 10);
+
+        return visualizer.show(figure=figure, display=display);
 
 
 class bsas:
@@ -42,6 +76,8 @@ class bsas:
     \f[
     \vec{m}_{C_{k}}^{new}=\frac{ \left ( n_{C_{k}^{new}} - 1 \right )\vec{m}_{C_{k}}^{old} + \vec{x} }{n_{C_{k}^{new}}}
     \f]
+
+    Clustering results of this algorithm depends on objects order in input data.
 
     Example:
     @code

@@ -24,7 +24,7 @@
 """
 
 from pyclustering.cluster import cluster_visualizer;
-from pyclustering.cluster.bsas import bsas;
+from pyclustering.cluster.bsas import bsas, bsas_visualizer;
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES;
 
@@ -48,14 +48,7 @@ def template_clustering(path, amount, threshold, **kwargs):
     representatives = bsas_instance.get_representatives();
 
     if (draw is True):
-        visualizer = cluster_visualizer();
-
-        visualizer.append_clusters(clusters, sample);
-
-        for cluster_index in range(len(clusters)):
-            visualizer.append_cluster_attribute(0, cluster_index, [representatives[cluster_index]], '*', 10);
-
-        visualizer.show();
+        bsas_visualizer.show_clusters(sample, clusters, representatives);
 
 
 def cluster_sample1():
