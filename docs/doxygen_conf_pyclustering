@@ -4,7 +4,7 @@
 # Project related configuration options
 #---------------------------------------------------------------------------
 DOXYFILE_ENCODING      = UTF-8
-PROJECT_NAME           = 
+PROJECT_NAME           = ""
 PROJECT_NUMBER         =
 PROJECT_BRIEF          =
 PROJECT_LOGO           = docs/logo/pyclustering_logo_01_small.png
