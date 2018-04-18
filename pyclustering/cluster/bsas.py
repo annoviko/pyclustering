@@ -101,7 +101,7 @@ class bsas:
 
     """
 
-    def __init__(self,  data, maximum_clusters, threshold, ccore=True, **kwargs):
+    def __init__(self, data, maximum_clusters, threshold, ccore=True, **kwargs):
         """!
         @brief Creates classical BSAS algorithm.
 
@@ -116,14 +116,14 @@ class bsas:
 
         """
 
-        self.__data = data;
-        self.__amount = maximum_clusters;
-        self.__threshold = threshold;
-        self.__ccore = ccore;
-        self.__metric = kwargs.get('metric', distance_metric(type_metric.MANHATTAN));
+        self._data = data;
+        self._amount = maximum_clusters;
+        self._threshold = threshold;
+        self._ccore = ccore;
+        self._metric = kwargs.get('metric', distance_metric(type_metric.MANHATTAN));
 
-        self.__clusters = [];
-        self.__representatives = [];
+        self._clusters = [];
+        self._representatives = [];
 
 
     def process(self):
@@ -137,19 +137,19 @@ class bsas:
 
         """
 
-        self.__clusters.append([0]);
-        self.__representatives.append(self.__data[0]);
+        self._clusters.append([0]);
+        self._representatives.append(self._data[0]);
 
-        for i in range(1, len(self.__data)):
-            point = self.__data[i];
-            index_cluster, distance = self.__find_nearest_cluster(point);
+        for i in range(1, len(self._data)):
+            point = self._data[i];
+            index_cluster, distance = self._find_nearest_cluster(point);
 
-            if (distance > self.__threshold) and (len(self.__clusters) < self.__amount):
-                self.__representatives.append(point);
-                self.__clusters.append([i]);
+            if (distance > self._threshold) and (len(self._clusters) < self._amount):
+                self._representatives.append(point);
+                self._clusters.append([i]);
             else:
-                self.__clusters[index_cluster].append(i);
-                self.__update_representative(index_cluster, point);
+                self._clusters[index_cluster].append(i);
+                self._update_representative(index_cluster, point);
 
 
     def get_clusters(self):
@@ -160,7 +160,7 @@ class bsas:
         @see get_representatives()
 
         """
-        return self.__clusters;
+        return self._clusters;
 
 
     def get_representatives(self):
@@ -171,7 +171,7 @@ class bsas:
         @see get_clusters()
 
         """
-        return self.__representatives;
+        return self._representatives;
 
 
     def get_cluster_encoding(self):
@@ -187,7 +187,7 @@ class bsas:
         return type_encoding.CLUSTER_INDEX_LIST_SEPARATION;
 
 
-    def __find_nearest_cluster(self, point):
+    def _find_nearest_cluster(self, point):
         """!
         @brief Find nearest cluster to the specified point.
 
@@ -199,8 +199,8 @@ class bsas:
         index_cluster = -1;
         nearest_distance = float('inf');
 
-        for index in range(len(self.__representatives)):
-            distance = self.__metric(point, self.__representatives[index]);
+        for index in range(len(self._representatives)):
+            distance = self._metric(point, self._representatives[index]);
             if distance < nearest_distance:
                 index_cluster = index;
                 nearest_distance = distance;
@@ -208,7 +208,7 @@ class bsas:
         return index_cluster, nearest_distance;
 
 
-    def __update_representative(self, index_cluster, point):
+    def _update_representative(self, index_cluster, point):
         """!
         @brief Update cluster representative in line with new cluster size and added point to it.
 
@@ -216,8 +216,8 @@ class bsas:
         @param[in] point (list): Point that was added to cluster.
 
         """
-        length = len(self.__clusters[index_cluster]);
-        rep = self.__representatives[index_cluster];
+        length = len(self._clusters[index_cluster]);
+        rep = self._representatives[index_cluster];
 
         for dimension in range(len(rep)):
             rep[dimension] = ( (length - 1) * rep[dimension] + point[dimension] ) / length;

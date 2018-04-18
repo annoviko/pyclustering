@@ -61,6 +61,7 @@ class BsasTestTemplate:
         assertion.eq(len(sample), obtained_length);
         assertion.eq(len(expected), len(clusters));
         assertion.eq(len(expected), len(representatives));
+        assertion.ge(amount, len(clusters));
 
         dimension = len(sample[0]);
         for rep in representatives:
