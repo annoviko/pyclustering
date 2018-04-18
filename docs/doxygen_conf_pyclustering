@@ -101,6 +101,7 @@ INPUT                  = pyclustering/__init__.py \
                          pyclustering/cluster/__init__.py \
                          pyclustering/cluster/agglomerative.py \
                          pyclustering/cluster/birch.py \
+                         pyclustering/cluster/bsas.py \
                          pyclustering/cluster/center_initializer.py \
                          pyclustering/cluster/clarans.py \
                          pyclustering/cluster/cure.py \
