@@ -30,10 +30,41 @@ from pyclustering.cluster.bsas import bsas;
 
 
 class mbsas(bsas):
+    """!
+    @brief Class represents MBSAS (Modified Basic Sequential Algorithmic Scheme).
+
+    @see pyclustering.cluster.bsas
+
+    """
+
     def __init__(self, data, maximum_clusters, threshold, ccore=True, **kwargs):
+        """!
+        @brief Creates MBSAS algorithm.
+
+        @param[in] data (list): Input data that is presented as list of points (objects), each point should be represented by list or tuple.
+        @param[in] maximum_clusters: Maximum allowable number of clusters that can be allocated during processing.
+        @param[in] threshold: Threshold of dissimilarity (maximum distance) between points.
+        @param[in] ccore (bool): If True than DLL CCORE (C++ solution) will be used for solving.
+        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'metric').
+
+        Keyword Args:
+            metric (distance_metric): Metric that is used for distance calculation between two points.
+
+        """
         super().__init__(data, maximum_clusters, threshold, ccore, **kwargs);
 
+
     def process(self):
+        """!
+        @brief Performs cluster analysis in line with rules of BSAS algorithm.
+
+        @remark Results of clustering can be obtained using corresponding get methods.
+
+        @see get_clusters()
+        @see get_representatives()
+
+        """
+
         self._clusters.append([0]);
         self._representatives.append(self._data[0]);
 

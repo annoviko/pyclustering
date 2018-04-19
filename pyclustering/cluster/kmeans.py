@@ -145,7 +145,7 @@ class kmeans_visualizer:
         @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'figure', 'display').
         
         Keyword Args:
-            figure (figure): If 'None' then new is figure is creater, otherwise specified figure is used for visualization.
+            figure (figure): If 'None' then new is figure is created, otherwise specified figure is used for visualization.
             display (bool): If 'True' then figure will be shown by the method, otherwise it should be shown manually using matplotlib function 'plt.show()'.
             offset (uint): Specify axes index on the figure where results should be drawn (only if argument 'figure' is specified).
         

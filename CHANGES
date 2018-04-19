@@ -5,6 +5,12 @@ CHANGE NOTES FOR 0.8.1 (STARTED Feb 23, 2018)
 ------------------------------------------------------------------------
 
 GENERAL CHANGES:
+- Implemented MBSAS algorithm (pyclustering.cluster.mbsas).
+  See: https://github.com/annoviko/pyclustering/issues/398
+
+- Implemented BSAS algorithm (pyclustering.cluster.bsas).
+  See: https://github.com/annoviko/pyclustering/issues/398
+
 - Implemented feature to use specific metric for distance calculation in K-Medoids algorithm (pyclustering.cluster.kmedoids, ccore.clst.kmedoids).
   See: https://github.com/annoviko/pyclustering/issues/417
 

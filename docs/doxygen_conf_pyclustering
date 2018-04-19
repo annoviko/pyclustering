@@ -113,6 +113,7 @@ INPUT                  = pyclustering/__init__.py \
                          pyclustering/cluster/kmeans.py \
                          pyclustering/cluster/kmedians.py \
                          pyclustering/cluster/kmedoids.py \
+                         pyclustering/cluster/mbsas.py \
                          pyclustering/cluster/optics.py \
                          pyclustering/cluster/rock.py \
                          pyclustering/cluster/somsc.py \

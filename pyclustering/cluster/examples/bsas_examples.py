@@ -47,7 +47,7 @@ def template_clustering(path, amount, threshold, **kwargs):
     clusters = bsas_instance.get_clusters();
     representatives = bsas_instance.get_representatives();
 
-    if (draw is True):
+    if draw is True:
         bsas_visualizer.show_clusters(sample, clusters, representatives);
 
 

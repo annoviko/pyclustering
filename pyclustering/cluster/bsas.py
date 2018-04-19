@@ -47,6 +47,12 @@ class bsas_visualizer:
         @param[in] sample (list): Dataset that was used for clustering.
         @param[in] clusters (array_like): Clusters that were allocated by the algorithm.
         @param[in] representatives (array_like): Allocated representatives correspond to clusters.
+        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'figure', 'display').
+
+        Keyword Args:
+            figure (figure): If 'None' then new is figure is created, otherwise specified figure is used for visualization.
+            display (bool): If 'True' then figure will be shown by the method, otherwise it should be shown manually using matplotlib function 'plt.show()'.
+            offset (uint): Specify axes index on the figure where results should be drawn (only if argument 'figure' is specified).
 
         @return (figure) Figure where clusters were drawn.
 
@@ -95,6 +101,9 @@ class bsas:
         # Get clustering results.
         clusters = bsas_instance.get_clusters();
         representatives = bsas_instance.get_representatives();
+
+        # Display results.
+        bsas_visualizer.show_clusters(sample, clusters, representatives);
     @endcode
 
     @see pyclustering.cluster.mbsas, pyclustering.cluster.ttsas
@@ -133,7 +142,7 @@ class bsas:
         @remark Results of clustering can be obtained using corresponding get methods.
 
         @see get_clusters()
-        @see get_medians()
+        @see get_representatives()
 
         """
 
