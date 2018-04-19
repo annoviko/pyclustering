@@ -208,6 +208,9 @@
     <ClCompile Include="interface\metric_interface.cpp">
       <Filter>Source Files\interface</Filter>
     </ClCompile>
+    <ClCompile Include="cluster\bsas.cpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cluster\agglomerative.hpp">
@@ -440,6 +443,12 @@
     </ClInclude>
     <ClInclude Include="interface\metric_interface.h">
       <Filter>Source Files\interface</Filter>
+    </ClInclude>
+    <ClInclude Include="cluster\bsas.hpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="cluster\bsas_data.hpp">
+      <Filter>Source Files\cluster</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

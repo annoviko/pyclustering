@@ -81,11 +81,16 @@ public:
 public:
     /**
     *
-    * @brief    Returns shared pointer to medoids that corresponds to allocated clusters.
+    * @brief    Returns medoids that corresponds to allocated clusters.
     *
     */
     medoid_sequence & medoids(void) { return m_medoids; }
 
+    /**
+    *
+    * @brief    Returns medoids that corresponds to allocated clusters.
+    *
+    */
     const medoid_sequence & medoids(void) const { return m_medoids; }
 };
 

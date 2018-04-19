@@ -38,7 +38,7 @@ kmedoids::kmedoids(void) :
 { }
 
 
-kmedoids::kmedoids(const std::vector<size_t> & p_initial_medoids,
+kmedoids::kmedoids(const medoid_sequence & p_initial_medoids,
                    const double p_tolerance,
                    const distance_metric<point> & p_metric) :
         m_data_ptr(nullptr),
@@ -111,7 +111,7 @@ void kmedoids::update_clusters(void) {
 }
 
 
-void kmedoids::calculate_medoids(std::vector<size_t> & p_medoids) {
+void kmedoids::calculate_medoids(cluster & p_medoids) {
     cluster_sequence & clusters = m_result_ptr->clusters();
 
     p_medoids.clear();

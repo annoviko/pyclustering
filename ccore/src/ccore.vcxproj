@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cluster\agglomerative.cpp" />
+    <ClCompile Include="cluster\bsas.cpp" />
     <ClCompile Include="cluster\cluster_algorithm.cpp" />
     <ClCompile Include="cluster\cluster_data.cpp" />
     <ClCompile Include="cluster\cure.cpp" />
@@ -82,6 +83,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cluster\agglomerative.hpp" />
+    <ClInclude Include="cluster\bsas.hpp" />
+    <ClInclude Include="cluster\bsas_data.hpp" />
     <ClInclude Include="cluster\cluster_algorithm.hpp" />
     <ClInclude Include="cluster\cluster_data.hpp" />
     <ClInclude Include="cluster\cure.hpp" />
