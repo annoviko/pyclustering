@@ -118,6 +118,7 @@ Brief Overview of the Library Content
 
 - Agglomerative [Python, C++]
 - BIRCH [Python]
+- BSAS [Python]
 - CLARANS [Python]
 - CURE [Python, C++]
 - DBSCAN [Python, C++]
@@ -128,6 +129,7 @@ Brief Overview of the Library Content
 - K-Means++ [Python, C++]
 - K-Medians [Python, C++]
 - K-Medoids (PAM) [Python, C++]
+- MBSAS [Python]
 - OPTICS [Python, C++]
 - ROCK [Python, C++]
 - SOM-SC [Python, C++]
