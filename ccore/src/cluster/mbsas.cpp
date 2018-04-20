@@ -19,7 +19,7 @@
 */
 
 
-#include "cluster/bsas.hpp"
+#include "cluster/mbsas.hpp"
 
 
 namespace ccore {
@@ -27,20 +27,20 @@ namespace ccore {
 namespace clst {
 
 
-bsas::bsas(const std::size_t p_amount,
-           const double p_threshold,
-           const distance_metric<point> & p_metric) :
-    m_threshold(p_threshold),
-    m_amount(p_amount),
-    m_metric(p_metric)
+mbsas::mbsas(const std::size_t p_amount,
+             const double p_threshold,
+             const distance_metric<point> & p_metric) :
+    bsas(p_amount, p_threshold, p_metric)
 { }
 
 
-void bsas::process(const dataset & p_data, cluster_data & p_result) {
-    m_result_ptr = (bsas_data *) &p_result;
+void mbsas::process(const dataset & p_data, cluster_data & p_result) {
+    m_result_ptr = (mbsas_data *) &p_result;
 
     m_result_ptr->clusters().push_back({ 0 });
     m_result_ptr->representatives().push_back( p_data[0] );
+
+    std::vector<std::size_t> skipped_objects = { };
 
     for (std::size_t i = 1; i < p_data.size(); i++) {
         auto nearest = find_nearest_cluster(p_data[i]);
@@ -50,34 +50,15 @@ void bsas::process(const dataset & p_data, cluster_data & p_result) {
             m_result_ptr->clusters().push_back({ i });
         }
         else {
-            m_result_ptr->clusters()[nearest.m_index].push_back(i);
-            update_representative(nearest.m_index, p_data[i]);
-        }
-    }
-}
-
-
-bsas::nearest_cluster bsas::find_nearest_cluster(const point & p_point) const {
-    bsas::nearest_cluster result;
-
-    for (std::size_t i = 0; i < m_result_ptr->clusters().size(); i++) {
-        double distance = m_metric(p_point, m_result_ptr->representatives()[i]);
-        if (distance < result.m_distance) {
-            result.m_distance = distance;
-            result.m_index = i;
+            skipped_objects.push_back(i);
         }
     }
 
-    return result;
-}
+    for (auto index : skipped_objects) {
+        auto nearest = find_nearest_cluster(p_data[index]);
 
-
-void bsas::update_representative(const std::size_t p_index, const point & p_point) {
-    double len = (double) m_result_ptr->clusters().size();
-    auto & rep = m_result_ptr->representatives()[p_index];
-
-    for (std::size_t dim = 0; dim < rep.size(); dim++) {
-        rep[dim] = ( (len - 1) * rep[dim] + p_point[dim] ) / len;
+        m_result_ptr->clusters().at(nearest.m_index).push_back(index);
+        update_representative(nearest.m_index, p_data[index]);
     }
 }
 

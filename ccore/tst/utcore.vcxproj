@@ -89,6 +89,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\src\cluster\agglomerative.cpp" />
+    <ClCompile Include="..\src\cluster\bsas.cpp" />
     <ClCompile Include="..\src\cluster\cluster_algorithm.cpp" />
     <ClCompile Include="..\src\cluster\cluster_data.cpp" />
     <ClCompile Include="..\src\cluster\cure.cpp" />
@@ -99,6 +100,7 @@
     <ClCompile Include="..\src\cluster\kmeans_plus_plus.cpp" />
     <ClCompile Include="..\src\cluster\kmedians.cpp" />
     <ClCompile Include="..\src\cluster\kmedoids.cpp" />
+    <ClCompile Include="..\src\cluster\mbsas.cpp" />
     <ClCompile Include="..\src\cluster\optics.cpp" />
     <ClCompile Include="..\src\cluster\ordering_analyser.cpp" />
     <ClCompile Include="..\src\cluster\rock.cpp" />
@@ -148,6 +150,7 @@
     <ClCompile Include="..\src\utils\random.cpp" />
     <ClCompile Include="..\tools\gtest\gtest-all.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="utest-mbsas.cpp" />
     <ClCompile Include="samples.cpp" />
     <ClCompile Include="utenv_check.cpp" />
     <ClCompile Include="utest-adjacency.cpp" />
@@ -157,6 +160,7 @@
     <ClCompile Include="utest-adjacency_matrix.cpp" />
     <ClCompile Include="utest-adjacency_weight_list.cpp" />
     <ClCompile Include="utest-agglomerative.cpp" />
+    <ClCompile Include="utest-bsas.cpp" />
     <ClCompile Include="utest-cure.cpp" />
     <ClCompile Include="utest-dbscan.cpp" />
     <ClCompile Include="utest-differential.cpp" />
@@ -203,6 +207,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\cluster\agglomerative.hpp" />
+    <ClInclude Include="..\src\cluster\bsas.hpp" />
+    <ClInclude Include="..\src\cluster\bsas_data.hpp" />
     <ClInclude Include="..\src\cluster\cluster_algorithm.hpp" />
     <ClInclude Include="..\src\cluster\cluster_data.hpp" />
     <ClInclude Include="..\src\cluster\cure.hpp" />
@@ -217,6 +223,8 @@
     <ClInclude Include="..\src\cluster\kmedians_data.hpp" />
     <ClInclude Include="..\src\cluster\kmedoids.hpp" />
     <ClInclude Include="..\src\cluster\kmedoids_data.hpp" />
+    <ClInclude Include="..\src\cluster\mbsas.hpp" />
+    <ClInclude Include="..\src\cluster\mbsas_data.hpp" />
     <ClInclude Include="..\src\cluster\optics.hpp" />
     <ClInclude Include="..\src\cluster\optics_data.hpp" />
     <ClInclude Include="..\src\cluster\ordering_analyser.hpp" />

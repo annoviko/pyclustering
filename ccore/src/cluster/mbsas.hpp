@@ -21,8 +21,8 @@
 #pragma once
 
 
-#include "cluster/cluster_algorithm.hpp"
-#include "cluster/bsas_data.hpp"
+#include "cluster/bsas.hpp"
+#include "cluster/mbsas_data.hpp"
 
 #include "utils/metric.hpp"
 
@@ -35,28 +35,13 @@ namespace ccore {
 namespace clst {
 
 
-class bsas : public cluster_algorithm {
-protected:
-    struct nearest_cluster {
-        std::size_t   m_index       = (std::size_t) -1;
-        double        m_distance    = std::numeric_limits<double>::max();
-    };
-
-protected:
-    bsas_data       * m_result_ptr  = nullptr; /* temporary pointer to clustering result that is used only during processing */
-
-    double          m_threshold     = 0.0;
-
-    std::size_t     m_amount        = 0;
-
-    distance_metric<point>          m_metric;
-
+class mbsas : public bsas {
 public:
-    bsas(void) = default;
+    mbsas(void) = default;
 
-    bsas(const std::size_t p_amount,
-         const double p_threshold,
-         const distance_metric<point> & p_metric = distance_metric_factory<point>::euclidean());
+    mbsas(const std::size_t p_amount,
+          const double p_threshold,
+          const distance_metric<point> & p_metric = distance_metric_factory<point>::euclidean());
 
 public:
     /**
@@ -68,11 +53,6 @@ public:
     *
     */
     virtual void process(const dataset & p_data, cluster_data & p_result) override;
-
-protected:
-    nearest_cluster find_nearest_cluster(const point & p_point) const;
-
-    void update_representative(const std::size_t p_index, const point & p_point);
 };
 
 

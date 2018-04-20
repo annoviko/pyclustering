@@ -374,6 +374,18 @@
     <ClCompile Include="..\src\interface\metric_interface.cpp">
       <Filter>Tested Code\interface</Filter>
     </ClCompile>
+    <ClCompile Include="utest-bsas.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="utest-mbsas.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\cluster\bsas.cpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\cluster\mbsas.cpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\tools\gtest\gtest.h">
@@ -612,6 +624,18 @@
     </ClInclude>
     <ClInclude Include="..\src\interface\metric_interface.h">
       <Filter>Tested Code\interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cluster\bsas.hpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cluster\bsas_data.hpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cluster\mbsas.hpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cluster\mbsas_data.hpp">
+      <Filter>Tested Code\cluster</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

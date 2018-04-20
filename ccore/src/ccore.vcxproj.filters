@@ -211,6 +211,9 @@
     <ClCompile Include="cluster\bsas.cpp">
       <Filter>Source Files\cluster</Filter>
     </ClCompile>
+    <ClCompile Include="cluster\mbsas.cpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cluster\agglomerative.hpp">
@@ -448,6 +451,12 @@
       <Filter>Source Files\cluster</Filter>
     </ClInclude>
     <ClInclude Include="cluster\bsas_data.hpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="cluster\mbsas.hpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="cluster\mbsas_data.hpp">
       <Filter>Source Files\cluster</Filter>
     </ClInclude>
   </ItemGroup>

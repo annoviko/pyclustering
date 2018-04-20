@@ -129,7 +129,7 @@ class bsas:
         self._amount = maximum_clusters;
         self._threshold = threshold;
         self._ccore = ccore;
-        self._metric = kwargs.get('metric', distance_metric(type_metric.MANHATTAN));
+        self._metric = kwargs.get('metric', distance_metric(type_metric.EUCLIDEAN));
 
         self._clusters = [];
         self._representatives = [];
