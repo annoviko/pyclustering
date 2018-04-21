@@ -122,7 +122,7 @@ class cluster_visualizer:
         self.__canvas_dimensions = [ None for _ in range(number_canvases) ];
         self.__canvas_titles = [ None for _ in range(number_canvases) ];
         
-        if (titles is not None):
+        if titles is not None:
             self.__canvas_titles = titles;
         
         self.__default_2d_marker_size = 5;
@@ -144,13 +144,13 @@ class cluster_visualizer:
         
         """
         
-        if (len(cluster) == 0):
+        if len(cluster) == 0:
             return;
         
-        if (canvas > self.__number_canvases):
+        if canvas > self.__number_canvases:
             raise NameError('Canvas does ' + canvas + ' not exists.');
         
-        if (color is None):
+        if color is None:
             index_color = len(self.__canvas_clusters[canvas]) % len(color_list.TITLES);
             color = color_list.TITLES[index_color];
         
@@ -158,27 +158,27 @@ class cluster_visualizer:
         self.__canvas_clusters[canvas].append( added_canvas_descriptor );
         
         dimension = 0;
-        if (data is None):
+        if data is None:
             dimension = len(cluster[0]);
-            if (self.__canvas_dimensions[canvas] is None):
+            if self.__canvas_dimensions[canvas] is None:
                 self.__canvas_dimensions[canvas] = dimension;
-            elif (self.__canvas_dimensions[canvas] != dimension):
+            elif self.__canvas_dimensions[canvas] != dimension:
                 raise NameError('Only clusters with the same dimension of objects can be displayed on canvas.');
                 
         else:
             dimension = len(data[0]);
-            if (self.__canvas_dimensions[canvas] is None):
+            if self.__canvas_dimensions[canvas] is None:
                 self.__canvas_dimensions[canvas] = dimension;
-            elif (self.__canvas_dimensions[canvas] != dimension):
+            elif self.__canvas_dimensions[canvas] != dimension:
                 raise NameError('Only clusters with the same dimension of objects can be displayed on canvas.');
 
-        if ( (dimension < 1) and (dimension > 3) ):
+        if (dimension < 1) and (dimension > 3):
             raise NameError('Only objects with size dimension 1 (1D plot), 2 (2D plot) or 3 (3D plot) can be displayed.');
         
-        if (markersize is None):
-            if ( (dimension == 1) or (dimension == 2) ):
+        if markersize is None:
+            if (dimension == 1) or (dimension == 2):
                 added_canvas_descriptor.markersize = self.__default_2d_marker_size;
-            elif (dimension == 3):
+            elif dimension == 3:
                 added_canvas_descriptor.markersize = self.__default_3d_marker_size;
         
         return len(self.__canvas_clusters[canvas]) - 1;

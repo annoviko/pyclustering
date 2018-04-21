@@ -33,7 +33,7 @@ class mbsas(bsas):
     """!
     @brief Class represents MBSAS (Modified Basic Sequential Algorithmic Scheme).
 
-    @see pyclustering.cluster.bsas
+    @see pyclustering.cluster.bsas, pyclustering.cluster.ttsas
 
     """
 

@@ -370,7 +370,7 @@ class pcnn_network(network):
         self.__ccore_pcnn_pointer = None;
         
         # set parameters of the network
-        if (parameters is not None):
+        if parameters is not None:
             self._params = parameters;
         else:
             self._params = pcnn_parameters();
@@ -496,7 +496,7 @@ class pcnn_network(network):
             else:
                 outputs[index] = self.__OUTPUT_FALSE;
             
-            # In case of Fast Linking we should calculate threshould until output is changed.
+            # In case of Fast Linking we should calculate threshold until output is changed.
             if self._params.FAST_LINKING is not True:
                 threshold[index] = self._params.AT * self._threshold[index] + self._params.VT * outputs[index];
         
@@ -533,7 +533,7 @@ class pcnn_network(network):
                 if output_change is True:
                     previous_outputs = outputs[:];
         
-        # In case of Fast Linking threshould should be calculated after fast linking.
+        # In case of Fast Linking threshold should be calculated after fast linking.
         if self._params.FAST_LINKING is True:
             for index in range(0, self._num_osc, 1):
                 threshold[index] = self._params.AT * self._threshold[index] + self._params.VT * outputs[index];
