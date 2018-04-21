@@ -101,7 +101,7 @@ class pcnn_dynamic:
         @brief (list) Returns oscillato outputs during simulation.
         
         """
-        if (self.__ccore_pcnn_dynamic_pointer is not None):
+        if self.__ccore_pcnn_dynamic_pointer is not None:
             return wrapper.pcnn_dynamic_get_output(self.__ccore_pcnn_dynamic_pointer);
             
         return self.__dynamic;
@@ -113,7 +113,7 @@ class pcnn_dynamic:
         @brief (list) Returns sampling times when dynamic is measured during simulation.
         
         """
-        if (self.__ccore_pcnn_dynamic_pointer is not None):
+        if self.__ccore_pcnn_dynamic_pointer is not None:
             return wrapper.pcnn_dynamic_get_time(self.__ccore_pcnn_dynamic_pointer);
         
         return list(range(len(self)));
@@ -139,7 +139,7 @@ class pcnn_dynamic:
         @brief Default destructor of PCNN dynamic.
         
         """
-        if (self.__ccore_pcnn_dynamic_pointer is not None):
+        if self.__ccore_pcnn_dynamic_pointer is not None:
             wrapper.pcnn_dynamic_destroy(self.__ccore_pcnn_dynamic_pointer);
     
     
@@ -148,7 +148,7 @@ class pcnn_dynamic:
         @brief (uint) Returns number of simulation steps that are stored in dynamic.
         
         """
-        if (self.__ccore_pcnn_dynamic_pointer is not None):
+        if self.__ccore_pcnn_dynamic_pointer is not None:
             return wrapper.pcnn_dynamic_get_size(self.__ccore_pcnn_dynamic_pointer);
         
         return len(self.__dynamic);
@@ -164,7 +164,7 @@ class pcnn_dynamic:
                 
         """
         
-        if (self.__ccore_pcnn_dynamic_pointer is not None):
+        if self.__ccore_pcnn_dynamic_pointer is not None:
             return wrapper.pcnn_dynamic_allocate_sync_ensembles(self.__ccore_pcnn_dynamic_pointer);
         
         sync_ensembles = [];
@@ -175,12 +175,12 @@ class pcnn_dynamic:
         for t in range(len(self.__dynamic) - 1, 0, -1):
             sync_ensemble = [];
             for i in range(number_oscillators):
-                if (self.__dynamic[t][i] == self.__OUTPUT_TRUE):
-                    if (i not in traverse_oscillators):
+                if self.__dynamic[t][i] == self.__OUTPUT_TRUE:
+                    if i not in traverse_oscillators:
                         sync_ensemble.append(i);
                         traverse_oscillators.add(i);
             
-            if (sync_ensemble != []):
+            if sync_ensemble != []:
                 sync_ensembles.append(sync_ensemble);
         
         return sync_ensembles;
@@ -195,7 +195,7 @@ class pcnn_dynamic:
         
         """
         
-        if (self.__ccore_pcnn_dynamic_pointer is not None):
+        if self.__ccore_pcnn_dynamic_pointer is not None:
             return wrapper.pcnn_dynamic_allocate_spike_ensembles(self.__ccore_pcnn_dynamic_pointer);
         
         spike_ensembles = [];
@@ -222,7 +222,7 @@ class pcnn_dynamic:
         
         """
         
-        if (self.__ccore_pcnn_dynamic_pointer is not None):
+        if self.__ccore_pcnn_dynamic_pointer is not None:
             return wrapper.pcnn_dynamic_allocate_time_signal(self.__ccore_pcnn_dynamic_pointer);
         
         signal_vector_information = [];
@@ -276,7 +276,7 @@ class pcnn_visualizer:
         @brief Shows animation of output dynamic (output of each oscillator) during simulation.
         
         @param[in] pcnn_output_dynamic (pcnn_dynamic): Output dynamic of the pulse-coupled neural network.
-        @param[in] image_size (list): Image size represented as [height, width].
+        @param[in] image_size (tuple): Image size represented as (height, width).
         
         """
         
@@ -290,12 +290,12 @@ class pcnn_visualizer:
         for t in range(len(time_signal)):
             image_color_segments = [(255, 255, 255)] * (image_size[0] * image_size[1]);
             
-            if (time_signal[t] > 0):
+            if time_signal[t] > 0:
                 for index_pixel in spike_ensembles[ensemble_index]:
                     image_color_segments[index_pixel] = (0, 0, 0);
                 
                 ensemble_index += 1;
-                
+
             stage = numpy.array(image_color_segments, numpy.uint8);
             stage = numpy.reshape(stage, image_size + ((3),)); # ((3),) it's size of RGB - third dimension.
             image_cluster = Image.fromarray(stage, 'RGB');
@@ -375,14 +375,14 @@ class pcnn_network(network):
         else:
             self._params = pcnn_parameters();
         
-        if ( (ccore is True) and ccore_library.workable() ):
+        if (ccore is True) and ccore_library.workable():
             network_height = height;
             network_width = width;
             
-            if ( (type_conn == conn_type.GRID_FOUR) or (type_conn == conn_type.GRID_EIGHT) ):
-                if ( (network_height is None) or (network_width is None) ):
+            if (type_conn == conn_type.GRID_FOUR) or (type_conn == conn_type.GRID_EIGHT):
+                if (network_height is None) or (network_width is None):
                     side_size = num_osc ** (0.5);
-                    if (side_size - math.floor(side_size) > 0):
+                    if side_size - math.floor(side_size) > 0:
                         raise NameError('Invalid number of oscillators in the network in case of grid structure');
                 
                     network_height = int(side_size);
@@ -407,7 +407,7 @@ class pcnn_network(network):
         @brief Default destructor of PCNN.
         
         """
-        if (self.__ccore_pcnn_pointer is not None):
+        if self.__ccore_pcnn_pointer is not None:
             wrapper.pcnn_destroy(self.__ccore_pcnn_pointer);
             self.__ccore_pcnn_pointer = None;
     
@@ -418,7 +418,7 @@ class pcnn_network(network):
         
         """
         
-        if (self.__ccore_pcnn_pointer is not None):
+        if self.__ccore_pcnn_pointer is not None:
             return wrapper.pcnn_get_size(self.__ccore_pcnn_pointer);
         
         return self._num_osc;
@@ -435,10 +435,10 @@ class pcnn_network(network):
         
         """
         
-        if (len(stimulus) != len(self)):
+        if len(stimulus) != len(self):
             raise NameError('Number of stimulus should be equal to number of oscillators. Each stimulus corresponds to only one oscillators.');
         
-        if (self.__ccore_pcnn_pointer is not None):
+        if self.__ccore_pcnn_pointer is not None:
             ccore_instance_dynamic = wrapper.pcnn_simulate(self.__ccore_pcnn_pointer, steps, stimulus);
             return pcnn_dynamic(None, ccore_instance_dynamic);
         
@@ -491,22 +491,22 @@ class pcnn_network(network):
             internal_activity = feeding[index] * (1.0 + self._params.B * linking[index]);
             
             # calculate output of the oscillator
-            if (internal_activity > self._threshold[index]):
+            if internal_activity > self._threshold[index]:
                 outputs[index] = self.__OUTPUT_TRUE;
             else:
                 outputs[index] = self.__OUTPUT_FALSE;
             
             # In case of Fast Linking we should calculate threshould until output is changed.
-            if (self._params.FAST_LINKING is not True):
+            if self._params.FAST_LINKING is not True:
                 threshold[index] = self._params.AT * self._threshold[index] + self._params.VT * outputs[index];
         
         
         # In case of Fast Linking we need to wait until output is changed.
-        if (self._params.FAST_LINKING is True):
+        if self._params.FAST_LINKING is True:
             current_output_change = False;
             previous_outputs = outputs[:];
             
-            while (output_change is True):               
+            while output_change is True:
                 for index in range(0, self._num_osc, 1):
                     linking_influence = 0.0;
             
@@ -519,22 +519,22 @@ class pcnn_network(network):
                     internal_activity = feeding[index] * (1.0 + self._params.B * linking[index]);
                     
                     # calculate output of the oscillator
-                    if (internal_activity > self._threshold[index]):
+                    if internal_activity > self._threshold[index]:
                         outputs[index] = self.__OUTPUT_TRUE;
                     else:
                         outputs[index] = self.__OUTPUT_FALSE;
                         
-                    if (outputs[index] != previous_outputs[index]):
+                    if outputs[index] != previous_outputs[index]:
                         current_output_change = True;
                 
                 output_change = current_output_change;
                 current_output_change = False;
                 
-                if (output_change is True):
+                if output_change is True:
                     previous_outputs = outputs[:];
         
         # In case of Fast Linking threshould should be calculated after fast linking.
-        if (self._params.FAST_LINKING is True):
+        if self._params.FAST_LINKING is True:
             for index in range(0, self._num_osc, 1):
                 threshold[index] = self._params.AT * self._threshold[index] + self._params.VT * outputs[index];
         

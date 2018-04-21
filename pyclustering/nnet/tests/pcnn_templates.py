@@ -24,19 +24,30 @@
 """
 
 
-from pyclustering.nnet.pcnn import pcnn_network;
+from pyclustering.nnet.pcnn import pcnn_network, pcnn_parameters, pcnn_visualizer;
 from pyclustering.nnet import conn_represent;
 
 
 class PcnnTestTemplates:
     @staticmethod
-    def templateDynamicLength(num_osc, steps, type_conn, repr_type, stimulus, ccore):
-        net = pcnn_network(num_osc, None, type_conn, repr_type, None, None, ccore);
+    def templateDynamicLength(num_osc, steps, type_conn, repr_type, stimulus, ccore, **kwargs):
+        params = kwargs.get('params', None);
+
+        net = pcnn_network(num_osc, params, type_conn, repr_type, None, None, ccore);
         dynamic = net.simulate(steps, stimulus);
         
         assert steps == len(dynamic);
         assert num_osc == len(dynamic.output[0]);
         assert steps == len(dynamic.allocate_time_signal());
+
+        return net;
+
+
+    @staticmethod
+    def templateDynamicLengthFastLinking(num_osc, steps, type_conn, repr_type, stimulus, ccore):
+        params = pcnn_parameters();
+        params.FAST_LINKING = True;
+        return PcnnTestTemplates.templateDynamicLength(num_osc, steps, type_conn, repr_type, stimulus, ccore, params=params);
 
 
     @staticmethod
@@ -86,7 +97,7 @@ class PcnnTestTemplates:
         for ensemble in sync_ensembles:
             spike_ensembles_exist = False;
             for index in range(len(spike_ensembles)): 
-                if (ensemble == spike_ensembles[index]):
+                if ensemble == spike_ensembles[index]:
                     spike_ensembles_exist = True;
                     break;
             
@@ -105,3 +116,13 @@ class PcnnTestTemplates:
         assert steps == len(dynamic);
         assert num_osc == len(dynamic.output[0]);
         assert steps == len(dynamic.allocate_time_signal());
+
+
+    @staticmethod
+    def visualize(num_osc, steps, type_conn, repr_type, stimulus, height, width, ccore):
+        net = pcnn_network(num_osc, None, type_conn, repr_type, None, None, ccore);
+        dynamic = net.simulate(steps, stimulus);
+
+        pcnn_visualizer.show_time_signal(dynamic);
+        pcnn_visualizer.show_output_dynamic(dynamic);
+        pcnn_visualizer.animate_spike_ensembles(dynamic, (height, width));

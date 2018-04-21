@@ -28,7 +28,7 @@ import unittest;
 
 from pyclustering.nnet.tests.pcnn_templates import PcnnTestTemplates;
 
-from pyclustering.nnet import conn_type;
+from pyclustering.nnet import conn_type, conn_represent;
 
 from pyclustering.core.tests import remove_library;
 
@@ -84,6 +84,11 @@ class PcnnIntegrationTest(unittest.TestCase):
 
     def testAllocationInRectangleEightStructureByCore(self):
         PcnnTestTemplates.templateAllocationInRectangleStructure(30, 6, 5, 20, conn_type.GRID_EIGHT, None, [0] * 30, True);
+
+
+    def testVisualizerNoFailureByCore(self):
+        stimulus = [ 5, 5, 5, 5, 10, 10, 10, 10, 15, 15, 15, 15, 20, 20, 20, 20 ];
+        PcnnTestTemplates.visualize(16, 20, conn_type.ALL_TO_ALL, conn_represent.MATRIX, stimulus, 4, 4, True);
 
 
     @remove_library
