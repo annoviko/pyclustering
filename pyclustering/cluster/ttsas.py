@@ -123,7 +123,7 @@ class ttsas(bsas):
 
         index_cluster, distance = self._find_nearest_cluster(point);
 
-        if distance < self._threshold:
+        if distance <= self._threshold:
             self.__append_to_cluster(index_cluster, index_point, point);
         elif distance > self._threshold2:
             self.__allocate_cluster(index_point, point);
