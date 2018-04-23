@@ -32,6 +32,30 @@ from pyclustering.cluster.bsas import bsas;
 class mbsas(bsas):
     """!
     @brief Class represents MBSAS (Modified Basic Sequential Algorithmic Scheme).
+    @details Interface of MBSAS algorithm is the same as for BSAS. This algorithm performs clustering in two steps.
+              The first - is determination of amount of clusters. The second - is assignment of points that were not
+              marked as a cluster representatives to clusters.
+
+    Code example of MBSAS usage:
+    @code
+        # Read data sample from 'Simple02.data'.
+        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE2);
+
+        # Prepare algorithm's parameters.
+        max_clusters = 2;
+        threshold = 1.0;
+
+        # Create instance of MBSAS algorithm.
+        mbsas_instance = mbsas(sample, max_clusters, threshold);
+        mbsas_instance.process();
+
+        # Get clustering results.
+        clusters = mbsas_instance.get_clusters();
+        representatives = mbsas_instance.get_representatives();
+
+        # Display results.
+        bsas_visualizer.show_clusters(sample, clusters, representatives);
+    @endcode
 
     @see pyclustering.cluster.bsas, pyclustering.cluster.ttsas
 

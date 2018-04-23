@@ -119,6 +119,7 @@ INPUT                  = pyclustering/__init__.py \
                          pyclustering/cluster/somsc.py \
                          pyclustering/cluster/syncnet.py \
                          pyclustering/cluster/syncsom.py \
+                         pyclustering/cluster/ttsas.py \
                          pyclustering/cluster/xmeans.py \
                          pyclustering/container/__init__.py \
                          pyclustering/container/cftree.py \

@@ -32,6 +32,32 @@ from pyclustering.cluster.bsas import bsas;
 class ttsas(bsas):
     """!
     @brief Class represents TTSAS (Two-Threshold Sequential Algorithmic Scheme).
+    @details Clustering results of BSAS and MBSAS are strongly dependent on the order in which the points in data.
+              TTSAS helps to overcome this shortcoming by using two threshold parameters. The first - if the distance
+              to the nearest cluster is less than the first threshold then point is assigned to the cluster. The
+              second - if distance to the nearest cluster is greater than the second threshold then new cluster is
+              allocated.
+
+    Code example of TTSAS usage:
+    @code
+        # Read data sample from 'Simple03.data'.
+        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE3);
+
+        # Prepare algorithm's parameters.
+        threshold1 = 1.0;
+        threshold2 = 2.0;
+
+        # Create instance of TTSAS algorithm.
+        ttsas_instance = ttsas(sample, max_clusters, threshold);
+        ttsas_instance.process();
+
+        # Get clustering results.
+        clusters = ttsas_instance.get_clusters();
+        representatives = ttsas_instance.get_representatives();
+
+        # Display results using BSAS visualizer.
+        bsas_visualizer.show_clusters(sample, clusters, representatives);
+    @endcode
 
     @see pyclustering.cluster.bsas, pyclustering.cluster.mbsas
 
@@ -42,7 +68,6 @@ class ttsas(bsas):
         @brief Creates TTSAS algorithm.
 
         @param[in] data (list): Input data that is presented as list of points (objects), each point should be represented by list or tuple.
-        @param[in] maximum_clusters: Maximum allowable number of clusters that can be allocated during processing.
         @param[in] threshold1: Dissimilarity level (distance) between point and its closest cluster, if the distance is
                     less than 'threshold1' value then point is assigned to the cluster.
         @param[in] threshold2: Dissimilarity level (distance) between point and its closest cluster, if the distance is

@@ -73,7 +73,7 @@ class MbsasTestTemplate:
 
 
 
-class BsasUnitTest(unittest.TestCase):
+class MbsasUnitTest(unittest.TestCase):
     def testClusteringSampleSimple1(self):
         MbsasTestTemplate.clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, 1.0, [5, 5], False);
         MbsasTestTemplate.clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 10, 1.0, [5, 5], False);

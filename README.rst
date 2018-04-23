@@ -135,6 +135,7 @@ Brief Overview of the Library Content
 - SOM-SC [Python, C++]
 - SyncNet [Python, C++]
 - Sync-SOM [Python]
+- TTSAS [Python]
 - X-Means [Python, C++]
 
 
