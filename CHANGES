@@ -5,7 +5,7 @@ CHANGE NOTES FOR 0.8.1 (STARTED Feb 23, 2018)
 ------------------------------------------------------------------------
 
 GENERAL CHANGES:
-- Implemented TTSAS algorithm (pyclustering.cluster.ttsas).
+- Implemented TTSAS algorithm (pyclustering.cluster.ttsas, ccore.clst.ttsas).
   See: https://github.com/annoviko/pyclustering/issues/398
 
 - Implemented MBSAS algorithm (pyclustering.cluster.mbsas, ccore.clst.mbsas).

@@ -52,6 +52,7 @@ from pyclustering.cluster.tests.unit               import ut_rock               
 from pyclustering.cluster.tests.unit               import ut_somsc              as cluster_somsc_unit_tests;
 from pyclustering.cluster.tests.unit               import ut_syncnet            as cluster_syncnet_unit_tests;
 from pyclustering.cluster.tests.unit               import ut_syncsom            as cluster_syncsom_unit_tests;
+from pyclustering.cluster.tests.unit               import ut_ttsas              as cluster_ttsas_unit_tests;
 from pyclustering.cluster.tests.unit               import ut_xmeans             as cluster_xmeans_unit_tests;
 
 
@@ -83,6 +84,7 @@ class clustering_unit_tests(suite_holder):
         unit_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_somsc_unit_tests));
         unit_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_syncnet_unit_tests));
         unit_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_syncsom_unit_tests));
+        unit_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_ttsas_unit_tests));
         unit_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_xmeans_unit_tests));
 
 

@@ -34,7 +34,7 @@ ttsas::ttsas(const double p_threshold1,
     m_data_ptr(nullptr),
     m_threshold2(p_threshold2),
     m_skipped_objects(),
-    m_start(m_skipped_objects.begin())
+    m_start(0)
 { }
 
 
@@ -44,7 +44,7 @@ void ttsas::process(const dataset & p_data, cluster_data & p_result) {
 
     m_amount = p_data.size();
     m_skipped_objects = std::vector<bool>(p_data.size(), true);
-    m_start = m_skipped_objects.begin();
+    m_start = 0;
 
     std::size_t changes = 0;
     while (m_amount != 0) {
@@ -57,16 +57,20 @@ void ttsas::process(const dataset & p_data, cluster_data & p_result) {
 
 
 void ttsas::process_objects(const std::size_t p_changes) {
-    m_start = std::find(m_skipped_objects.begin(), m_skipped_objects.end(), true);
+    for (; m_start < m_skipped_objects.size(); m_start++) {
+        if (m_skipped_objects[m_start]) {
+            break;
+        }
+    }
 
     if (p_changes == 0.0) {
-        allocate_cluster(*m_start, m_data_ptr->at(*m_start));
+        allocate_cluster(m_start, m_data_ptr->at(m_start));
         m_start++;
     }
 
-    for (auto iter = m_start; iter != m_skipped_objects.end(); iter++) {
-        if (m_skipped_objects[*iter]) {
-            process_skipped_object(*iter);
+    for (std::size_t i = m_start; i < m_skipped_objects.size(); i++) {
+        if (m_skipped_objects[i]) {
+            process_skipped_object(i);
         }
     }
 }
@@ -80,7 +84,7 @@ void ttsas::process_skipped_object(const std::size_t p_index_point) {
         append_to_cluster(nearest.m_index, p_index_point, cur_point);
     }
     else if (nearest.m_distance > m_threshold2) {
-        allocate_cluster(nearest.m_index, cur_point);
+        allocate_cluster(p_index_point, cur_point);
     }
 }
 
@@ -89,7 +93,7 @@ void ttsas::append_to_cluster(const std::size_t p_index_cluster, const std::size
     m_result_ptr->clusters()[p_index_cluster].push_back(p_index_point);
     update_representative(p_index_cluster, p_point);
 
-    m_amount -= 1;
+    m_amount--;
     m_skipped_objects[p_index_point] = false;
 }
 

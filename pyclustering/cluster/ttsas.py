@@ -26,6 +26,9 @@
 """
 
 
+from pyclustering.core.ttsas_wrapper import ttsas as ttsas_wrapper;
+from pyclustering.core.metric_wrapper import metric_wrapper;
+
 from pyclustering.cluster.bsas import bsas;
 
 
@@ -98,6 +101,18 @@ class ttsas(bsas):
 
         """
 
+        if self._ccore is True:
+            self.__process_by_ccore();
+        else:
+            self.__prcess_by_python();
+
+
+    def __process_by_ccore(self):
+        ccore_metric = metric_wrapper.create_instance(self._metric);
+        self._clusters, self._representatives = ttsas_wrapper(self._data, self._threshold, self._threshold2, ccore_metric.get_pointer());
+
+
+    def __prcess_by_python(self):
         changes = 0;
         while self._amount_skipped_objects != 0:
             previous_amount = self._amount_skipped_objects;

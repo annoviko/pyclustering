@@ -48,6 +48,8 @@ class remove_library(object):
         self.call_object = call_object;
 
     def __call__(self, *args):
+        print("[TEST] Ignore next print related to problems with pyclustering ccore");
+
         os.rename(PATH_PYCLUSTERING_CCORE_LIBRARY, PATH_PYCLUSTERING_CCORE_LIBRARY + "_corrupted");
         ccore_library.initialize();
 

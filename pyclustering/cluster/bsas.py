@@ -26,6 +26,10 @@
 """
 
 
+from pyclustering.core.wrapper import ccore_library;
+from pyclustering.core.bsas_wrapper import bsas as bsas_wrapper;
+from pyclustering.core.metric_wrapper import metric_wrapper;
+
 from pyclustering.cluster import cluster_visualizer;
 from pyclustering.cluster.encoder import type_encoding;
 
@@ -128,11 +132,14 @@ class bsas:
         self._data = data;
         self._amount = maximum_clusters;
         self._threshold = threshold;
-        self._ccore = ccore;
         self._metric = kwargs.get('metric', distance_metric(type_metric.EUCLIDEAN));
+        self._ccore = ccore and self._metric.get_type() != type_metric.USER_DEFINED;
 
         self._clusters = [];
         self._representatives = [];
+
+        if self._ccore is True:
+            self._ccore = ccore_library.workable();
 
 
     def process(self):
@@ -146,6 +153,18 @@ class bsas:
 
         """
 
+        if self._ccore is True:
+            self.__process_by_ccore();
+        else:
+            self.__prcess_by_python();
+
+
+    def __process_by_ccore(self):
+        ccore_metric = metric_wrapper.create_instance(self._metric);
+        self._clusters, self._representatives = bsas_wrapper(self._data, self._amount, self._threshold, ccore_metric.get_pointer());
+
+
+    def __prcess_by_python(self):
         self._clusters.append([0]);
         self._representatives.append(self._data[0]);
 

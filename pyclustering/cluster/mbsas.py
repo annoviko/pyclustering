@@ -26,6 +26,9 @@
 """
 
 
+from pyclustering.core.mbsas_wrapper import mbsas as mbsas_wrapper;
+from pyclustering.core.metric_wrapper import metric_wrapper;
+
 from pyclustering.cluster.bsas import bsas;
 
 
@@ -89,6 +92,18 @@ class mbsas(bsas):
 
         """
 
+        if self._ccore is True:
+            self.__process_by_ccore();
+        else:
+            self.__prcess_by_python();
+
+
+    def __process_by_ccore(self):
+        ccore_metric = metric_wrapper.create_instance(self._metric);
+        self._clusters, self._representatives = mbsas_wrapper(self._data, self._amount, self._threshold, ccore_metric.get_pointer());
+
+
+    def __prcess_by_python(self):
         self._clusters.append([0]);
         self._representatives.append(self._data[0]);
 
@@ -110,4 +125,3 @@ class mbsas(bsas):
 
             self._clusters[index_cluster].append(i);
             self._update_representative(index_cluster, point);
-

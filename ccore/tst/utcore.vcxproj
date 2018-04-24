@@ -106,6 +106,7 @@
     <ClCompile Include="..\src\cluster\rock.cpp" />
     <ClCompile Include="..\src\cluster\somsc.cpp" />
     <ClCompile Include="..\src\cluster\syncnet.cpp" />
+    <ClCompile Include="..\src\cluster\ttsas.cpp" />
     <ClCompile Include="..\src\cluster\xmeans.cpp" />
     <ClCompile Include="..\src\container\adjacency_bit_matrix.cpp" />
     <ClCompile Include="..\src\container\adjacency_connector.cpp" />
@@ -117,6 +118,7 @@
     <ClCompile Include="..\src\container\kdtree.cpp" />
     <ClCompile Include="..\src\differential\differ_factor.cpp" />
     <ClCompile Include="..\src\interface\agglomerative_interface.cpp" />
+    <ClCompile Include="..\src\interface\bsas_interface.cpp" />
     <ClCompile Include="..\src\interface\cure_interface.cpp" />
     <ClCompile Include="..\src\interface\dbscan_interface.cpp" />
     <ClCompile Include="..\src\interface\hhn_interface.cpp" />
@@ -125,6 +127,7 @@
     <ClCompile Include="..\src\interface\kmedians_interface.cpp" />
     <ClCompile Include="..\src\interface\kmedoids_interface.cpp" />
     <ClCompile Include="..\src\interface\legion_interface.cpp" />
+    <ClCompile Include="..\src\interface\mbsas_interface.cpp" />
     <ClCompile Include="..\src\interface\metric_interface.cpp" />
     <ClCompile Include="..\src\interface\optics_interface.cpp" />
     <ClCompile Include="..\src\interface\pcnn_interface.cpp" />
@@ -134,6 +137,7 @@
     <ClCompile Include="..\src\interface\syncnet_interface.cpp" />
     <ClCompile Include="..\src\interface\syncpr_interface.cpp" />
     <ClCompile Include="..\src\interface\sync_interface.cpp" />
+    <ClCompile Include="..\src\interface\ttsas_interface.cpp" />
     <ClCompile Include="..\src\interface\xmeans_interface.cpp" />
     <ClCompile Include="..\src\nnet\dynamic_analyser.cpp" />
     <ClCompile Include="..\src\nnet\hhn.cpp" />
@@ -150,6 +154,9 @@
     <ClCompile Include="..\src\utils\random.cpp" />
     <ClCompile Include="..\tools\gtest\gtest-all.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="utest-interface-bsas.cpp" />
+    <ClCompile Include="utest-interface-mbsas.cpp" />
+    <ClCompile Include="utest-interface-ttsas.cpp" />
     <ClCompile Include="utest-mbsas.cpp" />
     <ClCompile Include="samples.cpp" />
     <ClCompile Include="utenv_check.cpp" />
@@ -202,6 +209,7 @@
     <ClCompile Include="utest-syncpr.cpp" />
     <ClCompile Include="utenv_utils.cpp" />
     <ClCompile Include="utest-thread_pool.cpp" />
+    <ClCompile Include="utest-ttsas.cpp" />
     <ClCompile Include="utest-utils-metric.cpp" />
     <ClCompile Include="utest-xmeans.cpp" />
   </ItemGroup>
@@ -232,6 +240,8 @@
     <ClInclude Include="..\src\cluster\somsc.hpp" />
     <ClInclude Include="..\src\cluster\somsc_data.hpp" />
     <ClInclude Include="..\src\cluster\syncnet.hpp" />
+    <ClInclude Include="..\src\cluster\ttsas.hpp" />
+    <ClInclude Include="..\src\cluster\ttsas_data.hpp" />
     <ClInclude Include="..\src\cluster\xmeans.hpp" />
     <ClInclude Include="..\src\container\adjacency.hpp" />
     <ClInclude Include="..\src\container\adjacency_bit_matrix.hpp" />
@@ -252,6 +262,7 @@
     <ClInclude Include="..\src\differential\runge_kutta_fehlberg_45.hpp" />
     <ClInclude Include="..\src\differential\solve_type.hpp" />
     <ClInclude Include="..\src\interface\agglomerative_interface.h" />
+    <ClInclude Include="..\src\interface\bsas_interface.h" />
     <ClInclude Include="..\src\interface\cure_interface.h" />
     <ClInclude Include="..\src\interface\dbscan_interface.h" />
     <ClInclude Include="..\src\interface\hhn_interface.h" />
@@ -260,6 +271,7 @@
     <ClInclude Include="..\src\interface\kmedians_interface.h" />
     <ClInclude Include="..\src\interface\kmedoids_interface.h" />
     <ClInclude Include="..\src\interface\legion_interface.h" />
+    <ClInclude Include="..\src\interface\mbsas_interface.h" />
     <ClInclude Include="..\src\interface\metric_interface.h" />
     <ClInclude Include="..\src\interface\optics_interface.h" />
     <ClInclude Include="..\src\interface\pcnn_interface.h" />
@@ -269,6 +281,7 @@
     <ClInclude Include="..\src\interface\syncnet_interface.h" />
     <ClInclude Include="..\src\interface\syncpr_interface.h" />
     <ClInclude Include="..\src\interface\sync_interface.h" />
+    <ClInclude Include="..\src\interface\ttsas_interface.h" />
     <ClInclude Include="..\src\interface\xmeans_interface.h" />
     <ClInclude Include="..\src\nnet\dynamic_analyser.hpp" />
     <ClInclude Include="..\src\nnet\hhn.hpp" />

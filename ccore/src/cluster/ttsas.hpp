@@ -44,8 +44,8 @@ private:
 
     double          m_threshold2 = 0.0;
 
-    std::vector<bool>           m_skipped_objects = { };
-    std::vector<bool>::iterator m_start;
+    std::vector<bool>   m_skipped_objects = { };
+    std::size_t         m_start;
 
 public:
     ttsas(void) = default;
