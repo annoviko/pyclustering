@@ -24,7 +24,7 @@
 """
 
 
-from pyclustering.cluster.optics import optics, ordering_analyser, optics_data_type;
+from pyclustering.cluster.optics import optics, ordering_analyser;
 
 from pyclustering.utils import read_sample, calculate_distance_matrix;
 
@@ -33,19 +33,19 @@ from pyclustering.utils import read_sample, calculate_distance_matrix;
 class OpticsTestTemplates:
     @staticmethod
     def templateClusteringResults(path, radius, neighbors, amount_clusters, expected_length_clusters, ccore):
-        OpticsTestTemplates.templateClusteringResultsSpecificData(optics_data_type.POINTS, path, radius, neighbors, amount_clusters, expected_length_clusters, ccore);
+        OpticsTestTemplates.templateClusteringResultsSpecificData('points', path, radius, neighbors, amount_clusters, expected_length_clusters, ccore);
 
 
     @staticmethod
     def templateClusteringResultsDistanceMatrix(path, radius, neighbors, amount_clusters, expected_length_clusters, ccore):
-        OpticsTestTemplates.templateClusteringResultsSpecificData(optics_data_type.DISTANCE_MATRIX, path, radius, neighbors, amount_clusters, expected_length_clusters, ccore);
+        OpticsTestTemplates.templateClusteringResultsSpecificData('distance_matrix', path, radius, neighbors, amount_clusters, expected_length_clusters, ccore);
 
 
     @staticmethod
     def templateClusteringResultsSpecificData(data_type, path, radius, neighbors, amount_clusters, expected_length_clusters, ccore):
         sample = read_sample(path);
 
-        if data_type == optics_data_type.DISTANCE_MATRIX:
+        if data_type == 'distance_matrix':
             input_data = calculate_distance_matrix(sample);
         else:
             input_data = sample;

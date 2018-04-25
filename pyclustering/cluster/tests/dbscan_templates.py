@@ -25,7 +25,7 @@
 
 
 from pyclustering.utils import read_sample, calculate_distance_matrix;
-from pyclustering.cluster.dbscan import dbscan, dbscan_data_type;
+from pyclustering.cluster.dbscan import dbscan;
 
 from random import random;
 
@@ -48,12 +48,12 @@ class DbscanTestTemplates:
 
     @staticmethod
     def templateLengthProcessData(path_to_file, radius, min_number_neighbors, max_number_neighbors, ccore):
-        DbscanTestTemplates.templateLengthProcessSpecificData(dbscan_data_type.POINTS, path_to_file, radius,
+        DbscanTestTemplates.templateLengthProcessSpecificData('points', path_to_file, radius,
                                                               min_number_neighbors, max_number_neighbors, ccore);
 
     @staticmethod
     def templateLengthProcessDistanceMatrix(path_to_file, radius, min_number_neighbors, max_number_neighbors, ccore):
-        DbscanTestTemplates.templateLengthProcessSpecificData(dbscan_data_type.DISTANCE_MATRIX, path_to_file, radius,
+        DbscanTestTemplates.templateLengthProcessSpecificData('points', path_to_file, radius,
                                                               min_number_neighbors, max_number_neighbors, ccore);
 
     @staticmethod
@@ -61,10 +61,10 @@ class DbscanTestTemplates:
         for _ in range(min_number_neighbors, max_number_neighbors, 1):
             sample = read_sample(path_to_file);
 
-            if data_type == dbscan_data_type.DISTANCE_MATRIX:
+            if data_type == 'distance_matrix':
                 input_data = calculate_distance_matrix(sample);
 
-            elif data_type == dbscan_data_type.POINTS:
+            elif data_type == 'points':
                 input_data = sample;
 
             dbscan_instance = dbscan(input_data, radius, min_number_neighbors, ccore, data_type=data_type);
@@ -81,12 +81,12 @@ class DbscanTestTemplates:
 
     @staticmethod
     def templateClusterAllocationOneDimensionData(ccore_flag):
-        DbscanTestTemplates.templateClusterAllocationOneDimensionDataSpecificData(dbscan_data_type.POINTS, ccore_flag);
+        DbscanTestTemplates.templateClusterAllocationOneDimensionDataSpecificData('points', ccore_flag);
 
 
     @staticmethod
     def templateClusterAllocationOneDimensionDistanceMatrix(ccore_flag):
-        DbscanTestTemplates.templateClusterAllocationOneDimensionDataSpecificData(dbscan_data_type.DISTANCE_MATRIX, ccore_flag);
+        DbscanTestTemplates.templateClusterAllocationOneDimensionDataSpecificData('distance_matrix', ccore_flag);
 
 
     @staticmethod
@@ -94,10 +94,10 @@ class DbscanTestTemplates:
         for _ in range(50):
             sample = [[random()] for _ in range(10)] + [[random() + 3] for _ in range(10)] + [[random() + 6] for _ in range(10)] + [[random() + 9] for _ in range(10)];
 
-            if data_type == dbscan_data_type.DISTANCE_MATRIX:
+            if data_type == 'distance_matrix':
                 input_data = calculate_distance_matrix(sample);
 
-            elif data_type == dbscan_data_type.POINTS:
+            elif data_type == 'points':
                 input_data = sample;
 
             dbscan_instance = dbscan(input_data, 1.0, 2, ccore_flag, data_type=data_type);
@@ -115,7 +115,7 @@ class DbscanTestTemplates:
         sample = read_sample(path_to_file);
         distance_matrix = calculate_distance_matrix(sample);
 
-        dbscan_instance = dbscan(distance_matrix, radius, neighbors, ccore, data_type=dbscan_data_type.DISTANCE_MATRIX);
+        dbscan_instance = dbscan(distance_matrix, radius, neighbors, ccore, data_type='distance_matrix');
         dbscan_instance.process();
 
         clusters = dbscan_instance.get_clusters();

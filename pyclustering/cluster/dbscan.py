@@ -39,20 +39,6 @@ from pyclustering.utils import get_argument;
 import pyclustering.core.dbscan_wrapper as wrapper;
 
 
-
-class dbscan_data_type(IntEnum):
-    """!
-    @brief Enumeration of DBSCAN input data types that is used for processing: points, adjacency matrix.
-
-    """
-
-    ## Input data is represented by points that are contained by array like container, for example, by list.
-    POINTS = 0;
-
-    ## Input data is represented by distance matrix between points.
-    DISTANCE_MATRIX = 1;
-
-
 class dbscan:
     """!
     @brief Class represents clustering algorithm DBSCAN.
@@ -89,7 +75,7 @@ class dbscan:
         @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'data_type').
 
         <b>Keyword Args:</b><br>
-            - data_type (dbscan_data_type): Data type of input sample 'data' that is processed by the algorithm (simple sequence of points or distance matrix).
+            - data_type (string): Data type of input sample 'data' that is processed by the algorithm ('points', 'distance_matrix').
         
         """
         
@@ -102,13 +88,15 @@ class dbscan:
         self.__visited = [False] * len(self.__pointer_data);
         self.__belong = [False] * len(self.__pointer_data);
 
-        self.__data_type = get_argument('data_type', dbscan_data_type.POINTS, **kwargs);
+        self.__data_type = kwargs.get('data_type', 'points');
 
         self.__clusters = [];
         self.__noise = [];
-        
+
+        self.__neighbor_searcher = self.__create_neighbor_searcher(self.__data_type);
+
         self.__ccore = ccore;
-        if (self.__ccore):
+        if self.__ccore:
             self.__ccore = ccore_library.workable();
 
 
@@ -125,7 +113,7 @@ class dbscan:
             (self.__clusters, self.__noise) = wrapper.dbscan(self.__pointer_data, self.__eps, self.__neighbors, self.__data_type);
             
         else:
-            if self.__data_type == dbscan_data_type.POINTS:
+            if self.__data_type == 'points':
                 self.__kdtree = kdtree(self.__pointer_data, range(len(self.__pointer_data)));
 
             for i in range(0, len(self.__pointer_data)):
@@ -184,6 +172,21 @@ class dbscan:
         return type_encoding.CLUSTER_INDEX_LIST_SEPARATION;
 
 
+    def __create_neighbor_searcher(self, data_type):
+        """!
+        @brief Returns neighbor searcher in line with data type.
+
+        @param[in] data_type (string): Data type (points or distance matrix).
+
+        """
+        if data_type == 'points':
+            return self.__neighbor_indexes_points;
+        elif data_type == 'distance_matrix':
+            return self.__neighbor_indexes_distance_matrix;
+        else:
+            raise TypeError("Unknown type of data is specified '%s'" % data_type);
+
+
     def __expand_cluster(self, index_point):
         """!
         @brief Expands cluster from specified point in the input data space.
@@ -196,7 +199,7 @@ class dbscan:
         
         cluster = None;
         self.__visited[index_point] = True;
-        neighbors = self.__neighbor_indexes(index_point);
+        neighbors = self.__neighbor_searcher(index_point);
          
         if len(neighbors) >= self.__neighbors:
             cluster = [ index_point ];
@@ -206,7 +209,7 @@ class dbscan:
             for i in neighbors:
                 if self.__visited[i] is False:
                     self.__visited[i] = True;
-                    next_neighbors = self.__neighbor_indexes(i);
+                    next_neighbors = self.__neighbor_searcher(i);
                      
                     if len(next_neighbors) >= self.__neighbors:
                         # if some node has less then minimal number of neighbors than we shouldn't look at them
@@ -219,21 +222,29 @@ class dbscan:
              
         return cluster;
 
-    def __neighbor_indexes(self, index_point):
+
+    def __neighbor_indexes_points(self, index_point):
         """!
-        @brief Return list of indexes of neighbors of specified point for the data.
-        
-        @param[in] index_point (list): An index of a point for which potential neighbors should be returned in line with connectivity radius.
-        
-        @return (list) Return list of indexes of neighbors in line the connectivity radius.
-        
+        @brief Return neighbors of the specified object in case of sequence of points.
+
+        @param[in] index_point (uint): Index point whose neighbors are should be found.
+
+        @return (list) List of indexes of neighbors in line the connectivity radius.
+
         """
+        kdnodes = self.__kdtree.find_nearest_dist_nodes(self.__pointer_data[index_point], self.__eps);
+        return [node_tuple[1].payload for node_tuple in kdnodes if node_tuple[1].payload != index_point];
 
-        if self.__data_type == dbscan_data_type.POINTS:
-            kdnodes = self.__kdtree.find_nearest_dist_nodes(self.__pointer_data[index_point], self.__eps);
-            return [node_tuple[1].payload for node_tuple in kdnodes if node_tuple[1].payload != index_point];
 
-        else:
-            distances = self.__pointer_data[index_point];
-            return [ index_neighbor for index_neighbor in range(len(distances))
-                     if ( (distances[index_neighbor] <= self.__eps) and (index_neighbor != index_point) ) ];
+    def __neighbor_indexes_distance_matrix(self, index_point):
+        """!
+        @brief Return neighbors of the specified object in case of distance matrix.
+
+        @param[in] index_point (uint): Index point whose neighbors are should be found.
+
+        @return (list) List of indexes of neighbors in line the connectivity radius.
+
+        """
+        distances = self.__pointer_data[index_point];
+        return [index_neighbor for index_neighbor in range(len(distances))
+                if ((distances[index_neighbor] <= self.__eps) and (index_neighbor != index_point))];
