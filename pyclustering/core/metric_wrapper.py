@@ -32,6 +32,7 @@ from ctypes import c_double, c_size_t, POINTER, c_void_p, CFUNCTYPE;
 
 from pyclustering.utils.metric import type_metric;
 
+
 metric_callback = CFUNCTYPE(c_double, POINTER(pyclustering_package), POINTER(pyclustering_package));
 
 

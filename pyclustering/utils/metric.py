@@ -104,6 +104,8 @@ class distance_metric:
         self.__args = kwargs;
         self.__func = self.__args.get('func', None);
 
+        self.__calculator = self.__create_distance_calculator();
+
 
     def __call__(self, point1, point2):
         """!
@@ -115,26 +117,7 @@ class distance_metric:
         @return (double) Distance between two points.
 
         """
-        if self.__type == type_metric.EUCLIDEAN:
-            return euclidean_distance(point1, point2);
-
-        elif self.__type == type_metric.EUCLIDEAN_SQUARE:
-            return euclidean_distance_square(point1, point2);
-
-        elif self.__type == type_metric.MANHATTAN:
-            return manhattan_distance(point1, point2);
-
-        elif self.__type == type_metric.CHEBYSHEV:
-            return chebyshev_distance(point1, point2);
-
-        elif self.__type == type_metric.MINKOWSKI:
-            return minkowski_distance(point1, point2, self.__args.get('degree', 2));
-
-        elif self.__type == type_metric.USER_DEFINED:
-            return self.__func(point1, point2);
-
-        else:
-            raise ValueError("Unknown type of metric: '%d'", self.__type);
+        return self.__calculator(point1, point2);
 
 
     def get_type(self):
@@ -165,6 +148,35 @@ class distance_metric:
 
         """
         return self.__func;
+
+
+    def __create_distance_calculator(self):
+        """!
+        @brief Creates distance metric calculator.
+
+        @return (callable) Callable object of distance metric calculator.
+
+        """
+        if self.__type == type_metric.EUCLIDEAN:
+            return euclidean_distance;
+
+        elif self.__type == type_metric.EUCLIDEAN_SQUARE:
+            return euclidean_distance_square;
+
+        elif self.__type == type_metric.MANHATTAN:
+            return manhattan_distance;
+
+        elif self.__type == type_metric.CHEBYSHEV:
+            return chebyshev_distance;
+
+        elif self.__type == type_metric.MINKOWSKI:
+            return lambda point1, point2: minkowski_distance(point1, point2, self.__args.get('degree', 2));
+
+        elif self.__type == type_metric.USER_DEFINED:
+            return self.__func;
+
+        else:
+            raise ValueError("Unknown type of metric: '%d'", self.__type);
 
 
 
