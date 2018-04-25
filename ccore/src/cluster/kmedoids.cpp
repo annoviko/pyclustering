@@ -29,15 +29,6 @@ namespace ccore {
 namespace clst {
 
 
-kmedoids::kmedoids(void) :
-        m_data_ptr(nullptr),
-        m_result_ptr(nullptr),
-        m_initial_medoids(std::vector<size_t>()),
-        m_tolerance(0.0),
-        m_metric(nullptr)
-{ }
-
-
 kmedoids::kmedoids(const medoid_sequence & p_initial_medoids,
                    const double p_tolerance,
                    const distance_metric<point> & p_metric) :
@@ -53,8 +44,14 @@ kmedoids::~kmedoids(void) { }
 
 
 void kmedoids::process(const dataset & p_data, cluster_data & p_result) {
+    process(p_data, kmedoids_data_t::POINTS, p_result);
+}
+
+
+void kmedoids::process(const dataset & p_data, const kmedoids_data_t p_type, cluster_data & p_result) {
     m_data_ptr = &p_data;
     m_result_ptr = (kmedoids_data *) &p_result;
+    m_calculator = create_distance_calculator(p_type);
 
     medoid_sequence & medoids = m_result_ptr->medoids();
     medoids.assign(m_initial_medoids.begin(), m_initial_medoids.end());
@@ -98,7 +95,7 @@ void kmedoids::update_clusters(void) {
 
         for (size_t index = 0; index < medoids.size(); index++) {
             const size_t index_medoid = medoids[index];
-            const double distance = m_metric((*m_data_ptr)[index_point], (*m_data_ptr)[index_medoid]);
+            const double distance = m_calculator(index_point, index_medoid);
 
             if ( (distance < dist_optim) || (index == 0) ) {
                 index_optim = index;
@@ -130,7 +127,7 @@ size_t kmedoids::calculate_cluster_medoid(const cluster & p_cluster) const {
     for (auto index_candidate : p_cluster) {
         double distance_candidate = 0.0;
         for (auto index_point : p_cluster) {
-            distance_candidate += m_metric( (*m_data_ptr)[index_point], (*m_data_ptr)[index_candidate] );
+            distance_candidate += m_calculator(index_point, index_candidate);
         }
 
         if (distance_candidate < distance) {
@@ -149,13 +146,30 @@ double kmedoids::calculate_changes(const medoid_sequence & p_medoids) const {
         const size_t index_point1 = p_medoids[index];
         const size_t index_point2 = m_result_ptr->medoids()[index];
 
-        const double distance = m_metric( (*m_data_ptr)[index_point1], (*m_data_ptr)[index_point2] );
+        const double distance = m_calculator(index_point1, index_point2);
         if (distance > maximum_difference) {
             maximum_difference = distance;
         }
     }
 
     return maximum_difference;
+}
+
+
+kmedoids::distance_calculator kmedoids::create_distance_calculator(const kmedoids_data_t p_type) {
+    if (p_type == kmedoids_data_t::POINTS) {
+        return [this](const std::size_t index1, const std::size_t index2) {
+          return m_metric((*m_data_ptr)[index1], (*m_data_ptr)[index2]); 
+        };
+    }
+    else if (p_type == kmedoids_data_t::DISTANCE_MATRIX) {
+        return [this](const std::size_t index1, const std::size_t index2) {
+          return (*m_data_ptr)[index1][index2];
+        };
+    }
+    else {
+        throw std::invalid_argument("Unknown type data is specified");
+    }
 }
 
 

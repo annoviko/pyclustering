@@ -31,7 +31,8 @@ using namespace ccore::utils::metric;
 pyclustering_package * kmedoids_algorithm(const pyclustering_package * const p_sample,
                                           const pyclustering_package * const p_package_medoids,
                                           const double p_tolerance,
-                                          const void * const p_metric)
+                                          const void * const p_metric,
+                                          const std::size_t p_type)
 {
     ccore::clst::medoid_sequence medoids;
     p_package_medoids->extract(medoids);
@@ -48,7 +49,7 @@ pyclustering_package * kmedoids_algorithm(const pyclustering_package * const p_s
     p_sample->extract(input_dataset);
 
     ccore::clst::kmedoids_data output_result;
-    algorithm.process(input_dataset, output_result);
+    algorithm.process(input_dataset, (ccore::clst::kmedoids_data_t) p_type, output_result);
 
     pyclustering_package * package = create_package(&output_result.clusters());
     return package;

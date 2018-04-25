@@ -88,8 +88,8 @@ class dbscan:
         @param[in] ccore (bool): if True than DLL CCORE (C++ solution) will be used for solving the problem.
         @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'data_type').
 
-        Keyword Args:
-            data_type (dbscan_data_type): Data type of input sample 'data' that is processed by the algorithm (simple sequence of points or distance matrix).
+        <b>Keyword Args:</b><br>
+            - data_type (dbscan_data_type): Data type of input sample 'data' that is processed by the algorithm (simple sequence of points or distance matrix).
         
         """
         

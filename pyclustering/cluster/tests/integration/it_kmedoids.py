@@ -45,38 +45,74 @@ class KmedoidsIntegrationTest(unittest.TestCase):
     def testClusterAllocationSampleSimple1ByCore(self):
         KmedoidsTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], True);
 
-    def testClusterAllocationSampleSimple1Euclidean(self):
+    def testClusterAllocationSampleSimple1DistanceMatrixByCore(self):
+        KmedoidsTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], True, data_type='distance_matrix');
+
+    def testClusterAllocationSampleSimple1EuclideanByCore(self):
         metric = distance_metric(type_metric.EUCLIDEAN);
         KmedoidsTestTemplates.templateLengthProcessWithMetric(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], metric, True);
 
-    def testClusterAllocationSampleSimple1SquareEuclidean(self):
+    def testClusterAllocationSampleSimple1EuclideanDistanceMatrixByCore(self):
+        metric = distance_metric(type_metric.EUCLIDEAN);
+        KmedoidsTestTemplates.templateLengthProcessWithMetric(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], metric, True, data_type='distance_matrix');
+
+    def testClusterAllocationSampleSimple1SquareEuclideanByCore(self):
         metric = distance_metric(type_metric.EUCLIDEAN_SQUARE);
         KmedoidsTestTemplates.templateLengthProcessWithMetric(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], metric, True);
 
-    def testClusterAllocationSampleSimple1Manhattan(self):
+    def testClusterAllocationSampleSimple1SquareEuclideanDistanceMatrixByCore(self):
+        metric = distance_metric(type_metric.EUCLIDEAN_SQUARE);
+        KmedoidsTestTemplates.templateLengthProcessWithMetric(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], metric, True, data_type='distance_matrix');
+
+    def testClusterAllocationSampleSimple1ManhattanByCore(self):
         metric = distance_metric(type_metric.MANHATTAN);
         KmedoidsTestTemplates.templateLengthProcessWithMetric(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], metric, True);
 
-    def testClusterAllocationSampleSimple1Chebyshev(self):
+    def testClusterAllocationSampleSimple1ManhattanDistanceMatrixByCore(self):
+        metric = distance_metric(type_metric.MANHATTAN);
+        KmedoidsTestTemplates.templateLengthProcessWithMetric(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], metric, True, data_type='distance_matrix');
+
+    def testClusterAllocationSampleSimple1ChebyshevByCore(self):
         metric = distance_metric(type_metric.CHEBYSHEV);
         KmedoidsTestTemplates.templateLengthProcessWithMetric(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], metric, True);
 
-    def testClusterAllocationSampleSimple1Minkowski(self):
+    def testClusterAllocationSampleSimple1ChebyshevDistanceMatrixByCore(self):
+        metric = distance_metric(type_metric.CHEBYSHEV);
+        KmedoidsTestTemplates.templateLengthProcessWithMetric(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], metric, True, data_type='distance_matrix');
+
+    def testClusterAllocationSampleSimple1MinkowskiByCore(self):
         metric = distance_metric(type_metric.MINKOWSKI, degree=2.0);
         KmedoidsTestTemplates.templateLengthProcessWithMetric(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], metric, True);
 
-    def testClusterAllocationSampleSimple1UserDefined(self):
+    def testClusterAllocationSampleSimple1MinkowskiDistanceMatrixByCore(self):
+        metric = distance_metric(type_metric.MINKOWSKI, degree=2.0);
+        KmedoidsTestTemplates.templateLengthProcessWithMetric(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], metric, True, data_type='distance_matrix');
+
+    def testClusterAllocationSampleSimple1UserDefinedByCore(self):
         metric = distance_metric(type_metric.USER_DEFINED, func=distance_metric(type_metric.EUCLIDEAN));
         KmedoidsTestTemplates.templateLengthProcessWithMetric(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], metric, True);
+
+    def testClusterAllocationSampleSimple1UserDefinedDistanceMatrixByCore(self):
+        metric = distance_metric(type_metric.USER_DEFINED, func=distance_metric(type_metric.EUCLIDEAN));
+        KmedoidsTestTemplates.templateLengthProcessWithMetric(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], metric, True, data_type='distance_matrix');
 
     def testClusterOneAllocationSampleSimple1ByCore(self):
         KmedoidsTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [5], [10], True);
 
+    def testClusterOneAllocationSampleSimple1DistanceMatrixByCore(self):
+        KmedoidsTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [5], [10], True, data_type='distance_matrix');
+
     def testClusterAllocationSampleSimple2ByCore(self):
         KmedoidsTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [3, 12, 20], [10, 5, 8], True);
 
+    def testClusterAllocationSampleSimple2DistanceMatrixByCore(self):
+        KmedoidsTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [3, 12, 20], [10, 5, 8], True, data_type='distance_matrix');
+
     def testClusterOneAllocationSampleSimple2ByCore(self):
         KmedoidsTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [10], [23], True);
+
+    def testClusterOneAllocationSampleSimple2DistanceMatrixByCore(self):
+        KmedoidsTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [10], [23], True, data_type='distance_matrix');
 
     def testClusterAllocationSampleSimple3ByCore(self):
         KmedoidsTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [4, 12, 25, 37], [10, 10, 10, 30], True);

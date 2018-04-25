@@ -43,7 +43,7 @@ TEST(utest_interface_kmedoids, kmedoids_api) {
 
     distance_metric<point> metric = distance_metric_factory<point>::euclidean_square();
 
-    pyclustering_package * kmedoids_result = kmedoids_algorithm(sample.get(), medoids.get(), 0.1, &metric);
+    pyclustering_package * kmedoids_result = kmedoids_algorithm(sample.get(), medoids.get(), 0.1, &metric, 0);
     ASSERT_NE(nullptr, kmedoids_result);
 
     delete kmedoids_result;
@@ -54,7 +54,7 @@ TEST(utest_interface_kmedoids, kmedoids_api_null_metric) {
     std::shared_ptr<pyclustering_package> sample = pack(dataset({ { 1 }, { 2 }, { 3 }, { 10 }, { 11 }, { 12 } }));
     std::shared_ptr<pyclustering_package> medoids = pack(medoid_sequence({ 2, 4 }));
 
-    pyclustering_package * kmedoids_result = kmedoids_algorithm(sample.get(), medoids.get(), 0.1, nullptr);
+    pyclustering_package * kmedoids_result = kmedoids_algorithm(sample.get(), medoids.get(), 0.1, nullptr, 0);
     ASSERT_NE(nullptr, kmedoids_result);
 
     delete kmedoids_result;

@@ -63,7 +63,7 @@ private:
 
     size_t              m_neighbors       = 0;
 
-    dbscan_data_t    m_type               = dbscan_data_t::POINTS;
+    dbscan_data_t       m_type            = dbscan_data_t::POINTS;
 
     container::kdtree   m_kdtree          = container::kdtree();
 

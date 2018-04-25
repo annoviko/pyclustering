@@ -1,6 +1,6 @@
 """!
 
-@brief Common definition for CCORE.
+@brief Common converter from python types to C/C++.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2018
@@ -11,39 +11,23 @@
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
-    
+
     PyClustering is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
-    
+
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 @endcond
 
 """
 
-import pyclustering.core as core;
-import os;
-import platform;
 
-from sys import platform as _platform;
+from ctypes import c_size_t;
 
 
-# Path to CCORE library - pyclustering core.
-PATH_PYCLUSTERING_CCORE_LIBRARY = None;
-
-
-core_architecture = None;
-if (platform.architecture()[0] == "64bit"):
-    core_architecture = "x64";
-else:
-    core_architecture = "x86";
-
-
-if (_platform == "linux") or (_platform == "linux2") or (_platform == "cygwin"):
-    PATH_PYCLUSTERING_CCORE_LIBRARY = core.__path__[0] + os.sep + core_architecture + os.sep + "linux" + os.sep + "ccore.so";
-
-elif (_platform == "win32"):
-    PATH_PYCLUSTERING_CCORE_LIBRARY = core.__path__[0] + os.sep + core_architecture + os.sep + "win" + os.sep + "ccore.dll";
-
+def convert_data_type(data_type):
+    if data_type == 'points': return c_size_t(0);
+    elif data_type == 'distance_matrix': return c_size_t(1);
+    else: raise TypeError("Unknown data type is specified '%s'." % data_type);

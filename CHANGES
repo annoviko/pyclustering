@@ -5,6 +5,9 @@ CHANGE NOTES FOR 0.8.1 (STARTED Feb 23, 2018)
 ------------------------------------------------------------------------
 
 GENERAL CHANGES:
+- Supported new type of input data for K-Medoids - distance matrix (pyclustering.cluster.kmedoids, ccore.clst.kmedoids).
+  See: https://github.com/annoviko/pyclustering/issues/418
+
 - Implemented TTSAS algorithm (pyclustering.cluster.ttsas, ccore.clst.ttsas).
   See: https://github.com/annoviko/pyclustering/issues/398
 

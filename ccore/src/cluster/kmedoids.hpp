@@ -37,6 +37,12 @@ namespace ccore {
 namespace clst {
 
 
+enum class kmedoids_data_t {
+    POINTS,
+    DISTANCE_MATRIX
+};
+
+
 /**
 *
 * @brief    Represents K-Medoids clustering algorithm for cluster analysis.
@@ -46,15 +52,20 @@ namespace clst {
 */
 class kmedoids : public cluster_algorithm {
 private:
-    const dataset                   * m_data_ptr;   /* temporary pointer to input data that is used only during processing */
+    using distance_calculator = std::function<double(const std::size_t, const std::size_t)>;
 
-    kmedoids_data                   * m_result_ptr; /* temporary pointer to clustering result that is used only during processing */
+private:
+    const dataset                   * m_data_ptr      = nullptr;   /* temporary pointer to input data that is used only during processing */
 
-    medoid_sequence                 m_initial_medoids;
+    kmedoids_data                   * m_result_ptr    = nullptr; /* temporary pointer to clustering result that is used only during processing */
 
-    double                          m_tolerance;
+    medoid_sequence                 m_initial_medoids = { };
+
+    double                          m_tolerance       = 0.0;
 
     distance_metric<point>          m_metric;
+
+    distance_calculator             m_calculator;
 
 public:
     /**
@@ -62,7 +73,7 @@ public:
     * @brief    Default constructor of clustering algorithm.
     *
     */
-    kmedoids(void);
+    kmedoids(void) = default;
 
     /**
     *
@@ -96,6 +107,17 @@ public:
     *
     */
     virtual void process(const dataset & p_data, cluster_data & p_result) override;
+
+    /**
+    *
+    * @brief    Performs cluster analysis of an input data.
+    *
+    * @param[in]  p_data: input data for cluster analysis.
+    * @param[in]  p_type: data type (points or distance matrix).
+    * @param[out] p_result: clustering result of an input data.
+    *
+    */
+    virtual void process(const dataset & p_data, const kmedoids_data_t p_type, cluster_data & p_result);
 
 private:
     /**
@@ -135,6 +157,17 @@ private:
     *
     */
     double calculate_changes(const medoid_sequence & p_medoids) const;
+
+    /**
+    *
+    * @brief    Creates distance calcultor in line with data type and distance metric metric.
+    *
+    * @param[in] p_type: data type (points or distance matrix).
+    *
+    * @return   Distance calculator.
+    *
+    */
+    distance_calculator create_distance_calculator(const kmedoids_data_t p_type);
 };
 
 
