@@ -83,7 +83,7 @@ SHOW_FILES             = YES
 SHOW_NAMESPACES        = YES
 FILE_VERSION_FILTER    =
 LAYOUT_FILE            =
-CITE_BIB_FILES         =
+CITE_BIB_FILES         = docs/citation.bib
 #---------------------------------------------------------------------------
 # Configuration options related to warning and progress messages
 #---------------------------------------------------------------------------
@@ -100,6 +100,7 @@ WARN_LOGFILE           =
 INPUT                  = pyclustering/__init__.py \
                          pyclustering/cluster/__init__.py \
                          pyclustering/cluster/agglomerative.py \
+                         pyclustering/cluster/bang.py \
                          pyclustering/cluster/birch.py \
                          pyclustering/cluster/bsas.py \
                          pyclustering/cluster/center_initializer.py \
