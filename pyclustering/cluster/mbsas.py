@@ -74,8 +74,8 @@ class mbsas(bsas):
         @param[in] ccore (bool): If True than DLL CCORE (C++ solution) will be used for solving.
         @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'metric').
 
-        Keyword Args:
-            metric (distance_metric): Metric that is used for distance calculation between two points.
+        <b>Keyword Args:</b><br>
+            - metric (distance_metric): Metric that is used for distance calculation between two points.
 
         """
         super().__init__(data, maximum_clusters, threshold, ccore, **kwargs);

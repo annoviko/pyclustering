@@ -25,6 +25,7 @@
 
 
 import math;
+import numpy;
 
 from pyclustering.tests.assertion import assertion;
 
@@ -45,10 +46,14 @@ class KmedoidsTestTemplates:
     def templateLengthProcessWithMetric(path_to_file, initial_medoids, expected_cluster_length, metric, ccore_flag, **kwargs):
         sample = read_sample(path_to_file);
         data_type = kwargs.get('data_type', 'points');
+        input_type = kwargs.get('input_type', 'list')
 
         input_data = sample;
         if data_type == 'distance_matrix':
             input_data = calculate_distance_matrix(sample);
+
+            if input_type == 'numpy':
+                input_data = numpy.matrix(input_data);
 
         kmedoids_instance = kmedoids(input_data, initial_medoids, 0.025, ccore_flag, metric=metric, data_type=data_type);
         kmedoids_instance.process();

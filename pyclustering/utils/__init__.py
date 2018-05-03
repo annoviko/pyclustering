@@ -272,7 +272,11 @@ def median(data, indexes = None, **kwargs):
     if data_type == 'points':
         calculator = lambda index1, index2: metric(data[index1], data[index2]);
     elif data_type == 'distance_matrix':
-        calculator = lambda index1, index2: data[index1][index2];
+        if isinstance(data, numpy.matrix):
+            calculator = lambda index1, index2: data.item(index1, index2);
+
+        else:
+            calculator = lambda index1, index2: data[index1][index2];
     else:
         raise TypeError("Unknown type of data is specified '%s'." % data_type);
 

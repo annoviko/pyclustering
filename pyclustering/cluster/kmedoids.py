@@ -27,7 +27,7 @@
 """
 
 
-from enum import IntEnum;
+import numpy;
 
 from pyclustering.cluster.encoder import type_encoding;
 
@@ -157,8 +157,8 @@ class kmedoids:
             while changes > stop_condition:
                 self.__clusters = self.__update_clusters();
                 update_medoid_indexes = self.__update_medoids();
-             
-                changes = max([self.__metric(self.__pointer_data[self.__medoid_indexes[index]], self.__pointer_data[update_medoid_indexes[index]]) for index in range(len(update_medoid_indexes))]);
+
+                changes = max([self.__distance_calculator(self.__medoid_indexes[index], update_medoid_indexes[index]) for index in range(len(update_medoid_indexes))]);
 
                 self.__medoid_indexes = update_medoid_indexes;
 
@@ -211,6 +211,9 @@ class kmedoids:
             return lambda index1, index2: self.__metric(self.__pointer_data[index1], self.__pointer_data[index2]);
 
         elif self.__data_type == 'distance_matrix':
+            if isinstance(self.__pointer_data, numpy.matrix):
+                return lambda index1, index2: self.__pointer_data.item((index1, index2));
+
             return lambda index1, index2: self.__pointer_data[index1][index2];
 
         else:

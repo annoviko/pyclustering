@@ -142,12 +142,12 @@ class kmeans_visualizer:
         @param[in] clusters (array_like): Clusters that were allocated by the algorithm.
         @param[in] centers (array_like): Centers that were allocated by the algorithm.
         @param[in] initial_centers (array_like): Initial centers that were used by the algorithm, if 'None' then initial centers are not displyed.
-        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'figure', 'display').
+        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'figure', 'display', 'offset').
         
-        Keyword Args:
-            figure (figure): If 'None' then new is figure is created, otherwise specified figure is used for visualization.
-            display (bool): If 'True' then figure will be shown by the method, otherwise it should be shown manually using matplotlib function 'plt.show()'.
-            offset (uint): Specify axes index on the figure where results should be drawn (only if argument 'figure' is specified).
+        <b>Keyword Args:</b><br>
+            - figure (figure): If 'None' then new is figure is created, otherwise specified figure is used for visualization.
+            - display (bool): If 'True' then figure will be shown by the method, otherwise it should be shown manually using matplotlib function 'plt.show()'.
+            - offset (uint): Specify axes index on the figure where results should be drawn (only if argument 'figure' is specified).
         
         @return (figure) Figure where clusters were drawn.
         
@@ -319,8 +319,8 @@ class kmeans:
         @param[in] ccore (bool): Defines should be CCORE library (C++ pyclustering library) used instead of Python code or not.
         @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'observer').
         
-        Keyword Args:
-            observer (kmeans_observer): Observer of the algorithm to collect information about clustering process on each iteration.
+        <b>Keyword Args:</b><br>
+            - observer (kmeans_observer): Observer of the algorithm to collect information about clustering process on each iteration.
         
         @see center_initializer
         
