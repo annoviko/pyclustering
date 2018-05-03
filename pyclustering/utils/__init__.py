@@ -199,7 +199,7 @@ def average_neighbor_distance(points, num_neigh):
     
     """
     
-    if (num_neigh > len(points) - 1):
+    if num_neigh > len(points) - 1:
         raise NameError('Impossible to calculate average distance to neighbors when number of object is less than number of neighbors.');
     
     dist_matrix = [ [ 0.0 for i in range(len(points)) ] for j in range(len(points)) ];
@@ -235,7 +235,7 @@ def centroid(points, indexes = None):
     centroid_value = [0.0] * dimension;
     
     range_points = None;
-    if (indexes is None):
+    if indexes is None:
         range_points = range(len(points));
     else:
         range_points = indexes;

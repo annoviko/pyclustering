@@ -195,10 +195,10 @@ class kdtree:
         self.__root = None;
         self.__dimension = None;
         
-        if (data_list is None):
+        if data_list is None:
             return; # Just return from here, tree can be filled by insert method later
         
-        if (payload_list is None):
+        if payload_list is None:
             # Case when payload is not specified.
             for index in range(0, len(data_list)):
                 self.insert(data_list[index], None);
@@ -220,7 +220,7 @@ class kdtree:
         
         """
         
-        if (self.__root is None):
+        if self.__root is None:
             self.__dimension = len(point);
             self.__root = node(point, payload, None, None, 0);
             return self.__root;
@@ -228,11 +228,11 @@ class kdtree:
         cur_node = self.__root;
         
         while True:
-            if (cur_node.data[cur_node.disc] <= point[cur_node.disc]):
+            if cur_node.data[cur_node.disc] <= point[cur_node.disc]:
                 # If new node is greater or equal than current node then check right leaf
-                if (cur_node.right is None):
+                if cur_node.right is None:
                     discriminator = cur_node.disc + 1;
-                    if (discriminator >= self.__dimension):
+                    if discriminator >= self.__dimension:
                         discriminator = 0;
                         
                     cur_node.right = node(point, payload, None, None, discriminator, cur_node);
@@ -242,9 +242,9 @@ class kdtree:
             
             else:
                 # If new node is less than current then check left leaf
-                if (cur_node.left is None):
+                if cur_node.left is None:
                     discriminator = cur_node.disc + 1;
-                    if (discriminator >= self.__dimension):
+                    if discriminator >= self.__dimension:
                         discriminator = 0;
                         
                     cur_node.left = node(point, payload, None, None, discriminator, cur_node);
@@ -262,8 +262,8 @@ class kdtree:
         @param[in] point (list): Coordinates of the point of removed node.
         @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'payload').
         
-        Keyword Args:
-            payload (any): Payload of the node that should be removed.
+        <b>Keyword Args:</b><br>
+            - payload (any): Payload of the node that should be removed.
         
         @return (node) Root if node has been successfully removed, otherwise None.
         
@@ -271,26 +271,26 @@ class kdtree:
         
         # Get required node
         node_for_remove = None;
-        if ('payload' in kwargs):
+        if 'payload' in kwargs:
             node_for_remove = self.find_node_with_payload(point, kwargs['payload'], None);
         else:
             node_for_remove = self.find_node(point, None);
         
-        if (node_for_remove is None):
+        if node_for_remove is None:
             return None;
         
         parent = node_for_remove.parent;
         minimal_node = self.__recursive_remove(node_for_remove);
-        if (parent is None):
+        if parent is None:
             self.__root = minimal_node;
             
             # If all k-d tree was destroyed
-            if (minimal_node is not None):
+            if minimal_node is not None:
                 minimal_node.parent = None;
         else:
-            if (parent.left is node_for_remove):
+            if parent.left is node_for_remove:
                 parent.left = minimal_node;
-            elif (parent.right is node_for_remove):
+            elif parent.right is node_for_remove:
                 parent.right = minimal_node;
         
         return self.__root;
@@ -307,13 +307,13 @@ class kdtree:
         """
                 
         # Check if it is leaf
-        if ( (node_removed.right is None) and (node_removed.left is None) ):
+        if (node_removed.right is None) and (node_removed.left is None):
             return None;
         
         discriminator = node_removed.disc;
         
         # Check if only left branch exist
-        if (node_removed.right is None):
+        if node_removed.right is None:
             node_removed.right = node_removed.left;
             node_removed.left = None;
         
@@ -321,9 +321,9 @@ class kdtree:
         minimal_node = self.find_minimal_node(node_removed.right, discriminator);
         parent = minimal_node.parent;
         
-        if (parent.left is minimal_node):
+        if parent.left is minimal_node:
             parent.left = self.__recursive_remove(minimal_node);
-        elif (parent.right is minimal_node):
+        elif parent.right is minimal_node:
             parent.right = self.__recursive_remove(minimal_node);
         
         minimal_node.parent = node_removed.parent;
@@ -332,10 +332,10 @@ class kdtree:
         minimal_node.left = node_removed.left;
         
         # Update parent for successors of previous parent.
-        if (minimal_node.right is not None):
+        if minimal_node.right is not None:
             minimal_node.right.parent = minimal_node;
              
-        if (minimal_node.left is not None):
+        if minimal_node.left is not None:
             minimal_node.left.parent = minimal_node;
         
         return minimal_node;
@@ -387,13 +387,13 @@ class kdtree:
         
         req_node = None;
         
-        if (cur_node is None):
+        if cur_node is None:
             cur_node = self.__root;
         
         while cur_node:
-            if (cur_node.data[cur_node.disc] <= point[cur_node.disc]):
+            if cur_node.data[cur_node.disc] <= point[cur_node.disc]:
                 # Check if it's required node
-                if (search_rule(cur_node)):
+                if search_rule(cur_node):
                     req_node = cur_node;
                     break;
                 
@@ -455,12 +455,12 @@ class kdtree:
         
         best_nodes = self.find_nearest_dist_nodes(point, distance);
             
-        if (best_nodes == []): 
+        if best_nodes == []:
             return None;
         
         nearest = min(best_nodes, key = lambda item: item[0]);
         
-        if (retdistance == True):
+        if retdistance is True:
             return nearest;
         else:
             return nearest[1];
@@ -478,7 +478,7 @@ class kdtree:
         """
 
         best_nodes = [];
-        if (self.__root is not None):
+        if self.__root is not None:
             self.__recursive_nearest_nodes(point, distance, distance ** 2, self.__root, best_nodes);
 
         return best_nodes;
@@ -496,18 +496,18 @@ class kdtree:
         
         """
 
-        if (node_head.right is not None):
+        if node_head.right is not None:
             minimum = node_head.data[node_head.disc] - distance;
-            if (point[node_head.disc] >= minimum):
+            if point[node_head.disc] >= minimum:
                 self.__recursive_nearest_nodes(point, distance, sqrt_distance, node_head.right, best_nodes);
         
-        if (node_head.left is not None):
+        if node_head.left is not None:
             maximum = node_head.data[node_head.disc] + distance;
-            if (point[node_head.disc] < maximum):
+            if point[node_head.disc] < maximum:
                 self.__recursive_nearest_nodes(point, distance, sqrt_distance, node_head.left, best_nodes);
         
         candidate_distance = euclidean_distance_square(point, node_head.data);
-        if (candidate_distance <= sqrt_distance):
+        if candidate_distance <= sqrt_distance:
             best_nodes.append( (candidate_distance, node_head) );
 
 
@@ -521,9 +521,9 @@ class kdtree:
         
         """
         
-        if (node_parent.left is not None):
+        if node_parent.left is not None:
             yield node_parent.left;
-        if (node_parent.right is not None):
+        if node_parent.right is not None:
             yield node_parent.right;
 
 
@@ -538,11 +538,11 @@ class kdtree:
         
         """
         
-        if (start_node is None):
+        if start_node is None:
             start_node  = self.__root;
             level = 0;
         
-        if (start_node is None):
+        if start_node is None:
             return [];
         
         items = [ (level, start_node) ];

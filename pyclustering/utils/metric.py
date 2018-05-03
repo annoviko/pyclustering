@@ -95,9 +95,9 @@ class distance_metric:
         @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'func' and corresponding additional argument for
                     for specific metric types).
 
-        Keyword Args:
-            func (callable): Callable object with two arguments (point #1 and point #2) that is used only if metric is 'type_metric.USER_DEFINED'.
-            degree (numeric): Only for 'type_metric.MINKOWSKI' - degree of Minkowski equation.
+        <b>Keyword Args:</b><br>
+            - func (callable): Callable object with two arguments (point #1 and point #2) that is used only if metric is 'type_metric.USER_DEFINED'.
+            - degree (numeric): Only for 'type_metric.MINKOWSKI' - degree of Minkowski equation.
 
         """
         self.__type = type;
