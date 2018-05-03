@@ -1,8 +1,7 @@
 """!
 
 @brief Cluster analysis algorithm: BIRCH
-@details Implementation based on article:
-         - T.Zhang, R.Ramakrishnan, M.Livny. BIRCH: An Efficient Data Clustering Method for Very Large Databases. 1996.
+@details Implementation based on papers @cite cluster::birch::1.
          
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2018
