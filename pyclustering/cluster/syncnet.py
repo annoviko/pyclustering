@@ -1,8 +1,7 @@
 """!
 
 @brief Cluster analysis algorithm: Sync
-@details Based on article description:
-         - T.Miyano, T.Tsutsui. Data Synchronization as a Method of Data Mining. 2007.
+@details Implementation based on paper @cite article::syncnet::1.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2018

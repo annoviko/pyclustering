@@ -1,6 +1,7 @@
 """!
 
 @brief Cluster analysis algorithm: Genetic clustering algorithm (GA).
+@details Implementation based on papers @cite article::ga::1, @cite article::ga::2.
 
 @authors Andrey Novikov, Aleksey Kukushkin (pyclustering@yandex.ru)
 @date 2014-2018

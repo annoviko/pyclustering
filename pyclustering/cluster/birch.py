@@ -1,7 +1,7 @@
 """!
 
 @brief Cluster analysis algorithm: BIRCH
-@details Implementation based on papers @cite cluster::birch::1.
+@details Implementation based on paper @cite article::birch::1.
          
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2018

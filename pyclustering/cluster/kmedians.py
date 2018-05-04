@@ -1,8 +1,7 @@
 """!
 
 @brief Cluster analysis algorithm: K-Medians
-@details Based on book description:
-         - A.K. Jain, R.C Dubes, Algorithms for Clustering Data. 1988.
+@details Implementation based on paper @cite book::algorithms_for_clustering_data.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2018

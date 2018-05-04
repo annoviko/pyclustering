@@ -1,15 +1,14 @@
 """!
 
 @brief Collection of center initializers for algorithm that uses initial centers, for example, for K-Means or X-Means.
-@details Implementations based on articles:
-         - K-Means++: The Advantages of careful seeding. D. Arthur, S. Vassilvitskii. 2007.
+@details Implementation based on paper @cite article::kmeans++::1.
          
 @authors Andrei Novikov, Aleksey Kukushkin (pyclustering@yandex.ru)
 @date 2014-2018
 @copyright GNU Public License
 
-@see kmeans
-@see xmeans
+@see pyclustering.cluster.kmeans
+@see puclustering.cluster.xmeans
 
 @cond GNU_PUBLIC_LICENSE
     PyClustering is free software: you can redistribute it and/or modify

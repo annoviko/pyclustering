@@ -1,8 +1,7 @@
 """!
 
 @brief Cluster analysis algorithm: X-Means
-@details Based on article description:
-         - D.Pelleg, A.Moore. X-means: Extending K-means with Efficient Estimation of the Number of Clusters. 2000.
+@details Implementation based on paper @cite article::syncnet::1.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2018

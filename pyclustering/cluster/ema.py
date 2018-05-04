@@ -1,6 +1,7 @@
 """!
 
 @brief Cluster analysis algorithm: Expectation-Maximization Algorithm for Gaussian Mixture Model.
+@details Implementation based on paper @cite article::ema::1.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2018

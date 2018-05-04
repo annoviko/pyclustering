@@ -1,8 +1,7 @@
 """!
 
 @brief Cluster analysis algorithm: CLARANS.
-@details Implementation based on article:
-         - T.Ng.Raymond and H.Jiawei. CLARANS: A Method for Clustering Objects for Spatial Data Mining. 2002.
+@details Implementation based on paper @cite article::clarans::1.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2018

@@ -1,8 +1,7 @@
 """!
 
 @brief Cluster analysis algorithm: SYNC-SOM
-@details Based on article description:
-         - A.Novikov, E.Benderskaya. SYNC-SOM Double-layer Oscillatory Network for Cluster Analysis. 2014.
+@details Implementation based on paper @cite article::xmeans::1.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2018

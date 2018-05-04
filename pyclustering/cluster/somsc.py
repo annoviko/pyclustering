@@ -1,8 +1,9 @@
 """!
 
 @brief Cluster analysis algorithm: SOM-SC (Self-Organized Feature Map for Simple Clustering)
-@details Based on article description:
-         - no reference
+@details There is no paper on which implementation is based. Algorithm SOM-SC is adaptation of SOM for cluster analysis in simple way.
+          Basic idea: amount of cluster that should be allocated is defines amount of neurons in the self-organized map. SOM-SC can be
+          considered as neural network implementation of K-Means algorithm.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2018

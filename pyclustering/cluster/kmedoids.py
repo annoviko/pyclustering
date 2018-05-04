@@ -1,9 +1,7 @@
 """!
 
 @brief Cluster analysis algorithm: K-Medoids (PAM - Partitioning Around Medoids).
-@details Based on book description:
-         - A.K. Jain, R.C Dubes, Algorithms for Clustering Data. 1988.
-         - L. Kaufman, P.J. Rousseeuw, Finding Groups in Data: an Introduction to Cluster Analysis. 1990.
+@details Implementation based on papers @cite book::algorithms_for_clustering_data, @cite book::finding_groups_in_data.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2018

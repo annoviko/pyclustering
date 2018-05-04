@@ -1,7 +1,7 @@
 """!
 
 @brief Cluster analysis algorithm: BANG.
-@details Implementation based on papers @cite cluster::bang::1.
+@details Implementation based on paper @cite inproceedings::bang::1.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2018

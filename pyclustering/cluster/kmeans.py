@@ -1,8 +1,7 @@
 """!
 
 @brief Cluster analysis algorithm: K-Means
-@details Based on book description:
-         - J.B.MacQueen. Some Methods for Classification and Analysis of Multivariate Observations. 1967.
+@details Implementation based on paper @cite inproceedings::kmeans::1.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2018

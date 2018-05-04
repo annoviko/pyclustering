@@ -1,8 +1,7 @@
 """!
 
 @brief Cluster analysis algorithm: Hierarchical Sync (HSyncNet)
-@details Based on article description:
-         - J.Shao, X.He, C.Bohm, Q.Yang, C.Plant. Synchronization-Inspired Partitioning and Hierarchical Clustering. 2013.
+@details Implementation based on paper @cite artcile::hsyncnet::1.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2018

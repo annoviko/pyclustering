@@ -1,8 +1,7 @@
 """!
 
 @brief Cluster analysis algorithm: OPTICS (Ordering Points To Identify Clustering Structure)
-@details Based on article description:
-         - M.Ankerst, M.Breunig, H.Kriegel, J.Sander. OPTICS: Ordering Points To Identify the Clustering Structure. 1999.
+@details Implementation based on paper @cite article::optics::1.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2018

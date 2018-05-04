@@ -1,8 +1,7 @@
 """!
 
 @brief Cluster analysis algorithm: MBSAS (Modified Basic Sequential Algorithmic Scheme).
-@details Implementation based on book:
-         - Theodoridis, Koutroumbas, Konstantinos. Elsevier Academic Press - Pattern Recognition - 2nd Edition. 2003.
+@details Implementation based on paper @cite book::pattern_recognition::2009.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2018

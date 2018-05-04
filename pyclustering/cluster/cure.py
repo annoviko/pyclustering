@@ -1,8 +1,7 @@
 """!
 
 @brief Cluster analysis algorithm: CURE
-@details Implementation based on article:
-         - S.Guha, R.Rastogi, K.Shim. CURE: An Efficient Clustering Algorithm for Large Databases. 1998.
+@details Implementation based on paper @cite article::cure::1.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2018
