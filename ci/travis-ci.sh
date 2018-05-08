@@ -227,10 +227,12 @@ run_doxygen_job() {
     print_info "- Generate documentation and check for warnings."
 
 
+    # install dixygen itself
+    print_info "Install doxygen"
+    install_doxygen
+
     # install requirements for the job
     print_info "Install requirements for doxygen."
-
-    sudo apt-get install doxygen
     sudo apt-get install graphviz
     sudo apt-get install texlive
 
@@ -322,6 +324,25 @@ install_miniconda() {
     conda create -q -n test-environment python=3.4 numpy scipy matplotlib Pillow
 
     source activate test-environment
+}
+
+
+install_doxygen() {
+    print_info "Start downloading process of Doxygen"
+
+    DOXYGEN_VERSION=1.8.14
+    wget http://ftp.stack.nl/pub/users/dimitri/doxygen-$DOXYGEN_VERSION.linux.bin.tar.gz -O doxygen-$DOXYGEN_VERSION.tar.gz
+
+    print_info "Extract doxygen"
+    gunzip -c doxygen-$DOXYGEN_VERSION.tar.gz > doxygen-$DOXYGEN_VERSION.tar
+    tar xf doxygen-$DOXYGEN_VERSION.tar
+
+    print_info "Install doxygen"
+    cd doxygen-$DOXYGEN_VERSION
+    ./configure
+    sudo make install
+
+    cd -
 }
 
 
