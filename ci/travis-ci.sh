@@ -342,9 +342,9 @@ install_doxygen() {
     ./configure
 
     print_info "Makefile of doxygen'$DOXYGEN_VERSION' should be updated:"
-    sed '/doxytag/d' Makefile
-    sed '/ examples /d' Makefile
-    sed '/ html /d' Makefile
+    sed '/doxytag/d' Makefile > Makefile
+    sed '/ examples /d' Makefile > Makefile
+    sed '/ html /d' Makefile > Makefile
 
     print_info "Install doxygen '$DOXYGEN_VERSION'"
     sudo make
