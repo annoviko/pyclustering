@@ -1,8 +1,7 @@
 """!
 
 @brief Data Structure: CF-Tree
-@details Based on book description:
-         - M.Zhang, R.Ramakrishnan, M.Livny. BIRCH: An Efficient Data Clustering Method for Very Large Databases. 1996.
+@details Implementation based on paper @cite article::birch::1.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2018

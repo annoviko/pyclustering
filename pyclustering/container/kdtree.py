@@ -1,8 +1,7 @@
 """!
 
 @brief Data Structure: KD-Tree
-@details Based on book description:
-         - M.Samet. The Design And Analysis Of Spatial Data Structures. 1994.
+@details Implementation based on paper @cite book::the_design_and_analysis.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2018

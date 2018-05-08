@@ -1,8 +1,7 @@
 """!
 
 @brief Oscillatory Neural Network based on Hodgkin-Huxley Neuron Model
-@details Based on article description:
-         - D.Chik, R.Borisyuk, Y.Kazanovich. Selective attention model with spiking elements. 2009.
+@details Implementation based on paper @cite article::nnet::hnn::1.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2018

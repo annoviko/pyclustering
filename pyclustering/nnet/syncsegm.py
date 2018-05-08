@@ -1,8 +1,7 @@
 """!
 
 @brief Double-layer oscillatory network with phase oscillator for image segmentation.
-@details Implementation based on article:
-         - A.Novikov, E.Benderskaya. Oscillatory Network Based on Kuramoto Model for Image Segmentation. 2015.
+@details Implementation based on paper @cite inproceedings::nnet::syncsegm::1.
          
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2018

@@ -1,8 +1,7 @@
 """!
 
 @brief Graph coloring algorithm based on Sync Oscillatory Network
-@details Based on article description:
-         - J.Wu J, L.Jiao, W.Chen. Clustering dynamics of nonlinear oscillator network: Application to graph coloring problem. 2011.
+@details Implementation based on paper @cite article::gcolor::sync::1.
          
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2018

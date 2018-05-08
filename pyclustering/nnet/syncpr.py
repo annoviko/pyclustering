@@ -1,9 +1,8 @@
 """!
 
 @brief Phase oscillatory network for patten recognition based on modified Kuramoto model.
-@details Based on article description:
-         - R.Follmann, E.E.N.Macau, E.Rosa, Jr., J.R.C.Piqueira. Phase Oscillatory Network and Visual Pattern Recognition. 2014.
-         
+@details Implementation based on paper @cite article::nnet::syncpr::1.
+
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2018
 @copyright GNU Public License

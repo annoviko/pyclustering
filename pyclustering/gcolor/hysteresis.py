@@ -1,8 +1,7 @@
 """!
 
 @brief Graph coloring algorithm: Algorithm based on Hysteresis Oscillatory Network
-@details Based on article description:
-         - K.Jinno, H.Taguchi, T.Yamamoto, H.Hirose. Dynamical Hysteresis Neural Network for Graph Coloring Problem. 2003.
+@details Implementation based on paper @cite article::gcolor::hysteresis::1.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2018

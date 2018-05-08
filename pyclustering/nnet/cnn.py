@@ -1,9 +1,7 @@
 """!
 
 @brief Chaotic Neural Network
-@details Based on article description:
-         - E.N.Benderskaya, S.V.Zhukova. Large-dimension image clustering by means of fragmentary synchronization in chaotic systems. 2007.
-         - E.N.Benderskaya, S.V.Zhukova. Clustering by Chaotic Neural Networks with Mean Field Calculated Via Delaunay Triangulation. 2008.
+@details Implementation based on paper @cite article::nnet::cnn::1, @cite inproceedings::nnet::cnn::1.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2018

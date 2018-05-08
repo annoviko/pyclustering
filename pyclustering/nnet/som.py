@@ -1,10 +1,7 @@
 """!
 
 @brief Neural Network: Self-Organized Feature Map
-@details Based on article description:
-         - T.Kohonen. The Self-Organizing Map. 1990.
-         - T.Kohonen, E.Oja, O.Simula, A.Visa, J.Kangas. Engineering Applications of the Self-Organizing Map. 1996.
-         - A.Novikov, E.Benderskaya. SYNC-SOM Double-layer Oscillatory Network for Cluster Analysis. 2014.
+@details Implementation based on paper @cite article::nnet::som::1, @cite article::nnet::som::2.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2018

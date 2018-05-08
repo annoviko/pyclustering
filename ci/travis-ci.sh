@@ -238,6 +238,7 @@ run_doxygen_job() {
     # generate doxygen documentation
     print_info "Generate documentation."
 
+    doxygen --version
     doxygen docs/doxygen_conf_pyclustering > /dev/null 2> doxygen_problems.log
     
     check_error_log_file doxygen_problems.log "Building doxygen documentation: FAILURE."

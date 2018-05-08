@@ -1,9 +1,7 @@
 """!
 
 @brief Neural Network: Hysteresis Oscillatory Network
-@details Based on article description:
-         - K.Jinno. Oscillatory Hysteresis Associative Memory. 2002.
-         - K.Jinno, H.Taguchi, T.Yamamoto, H.Hirose. Dynamical Hysteresis Neural Network for Graph Coloring Problem. 2003.
+@details Implementation based on paper @cite article::nnet::hysteresis::1.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2018

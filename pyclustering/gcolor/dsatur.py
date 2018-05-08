@@ -1,8 +1,7 @@
 """!
 
 @brief Graph coloring algorithm: DSATUR
-@details Based on article description:
-         - D.Brelaz. New Methods to color the vertices of a graph. 1979.
+@details Implementation based on paper @cite article::gcolor::dsatur::1.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2018

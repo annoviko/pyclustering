@@ -1,8 +1,7 @@
 """!
 
 @brief Neural Network: Pulse Coupled Neural Network
-@details Based on book description:
-         - T.Lindblad, J.M.Kinser. Image Processing Using Pulse-Coupled Neural Networks (2nd edition). 2005.
+@details Implementation based on paper @cite book::image_processing_using_pcnn.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2018

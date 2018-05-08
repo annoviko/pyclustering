@@ -1,8 +1,7 @@
 """!
 
 @brief Oscillatory Neural Network based on Kuramoto model in frequency domain.
-@details Based on article description:
-         - Y.Kuramoto. Chemical Oscillations, Waves, and Turbulence. 1984.
+@details Implementation based on paper @cite book::chemical_oscillatorions_waves.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2018
@@ -254,11 +253,11 @@ class fsync_network(network):
         for t in numpy.arange(step, time + step, step):
             self.__amplitude = self.__calculate(t, step, int_step);
             
-            if (collect_dynamic == True):
+            if collect_dynamic is True:
                 dynamic_amplitude.append([ numpy.real(amplitude)[0] for amplitude in self.__amplitude ]);
                 dynamic_time.append(t);
         
-        if (collect_dynamic != True):
+        if collect_dynamic is False:
             dynamic_amplitude.append([ numpy.real(amplitude)[0] for amplitude in self.__amplitude ]);
             dynamic_time.append(time);
 
@@ -329,7 +328,7 @@ class fsync_network(network):
         sync_influence = 0.0;
         
         for k in range(self._num_osc):
-            if (self.has_connection(index, k) == True):
+            if self.has_connection(index, k) is True:
                 amplitude_neighbor = numpy.array(self.__amplitude[k], dtype = numpy.complex128, ndmin = 1);
                 sync_influence += amplitude_neighbor - amplitude;
         
