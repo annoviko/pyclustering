@@ -347,7 +347,6 @@ install_doxygen() {
     sed '/ html /d' Makefile > Makefile
 
     print_info "Install doxygen '$DOXYGEN_VERSION'"
-    sudo make
     sudo make install
 
     cd -
