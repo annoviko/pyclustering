@@ -328,18 +328,26 @@ install_miniconda() {
 
 
 install_doxygen() {
-    print_info "Start downloading process of Doxygen"
-
     DOXYGEN_VERSION=1.8.14
+
+    print_info "Start downloading process of Doxygen '$DOXYGEN_VERSION'"
     wget http://ftp.stack.nl/pub/users/dimitri/doxygen-$DOXYGEN_VERSION.linux.bin.tar.gz -O doxygen-$DOXYGEN_VERSION.tar.gz
 
-    print_info "Extract doxygen"
+    print_info "Extract doxygen '$DOXYGEN_VERSION'"
     gunzip -c doxygen-$DOXYGEN_VERSION.tar.gz > doxygen-$DOXYGEN_VERSION.tar
     tar xf doxygen-$DOXYGEN_VERSION.tar
 
-    print_info "Install doxygen"
+    print_info "Configure doxygen '$DOXYGEN_VERSION'"
     cd doxygen-$DOXYGEN_VERSION
     ./configure
+
+    print_info "Makefile of doxygen'$DOXYGEN_VERSION' should be updated:"
+    sed '/doxytag/d' Makefile
+    sed '/ examples /d' Makefile
+    sed '/ html /d' Makefile
+
+    print_info "Install doxygen '$DOXYGEN_VERSION'"
+    sudo make
     sudo make install
 
     cd -
