@@ -82,7 +82,7 @@ filter_content() {
                 echo -e "$line"
             fi
         done
-    done < file_name
+    done < $file_name
 }
 
 
