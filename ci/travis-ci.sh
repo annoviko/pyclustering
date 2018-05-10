@@ -67,7 +67,7 @@ filter_content() {
     filter_collection=$2
 
     if [ ${#filter_collection[@]} -eq 0 ]; then
-        cat file_name
+        cat $file_name
         return
     fi
 
