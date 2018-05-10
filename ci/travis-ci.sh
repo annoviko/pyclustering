@@ -23,6 +23,8 @@ CCORE_X64_BINARY_PATH=$CCORE_X64_BINARY_FOLDER/ccore.so
 CCORE_X86_BINARY_FOLDER=pyclustering/core/x86/linux
 CCORE_X86_BINARY_PATH=$CCORE_X86_BINARY_FOLDER/ccore.so
 
+DOXYGEN_FILTER=( "warning: unexpected new line character" )
+
 
 print_error() {
     echo "[PYCLUSTERING CI] ERROR: $1"
@@ -57,6 +59,30 @@ check_error_log_file() {
         print_error $2
         exit 1
     fi
+}
+
+
+filter_content() {
+    file_name=$1
+    filter_collection=$2
+
+    if [ ${#filter_collection[@]} -eq 0 ]; then
+        cat file_name
+        return
+    fi
+
+    while read line
+    do
+        line=`echo "$line" | tr '[:upper:]' '[:lower:]'`
+        for string_filter in "${filter_collection[@]}"
+        do
+            string_filter=`echo "$string_filter" | tr '[:upper:]' '[:lower:]'`
+            if [[ $line != *"$string_filter"* ]]
+            then
+                echo -e "$line"
+            fi
+        done
+    done < file_name
 }
 
 
@@ -236,7 +262,8 @@ run_doxygen_job() {
     print_info "Generate documentation."
     doxygen --version
     doxygen docs/doxygen_conf_pyclustering > /dev/null 2> doxygen_problems.log
-    
+
+    filter_content doxygen_problems.log $DOXYGEN_FILTER > doxygen_problems.log
     check_error_log_file doxygen_problems.log "Building doxygen documentation: FAILURE."
     print_info "Building doxygen documentation: SUCCESS."
 }
