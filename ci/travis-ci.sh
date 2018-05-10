@@ -226,20 +226,14 @@ run_doxygen_job() {
     print_info "DOXYGEN (documentation generation)."
     print_info "- Generate documentation and check for warnings."
 
-
-    # install dixygen itself
     print_info "Install doxygen"
-    install_doxygen
+    sudo apt-get install doxygen
 
-    # install requirements for the job
     print_info "Install requirements for doxygen."
     sudo apt-get install graphviz
     sudo apt-get install texlive
 
-
-    sudo apt-get install doxygen
     print_info "Generate documentation."
-
     doxygen --version
     doxygen docs/doxygen_conf_pyclustering > /dev/null 2> doxygen_problems.log
     
