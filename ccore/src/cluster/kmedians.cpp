@@ -142,7 +142,7 @@ double kmedians::update_medians(cluster_sequence & clusters, dataset & medians) 
                 return (*m_ptr_data)[index_object1] > (*m_ptr_data)[index_object2];
             });
 
-            size_t relative_index_median = (size_t) floor(current_cluster.size() / 2.0);
+            size_t relative_index_median = (size_t) floor((current_cluster.size() - 1) / 2.0);
             size_t index_median = current_cluster[relative_index_median];
 
             if (current_cluster.size() % 2 == 0) {

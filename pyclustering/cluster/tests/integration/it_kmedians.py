@@ -77,6 +77,10 @@ class KmediansIntegrationTest(unittest.TestCase):
     def testClusterTheSameData2Core(self):
         KmediansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, [ [1.1, 1.0], [3.0, 3.1], [5.0, 4.9] ], [5, 5, 5], True);
 
+    def testOddSize(self):
+        # Bug issue #428 (https://github.com/annoviko/pyclustering/issues/428)
+        data = [[59.00732, 9.748167], [59.00608, 9.749117], [59.0047, 9.749933]];
+        KmediansTestTemplates.templateLengthProcessData(data, [[59.00732, 9.748167], [59.00608, 9.749117]], None, True, tolerance=10);
 
     def testClusterAllocationOneDimensionDataCore(self):
         KmediansTestTemplates.templateClusterAllocationOneDimensionData(True);

@@ -74,7 +74,7 @@ class kmedians:
         self.__tolerance = tolerance;
         self.__ccore = ccore;
         
-        if (self.__ccore):
+        if self.__ccore:
             self.__ccore = ccore_library.workable();
 
 
@@ -89,7 +89,7 @@ class kmedians:
         
         """
         
-        if (self.__ccore is True):
+        if self.__ccore is True:
             self.__clusters = wrapper.kmedians(self.__pointer_data, self.__medians, self.__tolerance);
             self.__medians = self.__update_medians();
             
@@ -100,10 +100,10 @@ class kmedians:
             #stop_condition = self.__tolerance;              # Slow solution
              
             # Check for dimension
-            if (len(self.__pointer_data[0]) != len(self.__medians[0])):
+            if len(self.__pointer_data[0]) != len(self.__medians[0]):
                 raise NameError('Dimension of the input data and dimension of the initial cluster medians must be equal.');
              
-            while (changes > stop_condition):
+            while changes > stop_condition:
                 self.__clusters = self.__update_clusters();
                 updated_centers = self.__update_medians();  # changes should be calculated before asignment
              
@@ -166,7 +166,7 @@ class kmedians:
             for index in range(len(self.__medians)):
                 dist = euclidean_distance_square(self.__pointer_data[index_point], self.__medians[index]);
                  
-                if ( (dist < dist_optim) or (index is 0)):
+                if (dist < dist_optim) or (index is 0):
                     index_optim = index;
                     dist_optim = dist;
              
@@ -195,10 +195,10 @@ class kmedians:
             for index_dimension in range(len(self.__pointer_data[0])):
                 sorted_cluster = sorted(self.__clusters[index], key = lambda x: self.__pointer_data[x][index_dimension]);
                 
-                relative_index_median = int(math.floor(length_cluster / 2));
+                relative_index_median = int(math.floor((length_cluster - 1) / 2));
                 index_median = sorted_cluster[relative_index_median];
                 
-                if ( (length_cluster % 2) == 0 ):
+                if (length_cluster % 2) == 0:
                     index_median_second = sorted_cluster[relative_index_median + 1];
                     medians[index][index_dimension] =  (self.__pointer_data[index_median][index_dimension] + self.__pointer_data[index_median_second][index_dimension]) / 2.0;
                     

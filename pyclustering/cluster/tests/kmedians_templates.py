@@ -33,10 +33,15 @@ from random import random;
 
 class KmediansTestTemplates:
     @staticmethod
-    def templateLengthProcessData(path_to_file, start_centers, expected_cluster_length, ccore):
-        sample = read_sample(path_to_file);
-        
-        kmedians_instance = kmedians(sample, start_centers, 0.025, ccore);
+    def templateLengthProcessData(data, start_centers, expected_cluster_length, ccore, **kwargs):
+        tolerance = kwargs.get('tolerance', 0.01);
+
+        if isinstance(data, str):
+            sample = read_sample(data);
+        else:
+            sample = data;
+
+        kmedians_instance = kmedians(sample, start_centers, tolerance, ccore);
         kmedians_instance.process();
         
         clusters = kmedians_instance.get_clusters();
@@ -44,10 +49,10 @@ class KmediansTestTemplates:
         obtained_cluster_sizes = [len(cluster) for cluster in clusters];
         assert len(sample) == sum(obtained_cluster_sizes);
         
-        if (expected_cluster_length is not None):
+        if expected_cluster_length is not None:
             obtained_cluster_sizes.sort();
             expected_cluster_length.sort();
-            if (obtained_cluster_sizes != expected_cluster_length):
+            if obtained_cluster_sizes != expected_cluster_length:
                 print(obtained_cluster_sizes);
             assert obtained_cluster_sizes == expected_cluster_length;
 

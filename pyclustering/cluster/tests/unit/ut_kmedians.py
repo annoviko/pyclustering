@@ -25,6 +25,7 @@
 
 
 import unittest;
+import random;
 
 # Generate images without having a window appear.
 import matplotlib;
@@ -76,6 +77,12 @@ class KmediansUnitTest(unittest.TestCase):
 
     def testClusterTheSameData2(self):
         KmediansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, [ [1.1, 1.0], [3.0, 3.1], [5.0, 4.9] ], [5, 5, 5], False);
+
+    def testOddSize(self):
+        # Bug issue #428 (https://github.com/annoviko/pyclustering/issues/428)
+        data = [[59.00732, 9.748167], [59.00608, 9.749117], [59.0047, 9.749933]];
+        KmediansTestTemplates.templateLengthProcessData(data, [[59.00732, 9.748167], [59.00608, 9.749117]], None, False, tolerance=10);
+
 
     def testDifferentDimensions(self):
         kmedians_instance = kmedians([ [0, 1, 5], [0, 2, 3] ], [ [0, 3] ], ccore=False);

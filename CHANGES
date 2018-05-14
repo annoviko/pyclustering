@@ -33,6 +33,12 @@ GENERAL CHANGES:
   See: no reference.
 
 
+CORRECTED MAJOR BUGS:
+- Bug with out of range in K-Medians (pyclustering.cluster.kmedians, ccore.clst.kmedians).
+  See: https://github.com/annoviko/pyclustering/issues/428
+
+
+
 ------------------------------------------------------------------------
 
 CHANGE NOTES FOR 0.8.0 (STARTED Oct 23, 2017), (RELEASED: Feb 23, 2018)
