@@ -22,9 +22,15 @@
 #include "interface/interface_property.h"
 
 
-const char * INTERFACE_DESCRIPTION = "ccore library is a C/C++ part of pyclustering library";
+const char * INTERFACE_DESCRIPTION  = "ccore library is a C/C++ part of pyclustering library";
+const char * INTERFACE_VERSION      = "0.8.1";
 
 
 void * get_interface_description(void) {
     return (void *) INTERFACE_DESCRIPTION;
+}
+
+
+void * get_interface_version(void) {
+    return (void *) INTERFACE_VERSION;
 }

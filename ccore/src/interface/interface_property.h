@@ -32,3 +32,13 @@
  *
  */
 extern "C" DECLARATION void * get_interface_description(void);
+
+
+/**
+ *
+ * @brief   Returns version of the library interface
+ *
+ * @returns Returns const char pointer to version of the library interface.
+ *
+ */
+extern "C" DECLARATION void * get_interface_version(void);
