@@ -23,13 +23,23 @@
 #include "cluster/kmedians.hpp"
 
 
-pyclustering_package * kmedians_algorithm(const pyclustering_package * const p_sample, const pyclustering_package * const p_initial_medians, const double p_tolerance) {
+pyclustering_package * kmedians_algorithm(const pyclustering_package * const p_sample, 
+                                          const pyclustering_package * const p_initial_medians, 
+                                          const double p_tolerance, 
+                                          const void * const p_metric)
+{
     dataset data, medians;
 
     p_sample->extract(data);
     p_initial_medians->extract(medians);
 
-    ccore::clst::kmedians algorithm(medians, p_tolerance);
+    distance_metric<point> * metric = ((distance_metric<point> *) p_metric);
+    distance_metric<point> default_metric = distance_metric_factory<point>::euclidean_square();
+
+    if (!metric)
+        metric = &default_metric;
+
+    ccore::clst::kmedians algorithm(medians, p_tolerance, *metric);
 
     ccore::clst::kmedians_data output_result;
     algorithm.process(data, output_result);

@@ -5,6 +5,9 @@ CHANGE NOTES FOR 0.8.1 (STARTED Feb 23, 2018)
 ------------------------------------------------------------------------
 
 GENERAL CHANGES:
+- Implemented feature to use specific metric for distance calculation in K-Medians algorithm (pyclustering.cluster.kmedians, ccore.clst.kmedians).
+  See: https://github.com/annoviko/pyclustering/issues/429
+
 - Supported new type of input data for K-Medoids - distance matrix (pyclustering.cluster.kmedoids, ccore.clst.kmedoids).
   See: https://github.com/annoviko/pyclustering/issues/418
 

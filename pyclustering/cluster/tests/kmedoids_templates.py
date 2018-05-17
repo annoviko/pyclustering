@@ -24,116 +24,116 @@
 """
 
 
-import math;
-import numpy;
+import math
+import numpy
 
-from pyclustering.tests.assertion import assertion;
+from pyclustering.tests.assertion import assertion
 
-from pyclustering.cluster.kmedoids import kmedoids;
+from pyclustering.cluster.kmedoids import kmedoids
 
-from pyclustering.utils import read_sample, calculate_distance_matrix;
+from pyclustering.utils import read_sample, calculate_distance_matrix
 
-from random import random, randint;
+from random import random, randint
 
 
 class KmedoidsTestTemplates:
     @staticmethod
     def templateLengthProcessData(path_to_file, initial_medoids, expected_cluster_length, ccore_flag, **kwargs):
-        KmedoidsTestTemplates.templateLengthProcessWithMetric(path_to_file, initial_medoids, expected_cluster_length, None, ccore_flag, **kwargs);
+        KmedoidsTestTemplates.templateLengthProcessWithMetric(path_to_file, initial_medoids, expected_cluster_length, None, ccore_flag, **kwargs)
 
 
     @staticmethod
     def templateLengthProcessWithMetric(path_to_file, initial_medoids, expected_cluster_length, metric, ccore_flag, **kwargs):
-        sample = read_sample(path_to_file);
-        data_type = kwargs.get('data_type', 'points');
+        sample = read_sample(path_to_file)
+        data_type = kwargs.get('data_type', 'points')
         input_type = kwargs.get('input_type', 'list')
 
-        input_data = sample;
+        input_data = sample
         if data_type == 'distance_matrix':
-            input_data = calculate_distance_matrix(sample);
+            input_data = calculate_distance_matrix(sample)
 
             if input_type == 'numpy':
-                input_data = numpy.matrix(input_data);
+                input_data = numpy.matrix(input_data)
 
         kmedoids_instance = kmedoids(input_data, initial_medoids, 0.025, ccore_flag, metric=metric, data_type=data_type);
-        kmedoids_instance.process();
+        kmedoids_instance.process()
 
-        clusters = kmedoids_instance.get_clusters();
-        medoids = kmedoids_instance.get_medoids();
+        clusters = kmedoids_instance.get_clusters()
+        medoids = kmedoids_instance.get_medoids()
 
-        assertion.eq(len(clusters), len(medoids));
-        assertion.eq(len(set(medoids)), len(medoids));
+        assertion.eq(len(clusters), len(medoids))
+        assertion.eq(len(set(medoids)), len(medoids))
 
-        obtained_cluster_sizes = [len(cluster) for cluster in clusters];
-        assertion.eq(len(sample), sum(obtained_cluster_sizes));
+        obtained_cluster_sizes = [len(cluster) for cluster in clusters]
+        assertion.eq(len(sample), sum(obtained_cluster_sizes))
 
-        obtained_cluster_sizes.sort();
-        expected_cluster_length.sort();
-        assertion.eq(obtained_cluster_sizes, expected_cluster_length);
+        obtained_cluster_sizes.sort()
+        expected_cluster_length.sort()
+        assertion.eq(obtained_cluster_sizes, expected_cluster_length)
 
 
     @staticmethod
     def templateClusterAllocationOneDimensionData(ccore_flag):
-        input_data = [ [random()] for i in range(10) ] + [ [random() + 3] for i in range(10) ] + [ [random() + 5] for i in range(10) ] + [ [random() + 8] for i in range(10) ];
+        input_data = [ [random()] for i in range(10) ] + [ [random() + 3] for i in range(10) ] + [ [random() + 5] for i in range(10) ] + [ [random() + 8] for i in range(10) ]
          
-        kmedoids_instance = kmedoids(input_data, [ 5, 15, 25, 35 ], 0.025, ccore_flag);
-        kmedoids_instance.process();
-        clusters = kmedoids_instance.get_clusters();
+        kmedoids_instance = kmedoids(input_data, [ 5, 15, 25, 35 ], 0.025, ccore_flag)
+        kmedoids_instance.process()
+        clusters = kmedoids_instance.get_clusters()
          
-        assertion.eq(4, len(clusters));
+        assertion.eq(4, len(clusters))
         for cluster in clusters:
-            assertion.eq(10, len(cluster));
+            assertion.eq(10, len(cluster))
 
 
     @staticmethod
     def templateAllocateRequestedClusterAmount(data, amount_clusters, initial_medoids, ccore_flag):
-        if (initial_medoids is None):
-            initial_medoids = [];
+        if initial_medoids is None:
+            initial_medoids = []
             for _ in range(amount_clusters):
-                index_point = randint(0, len(data) - 1);
+                index_point = randint(0, len(data) - 1)
                 while (index_point in initial_medoids):
-                    index_point = randint(0, len(data) - 1);
+                    index_point = randint(0, len(data) - 1)
                 
-                initial_medoids.append(index_point);
+                initial_medoids.append(index_point)
             
-        kmedoids_instance = kmedoids(data, initial_medoids, 0.025, ccore = ccore_flag);
-        kmedoids_instance.process();
-        clusters = kmedoids_instance.get_clusters();
+        kmedoids_instance = kmedoids(data, initial_medoids, 0.025, ccore = ccore_flag)
+        kmedoids_instance.process()
+        clusters = kmedoids_instance.get_clusters()
         
-        assertion.eq(len(clusters), amount_clusters);
-        amount_objects = 0;
+        assertion.eq(len(clusters), amount_clusters)
+        amount_objects = 0
         for cluster in clusters:
-            amount_objects += len(cluster);
+            amount_objects += len(cluster)
         
-        assertion.eq(amount_objects, len(data));
+        assertion.eq(amount_objects, len(data))
 
 
     @staticmethod
     def templateClusterAllocationTheSameObjects(number_objects, number_clusters, ccore_flag = False):
-        value = random();
-        input_data = [ [value] ] * number_objects;
+        value = random()
+        input_data = [ [value] ] * number_objects
         
-        initial_medoids = [];
-        step = int(math.floor(number_objects / number_clusters));
+        initial_medoids = []
+        step = int(math.floor(number_objects / number_clusters))
         for i in range(number_clusters):
-            initial_medoids.append(i * step);
+            initial_medoids.append(i * step)
         
-        kmedoids_instance = kmedoids(input_data, initial_medoids, ccore=ccore_flag);
-        kmedoids_instance.process();
-        clusters = kmedoids_instance.get_clusters();
-        medoids = kmedoids_instance.get_medoids();
+        kmedoids_instance = kmedoids(input_data, initial_medoids, ccore=ccore_flag)
+        kmedoids_instance.process()
+        clusters = kmedoids_instance.get_clusters()
+        medoids = kmedoids_instance.get_medoids()
 
-        assertion.eq(len(clusters), len(medoids));
-        assertion.eq(len(set(medoids)), len(medoids));
+        assertion.eq(len(clusters), len(medoids))
+        assertion.eq(len(set(medoids)), len(medoids))
         
-        object_mark = [False] * number_objects;
-        allocated_number_objects = 0;
+        object_mark = [False] * number_objects
+        allocated_number_objects = 0
         
         for cluster in clusters:
             for index_object in cluster: 
-                assertion.eq(False, object_mark[index_object]);    # one object can be in only one cluster.
+                assertion.eq(False, object_mark[index_object])    # one object can be in only one cluster.
                 
-                object_mark[index_object] = True;
-                allocated_number_objects += 1;
+                object_mark[index_object] = True
+                allocated_number_objects += 1
             
-        assertion.eq(number_objects, allocated_number_objects);    # number of allocated objects should be the same.
+        assertion.eq(number_objects, allocated_number_objects)    # number of allocated objects should be the same.

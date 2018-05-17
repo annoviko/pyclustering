@@ -25,17 +25,17 @@
 """
 
 
-import numpy;
+import numpy
 
-from pyclustering.cluster.encoder import type_encoding;
+from pyclustering.cluster.encoder import type_encoding
 
-from pyclustering.utils import median;
-from pyclustering.utils.metric import distance_metric, type_metric;
+from pyclustering.utils import median
+from pyclustering.utils.metric import distance_metric, type_metric
 
-import pyclustering.core.kmedoids_wrapper as wrapper;
+import pyclustering.core.kmedoids_wrapper as wrapper
 
-from pyclustering.core.wrapper import ccore_library;
-from pyclustering.core.metric_wrapper import metric_wrapper;
+from pyclustering.core.wrapper import ccore_library
+from pyclustering.core.metric_wrapper import metric_wrapper
 
 
 class kmedoids:
@@ -50,55 +50,55 @@ class kmedoids:
     Clustering example:
     @code
         # load list of points for cluster analysis
-        sample = read_sample(path);
+        sample = read_sample(path)
         
         # set random initial medoids
-        initial_medoids = [1, 10];
+        initial_medoids = [1, 10]
         
         # create instance of K-Medoids algorithm
-        kmedoids_instance = kmedoids(sample, initial_medoids);
+        kmedoids_instance = kmedoids(sample, initial_medoids)
         
         # run cluster analysis and obtain results
         kmedoids_instance.process();
-        clusters = kmedoids_instance.get_clusters();
+        clusters = kmedoids_instance.get_clusters()
         
         # show allocated clusters
-        print(clusters);
+        print(clusters)
     @endcode
 
     Metric for calculation distance between points can be specified by parameter additional 'metric':
     @code
         # create Minkowski distance metric with degree equals to '2'
-        metric = distance_metric(type_metric.MINKOWSKI, degree=2);
+        metric = distance_metric(type_metric.MINKOWSKI, degree=2)
 
         # create K-Medoids algorithm with specific distance metric
-        kmedoids_instance = kmedoids(sample, initial_medoids, metric=metric);
+        kmedoids_instance = kmedoids(sample, initial_medoids, metric=metric)
 
         # run cluster analysis and obtain results
-        kmedoids_instance.process();
-        clusters = kmedoids_instance.get_clusters();
+        kmedoids_instance.process()
+        clusters = kmedoids_instance.get_clusters()
     @endcode
 
     Distance matrix can be used instead of sequence of points to increase performance and for that purpose parameter 'data_type' should be used:
     @code
         # calculate distance matrix for sample
-        sample = read_sample(path_to_sample);
-        matrix = calculate_distance_matrix(sample);
+        sample = read_sample(path_to_sample)
+        matrix = calculate_distance_matrix(sample)
 
         # create K-Medoids algorithm for processing distance matrix instead of points
-        kmedoids_instance = kmedoids(matrix, initial_medoids, data_type='distance_matrix');
+        kmedoids_instance = kmedoids(matrix, initial_medoids, data_type='distance_matrix')
 
         # run cluster analysis and obtain results
-        kmedoids_instance.process();
+        kmedoids_instance.process()
 
-        clusters = kmedoids_instance.get_clusters();
-        medoids = kmedoids_instance.get_medoids();
+        clusters = kmedoids_instance.get_clusters()
+        medoids = kmedoids_instance.get_medoids()
     @endcode
 
     """
     
     
-    def __init__(self, data, initial_index_medoids, tolerance = 0.001, ccore = True, **kwargs):
+    def __init__(self, data, initial_index_medoids, tolerance=0.001, ccore=True, **kwargs):
         """!
         @brief Constructor of clustering algorithm K-Medoids.
         
@@ -113,21 +113,21 @@ class kmedoids:
             - data_type (string): Data type of input sample 'data' that is processed by the algorithm ('points', 'distance_matrix').
 
         """
-        self.__pointer_data = data;
-        self.__clusters = [];
-        self.__medoid_indexes = initial_index_medoids;
-        self.__tolerance = tolerance;
+        self.__pointer_data = data
+        self.__clusters = []
+        self.__medoid_indexes = initial_index_medoids
+        self.__tolerance = tolerance
 
-        self.__metric = kwargs.get('metric', distance_metric(type_metric.EUCLIDEAN_SQUARE));
+        self.__metric = kwargs.get('metric', distance_metric(type_metric.EUCLIDEAN_SQUARE))
         if self.__metric is None:
-            self.__metric = distance_metric(type_metric.EUCLIDEAN_SQUARE);
+            self.__metric = distance_metric(type_metric.EUCLIDEAN_SQUARE)
 
-        self.__data_type = kwargs.get('data_type', 'points');
-        self.__distance_calculator = self.__create_distance_calculator();
+        self.__data_type = kwargs.get('data_type', 'points')
+        self.__distance_calculator = self.__create_distance_calculator()
 
-        self.__ccore = ccore and self.__metric.get_type() != type_metric.USER_DEFINED;
+        self.__ccore = ccore and self.__metric.get_type() != type_metric.USER_DEFINED
         if self.__ccore:
-            self.__ccore = ccore_library.workable();
+            self.__ccore = ccore_library.workable()
 
 
     def process(self):
@@ -142,23 +142,23 @@ class kmedoids:
         """
         
         if self.__ccore is True:
-            ccore_metric = metric_wrapper.create_instance(self.__metric);
+            ccore_metric = metric_wrapper.create_instance(self.__metric)
 
-            self.__clusters = wrapper.kmedoids(self.__pointer_data, self.__medoid_indexes, self.__tolerance, ccore_metric.get_pointer(), self.__data_type);
-            self.__medoid_indexes = self.__update_medoids();
+            self.__clusters = wrapper.kmedoids(self.__pointer_data, self.__medoid_indexes, self.__tolerance, ccore_metric.get_pointer(), self.__data_type)
+            self.__medoid_indexes = self.__update_medoids()
         
         else:
-            changes = float('inf');
+            changes = float('inf')
              
-            stop_condition = self.__tolerance;
+            stop_condition = self.__tolerance
              
             while changes > stop_condition:
-                self.__clusters = self.__update_clusters();
-                update_medoid_indexes = self.__update_medoids();
+                self.__clusters = self.__update_clusters()
+                update_medoid_indexes = self.__update_medoids()
 
-                changes = max([self.__distance_calculator(self.__medoid_indexes[index], update_medoid_indexes[index]) for index in range(len(update_medoid_indexes))]);
+                changes = max([self.__distance_calculator(self.__medoid_indexes[index], update_medoid_indexes[index]) for index in range(len(update_medoid_indexes))])
 
-                self.__medoid_indexes = update_medoid_indexes;
+                self.__medoid_indexes = update_medoid_indexes
 
 
     def get_clusters(self):
@@ -170,7 +170,7 @@ class kmedoids:
         
         """
         
-        return self.__clusters;
+        return self.__clusters
     
     
     def get_medoids(self):
@@ -182,7 +182,7 @@ class kmedoids:
         
         """
 
-        return self.__medoid_indexes;
+        return self.__medoid_indexes
 
 
     def get_cluster_encoding(self):
@@ -195,7 +195,7 @@ class kmedoids:
         
         """
         
-        return type_encoding.CLUSTER_INDEX_LIST_SEPARATION;
+        return type_encoding.CLUSTER_INDEX_LIST_SEPARATION
 
 
     def __create_distance_calculator(self):
@@ -206,16 +206,16 @@ class kmedoids:
 
         """
         if self.__data_type == 'points':
-            return lambda index1, index2: self.__metric(self.__pointer_data[index1], self.__pointer_data[index2]);
+            return lambda index1, index2: self.__metric(self.__pointer_data[index1], self.__pointer_data[index2])
 
         elif self.__data_type == 'distance_matrix':
             if isinstance(self.__pointer_data, numpy.matrix):
-                return lambda index1, index2: self.__pointer_data.item((index1, index2));
+                return lambda index1, index2: self.__pointer_data.item((index1, index2))
 
-            return lambda index1, index2: self.__pointer_data[index1][index2];
+            return lambda index1, index2: self.__pointer_data[index1][index2]
 
         else:
-            raise TypeError("Unknown type of data is specified '%s'" % self.__data_type);
+            raise TypeError("Unknown type of data is specified '%s'" % self.__data_type)
 
 
     def __update_clusters(self):
@@ -227,24 +227,24 @@ class kmedoids:
         
         """
         
-        clusters = [[self.__medoid_indexes[i]] for i in range(len(self.__medoid_indexes))];
+        clusters = [[self.__medoid_indexes[i]] for i in range(len(self.__medoid_indexes))]
         for index_point in range(len(self.__pointer_data)):
             if index_point in self.__medoid_indexes:
-                continue;
+                continue
 
-            index_optim = -1;
-            dist_optim = float('Inf');
+            index_optim = -1
+            dist_optim = float('Inf')
             
             for index in range(len(self.__medoid_indexes)):
-                dist = self.__distance_calculator(index_point, self.__medoid_indexes[index]);
+                dist = self.__distance_calculator(index_point, self.__medoid_indexes[index])
                 
                 if dist < dist_optim:
-                    index_optim = index;
-                    dist_optim = dist;
+                    index_optim = index
+                    dist_optim = dist
             
-            clusters[index_optim].append(index_point);
+            clusters[index_optim].append(index_point)
         
-        return clusters;
+        return clusters
     
     
     def __update_medoids(self):
@@ -255,10 +255,10 @@ class kmedoids:
         
         """
 
-        medoid_indexes = [-1] * len(self.__clusters);
+        medoid_indexes = [-1] * len(self.__clusters)
         
         for index in range(len(self.__clusters)):
-            medoid_index = median(self.__pointer_data, self.__clusters[index], metric=self.__metric, data_type=self.__data_type);
-            medoid_indexes[index] = medoid_index;
+            medoid_index = median(self.__pointer_data, self.__clusters[index], metric=self.__metric, data_type=self.__data_type)
+            medoid_indexes[index] = medoid_index
              
-        return medoid_indexes;
+        return medoid_indexes
