@@ -467,9 +467,6 @@ class pcnn_network(network):
         outputs = [0.0] * self._num_osc
         threshold = [0.0] * self._num_osc
         
-        # Used by Fast-Linking
-        output_change = False
-        
         for index in range(0, self._num_osc, 1):
             neighbors = self.get_neighbors(index)
             
@@ -498,19 +495,19 @@ class pcnn_network(network):
             # In case of Fast Linking we should calculate threshold until output is changed.
             if self._params.FAST_LINKING is not True:
                 threshold[index] = self._params.AT * self._threshold[index] + self._params.VT * outputs[index]
-        
-        
+
         # In case of Fast Linking we need to wait until output is changed.
         if self._params.FAST_LINKING is True:
-            current_output_change = False
+            output_change = True    # Set it True for the for the first iteration.
             previous_outputs = outputs[:]
 
-
-            
             while output_change is True:
+                current_output_change = False
+
                 for index in range(0, self._num_osc, 1):
                     linking_influence = 0.0
-            
+
+                    neighbors = self.get_neighbors(index)
                     for index_neighbour in neighbors:
                         linking_influence += previous_outputs[index_neighbour] * self._params.W
                     
@@ -524,12 +521,10 @@ class pcnn_network(network):
                         outputs[index] = self.__OUTPUT_TRUE
                     else:
                         outputs[index] = self.__OUTPUT_FALSE
-                        
-                    if outputs[index] != previous_outputs[index]:
-                        current_output_change = True
+
+                    current_output_change |= (outputs[index] != previous_outputs[index])
                 
                 output_change = current_output_change
-                current_output_change = False
                 
                 if output_change is True:
                     previous_outputs = outputs[:]
@@ -544,5 +539,3 @@ class pcnn_network(network):
         self._threshold = threshold[:]
         
         return outputs
-
-        
