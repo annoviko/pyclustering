@@ -48,7 +48,7 @@ void kmedians::process(const dataset & data, cluster_data & output_result) {
     m_ptr_result = (kmedians_data *) &output_result;
 
     if (data[0].size() != m_initial_medians[0].size()) {
-        throw std::invalid_argument(__FUNCTION__ ": Dimension of the input data and dimension of the initial medians must be equal.");
+        throw std::invalid_argument("kmedians: dimension of the input data and dimension of the initial medians must be equal.");
     }
 
     m_ptr_result->medians() = m_initial_medians;
