@@ -40,6 +40,9 @@ CORRECTED MAJOR BUGS:
 - Bug with out of range in K-Medians (pyclustering.cluster.kmedians, ccore.clst.kmedians).
   See: https://github.com/annoviko/pyclustering/issues/428
 
+- Bug with fast linking in PCNN (python implementation only) that wasn't used despite the corresponding option (pyclustering.nnet.pcnn).
+  See: https://github.com/annoviko/pyclustering/issues/419
+
 
 
 ------------------------------------------------------------------------
