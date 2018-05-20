@@ -35,6 +35,7 @@ from pyclustering.cluster import cluster_visualizer
 
 # TODO: Store blocks in block directory and control them via directory
 
+
 class bang_visualizer:
     @staticmethod
     def show_level_blocks(data, level_blocks):
@@ -129,9 +130,6 @@ class bang_block:
         if block is self:
             return False;
 
-        if block.get_region() == 17 and self.__region_number == 1:
-            print("Error case")
-
         block_max_corner, block_min_corner = block.get_corners()
 
         similarity_counter = 0
@@ -142,6 +140,7 @@ class bang_block:
 
         for i in range(dimension):
             diff = abs(block_max_corner[i] - self.__max_corner[i])
+
             if diff <= length_edges[i] + tolerances[i]:
                 similarity_counter += 1
 
@@ -326,8 +325,8 @@ class bang:
                 handled_block_indexes.append(unhandled_index)
                 neighbors.append(level_blocks[unhandled_index])
 
-                # Maximum number of neighbors is four
-                if len(neighbors) == 4:
+                # Maximum number of neighbors is eight
+                if len(neighbors) == 8:
                     break
 
         for handled_index in handled_block_indexes:

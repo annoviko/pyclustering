@@ -52,7 +52,7 @@ def template_clustering(data_path, levels, **kwargs):
 
 
 def cluster_simple_sample():
-    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 7)
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 8)
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 7)
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 7)
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 8)
