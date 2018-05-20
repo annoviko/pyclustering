@@ -76,6 +76,113 @@ class bang_visualizer:
             raise ValueError("Impossible to display blocks on non-2D dimensional data.")
 
 
+
+class spatial_block:
+    """!
+    @brief Geometrical description of BANG block in data space.
+    @details Provides services related to spatial function and used by bang_block
+
+    @see bang_block
+
+    """
+
+    def __init__(self, max_corner, min_corner):
+        """!
+        @brief Creates spatial block in data space.
+
+        @param[in] max_corner (array_like): Maximum corner coordinates of the block.
+        @param[in] min_corner (array_like): Minimal corner coordinates of the block.
+
+        """
+        self.__max_corner = max_corner
+        self.__min_corner = min_corner
+
+
+    def __str__(self):
+        """!
+        @brief Returns string block description.
+
+        """
+        return "(max: %s; min: %s)" % (self.__max_corner, self.__min_corner)
+
+
+    def __contains__(self, point):
+        """!
+        @brief Point is considered as contained if it lies in block (belong to it).
+
+        """
+        for i in range(len(point)):
+            if point[i] < self.__min_corner[i] or point[i] > self.__max_corner[i]:
+                return False
+
+        return True
+
+
+    def get_corners(self):
+        """!
+        @brief Return spatial description of current block.
+
+        @return (tuple) Pair of maximum and minimum corners (max_corner, min_corner).
+
+        """
+        return self.__max_corner, self.__min_corner
+
+
+    def split(self, dimension):
+        """!
+        @brief Split current block into two spatial blocks in specified dimension.
+
+        @param[in] dimension (uint): Dimension where current block should be split.
+
+        @return (tuple) Pair of new split blocks from current block.
+
+        """
+        first_max_corner = self.__max_corner[:]
+        second_min_corner = self.__min_corner[:]
+
+        split_border = (self.__max_corner[dimension] + self.__min_corner[dimension]) / 2.0
+
+        first_max_corner[dimension] = split_border
+        second_min_corner[dimension] = split_border
+
+        return spatial_block(first_max_corner, self.__min_corner), spatial_block(self.__max_corner, second_min_corner)
+
+
+    def is_neighbor(self, block):
+        """!
+        @brief Performs calculation to identify whether specified block is neighbor of current block.
+
+        @param[in] block (spatial_block): Another block that is check whether it is neighbor.
+
+        @return (bool) True is blocks are neighbors, False otherwise.
+
+        """
+        if block is not self:
+            block_max_corner, _ = block.get_corners()
+            dimension = len(block_max_corner)
+            neighborhood_score = self.__calculate_neighborhood(block_max_corner)
+
+            if neighborhood_score == dimension:
+                return True
+
+        return False
+
+
+    def __calculate_neighborhood(self, block_max_corner):
+        dimension = len(block_max_corner)
+
+        length_edges = [self.__max_corner[i] - self.__min_corner[i] for i in range(dimension)]
+
+        neighborhood_score = 0
+        for i in range(dimension):
+            diff = abs(block_max_corner[i] - self.__max_corner[i])
+
+            if diff <= length_edges[i] + length_edges[i] * 0.0001:
+                neighborhood_score += 1
+
+        return neighborhood_score
+
+
 class bang_block:
     def __init__(self, data, dimension, region, level, max_corner, min_corner, cache_points=False):
         self.__region_number = region
