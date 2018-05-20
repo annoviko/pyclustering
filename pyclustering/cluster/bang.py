@@ -67,6 +67,10 @@ class bang_visualizer:
                                      alpha=0.5)
             ax.add_patch(rect)
 
+            xlabel = (max_corner[0] + min_corner[0]) / 2.0
+            ylabel = (max_corner[1] + min_corner[1]) / 2.0
+            ax.text(xlabel, ylabel, str(block.get_region()), ha="center", va="center")
+
         else:
             raise ValueError("Impossible to display blocks on non-2D dimensional data.")
 
@@ -113,6 +117,7 @@ class bang_block:
         if self.__points is not None:
             return self.__points
 
+        # TODO: return for upper level - traverse tree is preferable than whole data with calculation
         return [index for index in range(len(self.__data)) if self.contained(self.__data[index])]
 
 
@@ -124,13 +129,26 @@ class bang_block:
         if block is self:
             return False;
 
-        block_max_corner, block_min_corner = block.get_corners()
-        for i in range(len(self.__max_corner)):
-            if self.__max_corner[i] == block_min_corner[i]:
-                return True
+        if block.get_region() == 17 and self.__region_number == 1:
+            print("Error case")
 
-            if self.__min_corner[i] == block_max_corner[i]:
-                return True
+        block_max_corner, block_min_corner = block.get_corners()
+
+        similarity_counter = 0
+        dimension = len(block_max_corner)
+
+        length_edges = [self.__max_corner[i] - self.__min_corner[i] for i in range(dimension)]
+        tolerances = [length_edge * 0.0001 for length_edge in length_edges]
+
+        for i in range(dimension):
+            diff = abs(block_max_corner[i] - self.__max_corner[i])
+            if diff <= length_edges[i] + tolerances[i]:
+                similarity_counter += 1
+
+        print(self.get_region(), block.get_region(), similarity_counter)
+
+        if similarity_counter == dimension:
+            return True
 
         return False
 
@@ -160,7 +178,7 @@ class bang_block:
 
     def contained(self, point):
         for i in range(len(point)):
-            if point[i] <= self.__min_corner[i] or point[i] > self.__max_corner[i]:
+            if point[i] < self.__min_corner[i] or point[i] > self.__max_corner[i]:
                 return False
 
         return True
@@ -259,7 +277,8 @@ class bang:
 
     def __allocate_clusters(self):
         level_blocks = self.__blocks[-1]
-        unhandled_block_indexes = set(range(len(level_blocks)))
+        unhandled_block_indexes = set([i for i in range(len(level_blocks)) if level_blocks[i].get_density() > self.__density_threshold])
+        appropriate_block_indexes = set(unhandled_block_indexes)
 
         current_block = self.__find_block_center(level_blocks)
         cluster_index = 0
@@ -273,18 +292,21 @@ class bang:
             neighbors = self.__find_block_neighbors(current_block, level_blocks, unhandled_block_indexes)
             for neighbor in neighbors:
                 neighbor.set_cluster(cluster_index)
-                neighbors += self.__find_block_neighbors(current_block, level_blocks, unhandled_block_indexes)
+                neighbors += self.__find_block_neighbors(neighbor, level_blocks, unhandled_block_indexes)
 
             current_block = self.__find_block_center(level_blocks)
             cluster_index += 1
 
         self.__clusters = [[] for _ in range(cluster_index)]
-        for block in level_blocks:
+        for appropriate_index in appropriate_block_indexes:
+            block = level_blocks[appropriate_index]
             index = block.get_cluster()
             if index is not None:
                 self.__clusters[index] += block.get_points()
             else:
                 self.__noise += block.get_points()
+
+        self.__clusters = [ list(set(cluster)) for cluster in self.__clusters ]
 
 
     def __find_block_center(self, level_blocks):
@@ -300,9 +322,9 @@ class bang:
 
         handled_block_indexes = []
         for unhandled_index in unhandled_block_indexes:
-            if block.is_neighbor(level_blocks[unhandled_index]):    # TODO: is_neighbor should consider density!
+            if block.is_neighbor(level_blocks[unhandled_index]):
                 handled_block_indexes.append(unhandled_index)
-                neighbors.append(block)
+                neighbors.append(level_blocks[unhandled_index])
 
                 # Maximum number of neighbors is four
                 if len(neighbors) == 4:

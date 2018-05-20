@@ -45,16 +45,25 @@ def template_clustering(data_path, levels, **kwargs):
     if len(data[0]) == 2:
         bang_visualizer.show_level_blocks(data, blocks)
 
-    #visualizer = cluster_visualizer()
-    #visualizer.append_clusters(clusters, data)
-    #visualizer.append_cluster(noise, marker='x')
-    #visualizer.show()
+    visualizer = cluster_visualizer()
+    visualizer.append_clusters(clusters, data)
+    visualizer.append_cluster(noise, data, marker='x')
+    visualizer.show()
 
 
 def cluster_simple_sample():
-    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 8)
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 7)
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 7)
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 7)
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 8)
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 8)
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE6, 7)
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE7, 4)
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE8, 7)
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 7)
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE10, 7)
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, 7)
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 7)
 
 
 cluster_simple_sample()
