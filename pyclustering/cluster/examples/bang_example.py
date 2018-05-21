@@ -40,10 +40,10 @@ def template_clustering(data_path, levels, **kwargs):
 
     clusters = bang_instance.get_clusters()
     noise = bang_instance.get_noise()
-    blocks = bang_instance.get_level_blocks()
+    directory = bang_instance.get_directory()
 
     if len(data[0]) == 2:
-        bang_visualizer.show_level_blocks(data, blocks)
+        bang_visualizer.show_blocks(data, directory)
 
     visualizer = cluster_visualizer()
     visualizer.append_clusters(clusters, data)

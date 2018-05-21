@@ -33,24 +33,21 @@ from pyclustering.utils import data_corners
 from pyclustering.cluster import cluster_visualizer
 
 
-# TODO: Store blocks in block directory and control them via directory
-
-
 class bang_visualizer:
     @staticmethod
-    def show_level_blocks(data, level_blocks):
+    def show_blocks(data, directory):
         visualizer = cluster_visualizer()
         visualizer.append_cluster(data)
 
         figure = visualizer.show(display=False)
 
-        bang_visualizer.__draw_blocks(figure, 0, level_blocks)
-        plt.show();
+        bang_visualizer.__draw_blocks(figure, 0, directory.get_leafs())
+        plt.show()
 
 
     @staticmethod
     def __draw_blocks(figure, offset, level_blocks):
-        ax = figure.get_axes()[offset];
+        ax = figure.get_axes()[offset]
         ax.grid(False)
 
         for block in level_blocks:
@@ -59,7 +56,7 @@ class bang_visualizer:
 
     @staticmethod
     def __draw_block(ax, block):
-        max_corner, min_corner = block.get_corners()
+        max_corner, min_corner = block.get_spatial_block().get_corners()
         belong_cluster = block.get_cluster() is not None
 
         if len(max_corner) == 2:
@@ -74,6 +71,105 @@ class bang_visualizer:
 
         else:
             raise ValueError("Impossible to display blocks on non-2D dimensional data.")
+
+
+
+class bang_directory:
+    def __init__(self, data, levels, density_threshold=0.0):
+        """!
+        @brief Create BANG directory - basically tree structure with direct access to leafs.
+
+        @param[in] levels (uint): Height of the blocks tree.
+        @param[in] density_threshold (double): The lowest level of density when contained data by bang-block is
+                    considered as a noise and there is no need to split it till the last level.
+
+        """
+        self.__data = data
+        self.__levels = levels
+        self.__density_threshold = density_threshold
+        self.__leafs = []
+        self.__root = None
+
+        self.__create_directory()
+
+
+    def get_leafs(self):
+        return self.__leafs
+
+
+    def __create_directory(self):
+        """!
+        @brief Create BANG directory as a tree with separate storage for leafs.
+
+        """
+
+        min_corner, max_corner = data_corners(self.__data)
+        data_block = spatial_block(max_corner, min_corner)
+
+        cache_require = (self.__levels == 1)
+        self.__root = bang_block(self.__data, 0, 0, data_block, cache_require)
+
+        if cache_require:
+            self.__leafs.append(self.__root)
+        else:
+            self.__build_directory_levels()
+
+
+    def __build_directory_levels(self):
+        """!
+        @brief Build levels of direction if amount of level is greater than one.
+
+        """
+        previous_level_blocks = [ self.__root ]
+        for level in range(1, self.__levels):
+            previous_level_blocks = self.__build_level(previous_level_blocks, level)
+
+        self.__leafs = sorted(self.__leafs, key=lambda block: block.get_density())
+
+
+    def __build_level(self, previous_level_blocks, level):
+        """!
+        @brief Build new level of directory.
+
+        @param[in] previous_level_blocks (list): BANG-blocks on the previous level.
+        @param[in] level (uint): Level number that should be built.
+
+        @return (list) New block on the specified level.
+
+        """
+        current_level_blocks = []
+
+        split_dimension = level % len(self.__data[0])
+        cache_require = (level == self.__levels - 1)
+
+        for block in previous_level_blocks:
+            self.__split_block(block, split_dimension, cache_require, current_level_blocks)
+
+        if cache_require:
+            self.__leafs += current_level_blocks
+
+        return current_level_blocks
+
+
+    def __split_block(self, block, split_dimension, cache_require, current_level_blocks):
+        """!
+        @brief Split specific block in specified dimension.
+        @details Split is not performed for block whose density is lower than threshold value, such blocks are putted to
+                  leafs.
+
+        @param[in] block (bang_block): BANG-block that should be split.
+        @param[in] split_dimension (uint): Dimension at which splitting should be performed.
+        @param[in] cache_require (bool): Defines when points in cache should be stored during density calculation.
+        @param[in|out] current_level_blocks (list): Block storage at the current level where new blocks should be added.
+
+        """
+        if block.get_density() <= self.__density_threshold:
+            self.__leafs.append(block)
+
+        else:
+            left, right = block.split(split_dimension, cache_require)
+            current_level_blocks.append(left)
+            current_level_blocks.append(right)
 
 
 
@@ -96,6 +192,7 @@ class spatial_block:
         """
         self.__max_corner = max_corner
         self.__min_corner = min_corner
+        self.__volume = self.__calculate_volume()
 
 
     def __str__(self):
@@ -126,6 +223,18 @@ class spatial_block:
 
         """
         return self.__max_corner, self.__min_corner
+
+
+    def get_volume(self):
+        """!
+        @brief Returns volume of current block.
+        @details Volume block has uncommon mining here: for 1D is length of a line, for 2D is square of rectangle,
+                  for 3D is volume of 3D figure, and for ND is volume of ND figure.
+
+        @return (double) Volume of current block.
+
+        """
+        return self.__volume
 
 
     def split(self, dimension):
@@ -169,6 +278,14 @@ class spatial_block:
 
 
     def __calculate_neighborhood(self, block_max_corner):
+        """!
+        @brief Calculates neighborhood score that defined whether blocks are neighbors.
+
+        @param[in] block_max_corner (list): Maximum coordinates of other block.
+
+        @return (uint) Neighborhood score.
+
+        """
         dimension = len(block_max_corner)
 
         length_edges = [self.__max_corner[i] - self.__min_corner[i] for i in range(dimension)]
@@ -183,15 +300,29 @@ class spatial_block:
         return neighborhood_score
 
 
+    def __calculate_volume(self):
+        """!
+        @brief Calculates volume of current spatial block.
+
+        @return (double) Volume of current spatial block.
+
+        """
+        volume = self.__max_corner[0] - self.__min_corner[0]
+        for i in range(1, len(self.__max_corner)):
+            volume *= self.__max_corner[i] - self.__min_corner[i]
+
+        return volume
+
+
+
 class bang_block:
-    def __init__(self, data, dimension, region, level, max_corner, min_corner, cache_points=False):
+    def __init__(self, data, region, level, space_block, cache_points=False):
+        self.__data = data
         self.__region_number = region
         self.__level = level
-        self.__data = data
-        self.__dimension = dimension
-        self.__max_corner = max_corner
-        self.__min_corner = min_corner
+        self.__spatial_block = space_block
         self.__cache_points = cache_points
+
         self.__cluster = None
         self.__points = None
         self.__density = self.__calculate_density()
@@ -205,10 +336,6 @@ class bang_block:
         return self.__region_number
 
 
-    def get_level(self):
-        return self.__level
-
-
     def get_density(self):
         return self.__density
 
@@ -217,16 +344,12 @@ class bang_block:
         return self.__cluster
 
 
-    def get_corners(self):
-        return self.__max_corner, self.__min_corner
+    def get_spatial_block(self):
+        return self.__spatial_block
 
 
     def get_points(self):
-        if self.__points is not None:
             return self.__points
-
-        # TODO: return for upper level - traverse tree is preferable than whole data with calculation
-        return [index for index in range(len(self.__data)) if self.contained(self.__data[index])]
 
 
     def set_cluster(self, index):
@@ -234,84 +357,41 @@ class bang_block:
 
 
     def is_neighbor(self, block):
-        if block is self:
-            return False;
-
-        block_max_corner, block_min_corner = block.get_corners()
-
-        similarity_counter = 0
-        dimension = len(block_max_corner)
-
-        length_edges = [self.__max_corner[i] - self.__min_corner[i] for i in range(dimension)]
-        tolerances = [length_edge * 0.0001 for length_edge in length_edges]
-
-        for i in range(dimension):
-            diff = abs(block_max_corner[i] - self.__max_corner[i])
-
-            if diff <= length_edges[i] + tolerances[i]:
-                similarity_counter += 1
-
-        print(self.get_region(), block.get_region(), similarity_counter)
-
-        if similarity_counter == dimension:
-            return True
-
-        return False
+        return self.get_spatial_block().is_neighbor(block.get_spatial_block())
 
 
-    def split(self, cache_points):
+    def split(self, split_dimension, cache_points):
         left_region_number = self.__region_number
         right_region_number = self.__region_number + 2 ** self.__level
 
-        dimension = self.__dimension + 1
-        if dimension >= len(self.__data[0]):
-            dimension = 0
+        first_spatial_block, second_spatial_block = self.__spatial_block.split(split_dimension)
 
-        first_max_corner = self.__max_corner[:]
-        first_min_corner = self.__min_corner[:]
-        second_max_corner = self.__max_corner[:]
-        second_min_corner = self.__min_corner[:]
-
-        split_border = (self.__max_corner[dimension] + self.__min_corner[dimension]) / 2.0
-        first_max_corner[dimension] = split_border
-        second_min_corner[dimension] = split_border
-
-        left = bang_block(self.__data, dimension, left_region_number, self.__level + 1, first_max_corner, first_min_corner, cache_points)
-        right = bang_block(self.__data, dimension, right_region_number, self.__level + 1, second_max_corner, second_min_corner, cache_points)
+        left = bang_block(self.__data, left_region_number, self.__level + 1, first_spatial_block, cache_points)
+        right = bang_block(self.__data, right_region_number, self.__level + 1, second_spatial_block, cache_points)
 
         return left, right
 
 
-    def contained(self, point):
-        for i in range(len(point)):
-            if point[i] < self.__min_corner[i] or point[i] > self.__max_corner[i]:
-                return False
-
-        return True
-
-
     def __calculate_density(self):
-        volume = self.__max_corner[0] - self.__min_corner[0]
-        for i in range(1, len(self.__max_corner)):
-            volume *= self.__max_corner[i] - self.__min_corner[i]
-
-        amount = self.__get_amount_points()
-        return amount / volume
+        return self.__get_amount_points() / self.__spatial_block.get_volume()
 
 
     def __get_amount_points(self):
         amount = 0
         for index in range(len(self.__data)):
-            if self.contained(self.__data[index]):
+            if self.__data[index] in self.__spatial_block:
+                self.__cache_point(index)
                 amount += 1
 
-                if self.__cache_points:
-                    if self.__points is None:
-                        self.__points = []
-
-                    self.__points.append(index)
-
         return amount
+
+
+    def __cache_point(self, index):
+        if self.__cache_points:
+            if self.__points is None:
+                self.__points = []
+
+            self.__points.append(index)
 
 
 
@@ -319,7 +399,7 @@ class bang:
     def __init__(self, data, levels, density_threshold = 0.0):
         self.__data = data
         self.__levels = levels
-        self.__blocks = []
+        self.__directory = None
         self.__clusters = []
         self.__noise = []
         self.__cluster_blocks = []
@@ -329,7 +409,7 @@ class bang:
     def process(self):
         self.__validate_arguments()
 
-        self.__build_blocks()
+        self.__directory = bang_directory(self.__data, self.__levels, self.__density_threshold)
         self.__allocate_clusters()
 
 
@@ -341,78 +421,63 @@ class bang:
         return self.__noise
 
 
-    def get_level_blocks(self, level=-1):
-        return self.__blocks[level]
+    def get_directory(self):
+        return self.__directory
 
 
     def __validate_arguments(self):
         if self.__levels <= 0:
-            raise ValueError("Incorrect amount of levels '%d'. Level value should be greater than 0." % (self.__levels))
+            raise ValueError("Incorrect amount of levels '%d'. Level value should be greater than 0." % self.__levels)
 
         if len(self.__data) == 0:
             raise ValueError("Empty input data. Data should contain at least one point.")
 
         if self.__density_threshold < 0:
-            raise ValueError("Incorrect density threshold '%f'. Density threshold should not be negative." % (self.__density_threshold))
-
-
-    def __build_blocks(self):
-        min_corner, max_corner = data_corners(self.__data)
-        root_block = bang_block(self.__data, 0, 0, 0, max_corner, min_corner, self.__levels == 1)
-
-        level_blocks = [root_block]
-        self.__blocks.append(level_blocks)
-
-        for level in range(1, self.__levels):
-            cache_points = (level == self.__levels - 1)
-            level_blocks = self.__build_next_level_blocks(level_blocks, cache_points)
-            level_blocks = sorted(level_blocks, key=lambda block: block.get_density())
-            self.__blocks.append(level_blocks)
-
-
-    def __build_next_level_blocks(self, level_blocks, cache_points):
-        next_level_blocks = []
-        for block in level_blocks:
-            left, right = block.split(cache_points)
-
-            next_level_blocks.append(left)
-            next_level_blocks.append(right)
-
-        return next_level_blocks
+            raise ValueError("Incorrect density threshold '%f'. Density threshold should not be negative." % self.__density_threshold)
 
 
     def __allocate_clusters(self):
-        level_blocks = self.__blocks[-1]
-        unhandled_block_indexes = set([i for i in range(len(level_blocks)) if level_blocks[i].get_density() > self.__density_threshold])
+        leaf_blocks = self.__directory.get_leafs()
+        unhandled_block_indexes = set([i for i in range(len(leaf_blocks)) if leaf_blocks[i].get_density() > self.__density_threshold])
         appropriate_block_indexes = set(unhandled_block_indexes)
 
-        current_block = self.__find_block_center(level_blocks)
+        current_block = self.__find_block_center(leaf_blocks)
         cluster_index = 0
 
         while current_block is not None:
-            if (current_block.get_density() <= self.__density_threshold):
+            if current_block.get_density() <= self.__density_threshold:
                 break
 
-            current_block.set_cluster(cluster_index)
+            self.__expand_cluster_block(current_block, cluster_index, leaf_blocks, unhandled_block_indexes)
 
-            neighbors = self.__find_block_neighbors(current_block, level_blocks, unhandled_block_indexes)
-            for neighbor in neighbors:
-                neighbor.set_cluster(cluster_index)
-                neighbors += self.__find_block_neighbors(neighbor, level_blocks, unhandled_block_indexes)
-
-            current_block = self.__find_block_center(level_blocks)
+            current_block = self.__find_block_center(leaf_blocks)
             cluster_index += 1
 
-        self.__clusters = [[] for _ in range(cluster_index)]
+        self.__store_clustering_results(cluster_index, appropriate_block_indexes, leaf_blocks)
+
+
+    def __expand_cluster_block(self, block, cluster_index, leaf_blocks, unhandled_block_indexes):
+        block.set_cluster(cluster_index)
+
+        neighbors = self.__find_block_neighbors(block, leaf_blocks, unhandled_block_indexes)
+        for neighbor in neighbors:
+            neighbor.set_cluster(cluster_index)
+            neighbors += self.__find_block_neighbors(neighbor, leaf_blocks, unhandled_block_indexes)
+
+
+    def __store_clustering_results(self, amount_clusters, appropriate_block_indexes, leaf_blocks):
+        self.__clusters = [[] for _ in range(amount_clusters)]
         for appropriate_index in appropriate_block_indexes:
-            block = level_blocks[appropriate_index]
+            block = leaf_blocks[appropriate_index]
             index = block.get_cluster()
+
             if index is not None:
                 self.__clusters[index] += block.get_points()
             else:
                 self.__noise += block.get_points()
 
         self.__clusters = [ list(set(cluster)) for cluster in self.__clusters ]
+        self.__noise = list(set(self.__noise))
 
 
     def __find_block_center(self, level_blocks):
