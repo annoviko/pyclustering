@@ -36,4 +36,5 @@ class color:
                 'black', 'mediumspringgreen', 'orange', 'darkviolet', 'darkblue',
                 'silver', 'lime', 'pink', 'brown', 'bisque',
                 'dimgray', 'firebrick', 'darksalmon', 'chartreuse', 'skyblue',
-                'purple', 'fuchsia', 'palegoldenrod', 'coral', 'hotpink'                ];
+                'purple', 'fuchsia', 'palegoldenrod', 'coral', 'hotpink',
+                'gray', 'tan', 'crimson', 'teal', 'olive'];

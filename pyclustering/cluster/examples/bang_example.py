@@ -24,12 +24,12 @@
 """
 
 
-from pyclustering.cluster import cluster_visualizer;
-from pyclustering.cluster.bang import bang, bang_visualizer;
+from pyclustering.cluster import cluster_visualizer
+from pyclustering.cluster.bang import bang, bang_visualizer
 
-from pyclustering.utils import read_sample;
+from pyclustering.utils import read_sample
 
-from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
+from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES
 
 
 def template_clustering(data_path, levels, **kwargs):
@@ -64,6 +64,16 @@ def cluster_simple_sample():
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE10, 7)
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, 7)
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 7)
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_ELONGATE, 7)
+
+
+def cluster_fcps():
+    template_clustering(FCPS_SAMPLES.SAMPLE_LSUN, 9)
+    template_clustering(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, 11)
+    template_clustering(FCPS_SAMPLES.SAMPLE_WING_NUT, 11)
+    template_clustering(FCPS_SAMPLES.SAMPLE_TARGET, 10)
+    template_clustering(FCPS_SAMPLES.SAMPLE_HEPTA, 10)
 
 
 cluster_simple_sample()
+cluster_fcps()

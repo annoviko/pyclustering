@@ -25,6 +25,7 @@
 """
 
 
+import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 
@@ -34,8 +35,26 @@ from pyclustering.cluster import cluster_visualizer
 
 
 class bang_visualizer:
+    """!
+    @brief Visualizer of BANG algorithm's results.
+    @details BANG visualizer provides visualization services that are specific for BANG algorithm.
+
+    """
+
+
+    __maximum_density_alpha = 0.6
+
+
     @staticmethod
     def show_blocks(data, directory):
+        """!
+        @brief Show BANG-blocks (leafs only) in data space.
+        @details BANG-blocks represents grid that was used for clustering process.
+
+        @param[in] data (list): Input data space that contains points where each point is also represented by list.
+        @param[in] directory (bang_directory): Directory that was created by BANG algorithm during clustering process.
+
+        """
         visualizer = cluster_visualizer()
         visualizer.append_cluster(data)
 
@@ -46,28 +65,48 @@ class bang_visualizer:
 
 
     @staticmethod
-    def __draw_blocks(figure, offset, level_blocks):
-        ax = figure.get_axes()[offset]
+    def __draw_blocks(figure, ax_index, blocks):
+        """!
+        @brief Display BANG-blocks on specified figure.
+
+        @param[in] figure (figure): Figure that is used for drawing blocks.
+        @param[in] ax_index (uint): Index of axis where blocks should be displayed.
+        @param[in] blocks (list): List of blocks that should be displyed.
+
+        """
+        ax = figure.get_axes()[ax_index]
         ax.grid(False)
 
-        for block in level_blocks:
-            bang_visualizer.__draw_block(ax, block)
+        density_scale = blocks[-1].get_density()
+        for block in blocks:
+            bang_visualizer.__draw_block(ax, block, density_scale)
 
 
     @staticmethod
-    def __draw_block(ax, block):
+    def __draw_block(ax, block, density_scale):
+        """!
+        @brief Display BANG-block on the specified ax.
+
+        @param[in] ax (Axis): Axis where block should be displayed.
+        @param[in] block (bang_block): BANG-block that should be displayed.
+        @param[in] density_scale (double): Max density to display density of the block by appropriate tone.
+
+        """
         max_corner, min_corner = block.get_spatial_block().get_corners()
         belong_cluster = block.get_cluster() is not None
+
+        density_scale = bang_visualizer.__maximum_density_alpha * block.get_density() / density_scale
+
+        face_color = matplotlib.colors.to_rgba('blue', alpha=density_scale)
+        edge_color = matplotlib.colors.to_rgba('black', alpha=1.0)
 
         if len(max_corner) == 2:
             rect = patches.Rectangle(min_corner, max_corner[0] - min_corner[0], max_corner[1] - min_corner[1],
                                      fill=belong_cluster,
-                                     alpha=0.5)
+                                     facecolor=face_color,
+                                     edgecolor=edge_color,
+                                     linewidth=0.5)
             ax.add_patch(rect)
-
-            xlabel = (max_corner[0] + min_corner[0]) / 2.0
-            ylabel = (max_corner[1] + min_corner[1]) / 2.0
-            ax.text(xlabel, ylabel, str(block.get_region()), ha="center", va="center")
 
         else:
             raise ValueError("Impossible to display blocks on non-2D dimensional data.")
@@ -75,6 +114,12 @@ class bang_visualizer:
 
 
 class bang_directory:
+    """!
+    @brief BANG directory stores BANG-blocks that represents grid in data space.
+    @details The directory build BANG-blocks in binary tree manner. Leafs of the tree stored separately to provide
+              a direct access to the leafs that should be analysed. Leafs cache data-points.
+
+    """
     def __init__(self, data, levels, density_threshold=0.0):
         """!
         @brief Create BANG directory - basically tree structure with direct access to leafs.
@@ -94,6 +139,14 @@ class bang_directory:
 
 
     def get_leafs(self):
+        """!
+        @brief Return leafs - the smallest blocks.
+        @details Some leafs can be bigger than others because splitting is not performed for blocks whose density is
+                  less than threshold.
+
+        @return (list) List of blocks that are leafs of BANG directory.
+
+        """
         return self.__leafs
 
 
@@ -199,6 +252,8 @@ class spatial_block:
         """!
         @brief Returns string block description.
 
+        @return String representation of the block.
+
         """
         return "(max: %s; min: %s)" % (self.__max_corner, self.__min_corner)
 
@@ -206,6 +261,8 @@ class spatial_block:
     def __contains__(self, point):
         """!
         @brief Point is considered as contained if it lies in block (belong to it).
+
+        @return (bool) True if point is in block, otherwise False.
 
         """
         for i in range(len(point)):
@@ -316,6 +373,10 @@ class spatial_block:
 
 
 class bang_block:
+    """!
+    @brief BANG-block that represent spatial region in data space.
+
+    """
     def __init__(self, data, region, level, space_block, cache_points=False):
         self.__data = data
         self.__region_number = region
@@ -333,34 +394,91 @@ class bang_block:
 
 
     def get_region(self):
+        """!
+        @brief Returns region number of BANG-block.
+        @details Region number is unique on among region numbers on a directory level. Pair of region number and level
+                  is unique for all directory.
+
+        @return (uint) Region number.
+
+        """
         return self.__region_number
 
 
     def get_density(self):
+        """!
+        @brief Returns density of the BANG-block.
+
+        @return (double) BANG-block density.
+
+        """
         return self.__density
 
 
     def get_cluster(self):
+        """!
+        @brief Return index of cluster to which the BANG-block belongs to.
+        @details Index of cluster may have None value if the block was not assigned to any cluster.
+
+        @return (uint) Index of cluster or None if the block does not belong to any cluster.
+
+        """
         return self.__cluster
 
 
     def get_spatial_block(self):
+        """!
+        @brief Return spatial block - BANG-block description in data space.
+
+        @return (spatial_block) Spatial block of the BANG-block.
+
+        """
         return self.__spatial_block
 
 
     def get_points(self):
-            return self.__points
+        """!
+        @brief Return points that covers by the BANG-block.
+        @details Returns None if block is not leaf.
+
+        @return (list) List of point indexes that are covered by the block.
+
+        """
+        return self.__points
 
 
     def set_cluster(self, index):
+        """!
+        @brief Assign cluster to the BANG-block by index.
+
+        @param[in] index (uint): Index cluster that is assigned to BANG-block.
+
+        """
         self.__cluster = index
 
 
     def is_neighbor(self, block):
+        """!
+        @brief Performs calculation to check whether specified block is neighbor to the current.
+
+        @param[in] block (bang_block): Other BANG-block that should be checked for neighborhood.
+
+        @return (bool) True if blocks are neighbors, False if blocks are not neighbors.
+
+        """
         return self.get_spatial_block().is_neighbor(block.get_spatial_block())
 
 
     def split(self, split_dimension, cache_points):
+        """!
+        @brief Split BANG-block into two new blocks in specified dimension.
+
+        @param[in] split_dimension (uint): Dimension where block should be split.
+        @param[in] cache_points (bool): If True then covered points are cached. Used for leaf blocks.
+
+        @return (tuple) Pair of BANG-block that were formed from the current.
+
+        """
         left_region_number = self.__region_number
         right_region_number = self.__region_number + 2 ** self.__level
 
@@ -373,10 +491,22 @@ class bang_block:
 
 
     def __calculate_density(self):
+        """!
+        @brief Calculates BANG-block density.
+
+        @return (double) BANG-block density.
+
+        """
         return self.__get_amount_points() / self.__spatial_block.get_volume()
 
 
     def __get_amount_points(self):
+        """!
+        @brief Count covered points by the BANG-block and if cache is enable then covered points are stored.
+
+        @return (uint) Amount of covered points.
+
+        """
         amount = 0
         for index in range(len(self.__data)):
             if self.__data[index] in self.__spatial_block:
@@ -387,6 +517,12 @@ class bang_block:
 
 
     def __cache_point(self, index):
+        """!
+        @brief Store index points.
+
+        @param[in] index (uint): Index point that should be stored.
+
+        """
         if self.__cache_points:
             if self.__points is None:
                 self.__points = []
