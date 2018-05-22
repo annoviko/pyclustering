@@ -29,9 +29,11 @@ import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 
-from pyclustering.utils import data_corners
-
 from pyclustering.cluster import cluster_visualizer
+
+from pyclustering.utils import data_corners
+from pyclustering.utils.color import color as color_list
+
 
 
 class bang_visualizer:
@@ -61,6 +63,31 @@ class bang_visualizer:
         figure = visualizer.show(display=False)
 
         bang_visualizer.__draw_blocks(figure, 0, directory.get_leafs())
+        plt.show()
+
+
+    @staticmethod
+    def show_dendrogram(dendrogram):
+        """!
+        @brief Display dendrogram of BANG-blocks.
+
+        @param[in] dendrogram (list): List representation of dendrogram of BANG-blocks.
+
+        @see bang.get_dendrogram()
+
+        """
+        axis = plt.subplot(111)
+
+        current_position = 0
+        for index_cluster in range(len(dendrogram)):
+            densities = [ block.get_density() for block in dendrogram[index_cluster] ]
+            xrange = range(current_position, current_position + len(densities))
+
+            axis.bar(xrange, densities, 1.0, linewidth=0.0, color=color_list.TITLES[index_cluster])
+
+            current_position += len(densities)
+
+        plt.xlim([-0.5, current_position - 0.5])
         plt.show()
 
 
@@ -539,6 +566,7 @@ class bang:
         self.__clusters = []
         self.__noise = []
         self.__cluster_blocks = []
+        self.__dendrogram = [[]]
         self.__density_threshold = density_threshold
 
 
@@ -561,6 +589,10 @@ class bang:
         return self.__directory
 
 
+    def get_dendrogram(self):
+        return self.__dendrogram
+
+
     def __validate_arguments(self):
         if self.__levels <= 0:
             raise ValueError("Incorrect amount of levels '%d'. Level value should be greater than 0." % self.__levels)
@@ -577,7 +609,7 @@ class bang:
         unhandled_block_indexes = set([i for i in range(len(leaf_blocks)) if leaf_blocks[i].get_density() > self.__density_threshold])
         appropriate_block_indexes = set(unhandled_block_indexes)
 
-        current_block = self.__find_block_center(leaf_blocks)
+        current_block = self.__find_block_center(leaf_blocks, unhandled_block_indexes)
         cluster_index = 0
 
         while current_block is not None:
@@ -586,7 +618,7 @@ class bang:
 
             self.__expand_cluster_block(current_block, cluster_index, leaf_blocks, unhandled_block_indexes)
 
-            current_block = self.__find_block_center(leaf_blocks)
+            current_block = self.__find_block_center(leaf_blocks, unhandled_block_indexes)
             cluster_index += 1
 
         self.__store_clustering_results(cluster_index, appropriate_block_indexes, leaf_blocks)
@@ -594,11 +626,17 @@ class bang:
 
     def __expand_cluster_block(self, block, cluster_index, leaf_blocks, unhandled_block_indexes):
         block.set_cluster(cluster_index)
+        self.__update_cluster_dendrogram(cluster_index, [block])
 
         neighbors = self.__find_block_neighbors(block, leaf_blocks, unhandled_block_indexes)
+        self.__update_cluster_dendrogram(cluster_index, neighbors)
+
         for neighbor in neighbors:
             neighbor.set_cluster(cluster_index)
-            neighbors += self.__find_block_neighbors(neighbor, leaf_blocks, unhandled_block_indexes)
+            neighbor_neighbors = self.__find_block_neighbors(neighbor, leaf_blocks, unhandled_block_indexes)
+            self.__update_cluster_dendrogram(cluster_index, neighbor_neighbors)
+
+            neighbors += neighbor_neighbors
 
 
     def __store_clustering_results(self, amount_clusters, appropriate_block_indexes, leaf_blocks):
@@ -616,9 +654,13 @@ class bang:
         self.__noise = list(set(self.__noise))
 
 
-    def __find_block_center(self, level_blocks):
+    def __find_block_center(self, level_blocks, unhandled_block_indexes):
         for i in reversed(range(len(level_blocks))):
+            if level_blocks[i].get_density() == 0:
+                return None
+
             if level_blocks[i].get_cluster() is None:
+                unhandled_block_indexes.remove(i)
                 return level_blocks[i]
 
         return None
@@ -641,3 +683,11 @@ class bang:
             unhandled_block_indexes.remove(handled_index)
 
         return neighbors
+
+
+    def __update_cluster_dendrogram(self, index_cluster, blocks):
+        if len(self.__dendrogram) <= index_cluster:
+            self.__dendrogram.append([])
+
+        blocks = sorted(blocks, key=lambda block: block.get_density(), reverse=True)
+        self.__dendrogram[index_cluster] += blocks

@@ -71,33 +71,33 @@ class ordering_visualizer:
         @endcode
         
         """
-        ordering = analyser.cluster_ordering;
-        axis = plt.subplot(111);
+        ordering = analyser.cluster_ordering
+        axis = plt.subplot(111)
         
         if (amount_clusters is not None):
-            radius, borders = analyser.calculate_connvectivity_radius(amount_clusters);
+            radius, borders = analyser.calculate_connvectivity_radius(amount_clusters)
         
             # divide into cluster groups to visualize by colors
-            left_index_border = 0;
-            current_index_border = 0;
+            left_index_border = 0
+            current_index_border = 0
             for index_border in range(len(borders)):
-                right_index_border = borders[index_border];
-                axis.bar(range(left_index_border, right_index_border), ordering[left_index_border:right_index_border], width = 1.0, color = color_list.TITLES[index_border]);
-                left_index_border = right_index_border;
-                current_index_border = index_border;
+                right_index_border = borders[index_border]
+                axis.bar(range(left_index_border, right_index_border), ordering[left_index_border:right_index_border], width = 1.0, color = color_list.TITLES[index_border])
+                left_index_border = right_index_border
+                current_index_border = index_border
             
-            axis.bar(range(left_index_border, len(ordering)), ordering[left_index_border:len(ordering)], width = 1.0, color = color_list.TITLES[current_index_border + 1]);
+            axis.bar(range(left_index_border, len(ordering)), ordering[left_index_border:len(ordering)], width = 1.0, color = color_list.TITLES[current_index_border + 1])
             
-            plt.xlim([0, len(ordering)]);
+            plt.xlim([0, len(ordering)])
             
-            plt.axhline(y = radius, linewidth = 2, color = 'black');
-            plt.text(0, radius + radius * 0.03, " Radius:   " + str(round(radius, 4)) + ";\n Clusters: " + str(amount_clusters), color = 'b', fontsize = 10);
+            plt.axhline(y = radius, linewidth = 2, color = 'black')
+            plt.text(0, radius + radius * 0.03, " Radius:   " + str(round(radius, 4)) + ";\n Clusters: " + str(amount_clusters), color = 'b', fontsize = 10)
             
         else:
             axis.bar(range(0, len(ordering)), ordering[0:len(ordering)], width = 1.0, color = 'black');
-            plt.xlim([0, len(ordering)]);
+            plt.xlim([0, len(ordering)])
         
-        plt.show();
+        plt.show()
 
 
 class ordering_analyser:
@@ -117,7 +117,7 @@ class ordering_analyser:
         @brief (list) Returns values of dataset cluster ordering.
         
         """
-        return self.__ordering;
+        return self.__ordering
     
     
     def __init__(self, ordering_diagram):
@@ -127,7 +127,7 @@ class ordering_analyser:
         @see calculate_connvectivity_radius
         
         """
-        self.__ordering = ordering_diagram;
+        self.__ordering = ordering_diagram
     
     
     def __len__(self):
@@ -135,7 +135,7 @@ class ordering_analyser:
         @brief Returns length of clustering-ordering diagram.
         
         """
-        return len(self.__ordering);
+        return len(self.__ordering)
     
     
     def calculate_connvectivity_radius(self, amount_clusters, maximum_iterations = 100):
@@ -151,34 +151,33 @@ class ordering_analyser:
         
         """
         
-        maximum_distance = max(self.__ordering);
+        maximum_distance = max(self.__ordering)
         
-        upper_distance = maximum_distance;
-        lower_distance = 0.0;
+        upper_distance = maximum_distance
+        lower_distance = 0.0
+
+        result = None
         
-        radius = None;
-        result = None;
-        
-        amount, borders = self.extract_cluster_amount(maximum_distance);
+        amount, borders = self.extract_cluster_amount(maximum_distance)
         if amount <= amount_clusters:
             for _ in range(maximum_iterations):
-                radius = (lower_distance + upper_distance) / 2.0;
+                radius = (lower_distance + upper_distance) / 2.0
                 
-                amount, borders = self.extract_cluster_amount(radius);
+                amount, borders = self.extract_cluster_amount(radius)
                 if amount == amount_clusters:
-                    result = radius;
-                    break;
+                    result = radius
+                    break
                 
                 elif amount == 0:
-                    break;
+                    break
                 
                 elif amount > amount_clusters:
-                    lower_distance = radius;
+                    lower_distance = radius
                 
                 elif amount < amount_clusters:
-                    upper_distance = radius;
+                    upper_distance = radius
         
-        return result, borders;
+        return result, borders
     
     
     def extract_cluster_amount(self, radius):
@@ -195,52 +194,52 @@ class ordering_analyser:
         
         """
         
-        amount_clusters = 1;
+        amount_clusters = 1
         
-        cluster_start = False;
-        cluster_pick = False;
-        total_similarity = True;
-        previous_cluster_distance = None;
-        previous_distance = None;
+        cluster_start = False
+        cluster_pick = False
+        total_similarity = True
+        previous_cluster_distance = None
+        previous_distance = None
         
-        cluster_borders = [];
+        cluster_borders = []
         
         for index_ordering in range(len(self.__ordering)):
-            distance = self.__ordering[index_ordering];
+            distance = self.__ordering[index_ordering]
             if distance >= radius:
                 if cluster_start is False:
-                    cluster_start = True;
-                    amount_clusters += 1;
+                    cluster_start = True
+                    amount_clusters += 1
                     
                     if index_ordering != 0:
-                        cluster_borders.append(index_ordering);
+                        cluster_borders.append(index_ordering)
                 
                 else:
                     if (distance < previous_cluster_distance) and (cluster_pick is False):
-                        cluster_pick = True;
+                        cluster_pick = True
                     
                     elif (distance > previous_cluster_distance) and (cluster_pick is True):
-                        cluster_pick = False;
-                        amount_clusters += 1;
+                        cluster_pick = False
+                        amount_clusters += 1
                         
                         if index_ordering != 0:
-                            cluster_borders.append(index_ordering);
+                            cluster_borders.append(index_ordering)
                 
-                previous_cluster_distance = distance;
+                previous_cluster_distance = distance
             
             else:
-                cluster_start = False;
-                cluster_pick = False;
+                cluster_start = False
+                cluster_pick = False
             
             if (previous_distance is not None) and (distance != previous_distance):
-                total_similarity = False;
+                total_similarity = False
             
-            previous_distance = distance;
+            previous_distance = distance
         
         if (total_similarity is True) and (previous_distance > radius):
-            amount_clusters = 0;
+            amount_clusters = 0
 
-        return amount_clusters, cluster_borders;
+        return amount_clusters, cluster_borders
 
 
 class optics_descriptor:
@@ -260,16 +259,16 @@ class optics_descriptor:
         """
         
         ## Reachability distance - the smallest distance to be reachable by core object.
-        self.index_object = index;
+        self.index_object = index
         
         ## Core distance - the smallest distance to reach specified number of neighbors that is not greater then connectivity radius.
-        self.core_distance = core_distance;
+        self.core_distance = core_distance
         
         ## Index of object from the input data.
-        self.reachability_distance = reachability_distance;
+        self.reachability_distance = reachability_distance
         
         ## True is object has been already traversed.
-        self.processed = False;
+        self.processed = False
 
     def __repr__(self):
         """!
@@ -356,24 +355,24 @@ class optics:
 
         """
         
-        self.__sample_pointer = sample;     # Algorithm parameter - pointer to sample for processing.
-        self.__eps = eps;                   # Algorithm parameter - connectivity radius between object for establish links between object.
-        self.__minpts = minpts;             # Algorithm parameter - minimum number of neighbors that is required for establish links between object.
-        self.__amount_clusters = amount_clusters;
+        self.__sample_pointer = sample      # Algorithm parameter - pointer to sample for processing.
+        self.__eps = eps                    # Algorithm parameter - connectivity radius between object for establish links between object.
+        self.__minpts = minpts              # Algorithm parameter - minimum number of neighbors that is required for establish links between object.
+        self.__amount_clusters = amount_clusters
         
-        self.__ordering = None;
-        self.__clusters = None;
-        self.__noise = None;
+        self.__ordering = None
+        self.__clusters = None
+        self.__noise = None
 
-        self.__data_type = kwargs.get('data_type', 'points');
+        self.__data_type = kwargs.get('data_type', 'points')
         
-        self.__kdtree = None;
-        self.__ccore = ccore;
+        self.__kdtree = None
+        self.__ccore = ccore
 
-        self.__neighbor_searcher = self.__create_neighbor_searcher(self.__data_type);
+        self.__neighbor_searcher = self.__create_neighbor_searcher(self.__data_type)
 
         if (self.__ccore):
-            self.__ccore = ccore_library.workable();
+            self.__ccore = ccore_library.workable()
 
 
     def process(self):
@@ -393,16 +392,16 @@ class optics:
         
         else:
             if self.__data_type == 'points':
-                self.__kdtree = kdtree(self.__sample_pointer, range(len(self.__sample_pointer)));
+                self.__kdtree = kdtree(self.__sample_pointer, range(len(self.__sample_pointer)))
 
-            self.__allocate_clusters();
+            self.__allocate_clusters()
             
             if (self.__amount_clusters is not None) and (self.__amount_clusters != len(self.get_clusters())):
-                analyser = ordering_analyser(self.get_ordering());
-                radius, _ = analyser.calculate_connvectivity_radius(self.__amount_clusters);
+                analyser = ordering_analyser(self.get_ordering())
+                radius, _ = analyser.calculate_connvectivity_radius(self.__amount_clusters)
                 if radius is not None:
-                    self.__eps = radius;
-                    self.__allocate_clusters();
+                    self.__eps = radius
+                    self.__allocate_clusters()
 
 
     def __initialize(self, sample):
@@ -411,12 +410,12 @@ class optics:
         
         """
         
-        self.__processed = [False] * len(sample);
-        self.__optics_objects = [optics_descriptor(i) for i in range(len(sample))];     # List of OPTICS objects that corresponds to objects from input sample.
-        self.__ordered_database = [];       # List of OPTICS objects in traverse order. 
+        self.__processed = [False] * len(sample)
+        self.__optics_objects = [optics_descriptor(i) for i in range(len(sample))]      # List of OPTICS objects that corresponds to objects from input sample.
+        self.__ordered_database = []        # List of OPTICS objects in traverse order.
         
-        self.__clusters = None;     # Result of clustering (list of clusters where each cluster contains indexes of objects from input data).
-        self.__noise = None;        # Result of clustering (noise).
+        self.__clusters = None      # Result of clustering (list of clusters where each cluster contains indexes of objects from input data).
+        self.__noise = None         # Result of clustering (noise).
 
 
     def __allocate_clusters(self):
@@ -425,13 +424,13 @@ class optics:
         
         """
         
-        self.__initialize(self.__sample_pointer);
+        self.__initialize(self.__sample_pointer)
         
         for optic_object in self.__optics_objects:
             if optic_object.processed is False:
-                self.__expand_cluster_order(optic_object);
+                self.__expand_cluster_order(optic_object)
         
-        self.__extract_clusters();
+        self.__extract_clusters()
     
     
     def get_clusters(self):
@@ -447,7 +446,7 @@ class optics:
         
         """
         
-        return self.__clusters;
+        return self.__clusters
     
     
     def get_noise(self):
@@ -463,7 +462,7 @@ class optics:
         
         """
         
-        return self.__noise;
+        return self.__noise
     
     
     def get_ordering(self):
@@ -481,15 +480,15 @@ class optics:
         """
         
         if self.__ordering is None:
-            self.__ordering = [];
+            self.__ordering = []
         
             for cluster in self.__clusters:
                 for index_object in cluster:
-                    optics_object = self.__optics_objects[index_object];
+                    optics_object = self.__optics_objects[index_object]
                     if optics_object.reachability_distance is not None:
-                        self.__ordering.append(optics_object.reachability_distance);
+                        self.__ordering.append(optics_object.reachability_distance)
             
-        return self.__ordering;
+        return self.__ordering
     
     
     def get_radius(self):
@@ -505,7 +504,7 @@ class optics:
         
         """
         
-        return self.__eps;
+        return self.__eps
     
 
     def get_cluster_encoding(self):
@@ -518,7 +517,7 @@ class optics:
         
         """
         
-        return type_encoding.CLUSTER_INDEX_LIST_SEPARATION;
+        return type_encoding.CLUSTER_INDEX_LIST_SEPARATION
 
 
     def __create_neighbor_searcher(self, data_type):
@@ -529,11 +528,11 @@ class optics:
 
         """
         if data_type == 'points':
-            return self.__neighbor_indexes_points;
+            return self.__neighbor_indexes_points
         elif data_type == 'distance_matrix':
-            return self.__neighbor_indexes_distance_matrix;
+            return self.__neighbor_indexes_distance_matrix
         else:
-            raise TypeError("Unknown type of data is specified '%s'" % data_type);
+            raise TypeError("Unknown type of data is specified '%s'" % data_type)
 
 
     def __expand_cluster_order(self, optics_object):
@@ -546,41 +545,41 @@ class optics:
         
         """
         
-        optics_object.processed = True;
+        optics_object.processed = True
         
-        neighbors_descriptor = self.__neighbor_searcher(optics_object);
-        optics_object.reachability_distance = None;
+        neighbors_descriptor = self.__neighbor_searcher(optics_object)
+        optics_object.reachability_distance = None
         
-        self.__ordered_database.append(optics_object);
+        self.__ordered_database.append(optics_object)
         
         # Check core distance
         if len(neighbors_descriptor) >= self.__minpts:
-            neighbors_descriptor.sort(key = lambda obj: obj[1]);
-            optics_object.core_distance = neighbors_descriptor[self.__minpts - 1][1];
+            neighbors_descriptor.sort(key = lambda obj: obj[1])
+            optics_object.core_distance = neighbors_descriptor[self.__minpts - 1][1]
             
             # Continue processing
-            order_seed = list();
-            self.__update_order_seed(optics_object, neighbors_descriptor, order_seed);
+            order_seed = list()
+            self.__update_order_seed(optics_object, neighbors_descriptor, order_seed)
             
             while len(order_seed) > 0:
-                optic_descriptor = order_seed[0];
-                order_seed.remove(optic_descriptor);
+                optic_descriptor = order_seed[0]
+                order_seed.remove(optic_descriptor)
                 
-                neighbors_descriptor = self.__neighbor_searcher(optic_descriptor);
-                optic_descriptor.processed = True;
+                neighbors_descriptor = self.__neighbor_searcher(optic_descriptor)
+                optic_descriptor.processed = True
                 
-                self.__ordered_database.append(optic_descriptor);
+                self.__ordered_database.append(optic_descriptor)
                 
                 if len(neighbors_descriptor) >= self.__minpts:
-                    neighbors_descriptor.sort(key = lambda obj: obj[1]);
-                    optic_descriptor.core_distance = neighbors_descriptor[self.__minpts - 1][1];
+                    neighbors_descriptor.sort(key = lambda obj: obj[1])
+                    optic_descriptor.core_distance = neighbors_descriptor[self.__minpts - 1][1]
                     
-                    self.__update_order_seed(optic_descriptor, neighbors_descriptor, order_seed);
+                    self.__update_order_seed(optic_descriptor, neighbors_descriptor, order_seed)
                 else:
-                    optic_descriptor.core_distance = None;
+                    optic_descriptor.core_distance = None
                     
         else:
-            optics_object.core_distance = None;
+            optics_object.core_distance = None
 
     
     def __extract_clusters(self):
@@ -589,19 +588,19 @@ class optics:
         
         """
      
-        self.__clusters = [];
-        self.__noise = [];
+        self.__clusters = []
+        self.__noise = []
 
-        current_cluster = self.__noise;
+        current_cluster = self.__noise
         for optics_object in self.__ordered_database:
             if (optics_object.reachability_distance is None) or (optics_object.reachability_distance > self.__eps):
                 if (optics_object.core_distance is not None) and (optics_object.core_distance <= self.__eps):
-                    self.__clusters.append([ optics_object.index_object ]);
-                    current_cluster = self.__clusters[-1];
+                    self.__clusters.append([ optics_object.index_object ])
+                    current_cluster = self.__clusters[-1]
                 else:
-                    self.__noise.append(optics_object.index_object);
+                    self.__noise.append(optics_object.index_object)
             else:
-                current_cluster.append(optics_object.index_object);
+                current_cluster.append(optics_object.index_object)
 
 
     def __update_order_seed(self, optic_descriptor, neighbors_descriptors, order_seed):
@@ -615,27 +614,27 @@ class optics:
         """
         
         for neighbor_descriptor in neighbors_descriptors:
-            index_neighbor = neighbor_descriptor[0];
-            current_reachable_distance = neighbor_descriptor[1];
+            index_neighbor = neighbor_descriptor[0]
+            current_reachable_distance = neighbor_descriptor[1]
             
             if self.__optics_objects[index_neighbor].processed is not True:
-                reachable_distance = max(current_reachable_distance, optic_descriptor.core_distance);
+                reachable_distance = max(current_reachable_distance, optic_descriptor.core_distance)
                 if self.__optics_objects[index_neighbor].reachability_distance is None:
-                    self.__optics_objects[index_neighbor].reachability_distance = reachable_distance;
+                    self.__optics_objects[index_neighbor].reachability_distance = reachable_distance
                     
                     # insert element in queue O(n) - worst case.
-                    index_insertion = len(order_seed);
+                    index_insertion = len(order_seed)
                     for index_seed in range(0, len(order_seed)):
                         if reachable_distance < order_seed[index_seed].reachability_distance:
-                            index_insertion = index_seed;
-                            break;
+                            index_insertion = index_seed
+                            break
                     
-                    order_seed.insert(index_insertion, self.__optics_objects[index_neighbor]);
+                    order_seed.insert(index_insertion, self.__optics_objects[index_neighbor])
 
                 else:
                     if reachable_distance < self.__optics_objects[index_neighbor].reachability_distance:
-                        self.__optics_objects[index_neighbor].reachability_distance = reachable_distance;
-                        order_seed.sort(key = lambda obj: obj.reachability_distance);
+                        self.__optics_objects[index_neighbor].reachability_distance = reachable_distance
+                        order_seed.sort(key = lambda obj: obj.reachability_distance)
 
 
     def __neighbor_indexes_points(self, optic_object):
@@ -647,9 +646,9 @@ class optics:
         @return (list) List of indexes of neighbors in line the connectivity radius.
 
         """
-        kdnodes = self.__kdtree.find_nearest_dist_nodes(self.__sample_pointer[optic_object.index_object], self.__eps);
+        kdnodes = self.__kdtree.find_nearest_dist_nodes(self.__sample_pointer[optic_object.index_object], self.__eps)
         return [[node_tuple[1].payload, math.sqrt(node_tuple[0])] for node_tuple in kdnodes if
-                node_tuple[1].payload != optic_object.index_object];
+                node_tuple[1].payload != optic_object.index_object]
 
 
     def __neighbor_indexes_distance_matrix(self, optic_object):
@@ -661,6 +660,6 @@ class optics:
         @return (list) List of indexes of neighbors in line the connectivity radius.
 
         """
-        distances = self.__sample_pointer[optic_object.index_object];
+        distances = self.__sample_pointer[optic_object.index_object]
         return [[index_neighbor, distances[index_neighbor]] for index_neighbor in range(len(distances))
-                if ((distances[index_neighbor] <= self.__eps) and (index_neighbor != optic_object.index_object))];
+                if ((distances[index_neighbor] <= self.__eps) and (index_neighbor != optic_object.index_object))]

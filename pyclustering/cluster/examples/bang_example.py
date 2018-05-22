@@ -41,9 +41,12 @@ def template_clustering(data_path, levels, **kwargs):
     clusters = bang_instance.get_clusters()
     noise = bang_instance.get_noise()
     directory = bang_instance.get_directory()
+    dendrogram = bang_instance.get_dendrogram()
 
     if len(data[0]) == 2:
         bang_visualizer.show_blocks(data, directory)
+
+    bang_visualizer.show_dendrogram(dendrogram)
 
     visualizer = cluster_visualizer()
     visualizer.append_clusters(clusters, data)
