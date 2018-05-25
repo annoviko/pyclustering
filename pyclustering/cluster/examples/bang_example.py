@@ -33,9 +33,10 @@ from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES
 
 
 def template_clustering(data_path, levels, **kwargs):
+    density_threshold = kwargs.get("threshold", 0.0)
     data = read_sample(data_path)
 
-    bang_instance = bang(data, levels)
+    bang_instance = bang(data, levels, density_threshold)
     bang_instance.process()
 
     clusters = bang_instance.get_clusters()
@@ -58,6 +59,7 @@ def cluster_simple_sample():
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 8)
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 7)
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 7)
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 4, threshold=2.5)
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 8)
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 8)
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE6, 7)

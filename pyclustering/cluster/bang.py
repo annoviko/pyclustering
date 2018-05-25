@@ -471,11 +471,13 @@ class bang_block:
     def get_points(self):
         """!
         @brief Return points that covers by the BANG-block.
-        @details Returns None if block is not leaf.
 
         @return (list) List of point indexes that are covered by the block.
 
         """
+        if self.__points is None:
+            self.__cache_covered_data()
+
         return self.__points
 
 
@@ -548,6 +550,19 @@ class bang_block:
         return amount
 
 
+    def __cache_covered_data(self):
+        """!
+        @brief Cache covered data.
+
+        """
+        self.__cache_points = True
+        self.__points = []
+
+        for index_point in range(len(self.__data)):
+            if self.__data[index_point] in self.__spatial_block:
+                self.__cache_point(index_point)
+
+
     def __cache_point(self, index):
         """!
         @brief Store index points.
@@ -589,8 +604,9 @@ class bang:
         self.__clusters = []
         self.__noise = []
         self.__cluster_blocks = []
-        self.__dendrogram = [[]]
+        self.__dendrogram = []
         self.__density_threshold = density_threshold
+        self.__ccore = ccore
 
 
     def process(self):
@@ -715,7 +731,7 @@ class bang:
             current_block = self.__find_block_center(leaf_blocks, unhandled_block_indexes)
             cluster_index += 1
 
-        self.__store_clustering_results(cluster_index, appropriate_block_indexes, leaf_blocks)
+        self.__store_clustering_results(cluster_index, leaf_blocks)
 
 
     def __expand_cluster_block(self, block, cluster_index, leaf_blocks, unhandled_block_indexes):
@@ -745,18 +761,16 @@ class bang:
             neighbors += neighbor_neighbors
 
 
-    def __store_clustering_results(self, amount_clusters, appropriate_block_indexes, leaf_blocks):
+    def __store_clustering_results(self, amount_clusters, leaf_blocks):
         """!
         @brief Stores clustering results in a convenient way.
 
         @param[in] amount_clusters (uint): Amount of cluster that was allocated during processing.
-        @param[in] appropriate_block_indexes (list): BANG-block their indexes that forms clusters.
         @param[in] leaf_blocks (list): Leaf BANG-blocks (the smallest cells).
 
         """
         self.__clusters = [[] for _ in range(amount_clusters)]
-        for appropriate_index in appropriate_block_indexes:
-            block = leaf_blocks[appropriate_index]
+        for block in leaf_blocks:
             index = block.get_cluster()
 
             if index is not None:
@@ -776,7 +790,7 @@ class bang:
 
         """
         for i in reversed(range(len(level_blocks))):
-            if level_blocks[i].get_density() == 0:
+            if level_blocks[i].get_density() <= self.__density_threshold:
                 return None
 
             if level_blocks[i].get_cluster() is None:

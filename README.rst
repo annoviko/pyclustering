@@ -36,11 +36,14 @@ Dependencies
 Performance
 ===========
 
-Each algorithm is implemented using Python and C/C++ language, thus performance can be significantly increase by **ccore** flag, for example:
+Each algorithm is implemented using Python and C/C++ language, if your platform is not supported then Python
+implementation is used, otherwise C/C++. Implementation can be chosen by **ccore** flag (by default it is always
+'True' and it means that C/C++ is used), for example:
 
 .. code:: python
 
-    xmeans_instance = xmeans(data_points, start_centers, 20, ccore = True);
+    xmeans_instance_1 = xmeans(data_points, start_centers, 20, ccore=True);   # As by default - C/C++ is used
+    xmeans_instance_2 = xmeans(data_points, start_centers, 20, ccore=False);  # Switch off core - Python is used
 
 **ccore** option runs ccore shared library (core of the pyclustering library). The core is maintained for Linux 32, 64-bit and Windows 32, 64-bit.
 
@@ -67,7 +70,9 @@ Manual installation using GCC:
     # compile CCORE library (core of the pyclustering library)
     # you can specify platform (32-bit: 'ccore_x86', 64-bit: 'ccore_x64')
     $ cd pyclustering/ccore
-    $ make ccore        # compile CCORE for both platforms
+    $ make ccore_x64    # compile CCORE for 64-bit
+    # make ccore_x86    # compile CCORE for 32-bit
+    # make ccore        # compile CCORE for both platforms if you do not know which is required
 
     # return to parent folder of the pyclustering library
     cd ../
@@ -117,6 +122,7 @@ Brief Overview of the Library Content
 **Clustering algorithms (module pyclustering.cluster):** 
 
 - Agglomerative [Python, C++]
+- BANG [Python]
 - BIRCH [Python]
 - BSAS [Python, C++]
 - CLARANS [Python]
@@ -196,12 +202,6 @@ Illustrations:
    :alt: Clustering by OPTICS
 
 
-**Image segmentation by Sync-SOM algorithm:**
-
-.. image:: https://github.com/annoviko/pyclustering/blob/master/docs/img/sync_som_image_segmentation.png
-   :alt: Image segmentation by Sync-SOM
-
-
 **Partial synchronization (clustering) in Sync oscillatory network:**
 
 .. image:: https://github.com/annoviko/pyclustering/blob/master/docs/img/sync_partial_synchronization.png
@@ -242,47 +242,6 @@ Code Examples:
     visualizer = cluster_visualizer();
     visualizer.append_clusters(clusters, None);
     visualizer.show();
-
-**Data clustering by SYNC-SOM (bio-inspired) algorithm**
-
-.. code:: python
-
-    from pyclustering.cluster import cluster_visualizer;
-    from pyclustering.cluster.syncsom import syncsom;
-
-    from pyclustering.samples.definitions import FCPS_SAMPLES;
-
-    from pyclustering.utils import read_sample, draw_dynamics;
-
-    # Input data in following format [ [0.1, 0.5], [0.3, 0.1], ... ].
-    input_data = read_sample(FCPS_SAMPLES.SAMPLE_TARGET);
-
-    # Create oscillatory network for cluster analysis
-    # where the first layer has size 9x9. Radius
-    # connectivity (similarity parameter) is 0.9.
-    # CCORE library (C/C++ part of the pyclustering library)
-    # is used to ensure high performance.
-    network = syncsom(input_data, 9, 9, 0.9, ccore = True);
-
-    # Simulate network (start processing) with collecting
-    # output dynamic.
-    (dyn_time, dyn_phase) = network.process(True, 0.999);
-
-    # Show structure of the first layer
-    network.show_som_layer();
-
-    # Show structure of the second layer
-    network.show_sync_layer();
-
-    # Show results of clustering
-    clusters = network.get_clusters();
-    visualizer = cluster_visualizer();
-    visualizer.append_clusters(clusters, input_data);
-    visualizer.show();
-
-    # Show output dynamic of the network (that is obtained
-    # from the second layer).
-    draw_dynamics(dyn_time, dyn_phase, x_title = "Time", y_title = "Phase", y_lim = [0, 2 * 3.14]);
 
 **Simulation of oscillatory network PCNN**
 

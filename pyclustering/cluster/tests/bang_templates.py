@@ -51,19 +51,23 @@ class bang_test_template:
         assertion.eq(len(expected_clusters), len(clusters))
         assertion.eq(len(clusters), len(dendrogram))
 
-        obtained_length = 0
+        obtained_length = len(noise)
         obtained_cluster_length = []
         for cluster in clusters:
             obtained_length += len(cluster)
             obtained_cluster_length.append(len(cluster))
 
+        obtained_cluster_length.sort()
+
         assertion.eq(len(sample), obtained_length)
-        assertion.eq(len(expected_noise), len(noise))
+        assertion.eq(expected_noise, len(noise))
         assertion.eq(expected_clusters, obtained_cluster_length)
 
         leafs = directory.get_leafs()
         covered_points = set()
         for leaf in leafs:
-            covered_points.add(set(leaf.get_points()))
+            points = leaf.get_points()
+            for index_point in points:
+                covered_points.add(index_point)
 
         assertion.eq(len(sample), len(covered_points))
