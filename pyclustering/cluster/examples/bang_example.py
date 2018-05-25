@@ -33,6 +33,8 @@ from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES
 
 
 def template_clustering(data_path, levels, **kwargs):
+    print("Sample: '%s'." % data_path)
+
     density_threshold = kwargs.get("threshold", 0.0)
     data = read_sample(data_path)
 
@@ -45,7 +47,7 @@ def template_clustering(data_path, levels, **kwargs):
     dendrogram = bang_instance.get_dendrogram()
 
     if len(data[0]) == 2:
-        bang_visualizer.show_blocks(data, directory)
+        bang_visualizer.show_blocks(directory)
 
     bang_visualizer.show_dendrogram(dendrogram)
 

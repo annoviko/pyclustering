@@ -49,17 +49,16 @@ class bang_visualizer:
 
 
     @staticmethod
-    def show_blocks(data, directory):
+    def show_blocks(directory):
         """!
         @brief Show BANG-blocks (leafs only) in data space.
         @details BANG-blocks represents grid that was used for clustering process.
 
-        @param[in] data (list): Input data space that contains points where each point is also represented by list.
         @param[in] directory (bang_directory): Directory that was created by BANG algorithm during clustering process.
 
         """
         visualizer = cluster_visualizer()
-        visualizer.append_cluster(data)
+        visualizer.append_cluster(directory.get_data())
 
         figure = visualizer.show(display=False)
 
@@ -77,7 +76,8 @@ class bang_visualizer:
         @see bang.get_dendrogram()
 
         """
-        axis = plt.subplot(111)
+        plt.figure()
+        axis = plt.subplot(1, 1, 1)
 
         current_position = 0
         for index_cluster in range(len(dendrogram)):
@@ -164,6 +164,16 @@ class bang_directory:
         self.__root = None
 
         self.__create_directory()
+
+
+    def get_data(self):
+        """!
+        @brief Return data that is stored in the directory.
+
+        @return (list) List of points that represents stored data.
+
+        """
+        return self.__data
 
 
     def get_leafs(self):

@@ -48,7 +48,6 @@ class bang_test_template:
         directory = bang_instance.get_directory()
         dendrogram = bang_instance.get_dendrogram()
 
-        assertion.eq(len(expected_clusters), len(clusters))
         assertion.eq(len(clusters), len(dendrogram))
 
         obtained_length = len(noise)
@@ -61,7 +60,10 @@ class bang_test_template:
 
         assertion.eq(len(sample), obtained_length)
         assertion.eq(expected_noise, len(noise))
-        assertion.eq(expected_clusters, obtained_cluster_length)
+
+        if expected_clusters is not None:
+            assertion.eq(len(expected_clusters), len(clusters))
+            assertion.eq(expected_clusters, obtained_cluster_length)
 
         leafs = directory.get_leafs()
         covered_points = set()
@@ -71,3 +73,20 @@ class bang_test_template:
                 covered_points.add(index_point)
 
         assertion.eq(len(sample), len(covered_points))
+        return bang_instance
+
+
+    @staticmethod
+    def visualize(path, levels, threshold, ccore, **kwargs):
+        sample = read_sample(path)
+
+        bang_instance = bang(sample, levels, threshold, ccore)
+        bang_instance.process()
+
+        directory = bang_instance.get_directory()
+        dendrogram = bang_instance.get_dendrogram()
+
+        if len(sample[0]) == 2:
+            bang_visualizer.show_blocks(directory)
+
+        bang_visualizer.show_dendrogram(dendrogram)
