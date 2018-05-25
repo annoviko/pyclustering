@@ -30,6 +30,7 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 
 from pyclustering.cluster import cluster_visualizer
+from pyclustering.cluster.encoder import type_encoding
 
 from pyclustering.utils import data_corners
 from pyclustering.utils.color import color as color_list
@@ -83,7 +84,7 @@ class bang_visualizer:
             densities = [ block.get_density() for block in dendrogram[index_cluster] ]
             xrange = range(current_position, current_position + len(densities))
 
-            axis.bar(xrange, densities, 1.0, linewidth=0.0, color=color_list.TITLES[index_cluster])
+            axis.bar(xrange, densities, 1.0, linewidth=0.0, color=color_list.get_color(index_cluster))
 
             current_position += len(densities)
 
@@ -417,6 +418,10 @@ class bang_block:
 
 
     def __str__(self):
+        """!
+        @brief Returns string representation of BANG-block using region number and level where block is located.
+
+        """
         return "(" + str(self.__region_number) + ", " + str(self.__level) + ")"
 
 
@@ -559,7 +564,25 @@ class bang_block:
 
 
 class bang:
-    def __init__(self, data, levels, density_threshold = 0.0):
+    """!
+    @brief Class implements BANG grid based clustering algorithm.
+    @details BANG clustering algorithms uses a multidimensional grid structure to organize the value space surrounding
+              the pattern values. The patterns are grouped into blocks and clustered with respect to the blocks by
+              a topological neighbor search algorithm @cite inproceedings::bang::1.
+
+    """
+
+    def __init__(self, data, levels, density_threshold=0.0, ccore=False):
+        """!
+        @brief Create BANG clustering algorithm.
+
+        @param[in] data (list): Input data (list of points) that should be clustered.
+        @param[in] levels (uint): Amount of levels in tree (how many times block should be split).
+        @param[in] density_threshold (double): If block density is smaller than this value then contained data by this
+                    block is considered as a noise.
+        @param[in] ccore (bool): Reserved positional argument - not used yet.
+
+        """
         self.__data = data
         self.__levels = levels
         self.__directory = None
@@ -571,6 +594,15 @@ class bang:
 
 
     def process(self):
+        """!
+        @brief Performs clustering process in line with rules of BANG clustering algorithm.
+
+        @see get_clusters()
+        @see get_noise()
+        @see get_directory()
+        @see get_dendrogram()
+
+        """
         self.__validate_arguments()
 
         self.__directory = bang_directory(self.__data, self.__levels, self.__density_threshold)
@@ -578,22 +610,80 @@ class bang:
 
 
     def get_clusters(self):
+        """!
+        @brief Returns allocated clusters.
+
+        @remark Allocated clusters are returned only after data processing (method process()). Otherwise empty list is returned.
+
+        @return (list) List of allocated clusters, each cluster contains indexes of objects in list of data.
+
+        @see process()
+        @see get_noise()
+
+        """
         return self.__clusters
 
 
     def get_noise(self):
+        """!
+        @brief Returns allocated noise.
+
+        @remark Allocated noise is returned only after data processing (method process()). Otherwise empty list is returned.
+
+        @return (list) List of indexes that are marked as a noise.
+
+        @see process()
+        @see get_clusters()
+
+        """
         return self.__noise
 
 
     def get_directory(self):
+        """!
+        @brief Returns grid directory that describes grid of the processed data.
+
+        @remark Grid directory is returned only after data processing (method process()). Otherwise None value is returned.
+
+        @return (bang_directory) BANG directory that describes grid of process data.
+
+        @see process()
+
+        """
         return self.__directory
 
 
     def get_dendrogram(self):
+        """!
+        @brief Returns dendrogram of clusters.
+        @details Dendrogram is created in following way: the density indices of all regions are calculated and sorted
+                  in decreasing order for each cluster during clustering process.
+
+        @remark Dendrogram is returned only after data processing (method process()). Otherwise empty list is returned.
+
+        """
         return self.__dendrogram
 
 
+    def get_cluster_encoding(self):
+        """!
+        @brief Returns clustering result representation type that indicate how clusters are encoded.
+
+        @return (type_encoding) Clustering result representation.
+
+        @see get_clusters()
+
+        """
+
+        return type_encoding.CLUSTER_INDEX_LIST_SEPARATION
+
+
     def __validate_arguments(self):
+        """!
+        @brief Check input arguments of BANG algorithm and if one of them is not correct then appropriate exception
+                is thrown.
+
+        """
         if self.__levels <= 0:
             raise ValueError("Incorrect amount of levels '%d'. Level value should be greater than 0." % self.__levels)
 
@@ -605,6 +695,10 @@ class bang:
 
 
     def __allocate_clusters(self):
+        """!
+        @brief Performs cluster allocation using leafs of tree in BANG directory (the smallest cells).
+
+        """
         leaf_blocks = self.__directory.get_leafs()
         unhandled_block_indexes = set([i for i in range(len(leaf_blocks)) if leaf_blocks[i].get_density() > self.__density_threshold])
         appropriate_block_indexes = set(unhandled_block_indexes)
@@ -625,6 +719,18 @@ class bang:
 
 
     def __expand_cluster_block(self, block, cluster_index, leaf_blocks, unhandled_block_indexes):
+        """!
+        @brief Expand cluster from specific block that is considered as a central block.
+
+        @param[in] block (bang_block): Block that is considered as a central block for cluster.
+        @param[in] cluster_index (uint): Index of cluster that is assigned to blocks that forms new cluster.
+        @param[in] leaf_blocks (list): Leaf BANG-blocks that are considered during cluster formation.
+        @param[in] unhandled_block_indexes (set): Set of candidates (BANG block indexes) to become a cluster member. The
+                    parameter helps to reduce traversing among BANG-block providing only restricted set of block that
+                    should be considered.
+
+        """
+
         block.set_cluster(cluster_index)
         self.__update_cluster_dendrogram(cluster_index, [block])
 
@@ -640,6 +746,14 @@ class bang:
 
 
     def __store_clustering_results(self, amount_clusters, appropriate_block_indexes, leaf_blocks):
+        """!
+        @brief Stores clustering results in a convenient way.
+
+        @param[in] amount_clusters (uint): Amount of cluster that was allocated during processing.
+        @param[in] appropriate_block_indexes (list): BANG-block their indexes that forms clusters.
+        @param[in] leaf_blocks (list): Leaf BANG-blocks (the smallest cells).
+
+        """
         self.__clusters = [[] for _ in range(amount_clusters)]
         for appropriate_index in appropriate_block_indexes:
             block = leaf_blocks[appropriate_index]
@@ -655,6 +769,12 @@ class bang:
 
 
     def __find_block_center(self, level_blocks, unhandled_block_indexes):
+        """!
+        @brief Search block that is cluster center for new cluster.
+
+        @return (bang_block) Central block for new cluster, if cluster is not found then None value is returned.
+
+        """
         for i in reversed(range(len(level_blocks))):
             if level_blocks[i].get_density() == 0:
                 return None
@@ -667,6 +787,17 @@ class bang:
 
 
     def __find_block_neighbors(self, block, level_blocks, unhandled_block_indexes):
+        """!
+        @brief Search block neighbors that are parts of new clusters (density is greater than threshold and that are
+                not cluster members yet), other neighbors are ignored.
+
+        @param[in] block (bang_block): BANG-block for which neighbors should be found (which can be part of cluster).
+        @param[in] level_blocks (list): BANG-blocks on specific level.
+        @param[in] unhandled_block_indexes (set): Blocks that have not been processed yet.
+
+        @return (list) Block neighbors that can become part of cluster.
+
+        """
         neighbors = []
 
         handled_block_indexes = []
@@ -686,6 +817,13 @@ class bang:
 
 
     def __update_cluster_dendrogram(self, index_cluster, blocks):
+        """!
+        @brief Append clustered blocks to dendrogram.
+
+        @param[in] index_cluster (uint): Cluster index that was assigned to blocks.
+        @param[in] blocks (list): Blocks that were clustered.
+
+        """
         if len(self.__dendrogram) <= index_cluster:
             self.__dendrogram.append([])
 

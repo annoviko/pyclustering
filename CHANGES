@@ -5,6 +5,9 @@ CHANGE NOTES FOR 0.8.1 (STARTED Feb 23, 2018)
 ------------------------------------------------------------------------
 
 GENERAL CHANGES:
+- Implemented BANG-clustering algorithm (pyclustering.cluster.bang).
+  See: https://github.com/annoviko/pyclustering/issues/424
+
 - Implemented feature to use specific metric for distance calculation in K-Medians algorithm (pyclustering.cluster.kmedians, ccore.clst.kmedians).
   See: https://github.com/annoviko/pyclustering/issues/429
 

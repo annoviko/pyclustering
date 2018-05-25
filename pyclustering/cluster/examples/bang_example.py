@@ -76,6 +76,9 @@ def cluster_fcps():
     template_clustering(FCPS_SAMPLES.SAMPLE_WING_NUT, 11)
     template_clustering(FCPS_SAMPLES.SAMPLE_TARGET, 10)
     template_clustering(FCPS_SAMPLES.SAMPLE_HEPTA, 10)
+    template_clustering(FCPS_SAMPLES.SAMPLE_CHAINLINK, 11)
+    template_clustering(FCPS_SAMPLES.SAMPLE_TETRA, 13)
+    template_clustering(FCPS_SAMPLES.SAMPLE_ATOM, 11)
 
 
 cluster_simple_sample()

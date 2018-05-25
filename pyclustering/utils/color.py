@@ -29,7 +29,20 @@ class color:
     @brief Consists titles of colors that are used by pyclustering for visualization.
     
     """
-    
+
+    @staticmethod
+    def get_color(sequential_index):
+        """!
+        @brief Returns color using round robin to avoid out of range exception.
+
+        @param[in] sequential_index (uint): Index that should be converted to valid color index.
+
+        @return (uint) Color from list color.TITLES.
+
+        """
+        return color.TITLES[sequential_index % len(color.TITLES)]
+
+
     ## List of color titles that are used by pyclustering for visualization.
     TITLES = [  'red', 'blue', 'darkgreen', 'gold', 'violet', 
                 'deepskyblue', 'darkgrey', 'lightsalmon', 'deeppink', 'yellow',
@@ -37,4 +50,4 @@ class color:
                 'silver', 'lime', 'pink', 'brown', 'bisque',
                 'dimgray', 'firebrick', 'darksalmon', 'chartreuse', 'skyblue',
                 'purple', 'fuchsia', 'palegoldenrod', 'coral', 'hotpink',
-                'gray', 'tan', 'crimson', 'teal', 'olive'];
+                'gray', 'tan', 'crimson', 'teal', 'olive']
