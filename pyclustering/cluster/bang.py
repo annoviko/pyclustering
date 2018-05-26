@@ -26,10 +26,12 @@
 
 
 import matplotlib
+import matplotlib.gridspec as gridspec;
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 
-from pyclustering.cluster import cluster_visualizer
+import itertools
+
 from pyclustering.cluster.encoder import type_encoding
 
 from pyclustering.utils import data_corners
@@ -57,12 +59,24 @@ class bang_visualizer:
         @param[in] directory (bang_directory): Directory that was created by BANG algorithm during clustering process.
 
         """
-        visualizer = cluster_visualizer()
-        visualizer.append_cluster(directory.get_data())
 
-        figure = visualizer.show(display=False)
+        dimension = len(directory.get_data()[0])
 
-        bang_visualizer.__draw_blocks(figure, 0, directory.get_leafs())
+        amount_canvases = 1
+        if dimension > 1:
+            amount_canvases = int(dimension * (dimension - 1) / 2)
+
+        figure = plt.figure();
+        grid_spec = gridspec.GridSpec(1, amount_canvases);
+
+        pairs = list(itertools.combinations(range(dimension), 2))
+        if len(pairs) == 0: pairs = [(0, 0)]
+
+        for index in range(amount_canvases):
+            ax = figure.add_subplot(grid_spec[index]);
+            bang_visualizer.__draw_blocks(ax, directory.get_leafs(), pairs[index])
+            bang_visualizer.__draw_two_dimension_data(ax, directory.get_data(), pairs[index])
+
         plt.show()
 
 
@@ -93,34 +107,56 @@ class bang_visualizer:
 
 
     @staticmethod
-    def __draw_blocks(figure, ax_index, blocks):
+    def __draw_two_dimension_data(ax, data, pair):
+        """!
+        @brief Display data in two-dimensional canvas.
+
+        @param[in] ax (Axis): Canvas where data should be displayed.
+        @param[in] data (list): Data points that should be displayed.
+        @param[in] pair (tuple): Pair of dimension indexes.
+
+        """
+        ax.set_xlabel("x%d" % pair[0])
+        ax.set_ylabel("x%d" % pair[1])
+
+        for point in data:
+            if len(data[0]) > 1:
+                ax.plot(point[pair[0]], point[pair[1]], color='red', marker='.')
+            else:
+                ax.plot(point[pair[0]], 0, color='red', marker='.')
+                ax.yaxis.set_ticklabels([]);
+
+
+    @staticmethod
+    def __draw_blocks(ax, blocks, pair):
         """!
         @brief Display BANG-blocks on specified figure.
 
-        @param[in] figure (figure): Figure that is used for drawing blocks.
-        @param[in] ax_index (uint): Index of axis where blocks should be displayed.
+        @param[in] ax (Axis): Axis where bang-blocks should be displayed.
         @param[in] blocks (list): List of blocks that should be displyed.
+        @param[in] pair (tuple): Pair of coordinate index that should be displyed.
 
         """
-        ax = figure.get_axes()[ax_index]
         ax.grid(False)
 
         density_scale = blocks[-1].get_density()
         for block in blocks:
-            bang_visualizer.__draw_block(ax, block, density_scale)
+            bang_visualizer.__draw_block(ax, pair, block, density_scale)
 
 
     @staticmethod
-    def __draw_block(ax, block, density_scale):
+    def __draw_block(ax, pair, block, density_scale):
         """!
         @brief Display BANG-block on the specified ax.
 
         @param[in] ax (Axis): Axis where block should be displayed.
+        @param[in] pair (tuple): Pair of coordinate index that should be displayed.
         @param[in] block (bang_block): BANG-block that should be displayed.
         @param[in] density_scale (double): Max density to display density of the block by appropriate tone.
 
         """
-        max_corner, min_corner = block.get_spatial_block().get_corners()
+        max_corner, min_corner = bang_visualizer.__get_rectangle_description(block, pair)
+
         belong_cluster = block.get_cluster() is not None
 
         density_scale = bang_visualizer.__maximum_density_alpha * block.get_density() / density_scale
@@ -128,17 +164,34 @@ class bang_visualizer:
         face_color = matplotlib.colors.to_rgba('blue', alpha=density_scale)
         edge_color = matplotlib.colors.to_rgba('black', alpha=1.0)
 
-        if len(max_corner) == 2:
-            rect = patches.Rectangle(min_corner, max_corner[0] - min_corner[0], max_corner[1] - min_corner[1],
-                                     fill=belong_cluster,
-                                     facecolor=face_color,
-                                     edgecolor=edge_color,
-                                     linewidth=0.5)
-            ax.add_patch(rect)
+        rect = patches.Rectangle(min_corner, max_corner[0] - min_corner[0], max_corner[1] - min_corner[1],
+                                 fill=belong_cluster,
+                                 facecolor=face_color,
+                                 edgecolor=edge_color,
+                                 linewidth=0.5)
+        ax.add_patch(rect)
 
-        else:
-            raise ValueError("Impossible to display blocks on non-2D dimensional data.")
 
+    @staticmethod
+    def __get_rectangle_description(block, pair):
+        """!
+        @brief Create rectangle description for block in specific dimension.
+
+        @param[in] pair (tuple): Pair of coordinate index that should be displayed.
+        @param[in] block (bang_block): BANG-block that should be displayed
+
+        @return (tuple) Pair of corners that describes rectangle.
+
+        """
+        max_corner, min_corner = block.get_spatial_block().get_corners()
+
+        max_corner = [max_corner[pair[0]], max_corner[pair[1]]]
+        min_corner = [min_corner[pair[0]], min_corner[pair[1]]]
+
+        if pair == (0, 0):
+            max_corner[1], min_corner[1] = 1.0, -1.0
+
+        return max_corner, min_corner
 
 
 class bang_directory:

@@ -86,7 +86,5 @@ class bang_test_template:
         directory = bang_instance.get_directory()
         dendrogram = bang_instance.get_dendrogram()
 
-        if len(sample[0]) == 2:
-            bang_visualizer.show_blocks(directory)
-
+        bang_visualizer.show_blocks(directory)
         bang_visualizer.show_dendrogram(dendrogram)

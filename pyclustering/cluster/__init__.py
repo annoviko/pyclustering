@@ -265,9 +265,6 @@ class cluster_visualizer:
         
         """
 
-        
-        cluster_figure = None;
-        
         canvas_shift = shift;
         if (canvas_shift is None):
             if (figure is not None):
