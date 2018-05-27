@@ -116,7 +116,7 @@ class bang_visualizer:
         """!
         @brief Display K-Means clustering results.
 
-        @param[in] sample (list): Dataset that was used for clustering.
+        @param[in] data (list): Dataset that was used for clustering.
         @param[in] clusters (array_like): Clusters that were allocated by the algorithm.
         @param[in] noise (array_like): Noise that were allocated by the algorithm.
 
@@ -226,6 +226,7 @@ class bang_directory:
         """!
         @brief Create BANG directory - basically tree structure with direct access to leafs.
 
+        @param[in] data (list): Input data that is clustered.
         @param[in] levels (uint): Height of the blocks tree.
         @param[in] density_threshold (double): The lowest level of density when contained data by bang-block is
                     considered as a noise and there is no need to split it till the last level.
@@ -490,6 +491,16 @@ class bang_block:
 
     """
     def __init__(self, data, region, level, space_block, cache_points=False):
+        """!
+        @brief Create BANG-block.
+
+        @param[in] data (list): List of points that are processed.
+        @param[in] region (uint): Region number - unique value on a level.
+        @param[in] level (uint): Level number where block is created.
+        @param[in] space_block (spatial_block): Spatial block description in data space.
+        @param[in] cache_points (bool): if True then points are stored in memory (used for leaf blocks).
+
+        """
         self.__data = data
         self.__region_number = region
         self.__level = level

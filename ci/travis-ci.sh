@@ -64,22 +64,20 @@ check_error_log_file() {
 
 filter_content() {
     file_name=$1
-    filter_collection=$2
+    output_file_name=$2
 
-    if [ ${#filter_collection[@]} -eq 0 ]; then
+    if [ ${#DOXYGEN_FILTER[@]} -eq 0 ]; then
         cat $file_name
         return
     fi
 
     while read line
     do
-        line=`echo "$line" | tr '[:upper:]' '[:lower:]'`
-        for string_filter in "${filter_collection[@]}"
+        for string_filter in "${DOXYGEN_FILTER[@]}"
         do
-            string_filter=`echo "$string_filter" | tr '[:upper:]' '[:lower:]'`
-            if [[ $line != *"$string_filter"* ]]
+            if [[ "$line" != *"$string_filter"* ]]
             then
-                echo -e "$line"
+                echo -e "$line" >> $output_file_name
             fi
         done
     done < $file_name
@@ -259,12 +257,19 @@ run_doxygen_job() {
     sudo apt-get install graphviz
     sudo apt-get install texlive
 
+    print_info "Prepare log files."
+    report_file=doxygen_problems.log
+    report_file_filtered=doxygen_problems_filtered.log
+
+    rm -f $report_file
+    rm -f $report_file_filtered
+
     print_info "Generate documentation."
     doxygen --version
-    doxygen docs/doxygen_conf_pyclustering > /dev/null 2> doxygen_problems.log
+    doxygen docs/doxygen_conf_pyclustering > /dev/null 2> $report_file
 
-    filter_content doxygen_problems.log $DOXYGEN_FILTER > doxygen_problems.log
-    check_error_log_file doxygen_problems.log "Building doxygen documentation: FAILURE."
+    filter_content $report_file $report_file_filtered
+    check_error_log_file $report_file_filtered "Building doxygen documentation: FAILURE."
     print_info "Building doxygen documentation: SUCCESS."
 }
 
