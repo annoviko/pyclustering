@@ -24,7 +24,6 @@
 """
 
 
-from pyclustering.cluster import cluster_visualizer
 from pyclustering.cluster.bang import bang, bang_visualizer
 
 from pyclustering.utils import read_sample
@@ -48,11 +47,7 @@ def template_clustering(data_path, levels, **kwargs):
 
     bang_visualizer.show_blocks(directory)
     bang_visualizer.show_dendrogram(dendrogram)
-
-    visualizer = cluster_visualizer()
-    visualizer.append_clusters(clusters, data)
-    visualizer.append_cluster(noise, data, marker='x')
-    visualizer.show()
+    bang_visualizer.show_clusters(data, clusters, noise)
 
 
 def cluster_simple_sample():

@@ -32,6 +32,7 @@ import matplotlib.patches as patches
 
 import itertools
 
+from pyclustering.cluster import cluster_visualizer
 from pyclustering.cluster.encoder import type_encoding
 
 from pyclustering.utils import data_corners
@@ -102,8 +103,28 @@ class bang_visualizer:
 
             current_position += len(densities)
 
+        axis.set_ylabel("density")
+        axis.set_xlabel("block")
+        axis.xaxis.set_ticklabels([]);
+
         plt.xlim([-0.5, current_position - 0.5])
         plt.show()
+
+
+    @staticmethod
+    def show_clusters(data, clusters, noise=[]):
+        """!
+        @brief Display K-Means clustering results.
+
+        @param[in] sample (list): Dataset that was used for clustering.
+        @param[in] clusters (array_like): Clusters that were allocated by the algorithm.
+        @param[in] noise (array_like): Noise that were allocated by the algorithm.
+
+        """
+        visualizer = cluster_visualizer()
+        visualizer.append_clusters(clusters, data)
+        visualizer.append_cluster(noise, data, marker='x')
+        visualizer.show()
 
 
     @staticmethod
@@ -648,6 +669,45 @@ class bang:
               the pattern values. The patterns are grouped into blocks and clustered with respect to the blocks by
               a topological neighbor search algorithm @cite inproceedings::bang::1.
 
+    Code example of BANG usage:
+    @code
+        from pyclustering.cluster.bang import bang, bang_visualizer
+        from pyclustering.utils import read_sample
+        from pyclustering.samples.definitions import FCPS_SAMPLES
+
+        # Read data three dimensional data.
+        data = read_sample(FCPS_SAMPLES.SAMPLE_CHAINLINK)
+
+        # Prepare algorithm's parameters.
+        levels = 11
+
+        # Create instance of BANG algorithm.
+        bang_instance = bang(data, levels)
+        bang_instance.process()
+
+        # Obtain clustering results.
+        clusters = bang_instance.get_clusters()
+        noise = bang_instance.get_noise()
+        directory = bang_instance.get_directory()
+        dendrogram = bang_instance.get_dendrogram()
+
+        # Visualize BANG clustering results.
+        bang_visualizer.show_blocks(directory)
+        bang_visualizer.show_dendrogram(dendrogram)
+        bang_visualizer.show_clusters(data, clusters, noise)
+    @endcode
+
+    There is visualization of BANG-clustering of three-dimensional data 'chainlink'. BANG-blocks that were formed during
+    processing are shown on following figure. The darkest color means highest density, blocks that does not cover points
+    are transparent:
+    @image html bang_blocks_chainlink.png "Fig. 1. BANG-blocks that cover input data."
+
+    Here is obtained dendrogram that can be used for further analysis to improve clustering results:
+    @image html bang_dendrogram_chainlink.png "Fig. 2. BANG dendrogram where the X-axis contains BANG-blocks, the Y-axis contains density."
+
+    BANG clustering result of 'chainlink' data:
+    @image html bang_clustering_chainlink.png "Fig. 3. BANG clustering result. Data: 'chainlink'."
+
     """
 
     def __init__(self, data, levels, density_threshold=0.0, ccore=False):
@@ -671,6 +731,8 @@ class bang:
         self.__density_threshold = density_threshold
         self.__ccore = ccore
 
+        self.__validate_arguments()
+
 
     def process(self):
         """!
@@ -682,8 +744,6 @@ class bang:
         @see get_dendrogram()
 
         """
-        self.__validate_arguments()
-
         self.__directory = bang_directory(self.__data, self.__levels, self.__density_threshold)
         self.__allocate_clusters()
 

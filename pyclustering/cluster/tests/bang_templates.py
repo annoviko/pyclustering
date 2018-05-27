@@ -88,3 +88,22 @@ class bang_test_template:
 
         bang_visualizer.show_blocks(directory)
         bang_visualizer.show_dendrogram(dendrogram)
+
+
+    @staticmethod
+    def exception(type, sample_storage, levels, threshold, ccore):
+        try:
+            sample = sample_storage
+            if isinstance(sample_storage, str):
+                sample = read_sample(sample_storage)
+
+            bang_instance = bang(sample, levels, threshold, ccore)
+            bang_instance.process()
+
+        except type:
+            return
+
+        except Exception as ex:
+            raise AssertionError("Expected: '%s', Actual: '%s'" % (type, type(ex).__name__))
+
+        raise AssertionError("Expected: '%s', Actual: 'None'" % type)

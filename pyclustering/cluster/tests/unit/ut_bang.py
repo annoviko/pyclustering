@@ -112,6 +112,20 @@ class bsas_unit_test(unittest.TestCase):
 
     def test_visualize_no_failure_three_dimensional(self):
         bang_test_template.visualize(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, 8, 0.0, False)
+        bang_test_template.visualize(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, 1, 0.0, False)
+
+
+    def test_argument_invalid_levels(self):
+        bang_test_template.exception(ValueError, SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 0, 0.0, False)
+        bang_test_template.exception(ValueError, SIMPLE_SAMPLES.SAMPLE_SIMPLE1, -1, 0.0, False)
+        bang_test_template.exception(ValueError, SIMPLE_SAMPLES.SAMPLE_SIMPLE1, -10, 0.0, False)
+
+    def test_argument_invalid_density(self):
+        bang_test_template.exception(ValueError, SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, -1.0, False)
+        bang_test_template.exception(ValueError, SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, -2.0, False)
+
+    def test_argument_empty_data(self):
+        bang_test_template.exception(ValueError, [], 1, 0.0, False)
 
 
 if __name__ == "__main__":

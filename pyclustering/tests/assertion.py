@@ -28,38 +28,38 @@ class assertion:
     @staticmethod
     def eq(argument1, argument2):
         if not (argument1 == argument2):
-            raise AssertionError("Expected: '" + str(argument1) + "', Actual: '" + str(argument2) + "'");
+            raise AssertionError("Expected: '" + str(argument1) + "', Actual: '" + str(argument2) + "'")
 
     @staticmethod
     def gt(argument1, argument2):
         if not (argument1 > argument2):
             raise AssertionError("Expected: '" + str(argument1) + "' > '" + str(argument2) +
-                                 "', Actual: '" + str(argument1) + "' vs '" + str(argument2) + "'");
+                                 "', Actual: '" + str(argument1) + "' vs '" + str(argument2) + "'")
 
     @staticmethod
     def ge(argument1, argument2):
         if not (argument1 >= argument2):
             raise AssertionError("Expected: '" + str(argument1) + "' >= '" + str(argument2) +
-                                 "', Actual: '" + str(argument1) + "' vs '" + str(argument2) + "'");
+                                 "', Actual: '" + str(argument1) + "' vs '" + str(argument2) + "'")
 
     @staticmethod
     def lt(argument1, argument2):
         if not (argument1 < argument2):
             raise AssertionError("Expected: '" + str(argument1) + "' < '" + str(argument2) +
-                                 "', Actual: '" + str(argument1) + "' vs '" + str(argument2) + "'");
+                                 "', Actual: '" + str(argument1) + "' vs '" + str(argument2) + "'")
 
     @staticmethod
     def le(argument1, argument2):
         if not (argument1 <= argument2):
             raise AssertionError("Expected: '" + str(argument1) + "' <= '" + str(argument2) +
-                                 "', Actual: '" + str(argument1) + "' vs '" + str(argument2) + "'");
+                                 "', Actual: '" + str(argument1) + "' vs '" + str(argument2) + "'")
 
     @staticmethod
     def true(argument1):
         if not argument1:
-            raise AssertionError("Expected: 'True', Actual: '" + str(argument1) + "'");
+            raise AssertionError("Expected: 'True', Actual: '" + str(argument1) + "'")
 
     @staticmethod
     def false(argument1):
         if argument1:
-            raise AssertionError("Expected: 'False', Actual: '" + str(argument1) + "'");
+            raise AssertionError("Expected: 'False', Actual: '" + str(argument1) + "'")
