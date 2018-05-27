@@ -32,6 +32,7 @@ matplotlib.use('Agg');
 
 
 from pyclustering.cluster.tests.unit               import ut_agglomerative      as cluster_agglomerative_unit_tests;
+from pyclustering.cluster.tests.unit               import ut_bang               as cluster_bang_unit_tests;
 from pyclustering.cluster.tests.unit               import ut_birch              as cluster_birch_unit_tests;
 from pyclustering.cluster.tests.unit               import ut_bsas               as cluster_bsas_unit_tests;
 from pyclustering.cluster.tests.unit               import ut_center_initializer as cluster_center_initializer_unit_tests;
@@ -64,6 +65,7 @@ class clustering_unit_tests(suite_holder):
     @staticmethod
     def fill_suite(unit_cluster_suite):
         unit_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_agglomerative_unit_tests));
+        unit_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_bang_unit_tests));
         unit_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_birch_unit_tests));
         unit_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_bsas_unit_tests));
         unit_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_center_initializer_unit_tests));

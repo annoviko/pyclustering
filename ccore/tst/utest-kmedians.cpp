@@ -32,11 +32,12 @@ using namespace ccore::clst;
 
 static void
 template_kmedians_length_process_data(const dataset_ptr & p_data,
-const dataset & p_start_medians,
-const std::vector<size_t> & p_expected_cluster_length)
+                                      const dataset & p_start_medians,
+                                      const std::vector<size_t> & p_expected_cluster_length,
+                                      const distance_metric<point> & p_metric = distance_metric_factory<point>::euclidean_square())
 {
     kmedians_data output_result;
-    kmedians solver(p_start_medians, 0.0001);
+    kmedians solver(p_start_medians, 0.0001, p_metric);
     solver.process(*p_data, output_result);
 
     const dataset & data = *p_data;
@@ -49,6 +50,45 @@ TEST(utest_kmedians, allocation_sample_simple_01) {
     dataset start_medians = { { 3.7, 5.5 }, { 6.7, 7.5 } };
     std::vector<size_t> expected_clusters_length = { 5, 5 };
     template_kmedians_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_medians, expected_clusters_length);
+}
+
+TEST(utest_kmedians, allocation_sample_simple_01_euclidean) {
+    dataset start_medians = { { 3.7, 5.5 }, { 6.7, 7.5 } };
+    std::vector<size_t> expected_clusters_length = { 5, 5 };
+    template_kmedians_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_medians, expected_clusters_length, distance_metric_factory<point>::euclidean());
+}
+
+TEST(utest_kmedians, allocation_sample_simple_01_euclidean_square) {
+    dataset start_medians = { { 3.7, 5.5 }, { 6.7, 7.5 } };
+    std::vector<size_t> expected_clusters_length = { 5, 5 };
+    template_kmedians_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_medians, expected_clusters_length, distance_metric_factory<point>::euclidean_square());
+}
+
+TEST(utest_kmedians, allocation_sample_simple_01_manhattan) {
+    dataset start_medians = { { 3.7, 5.5 }, { 6.7, 7.5 } };
+    std::vector<size_t> expected_clusters_length = { 5, 5 };
+    template_kmedians_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_medians, expected_clusters_length, distance_metric_factory<point>::manhattan());
+}
+
+TEST(utest_kmedians, allocation_sample_simple_01_chebyshev) {
+    dataset start_medians = { { 3.7, 5.5 }, { 6.7, 7.5 } };
+    std::vector<size_t> expected_clusters_length = { 5, 5 };
+    template_kmedians_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_medians, expected_clusters_length, distance_metric_factory<point>::chebyshev());
+}
+
+TEST(utest_kmedians, allocation_sample_simple_01_minkowski) {
+    dataset start_medians = { { 3.7, 5.5 }, { 6.7, 7.5 } };
+    std::vector<size_t> expected_clusters_length = { 5, 5 };
+    template_kmedians_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_medians, expected_clusters_length, distance_metric_factory<point>::minkowski(2.0));
+}
+
+TEST(utest_kmedians, allocation_sample_simple_01_user_defined) {
+    dataset start_medians = { { 3.7, 5.5 }, { 6.7, 7.5 } };
+    std::vector<size_t> expected_clusters_length = { 5, 5 };
+
+    auto user_metric = [](const point & p1, const point & p2) { return euclidean_distance(p1, p2); };
+
+    template_kmedians_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_medians, expected_clusters_length, distance_metric_factory<point>::user_defined(user_metric));
 }
 
 TEST(utest_kmedians, allocation_sample_simple_02) {

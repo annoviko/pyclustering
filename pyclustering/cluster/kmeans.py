@@ -51,9 +51,9 @@ class kmeans_observer:
         @brief Initializer of observer of K-Means algorithm.
         
         """
-        self.__evolution_clusters   = [];
-        self.__evolution_centers    = [];
-        self.__initial_centers      = [];
+        self.__evolution_clusters   = []
+        self.__evolution_centers    = []
+        self.__initial_centers      = []
 
 
     def __len__(self):
@@ -61,7 +61,7 @@ class kmeans_observer:
         @brief Returns amount of steps that were observer during clustering process in K-Means algorithm.
         
         """
-        return len(self.__evolution_clusters);
+        return len(self.__evolution_clusters)
 
 
     def notify(self, clusters, centers):
@@ -72,8 +72,8 @@ class kmeans_observer:
         @param[in] centers (array_like): Allocated centers by K-Means algorithm.
         
         """
-        self.__evolution_clusters.append(clusters);
-        self.__evolution_centers.append(centers);
+        self.__evolution_clusters.append(clusters)
+        self.__evolution_centers.append(centers)
 
 
     def set_evolution_centers(self, evolution_centers):
@@ -83,7 +83,7 @@ class kmeans_observer:
         @param[in] evolution_centers (array_like): Evolution of changes of centers during clustering process.
         
         """
-        self.__evolution_centers = evolution_centers;
+        self.__evolution_centers = evolution_centers
 
 
     def get_centers(self, iteration):
@@ -95,7 +95,7 @@ class kmeans_observer:
         @return (array_like) Centers at specific iteration.
         
         """
-        return self.__evolution_centers[iteration];
+        return self.__evolution_centers[iteration]
 
 
     def set_evolution_clusters(self, evolution_clusters):
@@ -105,7 +105,7 @@ class kmeans_observer:
         @param[in] evolution_clusters (array_like): Evolution of changes of clusters during clustering process.
         
         """
-        self.__evolution_clusters = evolution_clusters;
+        self.__evolution_clusters = evolution_clusters
 
 
     def get_clusters(self, iteration):
@@ -117,7 +117,7 @@ class kmeans_observer:
         @return (array_like) Clusters at specific iteration.
         
         """
-        return self.__evolution_clusters[iteration];
+        return self.__evolution_clusters[iteration]
 
 
 
@@ -128,8 +128,8 @@ class kmeans_visualizer:
     
     """
     
-    __default_2d_marker_size = 15;
-    __default_3d_marker_size = 70;
+    __default_2d_marker_size = 15
+    __default_3d_marker_size = 70
     
     
     @staticmethod
@@ -152,72 +152,72 @@ class kmeans_visualizer:
         
         """
 
-        visualizer = cluster_visualizer();
-        visualizer.append_clusters(clusters, sample);
+        visualizer = cluster_visualizer()
+        visualizer.append_clusters(clusters, sample)
         
-        offset = kwargs.get('offset', 0);
-        figure = kwargs.get('figure', None);
-        display = kwargs.get('display', True);
+        offset = kwargs.get('offset', 0)
+        figure = kwargs.get('figure', None)
+        display = kwargs.get('display', True)
 
-        if (figure is None):
-            figure = visualizer.show(display = False);
+        if figure is None:
+            figure = visualizer.show(display = False)
         else:
-            visualizer.show(figure = figure, display = False);
+            visualizer.show(figure = figure, display = False)
         
-        kmeans_visualizer.__draw_centers(figure, offset, visualizer, centers, initial_centers);
-        kmeans_visualizer.__draw_rays(figure, offset, visualizer, sample, clusters, centers);
+        kmeans_visualizer.__draw_centers(figure, offset, visualizer, centers, initial_centers)
+        kmeans_visualizer.__draw_rays(figure, offset, visualizer, sample, clusters, centers)
         
-        if (display is True):
-            plt.show();
+        if display is True:
+            plt.show()
 
-        return figure;
+        return figure
 
 
     @staticmethod
     def __draw_rays(figure, offset, visualizer, sample, clusters, centers):
-        ax = figure.get_axes()[offset];
+        ax = figure.get_axes()[offset]
         
         for index_cluster in range(len(clusters)):
-            color = visualizer.get_cluster_color(index_cluster, 0);
+            color = visualizer.get_cluster_color(index_cluster, 0)
             kmeans_visualizer.__draw_cluster_rays(ax, color, sample, clusters[index_cluster], centers[index_cluster])
 
 
     @staticmethod
     def __draw_cluster_rays(ax, color, sample, cluster, center):
-        dimension = len(sample[0]);
+        dimension = len(sample[0])
         
         for index_point in cluster:
-            point = sample[index_point];
+            point = sample[index_point]
             if dimension == 1:
-                ax.plot([point[0], center[0]], [0.0, 0.0], '-', color=color, linewidth=0.5);
+                ax.plot([point[0], center[0]], [0.0, 0.0], '-', color=color, linewidth=0.5)
             elif dimension == 2:
-                ax.plot([point[0], center[0]], [point[1], center[1]], '-', color=color, linewidth=0.5);
+                ax.plot([point[0], center[0]], [point[1], center[1]], '-', color=color, linewidth=0.5)
             elif dimension == 3:
                 ax.plot([point[0], center[0]], [point[1], center[1]], [point[2], center[2]], '-', color=color, linewidth=0.5)
 
 
     @staticmethod
     def __draw_center(ax, center, color, marker, alpha):
-        dimension = len(center);
+        dimension = len(center)
         
         if dimension == 1:
-            ax.plot(center[0], 0.0, color=color, alpha=alpha, marker=marker, markersize=kmeans_visualizer.__default_2d_marker_size);
+            ax.plot(center[0], 0.0, color=color, alpha=alpha, marker=marker, markersize=kmeans_visualizer.__default_2d_marker_size)
         elif dimension == 2:
-            ax.plot(center[0], center[1], color=color, alpha=alpha, marker=marker, markersize=kmeans_visualizer.__default_2d_marker_size);
+            ax.plot(center[0], center[1], color=color, alpha=alpha, marker=marker, markersize=kmeans_visualizer.__default_2d_marker_size)
         elif dimension == 3:
-            ax.scatter(center[0], center[1], center[2], c=color, alpha=alpha, marker=marker, s=kmeans_visualizer.__default_3d_marker_size);
+            ax.scatter(center[0], center[1], center[2], c=color, alpha=alpha, marker=marker, s=kmeans_visualizer.__default_3d_marker_size)
 
 
     @staticmethod
     def __draw_centers(figure, offset, visualizer, centers, initial_centers):
-        ax = figure.get_axes()[offset];
+        ax = figure.get_axes()[offset]
         
         for index_center in range(len(centers)):
-            color = visualizer.get_cluster_color(index_center, 0);
-            kmeans_visualizer.__draw_center(ax, centers[index_center], color, '*', 1.0);
+            color = visualizer.get_cluster_color(index_center, 0)
+            kmeans_visualizer.__draw_center(ax, centers[index_center], color, '*', 1.0)
             
             if initial_centers is not None:
-                kmeans_visualizer.__draw_center(ax, initial_centers[index_center], color, '*', 0.4);
+                kmeans_visualizer.__draw_center(ax, initial_centers[index_center], color, '*', 0.4)
 
 
     @staticmethod
@@ -232,32 +232,32 @@ class kmeans_visualizer:
         @param[in] save_movie (string): If it is specified then animation will be stored to file that is specified in this parameter.
 
         """
-        figure = plt.figure();
+        figure = plt.figure()
 
         def init_frame():
-            return frame_generation(0);
+            return frame_generation(0)
 
         def frame_generation(index_iteration):
-            figure.clf();
+            figure.clf()
 
-            figure.suptitle("K-Means algorithm (iteration: " + str(index_iteration) + ")", fontsize=18, fontweight='bold');
+            figure.suptitle("K-Means algorithm (iteration: " + str(index_iteration) + ")", fontsize=18, fontweight='bold')
 
-            clusters = observer.get_clusters(index_iteration);
-            centers = observer.get_centers(index_iteration);
-            kmeans_visualizer.show_clusters(data, clusters, centers, None, figure=figure, display=False);
+            clusters = observer.get_clusters(index_iteration)
+            centers = observer.get_centers(index_iteration)
+            kmeans_visualizer.show_clusters(data, clusters, centers, None, figure=figure, display=False)
 
-            figure.subplots_adjust(top=0.85);
+            figure.subplots_adjust(top=0.85)
 
-            return [figure.gca()];
+            return [figure.gca()]
 
-        iterations = len(observer);
+        iterations = len(observer)
         cluster_animation = animation.FuncAnimation(figure, frame_generation, iterations, interval=animation_velocity,
-                                                    init_func=init_frame, repeat_delay=5000);
+                                                    init_func=init_frame, repeat_delay=5000)
 
         if save_movie is not None:
-            cluster_animation.save(save_movie, writer='ffmpeg', fps=movie_fps, bitrate=3000);
+            cluster_animation.save(save_movie, writer='ffmpeg', fps=movie_fps, bitrate=3000)
         else:
-            plt.show();
+            plt.show()
 
 
 
@@ -276,31 +276,31 @@ class kmeans:
     Example #1 - Trivial clustering:
     @code
         # load list of points for cluster analysis
-        sample = read_sample(path);
+        sample = read_sample(path)
         
         # create instance of K-Means algorithm
-        kmeans_instance = kmeans(sample, [ [0.0, 0.1], [2.5, 2.6] ]);
+        kmeans_instance = kmeans(sample, [ [0.0, 0.1], [2.5, 2.6] ])
         
         # run cluster analysis and obtain results
-        kmeans_instance.process();
-        clusters = kmeans_instance.get_clusters();
+        kmeans_instance.process()
+        clusters = kmeans_instance.get_clusters()
     @endcode
     
     Example #2 - Clustering using K-Means++ for center initialization:
     @code
         # load list of points for cluster analysis
-        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE2);
+        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE2)
         
         # initialize initial centers using K-Means++ method
-        initial_centers = kmeans_plusplus_initializer(sample, 3).initialize();
+        initial_centers = kmeans_plusplus_initializer(sample, 3).initialize()
         
         # create instance of K-Means algorithm with prepared centers
-        kmeans_instance = kmeans(sample, initial_centers);
+        kmeans_instance = kmeans(sample, initial_centers)
         
         # run cluster analysis and obtain results
-        kmeans_instance.process();
-        clusters = kmeans_instance.get_clusters();
-        final_centers = kmeans_instance.get_centers();
+        kmeans_instance.process()
+        clusters = kmeans_instance.get_clusters()
+        final_centers = kmeans_instance.get_centers()
     @endcode
     
     @see center_initializer
@@ -324,18 +324,18 @@ class kmeans:
         @see center_initializer
         
         """
-        self.__pointer_data = numpy.matrix(data);
-        self.__clusters = [];
-        self.__centers = numpy.matrix(initial_centers);
-        self.__tolerance = tolerance;
+        self.__pointer_data = numpy.matrix(data)
+        self.__clusters = []
+        self.__centers = numpy.matrix(initial_centers)
+        self.__tolerance = tolerance
         
-        self.__observer = None;
+        self.__observer = None
         if 'observer' in kwargs:
-            self.__observer = kwargs['observer'];
+            self.__observer = kwargs['observer']
         
-        self.__ccore = ccore;
+        self.__ccore = ccore
         if self.__ccore is True:
-            self.__ccore = ccore_library.workable();
+            self.__ccore = ccore_library.workable()
 
 
     def process(self):
@@ -350,12 +350,12 @@ class kmeans:
         """
 
         if len(self.__pointer_data[0]) != len(self.__centers[0]):
-            raise NameError('Dimension of the input data and dimension of the initial cluster centers must be equal.');
+            raise NameError('Dimension of the input data and dimension of the initial cluster centers must be equal.')
 
         if self.__ccore is True:
-            self.__process_by_ccore();
+            self.__process_by_ccore()
         else:
-            self.__process_by_python();
+            self.__process_by_python()
 
 
     def __process_by_ccore(self):
@@ -363,13 +363,13 @@ class kmeans:
         @brief Performs cluster analysis using CCORE (C/C++ part of pyclustering library).
 
         """
-        results = wrapper.kmeans(self.__pointer_data, self.__centers, self.__tolerance, (self.__observer is not None));
-        self.__clusters = results[0];
-        self.__centers = results[1];
+        results = wrapper.kmeans(self.__pointer_data, self.__centers, self.__tolerance, (self.__observer is not None))
+        self.__clusters = results[0]
+        self.__centers = results[1]
 
         if self.__observer is not None:
-            self.__observer.set_evolution_clusters(results[2]);
-            self.__observer.set_evolution_centers(results[3]);
+            self.__observer.set_evolution_clusters(results[2])
+            self.__observer.set_evolution_centers(results[3])
 
 
     def __process_by_python(self):
@@ -378,28 +378,28 @@ class kmeans:
 
         """
 
-        maximum_change = float('inf');
-        stop_condition = self.__tolerance * self.__tolerance;
+        maximum_change = float('inf')
+        stop_condition = self.__tolerance * self.__tolerance
 
         if self.__observer is not None:
-            initial_clusters = self.__update_clusters();
-            self.__observer.notify(initial_clusters, self.__centers.tolist());
+            initial_clusters = self.__update_clusters()
+            self.__observer.notify(initial_clusters, self.__centers.tolist())
 
         while maximum_change > stop_condition:
-            self.__clusters = self.__update_clusters();
-            updated_centers = self.__update_centers();  # changes should be calculated before assignment
+            self.__clusters = self.__update_clusters()
+            updated_centers = self.__update_centers()  # changes should be calculated before assignment
 
             if self.__observer is not None:
-                self.__observer.notify(self.__clusters, updated_centers.tolist());
+                self.__observer.notify(self.__clusters, updated_centers.tolist())
 
             if len(self.__centers) != len(updated_centers):
-                maximum_change = float('inf');
+                maximum_change = float('inf')
 
             else:
-                changes = numpy.sum(numpy.square(self.__centers - updated_centers), axis=1);
-                maximum_change = numpy.max(changes);
+                changes = numpy.sum(numpy.square(self.__centers - updated_centers), axis=1)
+                maximum_change = numpy.max(changes)
 
-            self.__centers = updated_centers.tolist();
+            self.__centers = updated_centers.tolist()
 
 
     def get_clusters(self):
@@ -411,7 +411,7 @@ class kmeans:
         
         """
         
-        return self.__clusters;
+        return self.__clusters
     
     
     def get_centers(self):
@@ -424,9 +424,9 @@ class kmeans:
         """
 
         if isinstance(self.__centers, list):
-            return self.__centers;
+            return self.__centers
         
-        return self.__centers.tolist();
+        return self.__centers.tolist()
 
 
     def get_cluster_encoding(self):
@@ -439,7 +439,7 @@ class kmeans:
         
         """
         
-        return type_encoding.CLUSTER_INDEX_LIST_SEPARATION;
+        return type_encoding.CLUSTER_INDEX_LIST_SEPARATION
 
 
     def __update_clusters(self):
@@ -450,20 +450,20 @@ class kmeans:
         
         """
         
-        clusters = [[] for _ in range(len(self.__centers))];
+        clusters = [[] for _ in range(len(self.__centers))]
         
-        dataset_differences = numpy.zeros((len(clusters), len(self.__pointer_data)));
+        dataset_differences = numpy.zeros((len(clusters), len(self.__pointer_data)))
         for index_center in range(len(self.__centers)):
-            dataset_differences[index_center] = numpy.sum(numpy.square(self.__pointer_data - self.__centers[index_center]), axis=1).T;
+            dataset_differences[index_center] = numpy.sum(numpy.square(self.__pointer_data - self.__centers[index_center]), axis=1).T
         
-        optimum_indexes = numpy.argmin(dataset_differences, axis=0);
+        optimum_indexes = numpy.argmin(dataset_differences, axis=0)
         for index_point in range(len(optimum_indexes)):
-            index_cluster = optimum_indexes[index_point];
-            clusters[index_cluster].append(index_point);
+            index_cluster = optimum_indexes[index_point]
+            clusters[index_cluster].append(index_point)
         
-        clusters = [cluster for cluster in clusters if len(cluster) > 0];
+        clusters = [cluster for cluster in clusters if len(cluster) > 0]
         
-        return clusters;
+        return clusters
     
     
     def __update_centers(self):
@@ -474,11 +474,11 @@ class kmeans:
         
         """
         
-        dimension = self.__pointer_data.shape[1];
-        centers = numpy.zeros((len(self.__clusters), dimension));
+        dimension = self.__pointer_data.shape[1]
+        centers = numpy.zeros((len(self.__clusters), dimension))
         
         for index in range(len(self.__clusters)):
-            cluster_points = self.__pointer_data[self.__clusters[index], :];
-            centers[index] = cluster_points.mean(axis=0);
+            cluster_points = self.__pointer_data[self.__clusters[index], :]
+            centers[index] = cluster_points.mean(axis=0)
 
-        return numpy.matrix(centers);
+        return numpy.matrix(centers)

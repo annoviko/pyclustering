@@ -34,8 +34,12 @@
  * @param[in] p_sample: input data for clustering.
  * @param[in] p_medians: initial medians of clusters.
  * @param[in] p_tolerance: stop condition - when changes of medians are less then tolerance value.
+ * @param[in] p_metric: distance metric for distance calculation between objects.
  *
  * @return  Returns result of clustering - array of allocated clusters.
  *
  */
-extern "C" DECLARATION pyclustering_package * kmedians_algorithm(const pyclustering_package * const p_sample, const pyclustering_package * const p_medians, const double p_tolerance);
+extern "C" DECLARATION pyclustering_package * kmedians_algorithm(const pyclustering_package * const p_sample, 
+                                                                 const pyclustering_package * const p_medians, 
+                                                                 const double p_tolerance,
+                                                                 const void * const p_metric);

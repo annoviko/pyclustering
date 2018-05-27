@@ -25,17 +25,13 @@
 """
 
 
-from enum import IntEnum;
+from pyclustering.container.kdtree import kdtree
 
-from pyclustering.container.kdtree import kdtree;
+from pyclustering.cluster.encoder import type_encoding
 
-from pyclustering.cluster.encoder import type_encoding;
+from pyclustering.core.wrapper import ccore_library
 
-from pyclustering.core.wrapper import ccore_library;
-
-from pyclustering.utils import get_argument;
-
-import pyclustering.core.dbscan_wrapper as wrapper;
+import pyclustering.core.dbscan_wrapper as wrapper
 
 
 class dbscan:

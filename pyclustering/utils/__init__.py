@@ -396,7 +396,7 @@ def average_inter_cluster_distance(cluster1, cluster2, data = None):
     return distance ** 0.5;
 
 
-def average_intra_cluster_distance(cluster1, cluster2, data = None):
+def average_intra_cluster_distance(cluster1, cluster2, data=None):
     """!
     @brief Calculates average intra-cluster distance between two clusters.
     @details Clusters can be represented by list of coordinates (in this case data shouldn't be specified),
@@ -412,36 +412,39 @@ def average_intra_cluster_distance(cluster1, cluster2, data = None):
     
     """
         
-    distance = 0.0;
+    distance = 0.0
     
     for i in range(len(cluster1) + len(cluster2)):
         for j in range(len(cluster1) + len(cluster2)):
-            first_point = None;
-            second_point = None;
-            
-            if (data is None):
+            if data is None:
                 # the first point
-                if (i < len(cluster1)): first_point = cluster1[i];
-                else: first_point = cluster2[i - len(cluster1)];
+                if i < len(cluster1):
+                    first_point = cluster1[i]
+                else:
+                    first_point = cluster2[i - len(cluster1)]
                 
                 # the second point
-                if (j < len(cluster1)): second_point = cluster1[j];
-                else: second_point = cluster2[j - len(cluster1)];
+                if j < len(cluster1):
+                    second_point = cluster1[j]
+                else:
+                    second_point = cluster2[j - len(cluster1)]
                 
             else:
                 # the first point
-                if (i < len(cluster1)): first_point = data[ cluster1[i] ];
-                else: first_point = data[ cluster2[i - len(cluster1)] ];
+                if i < len(cluster1):
+                    first_point = data[cluster1[i]]
+                else:
+                    first_point = data[cluster2[i - len(cluster1)]]
             
-                if (j < len(cluster1)): second_point = data[ cluster1[j] ];
-                else: second_point = data[ cluster2[j - len(cluster1)] ];    
+                if j < len(cluster1):
+                    second_point = data[cluster1[j]]
+                else:
+                    second_point = data[cluster2[j - len(cluster1)]]
             
-
-            
-            distance += euclidean_distance_square(first_point, second_point);
+            distance += euclidean_distance_square(first_point, second_point)
     
-    distance /= float( (len(cluster1) + len(cluster2)) * (len(cluster1) + len(cluster2) - 1.0) );
-    return distance ** 0.5;
+    distance /= float((len(cluster1) + len(cluster2)) * (len(cluster1) + len(cluster2) - 1.0))
+    return distance ** 0.5
 
 
 def variance_increase_distance(cluster1, cluster2, data = None):
@@ -461,60 +464,56 @@ def variance_increase_distance(cluster1, cluster2, data = None):
     """
     
     # calculate local sum
-    member_cluster1 = None;
-    member_cluster2 = None;
-    
-    if (data is None):
-        member_cluster1 = [0.0] * len(cluster1[0]);
-        member_cluster2 = [0.0] * len(cluster2[0]);
+    if data is None:
+        member_cluster1 = [0.0] * len(cluster1[0])
+        member_cluster2 = [0.0] * len(cluster2[0])
         
     else:
-        member_cluster1 = [0.0] * len(data[0]);
-        member_cluster2 = [0.0] * len(data[0]);
+        member_cluster1 = [0.0] * len(data[0])
+        member_cluster2 = [0.0] * len(data[0])
     
     for i in range(len(cluster1)):
-        if (data is None):
-            member_cluster1 = list_math_addition(member_cluster1, cluster1[i]);
+        if data is None:
+            member_cluster1 = list_math_addition(member_cluster1, cluster1[i])
         else:
-            member_cluster1 = list_math_addition(member_cluster1, data[ cluster1[i] ]);
-    
-    
+            member_cluster1 = list_math_addition(member_cluster1, data[ cluster1[i] ])
+
     for j in range(len(cluster2)):
-        if (data is None):
-            member_cluster2 = list_math_addition(member_cluster2, cluster2[j]);
+        if data is None:
+            member_cluster2 = list_math_addition(member_cluster2, cluster2[j])
         else:
-            member_cluster2 = list_math_addition(member_cluster2, data[ cluster2[j] ]);
+            member_cluster2 = list_math_addition(member_cluster2, data[ cluster2[j] ])
     
-    member_cluster_general = list_math_addition(member_cluster1, member_cluster2);
-    member_cluster_general = list_math_division_number(member_cluster_general, len(cluster1) + len(cluster2));
+    member_cluster_general = list_math_addition(member_cluster1, member_cluster2)
+    member_cluster_general = list_math_division_number(member_cluster_general, len(cluster1) + len(cluster2))
     
-    member_cluster1 = list_math_division_number(member_cluster1, len(cluster1));
-    member_cluster2 = list_math_division_number(member_cluster2, len(cluster2));
+    member_cluster1 = list_math_division_number(member_cluster1, len(cluster1))
+    member_cluster2 = list_math_division_number(member_cluster2, len(cluster2))
     
     # calculate global sum
-    distance_general = 0.0;
-    distance_cluster1 = 0.0;
-    distance_cluster2 = 0.0;
+    distance_general = 0.0
+    distance_cluster1 = 0.0
+    distance_cluster2 = 0.0
     
     for i in range(len(cluster1)):
-        if (data is None):
-            distance_cluster1 += euclidean_distance_square(cluster1[i], member_cluster1);
-            distance_general += euclidean_distance_square(cluster1[i], member_cluster_general);
+        if data is None:
+            distance_cluster1 += euclidean_distance_square(cluster1[i], member_cluster1)
+            distance_general += euclidean_distance_square(cluster1[i], member_cluster_general)
             
         else:
-            distance_cluster1 += euclidean_distance_square(data[ cluster1[i]], member_cluster1);
-            distance_general += euclidean_distance_square(data[ cluster1[i]], member_cluster_general);
+            distance_cluster1 += euclidean_distance_square(data[ cluster1[i]], member_cluster1)
+            distance_general += euclidean_distance_square(data[ cluster1[i]], member_cluster_general)
     
     for j in range(len(cluster2)):
-        if (data is None):
-            distance_cluster2 += euclidean_distance_square(cluster2[j], member_cluster2);
-            distance_general += euclidean_distance_square(cluster2[j], member_cluster_general);
+        if data is None:
+            distance_cluster2 += euclidean_distance_square(cluster2[j], member_cluster2)
+            distance_general += euclidean_distance_square(cluster2[j], member_cluster_general)
             
         else:
-            distance_cluster2 += euclidean_distance_square(data[ cluster2[j]], member_cluster2);
-            distance_general += euclidean_distance_square(data[ cluster2[j]], member_cluster_general);
+            distance_cluster2 += euclidean_distance_square(data[ cluster2[j]], member_cluster2)
+            distance_general += euclidean_distance_square(data[ cluster2[j]], member_cluster_general)
     
-    return distance_general - distance_cluster1 - distance_cluster2;
+    return distance_general - distance_cluster1 - distance_cluster2
 
 
 def calculate_ellipse_description(covariance, scale = 2.0):
@@ -528,17 +527,17 @@ def calculate_ellipse_description(covariance, scale = 2.0):
     
     """
     
-    eigh_values, eigh_vectors = numpy.linalg.eigh(covariance);
-    order = eigh_values.argsort()[::-1];
+    eigh_values, eigh_vectors = numpy.linalg.eigh(covariance)
+    order = eigh_values.argsort()[::-1]
     
-    values, vectors = eigh_values[order], eigh_vectors[order];
-    angle = numpy.degrees(numpy.arctan2(*vectors[:,0][::-1]));
+    values, vectors = eigh_values[order], eigh_vectors[order]
+    angle = numpy.degrees(numpy.arctan2(*vectors[:,0][::-1]))
 
-    if (0.0 in values):
-        return 0, 0, 0;
+    if 0.0 in values:
+        return 0, 0, 0
 
-    width, height = 2.0 * scale * numpy.sqrt(values);
-    return angle, width, height;
+    width, height = 2.0 * scale * numpy.sqrt(values)
+    return angle, width, height
 
 
 def data_corners(data, data_filter = None):
@@ -553,24 +552,24 @@ def data_corners(data, data_filter = None):
     
     """
     
-    dimensions = len(data[0]);
+    dimensions = len(data[0])
     
-    bypass = data_filter;
-    if (bypass is None):
-        bypass = range(len(data));
+    bypass = data_filter
+    if bypass is None:
+        bypass = range(len(data))
     
-    maximum_corner = data[bypass[0]][:];
-    minimum_corner = data[bypass[0]][:];
+    maximum_corner = data[bypass[0]][:]
+    minimum_corner = data[bypass[0]][:]
     
     for index_point in bypass:
         for index_dimension in range(dimensions):
-            if (data[index_point][index_dimension] > maximum_corner[index_dimension]):
-                maximum_corner[index_dimension] = data[index_point][index_dimension];
+            if data[index_point][index_dimension] > maximum_corner[index_dimension]:
+                maximum_corner[index_dimension] = data[index_point][index_dimension]
             
-            if (data[index_point][index_dimension] < minimum_corner[index_dimension]):
-                minimum_corner[index_dimension] = data[index_point][index_dimension];
+            if data[index_point][index_dimension] < minimum_corner[index_dimension]:
+                minimum_corner[index_dimension] = data[index_point][index_dimension]
     
-    return (minimum_corner, maximum_corner);
+    return minimum_corner, maximum_corner
 
 
 def norm_vector(vector):
@@ -583,13 +582,13 @@ def norm_vector(vector):
     
     """
     
-    length = 0.0;
+    length = 0.0
     for component in vector:
-        length += component * component;
+        length += component * component
     
-    length = length ** 0.5;
+    length = length ** 0.5
     
-    return length;
+    return length
 
 
 def unit_vector(vector):

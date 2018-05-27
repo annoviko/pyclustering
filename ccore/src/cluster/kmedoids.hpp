@@ -87,7 +87,7 @@ public:
     *
     */
     kmedoids(const medoid_sequence & p_initial_medoids,
-             const double p_tolerance = 0.01,
+             const double p_tolerance = 0.001,
              const distance_metric<point> & p_metric = distance_metric_factory<point>::euclidean_square());
 
     /**

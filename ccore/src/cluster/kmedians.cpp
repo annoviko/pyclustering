@@ -34,21 +34,13 @@ namespace ccore {
 namespace clst {
 
 
-kmedians::kmedians(void) :
-    m_tolerance(0.025),
-    m_initial_medians(0, point()),
-    m_ptr_result(nullptr),
-    m_ptr_data(nullptr) { }
-
-
-kmedians::kmedians(const dataset & initial_medians, const double tolerance) :
+kmedians::kmedians(const dataset & initial_medians, const double tolerance, const distance_metric<point> & p_metric) :
     m_tolerance(tolerance),
     m_initial_medians(initial_medians),
     m_ptr_result(nullptr),
-    m_ptr_data(nullptr) { }
-
-
-kmedians::~kmedians(void) { }
+    m_ptr_data(nullptr),
+    m_metric(p_metric)
+{ }
 
 
 void kmedians::process(const dataset & data, cluster_data & output_result) {
@@ -56,12 +48,11 @@ void kmedians::process(const dataset & data, cluster_data & output_result) {
     m_ptr_result = (kmedians_data *) &output_result;
 
     if (data[0].size() != m_initial_medians[0].size()) {
-        throw std::runtime_error("CCORE [kmedians]: dimension of the input data and dimension of the initial cluster medians must be equal.");
+        throw std::invalid_argument("kmedians: dimension of the input data and dimension of the initial medians must be equal.");
     }
 
     m_ptr_result->medians() = m_initial_medians;
 
-    double stop_condition = m_tolerance * m_tolerance;
     double changes = 0.0;
     double prev_changes = 0.0;
 
@@ -81,7 +72,7 @@ void kmedians::process(const dataset & data, cluster_data & output_result) {
 
         prev_changes = changes;
     }
-    while ((changes > stop_condition) && (counter_repeaters < 10));
+    while ((changes > m_tolerance) && (counter_repeaters < 10));
 
     m_ptr_data = nullptr;
     m_ptr_result = nullptr;
@@ -99,7 +90,7 @@ void kmedians::update_clusters(const dataset & medians, cluster_sequence & clust
         double distance_optim = std::numeric_limits<double>::max();
 
         for (size_t index_cluster = 0; index_cluster < medians.size(); index_cluster++) {
-            double distance = euclidean_distance_square(data[index_point], medians[index_cluster]);
+            double distance = m_metric(data[index_point], medians[index_cluster]);
             if (distance < distance_optim) {
                 index_cluster_optim = index_cluster;
                 distance_optim = distance;
@@ -154,7 +145,7 @@ double kmedians::update_medians(cluster_sequence & clusters, dataset & medians) 
             }
         }
 
-        double change = euclidean_distance_square(prev_medians[index_cluster], medians[index_cluster]);
+        double change = m_metric(prev_medians[index_cluster], medians[index_cluster]);
         if (change > maximum_change) {
             maximum_change = change;
         }

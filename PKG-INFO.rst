@@ -29,7 +29,11 @@ implementation is used, otherwise C/C++. Implementation can be chosen by **ccore
 
 .. code:: python
 
-    xmeans_instance = xmeans(data_points, start_centers, 20, ccore = True);
+    # As by default - C/C++ is used
+    xmeans_instance_1 = xmeans(data_points, start_centers, 20, ccore=True);
+
+    # Switch off core - Python is used
+    xmeans_instance_2 = xmeans(data_points, start_centers, 20, ccore=False);
 
 Installation
 ============
@@ -88,6 +92,7 @@ Library Content
 **Clustering algorithms (module pyclustering.cluster):** 
 
 - **Agglomerative** (pyclustering.cluster.agglomerative);
+- **BANG** (pyclustering.cluster.bang);
 - **BIRCH** (pyclustering.cluster.birch);
 - **CLARANS** (pyclustering.cluster.clarans);
 - **CURE** (pyclustering.cluster.cure);

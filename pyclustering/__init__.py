@@ -33,6 +33,7 @@ PyClustering consists of six general modules where the algorithms, models, tools
 
 Cluster analysis algorithms and methods (module pyclustering.cluster):
 - Agglomerative (pyclustering.cluster.agglomerative);
+- BANG (pyclustering.cluster.bang);
 - BIRCH (pyclustering.cluster.birch);
 - BSAS (pyclustering.cluster.bsas);
 - CLARANS (pyclustering.cluster.clarans);

@@ -5,6 +5,12 @@ CHANGE NOTES FOR 0.8.1 (STARTED Feb 23, 2018)
 ------------------------------------------------------------------------
 
 GENERAL CHANGES:
+- Implemented BANG-clustering algorithm with result visualizer (pyclustering.cluster.bang).
+  See: https://github.com/annoviko/pyclustering/issues/424
+
+- Implemented feature to use specific metric for distance calculation in K-Medians algorithm (pyclustering.cluster.kmedians, ccore.clst.kmedians).
+  See: https://github.com/annoviko/pyclustering/issues/429
+
 - Supported new type of input data for K-Medoids - distance matrix (pyclustering.cluster.kmedoids, ccore.clst.kmedoids).
   See: https://github.com/annoviko/pyclustering/issues/418
 
@@ -36,6 +42,9 @@ GENERAL CHANGES:
 CORRECTED MAJOR BUGS:
 - Bug with out of range in K-Medians (pyclustering.cluster.kmedians, ccore.clst.kmedians).
   See: https://github.com/annoviko/pyclustering/issues/428
+
+- Bug with fast linking in PCNN (python implementation only) that wasn't used despite the corresponding option (pyclustering.nnet.pcnn).
+  See: https://github.com/annoviko/pyclustering/issues/419
 
 
 

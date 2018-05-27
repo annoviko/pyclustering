@@ -26,6 +26,11 @@
 #include "cluster/cluster_algorithm.hpp"
 #include "cluster/kmedians_data.hpp"
 
+#include "utils/metric.hpp"
+
+
+using namespace ccore::utils::metric;
+
 
 namespace ccore {
 
@@ -40,13 +45,15 @@ namespace clst {
 */
 class kmedians : public cluster_algorithm {
 private:
-    double                m_tolerance;
+    double                  m_tolerance         = 0.0;
 
-    dataset               m_initial_medians;
+    dataset                 m_initial_medians   = { };
 
-    kmedians_data         * m_ptr_result;   /* temporary pointer to output result */
+    kmedians_data         * m_ptr_result        = nullptr;   /* temporary pointer to output result */
 
-    const dataset         * m_ptr_data;     /* used only during processing */
+    const dataset         * m_ptr_data          = nullptr;     /* used only during processing */
+
+    distance_metric<point>  m_metric;
 
 public:
     /**
@@ -54,7 +61,7 @@ public:
     * @brief    Default constructor of clustering algorithm.
     *
     */
-    kmedians(void);
+    kmedians(void) = default;
 
     /**
     *
@@ -64,16 +71,19 @@ public:
     * @param[in] p_initial_medians: initial medians that are used for processing.
     * @param[in] p_tolerance: stop condition in following way: when maximum value of distance change of
     *             medians of clusters is less than tolerance than algorithm will stop processing.
+    * @param[in] p_metric: distance metric for distance calculation between objects.
     *
     */
-    kmedians(const dataset & p_initial_medians, const double p_tolerance);
+    kmedians(const dataset & p_initial_medians, 
+             const double p_tolerance = 0.001,
+             const distance_metric<point> & p_metric = distance_metric_factory<point>::euclidean_square());
 
     /**
     *
     * @brief    Default destructor of the algorithm.
     *
     */
-    virtual ~kmedians(void);
+    virtual ~kmedians(void) = default;
 
 public:
     /**
