@@ -112,15 +112,6 @@ void syncpr::simulate_static(const unsigned int steps,
     validate_pattern(input_pattern);
     initialize_phases(input_pattern);
 
-    for (size_t i = 0; i < input_pattern.size(); i++) {
-        if (input_pattern[i] > 0.0) {
-            m_oscillators[i].phase = 0.0;
-        }
-        else {
-            m_oscillators[i].phase = pi / 2.0;
-        }
-    }
-
     output_dynamic.clear();
 
     const double step = time / (double) steps;
