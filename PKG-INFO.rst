@@ -92,6 +92,7 @@ Library Content
 **Clustering algorithms (module pyclustering.cluster):** 
 
 - **Agglomerative** (pyclustering.cluster.agglomerative);
+- **BANG** (pyclustering.cluster.bang);
 - **BIRCH** (pyclustering.cluster.birch);
 - **CLARANS** (pyclustering.cluster.clarans);
 - **CURE** (pyclustering.cluster.cure);

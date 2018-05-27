@@ -23,7 +23,7 @@ CCORE_X64_BINARY_PATH=$CCORE_X64_BINARY_FOLDER/ccore.so
 CCORE_X86_BINARY_FOLDER=pyclustering/core/x86/linux
 CCORE_X86_BINARY_PATH=$CCORE_X86_BINARY_FOLDER/ccore.so
 
-DOXYGEN_FILTER=( "warning: unexpected new line character" )
+DOXYGEN_FILTER=( "warning: Unexpected new line character" )
 
 
 print_error() {
