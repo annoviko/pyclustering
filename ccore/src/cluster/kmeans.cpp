@@ -39,19 +39,17 @@ const double             kmeans::DEFAULT_TOLERANCE                       = 0.025
 const std::size_t        kmeans::DEFAULT_DATA_SIZE_PARALLEL_PROCESSING   = 200000;
 
 
-kmeans::kmeans(const dataset & p_initial_centers, const double p_tolerance) :
+kmeans::kmeans(const dataset & p_initial_centers, const double p_tolerance, const distance_metric<point> & p_metric) :
     m_tolerance(p_tolerance * p_tolerance),
     m_initial_centers(p_initial_centers),
     m_ptr_result(nullptr),
     m_ptr_data(nullptr),
+    m_metric(p_metric),
     m_parallel_trigger(DEFAULT_DATA_SIZE_PARALLEL_PROCESSING),
     m_parallel_processing(false),
     m_mutex(),
     m_pool(nullptr)
 { }
-
-
-kmeans::~kmeans(void) { }
 
 
 void kmeans::process(const dataset & p_data, cluster_data & p_result) {
@@ -130,7 +128,7 @@ void kmeans::assign_point_to_cluster(const std::size_t p_index_point, const data
     size_t    suitable_index_cluster = 0;
 
     for (size_t index_cluster = 0; index_cluster < p_centers.size(); index_cluster++) {
-        double distance = euclidean_distance_square(p_centers[index_cluster], (*m_ptr_data)[p_index_point]);
+        double distance = m_metric(p_centers[index_cluster], (*m_ptr_data)[p_index_point]);
 
         if (distance < minimum_distance) {
             minimum_distance = distance;
@@ -202,7 +200,7 @@ double kmeans::update_center(const cluster & p_cluster, point & p_center) {
         total[dimension] = total[dimension] / p_cluster.size();
     }
 
-    double change = euclidean_distance_square(p_center, total);
+    const double change = m_metric(p_center, total);
 
     p_center = std::move(total);
     return change;

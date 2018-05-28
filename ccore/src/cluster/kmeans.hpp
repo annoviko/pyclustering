@@ -29,8 +29,11 @@
 
 #include "parallel/thread_pool.hpp"
 
+#include "utils/metric.hpp"
+
 
 using namespace ccore::parallel;
+using namespace ccore::utils::metric;
 
 
 namespace ccore {
@@ -60,6 +63,8 @@ private:
 
     const index_sequence    * m_ptr_indexes         = nullptr;      /* temporary pointer to indexes */
 
+    distance_metric<point>  m_metric;
+
     std::size_t             m_parallel_trigger      = DEFAULT_DATA_SIZE_PARALLEL_PROCESSING;
 
     bool                    m_parallel_processing   = false;
@@ -84,16 +89,19 @@ public:
     * @param[in] p_initial_centers: initial centers that are used for processing.
     * @param[in] p_tolerance: stop condition in following way: when maximum value of distance change of
     *             cluster centers is less than tolerance than algorithm will stop processing.
+    * @param[in] p_metric: distance metric calculator for two points.
     *
     */
-    kmeans(const dataset & p_initial_centers, const double p_tolerance);
+    kmeans(const dataset & p_initial_centers, 
+           const double p_tolerance,
+           const distance_metric<point> & p_metric = distance_metric_factory<point>::euclidean_square());
 
     /**
     *
     * @brief    Default destructor of the algorithm.
     *
     */
-    virtual ~kmeans(void);
+    virtual ~kmeans(void) = default;
 
 public:
     /**

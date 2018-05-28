@@ -24,38 +24,41 @@
 """
 
 
-from pyclustering.tests.assertion import assertion;
+from pyclustering.tests.assertion import assertion
 
-from pyclustering.cluster.encoder import type_encoding, cluster_encoder;
-from pyclustering.cluster.kmeans import kmeans, kmeans_observer, kmeans_visualizer;
+from pyclustering.cluster.encoder import type_encoding, cluster_encoder
+from pyclustering.cluster.kmeans import kmeans, kmeans_observer, kmeans_visualizer
 
-from pyclustering.utils import read_sample;
+from pyclustering.utils import read_sample
+from pyclustering.utils.metric import distance_metric, type_metric
 
-from random import random;
+from random import random
 
 
 class KmeansTestTemplates:
     @staticmethod
-    def templateLengthProcessData(path_to_file, start_centers, expected_cluster_length, ccore):
-        sample = read_sample(path_to_file);
+    def templateLengthProcessData(path_to_file, start_centers, expected_cluster_length, ccore, **kwargs):
+        sample = read_sample(path_to_file)
+
+        metric = kwargs.get('metric', distance_metric(type_metric.EUCLIDEAN_SQUARE))
         
-        kmeans_instance = kmeans(sample, start_centers, 0.025, ccore);
-        kmeans_instance.process();
+        kmeans_instance = kmeans(sample, start_centers, 0.025, ccore, metric=metric)
+        kmeans_instance.process()
         
-        clusters = kmeans_instance.get_clusters();
-        centers = kmeans_instance.get_centers();
+        clusters = kmeans_instance.get_clusters()
+        centers = kmeans_instance.get_centers()
     
-        obtained_cluster_sizes = [len(cluster) for cluster in clusters];
-        assertion.eq(len(sample), sum(obtained_cluster_sizes));
+        obtained_cluster_sizes = [len(cluster) for cluster in clusters]
+        assertion.eq(len(sample), sum(obtained_cluster_sizes))
         
-        assertion.eq(len(clusters), len(centers));
+        assertion.eq(len(clusters), len(centers))
         for center in centers:
-            assertion.eq(len(sample[0]), len(center));
+            assertion.eq(len(sample[0]), len(center))
         
-        if (expected_cluster_length != None):
-            obtained_cluster_sizes.sort();
-            expected_cluster_length.sort();
-            assertion.eq(obtained_cluster_sizes, expected_cluster_length);
+        if expected_cluster_length != None:
+            obtained_cluster_sizes.sort()
+            expected_cluster_length.sort()
+            assertion.eq(obtained_cluster_sizes, expected_cluster_length)
 
 
     @staticmethod

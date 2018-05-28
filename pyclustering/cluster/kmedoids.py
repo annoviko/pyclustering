@@ -119,9 +119,6 @@ class kmedoids:
         self.__tolerance = tolerance
 
         self.__metric = kwargs.get('metric', distance_metric(type_metric.EUCLIDEAN_SQUARE))
-        if self.__metric is None:
-            self.__metric = distance_metric(type_metric.EUCLIDEAN_SQUARE)
-
         self.__data_type = kwargs.get('data_type', 'points')
         self.__distance_calculator = self.__create_distance_calculator()
 

@@ -25,17 +25,20 @@
 """
 
 
-import numpy;
+import numpy
 
-import matplotlib.pyplot as plt;
-import matplotlib.animation as animation;
+import matplotlib.pyplot as plt
+import matplotlib.animation as animation
 
-import pyclustering.core.kmeans_wrapper as wrapper;
+import pyclustering.core.kmeans_wrapper as wrapper
 
-from pyclustering.core.wrapper import ccore_library;
+from pyclustering.core.wrapper import ccore_library
+from pyclustering.core.metric_wrapper import metric_wrapper
 
-from pyclustering.cluster.encoder import type_encoding;
-from pyclustering.cluster import cluster_visualizer;
+from pyclustering.cluster.encoder import type_encoding
+from pyclustering.cluster import cluster_visualizer
+
+from pyclustering.utils.metric import distance_metric, type_metric
 
 
 class kmeans_observer:
@@ -316,10 +319,11 @@ class kmeans:
         @param[in] initial_centers (array_like): Initial coordinates of centers of clusters that are represented by array_like data structure: [center1, center2, ...].
         @param[in] tolerance (double): Stop condition: if maximum value of change of centers of clusters is less than tolerance then algorithm stops processing.
         @param[in] ccore (bool): Defines should be CCORE library (C++ pyclustering library) used instead of Python code or not.
-        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'observer').
+        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'observer', 'metric').
         
         <b>Keyword Args:</b><br>
             - observer (kmeans_observer): Observer of the algorithm to collect information about clustering process on each iteration.
+            - metric (distance_metric): Metric that is used for distance calculation between two points.
         
         @see center_initializer
         
@@ -328,12 +332,12 @@ class kmeans:
         self.__clusters = []
         self.__centers = numpy.matrix(initial_centers)
         self.__tolerance = tolerance
+
+        self.__observer = kwargs.get('observer', None)
+        self.__metric = kwargs.get('metric', distance_metric(type_metric.EUCLIDEAN_SQUARE))
+        self.__metric.enable_numpy_usage()
         
-        self.__observer = None
-        if 'observer' in kwargs:
-            self.__observer = kwargs['observer']
-        
-        self.__ccore = ccore
+        self.__ccore = ccore and self.__metric.get_type() != type_metric.USER_DEFINED
         if self.__ccore is True:
             self.__ccore = ccore_library.workable()
 
@@ -363,7 +367,9 @@ class kmeans:
         @brief Performs cluster analysis using CCORE (C/C++ part of pyclustering library).
 
         """
-        results = wrapper.kmeans(self.__pointer_data, self.__centers, self.__tolerance, (self.__observer is not None))
+        ccore_metric = metric_wrapper.create_instance(self.__metric)
+
+        results = wrapper.kmeans(self.__pointer_data, self.__centers, self.__tolerance, (self.__observer is not None), ccore_metric.get_pointer())
         self.__clusters = results[0]
         self.__centers = results[1]
 
@@ -396,7 +402,7 @@ class kmeans:
                 maximum_change = float('inf')
 
             else:
-                changes = numpy.sum(numpy.square(self.__centers - updated_centers), axis=1)
+                changes = self.__metric(self.__centers, updated_centers)
                 maximum_change = numpy.max(changes)
 
             self.__centers = updated_centers.tolist()
@@ -454,7 +460,7 @@ class kmeans:
         
         dataset_differences = numpy.zeros((len(clusters), len(self.__pointer_data)))
         for index_center in range(len(self.__centers)):
-            dataset_differences[index_center] = numpy.sum(numpy.square(self.__pointer_data - self.__centers[index_center]), axis=1).T
+            dataset_differences[index_center] = self.__metric(self.__pointer_data, self.__centers[index_center])
         
         optimum_indexes = numpy.argmin(dataset_differences, axis=0)
         for index_point in range(len(optimum_indexes)):

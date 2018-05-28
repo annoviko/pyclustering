@@ -32,6 +32,7 @@ from pyclustering.tests.assertion import assertion
 from pyclustering.cluster.kmedoids import kmedoids
 
 from pyclustering.utils import read_sample, calculate_distance_matrix
+from pyclustering.utils.metric import distance_metric, type_metric
 
 from random import random, randint
 
@@ -48,6 +49,9 @@ class KmedoidsTestTemplates:
         data_type = kwargs.get('data_type', 'points')
         input_type = kwargs.get('input_type', 'list')
 
+        if metric is None:
+            metric = distance_metric(type_metric.EUCLIDEAN_SQUARE)
+
         input_data = sample
         if data_type == 'distance_matrix':
             input_data = calculate_distance_matrix(sample)
@@ -55,7 +59,7 @@ class KmedoidsTestTemplates:
             if input_type == 'numpy':
                 input_data = numpy.matrix(input_data)
 
-        kmedoids_instance = kmedoids(input_data, initial_medoids, 0.025, ccore_flag, metric=metric, data_type=data_type);
+        kmedoids_instance = kmedoids(input_data, initial_medoids, 0.025, ccore_flag, metric=metric, data_type=data_type)
         kmedoids_instance.process()
 
         clusters = kmedoids_instance.get_clusters()

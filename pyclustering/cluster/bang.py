@@ -26,7 +26,7 @@
 
 
 import matplotlib
-import matplotlib.gridspec as gridspec;
+import matplotlib.gridspec as gridspec
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 
@@ -67,14 +67,14 @@ class bang_visualizer:
         if dimension > 1:
             amount_canvases = int(dimension * (dimension - 1) / 2)
 
-        figure = plt.figure();
-        grid_spec = gridspec.GridSpec(1, amount_canvases);
+        figure = plt.figure()
+        grid_spec = gridspec.GridSpec(1, amount_canvases)
 
         pairs = list(itertools.combinations(range(dimension), 2))
         if len(pairs) == 0: pairs = [(0, 0)]
 
         for index in range(amount_canvases):
-            ax = figure.add_subplot(grid_spec[index]);
+            ax = figure.add_subplot(grid_spec[index])
             bang_visualizer.__draw_blocks(ax, directory.get_leafs(), pairs[index])
             bang_visualizer.__draw_two_dimension_data(ax, directory.get_data(), pairs[index])
 
@@ -105,7 +105,7 @@ class bang_visualizer:
 
         axis.set_ylabel("density")
         axis.set_xlabel("block")
-        axis.xaxis.set_ticklabels([]);
+        axis.xaxis.set_ticklabels([])
 
         plt.xlim([-0.5, current_position - 0.5])
         plt.show()
@@ -145,7 +145,7 @@ class bang_visualizer:
                 ax.plot(point[pair[0]], point[pair[1]], color='red', marker='.')
             else:
                 ax.plot(point[pair[0]], 0, color='red', marker='.')
-                ax.yaxis.set_ticklabels([]);
+                ax.yaxis.set_ticklabels([])
 
 
     @staticmethod
