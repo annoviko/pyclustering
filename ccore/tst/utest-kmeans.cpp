@@ -24,22 +24,27 @@
 #include "samples.hpp"
 
 #include "cluster/kmeans.hpp"
+
+#include "utils/metric.hpp"
+
 #include "utenv_check.hpp"
 
 
 using namespace ccore::clst;
+using namespace ccore::utils::metric;
 
 
 static void
 template_kmeans_length_process_data_common(const dataset_ptr & p_data,
-    const dataset & p_start_centers,
-    const std::vector<size_t> & p_expected_cluster_length,
-    const index_sequence & p_indexes,
-    const bool p_observe,
-    const std::size_t p_parallel_processing_trigger)
+                                           const dataset & p_start_centers,
+                                           const std::vector<size_t> & p_expected_cluster_length,
+                                           const index_sequence & p_indexes,
+                                           const bool p_observe,
+                                           const std::size_t p_parallel_processing_trigger,
+                                           const distance_metric<point> & p_metric = distance_metric_factory<point>::euclidean_square())
 {
     kmeans_data output_result(p_observe);
-    kmeans solver(p_start_centers, 0.0001);
+    kmeans solver(p_start_centers, 0.0001, p_metric);
 
     solver.set_parallel_processing_trigger(p_parallel_processing_trigger);
 
@@ -77,10 +82,10 @@ template_kmeans_length_process_data_common(const dataset_ptr & p_data,
 
 static void
 template_kmeans_length_process_data_range(const dataset_ptr & p_data,
-    const dataset & p_start_centers,
-    const std::vector<size_t> & p_expected_cluster_length,
-    const index_sequence & p_indexes,
-    const std::size_t p_parallel_processing_trigger = kmeans::DEFAULT_DATA_SIZE_PARALLEL_PROCESSING)
+                                          const dataset & p_start_centers,
+                                          const std::vector<size_t> & p_expected_cluster_length,
+                                          const index_sequence & p_indexes,
+                                          const std::size_t p_parallel_processing_trigger = kmeans::DEFAULT_DATA_SIZE_PARALLEL_PROCESSING)
 {
     template_kmeans_length_process_data_common(p_data, p_start_centers, p_expected_cluster_length, p_indexes, false, p_parallel_processing_trigger);
 }
@@ -88,9 +93,9 @@ template_kmeans_length_process_data_range(const dataset_ptr & p_data,
 
 static void
 template_kmeans_length_process_data(const dataset_ptr & p_data,
-    const dataset & p_start_centers,
-    const std::vector<size_t> & p_expected_cluster_length,
-    const std::size_t parallel_processing_trigger = kmeans::DEFAULT_DATA_SIZE_PARALLEL_PROCESSING)
+                                    const dataset & p_start_centers,
+                                    const std::vector<size_t> & p_expected_cluster_length,
+                                    const std::size_t parallel_processing_trigger = kmeans::DEFAULT_DATA_SIZE_PARALLEL_PROCESSING)
 {
     template_kmeans_length_process_data_range(p_data, p_start_centers, p_expected_cluster_length, { }, parallel_processing_trigger);
 }
@@ -98,12 +103,23 @@ template_kmeans_length_process_data(const dataset_ptr & p_data,
 
 static void
 template_kmeans_observer(const dataset_ptr & p_data,
-    const dataset & p_start_centers,
-    const index_sequence & p_indexes,
-    const std::vector<size_t> & p_expected_cluster_length)
+                         const dataset & p_start_centers,
+                         const index_sequence & p_indexes,
+                         const std::vector<size_t> & p_expected_cluster_length)
 {
     template_kmeans_length_process_data_common(p_data, p_start_centers, p_expected_cluster_length, p_indexes, true, kmeans::DEFAULT_DATA_SIZE_PARALLEL_PROCESSING);
 }
+
+
+static void
+template_kmeans_metric(const dataset_ptr & p_data,
+                       const dataset & p_start_centers,
+                       const std::vector<size_t> & p_expected_cluster_length,
+                       const distance_metric<point> & p_metric)
+{
+  template_kmeans_length_process_data_common(p_data, p_start_centers, p_expected_cluster_length, { }, false, kmeans::DEFAULT_DATA_SIZE_PARALLEL_PROCESSING, p_metric);
+}
+
 
 
 TEST(utest_kmeans, allocation_sample_simple_01) {
@@ -130,6 +146,51 @@ TEST(utest_kmeans, one_cluster_allocation_sample_simple_01_range) {
     std::vector<size_t> expected_clusters_length = { 6 };
     index_sequence range = { 0, 1, 2, 5, 6, 7 };
     template_kmeans_length_process_data_range(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_centers, expected_clusters_length, range);
+}
+
+TEST(utest_kmeans, allocation_sample_simpl_01_euclidean) {
+    dataset start_centers = { { 3.7, 5.5 },{ 6.7, 7.5 } };
+    std::vector<size_t> expected_clusters_length = { 5, 5 };
+    auto metric = distance_metric_factory<point>::euclidean();
+    template_kmeans_metric(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_centers, expected_clusters_length, metric);
+}
+
+TEST(utest_kmeans, allocation_sample_simpl_01_euclidean_square) {
+    dataset start_centers = { { 3.7, 5.5 },{ 6.7, 7.5 } };
+    std::vector<size_t> expected_clusters_length = { 5, 5 };
+    auto metric = distance_metric_factory<point>::euclidean_square();
+    template_kmeans_metric(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_centers, expected_clusters_length, metric);
+}
+
+TEST(utest_kmeans, allocation_sample_simpl_01_manhattan) {
+    dataset start_centers = { { 3.7, 5.5 },{ 6.7, 7.5 } };
+    std::vector<size_t> expected_clusters_length = { 5, 5 };
+    auto metric = distance_metric_factory<point>::manhattan();
+    template_kmeans_metric(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_centers, expected_clusters_length, metric);
+}
+
+TEST(utest_kmeans, allocation_sample_simpl_01_chebyshev) {
+    dataset start_centers = { { 3.7, 5.5 },{ 6.7, 7.5 } };
+    std::vector<size_t> expected_clusters_length = { 5, 5 };
+    auto metric = distance_metric_factory<point>::chebyshev();
+    template_kmeans_metric(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_centers, expected_clusters_length, metric);
+}
+
+TEST(utest_kmeans, allocation_sample_simpl_01_minkowski) {
+    dataset start_centers = { { 3.7, 5.5 },{ 6.7, 7.5 } };
+    std::vector<size_t> expected_clusters_length = { 5, 5 };
+    auto metric = distance_metric_factory<point>::minkowski(2.0);
+    template_kmeans_metric(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_centers, expected_clusters_length, metric);
+}
+
+TEST(utest_kmeans, allocation_sample_simpl_01_user_defined) {
+    dataset start_centers = { { 3.7, 5.5 },{ 6.7, 7.5 } };
+    std::vector<size_t> expected_clusters_length = { 5, 5 };
+
+    auto user_metric = [](const point & p1, const point & p2) { return euclidean_distance(p1, p2); };
+    auto metric = distance_metric_factory<point>::user_defined(user_metric);
+
+    template_kmeans_metric(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_centers, expected_clusters_length, metric);
 }
 
 TEST(utest_kmeans, allocation_sample_simple_02) {

@@ -5,6 +5,9 @@ CHANGE NOTES FOR 0.8.1 (STARTED Feb 23, 2018)
 ------------------------------------------------------------------------
 
 GENERAL CHANGES:
+- Implemented feature to use specific metric for distance calculation in K-Means algorithm (pyclustering.cluster.kmeans, ccore.clst.kmeans).
+  See: https://github.com/annoviko/pyclustering/issues/434
+
 - Implemented BANG-clustering algorithm with result visualizer (pyclustering.cluster.bang).
   See: https://github.com/annoviko/pyclustering/issues/424
 

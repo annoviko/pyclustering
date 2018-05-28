@@ -20,45 +20,45 @@
 """
 
 
-import os;
+import os
 
-from setuptools import setup;
-from setuptools import find_packages;
-from setuptools.command.install import install;
+from setuptools import setup
+from setuptools import find_packages
+from setuptools.command.install import install
 
-from subprocess import call;
+from subprocess import call
 
-from sys import platform as _platform;
+from sys import platform as _platform
 
 
 class ccore_install(install):
     def run(self):
-        print("[CCORE BUILD] Current platform:", _platform);
+        print("[CCORE BUILD] Current platform:", _platform)
         if (_platform == "linux") or (_platform == "linux2"):
-            print("[CCORE BUILD] CCORE library should be built for", _platform);
+            print("[CCORE BUILD] CCORE library should be built for", _platform)
             
             def make_ccore_library():
-                call('pwd', shell = True);
-                call('cd ccore/ && make ccore && cd -', shell = True);
+                call('pwd', shell = True)
+                call('cd ccore/ && make ccore && cd -', shell = True)
             
-            self.execute(make_ccore_library, [], 'Build CCORE library...');
+            self.execute(make_ccore_library, [], 'Build CCORE library...')
 
-        install.run(self);
+        install.run(self)
 
 
 def load_readme():
-    readme_file = 'PKG-INFO.rst';
+    readme_file = 'PKG-INFO.rst'
     if os.path.isfile(readme_file):
         with open(readme_file) as file_descr:
-            return file_descr.read();
+            return file_descr.read()
 
-    return "pyclustering is a python data mining library (clustering, oscillatory networks, neural networks)";
+    return "pyclustering is a python data mining library (clustering, oscillatory networks, neural networks)"
 
 
 setup(
       name = 'pyclustering',
       packages = find_packages(),
-      version = '0.8.0',
+      version = '0.8.1',
       description = 'pyclustring is a python data mining library',
       long_description = load_readme(),
       url = 'https://github.com/annoviko/pyclustering',
@@ -102,4 +102,4 @@ setup(
       data_files = [ ('', ['LICENSE', 'CHANGES', 'README.rst', 'PKG-INFO.rst']) ],
 
       cmdclass = { 'install': ccore_install },
-    );
+    )

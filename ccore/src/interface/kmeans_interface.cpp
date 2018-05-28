@@ -22,14 +22,30 @@
 
 #include "cluster/kmeans.hpp"
 
+#include "utils/metric.hpp"
 
-pyclustering_package * kmeans_algorithm(const pyclustering_package * const p_sample, const pyclustering_package * const p_initial_centers, const double p_tolerance, const bool p_observe) {
+
+using namespace ccore::utils::metric;
+
+
+pyclustering_package * kmeans_algorithm(const pyclustering_package * const p_sample, 
+                                        const pyclustering_package * const p_initial_centers, 
+                                        const double p_tolerance, 
+                                        const bool p_observe,
+                                        const void * const p_metric)
+{
     dataset data, centers;
 
     p_sample->extract(data);
     p_initial_centers->extract(centers);
 
-    ccore::clst::kmeans algorithm(centers, p_tolerance);
+    distance_metric<point> * metric = ((distance_metric<point> *) p_metric);
+    distance_metric<point> default_metric = distance_metric_factory<point>::euclidean_square();
+
+    if (!metric)
+        metric = &default_metric;
+
+    ccore::clst::kmeans algorithm(centers, p_tolerance, *metric);
 
     ccore::clst::kmeans_data output_result(p_observe);
     algorithm.process(data, output_result);
