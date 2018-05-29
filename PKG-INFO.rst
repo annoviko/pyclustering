@@ -140,7 +140,7 @@ Library Content
 
 
 Cite the Library
-===============
+================
 
 If you are using pyclustering library in a scientific paper, please, cite the library.
 
