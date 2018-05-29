@@ -25,6 +25,8 @@
 """
 
 
+import numpy
+
 from pyclustering.cluster.encoder import type_encoding;
 
 from pyclustering.utils import euclidean_distance;
@@ -119,25 +121,23 @@ class cure:
         
         """
         
-        self.__pointer_data = data;
+        self.__pointer_data = data
         
-        self.__clusters = None;
-        self.__representors = None;
-        self.__means = None;
+        self.__clusters = None
+        self.__representors = None
+        self.__means = None
         
-        self.__number_cluster = number_cluster;
-        self.__number_represent_points = number_represent_points;
-        self.__compression = compression;
+        self.__number_cluster = number_cluster
+        self.__number_represent_points = number_represent_points
+        self.__compression = compression
         
-        self.__ccore = ccore;
-        if (self.__ccore):
-            self.__ccore = ccore_library.workable();
-        
-        if (self.__ccore is False):
-            self.__create_queue();      # queue
-            self.__create_kdtree();     # create k-d tree
+        self.__ccore = ccore
+        if self.__ccore:
+            self.__ccore = ccore_library.workable()
 
-    
+        self.__validate_arguments()
+
+
     def process(self):
         """!
         @brief Performs cluster analysis in line with rules of CURE algorithm.
@@ -158,6 +158,9 @@ class cure:
             wrapper.cure_data_destroy(cure_data_pointer);
             
         else:
+            self.__create_queue()      # queue
+            self.__create_kdtree()     # create k-d tree
+
             while (len(self.__queue) > self.__number_cluster):
                 cluster1 = self.__queue[0];            # cluster that has nearest neighbor.
                 cluster2 = cluster1.closest;    # closest cluster.
@@ -270,8 +273,8 @@ class cure:
         """
         
         return self.__means;
-    
-    
+
+
     def get_cluster_encoding(self):
         """!
         @brief Returns clustering result representation type that indicate how clusters are encoded.
@@ -283,8 +286,30 @@ class cure:
         """
         
         return type_encoding.CLUSTER_INDEX_LIST_SEPARATION;
-    
-    
+
+
+    def __validate_arguments(self):
+        """!
+        @brief Check input arguments of BANG algorithm and if one of them is not correct then appropriate exception
+                is thrown.
+
+        """
+        if not isinstance(self.__pointer_data, list):
+            raise ValueError("Incorrect type of data: '%s'. Input data should have 'list' type." % type(self.__pointer_data))
+
+        if len(self.__pointer_data) == 0:
+            raise ValueError("Empty input data. Data should contain at least one point.")
+
+        if self.__number_cluster <= 0:
+            raise ValueError("Incorrect amount of clusters '%d'. Amount of cluster should be greater than 0." % self.__number_cluster)
+
+        if self.__compression < 0:
+            raise ValueError("Incorrect compression level '%f'. Compression should not be negative." % self.__compression)
+
+        if self.__number_represent_points <= 0:
+            raise ValueError("Incorrect amount of representatives '%d'. Amount of representatives should be greater than 0." % self.__number_cluster)
+
+
     def __insert_cluster(self, cluster):
         """!
         @brief Insert cluster to the list (sorted queue) in line with sequence order (distance).
@@ -461,7 +486,7 @@ class cure:
         self.__tree = kdtree();
         for current_cluster in self.__queue:
             for representative_point in current_cluster.rep:
-                self.__tree.insert(representative_point, current_cluster);    
+                self.__tree.insert(representative_point, current_cluster);
 
 
     def __cluster_distance(self, cluster1, cluster2):
