@@ -43,6 +43,9 @@ class CureUnitTest(unittest.TestCase):
     def testClusterAllocationSampleSimple1(self):
         CureTestTemplates.template_cluster_allocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [5, 5], 2)
 
+    def testClusterAllocationSampleSimple1NumPy(self):
+        CureTestTemplates.template_cluster_allocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [5, 5], 2, numpy_usage=True)
+
     def testClusterAllocationSampleSimple2(self):
         CureTestTemplates.template_cluster_allocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [10, 5, 8], 3)
 
@@ -109,9 +112,6 @@ class CureUnitTest(unittest.TestCase):
     def test_argument_empty_data(self):
         CureTestTemplates.exception(ValueError, [], 3, 5, 0.3, False)
 
-    def test_invalid_data_type(self):
-        CureTestTemplates.exception(ValueError, numpy.array(read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1)), 3, 5, 0.3, False)
-        CureTestTemplates.exception(ValueError, numpy.matrix(read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1)), 3, 5, 0.3, False)
 
 if __name__ == "__main__":
     unittest.main()

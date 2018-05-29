@@ -24,14 +24,17 @@
 """
 
 
-import unittest;
-import math;
+import unittest
 
-from pyclustering.container.kdtree import kdtree, kdtree_text_visualizer;
+import math
 
-from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
+import numpy
 
-from pyclustering.utils import read_sample;
+from pyclustering.container.kdtree import kdtree, kdtree_text_visualizer
+
+from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES
+
+from pyclustering.utils import read_sample
 
 
 class KDTreeUnitTest(unittest.TestCase):
@@ -211,8 +214,13 @@ class KDTreeUnitTest(unittest.TestCase):
                     assert tree.find_nearest_dist_node(item, distance).data == item;
 
 
-    def templateSeachNearestNodeInTree(self, sample_path):
+    def templateSeachNearestNodeInTree(self, sample_path, **kwargs):
+        numpy_usage = kwargs.get('numpy_usage', False)
+
         sample = read_sample(sample_path);
+        if numpy_usage is True:
+            sample = numpy.array(sample)
+
         tree = kdtree();
         
         for point in sample:
@@ -223,36 +231,63 @@ class KDTreeUnitTest(unittest.TestCase):
 
             node = tree.find_nearest_dist_node(point, 0.0);
             assert node != None;
-            assert node.data == point;
+            assert node.data is point;
 
 
     def testSearchNearestNodeInSampleSimple01(self):
         self.templateSeachNearestNodeInTree(SIMPLE_SAMPLES.SAMPLE_SIMPLE1);
 
+    def testSearchNearestNodeInSampleSimple01NumPy(self):
+        self.templateSeachNearestNodeInTree(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, numpy_usage=True);
+
     def testSearchNearestNodeInSampleSimple02(self):
         self.templateSeachNearestNodeInTree(SIMPLE_SAMPLES.SAMPLE_SIMPLE2);
+
+    def testSearchNearestNodeInSampleSimple02NumPy(self):
+        self.templateSeachNearestNodeInTree(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, numpy_usage=True);
 
     def testSearchNearestNodeInSampleSimple03(self):
         self.templateSeachNearestNodeInTree(SIMPLE_SAMPLES.SAMPLE_SIMPLE3);
 
+    def testSearchNearestNodeInSampleSimple03NumPy(self):
+        self.templateSeachNearestNodeInTree(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, numpy_usage=True);
+
     def testSearchNearestNodeInSampleSimple04(self):
         self.templateSeachNearestNodeInTree(SIMPLE_SAMPLES.SAMPLE_SIMPLE4);
+
+    def testSearchNearestNodeInSampleSimple04NumPy(self):
+        self.templateSeachNearestNodeInTree(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, numpy_usage=True)
 
     def testSearchNearestNodeInSampleSimple05(self):
         self.templateSeachNearestNodeInTree(SIMPLE_SAMPLES.SAMPLE_SIMPLE5);
 
+    def testSearchNearestNodeInSampleSimple05NumPy(self):
+        self.templateSeachNearestNodeInTree(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, numpy_usage=True);
+
     def testSearchNearestNodeInLsun(self):
         self.templateSeachNearestNodeInTree(FCPS_SAMPLES.SAMPLE_LSUN);
+
+    def testSearchNearestNodeInLsunNumPy(self):
+        self.templateSeachNearestNodeInTree(FCPS_SAMPLES.SAMPLE_LSUN, numpy_usage=True);
 
     def testSearchNearestNodeInTetra(self):
         self.templateSeachNearestNodeInTree(FCPS_SAMPLES.SAMPLE_TETRA);
 
+    def testSearchNearestNodeInTetraNumPy(self):
+        self.templateSeachNearestNodeInTree(FCPS_SAMPLES.SAMPLE_TETRA, numpy_usage=True);
+
     def testSearchNearestNodeInHepta(self):
         self.templateSeachNearestNodeInTree(FCPS_SAMPLES.SAMPLE_HEPTA);
 
+    def testSearchNearestNodeInHeptaNumPy(self):
+        self.templateSeachNearestNodeInTree(FCPS_SAMPLES.SAMPLE_HEPTA, numpy_usage=True);
 
-    def templateSeachNearestNodesInTree(self, sample_path, search_radius, length = None):
+
+    def templateSeachNearestNodesInTree(self, sample_path, search_radius, length=None, numpy_usage=False):
         sample = read_sample(sample_path);
+        if numpy_usage is True:
+            sample = numpy.array(sample)
+
         tree = kdtree(sample);
         
         for point in sample:
@@ -268,18 +303,33 @@ class KDTreeUnitTest(unittest.TestCase):
     def testSeachNearestNodesInSampleSimple01(self):
         self.templateSeachNearestNodesInTree(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 0.5);
 
+    def testSeachNearestNodesInSampleSimple01NumPy(self):
+        self.templateSeachNearestNodesInTree(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 0.5, numpy_usage=True);
+
     def testSeachNearestNodesInSampleSimple02(self):
         self.templateSeachNearestNodesInTree(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 0.5);
+
+    def testSeachNearestNodesInSampleSimple02NumPy(self):
+        self.templateSeachNearestNodesInTree(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 0.5, numpy_usage=True);
 
     def testSeachNearestNodesInSampleSimple03(self):
         self.templateSeachNearestNodesInTree(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 0.5);
 
+    def testSeachNearestNodesInSampleSimple03NumPy(self):
+        self.templateSeachNearestNodesInTree(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 0.5, numpy_usage=True);
+
     def testSeachNearestNodesInSampleSimple03OneNode(self):
         self.templateSeachNearestNodesInTree(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 0.0, 1);
 
+    def testSeachNearestNodesInSampleSimple03OneNodeNumPy(self):
+        self.templateSeachNearestNodesInTree(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 0.0, 1, numpy_usage=True);
 
-    def templateTextTreeRepresentation(self, sample_path):
+
+    def templateTextTreeRepresentation(self, sample_path, numpy_usage=False):
         sample = read_sample(sample_path);
+        if numpy_usage is True:
+            sample = numpy.array(sample)
+
         tree = kdtree(sample);
         
         representation = kdtree_text_visualizer(tree).visualize(False);
@@ -295,8 +345,14 @@ class KDTreeUnitTest(unittest.TestCase):
     def testVisualizeSampleSimple01(self):
         self.templateTextTreeRepresentation(SIMPLE_SAMPLES.SAMPLE_SIMPLE1);
 
+    def testVisualizeSampleSimple01NumPy(self):
+        self.templateTextTreeRepresentation(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, numpy_usage=True);
+
     def testVisualizeSampleSimple02(self):
         self.templateTextTreeRepresentation(SIMPLE_SAMPLES.SAMPLE_SIMPLE2);
+
+    def testVisualizeSampleSimple02NumPy(self):
+        self.templateTextTreeRepresentation(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, numpy_usage=True);
 
     def testVisualizeSampleSimple05(self):
         self.templateTextTreeRepresentation(SIMPLE_SAMPLES.SAMPLE_SIMPLE5);
@@ -331,17 +387,32 @@ class KDTreeUnitTest(unittest.TestCase):
     def testTheSameDataSearchAndRemove1(self):
         self.templateTheSameDataSearchAndRemove([ [2], [2], [2], [2], [2] ], [ 1, 2, 3, 4, 5 ]);
 
+    def testTheSameDataSearchAndRemove1NumPy(self):
+        self.templateTheSameDataSearchAndRemove(numpy.array([ [2], [2], [2], [2], [2] ]), [ 1, 2, 3, 4, 5 ]);
+
     def testTheSameDataSearchAndRemove2(self):
         self.templateTheSameDataSearchAndRemove([ [-2.3], [-2.3], [-2.3], [-2.3], [-2.3] ], [ 10, 11, 12, 13, 14 ]);
+
+    def testTheSameDataSearchAndRemove2NumPy(self):
+        self.templateTheSameDataSearchAndRemove(numpy.array([ [-2.3], [-2.3], [-2.3], [-2.3], [-2.3] ]), [ 10, 11, 12, 13, 14 ]);
 
     def testTheSameDataSearchAndRemove3(self):
         self.templateTheSameDataSearchAndRemove([ [1.1, 2.1], [1.1, 2.1], [1.1, 2.1] ], [ 'qwe', 'asd', 'zxc' ]);
 
+    def testTheSameDataSearchAndRemove3NumPy(self):
+        self.templateTheSameDataSearchAndRemove(numpy.array([ [1.1, 2.1], [1.1, 2.1], [1.1, 2.1] ]), [ 'qwe', 'asd', 'zxc' ]);
+
     def testTheSameDataSearchAndRemove4(self):
         self.templateTheSameDataSearchAndRemove([ [1.0, 2.0, 3.0, 4.0], [1.0, 2.0, 3.0, 4.0] ], [ 'qwe', None ]);
 
+    def testTheSameDataSearchAndRemove4NumPy(self):
+        self.templateTheSameDataSearchAndRemove(numpy.array([ [1.0, 2.0, 3.0, 4.0], [1.0, 2.0, 3.0, 4.0] ]), [ 'qwe', None ]);
+
     def testTheSameDataSearchAndRemove5(self):
         self.templateTheSameDataSearchAndRemove([ [2] ], [ None ]);
+
+    def testTheSameDataSearchAndRemove5NumPy(self):
+        self.templateTheSameDataSearchAndRemove(numpy.array([ [2] ]), [ None ]);
 
 
 if __name__ == "__main__":

@@ -113,7 +113,7 @@ class cure:
         """!
         @brief Constructor of clustering algorithm CURE.
         
-        @param[in] data (list): Input data that is presented as list of points (objects), each point should be represented by list or tuple.
+        @param[in] data (array_like): Input data that should be processed.
         @param[in] number_cluster (uint): Number of clusters that should be allocated.
         @param[in] number_represent_points (uint): Number of representative points for each cluster.
         @param[in] compression (double): Coefficient defines level of shrinking of representation points toward the mean of the new created cluster after merging on each step. Usually it destributed from 0 to 1.
@@ -294,8 +294,6 @@ class cure:
                 is thrown.
 
         """
-        if not isinstance(self.__pointer_data, list):
-            raise ValueError("Incorrect type of data: '%s'. Input data should have 'list' type." % type(self.__pointer_data))
 
         if len(self.__pointer_data) == 0:
             raise ValueError("Empty input data. Data should contain at least one point.")

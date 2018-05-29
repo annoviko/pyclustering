@@ -24,6 +24,8 @@
 """
 
 
+import numpy
+
 from pyclustering.samples.definitions import SIMPLE_SAMPLES
 
 from pyclustering.utils import read_sample
@@ -36,12 +38,15 @@ from random import random
 
 class CureTestTemplates:
     @staticmethod
-    def template_cluster_allocation(input_data, cluster_sizes, number_cluster, number_represent_points = 5, compression = 0.5, ccore_flag = False):
+    def template_cluster_allocation(input_data, cluster_sizes, number_cluster, number_represent_points = 5, compression = 0.5, ccore_flag = False, **kwargs):
         if isinstance(input_data, str):
             sample = read_sample(input_data)
-
         else:
             sample = input_data
+
+        numpy_usage = kwargs.get('numpy_usage', False)
+        if numpy_usage is True:
+            sample = numpy.array(sample)
          
         cure_instance = cure(sample, number_cluster, number_represent_points, compression, ccore = ccore_flag)
         cure_instance.process()

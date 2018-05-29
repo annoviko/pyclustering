@@ -25,7 +25,9 @@
 """
 
 
-from pyclustering.utils import euclidean_distance_square;
+import numpy
+
+from pyclustering.utils import euclidean_distance_square
 
 
 class kdtree_text_visualizer:
@@ -45,6 +47,7 @@ class kdtree_text_visualizer:
         
         self.__tree_level_text  = "";
         self.__tree_text        = "";
+
 
     def visualize(self, display=True):
         """!
@@ -191,20 +194,11 @@ class kdtree:
         
         """
         
-        self.__root = None;
-        self.__dimension = None;
-        
-        if data_list is None:
-            return; # Just return from here, tree can be filled by insert method later
-        
-        if payload_list is None:
-            # Case when payload is not specified.
-            for index in range(0, len(data_list)):
-                self.insert(data_list[index], None);
-        else:
-            # Case when payload is specified.
-            for index in range(0, len(data_list)):
-                self.insert(data_list[index], payload_list[index]);
+        self.__root = None
+        self.__dimension = None
+        self.__point_comparator = None
+
+        self.__fill_tree(data_list, payload_list)
 
 
     def insert(self, point, payload):
@@ -220,11 +214,12 @@ class kdtree:
         """
         
         if self.__root is None:
-            self.__dimension = len(point);
-            self.__root = node(point, payload, None, None, 0);
-            return self.__root;
+            self.__dimension = len(point)
+            self.__root = node(point, payload, None, None, 0)
+            self.__point_comparator = self.__create_point_comparator(type(point))
+            return self.__root
         
-        cur_node = self.__root;
+        cur_node = self.__root
         
         while True:
             if cur_node.data[cur_node.disc] <= point[cur_node.disc]:
@@ -368,8 +363,45 @@ class kdtree:
                     isFinished = True;
 
         return min(candidates, key = min_key);
-    
-    
+
+
+    def __fill_tree(self, data_list, payload_list):
+        """!
+        @brief Fill KD-tree by specified data and create point comparator in line with data type.
+
+        @param[in] data_list (array_like): Data points that should be inserted to the tree.
+        @param[in] payload_list (array_like): Data point payloads that follows data points inserted to the tree.
+
+        """
+        if data_list is None or len(data_list) == 0:
+            return; # Just return from here, tree can be filled by insert method later
+
+        if payload_list is None:
+            # Case when payload is not specified.
+            for index in range(0, len(data_list)):
+                self.insert(data_list[index], None);
+        else:
+            # Case when payload is specified.
+            for index in range(0, len(data_list)):
+                self.insert(data_list[index], payload_list[index]);
+
+        self.__point_comparator = self.__create_point_comparator(type(self.__root.data))
+
+
+    def __create_point_comparator(self, type_node):
+        """!
+        @brief Create point comparator.
+        @details In case of numpy.array specific comparator is required.
+
+        @return (callable) Callable point comparator to compare to points.
+
+        """
+        if type_node == numpy.ndarray:
+            return lambda obj1, obj2: numpy.array_equal(obj1, obj2)
+
+        return lambda obj1, obj2: obj1 == obj2
+
+
     def __find_node_by_rule(self, point, search_rule, cur_node):
         """!
         @brief Search node that satisfy to parameters in search rule.
@@ -418,7 +450,7 @@ class kdtree:
         
         """
         
-        rule_search = lambda node, point=point, payload=payload: node.data == point and node.payload == payload;
+        rule_search = lambda node, point=point, payload=payload: self.__point_comparator(node.data, point) and node.payload == payload;
         return self.__find_node_by_rule(point, rule_search, cur_node);
 
 
@@ -435,7 +467,7 @@ class kdtree:
         
         """
         
-        rule_search = lambda node, point=point: node.data == point;
+        rule_search = lambda node, point=point: self.__point_comparator(node.data, point);
         return self.__find_node_by_rule(point, rule_search, cur_node);
     
     
