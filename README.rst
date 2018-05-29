@@ -177,7 +177,7 @@ Cite the Library
 If you are using pyclustering library in a scientific paper, please, cite the library.
 
 BibTeX entry:
-.. code:: bibtex
+.. code::
     @misc{andrei_novikov_2018_1254845,
         author       = {Andrei Novikov},
         title        = {annoviko/pyclustering: pyclustering 0.8.1 release},
@@ -316,7 +316,7 @@ Code Examples:
    :target: https://scrutinizer-ci.com/g/annoviko/pyclustering/?branch=master
 .. |Documentation| image:: https://codedocs.xyz/annoviko/pyclustering.svg
    :target: https://codedocs.xyz/annoviko/pyclustering/
-.. |DOI| image:: image:: https://zenodo.org/badge/DOI/10.5281/zenodo.1254845.svg
+.. |DOI| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.1254845.svg
    :target: https://doi.org/10.5281/zenodo.1254845
 .. |PyPi| image:: https://badge.fury.io/py/pyclustering.svg
    :target: https://badge.fury.io/py/pyclustering
