@@ -145,7 +145,9 @@ Cite the Library
 If you are using pyclustering library in a scientific paper, please, cite the library.
 
 BibTeX entry:
+
 .. code::
+
     @misc{andrei_novikov_2018_1254845,
         author       = {Andrei Novikov},
         title        = {annoviko/pyclustering: pyclustering 0.8.1 release},
