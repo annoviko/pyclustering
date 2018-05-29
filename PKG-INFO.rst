@@ -94,6 +94,7 @@ Library Content
 - **Agglomerative** (pyclustering.cluster.agglomerative);
 - **BANG** (pyclustering.cluster.bang);
 - **BIRCH** (pyclustering.cluster.birch);
+- **BSAS** (pyclustering.cluster.bsas);
 - **CLARANS** (pyclustering.cluster.clarans);
 - **CURE** (pyclustering.cluster.cure);
 - **DBSCAN** (pyclustering.cluster.dbscan);
@@ -104,11 +105,13 @@ Library Content
 - **K-Means++** (pyclustering.cluster.center_initializer);
 - **K-Medians** (pyclustering.cluster.kmedians);
 - **K-Medoids (PAM)** (pyclustering.cluster.kmedoids);
+- **MBSAS** (pyclustering.cluster.mbsas);
 - **OPTICS** (pyclustering.cluster.optics);
 - **ROCK** (pyclustering.cluster.rock);
 - **SOM-SC** (pyclustering.cluster.somsc);
 - **SyncNet** (pyclustering.cluster.syncnet);
 - **Sync-SOM** (pyclustering.cluster.syncsom);
+- **TTSAS** (pyclustering.cluster.ttsas);
 - **X-Means** (pyclustering.cluster.xmeans);
 
 
@@ -136,7 +139,24 @@ Library Content
 - **KD-Tree** (pyclustering.container.kdtree);
 
 
+Cite the Library
+===============
+
+If you are using pyclustering library in a scientific paper, please, cite the library.
+
+BibTeX entry:
+.. code:: bibtex
+    @misc{andrei_novikov_2018_1254845,
+        author       = {Andrei Novikov},
+        title        = {annoviko/pyclustering: pyclustering 0.8.1 release},
+        month        = may,
+        year         = 2018,
+        doi          = {10.5281/zenodo.1254845},
+        url          = {https://doi.org/10.5281/zenodo.1254845}
+    }
+
+
 .. |Documentation| image:: https://codedocs.xyz/annoviko/pyclustering.svg
    :target: https://codedocs.xyz/annoviko/pyclustering/
-.. |DOI| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.1183636.svg
-   :target: https://doi.org/10.5281/zenodo.1183636
+.. |DOI| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.1254845.svg
+   :target: https://doi.org/10.5281/zenodo.1254845

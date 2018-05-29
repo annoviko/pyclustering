@@ -43,7 +43,7 @@ implementation is used, otherwise C/C++. Implementation can be chosen by **ccore
 .. code:: python
 
     xmeans_instance_1 = xmeans(data_points, start_centers, 20, ccore=True);   # As by default - C/C++ is used
-    xmeans_instance_2 = xmeans(data_points, start_centers, 20, ccore=False);  # Switch off core - Python is used
+    xmeans_instance_2 = xmeans(data_points, start_centers, 20, ccore=False);  # Switch off the core - Python is used
 
 **ccore** option runs ccore shared library (core of the pyclustering library). The core is maintained for Linux 32, 64-bit and Windows 32, 64-bit.
 
@@ -168,6 +168,24 @@ Brief Overview of the Library Content
 
 - KD Tree [Python, C++]
 - CF Tree [Python]
+
+
+
+Cite the Library
+===============
+
+If you are using pyclustering library in a scientific paper, please, cite the library.
+
+BibTeX entry:
+.. code:: bibtex
+    @misc{andrei_novikov_2018_1254845,
+        author       = {Andrei Novikov},
+        title        = {annoviko/pyclustering: pyclustering 0.8.1 release},
+        month        = may,
+        year         = 2018,
+        doi          = {10.5281/zenodo.1254845},
+        url          = {https://doi.org/10.5281/zenodo.1254845}
+    }
 
 
 
@@ -298,8 +316,8 @@ Code Examples:
    :target: https://scrutinizer-ci.com/g/annoviko/pyclustering/?branch=master
 .. |Documentation| image:: https://codedocs.xyz/annoviko/pyclustering.svg
    :target: https://codedocs.xyz/annoviko/pyclustering/
-.. |DOI| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.1183636.svg
-   :target: https://doi.org/10.5281/zenodo.1183636
+.. |DOI| image:: image:: https://zenodo.org/badge/DOI/10.5281/zenodo.1254845.svg
+   :target: https://doi.org/10.5281/zenodo.1254845
 .. |PyPi| image:: https://badge.fury.io/py/pyclustering.svg
    :target: https://badge.fury.io/py/pyclustering
 .. |Build Status Linux 0.8| image:: https://travis-ci.org/annoviko/pyclustering.svg?branch=0.8.dev
