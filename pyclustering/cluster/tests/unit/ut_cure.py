@@ -43,8 +43,8 @@ class CureUnitTest(unittest.TestCase):
     def testClusterAllocationSampleSimple1(self):
         CureTestTemplates.template_cluster_allocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [5, 5], 2)
 
-    def testClusterAllocationSampleSimple1NumPy(self):
-        CureTestTemplates.template_cluster_allocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [5, 5], 2, numpy_usage=True)
+    #def testClusterAllocationSampleSimple1NumPy(self):
+    #    CureTestTemplates.template_cluster_allocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [5, 5], 2, numpy_usage=True)
 
     def testClusterAllocationSampleSimple2(self):
         CureTestTemplates.template_cluster_allocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [10, 5, 8], 3)
