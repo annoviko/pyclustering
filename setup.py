@@ -39,7 +39,7 @@ def load_readme():
 setup(
       name = 'pyclustering',
       packages = find_packages(),
-      version = '0.8.1',
+      version = '0.8.2',
       description = 'pyclustring is a python data mining library',
       long_description = load_readme(),
       url = 'https://github.com/annoviko/pyclustering',

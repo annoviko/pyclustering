@@ -1,5 +1,22 @@
 ------------------------------------------------------------------------
 
+CHANGE NOTES FOR 0.8.2 (STARTED May 28, 2018)
+
+------------------------------------------------------------------------
+
+GENERAL CHANGES:
+- Supported numpy.ndarray points in KD-tree (pyclustering.container.kdtree).
+  See: https://github.com/annoviko/pyclustering/issues/438
+
+
+CORRECTED MAJOR BUGS:
+- Bug with failure in case of numpy.ndarray data type in python part of CURE algorithm (pyclustering.cluster.cure).
+  See: https://github.com/annoviko/pyclustering/issues/438
+
+
+
+------------------------------------------------------------------------
+
 CHANGE NOTES FOR 0.8.1 (STARTED Feb 23, 2018), (RELEASED: May 28, 2018)
 
 ------------------------------------------------------------------------

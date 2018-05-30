@@ -46,16 +46,16 @@ def template_clustering(number_clusters, path, number_represent_points = 5, comp
     
     print("Sample: ", path, "\t\tExecution time: ", ticks, "\n")
 
-    if draw is True:
-        visualizer = cluster_visualizer()
-        
-        visualizer.append_clusters(clusters, sample)
-
-        for cluster_index in range(len(clusters)):
-            visualizer.append_cluster_attribute(0, cluster_index, representors[cluster_index], '*', 10)
-            visualizer.append_cluster_attribute(0, cluster_index, [ means[cluster_index] ], 'o')
-        
-        visualizer.show()
+    # if draw is True:
+    #     visualizer = cluster_visualizer()
+    #
+    #     visualizer.append_clusters(clusters, sample)
+    #
+    #     for cluster_index in range(len(clusters)):
+    #         visualizer.append_cluster_attribute(0, cluster_index, representors[cluster_index], '*', 10)
+    #         visualizer.append_cluster_attribute(0, cluster_index, [ means[cluster_index] ], 'o')
+    #
+    #     visualizer.show()
 
 
 def cluster_sample1():
@@ -124,24 +124,24 @@ def experiment_execution_time(draw, ccore):
     template_clustering(2, FCPS_SAMPLES.SAMPLE_ATOM, 20, 0.2)
 
 
-cluster_sample1()
-cluster_sample2()
-cluster_sample3()
-cluster_sample4()
-cluster_sample5()
-cluster_sample6()
-cluster_elongate()
-cluster_lsun()
-cluster_target()
+# cluster_sample1()
+# cluster_sample2()
+# cluster_sample3()
+# cluster_sample4()
+# cluster_sample5()
+# cluster_sample6()
+# cluster_elongate()
+# cluster_lsun()
+# cluster_target()
 cluster_two_diamonds()
-cluster_wing_nut()
-cluster_chainlink()
-cluster_hepta()
-cluster_tetra()
-cluster_atom()
-cluster_engy_time()
-cluster_golf_ball()
+# cluster_wing_nut()
+# cluster_chainlink()
+# cluster_hepta()
+# cluster_tetra()
+# cluster_atom()
+# cluster_engy_time()
+# cluster_golf_ball()
 
 
-experiment_execution_time(True, False);
-experiment_execution_time(True, True);
+# experiment_execution_time(True, False);
+# experiment_execution_time(True, True);
