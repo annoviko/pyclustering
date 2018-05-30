@@ -181,7 +181,7 @@ class syncsom:
         return False;
 
 
-    def get_som_clusters(self, eps = 0.1):
+    def get_som_clusters(self):
         """!
         @brief Returns clusters with SOM neurons that encode input features in line with result of synchronization in the second (Sync) layer.
         
@@ -222,23 +222,19 @@ class syncsom:
         
         """
         
-        sync_clusters = self._analyser.allocate_clusters(eps);       # it isn't indexes of SOM neurons
+        sync_clusters = self._analyser.allocate_clusters(eps)       # it isn't indexes of SOM neurons
         
-        clusters = list();
-        total_winners = 0;
-        total_number_points = 0;
+        clusters = list()
         for oscillators in sync_clusters:
-            cluster = list();
+            cluster = list()
             for index_oscillator in oscillators:
-                index_neuron = self._som_osc_table[index_oscillator];
+                index_neuron = self._som_osc_table[index_oscillator]
                 
-                cluster += self._som.capture_objects[index_neuron];
-                total_number_points += len(self._som.capture_objects[index_neuron]);
-                total_winners += 1;
+                cluster += self._som.capture_objects[index_neuron]
                 
-            clusters.append(cluster);
+            clusters.append(cluster)
         
-        return clusters;
+        return clusters
 
 
     def get_cluster_encoding(self):

@@ -645,23 +645,6 @@ def timedcall(executable_function, *args):
     return (time_end - time_start, result);
 
 
-def get_argument(argument_name, default_value, **kwargs):
-    """!
-    @brief Extract argument value without exception using default value in case of lack argument with specified name.
-
-    @param[in] argument_name (string): Argument name (key in **kwargs) whose value is required.
-    @param[in] default_value (any): Value that is returned if argument is not found in **kwargs.
-    @param[in] **kwargs: Arbitrary keyword arguments.
-
-    @return (any) Extracted argument if argument is contained by **kwargs, otherwise default value.
-
-    """
-    if (argument_name in kwargs):
-        return kwargs[argument_name];
-
-    return default_value;
-
-
 def extract_number_oscillations(osc_dyn, index = 0, amplitude_threshold = 1.0):
     """!
     @brief Extracts number of oscillations of specified oscillator.

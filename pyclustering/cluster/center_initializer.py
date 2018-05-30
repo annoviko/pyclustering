@@ -28,10 +28,8 @@
 """
 
 
-import numpy;
-import random;
-
-from pyclustering.utils import euclidean_distance;
+import numpy
+import random
 
 
 class random_center_initializer:
@@ -49,11 +47,11 @@ class random_center_initializer:
         
         """
         
-        self.__data = data;
-        self.__amount = amount_centers;
+        self.__data = data
+        self.__amount = amount_centers
 
         if self.__amount <= 0:
-            raise AttributeError("Amount of cluster centers should be at least 1.");
+            raise AttributeError("Amount of cluster centers should be at least 1.")
 
 
     def initialize(self):
@@ -63,7 +61,7 @@ class random_center_initializer:
         @return (list) List of centers where each center is represented by list of coordinates.
         
         """
-        return [ self.__create_center() for _ in range(self.__amount) ];
+        return [ self.__create_center() for _ in range(self.__amount) ]
 
 
     def __create_center(self):
@@ -71,7 +69,7 @@ class random_center_initializer:
         @brief Generates and returns random center.
         
         """
-        return [ random.random() for _ in range(len(self.__data[0])) ];
+        return [ random.random() for _ in range(len(self.__data[0])) ]
 
 
 
@@ -135,7 +133,7 @@ class kmeans_plusplus_initializer:
 
 
     ## Constant denotes that only points with highest probabilities should be considered as centers.
-    FARTHEST_CENTER_CANDIDATE = "farthest";
+    FARTHEST_CENTER_CANDIDATE = "farthest"
 
 
     def __init__(self, data, amount_centers, amount_candidates = 1):
@@ -151,11 +149,11 @@ class kmeans_plusplus_initializer:
 
         """
         
-        self.__data = numpy.array(data);
-        self.__amount = amount_centers;
-        self.__candidates = amount_candidates;
+        self.__data = numpy.array(data)
+        self.__amount = amount_centers
+        self.__candidates = amount_candidates
 
-        self.__check_parameters();
+        self.__check_parameters()
 
 
     def __check_parameters(self):
@@ -164,11 +162,11 @@ class kmeans_plusplus_initializer:
 
         """
         if (self.__amount <= 0) or (self.__amount > len(self.__data)):
-            raise AttributeError("Amount of cluster centers should be at least 1 and should be less or equal to amount of points in data.");
+            raise AttributeError("Amount of cluster centers should be at least 1 and should be less or equal to amount of points in data.")
 
         if self.__candidates != kmeans_plusplus_initializer.FARTHEST_CENTER_CANDIDATE:
             if (self.__candidates <= 0) or (self.__candidates > len(self.__data)):
-                raise AttributeError("Amount of candidates centers should be at least 1 and should be less or equal to amount of points in data.");
+                raise AttributeError("Amount of candidates centers should be at least 1 and should be less or equal to amount of points in data.")
 
         if len(self.__data) == 0:
             raise AttributeError("Data is empty.")
@@ -185,13 +183,13 @@ class kmeans_plusplus_initializer:
         
         """
 
-        dataset_differences = numpy.zeros((len(centers), len(data)));
+        dataset_differences = numpy.zeros((len(centers), len(data)))
         for index_center in range(len(centers)):
             dataset_differences[index_center] = numpy.sum(
-                numpy.square(data - centers[index_center]), axis=1).T;
+                numpy.square(data - centers[index_center]), axis=1).T
 
-        shortest_distances = numpy.min(dataset_differences, axis=0);
-        return shortest_distances;
+        shortest_distances = numpy.min(dataset_differences, axis=0)
+        return shortest_distances
 
 
     def __get_next_center(self, centers):
@@ -204,15 +202,15 @@ class kmeans_plusplus_initializer:
 
         """
 
-        distances = self.__calculate_shortest_distances(data=self.__data, centers=centers);
+        distances = self.__calculate_shortest_distances(data=self.__data, centers=centers)
 
         if self.__candidates == kmeans_plusplus_initializer.FARTHEST_CENTER_CANDIDATE:
-            center_index = numpy.argmax(distances);
+            center_index = numpy.argmax(distances)
         else:
-            probabilities = self.__calculate_probabilities(distances);
-            center_index = self.__get_probable_center(distances, probabilities);
+            probabilities = self.__calculate_probabilities(distances)
+            center_index = self.__get_probable_center(distances, probabilities)
 
-        return self.__data[center_index];
+        return self.__data[center_index]
 
 
     def __calculate_probabilities(self, distances):
@@ -225,12 +223,12 @@ class kmeans_plusplus_initializer:
 
         """
 
-        total_distance = numpy.sum(distances);
+        total_distance = numpy.sum(distances)
         if total_distance != 0.0:
-            probabilities = distances / total_distance;
-            return numpy.cumsum(probabilities);
+            probabilities = distances / total_distance
+            return numpy.cumsum(probabilities)
         else:
-            return numpy.zeros(len(distances));
+            return numpy.zeros(len(distances))
 
 
     def __get_probable_center(self, distances, probabilities):
@@ -244,22 +242,22 @@ class kmeans_plusplus_initializer:
 
         """
 
-        index_best_candidate = -1;
+        index_best_candidate = -1
         for _ in range(self.__candidates):
-            candidate_probability = random.random();
-            index_candidate = 0;
+            candidate_probability = random.random()
+            index_candidate = 0
 
             for index_object in range(len(probabilities)):
                 if candidate_probability < probabilities[index_object]:
-                    index_candidate = index_object;
-                    break;
+                    index_candidate = index_object
+                    break
 
             if index_best_candidate == -1:
-                index_best_candidate = index_candidate;
-            elif distances[index_best_candidate] < distances[index_object]:
-                index_best_candidate = index_candidate;
+                index_best_candidate = index_candidate
+            elif distances[index_best_candidate] < distances[index_candidate]:
+                index_best_candidate = index_candidate
 
-        return index_best_candidate;
+        return index_best_candidate
 
 
     def initialize(self):
@@ -270,12 +268,12 @@ class kmeans_plusplus_initializer:
         
         """
 
-        index_center = random.randint(0, len(self.__data) - 1);
-        centers = [ self.__data[ index_center ] ];
+        index_center = random.randint(0, len(self.__data) - 1)
+        centers = [ self.__data[ index_center ] ]
 
         # For each next center
         for _ in range(1, self.__amount):
-            next_center = self.__get_next_center(centers);
-            centers.append(next_center);
+            next_center = self.__get_next_center(centers)
+            centers.append(next_center)
 
-        return centers;
+        return centers

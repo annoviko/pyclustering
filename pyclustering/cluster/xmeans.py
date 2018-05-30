@@ -25,23 +25,22 @@
 """
 
 
-import numpy;
-import random;
+import numpy
+import random
 
-from enum import IntEnum;
+from enum import IntEnum
 
-from math import log;
+from math import log
 
-from pyclustering.cluster.encoder import type_encoding;
-from pyclustering.cluster.kmeans import kmeans;
-from pyclustering.cluster.center_initializer import kmeans_plusplus_initializer;
+from pyclustering.cluster.encoder import type_encoding
+from pyclustering.cluster.kmeans import kmeans
+from pyclustering.cluster.center_initializer import kmeans_plusplus_initializer
 
-from pyclustering.core.wrapper import ccore_library;
+from pyclustering.core.wrapper import ccore_library
 
-import pyclustering.core.xmeans_wrapper as wrapper;
+import pyclustering.core.xmeans_wrapper as wrapper
 
-from pyclustering.utils import euclidean_distance_square, euclidean_distance;
-from pyclustering.utils import list_math_addition_number;
+from pyclustering.utils import euclidean_distance_square, euclidean_distance
 
 
 class splitting_type(IntEnum):

@@ -29,13 +29,10 @@ import math;
 
 import matplotlib.pyplot as plt;
 
-from enum import IntEnum;
-
 from pyclustering.container.kdtree import kdtree;
 
 from pyclustering.cluster.encoder import type_encoding;
 
-from pyclustering.utils import get_argument;
 from pyclustering.utils.color import color as color_list;
 
 from pyclustering.core.wrapper import ccore_library;

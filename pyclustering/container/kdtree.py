@@ -58,12 +58,12 @@ class kdtree_text_visualizer:
         @return (string) Text representation of the KD-tree.
         
         """
+
+        kdnodes = self.__get_nodes()
+        level = kdnodes[0]
         
-        nodes = self.__get_nodes()
-        level = nodes[0]
-        
-        for node in nodes:
-            self.__print_node(level, node)
+        for kdnode in kdnodes:
+            self.__print_node(level, kdnode)
 
         self.__tree_text += self.__tree_level_text
         if display is True:
@@ -72,23 +72,23 @@ class kdtree_text_visualizer:
         return self.__tree_text
 
 
-    def __print_node(self, level, node):
-        if level == node[0]:
-            self.__tree_level_text += str(node[1]) + "\t"
+    def __print_node(self, level, kdnode):
+        if level == kdnode[0]:
+            self.__tree_level_text += str(kdnode[1]) + "\t"
 
         else:
             self.__tree_text += self.__tree_level_text + "\n"
-            level = node[0]
-            self.__tree_level_text = str(node[1]) + "\t"
+            level = kdnode[0]
+            self.__tree_level_text = str(kdnode[1]) + "\t"
 
 
     def __get_nodes(self):
-        nodes = self.__kdtree_instance.traverse()
-        if nodes == []:
+        kdnodes = self.__kdtree_instance.traverse()
+        if kdnodes == []:
             return
-        
-        nodes.sort(key = lambda item: item[0])
-        return nodes
+
+        kdnodes.sort(key = lambda item: item[0])
+        return kdnodes
 
 
 
@@ -438,21 +438,21 @@ class kdtree:
         return req_node
 
 
-    def find_node_with_payload(self, point, payload, cur_node = None):
+    def find_node_with_payload(self, point, point_payload, cur_node = None):
         """!
         @brief Find node with specified coordinates and payload.
         @details If node with specified parameters does not exist then None will be returned, 
                   otherwise required node will be returned.
         
         @param[in] point (list): Coordinates of the point whose node should be found.
-        @param[in] payload (any): Payload of the node that is searched in the tree.
+        @param[in] point_payload (any): Payload of the node that is searched in the tree.
         @param[in] cur_node (node): Node from which search should be started.
         
         @return (node) Node if it satisfies to input parameters, otherwise it return None.
         
         """
         
-        rule_search = lambda node, point=point, payload=payload: self.__point_comparator(node.data, point) and node.payload == payload
+        rule_search = lambda node, point=point, payload=point_payload: self.__point_comparator(node.data, point) and node.payload == payload
         return self.__find_node_by_rule(point, rule_search, cur_node)
 
 

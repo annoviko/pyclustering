@@ -25,13 +25,13 @@
 """
 
 
-import numpy;
-import random;
-import pyclustering.utils;
+import numpy
+import random
+import pyclustering.utils
 
-from scipy.integrate import odeint;
+from scipy.integrate import odeint
 
-from pyclustering.nnet import network, conn_type, conn_represent;
+from pyclustering.nnet import network, conn_type, conn_represent
 
 
 class fsync_dynamic:

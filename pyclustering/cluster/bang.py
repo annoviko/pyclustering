@@ -112,7 +112,7 @@ class bang_visualizer:
 
 
     @staticmethod
-    def show_clusters(data, clusters, noise=[]):
+    def show_clusters(data, clusters, noise=None):
         """!
         @brief Display K-Means clustering results.
 
@@ -123,7 +123,7 @@ class bang_visualizer:
         """
         visualizer = cluster_visualizer()
         visualizer.append_clusters(clusters, data)
-        visualizer.append_cluster(noise, data, marker='x')
+        visualizer.append_cluster(noise or [], data, marker='x')
         visualizer.show()
 
 
@@ -851,7 +851,6 @@ class bang:
         """
         leaf_blocks = self.__directory.get_leafs()
         unhandled_block_indexes = set([i for i in range(len(leaf_blocks)) if leaf_blocks[i].get_density() > self.__density_threshold])
-        appropriate_block_indexes = set(unhandled_block_indexes)
 
         current_block = self.__find_block_center(leaf_blocks, unhandled_block_indexes)
         cluster_index = 0

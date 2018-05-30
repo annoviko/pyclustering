@@ -24,21 +24,20 @@
 
 """
 
-import matplotlib.pyplot as plt;
-import matplotlib.animation as animation;
+import matplotlib.pyplot as plt
 
-from matplotlib import rcParams;
-from matplotlib.font_manager import FontProperties;
+from matplotlib import rcParams
+from matplotlib.font_manager import FontProperties
 
-import math;
-import numpy;
-import random;
+import math
+import numpy
+import random
 
-from enum import IntEnum;
+from enum import IntEnum
 
-from scipy.spatial import Delaunay;
+from scipy.spatial import Delaunay
 
-from pyclustering.utils import euclidean_distance_square, average_neighbor_distance, heaviside, draw_dynamics;
+from pyclustering.utils import euclidean_distance_square, average_neighbor_distance, heaviside, draw_dynamics
 
 
 class type_conn(IntEnum):
@@ -64,7 +63,7 @@ class cnn_dynamic:
     
     """
     
-    def __init__(self, output = [], time = []):
+    def __init__(self, output=None, time=None):
         """!
         @brief Costructor of the chaotic neural network output dynamic.
 
@@ -74,10 +73,10 @@ class cnn_dynamic:
         """
         
         ## Output value of each neuron on each iteration.
-        self.output = output;
+        self.output = output or []
         
         ## Sequence of simulation steps of the network.
-        self.time = time;
+        self.time = time or []
 
 
     def __len__(self):
@@ -85,7 +84,7 @@ class cnn_dynamic:
         @brief (uint) Returns amount of simulation steps that are stored.
         
         """
-        return len(self.output);
+        return len(self.output)
 
 
     def allocate_observation_matrix(self):
@@ -96,17 +95,17 @@ class cnn_dynamic:
         @return (list) Observation matrix of the network dynamic.
         
         """
-        number_neurons = len(self.output[0]);
-        observation_matrix = [];
+        number_neurons = len(self.output[0])
+        observation_matrix = []
         
         for iteration in range(len(self.output)):
-            obervation_column = [];
+            obervation_column = []
             for index_neuron in range(number_neurons):
-                obervation_column.append(heaviside(self.output[iteration][index_neuron]));
+                obervation_column.append(heaviside(self.output[iteration][index_neuron]))
             
-            observation_matrix.append(obervation_column);
+            observation_matrix.append(obervation_column)
         
-        return observation_matrix;
+        return observation_matrix
     
     
     def __allocate_neuron_patterns(self, start_iteration, stop_iteration):
@@ -118,15 +117,15 @@ class cnn_dynamic:
         
         """
         
-        pattern_matrix = [];
+        pattern_matrix = []
         for index_neuron in range(len(self.output[0])):
-            pattern_neuron = [];
+            pattern_neuron = []
             for iteration in range(start_iteration, stop_iteration):
                 pattern_neuron.append(heaviside(self.output[iteration][index_neuron]))
             
-            pattern_matrix.append(pattern_neuron);
+            pattern_matrix.append(pattern_neuron)
         
-        return pattern_matrix;
+        return pattern_matrix
     
     
     def allocate_sync_ensembles(self, steps):
@@ -141,36 +140,36 @@ class cnn_dynamic:
         
         """
         
-        iterations = steps;
-        if (iterations >= len(self.output)):
-            iterations = len(self.output);
+        iterations = steps
+        if iterations >= len(self.output):
+            iterations = len(self.output)
         
-        ensembles = [];
+        ensembles = []
 
-        start_iteration = len(self.output) - iterations;
-        end_iteration = len(self.output);
+        start_iteration = len(self.output) - iterations
+        end_iteration = len(self.output)
         
-        pattern_matrix = self.__allocate_neuron_patterns(start_iteration, end_iteration);
+        pattern_matrix = self.__allocate_neuron_patterns(start_iteration, end_iteration)
         
-        ensembles.append( [0] );
+        ensembles.append( [0] )
         
         for index_neuron in range(1, len(self.output[0])):
-            neuron_pattern = pattern_matrix[index_neuron][:];
+            neuron_pattern = pattern_matrix[index_neuron][:]
             
-            neuron_assigned = False;
+            neuron_assigned = False
             
             for ensemble in ensembles:
-                ensemble_pattern = pattern_matrix[ensemble[0]][:];
+                ensemble_pattern = pattern_matrix[ensemble[0]][:]
 
-                if (neuron_pattern == ensemble_pattern):
-                    ensemble.append(index_neuron);
-                    neuron_assigned = True;
-                    break;
+                if neuron_pattern == ensemble_pattern:
+                    ensemble.append(index_neuron)
+                    neuron_assigned = True
+                    break
             
-            if (neuron_assigned is False):
-                ensembles.append( [index_neuron] );
+            if neuron_assigned is False:
+                ensembles.append( [index_neuron] )
         
-        return ensembles;
+        return ensembles
 
 
 class cnn_visualizer:
@@ -191,7 +190,7 @@ class cnn_visualizer:
         
         """
         
-        draw_dynamics(cnn_output_dynamic.time, cnn_output_dynamic.output, x_title = "t", y_title = "x");
+        draw_dynamics(cnn_output_dynamic.time, cnn_output_dynamic.output, x_title = "t", y_title = "x")
     
     
     @staticmethod
@@ -207,10 +206,10 @@ class cnn_visualizer:
         
         """
         
-        network_dynamic = numpy.array(cnn_output_dynamic.output);
+        network_dynamic = numpy.array(cnn_output_dynamic.output)
         
-        plt.imshow(network_dynamic.T, cmap = plt.get_cmap('gray'), interpolation='None', vmin = 0.0, vmax = 1.0); 
-        plt.show();
+        plt.imshow(network_dynamic.T, cmap = plt.get_cmap('gray'), interpolation='None', vmin = 0.0, vmax = 1.0)
+        plt.show()
     
     
     @staticmethod
@@ -226,9 +225,9 @@ class cnn_visualizer:
         
         """
         
-        observation_matrix = numpy.array(cnn_output_dynamic.allocate_observation_matrix());
-        plt.imshow(observation_matrix.T, cmap = plt.get_cmap('gray'), interpolation='None', vmin = 0.0, vmax = 1.0); 
-        plt.show();
+        observation_matrix = numpy.array(cnn_output_dynamic.allocate_observation_matrix())
+        plt.imshow(observation_matrix.T, cmap = plt.get_cmap('gray'), interpolation='None', vmin = 0.0, vmax = 1.0)
+        plt.show()
 
 
 class cnn_network:
@@ -267,18 +266,18 @@ class cnn_network:
         
         """
         
-        self.__num_osc = num_osc;
-        self.__conn_type = conn_type;
-        self.__amount_neighbors = amount_neighbors;
+        self.__num_osc = num_osc
+        self.__conn_type = conn_type
+        self.__amount_neighbors = amount_neighbors
         
-        self.__average_distance = 0.0;
-        self.__weights = None;
-        self.__weights_summary = None;
+        self.__average_distance = 0.0
+        self.__weights = None
+        self.__weights_summary = None
         
-        self.__location = None;     # just for network visualization
+        self.__location = None     # just for network visualization
         
-        random.seed();
-        self.__output = [ random.random() for _ in range(num_osc) ];
+        random.seed()
+        self.__output = [ random.random() for _ in range(num_osc) ]
     
     
     def __len__(self):
@@ -286,7 +285,7 @@ class cnn_network:
         @brief Returns size of the chaotic neural network that is defined by amount of neurons.
         
         """
-        return self.__num_osc;
+        return self.__num_osc
     
     
     def simulate(self, steps, stimulus):
@@ -302,20 +301,20 @@ class cnn_network:
         
         """
         
-        self.__create_weights(stimulus);
-        self.__location = stimulus;
+        self.__create_weights(stimulus)
+        self.__location = stimulus
         
-        dynamic = cnn_dynamic([], []);
-        dynamic.output.append(self.__output);
-        dynamic.time.append(0);
+        dynamic = cnn_dynamic([], [])
+        dynamic.output.append(self.__output)
+        dynamic.time.append(0)
         
         for step in range(1, steps, 1):
-            self.__output = self.__calculate_states();
+            self.__output = self.__calculate_states()
             
-            dynamic.output.append(self.__output);
-            dynamic.time.append(step);
+            dynamic.output.append(self.__output)
+            dynamic.time.append(step)
             
-        return dynamic;
+        return dynamic
     
     
     def __calculate_states(self):
@@ -327,12 +326,12 @@ class cnn_network:
         
         """
         
-        output = [ 0.0 for _ in range(self.__num_osc) ];
+        output = [ 0.0 for _ in range(self.__num_osc) ]
         
         for i in range(self.__num_osc):
-            output[i] = self.__neuron_evolution(i);
+            output[i] = self.__neuron_evolution(i)
         
-        return output;
+        return output
     
     
     def __neuron_evolution(self, index):
@@ -344,12 +343,12 @@ class cnn_network:
         @return (double) New output of the specified neuron.
         
         """
-        value = 0.0;
+        value = 0.0
         
         for index_neighbor in range(self.__num_osc):
-            value += self.__weights[index][index_neighbor] * (1.0 - 2.0 * (self.__output[index_neighbor] ** 2));
+            value += self.__weights[index][index_neighbor] * (1.0 - 2.0 * (self.__output[index_neighbor] ** 2))
         
-        return value / self.__weights_summary[index];
+        return value / self.__weights_summary[index]
     
     
     def __create_weights(self, stimulus):
@@ -360,16 +359,16 @@ class cnn_network:
         
         """
         
-        self.__average_distance = average_neighbor_distance(stimulus, self.__amount_neighbors);
+        self.__average_distance = average_neighbor_distance(stimulus, self.__amount_neighbors)
         
-        self.__weights = [ [ 0.0 for _ in range(len(stimulus)) ] for _ in range(len(stimulus)) ];
-        self.__weights_summary = [ 0.0 for _ in range(self.__num_osc) ];
+        self.__weights = [ [ 0.0 for _ in range(len(stimulus)) ] for _ in range(len(stimulus)) ]
+        self.__weights_summary = [ 0.0 for _ in range(self.__num_osc) ]
         
-        if (self.__conn_type == type_conn.ALL_TO_ALL):
-            self.__create_weights_all_to_all(stimulus);
+        if self.__conn_type == type_conn.ALL_TO_ALL:
+            self.__create_weights_all_to_all(stimulus)
         
-        elif (self.__conn_type == type_conn.TRIANGULATION_DELAUNAY):
-            self.__create_weights_delaunay_triangulation(stimulus);
+        elif self.__conn_type == type_conn.TRIANGULATION_DELAUNAY:
+            self.__create_weights_delaunay_triangulation(stimulus)
     
     
     def __create_weights_all_to_all(self, stimulus):
@@ -382,13 +381,13 @@ class cnn_network:
         
         for i in range(len(stimulus)):
             for j in range(i + 1, len(stimulus)):
-                weight = self.__calculate_weight(stimulus[i], stimulus[j]);
+                weight = self.__calculate_weight(stimulus[i], stimulus[j])
                 
-                self.__weights[i][j] = weight;
-                self.__weights[j][i] = weight;
+                self.__weights[i][j] = weight
+                self.__weights[j][i] = weight
                 
-                self.__weights_summary[i] += weight;
-                self.__weights_summary[j] += weight;
+                self.__weights_summary[i] += weight
+                self.__weights_summary[j] += weight
     
     
     def __create_weights_delaunay_triangulation(self, stimulus):
@@ -399,22 +398,22 @@ class cnn_network:
         
         """
         
-        points = numpy.array(stimulus);
-        triangulation = Delaunay(points);
+        points = numpy.array(stimulus)
+        triangulation = Delaunay(points)
         
         for triangle in triangulation.simplices:
             for index_tri_point1 in range(len(triangle)):
                 for index_tri_point2 in range(index_tri_point1 + 1, len(triangle)):
-                    index_point1 = triangle[index_tri_point1];
-                    index_point2 = triangle[index_tri_point2];
+                    index_point1 = triangle[index_tri_point1]
+                    index_point2 = triangle[index_tri_point2]
                     
-                    weight = self.__calculate_weight(stimulus[index_point1], stimulus[index_point2]);
+                    weight = self.__calculate_weight(stimulus[index_point1], stimulus[index_point2])
                     
-                    self.__weights[index_point1][index_point2] = weight;
-                    self.__weights[index_point2][index_point1] = weight;
+                    self.__weights[index_point1][index_point2] = weight
+                    self.__weights[index_point2][index_point1] = weight
                     
-                    self.__weights_summary[index_point1] += weight;
-                    self.__weights_summary[index_point2] += weight;
+                    self.__weights_summary[index_point1] += weight
+                    self.__weights_summary[index_point2] += weight
     
     
     def __calculate_weight(self, stimulus1, stimulus2):
@@ -428,8 +427,8 @@ class cnn_network:
         
         """
         
-        distance = euclidean_distance_square(stimulus1, stimulus2);
-        return math.exp(-distance / (2.0 * self.__average_distance));
+        distance = euclidean_distance_square(stimulus1, stimulus2)
+        return math.exp(-distance / (2.0 * self.__average_distance))
 
     
     def show_network(self):
@@ -438,28 +437,28 @@ class cnn_network:
         
         """
         
-        dimension = len(self.__location[0]);
-        if ( (dimension != 3) and (dimension != 2) ):
-            raise NameError('Network that is located in different from 2-d and 3-d dimensions can not be represented');
+        dimension = len(self.__location[0])
+        if (dimension != 3) and (dimension != 2):
+            raise NameError('Network that is located in different from 2-d and 3-d dimensions can not be represented')
 
-        (fig, axes) = self.__create_surface(dimension);
+        (fig, axes) = self.__create_surface(dimension)
         
         for i in range(0, self.__num_osc, 1):
-            if (dimension == 2):
-                axes.plot(self.__location[i][0], self.__location[i][1], 'bo');  
+            if dimension == 2:
+                axes.plot(self.__location[i][0], self.__location[i][1], 'bo')
                 for j in range(i, self.__num_osc, 1):    # draw connection between two points only one time
-                    if (self.__weights[i][j] > 0.0):
-                        axes.plot([self.__location[i][0], self.__location[j][0]], [self.__location[i][1], self.__location[j][1]], 'b-', linewidth = 0.5);
+                    if self.__weights[i][j] > 0.0:
+                        axes.plot([self.__location[i][0], self.__location[j][0]], [self.__location[i][1], self.__location[j][1]], 'b-', linewidth = 0.5)
             
-            elif (dimension == 3):
-                axes.scatter(self.__location[i][0], self.__location[i][1], self.__location[i][2], c = 'b', marker = 'o');
+            elif dimension == 3:
+                axes.scatter(self.__location[i][0], self.__location[i][1], self.__location[i][2], c = 'b', marker = 'o')
                 
                 for j in range(i, self.__num_osc, 1):    # draw connection between two points only one time
-                    if (self.__weights[i][j] > 0.0):
-                        axes.plot([self.__location[i][0], self.__location[j][0]], [self.__location[i][1], self.__location[j][1]], [self.__location[i][2], self.__location[j][2]], 'b-', linewidth = 0.5);
+                    if self.__weights[i][j] > 0.0:
+                        axes.plot([self.__location[i][0], self.__location[j][0]], [self.__location[i][1], self.__location[j][1]], [self.__location[i][2], self.__location[j][2]], 'b-', linewidth = 0.5)
                 
-        plt.grid();
-        plt.show();
+        plt.grid()
+        plt.show()
     
     
     def __create_surface(self, dimension):
@@ -472,18 +471,18 @@ class cnn_network:
         
         """
         
-        rcParams['font.sans-serif'] = ['Arial'];
-        rcParams['font.size'] = 12;
+        rcParams['font.sans-serif'] = ['Arial']
+        rcParams['font.size'] = 12
 
-        fig = plt.figure();
-        axes = None;
-        if (dimension == 2):
-            axes = fig.add_subplot(111);
-        elif (dimension == 3):
-            axes = fig.gca(projection='3d');
+        fig = plt.figure()
+        axes = None
+        if dimension == 2:
+            axes = fig.add_subplot(111)
+        elif dimension == 3:
+            axes = fig.gca(projection='3d')
         
-        surface_font = FontProperties();
-        surface_font.set_name('Arial');
-        surface_font.set_size('12');
+        surface_font = FontProperties()
+        surface_font.set_name('Arial')
+        surface_font.set_size('12')
         
-        return (fig, axes);
+        return (fig, axes)
