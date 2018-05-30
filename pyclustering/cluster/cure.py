@@ -27,15 +27,15 @@
 
 import numpy
 
-from pyclustering.cluster.encoder import type_encoding;
+from pyclustering.cluster.encoder import type_encoding
 
-from pyclustering.utils import euclidean_distance;
+from pyclustering.utils import euclidean_distance
 
-from pyclustering.container.kdtree import kdtree;
+from pyclustering.container.kdtree import kdtree
 
 from pyclustering.core.wrapper import ccore_library
 
-import pyclustering.core.cure_wrapper as wrapper;
+import pyclustering.core.cure_wrapper as wrapper
 
 
 class cure_cluster:
@@ -55,35 +55,35 @@ class cure_cluster:
         """
         
         ## List of points that make up cluster.
-        self.points = [ ];
+        self.points = [ ]
         
         ## Point indexes in dataset.
-        self.indexes = -1;
+        self.indexes = -1
         
         ## Mean of points that make up cluster.
-        self.mean = None;
+        self.mean = None
         
         ## List of points that represents clusters.
-        self.rep = [ ];
+        self.rep = [ ]
         
-        if (point is not None):
-            self.points = [ point ];
-            self.indexes = [ index ];
-            self.mean = point;
-            self.rep = [ point ];
+        if point is not None:
+            self.points = [ point ]
+            self.indexes = [ index ]
+            self.mean = point
+            self.rep = [ point ]
         
         ## Pointer to the closest cluster.
-        self.closest = None;
+        self.closest = None
         
         ## Distance to the closest cluster.
-        self.distance = float('inf');      # calculation of distance is really complexity operation (even square distance), so let's store distance to closest cluster.
+        self.distance = float('inf')      # calculation of distance is really complexity operation (even square distance), so let's store distance to closest cluster.
 
     def __repr__(self):
         """!
         @brief Displays distance to closest cluster and points that are contained by current cluster.
         
         """
-        return "%s, %s" % (self.distance, self.points);
+        return "%s, %s" % (self.distance, self.points)
         
 
 class cure:
@@ -121,7 +121,7 @@ class cure:
         
         """
         
-        self.__pointer_data = data
+        self.__pointer_data = self.__prepare_data_points(data)
         
         self.__clusters = None
         self.__representors = None
@@ -130,7 +130,7 @@ class cure:
         self.__number_cluster = number_cluster
         self.__number_represent_points = number_represent_points
         self.__compression = compression
-        
+
         self.__ccore = ccore
         if self.__ccore:
             self.__ccore = ccore_library.workable()
@@ -148,88 +148,103 @@ class cure:
         
         """
         
-        if (self.__ccore is True):
-            cure_data_pointer = wrapper.cure_algorithm(self.__pointer_data, self.__number_cluster, self.__number_represent_points, self.__compression);
-            
-            self.__clusters = wrapper.cure_get_clusters(cure_data_pointer);
-            self.__representors = wrapper.cure_get_representors(cure_data_pointer);
-            self.__means = wrapper.cure_get_means(cure_data_pointer);
-            
-            wrapper.cure_data_destroy(cure_data_pointer);
+        if self.__ccore is True:
+            self.__process_by_ccore()
             
         else:
-            self.__create_queue()      # queue
-            self.__create_kdtree()     # create k-d tree
+            self.__process_by_python()
 
-            while (len(self.__queue) > self.__number_cluster):
-                cluster1 = self.__queue[0];            # cluster that has nearest neighbor.
-                cluster2 = cluster1.closest;    # closest cluster.
-                
-                #print("Merge decision: \n\t", cluster1, "\n\t", cluster2);
-                
-                self.__queue.remove(cluster1);
-                self.__queue.remove(cluster2);
-                
-                self.__delete_represented_points(cluster1);
-                self.__delete_represented_points(cluster2);
-        
-                merged_cluster = self.__merge_clusters(cluster1, cluster2);
-        
-                self.__insert_represented_points(merged_cluster);
-                
-                # Pointers to clusters that should be relocated is stored here.
-                cluster_relocation_requests = [];
-                
-                # Check for the last cluster
-                if (len(self.__queue) > 0):
-                    merged_cluster.closest = self.__queue[0];  # arbitrary cluster from queue
-                    merged_cluster.distance = self.__cluster_distance(merged_cluster, merged_cluster.closest);
-                    
-                    for item in self.__queue:
-                        distance = self.__cluster_distance(merged_cluster, item);
-                        # Check if distance between new cluster and current is the best than now.
-                        if (distance < merged_cluster.distance):
-                            merged_cluster.closest = item;
-                            merged_cluster.distance = distance;
-                        
-                        # Check if current cluster has removed neighbor.
-                        if ( (item.closest is cluster1) or (item.closest is cluster2) ):
-                            # If previous distance was less then distance to new cluster then nearest cluster should be found in the tree.
-                            #print("Update: ", item);
-                            if (item.distance < distance):
-                                (item.closest, item.distance) = self.__closest_cluster(item, distance);
-                                
-                                # TODO: investigation of root cause is required.
-                                # Itself and merged cluster should be always in list of neighbors in line with specified radius.
-                                # But merged cluster may not be in list due to error calculation, therefore it should be added
-                                # manually.
-                                if (item.closest is None):
-                                    item.closest = merged_cluster;
-                                    item.distance = distance;
-                                
-                            # Otherwise new cluster is nearest.
-                            else:
-                                item.closest = merged_cluster;
-                                item.distance = distance;
-                            
-                            cluster_relocation_requests.append(item);
-                        elif (item.distance > distance):
-                            item.closest = merged_cluster;
-                            item.distance = distance;
-                            
-                            cluster_relocation_requests.append(item);
-                
-                # New cluster and updated clusters should relocated in queue
-                self.__insert_cluster(merged_cluster);
-                for item in cluster_relocation_requests:
-                    self.__relocate_cluster(item);
-        
-            # Change cluster representation
-            self.__clusters = [ cure_cluster_unit.indexes for cure_cluster_unit in self.__queue ];
-            self.__representors = [ cure_cluster_unit.rep for cure_cluster_unit in self.__queue ];
-            self.__means = [ cure_cluster_unit.mean for cure_cluster_unit in self.__queue ];
-    
-    
+
+    def __process_by_ccore(self):
+        """!
+        @brief Performs cluster analysis using CCORE (C/C++ part of pyclustering library).
+
+        """
+        cure_data_pointer = wrapper.cure_algorithm(self.__pointer_data, self.__number_cluster,
+                                                   self.__number_represent_points, self.__compression)
+
+        self.__clusters = wrapper.cure_get_clusters(cure_data_pointer)
+        self.__representors = wrapper.cure_get_representors(cure_data_pointer)
+        self.__means = wrapper.cure_get_means(cure_data_pointer)
+
+        wrapper.cure_data_destroy(cure_data_pointer)
+
+
+    def __process_by_python(self):
+        """!
+        @brief Performs cluster analysis using python code.
+
+        """
+        self.__create_queue()  # queue
+        self.__create_kdtree()  # create k-d tree
+
+        while len(self.__queue) > self.__number_cluster:
+            cluster1 = self.__queue[0]  # cluster that has nearest neighbor.
+            cluster2 = cluster1.closest  # closest cluster.
+
+            self.__queue.remove(cluster1)
+            self.__queue.remove(cluster2)
+
+            self.__delete_represented_points(cluster1)
+            self.__delete_represented_points(cluster2)
+
+            merged_cluster = self.__merge_clusters(cluster1, cluster2)
+
+            self.__insert_represented_points(merged_cluster)
+
+            # Pointers to clusters that should be relocated is stored here.
+            cluster_relocation_requests = []
+
+            # Check for the last cluster
+            if len(self.__queue) > 0:
+                merged_cluster.closest = self.__queue[0]  # arbitrary cluster from queue
+                merged_cluster.distance = self.__cluster_distance(merged_cluster, merged_cluster.closest)
+
+                for item in self.__queue:
+                    distance = self.__cluster_distance(merged_cluster, item)
+                    # Check if distance between new cluster and current is the best than now.
+                    if distance < merged_cluster.distance:
+                        merged_cluster.closest = item
+                        merged_cluster.distance = distance
+
+                    # Check if current cluster has removed neighbor.
+                    if (item.closest is cluster1) or (item.closest is cluster2):
+                        # If previous distance was less then distance to new cluster then nearest cluster should be found in the tree.
+                        # print("Update: ", item);
+                        if item.distance < distance:
+                            (item.closest, item.distance) = self.__closest_cluster(item, distance)
+
+                            # TODO: investigation of root cause is required.
+                            # Itself and merged cluster should be always in list of neighbors in line with specified radius.
+                            # But merged cluster may not be in list due to error calculation, therefore it should be added
+                            # manually.
+                            if item.closest is None:
+                                item.closest = merged_cluster
+                                item.distance = distance
+
+                        # Otherwise new cluster is nearest.
+                        else:
+                            item.closest = merged_cluster
+                            item.distance = distance
+
+                        cluster_relocation_requests.append(item)
+                    elif item.distance > distance:
+                        item.closest = merged_cluster
+                        item.distance = distance
+
+                        cluster_relocation_requests.append(item)
+
+            # New cluster and updated clusters should relocated in queue
+            self.__insert_cluster(merged_cluster)
+            for item in cluster_relocation_requests:
+                self.__relocate_cluster(item)
+
+        # Change cluster representation
+        self.__clusters = [cure_cluster_unit.indexes for cure_cluster_unit in self.__queue]
+        self.__representors = [cure_cluster_unit.rep for cure_cluster_unit in self.__queue]
+        self.__means = [cure_cluster_unit.mean for cure_cluster_unit in self.__queue]
+
+
     def get_clusters(self):
         """!
         @brief Returns list of allocated clusters, each cluster contains indexes of objects in list of data.
@@ -242,7 +257,7 @@ class cure:
         
         """
         
-        return self.__clusters;
+        return self.__clusters
     
     
     def get_representors(self):
@@ -257,7 +272,7 @@ class cure:
         
         """
         
-        return self.__representors;
+        return self.__representors
     
     
     def get_means(self):
@@ -272,7 +287,7 @@ class cure:
         
         """
         
-        return self.__means;
+        return self.__means
 
 
     def get_cluster_encoding(self):
@@ -285,7 +300,21 @@ class cure:
         
         """
         
-        return type_encoding.CLUSTER_INDEX_LIST_SEPARATION;
+        return type_encoding.CLUSTER_INDEX_LIST_SEPARATION
+
+
+    def __prepare_data_points(self, sample):
+        """!
+        @brief Prepare data points for clustering.
+        @details In case of numpy.array there are a lot of overloaded basic operators, such as __contains__, __eq__.
+
+        @return (list) Returns sample in list format.
+
+        """
+        if isinstance(sample, numpy.ndarray):
+            return sample.tolist()
+
+        return sample
 
 
     def __validate_arguments(self):
@@ -317,11 +346,11 @@ class cure:
         """
         
         for index in range(len(self.__queue)):
-            if (cluster.distance < self.__queue[index].distance):
-                self.__queue.insert(index, cluster);
-                return;
+            if cluster.distance < self.__queue[index].distance:
+                self.__queue.insert(index, cluster)
+                return
     
-        self.__queue.append(cluster);
+        self.__queue.append(cluster)
 
 
     def __relocate_cluster(self, cluster):
@@ -332,8 +361,8 @@ class cure:
         
         """
         
-        self.__queue.remove(cluster);
-        self.__insert_cluster(cluster);
+        self.__queue.remove(cluster)
+        self.__insert_cluster(cluster)
 
 
     def __closest_cluster(self, cluster, distance):
@@ -347,18 +376,18 @@ class cure:
         
         """
         
-        nearest_cluster = None;
-        nearest_distance = float('inf');
+        nearest_cluster = None
+        nearest_distance = float('inf')
         
         for point in cluster.rep:
             # Nearest nodes should be returned (at least it will return itself).
-            nearest_nodes = self.__tree.find_nearest_dist_nodes(point, distance);
+            nearest_nodes = self.__tree.find_nearest_dist_nodes(point, distance)
             for (candidate_distance, kdtree_node) in nearest_nodes:
-                if ( (candidate_distance < nearest_distance) and (kdtree_node is not None) and (kdtree_node.payload is not cluster) ):
-                    nearest_distance = candidate_distance;
-                    nearest_cluster = kdtree_node.payload;
+                if (candidate_distance < nearest_distance) and (kdtree_node is not None) and (kdtree_node.payload is not cluster):
+                    nearest_distance = candidate_distance
+                    nearest_cluster = kdtree_node.payload
                     
-        return (nearest_cluster, nearest_distance);
+        return (nearest_cluster, nearest_distance)
 
 
     def __insert_represented_points(self, cluster):
@@ -370,7 +399,7 @@ class cure:
         """
         
         for point in cluster.rep:
-            self.__tree.insert(point, cluster);
+            self.__tree.insert(point, cluster)
 
 
     def __delete_represented_points(self, cluster): 
@@ -382,7 +411,7 @@ class cure:
         """
         
         for point in cluster.rep:
-            self.__tree.remove(point, payload=cluster);
+            self.__tree.remove(point, payload=cluster)
 
 
     def __merge_clusters(self, cluster1, cluster2):
@@ -396,50 +425,50 @@ class cure:
         
         """
         
-        merged_cluster = cure_cluster(None, None);
+        merged_cluster = cure_cluster(None, None)
         
-        merged_cluster.points = cluster1.points + cluster2.points;
-        merged_cluster.indexes = cluster1.indexes + cluster2.indexes;
+        merged_cluster.points = cluster1.points + cluster2.points
+        merged_cluster.indexes = cluster1.indexes + cluster2.indexes
         
         # merged_cluster.mean = ( len(cluster1.points) * cluster1.mean + len(cluster2.points) * cluster2.mean ) / ( len(cluster1.points) + len(cluster2.points) );
-        dimension = len(cluster1.mean);
-        merged_cluster.mean = [0] * dimension;
+        dimension = len(cluster1.mean)
+        merged_cluster.mean = [0] * dimension
         if merged_cluster.points[1:] == merged_cluster.points[:-1]:
             merged_cluster.mean = merged_cluster.points[0]
         else:
             for index in range(dimension):
                 merged_cluster.mean[index] = ( len(cluster1.points) * cluster1.mean[index] + len(cluster2.points) * cluster2.mean[index] ) / ( len(cluster1.points) + len(cluster2.points) );
         
-        temporary = list();
+        temporary = list()
         
         for index in range(self.__number_represent_points):
-            maximal_distance = 0;
-            maximal_point = None;
+            maximal_distance = 0
+            maximal_point = None
             
             for point in merged_cluster.points:
-                minimal_distance = 0;
-                if (index == 0):
-                    minimal_distance = euclidean_distance(point, merged_cluster.mean);
+                minimal_distance = 0
+                if index == 0:
+                    minimal_distance = euclidean_distance(point, merged_cluster.mean)
                     #minimal_distance = euclidean_distance_sqrt(point, merged_cluster.mean);
                 else:
-                    minimal_distance = min([euclidean_distance(point, p) for p in temporary]);
+                    minimal_distance = min([euclidean_distance(point, p) for p in temporary])
                     #minimal_distance = cluster_distance(cure_cluster(point), cure_cluster(temporary[0]));
                     
-                if (minimal_distance >= maximal_distance):
-                    maximal_distance = minimal_distance;
-                    maximal_point = point;
+                if minimal_distance >= maximal_distance:
+                    maximal_distance = minimal_distance
+                    maximal_point = point
         
-            if (maximal_point not in temporary):
-                temporary.append(maximal_point);
+            if maximal_point not in temporary:
+                temporary.append(maximal_point)
                 
         for point in temporary:
-            representative_point = [0] * dimension;
+            representative_point = [0] * dimension
             for index in range(dimension):
-                representative_point[index] = point[index] + self.__compression * (merged_cluster.mean[index] - point[index]);
+                representative_point[index] = point[index] + self.__compression * (merged_cluster.mean[index] - point[index])
                 
-            merged_cluster.rep.append(representative_point);
+            merged_cluster.rep.append(representative_point)
         
-        return merged_cluster;
+        return merged_cluster
 
 
     def __create_queue(self):
@@ -452,25 +481,25 @@ class cure:
         
         """
         
-        self.__queue = [cure_cluster(self.__pointer_data[index_point], index_point) for index_point in range(len(self.__pointer_data))];
+        self.__queue = [cure_cluster(self.__pointer_data[index_point], index_point) for index_point in range(len(self.__pointer_data))]
         
         # set closest clusters
         for i in range(0, len(self.__queue)):
-            minimal_distance = float('inf');
-            closest_index_cluster = -1;
+            minimal_distance = float('inf')
+            closest_index_cluster = -1
             
             for k in range(0, len(self.__queue)):
-                if (i != k):
-                    dist = self.__cluster_distance(self.__queue[i], self.__queue[k]);
-                    if (dist < minimal_distance):
-                        minimal_distance = dist;
-                        closest_index_cluster = k;
+                if i != k:
+                    dist = self.__cluster_distance(self.__queue[i], self.__queue[k])
+                    if dist < minimal_distance:
+                        minimal_distance = dist
+                        closest_index_cluster = k
             
-            self.__queue[i].closest = self.__queue[closest_index_cluster];
-            self.__queue[i].distance = minimal_distance;
+            self.__queue[i].closest = self.__queue[closest_index_cluster]
+            self.__queue[i].distance = minimal_distance
         
         # sort clusters
-        self.__queue.sort(key = lambda x: x.distance, reverse = False);
+        self.__queue.sort(key = lambda x: x.distance, reverse = False)
     
 
     def __create_kdtree(self):
@@ -481,10 +510,10 @@ class cure:
         
         """
         
-        self.__tree = kdtree();
+        self.__tree = kdtree()
         for current_cluster in self.__queue:
             for representative_point in current_cluster.rep:
-                self.__tree.insert(representative_point, current_cluster);
+                self.__tree.insert(representative_point, current_cluster)
 
 
     def __cluster_distance(self, cluster1, cluster2):
@@ -498,12 +527,12 @@ class cure:
         
         """
         
-        distance = float('inf');
+        distance = float('inf')
         for i in range(0, len(cluster1.rep)):
             for k in range(0, len(cluster2.rep)):
                 #dist = euclidean_distance_sqrt(cluster1.rep[i], cluster2.rep[k]);   # Fast mode
-                dist = euclidean_distance(cluster1.rep[i], cluster2.rep[k]);        # Slow mode
-                if (dist < distance):
-                    distance = dist;
+                dist = euclidean_distance(cluster1.rep[i], cluster2.rep[k])        # Slow mode
+                if dist < distance:
+                    distance = dist
                     
-        return distance;
+        return distance

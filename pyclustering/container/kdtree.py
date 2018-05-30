@@ -43,10 +43,10 @@ class kdtree_text_visualizer:
         @param[in] kdtree_instance (kdtree): Instance of KD-Tree that should be visualized.
         
         """
-        self.__kdtree_instance = kdtree_instance;
+        self.__kdtree_instance = kdtree_instance
         
-        self.__tree_level_text  = "";
-        self.__tree_text        = "";
+        self.__tree_level_text  = ""
+        self.__tree_text        = ""
 
 
     def visualize(self, display=True):
@@ -59,36 +59,36 @@ class kdtree_text_visualizer:
         
         """
         
-        nodes = self.__get_nodes();
-        level = nodes[0];
+        nodes = self.__get_nodes()
+        level = nodes[0]
         
         for node in nodes:
             self.__print_node(level, node)
 
-        self.__tree_text += self.__tree_level_text;
-        if (display is True):
-            print(self.__tree_text);
+        self.__tree_text += self.__tree_level_text
+        if display is True:
+            print(self.__tree_text)
         
-        return self.__tree_text;
+        return self.__tree_text
 
 
     def __print_node(self, level, node):
-        if (level == node[0]):
-            self.__tree_level_text += str(node[1]) + "\t";
+        if level == node[0]:
+            self.__tree_level_text += str(node[1]) + "\t"
 
         else:
-            self.__tree_text += self.__tree_level_text + "\n";
-            level = node[0];
-            self.__tree_level_text = str(node[1]) + "\t";
+            self.__tree_text += self.__tree_level_text + "\n"
+            level = node[0]
+            self.__tree_level_text = str(node[1]) + "\t"
 
 
     def __get_nodes(self):
-        nodes = self.__kdtree_instance.traverse();
-        if (nodes == []):
-            return;
+        nodes = self.__kdtree_instance.traverse()
+        if nodes == []:
+            return
         
-        nodes.sort(key = lambda item: item[0]);
-        return nodes;
+        nodes.sort(key = lambda item: item[0])
+        return nodes
 
 
 
@@ -98,7 +98,7 @@ class node:
     
     """
     
-    def __init__(self, data = None, payload = None, left = None, right = None, disc = None, parent = None):
+    def __init__(self, data=None, payload=None, left=None, right=None, disc=None, parent=None):
         """!
         @brief 
         
@@ -112,22 +112,22 @@ class node:
         """
         
         ## Data point that is presented as list of coodinates.
-        self.data = data;
+        self.data = data
         
         ## Payload of node that can be used by user for storing specific information in the node.
-        self.payload = payload;
+        self.payload = payload
         
         ## Left node successor of the node.
-        self.left = left;
+        self.left = left
         
         ## Right node successor of the node.
-        self.right = right;
+        self.right = right
         
         ## Index of dimension.
-        self.disc = disc;
+        self.disc = disc
         
         ## Parent node of the node.
-        self.parent = parent;
+        self.parent = parent
 
 
     def __repr__(self):
@@ -135,23 +135,23 @@ class node:
         @return (string) Default representation of the node.
         
         """
-        left = None; 
-        right = None; 
+        left = None
+        right = None
         
-        if (self.left is not None):
-            left = self.left.data;
+        if self.left is not None:
+            left = self.left.data
             
-        if (self.right is not None):
-            right = self.right.data;
+        if self.right is not None:
+            right = self.right.data
         
-        return "(%s: [L:'%s', R:'%s'])" % (self.data, left, right);
+        return "(%s: [L:'%s', R:'%s'])" % (self.data, left, right)
     
     def __str__(self):
         """!
         @return (string) String representation of the node.
         
         """
-        return self.__repr__();
+        return self.__repr__()
 
 
 class kdtree:
@@ -225,26 +225,26 @@ class kdtree:
             if cur_node.data[cur_node.disc] <= point[cur_node.disc]:
                 # If new node is greater or equal than current node then check right leaf
                 if cur_node.right is None:
-                    discriminator = cur_node.disc + 1;
+                    discriminator = cur_node.disc + 1
                     if discriminator >= self.__dimension:
-                        discriminator = 0;
+                        discriminator = 0
                         
-                    cur_node.right = node(point, payload, None, None, discriminator, cur_node);
-                    return cur_node.right;
+                    cur_node.right = node(point, payload, None, None, discriminator, cur_node)
+                    return cur_node.right
                 else: 
-                    cur_node = cur_node.right;
+                    cur_node = cur_node.right
             
             else:
                 # If new node is less than current then check left leaf
                 if cur_node.left is None:
-                    discriminator = cur_node.disc + 1;
+                    discriminator = cur_node.disc + 1
                     if discriminator >= self.__dimension:
-                        discriminator = 0;
+                        discriminator = 0
                         
-                    cur_node.left = node(point, payload, None, None, discriminator, cur_node);
-                    return cur_node.left;
+                    cur_node.left = node(point, payload, None, None, discriminator, cur_node)
+                    return cur_node.left
                 else:
-                    cur_node = cur_node.left;
+                    cur_node = cur_node.left
     
     
     def remove(self, point, **kwargs):
@@ -264,30 +264,30 @@ class kdtree:
         """
         
         # Get required node
-        node_for_remove = None;
+        node_for_remove = None
         if 'payload' in kwargs:
-            node_for_remove = self.find_node_with_payload(point, kwargs['payload'], None);
+            node_for_remove = self.find_node_with_payload(point, kwargs['payload'], None)
         else:
-            node_for_remove = self.find_node(point, None);
+            node_for_remove = self.find_node(point, None)
         
         if node_for_remove is None:
-            return None;
+            return None
         
-        parent = node_for_remove.parent;
-        minimal_node = self.__recursive_remove(node_for_remove);
+        parent = node_for_remove.parent
+        minimal_node = self.__recursive_remove(node_for_remove)
         if parent is None:
-            self.__root = minimal_node;
+            self.__root = minimal_node
             
             # If all k-d tree was destroyed
             if minimal_node is not None:
-                minimal_node.parent = None;
+                minimal_node.parent = None
         else:
             if parent.left is node_for_remove:
-                parent.left = minimal_node;
+                parent.left = minimal_node
             elif parent.right is node_for_remove:
-                parent.right = minimal_node;
+                parent.right = minimal_node
         
-        return self.__root;
+        return self.__root
     
     
     def __recursive_remove(self, node_removed):
@@ -302,37 +302,37 @@ class kdtree:
                 
         # Check if it is leaf
         if (node_removed.right is None) and (node_removed.left is None):
-            return None;
+            return None
         
-        discriminator = node_removed.disc;
+        discriminator = node_removed.disc
         
         # Check if only left branch exist
         if node_removed.right is None:
-            node_removed.right = node_removed.left;
-            node_removed.left = None;
+            node_removed.right = node_removed.left
+            node_removed.left = None
         
         # Find minimal node in line with coordinate that is defined by discriminator
-        minimal_node = self.find_minimal_node(node_removed.right, discriminator);
-        parent = minimal_node.parent;
+        minimal_node = self.find_minimal_node(node_removed.right, discriminator)
+        parent = minimal_node.parent
         
         if parent.left is minimal_node:
-            parent.left = self.__recursive_remove(minimal_node);
+            parent.left = self.__recursive_remove(minimal_node)
         elif parent.right is minimal_node:
-            parent.right = self.__recursive_remove(minimal_node);
+            parent.right = self.__recursive_remove(minimal_node)
         
-        minimal_node.parent = node_removed.parent;
-        minimal_node.disc = node_removed.disc;
-        minimal_node.right = node_removed.right;
-        minimal_node.left = node_removed.left;
+        minimal_node.parent = node_removed.parent
+        minimal_node.disc = node_removed.disc
+        minimal_node.right = node_removed.right
+        minimal_node.left = node_removed.left
         
         # Update parent for successors of previous parent.
         if minimal_node.right is not None:
-            minimal_node.right.parent = minimal_node;
+            minimal_node.right.parent = minimal_node
              
         if minimal_node.left is not None:
-            minimal_node.left.parent = minimal_node;
+            minimal_node.left.parent = minimal_node
         
-        return minimal_node;
+        return minimal_node
 
 
     def find_minimal_node(self, node_head, discriminator):
@@ -346,23 +346,23 @@ class kdtree:
         
         """
         
-        min_key = lambda cur_node: cur_node.data[discriminator];
-        stack = [];
-        candidates = [];
-        isFinished = False;
+        min_key = lambda cur_node: cur_node.data[discriminator]
+        stack = []
+        candidates = []
+        isFinished = False
         while isFinished is False:
             if node_head is not None:
-                stack.append(node_head);
-                node_head = node_head.left;
+                stack.append(node_head)
+                node_head = node_head.left
             else:
                 if len(stack) != 0:
-                    node_head = stack.pop();
-                    candidates.append(node_head);
-                    node_head = node_head.right;
+                    node_head = stack.pop()
+                    candidates.append(node_head)
+                    node_head = node_head.right
                 else:
-                    isFinished = True;
+                    isFinished = True
 
-        return min(candidates, key = min_key);
+        return min(candidates, key = min_key)
 
 
     def __fill_tree(self, data_list, payload_list):
@@ -374,29 +374,31 @@ class kdtree:
 
         """
         if data_list is None or len(data_list) == 0:
-            return; # Just return from here, tree can be filled by insert method later
+            return # Just return from here, tree can be filled by insert method later
 
         if payload_list is None:
             # Case when payload is not specified.
             for index in range(0, len(data_list)):
-                self.insert(data_list[index], None);
+                self.insert(data_list[index], None)
         else:
             # Case when payload is specified.
             for index in range(0, len(data_list)):
-                self.insert(data_list[index], payload_list[index]);
+                self.insert(data_list[index], payload_list[index])
 
         self.__point_comparator = self.__create_point_comparator(type(self.__root.data))
 
 
-    def __create_point_comparator(self, type_node):
+    def __create_point_comparator(self, type_point):
         """!
         @brief Create point comparator.
         @details In case of numpy.array specific comparator is required.
 
+        @param[in] type_point (data_type): Type of point that is stored in KD-node.
+
         @return (callable) Callable point comparator to compare to points.
 
         """
-        if type_node == numpy.ndarray:
+        if type_point == numpy.ndarray:
             return lambda obj1, obj2: numpy.array_equal(obj1, obj2)
 
         return lambda obj1, obj2: obj1 == obj2
@@ -416,24 +418,24 @@ class kdtree:
         
         """
         
-        req_node = None;
+        req_node = None
         
         if cur_node is None:
-            cur_node = self.__root;
+            cur_node = self.__root
         
         while cur_node:
             if cur_node.data[cur_node.disc] <= point[cur_node.disc]:
                 # Check if it's required node
                 if search_rule(cur_node):
-                    req_node = cur_node;
-                    break;
+                    req_node = cur_node
+                    break
                 
-                cur_node = cur_node.right;
+                cur_node = cur_node.right
             
             else:
-                cur_node = cur_node.left;
+                cur_node = cur_node.left
         
-        return req_node;
+        return req_node
 
 
     def find_node_with_payload(self, point, payload, cur_node = None):
@@ -450,8 +452,8 @@ class kdtree:
         
         """
         
-        rule_search = lambda node, point=point, payload=payload: self.__point_comparator(node.data, point) and node.payload == payload;
-        return self.__find_node_by_rule(point, rule_search, cur_node);
+        rule_search = lambda node, point=point, payload=payload: self.__point_comparator(node.data, point) and node.payload == payload
+        return self.__find_node_by_rule(point, rule_search, cur_node)
 
 
     def find_node(self, point, cur_node = None):
@@ -467,8 +469,8 @@ class kdtree:
         
         """
         
-        rule_search = lambda node, point=point: self.__point_comparator(node.data, point);
-        return self.__find_node_by_rule(point, rule_search, cur_node);
+        rule_search = lambda node, point=point: self.__point_comparator(node.data, point)
+        return self.__find_node_by_rule(point, rule_search, cur_node)
     
     
     def find_nearest_dist_node(self, point, distance, retdistance = False):
@@ -484,17 +486,17 @@ class kdtree:
         
         """
         
-        best_nodes = self.find_nearest_dist_nodes(point, distance);
+        best_nodes = self.find_nearest_dist_nodes(point, distance)
             
         if best_nodes == []:
-            return None;
+            return None
         
-        nearest = min(best_nodes, key = lambda item: item[0]);
+        nearest = min(best_nodes, key = lambda item: item[0])
         
         if retdistance is True:
-            return nearest;
+            return nearest
         else:
-            return nearest[1];
+            return nearest[1]
     
     
     def find_nearest_dist_nodes(self, point, distance):
@@ -508,11 +510,11 @@ class kdtree:
         
         """
 
-        best_nodes = [];
+        best_nodes = []
         if self.__root is not None:
-            self.__recursive_nearest_nodes(point, distance, distance ** 2, self.__root, best_nodes);
+            self.__recursive_nearest_nodes(point, distance, distance ** 2, self.__root, best_nodes)
 
-        return best_nodes;
+        return best_nodes
 
 
     def __recursive_nearest_nodes(self, point, distance, sqrt_distance, node_head, best_nodes):
@@ -528,18 +530,18 @@ class kdtree:
         """
 
         if node_head.right is not None:
-            minimum = node_head.data[node_head.disc] - distance;
+            minimum = node_head.data[node_head.disc] - distance
             if point[node_head.disc] >= minimum:
-                self.__recursive_nearest_nodes(point, distance, sqrt_distance, node_head.right, best_nodes);
+                self.__recursive_nearest_nodes(point, distance, sqrt_distance, node_head.right, best_nodes)
         
         if node_head.left is not None:
-            maximum = node_head.data[node_head.disc] + distance;
+            maximum = node_head.data[node_head.disc] + distance
             if point[node_head.disc] < maximum:
-                self.__recursive_nearest_nodes(point, distance, sqrt_distance, node_head.left, best_nodes);
+                self.__recursive_nearest_nodes(point, distance, sqrt_distance, node_head.left, best_nodes)
         
-        candidate_distance = euclidean_distance_square(point, node_head.data);
+        candidate_distance = euclidean_distance_square(point, node_head.data)
         if candidate_distance <= sqrt_distance:
-            best_nodes.append( (candidate_distance, node_head) );
+            best_nodes.append( (candidate_distance, node_head) )
 
 
     def children(self, node_parent):
@@ -553,9 +555,9 @@ class kdtree:
         """
         
         if node_parent.left is not None:
-            yield node_parent.left;
+            yield node_parent.left
         if node_parent.right is not None:
-            yield node_parent.right;
+            yield node_parent.right
 
 
     def traverse(self, start_node = None, level = None):
@@ -570,15 +572,15 @@ class kdtree:
         """
         
         if start_node is None:
-            start_node  = self.__root;
-            level = 0;
+            start_node  = self.__root
+            level = 0
         
         if start_node is None:
-            return [];
+            return []
         
-        items = [ (level, start_node) ];
+        items = [ (level, start_node) ]
         for child in self.children(start_node):
             if child is not None:
-                items += self.traverse(child, level + 1);
+                items += self.traverse(child, level + 1)
         
-        return items;
+        return items

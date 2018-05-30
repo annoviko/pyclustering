@@ -30,33 +30,41 @@ import unittest
 import matplotlib
 matplotlib.use('Agg')
 
-import numpy
-
 from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES
 
 from pyclustering.cluster.tests.cure_templates import CureTestTemplates
-
-from pyclustering.utils import read_sample
 
 
 class CureUnitTest(unittest.TestCase):
     def testClusterAllocationSampleSimple1(self):
         CureTestTemplates.template_cluster_allocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [5, 5], 2)
 
-    #def testClusterAllocationSampleSimple1NumPy(self):
-    #    CureTestTemplates.template_cluster_allocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [5, 5], 2, numpy_usage=True)
+    def testClusterAllocationSampleSimple1NumPy(self):
+        CureTestTemplates.template_cluster_allocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [5, 5], 2, numpy_usage=True)
 
     def testClusterAllocationSampleSimple2(self):
         CureTestTemplates.template_cluster_allocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [10, 5, 8], 3)
 
+    def testClusterAllocationSampleSimple2NumPy(self):
+        CureTestTemplates.template_cluster_allocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [10, 5, 8], 3, numpy_usage=True)
+
     def testClusterAllocationSampleSimple3(self):
         CureTestTemplates.template_cluster_allocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [10, 10, 10, 30], 4)
+
+    def testClusterAllocationSampleSimple3NumPy(self):
+        CureTestTemplates.template_cluster_allocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [10, 10, 10, 30], 4, numpy_usage=True)
 
     def testClusterAllocationSampleSimple4(self):
         CureTestTemplates.template_cluster_allocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, [15, 15, 15, 15, 15], 5)
 
+    def testClusterAllocationSampleSimple4NumPy(self):
+        CureTestTemplates.template_cluster_allocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, [15, 15, 15, 15, 15], 5, numpy_usage=True)
+
     def testClusterAllocationSampleSimple5(self):
         CureTestTemplates.template_cluster_allocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [15, 15, 15, 15], 4)
+
+    def testClusterAllocationSampleSimple5NumPy(self):
+        CureTestTemplates.template_cluster_allocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [15, 15, 15, 15], 4, numpy_usage=True)
 
     def testClusterAllocationSampleTwoDiamonds(self):
         CureTestTemplates.template_cluster_allocation(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, [400, 400], 2, 5, 0.3)
