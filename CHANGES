@@ -13,6 +13,9 @@ CORRECTED MAJOR BUGS:
 - Bug with failure in case of numpy.ndarray data type in python part of CURE algorithm (pyclustering.cluster.cure).
   See: https://github.com/annoviko/pyclustering/issues/438
 
+- Bug with computational error during KD-tree search point on a border of search radius that leads to missing these points (ccore.container.kdtree).
+  See: https://github.com/annoviko/pyclustering/issues/441
+
 
 
 ------------------------------------------------------------------------

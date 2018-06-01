@@ -185,8 +185,6 @@ class syncsom:
         """!
         @brief Returns clusters with SOM neurons that encode input features in line with result of synchronization in the second (Sync) layer.
         
-        @param[in] eps (double): Maximum error for allocation of synchronous ensemble oscillators.
-        
         @return (list) List of clusters that are represented by lists of indexes of neurons that encode input data.
         
         @see process()

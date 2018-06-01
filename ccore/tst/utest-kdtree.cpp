@@ -25,10 +25,14 @@
 
 #include "container/kdtree.hpp"
 
+#include "utils/metric.hpp"
+
 #include <algorithm>
+#include <numeric>
 
 
 using namespace ccore::container;
+using namespace ccore::utils::metric;
 
 
 class utest_kdtree : public ::testing::Test {
@@ -45,7 +49,7 @@ protected:
         }
     }
 
-    virtual void TemplateTestInsertSearchRemove(const dataset & p_data) {
+    virtual void TemplateTestInsertSearchRemove(const dataset & p_data, const double radius_search = 10.0) {
         tree = kdtree();
 
         ASSERT_EQ(nullptr, tree.get_root());
@@ -56,7 +60,7 @@ protected:
             tree.insert(p_data[index], (void *) index);
             ASSERT_EQ(tree.get_size(), index + 1);
 
-            searcher = kdtree_searcher(p_data[index], tree.get_root(), 10.0);
+            searcher = kdtree_searcher(p_data[index], tree.get_root(), radius_search);
 
             /* Find the nearest node */
             FindNearestNode(p_data, index);
@@ -295,6 +299,48 @@ TEST_F(utest_kdtree, insert_search_remove_simple_07) {
 }
 
 
+TEST_F(utest_kdtree, insert_search_remove_simple_08) {
+    auto sample = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_08);
+    const double search_radius = farthest_distance(*sample, distance_metric_factory<point>::euclidean());
+    TemplateTestInsertSearchRemove(*sample, search_radius);
+}
+
+
+TEST_F(utest_kdtree, insert_search_remove_simple_10) {
+    auto sample = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_10);
+    const double search_radius = farthest_distance(*sample, distance_metric_factory<point>::euclidean());
+    TemplateTestInsertSearchRemove(*sample, search_radius);
+}
+
+
+TEST_F(utest_kdtree, insert_search_remove_lsun) {
+    auto sample = fcps_sample_factory::create_sample(FCPS_SAMPLE::LSUN);
+    const double search_radius = farthest_distance(*sample, distance_metric_factory<point>::euclidean());
+    TemplateTestInsertSearchRemove(*sample, search_radius);
+}
+
+
+TEST_F(utest_kdtree, insert_search_remove_hepta) {
+    auto sample = fcps_sample_factory::create_sample(FCPS_SAMPLE::HEPTA);
+    const double search_radius = farthest_distance(*sample, distance_metric_factory<point>::euclidean());
+    TemplateTestInsertSearchRemove(*sample, search_radius);
+}
+
+
+TEST_F(utest_kdtree, insert_search_remove_tetra) {
+    auto sample = fcps_sample_factory::create_sample(FCPS_SAMPLE::TETRA);
+    const double search_radius = farthest_distance(*sample, distance_metric_factory<point>::euclidean());
+    TemplateTestInsertSearchRemove(*sample, search_radius);
+}
+
+
+TEST_F(utest_kdtree, insert_search_remove_two_diamonds) {
+    auto sample = fcps_sample_factory::create_sample(FCPS_SAMPLE::TWO_DIAMONDS);
+    const double search_radius = farthest_distance(*sample, distance_metric_factory<point>::euclidean());
+    TemplateTestInsertSearchRemove(*sample, search_radius);
+}
+
+
 TEST_F(utest_kdtree, insert_search_remove_with_payload_identical_data_1) {
     dataset data = { {0.1}, {0.1}, {0.1}, {0.1}, {0.2}, {0.2} };
     std::vector<std::size_t> payloads = { 0, 1, 2, 3, 4, 5 };
@@ -331,4 +377,31 @@ TEST_F(utest_kdtree, insert_search_remove_with_payload_identical_data_5) {
     std::vector<std::size_t> payloads = { 0, 1, 2, 3, 4, 5, 6, 7 };
 
     TemplateInsertFindRemoveByCoordinatesAndPayload(data, payloads);
+}
+
+
+TEST_F(utest_kdtree, insert_search_remove_with_payload_identical_simple_09) {
+    auto data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_09);
+    std::vector<std::size_t> payloads(data->size());
+    std::iota(payloads.begin(), payloads.end(), 0);
+
+    TemplateInsertFindRemoveByCoordinatesAndPayload(*data, payloads);
+}
+
+
+TEST_F(utest_kdtree, insert_search_remove_with_payload_identical_simple_11) {
+    auto data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_11);
+    std::vector<std::size_t> payloads(data->size());
+    std::iota(payloads.begin(), payloads.end(), 0);
+
+    TemplateInsertFindRemoveByCoordinatesAndPayload(*data, payloads);
+}
+
+
+TEST_F(utest_kdtree, insert_search_remove_with_payload_identical_simple_12) {
+    auto data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_12);
+    std::vector<std::size_t> payloads(data->size());
+    std::iota(payloads.begin(), payloads.end(), 0);
+
+    TemplateInsertFindRemoveByCoordinatesAndPayload(*data, payloads);
 }

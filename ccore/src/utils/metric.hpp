@@ -22,6 +22,8 @@
 #pragma once
 
 
+#include "definitions.hpp"
+
 #include <algorithm>
 #include <cmath>
 #include <exception>
@@ -35,6 +37,7 @@ namespace ccore {
 namespace utils {
 
 namespace metric {
+
 
 
 /**
@@ -407,6 +410,33 @@ public:
  *
  */
 double average_neighbor_distance(const std::vector<std::vector<double> > * points, const std::size_t num_neigh);
+
+
+/**
+ *
+ * @brief   Finds farthest distance between points in specified container (data).
+ *
+ * @param[in] p_container: input data.
+ * @param[in] p_metric: metric that is used for distance calculation between points.
+ *
+ * @return  Returns farthest distance between points.
+ *
+ */
+template <typename TypeContainer>
+double farthest_distance(const TypeContainer & p_container, const distance_metric<point> & p_metric)
+{
+    double distance = 0;
+    for (std::size_t i = 0; i < p_container.size(); i++) {
+        for (std::size_t j = i + 1; j < p_container.size(); j++) {
+            double candidate_distance = p_metric(p_container[i], p_container[j]);
+            if (candidate_distance > distance) {
+                distance = candidate_distance;
+            }
+        }
+    }
+
+    return distance;
+}
 
 
 }
