@@ -5,6 +5,9 @@ CHANGE NOTES FOR 0.8.2 (STARTED May 28, 2018)
 ------------------------------------------------------------------------
 
 GENERAL CHANGES:
+- Optimization of CURE algrotihm by using Euclidean Square distance (pyclustering.cluster.cure, ccore.clst.cure).
+  See: https://github.com/annoviko/pyclustering/issues/439
+
 - Supported numpy.ndarray points in KD-tree (pyclustering.container.kdtree).
   See: https://github.com/annoviko/pyclustering/issues/438
 
