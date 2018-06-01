@@ -29,6 +29,7 @@ import matplotlib
 import matplotlib.gridspec as gridspec
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
+import matplotlib.animation as animation
 
 import itertools
 
@@ -215,6 +216,138 @@ class bang_visualizer:
         return max_corner, min_corner
 
 
+class bang_animator:
+    """!
+    @brief Provides service for creating animation using BANG clustering results.
+
+    """
+    def __init__(self, directory, clusters, noise):
+        """!
+        @brief Creates BANG animator instance.
+
+        @param[in] directory (bang_directory): BANG directory that was formed during BANG clustering process.
+        @param[in] clusters (list): Allocated clusters during BANG clustering process.
+        @param[in] noise (list): Allocated noise (outliers) during BANG clustering process.
+
+        """
+        self.__directory = directory
+        self.__clusters = clusters
+        self.__noise = []
+
+        self.__current_block = 0
+        self.__current_level = 0
+        self.__level_blocks = directory.get_level(0)
+
+        self.__figure = plt.figure()
+        self.__ax = self.__figure.add_subplot(1, 1, 1)
+        self.__special_frame = 0
+
+
+    def __increment_block(self):
+        self.__current_block += 1
+        if self.__current_block >= len(self.__level_blocks):
+            self.__current_block = 0
+            self.__current_level += 1
+
+            if self.__current_level < self.__directory.get_height():
+                self.__level_blocks = self.__directory.get_level(self.__current_level)
+
+
+    def __draw_block(self, block, block_alpha=0.0):
+        max_corner, min_corner = block.get_spatial_block().get_corners()
+
+        face_color = matplotlib.colors.to_rgba('blue', alpha=block_alpha)
+        edge_color = matplotlib.colors.to_rgba('black', alpha=1.0)
+
+        rect = patches.Rectangle(min_corner, max_corner[0] - min_corner[0], max_corner[1] - min_corner[1],
+                                 fill=True,
+                                 facecolor=face_color,
+                                 edgecolor=edge_color,
+                                 linewidth=0.5)
+        self.__ax.add_patch(rect)
+
+
+    def __draw_leaf_density(self):
+        leafs = self.__directory.get_leafs()
+        density_scale = leafs[-1].get_density()
+
+        for block in leafs:
+            alpha = 0.8 * block.get_density() / density_scale
+            self.__draw_block(block, alpha)
+
+
+    def __draw_clusters(self):
+        data = self.__directory.get_data()
+        for index_cluster in range(len(self.__clusters)):
+            color = color_list.get_color(index_cluster)
+            self.__draw_cluster(data, self.__clusters[index_cluster], color, '.')
+
+        self.__draw_cluster(self.__directory.get_data(), self.__noise, 'gray', 'x')
+
+
+    def __draw_cluster(self, data, cluster, color, marker):
+        for item in cluster:
+            self.__ax.plot(data[item][0], data[item][1], color=color, marker=marker);
+
+
+    def animate(self, animation_velocity=75, movie_fps=1, save_movie=None):
+        """!
+        @brief Animates clustering process that is performed by BANG algorithm.
+
+        @param[in] animation_velocity (uint): Interval between frames in milliseconds (for run-time animation only).
+        @param[in] movie_fps (uint): Defines frames per second (for rendering movie only).
+        @param[in] save_movie (string): If it is specified then animation will be stored to file that is specified in this parameter.
+
+        """
+        def init_frame():
+            self.__figure.clf()
+            self.__ax = self.__figure.add_subplot(1, 1, 1)
+
+            for point in self.__directory.get_data():
+                self.__ax.plot(point[0], point[1], color='red', marker='.')
+
+            return frame_generation(0);
+
+
+        def frame_generation(index_iteration):
+            if self.__current_level < self.__directory.get_height():
+                print(index_iteration, "draw block")
+                block = self.__level_blocks[self.__current_block]
+                self.__draw_block(block)
+                self.__increment_block()
+
+            else:
+                if self.__special_frame == 0:
+                    print("draw density")
+                    self.__draw_leaf_density()
+
+                elif self.__special_frame == 1:
+                    print("draw clusters")
+                    self.__draw_clusters()
+
+                elif self.__special_frame == 2:
+                    print("draw only clusters")
+                    self.__figure.clf()
+                    self.__ax = self.__figure.add_subplot(1, 1, 1)
+                    self.__draw_clusters()
+
+                self.__special_frame += 1
+
+
+
+        iterations = len(self.__directory) + 2
+        print("Total number of iterations: %d" % iterations)
+        cluster_animation = animation.FuncAnimation(self.__figure, frame_generation, iterations,
+                                                    interval=animation_velocity,
+                                                    init_func=init_frame,
+                                                    repeat_delay=5000)
+
+        if (save_movie is not None):
+            cluster_animation.save(save_movie, writer = 'ffmpeg', fps = movie_fps, bitrate = 1500)
+        else:
+            plt.show()
+
+
 class bang_directory:
     """!
     @brief BANG directory stores BANG-blocks that represents grid in data space.
@@ -222,7 +355,7 @@ class bang_directory:
               a direct access to the leafs that should be analysed. Leafs cache data-points.
 
     """
-    def __init__(self, data, levels, density_threshold=0.0):
+    def __init__(self, data, levels, density_threshold=0.0, **kwargs):
         """!
         @brief Create BANG directory - basically tree structure with direct access to leafs.
 
@@ -230,6 +363,10 @@ class bang_directory:
         @param[in] levels (uint): Height of the blocks tree.
         @param[in] density_threshold (double): The lowest level of density when contained data by bang-block is
                     considered as a noise and there is no need to split it till the last level.
+        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'observe').
+
+        <b>Keyword Args:</b><br>
+            - observe (bool): If 'True' then blocks on each level are stored.
 
         """
         self.__data = data
@@ -237,8 +374,21 @@ class bang_directory:
         self.__density_threshold = density_threshold
         self.__leafs = []
         self.__root = None
+        self.__level_blocks = []
+        self.__size = 0
+        self.__observe = kwargs.get('observe', True)
 
         self.__create_directory()
+
+
+    def __len__(self):
+        """!
+        @brief Returns amount of blocks that is stored in the directory
+
+        @return (uint) Amount of blocks in the BANG directory.
+
+        """
+        return self.__size
 
 
     def get_data(self):
@@ -263,6 +413,28 @@ class bang_directory:
         return self.__leafs
 
 
+    def get_level(self, level):
+        """!
+        @brief Returns BANG blocks on the specific level.
+
+        @param[in] level (uint): Level of tree where BANG blocks are located.
+
+        @return (list) List of BANG blocks on the specific level.
+
+        """
+        return self.__level_blocks[level]
+
+
+    def get_height(self):
+        """!
+        @brief Returns height of BANG tree where blocks are stored.
+
+        @return (uint) Height of BANG tree.
+
+        """
+        return len(self.__level_blocks)
+
+
     def __create_directory(self):
         """!
         @brief Create BANG directory as a tree with separate storage for leafs.
@@ -277,8 +449,22 @@ class bang_directory:
 
         if cache_require:
             self.__leafs.append(self.__root)
+            self.__store_level_blocks([self.__root])
         else:
             self.__build_directory_levels()
+
+
+    def __store_level_blocks(self, level_blocks):
+        """!
+        @brief Store level blocks if observing is enabled.
+
+        @param[in] level_blocks (list): Created blocks on a new level.
+
+        """
+        self.__size += len(level_blocks)
+        if self.__observe is True:
+            self.__level_blocks.append(level_blocks)
+
 
 
     def __build_directory_levels(self):
@@ -286,9 +472,12 @@ class bang_directory:
         @brief Build levels of direction if amount of level is greater than one.
 
         """
+
         previous_level_blocks = [ self.__root ]
+
         for level in range(1, self.__levels):
             previous_level_blocks = self.__build_level(previous_level_blocks, level)
+            self.__store_level_blocks(previous_level_blocks)
 
         self.__leafs = sorted(self.__leafs, key=lambda block: block.get_density())
 
@@ -976,3 +1165,4 @@ class bang:
 
         blocks = sorted(blocks, key=lambda block: block.get_density(), reverse=True)
         self.__dendrogram[index_cluster] += blocks
+
