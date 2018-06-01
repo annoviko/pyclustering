@@ -48,24 +48,6 @@ using distance_functor = std::function<double(const TypeContainer &, const TypeC
 
 /**
  *
- * @brief   Private function that is used to check input arguments that are used for distance calculation.
- *
- * @param[in] point1: point #1 that is represented by coordinates.
- * @param[in] point2: point #2 that is represented by coordinates.
- *
- */
-template <typename TypeContainer>
-static void check_common_distance_arguments(const TypeContainer & point1, const TypeContainer & point2) {
-    if (point1.size() != point2.size()) {
-        throw std::invalid_argument("Impossible to calculate distance between object with different sizes ("
-                + std::to_string(point1.size()) + ", "
-                + std::to_string(point2.size()) + ").");
-    }
-}
-
-
-/**
- *
  * @brief   Calculates square of Euclidean distance between points.
  *
  * @param[in] point1: point #1 that is represented by coordinates.
@@ -76,8 +58,6 @@ static void check_common_distance_arguments(const TypeContainer & point1, const 
  */
 template <typename TypeContainer>
 double euclidean_distance_square(const TypeContainer & point1, const TypeContainer & point2) {
-    check_common_distance_arguments(point1, point2);
-
     double distance = 0.0;
     typename TypeContainer::const_iterator iter_point1 = point1.begin();
 
@@ -120,8 +100,6 @@ double euclidean_distance(const TypeContainer & point1, const TypeContainer & po
  */
 template <typename TypeContainer>
 double manhattan_distance(const TypeContainer & point1, const TypeContainer & point2) {
-    check_common_distance_arguments(point1, point2);
-
     double distance = 0.0;
     typename TypeContainer::const_iterator iter_point1 = point1.begin();
 
@@ -146,8 +124,6 @@ double manhattan_distance(const TypeContainer & point1, const TypeContainer & po
  */
 template <typename TypeContainer>
 double chebyshev_distance(const TypeContainer & point1, const TypeContainer & point2) {
-    check_common_distance_arguments(point1, point2);
-
     double distance = 0.0;
     typename TypeContainer::const_iterator iter_point1 = point1.begin();
 
@@ -173,8 +149,6 @@ double chebyshev_distance(const TypeContainer & point1, const TypeContainer & po
  */
 template <typename TypeContainer>
 double minkowski_distance(const TypeContainer & p_point1, const TypeContainer & p_point2, const double p_degree) {
-    check_common_distance_arguments(p_point1, p_point2);
-
     double distance = 0.0;
     typename TypeContainer::const_iterator iter_point1 = p_point1.begin();
 
