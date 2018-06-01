@@ -322,14 +322,16 @@ TEST_F(utest_kdtree, insert_search_remove_lsun) {
 
 TEST_F(utest_kdtree, insert_search_remove_hepta) {
     auto sample = fcps_sample_factory::create_sample(FCPS_SAMPLE::HEPTA);
-    const double search_radius = farthest_distance(*sample, distance_metric_factory<point>::euclidean());
+    double search_radius = farthest_distance(*sample, distance_metric_factory<point>::euclidean());
+    search_radius += search_radius * 0.0000001;
     TemplateTestInsertSearchRemove(*sample, search_radius);
 }
 
 
 TEST_F(utest_kdtree, insert_search_remove_tetra) {
     auto sample = fcps_sample_factory::create_sample(FCPS_SAMPLE::TETRA);
-    const double search_radius = farthest_distance(*sample, distance_metric_factory<point>::euclidean());
+    double search_radius = farthest_distance(*sample, distance_metric_factory<point>::euclidean());
+    search_radius += search_radius * 0.0000001;
     TemplateTestInsertSearchRemove(*sample, search_radius);
 }
 

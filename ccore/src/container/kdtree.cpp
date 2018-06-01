@@ -335,9 +335,6 @@ void kdtree_searcher::initialize(const std::vector<double> & point, const kdnode
     m_distance = radius_search;
     m_sqrt_distance = radius_search * radius_search;
 
-    /* Calculation error can be obtained in case of usage Euclidean Square instead of Euclidean */
-    m_sqrt_distance = m_sqrt_distance + m_sqrt_distance * 0.00000001;
-
     m_initial_node = node;
     m_search_point = point;
 }
