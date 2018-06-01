@@ -43,8 +43,9 @@ def template_clustering(number_clusters, path, number_represent_points = 5, comp
     clusters = cure_instance.get_clusters()
     representors = cure_instance.get_representors()
     means = cure_instance.get_means()
-    
+
     print("Sample: ", path, "\t\tExecution time: ", ticks, "\n")
+    #print([len(cluster) for cluster in clusters])
 
     if draw is True:
         visualizer = cluster_visualizer()
@@ -89,7 +90,7 @@ def cluster_two_diamonds():
     template_clustering(2, FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, 5, 0.3)
 
 def cluster_wing_nut():
-    template_clustering(2, FCPS_SAMPLES.SAMPLE_WING_NUT, 1, 1)
+    template_clustering(2, FCPS_SAMPLES.SAMPLE_WING_NUT, 3, 0.3)
     
 def cluster_chainlink():
     template_clustering(2, FCPS_SAMPLES.SAMPLE_CHAINLINK, 30, 0.2)
@@ -143,5 +144,5 @@ cluster_engy_time()
 cluster_golf_ball()
 
 
-experiment_execution_time(True, False);
-experiment_execution_time(True, True);
+experiment_execution_time(True, False)
+experiment_execution_time(True, True)

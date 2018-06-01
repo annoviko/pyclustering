@@ -252,7 +252,8 @@ void cure_queue::merge(cure_cluster * cluster1, cure_cluster * cluster2, const s
         relocation_request = new std::list<cure_cluster *>();
 
         for (auto & cluster : *(queue)) {
-            double distance = get_distance(merged_cluster, cluster);
+            const double distance = get_distance(merged_cluster, cluster);
+            const double real_euclidean_distance = std::sqrt(distance);
 
             /* Check if distance between new cluster and current is the best than now. */
             if (distance < merged_cluster->distance_closest) {
@@ -268,7 +269,8 @@ void cure_queue::merge(cure_cluster * cluster1, cure_cluster * cluster2, const s
                     double nearest_distance = std::numeric_limits<double>::max();
 
                     for (auto & point : *(cluster->rep)) {
-                        kdtree_searcher searcher(*point, tree->get_root(), distance);
+                        /* we are using Eucliean Square metric, but kdtree searcher requires common Eucliean distance (but output results are square) */
+                        kdtree_searcher searcher(*point, tree->get_root(), real_euclidean_distance);
 
                         std::vector<double> nearest_node_distances;
                         std::vector<kdnode::ptr> nearest_nodes;

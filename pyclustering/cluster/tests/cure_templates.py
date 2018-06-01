@@ -33,6 +33,8 @@ from pyclustering.utils import read_sample
 from pyclustering.cluster.cure import cure
 from pyclustering.cluster.encoder import type_encoding, cluster_encoder
 
+from pyclustering.tests.assertion import assertion
+
 from random import random
 
 
@@ -54,19 +56,19 @@ class CureTestTemplates:
         clusters = cure_instance.get_clusters()
         representors = cure_instance.get_representors()
         means = cure_instance.get_means()
- 
-        assert len(clusters) == number_cluster;
-        assert len(representors) == number_cluster;
-        assert len(means) == number_cluster;
+
+        assertion.eq(len(clusters), number_cluster)
+        assertion.eq(len(representors), number_cluster)
+        assertion.eq(len(means), number_cluster)
          
         obtained_cluster_sizes = [len(cluster) for cluster in clusters]
          
         total_length = sum(obtained_cluster_sizes)
-        assert total_length == len(sample);
+        assertion.eq(total_length, len(sample))
          
         cluster_sizes.sort()
         obtained_cluster_sizes.sort()
-        assert cluster_sizes == obtained_cluster_sizes;
+        assertion.eq(cluster_sizes, obtained_cluster_sizes)
 
 
     @staticmethod
@@ -76,10 +78,10 @@ class CureTestTemplates:
         cure_instance = cure(input_data, 4, ccore = ccore_flag)
         cure_instance.process()
         clusters = cure_instance.get_clusters()
-         
-        assert len(clusters) == 4
+
+        assertion.eq(4, len(clusters))
         for cluster in clusters:
-            assert len(cluster) == 10
+            assertion.eq(10, len(cluster))
 
 
     @staticmethod
@@ -97,7 +99,7 @@ class CureTestTemplates:
         encoder.set_encoding(type_encoding.CLUSTER_OBJECT_LIST_SEPARATION)
         encoder.set_encoding(type_encoding.CLUSTER_INDEX_LIST_SEPARATION)
 
-        assert 4 == len(clusters);
+        assertion.eq(4, len(clusters))
 
 
     @staticmethod

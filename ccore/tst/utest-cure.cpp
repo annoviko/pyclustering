@@ -159,3 +159,15 @@ TEST(utest_cure, allocation_lsun) {
     const std::vector<size_t> expected_clusters_length = { 100, 101, 202 };
     template_length_process_data(fcps_sample_factory::create_sample(FCPS_SAMPLE::LSUN), 3, 5, 0.3, expected_clusters_length);
 }
+
+
+TEST(utest_cure, allocation_two_diamonds) {
+    const std::vector<size_t> expected_clusters_length = { 399, 401 };
+    template_length_process_data(fcps_sample_factory::create_sample(FCPS_SAMPLE::TWO_DIAMONDS), 2, 5, 0.5, expected_clusters_length);
+}
+
+
+TEST(utest_cure, allocation_wing_nut) {
+    const std::vector<size_t> expected_clusters_length = { 508, 508 };
+    template_length_process_data(fcps_sample_factory::create_sample(FCPS_SAMPLE::WING_NUT), 2, 3, 0.3, expected_clusters_length);
+}

@@ -55,7 +55,7 @@ class CureIntegrationTest(unittest.TestCase):
         CureTestTemplates.template_cluster_allocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [15, 15, 15, 15], 4, 5, 0.5, True)
 
     def testClusterAllocationSampleTwoDiamondsByCore(self):
-        CureTestTemplates.template_cluster_allocation(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, [400, 400], 2, 5, 0.3, True)
+        CureTestTemplates.template_cluster_allocation(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, [399, 401], 2, 5, 0.3, True)
 
     def testClusterAllocationSampleLsunByCore(self):
         CureTestTemplates.template_cluster_allocation(FCPS_SAMPLES.SAMPLE_LSUN, [100, 101, 202], 3, 5, 0.3, True)

@@ -29,7 +29,7 @@ import numpy
 
 from pyclustering.cluster.encoder import type_encoding
 
-from pyclustering.utils import euclidean_distance
+from pyclustering.utils import euclidean_distance_square
 
 from pyclustering.container.kdtree import kdtree
 
@@ -378,10 +378,12 @@ class cure:
         
         nearest_cluster = None
         nearest_distance = float('inf')
-        
+
+        real_euclidean_distance = distance ** 0.5
+
         for point in cluster.rep:
             # Nearest nodes should be returned (at least it will return itself).
-            nearest_nodes = self.__tree.find_nearest_dist_nodes(point, distance)
+            nearest_nodes = self.__tree.find_nearest_dist_nodes(point, real_euclidean_distance)
             for (candidate_distance, kdtree_node) in nearest_nodes:
                 if (candidate_distance < nearest_distance) and (kdtree_node is not None) and (kdtree_node.payload is not cluster):
                     nearest_distance = candidate_distance
@@ -448,10 +450,10 @@ class cure:
             for point in merged_cluster.points:
                 minimal_distance = 0
                 if index == 0:
-                    minimal_distance = euclidean_distance(point, merged_cluster.mean)
+                    minimal_distance = euclidean_distance_square(point, merged_cluster.mean)
                     #minimal_distance = euclidean_distance_sqrt(point, merged_cluster.mean);
                 else:
-                    minimal_distance = min([euclidean_distance(point, p) for p in temporary])
+                    minimal_distance = min([euclidean_distance_square(point, p) for p in temporary])
                     #minimal_distance = cluster_distance(cure_cluster(point), cure_cluster(temporary[0]));
                     
                 if minimal_distance >= maximal_distance:
@@ -530,8 +532,8 @@ class cure:
         distance = float('inf')
         for i in range(0, len(cluster1.rep)):
             for k in range(0, len(cluster2.rep)):
-                #dist = euclidean_distance_sqrt(cluster1.rep[i], cluster2.rep[k]);   # Fast mode
-                dist = euclidean_distance(cluster1.rep[i], cluster2.rep[k])        # Slow mode
+                dist = euclidean_distance_square(cluster1.rep[i], cluster2.rep[k]);   # Fast mode
+                #dist = euclidean_distance(cluster1.rep[i], cluster2.rep[k])        # Slow mode
                 if dist < distance:
                     distance = dist
                     

@@ -512,7 +512,7 @@ class kdtree:
 
         best_nodes = []
         if self.__root is not None:
-            self.__recursive_nearest_nodes(point, distance, distance ** 2, self.__root, best_nodes)
+            self.__recursive_nearest_nodes(point, distance, distance * distance, self.__root, best_nodes)
 
         return best_nodes
 
