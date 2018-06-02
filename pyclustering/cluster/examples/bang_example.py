@@ -28,7 +28,7 @@ import os
 
 from pyclustering.cluster.bang import bang, bang_visualizer, bang_animator
 
-from pyclustering.utils import read_sample
+from pyclustering.utils import draw_image_mask_segments, read_sample, read_image
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES
 
@@ -56,6 +56,17 @@ def template_clustering(data_path, levels, **kwargs):
         animator.animate()
         # movie_filename = os.path.basename(data_path) + ".mp4"
         # animator.animate(movie_filename=movie_filename)
+
+
+def template_segmentation(source, levels, threshold):
+    data = read_image(source)
+
+    bang_instance = bang(data, levels, threshold)
+    bang_instance.process()
+
+    clusters = bang_instance.get_clusters()
+
+    draw_image_mask_segments(source, clusters)
 
 
 

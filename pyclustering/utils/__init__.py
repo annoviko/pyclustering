@@ -90,8 +90,8 @@ def read_image(filename):
     """
     
     with Image.open(filename) as image_source:
-        data = [pixel for pixel in image_source.getdata()];
-        return data;
+        data = [list(pixel) for pixel in image_source.getdata()]
+        return data
 
 
 def rgb2gray(image_rgb_array):
