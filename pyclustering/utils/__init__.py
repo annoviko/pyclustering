@@ -558,8 +558,8 @@ def data_corners(data, data_filter = None):
     if bypass is None:
         bypass = range(len(data))
     
-    maximum_corner = data[bypass[0]][:]
-    minimum_corner = data[bypass[0]][:]
+    maximum_corner = list(data[bypass[0]][:])
+    minimum_corner = list(data[bypass[0]][:])
     
     for index_point in bypass:
         for index_dimension in range(dimensions):
