@@ -115,6 +115,11 @@ class bsas_unit_test(unittest.TestCase):
         bang_test_template.visualize(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, 1, 0.0, False)
 
 
+    def test_animate_no_failure(self):
+        bang_test_template.animate(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 8, 0.0, False)
+        bang_test_template.animate(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 8, 0.0, False)
+
+
     def test_argument_invalid_levels(self):
         bang_test_template.exception(ValueError, SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 0, 0.0, False)
         bang_test_template.exception(ValueError, SIMPLE_SAMPLES.SAMPLE_SIMPLE1, -1, 0.0, False)

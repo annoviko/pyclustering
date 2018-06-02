@@ -30,7 +30,7 @@ matplotlib.use('Agg')
 
 from pyclustering.tests.assertion import assertion
 
-from pyclustering.cluster.bang import bang, bang_visualizer
+from pyclustering.cluster.bang import bang, bang_visualizer, bang_animator
 
 from pyclustering.utils import read_sample
 
@@ -88,6 +88,21 @@ class bang_test_template:
 
         bang_visualizer.show_blocks(directory)
         bang_visualizer.show_dendrogram(dendrogram)
+
+
+    @staticmethod
+    def animate(path, levels, threshold, ccore, **kwargs):
+        sample = read_sample(path)
+
+        bang_instance = bang(sample, levels, threshold, ccore)
+        bang_instance.process()
+
+        directory = bang_instance.get_directory()
+        clusters = bang_instance.get_clusters()
+        noise = bang_instance.get_noise()
+
+        animator = bang_animator(directory, clusters, noise)
+        animator.animate()
 
 
     @staticmethod
