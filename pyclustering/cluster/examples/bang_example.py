@@ -24,6 +24,8 @@
 """
 
 
+import os
+
 from pyclustering.cluster.bang import bang, bang_visualizer, bang_animator
 
 from pyclustering.utils import read_sample
@@ -32,7 +34,7 @@ from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES
 
 
 def template_clustering(data_path, levels, **kwargs):
-    print("Sample: '%s'." % data_path)
+    print("Sample: '%s'." % os.path.basename(data_path))
 
     density_threshold = kwargs.get("threshold", 0.0)
     data = read_sample(data_path)
@@ -52,6 +54,8 @@ def template_clustering(data_path, levels, **kwargs):
     if len(data[0]) == 2:
         animator = bang_animator(directory, clusters, noise)
         animator.animate()
+        # movie_filename = os.path.basename(data_path) + ".mp4"
+        # animator.animate(movie_filename=movie_filename)
 
 
 
