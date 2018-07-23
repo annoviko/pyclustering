@@ -26,7 +26,7 @@
 
 import os
 
-from cloud.client.yandex_disk import yandex_disk
+from cloud.yandex_disk import yandex_disk
 
 
 class task_handler:
@@ -45,6 +45,12 @@ class task_handler:
         elif action == 'mkdir':
             self.__mkdir(client_task.get_param('folder'))
 
+        elif action == 'rm':
+            self.__rm(client_task.get_param('path'))
+
+        else:
+            raise RuntimeError("ERROR: Unknown action is specified '%s'." % action)
+
 
     def __upload(self, from_path, to_path):
         if not os.path.isfile(from_path):
@@ -57,6 +63,7 @@ class task_handler:
                 raise RuntimeError("ERROR: Impossible to remove file '%s'." % to_path)
 
         disk_client.upload(from_path, to_path)
+        print("INFO: File '%s' is successfully uploaded to '%s'." % (from_path, to_path))
 
 
     def __download(self, from_path, to_path):
@@ -69,12 +76,24 @@ class task_handler:
             raise FileExistsError("ERROR: File '%s' does not exist on the cloud." % from_path)
 
         disk_client.download(from_path, to_path)
+        print("INFO: File '%s' is successfully downloaded to '%s'." % (from_path, to_path))
 
 
     def __mkdir(self, folder):
         disk_client = yandex_disk(self.__token)
         if disk_client.file_exist(folder):
-            print("WARNING: Folder '%s' already exists." % folder)
+            print("INFO: Folder '%s' already exists." % folder)
             return
 
         disk_client.create_folder(folder)
+        print("INFO: Folder '%s' is successfully created." % folder)
+
+
+    def __rm(self, path):
+        disk_client = yandex_disk(self.__token)
+        if disk_client.file_exist(path) or disk_client.directory_exist(path):
+            disk_client.delete(path)
+            print("INFO: '%s' is successfully removed." % path)
+
+        else:
+            print("ERROR: File or folder '%s' is not found." % path)

@@ -45,6 +45,12 @@ class task:
 
             action_params['folder'] = params[0]
 
+        elif self.__action == 'rm':
+            if len(params) != 1:
+                raise ValueError("ERROR: Incorrect amount of arguments ('%d' instead of '1')." % len(params))
+
+            action_params['path'] = params[0]
+
         else:
             raise ValueError("ERROR: Unknown action is specified '%s'." % self.__action)
 

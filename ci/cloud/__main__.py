@@ -28,15 +28,17 @@
 import sys
 
 
-from cloud.client.task import task
-from cloud.client.task_handler import task_handler
+from cloud.task import task
+from cloud.task_handler import task_handler
 
 
 def run():
-    arguments = str(sys.argv)
+    token = sys.argv[1]
+    action = sys.argv[2]
+    params = sys.argv[3:]
 
-    client_task = task(arguments[1], arguments[2:])
-    task_handler(arguments[0]).process(client_task)
+    client_task = task(action, params)
+    task_handler(token).process(client_task)
 
 
 if __name__ == '__main__':

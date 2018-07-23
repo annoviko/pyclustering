@@ -371,20 +371,15 @@ upload_binary() {
     fi
 
     # Create folder for uploaded binary file
-    curl -H "Authorization: OAuth $YANDEX_DISK_TOKEN" -X PUT https://cloud-api.yandex.net:443/v1/disk/resources?path=$TRAVIS_BRANCH
-    curl -H "Authorization: OAuth $YANDEX_DISK_TOKEN" -X PUT https://cloud-api.yandex.net:443/v1/disk/resources?path=$TRAVIS_BRANCH%2F$BUILD_FOLDER
-    curl -H "Authorization: OAuth $YANDEX_DISK_TOKEN" -X PUT https://cloud-api.yandex.net:443/v1/disk/resources?path=$TRAVIS_BRANCH%2F$BUILD_FOLDER%2F$BUILD_PLATFORM
-    curl -H "Authorization: OAuth $YANDEX_DISK_TOKEN" -X PUT https://cloud-api.yandex.net:443/v1/disk/resources?path=$TRAVIS_BRANCH%2F$BUILD_FOLDER%2F$BUILD_PLATFORM%2F$BINARY_FOLDER
+    python3 ci/cloud $YANDEX_DISK_TOKEN mkdir /$TRAVIS_BRANCH
+    python3 ci/cloud $YANDEX_DISK_TOKEN mkdir /$TRAVIS_BRANCH/$BUILD_FOLDER
+    python3 ci/cloud $YANDEX_DISK_TOKEN mkdir /$TRAVIS_BRANCH/$BUILD_FOLDER/$BUILD_PLATFORM
+    python3 ci/cloud $YANDEX_DISK_TOKEN mkdir /$TRAVIS_BRANCH/$BUILD_FOLDER/$BUILD_PLATFORM/$BINARY_FOLDER
 
-    # Obtain link for uploading
-    REMOTE_BINARY_FILEPATH=$TRAVIS_BRANCH%2F$BUILD_FOLDER%2F$BUILD_PLATFORM%2F$BINARY_FOLDER%2Fccore.so
-    
-    print_info "Upload binary using path '$REMOTE_BINARY_FILEPATH'."
+    # Upload binary file
+    REMOTE_BINARY_FILEPATH=/$TRAVIS_BRANCH/$BUILD_FOLDER/$BUILD_PLATFORM/$BINARY_FOLDER/ccore.so
 
-    UPLOAD_LINK=`curl -s -H "Authorization: OAuth $YANDEX_DISK_TOKEN" -X GET https://cloud-api.yandex.net:443/v1/disk/resources/upload?path=$REMOTE_BINARY_FILEPATH |\
-        python3 -c "import sys, json; print(json.load(sys.stdin)['href'])"`
-
-    curl -H "Authorization: OAuth $YANDEX_DISK_TOKEN" -X PUT $UPLOAD_LINK --upload-file $LOCAL_BINARY_PATH
+    python3 ci/cloud $YANDEX_DISK_TOKEN upload $LOCAL_BINARY_PATH $REMOTE_BINARY_FILEPATH
 }
 
 
@@ -403,18 +398,12 @@ download_binary() {
         exit 1
     fi
 
-    # Obtain link for download
+    # Download binary file
     BUILD_FOLDER=linux
     BINARY_FOLDER=$TRAVIS_BUILD_NUMBER
-    BINARY_FILEPATH=$TRAVIS_BRANCH%2F$BUILD_FOLDER%2F$BUILD_PLATFORM%2F$BINARY_FOLDER%2Fccore.so
+    BINARY_FILEPATH=/$TRAVIS_BRANCH/$BUILD_FOLDER/$BUILD_PLATFORM/$BINARY_FOLDER/ccore.so
 
-    DOWNLOAD_LINK=`curl -s -H "Authorization: OAuth $YANDEX_DISK_TOKEN" -X GET https://cloud-api.yandex.net:443/v1/disk/resources/download?path=$BINARY_FILEPATH |\
-        python3 -c "import sys, json; print(json.load(sys.stdin)['href'])"`
-
-    print_info "Download link '$DOWNLOAD_LINK'."
-
-    # Download binary to specific folder
-    curl -L "$DOWNLOAD_LINK" -o $LOCAL_BINARY_PATH
+    python3 ci/cloud $YANDEX_DISK_TOKEN download $BINARY_FILEPATH $LOCAL_BINARY_PATH
     
     print_info "Content of the binary folder."
     ls $LOCAL_BINARY_PATH -la
