@@ -12,6 +12,7 @@ init: []
 
 environment:
   CYGWIN_PATH: C:\cygwin64\bin\bash
+  PYTHON: C:\\Python36-x64
   TESTING_RESULT: "Success"
   GITHUB_TOKEN:
     secure: gzN7IIwlku2+7LB0SO+41zfT04Iir7WgCypBx/lwniP5JbxFl4dtjjMN/jj7sQZ1

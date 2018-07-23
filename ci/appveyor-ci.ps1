@@ -301,12 +301,9 @@ function download_binary($platform_version, $binary_path) {
     # Obtain link for download
     $env:BUILD_FOLDER = "windows";
     $env:BINARY_FOLDER = $env:APPVEYOR_BUILD_NUMBER;
-    $env:BINARY_FILEPATH = "$env:APPVEYOR_REPO_BRANCH%2F$env:BUILD_FOLDER%2F$platform_version%2F$env:BINARY_FOLDER%2Fccore.dll";
+    $env:BINARY_FILEPATH = "/$env:APPVEYOR_REPO_BRANCH/$env:BUILD_FOLDER/$platform_version/$env:BINARY_FOLDER/ccore.dll";
 
-    $env:DOWNLOAD_LINK = (curl.exe -H "Authorization: OAuth $env:YANDEX_DISK_TOKEN" -X GET "https://cloud-api.yandex.net:443/v1/disk/resources/download?path=$env:BINARY_FILEPATH" | ConvertFrom-Json).href;
-
-    # Download binary
-    curl.exe $env:DOWNLOAD_LINK -o $binary_path;
+    & $env:PYTHON ci/cloud $env:YANDEX_DISK_TOKEN download $env:BINARY_FILEPATH $binary_path
 }
 
 
@@ -318,16 +315,15 @@ function upload_binary($platform_version, $binary_path) {
     $env:BINARY_FOLDER = $env:APPVEYOR_BUILD_NUMBER;
 
     # Create folder for uploaded binary file
-    curl.exe -H "Authorization: OAuth $env:YANDEX_DISK_TOKEN" -X PUT "https://cloud-api.yandex.net:443/v1/disk/resources?path=$env:APPVEYOR_REPO_BRANCH";
-    curl.exe -H "Authorization: OAuth $env:YANDEX_DISK_TOKEN" -X PUT "https://cloud-api.yandex.net:443/v1/disk/resources?path=$env:APPVEYOR_REPO_BRANCH%2F$env:BUILD_FOLDER";
-    curl.exe -H "Authorization: OAuth $env:YANDEX_DISK_TOKEN" -X PUT "https://cloud-api.yandex.net:443/v1/disk/resources?path=$env:APPVEYOR_REPO_BRANCH%2F$env:BUILD_FOLDER%2F$platform_version";
-    curl.exe -H "Authorization: OAuth $env:YANDEX_DISK_TOKEN" -X PUT "https://cloud-api.yandex.net:443/v1/disk/resources?path=$env:APPVEYOR_REPO_BRANCH%2F$env:BUILD_FOLDER%2F$platform_version%2F$env:BINARY_FOLDER";
+    & $env:PYTHON ci/cloud $env:YANDEX_DISK_TOKEN mkdir "/$env:APPVEYOR_REPO_BRANCH"
+    & $env:PYTHON ci/cloud $env:YANDEX_DISK_TOKEN mkdir "/$env:APPVEYOR_REPO_BRANCH/$env:BUILD_FOLDER"
+    & $env:PYTHON ci/cloud $env:YANDEX_DISK_TOKEN mkdir "/$env:APPVEYOR_REPO_BRANCH/$env:BUILD_FOLDER/$platform_version"
+    & $env:PYTHON ci/cloud $env:YANDEX_DISK_TOKEN mkdir "/$env:APPVEYOR_REPO_BRANCH/$env:BUILD_FOLDER/$platform_version/$env:BINARY_FOLDER"
 
-    # Obtain link for uploading
-    $env:BINARY_FILEPATH = "$env:APPVEYOR_REPO_BRANCH%2F$env:BUILD_FOLDER%2F$platform_version%2F$env:BINARY_FOLDER%2Fccore.dll";
-    $env:UPLOAD_LINK = (curl.exe -H "Authorization: OAuth $env:YANDEX_DISK_TOKEN" -X GET https://cloud-api.yandex.net:443/v1/disk/resources/upload?path=$env:BINARY_FILEPATH | ConvertFrom-Json).href;
+    # Upload binary file
+    $env:BINARY_FILEPATH = "/$env:APPVEYOR_REPO_BRANCH/$env:BUILD_FOLDER/$platform_version/$env:BINARY_FOLDER/ccore.dll";
 
-    curl.exe -H "Authorization: OAuth $env:YANDEX_DISK_TOKEN" -X PUT $env:UPLOAD_LINK --upload-file $binary_path;
+    & $env:PYTHON ci/cloud $env:YANDEX_DISK_TOKEN upload $binary_path $env:BINARY_FILEPATH
 }
 
 

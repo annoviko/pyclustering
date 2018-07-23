@@ -62,8 +62,8 @@ class task_handler:
             if not disk_client.delete(to_path):
                 raise RuntimeError("ERROR: Impossible to remove file '%s'." % to_path)
 
-        disk_client.upload(from_path, to_path)
-        print("INFO: File '%s' is successfully uploaded to '%s'." % (from_path, to_path))
+        if disk_client.upload(from_path, to_path) is True:
+            print("INFO: File '%s' is successfully uploaded to '%s'." % (from_path, to_path))
 
 
     def __download(self, from_path, to_path):
@@ -75,8 +75,8 @@ class task_handler:
         if disk_client.file_exist(from_path) is False:
             raise FileExistsError("ERROR: File '%s' does not exist on the cloud." % from_path)
 
-        disk_client.download(from_path, to_path)
-        print("INFO: File '%s' is successfully downloaded to '%s'." % (from_path, to_path))
+        if disk_client.download(from_path, to_path) is True:
+            print("INFO: File '%s' is successfully downloaded to '%s'." % (from_path, to_path))
 
 
     def __mkdir(self, folder):
@@ -85,8 +85,8 @@ class task_handler:
             print("INFO: Folder '%s' already exists." % folder)
             return
 
-        disk_client.create_folder(folder)
-        print("INFO: Folder '%s' is successfully created." % folder)
+        if disk_client.create_folder(folder) is True:
+            print("INFO: Folder '%s' is successfully created." % folder)
 
 
     def __rm(self, path):

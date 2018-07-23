@@ -144,7 +144,7 @@ class yandex_disk:
 
     def create_folder(self, path):
         result, response_content = self.__send_request("PUT", yandex_disk.__HTTP_RESOURCES, {"path": path})
-        if result != 201:
+        if result != 201 and result != 409:
             print("ERROR: Impossible to create folder (code: '%d', description: '%s')" % (result, response_content))
             return False
 
