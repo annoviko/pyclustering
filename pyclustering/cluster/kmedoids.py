@@ -140,9 +140,7 @@ class kmedoids:
         
         if self.__ccore is True:
             ccore_metric = metric_wrapper.create_instance(self.__metric)
-
-            self.__clusters = wrapper.kmedoids(self.__pointer_data, self.__medoid_indexes, self.__tolerance, ccore_metric.get_pointer(), self.__data_type)
-            self.__medoid_indexes = self.__update_medoids()
+            self.__clusters, self.__medoid_indexes = wrapper.kmedoids(self.__pointer_data, self.__medoid_indexes, self.__tolerance, ccore_metric.get_pointer(), self.__data_type)
         
         else:
             changes = float('inf')

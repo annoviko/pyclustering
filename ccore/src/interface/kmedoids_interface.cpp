@@ -51,7 +51,10 @@ pyclustering_package * kmedoids_algorithm(const pyclustering_package * const p_s
     ccore::clst::kmedoids_data output_result;
     algorithm.process(input_dataset, (ccore::clst::kmedoids_data_t) p_type, output_result);
 
-    pyclustering_package * package = create_package(&output_result.clusters());
+    pyclustering_package * package = create_package_container(KMEDOIDS_PACKAGE_SIZE);
+    ((pyclustering_package **) package->data)[KMEDOIDS_PACKAGE_INDEX_CLUSTERS] = create_package(&output_result.clusters());
+    ((pyclustering_package **) package->data)[KMEDOIDS_PACKAGE_INDEX_MEDOIDS] = create_package(&output_result.medoids());
+
     return package;
 }
 

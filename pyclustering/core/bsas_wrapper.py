@@ -24,21 +24,21 @@
 """
 
 
-from ctypes import c_double, c_size_t, POINTER;
+from ctypes import c_double, c_size_t, POINTER
 
-from pyclustering.core.wrapper import ccore_library;
-from pyclustering.core.pyclustering_package import pyclustering_package, package_extractor, package_builder;
+from pyclustering.core.wrapper import ccore_library
+from pyclustering.core.pyclustering_package import pyclustering_package, package_extractor, package_builder
 
 
 def bsas(sample, amount, threshold, metric_pointer):
-    pointer_data = package_builder(sample, c_double).create();
+    pointer_data = package_builder(sample, c_double).create()
 
-    ccore = ccore_library.get();
+    ccore = ccore_library.get()
 
-    ccore.bsas_algorithm.restype = POINTER(pyclustering_package);
-    package = ccore.bsas_algorithm(pointer_data, c_size_t(amount), c_double(threshold), metric_pointer);
+    ccore.bsas_algorithm.restype = POINTER(pyclustering_package)
+    package = ccore.bsas_algorithm(pointer_data, c_size_t(amount), c_double(threshold), metric_pointer)
 
-    result = package_extractor(package).extract();
-    ccore.free_pyclustering_package(package);
+    result = package_extractor(package).extract()
+    ccore.free_pyclustering_package(package)
 
-    return result[0], result[1];
+    return result[0], result[1]

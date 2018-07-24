@@ -31,7 +31,7 @@
 #include "definitions.hpp"
 
 
-typedef enum pyclustering_type_data {
+enum pyclustering_data_t {
     PYCLUSTERING_TYPE_INT               = 0,
     PYCLUSTERING_TYPE_UNSIGNED_INT      = 1,
     PYCLUSTERING_TYPE_FLOAT             = 2,
@@ -41,7 +41,7 @@ typedef enum pyclustering_type_data {
     PYCLUSTERING_TYPE_LIST              = 6,
     PYCLUSTERING_TYPE_SIZE_T            = 7,
     PYCLUSTERING_TYPE_UNDEFINED         = 8,
-} pyclustering_type_data;
+};
 
 
 struct pyclustering_package {
@@ -53,7 +53,7 @@ public:
 public:
     pyclustering_package(void) = default;
 
-    pyclustering_package(const pyclustering_type_data package_type);
+    pyclustering_package(const pyclustering_data_t package_type);
 
     ~pyclustering_package(void);
 
@@ -107,28 +107,31 @@ private:
 };
 
 
+pyclustering_package * create_package_container(const std::size_t p_size);
+
+
 template <class TypeContainer>
 pyclustering_package * create_package(const TypeContainer * const data) {
     using contaner_data_t = typename TypeContainer::value_type;
 
-    pyclustering_type_data type_package = PYCLUSTERING_TYPE_UNDEFINED;
+    pyclustering_data_t type_package = PYCLUSTERING_TYPE_UNDEFINED;
     if (std::is_same<contaner_data_t, int>::value) {
-        type_package = pyclustering_type_data::PYCLUSTERING_TYPE_INT;
+        type_package = pyclustering_data_t::PYCLUSTERING_TYPE_INT;
     }
     else if (std::is_same<contaner_data_t, unsigned int>::value) {
-        type_package = pyclustering_type_data::PYCLUSTERING_TYPE_UNSIGNED_INT;
+        type_package = pyclustering_data_t::PYCLUSTERING_TYPE_UNSIGNED_INT;
     }
     else if (std::is_same<contaner_data_t, float>::value) {
-        type_package = pyclustering_type_data::PYCLUSTERING_TYPE_FLOAT;
+        type_package = pyclustering_data_t::PYCLUSTERING_TYPE_FLOAT;
     }
     else if (std::is_same<contaner_data_t, double>::value) {
-        type_package = pyclustering_type_data::PYCLUSTERING_TYPE_DOUBLE;
+        type_package = pyclustering_data_t::PYCLUSTERING_TYPE_DOUBLE;
     }
     else if (std::is_same<contaner_data_t, long>::value) {
-        type_package = pyclustering_type_data::PYCLUSTERING_TYPE_LONG;
+        type_package = pyclustering_data_t::PYCLUSTERING_TYPE_LONG;
     }
     else if (std::is_same<contaner_data_t, size_t>::value) {
-        type_package = pyclustering_type_data::PYCLUSTERING_TYPE_SIZE_T;
+        type_package = pyclustering_data_t::PYCLUSTERING_TYPE_SIZE_T;
     }
     else {
         return nullptr;
@@ -150,7 +153,7 @@ pyclustering_package * create_package(const TypeContainer * const data) {
 
 template <class TypeObject>
 pyclustering_package * create_package(const std::vector< std::vector<TypeObject> > * const data) {
-    pyclustering_package * package = new pyclustering_package(pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
+    pyclustering_package * package = new pyclustering_package(pyclustering_data_t::PYCLUSTERING_TYPE_LIST);
 
     package->size = data->size();
     package->data = new pyclustering_package * [package->size];
@@ -165,7 +168,7 @@ pyclustering_package * create_package(const std::vector< std::vector<TypeObject>
 
 template <class TypeObject>
 pyclustering_package * create_package(const std::vector< std::vector<TypeObject> * > * const data) {
-   pyclustering_package * package = new pyclustering_package(pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
+   pyclustering_package * package = new pyclustering_package(pyclustering_data_t::PYCLUSTERING_TYPE_LIST);
 
    package->size = data->size();
    package->data = new pyclustering_package * [package->size];

@@ -28,6 +28,19 @@
 
 /**
  *
+ * @brief   K-Medians result is returned by pyclustering_package that consist sub-packages and this enumerator provides
+ *           named indexes for sub-packages.
+ *
+ */
+enum kmedians_package_indexer {
+    KMEDIANS_PACKAGE_INDEX_CLUSTERS = 0,
+    KMEDIANS_PACKAGE_INDEX_MEDIANS,
+    KMEDIANS_PACKAGE_SIZE
+};
+
+
+/**
+ *
  * @brief   Clustering algorithm K-Medians returns allocated clusters.
  * @details Caller should destroy returned result in 'pyclustering_package'.
  *

@@ -33,7 +33,7 @@ pyclustering_package * xmeans_algorithm(const pyclustering_package * const p_sam
     ccore::clst::xmeans_data output_result;
     solver.process(data, output_result);
 
-    pyclustering_package * package = new pyclustering_package(pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
+    pyclustering_package * package = new pyclustering_package(pyclustering_data_t::PYCLUSTERING_TYPE_LIST);
     package->size = 2;   /* cluster package + center package */
     package->data = new pyclustering_package * [2];
 

@@ -100,10 +100,8 @@ class kmedians:
         
         if self.__ccore is True:
             ccore_metric = metric_wrapper.create_instance(self.__metric)
+            self.__clusters, self.__medians = wrapper.kmedians(self.__pointer_data, self.__medians, self.__tolerance, ccore_metric.get_pointer())
 
-            self.__clusters = wrapper.kmedians(self.__pointer_data, self.__medians, self.__tolerance, ccore_metric.get_pointer())
-            self.__medians = self.__update_medians()
-            
         else:
             changes = float('inf')
              

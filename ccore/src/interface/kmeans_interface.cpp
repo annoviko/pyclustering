@@ -50,10 +50,7 @@ pyclustering_package * kmeans_algorithm(const pyclustering_package * const p_sam
     ccore::clst::kmeans_data output_result(p_observe);
     algorithm.process(data, output_result);
 
-    pyclustering_package * package = new pyclustering_package(pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
-    package->size = KMEANS_PACKAGE_SIZE;
-    package->data = new pyclustering_package * [KMEANS_PACKAGE_SIZE];
-
+    pyclustering_package * package = create_package_container(KMEANS_PACKAGE_SIZE);
     ((pyclustering_package **) package->data)[KMEANS_PACKAGE_INDEX_CLUSTERS] = create_package(&output_result.clusters());
     ((pyclustering_package **) package->data)[KMEANS_PACKAGE_INDEX_CENTERS] = create_package(&output_result.centers());
     ((pyclustering_package **) package->data)[KMEANS_PACKAGE_INDEX_EVOLUTION_CLUSTERS] = create_package(&output_result.evolution_clusters());

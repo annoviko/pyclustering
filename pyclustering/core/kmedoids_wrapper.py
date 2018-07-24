@@ -24,11 +24,11 @@
 """
 
 
-from ctypes import c_double, c_size_t, POINTER;
+from ctypes import c_double, c_size_t, POINTER
 
-from pyclustering.core.wrapper import ccore_library;
-from pyclustering.core.converter import convert_data_type;
-from pyclustering.core.pyclustering_package import pyclustering_package, package_extractor, package_builder;
+from pyclustering.core.wrapper import ccore_library
+from pyclustering.core.converter import convert_data_type
+from pyclustering.core.pyclustering_package import pyclustering_package, package_extractor, package_builder
 
 
 def kmedoids(sample, medoids, tolerance, metric_pointer, data_type):
@@ -44,4 +44,4 @@ def kmedoids(sample, medoids, tolerance, metric_pointer, data_type):
     result = package_extractor(package).extract()
     ccore.free_pyclustering_package(package)
 
-    return result
+    return result[0], result[1]

@@ -44,6 +44,9 @@ pyclustering_package * kmedians_algorithm(const pyclustering_package * const p_s
     ccore::clst::kmedians_data output_result;
     algorithm.process(data, output_result);
 
-    pyclustering_package * package = create_package(&output_result.clusters());
+    pyclustering_package * package = create_package_container(KMEDIANS_PACKAGE_SIZE);
+    ((pyclustering_package **) package->data)[KMEDIANS_PACKAGE_INDEX_CLUSTERS] = create_package(&output_result.clusters());
+    ((pyclustering_package **) package->data)[KMEDIANS_PACKAGE_INDEX_MEDIANS] = create_package(&output_result.medians());
+
     return package;
 }

@@ -48,7 +48,7 @@ pyclustering_package * bsas_algorithm(const pyclustering_package * const p_sampl
     ccore::clst::bsas_data output_result;
     algorithm.process(input_dataset, output_result);
 
-    pyclustering_package * package = new pyclustering_package(pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
+    pyclustering_package * package = new pyclustering_package(pyclustering_data_t::PYCLUSTERING_TYPE_LIST);
     package->size = BSAS_PACKAGE_SIZE;
     package->data = new pyclustering_package * [BSAS_PACKAGE_SIZE];
 

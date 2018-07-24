@@ -28,6 +28,19 @@
 
 /**
  *
+ * @brief   K-Medians result is returned by pyclustering_package that consist sub-packages and this enumerator provides
+ *           named indexes for sub-packages.
+ *
+ */
+enum kmedoids_package_indexer {
+    KMEDOIDS_PACKAGE_INDEX_CLUSTERS = 0,
+    KMEDOIDS_PACKAGE_INDEX_MEDOIDS,
+    KMEDOIDS_PACKAGE_SIZE
+};
+
+
+/**
+ *
  * @brief   Clustering algorithm K-Medoids returns allocated clusters.
  * @details Caller should destroy returned result that is in 'pyclustering_package'.
  *

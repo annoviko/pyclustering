@@ -24,10 +24,10 @@
 """
 
 
-from ctypes import c_double, POINTER;
+from ctypes import c_double, POINTER
 
-from pyclustering.core.wrapper import ccore_library;
-from pyclustering.core.pyclustering_package import pyclustering_package, package_extractor, package_builder;
+from pyclustering.core.wrapper import ccore_library
+from pyclustering.core.pyclustering_package import pyclustering_package, package_extractor, package_builder
 
 
 def kmedians(sample, centers, tolerance, metric_pointer):
@@ -42,4 +42,4 @@ def kmedians(sample, centers, tolerance, metric_pointer):
     result = package_extractor(package).extract()
     ccore.free_pyclustering_package(package)
     
-    return result
+    return result[0], result[1]

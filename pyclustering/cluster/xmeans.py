@@ -61,7 +61,7 @@ class splitting_type(IntEnum):
     ##
     ## The maximum likelihood estimate (MLE) for the variance:
     ## \f[\hat{\sigma}^2 = \frac{1}{N - K}\sum\limits_{j}\sum\limits_{i}||x_{ij} - \hat{C}_j||^2\f]
-    BAYESIAN_INFORMATION_CRITERION = 0;
+    BAYESIAN_INFORMATION_CRITERION = 0
     
     ## Minimum noiseless description length (MNDL) to approximate the correct number of clusters.
     ## Beheshti's formula is used to calculate upper bound:
@@ -72,7 +72,7 @@ class splitting_type(IntEnum):
     ## To improve clustering results some contradiction is introduced:
     ## \f[W = \frac{1}{n_j}\sum\limits_{i}||x_{ij} - \hat{C}_j||\f]
     ## \f[\hat{\sigma}^2 = \frac{1}{N - K}\sum\limits_{j}\sum\limits_{i}||x_{ij} - \hat{C}_j||\f]
-    MINIMUM_NOISELESS_DESCRIPTION_LENGTH = 1;
+    MINIMUM_NOISELESS_DESCRIPTION_LENGTH = 1
 
 
 class xmeans:
@@ -125,21 +125,21 @@ class xmeans:
         
         """
         
-        self.__pointer_data = data;
-        self.__clusters = [];
+        self.__pointer_data = data
+        self.__clusters = []
         
         if (initial_centers is not None):
-            self.__centers = initial_centers[:];
+            self.__centers = initial_centers[:]
         else:
-            self.__centers = [ [random.random() for _ in range(len(data[0])) ] ];
+            self.__centers = [ [random.random() for _ in range(len(data[0])) ] ]
         
-        self.__kmax = kmax;
-        self.__tolerance = tolerance;
-        self.__criterion = criterion;
+        self.__kmax = kmax
+        self.__tolerance = tolerance
+        self.__criterion = criterion
          
-        self.__ccore = ccore;
+        self.__ccore = ccore
         if (self.__ccore):
-            self.__ccore = ccore_library.workable();
+            self.__ccore = ccore_library.workable()
 
 
     def process(self):

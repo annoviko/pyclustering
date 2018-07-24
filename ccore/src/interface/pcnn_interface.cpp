@@ -86,7 +86,7 @@ pyclustering_package * pcnn_dynamic_allocate_time_signal(const void * pointer) {
 pyclustering_package * pcnn_dynamic_get_output(const void * pointer) {
     pcnn_dynamic & dynamic = *((pcnn_dynamic *) pointer);
 
-    pyclustering_package * package = new pyclustering_package(pyclustering_type_data::PYCLUSTERING_TYPE_LIST);
+    pyclustering_package * package = new pyclustering_package(pyclustering_data_t::PYCLUSTERING_TYPE_LIST);
     package->size = dynamic.size();
     package->data = new pyclustering_package * [package->size];
 
@@ -101,7 +101,7 @@ pyclustering_package * pcnn_dynamic_get_output(const void * pointer) {
 pyclustering_package * pcnn_dynamic_get_time(const void * pointer) {
     pcnn_dynamic & dynamic = *((pcnn_dynamic *) pointer);
 
-    pyclustering_package * package = new pyclustering_package(pyclustering_type_data::PYCLUSTERING_TYPE_DOUBLE);
+    pyclustering_package * package = new pyclustering_package(pyclustering_data_t::PYCLUSTERING_TYPE_DOUBLE);
     package->size = dynamic.size();
     package->data = new double[package->size];
 

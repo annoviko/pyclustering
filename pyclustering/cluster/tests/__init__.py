@@ -23,29 +23,29 @@
 
 """
 
-import unittest;
-from pyclustering.tests.suite_holder import suite_holder;
+
+from pyclustering.tests.suite_holder import suite_holder
 
 # Generate images without having a window appear.
-import matplotlib;
-matplotlib.use('Agg');
+import matplotlib
+matplotlib.use('Agg')
 
 
-from pyclustering.cluster.tests.integration import clustering_integration_tests;
-from pyclustering.cluster.tests.unit import clustering_unit_tests;
+from pyclustering.cluster.tests.integration import clustering_integration_tests
+from pyclustering.cluster.tests.unit import clustering_unit_tests
 
 
 class clustering_tests(suite_holder):
     def __init__(self):
-        super().__init__();
-        clustering_integration_tests.fill_suite(self.get_suite());
-        clustering_unit_tests.fill_suite(self.get_suite());
+        super().__init__()
+        clustering_integration_tests.fill_suite(self.get_suite())
+        clustering_unit_tests.fill_suite(self.get_suite())
 
     @staticmethod
     def fill_suite(cluster_suite):
-        clustering_integration_tests.fill_suite(cluster_suite);
-        clustering_unit_tests.fill_suite(cluster_suite);
+        clustering_integration_tests.fill_suite(cluster_suite)
+        clustering_unit_tests.fill_suite(cluster_suite)
 
 
 if __name__ == "__main__":
-    clustering_tests().run();
+    clustering_tests().run()
