@@ -34,6 +34,9 @@ namespace ccore {
 namespace clst {
 
 
+const double kmedians::THRESHOLD_CHANGE = 0.000001;
+
+
 kmedians::kmedians(const dataset & initial_medians, const double tolerance, const distance_metric<point> & p_metric) :
     m_tolerance(tolerance),
     m_initial_medians(initial_medians),
@@ -63,7 +66,7 @@ void kmedians::process(const dataset & data, cluster_data & output_result) {
         changes = update_medians(m_ptr_result->clusters(), m_ptr_result->medians());
 
         double change_difference = abs(changes - prev_changes);
-        if (change_difference < 0.000001) {
+        if (change_difference < THRESHOLD_CHANGE) {
             counter_repeaters++;
         }
         else {
@@ -125,25 +128,7 @@ double kmedians::update_medians(cluster_sequence & clusters, dataset & medians) 
     double maximum_change = 0.0;
 
     for (size_t index_cluster = 0; index_cluster < clusters.size(); index_cluster++) {
-        for (size_t index_dimension = 0; index_dimension < dimension; index_dimension++) {
-            cluster & current_cluster = clusters[index_cluster];
-            std::sort(current_cluster.begin(), current_cluster.end(), 
-                [this](std::size_t index_object1, std::size_t index_object2) 
-            {
-                return (*m_ptr_data)[index_object1] > (*m_ptr_data)[index_object2];
-            });
-
-            size_t relative_index_median = (size_t) floor((current_cluster.size() - 1) / 2.0);
-            size_t index_median = current_cluster[relative_index_median];
-
-            if (current_cluster.size() % 2 == 0) {
-                size_t index_median_second = current_cluster[relative_index_median + 1];
-                medians[index_cluster][index_dimension] = (data[index_median][index_dimension] + data[index_median_second][index_dimension]) / 2.0;
-            }
-            else {
-                medians[index_cluster][index_dimension] = data[index_median][index_dimension];
-            }
-        }
+        calculate_median(clusters[index_cluster], medians[index_cluster]);
 
         double change = m_metric(prev_medians[index_cluster], medians[index_cluster]);
         if (change > maximum_change) {
@@ -152,6 +137,31 @@ double kmedians::update_medians(cluster_sequence & clusters, dataset & medians) 
     }
 
     return maximum_change;
+}
+
+
+void kmedians::calculate_median(cluster & current_cluster, point & median) {
+    const dataset & data = *m_ptr_data;
+    const std::size_t dimension = data[0].size();
+
+    for (size_t index_dimension = 0; index_dimension < dimension; index_dimension++) {
+        std::sort(current_cluster.begin(), current_cluster.end(), 
+            [this](std::size_t index_object1, std::size_t index_object2) 
+        {
+            return (*m_ptr_data)[index_object1] > (*m_ptr_data)[index_object2];
+        });
+
+        size_t relative_index_median = (size_t) floor((current_cluster.size() - 1) / 2.0);
+        size_t index_median = current_cluster[relative_index_median];
+
+        if (current_cluster.size() % 2 == 0) {
+            size_t index_median_second = current_cluster[relative_index_median + 1];
+            median[index_dimension] = (data[index_median][index_dimension] + data[index_median_second][index_dimension]) / 2.0;
+        }
+        else {
+            median[index_dimension] = data[index_median][index_dimension];
+        }
+    }
 }
 
 

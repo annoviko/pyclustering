@@ -414,23 +414,27 @@ class bang_directory:
               a direct access to the leafs that should be analysed. Leafs cache data-points.
 
     """
-    def __init__(self, data, levels, density_threshold=0.0, **kwargs):
+    def __init__(self, data, levels, **kwargs):
         """!
         @brief Create BANG directory - basically tree structure with direct access to leafs.
 
         @param[in] data (list): Input data that is clustered.
         @param[in] levels (uint): Height of the blocks tree.
-        @param[in] density_threshold (double): The lowest level of density when contained data by bang-block is
-                    considered as a noise and there is no need to split it till the last level.
         @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'observe').
 
         <b>Keyword Args:</b><br>
             - observe (bool): If 'True' then blocks on each level are stored.
+            - density_threshold (double): The lowest level of density when contained data in bang-block is
+               considered as a noise and there is no need to split it till the last level. Be aware that this
+               parameter is used with 'amount_threshold' parameter.
+            - amount_threshold (uint): Amount of points in the block when it contained data in bang-block is
+               considered as a noise and there is no need to split it till the last level.
 
         """
         self.__data = data
         self.__levels = levels
-        self.__density_threshold = density_threshold
+        self.__density_threshold = kwargs.get('density_threshold', 0.0)
+        self.__amount_density = kwargs.get('amount_threshold', 0)
         self.__leafs = []
         self.__root = None
         self.__level_blocks = []
@@ -577,7 +581,7 @@ class bang_directory:
         @param[in|out] current_level_blocks (list): Block storage at the current level where new blocks should be added.
 
         """
-        if block.get_density() <= self.__density_threshold:
+        if block.get_density() <= self.__density_threshold or len(block) <= self.__amount_density:
             self.__leafs.append(block)
 
         else:
@@ -757,7 +761,8 @@ class bang_block:
 
         self.__cluster = None
         self.__points = None
-        self.__density = self.__calculate_density()
+        self.__amount_points = self.__get_amount_points()
+        self.__density = self.__calculate_density(self.__amount_points)
 
 
     def __str__(self):
@@ -766,6 +771,14 @@ class bang_block:
 
         """
         return "(" + str(self.__region_number) + ", " + str(self.__level) + ")"
+
+
+    def __len__(self):
+        """!
+        @brief Returns block size defined by amount of points that are contained by this block.
+
+        """
+        return self.__amount_points
 
 
     def get_region(self):
@@ -867,14 +880,16 @@ class bang_block:
         return left, right
 
 
-    def __calculate_density(self):
+    def __calculate_density(self, amount_points):
         """!
         @brief Calculates BANG-block density.
+
+        @param[in] amount_points (uint): Amount of points in block.
 
         @return (double) BANG-block density.
 
         """
-        return self.__get_amount_points() / self.__spatial_block.get_volume()
+        return amount_points / self.__spatial_block.get_volume()
 
 
     def __get_amount_points(self):
@@ -969,15 +984,26 @@ class bang:
 
     """
 
-    def __init__(self, data, levels, density_threshold=0.0, ccore=False):
+    def __init__(self, data, levels, ccore=False, **kwargs):
         """!
         @brief Create BANG clustering algorithm.
 
         @param[in] data (list): Input data (list of points) that should be clustered.
-        @param[in] levels (uint): Amount of levels in tree (how many times block should be split).
-        @param[in] density_threshold (double): If block density is smaller than this value then contained data by this
-                    block is considered as a noise.
+        @param[in] levels (uint): Amount of levels in tree that is used for splitting (how many times block should be
+                    split). For example, if amount of levels is two then surface will be divided into two blocks and
+                    each obtained block will be divided into blocks also.
         @param[in] ccore (bool): Reserved positional argument - not used yet.
+        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'observe').
+
+        <b>Keyword Args:</b><br>
+            - density_threshold (double): If block density is smaller than this value then contained data by this
+               block is considered as a noise and its points as outliers. Block density is defined by amount of
+               points in block divided by block volume: <i>amount_block_points</i>/<i>block_volume</i>. By default
+               it is 0.0 - means than only empty blocks are considered as noise. Be aware that this parameter is used
+               with parameter 'amount_threshold' - the maximum threshold is considered during processing.
+            - amount_threshold (uint): Amount of points in the block when it contained data in bang-block is
+               considered as a noise and there is no need to split it till the last level. Be aware that this parameter
+               is used with parameter 'density_threshold' - the maximum threshold is considered during processing.
 
         """
         self.__data = data
@@ -987,7 +1013,8 @@ class bang:
         self.__noise = []
         self.__cluster_blocks = []
         self.__dendrogram = []
-        self.__density_threshold = density_threshold
+        self.__density_threshold = kwargs.get('density_threshold', 0.0)
+        self.__amount_threshold = kwargs.get('amount_threshold', 0)
         self.__ccore = ccore
 
         self.__validate_arguments()
@@ -1003,7 +1030,9 @@ class bang:
         @see get_dendrogram()
 
         """
-        self.__directory = bang_directory(self.__data, self.__levels, self.__density_threshold)
+        self.__directory = bang_directory(self.__data, self.__levels,
+                                          density_threshold=self.__density_threshold,
+                                          amount_threshold=self.__amount_threshold)
         self.__allocate_clusters()
 
 
@@ -1104,7 +1133,7 @@ class bang:
         cluster_index = 0
 
         while current_block is not None:
-            if current_block.get_density() <= self.__density_threshold:
+            if current_block.get_density() <= self.__density_threshold or len(current_block) <= self.__amount_threshold:
                 break
 
             self.__expand_cluster_block(current_block, cluster_index, leaf_blocks, unhandled_block_indexes)

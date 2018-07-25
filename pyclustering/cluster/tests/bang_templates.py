@@ -37,10 +37,15 @@ from pyclustering.utils import read_sample
 
 class bang_test_template:
     @staticmethod
-    def clustering(path, levels, threshold, expected_clusters, expected_noise, ccore, **kwargs):
+    def clustering(path, levels, density_threshold, expected_clusters, expected_noise, ccore, **kwargs):
         sample = read_sample(path)
 
-        bang_instance = bang(sample, levels, threshold, ccore)
+        amount_threshold = kwargs.get('amount_threshold', 0)
+
+        bang_instance = bang(sample, levels, ccore,
+                             density_threshold=density_threshold,
+                             amount_threshold=amount_threshold)
+
         bang_instance.process()
 
         clusters = bang_instance.get_clusters()
@@ -80,7 +85,7 @@ class bang_test_template:
     def visualize(path, levels, threshold, ccore, **kwargs):
         sample = read_sample(path)
 
-        bang_instance = bang(sample, levels, threshold, ccore)
+        bang_instance = bang(sample, levels, ccore, density_threshold=threshold)
         bang_instance.process()
 
         directory = bang_instance.get_directory()
@@ -94,7 +99,7 @@ class bang_test_template:
     def animate(path, levels, threshold, ccore, **kwargs):
         sample = read_sample(path)
 
-        bang_instance = bang(sample, levels, threshold, ccore)
+        bang_instance = bang(sample, levels, ccore, density_threshold=threshold)
         bang_instance.process()
 
         directory = bang_instance.get_directory()
@@ -112,7 +117,7 @@ class bang_test_template:
             if isinstance(sample_storage, str):
                 sample = read_sample(sample_storage)
 
-            bang_instance = bang(sample, levels, threshold, ccore)
+            bang_instance = bang(sample, levels, ccore, density_threshold=threshold)
             bang_instance.process()
 
         except type:

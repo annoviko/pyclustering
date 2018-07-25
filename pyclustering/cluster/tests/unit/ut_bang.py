@@ -45,6 +45,7 @@ class bsas_unit_test(unittest.TestCase):
 
     def test_clustering_sample_simple_1_noise_only(self):
         bang_test_template.clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 6, 1000.0, [], 10, False)
+        bang_test_template.clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 6, 0.0, [], 10, False, amount_threshold=20)
 
     def test_clustering_sample_simple_2(self):
         bang_test_template.clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 7, 0.0, [5, 8, 10], 0, False)
@@ -57,6 +58,7 @@ class bsas_unit_test(unittest.TestCase):
         bang_test_template.clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 8, 0.0, [10, 10, 10, 30], 0, False)
         bang_test_template.clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 1, 0.0, [60], 0, False)
         bang_test_template.clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 6, 500.0, [], 60, False)
+        bang_test_template.clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 6, 0.0, [], 60, False, amount_threshold=100)
 
     def test_clustering_sample_simple_3_half_noise(self):
         bang_test_template.clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 4, 2.5, [30], 30, False)

@@ -54,7 +54,7 @@ class kmedians:
         
         # run cluster analysis and obtain results
         kmedians_instance.process();
-        kmedians_instance.get_clusters();    
+        kmedians_instance.get_clusters();
     @endcode
     
     """

@@ -45,6 +45,9 @@ namespace clst {
 */
 class kmedians : public cluster_algorithm {
 private:
+    const static double   THRESHOLD_CHANGE;
+
+private:
     double                  m_tolerance         = 0.0;
 
     dataset                 m_initial_medians   = { };
@@ -116,6 +119,16 @@ private:
     *
     */
     double update_medians(cluster_sequence & clusters, dataset & medians);
+
+    /**
+    *
+    * @brief    Calculate median for particular cluster.
+    *
+    * @param[in|out] current_cluster: cluster that is sorted and used for updating medians.
+    * @param[out] median: calculate median for particular cluster.
+    *
+    */
+    void calculate_median(cluster & current_cluster, point & median);
 
     /**
     *
