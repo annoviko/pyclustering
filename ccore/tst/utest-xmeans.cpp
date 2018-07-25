@@ -36,10 +36,9 @@ template_length_process_data(const std::shared_ptr<dataset> & data,
                              const dataset & start_centers,
                              const unsigned int kmax,
                              const std::vector<unsigned int> & expected_cluster_length,
-                             const splitting_type criterion,
-                             const std::size_t parallel_processing_trigger = xmeans::DEFAULT_DATA_SIZE_PARALLEL_PROCESSING) {
+                             const splitting_type criterion)
+{
     xmeans solver(start_centers, kmax, 0.0001, criterion);
-    solver.set_parallel_processing_trigger(parallel_processing_trigger);
 
     xmeans_data output_result;
     solver.process(*data.get(), output_result);
@@ -173,40 +172,6 @@ TEST(utest_xmeans, same_size_data_and_centers_mndl) {
     dataset start_centers = { {1.0}, {2.0}, {3.0}, {4.0} };
 
     template_length_process_data(data, start_centers, 20, { 1, 1, 1, 1 }, splitting_type::MINIMUM_NOISELESS_DESCRIPTION_LENGTH);
-}
-
-
-TEST(utest_xmeans, parallel_processing_bic) {
-    dataset start_centers = { {0.25, 0.25}, {0.75, 0.65}, {0.95, 0.5} };
-    std::size_t parallel_processing_trigger = 100;
-
-    std::shared_ptr<dataset> trigger_parallel_data = simple_sample_factory::create_random_sample(parallel_processing_trigger, 5);
-
-    template_length_process_data(trigger_parallel_data, start_centers, 20, { }, splitting_type::BAYESIAN_INFORMATION_CRITERION, parallel_processing_trigger);
-}
-
-
-TEST(utest_xmeans, parallel_processing_mndl) {
-    dataset start_centers = { {0.25, 0.25}, {0.75, 0.65}, {0.95, 0.5} };
-    std::size_t parallel_processing_trigger = 100;
-
-    std::shared_ptr<dataset> trigger_parallel_data = simple_sample_factory::create_random_sample(parallel_processing_trigger, 5);
-
-    template_length_process_data(trigger_parallel_data, start_centers, 20, { }, splitting_type::MINIMUM_NOISELESS_DESCRIPTION_LENGTH, parallel_processing_trigger);
-}
-
-
-TEST(utest_xmeans, parallel_processing_sample_simple_01) {
-    dataset start_centers = { {3.7, 5.5}, {6.7, 7.5} };
-    std::vector<unsigned int> expected_clusters_length = {5, 5};
-    template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_centers, 20, expected_clusters_length, splitting_type::BAYESIAN_INFORMATION_CRITERION, 0);
-}
-
-
-TEST(utest_xmeans, parallel_processing_sample_simple_02) {
-    dataset start_centers = { {3.5, 4.8}, {6.9, 7.0}, {7.5, 0.5} };
-    std::vector<unsigned int> expected_clusters_length = {10, 5, 8};
-    template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02), start_centers, 20, expected_clusters_length, splitting_type::BAYESIAN_INFORMATION_CRITERION, 0);
 }
 
 

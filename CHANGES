@@ -6,7 +6,7 @@ CHANGE NOTES FOR 0.8.2 (STARTED May 28, 2018)
 
 GENERAL CHANGES:
 - Introduced new threshold parameter 'amount of block points' to BANG algorithm to allocate outliers more precisely (pyclustering.cluster.bang).
-  See: 
+  See: https://github.com/annoviko/pyclustering/issues/446
 
 - Optimization of conveying results from C++ to Python for K-Medians and K-Medoids (pyclustering.cluster.kmedoids, pyclustering.cluster.kmedians).
   See: https://github.com/annoviko/pyclustering/issues/445

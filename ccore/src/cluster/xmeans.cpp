@@ -31,10 +31,13 @@
 #include "cluster/kmeans.hpp"
 #include "cluster/kmeans_plus_plus.hpp"
 
+#include "parallel/parallel_for.hpp"
+
 #include "utils/math.hpp"
 #include "utils/metric.hpp"
 
 
+using namespace ccore::parallel;
 using namespace ccore::utils::metric;
 
 
@@ -45,8 +48,6 @@ namespace clst {
 
 const double             xmeans::DEFAULT_SPLIT_DIFFERENCE                = 0.001;
 
-const std::size_t        xmeans::DEFAULT_DATA_SIZE_PARALLEL_PROCESSING   = 100000;
-
 
 xmeans::xmeans(const dataset & p_centers, const std::size_t p_kmax, const double p_tolerance, const splitting_type p_criterion) :
     m_centers(p_centers),
@@ -54,10 +55,7 @@ xmeans::xmeans(const dataset & p_centers, const std::size_t p_kmax, const double
     m_ptr_data(nullptr),
     m_maximum_clusters(p_kmax),
     m_tolerance(p_tolerance * p_tolerance),
-    m_criterion(p_criterion),
-    m_parallel_trigger(DEFAULT_DATA_SIZE_PARALLEL_PROCESSING),
-    m_parallel_processing(false),
-    m_pool(nullptr)
+    m_criterion(p_criterion)
 { }
 
 
@@ -66,11 +64,6 @@ xmeans::~xmeans(void) { }
 
 void xmeans::process(const dataset & data, cluster_data & output_result) {
     m_ptr_data = &data;
-
-    m_parallel_processing = (m_ptr_data->size() >= m_parallel_trigger);
-    if (m_parallel_processing) {
-        m_pool = std::make_shared<thread_pool>();
-    }
 
     output_result = xmeans_data();
     m_ptr_result = (xmeans_data *)&output_result;
@@ -95,11 +88,6 @@ void xmeans::process(const dataset & data, cluster_data & output_result) {
 }
 
 
-void xmeans::set_parallel_processing_trigger(const std::size_t p_data_size) {
-    m_parallel_trigger = p_data_size;
-}
-
-
 void xmeans::improve_parameters(cluster_sequence & improved_clusters, dataset & improved_centers, const index_sequence & available_indexes) {
     kmeans_data result;
     kmeans(improved_centers, m_tolerance).process((*m_ptr_data), available_indexes, result);
@@ -115,26 +103,9 @@ void xmeans::improve_structure() {
 
     std::vector<dataset> region_allocated_centers(m_ptr_result->clusters().size(), dataset());
 
-    if (m_parallel_processing) {
-        for (std::size_t index = 0; index < m_ptr_result->clusters().size(); index++) {
-            task::proc improve_proc = [this, index, &clusters, &current_centers, &region_allocated_centers](){
-                    improve_region_structure(clusters[index], current_centers[index], region_allocated_centers[index]);
-                };
-
-            m_pool->add_task(improve_proc);
-        }
-
-        for (std::size_t i = 0; i < m_ptr_result->clusters().size(); i++) {
-            m_pool->pop_complete_task();
-        }
-    }
-    else {
-        dataset allocated_centers;
-
-        for (std::size_t index = 0; index < m_ptr_result->clusters().size(); index++) {
-            improve_region_structure(m_ptr_result->clusters()[index], current_centers[index], region_allocated_centers[index]);
-        }
-    }
+    parallel_for(0, m_ptr_result->clusters().size(), [this, &clusters, &current_centers, &region_allocated_centers](const std::size_t p_index) {
+        improve_region_structure(clusters[p_index], current_centers[p_index], region_allocated_centers[p_index]);
+    });
 
     /* update current centers */
     dataset allocated_centers = { };

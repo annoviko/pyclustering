@@ -71,7 +71,7 @@ public:
     ~thread_pool(void);
 
 public:
-    task::id add_task(task::proc & p_raw_task);
+    task::id add_task(const task::proc & p_raw_task);
 
     task::id pop_complete_task(void);
 

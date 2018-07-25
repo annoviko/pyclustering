@@ -57,7 +57,7 @@ thread_pool::~thread_pool(void) {
 }
 
 
-task::id thread_pool::add_task(task::proc & p_raw_task) {
+task::id thread_pool::add_task(const task::proc & p_raw_task) {
     std::size_t task_id = task::INVALID_TASK_ID;
 
     {

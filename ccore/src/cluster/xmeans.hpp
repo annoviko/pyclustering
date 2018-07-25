@@ -28,12 +28,6 @@
 #include "cluster/cluster_algorithm.hpp"
 #include "cluster/xmeans_data.hpp"
 
-#include "parallel/thread_pool.hpp"
-
-
-
-using namespace ccore::parallel;
-
 
 namespace ccore {
 
@@ -65,12 +59,6 @@ private:
     double            m_tolerance;
 
     splitting_type    m_criterion;
-
-    std::size_t       m_parallel_trigger      = DEFAULT_DATA_SIZE_PARALLEL_PROCESSING;
-
-    bool              m_parallel_processing   = false;
-
-    thread_pool::ptr  m_pool                  = nullptr;
 
 public:
     /**
@@ -113,7 +101,6 @@ public:
     * @param[in]  p_data_size: data size that triggers parallel processing.
     *
     */
-    void set_parallel_processing_trigger(const std::size_t p_data_size);
 
 private:
     void update_clusters(cluster_sequence & clusters, const dataset & centers, const index_sequence & available_indexes);
