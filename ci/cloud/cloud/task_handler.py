@@ -34,19 +34,25 @@ class task_handler:
         self.__token = token
 
 
-    def process(self, client_task):
-        action = client_task.get_action()
+    def process(self, task):
+        action = task.get_action()
         if action == 'upload':
-            self.__upload(client_task.get_param('from'), client_task.get_param('to'))
+            self.__upload(task.get_param('from'), task.get_param('to'))
 
         elif action == 'download':
-            self.__download(client_task.get_param('from'), client_task.get_param('to'))
+            self.__download(task.get_param('from'), task.get_param('to'))
 
         elif action == 'mkdir':
-            self.__mkdir(client_task.get_param('folder'))
+            self.__mkdir(task.get_param('folder'))
 
         elif action == 'rm':
-            self.__rm(client_task.get_param('path'))
+            self.__rm(task.get_param('path'))
+
+        elif action == 'get_third_party':
+            self.__third_party(task.get_param('os'), task.get_param('platform'), task.get_param('to'))
+
+        elif action == 'help':
+            self.__help()
 
         else:
             raise RuntimeError("ERROR: Unknown action is specified '%s'." % action)
@@ -96,4 +102,31 @@ class task_handler:
             print("INFO: '%s' is successfully removed." % path)
 
         else:
-            print("ERROR: File or folder '%s' is not found." % path)
+            print("WARNING: File or folder '%s' is not found." % path)
+
+
+    def __third_party(self, operating_system, platform, to_path):
+        disk_client = yandex_disk(self.__token)
+        remote_path = "/third_party/" + operating_system + "/" + platform
+        if not disk_client.directory_exist(remote_path):
+            raise FileExistsError("ERROR: Third party folder '%s' is not found on the cloud." % remote_path)
+
+        files = disk_client.folder_content(remote_path)
+        if files is None:
+            raise FileExistsError("ERROR: Impossible to get content of third party folder '%s'." % remote_path)
+
+        for file in files:
+            remote_file_path = remote_path + "/" + file
+            local_file_path = to_path + "/" + file
+
+            self.__download(remote_file_path, local_file_path)
+
+
+    def __help(self):
+        print("Following commands are supported by the tool:")
+        print(" upload <from> <to>                    - upload file or folder from local machine path to remote path on clound.")
+        print(" download <from> <to>                  - download file or folder from remote path on cloud to local machine.")
+        print(" rm <path>                             - remove file or folder on cloud.")
+        print(" mkdir <path>                          - create folder on cloud.")
+        print(" get_third_party <os> <platform> <to>  - download third party libraries from cloud for specific operating system"
+              " (linux or windows) and platform (x64 or x86) to specific folder on local machine.")

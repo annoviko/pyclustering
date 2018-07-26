@@ -33,11 +33,17 @@ from cloud.task_handler import task_handler
 
 
 def run():
-    token = sys.argv[1]
-    action = sys.argv[2]
-    params = sys.argv[3:]
+    if len(sys.argv) == 2:
+        client_task = task(sys.argv[1], [])
+        token = ""
 
-    client_task = task(action, params)
+    else:
+        token = sys.argv[1]
+        action = sys.argv[2]
+        params = sys.argv[3:]
+
+        client_task = task(action, params)
+
     task_handler(token).process(client_task)
 
 

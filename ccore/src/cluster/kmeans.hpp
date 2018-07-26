@@ -27,12 +27,9 @@
 #include "cluster/cluster_algorithm.hpp"
 #include "cluster/kmeans_data.hpp"
 
-#include "parallel/thread_pool.hpp"
-
 #include "utils/metric.hpp"
 
 
-using namespace ccore::parallel;
 using namespace ccore::utils::metric;
 
 
@@ -50,8 +47,6 @@ class kmeans : public cluster_algorithm {
 public:
     const static double             DEFAULT_TOLERANCE;
 
-    const static std::size_t        DEFAULT_DATA_SIZE_PARALLEL_PROCESSING;
-
 private:
     double                  m_tolerance             = DEFAULT_TOLERANCE;
 
@@ -65,13 +60,7 @@ private:
 
     distance_metric<point>  m_metric;
 
-    std::size_t             m_parallel_trigger      = DEFAULT_DATA_SIZE_PARALLEL_PROCESSING;
-
-    bool                    m_parallel_processing   = false;
-
     std::mutex              m_mutex;
-
-    thread_pool::ptr        m_pool                  = nullptr;
 
 public:
     /**
@@ -128,16 +117,6 @@ public:
     *
     */
     virtual void process(const dataset & p_data, const index_sequence & p_indexes, cluster_data & p_result);
-
-    /**
-    *
-    * @brief    Set custom trigger (that is defined by data size) for parallel processing,
-    *            by default this value is defined by static constant DEFAULT_DATA_SIZE_PARALLEL_PROCESSING.
-    *
-    * @param[in]  p_data_size: data size that triggers parallel processing.
-    *
-    */
-    void set_parallel_processing_trigger(const std::size_t p_data_size);
 
 private:
     void update_clusters(const dataset & centers, cluster_sequence & clusters);

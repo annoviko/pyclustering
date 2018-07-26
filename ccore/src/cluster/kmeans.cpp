@@ -23,9 +23,12 @@
 #include <algorithm>
 #include <limits>
 
+#include "parallel/parallel_for.hpp"
+
 #include "utils/metric.hpp"
 
 
+using namespace ccore::parallel;
 using namespace ccore::utils::metric;
 
 
@@ -36,8 +39,6 @@ namespace clst {
 
 const double             kmeans::DEFAULT_TOLERANCE                       = 0.025;
 
-const std::size_t        kmeans::DEFAULT_DATA_SIZE_PARALLEL_PROCESSING   = 200000;
-
 
 kmeans::kmeans(const dataset & p_initial_centers, const double p_tolerance, const distance_metric<point> & p_metric) :
     m_tolerance(p_tolerance * p_tolerance),
@@ -45,10 +46,7 @@ kmeans::kmeans(const dataset & p_initial_centers, const double p_tolerance, cons
     m_ptr_result(nullptr),
     m_ptr_data(nullptr),
     m_metric(p_metric),
-    m_parallel_trigger(DEFAULT_DATA_SIZE_PARALLEL_PROCESSING),
-    m_parallel_processing(false),
-    m_mutex(),
-    m_pool(nullptr)
+    m_mutex()
 { }
 
 
@@ -65,11 +63,6 @@ void kmeans::process(const dataset & p_data, const index_sequence & p_indexes, c
 
     if (p_data[0].size() != m_initial_centers[0].size()) {
         throw std::runtime_error("CCORE [kmeans]: dimension of the input data and dimension of the initial cluster centers must be equal.");
-    }
-
-    m_parallel_processing = (m_ptr_data->size() >= m_parallel_trigger);
-    if (m_parallel_processing) {
-        m_pool = std::make_shared<thread_pool>();
     }
 
     m_ptr_result->centers().assign(m_initial_centers.begin(), m_initial_centers.end());
@@ -93,11 +86,6 @@ void kmeans::process(const dataset & p_data, const index_sequence & p_indexes, c
             m_ptr_result->evolution_clusters().push_back(m_ptr_result->clusters());
         }
     }
-}
-
-
-void kmeans::set_parallel_processing_trigger(const std::size_t p_data_size) {
-    m_parallel_trigger = p_data_size;
 }
 
 
@@ -156,27 +144,9 @@ double kmeans::update_centers(const cluster_sequence & clusters, dataset & cente
     dataset calculated_clusters(clusters.size(), point(dimension, 0.0));
     std::vector<double> changes(clusters.size(), 0.0);
 
-    if (m_parallel_processing) {
-        for (size_t index_cluster = 0; index_cluster < clusters.size(); index_cluster++) {
-            calculated_clusters[index_cluster] = centers[index_cluster];
-
-            task::proc update_proc = [this, index_cluster, &clusters, &calculated_clusters, &changes]() {
-                changes[index_cluster] = update_center(clusters[index_cluster], calculated_clusters[index_cluster]);
-            };
-
-            m_pool->add_task(update_proc);
-        }
-
-        for (std::size_t index_cluster = 0; index_cluster < clusters.size(); index_cluster++) {
-            m_pool->pop_complete_task();
-        }
-    }
-    else {
-        for (size_t index_cluster = 0; index_cluster < clusters.size(); index_cluster++) {
-            calculated_clusters[index_cluster] = centers[index_cluster];
-            changes[index_cluster] = update_center(clusters[index_cluster], calculated_clusters[index_cluster]);
-        }
-    }
+    parallel_for(0, clusters.size(), [this, &clusters, &calculated_clusters, &changes](const std::size_t p_index) {
+        changes[p_index] = update_center(clusters[p_index], calculated_clusters[p_index]);
+    });
 
     centers = std::move(calculated_clusters);
 

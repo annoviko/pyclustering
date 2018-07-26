@@ -40,13 +40,10 @@ template_kmeans_length_process_data_common(const dataset_ptr & p_data,
                                            const std::vector<size_t> & p_expected_cluster_length,
                                            const index_sequence & p_indexes,
                                            const bool p_observe,
-                                           const std::size_t p_parallel_processing_trigger,
                                            const distance_metric<point> & p_metric = distance_metric_factory<point>::euclidean_square())
 {
     kmeans_data output_result(p_observe);
     kmeans solver(p_start_centers, 0.0001, p_metric);
-
-    solver.set_parallel_processing_trigger(p_parallel_processing_trigger);
 
     if (p_indexes.empty()) {
         solver.process(*p_data, output_result);
@@ -84,20 +81,18 @@ static void
 template_kmeans_length_process_data_range(const dataset_ptr & p_data,
                                           const dataset & p_start_centers,
                                           const std::vector<size_t> & p_expected_cluster_length,
-                                          const index_sequence & p_indexes,
-                                          const std::size_t p_parallel_processing_trigger = kmeans::DEFAULT_DATA_SIZE_PARALLEL_PROCESSING)
+                                          const index_sequence & p_indexes)
 {
-    template_kmeans_length_process_data_common(p_data, p_start_centers, p_expected_cluster_length, p_indexes, false, p_parallel_processing_trigger);
+    template_kmeans_length_process_data_common(p_data, p_start_centers, p_expected_cluster_length, p_indexes, false);
 }
 
 
 static void
 template_kmeans_length_process_data(const dataset_ptr & p_data,
                                     const dataset & p_start_centers,
-                                    const std::vector<size_t> & p_expected_cluster_length,
-                                    const std::size_t parallel_processing_trigger = kmeans::DEFAULT_DATA_SIZE_PARALLEL_PROCESSING)
+                                    const std::vector<size_t> & p_expected_cluster_length)
 {
-    template_kmeans_length_process_data_range(p_data, p_start_centers, p_expected_cluster_length, { }, parallel_processing_trigger);
+    template_kmeans_length_process_data_range(p_data, p_start_centers, p_expected_cluster_length, { });
 }
 
 
@@ -107,7 +102,7 @@ template_kmeans_observer(const dataset_ptr & p_data,
                          const index_sequence & p_indexes,
                          const std::vector<size_t> & p_expected_cluster_length)
 {
-    template_kmeans_length_process_data_common(p_data, p_start_centers, p_expected_cluster_length, p_indexes, true, kmeans::DEFAULT_DATA_SIZE_PARALLEL_PROCESSING);
+    template_kmeans_length_process_data_common(p_data, p_start_centers, p_expected_cluster_length, p_indexes, true);
 }
 
 
@@ -117,7 +112,7 @@ template_kmeans_metric(const dataset_ptr & p_data,
                        const std::vector<size_t> & p_expected_cluster_length,
                        const distance_metric<point> & p_metric)
 {
-  template_kmeans_length_process_data_common(p_data, p_start_centers, p_expected_cluster_length, { }, false, kmeans::DEFAULT_DATA_SIZE_PARALLEL_PROCESSING, p_metric);
+  template_kmeans_length_process_data_common(p_data, p_start_centers, p_expected_cluster_length, { }, false, p_metric);
 }
 
 
@@ -249,30 +244,6 @@ TEST(utest_kmeans, one_dimension_sample_simple_08) {
     dataset start_centers = { { -4.0 },{ 3.0 },{ 6.0 },{ 10.0 } };
     std::vector<size_t> expected_clusters_length = { 15, 30, 20, 80 };
     template_kmeans_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_08), start_centers, expected_clusters_length);
-}
-
-
-TEST(utest_kmeans, parallel_processing) {
-    dataset start_centers = { {0.25, 0.25}, {0.75, 0.65}, {0.95, 0.5} };
-    std::size_t parallel_processing_trigger = 100;
-
-    std::shared_ptr<dataset> trigger_parallel_data = simple_sample_factory::create_random_sample(parallel_processing_trigger, 5);
-
-    template_kmeans_length_process_data(trigger_parallel_data, start_centers, { }, parallel_processing_trigger);
-}
-
-
-TEST(utest_kmeans, parallel_processing_sample_simple_01) {
-    dataset start_centers = { { 3.7, 5.5 },{ 6.7, 7.5 } };
-    std::vector<size_t> expected_clusters_length = { 5, 5 };
-    template_kmeans_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_centers, expected_clusters_length, 0);
-}
-
-
-TEST(utest_kmeans, parallel_processing_sample_simple_02) {
-    dataset start_centers = { { 3.5, 4.8 },{ 6.9, 7.0 },{ 7.5, 0.5 } };
-    std::vector<size_t> expected_clusters_length = { 10, 5, 8 };
-    template_kmeans_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02), start_centers, expected_clusters_length, 0);
 }
 
 
