@@ -28,6 +28,7 @@ import http.client
 import json
 import os.path
 
+import urllib.request
 from urllib.parse import urlparse
 
 
@@ -121,9 +122,10 @@ class yandex_disk:
 
         json_content = json.loads(response_content)
         download_link = json_content['href']
-        result, content = self.__download_request(download_link)
-        if result != 200:
-            print("ERROR: Impossible to download file using link '%s' (code: '%d', description: '%s')." % (download_link, result, content))
+        status, content = self.__download_request(download_link)
+
+        if status != 200:
+            print("ERROR: Impossible to download file using link '%s' (code: '%d')." % (download_link, status))
             return False
 
         file_descriptor = open(local_path, "wb")
@@ -188,19 +190,9 @@ class yandex_disk:
 
 
     def __download_request(self, download_link):
-        parse_result = urlparse(download_link)
-
-        position = download_link.find(parse_result.path)
-        complete_url = download_link[position:]
-
-        connection = http.client.HTTPSConnection(parse_result.netloc)
-        connection.request("GET", complete_url)
-
-        response = connection.getresponse()
-        response_status = response.status
-        response_content = response.read()
-
-        connection.close()
+        with urllib.request.urlopen(download_link) as url:
+            response_status = url.getcode()
+            response_content = url.read()
 
         return response_status, response_content
 

@@ -29,7 +29,12 @@ import os
 from cloud.yandex_disk import yandex_disk
 
 
+
 class task_handler:
+    __LOCAL_PATH_TO_CCORE = "/pyclustering/core"
+    __LOCAL_OS_NAMES = { "windows" : "win",
+                         "linux" : "linux"  }
+
     def __init__(self, token):
         self.__token = token
 
@@ -115,10 +120,18 @@ class task_handler:
         if files is None:
             raise FileExistsError("ERROR: Impossible to get content of third party folder '%s'." % remote_path)
 
+        if to_path is None:
+            script_path = os.path.dirname(os.path.realpath(__file__))
+            os_folder = task_handler.__LOCAL_OS_NAMES[operating_system]
+            local_binary_folder = script_path + "/../../../pyclustering/core/" + platform + "/" + os_folder + "/"
+        else:
+            local_binary_folder = to_path
+
         for file in files:
             remote_file_path = remote_path + "/" + file
-            local_file_path = to_path + "/" + file
+            local_file_path = local_binary_folder + "/" + file
 
+            print(file)
             self.__download(remote_file_path, local_file_path)
 
 

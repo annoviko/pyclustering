@@ -52,12 +52,15 @@ class task:
             action_params['path'] = params[0]
 
         elif self.__action == 'get_third_party':
-            if len(params) != 3:
-                raise ValueError("ERROR: Incorrect amount of arguments ('%d' instead of '3')." % len(params))
+            if len(params) != 2 and len(params) != 3:
+                raise ValueError("ERROR: Incorrect amount of arguments ('%d' instead of '2' or '3')." % len(params))
 
             action_params['os'] = params[0]
             action_params['platform'] = params[1]
-            action_params['to'] = params[2]
+
+            action_params['to'] = None
+            if len(params) > 2:
+                action_params['to'] = params[2]
 
             if action_params['os'] not in ['windows', 'linux']:
                 raise ValueError("ERROR: Unsupported operating system '%s' (available: 'linux', 'windows')." % action_params['os'])
