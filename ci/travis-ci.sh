@@ -173,7 +173,7 @@ run_ut_ccore_job() {
     check_failure "CCORE unit-testing status: FAILURE."
     
     # step back to have full path to files in coverage reports
-    coveralls --root ../ --build-root . --exclude ccore/tst/ --exclude ccore/tools/ --gcov-options '\-lp'
+    coveralls --root ../ --build-root . --exclude ccore/tst/ --exclude ccore/external/ --gcov-options '\-lp'
 }
 
 
