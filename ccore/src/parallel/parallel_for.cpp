@@ -7,9 +7,8 @@ namespace parallel {
 
 
 void parallel_for(std::size_t p_start, std::size_t p_end, const std::function<void(const std::size_t)> & p_task) {
-    std::size_t thread_pool_size = 1;
     if (ccore::parallel::thread_pool::DEFAULT_POOL_SIZE > 1) {
-        thread_pool_size = ccore::parallel::thread_pool::DEFAULT_POOL_SIZE - 1;
+        std::size_t thread_pool_size = ccore::parallel::thread_pool::DEFAULT_POOL_SIZE - 1;
 
         ccore::parallel::thread_pool pool(thread_pool_size);
 
