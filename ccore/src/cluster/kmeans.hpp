@@ -60,8 +60,6 @@ private:
 
     distance_metric<point>  m_metric;
 
-    std::mutex              m_mutex;
-
 public:
     /**
     *

@@ -55,7 +55,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)tools\;$(SolutionDir)tools\gtest\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)external\include\;$(SolutionDir)external\include\gtest\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -74,7 +74,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)tools\;$(SolutionDir)tools\gtest\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)external\include\;$(SolutionDir)external\include\gtest\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
@@ -88,6 +88,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\external\include\gtest\gtest-all.cpp" />
     <ClCompile Include="..\src\cluster\agglomerative.cpp" />
     <ClCompile Include="..\src\cluster\bsas.cpp" />
     <ClCompile Include="..\src\cluster\cluster_algorithm.cpp" />
@@ -153,7 +154,6 @@
     <ClCompile Include="..\src\utils\math.cpp" />
     <ClCompile Include="..\src\utils\metric.cpp" />
     <ClCompile Include="..\src\utils\random.cpp" />
-    <ClCompile Include="..\tools\gtest\gtest-all.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="utest-interface-bsas.cpp" />
     <ClCompile Include="utest-interface-mbsas.cpp" />
@@ -215,6 +215,7 @@
     <ClCompile Include="utest-xmeans.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\external\include\gtest\gtest.h" />
     <ClInclude Include="..\src\cluster\agglomerative.hpp" />
     <ClInclude Include="..\src\cluster\bsas.hpp" />
     <ClInclude Include="..\src\cluster\bsas_data.hpp" />
@@ -299,7 +300,6 @@
     <ClInclude Include="..\src\utils\math.hpp" />
     <ClInclude Include="..\src\utils\metric.hpp" />
     <ClInclude Include="..\src\utils\random.hpp" />
-    <ClInclude Include="..\tools\gtest\gtest.h" />
     <ClInclude Include="samples.hpp" />
     <ClInclude Include="utenv_check.hpp" />
     <ClInclude Include="utest-adjacency.hpp" />

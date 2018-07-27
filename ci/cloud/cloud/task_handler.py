@@ -31,7 +31,7 @@ from cloud.yandex_disk import yandex_disk
 
 
 class task_handler:
-    __LOCAL_PATH_TO_CCORE = "/pyclustering/core"
+    __LOCAL_PATH_THIRD_PARTIES = "ccore/external/libs"
     __LOCAL_OS_NAMES = { "windows" : "win",
                          "linux" : "linux"  }
 
@@ -123,7 +123,7 @@ class task_handler:
         if to_path is None:
             script_path = os.path.dirname(os.path.realpath(__file__))
             os_folder = task_handler.__LOCAL_OS_NAMES[operating_system]
-            local_binary_folder = script_path + "/../../../pyclustering/core/" + platform + "/" + os_folder + "/"
+            local_binary_folder = script_path + "/../../../" + task_handler.__LOCAL_PATH_THIRD_PARTIES + "/" + os_folder + "/" + platform + "/"
         else:
             local_binary_folder = to_path
 
@@ -131,7 +131,6 @@ class task_handler:
             remote_file_path = remote_path + "/" + file
             local_file_path = local_binary_folder + "/" + file
 
-            print(file)
             self.__download(remote_file_path, local_file_path)
 
 

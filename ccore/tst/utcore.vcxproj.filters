@@ -5,9 +5,6 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="TestEnv Source Files">
-      <UniqueIdentifier>{9c57f161-4c1e-4636-bce0-4c7f5277b6ab}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Unit Tests">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
@@ -36,11 +33,11 @@
     <Filter Include="Tested Code\utils">
       <UniqueIdentifier>{74e6578f-f3e3-42b5-81f6-3c12a3435e94}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Google Test Environment">
+      <UniqueIdentifier>{9c57f161-4c1e-4636-bce0-4c7f5277b6ab}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\tools\gtest\gtest-all.cpp">
-      <Filter>TestEnv Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\container\adjacency_bit_matrix.cpp">
       <Filter>Tested Code\container</Filter>
     </ClCompile>
@@ -413,11 +410,11 @@
     <ClCompile Include="..\src\parallel\parallel_for.cpp">
       <Filter>Tested Code\parallel</Filter>
     </ClCompile>
+    <ClCompile Include="..\external\include\gtest\gtest-all.cpp">
+      <Filter>Google Test Environment</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\tools\gtest\gtest.h">
-      <Filter>TestEnv Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\container\adjacency.hpp">
       <Filter>Tested Code\container</Filter>
     </ClInclude>
@@ -681,6 +678,9 @@
     </ClInclude>
     <ClInclude Include="..\src\parallel\parallel_for.hpp">
       <Filter>Tested Code\parallel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\external\include\gtest\gtest.h">
+      <Filter>Google Test Environment</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

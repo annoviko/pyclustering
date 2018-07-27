@@ -45,8 +45,7 @@ kmeans::kmeans(const dataset & p_initial_centers, const double p_tolerance, cons
     m_initial_centers(p_initial_centers),
     m_ptr_result(nullptr),
     m_ptr_data(nullptr),
-    m_metric(p_metric),
-    m_mutex()
+    m_metric(p_metric)
 { }
 
 
@@ -144,7 +143,8 @@ double kmeans::update_centers(const cluster_sequence & clusters, dataset & cente
     dataset calculated_clusters(clusters.size(), point(dimension, 0.0));
     std::vector<double> changes(clusters.size(), 0.0);
 
-    parallel_for(0, clusters.size(), [this, &clusters, &calculated_clusters, &changes](const std::size_t p_index) {
+    parallel_for(0, clusters.size(), [this, &clusters, &centers, &calculated_clusters, &changes](const std::size_t p_index) {
+        calculated_clusters[p_index] = centers[p_index];
         changes[p_index] = update_center(clusters[p_index], calculated_clusters[p_index]);
     });
 
