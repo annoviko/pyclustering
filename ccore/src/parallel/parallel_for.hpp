@@ -4,8 +4,6 @@
 #include <cstddef>
 #include <functional>
 
-#include "thread_pool.hpp"
-
 
 namespace ccore {
 
