@@ -181,7 +181,8 @@ class bang_visualizer:
 
         belong_cluster = block.get_cluster() is not None
 
-        density_scale = bang_visualizer.__maximum_density_alpha * block.get_density() / density_scale
+        if density_scale != 0.0:
+            density_scale = bang_visualizer.__maximum_density_alpha * block.get_density() / density_scale
 
         face_color = matplotlib.colors.to_rgba('blue', alpha=density_scale)
         edge_color = matplotlib.colors.to_rgba('black', alpha=1.0)
@@ -320,6 +321,8 @@ class bang_animator:
         """
         leafs = self.__directory.get_leafs()
         density_scale = leafs[-1].get_density()
+
+        if density_scale == 0.0: density_scale = 1.0
 
         for block in leafs:
             alpha = 0.8 * block.get_density() / density_scale
@@ -724,12 +727,15 @@ class spatial_block:
     def __calculate_volume(self):
         """!
         @brief Calculates volume of current spatial block.
+        @details If empty dimension is detected (where all points has the same value) then such dimension is ignored
+                  during calculation of volume.
 
         @return (double) Volume of current spatial block.
 
         """
-        volume = self.__max_corner[0] - self.__min_corner[0]
-        for i in range(1, len(self.__max_corner)):
+
+        volume = 0.0
+        for i in range(0, len(self.__max_corner)):
             side_length = self.__max_corner[i] - self.__min_corner[i]
 
             if side_length != 0.0:
@@ -737,7 +743,6 @@ class spatial_block:
                 else: volume *= side_length
 
         return volume
-
 
 
 class bang_block:
@@ -892,7 +897,11 @@ class bang_block:
         @return (double) BANG-block density.
 
         """
-        return amount_points / self.__spatial_block.get_volume()
+        volume = self.__spatial_block.get_volume()
+        if volume != 0.0:
+            return amount_points / volume
+
+        return 0.0
 
 
     def __get_amount_points(self):
