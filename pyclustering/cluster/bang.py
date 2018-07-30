@@ -246,13 +246,12 @@ class bang_animator:
 
 
     """
-    def __init__(self, directory, clusters, noise):
+    def __init__(self, directory, clusters):
         """!
         @brief Creates BANG animator instance.
 
         @param[in] directory (bang_directory): BANG directory that was formed during BANG clustering process.
         @param[in] clusters (list): Allocated clusters during BANG clustering process.
-        @param[in] noise (list): Allocated noise (outliers) during BANG clustering process.
 
         """
         self.__directory = directory
@@ -731,7 +730,11 @@ class spatial_block:
         """
         volume = self.__max_corner[0] - self.__min_corner[0]
         for i in range(1, len(self.__max_corner)):
-            volume *= self.__max_corner[i] - self.__min_corner[i]
+            side_length = self.__max_corner[i] - self.__min_corner[i]
+
+            if side_length != 0.0:
+                if volume == 0.0: volume = side_length
+                else: volume *= side_length
 
         return volume
 

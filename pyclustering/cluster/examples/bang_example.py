@@ -53,7 +53,7 @@ def template_clustering(data_path, levels, **kwargs):
     bang_visualizer.show_clusters(data, clusters, noise)
 
     if len(data[0]) == 2:
-        animator = bang_animator(directory, clusters, noise)
+        animator = bang_animator(directory, clusters)
         animator.animate()
         # movie_filename = os.path.basename(data_path) + ".mp4"
         # animator.animate(movie_filename=movie_filename)
@@ -99,5 +99,10 @@ def cluster_fcps():
     template_clustering(FCPS_SAMPLES.SAMPLE_ATOM, 11)
 
 
-cluster_simple_sample()
-cluster_fcps()
+def customer_request():
+    template_clustering("Traffic1.data", 8)
+
+
+customer_request()
+#cluster_simple_sample()
+#cluster_fcps()

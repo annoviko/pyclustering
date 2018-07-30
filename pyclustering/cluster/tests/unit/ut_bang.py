@@ -104,6 +104,11 @@ class bsas_unit_test(unittest.TestCase):
         bang_test_template.clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 2, 0.0, [15], 0, False)
 
 
+    def test_clustering_zero_column(self):
+        bang_test_template.clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE13, 6, 0.0, [5, 5], 0, False)
+        bang_test_template.clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE13, 1, 0.0, [10], 0, False)
+
+
     def test_visualize_no_failure_one_dimensional(self):
         bang_test_template.visualize(SIMPLE_SAMPLES.SAMPLE_SIMPLE7, 4, 0.0, False)
         bang_test_template.visualize(SIMPLE_SAMPLES.SAMPLE_SIMPLE8, 7, 0.0, False)

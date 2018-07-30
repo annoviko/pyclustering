@@ -106,7 +106,7 @@ class bang_test_template:
         clusters = bang_instance.get_clusters()
         noise = bang_instance.get_noise()
 
-        animator = bang_animator(directory, clusters, noise)
+        animator = bang_animator(directory, clusters)
         animator.animate()
 
 

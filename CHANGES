@@ -28,6 +28,9 @@ CORRECTED MAJOR BUGS:
 - Bug with failure in case of numpy.ndarray data type in python part of CURE algorithm (pyclustering.cluster.cure).
   See: https://github.com/annoviko/pyclustering/issues/438
 
+- Bug with BANG algorithm when column contain zero values only (pyclustering.cluster.bang).
+  See: https://github.com/annoviko/pyclustering/issues/449
+
 
 
 ------------------------------------------------------------------------

@@ -120,6 +120,9 @@ class task_handler:
         if files is None:
             raise FileExistsError("ERROR: Impossible to get content of third party folder '%s'." % remote_path)
 
+        if len(files):
+            print("WARNING: No third parties for system '%s' on platform '%s'." % (operating_system, platform))
+
         if to_path is None:
             script_path = os.path.dirname(os.path.realpath(__file__))
             os_folder = task_handler.__LOCAL_OS_NAMES[operating_system]
