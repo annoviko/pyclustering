@@ -99,7 +99,7 @@ void kmeans::update_clusters(const dataset & p_centers, cluster_sequence & p_clu
     if (m_ptr_indexes->empty()) {
         std::vector<std::size_t> winners(data.size(), 0);
         parallel_for(0, data.size(), [this, &p_centers, &winners](std::size_t p_index) {
-            assign_point_to_cluster_parallel(p_index, p_centers, winners);
+            assign_point_to_cluster(p_index, p_centers, winners);
         });
 
         for (std::size_t index_point = 0; index_point < winners.size(); index_point++) {
@@ -113,7 +113,7 @@ void kmeans::update_clusters(const dataset & p_centers, cluster_sequence & p_clu
            But in K-Means case only - it works perfectly and increase performance. */
         std::vector<std::size_t> winners(data.size(), 0);
         parallel_for_each(*m_ptr_indexes, [this, &p_centers, &winners](std::size_t p_index) {
-            assign_point_to_cluster_parallel(p_index, p_centers, winners);
+            assign_point_to_cluster(p_index, p_centers, winners);
         });
 
         for (std::size_t index_point : *m_ptr_indexes) {
@@ -126,24 +126,7 @@ void kmeans::update_clusters(const dataset & p_centers, cluster_sequence & p_clu
 }
 
 
-void kmeans::assign_point_to_cluster(const std::size_t p_index_point, const dataset & p_centers, cluster_sequence & p_clusters) {
-    double    minimum_distance = std::numeric_limits<double>::max();
-    size_t    suitable_index_cluster = 0;
-
-    for (size_t index_cluster = 0; index_cluster < p_centers.size(); index_cluster++) {
-        double distance = m_metric(p_centers[index_cluster], (*m_ptr_data)[p_index_point]);
-
-        if (distance < minimum_distance) {
-            minimum_distance = distance;
-            suitable_index_cluster = index_cluster;
-        }
-    }
-
-    p_clusters[suitable_index_cluster].push_back(p_index_point);
-}
-
-
-void kmeans::assign_point_to_cluster_parallel(const std::size_t p_index_point, const dataset & p_centers, std::vector<std::size_t> & p_clusters) {
+void kmeans::assign_point_to_cluster(const std::size_t p_index_point, const dataset & p_centers, std::vector<std::size_t> & p_clusters) {
     double    minimum_distance = std::numeric_limits<double>::max();
     size_t    suitable_index_cluster = 0;
 

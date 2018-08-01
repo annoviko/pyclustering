@@ -211,17 +211,17 @@ class syncsegm:
         
         """
         
-        self.__order_color  = order_color;
-        self.__order_object = order_object;
+        self.__order_color  = order_color
+        self.__order_object = order_object
         
-        data = read_image(image_source);
-        color_analyser = self.__analyse_colors(data, collect_dynamic);
+        data = read_image(image_source)
+        color_analyser = self.__analyse_colors(data, collect_dynamic)
         
-        if (self.__object_radius is None):
-            return syncsegm_analyser(color_analyser, None);
+        if self.__object_radius is None:
+            return syncsegm_analyser(color_analyser, None)
     
-        object_segment_analysers = self.__analyse_objects(image_source, color_analyser, collect_dynamic);
-        return syncsegm_analyser(color_analyser, object_segment_analysers);
+        object_segment_analysers = self.__analyse_objects(image_source, color_analyser, collect_dynamic)
+        return syncsegm_analyser(color_analyser, object_segment_analysers)
     
     
     def __analyse_colors(self, image_data, collect_dynamic):

@@ -75,7 +75,7 @@ void syncnet::create_connections(const double connectivity_radius, const bool en
         distance_conn_weights = new std::vector<std::vector<double> >(size(), instance);
     }
     else {
-        distance_conn_weights = NULL;
+        distance_conn_weights = nullptr;
     }
 
     double maximum_distance = 0;
@@ -98,8 +98,8 @@ void syncnet::create_connections(const double connectivity_radius, const bool en
                     maximum_distance = distance;
                 }
 
-                if (distance < minimum_distance) {
-                    minimum_distance = distance;
+                if (distance < maximum_distance) {
+                    maximum_distance = distance;
                 }
             }
         }
