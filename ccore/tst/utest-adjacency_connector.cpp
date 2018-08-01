@@ -64,7 +64,7 @@ static void template_grid_connections(const grid_t p_connections, const size_t p
             break;
     }
 
-    int base = p_width;
+    int base = (int) p_width;
     if (base == 0) {
         base = (int) std::sqrt(p_elements);
     }

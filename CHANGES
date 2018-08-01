@@ -5,6 +5,9 @@ CHANGE NOTES FOR 0.8.2 (STARTED May 28, 2018)
 ------------------------------------------------------------------------
 
 GENERAL CHANGES:
+- Parallel optimization of K-Means algorithm (ccore.clst.kmeans).
+  See: https://github.com/annoviko/pyclustering/issues/451
+
 - Introduced new threshold parameter 'amount of block points' to BANG algorithm to allocate outliers more precisely (pyclustering.cluster.bang).
   See: https://github.com/annoviko/pyclustering/issues/446
 
@@ -25,10 +28,13 @@ GENERAL CHANGES:
 
 
 CORRECTED MAJOR BUGS:
+- Bug with calculation weighted connection for Sync based clustering algorithms in C++ implementation (ccore.nnet.syncnet).
+  See: no reference
+
 - Bug with failure in case of numpy.ndarray data type in python part of CURE algorithm (pyclustering.cluster.cure).
   See: https://github.com/annoviko/pyclustering/issues/438
 
-- Bug with BANG algorithm when column contain zero values only (pyclustering.cluster.bang).
+- Bug with BANG algorithm with empty dimensions - when data contains column with the same values (pyclustering.cluster.bang).
   See: https://github.com/annoviko/pyclustering/issues/449
 
 

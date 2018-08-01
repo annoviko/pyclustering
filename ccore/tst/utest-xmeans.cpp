@@ -197,3 +197,25 @@ TEST(utest_xmeans, custom_allocation_bic_01) {
 
     template_length_process_data(data, start_centers, 5, expected_clusters_length, splitting_type::BAYESIAN_INFORMATION_CRITERION);
 }
+
+
+#ifdef UT_PERFORMANCE_SESSION
+TEST(performance_xmeans, big_data) {
+    auto points = simple_sample_factory::create_random_sample(100000, 10);
+    dataset centers = { {0, 0}, {5, 5}, {10, 10}, {15, 15}, {20, 20} };
+
+    auto start = std::chrono::system_clock::now();
+
+    const std::size_t repeat = 1;
+    for (std::size_t i = 0; i < repeat; i++) {
+      xmeans_data output_result(false);
+      xmeans solver(centers, 20, 0.0001, splitting_type::BAYESIAN_INFORMATION_CRITERION);
+      solver.process(*points, output_result);
+    }
+
+    auto end = std::chrono::system_clock::now();
+
+    std::chrono::duration<double> difference = end - start;
+    std::cout << "Clustering time: '" << difference.count() / repeat << "' sec." << std::endl;
+}
+#endif

@@ -23,12 +23,12 @@
 
 """
 
-import matplotlib.pyplot as plt;
-import matplotlib.gridspec as gridspec;
+import matplotlib.pyplot as plt
+import matplotlib.gridspec as gridspec
 
-import math;
+import math
 
-from pyclustering.utils.color import color as color_list;
+from pyclustering.utils.color import color as color_list
 
 
 class canvas_cluster_descr:
@@ -65,7 +65,7 @@ class canvas_cluster_descr:
         
         ## Attribures of the clusters - additional collections of data points that are regarded to the cluster.
         self.attributes = []
-    
+
 
 class cluster_visualizer:
     """!

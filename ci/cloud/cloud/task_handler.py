@@ -120,13 +120,13 @@ class task_handler:
         if files is None:
             raise FileExistsError("ERROR: Impossible to get content of third party folder '%s'." % remote_path)
 
-        if len(files):
+        if len(files) == 0:
             print("WARNING: No third parties for system '%s' on platform '%s'." % (operating_system, platform))
+            return
 
         if to_path is None:
             script_path = os.path.dirname(os.path.realpath(__file__))
-            os_folder = task_handler.__LOCAL_OS_NAMES[operating_system]
-            local_binary_folder = script_path + "/../../../" + task_handler.__LOCAL_PATH_THIRD_PARTIES + "/" + os_folder + "/" + platform + "/"
+            local_binary_folder = script_path + "/../../../" + task_handler.__LOCAL_PATH_THIRD_PARTIES + "/" + operating_system + "/" + platform
         else:
             local_binary_folder = to_path
 
@@ -145,3 +145,6 @@ class task_handler:
         print(" mkdir <path>                          - create folder on cloud.")
         print(" get_third_party <os> <platform> <to>  - download third party libraries from cloud for specific operating system"
               " (linux or windows) and platform (x64 or x86) to specific folder on local machine.")
+        print("")
+        print("Example:")
+        print(" python3 ci/cloud $CLOUD_TOKEN get_third_party windows x64")

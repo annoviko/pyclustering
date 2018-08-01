@@ -123,6 +123,8 @@ private:
 
     void assign_point_to_cluster(const std::size_t p_index_point, const dataset & p_centers, cluster_sequence & p_clusters);
 
+    void assign_point_to_cluster_parallel(const std::size_t p_index_point, const dataset & p_centers, std::vector<std::size_t> & p_clusters);
+
     /**
     *
     * @brief    Calculate new center for specified cluster.

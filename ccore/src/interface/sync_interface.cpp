@@ -107,7 +107,7 @@ void sync_dynamic_destroy(const void * pointer_dynamic) {
 }
 
 
-pyclustering_package * sync_dynamic_allocate_sync_ensembles(const void * pointer, const double tolerance, const size_t iteration) {
+pyclustering_package * sync_dynamic_allocate_sync_ensembles(const void * pointer, const double tolerance, const std::size_t iteration) {
     ensemble_data<sync_ensemble> ensembles;
 
     ((sync_dynamic *) pointer)->allocate_sync_ensembles(tolerance, iteration, ensembles);
@@ -117,7 +117,7 @@ pyclustering_package * sync_dynamic_allocate_sync_ensembles(const void * pointer
 }
 
 
-pyclustering_package * sync_dynamic_allocate_correlation_matrix(const void * pointer_dynamic, const unsigned int iteration) {
+pyclustering_package * sync_dynamic_allocate_correlation_matrix(const void * pointer_dynamic, const std::size_t iteration) {
     sync_corr_matrix matrix;
     ((sync_dynamic *) pointer_dynamic)->allocate_correlation_matrix(iteration, matrix);
 

@@ -274,3 +274,24 @@ TEST(utest_kmeans, collect_evolution_sample_simple_02) {
     std::vector<size_t> expected_clusters_length = { 10, 5, 8 };
     template_kmeans_observer(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02), start_centers, { }, expected_clusters_length);
 }
+
+
+#ifdef UT_PERFORMANCE_SESSION
+TEST(performance_kmeans, big_data) {
+    auto points = simple_sample_factory::create_random_sample(100000, 10);
+    auto centers = simple_sample_factory::create_random_sample(1, 10);
+
+    auto start = std::chrono::system_clock::now();
+
+    for (std::size_t i = 0; i < 20; i++) {
+      kmeans_data output_result(false);
+      kmeans solver(*centers, 0.0001);
+      solver.process(*points, output_result);
+    }
+
+    auto end = std::chrono::system_clock::now();
+
+    std::chrono::duration<double> difference = end - start;
+    std::cout << "Clustering time: '" << difference.count() / 20 << "' sec." << std::endl;
+}
+#endif

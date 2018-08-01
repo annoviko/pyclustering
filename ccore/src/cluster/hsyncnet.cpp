@@ -66,7 +66,7 @@ hsyncnet::~hsyncnet() { }
 
 void hsyncnet::process(const double order, const solve_type solver, const bool collect_dynamic, hsyncnet_analyser & analyser) {
     std::size_t number_neighbors = m_initial_neighbors;
-    std::size_t current_number_clusters = std::numeric_limits<std::size_t>::max();
+    std::size_t current_number_clusters = m_oscillators.size();
 
     double radius = average_neighbor_distance(oscillator_locations, number_neighbors);
     
@@ -76,7 +76,7 @@ void hsyncnet::process(const double order, const solve_type solver, const bool c
     }
 
     sync_dynamic current_dynamic;
-    while(current_number_clusters > m_number_clusters) {
+    do {
         create_connections(radius, false);
 
         simulate_dynamic(order, 0.1, solver, collect_dynamic, current_dynamic);
@@ -100,6 +100,7 @@ void hsyncnet::process(const double order, const solve_type solver, const bool c
         number_neighbors += increase_step;
         radius = calculate_radius(radius, number_neighbors);
     }
+    while(current_number_clusters > m_number_clusters);
 
     if (!collect_dynamic) {
         store_state(*(current_dynamic.end() - 1), analyser);

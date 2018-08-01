@@ -170,7 +170,7 @@ static void template_ensemble_generation(const std::size_t p_num_osc,
         output_dynamic.enable(hhn_dynamic::collect::MEMBRANE_POTENTIAL);
 
         /* simulate and check collected outputs */
-        network.simulate(p_steps, p_time, solve_type::RUNGE_KUTTA_4, p_stimulus, output_dynamic);
+        network.simulate(p_steps, (double) p_time, solve_type::RUNGE_KUTTA_4, p_stimulus, output_dynamic);
 
         basic_ensemble_data   ensembles;
         basic_ensemble        dead_neurons;
@@ -252,7 +252,7 @@ static void template_write_read_dynamic(const std::size_t p_num_osc,
     output_dynamic.enable(p_enables);
 
     /* simulate and check collected outputs */
-    network.simulate(p_steps, p_time, solve_type::RUNGE_KUTTA_4, p_stimulus, output_dynamic);
+    network.simulate(p_steps, (double) p_time, solve_type::RUNGE_KUTTA_4, p_stimulus, output_dynamic);
 
     const std::string filename = "utest_dynamic_storage.txt";
     std::ofstream output_file(filename);

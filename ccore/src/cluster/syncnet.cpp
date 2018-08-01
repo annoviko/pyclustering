@@ -98,8 +98,8 @@ void syncnet::create_connections(const double connectivity_radius, const bool en
                     maximum_distance = distance;
                 }
 
-                if (distance < maximum_distance) {
-                    maximum_distance = distance;
+                if (distance < minimum_distance) {
+                    minimum_distance = distance;
                 }
             }
         }

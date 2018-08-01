@@ -155,7 +155,7 @@ extern "C" DECLARATION void sync_dynamic_destroy(const void * pointer);
  * @return  Package where synchronous ensembles are stored.
  *
  */
-extern "C" DECLARATION pyclustering_package * sync_dynamic_allocate_sync_ensembles(const void * pointer_dynamic, const double tolerance, const size_t iteration);
+extern "C" DECLARATION pyclustering_package * sync_dynamic_allocate_sync_ensembles(const void * pointer_dynamic, const double tolerance, const std::size_t iteration);
 
 /**
  *
@@ -169,7 +169,7 @@ extern "C" DECLARATION pyclustering_package * sync_dynamic_allocate_sync_ensembl
  * @return  Package where matrix is stored.
  *
  */
-extern "C" DECLARATION pyclustering_package * sync_dynamic_allocate_correlation_matrix(const void * pointer_dynamic, const unsigned int iteration);
+extern "C" DECLARATION pyclustering_package * sync_dynamic_allocate_correlation_matrix(const void * pointer_dynamic, const std::size_t iteration);
 
 /**
  *

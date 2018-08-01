@@ -20,10 +20,11 @@
 
 #include "cluster/kmeans.hpp"
 
+#include "parallel/parallel_for.hpp"
+
 #include <algorithm>
 #include <limits>
-
-#include "parallel/parallel_for.hpp"
+#include <unordered_map>
 
 #include "utils/metric.hpp"
 
@@ -96,13 +97,28 @@ void kmeans::update_clusters(const dataset & p_centers, cluster_sequence & p_clu
 
     /* fill clusters again in line with centers. */
     if (m_ptr_indexes->empty()) {
-        for (size_t index_object = 0; index_object < data.size(); index_object++) {
-            assign_point_to_cluster(index_object, p_centers, p_clusters);
+        std::vector<std::size_t> winners(data.size(), 0);
+        parallel_for(0, data.size(), [this, &p_centers, &winners](std::size_t p_index) {
+            assign_point_to_cluster_parallel(p_index, p_centers, winners);
+        });
+
+        for (std::size_t index_point = 0; index_point < winners.size(); index_point++) {
+            const std::size_t suitable_index_cluster = winners[index_point];
+            p_clusters[suitable_index_cluster].push_back(index_point);
         }
     }
     else {
-        for (size_t index_object : *m_ptr_indexes) {
-            assign_point_to_cluster(index_object, p_centers, p_clusters);
+        /* This part of code is used by X-Means and in case of parallel implementation of this part in scope of X-Means
+           performance is slightly reduced. Experiments has been performed our implementation and Intel TBB library. 
+           But in K-Means case only - it works perfectly and increase performance. */
+        std::vector<std::size_t> winners(data.size(), 0);
+        parallel_for_each(*m_ptr_indexes, [this, &p_centers, &winners](std::size_t p_index) {
+            assign_point_to_cluster_parallel(p_index, p_centers, winners);
+        });
+
+        for (std::size_t index_point : *m_ptr_indexes) {
+            const std::size_t suitable_index_cluster = winners[index_point];
+            p_clusters[suitable_index_cluster].push_back(index_point);
         }
     }
 
@@ -124,6 +140,23 @@ void kmeans::assign_point_to_cluster(const std::size_t p_index_point, const data
     }
 
     p_clusters[suitable_index_cluster].push_back(p_index_point);
+}
+
+
+void kmeans::assign_point_to_cluster_parallel(const std::size_t p_index_point, const dataset & p_centers, std::vector<std::size_t> & p_clusters) {
+    double    minimum_distance = std::numeric_limits<double>::max();
+    size_t    suitable_index_cluster = 0;
+
+    for (size_t index_cluster = 0; index_cluster < p_centers.size(); index_cluster++) {
+        double distance = m_metric(p_centers[index_cluster], (*m_ptr_data)[p_index_point]);
+
+        if (distance < minimum_distance) {
+            minimum_distance = distance;
+            suitable_index_cluster = index_cluster;
+        }
+    }
+
+    p_clusters[p_index_point] = suitable_index_cluster;
 }
 
 
