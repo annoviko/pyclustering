@@ -28,6 +28,9 @@ GENERAL CHANGES:
 
 
 CORRECTED MAJOR BUGS:
+- Bug with randomly enabled connection weights in case of SyncNet based algorithms using CCORE interface (pyclustering.nnet.syncnet).
+  See: https://github.com/annoviko/pyclustering/issues/452
+
 - Bug with calculation weighted connection for Sync based clustering algorithms in C++ implementation (ccore.nnet.syncnet).
   See: no reference
 
