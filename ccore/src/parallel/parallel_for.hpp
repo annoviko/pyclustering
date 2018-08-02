@@ -43,9 +43,9 @@ void parallel_for(std::size_t p_start, std::size_t p_end, const TypeAction & p_t
         try {
             future_result = std::async(std::launch::async, async_task);
         }
-        catch(...) {
-            std::cout << "[DEBUG] std::async throws exception." << std::endl;
-            future_result = std::async(std::launch::deferred, async_task);
+        catch(std::system_error &) {
+            std::cout << "[DEBUG] (parallel_for) std::async throws exception." << std::endl;
+            future_result = std::async(std::launch::async | std::launch::deferred, async_task);
         }
 
         future_storage[i] = std::move(future_result);
@@ -85,11 +85,20 @@ void parallel_for_each(const TypeIter p_begin, const TypeIter p_end, const TypeA
     auto current_end = p_begin + step;
 
     for (std::size_t i = 0; i < amount_threads; ++i) {
-        std::future<void> future_result = std::async(std::launch::async, [&p_task, current_start, current_end](){
+        std::future<void> future_result;
+        auto async_task = [&p_task, current_start, current_end](){
             for (auto iter = current_start; iter != current_end; ++iter) {
                 p_task(*iter);
             }
-        });
+        };
+
+        try {
+            future_result = std::async(std::launch::async, async_task);
+        }
+        catch(std::system_error &) {
+            std::cout << "[DEBUG] (parallel_for_each) std::async throws exception." << std::endl;
+            future_result = std::async(std::launch::async | std::launch::deferred, async_task);
+        }
 
         future_storage[i] = std::move(future_result);
 
