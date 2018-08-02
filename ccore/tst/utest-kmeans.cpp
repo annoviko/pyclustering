@@ -283,7 +283,8 @@ TEST(performance_kmeans, big_data) {
 
     auto start = std::chrono::system_clock::now();
 
-    for (std::size_t i = 0; i < 20; i++) {
+    const std::size_t repeat = 20;
+    for (std::size_t i = 0; i < repeat; i++) {
       kmeans_data output_result(false);
       kmeans solver(*centers, 0.0001);
       solver.process(*points, output_result);
@@ -292,6 +293,6 @@ TEST(performance_kmeans, big_data) {
     auto end = std::chrono::system_clock::now();
 
     std::chrono::duration<double> difference = end - start;
-    std::cout << "Clustering time: '" << difference.count() / 20 << "' sec." << std::endl;
+    std::cout << "Clustering time: '" << difference.count() / repeat << "' sec." << std::endl;
 }
 #endif
