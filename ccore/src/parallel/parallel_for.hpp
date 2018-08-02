@@ -7,8 +7,12 @@
 #include <vector>
 
 
+#include <iostream>
+
+
 /* Available options: PARALLEL_IMPLEMENTATION_CCORE, PARALLEL_IMPLEMENTATION_NONE */
-#define PARALLEL_IMPLEMENTATION_NONE
+#define PARALLEL_IMPLEMENTATION_CCORE
+
 
 
 namespace ccore {
@@ -29,11 +33,20 @@ void parallel_for(std::size_t p_start, std::size_t p_end, const TypeAction & p_t
     std::size_t current_end = p_start + step;
 
     for (std::size_t i = 0; i < amount_threads; ++i) {
-        std::future<void> future_result = std::move(std::async(std::launch::async, [&p_task, current_start, current_end](){
+        std::future<void> future_result;
+        auto async_task = [&p_task, current_start, current_end](){
             for (std::size_t i = current_start; i < current_end; ++i) {
                 p_task(i);
             }
-        }));
+        };
+
+        try {
+            future_result = std::async(std::launch::async, async_task);
+        }
+        catch(...) {
+            std::cout << "[DEBUG] std::async throws exception." << std::endl;
+            future_result = std::async(std::launch::deferred, async_task);
+        }
 
         future_storage[i] = std::move(future_result);
 
