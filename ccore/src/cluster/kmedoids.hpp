@@ -52,6 +52,9 @@ enum class kmedoids_data_t {
 */
 class kmedoids : public cluster_algorithm {
 private:
+    static const std::size_t OBJECT_ALREADY_CONTAINED;
+
+private:
     using distance_calculator = std::function<double(const std::size_t, const std::size_t)>;
 
 private:
@@ -168,6 +171,19 @@ private:
     *
     */
     distance_calculator create_distance_calculator(const kmedoids_data_t p_type);
+
+    /**
+    *
+    * @brief    Find appropriate cluster for the particular point.
+    *
+    * @param[in] p_index: Index of point that should be placed to cluster.
+    * @param[in] p_medoids: Medoids that corresponds to clusters.
+    *
+    * @return   Index of cluster that is appropriate for the particular point. If point is a medoid
+    *           then OBJECT_ALREADY_CONTAINED value is returned.
+    *
+    */
+    std::size_t find_appropriate_cluster(const std::size_t p_index, medoid_sequence & p_medoids);
 };
 
 

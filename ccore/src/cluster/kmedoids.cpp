@@ -23,10 +23,18 @@
 #include <algorithm>
 #include <limits>
 
+#include "parallel/parallel_for.hpp"
+
+
+using namespace ccore::parallel;
+
 
 namespace ccore {
 
 namespace clst {
+
+
+const std::size_t kmedoids::OBJECT_ALREADY_CONTAINED = std::numeric_limits<std::size_t>::max();
 
 
 kmedoids::kmedoids(const medoid_sequence & p_initial_medoids,
@@ -85,26 +93,27 @@ void kmedoids::update_clusters(void) {
         clusters[i].push_back(medoids[i]);
     }
 
-    for (size_t index_point = 0; index_point < m_data_ptr->size(); index_point++) {
-        if (std::find(medoids.begin(), medoids.end(), index_point) != medoids.cend()) {
-            continue;
+
+#if 0
+    std::vector<std::size_t> cluster_markers(m_data_ptr->size());
+    parallel_for(0, m_data_ptr->size(), [this, &medoids, &cluster_markers](const std::size_t p_index) {
+        cluster_markers[p_index] = find_appropriate_cluster(p_index, medoids);
+    });
+
+    for (std::size_t index_point = 0; index_point < m_data_ptr->size(); index_point++) {
+        const std::size_t index_optim = cluster_markers[index_point];
+        if (index_optim != OBJECT_ALREADY_CONTAINED) {
+            clusters[index_optim].push_back(index_point);
         }
-
-        size_t index_optim = 0;
-        double dist_optim = 0.0;
-
-        for (size_t index = 0; index < medoids.size(); index++) {
-            const size_t index_medoid = medoids[index];
-            const double distance = m_calculator(index_point, index_medoid);
-
-            if ( (distance < dist_optim) || (index == 0) ) {
-                index_optim = index;
-                dist_optim = distance;
-            }
-        }
-
-        clusters[index_optim].push_back(index_point);
     }
+#else
+    for (size_t index_point = 0; index_point < m_data_ptr->size(); index_point++) {
+        const size_t index_optim = find_appropriate_cluster(index_point, medoids);
+        if (index_optim != OBJECT_ALREADY_CONTAINED) {
+            clusters[index_optim].push_back(index_point);
+        }
+    }
+#endif
 }
 
 
@@ -114,9 +123,15 @@ void kmedoids::calculate_medoids(cluster & p_medoids) {
     p_medoids.clear();
     p_medoids.resize(clusters.size());
 
+#if 0
+    parallel_for(0, clusters.size(), [this, &p_medoids, &clusters](const std::size_t index) {
+        p_medoids[index] = calculate_cluster_medoid(clusters[index]);
+    });
+#else
     for (size_t index = 0; index < clusters.size(); index++) {
         p_medoids[index] = calculate_cluster_medoid(clusters[index]);
     }
+#endif
 }
 
 
@@ -170,6 +185,28 @@ kmedoids::distance_calculator kmedoids::create_distance_calculator(const kmedoid
     else {
         throw std::invalid_argument("Unknown type data is specified");
     }
+}
+
+
+std::size_t kmedoids::find_appropriate_cluster(const std::size_t p_index, medoid_sequence & p_medoids) {
+    if (std::find(p_medoids.begin(), p_medoids.end(), p_index) != p_medoids.cend()) {
+        return OBJECT_ALREADY_CONTAINED;
+    }
+
+    size_t index_optim = 0;
+    double dist_optim = m_calculator(p_index, 0);
+
+    for (size_t index = 1; index < p_medoids.size(); index++) {
+        const size_t index_medoid = p_medoids[index];
+        const double distance = m_calculator(p_index, index_medoid);
+
+        if (distance < dist_optim) {
+            index_optim = index;
+            dist_optim = distance;
+        }
+    }
+
+    return index_optim;
 }
 
 

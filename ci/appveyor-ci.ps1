@@ -306,7 +306,7 @@ function install_miniconda($platform_version) {
 
 
 function download_binary($platform_version, $binary_path) {
-    Write-Host "[DEPLOY]: Download binary file" -ForegroundColor Green;
+    Write-Host "[CI Job]: Download binary file" -ForegroundColor Green;
 
     # Obtain link for download
     $env:BUILD_FOLDER = "windows";

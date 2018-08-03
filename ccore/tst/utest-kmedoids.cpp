@@ -279,3 +279,32 @@ TEST(utest_kmedoids, totally_similar_data) {
     start_medoids = { 0, 1, 2, 3, 4 };
     template_kmedoids_length_process_data(dataset, start_medoids, expected_clusters_length);
 }
+
+
+#ifdef UT_PERFORMANCE_SESSION
+
+#include <chrono>
+
+TEST(performance_kmedoids, big_data) {
+    const std::size_t cluster_length = 1000;
+    const std::size_t amount_clusters = 10;
+
+    auto points = simple_sample_factory::create_random_sample(cluster_length, amount_clusters);
+
+    medoid_sequence start_medoids = { 10, cluster_length, cluster_length * 2, cluster_length * 3, cluster_length * 4, cluster_length * 5 };
+
+    auto start = std::chrono::system_clock::now();
+
+    const std::size_t repeat = 10;
+    for (std::size_t i = 0; i < repeat; i++) {
+      kmedoids_data output_result;
+      kmedoids solver(start_medoids, 0.0001);
+      solver.process(*points, output_result);
+    }
+
+    auto end = std::chrono::system_clock::now();
+
+    std::chrono::duration<double> difference = end - start;
+    std::cout << "Clustering time: '" << difference.count() / repeat << "' sec." << std::endl;
+}
+#endif
