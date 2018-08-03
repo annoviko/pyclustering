@@ -118,7 +118,17 @@ function job_pyclustering_windows($platform_version) {
     Write-Host "[CI Job] Set path '$env:APPVEYOR_BUILD_FOLDER' to tested pyclustering library." -ForegroundColor Green;
     $env:PYTHONPATH = "$env:APPVEYOR_BUILD_FOLDER;$env:PYTHONPATH";
 
-    build_ccore_library $platform_version;
+    Write-Host "[CI Job] Download built binary for platform '$platform_version'." -ForegroundColor Green;
+
+    $binary_path = "";
+    if ($platform_version -eq "x86") {
+        $binary_path = $env:CCORE_X86_BINARY_PATH
+    }
+    elseif ($platform_version -eq "x64") {
+        $binary_path = $env:CCORE_X64_BINARY_PATH
+    }
+
+    download_binary $platform_version $binary_path
 
     Write-Host "[CI Job] Starting integration testing using interpreter '$env:PYTHON_INTERPRETER'." -ForegroundColor Green;
     
@@ -304,6 +314,11 @@ function download_binary($platform_version, $binary_path) {
     $env:BINARY_FILEPATH = "/$env:APPVEYOR_REPO_BRANCH/$env:BUILD_FOLDER/$platform_version/$env:BINARY_FOLDER/ccore.dll";
 
     & $env:PYTHON ci/cloud $env:YANDEX_DISK_TOKEN download $env:BINARY_FILEPATH $binary_path
+    if ($LastExitCode -ne 0) {
+        Write-Error -Message "[CI Job] Impossible to download CCORE binary (platform '$platform_version') to '$binary_path'." -Category InvalidResult;
+        $env:TESTING_RESULT = $env:RESULT_FAILURE;
+        exit 1;
+    }
 }
 
 
