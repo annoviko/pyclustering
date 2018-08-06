@@ -31,7 +31,8 @@ from cloud.yandex_disk import yandex_disk
 
 
 class task_handler:
-    __LOCAL_PATH_THIRD_PARTIES = "ccore/external/libs"
+    __LOCAL_PATH_THIRD_PARTIES_LIBS = "ccore/external/libs"
+    __LOCAL_PATH_THIRD_PARTIES_INCLUDE = "ccore/external/include"
     __LOCAL_OS_NAMES = { "windows" : "win",
                          "linux" : "linux"  }
 
@@ -110,31 +111,65 @@ class task_handler:
             print("WARNING: File or folder '%s' is not found." % path)
 
 
-    def __third_party(self, operating_system, platform, to_path):
+    def __third_party_libs(self, operating_system, platform, to_path):
         disk_client = yandex_disk(self.__token)
-        remote_path = "/third_party/" + operating_system + "/" + platform
-        if not disk_client.directory_exist(remote_path):
-            raise FileExistsError("ERROR: Third party folder '%s' is not found on the cloud." % remote_path)
 
-        files = disk_client.folder_content(remote_path)
-        if files is None:
-            raise FileExistsError("ERROR: Impossible to get content of third party folder '%s'." % remote_path)
+        remote_path_libs = "/third_party/" + operating_system + "/" + platform
+        if not disk_client.directory_exist(remote_path_libs):
+            raise FileExistsError("ERROR: Third party folder '%s' is not found on the cloud." % remote_path_libs)
 
-        if len(files) == 0:
+        lib_files = disk_client.folder_content(remote_path_libs)
+        if lib_files is None:
+            raise FileExistsError("ERROR: Impossible to get content of third party folder '%s'." % remote_path_libs)
+
+        if len(lib_files) == 0:
             print("WARNING: No third parties for system '%s' on platform '%s'." % (operating_system, platform))
             return
 
         if to_path is None:
             script_path = os.path.dirname(os.path.realpath(__file__))
-            local_binary_folder = script_path + "/../../../" + task_handler.__LOCAL_PATH_THIRD_PARTIES + "/" + operating_system + "/" + platform
+            local_binary_folder = script_path + "/../../../" + task_handler.__LOCAL_PATH_THIRD_PARTIES_LIBS + "/" + operating_system + "/" + platform
         else:
             local_binary_folder = to_path
 
-        for file in files:
-            remote_file_path = remote_path + "/" + file
+        for file in lib_files:
+            remote_file_path = remote_path_libs + "/" + file
             local_file_path = local_binary_folder + "/" + file
 
             self.__download(remote_file_path, local_file_path)
+
+
+    def __third_party_include(self, to_path):
+        disk_client = yandex_disk(self.__token)
+
+        remote_path_inc = "/third_party/include"
+        if not disk_client.directory_exist(remote_path_inc):
+            raise FileExistsError("ERROR: Third party folder '%s' is not found on the cloud." % remote_path_inc)
+
+        inc_files = disk_client.folder_content(remote_path_inc)
+        if inc_files is None:
+            raise FileExistsError("ERROR: Impossible to get content of third party folder '%s'." % remote_path_inc)
+
+        if len(inc_files) == 0:
+            print("WARNING: No include third parties.")
+            return
+
+        if to_path is None:
+            script_path = os.path.dirname(os.path.realpath(__file__))
+            local_binary_folder = script_path + "/../../../" + task_handler.__LOCAL_PATH_THIRD_PARTIES_INCLUDE
+        else:
+            local_binary_folder = to_path
+
+        for file in inc_files:
+            remote_file_path = remote_path_inc + "/" + file
+            local_file_path = local_binary_folder + "/" + file
+
+            self.__download(remote_file_path, local_file_path)
+
+
+    def __third_party(self, operating_system, platform, to_path):
+        self.__third_party_libs(operating_system, platform, to_path)
+        self.__third_party_include(to_path)
 
 
     def __help(self):
