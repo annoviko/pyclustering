@@ -27,9 +27,11 @@
 #include <future>
 #include <vector>
 
+#include "parallel_thread_controller.hpp"
 
-/* Available options: PARALLEL_IMPLEMENTATION_CCORE, PARALLEL_IMPLEMENTATION_NONE */
-#define PARALLEL_IMPLEMENTATION_CCORE
+
+/* Available options: PARALLEL_IMPLEMENTATION_CCORE, PARALLEL_IMPLEMENTATION_CCORE_THREAD_POOL, PARALLEL_IMPLEMENTATION_NONE */
+#define PARALLEL_IMPLEMENTATION_CCORE_THREAD_POOL
 
 
 namespace ccore {
@@ -77,6 +79,44 @@ void parallel_for(std::size_t p_start, std::size_t p_end, const TypeAction & p_t
 
     for (auto & result : future_storage) {
         result.get();
+    }
+#elif defined(PARALLEL_IMPLEMENTATION_CCORE_THREAD_POOL)
+    static const std::size_t amount_threads = parallel_thread_controller::get_instance().size();
+
+    const std::size_t step = (p_end - p_start) / (amount_threads + 1);
+
+    std::size_t current_start = p_start;
+    std::size_t current_end = p_start + step;
+
+    std::vector<task::ptr> task_storage;
+    task_storage.reserve(amount_threads);
+
+    for (std::size_t i = 0; i < amount_threads; ++i) {
+        auto async_task = [&p_task, current_start, current_end](){
+            for (std::size_t i = current_start; i < current_end; ++i) {
+                p_task(i);
+            }
+        };
+
+        task::ptr task_under_processing = parallel_thread_controller::get_instance().add_task_if_free(async_task);
+        if (task_under_processing == nullptr) {
+            /* There is no free threads to take care about this task, process it by this thread */
+            async_task();
+        }
+        else {
+            task_storage.push_back(task_under_processing);
+        }
+
+        current_start = current_end;
+        current_end += step;
+    }
+
+    for (std::size_t i = current_start; i < p_end; ++i) {
+        p_task(i);
+    }
+
+    for (auto & task_under_processing : task_storage) {
+        task_under_processing->wait_ready();
     }
 #else
     /* This part of code is switched only to estimate parallel implementation of any algorithm with non-parallel.

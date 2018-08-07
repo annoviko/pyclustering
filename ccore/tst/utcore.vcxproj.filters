@@ -407,11 +407,14 @@
     <ClCompile Include="utest-interface-ttsas.cpp">
       <Filter>Unit Tests</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\parallel\parallel_for.cpp">
-      <Filter>Tested Code\parallel</Filter>
-    </ClCompile>
     <ClCompile Include="..\external\include\gtest\gtest-all.cpp">
       <Filter>Google Test Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\parallel\parallel_thread_controller.cpp">
+      <Filter>Tested Code\parallel</Filter>
+    </ClCompile>
+    <ClCompile Include="utest-parallel_for.cpp">
+      <Filter>Unit Tests</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -681,6 +684,12 @@
     </ClInclude>
     <ClInclude Include="..\external\include\gtest\gtest.h">
       <Filter>Google Test Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\parallel\parallel_for_each.hpp">
+      <Filter>Tested Code\parallel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\parallel\parallel_thread_controller.hpp">
+      <Filter>Tested Code\parallel</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

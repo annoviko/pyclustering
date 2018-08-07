@@ -243,8 +243,7 @@
     <LinkIncremental>false</LinkIncremental>
     <OutDir>..\..\pyclustering\core\x64\win\</OutDir>
     <IncludePath>.;src\;$(IncludePath)</IncludePath>
-    <LibraryPath>
-    </LibraryPath>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

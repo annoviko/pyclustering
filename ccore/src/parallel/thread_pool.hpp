@@ -53,6 +53,7 @@ private:
     std::condition_variable         m_queue_not_empty_cond;
 
     std::size_t                     m_free = 0;
+    std::size_t                     m_reserve = 0;
     bool                            m_stop = false;
 
 public:
@@ -68,6 +69,8 @@ public:
 
 public:
     task::ptr add_task(const task::proc & p_raw_task);
+
+    task::ptr add_task_if_free(const task::proc & p_raw_task);
 
     std::size_t size(void) const;
 

@@ -45,7 +45,7 @@ void task::wait_ready(void) const {
     std::unique_lock<std::mutex> lock_status(m_status_mutex);
 
     while(m_status != task_status::READY) {
-        m_status_ready_cond.wait(lock_status, [this]{ return (m_status == task_status::READY); });
+        m_status_ready_cond.wait(lock_status);
     }
 }
 

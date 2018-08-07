@@ -289,9 +289,9 @@ void sync_network::store_dynamic(const double time, const bool collect_dynamic, 
 
 
 void sync_network::calculate_phases(const solve_type solver, const double t, const double step, const double int_step) {
-    std::vector<double> next_phases(size(), 0);
+    std::vector<double> next_phases(size(), 0.0);
 
-    parallel_for(0, size(), [this, &solver, t, step, int_step, &next_phases](const std::size_t p_index) {
+    parallel_for(0, size(), [this, solver, t, step, int_step, &next_phases](const std::size_t p_index) {
         calculate_phase(solver, t, step, int_step, p_index, next_phases);
     });
 

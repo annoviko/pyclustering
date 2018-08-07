@@ -30,10 +30,7 @@ namespace ccore {
 namespace parallel {
 
 
-class parallel_thread_controller {
-private:
-    thread_pool m_pool;
-
+class parallel_thread_controller : public thread_pool {
 private:
     parallel_thread_controller(void);
 

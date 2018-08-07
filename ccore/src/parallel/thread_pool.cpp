@@ -74,23 +74,44 @@ task::ptr thread_pool::add_task(const task::proc & p_raw_task) {
 }
 
 
+task::ptr thread_pool::add_task_if_free(const task::proc & p_raw_task) {
+    task::ptr client_task = nullptr;
+
+    {
+        std::lock_guard<std::mutex> lock_common(m_common_mutex);
+
+        if (m_reserve > 0) {
+            client_task = std::make_shared<task>(p_raw_task);
+
+            m_queue.push_back(client_task);
+
+            m_queue_not_empty_cond.notify_one();
+
+            m_reserve--;
+        }
+    }
+
+    return client_task;
+}
+
+
 std::size_t thread_pool::size(void) const {
     return m_pool.size();
 }
 
 
 void thread_pool::initialize(const std::size_t p_size) {
-    m_pool  = { };
-    m_queue = { };
-    m_free  = 0;
-    m_stop  = false;
+    m_pool    = { };
+    m_queue   = { };
+    m_stop    = false;
 
     thread_executor::task_getter getter = std::bind(&thread_pool::get_task, this, std::placeholders::_1);
 
     for (std::size_t index = 0; index < p_size; index++) {
         m_pool.emplace_back(new thread_executor(getter));
-        m_free++;
     }
+
+    m_reserve = m_free = p_size;
 }
 
 
@@ -100,12 +121,18 @@ void thread_pool::get_task(task::ptr & p_task) {
     p_task = nullptr;
 
     while(m_queue.empty() && !m_stop) {
+        m_reserve++;
+        m_free++;
         m_queue_not_empty_cond.wait(lock_common, [this]{ return !m_queue.empty() || m_stop; });
     }
 
     if (!m_queue.empty()) {
         p_task = m_queue.front();
         m_queue.pop_front();
+
+        if (m_reserve == m_free)
+            m_reserve--;
+
         m_free--;
     }
 }

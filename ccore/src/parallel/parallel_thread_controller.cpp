@@ -28,7 +28,7 @@ namespace parallel {
 
 
 parallel_thread_controller::parallel_thread_controller(void) :
-    m_pool(thread_pool::DEFAULT_POOL_SIZE - 1)
+    thread_pool(thread_pool::DEFAULT_POOL_SIZE - 1)
 { }
 
 
