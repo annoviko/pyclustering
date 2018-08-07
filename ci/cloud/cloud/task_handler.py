@@ -25,6 +25,7 @@
 
 
 import os
+import zipfile
 
 from cloud.yandex_disk import yandex_disk
 
@@ -156,15 +157,30 @@ class task_handler:
 
         if to_path is None:
             script_path = os.path.dirname(os.path.realpath(__file__))
-            local_binary_folder = script_path + "/../../../" + task_handler.__LOCAL_PATH_THIRD_PARTIES_INCLUDE
+            local_include_folder = script_path + "/../../../" + task_handler.__LOCAL_PATH_THIRD_PARTIES_INCLUDE
         else:
-            local_binary_folder = to_path
+            local_include_folder = to_path
 
         for file in inc_files:
+            include_library_name = os.path.splitext(file)[0]
+            include_library_path = local_include_folder + "/" + include_library_name
+            if os.path.isdir(include_library_path):
+                print("WARNING: Include library folder already exists.")
+                continue
+
             remote_file_path = remote_path_inc + "/" + file
-            local_file_path = local_binary_folder + "/" + file
+            local_file_path = local_include_folder + "/" + file
+
+            if os.path.isfile(local_file_path) is True:
+                os.remove(local_file_path)
 
             self.__download(remote_file_path, local_file_path)
+
+            zip_archive = zipfile.ZipFile(local_file_path, 'r')
+            zip_archive.extractall(local_include_folder)
+            zip_archive.close()
+
+            os.remove(local_file_path)
 
 
     def __third_party(self, operating_system, platform, to_path):
