@@ -21,6 +21,7 @@
 #include "cluster/kmeans.hpp"
 
 #include "parallel/parallel_for.hpp"
+#include "parallel/parallel_for_each.hpp"
 
 #include <algorithm>
 #include <limits>

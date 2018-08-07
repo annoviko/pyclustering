@@ -57,21 +57,20 @@ thread_pool::~thread_pool(void) {
 }
 
 
-task::id thread_pool::add_task(const task::proc & p_raw_task) {
-    std::size_t task_id = task::INVALID_TASK_ID;
+task::ptr thread_pool::add_task(const task::proc & p_raw_task) {
+    task::ptr client_task = nullptr;
 
     {
         std::lock_guard<std::mutex> lock_common(m_common_mutex);
 
-        task::ptr client_task(new task(p_raw_task));
-        task_id = client_task->get_id();
+        client_task = std::make_shared<task>(p_raw_task);
 
         m_queue.push_back(client_task);
     }
 
     m_queue_not_empty_cond.notify_one();
 
-    return task_id;
+    return client_task;
 }
 
 
@@ -80,50 +79,18 @@ std::size_t thread_pool::size(void) const {
 }
 
 
-task::id thread_pool::pop_complete_task(void) {
-    std::unique_lock<std::mutex> lock_common(m_common_mutex);
-
-    if ( (m_free == m_pool.size()) && m_done.empty() && m_queue.empty() ) {
-        return task::INVALID_TASK_ID;
-    }
-    else {
-        while (m_done.empty()) {
-            m_done_not_empty_cond.wait(lock_common, [this]{ return !m_done.empty(); });
-        }
-
-        std::size_t complete_task_id = m_done.front()->get_id();
-        m_done.pop_front();
-
-        return complete_task_id;
-    }
-}
-
-
 void thread_pool::initialize(const std::size_t p_size) {
     m_pool  = { };
     m_queue = { };
-    m_done  = { };
     m_free  = 0;
     m_stop  = false;
 
     thread_executor::task_getter getter = std::bind(&thread_pool::get_task, this, std::placeholders::_1);
-    thread_executor::task_notifier notifier = std::bind(&thread_pool::done_task, this, std::placeholders::_1);
 
     for (std::size_t index = 0; index < p_size; index++) {
-        m_pool.emplace_back(new thread_executor(getter, notifier));
+        m_pool.emplace_back(new thread_executor(getter));
         m_free++;
     }
-}
-
-
-void thread_pool::done_task(const task::ptr & p_task) {
-    {
-        std::unique_lock<std::mutex> lock_common(m_common_mutex);
-        m_done.push_back(p_task);
-        m_free++;
-    }
-
-    m_done_not_empty_cond.notify_one();
 }
 
 

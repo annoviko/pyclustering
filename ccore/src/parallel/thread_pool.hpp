@@ -22,7 +22,6 @@
 #pragma once
 
 
-#include <atomic>
 #include <deque>
 #include <vector>
 
@@ -49,12 +48,9 @@ private:
 
     std::deque<task::ptr>           m_queue = { };
 
-    std::deque<task::ptr>           m_done  = { };
-
     mutable std::mutex              m_common_mutex;
 
     std::condition_variable         m_queue_not_empty_cond;
-    std::condition_variable         m_done_not_empty_cond;
 
     std::size_t                     m_free = 0;
     bool                            m_stop = false;
@@ -71,16 +67,12 @@ public:
     ~thread_pool(void);
 
 public:
-    task::id add_task(const task::proc & p_raw_task);
-
-    task::id pop_complete_task(void);
+    task::ptr add_task(const task::proc & p_raw_task);
 
     std::size_t size(void) const;
 
 private:
     void initialize(const std::size_t p_size);
-
-    void done_task(const task::ptr & p_task);
 
     void get_task(task::ptr & p_task);
 };

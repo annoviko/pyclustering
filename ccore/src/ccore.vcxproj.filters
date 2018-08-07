@@ -226,7 +226,7 @@
     <ClCompile Include="interface\ttsas_interface.cpp">
       <Filter>Source Files\interface</Filter>
     </ClCompile>
-    <ClCompile Include="parallel\parallel_for.cpp">
+    <ClCompile Include="parallel\parallel_thread_controller.cpp">
       <Filter>Source Files\parallel</Filter>
     </ClCompile>
   </ItemGroup>
@@ -490,6 +490,12 @@
       <Filter>Source Files\interface</Filter>
     </ClInclude>
     <ClInclude Include="parallel\parallel_for.hpp">
+      <Filter>Source Files\parallel</Filter>
+    </ClInclude>
+    <ClInclude Include="parallel\parallel_thread_controller.hpp">
+      <Filter>Source Files\parallel</Filter>
+    </ClInclude>
+    <ClInclude Include="parallel\parallel_for_each.hpp">
       <Filter>Source Files\parallel</Filter>
     </ClInclude>
   </ItemGroup>

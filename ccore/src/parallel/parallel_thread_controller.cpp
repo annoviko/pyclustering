@@ -19,7 +19,7 @@
 */
 
 
-#include "task.hpp"
+#include "parallel_thread_controller.hpp"
 
 
 namespace ccore {
@@ -27,31 +27,14 @@ namespace ccore {
 namespace parallel {
 
 
-task::task(const proc & p_task) :
-    m_task(p_task),
-    m_status(task_status::NOT_READY)
+parallel_thread_controller::parallel_thread_controller(void) :
+    m_pool(thread_pool::DEFAULT_POOL_SIZE - 1)
 { }
 
 
-void task::set_status(const task_status p_status) {
-    std::unique_lock<std::mutex> lock_status(m_status_mutex);
-
-    m_status = p_status;
-    m_status_ready_cond.notify_one();
-}
-
-
-void task::wait_ready(void) const {
-    std::unique_lock<std::mutex> lock_status(m_status_mutex);
-
-    while(m_status != task_status::READY) {
-        m_status_ready_cond.wait(lock_status, [this]{ return (m_status == task_status::READY); });
-    }
-}
-
-
-void task::operator()() {
-    m_task();
+parallel_thread_controller & parallel_thread_controller::get_instance(void) {
+    static parallel_thread_controller controller;
+    return controller;
 }
 
 

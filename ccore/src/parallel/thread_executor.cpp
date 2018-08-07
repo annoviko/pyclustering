@@ -29,11 +29,10 @@ namespace ccore {
 namespace parallel {
 
 
-thread_executor::thread_executor(const task_getter & p_getter, const task_notifier & p_notifier) {
+thread_executor::thread_executor(const task_getter & p_getter) {
     m_stop        = false;
 
     m_getter      = p_getter;
-    m_notifier    = p_notifier;
     m_executor    = std::thread(&thread_executor::run, this);
 }
 
@@ -44,11 +43,8 @@ void thread_executor::run(void) {
         m_getter(task);
 
         if (task) {
-            task->set_status(task_status::PROCESSING);
             (*task)();
             task->set_status(task_status::READY);
-
-            m_notifier(task);
         }
         else {
             m_stop = true;

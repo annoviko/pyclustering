@@ -22,9 +22,11 @@
 #pragma once
 
 
+#include <condition_variable>
 #include <functional>
 #include <list>
 #include <memory>
+#include <mutex>
 
 
 namespace ccore {
@@ -33,16 +35,17 @@ namespace parallel {
 
 
 enum class task_status {
-    PENDING,
-    PROCESSING,
+    NOT_READY,
     READY
 };
 
 
+class thread_executor;
+
 
 class task {
 public:
-    const static std::size_t    INVALID_TASK_ID;
+    friend thread_executor;
 
 public:
     using proc      = std::function<void(void)>;
@@ -50,12 +53,11 @@ public:
     using id        = std::size_t;
 
 private:
-    static std::size_t          STATIC_TASK_ID_GENERATOR;
+    proc                              m_task          = proc();
+    task_status                       m_status        = task_status::NOT_READY;
 
-private:
-    std::size_t                 m_id        = generate_task_id();
-    proc                        m_task      = proc();
-    task_status                 m_status    = task_status::PENDING;
+    mutable std::mutex                m_status_mutex;
+    mutable std::condition_variable   m_status_ready_cond;
 
 public:
     task(void) = default;
@@ -68,15 +70,11 @@ public:
 
     ~task(void) = default;
 
-public:
+private:
     void set_status(const task_status p_status);
 
-    task_status get_status(void) const;
-
-    task::id get_id(void) const;
-
-private:
-    static task::id generate_task_id(void);
+public:
+    void wait_ready(void) const;
 
 public:
     void operator()();

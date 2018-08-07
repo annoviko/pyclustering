@@ -22,10 +22,7 @@
 #pragma once
 
 
-#include <condition_variable>
-#include <thread>
-
-#include "task.hpp"
+#include "thread_pool.hpp"
 
 
 namespace ccore {
@@ -33,34 +30,21 @@ namespace ccore {
 namespace parallel {
 
 
-class thread_executor {
-public:
-    using task_getter   = std::function<void(task::ptr &)>;
-    using task_notifier = std::function<void(const task::ptr &)>;
-
-    using ptr           = std::shared_ptr<thread_executor>;
+class parallel_thread_controller {
+private:
+    thread_pool m_pool;
 
 private:
-    bool                    m_stop            = true;
-    task_getter             m_getter          = nullptr;
-    std::thread             m_executor;
+    parallel_thread_controller(void);
+
+    parallel_thread_controller(const parallel_thread_controller & p_other) = delete;
+
+    parallel_thread_controller(parallel_thread_controller && p_other) = delete;
+
+    ~parallel_thread_controller(void) = default;
 
 public:
-    thread_executor(void) = default;
-
-    explicit thread_executor(const task_getter & p_getter);
-
-    thread_executor(const thread_executor & p_other) = delete;
-
-    thread_executor(thread_executor && p_other) = delete;
-
-    ~thread_executor(void) = default;
-
-public:
-    void stop(void);
-
-private:
-    void run(void);
+    static parallel_thread_controller & get_instance(void);
 };
 
 

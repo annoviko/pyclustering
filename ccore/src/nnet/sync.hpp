@@ -34,12 +34,9 @@
 
 #include "nnet/network.hpp"
 
-#include "parallel/thread_pool.hpp"
-
 
 using namespace ccore::container;
 using namespace ccore::differential;
-using namespace ccore::parallel;
 
 
 namespace ccore {
@@ -297,9 +294,6 @@ public:
  *
  */
 class sync_network {
-public:
-    const static std::size_t DEFAULT_DATA_SIZE_PARALLEL_PROCESSING;
-
 private:
     const static std::size_t MAXIMUM_MATRIX_REPRESENTATION_SIZE;
 
@@ -313,11 +307,7 @@ protected:
 
     double weight;
 
-    thread_pool::ptr m_pool         = nullptr;
-
     bool m_parallel_processing      = false;
-
-    std::size_t m_parallel_trigger  = DEFAULT_DATA_SIZE_PARALLEL_PROCESSING;
 
 private:
     equation<double>  m_equation;
@@ -442,16 +432,6 @@ public:
         sync_dynamic & output_dynamic);
 
     /**
-    *
-    * @brief    Set custom trigger (that is defined by network size) for parallel processing,
-    *            by default this value is defined by static constant DEFAULT_DATA_SIZE_PARALLEL_PROCESSING.
-    *
-    * @param[in]  p_data_size: network size that triggers parallel processing.
-    *
-    */
-    virtual void set_parallel_processing_trigger(const std::size_t p_network_size);
-
-    /**
      *
      * @brief   Returns size of the oscillatory network that is defined by amount of oscillators.
      *
@@ -536,18 +516,16 @@ protected:
      * @param[in] step: step of solution at the end of which states of oscillators should be calculated.
      * @param[in] int_step: step differentiation that is used for solving differential equation (can 
      *             be ignored in case of solvers when integration step is defined by solver itself).
-     * @param[in] p_begin: interator to the first oscillator from the range.
-     * @param[in] p_end: iterator to the last oscillator from the range.
+     * @param[in] index: index of the particular oscillator whose phase should be calculated.
      * @param[in|out] p_next_phases: container where new oscillator phases from the range are placed.
      *
      */
-    virtual void calculate_phases(
+    virtual void calculate_phase(
         const solve_type solver, 
         const double t, 
         const double step, 
         const double int_step,
-        const iterator p_begin,
-        const iterator p_end,
+        const std::size_t index,
         std::vector<double> & p_next_phases);
 
     /**
@@ -602,14 +580,6 @@ private:
         const size_t height,
         const size_t width,
         const initial_type initial_phases);
-
-    /**
-    *
-    * @brief   Check if parallel processing should be used for network simulation and if it is required then
-    *          initialize thread pool for that purpose.
-    *
-    */
-    void check_parallel_condition(void);
 };
 
 

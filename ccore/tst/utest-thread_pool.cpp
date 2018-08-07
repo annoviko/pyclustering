@@ -49,7 +49,6 @@ static void template_create_delete_test(const std::size_t p_size) {
     }
 
     ASSERT_EQ(expected_size, pool->size());
-    ASSERT_EQ(task::INVALID_TASK_ID, pool->pop_complete_task());
 
     delete pool;
 }
@@ -89,37 +88,30 @@ static void template_add_task_test(const std::size_t p_pool_size, const std::siz
         expected_results[i] = expected_basic_result + i;
     }
 
-    std::map<std::size_t, std::size_t> task_ids;
+    std::vector<task::ptr> task_storage;
     for (std::size_t task_index = 0; task_index < p_task_amount; task_index++) {
         task::proc user_proc = [task_index, &results](){ 
                 results[task_index] = task_index + 1.0;
             };
         
-        std::size_t id = pool->add_task(user_proc);
+        task::ptr client_task = pool->add_task(user_proc);
 
-        ASSERT_NE(task::INVALID_TASK_ID, id);
-        ASSERT_TRUE(task_ids.find(id) == task_ids.end());
+        ASSERT_NE(nullptr, client_task);
+        ASSERT_EQ(std::find(task_storage.cbegin(), task_storage.cend(), client_task), task_storage.cend());
 
-        task_ids[id] = task_index;
+        task_storage.push_back(client_task);
     }
 
-    ASSERT_EQ(p_task_amount, task_ids.size());
+    ASSERT_EQ(p_task_amount, task_storage.size());
 
     for (std::size_t i = 0; i < p_task_amount; i++) {
-        task::id id = pool->pop_complete_task();
+        task_storage[i]->wait_ready();
 
-        ASSERT_NE(task::INVALID_TASK_ID, id);
-        ASSERT_TRUE(task_ids.find(id) != task_ids.end());
-
-        task::id task_index = task_ids[id];
-        double obtained_result = results[task_index];
-        double expected_result = expected_results[task_index];
+        double obtained_result = results[i];
+        double expected_result = expected_results[i];
 
         ASSERT_EQ(expected_result, obtained_result);
     }
-
-    task::id id = pool->pop_complete_task();
-    ASSERT_EQ(task::INVALID_TASK_ID, id);
 }
 
 

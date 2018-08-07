@@ -79,7 +79,7 @@
     <ClCompile Include="nnet\som.cpp" />
     <ClCompile Include="nnet\sync.cpp" />
     <ClCompile Include="nnet\syncpr.cpp" />
-    <ClCompile Include="parallel\parallel_for.cpp" />
+    <ClCompile Include="parallel\parallel_thread_controller.cpp" />
     <ClCompile Include="parallel\task.cpp" />
     <ClCompile Include="parallel\thread_executor.cpp" />
     <ClCompile Include="parallel\thread_pool.cpp" />
@@ -169,6 +169,8 @@
     <ClInclude Include="nnet\sync.hpp" />
     <ClInclude Include="nnet\syncpr.hpp" />
     <ClInclude Include="parallel\parallel_for.hpp" />
+    <ClInclude Include="parallel\parallel_for_each.hpp" />
+    <ClInclude Include="parallel\parallel_thread_controller.hpp" />
     <ClInclude Include="parallel\task.hpp" />
     <ClInclude Include="parallel\thread_executor.hpp" />
     <ClInclude Include="parallel\thread_pool.hpp" />
@@ -241,6 +243,8 @@
     <LinkIncremental>false</LinkIncremental>
     <OutDir>..\..\pyclustering\core\x64\win\</OutDir>
     <IncludePath>.;src\;$(IncludePath)</IncludePath>
+    <LibraryPath>
+    </LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
