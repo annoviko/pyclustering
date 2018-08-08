@@ -28,9 +28,8 @@ namespace parallel {
 
 
 task::task(const proc & p_task) :
-    m_task(p_task),
-    m_ready()
-{
+    m_task(p_task)
+{ 
     m_ready.lock();
 }
 

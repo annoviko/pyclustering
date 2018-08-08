@@ -21,6 +21,8 @@
 
 #include "spinlock.hpp"
 
+#include <thread>
+
 
 namespace ccore {
 
@@ -32,9 +34,11 @@ bool spinlock::try_lock(void) {
 }
 
 void spinlock::lock(void) {
-    while(!try_lock()) { }
+    for(std::size_t i = 0; !try_lock(); i++) {
+        if (i % 100)
+          std::this_thread::yield();
+    }
 }
-
 
 void spinlock::unlock(void) {
     m_lock.clear(std::memory_order_release);

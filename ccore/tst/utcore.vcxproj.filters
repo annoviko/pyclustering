@@ -419,6 +419,9 @@
     <ClCompile Include="..\src\parallel\start_for.cpp">
       <Filter>Tested Code\parallel</Filter>
     </ClCompile>
+    <ClCompile Include="utest-spinlock.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\container\adjacency.hpp">

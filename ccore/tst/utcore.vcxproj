@@ -284,6 +284,7 @@
     <ClCompile Include="utest-som.cpp" />
     <ClCompile Include="utest-somsc.cpp" />
     <ClCompile Include="utest-interface-sync.cpp" />
+    <ClCompile Include="utest-spinlock.cpp" />
     <ClCompile Include="utest-sync.cpp" />
     <ClCompile Include="utest-syncnet.cpp" />
     <ClCompile Include="utest-syncpr.cpp" />
