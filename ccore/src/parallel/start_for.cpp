@@ -19,7 +19,7 @@
 */
 
 
-#include "parallel_thread_controller.hpp"
+#include "start_for.hpp"
 
 
 namespace ccore {
@@ -27,13 +27,13 @@ namespace ccore {
 namespace parallel {
 
 
-parallel_thread_controller::parallel_thread_controller(void) :
+start_for::start_for(void) :
     thread_pool(thread_pool::DEFAULT_POOL_SIZE - 1)
 { }
 
 
-parallel_thread_controller & parallel_thread_controller::get_instance(void) {
-    static parallel_thread_controller controller;
+start_for & start_for::get_instance(void) {
+    static start_for controller;
     return controller;
 }
 

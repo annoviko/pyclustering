@@ -22,13 +22,7 @@
 #pragma once
 
 
-#include <condition_variable>
-#include <functional>
-#include <list>
-#include <memory>
-#include <mutex>
-
-#include "spinlock.hpp"
+#include "thread_pool.hpp"
 
 
 namespace ccore {
@@ -36,41 +30,18 @@ namespace ccore {
 namespace parallel {
 
 
-class thread_executor;
-
-
-class task {
-public:
-    friend thread_executor;
-
-public:
-    using proc      = std::function<void(void)>;
-    using ptr       = std::shared_ptr<task>;
-    using id        = std::size_t;
-
+class start_for : public thread_pool {
 private:
-    proc                m_task          = proc();
-    mutable spinlock    m_ready;
+    start_for(void);
+
+    start_for(const start_for & p_other) = delete;
+
+    start_for(start_for && p_other) = delete;
+
+    ~start_for(void) = default;
 
 public:
-    task(void) = default;
-
-    explicit task(const proc & p_task);
-
-    task(const task & p_other) = default;
-
-    task(task && p_other) = default;
-
-    ~task(void) = default;
-
-private:
-    void set_ready(void);
-
-public:
-    void wait_ready(void) const;
-
-public:
-    void operator()();
+    static start_for & get_instance(void);
 };
 
 

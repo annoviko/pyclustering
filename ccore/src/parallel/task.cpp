@@ -29,24 +29,19 @@ namespace parallel {
 
 task::task(const proc & p_task) :
     m_task(p_task),
-    m_status(task_status::NOT_READY)
-{ }
+    m_ready()
+{
+    m_ready.lock();
+}
 
 
-void task::set_status(const task_status p_status) {
-    std::unique_lock<std::mutex> lock_status(m_status_mutex);
-
-    m_status = p_status;
-    m_status_ready_cond.notify_one();
+void task::set_ready(void) {
+    m_ready.unlock();
 }
 
 
 void task::wait_ready(void) const {
-    std::unique_lock<std::mutex> lock_status(m_status_mutex);
-
-    while(m_status != task_status::READY) {
-        m_status_ready_cond.wait(lock_status);
-    }
+    m_ready.lock();
 }
 
 

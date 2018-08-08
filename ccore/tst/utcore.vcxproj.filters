@@ -410,11 +410,14 @@
     <ClCompile Include="..\external\include\gtest\gtest-all.cpp">
       <Filter>Google Test Environment</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\parallel\parallel_thread_controller.cpp">
-      <Filter>Tested Code\parallel</Filter>
-    </ClCompile>
     <ClCompile Include="utest-parallel_for.cpp">
       <Filter>Unit Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\parallel\spinlock.cpp">
+      <Filter>Tested Code\parallel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\parallel\start_for.cpp">
+      <Filter>Tested Code\parallel</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -688,7 +691,10 @@
     <ClInclude Include="..\src\parallel\parallel_for_each.hpp">
       <Filter>Tested Code\parallel</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\parallel\parallel_thread_controller.hpp">
+    <ClInclude Include="..\src\parallel\spinlock.hpp">
+      <Filter>Tested Code\parallel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\parallel\start_for.hpp">
       <Filter>Tested Code\parallel</Filter>
     </ClInclude>
   </ItemGroup>

@@ -22,7 +22,7 @@
 #pragma once
 
 
-#include "thread_pool.hpp"
+#include <atomic>
 
 
 namespace ccore {
@@ -30,18 +30,21 @@ namespace ccore {
 namespace parallel {
 
 
-class parallel_thread_controller : public thread_pool {
+class spinlock {
 private:
-    parallel_thread_controller(void);
-
-    parallel_thread_controller(const parallel_thread_controller & p_other) = delete;
-
-    parallel_thread_controller(parallel_thread_controller && p_other) = delete;
-
-    ~parallel_thread_controller(void) = default;
+    std::atomic_flag    m_lock = ATOMIC_FLAG_INIT;
 
 public:
-    static parallel_thread_controller & get_instance(void);
+    spinlock(void) = default;
+
+    ~spinlock(void) = default;
+
+public:
+    bool try_lock(void);
+
+    void lock(void);
+
+    void unlock(void);
 };
 
 

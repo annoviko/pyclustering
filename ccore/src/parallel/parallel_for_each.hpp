@@ -28,6 +28,9 @@
 #include <vector>
 
 
+#include "start_for.hpp"
+
+
 /* Available options: PARALLEL_IMPLEMENTATION_CCORE, PARALLEL_IMPLEMENTATION_CCORE_THREAD_POOL, PARALLEL_IMPLEMENTATION_NONE */
 #define PARALLEL_IMPLEMENTATION_CCORE_THREAD_POOL
 
@@ -80,7 +83,7 @@ void parallel_for_each(const TypeIter p_begin, const TypeIter p_end, const TypeA
         result.get();
     }
 #elif defined(PARALLEL_IMPLEMENTATION_CCORE_THREAD_POOL)
-    static const std::size_t amount_threads = parallel_thread_controller::get_instance().size();
+    static const std::size_t amount_threads = start_for::get_instance().size();
 
     const std::size_t step = std::distance(p_begin, p_end) / (amount_threads + 1);
 
@@ -97,13 +100,13 @@ void parallel_for_each(const TypeIter p_begin, const TypeIter p_end, const TypeA
             }
         };
 
-        task::ptr task_under_processing = parallel_thread_controller::get_instance().add_task_if_free(async_task);
+        task::ptr task_under_processing = start_for::get_instance().add_task_if_free(async_task);
         if (task_under_processing == nullptr) {
             /* There is no free threads to take care about this task, process it by this thread */
             async_task();
         }
         else {
-            task_storage.push_back(task_under_processing);
+            task_storage.push_back(std::move(task_under_processing));
         }
 
         current_start = current_end;

@@ -19,9 +19,7 @@
 */
 
 
-#include "thread_executor.hpp"
-
-#include <exception>
+#include "spinlock.hpp"
 
 
 namespace ccore {
@@ -29,36 +27,17 @@ namespace ccore {
 namespace parallel {
 
 
-thread_executor::thread_executor(const task_getter & p_getter) {
-    m_stop        = false;
+bool spinlock::try_lock(void) {
+    return !m_lock.test_and_set(std::memory_order_acquire);
+}
 
-    m_getter      = p_getter;
-    m_executor    = std::thread(&thread_executor::run, this);
+void spinlock::lock(void) {
+    while(!try_lock()) { }
 }
 
 
-void thread_executor::run(void) {
-    while(!m_stop) {
-        task::ptr task = nullptr;
-        m_getter(task);
-
-        if (task) {
-            (*task)();
-            task->set_ready();
-        }
-        else {
-            m_stop = true;
-        }
-    }
-}
-
-
-void thread_executor::stop(void) {
-    m_stop = true;
-
-    if (m_executor.joinable()) {
-        m_executor.join();
-    }
+void spinlock::unlock(void) {
+    m_lock.clear(std::memory_order_release);
 }
 
 

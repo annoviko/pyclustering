@@ -58,12 +58,10 @@ thread_pool::~thread_pool(void) {
 
 
 task::ptr thread_pool::add_task(const task::proc & p_raw_task) {
-    task::ptr client_task = nullptr;
+    task::ptr client_task = std::make_shared<task>(p_raw_task);
 
     {
         std::lock_guard<std::mutex> lock_common(m_common_mutex);
-
-        client_task = std::make_shared<task>(p_raw_task);
 
         m_queue.push_back(client_task);
     }
@@ -120,9 +118,10 @@ void thread_pool::get_task(task::ptr & p_task) {
 
     p_task = nullptr;
 
+    m_reserve++;
+    m_free++;
+
     while(m_queue.empty() && !m_stop) {
-        m_reserve++;
-        m_free++;
         m_queue_not_empty_cond.wait(lock_common, [this]{ return !m_queue.empty() || m_stop; });
     }
 
