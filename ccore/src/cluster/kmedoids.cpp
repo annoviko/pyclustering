@@ -179,7 +179,7 @@ kmedoids::distance_calculator kmedoids::create_distance_calculator(const kmedoid
     }
     else if (p_type == kmedoids_data_t::DISTANCE_MATRIX) {
         return [this](const std::size_t index1, const std::size_t index2) {
-          return (*m_data_ptr)[index1][index2];
+            return (*m_data_ptr)[index1][index2];
         };
     }
     else {
