@@ -31,11 +31,8 @@
 #include "start_for.hpp"
 
 
-/* Available options: PARALLEL_IMPLEMENTATION_ASYNC, 
-                      PARALLEL_IMPLEMENTATION_NONE,  */
-
+/* Available options: PARALLEL_IMPLEMENTATION_ASYNC_POOL, PARALLEL_IMPLEMENTATION_NONE */
 #define PARALLEL_IMPLEMENTATION_ASYNC_POOL
-//#define PARALLEL_IMPLEMENTATION_NONE
 
 
 namespace ccore {
@@ -46,26 +43,40 @@ namespace parallel {
 template <typename TypeIter, typename TypeAction>
 void parallel_for_each(const TypeIter p_begin, const TypeIter p_end, const TypeAction & p_task) {
 #if defined(PARALLEL_IMPLEMENTATION_ASYNC_POOL)
-    const std::size_t step = std::distance(p_begin, p_end) / (start_for::get_size() + 1);
+    static const std::size_t amount_hardware_threads = std::thread::hardware_concurrency();
+    static const std::size_t amount_threads = (amount_hardware_threads > 1) ? (amount_hardware_threads - 1) : 0;
+    static std::vector<std::future<void>> future_storage(amount_threads);
+    static std::vector<spinlock> future_locks(amount_threads);
+
+    const std::size_t step = std::distance(p_begin, p_end) / (amount_threads + 1);
 
     auto current_start = p_begin;
     auto current_end = p_begin + step;
 
-    std::vector<std::size_t> captured_threads;
+    std::vector<std::size_t> captured_feature;
 
-    for (std::size_t i = 0; i < start_for::get_size(); ++i) {
+    for (std::size_t i = 0; i < amount_threads; ++i) {
         auto async_task = [&p_task, current_start, current_end](){
             for (auto iter = current_start; iter != current_end; ++iter) {
                 p_task(*iter);
             }
         };
 
-        const std::size_t free_index = start_for::try_execute(async_task);
-        if (free_index == start_for::UNAVAILABLE_THREAD) {
-            async_task();
+        std::size_t free_index = (std::size_t) -1;
+        for (std::size_t i = 0; i < amount_threads; i++) {
+            if (future_locks[i].try_lock()) {
+                free_index = i;
+                break;
+            }
+        }
+
+        if (free_index != (std::size_t) -1) {
+            auto future_result = std::async(std::launch::async, async_task);
+            future_storage[free_index] = std::move(future_result);
+            captured_feature.push_back(free_index);
         }
         else {
-            captured_threads.push_back(free_index);
+            async_task();
         }
 
         current_start = current_end;
@@ -76,8 +87,9 @@ void parallel_for_each(const TypeIter p_begin, const TypeIter p_end, const TypeA
         p_task(*iter);
     }
 
-    for (auto index_thread : captured_threads) {
-        start_for::wait(index_thread);
+    for (auto index_feature : captured_feature) {
+        future_storage[index_feature].get();
+        future_locks[index_feature].unlock();
     }
 #else
     /* This part of code is switched only to estimate parallel implementation with non-parallel.

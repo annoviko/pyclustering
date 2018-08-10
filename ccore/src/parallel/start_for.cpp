@@ -27,23 +27,14 @@ namespace ccore {
 namespace parallel {
 
 
-const std::size_t start_for::AMOUNT_HARDWARE_THREADS = std::thread::hardware_concurrency();
-const std::size_t start_for::AMOUNT_THREADS = (AMOUNT_HARDWARE_THREADS > 1) ? (AMOUNT_HARDWARE_THREADS - 1) : 0;
-
-std::vector<std::future<void>> start_for::FUTURE_STORAGE(AMOUNT_THREADS);
-std::vector<spinlock> start_for::FUTURE_LOCKS(AMOUNT_THREADS);
-
-const std::size_t start_for::UNAVAILABLE_THREAD = std::numeric_limits<std::size_t>::max();
+start_for::start_for(void) :
+    thread_pool(thread_pool::DEFAULT_POOL_SIZE - 1)
+{ }
 
 
-std::size_t start_for::get_size(void) {
-    return AMOUNT_THREADS;
-}
-
-
-void start_for::wait(const std::size_t p_index) {
-    FUTURE_STORAGE[p_index].get();
-    FUTURE_LOCKS[p_index].unlock();
+start_for & start_for::get_instance(void) {
+    static start_for controller;
+    return controller;
 }
 
 

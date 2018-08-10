@@ -22,11 +22,7 @@
 #pragma once
 
 
-#include <future>
-#include <thread>
-#include <vector>
-
-#include "spinlock.hpp"
+#include "thread_pool.hpp"
 
 
 namespace ccore {
@@ -34,46 +30,18 @@ namespace ccore {
 namespace parallel {
 
 
-class start_for {
-public:
-    static const std::size_t UNAVAILABLE_THREAD;
-
+class start_for : public thread_pool {
 private:
-    static const std::size_t AMOUNT_HARDWARE_THREADS;
-    static const std::size_t AMOUNT_THREADS;
+    start_for(void);
 
-private:
-    static std::vector<std::future<void>> FUTURE_STORAGE;
-    static std::vector<spinlock> FUTURE_LOCKS;
+    start_for(const start_for & p_other) = delete;
 
-public:
-    start_for(void) = default;
-
-    start_for(const start_for & p_other) = default;
-
-    start_for(start_for && p_other) = default;
+    start_for(start_for && p_other) = delete;
 
     ~start_for(void) = default;
 
 public:
-    template <typename TypeAction>
-    static std::size_t try_execute(const TypeAction & p_action) {
-        std::size_t free_index = UNAVAILABLE_THREAD;
-        for (std::size_t i = 0; i < AMOUNT_THREADS; i++) {
-            if (FUTURE_LOCKS[i].try_lock()) {
-                auto future_result = std::async(std::launch::async, p_action);
-                FUTURE_STORAGE[free_index] = std::move(future_result);
-
-                break;
-            }
-        }
-
-        return free_index;
-    }
-
-    static std::size_t get_size(void);
-
-    static void wait(const std::size_t p_index);
+    static start_for & get_instance(void);
 };
 
 

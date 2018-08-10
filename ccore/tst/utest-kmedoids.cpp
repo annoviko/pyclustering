@@ -281,13 +281,12 @@ TEST(utest_kmedoids, totally_similar_data) {
 }
 
 
-//#define UT_PERFORMANCE_SESSION
 #ifdef UT_PERFORMANCE_SESSION
 
 #include <chrono>
 
 TEST(performance_kmedoids, big_data) {
-    const std::size_t cluster_length = 500;
+    const std::size_t cluster_length = 1000;
     const std::size_t amount_clusters = 10;
 
     auto points = simple_sample_factory::create_random_sample(cluster_length, amount_clusters);
