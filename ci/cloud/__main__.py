@@ -37,6 +37,10 @@ def run():
         client_task = task(sys.argv[1], [])
         token = ""
 
+    elif len(sys.argv) < 3:
+        raise SyntaxError("ERROR: Incorrect amount of arguments '%d' "
+                          "(please, see 'python3 ci/cloud --help')." % len(sys.argv))
+
     else:
         token = sys.argv[1]
         action = sys.argv[2]

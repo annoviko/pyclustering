@@ -155,7 +155,6 @@ class yandex_disk:
 
     def file_exist(self, path):
         result, response_content = self.__send_request("GET", yandex_disk.__HTTP_RESOURCES, {"path": path})
-        print(result)
         if result != 200:
             if result == 401:
                 raise PermissionError("ERROR: Impossible to obtain information about file '%s' "
