@@ -48,4 +48,10 @@ def run():
 
 
 if __name__ == '__main__':
-    run()
+    try:
+        run()
+        exit(0)
+
+    except Exception as error:
+        print(error)
+        exit(-1)

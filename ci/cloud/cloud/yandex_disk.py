@@ -155,7 +155,12 @@ class yandex_disk:
 
     def file_exist(self, path):
         result, response_content = self.__send_request("GET", yandex_disk.__HTTP_RESOURCES, {"path": path})
+        print(result)
         if result != 200:
+            if result == 401:
+                raise PermissionError("ERROR: Impossible to obtain information about file '%s' "
+                                      "(unauthorized request)." % path)
+
             return False
 
         json_content = json.loads(response_content)
@@ -168,6 +173,10 @@ class yandex_disk:
     def directory_exist(self, path):
         result, response_content = self.__send_request("GET", yandex_disk.__HTTP_RESOURCES, {"path": path})
         if result != 200:
+            if result == 401:
+                raise PermissionError("ERROR: Impossible to obtain information about directory '%s' "
+                                      "(unauthorized request)." % path)
+
             return False
 
         json_content = json.loads(response_content)
