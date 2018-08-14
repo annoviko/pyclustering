@@ -20,8 +20,7 @@
 
 #include "cluster/kmeans.hpp"
 
-#include "parallel/parallel_for.hpp"
-#include "parallel/parallel_for_each.hpp"
+#include "parallel/parallel.hpp"
 
 #include <algorithm>
 #include <limits>
@@ -99,7 +98,7 @@ void kmeans::update_clusters(const dataset & p_centers, cluster_sequence & p_clu
     /* fill clusters again in line with centers. */
     if (m_ptr_indexes->empty()) {
         std::vector<std::size_t> winners(data.size(), 0);
-        parallel_for(0, data.size(), [this, &p_centers, &winners](std::size_t p_index) {
+        parallel_for(std::size_t(0), data.size(), [this, &p_centers, &winners](std::size_t p_index) {
             assign_point_to_cluster(p_index, p_centers, winners);
         });
 
@@ -160,7 +159,7 @@ double kmeans::update_centers(const cluster_sequence & clusters, dataset & cente
     dataset calculated_clusters(clusters.size(), point(dimension, 0.0));
     std::vector<double> changes(clusters.size(), 0.0);
 
-    parallel_for(0, clusters.size(), [this, &clusters, &centers, &calculated_clusters, &changes](const std::size_t p_index) {
+    parallel_for(std::size_t(0), clusters.size(), [this, &clusters, &centers, &calculated_clusters, &changes](const std::size_t p_index) {
         calculated_clusters[p_index] = centers[p_index];
         changes[p_index] = update_center(clusters[p_index], calculated_clusters[p_index]);
     });

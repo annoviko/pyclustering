@@ -229,9 +229,6 @@
     <ClCompile Include="parallel\spinlock.cpp">
       <Filter>Source Files\parallel</Filter>
     </ClCompile>
-    <ClCompile Include="parallel\start_for.cpp">
-      <Filter>Source Files\parallel</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cluster\agglomerative.hpp">
@@ -492,16 +489,10 @@
     <ClInclude Include="interface\bsas_interface.h">
       <Filter>Source Files\interface</Filter>
     </ClInclude>
-    <ClInclude Include="parallel\parallel_for.hpp">
-      <Filter>Source Files\parallel</Filter>
-    </ClInclude>
-    <ClInclude Include="parallel\parallel_for_each.hpp">
-      <Filter>Source Files\parallel</Filter>
-    </ClInclude>
     <ClInclude Include="parallel\spinlock.hpp">
       <Filter>Source Files\parallel</Filter>
     </ClInclude>
-    <ClInclude Include="parallel\start_for.hpp">
+    <ClInclude Include="parallel\parallel.hpp">
       <Filter>Source Files\parallel</Filter>
     </ClInclude>
   </ItemGroup>

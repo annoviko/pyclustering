@@ -225,7 +225,6 @@
     <ClCompile Include="..\src\nnet\sync.cpp" />
     <ClCompile Include="..\src\nnet\syncpr.cpp" />
     <ClCompile Include="..\src\parallel\spinlock.cpp" />
-    <ClCompile Include="..\src\parallel\start_for.cpp" />
     <ClCompile Include="..\src\parallel\task.cpp" />
     <ClCompile Include="..\src\parallel\thread_executor.cpp" />
     <ClCompile Include="..\src\parallel\thread_pool.cpp" />
@@ -373,10 +372,8 @@
     <ClInclude Include="..\src\nnet\som.hpp" />
     <ClInclude Include="..\src\nnet\sync.hpp" />
     <ClInclude Include="..\src\nnet\syncpr.hpp" />
-    <ClInclude Include="..\src\parallel\parallel_for.hpp" />
-    <ClInclude Include="..\src\parallel\parallel_for_each.hpp" />
+    <ClInclude Include="..\src\parallel\parallel.hpp" />
     <ClInclude Include="..\src\parallel\spinlock.hpp" />
-    <ClInclude Include="..\src\parallel\start_for.hpp" />
     <ClInclude Include="..\src\parallel\task.hpp" />
     <ClInclude Include="..\src\parallel\thread_executor.hpp" />
     <ClInclude Include="..\src\parallel\thread_pool.hpp" />

@@ -21,7 +21,7 @@
 
 #include "gtest/gtest.h"
 
-#include "parallel/parallel_for.hpp"
+#include "parallel/parallel.hpp"
 
 #include <numeric>
 
@@ -34,7 +34,7 @@ static void template_parallel_square(const std::size_t p_length) {
     std::iota(values.begin(), values.end(), 0);
 
     std::vector<double> results(p_length);
-    parallel_for(0, values.size(), [&values, &results](const std::size_t p_index) {
+    parallel_for(std::size_t(0), values.size(), [&values, &results](const std::size_t p_index) {
         results[p_index] = values[p_index] * values[p_index];
     });
 

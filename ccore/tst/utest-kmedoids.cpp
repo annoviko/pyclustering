@@ -281,6 +281,7 @@ TEST(utest_kmedoids, totally_similar_data) {
 }
 
 
+//#define UT_PERFORMANCE_SESSION
 #ifdef UT_PERFORMANCE_SESSION
 
 #include <chrono>

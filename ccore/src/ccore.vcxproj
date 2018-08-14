@@ -79,7 +79,6 @@
     <ClCompile Include="nnet\som.cpp" />
     <ClCompile Include="nnet\sync.cpp" />
     <ClCompile Include="nnet\syncpr.cpp" />
-    <ClCompile Include="parallel\start_for.cpp" />
     <ClCompile Include="parallel\spinlock.cpp" />
     <ClCompile Include="parallel\task.cpp" />
     <ClCompile Include="parallel\thread_executor.cpp" />
@@ -169,9 +168,7 @@
     <ClInclude Include="nnet\som.hpp" />
     <ClInclude Include="nnet\sync.hpp" />
     <ClInclude Include="nnet\syncpr.hpp" />
-    <ClInclude Include="parallel\parallel_for.hpp" />
-    <ClInclude Include="parallel\parallel_for_each.hpp" />
-    <ClInclude Include="parallel\start_for.hpp" />
+    <ClInclude Include="parallel\parallel.hpp" />
     <ClInclude Include="parallel\spinlock.hpp" />
     <ClInclude Include="parallel\task.hpp" />
     <ClInclude Include="parallel\thread_executor.hpp" />

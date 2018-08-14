@@ -416,9 +416,6 @@
     <ClCompile Include="..\src\parallel\spinlock.cpp">
       <Filter>Tested Code\parallel</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\parallel\start_for.cpp">
-      <Filter>Tested Code\parallel</Filter>
-    </ClCompile>
     <ClCompile Include="utest-spinlock.cpp">
       <Filter>Unit Tests</Filter>
     </ClCompile>
@@ -685,19 +682,13 @@
     <ClInclude Include="..\src\interface\ttsas_interface.h">
       <Filter>Tested Code\interface</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\parallel\parallel_for.hpp">
-      <Filter>Tested Code\parallel</Filter>
-    </ClInclude>
     <ClInclude Include="..\external\include\gtest\gtest.h">
       <Filter>Google Test Environment</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\parallel\parallel_for_each.hpp">
-      <Filter>Tested Code\parallel</Filter>
     </ClInclude>
     <ClInclude Include="..\src\parallel\spinlock.hpp">
       <Filter>Tested Code\parallel</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\parallel\start_for.hpp">
+    <ClInclude Include="..\src\parallel\parallel.hpp">
       <Filter>Tested Code\parallel</Filter>
     </ClInclude>
   </ItemGroup>

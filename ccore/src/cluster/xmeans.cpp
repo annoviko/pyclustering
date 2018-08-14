@@ -31,7 +31,7 @@
 #include "cluster/kmeans.hpp"
 #include "cluster/kmeans_plus_plus.hpp"
 
-#include "parallel/parallel_for.hpp"
+#include "parallel/parallel.hpp"
 
 #include "utils/math.hpp"
 #include "utils/metric.hpp"
@@ -103,7 +103,7 @@ void xmeans::improve_structure() {
 
     std::vector<dataset> region_allocated_centers(m_ptr_result->clusters().size(), dataset());
 
-    parallel_for(0, m_ptr_result->clusters().size(), [this, &clusters, &current_centers, &region_allocated_centers](const std::size_t p_index) {
+    parallel_for(std::size_t(0), m_ptr_result->clusters().size(), [this, &clusters, &current_centers, &region_allocated_centers](const std::size_t p_index) {
         improve_region_structure(clusters[p_index], current_centers[p_index], region_allocated_centers[p_index]);
     });
 

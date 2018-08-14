@@ -33,7 +33,7 @@
 #include "differential/runge_kutta_4.hpp"
 #include "differential/runge_kutta_fehlberg_45.hpp"
 
-#include "parallel/parallel_for.hpp"
+#include "parallel/parallel.hpp"
 
 #include "utils/math.hpp"
 #include "utils/metric.hpp"
@@ -291,7 +291,7 @@ void sync_network::store_dynamic(const double time, const bool collect_dynamic, 
 void sync_network::calculate_phases(const solve_type solver, const double t, const double step, const double int_step) {
     std::vector<double> next_phases(size(), 0.0);
 
-    parallel_for(0, size(), [this, solver, t, step, int_step, &next_phases](const std::size_t p_index) {
+    parallel_for(std::size_t(0), size(), [this, solver, t, step, int_step, &next_phases](const std::size_t p_index) {
         calculate_phase(solver, t, step, int_step, p_index, next_phases);
     });
 
