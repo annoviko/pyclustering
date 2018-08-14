@@ -31,8 +31,22 @@
 #include "start_for.hpp"
 
 
-/* Available options: PARALLEL_IMPLEMENTATION_ASYNC_POOL, PARALLEL_IMPLEMENTATION_NONE */
+/* Available options: 
+    1. PARALLEL_IMPLEMENTATION_ASYNC_POOL - own parallel implementation based on std::async pool
+    2. PARALLEL_IMPLEMENTATION_NONE       - parallel implementation is not used
+    3. PARALLEL_IMPLEMENTATION_PPL        - parallel PPL implementation (windows system only)         */
+
+
+#if defined(_WIN32)
+#define PARALLEL_IMPLEMENTATION_PPL
+#else
 #define PARALLEL_IMPLEMENTATION_ASYNC_POOL
+#endif
+
+
+#if defined(PARALLEL_IMPLEMENTATION_PPL)
+#include <ppl.h>
+#endif
 
 
 namespace ccore {
@@ -91,6 +105,8 @@ void parallel_for_each(const TypeIter p_begin, const TypeIter p_end, const TypeA
         future_storage[index_feature].get();
         future_locks[index_feature].unlock();
     }
+#elif defined(PARALLEL_IMPLEMENTATION_PPL)
+    concurrency::parallel_for_each(p_begin, p_end, p_task);
 #else
     /* This part of code is switched only to estimate parallel implementation with non-parallel.
        Never switch on for real product. */
