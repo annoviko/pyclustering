@@ -156,7 +156,7 @@ class bang_visualizer:
 
         @param[in] ax (Axis): Axis where bang-blocks should be displayed.
         @param[in] blocks (list): List of blocks that should be displyed.
-        @param[in] pair (tuple): Pair of coordinate index that should be displyed.
+        @param[in] pair (tuple): Pair of coordinate index that should be displayed.
 
         """
         ax.grid(False)

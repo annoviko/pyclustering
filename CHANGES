@@ -5,7 +5,13 @@ CHANGE NOTES FOR 0.8.2 (STARTED May 28, 2018)
 ------------------------------------------------------------------------
 
 GENERAL CHANGES:
-- Parallel optimization of K-Means algorithm (ccore.clst.kmeans).
+- Implemented multidimensional cluster visualizer (pyclustering.cluster).
+  See: https://github.com/annoviko/pyclustering/issues/450
+
+- Parallel optimization of K-Medoids algorithm (ccore.clst.kmedoids).
+  See: https://github.com/annoviko/pyclustering/issues/447
+
+- Parallel optimization of K-Means and X-Means (that uses K-Means) algorithms (ccore.clst.kmeans, ccore.clst.xmeans).
   See: https://github.com/annoviko/pyclustering/issues/451
 
 - Introduced new threshold parameter 'amount of block points' to BANG algorithm to allocate outliers more precisely (pyclustering.cluster.bang).

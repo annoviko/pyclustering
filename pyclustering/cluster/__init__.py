@@ -26,6 +26,7 @@
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 
+import itertools
 import math
 
 from pyclustering.utils.color import color as color_list
@@ -67,9 +68,143 @@ class canvas_cluster_descr:
         self.attributes = []
 
 
+
+class cluster_visualizer_multidim:
+    """!
+    @brief Cluster visualizer for multi-dimensional data.
+
+    """
+
+    def __init__(self):
+        """!
+        @brief Constructs cluster visualizer for multidimensional data.
+        @details The visualizer is suitable more data whose dimension is bigger than 3.
+
+        """
+        self.__clusters = []
+
+    def append_cluster(self, cluster, data = None, marker = '.', markersize = None, color = None):
+        """!
+        @brief Appends cluster for visualization.
+
+        @param[in] cluster (list): cluster that may consist of indexes of objects from the data or object itself.
+        @param[in] data (list): If defines that each element of cluster is considered as a index of object from the data.
+        @param[in] marker (string): Marker that is used for displaying objects from cluster on the canvas.
+        @param[in] markersize (uint): Size of marker.
+        @param[in] color (string): Color of marker.
+
+        @return Returns index of cluster descriptor on the canvas.
+
+        """
+        if len(cluster) == 0:
+            raise ValueError("Empty cluster is provided.")
+
+        markersize = markersize or 5
+        if color is None:
+            index_color = len(self.__clusters) % len(color_list.TITLES)
+            color = color_list.TITLES[index_color]
+
+        cluster_descriptor = canvas_cluster_descr(cluster, data, marker, markersize, color)
+        self.__clusters.append(cluster_descriptor)
+
+
+    def append_clusters(self, clusters, data=None, marker='.', markersize=None):
+        """!
+        @brief Appends list of cluster for visualization.
+
+        @param[in] clusters (list): List of clusters where each cluster may consist of indexes of objects from the data or object itself.
+        @param[in] data (list): If defines that each element of cluster is considered as a index of object from the data.
+        @param[in] marker (string): Marker that is used for displaying objects from clusters on the canvas.
+        @param[in] markersize (uint): Size of marker.
+
+        """
+
+        for cluster in clusters:
+            self.append_cluster(cluster, data, marker, markersize)
+
+
+    def show(self, pair_filter=None):
+        """!
+        @brief Shows clusters (visualize).
+
+        @param[in] pair_filter (list): List of coordinate pairs that should be displayed. This argument is used as a filter.
+
+        """
+
+        cluster_data = self.__clusters[0].data or self.__clusters[0].cluster
+        dimension = len(cluster_data[0])
+
+        acceptable_pairs = pair_filter or []
+        pairs = list(itertools.combinations(range(dimension), 2))
+
+        if len(acceptable_pairs) > 0:
+            for pair in pairs:
+                if pair not in acceptable_pairs:
+                    pairs.remove(pair)
+
+        amount_axis = len(pairs)
+        axis_storage = []
+
+        figure = plt.figure()
+        grid_spec = gridspec.GridSpec(1, amount_axis)
+
+        for index in range(amount_axis):
+            ax = figure.add_subplot(grid_spec[index])
+
+            ax.set_xlabel("x%d" % pairs[index][0])
+            ax.set_ylabel("x%d" % pairs[index][1])
+
+            axis_storage.append(ax)
+
+        for cluster_descr in self.__clusters:
+            self.__draw_canvas_cluster(axis_storage, cluster_descr, pairs)
+
+        plt.show()
+
+
+    def __draw_canvas_cluster(self, axis_storage, cluster_descr, pairs):
+        """!
+        @brief Draw clusters.
+
+        @param[in] axis_storage (list): List of matplotlib axis where cluster dimensional chunks are displayed.
+        @param[in] cluster_descr (canvas_cluster_descr): Canvas cluster descriptor that should be displayed.
+        @param[in] pairs (list): List of coordinates that should be displayed.
+
+        """
+
+        for index_axis in range(len(axis_storage)):
+            for item in cluster_descr.cluster:
+                self.__draw_cluster_item(axis_storage[index_axis], pairs[index_axis], item, cluster_descr)
+
+
+    def __draw_cluster_item(self, ax, pair, item, cluster_descr):
+        """!
+        @brief Draw cluster feature in specific coordinates.
+
+        @param[in] ax (axis): Matplotlib axis that is used to display chunk of cluster point.
+        @param[in] pair (list): Coordinate of the point that should be displayed.
+        @param[in] item (list): Data point or index of data point.
+        @param[in] cluster_descr (canvas_cluster_descr): Cluster description whose point is visualized.
+
+        """
+        index_dimension1 = pair[0]
+        index_dimension2 = pair[1]
+
+        if cluster_descr.data is None:
+            ax.plot(item[index_dimension1], item[index_dimension2],
+                    color=cluster_descr.color, marker=cluster_descr.marker, markersize=cluster_descr.markersize)
+        else:
+            ax.plot(cluster_descr.data[item][index_dimension1], cluster_descr.data[item][index_dimension2],
+                    color=cluster_descr.color, marker=cluster_descr.marker, markersize=cluster_descr.markersize)
+
+
+
 class cluster_visualizer:
     """!
-    @brief Common visualizer of clusters on 2D or 3D surface.
+    @brief Common visualizer of clusters on 1D, 2D or 3D surface.
+    @details Use 'cluster_visualizer_multidim' visualizer in case of data dimension is greater than 3.
+
+    @see cluster_visualizer_multidim
     
     """
 
@@ -145,10 +280,10 @@ class cluster_visualizer:
         """
         
         if len(cluster) == 0:
-            return
+            raise ValueError("Empty cluster is provided.")
         
-        if canvas > self.__number_canvases:
-            raise NameError('Canvas does ' + canvas + ' not exists.')
+        if canvas > self.__number_canvases or canvas < 0:
+            raise ValueError("Canvas index '%d' is out of range [0; %d]." % self.__number_canvases or canvas)
         
         if color is None:
             index_color = len(self.__canvas_clusters[canvas]) % len(color_list.TITLES)
@@ -162,17 +297,18 @@ class cluster_visualizer:
             if self.__canvas_dimensions[canvas] is None:
                 self.__canvas_dimensions[canvas] = dimension
             elif self.__canvas_dimensions[canvas] != dimension:
-                raise NameError('Only clusters with the same dimension of objects can be displayed on canvas.')
+                raise ValueError("Only clusters with the same dimension of objects can be displayed on canvas.")
                 
         else:
             dimension = len(data[0])
             if self.__canvas_dimensions[canvas] is None:
                 self.__canvas_dimensions[canvas] = dimension
             elif self.__canvas_dimensions[canvas] != dimension:
-                raise NameError('Only clusters with the same dimension of objects can be displayed on canvas.')
+                raise ValueError("Only clusters with the same dimension of objects can be displayed on canvas.")
 
         if (dimension < 1) or (dimension > 3):
-            raise NameError('Only objects with size dimension 1 (1D plot), 2 (2D plot) or 3 (3D plot) can be displayed.')
+            raise ValueError("Only objects with size dimension 1 (1D plot), 2 (2D plot) or 3 (3D plot) "
+                             "can be displayed. For multi-dimensional data use 'cluster_visualizer_multidim'.")
         
         if markersize is None:
             if (dimension == 1) or (dimension == 2):
@@ -319,19 +455,20 @@ class cluster_visualizer:
             plt.show()
         
         return cluster_figure
-    
-    
-    """!
-    @brief Draw canvas cluster descriptor.
-    
-    @param[in] ax (Axis): Axis of the canvas where canvas cluster descriptor should be displayed.
-    @param[in] dimension (uint): Canvas dimension.
-    @param[in] cluster_descr (canvas_cluster_descr): Canvas cluster descriptor that should be displayed.
 
-    @return (fig) Figure where clusters are shown.
-    
-    """
+
     def __draw_canvas_cluster(self, ax, dimension, cluster_descr):
+        """!
+        @brief Draw canvas cluster descriptor.
+
+        @param[in] ax (Axis): Axis of the canvas where canvas cluster descriptor should be displayed.
+        @param[in] dimension (uint): Canvas dimension.
+        @param[in] cluster_descr (canvas_cluster_descr): Canvas cluster descriptor that should be displayed.
+
+        @return (fig) Figure where clusters are shown.
+
+        """
+
         cluster = cluster_descr.cluster
         data = cluster_descr.data
         marker = cluster_descr.marker
