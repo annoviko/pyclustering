@@ -25,20 +25,20 @@
 """
 
 
-import math;
+import math
 
-import random;
+import random
 
-import matplotlib.pyplot as plt;
+import matplotlib.pyplot as plt
 
-import pyclustering.core.som_wrapper as wrapper;
+import pyclustering.core.som_wrapper as wrapper
 
-from pyclustering.core.wrapper import ccore_library;
+from pyclustering.core.wrapper import ccore_library
 
-from pyclustering.utils import euclidean_distance_square;
-from pyclustering.utils.dimension import dimension_info;
+from pyclustering.utils import euclidean_distance_square
+from pyclustering.utils.dimension import dimension_info
 
-from enum import IntEnum;
+from enum import IntEnum
 
 
 class type_conn(IntEnum):
@@ -50,16 +50,16 @@ class type_conn(IntEnum):
     """
     
     ## Grid type of connections when each oscillator has connections with left, upper, right, lower neighbors.
-    grid_four = 0;
+    grid_four = 0
     
     ## Grid type of connections when each oscillator has connections with left, upper-left, upper, upper-right, right, right-lower, lower, lower-left neighbors.
-    grid_eight = 1;
+    grid_eight = 1
     
     ## Grid type of connections when each oscillator has connections with left, upper-left, upper-right, right, right-lower, lower-left neighbors.
-    honeycomb = 2;
+    honeycomb = 2
     
     ## Grid type of connections when existance of each connection is defined by the SOM rule on each step of simulation.
-    func_neighbor = 3;
+    func_neighbor = 3
     
     
 class type_init(IntEnum):
@@ -71,16 +71,16 @@ class type_init(IntEnum):
     """
     
     ## Weights are randomly distributed using Gaussian distribution (0, 1).
-    random = 0;
+    random = 0
     
     ## Weights are randomly distributed using Gaussian distribution (input data centroid, 1).
-    random_centroid = 1;
+    random_centroid = 1
     
     ## Weights are randomly distrbiuted using Gaussian distribution (input data centroid, surface of input data).
-    random_surface = 2;
+    random_surface = 2
     
     ## Weights are distributed as a uniform grid that covers whole surface of the input data.
-    uniform_grid = 3;
+    uniform_grid = 3
 
 
 class som_parameters:
@@ -96,16 +96,16 @@ class som_parameters:
         """
         
         ## Type of initialization of initial neuron weights (random, random in center of the input data, random distributed in data, ditributed in line with uniform grid).
-        self.init_type = type_init.uniform_grid; 
+        self.init_type = type_init.uniform_grid
         
         ## Initial radius (if not specified then will be calculated by SOM). 
-        self.init_radius = None;
+        self.init_radius = None
         
-        ## Rate of learning.   
-        self.init_learn_rate = 0.1;
+        ## Rate of learning.
+        self.init_learn_rate = 0.1
         
         ## Condition when learining process should be stoped. It's used when autostop mode is used. 
-        self.adaptation_threshold = 0.001; 
+        self.adaptation_threshold = 0.001;
 
 
 class som:
@@ -119,56 +119,54 @@ class som:
     
     Example:
     @code
-        import random;
+        import random
 
-        from pyclustering.utils import read_sample;
-
-        from pyclustering.nnet.som import som, type_conn, type_init, som_parameters;
-
-        from pyclustering.samples.definitions import FCPS_SAMPLES;
+        from pyclustering.utils import read_sample
+        from pyclustering.nnet.som import som, type_conn, type_init, som_parameters
+        from pyclustering.samples.definitions import FCPS_SAMPLES
 
         # read sample 'Lsun' from file
-        sample = read_sample(FCPS_SAMPLES.SAMPLE_LSUN);
+        sample = read_sample(FCPS_SAMPLES.SAMPLE_LSUN)
 
         # create SOM parameters
-        parameters = som_parameters();
+        parameters = som_parameters()
 
         # create self-organized feature map with size 7x7
-        rows = 10;  # five rows
-        cols = 10;  # five columns
+        rows = 10  # five rows
+        cols = 10  # five columns
         structure = type_conn.grid_four;  # each neuron has max. four neighbors.
-        network = som(rows, cols, structure, parameters);
+        network = som(rows, cols, structure, parameters)
 
         # train network on 'Lsun' sample during 100 epouchs.
-        network.train(sample, 100);
+        network.train(sample, 100)
 
         # simulate trained network using randomly modified point from input dataset.
-        index_point = random.randint(0, len(sample) - 1);
-        point = sample[index_point];  # obtain randomly point from data
-        point[0] += random.random() * 0.2;  # change randomly X-coordinate
-        point[1] += random.random() * 0.2;  # change randomly Y-coordinate
-        index_winner = network.simulate(point);
+        index_point = random.randint(0, len(sample) - 1)
+        point = sample[index_point]  # obtain randomly point from data
+        point[0] += random.random() * 0.2  # change randomly X-coordinate
+        point[1] += random.random() * 0.2  # change randomly Y-coordinate
+        index_winner = network.simulate(point)
 
         # check what are objects from input data are much close to randomly modified.
-        index_similar_objects = network.capture_objects[index_winner];
+        index_similar_objects = network.capture_objects[index_winner]
 
         # neuron contains information of encoded objects
-        print("Point '%s' is similar to objects with indexes '%s'." % (str(point), str(index_similar_objects)));
-        print("Coordinates of similar objects:");
-        for index in index_similar_objects: print("\tPoint:", sample[index]);
+        print("Point '%s' is similar to objects with indexes '%s'." % (str(point), str(index_similar_objects)))
+        print("Coordinates of similar objects:")
+        for index in index_similar_objects: print("\tPoint:", sample[index])
 
         # result visualization:
         # show distance matrix (U-matrix).
-        network.show_distance_matrix();
+        network.show_distance_matrix()
 
         # show density matrix (P-matrix).
-        network.show_density_matrix();
+        network.show_density_matrix()
 
         # show winner matrix.
-        network.show_winner_matrix();
+        network.show_winner_matrix()
 
         # show self-organized map.
-        network.show_network();
+        network.show_network()
     @endcode
     
     There is a visualization of 'Target' sample that was done by the self-organized feature map:
@@ -186,10 +184,10 @@ class som:
         
         """
         
-        if (self.__ccore_som_pointer is not None):
-            self._size = wrapper.som_get_size(self.__ccore_som_pointer);
+        if self.__ccore_som_pointer is not None:
+            self._size = wrapper.som_get_size(self.__ccore_som_pointer)
             
-        return self._size;
+        return self._size
     
     @property
     def weights(self):
@@ -200,10 +198,10 @@ class som:
         
         """
         
-        if (self.__ccore_som_pointer is not None):
-            self._weights = wrapper.som_get_weights(self.__ccore_som_pointer);
+        if self.__ccore_som_pointer is not None:
+            self._weights = wrapper.som_get_weights(self.__ccore_som_pointer)
         
-        return self._weights;
+        return self._weights
     
     @property
     def awards(self):
@@ -216,10 +214,10 @@ class som:
         
         """
         
-        if (self.__ccore_som_pointer is not None):
-            self._award = wrapper.som_get_awards(self.__ccore_som_pointer);
+        if self.__ccore_som_pointer is not None:
+            self._award = wrapper.som_get_awards(self.__ccore_som_pointer)
         
-        return self._award;
+        return self._award
     
     @property
     def capture_objects(self):
@@ -233,10 +231,10 @@ class som:
         
         """
         
-        if (self.__ccore_som_pointer is not None):
-            self._capture_objects = wrapper.som_get_capture_objects(self.__ccore_som_pointer);
+        if self.__ccore_som_pointer is not None:
+            self._capture_objects = wrapper.som_get_capture_objects(self.__ccore_som_pointer)
         
-        return self._capture_objects;
+        return self._capture_objects
     
     
     def __init__(self, rows, cols, conn_type = type_conn.grid_eight, parameters = None, ccore = True):
@@ -252,54 +250,54 @@ class som:
         """
         
         # some of these parameters are required despite core implementation, for example, for network demonstration.
-        self._cols = cols;
+        self._cols = cols
         
-        self._rows = rows;
+        self._rows = rows
         
-        self._size = cols * rows;
+        self._size = cols * rows
         
-        self._conn_type = conn_type;
+        self._conn_type = conn_type
         
-        self._data = None;
+        self._data = None
         
-        self._neighbors = None;
+        self._neighbors = None
         
-        self._local_radius = 0.0;
+        self._local_radius = 0.0
         
-        self._learn_rate = 0.0;
+        self._learn_rate = 0.0
         
-        self.__ccore_som_pointer = None;
+        self.__ccore_som_pointer = None
         
-        if (parameters is not None):
-            self._params = parameters;
+        if parameters is not None:
+            self._params = parameters
         else:
-            self._params = som_parameters();
+            self._params = som_parameters()
             
-        if (self._params.init_radius is None):
-            self._params.init_radius = self.__initialize_initial_radius(rows, cols);
+        if self._params.init_radius is None:
+            self._params.init_radius = self.__initialize_initial_radius(rows, cols)
         
-        if ( (ccore is True) and ccore_library.workable() ):
-            self.__ccore_som_pointer = wrapper.som_create(rows, cols, conn_type, self._params);
+        if (ccore is True) and ccore_library.workable():
+            self.__ccore_som_pointer = wrapper.som_create(rows, cols, conn_type, self._params)
             
         else:
             # location
-            self._location = self.__initialize_locations(rows, cols);
+            self._location = self.__initialize_locations(rows, cols)
             
             # default weights
-            self._weights = [ [0.0] ] * self._size;
+            self._weights = [ [0.0] ] * self._size
             
             # awards
-            self._award = [0] * self._size;
+            self._award = [0] * self._size
             
             # captured objects
-            self._capture_objects = [ [] for i in range(self._size) ];
+            self._capture_objects = [ [] for i in range(self._size) ]
             
             # distances
-            self._sqrt_distances = self.__initialize_distances(self._size, self._location);
+            self._sqrt_distances = self.__initialize_distances(self._size, self._location)
         
             # connections
-            if (conn_type != type_conn.func_neighbor):
-                self._create_connections(conn_type);
+            if conn_type != type_conn.func_neighbor:
+                self._create_connections(conn_type)
 
 
     def __del__(self):
@@ -308,8 +306,8 @@ class som:
         
         """
         
-        if (self.__ccore_som_pointer is not None):
-            wrapper.som_destroy(self.__ccore_som_pointer);
+        if self.__ccore_som_pointer is not None:
+            wrapper.som_destroy(self.__ccore_som_pointer)
     
     
     def __len__(self):
@@ -320,7 +318,7 @@ class som:
         
         """
         
-        return self._size;
+        return self._size
     
     
     def __initialize_initial_radius(self, rows, cols):
@@ -334,14 +332,14 @@ class som:
         
         """
         
-        if ((cols + rows) / 4.0 > 1.0): 
-            return 2.0;
+        if (cols + rows) / 4.0 > 1.0:
+            return 2.0
         
-        elif ( (cols > 1) and (rows > 1) ): 
-            return 1.5;
+        elif (cols > 1) and (rows > 1):
+            return 1.5
         
         else: 
-            return 1.0;
+            return 1.0
     
     
     def __initialize_locations(self, rows, cols):
@@ -355,12 +353,12 @@ class som:
         
         """
         
-        location = list();
+        location = list()
         for i in range(rows):
             for j in range(cols):
-                location.append([float(i), float(j)]);
+                location.append([float(i), float(j)])
         
-        return location;
+        return location
     
     
     def __initialize_distances(self, size, location):
@@ -373,14 +371,14 @@ class som:
         @return (list) Distance matrix between neurons in the network.
         
         """
-        sqrt_distances = [ [ [] for i in range(size) ] for j in range(size) ];
+        sqrt_distances = [ [ [] for i in range(size) ] for j in range(size) ]
         for i in range(size):
             for j in range(i, size, 1):
-                dist = euclidean_distance_square(location[i], location[j]);
-                sqrt_distances[i][j] = dist;
-                sqrt_distances[j][i] = dist;
+                dist = euclidean_distance_square(location[i], location[j])
+                sqrt_distances[i][j] = dist
+                sqrt_distances[j][i] = dist
         
-        return sqrt_distances;
+        return sqrt_distances
     
     
     def _create_initial_weights(self, init_type):
@@ -391,51 +389,51 @@ class som:
         
         """
         
-        dim_info = dimension_info(self._data);
+        dim_info = dimension_info(self._data)
         
-        step_x = dim_info.get_center()[0];
+        step_x = dim_info.get_center()[0]
         if (self._rows > 1): step_x = dim_info.get_width()[0] / (self._rows - 1);
         
-        step_y = 0.0;
+        step_y = 0.0
         if (dim_info.get_dimensions() > 1):
-            step_y = dim_info.get_center()[1];
+            step_y = dim_info.get_center()[1]
             if (self._cols > 1): step_y = dim_info.get_width()[1] / (self._cols - 1); 
                       
         # generate weights (topological coordinates)
-        random.seed();
+        random.seed()
         
         # Feature SOM 0002: Uniform grid.
         if (init_type == type_init.uniform_grid):
             # Predefined weights in line with input data.
-            self._weights = [ [ [] for i in range(dim_info.get_dimensions()) ] for j in range(self._size)];
+            self._weights = [ [ [] for i in range(dim_info.get_dimensions()) ] for j in range(self._size)]
             for i in range(self._size):
-                location = self._location[i];
+                location = self._location[i]
                 for dim in range(dim_info.get_dimensions()):
-                    if (dim == 0):
-                        if (self._rows > 1):
-                            self._weights[i][dim] = dim_info.get_minimum_coordinate()[dim] + step_x * location[dim];
+                    if dim == 0:
+                        if self._rows > 1:
+                            self._weights[i][dim] = dim_info.get_minimum_coordinate()[dim] + step_x * location[dim]
                         else:
-                            self._weights[i][dim] = dim_info.get_center()[dim];
+                            self._weights[i][dim] = dim_info.get_center()[dim]
                             
-                    elif (dim == 1):
-                        if (self._cols > 1):
-                            self._weights[i][dim] = dim_info.get_minimum_coordinate()[dim] + step_y * location[dim];
+                    elif dim == 1:
+                        if self._cols > 1:
+                            self._weights[i][dim] = dim_info.get_minimum_coordinate()[dim] + step_y * location[dim]
                         else:
-                            self._weights[i][dim] = dim_info.get_center()[dim];
+                            self._weights[i][dim] = dim_info.get_center()[dim]
                     else:
-                        self._weights[i][dim] = dim_info.get_center()[dim];
+                        self._weights[i][dim] = dim_info.get_center()[dim]
         
-        elif (init_type == type_init.random_surface):
+        elif init_type == type_init.random_surface:
             # Random weights at the full surface.
-            self._weights = [ [random.uniform(dim_info.get_minimum_coordinate()[i], dim_info.get_maximum_coordinate()[i]) for i in range(dim_info.get_dimensions())] for _ in range(self._size) ];
+            self._weights = [[random.uniform(dim_info.get_minimum_coordinate()[i], dim_info.get_maximum_coordinate()[i]) for i in range(dim_info.get_dimensions())] for _ in range(self._size)]
         
-        elif (init_type == type_init.random_centroid):
+        elif init_type == type_init.random_centroid:
             # Random weights at the center of input data.
-            self._weights = [ [(random.random() + dim_info.get_center()[i])  for i in range(dim_info.get_dimensions())] for _ in range(self._size) ];
+            self._weights = [[(random.random() + dim_info.get_center()[i])  for i in range(dim_info.get_dimensions())] for _ in range(self._size)]
         
         else:
             # Random weights of input data.
-            self._weights = [ [random.random()  for i in range(dim_info.get_dimensions())] for _ in range(self._size) ]; 
+            self._weights = [[random.random() for i in range(dim_info.get_dimensions())] for _ in range(self._size)]
 
 
     def _create_connections(self, conn_type):
@@ -446,78 +444,78 @@ class som:
         
         """
         
-        self._neighbors = [[] for index in range(self._size)];
+        self._neighbors = [[] for index in range(self._size)]
             
         for index in range(0, self._size, 1):
-            upper_index = index - self._cols;
-            upper_left_index = index - self._cols - 1;
-            upper_right_index = index - self._cols + 1;
+            upper_index = index - self._cols
+            upper_left_index = index - self._cols - 1
+            upper_right_index = index - self._cols + 1
             
-            lower_index = index + self._cols;
-            lower_left_index = index + self._cols - 1;
-            lower_right_index = index + self._cols + 1;
+            lower_index = index + self._cols
+            lower_left_index = index + self._cols - 1
+            lower_right_index = index + self._cols + 1
             
-            left_index = index - 1;
-            right_index = index + 1;
+            left_index = index - 1
+            right_index = index + 1
             
-            node_row_index = math.floor(index / self._cols);
-            upper_row_index = node_row_index - 1;
-            lower_row_index = node_row_index + 1;
+            node_row_index = math.floor(index / self._cols)
+            upper_row_index = node_row_index - 1
+            lower_row_index = node_row_index + 1
             
-            if ( (conn_type == type_conn.grid_eight) or (conn_type == type_conn.grid_four) ):
-                if (upper_index >= 0):
-                    self._neighbors[index].append(upper_index);
+            if (conn_type == type_conn.grid_eight) or (conn_type == type_conn.grid_four):
+                if upper_index >= 0:
+                    self._neighbors[index].append(upper_index)
                     
-                if (lower_index < self._size):
-                    self._neighbors[index].append(lower_index);
+                if lower_index < self._size:
+                    self._neighbors[index].append(lower_index)
             
-            if ( (conn_type == type_conn.grid_eight) or (conn_type == type_conn.grid_four) or (conn_type == type_conn.honeycomb) ):
-                if ( (left_index >= 0) and (math.floor(left_index / self._cols) == node_row_index) ):
-                    self._neighbors[index].append(left_index);
+            if (conn_type == type_conn.grid_eight) or (conn_type == type_conn.grid_four) or (conn_type == type_conn.honeycomb):
+                if (left_index >= 0) and (math.floor(left_index / self._cols) == node_row_index):
+                    self._neighbors[index].append(left_index)
                 
-                if ( (right_index < self._size) and (math.floor(right_index / self._cols) == node_row_index) ):
-                    self._neighbors[index].append(right_index);  
+                if (right_index < self._size) and (math.floor(right_index / self._cols) == node_row_index):
+                    self._neighbors[index].append(right_index)
                 
                 
-            if (conn_type == type_conn.grid_eight):
-                if ( (upper_left_index >= 0) and (math.floor(upper_left_index / self._cols) == upper_row_index) ):
-                    self._neighbors[index].append(upper_left_index);
+            if conn_type == type_conn.grid_eight:
+                if (upper_left_index >= 0) and (math.floor(upper_left_index / self._cols) == upper_row_index):
+                    self._neighbors[index].append(upper_left_index)
                 
-                if ( (upper_right_index >= 0) and (math.floor(upper_right_index / self._cols) == upper_row_index) ):
-                    self._neighbors[index].append(upper_right_index);
+                if (upper_right_index >= 0) and (math.floor(upper_right_index / self._cols) == upper_row_index):
+                    self._neighbors[index].append(upper_right_index)
                     
-                if ( (lower_left_index < self._size) and (math.floor(lower_left_index / self._cols) == lower_row_index) ):
-                    self._neighbors[index].append(lower_left_index);
+                if (lower_left_index < self._size) and (math.floor(lower_left_index / self._cols) == lower_row_index):
+                    self._neighbors[index].append(lower_left_index)
                     
-                if ( (lower_right_index < self._size) and (math.floor(lower_right_index / self._cols) == lower_row_index) ):
-                    self._neighbors[index].append(lower_right_index);          
+                if (lower_right_index < self._size) and (math.floor(lower_right_index / self._cols) == lower_row_index):
+                    self._neighbors[index].append(lower_right_index)
                 
             
-            if (conn_type == type_conn.honeycomb):
-                if ( (node_row_index % 2) == 0):
-                    upper_left_index = index - self._cols;
-                    upper_right_index = index - self._cols + 1;
+            if conn_type == type_conn.honeycomb:
+                if (node_row_index % 2) == 0:
+                    upper_left_index = index - self._cols
+                    upper_right_index = index - self._cols + 1
                 
-                    lower_left_index = index + self._cols;
-                    lower_right_index = index + self._cols + 1;
+                    lower_left_index = index + self._cols
+                    lower_right_index = index + self._cols + 1
                 else:
-                    upper_left_index = index - self._cols - 1;
-                    upper_right_index = index - self._cols;
+                    upper_left_index = index - self._cols - 1
+                    upper_right_index = index - self._cols
                 
-                    lower_left_index = index + self._cols - 1;
-                    lower_right_index = index + self._cols;
+                    lower_left_index = index + self._cols - 1
+                    lower_right_index = index + self._cols
                 
-                if ( (upper_left_index >= 0) and (math.floor(upper_left_index / self._cols) == upper_row_index) ):
-                    self._neighbors[index].append(upper_left_index);
+                if (upper_left_index >= 0) and (math.floor(upper_left_index / self._cols) == upper_row_index):
+                    self._neighbors[index].append(upper_left_index)
                 
-                if ( (upper_right_index >= 0) and (math.floor(upper_right_index / self._cols) == upper_row_index) ):
-                    self._neighbors[index].append(upper_right_index);
+                if (upper_right_index >= 0) and (math.floor(upper_right_index / self._cols) == upper_row_index):
+                    self._neighbors[index].append(upper_right_index)
                     
-                if ( (lower_left_index < self._size) and (math.floor(lower_left_index / self._cols) == lower_row_index) ):
-                    self._neighbors[index].append(lower_left_index);
+                if (lower_left_index < self._size) and (math.floor(lower_left_index / self._cols) == lower_row_index):
+                    self._neighbors[index].append(lower_left_index)
                     
-                if ( (lower_right_index < self._size) and (math.floor(lower_right_index / self._cols) == lower_row_index) ):
-                    self._neighbors[index].append(lower_right_index);
+                if (lower_right_index < self._size) and (math.floor(lower_right_index / self._cols) == lower_row_index):
+                    self._neighbors[index].append(lower_right_index)
     
     
     def _competition(self, x):
@@ -530,16 +528,16 @@ class som:
         
         """
         
-        index = 0;
-        minimum = euclidean_distance_square(self._weights[0], x);
+        index = 0
+        minimum = euclidean_distance_square(self._weights[0], x)
         
         for i in range(1, self._size, 1):
-            candidate = euclidean_distance_square(self._weights[i], x);
-            if (candidate < minimum):
-                index = i;
-                minimum = candidate;
+            candidate = euclidean_distance_square(self._weights[i], x)
+            if candidate < minimum:
+                index = i
+                minimum = candidate
         
-        return index;
+        return index
     
     
     def _adaptation(self, index, x):
@@ -551,32 +549,32 @@ class som:
         
         """
         
-        dimension = len(self._weights[0]);
+        dimension = len(self._weights[0])
         
-        if (self._conn_type == type_conn.func_neighbor):
+        if self._conn_type == type_conn.func_neighbor:
             for neuron_index in range(self._size):
-                distance = self._sqrt_distances[index][neuron_index];
+                distance = self._sqrt_distances[index][neuron_index]
                 
-                if (distance < self._local_radius):
-                    influence = math.exp( -( distance / (2.0 * self._local_radius) ) );
+                if distance < self._local_radius:
+                    influence = math.exp(-(distance / (2.0 * self._local_radius)))
                     
                     for i in range(dimension):
-                        self._weights[neuron_index][i] = self._weights[neuron_index][i] + self._learn_rate * influence * (x[i] - self._weights[neuron_index][i]); 
+                        self._weights[neuron_index][i] = self._weights[neuron_index][i] + self._learn_rate * influence * (x[i] - self._weights[neuron_index][i])
                     
         else:
             for i in range(dimension):
-                self._weights[index][i] = self._weights[index][i] + self._learn_rate * (x[i] - self._weights[index][i]); 
+                self._weights[index][i] = self._weights[index][i] + self._learn_rate * (x[i] - self._weights[index][i])
                 
             for neighbor_index in self._neighbors[index]: 
                 distance = self._sqrt_distances[index][neighbor_index]
-                if (distance < self._local_radius):
-                    influence = math.exp( -( distance / (2.0 * self._local_radius) ) );
+                if distance < self._local_radius:
+                    influence = math.exp(-(distance / (2.0 * self._local_radius)))
                     
                     for i in range(dimension):       
-                        self._weights[neighbor_index][i] = self._weights[neighbor_index][i] + self._learn_rate * influence * (x[i] - self._weights[neighbor_index][i]);  
+                        self._weights[neighbor_index][i] = self._weights[neighbor_index][i] + self._learn_rate * influence * (x[i] - self._weights[neighbor_index][i]);
 
 
-    def train(self, data, epochs, autostop = False):
+    def train(self, data, epochs, autostop=False):
         """!
         @brief Trains self-organized feature map (SOM).
 
@@ -588,55 +586,53 @@ class som:
         
         """
         
-        self._data = data;
+        self._data = data
         
-        if (self.__ccore_som_pointer is not None):
-            return wrapper.som_train(self.__ccore_som_pointer, data, epochs, autostop);
+        if self.__ccore_som_pointer is not None:
+            return wrapper.som_train(self.__ccore_som_pointer, data, epochs, autostop)
         
         for i in range(self._size):
-            self._award[i] = 0;
-            self._capture_objects[i].clear();
+            self._award[i] = 0
+            self._capture_objects[i].clear()
         
         # weights
-        self._create_initial_weights(self._params.init_type);
+        self._create_initial_weights(self._params.init_type)
         
-        previous_weights = None;
+        previous_weights = None
         
         for epoch in range(1, epochs + 1):
             # Depression term of coupling
-            self._local_radius = ( self._params.init_radius * math.exp(-(epoch / epochs)) ) ** 2;
-            self._learn_rate = self._params.init_learn_rate * math.exp(-(epoch / epochs));
-
-            #random.shuffle(self._data);    # Random order
+            self._local_radius = (self._params.init_radius * math.exp(-(epoch / epochs))) ** 2
+            self._learn_rate = self._params.init_learn_rate * math.exp(-(epoch / epochs))
             
             # Feature SOM 0003: Clear statistics
-            if (autostop == True):
+            if autostop:
                 for i in range(self._size):
-                    self._award[i] = 0;
-                    self._capture_objects[i].clear();
+                    self._award[i] = 0
+                    self._capture_objects[i].clear()
             
             for i in range(len(self._data)):
                 # Step 1: Competition:
-                index = self._competition(self._data[i]);
+                index = self._competition(self._data[i])
                     
                 # Step 2: Adaptation:   
-                self._adaptation(index, self._data[i]);
+                self._adaptation(index, self._data[i])
                 
                 # Update statistics
-                if ( (autostop == True) or (epoch == epochs) ):
-                    self._award[index] += 1;
-                    self._capture_objects[index].append(i);
+                if (autostop == True) or (epoch == epochs):
+                    self._award[index] += 1
+                    self._capture_objects[index].append(i)
             
             # Feature SOM 0003: Check requirement of stopping
-            if (autostop == True):
-                if (previous_weights is not None):
-                    maximal_adaptation = self._get_maximal_adaptation(previous_weights);
-                    if (maximal_adaptation < self._params.adaptation_threshold):
-                        return epoch;
+            if autostop:
+                if previous_weights is not None:
+                    maximal_adaptation = self._get_maximal_adaptation(previous_weights)
+                    if maximal_adaptation < self._params.adaptation_threshold:
+                        return epoch
             
-                previous_weights = [item[:] for item in self._weights];
+                previous_weights = [item[:] for item in self._weights]
         
-        return epochs;
+        return epochs
 
 
     def simulate(self, input_pattern):
@@ -652,10 +648,10 @@ class som:
         
         """
                 
-        if (self.__ccore_som_pointer is not None):
-            return wrapper.som_simulate(self.__ccore_som_pointer, input_pattern);
+        if self.__ccore_som_pointer is not None:
+            return wrapper.som_simulate(self.__ccore_som_pointer, input_pattern)
             
-        return self._competition(input_pattern);
+        return self._competition(input_pattern)
     
     
     def _get_maximal_adaptation(self, previous_weights):
@@ -668,19 +664,20 @@ class som:
         
         """
         
-        dimension = len(self._data[0]);
-        maximal_adaptation = 0.0;
+        dimension = len(self._data[0])
+        maximal_adaptation = 0.0
         
         for neuron_index in range(self._size):
             for dim in range(dimension):
-                current_adaptation = previous_weights[neuron_index][dim] - self._weights[neuron_index][dim];
+                current_adaptation = previous_weights[neuron_index][dim] - self._weights[neuron_index][dim]
                         
-                if (current_adaptation < 0): current_adaptation = -current_adaptation;
+                if current_adaptation < 0:
+                    current_adaptation = -current_adaptation;
                         
-                if (maximal_adaptation < current_adaptation):
-                    maximal_adaptation = current_adaptation;
+                if maximal_adaptation < current_adaptation:
+                    maximal_adaptation = current_adaptation
                     
-        return maximal_adaptation;
+        return maximal_adaptation
     
     
     def get_winner_number(self):
@@ -691,15 +688,15 @@ class som:
         
         """
         
-        if (self.__ccore_som_pointer is not None):
-            self._award = wrapper.som_get_awards(self.__ccore_som_pointer);
+        if self.__ccore_som_pointer is not None:
+            self._award = wrapper.som_get_awards(self.__ccore_som_pointer)
         
-        winner_number = 0;
+        winner_number = 0
         for i in range(self._size):
-            if (self._award[i] > 0):
-                winner_number += 1;
+            if self._award[i] > 0:
+                winner_number += 1
                 
-        return winner_number;
+        return winner_number
     
     
     def show_distance_matrix(self):
@@ -709,12 +706,12 @@ class som:
         @see get_distance_matrix()
         
         """
-        distance_matrix = self.get_distance_matrix();
+        distance_matrix = self.get_distance_matrix()
         
-        plt.imshow(distance_matrix, cmap = plt.get_cmap('hot'), interpolation='kaiser');
-        plt.title("U-Matrix");
-        plt.colorbar();
-        plt.show();
+        plt.imshow(distance_matrix, cmap = plt.get_cmap('hot'), interpolation='kaiser')
+        plt.title("U-Matrix")
+        plt.colorbar()
+        plt.show()
 
     
     def get_distance_matrix(self):
@@ -728,27 +725,27 @@ class som:
         @see get_density_matrix()
         
         """
-        if (self.__ccore_som_pointer is not None):
-            self._weights = wrapper.som_get_weights(self.__ccore_som_pointer);
+        if self.__ccore_som_pointer is not None:
+            self._weights = wrapper.som_get_weights(self.__ccore_som_pointer)
             
-            if (self._conn_type != type_conn.func_neighbor):
-                self._neighbors = wrapper.som_get_neighbors(self.__ccore_som_pointer);
+            if self._conn_type != type_conn.func_neighbor:
+                self._neighbors = wrapper.som_get_neighbors(self.__ccore_som_pointer)
             
-        distance_matrix = [ [0.0] * self._cols for i in range(self._rows) ];
+        distance_matrix = [[0.0] * self._cols for i in range(self._rows)]
         
         for i in range(self._rows):
             for j in range(self._cols):
-                neuron_index = i * self._cols + j;
+                neuron_index = i * self._cols + j
                 
-                if (self._conn_type == type_conn.func_neighbor):
-                    self._create_connections(type_conn.grid_eight);
+                if self._conn_type == type_conn.func_neighbor:
+                    self._create_connections(type_conn.grid_eight)
                 
                 for neighbor_index in self._neighbors[neuron_index]:
-                    distance_matrix[i][j] += euclidean_distance_square(self._weights[neuron_index], self._weights[neighbor_index]);
+                    distance_matrix[i][j] += euclidean_distance_square(self._weights[neuron_index], self._weights[neighbor_index])
                     
-                distance_matrix[i][j] /= len(self._neighbors[neuron_index]);
+                distance_matrix[i][j] /= len(self._neighbors[neuron_index])
     
-        return distance_matrix;
+        return distance_matrix
     
     
     def show_density_matrix(self, surface_divider = 20.0):
@@ -760,12 +757,12 @@ class som:
         @see show_distance_matrix()
         
         """        
-        density_matrix = self.get_density_matrix();
+        density_matrix = self.get_density_matrix()
         
-        plt.imshow(density_matrix, cmap = plt.get_cmap('hot'), interpolation='kaiser');
-        plt.title("P-Matrix");
-        plt.colorbar();
-        plt.show();
+        plt.imshow(density_matrix, cmap = plt.get_cmap('hot'), interpolation='kaiser')
+        plt.title("P-Matrix")
+        plt.colorbar()
+        plt.show()
     
     
     def get_density_matrix(self, surface_divider = 20.0):
@@ -780,43 +777,43 @@ class som:
         
         """
         
-        if (self.__ccore_som_pointer is not None):
-            self._weights = wrapper.som_get_weights(self.__ccore_som_pointer);
+        if self.__ccore_som_pointer is not None:
+            self._weights = wrapper.som_get_weights(self.__ccore_som_pointer)
         
-        density_matrix = [ [0] * self._cols for i in range(self._rows) ];
-        dimension = len(self._weights[0]);
+        density_matrix = [[0] * self._cols for i in range(self._rows)]
+        dimension = len(self._weights[0])
         
-        dim_max = [ float('-Inf') ] * dimension;
-        dim_min = [ float('Inf') ] * dimension;
+        dim_max = [ float('-Inf') ] * dimension
+        dim_min = [ float('Inf') ] * dimension
         
         for weight in self._weights:
             for index_dim in range(dimension):
-                if (weight[index_dim] > dim_max[index_dim]):
-                    dim_max[index_dim] = weight[index_dim];
+                if weight[index_dim] > dim_max[index_dim]:
+                    dim_max[index_dim] = weight[index_dim]
                 
-                if (weight[index_dim] < dim_min[index_dim]):
-                    dim_min[index_dim] = weight[index_dim];
+                if weight[index_dim] < dim_min[index_dim]:
+                    dim_min[index_dim] = weight[index_dim]
         
-        radius = [0.0] * len(self._weights[0]);
+        radius = [0.0] * len(self._weights[0])
         for index_dim in range(dimension):
-            radius[index_dim] = ( dim_max[index_dim] - dim_min[index_dim] ) / surface_divider;
+            radius[index_dim] = ( dim_max[index_dim] - dim_min[index_dim] ) / surface_divider
         
         for point in self._data:
             for index_neuron in range(len(self)):
-                point_covered = True;
+                point_covered = True
                 
                 for index_dim in range(dimension):
-                    if (abs(point[index_dim] - self._weights[index_neuron][index_dim]) > radius[index_dim]):
-                        point_covered = False;
-                        break;
+                    if abs(point[index_dim] - self._weights[index_neuron][index_dim]) > radius[index_dim]:
+                        point_covered = False
+                        break
                 
-                row = math.floor(index_neuron / self._cols);
-                col = index_neuron - row * self._cols;
+                row = math.floor(index_neuron / self._cols)
+                col = index_neuron - row * self._cols
                 
-                if (point_covered is True):
-                    density_matrix[row][col] += 1;
+                if point_covered is True:
+                    density_matrix[row][col] += 1
         
-        return density_matrix;
+        return density_matrix
     
     
     def show_winner_matrix(self):
@@ -828,24 +825,24 @@ class som:
         
         """
         
-        if (self.__ccore_som_pointer is not None):
-            self._award = wrapper.som_get_awards(self.__ccore_som_pointer);
+        if self.__ccore_som_pointer is not None:
+            self._award = wrapper.som_get_awards(self.__ccore_som_pointer)
         
-        (fig, ax) = plt.subplots();
-        winner_matrix = [ [0] * self._cols for i in range(self._rows) ];
+        (fig, ax) = plt.subplots()
+        winner_matrix = [[0] * self._cols for i in range(self._rows)]
         
         for i in range(self._rows):
             for j in range(self._cols):
-                neuron_index = i * self._cols + j;
+                neuron_index = i * self._cols + j
                 
-                winner_matrix[i][j] = self._award[neuron_index];
+                winner_matrix[i][j] = self._award[neuron_index]
                 ax.text(i, j, str(winner_matrix[i][j]), va='center', ha='center')
         
-        ax.imshow(winner_matrix, cmap = plt.get_cmap('cool'), interpolation='none');
-        ax.grid(True);
+        ax.imshow(winner_matrix, cmap = plt.get_cmap('cool'), interpolation='none')
+        ax.grid(True)
         
-        plt.title("Winner Matrix");
-        plt.show();
+        plt.title("Winner Matrix")
+        plt.show()
             
     
     def show_network(self, awards = False, belongs = False, coupling = True, dataset = True, marker_type = 'o'):
@@ -860,86 +857,87 @@ class som:
         
         """
         
-        if (self.__ccore_som_pointer is not None):
-            self._size = wrapper.som_get_size(self.__ccore_som_pointer);
-            self._weights = wrapper.som_get_weights(self.__ccore_som_pointer);
-            self._neighbors = wrapper.som_get_neighbors(self.__ccore_som_pointer);
-            self._award = wrapper.som_get_awards(self.__ccore_som_pointer);
+        if self.__ccore_som_pointer is not None:
+            self._size = wrapper.som_get_size(self.__ccore_som_pointer)
+            self._weights = wrapper.som_get_weights(self.__ccore_som_pointer)
+            self._neighbors = wrapper.som_get_neighbors(self.__ccore_som_pointer)
+            self._award = wrapper.som_get_awards(self.__ccore_som_pointer)
+
+        dimension = len(self._weights[0])
         
-        
-        dimension = len(self._weights[0]);
-        
-        fig = plt.figure();
-        axes = None;
+        fig = plt.figure()
         
         # Check for dimensions
-        if ( (dimension == 1) or (dimension == 2) ):
-            axes = fig.add_subplot(111);
-        elif (dimension == 3):
-            axes = fig.gca(projection='3d');
+        if (dimension == 1) or (dimension == 2):
+            axes = fig.add_subplot(111)
+        elif dimension == 3:
+            axes = fig.gca(projection='3d')
         else:
-            raise NameError('Dwawer supports only 1D, 2D and 3D data representation');
-        
-        
-        # Show data
-        if ((self._data is not None) and (dataset is True) ):
+            raise NotImplementedError('Impossible to show network in data-space that is differ from 1D, 2D or 3D.')
+
+        if (self._data is not None) and (dataset is True):
             for x in self._data:
-                if (dimension == 1):
-                    axes.plot(x[0], 0.0, 'b|', ms = 30);
+                if dimension == 1:
+                    axes.plot(x[0], 0.0, 'b|', ms = 30)
                     
-                elif (dimension == 2):
-                    axes.plot(x[0], x[1], 'b.');
+                elif dimension == 2:
+                    axes.plot(x[0], x[1], 'b.')
                     
-                elif (dimension == 3):
-                    axes.scatter(x[0], x[1], x[2], c = 'b', marker = '.');
+                elif dimension == 3:
+                    axes.scatter(x[0], x[1], x[2], c = 'b', marker = '.')
         
         # Show neurons
         for index in range(self._size):
-            color = 'g';
-            if (self._award[index] == 0): color = 'y';
+            color = 'g'
+            if self._award[index] == 0:
+                color = 'y'
             
-            if (dimension == 1):
-                axes.plot(self._weights[index][0], 0.0, color + marker_type);
+            if dimension == 1:
+                axes.plot(self._weights[index][0], 0.0, color + marker_type)
                 
-                if (awards == True):
-                    location = '{0}'.format(self._award[index]);
-                    axes.text(self._weights[index][0], 0.0, location, color='black', fontsize = 10);
+                if awards:
+                    location = '{0}'.format(self._award[index])
+                    axes.text(self._weights[index][0], 0.0, location, color='black', fontsize = 10)
             
-                if (belongs == True):
-                    location = '{0}'.format(index);
-                    axes.text(self._weights[index][0], 0.0, location, color='black', fontsize = 12);
+                if belongs:
+                    location = '{0}'.format(index)
+                    axes.text(self._weights[index][0], 0.0, location, color='black', fontsize = 12)
                     for k in range(len(self._capture_objects[index])):
-                        point = self._data[self._capture_objects[index][k]];
-                        axes.text(point[0], 0.0, location, color='blue', fontsize = 10);
+                        point = self._data[self._capture_objects[index][k]]
+                        axes.text(point[0], 0.0, location, color='blue', fontsize = 10)
             
-            if (dimension == 2):
-                axes.plot(self._weights[index][0], self._weights[index][1], color + marker_type);
+            if dimension == 2:
+                axes.plot(self._weights[index][0], self._weights[index][1], color + marker_type)
                 
-                if (awards == True):
-                    location = '{0}'.format(self._award[index]);
-                    axes.text(self._weights[index][0], self._weights[index][1], location, color='black', fontsize = 10);
+                if awards:
+                    location = '{0}'.format(self._award[index])
+                    axes.text(self._weights[index][0], self._weights[index][1], location, color='black', fontsize=10)
                     
-                if (belongs == True):
-                    location = '{0}'.format(index);
-                    axes.text(self._weights[index][0], self._weights[index][1], location, color='black', fontsize = 12);
+                if belongs:
+                    location = '{0}'.format(index)
+                    axes.text(self._weights[index][0], self._weights[index][1], location, color='black', fontsize=12)
                     for k in range(len(self._capture_objects[index])):
-                        point = self._data[self._capture_objects[index][k]];
-                        axes.text(point[0], point[1], location, color='blue', fontsize = 10);
+                        point = self._data[self._capture_objects[index][k]]
+                        axes.text(point[0], point[1], location, color='blue', fontsize=10)
                 
-                if ( (self._conn_type != type_conn.func_neighbor) and (coupling != False) ):
+                if (self._conn_type != type_conn.func_neighbor) and (coupling != False):
                     for neighbor in self._neighbors[index]:
-                        if (neighbor > index):
-                            axes.plot([self._weights[index][0], self._weights[neighbor][0]], [self._weights[index][1], self._weights[neighbor][1]], 'g', linewidth = 0.5);
+                        if neighbor > index:
+                            axes.plot([self._weights[index][0], self._weights[neighbor][0]],
+                                      [self._weights[index][1], self._weights[neighbor][1]],
+                                      'g', linewidth=0.5)
             
-            elif (dimension == 3):
-                axes.scatter(self._weights[index][0], self._weights[index][1], self._weights[index][2], c = color, marker = marker_type);
+            elif dimension == 3:
+                axes.scatter(self._weights[index][0], self._weights[index][1], self._weights[index][2], c=color, marker=marker_type)
                 
-                if ( (self._conn_type != type_conn.func_neighbor) and (coupling != False) ):
+                if (self._conn_type != type_conn.func_neighbor) and (coupling != False):
                     for neighbor in self._neighbors[index]:
-                        if (neighbor > index):
-                            axes.plot([self._weights[index][0], self._weights[neighbor][0]], [self._weights[index][1], self._weights[neighbor][1]], [self._weights[index][2], self._weights[neighbor][2]], 'g-', linewidth = 0.5);
-                        
-                
-        plt.title("Network Structure");
-        plt.grid();
-        plt.show();
+                        if neighbor > index:
+                            axes.plot([self._weights[index][0], self._weights[neighbor][0]],
+                                      [self._weights[index][1], self._weights[neighbor][1]],
+                                      [self._weights[index][2], self._weights[neighbor][2]],
+                                      'g-', linewidth=0.5)
+
+        plt.title("Network Structure")
+        plt.grid()
+        plt.show()
