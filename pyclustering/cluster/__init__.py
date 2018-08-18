@@ -71,7 +71,36 @@ class canvas_cluster_descr:
 
 class cluster_visualizer_multidim:
     """!
-    @brief Cluster visualizer for multi-dimensional data.
+    @brief Visualizer for cluster in multi-dimensional data.
+    @details This cluster visualizer is useful for clusters in data whose dimension is greater than 3. The
+              multidimensional visualizer helps to overcome 'cluster_visualizer' shortcoming - ability to display
+              clusters in 1D, 2D or 3D dimensional data space.
+
+        Example of clustering results visualization where 'Iris' is used:
+        @code
+            from pyclustering.utils import read_sample
+            from pyclustering.samples.definitions import FAMOUS_SAMPLES
+            from pyclustering.cluster import cluster_visualizer_multidim
+
+            # load 4D data sample 'Iris'
+            sample_4d = read_sample(FAMOUS_SAMPLES.SAMPLE_IRIS)
+
+            # initialize 3 initial centers using K-Means++ algorithm
+            centers = kmeans_plusplus_initializer(sample_4d, 3).initialize()
+
+            # performs cluster analysis using X-Means
+            xmeans_instance = xmeans(sample_4d, centers)
+            xmeans_instance.process()
+            clusters = xmeans_instance.get_clusters()
+
+            # visualize obtained clusters in multi-dimensional space
+            visualizer = cluster_visualizer_multidim()
+            visualizer.append_clusters(clusters, sample_4d)
+            visualizer.show(max_row_size=3)
+        @endcode
+
+        Visualized clustering results of 'Iris' data (multi-dimensional data):
+        @image html xmeans_clustering_famous_iris.png "Fig. 1. X-Means clustering results (data 'Iris')."
 
     """
 
@@ -82,6 +111,9 @@ class cluster_visualizer_multidim:
 
         """
         self.__clusters = []
+        self.__figure = None
+        self.__grid_spec = None
+
 
     def append_cluster(self, cluster, data = None, marker = '.', markersize = None, color = None):
         """!
@@ -123,18 +155,80 @@ class cluster_visualizer_multidim:
             self.append_cluster(cluster, data, marker, markersize)
 
 
-    def show(self, pair_filter=None):
+    def show(self, pair_filter=None, **kwargs):
         """!
-        @brief Shows clusters (visualize).
+        @brief Shows clusters (visualize) in multi-dimensional space.
 
         @param[in] pair_filter (list): List of coordinate pairs that should be displayed. This argument is used as a filter.
+        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'visible_axis' 'visible_labels', 'visible_grid', 'row_size').
+
+        <b>Keyword Args:</b><br>
+            - visible_axis (bool): Defines visibility of axes on each canvas, if True - axes are visible.
+               By default axis of each canvas are not displayed.
+            - visible_labels (bool): Defines visibility of labels on each canvas, if True - labels is displayed.
+               By default labels of each canvas are displayed.
+            - visible_grid (bool): Defines visibility of grid on each canvas, if True - grid is displayed.
+               By default grid of each canvas is displayed.
+            - max_row_size (uint): Maximum number of canvases on one row.
 
         """
+
+        if not len(self.__clusters) > 0:
+            raise ValueError("There is no non-empty clusters for visualization.")
 
         cluster_data = self.__clusters[0].data or self.__clusters[0].cluster
         dimension = len(cluster_data[0])
 
         acceptable_pairs = pair_filter or []
+        pairs = []
+        amount_axis = 1
+        axis_storage = []
+
+        if dimension > 1:
+            pairs = self.__create_pairs(dimension, acceptable_pairs)
+            amount_axis = len(pairs)
+
+        self.__figure = plt.figure()
+        self.__grid_spec = self.__create_grid_spec(amount_axis, kwargs.get('max_row_size', 4))
+
+        for index in range(amount_axis):
+            ax = self.__create_canvas(dimension, pairs, index, **kwargs)
+            axis_storage.append(ax)
+
+        for cluster_descr in self.__clusters:
+            self.__draw_canvas_cluster(axis_storage, cluster_descr, pairs)
+
+        plt.show()
+
+
+    def __create_grid_spec(self, amount_axis, max_row_size):
+        """!
+        @brief Create grid specification for figure to place canvases.
+
+        @param[in] amount_axis (uint): Amount of canvases that should be organized by the created grid specification.
+        @param[in] max_row_size (max_row_size): Maximum number of canvases on one row.
+
+        @return (gridspec.GridSpec) Grid specification to place canvases on figure.
+
+        """
+        row_size = amount_axis
+        if row_size > max_row_size:
+            row_size = max_row_size
+
+        col_size = math.ceil(amount_axis / row_size)
+        return gridspec.GridSpec(col_size, row_size)
+
+
+    def __create_pairs(self, dimension, acceptable_pairs):
+        """!
+        @brief Create coordinate pairs that should be displayed.
+
+        @param[in] dimension (uint): Data-space dimension.
+        @param[in] acceptable_pairs (list): List of coordinate pairs that should be displayed.
+
+        @return (list) List of coordinate pairs that should be displayed.
+
+        """
         pairs = list(itertools.combinations(range(dimension), 2))
 
         if len(acceptable_pairs) > 0:
@@ -142,24 +236,52 @@ class cluster_visualizer_multidim:
                 if pair not in acceptable_pairs:
                     pairs.remove(pair)
 
-        amount_axis = len(pairs)
-        axis_storage = []
+        return pairs
 
-        figure = plt.figure()
-        grid_spec = gridspec.GridSpec(1, amount_axis)
 
-        for index in range(amount_axis):
-            ax = figure.add_subplot(grid_spec[index])
+    def __create_canvas(self, dimension, pairs, position, **kwargs):
+        """!
+        @brief Create new canvas with user defined parameters to display cluster or chunk of cluster on it.
 
-            ax.set_xlabel("x%d" % pairs[index][0])
-            ax.set_ylabel("x%d" % pairs[index][1])
+        @param[in] dimension (uint): Data-space dimension.
+        @param[in] pairs (list): Pair of coordinates that will be displayed on the canvas. If empty than label will not
+                    be displayed on the canvas.
+        @param[in] position (uint): Index position of canvas on a grid.
+        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'visible_axis' 'visible_labels', 'visible_grid').
 
-            axis_storage.append(ax)
+        <b>Keyword Args:</b><br>
+            - visible_axis (bool): Defines visibility of axes on each canvas, if True - axes are visible.
+               By default axis are not displayed.
+            - visible_labels (bool): Defines visibility of labels on each canvas, if True - labels is displayed.
+               By default labels are displayed.
+            - visible_grid (bool): Defines visibility of grid on each canvas, if True - grid is displayed.
+               By default grid is displayed.
 
-        for cluster_descr in self.__clusters:
-            self.__draw_canvas_cluster(axis_storage, cluster_descr, pairs)
+        @return (matplotlib.Axis) Canvas to display cluster of chuck of cluster.
 
-        plt.show()
+        """
+        visible_grid = kwargs.get('visible_grid', True)
+        visible_labels = kwargs.get('visible_labels', True)
+        visible_axis = kwargs.get('visible_axis', False)
+
+        ax = self.__figure.add_subplot(self.__grid_spec[position])
+
+        if dimension > 1:
+            if visible_labels:
+                ax.set_xlabel("x%d" % pairs[position][0])
+                ax.set_ylabel("x%d" % pairs[position][1])
+        else:
+            ax.set_ylim(-0.5, 0.5)
+            ax.set_yticklabels([])
+
+        if visible_grid:
+            ax.grid(True)
+
+        if not visible_axis:
+            ax.set_yticklabels([])
+            ax.set_xticklabels([])
+
+        return ax
 
 
     def __draw_canvas_cluster(self, axis_storage, cluster_descr, pairs):
@@ -174,12 +296,15 @@ class cluster_visualizer_multidim:
 
         for index_axis in range(len(axis_storage)):
             for item in cluster_descr.cluster:
-                self.__draw_cluster_item(axis_storage[index_axis], pairs[index_axis], item, cluster_descr)
+                if len(pairs) > 0:
+                    self.__draw_cluster_item_multi_dimension(axis_storage[index_axis], pairs[index_axis], item, cluster_descr)
+                else:
+                    self.__draw_cluster_item_one_dimension(axis_storage[index_axis], item, cluster_descr)
 
 
-    def __draw_cluster_item(self, ax, pair, item, cluster_descr):
+    def __draw_cluster_item_multi_dimension(self, ax, pair, item, cluster_descr):
         """!
-        @brief Draw cluster feature in specific coordinates.
+        @brief Draw cluster chunk defined by pair coordinates in data space with dimension greater than 1.
 
         @param[in] ax (axis): Matplotlib axis that is used to display chunk of cluster point.
         @param[in] pair (list): Coordinate of the point that should be displayed.
@@ -187,6 +312,7 @@ class cluster_visualizer_multidim:
         @param[in] cluster_descr (canvas_cluster_descr): Cluster description whose point is visualized.
 
         """
+
         index_dimension1 = pair[0]
         index_dimension2 = pair[1]
 
@@ -195,6 +321,24 @@ class cluster_visualizer_multidim:
                     color=cluster_descr.color, marker=cluster_descr.marker, markersize=cluster_descr.markersize)
         else:
             ax.plot(cluster_descr.data[item][index_dimension1], cluster_descr.data[item][index_dimension2],
+                    color=cluster_descr.color, marker=cluster_descr.marker, markersize=cluster_descr.markersize)
+
+
+    def __draw_cluster_item_one_dimension(self, ax, item, cluster_descr):
+        """!
+        @brief Draw cluster point in one dimensional data space..
+
+        @param[in] ax (axis): Matplotlib axis that is used to display chunk of cluster point.
+        @param[in] item (list): Data point or index of data point.
+        @param[in] cluster_descr (canvas_cluster_descr): Cluster description whose point is visualized.
+
+        """
+
+        if cluster_descr.data is None:
+            ax.plot(item[0], 0.0,
+                    color=cluster_descr.color, marker=cluster_descr.marker, markersize=cluster_descr.markersize)
+        else:
+            ax.plot(cluster_descr.data[item][0], 0.0,
                     color=cluster_descr.color, marker=cluster_descr.marker, markersize=cluster_descr.markersize)
 
 
@@ -280,7 +424,7 @@ class cluster_visualizer:
         """
         
         if len(cluster) == 0:
-            raise ValueError("Empty cluster is provided.")
+            return
         
         if canvas > self.__number_canvases or canvas < 0:
             raise ValueError("Canvas index '%d' is out of range [0; %d]." % self.__number_canvases or canvas)
@@ -386,14 +530,15 @@ class cluster_visualizer:
         return self.__canvas_clusters[index_canvas][index_cluster].color
 
 
-    def show(self, figure = None, visible_axis = True, visible_grid = True, display = True, shift = None):
+    def show(self, figure=None, invisible_axis=True, visible_grid=True, display=True, shift=None):
         """!
         @brief Shows clusters (visualize).
         
         @param[in] figure (fig): Defines requirement to use specified figure, if None - new figure is created for drawing clusters.
-        @param[in] visible_axis (bool): Defines visibility of axes on each canvas, if True - axes are invisible.
-        @param[in] visible_grid (bool): Defines visibility of axes on each canvas, if True - grid is displayed.
-        @param[in] display (bool): Defines requirement to display clusters on a stage, if True - clusters are displayed, if False - plt.show() should be called by user."
+        @param[in] invisible_axis (bool): Defines visibility of axes on each canvas, if True - axes are invisible.
+        @param[in] visible_grid (bool): Defines visibility of grid on each canvas, if True - grid is displayed.
+        @param[in] display (bool): Defines requirement to display clusters on a stage, if True - clusters are displayed,
+                    if False - plt.show() should be called by user."
         @param[in] shift (uint): Force canvas shift value - defines canvas index from which custers should be visualized.
         
         @return (fig) Figure where clusters are shown.
@@ -431,7 +576,7 @@ class cluster_visualizer:
                 ax = cluster_figure.add_subplot(grid_spec[index_canvas + canvas_shift], projection='3d')
             
             if len(canvas_data) == 0:
-                plt.setp(ax, visible = False)
+                plt.setp(ax, visible=False)
             
             for cluster_descr in canvas_data:
                 self.__draw_canvas_cluster(ax, dimension, cluster_descr)
@@ -439,7 +584,7 @@ class cluster_visualizer:
                 for attribute_descr in cluster_descr.attributes:
                     self.__draw_canvas_cluster(ax, dimension, attribute_descr)
             
-            if visible_axis is True:
+            if invisible_axis is True:
                 ax.xaxis.set_ticklabels([])
                 ax.yaxis.set_ticklabels([])
                 

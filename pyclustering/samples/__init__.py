@@ -22,3 +22,55 @@
 @endcond
 
 """
+
+
+class answer_reader:
+    """!
+    @brief Answer reader for samples that are used by pyclustering library.
+
+    """
+
+    def __init__(self, answer_path):
+        """!
+        @brief Creates instance of answer reader to read proper clustering results of samples.
+
+        @param[in] answer_path (string): Path to clustering results (answers).
+
+        """
+        self.__answer_path = answer_path
+
+
+    def get_clusters(self):
+        """!
+        @brief Read proper clustering results.
+
+        @return (list) Clusters where each cluster is represented by list of index point from dataset.
+
+        """
+        file = open(self.__answer_path, 'r')
+
+        clusters = []
+        index_point = 0
+        for line in file:
+            index_cluster = int(line)
+            if index_cluster >= len(clusters):
+                clusters.append([index_point])
+            else:
+                clusters[index_cluster].append(index_point)
+
+            index_point += 1
+
+        file.close()
+        return clusters
+
+
+    def get_cluster_lengths(self):
+        """!
+        @brief Read proper cluster lengths.
+        @details Cluster length means amount of point in a cluster.
+
+        @return (list) Cluster lengths where each length means amount of points in a cluster.
+
+        """
+        clusters = self.get_clusters()
+        return [len(cluster) for cluster in clusters]

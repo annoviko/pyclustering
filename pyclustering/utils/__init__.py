@@ -23,22 +23,22 @@
 
 """
 
-import time;
-import numpy;
+import time
+import numpy
 
-from PIL import Image;
-from numpy import array;
+from PIL import Image
+from numpy import array
 
-import matplotlib.pyplot as plt;
-from mpl_toolkits.mplot3d import Axes3D;
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 
-from sys import platform as _platform;
+from sys import platform as _platform
 
-from pyclustering.utils.metric import distance_metric, type_metric;
+from pyclustering.utils.metric import distance_metric, type_metric
 
 
 ## The number \f$pi\f$ is a mathematical constant, the ratio of a circle's circumference to its diameter.
-pi = 3.1415926535;
+pi = 3.1415926535
 
 
 def read_sample(filename):
@@ -57,12 +57,12 @@ def read_sample(filename):
     
     """
     
-    file = open(filename, 'r');
+    file = open(filename, 'r')
 
-    sample = [[float(val) for val in line.split()] for line in file if len(line.strip()) > 0];
+    sample = [[float(val) for val in line.split()] for line in file if len(line.strip()) > 0]
     
-    file.close();
-    return sample;
+    file.close()
+    return sample
 
 
 def calculate_distance_matrix(sample):

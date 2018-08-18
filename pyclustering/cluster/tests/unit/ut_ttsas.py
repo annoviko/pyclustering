@@ -88,4 +88,4 @@ class ttsas_unit_tests(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    unittest.main();
+    unittest.main()

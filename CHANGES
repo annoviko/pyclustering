@@ -5,6 +5,9 @@ CHANGE NOTES FOR 0.8.2 (STARTED May 28, 2018)
 ------------------------------------------------------------------------
 
 GENERAL CHANGES:
+- Added new clustering answers for SAMPLE SIMPLE data collections (pyclustering.samples).
+  See: https://github.com/annoviko/pyclustering/issues/459
+
 - Implemented multidimensional cluster visualizer (pyclustering.cluster).
   See: https://github.com/annoviko/pyclustering/issues/450
 
