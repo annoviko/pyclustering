@@ -22,7 +22,6 @@
 
 
 #include <vector>
-
 #include <cstddef>
 
 #include "definitions.hpp"
@@ -121,7 +120,7 @@ private:
     som_award_sequence  m_awards;
 
     /* store pointer to training data for convinience */
-    const dataset     * data;
+    const dataset     * m_data;
 
     /* just for convenience (avoid excess calculation during learning) */
     dataset                 m_location;
@@ -305,6 +304,19 @@ private:
     *
     */
     double calculate_init_radius(const size_t p_rows, const size_t p_cols) const;
+
+public:
+    /**
+    *
+    * @brief   Store network to stream.
+    *
+    * @param[in] p_stream: stream that is used to store network.
+    * @param[in] p_network: SOM network that is stored to the stream 'p_stream'.
+    *
+    * @return  Stream where network is stored.
+    *
+    */
+    friend std::ostream & operator<<(std::ostream & p_stream, const som & p_network);
 };
 
 

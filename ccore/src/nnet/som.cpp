@@ -181,21 +181,21 @@ void som::create_connections(const som_conn_type type) {
 
 
 void som::create_initial_weights(const som_init_type type) {
-    size_t dimension = (*data)[0].size();
+    size_t dimension = (*m_data)[0].size();
 
     m_weights.resize(m_size, std::vector<double>(dimension, 0.0));
 
     std::vector<double> maximum_value_dimension(dimension, -std::numeric_limits<double>::max());
     std::vector<double> minimum_value_dimension(dimension, std::numeric_limits<double>::max());
 
-    for (size_t i = 0; i < data->size(); i++) {
+    for (size_t i = 0; i < m_data->size(); i++) {
         for (size_t dim = 0; dim < dimension; dim++) {
-            if (maximum_value_dimension[dim] < (*data)[i][dim]) {
-                maximum_value_dimension[dim] = (*data)[i][dim];
+            if (maximum_value_dimension[dim] < (*m_data)[i][dim]) {
+                maximum_value_dimension[dim] = (*m_data)[i][dim];
             }
 
-            if (minimum_value_dimension[dim] > (*data)[i][dim]) {
-                minimum_value_dimension[dim] = (*data)[i][dim];
+            if (minimum_value_dimension[dim] > (*m_data)[i][dim]) {
+                minimum_value_dimension[dim] = (*m_data)[i][dim];
             }
         }
     }
@@ -376,7 +376,7 @@ size_t som::train(const dataset & input_data, const size_t num_epochs, bool auto
     m_epouchs = num_epochs;
 
     /* store pointer to data (we are not owners, we don't need them after training) */
-    data = &input_data;
+    m_data = &input_data;
 
     /* create weights */
     create_initial_weights(m_params.init_type);
@@ -395,12 +395,12 @@ size_t som::train(const dataset & input_data, const size_t num_epochs, bool auto
             }
         }
 
-        for (size_t i = 0; i < data->size(); i++) {
+        for (size_t i = 0; i < m_data->size(); i++) {
             /* Step 1: Competition */
-            size_t index_winner = competition((*data)[i]);
+            size_t index_winner = competition((*m_data)[i]);
 
             /* Step 2: Adaptation */
-            adaptation(index_winner, (*data)[i]);
+            adaptation(index_winner, (*m_data)[i]);
 
             /* Update statistics */
             if ( (autostop == true) || (epouch == m_epouchs) ) {
@@ -432,7 +432,7 @@ size_t som::simulate(const pattern & input_pattern) const {
 
 
 double som::calculate_maximal_adaptation() const {
-    size_t dimensions = (*data)[0].size();
+    size_t dimensions = (*m_data)[0].size();
     double maximal_adaptation = 0;
 
     for (size_t neuron_index = 0; neuron_index < m_size; neuron_index++) {
@@ -476,6 +476,20 @@ double som::calculate_init_radius(const size_t p_rows, const size_t p_cols) cons
     else {
         return 1.0;
     }
+}
+
+
+std::ostream & operator<<(std::ostream & p_stream, const som & p_network) {
+    p_stream << p_network.m_rows << "\n";
+    p_stream << p_network.m_cols << "\n";
+    p_stream << (unsigned) p_network.m_conn_type << "\n";
+    p_stream << std::to_string(p_network.m_weights) << "\n";
+    p_stream << std::to_string(p_network.m_awards) << "\n";
+    p_stream << std::to_string(p_network.m_location) << "\n";
+    p_stream << std::to_string(p_network.m_capture_objects) << "\n";
+    p_stream << std::to_string(p_network.m_neighbors) << "\n";
+
+    return p_stream;
 }
 
 

@@ -36,7 +36,7 @@
     3. PARALLEL_IMPLEMENTATION_PPL        - parallel PPL implementation (windows system only)         */
 
 
-#if defined(_WIN32)
+#if defined(WIN32) || (_WIN32) || (_WIN64)
 #define PARALLEL_IMPLEMENTATION_PPL
 #else
 #define PARALLEL_IMPLEMENTATION_ASYNC_POOL

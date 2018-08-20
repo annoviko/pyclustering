@@ -23,12 +23,14 @@
 
 
 #include <memory>
+#include <string>
+#include <sstream>
 #include <vector>
 
 
 #if defined (__GNUC__) && defined(__unix__)
     #define DECLARATION __attribute__ ((__visibility__("default")))
-#elif defined (WIN32) || (_WIN64)
+#elif defined (WIN32) || (_WIN32) || (_WIN64)
     #define DECLARATION __declspec(dllexport)
 #else
     #error Unsupported platform
@@ -43,3 +45,27 @@ using point_ptr         = std::shared_ptr<point>;
 
 using dataset           = std::vector<point>;
 using dataset_ptr       = std::shared_ptr<dataset>;
+
+
+
+namespace std {
+
+
+template <typename TypeContainer>
+std::string to_string(const TypeContainer & p_container) {
+    std::stringstream stream;
+    stream << "[";
+    for (std::size_t p_index = 0; p_index < p_container.size(); p_index++) {
+        stream << std::to_string(p_container[p_index]);
+
+        if (p_index != (p_container.size() - 1)) {
+            stream << " ";
+        }
+    }
+
+    stream << "]";
+    return stream.str();
+}
+
+
+}
