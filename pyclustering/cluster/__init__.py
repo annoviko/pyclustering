@@ -102,6 +102,18 @@ class cluster_visualizer_multidim:
         Visualized clustering results of 'Iris' data (multi-dimensional data):
         @image html xmeans_clustering_famous_iris.png "Fig. 1. X-Means clustering results (data 'Iris')."
 
+        Sometimes no need to display results in all dimensions. Parameter 'filter' can be used to display only
+        interesting coordinate pairs. Here is an example of visualization of pair coordinates (x0, x1) and (x0, x2) for
+        previous clustering results:
+        @code
+            visualizer = cluster_visualizer_multidim()
+            visualizer.append_clusters(clusters, sample_4d)
+            visualizer.show(pair_filter=[[0, 1], [0, 2]])
+        @endcode
+
+        Visualized results of specified coordinate pairs:
+        @image html xmeans_clustering_famous_iris_filtered.png "Fig. 2. X-Means clustering results (x0, x1) and (x0, x2) (data 'Iris')."
+
     """
 
     def __init__(self):
@@ -229,14 +241,10 @@ class cluster_visualizer_multidim:
         @return (list) List of coordinate pairs that should be displayed.
 
         """
-        pairs = list(itertools.combinations(range(dimension), 2))
-
         if len(acceptable_pairs) > 0:
-            for pair in pairs:
-                if pair not in acceptable_pairs:
-                    pairs.remove(pair)
+            return acceptable_pairs
 
-        return pairs
+        return list(itertools.combinations(range(dimension), 2))
 
 
     def __create_canvas(self, dimension, pairs, position, **kwargs):
