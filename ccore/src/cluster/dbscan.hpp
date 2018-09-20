@@ -132,6 +132,8 @@ private:
     void get_neighbors_from_distance_matrix(const size_t p_index, std::vector<size_t> & p_neighbors);
 
     void create_kdtree(const dataset & p_data);
+
+    void expand_cluster(const std::size_t p_index, cluster & allocated_cluster);
 };
 
 

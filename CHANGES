@@ -37,6 +37,9 @@ GENERAL CHANGES:
 
 
 CORRECTED MAJOR BUGS:
+- Bug with DBSCAN when points are marked as a noise (pyclustering.cluster.dbscan).
+  See: https://github.com/annoviko/pyclustering/issues/462
+
 - Bug with randomly enabled connection weights in case of SyncNet based algorithms using CCORE interface (pyclustering.nnet.syncnet).
   See: https://github.com/annoviko/pyclustering/issues/452
 

@@ -23,125 +23,134 @@
 
 """
 
-import unittest;
+import unittest
 
 # Generate images without having a window appear.
-import matplotlib;
-matplotlib.use('Agg');
+import matplotlib
+matplotlib.use('Agg')
 
-from pyclustering.cluster.tests.dbscan_templates import DbscanTestTemplates;
+from pyclustering.cluster.tests.dbscan_templates import DbscanTestTemplates
 
-from pyclustering.samples.definitions import SIMPLE_SAMPLES;
-from pyclustering.samples.definitions import FCPS_SAMPLES;
+from pyclustering.samples.definitions import SIMPLE_SAMPLES
+from pyclustering.samples.definitions import FCPS_SAMPLES
 
 
 class DbscsanUnitTest(unittest.TestCase):
     def testClusteringSampleSimple1(self):
-        DbscanTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 0.4, 2, [5, 5], False);
-        DbscanTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 10, 2, [10], False);
+        DbscanTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 0.4, 2, [5, 5], False)
+        DbscanTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 10, 2, [10], False)
+
+    def testClusteringSampleSimple1Randomize(self):
+        DbscanTestTemplates.templateClusteringResultsRandomize(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 0.4, 2, [5, 5], False)
 
     def testClusteringSampleSimple1DistanceMatrix(self):
-        DbscanTestTemplates.templateClusteringDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 0.4, 2, [5, 5], False);
-        DbscanTestTemplates.templateClusteringDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 10, 2, [10], False);
+        DbscanTestTemplates.templateClusteringDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 0.4, 2, [5, 5], False)
+        DbscanTestTemplates.templateClusteringDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 10, 2, [10], False)
 
     def testClusteringSampleSimple2(self):
-        DbscanTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 1, 2, [5, 8, 10], False);
-        DbscanTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 5, 2, [23], False);
+        DbscanTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 1, 2, [5, 8, 10], False)
+        DbscanTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 5, 2, [23], False)
+
+    def testClusteringSampleSimple2Randomize(self):
+        DbscanTestTemplates.templateClusteringResultsRandomize(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 1, 2, [5, 8, 10], False)
 
     def testClusteringSampleSimple2DistanceMatrix(self):
-        DbscanTestTemplates.templateClusteringDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 1, 2, [5, 8, 10], False);
-        DbscanTestTemplates.templateClusteringDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 5, 2, [23], False);
+        DbscanTestTemplates.templateClusteringDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 1, 2, [5, 8, 10], False)
+        DbscanTestTemplates.templateClusteringDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 5, 2, [23], False)
 
     def testClusteringSampleSimple3(self):
-        DbscanTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 0.7, 3, [10, 10, 10, 30], False);
-        DbscanTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 5, 3, [60], False);
+        DbscanTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 0.7, 3, [10, 10, 10, 30], False)
+        DbscanTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 5, 3, [60], False)
+
+    def testClusteringSampleSimple3Randomize(self):
+        DbscanTestTemplates.templateClusteringResultsRandomize(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 0.7, 3, [10, 10, 10, 30], False)
 
     def testClusteringSampleSimple3DistanceMatrix(self):
-        DbscanTestTemplates.templateClusteringDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 0.7, 3, [10, 10, 10, 30], False);
-        DbscanTestTemplates.templateClusteringDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 5, 3, [60], False);
+        DbscanTestTemplates.templateClusteringDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 0.7, 3, [10, 10, 10, 30], False)
+        DbscanTestTemplates.templateClusteringDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 5, 3, [60], False)
 
     def testClusteringSampleSimple4(self):
-        DbscanTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 0.7, 3, [15, 15, 15, 15, 15], False);
-        DbscanTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 2, 3, [75], False);
+        DbscanTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 0.7, 3, [15, 15, 15, 15, 15], False)
+        DbscanTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 2, 3, [75], False)
 
     def testClusteringSampleSimple4DistanceMatrix(self):
-        DbscanTestTemplates.templateClusteringDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 0.7, 3, [15, 15, 15, 15, 15], False);
-        DbscanTestTemplates.templateClusteringDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 2, 3, [75], False);
+        DbscanTestTemplates.templateClusteringDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 0.7, 3, [15, 15, 15, 15, 15], False)
+        DbscanTestTemplates.templateClusteringDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 2, 3, [75], False)
 
     def testClusteringSampleSimple5(self):
-        DbscanTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 0.7, 3, [15, 15, 15, 15], False);
-        DbscanTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 10, 3, [60], False);
+        DbscanTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 0.7, 3, [15, 15, 15, 15], False)
+        DbscanTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 10, 3, [60], False)
 
     def testClusteringSampleSimple5DistanceMatrix(self):
-        DbscanTestTemplates.templateClusteringDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 0.7, 3, [15, 15, 15, 15], False);
-        DbscanTestTemplates.templateClusteringDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 10, 3, [60], False);
+        DbscanTestTemplates.templateClusteringDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 0.7, 3, [15, 15, 15, 15], False)
+        DbscanTestTemplates.templateClusteringDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 10, 3, [60], False)
 
     def testClusteringHepta(self):
-        DbscanTestTemplates.templateClusteringResults(FCPS_SAMPLES.SAMPLE_HEPTA, 1, 3, [30, 30, 30, 30, 30, 30, 32], False);
-        DbscanTestTemplates.templateClusteringResults(FCPS_SAMPLES.SAMPLE_HEPTA, 5, 3, [212], False);
+        DbscanTestTemplates.templateClusteringResults(FCPS_SAMPLES.SAMPLE_HEPTA, 1, 3, [30, 30, 30, 30, 30, 30, 32], False)
+        DbscanTestTemplates.templateClusteringResults(FCPS_SAMPLES.SAMPLE_HEPTA, 5, 3, [212], False)
 
     def testClusteringTheSameData1(self):
-        DbscanTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 1.0, 3, [10, 20], False);
+        DbscanTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 1.0, 3, [10, 20], False)
 
     def testClusteringTheSameData1DistanceMatrix(self):
-        DbscanTestTemplates.templateClusteringDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 1.0, 3, [10, 20], False);
+        DbscanTestTemplates.templateClusteringDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 1.0, 3, [10, 20], False)
 
     def testClusteringTheSameData2(self):
-        DbscanTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 1.0, 2, [5, 5, 5], False);
+        DbscanTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 1.0, 2, [5, 5, 5], False)
 
     def testClusteringTheSameData2DistanceMatrix(self):
-        DbscanTestTemplates.templateClusteringDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 1.0, 2, [5, 5, 5], False);
+        DbscanTestTemplates.templateClusteringDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 1.0, 2, [5, 5, 5], False)
 
 
     def testLengthProcessedSampleSimple1(self):
-        DbscanTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 0.7, 0, 10, False);
-        DbscanTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 0.5, 0, 10, False); 
+        DbscanTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 0.7, 0, 10, False)
+        DbscanTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 0.5, 0, 10, False)
 
     def testLengthProcessedSampleSimple1DistanceMatrix(self):
-        DbscanTestTemplates.templateLengthProcessDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 0.7, 0, 10, False);
-        DbscanTestTemplates.templateLengthProcessDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 0.5, 0, 10, False);
+        DbscanTestTemplates.templateLengthProcessDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 0.7, 0, 10, False)
+        DbscanTestTemplates.templateLengthProcessDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 0.5, 0, 10, False)
 
     def testLengthProcessedSampleSimple2(self):    
-        DbscanTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 0.3, 0, 15, False);
-        DbscanTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 1, 0, 15, False);
+        DbscanTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 0.3, 0, 15, False)
+        DbscanTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 1, 0, 15, False)
 
     def testLengthProcessedSampleSimple2DistanceMatrix(self):
-        DbscanTestTemplates.templateLengthProcessDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 0.3, 0, 15, False);
-        DbscanTestTemplates.templateLengthProcessDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 1, 0, 15, False);
+        DbscanTestTemplates.templateLengthProcessDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 0.3, 0, 15, False)
+        DbscanTestTemplates.templateLengthProcessDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 1, 0, 15, False)
 
     def testLengthProcessedSampleSimple3(self):
-        DbscanTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 0.1, 0, 20, False);
-        DbscanTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 5, 0, 20, False);
+        DbscanTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 0.1, 0, 20, False)
+        DbscanTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 5, 0, 20, False)
 
     def testLengthProcessedSampleSimple3DistanceMatrix(self):
-        DbscanTestTemplates.templateLengthProcessDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 0.1, 0, 20, False);
-        DbscanTestTemplates.templateLengthProcessDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 5, 0, 20, False);
+        DbscanTestTemplates.templateLengthProcessDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 0.1, 0, 20, False)
+        DbscanTestTemplates.templateLengthProcessDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 5, 0, 20, False)
 
     def testLengthProcessedSampleSimple4(self):
-        DbscanTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 0.1, 0, 10, False);
-        DbscanTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 10, 65, 75, False);
+        DbscanTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 0.1, 0, 10, False)
+        DbscanTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 10, 65, 75, False)
 
     def testLengthProcessedSampleSimple4DistanceMatrix(self):
-        DbscanTestTemplates.templateLengthProcessDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 0.1, 0, 10, False);
-        DbscanTestTemplates.templateLengthProcessDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 10, 65, 75, False);
+        DbscanTestTemplates.templateLengthProcessDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 0.1, 0, 10, False)
+        DbscanTestTemplates.templateLengthProcessDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 10, 65, 75, False)
 
     def testLengthProcessedSampleSimple5(self):
-        DbscanTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 0.1, 0, 10, False);
-        DbscanTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 0.3, 0, 10, False);
-        DbscanTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 0.6, 0, 10, False);
+        DbscanTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 0.1, 0, 10, False)
+        DbscanTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 0.3, 0, 10, False)
+        DbscanTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 0.6, 0, 10, False)
 
     def testLengthProcessedSampleSimple5DistanceMatrix(self):
-        DbscanTestTemplates.templateLengthProcessDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 0.1, 0, 10, False);
-        DbscanTestTemplates.templateLengthProcessDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 0.3, 0, 10, False);
-        DbscanTestTemplates.templateLengthProcessDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 0.6, 0, 10, False);
+        DbscanTestTemplates.templateLengthProcessDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 0.1, 0, 10, False)
+        DbscanTestTemplates.templateLengthProcessDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 0.3, 0, 10, False)
+        DbscanTestTemplates.templateLengthProcessDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 0.6, 0, 10, False)
 
 
     def testClusterAllocationOneDimensionData(self):
-        DbscanTestTemplates.templateClusterAllocationOneDimensionData(False);
+        DbscanTestTemplates.templateClusterAllocationOneDimensionData(False)
 
     def testClusterAllocationOneDimensionDistanceMatrix(self):
-        DbscanTestTemplates.templateClusterAllocationOneDimensionDistanceMatrix(False);
+        DbscanTestTemplates.templateClusterAllocationOneDimensionDistanceMatrix(False)
 
 
 if __name__ == "__main__":
-    unittest.main();
+    unittest.main()

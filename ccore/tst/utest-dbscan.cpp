@@ -82,6 +82,14 @@ TEST(utest_dbscan, allocation_sample_simple_01) {
 }
 
 
+TEST(utest_dbscan, allocation_sample_simple_01_randomize) {
+    for (std::size_t i = 0; i < 10; i++) {
+        const std::vector<size_t> expected_clusters_length = { 5, 5 };
+        template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01, true), 0.5, 2, expected_clusters_length);
+    }
+}
+
+
 TEST(utest_dbscan, allocation_sample_simple_01_distance_matrix) {
     const std::vector<size_t> expected_clusters_length = { 5, 5 };
     template_length_process_distance_matrix(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), 0.5, 2, expected_clusters_length);
@@ -103,6 +111,14 @@ TEST(utest_dbscan, allocation_sample_one_allocation_simple_01_distance_matrix) {
 TEST(utest_dbscan, allocation_sample_simple_02) {
     const std::vector<size_t> expected_clusters_length = { 10, 5, 8 };
     template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02), 1.0, 2, expected_clusters_length);
+}
+
+
+TEST(utest_dbscan, allocation_sample_simple_02_randomize) {
+    for (std::size_t i = 0; i < 10; i++) {
+        const std::vector<size_t> expected_clusters_length = { 10, 5, 8 };
+        template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02, true), 1.0, 2, expected_clusters_length);
+    }
 }
 
 
@@ -130,6 +146,14 @@ TEST(utest_dbscan, allocation_sample_simple_03) {
 }
 
 
+TEST(utest_dbscan, allocation_sample_simple_03_randomize) {
+    for (std::size_t i = 0; i < 10; i++) {
+        const std::vector<size_t> expected_clusters_length = { 10, 10, 10, 30 };
+        template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_03), 0.7, 3, expected_clusters_length);
+    }
+}
+
+
 TEST(utest_dbscan, allocation_sample_simple_03_distance_matrix) {
     const std::vector<size_t> expected_clusters_length = { 10, 10, 10, 30 };
     template_length_process_distance_matrix(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_03), 0.7, 3, expected_clusters_length);
@@ -139,6 +163,14 @@ TEST(utest_dbscan, allocation_sample_simple_03_distance_matrix) {
 TEST(utest_dbscan, allocation_sample_simple_04) {
     const std::vector<size_t> expected_clusters_length = { 15, 15, 15, 15, 15 };
     template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_04), 0.7, 3, expected_clusters_length);
+}
+
+
+TEST(utest_dbscan, allocation_sample_simple_04_randomize) {
+    for (std::size_t i = 0; i < 10; i++) {
+        const std::vector<size_t> expected_clusters_length = { 15, 15, 15, 15, 15 };
+        template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_04), 0.7, 3, expected_clusters_length);
+    }
 }
 
 

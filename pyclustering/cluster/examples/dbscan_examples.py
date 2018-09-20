@@ -203,23 +203,104 @@ def performance_measure_random_points(ccore):
 # cluster_sample5()
 # cluster_sample7()
 # cluster_sample8()
-cluster_elongate()
-cluster_lsun()
-cluster_target()
-cluster_two_diamonds()
-cluster_wing_nut()
-cluster_chainlink()
-cluster_hepta()
-cluster_golf_ball()           # it is commented due to long time of processing - it's working absolutely correct!
-cluster_atom()
-cluster_tetra()
-cluster_engy_time()
+# cluster_elongate()
+# cluster_lsun()
+# cluster_target()
+# cluster_two_diamonds()
+# cluster_wing_nut()
+# cluster_chainlink()
+# cluster_hepta()
+# cluster_golf_ball()           # it is commented due to long time of processing - it's working absolutely correct!
+# cluster_atom()
+# cluster_tetra()
+# cluster_engy_time()
+#
+# experiment_execution_time(False)  # Python code
+# experiment_execution_time(True)   # C++ code + Python env.
+#
+# display_fcps_clustering_results()
+# display_fcps_dependence_clustering_results()
+#
+# performance_measure_random_points(False)
+# performance_measure_random_points(True)
 
-experiment_execution_time(False)  # Python code
-experiment_execution_time(True)   # C++ code + Python env.
 
-display_fcps_clustering_results()
-display_fcps_dependence_clustering_results()
+import numpy as np
+import matplotlib.pyplot as plt
 
-performance_measure_random_points(False)
-performance_measure_random_points(True)
+from pyclustering.cluster.dbscan import dbscan
+
+def on_picker(event):
+    distances = np.abs(np.linalg.norm(data - np.array([event.mouseevent.xdata, event.mouseevent.ydata]), axis=1, ord=2))
+    ix = distances.argmin()
+
+    circle = plt.Circle((data[ix, 0], data[ix, 1]), eps, edgecolor='k', linestyle='-', linewidth=0.5, fill=None)
+
+    ax.add_artist(circle)
+    event.canvas.draw()
+
+data = np.array([[3.84883118, 7.98287654],
+                 [6.15957575, 0.93742612],
+                 [0.58865177, 7.34201309],
+                 [6.95169446, 6.34775643],
+                 [3.64920659, 1.43836441],
+                 [4.98745463, 1.48505],
+                 [1.50897943, 0.66372945],
+                 [1.7165765, 6.51867617],
+                 [3.63916014, 4.03335428],        # Point in question
+                 [1.64755443, 6.91168503],
+                 [5.18619498, 5.01467501],
+                 [5.22841242, 4.66132755],
+                 [4.46416522, 4.99414511],
+                 [5.74935967, 5.19903379],
+                 [4.71599415, 4.88615725],
+                 [5.24744658, 4.56903919],
+                 [5.19049452, 5.41090111],
+                 [4.46223735, 4.4370961],
+                 [4.06165299, 5.64246575],
+                 [4.13648305, 5.0203021],
+                 [5.0931739, 5.90484805],
+                 [5.27248291, 5.10978874],
+                 [4.98665978, 5.02617475],
+                 [4.49543272, 3.6342554],
+                 [5.49451608, 4.56799783],
+                 [5.26142474, 4.99616694],
+                 [5.5543285, 5.59529684],
+                 [4.15108339, 4.31406758],
+                 [5.12194741, 4.93568024],
+                 [4.77956745, 4.73403704],
+                 [5.58123982, 5.5657367],
+                 [5.06730322, 4.57878869],
+                 [4.58515378, 5.18852395],
+                 [5.49669378, 4.8901156],
+                 [5.42696559, 4.71035229],
+                 [3.5934053, 4.76841482],
+                 [5.60826032, 5.61143477],
+                 [6.23623543, 4.93332256],
+                 [5.25518697, 4.35253186],
+                 [3.63467815, 5.25080737],
+
+                 [3.63467815, 5.25080737]])
+
+eps, minPts = 1.0, 5
+dbscan_i = dbscan(data, eps, minPts, False)
+dbscan_i.process()
+
+labels = np.zeros(data.shape[0], dtype=np.int32)
+for ix, cluster_indices in enumerate(dbscan_i.get_clusters()):
+    labels[cluster_indices] = ix + 1
+
+fig = plt.figure()
+ax = fig.add_subplot(111)
+ax.axis("equal")
+for label in labels:
+    mask = labels == label
+    if label == 0:
+        ax.scatter(data[mask, 0], data[mask, 1], s=10, c='k', picker=True)
+    else:
+        ax.scatter(data[mask, 0], data[mask, 1], s=10, picker=True)
+ax.set_title("Eps {}, MinPts {}".format(eps, minPts))
+
+fig.canvas.mpl_connect("pick_event", on_picker)
+
+plt.show()

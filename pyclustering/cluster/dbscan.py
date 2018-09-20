@@ -74,25 +74,25 @@ class dbscan:
         
         """
         
-        self.__pointer_data = data;
-        self.__kdtree = None;
-        self.__eps = eps;
-        self.__sqrt_eps = eps * eps;
-        self.__neighbors = neighbors;
-        
-        self.__visited = [False] * len(self.__pointer_data);
-        self.__belong = [False] * len(self.__pointer_data);
+        self.__pointer_data = data
+        self.__kdtree = None
+        self.__eps = eps
+        self.__sqrt_eps = eps * eps
+        self.__neighbors = neighbors
 
-        self.__data_type = kwargs.get('data_type', 'points');
+        self.__visited = [False] * len(self.__pointer_data)
+        self.__belong = [False] * len(self.__pointer_data)
 
-        self.__clusters = [];
-        self.__noise = [];
+        self.__data_type = kwargs.get('data_type', 'points')
 
-        self.__neighbor_searcher = self.__create_neighbor_searcher(self.__data_type);
+        self.__clusters = []
+        self.__noise = []
 
-        self.__ccore = ccore;
+        self.__neighbor_searcher = self.__create_neighbor_searcher(self.__data_type)
+
+        self.__ccore = ccore
         if self.__ccore:
-            self.__ccore = ccore_library.workable();
+            self.__ccore = ccore_library.workable()
 
 
     def process(self):
@@ -105,21 +105,21 @@ class dbscan:
         """
         
         if self.__ccore is True:
-            (self.__clusters, self.__noise) = wrapper.dbscan(self.__pointer_data, self.__eps, self.__neighbors, self.__data_type);
+            (self.__clusters, self.__noise) = wrapper.dbscan(self.__pointer_data, self.__eps, self.__neighbors, self.__data_type)
             
         else:
             if self.__data_type == 'points':
-                self.__kdtree = kdtree(self.__pointer_data, range(len(self.__pointer_data)));
+                self.__kdtree = kdtree(self.__pointer_data, range(len(self.__pointer_data)))
 
             for i in range(0, len(self.__pointer_data)):
                 if self.__visited[i] is False:
-                     
-                    cluster = self.__expand_cluster(i);
+                    cluster = self.__expand_cluster(i)
                     if cluster is not None:
-                        self.__clusters.append(cluster);
-                    else:
-                        self.__noise.append(i);
-                        self.__belong[i] = True;
+                        self.__clusters.append(cluster)
+
+            for i in range(0, len(self.__pointer_data)):
+                if self.__belong[i] is False:
+                    self.__noise.append(i)
 
 
     def get_clusters(self):
@@ -135,7 +135,7 @@ class dbscan:
         
         """
         
-        return self.__clusters;
+        return self.__clusters
 
 
     def get_noise(self):
@@ -151,7 +151,7 @@ class dbscan:
         
         """
 
-        return self.__noise;
+        return self.__noise
 
 
     def get_cluster_encoding(self):
@@ -164,7 +164,7 @@ class dbscan:
         
         """
         
-        return type_encoding.CLUSTER_INDEX_LIST_SEPARATION;
+        return type_encoding.CLUSTER_INDEX_LIST_SEPARATION
 
 
     def __create_neighbor_searcher(self, data_type):
@@ -175,11 +175,11 @@ class dbscan:
 
         """
         if data_type == 'points':
-            return self.__neighbor_indexes_points;
+            return self.__neighbor_indexes_points
         elif data_type == 'distance_matrix':
-            return self.__neighbor_indexes_distance_matrix;
+            return self.__neighbor_indexes_distance_matrix
         else:
-            raise TypeError("Unknown type of data is specified '%s'" % data_type);
+            raise TypeError("Unknown type of data is specified '%s'" % data_type)
 
 
     def __expand_cluster(self, index_point):
@@ -192,30 +192,29 @@ class dbscan:
         
         """
         
-        cluster = None;
-        self.__visited[index_point] = True;
-        neighbors = self.__neighbor_searcher(index_point);
+        cluster = None
+        self.__visited[index_point] = True
+        neighbors = self.__neighbor_searcher(index_point)
          
         if len(neighbors) >= self.__neighbors:
-            cluster = [ index_point ];
+            cluster = [ index_point ]
              
-            self.__belong[index_point] = True;
+            self.__belong[index_point] = True
              
             for i in neighbors:
                 if self.__visited[i] is False:
-                    self.__visited[i] = True;
-                    next_neighbors = self.__neighbor_searcher(i);
+                    self.__visited[i] = True
+
+                    next_neighbors = self.__neighbor_searcher(i)
                      
                     if len(next_neighbors) >= self.__neighbors:
-                        # if some node has less then minimal number of neighbors than we shouldn't look at them
-                        # because maybe it's a noise.
-                        neighbors += [k for k in next_neighbors if ( (k in neighbors) == False)];
+                        neighbors += [k for k in next_neighbors if ( (k in neighbors) == False) and k != index_point]
                  
                 if self.__belong[i] is False:
-                    cluster.append(i);
-                    self.__belong[i] = True;
-             
-        return cluster;
+                    cluster.append(i)
+                    self.__belong[i] = True
+
+        return cluster
 
 
     def __neighbor_indexes_points(self, index_point):
@@ -227,8 +226,8 @@ class dbscan:
         @return (list) List of indexes of neighbors in line the connectivity radius.
 
         """
-        kdnodes = self.__kdtree.find_nearest_dist_nodes(self.__pointer_data[index_point], self.__eps);
-        return [node_tuple[1].payload for node_tuple in kdnodes if node_tuple[1].payload != index_point];
+        kdnodes = self.__kdtree.find_nearest_dist_nodes(self.__pointer_data[index_point], self.__eps)
+        return [node_tuple[1].payload for node_tuple in kdnodes if node_tuple[1].payload != index_point]
 
 
     def __neighbor_indexes_distance_matrix(self, index_point):
@@ -240,6 +239,6 @@ class dbscan:
         @return (list) List of indexes of neighbors in line the connectivity radius.
 
         """
-        distances = self.__pointer_data[index_point];
+        distances = self.__pointer_data[index_point]
         return [index_neighbor for index_neighbor in range(len(distances))
-                if ((distances[index_neighbor] <= self.__eps) and (index_neighbor != index_point))];
+                if ((distances[index_neighbor] <= self.__eps) and (index_neighbor != index_point))]

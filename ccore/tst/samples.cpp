@@ -21,6 +21,7 @@
 
 #include "samples.hpp"
 
+#include <algorithm>
 #include <fstream>
 #include <iostream>
 #include <random>
@@ -148,9 +149,18 @@ std::shared_ptr<dataset> generic_sample_factory::create_sample(const std::string
 }
 
 
-std::shared_ptr<dataset> simple_sample_factory::create_sample(const SAMPLE_SIMPLE sample) {
-    const std::string path_sample = m_sample_table.at(sample);
-    return generic_sample_factory::create_sample(path_sample);
+std::shared_ptr<dataset> simple_sample_factory::create_sample(const SAMPLE_SIMPLE p_sample, const bool p_random_order) {
+    const std::string path_sample = m_sample_table.at(p_sample);
+    auto points = generic_sample_factory::create_sample(path_sample);
+
+    if (p_random_order) {
+        std::random_device device;
+        std::mt19937 generator(device());
+
+        std::shuffle(points->begin(), points->end(), generator);
+    }
+
+    return points;
 }
 
 

@@ -97,12 +97,13 @@ public:
     *
     * @brief   Creates sample for cluster analysis.
     *
-    * @param[in] sample: sample that should be created.
+    * @param[in] p_sample: sample that should be created.
+    * @param[in] p_random_order: rearrange randomly data sample.
     *
     * @return  Smart pointer to created dataset.
     *
     */
-    static std::shared_ptr<dataset> create_sample(const SAMPLE_SIMPLE sample);
+    static std::shared_ptr<dataset> create_sample(const SAMPLE_SIMPLE p_sample, const bool p_random_order = false);
 
     /**
     *
