@@ -254,14 +254,14 @@ class optics_descriptor:
         @param[in] reachability_distance (double): Reachability distance to this object.
         
         """
-        
-        ## Reachability distance - the smallest distance to be reachable by core object.
+
+        ## Index of object from the input data.
         self.index_object = index
         
         ## Core distance - the smallest distance to reach specified number of neighbors that is not greater then connectivity radius.
         self.core_distance = core_distance
-        
-        ## Index of object from the input data.
+
+        ## Reachability distance - the smallest distance to be reachable by core object.
         self.reachability_distance = reachability_distance
         
         ## True is object has been already traversed.
