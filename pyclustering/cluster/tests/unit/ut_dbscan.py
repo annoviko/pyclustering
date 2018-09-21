@@ -31,7 +31,7 @@ matplotlib.use('Agg')
 
 from pyclustering.cluster.tests.dbscan_templates import DbscanTestTemplates
 
-from pyclustering.samples.definitions import SIMPLE_SAMPLES
+from pyclustering.samples.definitions import SIMPLE_SAMPLES, SIMPLE_ANSWERS
 from pyclustering.samples.definitions import FCPS_SAMPLES
 
 
@@ -143,6 +143,13 @@ class DbscsanUnitTest(unittest.TestCase):
         DbscanTestTemplates.templateLengthProcessDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 0.1, 0, 10, False)
         DbscanTestTemplates.templateLengthProcessDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 0.3, 0, 10, False)
         DbscanTestTemplates.templateLengthProcessDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 0.6, 0, 10, False)
+
+
+    def testPermutationSampleSimple14(self):
+        DbscanTestTemplates.templateClusteringWithAnswers(SIMPLE_SAMPLES.SAMPLE_SIMPLE14,
+                                                          SIMPLE_ANSWERS.ANSWER_SIMPLE14, 1.0, 5, False,
+                                                          random_order=True,
+                                                          repeat=20)
 
 
     def testClusterAllocationOneDimensionData(self):

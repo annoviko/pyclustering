@@ -31,6 +31,8 @@ from pyclustering.cluster.dbscan import dbscan
 
 from pyclustering.tests.assertion import assertion
 
+from pyclustering.samples import answer_reader
+
 
 class DbscanTestTemplates:
     @staticmethod
@@ -50,6 +52,44 @@ class DbscanTestTemplates:
         assertion.eq(len(sample), sum([len(cluster) for cluster in clusters]) + len(noise))
         assertion.eq(sum(expected_length_clusters), sum([len(cluster) for cluster in clusters]))
         assertion.eq(expected_length_clusters, sorted([len(cluster) for cluster in clusters]))
+
+
+    @staticmethod
+    def templateClusteringWithAnswers(sample_path, answer_path, radius, neighbors, ccore, **kwargs):
+        random_order = kwargs.get('random_order', False)
+        repeat = kwargs.get('repeat', 1)
+
+        for _ in range(repeat):
+            sample = read_sample(sample_path)
+
+            sample_index_map = [ i for i in range(len(sample)) ]
+            if random_order:
+                shuffle(sample_index_map)
+
+            sample_shuffled = [ sample[i] for i in sample_index_map ]
+
+            dbscan_instance = dbscan(sample_shuffled, radius, neighbors, ccore)
+            dbscan_instance.process()
+
+            clusters = dbscan_instance.get_clusters()
+            noise = dbscan_instance.get_noise()
+
+            for cluster in clusters:
+                for i in range(len(cluster)):
+                    cluster[i] = sample_index_map[cluster[i]]
+
+            for i in range(len(noise)):
+                noise[i] = sample_index_map[noise[i]]
+            noise = sorted(noise)
+
+            reader = answer_reader(answer_path)
+            expected_noise = sorted(reader.get_noise())
+            expected_length_clusters = reader.get_cluster_lengths()
+
+            assertion.eq(len(sample), sum([len(cluster) for cluster in clusters]) + len(noise))
+            assertion.eq(sum(expected_length_clusters), sum([len(cluster) for cluster in clusters]))
+            assertion.eq(expected_length_clusters, sorted([len(cluster) for cluster in clusters]))
+            assertion.eq(expected_noise, noise)
 
 
     @staticmethod

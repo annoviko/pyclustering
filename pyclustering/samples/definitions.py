@@ -55,6 +55,7 @@ class SIMPLE_SAMPLES:
     SAMPLE_SIMPLE11         = COLLECTION_PATH + "Simple11.data"
     SAMPLE_SIMPLE12         = COLLECTION_PATH + "Simple12.data"
     SAMPLE_SIMPLE13         = COLLECTION_PATH + "Simple13.data"
+    SAMPLE_SIMPLE14         = COLLECTION_PATH + "Simple14.data"
     SAMPLE_ELONGATE         = COLLECTION_PATH + "Elongate.data"
 
 
@@ -81,6 +82,7 @@ class SIMPLE_ANSWERS:
     ANSWER_SIMPLE11 = COLLECTION_PATH + "Simple11.answer"
     ANSWER_SIMPLE12 = COLLECTION_PATH + "Simple12.answer"
     ANSWER_SIMPLE13 = COLLECTION_PATH + "Simple13.answer"
+    ANSWER_SIMPLE14 = COLLECTION_PATH + "Simple14.answer"
     ANSWER_ELONGATE = COLLECTION_PATH + "Elongate.answer"
 
 

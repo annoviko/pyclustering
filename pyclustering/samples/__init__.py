@@ -38,6 +38,8 @@ class answer_reader:
 
         """
         self.__answer_path = answer_path
+        self.__clusters = None
+        self.__noise = None
 
 
     def get_clusters(self):
@@ -47,21 +49,19 @@ class answer_reader:
         @return (list) Clusters where each cluster is represented by list of index point from dataset.
 
         """
-        file = open(self.__answer_path, 'r')
+        self.__read_answer()
+        return self.__clusters
 
-        clusters = []
-        index_point = 0
-        for line in file:
-            index_cluster = int(line)
-            if index_cluster >= len(clusters):
-                clusters.append([index_point])
-            else:
-                clusters[index_cluster].append(index_point)
 
-            index_point += 1
+    def get_noise(self):
+        """!
+        @brief Read proper clustering results
 
-        file.close()
-        return clusters
+        @return (list) Noise where each outlier is represented by index point from dataset.
+
+        """
+        self.__read_answer()
+        return self.__noise
 
 
     def get_cluster_lengths(self):
@@ -74,3 +74,44 @@ class answer_reader:
         """
         clusters = self.get_clusters()
         return [len(cluster) for cluster in clusters]
+
+
+    def __read_answer_from_line(self, index_point, line):
+        """!
+        @brief Read information about point from the specific line and place it to cluster or noise in line with that
+                information.
+
+        @param[in] index_point (uint): Index point that should be placed to cluster or noise.
+        @param[in] line (string): Line where information about point should be read.
+
+        """
+
+        if line[0] == 'n':
+            self.__noise.append(index_point)
+        else:
+            index_cluster = int(line)
+            if index_cluster >= len(self.__clusters):
+                self.__clusters.append([index_point])
+            else:
+                self.__clusters[index_cluster].append(index_point)
+
+
+    def __read_answer(self):
+        """!
+        @brief Read information about proper clusters and noises from the file.
+
+        """
+
+        if self.__clusters is not None:
+            return
+
+        file = open(self.__answer_path, 'r')
+
+        self.__clusters, self.__noise = [], []
+
+        index_point = 0
+        for line in file:
+            self.__read_answer_from_line(index_point, line)
+            index_point += 1
+
+        file.close()
