@@ -105,7 +105,7 @@ class som_parameters:
         self.init_learn_rate = 0.1
         
         ## Condition when learining process should be stoped. It's used when autostop mode is used. 
-        self.adaptation_threshold = 0.001;
+        self.adaptation_threshold = 0.001
 
 
 class som:
@@ -202,7 +202,7 @@ class som:
             self._weights = wrapper.som_get_weights(self.__ccore_som_pointer)
         
         return self._weights
-    
+
     @property
     def awards(self):
         """!
@@ -218,7 +218,7 @@ class som:
             self._award = wrapper.som_get_awards(self.__ccore_som_pointer)
         
         return self._award
-    
+
     @property
     def capture_objects(self):
         """!
@@ -235,8 +235,8 @@ class som:
             self._capture_objects = wrapper.som_get_capture_objects(self.__ccore_som_pointer)
         
         return self._capture_objects
-    
-    
+
+
     def __init__(self, rows, cols, conn_type = type_conn.grid_eight, parameters = None, ccore = True):
         """!
         @brief Constructor of self-organized map.
@@ -267,7 +267,7 @@ class som:
         self._learn_rate = 0.0
         
         self.__ccore_som_pointer = None
-        
+
         if parameters is not None:
             self._params = parameters
         else:
@@ -292,8 +292,8 @@ class som:
             # captured objects
             self._capture_objects = [ [] for i in range(self._size) ]
             
-            # distances
-            self._sqrt_distances = self.__initialize_distances(self._size, self._location)
+            # distances - calculate and store them only during training
+            self._sqrt_distances = None
         
             # connections
             if conn_type != type_conn.func_neighbor:
@@ -308,8 +308,8 @@ class som:
         
         if self.__ccore_som_pointer is not None:
             wrapper.som_destroy(self.__ccore_som_pointer)
-    
-    
+
+
     def __len__(self):
         """!
         @brief Returns size of the network that defines by amount of neuron in it.
@@ -319,8 +319,31 @@ class som:
         """
         
         return self._size
-    
-    
+
+
+    def __getstate__(self):
+        """
+        @brief Returns state of SOM network that can be used to store network.
+
+        """
+        if self.__ccore_som_pointer is not None:
+            self.__download_dump_from_ccore()
+            return self.__get_dump_from_python(True)
+
+        return self.__get_dump_from_python(False)
+
+
+    def __setstate__(self, som_state):
+        """
+        @brief Set state of SOM network that can be used to load network.
+
+        """
+        if som_state['ccore'] is True:
+            self.__upload_dump_to_ccore(som_state['state'])
+        else:
+            self.__upload_dump_to_python(som_state['state'])
+
+
     def __initialize_initial_radius(self, rows, cols):
         """!
         @brief Initialize initial radius using map sizes.
@@ -340,8 +363,8 @@ class som:
         
         else: 
             return 1.0
-    
-    
+
+
     def __initialize_locations(self, rows, cols):
         """!
         @brief Initialize locations (coordinates in SOM grid) of each neurons in the map.
@@ -359,8 +382,8 @@ class som:
                 location.append([float(i), float(j)])
         
         return location
-    
-    
+
+
     def __initialize_distances(self, size, location):
         """!
         @brief Initialize distance matrix in SOM grid.
@@ -379,8 +402,8 @@ class som:
                 sqrt_distances[j][i] = dist
         
         return sqrt_distances
-    
-    
+
+
     def _create_initial_weights(self, init_type):
         """!
         @brief Creates initial weights for neurons in line with the specified initialization.
@@ -392,18 +415,18 @@ class som:
         dim_info = dimension_info(self._data)
         
         step_x = dim_info.get_center()[0]
-        if (self._rows > 1): step_x = dim_info.get_width()[0] / (self._rows - 1);
+        if self._rows > 1: step_x = dim_info.get_width()[0] / (self._rows - 1);
         
         step_y = 0.0
-        if (dim_info.get_dimensions() > 1):
+        if dim_info.get_dimensions() > 1:
             step_y = dim_info.get_center()[1]
-            if (self._cols > 1): step_y = dim_info.get_width()[1] / (self._cols - 1); 
+            if self._cols > 1: step_y = dim_info.get_width()[1] / (self._cols - 1);
                       
         # generate weights (topological coordinates)
         random.seed()
         
-        # Feature SOM 0002: Uniform grid.
-        if (init_type == type_init.uniform_grid):
+        # Uniform grid.
+        if init_type == type_init.uniform_grid:
             # Predefined weights in line with input data.
             self._weights = [ [ [] for i in range(dim_info.get_dimensions()) ] for j in range(self._size)]
             for i in range(self._size):
@@ -571,7 +594,7 @@ class som:
                     influence = math.exp(-(distance / (2.0 * self._local_radius)))
                     
                     for i in range(dimension):       
-                        self._weights[neighbor_index][i] = self._weights[neighbor_index][i] + self._learn_rate * influence * (x[i] - self._weights[neighbor_index][i]);
+                        self._weights[neighbor_index][i] = self._weights[neighbor_index][i] + self._learn_rate * influence * (x[i] - self._weights[neighbor_index][i])
 
 
     def train(self, data, epochs, autostop=False):
@@ -587,6 +610,7 @@ class som:
         """
         
         self._data = data
+        self._sqrt_distances = self.__initialize_distances(self._size, self._location)
         
         if self.__ccore_som_pointer is not None:
             return wrapper.som_train(self.__ccore_som_pointer, data, epochs, autostop)
@@ -605,7 +629,7 @@ class som:
             self._local_radius = (self._params.init_radius * math.exp(-(epoch / epochs))) ** 2
             self._learn_rate = self._params.init_learn_rate * math.exp(-(epoch / epochs))
             
-            # Feature SOM 0003: Clear statistics
+            # Clear statistics
             if autostop:
                 for i in range(self._size):
                     self._award[i] = 0
@@ -623,7 +647,7 @@ class som:
                     self._award[index] += 1
                     self._capture_objects[index].append(i)
             
-            # Feature SOM 0003: Check requirement of stopping
+            # Check requirement of stopping
             if autostop:
                 if previous_weights is not None:
                     maximal_adaptation = self._get_maximal_adaptation(previous_weights)
@@ -647,13 +671,13 @@ class som:
         @see capture_objects
         
         """
-                
+
         if self.__ccore_som_pointer is not None:
             return wrapper.som_simulate(self.__ccore_som_pointer, input_pattern)
             
         return self._competition(input_pattern)
-    
-    
+
+
     def _get_maximal_adaptation(self, previous_weights):
         """!
         @brief Calculates maximum changes of weight in line with comparison between previous weights and current weights.
@@ -672,14 +696,14 @@ class som:
                 current_adaptation = previous_weights[neuron_index][dim] - self._weights[neuron_index][dim]
                         
                 if current_adaptation < 0:
-                    current_adaptation = -current_adaptation;
+                    current_adaptation = -current_adaptation
                         
                 if maximal_adaptation < current_adaptation:
                     maximal_adaptation = current_adaptation
                     
         return maximal_adaptation
-    
-    
+
+
     def get_winner_number(self):
         """!
         @brief Calculates number of winner at the last step of learning process.
@@ -697,8 +721,8 @@ class som:
                 winner_number += 1
                 
         return winner_number
-    
-    
+
+
     def show_distance_matrix(self):
         """!
         @brief Shows gray visualization of U-matrix (distance matrix).
@@ -746,8 +770,8 @@ class som:
                 distance_matrix[i][j] /= len(self._neighbors[neuron_index])
     
         return distance_matrix
-    
-    
+
+
     def show_density_matrix(self, surface_divider = 20.0):
         """!
         @brief Show density matrix (P-matrix) using kernel density estimation.
@@ -756,15 +780,15 @@ class som:
         
         @see show_distance_matrix()
         
-        """        
-        density_matrix = self.get_density_matrix()
+        """
+        density_matrix = self.get_density_matrix(surface_divider)
         
         plt.imshow(density_matrix, cmap = plt.get_cmap('hot'), interpolation='kaiser')
         plt.title("P-Matrix")
         plt.colorbar()
         plt.show()
-    
-    
+
+
     def get_density_matrix(self, surface_divider = 20.0):
         """!
         @brief Calculates density matrix (P-Matrix).
@@ -797,7 +821,8 @@ class som:
         radius = [0.0] * len(self._weights[0])
         for index_dim in range(dimension):
             radius[index_dim] = ( dim_max[index_dim] - dim_min[index_dim] ) / surface_divider
-        
+
+        ## TODO: do not use data
         for point in self._data:
             for index_neuron in range(len(self)):
                 point_covered = True
@@ -807,15 +832,15 @@ class som:
                         point_covered = False
                         break
                 
-                row = math.floor(index_neuron / self._cols)
+                row = int(math.floor(index_neuron / self._cols))
                 col = index_neuron - row * self._cols
                 
                 if point_covered is True:
                     density_matrix[row][col] += 1
         
         return density_matrix
-    
-    
+
+
     def show_winner_matrix(self):
         """!
         @brief Show winner matrix where each element corresponds to neuron and value represents
@@ -843,8 +868,8 @@ class som:
         
         plt.title("Winner Matrix")
         plt.show()
-            
-    
+
+
     def show_network(self, awards = False, belongs = False, coupling = True, dataset = True, marker_type = 'o'):
         """!
         @brief Shows neurons in the dimension of data.
@@ -899,7 +924,7 @@ class som:
                     location = '{0}'.format(self._award[index])
                     axes.text(self._weights[index][0], 0.0, location, color='black', fontsize = 10)
             
-                if belongs:
+                if belongs and self._data is not None:
                     location = '{0}'.format(index)
                     axes.text(self._weights[index][0], 0.0, location, color='black', fontsize = 12)
                     for k in range(len(self._capture_objects[index])):
@@ -913,7 +938,7 @@ class som:
                     location = '{0}'.format(self._award[index])
                     axes.text(self._weights[index][0], self._weights[index][1], location, color='black', fontsize=10)
                     
-                if belongs:
+                if belongs and self._data is not None:
                     location = '{0}'.format(index)
                     axes.text(self._weights[index][0], self._weights[index][1], location, color='black', fontsize=12)
                     for k in range(len(self._capture_objects[index])):
@@ -941,3 +966,59 @@ class som:
         plt.title("Network Structure")
         plt.grid()
         plt.show()
+
+
+    def __get_dump_from_python(self, ccore_usage):
+        return { 'ccore': ccore_usage,
+                 'state' : { 'cols': self._cols,
+                             'rows': self._rows,
+                             'size': self._size,
+                             'conn_type': self._conn_type,
+                             'neighbors': self._neighbors,
+                             'local_radius': self._local_radius,
+                             'learn_rate': self._learn_rate,
+                             'params': self._params,
+                             'location': self._location,
+                             'weights': self._weights,
+                             'award': self._award,
+                             'capture_objects': self._capture_objects } }
+
+
+    def __download_dump_from_ccore(self):
+        self._location = self.__initialize_locations(self._rows, self._cols)
+        self._weights = wrapper.som_get_weights(self.__ccore_som_pointer)
+        self._award = wrapper.som_get_awards(self.__ccore_som_pointer)
+        self._capture_objects = wrapper.som_get_capture_objects(self.__ccore_som_pointer)
+
+
+    def __upload_common_part(self, state_dump):
+        self._cols = state_dump['cols']
+        self._rows = state_dump['rows']
+        self._size = state_dump['size']
+        self._conn_type = state_dump['conn_type']
+        self._neighbors = state_dump['neighbors']
+        self._local_radius = state_dump['local_radius']
+        self._learn_rate = state_dump['learn_rate']
+        self._params = state_dump['params']
+        self._neighbors = None
+
+
+    def __upload_dump_to_python(self, state_dump):
+        self.__ccore_som_pointer = None
+
+        self.__upload_common_part(state_dump)
+
+        self._location = state_dump['location']
+        self._weights = state_dump['weights']
+        self._award = state_dump['award']
+        self._capture_objects = state_dump['capture_objects']
+
+        self._location = self.__initialize_locations(self._rows, self._cols)
+        self._create_connections(self._conn_type)
+
+
+    def __upload_dump_to_ccore(self, state_dump):
+        self.__ccore_som_pointer = None
+
+        self.__upload_common_part(state_dump)
+        # TODO: upload to CCORE
