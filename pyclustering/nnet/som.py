@@ -610,11 +610,12 @@ class som:
         """
         
         self._data = data
-        self._sqrt_distances = self.__initialize_distances(self._size, self._location)
         
         if self.__ccore_som_pointer is not None:
             return wrapper.som_train(self.__ccore_som_pointer, data, epochs, autostop)
-        
+
+        self._sqrt_distances = self.__initialize_distances(self._size, self._location)
+
         for i in range(self._size):
             self._award[i] = 0
             self._capture_objects[i].clear()
