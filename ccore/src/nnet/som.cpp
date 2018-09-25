@@ -440,9 +440,9 @@ size_t som::train(const dataset & input_data, const size_t num_epochs, bool auto
 
 
 void som::load(const dataset & p_weights, const som_award_sequence & p_awards, const som_gain_sequence & p_capture_objects) {
-    if (p_weights.size() != m_rows && p_weights[0].size() != m_cols) {
-        throw std::invalid_argument("Provided weights (" + std::to_string(p_weights.size()) + "x" + std::to_string(p_weights[0].size()) + 
-          ") for loading does not correspond to network size (" + std::to_string(m_rows) + "x" + std::to_string(m_cols) + ").");
+    if (p_weights.size() != m_size) {
+        throw std::invalid_argument("Provided weights (" + std::to_string(p_weights.size()) + 
+          ") for loading does not correspond to network size (" + std::to_string(m_size) + ").");
     }
 
     m_weights = p_weights;

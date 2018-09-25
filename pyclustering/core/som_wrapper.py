@@ -70,25 +70,26 @@ def som_create(rows, cols, conn_type, parameters):
     return som_pointer
 
 
-def som_load(rows, cols, conn_type, parameters, weights, award, capture_objects):
+def som_load(som_pointer, weights, award, capture_objects):
+    """!
+    @brief Load dump of the network to SOM.
+    @details Initialize SOM using existed weights, amount of captured objects by each neuron, captured
+              objects by each neuron.
+
+    @param[in] som_pointer (POINTER): pointer to object of self-organized map.
+    @param[in] weights (list): weights that should assigned to neurons.
+    @param[in] awards (list): amount of captured objects by each neuron.
+    @param[in] capture_objects (list): captured objects by each neuron.
+
+    """
+
     ccore = ccore_library.get()
-
-    c_params = c_som_parameters()
-
-    c_params.init_type = parameters.init_type
-    c_params.init_radius = parameters.init_radius
-    c_params.init_learn_rate = parameters.init_learn_rate
-    c_params.adaptation_threshold = parameters.adaptation_threshold
 
     package_weights = package_builder(weights, c_double).create()
     package_award = package_builder(award, c_size_t).create()
     package_capture_objects = package_builder(capture_objects, c_size_t).create()
 
-    ccore.som_create.restype = POINTER(c_void_p)
-    som_pointer = ccore.som_load(c_uint(rows), c_uint(cols), c_uint(conn_type), pointer(c_params),
-                                 package_weights, package_award, package_capture_objects)
-
-    return som_pointer
+    ccore.som_load(som_pointer, package_weights, package_award, package_capture_objects)
 
 
 def som_destroy(som_pointer):

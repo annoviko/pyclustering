@@ -34,6 +34,24 @@ void som_destroy(const void * pointer) {
 }
 
 
+void som_load(const void * p_pointer, const pyclustering_package * p_weights, const pyclustering_package * p_awards, const pyclustering_package * p_captured_objects) {
+    dataset weights;
+    p_weights->extract(weights);
+
+    som_award_sequence awards = { };
+    if (p_awards) {
+        p_awards->extract(awards);
+    }
+
+    som_gain_sequence captured_objects = { };
+    if (p_captured_objects) {
+        p_captured_objects->extract(captured_objects);
+    }
+
+    ((som *) p_pointer)->load(weights, awards, captured_objects);
+}
+
+
 size_t som_train(const void * pointer, const pyclustering_package * const sample, const size_t epochs, const bool autostop) {
     dataset input_dataset;
     sample->extract(input_dataset);
@@ -63,9 +81,7 @@ size_t som_get_size(const void * pointer) {
 
 
 pyclustering_package * som_get_weights(const void * pointer) {
-    dataset weights;
-    ((som *) pointer)->allocate_weights(weights);
-
+    const dataset & weights = ((som *) pointer)->get_weights();
     pyclustering_package * package = create_package(&weights);
 
     return package;
@@ -73,9 +89,7 @@ pyclustering_package * som_get_weights(const void * pointer) {
 
 
 pyclustering_package * som_get_capture_objects(const void * pointer) {
-    som_gain_sequence capture_objects;
-    ((som *) pointer)->allocate_capture_objects(capture_objects);
-
+    const som_gain_sequence & capture_objects = ((som *) pointer)->get_capture_objects();
     pyclustering_package * package = create_package(&capture_objects);
 
     return package;
@@ -83,8 +97,7 @@ pyclustering_package * som_get_capture_objects(const void * pointer) {
 
 
 pyclustering_package * som_get_awards(const void * pointer) {
-    som_award_sequence awards;
-    ((som *) pointer)->allocate_awards(awards);
+    const som_award_sequence & awards = ((som *) pointer)->get_awards();
     pyclustering_package * package = create_package(&awards);
 
     return package;

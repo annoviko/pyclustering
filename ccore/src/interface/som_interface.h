@@ -58,6 +58,20 @@ extern "C" DECLARATION void som_destroy(const void * pointer);
 
 /**
 *
+* @brief    Load network parameters such weights, amount of won objects by each neuron (optional), captuted objects by each neuron (optional).
+*
+* @param[in] p_pointer: pointer to instance of self-organized feature map.
+* @param[in] p_weights: weights that should be load to the network.
+* @param[in] p_awards: amount of captured objects by each neuron (optional parameter and can be 'nullptr').
+* @param[in] p_captured_objects: captured objects by each neuron (optional parameter and can be 'nullptr').
+*
+* @see  som_destroy
+*
+*/
+extern "C" DECLARATION void som_load(const void * p_pointer, const pyclustering_package * p_weights, const pyclustering_package * p_awards, const pyclustering_package * p_captured_objects);
+
+/**
+*
 * @brief   Trains self-organized feature map (SOM).
 *
 * @param[in] pointer: pointer to instance of self-organized feature map.

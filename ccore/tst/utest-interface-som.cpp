@@ -80,5 +80,17 @@ TEST(utest_interface_som, som_api) {
     pyclustering_package * neighbors = som_get_neighbors(network);
     CHECK_FREE_PACKAGE(neighbors, 3);
 
+    /* get network dump and upload it again */
+    weights = som_get_weights(network);
+    awards = som_get_awards(network);
+    objects = som_get_capture_objects(network);
+
+    som_load(network, weights, awards, objects);
+
+    CHECK_FREE_PACKAGE(weights, 3);
+    CHECK_FREE_PACKAGE(awards, 3);
+    CHECK_FREE_PACKAGE(objects, 3);
+
+    /* destroy network */
     som_destroy(network);
 }

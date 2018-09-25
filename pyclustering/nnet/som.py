@@ -338,7 +338,7 @@ class som:
         @brief Set state of SOM network that can be used to load network.
 
         """
-        if som_state['ccore'] is True:
+        if som_state['ccore'] is True and ccore_library.workable():
             self.__upload_dump_to_ccore(som_state['state'])
         else:
             self.__upload_dump_to_python(som_state['state'])
@@ -1019,7 +1019,6 @@ class som:
 
 
     def __upload_dump_to_ccore(self, state_dump):
-        self.__ccore_som_pointer = None
-
         self.__upload_common_part(state_dump)
-        # TODO: upload to CCORE
+        self.__ccore_som_pointer = wrapper.som_create(self._rows, self._cols, self._conn_type, self._params)
+        wrapper.som_load(self.__ccore_som_pointer, state_dump['weights'], state_dump['award'], state_dump['capture_objects'])
