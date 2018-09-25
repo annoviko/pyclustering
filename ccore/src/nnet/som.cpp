@@ -22,6 +22,7 @@
 
 #include <cmath>
 #include <climits>
+#include <exception>
 #include <random>
 
 #include "utils/metric.hpp"
@@ -33,6 +34,18 @@ using namespace ccore::utils::metric;
 namespace ccore {
 
 namespace nnet {
+
+
+som_parameters & som_parameters::operator=(const som_parameters & p_other) {
+    if (&p_other != this) {
+        init_type = p_other.init_type;
+        init_radius = p_other.init_radius;
+        init_learn_rate = p_other.init_learn_rate;
+        adaptation_threshold = p_other.adaptation_threshold;
+    }
+
+    return *this;
+}
 
 
 som::som(const size_t num_rows, const size_t num_cols, const som_conn_type type_conn, const som_parameters & parameters) :
@@ -426,6 +439,34 @@ size_t som::train(const dataset & input_data, const size_t num_epochs, bool auto
 }
 
 
+void som::load(const dataset & p_weights, const som_award_sequence & p_awards, const som_gain_sequence & p_capture_objects) {
+    if (p_weights.size() != m_rows && p_weights[0].size() != m_cols) {
+        throw std::invalid_argument("Provided weights (" + std::to_string(p_weights.size()) + "x" + std::to_string(p_weights[0].size()) + 
+          ") for loading does not correspond to network size (" + std::to_string(m_rows) + "x" + std::to_string(m_cols) + ").");
+    }
+
+    m_weights = p_weights;
+
+    if (!p_capture_objects.empty()) {
+        if (p_capture_objects.size() != m_size) {
+            throw std::invalid_argument("Provided capture objects (size '" + std::to_string(p_capture_objects.size()) + 
+              "') for loading does not correspond to network size '" + std::to_string(m_size) + "'.");
+        }
+
+        m_capture_objects = p_capture_objects;
+    }
+
+    if (!p_awards.empty()) {
+        if (p_awards.size() != m_size) {
+            throw std::invalid_argument("Provided amount of capture objects by each neuron (size '" + std::to_string(p_capture_objects.size()) + 
+              "') for loading does not correspond to network size '" + std::to_string(m_size) + "'.");
+        }
+
+        m_awards = p_awards;
+    }
+}
+
+
 size_t som::simulate(const pattern & input_pattern) const {
     return competition(input_pattern);
 }
@@ -490,6 +531,36 @@ std::ostream & operator<<(std::ostream & p_stream, const som & p_network) {
     p_stream << std::to_string(p_network.m_neighbors) << "\n";
 
     return p_stream;
+}
+
+
+som & som::operator=(const som & p_other) {
+    if (&p_other == this) {
+        return *this;
+    }
+
+    m_rows = p_other.m_rows;
+    m_cols = p_other.m_cols;
+    m_size = p_other.m_size;
+
+    m_conn_type = p_other.m_conn_type;
+
+    m_weights = p_other.m_weights;
+    m_previous_weights = p_other.m_previous_weights;
+    m_awards = p_other.m_awards;
+
+    m_location = p_other.m_location;
+    m_sqrt_distances = p_other.m_sqrt_distances;
+    m_capture_objects = p_other.m_capture_objects;
+    m_neighbors = p_other.m_neighbors;
+
+    m_epouchs = p_other.m_epouchs;
+    m_params = p_other.m_params;
+
+    m_local_radius = p_other.m_local_radius;
+    m_learn_rate = p_other.m_learn_rate;
+
+    return *this;
 }
 
 

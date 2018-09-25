@@ -25,10 +25,10 @@
 
 
 
-from ctypes import *;
+from ctypes import *
 
-import collections;
-import numpy;
+import collections
+import numpy
 
 
 
@@ -46,7 +46,7 @@ class pyclustering_package(Structure):
     
     _fields_ = [ ("size", c_size_t),
                  ("type", c_uint),
-                 ("data", POINTER(c_void_p)) ];
+                 ("data", POINTER(c_void_p)) ]
 
 
 
@@ -56,15 +56,15 @@ class pyclustering_type_data:
     
     """
     
-    PYCLUSTERING_TYPE_INT               = 0x00;
-    PYCLUSTERING_TYPE_UNSIGNED_INT      = 0x01;
-    PYCLUSTERING_TYPE_FLOAT             = 0x02;
-    PYCLUSTERING_TYPE_DOUBLE            = 0x03;
-    PYCLUSTERING_TYPE_LONG              = 0x04;
-    PYCLUSTERING_TYPE_UNSIGNED_LONG     = 0x05;
-    PYCLUSTERING_TYPE_LIST              = 0x06;
-    PYCLUSTERING_TYPE_SIZE_T            = 0x07;
-    PYCLUSTERING_TYPE_UNDEFINED         = 0x08;
+    PYCLUSTERING_TYPE_INT               = 0x00
+    PYCLUSTERING_TYPE_UNSIGNED_INT      = 0x01
+    PYCLUSTERING_TYPE_FLOAT             = 0x02
+    PYCLUSTERING_TYPE_DOUBLE            = 0x03
+    PYCLUSTERING_TYPE_LONG              = 0x04
+    PYCLUSTERING_TYPE_UNSIGNED_LONG     = 0x05
+    PYCLUSTERING_TYPE_LIST              = 0x06
+    PYCLUSTERING_TYPE_SIZE_T            = 0x07
+    PYCLUSTERING_TYPE_UNDEFINED         = 0x08
 
     __CTYPE_PYCLUSTERING_MAP = { 
         c_int                           : PYCLUSTERING_TYPE_INT,
@@ -96,7 +96,7 @@ class pyclustering_type_data:
         @return (ctype) Return ctype that corresponds to pyclustering type data.
         
         """
-        return pyclustering_type_data.__PYCLUSTERING_CTYPE_MAP[pyclustering_package_type];
+        return pyclustering_type_data.__PYCLUSTERING_CTYPE_MAP[pyclustering_package_type]
 
     @staticmethod
     def get_pyclustering_type(data_ctype):
@@ -104,7 +104,7 @@ class pyclustering_type_data:
         @return (unit) Return pyclustering data type that corresponds to ctype.
         
         """
-        return pyclustering_type_data.__CTYPE_PYCLUSTERING_MAP[data_ctype];
+        return pyclustering_type_data.__CTYPE_PYCLUSTERING_MAP[data_ctype]
 
 
 class package_builder:
@@ -120,8 +120,8 @@ class package_builder:
         @param[in] c_data_type (ctype.type): If specified than specified data type is used for data storing in package. 
         
         """
-        self.__dataset = dataset;
-        self.__c_data_type = c_data_type;
+        self.__dataset = dataset
+        self.__c_data_type = c_data_type
 
 
     def create(self):
@@ -131,105 +131,105 @@ class package_builder:
         @return (pointer) ctype-pointer to pyclustering package.
         
         """
-        return self.__create_package(self.__dataset);
+        return self.__create_package(self.__dataset)
 
 
     def __is_container_type(self, value):
-        return isinstance(value, collections.Iterable);
+        return isinstance(value, collections.Iterable)
 
 
     def __get_type(self, pyclustering_data_type):
-        if (self.__c_data_type is None):
-            return pyclustering_data_type;
+        if self.__c_data_type is None:
+            return pyclustering_data_type
         
-        return self.__c_data_type;
+        return self.__c_data_type
 
 
     def __create_package(self, dataset):
-        dataset_package = pyclustering_package();
+        dataset_package = pyclustering_package()
         
-        if (isinstance(dataset, numpy.matrix)):
-            return self.__create_package_numpy_matrix(dataset_package, dataset);
+        if isinstance(dataset, numpy.matrix):
+            return self.__create_package_numpy_matrix(dataset_package, dataset)
         
-        dataset_package.size = len(dataset);
+        dataset_package.size = len(dataset)
     
-        if (len(dataset) == 0):
-            dataset_package.type = pyclustering_type_data.PYCLUSTERING_TYPE_UNDEFINED;
-            dataset_package.data = None;
+        if len(dataset) == 0:
+            dataset_package.type = pyclustering_type_data.PYCLUSTERING_TYPE_UNDEFINED
+            dataset_package.data = None
     
-            return pointer(dataset_package);
+            return pointer(dataset_package)
     
-        c_data_type = self.__fill_type(dataset_package, dataset);
-        self.__fill_data(dataset_package, c_data_type, dataset);
+        c_data_type = self.__fill_type(dataset_package, dataset)
+        self.__fill_data(dataset_package, c_data_type, dataset)
         
-        return pointer(dataset_package);
+        return pointer(dataset_package)
 
 
     def __fill_dataset_type(self, dataset_package, dataset):
-        if (self.__is_container_type(dataset[0])):
-            dataset_package.type = pyclustering_type_data.PYCLUSTERING_TYPE_LIST;
+        if self.__is_container_type(dataset[0]):
+            dataset_package.type = pyclustering_type_data.PYCLUSTERING_TYPE_LIST
         
-        elif (isinstance(dataset[0], int)):
-            dataset_package.type = pyclustering_type_data.PYCLUSTERING_TYPE_LONG;
+        elif isinstance(dataset[0], int):
+            dataset_package.type = pyclustering_type_data.PYCLUSTERING_TYPE_LONG
         
-        elif (isinstance(dataset[0], float)):
-            dataset_package.type = pyclustering_type_data.PYCLUSTERING_TYPE_DOUBLE;
+        elif isinstance(dataset[0], float):
+            dataset_package.type = pyclustering_type_data.PYCLUSTERING_TYPE_DOUBLE
         
         else:
-            raise NameError("Not supported type of pyclustering package.");
+            raise NameError("Not supported type of pyclustering package.")
         
-        return pyclustering_type_data.get_ctype(dataset_package.type);
+        return pyclustering_type_data.get_ctype(dataset_package.type)
 
 
     def __fill_specify_type(self, dataset_package):
-        dataset_package.type = pyclustering_type_data.get_pyclustering_type(self.__c_data_type);
-        return self.__c_data_type;
+        dataset_package.type = pyclustering_type_data.get_pyclustering_type(self.__c_data_type)
+        return self.__c_data_type
 
 
     def __fill_type(self, dataset_package, dataset):
-        if (self.__is_container_type(dataset[0])):
-            dataset_package.type = pyclustering_type_data.PYCLUSTERING_TYPE_LIST;
-            return None;
+        if self.__is_container_type(dataset[0]):
+            dataset_package.type = pyclustering_type_data.PYCLUSTERING_TYPE_LIST
+            return None
         
-        if (self.__c_data_type is None):
-            return self.__fill_dataset_type(dataset_package, dataset);
+        if self.__c_data_type is None:
+            return self.__fill_dataset_type(dataset_package, dataset)
         
-        return self.__fill_specify_type(dataset_package);
+        return self.__fill_specify_type(dataset_package)
 
 
     def __fill_data(self, dataset_package, c_data_type, dataset):
-        if (dataset_package.type == pyclustering_type_data.PYCLUSTERING_TYPE_LIST):
-            package_data = (POINTER(pyclustering_package) * len(dataset))();
+        if dataset_package.type == pyclustering_type_data.PYCLUSTERING_TYPE_LIST:
+            package_data = (POINTER(pyclustering_package) * len(dataset))()
             for index in range(len(dataset)):
-                package_data[index] = self.__create_package(dataset[index]);
+                package_data[index] = self.__create_package(dataset[index])
             
-            dataset_package.data = cast(package_data, POINTER(c_void_p));
+            dataset_package.data = cast(package_data, POINTER(c_void_p))
         else:
-            array_object = (c_data_type * len(dataset))(*dataset);
-            dataset_package.data = cast(array_object, POINTER(c_void_p));
+            array_object = (c_data_type * len(dataset))(*dataset)
+            dataset_package.data = cast(array_object, POINTER(c_void_p))
 
 
     def __create_package_numpy_matrix(self, dataset_package, dataset):
-        (rows, cols) = dataset.shape;
+        (rows, cols) = dataset.shape
         
-        dataset_package.size = rows;
-        dataset_package.type = pyclustering_type_data.PYCLUSTERING_TYPE_LIST;
+        dataset_package.size = rows
+        dataset_package.type = pyclustering_type_data.PYCLUSTERING_TYPE_LIST
         
-        package_data = (POINTER(pyclustering_package) * rows)();
+        package_data = (POINTER(pyclustering_package) * rows)()
         for row_index in range(rows):
-            array_package = pyclustering_package();
-            array_package.size = cols;
-            array_package.type = pyclustering_type_data.get_pyclustering_type(self.__c_data_type);
+            array_package = pyclustering_package()
+            array_package.size = cols
+            array_package.type = pyclustering_type_data.get_pyclustering_type(self.__c_data_type)
             
-            array_object = (self.__c_data_type * cols)();
+            array_object = (self.__c_data_type * cols)()
             for col_index in range(cols):
-                array_object[col_index] = self.__c_data_type(dataset[row_index, col_index]);
+                array_object[col_index] = self.__c_data_type(dataset[row_index, col_index])
         
-            array_package.data = cast(array_object, POINTER(c_void_p));
-            package_data[row_index] = pointer(array_package);
+            array_package.data = cast(array_object, POINTER(c_void_p))
+            package_data[row_index] = pointer(array_package)
             
-        dataset_package.data = cast(package_data, POINTER(c_void_p));
-        return pointer(dataset_package);
+        dataset_package.data = cast(package_data, POINTER(c_void_p))
+        return pointer(dataset_package)
 
 
 
@@ -245,7 +245,7 @@ class package_extractor:
         @param[in] package_pointer (pointer): ctype-pointer to 'pyclustering_package' that should be used for unpacking.
         
         """
-        self.__package_pointer = package_pointer;
+        self.__package_pointer = package_pointer
 
 
     def extract(self):
@@ -255,36 +255,36 @@ class package_extractor:
         @return (list) Extracted data from the pyclustering package.
         
         """
-        return self.__extract_data(self.__package_pointer);
+        return self.__extract_data(self.__package_pointer)
 
 
     def __extract_data(self, ccore_package_pointer):
-        if (ccore_package_pointer == 0):
-            return [];
+        if ccore_package_pointer == 0:
+            return []
         
-        pointer_package = cast(ccore_package_pointer, POINTER(pyclustering_package));
-        return self.__unpack_pointer_data(pointer_package);
+        pointer_package = cast(ccore_package_pointer, POINTER(pyclustering_package))
+        return self.__unpack_pointer_data(pointer_package)
     
     
     def __unpack_data(self, pointer_package, pointer_data, type_package):
-        result = [];
+        result = []
         
         for index in range(0, pointer_package[0].size):
-            if (type_package == pyclustering_type_data.PYCLUSTERING_TYPE_LIST):
-                pointer_package = cast(pointer_data[index], (POINTER(pyclustering_package)));
-                result.append(self.__extract_data(pointer_package));
+            if type_package == pyclustering_type_data.PYCLUSTERING_TYPE_LIST:
+                pointer_package = cast(pointer_data[index], (POINTER(pyclustering_package)))
+                result.append(self.__extract_data(pointer_package))
             
             else:
-                result.append(pointer_data[index]);
+                result.append(pointer_data[index])
         
-        return result;
+        return result
 
 
     def __unpack_pointer_data(self, pointer_package):
-        type_package = pointer_package[0].type;
+        type_package = pointer_package[0].type
         
-        if (pointer_package[0].size == 0):
-            return [];
+        if pointer_package[0].size == 0:
+            return []
         
-        pointer_data = cast(pointer_package[0].data, POINTER(pyclustering_type_data.get_ctype(type_package)));
-        return self.__unpack_data(pointer_package, pointer_data, type_package);
+        pointer_data = cast(pointer_package[0].data, POINTER(pyclustering_type_data.get_ctype(type_package)))
+        return self.__unpack_data(pointer_package, pointer_data, type_package)

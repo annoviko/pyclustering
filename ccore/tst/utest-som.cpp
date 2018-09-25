@@ -250,12 +250,21 @@ TEST(utest_som, double_training) {
 }
 
 
-static void template_simulate_check_winners(const som_conn_type conn_type, const bool autostop) {
+static void template_simulate_check_winners(const som_conn_type conn_type, const bool autostop, const bool p_reload = false) {
     som_parameters params;
     std::shared_ptr<dataset> sample_simple_01 = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01);
 
     som som_map(1, 2, conn_type, params);
     som_map.train(*sample_simple_01.get(), 100, autostop);
+
+    if (p_reload) {
+        auto weights = som_map.get_weights();
+        auto captured_objects = som_map.get_capture_objects();
+        auto awards = som_map.get_awards();
+
+        som_map = som(1, 2, conn_type, params);
+        som_map.load(weights, awards, captured_objects);
+    }
 
     std::vector<std::size_t> expected_winners = { 0, 1 };
     for (std::size_t i = 0; i < sample_simple_01->size(); i++) {
@@ -276,30 +285,62 @@ TEST(utest_som, simulate_func_neighbors_autostop) {
     template_simulate_check_winners(som_conn_type::SOM_FUNC_NEIGHBOR, true);
 }
 
+TEST(utest_som, simulate_func_neighbors_autostop_reload) {
+    template_simulate_check_winners(som_conn_type::SOM_FUNC_NEIGHBOR, true, true);
+}
+
 TEST(utest_som, simulate_grid_four_autostop) {
     template_simulate_check_winners(som_conn_type::SOM_GRID_FOUR, true);
+}
+
+TEST(utest_som, simulate_grid_four_autostop_reload) {
+    template_simulate_check_winners(som_conn_type::SOM_GRID_FOUR, true, true);
 }
 
 TEST(utest_som, simulate_grid_eight_autostop) {
     template_simulate_check_winners(som_conn_type::SOM_GRID_EIGHT, true);
 }
 
+TEST(utest_som, simulate_grid_eight_autostop_reload) {
+    template_simulate_check_winners(som_conn_type::SOM_GRID_EIGHT, true, true);
+}
+
 TEST(utest_som, simulate_honeycomb_autostop) {
     template_simulate_check_winners(som_conn_type::SOM_HONEYCOMB, true);
+}
+
+TEST(utest_som, simulate_honeycomb_autostop_reload) {
+    template_simulate_check_winners(som_conn_type::SOM_HONEYCOMB, true, true);
 }
 
 TEST(utest_som, simulate_func_neighbors_without_autostop) {
     template_simulate_check_winners(som_conn_type::SOM_FUNC_NEIGHBOR, false);
 }
 
+TEST(utest_som, simulate_func_neighbors_without_autostop_reload) {
+    template_simulate_check_winners(som_conn_type::SOM_FUNC_NEIGHBOR, false, true);
+}
+
 TEST(utest_som, simulate_grid_four_without_autostop) {
     template_simulate_check_winners(som_conn_type::SOM_GRID_FOUR, false);
+}
+
+TEST(utest_som, simulate_grid_four_without_autostop_reload) {
+    template_simulate_check_winners(som_conn_type::SOM_GRID_FOUR, false, true);
 }
 
 TEST(utest_som, simulate_grid_eight_without_autostop) {
     template_simulate_check_winners(som_conn_type::SOM_GRID_EIGHT, false);
 }
 
+TEST(utest_som, simulate_grid_eight_without_autostop_reload) {
+    template_simulate_check_winners(som_conn_type::SOM_GRID_EIGHT, false, true);
+}
+
 TEST(utest_som, simulate_honeycomb_without_autostop) {
     template_simulate_check_winners(som_conn_type::SOM_HONEYCOMB, false);
+}
+
+TEST(utest_som, simulate_honeycomb_without_autostop_reload) {
+    template_simulate_check_winners(som_conn_type::SOM_HONEYCOMB, false, true);
 }

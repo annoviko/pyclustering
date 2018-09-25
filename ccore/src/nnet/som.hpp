@@ -91,6 +91,9 @@ public:
     som_parameters(const som_parameters & p_other) = default;
 
     ~som_parameters(void) = default;
+
+public:
+    som_parameters & operator=(const som_parameters & p_other);
 };
 
 
@@ -147,7 +150,7 @@ public:
      * @param[in] parameters: others parameters of the network.
      *
      */
-    som(const size_t num_rows, const size_t num_cols, const som_conn_type type_conn, const som_parameters & parameters);
+    som(const std::size_t num_rows, const std::size_t num_cols, const som_conn_type type_conn, const som_parameters & parameters);
 
     /**
      *
@@ -156,6 +159,7 @@ public:
      */
     ~som(void);
 
+public:
     /**
      *
      * @brief   Trains self-organized feature map (SOM).
@@ -168,6 +172,21 @@ public:
      *
      */
     std::size_t train(const dataset & input_data, const size_t epochs, bool autostop);
+
+    /**
+     *
+     * @brief   Initialize SOM network by loading weights.
+     * @details This method is provided service to load trained network parameters to avoid network training that may take
+     *           a lot of time.
+     *
+     * @param[in] p_weights: neuron weights.
+     * @param[in] p_awards: amount of captured objects by each neuron during training (can be empty if it is not required).
+     * @param[in] p_capture_objects: captured objects by each neuron during training (can be empty if it is not required).
+     *
+     * @return  Returns number of learining iterations.
+     *
+     */
+    void load(const dataset & p_weights, const som_award_sequence & p_awards, const som_gain_sequence & p_capture_objects);
 
     /**
      *
@@ -208,6 +227,15 @@ public:
 
     /**
     *
+    * @return  Constant reference to neurons weights for read-only purposes.
+    *
+    */
+    inline const dataset & get_weights(void) const {
+        return m_weights;
+    }
+
+    /**
+    *
     * @brief  Returns sequence of captured objects by each neuron during training.
     *
     * param[out] objects: captured objects by each neuron.
@@ -215,6 +243,15 @@ public:
     */
     inline void allocate_capture_objects(som_gain_sequence & objects) {
         objects = m_capture_objects;
+    }
+
+    /**
+    *
+    * @return  Constant reference to sequence of captured objects by each neuron during training for read-only purposes.
+    *
+    */
+    inline const som_gain_sequence & get_capture_objects(void) const {
+        return m_capture_objects;
     }
 
     /**
@@ -230,6 +267,15 @@ public:
 
     /**
     *
+    * @return  Constant reference to neighbors of each neuron for read-only purposes.
+    *
+    */
+    inline const som_neighbor_sequence & get_neighbors(void) const {
+        return m_neighbors;
+    }
+
+    /**
+    *
     * @brief  Returns amount of captured objects by each neuron during training.
     *
     * param[out] awards: amount of captured objects by each neuron.
@@ -237,6 +283,15 @@ public:
     */
     inline void allocate_awards(som_award_sequence & awards) {
         awards = m_awards;
+    }
+
+    /**
+    *
+    * @return  Constant reference to amount of captured objects by each neuron during training for read-only purposes.
+    *
+    */
+    inline const som_award_sequence & get_awards(void) const {
+       return m_awards;
     }
 
 private:
@@ -317,6 +372,17 @@ public:
     *
     */
     friend std::ostream & operator<<(std::ostream & p_stream, const som & p_network);
+
+    /**
+    *
+    * @brief   Overloaded assignment operator to make deep copy of SOM.
+    *
+    * @param[in] p_other: another instance of SOM.
+    *
+    * @return  Reference to updated SOM instance.
+    *
+    */
+    som & operator=(const som & p_other);
 };
 
 
