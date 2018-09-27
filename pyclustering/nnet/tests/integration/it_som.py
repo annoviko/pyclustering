@@ -45,9 +45,9 @@ class SomIntegrationTest(unittest.TestCase):
         SomTestTemplates.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, 2, 100, [5, 5], False, True)
         SomTestTemplates.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, 1, 100, [5, 5], False, True)
 
-    # def testTwoNeuronsTwoClustersByCoreStoreLoad(self):
-    #     SomTestTemplates.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, 2, 100, [5, 5], False, True, store_load=True)
-    #     SomTestTemplates.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, 1, 100, [5, 5], False, True, store_load=True)
+    def testTwoNeuronsTwoClustersByCoreStoreLoad(self):
+        SomTestTemplates.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, 2, 100, [5, 5], False, True, store_load=True)
+        SomTestTemplates.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, 1, 100, [5, 5], False, True, store_load=True)
 
 
     def testAutostopTwoNeuronsTwoClustersByCore(self):
@@ -55,9 +55,9 @@ class SomIntegrationTest(unittest.TestCase):
         SomTestTemplates.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, 1, 100, [5, 5], True, True)
 
 
-    # def testAutostopTwoNeuronsTwoClustersByCoreStoreLoad(self):
-    #     SomTestTemplates.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, 2, 100, [5, 5], True, True, store_load=True)
-    #     SomTestTemplates.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, 1, 100, [5, 5], True, True, store_load=True)
+    def testAutostopTwoNeuronsTwoClustersByCoreStoreLoad(self):
+        SomTestTemplates.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, 2, 100, [5, 5], True, True, store_load=True)
+        SomTestTemplates.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, 1, 100, [5, 5], True, True, store_load=True)
 
 
     def testThreeNeuronsThreeClustersByCore(self):
@@ -156,14 +156,26 @@ class SomIntegrationTest(unittest.TestCase):
     def testSimulateCheckWinnerFuncNeighborByCore(self):
         SomTestTemplates.templateTestSimulate(type_conn.func_neighbor, True)
 
+    def testSimulateCheckWinnerFuncNeighborByCoreStoreLoad(self):
+        SomTestTemplates.templateTestSimulate(type_conn.func_neighbor, True, store_load=True)
+
     def testSimulateCheckWinnerGridFourByCore(self):
         SomTestTemplates.templateTestSimulate(type_conn.grid_four, True)
+
+    def testSimulateCheckWinnerGridFourByCoreStoreLoad(self):
+        SomTestTemplates.templateTestSimulate(type_conn.grid_four, True, store_load=True)
 
     def testSimulateCheckWinnerGridEightByCore(self):
         SomTestTemplates.templateTestSimulate(type_conn.grid_eight, True)
 
+    def testSimulateCheckWinnerGridEightByCoreStoreLoad(self):
+        SomTestTemplates.templateTestSimulate(type_conn.grid_eight, True, store_load=True)
+
     def testSimulateCheckWinnerHoneycombByCore(self):
         SomTestTemplates.templateTestSimulate(type_conn.honeycomb, True)
+
+    def testSimulateCheckWinnerHoneycombByCoreStoreLoad(self):
+        SomTestTemplates.templateTestSimulate(type_conn.honeycomb, True, store_load=True)
 
 
     @remove_library

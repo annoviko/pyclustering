@@ -74,7 +74,7 @@ def som_load(som_pointer, weights, award, capture_objects):
     """!
     @brief Load dump of the network to SOM.
     @details Initialize SOM using existed weights, amount of captured objects by each neuron, captured
-              objects by each neuron.
+              objects by each neuron. Initialization is not performed if weights are empty.
 
     @param[in] som_pointer (POINTER): pointer to object of self-organized map.
     @param[in] weights (list): weights that should assigned to neurons.
@@ -82,6 +82,9 @@ def som_load(som_pointer, weights, award, capture_objects):
     @param[in] capture_objects (list): captured objects by each neuron.
 
     """
+
+    if len(weights) == 0:
+        return
 
     ccore = ccore_library.get()
 

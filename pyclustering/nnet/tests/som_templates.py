@@ -59,7 +59,6 @@ class SomTestTemplates:
             
             if sorted(network.awards) != expected_result:
                 network.show_network(awards = True)
-                print(sorted(network.awards))
                 assert sorted(network.awards) == expected_result
              
             total_capture_points = 0
@@ -95,12 +94,18 @@ class SomTestTemplates:
 
 
     @staticmethod
-    def templateTestSimulate(connections, ccore_flag):
+    def templateTestSimulate(connections, ccore_flag, **kwargs):
+        store_load = kwargs.get('store_load', False)
+
         sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1)
         
         network = som(1, 2, connections, ccore = ccore_flag)
         network.train(sample, 100)
-        
+
+        if store_load:
+            dump_network = pickle.dumps(network)
+            network = pickle.loads(dump_network)
+
         expected_winners = [0, 1]
         for i in range(len(sample)):
             index_winner = network.simulate(sample[i])

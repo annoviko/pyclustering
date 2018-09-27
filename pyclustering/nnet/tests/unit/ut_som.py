@@ -167,14 +167,26 @@ class SomUnitTest(unittest.TestCase):
     def testSimulateCheckWinnerFuncNeighbor(self):
         SomTestTemplates.templateTestSimulate(type_conn.func_neighbor, False)
 
+    def testSimulateCheckWinnerFuncNeighborStoreLoad(self):
+        SomTestTemplates.templateTestSimulate(type_conn.func_neighbor, False, store_load=True)
+
     def testSimulateCheckWinnerGridFour(self):
         SomTestTemplates.templateTestSimulate(type_conn.grid_four, False)
+
+    def testSimulateCheckWinnerGridFourStoreLoad(self):
+        SomTestTemplates.templateTestSimulate(type_conn.grid_four, False, store_load=True)
 
     def testSimulateCheckWinnerGridEight(self):
         SomTestTemplates.templateTestSimulate(type_conn.grid_eight, False)
 
+    def testSimulateCheckWinnerGridEightStoreLoad(self):
+        SomTestTemplates.templateTestSimulate(type_conn.grid_eight, False, store_load=True)
+
     def testSimulateCheckWinnerHoneycomb(self):
         SomTestTemplates.templateTestSimulate(type_conn.honeycomb, False)
+
+    def testSimulateCheckWinnerHoneycombStoreLoad(self):
+        SomTestTemplates.templateTestSimulate(type_conn.honeycomb, False, store_load=True)
 
 
 if __name__ == "__main__":
