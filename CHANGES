@@ -37,6 +37,9 @@ GENERAL CHANGES:
 
 
 CORRECTED MAJOR BUGS:
+- Bug with SOM and pickle when it was not possible to store and load network using pickle (pyclustering.nnet.som).
+  See: https://github.com/annoviko/pyclustering/issues/456
+
 - Bug with DBSCAN when points are marked as a noise (pyclustering.cluster.dbscan).
   See: https://github.com/annoviko/pyclustering/issues/462
 
