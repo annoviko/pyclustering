@@ -419,6 +419,9 @@
     <ClCompile Include="utest-spinlock.cpp">
       <Filter>Unit Tests</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\cluster\optics_descriptor.cpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\container\adjacency.hpp">
@@ -690,6 +693,9 @@
     </ClInclude>
     <ClInclude Include="..\src\parallel\parallel.hpp">
       <Filter>Tested Code\parallel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cluster\optics_descriptor.hpp">
+      <Filter>Tested Code\cluster</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

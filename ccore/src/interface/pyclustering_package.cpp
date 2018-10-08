@@ -66,9 +66,11 @@ pyclustering_package::~pyclustering_package(void) {
         for (std::size_t i = 0; i < size; i++) {
             pyclustering_package * package = ((pyclustering_package **) data)[i];
             delete package;
+            package = nullptr;
         }
 
         delete [] (pyclustering_package **) data;
+        data = nullptr;
     }
 }
 

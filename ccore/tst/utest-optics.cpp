@@ -47,10 +47,18 @@ template_optics_length_process_data(const std::shared_ptr<dataset> & p_data,
 
     const dataset & data = *p_data;
     const cluster_sequence & actual_clusters = ptr_output_result->clusters();
+    const optics_object_sequence & objects = ptr_output_result->optics_objects();
 
     ASSERT_CLUSTER_SIZES(data, actual_clusters, p_expected_cluster_length);
     if (p_amount_clusters > 0) {
         EXPECT_EQ(p_expected_cluster_length.size(), ordering_analyser::extract_cluster_amount(ptr_output_result->cluster_ordering(), ptr_output_result->get_radius()));
+    }
+
+    EXPECT_EQ(p_data->size(), objects.size());
+    for (const auto & object : objects) {
+        EXPECT_TRUE(object.m_core_distance == optics::NONE_DISTANCE || object.m_core_distance >= 0.0);
+        EXPECT_TRUE(object.m_reachability_distance == optics::NONE_DISTANCE || object.m_reachability_distance >= 0.0);
+        EXPECT_TRUE(object.m_processed);
     }
 
     return ptr_output_result;

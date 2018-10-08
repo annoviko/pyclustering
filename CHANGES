@@ -5,6 +5,9 @@ CHANGE NOTES FOR 0.8.2 (STARTED May 28, 2018)
 ------------------------------------------------------------------------
 
 GENERAL CHANGES:
+- Introduced new method 'get_optics_objects' for OPTICS algorithm to obtain detailed information about ordering (pyclustering.cluster.optics, ccore.clst.optics).
+  See: https://github.com/annoviko/pyclustering/issues/464
+
 - Added new clustering answers for SAMPLE SIMPLE data collections (pyclustering.samples).
   See: https://github.com/annoviko/pyclustering/issues/459
 

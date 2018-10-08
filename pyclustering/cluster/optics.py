@@ -25,19 +25,19 @@
 """
 
 
-import math;
+import math
 
-import matplotlib.pyplot as plt;
+import matplotlib.pyplot as plt
 
-from pyclustering.container.kdtree import kdtree;
+from pyclustering.container.kdtree import kdtree
 
-from pyclustering.cluster.encoder import type_encoding;
+from pyclustering.cluster.encoder import type_encoding
 
-from pyclustering.utils.color import color as color_list;
+from pyclustering.utils.color import color as color_list
 
-from pyclustering.core.wrapper import ccore_library;
+from pyclustering.core.wrapper import ccore_library
 
-import pyclustering.core.optics_wrapper as wrapper;
+import pyclustering.core.optics_wrapper as wrapper
 
 
 class ordering_visualizer:
@@ -71,7 +71,7 @@ class ordering_visualizer:
         ordering = analyser.cluster_ordering
         axis = plt.subplot(111)
         
-        if (amount_clusters is not None):
+        if amount_clusters is not None:
             radius, borders = analyser.calculate_connvectivity_radius(amount_clusters)
         
             # divide into cluster groups to visualize by colors
@@ -91,7 +91,7 @@ class ordering_visualizer:
             plt.text(0, radius + radius * 0.03, " Radius:   " + str(round(radius, 4)) + ";\n Clusters: " + str(amount_clusters), color = 'b', fontsize = 10)
             
         else:
-            axis.bar(range(0, len(ordering)), ordering[0:len(ordering)], width = 1.0, color = 'black');
+            axis.bar(range(0, len(ordering)), ordering[0:len(ordering)], width = 1.0, color = 'black')
             plt.xlim([0, len(ordering)])
         
         plt.show()
@@ -360,6 +360,7 @@ class optics:
         self.__ordering = None
         self.__clusters = None
         self.__noise = None
+        self.__optics_objects = None
 
         self.__data_type = kwargs.get('data_type', 'points')
         
@@ -368,7 +369,7 @@ class optics:
 
         self.__neighbor_searcher = self.__create_neighbor_searcher(self.__data_type)
 
-        if (self.__ccore):
+        if self.__ccore:
             self.__ccore = ccore_library.workable()
 
 
@@ -385,20 +386,53 @@ class optics:
         """
         
         if self.__ccore is True:
-            (self.__clusters, self.__noise, self.__ordering, self.__eps) = wrapper.optics(self.__sample_pointer, self.__eps, self.__minpts, self.__amount_clusters, self.__data_type);
+            self.__process_by_ccore()
         
         else:
-            if self.__data_type == 'points':
-                self.__kdtree = kdtree(self.__sample_pointer, range(len(self.__sample_pointer)))
+            self.__process_by_python()
 
-            self.__allocate_clusters()
-            
-            if (self.__amount_clusters is not None) and (self.__amount_clusters != len(self.get_clusters())):
-                analyser = ordering_analyser(self.get_ordering())
-                radius, _ = analyser.calculate_connvectivity_radius(self.__amount_clusters)
-                if radius is not None:
-                    self.__eps = radius
-                    self.__allocate_clusters()
+
+    def __process_by_ccore(self):
+        """!
+        @brief Performs cluster analysis using CCORE (C/C++ part of pyclustering library).
+
+        """
+
+        (self.__clusters, self.__noise, self.__ordering, self.__eps,
+         objects_indexes, objects_core_distances, objects_reachability_distances) = \
+            wrapper.optics(self.__sample_pointer, self.__eps, self.__minpts, self.__amount_clusters, self.__data_type)
+
+        self.__optics_objects = []
+        for i in range(len(objects_indexes)):
+            if objects_core_distances[i] < 0.0:
+                objects_core_distances[i] = None
+
+            if objects_reachability_distances[i] < 0.0:
+                objects_reachability_distances[i] = None
+
+            optics_object = optics_descriptor(objects_indexes[i], objects_core_distances[i], objects_reachability_distances[i])
+            optics_object.processed = True
+
+            self.__optics_objects.append(optics_object)
+
+
+    def __process_by_python(self):
+        """!
+        @brief Performs cluster analysis using python code.
+
+        """
+
+        if self.__data_type == 'points':
+            self.__kdtree = kdtree(self.__sample_pointer, range(len(self.__sample_pointer)))
+
+        self.__allocate_clusters()
+
+        if (self.__amount_clusters is not None) and (self.__amount_clusters != len(self.get_clusters())):
+            analyser = ordering_analyser(self.get_ordering())
+            radius, _ = analyser.calculate_connvectivity_radius(self.__amount_clusters)
+            if radius is not None:
+                self.__eps = radius
+                self.__allocate_clusters()
 
 
     def __initialize(self, sample):
@@ -473,6 +507,7 @@ class optics:
         @see get_clusters()
         @see get_noise()
         @see get_radius()
+        @see get_optics_objects()
         
         """
         
@@ -486,7 +521,24 @@ class optics:
                         self.__ordering.append(optics_object.reachability_distance)
             
         return self.__ordering
-    
+
+
+    def get_optics_objects(self):
+        """!
+        @brief Returns OPTICS objects where each object contains information about index of point from processed data,
+                core distance and reachability distance.
+
+        @return (list) OPTICS objects.
+
+        @see get_ordering()
+        @see get_clusters()
+        @see get_noise()
+        @see optics_descriptor
+
+        """
+
+        return self.__optics_objects
+
     
     def get_radius(self):
         """!
@@ -498,6 +550,7 @@ class optics:
         @see get_ordering()
         @see get_clusters()
         @see get_noise()
+        @see get_optics_objects()
         
         """
         

@@ -49,5 +49,22 @@ pyclustering_package * optics_algorithm(const pyclustering_package * const p_sam
     std::vector<double> radius_storage(1, output_result.get_radius());
     ((pyclustering_package **) package->data)[OPTICS_PACKAGE_INDEX_RADIUS] = create_package(&radius_storage);
 
+    /* Pack OPTICS objects to pyclustering packages */
+    const auto & objects = output_result.optics_objects();
+
+    pyclustering_package * package_object_indexes = create_package<std::size_t>(objects.size());
+    pyclustering_package * package_core_distance = create_package<double>(objects.size());
+    pyclustering_package * package_reachability_distance = create_package<double>(objects.size());
+
+    for (std::size_t i = 0; i < objects.size(); i++) {
+        ((std::size_t *) package_object_indexes->data)[i] = objects[i].m_index;
+        ((double *) package_core_distance->data)[i] = objects[i].m_core_distance;
+        ((double *) package_reachability_distance->data)[i] = objects[i].m_reachability_distance;
+    }
+
+    ((pyclustering_package **) package->data)[OPTICS_PACKAGE_INDEX_OPTICS_OBJECTS_INDEX] = package_object_indexes;
+    ((pyclustering_package **) package->data)[OPTICS_PACKAGE_INDEX_OPTICS_OBJECTS_CORE_DISTANCE] = package_core_distance;
+    ((pyclustering_package **) package->data)[OPTICS_PACKAGE_INDEX_OPTICS_OBJECTS_REACHABILITY_DISTANCE] = package_reachability_distance;
+
     return package;
 }

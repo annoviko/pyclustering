@@ -110,41 +110,58 @@ private:
 pyclustering_package * create_package_container(const std::size_t p_size);
 
 
-template <class TypeContainer>
-pyclustering_package * create_package(const TypeContainer * const data) {
-    using contaner_data_t = typename TypeContainer::value_type;
-
+template <class TypeValue>
+pyclustering_data_t get_package_type(void) {
     pyclustering_data_t type_package = PYCLUSTERING_TYPE_UNDEFINED;
-    if (std::is_same<contaner_data_t, int>::value) {
+    if (std::is_same<TypeValue, int>::value) {
         type_package = pyclustering_data_t::PYCLUSTERING_TYPE_INT;
     }
-    else if (std::is_same<contaner_data_t, unsigned int>::value) {
+    else if (std::is_same<TypeValue, unsigned int>::value) {
         type_package = pyclustering_data_t::PYCLUSTERING_TYPE_UNSIGNED_INT;
     }
-    else if (std::is_same<contaner_data_t, float>::value) {
+    else if (std::is_same<TypeValue, float>::value) {
         type_package = pyclustering_data_t::PYCLUSTERING_TYPE_FLOAT;
     }
-    else if (std::is_same<contaner_data_t, double>::value) {
+    else if (std::is_same<TypeValue, double>::value) {
         type_package = pyclustering_data_t::PYCLUSTERING_TYPE_DOUBLE;
     }
-    else if (std::is_same<contaner_data_t, long>::value) {
+    else if (std::is_same<TypeValue, long>::value) {
         type_package = pyclustering_data_t::PYCLUSTERING_TYPE_LONG;
     }
-    else if (std::is_same<contaner_data_t, size_t>::value) {
+    else if (std::is_same<TypeValue, size_t>::value) {
         type_package = pyclustering_data_t::PYCLUSTERING_TYPE_SIZE_T;
     }
-    else {
+
+    return type_package;
+}
+
+
+template <class TypeValue>
+pyclustering_package * create_package(const std::size_t p_size) {
+    pyclustering_data_t type_package = get_package_type<TypeValue>();
+    if (type_package == pyclustering_data_t::PYCLUSTERING_TYPE_UNDEFINED) {
         return nullptr;
     }
 
     pyclustering_package * package = new pyclustering_package(type_package);
 
-    package->size = data->size();
-    package->data = (void *) new contaner_data_t[package->size];
+    package->size = p_size;
+    package->data = (void *) new TypeValue[package->size];
 
-    std::size_t index = 0;
-    for (auto iter = std::begin(*data); iter != std::end(*data); iter++, index++) {
-        ( (contaner_data_t *) package->data)[index] = *iter;
+    return package;
+}
+
+
+template <class TypeContainer>
+pyclustering_package * create_package(const TypeContainer * const data) {
+    using contaner_data_t = typename TypeContainer::value_type;
+
+    pyclustering_package * package = create_package<contaner_data_t>(data->size());
+    if (package) {
+        std::size_t index = 0;
+        for (auto iter = std::begin(*data); iter != std::end(*data); iter++, index++) {
+            ( (contaner_data_t *) package->data)[index] = *iter;
+        }
     }
 
     return package;

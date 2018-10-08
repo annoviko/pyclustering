@@ -38,6 +38,9 @@ enum optics_package_indexer {
     OPTICS_PACKAGE_INDEX_NOISE,
     OPTICS_PACKAGE_INDEX_ORDERING,
     OPTICS_PACKAGE_INDEX_RADIUS,
+    OPTICS_PACKAGE_INDEX_OPTICS_OBJECTS_INDEX,
+    OPTICS_PACKAGE_INDEX_OPTICS_OBJECTS_CORE_DISTANCE,
+    OPTICS_PACKAGE_INDEX_OPTICS_OBJECTS_REACHABILITY_DISTANCE,
     OPTICS_PACKAGE_SIZE
 };
 
@@ -56,8 +59,8 @@ enum optics_package_indexer {
  * @param[in] p_data_type: defines data type that is used for clustering process ('0' - points, '1' - distance matrix).
  *
  * @return  Returns result of clustering - array that consists of four general clustering results that are represented by arrays too:
- *          [ [allocated clusters], [noise], [ordering], [connectivity radius] ]. It is important to note that connectivity radius
- *          is also placed into array.
+ *          [ [allocated clusters], [noise], [ordering], [connectivity radius], [optics objects indexes], [ optics objects core distances ], 
+ *          [ optics objects reachability distances ] ]. It is important to note that connectivity radius is also placed into array.
  *
  */
 extern "C" DECLARATION pyclustering_package * optics_algorithm(const pyclustering_package * const p_sample, 

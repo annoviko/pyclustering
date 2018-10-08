@@ -229,6 +229,9 @@
     <ClCompile Include="parallel\spinlock.cpp">
       <Filter>Source Files\parallel</Filter>
     </ClCompile>
+    <ClCompile Include="cluster\optics_descriptor.cpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cluster\agglomerative.hpp">
@@ -494,6 +497,9 @@
     </ClInclude>
     <ClInclude Include="parallel\parallel.hpp">
       <Filter>Source Files\parallel</Filter>
+    </ClInclude>
+    <ClInclude Include="cluster\optics_descriptor.hpp">
+      <Filter>Source Files\cluster</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

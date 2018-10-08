@@ -180,6 +180,7 @@
     <ClCompile Include="..\src\cluster\kmedoids.cpp" />
     <ClCompile Include="..\src\cluster\mbsas.cpp" />
     <ClCompile Include="..\src\cluster\optics.cpp" />
+    <ClCompile Include="..\src\cluster\optics_descriptor.cpp" />
     <ClCompile Include="..\src\cluster\ordering_analyser.cpp" />
     <ClCompile Include="..\src\cluster\rock.cpp" />
     <ClCompile Include="..\src\cluster\somsc.cpp" />
@@ -316,6 +317,7 @@
     <ClInclude Include="..\src\cluster\mbsas_data.hpp" />
     <ClInclude Include="..\src\cluster\optics.hpp" />
     <ClInclude Include="..\src\cluster\optics_data.hpp" />
+    <ClInclude Include="..\src\cluster\optics_descriptor.hpp" />
     <ClInclude Include="..\src\cluster\ordering_analyser.hpp" />
     <ClInclude Include="..\src\cluster\rock.hpp" />
     <ClInclude Include="..\src\cluster\somsc.hpp" />

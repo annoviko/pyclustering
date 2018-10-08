@@ -23,6 +23,7 @@
 
 
 #include "cluster/dbscan_data.hpp"
+#include "cluster/optics_descriptor.hpp"
 
 
 namespace ccore {
@@ -30,8 +31,8 @@ namespace ccore {
 namespace clst {
 
 
-using ordering = std::vector<double>;
-using ordering_ptr = std::shared_ptr<ordering>;
+using ordering                = std::vector<double>;
+using optics_object_sequence  = std::vector<optics_descriptor>;
 
 
 /**
@@ -43,8 +44,9 @@ using ordering_ptr = std::shared_ptr<ordering>;
 */
 class optics_data : public dbscan_data {
 private:
-    ordering         m_ordering = { };
-    double           m_radius   = 0;
+    ordering                m_ordering = { };
+    double                  m_radius   = 0;
+    optics_object_sequence  m_optics_objects = { };
 
 public:
     /**
@@ -93,6 +95,20 @@ public:
     *
     */
     const ordering & cluster_ordering(void) const { return m_ordering; }
+
+    /**
+    *
+    * @brief    Returns reference to optics objects that corresponds to points from input dataspace.
+    *
+    */
+    optics_object_sequence & optics_objects(void) { return m_optics_objects; }
+
+    /**
+    *
+    * @brief    Returns const reference to optics objects that corresponds to points from input dataspace.
+    *
+    */
+    const optics_object_sequence & optics_objects(void) const { return m_optics_objects; }
 
     /**
     *
