@@ -40,6 +40,9 @@ GENERAL CHANGES:
 
 
 CORRECTED MAJOR BUGS:
+- Bug with animation of correlation matrix in case of new versions of matplotlib (pyclustering.nnet.sync).
+  See: no reference
+
 - Bug with SOM and pickle when it was not possible to store and load network using pickle (pyclustering.nnet.som).
   See: https://github.com/annoviko/pyclustering/issues/456
 

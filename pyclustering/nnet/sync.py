@@ -588,26 +588,26 @@ class sync_visualizer:
         
         """
         
-        figure = plt.figure();
+        figure = plt.figure()
         
-        correlation_matrix = sync_output_dynamic.allocate_correlation_matrix(0);
-        artist = plt.imshow(correlation_matrix, cmap = plt.get_cmap(colormap), interpolation='kaiser', hold = True, vmin = 0.0, vmax = 1.0);
+        correlation_matrix = sync_output_dynamic.allocate_correlation_matrix(0)
+        artist = plt.imshow(correlation_matrix, cmap = plt.get_cmap(colormap), interpolation='kaiser', vmin = 0.0, vmax = 1.0)
         
         def init_frame(): 
-            return [ artist ];
+            return [ artist ]
         
         def frame_generation(index_dynamic):
-            correlation_matrix = sync_output_dynamic.allocate_correlation_matrix(index_dynamic);
-            artist.set_data(correlation_matrix);
+            correlation_matrix = sync_output_dynamic.allocate_correlation_matrix(index_dynamic)
+            artist.set_data(correlation_matrix)
             
-            return [ artist ];
+            return [ artist ]
 
-        correlation_animation = animation.FuncAnimation(figure, frame_generation, len(sync_output_dynamic), init_func = init_frame, interval = animation_velocity , repeat_delay = 1000, blit = True);
+        correlation_animation = animation.FuncAnimation(figure, frame_generation, len(sync_output_dynamic), init_func = init_frame, interval = animation_velocity , repeat_delay = 1000, blit = True)
         
         if (save_movie is not None):
-            correlation_animation.save(save_movie, writer = 'ffmpeg', fps = 15, bitrate = 1500);
+            correlation_animation.save(save_movie, writer = 'ffmpeg', fps = 15, bitrate = 1500)
         else:
-            plt.show();
+            plt.show()
 
 
     @staticmethod

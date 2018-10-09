@@ -38,29 +38,29 @@ from pyclustering.utils import timedcall;
 
 
 def template_clustering(file, radius, order, show_dyn = False, show_conn = False, show_clusters = True, ena_conn_weight = False, ccore_flag = True, tolerance = 0.1):
-    sample = read_sample(file);
-    syncnet_instance = syncnet(sample, radius, enable_conn_weight = ena_conn_weight, ccore = ccore_flag);
+    sample = read_sample(file)
+    syncnet_instance = syncnet(sample, radius, enable_conn_weight = ena_conn_weight, ccore = ccore_flag)
 
-    (ticks, analyser) = timedcall(syncnet_instance.process, order, solve_type.FAST, show_dyn);
-    print("Sample: ", file, "\t\tExecution time: ", ticks);
+    (ticks, analyser) = timedcall(syncnet_instance.process, order, solve_type.FAST, show_dyn)
+    print("Sample: ", file, "\t\tExecution time: ", ticks)
 
-    if (show_dyn == True):
-        sync_visualizer.show_output_dynamic(analyser);
-        sync_visualizer.animate(analyser);
-        sync_visualizer.show_local_order_parameter(analyser, syncnet_instance);
+    if show_dyn == True:
+        sync_visualizer.show_output_dynamic(analyser)
+        sync_visualizer.animate(analyser)
+        sync_visualizer.show_local_order_parameter(analyser, syncnet_instance)
         #sync_visualizer.animate_output_dynamic(analyser);
-        #sync_visualizer.animate_correlation_matrix(analyser, colormap = 'hsv');
+        #sync_visualizer.animate_correlation_matrix(analyser, colormap = 'hsv')
      
-    if (show_conn == True):
-        syncnet_instance.show_network();
+    if show_conn == True:
+        syncnet_instance.show_network()
      
-    if (show_clusters == True):
-        clusters = analyser.allocate_clusters(tolerance);
-        print("Amount of allocated clusters: ", len(clusters));
-        draw_clusters(sample, clusters);
+    if show_clusters == True:
+        clusters = analyser.allocate_clusters(tolerance)
+        print("Amount of allocated clusters: ", len(clusters))
+        draw_clusters(sample, clusters)
     
-    print("----------------------------\n");
-    return (sample, clusters);
+    print("----------------------------\n")
+    return (sample, clusters)
 
 
 def cluster_simple1():
