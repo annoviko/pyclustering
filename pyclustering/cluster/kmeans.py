@@ -332,6 +332,7 @@ class kmeans:
         self.__clusters = []
         self.__centers = numpy.matrix(initial_centers)
         self.__tolerance = tolerance
+        self.__sum_metric_error = 0
 
         self.__observer = kwargs.get('observer', None)
         self.__metric = kwargs.get('metric', distance_metric(type_metric.EUCLIDEAN_SQUARE))
@@ -418,8 +419,8 @@ class kmeans:
         """
         
         return self.__clusters
-    
-    
+
+
     def get_centers(self):
         """!
         @brief Returns list of centers of allocated clusters.
@@ -433,6 +434,20 @@ class kmeans:
             return self.__centers
         
         return self.__centers.tolist()
+
+
+    def get_sum_metric_error(self):
+        """!
+        @brief Returns sum of metric errors that depends on metric that was used for clustering (by default SSE - Sum of Squared Errors).
+        @details Sum of metric errors is calculated using distance between point and its center:
+                 \f[error=\sum_{i=0}^{N}distance(x_{i}-center(x_{i}))\f]
+
+        @see process()
+        @see get_clusters()
+
+        """
+
+        return self.__sum_metric_error
 
 
     def get_cluster_encoding(self):
@@ -452,7 +467,7 @@ class kmeans:
         """!
         @brief Calculate Euclidean distance to each point from the each cluster. Nearest points are captured by according clusters and as a result clusters are updated.
         
-        @return (list) updated clusters as list of clusters. Each cluster contains indexes of objects from data.
+        @return (list) Updated clusters as list of clusters. Each cluster contains indexes of objects from data.
         
         """
         
@@ -468,10 +483,11 @@ class kmeans:
             clusters[index_cluster].append(index_point)
         
         clusters = [cluster for cluster in clusters if len(cluster) > 0]
-        
+        self.__sum_metric_error = numpy.sum(dataset_differences)
+
         return clusters
-    
-    
+
+
     def __update_centers(self):
         """!
         @brief Calculate centers of clusters in line with contained objects.
