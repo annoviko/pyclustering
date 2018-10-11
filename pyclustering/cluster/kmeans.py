@@ -332,7 +332,7 @@ class kmeans:
         self.__clusters = []
         self.__centers = numpy.matrix(initial_centers)
         self.__tolerance = tolerance
-        self.__sum_metric_error = 0
+        self.__total_wce = 0
 
         self.__observer = kwargs.get('observer', None)
         self.__metric = kwargs.get('metric', distance_metric(type_metric.EUCLIDEAN_SQUARE))
@@ -408,6 +408,8 @@ class kmeans:
 
             self.__centers = updated_centers.tolist()
 
+        self.__calculate_total_wce()
+
 
     def get_clusters(self):
         """!
@@ -436,7 +438,7 @@ class kmeans:
         return self.__centers.tolist()
 
 
-    def get_sum_metric_error(self):
+    def get_total_wce(self):
         """!
         @brief Returns sum of metric errors that depends on metric that was used for clustering (by default SSE - Sum of Squared Errors).
         @details Sum of metric errors is calculated using distance between point and its center:
@@ -447,7 +449,7 @@ class kmeans:
 
         """
 
-        return self.__sum_metric_error
+        return self.__total_wce
 
 
     def get_cluster_encoding(self):
@@ -483,7 +485,6 @@ class kmeans:
             clusters[index_cluster].append(index_point)
         
         clusters = [cluster for cluster in clusters if len(cluster) > 0]
-        self.__sum_metric_error = numpy.sum(dataset_differences)
 
         return clusters
 
@@ -504,3 +505,19 @@ class kmeans:
             centers[index] = cluster_points.mean(axis=0)
 
         return numpy.matrix(centers)
+
+
+    def __calculate_total_wce(self):
+        """!
+        @brief Calculate total within cluster errors that is depend on metric that was chosen for K-Means algorithm.
+
+        """
+
+        dataset_differences = numpy.zeros((len(self.__clusters), len(self.__pointer_data)))
+        for index_center in range(len(self.__centers)):
+            dataset_differences[index_center] = self.__metric(self.__pointer_data, self.__centers[index_center])
+
+        self.__total_wce = 0
+        for index_cluster in range(len(self.__clusters)):
+            for index_point in self.__clusters[index_cluster]:
+                self.__total_wce += dataset_differences[index_cluster][index_point]
