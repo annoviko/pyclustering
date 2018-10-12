@@ -26,7 +26,9 @@
 
 import matplotlib.pyplot as plt
 
+from pyclustering.cluster.center_initializer import kmeans_plusplus_initializer
 from pyclustering.cluster.elbow import elbow
+from pyclustering.cluster.kmeans import kmeans, kmeans_visualizer
 
 from pyclustering.utils import read_sample
 
@@ -42,13 +44,21 @@ def elbow_analysis(sample_file_path, kmin, kmax, **kwargs):
     amount_clusters = elbow_instance.get_amount()
     wce = elbow_instance.get_wce()
 
+    centers = kmeans_plusplus_initializer(sample, amount_clusters).initialize()
+    kmeans_instance = kmeans(sample, centers)
+    clusters = kmeans_instance.get_clusters()
+    centers = kmeans_instance.get_centers()
+
     print("Sample '%s': Obtained amount of clusters: '%d'." % (sample_file_path, amount_clusters))
 
     figure = plt.figure(1)
     ax = figure.add_subplot(111)
-    ax.plot(range(kmin, kmax), wce)
+    ax.plot(range(kmin, kmax), wce, color='b', marker='.')
+    ax.plot(amount_clusters, wce[amount_clusters - kmin], color='r', marker='.', markersize=10)
     ax.grid(True)
     plt.show()
+
+    kmeans_visualizer.show_clusters(sample, clusters, centers)
 
 
 def sample_simple_01():

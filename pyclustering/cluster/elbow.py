@@ -38,6 +38,11 @@ class elbow:
               sum of square erros. By default K-Means++ algorithm is used to calculate initial centers that are used by
               K-Means algorithm.
 
+    The Elbow is determined by max distance from each point (x, y) to segment from kmin-point (x0, y0) to kmax-point (x1, y1),
+    where 'x' is K (amount of clusters), and 'y' is within-cluster error. Following expression is used to calculate Elbow
+    length:
+    \f[Elbow_{k} = \frac{\left ( y_{0} - y_{1} \right )x_{k} + \left ( x_{1} - x_{0} \right )y_{k} + \left ( x_{0}y_{1} - x_{1}y_{0} \right )}{\sqrt{\left ( x_{1} - x_{0} \right )^{2} + \left ( y_{1} - y_{0} \right )^{2}}}\f]
+
     """
 
     def __init__(self, data, kmin, kmax, **kwargs):
@@ -104,6 +109,7 @@ class elbow:
     def __calculate_elbows(self):
         """!
         @brief Calculates potential elbows.
+        @details Elbow is calculated as a distance from each point (x, y) to segment from kmin-point (x0, y0) to kmax-point (x1, y1).
 
         """
 
