@@ -43,6 +43,39 @@ class elbow:
     length:
     \f[Elbow_{k} = \frac{\left ( y_{0} - y_{1} \right )x_{k} + \left ( x_{1} - x_{0} \right )y_{k} + \left ( x_{0}y_{1} - x_{1}y_{0} \right )}{\sqrt{\left ( x_{1} - x_{0} \right )^{2} + \left ( y_{1} - y_{0} \right )^{2}}}\f]
 
+    Usage example of Elbow method for cluster analysis:
+    @code
+        # read sample 'Simple3' from file (sample contains four clusters)
+        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE3)
+
+        # create instance of Elbow method using K value from 1 to 10.
+        kmin, kmax = 1, 10
+        elbow_instance = elbow(sample, kmin, kmax)
+
+        # process input data and obtain results of analysis
+        elbow_instance.process()
+        amount_clusters = elbow_instance.get_amount()   # most probable amount of clusters
+        wce = elbow_instance.get_wce()                  # total within-cluster errors for each K
+
+        # perform cluster analysis using K-Means algorithm
+        centers = kmeans_plusplus_initializer(sample, amount_clusters).initialize()
+        kmeans_instance = kmeans(sample, centers)
+        kmeans_instance.process()
+
+        # obtain clustering results and visualize them
+        clusters = kmeans_instance.get_clusters()
+        centers = kmeans_instance.get_centers()
+        kmeans_visualizer.show_clusters(sample, clusters, centers)
+    @endcode
+
+    By default Elbow uses K-Means++ initializer to calculate initial centers for K-Means algorithm, it can be changed
+    using argument 'initializer':
+    @code
+        # perform analysis using Elbow method with random center initializer for K-Means algorithm inside of the method.
+        kmin, kmax = 1, 10
+        elbow_instance = elbow(sample, kmin, kmax, initializer=random_center_initializer)
+        elbow_instance.process()
+    @endcode
     """
 
     def __init__(self, data, kmin, kmax, **kwargs):
@@ -80,7 +113,7 @@ class elbow:
         """
         for amount in range(self.__kmin, self.__kmax):
             centers = self.__initializer(self.__data, amount).initialize()
-            instance = kmeans(self.__data, centers, ccore=False)
+            instance = kmeans(self.__data, centers, ccore=True)
             instance.process()
 
             self.__wce.append(instance.get_total_wce())

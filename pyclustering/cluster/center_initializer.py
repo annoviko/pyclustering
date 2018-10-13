@@ -49,9 +49,13 @@ class random_center_initializer:
         
         self.__data = data
         self.__amount = amount_centers
+        self.__available_indexes = set(list(range(len(self.__data))))
 
         if self.__amount <= 0:
-            raise AttributeError("Amount of cluster centers should be at least 1.")
+            raise ValueError("Amount of cluster centers should be at least 1.")
+
+        if self.__amount > len(self.__data):
+            raise ValueError("Amount of cluster centers '%d' should be less than data size." % self.__amount)
 
 
     def initialize(self):
@@ -61,7 +65,10 @@ class random_center_initializer:
         @return (list) List of centers where each center is represented by list of coordinates.
         
         """
-        return [ self.__create_center() for _ in range(self.__amount) ]
+        if self.__amount == len(self.__data):
+            return self.__data[:]
+
+        return [self.__create_center() for _ in range(self.__amount)]
 
 
     def __create_center(self):
@@ -69,8 +76,13 @@ class random_center_initializer:
         @brief Generates and returns random center.
         
         """
-        return [ random.random() for _ in range(len(self.__data[0])) ]
+        random_index_point = random.randint(0, len(self.__data[0]))
+        if random_index_point not in self.__available_indexes:
+            random_index_point = self.__available_indexes.pop()
+        else:
+            self.__available_indexes.remove(random_index_point)
 
+        return self.__data[random_index_point]
 
 
 class kmeans_plusplus_initializer:

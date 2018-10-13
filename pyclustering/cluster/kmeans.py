@@ -310,7 +310,7 @@ class kmeans:
     
     """
     
-    def __init__(self, data, initial_centers, tolerance = 0.001, ccore = True, **kwargs):
+    def __init__(self, data, initial_centers, tolerance=0.001, ccore=True, **kwargs):
         """!
         @brief Constructor of clustering algorithm K-Means.
         @details Center initializer can be used for creating initial centers, for example, K-Means++ method.
@@ -377,6 +377,8 @@ class kmeans:
         if self.__observer is not None:
             self.__observer.set_evolution_clusters(results[2])
             self.__observer.set_evolution_centers(results[3])
+
+        self.__total_wce = results[4][0]
 
 
     def __process_by_python(self):

@@ -74,6 +74,8 @@ template_kmeans_length_process_data_common(const dataset_ptr & p_data,
             ASSERT_CLUSTER_SIZES(data, cluster, { }, p_indexes);
         }
     }
+
+    ASSERT_GT(output_result.wce(), 0.0);
 }
 
 

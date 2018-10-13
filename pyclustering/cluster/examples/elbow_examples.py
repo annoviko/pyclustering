@@ -26,7 +26,7 @@
 
 import matplotlib.pyplot as plt
 
-from pyclustering.cluster.center_initializer import kmeans_plusplus_initializer
+from pyclustering.cluster.center_initializer import kmeans_plusplus_initializer, random_center_initializer
 from pyclustering.cluster.elbow import elbow
 from pyclustering.cluster.kmeans import kmeans, kmeans_visualizer
 
@@ -36,9 +36,10 @@ from pyclustering.samples.definitions import SIMPLE_SAMPLES
 
 
 def elbow_analysis(sample_file_path, kmin, kmax, **kwargs):
+    initializer = kwargs.get('initializer', kmeans_plusplus_initializer)
     sample = read_sample(sample_file_path)
 
-    elbow_instance = elbow(sample, kmin, kmax)
+    elbow_instance = elbow(sample, kmin, kmax, initializer=initializer)
     elbow_instance.process()
 
     amount_clusters = elbow_instance.get_amount()
@@ -46,6 +47,7 @@ def elbow_analysis(sample_file_path, kmin, kmax, **kwargs):
 
     centers = kmeans_plusplus_initializer(sample, amount_clusters).initialize()
     kmeans_instance = kmeans(sample, centers)
+    kmeans_instance.process()
     clusters = kmeans_instance.get_clusters()
     centers = kmeans_instance.get_centers()
 
@@ -63,9 +65,11 @@ def elbow_analysis(sample_file_path, kmin, kmax, **kwargs):
 
 def sample_simple_01():
     elbow_analysis(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, 10)
+    elbow_analysis(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, 10, initializer=random_center_initializer)
 
 def sample_simple_02():
     elbow_analysis(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 1, 10)
+    elbow_analysis(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 1, 10, initializer=random_center_initializer)
 
 def sample_simple_03():
     elbow_analysis(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 1, 10)

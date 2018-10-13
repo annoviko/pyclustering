@@ -46,6 +46,8 @@ private:
 
     bool          m_observed  = false;
 
+    double        m_wce       = 0.0;
+
     std::vector<dataset> m_evolution_centers            = { };
     std::vector<cluster_sequence> m_evolution_clusters  = { };
 
@@ -112,6 +114,20 @@ public:
     *
     */
     bool is_observed(void) const { return m_observed; }
+
+    /**
+    *
+    * @brief    Returns total within-cluster errors.
+    *
+    */
+    double & wce(void) { return m_wce; }
+
+    /**
+    *
+    * @brief    Returns constant total within-cluster errors.
+    *
+    */
+    const double & wce(void) const { return m_wce; }
 
     /**
     *

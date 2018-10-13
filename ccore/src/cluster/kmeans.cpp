@@ -86,6 +86,8 @@ void kmeans::process(const dataset & p_data, const index_sequence & p_indexes, c
             m_ptr_result->evolution_clusters().push_back(m_ptr_result->clusters());
         }
     }
+
+    calculate_total_wce();
 }
 
 
@@ -190,6 +192,19 @@ double kmeans::update_center(const cluster & p_cluster, point & p_center) {
 
     p_center = std::move(total);
     return change;
+}
+
+
+void kmeans::calculate_total_wce(void) {
+    double & wce = m_ptr_result->wce();
+    for (std::size_t i = 0; i < m_ptr_result->clusters().size(); i++) {
+        const auto & current_cluster = m_ptr_result->clusters().at(i);
+        const auto & cluster_center = m_ptr_result->centers().at(i);
+
+        for (const auto & cluster_point : current_cluster) {
+            wce += m_metric(m_ptr_data->at(cluster_point), cluster_center);
+        }
+    }
 }
 
 

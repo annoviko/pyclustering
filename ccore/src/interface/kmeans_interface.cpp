@@ -56,5 +56,8 @@ pyclustering_package * kmeans_algorithm(const pyclustering_package * const p_sam
     ((pyclustering_package **) package->data)[KMEANS_PACKAGE_INDEX_EVOLUTION_CLUSTERS] = create_package(&output_result.evolution_clusters());
     ((pyclustering_package **) package->data)[KMEANS_PACKAGE_INDEX_EVOLUTION_CENTERS] = create_package(&output_result.evolution_centers());
 
+    std::vector<double> wce_storage(1, output_result.wce());
+    ((pyclustering_package **) package->data)[KMEANS_PACKAGE_INDEX_WCE] = create_package(&wce_storage);
+
     return package;
 }

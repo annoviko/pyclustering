@@ -107,6 +107,7 @@ INPUT                  = pyclustering/__init__.py \
                          pyclustering/cluster/clarans.py \
                          pyclustering/cluster/cure.py \
                          pyclustering/cluster/dbscan.py \
+                         pyclustering/cluster/elbow.py \
                          pyclustering/cluster/encoder.py \
                          pyclustering/cluster/ema.py \
                          pyclustering/cluster/ga.py \

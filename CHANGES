@@ -5,6 +5,9 @@ CHANGE NOTES FOR 0.8.2 (STARTED May 28, 2018)
 ------------------------------------------------------------------------
 
 GENERAL CHANGES:
+- Implemented Elbow method to find out proper amount of clusters in dataset (pyclustering.cluster.elbow).
+  See: https://github.com/annoviko/pyclustering/issues/416
+
 - Introduced new method 'get_optics_objects' for OPTICS algorithm to obtain detailed information about ordering (pyclustering.cluster.optics, ccore.clst.optics).
   See: https://github.com/annoviko/pyclustering/issues/464
 

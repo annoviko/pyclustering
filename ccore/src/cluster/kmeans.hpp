@@ -143,6 +143,13 @@ private:
     *
     */
     void erase_empty_clusters(cluster_sequence & p_clusters);
+
+    /**
+    *
+    * @brief    Calculates total within-cluster errors that is based on distance metric.
+    *
+    */
+    void calculate_total_wce(void);
 };
 
 

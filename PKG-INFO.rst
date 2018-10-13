@@ -98,6 +98,7 @@ Library Content
 - **CLARANS** (pyclustering.cluster.clarans);
 - **CURE** (pyclustering.cluster.cure);
 - **DBSCAN** (pyclustering.cluster.dbscan);
+- **Elbow** (pyclustering.cluster.elbow);
 - **EMA** (pyclustering.cluster.ema);
 - **GA (Genetic Algorithm)** (pyclustering.cluster.ga);
 - **HSyncNet** (pyclustering.cluster.hsyncnet);
