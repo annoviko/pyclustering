@@ -76,6 +76,9 @@ class elbow:
         elbow_instance = elbow(sample, kmin, kmax, initializer=random_center_initializer)
         elbow_instance.process()
     @endcode
+
+    @image html elbow_example_simple_03.png "Elbows analysis with further K-Means clustering."
+
     """
 
     def __init__(self, data, kmin, kmax, **kwargs):

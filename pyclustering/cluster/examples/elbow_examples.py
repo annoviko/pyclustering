@@ -57,7 +57,10 @@ def elbow_analysis(sample_file_path, kmin, kmax, **kwargs):
     ax = figure.add_subplot(111)
     ax.plot(range(kmin, kmax), wce, color='b', marker='.')
     ax.plot(amount_clusters, wce[amount_clusters - kmin], color='r', marker='.', markersize=10)
+    ax.annotate("Elbow", (amount_clusters + 0.1, wce[amount_clusters - kmin] + 5))
     ax.grid(True)
+    plt.ylabel("WCE")
+    plt.xlabel("K")
     plt.show()
 
     kmeans_visualizer.show_clusters(sample, clusters, centers)
