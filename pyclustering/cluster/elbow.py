@@ -81,16 +81,17 @@ class elbow:
 
     """
 
-    def __init__(self, data, kmin, kmax, **kwargs):
+    def __init__(self, data, kmin, kmax, ccore=True, **kwargs):
         """!
         @brief Construct Elbow method.
 
         @param[in] data (array_like): Input data that is presented as array of points (objects), each point should be represented by array_like data structure.
         @param[in] kmin (int): Minimum amount of clusters that should be considered.
         @param[in] kmax (int): Maximum amount of clusters that should be considered.
-        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'initializer').
+        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'ccore', 'initializer').
 
         <b>Keyword Args:</b><br>
+            - ccore (bool): If True then CCORE (C++ implementation of pyclustering library) is used (be default True).
             - initializer (callable): Center initializer that is used by K-Means algorithm (by default K-Means++).
 
         """
@@ -98,6 +99,7 @@ class elbow:
             raise ValueError("Amount of K (" + str(kmax - kmin) + ") is too small for analysis. "
                              "It is require to have at least three K to build elbow.")
 
+        self.__ccore = kwargs.get('ccore', True)
         self.__initializer = kwargs.get('initializer', kmeans_plusplus_initializer)
 
         self.__data = data

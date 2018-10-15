@@ -117,7 +117,7 @@ class cure:
         @param[in] number_cluster (uint): Number of clusters that should be allocated.
         @param[in] number_represent_points (uint): Number of representative points for each cluster.
         @param[in] compression (double): Coefficient defines level of shrinking of representation points toward the mean of the new created cluster after merging on each step. Usually it destributed from 0 to 1.
-        @param[in] ccore (bool): If True than DLL CCORE (C++ solution) will be used for solving.
+        @param[in] ccore (bool): If True then CCORE (C++ solution) will be used for solving.
         
         """
         

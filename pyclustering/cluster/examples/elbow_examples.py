@@ -80,8 +80,47 @@ def sample_simple_03():
 def sample_simple_04():
     elbow_analysis(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 1, 10)
 
+def sample_simple_05():
+    elbow_analysis(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 1, 10)
+
+def sample_simple_06():
+    elbow_analysis(SIMPLE_SAMPLES.SAMPLE_SIMPLE6, 1, 10)
+
+def sample_simple_07():
+    elbow_analysis(SIMPLE_SAMPLES.SAMPLE_SIMPLE7, 1, 10)
+
+def sample_simple_08():
+    elbow_analysis(SIMPLE_SAMPLES.SAMPLE_SIMPLE8, 1, 10)
+
+def sample_simple_09():
+    elbow_analysis(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 1, 10)
+
+def sample_simple_10():
+    elbow_analysis(SIMPLE_SAMPLES.SAMPLE_SIMPLE10, 1, 10)
+
+def sample_simple_11():
+    elbow_analysis(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, 1, 10)
+
+def sample_simple_12():
+    elbow_analysis(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 1, 10)
+
+def sample_simple_13():
+    elbow_analysis(SIMPLE_SAMPLES.SAMPLE_SIMPLE13, 1, 10)
+
+def sample_simple_14():
+    elbow_analysis(SIMPLE_SAMPLES.SAMPLE_SIMPLE14, 1, 10)
 
 sample_simple_01()
 sample_simple_02()
 sample_simple_03()
 sample_simple_04()
+sample_simple_05()
+sample_simple_06()
+sample_simple_07()
+sample_simple_08()
+sample_simple_09()
+sample_simple_10()
+sample_simple_11()
+sample_simple_12()
+sample_simple_13()
+sample_simple_14()
