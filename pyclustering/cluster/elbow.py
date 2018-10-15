@@ -81,7 +81,7 @@ class elbow:
 
     """
 
-    def __init__(self, data, kmin, kmax, ccore=True, **kwargs):
+    def __init__(self, data, kmin, kmax, **kwargs):
         """!
         @brief Construct Elbow method.
 
