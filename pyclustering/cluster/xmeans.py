@@ -128,7 +128,7 @@ class xmeans:
         self.__pointer_data = data
         self.__clusters = []
         
-        if (initial_centers is not None):
+        if initial_centers is not None:
             self.__centers = initial_centers[:]
         else:
             self.__centers = [ [random.random() for _ in range(len(data[0])) ] ]
@@ -138,7 +138,7 @@ class xmeans:
         self.__criterion = criterion
          
         self.__ccore = ccore
-        if (self.__ccore):
+        if self.__ccore:
             self.__ccore = ccore_library.workable()
 
 
@@ -154,23 +154,23 @@ class xmeans:
         """
         
         if (self.__ccore is True):
-            self.__clusters, self.__centers = wrapper.xmeans(self.__pointer_data, self.__centers, self.__kmax, self.__tolerance, self.__criterion);
+            self.__clusters, self.__centers = wrapper.xmeans(self.__pointer_data, self.__centers, self.__kmax, self.__tolerance, self.__criterion)
 
         else:
-            self.__clusters = [];
-            while ( len(self.__centers) <= self.__kmax ):
-                current_cluster_number = len(self.__centers);
+            self.__clusters = []
+            while len(self.__centers) <= self.__kmax:
+                current_cluster_number = len(self.__centers)
                 
-                self.__clusters, self.__centers = self.__improve_parameters(self.__centers);
-                allocated_centers = self.__improve_structure(self.__clusters, self.__centers);
+                self.__clusters, self.__centers = self.__improve_parameters(self.__centers)
+                allocated_centers = self.__improve_structure(self.__clusters, self.__centers)
                 
-                if (current_cluster_number == len(allocated_centers)):
+                if current_cluster_number == len(allocated_centers):
                 #if ( (current_cluster_number == len(allocated_centers)) or (len(allocated_centers) > self.__kmax) ):
-                    break;
+                    break
                 else:
-                    self.__centers = allocated_centers;
+                    self.__centers = allocated_centers
             
-            self.__clusters, self.__centers = self.__improve_parameters(self.__centers);
+            self.__clusters, self.__centers = self.__improve_parameters(self.__centers)
 
 
     def get_clusters(self):
@@ -184,7 +184,7 @@ class xmeans:
         
         """
 
-        return self.__clusters;
+        return self.__clusters
 
 
     def get_centers(self):
@@ -198,7 +198,7 @@ class xmeans:
         
         """
          
-        return self.__centers;
+        return self.__centers
 
 
     def get_cluster_encoding(self):
@@ -211,7 +211,7 @@ class xmeans:
         
         """
         
-        return type_encoding.CLUSTER_INDEX_LIST_SEPARATION;
+        return type_encoding.CLUSTER_INDEX_LIST_SEPARATION
 
 
     def __improve_parameters(self, centers, available_indexes = None):
@@ -225,28 +225,28 @@ class xmeans:
         
         """
 
-        if (available_indexes and len(available_indexes) == 1):
-            index_center = available_indexes[0];
-            return ([ available_indexes ], self.__pointer_data[index_center]);
+        if available_indexes and len(available_indexes) == 1:
+            index_center = available_indexes[0]
+            return [ available_indexes ], self.__pointer_data[index_center]
 
-        local_data = self.__pointer_data;
+        local_data = self.__pointer_data
         if available_indexes:
-            local_data = [ self.__pointer_data[i] for i in available_indexes ];
+            local_data = [ self.__pointer_data[i] for i in available_indexes ]
 
-        local_centers = centers;
+        local_centers = centers
         if centers is None:
-            local_centers = kmeans_plusplus_initializer(local_data, 2, kmeans_plusplus_initializer.FARTHEST_CENTER_CANDIDATE).initialize();
+            local_centers = kmeans_plusplus_initializer(local_data, 2, kmeans_plusplus_initializer.FARTHEST_CENTER_CANDIDATE).initialize()
 
-        kmeans_instance = kmeans(local_data, local_centers, tolerance=self.__tolerance, ccore=False);
-        kmeans_instance.process();
+        kmeans_instance = kmeans(local_data, local_centers, tolerance=self.__tolerance, ccore=False)
+        kmeans_instance.process()
 
-        local_centers = kmeans_instance.get_centers();
+        local_centers = kmeans_instance.get_centers()
         
-        clusters = kmeans_instance.get_clusters();
-        if (available_indexes):
-            clusters = self.__local_to_global_clusters(clusters, available_indexes);
+        clusters = kmeans_instance.get_clusters()
+        if available_indexes:
+            clusters = self.__local_to_global_clusters(clusters, available_indexes)
         
-        return (clusters, local_centers);
+        return clusters, local_centers
 
 
     def __local_to_global_clusters(self, local_clusters, available_indexes):
@@ -260,15 +260,15 @@ class xmeans:
 
         """
 
-        clusters = [];
+        clusters = []
         for local_cluster in local_clusters:
-            current_cluster = [];
+            current_cluster = []
             for index_point in local_cluster:
-                current_cluster.append(available_indexes[index_point]);
+                current_cluster.append(available_indexes[index_point])
 
-            clusters.append(current_cluster);
+            clusters.append(current_cluster)
 
-        return clusters;
+        return clusters
 
     
     def __improve_structure(self, clusters, centers):
@@ -282,43 +282,43 @@ class xmeans:
         
         """
 
-        allocated_centers = [];
-        amount_free_centers = self.__kmax - len(centers);
+        allocated_centers = []
+        amount_free_centers = self.__kmax - len(centers)
 
         for index_cluster in range(len(clusters)):
             # solve k-means problem for children where data of parent are used.
-            (parent_child_clusters, parent_child_centers) = self.__improve_parameters(None, clusters[index_cluster]);
+            (parent_child_clusters, parent_child_centers) = self.__improve_parameters(None, clusters[index_cluster])
               
             # If it's possible to split current data
-            if (len(parent_child_clusters) > 1):
+            if len(parent_child_clusters) > 1:
                 # Calculate splitting criterion
-                parent_scores = self.__splitting_criterion([ clusters[index_cluster] ], [ centers[index_cluster] ]);
-                child_scores = self.__splitting_criterion([ parent_child_clusters[0], parent_child_clusters[1] ], parent_child_centers);
+                parent_scores = self.__splitting_criterion([ clusters[index_cluster] ], [ centers[index_cluster] ])
+                child_scores = self.__splitting_criterion([ parent_child_clusters[0], parent_child_clusters[1] ], parent_child_centers)
               
-                split_require = False;
+                split_require = False
                 
                 # Reallocate number of centers (clusters) in line with scores
-                if (self.__criterion == splitting_type.BAYESIAN_INFORMATION_CRITERION):
-                    if (parent_scores < child_scores): split_require = True;
+                if self.__criterion == splitting_type.BAYESIAN_INFORMATION_CRITERION:
+                    if parent_scores < child_scores: split_require = True
                     
-                elif (self.__criterion == splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH):
+                elif self.__criterion == splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH:
                     # If its score for the split structure with two children is smaller than that for the parent structure, 
                     # then representing the data samples with two clusters is more accurate in comparison to a single parent cluster.
-                    if (parent_scores > child_scores): split_require = True;
+                    if parent_scores > child_scores: split_require = True;
                 
-                if ( (split_require is True) and (amount_free_centers > 0) ):
-                    allocated_centers.append(parent_child_centers[0]);
-                    allocated_centers.append(parent_child_centers[1]);
+                if (split_require is True) and (amount_free_centers > 0):
+                    allocated_centers.append(parent_child_centers[0])
+                    allocated_centers.append(parent_child_centers[1])
                     
-                    amount_free_centers -= 1;
+                    amount_free_centers -= 1
                 else:
-                    allocated_centers.append(centers[index_cluster]);
+                    allocated_centers.append(centers[index_cluster])
 
                     
             else:
-                allocated_centers.append(centers[index_cluster]);
+                allocated_centers.append(centers[index_cluster])
           
-        return allocated_centers;
+        return allocated_centers
      
      
     def __splitting_criterion(self, clusters, centers):
@@ -335,11 +335,11 @@ class xmeans:
         
         """
         
-        if (self.__criterion == splitting_type.BAYESIAN_INFORMATION_CRITERION):
-            return self.__bayesian_information_criterion(clusters, centers);
+        if self.__criterion == splitting_type.BAYESIAN_INFORMATION_CRITERION:
+            return self.__bayesian_information_criterion(clusters, centers)
         
-        elif (self.__criterion == splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH):
-            return self.__minimum_noiseless_description_length(clusters, centers);
+        elif self.__criterion == splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH:
+            return self.__minimum_noiseless_description_length(clusters, centers)
         
         else:
             assert 0;
@@ -359,42 +359,42 @@ class xmeans:
         
         """
         
-        scores = float('inf');
+        scores = float('inf')
         
-        W = 0.0;
-        K = len(clusters);
-        N = 0.0;
+        W = 0.0
+        K = len(clusters)
+        N = 0.0
 
-        sigma_sqrt = 0.0;
+        sigma_sqrt = 0.0
         
-        alpha = 0.9;
-        betta = 0.9;
+        alpha = 0.9
+        betta = 0.9
         
         for index_cluster in range(0, len(clusters), 1):
-            Ni = len(clusters[index_cluster]);
-            if (Ni == 0): 
-                return float('inf');
+            Ni = len(clusters[index_cluster])
+            if Ni == 0:
+                return float('inf')
             
-            Wi = 0.0;
+            Wi = 0.0
             for index_object in clusters[index_cluster]:
                 # euclidean_distance_square should be used in line with paper, but in this case results are
                 # very poor, therefore square root is used to improved.
-                Wi += euclidean_distance(self.__pointer_data[index_object], centers[index_cluster]);
+                Wi += euclidean_distance(self.__pointer_data[index_object], centers[index_cluster])
             
-            sigma_sqrt += Wi;
-            W += Wi / Ni;
-            N += Ni;
+            sigma_sqrt += Wi
+            W += Wi / Ni
+            N += Ni
         
-        if (N - K > 0):
-            sigma_sqrt /= (N - K);
-            sigma = sigma_sqrt ** 0.5;
+        if N - K > 0:
+            sigma_sqrt /= (N - K)
+            sigma = sigma_sqrt ** 0.5
             
-            Kw = (1.0 - K / N) * sigma_sqrt;
-            Ks = ( 2.0 * alpha * sigma / (N ** 0.5) ) * ( (alpha ** 2.0) * sigma_sqrt / N + W - Kw / 2.0 ) ** 0.5;
+            Kw = (1.0 - K / N) * sigma_sqrt
+            Ks = ( 2.0 * alpha * sigma / (N ** 0.5) ) * ( (alpha ** 2.0) * sigma_sqrt / N + W - Kw / 2.0 ) ** 0.5
             
             scores = sigma_sqrt * (2 * K)**0.5 * ((2 * K)**0.5 + betta) / N + W - sigma_sqrt + Ks + 2 * alpha**0.5 * sigma_sqrt / N
         
-        return scores;
+        return scores
 
 
     def __bayesian_information_criterion(self, clusters, centers):
@@ -412,37 +412,37 @@ class xmeans:
         """
 
         scores = [float('inf')] * len(clusters)     # splitting criterion
-        dimension = len(self.__pointer_data[0]);
+        dimension = len(self.__pointer_data[0])
           
         # estimation of the noise variance in the data set
-        sigma_sqrt = 0.0;
-        K = len(clusters);
-        N = 0.0;
+        sigma_sqrt = 0.0
+        K = len(clusters)
+        N = 0.0
           
         for index_cluster in range(0, len(clusters), 1):
             for index_object in clusters[index_cluster]:
                 sigma_sqrt += euclidean_distance_square(self.__pointer_data[index_object], centers[index_cluster]);
 
-            N += len(clusters[index_cluster]);
+            N += len(clusters[index_cluster])
       
-        if (N - K > 0):
-            sigma_sqrt /= (N - K);
-            p = (K - 1) + dimension * K + 1;
+        if N - K > 0:
+            sigma_sqrt /= (N - K)
+            p = (K - 1) + dimension * K + 1
 
             # in case of the same points, sigma_sqrt can be zero (issue: #407)
-            sigma_multiplier = 0.0;
-            if (sigma_sqrt <= 0.0):
-                sigma_multiplier = float('-inf');
+            sigma_multiplier = 0.0
+            if sigma_sqrt <= 0.0:
+                sigma_multiplier = float('-inf')
             else:
-                sigma_multiplier = dimension * 0.5 * log(sigma_sqrt);
+                sigma_multiplier = dimension * 0.5 * log(sigma_sqrt)
             
             # splitting criterion    
             for index_cluster in range(0, len(clusters), 1):
-                n = len(clusters[index_cluster]);
+                n = len(clusters[index_cluster])
 
-                L = n * log(n) - n * log(N) - n * 0.5 * log(2.0 * numpy.pi) - n * sigma_multiplier - (n - K) * 0.5;
+                L = n * log(n) - n * log(N) - n * 0.5 * log(2.0 * numpy.pi) - n * sigma_multiplier - (n - K) * 0.5
                 
                 # BIC calculation
-                scores[index_cluster] = L - p * 0.5 * log(N);
+                scores[index_cluster] = L - p * 0.5 * log(N)
                 
-        return sum(scores);
+        return sum(scores)

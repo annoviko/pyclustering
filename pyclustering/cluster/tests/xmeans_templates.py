@@ -23,56 +23,56 @@
 
 """
 
-import random;
+import random
 
-from pyclustering.cluster.xmeans import xmeans, splitting_type;
-from pyclustering.cluster.center_initializer import random_center_initializer;
+from pyclustering.cluster.xmeans import xmeans, splitting_type
+from pyclustering.cluster.center_initializer import random_center_initializer
 
-from pyclustering.utils import read_sample;
+from pyclustering.utils import read_sample
 
-from pyclustering.tests.assertion import assertion;
+from pyclustering.tests.assertion import assertion
 
 
 class XmeansTestTemplates:
     @staticmethod
     def templateLengthProcessData(input_sample, start_centers, expected_cluster_length, type_splitting, kmax, ccore):
-        sample = None;
-        if (isinstance(input_sample, str)):
-            sample = read_sample(input_sample);
+        sample = None
+        if isinstance(input_sample, str):
+            sample = read_sample(input_sample)
         else:
-            sample = input_sample;
+            sample = input_sample
         
         #clusters = xmeans(sample, start_centers, 20, ccore);
-        xmeans_instance = xmeans(sample, start_centers, kmax, 0.025, type_splitting, ccore);
-        xmeans_instance.process();
+        xmeans_instance = xmeans(sample, start_centers, kmax, 0.025, type_splitting, ccore)
+        xmeans_instance.process()
          
-        clusters = xmeans_instance.get_clusters();
-        centers = xmeans_instance.get_centers();
+        clusters = xmeans_instance.get_clusters()
+        centers = xmeans_instance.get_centers()
     
-        obtained_cluster_sizes = [len(cluster) for cluster in clusters];
+        obtained_cluster_sizes = [len(cluster) for cluster in clusters]
 
         assert len(sample) == sum(obtained_cluster_sizes);
         assert len(clusters) == len(centers);
         assert len(centers) <= kmax;
         
-        if (expected_cluster_length is not None):
+        if expected_cluster_length is not None:
             assert len(centers) == len(expected_cluster_length);
-            
-            obtained_cluster_sizes.sort();
-            expected_cluster_length.sort();
+
+            obtained_cluster_sizes.sort()
+            expected_cluster_length.sort()
             
             assert obtained_cluster_sizes == expected_cluster_length;
 
 
     @staticmethod
     def templateClusterAllocationOneDimensionData(ccore_flag):
-        input_data = [ [0.0] for _ in range(10) ] + [ [5.0] for _ in range(10) ] + [ [10.0] for _ in range(10) ] + [ [15.0] for _ in range(10) ];
+        input_data = [ [0.0] for _ in range(10) ] + [ [5.0] for _ in range(10) ] + [ [10.0] for _ in range(10) ] + [ [15.0] for _ in range(10) ]
             
-        xmeans_instance = xmeans(input_data, [ [0.5], [5.5], [10.5], [15.5] ], 20, 0.025, splitting_type.BAYESIAN_INFORMATION_CRITERION, ccore_flag);
-        xmeans_instance.process();
+        xmeans_instance = xmeans(input_data, [ [0.5], [5.5], [10.5], [15.5] ], 20, 0.025, splitting_type.BAYESIAN_INFORMATION_CRITERION, ccore_flag)
+        xmeans_instance.process()
         
-        clusters = xmeans_instance.get_clusters();
-        centers = xmeans_instance.get_centers();
+        clusters = xmeans_instance.get_clusters()
+        centers = xmeans_instance.get_centers()
 
         assert len(clusters) == 4;
         assert len(centers) == len(clusters);
@@ -84,21 +84,22 @@ class XmeansTestTemplates:
 
     @staticmethod
     def templateMaxAllocatedClusters(ccore_flag, amount_clusters, size_cluster, offset, kinitial, kmax):
-        input_data = [];
+        input_data = []
         for index in range(amount_clusters):
-            input_data.append([random.random() * index * offset, random.random() * index * offset]);
+            for _ in range(size_cluster):
+                input_data.append([random.random() * index * offset, random.random() * index * offset])
         
-        initial_centers = random_center_initializer(input_data, kinitial).initialize();
-        xmeans_instance = xmeans(input_data, initial_centers, kmax, 0.025, splitting_type.BAYESIAN_INFORMATION_CRITERION, ccore_flag);
-        xmeans_instance.process();
+        initial_centers = random_center_initializer(input_data, kinitial).initialize()
+        xmeans_instance = xmeans(input_data, initial_centers, kmax, 0.025, splitting_type.BAYESIAN_INFORMATION_CRITERION, ccore_flag)
+        xmeans_instance.process()
         
-        clusters = xmeans_instance.get_clusters();
-        centers = xmeans_instance.get_centers();
+        clusters = xmeans_instance.get_clusters()
+        centers = xmeans_instance.get_centers()
 
-        if (len(clusters) != len(centers)):
-            print(input_data);
-            print(initial_centers);
+        if len(clusters) != len(centers):
+            print(input_data)
+            print(initial_centers)
 
-        assertion.ge(kmax, len(clusters));
-        assertion.ge(kmax, len(centers));
-        assertion.eq(len(clusters), len(centers));
+        assertion.ge(kmax, len(clusters))
+        assertion.ge(kmax, len(centers))
+        assertion.eq(len(clusters), len(centers))
