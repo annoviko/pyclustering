@@ -25,6 +25,7 @@
     <ClCompile Include="cluster\cluster_data.cpp" />
     <ClCompile Include="cluster\cure.cpp" />
     <ClCompile Include="cluster\dbscan.cpp" />
+    <ClCompile Include="cluster\elbow.cpp" />
     <ClCompile Include="cluster\hsyncnet.cpp" />
     <ClCompile Include="cluster\kmeans.cpp" />
     <ClCompile Include="cluster\kmeans_data.cpp" />
@@ -98,6 +99,8 @@
     <ClInclude Include="cluster\cure_data.hpp" />
     <ClInclude Include="cluster\dbscan.hpp" />
     <ClInclude Include="cluster\dbscan_data.hpp" />
+    <ClInclude Include="cluster\elbow.hpp" />
+    <ClInclude Include="cluster\elbow_data.hpp" />
     <ClInclude Include="cluster\hsyncnet.hpp" />
     <ClInclude Include="cluster\kmeans.hpp" />
     <ClInclude Include="cluster\kmeans_data.hpp" />

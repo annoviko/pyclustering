@@ -232,6 +232,9 @@
     <ClCompile Include="cluster\optics_descriptor.cpp">
       <Filter>Source Files\cluster</Filter>
     </ClCompile>
+    <ClCompile Include="cluster\elbow.cpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cluster\agglomerative.hpp">
@@ -499,6 +502,12 @@
       <Filter>Source Files\parallel</Filter>
     </ClInclude>
     <ClInclude Include="cluster\optics_descriptor.hpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="cluster\elbow.hpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="cluster\elbow_data.hpp">
       <Filter>Source Files\cluster</Filter>
     </ClInclude>
   </ItemGroup>
