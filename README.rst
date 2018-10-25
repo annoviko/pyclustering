@@ -258,7 +258,7 @@ Code Examples:
 
     # Visualize clusters:
     visualizer = cluster_visualizer();
-    visualizer.append_clusters(clusters, None);
+    visualizer.append_clusters(clusters, input_data);
     visualizer.show();
 
 **Simulation of oscillatory network PCNN**
