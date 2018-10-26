@@ -24,6 +24,7 @@
 
 #include "definitions.hpp"
 
+#include "cluster/center_initializer.hpp"
 #include "cluster/cluster_data.hpp"
 #include "utils/metric.hpp"
 
@@ -41,7 +42,7 @@ namespace clst {
  * @brief K-Means++ center initializer algorithm.
  *
  */
-class kmeans_plus_plus {
+class kmeans_plus_plus : public center_initializer {
 public:
     /**
      *
@@ -88,7 +89,7 @@ public:
     * @see FARTHEST_CENTER_CANDIDATE
     *
     */
-    kmeans_plus_plus(const std::size_t p_amount, const std::size_t p_candidates) noexcept;
+    kmeans_plus_plus(const std::size_t p_amount, const std::size_t p_candidates = 1) noexcept;
 
     /**
     *
@@ -136,7 +137,7 @@ public:
     * @param[out] p_centers: initialized centers for the specified data.
     *
     */
-    void initialize(const dataset & p_data, dataset & p_centers) const;
+    void initialize(const dataset & p_data, dataset & p_centers) const override;
 
     /**
     *
@@ -149,7 +150,7 @@ public:
     * @param[out] p_centers: initialized centers for the specified data.
     *
     */
-    void initialize(const dataset & p_data, const index_sequence & p_indexes, dataset & p_centers) const;
+    void initialize(const dataset & p_data, const index_sequence & p_indexes, dataset & p_centers) const override;
 
 private:
     /**

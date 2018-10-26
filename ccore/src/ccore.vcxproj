@@ -25,7 +25,6 @@
     <ClCompile Include="cluster\cluster_data.cpp" />
     <ClCompile Include="cluster\cure.cpp" />
     <ClCompile Include="cluster\dbscan.cpp" />
-    <ClCompile Include="cluster\elbow.cpp" />
     <ClCompile Include="cluster\hsyncnet.cpp" />
     <ClCompile Include="cluster\kmeans.cpp" />
     <ClCompile Include="cluster\kmeans_data.cpp" />
@@ -36,6 +35,7 @@
     <ClCompile Include="cluster\optics.cpp" />
     <ClCompile Include="cluster\optics_descriptor.cpp" />
     <ClCompile Include="cluster\ordering_analyser.cpp" />
+    <ClCompile Include="cluster\random_center_initializer.cpp" />
     <ClCompile Include="cluster\rock.cpp" />
     <ClCompile Include="cluster\somsc.cpp" />
     <ClCompile Include="cluster\syncnet.cpp" />
@@ -93,6 +93,7 @@
     <ClInclude Include="cluster\agglomerative.hpp" />
     <ClInclude Include="cluster\bsas.hpp" />
     <ClInclude Include="cluster\bsas_data.hpp" />
+    <ClInclude Include="cluster\center_initializer.hpp" />
     <ClInclude Include="cluster\cluster_algorithm.hpp" />
     <ClInclude Include="cluster\cluster_data.hpp" />
     <ClInclude Include="cluster\cure.hpp" />
@@ -115,6 +116,7 @@
     <ClInclude Include="cluster\optics_data.hpp" />
     <ClInclude Include="cluster\optics_descriptor.hpp" />
     <ClInclude Include="cluster\ordering_analyser.hpp" />
+    <ClInclude Include="cluster\random_center_initializer.hpp" />
     <ClInclude Include="cluster\rock.hpp" />
     <ClInclude Include="cluster\somsc.hpp" />
     <ClInclude Include="cluster\somsc_data.hpp" />

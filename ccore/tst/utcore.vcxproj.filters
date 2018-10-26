@@ -422,6 +422,12 @@
     <ClCompile Include="..\src\cluster\optics_descriptor.cpp">
       <Filter>Tested Code\cluster</Filter>
     </ClCompile>
+    <ClCompile Include="utest-elbow.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\cluster\random_center_initializer.cpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\container\adjacency.hpp">
@@ -695,6 +701,21 @@
       <Filter>Tested Code\parallel</Filter>
     </ClInclude>
     <ClInclude Include="..\src\cluster\optics_descriptor.hpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="utest-elbow.hpp">
+      <Filter>Unit Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cluster\elbow.hpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cluster\elbow_data.hpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cluster\center_initializer.hpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cluster\random_center_initializer.hpp">
       <Filter>Tested Code\cluster</Filter>
     </ClInclude>
   </ItemGroup>

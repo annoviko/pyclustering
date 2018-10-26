@@ -22,8 +22,15 @@
 
 
 #include "cluster/elbow_data.hpp"
+#include "cluster/kmeans.hpp"
+#include "cluster/kmeans_plus_plus.hpp"
+
+#include "utils/metric.hpp"
 
 #include "definitions.hpp"
+
+
+using namespace ccore::utils::metric;
 
 
 namespace ccore {
@@ -31,16 +38,17 @@ namespace ccore {
 namespace clst {
 
 
-template <class TypeInitializer>
+template <class TypeInitializer = kmeans_plus_plus>
 class elbow {
 private:
     std::size_t   m_kmin      = 0;
     std::size_t   m_kmax      = 0;
 
-    elbow_data    * m_result  = nullptr;      /* temporary pointer to output result   */
-    dataset       * m_data    = nullptr;      /* temporary pointer to data            */
+    std::vector<double> m_elbow = { };
 
-private:
+    elbow_data    * m_result  = nullptr;      /* temporary pointer to output result   */
+
+public:
     elbow(void) = default;
 
     elbow(const std::size_t p_kmin, const std::size_t p_kmax) :
@@ -55,12 +63,51 @@ private:
 
 public:
     void process(const dataset & p_data, elbow_data & p_result) {
-        
+        m_result = &p_result;
+        m_elbow.clear();
+
+        for (std::size_t i = m_kmin; i < m_kmax; i++) {
+            dataset initial_centers;
+            TypeInitializer(i).initialize(p_data, initial_centers);
+
+            kmeans_data result;
+            kmeans instance(initial_centers, 0.0001);
+            instance.process(p_data, result);
+
+            m_result->get_wce().push_back(result.wce());
+        }
+
+        calculate_elbows();
+        m_result->set_amount(find_optimal_kvalue());
     }
 
 private:
     void verify(void) {
-    
+        if (m_kmax < 3 + m_kmin) {
+            throw std::invalid_argument("Amount of K " + std::to_string(m_kmax - m_kmin) + " is too small for analysis.");
+        }
+    }
+
+    void calculate_elbows(void) {
+        const double x0 = 0.0;
+        const double y0 = m_result->get_wce().front();
+
+        const double x1 = (double) m_result->get_wce().size();
+        const double y1 = m_result->get_wce().back();
+
+        for (std::size_t index_elbow = 1; index_elbow < m_result->get_wce().size() - 1; index_elbow++) {
+            const double x = (double) index_elbow;
+            const double y = m_result->get_wce().at(index_elbow);
+
+            const double segment = std::abs((y0 - y1) * x + (x1 - x0) * y + (x0 * y1 - x1 * y0));
+            const double norm = euclidean_distance(point({ x0, y0 }), point({ x1, y1 }));
+            m_elbow.push_back(segment / norm);
+        }
+    }
+
+    std::size_t find_optimal_kvalue(void) {
+        auto optimal_elbow_iter = std::max_element(m_elbow.cbegin(), m_elbow.cend());
+        return std::distance(m_elbow.cbegin(), optimal_elbow_iter) + 1 + m_kmin;
     }
 };
 

@@ -30,6 +30,8 @@ import unittest
 import matplotlib
 matplotlib.use('Agg')
 
+from pyclustering.cluster.center_initializer import random_center_initializer
+
 from pyclustering.cluster.tests.elbow_template import elbow_test_template
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES, SIMPLE_ANSWERS
@@ -39,11 +41,20 @@ class elbow_unit_test(unittest.TestCase):
     def test_elbow_simple_01(self):
         elbow_test_template.calculate_elbow(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, SIMPLE_ANSWERS.ANSWER_SIMPLE1, 1, 10, False)
 
+    def test_elbow_simple_01_random_initializer(self):
+        elbow_test_template.calculate_elbow(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, SIMPLE_ANSWERS.ANSWER_SIMPLE1, 1, 10, False, initializer=random_center_initializer)
+
     def test_elbow_simple_02(self):
         elbow_test_template.calculate_elbow(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, SIMPLE_ANSWERS.ANSWER_SIMPLE2, 1, 10, False)
 
+    def test_elbow_simple_02_random_initializer(self):
+        elbow_test_template.calculate_elbow(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, SIMPLE_ANSWERS.ANSWER_SIMPLE2, 1, 10, False, initializer=random_center_initializer)
+
     def test_elbow_simple_03(self):
         elbow_test_template.calculate_elbow(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, SIMPLE_ANSWERS.ANSWER_SIMPLE3, 1, 10, False)
+
+    def test_elbow_simple_03_random_initializer(self):
+        elbow_test_template.calculate_elbow(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, SIMPLE_ANSWERS.ANSWER_SIMPLE3, 1, 10, False, initializer=random_center_initializer)
 
     def test_elbow_simple_05(self):
         elbow_test_template.calculate_elbow(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, SIMPLE_ANSWERS.ANSWER_SIMPLE5, 1, 10, False)

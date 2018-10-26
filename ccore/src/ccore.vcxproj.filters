@@ -232,7 +232,7 @@
     <ClCompile Include="cluster\optics_descriptor.cpp">
       <Filter>Source Files\cluster</Filter>
     </ClCompile>
-    <ClCompile Include="cluster\elbow.cpp">
+    <ClCompile Include="cluster\random_center_initializer.cpp">
       <Filter>Source Files\cluster</Filter>
     </ClCompile>
   </ItemGroup>
@@ -508,6 +508,12 @@
       <Filter>Source Files\cluster</Filter>
     </ClInclude>
     <ClInclude Include="cluster\elbow_data.hpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="cluster\random_center_initializer.hpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="cluster\center_initializer.hpp">
       <Filter>Source Files\cluster</Filter>
     </ClInclude>
   </ItemGroup>

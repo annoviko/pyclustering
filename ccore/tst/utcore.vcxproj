@@ -182,6 +182,7 @@
     <ClCompile Include="..\src\cluster\optics.cpp" />
     <ClCompile Include="..\src\cluster\optics_descriptor.cpp" />
     <ClCompile Include="..\src\cluster\ordering_analyser.cpp" />
+    <ClCompile Include="..\src\cluster\random_center_initializer.cpp" />
     <ClCompile Include="..\src\cluster\rock.cpp" />
     <ClCompile Include="..\src\cluster\somsc.cpp" />
     <ClCompile Include="..\src\cluster\syncnet.cpp" />
@@ -233,6 +234,7 @@
     <ClCompile Include="..\src\utils\metric.cpp" />
     <ClCompile Include="..\src\utils\random.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="utest-elbow.cpp" />
     <ClCompile Include="utest-interface-bsas.cpp" />
     <ClCompile Include="utest-interface-mbsas.cpp" />
     <ClCompile Include="utest-interface-ttsas.cpp" />
@@ -299,12 +301,15 @@
     <ClInclude Include="..\src\cluster\agglomerative.hpp" />
     <ClInclude Include="..\src\cluster\bsas.hpp" />
     <ClInclude Include="..\src\cluster\bsas_data.hpp" />
+    <ClInclude Include="..\src\cluster\center_initializer.hpp" />
     <ClInclude Include="..\src\cluster\cluster_algorithm.hpp" />
     <ClInclude Include="..\src\cluster\cluster_data.hpp" />
     <ClInclude Include="..\src\cluster\cure.hpp" />
     <ClInclude Include="..\src\cluster\cure_data.hpp" />
     <ClInclude Include="..\src\cluster\dbscan.hpp" />
     <ClInclude Include="..\src\cluster\dbscan_data.hpp" />
+    <ClInclude Include="..\src\cluster\elbow.hpp" />
+    <ClInclude Include="..\src\cluster\elbow_data.hpp" />
     <ClInclude Include="..\src\cluster\hsyncnet.hpp" />
     <ClInclude Include="..\src\cluster\kmeans.hpp" />
     <ClInclude Include="..\src\cluster\kmeans_data.hpp" />
@@ -319,6 +324,7 @@
     <ClInclude Include="..\src\cluster\optics_data.hpp" />
     <ClInclude Include="..\src\cluster\optics_descriptor.hpp" />
     <ClInclude Include="..\src\cluster\ordering_analyser.hpp" />
+    <ClInclude Include="..\src\cluster\random_center_initializer.hpp" />
     <ClInclude Include="..\src\cluster\rock.hpp" />
     <ClInclude Include="..\src\cluster\somsc.hpp" />
     <ClInclude Include="..\src\cluster\somsc_data.hpp" />
@@ -386,6 +392,7 @@
     <ClInclude Include="utenv_check.hpp" />
     <ClInclude Include="utest-adjacency.hpp" />
     <ClInclude Include="utenv_utils.hpp" />
+    <ClInclude Include="utest-elbow.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
