@@ -20,6 +20,7 @@
 
 #include "nnet/legion.hpp"
 
+#include <chrono>
 #include <stdexcept>
 
 #include "container/adjacency_bit_matrix.hpp"
@@ -305,6 +306,7 @@ void legion_network::initialize(const size_t num_osc, const connection_t connect
     m_dynamic_connections = std::vector<std::vector<double> >(num_osc, std::vector<double>(num_osc, 0.0)),
     m_stimulus = nullptr;
     m_generator = std::default_random_engine(m_device());
+    m_generator.seed(std::chrono::system_clock::now().time_since_epoch().count());
     m_noise_distribution = std::uniform_real_distribution<double>(0.0, params.ro);
     m_global_inhibitor = 0;
 

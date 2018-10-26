@@ -22,6 +22,7 @@
 #include "cluster/kmeans_plus_plus.hpp"
 
 #include <algorithm>
+#include <chrono>
 #include <exception>
 #include <limits>
 #include <numeric>
@@ -110,6 +111,8 @@ point kmeans_plus_plus::get_first_center(void) const {
     std::size_t length = m_indexes_ptr->empty() ? m_data_ptr->size() : m_indexes_ptr->size();
 
     std::default_random_engine generator;
+    generator.seed(std::chrono::system_clock::now().time_since_epoch().count());
+
     std::uniform_int_distribution<std::size_t> distribution(0, length - 1);
 
     std::size_t index = distribution(generator);
@@ -191,6 +194,8 @@ void kmeans_plus_plus::calculate_probabilities(const std::vector<double> & p_dis
 
 std::size_t kmeans_plus_plus::get_probable_center(const std::vector<double> & p_distances, const std::vector<double> & p_probabilities) const {
     std::default_random_engine generator;
+    generator.seed(std::chrono::system_clock::now().time_since_epoch().count());
+
     std::uniform_real_distribution<double> distribution(0.0, 1.0);
 
     std::size_t best_index_candidate = 0;

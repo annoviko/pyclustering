@@ -20,6 +20,7 @@
 
 #include "nnet/som.hpp"
 
+#include <chrono>
 #include <cmath>
 #include <climits>
 #include <exception>
@@ -233,6 +234,8 @@ void som::create_initial_weights(const som_init_type type) {
     /* generate weights (topological coordinates) */
     std::random_device device;
     std::default_random_engine generator(device());
+
+    generator.seed(std::chrono::system_clock::now().time_since_epoch().count());
 
     switch (type) {
         /* Feature SOM 0002: Uniform grid. */
