@@ -24,10 +24,10 @@
 """
 
 
-from ctypes import c_double, c_size_t
+from ctypes import c_double, c_size_t, POINTER
 
 from pyclustering.core.wrapper import ccore_library
-from pyclustering.core.pyclustering_package import package_builder, package_extractor
+from pyclustering.core.pyclustering_package import pyclustering_package, package_builder, package_extractor
 
 from enum import IntEnum
 
@@ -48,8 +48,10 @@ def elbow(sample, kmin, kmax, initializer):
 
     ccore = ccore_library.get()
     if initializer == elbow_center_initializer.KMEANS_PLUS_PLUS:
+        ccore.elbow_method_ikpp.restype = POINTER(pyclustering_package)
         package = ccore.elbow_method_ikpp(pointer_data, c_size_t(kmin), c_size_t(kmax))
     elif initializer == elbow_center_initializer.RANDOM:
+        ccore.elbow_method_irnd.restype = POINTER(pyclustering_package)
         package = ccore.elbow_method_irnd(pointer_data, c_size_t(kmin), c_size_t(kmax))
     else:
         raise ValueError("Not supported type of center initializer '" + str(initializer) + "'.")
