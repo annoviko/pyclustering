@@ -63,6 +63,11 @@ public:
 
 public:
     void process(const dataset & p_data, elbow_data & p_result) {
+        if (p_data.size() < m_kmax) {
+            throw std::invalid_argument("K max value '" + std::to_string(m_kmax) 
+              + "' is greater than amount of data points '" + std::to_string(p_data.size()) + "'.");
+        }
+
         m_result = &p_result;
         m_elbow.clear();
 
@@ -84,7 +89,7 @@ public:
 private:
     void verify(void) {
         if (m_kmax < 3 + m_kmin) {
-            throw std::invalid_argument("Amount of K " + std::to_string(m_kmax - m_kmin) + " is too small for analysis.");
+            throw std::invalid_argument("Amount of K '" + std::to_string(m_kmax - m_kmin) + "' is too small for analysis.");
         }
     }
 

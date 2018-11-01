@@ -28,7 +28,10 @@
 import math
 
 from pyclustering.cluster.kmeans import kmeans
-from pyclustering.cluster.center_initializer import kmeans_plusplus_initializer
+from pyclustering.cluster.center_initializer import kmeans_plusplus_initializer, random_center_initializer
+from pyclustering.core.wrapper import ccore_library
+
+import pyclustering.core.elbow_wrapper as wrapper
 
 
 class elbow:
@@ -99,8 +102,17 @@ class elbow:
             raise ValueError("Amount of K (" + str(kmax - kmin) + ") is too small for analysis. "
                              "It is require to have at least three K to build elbow.")
 
-        self.__ccore = kwargs.get('ccore', True)
+        if len(data) < kmax:
+            raise ValueError("K max value '%d' is greater than amount of points in data '%d'." % (kmax, len(data)))
+
         self.__initializer = kwargs.get('initializer', kmeans_plusplus_initializer)
+
+        self.__ccore = kwargs.get('ccore', True) or \
+                       isinstance(self.__initializer, kmeans_plusplus_initializer) or \
+                       isinstance(self.__initializer, random_center_initializer)
+
+        if self.__ccore:
+            self.__ccore = ccore_library.workable()
 
         self.__data = data
         self.__kmin = kmin
@@ -114,6 +126,33 @@ class elbow:
     def process(self):
         """!
         @brief Performs analysis to find out appropriate amount of clusters.
+
+        """
+        if self.__ccore:
+            self.__process_by_ccore()
+        else:
+            self.__process_by_python()
+
+
+    def __process_by_ccore(self):
+        """!
+        @brief Performs processing using C++ implementation.
+
+        """
+        if isinstance(self.__initializer, kmeans_plusplus_initializer):
+            initializer = wrapper.elbow_center_initializer.KMEANS_PLUS_PLUS
+        else:
+            initializer = wrapper.elbow_center_initializer.RANDOM
+
+        result = wrapper.elbow(self.__data, self.__kmin, self.__kmax, initializer)
+
+        self.__kvalue = result[0]
+        self.__wce = result[1]
+
+
+    def __process_by_python(self):
+        """!
+        @brief Performs processing using python implementation.
 
         """
         for amount in range(self.__kmin, self.__kmax):

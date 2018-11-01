@@ -5,7 +5,10 @@ CHANGE NOTES FOR 0.8.2 (STARTED May 28, 2018)
 ------------------------------------------------------------------------
 
 GENERAL CHANGES:
-- Implemented Elbow method to find out proper amount of clusters in dataset (pyclustering.cluster.elbow).
+- Implemented Random Center Initializer for CCORE (ccore.clst.random_center_initializer).
+  See: no reference.
+
+- Implemented Elbow method to find out proper amount of clusters in dataset (pyclustering.cluster.elbow, ccore.clst.elbow).
   See: https://github.com/annoviko/pyclustering/issues/416
 
 - Introduced new method 'get_optics_objects' for OPTICS algorithm to obtain detailed information about ordering (pyclustering.cluster.optics, ccore.clst.optics).
@@ -44,7 +47,7 @@ GENERAL CHANGES:
 
 CORRECTED MAJOR BUGS:
 - Bug with animation of correlation matrix in case of new versions of matplotlib (pyclustering.nnet.sync).
-  See: no reference
+  See: no reference.
 
 - Bug with SOM and pickle when it was not possible to store and load network using pickle (pyclustering.nnet.som).
   See: https://github.com/annoviko/pyclustering/issues/456

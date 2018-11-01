@@ -235,7 +235,7 @@ void som::create_initial_weights(const som_init_type type) {
     std::random_device device;
     std::default_random_engine generator(device());
 
-    generator.seed(std::chrono::system_clock::now().time_since_epoch().count());
+    generator.seed(static_cast<unsigned int>(std::chrono::system_clock::now().time_since_epoch().count()));
 
     switch (type) {
         /* Feature SOM 0002: Uniform grid. */

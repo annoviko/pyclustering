@@ -235,6 +235,9 @@
     <ClCompile Include="cluster\random_center_initializer.cpp">
       <Filter>Source Files\cluster</Filter>
     </ClCompile>
+    <ClCompile Include="interface\elbow_interface.cpp">
+      <Filter>Source Files\interface</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cluster\agglomerative.hpp">
@@ -515,6 +518,9 @@
     </ClInclude>
     <ClInclude Include="cluster\center_initializer.hpp">
       <Filter>Source Files\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\elbow_interface.h">
+      <Filter>Source Files\interface</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

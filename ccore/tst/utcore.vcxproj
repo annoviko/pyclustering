@@ -201,6 +201,7 @@
     <ClCompile Include="..\src\interface\bsas_interface.cpp" />
     <ClCompile Include="..\src\interface\cure_interface.cpp" />
     <ClCompile Include="..\src\interface\dbscan_interface.cpp" />
+    <ClCompile Include="..\src\interface\elbow_interface.cpp" />
     <ClCompile Include="..\src\interface\hhn_interface.cpp" />
     <ClCompile Include="..\src\interface\hsyncnet_interface.cpp" />
     <ClCompile Include="..\src\interface\kmeans_interface.cpp" />
@@ -236,6 +237,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="utest-elbow.cpp" />
     <ClCompile Include="utest-interface-bsas.cpp" />
+    <ClCompile Include="utest-interface-elbow.cpp" />
     <ClCompile Include="utest-interface-mbsas.cpp" />
     <ClCompile Include="utest-interface-ttsas.cpp" />
     <ClCompile Include="utest-mbsas.cpp" />
@@ -354,6 +356,7 @@
     <ClInclude Include="..\src\interface\bsas_interface.h" />
     <ClInclude Include="..\src\interface\cure_interface.h" />
     <ClInclude Include="..\src\interface\dbscan_interface.h" />
+    <ClInclude Include="..\src\interface\elbow_interface.h" />
     <ClInclude Include="..\src\interface\hhn_interface.h" />
     <ClInclude Include="..\src\interface\hsyncnet_interface.h" />
     <ClInclude Include="..\src\interface\kmeans_interface.h" />

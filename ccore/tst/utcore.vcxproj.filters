@@ -428,6 +428,12 @@
     <ClCompile Include="..\src\cluster\random_center_initializer.cpp">
       <Filter>Tested Code\cluster</Filter>
     </ClCompile>
+    <ClCompile Include="utest-interface-elbow.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\interface\elbow_interface.cpp">
+      <Filter>Tested Code\interface</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\container\adjacency.hpp">
@@ -717,6 +723,9 @@
     </ClInclude>
     <ClInclude Include="..\src\cluster\random_center_initializer.hpp">
       <Filter>Tested Code\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\interface\elbow_interface.h">
+      <Filter>Tested Code\interface</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -168,7 +168,7 @@ void sync_network::initialize(const std::size_t size, const double weight_factor
     std::random_device                      device;
     std::default_random_engine              generator(device());
 
-    generator.seed(std::chrono::system_clock::now().time_since_epoch().count());
+    generator.seed(static_cast<unsigned int>(std::chrono::system_clock::now().time_since_epoch().count()));
 
     std::uniform_real_distribution<double>  phase_distribution(0.0, 2.0 * pi);
     std::uniform_real_distribution<double>  frequency_distribution(0.0, 1.0);
