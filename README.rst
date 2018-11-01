@@ -125,7 +125,7 @@ Brief Overview of the Library Content
 - CLARANS [Python]
 - CURE [Python, C++]
 - DBSCAN [Python, C++]
-- Elbow [Python]
+- Elbow [Python, C++]
 - EMA [Python]
 - GA (Genetic Algorithm) [Python, C++]
 - HSyncNet [Python, C++]

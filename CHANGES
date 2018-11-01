@@ -38,7 +38,7 @@ GENERAL CHANGES:
 - Implemented BANG animator to render animation of clustering process (pyclustering.cluster.bang).
   See: https://github.com/annoviko/pyclustering/issues/442
 
-- Optimization of CURE algrotihm by using Euclidean Square distance (pyclustering.cluster.cure, ccore.clst.cure).
+- Optimization of CURE algorithm by using Euclidean Square distance (pyclustering.cluster.cure, ccore.clst.cure).
   See: https://github.com/annoviko/pyclustering/issues/439
 
 - Supported numpy.ndarray points in KD-tree (pyclustering.container.kdtree).

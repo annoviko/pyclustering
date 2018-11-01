@@ -30,6 +30,12 @@
 #include "definitions.hpp"
 
 
+/**
+ *
+ * @brief   Elbow result is returned by pyclustering_package that consist sub-packages and this enumerator provides
+ *           named indexes for sub-packages.
+ *
+ */
 enum elbow_package_indexer {
     ELBOW_PACKAGE_AMOUNT = 0,
     ELBOW_PACKAGE_WCE,
@@ -37,6 +43,18 @@ enum elbow_package_indexer {
 };
 
 
+/**
+ *
+ * @brief   Performs data analysis using Elbow method using center initializer that is specified by template.
+ * @details Caller should destroy returned result by 'free_pyclustering_package'.
+ *
+ * @param[in] p_sample: input data for clustering.
+ * @param[in] p_kmin: minimum amount of clusters that should be considered.
+ * @param[in] p_kmax: maximum amount of clusters that should be considered.
+ *
+ * @return  Returns Elbow's analysis results as a pyclustering package [ [ amount of clusters ], [ within cluster errors (wce) ] ].
+ *
+ */
 template <class type_initializer>
 pyclustering_package * elbow_method(const pyclustering_package * const p_sample,
                                     const std::size_t p_kmin,
@@ -59,6 +77,7 @@ pyclustering_package * elbow_method(const pyclustering_package * const p_sample,
 
     return package;
 }
+
 
 /**
  *
