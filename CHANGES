@@ -46,6 +46,9 @@ GENERAL CHANGES:
 
 
 CORRECTED MAJOR BUGS:
+- Bug with clustering failure in case of non-numpy user defined metric for K-Means algorithm (pyclustering.cluster.kmeans).
+  See: https://github.com/annoviko/pyclustering/issues/471
+
 - Bug with animation of correlation matrix in case of new versions of matplotlib (pyclustering.nnet.sync).
   See: no reference.
 
