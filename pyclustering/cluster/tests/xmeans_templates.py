@@ -36,7 +36,6 @@ from pyclustering.tests.assertion import assertion
 class XmeansTestTemplates:
     @staticmethod
     def templateLengthProcessData(input_sample, start_centers, expected_cluster_length, type_splitting, kmax, ccore):
-        sample = None
         if isinstance(input_sample, str):
             sample = read_sample(input_sample)
         else:

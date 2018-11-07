@@ -71,7 +71,7 @@ class KmeansIntegrationTest(unittest.TestCase):
         KmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], True, metric=metric)
 
     def testClusterAllocationSampleSimple1UserDefinedByCore(self):
-        metric = distance_metric(type_metric.USER_DEFINED, func=distance_metric(type_metric.EUCLIDEAN, numpy_usage=True))
+        metric = distance_metric(type_metric.USER_DEFINED, func=distance_metric(type_metric.EUCLIDEAN))
         KmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], True, metric=metric)
 
     def testClusterAllocationSampleSimple2ByCore(self):
