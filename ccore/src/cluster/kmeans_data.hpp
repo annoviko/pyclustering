@@ -55,6 +55,7 @@ public:
     /**
     *
     * @brief    Default constructor that creates empty clustering data.
+    * @details  In case of default constructor clusters and centers are not stored on each clustering iteration.
     *
     */
     kmeans_data(void) = default;

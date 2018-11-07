@@ -323,20 +323,26 @@ class kmeans:
         
         <b>Keyword Args:</b><br>
             - observer (kmeans_observer): Observer of the algorithm to collect information about clustering process on each iteration.
-            - metric (distance_metric): Metric that is used for distance calculation between two points.
+            - metric (distance_metric): Metric that is used for distance calculation between two points (by default euclidean square distance).
+            - itermax (uint): Maximum number of iterations that is used for clustering process (by default: 200).
         
         @see center_initializer
         
         """
-        self.__pointer_data = numpy.matrix(data)
+        self.__pointer_data = numpy.array(data)
         self.__clusters = []
-        self.__centers = numpy.matrix(initial_centers)
+        self.__centers = numpy.array(initial_centers)
         self.__tolerance = tolerance
         self.__total_wce = 0
 
         self.__observer = kwargs.get('observer', None)
         self.__metric = kwargs.get('metric', distance_metric(type_metric.EUCLIDEAN_SQUARE))
-        self.__metric.enable_numpy_usage()
+        self.__maxiter = kwargs.get('maxiter', 200)
+
+        if self.__metric.get_type() != type_metric.USER_DEFINED:
+            self.__metric.enable_numpy_usage()
+        else:
+            self.__metric.disable_numpy_usage()
         
         self.__ccore = ccore and self.__metric.get_type() != type_metric.USER_DEFINED
         if self.__ccore is True:
@@ -355,7 +361,7 @@ class kmeans:
         """
 
         if len(self.__pointer_data[0]) != len(self.__centers[0]):
-            raise NameError('Dimension of the input data and dimension of the initial cluster centers must be equal.')
+            raise ValueError("Dimension of the input data and dimension of the initial cluster centers must be equal.")
 
         if self.__ccore is True:
             self.__process_by_ccore()
@@ -389,26 +395,23 @@ class kmeans:
 
         maximum_change = float('inf')
         stop_condition = self.__tolerance * self.__tolerance
+        iteration = 0
 
         if self.__observer is not None:
             initial_clusters = self.__update_clusters()
             self.__observer.notify(initial_clusters, self.__centers.tolist())
 
-        while maximum_change > stop_condition:
+        while maximum_change > stop_condition and iteration < self.__maxiter:
             self.__clusters = self.__update_clusters()
             updated_centers = self.__update_centers()  # changes should be calculated before assignment
 
             if self.__observer is not None:
                 self.__observer.notify(self.__clusters, updated_centers.tolist())
 
-            if len(self.__centers) != len(updated_centers):
-                maximum_change = float('inf')
+            maximum_change = self.__calculate_changes(updated_centers)
 
-            else:
-                changes = self.__metric(self.__centers, updated_centers)
-                maximum_change = numpy.max(changes)
-
-            self.__centers = updated_centers.tolist()
+            self.__centers = updated_centers    # assign center after change calculation
+            iteration += 1
 
         self.__calculate_total_wce()
 
@@ -477,9 +480,7 @@ class kmeans:
         
         clusters = [[] for _ in range(len(self.__centers))]
         
-        dataset_differences = numpy.zeros((len(clusters), len(self.__pointer_data)))
-        for index_center in range(len(self.__centers)):
-            dataset_differences[index_center] = self.__metric(self.__pointer_data, self.__centers[index_center])
+        dataset_differences = self.__calculate_dataset_difference(len(clusters))
         
         optimum_indexes = numpy.argmin(dataset_differences, axis=0)
         for index_point in range(len(optimum_indexes)):
@@ -506,7 +507,7 @@ class kmeans:
             cluster_points = self.__pointer_data[self.__clusters[index], :]
             centers[index] = cluster_points.mean(axis=0)
 
-        return numpy.matrix(centers)
+        return numpy.array(centers)
 
 
     def __calculate_total_wce(self):
@@ -515,11 +516,44 @@ class kmeans:
 
         """
 
-        dataset_differences = numpy.zeros((len(self.__clusters), len(self.__pointer_data)))
-        for index_center in range(len(self.__centers)):
-            dataset_differences[index_center] = self.__metric(self.__pointer_data, self.__centers[index_center])
+        dataset_differences = self.__calculate_dataset_difference(len(self.__clusters))
 
         self.__total_wce = 0
         for index_cluster in range(len(self.__clusters)):
             for index_point in self.__clusters[index_cluster]:
                 self.__total_wce += dataset_differences[index_cluster][index_point]
+
+
+    def __calculate_dataset_difference(self, amount_clusters):
+        """!
+        @brief Calculate distance from each point to each cluster center.
+
+        """
+        dataset_differences = numpy.zeros((amount_clusters, len(self.__pointer_data)))
+        for index_center in range(amount_clusters):
+            if self.__metric.get_type() != type_metric.USER_DEFINED:
+                dataset_differences[index_center] = self.__metric(self.__pointer_data, self.__centers[index_center])
+            else:
+                dataset_differences[index_center] = [ self.__metric(point, self.__centers[index_center])
+                                                      for point in self.__pointer_data ]
+
+        return dataset_differences
+
+
+    def __calculate_changes(self, updated_centers):
+        """!
+        @brief Calculates changes estimation between previous and current iteration using centers for that purpose.
+
+        @param[in] updated_centers (array_like): New cluster centers.
+
+        @return (float) Maximum changes between centers.
+
+        """
+        if len(self.__centers) != len(updated_centers):
+            maximum_change = float('inf')
+
+        else:
+            changes = self.__metric(self.__centers, updated_centers)
+            maximum_change = numpy.max(changes)
+
+        return maximum_change

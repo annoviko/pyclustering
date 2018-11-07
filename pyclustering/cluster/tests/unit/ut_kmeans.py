@@ -70,9 +70,21 @@ class KmeansUnitTest(unittest.TestCase):
         metric = distance_metric(type_metric.MINKOWSKI, degree=4)
         KmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], False, metric=metric)
 
-    def testClusterAllocationSampleSimple1UserDefined(self):
-        metric = distance_metric(type_metric.USER_DEFINED, func=distance_metric(type_metric.EUCLIDEAN, numpy_usage=True))
+    def testClusterAllocationSampleSimple1UserDefined1(self):
+        metric = distance_metric(type_metric.USER_DEFINED, func=distance_metric(type_metric.EUCLIDEAN))
         KmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], False, metric=metric)
+
+    def testClusterAllocationSampleSimple1UserDefined2(self):
+        metric = distance_metric(type_metric.USER_DEFINED, func=lambda p1, p2: (p1[0] - p2[0])**2 + (p1[1] - p2[1])**2)
+        KmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], False, metric=metric)
+
+    def testClusterAllocationSampleSimple1UserDefined3(self):
+        metric = distance_metric(type_metric.USER_DEFINED, func=lambda p1, p2: abs(p1[0] - p2[0]) + abs(p1[1] - p2[1]))
+        KmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], False, metric=metric)
+
+    def testClusterAllocationSampleSimple1UserDefinedInfitityProcessing(self):
+        metric = distance_metric(type_metric.USER_DEFINED, func=lambda p1, p2: p1[0] + p2[0] + 2)
+        KmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [10], False, metric=metric)
 
     def testClusterAllocationSampleSimple2(self):
         KmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [[3.5, 4.8], [6.9, 7], [7.5, 0.5]], [10, 5, 8], False)
@@ -82,6 +94,10 @@ class KmeansUnitTest(unittest.TestCase):
 
     def testClusterAllocationSampleSimple3(self):
         KmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [[0.2, 0.1], [4.0, 1.0], [2.0, 2.0], [2.3, 3.9]], [10, 10, 10, 30], False)
+
+    def testClusterAllocationSampleSimple3UserDefinedInfitityProcessing(self):
+        metric = distance_metric(type_metric.USER_DEFINED, func=lambda p1, p2: p1[0] + p2[0] + 2)
+        KmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [[0.2, 0.1], [4.0, 1.0], [2.0, 2.0], [2.3, 3.9]], [60], False, metric=metric)
 
     def testClusterOneAllocationSampleSimple3(self):
         KmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [[0.2, 0.1]], [60], False)

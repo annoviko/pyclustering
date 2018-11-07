@@ -158,17 +158,19 @@ class distance_metric:
     def enable_numpy_usage(self):
         """!
         @brief Start numpy for distance calculation.
-        @details Useful in case matrices to increase performance.
+        @details Useful in case matrices to increase performance. No effect in case of type_metric.USER_DEFINED type.
 
         """
         self.__numpy = True
-        self.__calculator = self.__create_distance_calculator()
+        if self.__type != type_metric.USER_DEFINED:
+            self.__calculator = self.__create_distance_calculator()
 
 
     def disable_numpy_usage(self):
         """!
         @brief Stop using numpy for distance calculation.
         @details Useful in case of big amount of small data portion when numpy call is longer than calculation itself.
+                  No effect in case of type_metric.USER_DEFINED type.
 
         """
         self.__numpy = False
@@ -176,6 +178,12 @@ class distance_metric:
 
 
     def __create_distance_calculator(self):
+        """!
+        @brief Creates distance metric calculator.
+
+        @return (callable) Callable object of distance metric calculator.
+
+        """
         if self.__numpy is True:
             return self.__create_distance_calculator_numpy()
 
@@ -184,7 +192,7 @@ class distance_metric:
 
     def __create_distance_calculator_basic(self):
         """!
-        @brief Creates distance metric calculator.
+        @brief Creates distance metric calculator that does not use numpy.
 
         @return (callable) Callable object of distance metric calculator.
 
