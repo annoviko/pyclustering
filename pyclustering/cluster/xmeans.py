@@ -86,26 +86,40 @@ class xmeans:
              
              CCORE implementation of the algorithm uses thread pool to parallelize the clustering process.
     
-    Example:
+    Here example how to perform cluster analysis using X-Means algorithm:
     @code
-        # sample for cluster analysis (represented by list)
-        sample = read_sample(path_to_sample);
-        
-        # create object of X-Means algorithm that uses CCORE for processing
-        # initial centers - optional parameter, if it is None, then random centers will be used by the algorithm.
-        # let's avoid random initial centers and initialize them using K-Means++ method:
-        initial_centers = kmeans_plusplus_initializer(sample, 2).initialize();
-        xmeans_instance = xmeans(sample, initial_centers, ccore = True);
-        
-        # run cluster analysis
-        xmeans_instance.process();
-        
-        # obtain results of clustering
-        clusters = xmeans_instance.get_clusters();
-        
-        # display allocated clusters
-        draw_clusters(sample, clusters);
+        from pyclustering.cluster import cluster_visualizer
+        from pyclustering.cluster.xmeans import xmeans
+        from pyclustering.cluster.center_initializer import kmeans_plusplus_initializer
+        from pyclustering.utils import read_sample
+        from pyclustering.samples.definitions import SIMPLE_SAMPLES
+
+        # Read sample 'simple3' from file.
+        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE3)
+
+        # Prepare initial centers - amount of initial centers defines amount of clusters from which X-Means will
+        # start analysis.
+        amount_initial_centers = 2
+        initial_centers = kmeans_plusplus_initializer(sample, amount_initial_centers).initialize()
+
+        # Create instance of X-Means algorithm. The algorithm will start analysis from 2 clusters, the maximum
+        # number of clusters that can be allocated is 20.
+        xmeans_instance = xmeans(sample, initial_centers, 20)
+        xmeans_instance.process()
+
+        # Extract clustering results: clusters and their centers
+        clusters = xmeans_instance.get_clusters()
+        centers = xmeans_instance.get_centers()
+
+        # Visualize clustering results
+        visualizer = cluster_visualizer()
+        visualizer.append_clusters(clusters, sample)
+        visualizer.append_cluster(centers, None, marker='*')
+        visualizer.show()
     @endcode
+
+    Visualization of clustering results that were obtained using code above and where X-Means algorithm allocates four clusters.
+    @image html xmeans_clustering_simple3.png "Fig. 1. X-Means clustering results (data 'Simple3')."
     
     @see center_initializer
     
