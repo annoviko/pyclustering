@@ -21,6 +21,7 @@
 
 #include "cluster/random_center_initializer.hpp"
 
+#include <chrono>
 #include <random>
 
 
@@ -65,7 +66,10 @@ void random_center_initializer::initialize(const dataset & p_data, const index_s
 
 void random_center_initializer::create_center(const dataset & p_data, dataset & p_centers) const {
     std::random_device random_device;
+
     std::mt19937 engine(random_device());
+    engine.seed(static_cast<unsigned int>(std::chrono::system_clock::now().time_since_epoch().count()));
+
     std::uniform_int_distribution<std::size_t> distribution(0, p_data.size() - 1);
 
     std::size_t random_index_point = distribution(engine);

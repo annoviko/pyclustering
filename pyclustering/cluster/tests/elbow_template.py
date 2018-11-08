@@ -37,7 +37,7 @@ from pyclustering.samples import answer_reader
 class elbow_test_template:
     @staticmethod
     def calculate_elbow(path_to_data, path_to_answer, kmin, kmax, ccore, **kwargs):
-        repeat = 5  # Elbow method randomly chooses initial centers therefore we need to repeat test if it fails.
+        repeat = 10  # Elbow method randomly chooses initial centers therefore we need to repeat test if it fails.
         testing_result = False
 
         initializer = kwargs.get('initializer', kmeans_plusplus_initializer)

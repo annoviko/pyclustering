@@ -110,7 +110,9 @@ void kmeans_plus_plus::free_temporal_params(void) const {
 point kmeans_plus_plus::get_first_center(void) const {
     std::size_t length = m_indexes_ptr->empty() ? m_data_ptr->size() : m_indexes_ptr->size();
 
-    std::default_random_engine generator;
+    std::random_device random_device;
+
+    std::mt19937 generator(random_device());
     generator.seed(static_cast<unsigned int>(std::chrono::system_clock::now().time_since_epoch().count()));
 
     std::uniform_int_distribution<std::size_t> distribution(0, length - 1);
