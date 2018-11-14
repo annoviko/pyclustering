@@ -25,10 +25,10 @@
 """
 
 
-from pyclustering.core.mbsas_wrapper import mbsas as mbsas_wrapper;
-from pyclustering.core.metric_wrapper import metric_wrapper;
+from pyclustering.core.mbsas_wrapper import mbsas as mbsas_wrapper
+from pyclustering.core.metric_wrapper import metric_wrapper
 
-from pyclustering.cluster.bsas import bsas;
+from pyclustering.cluster.bsas import bsas
 
 
 class mbsas(bsas):

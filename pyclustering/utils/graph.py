@@ -23,10 +23,16 @@
 
 """
 
-import matplotlib.pyplot as plt;
-from matplotlib import colors;
+import warnings
 
-from enum import IntEnum;
+try:
+    import matplotlib.pyplot as plt
+    from matplotlib import colors
+except Exception as error_instance:
+    warnings.warn("Impossible to import matplotlib (please, install 'matplotlib'), pyclustering's visualization "
+                  "functionality is not available (details: '%s')." % str(error_instance))
+
+from enum import IntEnum
 
 class type_graph_descr(IntEnum):
     """!

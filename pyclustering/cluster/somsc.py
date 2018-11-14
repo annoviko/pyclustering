@@ -27,10 +27,10 @@
 """
 
 
-from pyclustering.cluster.encoder import type_encoding;
+from pyclustering.cluster.encoder import type_encoding
 
-from pyclustering.nnet.som import som;
-from pyclustering.nnet.som import type_conn;
+from pyclustering.nnet.som import som
+from pyclustering.nnet.som import type_conn
 
 
 class somsc:

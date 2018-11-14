@@ -25,13 +25,13 @@
 """
 
 
-from pyclustering.cluster.encoder import type_encoding;
-from pyclustering.cluster.syncnet import syncnet;
+from pyclustering.cluster.encoder import type_encoding
+from pyclustering.cluster.syncnet import syncnet
 
-from pyclustering.nnet.som import som, type_conn;
-from pyclustering.nnet import initial_type;
+from pyclustering.nnet.som import som, type_conn
+from pyclustering.nnet import initial_type
 
-from pyclustering.utils import euclidean_distance_square;
+from pyclustering.utils import euclidean_distance_square
 
 
 class syncsom:

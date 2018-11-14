@@ -24,23 +24,27 @@
 
 """
 
+import math
+import warnings
 
-import matplotlib.pyplot as plt;
-import matplotlib.animation as animation;
+try:
+    import matplotlib.pyplot as plt
+    import matplotlib.animation as animation
+except Exception as error_instance:
+    warnings.warn("Impossible to import matplotlib (please, install 'matplotlib'), pyclustering's visualization "
+                  "functionality is not available (details: '%s')." % str(error_instance))
 
-import math;
+from pyclustering.cluster.encoder import type_encoding
+from pyclustering.cluster import cluster_visualizer
 
-from pyclustering.cluster.encoder import type_encoding;
-from pyclustering.cluster import cluster_visualizer;
+from pyclustering.core.syncnet_wrapper import syncnet_create_network, syncnet_process, syncnet_destroy_network, syncnet_analyser_destroy
+from pyclustering.core.sync_wrapper import sync_connectivity_matrix
+from pyclustering.core.wrapper import ccore_library
 
-from pyclustering.core.syncnet_wrapper import syncnet_create_network, syncnet_process, syncnet_destroy_network, syncnet_analyser_destroy;
-from pyclustering.core.sync_wrapper import sync_connectivity_matrix;
-from pyclustering.core.wrapper import ccore_library;
+from pyclustering.nnet.sync import sync_dynamic, sync_network, sync_visualizer
+from pyclustering.nnet import conn_represent, initial_type, conn_type, solve_type
 
-from pyclustering.nnet.sync import sync_dynamic, sync_network, sync_visualizer;
-from pyclustering.nnet import conn_represent, initial_type, conn_type, solve_type;
-
-from pyclustering.utils import euclidean_distance;
+from pyclustering.utils import euclidean_distance
 
 
 class syncnet_analyser(sync_dynamic):

@@ -24,9 +24,9 @@
 
 """
 
-from pyclustering.nnet import *;
-from pyclustering.nnet.sync import sync_network;
-from pyclustering.nnet.sync import sync_dynamic;
+from pyclustering.nnet import *
+from pyclustering.nnet.sync import sync_network
+from pyclustering.nnet.sync import sync_dynamic
 
 
 class syncgcolor_analyser(sync_dynamic):

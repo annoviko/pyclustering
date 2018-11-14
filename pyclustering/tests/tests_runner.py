@@ -24,13 +24,13 @@
 """
 
 
-import sys;
+import sys
 
-from pyclustering.tests.suite_holder import suite_holder;
+from pyclustering.tests.suite_holder import suite_holder
 
 # Generate images without having a window appear.
-import matplotlib;
-matplotlib.use('Agg');
+import matplotlib
+matplotlib.use('Agg')
 
 # Add path to pyclustering package (much better to set PYTHONPATH), but just to be sure that at least unit-tests can be run.
 # import os, sys;

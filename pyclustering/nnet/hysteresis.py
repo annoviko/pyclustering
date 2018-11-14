@@ -24,13 +24,13 @@
 
 """
 
-import numpy;
+import numpy
 
-from scipy.integrate import odeint;
+from scipy.integrate import odeint
 
-from pyclustering.nnet import *;
+from pyclustering.nnet import *
 
-from pyclustering.utils import draw_dynamics;
+from pyclustering.utils import draw_dynamics
 
 
 class hysteresis_dynamic:

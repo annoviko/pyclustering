@@ -24,11 +24,16 @@
 
 """
 
-import matplotlib.pyplot as plt
-import matplotlib.animation as animation
-
 import random
 import numpy
+import warnings
+
+try:
+    import matplotlib.pyplot as plt
+    import matplotlib.animation as animation
+except Exception as error_instance:
+    warnings.warn("Impossible to import matplotlib (please, install 'matplotlib'), pyclustering's visualization "
+                  "functionality is not available (details: '%s')." % str(error_instance))
 
 from PIL import Image
 

@@ -23,11 +23,16 @@
 
 """
 
-import matplotlib.pyplot as plt
-import matplotlib.gridspec as gridspec
-
 import itertools
 import math
+import warnings
+
+try:
+    import matplotlib.pyplot as plt
+    import matplotlib.gridspec as gridspec
+except Exception:
+    warnings.warn("Impossible to import matplotlib (please, install 'matplotlib'), pyclustering's visualization "
+                  "functionality is not available.")
 
 from pyclustering.utils.color import color as color_list
 

@@ -25,10 +25,10 @@
 """
 
 
-from pyclustering.core.ttsas_wrapper import ttsas as ttsas_wrapper;
-from pyclustering.core.metric_wrapper import metric_wrapper;
+from pyclustering.core.ttsas_wrapper import ttsas as ttsas_wrapper
+from pyclustering.core.metric_wrapper import metric_wrapper
 
-from pyclustering.cluster.bsas import bsas;
+from pyclustering.cluster.bsas import bsas
 
 
 class ttsas(bsas):

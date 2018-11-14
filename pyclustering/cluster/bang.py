@@ -24,14 +24,18 @@
 
 """
 
-
-import matplotlib
-import matplotlib.gridspec as gridspec
-import matplotlib.pyplot as plt
-import matplotlib.patches as patches
-import matplotlib.animation as animation
-
 import itertools
+import warnings
+
+try:
+    import matplotlib
+    import matplotlib.gridspec as gridspec
+    import matplotlib.pyplot as plt
+    import matplotlib.patches as patches
+    import matplotlib.animation as animation
+except Exception as error_instance:
+    warnings.warn("Impossible to import matplotlib (please, install 'matplotlib'), pyclustering's visualization "
+                  "functionality is not available (details: '%s')." % str(error_instance))
 
 from pyclustering.cluster import cluster_visualizer
 from pyclustering.cluster.encoder import type_encoding

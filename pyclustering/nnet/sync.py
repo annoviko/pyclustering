@@ -24,21 +24,26 @@
 
 """
 
-import matplotlib.pyplot as plt;
-import matplotlib.animation as animation;
+import math
+import numpy
+import random
+import warnings
 
-import math;
-import numpy;
-import random;
+try:
+    import matplotlib.pyplot as plt
+    import matplotlib.animation as animation
+except Exception as error_instance:
+    warnings.warn("Impossible to import matplotlib (please, install 'matplotlib'), pyclustering's visualization "
+                  "functionality is not available (details: '%s')." % str(error_instance))
 
-import pyclustering.core.sync_wrapper as wrapper;
+import pyclustering.core.sync_wrapper as wrapper
 
-from pyclustering.core.wrapper import ccore_library;
+from pyclustering.core.wrapper import ccore_library
 
-from scipy.integrate import odeint;
+from scipy.integrate import odeint
 
-from pyclustering.nnet import network, conn_represent, conn_type, initial_type, solve_type;
-from pyclustering.utils import pi, draw_dynamics, draw_dynamics_set, set_ax_param;
+from pyclustering.nnet import network, conn_represent, conn_type, initial_type, solve_type
+from pyclustering.utils import pi, draw_dynamics, draw_dynamics_set, set_ax_param
 
 
 class order_estimator:

@@ -24,18 +24,18 @@
 
 """
 
-import numpy;
-import random;
+import numpy
+import random
 
-import pyclustering.core.legion_wrapper as wrapper;
+import pyclustering.core.legion_wrapper as wrapper
 
-from pyclustering.core.wrapper import ccore_library;
+from pyclustering.core.wrapper import ccore_library
 
-from pyclustering.nnet import *;
+from pyclustering.nnet import *
 
-from pyclustering.utils import heaviside, allocate_sync_ensembles;
+from pyclustering.utils import heaviside, allocate_sync_ensembles
 
-from scipy.integrate import odeint;
+from scipy.integrate import odeint
 
 
 class legion_parameters:

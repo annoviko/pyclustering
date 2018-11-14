@@ -24,19 +24,19 @@
 """
 
 
-import sys;
-import unittest;
+import sys
+import unittest
 
 
 class suite_holder:
     def __init__(self):
-        self.__suite = unittest.TestSuite();
+        self.__suite = unittest.TestSuite()
 
     def get_suite(self):
-        return self.__suite;
+        return self.__suite
 
     def run(self):
-        return unittest.TextTestRunner(stream = sys.stdout, verbosity = 2).run(self.__suite);
+        return unittest.TextTestRunner(stream = sys.stdout, verbosity = 2).run(self.__suite)
 
     @staticmethod
     def fill_suite(test_suite):

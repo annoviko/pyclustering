@@ -24,16 +24,16 @@
 
 """
 
-from math import floor;
+from math import floor
 
-from PIL import Image;
+from PIL import Image
 
-from pyclustering.cluster.syncnet import syncnet;
+from pyclustering.cluster.syncnet import syncnet
 
-from pyclustering.nnet import solve_type, initial_type;
-from pyclustering.nnet.sync import sync_visualizer;
+from pyclustering.nnet import solve_type, initial_type
+from pyclustering.nnet.sync import sync_visualizer
 
-from pyclustering.utils import read_image;
+from pyclustering.utils import read_image
 
 
 class syncsegm_visualizer:

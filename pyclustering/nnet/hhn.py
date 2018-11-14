@@ -24,18 +24,18 @@
 
 """
 
-from scipy.integrate import odeint;
+from scipy.integrate import odeint
 
-from pyclustering.core.wrapper import ccore_library;
+from pyclustering.core.wrapper import ccore_library
 
-import pyclustering.core.hhn_wrapper as wrapper;
+import pyclustering.core.hhn_wrapper as wrapper
 
-from pyclustering.nnet import *;
+from pyclustering.nnet import *
 
-from pyclustering.utils import allocate_sync_ensembles;
+from pyclustering.utils import allocate_sync_ensembles
 
-import numpy;
-import random;
+import numpy
+import random
 
 class hhn_parameters:
     """!
