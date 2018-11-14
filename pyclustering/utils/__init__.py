@@ -27,8 +27,13 @@ import time
 import numpy
 import warnings
 
-from PIL import Image
 from numpy import array
+
+try:
+    from PIL import Image
+except Exception as error_instance:
+    warnings.warn("Impossible to import PIL (please, install 'PIL'), pyclustering's visualization "
+                  "functionality is partially not available (details: '%s')." % str(error_instance))
 
 try:
     import matplotlib.pyplot as plt

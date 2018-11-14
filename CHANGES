@@ -5,7 +5,7 @@ CHANGE NOTES FOR 0.8.2 (STARTED May 28, 2018)
 ------------------------------------------------------------------------
 
 GENERAL CHANGES:
-- Display warning instead of throwing error if matplotlib cannot be imported (MAC OS X problems).
+- Display warning instead of throwing error if matplotlib or Pillow cannot be imported (MAC OS X problems).
   See: https://github.com/annoviko/pyclustering/issues/455
 
 - Implemented Random Center Initializer for CCORE (ccore.clst.random_center_initializer).

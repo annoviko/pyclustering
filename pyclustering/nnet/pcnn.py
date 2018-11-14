@@ -33,9 +33,13 @@ try:
     import matplotlib.animation as animation
 except Exception as error_instance:
     warnings.warn("Impossible to import matplotlib (please, install 'matplotlib'), pyclustering's visualization "
-                  "functionality is not available (details: '%s')." % str(error_instance))
+                  "functionality is partially not available (details: '%s')." % str(error_instance))
 
-from PIL import Image
+try:
+    from PIL import Image
+except Exception as error_instance:
+    warnings.warn("Impossible to import PIL (please, install 'PIL'), pyclustering's visualization "
+                  "functionality is partially not available (details: '%s')." % str(error_instance))
 
 from pyclustering.nnet import *
 
