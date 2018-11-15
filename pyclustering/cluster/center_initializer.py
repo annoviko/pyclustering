@@ -204,13 +204,15 @@ class kmeans_plusplus_initializer:
         return shortest_distances
 
 
-    def __get_next_center(self, centers):
+    def __get_next_center(self, centers, return_index):
         """!
         @brief Calculates the next center for the data.
 
         @param[in] centers (array_like): Current initialized centers.
+        @param[in] return_index (bool): If True then return center's index instead of point.
 
-        @return (array_like) Next initialized center.
+        @return (array_like) Next initialized center.<br>
+                (uint) Index of next initialized center if return_index is True.
 
         """
 
@@ -222,7 +224,28 @@ class kmeans_plusplus_initializer:
             probabilities = self.__calculate_probabilities(distances)
             center_index = self.__get_probable_center(distances, probabilities)
 
+        if return_index:
+            return center_index
+
         return self.__data[center_index]
+
+
+    def __get_initial_center(self, return_index):
+        """!
+        @brief Choose randomly first center.
+
+        @param[in] return_index (bool): If True then return center's index instead of point.
+
+        @return (array_like) First center.<br>
+                (uint) Index of first center.
+
+        """
+
+        index_center = random.randint(0, len(self.__data) - 1)
+        if return_index:
+            return index_center
+
+        return self.__data[index_center]
 
 
     def __calculate_probabilities(self, distances):
@@ -272,20 +295,23 @@ class kmeans_plusplus_initializer:
         return index_best_candidate
 
 
-    def initialize(self):
+    def initialize(self, return_index=False):
         """!
         @brief Calculates initial centers using K-Means++ method.
+
+        @param[in] return_index (bool): If True then returns indexes of points from input data instead of points itself.
         
         @return (list) List of initialized initial centers.
+                  If argument 'return_index' is False then returns list of points.
+                  If argument 'return_index' is True then returns list of indexes.
         
         """
 
-        index_center = random.randint(0, len(self.__data) - 1)
-        centers = [ self.__data[ index_center ] ]
+        centers = [ self.__get_initial_center(return_index) ]
 
         # For each next center
         for _ in range(1, self.__amount):
-            next_center = self.__get_next_center(centers)
+            next_center = self.__get_next_center(centers, return_index)
             centers.append(next_center)
 
         return centers
