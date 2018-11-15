@@ -324,7 +324,7 @@ class kmeans:
         @param[in] initial_centers (array_like): Initial coordinates of centers of clusters that are represented by array_like data structure: [center1, center2, ...].
         @param[in] tolerance (double): Stop condition: if maximum value of change of centers of clusters is less than tolerance then algorithm stops processing.
         @param[in] ccore (bool): Defines should be CCORE library (C++ pyclustering library) used instead of Python code or not.
-        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'observer', 'metric').
+        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'observer', 'metric', 'itermax').
         
         <b>Keyword Args:</b><br>
             - observer (kmeans_observer): Observer of the algorithm to collect information about clustering process on each iteration.

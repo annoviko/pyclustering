@@ -119,6 +119,7 @@ INPUT                  = pyclustering/__init__.py \
                          pyclustering/cluster/mbsas.py \
                          pyclustering/cluster/optics.py \
                          pyclustering/cluster/rock.py \
+                         pyclustering/cluster/silhouette.py \
                          pyclustering/cluster/somsc.py \
                          pyclustering/cluster/syncnet.py \
                          pyclustering/cluster/syncsom.py \
