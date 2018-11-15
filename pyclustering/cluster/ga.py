@@ -343,7 +343,7 @@ class genetic_algorithm:
     """
 
     def __init__(self, data, count_clusters, chromosome_count, population_count, count_mutation_gens=2,
-                 coeff_mutation_count=0.25, select_coeff=1.0, observer=ga_observer()):
+                 coeff_mutation_count=0.25, select_coeff=1.0, crossover_rate=1.0, observer=ga_observer()):
         """!
         @brief Initialize genetic clustering algorithm for cluster analysis.
         
@@ -383,7 +383,7 @@ class genetic_algorithm:
         self._count_mutation_gens = count_mutation_gens
 
         # Crossover rate
-        self._crossover_rate = 1.0
+        self._crossover_rate = crossover_rate
 
         # Count of chromosome for mutation (range [0, 1])
         self._coeff_mutation_count = coeff_mutation_count
@@ -591,7 +591,7 @@ class genetic_algorithm:
         mask = np.zeros(mask_length)
 
         # Set a half of array to 1
-        mask[:int(int(mask_length) / 6)] = 1
+        mask[:int(int(mask_length) / 2)] = 1
 
         # Random shuffle
         np.random.shuffle(mask)
