@@ -37,14 +37,20 @@ def load_readme():
 
 
 setup(
-      name = 'pyclustering',
-      packages = find_packages(),
-      version = '0.8.2',
-      description = 'pyclustring is a python data mining library',
-      long_description = load_readme(),
-      url = 'https://github.com/annoviko/pyclustering',
-      license = 'GNU Public License',
-      classifiers = [
+      name='pyclustering',
+      packages=find_packages(),
+      version='0.8.2',
+      description='pyclustring is a python data mining library',
+      long_description=load_readme(),
+      url='https://github.com/annoviko/pyclustering',
+      project_urls={
+                     'Homepage': 'https://pyclustering.github.io/',
+                     'Repository': 'https://github.com/annoviko/pyclustering',
+                     'Documentation': 'https://codedocs.xyz/annoviko/pyclustering/',
+                     'Bug Tracker': 'https://github.com/annoviko/pyclustering/issues'
+                   },
+      license='GNU Public License',
+      classifiers=[
                      'Development Status :: 5 - Production/Stable',
                      'Intended Audience :: Developers',
                      'Intended Audience :: Education',
@@ -69,16 +75,18 @@ setup(
                      'Topic :: Scientific/Engineering :: Image Recognition',
                      'Topic :: Scientific/Engineering :: Information Analysis',
                      'Topic :: Scientific/Engineering :: Visualization'
-                     ],
-      keywords = 'pyclustering data-mining clustering cluster-analysis neural-network oscillatory-network',
-      author = 'Andrei Novikov',
-      author_email = 'pyclustering@yandex.ru',
-      
-      package_data = {
-                      'pyclustering.samples': ['samples/famous/*.data', 'samples/fcps/*.data', 'samples/simple/*.data', 'graphs/*.grpr', 'images/*.png', 'images/digits/*.png'],
-                      'pyclustering.core': [ 'x64/linux/ccore.so', 'x86/linux/ccore.so',
-                                             'x64/win/ccore.dll', 'x86/win/ccore.dll' ],
-                     },
+                  ],
+      keywords='pyclustering data-mining clustering cluster-analysis machine-learning neural-network oscillatory-network',
+      author='Andrei Novikov',
+      author_email='pyclustering@yandex.ru',
 
-      data_files = [ ('', ['LICENSE', 'CHANGES', 'README.rst', 'PKG-INFO.rst']) ],
+      install_requires=['scipy', 'matplotlib', 'numpy', 'Pillow'],
+      python_requires='>=3.4',
+      package_data={
+                      'pyclustering.samples': ['samples/famous/*.data', 'samples/fcps/*.data', 'samples/simple/*.data', 'graphs/*.grpr', 'images/*.png', 'images/digits/*.png'],
+                      'pyclustering.core': ['x64/linux/ccore.so', 'x86/linux/ccore.so',
+                                            'x64/win/ccore.dll', 'x86/win/ccore.dll'],
+                   },
+
+      data_files=[('', ['LICENSE', 'CHANGES', 'README.rst', 'PKG-INFO.rst'])],
     )

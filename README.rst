@@ -15,6 +15,8 @@ model. CCORE library is a part of pyclustering and supported only for
 
 **E-Mail**: pyclustering@yandex.ru
 
+**Documentation**: https://codedocs.xyz/annoviko/pyclustering/
+
 **Gitter**: https://gitter.im/pyclustering/pyclustering
 
 **PyClustering Wiki**: https://github.com/annoviko/pyclustering/wiki

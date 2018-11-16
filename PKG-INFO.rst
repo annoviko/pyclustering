@@ -11,6 +11,8 @@ model. CCORE library is a part of pyclustering and supported only for
 
 Official repository: https://github.com/annoviko/pyclustering/
 
+Documentation: https://codedocs.xyz/annoviko/pyclustering/
+
 Dependencies
 ============
 
@@ -32,8 +34,11 @@ implementation is used, otherwise C/C++. Implementation can be chosen by **ccore
     # As by default - C/C++ is used
     xmeans_instance_1 = xmeans(data_points, start_centers, 20, ccore=True);
 
+    # The same - C/C++ is used by default
+    xmeans_instance_2 = xmeans(data_points, start_centers, 20);
+
     # Switch off core - Python is used
-    xmeans_instance_2 = xmeans(data_points, start_centers, 20, ccore=False);
+    xmeans_instance_3 = xmeans(data_points, start_centers, 20, ccore=False);
 
 Installation
 ============
