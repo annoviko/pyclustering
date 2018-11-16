@@ -24,133 +24,207 @@
 """
 
 
-import unittest;
+import unittest
 
 # Generate images without having a window appear.
-import matplotlib;
-matplotlib.use('Agg');
+import matplotlib
+matplotlib.use('Agg')
 
-from pyclustering.cluster.tests.kmeans_templates import KmeansTestTemplates;
+from pyclustering.cluster.tests.kmeans_templates import KmeansTestTemplates
+from pyclustering.cluster.tests.kmedoids_templates import KmedoidsTestTemplates
 
-from pyclustering.cluster.center_initializer import random_center_initializer;
-from pyclustering.cluster.center_initializer import kmeans_plusplus_initializer;
+from pyclustering.cluster.center_initializer import random_center_initializer
+from pyclustering.cluster.center_initializer import kmeans_plusplus_initializer
 
-from pyclustering.samples.definitions import SIMPLE_SAMPLES;
+from pyclustering.samples.definitions import SIMPLE_SAMPLES
 
-from pyclustering.utils import read_sample;
+from pyclustering.utils import read_sample
 
-from pyclustering.tests.assertion import assertion;
+from pyclustering.tests.assertion import assertion
 
 
 class RandomCenterInitializerUnitTest(unittest.TestCase):
     def templateRandomCenterInitializer(self, data, amount):
-        centers = random_center_initializer(data, amount).initialize();
+        centers = random_center_initializer(data, amount).initialize()
 
-        self.assertEqual(amount, len(centers));
+        self.assertEqual(amount, len(centers))
 
         for center in centers:
-            self.assertEqual(len(data[0]), len(center));
+            self.assertEqual(len(data[0]), len(center))
 
     def test1DimensionDataOneCenter(self):
-        self.templateRandomCenterInitializer([[0.0], [1.0], [2.0], [3.0]], 1);
+        self.templateRandomCenterInitializer([[0.0], [1.0], [2.0], [3.0]], 1)
     
     def test2DimensionDataOneCenter(self):
-        self.templateRandomCenterInitializer([[0.0, 0.5], [1.0, 1.5], [2.0, 2.5], [3.0, 3.5]], 1);
+        self.templateRandomCenterInitializer([[0.0, 0.5], [1.0, 1.5], [2.0, 2.5], [3.0, 3.5]], 1)
 
     def testGenerateTwoCenters(self):
-        self.templateRandomCenterInitializer([[0.0], [-1.0], [-2.0], [-3.0]], 2);
+        self.templateRandomCenterInitializer([[0.0], [-1.0], [-2.0], [-3.0]], 2)
 
     def testGenerateThreeCenters(self):
-        self.templateRandomCenterInitializer([[0.0], [-1.0], [-2.0], [-3.0]], 3);
+        self.templateRandomCenterInitializer([[0.0], [-1.0], [-2.0], [-3.0]], 3)
 
     def testGenerateFourCenters(self):
-        self.templateRandomCenterInitializer([[0.0], [-1.0], [-2.0], [-3.0]], 4);
+        self.templateRandomCenterInitializer([[0.0], [-1.0], [-2.0], [-3.0]], 4)
 
     def testGenerateTwoCentersIntData(self):
-        self.templateRandomCenterInitializer([[0], [-1], [-2], [-3]], 2);
+        self.templateRandomCenterInitializer([[0], [-1], [-2], [-3]], 2)
 
 
 class KmeansPlusPlusInitializerUnitTest(unittest.TestCase):
     def templateKmeasPlusPlusCenterInitializer(self, data, amount):
-        centers = kmeans_plusplus_initializer(data, amount).initialize();
+        centers = kmeans_plusplus_initializer(data, amount).initialize()
 
-        assertion.eq(amount, len(centers));
+        assertion.eq(amount, len(centers))
 
         for center in centers:
-            assertion.eq(len(data[0]), len(center));
+            assertion.eq(len(data[0]), len(center))
 
-        return centers;
+        return centers
 
     def test1DimensionDataOneCenter(self):
-        self.templateKmeasPlusPlusCenterInitializer([[0.0], [1.0], [2.0], [3.0]], 1);
+        self.templateKmeasPlusPlusCenterInitializer([[0.0], [1.0], [2.0], [3.0]], 1)
     
     def test2DimensionDataOneCenter(self):
-        self.templateKmeasPlusPlusCenterInitializer([[0.0, 0.5], [1.0, 1.5], [2.0, 2.5], [3.0, 3.5]], 1);
+        self.templateKmeasPlusPlusCenterInitializer([[0.0, 0.5], [1.0, 1.5], [2.0, 2.5], [3.0, 3.5]], 1)
 
     def testGenerateTwoCenters(self):
-        self.templateKmeasPlusPlusCenterInitializer([[0.0], [-1.0], [-2.0], [-3.0]], 2);
+        self.templateKmeasPlusPlusCenterInitializer([[0.0], [-1.0], [-2.0], [-3.0]], 2)
 
     def testGenerateThreeCenters(self):
-        self.templateKmeasPlusPlusCenterInitializer([[0.0], [-1.0], [-2.0], [-3.0]], 3);
+        self.templateKmeasPlusPlusCenterInitializer([[0.0], [-1.0], [-2.0], [-3.0]], 3)
 
     def testGenerateFourCenters(self):
-        self.templateKmeasPlusPlusCenterInitializer([[0.0], [-1.0], [-2.0], [-3.0]], 4);
+        self.templateKmeasPlusPlusCenterInitializer([[0.0], [-1.0], [-2.0], [-3.0]], 4)
 
     def testGenerateTwoCentersIntData(self):
-        self.templateKmeasPlusPlusCenterInitializer([[0], [-1], [-2], [-3]], 2);
+        self.templateKmeasPlusPlusCenterInitializer([[0], [-1], [-2], [-3]], 2)
 
     def testGenerateCentersIdenticalData1(self):
-        self.templateKmeasPlusPlusCenterInitializer([[1.2], [1.2], [1.2], [1.2]], 2);
+        self.templateKmeasPlusPlusCenterInitializer([[1.2], [1.2], [1.2], [1.2]], 2)
 
     def testGenerateCentersIdenticalData2(self):
-        self.templateKmeasPlusPlusCenterInitializer([[1.2], [1.2], [1.2], [1.2]], 4);
+        self.templateKmeasPlusPlusCenterInitializer([[1.2], [1.2], [1.2], [1.2]], 4)
 
     def testGenerateCentersThreeDimensionalData(self):
-        self.templateKmeasPlusPlusCenterInitializer([[1.2, 1.3, 1.4], [1.2, 1.3, 1.4], [2.3, 2.3, 2.4], [2.1, 4.2, 1.1]], 3);
+        self.templateKmeasPlusPlusCenterInitializer([[1.2, 1.3, 1.4], [1.2, 1.3, 1.4], [2.3, 2.3, 2.4], [2.1, 4.2, 1.1]], 3)
 
     def testGenerateCentersOnePoint(self):
-        self.templateKmeasPlusPlusCenterInitializer([[1.2, 1.3, 1.4]], 1);
+        self.templateKmeasPlusPlusCenterInitializer([[1.2, 1.3, 1.4]], 1)
 
     def templateKmeansPlusPlusForClustering(self, path_sample, amount, expected_clusters_length):
-        result_success = True;
+        result_success = True
         for _ in range(3):
             try:
-                sample = read_sample(path_sample);
-                start_centers = kmeans_plusplus_initializer(sample, amount).initialize();
-                KmeansTestTemplates.templateLengthProcessData(path_sample, start_centers, expected_clusters_length, False);
+                sample = read_sample(path_sample)
+                start_centers = kmeans_plusplus_initializer(sample, amount).initialize()
+                KmeansTestTemplates.templateLengthProcessData(path_sample, start_centers, expected_clusters_length, False)
             
             except AssertionError:
-                continue;
+                continue
             
-            break;
+            break
         
         assert result_success == True;
 
 
     def testInitializerForKmeansSampleSimple01(self):
-        self.templateKmeansPlusPlusForClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, [5, 5]);
+        self.templateKmeansPlusPlusForClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, [5, 5])
 
     def testInitializerForKmeansSampleSimple01TenCenters(self):
-        self.templateKmeansPlusPlusForClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 10, None);
+        self.templateKmeansPlusPlusForClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 10, None)
 
     def testInitializerForKmeansSampleSimple02(self):
-        self.templateKmeansPlusPlusForClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 3, [10, 5, 8]);
+        self.templateKmeansPlusPlusForClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 3, [10, 5, 8])
 
     def testInitializerForKmeansSampleSimple03(self):
-        self.templateKmeansPlusPlusForClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 4, [10, 10, 10, 30]);
+        self.templateKmeansPlusPlusForClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 4, [10, 10, 10, 30])
 
     def testInitializerForKmeansSampleSimple04(self):
-        self.templateKmeansPlusPlusForClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 5, [15, 15, 15, 15, 15]);
+        self.templateKmeansPlusPlusForClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 5, [15, 15, 15, 15, 15])
 
     def testInitializerForKmeansTotallySimilarObjectsTwoCenters(self):
-        self.templateKmeansPlusPlusForClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 2, None);
+        self.templateKmeansPlusPlusForClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 2, None)
 
     def testInitializerForKmeansTotallySimilarObjectsFiveCenters(self):
-        self.templateKmeansPlusPlusForClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 5, None);
+        self.templateKmeansPlusPlusForClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 5, None)
 
     def testInitializerForKmeansTotallySimilarObjectsTenCenters(self):
-        self.templateKmeansPlusPlusForClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 10, None);
+        self.templateKmeansPlusPlusForClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 10, None)
+
+
+    def templateKmeasPlusPlusCenterInitializerIndexReturn(self, data, amount):
+        centers = kmeans_plusplus_initializer(data, amount).initialize(return_index=True)
+
+        assertion.eq(amount, len(centers))
+
+        for center_index in centers:
+            assertion.gt(len(data), center_index)
+            assertion.le(0, center_index)
+
+        return centers
+
+    def test1DimensionDataOneCenterReturnIndex(self):
+        self.templateKmeasPlusPlusCenterInitializerIndexReturn([[0.0], [1.0], [2.0], [3.0]], 1)
+
+    def test2DimensionDataOneCenterReturnIndex(self):
+        self.templateKmeasPlusPlusCenterInitializerIndexReturn([[0.0, 0.5], [1.0, 1.5], [2.0, 2.5], [3.0, 3.5]], 1)
+
+    def testGenerateTwoCentersReturnIndex(self):
+        self.templateKmeasPlusPlusCenterInitializerIndexReturn([[0.0], [-1.0], [-2.0], [-3.0]], 2)
+
+    def testGenerateThreeCentersReturnIndex(self):
+        self.templateKmeasPlusPlusCenterInitializerIndexReturn([[0.0], [-1.0], [-2.0], [-3.0]], 3)
+
+    def testGenerateFourCentersReturnIndex(self):
+        self.templateKmeasPlusPlusCenterInitializerIndexReturn([[0.0], [-1.0], [-2.0], [-3.0]], 4)
+
+    def testGenerateTwoCentersIntDataReturnIndex(self):
+        self.templateKmeasPlusPlusCenterInitializerIndexReturn([[0], [-1], [-2], [-3]], 2)
+
+    def testGenerateCentersIdenticalData1ReturnIndex(self):
+        self.templateKmeasPlusPlusCenterInitializerIndexReturn([[1.2], [1.2], [1.2], [1.2]], 2)
+
+    def testGenerateCentersIdenticalData2ReturnIndex(self):
+        self.templateKmeasPlusPlusCenterInitializerIndexReturn([[1.2], [1.2], [1.2], [1.2]], 4)
+
+    def testGenerateCentersThreeDimensionalDataReturnIndex(self):
+        self.templateKmeasPlusPlusCenterInitializerIndexReturn(
+            [[1.2, 1.3, 1.4], [1.2, 1.3, 1.4], [2.3, 2.3, 2.4], [2.1, 4.2, 1.1]], 3)
+
+    def testGenerateCentersOnePointReturnIndex(self):
+        self.templateKmeasPlusPlusCenterInitializerIndexReturn([[1.2, 1.3, 1.4]], 1)
+
+    def templateKmeansPlusPlusForKmedoidsClustering(self, path_sample, amount, expected_clusters_length):
+        result_success = True
+        for _ in range(3):
+            try:
+                sample = read_sample(path_sample)
+                start_medoids = kmeans_plusplus_initializer(sample, amount).initialize(return_index=True)
+                KmedoidsTestTemplates.templateLengthProcessData(path_sample, start_medoids, expected_clusters_length,
+                                                              False)
+
+            except AssertionError:
+                continue
+            break
+
+        assert result_success == True;
+
+    def testInitializerForKmedoidsSampleSimple01(self):
+        self.templateKmeansPlusPlusForKmedoidsClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, [5, 5])
+
+    def testInitializerForKmedoidsSampleSimple01TenCenters(self):
+        self.templateKmeansPlusPlusForKmedoidsClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 10, None)
+
+    def testInitializerForKmedoidsSampleSimple02(self):
+        self.templateKmeansPlusPlusForKmedoidsClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 3, [10, 5, 8])
+
+    def testInitializerForKmedoidsSampleSimple03(self):
+        self.templateKmeansPlusPlusForKmedoidsClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 4, [10, 10, 10, 30])
+
+    def testInitializerForKmedoidsSampleSimple04(self):
+        self.templateKmeansPlusPlusForKmedoidsClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 5, [15, 15, 15, 15, 15])
 
 
 if __name__ == "__main__":
-    unittest.main();
+    unittest.main()
