@@ -25,6 +25,15 @@
 """
 
 
+from enum import Enum
+
+import numpy
+
+from pyclustering.cluster.kmeans import kmeans
+from pyclustering.cluster.kmedians import kmedians
+from pyclustering.cluster.kmedoids import kmedoids
+from pyclustering.cluster.center_initializer import kmeans_plusplus_initializer
+
 from pyclustering.utils.metric import distance_metric, type_metric
 
 
@@ -80,9 +89,14 @@ class silhouette:
                score calculation (by default Square Euclidean distance).
 
         """
-        self.__data = data
+        self.__data = numpy.array(data)
         self.__clusters = clusters
         self.__metric = kwargs.get('metric', distance_metric(type_metric.EUCLIDEAN_SQUARE))
+
+        if self.__metric.get_type() != type_metric.USER_DEFINED:
+            self.__metric.enable_numpy_usage()
+        else:
+            self.__metric.disable_numpy_usage()
 
         self.__score = [0.0] * len(data)
 
@@ -141,6 +155,8 @@ class silhouette:
         """
 
         score = self.__calculate_cluster_difference(index_cluster, difference)
+        if len(self.__clusters[index_cluster]) == 1:
+            return float('nan')
         return score / (len(self.__clusters[index_cluster]) - 1)
 
 
@@ -173,7 +189,7 @@ class silhouette:
         optimal_score = float('inf')
         for index_neighbor_cluster in range(len(self.__clusters)):
             if index_cluster != index_neighbor_cluster:
-                candidate_score = self.__calculate_cluster_score(index_cluster, difference)
+                candidate_score = self.__calculate_cluster_score(index_neighbor_cluster, difference)
                 if candidate_score < optimal_score:
                     optimal_score = candidate_score
 
@@ -212,3 +228,205 @@ class silhouette:
             dataset_differences = [self.__metric(point, self.__data[index_point]) for point in self.__data]
 
         return dataset_differences
+
+
+
+class silhouette_ksearch_type(Enum):
+    """!
+    @brief Defines algorithms that can be used to find optimal number of cluster using Silhouette method.
+
+    @see silhouette_ksearch
+
+    """
+
+    ## K-Means algorithm for searching optimal number of clusters.
+    KMEANS = 0
+
+    ## K-Medians algorithm for searching optimal number of clusters.
+    KMEDIANS = 1
+
+    ## K-Medoids algorithm for searching optimal number of clusters.
+    KMEDOIDS = 2
+
+    def get_type(self):
+        """!
+        @brief Returns algorithm type that corresponds to specified enumeration value.
+
+        @return (type) Algorithm type for cluster analysis.
+
+        """
+        if self == silhouette_ksearch_type.KMEANS:
+            return kmeans
+        elif self == silhouette_ksearch_type.KMEDIANS:
+            return kmedians
+        elif self == silhouette_ksearch_type.KMEDOIDS:
+            return kmedoids
+        else:
+            return None
+
+
+
+class silhouette_ksearch:
+    """!
+    @brief Represent algorithm for searching optimal number of clusters using specified K-algorithm (K-Means,
+            K-Medians, K-Medoids) that is based on Silhouette method.
+
+    @details This algorithm uses average value of scores for estimation and applicable for clusters that are well
+              separated. Here is an example where clusters are well separated (sample 'Hepta'):
+    @code
+        from pyclustering.cluster import cluster_visualizer
+        from pyclustering.cluster.center_initializer import kmeans_plusplus_initializer
+        from pyclustering.cluster.kmeans import kmeans
+        from pyclustering.cluster.silhouette import silhouette_ksearch_type, silhouette_ksearch
+        from pyclustering.samples.definitions import FCPS_SAMPLES
+        from pyclustering.utils import read_sample
+
+        sample = read_sample(FCPS_SAMPLES.SAMPLE_HEPTA)
+        search_instance = silhouette_ksearch(sample, 2, 10, algorithm=silhouette_ksearch_type.KMEANS).process()
+
+        amount = search_instance.get_amount()
+        scores = search_instance.get_scores()
+
+        print("Scores: '%s'" % str(scores))
+
+        initial_centers = kmeans_plusplus_initializer(sample, amount).initialize()
+        kmeans_instance = kmeans(sample, initial_centers).process()
+
+        clusters = kmeans_instance.get_clusters()
+
+        visualizer = cluster_visualizer()
+        visualizer.append_clusters(clusters, sample)
+        visualizer.show()
+    @endcode
+
+    Obtained Silhouette scores for each K:
+    @code
+    Scores: '{2: 0.419652, 3: 0.454046, 4: 0.462794, 5: 0.670759, 6: 0.817936, 7: 0.743264, 8: 0.8175891, 9: 0.767061}'
+    @endcode
+
+    K = 8 has the bigger average Silhouette score and it means that it is optimal amount of clusters:
+    @image html silhouette_ksearch_hepta.png "Silhouette ksearch's analysis with further K-Means clustering (sample 'Hepta')."
+
+    @see silhouette_ksearch_type
+
+    """
+
+    def __init__(self, data, kmin, kmax, **kwargs):
+        """!
+        @brief Initialize Silhouette search algorithm to find out optimal amount of clusters.
+
+        @param[in] data (array_like): Input data that is used for searching optimal amount of clusters.
+        @param[in] kmin (uint): Amount of clusters from which search is performed. Should be equal or greater than 2.
+        @param[in] kmax (uint): Amount of clusters to which search is performed. Should be equal or less than amount of
+                    points in input data.
+        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'algorithm').
+
+        <b>Keyword Args:</b><br>
+            - algorithm (silhouette_ksearch_type): Defines algorithm that is used for searching optimal number of
+               clusters (by default K-Means).
+
+        """
+        self.__data = data
+        self.__kmin = kmin
+        self.__kmax = kmax
+
+        self.__algorithm = kwargs.get('algorithm', silhouette_ksearch_type.KMEANS)
+        self.__return_index = self.__algorithm == silhouette_ksearch_type.KMEDOIDS
+
+        self.__amount = -1
+        self.__score = float('-Inf')
+        self.__scores = {}
+
+        self.__verify_arguments()
+
+
+    def process(self):
+        """!
+        @brief Performs analysis to find optimal amount of clusters.
+
+        @see get_amount, get_score, get_scores
+
+        @return (silhouette_search) Itself instance (silhouette_search)
+
+        """
+        self.__scores = {}
+
+        for k in range(self.__kmin, self.__kmax):
+            clusters = self.__calculate_clusters(k)
+            if len(clusters) != k:
+                self.__scores[k] = float('nan')
+                continue
+
+            score = silhouette(self.__data, clusters).process().get_score()
+
+            self.__scores[k] = sum(score) / len(score)
+
+            if self.__scores[k] > self.__score:
+                self.__score = self.__scores[k]
+                self.__amount = k
+
+        return self
+
+
+    def get_amount(self):
+        """!
+        @brief Returns optimal amount of clusters that has been found during analysis.
+
+        @return (uint) Optimal amount of clusters.
+
+        @see process
+
+        """
+        return self.__amount
+
+
+    def get_score(self):
+        """!
+        @brief Returns silhouette score that belongs to optimal amount of clusters (k).
+
+        @return (float) Score that belong to optimal amount of clusters.
+
+        @see process, get_scores
+
+        """
+        return self.__score
+
+
+    def get_scores(self):
+        """!
+        @brief Returns silhouette score for each K value (amount of clusters).
+
+        @return (dict) Silhouette score for each K value, where key is a K value and value is a silhouette score.
+
+        @see process, get_score
+
+        """
+        return self.__scores
+
+
+    def __calculate_clusters(self, k):
+        """!
+        @brief Performs cluster analysis using specified K value.
+
+        @param[in] k (uint): Amount of clusters that should be allocated.
+
+        @return (array_like) Allocated clusters.
+
+        """
+        initial_values = kmeans_plusplus_initializer(self.__data, k).initialize(return_index=self.__return_index)
+        algorithm_type = self.__algorithm.get_type()
+        return algorithm_type(self.__data, initial_values).process().get_clusters()
+
+
+    def __verify_arguments(self):
+        """!
+        @brief Checks algorithm's arguments and if some of them is incorrect then exception is thrown.
+
+        """
+        if self.__kmax > len(self.__data):
+            raise ValueError("K max value '" + str(self.__kmax) + "' is bigger than amount of objects '" +
+                             str(len(self.__data)) + "' in input data.")
+
+        if self.__kmin <= 1:
+            raise ValueError("K min value '" + str(self.__kmin) + "' should be greater than 1 (impossible to provide "
+                             "silhiuette score for only one cluster).")

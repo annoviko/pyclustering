@@ -52,6 +52,7 @@ from pyclustering.cluster.tests.unit               import ut_kmedoids           
 from pyclustering.cluster.tests.unit               import ut_mbsas              as cluster_mbsas_unit_tests
 from pyclustering.cluster.tests.unit               import ut_optics             as cluster_optics_unit_tests
 from pyclustering.cluster.tests.unit               import ut_rock               as cluster_rock_unit_tests
+from pyclustering.cluster.tests.unit               import ut_silhouette         as cluster_silhouette_unit_tests
 from pyclustering.cluster.tests.unit               import ut_somsc              as cluster_somsc_unit_tests
 from pyclustering.cluster.tests.unit               import ut_syncnet            as cluster_syncnet_unit_tests
 from pyclustering.cluster.tests.unit               import ut_syncsom            as cluster_syncsom_unit_tests
@@ -88,6 +89,7 @@ class clustering_unit_tests(suite_holder):
         unit_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_mbsas_unit_tests))
         unit_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_optics_unit_tests))
         unit_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_rock_unit_tests))
+        unit_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_silhouette_unit_tests))
         unit_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_somsc_unit_tests))
         unit_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_syncnet_unit_tests))
         unit_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_syncsom_unit_tests))

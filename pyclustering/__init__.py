@@ -50,6 +50,7 @@ Cluster analysis algorithms and methods (module pyclustering.cluster):
 - MBSAS (pyclustering.cluster.mbsas);
 - OPTICS (pyclustering.cluster.optics);
 - ROCK (pyclustering.cluster.rock);
+- Silhouette (pyclustering.cluster.silhouette);
 - SOM-SC (pyclustering.cluster.somsc);
 - SyncNet (bio-inspired algorithm pyclustering.cluster.syncnet);
 - SyncSOM (bio-inspired algorithm pyclustering.cluster.syncsom);

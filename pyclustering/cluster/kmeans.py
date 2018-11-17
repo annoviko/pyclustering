@@ -357,7 +357,9 @@ class kmeans:
     def process(self):
         """!
         @brief Performs cluster analysis in line with rules of K-Means algorithm.
-        
+
+        @return (kmeans) Returns itself (K-Means instance).
+
         @remark Results of clustering can be obtained using corresponding get methods.
         
         @see get_clusters()
@@ -372,6 +374,8 @@ class kmeans:
             self.__process_by_ccore()
         else:
             self.__process_by_python()
+
+        return self
 
 
     def __process_by_ccore(self):

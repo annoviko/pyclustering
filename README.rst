@@ -118,7 +118,7 @@ PyClustering Status
 Brief Overview of the Library Content
 =====================================
 
-**Clustering algorithms (module pyclustering.cluster):** 
+**Clustering algorithms and methods (module pyclustering.cluster):**
 
 - Agglomerative [Python, C++]
 - BANG [Python]
@@ -138,6 +138,7 @@ Brief Overview of the Library Content
 - MBSAS [Python, C++]
 - OPTICS [Python, C++]
 - ROCK [Python, C++]
+- Silhouette [Python]
 - SOM-SC [Python, C++]
 - SyncNet [Python, C++]
 - Sync-SOM [Python]

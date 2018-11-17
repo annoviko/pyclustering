@@ -90,7 +90,9 @@ class kmedians:
     def process(self):
         """!
         @brief Performs cluster analysis in line with rules of K-Medians algorithm.
-        
+
+        @return (kmedians) Returns itself (K-Medians instance).
+
         @remark Results of clustering can be obtained using corresponding get methods.
         
         @see get_clusters()
@@ -116,6 +118,8 @@ class kmedians:
                 changes = max([self.__metric(self.__medians[index], updated_centers[index]) for index in range(len(updated_centers))])
                  
                 self.__medians = updated_centers
+
+        return self
 
 
     def get_clusters(self):

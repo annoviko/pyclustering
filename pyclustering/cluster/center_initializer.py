@@ -58,22 +58,34 @@ class random_center_initializer:
             raise ValueError("Amount of cluster centers '%d' should be less than data size." % self.__amount)
 
 
-    def initialize(self):
+    def initialize(self, **kwargs):
         """!
         @brief Generates random centers in line with input parameters.
-        
-        @return (list) List of centers where each center is represented by list of coordinates.
+
+        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'return_index').
+
+        <b>Keyword Args:</b><br>
+            - return_index (bool): If True then returns indexes of points from input data instead of points itself.
+
+        @return (list) List of initialized initial centers.
+                  If argument 'return_index' is False then returns list of points.
+                  If argument 'return_index' is True then returns list of indexes.
         
         """
+        return_index = kwargs.get('return_index', False)
         if self.__amount == len(self.__data):
+            if return_index:
+                return list(range(len(self.__data)))
             return self.__data[:]
 
-        return [self.__create_center() for _ in range(self.__amount)]
+        return [self.__create_center(return_index) for _ in range(self.__amount)]
 
 
-    def __create_center(self):
+    def __create_center(self, return_index):
         """!
         @brief Generates and returns random center.
+
+        @param[in] return_index (bool): If True then returns index of point from input data instead of point itself.
         
         """
         random_index_point = random.randint(0, len(self.__data[0]))
@@ -82,6 +94,8 @@ class random_center_initializer:
         else:
             self.__available_indexes.remove(random_index_point)
 
+        if return_index:
+            return random_index_point
         return self.__data[random_index_point]
 
 
@@ -174,11 +188,13 @@ class kmeans_plusplus_initializer:
 
         """
         if (self.__amount <= 0) or (self.__amount > len(self.__data)):
-            raise AttributeError("Amount of cluster centers should be at least 1 and should be less or equal to amount of points in data.")
+            raise AttributeError("Amount of cluster centers '" + str(self.__amount) + "' should be at least 1 and "
+                                 "should be less or equal to amount of points in data.")
 
         if self.__candidates != kmeans_plusplus_initializer.FARTHEST_CENTER_CANDIDATE:
             if (self.__candidates <= 0) or (self.__candidates > len(self.__data)):
-                raise AttributeError("Amount of candidates centers should be at least 1 and should be less or equal to amount of points in data.")
+                raise AttributeError("Amount of center candidates '" + str(self.__candidates) + "' should be at least 1 "
+                                     "and should be less or equal to amount of points in data.")
 
         if len(self.__data) == 0:
             raise AttributeError("Data is empty.")
@@ -295,19 +311,23 @@ class kmeans_plusplus_initializer:
         return index_best_candidate
 
 
-    def initialize(self, return_index=False):
+    def initialize(self, **kwargs):
         """!
         @brief Calculates initial centers using K-Means++ method.
 
-        @param[in] return_index (bool): If True then returns indexes of points from input data instead of points itself.
-        
+        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'return_index').
+
+        <b>Keyword Args:</b><br>
+            - return_index (bool): If True then returns indexes of points from input data instead of points itself.
+
         @return (list) List of initialized initial centers.
                   If argument 'return_index' is False then returns list of points.
                   If argument 'return_index' is True then returns list of indexes.
         
         """
 
-        centers = [ self.__get_initial_center(return_index) ]
+        return_index = kwargs.get('return_index', False)
+        centers = [self.__get_initial_center(return_index)]
 
         # For each next center
         for _ in range(1, self.__amount):

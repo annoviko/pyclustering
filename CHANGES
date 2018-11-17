@@ -5,7 +5,10 @@ CHANGE NOTES FOR 0.8.2 (STARTED May 28, 2018)
 ------------------------------------------------------------------------
 
 GENERAL CHANGES:
-- Introduced new 'return_index' parameter for kmeans_plus_plus algorithm (method 'initialize') to initialize initial medoids (pyclustering.cluster.center_initializer).
+- Implemented Silhouette method and Silhouette KSearcher to find out proper amount of clusters (pyclustering.cluster.silhouette).
+  See: https://github.com/annoviko/pyclustering/issues/416
+
+- Introduced new 'return_index' parameter for kmeans_plus_plus and random_center_initializer algorithms (method 'initialize') to initialize initial medoids (pyclustering.cluster.center_initializer).
   See: https://github.com/annoviko/pyclustering/issues/421
 
 - Display warning instead of throwing error if matplotlib or Pillow cannot be imported (MAC OS X problems).

@@ -130,7 +130,9 @@ class kmedoids:
     def process(self):
         """!
         @brief Performs cluster analysis in line with rules of K-Medoids algorithm.
-        
+
+        @return (kmedoids) Returns itself (K-Medoids instance).
+
         @remark Results of clustering can be obtained using corresponding get methods.
         
         @see get_clusters()
@@ -154,6 +156,8 @@ class kmedoids:
                 changes = max([self.__distance_calculator(self.__medoid_indexes[index], update_medoid_indexes[index]) for index in range(len(update_medoid_indexes))])
 
                 self.__medoid_indexes = update_medoid_indexes
+
+        return self
 
 
     def get_clusters(self):
