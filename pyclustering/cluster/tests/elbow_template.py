@@ -63,7 +63,7 @@ class elbow_test_template:
 
             if actual_elbow != len(answer.get_clusters()):
                 additional_info.append(actual_elbow)
-                time.sleep(0.05)    # sleep to gain new seed for random generator
+                #time.sleep(0.05)    # sleep to gain new seed for random generator
                 continue
 
             testing_result = True
