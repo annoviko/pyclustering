@@ -55,9 +55,15 @@ class assertion:
                                  "', Actual: '" + str(argument1) + "' vs '" + str(argument2) + "'")
 
     @staticmethod
-    def true(argument1):
+    def true(argument1, **kwargs):
+        message = kwargs.get('message', None)
+
+        error_message = "Expected: 'True', Actual: '%s'" % str(argument1)
+        if message:
+            error_message = "%s, Info: '%s'" % (error_message, message)
+
         if not argument1:
-            raise AssertionError("Expected: 'True', Actual: '" + str(argument1) + "'")
+            raise AssertionError(error_message)
 
     @staticmethod
     def false(argument1):

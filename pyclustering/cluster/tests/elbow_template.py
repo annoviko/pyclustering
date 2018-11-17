@@ -24,6 +24,8 @@
 """
 
 
+import time
+
 from pyclustering.utils import read_sample
 
 from pyclustering.cluster.center_initializer import kmeans_plusplus_initializer
@@ -45,6 +47,8 @@ class elbow_test_template:
         sample = read_sample(path_to_data)
         answer = answer_reader(path_to_answer)
 
+        additional_info = []
+
         for _ in range(repeat):
             elbow_instance = elbow(sample, kmin, kmax, ccore=ccore, initializer=initializer)
             elbow_instance.process()
@@ -55,12 +59,15 @@ class elbow_test_template:
             assertion.gt(actual_elbow, kmin)
             assertion.lt(actual_elbow, kmax)
             assertion.eq(len(actual_wce), kmax - kmin)
-            assertion.lt(actual_wce[-1], actual_wce[0])
+            assertion.lt(actual_wce[-1], actual_wce[0] + 0.0000001)
 
             if actual_elbow != len(answer.get_clusters()):
+                additional_info.append(actual_elbow)
+                time.sleep(0.05)    # sleep to gain new seed for random generator
                 continue
 
             testing_result = True
             break
 
-        assertion.true(testing_result)
+        message = str(len(answer.get_clusters())) + ": " + str(additional_info)
+        assertion.true(testing_result, message=message)
