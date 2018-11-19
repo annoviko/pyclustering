@@ -9,7 +9,7 @@ Python and C++ implementations (via CCORE library) of each algorithm or
 model. CCORE library is a part of pyclustering and supported only for
 32, 64-bit Linux and 32, 64-bit Windows operating systems.
 
-**Version**: 0.8.x
+**Version**: 0.8.2
 
 **License**: GNU General Public License
 
@@ -17,7 +17,7 @@ model. CCORE library is a part of pyclustering and supported only for
 
 **Documentation**: https://codedocs.xyz/annoviko/pyclustering/
 
-**Gitter**: https://gitter.im/pyclustering/pyclustering
+**Homepage**: https://pyclustering.github.io/
 
 **PyClustering Wiki**: https://github.com/annoviko/pyclustering/wiki
 
@@ -26,7 +26,7 @@ model. CCORE library is a part of pyclustering and supported only for
 Dependencies
 ============
 
-**Required packages**: scipy, matplotlib, numpy, PIL
+**Required packages**: scipy, matplotlib, numpy, Pillow
 
 **Python version**: >=3.4 (32, 64-bit)
 

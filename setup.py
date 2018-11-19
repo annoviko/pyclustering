@@ -26,7 +26,6 @@ from setuptools import setup
 from setuptools import find_packages
 
 
-
 def load_readme():
     readme_file = 'PKG-INFO.rst'
     if os.path.isfile(readme_file):

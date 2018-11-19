@@ -16,7 +16,7 @@ Documentation: https://codedocs.xyz/annoviko/pyclustering/
 Dependencies
 ============
 
-**Required packages**: scipy, matplotlib, numpy, PIL
+**Required packages**: scipy, matplotlib, numpy, Pillow
 
 **Python version**: >=3.4 (32-bit, 64-bit)
 
@@ -114,6 +114,7 @@ Library Content
 - **MBSAS** (pyclustering.cluster.mbsas);
 - **OPTICS** (pyclustering.cluster.optics);
 - **ROCK** (pyclustering.cluster.rock);
+- **Silhouette** (pyclustering.cluster.silhouette);
 - **SOM-SC** (pyclustering.cluster.somsc);
 - **SyncNet** (pyclustering.cluster.syncnet);
 - **Sync-SOM** (pyclustering.cluster.syncsom);
@@ -156,8 +157,8 @@ BibTeX entry:
 
     @misc{andrei_novikov_2018_1254845,
         author       = {Andrei Novikov},
-        title        = {annoviko/pyclustering: pyclustering 0.8.1 release},
-        month        = may,
+        title        = {annoviko/pyclustering: pyclustering 0.8.2 release},
+        month        = nov,
         year         = 2018,
         doi          = {10.5281/zenodo.1254845},
         url          = {https://doi.org/10.5281/zenodo.1254845}
