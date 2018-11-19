@@ -155,17 +155,17 @@ BibTeX entry:
 
 .. code::
 
-    @misc{andrei_novikov_2018_1254845,
+    @misc{andrei_novikov_2018_1491324,
         author       = {Andrei Novikov},
         title        = {annoviko/pyclustering: pyclustering 0.8.2 release},
         month        = nov,
         year         = 2018,
-        doi          = {10.5281/zenodo.1254845},
-        url          = {https://doi.org/10.5281/zenodo.1254845}
+        doi          = {10.5281/zenodo.1491324},
+        url          = {https://doi.org/10.5281/zenodo.1491324}
     }
 
 
 .. |Documentation| image:: https://codedocs.xyz/annoviko/pyclustering.svg
    :target: https://codedocs.xyz/annoviko/pyclustering/
-.. |DOI| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.1254845.svg
-   :target: https://doi.org/10.5281/zenodo.1254845
+.. |DOI| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.1491324.svg
+   :target: https://doi.org/10.5281/zenodo.1491324
