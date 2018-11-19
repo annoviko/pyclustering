@@ -104,13 +104,13 @@ PyClustering Status
 ===================
 
 +-----------------+------------------------------+--------------------------------+
-| Branch          | master                       | 0.8.dev                        |
+| Branch          | master                       | 0.8.2.rel                      |
 +=================+==============================+================================+
-| Build (Linux)   | |Build Status Linux|         | |Build Status Linux 0.8|       |
+| Build (Linux)   | |Build Status Linux|         | |Build Status Linux 0.8.2.rel| |
 +-----------------+------------------------------+--------------------------------+
-| Build (Win)     | |Build Status Win|           | |Build Status Win 0.8|         |
+| Build (Win)     | |Build Status Win|           | |Build Status Win 0.8.2.rel|   |
 +-----------------+------------------------------+--------------------------------+
-| Code Coverage   | |Coverage Status|            | |Coverage Status 0.8|          |
+| Code Coverage   | |Coverage Status|            | |Coverage Status 0.8.2.rel|    |
 +-----------------+------------------------------+--------------------------------+
 
 
@@ -183,8 +183,8 @@ BibTeX entry:
 
     @misc{andrei_novikov_2018_1254845,
         author       = {Andrei Novikov},
-        title        = {annoviko/pyclustering: pyclustering 0.8.1 release},
-        month        = may,
+        title        = {annoviko/pyclustering: pyclustering 0.8.2 release},
+        month        = nov,
         year         = 2018,
         doi          = {10.5281/zenodo.1254845},
         url          = {https://doi.org/10.5281/zenodo.1254845}
@@ -321,9 +321,9 @@ Code Examples:
    :target: https://doi.org/10.5281/zenodo.1254845
 .. |PyPi| image:: https://badge.fury.io/py/pyclustering.svg
    :target: https://badge.fury.io/py/pyclustering
-.. |Build Status Linux 0.8| image:: https://travis-ci.org/annoviko/pyclustering.svg?branch=0.8.dev
+.. |Build Status Linux 0.8.2.rel| image:: https://travis-ci.org/annoviko/pyclustering.svg?branch=0.8.2.rel
    :target: https://travis-ci.org/annoviko/pyclustering
-.. |Build Status Win 0.8| image:: https://ci.appveyor.com/api/projects/status/4uly2exfp49emwn0/branch/0.8.dev?svg=true
-   :target: https://ci.appveyor.com/project/annoviko/pyclustering/branch/0.8.dev
-.. |Coverage Status 0.8| image:: https://coveralls.io/repos/github/annoviko/pyclustering/badge.svg?branch=0.8.dev&ts=1
-   :target: https://coveralls.io/github/annoviko/pyclustering?branch=0.8.dev
+.. |Build Status Win 0.8.2.rel| image:: https://ci.appveyor.com/api/projects/status/4uly2exfp49emwn0/branch/0.8.2.rel?svg=true
+   :target: https://ci.appveyor.com/project/annoviko/pyclustering/branch/0.8.2.rel
+.. |Coverage Status 0.8.2.rel| image:: https://coveralls.io/repos/github/annoviko/pyclustering/badge.svg?branch=0.8.2.rel&ts=1
+   :target: https://coveralls.io/github/annoviko/pyclustering?branch=0.8.2.rel
