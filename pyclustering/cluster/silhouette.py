@@ -301,10 +301,10 @@ class silhouette_ksearch:
 
     Obtained Silhouette scores for each K:
     @code
-    Scores: '{2: 0.419652, 3: 0.454046, 4: 0.462794, 5: 0.670759, 6: 0.817936, 7: 0.743264, 8: 0.8175891, 9: 0.767061}'
+    Scores: '{2: 0.418434, 3: 0.450906, 4: 0.534709, 5: 0.689970, 6: 0.588460, 7: 0.882674, 8: 0.804725, 9: 0.780189}'
     @endcode
 
-    K = 8 has the bigger average Silhouette score and it means that it is optimal amount of clusters:
+    K = 7 has the bigger average Silhouette score and it means that it is optimal amount of clusters:
     @image html silhouette_ksearch_hepta.png "Silhouette ksearch's analysis with further K-Means clustering (sample 'Hepta')."
 
     @see silhouette_ksearch_type
