@@ -84,7 +84,7 @@ Utils that can be used for analysis, visualization, etc are placed in module pyc
 @section install_sec Installation
 The simplest way to install pyclustering library is to use pip:
 @code{.sh}
-    pip install pyclustering
+    pip3 install pyclustering
 @endcode
 
 The library can be compiled and manually installed on linux machine wherever you want:
