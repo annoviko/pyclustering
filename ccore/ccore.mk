@@ -18,8 +18,6 @@
 
 
 # Tools
-CC = g++ -c
-LD = g++
 RM = rm -rf
 MKDIR = mkdir -p
 
@@ -34,6 +32,16 @@ else
 endif
 
 
+# Compiler (g++ compiler is used by default)
+ifeq ($(COMPILER), clang)
+	CC = clang++ -c
+	LD = clang++
+else
+	CC = g++ -c
+	LD = g++
+endif
+
+
 # Target flag depending on platform
 ifeq ($(PLATFORM), x86)
 	CFLAG_PLATFORM = -m32
@@ -44,11 +52,11 @@ else
 endif
 
 
-# Warnings.
+# Warnings
 WARNING_FLAGS = -Wall -Wpedantic
 
 
-# Toolchain arguments.
+# Toolchain arguments
 CFLAGS = -O2 -MMD -MP -std=$(CPLUS_STANDARD) $(CFLAG_PIC) $(CFLAG_PLATFORM) $(WARNING_FLAGS)
 LFLAGS = -shared $(LFLAG_PLATFORM)
 

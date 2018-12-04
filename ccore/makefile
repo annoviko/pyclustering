@@ -31,6 +31,7 @@ default:
 	@echo "ccore_clean      - to clean all build files of CCORE library."
 	@echo " "
 	@echo "cppcheck         - to perform static analysis of source code."
+	@echo "clang            - to perform compilation and static analysis using clang compiler."
 	@echo " "
 	@echo "ut               - to build release unit-tests for CCORE library."
 	@echo "utdbg            - to build debug unit-tests for CCORE library."
@@ -77,6 +78,11 @@ ccore_clean:
 .PHONY: cppcheck
 cppcheck:
 	$(MAKE) $(MKFLAG) ccore.mk cppcheck
+
+
+.PHONY: clang
+clang:
+	$(MAKE) $(MKFLAG) ccore.mk ccore PLATFORM="x64" COMPILER="clang"
 
 
 .PHONY: ut
