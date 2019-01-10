@@ -92,9 +92,8 @@ class MetricUnitTest(unittest.TestCase):
 
 
     def testCanberraDistance(self):
-        assertion.true(math.isnan(metric.canberra_distance([0], [0])))
-        assertion.true(math.isnan(metric.canberra_distance_numpy(numpy.array([0]), numpy.array([0]))))
-
+        assertion.eq(0.0, metric.canberra_distance([0], [0]))
+        assertion.eq(0.0, metric.canberra_distance_numpy(numpy.array([0]), numpy.array([0])))
         assertion.eq(2.0, metric.canberra_distance([0.0, 0.0], [1.0, 1.0]))
         assertion.eq(2.0, metric.canberra_distance_numpy(numpy.array([0.0, 0.0]), numpy.array([1.0, 1.0])))
         assertion.eq(1.0, metric.canberra_distance([0.75, 0.75], [0.25, 0.25]))
@@ -102,9 +101,8 @@ class MetricUnitTest(unittest.TestCase):
 
 
     def testChiSquareDistance(self):
-        assertion.true(math.isnan(metric.chi_square_distance([0], [0])))
-        assertion.true(math.isnan(metric.chi_square_distance_numpy(numpy.array([0]), numpy.array([0]))))
-
+        assertion.eq(0.0, metric.chi_square_distance([0], [0]))
+        assertion.eq(0.0, metric.chi_square_distance_numpy(numpy.array([0]), numpy.array([0])))
         assertion.eq(2.0, metric.chi_square_distance([0.0, 0.0], [1.0, 1.0]))
         assertion.eq(2.0, metric.chi_square_distance_numpy(numpy.array([0.0, 0.0]), numpy.array([1.0, 1.0])))
         assertion.eq(0.5, metric.chi_square_distance([0.75, 0.75], [0.25, 0.25]))

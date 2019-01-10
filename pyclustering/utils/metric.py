@@ -458,7 +458,7 @@ def canberra_distance(point1, point2):
     @brief Calculate Canberra distance between two vectors.
 
     \f[
-    dist(a, b) = \sum_{i=0}^{N}\frac{\left | a_{i} - b_{i} \right |}{\left | a_{i} \right | + \left | b_{i} \right | };
+    dist(a, b) = \sum_{i=0}^{N}\frac{\left | a_{i} - b_{i} \right |}{\left | a_{i} \right | + \left | b_{i} \right |};
     \f]
 
     @param[in] point1 (array_like): The first vector.
@@ -471,7 +471,7 @@ def canberra_distance(point1, point2):
     for i in range(len(point1)):
         divider = abs(point1[i]) + abs(point2[i])
         if divider == 0.0:
-            return float('nan')
+            continue
 
         distance += abs(point1[i] - point2[i]) / divider
 
@@ -488,11 +488,10 @@ def canberra_distance_numpy(object1, object2):
     @return (float) Canberra distance between two objects.
 
     """
-    divider = numpy.abs(object1) + numpy.abs(object2)
-    if 0 in divider:
-        return float('nan')
+    with numpy.errstate(divide='ignore', invalid='ignore'):
+        result = numpy.divide(numpy.abs(object1 - object2), numpy.abs(object1) + numpy.abs(object2))
 
-    return numpy.sum(numpy.divide(numpy.abs(object1 - object2), numpy.abs(object1) + numpy.abs(object2)))
+    return numpy.sum(numpy.nan_to_num(result))
 
 
 def chi_square_distance(point1, point2):
@@ -500,7 +499,7 @@ def chi_square_distance(point1, point2):
     @brief Calculate Chi square distance between two vectors.
 
     \f[
-    dist(a, b) = \sum_{i=0}^{N}\frac{\left ( a_{i} - b_{i} \right )^{2}}{\left | a_{i} + b_{i} \right | };
+    dist(a, b) = \sum_{i=0}^{N}\frac{\left ( a_{i} - b_{i} \right )^{2}}{\left | a_{i} \right | + \left | b_{i} \right |};
     \f]
 
     @param[in] point1 (array_like): The first vector.
@@ -511,11 +510,11 @@ def chi_square_distance(point1, point2):
     """
     distance = 0.0
     for i in range(len(point1)):
-        divider = abs(point1[i] + point2[i])
+        divider = abs(point1[i]) + abs(point2[i])
         if divider == 0.0:
-            return float('nan')
+            continue
 
-        distance += ((point1[i] - point2[i]) ** 2.0) / abs(point1[i] + point2[i])
+        distance += ((point1[i] - point2[i]) ** 2.0) / divider
 
     return distance
 
@@ -530,8 +529,7 @@ def chi_square_distance_numpy(object1, object2):
     @return (float) Chi square distance between two objects.
 
     """
-    divider = numpy.abs(object1 + object2)
-    if 0 in divider:
-        return float('nan')
+    with numpy.errstate(divide='ignore', invalid='ignore'):
+        result = numpy.divide(numpy.power(object1 - object2, 2), numpy.abs(object1) + numpy.abs(object2))
 
-    return numpy.sum(numpy.divide(numpy.power(object1 - object2, 2), divider))
+    return numpy.sum(numpy.nan_to_num(result))

@@ -34,9 +34,6 @@
 #include <vector>
 
 
-#define METRIC_NAN_ID         "1"
-
-
 namespace ccore {
 
 namespace utils {
@@ -69,7 +66,7 @@ double euclidean_distance_square(const TypeContainer & point1, const TypeContain
     double distance = 0.0;
     typename TypeContainer::const_iterator iter_point1 = point1.begin();
 
-    for (auto & dim_point2 : point2) {
+    for (const auto & dim_point2 : point2) {
         double difference = (*iter_point1 - dim_point2);
         distance += difference * difference;
 
@@ -111,7 +108,7 @@ double manhattan_distance(const TypeContainer & point1, const TypeContainer & po
     double distance = 0.0;
     typename TypeContainer::const_iterator iter_point1 = point1.begin();
 
-    for (auto & dim_point2 : point2) {
+    for (const auto & dim_point2 : point2) {
         distance += std::abs(*iter_point1 - dim_point2);
         iter_point1++;
     }
@@ -135,7 +132,7 @@ double chebyshev_distance(const TypeContainer & point1, const TypeContainer & po
     double distance = 0.0;
     typename TypeContainer::const_iterator iter_point1 = point1.begin();
 
-    for (auto & dim_point2 : point2) {
+    for (const auto & dim_point2 : point2) {
         distance = std::max(distance, std::abs(*iter_point1 - dim_point2));
         iter_point1++;
     }
@@ -160,7 +157,7 @@ double minkowski_distance(const TypeContainer & p_point1, const TypeContainer & 
     double distance = 0.0;
     typename TypeContainer::const_iterator iter_point1 = p_point1.begin();
 
-    for (auto & dim_point2 : p_point2) {
+    for (const auto & dim_point2 : p_point2) {
         double difference = (*iter_point1 - dim_point2);
         distance += std::pow(difference, p_degree);
 
@@ -186,13 +183,16 @@ double canberra_distance(const TypeContainer & point1, const TypeContainer & poi
     double distance = 0.0;
     typename TypeContainer::const_iterator iter_point1 = point1.begin();
 
-    for (auto & dim_point2 : point2) {
-        const double divider = abs(*iter_point1) + abs(dim_point2);
+    for (const auto & dim_point2 : point2) {
+        const auto dim_point1 = *iter_point1;
+
+        const double divider = std::abs(dim_point1) + std::abs(dim_point2);
         if (divider == 0) {
-            return std::nan(METRIC_NAN_ID);
+            continue;
         }
 
-        distance += abs(*iter_point1 - dim_point2) / divider;
+        distance += std::abs(dim_point1 - dim_point2) / divider;
+        iter_point1++;
     }
 
     return distance;
@@ -214,13 +214,16 @@ double chi_square_distance(const TypeContainer & point1, const TypeContainer & p
     double distance = 0.0;
     typename TypeContainer::const_iterator iter_point1 = point1.begin();
 
-    for (auto & dim_point2 : point2) {
-        const double divider = abs(*iter_point1 + dim_point2);
+    for (const auto & dim_point2 : point2) {
+        const auto dim_point1 = *iter_point1;
+
+        const double divider = std::abs(dim_point1) + std::abs(dim_point2);
         if (divider == 0) {
-            return std::nan(METRIC_NAN_ID);
+            continue;
         }
 
-        distance += std::pow(*iter_point1 - dim_point2, 2) / divider;
+        distance += std::pow(dim_point1 - dim_point2, 2) / divider;
+        iter_point1++;
     }
 
     return distance;

@@ -67,14 +67,14 @@ class MetricUnitTest(unittest.TestCase):
 
     def testCanberraMetric(self):
         metric_instance = metric_wrapper(type_metric.CANBERRA, [], None)
-        assertion.true(math.isnan(metric_instance([0.0, 0.0], [0.0, 0.0])))
+        assertion.eq(0.0, metric_instance([0.0, 0.0], [0.0, 0.0]))
         assertion.eq(2.0, metric_instance([0.0, 0.0], [1.0, 1.0]))
         assertion.eq(1.0, metric_instance([0.75, 0.75], [0.25, 0.25]))
 
 
     def testChiSquareMetric(self):
         metric_instance = metric_wrapper(type_metric.CHI_SQUARE, [], None)
-        assertion.true(math.isnan(metric_instance([0.0, 0.0], [0.0, 0.0])))
+        assertion.eq(0.0, metric_instance([0.0, 0.0], [0.0, 0.0]))
         assertion.eq(2.0, metric_instance([0.0, 0.0], [1.0, 1.0]))
         assertion.eq(0.5, metric_instance([0.75, 0.75], [0.25, 0.25]))
 

@@ -55,12 +55,12 @@ TEST(utest_metric, metric_factory) {
    ASSERT_EQ(3.0, metric({-1.0, -2.0}, {-1.0, -5.0}));
 
    metric = distance_metric_factory<point>::canberra();
-   ASSERT_TRUE(std::isnan(metric({0.0, 0.0}, {0.0, 0.0})));
+   ASSERT_EQ(0.0, metric({0.0, 0.0}, {0.0, 0.0}));
    ASSERT_EQ(2.0, metric({0.0, 0.0}, {1.0, 1.0}));
    ASSERT_EQ(1.0, metric({0.75, 0.75}, {0.25, 0.25}));
 
    metric = distance_metric_factory<point>::chi_square();
-   ASSERT_TRUE(std::isnan(metric({0.0, 0.0}, {0.0, 0.0})));
+   ASSERT_EQ(0.0, metric({0.0, 0.0}, {0.0, 0.0}));
    ASSERT_EQ(2.0, metric({0.0, 0.0}, {1.0, 1.0}));
    ASSERT_EQ(0.5, metric({0.75, 0.75}, {0.25, 0.25}));
 

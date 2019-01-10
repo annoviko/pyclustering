@@ -1,5 +1,13 @@
 ------------------------------------------------------------------------
 
+CHANGE NOTES FOR 0.9.0 (STARTED Nov 19, 2018), (RELEASED: N/A)
+
+------------------------------------------------------------------------
+- Introduced new distance metrics: Canberra and Chi Square (pyclustering.utils.metric, ccore.utils.metric).
+  See: https://github.com/annoviko/pyclustering/issues/482
+
+------------------------------------------------------------------------
+
 CHANGE NOTES FOR 0.8.2 (STARTED May 28, 2018), (RELEASED: Nov 19, 2018)
 
 ------------------------------------------------------------------------
