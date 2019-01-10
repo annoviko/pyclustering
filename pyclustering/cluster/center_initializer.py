@@ -4,7 +4,7 @@
 @details Implementation based on paper @cite article::kmeans++::1.
          
 @authors Andrei Novikov, Aleksey Kukushkin (pyclustering@yandex.ru)
-@date 2014-2018
+@date 2014-2019
 @copyright GNU Public License
 
 @see pyclustering.cluster.kmeans

@@ -6,7 +6,7 @@
           considered as neural network implementation of K-Means algorithm.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
-@date 2014-2018
+@date 2014-2019
 @copyright GNU Public License
 
 @cond GNU_PUBLIC_LICENSE

@@ -3,7 +3,7 @@
 Unit-tests for dimension analyser.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
-@date 2014-2018
+@date 2014-2019
 @copyright GNU Public License
 
 pyclustering is free software: you can redistribute it and/or modify

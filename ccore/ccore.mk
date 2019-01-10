@@ -1,5 +1,7 @@
 #
-# Copyright (C) 2014-2018    Andrei Novikov (pyclustering@yandex.ru)
+# @authors Andrei Novikov (pyclustering@yandex.ru)
+# @date 2014-2019
+# @copyright GNU Public License
 #
 # GNU_PUBLIC_LICENSE
 #   pyclustering is free software: you can redistribute it and/or modify

@@ -4,7 +4,7 @@
 @details Implementation based on papers @cite article::ga::1, @cite article::ga::2.
 
 @authors Andrey Novikov, Aleksey Kukushkin (pyclustering@yandex.ru)
-@date 2014-2018
+@date 2014-2019
 @copyright GNU Public License
 
 @cond GNU_PUBLIC_LICENSE
