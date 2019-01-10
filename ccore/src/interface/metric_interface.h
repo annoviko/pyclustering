@@ -33,6 +33,8 @@ enum metric_t {
     MANHATTAN,
     CHEBYSHEV,
     MINKOWSKI,
+    CANBERRA,
+    CHI_SQUARE,
     USER_DEFINED = 1000
 };
 

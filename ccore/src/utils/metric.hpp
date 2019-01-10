@@ -32,6 +32,9 @@
 #include <vector>
 
 
+#define METRIC_NAN_ID         "1"
+
+
 namespace ccore {
 
 namespace utils {
@@ -163,6 +166,62 @@ double minkowski_distance(const TypeContainer & p_point1, const TypeContainer & 
     }
 
     return std::pow(distance, 1.0 / p_degree);
+}
+
+
+/**
+ *
+ * @brief   Calculates Canberra distance between points.
+ *
+ * @param[in] point1: point #1 that is represented by coordinates.
+ * @param[in] point2: point #2 that is represented by coordinates.
+ *
+ * @return  Returns Canberra distance between points.
+ *
+ */
+template <typename TypeContainer>
+double canberra_distance(const TypeContainer & point1, const TypeContainer & point2) {
+    double distance = 0.0;
+    typename TypeContainer::const_iterator iter_point1 = point1.begin();
+
+    for (auto & dim_point2 : point2) {
+        const double divider = abs(*iter_point1) + abs(dim_point2);
+        if (divider == 0) {
+            return std::nan(METRIC_NAN_ID);
+        }
+
+        distance += abs(*iter_point1 - dim_point2) / divider;
+    }
+
+    return distance;
+}
+
+
+/**
+ *
+ * @brief   Calculates Chi square distance between points.
+ *
+ * @param[in] point1: point #1 that is represented by coordinates.
+ * @param[in] point2: point #2 that is represented by coordinates.
+ *
+ * @return  Returns Chi square distance between points.
+ *
+ */
+template <typename TypeContainer>
+double chi_square_distance(const TypeContainer & point1, const TypeContainer & point2) {
+    double distance = 0.0;
+    typename TypeContainer::const_iterator iter_point1 = point1.begin();
+
+    for (auto & dim_point2 : point2) {
+        const double divider = abs(*iter_point1 + dim_point2);
+        if (divider == 0) {
+            return std::nan(METRIC_NAN_ID);
+        }
+
+        distance += std::pow(*iter_point1 - dim_point2, 2) / divider;
+    }
+
+    return distance;
 }
 
 
@@ -321,6 +380,34 @@ public:
 
 /**
  *
+ * @brief   Canberra distance metric calculator between two points.
+ *
+ */
+template <typename TypeContainer>
+class canberra_distance_metric : public distance_metric<TypeContainer> {
+public:
+    canberra_distance_metric(void) :
+        distance_metric<TypeContainer>(std::bind(canberra_distance<TypeContainer>, std::placeholders::_1, std::placeholders::_2))
+    { }
+};
+
+
+/**
+ *
+ * @brief   Chi square distance metric calculator between two points.
+ *
+ */
+template <typename TypeContainer>
+class chi_square_distance_metric : public distance_metric<TypeContainer> {
+public:
+    chi_square_distance_metric(void) :
+        distance_metric<TypeContainer>(std::bind(chi_square_distance<TypeContainer>, std::placeholders::_1, std::placeholders::_2))
+    { }
+};
+
+
+/**
+ *
  * @brief   Distance metric factory provides services for creation available metric in the 'ccore::utils::metric' and also user-defined.
  *
  */
@@ -382,6 +469,28 @@ public:
    */
     static distance_metric<TypeContainer> minkowski(const double p_degree) {
         return minkowski_distance_metric<TypeContainer>(p_degree);
+    }
+
+   /**
+   *
+   * @brief   Creates Canberra distance metric.
+   *
+   * @return  Canberra distance metric.
+   *
+   */
+    static distance_metric<TypeContainer> canberra(void) {
+        return canberra_distance_metric<TypeContainer>();
+    }
+
+   /**
+   *
+   * @brief   Creates Chi square distance metric.
+   *
+   * @return  Chi square distance metric.
+   *
+   */
+    static distance_metric<TypeContainer> chi_square(void) {
+        return chi_square_distance_metric<TypeContainer>();
     }
 
    /**

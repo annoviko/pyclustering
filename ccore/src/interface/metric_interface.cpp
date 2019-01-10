@@ -61,6 +61,16 @@ void * metric_create(const std::size_t p_type,
             return new distance_metric<point>(std::move(metric));
         }
 
+        case CANBERRA: {
+            distance_metric<point> metric = distance_metric_factory<point>::canberra();
+            return new distance_metric<point>(std::move(metric));
+        }
+
+        case CHI_SQUARE: {
+            distance_metric<point> metric = distance_metric_factory<point>::chi_square();
+            return new distance_metric<point>(std::move(metric));
+        }
+
         case USER_DEFINED: {
             auto functor_wrapper = [p_solver](const point & p1, const point & p2) {
                 pyclustering_package * point1 = create_package(&p1);

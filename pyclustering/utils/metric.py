@@ -50,6 +50,12 @@ class type_metric(IntEnum):
     ## Minkowski distance, for more information see function 'minkowski_distance'.
     MINKOWSKI = 4
 
+    ## Canberra distance, for more information see function 'canberra_distance'.
+    CANBERRA = 5
+
+    ## Chi square distance, for more information see function 'chi_square_distance'.
+    CHI_SQUARE = 6
+
     ## User defined function for distance calculation between two points.
     USER_DEFINED = 1000
 
@@ -89,11 +95,11 @@ class distance_metric:
     @endcode
 
     """
-    def __init__(self, type, **kwargs):
+    def __init__(self, metric_type, **kwargs):
         """!
         @brief Creates distance metric instance for calculation distance between two points.
 
-        @param[in] type (type_metric):
+        @param[in] metric_type (type_metric):
         @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'numpy_usage' 'func' and corresponding additional argument for
                     for specific metric types).
 
@@ -104,7 +110,7 @@ class distance_metric:
             - numpy_usage (bool): If True then numpy is used for calculation (by default is False).
 
         """
-        self.__type = type
+        self.__type = metric_type
         self.__args = kwargs
         self.__func = self.__args.get('func', None)
         self.__numpy = self.__args.get('numpy_usage', False)
@@ -212,6 +218,12 @@ class distance_metric:
         elif self.__type == type_metric.MINKOWSKI:
             return lambda point1, point2: minkowski_distance(point1, point2, self.__args.get('degree', 2))
 
+        elif self.__type == type_metric.CANBERRA:
+            return canberra_distance
+
+        elif self.__type == type_metric.CHI_SQUARE:
+            return chi_square_distance
+
         elif self.__type == type_metric.USER_DEFINED:
             return self.__func
 
@@ -240,6 +252,12 @@ class distance_metric:
 
         elif self.__type == type_metric.MINKOWSKI:
             return lambda object1, object2: minkowski_distance_numpy(object1, object2, self.__args.get('degree', 2))
+
+        elif self.__type == type_metric.CANBERRA:
+            return canberra_distance_numpy
+
+        elif self.__type == type_metric.CHI_SQUARE:
+            return chi_square_distance_numpy
 
         elif self.__type == type_metric.USER_DEFINED:
             return self.__func
@@ -433,3 +451,87 @@ def minkowski_distance_numpy(object1, object2, degree=2):
 
     """
     return numpy.sum(numpy.power(numpy.power(object1 - object2, degree), 1/degree), axis=1).T
+
+
+def canberra_distance(point1, point2):
+    """!
+    @brief Calculate Canberra distance between two vectors.
+
+    \f[
+    dist(a, b) = \sum_{i=0}^{N}\frac{\left | a_{i} - b_{i} \right |}{\left | a_{i} \right | + \left | b_{i} \right | };
+    \f]
+
+    @param[in] point1 (array_like): The first vector.
+    @param[in] point2 (array_like): The second vector.
+
+    @return (float) Canberra distance between two objects.
+
+    """
+    distance = 0.0
+    for i in range(len(point1)):
+        divider = abs(point1[i]) + abs(point2[i])
+        if divider == 0.0:
+            return float('nan')
+
+        distance += abs(point1[i] - point2[i]) / divider
+
+    return distance
+
+
+def canberra_distance_numpy(object1, object2):
+    """!
+    @brief Calculate Canberra distance between two objects using numpy.
+
+    @param[in] object1 (array_like): The first vector.
+    @param[in] object2 (array_like): The second vector.
+
+    @return (float) Canberra distance between two objects.
+
+    """
+    divider = numpy.abs(object1) + numpy.abs(object2)
+    if 0 in divider:
+        return float('nan')
+
+    return numpy.sum(numpy.divide(numpy.abs(object1 - object2), numpy.abs(object1) + numpy.abs(object2)))
+
+
+def chi_square_distance(point1, point2):
+    """!
+    @brief Calculate Chi square distance between two vectors.
+
+    \f[
+    dist(a, b) = \sum_{i=0}^{N}\frac{\left ( a_{i} - b_{i} \right )^{2}}{\left | a_{i} + b_{i} \right | };
+    \f]
+
+    @param[in] point1 (array_like): The first vector.
+    @param[in] point2 (array_like): The second vector.
+
+    @return (float) Chi square distance between two objects.
+
+    """
+    distance = 0.0
+    for i in range(len(point1)):
+        divider = abs(point1[i] + point2[i])
+        if divider == 0.0:
+            return float('nan')
+
+        distance += ((point1[i] - point2[i]) ** 2.0) / abs(point1[i] + point2[i])
+
+    return distance
+
+
+def chi_square_distance_numpy(object1, object2):
+    """!
+    @brief Calculate Chi square distance between two vectors using numpy.
+
+    @param[in] object1 (array_like): The first vector.
+    @param[in] object2 (array_like): The second vector.
+
+    @return (float) Chi square distance between two objects.
+
+    """
+    divider = numpy.abs(object1 + object2)
+    if 0 in divider:
+        return float('nan')
+
+    return numpy.sum(numpy.divide(numpy.power(object1 - object2, 2), divider))

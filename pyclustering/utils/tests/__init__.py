@@ -23,29 +23,28 @@
 
 """
 
-import unittest;
 
 # Generate images without having a window appear.
-import matplotlib;
-matplotlib.use('Agg');
+import matplotlib
+matplotlib.use('Agg')
 
-from pyclustering.tests.suite_holder import suite_holder;
+from pyclustering.tests.suite_holder import suite_holder
 
-from pyclustering.utils.tests.unit          import utils_unit_tests;
-from pyclustering.utils.tests.integration   import utils_integration_tests;
+from pyclustering.utils.tests.unit          import utils_unit_tests
+from pyclustering.utils.tests.integration   import utils_integration_tests
 
 
 class utils_tests(suite_holder):
     def __init__(self):
-        super().__init__();
-        utils_tests.fill_suite(self.get_suite());
+        super().__init__()
+        utils_tests.fill_suite(self.get_suite())
 
 
     @staticmethod
     def fill_suite(utils_suite):
-        utils_unit_tests.fill_suite(utils_suite);
-        utils_integration_tests.fill_suite(utils_suite);
+        utils_unit_tests.fill_suite(utils_suite)
+        utils_integration_tests.fill_suite(utils_suite)
 
 
 if __name__ == "__main__":
-    utils_tests().run();
+    utils_tests().run()
