@@ -9,7 +9,7 @@ Python and C++ implementations (via CCORE library) of each algorithm or
 model. CCORE library is a part of pyclustering and supported only for
 32, 64-bit Linux and 32, 64-bit Windows operating systems.
 
-**Version**: 0.8.2
+**Version**: 0.9.dev
 
 **License**: GNU General Public License
 
@@ -103,15 +103,15 @@ In case of any questions, proposals or bugs related to the pyclustering please c
 PyClustering Status
 ===================
 
-+-----------------+------------------------------+--------------------------------+
-| Branch          | master                       | 0.8.2.rel                      |
-+=================+==============================+================================+
-| Build (Linux)   | |Build Status Linux|         | |Build Status Linux 0.8.2.rel| |
-+-----------------+------------------------------+--------------------------------+
-| Build (Win)     | |Build Status Win|           | |Build Status Win 0.8.2.rel|   |
-+-----------------+------------------------------+--------------------------------+
-| Code Coverage   | |Coverage Status|            | |Coverage Status 0.8.2.rel|    |
-+-----------------+------------------------------+--------------------------------+
++-----------------+------------------------------+------------------------------+--------------------------------+
+| Branch          | master                       | 0.9.dev                      | 0.8.2.rel                      |
++=================+==============================+==============================+================================+
+| Build (Linux)   | |Build Status Linux|         | |Build Status Linux 0.9.dev| | |Build Status Linux 0.8.2.rel| |
++-----------------+------------------------------+------------------------------+--------------------------------+
+| Build (Win)     | |Build Status Win|           | |Build Status Win 0.9.dev|   | |Build Status Win 0.8.2.rel|   |
++-----------------+------------------------------+------------------------------+--------------------------------+
+| Code Coverage   | |Coverage Status|            | |Coverage Status 0.9.dev|    | |Coverage Status 0.8.2.rel|    |
++-----------------+------------------------------+------------------------------+--------------------------------+
 
 
 
@@ -321,6 +321,12 @@ Code Examples:
    :target: https://doi.org/10.5281/zenodo.1491324
 .. |PyPi| image:: https://badge.fury.io/py/pyclustering.svg
    :target: https://badge.fury.io/py/pyclustering
+.. |Build Status Linux 0.9.dev| image:: https://travis-ci.org/annoviko/pyclustering.svg?branch=0.9.dev
+   :target: https://travis-ci.org/annoviko/pyclustering
+.. |Build Status Win 0.9.dev| image:: https://ci.appveyor.com/api/projects/status/4uly2exfp49emwn0/branch/0.9.dev?svg=true
+   :target: https://ci.appveyor.com/project/annoviko/pyclustering/branch/0.9.dev
+.. |Coverage Status 0.9.dev| image:: https://coveralls.io/repos/github/annoviko/pyclustering/badge.svg?branch=0.9.dev&ts=1
+   :target: https://coveralls.io/github/annoviko/pyclustering?branch=0.9.dev
 .. |Build Status Linux 0.8.2.rel| image:: https://travis-ci.org/annoviko/pyclustering.svg?branch=0.8.2.rel
    :target: https://travis-ci.org/annoviko/pyclustering
 .. |Build Status Win 0.8.2.rel| image:: https://ci.appveyor.com/api/projects/status/4uly2exfp49emwn0/branch/0.8.2.rel?svg=true
