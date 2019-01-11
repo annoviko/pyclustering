@@ -70,6 +70,8 @@ class MetricUnitTest(unittest.TestCase):
         assertion.eq(0.0, metric_instance([0.0, 0.0], [0.0, 0.0]))
         assertion.eq(2.0, metric_instance([0.0, 0.0], [1.0, 1.0]))
         assertion.eq(1.0, metric_instance([0.75, 0.75], [0.25, 0.25]))
+        assertion.eq(0.0, metric_instance([-1.0, -1.0], [-1.0, -1.0]))
+        assertion.eq(0.4, metric_instance([-2.0, -2.0], [-3.0, -3.0]))
 
 
     def testChiSquareMetric(self):
@@ -77,6 +79,8 @@ class MetricUnitTest(unittest.TestCase):
         assertion.eq(0.0, metric_instance([0.0, 0.0], [0.0, 0.0]))
         assertion.eq(2.0, metric_instance([0.0, 0.0], [1.0, 1.0]))
         assertion.eq(0.5, metric_instance([0.75, 0.75], [0.25, 0.25]))
+        assertion.eq(0.0, metric_instance([-1.0, -1.0], [-1.0, -1.0]))
+        assertion.eq(0.4, metric_instance([-2.0, -2.0], [-3.0, -3.0]))
 
 
     # TODO: doesn't work for some platforms.
