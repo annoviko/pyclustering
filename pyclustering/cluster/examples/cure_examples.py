@@ -34,7 +34,7 @@ from pyclustering.cluster import cluster_visualizer
 from pyclustering.cluster.cure import cure
 
 
-def template_clustering(number_clusters, path, number_represent_points = 5, compression = 0.5, draw = True, ccore_flag = True):
+def template_clustering(number_clusters, path, number_represent_points=5, compression=0.5, draw=True, ccore_flag=False):
     sample = read_sample(path)
     
     cure_instance = cure(sample, number_clusters, number_represent_points, compression, ccore_flag)
@@ -89,8 +89,8 @@ def cluster_target():
 def cluster_two_diamonds():
     template_clustering(2, FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, 5, 0.3)
 
-def cluster_wing_nut():
-    template_clustering(2, FCPS_SAMPLES.SAMPLE_WING_NUT, 3, 0.3)
+def cluster_wing_nut(ccore_flag=True):
+    template_clustering(2, FCPS_SAMPLES.SAMPLE_WING_NUT, 4, 0.3, ccore_flag=ccore_flag)
     
 def cluster_chainlink():
     template_clustering(2, FCPS_SAMPLES.SAMPLE_CHAINLINK, 30, 0.2)
@@ -135,7 +135,8 @@ cluster_elongate()
 cluster_lsun()
 cluster_target()
 cluster_two_diamonds()
-cluster_wing_nut()
+cluster_wing_nut(True)
+cluster_wing_nut(False)
 cluster_chainlink()
 cluster_hepta()
 cluster_tetra()

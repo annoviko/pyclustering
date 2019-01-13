@@ -209,28 +209,21 @@ class cure:
 
                     # Check if current cluster has removed neighbor.
                     if (item.closest is cluster1) or (item.closest is cluster2):
-                        # If previous distance was less then distance to new cluster then nearest cluster should be found in the tree.
-                        # print("Update: ", item);
+                        # If previous distance was less then distance to new cluster then nearest cluster should
+                        # be found in the tree.
                         if item.distance < distance:
                             (item.closest, item.distance) = self.__closest_cluster(item, distance)
 
-                            # TODO: investigation of root cause is required.
-                            # Itself and merged cluster should be always in list of neighbors in line with specified radius.
-                            # But merged cluster may not be in list due to error calculation, therefore it should be added
-                            # manually.
+                            # TODO: investigation is required. There is assumption that itself and merged cluster
+                            # should be always in list of neighbors in line with specified radius. But merged cluster
+                            # may not be in list due to error calculation, therefore it should be added manually.
                             if item.closest is None:
                                 item.closest = merged_cluster
                                 item.distance = distance
 
-                        # Otherwise new cluster is nearest.
                         else:
                             item.closest = merged_cluster
                             item.distance = distance
-
-                        cluster_relocation_requests.append(item)
-                    elif item.distance > distance:
-                        item.closest = merged_cluster
-                        item.distance = distance
 
                         cluster_relocation_requests.append(item)
 

@@ -3,8 +3,18 @@
 CHANGE NOTES FOR 0.9.0 (STARTED Nov 19, 2018), (RELEASED: N/A)
 
 ------------------------------------------------------------------------
+
+GENERAL CHANGES:
 - Introduced new distance metrics: Canberra and Chi Square (pyclustering.utils.metric, ccore.utils.metric).
   See: https://github.com/annoviko/pyclustering/issues/482
+
+- Optimization of CURE algorithm (C++ implementation) by using heap (multiset) instead of list to store clusters in queue (ccore.clst.cure).
+  See: https://github.com/annoviko/pyclustering/issues/479
+
+CORRECTED MAJOR BUGS:
+- Bug with incorrect clustering in case of CURE python implementation when clusters are allocated incorrectly.
+  See: https://github.com/annoviko/pyclustering/issues/483
+
 
 ------------------------------------------------------------------------
 

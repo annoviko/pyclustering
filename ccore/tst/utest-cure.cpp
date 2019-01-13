@@ -171,5 +171,5 @@ TEST(utest_cure, allocation_two_diamonds) {
 
 TEST(utest_cure, allocation_wing_nut) {
     const std::vector<size_t> expected_clusters_length = { 508, 508 };
-    template_length_process_data(fcps_sample_factory::create_sample(FCPS_SAMPLE::WING_NUT), 2, 3, 0.3, expected_clusters_length);
+    template_length_process_data(fcps_sample_factory::create_sample(FCPS_SAMPLE::WING_NUT), 2, 4, 0.3, expected_clusters_length);
 }

@@ -23,9 +23,10 @@
 #pragma once
 
 
-#include <vector>
-#include <list>
 #include <algorithm>
+#include <list>
+#include <set>
+#include <vector>
 
 #include "container/kdtree.hpp"
 
@@ -82,9 +83,32 @@ public:
     * @brief   Insert points to cluster.
     *
     */
-    inline void insert_points(std::vector<std::vector<double> *> * append_points) {
-        points->insert(points->end(), append_points->begin(), append_points->end());
-    }
+    void insert_points(std::vector<std::vector<double> *> * append_points);
+
+public:
+    friend std::ostream & operator<<(std::ostream & p_stream, cure_cluster & p_cluster);
+};
+
+
+
+/**
+*
+* @brief   Cluster comparator for set where pointers are stored.
+*
+*/
+class cure_cluster_comparator {
+public:
+    /**
+    *
+    * @brief   Defines compare procedure using closest distance without checking for nullptr.
+    *
+    * @param[in] obj1: pointer to left operand (cluster 1).
+    * @param[in] obj2: pointer to right operand (cluster 2).
+    *
+    * @return  Returns 'true' if left operand is less than right.
+    *
+    */
+    bool operator()(const cure_cluster * const obj1, const cure_cluster * const obj2) const;
 };
 
 
@@ -98,7 +122,7 @@ public:
 */
 class cure_queue {
 private:
-    std::list<cure_cluster *> * queue;
+    std::multiset<cure_cluster *, cure_cluster_comparator> * queue;
     kdtree * tree;
 
 private:
@@ -109,7 +133,7 @@ private:
     * @param[in] data: pointer to points.
     *
     */
-    void create_queue(const std::vector< std::vector<double> > * data);
+    void create_queue(const dataset * data);
 
     /**
     *
@@ -147,9 +171,7 @@ private:
     * @param[in] removed_cluster: pointer to points.
     *
     */
-    inline void remove_cluster(cure_cluster * removed_cluster) {
-        queue->remove(removed_cluster);
-    }
+    void remove_cluster(cure_cluster * removed_cluster);
 
     /**
     *
@@ -163,9 +185,8 @@ private:
     bool are_all_elements_same(cure_cluster * merged_cluster);
 
 public:
-    typedef std::list<cure_cluster *>::iterator iterator;
-
-    typedef std::list<cure_cluster *>::const_iterator const_iterator;
+    using iterator        = std::multiset<cure_cluster *, cure_cluster_comparator>::iterator;
+    using const_iterator  = std::multiset<cure_cluster *, cure_cluster_comparator>::const_iterator;
 
     /**
     *
@@ -249,6 +270,26 @@ public:
     */
     inline size_t size(void) { return queue->size(); }
 };
+
+
+
+class relocation_info {
+private:
+    cure_queue::iterator m_cluster_iterator;
+    cure_cluster * m_closest_cluster;
+    double m_closest_distance;
+
+public:
+    relocation_info(const cure_queue::iterator & cluster_iterator, const cure_cluster * closest_cluster, const double closest_distance);
+
+public:
+    cure_queue::iterator get_cluster_iterator(void);
+
+    cure_cluster * get_closest_cluster(void);
+
+    double get_closest_distance(void);
+};
+
 
 
 /**
