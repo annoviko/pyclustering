@@ -67,6 +67,12 @@ TEST(utest_cure, allocation_sample_simple_01) {
 }
 
 
+TEST(utest_cure, allocation_sample_simple_01_one_representative) {
+    const std::vector<size_t> expected_clusters_length = { 5, 5 };
+    template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), 2, 1, 0.5, expected_clusters_length);
+}
+
+
 TEST(utest_cure, allocation_sample_one_allocation_simple_01) {
     const std::vector<size_t> expected_clusters_length = { 10 };
     template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), 1, 5, 0.5, expected_clusters_length);
@@ -76,6 +82,12 @@ TEST(utest_cure, allocation_sample_one_allocation_simple_01) {
 TEST(utest_cure, allocation_sample_simple_02) {
     const std::vector<size_t> expected_clusters_length = { 10, 5, 8 };
     template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02), 3, 5, 0.5, expected_clusters_length);
+}
+
+
+TEST(utest_cure, allocation_sample_simple_02_one_representative) {
+    const std::vector<size_t> expected_clusters_length = { 10, 5, 8 };
+    template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02), 3, 1, 0.5, expected_clusters_length);
 }
 
 
@@ -133,9 +145,21 @@ TEST(utest_cure, allocation_sample_simple_10) {
 }
 
 
+TEST(utest_cure, allocation_sample_simple_10_one_representative) {
+    const std::vector<size_t> expected_clusters_length = { 11, 11, 11 };
+    template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_10), 3, 1, 0.3, expected_clusters_length);
+}
+
+
 TEST(utest_cure, allocation_sample_simple_11) {
     const std::vector<size_t> expected_clusters_length = { 10, 10 };
     template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_11), 2, 5, 0.3, expected_clusters_length);
+}
+
+
+TEST(utest_cure, allocation_sample_simple_11_one_representative) {
+    const std::vector<size_t> expected_clusters_length = { 10, 10 };
+    template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_11), 2, 1, 0.3, expected_clusters_length);
 }
 
 
@@ -145,9 +169,27 @@ TEST(utest_cure, allocation_sample_simple_12) {
 }
 
 
+TEST(utest_cure, allocation_sample_simple_12_one_representative) {
+    const std::vector<size_t> expected_clusters_length = { 5, 5, 5 };
+    template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_12), 3, 1, 0.3, expected_clusters_length);
+}
+
+
 TEST(utest_cure, allocation_hepta) {
     const std::vector<size_t> expected_clusters_length = { 30, 30, 30, 30, 30, 30, 32 };
     template_length_process_data(fcps_sample_factory::create_sample(FCPS_SAMPLE::HEPTA), 7, 5, 0.3, expected_clusters_length);
+}
+
+
+TEST(utest_cure, allocation_hepta_one_representative) {
+    const std::vector<size_t> expected_clusters_length = { 30, 30, 30, 30, 30, 30, 32 };
+    template_length_process_data(fcps_sample_factory::create_sample(FCPS_SAMPLE::HEPTA), 7, 1, 0.3, expected_clusters_length);
+}
+
+
+TEST(utest_cure, allocation_hepta_one_cluster_allocation) {
+    const std::vector<size_t> expected_clusters_length = { 212 };
+    template_length_process_data(fcps_sample_factory::create_sample(FCPS_SAMPLE::HEPTA), 1, 1, 0.3, expected_clusters_length);
 }
 
 
