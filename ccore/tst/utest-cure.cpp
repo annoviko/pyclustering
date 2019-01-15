@@ -73,6 +73,12 @@ TEST(utest_cure, allocation_sample_simple_01_one_representative) {
 }
 
 
+TEST(utest_cure, allocation_sample_simple_01_no_compression) {
+    const std::vector<size_t> expected_clusters_length = { 5, 5 };
+    template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), 2, 5, 0.0, expected_clusters_length);
+}
+
+
 TEST(utest_cure, allocation_sample_one_allocation_simple_01) {
     const std::vector<size_t> expected_clusters_length = { 10 };
     template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), 1, 5, 0.5, expected_clusters_length);
@@ -88,6 +94,12 @@ TEST(utest_cure, allocation_sample_simple_02) {
 TEST(utest_cure, allocation_sample_simple_02_one_representative) {
     const std::vector<size_t> expected_clusters_length = { 10, 5, 8 };
     template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02), 3, 1, 0.5, expected_clusters_length);
+}
+
+
+TEST(utest_cure, allocation_sample_simple_02_no_compression) {
+    const std::vector<size_t> expected_clusters_length = { 10, 5, 8 };
+    template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02), 3, 5, 0.0, expected_clusters_length);
 }
 
 
@@ -181,6 +193,12 @@ TEST(utest_cure, allocation_hepta) {
 }
 
 
+TEST(utest_cure, allocation_hepta_max_compression) {
+    const std::vector<size_t> expected_clusters_length = { 30, 30, 30, 30, 30, 30, 32 };
+    template_length_process_data(fcps_sample_factory::create_sample(FCPS_SAMPLE::HEPTA), 7, 5, 1.0, expected_clusters_length);
+}
+
+
 TEST(utest_cure, allocation_hepta_one_representative) {
     const std::vector<size_t> expected_clusters_length = { 30, 30, 30, 30, 30, 30, 32 };
     template_length_process_data(fcps_sample_factory::create_sample(FCPS_SAMPLE::HEPTA), 7, 1, 0.3, expected_clusters_length);
@@ -214,4 +232,10 @@ TEST(utest_cure, allocation_two_diamonds) {
 TEST(utest_cure, allocation_wing_nut) {
     const std::vector<size_t> expected_clusters_length = { 508, 508 };
     template_length_process_data(fcps_sample_factory::create_sample(FCPS_SAMPLE::WING_NUT), 2, 4, 0.3, expected_clusters_length);
+}
+
+
+TEST(utest_cure, allocation_chainlink) {
+    const std::vector<size_t> expected_clusters_length = { 500, 500 };
+    template_length_process_data(fcps_sample_factory::create_sample(FCPS_SAMPLE::CHAINLINK), 2, 10, 0.3, expected_clusters_length);
 }

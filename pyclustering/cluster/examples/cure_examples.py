@@ -34,7 +34,7 @@ from pyclustering.cluster import cluster_visualizer
 from pyclustering.cluster.cure import cure
 
 
-def template_clustering(number_clusters, path, number_represent_points=5, compression=0.5, draw=True, ccore_flag=False):
+def template_clustering(number_clusters, path, number_represent_points=5, compression=0.5, draw=True, ccore_flag=True):
     sample = read_sample(path)
     
     cure_instance = cure(sample, number_clusters, number_represent_points, compression, ccore_flag)
@@ -125,18 +125,18 @@ def experiment_execution_time(draw, ccore):
     template_clustering(2, FCPS_SAMPLES.SAMPLE_ATOM, 20, 0.2)
 
 
-cluster_sample1()
-cluster_sample2()
-cluster_sample3()
-cluster_sample4()
-cluster_sample5()
-cluster_sample6()
-cluster_elongate()
-cluster_lsun()
-cluster_target()
-cluster_two_diamonds()
-cluster_wing_nut(True)
-cluster_wing_nut(False)
+# cluster_sample1()
+# cluster_sample2()
+# cluster_sample3()
+# cluster_sample4()
+# cluster_sample5()
+# cluster_sample6()
+# cluster_elongate()
+# cluster_lsun()
+# cluster_target()
+# cluster_two_diamonds()
+# cluster_wing_nut(True)
+# cluster_wing_nut(False)
 cluster_chainlink()
 cluster_hepta()
 cluster_tetra()

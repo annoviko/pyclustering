@@ -98,7 +98,7 @@ class cure:
         
         # create instance of cure algorithm for cluster analysis
         # request for allocation of two clusters.
-        cure_instance = cure(sample, 2, 5, 0.5, True);
+        cure_instance = cure(sample, 2, 5, 0.5);
         
         # run cluster analysis
         cure_instance.process();
