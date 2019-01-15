@@ -141,6 +141,14 @@ class KmeansUnitTest(unittest.TestCase):
     def testClusterOneDimensionSampleSimple7(self):
         KmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE7, [[-3.0], [2.0]], [10, 10], False)
 
+    def testClusterAllocationSampleSimple7Canberra(self):
+        metric = distance_metric(type_metric.CANBERRA)
+        KmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE7, [[-3.0], [2.0]], [10, 10], False, metric=metric)
+
+    def testClusterAllocationSampleSimple7ChiSquare(self):
+        metric = distance_metric(type_metric.CHI_SQUARE)
+        KmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE7, [[-3.0], [2.0]], [10, 10], False, metric=metric)
+
     def testClusterOneDimensionSampleSimple8(self):
         KmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE8, [[-4.0], [3.1], [6.1], [12.0]], [15, 30, 20, 80], False)
 
