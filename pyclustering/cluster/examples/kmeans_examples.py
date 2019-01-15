@@ -33,14 +33,17 @@ from pyclustering.cluster.kmeans import kmeans, kmeans_observer, kmeans_visualiz
 
 from pyclustering.utils import read_sample
 from pyclustering.utils import timedcall
+from pyclustering.utils.metric import distance_metric, type_metric
 
 
-def template_clustering(start_centers, path, tolerance = 0.25, ccore = True):
+def template_clustering(start_centers, path, tolerance = 0.25, ccore = False):
     sample = read_sample(path)
     dimension = len(sample[0])
-    
+
+    metric = distance_metric(type_metric.MANHATTAN)
+
     observer = kmeans_observer()
-    kmeans_instance = kmeans(sample, start_centers, tolerance, ccore, observer=observer)
+    kmeans_instance = kmeans(sample, start_centers, tolerance, ccore, observer=observer, metric=metric)
     (ticks, _) = timedcall(kmeans_instance.process)
     
     clusters = kmeans_instance.get_clusters()

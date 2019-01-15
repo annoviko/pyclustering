@@ -491,7 +491,7 @@ def canberra_distance_numpy(object1, object2):
     with numpy.errstate(divide='ignore', invalid='ignore'):
         result = numpy.divide(numpy.abs(object1 - object2), numpy.abs(object1) + numpy.abs(object2))
 
-    return numpy.sum(numpy.nan_to_num(result))
+    return numpy.sum(numpy.nan_to_num(result), axis=1).T
 
 
 def chi_square_distance(point1, point2):
@@ -532,4 +532,4 @@ def chi_square_distance_numpy(object1, object2):
     with numpy.errstate(divide='ignore', invalid='ignore'):
         result = numpy.divide(numpy.power(object1 - object2, 2), numpy.abs(object1) + numpy.abs(object2))
 
-    return numpy.sum(numpy.nan_to_num(result))
+    return numpy.sum(numpy.nan_to_num(result), axis=1).T

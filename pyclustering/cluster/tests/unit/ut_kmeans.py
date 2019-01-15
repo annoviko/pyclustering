@@ -86,11 +86,27 @@ class KmeansUnitTest(unittest.TestCase):
         metric = distance_metric(type_metric.USER_DEFINED, func=lambda p1, p2: p1[0] + p2[0] + 2)
         KmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [10], False, metric=metric)
 
+    def testClusterAllocationSampleSimple1Canberra(self):
+        metric = distance_metric(type_metric.CANBERRA)
+        KmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], False, metric=metric)
+
+    def testClusterAllocationSampleSimple1ChiSquare(self):
+        metric = distance_metric(type_metric.CHI_SQUARE)
+        KmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], False, metric=metric)
+
     def testClusterAllocationSampleSimple2(self):
         KmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [[3.5, 4.8], [6.9, 7], [7.5, 0.5]], [10, 5, 8], False)
 
     def testClusterOneAllocationSampleSimple2(self):
         KmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [[0.5, 0.2]], [23], False)
+
+    def testClusterAllocationSampleSimple2Canberra(self):
+        metric = distance_metric(type_metric.CANBERRA)
+        KmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [[3.5, 4.8], [6.9, 7], [7.5, 0.5]], [10, 5, 8], False, metric=metric)
+
+    def testClusterAllocationSampleSimple2ChiSquare(self):
+        metric = distance_metric(type_metric.CHI_SQUARE)
+        KmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [[3.5, 4.8], [6.9, 7], [7.5, 0.5]], [10, 5, 8], False, metric=metric)
 
     def testClusterAllocationSampleSimple3(self):
         KmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [[0.2, 0.1], [4.0, 1.0], [2.0, 2.0], [2.3, 3.9]], [10, 10, 10, 30], False)
@@ -113,6 +129,14 @@ class KmeansUnitTest(unittest.TestCase):
 
     def testClusterOneAllocationSampleSimple5(self):
         KmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [[0.0, 0.0]], [60], False)
+
+    def testClusterAllocationSampleSimple5Canberra(self):
+        metric = distance_metric(type_metric.CANBERRA)
+        KmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [[0.0, 1.0], [0.0, 0.0], [1.0, 1.0], [1.0, 0.0]], [30, 30], False, metric=metric)
+
+    def testClusterAllocationSampleSimple5ChiSquare(self):
+        metric = distance_metric(type_metric.CHI_SQUARE)
+        KmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [[3.4, 2.6], [3.4, -3.2], [-3.4, -3.4], [-3.1, 3.3]], [15, 15, 15, 15], False, metric=metric)
 
     def testClusterOneDimensionSampleSimple7(self):
         KmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE7, [[-3.0], [2.0]], [10, 10], False)

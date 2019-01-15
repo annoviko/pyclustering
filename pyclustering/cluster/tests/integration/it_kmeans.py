@@ -74,6 +74,14 @@ class KmeansIntegrationTest(unittest.TestCase):
         metric = distance_metric(type_metric.USER_DEFINED, func=distance_metric(type_metric.EUCLIDEAN))
         KmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], True, metric=metric)
 
+    def testClusterAllocationSampleSimple1Canberra(self):
+        metric = distance_metric(type_metric.CANBERRA)
+        KmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], True, metric=metric)
+
+    def testClusterAllocationSampleSimple1ChiSquare(self):
+        metric = distance_metric(type_metric.CHI_SQUARE)
+        KmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], True, metric=metric)
+
     def testClusterAllocationSampleSimple2ByCore(self):
         KmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [[3.5, 4.8], [6.9, 7], [7.5, 0.5]], [10, 5, 8], True)
 
@@ -97,6 +105,14 @@ class KmeansIntegrationTest(unittest.TestCase):
 
     def testClusterOneAllocationSampleSimple5ByCore(self):
         KmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [[0.0, 0.0]], [60], True)
+
+    def testClusterAllocationSampleSimple5Canberra(self):
+        metric = distance_metric(type_metric.CANBERRA)
+        KmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [[0.0, 1.0], [0.0, 0.0], [1.0, 1.0], [1.0, 0.0]], [30, 30], True, metric=metric)
+
+    def testClusterAllocationSampleSimple5ChiSquare(self):
+        metric = distance_metric(type_metric.CHI_SQUARE)
+        KmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [[3.4, 2.6], [3.4, -3.2], [-3.4, -3.4], [-3.1, 3.3]], [15, 15, 15, 15], True, metric=metric)
 
     def testClusterOneDimensionSampleSimple7ByCore(self):
         KmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE7, [[-3.0], [2.0]], [10, 10], True)

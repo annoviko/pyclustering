@@ -310,7 +310,22 @@ class kmeans:
         clusters = kmeans_instance.get_clusters()
         final_centers = kmeans_instance.get_centers()
     @endcode
-    
+
+    Example #3 - Clustering using specific distance metric, for example, Manhattan distance:
+    @code
+        # prepare input data and initial centers for cluster analysis using K-Means
+
+        # create metric that will be used for clustering
+        manhattan_metric = distance_metric(type_metric.MANHATTAN)
+
+        # create instance of K-Means using specific distance metric:
+        kmeans_instance = kmeans(sample, initial_centers, metric=manhattan_metric)
+
+        # run cluster analysis and obtain results
+        kmeans_instance.process()
+        clusters = kmeans_instance.get_clusters()
+    @endcode
+
     @see center_initializer
     
     """
