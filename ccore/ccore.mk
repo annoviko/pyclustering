@@ -36,8 +36,8 @@ endif
 
 # Compiler (g++ compiler is used by default)
 ifeq ($(COMPILER), clang)
-	CC = clang++ -c
-	LD = clang++
+	CC = scan-build clang++ -c
+	LD = scan-build clang++
 else
 	CC = g++ -c
 	LD = g++

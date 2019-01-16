@@ -70,6 +70,10 @@ void hsyncnet::process(const double order, const solve_type solver, const bool c
     std::size_t number_neighbors = m_initial_neighbors;
     std::size_t current_number_clusters = m_oscillators.size();
 
+    if (current_number_clusters <= m_number_clusters) {
+        return;   /* Nothing to process, amount of objects is less than required amount of clusters. */
+    }
+
     double radius = average_neighbor_distance(oscillator_locations, number_neighbors);
     
     std::size_t increase_step = (std::size_t) round(oscillator_locations->size() * m_increase_persent);

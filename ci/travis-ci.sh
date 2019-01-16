@@ -143,12 +143,17 @@ run_analyse_ccore_job() {
     print_info "Install requirement for static analysis of CCORE."
 
     sudo apt-get install -qq cppcheck
+    sudo apt-get install -qq clang
 
     # analyse source code
     cd ccore/
 
     make cppcheck
-    check_failure "C/C++ static analysis: FAILURE."
+    check_failure "C/C++ static analysis (tool: 'cppcheck'): FAILURE."
+
+    print_info "- Code checking using 'scan-build clang++'."
+    make clang > >(tee -a stdout.log) 2> >(tee -a stderr.log >&2)
+    check_error_log_file stderr.log "C/C++ static analysis (tool: 'scan-build clang++'): FAILURE."
 }
 
 
