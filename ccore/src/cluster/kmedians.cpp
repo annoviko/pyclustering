@@ -67,7 +67,7 @@ void kmedians::process(const dataset & data, cluster_data & output_result) {
         update_clusters(m_ptr_result->medians(), m_ptr_result->clusters());
         changes = update_medians(m_ptr_result->clusters(), m_ptr_result->medians());
 
-        double change_difference = abs(changes - prev_changes);
+        double change_difference = std::abs(changes - prev_changes);
         if (change_difference < THRESHOLD_CHANGE) {
             counter_repeaters++;
         }

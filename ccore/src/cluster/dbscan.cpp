@@ -38,7 +38,6 @@ dbscan::dbscan(const double p_radius_connectivity, const size_t p_minimum_neighb
         m_visited(std::vector<bool>()),
         m_belong(std::vector<bool>()),
         m_initial_radius(p_radius_connectivity),
-        m_radius(p_radius_connectivity * p_radius_connectivity),
         m_neighbors(p_minimum_neighbors)
 { }
 

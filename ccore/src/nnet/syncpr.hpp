@@ -48,6 +48,10 @@ public:
 
 
 class syncpr: public sync_network {
+private:
+    using sync_network::simulate_static;
+    using sync_network::simulate_dynamic;
+
 protected:
     double m_increase_strength1;
     double m_increase_strength2;

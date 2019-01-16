@@ -100,7 +100,7 @@ void optics::initialize(void) {
         }
     }
     else {
-        std::for_each(m_optics_objects->begin(), m_optics_objects->end(), [this](auto & p_object) { p_object.clear(); });
+        std::for_each(m_optics_objects->begin(), m_optics_objects->end(), [](auto & p_object) { p_object.clear(); });
     }
 
 

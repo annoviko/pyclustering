@@ -52,8 +52,7 @@ private:
     using index_storage = std::unordered_set<std::size_t>;
 
 private:
-    std::size_t         m_amount            = 0;
-    std::size_t         m_candidates        = 0;
+    std::size_t             m_amount            = 0;
 
     mutable index_storage   m_available_indexes = { };
 

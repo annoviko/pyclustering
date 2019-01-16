@@ -89,7 +89,7 @@ public:
     *
     */
     adjacency_connector(void) {
-        m_connector = [this](const size_t index1, const size_t index2, TypeCollection & collection) { 
+        m_connector = [](const size_t index1, const size_t index2, TypeCollection & collection) { 
             collection.set_connection(index1, index2); 
         };
     }

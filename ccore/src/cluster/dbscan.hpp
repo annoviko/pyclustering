@@ -61,8 +61,6 @@ private:
 
     double              m_initial_radius  = 0.0;    /* original radius that was specified by user */
 
-    double              m_radius          = 0.0;    /* square of the original radius to improve performance */
-
     size_t              m_neighbors       = 0;
 
     dbscan_data_t       m_type            = dbscan_data_t::POINTS;
