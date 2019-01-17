@@ -136,6 +136,8 @@ TEST(utest_syncnet, two_clusters_rk4_solver_without_collection) {
     template_two_cluster_allocation(solve_type::RUNGE_KUTTA_4, false, false);
 }
 
+#ifndef VALGRIND_ANALYSIS_SHOCK
+
 TEST(utest_syncnet, two_clusters_rkf45_solver_without_collection) {
     template_two_cluster_allocation(solve_type::RUNGE_KUTTA_FEHLBERG_45, false, false);
 }
@@ -143,3 +145,5 @@ TEST(utest_syncnet, two_clusters_rkf45_solver_without_collection) {
 TEST(utest_syncnet, two_clusters_fast_solver_conn_weight) {
     template_two_cluster_allocation(solve_type::FORWARD_EULER, false, true);
 }
+
+#endif

@@ -120,9 +120,13 @@ TEST(utest_syncpr, dynamic_simulation_RK4) {
     template_simulation_dynamic(solve_type::RUNGE_KUTTA_4, true);
 }
 
+#ifndef VALGRIND_ANALYSIS_SHOCK
+
 TEST(utest_syncpr, dynamic_simulation_RKF45) {
     template_simulation_dynamic(solve_type::RUNGE_KUTTA_FEHLBERG_45, true);
 }
+
+#endif
 
 TEST(utest_syncpr, dynamic_simulation_FAST_no_collecting) {
     template_simulation_dynamic(solve_type::FORWARD_EULER, false);
@@ -132,9 +136,13 @@ TEST(utest_syncpr, dynamic_simulation_RK4_no_collecting) {
     template_simulation_dynamic(solve_type::RUNGE_KUTTA_4, false);
 }
 
+#ifndef VALGRIND_ANALYSIS_SHOCK
+
 TEST(utest_syncpr, dynamic_simulation_RKF45_no_collecting) {
     template_simulation_dynamic(solve_type::RUNGE_KUTTA_FEHLBERG_45, false);
 }
+
+#endif
 
 TEST(utest_syncpr, train_and_recognize_pattern) {
     syncpr network(10, 0.1, 0.1);

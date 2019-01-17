@@ -41,6 +41,7 @@ default:
 	@echo "utclean          - to clean build files of unit-tests of CCORE library."
 	@echo " "
 	@echo "valgrind         - to build and run unit-tests for memory leak checking of CCORE library."
+	@echo "valgrind_shock   - to build and run shock scope of unit-tests for memory leak checking of CCORE library."
 	@echo " "
 	@echo "clean            - to clean everything."
 
@@ -110,6 +111,12 @@ utclean:
 .PHONE: valgrind
 valgrind:
 	$(MAKE) $(MKFLAG) utcore.mk ut CONFIG="valgrind"
+	cd tst/ && valgrind --leak-check=full --leak-check=yes --error-exitcode=1 ./utcore.exe
+
+
+.PHONE: valgrind_shock
+valgrind_shock:
+	$(MAKE) $(MKFLAG) utcore.mk ut CONFIG="valgrind" BUILD_VERSION="valgrind_shock"
 	cd tst/ && valgrind --leak-check=full --leak-check=yes --error-exitcode=1 ./utcore.exe
 
 

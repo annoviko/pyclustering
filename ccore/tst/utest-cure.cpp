@@ -211,6 +211,8 @@ TEST(utest_cure, allocation_hepta_one_cluster_allocation) {
 }
 
 
+#ifndef VALGRIND_ANALYSIS_SHOCK
+
 TEST(utest_cure, allocation_tetra) {
     const std::vector<size_t> expected_clusters_length = { 100, 100, 100, 100 };
     template_length_process_data(fcps_sample_factory::create_sample(FCPS_SAMPLE::TETRA), 4, 5, 0.5, expected_clusters_length);
@@ -239,3 +241,5 @@ TEST(utest_cure, allocation_chainlink) {
     const std::vector<size_t> expected_clusters_length = { 500, 500 };
     template_length_process_data(fcps_sample_factory::create_sample(FCPS_SAMPLE::CHAINLINK), 2, 10, 0.3, expected_clusters_length);
 }
+
+#endif

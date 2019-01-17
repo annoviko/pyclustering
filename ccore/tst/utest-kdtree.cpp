@@ -315,17 +315,19 @@ TEST_F(utest_kdtree, insert_search_remove_simple_10) {
 }
 
 
-TEST_F(utest_kdtree, insert_search_remove_lsun) {
-    auto sample = fcps_sample_factory::create_sample(FCPS_SAMPLE::LSUN);
-    const double search_radius = farthest_distance(*sample, distance_metric_factory<point>::euclidean());
-    TemplateTestInsertSearchRemove(*sample, search_radius);
-}
-
-
 TEST_F(utest_kdtree, insert_search_remove_hepta) {
     auto sample = fcps_sample_factory::create_sample(FCPS_SAMPLE::HEPTA);
     double search_radius = farthest_distance(*sample, distance_metric_factory<point>::euclidean());
     search_radius += search_radius * 0.0000001;
+    TemplateTestInsertSearchRemove(*sample, search_radius);
+}
+
+
+#ifndef VALGRIND_ANALYSIS_SHOCK
+
+TEST_F(utest_kdtree, insert_search_remove_lsun) {
+    auto sample = fcps_sample_factory::create_sample(FCPS_SAMPLE::LSUN);
+    const double search_radius = farthest_distance(*sample, distance_metric_factory<point>::euclidean());
     TemplateTestInsertSearchRemove(*sample, search_radius);
 }
 
@@ -343,6 +345,8 @@ TEST_F(utest_kdtree, insert_search_remove_two_diamonds) {
     const double search_radius = farthest_distance(*sample, distance_metric_factory<point>::euclidean());
     TemplateTestInsertSearchRemove(*sample, search_radius);
 }
+
+#endif
 
 
 TEST_F(utest_kdtree, insert_search_remove_with_payload_identical_data_1) {

@@ -77,6 +77,9 @@ TEST(utest_legion, one_stimulated_oscillator_rk4) {
     template_simulation({ 1 }, connection_t::CONNECTION_GRID_FOUR, solve_type::RUNGE_KUTTA_4, 10, 100);
 }
 
+
+#ifndef VALGRIND_ANALYSIS_SHOCK
+
 TEST(utest_legion, dynamic_simulation_grid_four_rk4) {
     template_simulation({ 1, 1, 1, 0, 0, 0, 1, 1, 1 }, connection_t::CONNECTION_GRID_FOUR, solve_type::RUNGE_KUTTA_4, 10, 100);
 }
@@ -84,3 +87,5 @@ TEST(utest_legion, dynamic_simulation_grid_four_rk4) {
 TEST(utest_legion, dynamic_simulation_grid_eight_rk4) {
     template_simulation({ 1, 1, 1, 0, 0, 0, 1, 1, 1 }, connection_t::CONNECTION_GRID_EIGHT, solve_type::RUNGE_KUTTA_4, 10, 100);
 }
+
+#endif

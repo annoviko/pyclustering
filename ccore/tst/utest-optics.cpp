@@ -226,6 +226,8 @@ TEST(utest_optics, allocation_sample_simple_05_large_radius) {
 }
 
 
+#ifndef VALGRIND_ANALYSIS_SHOCK
+
 TEST(utest_optics, allocation_sample_lsun_large_radius_10) {
     const std::vector<size_t> expected_clusters_length = { 99, 100, 202 };
     template_optics_length_process_data(fcps_sample_factory::create_sample(FCPS_SAMPLE::LSUN), 1.0, 3, 3, expected_clusters_length);
@@ -236,6 +238,8 @@ TEST(utest_optics, allocation_sample_lsun_large_radius_19) {
     const std::vector<size_t> expected_clusters_length = { 99, 100, 202 };
     template_optics_length_process_data(fcps_sample_factory::create_sample(FCPS_SAMPLE::LSUN), 1.9, 3, 3, expected_clusters_length);
 }
+
+#endif
 
 
 static std::shared_ptr<optics_data>

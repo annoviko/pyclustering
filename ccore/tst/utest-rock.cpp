@@ -108,7 +108,11 @@ TEST(utest_rock, allocation_sample_simple_07) {
 }
 
 
+#ifndef VALGRIND_ANALYSIS_SHOCK
+
 TEST(utest_rock, allocation_sample_simple_08) {
     const std::vector<size_t> expected_clusters_length = { 15, 30, 20, 80 };
     template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_08), 1.0, 4, 0.5, expected_clusters_length);
 }
+
+#endif

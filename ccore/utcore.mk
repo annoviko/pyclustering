@@ -53,6 +53,12 @@ else
 endif
 
 
+# Build specific flags (VALGRIND_ANALYSIS_SHOCK - for valgrind shock checking)
+ifeq ($(BUILD_VERSION), valgrind_shock)
+	CFLAGS += -DVALGRIND_ANALYSIS_SHOCK
+endif
+
+
 # Output name of executable file
 EXECUTABLE_DIRECTORY = tst
 EXECUTABLE = $(EXECUTABLE_DIRECTORY)/utcore.exe

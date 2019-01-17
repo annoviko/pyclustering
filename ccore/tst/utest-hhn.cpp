@@ -225,6 +225,8 @@ TEST(utest_hhn, one_with_one_without_stimulation) {
     template_ensemble_generation(2, 400, 100, 0.0, { 0, 25 }, expected_ensembles, dead_neurons);
 }
 
+#ifndef VALGRIND_ANALYSIS_SHOCK
+
 TEST(utest_hhn, two_sync_ensembles_01) {
     basic_ensemble_data expected_ensembles = { { 0, 1 }, { 2, 3 } };
     basic_ensemble      dead_neurons = { };
@@ -238,6 +240,8 @@ TEST(utest_hhn, two_sync_ensembles_02) {
 
     template_ensemble_generation(6, 800, 200, 0.1, { 20, 20, 20, 50, 50, 50 }, expected_ensembles, dead_neurons);
 }
+
+#endif
 
 
 static void template_write_read_dynamic(const std::size_t p_num_osc,
@@ -286,6 +290,9 @@ TEST(utest_hhn, wr_two_oscillators) {
     template_write_read_dynamic(2, 30, 1, { 40, 20 }, enables);
 }
 
+
+#ifndef VALGRIND_ANALYSIS_SHOCK
+
 TEST(utest_hhn, wr_ten_oscillators) {
     std::vector<hhn_dynamic::collect> enables = { hhn_dynamic::collect::MEMBRANE_POTENTIAL };
     template_write_read_dynamic(10, 100, 10, { 10, 10, 10, 12, 12, 12, 20, 20, 20, 20 }, enables);
@@ -309,3 +316,4 @@ TEST(utest_hhn, wr_specific_dynamic_collection) {
     template_write_read_dynamic(4, 50, 3, { 40, 20, 70, 120 }, enables);
 }
 
+#endif

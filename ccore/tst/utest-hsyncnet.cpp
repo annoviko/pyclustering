@@ -65,6 +65,10 @@ TEST(utest_hsyncnet, allocation_2_clusters) {
     template_cluster_allocation(2);
 }
 
+#ifndef VALGRIND_ANALYSIS_SHOCK
+
 TEST(utest_hsyncnet, allocation_1_clusters) {
     template_cluster_allocation(1);
 }
+
+#endif

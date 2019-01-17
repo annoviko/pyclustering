@@ -185,9 +185,9 @@ run_ut_ccore_job() {
 
 
 run_valgrind_ccore_job() {
-    print_info "VALGRIND CCORE (C++ code valgrind checking):"
+    print_info "VALGRIND CCORE (C++ code valgrind shock checking):"
     print_info "- Run unit-tests of pyclustering."
-    print_info "- Memory leakage detection by valgrind."
+    print_info "- Shock memory leakage detection by valgrind."
 
     # install requirements for the job
     sudo apt-get install -qq g++-5
@@ -198,8 +198,8 @@ run_valgrind_ccore_job() {
     # build and run unit-test project under valgrind to check memory leakage
     cd ccore/
 
-    make valgrind
-    check_failure "CCORE memory leakage status: FAILURE."
+    make valgrind_shock
+    check_failure "CCORE shock memory leakage status: FAILURE."
 }
 
 
