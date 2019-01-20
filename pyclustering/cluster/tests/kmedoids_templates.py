@@ -30,6 +30,7 @@ import numpy
 from pyclustering.tests.assertion import assertion
 
 from pyclustering.cluster.kmedoids import kmedoids
+from pyclustering.cluster.center_initializer import kmeans_plusplus_initializer
 
 from pyclustering.utils import read_sample, calculate_distance_matrix
 from pyclustering.utils.metric import distance_metric, type_metric
@@ -48,6 +49,7 @@ class KmedoidsTestTemplates:
         sample = read_sample(path_to_file)
         data_type = kwargs.get('data_type', 'points')
         input_type = kwargs.get('input_type', 'list')
+        initialize_medoids = kwargs.get('initialize_medoids', None)
 
         if metric is None:
             metric = distance_metric(type_metric.EUCLIDEAN_SQUARE)
@@ -57,28 +59,47 @@ class KmedoidsTestTemplates:
             input_data = calculate_distance_matrix(sample)
 
             if input_type == 'numpy':
-                input_data = numpy.matrix(input_data)
+                input_data = numpy.array(input_data)
 
-        kmedoids_instance = kmedoids(input_data, initial_medoids, 0.025, ccore_flag, metric=metric, data_type=data_type)
-        kmedoids_instance.process()
+        testing_result = False
+        testing_attempts = 1
+        if initialize_medoids is not None:  # in case center initializer randomization appears
+            testing_attempts = 10
 
-        clusters = kmedoids_instance.get_clusters()
-        medoids = kmedoids_instance.get_medoids()
+        for _ in range(testing_attempts):
+            if initialize_medoids is not None:
+                initial_medoids = kmeans_plusplus_initializer(sample, initialize_medoids).initialize(return_index=True)
 
-        assertion.eq(len(clusters), len(medoids))
-        assertion.eq(len(set(medoids)), len(medoids))
+            kmedoids_instance = kmedoids(input_data, initial_medoids, 0.025, ccore_flag, metric=metric, data_type=data_type)
+            kmedoids_instance.process()
 
-        obtained_cluster_sizes = [len(cluster) for cluster in clusters]
-        assertion.eq(len(sample), sum(obtained_cluster_sizes))
+            clusters = kmedoids_instance.get_clusters()
+            medoids = kmedoids_instance.get_medoids()
 
-        obtained_cluster_sizes.sort()
-        expected_cluster_length.sort()
-        assertion.eq(obtained_cluster_sizes, expected_cluster_length)
+            if len(clusters) != len(medoids):
+                continue
+
+            if len(set(medoids)) != len(medoids):
+                continue
+
+            obtained_cluster_sizes = [len(cluster) for cluster in clusters]
+            if len(sample) != sum(obtained_cluster_sizes):
+                continue
+
+            if expected_cluster_length is not None:
+                obtained_cluster_sizes.sort()
+                expected_cluster_length.sort()
+                if obtained_cluster_sizes != expected_cluster_length:
+                    continue
+
+            testing_result = True
+
+        assertion.true(testing_result)
 
 
     @staticmethod
     def templateClusterAllocationOneDimensionData(ccore_flag):
-        input_data = [ [random()] for i in range(10) ] + [ [random() + 3] for i in range(10) ] + [ [random() + 5] for i in range(10) ] + [ [random() + 8] for i in range(10) ]
+        input_data = [[random()] for i in range(10)] + [ [random() + 3] for i in range(10) ] + [ [random() + 5] for i in range(10) ] + [ [random() + 8] for i in range(10) ]
          
         kmedoids_instance = kmedoids(input_data, [ 5, 15, 25, 35 ], 0.025, ccore_flag)
         kmedoids_instance.process()

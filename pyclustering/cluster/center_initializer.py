@@ -99,6 +99,7 @@ class random_center_initializer:
         return self.__data[random_index_point]
 
 
+
 class kmeans_plusplus_initializer:
     """!
     @brief K-Means++ is an algorithm for choosing the initial centers for algorithms like K-Means or X-Means.
@@ -200,12 +201,14 @@ class kmeans_plusplus_initializer:
             raise AttributeError("Data is empty.")
 
 
-    def __calculate_shortest_distances(self, data, centers):
+    def __calculate_shortest_distances(self, data, centers, index_representation):
         """!
         @brief Calculates distance from each data point to nearest center.
         
         @param[in] data (numpy.array): Array of points for that initialization is performed.
-        @param[in] centers (numpy.array): Array of points that represents centers.
+        @param[in] centers (numpy.array): Array of points or indexes that represents centers.
+        @param[in] index_representation (bool): If 'True' then index representation is used in 'centers', otherwise
+                    points itself are used for representation.
         
         @return (numpy.array) List of distances to closest center for each data point.
         
@@ -213,8 +216,12 @@ class kmeans_plusplus_initializer:
 
         dataset_differences = numpy.zeros((len(centers), len(data)))
         for index_center in range(len(centers)):
-            dataset_differences[index_center] = numpy.sum(
-                numpy.square(data - centers[index_center]), axis=1).T
+            if index_representation:
+                center = data[centers[index_center]]
+            else:
+                center = centers[index_center]
+
+            dataset_differences[index_center] = numpy.sum(numpy.square(data - center), axis=1).T
 
         shortest_distances = numpy.min(dataset_differences, axis=0)
         return shortest_distances
@@ -232,7 +239,7 @@ class kmeans_plusplus_initializer:
 
         """
 
-        distances = self.__calculate_shortest_distances(data=self.__data, centers=centers)
+        distances = self.__calculate_shortest_distances(self.__data, centers, return_index)
 
         if self.__candidates == kmeans_plusplus_initializer.FARTHEST_CENTER_CANDIDATE:
             center_index = numpy.argmax(distances)

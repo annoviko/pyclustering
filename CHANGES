@@ -1,6 +1,6 @@
 ------------------------------------------------------------------------
 
-CHANGE NOTES FOR 0.9.0 (STARTED Nov 19, 2018), (RELEASED: N/A)
+CHANGE NOTES FOR 0.9.0 (STARTED Nov 19, 2018), (RELEASED: -)
 
 ------------------------------------------------------------------------
 
@@ -12,8 +12,11 @@ GENERAL CHANGES:
   See: https://github.com/annoviko/pyclustering/issues/479
 
 CORRECTED MAJOR BUGS:
-- Bug with incorrect clustering in case of CURE python implementation when clusters are allocated incorrectly.
+- Bug with incorrect clustering in case of CURE python implementation when clusters are allocated incorrectly (pyclustering.cluster.cure).
   See: https://github.com/annoviko/pyclustering/issues/483
+
+- Bug with incorrect distance calculation for kmeans++ in case of index representation for centers (pyclustering.cluster.center_initializer).
+  See: https://github.com/annoviko/pyclustering/issues/485
 
 
 ------------------------------------------------------------------------

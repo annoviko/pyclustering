@@ -102,6 +102,9 @@ class KmedoidsUnitTest(unittest.TestCase):
     def testClusterOneAllocationSampleSimple1DistanceMatrix(self):
         KmedoidsTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [5], [10], False, data_type='distance_matrix')
 
+    def testClusterAllocationSampleSimple1WithMedoidsInitializer(self):
+        KmedoidsTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, None, [5, 5], False, initialize_medoids=2)
+
     def testClusterAllocationSampleSimple2(self):
         KmedoidsTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [3, 12, 20], [10, 5, 8], False)
 
@@ -114,6 +117,9 @@ class KmedoidsUnitTest(unittest.TestCase):
     def testClusterOneAllocationSampleSimple2DistanceMatrix(self):
         KmedoidsTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [10], [23], False, data_type='distance_matrix')
 
+    def testClusterAllocationSampleSimple2WithMedoidsInitializer(self):
+        KmedoidsTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, None, [10, 5, 8], False, initialize_medoids=3)
+
     def testClusterAllocationSampleSimple3(self):
         KmedoidsTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [4, 12, 25, 37], [10, 10, 10, 30], False)
 
@@ -122,6 +128,9 @@ class KmedoidsUnitTest(unittest.TestCase):
 
     def testClusterOneAllocationSampleSimple3(self):
         KmedoidsTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [30], [60], False)
+
+    def testClusterAllocationSampleSimple3WithMedoidsInitializer(self):
+        KmedoidsTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, None, [10, 10, 10, 30], False, initialize_medoids=4)
 
     def testClusterAllocationSampleSimple5(self):
         KmedoidsTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [4, 18, 34, 55], [15, 15, 15, 15], False)
