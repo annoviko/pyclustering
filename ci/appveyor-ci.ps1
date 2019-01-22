@@ -284,10 +284,10 @@ function install_miniconda($platform_version) {
     conda install -q conda;
     
     conda create -q -n test-environment python=3.5;
-    conda install -q -n test-environment mkl numpy scipy matplotlib;
+    conda install -q -n test-environment mkl numpy scipy matplotlib pillow;
 
-    # Download pillow from the channel because of troubles on default channel. The issue is known: https://github.com/python-pillow/Pillow/issues/2945.
-    conda install --channel conda-forge pillow=5.2.0;
+    # Download pillow from the channel because of troubles on default channel.
+    # conda install --channel conda-forge pillow=5.2.0;
 
     
     echo "[CI Job] Activating environment for powershell manually (activate does not work).";
