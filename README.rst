@@ -15,7 +15,7 @@ model. CCORE library is a part of pyclustering and supported only for
 
 **E-Mail**: pyclustering@yandex.ru
 
-**Documentation**: https://codedocs.xyz/annoviko/pyclustering/
+**Documentation**: https://pyclustering.github.io/docs/0.8.2/html/index.html
 
 **Homepage**: https://pyclustering.github.io/
 
@@ -37,9 +37,9 @@ Dependencies
 Performance
 ===========
 
-Each algorithm is implemented using Python and C/C++ language, if your platform is not supported then Python
-implementation is used, otherwise C/C++. Implementation can be chosen by **ccore** flag (by default it is always
-'True' and it means that C/C++ is used), for example:
+Each algorithm is implemented using Python and C/C++ language, if your platform is not supported then the Python
+implementation is used, otherwise C/C++. The implementation can be chosen by **ccore** flag (by default it is always
+'True' and it means that the C/C++ implementation is used), for example:
 
 .. code:: python
 
