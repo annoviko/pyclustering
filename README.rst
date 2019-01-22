@@ -1,4 +1,4 @@
-|Build Status Linux| |Build Status Win| |Coverage Status| |Documentation| |PyPi| |DOI|
+|Build Status Linux| |Build Status Win| |Coverage Status| |Documentation| |PyPi| |Download Counter| |DOI|
 
 PyClustering
 ============
@@ -333,3 +333,5 @@ Code Examples:
    :target: https://ci.appveyor.com/project/annoviko/pyclustering/branch/0.8.2.rel
 .. |Coverage Status 0.8.2.rel| image:: https://coveralls.io/repos/github/annoviko/pyclustering/badge.svg?branch=0.8.2.rel&ts=1
    :target: https://coveralls.io/github/annoviko/pyclustering?branch=0.8.2.rel
+.. |Download Counter| image:: https://pepy.tech/badge/pyclustering
+   :target: https://pepy.tech/project/pyclustering
