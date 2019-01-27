@@ -197,7 +197,7 @@ class dbscan:
         neighbors = self.__neighbor_searcher(index_point)
          
         if len(neighbors) >= self.__neighbors:
-            cluster = [ index_point ]
+            cluster = [index_point]
              
             self.__belong[index_point] = True
              

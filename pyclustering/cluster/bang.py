@@ -600,7 +600,7 @@ class bang_directory:
 class spatial_block:
     """!
     @brief Geometrical description of BANG block in data space.
-    @details Provides services related to spatial function and used by bang_block
+    @details Provides services related to spatial functionality and used by bang_block
 
     @see bang_block
 
