@@ -99,10 +99,5 @@ def cluster_fcps():
     template_clustering(FCPS_SAMPLES.SAMPLE_ATOM, 11)
 
 
-def customer_request():
-    template_clustering("Traffic1.data", 8)
-
-
-customer_request()
-#cluster_simple_sample()
-#cluster_fcps()
+cluster_simple_sample()
+cluster_fcps()

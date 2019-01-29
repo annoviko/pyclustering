@@ -80,55 +80,13 @@ class spatial_block:
         return self.__max_corner, self.__min_corner
 
 
-    def is_neighbor(self, block):
-        """!
-        @brief Performs calculation to identify whether specified block is neighbor of current block.
-
-        @param[in] block (spatial_block): Another block that is check whether it is neighbor.
-
-        @return (bool) True is blocks are neighbors, False otherwise.
-
-        """
-        if block is not self:
-            block_max_corner, _ = block.get_corners()
-            dimension = len(block_max_corner)
-            neighborhood_score = self.__calculate_neighborhood(block_max_corner)
-
-            if neighborhood_score == dimension:
-                return True
-
-        return False
-
-
-    def __calculate_neighborhood(self, block_max_corner):
-        """!
-        @brief Calculates neighborhood score that defined whether blocks are neighbors.
-
-        @param[in] block_max_corner (list): Maximum coordinates of other block.
-
-        @return (uint) Neighborhood score.
-
-        """
-        dimension = len(block_max_corner)
-
-        length_edges = [self.__max_corner[i] - self.__min_corner[i] for i in range(dimension)]
-
-        neighborhood_score = 0
-        for i in range(dimension):
-            diff = abs(block_max_corner[i] - self.__max_corner[i])
-
-            if diff <= length_edges[i] + length_edges[i] * 0.0001:
-                neighborhood_score += 1
-
-        return neighborhood_score
-
-
 
 class clique_block:
     def __init__(self):
         self.__logical_location = []
         self.__spatial_location = None
         self.__points = []
+        self.__belong = False
 
     @property
     def logical_location(self):
@@ -150,6 +108,15 @@ class clique_block:
     def points(self):
         return self.__points
 
+    @property
+    def belong(self):
+        return self.__belong
+
+    @belong.setter
+    def belong(self, value):
+        self.__belong = value
+
+
     def capture_points(self, data, point_availability):
         for index_point in range(len(data)):
             if (point_availability[index_point] is True) and (data[index_point] in self.__spatial_location):
@@ -157,20 +124,21 @@ class clique_block:
                 point_availability[index_point] = False
 
 
-    def is_neighbor(self, block):
+    def get_location_neighbors(self, edge):
+        neighbors = []
+
         for index_dimension in range(len(self.__logical_location)):
-            if not self.__is_dimension_neighbor(self.__logical_location[index_dimension], block.logical_location[index_dimension]):
-                return False
+            if self.__logical_location[index_dimension] + 1 < edge:
+                position = self.__logical_location[:]
+                position[index_dimension] += 1
+                neighbors.append(position)
 
-        return True
+            if self.__logical_location[index_dimension] - 1 >= 0:
+                position = self.__logical_location[:]
+                position[index_dimension] -= 1
+                neighbors.append(position)
 
-
-    def get_neighbors(self):
-        pass
-
-
-    def __is_dimension_neighbor(self, location1, location2):
-        return location1 + 1 == location2 or location1 - 1 == location2
+        return neighbors
 
 
 
@@ -206,12 +174,17 @@ class clique:
         self.__clusters = []
         self.__noise = []
 
+        self.__cells = []
+        self.__cells_map = {}
+
         self.__validate_arguments()
 
 
     def process(self):
-        cells = self.__create_grid()
-        self.__allocate_clusters(cells)
+        self.__create_grid()
+        self.__allocate_clusters()
+
+        self.__cells_map.clear()
 
 
     def get_clusters(self):
@@ -233,23 +206,48 @@ class clique:
             raise ValueError("Incorrect density threshold '%f'. Density threshold should not be negative." % self.__density_threshold)
 
 
-    def __allocate_clusters(self, cells):
-        belong = [False] * len(cells)
+    def __allocate_clusters(self):
+        for cell in self.__cells:
+            if cell.belong is False:
+                cell.belong = True
+                if len(cell.points) > self.__density_threshold:
+                    self.__expand_cluster(cell)    # traverse from this cell to expand cluster
+                elif len(cell.points) > 0:
+                    self.__noise.extend(cell.points)
 
-        for index_cell in range(len(cells)):
-            if (belong[index_cell] is False) and (len(cells[index_cell].points) > self.__density_threshold):
-                belong[index_cell] = True
-                self.__expand_cluster(cells[index_cell], belong)    # traverse from this cell to expand cluster
 
-
-    def __expand_cluster(self, cell, belong):
+    def __expand_cluster(self, cell):
         cluster = cell.points[:]
-        neighbors = cell.get_neighbors()
+
+        neighbors = []
+        traversed = set()
+        self.__fill_by_free_neighbors(cell, neighbors, traversed)
 
         for cell_neighbor in neighbors:
+            cell_neighbor.belong = True
+
             if len(cell_neighbor.points) > self.__density_threshold:
                 cluster.extend(cell_neighbor.points)
-                # mark that cell belongs to cluster
+                self.__fill_by_free_neighbors(cell_neighbor, neighbors, traversed)
+            elif len(cell_neighbor.points) > 0:
+                self.__noise.extend(cell.points)
+
+        self.__clusters.append(cluster)
+
+
+    def __fill_by_free_neighbors(self, cell, neighbors, traversed):
+        location_neighbors = cell.get_location_neighbors(self.__amount_intervals)
+
+        for location in location_neighbors:
+            key = self.__location_to_key(location)
+
+            if key not in traversed:
+                traversed.add(key)
+                neighbor = self.__cell_map[key]
+                if neighbor.belong is False:
+                    neighbors.append(self.__cell_map[key])
+
+        return neighbors
 
 
     def __create_grid(self):
@@ -258,28 +256,40 @@ class clique:
 
         cell_sizes = [dimension_length / self.__amount_intervals for dimension_length in data_sizes]
 
-        cells = [clique_block() for _ in range(pow(self.__amount_intervals, dimension))]
+        self.__cells = [clique_block() for _ in range(pow(self.__amount_intervals, dimension))]
         iterator = coordinate_iterator(dimension, self.__amount_intervals)
 
         point_availability = [True] * len(self.__data)
-        for index_cell in range(len(cells)):
+        self.__cell_map = {}
+        for index_cell in range(len(self.__cells)):
             logical_location = iterator.get_coordinate()
-            cells[index_cell].logical_location = logical_location[:]
+            iterator.increment()
 
-            cur_max_corner, cur_min_corner = self.__get_spatial_location(logical_location, min_corner, cell_sizes)
-            cells[index_cell].spatial_location = spatial_block(cur_max_corner, cur_min_corner)
+            self.__cells[index_cell].logical_location = logical_location[:]
 
-            cells[index_cell].capture_points(self.__data, point_availability)
+            cur_max_corner, cur_min_corner = self.__get_spatial_location(logical_location, min_corner, max_corner, cell_sizes)
+            self.__cells[index_cell].spatial_location = spatial_block(cur_max_corner, cur_min_corner)
 
-        return cells
+            self.__cells[index_cell].capture_points(self.__data, point_availability)
+
+            self.__cell_map[self.__location_to_key(logical_location)] = self.__cells[index_cell]
 
 
-    def __get_spatial_location(self, logical_location, min_corner, cell_sizes):
+    def __location_to_key(self, location):
+        return ''.join(str(e) for e in location)
+
+
+    def __get_spatial_location(self, logical_location, min_corner, max_corner, cell_sizes):
         cur_min_corner = min_corner[:]
         cur_max_corner = min_corner[:]
-        for index_dimension in range(len(self.__data[0])):
+        dimension = len(self.__data[0])
+        for index_dimension in range(dimension):
             cur_min_corner[index_dimension] += cell_sizes[index_dimension] * logical_location[index_dimension]
-            cur_max_corner[index_dimension] += cell_sizes[index_dimension]
+
+            if logical_location[index_dimension] == self.__amount_intervals - 1:
+                cur_max_corner[index_dimension] = max_corner[index_dimension]
+            else:
+                cur_max_corner[index_dimension] = cur_min_corner[index_dimension] + cell_sizes[index_dimension]
 
         return cur_max_corner, cur_min_corner
 
@@ -304,3 +314,12 @@ class clique:
             data_sizes[index_dimension] = max_corner[index_dimension] - min_corner[index_dimension]
 
         return data_sizes, min_corner, max_corner
+
+
+
+# block1 = clique_block()
+# block1.logical_location = [1, 1]
+# block2 = clique_block()
+# block2.logical_location = [0, 1]
+#
+# print(block1.get_locaion_neighbors(3))
