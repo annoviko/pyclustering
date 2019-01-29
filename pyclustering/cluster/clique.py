@@ -112,6 +112,7 @@ class clique_visualizer:
                                  edgecolor=edge_color,
                                  linewidth=0.5)
         ax.add_patch(rect)
+        #ax.annotate(str(cell.logical_location), (min_corner[0], min_corner[1]), fontsize=6, ha='center', va='center')
 
 
     @staticmethod
@@ -190,6 +191,12 @@ class clique_block:
         self.__spatial_location = None
         self.__points = []
         self.__belong = False
+
+    def __str__(self):
+        return str(self.__logical_location)
+
+    def __repr__(self):
+        return str(self.__logical_location)
 
     @property
     def logical_location(self):
@@ -333,6 +340,8 @@ class clique:
 
         neighbors = []
         captured_cells = set()
+        captured_cells.add(self.__location_to_key(cell.logical_location))
+
         self.__fill_by_free_neighbors(cell, neighbors, captured_cells)
 
         for cell_neighbor in neighbors:
@@ -343,7 +352,7 @@ class clique:
                 self.__fill_by_free_neighbors(cell_neighbor, neighbors, captured_cells)
 
             elif len(cell_neighbor.points) > 0:
-                self.__noise.extend(cell.points)
+                self.__noise.extend(cell_neighbor.points)
 
         self.__clusters.append(cluster)
 
@@ -388,7 +397,7 @@ class clique:
 
 
     def __location_to_key(self, location):
-        return ''.join(str(e) for e in location)
+        return ''.join(str(e) + '.' for e in location)
 
 
     def __get_spatial_location(self, logical_location, min_corner, max_corner, cell_sizes):
