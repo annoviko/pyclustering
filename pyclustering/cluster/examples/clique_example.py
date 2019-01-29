@@ -27,7 +27,7 @@
 import os
 
 from pyclustering.cluster import cluster_visualizer
-from pyclustering.cluster.clique import clique
+from pyclustering.cluster.clique import clique, clique_visualizer
 
 from pyclustering.utils import read_sample
 
@@ -44,8 +44,11 @@ def template_clustering(data_path, intervals, density_threshold, **kwargs):
 
     clusters = clique_instance.get_clusters()
     noise = clique_instance.get_noise()
+    cells = clique_instance.get_cells()
 
     print([len(cluster) for cluster in clusters])
+
+    clique_visualizer.show_grid(cells, data)
 
     visualizer = cluster_visualizer()
     visualizer.append_clusters(clusters, data)
@@ -80,5 +83,5 @@ def cluster_fcps():
     template_clustering(FCPS_SAMPLES.SAMPLE_ATOM, 10, 0)
 
 
-cluster_simple_sample()
+#cluster_simple_sample()
 cluster_fcps()

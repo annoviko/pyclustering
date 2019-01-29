@@ -25,6 +25,109 @@
 """
 
 
+import itertools
+
+try:
+    import matplotlib
+    import matplotlib.gridspec as gridspec
+    import matplotlib.pyplot as plt
+    import matplotlib.patches as patches
+    import matplotlib.animation as animation
+except Exception as error_instance:
+    import warnings
+    warnings.warn("Impossible to import matplotlib (please, install 'matplotlib'), pyclustering's visualization "
+                  "functionality is not available (details: '%s')." % str(error_instance))
+
+
+class clique_visualizer:
+    __maximum_density_alpha = 0.6
+
+    @staticmethod
+    def show_grid(cells, data):
+        dimension = cells[0].dimensions
+
+        amount_canvases = 1
+        if dimension > 1:
+            amount_canvases = int(dimension * (dimension - 1) / 2)
+
+        figure = plt.figure()
+        grid_spec = gridspec.GridSpec(1, amount_canvases)
+
+        pairs = list(itertools.combinations(range(dimension), 2))
+        if len(pairs) == 0: pairs = [(0, 0)]
+
+        for index in range(amount_canvases):
+            ax = figure.add_subplot(grid_spec[index])
+            clique_visualizer.__draw_cells(ax, cells, pairs[index])
+            clique_visualizer.__draw_two_dimension_data(ax, data, pairs[index])
+
+        plt.show()
+
+
+    @staticmethod
+    def __draw_two_dimension_data(ax, data, pair):
+        """!
+        @brief Display data in two-dimensional canvas.
+
+        @param[in] ax (Axis): Canvas where data should be displayed.
+        @param[in] data (list): Data points that should be displayed.
+        @param[in] pair (tuple): Pair of dimension indexes.
+
+        """
+        ax.set_xlabel("x%d" % pair[0])
+        ax.set_ylabel("x%d" % pair[1])
+
+        for point in data:
+            if len(data[0]) > 1:
+                ax.plot(point[pair[0]], point[pair[1]], color='red', marker='.')
+            else:
+                ax.plot(point[pair[0]], 0, color='red', marker='.')
+                ax.yaxis.set_ticklabels([])
+
+
+    @staticmethod
+    def __draw_cells(ax, cells, pair):
+        ax.grid(False)
+
+        density_scale = max(len(cell.points) for cell in cells)
+        for cell in cells:
+            clique_visualizer.__draw_cell(ax, pair, cell, density_scale)
+
+
+    @staticmethod
+    def __draw_cell(ax, pair, cell, density_scale):
+        max_corner, min_corner = clique_visualizer.__get_rectangle_description(cell, pair)
+
+        belong_cluster = (len(cell.points) > 0)
+
+        if density_scale != 0.0:
+            density_scale = clique_visualizer.__maximum_density_alpha * len(cell.points) / density_scale
+
+        face_color = matplotlib.colors.to_rgba('blue', alpha=density_scale)
+        edge_color = matplotlib.colors.to_rgba('black', alpha=1.0)
+
+        rect = patches.Rectangle(min_corner, max_corner[0] - min_corner[0], max_corner[1] - min_corner[1],
+                                 fill=belong_cluster,
+                                 facecolor=face_color,
+                                 edgecolor=edge_color,
+                                 linewidth=0.5)
+        ax.add_patch(rect)
+
+
+    @staticmethod
+    def __get_rectangle_description(cell, pair):
+        max_corner, min_corner = cell.spatial_location.get_corners()
+
+        max_corner = [max_corner[pair[0]], max_corner[pair[1]]]
+        min_corner = [min_corner[pair[0]], min_corner[pair[1]]]
+
+        if pair == (0, 0):
+            max_corner[1], min_corner[1] = 1.0, -1.0
+
+        return max_corner, min_corner
+
+
+
 class spatial_block:
     """!
     @brief Geometrical description of CLIQUE block in data space.
@@ -103,6 +206,10 @@ class clique_block:
     @spatial_location.setter
     def spatial_location(self, location):
         self.__spatial_location = location
+
+    @property
+    def dimensions(self):
+        return len(self.__logical_location)
 
     @property
     def points(self):
@@ -195,6 +302,10 @@ class clique:
         return self.__noise
 
 
+    def get_cells(self):
+        return self.__cells
+
+
     def __validate_arguments(self):
         if len(self.__data) == 0:
             raise ValueError("Empty input data. Data should contain at least one point.")
@@ -210,6 +321,7 @@ class clique:
         for cell in self.__cells:
             if cell.belong is False:
                 cell.belong = True
+
                 if len(cell.points) > self.__density_threshold:
                     self.__expand_cluster(cell)    # traverse from this cell to expand cluster
                 elif len(cell.points) > 0:
@@ -220,32 +332,32 @@ class clique:
         cluster = cell.points[:]
 
         neighbors = []
-        traversed = set()
-        self.__fill_by_free_neighbors(cell, neighbors, traversed)
+        captured_cells = set()
+        self.__fill_by_free_neighbors(cell, neighbors, captured_cells)
 
         for cell_neighbor in neighbors:
             cell_neighbor.belong = True
 
             if len(cell_neighbor.points) > self.__density_threshold:
                 cluster.extend(cell_neighbor.points)
-                self.__fill_by_free_neighbors(cell_neighbor, neighbors, traversed)
+                self.__fill_by_free_neighbors(cell_neighbor, neighbors, captured_cells)
+
             elif len(cell_neighbor.points) > 0:
                 self.__noise.extend(cell.points)
 
         self.__clusters.append(cluster)
 
 
-    def __fill_by_free_neighbors(self, cell, neighbors, traversed):
+    def __fill_by_free_neighbors(self, cell, neighbors, captured_cells):
         location_neighbors = cell.get_location_neighbors(self.__amount_intervals)
 
         for location in location_neighbors:
             key = self.__location_to_key(location)
-
-            if key not in traversed:
-                traversed.add(key)
+            if key not in captured_cells:
                 neighbor = self.__cell_map[key]
                 if neighbor.belong is False:
                     neighbors.append(self.__cell_map[key])
+                    captured_cells.add(key)
 
         return neighbors
 
