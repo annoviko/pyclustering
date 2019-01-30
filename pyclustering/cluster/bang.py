@@ -688,6 +688,7 @@ class spatial_block:
     def is_neighbor(self, block):
         """!
         @brief Performs calculation to identify whether specified block is neighbor of current block.
+        @details It also considers diagonal blocks as neighbors.
 
         @param[in] block (spatial_block): Another block that is check whether it is neighbor.
 

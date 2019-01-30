@@ -280,7 +280,7 @@ class coordinate_iterator:
 
 
 class clique:
-    def __init__(self, data, amount_intervals, density_threshold):
+    def __init__(self, data, amount_intervals, density_threshold, ccore=True):
         self.__data = data
         self.__amount_intervals = amount_intervals
         self.__density_threshold = density_threshold
@@ -299,6 +299,7 @@ class clique:
         self.__allocate_clusters()
 
         self.__cells_map.clear()
+        return self
 
 
     def get_clusters(self):
@@ -435,12 +436,3 @@ class clique:
             data_sizes[index_dimension] = max_corner[index_dimension] - min_corner[index_dimension]
 
         return data_sizes, min_corner, max_corner
-
-
-
-# block1 = clique_block()
-# block1.logical_location = [1, 1]
-# block2 = clique_block()
-# block2.logical_location = [0, 1]
-#
-# print(block1.get_locaion_neighbors(3))

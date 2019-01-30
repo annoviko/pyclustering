@@ -69,6 +69,7 @@ def cluster_simple_sample():
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE10, 7, 0)
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, 5, 0)
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 7, 0)
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE13, 2, 0)
     template_clustering(SIMPLE_SAMPLES.SAMPLE_ELONGATE, 7, 0)
 
 
@@ -77,7 +78,7 @@ def cluster_fcps():
     template_clustering(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, 10, 0)
     template_clustering(FCPS_SAMPLES.SAMPLE_WING_NUT, 10, 0)
     template_clustering(FCPS_SAMPLES.SAMPLE_TARGET, 10, 0)
-    template_clustering(FCPS_SAMPLES.SAMPLE_HEPTA, 10, 0)
+    template_clustering(FCPS_SAMPLES.SAMPLE_HEPTA, 9, 0)
     template_clustering(FCPS_SAMPLES.SAMPLE_CHAINLINK, 10, 0)
     template_clustering(FCPS_SAMPLES.SAMPLE_TETRA, 10, 0)
     template_clustering(FCPS_SAMPLES.SAMPLE_ATOM, 10, 0)

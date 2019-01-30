@@ -72,3 +72,34 @@ class clique_test_template:
 
         assertion.eq(len(sample), len(covered_points))
         return clique_instance
+
+
+    @staticmethod
+    def visualize(path, levels, threshold, ccore, **kwargs):
+        sample = read_sample(path)
+
+        clique_instance = clique(sample, levels, threshold, ccore)
+        clique_instance.process()
+
+        cells = clique_instance.get_cells()
+
+        clique_visualizer.show_grid(cells, sample)
+
+
+    @staticmethod
+    def exception(type, sample_storage, levels, threshold, ccore):
+        try:
+            sample = sample_storage
+            if isinstance(sample_storage, str):
+                sample = read_sample(sample_storage)
+
+            bang_instance = clique(sample, levels, threshold, ccore)
+            bang_instance.process()
+
+        except type:
+            return
+
+        except Exception as ex:
+            raise AssertionError("Expected: '%s', Actual: '%s'" % (type, type(ex).__name__))
+
+        raise AssertionError("Expected: '%s', Actual: 'None'" % type)

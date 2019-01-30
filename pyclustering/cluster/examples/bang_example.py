@@ -72,7 +72,7 @@ def template_segmentation(source, levels, threshold):
 
 
 def cluster_simple_sample():
-    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 8)
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 3)
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 7)
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 7)
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 4, density_threshold=2.5)
@@ -85,6 +85,7 @@ def cluster_simple_sample():
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE10, 7)
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, 7)
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 7)
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE13, 7)
     template_clustering(SIMPLE_SAMPLES.SAMPLE_ELONGATE, 7)
 
 

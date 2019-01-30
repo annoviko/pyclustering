@@ -37,6 +37,7 @@ from pyclustering.cluster.tests.unit               import ut_birch              
 from pyclustering.cluster.tests.unit               import ut_bsas               as cluster_bsas_unit_tests
 from pyclustering.cluster.tests.unit               import ut_center_initializer as cluster_center_initializer_unit_tests
 from pyclustering.cluster.tests.unit               import ut_clarans            as cluster_clarans_unit_tests
+from pyclustering.cluster.tests.unit               import ut_clique             as cluster_clique_unit_tests
 from pyclustering.cluster.tests.unit               import ut_cure               as cluster_cure_unit_tests
 from pyclustering.cluster.tests.unit               import ut_dbscan             as cluster_dbscan_unit_tests
 from pyclustering.cluster.tests.unit               import ut_elbow              as cluster_elbow_unit_tests
@@ -74,6 +75,7 @@ class clustering_unit_tests(suite_holder):
         unit_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_bsas_unit_tests))
         unit_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_center_initializer_unit_tests))
         unit_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_clarans_unit_tests))
+        unit_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_clique_unit_tests))
         unit_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_cure_unit_tests))
         unit_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_dbscan_unit_tests))
         unit_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_elbow_unit_tests))
