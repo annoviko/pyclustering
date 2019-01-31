@@ -168,6 +168,8 @@
     <ClCompile Include="..\external\include\gtest\gtest-all.cpp" />
     <ClCompile Include="..\src\cluster\agglomerative.cpp" />
     <ClCompile Include="..\src\cluster\bsas.cpp" />
+    <ClCompile Include="..\src\cluster\clique.cpp" />
+    <ClCompile Include="..\src\cluster\clique_block.cpp" />
     <ClCompile Include="..\src\cluster\cluster_algorithm.cpp" />
     <ClCompile Include="..\src\cluster\cluster_data.cpp" />
     <ClCompile Include="..\src\cluster\cure.cpp" />
@@ -304,6 +306,9 @@
     <ClInclude Include="..\src\cluster\bsas.hpp" />
     <ClInclude Include="..\src\cluster\bsas_data.hpp" />
     <ClInclude Include="..\src\cluster\center_initializer.hpp" />
+    <ClInclude Include="..\src\cluster\clique.hpp" />
+    <ClInclude Include="..\src\cluster\clique_block.hpp" />
+    <ClInclude Include="..\src\cluster\clique_data.hpp" />
     <ClInclude Include="..\src\cluster\cluster_algorithm.hpp" />
     <ClInclude Include="..\src\cluster\cluster_data.hpp" />
     <ClInclude Include="..\src\cluster\cure.hpp" />

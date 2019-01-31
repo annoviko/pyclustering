@@ -105,12 +105,6 @@ public:
     */
 
 private:
-    void update_clusters(cluster_sequence & clusters, const dataset & centers, const index_sequence & available_indexes);
-
-    double update_centers(const cluster_sequence & clusters, dataset & centers);
-
-    double update_center(const cluster & p_cluster, point & p_center);
-
     void improve_structure(void);
 
     void improve_region_structure(const cluster & p_cluster, const point & p_center, dataset & p_allocated_centers);
@@ -118,8 +112,6 @@ private:
     void improve_parameters(cluster_sequence & clusters, dataset & centers, const index_sequence & available_indexes);
 
     double splitting_criterion(const cluster_sequence & clusters, const dataset & centers) const;
-
-    std::size_t find_proper_cluster(const dataset & analysed_centers, const point & p_point) const;
 
     double bayesian_information_criterion(const cluster_sequence & clusters, const dataset & centers) const;
 

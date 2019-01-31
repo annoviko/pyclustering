@@ -238,6 +238,12 @@
     <ClCompile Include="interface\elbow_interface.cpp">
       <Filter>Source Files\interface</Filter>
     </ClCompile>
+    <ClCompile Include="cluster\clique.cpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClCompile>
+    <ClCompile Include="cluster\clique_block.cpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cluster\agglomerative.hpp">
@@ -521,6 +527,15 @@
     </ClInclude>
     <ClInclude Include="interface\elbow_interface.h">
       <Filter>Source Files\interface</Filter>
+    </ClInclude>
+    <ClInclude Include="cluster\clique.hpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="cluster\clique_block.hpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="cluster\clique_data.hpp">
+      <Filter>Source Files\cluster</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

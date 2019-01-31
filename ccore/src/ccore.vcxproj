@@ -21,6 +21,8 @@
   <ItemGroup>
     <ClCompile Include="cluster\agglomerative.cpp" />
     <ClCompile Include="cluster\bsas.cpp" />
+    <ClCompile Include="cluster\clique.cpp" />
+    <ClCompile Include="cluster\clique_block.cpp" />
     <ClCompile Include="cluster\cluster_algorithm.cpp" />
     <ClCompile Include="cluster\cluster_data.cpp" />
     <ClCompile Include="cluster\cure.cpp" />
@@ -95,6 +97,9 @@
     <ClInclude Include="cluster\bsas.hpp" />
     <ClInclude Include="cluster\bsas_data.hpp" />
     <ClInclude Include="cluster\center_initializer.hpp" />
+    <ClInclude Include="cluster\clique.hpp" />
+    <ClInclude Include="cluster\clique_block.hpp" />
+    <ClInclude Include="cluster\clique_data.hpp" />
     <ClInclude Include="cluster\cluster_algorithm.hpp" />
     <ClInclude Include="cluster\cluster_data.hpp" />
     <ClInclude Include="cluster\cure.hpp" />

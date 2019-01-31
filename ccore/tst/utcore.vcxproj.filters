@@ -434,6 +434,12 @@
     <ClCompile Include="..\src\interface\elbow_interface.cpp">
       <Filter>Tested Code\interface</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\cluster\clique.cpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\cluster\clique_block.cpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\container\adjacency.hpp">
@@ -726,6 +732,15 @@
     </ClInclude>
     <ClInclude Include="..\src\interface\elbow_interface.h">
       <Filter>Tested Code\interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cluster\clique.hpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cluster\clique_data.hpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cluster\clique_block.hpp">
+      <Filter>Tested Code\cluster</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

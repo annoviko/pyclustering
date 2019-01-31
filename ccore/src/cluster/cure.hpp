@@ -344,7 +344,7 @@ public:
     * @param[out] p_result: clustering result of an input data.
     *
     */
-    virtual void process(const dataset & p_data, cluster_data & p_result);
+    virtual void process(const dataset & p_data, cluster_data & p_result) override;
 };
 
 

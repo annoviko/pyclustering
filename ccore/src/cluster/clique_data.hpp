@@ -23,11 +23,8 @@
 #pragma once
 
 
-#include <vector>
-
+#include "cluster/clique_block.hpp"
 #include "cluster/cluster_data.hpp"
-
-#include "definitions.hpp"
 
 
 namespace ccore {
@@ -35,30 +32,17 @@ namespace ccore {
 namespace clst {
 
 
-/**
-*
-* @brief    Clustering algorithm interface.
-*
-*/
-class cluster_algorithm {
-public:
-    /**
-    *
-    * @brief    Default destructor that destroy object.
-    *
-    */
-    virtual ~cluster_algorithm(void);
+using clique_block_sequence = std::vector<clique_block>;
+
+
+class clique_data : public cluster_data {
+private:
+    clique_block_sequence m_blocks;
 
 public:
-    /**
-    *
-    * @brief    Performs cluster analysis of an input data.
-    *
-    * @param[in]  p_data: input data for cluster analysis.
-    * @param[out] p_result: clustering result of an input data.
-    *
-    */
-    virtual void process(const dataset & p_data, cluster_data & p_result) = 0;
+    const clique_block_sequence & get_blocks(void) const { return m_blocks; }
+
+    clique_block_sequence & get_blocks(void) { return m_blocks; }
 };
 
 
