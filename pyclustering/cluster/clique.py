@@ -190,7 +190,7 @@ class clique_block:
         self.__logical_location = []
         self.__spatial_location = None
         self.__points = []
-        self.__belong = False
+        self.__visited = False
 
     def __str__(self):
         return str(self.__logical_location)
@@ -223,12 +223,12 @@ class clique_block:
         return self.__points
 
     @property
-    def belong(self):
-        return self.__belong
+    def visited(self):
+        return self.__visited
 
-    @belong.setter
-    def belong(self, value):
-        self.__belong = value
+    @visited.setter
+    def visited(self, visited):
+        self.__visited = visited
 
 
     def capture_points(self, data, point_availability):
@@ -280,7 +280,7 @@ class coordinate_iterator:
 
 
 class clique:
-    def __init__(self, data, amount_intervals, density_threshold, ccore=True):
+    def __init__(self, data, amount_intervals, density_threshold, **kwargs):
         self.__data = data
         self.__amount_intervals = amount_intervals
         self.__density_threshold = density_threshold
@@ -327,49 +327,32 @@ class clique:
 
     def __allocate_clusters(self):
         for cell in self.__cells:
-            if cell.belong is False:
-                cell.belong = True
+            if cell.visited is False:
+                cluster = []
+                self.__expand_cluster_recursive(cell, cluster)
 
-                if len(cell.points) > self.__density_threshold:
-                    self.__expand_cluster(cell)    # traverse from this cell to expand cluster
-                elif len(cell.points) > 0:
-                    self.__noise.extend(cell.points)
-
-
-    def __expand_cluster(self, cell):
-        cluster = cell.points[:]
-
-        neighbors = []
-        captured_cells = set()
-        captured_cells.add(self.__location_to_key(cell.logical_location))
-
-        self.__fill_by_free_neighbors(cell, neighbors, captured_cells)
-
-        for cell_neighbor in neighbors:
-            cell_neighbor.belong = True
-
-            if len(cell_neighbor.points) > self.__density_threshold:
-                cluster.extend(cell_neighbor.points)
-                self.__fill_by_free_neighbors(cell_neighbor, neighbors, captured_cells)
-
-            elif len(cell_neighbor.points) > 0:
-                self.__noise.extend(cell_neighbor.points)
-
-        self.__clusters.append(cluster)
+                if len(cluster) > 0:
+                    self.__clusters.append(cluster)
 
 
-    def __fill_by_free_neighbors(self, cell, neighbors, captured_cells):
+    def __expand_cluster_recursive(self, cell, cluster):
+        cell.visited = True
+
+        if len(cell.points) > self.__density_threshold:
+            cluster.extend(cell.points)
+        else:
+            if len(cell.points) > 0:
+                self.__noise.extend(cell.points)
+            return
+
+
         location_neighbors = cell.get_location_neighbors(self.__amount_intervals)
-
         for location in location_neighbors:
             key = self.__location_to_key(location)
-            if key not in captured_cells:
-                neighbor = self.__cell_map[key]
-                if neighbor.belong is False:
-                    neighbors.append(self.__cell_map[key])
-                    captured_cells.add(key)
+            neighbor = self.__cell_map[key]
 
-        return neighbors
+            if neighbor.visited is False:
+                self.__expand_cluster_recursive(neighbor, cluster)
 
 
     def __create_grid(self):

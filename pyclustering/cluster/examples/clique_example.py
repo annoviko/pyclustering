@@ -84,5 +84,5 @@ def cluster_fcps():
     template_clustering(FCPS_SAMPLES.SAMPLE_ATOM, 10, 0)
 
 
-#cluster_simple_sample()
+cluster_simple_sample()
 cluster_fcps()

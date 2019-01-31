@@ -36,11 +36,11 @@ from pyclustering.utils import read_sample
 
 class clique_test_template:
     @staticmethod
-    def clustering(path, intervals, density_threshold, expected_clusters, expected_noise, ccore, **kwargs):
+    def clustering(path, intervals, density_threshold, expected_clusters, expected_noise, ccore_enabled, **kwargs):
         sample = read_sample(path)
         dimension = len(sample[0])
 
-        clique_instance = clique(sample, intervals, density_threshold)
+        clique_instance = clique(sample, intervals, density_threshold, ccore=ccore_enabled)
         clique_instance.process()
 
         clusters = clique_instance.get_clusters()
@@ -75,10 +75,10 @@ class clique_test_template:
 
 
     @staticmethod
-    def visualize(path, levels, threshold, ccore, **kwargs):
+    def visualize(path, levels, threshold, ccore_enabled, **kwargs):
         sample = read_sample(path)
 
-        clique_instance = clique(sample, levels, threshold, ccore)
+        clique_instance = clique(sample, levels, threshold, ccore=ccore_enabled)
         clique_instance.process()
 
         cells = clique_instance.get_cells()
@@ -87,13 +87,13 @@ class clique_test_template:
 
 
     @staticmethod
-    def exception(type, sample_storage, levels, threshold, ccore):
+    def exception(type, sample_storage, levels, threshold, ccore_enabled):
         try:
             sample = sample_storage
             if isinstance(sample_storage, str):
                 sample = read_sample(sample_storage)
 
-            bang_instance = clique(sample, levels, threshold, ccore)
+            bang_instance = clique(sample, levels, threshold, ccore=ccore_enabled)
             bang_instance.process()
 
         except type:
