@@ -27,6 +27,9 @@
 
 import itertools
 
+from collections import deque
+
+
 try:
     import matplotlib
     import matplotlib.gridspec as gridspec
@@ -328,31 +331,45 @@ class clique:
     def __allocate_clusters(self):
         for cell in self.__cells:
             if cell.visited is False:
-                cluster = []
-                self.__expand_cluster_recursive(cell, cluster)
-
-                if len(cluster) > 0:
-                    self.__clusters.append(cluster)
+                self.__expand_cluster(cell)
 
 
-    def __expand_cluster_recursive(self, cell, cluster):
+    def __expand_cluster(self, cell):
         cell.visited = True
 
-        if len(cell.points) > self.__density_threshold:
-            cluster.extend(cell.points)
-        else:
+        if len(cell.points) <= self.__density_threshold:
             if len(cell.points) > 0:
                 self.__noise.extend(cell.points)
+
             return
 
+        cluster = cell.points[:]
+        neighbors = self.__get_neighbors(cell)
 
+        for neighbor in neighbors:
+            if len(neighbor.points) > self.__density_threshold:
+                cluster.extend(neighbor.points)
+                neighbors += self.__get_neighbors(neighbor)
+
+            elif len(neighbor.points) > 0:
+                self.__noise.extend(neighbor.points)
+
+        self.__clusters.append(cluster)
+
+
+    def __get_neighbors(self, cell):
+        neighbors = []
         location_neighbors = cell.get_location_neighbors(self.__amount_intervals)
-        for location in location_neighbors:
-            key = self.__location_to_key(location)
-            neighbor = self.__cell_map[key]
 
-            if neighbor.visited is False:
-                self.__expand_cluster_recursive(neighbor, cluster)
+        for i in range(len(location_neighbors)):
+            key = self.__location_to_key(location_neighbors[i])
+            candidate_neighbor = self.__cell_map[key]
+
+            if not candidate_neighbor.visited:
+                candidate_neighbor.visited = True
+                neighbors.append(candidate_neighbor)
+
+        return neighbors
 
 
     def __create_grid(self):
