@@ -50,6 +50,10 @@ template_clique_length_process_data(
     const noise & noise = output_result.noise();
     const clique_block_sequence & blocks = output_result.blocks();
 
+    for (auto & block : blocks) {
+        ASSERT_TRUE(block.is_visited());
+    }
+
     ASSERT_CLUSTER_NOISE_SIZES(data, actual_clusters, p_expected_cluster_length, noise, p_expected_noise_length);
 }
 
