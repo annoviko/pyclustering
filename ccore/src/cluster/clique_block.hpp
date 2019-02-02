@@ -42,6 +42,7 @@ private:
     point   m_min_corner;
 
 public:
+    clique_spatial_block(void) = default;
     clique_spatial_block(const point & p_max_corner, const point & p_min_corner);
 
 public:
@@ -49,7 +50,11 @@ public:
 
     const point & get_max_corner(void) const;
 
+    void move_max_corner(point && p_corner);
+
     const point & get_min_corner(void) const;
+
+    void move_min_corner(point && p_corner);
 };
 
 
@@ -66,6 +71,8 @@ private:
 public:
     clique_block(const clique_block_location & p_location, const clique_spatial_block & p_block);
 
+    clique_block(clique_block_location && p_location, clique_spatial_block && p_block);
+
 public:
     const clique_block_location & get_logical_location() const;
 
@@ -77,10 +84,9 @@ public:
 
     void touch(void);
 
-public:
-    void capture_points(const dataset & p_data, const std::vector<bool> p_availability);
+    void capture_points(const dataset & p_data, std::vector<bool> & p_availability);
 
-    void get_location_neighbors(const std::size_t p_edge, std::vector<clique_block_location> p_neighbors);
+    void get_location_neighbors(const std::size_t p_edge, std::vector<clique_block_location> & p_neighbors) const;
 };
 
 

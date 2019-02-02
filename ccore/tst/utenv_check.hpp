@@ -49,17 +49,28 @@ using namespace ccore::clst;
 * @param[in] p_indexes: specific object indexes that are used for clustering.
 *
 */
-void ASSERT_CLUSTER_SIZES(const dataset & p_data,
-        const cluster_sequence & p_actual_clusters,
-        const std::vector<size_t> & p_expected_cluster_length,
-        const index_sequence & p_indexes = { });
+void ASSERT_CLUSTER_SIZES(
+    const dataset & p_data,
+    const cluster_sequence & p_actual_clusters,
+    const std::vector<size_t> & p_expected_cluster_length,
+    const index_sequence & p_indexes = { });
+
+
+void ASSERT_CLUSTER_NOISE_SIZES(
+    const dataset & p_data,
+    const cluster_sequence & p_actual_clusters,
+    const std::vector<std::size_t> & p_expected_cluster_length,
+    const noise & p_actual_noise,
+    const std::size_t & p_expected_noise_length,
+    const index_sequence & p_indexes = { });
 
 
 template <typename EnsemblesType>
-bool COMPARE_SYNC_ENSEMBLES(EnsemblesType & p_ensembles,
-                            EnsemblesType & p_expected_ensembles,
-                            typename EnsemblesType::value_type & p_dead,
-                            typename EnsemblesType::value_type & p_expected_dead)
+bool COMPARE_SYNC_ENSEMBLES(
+    EnsemblesType & p_ensembles,
+    EnsemblesType & p_expected_ensembles,
+    typename EnsemblesType::value_type & p_dead,
+    typename EnsemblesType::value_type & p_expected_dead)
 {
     /* compare dead neurons */
     std::sort(p_dead.begin(), p_dead.end());

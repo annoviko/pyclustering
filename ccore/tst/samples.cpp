@@ -58,6 +58,7 @@ const std::string simple_sample_factory::PATH_SAMPLE_SIMPLE_09 = PATH_SAMPLE_SIM
 const std::string simple_sample_factory::PATH_SAMPLE_SIMPLE_10 = PATH_SAMPLE_SIMPLE_FOLDER + "Simple10.data";
 const std::string simple_sample_factory::PATH_SAMPLE_SIMPLE_11 = PATH_SAMPLE_SIMPLE_FOLDER + "Simple11.data";
 const std::string simple_sample_factory::PATH_SAMPLE_SIMPLE_12 = PATH_SAMPLE_SIMPLE_FOLDER + "Simple12.data";
+const std::string simple_sample_factory::PATH_SAMPLE_SIMPLE_13 = PATH_SAMPLE_SIMPLE_FOLDER + "Simple13.data";
 
 
 const simple_sample_factory::map_sample simple_sample_factory::m_sample_table = {
@@ -72,7 +73,8 @@ const simple_sample_factory::map_sample simple_sample_factory::m_sample_table = 
     { SAMPLE_SIMPLE::SAMPLE_SIMPLE_09, simple_sample_factory::PATH_SAMPLE_SIMPLE_09 },
     { SAMPLE_SIMPLE::SAMPLE_SIMPLE_10, simple_sample_factory::PATH_SAMPLE_SIMPLE_10 },
     { SAMPLE_SIMPLE::SAMPLE_SIMPLE_11, simple_sample_factory::PATH_SAMPLE_SIMPLE_11 },
-    { SAMPLE_SIMPLE::SAMPLE_SIMPLE_12, simple_sample_factory::PATH_SAMPLE_SIMPLE_12 }
+    { SAMPLE_SIMPLE::SAMPLE_SIMPLE_12, simple_sample_factory::PATH_SAMPLE_SIMPLE_12 },
+    { SAMPLE_SIMPLE::SAMPLE_SIMPLE_13, simple_sample_factory::PATH_SAMPLE_SIMPLE_13 }
 };
 
 

@@ -37,12 +37,17 @@ using clique_block_sequence = std::vector<clique_block>;
 
 class clique_data : public cluster_data {
 private:
-    clique_block_sequence m_blocks;
+    clique_block_sequence   m_blocks;
+    clst::noise             m_noise;
 
 public:
-    const clique_block_sequence & get_blocks(void) const { return m_blocks; }
+    const clique_block_sequence & blocks(void) const { return m_blocks; }
 
-    clique_block_sequence & get_blocks(void) { return m_blocks; }
+    clique_block_sequence & blocks(void) { return m_blocks; }
+
+    const clst::noise & noise(void) const { return m_noise; }
+
+    clst::noise & noise(void) { return m_noise; }
 };
 
 

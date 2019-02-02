@@ -57,7 +57,7 @@ def template_clustering(data_path, intervals, density_threshold, **kwargs):
 
 
 def cluster_simple_sample():
-    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 5, 0)
+    template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 8, 0)
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 5, 0)
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 5, 0)
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, 10, 0)
@@ -75,8 +75,8 @@ def cluster_simple_sample():
 
 def cluster_fcps():
     template_clustering(FCPS_SAMPLES.SAMPLE_LSUN, 15, 0)
-    template_clustering(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, 10, 0)
-    template_clustering(FCPS_SAMPLES.SAMPLE_WING_NUT, 10, 0)
+    template_clustering(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, 15, 0)
+    template_clustering(FCPS_SAMPLES.SAMPLE_WING_NUT, 15, 0)
     template_clustering(FCPS_SAMPLES.SAMPLE_TARGET, 10, 0)
     template_clustering(FCPS_SAMPLES.SAMPLE_HEPTA, 9, 0)
     template_clustering(FCPS_SAMPLES.SAMPLE_CHAINLINK, 10, 0)

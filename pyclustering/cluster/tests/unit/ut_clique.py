@@ -88,7 +88,7 @@ class clique_unit_test(unittest.TestCase):
         clique_test_template.clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE8, 15, 0, [15, 20, 30, 80], 0, False)
         clique_test_template.clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE8, 2, 0, [145], 0, False)
 
-    def test_clustering_one_dimensional_data_3_Similar(self):
+    def test_clustering_one_dimensional_data_3_similar(self):
         clique_test_template.clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 7, 0, [10, 20], 0, False)
         clique_test_template.clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 2, 0, [30], 0, False)
 

@@ -237,6 +237,7 @@
     <ClCompile Include="..\src\utils\metric.cpp" />
     <ClCompile Include="..\src\utils\random.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="utest-clique.cpp" />
     <ClCompile Include="utest-elbow.cpp" />
     <ClCompile Include="utest-interface-bsas.cpp" />
     <ClCompile Include="utest-interface-elbow.cpp" />

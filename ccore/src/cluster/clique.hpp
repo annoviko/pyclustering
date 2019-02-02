@@ -25,6 +25,7 @@
 #include "cluster/clique_data.hpp"
 #include "cluster/cluster_algorithm.hpp"
 
+#include <list>
 #include <unordered_map>
 
 
@@ -53,6 +54,13 @@ public:
 
 class clique : public cluster_algorithm {
 private:
+    struct data_info {
+        point m_min_corner;
+        point m_max_corner;
+        std::vector<double> m_sizes;
+    };
+
+private:
     using block_map = std::unordered_map<std::string, clique_block *>;
 
 private:
@@ -72,6 +80,16 @@ public:
 
 private:
     void create_grid(void);
+
+    void expand_cluster(clique_block & p_block);
+
+    std::string location_to_key(const clique_block_location & p_location) const;
+
+    void get_neighbors(const clique_block & p_block, std::list<clique_block *> & p_neighbors) const;
+
+    void get_spatial_location(const clique_block_location & p_location, const clique::data_info & p_info, clique_spatial_block & p_block) const;
+
+    void get_data_info(clique::data_info & p_info) const;
 };
 
 }

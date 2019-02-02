@@ -63,7 +63,8 @@ enum class SAMPLE_SIMPLE {
     SAMPLE_SIMPLE_09,
     SAMPLE_SIMPLE_10,
     SAMPLE_SIMPLE_11,
-    SAMPLE_SIMPLE_12
+    SAMPLE_SIMPLE_12,
+    SAMPLE_SIMPLE_13
 };
 
 
@@ -93,6 +94,7 @@ private:
     const static std::string PATH_SAMPLE_SIMPLE_10;
     const static std::string PATH_SAMPLE_SIMPLE_11;
     const static std::string PATH_SAMPLE_SIMPLE_12;
+    const static std::string PATH_SAMPLE_SIMPLE_13;
 
 public:
     /**

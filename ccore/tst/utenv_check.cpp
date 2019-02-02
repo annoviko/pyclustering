@@ -31,10 +31,24 @@
 using namespace ccore::clst;
 
 
-void ASSERT_CLUSTER_SIZES(const dataset & p_data, 
-                          const cluster_sequence & p_actual_clusters, 
-                          const std::vector<size_t> & p_expected_cluster_length,
-                          const index_sequence & p_indexes) {
+void ASSERT_CLUSTER_SIZES(
+    const dataset & p_data, 
+    const cluster_sequence & p_actual_clusters, 
+    const std::vector<size_t> & p_expected_cluster_length,
+    const index_sequence & p_indexes)
+{
+    ASSERT_CLUSTER_NOISE_SIZES(p_data, p_actual_clusters, p_expected_cluster_length, {}, -1, p_indexes);
+}
+
+
+void ASSERT_CLUSTER_NOISE_SIZES(
+    const dataset & p_data,
+    const cluster_sequence & p_actual_clusters,
+    const std::vector<std::size_t> & p_expected_cluster_length,
+    const noise & p_actual_noise,
+    const std::size_t & p_expected_noise_length,
+    const index_sequence & p_indexes)
+{
     if (p_expected_cluster_length.empty() && p_actual_clusters.empty()) {
         return;
     }
@@ -53,10 +67,15 @@ void ASSERT_CLUSTER_SIZES(const dataset & p_data,
         }
     }
 
+    total_size += p_actual_noise.size();
+    for (auto index_object : p_actual_noise) {
+        unique_objects[index_object] = false;
+    }
+
     ASSERT_EQ(total_size, unique_objects.size());
 
     if (!p_expected_cluster_length.empty()) {
-        std::size_t expected_total_size = std::accumulate(p_expected_cluster_length.cbegin(), p_expected_cluster_length.cend(), (std::size_t) 0);
+        std::size_t expected_total_size = std::accumulate(p_expected_cluster_length.cbegin(), p_expected_cluster_length.cend(), (std::size_t) 0) + p_expected_noise_length;
 
         ASSERT_EQ(expected_total_size, total_size);
 
@@ -81,5 +100,9 @@ void ASSERT_CLUSTER_SIZES(const dataset & p_data,
         else {
             ASSERT_EQ(p_data.size(), total_size);
         }
+    }
+
+    if (p_expected_noise_length != (std::size_t) -1) {
+        ASSERT_EQ(p_expected_noise_length, p_actual_noise.size());
     }
 }
