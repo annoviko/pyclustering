@@ -230,33 +230,6 @@ def average_neighbor_distance(points, num_neigh):
     return ( total_distance / (num_neigh * len(points)) );
 
 
-def centroid(points, indexes = None):
-    """!
-    @brief Calculate centroid of input set of points. 
-    
-    @param[in] points (list): Set of points for centroid calculation.
-    @param[in] indexes (list): Indexes of objects in input set of points that will be taken into account during centroid calculation.
-    
-    @return (list) centroid on the set of points where each element of list is corresponding to value in its dimension.
-    
-    """
-    
-    dimension = len(points[0]);
-    centroid_value = [0.0] * dimension;
-    
-    range_points = None;
-    if indexes is None:
-        range_points = range(len(points));
-    else:
-        range_points = indexes;
-    
-    for index_point in range_points:
-        centroid_value = list_math_addition(centroid_value, points[index_point]);
-    
-    centroid_value = list_math_division_number(centroid_value, len(range_points));
-    return centroid_value;
-
-
 def median(data, indexes = None, **kwargs):
     """!
     @brief Calculate geometric median of input set of points using Euclidean distance.
@@ -599,26 +572,6 @@ def norm_vector(vector):
     length = length ** 0.5
     
     return length
-
-
-def unit_vector(vector):
-    """!
-    @brief Calculates unit vector.
-    @details Unit vector calculates of an input vector involves two steps. 
-              The first, calculate vector length. The second,
-              divide each vector component by the obtained length.
-    
-    @param[in] vector (list): The input vector that is used for unit vector calculation.
-    
-    """
-    
-    length = norm_vector(vector);
-    unit_vector_instance = [];
-    
-    for component in vector:
-        unit_vector_instance.append(component / length);
-    
-    return unit_vector_instance;
 
 
 def heaviside(value):
