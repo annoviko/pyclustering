@@ -54,6 +54,7 @@
     <ClCompile Include="differential\differ_factor.cpp" />
     <ClCompile Include="interface\agglomerative_interface.cpp" />
     <ClCompile Include="interface\bsas_interface.cpp" />
+    <ClCompile Include="interface\clique_interface.cpp" />
     <ClCompile Include="interface\cure_interface.cpp" />
     <ClCompile Include="interface\dbscan_interface.cpp" />
     <ClCompile Include="interface\elbow_interface.cpp" />
@@ -151,6 +152,7 @@
     <ClInclude Include="differential\solve_type.hpp" />
     <ClInclude Include="interface\agglomerative_interface.h" />
     <ClInclude Include="interface\bsas_interface.h" />
+    <ClInclude Include="interface\clique_interface.h" />
     <ClInclude Include="interface\cure_interface.h" />
     <ClInclude Include="interface\dbscan_interface.h" />
     <ClInclude Include="interface\elbow_interface.h" />

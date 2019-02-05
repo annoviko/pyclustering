@@ -27,7 +27,9 @@
 
 import itertools
 
-from collections import deque
+from pyclustering.core.wrapper import ccore_library
+
+import pyclustering.core.clique_wrapper as wrapper
 
 
 try:
@@ -189,11 +191,11 @@ class spatial_block:
 
 
 class clique_block:
-    def __init__(self):
-        self.__logical_location = []
-        self.__spatial_location = None
-        self.__points = []
-        self.__visited = False
+    def __init__(self, logical_location=None, spatial_location=None, points=None, visited=False):
+        self.__logical_location = logical_location or []
+        self.__spatial_location = spatial_location
+        self.__points = points or []
+        self.__visited = visited
 
     def __str__(self):
         return str(self.__logical_location)
@@ -288,6 +290,10 @@ class clique:
         self.__amount_intervals = amount_intervals
         self.__density_threshold = density_threshold
 
+        self.__ccore = kwargs.get('ccore', True)
+        if self.__ccore:
+            self.__ccore = ccore_library.workable()
+
         self.__clusters = []
         self.__noise = []
 
@@ -298,11 +304,31 @@ class clique:
 
 
     def process(self):
+        if self.__ccore:
+            self.__process_by_ccore()
+        else:
+            self.__process_by_python()
+
+        return self
+
+
+    def __process_by_ccore(self):
+        (self.__clusters, self.__noise, block_logical_locations, block_max_corners, block_min_corners, block_points) = \
+            wrapper.clique(self.__data, self.__amount_intervals, self.__density_threshold)
+
+        amount_cells = len(block_logical_locations)
+        for i in range(amount_cells):
+            self.__cells.append(clique_block(block_logical_locations[i],
+                                             spatial_block(block_max_corners[i], block_min_corners[i]),
+                                             block_points[i],
+                                             True))
+
+
+    def __process_by_python(self):
         self.__create_grid()
         self.__allocate_clusters()
 
         self.__cells_map.clear()
-        return self
 
 
     def get_clusters(self):

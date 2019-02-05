@@ -23,16 +23,17 @@
 
 """
 
-import unittest;
-from pyclustering.tests.suite_holder import suite_holder;
+import unittest
+from pyclustering.tests.suite_holder import suite_holder
 
 # Generate images without having a window appear.
-import matplotlib;
-matplotlib.use('Agg');
+import matplotlib
+matplotlib.use('Agg')
 
 
 from pyclustering.cluster.tests.integration               import it_agglomerative as cluster_agglomerative_integration_tests
 from pyclustering.cluster.tests.integration               import it_bsas          as cluster_bsas_integration_tests
+from pyclustering.cluster.tests.integration               import it_clique        as cluster_clique_integration_tests
 from pyclustering.cluster.tests.integration               import it_cure          as cluster_cure_integration_tests
 from pyclustering.cluster.tests.integration               import it_dbscan        as cluster_dbscan_integration_tests
 from pyclustering.cluster.tests.integration               import it_elbow         as cluster_elbow_integration_tests
@@ -58,6 +59,7 @@ class clustering_integration_tests(suite_holder):
     def fill_suite(integration_cluster_suite):
         integration_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_agglomerative_integration_tests))
         integration_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_bsas_integration_tests))
+        integration_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_clique_integration_tests))
         integration_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_cure_integration_tests))
         integration_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_dbscan_integration_tests))
         integration_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_elbow_integration_tests))

@@ -201,6 +201,7 @@
     <ClCompile Include="..\src\differential\differ_factor.cpp" />
     <ClCompile Include="..\src\interface\agglomerative_interface.cpp" />
     <ClCompile Include="..\src\interface\bsas_interface.cpp" />
+    <ClCompile Include="..\src\interface\clique_interface.cpp" />
     <ClCompile Include="..\src\interface\cure_interface.cpp" />
     <ClCompile Include="..\src\interface\dbscan_interface.cpp" />
     <ClCompile Include="..\src\interface\elbow_interface.cpp" />
@@ -240,6 +241,7 @@
     <ClCompile Include="utest-clique.cpp" />
     <ClCompile Include="utest-elbow.cpp" />
     <ClCompile Include="utest-interface-bsas.cpp" />
+    <ClCompile Include="utest-interface-clique.cpp" />
     <ClCompile Include="utest-interface-elbow.cpp" />
     <ClCompile Include="utest-interface-mbsas.cpp" />
     <ClCompile Include="utest-interface-ttsas.cpp" />
@@ -360,6 +362,7 @@
     <ClInclude Include="..\src\differential\solve_type.hpp" />
     <ClInclude Include="..\src\interface\agglomerative_interface.h" />
     <ClInclude Include="..\src\interface\bsas_interface.h" />
+    <ClInclude Include="..\src\interface\clique_interface.h" />
     <ClInclude Include="..\src\interface\cure_interface.h" />
     <ClInclude Include="..\src\interface\dbscan_interface.h" />
     <ClInclude Include="..\src\interface\elbow_interface.h" />
