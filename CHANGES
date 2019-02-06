@@ -5,6 +5,9 @@ CHANGE NOTES FOR 0.9.0 (STARTED Nov 19, 2018), (RELEASED: -)
 ------------------------------------------------------------------------
 
 GENERAL CHANGES:
+- Implemented CLIQUE algorithms (pyclustering.cluster.clique, ccore.clst.clique).
+  See: https://github.com/annoviko/pyclustering/issues/381
+
 - Introduced new distance metrics: Canberra and Chi Square (pyclustering.utils.metric, ccore.utils.metric).
   See: https://github.com/annoviko/pyclustering/issues/482
 

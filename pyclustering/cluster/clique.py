@@ -27,6 +27,7 @@
 
 import itertools
 
+from pyclustering.cluster import cluster_visualizer
 from pyclustering.core.wrapper import ccore_library
 
 import pyclustering.core.clique_wrapper as wrapper
@@ -45,10 +46,26 @@ except Exception as error_instance:
 
 
 class clique_visualizer:
+    """!
+    @brief Visualizer of CLIQUE algorithm's results.
+    @details CLIQUE visualizer provides visualization services that are specific for CLIQUE algorithm, for example,
+              to display grid and its density.
+
+    """
+
     __maximum_density_alpha = 0.6
 
     @staticmethod
     def show_grid(cells, data):
+        """!
+        @brief Show CLIQUE blocks as a grid in data space.
+        @details Each block contains points and according to this density is displayed. CLIQUE grid helps to visualize
+                  grid that was used for clustering process.
+
+        @param[in] cells (list): List of cells that is produced by CLIQUE algorithm.
+        @param[in] data (array_like): Input data that was used for clustering process.
+
+        """
         dimension = cells[0].dimensions
 
         amount_canvases = 1
@@ -67,6 +84,22 @@ class clique_visualizer:
             clique_visualizer.__draw_two_dimension_data(ax, data, pairs[index])
 
         plt.show()
+
+
+    @staticmethod
+    def show_clusters(data, clusters, noise=None):
+        """!
+        @brief Display CLIQUE clustering results.
+
+        @param[in] data (list): Data that was used for clustering.
+        @param[in] clusters (array_like): Clusters that were allocated by the algorithm.
+        @param[in] noise (array_like): Noise that were allocated by the algorithm.
+
+        """
+        visualizer = cluster_visualizer()
+        visualizer.append_clusters(clusters, data)
+        visualizer.append_cluster(noise or [], data, marker='x')
+        visualizer.show()
 
 
     @staticmethod
@@ -191,52 +224,138 @@ class spatial_block:
 
 
 class clique_block:
+    """!
+    @brief CLIQUE block contains information about its logical location in grid, spatial location in data space and
+            points that are covered by the block.
+
+    """
+
     def __init__(self, logical_location=None, spatial_location=None, points=None, visited=False):
+        """!
+        @brief Initializes CLIQUE block.
+
+        @param[in] logical_location (list): Logical location of the block in CLIQUE grid.
+        @param[in] spatial_location (spatial_block): Spatial location in data space.
+        @param[in] points (array_like): Points that belong to this block (can be obtained by method 'capture_points',
+                    this parameter is used by CLIQUE in case of processing by C++ implementation when clustering
+                    result are passed back to Python code.
+        @param[in] visited (bool): Marks if block is visited during clustering process.
+
+        """
         self.__logical_location = logical_location or []
         self.__spatial_location = spatial_location
         self.__points = points or []
         self.__visited = visited
 
     def __str__(self):
+        """!
+        @brief Returns string representation of the block using its logical location in CLIQUE grid.
+
+        """
         return str(self.__logical_location)
 
     def __repr__(self):
+        """!
+        @brief Returns string representation of the block using its logical location in CLIQUE grid.
+
+        """
         return str(self.__logical_location)
 
     @property
     def logical_location(self):
+        """!
+        @brief Logical location is represented by coordinates in CLIQUE grid, for example, in case of 2x2 grid blocks
+                may have following coordinates: [0, 0], [0, 1], [1, 0], [1, 1].
+        @return (list) Logical location of the block in CLIQUE grid.
+
+        """
         return self.__logical_location
 
     @logical_location.setter
     def logical_location(self, location):
+        """!
+        @brief Assign logical location to CLIQUE block.
+
+        @param[in] location (list): New logical location of the block in CLIQUE grid.
+
+        """
         self.__logical_location = location
 
     @property
     def spatial_location(self):
+        """!
+        @brief Spatial location is represented by real data space coordinates.
+        @return (spatial_block) Spatial block that describes location in data space.
+
+        """
         return self.__spatial_location
 
     @spatial_location.setter
     def spatial_location(self, location):
+        """!
+        @brief Assign spatial location to CLIQUE block.
+
+        @param[in] location (spatial_block): New spatial location of the block.
+
+        """
         self.__spatial_location = location
 
     @property
     def dimensions(self):
+        """!
+        @brief Amount of dimensions where CLIQUE block is located.
+        @return (uint) Amount of dimensions where CLIQUE block is located.
+
+        """
         return len(self.__logical_location)
 
     @property
     def points(self):
+        """!
+        @brief Points that belong to the CLIQUE block.
+        @details Points are represented by indexes that correspond to points in input data space.
+
+        @return (array_like) Points that belong to the CLIQUE block.
+
+        @see capture_points
+
+        """
         return self.__points
 
     @property
     def visited(self):
+        """!
+        @brief Defines whether block is visited during cluster analysis.
+        @details If cluster analysis has not been performed then value will False.
+
+        @return (bool) True if block has been visited during processing, False otherwise.
+
+        """
         return self.__visited
 
     @visited.setter
     def visited(self, visited):
+        """!
+        @brief Marks or unmarks block as a visited.
+        @details This setter is used by CLIQUE algorithm.
+
+        @param[in] visited (bool): New visited state for the CLIQUE block.
+
+        """
         self.__visited = visited
 
 
     def capture_points(self, data, point_availability):
+        """!
+        @brief Finds points that belong to this block using availability map to reduce computational complexity by
+                checking whether the point belongs to the block.
+        @details Algorithm complexity of this method is O(n).
+
+        @param[in] data (array_like): Data where points are represented as coordinates.
+        @param[in] point_availability (array_like): Contains boolean values that denote whether point is already belong
+                    to another CLIQUE block.
+
+        """
         for index_point in range(len(data)):
             if (point_availability[index_point] is True) and (data[index_point] in self.__spatial_location):
                 self.__points.append(index_point)
@@ -244,6 +363,14 @@ class clique_block:
 
 
     def get_location_neighbors(self, edge):
+        """!
+        @brief Forms list of logical location of each neighbor for this particular CLIQUE block.
+
+        @param[in] edge (uint): Amount of intervals in each dimension that is used for clustering process.
+
+        @return (list) Logical location of each neighbor for this particular CLIQUE block.
+
+        """
         neighbors = []
 
         for index_dimension in range(len(self.__logical_location)):
@@ -262,17 +389,38 @@ class clique_block:
 
 
 class coordinate_iterator:
+    """!
+    @brief Coordinate iterator is used to generate logical location description for each CLIQUE block.
+    @details This class is used by CLIQUE algorithm for clustering process.
+
+    """
+
     def __init__(self, dimension, intervals):
+        """!
+        @brief Initializes coordinate iterator for CLIQUE algorithm.
+
+        @param[in] dimension (uint): Amount of dimensions in input data space.
+        @param[in] intervals (uint): Amount of intervals in each dimension.
+
+        """
         self.__intervals = intervals
         self.__dimension = dimension
         self.__coordiate = [0] * dimension
 
 
     def get_coordinate(self):
+        """!
+        @brief Returns current block coordinate.
+
+        """
         return self.__coordiate
 
 
     def increment(self):
+        """!
+        @brief Forms logical location for next block.
+
+        """
         for index_dimension in range(self.__dimension):
             if self.__coordiate[index_dimension] + 1 < self.__intervals:
                 self.__coordiate[index_dimension] += 1
@@ -285,7 +433,74 @@ class coordinate_iterator:
 
 
 class clique:
+    """!
+    @brief Class implements CLIQUE grid based clustering algorithm.
+    @details CLIQUE automatically finnds subspaces with high-density clusters. It produces identical results
+              irrespective of the order in which the input records are presented and it does not presume any canonical
+              distribution for input data @cite article::clique::1.
+
+    Here is an example where data in two-dimensional space is clustered using CLIQUE algorithm:
+    @code
+        from pyclustering.cluster.clique import clique, clique_visualizer
+        from pyclustering.utils import read_sample
+        from pyclustering.samples.definitions import FCPS_SAMPLES
+
+        # read two-dimensional input data 'Target'
+        data = read_sample(FCPS_SAMPLES.SAMPLE_TARGET)
+
+        # create CLIQUE algorithm for processing
+        intervals = 10  # defines amount of cells in grid in each dimension
+        threshold = 0   # lets consider each point as non-outlier
+        clique_instance = clique(data, intervals, threshold)
+
+        # start clustering process and obtain results
+        clique_instance.process()
+        clusters = clique_instance.get_clusters()  # allocated clusters
+        noise = clique_instance.get_noise()     # points that are considered as outliers (in this example should be empty)
+        cells = clique_instance.get_cells()     # CLIQUE blocks that forms grid
+
+        print("Amount of clusters:", len(clusters))
+
+        # visualize clustering results
+        clique_visualizer.show_grid(cells, data)    # show grid that has been formed by the algorithm
+        clique_visualizer.show_clusters(data, clusters, noise)  # show clustering results
+    @endcode
+
+    In this example 6 clusters are allocated including four small cluster where each such small cluster consists of
+    three points. There are visualized clustering results - grid that has been formed by CLIQUE algorithm with
+    density and clusters itself:
+    @image html clique_clustering_target.png "Fig. 1. CLIQUE clustering results (grid and clusters itself)."
+
+    Sometimes such small clusters should be considered as outliers taking into account fact that two clusters in the
+    central are relatively huge. To treat them as a noise threshold value should be increased:
+    @code
+        intervals = 10
+        threshold = 3   # block that contains 3 or less points is considered as a outlier as well as its points
+        clique_instance = clique(data, intervals, threshold)
+    @endcode
+
+    Two clusters are allocated, but in this case some points in cluster-"circle" are also considered as outliers,
+    because CLIQUE operates with blocks, not with points:
+    @image html clique_clustering_with_noise.png "Fig. 2. Noise allocation by CLIQUE."
+
+    """
+
     def __init__(self, data, amount_intervals, density_threshold, **kwargs):
+        """!
+        @brief Create CLIQUE clustering algorithm.
+
+        @param[in] data (list): Input data (list of points) that should be clustered.
+        @param[in] amount_intervals (uint): Amount of intervals in each dimension that defines amount of CLIQUE block
+                    as \f[N_{blocks} = intervals^{dimensions}\f].
+        @param[in] density_threshold (uint): Minimum number of points that should contain CLIQUE block to consider its
+                    points as non-outliers.
+        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'ccore').
+
+        <b>Keyword Args:</b><br>
+            - ccore (bool): By default is True. If True then C++ implementation is used for cluster analysis, otherwise
+               Python implementation is used.
+
+        """
         self.__data = data
         self.__amount_intervals = amount_intervals
         self.__density_threshold = density_threshold
@@ -304,6 +519,17 @@ class clique:
 
 
     def process(self):
+        """!
+        @brief Performs clustering process in line with rules of CLIQUE clustering algorithm.
+
+        @return (clique) Returns itself (CLIQUE instance).
+
+        @see get_clusters()
+        @see get_noise()
+        @see get_cells()
+
+        """
+
         if self.__ccore:
             self.__process_by_ccore()
         else:
@@ -312,7 +538,54 @@ class clique:
         return self
 
 
+    def get_clusters(self):
+        """!
+        @brief Returns allocated clusters.
+
+        @remark Allocated clusters are returned only after data processing (method process()). Otherwise empty list is returned.
+
+        @return (list) List of allocated clusters, each cluster contains indexes of objects in list of data.
+
+        @see process()
+        @see get_noise()
+
+        """
+        return self.__clusters
+
+
+    def get_noise(self):
+        """!
+        @brief Returns allocated noise.
+
+        @remark Allocated noise is returned only after data processing (method process()). Otherwise empty list is returned.
+
+        @return (list) List of indexes that are marked as a noise.
+
+        @see process()
+        @see get_clusters()
+
+        """
+        return self.__noise
+
+
+    def get_cells(self):
+        """!
+        @brief Returns CLIQUE blocks that are formed during clustering process.
+        @details CLIQUE blocks can be used for visualization purposes. Each CLIQUE block contain its logical location
+                  in grid, spatial location in data space and points that belong to block.
+
+        @return (list) List of CLIQUE blocks.
+
+        """
+        return self.__cells
+
+
     def __process_by_ccore(self):
+        """!
+        @brief Performs cluster analysis using C++ implementation of CLIQUE algorithm that is used by default if
+                user's target platform is supported.
+
+        """
         (self.__clusters, self.__noise, block_logical_locations, block_max_corners, block_min_corners, block_points) = \
             wrapper.clique(self.__data, self.__amount_intervals, self.__density_threshold)
 
@@ -325,25 +598,23 @@ class clique:
 
 
     def __process_by_python(self):
+        """!
+        @brief Performs cluster analysis using Python implementation of CLIQUE algorithm.
+
+        """
         self.__create_grid()
         self.__allocate_clusters()
 
         self.__cells_map.clear()
 
 
-    def get_clusters(self):
-        return self.__clusters
-
-
-    def get_noise(self):
-        return self.__noise
-
-
-    def get_cells(self):
-        return self.__cells
-
-
     def __validate_arguments(self):
+        """!
+        @brief Check input arguments of CLIQUE algorithm and if one of them is not correct then appropriate exception
+                is thrown.
+
+        """
+
         if len(self.__data) == 0:
             raise ValueError("Empty input data. Data should contain at least one point.")
 
@@ -355,12 +626,23 @@ class clique:
 
 
     def __allocate_clusters(self):
+        """!
+        @brief Performs cluster analysis using formed CLIQUE blocks.
+
+        """
         for cell in self.__cells:
             if cell.visited is False:
                 self.__expand_cluster(cell)
 
 
     def __expand_cluster(self, cell):
+        """!
+        @brief Tries to expand cluster from specified cell.
+        @details During expanding points are marked as noise or append to new cluster.
+
+        @param[in] cell (clique_block): CLIQUE block from that cluster should be expanded.
+
+        """
         cell.visited = True
 
         if len(cell.points) <= self.__density_threshold:
@@ -384,6 +666,12 @@ class clique:
 
 
     def __get_neighbors(self, cell):
+        """!
+        @brief Returns neighbors for specified CLIQUE block as clique_block objects.
+
+        @return (list) Neighbors as clique_block objects.
+
+        """
         neighbors = []
         location_neighbors = cell.get_location_neighbors(self.__amount_intervals)
 
@@ -399,6 +687,10 @@ class clique:
 
 
     def __create_grid(self):
+        """!
+        @brief Creates CLIQUE grid that consists of CLIQUE blocks for clustering process.
+
+        """
         data_sizes, min_corner, max_corner = self.__get_data_size_derscription()
         dimension = len(self.__data[0])
 
@@ -424,10 +716,27 @@ class clique:
 
 
     def __location_to_key(self, location):
+        """!
+        @brief Forms key using logical location of a CLIQUE block.
+
+        @return (string) Key for CLIQUE block map.
+
+        """
         return ''.join(str(e) + '.' for e in location)
 
 
     def __get_spatial_location(self, logical_location, min_corner, max_corner, cell_sizes):
+        """!
+        @brief Calculates spatial location for CLIQUE block with logical coordinates defined by logical_location.
+
+        @param[in] logical_location (list): Logical location of CLIQUE block for that spatial location should be calculated.
+        @param[in] min_corner (list): Minimum corner of an input data.
+        @param[in] max_corner (list): Maximum corner of an input data.
+        @param[in] cell_sizes (list): Size of CLIQUE block in each dimension.
+
+        @return (list, list): Maximum and minimum corners for the specified CLIQUE block.
+
+        """
         cur_min_corner = min_corner[:]
         cur_max_corner = min_corner[:]
         dimension = len(self.__data[0])
@@ -443,6 +752,12 @@ class clique:
 
 
     def __get_data_size_derscription(self):
+        """!
+        @brief Calculates input data description that is required to create CLIQUE grid.
+
+        @return (list, list, list): Data size in each dimension, minimum and maximum corners.
+
+        """
         min_corner = self.__data[0][:]
         max_corner = self.__data[0][:]
 

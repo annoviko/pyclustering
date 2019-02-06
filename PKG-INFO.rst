@@ -101,6 +101,7 @@ Library Content
 - **BIRCH** (pyclustering.cluster.birch);
 - **BSAS** (pyclustering.cluster.bsas);
 - **CLARANS** (pyclustering.cluster.clarans);
+- **CLIQUE** (pyclustering.cluster.clique);
 - **CURE** (pyclustering.cluster.cure);
 - **DBSCAN** (pyclustering.cluster.dbscan);
 - **Elbow** (pyclustering.cluster.elbow);

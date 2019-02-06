@@ -52,7 +52,6 @@ class bang_visualizer:
 
     """
 
-
     __maximum_density_alpha = 0.6
 
 
@@ -119,7 +118,7 @@ class bang_visualizer:
     @staticmethod
     def show_clusters(data, clusters, noise=None):
         """!
-        @brief Display K-Means clustering results.
+        @brief Display BANG clustering results.
 
         @param[in] data (list): Dataset that was used for clustering.
         @param[in] clusters (array_like): Clusters that were allocated by the algorithm.
@@ -1041,6 +1040,8 @@ class bang:
         """!
         @brief Performs clustering process in line with rules of BANG clustering algorithm.
 
+        @return (bang) Returns itself (BANG instance).
+
         @see get_clusters()
         @see get_noise()
         @see get_directory()
@@ -1051,6 +1052,8 @@ class bang:
                                           density_threshold=self.__density_threshold,
                                           amount_threshold=self.__amount_threshold)
         self.__allocate_clusters()
+
+        return self
 
 
     def get_clusters(self):

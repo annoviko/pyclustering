@@ -29,7 +29,7 @@ tools for visualization and result analysis, etc. High performance is ensured by
 models, tools are implemented. There is ability to use python code implementation only or CCORE (C/C++) implementation using special flag. CCORE library does not
 use python.h interface to communicate with python code due to requirement to save ability to use CCORE library or C/C++ code part of CCORE in other projects.
 
-PyClustering consists of six general modules where the algorithms, models, tools are placed:
+PyClustering consists of five general modules where the algorithms, models, tools are placed:
 
 Cluster analysis algorithms and methods (module pyclustering.cluster):
 - Agglomerative (pyclustering.cluster.agglomerative);
@@ -37,6 +37,7 @@ Cluster analysis algorithms and methods (module pyclustering.cluster):
 - BIRCH (pyclustering.cluster.birch);
 - BSAS (pyclustering.cluster.bsas);
 - CLARANS (pyclustering.cluster.clarans);
+- CLIQUE (pyclustering.cluster.clique);
 - CURE (pyclustering.cluster.cure);
 - DBSCAN (pyclustering.cluster.dbscan);
 - Elbow (pyclustering.cluster.elbow);

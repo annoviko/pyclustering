@@ -125,6 +125,7 @@ Brief Overview of the Library Content
 - BIRCH [Python]
 - BSAS [Python, C++]
 - CLARANS [Python]
+- CLIQUE [Python, C++]
 - CURE [Python, C++]
 - DBSCAN [Python, C++]
 - Elbow [Python, C++]
