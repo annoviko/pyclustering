@@ -59,7 +59,7 @@ Manual installation from official repository using GCC:
     $ git clone https://github.com/annoviko/pyclustering.git .
 
     # compile CCORE library (core of the pyclustering library).
-    $ cd pyclustering/ccore
+    $ cd ccore/
     $ make ccore_x64        # build for 64-bit OS
 
     # $ make ccore_x86      # build for 32-bit OS
