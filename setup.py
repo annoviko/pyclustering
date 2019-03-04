@@ -39,7 +39,7 @@ setup(
       name='pyclustering',
       packages=find_packages(),
       version='0.8.2',
-      description='pyclustring is a python data mining library',
+      description='pyclustering is a python data mining library',
       long_description=load_readme(),
       url='https://github.com/annoviko/pyclustering',
       project_urls={
