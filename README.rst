@@ -315,6 +315,8 @@ Code Examples:
 
 **Data clustering by OPTICS algorithm**
 
+.. code:: python
+
     from pyclustering.cluster.optics import optics
     from pyclustering.samples.definitions import FCPS_SAMPLES
     from pyclustering.utils import read_sample
