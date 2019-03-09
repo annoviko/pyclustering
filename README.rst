@@ -277,12 +277,12 @@ Code Examples:
     # Input data in following format [ [0.1, 0.5], [0.3, 0.1], ... ].
     input_data = read_sample(FCPS_SAMPLES.SAMPLE_LSUN);
 
-    # Allocate three clusters:
+    # Allocate three clusters.
     cure_instance = cure(input_data, 3);
     cure_instance.process();
     clusters = cure_instance.get_clusters();
 
-    # Visualize clusters:
+    # Visualize allocated clusters.
     visualizer = cluster_visualizer();
     visualizer.append_clusters(clusters, input_data);
     visualizer.show();
@@ -296,16 +296,16 @@ Code Examples:
     from pyclustering.samples.definitions import FCPS_SAMPLES
     from pyclustering.utils import read_sample
 
-    # Load list of points for cluster analysis
+    # Load list of points for cluster analysis.
     sample = read_sample(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS)
 
-    # Initialize initial centers using K-Means++ method
+    # Prepare initial centers using K-Means++ method.
     initial_centers = kmeans_plusplus_initializer(sample, 2).initialize()
 
-    # Create instance of K-Means algorithm with prepared centers
+    # Create instance of K-Means algorithm with prepared centers.
     kmeans_instance = kmeans(sample, initial_centers)
 
-    # Run cluster analysis and obtain results
+    # Run cluster analysis and obtain results.
     kmeans_instance.process()
     clusters = kmeans_instance.get_clusters()
     final_centers = kmeans_instance.get_centers()
@@ -321,16 +321,16 @@ Code Examples:
     from pyclustering.samples.definitions import FCPS_SAMPLES
     from pyclustering.utils import read_sample
 
-    # Read sample for clustering from some file
+    # Read 'Lsun' sample for clustering.
     sample = read_sample(FCPS_SAMPLES.SAMPLE_LSUN)
 
-    # Run cluster analysis where connectivity radius is bigger than real
+    # Run cluster analysis where connectivity radius is bigger than real.
     radius = 2.0
     neighbors = 3
     amount_of_clusters = 3
     optics_instance = optics(sample, radius, neighbors, amount_of_clusters)
 
-    # Obtain results of clustering
+    # Obtain clustering results.
     clusters = optics_instance.get_clusters()
     noise = optics_instance.get_noise()
 
@@ -346,7 +346,7 @@ Code Examples:
     # Perform simulation during 100 steps using binary external stimulus.
     dynamic = net.simulate(50, [1, 1, 1, 0, 0, 0, 0, 1, 1, 1])
 
-    # Allocate synchronous ensembles in the network.
+    # Allocate synchronous ensembles from the output dynamic.
     ensembles = dynamic.allocate_sync_ensembles()
 
     # Show output dynamic.
@@ -361,24 +361,24 @@ Code Examples:
     from pyclustering.utils import read_sample
     from pyclustering.nnet.cnn import cnn_network, cnn_visualizer
 
-    # Load stimulus from file
+    # Load stimulus from file.
     stimulus = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE3)
 
-    # Create chaotic neural network, amount of neurons should be equal to amount of stimulus
+    # Create chaotic neural network, amount of neurons should be equal to amount of stimulus.
     network_instance = cnn_network(len(stimulus))
 
-    # Simulate it during 100 steps
+    # Perform simulation during 100 steps.
     steps = 100
     output_dynamic = network_instance.simulate(steps, stimulus)
 
-    # Display output dynamic of the network
+    # Display output dynamic of the network.
     cnn_visualizer.show_output_dynamic(output_dynamic)
 
     # Display dynamic matrix and observation matrix to show clustering phenomenon.
     cnn_visualizer.show_dynamic_matrix(output_dynamic)
     cnn_visualizer.show_observation_matrix(output_dynamic)
 
-    # Visualize clustering results
+    # Visualize clustering results.
     clusters = output_dynamic.allocate_sync_ensembles(10)
     visualizer = cluster_visualizer()
     visualizer.append_clusters(clusters, stimulus)
