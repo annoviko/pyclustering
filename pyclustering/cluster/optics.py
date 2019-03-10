@@ -293,48 +293,66 @@ class optics:
 
     @image html optics_example_clustering.png "Scheme how does OPTICS works. At the beginning only one cluster is allocated, but two is requested. At the second step OPTICS calculates connectivity radius using cluster-ordering and performs final cluster allocation."
 
-    Example:
+    Clustering example using sample 'Chainlink':
     @code
+        from pyclustering.cluster import cluster_visualizer
+        from pyclustering.cluster.optics import optics, ordering_analyser, ordering_visualizer
+        from pyclustering.samples.definitions import FCPS_SAMPLES
+        from pyclustering.utils import read_sample
+
         # Read sample for clustering from some file
-        sample = read_sample(path_sample);
-        
-        # Create OPTICS algorithm for cluster analysis
-        optics_instance = optics(sample, 0.5, 6);
-        
-        # Run cluster analysis
-        optics_instance.process();
-        
+        sample = read_sample(FCPS_SAMPLES.SAMPLE_CHAINLINK)
+
+        # Run cluster analysis where connectivity radius is bigger than real
+        radius = 0.5
+        neighbors = 3
+        optics_instance = optics(sample, radius, neighbors)
+
+        # Performs cluster analysis
+        optics_instance.process()
+
         # Obtain results of clustering
-        clusters = optics_instance.get_clusters();
-        noise = optics_instance.get_noise();
-        
-        # Obtain rechability-distances
-        ordering = ordering_analyser(optics_instance.get_ordering());
-        
-        # Visualization of cluster ordering in line with reachability distance.
-        ordering_visualizer.show_ordering_diagram(ordering);
+        clusters = optics_instance.get_clusters()
+        noise = optics_instance.get_noise()
+
+        # Visualize clustering results
+        visualizer = cluster_visualizer()
+        visualizer.append_clusters(clusters, sample)
+        visualizer.show()
     @endcode
-    
+
     Amount of clusters that should be allocated can be also specified. In this case connectivity radius should be greater than real, for example:
     @code
-        # Import required packages
-        from pyclustering.cluster.optics import optics;
-        from pyclustering.samples.definitions import FCPS_SAMPLES;
-        from pyclustering.utils import read_sample;
-        
+        from pyclustering.cluster import cluster_visualizer
+        from pyclustering.cluster.optics import optics, ordering_analyser, ordering_visualizer
+        from pyclustering.samples.definitions import FCPS_SAMPLES
+        from pyclustering.utils import read_sample
+
         # Read sample for clustering from some file
-        sample = read_sample(FCPS_SAMPLES.SAMPLE_LSUN);
-        
-        # Run cluster analysis where connvectivity radius is bigger than real
-        radius = 2.0;
-        neighbors = 3;
-        amount_of_clusters = 3;
-        
-        optics_instance = optics(sample, radius, neighbors, amount_of_clusters);
-        
+        sample = read_sample(FCPS_SAMPLES.SAMPLE_LSUN)
+
+        # Run cluster analysis where connectivity radius is bigger than real
+        radius = 2.0
+        neighbors = 3
+        amount_of_clusters = 3
+        optics_instance = optics(sample, radius, neighbors, amount_of_clusters)
+
+        # Performs cluster analysis
+        optics_instance.process()
+
         # Obtain results of clustering
-        clusters = optics_instance.get_clusters();
-        noise = optics_instance.get_noise();
+        clusters = optics_instance.get_clusters()
+        noise = optics_instance.get_noise()
+        ordering = optics_instance.get_ordering()
+
+        # Visualize ordering diagram
+        analyser = ordering_analyser(ordering)
+        ordering_visualizer.show_ordering_diagram(analyser, amount_of_clusters)
+
+        # Visualize clustering results
+        visualizer = cluster_visualizer()
+        visualizer.append_clusters(clusters, sample)
+        visualizer.show()
     @endcode
     
     """
