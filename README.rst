@@ -318,22 +318,36 @@ Code Examples
 
 .. code:: python
 
-    from pyclustering.cluster.optics import optics
+    from pyclustering.cluster import cluster_visualizer
+    from pyclustering.cluster.optics import optics, ordering_analyser, ordering_visualizer
     from pyclustering.samples.definitions import FCPS_SAMPLES
     from pyclustering.utils import read_sample
 
-    # Read 'Lsun' sample for clustering.
+    # Read sample for clustering from some file
     sample = read_sample(FCPS_SAMPLES.SAMPLE_LSUN)
 
-    # Run cluster analysis where connectivity radius is bigger than real.
+    # Run cluster analysis where connectivity radius is bigger than real
     radius = 2.0
     neighbors = 3
     amount_of_clusters = 3
     optics_instance = optics(sample, radius, neighbors, amount_of_clusters)
 
-    # Obtain clustering results.
+    # Performs cluster analysis
+    optics_instance.process()
+
+    # Obtain results of clustering
     clusters = optics_instance.get_clusters()
     noise = optics_instance.get_noise()
+    ordering = optics_instance.get_ordering()
+
+    # Visualize ordering diagram
+    analyser = ordering_analyser(ordering)
+    ordering_visualizer.show_ordering_diagram(analyser, amount_of_clusters)
+
+    # Visualize clustering results
+    visualizer = cluster_visualizer()
+    visualizer.append_clusters(clusters, sample)
+    visualizer.show()
 
 **Simulation of oscillatory network PCNN**
 
