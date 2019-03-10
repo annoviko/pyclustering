@@ -44,55 +44,55 @@ Algorithms and methods are located in module 'pyclustering.cluster' in case of P
 +------------------------+---------+-----+
 | Algorithm              | Python  | C++ |
 +========================+=========+=====+
-| Agglomerative          | ✓       | ✓   |
+| Agglomerative          | v       | v   |
 +------------------------+---------+-----+
-| BANG                   | ✓       |     |
+| BANG                   | v       |     |
 +------------------------+---------+-----+
-| BIRCH                  | ✓       |     |
+| BIRCH                  | v       |     |
 +------------------------+---------+-----+
-| BSAS                   | ✓       | ✓   |
+| BSAS                   | v       | v   |
 +------------------------+---------+-----+
-| CLARANS                | ✓       |     |
+| CLARANS                | v       |     |
 +------------------------+---------+-----+
-| CLIQUE                 | ✓       | ✓   |
+| CLIQUE                 | v       | v   |
 +------------------------+---------+-----+
-| CURE                   | ✓       | ✓   |
+| CURE                   | v       | v   |
 +------------------------+---------+-----+
-| DBSCAN                 | ✓       | ✓   |
+| DBSCAN                 | v       | v   |
 +------------------------+---------+-----+
-| Elbow                  | ✓       | ✓   |
+| Elbow                  | v       | v   |
 +------------------------+---------+-----+
-| EMA                    | ✓       |     |
+| EMA                    | v       |     |
 +------------------------+---------+-----+
-| GA (Genetic Algorithm) | ✓       | ✓   |
+| GA (Genetic Algorithm) | v       | v   |
 +------------------------+---------+-----+
-| HSyncNet               | ✓       | ✓   |
+| HSyncNet               | v       | v   |
 +------------------------+---------+-----+
-| K-Means                | ✓       | ✓   |
+| K-Means                | v       | v   |
 +------------------------+---------+-----+
-| K-Means++              | ✓       | ✓   |
+| K-Means++              | v       | v   |
 +------------------------+---------+-----+
-| K-Medians              | ✓       | ✓   |
+| K-Medians              | v       | v   |
 +------------------------+---------+-----+
-| K-Medoids (PAM)        | ✓       | ✓   |
+| K-Medoids (PAM)        | v       | v   |
 +------------------------+---------+-----+
-| MBSAS                  | ✓       | ✓   |
+| MBSAS                  | v       | v   |
 +------------------------+---------+-----+
-| OPTICS                 | ✓       | ✓   |
+| OPTICS                 | v       | v   |
 +------------------------+---------+-----+
-| ROCK                   | ✓       | ✓   |
+| ROCK                   | v       | v   |
 +------------------------+---------+-----+
-| Silhouette             | ✓       |     |
+| Silhouette             | v       |     |
 +------------------------+---------+-----+
-| SOM-SC                 | ✓       | ✓   |
+| SOM-SC                 | v       | v   |
 +------------------------+---------+-----+
-| SyncNet                | ✓       | ✓   |
+| SyncNet                | v       | v   |
 +------------------------+---------+-----+
-| Sync-SOM               | ✓       |     |
+| Sync-SOM               | v       |     |
 +------------------------+---------+-----+
-| TTSAS                  | ✓       | ✓   |
+| TTSAS                  | v       | v   |
 +------------------------+---------+-----+
-| X-Means                | ✓       | ✓   |
+| X-Means                | v       | v   |
 +------------------------+---------+-----+
 
 # Oscillatory Networks and Neural Networks
@@ -102,25 +102,25 @@ Networks are located in module 'pyclustering.nnet' in case of Python and in name
 +--------------------------------------------------------------------------------+---------+-----+
 | Model                                                                          | Python  | C++ |
 +================================================================================+=========+=====+
-| CNN (Chaotic Neural Network)                                                   | ✓       |     |
+| CNN (Chaotic Neural Network)                                                   | v       |     |
 +--------------------------------------------------------------------------------+---------+-----+
-| fSync (Oscillatory network based on Landau-Stuart equation and Kuramoto model) | ✓       |     |
+| fSync (Oscillatory network based on Landau-Stuart equation and Kuramoto model) | v       |     |
 +--------------------------------------------------------------------------------+---------+-----+
-| HHN (Oscillatory network based on Hodgkin-Huxley model)                        | ✓       | ✓   |
+| HHN (Oscillatory network based on Hodgkin-Huxley model)                        | v       | v   |
 +--------------------------------------------------------------------------------+---------+-----+
-| Hysteresis Oscillatory Network                                                 | ✓       |     |
+| Hysteresis Oscillatory Network                                                 | v       |     |
 +--------------------------------------------------------------------------------+---------+-----+
-| LEGION (Local Excitatory Global Inhibitory Oscillatory Network)                | ✓       | ✓   |
+| LEGION (Local Excitatory Global Inhibitory Oscillatory Network)                | v       | v   |
 +--------------------------------------------------------------------------------+---------+-----+
-| PCNN (Pulse-Coupled Neural Network)                                            | ✓       | ✓   |
+| PCNN (Pulse-Coupled Neural Network)                                            | v       | v   |
 +--------------------------------------------------------------------------------+---------+-----+
-| SOM (Self-Organized Map)                                                       | ✓       | ✓   |
+| SOM (Self-Organized Map)                                                       | v       | v   |
 +--------------------------------------------------------------------------------+---------+-----+
-| Sync (Oscillatory network based on Kuramoto model)                             | ✓       | ✓   |
+| Sync (Oscillatory network based on Kuramoto model)                             | v       | v   |
 +--------------------------------------------------------------------------------+---------+-----+
-| SyncPR (Oscillatory network for pattern recognition)                           | ✓       | ✓   |
+| SyncPR (Oscillatory network for pattern recognition)                           | v       | v   |
 +--------------------------------------------------------------------------------+---------+-----+
-| SyncSegm (Oscillatory network for image segmentation)                          | ✓       | ✓   |
+| SyncSegm (Oscillatory network for image segmentation)                          | v       | v   |
 +--------------------------------------------------------------------------------+---------+-----+
 
 # Graph Coloring Algorithms
@@ -130,11 +130,11 @@ Algorithms are located in module 'pyclustering.gcolor' in case of Python and in 
 +------------------------+---------+-----+
 | Algorithm              | Python  | C++ |
 +========================+=========+=====+
-| DSatur                 | ✓       |     |
+| DSatur                 | v       |     |
 +------------------------+---------+-----+
-| Hysteresis             | ✓       |     |
+| Hysteresis             | v       |     |
 +------------------------+---------+-----+
-| GColorSync             | ✓       |     |
+| GColorSync             | v       |     |
 +------------------------+---------+-----+
 
 # Containers
@@ -144,9 +144,9 @@ Algorithms are located in module 'pyclustering.container' in case of Python.
 +------------------------+---------+-----+
 | Algorithm              | Python  | C++ |
 +========================+=========+=====+
-| KD Tree                | ✓       | ✓   |
+| KD Tree                | v       | v   |
 +------------------------+---------+-----+
-| CF Tree                | ✓       |     |
+| CF Tree                | v       |     |
 +------------------------+---------+-----+
 
 # References

@@ -115,6 +115,26 @@ PyClustering Status
 
 
 
+Cite the Library
+================
+
+If you are using pyclustering library in a scientific paper, please, cite the library.
+
+BibTeX entry:
+
+.. code::
+
+    @misc{andrei_novikov_2018_1491324,
+        author       = {Andrei Novikov},
+        title        = {annoviko/pyclustering: pyclustering 0.8.2 release},
+        month        = nov,
+        year         = 2018,
+        doi          = {10.5281/zenodo.1491324},
+        url          = {https://doi.org/10.5281/zenodo.1491324}
+    }
+
+
+
 Brief Overview of the Library Content
 =====================================
 
@@ -226,25 +246,6 @@ Brief Overview of the Library Content
 +------------------------+---------+-----+
 
 
-Cite the Library
-================
-
-If you are using pyclustering library in a scientific paper, please, cite the library.
-
-BibTeX entry:
-
-.. code::
-
-    @misc{andrei_novikov_2018_1491324,
-        author       = {Andrei Novikov},
-        title        = {annoviko/pyclustering: pyclustering 0.8.2 release},
-        month        = nov,
-        year         = 2018,
-        doi          = {10.5281/zenodo.1491324},
-        url          = {https://doi.org/10.5281/zenodo.1491324}
-    }
-
-
 
 Examples in the Library
 =======================
@@ -262,8 +263,8 @@ The library contains examples for each algorithm and oscillatory network model:
 
 
 
-Code Examples:
-==============
+Code Examples
+=============
 
 **Data clustering by CURE algorithm**
 
