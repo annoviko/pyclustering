@@ -139,10 +139,10 @@ Algorithms are located in module 'pyclustering.gcolor' in case of Python and in 
 
 # Containers
 
-Algorithms are located in module 'pyclustering.container' in case of Python.
+Containers are located in module 'pyclustering.container' in case of Python.
 
 +------------------------+---------+-----+
-| Algorithm              | Python  | C++ |
+| Container              | Python  | C++ |
 +========================+=========+=====+
 | KD Tree                | v       | v   |
 +------------------------+---------+-----+
