@@ -44,55 +44,55 @@ Algorithms and methods are located in the Python module `pyclustering.cluster` a
 +---------------------------------------------------------+--------------+--------------+
 | Algorithm                                               | Python       | C++          |
 +=========================================================+==============+==============+
-| Agglomerative [@book::algorithms_for_clustering_data]   | $\checkmark$ | $\checkmark$ |
+| Agglomerative [@book_algorithms_for_clustering_data]   | $\checkmark$ | $\checkmark$ |
 +---------------------------------------------------------+--------------+--------------+
-| BANG [@inproceedings::bang::1]                          | $\checkmark$ |              |
+| BANG [@inproceedings_bang_1]                          | $\checkmark$ |              |
 +---------------------------------------------------------+--------------+--------------+
-| BIRCH [@article::birch::1]                              | $\checkmark$ |              |
+| BIRCH [@article_birch_1]                              | $\checkmark$ |              |
 +---------------------------------------------------------+--------------+--------------+
-| BSAS [@book::pattern_recognition::2009]                 | $\checkmark$ | $\checkmark$ |
+| BSAS [@book_pattern_recognition_2009]                 | $\checkmark$ | $\checkmark$ |
 +---------------------------------------------------------+----------------+------------+
-| CLARANS [@article::clarans::1]                          | $\checkmark$ |              |
+| CLARANS [@article_clarans_1]                          | $\checkmark$ |              |
 +---------------------------------------------------------+--------------+--------------+
-| CLIQUE [@article::clique::1]                            | $\checkmark$ | $\checkmark$ |
+| CLIQUE [@article_clique_1]                            | $\checkmark$ | $\checkmark$ |
 +---------------------------------------------------------+--------------+--------------+
-| CURE [@article::cure::1]                                | $\checkmark$ | $\checkmark$ |
+| CURE [@article_cure_1]                                | $\checkmark$ | $\checkmark$ |
 +---------------------------------------------------------+--------------+--------------+
-| DBSCAN [@inproceedings::dbscan::1]                      | $\checkmark$ | $\checkmark$ |
+| DBSCAN [@inproceedings_dbscan_1]                      | $\checkmark$ | $\checkmark$ |
 +---------------------------------------------------------+--------------+--------------+
-| Elbow [@article::cluster::elbow::1]                     | $\checkmark$ | $\checkmark$ |
+| Elbow [@article_cluster_elbow_1]                     | $\checkmark$ | $\checkmark$ |
 +---------------------------------------------------------+--------------+--------------+
-| EMA [@article::ema::1]                                  | $\checkmark$ |              |
+| EMA [@article_ema_1]                                  | $\checkmark$ |              |
 +---------------------------------------------------------+--------------+--------------+
-| GA (Genetic Algorithm) [article::ga::2]                 | $\checkmark$ | $\checkmark$ |
+| GA (Genetic Algorithm) [article_ga_2]                 | $\checkmark$ | $\checkmark$ |
 +---------------------------------------------------------+--------------+--------------+
-| HSyncNet [@artcile::hsyncnet::1]                        | $\checkmark$ | $\checkmark$ |
+| HSyncNet [@artcile_hsyncnet_1]                        | $\checkmark$ | $\checkmark$ |
 +---------------------------------------------------------+--------------+--------------+
-| K-Means [@inproceedings::kmeans::1]                     | $\checkmark$ | $\checkmark$ |
+| K-Means [@inproceedings_kmeans_1]                     | $\checkmark$ | $\checkmark$ |
 +---------------------------------------------------------+--------------+--------------+
-| K-Means++ [@article::kmeans++::1]                       | $\checkmark$ | $\checkmark$ |
+| K-Means++ [@article_kmeans++_1]                       | $\checkmark$ | $\checkmark$ |
 +---------------------------------------------------------+--------------+--------------+
-| K-Medians [@book::algorithms_for_clustering_data]       | $\checkmark$ | $\checkmark$ |
+| K-Medians [@book_algorithms_for_clustering_data]       | $\checkmark$ | $\checkmark$ |
 +---------------------------------------------------------+--------------+--------------+
-| K-Medoids (PAM) [@book::algorithms_for_clustering_data] | $\checkmark$ | $\checkmark$ |
+| K-Medoids (PAM) [@book_algorithms_for_clustering_data] | $\checkmark$ | $\checkmark$ |
 +---------------------------------------------------------+--------------+--------------+
-| MBSAS [@book::pattern_recognition::2009]                | $\checkmark$ | $\checkmark$ |
+| MBSAS [@book_pattern_recognition_2009]                | $\checkmark$ | $\checkmark$ |
 +---------------------------------------------------------+--------------+--------------+
-| OPTICS [@article::optics::1]                            | $\checkmark$ | $\checkmark$ |
+| OPTICS [@article_optics_1]                            | $\checkmark$ | $\checkmark$ |
 +---------------------------------------------------------+--------------+--------------+
-| ROCK [@inproceedings::rock::1]                          | $\checkmark$ | $\checkmark$ |
+| ROCK [@inproceedings_rock_1]                          | $\checkmark$ | $\checkmark$ |
 +---------------------------------------------------------+--------------+--------------+
-| Silhouette [@article::cluster::silhouette::1]           | $\checkmark$ |              |
+| Silhouette [@article_cluster_silhouette_1]           | $\checkmark$ |              |
 +---------------------------------------------------------+--------------+--------------+
-| SOM-SC [@article::nnet::som::1]                         | $\checkmark$ | $\checkmark$ |
+| SOM-SC [@article_nnet_som_1]                         | $\checkmark$ | $\checkmark$ |
 +---------------------------------------------------------+--------------+--------------+
-| SyncNet [@article::syncnet::1]                          | $\checkmark$ | $\checkmark$ |
+| SyncNet [@article_syncnet_1]                          | $\checkmark$ | $\checkmark$ |
 +---------------------------------------------------------+--------------+--------------+
-| Sync-SOM [@article::syncsom::1]                         | $\checkmark$ |              |
+| Sync-SOM [@article_syncsom_1]                         | $\checkmark$ |              |
 +---------------------------------------------------------+--------------+--------------+
-| TTSAS [@book::pattern_recognition::2009]                | $\checkmark$ | $\checkmark$ |
+| TTSAS [@book_pattern_recognition_2009]                | $\checkmark$ | $\checkmark$ |
 +---------------------------------------------------------+--------------+--------------+
-| X-Means [@article::xmeans::1]                           | $\checkmark$ | $\checkmark$ |
+| X-Means [@article_xmeans_1]                           | $\checkmark$ | $\checkmark$ |
 +---------------------------------------------------------+--------------+--------------+
 
 # Oscillatory Networks and Neural Networks
@@ -102,25 +102,25 @@ Networks are located in the Python module `pyclustering.nnet` and in the C++ nam
 +-----------------------------------------------------------------------------------------------------------------------+--------------+--------------+
 | Model                                                                                                                 | Python       | C++          |
 +=======================================================================================================================+==============+==============+
-| CNN - Chaotic Neural Network [@article::nnet::cnn::1]                                                                 | $\checkmark$ |              |
+| CNN - Chaotic Neural Network [@article_nnet_cnn_1]                                                                 | $\checkmark$ |              |
 +-----------------------------------------------------------------------------------------------------------------------+--------------+--------------+
-| fSync - Oscillatory network based on Landau-Stuart equation and Kuramoto model [@book::chemical_oscillatorions_waves] | $\checkmark$ |              |
+| fSync - Oscillatory network based on Landau-Stuart equation and Kuramoto model [@book_chemical_oscillatorions_waves] | $\checkmark$ |              |
 +-----------------------------------------------------------------------------------------------------------------------+--------------+--------------+
-| HHN - Oscillatory network based on Hodgkin-Huxley model [@article::nnet::hnn::1]                                      | $\checkmark$ | $\checkmark$ |
+| HHN - Oscillatory network based on Hodgkin-Huxley model [@article_nnet_hnn_1]                                      | $\checkmark$ | $\checkmark$ |
 +-----------------------------------------------------------------------------------------------------------------------+--------------+--------------+
-| Hysteresis Oscillatory Network [@article::nnet::hysteresis::1]                                                        | $\checkmark$ |              |
+| Hysteresis Oscillatory Network [@article_nnet_hysteresis_1]                                                        | $\checkmark$ |              |
 +-----------------------------------------------------------------------------------------------------------------------+--------------+--------------+
-| LEGION - Local Excitatory Global Inhibitory Oscillatory Network [@article::legion::1]                                 | $\checkmark$ | $\checkmark$ |
+| LEGION - Local Excitatory Global Inhibitory Oscillatory Network [@article_legion_1]                                 | $\checkmark$ | $\checkmark$ |
 +-----------------------------------------------------------------------------------------------------------------------+--------------+--------------+
-| PCNN - Pulse-Coupled Neural Network [@book::image_processing_using_pcnn]                                              | $\checkmark$ | $\checkmark$ |
+| PCNN - Pulse-Coupled Neural Network [@book_image_processing_using_pcnn]                                              | $\checkmark$ | $\checkmark$ |
 +-----------------------------------------------------------------------------------------------------------------------+--------------+--------------+
-| SOM - Self-Organized Map [@article::nnet::som::1]                                                                     | $\checkmark$ | $\checkmark$ |
+| SOM - Self-Organized Map [@article_nnet_som_1]                                                                     | $\checkmark$ | $\checkmark$ |
 +-----------------------------------------------------------------------------------------------------------------------+--------------+--------------+
-| Sync - Oscillatory network based on Kuramoto model [@article::nnet::sync::1]                                          | $\checkmark$ | $\checkmark$ |
+| Sync - Oscillatory network based on Kuramoto model [@article_nnet_sync_1]                                          | $\checkmark$ | $\checkmark$ |
 +-----------------------------------------------------------------------------------------------------------------------+--------------+--------------+
-| SyncPR - Oscillatory network for pattern recognition [@article::nnet::syncpr::1]                                      | $\checkmark$ | $\checkmark$ |
+| SyncPR - Oscillatory network for pattern recognition [@article_nnet_syncpr_1]                                      | $\checkmark$ | $\checkmark$ |
 +-----------------------------------------------------------------------------------------------------------------------+--------------+--------------+
-| SyncSegm - Oscillatory network for image segmentation [@inproceedings::nnet::syncsegm::1]                             | $\checkmark$ | $\checkmark$ |
+| SyncSegm - Oscillatory network for image segmentation [@inproceedings_nnet_syncsegm_1]                             | $\checkmark$ | $\checkmark$ |
 +-----------------------------------------------------------------------------------------------------------------------+--------------+--------------+
 
 # Graph Coloring Algorithms
@@ -130,11 +130,11 @@ Algorithms are located in the Python module `pyclustering.gcolor`.
 +----------------------------------------------+--------------+-----+
 | Algorithm                                    | Python       | C++ |
 +==============================================+==============+=====+
-| DSatur [@article::gcolor::dsatur::1]         | $\checkmark$ |     |
+| DSatur [@article_gcolor_dsatur_1]         | $\checkmark$ |     |
 +----------------------------------------------+--------------+-----+
-| Hysteresis [@article::gcolor::hysteresis::1] | $\checkmark$ |     |
+| Hysteresis [@article_gcolor_hysteresis_1] | $\checkmark$ |     |
 +----------------------------------------------+--------------+-----+
-| GColorSync [@article::gcolor::sync::1]       | $\checkmark$ |     |
+| GColorSync [@article_gcolor_sync_1]       | $\checkmark$ |     |
 +----------------------------------------------+--------------+-----+
 
 # Containers
@@ -144,9 +144,9 @@ Containers are located in the Python module `pyclustering.container` and in the 
 +------------------------------------------+--------------+--------------+
 | Container                                | Python       | C++          |
 +==========================================+==============+==============+
-| KD Tree [@book::the_design_and_analysis] | $\checkmark$ | $\checkmark$ |
+| KD Tree [@book_the_design_and_analysis] | $\checkmark$ | $\checkmark$ |
 +------------------------------------------+--------------+--------------+
-| CF Tree [@article::birch::1]             | $\checkmark$ |              |
+| CF Tree [@article_birch_1]             | $\checkmark$ |              |
 +------------------------------------------+--------------+--------------+
 
 # References
