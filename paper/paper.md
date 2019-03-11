@@ -70,7 +70,7 @@ Algorithms and methods are located in the Python module `pyclustering.cluster` a
 +---------------------------------------------------------+--------------+--------------+
 | K-Means [@inproceedings_kmeans_1]                       | $\checkmark$ | $\checkmark$ |
 +---------------------------------------------------------+--------------+--------------+
-| K-Means++ [@article_kmeans++_1]                         | $\checkmark$ | $\checkmark$ |
+| K-Means++ [@article_kmeans_plus_plus_1]                 | $\checkmark$ | $\checkmark$ |
 +---------------------------------------------------------+--------------+--------------+
 | K-Medians [@book_algorithms_for_clustering_data]        | $\checkmark$ | $\checkmark$ |
 +---------------------------------------------------------+--------------+--------------+
