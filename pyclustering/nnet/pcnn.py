@@ -321,29 +321,21 @@ class pcnn_network(network):
     
     @details CCORE option can be used to use the pyclustering core - C/C++ shared library for processing that significantly increases performance.
     
-    Example:
+    Here is an example how to perform PCNN simulation:
     @code
-        # Create pulse-coupled neural network:
-        # - 9 oscillators.
-        # - default parameters.
-        # - grid type of connections (each oscillator has connection with four neighbors).
-        net = pcnn_network(9, None, conn_type.GRID_FOUR, ccore = ccore_flag)
-        
-        # Create external stimulus. Number of stimulus should be equal to number of neurons.
-        stimulus = [1, 1, 1, 0, 0, 0, 1, 1, 1]
-        
-        # Simulate dynamic of the network during 40 iterations
-        dynamic = net.simulate(40, stimulus)
-        
-        # Allocate synchronous oscillators
+        from pyclustering.nnet.pcnn import pcnn_network, pcnn_visualizer
+
+        # Create Pulse-Coupled neural network with 10 oscillators.
+        net = pcnn_network(10)
+
+        # Perform simulation during 100 steps using binary external stimulus.
+        dynamic = net.simulate(50, [1, 1, 1, 0, 0, 0, 0, 1, 1, 1])
+
+        # Allocate synchronous ensembles from the output dynamic.
         ensembles = dynamic.allocate_sync_ensembles()
-        print(ensembles)
-        
-        # Show output dynamic of the network
-        pcnn_visualizer.show_output_dynamic(dynamic)
-        
-        # Show time signal vector information
-        pcnn_visualizer.show_time_signal(dynamic)
+
+        # Show output dynamic.
+        pcnn_visualizer.show_output_dynamic(dynamic, ensembles)
     @endcode
     
     """

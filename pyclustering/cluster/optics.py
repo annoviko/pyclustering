@@ -278,7 +278,7 @@ class optics_descriptor:
         
         """
         
-        return '(%s, [c: %s, r: %s])' % (self.index_object, self.core_distance, self.reachability_distance);
+        return '(%s, [c: %s, r: %s])' % (self.index_object, self.core_distance, self.reachability_distance)
 
 
 class optics:

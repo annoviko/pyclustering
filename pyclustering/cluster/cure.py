@@ -91,20 +91,25 @@ class cure:
     @brief Class represents clustering algorithm CURE with KD-tree optimization.
     @details CCORE option can be used to use the pyclustering core - C/C++ shared library for processing that significantly increases performance.
     
-    Example:
+    Here is an example how to perform cluster analysis of sample 'Lsun':
     @code
-        # read data for clustering from some file
-        sample = read_sample(path_to_data);
-        
-        # create instance of cure algorithm for cluster analysis
-        # request for allocation of two clusters.
-        cure_instance = cure(sample, 2, 5, 0.5);
-        
-        # run cluster analysis
+        from pyclustering.cluster import cluster_visualizer;
+        from pyclustering.cluster.cure import cure;
+        from pyclustering.utils import read_sample;
+        from pyclustering.samples.definitions import FCPS_SAMPLES;
+
+        # Input data in following format [ [0.1, 0.5], [0.3, 0.1], ... ].
+        input_data = read_sample(FCPS_SAMPLES.SAMPLE_LSUN);
+
+        # Allocate three clusters.
+        cure_instance = cure(input_data, 3);
         cure_instance.process();
-        
-        # get results of clustering
         clusters = cure_instance.get_clusters();
+
+        # Visualize allocated clusters.
+        visualizer = cluster_visualizer();
+        visualizer.append_clusters(clusters, input_data);
+        visualizer.show();
     @endcode
     
     """
