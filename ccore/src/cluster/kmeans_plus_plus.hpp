@@ -154,6 +154,16 @@ public:
     */
     void initialize(const dataset & p_data, const index_sequence & p_indexes, dataset & p_centers) const override;
 
+    /**
+    *
+    * @brief    Performs center initialization process in line algorithm configuration using real points from dataset as centers.
+    *
+    * @param[in]  p_data: data for that centers are calculated.
+    * @param[out] p_center_indexes: initialized center indexes for the specified data where indexes correspond to points from the data.
+    *
+    */
+    void initialize(const dataset & p_data, std::vector<std::size_t> & p_center_indexes) const;
+
 private:
     /**
     *

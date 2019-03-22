@@ -62,6 +62,16 @@ void kmeans_plus_plus::initialize(const dataset & p_data, dataset & p_centers) c
 }
 
 
+void kmeans_plus_plus::initialize(const dataset & p_data, std::vector<std::size_t> & p_indexes) const {
+    p_indexes.clear();
+    p_indexes.reserve(m_amount);
+
+    if (!m_amount) { return; }
+
+    /* TODO: implementation is required */
+}
+
+
 void kmeans_plus_plus::initialize(const dataset & p_data,
                                   const index_sequence & p_indexes,
                                   dataset & p_centers) const

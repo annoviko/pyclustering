@@ -76,12 +76,6 @@ private:
 };
 
 
-
-class silhouette_ksearch {
-
-};
-
-
 }
 
 }
