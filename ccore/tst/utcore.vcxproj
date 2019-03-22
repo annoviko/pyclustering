@@ -186,6 +186,7 @@
     <ClCompile Include="..\src\cluster\ordering_analyser.cpp" />
     <ClCompile Include="..\src\cluster\random_center_initializer.cpp" />
     <ClCompile Include="..\src\cluster\rock.cpp" />
+    <ClCompile Include="..\src\cluster\silhouette.cpp" />
     <ClCompile Include="..\src\cluster\somsc.cpp" />
     <ClCompile Include="..\src\cluster\syncnet.cpp" />
     <ClCompile Include="..\src\cluster\ttsas.cpp" />
@@ -336,6 +337,8 @@
     <ClInclude Include="..\src\cluster\ordering_analyser.hpp" />
     <ClInclude Include="..\src\cluster\random_center_initializer.hpp" />
     <ClInclude Include="..\src\cluster\rock.hpp" />
+    <ClInclude Include="..\src\cluster\silhouette.hpp" />
+    <ClInclude Include="..\src\cluster\silhouette_data.hpp" />
     <ClInclude Include="..\src\cluster\somsc.hpp" />
     <ClInclude Include="..\src\cluster\somsc_data.hpp" />
     <ClInclude Include="..\src\cluster\syncnet.hpp" />
