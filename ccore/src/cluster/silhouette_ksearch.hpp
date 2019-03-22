@@ -62,8 +62,8 @@ public:
 
 class silhouette_ksearch {
 private:
-    std::size_t m_kmax;
     std::size_t m_kmin;
+    std::size_t m_kmax;
     silhouette_ksearch_allocator::ptr m_allocator = std::make_shared<kmeans_allocator>();
 
 public:

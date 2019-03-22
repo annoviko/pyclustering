@@ -23,38 +23,21 @@
 #pragma once
 
 
-#include "definitions.hpp"
+#include "answer.hpp"
+
+#include "samples.hpp"
+
+#include <unordered_map>
 
 
-namespace ccore {
-
-namespace clst {
-
-
-using silhouette_score_sequence = std::vector<double>;
-
-
-class silhouette_ksearch_data {
+class answer_reader {
 private:
-    std::size_t m_amount = 0;
-    double      m_score  = 0;
-    silhouette_score_sequence m_scores = { };
+    const static std::string PATH_SIMPLE_ANSWER_FOLDER;
+
+    const static std::unordered_map<SAMPLE_SIMPLE, std::string> SIMPLE_ANSWER_MAP;
 
 public:
-    const std::size_t get_amount(void) const { return m_amount; }
+    static answer read(const std::string & p_path);
 
-    void set_amount(const std::size_t p_amount) { m_amount = p_amount; }
-
-    const double get_score(void) const { return m_score; }
-
-    void set_score(const double p_score) { m_score = p_score; }
-
-    const silhouette_score_sequence & scores(void) const { return m_scores; }
-
-    silhouette_score_sequence & scores(void) { return m_scores; }
+    static answer read(const SAMPLE_SIMPLE p_sample);
 };
-
-
-}
-
-}

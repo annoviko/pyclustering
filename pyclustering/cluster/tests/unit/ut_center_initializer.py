@@ -161,6 +161,7 @@ class KmeansPlusPlusInitializerUnitTest(unittest.TestCase):
         for center_index in centers:
             assertion.gt(len(data), center_index)
             assertion.le(0, center_index)
+            assertion.eq(1, centers.count(center_index))
 
         return centers
 

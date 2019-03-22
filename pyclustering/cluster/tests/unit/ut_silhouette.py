@@ -89,7 +89,9 @@ class silhouette_unit_tests(unittest.TestCase):
             assertion.ge(1.0, score)
             assertion.eq(kmax - kmin, len(scores))
 
-            if amount != len(clusters): continue
+            if amount != len(clusters):
+                continue
+
             testing_result = True
             break
 
@@ -111,13 +113,37 @@ class silhouette_unit_tests(unittest.TestCase):
         self.template_correct_ksearch(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, SIMPLE_ANSWERS.ANSWER_SIMPLE2, 2, 10,
                                       silhouette_ksearch_type.KMEANS)
 
+    def test_correct_ksearch_simple02_kmedoids(self):
+        self.template_correct_ksearch(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, SIMPLE_ANSWERS.ANSWER_SIMPLE2, 2, 10,
+                                      silhouette_ksearch_type.KMEDOIDS)
+
+    def test_correct_ksearch_simple02_kmedians(self):
+        self.template_correct_ksearch(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, SIMPLE_ANSWERS.ANSWER_SIMPLE2, 2, 10,
+                                      silhouette_ksearch_type.KMEDIANS)
+
     def test_correct_ksearch_simple03(self):
         self.template_correct_ksearch(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, SIMPLE_ANSWERS.ANSWER_SIMPLE3, 2, 10,
                                       silhouette_ksearch_type.KMEANS)
 
+    def test_correct_ksearch_simple03_kmedoids(self):
+        self.template_correct_ksearch(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, SIMPLE_ANSWERS.ANSWER_SIMPLE3, 2, 10,
+                                      silhouette_ksearch_type.KMEDOIDS)
+
+    def test_correct_ksearch_simple03_kmedians(self):
+        self.template_correct_ksearch(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, SIMPLE_ANSWERS.ANSWER_SIMPLE3, 2, 10,
+                                      silhouette_ksearch_type.KMEDIANS)
+
     def test_correct_ksearch_simple04(self):
         self.template_correct_ksearch(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, SIMPLE_ANSWERS.ANSWER_SIMPLE4, 2, 10,
                                       silhouette_ksearch_type.KMEANS)
+
+    def test_correct_ksearch_simple04_kmedoids(self):
+        self.template_correct_ksearch(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, SIMPLE_ANSWERS.ANSWER_SIMPLE4, 2, 10,
+                                      silhouette_ksearch_type.KMEDOIDS)
+
+    def test_correct_ksearch_simple04_kmedians(self):
+        self.template_correct_ksearch(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, SIMPLE_ANSWERS.ANSWER_SIMPLE4, 2, 10,
+                                      silhouette_ksearch_type.KMEDIANS)
 
     def test_correct_ksearch_simple05(self):
         self.template_correct_ksearch(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, SIMPLE_ANSWERS.ANSWER_SIMPLE5, 2, 10,

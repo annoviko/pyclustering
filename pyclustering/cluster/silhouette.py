@@ -429,4 +429,4 @@ class silhouette_ksearch:
 
         if self.__kmin <= 1:
             raise ValueError("K min value '" + str(self.__kmin) + "' should be greater than 1 (impossible to provide "
-                             "silhiuette score for only one cluster).")
+                             "silhouette score for only one cluster).")

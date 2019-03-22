@@ -23,38 +23,31 @@
 #pragma once
 
 
-#include "definitions.hpp"
+#include <vector>
 
 
-namespace ccore {
+using cluster = std::vector<std::size_t>;
+using cluster_sequence = std::vector<cluster>;
 
-namespace clst {
-
-
-using silhouette_score_sequence = std::vector<double>;
+using length_sequence = std::vector<std::size_t>;
 
 
-class silhouette_ksearch_data {
+class answer {
 private:
-    std::size_t m_amount = 0;
-    double      m_score  = 0;
-    silhouette_score_sequence m_scores = { };
+    cluster_sequence m_clusters;
+    length_sequence  m_cluster_lengths;
+    cluster          m_noise;
 
 public:
-    const std::size_t get_amount(void) const { return m_amount; }
+    const cluster_sequence & clusters(void) const { return m_clusters; }
 
-    void set_amount(const std::size_t p_amount) { m_amount = p_amount; }
+    cluster_sequence & clusters(void) { return m_clusters; }
 
-    const double get_score(void) const { return m_score; }
+    const length_sequence & cluster_lengths(void) const { return m_cluster_lengths; }
 
-    void set_score(const double p_score) { m_score = p_score; }
+    length_sequence & cluster_lengths(void) { return m_cluster_lengths; }
 
-    const silhouette_score_sequence & scores(void) const { return m_scores; }
+    const cluster & noise(void) const { return m_noise; }
 
-    silhouette_score_sequence & scores(void) { return m_scores; }
+    cluster & noise(void) { return m_noise; }
 };
-
-
-}
-
-}

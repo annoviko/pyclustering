@@ -28,6 +28,8 @@
 #include "cluster/kmedians.hpp"
 #include "cluster/kmedoids.hpp"
 
+#include <numeric>
+
 
 namespace ccore {
 
@@ -68,15 +70,46 @@ void kmedoids_allocator::allocate(const std::size_t p_amount, const dataset & p_
 
 
 
-silhouette_ksearch::silhouette_ksearch(const std::size_t p_kmax, const std::size_t p_kmin, const silhouette_ksearch_allocator::ptr & p_allocator) :
-    m_kmax(p_kmax),
+silhouette_ksearch::silhouette_ksearch(const std::size_t p_kmin, const std::size_t p_kmax, const silhouette_ksearch_allocator::ptr & p_allocator) :
     m_kmin(p_kmin),
+    m_kmax(p_kmax),
     m_allocator(p_allocator)
-{ }
+{
+    if (m_kmin <= 1) {
+        throw std::invalid_argument("K min value '" + std::to_string(m_kmin) + 
+            "' should be greater than 1 (impossible to provide silhouette score for only one cluster).");
+    }
+}
 
 
 void silhouette_ksearch::process(const dataset & p_data, silhouette_ksearch_data & p_result) {
-    /* TODO: implementation */
+    if (m_kmax > p_data.size()) {
+        throw std::invalid_argument("K max value '" + std::to_string(m_kmax) + 
+            "' should be bigger than amount of objects '" + std::to_string(p_data.size()) + "' in input data.");
+    }
+
+    p_result.scores().reserve(m_kmax - m_kmin);
+
+    for (std::size_t k = m_kmin; k < m_kmax; k++) {
+        cluster_sequence clusters;
+        m_allocator->allocate(k, p_data, clusters);
+
+        if (clusters.size() != k) {
+            p_result.scores().push_back(std::nan("1"));
+            continue;
+        }
+        
+        silhouette_data result;
+        silhouette().process(p_data, clusters, result);
+
+        const double score = std::accumulate(result.get_score().begin(), result.get_score().end(), (double) 0.0) / result.get_score().size();
+        p_result.scores().push_back(score);
+
+        if (score > p_result.get_score()) {
+            p_result.set_amount(k);
+            p_result.set_score(score);
+        }
+    }
 }
 
 

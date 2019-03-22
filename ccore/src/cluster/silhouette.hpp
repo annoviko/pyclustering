@@ -50,7 +50,7 @@ private:
 public:
     silhouette(void) = default;
 
-    silhouette(const distance_metric<point> & p_metric = distance_metric_factory<point>::euclidean_square());
+    silhouette(const distance_metric<point> & p_metric);
 
     silhouette(const silhouette & p_other) = default;
 

@@ -62,6 +62,10 @@ public:
     using metric = distance_functor< std::vector<double> >;
 
 private:
+    using center_description = std::tuple<point, std::size_t>;
+    enum { POINT, INDEX };
+
+private:
     std::size_t         m_amount        = 0;
     std::size_t         m_candidates    = 0;
     metric              m_dist_func;
@@ -162,7 +166,7 @@ public:
     * @param[out] p_center_indexes: initialized center indexes for the specified data where indexes correspond to points from the data.
     *
     */
-    void initialize(const dataset & p_data, std::vector<std::size_t> & p_center_indexes) const;
+    void initialize(const dataset & p_data, index_sequence & p_center_indexes) const;
 
 private:
     /**
@@ -194,7 +198,7 @@ private:
     * @return   The first initialized center.
     *
     */
-    point get_first_center(void) const;
+    center_description get_first_center(void) const;
 
     /**
     *
@@ -203,7 +207,7 @@ private:
     * @return   The next initialized center.
     *
     */
-    point get_next_center(void) const;
+    center_description get_next_center(void) const;
 
     /**
     *
