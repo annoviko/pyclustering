@@ -280,38 +280,33 @@ class kmeans:
     initial centers from module 'pyclustering.cluster.center_initializer'.
     
     @image html kmeans_example_clustering.png "K-Means clustering results. At the left - 'Simple03.data' sample, at the right - 'Lsun.data' sample."
-    
-    Example #1 - Trivial clustering:
+
+    Example #1 - Clustering using K-Means++ for center initialization:
     @code
-        # load list of points for cluster analysis
-        sample = read_sample(path)
-        
-        # create instance of K-Means algorithm
-        kmeans_instance = kmeans(sample, [ [0.0, 0.1], [2.5, 2.6] ])
-        
-        # run cluster analysis and obtain results
-        kmeans_instance.process()
-        clusters = kmeans_instance.get_clusters()
-    @endcode
-    
-    Example #2 - Clustering using K-Means++ for center initialization:
-    @code
-        # load list of points for cluster analysis
-        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE2)
-        
-        # initialize initial centers using K-Means++ method
-        initial_centers = kmeans_plusplus_initializer(sample, 3).initialize()
-        
-        # create instance of K-Means algorithm with prepared centers
+        from pyclustering.cluster.kmeans import kmeans, kmeans_visualizer
+        from pyclustering.cluster.center_initializer import kmeans_plusplus_initializer
+        from pyclustering.samples.definitions import FCPS_SAMPLES
+        from pyclustering.utils import read_sample
+
+        # Load list of points for cluster analysis.
+        sample = read_sample(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS)
+
+        # Prepare initial centers using K-Means++ method.
+        initial_centers = kmeans_plusplus_initializer(sample, 2).initialize()
+
+        # Create instance of K-Means algorithm with prepared centers.
         kmeans_instance = kmeans(sample, initial_centers)
-        
-        # run cluster analysis and obtain results
+
+        # Run cluster analysis and obtain results.
         kmeans_instance.process()
         clusters = kmeans_instance.get_clusters()
         final_centers = kmeans_instance.get_centers()
+
+        # Visualize obtained results
+        kmeans_visualizer.show_clusters(sample, clusters, final_centers)
     @endcode
 
-    Example #3 - Clustering using specific distance metric, for example, Manhattan distance:
+    Example #2 - Clustering using specific distance metric, for example, Manhattan distance:
     @code
         # prepare input data and initial centers for cluster analysis using K-Means
 

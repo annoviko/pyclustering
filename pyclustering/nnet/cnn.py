@@ -238,25 +238,35 @@ class cnn_visualizer:
 class cnn_network:
     """!
     @brief Chaotic neural network based on system of logistic map where clustering phenomenon can be observed.
-    
-    Example:
+    @details Here is an example how to perform cluster analysis using chaotic neural network:
     @code
-        # load stimulus from file
-        stimulus = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1);
-        
-        # create chaotic neural network, amount of neurons should be equal to amout of stimulus
-        network_instance = cnn_network(len(stimulus));
-        
-        # simulate it during 100 steps
-        output_dynamic = network_instance.simulate(steps, stimulus);
-        
-        # display output dynamic of the network
-        cnn_visualizer.show_output_dynamic(output_dynamic);
-        
-        # dysplay dynamic matrix and observation matrix to show clustering
-        # phenomenon.
-        cnn_visualizer.show_dynamic_matrix(output_dynamic);
-        cnn_visualizer.show_observation_matrix(output_dynamic);
+        from pyclustering.cluster import cluster_visualizer
+        from pyclustering.samples.definitions import SIMPLE_SAMPLES
+        from pyclustering.utils import read_sample
+        from pyclustering.nnet.cnn import cnn_network, cnn_visualizer
+
+        # Load stimulus from file.
+        stimulus = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE3)
+
+        # Create chaotic neural network, amount of neurons should be equal to amount of stimulus.
+        network_instance = cnn_network(len(stimulus))
+
+        # Perform simulation during 100 steps.
+        steps = 100
+        output_dynamic = network_instance.simulate(steps, stimulus)
+
+        # Display output dynamic of the network.
+        cnn_visualizer.show_output_dynamic(output_dynamic)
+
+        # Display dynamic matrix and observation matrix to show clustering phenomenon.
+        cnn_visualizer.show_dynamic_matrix(output_dynamic)
+        cnn_visualizer.show_observation_matrix(output_dynamic)
+
+        # Visualize clustering results.
+        clusters = output_dynamic.allocate_sync_ensembles(10)
+        visualizer = cluster_visualizer()
+        visualizer.append_clusters(clusters, stimulus)
+        visualizer.show()
     @endcode
     
     """

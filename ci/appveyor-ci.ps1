@@ -348,6 +348,11 @@ function upload_binary($platform_version, $binary_path) {
 
 
 
+if ($env:APPVEYOR_REPO_COMMIT_MESSAGE -Match "\[no-build\]") {
+    Write-Host "Option '[no-build]' is detected, sources will not be built, checked, verified and published." -ForegroundColor Green;
+    Exit 0;
+}
+
 switch ($env:CI_JOB) {
     "BUILD_WINDOWS_CCORE" {
         job_build_windows_ccore;

@@ -1,7 +1,7 @@
 """!
 
 @brief Cluster analysis algorithm: SYNC-SOM
-@details Implementation based on paper @cite article::xmeans::1.
+@details Implementation based on paper @cite article::syncsom::1.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2019

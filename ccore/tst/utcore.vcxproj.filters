@@ -449,6 +449,9 @@
     <ClCompile Include="utest-interface-clique.cpp">
       <Filter>Unit Tests</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\cluster\silhouette.cpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\container\adjacency.hpp">
@@ -753,6 +756,12 @@
     </ClInclude>
     <ClInclude Include="..\src\interface\clique_interface.h">
       <Filter>Tested Code\interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cluster\silhouette.hpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cluster\silhouette_data.hpp">
+      <Filter>Tested Code\cluster</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

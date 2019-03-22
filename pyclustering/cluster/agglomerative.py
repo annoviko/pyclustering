@@ -1,7 +1,7 @@
 """!
 
 @brief Cluster analysis algorithm: agglomerative algorithm.
-@details Implementation based on paper @cite book::algorithms_for_clustering_data::1988.
+@details Implementation based on paper @cite book::algorithms_for_clustering_data.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2019

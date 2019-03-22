@@ -1,7 +1,7 @@
 """!
 
 @brief Cluster analysis algorithm: X-Means
-@details Implementation based on paper @cite article::syncnet::1.
+@details Implementation based on paper @cite article::xmeans::1.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2019

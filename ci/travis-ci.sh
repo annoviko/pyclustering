@@ -283,7 +283,7 @@ run_doxygen_job() {
 
 run_deploy_job() {
     print_info "Deploy (upload linux binary file to github)"
-    if [[ $TRAVIS_COMMIT_MESSAGE != *"[publish]"* ]]; then 
+    if [[ $TRAVIS_COMMIT_MESSAGE != *"[publish]"* ]]; then
         print_info "Binary files will not be published to github repository (keyword '[publish]' is not specified)."
         exit 0
     fi
@@ -421,6 +421,10 @@ download_binary() {
 set -e
 set -x
 
+if [[ $TRAVIS_COMMIT_MESSAGE == *"[no-build]"* ]]; then
+    print_info "Option '[no-build]' is detected, sources will not be built, checked, verified and published."
+    exit 0
+fi
 
 case $1 in
     BUILD_CCORE) 
