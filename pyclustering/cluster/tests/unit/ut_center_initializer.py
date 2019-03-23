@@ -165,6 +165,21 @@ class KmeansPlusPlusInitializerUnitTest(unittest.TestCase):
 
         return centers
 
+    def testSimple01ReturnIndex(self):
+        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1)
+        for amount in range(1, len(sample)):
+            self.templateKmeasPlusPlusCenterInitializerIndexReturn(sample, amount)
+
+    def testSimple02ReturnIndex(self):
+        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE2)
+        for amount in range(1, len(sample)):
+            self.templateKmeasPlusPlusCenterInitializerIndexReturn(sample, amount)
+
+    def testSimple03ReturnIndex(self):
+        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE3)
+        for amount in range(1, len(sample)):
+            self.templateKmeasPlusPlusCenterInitializerIndexReturn(sample, amount)
+
     def test1DimensionDataOneCenterReturnIndex(self):
         self.templateKmeasPlusPlusCenterInitializerIndexReturn([[0.0], [1.0], [2.0], [3.0]], 1)
 
