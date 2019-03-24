@@ -27,14 +27,14 @@
 
 #include "samples.hpp"
 
-#include <unordered_map>
+#include <map>
 
 
 class answer_reader {
 private:
     const static std::string PATH_SIMPLE_ANSWER_FOLDER;
 
-    const static std::unordered_map<SAMPLE_SIMPLE, std::string> SIMPLE_ANSWER_MAP;
+    const static std::map<SAMPLE_SIMPLE, std::string> SIMPLE_ANSWER_MAP;
 
 public:
     static answer read(const std::string & p_path);

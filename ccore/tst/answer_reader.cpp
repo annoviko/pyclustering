@@ -43,7 +43,7 @@ const std::string answer_reader::PATH_SIMPLE_ANSWER_FOLDER =
     "simple" + separator;
 
 
-const std::unordered_map<SAMPLE_SIMPLE, std::string> answer_reader::SIMPLE_ANSWER_MAP = { 
+const std::map<SAMPLE_SIMPLE, std::string> answer_reader::SIMPLE_ANSWER_MAP = {
     { SAMPLE_SIMPLE::SAMPLE_SIMPLE_01, PATH_SIMPLE_ANSWER_FOLDER + "Simple01.answer" },
     { SAMPLE_SIMPLE::SAMPLE_SIMPLE_02, PATH_SIMPLE_ANSWER_FOLDER + "Simple02.answer" },
     { SAMPLE_SIMPLE::SAMPLE_SIMPLE_03, PATH_SIMPLE_ANSWER_FOLDER + "Simple03.answer" },
@@ -58,7 +58,6 @@ const std::unordered_map<SAMPLE_SIMPLE, std::string> answer_reader::SIMPLE_ANSWE
     { SAMPLE_SIMPLE::SAMPLE_SIMPLE_12, PATH_SIMPLE_ANSWER_FOLDER + "Simple12.answer" },
     { SAMPLE_SIMPLE::SAMPLE_SIMPLE_13, PATH_SIMPLE_ANSWER_FOLDER + "Simple13.answer" }
 };
-
 
 answer answer_reader::read(const std::string & p_path) {
     answer result;
