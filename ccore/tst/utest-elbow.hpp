@@ -26,6 +26,8 @@
 
 #include "gtest/gtest.h"
 
+#include <thread>
+
 #include "utenv_check.hpp"
 
 #include "cluster/elbow.hpp"
@@ -55,6 +57,7 @@ void elbow_template(const dataset_ptr p_data,
     ASSERT_GT(result.get_wce().front(), result.get_wce().back());
 
     if (result.get_amount() != p_amount_clusters) {
+      std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(25));
       continue;
     }
 

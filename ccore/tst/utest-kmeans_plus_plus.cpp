@@ -189,6 +189,91 @@ TEST(utest_kmeans_plus_plus, empty_data) {
 
 
 static void
+template_kmeans_plus_plus_medoid_initialization(const dataset_ptr & p_data, const std::size_t p_amount, const std::size_t p_candidates)
+{
+    kmeans_plus_plus initializer(p_amount, p_candidates);
+
+    std::vector<std::size_t> medoids;
+    initializer.initialize(*p_data, medoids);
+
+    ASSERT_EQ(p_amount, medoids.size());
+    for (const auto medoid : medoids) {
+        ASSERT_LT(medoid, p_data->size());
+        ASSERT_EQ(1, std::count(medoids.begin(), medoids.end(), medoid));
+    }
+}
+
+TEST(utest_kmeans_plus_plus, medoids_simple_01) {
+    dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01);
+    template_kmeans_plus_plus_medoid_initialization(data, 1, kmeans_plus_plus::FARTHEST_CENTER_CANDIDATE);
+}
+
+TEST(utest_kmeans_plus_plus, medoids_simple_01_one_candidate) {
+    dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01);
+    template_kmeans_plus_plus_medoid_initialization(data, 1, 1);
+}
+
+TEST(utest_kmeans_plus_plus, medoids_simple_01_two_candidate) {
+    dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01);
+    template_kmeans_plus_plus_medoid_initialization(data, 1, 2);
+}
+
+TEST(utest_kmeans_plus_plus, medoids_simple_01_all_range) {
+    dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01);
+    for (std::size_t i = 1; i < data->size(); i++) {
+        template_kmeans_plus_plus_medoid_initialization(data, i, 1);
+    }
+}
+
+TEST(utest_kmeans_plus_plus, medoids_simple_02) {
+    dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02);
+    template_kmeans_plus_plus_medoid_initialization(data, 0, kmeans_plus_plus::FARTHEST_CENTER_CANDIDATE);
+}
+
+TEST(utest_kmeans_plus_plus, medoids_simple_02_one_candidate) {
+    dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02);
+    template_kmeans_plus_plus_medoid_initialization(data, 0, 1);
+}
+
+TEST(utest_kmeans_plus_plus, medoids_simple_02_all_range) {
+    dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02);
+    for (std::size_t i = 1; i < data->size(); i++) {
+        template_kmeans_plus_plus_medoid_initialization(data, i, 1);
+    }
+}
+
+TEST(utest_kmeans_plus_plus, medoids_simple_03) {
+    dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_03);
+    template_kmeans_plus_plus_medoid_initialization(data, 0, kmeans_plus_plus::FARTHEST_CENTER_CANDIDATE);
+}
+
+TEST(utest_kmeans_plus_plus, medoids_simple_03_one_candidate) {
+    dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_03);
+    template_kmeans_plus_plus_medoid_initialization(data, 0, 1);
+}
+
+TEST(utest_kmeans_plus_plus, medoids_simple_04) {
+    dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_04);
+    template_kmeans_plus_plus_medoid_initialization(data, 0, kmeans_plus_plus::FARTHEST_CENTER_CANDIDATE);
+}
+
+TEST(utest_kmeans_plus_plus, medoids_simple_04_one_candidate) {
+    dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_04);
+    template_kmeans_plus_plus_medoid_initialization(data, 0, 1);
+}
+
+TEST(utest_kmeans_plus_plus, medoids_simple_05) {
+    dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_05);
+    template_kmeans_plus_plus_medoid_initialization(data, 0, kmeans_plus_plus::FARTHEST_CENTER_CANDIDATE);
+}
+
+TEST(utest_kmeans_plus_plus, medoids_simple_05_one_candidate) {
+    dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_05);
+    template_kmeans_plus_plus_medoid_initialization(data, 0, 1);
+}
+
+
+static void
 template_initialize_kmeans(const dataset_ptr & p_data,
                            const std::size_t p_amount,
                            const std::size_t p_candidate,

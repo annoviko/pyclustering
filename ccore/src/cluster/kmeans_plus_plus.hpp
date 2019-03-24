@@ -24,6 +24,8 @@
 #pragma once
 
 
+#include <unordered_set>
+
 #include "definitions.hpp"
 
 #include "cluster/center_initializer.hpp"
@@ -62,18 +64,24 @@ public:
     using metric = distance_functor< std::vector<double> >;
 
 private:
+    using index_set = std::unordered_set<std::size_t>;
+
     using center_description = std::tuple<point, std::size_t>;
     enum { POINT, INDEX };
+
+    using store_result = std::function<void(center_description &)>;
 
 private:
     std::size_t         m_amount        = 0;
     std::size_t         m_candidates    = 0;
-    metric              m_dist_func;
+    metric              m_dist_func ;
 
     /* temporal members that are used only during initialization */
     mutable dataset const *           m_data_ptr      = nullptr;
     mutable index_sequence const *    m_indexes_ptr   = nullptr;
-    mutable dataset const *           m_centers_ptr   = nullptr;
+
+    mutable index_set       m_free_indexes;
+    mutable index_sequence  m_allocated_indexes;
 
 public:
     /**
@@ -171,18 +179,39 @@ public:
 private:
     /**
     *
+    * @brief    Performs center initialization process in line algorithm configuration.
+    *
+    * @param[in]  p_data: data for that centers are calculated.
+    * @param[in]  p_indexes: point indexes from data that are defines which points should be considered
+    *              during calculation process. If empty then all data points are considered.
+    * @param[out] p_proc: function that defines how to store output result of the algorithm.
+    *
+    */
+    void initialize(const dataset & p_data, const index_sequence & p_indexes, const store_result & p_proc) const;
+
+    /**
+    *
+    * @brief    Store obtained center.
+    *
+    * @param[in]  p_proc: function that defines how to store output result of the algorithm.
+    * @param[in]  p_result: initialized center that should be stored.
+    *
+    */
+    void store_center(const store_result & p_proc, center_description & p_result) const;
+
+    /**
+    *
     * @brief    Store pointers to data, indexes and centers to avoiding passing them between class methods.
     * @details  Pointers are reseted when center initialization is over.
     *
     * @param[in]  p_data: data for that centers are calculated.
     * @param[in]  p_indexes: point indexes from data that are defines which points should be
     *              considered during calculation process.
-    * @param[in]  p_centers: initialized centers for the specified data.
     *
     * @return   The first initialized center.
     *
     */
-    void store_temporal_params(const dataset & p_data, const index_sequence & p_indexes, const dataset & p_centers) const;
+    void store_temporal_params(const dataset & p_data, const index_sequence & p_indexes) const;
 
     /**
     *

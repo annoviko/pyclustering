@@ -193,6 +193,9 @@ class silhouette:
                 if candidate_score < optimal_score:
                     optimal_score = candidate_score
 
+        if optimal_score == float('inf'):
+            optimal_score = -1.0
+
         return optimal_score
 
 
@@ -334,7 +337,7 @@ class silhouette_ksearch:
         self.__return_index = self.__algorithm == silhouette_ksearch_type.KMEDOIDS
 
         self.__amount = -1
-        self.__score = float('-Inf')
+        self.__score = -1.0
         self.__scores = {}
 
         self.__verify_arguments()

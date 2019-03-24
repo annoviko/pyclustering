@@ -462,7 +462,7 @@
       <Filter>Unit Tests</Filter>
     </ClCompile>
     <ClCompile Include="utest-silhouette_ksearch.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Unit Tests</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -66,19 +66,9 @@ void kmeans_plus_plus::initialize(const dataset & p_data, index_sequence & p_cen
     p_center_indexes.clear();
     p_center_indexes.reserve(m_amount);
 
-    if (!m_amount) { return; }
-
-    store_temporal_params(p_data, { }, { });
-
-    auto center = get_first_center();
-    p_center_indexes.push_back(std::move(std::get<INDEX>(center)));
-
-    for (std::size_t i = 1; i < m_amount; i++) {
-        center = get_next_center();
-        p_center_indexes.push_back(std::move(std::get<INDEX>(center)));
-    }
-
-    free_temporal_params();
+    initialize(p_data, { }, [&p_center_indexes](center_description & p_center) { 
+        p_center_indexes.push_back(std::get<INDEX>(p_center));
+    });
 }
 
 
@@ -89,23 +79,37 @@ void kmeans_plus_plus::initialize(const dataset & p_data,
     p_centers.clear();
     p_centers.reserve(m_amount);
 
+    initialize(p_data, p_indexes, [&p_centers](center_description & p_center) { 
+        p_centers.push_back(std::move(std::get<POINT>(p_center)));
+    });
+}
+
+
+void kmeans_plus_plus::initialize(const dataset & p_data, const index_sequence & p_indexes, const store_result & p_proc) const {
     if (!m_amount) { return; }
 
-    store_temporal_params(p_data, p_indexes, p_centers);
+    store_temporal_params(p_data, p_indexes);
 
     auto center = get_first_center();
-    p_centers.push_back(std::move(std::get<POINT>(center)));
+    store_center(p_proc, center);
 
     for (std::size_t i = 1; i < m_amount; i++) {
         center = get_next_center();
-        p_centers.push_back(std::move(std::get<POINT>(center)));
+        store_center(p_proc, center);
     }
 
     free_temporal_params();
 }
 
 
-void kmeans_plus_plus::store_temporal_params(const dataset & p_data, const index_sequence & p_indexes, const dataset & p_centers) const {
+void kmeans_plus_plus::store_center(const store_result & p_proc, center_description & p_result) const {
+    m_allocated_indexes.push_back(std::get<INDEX>(p_result));
+    m_free_indexes.erase(std::get<INDEX>(p_result));
+    p_proc(p_result);
+}
+
+
+void kmeans_plus_plus::store_temporal_params(const dataset & p_data, const index_sequence & p_indexes) const {
     if (p_data.empty()) {
         throw std::invalid_argument("Input data is empty.");
     }
@@ -120,14 +124,19 @@ void kmeans_plus_plus::store_temporal_params(const dataset & p_data, const index
 
     m_data_ptr      = (dataset *) &p_data;
     m_indexes_ptr   = (index_sequence *) &p_indexes;
-    m_centers_ptr   = (dataset *) &p_centers;
+
+    m_allocated_indexes.clear();
+    m_free_indexes.clear();
+
+    for (std::size_t i = 0; i < m_data_ptr->size(); i++) {
+        m_free_indexes.insert(i);
+    }
 }
 
 
 void kmeans_plus_plus::free_temporal_params(void) const {
     m_data_ptr      = nullptr;
     m_indexes_ptr   = nullptr;
-    m_centers_ptr   = nullptr;
 }
 
 
@@ -192,8 +201,8 @@ void kmeans_plus_plus::calculate_shortest_distances(std::vector<double> & p_dist
 
 double kmeans_plus_plus::get_shortest_distance(const point & p_point) const {
     double shortest_distance = std::numeric_limits<double>::max();
-    for (auto & center : (*m_centers_ptr)) {
-        double distance = std::abs(m_dist_func(p_point, center));
+    for (auto & index_point : m_allocated_indexes) {
+        double distance = std::abs(m_dist_func(p_point, m_data_ptr->at(index_point)));
         if (distance < shortest_distance) {
             shortest_distance = distance;
         }
@@ -238,7 +247,7 @@ std::size_t kmeans_plus_plus::get_probable_center(const std::vector<double> & p_
         }
 
         if (i == 0) {
-            best_index_candidate = current_index_candidate;
+            best_index_candidate = *(m_free_indexes.begin());
         }
         else if (p_distances[current_index_candidate] > p_distances[best_index_candidate]) {
             best_index_candidate = current_index_candidate;

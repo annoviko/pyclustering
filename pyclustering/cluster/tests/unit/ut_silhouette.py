@@ -89,7 +89,12 @@ class silhouette_unit_tests(unittest.TestCase):
             assertion.ge(1.0, score)
             assertion.eq(kmax - kmin, len(scores))
 
-            if amount != len(clusters):
+            upper_limit = len(clusters) + 1
+            lower_limit = len(clusters) - 1
+            if lower_limit < 1:
+                lower_limit = 1
+
+            if (amount > upper_limit) and (amount < lower_limit):
                 continue
 
             testing_result = True

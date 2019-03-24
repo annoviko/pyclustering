@@ -99,6 +99,11 @@ TEST(utest_kmedians, allocation_sample_simple_02) {
     template_kmedians_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02), start_medians, expected_clusters_length);
 }
 
+TEST(utest_kmedians, allocation_sample_simple_03_hanging) {
+    dataset start_medians = { { 1.80508 , 4.609467 }, { 0.926445, 0.126412 }, { 0.144706, 0.987019 } };
+    template_kmedians_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_03), start_medians, { });
+}
+
 TEST(utest_kmedians, allocation_sample_simple_03) {
     dataset start_medians = { { 0.2, 0.1 }, { 4.0, 1.0 }, { 2.0, 2.0 }, { 2.3, 3.9 } };
     std::vector<size_t> expected_clusters_length = { 10, 10, 10, 30 };

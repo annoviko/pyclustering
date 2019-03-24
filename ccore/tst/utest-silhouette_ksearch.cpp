@@ -23,6 +23,8 @@
 
 #include "gtest/gtest.h"
 
+#include <thread>
+
 #include "answer.hpp"
 #include "answer_reader.hpp"
 #include "samples.hpp"
@@ -51,7 +53,11 @@ static void template_correct_ksearch(
         ASSERT_GE(1.0, result.get_score());
         ASSERT_EQ(p_kmax - p_kmin, result.scores().size());
 
-        if (result.get_amount() != p_answer.clusters().size()) {
+        const std::size_t upper_limit = p_answer.clusters().size() + 1;
+        const std::size_t lower_limit = p_answer.clusters().size() > 1 ? p_answer.clusters().size() - 1 : 1;
+
+        if ((result.get_amount() > upper_limit) && (result.get_amount() < lower_limit)) {
+            std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(25));
             continue;
         }
 
@@ -96,16 +102,6 @@ TEST(utest_silhouette_ksearch, correct_ksearch_simple02_kmedoids) {
 TEST(utest_silhouette_ksearch, correct_ksearch_simple03) {
     template_correct_ksearch(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_03), answer_reader::read(SAMPLE_SIMPLE::SAMPLE_SIMPLE_03),
         2, 10, std::make_shared<kmeans_allocator>());
-}
-
-TEST(utest_silhouette_ksearch, correct_ksearch_simple03_kmedians) {
-    template_correct_ksearch(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_03), answer_reader::read(SAMPLE_SIMPLE::SAMPLE_SIMPLE_03),
-        2, 10, std::make_shared<kmedians_allocator>());
-}
-
-TEST(utest_silhouette_ksearch, correct_ksearch_simple03_kmedoids) {
-    template_correct_ksearch(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_03), answer_reader::read(SAMPLE_SIMPLE::SAMPLE_SIMPLE_03),
-        2, 10, std::make_shared<kmedoids_allocator>());
 }
 
 TEST(utest_silhouette_ksearch, correct_ksearch_simple04) {

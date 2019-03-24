@@ -15,6 +15,12 @@ GENERAL CHANGES:
   See: https://github.com/annoviko/pyclustering/issues/479
 
 CORRECTED MAJOR BUGS:
+- Bug with hanging of K-Medians algorithm for some cases when algorithm is initialized by wrong amount of centers (ccore.clst.kmedians).
+  See: https://github.com/annoviko/pyclustering/issues/498
+
+- Bug with incorrect center initialization, when the same point can be placed to result more than once (pyclustering.cluster.center_initializer, ccore.clst.kmeans_plus_plus).
+  See: https://github.com/annoviko/pyclustering/issues/497
+
 - Bug with incorrect clustering in case of CURE python implementation when clusters are allocated incorrectly (pyclustering.cluster.cure).
   See: https://github.com/annoviko/pyclustering/issues/483
 

@@ -176,7 +176,7 @@ class kmedians:
             for index in range(len(self.__medians)):
                 dist = self.__metric(self.__pointer_data[index_point], self.__medians[index])
                  
-                if (dist < dist_optim) or (index is 0):
+                if (dist < dist_optim) or (index == 0):
                     index_optim = index
                     dist_optim = dist
              
@@ -199,7 +199,7 @@ class kmedians:
         medians = [[] for i in range(len(self.__clusters))]
          
         for index in range(len(self.__clusters)):
-            medians[index] = [ 0.0 for i in range(len(self.__pointer_data[0]))]
+            medians[index] = [0.0 for i in range(len(self.__pointer_data[0]))]
             length_cluster = len(self.__clusters[index])
             
             for index_dimension in range(len(self.__pointer_data[0])):
