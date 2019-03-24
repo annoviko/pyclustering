@@ -73,7 +73,7 @@ class silhouette_unit_tests(unittest.TestCase):
 
 
     def template_correct_ksearch(self, sample_path, answer_path, kmin, kmax, algorithm):
-        attempts = 5
+        attempts = 10
         testing_result = False
 
         sample = read_sample(sample_path)
@@ -94,7 +94,7 @@ class silhouette_unit_tests(unittest.TestCase):
             if lower_limit < 1:
                 lower_limit = 1
 
-            if (amount > upper_limit) and (amount < lower_limit):
+            if (amount > upper_limit) or (amount < lower_limit):
                 continue
 
             testing_result = True
@@ -136,18 +136,6 @@ class silhouette_unit_tests(unittest.TestCase):
 
     def test_correct_ksearch_simple03_kmedians(self):
         self.template_correct_ksearch(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, SIMPLE_ANSWERS.ANSWER_SIMPLE3, 2, 10,
-                                      silhouette_ksearch_type.KMEDIANS)
-
-    def test_correct_ksearch_simple04(self):
-        self.template_correct_ksearch(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, SIMPLE_ANSWERS.ANSWER_SIMPLE4, 2, 10,
-                                      silhouette_ksearch_type.KMEANS)
-
-    def test_correct_ksearch_simple04_kmedoids(self):
-        self.template_correct_ksearch(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, SIMPLE_ANSWERS.ANSWER_SIMPLE4, 2, 10,
-                                      silhouette_ksearch_type.KMEDOIDS)
-
-    def test_correct_ksearch_simple04_kmedians(self):
-        self.template_correct_ksearch(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, SIMPLE_ANSWERS.ANSWER_SIMPLE4, 2, 10,
                                       silhouette_ksearch_type.KMEDIANS)
 
     def test_correct_ksearch_simple05(self):

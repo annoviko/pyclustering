@@ -56,7 +56,7 @@ static void template_correct_ksearch(
         const std::size_t upper_limit = p_answer.clusters().size() + 1;
         const std::size_t lower_limit = p_answer.clusters().size() > 1 ? p_answer.clusters().size() - 1 : 1;
 
-        if ((result.get_amount() > upper_limit) && (result.get_amount() < lower_limit)) {
+        if ((result.get_amount() > upper_limit) || (result.get_amount() < lower_limit)) {
             std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(25));
             continue;
         }
