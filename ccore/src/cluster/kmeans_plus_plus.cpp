@@ -128,8 +128,16 @@ void kmeans_plus_plus::store_temporal_params(const dataset & p_data, const index
     m_allocated_indexes.clear();
     m_free_indexes.clear();
 
-    for (std::size_t i = 0; i < m_data_ptr->size(); i++) {
-        m_free_indexes.insert(i);
+    if (m_indexes_ptr->empty())
+    {
+        for (std::size_t i = 0; i < m_data_ptr->size(); i++) {
+            m_free_indexes.insert(i);
+        }
+    }
+    else {
+        for (const auto index : *m_indexes_ptr) {
+            m_free_indexes.insert(index);
+        }
     }
 }
 

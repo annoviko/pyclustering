@@ -258,6 +258,22 @@ TEST(utest_xmeans, custom_allocation_bic_01) {
 }
 
 
+TEST(utest_xmeans, math_error_domain_bic) {
+    dataset_ptr data = dataset_ptr(new dataset({ {0}, {0}, {10}, {10}, {20}, {20} }));
+    dataset start_centers = { {5}, {20} };
+    std::vector<unsigned int> expected_clusters_length = {2, 2, 2};
+    template_length_process_data(data, start_centers, 20, expected_clusters_length, splitting_type::BAYESIAN_INFORMATION_CRITERION);
+}
+
+
+TEST(utest_xmeans, math_error_domain_mndl) {
+    dataset_ptr data = dataset_ptr(new dataset({ {0}, {0}, {10}, {10}, {20}, {20} }));
+    dataset start_centers = { {5}, {20} };
+    std::vector<unsigned int> expected_clusters_length = {2, 2, 2};
+    template_length_process_data(data, start_centers, 20, expected_clusters_length, splitting_type::MINIMUM_NOISELESS_DESCRIPTION_LENGTH);
+}
+
+
 #ifdef UT_PERFORMANCE_SESSION
 TEST(performance_xmeans, big_data) {
     auto points = simple_sample_factory::create_random_sample(20000, 10);

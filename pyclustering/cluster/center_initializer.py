@@ -223,6 +223,8 @@ class kmeans_plusplus_initializer:
                 center = centers[index_center]
 
             dataset_differences[index_center] = numpy.sum(numpy.square(data - center), axis=1).T
+            for index_other_centers in centers:
+                dataset_differences[index_center][index_other_centers] = float('nan')
 
         shortest_distances = numpy.min(dataset_differences, axis=0)
         return shortest_distances
@@ -243,7 +245,7 @@ class kmeans_plusplus_initializer:
         distances = self.__calculate_shortest_distances(self.__data, centers, return_index)
 
         if self.__candidates == kmeans_plusplus_initializer.FARTHEST_CENTER_CANDIDATE:
-            center_index = numpy.argmax(distances)
+            center_index = numpy.nanargmax(distances)
         else:
             probabilities = self.__calculate_probabilities(distances)
             center_index = self.__get_probable_center(distances, probabilities)

@@ -104,11 +104,6 @@ TEST(utest_silhouette_ksearch, correct_ksearch_simple03) {
         2, 10, std::make_shared<kmeans_allocator>());
 }
 
-TEST(utest_silhouette_ksearch, correct_ksearch_simple04) {
-    template_correct_ksearch(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_04), answer_reader::read(SAMPLE_SIMPLE::SAMPLE_SIMPLE_04),
-        2, 10, std::make_shared<kmeans_allocator>());
-}
-
 TEST(utest_silhouette_ksearch, correct_ksearch_simple05) {
     template_correct_ksearch(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_05), answer_reader::read(SAMPLE_SIMPLE::SAMPLE_SIMPLE_05),
         2, 10, std::make_shared<kmeans_allocator>());
@@ -126,11 +121,6 @@ TEST(utest_silhouette_ksearch, correct_ksearch_simple07) {
 
 TEST(utest_silhouette_ksearch, correct_ksearch_simple08) {
     template_correct_ksearch(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_08), answer_reader::read(SAMPLE_SIMPLE::SAMPLE_SIMPLE_08),
-        2, 10, std::make_shared<kmeans_allocator>());
-}
-
-TEST(utest_silhouette_ksearch, correct_ksearch_simple09) {
-    template_correct_ksearch(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_09), answer_reader::read(SAMPLE_SIMPLE::SAMPLE_SIMPLE_09),
         2, 10, std::make_shared<kmeans_allocator>());
 }
 

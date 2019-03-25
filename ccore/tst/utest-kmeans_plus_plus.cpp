@@ -225,6 +225,13 @@ TEST(utest_kmeans_plus_plus, medoids_simple_01_all_range) {
     }
 }
 
+TEST(utest_kmeans_plus_plus, medoids_simple_01_all_range_farthest) {
+    dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01);
+    for (std::size_t i = 1; i < data->size(); i++) {
+        template_kmeans_plus_plus_medoid_initialization(data, i, kmeans_plus_plus::FARTHEST_CENTER_CANDIDATE);
+    }
+}
+
 TEST(utest_kmeans_plus_plus, medoids_simple_02) {
     dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02);
     template_kmeans_plus_plus_medoid_initialization(data, 0, kmeans_plus_plus::FARTHEST_CENTER_CANDIDATE);
