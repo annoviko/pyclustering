@@ -111,7 +111,7 @@ Library Content
 - **K-Means** (pyclustering.cluster.kmeans);
 - **K-Means++** (pyclustering.cluster.center_initializer);
 - **K-Medians** (pyclustering.cluster.kmedians);
-- **K-Medoids (PAM)** (pyclustering.cluster.kmedoids);
+- **K-Medoids (using k-means-style algorithm)** (pyclustering.cluster.kmedoids);
 - **MBSAS** (pyclustering.cluster.mbsas);
 - **OPTICS** (pyclustering.cluster.optics);
 - **ROCK** (pyclustering.cluster.rock);
