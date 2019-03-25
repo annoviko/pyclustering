@@ -232,21 +232,21 @@ def average_neighbor_distance(points, num_neigh):
 
 def median(data, indexes = None, **kwargs):
     """!
-    @brief Calculate geometric median of input set of points using Euclidean distance.
+    @brief Calculate medoid of input set of points using Euclidean distance.
     
-    @param[in] data (list): Set of points for median calculation.
-    @param[in] indexes (list): Indexes of objects in input set of points that will be taken into account during median calculation.
+    @param[in] data (list): Set of points for medoid calculation.
+    @param[in] indexes (list): Indexes of objects in input set of points that will be taken into account during medoid calculation.
     @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'metric', 'data_type').
 
     <b>Keyword Args:</b><br>
         - metric (distance_metric): Metric that is used for distance calculation between two points.
         - data_type (string): Data type of input sample 'data' (available values: 'points', 'distance_matrix').
 
-    @return (uint) index of point in input set that corresponds to median.
+    @return (uint) index of point in input set that corresponds to medoid.
     
     """
     
-    index_median = None;
+    index_medoid = None;
     distance = float('Inf');
 
     metric = kwargs.get('metric', type_metric.EUCLIDEAN_SQUARE);
@@ -275,9 +275,9 @@ def median(data, indexes = None, **kwargs):
         
         if distance_candidate < distance:
             distance = distance_candidate;
-            index_median = index_candidate;
+            index_medoid = index_candidate;
     
-    return index_median;
+    return index_medoid;
 
 
 def euclidean_distance(a, b):
