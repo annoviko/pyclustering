@@ -74,7 +74,7 @@ Algorithms and methods are located in the Python module `pyclustering.cluster` a
 +---------------------------------------------------------+--------------+--------------+
 | K-Medians [@book_algorithms_for_clustering_data]        | $\checkmark$ | $\checkmark$ |
 +---------------------------------------------------------+--------------+--------------+
-| K-Medoids (PAM) [@book_algorithms_for_clustering_data]  | $\checkmark$ | $\checkmark$ |
+| K-Medoids (k-means-style algorithm)                     | $\checkmark$ | $\checkmark$ |
 +---------------------------------------------------------+--------------+--------------+
 | MBSAS [@book_pattern_recognition_2009]                  | $\checkmark$ | $\checkmark$ |
 +---------------------------------------------------------+--------------+--------------+
