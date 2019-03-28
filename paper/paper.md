@@ -132,7 +132,7 @@ Algorithms are located in the Python module `pyclustering.gcolor`.
 +==============================================+==============+=====+
 | DSatur [@article_gcolor_dsatur_1]            | $\checkmark$ |     |
 +----------------------------------------------+--------------+-----+
-| Hysteresis [@article_gcolor_hysteresis_1]    | $\checkmark$ |     |
+| Hysteresis [@article_nnet_hysteresis_1]      | $\checkmark$ |     |
 +----------------------------------------------+--------------+-----+
 | GColorSync [@article_gcolor_sync_1]          | $\checkmark$ |     |
 +----------------------------------------------+--------------+-----+
