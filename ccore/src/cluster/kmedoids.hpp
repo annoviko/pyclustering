@@ -49,7 +49,6 @@ enum class kmedoids_data_t {
 *
 * @brief    Represents K-Medoids clustering algorithm for cluster analysis.
 * @details  The algorithm related to partitional class when input data is divided into groups.
-*           K-Medoids algorithm is also known as the PAM (Partitioning Around Medoids).
 *
 */
 class kmedoids : public cluster_algorithm {

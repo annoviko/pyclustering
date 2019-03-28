@@ -1,6 +1,6 @@
 """!
 
-@brief CCORE Wrapper for K-Medoids algorithm (PAM).
+@brief CCORE Wrapper for K-Medoids algorithm.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2019
