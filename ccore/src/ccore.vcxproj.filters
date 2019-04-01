@@ -247,6 +247,15 @@
     <ClCompile Include="interface\clique_interface.cpp">
       <Filter>Source Files\interface</Filter>
     </ClCompile>
+    <ClCompile Include="cluster\silhouette_ksearch.cpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClCompile>
+    <ClCompile Include="cluster\silhouette.cpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\silhouette_interface.cpp">
+      <Filter>Source Files\interface</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cluster\agglomerative.hpp">
@@ -541,6 +550,18 @@
       <Filter>Source Files\cluster</Filter>
     </ClInclude>
     <ClInclude Include="interface\clique_interface.h">
+      <Filter>Source Files\interface</Filter>
+    </ClInclude>
+    <ClInclude Include="cluster\silhouette_ksearch.hpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="cluster\silhouette_ksearch_data.hpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="cluster\silhouette.hpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\silhouette_interface.h">
       <Filter>Source Files\interface</Filter>
     </ClInclude>
   </ItemGroup>

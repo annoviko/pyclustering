@@ -42,7 +42,6 @@ class elbow_center_initializer(IntEnum):
     RANDOM = 1
 
 
-
 def elbow(sample, kmin, kmax, initializer):
     pointer_data = package_builder(sample, c_double).create()
 

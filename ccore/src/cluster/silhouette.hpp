@@ -50,7 +50,7 @@ private:
 public:
     silhouette(void) = default;
 
-    silhouette(const distance_metric<point> & p_metric = distance_metric_factory<point>::euclidean_square());
+    silhouette(const distance_metric<point> & p_metric);
 
     silhouette(const silhouette & p_other) = default;
 
@@ -73,12 +73,6 @@ private:
     double calculate_cluster_score(const std::size_t p_index_cluster, const std::vector<double> & p_dataset_difference) const;
 
     double caclulate_optimal_neighbor_cluster_score(const std::size_t p_index_cluster, const std::vector<double> & p_dataset_difference) const;
-};
-
-
-
-class silhouette_ksearch {
-
 };
 
 

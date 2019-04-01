@@ -26,6 +26,8 @@
 
 #include "gtest/gtest.h"
 
+#include <thread>
+
 #include "utenv_check.hpp"
 
 #include "cluster/elbow.hpp"
@@ -54,7 +56,11 @@ void elbow_template(const dataset_ptr p_data,
     ASSERT_EQ(result.get_wce().size(), p_kmax - p_kmin);
     ASSERT_GT(result.get_wce().front(), result.get_wce().back());
 
-    if (result.get_amount() != p_amount_clusters) {
+    std::size_t upper_limit = p_amount_clusters + 1;
+    std::size_t lower_limit = p_amount_clusters > 1 ? p_amount_clusters - 1 : 1;
+    
+    if ((result.get_amount() > upper_limit) || (result.get_amount() < lower_limit)) {
+      std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(25));
       continue;
     }
 

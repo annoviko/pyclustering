@@ -82,7 +82,7 @@ public:
     *
     */
     kmeans(const dataset & p_initial_centers, 
-           const double p_tolerance,
+           const double p_tolerance = DEFAULT_TOLERANCE,
            const distance_metric<point> & p_metric = distance_metric_factory<point>::euclidean_square());
 
     /**

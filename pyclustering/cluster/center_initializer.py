@@ -179,6 +179,7 @@ class kmeans_plusplus_initializer:
         self.__data = numpy.array(data)
         self.__amount = amount_centers
         self.__candidates = amount_candidates
+        self.__free_indexes = set(range(len(self.__data)))
 
         self.__check_parameters()
 
@@ -222,6 +223,8 @@ class kmeans_plusplus_initializer:
                 center = centers[index_center]
 
             dataset_differences[index_center] = numpy.sum(numpy.square(data - center), axis=1).T
+            for index_other_centers in centers:
+                dataset_differences[index_center][index_other_centers] = float('nan')
 
         shortest_distances = numpy.min(dataset_differences, axis=0)
         return shortest_distances
@@ -242,7 +245,7 @@ class kmeans_plusplus_initializer:
         distances = self.__calculate_shortest_distances(self.__data, centers, return_index)
 
         if self.__candidates == kmeans_plusplus_initializer.FARTHEST_CENTER_CANDIDATE:
-            center_index = numpy.argmax(distances)
+            center_index = numpy.nanargmax(distances)
         else:
             probabilities = self.__calculate_probabilities(distances)
             center_index = self.__get_probable_center(distances, probabilities)
@@ -311,7 +314,7 @@ class kmeans_plusplus_initializer:
                     break
 
             if index_best_candidate == -1:
-                index_best_candidate = index_candidate
+                index_best_candidate = next(iter(self.__free_indexes))
             elif distances[index_best_candidate] < distances[index_candidate]:
                 index_best_candidate = index_candidate
 
@@ -334,11 +337,18 @@ class kmeans_plusplus_initializer:
         """
 
         return_index = kwargs.get('return_index', False)
-        centers = [self.__get_initial_center(return_index)]
+
+        index_point = self.__get_initial_center(True)
+        centers = [index_point]
+        self.__free_indexes.remove(index_point)
 
         # For each next center
         for _ in range(1, self.__amount):
-            next_center = self.__get_next_center(centers, return_index)
-            centers.append(next_center)
+            index_point = self.__get_next_center(centers, True)
+            centers.append(index_point)
+            self.__free_indexes.remove(index_point)
+
+        if not return_index:
+            centers = [self.__data[index] for index in centers]
 
         return centers

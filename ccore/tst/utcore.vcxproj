@@ -187,6 +187,7 @@
     <ClCompile Include="..\src\cluster\random_center_initializer.cpp" />
     <ClCompile Include="..\src\cluster\rock.cpp" />
     <ClCompile Include="..\src\cluster\silhouette.cpp" />
+    <ClCompile Include="..\src\cluster\silhouette_ksearch.cpp" />
     <ClCompile Include="..\src\cluster\somsc.cpp" />
     <ClCompile Include="..\src\cluster\syncnet.cpp" />
     <ClCompile Include="..\src\cluster\ttsas.cpp" />
@@ -218,6 +219,7 @@
     <ClCompile Include="..\src\interface\pcnn_interface.cpp" />
     <ClCompile Include="..\src\interface\pyclustering_interface.cpp" />
     <ClCompile Include="..\src\interface\pyclustering_package.cpp" />
+    <ClCompile Include="..\src\interface\silhouette_interface.cpp" />
     <ClCompile Include="..\src\interface\som_interface.cpp" />
     <ClCompile Include="..\src\interface\syncnet_interface.cpp" />
     <ClCompile Include="..\src\interface\syncpr_interface.cpp" />
@@ -238,6 +240,7 @@
     <ClCompile Include="..\src\utils\math.cpp" />
     <ClCompile Include="..\src\utils\metric.cpp" />
     <ClCompile Include="..\src\utils\random.cpp" />
+    <ClCompile Include="answer_reader.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="utest-clique.cpp" />
     <ClCompile Include="utest-elbow.cpp" />
@@ -245,6 +248,7 @@
     <ClCompile Include="utest-interface-clique.cpp" />
     <ClCompile Include="utest-interface-elbow.cpp" />
     <ClCompile Include="utest-interface-mbsas.cpp" />
+    <ClCompile Include="utest-interface-silhouette.cpp" />
     <ClCompile Include="utest-interface-ttsas.cpp" />
     <ClCompile Include="utest-mbsas.cpp" />
     <ClCompile Include="samples.cpp" />
@@ -291,6 +295,8 @@
     <ClCompile Include="utest-pcnn.cpp" />
     <ClCompile Include="utest-pyclustering.cpp" />
     <ClCompile Include="utest-rock.cpp" />
+    <ClCompile Include="utest-silhouette.cpp" />
+    <ClCompile Include="utest-silhouette_ksearch.cpp" />
     <ClCompile Include="utest-som.cpp" />
     <ClCompile Include="utest-somsc.cpp" />
     <ClCompile Include="utest-interface-sync.cpp" />
@@ -339,6 +345,8 @@
     <ClInclude Include="..\src\cluster\rock.hpp" />
     <ClInclude Include="..\src\cluster\silhouette.hpp" />
     <ClInclude Include="..\src\cluster\silhouette_data.hpp" />
+    <ClInclude Include="..\src\cluster\silhouette_ksearch.hpp" />
+    <ClInclude Include="..\src\cluster\silhouette_ksearch_data.hpp" />
     <ClInclude Include="..\src\cluster\somsc.hpp" />
     <ClInclude Include="..\src\cluster\somsc_data.hpp" />
     <ClInclude Include="..\src\cluster\syncnet.hpp" />
@@ -381,6 +389,7 @@
     <ClInclude Include="..\src\interface\pcnn_interface.h" />
     <ClInclude Include="..\src\interface\pyclustering_interface.h" />
     <ClInclude Include="..\src\interface\pyclustering_package.hpp" />
+    <ClInclude Include="..\src\interface\silhouette_interface.h" />
     <ClInclude Include="..\src\interface\som_interface.h" />
     <ClInclude Include="..\src\interface\syncnet_interface.h" />
     <ClInclude Include="..\src\interface\syncpr_interface.h" />
@@ -403,6 +412,8 @@
     <ClInclude Include="..\src\utils\math.hpp" />
     <ClInclude Include="..\src\utils\metric.hpp" />
     <ClInclude Include="..\src\utils\random.hpp" />
+    <ClInclude Include="answer.hpp" />
+    <ClInclude Include="answer_reader.hpp" />
     <ClInclude Include="samples.hpp" />
     <ClInclude Include="utenv_check.hpp" />
     <ClInclude Include="utest-adjacency.hpp" />

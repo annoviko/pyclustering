@@ -36,11 +36,15 @@ namespace ccore {
 namespace clst {
 
 
-const double kmedians::THRESHOLD_CHANGE = 0.000001;
+const double kmedians::THRESHOLD_CHANGE         = 0.000001;
+
+const double kmedians::DEFAULT_TOLERANCE        = 0.001;
+const std::size_t kmedians::DEFAULT_MAX_ITER    = 50;
 
 
-kmedians::kmedians(const dataset & initial_medians, const double tolerance, const distance_metric<point> & p_metric) :
+kmedians::kmedians(const dataset & initial_medians, const double tolerance, const distance_metric<point> & p_metric, const std::size_t p_max_iter) :
     m_tolerance(tolerance),
+    m_max_iter(p_max_iter),
     m_initial_medians(initial_medians),
     m_ptr_result(nullptr),
     m_ptr_data(nullptr),
@@ -61,7 +65,8 @@ void kmedians::process(const dataset & data, cluster_data & output_result) {
     double changes = 0.0;
     double prev_changes = 0.0;
 
-    size_t counter_repeaters = 0;
+    std::size_t counter_iteration = 0;
+    std::size_t counter_repeaters = 0;
 
     do {
         update_clusters(m_ptr_result->medians(), m_ptr_result->clusters());
@@ -76,8 +81,9 @@ void kmedians::process(const dataset & data, cluster_data & output_result) {
         }
 
         prev_changes = changes;
+        counter_iteration++;
     }
-    while ((changes > m_tolerance) && (counter_repeaters < 10));
+    while ((changes > m_tolerance) && (counter_repeaters < 10) && (counter_iteration < m_max_iter));
 
     m_ptr_data = nullptr;
     m_ptr_result = nullptr;
@@ -110,7 +116,7 @@ void kmedians::update_clusters(const dataset & medians, cluster_sequence & clust
 
 
 void kmedians::erase_empty_clusters(cluster_sequence & p_clusters) {
-    for (size_t index_cluster = p_clusters.size() - 1; index_cluster != (size_t) -1; index_cluster--) {
+    for (std::size_t index_cluster = p_clusters.size() - 1; index_cluster != (std::size_t) -1; index_cluster--) {
         if (p_clusters[index_cluster].empty()) {
             p_clusters.erase(p_clusters.begin() + index_cluster);
         }
@@ -120,7 +126,7 @@ void kmedians::erase_empty_clusters(cluster_sequence & p_clusters) {
 
 double kmedians::update_medians(cluster_sequence & clusters, dataset & medians) {
     const dataset & data = *m_ptr_data;
-    const size_t dimension = data[0].size();
+    const std::size_t dimension = data[0].size();
 
     std::vector<point> prev_medians(medians);
 
@@ -129,7 +135,7 @@ double kmedians::update_medians(cluster_sequence & clusters, dataset & medians) 
 
     double maximum_change = 0.0;
 
-    for (size_t index_cluster = 0; index_cluster < clusters.size(); index_cluster++) {
+    for (std::size_t index_cluster = 0; index_cluster < clusters.size(); index_cluster++) {
         calculate_median(clusters[index_cluster], medians[index_cluster]);
 
         double change = m_metric(prev_medians[index_cluster], medians[index_cluster]);
@@ -153,11 +159,11 @@ void kmedians::calculate_median(cluster & current_cluster, point & median) {
             return (*m_ptr_data)[index_object1] > (*m_ptr_data)[index_object2];
         });
 
-        size_t relative_index_median = (size_t) floor((current_cluster.size() - 1) / 2.0);
-        size_t index_median = current_cluster[relative_index_median];
+        std::size_t relative_index_median = (std::size_t) (current_cluster.size() - 1) / 2;
+        std::size_t index_median = current_cluster[relative_index_median];
 
         if (current_cluster.size() % 2 == 0) {
-            size_t index_median_second = current_cluster[relative_index_median + 1];
+            std::size_t index_median_second = current_cluster[relative_index_median + 1];
             median[index_dimension] = (data[index_median][index_dimension] + data[index_median_second][index_dimension]) / 2.0;
         }
         else {

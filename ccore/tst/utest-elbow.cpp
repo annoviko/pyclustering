@@ -56,20 +56,12 @@ TEST(utest_elbow, simple_06) {
   elbow_template(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_06), 2, 1, 10);
 }
 
-TEST(utest_elbow, simple_10) {
-  elbow_template(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_10), 3, 1, 10);
-}
-
 TEST(utest_elbow, simple_12) {
   elbow_template(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_12), 3, 1, 10);
 }
 
 TEST(utest_elbow, one_dimensional_simple_07) {
   elbow_template(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_07), 2, 1, 10);
-}
-
-TEST(utest_elbow, one_dimensional_simple_09) {
-  elbow_template(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_09), 2, 1, 10);
 }
 
 TEST(utest_elbow, three_dimensional_simple_11) {

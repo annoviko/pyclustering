@@ -157,7 +157,7 @@ class XmeansUnitTest(unittest.TestCase):
 
 
     def testClusterAllocationOneDimensionData(self):
-        XmeansTestTemplates.templateClusterAllocationOneDimensionData(False);
+        XmeansTestTemplates.templateClusterAllocationOneDimensionData(False)
 
 
     def testKmax05Amount3Offset02Initial01(self):

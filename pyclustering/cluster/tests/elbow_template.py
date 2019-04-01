@@ -24,8 +24,6 @@
 """
 
 
-import time
-
 from pyclustering.utils import read_sample
 
 from pyclustering.cluster.center_initializer import kmeans_plusplus_initializer

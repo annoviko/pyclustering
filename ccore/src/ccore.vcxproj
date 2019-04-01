@@ -39,6 +39,8 @@
     <ClCompile Include="cluster\ordering_analyser.cpp" />
     <ClCompile Include="cluster\random_center_initializer.cpp" />
     <ClCompile Include="cluster\rock.cpp" />
+    <ClCompile Include="cluster\silhouette.cpp" />
+    <ClCompile Include="cluster\silhouette_ksearch.cpp" />
     <ClCompile Include="cluster\somsc.cpp" />
     <ClCompile Include="cluster\syncnet.cpp" />
     <ClCompile Include="cluster\ttsas.cpp" />
@@ -71,6 +73,7 @@
     <ClCompile Include="interface\pyclustering_interface.cpp" />
     <ClCompile Include="interface\pyclustering_package.cpp" />
     <ClCompile Include="interface\rock_interface.cpp" />
+    <ClCompile Include="interface\silhouette_interface.cpp" />
     <ClCompile Include="interface\som_interface.cpp" />
     <ClCompile Include="interface\syncnet_interface.cpp" />
     <ClCompile Include="interface\syncpr_interface.cpp" />
@@ -125,6 +128,9 @@
     <ClInclude Include="cluster\ordering_analyser.hpp" />
     <ClInclude Include="cluster\random_center_initializer.hpp" />
     <ClInclude Include="cluster\rock.hpp" />
+    <ClInclude Include="cluster\silhouette.hpp" />
+    <ClInclude Include="cluster\silhouette_ksearch.hpp" />
+    <ClInclude Include="cluster\silhouette_ksearch_data.hpp" />
     <ClInclude Include="cluster\somsc.hpp" />
     <ClInclude Include="cluster\somsc_data.hpp" />
     <ClInclude Include="cluster\syncnet.hpp" />
@@ -169,6 +175,7 @@
     <ClInclude Include="interface\pyclustering_interface.h" />
     <ClInclude Include="interface\pyclustering_package.hpp" />
     <ClInclude Include="interface\rock_interface.h" />
+    <ClInclude Include="interface\silhouette_interface.h" />
     <ClInclude Include="interface\som_interface.h" />
     <ClInclude Include="interface\syncnet_interface.h" />
     <ClInclude Include="interface\syncpr_interface.h" />

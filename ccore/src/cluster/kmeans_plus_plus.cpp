@@ -62,6 +62,16 @@ void kmeans_plus_plus::initialize(const dataset & p_data, dataset & p_centers) c
 }
 
 
+void kmeans_plus_plus::initialize(const dataset & p_data, index_sequence & p_center_indexes) const {
+    p_center_indexes.clear();
+    p_center_indexes.reserve(m_amount);
+
+    initialize(p_data, { }, [&p_center_indexes](center_description & p_center) { 
+        p_center_indexes.push_back(std::get<INDEX>(p_center));
+    });
+}
+
+
 void kmeans_plus_plus::initialize(const dataset & p_data,
                                   const index_sequence & p_indexes,
                                   dataset & p_centers) const
@@ -69,21 +79,37 @@ void kmeans_plus_plus::initialize(const dataset & p_data,
     p_centers.clear();
     p_centers.reserve(m_amount);
 
+    initialize(p_data, p_indexes, [&p_centers](center_description & p_center) { 
+        p_centers.push_back(std::move(std::get<POINT>(p_center)));
+    });
+}
+
+
+void kmeans_plus_plus::initialize(const dataset & p_data, const index_sequence & p_indexes, const store_result & p_proc) const {
     if (!m_amount) { return; }
 
-    store_temporal_params(p_data, p_indexes, p_centers);
+    store_temporal_params(p_data, p_indexes);
 
-    p_centers.push_back(get_first_center());
+    auto center = get_first_center();
+    store_center(p_proc, center);
 
     for (std::size_t i = 1; i < m_amount; i++) {
-        p_centers.push_back(get_next_center());
+        center = get_next_center();
+        store_center(p_proc, center);
     }
 
     free_temporal_params();
 }
 
 
-void kmeans_plus_plus::store_temporal_params(const dataset & p_data, const index_sequence & p_indexes, const dataset & p_centers) const {
+void kmeans_plus_plus::store_center(const store_result & p_proc, center_description & p_result) const {
+    m_allocated_indexes.push_back(std::get<INDEX>(p_result));
+    m_free_indexes.erase(std::get<INDEX>(p_result));
+    p_proc(p_result);
+}
+
+
+void kmeans_plus_plus::store_temporal_params(const dataset & p_data, const index_sequence & p_indexes) const {
     if (p_data.empty()) {
         throw std::invalid_argument("Input data is empty.");
     }
@@ -98,18 +124,31 @@ void kmeans_plus_plus::store_temporal_params(const dataset & p_data, const index
 
     m_data_ptr      = (dataset *) &p_data;
     m_indexes_ptr   = (index_sequence *) &p_indexes;
-    m_centers_ptr   = (dataset *) &p_centers;
+
+    m_allocated_indexes.clear();
+    m_free_indexes.clear();
+
+    if (m_indexes_ptr->empty())
+    {
+        for (std::size_t i = 0; i < m_data_ptr->size(); i++) {
+            m_free_indexes.insert(i);
+        }
+    }
+    else {
+        for (const auto index : *m_indexes_ptr) {
+            m_free_indexes.insert(index);
+        }
+    }
 }
 
 
 void kmeans_plus_plus::free_temporal_params(void) const {
     m_data_ptr      = nullptr;
     m_indexes_ptr   = nullptr;
-    m_centers_ptr   = nullptr;
 }
 
 
-point kmeans_plus_plus::get_first_center(void) const {
+kmeans_plus_plus::center_description kmeans_plus_plus::get_first_center(void) const {
     std::size_t length = m_indexes_ptr->empty() ? m_data_ptr->size() : m_indexes_ptr->size();
 
     std::random_device random_device;
@@ -120,11 +159,13 @@ point kmeans_plus_plus::get_first_center(void) const {
     std::uniform_int_distribution<std::size_t> distribution(0, length - 1);
 
     std::size_t index = distribution(generator);
-    return m_indexes_ptr->empty() ? (*m_data_ptr)[index] : (*m_data_ptr)[ (*m_indexes_ptr)[index] ];
+    const auto & center = m_indexes_ptr->empty() ? (*m_data_ptr)[index] : (*m_data_ptr)[ (*m_indexes_ptr)[index] ];
+
+    return std::make_tuple(center, index);
 }
 
 
-point kmeans_plus_plus::get_next_center(void) const
+kmeans_plus_plus::center_description kmeans_plus_plus::get_next_center(void) const
 {
     std::vector<double> distances;
     calculate_shortest_distances(distances);
@@ -140,8 +181,8 @@ point kmeans_plus_plus::get_next_center(void) const
         index = get_probable_center(distances, probabilities);
     }
 
-
-    return m_indexes_ptr->empty() ? (*m_data_ptr)[index] : (*m_data_ptr)[ (*m_indexes_ptr)[index] ];
+    const auto & center = m_indexes_ptr->empty() ? (*m_data_ptr)[index] : (*m_data_ptr)[ (*m_indexes_ptr)[index] ];
+    return std::make_tuple(center, index);
 }
 
 
@@ -168,8 +209,8 @@ void kmeans_plus_plus::calculate_shortest_distances(std::vector<double> & p_dist
 
 double kmeans_plus_plus::get_shortest_distance(const point & p_point) const {
     double shortest_distance = std::numeric_limits<double>::max();
-    for (auto & center : (*m_centers_ptr)) {
-        double distance = std::abs(m_dist_func(p_point, center));
+    for (auto & index_point : m_allocated_indexes) {
+        double distance = std::abs(m_dist_func(p_point, m_data_ptr->at(index_point)));
         if (distance < shortest_distance) {
             shortest_distance = distance;
         }
@@ -214,7 +255,7 @@ std::size_t kmeans_plus_plus::get_probable_center(const std::vector<double> & p_
         }
 
         if (i == 0) {
-            best_index_candidate = current_index_candidate;
+            best_index_candidate = *(m_free_indexes.begin());
         }
         else if (p_distances[current_index_candidate] > p_distances[best_index_candidate]) {
             best_index_candidate = current_index_candidate;

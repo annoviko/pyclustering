@@ -25,7 +25,7 @@
 """
 
 
-from enum import Enum
+from enum import IntEnum
 
 import numpy
 
@@ -35,6 +35,11 @@ from pyclustering.cluster.kmedoids import kmedoids
 from pyclustering.cluster.center_initializer import kmeans_plusplus_initializer
 
 from pyclustering.utils.metric import distance_metric, type_metric
+
+from pyclustering.core.wrapper import ccore_library
+from pyclustering.core.metric_wrapper import metric_wrapper
+
+import pyclustering.core.silhouette_wrapper as wrapper
 
 
 class silhouette:
@@ -87,9 +92,10 @@ class silhouette:
         <b>Keyword Args:</b><br>
             - metric (distance_metric): Metric that was used for cluster analysis and should be used for Silhouette
                score calculation (by default Square Euclidean distance).
+            - ccore (bool): If True then CCORE (C++ implementation of pyclustering library) is used (by default True).
 
         """
-        self.__data = numpy.array(data)
+        self.__data = data
         self.__clusters = clusters
         self.__metric = kwargs.get('metric', distance_metric(type_metric.EUCLIDEAN_SQUARE))
 
@@ -100,6 +106,13 @@ class silhouette:
 
         self.__score = [0.0] * len(data)
 
+        self.__ccore = kwargs.get('ccore', True) and self.__metric.get_type() != type_metric.USER_DEFINED
+        if self.__ccore:
+            self.__ccore = ccore_library.workable()
+
+        if self.__ccore is False:
+            self.__data = numpy.array(data)
+
 
     def process(self):
         """!
@@ -108,11 +121,31 @@ class silhouette:
         @return (silhouette) Instance of the method (self).
 
         """
+        if self.__ccore is True:
+            self.__process_by_ccore()
+        else:
+            self.__process_by_python()
+
+        return self
+
+
+    def __process_by_ccore(self):
+        """!
+        @brief Performs processing using CCORE (C/C++ part of pyclustering library).
+
+        """
+        ccore_metric = metric_wrapper.create_instance(self.__metric)
+        self.__score = wrapper.silhoeutte(self.__data, self.__clusters, ccore_metric.get_pointer())
+
+
+    def __process_by_python(self):
+        """!
+        @brief Performs processing using python code.
+
+        """
         for index_cluster in range(len(self.__clusters)):
             for index_point in self.__clusters[index_cluster]:
                 self.__score[index_point] = self.__calculate_score(index_point, index_cluster)
-
-        return self
 
 
     def get_score(self):
@@ -193,6 +226,9 @@ class silhouette:
                 if candidate_score < optimal_score:
                     optimal_score = candidate_score
 
+        if optimal_score == float('inf'):
+            optimal_score = -1.0
+
         return optimal_score
 
 
@@ -231,7 +267,7 @@ class silhouette:
 
 
 
-class silhouette_ksearch_type(Enum):
+class silhouette_ksearch_type(IntEnum):
     """!
     @brief Defines algorithms that can be used to find optimal number of cluster using Silhouette method.
 
@@ -324,6 +360,7 @@ class silhouette_ksearch:
         <b>Keyword Args:</b><br>
             - algorithm (silhouette_ksearch_type): Defines algorithm that is used for searching optimal number of
                clusters (by default K-Means).
+            - ccore (bool): If True then CCORE (C++ implementation of pyclustering library) is used (by default True).
 
         """
         self.__data = data
@@ -334,10 +371,14 @@ class silhouette_ksearch:
         self.__return_index = self.__algorithm == silhouette_ksearch_type.KMEDOIDS
 
         self.__amount = -1
-        self.__score = float('-Inf')
+        self.__score = -1.0
         self.__scores = {}
 
         self.__verify_arguments()
+
+        self.__ccore = kwargs.get('ccore', True)
+        if self.__ccore:
+            self.__ccore = ccore_library.workable()
 
 
     def process(self):
@@ -347,6 +388,31 @@ class silhouette_ksearch:
         @see get_amount, get_score, get_scores
 
         @return (silhouette_search) Itself instance (silhouette_search)
+
+        """
+        if self.__ccore is True:
+            self.__process_by_ccore()
+        else:
+            self.__process_by_python()
+
+        return self
+
+
+    def __process_by_ccore(self):
+        """!
+        @brief Performs processing using CCORE (C/C++ part of pyclustering library).
+
+        """
+        results = wrapper.silhoeutte_ksearch(self.__data, self.__kmin, self.__kmax, self.__algorithm)
+
+        self.__amount = results[0]
+        self.__score = results[1]
+        self.__scores = results[2]
+
+
+    def __process_by_python(self):
+        """!
+        @brief Performs processing using python code.
 
         """
         self.__scores = {}
@@ -364,8 +430,6 @@ class silhouette_ksearch:
             if self.__scores[k] > self.__score:
                 self.__score = self.__scores[k]
                 self.__amount = k
-
-        return self
 
 
     def get_amount(self):
@@ -429,4 +493,4 @@ class silhouette_ksearch:
 
         if self.__kmin <= 1:
             raise ValueError("K min value '" + str(self.__kmin) + "' should be greater than 1 (impossible to provide "
-                             "silhiuette score for only one cluster).")
+                             "silhouette score for only one cluster).")

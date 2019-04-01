@@ -28,6 +28,11 @@ namespace ccore {
 namespace clst {
 
 
+silhouette::silhouette(const distance_metric<point> & p_metric) :
+    m_metric(p_metric)
+{ }
+
+
 void silhouette::process(const dataset & p_data, const cluster_sequence & p_clusters, silhouette_data & p_result) {
     m_data      = &p_data;
     m_clusters  = &p_clusters;

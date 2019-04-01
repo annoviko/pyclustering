@@ -94,7 +94,7 @@ class elbow:
         @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'ccore', 'initializer').
 
         <b>Keyword Args:</b><br>
-            - ccore (bool): If True then CCORE (C++ implementation of pyclustering library) is used (be default True).
+            - ccore (bool): If True then CCORE (C++ implementation of pyclustering library) is used (by default True).
             - initializer (callable): Center initializer that is used by K-Means algorithm (by default K-Means++).
 
         """
@@ -127,11 +127,15 @@ class elbow:
         """!
         @brief Performs analysis to find out appropriate amount of clusters.
 
+        @return
+
         """
         if self.__ccore:
             self.__process_by_ccore()
         else:
             self.__process_by_python()
+
+        return self
 
 
     def __process_by_ccore(self):

@@ -47,10 +47,14 @@ namespace clst {
 */
 class kmedians : public cluster_algorithm {
 private:
-    const static double   THRESHOLD_CHANGE;
+    const static double         THRESHOLD_CHANGE;
+    const static double         DEFAULT_TOLERANCE;
+    const static std::size_t    DEFAULT_MAX_ITER;
 
 private:
     double                  m_tolerance         = 0.0;
+
+    std::size_t             m_max_iter          = 0;
 
     dataset                 m_initial_medians   = { };
 
@@ -77,11 +81,13 @@ public:
     * @param[in] p_tolerance: stop condition in following way: when maximum value of distance change of
     *             medians of clusters is less than tolerance than algorithm will stop processing.
     * @param[in] p_metric: distance metric for distance calculation between objects.
+    * @param[in] p_max_iter: maximum amount of iteration for clustering.
     *
     */
     kmedians(const dataset & p_initial_medians, 
-             const double p_tolerance = 0.001,
-             const distance_metric<point> & p_metric = distance_metric_factory<point>::euclidean_square());
+             const double p_tolerance = DEFAULT_TOLERANCE,
+             const distance_metric<point> & p_metric = distance_metric_factory<point>::euclidean_square(),
+             const std::size_t p_max_iter = DEFAULT_MAX_ITER);
 
     /**
     *
