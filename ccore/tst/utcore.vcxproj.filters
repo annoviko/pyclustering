@@ -464,6 +464,12 @@
     <ClCompile Include="utest-silhouette_ksearch.cpp">
       <Filter>Unit Tests</Filter>
     </ClCompile>
+    <ClCompile Include="utest-interface-silhouette.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\interface\silhouette_interface.cpp">
+      <Filter>Tested Code\interface</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\container\adjacency.hpp">
@@ -786,6 +792,9 @@
     </ClInclude>
     <ClInclude Include="answer.hpp">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\interface\silhouette_interface.h">
+      <Filter>Tested Code\interface</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

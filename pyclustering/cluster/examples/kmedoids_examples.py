@@ -49,7 +49,7 @@ def template_clustering(start_medoids, path, tolerance = 0.25, show = True):
         visualizer.append_cluster(medoids, data=sample, marker='*', markersize=15)
         visualizer.show()
     
-    return (sample, clusters)
+    return sample, clusters
     
 def cluster_sample1():
     template_clustering([2, 9], SIMPLE_SAMPLES.SAMPLE_SIMPLE1)

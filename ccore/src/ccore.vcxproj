@@ -73,6 +73,7 @@
     <ClCompile Include="interface\pyclustering_interface.cpp" />
     <ClCompile Include="interface\pyclustering_package.cpp" />
     <ClCompile Include="interface\rock_interface.cpp" />
+    <ClCompile Include="interface\silhouette_interface.cpp" />
     <ClCompile Include="interface\som_interface.cpp" />
     <ClCompile Include="interface\syncnet_interface.cpp" />
     <ClCompile Include="interface\syncpr_interface.cpp" />
@@ -174,6 +175,7 @@
     <ClInclude Include="interface\pyclustering_interface.h" />
     <ClInclude Include="interface\pyclustering_package.hpp" />
     <ClInclude Include="interface\rock_interface.h" />
+    <ClInclude Include="interface\silhouette_interface.h" />
     <ClInclude Include="interface\som_interface.h" />
     <ClInclude Include="interface\syncnet_interface.h" />
     <ClInclude Include="interface\syncpr_interface.h" />

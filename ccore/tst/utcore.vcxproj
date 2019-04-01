@@ -219,6 +219,7 @@
     <ClCompile Include="..\src\interface\pcnn_interface.cpp" />
     <ClCompile Include="..\src\interface\pyclustering_interface.cpp" />
     <ClCompile Include="..\src\interface\pyclustering_package.cpp" />
+    <ClCompile Include="..\src\interface\silhouette_interface.cpp" />
     <ClCompile Include="..\src\interface\som_interface.cpp" />
     <ClCompile Include="..\src\interface\syncnet_interface.cpp" />
     <ClCompile Include="..\src\interface\syncpr_interface.cpp" />
@@ -247,6 +248,7 @@
     <ClCompile Include="utest-interface-clique.cpp" />
     <ClCompile Include="utest-interface-elbow.cpp" />
     <ClCompile Include="utest-interface-mbsas.cpp" />
+    <ClCompile Include="utest-interface-silhouette.cpp" />
     <ClCompile Include="utest-interface-ttsas.cpp" />
     <ClCompile Include="utest-mbsas.cpp" />
     <ClCompile Include="samples.cpp" />
@@ -387,6 +389,7 @@
     <ClInclude Include="..\src\interface\pcnn_interface.h" />
     <ClInclude Include="..\src\interface\pyclustering_interface.h" />
     <ClInclude Include="..\src\interface\pyclustering_package.hpp" />
+    <ClInclude Include="..\src\interface\silhouette_interface.h" />
     <ClInclude Include="..\src\interface\som_interface.h" />
     <ClInclude Include="..\src\interface\syncnet_interface.h" />
     <ClInclude Include="..\src\interface\syncpr_interface.h" />

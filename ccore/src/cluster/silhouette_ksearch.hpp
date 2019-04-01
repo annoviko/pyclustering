@@ -69,7 +69,7 @@ private:
 public:
     silhouette_ksearch(void) = default;
 
-    silhouette_ksearch(const std::size_t p_kmax, const std::size_t p_kmin, const silhouette_ksearch_allocator::ptr & p_allocator = std::make_shared<kmeans_allocator>());
+    silhouette_ksearch(const std::size_t p_kmin, const std::size_t p_kmax, const silhouette_ksearch_allocator::ptr & p_allocator = std::make_shared<kmeans_allocator>());
 
     silhouette_ksearch(const silhouette_ksearch & p_other) = default;
 
