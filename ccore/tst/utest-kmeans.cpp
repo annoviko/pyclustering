@@ -122,17 +122,6 @@ template_kmeans_observer(
 
 
 static void
-template_kmeans_itermax(
-    const dataset_ptr & p_data,
-    const dataset & p_start_centers,
-    const index_sequence & p_indexes,
-    const std::vector<size_t> & p_expected_cluster_length)
-{
-    template_kmeans_length_process_data_common(p_data, p_start_centers, p_expected_cluster_length, p_indexes, true);
-}
-
-
-static void
 template_kmeans_metric(
     const dataset_ptr & p_data,
     const dataset & p_start_centers,
@@ -330,13 +319,13 @@ TEST(utest_kmeans, itermax_1) {
 TEST(utest_kmeans, itermax_10_simple01) {
     dataset start_centers = { { 3.7, 5.5 },{ 6.7, 7.5 } };
     std::vector<size_t> expected_clusters_length = { 5, 5 };
-    template_kmeans_itermax(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_centers, expected_clusters_length, 1);
+    template_kmeans_itermax(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_centers, expected_clusters_length, 10);
 }
 
 TEST(utest_kmeans, itermax_10_simple02) {
     dataset start_centers = { { 3.5, 4.8 },{ 6.9, 7.0 },{ 7.5, 0.5 } };
     std::vector<size_t> expected_clusters_length = { 10, 5, 8 };
-    template_kmeans_itermax(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02), start_centers, expected_clusters_length, 1);
+    template_kmeans_itermax(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02), start_centers, expected_clusters_length, 10);
 }
 
 
