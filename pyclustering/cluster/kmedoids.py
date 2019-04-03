@@ -29,7 +29,7 @@ import numpy
 
 from pyclustering.cluster.encoder import type_encoding
 
-from pyclustering.utils import median
+from pyclustering.utils import medoid
 from pyclustering.utils.metric import distance_metric, type_metric
 
 import pyclustering.core.kmedoids_wrapper as wrapper
@@ -261,7 +261,7 @@ class kmedoids:
         medoid_indexes = [-1] * len(self.__clusters)
         
         for index in range(len(self.__clusters)):
-            medoid_index = median(self.__pointer_data, self.__clusters[index], metric=self.__metric, data_type=self.__data_type)
+            medoid_index = medoid(self.__pointer_data, self.__clusters[index], metric=self.__metric, data_type=self.__data_type)
             medoid_indexes[index] = medoid_index
              
         return medoid_indexes
