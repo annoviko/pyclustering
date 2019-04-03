@@ -620,7 +620,7 @@ class genetic_algorithm:
         mask = np.zeros(mask_length)
 
         # Set a half of array to 1
-        mask[:int(int(mask_length) / 6)] = 1
+        mask[:int(int(mask_length) / 2)] = 1
 
         # Random shuffle
         np.random.shuffle(mask)
