@@ -352,7 +352,7 @@ class kmeans:
 
         self.__observer = kwargs.get('observer', None)
         self.__metric = kwargs.get('metric', distance_metric(type_metric.EUCLIDEAN_SQUARE))
-        self.__maxiter = kwargs.get('maxiter', 200)
+        self.__itermax = kwargs.get('itermax', 200)
 
         if self.__metric.get_type() != type_metric.USER_DEFINED:
             self.__metric.enable_numpy_usage()
@@ -395,7 +395,7 @@ class kmeans:
         """
         ccore_metric = metric_wrapper.create_instance(self.__metric)
 
-        results = wrapper.kmeans(self.__pointer_data, self.__centers, self.__tolerance, (self.__observer is not None), ccore_metric.get_pointer())
+        results = wrapper.kmeans(self.__pointer_data, self.__centers, self.__tolerance, self.__itermax, (self.__observer is not None), ccore_metric.get_pointer())
         self.__clusters = results[0]
         self.__centers = results[1]
 
@@ -413,14 +413,13 @@ class kmeans:
         """
 
         maximum_change = float('inf')
-        stop_condition = self.__tolerance * self.__tolerance
         iteration = 0
 
         if self.__observer is not None:
             initial_clusters = self.__update_clusters()
             self.__observer.notify(initial_clusters, self.__centers.tolist())
 
-        while maximum_change > stop_condition and iteration < self.__maxiter:
+        while maximum_change > self.__tolerance and iteration < self.__itermax:
             self.__clusters = self.__update_clusters()
             updated_centers = self.__update_centers()  # changes should be calculated before assignment
 

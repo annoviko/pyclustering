@@ -36,39 +36,56 @@ using namespace ccore::clst;
 
 static void
 template_kmedoids_length_process_data(const dataset_ptr p_data,
-        const medoid_sequence & p_start_medians,
+        const medoid_sequence & p_start_medoids,
         const std::vector<size_t> & p_expected_cluster_length,
+        const std::size_t p_itermax = kmedoids::DEFAULT_ITERMAX,
         const distance_metric<point> & p_metric = distance_metric_factory<point>::euclidean_square()) {
 
     kmedoids_data output_result;
-    kmedoids solver(p_start_medians, 0.0001, p_metric);
+    kmedoids solver(p_start_medoids, kmedoids::DEFAULT_TOLERANCE, p_itermax, p_metric);
     solver.process(*p_data, output_result);
 
     const dataset & data = *p_data;
     const cluster_sequence & actual_clusters = output_result.clusters();
+    const medoid_sequence & medoids = output_result.medoids();
 
-    ASSERT_EQ(p_start_medians.size(), actual_clusters.size());
+    if (p_itermax == 0) {
+        ASSERT_TRUE(actual_clusters.empty());
+        ASSERT_EQ(p_start_medoids, medoids);
+        return;
+    }
+
+    ASSERT_EQ(p_start_medoids.size(), actual_clusters.size());
     ASSERT_CLUSTER_SIZES(data, actual_clusters, p_expected_cluster_length);
 }
 
 
 static void
 template_kmedoids_length_process_distance_matrix(const dataset_ptr p_data,
-        const medoid_sequence & p_start_medians,
+        const medoid_sequence & p_start_medoids,
         const std::vector<size_t> & p_expected_cluster_length,
+        const std::size_t p_itermax = kmedoids::DEFAULT_ITERMAX,
         const distance_metric<point> & p_metric = distance_metric_factory<point>::euclidean_square()) {
 
     dataset matrix;
     distance_matrix(*p_data, matrix);
 
     kmedoids_data output_result;
-    kmedoids solver(p_start_medians, 0.0001, p_metric);
+    kmedoids solver(p_start_medoids, kmedoids::DEFAULT_TOLERANCE, p_itermax, p_metric);
     solver.process(matrix, kmedoids_data_t::DISTANCE_MATRIX, output_result);
 
     const dataset & data = *p_data;
     const cluster_sequence & actual_clusters = output_result.clusters();
+    const medoid_sequence & medoids = output_result.medoids();
 
-    ASSERT_EQ(p_start_medians.size(), actual_clusters.size());
+    if (p_itermax == 0) {
+        ASSERT_TRUE(actual_clusters.empty());
+        ASSERT_EQ(p_start_medoids, medoids);
+        return;
+    }
+
+    ASSERT_EQ(p_start_medoids.size(), actual_clusters.size());
+    ASSERT_EQ(p_start_medoids.size(), medoids.size());
     ASSERT_CLUSTER_SIZES(data, actual_clusters, p_expected_cluster_length);
 }
 
@@ -90,70 +107,80 @@ TEST(utest_kmedoids, allocation_sample_simple_01_distance_matrix) {
 TEST(utest_kmedoids, allocation_sample_simple_01_euclidean) {
     const medoid_sequence start_medoids = { 1, 5 };
     const std::vector<size_t> expected_clusters_length = { 5, 5 };
-    template_kmedoids_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_medoids, expected_clusters_length, distance_metric_factory<point>::euclidean());
+    template_kmedoids_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_medoids, expected_clusters_length, 
+        kmedoids::DEFAULT_ITERMAX, distance_metric_factory<point>::euclidean());
 }
 
 
 TEST(utest_kmedoids, allocation_sample_simple_01_euclidean_distance_matrix) {
     const medoid_sequence start_medoids = { 1, 5 };
     const std::vector<size_t> expected_clusters_length = { 5, 5 };
-    template_kmedoids_length_process_distance_matrix(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_medoids, expected_clusters_length, distance_metric_factory<point>::euclidean());
+    template_kmedoids_length_process_distance_matrix(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_medoids, expected_clusters_length, 
+        kmedoids::DEFAULT_ITERMAX, distance_metric_factory<point>::euclidean());
 }
 
 
 TEST(utest_kmedoids, allocation_sample_simple_01_euclidean_square) {
     const medoid_sequence start_medoids = { 1, 5 };
     const std::vector<size_t> expected_clusters_length = { 5, 5 };
-    template_kmedoids_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_medoids, expected_clusters_length, distance_metric_factory<point>::euclidean_square());
+    template_kmedoids_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_medoids, expected_clusters_length, 
+        kmedoids::DEFAULT_ITERMAX, distance_metric_factory<point>::euclidean_square());
 }
 
 
 TEST(utest_kmedoids, allocation_sample_simple_01_euclidean_square_distance_matrix) {
     const medoid_sequence start_medoids = { 1, 5 };
     const std::vector<size_t> expected_clusters_length = { 5, 5 };
-    template_kmedoids_length_process_distance_matrix(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_medoids, expected_clusters_length, distance_metric_factory<point>::euclidean_square());
+    template_kmedoids_length_process_distance_matrix(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_medoids, expected_clusters_length, 
+        kmedoids::DEFAULT_ITERMAX, distance_metric_factory<point>::euclidean_square());
 }
 
 
 TEST(utest_kmedoids, allocation_sample_simple_01_manhattan) {
     const medoid_sequence start_medoids = { 1, 5 };
     const std::vector<size_t> expected_clusters_length = { 5, 5 };
-    template_kmedoids_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_medoids, expected_clusters_length, distance_metric_factory<point>::manhattan());
+    template_kmedoids_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_medoids, expected_clusters_length, 
+        kmedoids::DEFAULT_ITERMAX, distance_metric_factory<point>::manhattan());
 }
 
 
 TEST(utest_kmedoids, allocation_sample_simple_01_manhattan_distance_matrix) {
     const medoid_sequence start_medoids = { 1, 5 };
     const std::vector<size_t> expected_clusters_length = { 5, 5 };
-    template_kmedoids_length_process_distance_matrix(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_medoids, expected_clusters_length, distance_metric_factory<point>::manhattan());
+    template_kmedoids_length_process_distance_matrix(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_medoids, expected_clusters_length, 
+        kmedoids::DEFAULT_ITERMAX, distance_metric_factory<point>::manhattan());
 }
 
 
 TEST(utest_kmedoids, allocation_sample_simple_01_chebyshev) {
     const medoid_sequence start_medoids = { 1, 5 };
     const std::vector<size_t> expected_clusters_length = { 5, 5 };
-    template_kmedoids_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_medoids, expected_clusters_length, distance_metric_factory<point>::chebyshev());
+    template_kmedoids_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_medoids, expected_clusters_length, 
+        kmedoids::DEFAULT_ITERMAX, distance_metric_factory<point>::chebyshev());
 }
 
 
 TEST(utest_kmedoids, allocation_sample_simple_01_chebyshev_distance_matrix) {
     const medoid_sequence start_medoids = { 1, 5 };
     const std::vector<size_t> expected_clusters_length = { 5, 5 };
-    template_kmedoids_length_process_distance_matrix(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_medoids, expected_clusters_length, distance_metric_factory<point>::chebyshev());
+    template_kmedoids_length_process_distance_matrix(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_medoids, expected_clusters_length, 
+        kmedoids::DEFAULT_ITERMAX, distance_metric_factory<point>::chebyshev());
 }
 
 
 TEST(utest_kmedoids, allocation_sample_simple_01_minkowski) {
     const medoid_sequence start_medoids = { 1, 5 };
     const std::vector<size_t> expected_clusters_length = { 5, 5 };
-    template_kmedoids_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_medoids, expected_clusters_length, distance_metric_factory<point>::minkowski(2.0));
+    template_kmedoids_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_medoids, expected_clusters_length, 
+        kmedoids::DEFAULT_ITERMAX, distance_metric_factory<point>::minkowski(2.0));
 }
 
 
 TEST(utest_kmedoids, allocation_sample_simple_01_minkowski_distance_matrix) {
     const medoid_sequence start_medoids = { 1, 5 };
     const std::vector<size_t> expected_clusters_length = { 5, 5 };
-    template_kmedoids_length_process_distance_matrix(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_medoids, expected_clusters_length, distance_metric_factory<point>::minkowski(2.0));
+    template_kmedoids_length_process_distance_matrix(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_medoids, expected_clusters_length, 
+        kmedoids::DEFAULT_ITERMAX, distance_metric_factory<point>::minkowski(2.0));
 }
 
 
@@ -163,7 +190,8 @@ TEST(utest_kmedoids, allocation_sample_simple_01_user_defined) {
 
     auto user_metric = [](const point & p1, const point & p2) { return euclidean_distance(p1, p2); };
 
-    template_kmedoids_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_medoids, expected_clusters_length, distance_metric_factory<point>::user_defined(user_metric));
+    template_kmedoids_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_medoids, expected_clusters_length, 
+        kmedoids::DEFAULT_ITERMAX, distance_metric_factory<point>::user_defined(user_metric));
 }
 
 
@@ -173,7 +201,8 @@ TEST(utest_kmedoids, allocation_sample_simple_01_user_defined_distance_matrix) {
 
     auto user_metric = [](const point & p1, const point & p2) { return euclidean_distance(p1, p2); };
 
-    template_kmedoids_length_process_distance_matrix(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_medoids, expected_clusters_length, distance_metric_factory<point>::user_defined(user_metric));
+    template_kmedoids_length_process_distance_matrix(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_medoids, expected_clusters_length, 
+        kmedoids::DEFAULT_ITERMAX, distance_metric_factory<point>::user_defined(user_metric));
 }
 
 
@@ -280,6 +309,31 @@ TEST(utest_kmedoids, totally_similar_data) {
 
     start_medoids = { 0, 1, 2, 3, 4 };
     template_kmedoids_length_process_data(dataset, start_medoids, expected_clusters_length);
+}
+
+
+TEST(utest_kmedoids, itermax_0) {
+    const medoid_sequence start_medoids = { 1, 5 };
+    const std::vector<size_t> expected_clusters_length = { };
+    template_kmedoids_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_medoids, expected_clusters_length, 0);
+}
+
+TEST(utest_kmedoids, itermax_1) {
+    const medoid_sequence start_medoids = { 1, 5 };
+    const std::vector<size_t> expected_clusters_length = { 5, 5 };
+    template_kmedoids_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_medoids, expected_clusters_length, 1);
+}
+
+TEST(utest_kmedoids, itermax_10_simple01) {
+    const medoid_sequence start_medoids = { 1, 5 };
+    const std::vector<size_t> expected_clusters_length = { 5, 5 };
+    template_kmedoids_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_medoids, expected_clusters_length, 10);
+}
+
+TEST(utest_kmedoids, itermax_10_simple02) {
+    const medoid_sequence start_medoids = { 3, 12, 20 };
+    const std::vector<size_t> expected_clusters_length = { 5, 8, 10 };
+    template_kmedoids_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02), start_medoids, expected_clusters_length, 10);
 }
 
 

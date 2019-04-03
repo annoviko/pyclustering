@@ -39,10 +39,10 @@ namespace clst {
 const double kmedians::THRESHOLD_CHANGE         = 0.000001;
 
 const double kmedians::DEFAULT_TOLERANCE        = 0.001;
-const std::size_t kmedians::DEFAULT_MAX_ITER    = 50;
+const std::size_t kmedians::DEFAULT_ITERMAX     = 50;
 
 
-kmedians::kmedians(const dataset & initial_medians, const double tolerance, const distance_metric<point> & p_metric, const std::size_t p_max_iter) :
+kmedians::kmedians(const dataset & initial_medians, const double tolerance, const std::size_t p_max_iter, const distance_metric<point> & p_metric) :
     m_tolerance(tolerance),
     m_max_iter(p_max_iter),
     m_initial_medians(initial_medians),
@@ -62,13 +62,13 @@ void kmedians::process(const dataset & data, cluster_data & output_result) {
 
     m_ptr_result->medians() = m_initial_medians;
 
-    double changes = 0.0;
+    double changes = std::numeric_limits<double>::max();
     double prev_changes = 0.0;
 
-    std::size_t counter_iteration = 0;
     std::size_t counter_repeaters = 0;
 
-    do {
+    for (std::size_t iteration = 0; (iteration < m_max_iter) && (changes > m_tolerance) && (counter_repeaters < 10); iteration++)
+    {
         update_clusters(m_ptr_result->medians(), m_ptr_result->clusters());
         changes = update_medians(m_ptr_result->clusters(), m_ptr_result->medians());
 
@@ -81,9 +81,7 @@ void kmedians::process(const dataset & data, cluster_data & output_result) {
         }
 
         prev_changes = changes;
-        counter_iteration++;
     }
-    while ((changes > m_tolerance) && (counter_repeaters < 10) && (counter_iteration < m_max_iter));
 
     m_ptr_data = nullptr;
     m_ptr_result = nullptr;

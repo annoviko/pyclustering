@@ -216,5 +216,18 @@ class KmedoidsUnitTest(unittest.TestCase):
         KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 1, None, False)
 
 
+    def testItermax0(self):
+        KmedoidsTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [], False, itermax=0)
+
+    def testItermax1(self):
+        KmedoidsTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], False, itermax=1)
+
+    def testItermax10Simple01(self):
+        KmedoidsTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], False, itermax=10)
+
+    def testItermax10Simple02(self):
+        KmedoidsTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [3, 12, 20], [10, 5, 8], False, itermax=10)
+
+
 if __name__ == "__main__":
     unittest.main()

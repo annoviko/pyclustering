@@ -106,11 +106,12 @@ class kmedoids:
         @param[in] initial_index_medoids (list): Indexes of intial medoids (indexes of points in input data).
         @param[in] tolerance (double): Stop condition: if maximum value of distance change of medoids of clusters is less than tolerance than algorithm will stop processing.
         @param[in] ccore (bool): If specified than CCORE library (C++ pyclustering library) is used for clustering instead of Python code.
-        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'metric', 'data_type').
+        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'metric', 'data_type', 'itermax').
 
         <b>Keyword Args:</b><br>
             - metric (distance_metric): Metric that is used for distance calculation between two points.
             - data_type (string): Data type of input sample 'data' that is processed by the algorithm ('points', 'distance_matrix').
+            - itermax (uint): Maximum number of iteration for cluster analysis.
 
         """
         self.__pointer_data = data
@@ -120,6 +121,8 @@ class kmedoids:
 
         self.__metric = kwargs.get('metric', distance_metric(type_metric.EUCLIDEAN_SQUARE))
         self.__data_type = kwargs.get('data_type', 'points')
+        self.__itermax = kwargs.get('itermax', 200)
+
         self.__distance_calculator = self.__create_distance_calculator()
 
         self.__ccore = ccore and self.__metric.get_type() != type_metric.USER_DEFINED
@@ -142,20 +145,21 @@ class kmedoids:
         
         if self.__ccore is True:
             ccore_metric = metric_wrapper.create_instance(self.__metric)
-            self.__clusters, self.__medoid_indexes = wrapper.kmedoids(self.__pointer_data, self.__medoid_indexes, self.__tolerance, ccore_metric.get_pointer(), self.__data_type)
+            self.__clusters, self.__medoid_indexes = wrapper.kmedoids(self.__pointer_data, self.__medoid_indexes, self.__tolerance, self.__itermax, ccore_metric.get_pointer(), self.__data_type)
         
         else:
             changes = float('inf')
-             
-            stop_condition = self.__tolerance
-             
-            while changes > stop_condition:
+            iterations = 0
+
+            while changes > self.__tolerance and iterations < self.__itermax:
                 self.__clusters = self.__update_clusters()
                 update_medoid_indexes = self.__update_medoids()
 
                 changes = max([self.__distance_calculator(self.__medoid_indexes[index], update_medoid_indexes[index]) for index in range(len(update_medoid_indexes))])
 
                 self.__medoid_indexes = update_medoid_indexes
+
+                iterations += 1
 
         return self
 

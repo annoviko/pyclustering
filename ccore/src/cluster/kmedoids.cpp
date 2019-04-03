@@ -39,14 +39,21 @@ namespace clst {
 const std::size_t kmedoids::OBJECT_ALREADY_CONTAINED = std::numeric_limits<std::size_t>::max();
 
 
+const double             kmedoids::DEFAULT_TOLERANCE                       = 0.001;
+
+const std::size_t        kmedoids::DEFAULT_ITERMAX                         = 200;
+
+
 kmedoids::kmedoids(const medoid_sequence & p_initial_medoids,
                    const double p_tolerance,
+                   const std::size_t p_itermax,
                    const distance_metric<point> & p_metric) :
-        m_data_ptr(nullptr),
-        m_result_ptr(nullptr),
-        m_initial_medoids(p_initial_medoids),
-        m_tolerance(p_tolerance),
-        m_metric(p_metric)
+    m_data_ptr(nullptr),
+    m_result_ptr(nullptr),
+    m_initial_medoids(p_initial_medoids),
+    m_tolerance(p_tolerance),
+    m_itermax(p_itermax),
+    m_metric(p_metric)
 { }
 
 
@@ -66,8 +73,8 @@ void kmedoids::process(const dataset & p_data, const kmedoids_data_t p_type, clu
     medoid_sequence & medoids = m_result_ptr->medoids();
     medoids.assign(m_initial_medoids.begin(), m_initial_medoids.end());
 
-    double changes = 0.0;
-    do {
+    double changes = std::numeric_limits<double>::max();
+    for (std::size_t iteration = 0; (iteration < m_itermax) && (changes > m_tolerance); iteration++) {
         update_clusters();
 
         std::vector<size_t> updated_medoids;
@@ -77,7 +84,6 @@ void kmedoids::process(const dataset & p_data, const kmedoids_data_t p_type, clu
 
         medoids.swap(updated_medoids);
     }
-    while (changes > m_tolerance);
 
     m_data_ptr = nullptr;
     m_result_ptr = nullptr;

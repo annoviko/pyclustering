@@ -52,6 +52,7 @@ enum kmeans_package_indexer {
  * @param[in] p_sample: input data for clustering.
  * @param[in] p_centers: initial cluster centers.
  * @param[in] p_tolerance: stop condition - when changes of medians are less then tolerance value.
+ * @param[in] p_itermax: maximum number of iterations for cluster analysis.
  * @param[in] p_observe: if 'true' then evolution of cluster and center changes are collected to result.
  * @param[in] p_metric: pointer to distance metric 'distance_metric' that is used for distance calculation between two points.
  *
@@ -62,5 +63,6 @@ enum kmeans_package_indexer {
 extern "C" DECLARATION pyclustering_package * kmeans_algorithm(const pyclustering_package * const p_sample,
                                                                const pyclustering_package * const p_centers,
                                                                const double p_tolerance,
+                                                               const std::size_t p_itermax,
                                                                const bool p_observe,
                                                                const void * const p_metric);

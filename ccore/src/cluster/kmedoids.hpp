@@ -52,6 +52,11 @@ enum class kmedoids_data_t {
 *
 */
 class kmedoids : public cluster_algorithm {
+public:
+    static const double      DEFAULT_TOLERANCE;
+
+    static const std::size_t DEFAULT_ITERMAX;
+
 private:
     static const std::size_t OBJECT_ALREADY_CONTAINED;
 
@@ -65,7 +70,9 @@ private:
 
     medoid_sequence                 m_initial_medoids = { };
 
-    double                          m_tolerance       = 0.0;
+    double                          m_tolerance       = DEFAULT_TOLERANCE;
+
+    std::size_t                     m_itermax         = DEFAULT_ITERMAX;
 
     distance_metric<point>          m_metric;
 
@@ -87,11 +94,13 @@ public:
     * @param[in] p_initial_medoids: initial medoids that are used for processing.
     * @param[in] p_tolerance: stop condition in following way: when maximum value of distance change of
     *             medoids of clusters is less than tolerance than algorithm will stop processing.
+    * @param[in] p_itermax: maximum amount of iterations (by default kmedoids::DEFAULT_ITERMAX).
     * @param[in] p_metric: distance metric calculator for two points.
     *
     */
     kmedoids(const medoid_sequence & p_initial_medoids,
-             const double p_tolerance = 0.001,
+             const double p_tolerance = DEFAULT_TOLERANCE,
+             const std::size_t p_itermax = DEFAULT_ITERMAX,
              const distance_metric<point> & p_metric = distance_metric_factory<point>::euclidean_square());
 
     /**

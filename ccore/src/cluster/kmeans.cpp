@@ -40,11 +40,14 @@ namespace ccore {
 namespace clst {
 
 
-const double             kmeans::DEFAULT_TOLERANCE                       = 0.025;
+const double             kmeans::DEFAULT_TOLERANCE                       = 0.001;
+
+const std::size_t        kmeans::DEFAULT_ITERMAX                         = 200;
 
 
-kmeans::kmeans(const dataset & p_initial_centers, const double p_tolerance, const distance_metric<point> & p_metric) :
-    m_tolerance(p_tolerance * p_tolerance),
+kmeans::kmeans(const dataset & p_initial_centers, const double p_tolerance, const std::size_t p_itermax, const distance_metric<point> & p_metric) :
+    m_tolerance(p_tolerance),
+    m_itermax(p_itermax),
     m_initial_centers(p_initial_centers),
     m_ptr_result(nullptr),
     m_ptr_data(nullptr),
@@ -79,7 +82,7 @@ void kmeans::process(const dataset & p_data, const index_sequence & p_indexes, c
 
     double current_change = std::numeric_limits<double>::max();
 
-    while(current_change > m_tolerance) {
+    for(std::size_t iteration = 0; iteration < m_itermax && current_change > m_tolerance; iteration++) {
         update_clusters(m_ptr_result->centers(), m_ptr_result->clusters());
         current_change = update_centers(m_ptr_result->clusters(), m_ptr_result->centers());
 

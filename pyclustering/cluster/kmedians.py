@@ -67,10 +67,11 @@ class kmedians:
         @param[in] initial_centers (list): Initial coordinates of medians of clusters that are represented by list: [center1, center2, ...].
         @param[in] tolerance (double): Stop condition: if maximum value of change of centers of clusters is less than tolerance than algorithm will stop processing
         @param[in] ccore (bool): Defines should be CCORE library (C++ pyclustering library) used instead of Python code or not.
-        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'metric').
+        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'metric', 'itermax').
 
         <b>Keyword Args:</b><br>
             - metric (distance_metric): Metric that is used for distance calculation between two points.
+            - itermax (uint): Maximum number of iterations for cluster analysis.
         
         """
         self.__pointer_data = data
@@ -78,6 +79,7 @@ class kmedians:
         self.__medians = initial_centers[:]
         self.__tolerance = tolerance
 
+        self.__itermax = kwargs.get('itermax', 200)
         self.__metric = kwargs.get('metric', distance_metric(type_metric.EUCLIDEAN_SQUARE))
         if self.__metric is None:
             self.__metric = distance_metric(type_metric.EUCLIDEAN_SQUARE)
@@ -102,7 +104,7 @@ class kmedians:
         
         if self.__ccore is True:
             ccore_metric = metric_wrapper.create_instance(self.__metric)
-            self.__clusters, self.__medians = wrapper.kmedians(self.__pointer_data, self.__medians, self.__tolerance, ccore_metric.get_pointer())
+            self.__clusters, self.__medians = wrapper.kmedians(self.__pointer_data, self.__medians, self.__tolerance, self.__itermax, ccore_metric.get_pointer())
 
         else:
             changes = float('inf')
@@ -110,14 +112,17 @@ class kmedians:
             # Check for dimension
             if len(self.__pointer_data[0]) != len(self.__medians[0]):
                 raise NameError('Dimension of the input data and dimension of the initial medians must be equal.')
-             
-            while changes > self.__tolerance:
+
+            iterations = 0
+            while changes > self.__tolerance and iterations < self.__itermax:
                 self.__clusters = self.__update_clusters()
                 updated_centers = self.__update_medians()
              
                 changes = max([self.__metric(self.__medians[index], updated_centers[index]) for index in range(len(updated_centers))])
                  
                 self.__medians = updated_centers
+
+                iterations += 1
 
         return self
 

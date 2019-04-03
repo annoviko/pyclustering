@@ -44,6 +44,7 @@ from pyclustering.cluster.tests.integration               import it_kmedoids    
 from pyclustering.cluster.tests.integration               import it_mbsas         as cluster_mbsas_integration_tests
 from pyclustering.cluster.tests.integration               import it_optics        as cluster_optics_integration_tests
 from pyclustering.cluster.tests.integration               import it_rock          as cluster_rock_integration_tests
+from pyclustering.cluster.tests.integration               import it_silhouette    as cluster_silhouette_integration_tests
 from pyclustering.cluster.tests.integration               import it_somsc         as cluster_somsc_integration_tests
 from pyclustering.cluster.tests.integration               import it_syncnet       as cluster_syncnet_integration_tests
 from pyclustering.cluster.tests.integration               import it_ttsas         as cluster_ttsas_integration_tests
@@ -70,6 +71,7 @@ class clustering_integration_tests(suite_holder):
         integration_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_mbsas_integration_tests))
         integration_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_optics_integration_tests))
         integration_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_rock_integration_tests))
+        integration_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_silhouette_integration_tests))
         integration_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_somsc_integration_tests))
         integration_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_syncnet_integration_tests))
         integration_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_ttsas_integration_tests))
