@@ -3,7 +3,7 @@
 @brief Cluster analysis algorithm: Genetic clustering algorithm (GA).
 @details Implementation based on papers @cite article::ga::1, @cite article::ga::2.
 
-@authors Andrey Novikov, Aleksey Kukushkin (pyclustering@yandex.ru)
+@authors Andrei Novikov, Aleksey Kukushkin (pyclustering@yandex.ru)
 @date 2014-2019
 @copyright GNU Public License
 
@@ -58,18 +58,18 @@ class ga_observer:
         """
 
         # Global best chromosome and fitness function for each population
-        self._global_best_result = {'chromosome': [], 'fitness_function': []};
+        self._global_best_result = {'chromosome': [], 'fitness_function': []}
 
         # Best chromosome and fitness function on a population
-        self._best_population_result = {'chromosome': [], 'fitness_function': []};
+        self._best_population_result = {'chromosome': [], 'fitness_function': []}
 
         # Mean fitness function on each population
-        self._mean_ff_result = [];
+        self._mean_ff_result = []
 
         # Flags to collect
-        self._need_global_best = need_global_best;
-        self._need_population_best = need_population_best;
-        self._need_mean_ff = need_mean_ff;
+        self._need_global_best = need_global_best
+        self._need_population_best = need_population_best
+        self._need_mean_ff = need_mean_ff
 
 
     def __len__(self):
@@ -77,11 +77,11 @@ class ga_observer:
         @brief Returns amount of iterations that genetic algorithm was observed.
         
         """
-        global_length = len(self._global_best_result['chromosome']);
-        local_length = len(self._best_population_result['chromosome']);
-        average_length = len(self._mean_ff_result);
+        global_length = len(self._global_best_result['chromosome'])
+        local_length = len(self._best_population_result['chromosome'])
+        average_length = len(self._mean_ff_result)
         
-        return max(global_length, local_length, average_length);
+        return max(global_length, local_length, average_length)
 
 
     def collect_global_best(self, best_chromosome, best_fitness_function):
@@ -94,10 +94,10 @@ class ga_observer:
         """
 
         if not self._need_global_best:
-            return;
+            return
 
-        self._global_best_result['chromosome'].append(best_chromosome);
-        self._global_best_result['fitness_function'].append(best_fitness_function);
+        self._global_best_result['chromosome'].append(best_chromosome)
+        self._global_best_result['fitness_function'].append(best_fitness_function)
 
 
     def collect_population_best(self, best_chromosome, best_fitness_function):
@@ -110,10 +110,10 @@ class ga_observer:
         """
 
         if not self._need_population_best:
-            return;
+            return
 
-        self._best_population_result['chromosome'].append(best_chromosome);
-        self._best_population_result['fitness_function'].append(best_fitness_function);
+        self._best_population_result['chromosome'].append(best_chromosome)
+        self._best_population_result['fitness_function'].append(best_fitness_function)
 
 
     def collect_mean(self, fitness_functions):
@@ -125,9 +125,9 @@ class ga_observer:
         """
 
         if not self._need_mean_ff:
-            return;
+            return
 
-        self._mean_ff_result.append(np.mean(fitness_functions));
+        self._mean_ff_result.append(np.mean(fitness_functions))
 
 
     def get_global_best(self):
@@ -136,7 +136,7 @@ class ga_observer:
                  and its fitness function's value (evolution of global optimum) are stored in lists.
         
         """
-        return self._global_best_result;
+        return self._global_best_result
 
 
     def get_population_best(self):
@@ -145,7 +145,7 @@ class ga_observer:
                  and its fitness function's value (evolution of local optimum) are stored in lists.
         
         """
-        return self._best_population_result;
+        return self._best_population_result
 
 
     def get_mean_fitness_function(self):
@@ -153,7 +153,7 @@ class ga_observer:
         @brief (list) Returns fitness function's values on each iteration.
         
         """
-        return self._mean_ff_result;
+        return self._mean_ff_result
 
 
 
@@ -165,25 +165,36 @@ class ga_visualizer:
               genetic algorithm. The observer is created by user and passed to genetic algorithm. There
               is usage example of the visualizer using the observer:
     @code
-        # Read data for clustering 
-        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1);
-        
+        from pyclustering.cluster.ga import genetic_algorithm, ga_observer, ga_visualizer
+        from pyclustering.utils import read_sample
+        from pyclustering.samples.definitions import SIMPLE_SAMPLES
+
+
+        # Read data for clustering
+        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1)
+
         # Create instance of observer that will collect all information:
-        observer_instance = ga_observer(True, True, True);
-        
+        observer_instance = ga_observer(True, True, True)
+
         # Create genetic algorithm where observer will collect information:
         ga_instance = genetic_algorithm(data=sample,
-                                      count_clusters=2,
-                                      chromosome_count=20,
-                                      population_count=20,
-                                      count_mutation_gens=1,
-                                      observer=observer_instance);
-        
+                                        count_clusters=2,
+                                        chromosome_count=20,
+                                        population_count=20,
+                                        count_mutation_gens=1,
+                                        observer=observer_instance)
+
         # Start processing
-        ga_instance.process();
-        
+        ga_instance.process()
+
+        # Obtain results
+        clusters = ga_instance.get_clusters()
+
+        # Print cluster to console
+        print("Amount of clusters: '%d'. Clusters: '%s'" % (len(clusters), clusters))
+
         # Show cluster using observer:
-        ga_visualizer.show_clusters(sample, observer_instance);
+        ga_visualizer.show_clusters(sample, observer_instance)
     @endcode
     
     @see cluster_visualizer
@@ -191,7 +202,7 @@ class ga_visualizer:
     """
     
     @staticmethod
-    def show_evolution(observer, start_iteration = 0, stop_iteration = None, ax = None, display = True):
+    def show_evolution(observer, start_iteration = 0, stop_iteration=None, ax=None, display=True):
         """!
         @brief Displays evolution of fitness function for the best chromosome, for the current best chromosome and
                 average value among all chromosomes.
@@ -209,32 +220,32 @@ class ga_visualizer:
         """
         
         if (ax is None):
-            _, ax = plt.subplots(1);
-            ax.set_title("Evolution");
+            _, ax = plt.subplots(1)
+            ax.set_title("Evolution")
         
-        if (stop_iteration is None):
-            stop_iteration = len(observer);
+        if stop_iteration is None:
+            stop_iteration = len(observer)
         
-        line_best, = ax.plot(observer.get_global_best()['fitness_function'][start_iteration:stop_iteration], 'r');
-        line_current, = ax.plot(observer.get_population_best()['fitness_function'][start_iteration:stop_iteration], 'k');
-        line_mean, = ax.plot(observer.get_mean_fitness_function()[start_iteration:stop_iteration], 'c');
+        line_best, = ax.plot(observer.get_global_best()['fitness_function'][start_iteration:stop_iteration], 'r')
+        line_current, = ax.plot(observer.get_population_best()['fitness_function'][start_iteration:stop_iteration], 'k')
+        line_mean, = ax.plot(observer.get_mean_fitness_function()[start_iteration:stop_iteration], 'c')
 
-        if (start_iteration < (stop_iteration - 1)):
-            ax.set_xlim([start_iteration, (stop_iteration - 1)]);
+        if start_iteration < (stop_iteration - 1):
+            ax.set_xlim([start_iteration, (stop_iteration - 1)])
         
-        ax.set_xlabel("Iteration");
-        ax.set_ylabel("Fitness function");
-        ax.legend([line_best, line_current, line_mean], ["The best pop.", "Cur. best pop.", "Average"], prop={'size': 10});
-        ax.grid();
+        ax.set_xlabel("Iteration")
+        ax.set_ylabel("Fitness function")
+        ax.legend([line_best, line_current, line_mean], ["The best pop.", "Cur. best pop.", "Average"], prop={'size': 10})
+        ax.grid()
 
-        if (display is True):
-            plt.show();
+        if display is True:
+            plt.show()
         
-        return ax;
+        return ax
 
 
     @staticmethod
-    def show_clusters(data, observer, marker = '.', markersize = None):
+    def show_clusters(data, observer, marker='.', markersize=None):
         """!
         @brief Shows allocated clusters by the genetic algorithm.
         
@@ -249,20 +260,20 @@ class ga_visualizer:
         
         """
         
-        figure = plt.figure();
-        ax1 = figure.add_subplot(121);
+        figure = plt.figure()
+        ax1 = figure.add_subplot(121)
         
-        clusters = ga_math.get_clusters_representation(observer.get_global_best()['chromosome'][-1]);
+        clusters = ga_math.get_clusters_representation(observer.get_global_best()['chromosome'][-1])
         
-        visualizer = cluster_visualizer(1, 2);
-        visualizer.append_clusters(clusters, data, 0, marker, markersize);
-        visualizer.show(figure, display = False);
+        visualizer = cluster_visualizer(1, 2)
+        visualizer.append_clusters(clusters, data, 0, marker, markersize)
+        visualizer.show(figure, display=False)
         
-        ga_visualizer.show_evolution(observer, 0, None, ax1, True);
+        ga_visualizer.show_evolution(observer, 0, None, ax1, True)
 
 
     @staticmethod
-    def animate_cluster_allocation(data, observer, animation_velocity = 75, movie_fps = 5, save_movie = None):
+    def animate_cluster_allocation(data, observer, animation_velocity=75, movie_fps=5, save_movie=None):
         """!
         @brief Animate clustering process of genetic clustering algorithm.
         @details This method can be also used for rendering movie of clustering process and 'ffmpeg' is required for that purpuse.
@@ -276,39 +287,39 @@ class ga_visualizer:
         
         """
         
-        figure = plt.figure();
+        figure = plt.figure()
         
         def init_frame():
-            return frame_generation(0);
+            return frame_generation(0)
 
         def frame_generation(index_iteration):
-            figure.clf();
+            figure.clf()
             
-            figure.suptitle("Clustering genetic algorithm (iteration: " + str(index_iteration) +")", fontsize = 18, fontweight = 'bold');
+            figure.suptitle("Clustering genetic algorithm (iteration: " + str(index_iteration) + ")", fontsize=18, fontweight='bold')
             
-            visualizer = cluster_visualizer(4, 2, ["The best pop. on step #" + str(index_iteration), "The best population"]);
+            visualizer = cluster_visualizer(4, 2, ["The best pop. on step #" + str(index_iteration), "The best population"])
             
-            local_minimum_clusters = ga_math.get_clusters_representation(observer.get_population_best()['chromosome'][index_iteration]);
-            visualizer.append_clusters(local_minimum_clusters, data, 0);
+            local_minimum_clusters = ga_math.get_clusters_representation(observer.get_population_best()['chromosome'][index_iteration])
+            visualizer.append_clusters(local_minimum_clusters, data, 0)
             
-            global_minimum_clusters = ga_math.get_clusters_representation(observer.get_global_best()['chromosome'][index_iteration]);
-            visualizer.append_clusters(global_minimum_clusters, data, 1);
+            global_minimum_clusters = ga_math.get_clusters_representation(observer.get_global_best()['chromosome'][index_iteration])
+            visualizer.append_clusters(global_minimum_clusters, data, 1)
             
-            ax1 = plt.subplot2grid((2, 2), (1, 0), colspan = 2);
-            ga_visualizer.show_evolution(observer, 0, index_iteration + 1, ax1, False);
+            ax1 = plt.subplot2grid((2, 2), (1, 0), colspan=2)
+            ga_visualizer.show_evolution(observer, 0, index_iteration + 1, ax1, False)
             
-            visualizer.show(figure, shift = 0, display = False);
-            figure.subplots_adjust(top = 0.85);
+            visualizer.show(figure, shift=0, display=False)
+            figure.subplots_adjust(top=0.85)
             
-            return [ figure.gca() ];
+            return [figure.gca()]
         
-        iterations = len(observer);
-        cluster_animation = animation.FuncAnimation(figure, frame_generation, iterations, interval = animation_velocity, init_func = init_frame, repeat_delay = 5000);
+        iterations = len(observer)
+        cluster_animation = animation.FuncAnimation(figure, frame_generation, iterations, interval=animation_velocity, init_func=init_frame, repeat_delay=5000)
 
-        if (save_movie is not None):
-            cluster_animation.save(save_movie, writer = 'ffmpeg', fps = movie_fps, bitrate = 1500);
+        if save_movie is not None:
+            cluster_animation.save(save_movie, writer='ffmpeg', fps=movie_fps, bitrate=1500)
         else:
-            plt.show();
+            plt.show()
 
 
 class genetic_algorithm:
@@ -319,22 +330,32 @@ class genetic_algorithm:
     
     Example of clustering using genetic algorithm:
     @code
+        from pyclustering.cluster.ga import genetic_algorithm, ga_observer
+        from pyclustering.utils import read_sample
+        from pyclustering.samples.definitions import SIMPLE_SAMPLES
+
+
         # Read input data for clustering
-        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE4);
-        
+        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE4)
+
+        # Create instance of observer that will collect all information:
+        observer_instance = ga_observer(True, True, True)
+
         # Create genetic algorithm for clustering
         ga_instance = genetic_algorithm(data=sample,
-                                      count_clusters=4,
-                                      chromosome_count=100,
-                                      population_count=200,
-                                      count_mutation_gens=1);
-        
-        # Start clustering process
-        ga_instance.process();
-        
-        # Extract extracted clusters by the algorithm
-        clusters = ga_instance.get_clusters();
-        print(clusters);
+                                        count_clusters=4,
+                                        chromosome_count=100,
+                                        population_count=200,
+                                        count_mutation_gens=1)
+
+        # Start processing
+        ga_instance.process()
+
+        # Obtain results
+        clusters = ga_instance.get_clusters()
+
+        # Print cluster to console
+        print("Amount of clusters: '%d'. Clusters: '%s'" % (len(clusters), clusters))
     @endcode
 
     There is an example of clustering results (fitness function evolution and allocated clusters) that were 
@@ -347,8 +368,7 @@ class genetic_algorithm:
 
     """
 
-    def __init__(self, data, count_clusters, chromosome_count, population_count, count_mutation_gens=2,
-                 coeff_mutation_count=0.25, select_coeff=1.0, observer=ga_observer()):
+    def __init__(self, data, count_clusters, chromosome_count, population_count, **kwargs):
         """!
         @brief Initialize genetic clustering algorithm for cluster analysis.
         
@@ -357,13 +377,17 @@ class genetic_algorithm:
         @param[in] count_clusters (uint): Amount of clusters that should be allocated in the data.
         @param[in] chromosome_count (uint): Amount of chromosomes in each population.
         @param[in] population_count (uint): Amount of populations.
-        @param[in] count_mutation_gens (uint): Amount of genes in chromosome that is mutated on each step.
-        @param[in] coeff_mutation_count (float): Percent of chromosomes for mutation, destributed in range (0, 1] and
-                    thus amount of chromosomes is defined as follows: 'chromosome_count' * 'coeff_mutation_count'.
-        @param[in] select_coeff (float): Exponential coefficient for selection procedure that is used as follows:
-                   math.exp(1 + fitness(chromosome) * select_coeff).
-        @param[in] observer (ga_observer): Observer that is used for collecting information of about clustering process on each step.
-        
+        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'count_mutation_gens', 'coeff_mutation_count', 'select_coeff', 'crossover_rate', 'observer').
+
+        <b>Keyword Args:</b><br>
+            - count_mutation_gens (uint): Amount of genes in chromosome that is mutated on each step.
+            - coeff_mutation_count (float): Percent of chromosomes for mutation, distributed in range (0, 1] and
+               thus amount of chromosomes is defined as follows: 'chromosome_count' * 'coeff_mutation_count'.
+            - select_coeff (float): Exponential coefficient for selection procedure that is used as follows:
+               math.exp(1 + fitness(chromosome) * select_coeff).
+            - crossover_rate (float): Crossover rate.
+            - observer (ga_observer): Observer that is used for collecting information of about clustering process on each step.
+
         """
         
         # Initialize random
@@ -385,23 +409,23 @@ class genetic_algorithm:
         self._population_count = population_count
 
         # Count mutation genes
-        self._count_mutation_gens = count_mutation_gens
+        self._count_mutation_gens = kwargs.get('count_mutation_gens', 2)
 
         # Crossover rate
-        self._crossover_rate = 1.0
+        self._crossover_rate = kwargs.get('crossover_rate', 1.0)
 
         # Count of chromosome for mutation (range [0, 1])
-        self._coeff_mutation_count = coeff_mutation_count
+        self._coeff_mutation_count = kwargs.get('coeff_mutation_count', 0.25)
 
         # Exponential coeff for selection
-        self._select_coeff = select_coeff
+        self._select_coeff = kwargs.get('select_coeff', 1.0)
 
         # Result of clustering : best chromosome
         self._result_clustering = {'best_chromosome': [],
-                                  'best_fitness_function': 0.0}
+                                   'best_fitness_function': 0.0}
 
         # Observer
-        self._observer = observer
+        self._observer = kwargs.get('observer', ga_observer())
 
     def process(self):
         """!

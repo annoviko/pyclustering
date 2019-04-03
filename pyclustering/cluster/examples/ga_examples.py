@@ -24,13 +24,13 @@
 """
 
 
-from pyclustering.samples.definitions import SIMPLE_SAMPLES;
+from pyclustering.samples.definitions import SIMPLE_SAMPLES
 
-from pyclustering.cluster.ga import genetic_algorithm, ga_observer, ga_visualizer;
+from pyclustering.cluster.ga import genetic_algorithm, ga_observer, ga_visualizer
 
-from pyclustering.utils import read_sample;
+from pyclustering.utils import read_sample
 
-import time;
+import time
 
 
 def template_clustering(path,
@@ -43,7 +43,7 @@ def template_clustering(path,
                         fps=15,
                         animation=False):
 
-    sample = read_sample(path);
+    sample = read_sample(path)
 
     algo_instance = genetic_algorithm(data=sample,
                                       count_clusters=count_clusters,
@@ -54,18 +54,18 @@ def template_clustering(path,
                                       select_coeff=select_coeff,
                                       observer=ga_observer(True, True, True))
 
-    start_time = time.time();
+    start_time = time.time()
 
-    algo_instance.process();
+    algo_instance.process()
 
-    print("Sample: ", path, "\t\tExecution time: ", time.time() - start_time, "\n");
+    print("Sample: ", path, "\t\tExecution time: ", time.time() - start_time, "\n")
 
-    observer = algo_instance.get_observer();
+    observer = algo_instance.get_observer()
     
-    ga_visualizer.show_clusters(sample, observer);
+    ga_visualizer.show_clusters(sample, observer)
     
     if (animation is True):
-        ga_visualizer.animate_cluster_allocation(sample, observer, movie_fps=fps, save_movie="clustering_animation.mp4");
+        ga_visualizer.animate_cluster_allocation(sample, observer, movie_fps=fps, save_movie="clustering_animation.mp4")
 #         ga_visualizer.animate_cluster_allocation(sample, observer);
 
 
@@ -153,7 +153,7 @@ def animation_cluster_sample1():
                         count_mutation_gens=2,
                         select_coeff=0.02,
                         fps=5,
-                        animation=True);
+                        animation=True)
 
 def animation_cluster_sample2():
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2,
@@ -174,7 +174,7 @@ def animation_cluster_sample3():
                         coeff_mutation_count=0.8,
                         select_coeff=0.3,
                         fps=5,
-                        animation=True);
+                        animation=True)
 
 def animation_cluster_sample4():
     template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE4,
@@ -187,16 +187,16 @@ def animation_cluster_sample4():
                         animation=True)
 
 
-cluster_sample1();
-cluster_sample2();
-cluster_sample3();
-cluster_sample4();
-cluster_sample5();
-cluster_sample6();
-cluster_sample7();
-cluster_sample11();
+cluster_sample1()
+cluster_sample2()
+cluster_sample3()
+cluster_sample4()
+cluster_sample5()
+cluster_sample6()
+cluster_sample7()
+cluster_sample11()
 
-animation_cluster_sample1();
-animation_cluster_sample2();
-animation_cluster_sample3();
-animation_cluster_sample4();
+animation_cluster_sample1()
+animation_cluster_sample2()
+animation_cluster_sample3()
+animation_cluster_sample4()
