@@ -21,6 +21,9 @@ GENERAL CHANGES:
   See: https://github.com/annoviko/pyclustering/issues/479
 
 CORRECTED MAJOR BUGS:
+- Bug with crossover mask generation for genetic clustering algorithm (pyclustering.cluster.ga).
+  See: https://github.com/annoviko/pyclustering/pull/474
+
 - Bug with hanging of K-Medians algorithm for some cases when algorithm is initialized by wrong amount of centers (ccore.clst.kmedians).
   See: https://github.com/annoviko/pyclustering/issues/498
 
