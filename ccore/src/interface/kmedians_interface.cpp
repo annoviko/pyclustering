@@ -27,7 +27,8 @@
 
 pyclustering_package * kmedians_algorithm(const pyclustering_package * const p_sample, 
                                           const pyclustering_package * const p_initial_medians, 
-                                          const double p_tolerance, 
+                                          const double p_tolerance,
+                                          const std::size_t p_itermax,
                                           const void * const p_metric)
 {
     dataset data, medians;
@@ -41,7 +42,7 @@ pyclustering_package * kmedians_algorithm(const pyclustering_package * const p_s
     if (!metric)
         metric = &default_metric;
 
-    ccore::clst::kmedians algorithm(medians, p_tolerance, *metric);
+    ccore::clst::kmedians algorithm(medians, p_tolerance, p_itermax, *metric);
 
     ccore::clst::kmedians_data output_result;
     algorithm.process(data, output_result);

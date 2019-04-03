@@ -33,22 +33,30 @@ from random import random
 
 class KmediansTestTemplates:
     @staticmethod
-    def templateLengthProcessData(data, start_centers, expected_cluster_length, ccore, **kwargs):
+    def templateLengthProcessData(data, start_medians, expected_cluster_length, ccore, **kwargs):
         tolerance = kwargs.get('tolerance', 0.01)
         metric = kwargs.get('metric', None)
+        itermax = kwargs.get('itermax', 200)
 
         if isinstance(data, str):
             sample = read_sample(data)
         else:
             sample = data
 
-        kmedians_instance = kmedians(sample, start_centers, tolerance, ccore, metric=metric)
+        kmedians_instance = kmedians(sample, start_medians, tolerance, ccore, metric=metric, itermax=itermax)
         kmedians_instance.process()
         
         clusters = kmedians_instance.get_clusters()
-        
+        medians = kmedians_instance.get_medians()
+
+        if itermax == 0:
+            assert clusters == []
+            assert start_medians == medians
+            return
+
         obtained_cluster_sizes = [len(cluster) for cluster in clusters]
         assert len(sample) == sum(obtained_cluster_sizes)
+        assert len(medians) == len(clusters)
         
         if expected_cluster_length is not None:
             obtained_cluster_sizes.sort()

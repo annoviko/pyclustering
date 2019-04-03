@@ -41,13 +41,13 @@ TEST(utest_interface_kmeans, kmeans_api) {
 
     distance_metric<point> metric = distance_metric_factory<point>::euclidean_square();
 
-    pyclustering_package * kmeans_result = kmeans_algorithm(sample.get(), centers.get(), 0.1, false, &metric);
+    pyclustering_package * kmeans_result = kmeans_algorithm(sample.get(), centers.get(), 0.001, 200, false, &metric);
     ASSERT_NE(nullptr, kmeans_result);
 
     delete kmeans_result;
     kmeans_result = nullptr;
 
-    kmeans_result = kmeans_algorithm(sample.get(), centers.get(), 0.1, true, &metric);
+    kmeans_result = kmeans_algorithm(sample.get(), centers.get(), 0.1, 100, true, &metric);
     ASSERT_NE(nullptr, kmeans_result);
 
     delete kmeans_result;

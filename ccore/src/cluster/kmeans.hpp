@@ -49,8 +49,12 @@ class kmeans : public cluster_algorithm {
 public:
     const static double             DEFAULT_TOLERANCE;
 
+    const static std::size_t        DEFAULT_ITERMAX;
+
 private:
     double                  m_tolerance             = DEFAULT_TOLERANCE;
+
+    std::size_t             m_itermax               = DEFAULT_ITERMAX;
 
     dataset                 m_initial_centers       = { };
 
@@ -78,11 +82,13 @@ public:
     * @param[in] p_initial_centers: initial centers that are used for processing.
     * @param[in] p_tolerance: stop condition in following way: when maximum value of distance change of
     *             cluster centers is less than tolerance than algorithm will stop processing.
+    * @param[in] p_itermax: maximum number of iterations (by default kmeans::DEFAULT_ITERMAX).
     * @param[in] p_metric: distance metric calculator for two points.
     *
     */
     kmeans(const dataset & p_initial_centers, 
            const double p_tolerance = DEFAULT_TOLERANCE,
+           const std::size_t p_itermax = DEFAULT_ITERMAX,
            const distance_metric<point> & p_metric = distance_metric_factory<point>::euclidean_square());
 
     /**

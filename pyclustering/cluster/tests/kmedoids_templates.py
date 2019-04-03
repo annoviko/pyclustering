@@ -50,6 +50,7 @@ class KmedoidsTestTemplates:
         data_type = kwargs.get('data_type', 'points')
         input_type = kwargs.get('input_type', 'list')
         initialize_medoids = kwargs.get('initialize_medoids', None)
+        itermax = kwargs.get('itermax', 200)
 
         if metric is None:
             metric = distance_metric(type_metric.EUCLIDEAN_SQUARE)
@@ -70,11 +71,16 @@ class KmedoidsTestTemplates:
             if initialize_medoids is not None:
                 initial_medoids = kmeans_plusplus_initializer(sample, initialize_medoids).initialize(return_index=True)
 
-            kmedoids_instance = kmedoids(input_data, initial_medoids, 0.025, ccore_flag, metric=metric, data_type=data_type)
+            kmedoids_instance = kmedoids(input_data, initial_medoids, 0.001, ccore_flag, metric=metric, data_type=data_type, itermax=itermax)
             kmedoids_instance.process()
 
             clusters = kmedoids_instance.get_clusters()
             medoids = kmedoids_instance.get_medoids()
+
+            if itermax == 0:
+                assertion.eq([], clusters)
+                assertion.eq(medoids, initial_medoids)
+                return
 
             if len(clusters) != len(medoids):
                 continue

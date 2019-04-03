@@ -41,7 +41,7 @@ TEST(utest_interface_kmedians, kmedians_api) {
 
     distance_metric<point> metric = distance_metric_factory<point>::euclidean_square();
 
-    pyclustering_package * kmedians_result = kmedians_algorithm(sample.get(), medians.get(), 0.01, &metric);
+    pyclustering_package * kmedians_result = kmedians_algorithm(sample.get(), medians.get(), 0.001, 100, &metric);
     ASSERT_NE(nullptr, kmedians_result);
 
     delete kmedians_result;
@@ -52,7 +52,7 @@ TEST(utest_interface_kmedians, kmedians_api_null_metric) {
     std::shared_ptr<pyclustering_package> sample = pack(dataset({ { 1 }, { 2 }, { 3 }, { 10 }, { 11 }, { 12 } }));
     std::shared_ptr<pyclustering_package> medians = pack(dataset({ { 1 }, { 10 } }));
 
-    pyclustering_package * kmedians_result = kmedians_algorithm(sample.get(), medians.get(), 0.01, nullptr);
+    pyclustering_package * kmedians_result = kmedians_algorithm(sample.get(), medians.get(), 0.001, 100, nullptr);
     ASSERT_NE(nullptr, kmedians_result);
 
     delete kmedians_result;

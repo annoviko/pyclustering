@@ -33,6 +33,7 @@ using namespace ccore::utils::metric;
 pyclustering_package * kmeans_algorithm(const pyclustering_package * const p_sample, 
                                         const pyclustering_package * const p_initial_centers, 
                                         const double p_tolerance, 
+                                        const std::size_t p_itermax,
                                         const bool p_observe,
                                         const void * const p_metric)
 {
@@ -47,7 +48,7 @@ pyclustering_package * kmeans_algorithm(const pyclustering_package * const p_sam
     if (!metric)
         metric = &default_metric;
 
-    ccore::clst::kmeans algorithm(centers, p_tolerance, *metric);
+    ccore::clst::kmeans algorithm(centers, p_tolerance, p_itermax, *metric);
 
     ccore::clst::kmeans_data output_result(p_observe);
     algorithm.process(data, output_result);

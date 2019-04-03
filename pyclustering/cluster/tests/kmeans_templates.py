@@ -41,13 +41,21 @@ class KmeansTestTemplates:
         sample = read_sample(path_to_file)
 
         metric = kwargs.get('metric', distance_metric(type_metric.EUCLIDEAN_SQUARE))
+        itermax = kwargs.get('itermax', 200)
         
-        kmeans_instance = kmeans(sample, start_centers, 0.025, ccore, metric=metric)
+        kmeans_instance = kmeans(sample, start_centers, 0.001, ccore, metric=metric, itermax=itermax)
         kmeans_instance.process()
         
         clusters = kmeans_instance.get_clusters()
         centers = kmeans_instance.get_centers()
-    
+        wce = kmeans_instance.get_total_wce()
+
+        if itermax == 0:
+            assertion.eq(start_centers, centers)
+            assertion.eq([], clusters)
+            assertion.eq(0.0, wce)
+            return
+
         obtained_cluster_sizes = [len(cluster) for cluster in clusters]
         assertion.eq(len(sample), sum(obtained_cluster_sizes))
         
@@ -55,7 +63,7 @@ class KmeansTestTemplates:
         for center in centers:
             assertion.eq(len(sample[0]), len(center))
         
-        if expected_cluster_length != None:
+        if expected_cluster_length is not None:
             obtained_cluster_sizes.sort()
             expected_cluster_length.sort()
             assertion.eq(obtained_cluster_sizes, expected_cluster_length)
@@ -65,69 +73,69 @@ class KmeansTestTemplates:
     def templateClusterAllocationOneDimensionData(ccore_flag):
         input_data = [ [random()] for _ in range(10) ] + [ [random() + 3] for _ in range(10) ] + [ [random() + 5] for _ in range(10) ] + [ [random() + 8] for _ in range(10) ];
         
-        kmeans_instance = kmeans(input_data, [ [0.0], [3.0], [5.0], [8.0] ], 0.025, ccore_flag);
-        kmeans_instance.process();
-        clusters = kmeans_instance.get_clusters();
+        kmeans_instance = kmeans(input_data, [ [0.0], [3.0], [5.0], [8.0] ], 0.025, ccore_flag)
+        kmeans_instance.process()
+        clusters = kmeans_instance.get_clusters()
         
-        assertion.eq(4, len(clusters));
+        assertion.eq(4, len(clusters))
         for cluster in clusters:
-            assertion.eq(10, len(cluster));
+            assertion.eq(10, len(cluster))
 
 
     @staticmethod
     def templateEncoderProcedures(filename, initial_centers, number_clusters, ccore_flag):
-        sample = read_sample(filename);
+        sample = read_sample(filename)
         
-        kmeans_instance = kmeans(sample, initial_centers, 0.025, ccore_flag);
-        kmeans_instance.process();
+        kmeans_instance = kmeans(sample, initial_centers, 0.025, ccore_flag)
+        kmeans_instance.process()
         
-        clusters = kmeans_instance.get_clusters();
-        encoding = kmeans_instance.get_cluster_encoding();
+        clusters = kmeans_instance.get_clusters()
+        encoding = kmeans_instance.get_cluster_encoding()
         
-        encoder = cluster_encoder(encoding, clusters, sample);
-        encoder.set_encoding(type_encoding.CLUSTER_INDEX_LABELING);
-        encoder.set_encoding(type_encoding.CLUSTER_OBJECT_LIST_SEPARATION);
-        encoder.set_encoding(type_encoding.CLUSTER_INDEX_LIST_SEPARATION);
+        encoder = cluster_encoder(encoding, clusters, sample)
+        encoder.set_encoding(type_encoding.CLUSTER_INDEX_LABELING)
+        encoder.set_encoding(type_encoding.CLUSTER_OBJECT_LIST_SEPARATION)
+        encoder.set_encoding(type_encoding.CLUSTER_INDEX_LIST_SEPARATION)
         
-        assertion.eq(number_clusters, len(clusters));
+        assertion.eq(number_clusters, len(clusters))
 
 
     @staticmethod
     def templateCollectEvolution(filename, initial_centers, number_clusters, ccore_flag):
-        sample = read_sample(filename);
+        sample = read_sample(filename)
         
-        observer = kmeans_observer();
-        kmeans_instance = kmeans(sample, initial_centers, 0.025, ccore_flag, observer=observer);
-        kmeans_instance.process();
+        observer = kmeans_observer()
+        kmeans_instance = kmeans(sample, initial_centers, 0.025, ccore_flag, observer=observer)
+        kmeans_instance.process()
         
-        assertion.le(1, len(observer));
+        assertion.le(1, len(observer))
         for i in range(len(observer)):
-            assertion.le(1, len(observer.get_centers(i)));
+            assertion.le(1, len(observer.get_centers(i)))
             for center in observer.get_centers(i):
-                assertion.eq(len(sample[0]), len(center));
+                assertion.eq(len(sample[0]), len(center))
             
-            assertion.le(1, len(observer.get_clusters(i)));
+            assertion.le(1, len(observer.get_clusters(i)))
 
 
     @staticmethod
     def templateShowClusteringResultNoFailure(filename, initial_centers, ccore_flag):
-        sample = read_sample(filename);
+        sample = read_sample(filename)
 
-        kmeans_instance = kmeans(sample, initial_centers, 0.025, ccore_flag);
-        kmeans_instance.process();
+        kmeans_instance = kmeans(sample, initial_centers, 0.025, ccore_flag)
+        kmeans_instance.process()
 
-        clusters = kmeans_instance.get_clusters();
-        centers = kmeans_instance.get_centers();
+        clusters = kmeans_instance.get_clusters()
+        centers = kmeans_instance.get_centers()
 
-        kmeans_visualizer.show_clusters(sample, clusters, centers, initial_centers);
+        kmeans_visualizer.show_clusters(sample, clusters, centers, initial_centers)
 
 
     @staticmethod
     def templateAnimateClusteringResultNoFailure(filename, initial_centers, ccore_flag):
-        sample = read_sample(filename);
+        sample = read_sample(filename)
 
-        observer = kmeans_observer();
-        kmeans_instance = kmeans(sample, initial_centers, 0.025, ccore_flag, observer=observer);
-        kmeans_instance.process();
+        observer = kmeans_observer()
+        kmeans_instance = kmeans(sample, initial_centers, 0.025, ccore_flag, observer=observer)
+        kmeans_instance.process()
 
-        kmeans_visualizer.animate_cluster_allocation(sample, observer);
+        kmeans_visualizer.animate_cluster_allocation(sample, observer)
