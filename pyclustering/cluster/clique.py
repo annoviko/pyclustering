@@ -28,6 +28,8 @@
 import itertools
 
 from pyclustering.cluster import cluster_visualizer
+from pyclustering.cluster.encoder import type_encoding
+
 from pyclustering.core.wrapper import ccore_library
 
 import pyclustering.core.clique_wrapper as wrapper
@@ -578,6 +580,19 @@ class clique:
 
         """
         return self.__cells
+
+
+    def get_cluster_encoding(self):
+        """!
+        @brief Returns clustering result representation type that indicate how clusters are encoded.
+
+        @return (type_encoding) Clustering result representation.
+
+        @see get_clusters()
+
+        """
+
+        return type_encoding.CLUSTER_INDEX_LIST_SEPARATION
 
 
     def __process_by_ccore(self):
