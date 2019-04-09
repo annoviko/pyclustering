@@ -490,7 +490,8 @@ class kmeans:
 
     def __update_clusters(self):
         """!
-        @brief Calculate Euclidean distance to each point from the each cluster. Nearest points are captured by according clusters and as a result clusters are updated.
+        @brief Calculate distance (in line with specified metric) to each point from the each cluster. Nearest points
+                are captured by according clusters and as a result clusters are updated.
         
         @return (list) Updated clusters as list of clusters. Each cluster contains indexes of objects from data.
         
@@ -514,7 +515,7 @@ class kmeans:
         """!
         @brief Calculate centers of clusters in line with contained objects.
         
-        @return (numpy.matrix) Updated centers as list of centers.
+        @return (numpy.array) Updated centers.
         
         """
         

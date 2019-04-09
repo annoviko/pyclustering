@@ -46,12 +46,18 @@ class fcm:
         @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'tolerance', 'itermax', 'm').
 
         <b>Keyword Args:</b><br>
+            - ccore (bool): Defines should be CCORE library (C++ pyclustering library) used instead of Python code or not.
             - tolerance (float): Stop condition: if maximum value of change of centers of clusters is less than tolerance then algorithm stops processing.
             - itermax (uint): Maximum number of iterations that is used for clustering process (by default: 200).
             - m (float): Hyper-parameter that controls how fuzzy the cluster will be. The higher it is, the fuzzier the cluster will be in the end.
                This parameter should be greater than 1 (by default: 2).
 
         """
+
+        self.__ccore = kwargs.get('ccore', True)
+        if self.__ccore is True:
+            self.__ccore = ccore_library.workable()
+
         self.__data = numpy.array(data)
         self.__clusters = []
         self.__centers = numpy.array(initial_centers)
@@ -65,23 +71,69 @@ class fcm:
 
 
     def process(self):
+        """!
+        @brief Performs cluster analysis in line with Fuzzy C-Means algorithm.
+
+        @see get_clusters()
+        @see get_centers()
+        @see get_membership()
+
+        """
         self.__process_by_python()
         return self
 
 
     def get_clusters(self):
+        """!
+        @brief Returns allocated clusters that consists of points that most likely (in line with membership) belong to
+                these clusters.
+
+        @remark Allocated clusters can be returned only after data processing (use method process()). Otherwise empty list is returned.
+
+        @return (list) List of allocated clusters, each cluster contains indexes from input data.
+
+        @see process()
+        @see get_centers()
+        @see get_membership()
+
+        """
         return self.__clusters
 
 
     def get_centers(self):
+        """!
+        @brief Returns list of centers of allocated clusters.
+
+        @return (array_like) Cluster centers.
+
+        @see process()
+        @see get_clusters()
+        @see get_membership()
+
+        """
         return self.__centers
 
 
     def get_membership(self):
+        """!
+        @brief Returns cluster membership (probability) for each point in data.
+
+        @return (array_like) Membership for each point in format [[Px1(c1), Px1(c2), ...], [Px2(c1), Px2(c2), ...], ...],
+                 where [Px1(c1), Px1(c2), ...] membership for point x1.
+
+        @see process()
+        @see get_clusters()
+        @see get_centers()
+
+        """
         return self.__membership
 
 
     def __process_by_python(self):
+        """!
+        @brief Performs cluster analysis using Python implementation.
+
+        """
         self.__membership = numpy.random.rand(len(self.__data), len(self.__centers))
         self.__membership = self.__membership / self.__membership.sum(axis=1)[:, None]
 
@@ -100,6 +152,14 @@ class fcm:
 
 
     def __calculate_centers(self):
+        """!
+        @brief Calculate center using membership of each cluster: TODO: formula
+
+        @return (list) Updated clusters as list of clusters. Each cluster contains indexes of objects from data.
+
+        @return (numpy.array) Updated centers.
+
+        """
         dimension = self.__data.shape[1]
         centers = numpy.zeros((len(self.__centers), dimension))
 
@@ -111,6 +171,10 @@ class fcm:
 
 
     def __update_membership(self):
+        """!
+        @brief Update membership for each point in line with current cluster centers.
+
+        """
         data_difference = numpy.zeros((len(self.__centers), len(self.__data)))
 
         for i in range(len(self.__centers)):
@@ -123,6 +187,12 @@ class fcm:
 
 
     def __calculate_changes(self, updated_centers):
+        """!
+        @brief Calculate changes between centers.
+
+        @return (float) Maximum change between centers.
+
+        """
         changes = numpy.sum(numpy.square(self.__centers - updated_centers), axis=1).T
         return numpy.max(changes)
 
