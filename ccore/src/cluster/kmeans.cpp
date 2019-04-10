@@ -42,7 +42,7 @@ namespace clst {
 
 const double             kmeans::DEFAULT_TOLERANCE                       = 0.001;
 
-const std::size_t        kmeans::DEFAULT_ITERMAX                         = 200;
+const std::size_t        kmeans::DEFAULT_ITERMAX                         = 100;
 
 
 kmeans::kmeans(const dataset & p_initial_centers, const double p_tolerance, const std::size_t p_itermax, const distance_metric<point> & p_metric) :
@@ -67,7 +67,7 @@ void kmeans::process(const dataset & p_data, const index_sequence & p_indexes, c
     m_ptr_result = (kmeans_data *) &p_result;
 
     if (p_data[0].size() != m_initial_centers[0].size()) {
-        throw std::runtime_error("CCORE [kmeans]: dimension of the input data and dimension of the initial cluster centers must be equal.");
+        throw std::invalid_argument("Dimension of the input data and dimension of the initial cluster centers must be the same.");
     }
 
     m_ptr_result->centers().assign(m_initial_centers.begin(), m_initial_centers.end());

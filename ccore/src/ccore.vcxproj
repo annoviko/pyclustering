@@ -27,6 +27,7 @@
     <ClCompile Include="cluster\cluster_data.cpp" />
     <ClCompile Include="cluster\cure.cpp" />
     <ClCompile Include="cluster\dbscan.cpp" />
+    <ClCompile Include="cluster\fcm.cpp" />
     <ClCompile Include="cluster\hsyncnet.cpp" />
     <ClCompile Include="cluster\kmeans.cpp" />
     <ClCompile Include="cluster\kmeans_data.cpp" />
@@ -60,6 +61,7 @@
     <ClCompile Include="interface\cure_interface.cpp" />
     <ClCompile Include="interface\dbscan_interface.cpp" />
     <ClCompile Include="interface\elbow_interface.cpp" />
+    <ClCompile Include="interface\fcm_interface.cpp" />
     <ClCompile Include="interface\hhn_interface.cpp" />
     <ClCompile Include="interface\hsyncnet_interface.cpp" />
     <ClCompile Include="interface\kmeans_interface.cpp" />
@@ -112,6 +114,8 @@
     <ClInclude Include="cluster\dbscan_data.hpp" />
     <ClInclude Include="cluster\elbow.hpp" />
     <ClInclude Include="cluster\elbow_data.hpp" />
+    <ClInclude Include="cluster\fcm.hpp" />
+    <ClInclude Include="cluster\fcm_data.hpp" />
     <ClInclude Include="cluster\hsyncnet.hpp" />
     <ClInclude Include="cluster\kmeans.hpp" />
     <ClInclude Include="cluster\kmeans_data.hpp" />
@@ -162,6 +166,7 @@
     <ClInclude Include="interface\cure_interface.h" />
     <ClInclude Include="interface\dbscan_interface.h" />
     <ClInclude Include="interface\elbow_interface.h" />
+    <ClInclude Include="interface\fcm_interface.h" />
     <ClInclude Include="interface\hhn_interface.h" />
     <ClInclude Include="interface\hsyncnet_interface.h" />
     <ClInclude Include="interface\kmeans_interface.h" />

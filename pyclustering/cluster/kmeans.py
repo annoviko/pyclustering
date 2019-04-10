@@ -352,7 +352,7 @@ class kmeans:
 
         self.__observer = kwargs.get('observer', None)
         self.__metric = kwargs.get('metric', distance_metric(type_metric.EUCLIDEAN_SQUARE))
-        self.__itermax = kwargs.get('itermax', 200)
+        self.__itermax = kwargs.get('itermax', 100)
 
         if self.__metric.get_type() != type_metric.USER_DEFINED:
             self.__metric.enable_numpy_usage()

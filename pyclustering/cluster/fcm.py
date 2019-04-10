@@ -67,7 +67,7 @@ class fcm:
         self.__itermax = kwargs.get('itermax', 200)
         self.__m = kwargs.get('m', 2)
 
-        self.__degree = 2.0 / (kwargs.get('m', 2) - 1)
+        self.__degree = 2.0 / (self.__m - 1)
 
 
     def process(self):

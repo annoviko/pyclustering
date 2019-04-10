@@ -41,7 +41,7 @@ const std::size_t kmedoids::OBJECT_ALREADY_CONTAINED = std::numeric_limits<std::
 
 const double             kmedoids::DEFAULT_TOLERANCE                       = 0.001;
 
-const std::size_t        kmedoids::DEFAULT_ITERMAX                         = 200;
+const std::size_t        kmedoids::DEFAULT_ITERMAX                         = 100;
 
 
 kmedoids::kmedoids(const medoid_sequence & p_initial_medoids,

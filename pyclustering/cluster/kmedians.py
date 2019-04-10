@@ -79,7 +79,7 @@ class kmedians:
         self.__medians = initial_centers[:]
         self.__tolerance = tolerance
 
-        self.__itermax = kwargs.get('itermax', 200)
+        self.__itermax = kwargs.get('itermax', 100)
         self.__metric = kwargs.get('metric', distance_metric(type_metric.EUCLIDEAN_SQUARE))
         if self.__metric is None:
             self.__metric = distance_metric(type_metric.EUCLIDEAN_SQUARE)
