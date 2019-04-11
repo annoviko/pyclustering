@@ -27,6 +27,8 @@
 
 import numpy
 
+import pyclustering.core.fcm_wrapper as wrapper
+
 from pyclustering.core.wrapper import ccore_library
 
 
@@ -34,6 +36,38 @@ class fcm:
     """!
     @brief Class represents Fuzzy C-means clustering (FCM).
     @details Fuzzy clustering is a form of clustering in which each data point can belong to more than one cluster.
+
+    Fuzzy C-Means clustering results depend on initial centers. Algorithm K-Means++ can used for center initialization
+    from module 'pyclustering.cluster.center_initializer'.
+
+    Here is an example how to perform cluster analysis using Fuzzy C-Means algorithm:
+    @code
+        from pyclustering.samples.definitions import FAMOUS_SAMPLES
+        from pyclustering.cluster import cluster_visualizer
+        from pyclustering.cluster.center_initializer import kmeans_plusplus_initializer
+        from pyclustering.cluster.fcm import fcm
+        from pyclustering.utils import read_sample
+
+        # load list of points for cluster analysis
+        sample = read_sample(FAMOUS_SAMPLES.SAMPLE_OLD_FAITHFUL)
+
+        # initialize
+        initial_centers = kmeans_plusplus_initializer(sample, 2, kmeans_plusplus_initializer.FARTHEST_CENTER_CANDIDATE).initialize()
+
+        # create instance of Fuzzy C-Means algorithm
+        fcm_instance = fcm(sample, initial_centers)
+
+        # run cluster analysis and obtain results
+        fcm_instance.process()
+        clusters = fcm_instance.get_clusters()
+        centers = fcm_instance.get_centers()
+
+        # visualize clustering results
+        visualizer = cluster_visualizer()
+        visualizer.append_clusters(clusters, sample)
+        visualizer.append_cluster(centers, marker='*', markersize=10)
+        visualizer.show()
+    @endcode
 
     """
 
@@ -54,13 +88,9 @@ class fcm:
 
         """
 
-        self.__ccore = kwargs.get('ccore', True)
-        if self.__ccore is True:
-            self.__ccore = ccore_library.workable()
-
-        self.__data = numpy.array(data)
+        self.__data = data
         self.__clusters = []
-        self.__centers = numpy.array(initial_centers)
+        self.__centers = initial_centers
         self.__membership = []
 
         self.__tolerance = kwargs.get('tolerance', 0.001)
@@ -68,6 +98,10 @@ class fcm:
         self.__m = kwargs.get('m', 2)
 
         self.__degree = 2.0 / (self.__m - 1)
+
+        self.__ccore = kwargs.get('ccore', True)
+        if self.__ccore is True:
+            self.__ccore = ccore_library.workable()
 
 
     def process(self):
@@ -79,7 +113,11 @@ class fcm:
         @see get_membership()
 
         """
-        self.__process_by_python()
+        if self.__ccore is True:
+            self.__process_by_ccore()
+        else:
+            self.__process_by_python()
+
         return self
 
 
@@ -129,13 +167,27 @@ class fcm:
         return self.__membership
 
 
+    def __process_by_ccore(self):
+        """!
+        @brief Performs cluster analysis using C/C++ implementation.
+
+        """
+        result = wrapper.fcm_algorithm(self.__data, self.__centers, self.__m, self.__tolerance, self.__itermax)
+
+        self.__clusters = result[wrapper.fcm_package_indexer.INDEX_CLUSTERS]
+        self.__centers = result[wrapper.fcm_package_indexer.INDEX_CENTERS]
+        self.__membership = result[wrapper.fcm_package_indexer.INDEX_MEMBERSHIP]
+
+
     def __process_by_python(self):
         """!
         @brief Performs cluster analysis using Python implementation.
 
         """
-        self.__membership = numpy.random.rand(len(self.__data), len(self.__centers))
-        self.__membership = self.__membership / self.__membership.sum(axis=1)[:, None]
+        self.__data = numpy.array(self.__data)
+        self.__centers = numpy.array(self.__centers)
+
+        self.__membership = numpy.zeros((len(self.__data), len(self.__centers)))
 
         change = float('inf')
         iteration = 0
@@ -182,8 +234,12 @@ class fcm:
 
         for i in range(len(self.__data)):
             for j in range(len(self.__centers)):
-                divider = sum([pow(data_difference[j][i] / data_difference[k][i], self.__degree) for k in range(len(self.__centers))])
-                self.__membership[i][j] = 1.0 / divider
+                divider = sum([pow(data_difference[j][i] / data_difference[k][i], self.__degree) for k in range(len(self.__centers)) if data_difference[k][i] != 0.0])
+
+                if divider != 0.0:
+                    self.__membership[i][j] = 1.0 / divider
+                else:
+                    self.__membership[i][j] = 1.0
 
 
     def __calculate_changes(self, updated_centers):

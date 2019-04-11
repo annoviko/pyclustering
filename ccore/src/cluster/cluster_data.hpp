@@ -49,7 +49,7 @@ using cluster_sequence_ptr = std::shared_ptr<cluster_sequence>;
 */
 class cluster_data {
 protected:
-    cluster_sequence      m_clusters;
+    cluster_sequence      m_clusters = { };
 
 public:
     /**

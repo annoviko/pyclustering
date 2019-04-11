@@ -44,17 +44,25 @@ const double             fcm::DEFAULT_HYPER_PARAMETER                 = 2.0;
 fcm::fcm(const dataset & p_initial_centers, const double p_m, const double p_tolerance, const std::size_t p_itermax) :
     m_tolerance(p_tolerance),
     m_itermax(p_itermax),
-    m_initial_centers(p_initial_centers),
-    m_degree(2.0 / (p_m - 1.0))
-{ }
+    m_initial_centers(p_initial_centers)
+{
+    if (p_m <= 1.0) {
+        throw std::invalid_argument("Hyper parameter should be greater than 1.0.");
+    }
+
+    m_degree = 2.0 / (p_m - 1.0);
+}
 
 
 void fcm::process(const dataset & p_data, cluster_data & p_result) {
     m_ptr_data = &p_data;
     m_ptr_result = (fcm_data *) &p_result;
-
-    m_ptr_result->membership().resize(m_ptr_data->size(), point(m_ptr_data->at(0).size(), 0.0));
+    
     m_ptr_result->centers().assign(m_initial_centers.begin(), m_initial_centers.end());
+
+    if (m_itermax == 0) { return; }
+
+    m_ptr_result->membership().resize(m_ptr_data->size(), point(m_initial_centers.size(), 0.0));
 
     double current_change = std::numeric_limits<double>::max();
 
@@ -76,15 +84,17 @@ void fcm::verify(void) const {
 
 double fcm::update_centers(void) {
     const std::size_t dimensions = m_ptr_data->at(0).size();
+    const std::size_t data_length = m_ptr_data->size();
+    const std::size_t amount_centers = m_ptr_result->centers().size();
     double change = 0.0;
 
-    for (std::size_t i = 0; i < m_ptr_result->centers().size(); i++) {
-        std::vector<double> dividend(m_ptr_data->at(0).size(), 0.0);
-        std::vector<double> divider(m_ptr_data->at(0).size(), 0.0);
-        for (std::size_t j = 0; j < m_ptr_data->size(); j++) {
+    for (std::size_t i = 0; i < amount_centers; i++) {
+        std::vector<double> dividend(dimensions, 0.0);
+        std::vector<double> divider(dimensions, 0.0);
+        for (std::size_t j = 0; j < data_length; j++) {
             for (std::size_t dimension = 0; dimension < dimensions; dimension++) {
-                dividend[dimension] += m_ptr_data->at(j).at(dimension) * m_ptr_result->membership()[i][j];
-                divider[dimension] += m_ptr_result->membership()[i][j];
+                dividend[dimension] += m_ptr_data->at(j).at(dimension) * m_ptr_result->membership()[j][i];
+                divider[dimension] += m_ptr_result->membership()[j][i];
             }
         }
 
@@ -111,13 +121,20 @@ void fcm::update_membership(void) {
             differences[j] = euclidean_distance(m_ptr_data->at(i), m_ptr_result->centers().at(j));
         }
 
-        for (std::size_t j = 0; j < center_amount; i++) {
+        for (std::size_t j = 0; j < center_amount; j++) {
             double divider = 0.0;
             for (std::size_t k = 0; k < center_amount; k++) {
-                divider += std::pow( differences[j] / differences[k], m_degree );
+                if (differences[k] != 0.0) {
+                  divider += std::pow(differences[j] / differences[k], m_degree);
+                }
             }
 
-            m_ptr_result->membership()[i][j] = 1.0 / divider;
+            if (divider == 0.0) {
+                m_ptr_result->membership()[i][j] = 1.0;
+            }
+            else {
+                m_ptr_result->membership()[i][j] = 1.0 / divider;
+            }
         }
     }
 }

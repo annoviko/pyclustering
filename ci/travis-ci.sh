@@ -354,7 +354,7 @@ install_miniconda() {
 
     conda install -q libgfortran
 
-    conda create -q -n test-environment python=3.4 numpy scipy matplotlib Pillow
+    conda create -q -n test-environment python=3.5 numpy scipy matplotlib Pillow
 
     source activate test-environment
 }

@@ -179,3 +179,45 @@ public:
     */
     static std::shared_ptr<dataset> create_sample(const FCPS_SAMPLE sample);
 };
+
+
+/**
+*
+* @brief   Samples from set FAMOUS that is used for functional testing of clustering algorithms.
+*
+*/
+enum class FAMOUS_SAMPLE {
+    OLD_FAITHFUL,
+    SAMPLE_IRIS
+};
+
+
+/**
+*
+* @brief   Factory of samples from FAMOUS SAMPLE set.
+*
+*/
+class famous_sample_factory {
+private:
+    typedef std::map<FAMOUS_SAMPLE, std::string>    map_sample;
+
+private:
+    const static map_sample  m_sample_table;
+
+private:
+    const static std::string PATH_FAMOUS_SAMPLE_FOLDER;
+    const static std::string PATH_OLD_FAITHFUL;
+    const static std::string PATH_IRIS;
+
+public:
+    /**
+    *
+    * @brief   Creates sample for cluster analysis.
+    *
+    * @param[in] sample: sample that should be created.
+    *
+    * @return  Smart pointer to created dataset.
+    *
+    */
+    static std::shared_ptr<dataset> create_sample(const FAMOUS_SAMPLE sample);
+};

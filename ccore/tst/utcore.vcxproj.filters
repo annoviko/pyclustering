@@ -470,6 +470,18 @@
     <ClCompile Include="..\src\interface\silhouette_interface.cpp">
       <Filter>Tested Code\interface</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\cluster\fcm.cpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\interface\fcm_interface.cpp">
+      <Filter>Tested Code\interface</Filter>
+    </ClCompile>
+    <ClCompile Include="utest-fcm.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="utest-interface-fcm.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\container\adjacency.hpp">
@@ -794,6 +806,15 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="..\src\interface\silhouette_interface.h">
+      <Filter>Tested Code\interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cluster\fcm.hpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cluster\fcm_data.hpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\interface\fcm_interface.h">
       <Filter>Tested Code\interface</Filter>
     </ClInclude>
   </ItemGroup>

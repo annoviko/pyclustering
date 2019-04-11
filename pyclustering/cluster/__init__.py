@@ -421,7 +421,7 @@ class cluster_visualizer:
         self.__default_3d_marker_size = 30
     
     
-    def append_cluster(self, cluster, data = None, canvas = 0, marker = '.', markersize = None, color = None):
+    def append_cluster(self, cluster, data=None, canvas=0, marker='.', markersize=None, color=None):
         """!
         @brief Appends cluster to canvas for drawing.
         

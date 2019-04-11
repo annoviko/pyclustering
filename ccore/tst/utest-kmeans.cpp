@@ -316,11 +316,13 @@ TEST(utest_kmeans, itermax_1) {
     template_kmeans_itermax(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_centers, expected_clusters_length, 1);
 }
 
+
 TEST(utest_kmeans, itermax_10_simple01) {
     dataset start_centers = { { 3.7, 5.5 },{ 6.7, 7.5 } };
     std::vector<size_t> expected_clusters_length = { 5, 5 };
     template_kmeans_itermax(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), start_centers, expected_clusters_length, 10);
 }
+
 
 TEST(utest_kmeans, itermax_10_simple02) {
     dataset start_centers = { { 3.5, 4.8 },{ 6.9, 7.0 },{ 7.5, 0.5 } };

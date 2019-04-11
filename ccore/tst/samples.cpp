@@ -115,6 +115,26 @@ const fcps_sample_factory::map_sample fcps_sample_factory::m_sample_table = {
 
 
 
+const std::string famous_sample_factory::PATH_FAMOUS_SAMPLE_FOLDER = 
+    ".." + separator +
+    ".." + separator +
+    "pyclustering" + separator +
+    "samples" + separator +
+    "samples" + separator +
+    "famous" + separator;
+
+
+const std::string famous_sample_factory::PATH_OLD_FAITHFUL = PATH_FAMOUS_SAMPLE_FOLDER + "OldFaithful.data";
+const std::string famous_sample_factory::PATH_IRIS         = PATH_FAMOUS_SAMPLE_FOLDER + "Iris.data";
+
+
+const famous_sample_factory::map_sample famous_sample_factory::m_sample_table = {
+    { FAMOUS_SAMPLE::OLD_FAITHFUL,    famous_sample_factory::PATH_OLD_FAITHFUL   },
+    { FAMOUS_SAMPLE::SAMPLE_IRIS,     famous_sample_factory::PATH_IRIS           }
+};
+
+
+
 std::shared_ptr<dataset> generic_sample_factory::create_sample(const std::string & path_sample) {
     std::shared_ptr<dataset> sample_data(new dataset);
     size_t sample_dimension = 0;
@@ -189,6 +209,12 @@ std::shared_ptr<dataset> simple_sample_factory::create_random_sample(const std::
 
 
 std::shared_ptr<dataset> fcps_sample_factory::create_sample(const FCPS_SAMPLE sample) {
+    const std::string path_sample = m_sample_table.at(sample);
+    return generic_sample_factory::create_sample(path_sample);
+}
+
+
+std::shared_ptr<dataset> famous_sample_factory::create_sample(const FAMOUS_SAMPLE sample) {
     const std::string path_sample = m_sample_table.at(sample);
     return generic_sample_factory::create_sample(path_sample);
 }

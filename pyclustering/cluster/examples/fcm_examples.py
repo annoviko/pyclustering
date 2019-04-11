@@ -45,8 +45,6 @@ def template_clustering(start_centers, path):
     centers = fcm_instance.get_centers()
     membership = fcm_instance.get_membership()
 
-    print(membership)
-
     visualizer = cluster_visualizer_multidim()
     visualizer.append_clusters(clusters, sample)
     visualizer.append_cluster(centers, marker='*', markersize=10)
