@@ -61,31 +61,35 @@ class ccore_library:
         ccore_library.__initialized = True
         
         if PATH_PYCLUSTERING_CCORE_LIBRARY is None:
-            print("The pyclustering core is not supported for platform '" + sys.platform + "' (" + platform.architecture()[0] + ").\n" + 
-                  "Please, contact to 'pyclustering@yandex.ru'.")
+            print("The pyclustering ccore is not supported for platform '" + sys.platform + "' (" +
+                  platform.architecture()[0] + ").\n" +
+                  "Falling back on python implementation.\n" +
+                  "For more information, contact 'pyclustering@yandex.ru'.")
             
             return None
     
         if os.path.exists(PATH_PYCLUSTERING_CCORE_LIBRARY) is False:
-            print("The pyclustering core is not found (expected core location: '" + PATH_PYCLUSTERING_CCORE_LIBRARY + "').\n" + 
+            print("The pyclustering ccore is not found (expected core location: '" + PATH_PYCLUSTERING_CCORE_LIBRARY + "').\n" +
                   "Probably library has not been successfully installed ('" + sys.platform + "', '" + platform.architecture()[0] + "').\n" + 
-                  "Please, contact to 'pyclustering@yandex.ru'.")
+                  "Falling back on python implementation.\n" +
+                  "For more information, contact 'pyclustering@yandex.ru'.")
             
             return None
 
         ccore_library.__library = cdll.LoadLibrary(PATH_PYCLUSTERING_CCORE_LIBRARY)
         if ccore_library.__check_library_integrity() is False:
-            print("Impossible to mark core as workable due to compitability troubles " +
+            print("Impossible to mark ccore as workable due to compatibility issues " +
                   "('" + sys.platform + "', '" + platform.architecture()[0] + "').\n" + 
-                  "Please, contact to 'pyclustering@yandex.ru'")
+                  "Falling back on python implementation.\n" +
+                  "For more information, contact 'pyclustering@yandex.ru'.")
             
             return None
 
         result, version = ccore_library.__check_library_version()
         if result is False:
-            print("Incompatible core version of pyclustering library is used ('" + version +"' instead '" + ccore_library_version + "').\n" +
+            print("Incompatible core version of pyclustering library is being used ('" + version +"' instead '" + ccore_library_version + "').\n" +
                   "Probably library has not been successfully installed.\n" +
-                  "Please, contact to 'pyclustering@yandex.ru'.")
+                  "Please, contact 'pyclustering@yandex.ru'.")
 
         return ccore_library.__library
 
