@@ -37,6 +37,7 @@ from pyclustering.cluster.tests.integration               import it_clique      
 from pyclustering.cluster.tests.integration               import it_cure          as cluster_cure_integration_tests
 from pyclustering.cluster.tests.integration               import it_dbscan        as cluster_dbscan_integration_tests
 from pyclustering.cluster.tests.integration               import it_elbow         as cluster_elbow_integration_tests
+from pyclustering.cluster.tests.integration               import it_fcm           as cluster_fcm_integration_tests
 from pyclustering.cluster.tests.integration               import it_hsyncnet      as cluster_hsyncnet_integration_tests
 from pyclustering.cluster.tests.integration               import it_kmeans        as cluster_kmeans_integration_tests
 from pyclustering.cluster.tests.integration               import it_kmedians      as cluster_kmedians_integration_tests
@@ -64,6 +65,7 @@ class clustering_integration_tests(suite_holder):
         integration_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_cure_integration_tests))
         integration_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_dbscan_integration_tests))
         integration_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_elbow_integration_tests))
+        integration_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_fcm_integration_tests))
         integration_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_hsyncnet_integration_tests))
         integration_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_kmeans_integration_tests))
         integration_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_kmedians_integration_tests))

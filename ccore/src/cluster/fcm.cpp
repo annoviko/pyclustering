@@ -118,7 +118,7 @@ void fcm::update_membership(void) {
     for (std::size_t i = 0; i < data_size; i++) {
         std::vector<double> differences(center_amount, 0.0);
         for (std::size_t j = 0; j < center_amount; j++) {
-            differences[j] = euclidean_distance(m_ptr_data->at(i), m_ptr_result->centers().at(j));
+            differences[j] = euclidean_distance_square(m_ptr_data->at(i), m_ptr_result->centers().at(j));
         }
 
         for (std::size_t j = 0; j < center_amount; j++) {

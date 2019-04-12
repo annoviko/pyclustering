@@ -30,6 +30,14 @@ class assertion:
         if not (argument1 == argument2):
             raise AssertionError("Expected: '" + str(argument1) + "', Actual: '" + str(argument2) + "'")
 
+
+    @staticmethod
+    def eq_float(argument1, argument2, eps):
+        if abs(argument1 - argument2) >= eps:
+            raise AssertionError("Expected: '" + str(argument1) + "', Actual: '" + str(argument2) +
+                                 "' (eps: '" + str(eps) + "')")
+
+
     @staticmethod
     def gt(argument1, argument2):
         if not (argument1 > argument2):

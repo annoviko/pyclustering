@@ -25,7 +25,7 @@
 
 
 const char * INTERFACE_DESCRIPTION  = "ccore library is a C/C++ part of pyclustering library";
-const char * INTERFACE_VERSION      = "0.8.1";
+const char * INTERFACE_VERSION      = "0.9.0";
 
 
 void * get_interface_description(void) {

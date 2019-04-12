@@ -55,6 +55,11 @@ static void template_fcm_data_processing(
         return;
     }
 
+    for (const auto & probablities : output_result.membership()) {
+        double total_probability = std::accumulate(probablities.begin(), probablities.end(), 0.0);
+        ASSERT_DOUBLE_EQ(1.0, total_probability);
+    }
+
     ASSERT_CLUSTER_SIZES(*p_data, output_result.clusters(), p_expected_cluster_length);
 
     const std::size_t dimension = p_data->at(0).size();
@@ -67,11 +72,6 @@ static void template_fcm_data_processing(
     }
 
     ASSERT_EQ(output_result.centers().size(), output_result.clusters().size());
-
-    for (const auto & probablities : output_result.membership()) {
-        double total_probability = std::accumulate(probablities.begin(), probablities.end(), 0.0);
-        ASSERT_DOUBLE_EQ(1.0, total_probability);
-    }
 }
 
 
@@ -198,6 +198,20 @@ TEST(utest_fcm, allocation_famous_old_faithful) {
     dataset start_centers = { { 4.0, 70 }, { 1.0, 48 } };
     std::vector<size_t> expected_clusters_length = { };
     template_fcm_data_processing(famous_sample_factory::create_sample(FAMOUS_SAMPLE::OLD_FAITHFUL), start_centers, 2, expected_clusters_length);
+}
+
+
+TEST(utest_fcm, allocation_fcps_hepta) {
+    dataset start_centers = { { -0.06, 0.02, 0.02 }, { 2.41, 0.49, 0.03 }, { -2.69, 0.34, 0.29 }, { 0.49, 2.89, 0.78 }, { -0.60, -2.31, 0.05 }, { -0.15, 0.77, 3.23 }, { -0.50, 0.43, -2.60 } };
+    std::vector<size_t> expected_clusters_length = { 30, 30, 30, 30, 30, 30, 32 };
+    template_fcm_data_processing(fcps_sample_factory::create_sample(FCPS_SAMPLE::HEPTA), start_centers, 2, expected_clusters_length);
+}
+
+
+TEST(utest_fcm, allocation_fcps_tetra) {
+    dataset start_centers = { { 1.001, -0.083, -0.681 }, { -0.811, 0.476, -0.759 }, { -0.956, -1.427, -0.020 }, { 0.225, 0.560, 1.794 } };
+    std::vector<size_t> expected_clusters_length = { 100, 100, 100, 100 };
+    template_fcm_data_processing(fcps_sample_factory::create_sample(FCPS_SAMPLE::TETRA), start_centers, 2, expected_clusters_length);
 }
 
 

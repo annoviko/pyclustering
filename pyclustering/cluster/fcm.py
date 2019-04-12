@@ -40,6 +40,13 @@ class fcm:
     Fuzzy C-Means clustering results depend on initial centers. Algorithm K-Means++ can used for center initialization
     from module 'pyclustering.cluster.center_initializer'.
 
+    Fuzzy C-Means algorithm uses two general formulas for cluster analysis. The first is to updated membership of each
+    point:
+    \f[w_{ij}=\frac{1}{\sum_{k=0}^{c}\left ( \frac{\left \| x_{i}-c_{j} \right \|}{\left \| x_{i}-c_{k} \right \|} \right )^{\frac{2}{m-1}}}\f]
+
+    The second formula is used to update centers in line with obtained centers:
+    \f[c_{k}=\frac{\sum_{i=0}^{N}w_{k}\left ( x_{i} \right )^{m}x_{i}}{\sum_{i=0}^{N}w_{k}\left ( x_{i} \right )^{m}}\f]
+
     Here is an example how to perform cluster analysis using Fuzzy C-Means algorithm:
     @code
         from pyclustering.samples.definitions import FAMOUS_SAMPLES
@@ -205,7 +212,7 @@ class fcm:
 
     def __calculate_centers(self):
         """!
-        @brief Calculate center using membership of each cluster: TODO: formula
+        @brief Calculate center using membership of each cluster.
 
         @return (list) Updated clusters as list of clusters. Each cluster contains indexes of objects from data.
 

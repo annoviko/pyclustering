@@ -111,6 +111,7 @@ INPUT                  = pyclustering/__init__.py \
                          pyclustering/cluster/elbow.py \
                          pyclustering/cluster/encoder.py \
                          pyclustering/cluster/ema.py \
+                         pyclustering/cluster/fcm.py \
                          pyclustering/cluster/ga.py \
                          pyclustering/cluster/generator.py \
                          pyclustering/cluster/hsyncnet.py \

@@ -32,7 +32,7 @@ from pyclustering.core.definitions import *
 
 
 ccore_library_instance  = None
-ccore_library_version   = "0.8.1"
+ccore_library_version   = "0.9.0"
 
 
 class ccore_library:
