@@ -167,38 +167,35 @@ class central_element:
 
 class hhn_network(network):
     """!
-    @brief Oscillatory Neural Network with central element based on Hodgkin-Huxley neuron model. Interaction between oscillators is performed via
-           central element (no connection between oscillators that are called as peripheral). Peripheral oscillators receive external stimulus.
-           Central element consist of two oscillators: the first is used for synchronization some ensemble of oscillators and the second controls
-           synchronization of the first central oscillator with various ensembles.
+    @brief Oscillatory Neural Network with central element based on Hodgkin-Huxley neuron model.
+    @details Interaction between oscillators is performed via central element (no connection between oscillators that
+              are called as peripheral). Peripheral oscillators receive external stimulus. Central element consist of
+              two oscillators: the first is used for synchronization some ensemble of oscillators and the second
+              controls synchronization of the first central oscillator with various ensembles.
     
     Usage example where oscillatory network with 6 oscillators is used for simulation. The first two oscillators
     have the same stimulus, as well as the third and fourth oscillators and the last two. Thus three synchronous
     ensembles are expected after simulation.
     @code
-        # change period of time when high strength value of synaptic connection exists from CN2 to PN.
-        params = hhn_parameters();
-        params.deltah = 400;
-        
-        # create oscillatory network with stimulus
-        net = hhn_network(6, [0, 0, 25, 25, 47, 47], params);
-        
-        # simulate network
-        (t, dyn) = net.simulate(1200, 600);
-        
-        # draw network output during simulation (membrane potential of peripheral and central neurons).
-        amount_canvases = 6 + 2; # 6 peripheral oscillator + 2 central elements
-        visualizer = dynamic_visualizer(amount_canvases, x_title="Time", y_title="V", y_labels=False);
-        visualizer.append_dynamics(t, dyn_peripheral, 0, separate);
-        visualizer.append_dynamics(t, dyn_central, amount_canvases - 2, True);
-        visualizer.show();
-    @endcode
+        from pyclustering.nnet.hhn import hhn_network, hhn_parameters
+        from pyclustering.nnet.dynamic_visualizer import dynamic_visualizer
 
-    To increase performance CCORE can be used, for that purpose special flag should be specified when network is
-    constructed:
-    @code
-        # create oscillatory network with stimulus using CCORE
-        net = hhn_network(6, [0, 0, 25, 25, 47, 47], params, ccore=True);
+        # Change period of time when high strength value of synaptic connection exists from CN2 to PN.
+        params = hhn_parameters()
+        params.deltah = 400
+
+        # Create Hodgkin-Huxley oscillatory network with stimulus.
+        net = hhn_network(6, [0, 0, 25, 25, 47, 47], params)
+
+        # Simulate network.
+        (t, dyn_peripheral, dyn_central) = net.simulate(2400, 600)
+
+        # Visualize network's output (membrane potential of peripheral and central neurons).
+        amount_canvases = 6 + 2  # 6 peripheral oscillator + 2 central elements
+        visualizer = dynamic_visualizer(amount_canvases, x_title="Time", y_title="V", y_labels=False)
+        visualizer.append_dynamics(t, dyn_peripheral, 0, True)
+        visualizer.append_dynamics(t, dyn_central, amount_canvases - 2, True)
+        visualizer.show()
     @endcode
 
     There is visualized result of simulation where three synchronous ensembles of oscillators can be observed. The
@@ -283,7 +280,7 @@ class hhn_network(network):
         
         """
         
-        return self.simulate_static(steps, time, solution);
+        return self.simulate_static(steps, time, solution)
     
     
     def simulate_static(self, steps, time, solution = solve_type.RK4):

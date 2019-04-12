@@ -112,12 +112,12 @@ def six_oscillators_mix_2_stimulated():
 
 
 def six_oscillators_mix_3_stimulated():
-    params = hhn_parameters();
-    params.deltah = 400;
+    params = hhn_parameters()
+    params.deltah = 400
 
-    stimulus = [0, 0, 25, 25, 47, 47];
-    template_dynamic_hhn(6, 1200, 600, stimulus, params, separate=True, ccore_flag=False);
-    template_dynamic_hhn(6, 2400, 600, stimulus, params, separate=True, ccore_flag=True);
+    stimulus = [0, 0, 25, 25, 47, 47]
+    template_dynamic_hhn(6, 1200, 600, stimulus, params, separate=True, ccore_flag=False)
+    template_dynamic_hhn(6, 2400, 600, stimulus, params, separate=True, ccore_flag=True)
 
 
 def three_sync_ensembles():
@@ -152,14 +152,14 @@ def two_ensembles_80_oscillators():
     template_dynamic_hhn(len(stimulus), 4000, 1000, stimulus, params, separate=expected_ensembles, ccore_flag=True);
 
 
-one_oscillator_unstimulated();
-one_oscillator_stimulated();
-three_oscillators_stimulated();
-two_sync_ensembles();
-ten_oscillators_stimulated_desync();
-ten_oscillators_stimulated_sync();
-ten_oscillators_stimulated_partial_sync();
-six_oscillators_mix_2_stimulated();
-six_oscillators_mix_3_stimulated();
-three_sync_ensembles();
-two_ensembles_80_oscillators();
+one_oscillator_unstimulated()
+one_oscillator_stimulated()
+three_oscillators_stimulated()
+two_sync_ensembles()
+ten_oscillators_stimulated_desync()
+ten_oscillators_stimulated_sync()
+ten_oscillators_stimulated_partial_sync()
+six_oscillators_mix_2_stimulated()
+six_oscillators_mix_3_stimulated()
+three_sync_ensembles()
+two_ensembles_80_oscillators()
