@@ -41,7 +41,7 @@ class clarans:
     def __init__(self, data, number_clusters, numlocal, maxneighbor):
         """!
         @brief Constructor of clustering algorithm CLARANS.
-        @details The higher the value of maxneighbor, the closer is CLARANS to K-Medoids (PAM - Partitioning Around Medoids), and the longer is each search of a local minima.
+        @details The higher the value of maxneighbor, the closer is CLARANS to K-Medoids, and the longer is each search of a local minima.
         
         @param[in] data (list): Input data that is presented as list of points (objects), each point should be represented by list or tuple.
         @param[in] number_clusters (uint): amount of clusters that should be allocated.
