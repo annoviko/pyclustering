@@ -86,8 +86,6 @@ void fcm::verify(void) const {
 
 
 double fcm::update_centers(void) {
-    const std::size_t dimensions = m_ptr_data->at(0).size();
-    const std::size_t data_length = m_ptr_data->size();
     const std::size_t amount_centers = m_ptr_result->centers().size();
 
     std::vector<double> changes(amount_centers, 0.0);
@@ -127,7 +125,6 @@ double fcm::update_center(const std::size_t p_index) {
 
 void fcm::update_membership(void) {
     const std::size_t data_size = m_ptr_result->membership().size();
-    const std::size_t center_amount = m_ptr_result->centers().size();
 
     parallel_for(std::size_t(0), data_size, [this](std::size_t p_index) {
         update_point_membership(p_index);

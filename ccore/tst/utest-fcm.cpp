@@ -252,7 +252,7 @@ TEST(utest_fcm, itermax_10_simple02) {
     template_fcm_data_processing(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02), start_centers, 2, expected_clusters_length, 10);
 }
 
-#define UT_PERFORMANCE_SESSION
+
 #ifdef UT_PERFORMANCE_SESSION
 #include <chrono>
 
