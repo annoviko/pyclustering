@@ -37,15 +37,17 @@ class fcm:
     @brief Class represents Fuzzy C-means clustering (FCM).
     @details Fuzzy clustering is a form of clustering in which each data point can belong to more than one cluster.
 
-    Fuzzy C-Means clustering results depend on initial centers. Algorithm K-Means++ can used for center initialization
-    from module 'pyclustering.cluster.center_initializer'.
-
     Fuzzy C-Means algorithm uses two general formulas for cluster analysis. The first is to updated membership of each
     point:
     \f[w_{ij}=\frac{1}{\sum_{k=0}^{c}\left ( \frac{\left \| x_{i}-c_{j} \right \|}{\left \| x_{i}-c_{k} \right \|} \right )^{\frac{2}{m-1}}}\f]
 
     The second formula is used to update centers in line with obtained centers:
     \f[c_{k}=\frac{\sum_{i=0}^{N}w_{k}\left ( x_{i} \right )^{m}x_{i}}{\sum_{i=0}^{N}w_{k}\left ( x_{i} \right )^{m}}\f]
+
+    Fuzzy C-Means clustering results depend on initial centers. Algorithm K-Means++ can used for center initialization
+    from module 'pyclustering.cluster.center_initializer'.
+
+    CCORE implementation of the algorithm uses thread pool to parallelize the clustering process.
 
     Here is an example how to perform cluster analysis using Fuzzy C-Means algorithm:
     @code
@@ -75,6 +77,31 @@ class fcm:
         visualizer.append_cluster(centers, marker='*', markersize=10)
         visualizer.show()
     @endcode
+
+    The next example shows how to perform image segmentation using Fuzzy C-Means algorithm:
+    @code
+        from pyclustering.cluster.center_initializer import kmeans_plusplus_initializer
+        from pyclustering.cluster.fcm import fcm
+        from pyclustering.utils import read_image, draw_image_mask_segments
+
+        # load list of points for cluster analysis
+        data = read_image("stpetersburg_admiral.jpg")
+
+        # initialize
+        initial_centers = kmeans_plusplus_initializer(data, 3, kmeans_plusplus_initializer.FARTHEST_CENTER_CANDIDATE).initialize()
+
+        # create instance of Fuzzy C-Means algorithm
+        fcm_instance = fcm(data, initial_centers)
+
+        # run cluster analysis and obtain results
+        fcm_instance.process()
+        clusters = fcm_instance.get_clusters()
+
+        # visualize segmentation results
+        draw_image_mask_segments("stpetersburg_admiral.jpg", clusters)
+    @endcode
+
+    @image html fcm_segmentation_stpetersburg.png "Image segmentation using Fuzzy C-Means algorithm."
 
     """
 

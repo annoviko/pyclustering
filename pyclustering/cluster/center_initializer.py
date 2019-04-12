@@ -30,6 +30,7 @@
 
 import numpy
 import random
+import warnings
 
 
 class random_center_initializer:
@@ -224,9 +225,12 @@ class kmeans_plusplus_initializer:
 
             dataset_differences[index_center] = numpy.sum(numpy.square(data - center), axis=1).T
             for index_other_centers in centers:
-                dataset_differences[index_center][index_other_centers] = float('nan')
+                dataset_differences[index_center][index_other_centers] = numpy.nan
 
-        shortest_distances = numpy.min(dataset_differences, axis=0)
+        with warnings.catch_warnings():
+            numpy.warnings.filterwarnings('ignore', r'All-NaN (slice|axis) encountered')
+            shortest_distances = numpy.nanmin(dataset_differences, axis=0)
+
         return shortest_distances
 
 

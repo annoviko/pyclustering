@@ -25,7 +25,10 @@
 
 #include "utils/metric.hpp"
 
+#include "parallel/parallel.hpp"
 
+
+using namespace ccore::parallel;
 using namespace ccore::utils::metric;
 
 
@@ -86,26 +89,37 @@ double fcm::update_centers(void) {
     const std::size_t dimensions = m_ptr_data->at(0).size();
     const std::size_t data_length = m_ptr_data->size();
     const std::size_t amount_centers = m_ptr_result->centers().size();
-    double change = 0.0;
 
-    for (std::size_t i = 0; i < amount_centers; i++) {
-        std::vector<double> dividend(dimensions, 0.0);
-        std::vector<double> divider(dimensions, 0.0);
-        for (std::size_t j = 0; j < data_length; j++) {
-            for (std::size_t dimension = 0; dimension < dimensions; dimension++) {
-                dividend[dimension] += m_ptr_data->at(j).at(dimension) * m_ptr_result->membership()[j][i];
-                divider[dimension] += m_ptr_result->membership()[j][i];
-            }
-        }
+    std::vector<double> changes(amount_centers, 0.0);
 
-        point update_center(dimensions, 0.0);
+    parallel_for(std::size_t(0), amount_centers, [this, &changes](const std::size_t p_index) {
+        changes[p_index] = update_center(p_index);
+    });
+
+    return *(std::max_element(changes.cbegin(), changes.cend()));
+}
+
+
+double fcm::update_center(const std::size_t p_index) {
+    const std::size_t dimensions = m_ptr_data->at(0).size();
+    const std::size_t data_length = m_ptr_data->size();
+
+    std::vector<double> dividend(dimensions, 0.0);
+    std::vector<double> divider(dimensions, 0.0);
+    for (std::size_t j = 0; j < data_length; j++) {
         for (std::size_t dimension = 0; dimension < dimensions; dimension++) {
-            update_center[dimension] = dividend[dimension] / divider[dimension];
+            dividend[dimension] += m_ptr_data->at(j).at(dimension) * m_ptr_result->membership()[j][p_index];
+            divider[dimension] += m_ptr_result->membership()[j][p_index];
         }
-
-        change = std::max(change, euclidean_distance(update_center, m_ptr_result->centers().at(i)));
-        m_ptr_result->centers().at(i) = std::move(update_center);
     }
+
+    point update_center(dimensions, 0.0);
+    for (std::size_t dimension = 0; dimension < dimensions; dimension++) {
+        update_center[dimension] = dividend[dimension] / divider[dimension];
+    }
+
+    double change = euclidean_distance(update_center, m_ptr_result->centers().at(p_index));
+    m_ptr_result->centers().at(p_index) = std::move(update_center);
 
     return change;
 }
@@ -115,26 +129,32 @@ void fcm::update_membership(void) {
     const std::size_t data_size = m_ptr_result->membership().size();
     const std::size_t center_amount = m_ptr_result->centers().size();
 
-    for (std::size_t i = 0; i < data_size; i++) {
-        std::vector<double> differences(center_amount, 0.0);
-        for (std::size_t j = 0; j < center_amount; j++) {
-            differences[j] = euclidean_distance_square(m_ptr_data->at(i), m_ptr_result->centers().at(j));
+    parallel_for(std::size_t(0), data_size, [this](std::size_t p_index) {
+        update_point_membership(p_index);
+    });
+}
+
+
+void fcm::update_point_membership(const std::size_t p_index) {
+    const std::size_t center_amount = m_ptr_result->centers().size();
+    std::vector<double> differences(center_amount, 0.0);
+    for (std::size_t j = 0; j < center_amount; j++) {
+        differences[j] = euclidean_distance_square(m_ptr_data->at(p_index), m_ptr_result->centers().at(j));
+    }
+
+    for (std::size_t j = 0; j < center_amount; j++) {
+        double divider = 0.0;
+        for (std::size_t k = 0; k < center_amount; k++) {
+            if (differences[k] != 0.0) {
+                divider += std::pow(differences[j] / differences[k], m_degree);
+            }
         }
 
-        for (std::size_t j = 0; j < center_amount; j++) {
-            double divider = 0.0;
-            for (std::size_t k = 0; k < center_amount; k++) {
-                if (differences[k] != 0.0) {
-                  divider += std::pow(differences[j] / differences[k], m_degree);
-                }
-            }
-
-            if (divider == 0.0) {
-                m_ptr_result->membership()[i][j] = 1.0;
-            }
-            else {
-                m_ptr_result->membership()[i][j] = 1.0 / divider;
-            }
+        if (divider == 0.0) {
+            m_ptr_result->membership()[p_index][j] = 1.0;
+        }
+        else {
+            m_ptr_result->membership()[p_index][j] = 1.0 / divider;
         }
     }
 }

@@ -70,7 +70,11 @@ private:
 
     double update_centers(void);
 
+    double update_center(const std::size_t p_index);
+
     void update_membership(void);
+
+    void update_point_membership(const std::size_t p_index);
 
     void extract_clusters(cluster_sequence & p_clusters);
 };

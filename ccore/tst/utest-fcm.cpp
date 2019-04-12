@@ -251,3 +251,27 @@ TEST(utest_fcm, itermax_10_simple02) {
     std::vector<size_t> expected_clusters_length = { 10, 5, 8 };
     template_fcm_data_processing(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02), start_centers, 2, expected_clusters_length, 10);
 }
+
+#define UT_PERFORMANCE_SESSION
+#ifdef UT_PERFORMANCE_SESSION
+#include <chrono>
+
+TEST(performance_fcm, big_data) {
+    auto points = simple_sample_factory::create_random_sample(100000, 10);
+    auto centers = simple_sample_factory::create_random_sample(1, 10);
+
+    auto start = std::chrono::system_clock::now();
+
+    const std::size_t repeat = 1;
+    for (std::size_t i = 0; i < repeat; i++) {
+      fcm_data output_result;
+      fcm solver(*centers, 2.0);
+      solver.process(*points, output_result);
+    }
+
+    auto end = std::chrono::system_clock::now();
+
+    std::chrono::duration<double> difference = end - start;
+    std::cout << "Clustering time: '" << difference.count() / repeat << "' sec." << std::endl;
+}
+#endif
