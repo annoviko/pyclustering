@@ -253,6 +253,22 @@ run_integration_test_job() {
 }
 
 
+run_build_test_ccore_macos_job() {
+    print_info "BUILD AND TEST CCORE FOR MACOS."
+    print_info "- Build CCORE library."
+    print_info "- Run integration tests of pyclustering."
+    print_info "- Upload binary to cloud."
+
+    # build ccore library
+    build_ccore x64
+
+    # run integration tests
+    python pyclustering/tests/tests_runner.py --integration
+
+    # TODO: upload binary to cloud
+}
+
+
 run_doxygen_job() {
     print_info "DOXYGEN (documentation generation)."
     print_info "- Generate documentation and check for warnings."
@@ -426,6 +442,15 @@ if [[ $TRAVIS_COMMIT_MESSAGE == *"[no-build]"* ]]; then
     exit 0
 fi
 
+if [[ $TRAVIS_COMMIT_MESSAGE == *"[build-only-osx]"* ]]; then
+    if [[ $1 == BUILD_TEST_CCORE_MACOS ]]; then
+        print_info "Option '[build-only-osx]' is detected, mac os build will be started."
+    else
+        print_info "Option '[build-only-osx]' is detected, sources will not be built, checked, verified and published."
+        exit 0
+    fi
+fi
+
 case $1 in
     BUILD_CCORE) 
         run_build_ccore_job ;;
@@ -447,6 +472,9 @@ case $1 in
 
     IT_CCORE_X64)
         run_integration_test_job x64 ;;
+
+    BUILD_TEST_CCORE_MACOS)
+        run_build_test_ccore_macos_job ;;
 
     DOCUMENTATION)
         run_doxygen_job ;;

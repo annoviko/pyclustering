@@ -35,7 +35,7 @@ stages:
 jobs:
   include:
   - stage: build and test
-    env: TITLE="Build CCORE."
+    env: TITLE="Build CCORE (Linux)."
     script: ./ci/travis-ci.sh BUILD_CCORE
   - state: build and test
     env: TITLE="Run C/C++ static code analyser."
@@ -49,6 +49,10 @@ jobs:
   - stage: build and test
     env: TITLE="PyClustering unit and integration testing."
     script: ./ci/travis-ci.sh TEST_PYCLUSTERING
+  - stage: build and test
+    os: osx
+    env: TITLE="Build CCORE (MacOS) and intergration testing."
+    script: ./ci/travis-ci.sh BUILD_TEST_CCORE_MACOS
   - stage: build and test
     env: TITLE="Build documentation."
     script: ./ci/travis-ci.sh DOCUMENTATION
