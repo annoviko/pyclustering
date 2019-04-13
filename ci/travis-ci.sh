@@ -166,6 +166,7 @@ run_ut_ccore_job() {
     sudo apt-get install -qq g++-5
     sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-5 50
     sudo update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-5 50
+    sudo apt-get install python3
 
     pip3 install cpp-coveralls
 
