@@ -167,7 +167,7 @@ run_ut_ccore_job() {
     sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-5 50
     sudo update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-5 50
 
-    pip install cpp-coveralls
+    pip3 install cpp-coveralls
 
     # build unit-test project
     cd ccore/
