@@ -385,54 +385,38 @@ install_miniconda() {
 
 
 upload_binary() {
-    print_info "Upload binary files to storage."
+    print_info "Upload binary files (platform: '$1', os: '$2') to storage."
 
-    BUILD_FOLDER=$2
     BUILD_PLATFORM=$1
+    BUILD_OS=$2
     BINARY_FOLDER=$TRAVIS_BUILD_NUMBER
 
-    LOCAL_BINARY_PATH=
-    if [ "$BUILD_PLATFORM" == "x64" ]; then
-        LOCAL_BINARY_PATH=$CCORE_X64_BINARY_PATH
-    elif [ "$BUILD_PLATFORM" == "x86" ]; then
-        LOCAL_BINARY_PATH=$CCORE_X86_BINARY_PATH
-    else
-        print_error "Invalid platform is specified '$BUILD_PLATFORM' for uploading."
-        exit 1
-    fi
+    LOCAL_BINARY_PATH=pyclustering/core/$BUILD_PLATFORM/$BUILD_OS/ccore.so
 
     # Create folder for uploaded binary file
     python3 ci/cloud $YANDEX_DISK_TOKEN mkdir /$TRAVIS_BRANCH
-    python3 ci/cloud $YANDEX_DISK_TOKEN mkdir /$TRAVIS_BRANCH/$BUILD_FOLDER
-    python3 ci/cloud $YANDEX_DISK_TOKEN mkdir /$TRAVIS_BRANCH/$BUILD_FOLDER/$BUILD_PLATFORM
-    python3 ci/cloud $YANDEX_DISK_TOKEN mkdir /$TRAVIS_BRANCH/$BUILD_FOLDER/$BUILD_PLATFORM/$BINARY_FOLDER
+    python3 ci/cloud $YANDEX_DISK_TOKEN mkdir /$TRAVIS_BRANCH/$BUILD_OS
+    python3 ci/cloud $YANDEX_DISK_TOKEN mkdir /$TRAVIS_BRANCH/$BUILD_OS/$BUILD_PLATFORM
+    python3 ci/cloud $YANDEX_DISK_TOKEN mkdir /$TRAVIS_BRANCH/$BUILD_OS/$BUILD_PLATFORM/$BINARY_FOLDER
 
     # Upload binary file
-    REMOTE_BINARY_FILEPATH=/$TRAVIS_BRANCH/$BUILD_FOLDER/$BUILD_PLATFORM/$BINARY_FOLDER/ccore.so
+    REMOTE_BINARY_FILEPATH=/$TRAVIS_BRANCH/$BUILD_OS/$BUILD_PLATFORM/$BINARY_FOLDER/ccore.so
 
     python3 ci/cloud $YANDEX_DISK_TOKEN upload $LOCAL_BINARY_PATH $REMOTE_BINARY_FILEPATH
 }
 
 
 download_binary() {
-    print_info "Download CCORE binary (platform: '$1') file from cloud."
+    print_info "Download CCORE binary (platform: '$1', os: '$2') file from cloud."
 
     BUILD_PLATFORM=$1
+    BUILD_OS=$2
     
-    LOCAL_BINARY_PATH=
-    if [ "$BUILD_PLATFORM" == "x64" ]; then
-        LOCAL_BINARY_PATH=$CCORE_X64_BINARY_PATH
-    elif [ "$BUILD_PLATFORM" == "x86" ]; then
-        LOCAL_BINARY_PATH=$CCORE_X86_BINARY_PATH
-    else
-        print_error "Unkown platform is specified impossible to identify where to place binary."
-        exit 1
-    fi
+    LOCAL_BINARY_PATH=pyclustering/core/$BUILD_PLATFORM/$BUILD_OS/ccore.so
 
     # Download binary file
-    BUILD_FOLDER=linux
     BINARY_FOLDER=$TRAVIS_BUILD_NUMBER
-    BINARY_FILEPATH=/$TRAVIS_BRANCH/$BUILD_FOLDER/$BUILD_PLATFORM/$BINARY_FOLDER/ccore.so
+    BINARY_FILEPATH=/$TRAVIS_BRANCH/$BUILD_OS/$BUILD_PLATFORM/$BINARY_FOLDER/ccore.so
 
     python3 ci/cloud $YANDEX_DISK_TOKEN download $BINARY_FILEPATH $LOCAL_BINARY_PATH
     
