@@ -25,10 +25,18 @@ MKDIR = mkdir -p
 
 
 # C++ standard depending on operating system
-ifeq ($(shell uname -o), Cygwin)
+UNAME = $(shell uname -s | tr '[:upper:]' '[:lower:]')
+ifeq ($(findstring cygwin, $(UNAME)), cygwin)
+	OSNAME = win
 	CPLUS_STANDARD = gnu++14
 	CFLAG_PIC = 
 else
+	ifeq ($(UNAME), darwin)
+		OSNAME = macos
+	else
+		OSNAME = linux
+	endif
+
 	CPLUS_STANDARD = c++14
 	CFLAG_PIC = -fPIC
 endif
@@ -64,7 +72,7 @@ LFLAGS = -shared $(LFLAG_PLATFORM)
 
 
 # Executable library file
-EXECUTABLE_DIRECTORY = ../pyclustering/core/$(PLATFORM)/linux
+EXECUTABLE_DIRECTORY = ../pyclustering/core/$(PLATFORM)/$(OSNAME)
 EXECUTABLE = $(EXECUTABLE_DIRECTORY)/ccore.so
 
 

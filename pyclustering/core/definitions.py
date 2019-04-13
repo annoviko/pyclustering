@@ -23,27 +23,32 @@
 
 """
 
-import pyclustering.core as core;
-import os;
-import platform;
+import pyclustering.core as core
+import os
+import platform
 
-from sys import platform as _platform;
+from sys import platform as _platform
 
 
 # Path to CCORE library - pyclustering core.
-PATH_PYCLUSTERING_CCORE_LIBRARY = None;
+PATH_PYCLUSTERING_CCORE_LIBRARY = None
 
 
-core_architecture = None;
+core_architecture = None
 if platform.architecture()[0] == "64bit":
-    core_architecture = "x64";
+    core_architecture = "x64"
 else:
-    core_architecture = "x86";
+    core_architecture = "x86"
 
 
-if (_platform == "linux") or (_platform == "linux2") or (_platform == "cygwin"):
-    PATH_PYCLUSTERING_CCORE_LIBRARY = core.__path__[0] + os.sep + core_architecture + os.sep + "linux" + os.sep + "ccore.so";
+if (_platform == "linux") or (_platform == "linux2"):
+    PATH_PYCLUSTERING_CCORE_LIBRARY = core.__path__[0] + os.sep + core_architecture + os.sep + "linux" + os.sep + "ccore.so"
 
-elif (_platform == "win32"):
-    PATH_PYCLUSTERING_CCORE_LIBRARY = core.__path__[0] + os.sep + core_architecture + os.sep + "win" + os.sep + "ccore.dll";
+elif _platform == "darwin":
+    PATH_PYCLUSTERING_CCORE_LIBRARY = core.__path__[0] + os.sep + core_architecture + os.sep + "macos" + os.sep + "ccore.so"
 
+elif _platform == "win32":
+    PATH_PYCLUSTERING_CCORE_LIBRARY = core.__path__[0] + os.sep + core_architecture + os.sep + "win" + os.sep + "ccore.dll"
+
+elif _platform == "cygwin":
+    PATH_PYCLUSTERING_CCORE_LIBRARY = core.__path__[0] + os.sep + core_architecture + os.sep + "win" + os.sep + "ccore.so"

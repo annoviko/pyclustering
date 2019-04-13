@@ -30,7 +30,7 @@
 #include <vector>
 
 
-#if defined (__GNUC__) && defined(__unix__)
+#if (defined (__GNUC__) && defined(__unix__)) || defined(__APPLE__)
     #define DECLARATION __attribute__ ((__visibility__("default")))
 #elif defined (WIN32) || (_WIN32) || (_WIN64)
     #define DECLARATION __declspec(dllexport)

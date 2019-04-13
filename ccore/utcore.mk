@@ -27,7 +27,8 @@ MKDIR = mkdir -p
 
 
 # C++ standard depending on operating system
-ifeq ($(shell uname -o), Cygwin)
+UNAME = $(shell uname -s | tr '[:upper:]' '[:lower:]')
+ifeq ($(findstring cygwin, $(UNAME)), cygwin)
 	CPLUS_STANDARD = gnu++14
 	PIC_FLAG = 
 else
