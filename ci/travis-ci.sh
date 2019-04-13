@@ -259,6 +259,10 @@ run_build_test_ccore_macos_job() {
     print_info "- Run integration tests of pyclustering."
     print_info "- Upload binary to cloud."
 
+    # set path to the tested library
+    PYTHONPATH=`pwd`
+    export PYTHONPATH=${PYTHONPATH}
+
     # build ccore library
     build_ccore x64
 
