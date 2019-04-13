@@ -34,8 +34,9 @@ from cloud.yandex_disk import yandex_disk
 class task_handler:
     __LOCAL_PATH_THIRD_PARTIES_LIBS = "ccore/external/libs"
     __LOCAL_PATH_THIRD_PARTIES_INCLUDE = "ccore/external/include"
-    __LOCAL_OS_NAMES = { "windows" : "win",
-                         "linux" : "linux"  }
+    __LOCAL_OS_NAMES = {"windows": "win",
+                        "linux": "linux",
+                        "macos": "macos"}
 
     def __init__(self, token):
         self.__token = token
@@ -195,7 +196,7 @@ class task_handler:
         print(" rm <path>                             - remove file or folder on cloud.")
         print(" mkdir <path>                          - create folder on cloud.")
         print(" get_third_party <os> <platform> <to>  - download third party libraries from cloud for specific operating system"
-              " (linux or windows) and platform (x64 or x86) to specific folder on local machine.")
+              " (linux, windows, macos) and platform (x64 or x86) to specific folder on local machine.")
         print("")
         print("Example:")
         print(" python3 ci/cloud $CLOUD_TOKEN get_third_party windows x64")

@@ -128,10 +128,10 @@ run_build_ccore_job() {
     build_ccore x86
 
     print_info "Upload ccore x64 binary."
-    upload_binary x64
+    upload_binary x64 linux
     
     print_info "Upload ccore x86 binary."
-    upload_binary x86
+    upload_binary x86 linux
 }
 
 
@@ -272,7 +272,8 @@ run_build_test_ccore_macos_job() {
     # run integration tests
     python3 pyclustering/tests/tests_runner.py --integration
 
-    # TODO: upload binary to cloud
+    # upload binaries to cloud
+    upload_binary x64 macos
 }
 
 
@@ -386,7 +387,7 @@ install_miniconda() {
 upload_binary() {
     print_info "Upload binary files to storage."
 
-    BUILD_FOLDER=linux
+    BUILD_FOLDER=$2
     BUILD_PLATFORM=$1
     BINARY_FOLDER=$TRAVIS_BUILD_NUMBER
 

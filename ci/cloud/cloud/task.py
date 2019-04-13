@@ -62,7 +62,7 @@ class task:
             if len(params) > 2:
                 action_params['to'] = params[2]
 
-            if action_params['os'] not in ['windows', 'linux']:
+            if action_params['os'] not in ['windows', 'linux', 'macos']:
                 raise ValueError("ERROR: Unsupported operating system '%s' (available: 'linux', 'windows')." % action_params['os'])
 
             if action_params['platform'] not in ['x64', 'x86']:
