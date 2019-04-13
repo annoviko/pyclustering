@@ -1,5 +1,5 @@
 dist: trusty
-
+language: generic
 
 os:
 - linux
@@ -16,7 +16,6 @@ addons:
 
 
 install:
-- sudo apt-get update
 - chmod u+x ci/travis-ci.sh
 
 
