@@ -170,7 +170,7 @@ run_ut_ccore_job() {
     sudo apt-get install python3
     sudo apt-get install python3-pip
 
-    pip3 install cpp-coveralls
+    sudo pip3 install cpp-coveralls
 
     # build unit-test project
     cd ccore/
