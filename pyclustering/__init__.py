@@ -95,7 +95,7 @@ The simplest way to install pyclustering library is to use pip:
     pip3 install pyclustering
 @endcode
 
-The library can be compiled and manually installed on linux machine wherever you want:
+The library can be compiled and manually installed on Linux or MacOS machine wherever you want:
 @code{.sh}
     # extract content of the pyclustering library...
     # compile CCORE library (core of the pyclustering library).
@@ -110,10 +110,6 @@ The library can be compiled and manually installed on linux machine wherever you
     PYTHONPATH=`pwd`
     export PYTHONPATH=${PYTHONPATH}
 @endcode
-
-The library CCORE for 64-bit windows is distributed with pyclustering library so there is no need to re-built it.
-If you want to re-built CCORE library you can open CCORE Microsoft Visual Studio project that is located in
-ccore/ folder and compile it.
 
 
 @section example_sec Examples

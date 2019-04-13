@@ -1,4 +1,4 @@
-|Build Status Linux| |Build Status Win| |Coverage Status| |Documentation| |PyPi| |Download Counter| |DOI|
+|Build Status Linux MacOS| |Build Status Win| |Coverage Status| |Documentation| |PyPi| |Download Counter| |DOI|
 
 PyClustering
 ============
@@ -7,7 +7,7 @@ PyClustering
 algorithm, oscillatory networks, neural networks). The library provides
 Python and C++ implementations (via CCORE library) of each algorithm or
 model. CCORE library is a part of pyclustering and supported only for
-32, 64-bit Linux and 32, 64-bit Windows operating systems.
+Linux, Windows and MacOS operating systems.
 
 **Version**: 0.9.dev
 
@@ -28,7 +28,7 @@ Dependencies
 
 **Required packages**: scipy, matplotlib, numpy, Pillow
 
-**Python version**: >=3.4 (32, 64-bit)
+**Python version**: >=3.5 (32, 64-bit)
 
 **C++ version**: >= 14 (32, 64-bit)
 
@@ -43,10 +43,16 @@ implementation is used, otherwise C/C++. The implementation can be chosen by **c
 
 .. code:: python
 
-    xmeans_instance_1 = xmeans(data_points, start_centers, 20, ccore=True);   # As by default - C/C++ is used
-    xmeans_instance_2 = xmeans(data_points, start_centers, 20, ccore=False);  # Switch off the core - Python is used
+    # As by default - C/C++ is used
+    xmeans_instance_1 = xmeans(data_points, start_centers, 20, ccore=True);
 
-**ccore** option runs ccore shared library (core of the pyclustering library). The core is maintained for Linux 32, 64-bit and Windows 32, 64-bit.
+    # The same - C/C++ is used by default
+    xmeans_instance_2 = xmeans(data_points, start_centers, 20);
+
+    # Switch off core - Python is used
+    xmeans_instance_3 = xmeans(data_points, start_centers, 20, ccore=False);
+
+**ccore** option runs ccore shared library (core of the pyclustering library). The core is maintained for Linux, Windows and MacOS.
 
 
 
@@ -103,15 +109,15 @@ In case of any questions, proposals or bugs related to the pyclustering please c
 PyClustering Status
 ===================
 
-+-----------------+------------------------------+------------------------------+--------------------------------+
-| Branch          | master                       | 0.9.dev                      | 0.8.2.rel                      |
-+=================+==============================+==============================+================================+
-| Build (Linux)   | |Build Status Linux|         | |Build Status Linux 0.9.dev| | |Build Status Linux 0.8.2.rel| |
-+-----------------+------------------------------+------------------------------+--------------------------------+
-| Build (Win)     | |Build Status Win|           | |Build Status Win 0.9.dev|   | |Build Status Win 0.8.2.rel|   |
-+-----------------+------------------------------+------------------------------+--------------------------------+
-| Code Coverage   | |Coverage Status|            | |Coverage Status 0.9.dev|    | |Coverage Status 0.8.2.rel|    |
-+-----------------+------------------------------+------------------------------+--------------------------------+
++----------------------+------------------------------+------------------------------------+--------------------------------+
+| Branch               | master                       | 0.9.dev                            | 0.8.2.rel                      |
++======================+==============================+====================================+================================+
+| Build (Linux, MacOS) | |Build Status Linux MacOS|   | |Build Status Linux MacOS 0.9.dev| | |Build Status Linux 0.8.2.rel| |
++----------------------+------------------------------+------------------------------------+--------------------------------+
+| Build (Win)          | |Build Status Win|           | |Build Status Win 0.9.dev|         | |Build Status Win 0.8.2.rel|   |
++----------------------+------------------------------+------------------------------------+--------------------------------+
+| Code Coverage        | |Coverage Status|            | |Coverage Status 0.9.dev|          | |Coverage Status 0.8.2.rel|    |
++----------------------+------------------------------+------------------------------------+--------------------------------+
 
 
 
@@ -162,6 +168,8 @@ Brief Overview of the Library Content
 | Elbow                  | ✓       | ✓   |
 +------------------------+---------+-----+
 | EMA                    | ✓       |     |
++------------------------+---------+-----+
+| Fuzzy C-Means          | ✓       | ✓   |
 +------------------------+---------+-----+
 | GA (Genetic Algorithm) | ✓       | ✓   |
 +------------------------+---------+-----+
@@ -428,7 +436,7 @@ Illustrations
 
 
 
-.. |Build Status Linux| image:: https://travis-ci.org/annoviko/pyclustering.svg?branch=master
+.. |Build Status Linux MacOS| image:: https://travis-ci.org/annoviko/pyclustering.svg?branch=master
    :target: https://travis-ci.org/annoviko/pyclustering
 .. |Build Status Win| image:: https://ci.appveyor.com/api/projects/status/4uly2exfp49emwn0/branch/master?svg=true
    :target: https://ci.appveyor.com/project/annoviko/pyclustering/branch/master
@@ -440,7 +448,7 @@ Illustrations
    :target: https://doi.org/10.5281/zenodo.1491324
 .. |PyPi| image:: https://badge.fury.io/py/pyclustering.svg
    :target: https://badge.fury.io/py/pyclustering
-.. |Build Status Linux 0.9.dev| image:: https://travis-ci.org/annoviko/pyclustering.svg?branch=0.9.dev
+.. |Build Status Linux MacOS 0.9.dev| image:: https://travis-ci.org/annoviko/pyclustering.svg?branch=0.9.dev
    :target: https://travis-ci.org/annoviko/pyclustering
 .. |Build Status Win 0.9.dev| image:: https://ci.appveyor.com/api/projects/status/4uly2exfp49emwn0/branch/0.9.dev?svg=true
    :target: https://ci.appveyor.com/project/annoviko/pyclustering/branch/0.9.dev

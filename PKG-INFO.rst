@@ -6,8 +6,8 @@ PyClustering
 **pyclustering** is a Python, C++ data mining library (clustering
 algorithm, oscillatory networks, neural networks). The library provides
 Python and C++ implementations (via CCORE library) of each algorithm or
-model. CCORE library is a part of pyclustering and supported only for
-32, 64-bit Linux and 32, 64-bit Windows operating systems.
+model. CCORE library is a part of pyclustering and supported for
+Linux, Windows and MacOS operating systems.
 
 Official repository: https://github.com/annoviko/pyclustering/
 
@@ -18,7 +18,7 @@ Dependencies
 
 **Required packages**: scipy, matplotlib, numpy, Pillow
 
-**Python version**: >=3.4 (32-bit, 64-bit)
+**Python version**: >=3.5 (32-bit, 64-bit)
 
 **C++ version**: >= 14 (32-bit, 64-bit)
 
@@ -106,6 +106,7 @@ Library Content
 - **DBSCAN** (pyclustering.cluster.dbscan);
 - **Elbow** (pyclustering.cluster.elbow);
 - **EMA** (pyclustering.cluster.ema);
+- **Fuzzy C-Means** (pyclustering.cluster.fcm);
 - **GA (Genetic Algorithm)** (pyclustering.cluster.ga);
 - **HSyncNet** (pyclustering.cluster.hsyncnet);
 - **K-Means** (pyclustering.cluster.kmeans);
