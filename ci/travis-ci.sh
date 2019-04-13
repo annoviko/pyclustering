@@ -262,12 +262,11 @@ run_build_test_ccore_macos_job() {
     # build ccore library
     build_ccore x64
 
-    # install python and corresponding packages
-    brew install python3
+    # install corresponding packages
     pip3 install numpy matplotlib scipy Pillow
 
     # run integration tests
-    python pyclustering/tests/tests_runner.py --integration
+    python3 pyclustering/tests/tests_runner.py --integration
 
     # TODO: upload binary to cloud
 }
