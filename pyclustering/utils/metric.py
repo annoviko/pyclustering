@@ -87,10 +87,19 @@ class distance_metric:
         distance = metric([4.0, 9.2, 1.0], [3.4, 2.5, 6.2])
     @endcode
 
-    User may define its own function for distance calculation:
+    User may define its own function for distance calculation. In this case input is two points, for example, you
+    want to implement your own version of Manhattan distance:
     @code
-        user_function = lambda point1, point2: point1[0] + point2[0] + 2
-        metric = distance_metric(type_metric.USER_DEFINED, func=user_function)
+        from pyclustering.utils.metric import distance_metric, type_metric
+
+        def my_manhattan(point1, point2):
+            dimension = len(point1)
+            result = 0.0
+            for i in range(dimension):
+                result += abs(point1[i] - point2[i]) * 0.1
+            return result
+
+        metric = distance_metric(type_metric.USER_DEFINED, func=my_manhattan)
         distance = metric([2.0, 3.0], [1.0, 3.0])
     @endcode
 

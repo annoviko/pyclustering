@@ -34,7 +34,7 @@ from pyclustering.core.wrapper import ccore_library
 
 class fcm:
     """!
-    @brief Class represents Fuzzy C-means clustering (FCM).
+    @brief Class represents Fuzzy C-means (FCM) clustering algorithm.
     @details Fuzzy clustering is a form of clustering in which each data point can belong to more than one cluster.
 
     Fuzzy C-Means algorithm uses two general formulas for cluster analysis. The first is to updated membership of each
