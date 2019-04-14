@@ -1,4 +1,4 @@
-|Build Status Linux MacOS| |Build Status Win| |Coverage Status| |Documentation| |PyPi| |Download Counter| |DOI|
+|Build Status Linux MacOS| |Build Status Win| |Coverage Status| |Documentation| |PyPi| |Download Counter| |JOSS|
 
 PyClustering
 ============
@@ -124,19 +124,26 @@ PyClustering Status
 Cite the Library
 ================
 
-If you are using pyclustering library in a scientific paper, please, cite the library.
+If you are using pyclustering library in a scientific paper, please, cite the library:
+
+Novikov, A., 2019. PyClustering: Data Mining Library. Journal of Open Source Software, 4(36), p.1230. Available at: http://dx.doi.org/10.21105/joss.01230.
 
 BibTeX entry:
 
 .. code::
 
-    @misc{andrei_novikov_2018_1491324,
-        author       = {Andrei Novikov},
-        title        = {annoviko/pyclustering: pyclustering 0.8.2 release},
-        month        = nov,
-        year         = 2018,
-        doi          = {10.5281/zenodo.1491324},
-        url          = {https://doi.org/10.5281/zenodo.1491324}
+    @article{Novikov2019,
+        doi         = {10.21105/joss.01230},
+        url         = {https://doi.org/10.21105/joss.01230},
+        year        = 2019,
+        month       = {apr},
+        publisher   = {The Open Journal},
+        volume      = {4},
+        number      = {36},
+        pages       = {1230},
+        author      = {Andrei Novikov},
+        title       = {{PyClustering}: Data Mining Library},
+        journal     = {Journal of Open Source Software}
     }
 
 
@@ -462,3 +469,5 @@ Illustrations
    :target: https://coveralls.io/github/annoviko/pyclustering?branch=0.8.2.rel
 .. |Download Counter| image:: https://pepy.tech/badge/pyclustering
    :target: https://pepy.tech/project/pyclustering
+.. |JOSS| image:: http://joss.theoj.org/papers/10.21105/joss.01230/status.svg
+   :target: https://doi.org/10.21105/joss.01230
