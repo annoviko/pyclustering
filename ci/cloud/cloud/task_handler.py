@@ -56,6 +56,9 @@ class task_handler:
         elif action == 'rm':
             self.__rm(task.get_param('path'))
 
+        elif action == 'get_bin':
+            self.__get_bin(task.get_param('branch'), task.get_param('os'), task.get_param('platform'))
+
         elif action == 'get_third_party':
             self.__third_party(task.get_param('os'), task.get_param('platform'), task.get_param('to'))
 
@@ -111,6 +114,32 @@ class task_handler:
 
         else:
             print("WARNING: File or folder '%s' is not found." % path)
+
+
+    def __get_bin(self, branch, osys, platform):
+        dict_extension = {"macos": "so", "linux": "so", "windows": "dll"}
+        dict_os = {"macos": "macos", "linux": "linux", "windows": "win"}
+
+        disk_client = yandex_disk(self.__token)
+
+        remote_path_builds = "/%s/%s/%s" % (branch, osys, platform)
+        builds = disk_client.folder_content(remote_path_builds)
+
+        if len(builds) == 0:
+            print("WARNING: No builds for system '%s' on platform '%s' (branch '%s')." % (osys, platform, branch))
+            return
+
+        sorted_builds = sorted(builds)
+        latest_build = sorted_builds[-1]
+
+        remote_path_binary = "%s/%s/ccore.%s" % (remote_path_builds, latest_build, dict_extension[osys])
+
+        script_path = os.path.dirname(os.path.realpath(__file__))
+        local_path_binary = "%s/../../../pyclustering/core/%s/%s/ccore.%s" % (script_path, platform, dict_os[osys], dict_extension[osys])
+        local_path_binary = os.path.realpath(local_path_binary)
+
+        self.__download(remote_path_binary, local_path_binary)
+        print("Latest build for '%s' '%s' on branch '%s' is '%s'" % (osys, platform, branch, builds[-1]))
 
 
     def __third_party_libs(self, operating_system, platform, to_path):
@@ -191,12 +220,13 @@ class task_handler:
 
     def __help(self):
         print("Following commands are supported by the tool:")
-        print(" upload <from> <to>                    - upload file or folder from local machine path to remote path on clound.")
-        print(" download <from> <to>                  - download file or folder from remote path on cloud to local machine.")
-        print(" rm <path>                             - remove file or folder on cloud.")
-        print(" mkdir <path>                          - create folder on cloud.")
-        print(" get_third_party <os> <platform> <to>  - download third party libraries from cloud for specific operating system"
-              " (linux, windows, macos) and platform (x64 or x86) to specific folder on local machine.")
+        print(" upload <from> <to>                      - upload file or folder from local machine path to remote path on clound.")
+        print(" download <from> <to>                    - download file or folder from remote path on cloud to local machine.")
+        print(" rm <path>                               - remove file or folder on cloud.")
+        print(" mkdir <path>                            - create folder on cloud.")
+        print(" get_third_party <os> <platform> <to>    - download third party from cloud for specific system (linux, windows, macos) and platform (x64, x86)\n"
+              "                                           to specific folder on local machine.")
+        print(" get_bin <branch> <os> <platform>        - download latest binary file for particular branch, system (linux, windows, macos) and platform (x64, x86).")
         print("")
         print("Example:")
         print(" python3 ci/cloud $CLOUD_TOKEN get_third_party windows x64")

@@ -30,9 +30,9 @@ import os
 import unittest
 
 
-from cloud.client.task import task
-from cloud.client.task_handler import task_handler
-from cloud.client.yandex_disk import yandex_disk
+from cloud.task import task
+from cloud.task_handler import task_handler
+from cloud.yandex_disk import yandex_disk
 
 
 class cloud_unit_test(unittest.TestCase):

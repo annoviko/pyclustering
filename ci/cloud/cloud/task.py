@@ -39,17 +39,35 @@ class task:
             action_params['from'] = params[0]
             action_params['to'] = params[1]
 
+
         elif self.__action == 'mkdir':
             if len(params) != 1:
                 raise ValueError("ERROR: Incorrect amount of arguments ('%d' instead of '1')." % len(params))
 
             action_params['folder'] = params[0]
 
+
         elif self.__action == 'rm':
             if len(params) != 1:
                 raise ValueError("ERROR: Incorrect amount of arguments ('%d' instead of '1')." % len(params))
 
             action_params['path'] = params[0]
+
+
+        elif self.__action == 'get_bin':
+            if len(params) != 3:
+                raise ValueError("ERROR: Incorrect amount of arguments ('%d' instead of '3')." % len(params))
+
+            action_params['branch'] = params[0]
+            action_params['os'] = params[1]
+            action_params['platform'] = params[2]
+
+            if action_params['os'] not in ['windows', 'linux', 'macos']:
+                raise ValueError("ERROR: Unsupported operating system '%s' (available: 'linux', 'windows')." % action_params['os'])
+
+            if action_params['platform'] not in ['x64', 'x86']:
+                raise ValueError("ERROR: Unsupported platform '%s' (available: 'x86', 'x64')." % action_params['platform'])
+
 
         elif self.__action == 'get_third_party':
             if len(params) != 2 and len(params) != 3:
@@ -68,8 +86,10 @@ class task:
             if action_params['platform'] not in ['x64', 'x86']:
                 raise ValueError("ERROR: Unsupported platform '%s' (available: 'x86', 'x64')." % action_params['platform'])
 
+
         elif self.__action in ['-h', '--help', 'help']:
             self.__action = 'help'
+
 
         else:
             raise ValueError("ERROR: Unknown action is specified '%s'." % self.__action)
