@@ -25,14 +25,14 @@
 """
 
 
-from pyclustering.core.wrapper import ccore_library;
-from pyclustering.core.bsas_wrapper import bsas as bsas_wrapper;
-from pyclustering.core.metric_wrapper import metric_wrapper;
+from pyclustering.core.wrapper import ccore_library
+from pyclustering.core.bsas_wrapper import bsas as bsas_wrapper
+from pyclustering.core.metric_wrapper import metric_wrapper
 
-from pyclustering.cluster import cluster_visualizer;
-from pyclustering.cluster.encoder import type_encoding;
+from pyclustering.cluster import cluster_visualizer
+from pyclustering.cluster.encoder import type_encoding
 
-from pyclustering.utils.metric import type_metric, distance_metric;
+from pyclustering.utils.metric import type_metric, distance_metric
 
 
 class bsas_visualizer:
@@ -61,17 +61,17 @@ class bsas_visualizer:
 
         """
 
-        figure = kwargs.get('figure', None);
-        display = kwargs.get('display', True);
-        offset = kwargs.get('offset', 0);
+        figure = kwargs.get('figure', None)
+        display = kwargs.get('display', True)
+        offset = kwargs.get('offset', 0)
 
-        visualizer = cluster_visualizer();
-        visualizer.append_clusters(clusters, sample, canvas=offset);
+        visualizer = cluster_visualizer()
+        visualizer.append_clusters(clusters, sample, canvas=offset)
 
         for cluster_index in range(len(clusters)):
-            visualizer.append_cluster_attribute(offset, cluster_index, [representatives[cluster_index]], '*', 10);
+            visualizer.append_cluster_attribute(offset, cluster_index, [representatives[cluster_index]], '*', 10)
 
-        return visualizer.show(figure=figure, display=display);
+        return visualizer.show(figure=figure, display=display)
 
 
 class bsas:
@@ -90,23 +90,27 @@ class bsas:
 
     Example:
     @code
+        from pyclustering.cluster.bsas import bsas, bsas_visualizer
+        from pyclustering.utils import read_sample
+        from pyclustering.samples.definitions import SIMPLE_SAMPLES
+
         # Read data sample from 'Simple02.data'.
-        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE2);
+        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE2)
 
         # Prepare algorithm's parameters.
-        max_clusters = 2;
-        threshold = 1.0;
+        max_clusters = 3
+        threshold = 1.0
 
         # Create instance of BSAS algorithm.
-        bsas_instance = bsas(sample, max_clusters, threshold);
-        bsas_instance.process();
+        bsas_instance = bsas(sample, max_clusters, threshold)
+        bsas_instance.process()
 
         # Get clustering results.
-        clusters = bsas_instance.get_clusters();
-        representatives = bsas_instance.get_representatives();
+        clusters = bsas_instance.get_clusters()
+        representatives = bsas_instance.get_representatives()
 
         # Display results.
-        bsas_visualizer.show_clusters(sample, clusters, representatives);
+        bsas_visualizer.show_clusters(sample, clusters, representatives)
     @endcode
 
     @see pyclustering.cluster.mbsas, pyclustering.cluster.ttsas

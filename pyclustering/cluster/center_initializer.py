@@ -137,24 +137,30 @@ class kmeans_plusplus_initializer:
     
     Code example where initial centers are prepared for K-Means algorithm:
     @code
+        from pyclustering.cluster.center_initializer import kmeans_plusplus_initializer
+        from pyclustering.cluster.kmeans import kmeans
+        from pyclustering.cluster import cluster_visualizer
+        from pyclustering.utils import read_sample
+        from pyclustering.samples.definitions import SIMPLE_SAMPLES
+
         # Read data 'SampleSimple3' from Simple Sample collection.
-        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE3);
-        
+        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE3)
+
         # Calculate initial centers using K-Means++ method.
-        centers = kmeans_plusplus_initializer(sample, 4).initialize();
-        
+        centers = kmeans_plusplus_initializer(sample, 4, kmeans_plusplus_initializer.FARTHEST_CENTER_CANDIDATE).initialize()
+
         # Display initial centers.
-        visualizer = cluster_visualizer();
-        visualizer.append_cluster(sample);
-        visualizer.append_cluster(centers, marker = '*', markersize = 10);
-        visualizer.show();
-        
+        visualizer = cluster_visualizer()
+        visualizer.append_cluster(sample)
+        visualizer.append_cluster(centers, marker='*', markersize=10)
+        visualizer.show()
+
         # Perform cluster analysis using K-Means algorithm with initial centers.
-        kmeans_instance = kmeans(sample, centers);
-        
+        kmeans_instance = kmeans(sample, centers)
+
         # Run clustering process and obtain result.
-        kmeans_instance.process();
-        clusters = kmeans_instance.get_clusters();
+        kmeans_instance.process()
+        clusters = kmeans_instance.get_clusters()
     @endcode
     
     """

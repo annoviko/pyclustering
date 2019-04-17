@@ -244,7 +244,7 @@ class bang_animator:
         directory = bang_instance.get_directory()
 
         # Create BANG animation using class 'bang_animator':
-        animator = bang_animator(directory, clusters, noise)
+        animator = bang_animator(directory, clusters)
         animator.animate()
     @endcode
 

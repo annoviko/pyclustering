@@ -25,11 +25,11 @@
 """
 
 
-import random;
+import random
 
-from pyclustering.cluster.encoder import type_encoding;
+from pyclustering.cluster.encoder import type_encoding
 
-from pyclustering.utils import euclidean_distance_square;
+from pyclustering.utils import euclidean_distance_square
 
 
 class clarans:
@@ -50,17 +50,17 @@ class clarans:
         
         """
         
-        self.__pointer_data = data;
-        self.__numlocal = numlocal;
-        self.__maxneighbor = maxneighbor;
-        self.__number_clusters = number_clusters;
+        self.__pointer_data = data
+        self.__numlocal = numlocal
+        self.__maxneighbor = maxneighbor
+        self.__number_clusters = number_clusters
         
-        self.__clusters = [];
-        self.__current = [];
-        self.__belong = [];
+        self.__clusters = []
+        self.__current = []
+        self.__belong = []
         
-        self.__optimal_medoids = [];
-        self.__optimal_estimation = float('inf');
+        self.__optimal_medoids = []
+        self.__optimal_estimation = float('inf')
     
     
     def process(self):
@@ -72,25 +72,25 @@ class clarans:
         
         """
         
-        random.seed();
+        random.seed()
         
         for _ in range(0, self.__numlocal):
             # set (current) random medoids
-            self.__current = random.sample(range(0, len(self.__pointer_data)), self.__number_clusters);
+            self.__current = random.sample(range(0, len(self.__pointer_data)), self.__number_clusters)
             
             # update clusters in line with random allocated medoids
-            self.__update_clusters(self.__current);
+            self.__update_clusters(self.__current)
             
             # optimize configuration
-            self.__optimize_configuration();
+            self.__optimize_configuration()
             
             # obtain cost of current cluster configuration and compare it with the best obtained
-            estimation = self.__calculate_estimation();
-            if (estimation < self.__optimal_estimation):
-                self.__optimal_medoids = self.__current[:];
-                self.__optimal_estimation = estimation;
+            estimation = self.__calculate_estimation()
+            if estimation < self.__optimal_estimation:
+                self.__optimal_medoids = self.__current[:]
+                self.__optimal_estimation = estimation
         
-        self.__update_clusters(self.__optimal_medoids);
+        self.__update_clusters(self.__optimal_medoids)
     
     
     def get_clusters(self):
@@ -106,7 +106,7 @@ class clarans:
         
         """
         
-        return self.__clusters;
+        return self.__clusters
     
     
     def get_medoids(self):
@@ -118,7 +118,7 @@ class clarans:
         
         """
 
-        return self.__optimal_medoids;
+        return self.__optimal_medoids
 
 
     def get_cluster_encoding(self):
@@ -131,7 +131,7 @@ class clarans:
         
         """
         
-        return type_encoding.CLUSTER_INDEX_LIST_SEPARATION;
+        return type_encoding.CLUSTER_INDEX_LIST_SEPARATION
 
 
     def __update_clusters(self, medoids):
@@ -140,24 +140,24 @@ class clarans:
         
         """
         
-        self.__belong = [0] * len(self.__pointer_data);
-        self.__clusters = [[] for i in range(len(medoids))];
+        self.__belong = [0] * len(self.__pointer_data)
+        self.__clusters = [[] for i in range(len(medoids))]
         for index_point in range(len(self.__pointer_data)):
-            index_optim = -1;
-            dist_optim = 0.0;
+            index_optim = -1
+            dist_optim = 0.0
              
             for index in range(len(medoids)):
-                dist = euclidean_distance_square(self.__pointer_data[index_point], self.__pointer_data[medoids[index]]);
+                dist = euclidean_distance_square(self.__pointer_data[index_point], self.__pointer_data[medoids[index]])
                  
-                if ( (dist < dist_optim) or (index is 0)):
-                    index_optim = index;
-                    dist_optim = dist;
-             
-            self.__clusters[index_optim].append(index_point);
-            self.__belong[index_point] = index_optim;
+                if (dist < dist_optim) or (index is 0):
+                    index_optim = index
+                    dist_optim = dist
+
+            self.__clusters[index_optim].append(index_point)
+            self.__belong[index_point] = index_optim
         
         # If cluster is not able to capture object it should be removed
-        self.__clusters = [cluster for cluster in self.__clusters if len(cluster) > 0];
+        self.__clusters = [cluster for cluster in self.__clusters if len(cluster) > 0]
     
     
     def __optimize_configuration(self):
@@ -165,50 +165,50 @@ class clarans:
         @brief Finds quasi-optimal medoids and updates in line with them clusters in line with algorithm's rules. 
         
         """
-        index_neighbor = 0;
+        index_neighbor = 0
         while (index_neighbor < self.__maxneighbor):
             # get random current medoid that is to be replaced
-            current_medoid_index = self.__current[random.randint(0, self.__number_clusters - 1)];
-            current_medoid_cluster_index = self.__belong[current_medoid_index];
+            current_medoid_index = self.__current[random.randint(0, self.__number_clusters - 1)]
+            current_medoid_cluster_index = self.__belong[current_medoid_index]
             
             # get new candidate to be medoid
-            candidate_medoid_index = random.randint(0, len(self.__pointer_data) - 1);
+            candidate_medoid_index = random.randint(0, len(self.__pointer_data) - 1)
             
-            while (candidate_medoid_index in self.__current):
-                candidate_medoid_index = random.randint(0, len(self.__pointer_data) - 1);
+            while candidate_medoid_index in self.__current:
+                candidate_medoid_index = random.randint(0, len(self.__pointer_data) - 1)
             
-            candidate_cost = 0.0;
+            candidate_cost = 0.0
             for point_index in range(0, len(self.__pointer_data)):
-                if (point_index not in self.__current):
+                if point_index not in self.__current:
                     # get non-medoid point and its medoid
-                    point_cluster_index = self.__belong[point_index];
-                    point_medoid_index = self.__current[point_cluster_index];
+                    point_cluster_index = self.__belong[point_index]
+                    point_medoid_index = self.__current[point_cluster_index]
                     
                     # get other medoid that is nearest to the point (except current and candidate)
-                    other_medoid_index = self.__find_another_nearest_medoid(point_index, current_medoid_index);
-                    other_medoid_cluster_index = self.__belong[other_medoid_index];
+                    other_medoid_index = self.__find_another_nearest_medoid(point_index, current_medoid_index)
+                    other_medoid_cluster_index = self.__belong[other_medoid_index]
                     
                     # for optimization calculate all required distances
                     # from the point to current medoid
-                    distance_current = euclidean_distance_square(self.__pointer_data[point_index], self.__pointer_data[current_medoid_index]);
+                    distance_current = euclidean_distance_square(self.__pointer_data[point_index], self.__pointer_data[current_medoid_index])
                     
                     # from the point to candidate median
-                    distance_candidate = euclidean_distance_square(self.__pointer_data[point_index], self.__pointer_data[candidate_medoid_index]);
+                    distance_candidate = euclidean_distance_square(self.__pointer_data[point_index], self.__pointer_data[candidate_medoid_index])
                     
                     # from the point to nearest (own) medoid
-                    distance_nearest = float('inf');
+                    distance_nearest = float('inf')
                     if ( (point_medoid_index != candidate_medoid_index) and (point_medoid_index != current_medoid_cluster_index) ):
-                        distance_nearest = euclidean_distance_square(self.__pointer_data[point_index], self.__pointer_data[point_medoid_index]);
+                        distance_nearest = euclidean_distance_square(self.__pointer_data[point_index], self.__pointer_data[point_medoid_index])
                     
                     # apply rules for cost calculation
                     if (point_cluster_index == current_medoid_cluster_index):
                         # case 1:
                         if (distance_candidate >= distance_nearest):
-                            candidate_cost += distance_nearest - distance_current;
+                            candidate_cost += distance_nearest - distance_current
                         
                         # case 2:
                         else:
-                            candidate_cost += distance_candidate - distance_current;
+                            candidate_cost += distance_candidate - distance_current
                     
                     elif (point_cluster_index == other_medoid_cluster_index):
                         # case 3 ('nearest medoid' is the representative object of that cluster and object is more similar to 'nearest' than to 'candidate'):
@@ -217,20 +217,20 @@ class clarans:
                         
                         # case 4:
                         else:
-                            candidate_cost += distance_candidate - distance_nearest;
+                            candidate_cost += distance_candidate - distance_nearest
             
             if (candidate_cost < 0):
                 # set candidate that has won
-                self.__current[current_medoid_cluster_index] = candidate_medoid_index;
+                self.__current[current_medoid_cluster_index] = candidate_medoid_index
                 
                 # recalculate clusters
-                self.__update_clusters(self.__current);
+                self.__update_clusters(self.__current)
                 
                 # reset iterations and starts investigation from the begining
-                index_neighbor = 0;
+                index_neighbor = 0
                 
             else:
-                index_neighbor += 1;
+                index_neighbor += 1
     
     
     def __find_another_nearest_medoid(self, point_index, current_medoid_index):
@@ -243,17 +243,17 @@ class clarans:
         @return (uint) index of the another nearest medoid for the point.
         
         """
-        other_medoid_index = -1;
-        other_distance_nearest = float('inf');
+        other_medoid_index = -1
+        other_distance_nearest = float('inf')
         for index_medoid in self.__current:
             if (index_medoid != current_medoid_index):
-                other_distance_candidate = euclidean_distance_square(self.__pointer_data[point_index], self.__pointer_data[current_medoid_index]);
+                other_distance_candidate = euclidean_distance_square(self.__pointer_data[point_index], self.__pointer_data[current_medoid_index])
                 
-                if (other_distance_candidate < other_distance_nearest):
-                    other_distance_nearest = other_distance_candidate;
-                    other_medoid_index = index_medoid;
+                if other_distance_candidate < other_distance_nearest:
+                    other_distance_nearest = other_distance_candidate
+                    other_medoid_index = index_medoid
         
-        return other_medoid_index;
+        return other_medoid_index
     
     
     def __calculate_estimation(self):
@@ -264,11 +264,11 @@ class clarans:
         @return (double) estimation of current clusters.
         
         """
-        estimation = 0.0;
+        estimation = 0.0
         for index_cluster in range(0, len(self.__clusters)):
-            cluster = self.__clusters[index_cluster];
-            index_medoid = self.__current[index_cluster];
+            cluster = self.__clusters[index_cluster]
+            index_medoid = self.__current[index_cluster]
             for index_point in cluster:
-                estimation += euclidean_distance_square(self.__pointer_data[index_point], self.__pointer_data[index_medoid]);
+                estimation += euclidean_distance_square(self.__pointer_data[index_point], self.__pointer_data[index_medoid])
         
-        return estimation;
+        return estimation

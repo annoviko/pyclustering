@@ -25,11 +25,11 @@
 """
 
 
-from pyclustering.utils import linear_sum, square_sum;
+from pyclustering.utils import linear_sum, square_sum
 
-from pyclustering.cluster.encoder import type_encoding;
+from pyclustering.cluster.encoder import type_encoding
 
-from pyclustering.container.cftree import cftree, cfentry, measurement_type;
+from pyclustering.container.cftree import cftree, cfentry, measurement_type
 
 
 class birch:
@@ -69,14 +69,29 @@ class birch:
         
         @remark Despite eight arguments only the first two is mandatory, others can be ommitted. In this case default values are used for instance creation.
         
-        Example:
+        Example how to extract clusters from 'OldFaithful' sample using BIRCH algorithm:
         @code
-            birch_instance1 = birch(sample1, 2);    # two clusters should be allocated
-            birch_instance2 = birch(sample2, 5);    # five clusters should be allocated
-            
-            # three clusters should be allocated, but also each leaf node can have maximum 5 
-            # entries and each entry can have maximum 5 descriptors with initial diameter 0.05.
-            birch_instance3 = birch(sample3, 3, 5, 5, 0.05);
+            from pyclustering.cluster.birch import birch, measurement_type
+            from pyclustering.cluster import cluster_visualizer
+            from pyclustering.utils import read_sample
+            from pyclustering.samples.definitions import FAMOUS_SAMPLES
+
+            # Sample for cluster analysis (represented by list)
+            sample = read_sample(FAMOUS_SAMPLES.SAMPLE_OLD_FAITHFUL)
+
+            # Create BIRCH algorithm
+            birch_instance = birch(sample, 2)
+
+            # Cluster analysis
+            birch_instance.process()
+
+            # Obtain results of clustering
+            clusters = birch_instance.get_clusters()
+
+            # Visualize allocated clusters
+            visualizer = cluster_visualizer()
+            visualizer.append_clusters(clusters, sample)
+            visualizer.show()
         @endcode
         
         """

@@ -65,37 +65,50 @@ class agglomerative:
     
     Example of agglomerative algorithm where centroid link is used:
     @code
-        # sample for cluster analysis (represented by list)
-        sample = read_sample(path_to_sample);
-        
-        # create object that uses python code only
-        agglomerative_instance = agglomerative(sample, 2, link_type.CENTROID_LINK)
-        
-        # cluster analysis
-        agglomerative_instance.process();
-        
-        # obtain results of clustering
-        clusters = agglomerative_instance.get_clusters();  
+        from pyclustering.cluster.agglomerative import agglomerative, type_link
+        from pyclustering.cluster import cluster_visualizer
+        from pyclustering.samples.definitions import FCPS_SAMPLES
+        from pyclustering.utils import read_sample
+
+        # Sample for cluster analysis (represented by list)
+        sample = read_sample(FCPS_SAMPLES.SAMPLE_TARGET)
+
+        # Create object that uses python code only
+        agglomerative_instance = agglomerative(sample, 6, type_link.SINGLE_LINK, ccore=True)
+
+        # Cluster analysis
+        agglomerative_instance.process()
+
+        # Obtain results of clustering
+        clusters = agglomerative_instance.get_clusters()
+
+        # Visualize clustering results
+        visualizer = cluster_visualizer()
+        visualizer.append_clusters(clusters, sample)
+        visualizer.show()
     @endcode
     
-    Algorithm performance can be improved if 'ccore' flag is on. In this case C++ library will be called for clustering.
-    There is example of clustering 'LSUN' sample when usage of single or complete link will take a lot of resources and
-    when core usage is prefereble.
+    There is example of clustering 'LSUN' sample:
     @code
+        from pyclustering.cluster.agglomerative import agglomerative, type_link
+        from pyclustering.cluster import cluster_visualizer
+        from pyclustering.samples.definitions import FCPS_SAMPLES
+        from pyclustering.utils import read_sample
+
         # sample Lsun for cluster analysis
-        lsun_sample = read_sample(FCPS_SAMPLES.SAMPLE_LSUN);
-        
+        lsun_sample = read_sample(FCPS_SAMPLES.SAMPLE_LSUN)
+
         # create instance of the algorithm that will use ccore library (the last argument)
-        agglomerative_instance = agglomerative(lsun_sample, 3, link_type.SINGLE_LINK, True);
-        
+        agglomerative_instance = agglomerative(lsun_sample, 3, type_link.SINGLE_LINK, True)
+
         # start processing
-        agglomerative_instance.process();
-        
+        agglomerative_instance.process()
+
         # get result and visualize it
-        lsun_clusters = agglomerative_instance.get_clusters();
-        visualizer = cluster_visualizer();
-        visualizer.append_clusters(lsun_clusters, lsun_sample);
-        visualizer.show();
+        lsun_clusters = agglomerative_instance.get_clusters()
+        visualizer = cluster_visualizer()
+        visualizer.append_clusters(lsun_clusters, lsun_sample)
+        visualizer.show()
     @endcode
     
     Example of agglomerative clustering using different links:
@@ -115,20 +128,20 @@ class agglomerative:
         
         """  
         
-        self.__pointer_data = data;
-        self.__number_clusters = number_clusters;
-        self.__similarity = link;
+        self.__pointer_data = data
+        self.__number_clusters = number_clusters
+        self.__similarity = link
         
-        if (self.__similarity is None):
-            self.__similarity = type_link.CENTROID_LINK;
+        if self.__similarity is None:
+            self.__similarity = type_link.CENTROID_LINK
         
-        self.__clusters = [];
-        self.__ccore = ccore;
+        self.__clusters = []
+        self.__ccore = ccore
         if (self.__ccore):
-            self.__ccore = ccore_library.workable();
+            self.__ccore = ccore_library.workable()
         
         if (self.__similarity == type_link.CENTROID_LINK):
-            self.__centers = self.__pointer_data.copy();    # used in case of usage of centroid links
+            self.__centers = self.__pointer_data.copy()    # used in case of usage of centroid links
     
     
     def process(self):
