@@ -45,7 +45,7 @@ setup(
       project_urls={
                      'Homepage': 'https://pyclustering.github.io/',
                      'Repository': 'https://github.com/annoviko/pyclustering',
-                     'Documentation': 'https://codedocs.xyz/annoviko/pyclustering/',
+                     'Documentation': 'https://pyclustering.github.io/docs/0.9.0/html/',
                      'Bug Tracker': 'https://github.com/annoviko/pyclustering/issues'
                    },
       license='GNU Public License',
