@@ -42,8 +42,6 @@ class kmedians:
     @brief Class represents clustering algorithm K-Medians.
     @details The algorithm is less sensitive to outliers than K-Means. Medians are calculated instead of centroids.
     
-             CCORE option can be used to use the pyclustering core - C/C++ shared library for processing that significantly increases performance.
-    
     Example:
     @code
         from pyclustering.cluster.kmedians import kmedians

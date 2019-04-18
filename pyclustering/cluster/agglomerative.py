@@ -60,8 +60,6 @@ class agglomerative:
     @brief Class represents agglomerative algorithm for cluster analysis.
     @details Agglomerative algorithm considers each data point (object) as a separate cluster at the beggining and
               step by step finds the best pair of clusters for merge until required amount of clusters is obtained.
-            
-            CCORE option can be used to use the pyclustering core - C/C++ shared library for processing that significantly increases performance.
     
     Example of agglomerative algorithm where centroid link is used:
     @code

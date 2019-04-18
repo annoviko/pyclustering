@@ -40,8 +40,6 @@ class hsyncnet(syncnet):
     """!
     @brief Class represents clustering algorithm HSyncNet. HSyncNet is bio-inspired algorithm that is based on oscillatory network that uses modified Kuramoto model.
     
-    @details CCORE option can be used to use the pyclustering core - C/C++ shared library for processing that significantly increases performance.
-    
     Example:
     @code
         from pyclustering.cluster.hsyncnet import hsyncnet

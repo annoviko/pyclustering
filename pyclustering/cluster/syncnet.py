@@ -166,8 +166,6 @@ class syncnet(sync_network):
     @brief Class represents clustering algorithm SyncNet. 
     @details SyncNet is bio-inspired algorithm that is based on oscillatory network that uses modified Kuramoto model. Each attribute of a data object
              is considered as a phase oscillator.
-             
-             CCORE option can be used to use the pyclustering core - C/C++ shared library for processing that significantly increases performance.
     
     Example:
     @code

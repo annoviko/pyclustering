@@ -36,19 +36,29 @@ class birch:
     """!
     @brief Class represents clustering algorithm BIRCH.
     
-    Example:
+    Example how to extract clusters from 'OldFaithful' sample using BIRCH algorithm:
     @code
-        # sample for cluster analysis (represented by list)
-        sample = read_sample(path_to_sample);
-        
-        # create object of birch that uses CCORE for processing
-        birch_instance = birch(sample, 2, 5, 5, 0.05, measurement_type.CENTROID_EUCLIDIAN_DISTANCE, 200, True);
-        
-        # cluster analysis
-        birch_instance.process();
-        
-        # obtain results of clustering
-        clusters = birch_instance.get_clusters();
+        from pyclustering.cluster.birch import birch, measurement_type
+        from pyclustering.cluster import cluster_visualizer
+        from pyclustering.utils import read_sample
+        from pyclustering.samples.definitions import FAMOUS_SAMPLES
+
+        # Sample for cluster analysis (represented by list)
+        sample = read_sample(FAMOUS_SAMPLES.SAMPLE_OLD_FAITHFUL)
+
+        # Create BIRCH algorithm
+        birch_instance = birch(sample, 2)
+
+        # Cluster analysis
+        birch_instance.process()
+
+        # Obtain results of clustering
+        clusters = birch_instance.get_clusters()
+
+        # Visualize allocated clusters
+        visualizer = cluster_visualizer()
+        visualizer.append_clusters(clusters, sample)
+        visualizer.show()
     @endcode
     
     """
@@ -68,31 +78,6 @@ class birch:
         @param[in] ccore (bool): If True than DLL CCORE (C++ solution) will be used for solving the problem.
         
         @remark Despite eight arguments only the first two is mandatory, others can be ommitted. In this case default values are used for instance creation.
-        
-        Example how to extract clusters from 'OldFaithful' sample using BIRCH algorithm:
-        @code
-            from pyclustering.cluster.birch import birch, measurement_type
-            from pyclustering.cluster import cluster_visualizer
-            from pyclustering.utils import read_sample
-            from pyclustering.samples.definitions import FAMOUS_SAMPLES
-
-            # Sample for cluster analysis (represented by list)
-            sample = read_sample(FAMOUS_SAMPLES.SAMPLE_OLD_FAITHFUL)
-
-            # Create BIRCH algorithm
-            birch_instance = birch(sample, 2)
-
-            # Cluster analysis
-            birch_instance.process()
-
-            # Obtain results of clustering
-            clusters = birch_instance.get_clusters()
-
-            # Visualize allocated clusters
-            visualizer = cluster_visualizer()
-            visualizer.append_clusters(clusters, sample)
-            visualizer.show()
-        @endcode
         
         """
         

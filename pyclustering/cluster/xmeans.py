@@ -82,8 +82,6 @@ class xmeans:
              and then dynamically increases them. X-means uses specified splitting criterion to control 
              the process of splitting clusters. Method K-Means++ can be used for calculation of initial centers.
              
-             CCORE option can be used to use the pyclustering core - C/C++ shared library for processing that significantly increases performance.
-             
              CCORE implementation of the algorithm uses thread pool to parallelize the clustering process.
     
     Here example how to perform cluster analysis using X-Means algorithm:

@@ -39,8 +39,6 @@ class somsc:
     @brief Class represents simple clustering algorithm based on self-organized feature map. 
     @details This algorithm uses amount of clusters that should be allocated as a size of SOM map. Captured objects by neurons are clusters.
              Algorithm is able to process data with Gaussian distribution that has spherical forms.
-             
-             CCORE option can be used to use the pyclustering core - C/C++ shared library for processing that significantly increases performance.
     
     Example:
     @code
