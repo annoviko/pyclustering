@@ -44,15 +44,25 @@ class somsc:
     
     Example:
     @code
-        # load list of points for cluster analysis
-        sample = read_sample(path);
-        
-        # create instance of SOM-SC algorithm to allocated two clusters
-        somsc_instance = somsc(sample, 2);
-        
-        # run cluster analysis and obtain results
-        somsc_instance.process();
-        somsc_instance.get_clusters();
+        from pyclustering.cluster import cluster_visualizer
+        from pyclustering.cluster.somsc import somsc
+        from pyclustering.samples.definitions import FCPS_SAMPLES
+        from pyclustering.utils import read_sample
+
+        # Load list of points for cluster analysis
+        sample = read_sample(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS)
+
+        # Create instance of SOM-SC algorithm to allocated two clusters
+        somsc_instance = somsc(sample, 2)
+
+        # Run cluster analysis and obtain results
+        somsc_instance.process()
+        clusters = somsc_instance.get_clusters()
+
+        # Visualize clustering results.
+        visualizer = cluster_visualizer()
+        visualizer.append_clusters(clusters, sample)
+        visualizer.show()
     @endcode
     
     """

@@ -48,6 +48,12 @@ class elbow:
 
     Usage example of Elbow method for cluster analysis:
     @code
+        from pyclustering.cluster.kmeans import kmeans, kmeans_visualizer
+        from pyclustering.cluster.center_initializer import kmeans_plusplus_initializer
+        from pyclustering.cluster.elbow import elbow
+        from pyclustering.utils import read_sample
+        from pyclustering.samples.definitions import SIMPLE_SAMPLES
+
         # read sample 'Simple3' from file (sample contains four clusters)
         sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE3)
 
@@ -57,11 +63,12 @@ class elbow:
 
         # process input data and obtain results of analysis
         elbow_instance.process()
-        amount_clusters = elbow_instance.get_amount()   # most probable amount of clusters
-        wce = elbow_instance.get_wce()                  # total within-cluster errors for each K
+        amount_clusters = elbow_instance.get_amount()  # most probable amount of clusters
+        wce = elbow_instance.get_wce()  # total within-cluster errors for each K
 
         # perform cluster analysis using K-Means algorithm
-        centers = kmeans_plusplus_initializer(sample, amount_clusters).initialize()
+        centers = kmeans_plusplus_initializer(sample, amount_clusters,
+                                              amount_candidates=kmeans_plusplus_initializer.FARTHEST_CENTER_CANDIDATE).initialize()
         kmeans_instance = kmeans(sample, centers)
         kmeans_instance.process()
 

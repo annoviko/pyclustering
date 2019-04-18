@@ -46,15 +46,29 @@ class kmedians:
     
     Example:
     @code
-        # load list of points for cluster analysis
-        sample = read_sample(path);
-        
-        # create instance of K-Medians algorithm
-        kmedians_instance = kmedians(sample, [ [0.0, 0.1], [2.5, 2.6] ]);
-        
-        # run cluster analysis and obtain results
-        kmedians_instance.process();
-        kmedians_instance.get_clusters();
+        from pyclustering.cluster.kmedians import kmedians
+        from pyclustering.cluster import cluster_visualizer
+        from pyclustering.utils import read_sample
+        from pyclustering.samples.definitions import FCPS_SAMPLES
+
+        # Load list of points for cluster analysis.
+        sample = read_sample(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS)
+
+        # Create instance of K-Medians algorithm.
+        initial_medians = [[0.0, 0.1], [2.5, 0.7]]
+        kmedians_instance = kmedians(sample, initial_medians)
+
+        # Run cluster analysis and obtain results.
+        kmedians_instance.process()
+        clusters = kmedians_instance.get_clusters()
+        medians = kmedians_instance.get_medians()
+
+        # Visualize clustering results.
+        visualizer = cluster_visualizer()
+        visualizer.append_clusters(clusters, sample)
+        visualizer.append_cluster(initial_medians, marker='*', markersize=10)
+        visualizer.append_cluster(medians, marker='*', markersize=10)
+        visualizer.show()
     @endcode
     
     """

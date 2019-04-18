@@ -171,24 +171,31 @@ class syncnet(sync_network):
     
     Example:
     @code
-        # read sample for clustering from some file
-        sample = read_sample(path_to_file);
-        
-        # create oscillatory network with connectivity radius 0.5 using CCORE (C++ implementation of pyclustering)
-        network = syncnet(sample, 0.5, ccore = True);
-        
-        # run cluster analysis and collect output dynamic of the oscillatory network, 
-        # network simulation is performed by Runge Kutta Fehlberg 45.
-        (dyn_time, dyn_phase) = network.process(0.998, solve_type.RFK45, True);
-        
-        # show oscillatory network
-        network.show_network();
-        
-        # obtain clustering results
-        clusters = network.get_clusters();
-        
-        # show clusters
-        draw_clusters(sample, clusters);
+        from pyclustering.cluster import cluster_visualizer
+        from pyclustering.cluster.syncnet import syncnet, solve_type
+        from pyclustering.samples.definitions import SIMPLE_SAMPLES
+        from pyclustering.utils import read_sample
+
+        # Read sample for clustering from some file.
+        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE3)
+
+        # Create oscillatory network with connectivity radius 1.0.
+        network = syncnet(sample, 1.0)
+
+        # Run cluster analysis and collect output dynamic of the oscillatory network.
+        # Network simulation is performed by Runge Kutta 4.
+        analyser = network.process(0.998, solve_type.RK4)
+
+        # Show oscillatory network.
+        network.show_network()
+
+        # Obtain clustering results.
+        clusters = analyser.allocate_clusters()
+
+        # Visualize clustering results.
+        visualizer = cluster_visualizer()
+        visualizer.append_clusters(clusters, sample)
+        visualizer.show()
     @endcode
     
     """

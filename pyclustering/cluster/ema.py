@@ -106,16 +106,16 @@ class ema_initializer():
               kmeans with kmeans++ initialization. Here an example of initialization using kmeans strategy:
     
     @code
-        from pyclustering.utils import read_sample;
-        from pyclustering.samples.definitions import FAMOUS_SAMPLES;
-        from pyclustering.cluster.ema import ema_initializer;
-        
-        sample = read_sample(FAMOUS_SAMPLES.SAMPLE_OLD_FAITHFUL);
-        amount_clusters = 2;
-        
-        initial_means, initial_covariance = ema_initializer(sample, amount_clusters).initialize(initializer);
-        print(initial_means);
-        print(initial_covariance);
+        from pyclustering.utils import read_sample
+        from pyclustering.samples.definitions import FAMOUS_SAMPLES
+        from pyclustering.cluster.ema import ema_initializer
+
+        sample = read_sample(FAMOUS_SAMPLES.SAMPLE_OLD_FAITHFUL)
+        amount_clusters = 2
+
+        initial_means, initial_covariance = ema_initializer(sample, amount_clusters).initialize()
+        print(initial_means)
+        print(initial_covariance)
     @endcode
     
     """
@@ -239,34 +239,34 @@ class ema_observer:
               means and covariances are stored in observer on each step. Here an example of usage:
     
     @code
-        from pyclustering.cluster.ema import ema, ema_observer;
-        from pyclustering.utils import read_sample;
-        from pyclustering.samples.definitions import SIMPLE_SAMPLES;
-        
-        # Read data from text file
-        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE3);
-        
-        # Create EM observer
-        observer = ema_observer();
-        
-        # Create EM algorithm to allocated four clusters and pass observer to it
-        ema_instance = ema(sample, 4, observer=observer);
-        
-        # Run clustering process
-        ema_instance.process();
-        
-        # Print amount of steps that were done by the algorithm
-        print("EMA steps:", observer.get_iterations());
-        
-        # Print evolution of means and covariances
-        print("Means evolution:", observer.get_evolution_means());
-        print("Covariances evolution:", observer.get_evolution_covariances());
-        
-        # Print evolution of clusters
-        print("Clusters evolution:", observer.get_evolution_clusters());
-        
-        # Print final clusters
-        print("Allocated clusters:", observer.get_evolution_clusters()[-1]);
+        from pyclustering.cluster.ema import ema, ema_observer
+        from pyclustering.utils import read_sample
+        from pyclustering.samples.definitions import SIMPLE_SAMPLES
+
+        # Read data from text file.
+        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE3)
+
+        # Create EM observer.
+        observer = ema_observer()
+
+        # Create EM algorithm to allocated four clusters and pass observer to it.
+        ema_instance = ema(sample, 4, observer=observer)
+
+        # Run clustering process.
+        ema_instance.process()
+
+        # Print amount of steps that were done by the algorithm.
+        print("EMA steps:", observer.get_iterations())
+
+        # Print evolution of means and covariances.
+        print("Means evolution:", observer.get_evolution_means())
+        print("Covariances evolution:", observer.get_evolution_covariances())
+
+        # Print evolution of clusters.
+        print("Clusters evolution:", observer.get_evolution_clusters())
+
+        # Print final clusters.
+        print("Allocated clusters:", observer.get_evolution_clusters()[-1])
     @endcode
     
     """
@@ -446,37 +446,26 @@ class ema:
     @details The algorithm provides only clustering services (unsupervised learning).
               Here an example of data clustering process:
     @code
-        # Read dataset from text file
-        sample = read_sample(FAMOUS_SAMPLES.SAMPLE_OLD_FAITHFUL);
-        
-        # Amount of cluster that should be allocated
-        amount = 2;
-        
-        # Prepare initial means and covariances using K-Means initializer
-        initializer = ema_init_type.KMEANS_INITIALIZATION;
-        initial_means, initial_covariance = ema_initializer(sample, amount).initialize(initializer);
-        
-        # Lets create observer to see clustering process
-        observer = ema_observer();
-        
-        # Create instance of the EM algorithm
-        ema_instance = ema(sample, amount, initial_means, initial_covariance, observer=observer);
-        
-        # Run clustering process
-        ema_instance.process();
-        
-        # Extract clusters
-        clusters = ema_instance.get_clusters();
-        print("Obtained clusters:", clusters);
-        
-        # Display allocated clusters using visualizer
-        covariances = ema_instance.get_covariances();
-        means = ema_instance.get_centers();
-        ema_visualizer.show_clusters(clusters, sample, covariances, means);
-        
-        # Show animation process
-        ema_visualizer.animate_cluster_allocation(sample, observer);
-        
+        from pyclustering.cluster.ema import ema, ema_visualizer
+        from pyclustering.utils import read_sample
+        from pyclustering.samples.definitions import FCPS_SAMPLES
+
+        # Read data from text file.
+        sample = read_sample(FCPS_SAMPLES.SAMPLE_LSUN)
+
+        # Create EM algorithm to allocated four clusters.
+        ema_instance = ema(sample, 3)
+
+        # Run clustering process.
+        ema_instance.process()
+
+        # Get clustering results.
+        clusters = ema_instance.get_clusters()
+        covariances = ema_instance.get_covariances()
+        means = ema_instance.get_centers()
+
+        # Visualize obtained clustering results.
+        ema_visualizer.show_clusters(clusters, sample, covariances, means)
     @endcode
     
     Here is clustering results of the Expectation-Maximization clustering algorithm where popular sample 'OldFaithful' was used.

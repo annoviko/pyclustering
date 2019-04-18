@@ -42,30 +42,35 @@ class ttsas(bsas):
 
     Code example of TTSAS usage:
     @code
+        from pyclustering.cluster.bsas import bsas_visualizer
+        from pyclustering.cluster.ttsas import ttsas
+        from pyclustering.samples.definitions import SIMPLE_SAMPLES
+        from pyclustering.utils import read_sample
+
         # Read data sample from 'Simple03.data'.
-        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE3);
+        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE3)
 
         # Prepare algorithm's parameters.
-        threshold1 = 1.0;
-        threshold2 = 2.0;
+        threshold1 = 1.0
+        threshold2 = 2.0
 
         # Create instance of TTSAS algorithm.
-        ttsas_instance = ttsas(sample, max_clusters, threshold);
-        ttsas_instance.process();
+        ttsas_instance = ttsas(sample, threshold1, threshold2)
+        ttsas_instance.process()
 
         # Get clustering results.
-        clusters = ttsas_instance.get_clusters();
-        representatives = ttsas_instance.get_representatives();
+        clusters = ttsas_instance.get_clusters()
+        representatives = ttsas_instance.get_representatives()
 
         # Display results using BSAS visualizer.
-        bsas_visualizer.show_clusters(sample, clusters, representatives);
+        bsas_visualizer.show_clusters(sample, clusters, representatives)
     @endcode
 
     @see pyclustering.cluster.bsas, pyclustering.cluster.mbsas
 
     """
 
-    def __init__(self, data, threshold1, threshold2, ccore, **kwargs):
+    def __init__(self, data, threshold1, threshold2, ccore=True, **kwargs):
         """!
         @brief Creates TTSAS algorithm.
 

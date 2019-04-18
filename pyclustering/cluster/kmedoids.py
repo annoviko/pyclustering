@@ -44,26 +44,34 @@ class kmedoids:
     @details The algorithm is less sensitive to outliers tham K-Means. The principle difference between K-Medoids and K-Medians is that
              K-Medoids uses existed points from input data space as medoids, but median in K-Medians can be unreal object (not from
              input data space).
-             
-             CCORE option can be used to use core pyclustering - C/C++ shared library for processing that significantly increases performance.
     
     Clustering example:
     @code
-        # load list of points for cluster analysis
-        sample = read_sample(path)
-        
-        # set random initial medoids
-        initial_medoids = [1, 10]
-        
-        # create instance of K-Medoids algorithm
+        from pyclustering.cluster.kmedoids import kmedoids
+        from pyclustering.cluster import cluster_visualizer
+        from pyclustering.utils import read_sample
+        from pyclustering.samples.definitions import FCPS_SAMPLES
+
+        # Load list of points for cluster analysis.
+        sample = read_sample(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS)
+
+        # Set random initial medoids.
+        initial_medoids = [1, 500]
+
+        # Create instance of K-Medoids algorithm.
         kmedoids_instance = kmedoids(sample, initial_medoids)
-        
-        # run cluster analysis and obtain results
-        kmedoids_instance.process();
+
+        # Run cluster analysis and obtain results.
+        kmedoids_instance.process()
         clusters = kmedoids_instance.get_clusters()
-        
-        # show allocated clusters
+
+        # Show allocated clusters.
         print(clusters)
+
+        # Display clusters.
+        visualizer = cluster_visualizer()
+        visualizer.append_clusters(clusters, sample)
+        visualizer.show()
     @endcode
 
     Metric for calculation distance between points can be specified by parameter additional 'metric':

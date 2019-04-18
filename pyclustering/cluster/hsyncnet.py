@@ -25,15 +25,15 @@
 """
 
 
-import pyclustering.core.hsyncnet_wrapper as wrapper;
+import pyclustering.core.hsyncnet_wrapper as wrapper
 
-from pyclustering.core.wrapper import ccore_library;
+from pyclustering.core.wrapper import ccore_library
 
-from pyclustering.nnet import initial_type, solve_type;
+from pyclustering.nnet import initial_type, solve_type
 
-from pyclustering.cluster.syncnet import syncnet, syncnet_analyser;
+from pyclustering.cluster.syncnet import syncnet, syncnet_analyser
 
-from pyclustering.utils import average_neighbor_distance;
+from pyclustering.utils import average_neighbor_distance
 
 
 class hsyncnet(syncnet):
@@ -44,20 +44,28 @@ class hsyncnet(syncnet):
     
     Example:
     @code
-        # read list of points for cluster analysis
-        sample = read_sample(file);
-        
-        # create network for allocation three clusters using CCORE (C++ implementation)
-        network = hsyncnet(sample, 3, ccore = True);
-        
-        # run cluster analysis and output dynamic of the network
-        (time, dynamic) = network.process(0.995, collect_dynamic = True);
-        
-        # get allocated clusters
-        clusters = network.get_clusters();
-        
-        # show output dynamic of the network
-        draw_dynamics(time, dynamic);
+        from pyclustering.cluster.hsyncnet import hsyncnet
+        from pyclustering.nnet.sync import sync_visualizer
+        from pyclustering.utils import read_sample, draw_clusters
+        from pyclustering.samples.definitions import SIMPLE_SAMPLES
+
+        # Read list of points for cluster analysis.
+        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE2)
+
+        # Create network for allocation of three clusters.
+        network = hsyncnet(sample, 3)
+
+        # Run cluster analysis and output dynamic of the network.
+        analyser = network.process(0.995, collect_dynamic=True)
+
+        # Get allocated clusters.
+        clusters = analyser.allocate_clusters(eps=0.1)
+
+        # Show output dynamic of the network.
+        sync_visualizer.show_output_dynamic(analyser)
+
+        # Show allocated clusters.
+        draw_clusters(sample, clusters)
     @endcode
     """
     

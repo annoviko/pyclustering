@@ -40,23 +40,28 @@ class mbsas(bsas):
 
     Code example of MBSAS usage:
     @code
+        from pyclustering.cluster.bsas import bsas_visualizer
+        from pyclustering.cluster.mbsas import mbsas
+        from pyclustering.utils import read_sample
+        from pyclustering.samples.definitions import SIMPLE_SAMPLES
+
         # Read data sample from 'Simple02.data'.
-        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE2);
+        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE2)
 
         # Prepare algorithm's parameters.
-        max_clusters = 2;
-        threshold = 1.0;
+        max_clusters = 3
+        threshold = 1.0
 
         # Create instance of MBSAS algorithm.
-        mbsas_instance = mbsas(sample, max_clusters, threshold);
-        mbsas_instance.process();
+        mbsas_instance = mbsas(sample, max_clusters, threshold)
+        mbsas_instance.process()
 
         # Get clustering results.
-        clusters = mbsas_instance.get_clusters();
-        representatives = mbsas_instance.get_representatives();
+        clusters = mbsas_instance.get_clusters()
+        representatives = mbsas_instance.get_representatives()
 
         # Display results.
-        bsas_visualizer.show_clusters(sample, clusters, representatives);
+        bsas_visualizer.show_clusters(sample, clusters, representatives)
     @endcode
 
     @see pyclustering.cluster.bsas, pyclustering.cluster.ttsas

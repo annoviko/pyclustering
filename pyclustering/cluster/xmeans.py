@@ -114,7 +114,7 @@ class xmeans:
         # Visualize clustering results
         visualizer = cluster_visualizer()
         visualizer.append_clusters(clusters, sample)
-        visualizer.append_cluster(centers, None, marker='*')
+        visualizer.append_cluster(centers, None, marker='*', markersize=10)
         visualizer.show()
     @endcode
 
