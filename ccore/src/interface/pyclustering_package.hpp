@@ -148,7 +148,7 @@ pyclustering_package * create_package(const std::size_t p_size) {
     pyclustering_package * package = new pyclustering_package(type_package);
 
     package->size = p_size;
-    package->data = std::malloc(sizeof(TypeValue) * package->size);
+    package->data = new TypeValue[package->size];
 
     return package;
 }
