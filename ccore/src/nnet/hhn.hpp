@@ -311,8 +311,8 @@ private:
 public:
     hhn_network(void) = default;
 
-    hhn_network(const std::size_t     p_size,
-                const hnn_parameters  p_parameters);
+    hhn_network(const std::size_t      p_size,
+                const hnn_parameters & p_parameters);
 
     ~hhn_network(void) = default;
 

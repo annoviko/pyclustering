@@ -97,9 +97,9 @@ bool rock::merge_cluster(void) {
 
     double maximum_goodness = 0;
 
-    for (auto i = m_clusters.begin(); i != m_clusters.end(); i++) {
+    for (auto i = m_clusters.begin(); i != m_clusters.end(); ++i) {
         auto next = i;
-        for (auto j = ++next; j != m_clusters.end(); j++) {
+        for (auto j = ++next; j != m_clusters.end(); ++j) {
             double goodness = calculate_goodness(*i, *j);
             if (goodness > maximum_goodness) {
                 maximum_goodness = goodness;

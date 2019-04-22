@@ -212,7 +212,7 @@ double xmeans::bayesian_information_criterion(const cluster_sequence & analysed_
         N += analysed_clusters[index_cluster].size();
     }
 
-    if (N - K > 0) {
+    if (N != K) {
         sigma /= (double) (N - K);
         double p = (K - 1) + dimension * K + 1;
 

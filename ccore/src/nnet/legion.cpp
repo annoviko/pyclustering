@@ -46,8 +46,6 @@ namespace nnet {
 const size_t legion_network::MAXIMUM_MATRIX_REPRESENTATION_SIZE = 4096;
 
 
-legion_network::legion_network(void) : m_stimulus(nullptr) { }
-
 
 legion_network::legion_network(const size_t num_osc, const connection_t connection_type, const legion_parameters & params) {
     initialize(num_osc, connection_type, 0, 0, params);
@@ -141,7 +139,7 @@ void legion_network::calculate_states(const legion_stimulus & stimulus, const so
     unsigned int number_int_steps = (unsigned int) (step / int_step);
 
     for (std::size_t index = 0; index < size(); index++) {
-        argv[0] = (void *) &index;
+        argv[0] = (void *) index;
 
         differ_state<double> inputs { m_oscillators[index].m_excitatory, m_oscillators[index].m_inhibitory };
         if (m_params.ENABLE_POTENTIAL) {
@@ -231,7 +229,7 @@ void legion_network::calculate_states(const legion_stimulus & stimulus, const so
 
 
 void legion_network::neuron_states(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs) {
-    unsigned int index = *(unsigned int *) argv[0];
+    std::size_t index = (std::size_t) argv[0];
 
     const double x = inputs[0];
     const double y = inputs[1];

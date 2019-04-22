@@ -164,7 +164,7 @@ public:
      *
      */
     static double calculate_local_sync_order(
-            const std::shared_ptr<adjacency_collection> p_connections,
+            const std::shared_ptr<adjacency_collection> & p_connections,
             const std::vector<double> & p_phases);
 
     /**
@@ -180,7 +180,7 @@ public:
      *
      */
     static double calculate_local_sync_order(
-            const std::shared_ptr<adjacency_collection> p_connections,
+            const std::shared_ptr<adjacency_collection> & p_connections,
             const std::vector<sync_oscillator> & p_oscillators);
 
 private:
@@ -191,7 +191,7 @@ private:
 
     template <class TypeContainer>
     static double calculate_local_sync_order_parameter(
-            const std::shared_ptr<adjacency_collection> p_connections,
+            const std::shared_ptr<adjacency_collection> & p_connections,
             const TypeContainer & p_container,
             const phase_getter & p_getter);
 };

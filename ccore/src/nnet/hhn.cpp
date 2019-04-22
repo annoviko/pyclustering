@@ -525,7 +525,7 @@ const std::size_t hhn_network::POSITION_INACTIVE_COND_SODIUM    = 2;
 const std::size_t hhn_network::POSITION_ACTIVE_COND_POTASSIUM   = 3;
 
 
-hhn_network::hhn_network(const std::size_t p_size, const hnn_parameters p_parameters) :
+hhn_network::hhn_network(const std::size_t p_size, const hnn_parameters & p_parameters) :
     m_peripheral(p_size),
     m_central(2),
     m_stimulus(nullptr),
@@ -632,7 +632,7 @@ void hhn_network::calculate_peripheral_states(const solve_type p_solver, const d
     std::vector<void *> argv(1, nullptr);
 
     for (std::size_t index = 0; index < m_peripheral.size(); index++) {
-        argv[0] = (void *) &index;
+        argv[0] = (void *) index;
 
         differ_state<double> inputs;
         pack_equation_input(m_peripheral[index], inputs);
@@ -647,7 +647,7 @@ void hhn_network::calculate_central_states(const solve_type p_solver, const doub
 
     for (std::size_t index = 0; index < m_central.size(); index++) {
         std::size_t index_central = index + m_peripheral.size();
-        argv[0] = (void *) &index_central;
+        argv[0] = (void *) index_central;
 
         differ_state<double> inputs;
         pack_equation_input(m_central[index], inputs);
@@ -684,7 +684,7 @@ void hhn_network::perform_calculation(const solve_type p_solver, const double p_
 
 
 void hhn_network::neuron_states(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs) {
-    std::size_t index = *(std::size_t *) argv[0];
+    std::size_t index = (std::size_t) argv[0];
 
     double v = inputs[POSITION_MEMBRAN_POTENTIAL];       /* membrane potential (v)                               */
     double m = inputs[POSITION_ACTIVE_COND_SODIUM];      /* activation conductance of the sodium channel (m)     */

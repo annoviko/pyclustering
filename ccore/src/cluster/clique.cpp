@@ -85,9 +85,10 @@ void clique::process(const dataset & p_data, cluster_data & p_result) {
 void clique::expand_cluster(clique_block & p_block) {
     p_block.touch();
 
-    if (p_block.get_points().size() <= m_density_threshold) {
-        if (!p_block.get_points().empty()) {
-            m_result_ptr->noise().insert(m_result_ptr->noise().end(), p_block.get_points().begin(), p_block.get_points().end());
+    const auto & points = p_block.get_points();
+    if (points.size() <= m_density_threshold) {
+        if (!points.empty()) {
+            m_result_ptr->noise().insert(m_result_ptr->noise().end(), points.begin(), points.end());
         }
 
         return;
@@ -135,7 +136,9 @@ void clique::create_grid(void) {
     const std::size_t dimension = m_data_ptr->at(0).size();
     const std::size_t amount_blocks = static_cast<std::size_t>(std::pow(m_intervals, dimension));
 
-    m_result_ptr->blocks().reserve(amount_blocks);
+    auto & blocks = m_result_ptr->blocks();
+    blocks.reserve(amount_blocks);
+
     auto iterator = coordinate_iterator(dimension, m_intervals);
 
     std::vector<bool> point_availability(m_data_ptr->size(), true);
@@ -150,9 +153,9 @@ void clique::create_grid(void) {
         clique_block cell(logical_location, std::move(spatial_block));
         cell.capture_points(*m_data_ptr, point_availability);
 
-        m_result_ptr->blocks().push_back(std::move(cell));
+        blocks.push_back(std::move(cell));
 
-        m_cells_map.insert({ location_to_key(m_result_ptr->blocks().back().get_logical_location()), &(m_result_ptr->blocks().back()) });
+        m_cells_map.insert({ location_to_key(blocks.back().get_logical_location()), &(blocks.back()) });
     }
 }
 

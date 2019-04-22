@@ -178,7 +178,7 @@ void optics::update_order_seed(const optics_descriptor & p_object, const neighbo
                 m_optics_objects->at(index_neighbor).m_reachability_distance = reachable_distance;
 
                 auto position_insertion = order_seed.end();
-                for (auto position = order_seed.begin(); position != order_seed.end(); position++) {
+                for (auto position = order_seed.begin(); position != order_seed.end(); ++position) {
                     if (reachable_distance < (*position)->m_reachability_distance) {
                         position_insertion = position;
                         break;

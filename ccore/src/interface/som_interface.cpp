@@ -27,7 +27,7 @@ using namespace ccore::nnet;
 
 
 void * som_create(const size_t num_rows, const size_t num_cols, const size_t type_conn, const void * parameters) {
-    return (void *) new som(num_rows, num_cols, (som_conn_type) type_conn,  *((som_parameters *) parameters));
+    return new som(num_rows, num_cols, (som_conn_type) type_conn,  *((som_parameters *) parameters));
 }
 
 

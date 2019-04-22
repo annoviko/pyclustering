@@ -125,7 +125,7 @@ private:
     som_award_sequence  m_awards;
 
     /* store pointer to training data for convinience */
-    const dataset     * m_data;
+    const dataset     * m_data = nullptr;
 
     /* just for convenience (avoid excess calculation during learning) */
     dataset                 m_location;
@@ -134,12 +134,12 @@ private:
     som_neighbor_sequence   m_neighbors;
 
     /* describe learning process and internal state */
-    std::size_t     m_epouchs;
+    std::size_t     m_epouchs = 0;
     som_parameters  m_params;
 
     /* dynamic changes learning parameters */
-    double m_local_radius;
-    double m_learn_rate;
+    double m_local_radius = 0.0;
+    double m_learn_rate = 0.0;
 
 public:
     /**
@@ -153,6 +153,15 @@ public:
      *
      */
     som(const std::size_t num_rows, const std::size_t num_cols, const som_conn_type type_conn, const som_parameters & parameters);
+
+    /**
+     *
+     * @brief   Copy constructor.
+     *
+     * @param[in] p_other: self-organized map that should be copied.
+     *
+     */
+    som(const som & p_other);
 
     /**
      *

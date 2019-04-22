@@ -38,7 +38,7 @@ void * hsyncnet_create_network(const pyclustering_package * const p_sample,
     dataset input_data;
     p_sample->extract(input_data);
 
-    return (void *) new hsyncnet(&input_data, p_number_clusters, (initial_type) p_initial_phases, p_initial_neighbors, p_increase_persent);
+    return new hsyncnet(&input_data, p_number_clusters, (initial_type) p_initial_phases, p_initial_neighbors, p_increase_persent);
 }
 
 

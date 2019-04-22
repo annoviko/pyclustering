@@ -33,7 +33,7 @@ void * syncnet_create_network(const pyclustering_package * const p_sample, const
     dataset input_data;
     p_sample->extract(input_data);
 
-    return (void *) new syncnet(&input_data, p_connectivity_radius, p_enable_conn_weight, (initial_type) p_initial_phases);
+    return new syncnet(&input_data, p_connectivity_radius, p_enable_conn_weight, (initial_type) p_initial_phases);
 }
 
 

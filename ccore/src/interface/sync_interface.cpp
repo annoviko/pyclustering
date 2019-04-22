@@ -30,7 +30,7 @@ using namespace ccore::nnet;
 
 
 void * sync_create_network(const unsigned int size, const double weight_factor, const double frequency_factor, const unsigned int connection_type, const unsigned int initial_phases) {
-    return (void *) new sync_network(size, weight_factor, frequency_factor, (connection_t) connection_type, (initial_type) initial_phases);
+    return new sync_network(size, weight_factor, frequency_factor, (connection_t) connection_type, (initial_type) initial_phases);
 }
 
 
@@ -89,7 +89,7 @@ pyclustering_package * sync_connectivity_matrix(const void * pointer_network) {
         subpackage->data = (void *) new double[subpackage->size];
 
         for (std::size_t j = 0; j < subpackage->size; j++) {
-            ((double *) subpackage->data)[j] = connections->has_connection(i, j);
+            ((double *) subpackage->data)[j] = connections->has_connection(i, j) ? 1.0 : 0.0;
         }
 
         ((pyclustering_package **) package->data)[i] = subpackage;

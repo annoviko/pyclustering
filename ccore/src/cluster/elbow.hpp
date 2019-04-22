@@ -96,15 +96,17 @@ private:
     }
 
     void calculate_elbows(void) {
+        const auto & wce = m_result->get_wce();
+
         const double x0 = 0.0;
-        const double y0 = m_result->get_wce().front();
+        const double y0 = wce.front();
 
-        const double x1 = (double) m_result->get_wce().size();
-        const double y1 = m_result->get_wce().back();
+        const double x1 = (double) wce.size();
+        const double y1 = wce.back();
 
-        for (std::size_t index_elbow = 1; index_elbow < m_result->get_wce().size() - 1; index_elbow++) {
+        for (std::size_t index_elbow = 1; index_elbow < wce.size() - 1; index_elbow++) {
             const double x = (double) index_elbow;
-            const double y = m_result->get_wce().at(index_elbow);
+            const double y = wce.at(index_elbow);
 
             const double segment = std::abs((y0 - y1) * x + (x1 - x0) * y + (x0 * y1 - x1 * y0));
             const double norm = euclidean_distance(point({ x0, y0 }), point({ x1, y1 }));

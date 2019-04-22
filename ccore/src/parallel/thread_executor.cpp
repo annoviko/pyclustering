@@ -31,12 +31,11 @@ namespace ccore {
 namespace parallel {
 
 
-thread_executor::thread_executor(const task_getter & p_getter) {
-    m_stop        = false;
-
-    m_getter      = p_getter;
-    m_executor    = std::thread(&thread_executor::run, this);
-}
+thread_executor::thread_executor(const task_getter & p_getter) :
+    m_stop(false),
+    m_getter(p_getter),
+    m_executor(&thread_executor::run, this)
+{ }
 
 
 void thread_executor::run(void) {

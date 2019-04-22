@@ -70,7 +70,7 @@ double euclidean_distance_square(const TypeContainer & point1, const TypeContain
         double difference = (*iter_point1 - dim_point2);
         distance += difference * difference;
 
-        iter_point1++;
+        ++iter_point1;
     }
 
     return distance;
@@ -110,7 +110,7 @@ double manhattan_distance(const TypeContainer & point1, const TypeContainer & po
 
     for (const auto & dim_point2 : point2) {
         distance += std::abs(*iter_point1 - dim_point2);
-        iter_point1++;
+        ++iter_point1;
     }
 
     return distance;
@@ -134,7 +134,7 @@ double chebyshev_distance(const TypeContainer & point1, const TypeContainer & po
 
     for (const auto & dim_point2 : point2) {
         distance = std::max(distance, std::abs(*iter_point1 - dim_point2));
-        iter_point1++;
+        ++iter_point1;
     }
 
     return distance;
@@ -161,7 +161,7 @@ double minkowski_distance(const TypeContainer & p_point1, const TypeContainer & 
         double difference = (*iter_point1 - dim_point2);
         distance += std::pow(difference, p_degree);
 
-        iter_point1++;
+        ++iter_point1;
     }
 
     return std::pow(distance, 1.0 / p_degree);
@@ -192,7 +192,7 @@ double canberra_distance(const TypeContainer & point1, const TypeContainer & poi
         }
 
         distance += std::abs(dim_point1 - dim_point2) / divider;
-        iter_point1++;
+        ++iter_point1;
     }
 
     return distance;
@@ -223,7 +223,7 @@ double chi_square_distance(const TypeContainer & point1, const TypeContainer & p
         }
 
         distance += std::pow(dim_point1 - dim_point2, 2) / divider;
-        iter_point1++;
+        ++iter_point1;
     }
 
     return distance;

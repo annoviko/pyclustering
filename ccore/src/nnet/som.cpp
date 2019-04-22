@@ -57,6 +57,7 @@ som::som(const size_t num_rows, const size_t num_cols, const som_conn_type type_
     m_size(num_rows * num_cols),
     m_conn_type(type_conn),
     m_awards(m_size, 0),
+    m_data(nullptr),
     m_location(m_size),
     m_sqrt_distances(m_size, std::vector<double>(m_size, 0)),
     m_capture_objects(m_size),
@@ -78,13 +79,14 @@ som::som(const size_t num_rows, const size_t num_cols, const som_conn_type type_
     }
 
     /* distances */
-    for (size_t i = 0; i < m_size; i++) {
+    for (std::size_t i = 0; i < m_size; i++) {
         std::vector<double> column_distances(m_size, 0);
         m_sqrt_distances[i] = column_distances;
     }
 
-    for (size_t i = 0; i < m_size; i++) {
-        for (size_t j = i; j < m_size; j++) {
+    for (std::size_t i = 0; i < m_size; i++) {
+        m_sqrt_distances[i][i] = 0.0;
+        for (std::size_t j = i + 1; j < m_size; j++) {
             double distance = euclidean_distance_square(m_location[i], m_location[j]);
             m_sqrt_distances[i][j] = distance;
             m_sqrt_distances[j][i] = distance;
@@ -95,6 +97,11 @@ som::som(const size_t num_rows, const size_t num_cols, const som_conn_type type_
     if (type_conn != som_conn_type::SOM_FUNC_NEIGHBOR) {
         create_connections(type_conn);
     }
+}
+
+
+som::som(const som & p_other) {
+    operator=(p_other);
 }
 
 
@@ -137,7 +144,7 @@ void som::create_connections(const som_conn_type type) {
                 neuron_neighbors.push_back(left_index);
             }
 
-            if ( (right_index >= 0) && ( (int) std::floor((double) right_index / (double) m_cols) == node_row_index) ) {
+            if ( (int) std::floor((double) right_index / (double) m_cols) == node_row_index ) {
                 neuron_neighbors.push_back(right_index);
             }
         }
@@ -176,19 +183,19 @@ void som::create_connections(const som_conn_type type) {
                 lower_right_index = index + (int) m_cols;
             }
 
-            if ( (upper_left_index >= 0) && ( (int) std::floor(std::floor((double) upper_left_index / (double) m_cols)) == upper_row_index) ) {
+            if ( (upper_left_index >= 0) && ( (int) std::floor((double) upper_left_index / (double) m_cols) == upper_row_index) ) {
                 neuron_neighbors.push_back(upper_left_index);
             }
 
-            if ( (upper_right_index >= 0) && ( (int) std::floor(std::floor((double) upper_right_index / (double) m_cols)) == upper_row_index) ) {
+            if ( (upper_right_index >= 0) && ( (int) std::floor((double) upper_right_index / (double) m_cols) == upper_row_index) ) {
                 neuron_neighbors.push_back(upper_right_index);
             }
 
-            if ( (lower_left_index < (int) m_size) && ( (int) std::floor(std::floor((double) lower_left_index / (double) m_cols)) == lower_row_index) ) {
+            if ( (lower_left_index < (int) m_size) && ( (int) std::floor((double) lower_left_index / (double) m_cols) == lower_row_index) ) {
                 neuron_neighbors.push_back(lower_left_index);
             }
 
-            if ( (lower_right_index < (int) m_size) && ( (int) std::floor(std::floor((double) lower_right_index / (double) m_cols)) == lower_row_index) ) {
+            if ( (lower_right_index < (int) m_size) && ( (int) std::floor((double) lower_right_index / (double) m_cols) == lower_row_index) ) {
                 neuron_neighbors.push_back(lower_right_index);
             }
         }

@@ -133,7 +133,7 @@ class legion_network {
 private:
     std::vector<legion_oscillator> m_oscillators;
 
-    double m_global_inhibitor;
+    double m_global_inhibitor = 0.0;
 
     legion_parameters m_params;
 
@@ -141,7 +141,7 @@ private:
 
     std::vector<std::vector<double> > m_dynamic_connections;
 
-    legion_stimulus * m_stimulus;   /* just keep it during simulation for convinience (pointer to external object, legion is not owner) */
+    legion_stimulus * m_stimulus = nullptr;   /* just keep it during simulation for convinience (pointer to external object, legion is not owner) */
 
     std::random_device                      m_device;
 
@@ -155,7 +155,7 @@ private:
 
 
 public:
-    legion_network(void);
+    legion_network(void) = default;
 
     legion_network(const size_t num_osc, 
         const connection_t connection_type,

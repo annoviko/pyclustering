@@ -108,7 +108,7 @@ void thread_pool::initialize(const std::size_t p_size) {
     thread_executor::task_getter getter = std::bind(&thread_pool::get_task, this, std::placeholders::_1);
 
     for (std::size_t index = 0; index < p_size; index++) {
-        m_pool.emplace_back(new thread_executor(getter));
+        m_pool.emplace_back(std::make_shared<thread_executor>(getter));
     }
 
     m_reserve = m_free = p_size;

@@ -91,20 +91,20 @@ double sync_ordering::calculate_sync_order_parameter(const TypeContainer & p_con
 }
 
 
-double sync_ordering::calculate_local_sync_order(const std::shared_ptr<adjacency_collection> p_connections, const std::vector<double> & p_phases) {
+double sync_ordering::calculate_local_sync_order(const std::shared_ptr<adjacency_collection> & p_connections, const std::vector<double> & p_phases) {
     phase_getter getter = [&p_phases](std::size_t index){ return p_phases[index]; };
     return calculate_local_sync_order_parameter(p_connections, p_phases, getter);
 }
 
 
-double sync_ordering::calculate_local_sync_order(const std::shared_ptr<adjacency_collection> p_connections, const std::vector<sync_oscillator> & p_oscillators) {
+double sync_ordering::calculate_local_sync_order(const std::shared_ptr<adjacency_collection> & p_connections, const std::vector<sync_oscillator> & p_oscillators) {
     phase_getter getter = [&p_oscillators](std::size_t index){ return p_oscillators[index].phase; };
     return calculate_local_sync_order_parameter(p_connections, p_oscillators, getter);
 }
 
 
 template <class TypeContainer>
-double sync_ordering::calculate_local_sync_order_parameter(const std::shared_ptr<adjacency_collection> p_connections, const TypeContainer & p_container, const phase_getter & p_getter) {
+double sync_ordering::calculate_local_sync_order_parameter(const std::shared_ptr<adjacency_collection> & p_connections, const TypeContainer & p_container, const phase_getter & p_getter) {
     double exp_amount = 0.0;
     double number_neighbors = 0.0;
 

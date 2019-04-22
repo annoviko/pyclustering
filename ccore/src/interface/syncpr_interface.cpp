@@ -30,7 +30,7 @@ using namespace ccore::nnet;
 
 
 void * syncpr_create(const unsigned int num_osc, const double increase_strength1, const double increase_strength2) {
-    return (void *) new syncpr(num_osc, increase_strength1, increase_strength2);
+    return new syncpr(num_osc, increase_strength1, increase_strength2);
 }
 
 

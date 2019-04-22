@@ -107,7 +107,7 @@ void runge_kutta_fehlberg_45(
         differ_state<state_type> errors = factor::R1 * k1 + factor::R3 * k3 + factor::R4 * k4 + factor::R5 * k5 + factor::R6 * k6;
 
         double err = 0.0;
-        for (typename differ_state<state_type>::const_iterator iter = errors.cbegin(); iter != errors.cend(); iter++) {
+        for (typename differ_state<state_type>::const_iterator iter = errors.cbegin(); iter != errors.cend(); ++iter) {
             double current_error = std::abs(*iter);
             if (current_error > err) {
                 err = current_error;

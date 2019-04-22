@@ -258,7 +258,7 @@ public:
     * @param[in] radius_search: allowable distance for searching from the point.
     *
     */
-    kdtree_searcher(const std::vector<double> & point, const kdnode::ptr node, const double radius_search);
+    kdtree_searcher(const std::vector<double> & point, const kdnode::ptr & node, const double radius_search);
 
     /**
     *
@@ -309,7 +309,7 @@ private:
     * @param[in] radius_search: allowable distance for searching from the point.
     *
     */
-    void initialize(const std::vector<double> & point, const kdnode::ptr node, const double radius_search);
+    void initialize(const std::vector<double> & point, const kdnode::ptr & node, const double radius_search);
 
     /**
     *
@@ -325,7 +325,7 @@ private:
     * @param[in] node: initial node in tree from which searching should performed.
     *
     */
-    void recursive_nearest_nodes(const kdnode::ptr node) const;
+    void recursive_nearest_nodes(const kdnode::ptr & node) const;
 
     /**
     *
@@ -334,7 +334,7 @@ private:
     * @param[in] node: node that should be added to best collection if it is reachable.
     *
     */
-    void store_if_reachable(const kdnode::ptr node) const;
+    void store_if_reachable(const kdnode::ptr & node) const;
 
     /**
     *
@@ -343,7 +343,7 @@ private:
     * @param[in] node: node that should be added to best collection if it is reachable.
     *
     */
-    void store_best_if_reachable(const kdnode::ptr node) const;
+    void store_best_if_reachable(const kdnode::ptr & node) const;
 
     /**
     *
@@ -352,7 +352,7 @@ private:
     * @param[in] node: node that should be added to best collection if it is reachable.
     *
     */
-    void store_user_nodes_if_reachable(const kdnode::ptr node) const;
+    void store_user_nodes_if_reachable(const kdnode::ptr & node) const;
 };
 
 

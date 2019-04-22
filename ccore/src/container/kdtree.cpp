@@ -328,12 +328,12 @@ kdtree & kdtree::operator=(kdtree && p_other) {
 
 
 
-kdtree_searcher::kdtree_searcher(const std::vector<double> & point, const kdnode::ptr node, const double radius_search) {
+kdtree_searcher::kdtree_searcher(const std::vector<double> & point, const kdnode::ptr & node, const double radius_search) {
     initialize(point, node, radius_search);
 }
 
 
-void kdtree_searcher::initialize(const std::vector<double> & point, const kdnode::ptr node, const double radius_search) {
+void kdtree_searcher::initialize(const std::vector<double> & point, const kdnode::ptr & node, const double radius_search) {
     m_distance = radius_search;
     m_sqrt_distance = radius_search * radius_search;
 
@@ -342,7 +342,7 @@ void kdtree_searcher::initialize(const std::vector<double> & point, const kdnode
 }
 
 
-void kdtree_searcher::recursive_nearest_nodes(const kdnode::ptr node) const {
+void kdtree_searcher::recursive_nearest_nodes(const kdnode::ptr & node) const {
     double minimum = node->get_value() - m_distance;
     double maximum = node->get_value() + m_distance;
 
@@ -362,7 +362,7 @@ void kdtree_searcher::recursive_nearest_nodes(const kdnode::ptr node) const {
 }
 
 
-void kdtree_searcher::store_if_reachable(const kdnode::ptr node) const {
+void kdtree_searcher::store_if_reachable(const kdnode::ptr & node) const {
     double candidate_distance = euclidean_distance_square(m_search_point, node->get_data());
     if (candidate_distance <= m_sqrt_distance) {
         m_nearest_nodes.push_back(node);
@@ -371,7 +371,7 @@ void kdtree_searcher::store_if_reachable(const kdnode::ptr node) const {
 }
 
 
-void kdtree_searcher::store_best_if_reachable(const kdnode::ptr node) const {
+void kdtree_searcher::store_best_if_reachable(const kdnode::ptr & node) const {
     double candidate_distance = euclidean_distance_square(m_search_point, node->get_data());
     if (candidate_distance <= m_nodes_distance[0]) {
         m_nearest_nodes[0] = node;
@@ -380,7 +380,7 @@ void kdtree_searcher::store_best_if_reachable(const kdnode::ptr node) const {
 }
 
 
-void kdtree_searcher::store_user_nodes_if_reachable(const kdnode::ptr node) const {
+void kdtree_searcher::store_user_nodes_if_reachable(const kdnode::ptr & node) const {
     double candidate_distance = euclidean_distance_square(m_search_point, node->get_data());
     if (candidate_distance <= m_sqrt_distance) {
         m_user_rule(node, candidate_distance);

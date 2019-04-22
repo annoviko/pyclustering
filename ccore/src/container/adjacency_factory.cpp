@@ -50,7 +50,7 @@ std::shared_ptr<adjacency_collection> adjacency_unweight_factory::create_collect
         break;
 
     default:
-        throw new std::runtime_error("Unknown type of adjacency collection without weights is required from the factory.");
+        throw std::runtime_error("Unknown type of adjacency collection without weights is required from the factory.");
     }
 
     /* establish structures between nodes */
@@ -74,7 +74,7 @@ std::shared_ptr<adjacency_weight_collection> adjacency_weight_factory::create_co
         break;
 
     default:
-        throw new std::runtime_error("Unknown type of adjacency collection without weights is required from the factory.");
+        throw std::runtime_error("Unknown type of adjacency collection without weights is required from the factory.");
     }
 
     /* establish structures between nodes */
