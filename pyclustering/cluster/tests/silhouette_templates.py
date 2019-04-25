@@ -49,7 +49,7 @@ class silhouette_test_template:
 
     @staticmethod
     def correct_ksearch(sample_path, answer_path, kmin, kmax, algorithm, ccore_flag):
-        attempts = 10
+        attempts = 15
         testing_result = False
 
         sample = read_sample(sample_path)

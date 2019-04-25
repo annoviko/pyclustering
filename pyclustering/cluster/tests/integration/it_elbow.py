@@ -34,7 +34,7 @@ from pyclustering.cluster.center_initializer import random_center_initializer
 
 from pyclustering.cluster.tests.elbow_template import elbow_test_template
 
-from pyclustering.samples.definitions import SIMPLE_SAMPLES, SIMPLE_ANSWERS
+from pyclustering.samples.definitions import FCPS_SAMPLES, SIMPLE_SAMPLES, SIMPLE_ANSWERS
 
 
 class elbow_integration_test(unittest.TestCase):
@@ -76,6 +76,12 @@ class elbow_integration_test(unittest.TestCase):
 
     def test_elbow_three_dimensional_simple_11(self):
         elbow_test_template.calculate_elbow(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, SIMPLE_ANSWERS.ANSWER_SIMPLE11, 1, 10, True)
+
+    def test_elbow_hepta(self):
+        elbow_test_template.calculate_elbow(FCPS_SAMPLES.SAMPLE_HEPTA, None, 1, 20, True)
+
+    def test_elbow_tetra(self):
+        elbow_test_template.calculate_elbow(FCPS_SAMPLES.SAMPLE_TETRA, None, 1, 25, True)
 
 
 if __name__ == "__main__":

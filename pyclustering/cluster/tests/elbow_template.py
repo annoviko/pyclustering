@@ -37,13 +37,16 @@ from pyclustering.samples import answer_reader
 class elbow_test_template:
     @staticmethod
     def calculate_elbow(path_to_data, path_to_answer, kmin, kmax, ccore, **kwargs):
-        repeat = 10  # Elbow method randomly chooses initial centers therefore we need to repeat test if it fails.
+        repeat = 15  # Elbow method randomly chooses initial centers therefore we need to repeat test if it fails.
         testing_result = False
 
         initializer = kwargs.get('initializer', kmeans_plusplus_initializer)
 
         sample = read_sample(path_to_data)
-        answer = answer_reader(path_to_answer)
+
+        answer = None
+        if path_to_answer is not None:
+            answer = answer_reader(path_to_answer)
 
         additional_info = []
 
@@ -59,13 +62,14 @@ class elbow_test_template:
             assertion.eq(len(actual_wce), kmax - kmin)
             assertion.lt(actual_wce[-1], actual_wce[0] + 0.0000001)
 
-            if actual_elbow != len(answer.get_clusters()):
+            if (answer is not None) and (actual_elbow != len(answer.get_clusters())):
                 additional_info.append(actual_elbow)
-                #time.sleep(0.05)    # sleep to gain new seed for random generator
                 continue
 
             testing_result = True
             break
 
-        message = str(len(answer.get_clusters())) + ": " + str(additional_info)
+        message = None
+        if answer is not None:
+            message = str(len(answer.get_clusters())) + ": " + str(additional_info)
         assertion.true(testing_result, message=message)
