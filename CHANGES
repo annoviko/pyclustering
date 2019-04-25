@@ -1,6 +1,17 @@
 ------------------------------------------------------------------------
 
-CHANGE NOTES FOR 0.9.0 (STARTED Nov 19, 2018), (RELEASED: -)
+CHANGE NOTES FOR 0.9.0 (STARTED Apr 14, 2019), (RELEASED: -)
+
+------------------------------------------------------------------------
+
+GENERAL CHANGES:
+- Parallel optimization of Elbow method. (ccore.clst.elbow).
+  See: https://github.com/annoviko/pyclustering/issues/511
+
+
+------------------------------------------------------------------------
+
+CHANGE NOTES FOR 0.9.0 (STARTED Nov 19, 2018), (RELEASED: Apr 14, 2019)
 
 ------------------------------------------------------------------------
 
