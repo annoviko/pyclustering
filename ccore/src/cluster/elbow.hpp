@@ -27,11 +27,14 @@
 #include "cluster/kmeans.hpp"
 #include "cluster/kmeans_plus_plus.hpp"
 
+#include "parallel/parallel.hpp"
+
 #include "utils/metric.hpp"
 
 #include "definitions.hpp"
 
 
+using namespace ccore::parallel;
 using namespace ccore::utils::metric;
 
 
@@ -48,6 +51,7 @@ private:
 
     std::vector<double> m_elbow = { };
 
+    const dataset * m_data    = nullptr;      /* temporary pointer to input data      */
     elbow_data    * m_result  = nullptr;      /* temporary pointer to output result   */
 
 public:
@@ -55,7 +59,9 @@ public:
 
     elbow(const std::size_t p_kmin, const std::size_t p_kmax) :
         m_kmin(p_kmin), m_kmax(p_kmax)
-    { verify(); }
+    {
+      verify();
+    }
 
     elbow(const elbow & p_other) = default;
 
@@ -70,25 +76,45 @@ public:
               + "' is greater than amount of data points '" + std::to_string(p_data.size()) + "'.");
         }
 
-        m_result = &p_result;
+        m_data    = &p_data;
+        m_result  = &p_result;
+
         m_elbow.clear();
 
-        for (std::size_t i = m_kmin; i < m_kmax; i++) {
-            dataset initial_centers;
-            TypeInitializer(i).initialize(p_data, initial_centers);
+        m_result->get_wce().resize(m_kmax - m_kmin);
 
-            kmeans_data result;
-            kmeans instance(initial_centers, 0.0001);
-            instance.process(p_data, result);
-
-            m_result->get_wce().push_back(result.wce());
-        }
+        parallel_for(m_kmin, m_kmax, [this](const std::size_t p_index) {
+            calculate_wce(p_index);
+        });
 
         calculate_elbows();
         m_result->set_amount(find_optimal_kvalue());
     }
 
 private:
+    template<class CenterInitializer = TypeInitializer>
+    typename std::enable_if<std::is_same<CenterInitializer, kmeans_plus_plus>::value, void>::type
+    prepare_centers(const std::size_t p_amout, const dataset & p_data, dataset & p_initial_centers) {
+        kmeans_plus_plus(p_amout, kmeans_plus_plus::FARTHEST_CENTER_CANDIDATE).initialize(p_data, p_initial_centers);
+    }
+
+    template<class CenterInitializer = TypeInitializer>
+    typename std::enable_if<!std::is_same<CenterInitializer, kmeans_plus_plus>::value, void>::type
+    prepare_centers(const std::size_t p_amout, const dataset & p_data, dataset & p_initial_centers) {
+        TypeInitializer(p_amout).initialize(p_data, p_initial_centers);
+    }
+
+    void calculate_wce(const std::size_t p_amout) {
+        dataset initial_centers;
+        prepare_centers(p_amout, *m_data, initial_centers);
+
+        kmeans_data result;
+        kmeans instance(initial_centers, kmeans::DEFAULT_TOLERANCE);
+        instance.process(*m_data, result);
+
+        m_result->get_wce().at(p_amout - m_kmin) = result.wce();
+    }
+
     void verify(void) {
         if (m_kmax < 3 + m_kmin) {
             throw std::invalid_argument("Amount of K '" + std::to_string(m_kmax - m_kmin) + "' is too small for analysis.");
@@ -98,20 +124,28 @@ private:
     void calculate_elbows(void) {
         const auto & wce = m_result->get_wce();
 
+        m_elbow.resize(wce.size() - 1);
+
+        parallel_for(std::size_t(1), wce.size() - 1, [this](const std::size_t p_index) {
+            calculate_elbow(p_index);
+        });
+    }
+
+    void calculate_elbow(const std::size_t p_index) {
+        const auto & wce = m_result->get_wce();
+
         const double x0 = 0.0;
         const double y0 = wce.front();
 
         const double x1 = (double) wce.size();
         const double y1 = wce.back();
 
-        for (std::size_t index_elbow = 1; index_elbow < wce.size() - 1; index_elbow++) {
-            const double x = (double) index_elbow;
-            const double y = wce.at(index_elbow);
+        const double x = (double) p_index + 1;
+        const double y = wce.at(p_index + 1);
 
-            const double segment = std::abs((y0 - y1) * x + (x1 - x0) * y + (x0 * y1 - x1 * y0));
-            const double norm = euclidean_distance(point({ x0, y0 }), point({ x1, y1 }));
-            m_elbow.push_back(segment / norm);
-        }
+        const double segment = std::abs((y0 - y1) * x + (x1 - x0) * y + (x0 * y1 - x1 * y0));
+        const double norm = euclidean_distance(point({ x0, y0 }), point({ x1, y1 }));
+        m_elbow.at(p_index) = segment / norm;
     }
 
     std::size_t find_optimal_kvalue(void) {
