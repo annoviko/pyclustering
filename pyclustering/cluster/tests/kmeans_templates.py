@@ -34,6 +34,8 @@ from pyclustering.utils.metric import distance_metric, type_metric
 
 from random import random
 
+import numpy
+
 
 class KmeansTestTemplates:
     @staticmethod
@@ -67,6 +69,21 @@ class KmeansTestTemplates:
             obtained_cluster_sizes.sort()
             expected_cluster_length.sort()
             assertion.eq(obtained_cluster_sizes, expected_cluster_length)
+
+
+    @staticmethod
+    def templatePredict(path_to_file, initial_centers, points, expected_closest_clusters, ccore, **kwargs):
+        sample = read_sample(path_to_file)
+
+        metric = kwargs.get('metric', distance_metric(type_metric.EUCLIDEAN_SQUARE))
+        itermax = kwargs.get('itermax', 200)
+
+        kmeans_instance = kmeans(sample, initial_centers, 0.001, ccore, metric=metric, itermax=itermax)
+        kmeans_instance.process()
+
+        closest_clusters = kmeans_instance.predict(points)
+        assertion.eq(len(expected_closest_clusters), len(closest_clusters))
+        assertion.true(numpy.array_equal(numpy.array(expected_closest_clusters), closest_clusters))
 
 
     @staticmethod

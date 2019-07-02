@@ -432,6 +432,55 @@ class kmeans:
         self.__calculate_total_wce()
 
 
+    def predict(self, points):
+        """!
+        @brief Calculates the closest cluster to each point.
+
+        @param[in] points (array_like): Points for which closest clusters are calculated.
+
+        @return (list) List of closest clusters for each point. Each cluster is denoted by index. Return empty
+                 collection if 'process()' method was not called.
+
+        An example how to calculate (or predict) the closest cluster to specified points.
+        @code
+            from pyclustering.cluster.kmeans import kmeans, kmeans_visualizer
+            from pyclustering.samples.definitions import SIMPLE_SAMPLES
+            from pyclustering.utils import read_sample
+
+            # Load list of points for cluster analysis.
+            sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE3)
+
+            # Initial centers for sample 'Simple3'.
+            initial_centers = [[0.2, 0.1], [4.0, 1.0], [2.0, 2.0], [2.3, 3.9]]
+
+            # Create instance of K-Means algorithm with prepared centers.
+            kmeans_instance = kmeans(sample, initial_centers)
+
+            # Run cluster analysis.
+            kmeans_instance.process()
+
+            # Calculate the closest cluster to following two points.
+            points = [[0.25, 0.2], [2.5, 4.0]]
+            closest_clusters = kmeans_instance.predict(points)
+            print(closest_clusters)
+        @endcode
+
+        """
+
+        nppoints = numpy.array(points)
+        if len(self.__clusters) == 0:
+            return []
+
+        differences = numpy.zeros((len(nppoints), len(self.__centers)))
+        for index_point in range(len(nppoints)):
+            if self.__metric.get_type() != type_metric.USER_DEFINED:
+                differences[index_point] = self.__metric(nppoints[index_point], self.__centers)
+            else:
+                differences[index_point] = [ self.__metric(nppoints[index_point], center) for center in self.__centers ]
+
+        return numpy.argmin(differences, axis=1)
+
+
     def get_clusters(self):
         """!
         @brief Returns list of allocated clusters, each cluster contains indexes of objects in list of data.
