@@ -172,6 +172,52 @@ class kmedoids:
         return self
 
 
+    def predict(self, points):
+        """!
+        @brief Calculates the closest cluster to each point.
+
+        @param[in] points (array_like): Points for which closest clusters are calculated.
+
+        @return (list) List of closest clusters for each point. Each cluster is denoted by index. Return empty
+                 collection if 'process()' method was not called.
+
+        An example how to calculate (or predict) the closest cluster to specified points.
+        @code
+            from pyclustering.cluster.kmedoids import kmedoids
+            from pyclustering.samples.definitions import SIMPLE_SAMPLES
+            from pyclustering.utils import read_sample
+
+            # Load list of points for cluster analysis.
+            sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE3)
+
+            # Initial medoids for sample 'Simple3'.
+            initial_medoids = [4, 12, 25, 37]
+
+            # Create instance of K-Medoids algorithm with prepared centers.
+            kmedoids_instance = kmedoids(sample, initial_medoids)
+
+            # Run cluster analysis.
+            kmedoids_instance.process()
+
+            # Calculate the closest cluster to following two points.
+            points = [[0.35, 0.5], [2.5, 2.0]]
+            closest_clusters = kmedoids_instance.predict(points)
+            print(closest_clusters)
+        @endcode
+
+        """
+
+        if len(self.__clusters) == 0:
+            return []
+
+        medoids = [ self.__pointer_data[index] for index in self.__medoid_indexes ]
+        differences = numpy.zeros((len(points), len(medoids)))
+        for index_point in range(len(points)):
+            differences[index_point] = [ self.__metric(points[index_point], center) for center in medoids ]
+
+        return numpy.argmin(differences, axis=1)
+
+
     def get_clusters(self):
         """!
         @brief Returns list of allocated clusters, each cluster contains indexes of objects in list of data.

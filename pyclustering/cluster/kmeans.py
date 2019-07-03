@@ -443,7 +443,7 @@ class kmeans:
 
         An example how to calculate (or predict) the closest cluster to specified points.
         @code
-            from pyclustering.cluster.kmeans import kmeans, kmeans_visualizer
+            from pyclustering.cluster.kmeans import kmeans
             from pyclustering.samples.definitions import SIMPLE_SAMPLES
             from pyclustering.utils import read_sample
 
