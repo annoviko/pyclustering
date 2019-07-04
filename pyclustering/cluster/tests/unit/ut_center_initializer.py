@@ -31,7 +31,7 @@ import matplotlib
 matplotlib.use('Agg')
 
 from pyclustering.cluster.tests.kmeans_templates import KmeansTestTemplates
-from pyclustering.cluster.tests.kmedoids_templates import KmedoidsTestTemplates
+from pyclustering.cluster.tests.kmedoids_templates import kmedoids_test_template
 
 from pyclustering.cluster.center_initializer import random_center_initializer
 from pyclustering.cluster.center_initializer import kmeans_plusplus_initializer
@@ -217,7 +217,7 @@ class KmeansPlusPlusInitializerUnitTest(unittest.TestCase):
             try:
                 sample = read_sample(path_sample)
                 start_medoids = kmeans_plusplus_initializer(sample, amount).initialize(return_index=True)
-                KmedoidsTestTemplates.templateLengthProcessData(path_sample, start_medoids, expected_clusters_length,
+                kmedoids_test_template.templateLengthProcessData(path_sample, start_medoids, expected_clusters_length,
                                                               False)
 
             except AssertionError:

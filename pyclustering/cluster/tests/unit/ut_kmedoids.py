@@ -30,7 +30,7 @@ import unittest
 import matplotlib
 matplotlib.use('Agg')
 
-from pyclustering.cluster.tests.kmedoids_templates import KmedoidsTestTemplates
+from pyclustering.cluster.tests.kmedoids_templates import kmedoids_test_template
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES
 
@@ -40,193 +40,232 @@ from pyclustering.utils.metric import type_metric, distance_metric
 
 class KmedoidsUnitTest(unittest.TestCase):
     def testClusterAllocationSampleSimple1(self):
-        KmedoidsTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], False)
+        kmedoids_test_template.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], False)
 
     def testClusterAllocationSampleSimple1DistanceMatrix(self):
-        KmedoidsTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], False, data_type='distance_matrix')
+        kmedoids_test_template.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], False, data_type='distance_matrix')
 
     def testClusterAllocationSampleSimple1DistanceMatrixNumpy(self):
-        KmedoidsTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], False, data_type='distance_matrix', input_type='numpy')
+        kmedoids_test_template.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], False, data_type='distance_matrix', input_type='numpy')
 
     def testClusterAllocationSampleSimple1Euclidean(self):
         metric = distance_metric(type_metric.EUCLIDEAN)
-        KmedoidsTestTemplates.templateLengthProcessWithMetric(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], metric, False)
+        kmedoids_test_template.templateLengthProcessWithMetric(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], metric, False)
 
     def testClusterAllocationSampleSimple1EuclideanDistanceMatrix(self):
         metric = distance_metric(type_metric.EUCLIDEAN)
-        KmedoidsTestTemplates.templateLengthProcessWithMetric(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], metric, False, data_type='distance_matrix')
+        kmedoids_test_template.templateLengthProcessWithMetric(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], metric, False, data_type='distance_matrix')
 
     def testClusterAllocationSampleSimple1SquareEuclidean(self):
         metric = distance_metric(type_metric.EUCLIDEAN_SQUARE)
-        KmedoidsTestTemplates.templateLengthProcessWithMetric(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], metric, False)
+        kmedoids_test_template.templateLengthProcessWithMetric(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], metric, False)
 
     def testClusterAllocationSampleSimple1SquareEuclideanDistanceMatrix(self):
         metric = distance_metric(type_metric.EUCLIDEAN_SQUARE)
-        KmedoidsTestTemplates.templateLengthProcessWithMetric(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], metric, False, data_type='distance_matrix')
+        kmedoids_test_template.templateLengthProcessWithMetric(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], metric, False, data_type='distance_matrix')
 
     def testClusterAllocationSampleSimple1Manhattan(self):
         metric = distance_metric(type_metric.MANHATTAN)
-        KmedoidsTestTemplates.templateLengthProcessWithMetric(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], metric, False)
+        kmedoids_test_template.templateLengthProcessWithMetric(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], metric, False)
 
     def testClusterAllocationSampleSimple1ManhattanDistanceMatrix(self):
         metric = distance_metric(type_metric.MANHATTAN)
-        KmedoidsTestTemplates.templateLengthProcessWithMetric(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], metric, False, data_type='distance_matrix')
+        kmedoids_test_template.templateLengthProcessWithMetric(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], metric, False, data_type='distance_matrix')
 
     def testClusterAllocationSampleSimple1Chebyshev(self):
         metric = distance_metric(type_metric.CHEBYSHEV)
-        KmedoidsTestTemplates.templateLengthProcessWithMetric(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], metric, False)
+        kmedoids_test_template.templateLengthProcessWithMetric(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], metric, False)
 
     def testClusterAllocationSampleSimple1ChebyshevDistanceMatrix(self):
         metric = distance_metric(type_metric.CHEBYSHEV)
-        KmedoidsTestTemplates.templateLengthProcessWithMetric(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], metric, False, data_type='distance_matrix')
+        kmedoids_test_template.templateLengthProcessWithMetric(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], metric, False, data_type='distance_matrix')
 
     def testClusterAllocationSampleSimple1Minkowski(self):
         metric = distance_metric(type_metric.MINKOWSKI, degree=2.0)
-        KmedoidsTestTemplates.templateLengthProcessWithMetric(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], metric, False)
+        kmedoids_test_template.templateLengthProcessWithMetric(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], metric, False)
 
     def testClusterAllocationSampleSimple1MinkowskiDistanceMatrix(self):
         metric = distance_metric(type_metric.MINKOWSKI, degree=2.0)
-        KmedoidsTestTemplates.templateLengthProcessWithMetric(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], metric, False, data_type='distance_matrix')
+        kmedoids_test_template.templateLengthProcessWithMetric(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], metric, False, data_type='distance_matrix')
 
     def testClusterAllocationSampleSimple1UserDefined(self):
         metric = distance_metric(type_metric.USER_DEFINED, func=distance_metric(type_metric.EUCLIDEAN))
-        KmedoidsTestTemplates.templateLengthProcessWithMetric(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], metric, False)
+        kmedoids_test_template.templateLengthProcessWithMetric(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], metric, False)
 
     def testClusterAllocationSampleSimple1UserDefinedDistanceMatrix(self):
         metric = distance_metric(type_metric.USER_DEFINED, func=distance_metric(type_metric.EUCLIDEAN))
-        KmedoidsTestTemplates.templateLengthProcessWithMetric(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], metric, False, data_type='distance_matrix')
+        kmedoids_test_template.templateLengthProcessWithMetric(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], metric, False, data_type='distance_matrix')
 
     def testClusterOneAllocationSampleSimple1(self):
-        KmedoidsTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [5], [10], False)
+        kmedoids_test_template.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [5], [10], False)
 
     def testClusterOneAllocationSampleSimple1DistanceMatrix(self):
-        KmedoidsTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [5], [10], False, data_type='distance_matrix')
+        kmedoids_test_template.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [5], [10], False, data_type='distance_matrix')
 
     def testClusterAllocationSampleSimple1WithMedoidsInitializer(self):
-        KmedoidsTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, None, [5, 5], False, initialize_medoids=2)
+        kmedoids_test_template.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, None, [5, 5], False, initialize_medoids=2)
 
     def testClusterAllocationSampleSimple2(self):
-        KmedoidsTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [3, 12, 20], [10, 5, 8], False)
+        kmedoids_test_template.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [3, 12, 20], [10, 5, 8], False)
 
     def testClusterAllocationSampleSimple2DistanceMatrix(self):
-        KmedoidsTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [3, 12, 20], [10, 5, 8], False, data_type='distance_matrix')
+        kmedoids_test_template.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [3, 12, 20], [10, 5, 8], False, data_type='distance_matrix')
 
     def testClusterOneAllocationSampleSimple2(self):
-        KmedoidsTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [10], [23], False)
+        kmedoids_test_template.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [10], [23], False)
 
     def testClusterOneAllocationSampleSimple2DistanceMatrix(self):
-        KmedoidsTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [10], [23], False, data_type='distance_matrix')
+        kmedoids_test_template.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [10], [23], False, data_type='distance_matrix')
 
     def testClusterAllocationSampleSimple2WithMedoidsInitializer(self):
-        KmedoidsTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, None, [10, 5, 8], False, initialize_medoids=3)
+        kmedoids_test_template.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, None, [10, 5, 8], False, initialize_medoids=3)
 
     def testClusterAllocationSampleSimple3(self):
-        KmedoidsTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [4, 12, 25, 37], [10, 10, 10, 30], False)
+        kmedoids_test_template.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [4, 12, 25, 37], [10, 10, 10, 30], False)
 
     def testClusterAllocationSampleSimple3DistanceMatrix(self):
-        KmedoidsTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [4, 12, 25, 37], [10, 10, 10, 30], False, data_type='distance_matrix')
+        kmedoids_test_template.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [4, 12, 25, 37], [10, 10, 10, 30], False, data_type='distance_matrix')
 
     def testClusterOneAllocationSampleSimple3(self):
-        KmedoidsTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [30], [60], False)
+        kmedoids_test_template.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [30], [60], False)
 
     def testClusterAllocationSampleSimple3WithMedoidsInitializer(self):
-        KmedoidsTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, None, [10, 10, 10, 30], False, initialize_medoids=4)
+        kmedoids_test_template.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, None, [10, 10, 10, 30], False, initialize_medoids=4)
 
     def testClusterAllocationSampleSimple5(self):
-        KmedoidsTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [4, 18, 34, 55], [15, 15, 15, 15], False)
+        kmedoids_test_template.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [4, 18, 34, 55], [15, 15, 15, 15], False)
 
     def testClusterAllocationSampleSimple5DistanceMatrix(self):
-        KmedoidsTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [4, 18, 34, 55], [15, 15, 15, 15], False, data_type='distance_matrix')
+        kmedoids_test_template.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [4, 18, 34, 55], [15, 15, 15, 15], False, data_type='distance_matrix')
 
     def testClusterOneAllocationSampleSimple5(self):
-        KmedoidsTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [35], [60], False)
+        kmedoids_test_template.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [35], [60], False)
 
     def testClusterTheSameData1(self):
-        KmedoidsTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, [2, 20], [10, 20], False)
+        kmedoids_test_template.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, [2, 20], [10, 20], False)
 
     def testClusterTheSameData1DistanceMatrix(self):
-        KmedoidsTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, [2, 20], [10, 20], False, data_type='distance_matrix')
+        kmedoids_test_template.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, [2, 20], [10, 20], False, data_type='distance_matrix')
 
     def testClusterTheSameData2(self):
-        KmedoidsTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, [2, 7, 12], [5, 5, 5], False)
+        kmedoids_test_template.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, [2, 7, 12], [5, 5, 5], False)
 
     def testClusterTheSameData2DistanceMatrix(self):
-        KmedoidsTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, [2, 7, 12], [5, 5, 5], False, data_type='distance_matrix')
+        kmedoids_test_template.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, [2, 7, 12], [5, 5, 5], False, data_type='distance_matrix')
 
 
     def testClusterAllocationOneDimensionData(self):
-        KmedoidsTestTemplates.templateClusterAllocationOneDimensionData(False)
+        kmedoids_test_template.templateClusterAllocationOneDimensionData(False)
 
 
     def testClusterAllocationTheSameObjectsOneInitialMedoid(self):
-        KmedoidsTestTemplates.templateClusterAllocationTheSameObjects(20, 1, False)
+        kmedoids_test_template.templateClusterAllocationTheSameObjects(20, 1, False)
 
     def testClusterAllocationTheSameObjectsTwoInitialMedoids(self):
-        KmedoidsTestTemplates.templateClusterAllocationTheSameObjects(15, 2, False)
+        kmedoids_test_template.templateClusterAllocationTheSameObjects(15, 2, False)
 
     def testClusterAllocationTheSameObjectsThreeInitialMedoids(self):
-        KmedoidsTestTemplates.templateClusterAllocationTheSameObjects(25, 3, False)
+        kmedoids_test_template.templateClusterAllocationTheSameObjects(25, 3, False)
+
+
+    def testPredictOnePoint(self):
+        medoids = [4, 12, 25, 37]
+        kmedoids_test_template.templatePredict(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, medoids, [[0.3, 0.2]], [0], False)
+        kmedoids_test_template.templatePredict(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, medoids, [[4.1, 1.1]], [3], False)
+        kmedoids_test_template.templatePredict(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, medoids, [[2.1, 1.9]], [2], False)
+        kmedoids_test_template.templatePredict(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, medoids, [[2.1, 4.1]], [1], False)
+
+    def testPredictOnePointUserMetric(self):
+        medoids = [4, 12, 25, 37]
+        metric = distance_metric(type_metric.USER_DEFINED, func=distance_metric(type_metric.EUCLIDEAN))
+        kmedoids_test_template.templatePredict(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, medoids, [[0.3, 0.2]], [0], False, metric=metric)
+
+    def testPredictTwoPoints(self):
+        medoids = [4, 12, 25, 37]
+        kmedoids_test_template.templatePredict(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, medoids, [[0.3, 0.2], [2.1, 1.9]], [0, 2], False)
+        kmedoids_test_template.templatePredict(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, medoids, [[2.1, 4.1], [2.1, 1.9]], [1, 2], False)
+
+    def testPredictTwoPointsUserMetric(self):
+        medoids = [4, 12, 25, 37]
+        metric = distance_metric(type_metric.USER_DEFINED, func=distance_metric(type_metric.EUCLIDEAN))
+        kmedoids_test_template.templatePredict(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, medoids, [[0.3, 0.2], [2.1, 1.9]], [0, 2], False, metric=metric)
+
+    def testPredictFourPoints(self):
+        medoids = [4, 12, 25, 37]
+        to_predict = [[0.3, 0.2], [4.1, 1.1], [2.1, 1.9], [2.1, 4.1]]
+        kmedoids_test_template.templatePredict(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, medoids, to_predict, [0, 3, 2, 1], False)
+
+    def testPredictFivePoints(self):
+        medoids = [4, 12, 25, 37]
+        to_predict = [[0.3, 0.2], [4.1, 1.1], [3.9, 1.1], [2.1, 1.9], [2.1, 4.1]]
+        kmedoids_test_template.templatePredict(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, medoids, to_predict, [0, 3, 3, 2, 1], False)
+
+    def testPredictFivePointsUserMetric(self):
+        medoids = [4, 12, 25, 37]
+        to_predict = [[0.3, 0.2], [4.1, 1.1], [3.9, 1.1], [2.1, 1.9], [2.1, 4.1]]
+        metric = distance_metric(type_metric.USER_DEFINED, func=distance_metric(type_metric.EUCLIDEAN))
+        kmedoids_test_template.templatePredict(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, medoids, to_predict, [0, 3, 3, 2, 1], False, metric=metric)
 
 
     def testAllocatedRequestedClustersSampleSimple01(self):
         sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1)
-        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 1, None, False)
-        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 2, None, False)
-        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 3, None, False)
-        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 4, None, False)
-        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 5, None, False)
+        kmedoids_test_template.templateAllocateRequestedClusterAmount(sample, 1, None, False)
+        kmedoids_test_template.templateAllocateRequestedClusterAmount(sample, 2, None, False)
+        kmedoids_test_template.templateAllocateRequestedClusterAmount(sample, 3, None, False)
+        kmedoids_test_template.templateAllocateRequestedClusterAmount(sample, 4, None, False)
+        kmedoids_test_template.templateAllocateRequestedClusterAmount(sample, 5, None, False)
 
     def testAllocatedRequestedClustersSampleSimple02(self):
         sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE2)
-        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 1, None, False)
-        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 2, None, False)
-        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 3, None, False)
-        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 4, None, False)
-        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 5, None, False)
+        kmedoids_test_template.templateAllocateRequestedClusterAmount(sample, 1, None, False)
+        kmedoids_test_template.templateAllocateRequestedClusterAmount(sample, 2, None, False)
+        kmedoids_test_template.templateAllocateRequestedClusterAmount(sample, 3, None, False)
+        kmedoids_test_template.templateAllocateRequestedClusterAmount(sample, 4, None, False)
+        kmedoids_test_template.templateAllocateRequestedClusterAmount(sample, 5, None, False)
 
     def testAllocatedRequestedClustersSampleSimple03(self):
         sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE3)
-        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 2, None, False)
-        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 5, None, False)
-        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 8, None, False)
-        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 10, None, False)
-        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 15, None, False)
+        kmedoids_test_template.templateAllocateRequestedClusterAmount(sample, 2, None, False)
+        kmedoids_test_template.templateAllocateRequestedClusterAmount(sample, 5, None, False)
+        kmedoids_test_template.templateAllocateRequestedClusterAmount(sample, 8, None, False)
+        kmedoids_test_template.templateAllocateRequestedClusterAmount(sample, 10, None, False)
+        kmedoids_test_template.templateAllocateRequestedClusterAmount(sample, 15, None, False)
 
     def testAllocatedRequestedClustersSampleSimple04(self):
         sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE4)
-        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 10, None, False)
-        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 25, None, False)
-        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 40, None, False)
+        kmedoids_test_template.templateAllocateRequestedClusterAmount(sample, 10, None, False)
+        kmedoids_test_template.templateAllocateRequestedClusterAmount(sample, 25, None, False)
+        kmedoids_test_template.templateAllocateRequestedClusterAmount(sample, 40, None, False)
 
     def testAllocatedRequestedClustersWithTheSamePoints(self):
         # Bug issue #366 - Kmedoids returns incorrect number of clusters.
         sample = [ [0.0, 0.0], [0.1, 0.1], [0.0, 0.0], [0.1, 0.2] ]
-        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 4, None, False)
-        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 3, None, False)
-        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 2, None, False)
-        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 1, None, False)
+        kmedoids_test_template.templateAllocateRequestedClusterAmount(sample, 4, None, False)
+        kmedoids_test_template.templateAllocateRequestedClusterAmount(sample, 3, None, False)
+        kmedoids_test_template.templateAllocateRequestedClusterAmount(sample, 2, None, False)
+        kmedoids_test_template.templateAllocateRequestedClusterAmount(sample, 1, None, False)
 
 
     def testAllocatedRequestedClustersWithTotallyTheSamePoints(self):
         # Bug issue #366 - Kmedoids returns incorrect number of clusters.
         sample = [ [0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0] ]
-        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 4, None, False)
-        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 3, None, False)
-        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 2, None, False)
-        KmedoidsTestTemplates.templateAllocateRequestedClusterAmount(sample, 1, None, False)
+        kmedoids_test_template.templateAllocateRequestedClusterAmount(sample, 4, None, False)
+        kmedoids_test_template.templateAllocateRequestedClusterAmount(sample, 3, None, False)
+        kmedoids_test_template.templateAllocateRequestedClusterAmount(sample, 2, None, False)
+        kmedoids_test_template.templateAllocateRequestedClusterAmount(sample, 1, None, False)
 
 
     def testItermax0(self):
-        KmedoidsTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [], False, itermax=0)
+        kmedoids_test_template.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [], False, itermax=0)
 
     def testItermax1(self):
-        KmedoidsTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], False, itermax=1)
+        kmedoids_test_template.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], False, itermax=1)
 
     def testItermax10Simple01(self):
-        KmedoidsTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], False, itermax=10)
+        kmedoids_test_template.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], False, itermax=10)
 
     def testItermax10Simple02(self):
-        KmedoidsTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [3, 12, 20], [10, 5, 8], False, itermax=10)
+        kmedoids_test_template.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [3, 12, 20], [10, 5, 8], False, itermax=10)
 
 
 if __name__ == "__main__":

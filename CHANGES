@@ -5,6 +5,9 @@ CHANGE NOTES FOR 0.9.0 (STARTED Apr 14, 2019), (RELEASED: -)
 ------------------------------------------------------------------------
 
 GENERAL CHANGES:
+- Introduced 'predict' method for K-Medoids algorithm to find closest clusters for particular points (pyclustering.cluster.kmedoids).
+  See: https://github.com/annoviko/pyclustering/issues/527
+
 - Introduced 'predict' method for K-Means algorithm to find closest clusters for particular points (pyclustering.cluster.kmeans).
   See: https://github.com/annoviko/pyclustering/issues/515
 

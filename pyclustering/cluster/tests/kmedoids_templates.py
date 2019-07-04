@@ -38,10 +38,10 @@ from pyclustering.utils.metric import distance_metric, type_metric
 from random import random, randint
 
 
-class KmedoidsTestTemplates:
+class kmedoids_test_template:
     @staticmethod
     def templateLengthProcessData(path_to_file, initial_medoids, expected_cluster_length, ccore_flag, **kwargs):
-        KmedoidsTestTemplates.templateLengthProcessWithMetric(path_to_file, initial_medoids, expected_cluster_length, None, ccore_flag, **kwargs)
+        kmedoids_test_template.templateLengthProcessWithMetric(path_to_file, initial_medoids, expected_cluster_length, None, ccore_flag, **kwargs)
 
 
     @staticmethod
@@ -168,3 +168,18 @@ class KmedoidsTestTemplates:
                 allocated_number_objects += 1
             
         assertion.eq(number_objects, allocated_number_objects)    # number of allocated objects should be the same.
+
+
+    @staticmethod
+    def templatePredict(path_to_file, initial_medoids, points, expected_closest_clusters, ccore, **kwargs):
+        sample = read_sample(path_to_file)
+
+        metric = kwargs.get('metric', distance_metric(type_metric.EUCLIDEAN_SQUARE))
+        itermax = kwargs.get('itermax', 200)
+
+        kmedoids_instance = kmedoids(sample, initial_medoids, 0.001, ccore, metric=metric, itermax=itermax)
+        kmedoids_instance.process()
+
+        closest_clusters = kmedoids_instance.predict(points)
+        assertion.eq(len(expected_closest_clusters), len(closest_clusters))
+        assertion.true(numpy.array_equal(numpy.array(expected_closest_clusters), closest_clusters))
