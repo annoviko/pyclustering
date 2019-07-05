@@ -43,14 +43,14 @@ WARNING_FLAGS = -Wall -Wpedantic
 
 # Toolchain arguments
 ifeq ($(CONFIG), valgrind)
-	CFLAGS = -MMD -MP -std=$(CPLUS_STANDARD) $(PIC_FLAG) -g
-	LFLAGS = -pthread
+	CFLAGS = -MMD -MP -fopenmp -std=$(CPLUS_STANDARD) $(PIC_FLAG) -g
+	LFLAGS = -pthread -fopenmp
 else ifeq ($(CONFIG), debug)
-	CFLAGS = -Og -MMD -MP -std=$(CPLUS_STANDARD) $(PIC_FLAG) -g3 -ggdb3
-	LFLAGS = -pthread
+	CFLAGS = -Og -MMD -MP -fopenmp -std=$(CPLUS_STANDARD) $(PIC_FLAG) -g3 -ggdb3
+	LFLAGS = -pthread -fopenmp
 else
-	CFLAGS = -O2 -MMD -MP -std=$(CPLUS_STANDARD) $(PIC_FLAG) -fprofile-arcs -ftest-coverage $(WARNING_FLAGS)
-	LFLAGS = -pthread -fprofile-arcs -ftest-coverage
+	CFLAGS = -O2 -MMD -MP -fopenmp -std=$(CPLUS_STANDARD) $(PIC_FLAG) -fprofile-arcs -ftest-coverage $(WARNING_FLAGS)
+	LFLAGS = -pthread -fopenmp -fprofile-arcs -ftest-coverage
 endif
 
 

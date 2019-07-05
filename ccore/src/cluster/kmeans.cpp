@@ -104,7 +104,7 @@ void kmeans::update_clusters(const dataset & p_centers, cluster_sequence & p_clu
 
     /* fill clusters again in line with centers. */
     if (m_ptr_indexes->empty()) {
-        std::vector<std::size_t> winners(data.size(), 0);
+        index_sequence winners(data.size(), 0);
         parallel_for(std::size_t(0), data.size(), [this, &p_centers, &winners](std::size_t p_index) {
             assign_point_to_cluster(p_index, p_centers, winners);
         });
@@ -133,7 +133,7 @@ void kmeans::update_clusters(const dataset & p_centers, cluster_sequence & p_clu
 }
 
 
-void kmeans::assign_point_to_cluster(const std::size_t p_index_point, const dataset & p_centers, std::vector<std::size_t> & p_clusters) {
+void kmeans::assign_point_to_cluster(const std::size_t p_index_point, const dataset & p_centers, index_sequence & p_clusters) {
     double    minimum_distance = std::numeric_limits<double>::max();
     size_t    suitable_index_cluster = 0;
 

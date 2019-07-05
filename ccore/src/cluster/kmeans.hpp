@@ -129,7 +129,7 @@ private:
 
     double update_centers(const cluster_sequence & clusters, dataset & centers);
 
-    void assign_point_to_cluster(const std::size_t p_index_point, const dataset & p_centers, std::vector<std::size_t> & p_clusters);
+    void assign_point_to_cluster(const std::size_t p_index_point, const dataset & p_centers, index_sequence & p_clusters);
 
     /**
     *

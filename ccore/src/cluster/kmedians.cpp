@@ -88,28 +88,41 @@ void kmedians::process(const dataset & data, cluster_data & output_result) {
 }
 
 
-void kmedians::update_clusters(const dataset & medians, cluster_sequence & clusters) {
+void kmedians::update_clusters(const dataset & p_medians, cluster_sequence & p_clusters) {
     const dataset & data = *m_ptr_data;
 
-    clusters.clear();
-    clusters.resize(medians.size());
+    p_clusters.clear();
+    p_clusters.resize(p_medians.size());
 
-    for (size_t index_point = 0; index_point < data.size(); index_point++) {
-        size_t index_cluster_optim = 0;
-        double distance_optim = std::numeric_limits<double>::max();
+    index_sequence labels(data.size(), 0);
 
-        for (size_t index_cluster = 0; index_cluster < medians.size(); index_cluster++) {
-            double distance = m_metric(data[index_point], medians[index_cluster]);
-            if (distance < distance_optim) {
-                index_cluster_optim = index_cluster;
-                distance_optim = distance;
-            }
-        }
-
-        clusters[index_cluster_optim].push_back(index_point);
+    #pragma omp parallel for
+    for (long long index = 0; index < static_cast<long long>(data.size()); index++) {
+        assign_point_to_cluster(index, p_medians, labels);
     }
 
-    erase_empty_clusters(clusters);
+    for (std::size_t index_point = 0; index_point < labels.size(); index_point++) {
+        const std::size_t suitable_index_cluster = labels[index_point];
+        p_clusters[suitable_index_cluster].push_back(index_point);
+    }
+
+    erase_empty_clusters(p_clusters);
+}
+
+
+void kmedians::assign_point_to_cluster(const std::size_t p_index_point, const dataset & p_medians, index_sequence & p_lables) {
+    size_t index_cluster_optim = 0;
+    double distance_optim = std::numeric_limits<double>::max();
+
+    for (size_t index_cluster = 0; index_cluster < p_medians.size(); index_cluster++) {
+        double distance = m_metric((*m_ptr_data)[p_index_point], p_medians[index_cluster]);
+        if (distance < distance_optim) {
+            index_cluster_optim = index_cluster;
+            distance_optim = distance;
+        }
+    }
+
+    p_lables[p_index_point] = index_cluster_optim;
 }
 
 
@@ -131,18 +144,15 @@ double kmedians::update_medians(cluster_sequence & clusters, dataset & medians) 
     medians.clear();
     medians.resize(clusters.size(), point(dimension, 0.0));
 
-    double maximum_change = 0.0;
+    std::vector<double> changes(clusters.size(), 0);
 
-    for (std::size_t index_cluster = 0; index_cluster < clusters.size(); index_cluster++) {
+    #pragma omp parallel for
+    for (long long index_cluster = 0; index_cluster < static_cast<long long>(clusters.size()); index_cluster++) {
         calculate_median(clusters[index_cluster], medians[index_cluster]);
-
-        double change = m_metric(prev_medians[index_cluster], medians[index_cluster]);
-        if (change > maximum_change) {
-            maximum_change = change;
-        }
+        changes[index_cluster] = m_metric(prev_medians[index_cluster], medians[index_cluster]);
     }
 
-    return maximum_change;
+    return *std::max_element(changes.cbegin(), changes.cend());
 }
 
 

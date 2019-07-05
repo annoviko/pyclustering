@@ -123,6 +123,17 @@ private:
 
     /**
     *
+    * @brief    Assign point to cluster by marking corresponding index in container 'p_lables'.
+    *
+    * @param[in] p_index_point: index of point that should be assigned to cluster.
+    * @param[in] p_medians: medians that corresponds to clusters.
+    * @param[out] p_lables: cluster labels for each point (cluster labels has the same size as an input data).
+    *
+    */
+    void assign_point_to_cluster(const std::size_t p_index_point, const dataset & p_medians, index_sequence & p_lables);
+
+    /**
+    *
     * @brief    Updates medians in line with current clusters.
     *
     * @param[in|out] clusters: clusters that are sorted and used for updating medians.
