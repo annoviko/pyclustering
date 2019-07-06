@@ -26,6 +26,7 @@
 
 
 import math
+import numpy
 
 from pyclustering.cluster.encoder import type_encoding
 
@@ -86,10 +87,11 @@ class kmedians:
             - itermax (uint): Maximum number of iterations for cluster analysis.
         
         """
-        self.__pointer_data = data
+        self.__pointer_data = numpy.array(data)
         self.__clusters = []
-        self.__medians = initial_centers[:]
+        self.__medians = numpy.array(initial_centers)
         self.__tolerance = tolerance
+        self.__total_wce = 0
 
         self.__itermax = kwargs.get('itermax', 100)
         self.__metric = kwargs.get('metric', distance_metric(type_metric.EUCLIDEAN_SQUARE))
@@ -136,6 +138,8 @@ class kmedians:
 
                 iterations += 1
 
+        self.__calculate_total_wce()
+
         return self
 
 
@@ -161,6 +165,20 @@ class kmedians:
         """
 
         return self.__medians
+
+
+    def get_total_wce(self):
+        """!
+        @brief Returns sum of metric errors that depends on metric that was used for clustering (by default SSE - Sum of Squared Errors).
+        @details Sum of metric errors is calculated using distance between point and its center:
+                 \f[error=\sum_{i=0}^{N}distance(x_{i}-center(x_{i}))\f]
+
+        @see process()
+        @see get_clusters()
+
+        """
+
+        return self.__total_wce
 
 
     def get_cluster_encoding(self):
@@ -204,7 +222,38 @@ class kmedians:
         
         return clusters
     
-    
+
+    def __calculate_total_wce(self):
+        """!
+        @brief Calculate total within cluster errors that is depend on metric that was chosen for K-Medians algorithm.
+
+        """
+
+        dataset_differences = self.__calculate_dataset_difference(len(self.__clusters))
+
+        self.__total_wce = 0
+        for index_cluster in range(len(self.__clusters)):
+            for index_point in self.__clusters[index_cluster]:
+                self.__total_wce += dataset_differences[index_cluster][index_point]
+
+
+    def __calculate_dataset_difference(self, amount_clusters):
+        """!
+        @brief Calculate distance from each point to each cluster center.
+
+        """
+        self.__metric.enable_numpy_usage()
+        dataset_differences = numpy.zeros((amount_clusters, len(self.__pointer_data)))
+        for index_center in range(amount_clusters):
+            if self.__metric.get_type() != type_metric.USER_DEFINED:
+                dataset_differences[index_center] = self.__metric(self.__pointer_data, self.__medians[index_center])
+            else:
+                dataset_differences[index_center] = [self.__metric(point, self.__medians[index_center])
+                                                      for point in self.__pointer_data]
+        self.__metric.disable_numpy_usage()
+        return dataset_differences
+
+
     def __update_medians(self):
         """!
         @brief Calculate medians of clusters in line with contained objects.
