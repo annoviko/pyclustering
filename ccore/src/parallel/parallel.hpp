@@ -35,7 +35,8 @@
 /* Available options: 
     1. PARALLEL_IMPLEMENTATION_ASYNC_POOL - own parallel implementation based on std::async pool
     2. PARALLEL_IMPLEMENTATION_NONE       - parallel implementation is not used
-    3. PARALLEL_IMPLEMENTATION_PPL        - parallel PPL implementation (windows system only)         */
+    3. PARALLEL_IMPLEMENTATION_PPL        - parallel PPL implementation (windows system only)
+    4. PARALLEL_IMPLEMENTATION_OPENMP     - parallel OpenMP implementation */
 
 
 #if defined(WIN32) || (_WIN32) || (_WIN64)
@@ -108,6 +109,11 @@ void parallel_for(const TypeIndex p_start, const TypeIndex p_end, const TypeActi
     }
 #elif defined(PARALLEL_IMPLEMENTATION_PPL)
     concurrency::parallel_for(p_start, p_end, p_task);
+#elif defined(PARALLEL_IMPLEMENTATION_OPENMP)
+    #pragma omp parallel for
+    for (TypeIndex i = p_start; i < p_end, i++) {
+        p_task(i);
+    }
 #else
     for (std::size_t i = p_start; i < p_end; i++) {
         p_task(i);

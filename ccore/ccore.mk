@@ -44,11 +44,11 @@ endif
 
 # Compiler (g++ compiler is used by default)
 ifeq ($(COMPILER), clang)
-	CC = scan-build clang++ -c -fopenmp
+	CC = scan-build clang++ -c
 	LD = scan-build clang++
 else
-	CC = g++ -c -fopenmp
-	LD = g++ -fopenmp
+	CC = g++ -c
+	LD = g++
 endif
 
 

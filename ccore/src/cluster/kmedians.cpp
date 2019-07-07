@@ -25,9 +25,11 @@
 #include <algorithm>
 #include <cmath>
 
+#include "parallel/parallel.hpp"
 #include "utils/metric.hpp"
 
 
+using namespace ccore::parallel;
 using namespace ccore::utils::metric;
 
 
@@ -96,10 +98,9 @@ void kmedians::update_clusters(const dataset & p_medians, cluster_sequence & p_c
 
     index_sequence labels(data.size(), 0);
 
-    #pragma omp parallel for
-    for (long long index = 0; index < static_cast<long long>(data.size()); index++) {
+    parallel_for(std::size_t(0), data.size(), [this, &p_medians, &labels](std::size_t index) {
         assign_point_to_cluster(index, p_medians, labels);
-    }
+    });
 
     for (std::size_t index_point = 0; index_point < labels.size(); index_point++) {
         const std::size_t suitable_index_cluster = labels[index_point];
@@ -146,11 +147,10 @@ double kmedians::update_medians(cluster_sequence & clusters, dataset & medians) 
 
     std::vector<double> changes(clusters.size(), 0);
 
-    #pragma omp parallel for
-    for (long long index_cluster = 0; index_cluster < static_cast<long long>(clusters.size()); index_cluster++) {
+    parallel_for(std::size_t(0), clusters.size(), [this, &medians, &prev_medians, &clusters, &changes](std::size_t index_cluster) {
         calculate_median(clusters[index_cluster], medians[index_cluster]);
         changes[index_cluster] = m_metric(prev_medians[index_cluster], medians[index_cluster]);
-    }
+    });
 
     return *std::max_element(changes.cbegin(), changes.cend());
 }
