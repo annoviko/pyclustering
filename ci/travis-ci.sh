@@ -358,10 +358,10 @@ install_miniconda() {
     PLATFORM_TARGET=$1
     if [ "$PLATFORM_TARGET" == "x64" ]; then
         print_info "Download Miniconda for platform '$PLATFORM_TARGET'."
-        wget https://repo.continuum.io/miniconda/Miniconda3-4.3.27-Linux-x86_64.sh -O miniconda.sh
+        wget https://repo.continuum.io/miniconda/Miniconda3-4.6.14-Linux-x86_64.sh -O miniconda.sh
     elif [ "$PLATFORM_TARGET" == "x86" ]; then
         print_info "Download Miniconda for platform '$PLATFORM_TARGET'"
-        wget https://repo.continuum.io/miniconda/Miniconda3-4.3.27-Linux-x86.sh -O miniconda.sh
+        wget https://repo.continuum.io/miniconda/Miniconda3-4.5.12-Linux-x86.sh -O miniconda.sh
     else
         print_error "Unknown platform '$PLATFORM_TARGET' is specified for Miniconda."
         exit 1
