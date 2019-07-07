@@ -48,10 +48,12 @@ class KmediansTestTemplates:
         
         clusters = kmedians_instance.get_clusters()
         medians = kmedians_instance.get_medians()
+        wce = kmedians_instance.get_total_wce()
 
         if itermax == 0:
             assert clusters == []
             assert start_medians == medians
+            assert 0.0 == wce
             return
 
         obtained_cluster_sizes = [len(cluster) for cluster in clusters]
