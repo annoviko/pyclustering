@@ -164,7 +164,10 @@ class kmedians:
         
         """
 
-        return self.__medians
+        if isinstance(self.__medians, list):
+            return self.__medians
+
+        return self.__medians.tolist()
 
 
     def get_total_wce(self):
