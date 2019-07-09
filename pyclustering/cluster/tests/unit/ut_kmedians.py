@@ -132,6 +132,11 @@ class KmediansUnitTest(unittest.TestCase):
         initial_medians = [[0.0772944481804071, 0.05224990900863469], [1.6021689021213712, 1.0347579135245601], [2.3341008076636096, 1.280022869739064]]
         KmediansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE10, initial_medians, None, False)
 
+    def testTotalWithingClusterErrorSimple3(self):
+        sample = [[0, 1, 5], [0, 2, 3]]
+        initial_medians = [0, 3, 2]
+        kmedians_instance = kmedians(sample, initial_medians, ccore=False)
+        self.assertNotEqual(self, kmedians_instance.get_total_wce(), 2.5)
 
     def testItermax0(self):
         KmediansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [], False, itermax=0)
