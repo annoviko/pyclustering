@@ -115,6 +115,11 @@ function job_ut_cygwin_ccore() {
 function job_pyclustering_windows($platform_version) {
     Write-Host "[CI Job] Testing interaction between pyclustering and CCORE on Windows platform $platform_version." -ForegroundColor Green;
 
+    if ($env:APPVEYOR_PULL_REQUEST_NUMBER == "") {
+        Write-Host -Message "[CI Job] Integration tests are disabled for Pull Requests." -ForegroundColor Green;
+        exit 0
+    }
+
     install_miniconda $platform_version;
 
     Write-Host "[CI Job] Set path '$env:APPVEYOR_BUILD_FOLDER' to tested pyclustering library." -ForegroundColor Green;
@@ -185,8 +190,8 @@ function job_deploy() {
 
     Write-Host "[DEPLOY]: Add changes for commit" -ForegroundColor Green;
 
-    echo "windows ccore x32 build version: '$env:APPVEYOR_BUILD_NUMBER'" > pyclustering\core\x86\win\.win.info;
-    echo "windows ccore x64 build version: '$env:APPVEYOR_BUILD_NUMBER'" > pyclustering\core\x64\win\.win.info;
+    Write-Host "windows ccore x32 build version: '$env:APPVEYOR_BUILD_NUMBER'" > pyclustering\core\x86\win\.win.info;
+    Write-Host "windows ccore x64 build version: '$env:APPVEYOR_BUILD_NUMBER'" > pyclustering\core\x64\win\.win.info;
     
     git.exe add pyclustering\core\x86\win\.win.info;
     git.exe add pyclustering\core\x86\win\ccore.dll;

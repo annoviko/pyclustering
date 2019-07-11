@@ -388,6 +388,11 @@ install_miniconda() {
 upload_binary() {
     print_info "Upload binary files (platform: '$1', os: '$2') to storage."
 
+    if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
+        print_info "Upload CCORE library is disabled in case of Pull Request."
+        return
+    fi
+
     BUILD_PLATFORM=$1
     BUILD_OS=$2
     BINARY_FOLDER=$TRAVIS_BUILD_NUMBER
@@ -409,6 +414,11 @@ upload_binary() {
 
 download_binary() {
     print_info "Download CCORE binary (platform: '$1', os: '$2') file from cloud."
+
+    if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
+        print_info "Download CCORE library is disabled in case of Pull Request."
+        return
+    fi
 
     BUILD_PLATFORM=$1
     BUILD_OS=$2
