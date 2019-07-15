@@ -115,7 +115,7 @@ function job_ut_cygwin_ccore() {
 function job_pyclustering_windows($platform_version) {
     Write-Host "[CI Job] Testing interaction between pyclustering and CCORE on Windows platform $platform_version." -ForegroundColor Green;
 
-    if ($env:APPVEYOR_PULL_REQUEST_NUMBER == "") {
+    if ($env:APPVEYOR_PULL_REQUEST_NUMBER) {
         Write-Host -Message "[CI Job] Integration tests are disabled for Pull Requests." -ForegroundColor Green;
         exit 0
     }
