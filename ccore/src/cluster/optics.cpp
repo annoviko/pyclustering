@@ -139,7 +139,7 @@ void optics::expand_cluster_order(optics_descriptor & p_object) {
         std::multiset<optics_descriptor *, optics_pointer_descriptor_less> order_seed;
         update_order_seed(p_object, neighbors, order_seed);
 
-        while(order_seed.size() > 0) {
+        while(!order_seed.empty()) {
             optics_descriptor * descriptor = *(order_seed.begin());
             order_seed.erase(order_seed.begin());
 

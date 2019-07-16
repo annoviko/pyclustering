@@ -268,7 +268,7 @@ protected:
 public:
     distance_metric(void) = default;
 
-    distance_metric(const distance_functor<TypeContainer> & p_functor) : m_functor(p_functor) { }
+    explicit distance_metric(const distance_functor<TypeContainer> & p_functor) : m_functor(p_functor) { }
 
     distance_metric(const distance_metric & p_other) = default;
 
@@ -377,7 +377,7 @@ public:
    * @param[in] p_degree: degree of Minkowski equation.
    *
    */
-    minkowski_distance_metric(const double p_degree) :
+    explicit minkowski_distance_metric(const double p_degree) :
         distance_metric<TypeContainer>(std::bind(minkowski_distance<TypeContainer>, std::placeholders::_1, std::placeholders::_2, p_degree))
     { }
 };
