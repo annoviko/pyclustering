@@ -25,6 +25,7 @@
 
 
 #include <list>
+#include <set>
 #include <tuple>
 
 #include "container/kdtree.hpp"
@@ -83,7 +84,7 @@ private:
 
     optics_object_sequence *            m_optics_objects    = nullptr;
 
-    std::vector<optics_descriptor *>    m_ordered_database  = { };
+    std::list<optics_descriptor *>      m_ordered_database  = { };
 
 public:
     /**
@@ -177,7 +178,7 @@ private:
 
     void get_neighbors_from_distance_matrix(const std::size_t p_index, neighbors_collection & p_neighbors);
 
-    void update_order_seed(const optics_descriptor & p_object, const neighbors_collection & neighbors, std::list<optics_descriptor *> & order_seed);
+    void update_order_seed(const optics_descriptor & p_object, const neighbors_collection & neighbors, std::multiset<optics_descriptor *, optics_pointer_descriptor_less> & order_seed);
 
     void calculate_ordering(void);
 

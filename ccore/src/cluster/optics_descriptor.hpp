@@ -98,6 +98,27 @@ public:
 };
 
 
+
+/**
+ *
+ * @brief Less comparator for object description that used by OPTICS algorithm for cluster analysis.
+ *
+ */
+struct optics_pointer_descriptor_less {
+    /**
+     *
+     * @brief Compare two OPTICS object using following rule: p_object1 < p_object2.
+     *
+     * @param[in] p_object1: left operand to compare.
+     * @param[in] p_object2: right operand to compare.
+     *
+     * @return 'true' if left operand is less than right operand.
+     *
+     */
+    bool operator()(const optics_descriptor * p_object1, const optics_descriptor * p_object2) const;
+};
+
+
 }
 
 }

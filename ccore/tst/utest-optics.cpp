@@ -108,12 +108,16 @@ TEST(utest_optics, allocation_sample_simple_01_distance_matrix) {
 TEST(utest_optics, allocation_one_allocation_simple_01) {
     const std::vector<size_t> expected_clusters_length = { 10 };
     template_optics_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), 10.0, 1, 0, expected_clusters_length);
+    template_optics_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), 9.0, 1, 0, expected_clusters_length);
+    template_optics_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), 5.0, 1, 0, expected_clusters_length);
 }
 
 
 TEST(utest_optics, allocation_one_allocation_simple_01_distance_matrix) {
     const std::vector<size_t> expected_clusters_length = { 10 };
     template_optics_length_process_distance_matrix(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), 10.0, 1, 0, expected_clusters_length);
+    template_optics_length_process_distance_matrix(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), 9.0, 1, 0, expected_clusters_length);
+    template_optics_length_process_distance_matrix(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), 5.0, 1, 0, expected_clusters_length);
 }
 
 
@@ -174,6 +178,18 @@ TEST(utest_optics, allocation_sample_simple_05) {
 TEST(utest_optics, allocation_sample_simple_05_distance_matrix) {
     const std::vector<size_t> expected_clusters_length = { 15, 15, 15, 15 };
     template_optics_length_process_distance_matrix(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_05), 0.7, 3, 0, expected_clusters_length);
+}
+
+
+TEST(utest_optics, allocation_one_dimension) {
+    const std::vector<size_t> expected_clusters_length = { 10, 10 };
+    template_optics_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_07), 3.0, 3, 0, expected_clusters_length);
+}
+
+
+TEST(utest_optics, allocation_one_dimension_one_allocation) {
+    const std::vector<size_t> expected_clusters_length = { 20 };
+    template_optics_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_07), 7.0, 3, 0, expected_clusters_length);
 }
 
 

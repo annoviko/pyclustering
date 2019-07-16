@@ -25,6 +25,7 @@
 #include <algorithm>
 #include <cmath>
 #include <limits>
+#include <map>
 #include <string>
 
 #include "ordering_analyser.hpp"
@@ -134,12 +135,11 @@ void optics::expand_cluster_order(optics_descriptor & p_object) {
         std::sort(neighbors.begin(), neighbors.end(), [](const auto & a, const auto & b) { return std::get<1>(a) < std::get<1>(b); });
         p_object.m_core_distance = std::get<1>(neighbors[m_neighbors - 1]);
 
-        std::list<optics_descriptor *> order_seed;
+        std::multiset<optics_descriptor *, optics_pointer_descriptor_less> order_seed;
         update_order_seed(p_object, neighbors, order_seed);
 
-        std::size_t order_seed_length = order_seed.size();
-        while(order_seed_length > 0) {
-            optics_descriptor * descriptor = order_seed.front();
+        while(order_seed.size() > 0) {
+            optics_descriptor * descriptor = *(order_seed.begin());
             order_seed.erase(order_seed.begin());
 
             get_neighbors(descriptor->m_index, neighbors);
@@ -156,8 +156,6 @@ void optics::expand_cluster_order(optics_descriptor & p_object) {
             else {
                 descriptor->m_core_distance = optics::NONE_DISTANCE;
             }
-
-            order_seed_length = order_seed.size();
         }
     }
     else {
@@ -166,31 +164,29 @@ void optics::expand_cluster_order(optics_descriptor & p_object) {
 }
 
 
-void optics::update_order_seed(const optics_descriptor & p_object, const neighbors_collection & p_neighbors, std::list<optics_descriptor *> & order_seed) {
+void optics::update_order_seed(const optics_descriptor & p_object, const neighbors_collection & p_neighbors, std::multiset<optics_descriptor *, optics_pointer_descriptor_less> & order_seed) {
     for (auto & descriptor : p_neighbors) {
         std::size_t index_neighbor = std::get<0>(descriptor);
         double current_reachability_distance = std::get<1>(descriptor);
 
-        if (!m_optics_objects->at(index_neighbor).m_processed) {
+        optics_descriptor & optics_object = m_optics_objects->at(index_neighbor);
+        if (!optics_object.m_processed) {
             double reachable_distance = std::max({ current_reachability_distance, p_object.m_core_distance });
 
-            if (m_optics_objects->at(index_neighbor).m_reachability_distance == optics::NONE_DISTANCE) {
-                m_optics_objects->at(index_neighbor).m_reachability_distance = reachable_distance;
-
-                auto position_insertion = order_seed.end();
-                for (auto position = order_seed.begin(); position != order_seed.end(); ++position) {
-                    if (reachable_distance < (*position)->m_reachability_distance) {
-                        position_insertion = position;
-                        break;
-                    }
-                }
-
-                order_seed.insert(position_insertion, &(*m_optics_objects)[index_neighbor]);
+            if (optics_object.m_reachability_distance == optics::NONE_DISTANCE) {
+                optics_object.m_reachability_distance = reachable_distance;
+                order_seed.insert(&optics_object);
             }
             else {
-                if (reachable_distance < m_optics_objects->at(index_neighbor).m_reachability_distance) {
-                    m_optics_objects->at(index_neighbor).m_reachability_distance = reachable_distance;
-                    order_seed.sort([](const auto & a, const auto & b) { return a->m_reachability_distance < b->m_reachability_distance; });
+                if (reachable_distance < optics_object.m_reachability_distance) {
+                    optics_object.m_reachability_distance = reachable_distance;
+
+                    auto object_iterator = std::find_if(order_seed.begin(), order_seed.end(), [&optics_object](optics_descriptor * obj) {
+                        return obj->m_index == optics_object.m_index;
+                    });
+
+                    order_seed.erase(object_iterator);
+                    order_seed.insert(&optics_object);
                 }
             }
         }
