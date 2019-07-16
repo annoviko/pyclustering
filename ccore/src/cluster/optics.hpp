@@ -68,7 +68,7 @@ public:
 private:
     struct neighbor_descriptor {
     public:
-        std::size_t m_index           = INVALID_INDEX;
+        std::size_t m_index             = INVALID_INDEX;
         double m_reachability_distance  = 0;
 
     public:
