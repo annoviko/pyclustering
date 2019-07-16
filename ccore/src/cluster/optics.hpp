@@ -62,10 +62,29 @@ enum class optics_data_t {
  */
 class optics : public cluster_algorithm  {
 public:
-    static const double NONE_DISTANCE;
+    static const double       NONE_DISTANCE;
+    static const std::size_t  INVALID_INDEX;
 
 private:
-    using neighbors_collection = std::vector< std::tuple<std::size_t, double> >;
+    struct neighbor_descriptor {
+    public:
+        std::size_t m_index           = INVALID_INDEX;
+        double m_reachability_distance  = 0;
+
+    public:
+        neighbor_descriptor(const std::size_t p_index, const double p_distance) :
+            m_index(p_index), m_reachability_distance(p_distance)
+        { }
+    };
+
+    struct neighbor_descriptor_less {
+    public:
+        bool operator()(const neighbor_descriptor & p_object1, const neighbor_descriptor & p_object2) const {
+            return p_object1.m_reachability_distance < p_object2.m_reachability_distance;
+        }
+    };
+
+    using neighbors_collection = std::multiset<neighbor_descriptor, neighbor_descriptor_less>;
 
 private:
     const dataset       * m_data_ptr        = nullptr;
@@ -177,6 +196,8 @@ private:
     void get_neighbors_from_points(const std::size_t p_index, neighbors_collection & p_neighbors);
 
     void get_neighbors_from_distance_matrix(const std::size_t p_index, neighbors_collection & p_neighbors);
+
+    double get_core_distance(const neighbors_collection & p_neighbors) const;
 
     void update_order_seed(const optics_descriptor & p_object, const neighbors_collection & neighbors, std::multiset<optics_descriptor *, optics_pointer_descriptor_less> & order_seed);
 
