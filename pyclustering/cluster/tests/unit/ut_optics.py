@@ -69,6 +69,16 @@ class OpticsUnitTest(unittest.TestCase):
     def testClusteringSampleSimple5DistanceMatrix(self):
         OpticsTestTemplates.templateClusteringResultsDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, 0.7, 3, None, [15, 15, 15, 15], False)
 
+    def testClusteringSampleSimple6(self):
+        OpticsTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE6, 1.0, 3, None, [20, 21], False)
+
+    def testClusteringSampleSimple6DistanceMatrix(self):
+        OpticsTestTemplates.templateClusteringResultsDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE6, 1.0, 3, None, [20, 21], False)
+
+    def testClusteringThreeDimensionalSimple11(self):
+        OpticsTestTemplates.templateClusteringResultsDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, 2.0, 2, None, [10, 10], False)
+        OpticsTestTemplates.templateClusteringResultsDistanceMatrix(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, 3.0, 2, None, [10, 10], False)
+
     def testClusteringTheSameData1(self):
         OpticsTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 1.0, 3, None, [10, 20], False)
 
