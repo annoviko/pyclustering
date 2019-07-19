@@ -103,7 +103,7 @@ def cluster_wing_nut_radius_calculation():
     template_clustering(FCPS_SAMPLES.SAMPLE_WING_NUT, 1.0, 2, 2)
 
 def cluster_chainlink():
-    template_clustering(FCPS_SAMPLES.SAMPLE_CHAINLINK, 0.5, 3)
+    template_clustering(FCPS_SAMPLES.SAMPLE_CHAINLINK, 0.15, 3)
     
 def cluster_hepta():
     template_clustering(FCPS_SAMPLES.SAMPLE_HEPTA, 1, 3)
@@ -176,6 +176,6 @@ cluster_engy_time()
 
 experiment_execution_time(False)
 experiment_execution_time(True)
- 
+
 performance_measure_random_points(False)
 performance_measure_random_points(True)
