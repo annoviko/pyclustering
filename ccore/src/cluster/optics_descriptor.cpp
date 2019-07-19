@@ -49,6 +49,11 @@ void optics_descriptor::clear(void) {
 }
 
 
+bool optics_pointer_descriptor_less::operator()(const optics_descriptor * p_object1, const optics_descriptor * p_object2) const {
+    return p_object1->m_reachability_distance < p_object2->m_reachability_distance;
+}
+
+
 }
 
 }

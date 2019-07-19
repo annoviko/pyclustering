@@ -49,9 +49,14 @@ function job_build_windows_ccore($platform_version) {
     build_ccore_library x86;
     build_ccore_library x64;
 
+    if ($env:APPVEYOR_PULL_REQUEST_NUMBER) {
+        Write-Host -Message "[CI Job] Builds uploading is disabled for Pull Requests." -ForegroundColor Green;
+        Exit 1;
+    }
+
     upload_binary x86 $env:CCORE_X86_BINARY_PATH;
     upload_binary x64 $env:CCORE_X64_BINARY_PATH;
-    
+
     Write-Host "Building CCORE library for WINDOWS platform: SUCCESS." -ForegroundColor Green;
 }
 
@@ -114,6 +119,11 @@ function job_ut_cygwin_ccore() {
 
 function job_pyclustering_windows($platform_version) {
     Write-Host "[CI Job] Testing interaction between pyclustering and CCORE on Windows platform $platform_version." -ForegroundColor Green;
+
+    if ($env:APPVEYOR_PULL_REQUEST_NUMBER) {
+        Write-Host -Message "[CI Job] Integration tests are disabled for Pull Requests." -ForegroundColor Green;
+        exit 0
+    }
 
     install_miniconda $platform_version;
 
@@ -185,8 +195,8 @@ function job_deploy() {
 
     Write-Host "[DEPLOY]: Add changes for commit" -ForegroundColor Green;
 
-    echo "windows ccore x32 build version: '$env:APPVEYOR_BUILD_NUMBER'" > pyclustering\core\x86\win\.win.info;
-    echo "windows ccore x64 build version: '$env:APPVEYOR_BUILD_NUMBER'" > pyclustering\core\x64\win\.win.info;
+    Write-Host "windows ccore x32 build version: '$env:APPVEYOR_BUILD_NUMBER'" > pyclustering\core\x86\win\.win.info;
+    Write-Host "windows ccore x64 build version: '$env:APPVEYOR_BUILD_NUMBER'" > pyclustering\core\x64\win\.win.info;
     
     git.exe add pyclustering\core\x86\win\.win.info;
     git.exe add pyclustering\core\x86\win\ccore.dll;
@@ -249,7 +259,7 @@ function download_miniconda($platform_version) {
     }
     
     
-    echo "[CI Job] Start installing process using '$filepath'.";
+    Write-Host "[CI Job] Start installing process using '$filepath'." -ForegroundColor Green;
     
     $env:MINICONDA_PATH = "C:\Specific-Miniconda";
     $args = "/InstallationType=AllUsers /S /AddToPath=1 /RegisterPython=1 /D=$env:MINICONDA_PATH";
@@ -257,7 +267,7 @@ function download_miniconda($platform_version) {
     Start-Process -FilePath $filepath -ArgumentList $args -Wait -Passthru;
     
     if (Test-Path $env:MINICONDA_PATH) {
-        echo "[CI Job] Miniconda has been successfully installed to '$env:MINICONDA_PATH'.";
+        Write-Host "[CI Job] Miniconda has been successfully installed to '$env:MINICONDA_PATH'." -ForegroundColor Green;
         
         Remove-Item $filepath;
     }
@@ -275,7 +285,7 @@ function download_miniconda($platform_version) {
 
 
 function install_miniconda($platform_version) {
-    echo "[CI Job] Starting process of installation of miniconda.";
+    Write-Host "[CI Job] Starting process of installation of miniconda." -ForegroundColor Green;
     
     download_miniconda $platform_version;
     
@@ -290,7 +300,7 @@ function install_miniconda($platform_version) {
     # conda install --channel conda-forge pillow=5.2.0;
 
     
-    echo "[CI Job] Activating environment for powershell manually (activate does not work).";
+    Write-Host "[CI Job] Activating environment for powershell manually (activate does not work)." -ForegroundColor Green;
     activate test-environment;
     
     $env:PYTHON_INTERPRETER = "$env:MINICONDA_PATH\envs\test-environment\python.exe";
@@ -301,10 +311,10 @@ function install_miniconda($platform_version) {
     $env:PATH = "$env:MINICONDA_PATH\envs\test-environment\Library\bin;$env:PATH";
 
 
-    echo "[CI Job] Miniconda environment information after installation of miniconda:";
+    Write-Host "[CI Job] Miniconda environment information after installation of miniconda:" -ForegroundColor Green;
     conda info -a;
 
-    echo "[CI Job] Python interpreter information after installation of miniconda:";
+    Write-Host "[CI Job] Python interpreter information after installation of miniconda:" -ForegroundColor Green;
     & $env:PYTHON_INTERPRETER --version;
 }
 

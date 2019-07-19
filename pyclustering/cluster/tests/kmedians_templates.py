@@ -24,11 +24,15 @@
 """
 
 
+from pyclustering.tests.assertion import assertion
+
 from pyclustering.cluster.kmedians import kmedians
 
-from pyclustering.utils import read_sample
+from pyclustering.utils import read_sample, distance_metric, type_metric
 
 from random import random
+
+import numpy
 
 
 class KmediansTestTemplates:
@@ -105,3 +109,18 @@ class KmediansTestTemplates:
                 allocated_number_objects += 1
              
         assert (number_objects == allocated_number_objects)    # number of allocated objects should be the same.
+
+
+    @staticmethod
+    def templatePredict(path_to_file, initial_medians, points, expected_closest_clusters, ccore, **kwargs):
+        sample = read_sample(path_to_file)
+
+        metric = kwargs.get('metric', distance_metric(type_metric.EUCLIDEAN_SQUARE))
+        itermax = kwargs.get('itermax', 200)
+
+        kmeans_instance = kmedians(sample, initial_medians, 0.001, ccore, metric=metric, itermax=itermax)
+        kmeans_instance.process()
+
+        closest_clusters = kmeans_instance.predict(points)
+        assertion.eq(len(expected_closest_clusters), len(closest_clusters))
+        assertion.true(numpy.array_equal(numpy.array(expected_closest_clusters), closest_clusters))

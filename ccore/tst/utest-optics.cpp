@@ -108,12 +108,16 @@ TEST(utest_optics, allocation_sample_simple_01_distance_matrix) {
 TEST(utest_optics, allocation_one_allocation_simple_01) {
     const std::vector<size_t> expected_clusters_length = { 10 };
     template_optics_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), 10.0, 1, 0, expected_clusters_length);
+    template_optics_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), 9.0, 1, 0, expected_clusters_length);
+    template_optics_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), 5.0, 1, 0, expected_clusters_length);
 }
 
 
 TEST(utest_optics, allocation_one_allocation_simple_01_distance_matrix) {
     const std::vector<size_t> expected_clusters_length = { 10 };
     template_optics_length_process_distance_matrix(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), 10.0, 1, 0, expected_clusters_length);
+    template_optics_length_process_distance_matrix(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), 9.0, 1, 0, expected_clusters_length);
+    template_optics_length_process_distance_matrix(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), 5.0, 1, 0, expected_clusters_length);
 }
 
 
@@ -174,6 +178,18 @@ TEST(utest_optics, allocation_sample_simple_05) {
 TEST(utest_optics, allocation_sample_simple_05_distance_matrix) {
     const std::vector<size_t> expected_clusters_length = { 15, 15, 15, 15 };
     template_optics_length_process_distance_matrix(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_05), 0.7, 3, 0, expected_clusters_length);
+}
+
+
+TEST(utest_optics, allocation_one_dimension) {
+    const std::vector<size_t> expected_clusters_length = { 10, 10 };
+    template_optics_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_07), 3.0, 3, 0, expected_clusters_length);
+}
+
+
+TEST(utest_optics, allocation_one_dimension_one_allocation) {
+    const std::vector<size_t> expected_clusters_length = { 20 };
+    template_optics_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_07), 7.0, 3, 0, expected_clusters_length);
 }
 
 
@@ -306,3 +322,81 @@ TEST(utest_optics, noise_cluster_allocation_sample_simple_02_distance_matrix) {
     const std::vector<size_t> expected_clusters_length = { 10 };
     template_optics_noise_allocation_distance_matrix(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02), 2.0, 9, 0, expected_clusters_length, 13);
 }
+
+
+#ifdef UT_PERFORMANCE_SESSION
+#include <chrono>
+
+TEST(performance_optics, big_data) {
+    auto points = simple_sample_factory::create_random_sample(5000, 10);
+
+    auto start = std::chrono::system_clock::now();
+
+    const std::size_t repeat = 1;
+    for (std::size_t i = 0; i < repeat; i++) {
+      optics_data output_result;
+      optics solver(0.1, 40);
+      solver.process(*points, output_result);
+    }
+
+    auto end = std::chrono::system_clock::now();
+
+    std::chrono::duration<double> difference = end - start;
+    std::cout << "Clustering time: '" << difference.count() / repeat << "' sec." << std::endl;
+}
+
+TEST(performance_optics, engy_time) {
+    auto points = fcps_sample_factory::create_sample(FCPS_SAMPLE::ENGY_TIME);
+
+    auto start = std::chrono::system_clock::now();
+
+    const std::size_t repeat = 30;
+    for (std::size_t i = 0; i < repeat; i++) {
+      optics_data output_result;
+      optics solver(0.2, 20);
+      solver.process(*points, output_result);
+    }
+
+    auto end = std::chrono::system_clock::now();
+
+    std::chrono::duration<double> difference = end - start;
+    std::cout << "Clustering time: '" << difference.count() / repeat << "' sec." << std::endl;
+}
+
+TEST(performance_optics, atom) {
+    auto points = fcps_sample_factory::create_sample(FCPS_SAMPLE::ATOM);
+
+    auto start = std::chrono::system_clock::now();
+
+    const std::size_t repeat = 20;
+    for (std::size_t i = 0; i < repeat; i++) {
+      optics_data output_result;
+      optics solver(15, 3);
+      solver.process(*points, output_result);
+    }
+
+    auto end = std::chrono::system_clock::now();
+
+    std::chrono::duration<double> difference = end - start;
+    std::cout << "Clustering time: '" << difference.count() / repeat << "' sec." << std::endl;
+}
+
+TEST(performance_optics, chainlink) {
+    auto points = fcps_sample_factory::create_sample(FCPS_SAMPLE::CHAINLINK);
+
+    auto start = std::chrono::system_clock::now();
+
+    const std::size_t repeat = 20;
+    for (std::size_t i = 0; i < repeat; i++) {
+      optics_data output_result;
+      optics solver(0.15, 3);
+      solver.process(*points, output_result);
+    }
+
+    auto end = std::chrono::system_clock::now();
+
+    std::chrono::duration<double> difference = end - start;
+    std::cout << "Clustering time: '" << difference.count() / repeat << "' sec." << std::endl;
+}
+
+#endif

@@ -5,7 +5,10 @@ CHANGE NOTES FOR 0.9.0 (STARTED Apr 14, 2019), (RELEASED: -)
 ------------------------------------------------------------------------
 
 GENERAL CHANGES:
-- Optimization of K-Medians algorithm by parallel processing (pyclustering.cluster.kmedians).
+- Optimization of OPTICS algorithm by reducing complexity (ccore.clst.optics).
+  See: https://github.com/annoviko/pyclustering/issues/521
+
+- Optimization of K-Medians algorithm by parallel processing (ccore.clst.kmedians).
   See: https://github.com/annoviko/pyclustering/issues/529
 
 - Introduced 'predict' method for K-Medoids algorithm to find closest clusters for particular points (pyclustering.cluster.kmedoids).
