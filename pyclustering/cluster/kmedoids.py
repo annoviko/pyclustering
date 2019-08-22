@@ -137,6 +137,8 @@ class kmedoids:
         if self.__ccore:
             self.__ccore = ccore_library.workable()
 
+        #self.__verify_instance()
+
 
     def process(self):
         """!
@@ -253,6 +255,10 @@ class kmedoids:
         """
         
         return type_encoding.CLUSTER_INDEX_LIST_SEPARATION
+
+
+    def __verify_instance(self):
+        pass
 
 
     def __create_distance_calculator(self):

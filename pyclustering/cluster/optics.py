@@ -357,7 +357,39 @@ class optics:
         visualizer.append_clusters(clusters, sample)
         visualizer.show()
     @endcode
-    
+
+    Here is an example where OPTICS extracts outliers from sample 'Tetra':
+    @code
+        from pyclustering.cluster import cluster_visualizer
+        from pyclustering.cluster.optics import optics
+        from pyclustering.samples.definitions import FCPS_SAMPLES
+        from pyclustering.utils import read_sample
+
+        # Read sample for clustering from some file.
+        sample = read_sample(FCPS_SAMPLES.SAMPLE_TETRA)
+
+        # Run cluster analysis where connectivity radius is bigger than real.
+        radius = 0.4
+        neighbors = 3
+        optics_instance = optics(sample, radius, neighbors)
+
+        # Performs cluster analysis.
+        optics_instance.process()
+
+        # Obtain results of clustering.
+        clusters = optics_instance.get_clusters()
+        noise = optics_instance.get_noise()
+
+        # Visualize clustering results (clusters and outliers).
+        visualizer = cluster_visualizer()
+        visualizer.append_clusters(clusters, sample)
+        visualizer.append_cluster(noise, sample, marker='x')
+        visualizer.show()
+    @endcode
+
+    Visualization result of allocated clusters and outliers is presented on the image below:
+    @image html optics_noise_tetra.png "Clusters and outliers extracted by OPTICS algorithm from sample 'Tetra'."
+
     """
     
     def __init__(self, sample, eps, minpts, amount_clusters = None, ccore = True, **kwargs):
