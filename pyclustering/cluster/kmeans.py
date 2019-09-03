@@ -441,30 +441,6 @@ class kmeans:
         @return (list) List of closest clusters for each point. Each cluster is denoted by index. Return empty
                  collection if 'process()' method was not called.
 
-        An example how to calculate (or predict) the closest cluster to specified points.
-        @code
-            from pyclustering.cluster.kmeans import kmeans
-            from pyclustering.samples.definitions import SIMPLE_SAMPLES
-            from pyclustering.utils import read_sample
-
-            # Load list of points for cluster analysis.
-            sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE3)
-
-            # Initial centers for sample 'Simple3'.
-            initial_centers = [[0.2, 0.1], [4.0, 1.0], [2.0, 2.0], [2.3, 3.9]]
-
-            # Create instance of K-Means algorithm with prepared centers.
-            kmeans_instance = kmeans(sample, initial_centers)
-
-            # Run cluster analysis.
-            kmeans_instance.process()
-
-            # Calculate the closest cluster to following two points.
-            points = [[0.25, 0.2], [2.5, 4.0]]
-            closest_clusters = kmeans_instance.predict(points)
-            print(closest_clusters)
-        @endcode
-
         """
 
         nppoints = numpy.array(points)

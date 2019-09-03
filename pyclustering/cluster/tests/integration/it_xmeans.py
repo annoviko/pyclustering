@@ -24,18 +24,18 @@
 """
 
 
-import unittest;
+import unittest
 
 # Generate images without having a window appear.
-import matplotlib;
-matplotlib.use('Agg');
+import matplotlib
+matplotlib.use('Agg')
 
-from pyclustering.cluster.tests.xmeans_templates import XmeansTestTemplates;
-from pyclustering.cluster.xmeans import xmeans, splitting_type;
+from pyclustering.cluster.tests.xmeans_templates import XmeansTestTemplates
+from pyclustering.cluster.xmeans import xmeans, splitting_type
 
-from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
+from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES
 
-from pyclustering.core.tests import remove_library;
+from pyclustering.core.tests import remove_library
 
 
 class XmeansIntegrationTest(unittest.TestCase):
@@ -184,6 +184,17 @@ class XmeansIntegrationTest(unittest.TestCase):
     def testKmax05Amount01Offset01Initial04(self):
         XmeansTestTemplates.templateMaxAllocatedClusters(True, 1, 1000, 1, 4, 5);
 
+    def testPredictOnePoint(self):
+        centers = [[0.2, 0.1], [4.0, 1.0], [2.0, 2.0], [2.3, 3.9]]
+        XmeansTestTemplates.templatePredict(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, centers, [[0.3, 0.2]], 4, [0], True)
+        XmeansTestTemplates.templatePredict(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, centers, [[4.1, 1.1]], 4, [1], True)
+        XmeansTestTemplates.templatePredict(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, centers, [[2.1, 1.9]], 4, [2], True)
+        XmeansTestTemplates.templatePredict(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, centers, [[2.1, 4.1]], 4, [3], True)
+
+    def testPredictTwoPoints(self):
+        centers = [[0.2, 0.1], [4.0, 1.0], [2.0, 2.0], [2.3, 3.9]]
+        XmeansTestTemplates.templatePredict(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, centers, [[0.3, 0.2], [2.1, 1.9]], 4, [0, 2], True)
+        XmeansTestTemplates.templatePredict(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, centers, [[2.1, 4.1], [2.1, 1.9]], 4, [3, 2], True)
 
     @remove_library
     def testProcessingWhenLibraryCoreCorrupted(self):
@@ -191,4 +202,4 @@ class XmeansIntegrationTest(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    unittest.main();
+    unittest.main()

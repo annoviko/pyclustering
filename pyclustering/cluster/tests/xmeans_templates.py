@@ -23,12 +23,13 @@
 
 """
 
+import numpy
 import random
 
 from pyclustering.cluster.xmeans import xmeans, splitting_type
 from pyclustering.cluster.center_initializer import random_center_initializer
 
-from pyclustering.utils import read_sample
+from pyclustering.utils import read_sample, distance_metric, type_metric
 
 from pyclustering.tests.assertion import assertion
 
@@ -61,6 +62,21 @@ class XmeansTestTemplates:
             expected_cluster_length.sort()
             
             assert obtained_cluster_sizes == expected_cluster_length;
+
+
+    @staticmethod
+    def templatePredict(path_to_file, initial_centers, points, expected_amount, expected_closest_clusters, ccore, **kwargs):
+        sample = read_sample(path_to_file)
+
+        kmax = kwargs.get('kmax', 20)
+
+        xmeans_instance = xmeans(sample, initial_centers, kmax, 0.025, splitting_type.BAYESIAN_INFORMATION_CRITERION, ccore)
+        xmeans_instance.process()
+
+        closest_clusters = xmeans_instance.predict(points)
+        assertion.eq(expected_amount, len(xmeans_instance.get_clusters()))
+        assertion.eq(len(expected_closest_clusters), len(closest_clusters))
+        assertion.true(numpy.array_equal(numpy.array(expected_closest_clusters), closest_clusters))
 
 
     @staticmethod

@@ -40,7 +40,7 @@ from pyclustering.core.wrapper import ccore_library
 
 import pyclustering.core.xmeans_wrapper as wrapper
 
-from pyclustering.utils import euclidean_distance_square, euclidean_distance
+from pyclustering.utils import euclidean_distance_square, euclidean_distance, distance_metric, type_metric
 
 
 class splitting_type(IntEnum):
@@ -123,7 +123,7 @@ class xmeans:
     
     """
     
-    def __init__(self, data, initial_centers = None, kmax = 20, tolerance = 0.025, criterion = splitting_type.BAYESIAN_INFORMATION_CRITERION, ccore = True):
+    def __init__(self, data, initial_centers=None, kmax=20, tolerance=0.025, criterion=splitting_type.BAYESIAN_INFORMATION_CRITERION, ccore=True):
         """!
         @brief Constructor of clustering algorithm X-Means.
         
@@ -143,7 +143,7 @@ class xmeans:
         if initial_centers is not None:
             self.__centers = initial_centers[:]
         else:
-            self.__centers = [ [random.random() for _ in range(len(data[0])) ] ]
+            self.__centers = [[random.random() for _ in range(len(data[0]))]]
         
         self.__kmax = kmax
         self.__tolerance = tolerance
@@ -165,7 +165,7 @@ class xmeans:
         
         """
         
-        if (self.__ccore is True):
+        if self.__ccore is True:
             self.__clusters, self.__centers = wrapper.xmeans(self.__pointer_data, self.__centers, self.__kmax, self.__tolerance, self.__criterion)
 
         else:
@@ -183,6 +183,53 @@ class xmeans:
                     self.__centers = allocated_centers
             
             self.__clusters, self.__centers = self.__improve_parameters(self.__centers)
+
+
+    def predict(self, points):
+        """!
+        @brief Calculates the closest cluster to each point.
+
+        @param[in] points (array_like): Points for which closest clusters are calculated.
+
+        @return (list) List of closest clusters for each point. Each cluster is denoted by index. Return empty
+                 collection if 'process()' method was not called.
+
+        An example how to calculate (or predict) the closest cluster to specified points.
+        @code
+            from pyclustering.cluster.xmeans import xmeans
+            from pyclustering.samples.definitions import SIMPLE_SAMPLES
+            from pyclustering.utils import read_sample
+
+            # Load list of points for cluster analysis.
+            sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE3)
+
+            # Initial centers for sample 'Simple3'.
+            initial_centers = [[0.2, 0.1], [4.0, 1.0], [2.0, 2.0], [2.3, 3.9]]
+
+            # Create instance of X-Means algorithm with prepared centers.
+            xmeans_instance = xmeans(sample, initial_centers)
+
+            # Run cluster analysis.
+            xmeans_instance.process()
+
+            # Calculate the closest cluster to following two points.
+            points = [[0.25, 0.2], [2.5, 4.0]]
+            closest_clusters = xmeans_instance.predict(points)
+            print(closest_clusters)
+        @endcode
+
+        """
+        nppoints = numpy.array(points)
+        if len(self.__clusters) == 0:
+            return []
+
+        metric = distance_metric(type_metric.EUCLIDEAN_SQUARE, numpy_usage=True)
+
+        differences = numpy.zeros((len(nppoints), len(self.__centers)))
+        for index_point in range(len(nppoints)):
+            differences[index_point] = metric(nppoints[index_point], self.__centers)
+
+        return numpy.argmin(differences, axis=1)
 
 
     def get_clusters(self):
