@@ -5,6 +5,9 @@ CHANGE NOTES FOR 0.9.0 (STARTED Apr 14, 2019), (RELEASED: -)
 ------------------------------------------------------------------------
 
 GENERAL CHANGES:
+- Introduced 'predict' method for X-Means algorithm to find closest clusters for particular points (pyclustering.cluster.xmeans).
+  See: https://github.com/annoviko/pyclustering/issues/540
+
 - Optimization of OPTICS algorithm by reducing complexity (ccore.clst.optics).
   See: https://github.com/annoviko/pyclustering/issues/521
 
