@@ -11,7 +11,7 @@ Linux, Windows and MacOS operating systems.
 
 Official repository: https://github.com/annoviko/pyclustering/
 
-Documentation: https://codedocs.xyz/annoviko/pyclustering/
+Documentation: https://pyclustering.github.io/docs/0.9.1/html/
 
 Dependencies
 ============
