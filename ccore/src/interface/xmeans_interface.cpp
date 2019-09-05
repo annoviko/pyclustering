@@ -36,11 +36,12 @@ pyclustering_package * xmeans_algorithm(const pyclustering_package * const p_sam
     solver.process(data, output_result);
 
     pyclustering_package * package = new pyclustering_package(pyclustering_data_t::PYCLUSTERING_TYPE_LIST);
-    package->size = 2;   /* cluster package + center package */
-    package->data = new pyclustering_package * [2];
+    package->size = xmeans_package_indexer::XMEANS_PACKAGE_SIZE;
+    package->data = new pyclustering_package * [package->size];
 
-    ((pyclustering_package **) package->data)[0] = create_package(&output_result.clusters());
-    ((pyclustering_package **) package->data)[1] = create_package(&output_result.centers());
+    ((pyclustering_package **) package->data)[xmeans_package_indexer::XMEANS_PACKAGE_INDEX_CLUSTERS] = create_package(&output_result.clusters());
+    ((pyclustering_package **) package->data)[xmeans_package_indexer::XMEANS_PACKAGE_INDEX_CENTERS] = create_package(&output_result.centers());
+    ((pyclustering_package **) package->data)[xmeans_package_indexer::XMEANS_PACKAGE_INDEX_WCE] = create_package(1, output_result.wce());
 
     return package;
 }

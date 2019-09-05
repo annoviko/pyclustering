@@ -109,7 +109,7 @@ private:
 
     void improve_region_structure(const cluster & p_cluster, const point & p_center, dataset & p_allocated_centers);
 
-    void improve_parameters(cluster_sequence & clusters, dataset & centers, const index_sequence & available_indexes);
+    double improve_parameters(cluster_sequence & clusters, dataset & centers, const index_sequence & available_indexes);
 
     double splitting_criterion(const cluster_sequence & clusters, const dataset & centers) const;
 

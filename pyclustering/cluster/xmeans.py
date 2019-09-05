@@ -109,6 +109,9 @@ class xmeans:
         clusters = xmeans_instance.get_clusters()
         centers = xmeans_instance.get_centers()
 
+        # Print total sum of metric errors
+        print("Total WCE:", xmeans_instance.get_total_wce())
+
         # Visualize clustering results
         visualizer = cluster_visualizer()
         visualizer.append_clusters(clusters, sample)
@@ -148,6 +151,7 @@ class xmeans:
         self.__kmax = kmax
         self.__tolerance = tolerance
         self.__criterion = criterion
+        self.__total_wce = 0.0
          
         self.__ccore = ccore
         if self.__ccore:
@@ -166,23 +170,25 @@ class xmeans:
         """
         
         if self.__ccore is True:
-            self.__clusters, self.__centers = wrapper.xmeans(self.__pointer_data, self.__centers, self.__kmax, self.__tolerance, self.__criterion)
+            result = wrapper.xmeans(self.__pointer_data, self.__centers, self.__kmax, self.__tolerance, self.__criterion)
+            self.__clusters = result[0]
+            self.__centers = result[1]
+            self.__total_wce = result[2][0]
 
         else:
             self.__clusters = []
             while len(self.__centers) <= self.__kmax:
                 current_cluster_number = len(self.__centers)
                 
-                self.__clusters, self.__centers = self.__improve_parameters(self.__centers)
+                self.__clusters, self.__centers, _ = self.__improve_parameters(self.__centers)
                 allocated_centers = self.__improve_structure(self.__clusters, self.__centers)
                 
                 if current_cluster_number == len(allocated_centers):
-                #if ( (current_cluster_number == len(allocated_centers)) or (len(allocated_centers) > self.__kmax) ):
                     break
                 else:
                     self.__centers = allocated_centers
             
-            self.__clusters, self.__centers = self.__improve_parameters(self.__centers)
+            self.__clusters, self.__centers, self.__total_wce = self.__improve_parameters(self.__centers)
 
 
     def predict(self, points):
@@ -240,6 +246,7 @@ class xmeans:
         
         @see process()
         @see get_centers()
+        @see get_total_wce()
         
         """
 
@@ -254,6 +261,7 @@ class xmeans:
         
         @see process()
         @see get_clusters()
+        @see get_total_wce()
         
         """
          
@@ -273,24 +281,38 @@ class xmeans:
         return type_encoding.CLUSTER_INDEX_LIST_SEPARATION
 
 
-    def __improve_parameters(self, centers, available_indexes = None):
+    def get_total_wce(self):
+        """!
+        @brief Returns sum of Euclidean Squared metric errors (SSE - Sum of Squared Errors).
+        @details Sum of metric errors is calculated using distance between point and its center:
+                 \f[error=\sum_{i=0}^{N}euclidean_square_distance(x_{i}-center(x_{i}))\f]
+
+        @see process()
+        @see get_clusters()
+
+        """
+
+        return self.__total_wce
+
+
+    def __improve_parameters(self, centers, available_indexes=None):
         """!
         @brief Performs k-means clustering in the specified region.
         
-        @param[in] centers (list): Centers of clusters.
-        @param[in] available_indexes (list): Indexes that defines which points can be used for k-means clustering, if None - then all points are used.
+        @param[in] centers (list): Cluster centers, if None then automatically generated two centers using center initialization method.
+        @param[in] available_indexes (list): Indexes that defines which points can be used for k-means clustering, if None then all points are used.
         
-        @return (list) List of allocated clusters, each cluster contains indexes of objects in list of data.
+        @return (tuple) List of allocated clusters, list of centers and total WCE.
         
         """
 
         if available_indexes and len(available_indexes) == 1:
             index_center = available_indexes[0]
-            return [ available_indexes ], self.__pointer_data[index_center]
+            return [available_indexes], self.__pointer_data[index_center], 0.0
 
         local_data = self.__pointer_data
         if available_indexes:
-            local_data = [ self.__pointer_data[i] for i in available_indexes ]
+            local_data = [self.__pointer_data[i] for i in available_indexes]
 
         local_centers = centers
         if centers is None:
@@ -299,13 +321,14 @@ class xmeans:
         kmeans_instance = kmeans(local_data, local_centers, tolerance=self.__tolerance, ccore=False)
         kmeans_instance.process()
 
+        local_wce = kmeans_instance.get_total_wce()
         local_centers = kmeans_instance.get_centers()
         
         clusters = kmeans_instance.get_clusters()
         if available_indexes:
             clusters = self.__local_to_global_clusters(clusters, available_indexes)
         
-        return clusters, local_centers
+        return clusters, local_centers, local_wce
 
 
     def __local_to_global_clusters(self, local_clusters, available_indexes):
@@ -346,7 +369,7 @@ class xmeans:
 
         for index_cluster in range(len(clusters)):
             # solve k-means problem for children where data of parent are used.
-            (parent_child_clusters, parent_child_centers) = self.__improve_parameters(None, clusters[index_cluster])
+            (parent_child_clusters, parent_child_centers, _) = self.__improve_parameters(None, clusters[index_cluster])
               
             # If it's possible to split current data
             if len(parent_child_clusters) > 1:

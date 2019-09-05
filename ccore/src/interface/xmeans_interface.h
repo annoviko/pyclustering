@@ -28,6 +28,20 @@
 
 /**
 *
+* @brief   X-Means result is returned using pyclustering_package that consist sub-packages and this enumerator provides
+*           named indexes for sub-packages.
+*
+*/
+enum xmeans_package_indexer {
+    XMEANS_PACKAGE_INDEX_CLUSTERS = 0,
+    XMEANS_PACKAGE_INDEX_CENTERS,
+    XMEANS_PACKAGE_INDEX_WCE,
+    XMEANS_PACKAGE_SIZE
+};
+
+
+/**
+*
 * @brief   Clustering algorithm X-Means returns allocated clusters.
 * @details Caller should destroy returned result in 'pyclustering_package'.
 *

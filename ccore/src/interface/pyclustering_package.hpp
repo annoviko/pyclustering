@@ -154,6 +154,19 @@ pyclustering_package * create_package(const std::size_t p_size) {
 }
 
 
+template <class TypeValue>
+pyclustering_package * create_package(const std::size_t p_size, const TypeValue & p_value) {
+    pyclustering_package * package = create_package<TypeValue>(p_size);
+    if (package) {
+        for (std::size_t i = 0; i < p_size; i++) {
+            ((TypeValue *) package->data)[i] = p_value;
+        }
+    }
+
+    return package;
+}
+
+
 template <class TypeContainer>
 pyclustering_package * create_package(const TypeContainer * const data) {
     using contaner_data_t = typename TypeContainer::value_type;

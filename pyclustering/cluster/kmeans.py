@@ -346,7 +346,7 @@ class kmeans:
         self.__clusters = []
         self.__centers = numpy.array(initial_centers)
         self.__tolerance = tolerance
-        self.__total_wce = 0
+        self.__total_wce = 0.0
 
         self.__observer = kwargs.get('observer', None)
         self.__metric = kwargs.get('metric', distance_metric(type_metric.EUCLIDEAN_SQUARE))

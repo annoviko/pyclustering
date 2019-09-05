@@ -26,6 +26,8 @@
 import numpy
 import random
 
+from pyclustering.tests.assertion import assertion
+
 from pyclustering.cluster.xmeans import xmeans, splitting_type
 from pyclustering.cluster.center_initializer import random_center_initializer
 
@@ -36,32 +38,40 @@ from pyclustering.tests.assertion import assertion
 
 class XmeansTestTemplates:
     @staticmethod
-    def templateLengthProcessData(input_sample, start_centers, expected_cluster_length, type_splitting, kmax, ccore):
+    def templateLengthProcessData(input_sample, start_centers, expected_cluster_length, type_splitting, kmax, ccore, **kwargs):
         if isinstance(input_sample, str):
             sample = read_sample(input_sample)
         else:
             sample = input_sample
-        
-        #clusters = xmeans(sample, start_centers, 20, ccore);
+
         xmeans_instance = xmeans(sample, start_centers, kmax, 0.025, type_splitting, ccore)
         xmeans_instance.process()
          
         clusters = xmeans_instance.get_clusters()
         centers = xmeans_instance.get_centers()
+        wce = xmeans_instance.get_total_wce()
     
         obtained_cluster_sizes = [len(cluster) for cluster in clusters]
 
-        assert len(sample) == sum(obtained_cluster_sizes);
-        assert len(clusters) == len(centers);
-        assert len(centers) <= kmax;
-        
+        assertion.eq(len(sample), sum(obtained_cluster_sizes))
+        assertion.eq(len(clusters), len(centers))
+        assertion.le(len(centers), kmax)
+
+        expected_wce = 0.0
+        metric = distance_metric(type_metric.EUCLIDEAN_SQUARE)
+        for index_cluster in range(len(clusters)):
+            for index_point in clusters[index_cluster]:
+                expected_wce += metric(sample[index_point], centers[index_cluster])
+
+        assertion.eq(expected_wce, wce)
+
         if expected_cluster_length is not None:
-            assert len(centers) == len(expected_cluster_length);
+            assertion.eq(len(centers), len(expected_cluster_length))
 
             obtained_cluster_sizes.sort()
             expected_cluster_length.sort()
             
-            assert obtained_cluster_sizes == expected_cluster_length;
+            assertion.eq(obtained_cluster_sizes, expected_cluster_length)
 
 
     @staticmethod
@@ -81,20 +91,20 @@ class XmeansTestTemplates:
 
     @staticmethod
     def templateClusterAllocationOneDimensionData(ccore_flag):
-        input_data = [ [0.0] for _ in range(10) ] + [ [5.0] for _ in range(10) ] + [ [10.0] for _ in range(10) ] + [ [15.0] for _ in range(10) ]
+        input_data = [[0.0] for _ in range(10)] + [[5.0] for _ in range(10)] + [[10.0] for _ in range(10)] + [[15.0] for _ in range(10)]
             
-        xmeans_instance = xmeans(input_data, [ [0.5], [5.5], [10.5], [15.5] ], 20, 0.025, splitting_type.BAYESIAN_INFORMATION_CRITERION, ccore_flag)
+        xmeans_instance = xmeans(input_data, [[0.5], [5.5], [10.5], [15.5]], 20, 0.025, splitting_type.BAYESIAN_INFORMATION_CRITERION, ccore_flag)
         xmeans_instance.process()
         
         clusters = xmeans_instance.get_clusters()
         centers = xmeans_instance.get_centers()
 
-        assert len(clusters) == 4;
-        assert len(centers) == len(clusters);
+        assertion.eq(len(clusters), 4)
+        assertion.eq(len(centers), len(clusters))
         
-        assert len(clusters) <= 20;
+        assertion.le(len(clusters), 20)
         for cluster in clusters:
-            assert len(cluster) == 10;
+            assertion.eq(len(cluster), 10)
 
 
     @staticmethod

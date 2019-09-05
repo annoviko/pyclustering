@@ -33,12 +33,15 @@
 using namespace ccore::clst;
 
 
-static void
-template_length_process_data(const std::shared_ptr<dataset> & data,
-                             const dataset & start_centers,
-                             const unsigned int kmax,
-                             const std::vector<unsigned int> & expected_cluster_length,
-                             const splitting_type criterion)
+const double WCE_CHECK_DISABLED = std::numeric_limits<double>::max();
+
+
+void template_length_process_data(const std::shared_ptr<dataset> & data,
+                                  const dataset & start_centers,
+                                  const unsigned int kmax,
+                                  const std::vector<unsigned int> & expected_cluster_length,
+                                  const splitting_type criterion,
+                                  const double expected_wce = WCE_CHECK_DISABLED)
 {
     xmeans solver(start_centers, kmax, 0.0001, criterion);
 
@@ -73,6 +76,10 @@ template_length_process_data(const std::shared_ptr<dataset> & data,
         for (size_t i = 0; i < obtained_cluster_length.size(); i++) {
             ASSERT_EQ(obtained_cluster_length[i], sorted_expected_cluster_length[i]);
         }
+    }
+
+    if (expected_wce != WCE_CHECK_DISABLED) {
+        ASSERT_EQ(output_result.wce(), expected_wce);
     }
 }
 
@@ -262,7 +269,7 @@ TEST(utest_xmeans, math_error_domain_bic) {
     dataset_ptr data = dataset_ptr(new dataset({ {0}, {0}, {10}, {10}, {20}, {20} }));
     dataset start_centers = { {5}, {20} };
     std::vector<unsigned int> expected_clusters_length = {2, 2, 2};
-    template_length_process_data(data, start_centers, 20, expected_clusters_length, splitting_type::BAYESIAN_INFORMATION_CRITERION);
+    template_length_process_data(data, start_centers, 20, expected_clusters_length, splitting_type::BAYESIAN_INFORMATION_CRITERION, 0.0);
 }
 
 
@@ -270,7 +277,7 @@ TEST(utest_xmeans, math_error_domain_mndl) {
     dataset_ptr data = dataset_ptr(new dataset({ {0}, {0}, {10}, {10}, {20}, {20} }));
     dataset start_centers = { {5}, {20} };
     std::vector<unsigned int> expected_clusters_length = {2, 2, 2};
-    template_length_process_data(data, start_centers, 20, expected_clusters_length, splitting_type::MINIMUM_NOISELESS_DESCRIPTION_LENGTH);
+    template_length_process_data(data, start_centers, 20, expected_clusters_length, splitting_type::MINIMUM_NOISELESS_DESCRIPTION_LENGTH, 0.0);
 }
 
 

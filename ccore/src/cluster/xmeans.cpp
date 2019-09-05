@@ -86,16 +86,18 @@ void xmeans::process(const dataset & data, cluster_data & output_result) {
         current_number_clusters = m_ptr_result->centers().size();
     }
 
-    improve_parameters(m_ptr_result->clusters(), m_ptr_result->centers(), dummy);
+    m_ptr_result->wce() = improve_parameters(m_ptr_result->clusters(), m_ptr_result->centers(), dummy);
 }
 
 
-void xmeans::improve_parameters(cluster_sequence & improved_clusters, dataset & improved_centers, const index_sequence & available_indexes) {
+double xmeans::improve_parameters(cluster_sequence & improved_clusters, dataset & improved_centers, const index_sequence & available_indexes) {
     kmeans_data result;
     kmeans(improved_centers, m_tolerance).process((*m_ptr_data), available_indexes, result);
 
     improved_centers = result.centers();
     improved_clusters = result.clusters();
+
+    return result.wce();
 }
 
 

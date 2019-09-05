@@ -1,5 +1,16 @@
 ------------------------------------------------------------------------
 
+CHANGE NOTES FOR 0.9.2 (STARTED Sep 9, 2019), (RELEASED: -)
+
+------------------------------------------------------------------------
+
+GENERAL CHANGES:
+- Introduced `get_total_wce` method for `xmeans` algorithm to find WCE (pyclustering.cluster.xmeans).
+  See: https://github.com/annoviko/pyclustering/issues/508
+
+
+------------------------------------------------------------------------
+
 CHANGE NOTES FOR 0.9.1 (STARTED Apr 14, 2019), (RELEASED: Sep 9, 2019)
 
 ------------------------------------------------------------------------
