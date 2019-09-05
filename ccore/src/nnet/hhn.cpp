@@ -26,6 +26,7 @@
 #include "differential/differ_state.hpp"
 #include "differential/runge_kutta_4.hpp"
 #include "differential/runge_kutta_fehlberg_45.hpp"
+#include "parallel/parallel.hpp"
 
 
 using namespace std::placeholders;
@@ -629,31 +630,30 @@ void hhn_network::assign_neuron_states(const double p_time, const double p_step,
 
 
 void hhn_network::calculate_peripheral_states(const solve_type p_solver, const double p_time, const double p_step, const double p_int_step, hhn_states & p_next_states) {
-    std::vector<void *> argv(1, nullptr);
-
-    for (std::size_t index = 0; index < m_peripheral.size(); index++) {
-        argv[0] = (void *) index;
+    parallel::parallel_for(std::size_t(0), m_peripheral.size(), [this, &p_solver, p_time, p_step, p_int_step, &p_next_states](const std::size_t p_index) {
+        std::vector<void *> argv(1, nullptr);
+        argv[0] = (void *) p_index;
 
         differ_state<double> inputs;
-        pack_equation_input(m_peripheral[index], inputs);
+        pack_equation_input(m_peripheral[p_index], inputs);
 
-        perform_calculation(p_solver, p_time, p_step, p_int_step, inputs, argv, p_next_states[index]);
-    }
+        perform_calculation(p_solver, p_time, p_step, p_int_step, inputs, argv, p_next_states[p_index]);
+    });
 }
 
 
 void hhn_network::calculate_central_states(const solve_type p_solver, const double p_time, const double p_step, const double p_int_step, hhn_states & p_next_states) {
-    std::vector<void *> argv(1, nullptr);
+    parallel::parallel_for(std::size_t(0), m_central.size(), [this, &p_solver, p_time, p_step, p_int_step, &p_next_states](const std::size_t p_index) {
+        std::vector<void *> argv(1, nullptr);
 
-    for (std::size_t index = 0; index < m_central.size(); index++) {
-        std::size_t index_central = index + m_peripheral.size();
+        std::size_t index_central = p_index + m_peripheral.size();
         argv[0] = (void *) index_central;
 
         differ_state<double> inputs;
-        pack_equation_input(m_central[index], inputs);
+        pack_equation_input(m_central[p_index], inputs);
 
-        perform_calculation(p_solver, p_time, p_step, p_int_step, inputs, argv, p_next_states[index]);
-    }
+        perform_calculation(p_solver, p_time, p_step, p_int_step, inputs, argv, p_next_states[p_index]);
+    });
 }
 
 
