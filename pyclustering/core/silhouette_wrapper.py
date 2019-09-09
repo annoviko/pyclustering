@@ -26,6 +26,7 @@
 
 from ctypes import c_double, c_size_t, POINTER
 
+from pyclustering.core.converter import convert_data_type
 from pyclustering.core.wrapper import ccore_library
 from pyclustering.core.pyclustering_package import pyclustering_package, package_builder, package_extractor
 
@@ -36,13 +37,14 @@ class silhouette_ksearch_package_indexer:
     SILHOUETTE_KSEARCH_PACKAGE_INDEX_SCORES = 2
 
 
-def silhoeutte(sample, clusters, pointer_metric):
+def silhoeutte(sample, clusters, pointer_metric, data_type):
     pointer_data = package_builder(sample, c_double).create()
     pointer_clusters = package_builder(clusters, c_size_t).create()
+    c_data_type = convert_data_type(data_type)
 
     ccore = ccore_library.get()
     ccore.silhouette_algorithm.restype = POINTER(pyclustering_package)
-    package = ccore.silhouette_algorithm(pointer_data, pointer_clusters, pointer_metric)
+    package = ccore.silhouette_algorithm(pointer_data, pointer_clusters, pointer_metric, c_data_type)
 
     result = package_extractor(package).extract()
     ccore.free_pyclustering_package(package)

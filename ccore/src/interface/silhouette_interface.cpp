@@ -43,7 +43,8 @@ ccore::clst::silhouette_ksearch_allocator::ptr get_silhouette_ksearch_allocator(
 pyclustering_package * silhouette_algorithm(
     const pyclustering_package * const p_sample,
     const pyclustering_package * const p_clusters,
-    const void * const p_metric)
+    const void * const p_metric,
+    const std::size_t p_data_type)
 {
     dataset data;
     p_sample->extract(data);
@@ -58,7 +59,7 @@ pyclustering_package * silhouette_algorithm(
         metric = &default_metric;
 
     ccore::clst::silhouette_data result;
-    ccore::clst::silhouette(*metric).process(data, clusters, result);
+    ccore::clst::silhouette(*metric).process(data, clusters, static_cast<ccore::clst::silhouette_data_t>(p_data_type), result);
 
     return create_package(&result.get_score());
 }

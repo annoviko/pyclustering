@@ -31,14 +31,14 @@ from ctypes import *
 from pyclustering.core.definitions import *
 
 
-ccore_library_instance  = None
-ccore_library_version   = "0.9.1"
+ccore_library_instance = None
+ccore_library_version = "0.9.2"
 
 
 class ccore_library:
-    __library           = None
-    __workable          = False
-    __initialized       = False
+    __library = None
+    __workable = False
+    __initialized = False
 
     @staticmethod
     def get():

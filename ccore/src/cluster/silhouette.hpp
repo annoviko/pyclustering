@@ -39,13 +39,21 @@ namespace ccore {
 namespace clst {
 
 
+enum class silhouette_data_t {
+    POINTS,
+    DISTANCE_MATRIX
+};
+
+
 class silhouette {
 private:
     const dataset *           m_data      = nullptr;  /* temporary object, exists during processing */
     const cluster_sequence *  m_clusters  = nullptr;  /* temporary object, exists during processing */
     silhouette_data *         m_result    = nullptr;  /* temporary object, exists during processing */
 
-    distance_metric<point>  m_metric = distance_metric_factory<point>::euclidean_square();
+    silhouette_data_t         m_type      = silhouette_data_t::POINTS;
+
+    distance_metric<point>    m_metric    = distance_metric_factory<point>::euclidean_square();
 
 public:
     silhouette(void) = default;
@@ -60,6 +68,8 @@ public:
 
 public:
     void process(const dataset & p_data, const cluster_sequence & p_clusters, silhouette_data & p_result);
+
+    void process(const dataset & p_data, const cluster_sequence & p_clusters, const silhouette_data_t & p_type, silhouette_data & p_result);
 
 private:
     double calculate_score(const std::size_t p_index_point, const std::size_t p_index_cluster) const;

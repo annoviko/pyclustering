@@ -85,19 +85,23 @@ class silhouette:
         """!
         @brief Initializes Silhouette method for analysis.
 
-        @param[in] data (array_like): Input data that was used for cluster analysis.
+        @param[in] data (array_like): Input data that was used for cluster analysis and that is presented as list of
+                    points or distance matrix (defined by parameter 'data_type', by default data is considered as a list
+                    of points).
         @param[in] clusters (list): Cluster that have been obtained after cluster analysis.
         @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'metric').
 
         <b>Keyword Args:</b><br>
             - metric (distance_metric): Metric that was used for cluster analysis and should be used for Silhouette
                score calculation (by default Square Euclidean distance).
+            - data_type (string): Data type of input sample 'data' that is processed by the algorithm ('points', 'distance_matrix').
             - ccore (bool): If True then CCORE (C++ implementation of pyclustering library) is used (by default True).
 
         """
         self.__data = data
         self.__clusters = clusters
         self.__metric = kwargs.get('metric', distance_metric(type_metric.EUCLIDEAN_SQUARE))
+        self.__data_type = kwargs.get('data_type', 'points')
 
         if self.__metric.get_type() != type_metric.USER_DEFINED:
             self.__metric.enable_numpy_usage()
@@ -135,7 +139,7 @@ class silhouette:
 
         """
         ccore_metric = metric_wrapper.create_instance(self.__metric)
-        self.__score = wrapper.silhoeutte(self.__data, self.__clusters, ccore_metric.get_pointer())
+        self.__score = wrapper.silhoeutte(self.__data, self.__clusters, ccore_metric.get_pointer(), self.__data_type)
 
 
     def __process_by_python(self):
@@ -168,7 +172,10 @@ class silhouette:
         @return (float) Silhouette score for the object.
 
         """
-        difference = self.__calculate_dataset_difference(index_point)
+        if self.__data_type == 'points':
+            difference = self.__calculate_dataset_difference(index_point)
+        else:
+            difference = self.__data[index_point]
 
         a_score = self.__calculate_within_cluster_score(index_cluster, difference)
         b_score = self.__caclulate_optimal_neighbor_cluster_score(index_cluster, difference)

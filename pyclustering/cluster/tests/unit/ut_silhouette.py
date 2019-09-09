@@ -134,5 +134,34 @@ class silhouette_unit_tests(unittest.TestCase):
         silhouette_test_template.correct_ksearch(SIMPLE_SAMPLES.SAMPLE_SIMPLE13, SIMPLE_ANSWERS.ANSWER_SIMPLE13, 2, 10,
                                                  silhouette_ksearch_type.KMEANS, False)
 
+    def test_distance_matrix_sample01(self):
+        silhouette_test_template.correct_processing_data_types(SIMPLE_SAMPLES.SAMPLE_SIMPLE1,
+                                                               SIMPLE_ANSWERS.ANSWER_SIMPLE1, False)
+
+    def test_distance_matrix_sample02(self):
+        silhouette_test_template.correct_processing_data_types(SIMPLE_SAMPLES.SAMPLE_SIMPLE2,
+                                                               SIMPLE_ANSWERS.ANSWER_SIMPLE2, False)
+
+    def test_distance_matrix_sample03(self):
+        silhouette_test_template.correct_processing_data_types(SIMPLE_SAMPLES.SAMPLE_SIMPLE3,
+                                                               SIMPLE_ANSWERS.ANSWER_SIMPLE3, False)
+
+    def test_distance_matrix_sample04(self):
+        silhouette_test_template.correct_processing_data_types(SIMPLE_SAMPLES.SAMPLE_SIMPLE4,
+                                                               SIMPLE_ANSWERS.ANSWER_SIMPLE4, False)
+
+    def test_distance_matrix_sample05(self):
+        silhouette_test_template.correct_processing_data_types(SIMPLE_SAMPLES.SAMPLE_SIMPLE5,
+                                                               SIMPLE_ANSWERS.ANSWER_SIMPLE5, False)
+
+    def test_distance_matrix_sample06(self):
+        silhouette_test_template.correct_processing_data_types(SIMPLE_SAMPLES.SAMPLE_SIMPLE6,
+                                                               SIMPLE_ANSWERS.ANSWER_SIMPLE6, False)
+
+    def test_distance_matrix_sample07(self):
+        silhouette_test_template.correct_processing_data_types(SIMPLE_SAMPLES.SAMPLE_SIMPLE7,
+                                                               SIMPLE_ANSWERS.ANSWER_SIMPLE7, False)
+
+
 if __name__ == "__main__":
     unittest.main()

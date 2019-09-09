@@ -24,7 +24,7 @@
 """
 
 
-from ctypes import c_size_t;
+from ctypes import c_size_t
 
 
 def convert_data_type(data_type):

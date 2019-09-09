@@ -30,21 +30,37 @@ from pyclustering.samples import answer_reader
 
 from pyclustering.tests.assertion import assertion
 
-from pyclustering.utils import read_sample
+from pyclustering.utils import read_sample, calculate_distance_matrix, distance_metric, type_metric
 
 
 class silhouette_test_template:
     @staticmethod
-    def correct_scores(sample_path, answer_path, ccore_flag):
+    def correct_scores(sample_path, answer_path, ccore_flag, **kwargs):
+        data_type = kwargs.get('data_type', 'points')
+
         sample = read_sample(sample_path)
+        if data_type == 'distance_matrix':
+            sample = calculate_distance_matrix(sample, distance_metric(type_metric.EUCLIDEAN_SQUARE))
+
         clusters = answer_reader(answer_path).get_clusters()
 
-        scores = silhouette(sample, clusters, ccore=ccore_flag).process().get_score()
+        scores = silhouette(sample, clusters, ccore=ccore_flag, data_type=data_type).process().get_score()
 
         assertion.eq(len(sample), len(scores))
         for score in scores:
             assertion.le(-1.0, score)
             assertion.ge(1.0, score)
+
+        return scores
+
+
+    @staticmethod
+    def correct_processing_data_types(sample_path, answer_path, ccore_flag):
+        scores_points = silhouette_test_template.correct_scores(sample_path, answer_path, ccore_flag, data_type='points')
+        scores_matrix = silhouette_test_template.correct_scores(sample_path, answer_path, ccore_flag, data_type='distance_matrix')
+
+        assertion.eq(len(scores_points), len(scores_matrix))
+        assertion.eq(scores_points, scores_matrix)
 
 
     @staticmethod

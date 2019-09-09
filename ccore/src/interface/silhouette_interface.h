@@ -77,6 +77,7 @@ ccore::clst::silhouette_ksearch_allocator::ptr get_silhouette_ksearch_allocator(
  * @param[in] p_sample: input data for clustering.
  * @param[in] p_clusters: clusters that have been allocated for that data.
  * @param[in] p_metric: pointer to distance metric 'distance_metric' that is used for distance calculation between two points.
+ * @param[in] p_data_type: defines data type that is used for clustering process ('0' - points, '1' - distance matrix).
  *
  * @return  Returns Silhouette's analysis results as a pyclustering package [ scores ].
  *
@@ -84,7 +85,8 @@ ccore::clst::silhouette_ksearch_allocator::ptr get_silhouette_ksearch_allocator(
 extern "C" DECLARATION pyclustering_package * silhouette_algorithm(
     const pyclustering_package * const p_sample,
     const pyclustering_package * const p_clusters,
-    const void * const p_metric);
+    const void * const p_metric,
+    const std::size_t p_data_type);
 
 
 /**

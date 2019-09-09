@@ -28,9 +28,29 @@
 
 #include "samples.hpp"
 
+#include "answer.hpp"
+#include "answer_reader.hpp"
 #include "utenv_utils.hpp"
 
 #include <memory>
+
+
+TEST(utest_interface_silhouette, silhouette) {
+    dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01);
+    answer ans = answer_reader::read(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01);
+
+    std::shared_ptr<pyclustering_package> data_package = pack(*data);
+    std::shared_ptr<pyclustering_package> cluster_package = pack(ans.clusters());
+
+    pyclustering_package * result_points = silhouette_algorithm(data_package.get(), cluster_package.get(), nullptr, 0);
+    pyclustering_package * result_matrix = silhouette_algorithm(data_package.get(), cluster_package.get(), nullptr, 1);
+
+    ASSERT_NE(nullptr, result_points);
+    ASSERT_NE(nullptr, result_matrix);
+
+    ASSERT_EQ(result_points->size, result_matrix->size);
+    ASSERT_EQ(result_points->type, result_matrix->type);
+}
 
 
 TEST(utest_interface_silhouette, silhouette_ksearch) {

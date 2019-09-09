@@ -74,7 +74,8 @@ class dbscan:
         """!
         @brief Constructor of clustering algorithm DBSCAN.
         
-        @param[in] data (list): Input data that is presented as list of points (objects), each point should be represented by list or tuple.
+        @param[in] data (list): Input data that is presented as list of points or distance matrix (defined by parameter
+                   'data_type', by default data is considered as a list of points).
         @param[in] eps (double): Connectivity radius between points, points may be connected if distance between them less then the radius.
         @param[in] neighbors (uint): minimum number of shared neighbors that is required for establish links between points.
         @param[in] ccore (bool): if True than DLL CCORE (C++ solution) will be used for solving the problem.

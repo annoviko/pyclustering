@@ -59,9 +59,9 @@ class kmeans_observer:
         @brief Initializer of observer of K-Means algorithm.
         
         """
-        self.__evolution_clusters   = []
-        self.__evolution_centers    = []
-        self.__initial_centers      = []
+        self.__evolution_clusters = []
+        self.__evolution_centers = []
+        self.__initial_centers = []
 
 
     def __len__(self):
@@ -168,9 +168,9 @@ class kmeans_visualizer:
         display = kwargs.get('display', True)
 
         if figure is None:
-            figure = visualizer.show(display = False)
+            figure = visualizer.show(display=False)
         else:
-            visualizer.show(figure = figure, display = False)
+            visualizer.show(figure=figure, display=False)
         
         kmeans_visualizer.__draw_centers(figure, offset, visualizer, centers, initial_centers)
         kmeans_visualizer.__draw_rays(figure, offset, visualizer, sample, clusters, centers)
@@ -229,7 +229,7 @@ class kmeans_visualizer:
 
 
     @staticmethod
-    def animate_cluster_allocation(data, observer, animation_velocity = 500, movie_fps = 1, save_movie = None):
+    def animate_cluster_allocation(data, observer, animation_velocity=500, movie_fps=1, save_movie=None):
         """!
         @brief Animates clustering process that is performed by K-Means algorithm.
 

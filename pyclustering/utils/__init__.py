@@ -75,18 +75,19 @@ def read_sample(filename):
     return sample
 
 
-def calculate_distance_matrix(sample):
+def calculate_distance_matrix(sample, metric=distance_metric(type_metric.EUCLIDEAN)):
     """!
-    @brief Calculates distance matrix for data sample (sequence of points) using Euclidean distance as a metric.
+    @brief Calculates distance matrix for data sample (sequence of points) using specified metric (by default Euclidean distance).
 
     @param[in] sample (array_like): Data points that are used for distance calculation.
+    @param[in] metric (distance_metric): Metric that is used for distance calculation between two points.
 
     @return (list) Matrix distance between data points.
 
     """
 
-    amount_rows = len(sample);
-    return [ [ euclidean_distance(sample[i], sample[j]) for j in range(amount_rows) ] for i in range(amount_rows) ];
+    amount_rows = len(sample)
+    return [[metric(sample[i], sample[j]) for j in range(amount_rows)] for i in range(amount_rows)]
 
 
 def read_image(filename):

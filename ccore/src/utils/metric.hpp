@@ -232,30 +232,6 @@ double chi_square_distance(const TypeContainer & point1, const TypeContainer & p
 
 /**
  *
- * @brief   Calculates distance matrix using points container.
- *
- * @param[in]  p_points: input data that is represented by points.
- * @param[out] p_distance_matrix: output distance matrix of points.
- *
- */
-template <typename TypeContainer>
-void distance_matrix(const TypeContainer & p_points, TypeContainer & p_distance_matrix) {
-    using TypeElement = typename TypeContainer::value_type;
-    
-    p_distance_matrix = TypeContainer(p_points.size(), TypeElement(p_points.size(), 0.0));
-
-    for (std::size_t i = 0; i < p_points.size(); i++) {
-        for (std::size_t j = i + 1; j < p_points.size(); j++) {
-            const double distance = euclidean_distance(p_points.at(i), p_points.at(j));
-            p_distance_matrix[i][j] = distance;
-            p_distance_matrix[j][i] = distance;
-        }
-    }
-}
-
-
-/**
- *
  * @brief   Basic distance metric provides interface for calculation distance between objects in line with
  *           specific metric.
  *
@@ -550,6 +526,45 @@ double farthest_distance(const TypeContainer & p_container, const distance_metri
     }
 
     return distance;
+}
+
+
+/**
+ *
+ * @brief   Calculates distance matrix using points container using Euclidean distance.
+ *
+ * @param[in]  p_points: input data that is represented by points.
+ * @param[in]  p_metric: metric for distance calculation between points.
+ * @param[out] p_distance_matrix: output distance matrix of points.
+ *
+ */
+template <typename TypeContainer>
+void distance_matrix(const TypeContainer & p_points, const distance_metric<point> & p_metric, TypeContainer & p_distance_matrix) {
+    using TypeElement = typename TypeContainer::value_type;
+    
+    p_distance_matrix = TypeContainer(p_points.size(), TypeElement(p_points.size(), 0.0));
+
+    for (std::size_t i = 0; i < p_points.size(); i++) {
+        for (std::size_t j = i + 1; j < p_points.size(); j++) {
+            const double distance = p_metric(p_points.at(i), p_points.at(j));
+            p_distance_matrix[i][j] = distance;
+            p_distance_matrix[j][i] = distance;
+        }
+    }
+}
+
+
+/**
+ *
+ * @brief   Calculates distance matrix using points container using Euclidean distance.
+ *
+ * @param[in]  p_points: input data that is represented by points.
+ * @param[out] p_distance_matrix: output distance matrix of points.
+ *
+ */
+template <typename TypeContainer>
+void distance_matrix(const TypeContainer & p_points, TypeContainer & p_distance_matrix) {
+    distance_matrix(p_points, distance_metric_factory<point>::euclidean(), p_distance_matrix);
 }
 
 
