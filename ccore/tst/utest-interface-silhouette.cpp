@@ -50,6 +50,9 @@ TEST(utest_interface_silhouette, silhouette) {
 
     ASSERT_EQ(result_points->size, result_matrix->size);
     ASSERT_EQ(result_points->type, result_matrix->type);
+
+    delete result_matrix;
+    delete result_points;
 }
 
 
