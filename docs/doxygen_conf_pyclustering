@@ -150,7 +150,8 @@ INPUT                  = pyclustering/__init__.py \
                          pyclustering/utils/__init__.py \
                          pyclustering/utils/color.py \
                          pyclustering/utils/graph.py \
-                         pyclustering/utils/metric.py
+                         pyclustering/utils/metric.py \
+                         pyclustering/utils/sampling.py
 
 INPUT_ENCODING         = UTF-8
 FILE_PATTERNS          = 
