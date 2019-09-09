@@ -25,6 +25,7 @@
 
 #include "interface/silhouette_interface.h"
 #include "interface/pyclustering_package.hpp"
+#include "utils/metric.hpp"
 
 #include "samples.hpp"
 
@@ -39,11 +40,15 @@ TEST(utest_interface_silhouette, silhouette) {
     dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01);
     answer ans = answer_reader::read(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01);
 
+    dataset matrix;
+    distance_matrix(*data, distance_metric_factory<point>::euclidean_square(), matrix);
+
     std::shared_ptr<pyclustering_package> data_package = pack(*data);
+    std::shared_ptr<pyclustering_package> matrix_package = pack(matrix);
     std::shared_ptr<pyclustering_package> cluster_package = pack(ans.clusters());
 
     pyclustering_package * result_points = silhouette_algorithm(data_package.get(), cluster_package.get(), nullptr, 0);
-    pyclustering_package * result_matrix = silhouette_algorithm(data_package.get(), cluster_package.get(), nullptr, 1);
+    pyclustering_package * result_matrix = silhouette_algorithm(matrix_package.get(), cluster_package.get(), nullptr, 1);
 
     ASSERT_NE(nullptr, result_points);
     ASSERT_NE(nullptr, result_matrix);
