@@ -88,6 +88,14 @@ class KmedoidsUnitTest(unittest.TestCase):
         metric = distance_metric(type_metric.MINKOWSKI, degree=2.0)
         kmedoids_test_template.templateLengthProcessWithMetric(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], metric, False, data_type='distance_matrix')
 
+    def testClusterAllocationSampleSimple1Gower(self):
+        metric = distance_metric(type_metric.GOWER, data=read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1))
+        kmedoids_test_template.templateLengthProcessWithMetric(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], metric, False)
+
+    def testClusterAllocationSampleSimple1GowerDistanceMatrix(self):
+        metric = distance_metric(type_metric.GOWER, data=read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1))
+        kmedoids_test_template.templateLengthProcessWithMetric(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], metric, False, data_type='distance_matrix')
+
     def testClusterAllocationSampleSimple1UserDefined(self):
         metric = distance_metric(type_metric.USER_DEFINED, func=distance_metric(type_metric.EUCLIDEAN))
         kmedoids_test_template.templateLengthProcessWithMetric(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], metric, False)

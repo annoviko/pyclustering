@@ -249,7 +249,7 @@ double gower_distance(const TypeContainer & p_point1, const TypeContainer & p_po
 
     for (const auto & dim_point2 : p_point2) {
         if (*iter_range != 0.0) {
-            distance += abs(*iter_point1 - dim_point2) / *iter_range;
+            distance += std::abs(*iter_point1 - dim_point2) / *iter_range;
         }
 
         ++iter_point1;
