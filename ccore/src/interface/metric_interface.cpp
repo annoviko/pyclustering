@@ -73,6 +73,14 @@ void * metric_create(const std::size_t p_type,
             return new distance_metric<point>(std::move(metric));
         }
 
+        case GOWER: {
+            point max_range;
+            p_arguments->extract(max_range);
+
+            distance_metric<point> metric = distance_metric_factory<point>::gower(max_range);
+            return new distance_metric<point>(std::move(metric));
+        }
+
         case USER_DEFINED: {
             auto functor_wrapper = [p_solver](const point & p1, const point & p2) {
                 pyclustering_package * point1 = create_package(&p1);

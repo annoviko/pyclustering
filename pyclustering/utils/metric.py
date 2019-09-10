@@ -56,6 +56,9 @@ class type_metric(IntEnum):
     ## Chi square distance, for more information see function 'chi_square_distance'.
     CHI_SQUARE = 6
 
+    ## Gower distance, for more information see function 'gower_distance'.
+    GOWER = 7
+
     ## User defined function for distance calculation between two points.
     USER_DEFINED = 1000
 
@@ -116,6 +119,10 @@ class distance_metric:
             - func (callable): Callable object with two arguments (point #1 and point #2) or (object #1 and object #2) in case of numpy usage.
                                 This argument is used only if metric is 'type_metric.USER_DEFINED'.
             - degree (numeric): Only for 'type_metric.MINKOWSKI' - degree of Minkowski equation.
+            - max_range (array_like): Only for 'type_metric.GOWER' - max range in each dimension. 'data' can be used
+                                       instead of this parameter.
+            - data (array_like): Only for 'type_metric.GOWER' - input data that used for 'max_range' calculation.
+                                 'max_range' can be used instead of this parameter.
             - numpy_usage (bool): If True then numpy is used for calculation (by default is False).
 
         """
@@ -233,11 +240,34 @@ class distance_metric:
         elif self.__type == type_metric.CHI_SQUARE:
             return chi_square_distance
 
+        elif self.__type == type_metric.GOWER:
+            max_range = self.__get_gower_max_range()
+            return lambda point1, point2: gower_distance(point1, point2, max_range)
+
         elif self.__type == type_metric.USER_DEFINED:
             return self.__func
 
         else:
             raise ValueError("Unknown type of metric: '%d'", self.__type)
+
+
+    def __get_gower_max_range(self):
+        """!
+        @brief Returns max range for Gower distance using input parameters ('max_range' or 'data').
+
+        @return (numpy.array) Max range for Gower distance.
+
+        """
+        max_range = self.__args.get('max_range', None)
+        if max_range is None:
+            data = self.__args.get('data', None)
+            if data is None:
+                raise ValueError("Gower distance requires 'data' or 'max_range' argument to construct metric.")
+
+            max_range = numpy.max(data, axis=0) - numpy.min(data, axis=0)
+            self.__args['max_range'] = max_range
+
+        return max_range
 
 
     def __create_distance_calculator_numpy(self):
@@ -267,6 +297,10 @@ class distance_metric:
 
         elif self.__type == type_metric.CHI_SQUARE:
             return chi_square_distance_numpy
+
+        elif self.__type == type_metric.GOWER:
+            max_range = self.__get_gower_max_range()
+            return lambda object1, object2: gower_distance_numpy(object1, object2, max_range)
 
         elif self.__type == type_metric.USER_DEFINED:
             return self.__func
@@ -523,10 +557,8 @@ def chi_square_distance(point1, point2):
     distance = 0.0
     for i in range(len(point1)):
         divider = abs(point1[i]) + abs(point2[i])
-        if divider == 0.0:
-            continue
-
-        distance += ((point1[i] - point2[i]) ** 2.0) / divider
+        if divider != 0.0:
+            distance += ((point1[i] - point2[i]) ** 2.0) / divider
 
     return distance
 
@@ -548,3 +580,53 @@ def chi_square_distance_numpy(object1, object2):
         return numpy.sum(numpy.nan_to_num(result), axis=1).T
     else:
         return numpy.sum(numpy.nan_to_num(result))
+
+
+def gower_distance(point1, point2, max_range):
+    """!
+    @brief Calculate Gower distance between two vectors.
+    @details Gower distance is calculate using following formula:
+    \f[
+    dist\left ( a, b \right )=\frac{1}{p}\sum_{i=0}^{p}\frac{\left | a_{i} - b_{i} \right |}{R_{i}},
+    \f]
+
+    where \f$R_{i}\f$ is a max range for ith dimension. \f$R\f$ is defined in line following formula:
+
+    \f[
+    R=max\left ( X \right )-min\left ( X \right )
+    \f]
+
+    @param[in] point1 (array_like): The first vector.
+    @param[in] point2 (array_like): The second vector.
+    @param[in] max_range (array_like): Max range in each data dimension.
+
+    @return (float) Gower distance between two objects.
+
+    """
+    distance = 0.0
+    dimensions = len(point1)
+    for i in range(dimensions):
+        if max_range[i] != 0.0:
+            distance += abs(point1[i] - point2[i]) / max_range[i]
+
+    return distance / dimensions
+
+
+def gower_distance_numpy(point1, point2, max_range):
+    """!
+    @brief Calculate Gower distance between two vectors using numpy.
+
+    @param[in] point1 (array_like): The first vector.
+    @param[in] point2 (array_like): The second vector.
+    @param[in] max_range (array_like): Max range in each data dimension.
+
+    @return (float) Gower distance between two objects.
+
+    """
+    with numpy.errstate(divide='ignore', invalid='ignore'):
+        result = numpy.divide(numpy.abs(point1 - point2), max_range)
+
+    if len(result.shape) > 1:
+        return numpy.sum(numpy.nan_to_num(result), axis=1).T / len(point1)
+    else:
+        return numpy.sum(numpy.nan_to_num(result)) / len(point1)

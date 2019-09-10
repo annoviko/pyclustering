@@ -75,6 +75,9 @@ class metric_wrapper:
         arguments = []
 
         if mtype == type_metric.MINKOWSKI:
-            arguments = [ metric.get_arguments().get('degree') ]
+            arguments = [metric.get_arguments().get('degree')]
+
+        elif mtype == type_metric.GOWER:
+            arguments = metric.get_arguments().get('max_range')
 
         return metric_wrapper(mtype, arguments, metric.get_function())

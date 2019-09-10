@@ -143,13 +143,13 @@ double chebyshev_distance(const TypeContainer & point1, const TypeContainer & po
 
 /**
  *
- * @brief   Calculates square of Minkowski distance between points.
+ * @brief   Calculates Minkowski distance between points.
  *
  * @param[in] p_point1: point #1 that is represented by coordinates.
  * @param[in] p_point2: point #2 that is represented by coordinates.
  * @param[in] p_degree: degree of Minkownski equation.
  *
- * @return  Returns square of Minkowski distance between points.
+ * @return  Returns Minkowski distance between points.
  *
  */
 template <typename TypeContainer>
@@ -227,6 +227,36 @@ double chi_square_distance(const TypeContainer & point1, const TypeContainer & p
     }
 
     return distance;
+}
+
+
+/**
+ *
+ * @brief   Calculates Gower distance between points.
+ *
+ * @param[in] p_point1: point #1 that is represented by coordinates.
+ * @param[in] p_point2: point #2 that is represented by coordinates.
+ * @param[in] p_max_range: max range in each data dimension.
+ *
+ * @return  Returns Gower distance between points.
+ *
+ */
+template <typename TypeContainer>
+double gower_distance(const TypeContainer & p_point1, const TypeContainer & p_point2, const TypeContainer & p_max_range) {
+    double distance = 0.0;
+    typename TypeContainer::const_iterator iter_point1 = p_point1.begin();
+    typename TypeContainer::const_iterator iter_range  = p_max_range.begin();
+
+    for (const auto & dim_point2 : p_point2) {
+        if (*iter_range != 0.0) {
+            distance += abs(*iter_point1 - dim_point2) / *iter_range;
+        }
+
+        ++iter_point1;
+        ++iter_range;
+    }
+
+    return distance / p_point1.size();
 }
 
 
@@ -389,6 +419,27 @@ public:
 
 /**
  *
+ * @brief   Gower distance metric calculator between two points.
+ *
+ */
+template <typename TypeContainer>
+class gower_distance_metric : public distance_metric<TypeContainer> {
+public:
+  /**
+   *
+   * @brief   Constructor of Gower distance metric.
+   *
+   * @param[in] p_max_range: max range in each data dimension.
+   *
+   */
+    explicit gower_distance_metric(const TypeContainer & p_max_range) :
+        distance_metric<TypeContainer>(std::bind(gower_distance<TypeContainer>, std::placeholders::_1, std::placeholders::_2, p_max_range))
+    { }
+};
+
+
+/**
+ *
  * @brief   Distance metric factory provides services for creation available metric in the 'ccore::utils::metric' and also user-defined.
  *
  */
@@ -472,6 +523,19 @@ public:
    */
     static distance_metric<TypeContainer> chi_square(void) {
         return chi_square_distance_metric<TypeContainer>();
+    }
+
+   /**
+   *
+   * @brief   Creates Gower distance metric.
+   *
+   * @param[in] p_max_range: max range in each data dimension.
+   *
+   * @return  Gower distance metric.
+   *
+   */
+    static distance_metric<TypeContainer> gower(const TypeContainer & p_max_range) {
+        return gower_distance_metric<TypeContainer>(p_max_range);
     }
 
    /**

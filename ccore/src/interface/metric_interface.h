@@ -37,6 +37,7 @@ enum metric_t {
     MINKOWSKI,
     CANBERRA,
     CHI_SQUARE,
+    GOWER,
     USER_DEFINED = 1000
 };
 

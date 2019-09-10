@@ -35,9 +35,8 @@
 using namespace ccore::utils::metric;
 
 
-TEST(utest_interface_dbscan, metric_algorithm) {
+TEST(utest_interface_metric, euclidean) {
     std::shared_ptr<pyclustering_package> arguments = pack(std::vector<double>());
-    distance_metric<point> metric = distance_metric_factory<point>::euclidean();
     double (*p_solver)(const void *, const void *) = nullptr;
 
     void * metric_pointer = metric_create(metric_t::EUCLIDEAN, arguments.get(), p_solver);
@@ -50,6 +49,24 @@ TEST(utest_interface_dbscan, metric_algorithm) {
     double distance = metric_calculate(metric_pointer, point1.get(), point2.get());
 
     ASSERT_EQ(1.0, distance);
+
+    metric_destroy(metric_pointer);
+}
+
+TEST(utest_interface_metric, gower) {
+    std::shared_ptr<pyclustering_package> arguments = pack(std::vector<double>({1.0, 0.0}));
+    double (*p_solver)(const void *, const void *) = nullptr;
+
+    void * metric_pointer = metric_create(metric_t::GOWER, arguments.get(), p_solver);
+
+    ASSERT_NE(nullptr, metric_pointer);
+
+    std::shared_ptr<pyclustering_package> point1 = pack(point({1.0, 1.0}));
+    std::shared_ptr<pyclustering_package> point2 = pack(point({2.0, 1.0}));
+
+    double distance = metric_calculate(metric_pointer, point1.get(), point2.get());
+
+    ASSERT_EQ(0.5, distance);
 
     metric_destroy(metric_pointer);
 }

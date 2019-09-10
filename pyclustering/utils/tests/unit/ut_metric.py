@@ -43,6 +43,8 @@ class MetricUnitTest(unittest.TestCase):
         assertion.eq(2.0, metric.distance_metric(metric.type_metric.CHEBYSHEV)([2.0, -2.0], [0.0, 0.0]))
         assertion.eq(2.0, metric.distance_metric(metric.type_metric.MINKOWSKI)([-3.0, -3.0], [-5.0, -3.0]))
         assertion.eq(2.0, metric.distance_metric(metric.type_metric.MINKOWSKI, degree=2)([-3.0, -3.0], [-5.0, -3.0]))
+        assertion.eq(0.5, metric.distance_metric(metric.type_metric.GOWER, max_range=([2.0, 0.0]))([-3.0, -3.0], [-5.0, -3.0]))
+        assertion.eq(0.5, metric.distance_metric(metric.type_metric.GOWER, data=[[-3.0, -3.0], [-4.0, -3.0], [-4.5, -3.0], [-5.0, -3.0]])([-3.0, -3.0],[-5.0, -3.0]))
         assertion.eq(4.0, metric.distance_metric(metric.type_metric.USER_DEFINED, func=metric.euclidean_distance_square)([2.0, 2.0], [4.0, 2.0]))
 
         user_function = lambda point1, point2: point1[0] + point2[0] + 2
@@ -114,6 +116,19 @@ class MetricUnitTest(unittest.TestCase):
         assertion.eq(0.0, metric.chi_square_distance_numpy(numpy.array([-1.0, -1.0]), numpy.array([-1.0, -1.0])))
         assertion.eq(0.4, metric.chi_square_distance([-2.0, -2.0], [-3.0, -3.0]))
         assertion.eq(0.4, metric.chi_square_distance_numpy(numpy.array([-2.0, -2.0]), numpy.array([-3.0, -3.0])))
+
+
+    def testGowerDistance(self):
+        assertion.eq(0.0, metric.gower_distance([0], [0], [0.0]))
+        assertion.eq(0.0, metric.gower_distance_numpy(numpy.array([0]), numpy.array([0]), numpy.array([0.0])))
+        assertion.eq(1.0, metric.gower_distance([0.0, 0.0], [1.0, 1.0], [1.0, 1.0]))
+        assertion.eq(1.0, metric.gower_distance_numpy(numpy.array([0.0, 0.0]), numpy.array([1.0, 1.0]), numpy.array([1.0, 1.0])))
+        assertion.eq(1.0, metric.gower_distance([0.75, 0.75], [0.25, 0.25], [0.5, 0.5]))
+        assertion.eq(1.0, metric.gower_distance_numpy(numpy.array([0.75, 0.75]), numpy.array([0.25, 0.25]), numpy.array([0.5, 0.5])))
+        assertion.eq(0.0, metric.gower_distance([-1.0, -1.0], [-1.0, -1.0], [0.0, 0.0]))
+        assertion.eq(0.0, metric.gower_distance_numpy(numpy.array([-1.0, -1.0]), numpy.array([-1.0, -1.0]), numpy.array([0.0, 0.0])))
+        assertion.eq(1.0, metric.gower_distance([-2.0, -2.0], [-3.0, -3.0], [1.0, 1.0]))
+        assertion.eq(1.0, metric.gower_distance_numpy(numpy.array([-2.0, -2.0]), numpy.array([-3.0, -3.0]), numpy.array([1.0, 1.0])))
 
 
 if __name__ == "__main__":
