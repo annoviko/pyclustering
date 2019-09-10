@@ -29,7 +29,6 @@ import matplotlib
 matplotlib.use('Agg')
 
 import numpy
-import math
 
 from pyclustering.tests.assertion import assertion
 

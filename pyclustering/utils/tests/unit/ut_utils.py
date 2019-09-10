@@ -21,27 +21,27 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 """
 
-import unittest;
+import unittest
 
 # Generate images without having a window appear.
-import matplotlib;
-matplotlib.use('Agg');
+import matplotlib
+matplotlib.use('Agg')
 
-from pyclustering.cluster.kmeans import kmeans;
-from pyclustering.cluster.center_initializer import kmeans_plusplus_initializer;
+from pyclustering.cluster.kmeans import kmeans
+from pyclustering.cluster.center_initializer import kmeans_plusplus_initializer
 
-import pyclustering.utils as utils;
+import pyclustering.utils as utils
 
-from pyclustering.utils import euclidean_distance;
-from pyclustering.utils import average_neighbor_distance;
-from pyclustering.utils import read_sample;
-from pyclustering.utils import data_corners;
-from pyclustering.utils import norm_vector;
-from pyclustering.utils import rgb2gray;
-from pyclustering.utils import extract_number_oscillations;
-from pyclustering.utils import draw_clusters;
+from pyclustering.utils import euclidean_distance
+from pyclustering.utils import average_neighbor_distance
+from pyclustering.utils import read_sample
+from pyclustering.utils import data_corners
+from pyclustering.utils import norm_vector
+from pyclustering.utils import rgb2gray
+from pyclustering.utils import extract_number_oscillations
+from pyclustering.utils import draw_clusters
 
-from pyclustering.samples.definitions import SIMPLE_SAMPLES, IMAGE_SIMPLE_SAMPLES;
+from pyclustering.samples.definitions import SIMPLE_SAMPLES, IMAGE_SIMPLE_SAMPLES
 
 
 class Test(unittest.TestCase):
