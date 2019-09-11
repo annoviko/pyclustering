@@ -585,7 +585,8 @@ def chi_square_distance_numpy(object1, object2):
 def gower_distance(point1, point2, max_range):
     """!
     @brief Calculate Gower distance between two vectors.
-    @details Gower distance is calculate using following formula:
+    @details Implementation is based on the paper @cite article::utils::metric::gower. Gower distance is calculate
+              using following formula:
     \f[
     dist\left ( a, b \right )=\frac{1}{p}\sum_{i=0}^{p}\frac{\left | a_{i} - b_{i} \right |}{R_{i}},
     \f]
