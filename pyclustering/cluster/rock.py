@@ -108,20 +108,21 @@ class rock:
         # points and rock algorithm between clusters because we consider non-categorical samples. But it is required more investigations.
         
         if (self.__ccore is True):
-            self.__clusters = wrapper.rock(self.__pointer_data, self.__eps, self.__number_clusters, self.__threshold);
+            self.__clusters = wrapper.rock(self.__pointer_data, self.__eps, self.__number_clusters, self.__threshold)
         
         else:  
-            self.__clusters = [[index] for index in range(len(self.__pointer_data))];
+            self.__clusters = [[index] for index in range(len(self.__pointer_data))]
             
-            while (len(self.__clusters) > self.__number_clusters):
-                indexes = self.__find_pair_clusters(self.__clusters);
+            while len(self.__clusters) > self.__number_clusters:
+                indexes = self.__find_pair_clusters(self.__clusters)
                 
                 if (indexes != [-1, -1]):
-                    self.__clusters[indexes[0]] += self.__clusters[indexes[1]];
-                    self.__clusters.pop(indexes[1]);   # remove merged cluster.
+                    self.__clusters[indexes[0]] += self.__clusters[indexes[1]]
+                    self.__clusters.pop(indexes[1])   # remove merged cluster.
                 else:
-                    break;  # totally separated clusters have been allocated
-    
+                    break  # totally separated clusters have been allocated
+        return self
+
     
     def get_clusters(self):
         """!

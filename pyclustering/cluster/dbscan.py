@@ -133,6 +133,8 @@ class dbscan:
                 if self.__belong[i] is False:
                     self.__noise.append(i)
 
+        return self
+
 
     def get_clusters(self):
         """!

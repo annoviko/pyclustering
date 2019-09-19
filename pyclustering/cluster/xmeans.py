@@ -190,6 +190,8 @@ class xmeans:
             
             self.__clusters, self.__centers, self.__total_wce = self.__improve_parameters(self.__centers)
 
+        return self
+
 
     def predict(self, points):
         """!

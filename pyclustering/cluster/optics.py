@@ -449,6 +449,8 @@ class optics:
         else:
             self.__process_by_python()
 
+        return self
+
 
     def __process_by_ccore(self):
         """!

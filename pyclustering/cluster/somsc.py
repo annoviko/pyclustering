@@ -94,8 +94,9 @@ class somsc:
         
         """
         
-        self.__network = som(1, self.__amount_clusters, type_conn.grid_four, None, self.__ccore);
-        self.__network.train(self.__data_pointer, self.__epouch, True);
+        self.__network = som(1, self.__amount_clusters, type_conn.grid_four, None, self.__ccore)
+        self.__network.train(self.__data_pointer, self.__epouch, True)
+        return self
 
 
     def get_clusters(self):

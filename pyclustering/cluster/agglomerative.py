@@ -151,17 +151,19 @@ class agglomerative:
         """
         
         if (self.__ccore is True):
-            self.__clusters = wrapper.agglomerative_algorithm(self.__pointer_data, self.__number_clusters, self.__similarity);
+            self.__clusters = wrapper.agglomerative_algorithm(self.__pointer_data, self.__number_clusters, self.__similarity)
 
         else:
-            self.__clusters = [[index] for index in range(0, len(self.__pointer_data))];
+            self.__clusters = [[index] for index in range(0, len(self.__pointer_data))]
             
-            current_number_clusters = len(self.__clusters);
+            current_number_clusters = len(self.__clusters)
                 
-            while (current_number_clusters > self.__number_clusters):
-                self.__merge_similar_clusters();
-                current_number_clusters = len(self.__clusters);
-    
+            while current_number_clusters > self.__number_clusters:
+                self.__merge_similar_clusters()
+                current_number_clusters = len(self.__clusters)
+
+        return self
+
     
     def get_clusters(self):
         """!

@@ -543,6 +543,7 @@ class ema:
             self.__stop = self.__get_stop_condition()
         
         self.__normalize_probabilities()
+        return self
 
 
     def get_clusters(self):

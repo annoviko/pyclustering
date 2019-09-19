@@ -91,6 +91,7 @@ class clarans:
                 self.__optimal_estimation = estimation
         
         self.__update_clusters(self.__optimal_medoids)
+        return self
     
     
     def get_clusters(self):

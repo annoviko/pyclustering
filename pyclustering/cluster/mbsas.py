@@ -97,9 +97,11 @@ class mbsas(bsas):
         """
 
         if self._ccore is True:
-            self.__process_by_ccore();
+            self.__process_by_ccore()
         else:
-            self.__prcess_by_python();
+            self.__prcess_by_python()
+
+        return self
 
 
     def __process_by_ccore(self):
