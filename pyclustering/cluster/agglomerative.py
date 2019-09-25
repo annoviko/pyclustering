@@ -145,12 +145,14 @@ class agglomerative:
     def process(self):
         """!
         @brief Performs cluster analysis in line with rules of agglomerative algorithm and similarity.
-        
+
+        @return (agglomerative) Returns itself (Agglomerative instance).
+
         @see get_clusters()
         
         """
         
-        if (self.__ccore is True):
+        if self.__ccore is True:
             self.__clusters = wrapper.agglomerative_algorithm(self.__pointer_data, self.__number_clusters, self.__similarity)
 
         else:
@@ -177,7 +179,7 @@ class agglomerative:
         
         """
         
-        return self.__clusters;
+        return self.__clusters
     
     
     def get_cluster_encoding(self):
@@ -190,7 +192,7 @@ class agglomerative:
         
         """
         
-        return type_encoding.CLUSTER_INDEX_LIST_SEPARATION;
+        return type_encoding.CLUSTER_INDEX_LIST_SEPARATION
     
     
     def __merge_similar_clusters(self):
@@ -199,20 +201,20 @@ class agglomerative:
         
         """
         
-        if (self.__similarity == type_link.AVERAGE_LINK):
-            self.__merge_by_average_link();
+        if self.__similarity == type_link.AVERAGE_LINK:
+            self.__merge_by_average_link()
         
-        elif (self.__similarity == type_link.CENTROID_LINK):
-            self.__merge_by_centroid_link();
+        elif self.__similarity == type_link.CENTROID_LINK:
+            self.__merge_by_centroid_link()
         
-        elif (self.__similarity == type_link.COMPLETE_LINK):
-            self.__merge_by_complete_link();
+        elif self.__similarity == type_link.COMPLETE_LINK:
+            self.__merge_by_complete_link()
         
-        elif (self.__similarity == type_link.SINGLE_LINK):
-            self.__merge_by_signle_link();
+        elif self.__similarity == type_link.SINGLE_LINK:
+            self.__merge_by_signle_link()
         
         else:
-            raise NameError('Not supported similarity is used');
+            raise NameError('Not supported similarity is used')
     
     
     def __merge_by_average_link(self):
@@ -221,25 +223,25 @@ class agglomerative:
         
         """
         
-        minimum_average_distance = float('Inf');
+        minimum_average_distance = float('Inf')
         
         for index_cluster1 in range(0, len(self.__clusters)):
             for index_cluster2 in range(index_cluster1 + 1, len(self.__clusters)):
                 
                 # Find farthest objects
-                candidate_average_distance = 0.0;
+                candidate_average_distance = 0.0
                 for index_object1 in self.__clusters[index_cluster1]:
                     for index_object2 in self.__clusters[index_cluster2]:
-                        candidate_average_distance += euclidean_distance_square(self.__pointer_data[index_object1], self.__pointer_data[index_object2]);
+                        candidate_average_distance += euclidean_distance_square(self.__pointer_data[index_object1], self.__pointer_data[index_object2])
                 
-                candidate_average_distance /= (len(self.__clusters[index_cluster1]) + len(self.__clusters[index_cluster2]));
+                candidate_average_distance /= (len(self.__clusters[index_cluster1]) + len(self.__clusters[index_cluster2]))
                 
-                if (candidate_average_distance < minimum_average_distance):
-                    minimum_average_distance = candidate_average_distance;
-                    indexes = [index_cluster1, index_cluster2];
+                if candidate_average_distance < minimum_average_distance:
+                    minimum_average_distance = candidate_average_distance
+                    indexes = [index_cluster1, index_cluster2]
         
-        self.__clusters[indexes[0]] += self.__clusters[indexes[1]];  
-        self.__clusters.pop(indexes[1]);   # remove merged cluster.  
+        self.__clusters[indexes[0]] += self.__clusters[indexes[1]]
+        self.__clusters.pop(indexes[1])   # remove merged cluster.
         
     
     def __merge_by_centroid_link(self):

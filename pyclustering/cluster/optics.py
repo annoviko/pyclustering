@@ -435,7 +435,7 @@ class optics:
         """!
         @brief Performs cluster analysis in line with rules of OPTICS algorithm.
         
-        @remark Results of clustering can be obtained using corresponding gets methods.
+        @return (optics) Returns itself (OPTICS instance).
         
         @see get_clusters()
         @see get_noise()

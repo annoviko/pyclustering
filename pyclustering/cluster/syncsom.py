@@ -72,7 +72,7 @@ class syncsom:
         @brief The first layer of the oscillatory network - self-organized feature map.
         
         """
-        return self._som;
+        return self._som
 
 
     @property
@@ -81,7 +81,7 @@ class syncsom:
         @brief The second layer of the oscillatory network based on Kuramoto model.
         
         """
-        return self._sync;
+        return self._sync
 
 
     def __init__(self, data, rows, cols, radius):
@@ -95,20 +95,20 @@ class syncsom:
         
         """
         
-        self._data = data;
-        self._radius = radius * radius;
+        self._data = data
+        self._radius = radius * radius
         
-        self._som = som(rows, cols, conn_type = type_conn.grid_four, ccore = False);   # The first (input) later - SOM layer.
-        self._som_osc_table = list();
+        self._som = som(rows, cols, conn_type=type_conn.grid_four, ccore=False)   # The first (input) later - SOM layer.
+        self._som_osc_table = list()
         
-        self._sync = None;       # The second (output) layer - Sync layer.
-        self._struct = None;     # Structure of connections between oscillators in the second layer - Sync layer.
+        self._sync = None       # The second (output) layer - Sync layer.
+        self._struct = None     # Structure of connections between oscillators in the second layer - Sync layer.
         
         # For convenience
-        self._analyser = None;
+        self._analyser = None
 
 
-    def process(self, collect_dynamic = False, order = 0.999):
+    def process(self, collect_dynamic=False, order=0.999):
         """!
         @brief Performs simulation of the oscillatory network.
         
@@ -123,21 +123,21 @@ class syncsom:
         """
         
         # train self-organization map.
-        self._som.train(self._data, 100);
+        self._som.train(self._data, 100)
         
         # prepare to build list.
-        weights = list();
-        self._som_osc_table.clear();        # must be cleared, if it's used before.
+        weights = list()
+        self._som_osc_table.clear()       # must be cleared, if it's used before.
         for i in range(self._som.size):
-            if (self._som.awards[i] > 0):
-                weights.append(self._som.weights[i]);
-                self._som_osc_table.append(i);
+            if self._som.awards[i] > 0:
+                weights.append(self._som.weights[i])
+                self._som_osc_table.append(i)
         
         # create oscillatory neural network.
-        self._sync = self.__create_sync_layer(weights);
-        self._analyser = self._sync.process(order, collect_dynamic = collect_dynamic);
+        self._sync = self.__create_sync_layer(weights)
+        self._analyser = self._sync.process(order, collect_dynamic=collect_dynamic)
         
-        return (self._analyser.time, self._analyser.output);
+        return self._analyser.time, self._analyser.output
 
 
     def __create_sync_layer(self, weights):
@@ -149,14 +149,14 @@ class syncsom:
         @return (syncnet) Second layer of the network.
         
         """
-        sync_layer = syncnet(weights, 0.0, initial_phases = initial_type.RANDOM_GAUSSIAN, ccore = False);
+        sync_layer = syncnet(weights, 0.0, initial_phases = initial_type.RANDOM_GAUSSIAN, ccore=False)
         
         for oscillator_index1 in range(0, len(sync_layer)):
             for oscillator_index2 in range(oscillator_index1 + 1, len(sync_layer)):
-                if (self.__has_object_connection(oscillator_index1, oscillator_index2)):
-                    sync_layer.set_connection(oscillator_index1, oscillator_index2);
+                if self.__has_object_connection(oscillator_index1, oscillator_index2):
+                    sync_layer.set_connection(oscillator_index1, oscillator_index2)
         
-        return sync_layer;
+        return sync_layer
 
 
     def __has_object_connection(self, oscillator_index1, oscillator_index2):
@@ -169,16 +169,16 @@ class syncsom:
         @return (bool) True - if there is pair of connected objects encoded by specified oscillators.
         
         """
-        som_neuron_index1 = self._som_osc_table[oscillator_index1];
-        som_neuron_index2 = self._som_osc_table[oscillator_index2];
+        som_neuron_index1 = self._som_osc_table[oscillator_index1]
+        som_neuron_index2 = self._som_osc_table[oscillator_index2]
         
         for index_object1 in self._som.capture_objects[som_neuron_index1]:
             for index_object2 in self._som.capture_objects[som_neuron_index2]:
-                distance = euclidean_distance_square(self._data[index_object1], self._data[index_object2]);
-                if (distance <= self._radius):
-                    return True;
+                distance = euclidean_distance_square(self._data[index_object1], self._data[index_object2])
+                if distance <= self._radius:
+                    return True
         
-        return False;
+        return False
 
 
     def get_som_clusters(self):
@@ -192,22 +192,22 @@ class syncsom:
         
         """
         
-        sync_clusters = self._analyser.allocate_clusters();
+        sync_clusters = self._analyser.allocate_clusters()
         
         # Decode it to indexes of SOM neurons
-        som_clusters = list();
+        som_clusters = list()
         for oscillators in sync_clusters:
-            cluster = list();
+            cluster = list()
             for index_oscillator in oscillators:
-                index_neuron = self._som_osc_table[index_oscillator];
-                cluster.append(index_neuron);
+                index_neuron = self._som_osc_table[index_oscillator]
+                cluster.append(index_neuron)
                 
-            som_clusters.append(cluster);
+            som_clusters.append(cluster)
             
-        return som_clusters;
+        return som_clusters
 
 
-    def get_clusters(self, eps = 0.1):
+    def get_clusters(self, eps=0.1):
         """!
         @brief Returns clusters in line with ensembles of synchronous oscillators where each synchronous ensemble corresponds to only one cluster.
         
@@ -245,7 +245,7 @@ class syncsom:
         
         """
         
-        return type_encoding.CLUSTER_INDEX_LIST_SEPARATION;
+        return type_encoding.CLUSTER_INDEX_LIST_SEPARATION
 
 
     def show_som_layer(self):
@@ -254,7 +254,7 @@ class syncsom:
         
         """
         
-        self._som.show_network();
+        self._som.show_network()
 
 
     def show_sync_layer(self):
@@ -263,4 +263,4 @@ class syncsom:
         
         """
         
-        self._sync.show_network();
+        self._sync.show_network()

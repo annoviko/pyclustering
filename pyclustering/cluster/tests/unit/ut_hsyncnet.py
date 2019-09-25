@@ -24,17 +24,17 @@
 """
 
 
-import unittest;
+import unittest
 
 # Generate images without having a window appear.
-import matplotlib;
-matplotlib.use('Agg');
+import matplotlib
+matplotlib.use('Agg')
 
-from pyclustering.cluster.tests.hsyncnet_templates import HsyncnetTestTemplates;
+from pyclustering.cluster.tests.hsyncnet_templates import HsyncnetTestTemplates
 
-from pyclustering.nnet import solve_type;
+from pyclustering.nnet import solve_type
 
-from pyclustering.samples.definitions import SIMPLE_SAMPLES;
+from pyclustering.samples.definitions import SIMPLE_SAMPLES
 
 
 class HsyncnetUnitTest(unittest.TestCase):

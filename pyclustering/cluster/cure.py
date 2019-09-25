@@ -147,7 +147,7 @@ class cure:
         """!
         @brief Performs cluster analysis in line with rules of CURE algorithm.
         
-        @remark Results of clustering can be obtained using corresponding get methods.
+        @return (cure) Returns itself (CURE instance).
         
         @see get_clusters()
         

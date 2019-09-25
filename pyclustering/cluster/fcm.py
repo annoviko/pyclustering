@@ -142,6 +142,8 @@ class fcm:
         """!
         @brief Performs cluster analysis in line with Fuzzy C-Means algorithm.
 
+        @return (fcm) Returns itself (Fuzzy C-Means instance).
+
         @see get_clusters()
         @see get_centers()
         @see get_membership()

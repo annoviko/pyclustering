@@ -162,7 +162,7 @@ class xmeans:
         """!
         @brief Performs cluster analysis in line with rules of X-Means algorithm.
         
-        @remark Results of clustering can be obtained using corresponding gets methods.
+        @return (xmeans) Returns itself (X-Means instance).
         
         @see get_clusters()
         @see get_centers()

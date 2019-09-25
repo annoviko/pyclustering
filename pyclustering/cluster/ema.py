@@ -521,7 +521,8 @@ class ema:
     def process(self):
         """!
         @brief Run clustering process of the algorithm.
-        @details This method should be called before call 'get_clusters()'.
+
+        @return (ema) Returns itself (EMA instance).
         
         """
         

@@ -65,7 +65,7 @@ class somsc:
     
     """
     
-    def __init__(self, data, amount_clusters, epouch = 100, ccore = True):
+    def __init__(self, data, amount_clusters, epouch=100, ccore=True):
         """!
         @brief Creates SOM-SC (Self Organized Map for Simple Clustering) algorithm for clustering analysis.
         
@@ -76,19 +76,19 @@ class somsc:
         
         """
         
-        self.__data_pointer = data;
-        self.__amount_clusters = amount_clusters;
-        self.__epouch = epouch;
-        self.__ccore = ccore;
+        self.__data_pointer = data
+        self.__amount_clusters = amount_clusters
+        self.__epouch = epouch
+        self.__ccore = ccore
         
-        self.__network = None;
+        self.__network = None
 
 
     def process(self):
         """!
         @brief Performs cluster analysis by competition between neurons of SOM.
         
-        @remark Results of clustering can be obtained using corresponding get methods.
+        @return (somsc) Returns itself (SOM Simple Clustering instance).
         
         @see get_clusters()
         
@@ -107,7 +107,7 @@ class somsc:
         
         """
         
-        return self.__network.capture_objects;
+        return self.__network.capture_objects
 
 
     def get_cluster_encoding(self):
@@ -120,4 +120,4 @@ class somsc:
         
         """
         
-        return type_encoding.CLUSTER_INDEX_LIST_SEPARATION;
+        return type_encoding.CLUSTER_INDEX_LIST_SEPARATION

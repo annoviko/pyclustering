@@ -75,32 +75,32 @@ class birch:
         @param[in] type_measurement (measurement_type): Type measurement used for calculation distance metrics.
         @param[in] entry_size_limit (uint): Maximum number of entries that can be stored in CF-Tree, if it is exceeded during creation then diameter is increased and CF-Tree is rebuilt.
         @param[in] diameter_multiplier (double): Multiplier that is used for increasing diameter when entry_size_limit is exceeded.
-        @param[in] ccore (bool): If True than DLL CCORE (C++ solution) will be used for solving the problem.
+        @param[in] ccore (bool): If True than CCORE (C++ part of the library) will be used for solving the problem.
         
         @remark Despite eight arguments only the first two is mandatory, others can be ommitted. In this case default values are used for instance creation.
         
         """
         
-        self.__pointer_data = data;
-        self.__number_clusters = number_clusters;
+        self.__pointer_data = data
+        self.__number_clusters = number_clusters
         
-        self.__measurement_type = type_measurement;
-        self.__entry_size_limit = entry_size_limit;
-        self.__diameter_multiplier = diameter_multiplier;
-        self.__ccore = ccore;
+        self.__measurement_type = type_measurement
+        self.__entry_size_limit = entry_size_limit
+        self.__diameter_multiplier = diameter_multiplier
+        self.__ccore = ccore
         
-        self.__features = None;
-        self.__tree = cftree(branching_factor, max_node_entries, initial_diameter, type_measurement);
+        self.__features = None
+        self.__tree = cftree(branching_factor, max_node_entries, initial_diameter, type_measurement)
         
-        self.__clusters = [];
-        self.__noise = [];
+        self.__clusters = []
+        self.__noise = []
 
 
     def process(self):
         """!
         @brief Performs cluster analysis in line with rules of BIRCH algorithm.
         
-        @remark Results of clustering can be obtained using corresponding gets methods.
+        @return (birch) Returns itself (BIRCH instance).
         
         @see get_clusters()
         

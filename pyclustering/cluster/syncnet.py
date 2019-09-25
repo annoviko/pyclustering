@@ -62,7 +62,7 @@ class syncnet_analyser(sync_dynamic):
         @param[in] pointer_sync_analyser (POINTER): Pointer to CCORE analyser, if specified then other arguments can be omitted.
         
         """
-        super().__init__(phase, time, pointer_sync_analyser);
+        super().__init__(phase, time, pointer_sync_analyser)
 
 
     def __del__(self):
@@ -71,9 +71,9 @@ class syncnet_analyser(sync_dynamic):
         
         """
         
-        if (self._ccore_sync_dynamic_pointer is not None):
-            syncnet_analyser_destroy(self._ccore_sync_dynamic_pointer);
-            self._ccore_sync_dynamic_pointer = None;
+        if self._ccore_sync_dynamic_pointer is not None:
+            syncnet_analyser_destroy(self._ccore_sync_dynamic_pointer)
+            self._ccore_sync_dynamic_pointer = None
     
     
     def allocate_clusters(self, eps = 0.01, indexes = None, iteration = None):
@@ -88,7 +88,7 @@ class syncnet_analyser(sync_dynamic):
         
         """
         
-        return self.allocate_sync_ensembles(eps, indexes, iteration);
+        return self.allocate_sync_ensembles(eps, indexes, iteration)
 
 
     def get_cluster_encoding(self):
@@ -101,7 +101,7 @@ class syncnet_analyser(sync_dynamic):
         
         """
         
-        return type_encoding.CLUSTER_INDEX_LIST_SEPARATION;
+        return type_encoding.CLUSTER_INDEX_LIST_SEPARATION
 
 
 
@@ -125,40 +125,40 @@ class syncnet_visualizer(sync_visualizer):
         
         """
         
-        figure = plt.figure();
+        figure = plt.figure()
         
         def init_frame():
-            return frame_generation(0);
+            return frame_generation(0)
         
         def frame_generation(index_dynamic):
-            figure.clf();
-            if (title is not None):
-                figure.suptitle(title, fontsize = 26, fontweight = 'bold');
+            figure.clf()
+            if title is not None:
+                figure.suptitle(title, fontsize = 26, fontweight = 'bold')
             
-            ax1 = figure.add_subplot(121, projection='polar');
+            ax1 = figure.add_subplot(121, projection='polar')
             
-            clusters = analyser.allocate_clusters(eps = tolerance, iteration = index_dynamic);
-            dynamic = analyser.output[index_dynamic];
+            clusters = analyser.allocate_clusters(eps = tolerance, iteration = index_dynamic)
+            dynamic = analyser.output[index_dynamic]
             
-            visualizer = cluster_visualizer(size_row = 2);
-            visualizer.append_clusters(clusters, dataset);
+            visualizer = cluster_visualizer(size_row = 2)
+            visualizer.append_clusters(clusters, dataset)
             
-            artist1, = ax1.plot(dynamic, [1.0] * len(dynamic), marker = 'o', color = 'blue', ls = '');
+            artist1, = ax1.plot(dynamic, [1.0] * len(dynamic), marker = 'o', color = 'blue', ls = '')
             
-            visualizer.show(figure, display = False);
-            artist2 = figure.gca();
+            visualizer.show(figure, display = False)
+            artist2 = figure.gca()
             
-            return [ artist1, artist2 ];
+            return [ artist1, artist2 ]
         
         cluster_animation = animation.FuncAnimation(figure, frame_generation, len(analyser), interval = animation_velocity, init_func = init_frame, repeat_delay = 5000);
 
-        if (save_movie is not None):
+        if save_movie is not None:
 #             plt.rcParams['animation.ffmpeg_path'] = 'D:\\Program Files\\ffmpeg-3.3.1-win64-static\\bin\\ffmpeg.exe';
 #             ffmpeg_writer = animation.FFMpegWriter(fps = 15);
 #             cluster_animation.save(save_movie, writer = ffmpeg_writer);
-            cluster_animation.save(save_movie, writer = 'ffmpeg', fps = 15, bitrate = 1500);
+            cluster_animation.save(save_movie, writer = 'ffmpeg', fps = 15, bitrate = 1500)
         else:
-            plt.show();
+            plt.show()
 
 
 class syncnet(sync_network):
@@ -212,25 +212,25 @@ class syncnet(sync_network):
         
         """
         
-        self._ccore_network_pointer = None;
-        self._osc_loc = sample;
-        self._num_osc = len(sample);
+        self._ccore_network_pointer = None
+        self._osc_loc = sample
+        self._num_osc = len(sample)
         
-        if ( (ccore is True) and ccore_library.workable() ):
-            self._ccore_network_pointer = syncnet_create_network(sample, radius, initial_phases, enable_conn_weight);
+        if (ccore is True) and ccore_library.workable():
+            self._ccore_network_pointer = syncnet_create_network(sample, radius, initial_phases, enable_conn_weight)
             
             # Default representation that is returned by CCORE is matrix.
-            self._conn_represent = conn_represent.MATRIX;
+            self._conn_represent = conn_represent.MATRIX
 
         else:
-            super().__init__(len(sample), 1, 0, conn_type.DYNAMIC, conn_repr, initial_phases, False);
+            super().__init__(len(sample), 1, 0, conn_type.DYNAMIC, conn_repr, initial_phases, False)
             
-            self._conn_weight = None;
-            self._ena_conn_weight = enable_conn_weight;
+            self._conn_weight = None
+            self._ena_conn_weight = enable_conn_weight
             
             # Create connections.
-            if (radius is not None):
-                self._create_connections(radius);
+            if radius is not None:
+                self._create_connections(radius)
 
 
     def __del__(self):
@@ -239,9 +239,9 @@ class syncnet(sync_network):
         
         """
         
-        if (self._ccore_network_pointer is not None):
-            syncnet_destroy_network(self._ccore_network_pointer);
-            self._ccore_network_pointer = None;
+        if self._ccore_network_pointer is not None:
+            syncnet_destroy_network(self._ccore_network_pointer)
+            self._ccore_network_pointer = None
 
 
     def _create_connections(self, radius):
@@ -252,44 +252,44 @@ class syncnet(sync_network):
         
         """
         
-        if (self._ena_conn_weight is True):
-            self._conn_weight = [[0] * self._num_osc for _ in range(0, self._num_osc, 1)];
+        if self._ena_conn_weight is True:
+            self._conn_weight = [[0] * self._num_osc for _ in range(0, self._num_osc, 1)]
         
-        maximum_distance = 0;
-        minimum_distance = float('inf');
+        maximum_distance = 0
+        minimum_distance = float('inf')
         
         # Create connections
         for i in range(0, self._num_osc, 1):
             for j in range(i + 1, self._num_osc, 1):
-                    dist = euclidean_distance(self._osc_loc[i], self._osc_loc[j]);
+                    dist = euclidean_distance(self._osc_loc[i], self._osc_loc[j])
                     
-                    if (self._ena_conn_weight is True):
-                        self._conn_weight[i][j] = dist;
-                        self._conn_weight[j][i] = dist;
+                    if self._ena_conn_weight is True:
+                        self._conn_weight[i][j] = dist
+                        self._conn_weight[j][i] = dist
                         
-                        if (dist > maximum_distance): maximum_distance = dist;
-                        if (dist < minimum_distance): minimum_distance = dist;
+                        if (dist > maximum_distance): maximum_distance = dist
+                        if (dist < minimum_distance): minimum_distance = dist
                     
-                    if (dist <= radius):
-                        self.set_connection(i, j);
+                    if dist <= radius:
+                        self.set_connection(i, j)
         
-        if (self._ena_conn_weight is True):
-            multiplier = 1; 
-            subtractor = 0;
+        if self._ena_conn_weight is True:
+            multiplier = 1
+            subtractor = 0
             
-            if (maximum_distance != minimum_distance):
-                multiplier = (maximum_distance - minimum_distance);
-                subtractor = minimum_distance;
+            if maximum_distance != minimum_distance:
+                multiplier = (maximum_distance - minimum_distance)
+                subtractor = minimum_distance
             
             for i in range(0, self._num_osc, 1):
                 for j in range(i + 1, self._num_osc, 1):
-                    value_conn_weight = (self._conn_weight[i][j] - subtractor) / multiplier;
+                    value_conn_weight = (self._conn_weight[i][j] - subtractor) / multiplier
                     
-                    self._conn_weight[i][j] = value_conn_weight;
-                    self._conn_weight[j][i] = value_conn_weight;
+                    self._conn_weight[i][j] = value_conn_weight
+                    self._conn_weight[j][i] = value_conn_weight
 
 
-    def process(self, order = 0.998, solution = solve_type.FAST, collect_dynamic = True):
+    def process(self, order = 0.998, solution=solve_type.FAST, collect_dynamic=True):
         """!
         @brief Peforms cluster analysis using simulation of the oscillatory network.
         
@@ -301,12 +301,12 @@ class syncnet(sync_network):
         
         """
         
-        if (self._ccore_network_pointer is not None):
-            pointer_output_dynamic = syncnet_process(self._ccore_network_pointer, order, solution, collect_dynamic);
-            return syncnet_analyser(None, None, pointer_output_dynamic);
+        if self._ccore_network_pointer is not None:
+            pointer_output_dynamic = syncnet_process(self._ccore_network_pointer, order, solution, collect_dynamic)
+            return syncnet_analyser(None, None, pointer_output_dynamic)
         else:
-            output_sync_dynamic = self.simulate_dynamic(order, solution, collect_dynamic);
-            return syncnet_analyser(output_sync_dynamic.output, output_sync_dynamic.time, None);
+            output_sync_dynamic = self.simulate_dynamic(order, solution, collect_dynamic)
+            return syncnet_analyser(output_sync_dynamic.output, output_sync_dynamic.time, None)
     
     
     def _phase_kuramoto(self, teta, t, argv):
@@ -321,22 +321,22 @@ class syncnet(sync_network):
         
         """
         
-        index = argv;   # index of oscillator
-        phase = 0.0;      # phase of a specified oscillator that will calculated in line with current env. states.
+        index = argv   # index of oscillator
+        phase = 0.0      # phase of a specified oscillator that will calculated in line with current env. states.
         
-        neighbors = self.get_neighbors(index);
+        neighbors = self.get_neighbors(index)
         for k in neighbors:
-            conn_weight = 1.0;
-            if (self._ena_conn_weight is True):
-                conn_weight = self._conn_weight[index][k];
+            conn_weight = 1.0
+            if self._ena_conn_weight is True:
+                conn_weight = self._conn_weight[index][k]
                 
-            phase += conn_weight * self._weight * math.sin(self._phases[k] - teta);
+            phase += conn_weight * self._weight * math.sin(self._phases[k] - teta)
         
-        divider = len(neighbors);
-        if (divider == 0):
-            divider = 1.0;
+        divider = len(neighbors)
+        if divider == 0:
+            divider = 1.0
             
-        return ( self._freq[index] + (phase / divider) );   
+        return self._freq[index] + (phase / divider)
     
     
     def show_network(self):
@@ -345,55 +345,55 @@ class syncnet(sync_network):
         
         """
         
-        if ( (self._ccore_network_pointer is not None) and (self._osc_conn is None) ):
-            self._osc_conn = sync_connectivity_matrix(self._ccore_network_pointer);
+        if (self._ccore_network_pointer is not None) and (self._osc_conn is None):
+            self._osc_conn = sync_connectivity_matrix(self._ccore_network_pointer)
         
-        dimension = len(self._osc_loc[0]);
-        if ( (dimension != 3) and (dimension != 2) ):
+        dimension = len(self._osc_loc[0])
+        if (dimension != 3) and (dimension != 2):
             raise NameError('Network that is located in different from 2-d and 3-d dimensions can not be represented');
         
-        from matplotlib.font_manager import FontProperties;
-        from matplotlib import rcParams;
+        from matplotlib.font_manager import FontProperties
+        from matplotlib import rcParams
     
-        rcParams['font.sans-serif'] = ['Arial'];
-        rcParams['font.size'] = 12;
+        rcParams['font.sans-serif'] = ['Arial']
+        rcParams['font.size'] = 12
 
-        fig = plt.figure();
-        axes = None;
-        if (dimension == 2):
-            axes = fig.add_subplot(111);
-        elif (dimension == 3):
-            axes = fig.gca(projection='3d');
+        fig = plt.figure()
+        axes = None
+        if dimension == 2:
+            axes = fig.add_subplot(111)
+        elif dimension == 3:
+            axes = fig.gca(projection='3d')
         
-        surface_font = FontProperties();
-        surface_font.set_name('Arial');
-        surface_font.set_size('12');
+        surface_font = FontProperties()
+        surface_font.set_name('Arial')
+        surface_font.set_size('12')
         
         for i in range(0, self._num_osc, 1):
-            if (dimension == 2):
-                axes.plot(self._osc_loc[i][0], self._osc_loc[i][1], 'bo');  
-                if (self._conn_represent == conn_represent.MATRIX):
+            if dimension == 2:
+                axes.plot(self._osc_loc[i][0], self._osc_loc[i][1], 'bo')
+                if self._conn_represent == conn_represent.MATRIX:
                     for j in range(i, self._num_osc, 1):    # draw connection between two points only one time
-                        if (self.has_connection(i, j) == True):
-                            axes.plot([self._osc_loc[i][0], self._osc_loc[j][0]], [self._osc_loc[i][1], self._osc_loc[j][1]], 'b-', linewidth = 0.5);
+                        if self.has_connection(i, j) is True:
+                            axes.plot([self._osc_loc[i][0], self._osc_loc[j][0]], [self._osc_loc[i][1], self._osc_loc[j][1]], 'b-', linewidth = 0.5)
                             
                 else:
                     for j in self.get_neighbors(i):
-                        if ( (self.has_connection(i, j) == True) and (i > j) ):     # draw connection between two points only one time
-                            axes.plot([self._osc_loc[i][0], self._osc_loc[j][0]], [self._osc_loc[i][1], self._osc_loc[j][1]], 'b-', linewidth = 0.5);
+                        if (self.has_connection(i, j) is True) and (i > j):     # draw connection between two points only one time
+                            axes.plot([self._osc_loc[i][0], self._osc_loc[j][0]], [self._osc_loc[i][1], self._osc_loc[j][1]], 'b-', linewidth = 0.5)
             
-            elif (dimension == 3):
-                axes.scatter(self._osc_loc[i][0], self._osc_loc[i][1], self._osc_loc[i][2], c = 'b', marker = 'o');
+            elif dimension == 3:
+                axes.scatter(self._osc_loc[i][0], self._osc_loc[i][1], self._osc_loc[i][2], c = 'b', marker = 'o')
                 
-                if (self._conn_represent == conn_represent.MATRIX):
+                if self._conn_represent == conn_represent.MATRIX:
                     for j in range(i, self._num_osc, 1):    # draw connection between two points only one time
-                        if (self.has_connection(i, j) == True):
-                            axes.plot([self._osc_loc[i][0], self._osc_loc[j][0]], [self._osc_loc[i][1], self._osc_loc[j][1]], [self._osc_loc[i][2], self._osc_loc[j][2]], 'b-', linewidth = 0.5);
+                        if self.has_connection(i, j) is True:
+                            axes.plot([self._osc_loc[i][0], self._osc_loc[j][0]], [self._osc_loc[i][1], self._osc_loc[j][1]], [self._osc_loc[i][2], self._osc_loc[j][2]], 'b-', linewidth = 0.5)
                         
                 else:
                     for j in self.get_neighbors(i):
-                        if ( (self.has_connection(i, j) == True) and (i > j) ):     # draw connection between two points only one time
-                            axes.plot([self._osc_loc[i][0], self._osc_loc[j][0]], [self._osc_loc[i][1], self._osc_loc[j][1]], [self._osc_loc[i][2], self._osc_loc[j][2]], 'b-', linewidth = 0.5);
-                               
-        plt.grid();
-        plt.show();
+                        if (self.has_connection(i, j) == True) and (i > j):     # draw connection between two points only one time
+                            axes.plot([self._osc_loc[i][0], self._osc_loc[j][0]], [self._osc_loc[i][1], self._osc_loc[j][1]], [self._osc_loc[i][2], self._osc_loc[j][2]], 'b-', linewidth = 0.5)
+
+        plt.grid()
+        plt.show()

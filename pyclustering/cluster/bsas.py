@@ -124,7 +124,7 @@ class bsas:
         @param[in] data (list): Input data that is presented as list of points (objects), each point should be represented by list or tuple.
         @param[in] maximum_clusters: Maximum allowable number of clusters that can be allocated during processing.
         @param[in] threshold: Threshold of dissimilarity (maximum distance) between points.
-        @param[in] ccore (bool): If True than DLL CCORE (C++ solution) will be used for solving.
+        @param[in] ccore (bool): If True than CCORE (C++ part of the library) will be used for solving.
         @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'metric').
 
         <b>Keyword Args:</b><br>
@@ -132,22 +132,24 @@ class bsas:
 
         """
 
-        self._data = data;
-        self._amount = maximum_clusters;
-        self._threshold = threshold;
-        self._metric = kwargs.get('metric', distance_metric(type_metric.EUCLIDEAN));
-        self._ccore = ccore and self._metric.get_type() != type_metric.USER_DEFINED;
+        self._data = data
+        self._amount = maximum_clusters
+        self._threshold = threshold
+        self._metric = kwargs.get('metric', distance_metric(type_metric.EUCLIDEAN))
+        self._ccore = ccore and self._metric.get_type() != type_metric.USER_DEFINED
 
-        self._clusters = [];
-        self._representatives = [];
+        self._clusters = []
+        self._representatives = []
 
         if self._ccore is True:
-            self._ccore = ccore_library.workable();
+            self._ccore = ccore_library.workable()
 
 
     def process(self):
         """!
         @brief Performs cluster analysis in line with rules of BSAS algorithm.
+
+        @return (bsas) Returns itself (BSAS instance).
 
         @remark Results of clustering can be obtained using corresponding get methods.
 

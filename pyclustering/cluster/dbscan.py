@@ -110,7 +110,9 @@ class dbscan:
     def process(self):
         """!
         @brief Performs cluster analysis in line with rules of DBSCAN algorithm.
-        
+
+        @return (dbscan) Returns itself (DBSCAN instance).
+
         @see get_clusters()
         @see get_noise()
         

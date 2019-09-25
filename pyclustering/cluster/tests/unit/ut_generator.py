@@ -45,7 +45,7 @@ class generator_unit_tests(unittest.TestCase):
         index_cluster = 0
         index_cluster_point = 0
 
-        actual_means = [ [ 0.0 for _ in range(len(data[0])) ] for _ in range(len(sizes)) ]
+        actual_means = [[0.0 for _ in range(len(data[0])) ] for _ in range(len(sizes))]
 
         for index_point in range(len(data)):
             for index_dimension in range(len(data[0])):

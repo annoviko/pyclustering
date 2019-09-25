@@ -66,6 +66,8 @@ class clarans:
     def process(self):
         """!
         @brief Performs cluster analysis in line with rules of CLARANS algorithm.
+
+        @return (clarans) Returns itself (CLARANS instance).
         
         @see get_clusters()
         @see get_medoids()

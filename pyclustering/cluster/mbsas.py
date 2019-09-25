@@ -82,14 +82,14 @@ class mbsas(bsas):
             - metric (distance_metric): Metric that is used for distance calculation between two points.
 
         """
-        super().__init__(data, maximum_clusters, threshold, ccore, **kwargs);
+        super().__init__(data, maximum_clusters, threshold, ccore, **kwargs)
 
 
     def process(self):
         """!
-        @brief Performs cluster analysis in line with rules of BSAS algorithm.
+        @brief Performs cluster analysis in line with MBSAS algorithm.
 
-        @remark Results of clustering can be obtained using corresponding get methods.
+        @return (mbsas) Returns itself (MBSAS instance).
 
         @see get_clusters()
         @see get_representatives()
@@ -105,8 +105,8 @@ class mbsas(bsas):
 
 
     def __process_by_ccore(self):
-        ccore_metric = metric_wrapper.create_instance(self._metric);
-        self._clusters, self._representatives = mbsas_wrapper(self._data, self._amount, self._threshold, ccore_metric.get_pointer());
+        ccore_metric = metric_wrapper.create_instance(self._metric)
+        self._clusters, self._representatives = mbsas_wrapper(self._data, self._amount, self._threshold, ccore_metric.get_pointer())
 
 
     def __prcess_by_python(self):

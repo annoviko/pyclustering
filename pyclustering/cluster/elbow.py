@@ -134,6 +134,8 @@ class elbow:
         """!
         @brief Performs analysis to find out appropriate amount of clusters.
 
+        @return (elbow) Returns itself (Elbow instance).
+
         @return
 
         """

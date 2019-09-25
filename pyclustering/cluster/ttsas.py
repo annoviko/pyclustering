@@ -87,18 +87,18 @@ class ttsas(bsas):
 
         """
 
-        self._threshold2 = threshold2;
-        self._amount_skipped_objects = len(data);
-        self._skipped_objects = [ True ] * len(data);
+        self._threshold2 = threshold2
+        self._amount_skipped_objects = len(data)
+        self._skipped_objects = [ True ] * len(data)
 
-        super().__init__(data, len(data), threshold1, ccore, **kwargs);
+        super().__init__(data, len(data), threshold1, ccore, **kwargs)
 
 
     def process(self):
         """!
-        @brief Performs cluster analysis in line with rules of BSAS algorithm.
+        @brief Performs cluster analysis in line with rules of TTSAS algorithm.
 
-        @remark Results of clustering can be obtained using corresponding get methods.
+        @return (ttsas) Returns itself (TTSAS instance).
 
         @see get_clusters()
         @see get_representatives()
@@ -114,53 +114,53 @@ class ttsas(bsas):
 
 
     def __process_by_ccore(self):
-        ccore_metric = metric_wrapper.create_instance(self._metric);
-        self._clusters, self._representatives = ttsas_wrapper(self._data, self._threshold, self._threshold2, ccore_metric.get_pointer());
+        ccore_metric = metric_wrapper.create_instance(self._metric)
+        self._clusters, self._representatives = ttsas_wrapper(self._data, self._threshold, self._threshold2, ccore_metric.get_pointer())
 
 
     def __prcess_by_python(self):
-        changes = 0;
+        changes = 0
         while self._amount_skipped_objects != 0:
-            previous_amount = self._amount_skipped_objects;
-            self.__process_objects(changes);
+            previous_amount = self._amount_skipped_objects
+            self.__process_objects(changes)
 
-            changes = previous_amount - self._amount_skipped_objects;
+            changes = previous_amount - self._amount_skipped_objects
 
 
     def __process_objects(self, changes):
-        index_point = self._skipped_objects.index(True);
+        index_point = self._skipped_objects.index(True)
 
         if changes == 0:
-            self.__allocate_cluster(index_point, self._data[index_point]);
-            index_point += 1;
+            self.__allocate_cluster(index_point, self._data[index_point])
+            index_point += 1
 
         for i in range(index_point, len(self._data)):
             if self._skipped_objects[i] is True:
-                self.__process_skipped_object(i);
+                self.__process_skipped_object(i)
 
 
     def __process_skipped_object(self, index_point):
-        point = self._data[index_point];
+        point = self._data[index_point]
 
-        index_cluster, distance = self._find_nearest_cluster(point);
+        index_cluster, distance = self._find_nearest_cluster(point)
 
         if distance <= self._threshold:
-            self.__append_to_cluster(index_cluster, index_point, point);
+            self.__append_to_cluster(index_cluster, index_point, point)
         elif distance > self._threshold2:
-            self.__allocate_cluster(index_point, point);
+            self.__allocate_cluster(index_point, point)
 
 
     def __append_to_cluster(self, index_cluster, index_point, point):
-        self._clusters[index_cluster].append(index_point);
-        self._update_representative(index_cluster, point);
+        self._clusters[index_cluster].append(index_point)
+        self._update_representative(index_cluster, point)
 
-        self._amount_skipped_objects -= 1;
-        self._skipped_objects[index_point] = False;
+        self._amount_skipped_objects -= 1
+        self._skipped_objects[index_point] = False
 
 
     def __allocate_cluster(self, index_point, point):
-        self._clusters.append( [index_point] );
-        self._representatives.append(point);
+        self._clusters.append( [index_point] )
+        self._representatives.append(point)
 
-        self._amount_skipped_objects -= 1;
-        self._skipped_objects[index_point] = False;
+        self._amount_skipped_objects -= 1
+        self._skipped_objects[index_point] = False
