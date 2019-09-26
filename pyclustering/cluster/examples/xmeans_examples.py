@@ -35,7 +35,7 @@ from pyclustering.cluster.xmeans import xmeans, splitting_type
 from pyclustering.utils import read_sample, timedcall
 
 
-def template_clustering(start_centers, path, tolerance=0.025, criterion = splitting_type.BAYESIAN_INFORMATION_CRITERION, ccore=False):
+def template_clustering(start_centers, path, tolerance=0.025, criterion = splitting_type.BAYESIAN_INFORMATION_CRITERION, ccore=True):
     sample = read_sample(path)
     
     xmeans_instance = xmeans(sample, start_centers, 20, tolerance, criterion, ccore, repeat=5)

@@ -111,7 +111,7 @@ double xmeans::search_optimal_parameters(cluster_sequence & improved_clusters, d
         /* initialize initial center using k-means++ */
         dataset candidate_centers;
         const std::size_t candidates = available_indexes.size() < AMOUNT_CENTER_CANDIDATES ?  available_indexes.size() : AMOUNT_CENTER_CANDIDATES;
-        kmeans_plus_plus(2U, kmeans_plus_plus::FARTHEST_CENTER_CANDIDATE).initialize(*m_ptr_data, available_indexes, candidate_centers);
+        kmeans_plus_plus(2U, candidates).initialize(*m_ptr_data, available_indexes, candidate_centers);
 
         /* perform cluster analysis and update optimum if results became better */
         cluster_sequence candidate_clusters;
