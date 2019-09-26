@@ -50,8 +50,15 @@ enum xmeans_package_indexer {
 * @param[in] p_kmax: maximum number of clusters that can be allocated.
 * @param[in] p_tolerance: stop condition for local parameter improvement.
 * @param[in] p_criterion: cluster splitting criterion.
+* @param[in] p_repeat: how many times K-Means should be run to improve parameters (by default is 1), 
+*             with larger 'repeat' values suggesting higher probability of finding global optimum.
 *
 * @return  Returns result of clustering - array of allocated clusters in the pyclustering package.
 *
 */
-extern "C" DECLARATION pyclustering_package * xmeans_algorithm(const pyclustering_package * const p_sample, const pyclustering_package * const p_centers, const std::size_t p_kmax, const double p_tolerance, const unsigned int p_criterion);
+extern "C" DECLARATION pyclustering_package * xmeans_algorithm(const pyclustering_package * const p_sample,
+                                                               const pyclustering_package * const p_centers,
+                                                               const std::size_t p_kmax,
+                                                               const double p_tolerance,
+                                                               const unsigned int p_criterion,
+                                                               const std::size_t p_repeat);

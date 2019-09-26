@@ -25,12 +25,18 @@
 #include "cluster/xmeans.hpp"
 
 
-pyclustering_package * xmeans_algorithm(const pyclustering_package * const p_sample, const pyclustering_package * const p_centers, const std::size_t p_kmax, const double p_tolerance, const unsigned int p_criterion) {
+pyclustering_package * xmeans_algorithm(const pyclustering_package * const p_sample,
+                                        const pyclustering_package * const p_centers,
+                                        const std::size_t p_kmax,
+                                        const double p_tolerance,
+                                        const unsigned int p_criterion,
+                                        const std::size_t p_repeat)
+{
     dataset data, centers;
     p_sample->extract(data);
     p_centers->extract(centers);
 
-    ccore::clst::xmeans solver(centers, p_kmax, p_tolerance, (ccore::clst::splitting_type) p_criterion);
+    ccore::clst::xmeans solver(centers, p_kmax, p_tolerance, (ccore::clst::splitting_type) p_criterion, p_repeat);
 
     ccore::clst::xmeans_data output_result;
     solver.process(data, output_result);

@@ -26,8 +26,6 @@
 import numpy
 import random
 
-from pyclustering.tests.assertion import assertion
-
 from pyclustering.cluster.xmeans import xmeans, splitting_type
 from pyclustering.cluster.center_initializer import random_center_initializer
 
@@ -44,7 +42,7 @@ class XmeansTestTemplates:
         else:
             sample = input_sample
 
-        xmeans_instance = xmeans(sample, start_centers, kmax, 0.025, type_splitting, ccore)
+        xmeans_instance = xmeans(sample, start_centers, kmax, 0.025, type_splitting, ccore, **kwargs)
         xmeans_instance.process()
          
         clusters = xmeans_instance.get_clusters()

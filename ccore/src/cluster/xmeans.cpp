@@ -50,14 +50,17 @@ namespace clst {
 
 const double             xmeans::DEFAULT_SPLIT_DIFFERENCE                = 0.001;
 
+const std::size_t        xmeans::AMOUNT_CENTER_CANDIDATES                = 5;
 
-xmeans::xmeans(const dataset & p_centers, const std::size_t p_kmax, const double p_tolerance, const splitting_type p_criterion) :
+
+xmeans::xmeans(const dataset & p_centers, const std::size_t p_kmax, const double p_tolerance, const splitting_type p_criterion, std::size_t p_repeat) :
     m_centers(p_centers),
     m_ptr_result(nullptr),
     m_ptr_data(nullptr),
     m_maximum_clusters(p_kmax),
     m_tolerance(p_tolerance * p_tolerance),
-    m_criterion(p_criterion)
+    m_criterion(p_criterion),
+    m_repeat(p_repeat)
 { }
 
 
@@ -90,7 +93,7 @@ void xmeans::process(const dataset & data, cluster_data & output_result) {
 }
 
 
-double xmeans::improve_parameters(cluster_sequence & improved_clusters, dataset & improved_centers, const index_sequence & available_indexes) {
+double xmeans::improve_parameters(cluster_sequence & improved_clusters, dataset & improved_centers, const index_sequence & available_indexes) const {
     kmeans_data result;
     kmeans(improved_centers, m_tolerance).process((*m_ptr_data), available_indexes, result);
 
@@ -98,6 +101,30 @@ double xmeans::improve_parameters(cluster_sequence & improved_clusters, dataset 
     improved_clusters = result.clusters();
 
     return result.wce();
+}
+
+
+double xmeans::search_optimal_parameters(cluster_sequence & improved_clusters, dataset & improved_centers, const index_sequence & available_indexes) const {
+    double optimal_wce = std::numeric_limits<double>::max();
+
+    for (std::size_t attempt = 0; attempt < m_repeat; attempt++) {
+        /* initialize initial center using k-means++ */
+        dataset candidate_centers;
+        const std::size_t candidates = available_indexes.size() < AMOUNT_CENTER_CANDIDATES ?  available_indexes.size() : AMOUNT_CENTER_CANDIDATES;
+        kmeans_plus_plus(2U, kmeans_plus_plus::FARTHEST_CENTER_CANDIDATE).initialize(*m_ptr_data, available_indexes, candidate_centers);
+
+        /* perform cluster analysis and update optimum if results became better */
+        cluster_sequence candidate_clusters;
+        double candidate_wce = improve_parameters(candidate_clusters, candidate_centers, available_indexes);
+
+        if (candidate_wce < optimal_wce) {
+            improved_clusters = std::move(candidate_clusters);
+            improved_centers = std::move(candidate_centers);
+            optimal_wce = candidate_wce;
+        }
+    }
+
+    return optimal_wce;
 }
 
 
@@ -133,22 +160,18 @@ void xmeans::improve_structure() {
 }
 
 
-void xmeans::improve_region_structure(const cluster & p_cluster, const point & p_center, dataset & p_allocated_centers) {
+void xmeans::improve_region_structure(const cluster & p_cluster, const point & p_center, dataset & p_allocated_centers) const {
     /* in case of cluster with one object */
     if (p_cluster.size() == 1) {
         std::size_t index_center = p_cluster[0];
         p_allocated_centers.push_back((*m_ptr_data)[index_center]);
-
         return;
     }
 
-    /* initialize initial center using k-means++ */
-    dataset parent_child_centers;
-    kmeans_plus_plus(2U, kmeans_plus_plus::FARTHEST_CENTER_CANDIDATE).initialize(*m_ptr_data, p_cluster, parent_child_centers);
-
     /* solve k-means problem for children where data of parent are used */
+    dataset parent_child_centers;
     cluster_sequence parent_child_clusters;
-    improve_parameters(parent_child_clusters, parent_child_centers, p_cluster);
+    search_optimal_parameters(parent_child_clusters, parent_child_centers, p_cluster);
 
     if (parent_child_clusters.size() == 1) {
         /* real situation when all points in cluster are identical */
@@ -180,7 +203,6 @@ void xmeans::improve_region_structure(const cluster & p_cluster, const point & p
         p_allocated_centers.push_back(p_center);
     }
 }
-
 
 double xmeans::splitting_criterion(const cluster_sequence & analysed_clusters, const dataset & analysed_centers) const {
     switch(m_criterion) {

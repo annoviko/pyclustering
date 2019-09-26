@@ -49,6 +49,8 @@ public:
 private:
     const static double             DEFAULT_SPLIT_DIFFERENCE;
 
+    const static std::size_t        AMOUNT_CENTER_CANDIDATES;
+
 private:
     dataset           m_centers;
 
@@ -62,6 +64,8 @@ private:
 
     splitting_type    m_criterion;
 
+    std::size_t       m_repeat              = 1;
+
 public:
     /**
     *
@@ -73,9 +77,11 @@ public:
     * @param[in] p_tolerance: stop condition in following way: when maximum value of distance change of
     *             cluster centers is less than tolerance than algorithm will stop processing.
     * @param[in] p_criterion: splitting criterion that is used for making descision about cluster splitting.
+    * @param[in] p_repeat: how many times K-Means should be run to improve parameters (by default is 1), 
+    *             with larger 'repeat' values suggesting higher probability of finding global optimum.
     *
     */
-    xmeans(const dataset & p_centers, const std::size_t p_kmax, const double p_tolerance, const splitting_type p_criterion);
+    xmeans(const dataset & p_centers, const std::size_t p_kmax, const double p_tolerance, const splitting_type p_criterion, const std::size_t p_repeat = 1);
 
     /**
     *
@@ -95,21 +101,14 @@ public:
     */
     virtual void process(const dataset & data, cluster_data & output_result) override;
 
-    /**
-    *
-    * @brief    Set custom trigger (that is defined by data size) for parallel processing,
-    *            by default this value is defined by static constant DEFAULT_DATA_SIZE_PARALLEL_PROCESSING.
-    *
-    * @param[in]  p_data_size: data size that triggers parallel processing.
-    *
-    */
-
 private:
     void improve_structure(void);
 
-    void improve_region_structure(const cluster & p_cluster, const point & p_center, dataset & p_allocated_centers);
+    void improve_region_structure(const cluster & p_cluster, const point & p_center, dataset & p_allocated_centers) const;
 
-    double improve_parameters(cluster_sequence & clusters, dataset & centers, const index_sequence & available_indexes);
+    double search_optimal_parameters(cluster_sequence & clusters, dataset & centers, const index_sequence & available_indexes) const;
+
+    double improve_parameters(cluster_sequence & clusters, dataset & centers, const index_sequence & available_indexes) const;
 
     double splitting_criterion(const cluster_sequence & clusters, const dataset & centers) const;
 

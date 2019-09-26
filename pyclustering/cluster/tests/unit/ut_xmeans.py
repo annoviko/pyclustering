@@ -40,11 +40,20 @@ class XmeansUnitTest(unittest.TestCase):
     def testBicClusterAllocationSampleSimple1(self):
         XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, False)
 
+    def testBicClusterAllocationSampleSimple1Repeat(self):
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, False, repeat=5)
+
     def testBicSampleSimple1WithoutInitialCenters(self):
         XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, None, [5, 5], splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, False)
 
+    def testBicSampleSimple1WithoutInitialCentersRepeat(self):
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, None, [5, 5], splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, False, repeat=3)
+
     def testBicSampleSimple1MaxLessReal(self):
         XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5]], None, splitting_type.BAYESIAN_INFORMATION_CRITERION, 1, False)
+
+    def testBicSampleSimple1MaxLessRealRepeat(self):
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5]], None, splitting_type.BAYESIAN_INFORMATION_CRITERION, 1, False, repeat=5)
 
     def testBicWrongStartClusterAllocationSampleSimple1(self):
         XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5]], [5, 5], splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, False)
@@ -58,6 +67,9 @@ class XmeansUnitTest(unittest.TestCase):
     def testBicClusterAllocationSampleSimple2(self):
         XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [[3.5, 4.8], [6.9, 7], [7.5, 0.5]], [10, 5, 8], splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, False)
 
+    def testBicClusterAllocationSampleSimple2Repeat(self):
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [[3.5, 4.8], [6.9, 7], [7.5, 0.5]], [10, 5, 8], splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, False, repeat=5)
+
     def testBicWrongStartClusterAllocationSampleSimple2(self):
         XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [[3.5, 4.8], [6.9, 7]], [10, 5, 8], splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, False)
 
@@ -69,6 +81,9 @@ class XmeansUnitTest(unittest.TestCase):
 
     def testBicClusterAllocationSampleSimple3(self):
         XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [[0.2, 0.1], [4.0, 1.0], [2.0, 2.0], [2.3, 3.9]], [10, 10, 10, 30], splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, False)
+
+    def testBicClusterAllocationSampleSimple3Repeat(self):
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [[0.2, 0.1], [4.0, 1.0], [2.0, 2.0], [2.3, 3.9]], [10, 10, 10, 30], splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, False, repeat=5)
 
     def testBicWrongStartClusterAllocationSampleSimple3(self):
         XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [[0.2, 0.1], [4.0, 1.0], [5.9, 5.9]], [10, 10, 10, 30], splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, False)
@@ -84,6 +99,9 @@ class XmeansUnitTest(unittest.TestCase):
 
     def testBicClusterAllocationSampleSimple4(self):
         XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, [[1.5, 0.0], [1.5, 2.0], [1.5, 4.0], [1.5, 6.0], [1.5, 8.0]], [15, 15, 15, 15, 15], splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, False)
+
+    def testBicClusterAllocationSampleSimple4Repeat(self):
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, [[1.5, 0.0], [1.5, 2.0], [1.5, 4.0], [1.5, 6.0], [1.5, 8.0]], [15, 15, 15, 15, 15], splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, False, repeat=5)
 
     def testBicWrongStartClusterAllocationSampleSimple4(self):
         XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, [[1.5, 0.0], [1.5, 2.0], [1.5, 4.0], [1.5, 6.0]], [15, 15, 15, 15, 15], splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, False)

@@ -151,7 +151,7 @@ class xmeans:
         if initial_centers is not None:
             self.__centers = initial_centers[:]
         else:
-            self.__centers = [[random.random() for _ in range(len(data[0]))]]
+            self.__centers = kmeans_plusplus_initializer(data, 2).initialize()
         
         self.__kmax = kmax
         self.__tolerance = tolerance
@@ -190,7 +190,7 @@ class xmeans:
 
         """
 
-        result = wrapper.xmeans(self.__pointer_data, self.__centers, self.__kmax, self.__tolerance, self.__criterion)
+        result = wrapper.xmeans(self.__pointer_data, self.__centers, self.__kmax, self.__tolerance, self.__criterion, self.__repeat)
         self.__clusters = result[0]
         self.__centers = result[1]
         self.__total_wce = result[2][0]
@@ -321,17 +321,35 @@ class xmeans:
         return self.__total_wce
 
 
-    def __search_optimial_parameters(self, centers, available_indexes):
-        clusters, local_centers, local_wce = self.__improve_parameters(centers, available_indexes)
+    def __search_optimial_parameters(self, local_data):
+        """!
+        @brief Split data of the region into two cluster and tries to find global optimum by running k-means clustering
+                several times (defined by 'repeat' argument).
 
-        for attempt in range(1, self.__repeat):
-            clusters_, local_centers_, local_wce_ = self.__improve_parameters(centers, available_indexes)
-            if local_wce_ < local_wce:
-                clusters = clusters_
-                local_centers = local_centers_
-                local_wce = local_wce_
+        @param[in] local_data (list): Points of a region that should be split into two clusters.
 
-        return clusters, local_centers, local_wce
+        @return (tuple) List of allocated clusters, list of centers and total WCE (clusters, centers, wce).
+
+        """
+        optimal_wce, optimal_centers, optimal_clusters = float('+inf'), None, None
+
+        for _ in range(self.__repeat):
+            candidates = 5
+            if len(local_data) < candidates:
+                candidates = len(local_data)
+
+            local_centers = kmeans_plusplus_initializer(local_data, 2, candidates).initialize()
+
+            kmeans_instance = kmeans(local_data, local_centers, tolerance=self.__tolerance, ccore=False)
+            kmeans_instance.process()
+
+            local_wce = kmeans_instance.get_total_wce()
+            if local_wce < optimal_wce:
+                optimal_centers = kmeans_instance.get_centers()
+                optimal_clusters = kmeans_instance.get_clusters()
+                optimal_wce = local_wce
+
+        return optimal_clusters, optimal_centers, optimal_wce
 
 
     def __improve_parameters(self, centers, available_indexes=None):
@@ -341,7 +359,7 @@ class xmeans:
         @param[in] centers (list): Cluster centers, if None then automatically generated two centers using center initialization method.
         @param[in] available_indexes (list): Indexes that defines which points can be used for k-means clustering, if None then all points are used.
         
-        @return (tuple) List of allocated clusters, list of centers and total WCE.
+        @return (tuple) List of allocated clusters, list of centers and total WCE (clusters, centers, wce).
         
         """
 
@@ -355,15 +373,14 @@ class xmeans:
 
         local_centers = centers
         if centers is None:
-            local_centers = kmeans_plusplus_initializer(local_data, 2, kmeans_plusplus_initializer.FARTHEST_CENTER_CANDIDATE).initialize()
+            clusters, local_centers, local_wce = self.__search_optimial_parameters(local_data)
+        else:
+            kmeans_instance = kmeans(local_data, local_centers, tolerance=self.__tolerance, ccore=False).process()
 
-        kmeans_instance = kmeans(local_data, local_centers, tolerance=self.__tolerance, ccore=False)
-        kmeans_instance.process()
+            local_wce = kmeans_instance.get_total_wce()
+            local_centers = kmeans_instance.get_centers()
+            clusters = kmeans_instance.get_clusters()
 
-        local_wce = kmeans_instance.get_total_wce()
-        local_centers = kmeans_instance.get_centers()
-        
-        clusters = kmeans_instance.get_clusters()
         if available_indexes:
             clusters = self.__local_to_global_clusters(clusters, available_indexes)
         
@@ -409,12 +426,12 @@ class xmeans:
         for index_cluster in range(len(clusters)):
             # solve k-means problem for children where data of parent are used.
             (parent_child_clusters, parent_child_centers, _) = self.__improve_parameters(None, clusters[index_cluster])
-              
+
             # If it's possible to split current data
             if len(parent_child_clusters) > 1:
                 # Calculate splitting criterion
-                parent_scores = self.__splitting_criterion([ clusters[index_cluster] ], [ centers[index_cluster] ])
-                child_scores = self.__splitting_criterion([ parent_child_clusters[0], parent_child_clusters[1] ], parent_child_centers)
+                parent_scores = self.__splitting_criterion([clusters[index_cluster] ], [ centers[index_cluster]])
+                child_scores = self.__splitting_criterion([parent_child_clusters[0], parent_child_clusters[1]], parent_child_centers)
               
                 split_require = False
                 
@@ -435,7 +452,6 @@ class xmeans:
                 else:
                     allocated_centers.append(centers[index_cluster])
 
-                    
             else:
                 allocated_centers.append(centers[index_cluster])
           
