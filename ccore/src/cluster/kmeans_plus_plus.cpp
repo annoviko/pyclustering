@@ -38,6 +38,7 @@ namespace clst {
 
 
 const std::size_t kmeans_plus_plus::FARTHEST_CENTER_CANDIDATE = std::numeric_limits<std::size_t>::max();
+const std::size_t kmeans_plus_plus::INVALID_INDEX = std::numeric_limits<std::size_t>::max();
 
 
 kmeans_plus_plus::kmeans_plus_plus(const std::size_t p_amount, const std::size_t p_candidates) noexcept :
@@ -245,7 +246,7 @@ std::size_t kmeans_plus_plus::get_probable_center(const std::vector<double> & p_
 
     std::size_t best_index_candidate = 0;
     for (std::size_t i = 0; i < m_candidates; i++) {
-        std::size_t current_index_candidate = 0;
+        std::size_t current_index_candidate = kmeans_plus_plus::INVALID_INDEX;
         double candidate_probability = distribution(generator);
         for (std::size_t j = 0; j < p_probabilities.size(); j++) {
             if (candidate_probability < p_probabilities[j]) {
@@ -254,7 +255,7 @@ std::size_t kmeans_plus_plus::get_probable_center(const std::vector<double> & p_
             }
         }
 
-        if (i == 0) {
+        if (current_index_candidate == kmeans_plus_plus::INVALID_INDEX) {
             best_index_candidate = *(m_free_indexes.begin());
         }
         else if (p_distances[current_index_candidate] > p_distances[best_index_candidate]) {

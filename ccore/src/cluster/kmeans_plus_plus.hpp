@@ -55,6 +55,13 @@ public:
      */
     static const std::size_t FARTHEST_CENTER_CANDIDATE;
 
+    /**
+     *
+     * @brief Non-existed index that represents non-initialized value.
+     *
+     */
+    static const std::size_t INVALID_INDEX;
+
 public:
     /**
      *
@@ -74,7 +81,7 @@ private:
 private:
     std::size_t         m_amount        = 0;
     std::size_t         m_candidates    = 0;
-    metric              m_dist_func ;
+    metric              m_dist_func;
 
     /* temporal members that are used only during initialization */
     mutable dataset const *           m_data_ptr      = nullptr;

@@ -299,7 +299,6 @@ function install_miniconda($platform_version) {
     # Download pillow from the channel because of troubles on default channel.
     # conda install --channel conda-forge pillow=5.2.0;
 
-    
     Write-Host "[CI Job] Activating environment for powershell manually (activate does not work)." -ForegroundColor Green;
     activate test-environment;
     

@@ -170,14 +170,15 @@ class kmeans_plusplus_initializer:
     FARTHEST_CENTER_CANDIDATE = "farthest"
 
 
-    def __init__(self, data, amount_centers, amount_candidates = 1):
+    def __init__(self, data, amount_centers, amount_candidates=None):
         """!
         @brief Creates K-Means++ center initializer instance.
         
         @param[in] data (array_like): List of points where each point is represented by list of coordinates.
         @param[in] amount_centers (uint): Amount of centers that should be initialized.
-        @param[in] amount_candidates (uint): Amount of candidates that is considered as a center, if the farthest points (with the highest probability) should
-                    be considered as centers then special constant should be used 'FARTHEST_CENTER_CANDIDATE'.
+        @param[in] amount_candidates (uint): Amount of candidates that is considered as a center, if the farthest points
+                    (with the highest probability) should be considered as centers then special constant should be used
+                    'FARTHEST_CENTER_CANDIDATE'.
 
         @see FARTHEST_CENTER_CANDIDATE
 
@@ -185,10 +186,18 @@ class kmeans_plusplus_initializer:
         
         self.__data = numpy.array(data)
         self.__amount = amount_centers
-        self.__candidates = amount_candidates
         self.__free_indexes = set(range(len(self.__data)))
 
+        if amount_candidates is None:
+            self.__candidates = 3
+            if self.__candidates > len(self.__data):
+                self.__candidates = len(self.__data)
+        else:
+            self.__candidates = amount_candidates
+
         self.__check_parameters()
+
+        random.seed()
 
 
     def __check_parameters(self):
@@ -209,14 +218,12 @@ class kmeans_plusplus_initializer:
             raise AttributeError("Data is empty.")
 
 
-    def __calculate_shortest_distances(self, data, centers, index_representation):
+    def __calculate_shortest_distances(self, data, centers):
         """!
         @brief Calculates distance from each data point to nearest center.
         
         @param[in] data (numpy.array): Array of points for that initialization is performed.
-        @param[in] centers (numpy.array): Array of points or indexes that represents centers.
-        @param[in] index_representation (bool): If 'True' then index representation is used in 'centers', otherwise
-                    points itself are used for representation.
+        @param[in] centers (numpy.array): Array of indexes that represents centers.
         
         @return (numpy.array) List of distances to closest center for each data point.
         
@@ -224,14 +231,9 @@ class kmeans_plusplus_initializer:
 
         dataset_differences = numpy.zeros((len(centers), len(data)))
         for index_center in range(len(centers)):
-            if index_representation:
-                center = data[centers[index_center]]
-            else:
-                center = centers[index_center]
+            center = data[centers[index_center]]
 
             dataset_differences[index_center] = numpy.sum(numpy.square(data - center), axis=1).T
-            for index_other_centers in centers:
-                dataset_differences[index_center][index_other_centers] = numpy.nan
 
         with warnings.catch_warnings():
             numpy.warnings.filterwarnings('ignore', r'All-NaN (slice|axis) encountered')
@@ -240,30 +242,28 @@ class kmeans_plusplus_initializer:
         return shortest_distances
 
 
-    def __get_next_center(self, centers, return_index):
+    def __get_next_center(self, centers):
         """!
         @brief Calculates the next center for the data.
 
-        @param[in] centers (array_like): Current initialized centers.
-        @param[in] return_index (bool): If True then return center's index instead of point.
+        @param[in] centers (array_like): Current initialized centers represented by indexes.
 
         @return (array_like) Next initialized center.<br>
                 (uint) Index of next initialized center if return_index is True.
 
         """
 
-        distances = self.__calculate_shortest_distances(self.__data, centers, return_index)
+        distances = self.__calculate_shortest_distances(self.__data, centers)
 
         if self.__candidates == kmeans_plusplus_initializer.FARTHEST_CENTER_CANDIDATE:
+            for index_point in centers:
+                distances[index_point] = numpy.nan
             center_index = numpy.nanargmax(distances)
         else:
             probabilities = self.__calculate_probabilities(distances)
             center_index = self.__get_probable_center(distances, probabilities)
 
-        if return_index:
-            return center_index
-
-        return self.__data[center_index]
+        return center_index
 
 
     def __get_initial_center(self, return_index):
@@ -313,17 +313,17 @@ class kmeans_plusplus_initializer:
 
         """
 
-        index_best_candidate = -1
-        for _ in range(self.__candidates):
+        index_best_candidate = 0
+        for i in range(self.__candidates):
             candidate_probability = random.random()
-            index_candidate = 0
+            index_candidate = -1
 
             for index_object in range(len(probabilities)):
                 if candidate_probability < probabilities[index_object]:
                     index_candidate = index_object
                     break
 
-            if index_best_candidate == -1:
+            if index_candidate == -1:
                 index_best_candidate = next(iter(self.__free_indexes))
             elif distances[index_best_candidate] < distances[index_candidate]:
                 index_best_candidate = index_candidate
@@ -354,7 +354,7 @@ class kmeans_plusplus_initializer:
 
         # For each next center
         for _ in range(1, self.__amount):
-            index_point = self.__get_next_center(centers, True)
+            index_point = self.__get_next_center(centers)
             centers.append(index_point)
             self.__free_indexes.remove(index_point)
 

@@ -25,13 +25,13 @@
 """
 
 
-from pyclustering.cluster.encoder import type_encoding;
+from pyclustering.cluster.encoder import type_encoding
 
-from pyclustering.utils import euclidean_distance;
+from pyclustering.utils import euclidean_distance
 
-from pyclustering.core.wrapper import ccore_library;
+from pyclustering.core.wrapper import ccore_library
 
-import pyclustering.core.rock_wrapper as wrapper;
+import pyclustering.core.rock_wrapper as wrapper
 
 
 class rock:
@@ -134,7 +134,7 @@ class rock:
         
         """
         
-        return self.__clusters;
+        return self.__clusters
 
 
     def get_cluster_encoding(self):
@@ -147,7 +147,7 @@ class rock:
         
         """
         
-        return type_encoding.CLUSTER_INDEX_LIST_SEPARATION;
+        return type_encoding.CLUSTER_INDEX_LIST_SEPARATION
 
 
     def __find_pair_clusters(self, clusters):
@@ -162,17 +162,17 @@ class rock:
         
         """
         
-        maximum_goodness = 0.0;
-        cluster_indexes = [-1, -1];
+        maximum_goodness = 0.0
+        cluster_indexes = [-1, -1]
         
         for i in range(0, len(clusters)):
             for j in range(i + 1, len(clusters)):
-                goodness = self.__calculate_goodness(clusters[i], clusters[j]);
-                if (goodness > maximum_goodness):
-                    maximum_goodness = goodness;
-                    cluster_indexes = [i, j];
+                goodness = self.__calculate_goodness(clusters[i], clusters[j])
+                if goodness > maximum_goodness:
+                    maximum_goodness = goodness
+                    cluster_indexes = [i, j]
         
-        return cluster_indexes;
+        return cluster_indexes
 
 
     def __calculate_links(self, cluster1, cluster2):
@@ -187,13 +187,13 @@ class rock:
         
         """
         
-        number_links = 0;
+        number_links = 0
         
         for index1 in cluster1:
             for index2 in cluster2:
-                number_links += self.__adjacency_matrix[index1][index2];
+                number_links += self.__adjacency_matrix[index1][index2]
                 
-        return number_links;
+        return number_links
             
 
     def __create_adjacency_matrix(self):
@@ -202,15 +202,15 @@ class rock:
         
         """
         
-        size_data = len(self.__pointer_data);
+        size_data = len(self.__pointer_data)
         
-        self.__adjacency_matrix = [ [ 0 for i in range(size_data) ] for j in range(size_data) ];
+        self.__adjacency_matrix = [[0 for i in range(size_data)] for j in range(size_data)]
         for i in range(0, size_data):
             for j in range(i + 1, size_data):
-                distance = euclidean_distance(self.__pointer_data[i], self.__pointer_data[j]);
+                distance = euclidean_distance(self.__pointer_data[i], self.__pointer_data[j])
                 if (distance <= self.__eps):
-                    self.__adjacency_matrix[i][j] = 1;
-                    self.__adjacency_matrix[j][i] = 1;
+                    self.__adjacency_matrix[i][j] = 1
+                    self.__adjacency_matrix[j][i] = 1
         
     
 
@@ -225,7 +225,7 @@ class rock:
         
         """
         
-        number_links = self.__calculate_links(cluster1, cluster2);
-        devider = (len(cluster1) + len(cluster2)) ** self.__degree_normalization - len(cluster1) ** self.__degree_normalization - len(cluster2) ** self.__degree_normalization;
+        number_links = self.__calculate_links(cluster1, cluster2)
+        devider = (len(cluster1) + len(cluster2)) ** self.__degree_normalization - len(cluster1) ** self.__degree_normalization - len(cluster2) ** self.__degree_normalization
         
-        return (number_links / devider);
+        return number_links / devider

@@ -72,8 +72,8 @@ class RandomCenterInitializerUnitTest(unittest.TestCase):
 
 
 class KmeansPlusPlusInitializerUnitTest(unittest.TestCase):
-    def templateKmeasPlusPlusCenterInitializer(self, data, amount):
-        centers = kmeans_plusplus_initializer(data, amount).initialize()
+    def templateKmeasPlusPlusCenterInitializer(self, data, amount, candidates=None):
+        centers = kmeans_plusplus_initializer(data, amount, candidates).initialize()
 
         assertion.eq(amount, len(centers))
 
@@ -112,6 +112,12 @@ class KmeansPlusPlusInitializerUnitTest(unittest.TestCase):
     def testGenerateCentersOnePoint(self):
         self.templateKmeasPlusPlusCenterInitializer([[1.2, 1.3, 1.4]], 1)
 
+    def testTwoSimilarPointsTwoCenters1(self):
+        self.templateKmeasPlusPlusCenterInitializer([[0], [0]], 2, "farthest")
+
+    def testTwoSimilarPointsTwoCenters2(self):
+        self.templateKmeasPlusPlusCenterInitializer([[20], [20]], 2, "farthest")
+
     def templateKmeansPlusPlusForClustering(self, path_sample, amount, expected_clusters_length):
         result_success = True
         for _ in range(3):
@@ -125,7 +131,7 @@ class KmeansPlusPlusInitializerUnitTest(unittest.TestCase):
             
             break
         
-        assert result_success == True;
+        self.assertTrue(result_success)
 
 
     def testInitializerForKmeansSampleSimple01(self):
@@ -224,7 +230,7 @@ class KmeansPlusPlusInitializerUnitTest(unittest.TestCase):
                 continue
             break
 
-        assert result_success == True;
+        assert result_success is True;
 
     def testInitializerForKmedoidsSampleSimple01(self):
         self.templateKmeansPlusPlusForKmedoidsClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, [5, 5])
@@ -240,6 +246,80 @@ class KmeansPlusPlusInitializerUnitTest(unittest.TestCase):
 
     def testInitializerForKmedoidsSampleSimple04(self):
         self.templateKmeansPlusPlusForKmedoidsClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 5, [15, 15, 15, 15, 15])
+
+
+    def templateKmeansPlusPlusUnique(self, path_sample, amount, candidates):
+        sample = read_sample(path_sample)
+        start_medoids = kmeans_plusplus_initializer(sample, amount, candidates).initialize(return_index=True)
+
+        unique_mediods = set(start_medoids)
+        self.assertEqual(len(unique_mediods), len(start_medoids))
+
+    def testKmeansPlusPlusUniqueCentersSimple01(self):
+        self.templateKmeansPlusPlusUnique(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, 1)
+        self.templateKmeansPlusPlusUnique(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 3, 1)
+        self.templateKmeansPlusPlusUnique(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 5, 1)
+        self.templateKmeansPlusPlusUnique(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 10, 1)
+
+    def testKmeansPlusPlusUniqueCentersSeveralCandidatesSimple01(self):
+        self.templateKmeansPlusPlusUnique(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, 5)
+        self.templateKmeansPlusPlusUnique(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 3, 5)
+        self.templateKmeansPlusPlusUnique(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 5, 5)
+        self.templateKmeansPlusPlusUnique(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 10, 5)
+
+    def testKmeansPlusPlusUniqueCentersFarthestCandidatesSimple01(self):
+        self.templateKmeansPlusPlusUnique(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, 'farthest')
+        self.templateKmeansPlusPlusUnique(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 3, 'farthest')
+        self.templateKmeansPlusPlusUnique(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 5, 'farthest')
+        self.templateKmeansPlusPlusUnique(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 10, 'farthest')
+
+    def testKmeansPlusPlusUniqueCentersSimple02(self):
+        self.templateKmeansPlusPlusUnique(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 2, 1)
+        self.templateKmeansPlusPlusUnique(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 3, 1)
+        self.templateKmeansPlusPlusUnique(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 5, 1)
+        self.templateKmeansPlusPlusUnique(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 23, 1)
+
+    def testKmeansPlusPlusUniqueCentersSeveralCandidatesSimple02(self):
+        self.templateKmeansPlusPlusUnique(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 2, 10)
+        self.templateKmeansPlusPlusUnique(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 3, 10)
+        self.templateKmeansPlusPlusUnique(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 5, 10)
+        self.templateKmeansPlusPlusUnique(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 23, 10)
+
+
+    def templateKmeansPlusPlusSeveralRuns(self, path_sample, amount, candidates):
+        sample = read_sample(path_sample)
+
+        attempts = 10
+        for _ in range(attempts):
+            medoids = kmeans_plusplus_initializer(sample, amount, candidates).initialize(return_index=True)
+            medoids += kmeans_plusplus_initializer(sample, amount, candidates).initialize(return_index=True)
+            medoids += kmeans_plusplus_initializer(sample, amount, candidates).initialize(return_index=True)
+
+            unique_medoids = set(medoids)
+            if len(unique_medoids) != len(medoids):
+                continue
+
+            return
+
+        self.assertTrue(False, "K-Means++ does not return unique medoids during %d attempts." % attempts)
+
+    def templateKmeansPlusPlusVariousCentersSimple01(self):
+        self.templateKmeansPlusPlusSeveralRuns(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, 1)
+        self.templateKmeansPlusPlusSeveralRuns(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 5, 1)
+
+    def templateKmeansPlusPlusVariousCentersSeveralCandidatesSimple01(self):
+        self.templateKmeansPlusPlusSeveralRuns(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, 3)
+
+    def templateKmeansPlusPlusVariousCentersFarthestCandidatesSimple01(self):
+        self.templateKmeansPlusPlusSeveralRuns(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, 'farthest')
+
+    def templateKmeansPlusPlusVariousCentersSimple02(self):
+        self.templateKmeansPlusPlusSeveralRuns(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 3, 1)
+        self.templateKmeansPlusPlusSeveralRuns(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 6, 1)
+
+    def templateKmeansPlusPlusVariousCentersSimple03(self):
+        self.templateKmeansPlusPlusSeveralRuns(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 4, 1)
+        self.templateKmeansPlusPlusSeveralRuns(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 8, 1)
 
 
 if __name__ == "__main__":

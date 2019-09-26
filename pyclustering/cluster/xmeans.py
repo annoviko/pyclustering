@@ -126,7 +126,7 @@ class xmeans:
     
     """
     
-    def __init__(self, data, initial_centers=None, kmax=20, tolerance=0.025, criterion=splitting_type.BAYESIAN_INFORMATION_CRITERION, ccore=True):
+    def __init__(self, data, initial_centers=None, kmax=20, tolerance=0.025, criterion=splitting_type.BAYESIAN_INFORMATION_CRITERION, ccore=True, **kwargs):
         """!
         @brief Constructor of clustering algorithm X-Means.
         
@@ -137,7 +137,12 @@ class xmeans:
         @param[in] tolerance (double): Stop condition for each iteration: if maximum value of change of centers of clusters is less than tolerance than algorithm will stop processing.
         @param[in] criterion (splitting_type): Type of splitting creation.
         @param[in] ccore (bool): Defines should be CCORE (C++ pyclustering library) used instead of Python code or not.
-        
+        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'repeat').
+
+        <b>Keyword Args:</b><br>
+            - repeat (unit): How many times K-Means should be run to improve parameters (by default is 1).
+               With larger 'repeat' values suggesting higher probability of finding global optimum.
+
         """
         
         self.__pointer_data = data
@@ -152,6 +157,7 @@ class xmeans:
         self.__tolerance = tolerance
         self.__criterion = criterion
         self.__total_wce = 0.0
+        self.__repeat = kwargs.get('repeat', 1)
          
         self.__ccore = ccore
         if self.__ccore:
@@ -170,27 +176,45 @@ class xmeans:
         """
         
         if self.__ccore is True:
-            result = wrapper.xmeans(self.__pointer_data, self.__centers, self.__kmax, self.__tolerance, self.__criterion)
-            self.__clusters = result[0]
-            self.__centers = result[1]
-            self.__total_wce = result[2][0]
+            self.__process_by_ccore()
 
         else:
-            self.__clusters = []
-            while len(self.__centers) <= self.__kmax:
-                current_cluster_number = len(self.__centers)
-                
-                self.__clusters, self.__centers, _ = self.__improve_parameters(self.__centers)
-                allocated_centers = self.__improve_structure(self.__clusters, self.__centers)
-                
-                if current_cluster_number == len(allocated_centers):
-                    break
-                else:
-                    self.__centers = allocated_centers
-            
-            self.__clusters, self.__centers, self.__total_wce = self.__improve_parameters(self.__centers)
+            self.__process_by_python()
 
         return self
+
+
+    def __process_by_ccore(self):
+        """!
+        @brief Performs cluster analysis using CCORE (C/C++ part of pyclustering library).
+
+        """
+
+        result = wrapper.xmeans(self.__pointer_data, self.__centers, self.__kmax, self.__tolerance, self.__criterion)
+        self.__clusters = result[0]
+        self.__centers = result[1]
+        self.__total_wce = result[2][0]
+
+
+    def __process_by_python(self):
+        """!
+        @brief Performs cluster analysis using python code.
+
+        """
+
+        self.__clusters = []
+        while len(self.__centers) <= self.__kmax:
+            current_cluster_number = len(self.__centers)
+
+            self.__clusters, self.__centers, _ = self.__improve_parameters(self.__centers)
+            allocated_centers = self.__improve_structure(self.__clusters, self.__centers)
+
+            if current_cluster_number == len(allocated_centers):
+                break
+            else:
+                self.__centers = allocated_centers
+
+        self.__clusters, self.__centers, self.__total_wce = self.__improve_parameters(self.__centers)
 
 
     def predict(self, points):
@@ -295,6 +319,19 @@ class xmeans:
         """
 
         return self.__total_wce
+
+
+    def __search_optimial_parameters(self, centers, available_indexes):
+        clusters, local_centers, local_wce = self.__improve_parameters(centers, available_indexes)
+
+        for attempt in range(1, self.__repeat):
+            clusters_, local_centers_, local_wce_ = self.__improve_parameters(centers, available_indexes)
+            if local_wce_ < local_wce:
+                clusters = clusters_
+                local_centers = local_centers_
+                local_wce = local_wce_
+
+        return clusters, local_centers, local_wce
 
 
     def __improve_parameters(self, centers, available_indexes=None):
@@ -424,7 +461,7 @@ class xmeans:
         
         elif self.__criterion == splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH:
             return self.__minimum_noiseless_description_length(clusters, centers)
-        
+
         else:
             assert 0;
 
@@ -505,7 +542,7 @@ class xmeans:
           
         for index_cluster in range(0, len(clusters), 1):
             for index_object in clusters[index_cluster]:
-                sigma_sqrt += euclidean_distance_square(self.__pointer_data[index_object], centers[index_cluster]);
+                sigma_sqrt += euclidean_distance_square(self.__pointer_data[index_object], centers[index_cluster])
 
             N += len(clusters[index_cluster])
       

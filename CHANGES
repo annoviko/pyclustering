@@ -20,6 +20,9 @@ GENERAL CHANGES:
 - Introduced `get_total_wce` method for `xmeans` algorithm to find WCE (pyclustering.cluster.xmeans).
   See: https://github.com/annoviko/pyclustering/issues/508
 
+CORRECTED MAJOR BUGS:
+- Incorrect center initialization in K-Means++ when candidates are not farthest (pyclustering.cluster.center_initializer).
+  See: https://github.com/annoviko/pyclustering/issues/549
 
 ------------------------------------------------------------------------
 
