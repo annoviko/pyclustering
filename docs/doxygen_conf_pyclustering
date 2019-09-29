@@ -114,6 +114,7 @@ INPUT                  = pyclustering/__init__.py \
                          pyclustering/cluster/fcm.py \
                          pyclustering/cluster/ga.py \
                          pyclustering/cluster/generator.py \
+                         pyclustering/cluster/gmeans.py \
                          pyclustering/cluster/hsyncnet.py \
                          pyclustering/cluster/kmeans.py \
                          pyclustering/cluster/kmedians.py \

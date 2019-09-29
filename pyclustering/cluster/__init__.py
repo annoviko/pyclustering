@@ -447,7 +447,7 @@ class cluster_visualizer:
             color = color_list.TITLES[index_color]
         
         added_canvas_descriptor = canvas_cluster_descr(cluster, data, marker, markersize, color)
-        self.__canvas_clusters[canvas].append( added_canvas_descriptor )
+        self.__canvas_clusters[canvas].append(added_canvas_descriptor)
 
         if data is None:
             dimension = len(cluster[0])
@@ -486,7 +486,7 @@ class cluster_visualizer:
         @param[in] data (list): List of points (data) that represents attribute.
         @param[in] marker (string): Marker that is used for displaying objects from cluster on the canvas.
         @param[in] markersize (uint): Size of marker.
-        
+
         """
         
         cluster_descr = self.__canvas_clusters[index_canvas][index_cluster]
@@ -513,7 +513,7 @@ class cluster_visualizer:
         @param[in] canvas (uint): Number of canvas that should be used for displaying clusters.
         @param[in] marker (string): Marker that is used for displaying objects from clusters on the canvas.
         @param[in] markersize (uint): Size of marker.
-        
+
         """
         
         for cluster in clusters:
@@ -526,7 +526,7 @@ class cluster_visualizer:
         
         @param[in] text (string): Title for canvas.
         @param[in] canvas (uint): Index of canvas where title should be displayed.
-        
+
         """
         
         if canvas > self.__number_canvases:

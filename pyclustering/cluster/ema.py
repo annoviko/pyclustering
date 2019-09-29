@@ -185,7 +185,7 @@ class ema_initializer():
                 covariances.append(numpy.cov(cluster_sample, rowvar = False))
             else:
                 dimension = len(self.__sample[0])
-                covariances.append(numpy.zeros((dimension, dimension))  + random.random() / 10.0)
+                covariances.append(numpy.zeros((dimension, dimension)) + random.random() / 10.0)
         
         return covariances
 
@@ -620,13 +620,13 @@ class ema:
 
 
     def __extract_clusters(self):
-        self.__clusters = [ [] for _ in range(self.__amount_clusters) ]
+        self.__clusters = [[] for _ in range(self.__amount_clusters)]
         for index_point in range(len(self.__data)):
             candidates = []
             for index_cluster in range(self.__amount_clusters):
                 candidates.append((index_cluster, self.__rc[index_cluster][index_point]))
             
-            index_winner = max(candidates, key = lambda candidate : candidate[1])[0]
+            index_winner = max(candidates, key=lambda candidate: candidate[1])[0]
             self.__clusters[index_winner].append(index_point)
         
         self.__erase_empty_clusters()
@@ -700,7 +700,7 @@ class ema:
     def __update_covariance(self, means, rc, mc):
         covariance = 0.0
         for index_point in range(len(self.__data)):
-            deviation = numpy.array( [ self.__data[index_point] - means ])
+            deviation = numpy.array([self.__data[index_point] - means])
             covariance += rc[index_point] * deviation.T.dot(deviation)
         
         covariance = covariance / mc

@@ -430,7 +430,7 @@ class xmeans:
             # If it's possible to split current data
             if len(parent_child_clusters) > 1:
                 # Calculate splitting criterion
-                parent_scores = self.__splitting_criterion([clusters[index_cluster] ], [ centers[index_cluster]])
+                parent_scores = self.__splitting_criterion([clusters[index_cluster]], [centers[index_cluster]])
                 child_scores = self.__splitting_criterion([parent_child_clusters[0], parent_child_clusters[1]], parent_child_centers)
               
                 split_require = False

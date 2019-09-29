@@ -1,6 +1,6 @@
 """!
 
-@brief Cluster analysis algorithm: K-Means
+@brief The module contains K-Means algorithm and other related services.
 @details Implementation based on paper @cite inproceedings::kmeans::1.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
@@ -271,12 +271,19 @@ class kmeans_visualizer:
 
 class kmeans:
     """!
-    @brief Class represents K-Means clustering algorithm.
-    @details CCORE implementation of the algorithm uses thread pool to parallelize the clustering process.
-    
-    K-Means clustering results depend on initial centers. Algorithm K-Means++ can used for initialization 
-    initial centers from module 'pyclustering.cluster.center_initializer'.
-    
+    @brief Class implements K-Means clustering algorithm.
+    @details K-Means clustering aims to partition n observations into k clusters in which each observation belongs to
+              the cluster with the nearest mean, serving as a prototype of the cluster. This results in a partitioning
+              of the data space into Voronoi cells.
+
+    K-Means clustering results depend on initial centers. Algorithm K-Means++ can used for initialization of
+    initial centers - see module 'pyclustering.cluster.center_initializer'.
+
+    CCORE implementation (C/C++ part of the library) of the algorithm performs parallel processing to ensure maximum
+    performance.
+
+    Implementation based on the paper @cite inproceedings::kmeans::1.
+
     @image html kmeans_example_clustering.png "K-Means clustering results. At the left - 'Simple03.data' sample, at the right - 'Lsun.data' sample."
 
     Example #1 - Clustering using K-Means++ for center initialization:

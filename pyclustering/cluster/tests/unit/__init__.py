@@ -47,6 +47,7 @@ from pyclustering.cluster.tests.unit               import ut_fcm                
 from pyclustering.cluster.tests.unit               import ut_ga                 as cluster_ga_unit_tests
 from pyclustering.cluster.tests.unit               import ut_general            as cluster_general_unit_tests
 from pyclustering.cluster.tests.unit               import ut_generator          as cluster_generator_unit_tests
+from pyclustering.cluster.tests.unit               import ut_gmeans             as cluster_gmeans_unit_tests
 from pyclustering.cluster.tests.unit               import ut_hsyncnet           as cluster_hsyncnet_unit_tests
 from pyclustering.cluster.tests.unit               import ut_kmeans             as cluster_kmeans_unit_tests
 from pyclustering.cluster.tests.unit               import ut_kmedians           as cluster_kmedians_unit_tests
@@ -86,6 +87,7 @@ class clustering_unit_tests(suite_holder):
         unit_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_ga_unit_tests))
         unit_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_general_unit_tests))
         unit_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_generator_unit_tests))
+        unit_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_gmeans_unit_tests))
         unit_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_hsyncnet_unit_tests))
         unit_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_kmeans_unit_tests))
         unit_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_kmedians_unit_tests))
