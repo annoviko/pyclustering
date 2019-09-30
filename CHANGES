@@ -6,7 +6,7 @@ CHANGE NOTES FOR 0.9.2 (STARTED Sep 9, 2019), (RELEASED: -)
 
 GENERAL CHANGES:
 - Implemented new clustering algorithm G-Means (pyclustering.cluster.gmeans).
-  See: 
+  See: https://github.com/annoviko/pyclustering/issues/506
 
 - Introduced parameter `repeat` to improve parameters in X-Means algorithm (pyclustering.cluster.xmeans, ccore.clst.xmeans).
   See: https://github.com/annoviko/pyclustering/issues/525

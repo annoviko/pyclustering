@@ -30,6 +30,7 @@ import scipy.stats
 
 from pyclustering.cluster.center_initializer import kmeans_plusplus_initializer
 from pyclustering.cluster.kmeans import kmeans
+from pyclustering.utils import distance_metric, type_metric
 
 
 class gmeans:
@@ -42,17 +43,71 @@ class gmeans:
 
     Implementation based on the paper @cite inproceedings::gmeans::1.
 
+    @image html gmeans_example_clustering.png "G-Means clustering results on most common data-sets."
+
+    Example #1. In this example, G-Means starts analysis from single cluster.
+    @code
+        from pyclustering.cluster import cluster_visualizer
+        from pyclustering.cluster.gmeans import gmeans
+        from pyclustering.utils import read_sample
+        from pyclustering.samples.definitions import FCPS_SAMPLES
+
+        # Read sample 'Lsun' from file.
+        sample = read_sample(FCPS_SAMPLES.SAMPLE_LSUN)
+
+        # Create instance of G-Means algorithm. By default algorithm start search from single cluster.
+        gmeans_instance = gmeans(sample).process()
+
+        # Extract clustering results: clusters and their centers
+        clusters = gmeans_instance.get_clusters()
+        centers = gmeans_instance.get_centers()
+
+        # Print total sum of metric errors
+        print("Total WCE:", gmeans_instance.get_total_wce())
+
+        # Visualize clustering results
+        visualizer = cluster_visualizer()
+        visualizer.append_clusters(clusters, sample)
+        visualizer.show()
+    @endcode
+
+    Example #2. Sometimes G-Means may found local optimum. 'repeat' value can be used to increase probability to
+    find global optimum. Argument 'repeat' defines how many times K-Means clustering with K-Means++
+    initialization should be run to find optimal clusters.
+    @code
+        # Read sample 'Tetra' from file.
+        sample = read_sample(FCPS_SAMPLES.SAMPLE_TETRA)
+
+        # Create instance of G-Means algorithm. By default algorithm start search from single cluster.
+        gmeans_instance = gmeans(sample, repeat=10).process()
+
+        # Extract clustering results: clusters and their centers
+        clusters = gmeans_instance.get_clusters()
+
+        # Visualize clustering results
+        visualizer = cluster_visualizer()
+        visualizer.append_clusters(clusters, sample)
+        visualizer.show()
+    @endcode
+
     """
 
-    def __init__(self, data, k_init, ccore=True, **kwargs):
+    def __init__(self, data, k_init=1, ccore=True, **kwargs):
         """!
         @brief Initializes G-Means algorithm.
 
         @param[in] data (array_like): Input data that is presented as array of points (objects), each point should be
                     represented by array_like data structure.
-        @param[in] k_init (uint): Initial amount of centers.
+        @param[in] k_init (uint): Initial amount of centers (by default started search from 1).
         @param[in] ccore (bool): Defines whether CCORE library (C/C++ part of the library) should be used instead of
                     Python code.
+        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'tolerance', 'repeat').
+
+        <b>Keyword Args:</b><br>
+            - tolerance (double): tolerance (double): Stop condition for each K-Means iteration: if maximum value of
+               change of centers of clusters is less than tolerance than algorithm will stop processing.
+            - repeat (unit): How many times K-Means should be run to improve parameters (by default is 1).
+               With larger 'repeat' values suggesting higher probability of finding global optimum.
 
         """
         self.__data = data
@@ -91,6 +146,29 @@ class gmeans:
         return self
 
 
+    def predict(self, points):
+        """!
+        @brief Calculates the closest cluster to each point.
+
+        @param[in] points (array_like): Points for which closest clusters are calculated.
+
+        @return (list) List of closest clusters for each point. Each cluster is denoted by index. Return empty
+                 collection if 'process()' method was not called.
+
+        """
+        nppoints = numpy.array(points)
+        if len(self.__clusters) == 0:
+            return []
+
+        metric = distance_metric(type_metric.EUCLIDEAN_SQUARE, numpy_usage=True)
+
+        differences = numpy.zeros((len(nppoints), len(self.__centers)))
+        for index_point in range(len(nppoints)):
+            differences[index_point] = metric(nppoints[index_point], self.__centers)
+
+        return numpy.argmin(differences, axis=1)
+
+
     def get_clusters(self):
         """!
         @brief Returns list of allocated clusters, each cluster contains indexes of objects in list of data.
@@ -115,6 +193,20 @@ class gmeans:
 
         """
         return self.__centers
+
+
+    def get_total_wce(self):
+        """!
+        @brief Returns sum of metric errors that depends on metric that was used for clustering (by default SSE - Sum of Squared Errors).
+        @details Sum of metric errors is calculated using distance between point and its center:
+                 \f[error=\sum_{i=0}^{N}distance(x_{i}-center(x_{i}))\f]
+
+        @see process()
+        @see get_clusters()
+
+        """
+
+        return self.__total_wce
 
 
     def _statistical_optimization(self):
@@ -143,12 +235,16 @@ class gmeans:
         @return (array_like) Two new centers if two new clusters are considered as more suitable.
                 (None) If current cluster is more suitable.
         """
+        if len(cluster) == 1:
+            return None
+
         points = [self.__data[index_point] for index_point in cluster]
         new_clusters, new_centers, _ = self._search_optimal_parameters(points, 2)
 
-        accept_null_hypothesis = self._is_null_hypothesis(points, new_centers)
-        if not accept_null_hypothesis:
-            return new_centers  # If null hypothesis is rejected then use two new clusters
+        if len(new_centers) > 1:
+            accept_null_hypothesis = self._is_null_hypothesis(points, new_centers)
+            if not accept_null_hypothesis:
+                return new_centers  # If null hypothesis is rejected then use two new clusters
 
         return None
 
@@ -213,6 +309,9 @@ class gmeans:
                 best_wce = candidate_wce
                 best_clusters = solver.get_clusters()
                 best_centers = solver.get_centers()
+
+            if len(initial_centers) == 1:
+                break   # No need to rerun clustering for one initial center.
 
         return best_clusters, best_centers, best_wce
 
