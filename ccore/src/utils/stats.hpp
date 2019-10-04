@@ -23,6 +23,7 @@
 #pragma once
 
 
+#include <algorithm>
 #include <cmath>
 #include <iterator>
 #include <vector>
@@ -35,6 +36,9 @@ namespace ccore {
 namespace utils {
 
 namespace stats {
+
+
+const double        SQRT_0_5 = 0.70710678118654752440084436210485;
 
 
 /**
@@ -59,7 +63,7 @@ double mean(const TypeContainer & p_container) {
 
 /**
  *
- * @brief   Calculates correct variance deviation.
+ * @brief   Calculates correct variance deviation (degree of freedom = 1).
  *
  * @param[in] p_container: data to calculate standard deviation.
  * @param[in] p_mean: data's mean value.
@@ -81,7 +85,7 @@ double var(const TypeContainer & p_container, const double p_mean) {
 
 /**
  *
- * @brief   Calculates correct variance deviation.
+ * @brief   Calculates correct variance deviation (degree of freedom = 1).
  *
  * @param[in] p_container: data to calculate standard deviation.
  *
@@ -98,7 +102,7 @@ double var(const TypeContainer & p_container) {
 
 /**
  *
- * @brief   Calculates correct standard deviation.
+ * @brief   Calculates correct standard deviation (degree of freedom = 1).
  *
  * @param[in] p_container: data to calculate standard deviation.
  * @param[in] p_mean: data's mean value.
@@ -114,7 +118,7 @@ double std(const TypeContainer & p_container, const double p_mean) {
 
 /**
  *
- * @brief   Calculates correct standard deviation.
+ * @brief   Calculates correct standard deviation (degree of freedom = 1).
  *
  * @param[in] p_container: data to calculate standard deviation.
  *
@@ -131,24 +135,105 @@ double std(const TypeContainer & p_container) {
  *
  * @brief   Calculates PDF (Probability Distribution Function) for Gaussian (normal) distribution.
  *
- * @param[in] p_container: data to calculate probability distribution function.
+ * @param[in] p_data: data to calculate probability distribution function.
  *
  * @return  Probability distribution function.
  *
  */
 template <class TypeContainer>
-std::vector<double> pdf(const TypeContainer & p_container) {
+std::vector<double> pdf(const TypeContainer & p_data) {
     double m = 1.0 / std::sqrt(2.0 * ccore::utils::math::pi);
 
     std::vector<double> result;
-    result.reserve(p_container.size());
+    result.reserve(p_data.size());
 
-    for (auto & value : p_container) {
+    for (auto & value : p_data) {
         result.push_back(m * std::exp(-0.5 * std::pow(value, 2)));
     }
 
     return result;
 }
+
+
+/**
+ *
+ * @brief   Calculates CDF (Cumulative Distribution Function) for Gaussian (normal) distribution.
+ *
+ * @param[in] p_data: data to calculate probability distribution function.
+ *
+ * @return  Cumulative distribution function.
+ *
+ */
+template <class TypeContainer>
+std::vector<double> cdf(const TypeContainer & p_data) {
+    std::vector<double> result;
+    result.reserve(p_data.size());
+
+    for (auto & value : p_data) {
+        result.push_back(0.5 * std::erfc(-value * SQRT_0_5));
+    }
+
+    return result;
+}
+
+
+
+/**
+ *
+ * @brief   Calculates Anderson-Darling test value for Gaussian distribution.
+ *
+ * @param[in] p_data: data to test against Gaussian distribution.
+ *
+ * @return  Anderson-Darling test value.
+ *
+ */
+template <class TypeContainer>
+double anderson(const TypeContainer & p_data) {
+    const double m = mean(p_data);
+    const double v = ccore::utils::stats::std(p_data, m);
+
+    TypeContainer sample = p_data;
+    for (auto & value : sample) {
+        value = (value - m) / v;
+    }
+
+    std::sort(std::begin(sample), std::end(sample));
+
+    const auto y = cdf(sample);
+
+    double s = 0.0;
+    std::size_t n = p_data.size();
+
+    for (std::size_t i = 0; i < n; ++i) {
+        const double k = 2.0 * (i + 1.0) - 1.0;
+        s += k * (std::log(y[i]) + std::log(1.0 - y[n - i - 1]));
+    }
+
+    s /= n;
+    return -s - n;
+}
+
+
+
+/**
+ *
+ * @brief   Calculates critical values for data with Gaussian distribution for the following 
+ *           significance levels: 15%, 10%, 5%, 2.5%, 1%.
+ *
+ * @param[in] p_data_size: Data size for that critical values should be calculated.
+ *
+ * @return  Calculates critical values.
+ *
+ */
+std::vector<double> critical_values(const std::size_t p_data_size) {
+    std::vector<double> result = { 0.576, 0.656, 0.787, 0.918, 1.092 };
+    for (auto & value : result) {
+        value /= (1.0 + 4.0 / p_data_size - 25.0 / p_data_size / p_data_size);
+    }
+
+    return result;
+}
+
 
 
 }
