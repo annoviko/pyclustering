@@ -37,7 +37,7 @@ TEST(utest_stats, pdf) {
 
     auto result = pdf(data);
 
-    ASSERT_EQ(std::size(result), result.size());
+    ASSERT_EQ(data.size(), result.size());
 
     std::vector<double> expected = { 0.0203153, 0.14610067, 0.17646506, 0.23318766, 0.28846996, 0.39374123, 0.39893464, 0.21101479, 0.15298106, 0.09874884 };
     for (std::size_t i = 0; i < result.size(); i++) {
