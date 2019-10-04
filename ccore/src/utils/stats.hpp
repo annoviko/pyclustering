@@ -53,7 +53,7 @@ double mean(const TypeContainer & p_container) {
         result += static_cast<double>(value);
     }
 
-    return result / std::size(p_container);
+    return result / p_container.size();
 }
 
 
