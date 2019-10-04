@@ -74,7 +74,7 @@ double var(const TypeContainer & p_container, const double p_mean) {
         result += std::pow(value - p_mean, 2);
     }
 
-    result /= (std::size(p_container) - 1);
+    result /= (p_container.size() - 1);
     return result;
 }
 
@@ -141,7 +141,7 @@ std::vector<double> pdf(const TypeContainer & p_container) {
     double m = 1.0 / std::sqrt(2.0 * ccore::utils::math::pi);
 
     std::vector<double> result;
-    result.reserve(std::size(p_container));
+    result.reserve(p_container.size());
 
     for (auto & value : p_container) {
         result.push_back(m * std::exp(-0.5 * std::pow(value, 2)));
