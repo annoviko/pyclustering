@@ -579,5 +579,8 @@
     <ClInclude Include="interface\fcm_interface.h">
       <Filter>Source Files\interface</Filter>
     </ClInclude>
+    <ClInclude Include="utils\stats.hpp">
+      <Filter>Source Files\utils</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

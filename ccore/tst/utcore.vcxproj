@@ -307,6 +307,7 @@
     <ClCompile Include="utest-somsc.cpp" />
     <ClCompile Include="utest-interface-sync.cpp" />
     <ClCompile Include="utest-spinlock.cpp" />
+    <ClCompile Include="utest-stats.cpp" />
     <ClCompile Include="utest-sync.cpp" />
     <ClCompile Include="utest-syncnet.cpp" />
     <ClCompile Include="utest-syncpr.cpp" />
@@ -421,6 +422,7 @@
     <ClInclude Include="..\src\utils\math.hpp" />
     <ClInclude Include="..\src\utils\metric.hpp" />
     <ClInclude Include="..\src\utils\random.hpp" />
+    <ClInclude Include="..\src\utils\stats.hpp" />
     <ClInclude Include="answer.hpp" />
     <ClInclude Include="answer_reader.hpp" />
     <ClInclude Include="samples.hpp" />

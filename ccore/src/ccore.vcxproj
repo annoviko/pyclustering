@@ -204,6 +204,7 @@
     <ClInclude Include="utils\math.hpp" />
     <ClInclude Include="utils\metric.hpp" />
     <ClInclude Include="utils\random.hpp" />
+    <ClInclude Include="utils\stats.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{DBEBB335-D398-45F8-899A-503AFC64ACFE}</ProjectGuid>
