@@ -485,6 +485,18 @@
     <ClCompile Include="utest-stats.cpp">
       <Filter>Unit Tests</Filter>
     </ClCompile>
+    <ClCompile Include="utest-linalg.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\utils\linalg.cpp">
+      <Filter>Tested Code\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\cluster\gmeans.cpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\utils\stats.cpp">
+      <Filter>Tested Code\utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\container\adjacency.hpp">
@@ -822,6 +834,15 @@
     </ClInclude>
     <ClInclude Include="..\src\utils\stats.hpp">
       <Filter>Tested Code\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\utils\linalg.hpp">
+      <Filter>Tested Code\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cluster\gmeans.hpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cluster\gmeans_data.hpp">
+      <Filter>Tested Code\cluster</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

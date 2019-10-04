@@ -262,6 +262,15 @@
     <ClCompile Include="interface\fcm_interface.cpp">
       <Filter>Source Files\interface</Filter>
     </ClCompile>
+    <ClCompile Include="cluster\gmeans.cpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\linalg.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\stats.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cluster\agglomerative.hpp">
@@ -580,6 +589,15 @@
       <Filter>Source Files\interface</Filter>
     </ClInclude>
     <ClInclude Include="utils\stats.hpp">
+      <Filter>Source Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="cluster\gmeans.hpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="cluster\gmeans_data.hpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\linalg.hpp">
       <Filter>Source Files\utils</Filter>
     </ClInclude>
   </ItemGroup>

@@ -28,6 +28,7 @@
     <ClCompile Include="cluster\cure.cpp" />
     <ClCompile Include="cluster\dbscan.cpp" />
     <ClCompile Include="cluster\fcm.cpp" />
+    <ClCompile Include="cluster\gmeans.cpp" />
     <ClCompile Include="cluster\hsyncnet.cpp" />
     <ClCompile Include="cluster\kmeans.cpp" />
     <ClCompile Include="cluster\kmeans_data.cpp" />
@@ -94,9 +95,11 @@
     <ClCompile Include="parallel\task.cpp" />
     <ClCompile Include="parallel\thread_executor.cpp" />
     <ClCompile Include="parallel\thread_pool.cpp" />
+    <ClCompile Include="utils\linalg.cpp" />
     <ClCompile Include="utils\math.cpp" />
     <ClCompile Include="utils\metric.cpp" />
     <ClCompile Include="utils\random.cpp" />
+    <ClCompile Include="utils\stats.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cluster\agglomerative.hpp" />
@@ -116,6 +119,8 @@
     <ClInclude Include="cluster\elbow_data.hpp" />
     <ClInclude Include="cluster\fcm.hpp" />
     <ClInclude Include="cluster\fcm_data.hpp" />
+    <ClInclude Include="cluster\gmeans.hpp" />
+    <ClInclude Include="cluster\gmeans_data.hpp" />
     <ClInclude Include="cluster\hsyncnet.hpp" />
     <ClInclude Include="cluster\kmeans.hpp" />
     <ClInclude Include="cluster\kmeans_data.hpp" />
@@ -201,6 +206,7 @@
     <ClInclude Include="parallel\task.hpp" />
     <ClInclude Include="parallel\thread_executor.hpp" />
     <ClInclude Include="parallel\thread_pool.hpp" />
+    <ClInclude Include="utils\linalg.hpp" />
     <ClInclude Include="utils\math.hpp" />
     <ClInclude Include="utils\metric.hpp" />
     <ClInclude Include="utils\random.hpp" />

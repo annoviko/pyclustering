@@ -177,6 +177,7 @@
     <ClCompile Include="..\src\cluster\cure.cpp" />
     <ClCompile Include="..\src\cluster\dbscan.cpp" />
     <ClCompile Include="..\src\cluster\fcm.cpp" />
+    <ClCompile Include="..\src\cluster\gmeans.cpp" />
     <ClCompile Include="..\src\cluster\hsyncnet.cpp" />
     <ClCompile Include="..\src\cluster\kmeans.cpp" />
     <ClCompile Include="..\src\cluster\kmeans_data.cpp" />
@@ -241,9 +242,11 @@
     <ClCompile Include="..\src\parallel\task.cpp" />
     <ClCompile Include="..\src\parallel\thread_executor.cpp" />
     <ClCompile Include="..\src\parallel\thread_pool.cpp" />
+    <ClCompile Include="..\src\utils\linalg.cpp" />
     <ClCompile Include="..\src\utils\math.cpp" />
     <ClCompile Include="..\src\utils\metric.cpp" />
     <ClCompile Include="..\src\utils\random.cpp" />
+    <ClCompile Include="..\src\utils\stats.cpp" />
     <ClCompile Include="answer_reader.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="utest-clique.cpp" />
@@ -256,6 +259,7 @@
     <ClCompile Include="utest-interface-mbsas.cpp" />
     <ClCompile Include="utest-interface-silhouette.cpp" />
     <ClCompile Include="utest-interface-ttsas.cpp" />
+    <ClCompile Include="utest-linalg.cpp" />
     <ClCompile Include="utest-mbsas.cpp" />
     <ClCompile Include="samples.cpp" />
     <ClCompile Include="utenv_check.cpp" />
@@ -336,6 +340,8 @@
     <ClInclude Include="..\src\cluster\elbow_data.hpp" />
     <ClInclude Include="..\src\cluster\fcm.hpp" />
     <ClInclude Include="..\src\cluster\fcm_data.hpp" />
+    <ClInclude Include="..\src\cluster\gmeans.hpp" />
+    <ClInclude Include="..\src\cluster\gmeans_data.hpp" />
     <ClInclude Include="..\src\cluster\hsyncnet.hpp" />
     <ClInclude Include="..\src\cluster\kmeans.hpp" />
     <ClInclude Include="..\src\cluster\kmeans_data.hpp" />
@@ -419,6 +425,7 @@
     <ClInclude Include="..\src\parallel\task.hpp" />
     <ClInclude Include="..\src\parallel\thread_executor.hpp" />
     <ClInclude Include="..\src\parallel\thread_pool.hpp" />
+    <ClInclude Include="..\src\utils\linalg.hpp" />
     <ClInclude Include="..\src\utils\math.hpp" />
     <ClInclude Include="..\src\utils\metric.hpp" />
     <ClInclude Include="..\src\utils\random.hpp" />

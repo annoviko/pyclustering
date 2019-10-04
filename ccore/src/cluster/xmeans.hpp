@@ -43,9 +43,6 @@ enum class splitting_type {
 
 
 class xmeans : public cluster_algorithm {
-public:
-    const static std::size_t        DEFAULT_DATA_SIZE_PARALLEL_PROCESSING;
-
 private:
     const static double             DEFAULT_SPLIT_DIFFERENCE;
 

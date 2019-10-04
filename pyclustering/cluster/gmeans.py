@@ -106,7 +106,7 @@ class gmeans:
         <b>Keyword Args:</b><br>
             - tolerance (double): tolerance (double): Stop condition for each K-Means iteration: if maximum value of
                change of centers of clusters is less than tolerance than algorithm will stop processing.
-            - repeat (unit): How many times K-Means should be run to improve parameters (by default is 1).
+            - repeat (unit): How many times K-Means should be run to improve parameters (by default is 3).
                With larger 'repeat' values suggesting higher probability of finding global optimum.
 
         """

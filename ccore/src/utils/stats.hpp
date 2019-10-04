@@ -225,14 +225,7 @@ double anderson(const TypeContainer & p_data) {
  * @return  Calculates critical values.
  *
  */
-std::vector<double> critical_values(const std::size_t p_data_size) {
-    std::vector<double> result = { 0.576, 0.656, 0.787, 0.918, 1.092 };
-    for (auto & value : result) {
-        value /= (1.0 + 4.0 / p_data_size - 25.0 / p_data_size / p_data_size);
-    }
-
-    return result;
-}
+std::vector<double> critical_values(const std::size_t p_data_size);
 
 
 

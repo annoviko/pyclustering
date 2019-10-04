@@ -31,10 +31,10 @@ implementation is used, otherwise C/C++. Implementation can be chosen by **ccore
 
 .. code:: python
 
-    # As by default - C/C++ is used
+    # As by default - C/C++ part of the library is used
     xmeans_instance_1 = xmeans(data_points, start_centers, 20, ccore=True);
 
-    # The same - C/C++ is used by default
+    # The same - C/C++ part of the library is used by default
     xmeans_instance_2 = xmeans(data_points, start_centers, 20);
 
     # Switch off core - Python is used
@@ -108,6 +108,7 @@ Library Content
 - **EMA** (pyclustering.cluster.ema);
 - **Fuzzy C-Means** (pyclustering.cluster.fcm);
 - **GA (Genetic Algorithm)** (pyclustering.cluster.ga);
+- **G-Means** (pyclustering.cluster.gmeans);
 - **HSyncNet** (pyclustering.cluster.hsyncnet);
 - **K-Means** (pyclustering.cluster.kmeans);
 - **K-Means++** (pyclustering.cluster.center_initializer);

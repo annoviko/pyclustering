@@ -24,6 +24,7 @@
 """
 
 
+import numpy
 import unittest
 
 # Generate images without having a window appear.
@@ -32,7 +33,7 @@ matplotlib.use('Agg')
 
 from pyclustering.samples import answer_reader
 from pyclustering.cluster.gmeans import gmeans
-from pyclustering.utils import read_sample
+from pyclustering.utils import read_sample, distance_metric, type_metric
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES, SIMPLE_ANSWERS
 
@@ -66,6 +67,15 @@ class gmeans_unit_test(unittest.TestCase):
             expected_length_clusters = sorted(reader.get_cluster_lengths())
 
             clusters = gmeans_instance.get_clusters()
+            centers = gmeans_instance.get_centers()
+            wce = gmeans_instance.get_total_wce()
+
+            self.assertEqual(len(expected_length_clusters), len(centers))
+
+            if len(clusters) > 1:
+                self.assertGreater(wce, 0.0)
+            else:
+                self.assertGreaterEqual(wce, 0.0)
 
             unique_indexes = set()
             for cluster in clusters:
@@ -140,3 +150,36 @@ class gmeans_unit_test(unittest.TestCase):
 
     def test_incorrect_repeat(self):
         self.assertRaises(ValueError, gmeans, [[0], [1], [2]], 3, False, tolerance=1, repeat=0)
+
+    def test_predict_without_process(self):
+        self.assertEqual([], gmeans([[0], [1]]).predict([0]))
+
+
+    def template_predict(self, path, amount, points, ccore):
+        metric = distance_metric(type_metric.EUCLIDEAN)
+
+        sample = read_sample(path)
+        gmeans_instance = gmeans(sample, amount, ccore).process()
+        centers = gmeans_instance.get_centers()
+
+        closest_clusters = gmeans_instance.predict(points)
+
+        self.assertEqual(len(points), len(closest_clusters))
+
+        for i in range(len(points)):
+            cluster_index = closest_clusters[i]
+            distance = metric(centers[cluster_index], points[i])
+            for center_index in range(len(centers)):
+                if center_index != cluster_index:
+                    other_distance = metric(centers[center_index], points[i])
+                    self.assertLessEqual(distance, other_distance)
+
+    def test_predict_one_point(self):
+        self.template_predict(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 4, [[0.3, 0.2]], False)
+        self.template_predict(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 4, [[4.1, 1.1]], False)
+        self.template_predict(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 4, [[2.1, 1.9]], False)
+        self.template_predict(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 4, [[2.1, 4.1]], False)
+
+    def test_predict_two_points(self):
+        self.template_predict(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 4, [[0.3, 0.2], [2.1, 1.9]], False)
+        self.template_predict(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 4, [[2.1, 4.1], [2.1, 1.9]], False)
