@@ -24,14 +24,14 @@
 """
 
 
-import numpy
 import unittest
 
 # Generate images without having a window appear.
 import matplotlib
 matplotlib.use('Agg')
 
-from pyclustering.samples import answer_reader
+from pyclustering.cluster.tests.gmeans_templates import gmeans_test_template
+
 from pyclustering.cluster.gmeans import gmeans
 from pyclustering.utils import read_sample, distance_metric, type_metric
 
@@ -53,89 +53,42 @@ class gmeans_unit_test(unittest.TestCase):
         projection = testable_gmeans.get_data_projection(data, [1, 1])
         self.assertEqual([1.0, 2.0, 3.0], projection.tolist())
 
-    def template_clustering(self, sample_path, answer_path, amount, ccore):
-        attempts = 10
-
-        failures = ""
-
-        for _ in range(attempts):
-            data = read_sample(sample_path)
-
-            gmeans_instance = gmeans(data, amount, ccore).process()
-
-            reader = answer_reader(answer_path)
-            expected_length_clusters = sorted(reader.get_cluster_lengths())
-
-            clusters = gmeans_instance.get_clusters()
-            centers = gmeans_instance.get_centers()
-            wce = gmeans_instance.get_total_wce()
-
-            self.assertEqual(len(expected_length_clusters), len(centers))
-
-            if len(clusters) > 1:
-                self.assertGreater(wce, 0.0)
-            else:
-                self.assertGreaterEqual(wce, 0.0)
-
-            unique_indexes = set()
-            for cluster in clusters:
-                for index_point in cluster:
-                    unique_indexes.add(index_point)
-
-            if len(data) != len(unique_indexes):
-                failures += "1. %d != %d\n" % (len(data), len(unique_indexes))
-                continue
-
-            expected_total_length = sum(expected_length_clusters)
-            actual_total_length = sum([len(cluster) for cluster in clusters])
-            if expected_total_length != actual_total_length:
-                failures += "2. %d != %d\n" % (expected_total_length, actual_total_length)
-                continue
-
-            actual_length_clusters = sorted([len(cluster) for cluster in clusters])
-            if expected_length_clusters != actual_length_clusters:
-                failures += "3. %s != %s\n" % (str(expected_length_clusters), str(actual_length_clusters))
-                continue
-
-            return
-
-        self.fail("Expected result is not obtained during %d attempts: %s\n" % (attempts, failures))
 
     def test_clustering_sample_01(self):
-        self.template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, SIMPLE_ANSWERS.ANSWER_SIMPLE1, 1, False)
+        gmeans_test_template().clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, SIMPLE_ANSWERS.ANSWER_SIMPLE1, 1, False)
 
     def test_clustering_sample_02(self):
-        self.template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, SIMPLE_ANSWERS.ANSWER_SIMPLE2, 1, False)
+        gmeans_test_template().clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, SIMPLE_ANSWERS.ANSWER_SIMPLE2, 1, False)
 
     def test_clustering_sample_03(self):
-        self.template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, SIMPLE_ANSWERS.ANSWER_SIMPLE3, 1, False)
+        gmeans_test_template().clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, SIMPLE_ANSWERS.ANSWER_SIMPLE3, 1, False)
 
     def test_clustering_sample_05(self):
-        self.template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, SIMPLE_ANSWERS.ANSWER_SIMPLE5, 1, False)
+        gmeans_test_template().clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, SIMPLE_ANSWERS.ANSWER_SIMPLE5, 1, False)
 
     def test_clustering_sample_06(self):
-        self.template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE6, SIMPLE_ANSWERS.ANSWER_SIMPLE6, 1, False)
+        gmeans_test_template().clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE6, SIMPLE_ANSWERS.ANSWER_SIMPLE6, 1, False)
 
     def test_clustering_sample_07(self):
-        self.template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE7, SIMPLE_ANSWERS.ANSWER_SIMPLE7, 1, False)
+        gmeans_test_template().clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE7, SIMPLE_ANSWERS.ANSWER_SIMPLE7, 1, False)
 
     def test_clustering_sample_08(self):
-        self.template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE8, SIMPLE_ANSWERS.ANSWER_SIMPLE8, 1, False)
+        gmeans_test_template().clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE8, SIMPLE_ANSWERS.ANSWER_SIMPLE8, 1, False)
 
     def test_clustering_sample_09(self):
-        self.template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, SIMPLE_ANSWERS.ANSWER_SIMPLE9, 1, False)
+        gmeans_test_template().clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, SIMPLE_ANSWERS.ANSWER_SIMPLE9, 1, False)
 
     def test_clustering_sample_10(self):
-        self.template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE10, SIMPLE_ANSWERS.ANSWER_SIMPLE10, 1, False)
+        gmeans_test_template().clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE10, SIMPLE_ANSWERS.ANSWER_SIMPLE10, 1, False)
 
     def test_clustering_sample_11(self):
-        self.template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, SIMPLE_ANSWERS.ANSWER_SIMPLE11, 1, False)
+        gmeans_test_template().clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, SIMPLE_ANSWERS.ANSWER_SIMPLE11, 1, False)
 
     def test_clustering_sample_12(self):
-        self.template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, SIMPLE_ANSWERS.ANSWER_SIMPLE12, 1, False)
+        gmeans_test_template().clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, SIMPLE_ANSWERS.ANSWER_SIMPLE12, 1, False)
 
     def test_clustering_sample_13(self):
-        self.template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE13, SIMPLE_ANSWERS.ANSWER_SIMPLE13, 1, False)
+        gmeans_test_template().clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE13, SIMPLE_ANSWERS.ANSWER_SIMPLE13, 1, False)
 
 
     def test_incorrect_data(self):

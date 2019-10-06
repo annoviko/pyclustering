@@ -46,8 +46,6 @@ class gmeans_data : public cluster_data {
 private:
     dataset       m_centers   = { };
 
-    bool          m_observed  = false;
-
     double        m_wce       = 0.0;
 
 public:

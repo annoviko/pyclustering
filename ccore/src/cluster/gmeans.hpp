@@ -53,12 +53,10 @@ class gmeans : public cluster_algorithm {
 private:
     using projection = std::vector<double>;
 
-private:
+public:
     const static double             DEFAULT_TOLERANCE;
 
     const static std::size_t        DEFAULT_REPEAT;
-
-    const static std::size_t        DEFAULT_ITERMAX;
 
     const static std::size_t        DEFAULT_CANDIDATES;
 

@@ -63,6 +63,7 @@
     <ClCompile Include="interface\dbscan_interface.cpp" />
     <ClCompile Include="interface\elbow_interface.cpp" />
     <ClCompile Include="interface\fcm_interface.cpp" />
+    <ClCompile Include="interface\gmeans_interface.cpp" />
     <ClCompile Include="interface\hhn_interface.cpp" />
     <ClCompile Include="interface\hsyncnet_interface.cpp" />
     <ClCompile Include="interface\kmeans_interface.cpp" />
@@ -172,6 +173,7 @@
     <ClInclude Include="interface\dbscan_interface.h" />
     <ClInclude Include="interface\elbow_interface.h" />
     <ClInclude Include="interface\fcm_interface.h" />
+    <ClInclude Include="interface\gmeans_interface.h" />
     <ClInclude Include="interface\hhn_interface.h" />
     <ClInclude Include="interface\hsyncnet_interface.h" />
     <ClInclude Include="interface\kmeans_interface.h" />

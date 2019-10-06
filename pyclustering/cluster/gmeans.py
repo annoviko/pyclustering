@@ -28,6 +28,9 @@
 import numpy
 import scipy.stats
 
+from pyclustering.core.gmeans_wrapper import gmeans as gmeans_wrapper
+from pyclustering.core.wrapper import ccore_library
+
 from pyclustering.cluster.center_initializer import kmeans_plusplus_initializer
 from pyclustering.cluster.kmeans import kmeans
 from pyclustering.utils import distance_metric, type_metric
@@ -116,9 +119,13 @@ class gmeans:
         self.__clusters = []
         self.__centers = []
         self.__total_wce = 0.0
+        self.__ccore = ccore
 
         self.__tolerance = kwargs.get('tolerance', 0.025)
         self.__repeat = kwargs.get('repeat', 3)
+
+        if self.__ccore is True:
+            self.__ccore = ccore_library.workable()
 
         self._verify_arguments()
 
@@ -131,6 +138,26 @@ class gmeans:
 
         @see get_clusters()
         @see get_centers()
+
+        """
+        if self.__ccore is True:
+            return self._process_by_ccore()
+
+        return self._process_by_python()
+
+
+    def _process_by_ccore(self):
+        """!
+        @brief Performs cluster analysis using CCORE (C/C++ part of pyclustering library).
+
+        """
+        self.__clusters, self.__centers, self.__total_wce = gmeans_wrapper(self.__data, self.__k_init, self.__tolerance, self.__repeat)
+        return self
+
+
+    def _process_by_python(self):
+        """!
+        @brief Performs cluster analysis using Python.
 
         """
         self.__clusters, self.__centers, _ = self._search_optimal_parameters(self.__data, self.__k_init)

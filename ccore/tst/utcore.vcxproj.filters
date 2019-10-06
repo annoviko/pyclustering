@@ -497,6 +497,15 @@
     <ClCompile Include="..\src\utils\stats.cpp">
       <Filter>Tested Code\utils</Filter>
     </ClCompile>
+    <ClCompile Include="utest-gmeans.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="utest-interface-gmeans.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\interface\gmeans_interface.cpp">
+      <Filter>Tested Code\interface</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\container\adjacency.hpp">
@@ -843,6 +852,9 @@
     </ClInclude>
     <ClInclude Include="..\src\cluster\gmeans_data.hpp">
       <Filter>Tested Code\cluster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\interface\gmeans_interface.h">
+      <Filter>Tested Code\interface</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

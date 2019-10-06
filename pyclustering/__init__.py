@@ -50,6 +50,7 @@ Cluster analysis algorithms and methods (module pyclustering.cluster):
 - EMA (pyclustering.cluster.ema);
 - Fuzzy C-Means (pyclustering.cluster.fcm);
 - GA (genetic algorithm pyclustering.cluster.ga);
+- G-Means (pyclustering.cluster.gmeans);
 - HSyncNet (bio-inspired algorithm pyclustering.cluster.hsyncnet);
 - K-Means (pyclustering.cluster.kmeans);
 - K-Means++ (pyclustering.cluster.center_initializer);

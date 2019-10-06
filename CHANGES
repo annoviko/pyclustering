@@ -8,7 +8,7 @@ GENERAL CHANGES:
 - Implemented functionality to perform Anderson-Darling test for Gaussian distribution (ccore.stats).
   See: https://github.com/annoviko/pyclustering/issues/550
 
-- Implemented new clustering algorithm G-Means (pyclustering.cluster.gmeans).
+- Implemented new clustering algorithm G-Means (pyclustering.cluster.gmeans, ccore.clst.gmeans).
   See: https://github.com/annoviko/pyclustering/issues/506
 
 - Introduced parameter `repeat` to improve parameters in X-Means algorithm (pyclustering.cluster.xmeans, ccore.clst.xmeans).

@@ -35,7 +35,7 @@ from pyclustering.utils import read_sample
 def template_clustering(sample_path, k_init=1, ccore=True, **kwargs):
     sample = read_sample(sample_path)
 
-    gmeans_instance = gmeans(sample, k_init, repeat=5).process()
+    gmeans_instance = gmeans(sample, k_init, ccore, repeat=5).process()
     clusters = gmeans_instance.get_clusters()
     centers = gmeans_instance.get_centers()
 

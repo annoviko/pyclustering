@@ -73,7 +73,7 @@ void gmeans::process(const dataset & p_data, cluster_data & p_result) {
         std::size_t current_amount_clusters = m_ptr_result->clusters().size();
         statistical_optimization();
 
-        if (current_amount_clusters == m_ptr_result->clusters().size()) {
+        if (current_amount_clusters == m_ptr_result->centers().size()) {
             break;
         }
 
@@ -109,6 +109,9 @@ void gmeans::search_optimal_parameters(const dataset & p_data, const std::size_t
             break;      /* No need to rerun clustering for one initial center. */
         }
     }
+
+    p_clusters = std::move(best_clusters);
+    p_centers = std::move(best_centers);
 }
 
 
@@ -154,7 +157,7 @@ void gmeans::split_and_search_optimal(const cluster & p_cluster, dataset & p_cen
     cluster_sequence new_clusters;
     dataset new_centers;
 
-    search_optimal_parameters(*m_ptr_data, m_amount, new_clusters, new_centers);
+    search_optimal_parameters(region_points, 2, new_clusters, new_centers);
     if (new_centers.size() > 1) {
         if (!is_null_hypothesis(region_points, new_centers[0], new_centers[1])) {
             p_centers = std::move(new_centers);
