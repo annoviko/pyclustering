@@ -92,7 +92,9 @@ class birch:
         self.__entry_size_limit = entry_size_limit
         self.__diameter_multiplier = diameter_multiplier
         self.__ccore = ccore
-        
+
+        self.__verify_arguments()
+
         self.__features = None
         self.__tree = cftree(branching_factor, max_node_entries, initial_diameter, type_measurement)
         

@@ -562,7 +562,7 @@ class non_leaf_node(cfnode):
                     farthest_node1 = candidate1
                     farthest_node2 = candidate2
         
-        return [farthest_node1, farthest_node2]
+                    return [farthest_node1, farthest_node2]
     
     
     def get_nearest_successors(self, type_measurement):
