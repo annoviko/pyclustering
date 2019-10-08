@@ -30,7 +30,7 @@ using namespace ccore::nnet;
 
 
 void * syncnet_create_network(const pyclustering_package * const p_sample, const double p_connectivity_radius, const bool p_enable_conn_weight, const unsigned int p_initial_phases) {
-    dataset input_data;
+    ccore::dataset input_data;
     p_sample->extract(input_data);
 
     return new syncnet(&input_data, p_connectivity_radius, p_enable_conn_weight, (initial_type) p_initial_phases);

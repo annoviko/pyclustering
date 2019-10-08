@@ -30,7 +30,7 @@ pyclustering_package * gmeans_algorithm(const pyclustering_package * const p_sam
                                         const double p_tolerance,
                                         const std::size_t p_repeat)
 {
-    dataset data;
+    ccore::dataset data;
     p_sample->extract(data);
 
     ccore::clst::gmeans algorithm(p_amount, p_tolerance, p_repeat);

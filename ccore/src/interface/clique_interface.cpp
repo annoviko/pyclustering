@@ -26,7 +26,7 @@
 
 
 pyclustering_package * clique_algorithm(const pyclustering_package * const p_sample, const std::size_t p_intervals, const std::size_t p_threshold) {
-    dataset input_dataset;
+    ccore::dataset input_dataset;
     p_sample->extract(input_dataset);
 
     ccore::clst::clique solver(p_intervals, p_threshold);

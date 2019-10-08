@@ -37,13 +37,13 @@ pyclustering_package * kmeans_algorithm(const pyclustering_package * const p_sam
                                         const bool p_observe,
                                         const void * const p_metric)
 {
-    dataset data, centers;
+    ccore::dataset data, centers;
 
     p_sample->extract(data);
     p_initial_centers->extract(centers);
 
-    distance_metric<point> * metric = ((distance_metric<point> *) p_metric);
-    distance_metric<point> default_metric = distance_metric_factory<point>::euclidean_square();
+    distance_metric<ccore::point> * metric = ((distance_metric<ccore::point> *) p_metric);
+    distance_metric<ccore::point> default_metric = distance_metric_factory<ccore::point>::euclidean_square();
 
     if (!metric)
         metric = &default_metric;

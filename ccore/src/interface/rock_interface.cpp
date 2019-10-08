@@ -26,7 +26,7 @@
 
 
 pyclustering_package * rock_algorithm(const pyclustering_package * const p_sample, const double p_radius, const size_t p_number_clusters, const double p_threshold) {
-    dataset input_dataset;
+    ccore::dataset input_dataset;
     p_sample->extract(input_dataset);
 
     ccore::clst::rock solver(p_radius, p_number_clusters, p_threshold);

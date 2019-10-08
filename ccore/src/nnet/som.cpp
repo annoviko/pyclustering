@@ -536,11 +536,11 @@ std::ostream & operator<<(std::ostream & p_stream, const som & p_network) {
     p_stream << p_network.m_rows << "\n";
     p_stream << p_network.m_cols << "\n";
     p_stream << (unsigned) p_network.m_conn_type << "\n";
-    p_stream << std::to_string(p_network.m_weights) << "\n";
-    p_stream << std::to_string(p_network.m_awards) << "\n";
-    p_stream << std::to_string(p_network.m_location) << "\n";
-    p_stream << std::to_string(p_network.m_capture_objects) << "\n";
-    p_stream << std::to_string(p_network.m_neighbors) << "\n";
+    p_stream << ccore::to_string(p_network.m_weights) << "\n";
+    p_stream << ccore::to_string(p_network.m_awards) << "\n";
+    p_stream << ccore::to_string(p_network.m_location) << "\n";
+    p_stream << ccore::to_string(p_network.m_capture_objects) << "\n";
+    p_stream << ccore::to_string(p_network.m_neighbors) << "\n";
 
     return p_stream;
 }

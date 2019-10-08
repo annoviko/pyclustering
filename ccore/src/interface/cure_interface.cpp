@@ -26,7 +26,7 @@
 
 
 void * cure_algorithm(const pyclustering_package * const sample, const size_t number_clusters, const size_t number_repr_points, const double compression) {
-    dataset input_dataset;
+    ccore::dataset input_dataset;
     sample->extract(input_dataset);
 
     ccore::clst::cure solver(number_clusters, number_repr_points, compression);

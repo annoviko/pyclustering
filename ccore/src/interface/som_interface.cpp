@@ -37,7 +37,7 @@ void som_destroy(const void * pointer) {
 
 
 void som_load(const void * p_pointer, const pyclustering_package * p_weights, const pyclustering_package * p_awards, const pyclustering_package * p_captured_objects) {
-    dataset weights;
+    ccore::dataset weights;
     p_weights->extract(weights);
 
     som_award_sequence awards = { };
@@ -55,7 +55,7 @@ void som_load(const void * p_pointer, const pyclustering_package * p_weights, co
 
 
 size_t som_train(const void * pointer, const pyclustering_package * const sample, const size_t epochs, const bool autostop) {
-    dataset input_dataset;
+    ccore::dataset input_dataset;
     sample->extract(input_dataset);
 
     size_t result = ((som *) pointer)->train(input_dataset, epochs, autostop);
@@ -65,7 +65,7 @@ size_t som_train(const void * pointer, const pyclustering_package * const sample
 
 
 size_t som_simulate(const void * pointer, const pyclustering_package * const p_pattern) {
-    pattern input_pattern;
+    ccore::pattern input_pattern;
     p_pattern->extract(input_pattern);
 
     return ((som *) pointer)->simulate(input_pattern);
@@ -83,7 +83,7 @@ size_t som_get_size(const void * pointer) {
 
 
 pyclustering_package * som_get_weights(const void * pointer) {
-    const dataset & weights = ((som *) pointer)->get_weights();
+    const ccore::dataset & weights = ((som *) pointer)->get_weights();
     pyclustering_package * package = create_package(&weights);
 
     return package;

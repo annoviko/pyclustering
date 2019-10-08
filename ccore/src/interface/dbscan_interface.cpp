@@ -30,7 +30,7 @@ pyclustering_package * dbscan_algorithm(const pyclustering_package * const sampl
                                         const size_t minumum_neighbors,
                                         const size_t p_data_type)
 {
-    dataset input_dataset;
+    ccore::dataset input_dataset;
     sample->extract(input_dataset);
 
     ccore::clst::dbscan solver(radius, minumum_neighbors);

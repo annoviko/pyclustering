@@ -32,7 +32,7 @@ pyclustering_package * optics_algorithm(const pyclustering_package * const p_sam
                                         const size_t p_amount_clusters,
                                         const size_t p_data_type)
 {
-    dataset input_dataset;
+    ccore::dataset input_dataset;
     p_sample->extract(input_dataset);
 
     ccore::clst::optics solver(p_radius, p_minumum_neighbors, p_amount_clusters);

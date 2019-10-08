@@ -62,7 +62,7 @@ pyclustering_package * elbow_method(const pyclustering_package * const p_sample,
                                     const std::size_t p_kmin,
                                     const std::size_t p_kmax)
 {
-    dataset input_dataset;
+    ccore::dataset input_dataset;
     p_sample->extract(input_dataset);
 
     ccore::clst::elbow_data result;

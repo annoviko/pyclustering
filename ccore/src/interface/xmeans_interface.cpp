@@ -32,7 +32,7 @@ pyclustering_package * xmeans_algorithm(const pyclustering_package * const p_sam
                                         const unsigned int p_criterion,
                                         const std::size_t p_repeat)
 {
-    dataset data, centers;
+    ccore::dataset data, centers;
     p_sample->extract(data);
     p_centers->extract(centers);
 

@@ -28,6 +28,7 @@
 #include "utils/metric.hpp"
 
 
+using namespace ccore;
 using namespace ccore::utils::metric;
 
 

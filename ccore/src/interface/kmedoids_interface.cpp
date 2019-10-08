@@ -40,15 +40,15 @@ pyclustering_package * kmedoids_algorithm(const pyclustering_package * const p_s
     ccore::clst::medoid_sequence medoids;
     p_package_medoids->extract(medoids);
 
-    distance_metric<point> * metric = ((distance_metric<point> *) p_metric);
-    distance_metric<point> default_metric = distance_metric_factory<point>::euclidean_square();
+    distance_metric<ccore::point> * metric = ((distance_metric<ccore::point> *) p_metric);
+    distance_metric<ccore::point> default_metric = distance_metric_factory<ccore::point>::euclidean_square();
 
     if (!metric)
         metric = &default_metric;
 
     ccore::clst::kmedoids algorithm(medoids, p_tolerance, p_itermax, *metric);
 
-    dataset input_dataset;
+    ccore::dataset input_dataset;
     p_sample->extract(input_dataset);
 
     ccore::clst::kmedoids_data output_result;

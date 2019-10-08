@@ -46,14 +46,14 @@ pyclustering_package * silhouette_algorithm(
     const void * const p_metric,
     const std::size_t p_data_type)
 {
-    dataset data;
+    ccore::dataset data;
     p_sample->extract(data);
 
     ccore::clst::cluster_sequence clusters;
     p_clusters->extract(clusters);
 
-    distance_metric<point> * metric = ((distance_metric<point> *) p_metric);
-    distance_metric<point> default_metric = distance_metric_factory<point>::euclidean_square();
+    distance_metric<ccore::point> * metric = ((distance_metric<ccore::point> *) p_metric);
+    distance_metric<ccore::point> default_metric = distance_metric_factory<ccore::point>::euclidean_square();
 
     if (!metric)
         metric = &default_metric;
@@ -71,7 +71,7 @@ pyclustering_package * silhouette_ksearch_algorithm(
     const std::size_t p_kmax,
     const std::size_t p_algorithm)
 {
-    dataset data;
+    ccore::dataset data;
     p_sample->extract(data);
 
     auto allocator = get_silhouette_ksearch_allocator(static_cast<silhouette_ksearch_type>(p_algorithm));

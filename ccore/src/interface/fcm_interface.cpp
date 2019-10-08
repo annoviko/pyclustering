@@ -32,7 +32,7 @@ pyclustering_package * fcm_algorithm(const pyclustering_package * const p_sample
                                      const double p_tolerance,
                                      const std::size_t p_itermax)
 {
-    dataset data, centers;
+    ccore::dataset data, centers;
 
     p_sample->extract(data);
     p_centers->extract(centers);

@@ -37,15 +37,15 @@ pyclustering_package * mbsas_algorithm(const pyclustering_package * const p_samp
                                        const double p_threshold,
                                        const void * const p_metric)
 {
-    distance_metric<point> * metric = ((distance_metric<point> *) p_metric);
-    distance_metric<point> default_metric = distance_metric_factory<point>::euclidean_square();
+    distance_metric<ccore::point> * metric = ((distance_metric<ccore::point> *) p_metric);
+    distance_metric<ccore::point> default_metric = distance_metric_factory<ccore::point>::euclidean_square();
 
     if (!metric)
         metric = &default_metric;
 
     ccore::clst::mbsas algorithm(p_amount, p_threshold, *metric);
 
-    dataset input_dataset;
+    ccore::dataset input_dataset;
     p_sample->extract(input_dataset);
 
     ccore::clst::mbsas_data output_result;
