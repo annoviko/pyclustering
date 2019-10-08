@@ -190,5 +190,14 @@ class KmediansUnitTest(unittest.TestCase):
         KmediansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [[3.5, 4.8], [6.9, 7], [7.5, 0.5]], [10, 5, 8], False, itermax=10)
 
 
-if __name__ == "__main__":
-    unittest.main()
+    def test_incorrect_data(self):
+        self.assertRaises(ValueError, kmedians, [], [[1]])
+
+    def test_incorrect_centers(self):
+        self.assertRaises(ValueError, kmedians, [[0], [1], [2]], [])
+
+    def test_incorrect_tolerance(self):
+        self.assertRaises(ValueError, kmedians, [[0], [1], [2]], [[1]], -1.0)
+
+    def test_incorrect_itermax(self):
+        self.assertRaises(ValueError, kmedians, [[0], [1], [2]], [[1]], itermax=-5)

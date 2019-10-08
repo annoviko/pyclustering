@@ -31,6 +31,7 @@ import matplotlib
 matplotlib.use('Agg')
 
 from pyclustering.cluster.center_initializer import random_center_initializer
+from pyclustering.cluster.elbow import elbow
 
 from pyclustering.cluster.tests.elbow_template import elbow_test_template
 
@@ -78,5 +79,14 @@ class elbow_unit_test(unittest.TestCase):
         elbow_test_template.calculate_elbow(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, SIMPLE_ANSWERS.ANSWER_SIMPLE11, 1, 10, False)
 
 
-if __name__ == "__main__":
-    unittest.main()
+    def test_incorrect_data(self):
+        self.assertRaises(ValueError, elbow, [], 1, 5)
+
+    def test_incorrect_kmin(self):
+        self.assertRaises(ValueError, elbow, [[0], [1], [2]], 0, 2)
+
+    def test_incorrect_difference(self):
+        self.assertRaises(ValueError, elbow, [[0], [1], [2]], 1, 2)
+
+    def test_incorrect_kmax(self):
+        self.assertRaises(ValueError, elbow, [[0], [1], [2]], 1, 10)

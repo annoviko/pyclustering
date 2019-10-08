@@ -72,12 +72,12 @@ class kmedians:
     
     """
     
-    def __init__(self, data, initial_centers, tolerance=0.001, ccore=True, **kwargs):
+    def __init__(self, data, initial_medians, tolerance=0.001, ccore=True, **kwargs):
         """!
         @brief Constructor of clustering algorithm K-Medians.
         
         @param[in] data (list): Input data that is presented as list of points (objects), each point should be represented by list or tuple.
-        @param[in] initial_centers (list): Initial coordinates of medians of clusters that are represented by list: [center1, center2, ...].
+        @param[in] initial_medians (list): Initial coordinates of medians of clusters that are represented by list: [center1, center2, ...].
         @param[in] tolerance (double): Stop condition: if maximum value of change of centers of clusters is less than tolerance than algorithm will stop processing
         @param[in] ccore (bool): Defines should be CCORE library (C++ pyclustering library) used instead of Python code or not.
         @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'metric', 'itermax').
@@ -89,7 +89,7 @@ class kmedians:
         """
         self.__pointer_data = numpy.array(data)
         self.__clusters = []
-        self.__medians = numpy.array(initial_centers)
+        self.__medians = numpy.array(initial_medians)
         self.__tolerance = tolerance
         self.__total_wce = 0
 
@@ -101,6 +101,8 @@ class kmedians:
         self.__ccore = ccore and self.__metric.get_type() != type_metric.USER_DEFINED
         if self.__ccore:
             self.__ccore = ccore_library.workable()
+
+        self.__verify_arguments()
 
 
     def process(self):
@@ -330,3 +332,23 @@ class kmedians:
                     medians[index][index_dimension] = self.__pointer_data[index_median][index_dimension]
              
         return medians
+
+
+    def __verify_arguments(self):
+        """!
+        @brief Verify input parameters for the algorithm and throw exception in case of incorrectness.
+
+        """
+        if len(self.__pointer_data) == 0:
+            raise ValueError("Input data is empty (size: '%d')." % len(self.__pointer_data))
+
+        if len(self.__medians) == 0:
+            raise ValueError("Initial medians are empty (size: '%d')." % len(self.__pointer_data))
+
+        if self.__tolerance < 0:
+            raise ValueError("Tolerance (current value: '%d') should be greater or equal to 0." %
+                             self.__tolerance)
+
+        if self.__itermax < 0:
+            raise ValueError("Maximum iterations (current value: '%d') should be greater or equal to 0." %
+                             self.__tolerance)

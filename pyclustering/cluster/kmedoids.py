@@ -137,7 +137,7 @@ class kmedoids:
         if self.__ccore:
             self.__ccore = ccore_library.workable()
 
-        #self.__verify_instance()
+        self.__verify_arguments()
 
 
     def process(self):
@@ -257,8 +257,24 @@ class kmedoids:
         return type_encoding.CLUSTER_INDEX_LIST_SEPARATION
 
 
-    def __verify_instance(self):
-        pass
+    def __verify_arguments(self):
+        """!
+        @brief Verify input parameters for the algorithm and throw exception in case of incorrectness.
+
+        """
+        if len(self.__pointer_data) == 0:
+            raise ValueError("Input data is empty (size: '%d')." % len(self.__pointer_data))
+
+        if len(self.__medoid_indexes) == 0:
+            raise ValueError("Initial medoids are empty (size: '%d')." % len(self.__pointer_data))
+
+        if self.__tolerance < 0:
+            raise ValueError("Tolerance (current value: '%d') should be greater or equal to 0." %
+                             self.__tolerance)
+
+        if self.__itermax < 0:
+            raise ValueError("Maximum iterations (current value: '%d') should be greater or equal to 0." %
+                             self.__tolerance)
 
 
     def __create_distance_calculator(self):

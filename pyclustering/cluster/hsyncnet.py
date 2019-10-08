@@ -67,7 +67,8 @@ class hsyncnet(syncnet):
     @endcode
     """
     
-    def __init__(self, source_data, number_clusters, osc_initial_phases = initial_type.RANDOM_GAUSSIAN, initial_neighbors = 3, increase_persent = 0.15, ccore = True):
+    def __init__(self, source_data, number_clusters, osc_initial_phases=initial_type.RANDOM_GAUSSIAN,
+                 initial_neighbors=3, increase_persent=0.15, ccore=True):
         """!
         @brief Costructor of the oscillatory network hSyncNet for cluster analysis.
 
@@ -84,8 +85,8 @@ class hsyncnet(syncnet):
         
         if initial_neighbors >= len(source_data):
             initial_neighbors = len(source_data) - 1
-        
-        if ( (ccore is True) and ccore_library.workable() ):
+
+        if (ccore is True) and ccore_library.workable():
             self.__ccore_network_pointer = wrapper.hsyncnet_create_network(source_data, number_clusters, osc_initial_phases, initial_neighbors, increase_persent)
         else: 
             super().__init__(source_data, 0, initial_phases=osc_initial_phases, ccore=False)

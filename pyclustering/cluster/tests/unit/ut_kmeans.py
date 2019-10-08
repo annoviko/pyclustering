@@ -283,5 +283,14 @@ class KmeansUnitTest(unittest.TestCase):
         KmeansTestTemplates.templateAnimateClusteringResultNoFailure(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, [[1.0, 0.6, 0.8], [4.1, 4.2, 4.3]], False)
 
 
-if __name__ == "__main__":
-    unittest.main()
+    def test_incorrect_data(self):
+        self.assertRaises(ValueError, kmeans, [], [[1]])
+
+    def test_incorrect_centers(self):
+        self.assertRaises(ValueError, kmeans, [[0], [1], [2]], [])
+
+    def test_incorrect_tolerance(self):
+        self.assertRaises(ValueError, kmeans, [[0], [1], [2]], [[1]], -1.0)
+
+    def test_incorrect_itermax(self):
+        self.assertRaises(ValueError, kmeans, [[0], [1], [2]], [[1]], itermax=-5)

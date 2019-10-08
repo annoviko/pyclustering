@@ -105,12 +105,6 @@ class elbow:
             - initializer (callable): Center initializer that is used by K-Means algorithm (by default K-Means++).
 
         """
-        if kmax - kmin < 3:
-            raise ValueError("Amount of K (" + str(kmax - kmin) + ") is too small for analysis. "
-                             "It is require to have at least three K to build elbow.")
-
-        if len(data) < kmax:
-            raise ValueError("K max value '%d' is greater than amount of points in data '%d'." % (kmax, len(data)))
 
         self.__initializer = kwargs.get('initializer', kmeans_plusplus_initializer)
 
@@ -128,6 +122,8 @@ class elbow:
         self.__wce = []
         self.__elbows = []
         self.__kvalue = -1
+
+        self.__verify_arguments()
 
 
     def process(self):
@@ -223,3 +219,23 @@ class elbow:
         """
         optimal_elbow_value = max(self.__elbows)
         self.__kvalue = self.__elbows.index(optimal_elbow_value) + 1 + self.__kmin
+
+
+    def __verify_arguments(self):
+        """!
+        @brief Verify input parameters for the algorithm and throw exception in case of incorrectness.
+
+        """
+        if len(self.__data) == 0:
+            raise ValueError("Input data is empty (size: '%d')." % len(self.__data))
+
+        if self.__kmin < 1:
+            raise ValueError("K min value (current value '%d') should be greater or equal to 1." % self.__kmin)
+
+        if self.__kmax - self.__kmin < 3:
+            raise ValueError("Amount of K (" + str(self.__kmax - self.__kmin) + ") is too small for analysis. "
+                             "It is require to have at least three K to build elbow.")
+
+        if len(self.__data) < self.__kmax:
+            raise ValueError("K max value '%d' is greater than amount of points in data '%d'." %
+                             (self.__kmax, len(self.__data)))

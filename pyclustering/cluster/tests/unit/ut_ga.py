@@ -281,5 +281,8 @@ class GeneticAlgorithmClusteringUnitTest(unittest.TestCase):
         assert None is ga_instance.get_observer()
 
 
-if __name__ == "__main__":
-    unittest.main()
+    def test_incorrect_data(self):
+        self.assertRaises(ValueError, genetic_algorithm, [], 1, 2, 2)
+
+    def test_incorrect_amount_clusters(self):
+        self.assertRaises(ValueError, genetic_algorithm, [[0], [1], [2]], 0, 2, 2)

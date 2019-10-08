@@ -64,7 +64,3 @@ class HsyncnetUnitTest(unittest.TestCase):
 
     def testDynamicLengthWithoutCollecting(self):
         HsyncnetTestTemplates.templateDynamicLength(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, None, 5, 0.3, False, False);
-
-
-if __name__ == "__main__":
-    unittest.main();

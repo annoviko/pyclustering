@@ -30,6 +30,7 @@ import unittest
 import matplotlib
 matplotlib.use('Agg')
 
+from pyclustering.cluster.kmedoids import kmedoids
 from pyclustering.cluster.tests.kmedoids_templates import kmedoids_test_template
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES
@@ -276,5 +277,14 @@ class KmedoidsUnitTest(unittest.TestCase):
         kmedoids_test_template.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [3, 12, 20], [10, 5, 8], False, itermax=10)
 
 
-if __name__ == "__main__":
-    unittest.main()
+    def test_incorrect_data(self):
+        self.assertRaises(ValueError, kmedoids, [], [1])
+
+    def test_incorrect_centers(self):
+        self.assertRaises(ValueError, kmedoids, [[0], [1], [2]], [])
+
+    def test_incorrect_tolerance(self):
+        self.assertRaises(ValueError, kmedoids, [[0], [1], [2]], [1], -1.0)
+
+    def test_incorrect_itermax(self):
+        self.assertRaises(ValueError, kmedoids, [[0], [1], [2]], [1], itermax=-5)

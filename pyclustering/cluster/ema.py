@@ -477,7 +477,7 @@ class ema:
     @see ema_observer
     
     """
-    def __init__(self, data, amount_clusters, means = None, variances = None, observer = None, tolerance = 0.00001, iterations = 100):
+    def __init__(self, data, amount_clusters, means=None, variances=None, observer=None, tolerance=0.00001, iterations=100):
         """!
         @brief Initializes Expectation-Maximization algorithm for cluster analysis.
         
@@ -504,7 +504,9 @@ class ema:
         
         self.__means = means
         self.__variances = variances
-        
+
+        self.__verify_arguments()
+
         if (means is None) or (variances is None):
             self.__means, self.__variances = ema_initializer(data, amount_clusters).initialize(ema_init_type.KMEANS_INITIALIZATION)
             
@@ -734,3 +736,16 @@ class ema:
 
         for index_cluster in range(len(self.__clusters)):
             self.__rc[index_cluster][index_point] *= normalization
+
+
+    def __verify_arguments(self):
+        """!
+        @brief Verify input parameters for the algorithm and throw exception in case of incorrectness.
+
+        """
+        if len(self.__data) == 0:
+            raise ValueError("Input data is empty (size: '%d')." % len(self.__data))
+
+        if self.__amount_clusters < 1:
+            raise ValueError("Amount of clusters (current value '%d') should be greater or equal to 1." %
+                             self.__amount_clusters)

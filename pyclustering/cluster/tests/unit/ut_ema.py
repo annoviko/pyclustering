@@ -23,16 +23,16 @@
 
 """
 
-import unittest;
+import unittest
 
 # Generate images without having a window appear.
-import matplotlib;
-matplotlib.use('Agg');
+import matplotlib
+matplotlib.use('Agg')
 
-from pyclustering.cluster.ema import ema, ema_observer, ema_initializer, ema_init_type, ema_visualizer;
-from pyclustering.utils import read_sample;
+from pyclustering.cluster.ema import ema, ema_observer, ema_initializer, ema_init_type, ema_visualizer
+from pyclustering.utils import read_sample
 
-from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES, FAMOUS_SAMPLES;
+from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES, FAMOUS_SAMPLES
 
 
 class EmaUnitTest(unittest.TestCase):
@@ -204,5 +204,8 @@ class EmaUnitTest(unittest.TestCase):
         ema_visualizer.animate_cluster_allocation(sample, observer_instance)
 
 
-if __name__ == "__main__":
-    unittest.main()
+    def test_incorrect_data(self):
+        self.assertRaises(ValueError, ema, [], 2)
+
+    def test_incorrect_amount_clusters(self):
+        self.assertRaises(ValueError, ema, [[0], [1], [2]], 0)

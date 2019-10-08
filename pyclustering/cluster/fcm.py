@@ -137,6 +137,8 @@ class fcm:
         if self.__ccore is True:
             self.__ccore = ccore_library.workable()
 
+        self.__verify_arguments()
+
 
     def process(self):
         """!
@@ -295,3 +297,15 @@ class fcm:
 
         for i in range(len(belongs)):
             self.__clusters[belongs[i]].append(i)
+
+
+    def __verify_arguments(self):
+        """!
+        @brief Verify input parameters for the algorithm and throw exception in case of incorrectness.
+
+        """
+        if len(self.__data) == 0:
+            raise ValueError("Input data is empty (size: '%d')." % len(self.__data))
+
+        if len(self.__centers) == 0:
+            raise ValueError("Initial centers are empty (size: '%d')." % len(self.__centers))

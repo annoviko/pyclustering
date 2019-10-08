@@ -394,10 +394,7 @@ class genetic_algorithm:
         np.random.seed()
 
         # Clustering data
-        if type(data) is list:
-            self._data = np.array(data)
-        else:
-            self._data = data
+        self._data = np.array(data)
 
         # Count clusters
         self._count_clusters = count_clusters
@@ -426,6 +423,9 @@ class genetic_algorithm:
 
         # Observer
         self._observer = kwargs.get('observer', ga_observer())
+
+        self._verify_arguments()
+
 
     def process(self):
         """!
@@ -704,3 +704,16 @@ class genetic_algorithm:
             fitness_function[_idx_chromosome] += np.sum(abs(data - centres_data))
 
         return fitness_function
+
+
+    def _verify_arguments(self):
+        """!
+        @brief Verify input parameters for the algorithm and throw exception in case of incorrectness.
+
+        """
+        if len(self._data) == 0:
+            raise ValueError("Input data is empty (size: '%d')." % len(self._data))
+
+        if self._count_clusters <= 0:
+            raise ValueError("Amount of cluster (current value: '%d') for allocation should be greater than 0." %
+                             self._count_clusters)

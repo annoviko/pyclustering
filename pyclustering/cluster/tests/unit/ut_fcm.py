@@ -32,6 +32,8 @@ matplotlib.use('Agg')
 
 from pyclustering.cluster.tests.fcm_templates import fcm_test_template
 
+from pyclustering.cluster.fcm import fcm
+
 from pyclustering.samples.definitions import SIMPLE_SAMPLES, FAMOUS_SAMPLES, FCPS_SAMPLES
 
 
@@ -111,3 +113,10 @@ class fcm_unit_tests(unittest.TestCase):
         fcm_test_template.cluster_allocation(FCPS_SAMPLES.SAMPLE_HEPTA,
                                              [[-0.06,0.02, 0.02], [2.41, 0.49, 0.03], [-2.69, 0.34, 0.29], [0.49, 2.89, 0.78], [-0.60, -2.31, 0.05], [-0.50, 0.43, -2.60]],
                                              2.0, [30, 30, 30, 30, 30, 62], False)
+
+
+    def test_incorrect_data(self):
+        self.assertRaises(ValueError, fcm, [], 1)
+
+    def test_incorrect_centers(self):
+        self.assertRaises(ValueError, fcm, [[0], [1], [2]], [])
