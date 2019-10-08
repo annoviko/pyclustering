@@ -144,6 +144,8 @@ class bsas:
         if self._ccore is True:
             self._ccore = ccore_library.workable()
 
+        self._verify_arguments()
+
 
     def process(self):
         """!
@@ -167,24 +169,24 @@ class bsas:
 
 
     def __process_by_ccore(self):
-        ccore_metric = metric_wrapper.create_instance(self._metric);
-        self._clusters, self._representatives = bsas_wrapper(self._data, self._amount, self._threshold, ccore_metric.get_pointer());
+        ccore_metric = metric_wrapper.create_instance(self._metric)
+        self._clusters, self._representatives = bsas_wrapper(self._data, self._amount, self._threshold, ccore_metric.get_pointer())
 
 
     def __prcess_by_python(self):
-        self._clusters.append([0]);
-        self._representatives.append(self._data[0]);
+        self._clusters.append([0])
+        self._representatives.append(self._data[0])
 
         for i in range(1, len(self._data)):
-            point = self._data[i];
-            index_cluster, distance = self._find_nearest_cluster(point);
+            point = self._data[i]
+            index_cluster, distance = self._find_nearest_cluster(point)
 
             if (distance > self._threshold) and (len(self._clusters) < self._amount):
-                self._representatives.append(point);
-                self._clusters.append([i]);
+                self._representatives.append(point)
+                self._clusters.append([i])
             else:
-                self._clusters[index_cluster].append(i);
-                self._update_representative(index_cluster, point);
+                self._clusters[index_cluster].append(i)
+                self._update_representative(index_cluster, point)
 
 
     def get_clusters(self):
@@ -195,7 +197,7 @@ class bsas:
         @see get_representatives()
 
         """
-        return self._clusters;
+        return self._clusters
 
 
     def get_representatives(self):
@@ -206,7 +208,7 @@ class bsas:
         @see get_clusters()
 
         """
-        return self._representatives;
+        return self._representatives
 
 
     def get_cluster_encoding(self):
@@ -219,7 +221,7 @@ class bsas:
 
         """
 
-        return type_encoding.CLUSTER_INDEX_LIST_SEPARATION;
+        return type_encoding.CLUSTER_INDEX_LIST_SEPARATION
 
 
     def _find_nearest_cluster(self, point):
@@ -231,16 +233,16 @@ class bsas:
         @return (uint, double) Index of nearest cluster and distance to it.
 
         """
-        index_cluster = -1;
-        nearest_distance = float('inf');
+        index_cluster = -1
+        nearest_distance = float('inf')
 
         for index in range(len(self._representatives)):
-            distance = self._metric(point, self._representatives[index]);
+            distance = self._metric(point, self._representatives[index])
             if distance < nearest_distance:
-                index_cluster = index;
-                nearest_distance = distance;
+                index_cluster = index
+                nearest_distance = distance
 
-        return index_cluster, nearest_distance;
+        return index_cluster, nearest_distance
 
 
     def _update_representative(self, index_cluster, point):
@@ -251,8 +253,25 @@ class bsas:
         @param[in] point (list): Point that was added to cluster.
 
         """
-        length = len(self._clusters[index_cluster]);
-        rep = self._representatives[index_cluster];
+        length = len(self._clusters[index_cluster])
+        rep = self._representatives[index_cluster]
 
         for dimension in range(len(rep)):
-            rep[dimension] = ( (length - 1) * rep[dimension] + point[dimension] ) / length;
+            rep[dimension] = ( (length - 1) * rep[dimension] + point[dimension] ) / length
+
+
+    def _verify_arguments(self):
+        """!
+        @brief Verify input parameters for the algorithm and throw exception in case of incorrectness.
+
+        """
+        if len(self._data) == 0:
+            raise ValueError("Input data is empty (size: '%d')." % len(self._data))
+
+        if self._amount <= 0:
+            raise ValueError("Amount of cluster (current value: '%d') for allocation should be greater than 0." %
+                             self._amount)
+
+        if self._threshold < 0:
+            raise ValueError("Threshold of dissimilarity (current value: '%d') between points should be greater or "
+                             "equal to 0." % self._threshold)

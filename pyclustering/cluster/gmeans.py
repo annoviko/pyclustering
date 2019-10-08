@@ -1,7 +1,7 @@
 """!
 
 @brief The module contains G-Means algorithm and other related services.
-@details Implementation based on paper @cite inproceedings::gmeans::1.
+@details Implementation based on paper @cite inproceedings::cluster::gmeans::1.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2019
@@ -44,7 +44,7 @@ class gmeans:
               Gaussian distribution. G-means repeatedly makes decisions based on a statistical test for the data
               assigned to each center.
 
-    Implementation based on the paper @cite inproceedings::gmeans::1.
+    Implementation based on the paper @cite inproceedings::cluster::gmeans::1.
 
     @image html gmeans_example_clustering.png "G-Means clustering results on most common data-sets."
 

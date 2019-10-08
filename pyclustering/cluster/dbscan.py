@@ -70,7 +70,7 @@ class dbscan:
     
     """
     
-    def __init__(self, data, eps, neighbors, ccore = True, **kwargs):
+    def __init__(self, data, eps, neighbors, ccore=True, **kwargs):
         """!
         @brief Constructor of clustering algorithm DBSCAN.
         
@@ -105,6 +105,8 @@ class dbscan:
         self.__ccore = ccore
         if self.__ccore:
             self.__ccore = ccore_library.workable()
+
+        self.__verify_arguments()
 
 
     def process(self):
@@ -181,6 +183,18 @@ class dbscan:
         """
         
         return type_encoding.CLUSTER_INDEX_LIST_SEPARATION
+
+
+    def __verify_arguments(self):
+        """!
+        @brief Verify input parameters for the algorithm and throw exception in case of incorrectness.
+
+        """
+        if len(self.__pointer_data) == 0:
+            raise ValueError("Input data is empty (size: '%d')." % len(self.__pointer_data))
+
+        if self.__eps < 0:
+            raise ValueError("Connectivity radius (current value: '%d') should be greater or equal to 0." % self.__eps)
 
 
     def __create_neighbor_searcher(self, data_type):

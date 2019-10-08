@@ -53,38 +53,38 @@ def template_clustering(number_clusters, path, branching_factor = 5, max_node_en
 
 
 def cluster_sample1():
-    template_clustering(2, SIMPLE_SAMPLES.SAMPLE_SIMPLE1);
-    template_clustering(2, SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 5, 5, 0.1, measurement_type.CENTROID_EUCLIDEAN_DISTANCE, 2);      # only two entries available
+    template_clustering(2, SIMPLE_SAMPLES.SAMPLE_SIMPLE1)
+    template_clustering(2, SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 5, 5, 0.1, measurement_type.CENTROID_EUCLIDEAN_DISTANCE, 2)      # only two entries available
 
 def cluster_sample2():
-    template_clustering(3, SIMPLE_SAMPLES.SAMPLE_SIMPLE2);
+    template_clustering(3, SIMPLE_SAMPLES.SAMPLE_SIMPLE2)
 
 def cluster_sample3():
-    template_clustering(4, SIMPLE_SAMPLES.SAMPLE_SIMPLE3);
+    template_clustering(4, SIMPLE_SAMPLES.SAMPLE_SIMPLE3)
 
 def cluster_sample4():
-    template_clustering(5, SIMPLE_SAMPLES.SAMPLE_SIMPLE4);
+    template_clustering(5, SIMPLE_SAMPLES.SAMPLE_SIMPLE4)
     
 def cluster_sample5():
-    template_clustering(4, SIMPLE_SAMPLES.SAMPLE_SIMPLE5);
+    template_clustering(4, SIMPLE_SAMPLES.SAMPLE_SIMPLE5)
 
 def cluster_sample7():
-    template_clustering(2, SIMPLE_SAMPLES.SAMPLE_SIMPLE7);
+    template_clustering(2, SIMPLE_SAMPLES.SAMPLE_SIMPLE7)
 
 def cluster_sample8():
-    template_clustering(4, SIMPLE_SAMPLES.SAMPLE_SIMPLE8);
+    template_clustering(4, SIMPLE_SAMPLES.SAMPLE_SIMPLE8)
 
 def cluster_elongate():
-    template_clustering(2, SIMPLE_SAMPLES.SAMPLE_ELONGATE);
+    template_clustering(2, SIMPLE_SAMPLES.SAMPLE_ELONGATE)
 
 def cluster_lsun():
-    template_clustering(3, FCPS_SAMPLES.SAMPLE_LSUN);
-    template_clustering(3, FCPS_SAMPLES.SAMPLE_LSUN, 5, 5, 0.2, measurement_type.CENTROID_MANHATTAN_DISTANCE, 200);         # not correct, but almost good result
+    template_clustering(3, FCPS_SAMPLES.SAMPLE_LSUN)
+    template_clustering(3, FCPS_SAMPLES.SAMPLE_LSUN, 5, 5, 0.2, measurement_type.CENTROID_MANHATTAN_DISTANCE, 200)  # not correct, but almost good result
 
 def cluster_target():
-    template_clustering(6, FCPS_SAMPLES.SAMPLE_TARGET);
-    template_clustering(6, FCPS_SAMPLES.SAMPLE_TARGET, 5, 10, 0.5, measurement_type.CENTROID_MANHATTAN_DISTANCE, 200);       # interesting - sliced cake.
-    template_clustering(6, FCPS_SAMPLES.SAMPLE_TARGET, 50, 100, 0.5, measurement_type.VARIANCE_INCREASE_DISTANCE, 200);      # interesting - sliced cake.
+    template_clustering(6, FCPS_SAMPLES.SAMPLE_TARGET)
+    template_clustering(6, FCPS_SAMPLES.SAMPLE_TARGET, 5, 10, 0.5, measurement_type.CENTROID_MANHATTAN_DISTANCE, 200)  # interesting - sliced cake.
+    template_clustering(6, FCPS_SAMPLES.SAMPLE_TARGET, 50, 100, 0.5, measurement_type.VARIANCE_INCREASE_DISTANCE, 200)  # interesting - sliced cake.
 
 def cluster_two_diamonds():
     template_clustering(2, FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS);

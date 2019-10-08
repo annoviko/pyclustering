@@ -44,9 +44,9 @@ class clarans:
         @details The higher the value of maxneighbor, the closer is CLARANS to K-Medoids, and the longer is each search of a local minima.
         
         @param[in] data (list): Input data that is presented as list of points (objects), each point should be represented by list or tuple.
-        @param[in] number_clusters (uint): amount of clusters that should be allocated.
-        @param[in] numlocal (uint): the number of local minima obtained (amount of iterations for solving the problem).
-        @param[in] maxneighbor (uint): the maximum number of neighbors examined.
+        @param[in] number_clusters (uint): Amount of clusters that should be allocated.
+        @param[in] numlocal (uint): The number of local minima obtained (amount of iterations for solving the problem).
+        @param[in] maxneighbor (uint): The maximum number of neighbors examined.
         
         """
         
@@ -61,8 +61,30 @@ class clarans:
         
         self.__optimal_medoids = []
         self.__optimal_estimation = float('inf')
-    
-    
+
+        self.__verify_arguments()
+
+
+    def __verify_arguments(self):
+        """!
+        @brief Verify input parameters for the algorithm and throw exception in case of incorrectness.
+
+        """
+        if len(self.__pointer_data) == 0:
+            raise ValueError("Input data is empty (size: '%d')." % len(self.__pointer_data))
+
+        if self.__number_clusters <= 0:
+            raise ValueError("Amount of cluster (current value: '%d') for allocation should be greater than 0." %
+                             self.__number_clusters)
+
+        if self.__numlocal < 0:
+            raise ValueError("Local minima (current value: '%d') should be greater or equal to 0." % self.__numlocal)
+
+        if self.__maxneighbor < 0:
+            raise ValueError("Maximum number of neighbors (current value: '%d') should be greater or "
+                             "equal to 0." % self.__maxneighbor)
+
+
     def process(self):
         """!
         @brief Performs cluster analysis in line with rules of CLARANS algorithm.

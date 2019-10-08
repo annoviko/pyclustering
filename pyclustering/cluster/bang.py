@@ -424,7 +424,7 @@ class bang_directory:
         @brief Create BANG directory - basically tree structure with direct access to leafs.
 
         @param[in] data (list): Input data that is clustered.
-        @param[in] levels (uint): Height of the blocks tree.
+        @param[in] levels (uint): Height of the tree of blocks.
         @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'observe').
 
         <b>Keyword Args:</b><br>
@@ -593,7 +593,6 @@ class bang_directory:
             left, right = block.split(split_dimension, cache_require)
             current_level_blocks.append(left)
             current_level_blocks.append(right)
-
 
 
 class spatial_block:
@@ -1131,14 +1130,19 @@ class bang:
                 is thrown.
 
         """
-        if self.__levels <= 0:
-            raise ValueError("Incorrect amount of levels '%d'. Level value should be greater than 0." % self.__levels)
-
         if len(self.__data) == 0:
-            raise ValueError("Empty input data. Data should contain at least one point.")
+            raise ValueError("Input data is empty (size: '%d')." % len(self.__data))
 
-        if self.__density_threshold < 0:
-            raise ValueError("Incorrect density threshold '%f'. Density threshold should not be negative." % self.__density_threshold)
+        if self.__levels < 1:
+            raise ValueError("Height of the tree should be greater than 0 (current value: '%d')." % self.__levels)
+
+        if self.__density_threshold < 0.0:
+            raise ValueError("Density threshold should be greater or equal to 0 (current value: '%d')." %
+                             self.__density_threshold)
+
+        if self.__amount_threshold < 0:
+            raise ValueError("Amount of points threshold should be greater than 0 (current value: '%d')" %
+                             self.__amount_threshold)
 
 
     def __allocate_clusters(self):

@@ -129,18 +129,20 @@ class agglomerative:
         self.__pointer_data = data
         self.__number_clusters = number_clusters
         self.__similarity = link
-        
+
+        self.__verify_arguments()
+
         if self.__similarity is None:
             self.__similarity = type_link.CENTROID_LINK
         
         self.__clusters = []
         self.__ccore = ccore
-        if (self.__ccore):
+        if self.__ccore:
             self.__ccore = ccore_library.workable()
-        
-        if (self.__similarity == type_link.CENTROID_LINK):
+
+        if self.__similarity == type_link.CENTROID_LINK:
             self.__centers = self.__pointer_data.copy()    # used in case of usage of centroid links
-    
+
     
     def process(self):
         """!
@@ -193,8 +195,8 @@ class agglomerative:
         """
         
         return type_encoding.CLUSTER_INDEX_LIST_SEPARATION
-    
-    
+
+
     def __merge_similar_clusters(self):
         """!
         @brief Merges the most similar clusters in line with link type.
@@ -250,21 +252,21 @@ class agglomerative:
         
         """
         
-        minimum_centroid_distance = float('Inf');
-        indexes = None;
+        minimum_centroid_distance = float('Inf')
+        indexes = None
         
         for index1 in range(0, len(self.__centers)):
             for index2 in range(index1 + 1, len(self.__centers)):
-                distance = euclidean_distance_square(self.__centers[index1], self.__centers[index2]);
-                if (distance < minimum_centroid_distance):
-                    minimum_centroid_distance = distance;
-                    indexes = [index1, index2];
+                distance = euclidean_distance_square(self.__centers[index1], self.__centers[index2])
+                if distance < minimum_centroid_distance:
+                    minimum_centroid_distance = distance
+                    indexes = [index1, index2]
         
-        self.__clusters[indexes[0]] += self.__clusters[indexes[1]];
-        self.__centers[indexes[0]] = self.__calculate_center(self.__clusters[indexes[0]]);
+        self.__clusters[indexes[0]] += self.__clusters[indexes[1]]
+        self.__centers[indexes[0]] = self.__calculate_center(self.__clusters[indexes[0]])
          
-        self.__clusters.pop(indexes[1]);   # remove merged cluster.
-        self.__centers.pop(indexes[1]);    # remove merged center.
+        self.__clusters.pop(indexes[1])   # remove merged cluster.
+        self.__centers.pop(indexes[1])    # remove merged center.
     
     
     def __merge_by_complete_link(self):
@@ -273,19 +275,19 @@ class agglomerative:
         
         """
         
-        minimum_complete_distance = float('Inf');
-        indexes = None;
+        minimum_complete_distance = float('Inf')
+        indexes = None
         
         for index_cluster1 in range(0, len(self.__clusters)):
             for index_cluster2 in range(index_cluster1 + 1, len(self.__clusters)):
-                candidate_maximum_distance = self.__calculate_farthest_distance(index_cluster1, index_cluster2);
+                candidate_maximum_distance = self.__calculate_farthest_distance(index_cluster1, index_cluster2)
                 
-                if (candidate_maximum_distance < minimum_complete_distance):
-                    minimum_complete_distance = candidate_maximum_distance;
-                    indexes = [index_cluster1, index_cluster2];
+                if candidate_maximum_distance < minimum_complete_distance:
+                    minimum_complete_distance = candidate_maximum_distance
+                    indexes = [index_cluster1, index_cluster2]
 
-        self.__clusters[indexes[0]] += self.__clusters[indexes[1]];  
-        self.__clusters.pop(indexes[1]);   # remove merged cluster.        
+        self.__clusters[indexes[0]] += self.__clusters[indexes[1]]
+        self.__clusters.pop(indexes[1])   # remove merged cluster.
     
     
     def __calculate_farthest_distance(self, index_cluster1, index_cluster2):
@@ -298,15 +300,15 @@ class agglomerative:
         @return The farthest euclidean distance between two clusters.
         
         """
-        candidate_maximum_distance = 0.0;
+        candidate_maximum_distance = 0.0
         for index_object1 in self.__clusters[index_cluster1]:
             for index_object2 in self.__clusters[index_cluster2]:
-                distance = euclidean_distance_square(self.__pointer_data[index_object1], self.__pointer_data[index_object2]);
+                distance = euclidean_distance_square(self.__pointer_data[index_object1], self.__pointer_data[index_object2])
                 
-                if (distance > candidate_maximum_distance):
-                    candidate_maximum_distance = distance;
+                if distance > candidate_maximum_distance:
+                    candidate_maximum_distance = distance
     
-        return candidate_maximum_distance;
+        return candidate_maximum_distance
     
     
     def __merge_by_signle_link(self):
@@ -315,19 +317,19 @@ class agglomerative:
         
         """
         
-        minimum_single_distance = float('Inf');
-        indexes = None;
+        minimum_single_distance = float('Inf')
+        indexes = None
         
         for index_cluster1 in range(0, len(self.__clusters)):
             for index_cluster2 in range(index_cluster1 + 1, len(self.__clusters)):
-                candidate_minimum_distance = self.__calculate_nearest_distance(index_cluster1, index_cluster2);
+                candidate_minimum_distance = self.__calculate_nearest_distance(index_cluster1, index_cluster2)
                 
-                if (candidate_minimum_distance < minimum_single_distance):
-                    minimum_single_distance = candidate_minimum_distance;
-                    indexes = [index_cluster1, index_cluster2];
+                if candidate_minimum_distance < minimum_single_distance:
+                    minimum_single_distance = candidate_minimum_distance
+                    indexes = [index_cluster1, index_cluster2]
 
-        self.__clusters[indexes[0]] += self.__clusters[indexes[1]];  
-        self.__clusters.pop(indexes[1]);   # remove merged cluster.
+        self.__clusters[indexes[0]] += self.__clusters[indexes[1]]
+        self.__clusters.pop(indexes[1])   # remove merged cluster.
     
     
     def __calculate_nearest_distance(self, index_cluster1, index_cluster2):
@@ -340,15 +342,15 @@ class agglomerative:
         @return The nearest euclidean distance between two clusters.
         
         """
-        candidate_minimum_distance = float('Inf');
+        candidate_minimum_distance = float('Inf')
         
         for index_object1 in self.__clusters[index_cluster1]:
             for index_object2 in self.__clusters[index_cluster2]:
-                distance = euclidean_distance_square(self.__pointer_data[index_object1], self.__pointer_data[index_object2]);
-                if (distance < candidate_minimum_distance):
-                    candidate_minimum_distance = distance;
+                distance = euclidean_distance_square(self.__pointer_data[index_object1], self.__pointer_data[index_object2])
+                if distance < candidate_minimum_distance:
+                    candidate_minimum_distance = distance
         
-        return candidate_minimum_distance;
+        return candidate_minimum_distance
     
     
     def __calculate_center(self, cluster):
@@ -359,13 +361,26 @@ class agglomerative:
         
         """
          
-        dimension = len(self.__pointer_data[cluster[0]]);
-        center = [0] * dimension;
+        dimension = len(self.__pointer_data[cluster[0]])
+        center = [0] * dimension
         for index_point in cluster:
             for index_dimension in range(0, dimension):
-                center[index_dimension] += self.__pointer_data[index_point][index_dimension];
+                center[index_dimension] += self.__pointer_data[index_point][index_dimension]
          
         for index_dimension in range(0, dimension):
-            center[index_dimension] /= len(cluster);
+            center[index_dimension] /= len(cluster)
              
-        return center;
+        return center
+
+
+    def __verify_arguments(self):
+        """!
+        @brief Verify input parameters for the algorithm and throw exception in case of incorrectness.
+
+        """
+        if len(self.__pointer_data) == 0:
+            raise ValueError("Input data is empty (size: '%d')." % len(self.__pointer_data))
+
+        if self.__number_clusters <= 0:
+            raise ValueError("Amount of cluster (current value: '%d') for allocation should be greater than 0." %
+                             self.__number_clusters)

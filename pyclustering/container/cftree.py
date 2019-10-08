@@ -45,19 +45,19 @@ class measurement_type(IntEnum):
     """
     
     ## Euclidian distance between centroids of clustering features.
-    CENTROID_EUCLIDEAN_DISTANCE     = 0;
+    CENTROID_EUCLIDEAN_DISTANCE = 0
     
     ## Manhattan distance between centroids of clustering features.
-    CENTROID_MANHATTAN_DISTANCE     = 1;
+    CENTROID_MANHATTAN_DISTANCE = 1
     
     ## Average distance between all objects from clustering features.
-    AVERAGE_INTER_CLUSTER_DISTANCE  = 2;
+    AVERAGE_INTER_CLUSTER_DISTANCE = 2
     
     ## Average distance between all objects within clustering features and between them.
-    AVERAGE_INTRA_CLUSTER_DISTANCE  = 3;
+    AVERAGE_INTRA_CLUSTER_DISTANCE = 3
     
     ## Variance based distance between clustering features.
-    VARIANCE_INCREASE_DISTANCE      = 4;
+    VARIANCE_INCREASE_DISTANCE = 4
 
 
 class cfnode_type(IntEnum):
@@ -70,13 +70,13 @@ class cfnode_type(IntEnum):
     """
     
     ## Undefined node.
-    CFNODE_DUMMY    = 0;
+    CFNODE_DUMMY = 0
     
     ## Leaf node hasn't got successors, only entries.
-    CFNODE_LEAF     = 1;
+    CFNODE_LEAF = 1
     
     ## Non-leaf node has got successors and hasn't got entries.
-    CFNODE_NONLEAF  = 2;
+    CFNODE_NONLEAF = 2
 
 
 class cfentry:
@@ -96,7 +96,7 @@ class cfentry:
         @return (uint) Number of encoded points.
         
         """
-        return self.__number_points;
+        return self.__number_points
     
     @property
     def linear_sum(self):
@@ -107,7 +107,7 @@ class cfentry:
         
         """
         
-        return self.__linear_sum;
+        return self.__linear_sum
     
     @property
     def square_sum(self):
@@ -117,7 +117,7 @@ class cfentry:
         @return (double) Square sum.
         
         """
-        return self.__square_sum;
+        return self.__square_sum
     
     
     def __init__(self, number_points, linear_sum, square_sum):
@@ -130,13 +130,13 @@ class cfentry:
         
         """
         
-        self.__number_points = number_points;
-        self.__linear_sum = linear_sum;
-        self.__square_sum = square_sum;
+        self.__number_points = number_points
+        self.__linear_sum = linear_sum
+        self.__square_sum = square_sum
         
-        self.__centroid = None;
-        self.__radius = None;
-        self.__diameter = None;
+        self.__centroid = None
+        self.__radius = None
+        self.__diameter = None
     
     
     def __copy__(self):
@@ -144,7 +144,7 @@ class cfentry:
         @returns (cfentry) Makes copy of the cfentry instance.
         
         """
-        return cfentry(self.__number_points, self.__linear_sum, self.__square_sum);
+        return cfentry(self.__number_points, self.__linear_sum, self.__square_sum)
     
     
     def __repr__(self):
@@ -152,7 +152,7 @@ class cfentry:
         @return (string) Default cfentry representation.
         
         """
-        return 'CF (%s, %s, %0.2f) [%s]' % ( self.number_points, self.linear_sum, self.__square_sum, hex(id(self)) );    
+        return 'CF (%s, %s, %0.2f) [%s]' % (self.number_points, self.linear_sum, self.__square_sum, hex(id(self)))
     
     
     def __str__(self):
@@ -160,7 +160,7 @@ class cfentry:
         @brief Default cfentry string representation.
         
         """
-        return self.__repr__();
+        return self.__repr__()
     
     
     def __add__(self, entry):
@@ -173,11 +173,11 @@ class cfentry:
         
         """
         
-        number_points = self.number_points + entry.number_points;
-        result_linear_sum = list_math_addition(self.linear_sum, entry.linear_sum);
-        result_square_sum = self.square_sum + entry.square_sum;  
+        number_points = self.number_points + entry.number_points
+        result_linear_sum = list_math_addition(self.linear_sum, entry.linear_sum)
+        result_square_sum = self.square_sum + entry.square_sum
         
-        return cfentry(number_points, result_linear_sum, result_square_sum);
+        return cfentry(number_points, result_linear_sum, result_square_sum)
     
     
     def __sub__(self, entry):
@@ -191,14 +191,14 @@ class cfentry:
         
         """
                 
-        number_points = self.number_points - entry.number_points;
-        result_linear_sum = list_math_subtraction(self.linear_sum, entry.linear_sum);
-        result_square_sum = self.square_sum - entry.square_sum;
+        number_points = self.number_points - entry.number_points
+        result_linear_sum = list_math_subtraction(self.linear_sum, entry.linear_sum)
+        result_square_sum = self.square_sum - entry.square_sum
         
-        if ( (number_points < 0) or (result_square_sum < 0) ):
-            raise NameError("Substruction with negative result is not possible for clustering features.");
+        if (number_points < 0) or (result_square_sum < 0):
+            raise NameError("Substruction with negative result is not possible for clustering features.")
         
-        return cfentry(number_points, result_linear_sum, result_square_sum);
+        return cfentry(number_points, result_linear_sum, result_square_sum)
     
     
     def __eq__(self, entry):
@@ -212,15 +212,15 @@ class cfentry:
         
         """
                 
-        tolerance = 0.00001;
+        tolerance = 0.00001
         
-        result = (self.__number_points == entry.number_points);
-        result &= ( (self.square_sum + tolerance > entry.square_sum) and (self.square_sum - tolerance < entry.square_sum) );
+        result = (self.__number_points == entry.number_points)
+        result &= ((self.square_sum + tolerance > entry.square_sum) and (self.square_sum - tolerance < entry.square_sum))
         
         for index_dimension in range(0, len(self.linear_sum)):
-            result &= ( (self.linear_sum[index_dimension] + tolerance > entry.linear_sum[index_dimension]) and (self.linear_sum[index_dimension] - tolerance < entry.linear_sum[index_dimension]) );
+            result &= ((self.linear_sum[index_dimension] + tolerance > entry.linear_sum[index_dimension]) and (self.linear_sum[index_dimension] - tolerance < entry.linear_sum[index_dimension]))
         
-        return result;
+        return result
     
     
     def get_distance(self, entry, type_measurement):
@@ -238,23 +238,23 @@ class cfentry:
         
         """
         
-        if (type_measurement is measurement_type.CENTROID_EUCLIDEAN_DISTANCE):
-            return euclidean_distance_square(entry.get_centroid(), self.get_centroid());
+        if type_measurement is measurement_type.CENTROID_EUCLIDEAN_DISTANCE:
+            return euclidean_distance_square(entry.get_centroid(), self.get_centroid())
         
-        elif (type_measurement is measurement_type.CENTROID_MANHATTAN_DISTANCE):
-            return manhattan_distance(entry.get_centroid(), self.get_centroid());
+        elif type_measurement is measurement_type.CENTROID_MANHATTAN_DISTANCE:
+            return manhattan_distance(entry.get_centroid(), self.get_centroid())
         
-        elif (type_measurement is measurement_type.AVERAGE_INTER_CLUSTER_DISTANCE):
-            return self.__get_average_inter_cluster_distance(entry);
+        elif type_measurement is measurement_type.AVERAGE_INTER_CLUSTER_DISTANCE:
+            return self.__get_average_inter_cluster_distance(entry)
             
-        elif (type_measurement is measurement_type.AVERAGE_INTRA_CLUSTER_DISTANCE):
-            return self.__get_average_intra_cluster_distance(entry);
+        elif type_measurement is measurement_type.AVERAGE_INTRA_CLUSTER_DISTANCE:
+            return self.__get_average_intra_cluster_distance(entry)
         
-        elif (type_measurement is measurement_type.VARIANCE_INCREASE_DISTANCE):
-            return self.__get_variance_increase_distance(entry);
-        
+        elif type_measurement is measurement_type.VARIANCE_INCREASE_DISTANCE:
+            return self.__get_variance_increase_distance(entry)
+
         else:
-            assert 0;
+            raise ValueError("Unsupported type of measurement '%s' is specified." % type_measurement)
     
         
     def get_centroid(self):
@@ -266,14 +266,14 @@ class cfentry:
         
         """
         
-        if (self.__centroid is not None):
-            return self.__centroid;
+        if self.__centroid is not None:
+            return self.__centroid
         
-        self.__centroid = [0] * len(self.linear_sum);
+        self.__centroid = [0] * len(self.linear_sum)
         for index_dimension in range(0, len(self.linear_sum)):
-            self.__centroid[index_dimension] = self.linear_sum[index_dimension] / self.number_points;
+            self.__centroid[index_dimension] = self.linear_sum[index_dimension] / self.number_points
         
-        return self.__centroid;
+        return self.__centroid
     
     
     def get_radius(self):
@@ -285,25 +285,22 @@ class cfentry:
         
         """
         
-        if (self.__radius is not None):
-            return self.__radius;
+        if self.__radius is not None:
+            return self.__radius
         
-        centroid = self.get_centroid();
+        centroid = self.get_centroid()
         
-        radius_part_1 = self.square_sum;
+        radius_part_1 = self.square_sum
         
-        radius_part_2 = 0.0;
-        radius_part_3 = 0.0;
-        
-        if (type(centroid) == list):
-            radius_part_2 = 2.0 * sum(list_math_multiplication(self.linear_sum, centroid));
-            radius_part_3 = self.number_points * sum(list_math_multiplication(centroid, centroid));
+        if type(centroid) == list:
+            radius_part_2 = 2.0 * sum(list_math_multiplication(self.linear_sum, centroid))
+            radius_part_3 = self.number_points * sum(list_math_multiplication(centroid, centroid))
         else:
-            radius_part_2 = 2.0 * self.linear_sum * centroid;
-            radius_part_3 = self.number_points * centroid * centroid;
+            radius_part_2 = 2.0 * self.linear_sum * centroid
+            radius_part_3 = self.number_points * centroid * centroid
         
-        self.__radius = ( (1.0 / self.number_points) * (radius_part_1 - radius_part_2 + radius_part_3) ) ** 0.5;
-        return self.__radius;
+        self.__radius = ((1.0 / self.number_points) * (radius_part_1 - radius_part_2 + radius_part_3)) ** 0.5
+        return self.__radius
         
     
     def get_diameter(self):
@@ -315,17 +312,16 @@ class cfentry:
         
         """
         
-        if (self.__diameter is not None):
-            return self.__diameter;
-        
-        diameter_part = 0.0;
-        if (type(self.linear_sum) == list):
-            diameter_part = self.square_sum * self.number_points - 2.0 * sum(list_math_multiplication(self.linear_sum, self.linear_sum)) + self.square_sum * self.number_points;
+        if self.__diameter is not None:
+            return self.__diameter
+
+        if type(self.linear_sum) == list:
+            diameter_part = self.square_sum * self.number_points - 2.0 * sum(list_math_multiplication(self.linear_sum, self.linear_sum)) + self.square_sum * self.number_points
         else:
-            diameter_part = self.square_sum * self.number_points - 2.0 * self.linear_sum * self.linear_sum + self.square_sum * self.number_points;
+            diameter_part = self.square_sum * self.number_points - 2.0 * self.linear_sum * self.linear_sum + self.square_sum * self.number_points
             
-        self.__diameter = ( diameter_part / (self.number_points * (self.number_points - 1)) ) ** 0.5;
-        return self.__diameter;
+        self.__diameter = (diameter_part / (self.number_points * (self.number_points - 1))) ** 0.5
+        return self.__diameter
     
         
     def __get_average_inter_cluster_distance(self, entry):
@@ -338,9 +334,9 @@ class cfentry:
         
         """
         
-        linear_part_distance = sum(list_math_multiplication(self.linear_sum, entry.linear_sum));
+        linear_part_distance = sum(list_math_multiplication(self.linear_sum, entry.linear_sum))
         
-        return ( (entry.number_points * self.square_sum - 2.0 * linear_part_distance + self.number_points * entry.square_sum) / (self.number_points * entry.number_points) ) ** 0.5;
+        return ((entry.number_points * self.square_sum - 2.0 * linear_part_distance + self.number_points * entry.square_sum) / (self.number_points * entry.number_points)) ** 0.5
     
     
     def __get_average_intra_cluster_distance(self, entry):
@@ -353,14 +349,14 @@ class cfentry:
         
         """
         
-        linear_part_first = list_math_addition(self.linear_sum, entry.linear_sum);
-        linear_part_second = linear_part_first;
+        linear_part_first = list_math_addition(self.linear_sum, entry.linear_sum)
+        linear_part_second = linear_part_first
         
-        linear_part_distance = sum(list_math_multiplication(linear_part_first, linear_part_second));
+        linear_part_distance = sum(list_math_multiplication(linear_part_first, linear_part_second))
         
-        general_part_distance = 2.0 * (self.number_points + entry.number_points) * (self.square_sum + entry.square_sum) - 2.0 * linear_part_distance;
+        general_part_distance = 2.0 * (self.number_points + entry.number_points) * (self.square_sum + entry.square_sum) - 2.0 * linear_part_distance
         
-        return (general_part_distance / ( (self.number_points + entry.number_points) * (self.number_points + entry.number_points - 1.0) )) ** 0.5;
+        return (general_part_distance / ((self.number_points + entry.number_points) * (self.number_points + entry.number_points - 1.0))) ** 0.5
     
     
     def __get_variance_increase_distance(self, entry):
@@ -373,19 +369,18 @@ class cfentry:
         
         """
                 
-        linear_part_12 = list_math_addition(self.linear_sum, entry.linear_sum);
+        linear_part_12 = list_math_addition(self.linear_sum, entry.linear_sum)
         variance_part_first = (self.square_sum + entry.square_sum) - \
             2.0 * sum(list_math_multiplication(linear_part_12, linear_part_12)) / (self.number_points + entry.number_points) + \
-            (self.number_points + entry.number_points) * sum(list_math_multiplication(linear_part_12, linear_part_12)) / (self.number_points + entry.number_points)**2.0;
-
+            (self.number_points + entry.number_points) * sum(list_math_multiplication(linear_part_12, linear_part_12)) / (self.number_points + entry.number_points)**2.0
         
-        linear_part_11 = sum(list_math_multiplication(self.linear_sum, self.linear_sum));
-        variance_part_second = -( self.square_sum - (2.0 * linear_part_11 / self.number_points) + (linear_part_11 / self.number_points) );
+        linear_part_11 = sum(list_math_multiplication(self.linear_sum, self.linear_sum))
+        variance_part_second = -(self.square_sum - (2.0 * linear_part_11 / self.number_points) + (linear_part_11 / self.number_points))
         
-        linear_part_22 = sum(list_math_multiplication(entry.linear_sum, entry.linear_sum));
-        variance_part_third = -( entry.square_sum - (2.0 / entry.number_points) * linear_part_22 + entry.number_points * (1.0 / entry.number_points ** 2.0) * linear_part_22 );
+        linear_part_22 = sum(list_math_multiplication(entry.linear_sum, entry.linear_sum))
+        variance_part_third = -(entry.square_sum - (2.0 / entry.number_points) * linear_part_22 + entry.number_points * (1.0 / entry.number_points ** 2.0) * linear_part_22)
 
-        return (variance_part_first + variance_part_second + variance_part_third);
+        return variance_part_first + variance_part_second + variance_part_third
         
 
 class cfnode:
@@ -405,16 +400,16 @@ class cfnode:
         """
         
         ## Clustering feature of the node.
-        self.feature = copy(feature);
+        self.feature = copy(feature)
 
         ## Pointer to the parent node (None for root).
-        self.parent = parent;
+        self.parent = parent
         
         ## Type node (leaf or non-leaf).
-        self.type = cfnode_type.CFNODE_DUMMY;
+        self.type = cfnode_type.CFNODE_DUMMY
         
         ## Payload of node where user data can be stored.
-        self.payload = payload;
+        self.payload = payload
     
     
     def __repr__(self):
@@ -423,7 +418,7 @@ class cfnode:
         
         """
         
-        return 'CF node %s, parent %s, feature %s' % ( hex(id(self)), self.parent, self.feature );
+        return 'CF node %s, parent %s, feature %s' % (hex(id(self)), self.parent, self.feature)
 
 
     def __str__(self):
@@ -431,7 +426,7 @@ class cfnode:
         @return (string) String representation of CF node.
         
         """
-        return self.__repr__();
+        return self.__repr__()
     
     
     def get_distance(self, node, type_measurement):
@@ -445,7 +440,7 @@ class cfnode:
         
         """
         
-        return self.feature.get_distance(node.feature, type_measurement);
+        return self.feature.get_distance(node.feature, type_measurement)
     
 
 class non_leaf_node(cfnode):
@@ -460,7 +455,7 @@ class non_leaf_node(cfnode):
         @return (list) List of successors of the node.
         
         """
-        return self.__successors;
+        return self.__successors
     
     
     def __init__(self, feature, parent, successors, payload):
@@ -474,12 +469,12 @@ class non_leaf_node(cfnode):
         
         """
                 
-        super().__init__(feature, parent, payload);
+        super().__init__(feature, parent, payload)
         
         ## Node type in CF tree that is CFNODE_NONLEAF for non leaf node.
-        self.type = cfnode_type.CFNODE_NONLEAF;
+        self.type = cfnode_type.CFNODE_NONLEAF
         
-        self.__successors = successors;
+        self.__successors = successors
     
     
     def __repr__(self):
@@ -487,7 +482,7 @@ class non_leaf_node(cfnode):
         @return (string) Representation of non-leaf node representation.
         
         """   
-        return 'Non-leaf node %s, parent %s, feature %s, successors: %d' % ( hex(id(self)), self.parent, self.feature, len(self.successors) );
+        return 'Non-leaf node %s, parent %s, feature %s, successors: %d' % (hex(id(self)), self.parent, self.feature, len(self.successors))
     
     
     def __str__(self):
@@ -495,7 +490,7 @@ class non_leaf_node(cfnode):
         @return (string) String non-leaf representation.
         
         """
-        return self.__repr__();
+        return self.__repr__()
     
     
     def insert_successor(self, successor):
@@ -506,10 +501,10 @@ class non_leaf_node(cfnode):
         
         """
         
-        self.feature += successor.feature;
-        self.successors.append(successor);
+        self.feature += successor.feature
+        self.successors.append(successor)
         
-        successor.parent = self;
+        successor.parent = self
     
     
     def remove_successor(self, successor):
@@ -520,10 +515,10 @@ class non_leaf_node(cfnode):
         
         """
         
-        self.feature -= successor.feature;
-        self.successors.append(successor);
+        self.feature -= successor.feature
+        self.successors.append(successor)
         
-        successor.parent = self;
+        successor.parent = self
     
     
     def merge(self, node):
@@ -534,11 +529,11 @@ class non_leaf_node(cfnode):
         
         """
                 
-        self.feature += node.feature;
+        self.feature += node.feature
         
         for child in node.successors:
-            child.parent = self;
-            self.successors.append(child);
+            child.parent = self
+            self.successors.append(child)
     
     
     def get_farthest_successors(self, type_measurement):
@@ -551,23 +546,23 @@ class non_leaf_node(cfnode):
         
         """
         
-        farthest_node1 = None;
-        farthest_node2 = None;
-        farthest_distance = 0;
+        farthest_node1 = None
+        farthest_node2 = None
+        farthest_distance = 0.0
         
         for i in range(0, len(self.successors)):
-            candidate1 = self.successors[i];
+            candidate1 = self.successors[i]
             
             for j in range(i + 1, len(self.successors)):
-                candidate2 = self.successors[j];
-                candidate_distance = candidate1.get_distance(candidate2, type_measurement);
+                candidate2 = self.successors[j]
+                candidate_distance = candidate1.get_distance(candidate2, type_measurement)
                 
-                if (candidate_distance > farthest_distance):
-                    farthest_distance = candidate_distance;
-                    farthest_node1 = candidate1;
-                    farthest_node2 = candidate2;        
+                if candidate_distance > farthest_distance:
+                    farthest_distance = candidate_distance
+                    farthest_node1 = candidate1
+                    farthest_node2 = candidate2
         
-                    return [farthest_node1, farthest_node2];
+        return [farthest_node1, farthest_node2]
     
     
     def get_nearest_successors(self, type_measurement):
@@ -580,23 +575,23 @@ class non_leaf_node(cfnode):
         
         """
                 
-        nearest_node1 = None;
-        nearest_node2 = None;
-        nearest_distance = float("Inf");
+        nearest_node1 = None
+        nearest_node2 = None
+        nearest_distance = float("Inf")
         
         for i in range(0, len(self.successors)):
-            candidate1 = self.successors[i];
+            candidate1 = self.successors[i]
             
             for j in range(i + 1, len(self.successors)):
-                candidate2 = self.successors[j];
-                candidate_distance = candidate1.get_distance(candidate2, type_measurement);
+                candidate2 = self.successors[j]
+                candidate_distance = candidate1.get_distance(candidate2, type_measurement)
                 
-                if (candidate_distance < nearest_distance):
-                    nearest_distance = candidate_distance;
-                    nearest_node1 = candidate1;
-                    nearest_node2 = candidate2;
+                if candidate_distance < nearest_distance:
+                    nearest_distance = candidate_distance
+                    nearest_node1 = candidate1
+                    nearest_node2 = candidate2
         
-        return [nearest_node1, nearest_node2];
+                return [nearest_node1, nearest_node2]
 
 
 class leaf_node(cfnode):
@@ -611,7 +606,7 @@ class leaf_node(cfnode):
         @return (list) List of leaf nodes.
         
         """
-        return self.__entries;
+        return self.__entries
     
     
     def __init__(self, feature, parent, entries, payload):
@@ -625,12 +620,12 @@ class leaf_node(cfnode):
         
         """
         
-        super().__init__(feature, parent, payload);
+        super().__init__(feature, parent, payload)
         
         ## Node type in CF tree that is CFNODE_LEAF for leaf node.
-        self.type = cfnode_type.CFNODE_LEAF;
+        self.type = cfnode_type.CFNODE_LEAF
         
-        self.__entries = entries;   # list of clustering features
+        self.__entries = entries   # list of clustering features
         
     
     def __repr__(self):
@@ -638,11 +633,11 @@ class leaf_node(cfnode):
         @return (string) Default leaf node represenation.
         
         """
-        text_entries = "\n";
+        text_entries = "\n"
         for entry in self.entries:
-            text_entries += "\t" + str(entry) + "\n";
+            text_entries += "\t" + str(entry) + "\n"
         
-        return 'Leaf-node %s, parent %s, feature %s, entries: %d %s' % ( hex(id(self)), self.parent, self.feature, len(self.entries), text_entries );
+        return 'Leaf-node %s, parent %s, feature %s, entries: %d %s' % (hex(id(self)), self.parent, self.feature, len(self.entries), text_entries)
     
     
     def __str__(self):
@@ -650,7 +645,7 @@ class leaf_node(cfnode):
         @return (string) String leaf node representation.
         
         """
-        return self.__repr__();
+        return self.__repr__()
     
     
     def insert_entry(self, entry):
@@ -660,9 +655,9 @@ class leaf_node(cfnode):
         @param[in] entry (cfentry): Clustering feature.
         
         """
-                              
-        self.feature += entry;
-        self.entries.append(entry);
+
+        self.feature += entry
+        self.entries.append(entry)
         
     
     def remove_entry(self, entry):
@@ -672,9 +667,9 @@ class leaf_node(cfnode):
         @param[in] entry (cfentry): Clustering feature.
         
         """
-                
-        self.feature -= entry;
-        self.entries.remove(entry);
+
+        self.feature -= entry
+        self.entries.remove(entry)
     
     
     def merge(self, node):
@@ -685,11 +680,11 @@ class leaf_node(cfnode):
         
         """
         
-        self.feature += node.feature;
+        self.feature += node.feature
         
         # Move entries from merged node
         for entry in node.entries:
-            self.entries.append(entry);
+            self.entries.append(entry)
             
     
     def get_farthest_entries(self, type_measurement):
@@ -702,23 +697,23 @@ class leaf_node(cfnode):
         
         """
         
-        farthest_entity1 = None;
-        farthest_entity2 = None;
-        farthest_distance = 0;
+        farthest_entity1 = None
+        farthest_entity2 = None
+        farthest_distance = 0
         
         for i in range(0, len(self.entries)):
-            candidate1 = self.entries[i];
+            candidate1 = self.entries[i]
             
             for j in range(i + 1, len(self.entries)):
-                candidate2 = self.entries[j];
-                candidate_distance = candidate1.get_distance(candidate2, type_measurement);
+                candidate2 = self.entries[j]
+                candidate_distance = candidate1.get_distance(candidate2, type_measurement)
                 
-                if (candidate_distance > farthest_distance):
-                    farthest_distance = candidate_distance;
-                    farthest_entity1 = candidate1;
-                    farthest_entity2 = candidate2;
+                if candidate_distance > farthest_distance:
+                    farthest_distance = candidate_distance
+                    farthest_entity1 = candidate1
+                    farthest_entity2 = candidate2
         
-        return [farthest_entity1, farthest_entity2];
+        return [farthest_entity1, farthest_entity2]
     
     
     def get_nearest_index_entry(self, entry, type_measurement):
@@ -732,15 +727,15 @@ class leaf_node(cfnode):
         
         """
         
-        minimum_distance = float('Inf');
-        nearest_index = 0;
+        minimum_distance = float('Inf')
+        nearest_index = 0
         
         for candidate_index in range(0, len(self.entries)):
-            candidate_distance = self.entries[candidate_index].get_distance(entry, type_measurement);
-            if (candidate_distance < minimum_distance):
-                nearest_index = candidate_index;
+            candidate_distance = self.entries[candidate_index].get_distance(entry, type_measurement)
+            if candidate_distance < minimum_distance:
+                nearest_index = candidate_index
         
-        return nearest_index;
+        return nearest_index
     
     
     def get_nearest_entry(self, entry, type_measurement):
@@ -754,8 +749,8 @@ class leaf_node(cfnode):
         
         """
         
-        min_key = lambda cur_entity: cur_entity.get_distance(entry, type_measurement);
-        return min(self.__entries, key = min_key);
+        min_key = lambda cur_entity: cur_entity.get_distance(entry, type_measurement)
+        return min(self.__entries, key=min_key)
 
 
 class cftree:
@@ -771,7 +766,7 @@ class cftree:
         @return (cfnode) Root of the tree.
         
         """
-        return self.__root;
+        return self.__root
     
     
     @property
@@ -780,7 +775,7 @@ class cftree:
         @return (list) List of all non-leaf nodes in the tree.
         
         """
-        return self.__leafes;
+        return self.__leafes
     
     
     @property
@@ -789,7 +784,7 @@ class cftree:
         @return (unit) Number of nodes (leaf and non-leaf) in the tree.
         
         """
-        return self.__amount_nodes;
+        return self.__amount_nodes
     
     
     @property
@@ -798,7 +793,7 @@ class cftree:
         @return (uint) Number of entries in the tree.
         
         """
-        return self.__amount_entries;
+        return self.__amount_entries
     
     
     @property
@@ -807,7 +802,7 @@ class cftree:
         @return (uint) Height of the tree.
         
         """
-        return self.__height;
+        return self.__height
     
     
     @property
@@ -817,7 +812,7 @@ class cftree:
         @details Branching factor defines maximum number of successors in each non-leaf node.
         
         """
-        return self.__branch_factor;
+        return self.__branch_factor
     
     
     @property
@@ -826,7 +821,7 @@ class cftree:
         @return (double) Threshold of the tree that represents maximum diameter of sub-clusters that is formed by leaf node entries.
         
         """
-        return self.__threshold;
+        return self.__threshold
     
     
     @property
@@ -835,7 +830,7 @@ class cftree:
         @return (uint) Maximum number of entries in each leaf node.
         
         """
-        return self.__max_entries;
+        return self.__max_entries
     
     
     @property
@@ -844,7 +839,7 @@ class cftree:
         @return (measurement_type) Type that is used for measuring.
         
         """
-        return self.__type_measurement;
+        return self.__type_measurement
     
     
     def __init__(self, branch_factor, max_entries, threshold, type_measurement = measurement_type.CENTROID_EUCLIDEAN_DISTANCE):
@@ -858,24 +853,23 @@ class cftree:
         
         """
 
-        self.__root = None;
+        self.__root = None
 
-        self.__branch_factor = branch_factor; # maximum number of children
-        if (self.__branch_factor < 2):
-            self.__branch_factor = 2;
+        self.__branch_factor = branch_factor  # maximum number of children
+        if self.__branch_factor < 2:
+            self.__branch_factor = 2
         
+        self.__threshold = threshold  # maximum diameter of sub-clusters stored at the leaf nodes
+        self.__max_entries = max_entries
         
-        self.__threshold = threshold;         # maximum diameter of sub-clusters stored at the leaf nodes
-        self.__max_entries = max_entries;
+        self.__leafes = []
         
-        self.__leafes = [];
-        
-        self.__type_measurement = type_measurement;
+        self.__type_measurement = type_measurement
         
         # statistics
-        self.__amount_nodes = 0;    # root, despite it can be None.
-        self.__amount_entries = 0;
-        self.__height = 0;          # tree size with root.
+        self.__amount_nodes = 0    # root, despite it can be None.
+        self.__amount_entries = 0
+        self.__height = 0          # tree size with root.
     
     
     def get_level_nodes(self, level):

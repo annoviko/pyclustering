@@ -31,6 +31,7 @@ matplotlib.use('Agg')
 
 from pyclustering.cluster.tests.bang_templates import bang_test_template
 
+from pyclustering.cluster.bang import bang
 from pyclustering.samples.definitions import SIMPLE_SAMPLES
 
 
@@ -142,6 +143,19 @@ class bang_unit_test(unittest.TestCase):
 
     def test_argument_empty_data(self):
         bang_test_template.exception(ValueError, [], 1, 0.0, False)
+
+
+    def test_incorrect_data(self):
+        self.assertRaises(ValueError, bang, [], 1)
+
+    def test_incorrect_levels(self):
+        self.assertRaises(ValueError, bang, [[0], [1], [2]], 0)
+
+    def test_incorrect_density_threshold(self):
+        self.assertRaises(ValueError, bang, [[0], [1], [2]], 1, density_threshold=-0.1)
+
+    def test_incorrect_amount_threshold(self):
+        self.assertRaises(ValueError, bang, [[0], [1], [2]], 2, amount_threshold=-1)
 
 
 if __name__ == "__main__":

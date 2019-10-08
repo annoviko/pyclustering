@@ -31,6 +31,8 @@ matplotlib.use('Agg')
 
 from pyclustering.cluster.tests.dbscan_templates import DbscanTestTemplates
 
+from pyclustering.cluster.dbscan import dbscan
+
 from pyclustering.samples.definitions import SIMPLE_SAMPLES, SIMPLE_ANSWERS
 from pyclustering.samples.definitions import FCPS_SAMPLES
 
@@ -159,5 +161,8 @@ class DbscsanUnitTest(unittest.TestCase):
         DbscanTestTemplates.templateClusterAllocationOneDimensionDistanceMatrix(False)
 
 
-if __name__ == "__main__":
-    unittest.main()
+    def test_incorrect_data(self):
+        self.assertRaises(ValueError, dbscan, [], 0.1, 1)
+
+    def test_incorrect_eps(self):
+        self.assertRaises(ValueError, dbscan, [[0], [1], [2]], -1.0, 1)
