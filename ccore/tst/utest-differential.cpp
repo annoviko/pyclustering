@@ -26,7 +26,7 @@
 #include "gtest/gtest.h"
 
 
-using namespace ccore::differential;
+using namespace pyclustering::differential;
 
 
 TEST(utest_differential, plus_states) {

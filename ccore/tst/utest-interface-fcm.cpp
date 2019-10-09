@@ -30,7 +30,7 @@
 #include "utenv_utils.hpp"
 
 
-using namespace ccore;
+using namespace pyclustering;
 
 
 TEST(utest_interface_fcm, fcm_api) {

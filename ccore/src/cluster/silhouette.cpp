@@ -23,7 +23,7 @@
 #include "cluster/silhouette.hpp"
 
 
-namespace ccore {
+namespace pyclustering {
 
 namespace clst {
 

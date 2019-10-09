@@ -28,7 +28,7 @@
 #include <cmath>
 
 
-using namespace ccore::nnet;
+using namespace pyclustering::nnet;
 
 
 static void template_create_delete(const connection_t type, const initial_type initial) {

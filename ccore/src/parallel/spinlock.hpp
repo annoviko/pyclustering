@@ -27,7 +27,7 @@
 #include <atomic>
 
 
-namespace ccore {
+namespace pyclustering {
 
 namespace parallel {
 

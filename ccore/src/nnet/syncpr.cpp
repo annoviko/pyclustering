@@ -31,11 +31,11 @@
 
 using namespace std::placeholders;
 
-using namespace ccore::utils::math;
-using namespace ccore::utils::metric;
+using namespace pyclustering::utils::math;
+using namespace pyclustering::utils::metric;
 
 
-namespace ccore {
+namespace pyclustering {
 
 namespace nnet {
 

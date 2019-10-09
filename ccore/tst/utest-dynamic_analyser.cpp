@@ -28,7 +28,7 @@
 #include "nnet/dynamic_analyser.hpp"
 
 
-using namespace ccore::nnet;
+using namespace pyclustering::nnet;
 
 
 using network_dynamic = std::vector<std::vector<double>>;

@@ -24,7 +24,7 @@
 #pragma once
 
 
-namespace ccore {
+namespace pyclustering {
 
 namespace nnet {
 

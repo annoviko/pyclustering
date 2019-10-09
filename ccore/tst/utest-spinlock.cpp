@@ -29,7 +29,7 @@
 #include <algorithm>
 
 
-using namespace ccore::parallel;
+using namespace pyclustering::parallel;
 
 
 TEST(utest_spinlock, count_value) {

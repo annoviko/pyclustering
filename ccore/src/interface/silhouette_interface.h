@@ -65,7 +65,7 @@ enum silhouette_ksearch_type {
  * @return  Returns cluster allocator.
  *
  */
-ccore::clst::silhouette_ksearch_allocator::ptr get_silhouette_ksearch_allocator(
+pyclustering::clst::silhouette_ksearch_allocator::ptr get_silhouette_ksearch_allocator(
     const silhouette_ksearch_type p_algorithm);
 
 

@@ -28,7 +28,7 @@
 #include <list>
 
 
-namespace ccore {
+namespace pyclustering {
 
 namespace clst {
 

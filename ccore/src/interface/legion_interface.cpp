@@ -25,7 +25,7 @@
 #include "nnet/legion.hpp"
 
 
-using namespace ccore::nnet;
+using namespace pyclustering::nnet;
 
 
 void * legion_create(const unsigned int size, const unsigned int connection_type, const void * const parameters) {

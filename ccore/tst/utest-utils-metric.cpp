@@ -30,8 +30,8 @@
 #include "utenv_check.hpp"
 
 
-using namespace ccore;
-using namespace ccore::utils::metric;
+using namespace pyclustering;
+using namespace pyclustering::utils::metric;
 
 
 TEST(utest_metric, metric_factory_euclidean) {
@@ -98,7 +98,7 @@ TEST(utest_metric, calculate_distance_matrix_01) {
     dataset points = { {0}, {2}, {4} };
     dataset distance_matrix;
 
-    ccore::utils::metric::distance_matrix(points, distance_matrix);
+    pyclustering::utils::metric::distance_matrix(points, distance_matrix);
 
     dataset distance_matrix_expected = { { 0.0, 2.0, 4.0 }, { 2.0, 0.0, 2.0 }, { 4.0, 2.0, 0.0 } };
 

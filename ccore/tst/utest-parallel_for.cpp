@@ -28,7 +28,7 @@
 #include <numeric>
 
 
-using namespace ccore::parallel;
+using namespace pyclustering::parallel;
 
 
 static void template_parallel_square(const std::size_t p_length) {

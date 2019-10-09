@@ -30,7 +30,7 @@
 #include "nnet/hhn.hpp"
 
 
-using namespace ccore::nnet;
+using namespace pyclustering::nnet;
 
 
 void * hhn_create(const std::size_t p_size, const void * const p_params) {

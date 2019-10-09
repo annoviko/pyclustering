@@ -23,7 +23,7 @@
 #include "container/adjacency_matrix.hpp"
 
 
-namespace ccore {
+namespace pyclustering {
 
 namespace container {
 

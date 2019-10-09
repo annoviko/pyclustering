@@ -31,10 +31,10 @@
 #include "utils/metric.hpp"
 
 
-using namespace ccore::utils::metric;
+using namespace pyclustering::utils::metric;
 
 
-namespace ccore {
+namespace pyclustering {
 
 namespace clst {
 

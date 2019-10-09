@@ -28,7 +28,7 @@
 #include <unordered_map>
 
 
-using namespace ccore::clst;
+using namespace pyclustering::clst;
 
 
 void ASSERT_CLUSTER_SIZES(

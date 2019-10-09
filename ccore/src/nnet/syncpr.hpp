@@ -26,7 +26,7 @@
 #include "nnet/sync.hpp"
 
 
-namespace ccore {
+namespace pyclustering {
 
 namespace nnet {
 

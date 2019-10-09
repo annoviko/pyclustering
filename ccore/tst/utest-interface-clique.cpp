@@ -30,7 +30,7 @@
 #include <memory>
 
 
-using namespace ccore;
+using namespace pyclustering;
 
 
 TEST(utest_interface_clique, clique_algorithm) {

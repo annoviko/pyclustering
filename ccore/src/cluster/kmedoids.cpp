@@ -28,10 +28,10 @@
 #include "parallel/parallel.hpp"
 
 
-using namespace ccore::parallel;
+using namespace pyclustering::parallel;
 
 
-namespace ccore {
+namespace pyclustering {
 
 namespace clst {
 

@@ -33,9 +33,9 @@
 #include <memory>
 
 
-using namespace ccore;
-using namespace ccore::clst;
-using namespace ccore::utils::metric;
+using namespace pyclustering;
+using namespace pyclustering::clst;
+using namespace pyclustering::utils::metric;
 
 
 TEST(utest_interface_gmeans, kmedoids_api) {

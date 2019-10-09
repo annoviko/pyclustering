@@ -41,16 +41,16 @@
 #include "utils/metric.hpp"
 
 
-using namespace ccore::container;
-using namespace ccore::differential;
-using namespace ccore::parallel;
-using namespace ccore::utils::math;
-using namespace ccore::utils::metric;
+using namespace pyclustering::container;
+using namespace pyclustering::differential;
+using namespace pyclustering::parallel;
+using namespace pyclustering::utils::math;
+using namespace pyclustering::utils::metric;
 
 using namespace std::placeholders;
 
 
-namespace ccore {
+namespace pyclustering {
 
 namespace nnet {
 

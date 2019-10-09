@@ -30,7 +30,7 @@
 #include "thread_executor.hpp"
 
 
-namespace ccore {
+namespace pyclustering {
 
 namespace parallel {
 

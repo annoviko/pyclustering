@@ -38,11 +38,11 @@
 #include "nnet/network.hpp"
 
 
-using namespace ccore::container;
-using namespace ccore::differential;
+using namespace pyclustering::container;
+using namespace pyclustering::differential;
 
 
-namespace ccore {
+namespace pyclustering {
 
 namespace nnet {
 

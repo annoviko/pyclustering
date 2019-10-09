@@ -32,8 +32,8 @@
 #include <vector>
 
 
-using namespace ccore;
-using namespace ccore::parallel;
+using namespace pyclustering;
+using namespace pyclustering::parallel;
 
 
 std::size_t AUTO_POOL_SIZE = std::numeric_limits<std::size_t>::max();

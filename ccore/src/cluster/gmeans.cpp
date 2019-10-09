@@ -36,13 +36,13 @@
 #include "utils/stats.hpp"
 
 
-using namespace ccore::parallel;
-using namespace ccore::utils::linalg;
-using namespace ccore::utils::metric;
-using namespace ccore::utils::stats;
+using namespace pyclustering::parallel;
+using namespace pyclustering::utils::linalg;
+using namespace pyclustering::utils::metric;
+using namespace pyclustering::utils::stats;
 
 
-namespace ccore {
+namespace pyclustering {
 
 namespace clst {
 

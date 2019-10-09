@@ -28,7 +28,7 @@
 #include "cluster/optics_descriptor.hpp"
 
 
-namespace ccore {
+namespace pyclustering {
 
 namespace clst {
 

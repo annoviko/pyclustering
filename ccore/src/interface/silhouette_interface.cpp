@@ -24,16 +24,16 @@
 #include "silhouette_interface.h"
 
 
-ccore::clst::silhouette_ksearch_allocator::ptr get_silhouette_ksearch_allocator(
+pyclustering::clst::silhouette_ksearch_allocator::ptr get_silhouette_ksearch_allocator(
     const silhouette_ksearch_type p_algorithm)
 {
     switch(p_algorithm) {
       case silhouette_ksearch_type::KMEANS:
-          return std::make_shared<ccore::clst::kmeans_allocator>();
+          return std::make_shared<pyclustering::clst::kmeans_allocator>();
       case silhouette_ksearch_type::KMEDIANS:
-          return std::make_shared<ccore::clst::kmedians_allocator>();
+          return std::make_shared<pyclustering::clst::kmedians_allocator>();
       case silhouette_ksearch_type::KMEDOIDS:
-          return std::make_shared<ccore::clst::kmedoids_allocator>();
+          return std::make_shared<pyclustering::clst::kmedoids_allocator>();
       default:
           throw std::invalid_argument("Unknown allocator '" + std::to_string(static_cast<int>(p_algorithm)) + "' is specified.");
     }
@@ -46,20 +46,20 @@ pyclustering_package * silhouette_algorithm(
     const void * const p_metric,
     const std::size_t p_data_type)
 {
-    ccore::dataset data;
+    pyclustering::dataset data;
     p_sample->extract(data);
 
-    ccore::clst::cluster_sequence clusters;
+    pyclustering::clst::cluster_sequence clusters;
     p_clusters->extract(clusters);
 
-    distance_metric<ccore::point> * metric = ((distance_metric<ccore::point> *) p_metric);
-    distance_metric<ccore::point> default_metric = distance_metric_factory<ccore::point>::euclidean_square();
+    distance_metric<pyclustering::point> * metric = ((distance_metric<pyclustering::point> *) p_metric);
+    distance_metric<pyclustering::point> default_metric = distance_metric_factory<pyclustering::point>::euclidean_square();
 
     if (!metric)
         metric = &default_metric;
 
-    ccore::clst::silhouette_data result;
-    ccore::clst::silhouette(*metric).process(data, clusters, static_cast<ccore::clst::silhouette_data_t>(p_data_type), result);
+    pyclustering::clst::silhouette_data result;
+    pyclustering::clst::silhouette(*metric).process(data, clusters, static_cast<pyclustering::clst::silhouette_data_t>(p_data_type), result);
 
     return create_package(&result.get_score());
 }
@@ -71,13 +71,13 @@ pyclustering_package * silhouette_ksearch_algorithm(
     const std::size_t p_kmax,
     const std::size_t p_algorithm)
 {
-    ccore::dataset data;
+    pyclustering::dataset data;
     p_sample->extract(data);
 
     auto allocator = get_silhouette_ksearch_allocator(static_cast<silhouette_ksearch_type>(p_algorithm));
 
-    ccore::clst::silhouette_ksearch_data result;
-    ccore::clst::silhouette_ksearch(p_kmin, p_kmax, allocator).process(data, result);
+    pyclustering::clst::silhouette_ksearch_data result;
+    pyclustering::clst::silhouette_ksearch(p_kmin, p_kmax, allocator).process(data, result);
 
     pyclustering_package * package = new pyclustering_package(pyclustering_data_t::PYCLUSTERING_TYPE_LIST);
     package->size = SILHOUETTE_KSEARCH_PACKAGE_SIZE;

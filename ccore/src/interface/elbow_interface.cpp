@@ -28,7 +28,7 @@ pyclustering_package * elbow_method_ikpp(const pyclustering_package * const p_sa
                                          const std::size_t p_kmin, 
                                          const std::size_t p_kmax)
 {
-    return elbow_method<ccore::clst::kmeans_plus_plus>(p_sample, p_kmin, p_kmax);
+    return elbow_method<pyclustering::clst::kmeans_plus_plus>(p_sample, p_kmin, p_kmax);
 }
 
 
@@ -36,5 +36,5 @@ pyclustering_package * elbow_method_irnd(const pyclustering_package * const p_sa
                                          const std::size_t p_kmin, 
                                          const std::size_t p_kmax)
 {
-    return elbow_method<ccore::clst::random_center_initializer>(p_sample, p_kmin, p_kmax);
+    return elbow_method<pyclustering::clst::random_center_initializer>(p_sample, p_kmin, p_kmax);
 }

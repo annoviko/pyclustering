@@ -26,7 +26,7 @@
 #include <algorithm>
 
 
-namespace ccore {
+namespace pyclustering {
 
 namespace utils {
 

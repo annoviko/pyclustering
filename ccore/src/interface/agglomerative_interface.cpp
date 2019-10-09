@@ -26,12 +26,12 @@
 
 
 pyclustering_package * agglomerative_algorithm(const pyclustering_package * const p_sample, const size_t p_number_clusters, const size_t p_link) {
-    ccore::clst::agglomerative algorithm(p_number_clusters, (ccore::clst::type_link) p_link);
+    pyclustering::clst::agglomerative algorithm(p_number_clusters, (pyclustering::clst::type_link) p_link);
 
-    ccore::dataset data;
+    pyclustering::dataset data;
     p_sample->extract(data);
 
-    ccore::clst::cluster_data result;
+    pyclustering::clst::cluster_data result;
     algorithm.process(data, result);
 
     pyclustering_package * package = create_package(&result.clusters());

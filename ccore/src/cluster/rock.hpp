@@ -33,10 +33,10 @@
 #include "definitions.hpp"
 
 
-using namespace ccore::container;
+using namespace pyclustering::container;
 
 
-namespace ccore {
+namespace pyclustering {
 
 namespace clst {
 

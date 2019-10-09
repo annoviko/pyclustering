@@ -31,7 +31,7 @@
 #include "ordering_analyser.hpp"
 
 
-namespace ccore {
+namespace pyclustering {
 
 namespace clst {
 

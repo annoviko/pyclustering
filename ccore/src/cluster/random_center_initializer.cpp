@@ -27,7 +27,7 @@
 #include <random>
 
 
-namespace ccore {
+namespace pyclustering {
 
 namespace clst {
 

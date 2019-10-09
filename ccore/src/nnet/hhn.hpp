@@ -39,11 +39,11 @@
 #include "differential/differ_state.hpp"
 
 
-using namespace ccore::differential;
-using namespace ccore::utils::random;
+using namespace pyclustering::differential;
+using namespace pyclustering::utils::random;
 
 
-namespace ccore {
+namespace pyclustering {
 
 namespace nnet {
 

@@ -28,7 +28,7 @@
 #include <algorithm>
 
 
-using namespace ccore::container;
+using namespace pyclustering::container;
 
 
 void template_set_connection(adjacency_collection & collection) {

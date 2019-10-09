@@ -26,7 +26,7 @@
 #include "nnet/syncpr.hpp"
 
 
-using namespace ccore::nnet;
+using namespace pyclustering::nnet;
 
 
 void * syncpr_create(const unsigned int num_osc, const double increase_strength1, const double increase_strength2) {

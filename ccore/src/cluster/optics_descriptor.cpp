@@ -26,7 +26,7 @@
 #include <limits>
 
 
-namespace ccore {
+namespace pyclustering {
 
 namespace clst {
 

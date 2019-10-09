@@ -26,7 +26,7 @@
 #include "nnet/sync.hpp"
 
 
-using namespace ccore::nnet;
+using namespace pyclustering::nnet;
 
 
 void * sync_create_network(const unsigned int size, const double weight_factor, const double frequency_factor, const unsigned int connection_type, const unsigned int initial_phases) {

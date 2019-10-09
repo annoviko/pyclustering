@@ -30,8 +30,8 @@
 #include <algorithm>
 
 
-using namespace ccore;
-using namespace ccore::clst;
+using namespace pyclustering;
+using namespace pyclustering::clst;
 
 
 const double WCE_CHECK_DISABLED = std::numeric_limits<double>::max();

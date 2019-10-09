@@ -28,7 +28,7 @@
 #include "container/adjacency_weight_list.hpp"
 
 
-namespace ccore {
+namespace pyclustering {
 
 namespace container {
 

@@ -27,7 +27,7 @@
 #include "utils/metric.hpp"
 
 
-using namespace ccore::utils::metric;
+using namespace pyclustering::utils::metric;
 
 
 pyclustering_package * kmedoids_algorithm(const pyclustering_package * const p_sample,
@@ -37,22 +37,22 @@ pyclustering_package * kmedoids_algorithm(const pyclustering_package * const p_s
                                           const void * const p_metric,
                                           const std::size_t p_type)
 {
-    ccore::clst::medoid_sequence medoids;
+    pyclustering::clst::medoid_sequence medoids;
     p_package_medoids->extract(medoids);
 
-    distance_metric<ccore::point> * metric = ((distance_metric<ccore::point> *) p_metric);
-    distance_metric<ccore::point> default_metric = distance_metric_factory<ccore::point>::euclidean_square();
+    distance_metric<pyclustering::point> * metric = ((distance_metric<pyclustering::point> *) p_metric);
+    distance_metric<pyclustering::point> default_metric = distance_metric_factory<pyclustering::point>::euclidean_square();
 
     if (!metric)
         metric = &default_metric;
 
-    ccore::clst::kmedoids algorithm(medoids, p_tolerance, p_itermax, *metric);
+    pyclustering::clst::kmedoids algorithm(medoids, p_tolerance, p_itermax, *metric);
 
-    ccore::dataset input_dataset;
+    pyclustering::dataset input_dataset;
     p_sample->extract(input_dataset);
 
-    ccore::clst::kmedoids_data output_result;
-    algorithm.process(input_dataset, (ccore::clst::kmedoids_data_t) p_type, output_result);
+    pyclustering::clst::kmedoids_data output_result;
+    algorithm.process(input_dataset, (pyclustering::clst::kmedoids_data_t) p_type, output_result);
 
     pyclustering_package * package = create_package_container(KMEDOIDS_PACKAGE_SIZE);
     ((pyclustering_package **) package->data)[KMEDOIDS_PACKAGE_INDEX_CLUSTERS] = create_package(&output_result.clusters());

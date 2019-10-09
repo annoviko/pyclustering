@@ -29,7 +29,7 @@
 #include <unordered_map>
 
 
-namespace ccore {
+namespace pyclustering {
 
 namespace clst {
 

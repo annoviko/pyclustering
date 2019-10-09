@@ -31,8 +31,8 @@
 #include <utility>
 
 
-using namespace ccore;
-using namespace ccore::container;
+using namespace pyclustering;
+using namespace pyclustering::container;
 
 
 TEST(utest_adjacency_weight_list, create_delete) {

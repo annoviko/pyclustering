@@ -26,7 +26,7 @@
 #include <thread>
 
 
-namespace ccore {
+namespace pyclustering {
 
 namespace parallel {
 

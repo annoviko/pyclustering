@@ -26,7 +26,7 @@
 #include <exception>
 
 
-namespace ccore {
+namespace pyclustering {
 
 namespace parallel {
 

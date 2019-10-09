@@ -28,8 +28,8 @@
 #include "utils/metric.hpp"
 
 
-using namespace ccore;
-using namespace ccore::utils::metric;
+using namespace pyclustering;
+using namespace pyclustering::utils::metric;
 
 
 pyclustering_package * bsas_algorithm(const pyclustering_package * const p_sample,
@@ -43,12 +43,12 @@ pyclustering_package * bsas_algorithm(const pyclustering_package * const p_sampl
     if (!metric)
         metric = &default_metric;
 
-    ccore::clst::bsas algorithm(p_amount, p_threshold, *metric);
+    pyclustering::clst::bsas algorithm(p_amount, p_threshold, *metric);
 
     dataset input_dataset;
     p_sample->extract(input_dataset);
 
-    ccore::clst::bsas_data output_result;
+    pyclustering::clst::bsas_data output_result;
     algorithm.process(input_dataset, output_result);
 
     pyclustering_package * package = new pyclustering_package(pyclustering_data_t::PYCLUSTERING_TYPE_LIST);

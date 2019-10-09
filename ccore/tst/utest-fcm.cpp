@@ -33,8 +33,8 @@
 #include <numeric>
 
 
-using namespace ccore;
-using namespace ccore::clst;
+using namespace pyclustering;
+using namespace pyclustering::clst;
 
 
 static void template_fcm_data_processing(

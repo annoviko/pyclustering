@@ -23,7 +23,7 @@
 #include "interface/pcnn_interface.h"
 
 
-using namespace ccore::nnet;
+using namespace pyclustering::nnet;
 
 
 void * pcnn_create(const unsigned int p_size, const unsigned int p_connection_type, const unsigned int p_height, const unsigned int p_width, const void * const p_parameters) {

@@ -33,7 +33,7 @@
 #include "cluster/elbow.hpp"
 
 
-using namespace ccore::clst;
+using namespace pyclustering::clst;
 
 
 template <class type_initializer = kmeans_plus_plus>

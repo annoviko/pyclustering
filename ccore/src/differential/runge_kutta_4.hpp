@@ -30,7 +30,7 @@
 #include <functional>
 
 
-namespace ccore {
+namespace pyclustering {
 
 namespace differential {
 

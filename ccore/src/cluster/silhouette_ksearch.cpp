@@ -31,7 +31,7 @@
 #include <numeric>
 
 
-namespace ccore {
+namespace pyclustering {
 
 namespace clst {
 

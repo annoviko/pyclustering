@@ -35,10 +35,10 @@
 
 using namespace std::placeholders;
 
-using namespace ccore::utils::math;
+using namespace pyclustering::utils::math;
 
 
-namespace ccore {
+namespace pyclustering {
 
 namespace nnet {
 

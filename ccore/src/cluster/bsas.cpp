@@ -24,7 +24,7 @@
 #include "cluster/bsas.hpp"
 
 
-namespace ccore {
+namespace pyclustering {
 
 namespace clst {
 

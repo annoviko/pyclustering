@@ -32,8 +32,8 @@
 #include "utenv_utils.hpp"
 
 
-using namespace ccore;
-using namespace ccore::nnet;
+using namespace pyclustering;
+using namespace pyclustering::nnet;
 
 
 static void CHECK_FREE_PACKAGE(pyclustering_package * package) {

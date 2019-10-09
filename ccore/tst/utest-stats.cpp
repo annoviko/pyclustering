@@ -28,7 +28,7 @@
 #include "utils/stats.hpp"
 
 
-using namespace ccore::utils::stats;
+using namespace pyclustering::utils::stats;
 
 
 TEST(utest_stats, pdf) {
@@ -77,7 +77,7 @@ TEST(utest_stats, var) {
 
 TEST(utest_stats, std) {
     std::vector<double> data = {-0.80526491, -1.03631388, 1.38455957, 1.67106978, -0.00618697, -2.44026332, 1.12861732, -0.16200512, -1.41740669, -1.27725788};
-    const double result = ccore::utils::stats::std(data);
+    const double result = pyclustering::utils::stats::std(data);
     ASSERT_NEAR(1.351987, result, 0.000001);
 }
 

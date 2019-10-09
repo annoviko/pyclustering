@@ -29,7 +29,7 @@
 #include <unordered_set>
 
 
-using namespace ccore::nnet;
+using namespace pyclustering::nnet;
 
 
 static void template_dynamic_generation_runner(

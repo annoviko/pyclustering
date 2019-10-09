@@ -33,7 +33,7 @@ using namespace std::placeholders;
 
 
 
-namespace ccore {
+namespace pyclustering {
 
 namespace nnet {
 

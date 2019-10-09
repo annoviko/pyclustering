@@ -23,7 +23,7 @@
 #include "differential/differ_factor.hpp"
 
 
-namespace ccore {
+namespace pyclustering {
 
 namespace differential {
 

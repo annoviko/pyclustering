@@ -30,7 +30,7 @@
 #include "nnet/som.hpp"
 
 
-namespace ccore {
+namespace pyclustering {
 
 namespace clst {
 

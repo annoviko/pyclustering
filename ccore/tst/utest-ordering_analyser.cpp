@@ -29,7 +29,7 @@
 #include "utenv_check.hpp"
 
 
-using namespace ccore::clst;
+using namespace pyclustering::clst;
 
 
 TEST(utest_ordering, cluster_allocation_identical_ordering) {

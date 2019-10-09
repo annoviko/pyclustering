@@ -29,7 +29,7 @@
 #include "solve_type.hpp"
 
 
-namespace ccore {
+namespace pyclustering {
 
 namespace differential {
 

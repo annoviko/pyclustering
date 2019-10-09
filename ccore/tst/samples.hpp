@@ -31,7 +31,7 @@
 #include "definitions.hpp"
 
 
-using namespace ccore;
+using namespace pyclustering;
 
 
 class generic_sample_factory {

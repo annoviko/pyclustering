@@ -32,8 +32,8 @@
 #include <memory>
 
 
-using namespace ccore;
-using namespace ccore::utils::metric;
+using namespace pyclustering;
+using namespace pyclustering::utils::metric;
 
 
 TEST(utest_interface_mbsas, mbsas_api) {

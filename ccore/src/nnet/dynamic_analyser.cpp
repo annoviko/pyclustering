@@ -28,10 +28,10 @@
 #include "utils/math.hpp"
 
 
-using namespace ccore::utils::math;
+using namespace pyclustering::utils::math;
 
 
-namespace ccore {
+namespace pyclustering {
 
 namespace nnet {
 

@@ -33,8 +33,8 @@
 #include "nnet/hhn.hpp"
 
 
-using namespace ccore::differential;
-using namespace ccore::nnet;
+using namespace pyclustering::differential;
+using namespace pyclustering::nnet;
 
 
 static void template_create_delete(const std::size_t p_num_osc) {

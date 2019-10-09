@@ -31,20 +31,20 @@ pyclustering_package * kmedians_algorithm(const pyclustering_package * const p_s
                                           const std::size_t p_itermax,
                                           const void * const p_metric)
 {
-    ccore::dataset data, medians;
+    pyclustering::dataset data, medians;
 
     p_sample->extract(data);
     p_initial_medians->extract(medians);
 
-    distance_metric<ccore::point> * metric = ((distance_metric<ccore::point> *) p_metric);
-    distance_metric<ccore::point> default_metric = distance_metric_factory<ccore::point>::euclidean_square();
+    distance_metric<pyclustering::point> * metric = ((distance_metric<pyclustering::point> *) p_metric);
+    distance_metric<pyclustering::point> default_metric = distance_metric_factory<pyclustering::point>::euclidean_square();
 
     if (!metric)
         metric = &default_metric;
 
-    ccore::clst::kmedians algorithm(medians, p_tolerance, p_itermax, *metric);
+    pyclustering::clst::kmedians algorithm(medians, p_tolerance, p_itermax, *metric);
 
-    ccore::clst::kmedians_data output_result;
+    pyclustering::clst::kmedians_data output_result;
     algorithm.process(data, output_result);
 
     pyclustering_package * package = create_package_container(KMEDIANS_PACKAGE_SIZE);

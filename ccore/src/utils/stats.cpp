@@ -24,7 +24,7 @@
 #include "utils/stats.hpp"
 
 
-namespace ccore {
+namespace pyclustering {
 
 namespace utils {
 

@@ -31,7 +31,7 @@
 #include "utils/math.hpp"
 
 
-namespace ccore {
+namespace pyclustering {
 
 namespace utils {
 
@@ -142,7 +142,7 @@ double std(const TypeContainer & p_container) {
  */
 template <class TypeContainer>
 std::vector<double> pdf(const TypeContainer & p_data) {
-    double m = 1.0 / std::sqrt(2.0 * ccore::utils::math::pi);
+    double m = 1.0 / std::sqrt(2.0 * pyclustering::utils::math::pi);
 
     std::vector<double> result;
     result.reserve(p_data.size());
@@ -190,7 +190,7 @@ std::vector<double> cdf(const TypeContainer & p_data) {
 template <class TypeContainer>
 double anderson(const TypeContainer & p_data) {
     const double m = mean(p_data);
-    const double v = ccore::utils::stats::std(p_data, m);
+    const double v = pyclustering::utils::stats::std(p_data, m);
 
     TypeContainer sample = p_data;
     for (auto & value : sample) {

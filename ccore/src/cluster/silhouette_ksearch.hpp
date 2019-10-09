@@ -27,7 +27,7 @@
 #include "cluster/silhouette_ksearch_data.hpp"
 
 
-namespace ccore {
+namespace pyclustering {
 
 namespace clst {
 

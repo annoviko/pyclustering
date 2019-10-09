@@ -29,7 +29,7 @@
 #include "container/adjacency_connector.hpp"
 
 
-namespace ccore {
+namespace pyclustering {
 
 namespace container {
 

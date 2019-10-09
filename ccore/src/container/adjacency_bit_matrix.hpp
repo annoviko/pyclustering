@@ -25,7 +25,7 @@
 #include "container/adjacency.hpp"
 
 
-namespace ccore {
+namespace pyclustering {
 
 namespace container {
 

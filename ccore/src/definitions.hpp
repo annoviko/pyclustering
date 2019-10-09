@@ -43,7 +43,7 @@
 #endif
 
 
-namespace ccore {
+namespace pyclustering {
 
 
 using pattern           = std::vector<double>;
@@ -78,7 +78,7 @@ std::string to_string(const TypeContainer & p_container) {
     std::stringstream stream;
     stream << "[";
     for (std::size_t p_index = 0; p_index < p_container.size(); p_index++) {
-        stream << ccore::to_string(p_container[p_index]);
+        stream << pyclustering::to_string(p_container[p_index]);
 
         if (p_index != (p_container.size() - 1)) {
             stream << " ";

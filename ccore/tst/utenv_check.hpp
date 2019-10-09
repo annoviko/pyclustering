@@ -33,8 +33,8 @@
 #include "cluster/cluster_algorithm.hpp"
 
 
-using namespace ccore;
-using namespace ccore::clst;
+using namespace pyclustering;
+using namespace pyclustering::clst;
 
 
 /**

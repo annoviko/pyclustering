@@ -28,7 +28,7 @@
 #include "utils/linalg.hpp"
 
 
-using namespace ccore::utils::linalg;
+using namespace pyclustering::utils::linalg;
 
 
 TEST(utest_lingalg, subtract) {

@@ -28,7 +28,7 @@
 #include "cluster/syncnet.hpp"
 
 
-namespace ccore {
+namespace pyclustering {
 
 namespace clst {
 

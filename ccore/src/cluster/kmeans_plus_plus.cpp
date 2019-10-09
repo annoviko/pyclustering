@@ -32,7 +32,7 @@
 #include <string>
 
 
-namespace ccore {
+namespace pyclustering {
 
 namespace clst {
 

@@ -36,7 +36,7 @@
 #include <memory>
 
 
-using namespace ccore;
+using namespace pyclustering;
 
 
 TEST(utest_interface_silhouette, silhouette) {

@@ -28,7 +28,7 @@
 #include "cluster/syncnet.hpp"
 
 
-using namespace ccore::clst;
+using namespace pyclustering::clst;
 
 
 static void template_create_delete(const unsigned int size) {

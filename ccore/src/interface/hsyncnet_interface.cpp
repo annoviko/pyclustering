@@ -25,8 +25,8 @@
 #include "cluster/hsyncnet.hpp"
 
 
-using namespace ccore::clst;
-using namespace ccore::nnet;
+using namespace pyclustering::clst;
+using namespace pyclustering::nnet;
 
 
 void * hsyncnet_create_network(const pyclustering_package * const p_sample, 
@@ -35,7 +35,7 @@ void * hsyncnet_create_network(const pyclustering_package * const p_sample,
                                const unsigned int p_initial_neighbors,
                                const double p_increase_persent) {
 
-    ccore::dataset input_data;
+    pyclustering::dataset input_data;
     p_sample->extract(input_data);
 
     return new hsyncnet(&input_data, p_number_clusters, (initial_type) p_initial_phases, p_initial_neighbors, p_increase_persent);

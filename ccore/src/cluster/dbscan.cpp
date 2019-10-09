@@ -27,7 +27,7 @@
 #include <unordered_set>
 
 
-namespace ccore {
+namespace pyclustering {
 
 namespace clst {
 

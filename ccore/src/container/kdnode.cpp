@@ -24,7 +24,7 @@
 #include "kdnode.hpp"
 
 
-namespace ccore {
+namespace pyclustering {
 
 namespace container {
 

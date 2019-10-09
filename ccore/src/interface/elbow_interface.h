@@ -62,11 +62,11 @@ pyclustering_package * elbow_method(const pyclustering_package * const p_sample,
                                     const std::size_t p_kmin,
                                     const std::size_t p_kmax)
 {
-    ccore::dataset input_dataset;
+    pyclustering::dataset input_dataset;
     p_sample->extract(input_dataset);
 
-    ccore::clst::elbow_data result;
-    ccore::clst::elbow<type_initializer> solver(p_kmin, p_kmax);
+    pyclustering::clst::elbow_data result;
+    pyclustering::clst::elbow<type_initializer> solver(p_kmin, p_kmax);
     solver.process(input_dataset, result);
 
     pyclustering_package * package = new pyclustering_package(pyclustering_data_t::PYCLUSTERING_TYPE_LIST);

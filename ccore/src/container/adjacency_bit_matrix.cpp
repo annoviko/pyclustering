@@ -26,7 +26,7 @@
 #include <stdexcept>
 
 
-namespace ccore {
+namespace pyclustering {
 
 namespace container {
 

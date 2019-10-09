@@ -33,9 +33,9 @@
 #include <numeric>
 
 
-using namespace ccore;
-using namespace ccore::container;
-using namespace ccore::utils::metric;
+using namespace pyclustering;
+using namespace pyclustering::container;
+using namespace pyclustering::utils::metric;
 
 
 class utest_kdtree : public ::testing::Test {

@@ -30,8 +30,8 @@
 #include "cluster/silhouette.hpp"
 
 
-using namespace ccore;
-using namespace ccore::clst;
+using namespace pyclustering;
+using namespace pyclustering::clst;
 
 
 void template_correct_scores(const dataset_ptr & p_data, const answer & p_answer) {

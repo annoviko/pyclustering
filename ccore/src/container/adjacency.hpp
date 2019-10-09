@@ -27,7 +27,7 @@
 #include <cstdlib>
 
 
-namespace ccore {
+namespace pyclustering {
 
 namespace container {
 

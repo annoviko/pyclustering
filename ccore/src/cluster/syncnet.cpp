@@ -28,13 +28,13 @@
 #include "utils/metric.hpp"
 
 
-using namespace ccore::utils::metric;
-using namespace ccore::nnet;
+using namespace pyclustering::utils::metric;
+using namespace pyclustering::nnet;
 
 using namespace std::placeholders;
 
 
-namespace ccore {
+namespace pyclustering {
 
 namespace clst {
 

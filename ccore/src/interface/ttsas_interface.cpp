@@ -29,7 +29,7 @@
 #include "utils/metric.hpp"
 
 
-using namespace ccore::utils::metric;
+using namespace pyclustering::utils::metric;
 
 
 pyclustering_package * ttsas_algorithm(const pyclustering_package * const p_sample,
@@ -37,18 +37,18 @@ pyclustering_package * ttsas_algorithm(const pyclustering_package * const p_samp
                                        const double p_threshold2,
                                        const void * const p_metric)
 {
-    distance_metric<ccore::point> * metric = ((distance_metric<ccore::point> *) p_metric);
-    distance_metric<ccore::point> default_metric = distance_metric_factory<ccore::point>::euclidean_square();
+    distance_metric<pyclustering::point> * metric = ((distance_metric<pyclustering::point> *) p_metric);
+    distance_metric<pyclustering::point> default_metric = distance_metric_factory<pyclustering::point>::euclidean_square();
 
     if (!metric)
         metric = &default_metric;
 
-    ccore::clst::ttsas algorithm(p_threshold1, p_threshold2, *metric);
+    pyclustering::clst::ttsas algorithm(p_threshold1, p_threshold2, *metric);
 
-    ccore::dataset input_dataset;
+    pyclustering::dataset input_dataset;
     p_sample->extract(input_dataset);
 
-    ccore::clst::ttsas_data output_result;
+    pyclustering::clst::ttsas_data output_result;
     algorithm.process(input_dataset, output_result);
 
     pyclustering_package * package = new pyclustering_package(pyclustering_data_t::PYCLUSTERING_TYPE_LIST);

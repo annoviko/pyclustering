@@ -26,7 +26,7 @@
 #include "task.hpp"
 
 
-namespace ccore {
+namespace pyclustering {
 
 namespace parallel {
 

@@ -31,8 +31,8 @@
 #include "answer_reader.hpp"
 
 
-using namespace ccore::clst;
-using namespace ccore::utils::metric;
+using namespace pyclustering::clst;
+using namespace pyclustering::utils::metric;
 
 
 static void

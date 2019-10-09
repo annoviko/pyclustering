@@ -24,7 +24,7 @@
 #include "cluster/ttsas.hpp"
 
 
-namespace ccore {
+namespace pyclustering {
 
 namespace clst {
 

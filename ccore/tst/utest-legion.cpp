@@ -26,7 +26,7 @@
 #include "nnet/legion.hpp"
 
 
-using namespace ccore::nnet;
+using namespace pyclustering::nnet;
 
 
 static void template_create_delete(const unsigned int num_osc, const connection_t type) {

@@ -28,7 +28,7 @@
 #include <sstream>
 
 
-namespace ccore {
+namespace pyclustering {
 
 namespace utils {
 

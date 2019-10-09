@@ -31,7 +31,7 @@
 #include "cluster/xmeans_data.hpp"
 
 
-namespace ccore {
+namespace pyclustering {
 
 namespace clst {
 

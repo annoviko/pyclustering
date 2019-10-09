@@ -30,8 +30,8 @@
 #include "utenv_check.hpp"
 
 
-using namespace ccore;
-using namespace ccore::clst;
+using namespace pyclustering;
+using namespace pyclustering::clst;
 
 
 void template_kmeans_plus_plus_initialization(const dataset_ptr & p_data, const std::size_t p_amount, const std::size_t p_candidates)
@@ -360,7 +360,7 @@ void template_kmeans_plus_plus_metric(const dataset_ptr & p_data,
 TEST(utest_kmeans_plus_plus, metric_manhattan) {
     dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01);
     kmeans_plus_plus::metric metric = [](const point & p1, const point & p2) {
-        return ccore::utils::metric::manhattan_distance(p1, p2);
+        return pyclustering::utils::metric::manhattan_distance(p1, p2);
     };
 
     template_kmeans_plus_plus_metric(data, 2, kmeans_plus_plus::FARTHEST_CENTER_CANDIDATE, metric);
@@ -369,7 +369,7 @@ TEST(utest_kmeans_plus_plus, metric_manhattan) {
 TEST(utest_kmeans_plus_plus, metric_euclidean) {
     dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01);
     kmeans_plus_plus::metric metric = [](const point & p1, const point & p2) {
-        return ccore::utils::metric::euclidean_distance(p1, p2);
+        return pyclustering::utils::metric::euclidean_distance(p1, p2);
     };
 
     template_kmeans_plus_plus_metric(data, 2, kmeans_plus_plus::FARTHEST_CENTER_CANDIDATE, metric);

@@ -26,8 +26,8 @@
 #include "utils/metric.hpp"
 
 
-using namespace ccore;
-using namespace ccore::utils::metric;
+using namespace pyclustering;
+using namespace pyclustering::utils::metric;
 
 
 void * metric_create(const std::size_t p_type,

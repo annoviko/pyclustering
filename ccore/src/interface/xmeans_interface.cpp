@@ -32,13 +32,13 @@ pyclustering_package * xmeans_algorithm(const pyclustering_package * const p_sam
                                         const unsigned int p_criterion,
                                         const std::size_t p_repeat)
 {
-    ccore::dataset data, centers;
+    pyclustering::dataset data, centers;
     p_sample->extract(data);
     p_centers->extract(centers);
 
-    ccore::clst::xmeans solver(centers, p_kmax, p_tolerance, (ccore::clst::splitting_type) p_criterion, p_repeat);
+    pyclustering::clst::xmeans solver(centers, p_kmax, p_tolerance, (pyclustering::clst::splitting_type) p_criterion, p_repeat);
 
-    ccore::clst::xmeans_data output_result;
+    pyclustering::clst::xmeans_data output_result;
     solver.process(data, output_result);
 
     pyclustering_package * package = new pyclustering_package(pyclustering_data_t::PYCLUSTERING_TYPE_LIST);

@@ -28,7 +28,7 @@
 #include <algorithm>
 
 
-using namespace ccore::nnet;
+using namespace pyclustering::nnet;
 
 
 static void template_syncpr_create_delete(const unsigned int size) {

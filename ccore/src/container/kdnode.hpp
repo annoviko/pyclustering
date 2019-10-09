@@ -28,7 +28,7 @@
 #include <vector>
 
 
-namespace ccore {
+namespace pyclustering {
 
 namespace container {
 

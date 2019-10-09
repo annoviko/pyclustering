@@ -31,7 +31,7 @@
 #include <utility>
 
 
-using namespace ccore::container;
+using namespace pyclustering::container;
 
 
 TEST(utest_adjacency_matrix, create_delete) {

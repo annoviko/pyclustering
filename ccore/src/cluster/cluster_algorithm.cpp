@@ -24,7 +24,7 @@
 #include "cluster_algorithm.hpp"
 
 
-namespace ccore {
+namespace pyclustering {
 
 namespace clst {
 

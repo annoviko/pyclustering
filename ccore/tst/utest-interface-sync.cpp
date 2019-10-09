@@ -32,7 +32,7 @@
 #include "utenv_utils.hpp"
 
 
-using namespace ccore::nnet;
+using namespace pyclustering::nnet;
 
 
 static void CHECK_FREE_PACKAGE(pyclustering_package * package, const std::size_t size = 0) {

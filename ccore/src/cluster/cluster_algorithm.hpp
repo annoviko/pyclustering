@@ -30,7 +30,7 @@
 #include "definitions.hpp"
 
 
-namespace ccore {
+namespace pyclustering {
 
 namespace clst {
 

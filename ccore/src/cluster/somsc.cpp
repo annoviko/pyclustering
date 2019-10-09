@@ -23,10 +23,10 @@
 #include "cluster/somsc.hpp"
 
 
-using namespace ccore::nnet;
+using namespace pyclustering::nnet;
 
 
-namespace ccore {
+namespace pyclustering {
 
 namespace clst {
 

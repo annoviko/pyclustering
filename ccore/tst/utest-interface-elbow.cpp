@@ -33,7 +33,7 @@
 #include <memory>
 
 
-using namespace ccore;
+using namespace pyclustering;
 
 
 TEST(utest_interface_elbow, elbow_method) {

@@ -23,7 +23,7 @@
 #include "cluster/clique_block.hpp"
 
 
-namespace ccore {
+namespace pyclustering {
 
 namespace clst {
 

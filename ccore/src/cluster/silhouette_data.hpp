@@ -4,7 +4,7 @@
 #include <vector>
 
 
-namespace ccore {
+namespace pyclustering {
 
 namespace clst {
 

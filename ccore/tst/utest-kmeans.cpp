@@ -32,9 +32,9 @@
 #include "utenv_check.hpp"
 
 
-using namespace ccore;
-using namespace ccore::clst;
-using namespace ccore::utils::metric;
+using namespace pyclustering;
+using namespace pyclustering::clst;
+using namespace pyclustering::utils::metric;
 
 
 static void

@@ -34,7 +34,7 @@
 #include <vector>
 
 
-namespace ccore {
+namespace pyclustering {
 
 namespace utils {
 
@@ -440,7 +440,7 @@ public:
 
 /**
  *
- * @brief   Distance metric factory provides services for creation available metric in the 'ccore::utils::metric' and also user-defined.
+ * @brief   Distance metric factory provides services for creation available metric in the 'pyclustering::utils::metric' and also user-defined.
  *
  */
 template <typename TypeContainer>
