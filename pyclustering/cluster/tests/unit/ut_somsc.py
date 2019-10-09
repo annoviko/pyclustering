@@ -30,6 +30,7 @@ import unittest
 import matplotlib
 matplotlib.use('Agg')
 
+from pyclustering.cluster.somsc import somsc
 from pyclustering.cluster.tests.somsc_templates import SyncnetTestTemplates
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES
@@ -88,5 +89,11 @@ class SomscUnitTest(unittest.TestCase):
         SyncnetTestTemplates.templateClusterAllocationOneDimensionData(False)
 
 
-if __name__ == "__main__":
-    unittest.main()
+    def test_incorrect_data(self):
+        self.assertRaises(ValueError, somsc, [], 1, 1)
+
+    def test_incorrect_epouch(self):
+        self.assertRaises(ValueError, somsc, [[0], [1], [2]], 1, -1)
+
+    def test_incorrect_amount_clusters(self):
+        self.assertRaises(ValueError, somsc, [[0], [1], [2]], 0, 1)

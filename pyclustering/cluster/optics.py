@@ -392,7 +392,7 @@ class optics:
 
     """
     
-    def __init__(self, sample, eps, minpts, amount_clusters = None, ccore = True, **kwargs):
+    def __init__(self, sample, eps, minpts, amount_clusters=None, ccore=True, **kwargs):
         """!
         @brief Constructor of clustering algorithm OPTICS.
         
@@ -429,6 +429,8 @@ class optics:
 
         if self.__ccore:
             self.__ccore = ccore_library.workable()
+
+        self.__verify_arguments()
 
 
     def process(self):
@@ -773,3 +775,23 @@ class optics:
         distances = self.__sample_pointer[optic_object.index_object]
         return [[index_neighbor, distances[index_neighbor]] for index_neighbor in range(len(distances))
                 if ((distances[index_neighbor] <= self.__eps) and (index_neighbor != optic_object.index_object))]
+
+
+    def __verify_arguments(self):
+        """!
+        @brief Verify input parameters for the algorithm and throw exception in case of incorrectness.
+
+        """
+        if len(self.__sample_pointer) == 0:
+            raise ValueError("Input data is empty (size: '%d')." % len(self.__sample_pointer))
+
+        if self.__eps < 0:
+            raise ValueError("Connectivity radius (current value: '%d') should be greater or equal to 0." % self.__eps)
+
+        if self.__minpts < 0:
+            raise ValueError("Minimum number of neighbors (current value: '%d') should be greater than 0." %
+                             self.__minpts)
+
+        if (self.__amount_clusters is not None) and (self.__amount_clusters <= 0):
+            raise ValueError("Amount of clusters (current value: '%d') should be greater than 0." %
+                             self.__amount_clusters)

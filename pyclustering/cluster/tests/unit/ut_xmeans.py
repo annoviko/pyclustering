@@ -31,7 +31,7 @@ import matplotlib
 matplotlib.use('Agg')
 
 from pyclustering.cluster.tests.xmeans_templates import XmeansTestTemplates
-from pyclustering.cluster.xmeans import splitting_type
+from pyclustering.cluster.xmeans import xmeans, splitting_type
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES
 
@@ -215,5 +215,14 @@ class XmeansUnitTest(unittest.TestCase):
         XmeansTestTemplates.templatePredict(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, centers, [[2.1, 4.1], [2.1, 1.9]], 4, [3, 2], False)
 
 
-if __name__ == "__main__":
-    unittest.main()
+    def test_incorrect_data(self):
+        self.assertRaises(ValueError, xmeans, [])
+
+    def test_incorrect_centers(self):
+        self.assertRaises(ValueError, xmeans, [[0], [1], [2]], [])
+
+    def test_incorrect_tolerance(self):
+        self.assertRaises(ValueError, xmeans, [[0], [1], [2]], [[1]], 20, -1)
+
+    def test_incorrect_repeat(self):
+        self.assertRaises(ValueError, xmeans, [[0], [1], [2]], repeat=0)

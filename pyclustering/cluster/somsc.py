@@ -83,6 +83,8 @@ class somsc:
         
         self.__network = None
 
+        self.__verify_arguments()
+
 
     def process(self):
         """!
@@ -121,3 +123,20 @@ class somsc:
         """
         
         return type_encoding.CLUSTER_INDEX_LIST_SEPARATION
+
+
+    def __verify_arguments(self):
+        """!
+        @brief Verify input parameters for the algorithm and throw exception in case of incorrectness.
+
+        """
+        if len(self.__data_pointer) == 0:
+            raise ValueError("Input data is empty (size: '%d')." % len(self.__data_pointer))
+
+        if self.__amount_clusters <= 0:
+            raise ValueError("Amount of clusters (current value: '%d') should be greater than 0." %
+                             self.__amount_clusters)
+
+        if self.__epouch < 0:
+            raise ValueError("Amount of epouch (current value: '%d') should be greater or equal to 0." %
+                             self.__epouch)

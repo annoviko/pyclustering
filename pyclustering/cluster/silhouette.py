@@ -117,6 +117,8 @@ class silhouette:
         if self.__ccore is False:
             self.__data = numpy.array(data)
 
+        self.__verify_arguments()
+
 
     def process(self):
         """!
@@ -271,6 +273,18 @@ class silhouette:
             dataset_differences = [self.__metric(point, self.__data[index_point]) for point in self.__data]
 
         return dataset_differences
+
+
+    def __verify_arguments(self):
+        """!
+        @brief Verify input parameters for the algorithm and throw exception in case of incorrectness.
+
+        """
+        if len(self.__data) == 0:
+            raise ValueError("Input data is empty (size: '%d')." % len(self.__data))
+
+        if len(self.__clusters) == 0:
+            raise ValueError("Input clusters are empty (size: '%d')." % len(self.__clusters))
 
 
 

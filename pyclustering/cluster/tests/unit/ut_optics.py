@@ -170,5 +170,14 @@ class OpticsUnitTest(unittest.TestCase):
         assert 0 == len(borders)
 
 
-if __name__ == "__main__":
-    unittest.main()
+    def test_incorrect_data(self):
+        self.assertRaises(ValueError, optics, [], 0.1, 1)
+
+    def test_incorrect_eps(self):
+        self.assertRaises(ValueError, optics, [[0], [1], [2]], -1.0, 1)
+
+    def test_incorrect_minpts(self):
+        self.assertRaises(ValueError, optics, [[0], [1], [2]], 0.5, -1)
+
+    def test_incorrect_amount_clusters(self):
+        self.assertRaises(ValueError, optics, [[0], [1], [2]], 0.5, 1, amount_clusters=-1)

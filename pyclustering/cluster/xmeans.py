@@ -163,6 +163,8 @@ class xmeans:
         if self.__ccore:
             self.__ccore = ccore_library.workable()
 
+        self.__verify_arguments()
+
 
     def process(self):
         """!
@@ -583,3 +585,23 @@ class xmeans:
                 scores[index_cluster] = L - p * 0.5 * log(N)
                 
         return sum(scores)
+
+
+    def __verify_arguments(self):
+        """!
+        @brief Verify input parameters for the algorithm and throw exception in case of incorrectness.
+
+        """
+        if len(self.__pointer_data) == 0:
+            raise ValueError("Input data is empty (size: '%d')." % len(self.__pointer_data))
+
+        if len(self.__centers) == 0:
+            raise ValueError("Initial centers are empty (size: '%d')." % len(self.__pointer_data))
+
+        if self.__tolerance < 0:
+            raise ValueError("Tolerance (current value: '%d') should be greater or equal to 0." %
+                             self.__tolerance)
+
+        if self.__repeat <= 0:
+            raise ValueError("Repeat (current value: '%d') should be greater than 0." %
+                             self.__repeat)

@@ -30,7 +30,7 @@ import unittest
 import matplotlib
 matplotlib.use('Agg')
 
-from pyclustering.cluster.silhouette import silhouette_ksearch_type
+from pyclustering.cluster.silhouette import silhouette, silhouette_ksearch_type
 from pyclustering.cluster.tests.silhouette_templates import silhouette_test_template
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES, SIMPLE_ANSWERS
@@ -163,5 +163,8 @@ class silhouette_unit_tests(unittest.TestCase):
                                                                SIMPLE_ANSWERS.ANSWER_SIMPLE7, False)
 
 
-if __name__ == "__main__":
-    unittest.main()
+    def test_incorrect_data(self):
+        self.assertRaises(ValueError, silhouette, [], [[1, 2], [3, 4]])
+
+    def test_incorrect_clusters(self):
+        self.assertRaises(ValueError, silhouette, [[1], [2], [3], [4]], [])

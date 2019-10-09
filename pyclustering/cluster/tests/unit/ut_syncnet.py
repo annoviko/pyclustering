@@ -23,23 +23,23 @@
 
 """
 
-import unittest;
+import unittest
 
 # Generate images without having a window appear.
-import matplotlib;
-matplotlib.use('Agg');
+import matplotlib
+matplotlib.use('Agg')
 
 
-from pyclustering.nnet import initial_type, conn_represent, solve_type;
+from pyclustering.nnet import initial_type, conn_represent, solve_type
 
-from pyclustering.cluster.tests.syncnet_templates import SyncnetTestTemplates;
-from pyclustering.cluster.syncnet import syncnet, syncnet_visualizer;
+from pyclustering.cluster.tests.syncnet_templates import SyncnetTestTemplates
+from pyclustering.cluster.syncnet import syncnet, syncnet_visualizer
 
-from pyclustering.utils import read_sample;
+from pyclustering.utils import read_sample
 
-from numpy import pi;
+from numpy import pi
 
-from pyclustering.samples.definitions import SIMPLE_SAMPLES;
+from pyclustering.samples.definitions import SIMPLE_SAMPLES
 
 
 class SyncnetUnitTest(unittest.TestCase):
@@ -149,12 +149,11 @@ class SyncnetUnitTest(unittest.TestCase):
 
 
     def testVisualizerNoFailure(self):
-        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1);
-        network = syncnet(sample, 1.0, ccore = False);
+        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1)
+        network = syncnet(sample, 1.0, ccore=False)
 
-        analyser = network.simulate(25, 5, solve_type.FAST, True);
-        syncnet_visualizer.animate_cluster_allocation(sample, analyser);
+        analyser = network.simulate(25, 5, solve_type.FAST, True)
+        syncnet_visualizer.animate_cluster_allocation(sample, analyser)
 
-
-if __name__ == "__main__":
-    unittest.main();
+    def test_incorrect_data(self):
+        self.assertRaises(ValueError, syncnet, [], 0.5)

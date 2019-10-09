@@ -198,7 +198,8 @@ class syncnet(sync_network):
     
     """
     
-    def __init__(self, sample, radius, conn_repr = conn_represent.MATRIX, initial_phases = initial_type.RANDOM_GAUSSIAN, enable_conn_weight = False, ccore = True):
+    def __init__(self, sample, radius, conn_repr=conn_represent.MATRIX, initial_phases=initial_type.RANDOM_GAUSSIAN,
+                 enable_conn_weight=False, ccore=True):
         """!
         @brief Contructor of the oscillatory network SYNC for cluster analysis.
         
@@ -215,7 +216,9 @@ class syncnet(sync_network):
         self._ccore_network_pointer = None
         self._osc_loc = sample
         self._num_osc = len(sample)
-        
+
+        self._verify_arguments()
+
         if (ccore is True) and ccore_library.workable():
             self._ccore_network_pointer = syncnet_create_network(sample, radius, initial_phases, enable_conn_weight)
             
@@ -242,6 +245,15 @@ class syncnet(sync_network):
         if self._ccore_network_pointer is not None:
             syncnet_destroy_network(self._ccore_network_pointer)
             self._ccore_network_pointer = None
+
+
+    def _verify_arguments(self):
+        """!
+        @brief Verify input parameters for the algorithm and throw exception in case of incorrectness.
+
+        """
+        if self._num_osc <= 0:
+            raise ValueError("Input data is empty (size: '%d')." % self._num_osc)
 
 
     def _create_connections(self, radius):

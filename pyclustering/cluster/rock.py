@@ -87,13 +87,15 @@ class rock:
         self.__ccore = ccore
         if self.__ccore:
             self.__ccore = ccore_library.workable()
-        
+
+        self.__verify_arguments()
+
         self.__degree_normalization = 1.0 + 2.0 * ((1.0 - threshold) / (1.0 + threshold))
-        
+
         self.__adjacency_matrix = None
         self.__create_adjacency_matrix()
-        
-        
+
+
     def process(self):
         """!
         @brief Performs cluster analysis in line with rules of ROCK algorithm.
@@ -229,3 +231,22 @@ class rock:
         devider = (len(cluster1) + len(cluster2)) ** self.__degree_normalization - len(cluster1) ** self.__degree_normalization - len(cluster2) ** self.__degree_normalization
         
         return number_links / devider
+
+
+    def __verify_arguments(self):
+        """!
+        @brief Verify input parameters for the algorithm and throw exception in case of incorrectness.
+
+        """
+        if len(self.__pointer_data) == 0:
+            raise ValueError("Input data is empty (size: '%d')." % len(self.__pointer_data))
+
+        if self.__eps < 0:
+            raise ValueError("Connectivity radius (current value: '%d') should be greater or equal to 0." % self.__eps)
+
+        if self.__threshold < 0 or self.__threshold > 1:
+            raise ValueError("Threshold (current value: '%d') should be in range (0, 1)." % self.__threshold)
+
+        if (self.__number_clusters is not None) and (self.__number_clusters <= 0):
+            raise ValueError("Amount of clusters (current value: '%d') should be greater than 0." %
+                             self.__number_clusters)

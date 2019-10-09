@@ -320,7 +320,3 @@ class KmeansPlusPlusInitializerUnitTest(unittest.TestCase):
     def templateKmeansPlusPlusVariousCentersSimple03(self):
         self.templateKmeansPlusPlusSeveralRuns(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 4, 1)
         self.templateKmeansPlusPlusSeveralRuns(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 8, 1)
-
-
-if __name__ == "__main__":
-    unittest.main()
