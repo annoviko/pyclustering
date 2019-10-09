@@ -33,6 +33,7 @@
 #include <numeric>
 
 
+using namespace ccore;
 using namespace ccore::container;
 using namespace ccore::utils::metric;
 

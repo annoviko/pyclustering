@@ -30,6 +30,7 @@
 #include <algorithm>
 
 
+using namespace ccore;
 using namespace ccore::clst;
 
 

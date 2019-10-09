@@ -33,6 +33,9 @@
 #include "utenv_utils.hpp"
 
 
+using namespace ccore;
+
+
 static void CHECK_FREE_PACKAGE(pyclustering_package * package) {
     ASSERT_NE(nullptr, package);
     ASSERT_TRUE(package->size > 0);

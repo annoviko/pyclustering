@@ -31,6 +31,9 @@
 #include "definitions.hpp"
 
 
+using namespace ccore;
+
+
 class generic_sample_factory {
 public:
     /**

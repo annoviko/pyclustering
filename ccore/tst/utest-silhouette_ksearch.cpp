@@ -32,6 +32,7 @@
 #include "cluster/silhouette_ksearch.hpp"
 
 
+using namespace ccore;
 using namespace ccore::clst;
 
 

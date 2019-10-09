@@ -36,6 +36,9 @@
 #include <memory>
 
 
+using namespace ccore;
+
+
 TEST(utest_interface_silhouette, silhouette) {
     dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01);
     answer ans = answer_reader::read(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01);

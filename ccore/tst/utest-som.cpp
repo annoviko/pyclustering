@@ -31,6 +31,7 @@
 #include <numeric>
 
 
+using namespace ccore;
 using namespace ccore::nnet;
 
 

@@ -33,6 +33,9 @@
 #include <memory>
 
 
+using namespace ccore;
+
+
 TEST(utest_interface_elbow, elbow_method) {
     std::shared_ptr<pyclustering_package> sample = pack(dataset({ { 1.0, 1.0 }, { 1.1, 1.0 }, { 1.2, 1.4 }, { 10.0, 10.3 }, { 10.1, 10.2 }, { 10.2, 10.4 } }));
 

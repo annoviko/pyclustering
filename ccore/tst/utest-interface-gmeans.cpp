@@ -33,8 +33,8 @@
 #include <memory>
 
 
+using namespace ccore;
 using namespace ccore::clst;
-
 using namespace ccore::utils::metric;
 
 

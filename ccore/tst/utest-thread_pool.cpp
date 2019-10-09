@@ -32,6 +32,7 @@
 #include <vector>
 
 
+using namespace ccore;
 using namespace ccore::parallel;
 
 

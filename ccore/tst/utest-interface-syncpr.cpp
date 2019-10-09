@@ -32,6 +32,7 @@
 #include "utenv_utils.hpp"
 
 
+using namespace ccore;
 using namespace ccore::nnet;
 
 

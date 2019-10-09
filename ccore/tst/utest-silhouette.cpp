@@ -30,6 +30,7 @@
 #include "cluster/silhouette.hpp"
 
 
+using namespace ccore;
 using namespace ccore::clst;
 
 

@@ -31,6 +31,7 @@
 #include <memory>
 
 
+using namespace ccore;
 using namespace ccore::nnet;
 
 

@@ -31,6 +31,7 @@
 #include "utenv_check.hpp"
 
 
+using namespace ccore;
 using namespace ccore::clst;
 
 

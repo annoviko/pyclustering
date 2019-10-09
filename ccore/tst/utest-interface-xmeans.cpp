@@ -30,6 +30,9 @@
 #include <memory>
 
 
+using namespace ccore;
+
+
 TEST(utest_interface_xmeans, xmeans_algorithm) {
     std::shared_ptr<pyclustering_package> sample = pack(dataset({ { 1 }, { 2 }, { 3 }, { 10 }, { 11 }, { 12 } }));
     std::shared_ptr<pyclustering_package> centers = pack(dataset({ { 1 }, { 2 } }));

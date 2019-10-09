@@ -30,6 +30,9 @@
 #include "utenv_utils.hpp"
 
 
+using namespace ccore;
+
+
 TEST(utest_interface_fcm, fcm_api) {
     dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01);
     std::shared_ptr<pyclustering_package> sample = pack(*data);
