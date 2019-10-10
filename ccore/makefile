@@ -20,7 +20,21 @@
 
 
 MAKE = make
-MKFLAG = -f
+
+NCORES = 1
+UNAME = $(shell uname -s | tr '[:upper:]' '[:lower:]')
+ifeq ($(findstring cygwin, $(UNAME)), cygwin)
+	NCORES = $(shell grep -c ^processor /proc/cpuinfo)
+else
+	ifeq ($(UNAME), darwin)
+		NCORES = $(shell system_profiler | awk '/Number of CPUs/ {print $$4}{next;}')
+	else
+		NCORES = $(shell grep -c ^processor /proc/cpuinfo)
+	endif
+endif
+
+
+MKFLAG = -j$(NCORES) -f
 
 
 default:
