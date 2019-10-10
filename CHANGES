@@ -36,6 +36,7 @@ CORRECTED MAJOR BUGS:
 - Incorrect center initialization in K-Means++ when candidates are not farthest (pyclustering.cluster.center_initializer).
   See: https://github.com/annoviko/pyclustering/issues/549
 
+
 ------------------------------------------------------------------------
 
 CHANGE NOTES FOR 0.9.1 (STARTED Apr 14, 2019), (RELEASED: Sep 9, 2019)
