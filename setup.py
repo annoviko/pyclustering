@@ -32,20 +32,20 @@ def load_readme():
         with open(readme_file) as file_descr:
             return file_descr.read()
 
-    return "pyclustering is a python data mining library (clustering, oscillatory networks, neural networks)"
+    return "pyclustering is a python data mining library (cluster-analysis, graph coloring, oscillatory networks)"
 
 
 setup(
       name='pyclustering',
       packages=find_packages(),
-      version='0.9.1',
+      version='0.9.2',
       description='pyclustring is a python data mining library',
       long_description=load_readme(),
       url='https://github.com/annoviko/pyclustering',
       project_urls={
                      'Homepage': 'https://pyclustering.github.io/',
                      'Repository': 'https://github.com/annoviko/pyclustering',
-                     'Documentation': 'https://codedocs.xyz/annoviko/pyclustering/',
+                     'Documentation': 'https://pyclustering.github.io/docs/0.9.2/html/index.html',
                      'Bug Tracker': 'https://github.com/annoviko/pyclustering/issues'
                    },
       license='GNU Public License',

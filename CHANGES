@@ -1,12 +1,12 @@
 ------------------------------------------------------------------------
 
-CHANGE NOTES FOR 0.9.2 (STARTED Sep 9, 2019), (RELEASED: -)
+CHANGE NOTES FOR 0.9.2 (STARTED Sep 9, 2019), (RELEASED: Oct 10, 2019)
 
 ------------------------------------------------------------------------
 
 GENERAL CHANGES:
 - Introduced checking of input arguments for clustering algorithm to provide human-readable errors (pyclustering.cluster).
-  See:
+  See: https://github.com/annoviko/pyclustering/issues/548
 
 - Implemented functionality to perform Anderson-Darling test for Gaussian distribution (ccore.stats).
   See: https://github.com/annoviko/pyclustering/issues/550
