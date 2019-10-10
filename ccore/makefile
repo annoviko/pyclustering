@@ -27,7 +27,7 @@ ifeq ($(findstring cygwin, $(UNAME)), cygwin)
 	NCORES = $(shell grep -c ^processor /proc/cpuinfo)
 else
 	ifeq ($(UNAME), darwin)
-		NCORES = $(shell system_profiler | awk '/Number of CPUs/ {print $$4}{next;}')
+		NCORES = $(shell sysctl -n hw.ncpu')
 	else
 		NCORES = $(shell grep -c ^processor /proc/cpuinfo)
 	endif
