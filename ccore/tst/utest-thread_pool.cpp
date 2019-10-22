@@ -21,9 +21,9 @@
 */
 
 
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
-#include "parallel/thread_pool.hpp"
+#include <pyclustering/parallel/thread_pool.hpp>
 
 #include <algorithm>
 #include <limits>

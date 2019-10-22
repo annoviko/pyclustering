@@ -21,9 +21,9 @@
 */
 
 
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
-#include "parallel/parallel.hpp"
+#include <pyclustering/parallel/parallel.hpp>
 
 #include <numeric>
 

@@ -21,9 +21,9 @@
 */
 
 
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
-#include "cluster/ordering_analyser.hpp"
+#include <pyclustering/cluster/ordering_analyser.hpp>
 
 #include "samples.hpp"
 #include "utenv_check.hpp"

@@ -20,9 +20,9 @@
 *
 */
 
-#include "interface/gmeans_interface.h"
+#include <pyclustering/interface/gmeans_interface.h>
 
-#include "cluster/gmeans.hpp"
+#include <pyclustering/cluster/gmeans.hpp>
 
 
 pyclustering_package * gmeans_algorithm(const pyclustering_package * const p_sample, 

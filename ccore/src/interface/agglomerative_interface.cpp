@@ -20,9 +20,9 @@
 *
 */
 
-#include "interface/agglomerative_interface.h"
+#include <pyclustering/interface/agglomerative_interface.h>
 
-#include "cluster/agglomerative.hpp"
+#include <pyclustering/cluster/agglomerative.hpp>
 
 
 pyclustering_package * agglomerative_algorithm(const pyclustering_package * const p_sample, const size_t p_number_clusters, const size_t p_link) {

@@ -21,11 +21,11 @@
 */
 
 
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
 #include <algorithm>
 
-#include "utils/stats.hpp"
+#include <pyclustering/utils/stats.hpp>
 
 
 using namespace pyclustering::utils::stats;

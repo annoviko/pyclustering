@@ -21,9 +21,9 @@
 */
 
 
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
-#include "nnet/sync.hpp"
+#include <pyclustering/nnet/sync.hpp>
 
 #include <cmath>
 

@@ -21,13 +21,13 @@
 */
 
 
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
 #include "answer.hpp"
 #include "answer_reader.hpp"
 #include "samples.hpp"
 
-#include "cluster/silhouette.hpp"
+#include <pyclustering/cluster/silhouette.hpp>
 
 
 using namespace pyclustering;

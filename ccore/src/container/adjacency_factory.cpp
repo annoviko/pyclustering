@@ -20,12 +20,12 @@
 *
 */
 
-#include "container/adjacency_factory.hpp"
+#include <pyclustering/container/adjacency_factory.hpp>
 
-#include "container/adjacency_bit_matrix.hpp"
-#include "container/adjacency_list.hpp"
-#include "container/adjacency_matrix.hpp"
-#include "container/adjacency_weight_list.hpp"
+#include <pyclustering/container/adjacency_bit_matrix.hpp>
+#include <pyclustering/container/adjacency_list.hpp>
+#include <pyclustering/container/adjacency_matrix.hpp>
+#include <pyclustering/container/adjacency_weight_list.hpp>
 
 
 namespace pyclustering {

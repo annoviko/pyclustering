@@ -20,13 +20,13 @@
 *
 */
 
-#include "nnet/syncpr.hpp"
+#include <pyclustering/nnet/syncpr.hpp>
 
 #include <complex>
 #include <cmath>
 
-#include "utils/math.hpp"
-#include "utils/metric.hpp"
+#include <pyclustering/utils/math.hpp>
+#include <pyclustering/utils/metric.hpp>
 
 
 using namespace std::placeholders;

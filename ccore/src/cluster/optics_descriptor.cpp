@@ -21,7 +21,7 @@
 */
 
 
-#include "cluster/optics_descriptor.hpp"
+#include <pyclustering/cluster/optics_descriptor.hpp>
 
 #include <limits>
 

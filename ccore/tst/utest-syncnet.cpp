@@ -21,11 +21,11 @@
 */
 
 
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
 #include "samples.hpp"
 
-#include "cluster/syncnet.hpp"
+#include <pyclustering/cluster/syncnet.hpp>
 
 
 using namespace pyclustering::clst;

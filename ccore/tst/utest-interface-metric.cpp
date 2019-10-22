@@ -20,12 +20,12 @@
 *
 */
 
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
-#include "interface/metric_interface.h"
-#include "interface/pyclustering_package.hpp"
+#include <pyclustering/interface/metric_interface.h>
+#include <pyclustering/interface/pyclustering_package.hpp>
 
-#include "utils/metric.hpp"
+#include <pyclustering/utils/metric.hpp>
 
 #include "utenv_utils.hpp"
 

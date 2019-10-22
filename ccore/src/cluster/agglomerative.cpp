@@ -20,11 +20,10 @@
 *
 */
 
-#include "cluster/agglomerative.hpp"
+#include <pyclustering/cluster/agglomerative.hpp>
+#include <pyclustering/utils/metric.hpp>
 
 #include <algorithm>
-
-#include "utils/metric.hpp"
 
 
 using namespace pyclustering::utils::metric;
@@ -233,7 +232,7 @@ void agglomerative::merge_by_signle_link(void) {
 }
 
 
-void agglomerative::calculate_center(const cluster & cluster, point & center) {
+void agglomerative::calculate_center(const cluster & cluster, point & center) const {
     const std::vector<point> & data = *m_ptr_data;
 
     const size_t dimension = data[0].size();

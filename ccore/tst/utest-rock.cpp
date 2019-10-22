@@ -21,9 +21,9 @@
 */
 
 
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
-#include "cluster/rock.hpp"
+#include <pyclustering/cluster/rock.hpp>
 
 #include "samples.hpp"
 #include "utenv_check.hpp"

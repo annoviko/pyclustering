@@ -21,12 +21,12 @@
 */
 
 
-#include "nnet/hhn.hpp"
+#include <pyclustering/nnet/hhn.hpp>
 
-#include "differential/differ_state.hpp"
-#include "differential/runge_kutta_4.hpp"
-#include "differential/runge_kutta_fehlberg_45.hpp"
-#include "parallel/parallel.hpp"
+#include <pyclustering/differential/differ_state.hpp>
+#include <pyclustering/differential/runge_kutta_4.hpp>
+#include <pyclustering/differential/runge_kutta_fehlberg_45.hpp>
+#include <pyclustering/parallel/parallel.hpp>
 
 
 using namespace std::placeholders;
@@ -488,7 +488,7 @@ void hhn_dynamic_reader::extract_dynamic(const std::string & p_line, double & p_
 }
 
 
-void hhn_dynamic_reader::extract_state(std::istringstream & p_stream, basic_neuron_state & p_state) {
+void hhn_dynamic_reader::extract_state(std::istringstream & p_stream, basic_neuron_state & p_state) const {
     std::string item;
     for (std::size_t item_index = 0; std::getline(p_stream, item, ' '); item_index++) {
         if (item == "]") {
@@ -683,7 +683,7 @@ void hhn_network::perform_calculation(const solve_type p_solver, const double p_
 }
 
 
-void hhn_network::neuron_states(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs) {
+void hhn_network::neuron_states(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs) const {
     std::size_t index = (std::size_t) argv[0];
 
     double v = inputs[POSITION_MEMBRAN_POTENTIAL];       /* membrane potential (v)                               */
@@ -767,7 +767,7 @@ double hhn_network::central_first_synaptic_current(const double p_time, const do
 }
 
 
-double hhn_network::alpha_function(const double p_time, const double p_alfa, const double p_betta) const {
+double hhn_network::alpha_function(const double p_time, const double p_alfa, const double p_betta) {
     return p_alfa * p_time * std::exp(-p_betta * p_time);
 }
 

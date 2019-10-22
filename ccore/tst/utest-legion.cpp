@@ -21,9 +21,9 @@
 */
 
 
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
-#include "nnet/legion.hpp"
+#include <pyclustering/nnet/legion.hpp>
 
 
 using namespace pyclustering::nnet;

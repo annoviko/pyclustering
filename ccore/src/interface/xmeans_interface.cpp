@@ -20,9 +20,9 @@
 *
 */
 
-#include "interface/xmeans_interface.h"
+#include <pyclustering/interface/xmeans_interface.h>
 
-#include "cluster/xmeans.hpp"
+#include <pyclustering/cluster/xmeans.hpp>
 
 
 pyclustering_package * xmeans_algorithm(const pyclustering_package * const p_sample,

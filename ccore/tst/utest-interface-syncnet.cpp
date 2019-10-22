@@ -21,14 +21,14 @@
 */
 
 
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
-#include "interface/sync_interface.h"
-#include "interface/syncnet_interface.h"
-#include "interface/pyclustering_interface.h"
-#include "interface/pyclustering_package.hpp"
+#include <pyclustering/interface/sync_interface.h>
+#include <pyclustering/interface/syncnet_interface.h>
+#include <pyclustering/interface/pyclustering_interface.h>
+#include <pyclustering/interface/pyclustering_package.hpp>
 
-#include "cluster/syncnet.hpp"
+#include <pyclustering/cluster/syncnet.hpp>
 
 #include "utenv_utils.hpp"
 

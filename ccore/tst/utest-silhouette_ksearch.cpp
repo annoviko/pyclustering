@@ -21,7 +21,7 @@
 */
 
 
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
 #include <thread>
 
@@ -29,7 +29,7 @@
 #include "answer_reader.hpp"
 #include "samples.hpp"
 
-#include "cluster/silhouette_ksearch.hpp"
+#include <pyclustering/cluster/silhouette_ksearch.hpp>
 
 
 using namespace pyclustering;

@@ -21,9 +21,9 @@
 */
 
 
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
-#include "cluster/agglomerative.hpp"
+#include <pyclustering/cluster/agglomerative.hpp>
 #include "samples.hpp"
 
 #include <algorithm>

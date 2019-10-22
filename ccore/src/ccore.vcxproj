@@ -74,6 +74,7 @@
     <ClCompile Include="interface\gmeans_interface.cpp" />
     <ClCompile Include="interface\hhn_interface.cpp" />
     <ClCompile Include="interface\hsyncnet_interface.cpp" />
+    <ClCompile Include="interface\interface_property.cpp" />
     <ClCompile Include="interface\kmeans_interface.cpp" />
     <ClCompile Include="interface\kmedians_interface.cpp" />
     <ClCompile Include="interface\kmedoids_interface.cpp" />
@@ -90,7 +91,6 @@
     <ClCompile Include="interface\syncnet_interface.cpp" />
     <ClCompile Include="interface\syncpr_interface.cpp" />
     <ClCompile Include="interface\sync_interface.cpp" />
-    <ClCompile Include="interface\interface_property.cpp" />
     <ClCompile Include="interface\ttsas_interface.cpp" />
     <ClCompile Include="interface\xmeans_interface.cpp" />
     <ClCompile Include="nnet\dynamic_analyser.cpp" />
@@ -111,116 +111,117 @@
     <ClCompile Include="utils\stats.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="cluster\agglomerative.hpp" />
-    <ClInclude Include="cluster\bsas.hpp" />
-    <ClInclude Include="cluster\bsas_data.hpp" />
-    <ClInclude Include="cluster\center_initializer.hpp" />
-    <ClInclude Include="cluster\clique.hpp" />
-    <ClInclude Include="cluster\clique_block.hpp" />
-    <ClInclude Include="cluster\clique_data.hpp" />
-    <ClInclude Include="cluster\cluster_algorithm.hpp" />
-    <ClInclude Include="cluster\cluster_data.hpp" />
-    <ClInclude Include="cluster\cure.hpp" />
-    <ClInclude Include="cluster\cure_data.hpp" />
-    <ClInclude Include="cluster\dbscan.hpp" />
-    <ClInclude Include="cluster\dbscan_data.hpp" />
-    <ClInclude Include="cluster\elbow.hpp" />
-    <ClInclude Include="cluster\elbow_data.hpp" />
-    <ClInclude Include="cluster\fcm.hpp" />
-    <ClInclude Include="cluster\fcm_data.hpp" />
-    <ClInclude Include="cluster\gmeans.hpp" />
-    <ClInclude Include="cluster\gmeans_data.hpp" />
-    <ClInclude Include="cluster\hsyncnet.hpp" />
-    <ClInclude Include="cluster\kmeans.hpp" />
-    <ClInclude Include="cluster\kmeans_data.hpp" />
-    <ClInclude Include="cluster\kmeans_plus_plus.hpp" />
-    <ClInclude Include="cluster\kmedians.hpp" />
-    <ClInclude Include="cluster\kmedians_data.hpp" />
-    <ClInclude Include="cluster\kmedoids.hpp" />
-    <ClInclude Include="cluster\kmedoids_data.hpp" />
-    <ClInclude Include="cluster\mbsas.hpp" />
-    <ClInclude Include="cluster\mbsas_data.hpp" />
-    <ClInclude Include="cluster\optics.hpp" />
-    <ClInclude Include="cluster\optics_data.hpp" />
-    <ClInclude Include="cluster\optics_descriptor.hpp" />
-    <ClInclude Include="cluster\ordering_analyser.hpp" />
-    <ClInclude Include="cluster\random_center_initializer.hpp" />
-    <ClInclude Include="cluster\rock.hpp" />
-    <ClInclude Include="cluster\silhouette.hpp" />
-    <ClInclude Include="cluster\silhouette_ksearch.hpp" />
-    <ClInclude Include="cluster\silhouette_ksearch_data.hpp" />
-    <ClInclude Include="cluster\somsc.hpp" />
-    <ClInclude Include="cluster\somsc_data.hpp" />
-    <ClInclude Include="cluster\syncnet.hpp" />
-    <ClInclude Include="cluster\ttsas.hpp" />
-    <ClInclude Include="cluster\ttsas_data.hpp" />
-    <ClInclude Include="cluster\xmeans.hpp" />
-    <ClInclude Include="cluster\xmeans_data.hpp" />
-    <ClInclude Include="container\adjacency.hpp" />
-    <ClInclude Include="container\adjacency_bit_matrix.hpp" />
-    <ClInclude Include="container\adjacency_connector.hpp" />
-    <ClInclude Include="container\adjacency_factory.hpp" />
-    <ClInclude Include="container\adjacency_list.hpp" />
-    <ClInclude Include="container\adjacency_matrix.hpp" />
-    <ClInclude Include="container\adjacency_weight_list.hpp" />
-    <ClInclude Include="container\dynamic_data.hpp" />
-    <ClInclude Include="container\ensemble_data.hpp" />
-    <ClInclude Include="container\kdnode.hpp" />
-    <ClInclude Include="container\kdtree.hpp" />
-    <ClInclude Include="definitions.hpp" />
-    <ClInclude Include="differential\differ_factor.hpp" />
-    <ClInclude Include="differential\differ_state.hpp" />
-    <ClInclude Include="differential\equation.hpp" />
-    <ClInclude Include="differential\runge_kutta_4.hpp" />
-    <ClInclude Include="differential\runge_kutta_fehlberg_45.hpp" />
-    <ClInclude Include="differential\solve_type.hpp" />
-    <ClInclude Include="interface\agglomerative_interface.h" />
-    <ClInclude Include="interface\bsas_interface.h" />
-    <ClInclude Include="interface\clique_interface.h" />
-    <ClInclude Include="interface\cure_interface.h" />
-    <ClInclude Include="interface\dbscan_interface.h" />
-    <ClInclude Include="interface\elbow_interface.h" />
-    <ClInclude Include="interface\fcm_interface.h" />
-    <ClInclude Include="interface\gmeans_interface.h" />
-    <ClInclude Include="interface\hhn_interface.h" />
-    <ClInclude Include="interface\hsyncnet_interface.h" />
-    <ClInclude Include="interface\kmeans_interface.h" />
-    <ClInclude Include="interface\kmedians_interface.h" />
-    <ClInclude Include="interface\kmedoids_interface.h" />
-    <ClInclude Include="interface\legion_interface.h" />
-    <ClInclude Include="interface\mbsas_interface.h" />
-    <ClInclude Include="interface\metric_interface.h" />
-    <ClInclude Include="interface\optics_interface.h" />
-    <ClInclude Include="interface\pcnn_interface.h" />
-    <ClInclude Include="interface\pyclustering_interface.h" />
-    <ClInclude Include="interface\pyclustering_package.hpp" />
-    <ClInclude Include="interface\rock_interface.h" />
-    <ClInclude Include="interface\silhouette_interface.h" />
-    <ClInclude Include="interface\som_interface.h" />
-    <ClInclude Include="interface\syncnet_interface.h" />
-    <ClInclude Include="interface\syncpr_interface.h" />
-    <ClInclude Include="interface\sync_interface.h" />
-    <ClInclude Include="interface\interface_property.h" />
-    <ClInclude Include="interface\ttsas_interface.h" />
-    <ClInclude Include="interface\xmeans_interface.h" />
-    <ClInclude Include="nnet\dynamic_analyser.hpp" />
-    <ClInclude Include="nnet\hhn.hpp" />
-    <ClInclude Include="nnet\legion.hpp" />
-    <ClInclude Include="nnet\network.hpp" />
-    <ClInclude Include="nnet\pcnn.hpp" />
-    <ClInclude Include="nnet\som.hpp" />
-    <ClInclude Include="nnet\sync.hpp" />
-    <ClInclude Include="nnet\syncpr.hpp" />
-    <ClInclude Include="parallel\parallel.hpp" />
-    <ClInclude Include="parallel\spinlock.hpp" />
-    <ClInclude Include="parallel\task.hpp" />
-    <ClInclude Include="parallel\thread_executor.hpp" />
-    <ClInclude Include="parallel\thread_pool.hpp" />
-    <ClInclude Include="utils\linalg.hpp" />
-    <ClInclude Include="utils\math.hpp" />
-    <ClInclude Include="utils\metric.hpp" />
-    <ClInclude Include="utils\random.hpp" />
-    <ClInclude Include="utils\stats.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\agglomerative.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\bsas.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\bsas_data.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\center_initializer.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\clique.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\clique_block.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\clique_data.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\cluster_algorithm.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\cluster_data.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\cure.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\cure_data.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\dbscan.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\dbscan_data.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\elbow.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\elbow_data.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\fcm.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\fcm_data.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\gmeans.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\gmeans_data.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\hsyncnet.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\kmeans.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\kmeans_data.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\kmeans_plus_plus.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\kmedians.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\kmedians_data.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\kmedoids.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\kmedoids_data.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\mbsas.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\mbsas_data.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\optics.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\optics_data.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\optics_descriptor.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\ordering_analyser.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\random_center_initializer.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\rock.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\silhouette.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\silhouette_data.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\silhouette_ksearch.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\silhouette_ksearch_data.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\somsc.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\somsc_data.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\syncnet.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\ttsas.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\ttsas_data.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\xmeans.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\xmeans_data.hpp" />
+    <ClInclude Include="..\include\pyclustering\container\adjacency.hpp" />
+    <ClInclude Include="..\include\pyclustering\container\adjacency_bit_matrix.hpp" />
+    <ClInclude Include="..\include\pyclustering\container\adjacency_connector.hpp" />
+    <ClInclude Include="..\include\pyclustering\container\adjacency_factory.hpp" />
+    <ClInclude Include="..\include\pyclustering\container\adjacency_list.hpp" />
+    <ClInclude Include="..\include\pyclustering\container\adjacency_matrix.hpp" />
+    <ClInclude Include="..\include\pyclustering\container\adjacency_weight_list.hpp" />
+    <ClInclude Include="..\include\pyclustering\container\dynamic_data.hpp" />
+    <ClInclude Include="..\include\pyclustering\container\ensemble_data.hpp" />
+    <ClInclude Include="..\include\pyclustering\container\kdnode.hpp" />
+    <ClInclude Include="..\include\pyclustering\container\kdtree.hpp" />
+    <ClInclude Include="..\include\pyclustering\definitions.hpp" />
+    <ClInclude Include="..\include\pyclustering\differential\differ_factor.hpp" />
+    <ClInclude Include="..\include\pyclustering\differential\differ_state.hpp" />
+    <ClInclude Include="..\include\pyclustering\differential\equation.hpp" />
+    <ClInclude Include="..\include\pyclustering\differential\runge_kutta_4.hpp" />
+    <ClInclude Include="..\include\pyclustering\differential\runge_kutta_fehlberg_45.hpp" />
+    <ClInclude Include="..\include\pyclustering\differential\solve_type.hpp" />
+    <ClInclude Include="..\include\pyclustering\interface\agglomerative_interface.h" />
+    <ClInclude Include="..\include\pyclustering\interface\bsas_interface.h" />
+    <ClInclude Include="..\include\pyclustering\interface\clique_interface.h" />
+    <ClInclude Include="..\include\pyclustering\interface\cure_interface.h" />
+    <ClInclude Include="..\include\pyclustering\interface\dbscan_interface.h" />
+    <ClInclude Include="..\include\pyclustering\interface\elbow_interface.h" />
+    <ClInclude Include="..\include\pyclustering\interface\fcm_interface.h" />
+    <ClInclude Include="..\include\pyclustering\interface\gmeans_interface.h" />
+    <ClInclude Include="..\include\pyclustering\interface\hhn_interface.h" />
+    <ClInclude Include="..\include\pyclustering\interface\hsyncnet_interface.h" />
+    <ClInclude Include="..\include\pyclustering\interface\interface_property.h" />
+    <ClInclude Include="..\include\pyclustering\interface\kmeans_interface.h" />
+    <ClInclude Include="..\include\pyclustering\interface\kmedians_interface.h" />
+    <ClInclude Include="..\include\pyclustering\interface\kmedoids_interface.h" />
+    <ClInclude Include="..\include\pyclustering\interface\legion_interface.h" />
+    <ClInclude Include="..\include\pyclustering\interface\mbsas_interface.h" />
+    <ClInclude Include="..\include\pyclustering\interface\metric_interface.h" />
+    <ClInclude Include="..\include\pyclustering\interface\optics_interface.h" />
+    <ClInclude Include="..\include\pyclustering\interface\pcnn_interface.h" />
+    <ClInclude Include="..\include\pyclustering\interface\pyclustering_interface.h" />
+    <ClInclude Include="..\include\pyclustering\interface\pyclustering_package.hpp" />
+    <ClInclude Include="..\include\pyclustering\interface\rock_interface.h" />
+    <ClInclude Include="..\include\pyclustering\interface\silhouette_interface.h" />
+    <ClInclude Include="..\include\pyclustering\interface\som_interface.h" />
+    <ClInclude Include="..\include\pyclustering\interface\syncnet_interface.h" />
+    <ClInclude Include="..\include\pyclustering\interface\syncpr_interface.h" />
+    <ClInclude Include="..\include\pyclustering\interface\sync_interface.h" />
+    <ClInclude Include="..\include\pyclustering\interface\ttsas_interface.h" />
+    <ClInclude Include="..\include\pyclustering\interface\xmeans_interface.h" />
+    <ClInclude Include="..\include\pyclustering\nnet\dynamic_analyser.hpp" />
+    <ClInclude Include="..\include\pyclustering\nnet\hhn.hpp" />
+    <ClInclude Include="..\include\pyclustering\nnet\legion.hpp" />
+    <ClInclude Include="..\include\pyclustering\nnet\network.hpp" />
+    <ClInclude Include="..\include\pyclustering\nnet\pcnn.hpp" />
+    <ClInclude Include="..\include\pyclustering\nnet\som.hpp" />
+    <ClInclude Include="..\include\pyclustering\nnet\sync.hpp" />
+    <ClInclude Include="..\include\pyclustering\nnet\syncpr.hpp" />
+    <ClInclude Include="..\include\pyclustering\parallel\parallel.hpp" />
+    <ClInclude Include="..\include\pyclustering\parallel\spinlock.hpp" />
+    <ClInclude Include="..\include\pyclustering\parallel\task.hpp" />
+    <ClInclude Include="..\include\pyclustering\parallel\thread_executor.hpp" />
+    <ClInclude Include="..\include\pyclustering\parallel\thread_pool.hpp" />
+    <ClInclude Include="..\include\pyclustering\utils\linalg.hpp" />
+    <ClInclude Include="..\include\pyclustering\utils\math.hpp" />
+    <ClInclude Include="..\include\pyclustering\utils\metric.hpp" />
+    <ClInclude Include="..\include\pyclustering\utils\random.hpp" />
+    <ClInclude Include="..\include\pyclustering\utils\stats.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{DBEBB335-D398-45F8-899A-503AFC64ACFE}</ProjectGuid>
@@ -293,31 +294,34 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(SolutionDir)/include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <OutDir>..\..\pyclustering\core\x86\win</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>..\..\pyclustering\core\x64\win</OutDir>
+    <IncludePath>$(SolutionDir)/include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>..\..\pyclustering\core\x86\win\</OutDir>
-    <IncludePath>.;src\;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)/include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release Static Library|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>..\..\pyclustering\core\x86\win\</OutDir>
-    <IncludePath>.;src\;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)/include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>..\..\pyclustering\core\x64\win\</OutDir>
-    <IncludePath>.;src\;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)/include;$(IncludePath)</IncludePath>
     <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release Static Library|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>.</OutDir>
-    <IncludePath>.;src\;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)/include;$(IncludePath)</IncludePath>
     <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -400,7 +404,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;BUILDING_LIBRARY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <AdditionalIncludeDirectories>$(SolutionDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <OpenMPSupport>false</OpenMPSupport>
     </ClCompile>
@@ -424,7 +428,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;BUILDING_LIBRARY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <AdditionalIncludeDirectories>$(SolutionDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <OpenMPSupport>false</OpenMPSupport>
     </ClCompile>

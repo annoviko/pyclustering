@@ -20,7 +20,7 @@
 *
 */
 
-#include "differential/differ_factor.hpp"
+#include <pyclustering/differential/differ_factor.hpp>
 
 
 namespace pyclustering {

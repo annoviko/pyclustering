@@ -20,9 +20,9 @@
 *
 */
 
-#include "interface/rock_interface.h"
+#include <pyclustering/interface/rock_interface.h>
 
-#include "cluster/rock.hpp"
+#include <pyclustering/cluster/rock.hpp>
 
 
 pyclustering_package * rock_algorithm(const pyclustering_package * const p_sample, const double p_radius, const size_t p_number_clusters, const double p_threshold) {

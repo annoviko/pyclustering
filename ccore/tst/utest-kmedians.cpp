@@ -21,11 +21,11 @@
 */
 
 
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
 #include "samples.hpp"
 
-#include "cluster/kmedians.hpp"
+#include <pyclustering/cluster/kmedians.hpp>
 #include "utenv_check.hpp"
 
 

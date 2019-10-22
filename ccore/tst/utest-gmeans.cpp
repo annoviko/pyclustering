@@ -21,11 +21,11 @@
 */
 
 
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
 #include "samples.hpp"
 
-#include "cluster/gmeans.hpp"
+#include <pyclustering/cluster/gmeans.hpp>
 
 #include "answer.hpp"
 #include "answer_reader.hpp"

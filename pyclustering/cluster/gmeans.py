@@ -58,7 +58,7 @@ class gmeans:
         # Read sample 'Lsun' from file.
         sample = read_sample(FCPS_SAMPLES.SAMPLE_LSUN)
 
-        # Create instance of G-Means algorithm. By default algorithm start search from single cluster.
+        # Create instance of G-Means algorithm. By default the algorithm starts search from a single cluster.
         gmeans_instance = gmeans(sample).process()
 
         # Extract clustering results: clusters and their centers

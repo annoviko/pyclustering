@@ -21,7 +21,7 @@
 */
 
 
-#include "thread_executor.hpp"
+#include <pyclustering/parallel/thread_executor.hpp>
 
 #include <exception>
 

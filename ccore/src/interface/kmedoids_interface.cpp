@@ -20,11 +20,11 @@
 *
 */
 
-#include "interface/kmedoids_interface.h"
+#include <pyclustering/interface/kmedoids_interface.h>
 
-#include "cluster/kmedoids.hpp"
+#include <pyclustering/cluster/kmedoids.hpp>
 
-#include "utils/metric.hpp"
+#include <pyclustering/utils/metric.hpp>
 
 
 using namespace pyclustering::utils::metric;

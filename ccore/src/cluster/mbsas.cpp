@@ -21,7 +21,7 @@
 */
 
 
-#include "cluster/mbsas.hpp"
+#include <pyclustering/cluster/mbsas.hpp>
 
 
 namespace pyclustering {

@@ -20,14 +20,14 @@
 *
 */
 
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
-#include "interface/kmedoids_interface.h"
-#include "interface/pyclustering_package.hpp"
+#include <pyclustering/interface/kmedoids_interface.h>
+#include <pyclustering/interface/pyclustering_package.hpp>
 
-#include "cluster/kmedoids.hpp"
+#include <pyclustering/cluster/kmedoids.hpp>
 
-#include "utils/metric.hpp"
+#include <pyclustering/utils/metric.hpp>
 
 #include "utenv_utils.hpp"
 

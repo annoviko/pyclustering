@@ -20,7 +20,7 @@
 *
 */
 
-#include "container/adjacency_weight_list.hpp"
+#include <pyclustering/container/adjacency_weight_list.hpp>
 
 
 namespace pyclustering {

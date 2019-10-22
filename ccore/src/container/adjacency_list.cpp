@@ -20,7 +20,7 @@
 *
 */
 
-#include "container/adjacency_list.hpp"
+#include <pyclustering/container/adjacency_list.hpp>
 
 #include <string>
 #include <stdexcept>

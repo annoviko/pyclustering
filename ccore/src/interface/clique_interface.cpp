@@ -20,9 +20,9 @@
 *
 */
 
-#include "interface/clique_interface.h"
+#include <pyclustering/interface/clique_interface.h>
 
-#include "cluster/clique.hpp"
+#include <pyclustering/cluster/clique.hpp>
 
 
 pyclustering_package * clique_algorithm(const pyclustering_package * const p_sample, const std::size_t p_intervals, const std::size_t p_threshold) {

@@ -20,14 +20,14 @@
 *
 */
 
-#include "nnet/pcnn.hpp"
+#include <pyclustering/nnet/pcnn.hpp>
 
 #include <stdexcept>
 #include <unordered_set>
 
-#include "container/adjacency_bit_matrix.hpp"
-#include "container/adjacency_connector.hpp"
-#include "container/adjacency_matrix.hpp"
+#include <pyclustering/container/adjacency_bit_matrix.hpp>
+#include <pyclustering/container/adjacency_connector.hpp>
+#include <pyclustering/container/adjacency_matrix.hpp>
 
 
 namespace pyclustering {
@@ -168,7 +168,7 @@ void pcnn::fast_linking(const std::vector<double> & feeding, std::vector<double>
 }
 
 
-void pcnn::store_dynamic(const std::size_t step, pcnn_dynamic & dynamic) {
+void pcnn::store_dynamic(const std::size_t step, pcnn_dynamic & dynamic) const {
     pcnn_network_state & current_state = (pcnn_network_state &) dynamic[step];
     current_state.m_output.resize(size());
 

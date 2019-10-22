@@ -20,11 +20,11 @@
 *
 */
 
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
-#include "cluster/mbsas.hpp"
+#include <pyclustering/cluster/mbsas.hpp>
 
-#include "utils/metric.hpp"
+#include <pyclustering/utils/metric.hpp>
 
 #include "samples.hpp"
 

@@ -21,9 +21,9 @@
 */
 
 
-#include "interface/optics_interface.h"
+#include <pyclustering/interface/optics_interface.h>
 
-#include "cluster/optics.hpp"
+#include <pyclustering/cluster/optics.hpp>
 
 
 pyclustering_package * optics_algorithm(const pyclustering_package * const p_sample,

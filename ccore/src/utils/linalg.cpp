@@ -21,7 +21,7 @@
 */
 
 
-#include "linalg.hpp"
+#include <pyclustering/utils/linalg.hpp>
 
 #include <functional>
 #include <numeric>

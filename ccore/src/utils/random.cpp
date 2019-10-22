@@ -20,7 +20,7 @@
 *
 */
 
-#include "random.hpp"
+#include <pyclustering/utils/random.hpp>
 
 #include <chrono>
 #include <random>

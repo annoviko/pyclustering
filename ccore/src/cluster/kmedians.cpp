@@ -20,13 +20,13 @@
 *
 */
 
-#include "cluster/kmedians.hpp"
+#include <pyclustering/cluster/kmedians.hpp>
 
 #include <algorithm>
 #include <cmath>
 
-#include "parallel/parallel.hpp"
-#include "utils/metric.hpp"
+#include <pyclustering/parallel/parallel.hpp>
+#include <pyclustering/utils/metric.hpp>
 
 
 using namespace pyclustering::parallel;

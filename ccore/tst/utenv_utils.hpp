@@ -23,7 +23,7 @@
 #pragma once
 
 
-#include "interface/pyclustering_package.hpp"
+#include <pyclustering/interface/pyclustering_package.hpp>
 
 
 template <class ContainerType>

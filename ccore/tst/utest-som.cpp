@@ -21,11 +21,11 @@
 */
 
 
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
 #include "samples.hpp"
 
-#include "nnet/som.hpp"
+#include <pyclustering/nnet/som.hpp>
 
 #include <algorithm>
 #include <numeric>

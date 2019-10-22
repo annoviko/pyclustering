@@ -20,17 +20,17 @@
 *
 */
 
-#include "nnet/legion.hpp"
+#include <pyclustering/nnet/legion.hpp>
 
 #include <chrono>
 #include <stdexcept>
 
-#include "container/adjacency_bit_matrix.hpp"
-#include "container/adjacency_connector.hpp"
-#include "container/adjacency_matrix.hpp"
+#include <pyclustering/container/adjacency_bit_matrix.hpp>
+#include <pyclustering/container/adjacency_connector.hpp>
+#include <pyclustering/container/adjacency_matrix.hpp>
 
-#include "utils/math.hpp"
-#include "utils/metric.hpp"
+#include <pyclustering/utils/math.hpp>
+#include <pyclustering/utils/metric.hpp>
 
 
 using namespace std::placeholders;
@@ -114,7 +114,7 @@ void legion_network::create_dynamic_connections(const legion_stimulus & stimulus
     }
 }
 
-void legion_network::store_dynamic(const double time, const bool collect_dynamic, legion_dynamic & dynamic) {
+void legion_network::store_dynamic(const double time, const bool collect_dynamic, legion_dynamic & dynamic) const {
     legion_network_state state(size());
 
     for (unsigned int index = 0; index < size(); index++) {
@@ -283,7 +283,7 @@ void legion_network::neuron_simplify_states(const double t, const differ_state<d
 }
 
 
-void legion_network::inhibitor_state(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs) {
+void legion_network::inhibitor_state(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs) const {
     const double z = inputs[0];
 
     double sigma = 0.0;

@@ -28,7 +28,7 @@
 #include <memory>
 #include <map>
 
-#include "definitions.hpp"
+#include <pyclustering/definitions.hpp>
 
 
 using namespace pyclustering;

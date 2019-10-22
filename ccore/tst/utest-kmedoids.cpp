@@ -21,11 +21,11 @@
 */
 
 
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
-#include "cluster/kmedoids.hpp"
+#include <pyclustering/cluster/kmedoids.hpp>
 
-#include "utils/metric.hpp"
+#include <pyclustering/utils/metric.hpp>
 
 #include "samples.hpp"
 #include "utenv_check.hpp"

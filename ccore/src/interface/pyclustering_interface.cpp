@@ -21,7 +21,7 @@
 */
 
 
-#include "interface/pyclustering_interface.h"
+#include <pyclustering/interface/pyclustering_interface.h>
 
 
 void free_pyclustering_package(pyclustering_package * package) {

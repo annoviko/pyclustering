@@ -21,7 +21,7 @@
 */
 
 
-#include "cluster/ttsas.hpp"
+#include <pyclustering/cluster/ttsas.hpp>
 
 
 namespace pyclustering {

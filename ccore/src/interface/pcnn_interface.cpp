@@ -20,7 +20,7 @@
 *
 */
 
-#include "interface/pcnn_interface.h"
+#include <pyclustering/interface/pcnn_interface.h>
 
 
 using namespace pyclustering::nnet;
@@ -32,24 +32,24 @@ void * pcnn_create(const unsigned int p_size, const unsigned int p_connection_ty
 }
 
 
-void pcnn_destroy(const void * pointer) {
-    delete (pcnn *) pointer;
+void pcnn_destroy(const void * p_pointer) {
+    delete (pcnn *) p_pointer;
 }
 
 
-void * pcnn_simulate(const void * pointer, const unsigned int steps, const void * const stimulus) {
-    const pyclustering_package * const package_stimulus = (const pyclustering_package * const) stimulus;
+void * pcnn_simulate(const void * p_pointer, const unsigned int p_steps, const void * const p_stimulus) {
+    const pyclustering_package * const package_stimulus = static_cast<const pyclustering_package * const>(p_stimulus);
     pcnn_stimulus stimulus_vector((double *) package_stimulus->data, ((double *) package_stimulus->data) + package_stimulus->size);
 
     pcnn_dynamic * dynamic = new pcnn_dynamic();
-    ((pcnn *) pointer)->simulate(steps, stimulus_vector, (*dynamic));
+    ((pcnn *)p_pointer)->simulate(p_steps, stimulus_vector, (*dynamic));
 
     return dynamic;
 }
 
 
-std::size_t pcnn_get_size(const void * pointer) {
-    return ((pcnn *) pointer)->size();
+std::size_t pcnn_get_size(const void * p_pointer) {
+    return ((pcnn *) p_pointer)->size();
 }
 
 

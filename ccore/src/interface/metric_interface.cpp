@@ -21,9 +21,9 @@
 */
 
 
-#include "interface/metric_interface.h"
+#include <pyclustering/interface/metric_interface.h>
 
-#include "utils/metric.hpp"
+#include <pyclustering/utils/metric.hpp>
 
 
 using namespace pyclustering;

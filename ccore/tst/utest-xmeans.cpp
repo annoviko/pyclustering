@@ -21,11 +21,11 @@
 */
 
 
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
 #include "samples.hpp"
 
-#include "cluster/xmeans.hpp"
+#include <pyclustering/cluster/xmeans.hpp>
 
 #include <algorithm>
 

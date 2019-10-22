@@ -20,13 +20,13 @@
 *
 */
 
-#include "cluster/rock.hpp"
+#include <pyclustering/cluster/rock.hpp>
 
 #include <cmath>
 #include <climits>
 #include <iostream>
 
-#include "utils/metric.hpp"
+#include <pyclustering/utils/metric.hpp>
 
 
 using namespace pyclustering::utils::metric;

@@ -20,7 +20,7 @@
 *
 */
 
-#include "cluster/silhouette.hpp"
+#include <pyclustering/cluster/silhouette.hpp>
 
 
 namespace pyclustering {

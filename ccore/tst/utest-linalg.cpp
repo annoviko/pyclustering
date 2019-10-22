@@ -21,11 +21,11 @@
 */
 
 
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
 #include <algorithm>
 
-#include "utils/linalg.hpp"
+#include <pyclustering/utils/linalg.hpp>
 
 
 using namespace pyclustering::utils::linalg;

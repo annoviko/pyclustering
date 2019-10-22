@@ -20,7 +20,7 @@
 *
 */
 
-#include "interface/som_interface.h"
+#include <pyclustering/interface/som_interface.h>
 
 
 using namespace pyclustering::nnet;

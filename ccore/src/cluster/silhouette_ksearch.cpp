@@ -20,13 +20,13 @@
 *
 */
 
-#include "cluster/silhouette_ksearch.hpp"
+#include <pyclustering/cluster/silhouette_ksearch.hpp>
 
-#include "cluster/kmeans_plus_plus.hpp"
+#include <pyclustering/cluster/kmeans_plus_plus.hpp>
 
-#include "cluster/kmeans.hpp"
-#include "cluster/kmedians.hpp"
-#include "cluster/kmedoids.hpp"
+#include <pyclustering/cluster/kmeans.hpp>
+#include <pyclustering/cluster/kmedians.hpp>
+#include <pyclustering/cluster/kmedoids.hpp>
 
 #include <numeric>
 

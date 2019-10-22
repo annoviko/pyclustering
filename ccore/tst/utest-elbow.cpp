@@ -25,7 +25,7 @@
 
 #include "samples.hpp"
 
-#include "cluster/random_center_initializer.hpp"
+#include <pyclustering/cluster/random_center_initializer.hpp>
 
 
 TEST(utest_elbow, simple_01) {

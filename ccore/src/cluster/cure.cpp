@@ -25,9 +25,9 @@
 #include <set>
 #include <iostream>
 
-#include "cluster/cure.hpp"
+#include <pyclustering/cluster/cure.hpp>
 
-#include "utils/metric.hpp"
+#include <pyclustering/utils/metric.hpp>
 
 
 using namespace pyclustering::container;
@@ -306,7 +306,7 @@ void cure_queue::merge(cure_cluster * cluster1, cure_cluster * cluster2, const s
                         for (std::size_t index = 0; index < nearest_nodes.size(); index++) {
                             if ( (nearest_node_distances[index] < nearest_distance) && ( nearest_nodes[index]->get_payload() != cluster ) ) {
                                 nearest_distance = nearest_node_distances[index];
-                                nearest_cluster = (cure_cluster *) nearest_nodes[index]->get_payload();
+                                nearest_cluster = static_cast<cure_cluster *>(nearest_nodes[index]->get_payload());
                             }
                         }
                     }
@@ -378,14 +378,14 @@ void cure_queue::insert_representative_points(cure_cluster * cluster) {
 
 
 
-relocation_info::relocation_info(const cure_queue::iterator & cluster_iterator, const cure_cluster * closest_cluster, const double closest_distance) :
+relocation_info::relocation_info(const cure_queue::iterator & cluster_iterator, cure_cluster * closest_cluster, const double closest_distance) :
     m_cluster_iterator(cluster_iterator),
-    m_closest_cluster((cure_cluster *) closest_cluster),
+    m_closest_cluster(closest_cluster),
     m_closest_distance(closest_distance)
 { }
 
 
-cure_queue::iterator relocation_info::get_cluster_iterator(void) {
+cure_queue::iterator relocation_info::get_cluster_iterator(void) const {
     return m_cluster_iterator; 
 }
 
@@ -395,7 +395,7 @@ cure_cluster * relocation_info::get_closest_cluster(void) {
 }
 
 
-double relocation_info::get_closest_distance(void) {
+double relocation_info::get_closest_distance(void) const {
     return m_closest_distance;
 }
 
@@ -416,6 +416,10 @@ cure::~cure() {
 
 
 void cure::process(const dataset & p_data, cluster_data & p_result) {
+    if (queue) {
+        delete queue;
+    }
+
     queue = new cure_queue(&p_data);
     data = &p_data;
 

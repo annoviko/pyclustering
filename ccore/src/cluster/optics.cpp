@@ -20,15 +20,14 @@
 *
 */
 
-#include "cluster/optics.hpp"
+#include <pyclustering/cluster/optics.hpp>
+#include <pyclustering/cluster/ordering_analyser.hpp>
 
 #include <algorithm>
 #include <cmath>
 #include <limits>
 #include <map>
 #include <string>
-
-#include "ordering_analyser.hpp"
 
 
 namespace pyclustering {

@@ -20,9 +20,9 @@
 *
 */
 
-#include "interface/legion_interface.h"
+#include <pyclustering/interface/legion_interface.h>
 
-#include "nnet/legion.hpp"
+#include <pyclustering/nnet/legion.hpp>
 
 
 using namespace pyclustering::nnet;

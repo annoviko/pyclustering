@@ -28,15 +28,15 @@
 #include <limits>
 #include <numeric>
 
-#include "cluster/xmeans.hpp"
+#include <pyclustering/cluster/xmeans.hpp>
 
-#include "cluster/kmeans.hpp"
-#include "cluster/kmeans_plus_plus.hpp"
+#include <pyclustering/cluster/kmeans.hpp>
+#include <pyclustering/cluster/kmeans_plus_plus.hpp>
 
-#include "parallel/parallel.hpp"
+#include <pyclustering/parallel/parallel.hpp>
 
-#include "utils/math.hpp"
-#include "utils/metric.hpp"
+#include <pyclustering/utils/math.hpp>
+#include <pyclustering/utils/metric.hpp>
 
 
 using namespace pyclustering::parallel;

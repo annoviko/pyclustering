@@ -21,7 +21,7 @@
 */
 
 
-#include "interface/elbow_interface.h"
+#include <pyclustering/interface/elbow_interface.h>
 
 
 pyclustering_package * elbow_method_ikpp(const pyclustering_package * const p_sample, 

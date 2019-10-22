@@ -21,7 +21,7 @@
 */
 
 
-#include "math.hpp"
+#include <pyclustering/utils/math.hpp>
 
 
 

@@ -21,11 +21,11 @@
 */
 
 
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
 #include "samples.hpp"
 
-#include "cluster/somsc.hpp"
+#include <pyclustering/cluster/somsc.hpp>
 #include "utenv_check.hpp"
 
 

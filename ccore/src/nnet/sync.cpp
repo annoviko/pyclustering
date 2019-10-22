@@ -20,7 +20,7 @@
 *
 */
 
-#include "nnet/sync.hpp"
+#include <pyclustering/nnet/sync.hpp>
 
 #include <cmath>
 #include <random>
@@ -28,17 +28,17 @@
 #include <stdexcept>
 #include <chrono>
 
-#include "container/adjacency_bit_matrix.hpp"
-#include "container/adjacency_connector.hpp"
-#include "container/adjacency_matrix.hpp"
+#include <pyclustering/container/adjacency_bit_matrix.hpp>
+#include <pyclustering/container/adjacency_connector.hpp>
+#include <pyclustering/container/adjacency_matrix.hpp>
 
-#include "differential/runge_kutta_4.hpp"
-#include "differential/runge_kutta_fehlberg_45.hpp"
+#include <pyclustering/differential/runge_kutta_4.hpp>
+#include <pyclustering/differential/runge_kutta_fehlberg_45.hpp>
 
-#include "parallel/parallel.hpp"
+#include <pyclustering/parallel/parallel.hpp>
 
-#include "utils/math.hpp"
-#include "utils/metric.hpp"
+#include <pyclustering/utils/math.hpp>
+#include <pyclustering/utils/metric.hpp>
 
 
 using namespace pyclustering::container;

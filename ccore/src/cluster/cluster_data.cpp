@@ -20,7 +20,7 @@
 *
 */
 
-#include "cluster_data.hpp"
+#include <pyclustering/cluster/cluster_data.hpp>
 
 
 namespace pyclustering {

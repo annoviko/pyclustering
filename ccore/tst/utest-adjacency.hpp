@@ -24,7 +24,7 @@
 #pragma once
 
 
-#include "container/adjacency.hpp"
+#include <pyclustering/container/adjacency.hpp>
 
 
 using namespace pyclustering::container;

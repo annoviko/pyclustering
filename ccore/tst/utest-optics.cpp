@@ -21,12 +21,12 @@
 */
 
 
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
-#include "cluster/optics.hpp"
-#include "cluster/ordering_analyser.hpp"
+#include <pyclustering/cluster/optics.hpp>
+#include <pyclustering/cluster/ordering_analyser.hpp>
 
-#include "utils/metric.hpp"
+#include <pyclustering/utils/metric.hpp>
 
 #include "samples.hpp"
 #include "utenv_check.hpp"

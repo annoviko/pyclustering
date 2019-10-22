@@ -20,12 +20,12 @@
 *
 */
 
-#include "dynamic_analyser.hpp"
+#include <pyclustering/nnet/dynamic_analyser.hpp>
 
 #include <sstream>
 #include <stdexcept>
 
-#include "utils/math.hpp"
+#include <pyclustering/utils/math.hpp>
 
 
 using namespace pyclustering::utils::math;

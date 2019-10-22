@@ -21,16 +21,16 @@
 */
 
 
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
 #include <cmath>
 #include <algorithm>
 
-#include <container/adjacency_connector.hpp>
-#include <container/adjacency_bit_matrix.hpp>
-#include <container/adjacency_list.hpp>
-#include <container/adjacency_matrix.hpp>
-#include <container/adjacency_weight_list.hpp>
+#include <pyclustering/container/adjacency_connector.hpp>
+#include <pyclustering/container/adjacency_bit_matrix.hpp>
+#include <pyclustering/container/adjacency_list.hpp>
+#include <pyclustering/container/adjacency_matrix.hpp>
+#include <pyclustering/container/adjacency_weight_list.hpp>
 
 
 using namespace pyclustering::container;

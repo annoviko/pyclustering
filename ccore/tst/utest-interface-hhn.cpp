@@ -20,13 +20,13 @@
 *
 */
 
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
-#include "interface/hhn_interface.h"
-#include "interface/pyclustering_interface.h"
-#include "interface/pyclustering_package.hpp"
+#include <pyclustering/interface/hhn_interface.h>
+#include <pyclustering/interface/pyclustering_interface.h>
+#include <pyclustering/interface/pyclustering_package.hpp>
 
-#include "nnet/hhn.hpp"
+#include <pyclustering/nnet/hhn.hpp>
 
 #include "utenv_utils.hpp"
 

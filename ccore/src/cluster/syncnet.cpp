@@ -21,11 +21,11 @@
 */
 
 
-#include "cluster/syncnet.hpp"
+#include <pyclustering/cluster/syncnet.hpp>
 
 #include <limits>
 
-#include "utils/metric.hpp"
+#include <pyclustering/utils/metric.hpp>
 
 
 using namespace pyclustering::utils::metric;

@@ -79,11 +79,13 @@ EXECUTABLE = $(EXECUTABLE_DIRECTORY)/ccore.so
 # Project sources
 MODULES = . cluster container differential interface nnet parallel utils
 
+PROJECT_DIRECTORY = .
+INCLUDE_DIRECTORY = $(PROJECT_DIRECTORY)/include/
 SOURCES_DIRECTORY = src
 SOURCES_DIRECTORIES = $(addprefix $(SOURCES_DIRECTORY)/, $(MODULES))
 SOURCES = $(foreach SUBDIR, $(SOURCES_DIRECTORIES), $(wildcard $(SUBDIR)/*.cpp))
 
-INCLUDES = -I$(SOURCES_DIRECTORY)
+INCLUDES = -I$(INCLUDE_DIRECTORY)
 
 
 # Project objects
@@ -99,7 +101,7 @@ DEPENDENCIES = $(OBJECTS:.o=.d)
 # Targets
 .PHONY: cppcheck
 cppcheck:
-	cppcheck --error-exitcode=1 --inconclusive --enable=warning,style,performance,information,portability --include=$(SOURCES_DIRECTORY) $(SOURCES_DIRECTORY)
+	cppcheck --error-exitcode=1 --inconclusive --enable=warning,style,performance,information,portability -I $(INCLUDE_DIRECTORY) $(SOURCES_DIRECTORY)
 
 
 .PHONY: ccore

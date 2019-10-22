@@ -21,9 +21,9 @@
 */
 
 
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
-#include "cluster/cure.hpp"
+#include <pyclustering/cluster/cure.hpp>
 
 #include "samples.hpp"
 #include "utenv_check.hpp"

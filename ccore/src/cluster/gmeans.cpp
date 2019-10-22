@@ -24,16 +24,15 @@
 #include <limits>
 #include <numeric>
 
-#include "cluster/gmeans.hpp"
-#include "cluster/kmeans.hpp"
-#include "cluster/kmeans_plus_plus.hpp"
+#include <pyclustering/cluster/gmeans.hpp>
+#include <pyclustering/cluster/kmeans.hpp>
+#include <pyclustering/cluster/kmeans_plus_plus.hpp>
 
-#include "parallel/parallel.hpp"
+#include <pyclustering/parallel/parallel.hpp>
 
-
-#include "utils/linalg.hpp"
-#include "utils/metric.hpp"
-#include "utils/stats.hpp"
+#include <pyclustering/utils/linalg.hpp>
+#include <pyclustering/utils/metric.hpp>
+#include <pyclustering/utils/stats.hpp>
 
 
 using namespace pyclustering::parallel;
@@ -66,6 +65,10 @@ gmeans::gmeans(const std::size_t p_k_initial, const double p_tolerance, const st
 void gmeans::process(const dataset & p_data, cluster_data & p_result) {
     m_ptr_data = &p_data;
     m_ptr_result = dynamic_cast<gmeans_data *>(&p_result);
+
+    if (!m_ptr_result) {
+        throw std::invalid_argument("Invalid result storage is specified: impossible to cast to 'gmeans_data'.");
+    }
 
     search_optimal_parameters(p_data, m_amount, m_ptr_result->clusters(), m_ptr_result->centers());
 

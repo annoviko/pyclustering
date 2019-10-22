@@ -21,7 +21,7 @@
 */
 
 
-#include "cluster_algorithm.hpp"
+#include <pyclustering/cluster/cluster_algorithm.hpp>
 
 
 namespace pyclustering {

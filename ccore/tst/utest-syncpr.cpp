@@ -21,9 +21,9 @@
 */
 
 
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
-#include "nnet/syncpr.hpp"
+#include <pyclustering/nnet/syncpr.hpp>
 
 #include <algorithm>
 

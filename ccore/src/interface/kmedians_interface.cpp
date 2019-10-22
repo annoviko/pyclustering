@@ -20,9 +20,9 @@
 *
 */
 
-#include "interface/kmedians_interface.h"
+#include <pyclustering/interface/kmedians_interface.h>
 
-#include "cluster/kmedians.hpp"
+#include <pyclustering/cluster/kmedians.hpp>
 
 
 pyclustering_package * kmedians_algorithm(const pyclustering_package * const p_sample, 

@@ -20,11 +20,11 @@
 *
 */
 
-#include "interface/kmeans_interface.h"
+#include <pyclustering/interface/kmeans_interface.h>
 
-#include "cluster/kmeans.hpp"
+#include <pyclustering/cluster/kmeans.hpp>
 
-#include "utils/metric.hpp"
+#include <pyclustering/utils/metric.hpp>
 
 
 using namespace pyclustering::utils::metric;

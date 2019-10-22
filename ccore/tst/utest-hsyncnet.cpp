@@ -21,9 +21,9 @@
 */
 
 
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
-#include "cluster/hsyncnet.hpp"
+#include <pyclustering/cluster/hsyncnet.hpp>
 
 
 using namespace pyclustering::clst;

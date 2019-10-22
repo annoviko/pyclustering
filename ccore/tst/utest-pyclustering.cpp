@@ -21,9 +21,9 @@
 */
 
 
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
-#include "interface/pyclustering_package.hpp"
+#include <pyclustering/interface/pyclustering_package.hpp>
 
 #include <vector>
 

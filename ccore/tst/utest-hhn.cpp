@@ -23,14 +23,14 @@
 
 #include <fstream>
 
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
 #include "utenv_check.hpp"
 
-#include "container/ensemble_data.hpp"
+#include <pyclustering/container/ensemble_data.hpp>
 
-#include "nnet/dynamic_analyser.hpp"
-#include "nnet/hhn.hpp"
+#include <pyclustering/nnet/dynamic_analyser.hpp>
+#include <pyclustering/nnet/hhn.hpp>
 
 
 using namespace pyclustering::differential;

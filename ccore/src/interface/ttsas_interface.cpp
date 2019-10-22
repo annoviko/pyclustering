@@ -21,12 +21,12 @@
 */
 
 
-#include "interface/bsas_interface.h"
-#include "interface/ttsas_interface.h"
+#include <pyclustering/interface/bsas_interface.h>
+#include <pyclustering/interface/ttsas_interface.h>
 
-#include "cluster/ttsas.hpp"
+#include <pyclustering/cluster/ttsas.hpp>
 
-#include "utils/metric.hpp"
+#include <pyclustering/utils/metric.hpp>
 
 
 using namespace pyclustering::utils::metric;

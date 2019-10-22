@@ -21,7 +21,7 @@
 */
 
 
-#include "interface/interface_property.h"
+#include <pyclustering/interface/interface_property.h>
 
 
 const char * INTERFACE_DESCRIPTION  = "pyclustering library is a C/C++ part of pyclustering library";

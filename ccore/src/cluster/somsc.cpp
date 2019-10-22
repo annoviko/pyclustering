@@ -20,7 +20,7 @@
 *
 */
 
-#include "cluster/somsc.hpp"
+#include <pyclustering/cluster/somsc.hpp>
 
 
 using namespace pyclustering::nnet;

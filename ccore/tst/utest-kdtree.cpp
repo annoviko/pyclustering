@@ -21,13 +21,13 @@
 */
 
 
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
 #include "samples.hpp"
 
-#include "container/kdtree.hpp"
+#include <pyclustering/container/kdtree.hpp>
 
-#include "utils/metric.hpp"
+#include <pyclustering/utils/metric.hpp>
 
 #include <algorithm>
 #include <numeric>

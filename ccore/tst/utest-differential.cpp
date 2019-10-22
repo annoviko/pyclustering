@@ -21,9 +21,9 @@
 */
 
 
-#include "differential/differ_state.hpp"
+#include <pyclustering/differential/differ_state.hpp>
 
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
 
 using namespace pyclustering::differential;

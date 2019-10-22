@@ -20,9 +20,9 @@
 *
 */
 
-#include "interface/cure_interface.h"
+#include <pyclustering/interface/cure_interface.h>
 
-#include "cluster/cure.hpp"
+#include <pyclustering/cluster/cure.hpp>
 
 
 void * cure_algorithm(const pyclustering_package * const sample, const size_t number_clusters, const size_t number_repr_points, const double compression) {

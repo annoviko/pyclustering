@@ -21,7 +21,7 @@
 */
 
 
-#include "kdnode.hpp"
+#include <pyclustering/container/kdnode.hpp>
 
 
 namespace pyclustering {

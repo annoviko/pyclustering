@@ -21,7 +21,7 @@
 */
 
 
-#include "cluster/kmeans_plus_plus.hpp"
+#include <pyclustering/cluster/kmeans_plus_plus.hpp>
 
 #include <algorithm>
 #include <chrono>

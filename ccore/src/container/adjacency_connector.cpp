@@ -20,7 +20,7 @@
 *
 */
 
-#include "container/adjacency_connector.hpp"
+#include <pyclustering/container/adjacency_connector.hpp>
 
 
 namespace pyclustering {

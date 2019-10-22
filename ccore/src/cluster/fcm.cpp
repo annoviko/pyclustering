@@ -21,11 +21,11 @@
 */
 
 
-#include "fcm.hpp"
+#include <pyclustering/cluster/fcm.hpp>
 
-#include "utils/metric.hpp"
+#include <pyclustering/utils/metric.hpp>
 
-#include "parallel/parallel.hpp"
+#include <pyclustering/parallel/parallel.hpp>
 
 
 using namespace pyclustering::parallel;

@@ -20,9 +20,9 @@
 *
 */
 
-#include "interface/dbscan_interface.h"
+#include <pyclustering/interface/dbscan_interface.h>
 
-#include "cluster/dbscan.hpp"
+#include <pyclustering/cluster/dbscan.hpp>
 
 
 pyclustering_package * dbscan_algorithm(const pyclustering_package * const sample, 

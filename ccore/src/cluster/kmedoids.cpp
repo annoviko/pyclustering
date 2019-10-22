@@ -20,12 +20,12 @@
 *
 */
 
-#include "cluster/kmedoids.hpp"
+#include <pyclustering/cluster/kmedoids.hpp>
 
 #include <algorithm>
 #include <limits>
 
-#include "parallel/parallel.hpp"
+#include <pyclustering/parallel/parallel.hpp>
 
 
 using namespace pyclustering::parallel;

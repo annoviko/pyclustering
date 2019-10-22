@@ -20,13 +20,13 @@
 *
 */
 
-#include "container/kdtree.hpp"
+#include <pyclustering/container/kdtree.hpp>
 
 #include <limits>
 #include <iostream>
 #include <stack>
 
-#include "utils/metric.hpp"
+#include <pyclustering/utils/metric.hpp>
 
 
 using namespace pyclustering::utils::metric;
@@ -187,23 +187,24 @@ kdnode::ptr kdtree::recursive_remove(kdnode::ptr & node) {
 }
 
 
-kdnode::ptr kdtree::find_minimal_node(kdnode::ptr node, std::size_t discriminator) {
+kdnode::ptr kdtree::find_minimal_node(const kdnode::ptr & node, std::size_t discriminator) {
     std::stack<kdnode::ptr> stack;
     kdnode::ptr minimal_node = node;
+    kdnode::ptr cursor = node;
     std::vector<kdnode::ptr> candidates;
     bool is_done = false;
 
     while (!is_done) {
-        if (node != nullptr) {
-            stack.push(node);
-            node = node->get_left();
+        if (cursor != nullptr) {
+            stack.push(cursor);
+            cursor = cursor->get_left();
         }
         else {
             if (!stack.empty()) {
-                node = stack.top();
-                candidates.push_back(node);
+                cursor = stack.top();
+                candidates.push_back(cursor);
                 stack.pop();
-                node = node->get_right();
+                cursor = cursor->get_right();
             }
             else {
                 is_done = true;

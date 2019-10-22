@@ -21,7 +21,7 @@
 */
 
 
-#include "cluster/random_center_initializer.hpp"
+#include <pyclustering/cluster/random_center_initializer.hpp>
 
 #include <chrono>
 #include <random>

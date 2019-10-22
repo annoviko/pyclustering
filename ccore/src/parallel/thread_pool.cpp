@@ -21,9 +21,9 @@
 */
 
 
-#include "thread_pool.hpp"
+#include <pyclustering/parallel/thread_pool.hpp>
 
-#include "task.hpp"
+#include <pyclustering/parallel/task.hpp>
 
 
 namespace pyclustering {

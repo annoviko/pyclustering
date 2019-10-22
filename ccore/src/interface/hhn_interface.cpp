@@ -23,11 +23,11 @@
 
 #include <fstream>
 
-#include "interface/hhn_interface.h"
+#include <pyclustering/interface/hhn_interface.h>
 
-#include "differential/solve_type.hpp"
+#include <pyclustering/differential/solve_type.hpp>
 
-#include "nnet/hhn.hpp"
+#include <pyclustering/nnet/hhn.hpp>
 
 
 using namespace pyclustering::nnet;

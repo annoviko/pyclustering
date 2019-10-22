@@ -21,7 +21,7 @@
 */
 
 
-#include "silhouette_interface.h"
+#include <pyclustering/interface/silhouette_interface.h>
 
 
 pyclustering::clst::silhouette_ksearch_allocator::ptr get_silhouette_ksearch_allocator(

@@ -20,7 +20,7 @@
 *
 */
 
-#include "cluster/clique.hpp"
+#include <pyclustering/cluster/clique.hpp>
 
 #include <cmath>
 
@@ -160,7 +160,7 @@ void clique::create_grid(void) {
 }
 
 
-std::string clique::location_to_key(const clique_block_location & p_location) const {
+std::string clique::location_to_key(const clique_block_location & p_location) {
     std::string result;
     for (const auto coordinate : p_location) {
         result += std::to_string(coordinate) + '.';

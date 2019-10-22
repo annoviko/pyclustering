@@ -27,10 +27,10 @@
 #include <algorithm>
 #include <vector>
 
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
-#include "cluster/cluster_data.hpp"
-#include "cluster/cluster_algorithm.hpp"
+#include <pyclustering/cluster/cluster_data.hpp>
+#include <pyclustering/cluster/cluster_algorithm.hpp>
 
 
 using namespace pyclustering;

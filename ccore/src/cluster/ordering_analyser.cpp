@@ -21,7 +21,7 @@
 */
 
 
-#include "ordering_analyser.hpp"
+#include <pyclustering/cluster/ordering_analyser.hpp>
 
 
 #include <algorithm>

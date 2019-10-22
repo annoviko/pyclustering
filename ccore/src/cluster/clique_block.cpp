@@ -20,7 +20,7 @@
 *
 */
 
-#include "cluster/clique_block.hpp"
+#include <pyclustering/cluster/clique_block.hpp>
 
 
 namespace pyclustering {

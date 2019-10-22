@@ -119,6 +119,30 @@ def cluster_engytime():
     template_clustering(FCPS_SAMPLES.SAMPLE_ENGY_TIME)
 
 
+def display_simple_clustering_results():
+    (simple1, simple1_clusters) = template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, visualize=False)
+    (simple2, simple2_clusters) = template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, visualize=False)
+    (simple3, simple3_clusters) = template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, visualize=False)
+    (simple4, simple4_clusters) = template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, visualize=False)
+    (simple5, simple5_clusters) = template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, visualize=False)
+    (simple6, simple6_clusters) = template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE6, visualize=False)
+    (simple7, simple7_clusters) = template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE7, visualize=False)
+    (simple8, simple8_clusters) = template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE8, visualize=False)
+    (simple9, simple9_clusters) = template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, visualize=False)
+
+    visualizer = cluster_visualizer(9, 3)
+    visualizer.append_clusters(simple1_clusters, simple1, 0, markersize=3)
+    visualizer.append_clusters(simple2_clusters, simple2, 1, markersize=3)
+    visualizer.append_clusters(simple3_clusters, simple3, 2, markersize=3)
+    visualizer.append_clusters(simple4_clusters, simple4, 3, markersize=3)
+    visualizer.append_clusters(simple5_clusters, simple5, 4, markersize=3)
+    visualizer.append_clusters(simple6_clusters, simple6, 5, markersize=6)
+    visualizer.append_clusters(simple7_clusters, simple7, 6, markersize=6)
+    visualizer.append_clusters(simple8_clusters, simple8, 7, markersize=6)
+    visualizer.append_clusters(simple9_clusters, simple9, 8, markersize=6)
+    visualizer.show()
+
+
 def display_fcps_clustering_results():
     (simple3, simple3_clusters) = template_clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, visualize=False)
     (lsun, lsun_clusters) = template_clustering(FCPS_SAMPLES.SAMPLE_LSUN, visualize=False)
@@ -167,4 +191,5 @@ cluster_wingnut()
 cluster_atom()
 cluster_engytime()
 
+# display_simple_clustering_results()
 # display_fcps_clustering_results()

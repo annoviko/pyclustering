@@ -21,10 +21,10 @@
 */
 
 
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
-#include "interface/fcm_interface.h"
-#include "interface/pyclustering_package.hpp"
+#include <pyclustering/interface/fcm_interface.h>
+#include <pyclustering/interface/pyclustering_package.hpp>
 
 #include "samples.hpp"
 #include "utenv_utils.hpp"

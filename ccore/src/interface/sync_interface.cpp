@@ -21,9 +21,9 @@
 */
 
 
-#include "interface/sync_interface.h"
+#include <pyclustering/interface/sync_interface.h>
 
-#include "nnet/sync.hpp"
+#include <pyclustering/nnet/sync.hpp>
 
 
 using namespace pyclustering::nnet;
@@ -109,10 +109,10 @@ void sync_dynamic_destroy(const void * pointer_dynamic) {
 }
 
 
-pyclustering_package * sync_dynamic_allocate_sync_ensembles(const void * pointer, const double tolerance, const std::size_t iteration) {
+pyclustering_package * sync_dynamic_allocate_sync_ensembles(const void * pointer_dynamic, const double tolerance, const std::size_t iteration) {
     ensemble_data<sync_ensemble> ensembles;
 
-    ((sync_dynamic *) pointer)->allocate_sync_ensembles(tolerance, iteration, ensembles);
+    ((sync_dynamic *)pointer_dynamic)->allocate_sync_ensembles(tolerance, iteration, ensembles);
 
     pyclustering_package * package = create_package(&ensembles);
     return package;
@@ -128,8 +128,8 @@ pyclustering_package * sync_dynamic_allocate_correlation_matrix(const void * poi
 }
 
 
-pyclustering_package * sync_dynamic_get_time(const void * pointer) {
-    sync_dynamic & dynamic = *((sync_dynamic *) pointer);
+pyclustering_package * sync_dynamic_get_time(const void * pointer_dynamic) {
+    sync_dynamic & dynamic = *((sync_dynamic *)pointer_dynamic);
 
     pyclustering_package * package = new pyclustering_package(pyclustering_data_t::PYCLUSTERING_TYPE_DOUBLE);
     package->size = dynamic.size();
@@ -143,8 +143,8 @@ pyclustering_package * sync_dynamic_get_time(const void * pointer) {
 }
 
 
-pyclustering_package * sync_dynamic_get_output(const void * pointer) {
-    sync_dynamic & dynamic = *((sync_dynamic *) pointer);
+pyclustering_package * sync_dynamic_get_output(const void * pointer_dynamic) {
+    sync_dynamic & dynamic = *((sync_dynamic *)pointer_dynamic);
 
     pyclustering_package * package = new pyclustering_package(pyclustering_data_t::PYCLUSTERING_TYPE_LIST);
     package->size = dynamic.size();

@@ -21,11 +21,11 @@
 */
 
 
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
 #include "samples.hpp"
 
-#include "cluster/fcm.hpp"
+#include <pyclustering/cluster/fcm.hpp>
 
 #include "utenv_check.hpp"
 

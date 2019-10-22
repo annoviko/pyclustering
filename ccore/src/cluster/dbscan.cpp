@@ -21,7 +21,7 @@
 */
 
 
-#include "cluster/dbscan.hpp"
+#include <pyclustering/cluster/dbscan.hpp>
 
 #include <string>
 #include <unordered_set>

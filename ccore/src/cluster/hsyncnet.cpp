@@ -20,12 +20,12 @@
 *
 */
 
-#include "cluster/hsyncnet.hpp"
+#include <pyclustering/cluster/hsyncnet.hpp>
 
 #include <limits>
 #include <cmath>
 
-#include "utils/metric.hpp"
+#include <pyclustering/utils/metric.hpp>
 
 
 using namespace pyclustering::utils::metric;

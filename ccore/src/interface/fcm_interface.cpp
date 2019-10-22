@@ -21,9 +21,9 @@
 */
 
 
-#include "interface/fcm_interface.h"
+#include <pyclustering/interface/fcm_interface.h>
 
-#include "cluster/fcm.hpp"
+#include <pyclustering/cluster/fcm.hpp>
 
 
 pyclustering_package * fcm_algorithm(const pyclustering_package * const p_sample, 

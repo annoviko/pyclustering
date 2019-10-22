@@ -21,11 +21,11 @@
 */
 
 
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
 #include "utenv_check.hpp"
 
-#include "nnet/dynamic_analyser.hpp"
+#include <pyclustering/nnet/dynamic_analyser.hpp>
 
 
 using namespace pyclustering::nnet;

@@ -21,7 +21,7 @@
 */
 
 
-#include "task.hpp"
+#include <pyclustering/parallel/task.hpp>
 
 
 namespace pyclustering {

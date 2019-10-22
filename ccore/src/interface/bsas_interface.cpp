@@ -21,11 +21,11 @@
 */
 
 
-#include "interface/bsas_interface.h"
+#include <pyclustering/interface/bsas_interface.h>
 
-#include "cluster/bsas.hpp"
+#include <pyclustering/cluster/bsas.hpp>
 
-#include "utils/metric.hpp"
+#include <pyclustering/utils/metric.hpp>
 
 
 using namespace pyclustering;

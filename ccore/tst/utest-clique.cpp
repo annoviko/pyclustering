@@ -21,9 +21,9 @@
 */
 
 
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
-#include "cluster/clique.hpp"
+#include <pyclustering/cluster/clique.hpp>
 
 #include "samples.hpp"
 

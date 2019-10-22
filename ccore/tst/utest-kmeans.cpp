@@ -21,13 +21,13 @@
 */
 
 
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
 #include "samples.hpp"
 
-#include "cluster/kmeans.hpp"
+#include <pyclustering/cluster/kmeans.hpp>
 
-#include "utils/metric.hpp"
+#include <pyclustering/utils/metric.hpp>
 
 #include "utenv_check.hpp"
 

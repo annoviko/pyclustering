@@ -21,9 +21,9 @@
 */
 
 
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
-#include "container/adjacency_list.hpp"
+#include <pyclustering/container/adjacency_list.hpp>
 
 #include "utest-adjacency.hpp"
 

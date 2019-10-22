@@ -21,7 +21,7 @@
 */
 
 
-#include "utils/stats.hpp"
+#include <pyclustering/utils/stats.hpp>
 
 
 namespace pyclustering {

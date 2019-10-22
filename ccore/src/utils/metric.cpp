@@ -21,7 +21,7 @@
 */
 
 
-#include "metric.hpp"
+#include <pyclustering/utils/metric.hpp>
 
 #include <algorithm>
 

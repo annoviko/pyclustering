@@ -20,9 +20,9 @@
 *
 */
 
-#include "interface/syncnet_interface.h"
+#include <pyclustering/interface/syncnet_interface.h>
 
-#include "cluster/syncnet.hpp"
+#include <pyclustering/cluster/syncnet.hpp>
 
 
 using namespace pyclustering::clst;

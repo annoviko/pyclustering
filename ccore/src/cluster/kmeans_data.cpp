@@ -21,7 +21,7 @@
 */
 
 
-#include "cluster/kmeans_data.hpp"
+#include <pyclustering/cluster/kmeans_data.hpp>
 
 
 namespace pyclustering {

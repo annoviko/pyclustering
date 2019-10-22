@@ -97,15 +97,15 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>../src;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)/include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>../src;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)/include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)src;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)/include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release Static Library|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -113,12 +113,12 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)src;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)/include;$(IncludePath)</IncludePath>
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release Static Library|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)src;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)/include;$(IncludePath)</IncludePath>
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -127,7 +127,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;BUILDING_LIBRARY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)external\include\;$(SolutionDir)external\include\gtest\;$(SolutionDir)external\include\tbb\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
@@ -144,7 +144,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;BUILDING_LIBRARY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)external\include\;$(SolutionDir)external\include\gtest\;$(SolutionDir)external\include\tbb\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
@@ -300,6 +300,7 @@
     <ClCompile Include="..\src\interface\gmeans_interface.cpp" />
     <ClCompile Include="..\src\interface\hhn_interface.cpp" />
     <ClCompile Include="..\src\interface\hsyncnet_interface.cpp" />
+    <ClCompile Include="..\src\interface\interface_property.cpp" />
     <ClCompile Include="..\src\interface\kmeans_interface.cpp" />
     <ClCompile Include="..\src\interface\kmedians_interface.cpp" />
     <ClCompile Include="..\src\interface\kmedoids_interface.cpp" />
@@ -310,6 +311,7 @@
     <ClCompile Include="..\src\interface\pcnn_interface.cpp" />
     <ClCompile Include="..\src\interface\pyclustering_interface.cpp" />
     <ClCompile Include="..\src\interface\pyclustering_package.cpp" />
+    <ClCompile Include="..\src\interface\rock_interface.cpp" />
     <ClCompile Include="..\src\interface\silhouette_interface.cpp" />
     <ClCompile Include="..\src\interface\som_interface.cpp" />
     <ClCompile Include="..\src\interface\syncnet_interface.cpp" />
@@ -411,114 +413,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\external\include\gtest\gtest.h" />
-    <ClInclude Include="..\src\cluster\agglomerative.hpp" />
-    <ClInclude Include="..\src\cluster\bsas.hpp" />
-    <ClInclude Include="..\src\cluster\bsas_data.hpp" />
-    <ClInclude Include="..\src\cluster\center_initializer.hpp" />
-    <ClInclude Include="..\src\cluster\clique.hpp" />
-    <ClInclude Include="..\src\cluster\clique_block.hpp" />
-    <ClInclude Include="..\src\cluster\clique_data.hpp" />
-    <ClInclude Include="..\src\cluster\cluster_algorithm.hpp" />
-    <ClInclude Include="..\src\cluster\cluster_data.hpp" />
-    <ClInclude Include="..\src\cluster\cure.hpp" />
-    <ClInclude Include="..\src\cluster\cure_data.hpp" />
-    <ClInclude Include="..\src\cluster\dbscan.hpp" />
-    <ClInclude Include="..\src\cluster\dbscan_data.hpp" />
-    <ClInclude Include="..\src\cluster\elbow.hpp" />
-    <ClInclude Include="..\src\cluster\elbow_data.hpp" />
-    <ClInclude Include="..\src\cluster\fcm.hpp" />
-    <ClInclude Include="..\src\cluster\fcm_data.hpp" />
-    <ClInclude Include="..\src\cluster\gmeans.hpp" />
-    <ClInclude Include="..\src\cluster\gmeans_data.hpp" />
-    <ClInclude Include="..\src\cluster\hsyncnet.hpp" />
-    <ClInclude Include="..\src\cluster\kmeans.hpp" />
-    <ClInclude Include="..\src\cluster\kmeans_data.hpp" />
-    <ClInclude Include="..\src\cluster\kmeans_plus_plus.hpp" />
-    <ClInclude Include="..\src\cluster\kmedians.hpp" />
-    <ClInclude Include="..\src\cluster\kmedians_data.hpp" />
-    <ClInclude Include="..\src\cluster\kmedoids.hpp" />
-    <ClInclude Include="..\src\cluster\kmedoids_data.hpp" />
-    <ClInclude Include="..\src\cluster\mbsas.hpp" />
-    <ClInclude Include="..\src\cluster\mbsas_data.hpp" />
-    <ClInclude Include="..\src\cluster\optics.hpp" />
-    <ClInclude Include="..\src\cluster\optics_data.hpp" />
-    <ClInclude Include="..\src\cluster\optics_descriptor.hpp" />
-    <ClInclude Include="..\src\cluster\ordering_analyser.hpp" />
-    <ClInclude Include="..\src\cluster\random_center_initializer.hpp" />
-    <ClInclude Include="..\src\cluster\rock.hpp" />
-    <ClInclude Include="..\src\cluster\silhouette.hpp" />
-    <ClInclude Include="..\src\cluster\silhouette_data.hpp" />
-    <ClInclude Include="..\src\cluster\silhouette_ksearch.hpp" />
-    <ClInclude Include="..\src\cluster\silhouette_ksearch_data.hpp" />
-    <ClInclude Include="..\src\cluster\somsc.hpp" />
-    <ClInclude Include="..\src\cluster\somsc_data.hpp" />
-    <ClInclude Include="..\src\cluster\syncnet.hpp" />
-    <ClInclude Include="..\src\cluster\ttsas.hpp" />
-    <ClInclude Include="..\src\cluster\ttsas_data.hpp" />
-    <ClInclude Include="..\src\cluster\xmeans.hpp" />
-    <ClInclude Include="..\src\container\adjacency.hpp" />
-    <ClInclude Include="..\src\container\adjacency_bit_matrix.hpp" />
-    <ClInclude Include="..\src\container\adjacency_connector.hpp" />
-    <ClInclude Include="..\src\container\adjacency_factory.hpp" />
-    <ClInclude Include="..\src\container\adjacency_list.hpp" />
-    <ClInclude Include="..\src\container\adjacency_matrix.hpp" />
-    <ClInclude Include="..\src\container\adjacency_weight_list.hpp" />
-    <ClInclude Include="..\src\container\dynamic_data.hpp" />
-    <ClInclude Include="..\src\container\ensemble_data.hpp" />
-    <ClInclude Include="..\src\container\kdnode.hpp" />
-    <ClInclude Include="..\src\container\kdtree.hpp" />
-    <ClInclude Include="..\src\definitions.hpp" />
-    <ClInclude Include="..\src\differential\differ_factor.hpp" />
-    <ClInclude Include="..\src\differential\differ_state.hpp" />
-    <ClInclude Include="..\src\differential\equation.hpp" />
-    <ClInclude Include="..\src\differential\runge_kutta_4.hpp" />
-    <ClInclude Include="..\src\differential\runge_kutta_fehlberg_45.hpp" />
-    <ClInclude Include="..\src\differential\solve_type.hpp" />
-    <ClInclude Include="..\src\interface\agglomerative_interface.h" />
-    <ClInclude Include="..\src\interface\bsas_interface.h" />
-    <ClInclude Include="..\src\interface\clique_interface.h" />
-    <ClInclude Include="..\src\interface\cure_interface.h" />
-    <ClInclude Include="..\src\interface\dbscan_interface.h" />
-    <ClInclude Include="..\src\interface\elbow_interface.h" />
-    <ClInclude Include="..\src\interface\fcm_interface.h" />
-    <ClInclude Include="..\src\interface\gmeans_interface.h" />
-    <ClInclude Include="..\src\interface\hhn_interface.h" />
-    <ClInclude Include="..\src\interface\hsyncnet_interface.h" />
-    <ClInclude Include="..\src\interface\kmeans_interface.h" />
-    <ClInclude Include="..\src\interface\kmedians_interface.h" />
-    <ClInclude Include="..\src\interface\kmedoids_interface.h" />
-    <ClInclude Include="..\src\interface\legion_interface.h" />
-    <ClInclude Include="..\src\interface\mbsas_interface.h" />
-    <ClInclude Include="..\src\interface\metric_interface.h" />
-    <ClInclude Include="..\src\interface\optics_interface.h" />
-    <ClInclude Include="..\src\interface\pcnn_interface.h" />
-    <ClInclude Include="..\src\interface\pyclustering_interface.h" />
-    <ClInclude Include="..\src\interface\pyclustering_package.hpp" />
-    <ClInclude Include="..\src\interface\silhouette_interface.h" />
-    <ClInclude Include="..\src\interface\som_interface.h" />
-    <ClInclude Include="..\src\interface\syncnet_interface.h" />
-    <ClInclude Include="..\src\interface\syncpr_interface.h" />
-    <ClInclude Include="..\src\interface\sync_interface.h" />
-    <ClInclude Include="..\src\interface\ttsas_interface.h" />
-    <ClInclude Include="..\src\interface\xmeans_interface.h" />
-    <ClInclude Include="..\src\nnet\dynamic_analyser.hpp" />
-    <ClInclude Include="..\src\nnet\hhn.hpp" />
-    <ClInclude Include="..\src\nnet\legion.hpp" />
-    <ClInclude Include="..\src\nnet\network.hpp" />
-    <ClInclude Include="..\src\nnet\pcnn.hpp" />
-    <ClInclude Include="..\src\nnet\som.hpp" />
-    <ClInclude Include="..\src\nnet\sync.hpp" />
-    <ClInclude Include="..\src\nnet\syncpr.hpp" />
-    <ClInclude Include="..\src\parallel\parallel.hpp" />
-    <ClInclude Include="..\src\parallel\spinlock.hpp" />
-    <ClInclude Include="..\src\parallel\task.hpp" />
-    <ClInclude Include="..\src\parallel\thread_executor.hpp" />
-    <ClInclude Include="..\src\parallel\thread_pool.hpp" />
-    <ClInclude Include="..\src\utils\linalg.hpp" />
-    <ClInclude Include="..\src\utils\math.hpp" />
-    <ClInclude Include="..\src\utils\metric.hpp" />
-    <ClInclude Include="..\src\utils\random.hpp" />
-    <ClInclude Include="..\src\utils\stats.hpp" />
     <ClInclude Include="answer.hpp" />
     <ClInclude Include="answer_reader.hpp" />
     <ClInclude Include="samples.hpp" />

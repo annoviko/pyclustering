@@ -20,15 +20,15 @@
 *
 */
 
-#include "cluster/kmeans.hpp"
+#include <pyclustering/cluster/kmeans.hpp>
 
-#include "parallel/parallel.hpp"
+#include <pyclustering/parallel/parallel.hpp>
 
 #include <algorithm>
 #include <limits>
 #include <unordered_map>
 
-#include "utils/metric.hpp"
+#include <pyclustering/utils/metric.hpp>
 
 
 using namespace pyclustering::parallel;

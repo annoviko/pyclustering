@@ -21,7 +21,7 @@
 */
 
 
-#include "spinlock.hpp"
+#include <pyclustering/parallel/spinlock.hpp>
 
 #include <thread>
 

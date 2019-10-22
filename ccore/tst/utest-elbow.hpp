@@ -24,13 +24,13 @@
 #pragma once
 
 
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
 #include <thread>
 
 #include "utenv_check.hpp"
 
-#include "cluster/elbow.hpp"
+#include <pyclustering/cluster/elbow.hpp>
 
 
 using namespace pyclustering::clst;

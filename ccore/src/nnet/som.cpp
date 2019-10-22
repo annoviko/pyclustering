@@ -20,7 +20,7 @@
 *
 */
 
-#include "nnet/som.hpp"
+#include <pyclustering/nnet/som.hpp>
 
 #include <chrono>
 #include <cmath>
@@ -28,7 +28,7 @@
 #include <exception>
 #include <random>
 
-#include "utils/metric.hpp"
+#include <pyclustering/utils/metric.hpp>
 
 
 using namespace pyclustering::utils::metric;
@@ -293,21 +293,7 @@ void som::create_initial_weights(const som_init_type type) {
             break;
         }
 
-        case som_init_type::SOM_RANDOM_CENTROID: {
-            /* Random weights at the center of input data. */
-            std::uniform_real_distribution<double> position_distribution(-0.5, 0.5);
-
-            for (size_t i = 0; i < m_size; i++) {
-                std::vector<double> & neuron_weight = m_weights[i];
-
-                for (size_t dim = 0; dim < dimension; dim++) {
-                    neuron_weight[dim] = position_distribution(generator);
-                }
-            }
-
-            break;
-        }
-
+        case som_init_type::SOM_RANDOM_CENTROID:
         case som_init_type::SOM_RANDOM: {
             /* Random weights of input data. */
             std::uniform_real_distribution<double> position_distribution(-0.5, 0.5);
@@ -519,7 +505,7 @@ std::size_t som::get_winner_number(void) const {
 }
 
 
-double som::calculate_init_radius(const size_t p_rows, const size_t p_cols) const {
+double som::calculate_init_radius(const size_t p_rows, const size_t p_cols) {
     if ((double)(p_cols + p_rows) / 4.0 > 1.0) {
         return 2.0;
     }
