@@ -56,7 +56,7 @@ void dbscan::process(const dataset & p_data, const dbscan_data_t p_type, cluster
     }
 
     m_visited = std::vector<bool>(m_data_ptr->size(), false);
-    m_belong = std::vector<bool>(m_data_ptr->size(), false);
+    m_belong = m_visited;
 
     m_result_ptr = (dbscan_data *) &p_result;
 

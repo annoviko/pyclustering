@@ -259,7 +259,7 @@ private:
 public:
     hhn_dynamic_reader(void) = default;
 
-    hhn_dynamic_reader(const std::string & p_filename);
+    explicit hhn_dynamic_reader(const std::string & p_filename);
 
     ~hhn_dynamic_reader(void);
 
@@ -290,10 +290,13 @@ using hhn_stimulus        = std::vector<double>;
 
 class hhn_network {
 private:
-    const static std::size_t POSITION_MEMBRAN_POTENTIAL;
-    const static std::size_t POSITION_ACTIVE_COND_SODIUM;
-    const static std::size_t POSITION_INACTIVE_COND_SODIUM;
-    const static std::size_t POSITION_ACTIVE_COND_POTASSIUM;
+    enum: std::size_t {
+        POSITION_MEMBRAN_POTENTIAL = 0,
+        POSITION_ACTIVE_COND_SODIUM,
+        POSITION_INACTIVE_COND_SODIUM,
+        POSITION_ACTIVE_COND_POTASSIUM,
+        POSITION_AMOUNT
+    };
 
 private:
     using hhn_state           = differ_result<double>;
@@ -353,16 +356,16 @@ private:
     static double alpha_function(const double p_time, const double p_alfa, const double p_betta);
 
     template <class NeuronType>
-    void pack_equation_input(const NeuronType & p_neuron, differ_state<double> & p_inputs) const;
+    static void pack_equation_input(const NeuronType & p_neuron, differ_state<double> & p_inputs);
 
     template <class NeuronType>
-    void unpack_equation_output(const hhn_state & p_outputs, NeuronType & p_neuron) const;
+    static void unpack_equation_output(const hhn_state & p_outputs, NeuronType & p_neuron);
 };
 
 
 template <class NeuronType>
-void hhn_network::pack_equation_input(const NeuronType & p_neuron, differ_state<double> & p_inputs) const {
-    p_inputs.resize(4);
+void hhn_network::pack_equation_input(const NeuronType & p_neuron, differ_state<double> & p_inputs) {
+    p_inputs.resize(POSITION_AMOUNT);
     p_inputs[POSITION_MEMBRAN_POTENTIAL]      = p_neuron.m_membrane_potential;
     p_inputs[POSITION_ACTIVE_COND_SODIUM]     = p_neuron.m_active_cond_sodium;
     p_inputs[POSITION_INACTIVE_COND_SODIUM]   = p_neuron.m_inactive_cond_sodium;
@@ -371,7 +374,7 @@ void hhn_network::pack_equation_input(const NeuronType & p_neuron, differ_state<
 
 
 template <class NeuronType>
-void hhn_network::unpack_equation_output(const hhn_state & p_outputs, NeuronType & p_neuron) const {
+void hhn_network::unpack_equation_output(const hhn_state & p_outputs, NeuronType & p_neuron) {
     p_neuron.m_membrane_potential      = p_outputs[0].state[POSITION_MEMBRAN_POTENTIAL];
     p_neuron.m_active_cond_sodium      = p_outputs[0].state[POSITION_ACTIVE_COND_SODIUM];
     p_neuron.m_inactive_cond_sodium    = p_outputs[0].state[POSITION_INACTIVE_COND_SODIUM];

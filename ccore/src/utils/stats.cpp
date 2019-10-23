@@ -33,8 +33,9 @@ namespace stats {
 
 std::vector<double> critical_values(const std::size_t p_data_size) {
     std::vector<double> result = { 0.576, 0.656, 0.787, 0.918, 1.092 };
+    const double size = static_cast<const double>(p_data_size);
     for (auto & value : result) {
-        value /= (1.0 + 4.0 / p_data_size - 25.0 / p_data_size / p_data_size);
+        value /= (1.0 + 4.0 / size - 25.0 / size / size);
     }
 
     return result;

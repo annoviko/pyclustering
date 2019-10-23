@@ -387,7 +387,7 @@ public:
     *
     */
     adjacency_weight_connector(const adjacency_weight_initializer & initializer) {
-        if (initializer != nullptr) {
+        if (initializer) {
             m_initializer = initializer; /* [this](const size_t index1, const size_t index2, TypeCollection & collection) {
                 collection.set_connection_weight(index1, index2, initializer());
             }; */

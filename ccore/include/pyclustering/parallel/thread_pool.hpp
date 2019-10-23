@@ -43,6 +43,7 @@ private:
     using thread_container = std::vector<thread_executor::ptr>;
 
 public:
+    static const std::size_t        DEFAULT_AMOUNT_THREADS;
     static const std::size_t        DEFAULT_POOL_SIZE;
 
 private:

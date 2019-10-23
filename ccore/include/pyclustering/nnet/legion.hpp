@@ -54,28 +54,16 @@ typedef std::vector<double>         legion_stimulus;
 struct legion_network_state {
 public:
     std::vector<double> m_output;
-    double              m_inhibitor;
-    double              m_time;
+    double              m_inhibitor = 0.0;
+    double              m_time      = 0.0;
 
 public:
-    legion_network_state(void) : m_inhibitor(0.0), m_time(0.0) { }
+    legion_network_state(void) = default;
 
-    legion_network_state(const std::size_t size) : m_output(size, 0.0), m_inhibitor(0.0), m_time(0.0) { }
+    explicit legion_network_state(const std::size_t size) : m_output(size, 0.0), m_inhibitor(0.0), m_time(0.0) { }
 
 public:
-    inline std::size_t size(void) const { return m_output.size(); }
-
-    inline legion_network_state & operator=(const legion_network_state & other) {
-        if (this != &other) {
-            m_output.resize(other.size());
-            std::copy(other.m_output.cbegin(), other.m_output.cend(), m_output.begin());
-
-            m_inhibitor = other.m_inhibitor;
-            m_time = other.m_time;
-        }
-
-        return *this;
-    }
+    std::size_t size(void) const;
 };
 
 

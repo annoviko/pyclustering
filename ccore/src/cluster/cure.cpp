@@ -210,13 +210,13 @@ void cure_queue::merge(cure_cluster * cluster1, cure_cluster * cluster2, const s
 
     //If all elements were same then avoid calculating the mean mathematically as it may lead to precision error.
     if (are_all_elements_same(merged_cluster)) {
-        for (unsigned int i = 0; i < (*merged_cluster->points)[0]->size(); i++) {
+        for (std::size_t i = 0; i < (*merged_cluster->points)[0]->size(); i++) {
             (*merged_cluster->mean)[i] = (*(*merged_cluster->points)[0])[i];
         }
 
     }
     else {
-        for (unsigned int dimension = 0; dimension < merged_cluster->mean->size(); dimension++) {
+        for (std::size_t dimension = 0; dimension < merged_cluster->mean->size(); dimension++) {
             (*merged_cluster->mean)[dimension] = (cluster1->points->size() * (*cluster1->mean)[dimension] + cluster2->points->size() * (*cluster2->mean)[dimension]) / (cluster1->points->size() + cluster2->points->size());
         }
     }
@@ -416,9 +416,7 @@ cure::~cure() {
 
 
 void cure::process(const dataset & p_data, cluster_data & p_result) {
-    if (queue) {
-        delete queue;
-    }
+    delete queue;
 
     queue = new cure_queue(&p_data);
     data = &p_data;

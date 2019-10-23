@@ -47,7 +47,7 @@ enum kmedians_package_indexer {
  * @details Caller should destroy returned result in 'pyclustering_package'.
  *
  * @param[in] p_sample: input data for clustering.
- * @param[in] p_medians: initial medians of clusters.
+ * @param[in] p_initial_medians: initial medians of clusters.
  * @param[in] p_tolerance: stop condition - when changes of medians are less then tolerance value.
  * @param[in] p_itermax: maximum amount of iterations for cluster analysis.
  * @param[in] p_metric: distance metric for distance calculation between objects.
@@ -56,7 +56,7 @@ enum kmedians_package_indexer {
  *
  */
 extern "C" DECLARATION pyclustering_package * kmedians_algorithm(const pyclustering_package * const p_sample, 
-                                                                 const pyclustering_package * const p_medians, 
+                                                                 const pyclustering_package * const p_initial_medians,
                                                                  const double p_tolerance,
                                                                  const std::size_t p_itermax,
                                                                  const void * const p_metric);

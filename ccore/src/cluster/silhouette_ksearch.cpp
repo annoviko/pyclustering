@@ -102,7 +102,8 @@ void silhouette_ksearch::process(const dataset & p_data, silhouette_ksearch_data
         silhouette_data result;
         silhouette().process(p_data, clusters, result);
 
-        const double score = std::accumulate(result.get_score().begin(), result.get_score().end(), (double) 0.0) / result.get_score().size();
+        const auto & scores = result.get_score();
+        const double score = std::accumulate(scores.begin(), scores.end(), 0.0) / scores.size();
         p_result.scores().push_back(score);
 
         if (score > p_result.get_score()) {

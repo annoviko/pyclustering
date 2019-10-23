@@ -57,11 +57,10 @@ typedef struct sync_oscillator {
 } sync_oscillator;
 
 
-typedef std::vector<unsigned int>     sync_ensemble;
+using sync_ensemble = std::vector<std::size_t>;
 
-
-typedef std::vector<double>           sync_corr_row;
-typedef std::vector<sync_corr_row>    sync_corr_matrix;
+using sync_corr_row = std::vector<double>;
+using sync_corr_matrix = std::vector<sync_corr_row>;
 
 
 /**

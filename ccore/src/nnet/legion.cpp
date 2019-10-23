@@ -46,6 +46,10 @@ namespace nnet {
 const size_t legion_network::MAXIMUM_MATRIX_REPRESENTATION_SIZE = 4096;
 
 
+std::size_t legion_network_state::size(void) const {
+    return m_output.size();
+}
+
 
 legion_network::legion_network(const size_t num_osc, const connection_t connection_type, const legion_parameters & params) {
     initialize(num_osc, connection_type, 0, 0, params);
@@ -117,7 +121,7 @@ void legion_network::create_dynamic_connections(const legion_stimulus & stimulus
 void legion_network::store_dynamic(const double time, const bool collect_dynamic, legion_dynamic & dynamic) const {
     legion_network_state state(size());
 
-    for (unsigned int index = 0; index < size(); index++) {
+    for (std::size_t index = 0; index < size(); index++) {
         state.m_output[index] = m_oscillators[index].m_excitatory;
     }
 
@@ -136,7 +140,7 @@ void legion_network::calculate_states(const legion_stimulus & stimulus, const so
     std::vector< differ_result<double> > next_states(size());
     std::vector<void *> argv(1, nullptr);
 
-    unsigned int number_int_steps = (unsigned int) (step / int_step);
+    std::size_t number_int_steps = static_cast<std::size_t>(step / int_step);
 
     for (std::size_t index = 0; index < size(); index++) {
         argv[0] = (void *) index;
@@ -287,7 +291,7 @@ void legion_network::inhibitor_state(const double t, const differ_state<double> 
     const double z = inputs[0];
 
     double sigma = 0.0;
-    for (unsigned int index = 0; index < size(); index++) {
+    for (std::size_t index = 0; index < size(); index++) {
         if (m_oscillators[index].m_excitatory > m_params.teta_zx) {
             sigma = 1.0;
             break;

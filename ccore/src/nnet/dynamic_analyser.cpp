@@ -66,13 +66,13 @@ std::size_t spike::get_stop(void) const {
 
 
 bool spike::compare(const spike & p_other, const double p_tolerance) const {
-    double delta = m_duration * p_tolerance;
+    const double delta = m_duration * p_tolerance;
 
     if (absolute_difference(p_other.get_duration(), get_duration()) > delta) {
         return false;
     }
 
-    double difference = (double) absolute_difference(p_other.get_start(), get_start()) + absolute_difference(p_other.get_stop(), get_stop());
+    const double difference = (double) absolute_difference(p_other.get_start(), get_start()) + absolute_difference(p_other.get_stop(), get_stop());
     if (difference > delta) {
         return false;
     }

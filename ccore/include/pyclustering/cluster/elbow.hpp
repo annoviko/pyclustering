@@ -88,13 +88,13 @@ public:
 private:
     template<class CenterInitializer = TypeInitializer>
     typename std::enable_if<std::is_same<CenterInitializer, kmeans_plus_plus>::value, void>::type
-    prepare_centers(const std::size_t p_amount, const dataset & p_data, dataset & p_initial_centers) {
+    static prepare_centers(const std::size_t p_amount, const dataset & p_data, dataset & p_initial_centers) {
         kmeans_plus_plus(p_amount, kmeans_plus_plus::FARTHEST_CENTER_CANDIDATE).initialize(p_data, p_initial_centers);
     }
 
     template<class CenterInitializer = TypeInitializer>
     typename std::enable_if<!std::is_same<CenterInitializer, kmeans_plus_plus>::value, void>::type
-    prepare_centers(const std::size_t p_amount, const dataset & p_data, dataset & p_initial_centers) {
+    static prepare_centers(const std::size_t p_amount, const dataset & p_data, dataset & p_initial_centers) {
         TypeInitializer(p_amount).initialize(p_data, p_initial_centers);
     }
 
@@ -116,19 +116,21 @@ private:
     }
 
     void calculate_elbows(void) {
-        const double x0 = 0.0;
-        const double y0 = m_result->get_wce().front();
+        const wce_sequence & wce = m_result->get_wce();
 
-        const double x1 = (double) m_result->get_wce().size();
-        const double y1 = m_result->get_wce().back();
+        const double x0 = 0.0;
+        const double y0 = wce.front();
+
+        const double x1 = static_cast<double>(wce.size());
+        const double y1 = wce.back();
 
         const double norm = euclidean_distance(point({ x0, y0 }), point({ x1, y1 }));
 
-        m_elbow.resize(m_result->get_wce().size() - 2, 0.0);
+        m_elbow.resize(wce.size() - 2, 0.0);
 
         for (std::size_t index_elbow = 1; index_elbow < m_result->get_wce().size() - 1; index_elbow++) {
-            const double x = (double) index_elbow;
-            const double y = m_result->get_wce().at(index_elbow);
+            const double x = static_cast<double>(index_elbow);
+            const double y = wce.at(index_elbow);
 
             const double segment = std::abs((y0 - y1) * x + (x1 - x0) * y + (x0 * y1 - x1 * y0));
             

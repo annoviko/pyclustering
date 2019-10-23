@@ -25,15 +25,15 @@
 #include <pyclustering/cluster/dbscan.hpp>
 
 
-pyclustering_package * dbscan_algorithm(const pyclustering_package * const sample, 
-                                        const double radius, 
-                                        const size_t minumum_neighbors,
+pyclustering_package * dbscan_algorithm(const pyclustering_package * const p_sample, 
+                                        const double p_radius,
+                                        const size_t p_minumum_neighbors,
                                         const size_t p_data_type)
 {
     pyclustering::dataset input_dataset;
-    sample->extract(input_dataset);
+    p_sample->extract(input_dataset);
 
-    pyclustering::clst::dbscan solver(radius, minumum_neighbors);
+    pyclustering::clst::dbscan solver(p_radius, p_minumum_neighbors);
 
     pyclustering::clst::dbscan_data output_result;
 

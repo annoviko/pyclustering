@@ -135,7 +135,7 @@ pyclustering_package * sync_dynamic_get_time(const void * pointer_dynamic) {
     package->size = dynamic.size();
     package->data = new double[package->size];
 
-    for (unsigned int i = 0; i < package->size; i++) {
+    for (std::size_t i = 0; i < package->size; i++) {
         ((double *) package->data)[i]  = dynamic[i].m_time;
     }
 
@@ -150,7 +150,7 @@ pyclustering_package * sync_dynamic_get_output(const void * pointer_dynamic) {
     package->size = dynamic.size();
     package->data = new pyclustering_package * [package->size];
 
-    for (unsigned int i = 0; i < package->size; i++) {
+    for (std::size_t i = 0; i < package->size; i++) {
         ((pyclustering_package **) package->data)[i] = create_package(&dynamic[i].m_phase);
     }
 

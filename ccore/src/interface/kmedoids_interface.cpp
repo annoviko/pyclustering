@@ -31,14 +31,14 @@ using namespace pyclustering::utils::metric;
 
 
 pyclustering_package * kmedoids_algorithm(const pyclustering_package * const p_sample,
-                                          const pyclustering_package * const p_package_medoids,
+                                          const pyclustering_package * const p_medoids,
                                           const double p_tolerance,
                                           const std::size_t p_itermax,
                                           const void * const p_metric,
                                           const std::size_t p_type)
 {
     pyclustering::clst::medoid_sequence medoids;
-    p_package_medoids->extract(medoids);
+    p_medoids->extract(medoids);
 
     distance_metric<pyclustering::point> * metric = ((distance_metric<pyclustering::point> *) p_metric);
     distance_metric<pyclustering::point> default_metric = distance_metric_factory<pyclustering::point>::euclidean_square();

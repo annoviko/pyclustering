@@ -46,7 +46,7 @@ kdnode::ptr kdtree::insert(const std::vector<double> & point, void * payload) {
         m_root = node;
         m_dimension = node->get_dimension();
 
-        inserted_kdnode = node;
+        inserted_kdnode = std::move(node);
     }
     else {
         kdnode::ptr cur_node = m_root;

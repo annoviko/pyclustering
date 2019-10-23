@@ -114,11 +114,9 @@ void runge_kutta_fehlberg_45(
             }
         }
 
-        /* Calculate new value. */
-        differ_state<state_type> ynew = current_value + factor::N1 * k1 + factor::N3 * k3 + factor::N4 * k4 + factor::N5 * k5;
-
         if ( (err < tolerance) || (h < 2.0 * hmin) ) {
-            current_result.state = ynew;
+            /* Calculate new value. */
+            current_result.state = current_value + factor::N1 * k1 + factor::N3 * k3 + factor::N4 * k4 + factor::N5 * k5;
 
             if (current_time + h > br) {
                 current_result.time = time_end;

@@ -51,7 +51,7 @@ public:
 
     void set_amount(const std::size_t p_amount) { m_amount = p_amount; }
 
-    std::size_t get_amount(void) { return m_amount; }
+    std::size_t get_amount(void) const { return m_amount; }
 };
 
 

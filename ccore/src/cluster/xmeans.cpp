@@ -53,8 +53,8 @@ const double             xmeans::DEFAULT_SPLIT_DIFFERENCE                = 0.001
 const std::size_t        xmeans::AMOUNT_CENTER_CANDIDATES                = 5;
 
 
-xmeans::xmeans(const dataset & p_centers, const std::size_t p_kmax, const double p_tolerance, const splitting_type p_criterion, std::size_t p_repeat) :
-    m_centers(p_centers),
+xmeans::xmeans(const dataset & p_initial_centers, const std::size_t p_kmax, const double p_tolerance, const splitting_type p_criterion, std::size_t p_repeat) :
+    m_initial_centers(p_initial_centers),
     m_ptr_result(nullptr),
     m_ptr_data(nullptr),
     m_maximum_clusters(p_kmax),
@@ -73,23 +73,25 @@ void xmeans::process(const dataset & data, cluster_data & output_result) {
     output_result = xmeans_data();
     m_ptr_result = (xmeans_data *)&output_result;
 
-    m_ptr_result->centers() = m_centers;
+    m_ptr_result->centers() = m_initial_centers;
+    dataset & centers = m_ptr_result->centers();
+    cluster_sequence & clusters = m_ptr_result->clusters();
 
-    size_t current_number_clusters = m_ptr_result->centers().size();
+    std::size_t current_number_clusters = centers.size();
     const index_sequence dummy;
 
     while (current_number_clusters <= m_maximum_clusters) {
-        improve_parameters(m_ptr_result->clusters(), m_ptr_result->centers(), dummy);
+        improve_parameters(clusters, centers, dummy);
         improve_structure();
 
-        if (current_number_clusters == m_ptr_result->centers().size()) {
+        if (current_number_clusters == centers.size()) {
             break;
         }
 
-        current_number_clusters = m_ptr_result->centers().size();
+        current_number_clusters = centers.size();
     }
 
-    m_ptr_result->wce() = improve_parameters(m_ptr_result->clusters(), m_ptr_result->centers(), dummy);
+    m_ptr_result->wce() = improve_parameters(clusters, centers, dummy);
 }
 
 
@@ -220,8 +222,6 @@ double xmeans::splitting_criterion(const cluster_sequence & analysed_clusters, c
 
 
 double xmeans::bayesian_information_criterion(const cluster_sequence & analysed_clusters, const dataset & analysed_centers) const {
-    std::vector<double> scores(analysed_centers.size(), 0.0);
-
     double score = std::numeric_limits<double>::max();
     double dimension = (double) analysed_centers[0].size();
     double sigma = 0.0;
@@ -237,6 +237,8 @@ double xmeans::bayesian_information_criterion(const cluster_sequence & analysed_
     }
 
     if (N != K) {
+        std::vector<double> scores(analysed_centers.size(), 0.0);
+
         sigma /= (double) (N - K);
         double p = (K - 1) + dimension * K + 1;
 

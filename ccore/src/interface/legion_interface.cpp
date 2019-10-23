@@ -28,52 +28,52 @@
 using namespace pyclustering::nnet;
 
 
-void * legion_create(const unsigned int size, const unsigned int connection_type, const void * const parameters) {
-    legion_network * network = new legion_network(size, (connection_t) connection_type, *((legion_parameters *) parameters));
+void * legion_create(const unsigned int p_size, const unsigned int p_connection_type, const void * const p_parameters) {
+    legion_network * network = new legion_network(p_size, (connection_t) p_connection_type, *((legion_parameters *) p_parameters));
     return (void *) network;
 }
 
 
-void legion_destroy(const void * pointer) {
-    delete (legion_network *) pointer;
+void legion_destroy(const void * p_network_pointer) {
+    delete (legion_network *) p_network_pointer;
 }
 
 
-void * legion_simulate( const void * pointer, 
-                        const unsigned int steps, 
-                        const double time, 
-                        const unsigned int solver, 
-                        const bool collect_dynamic, 
-                        const void * const stimulus ) 
+void * legion_simulate( const void * p_network_pointer,
+                        const unsigned int p_steps, 
+                        const double p_time,
+                        const unsigned int p_solver,
+                        const bool p_collect_dynamic,
+                        const void * const p_stimulus )
 {
-  const pyclustering_package * const package_stimulus = (const pyclustering_package * const) stimulus;
+  const pyclustering_package * const package_stimulus = (const pyclustering_package * const) p_stimulus;
   legion_stimulus stimulus_vector((double *) package_stimulus->data, ((double *) package_stimulus->data) + package_stimulus->size);
 
   legion_dynamic * dynamic = new legion_dynamic();
-  ((legion_network *) pointer)->simulate(steps, time, (solve_type) solver, collect_dynamic, stimulus_vector, (*dynamic));
+  ((legion_network *) p_network_pointer)->simulate(p_steps, p_time, (solve_type) p_solver, p_collect_dynamic, stimulus_vector, (*dynamic));
 
   return dynamic;
 }
 
 
-std::size_t legion_get_size(const void * pointer) {
-    return ((legion_network *) pointer)->size();
+std::size_t legion_get_size(const void * p_network_pointer) {
+    return ((legion_network *) p_network_pointer)->size();
 }
 
 
-void legion_dynamic_destroy(const void * pointer) {
-    delete (legion_dynamic *) pointer;
+void legion_dynamic_destroy(const void * p_dynamic_pointer) {
+    delete (legion_dynamic *) p_dynamic_pointer;
 }
 
 
-pyclustering_package * legion_dynamic_get_output(const void * pointer) {
-    legion_dynamic & dynamic = *((legion_dynamic *) pointer);
+pyclustering_package * legion_dynamic_get_output(const void * p_dynamic_pointer) {
+    legion_dynamic & dynamic = *((legion_dynamic *) p_dynamic_pointer);
 
     pyclustering_package * package = new pyclustering_package(pyclustering_data_t::PYCLUSTERING_TYPE_LIST);
     package->size = dynamic.size();
     package->data = new pyclustering_package * [package->size];
 
-    for (unsigned int i = 0; i < package->size; i++) {
+    for (std::size_t i = 0; i < package->size; i++) {
         ((pyclustering_package **) package->data)[i] = create_package(&dynamic[i].m_output);
     }
 
@@ -81,14 +81,14 @@ pyclustering_package * legion_dynamic_get_output(const void * pointer) {
 }
 
 
-pyclustering_package * legion_dynamic_get_inhibitory_output(const void * pointer) {
-    legion_dynamic & dynamic = *((legion_dynamic *) pointer);
+pyclustering_package * legion_dynamic_get_inhibitory_output(const void * p_dynamic_pointer) {
+    legion_dynamic & dynamic = *((legion_dynamic *) p_dynamic_pointer);
 
     pyclustering_package * package = new pyclustering_package(pyclustering_data_t::PYCLUSTERING_TYPE_DOUBLE);
     package->size = dynamic.size();
     package->data = new double[package->size];
 
-    for (unsigned int i = 0; i < package->size; i++) {
+    for (std::size_t i = 0; i < package->size; i++) {
         ((double *) package->data)[i] = dynamic[i].m_inhibitor;
     }
 
@@ -96,14 +96,14 @@ pyclustering_package * legion_dynamic_get_inhibitory_output(const void * pointer
 }
 
 
-pyclustering_package * legion_dynamic_get_time(const void * pointer) {
-    legion_dynamic & dynamic = *((legion_dynamic *) pointer);
+pyclustering_package * legion_dynamic_get_time(const void * p_dynamic_pointer) {
+    legion_dynamic & dynamic = *((legion_dynamic *) p_dynamic_pointer);
 
     pyclustering_package * package = new pyclustering_package(pyclustering_data_t::PYCLUSTERING_TYPE_DOUBLE);
     package->size = dynamic.size();
     package->data = new double[package->size];
 
-    for (unsigned int i = 0; i < package->size; i++) {
+    for (std::size_t i = 0; i < package->size; i++) {
         ((double *) package->data)[i] = dynamic[i].m_time;
     }
 
@@ -111,6 +111,6 @@ pyclustering_package * legion_dynamic_get_time(const void * pointer) {
 }
 
 
-std::size_t legion_dynamic_get_size(const void * pointer) {
-    return ((legion_dynamic *) pointer)->size();
+std::size_t legion_dynamic_get_size(const void * p_dynamic_pointer) {
+    return ((legion_dynamic *) p_dynamic_pointer)->size();
 }

@@ -49,7 +49,7 @@ private:
     const static std::size_t        AMOUNT_CENTER_CANDIDATES;
 
 private:
-    dataset           m_centers;
+    dataset           m_initial_centers;
 
     xmeans_data       * m_ptr_result        = nullptr;   /* temporary pointer to output result */
 
@@ -69,7 +69,7 @@ public:
     * @brief    Constructor of clustering algorithm where algorithm parameters for processing are
     *           specified.
     *
-    * @param[in] p_centers: initial centers that are used for processing.
+    * @param[in] p_initial_centers: initial centers that are used for processing.
     * @param[in] p_kmax: maximum number of clusters that can be allocated.
     * @param[in] p_tolerance: stop condition in following way: when maximum value of distance change of
     *             cluster centers is less than tolerance than algorithm will stop processing.
@@ -78,7 +78,7 @@ public:
     *             with larger 'repeat' values suggesting higher probability of finding global optimum.
     *
     */
-    xmeans(const dataset & p_centers, const std::size_t p_kmax, const double p_tolerance, const splitting_type p_criterion, const std::size_t p_repeat = 1);
+    xmeans(const dataset & p_initial_centers, const std::size_t p_kmax, const double p_tolerance, const splitting_type p_criterion, const std::size_t p_repeat = 1);
 
     /**
     *

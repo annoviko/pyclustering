@@ -39,17 +39,20 @@ mbsas::mbsas(const std::size_t p_amount,
 void mbsas::process(const dataset & p_data, cluster_data & p_result) {
     m_result_ptr = (mbsas_data *) &p_result;
 
-    m_result_ptr->clusters().push_back({ 0 });
-    m_result_ptr->representatives().push_back( p_data[0] );
+    cluster_sequence & clusters = m_result_ptr->clusters();
+    representative_sequence & representative = m_result_ptr->representatives();
+
+    clusters.push_back({ 0 });
+    representative.push_back( p_data[0] );
 
     std::vector<std::size_t> skipped_objects = { };
 
     for (std::size_t i = 1; i < p_data.size(); i++) {
         auto nearest = find_nearest_cluster(p_data[i]);
 
-        if ( (nearest.m_distance > m_threshold) && (m_result_ptr->clusters().size() < m_amount) ) {
-            m_result_ptr->representatives().push_back(p_data[i]);
-            m_result_ptr->clusters().push_back({ i });
+        if ( (nearest.m_distance > m_threshold) && (clusters.size() < m_amount) ) {
+            representative.push_back(p_data[i]);
+            clusters.push_back({ i });
         }
         else {
             skipped_objects.push_back(i);
@@ -59,7 +62,7 @@ void mbsas::process(const dataset & p_data, cluster_data & p_result) {
     for (auto index : skipped_objects) {
         auto nearest = find_nearest_cluster(p_data[index]);
 
-        m_result_ptr->clusters().at(nearest.m_index).push_back(index);
+        clusters.at(nearest.m_index).push_back(index);
         update_representative(nearest.m_index, p_data[index]);
     }
 }

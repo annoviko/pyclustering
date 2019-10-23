@@ -102,12 +102,13 @@ void clique::expand_cluster(clique_block & p_block) {
     get_neighbors(p_block, neighbors);
 
     for (clique_block * neighbor : neighbors) {
-        if (neighbor->get_points().size() > m_density_threshold) {
-            cur_cluster.insert(cur_cluster.end(), neighbor->get_points().begin(), neighbor->get_points().end());
+        const auto & points = neighbor->get_points();
+        if (points.size() > m_density_threshold) {
+            cur_cluster.insert(cur_cluster.end(), points.begin(), points.end());
             get_neighbors(*neighbor, neighbors);
         }
-        else if (!neighbor->get_points().empty()) {
-            m_result_ptr->noise().insert(m_result_ptr->noise().end(), neighbor->get_points().begin(), neighbor->get_points().end());
+        else if (!points.empty()) {
+            m_result_ptr->noise().insert(m_result_ptr->noise().end(), points.begin(), points.end());
         }
     }
 }
@@ -199,7 +200,7 @@ void clique::get_spatial_location(const clique_block_location & p_location, cons
 
 void clique::get_data_info(clique::data_info & p_info) const {
     p_info.m_min_corner = m_data_ptr->at(0);
-    p_info.m_max_corner = m_data_ptr->at(0);
+    p_info.m_max_corner = p_info.m_min_corner;
 
     const std::size_t dimension = p_info.m_min_corner.size();
     const dataset & data = *m_data_ptr;

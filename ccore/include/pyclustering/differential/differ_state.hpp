@@ -48,7 +48,7 @@ public:
 public:
     differ_state(void) : m_variable_state(std::vector<state_type>()) { }
 
-    differ_state(const size_t size) : m_variable_state(std::vector<state_type>(size)) { }
+    explicit differ_state(const size_t size) : m_variable_state(std::vector<state_type>(size)) { }
 
     differ_state(const size_t size, const state_type value) : m_variable_state(std::vector<state_type>(size, value)) { }
 
@@ -256,7 +256,7 @@ public:
 
     inline friend differ_state operator+(const differ_state & lhs, const double rhs) {
         differ_state result(lhs.size());
-        for (unsigned int i = 0; i < result.size(); i++) {
+        for (std::size_t i = 0; i < result.size(); i++) {
             result[i] = lhs[i] + rhs;
         }
 
@@ -282,7 +282,7 @@ public:
 
     inline friend differ_state operator-(const differ_state & lhs, const double rhs) {
         differ_state result(lhs.size());
-        for (unsigned int i = 0; i < result.size(); i++) {
+        for (std::size_t i = 0; i < result.size(); i++) {
             result[i] = lhs[i] - rhs;
         }
 
@@ -291,7 +291,7 @@ public:
 
     inline friend differ_state operator-(const double lhs, const differ_state & rhs) {
         differ_state result(rhs.size());
-        for (unsigned int i = 0; i < result.size(); i++) {
+        for (std::size_t i = 0; i < result.size(); i++) {
             result[i] = lhs - rhs[i];
         }
 
@@ -313,7 +313,7 @@ public:
 
     inline friend differ_state operator/(const differ_state & lhs, const double rhs) {
         differ_state result(lhs.size());
-        for (unsigned int i = 0; i < result.size(); i++) {
+        for (std::size_t i = 0; i < result.size(); i++) {
             result[i] = lhs[i] / rhs;
         }
 
@@ -322,7 +322,7 @@ public:
 
     inline friend differ_state operator/(const double lhs, const differ_state & rhs) {
         differ_state result(rhs.size());
-        for (unsigned int i = 0; i < result.size(); i++) {
+        for (std::size_t i = 0; i < result.size(); i++) {
             result[i] = lhs / rhs[i];
         }
 
@@ -331,7 +331,7 @@ public:
 
     inline friend differ_state operator*(const differ_state & lhs, const double rhs) {
         differ_state result(lhs.size());
-        for (unsigned int i = 0; i < result.size(); i++) {
+        for (std::size_t i = 0; i < result.size(); i++) {
             result[i] = lhs[i] * rhs;
         }
 

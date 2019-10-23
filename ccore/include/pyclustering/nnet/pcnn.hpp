@@ -44,7 +44,7 @@ namespace nnet {
 #define OUTPUT_ACTIVE_STATE       (double) 1.0
 #define OUTPUT_INACTIVE_STATE     (double) 0.0
 
-typedef struct pcnn_oscillator {
+struct pcnn_oscillator {
     double output;
     double feeding;
     double linking;
@@ -55,10 +55,10 @@ typedef struct pcnn_oscillator {
         feeding(0.0),
         linking(0.0),
         threshold(0.0) { }
-} pcnn_oscillator;
+};
 
 
-typedef struct pcnn_parameters {
+struct pcnn_parameters {
     double VF = 1.0;
     double VL = 1.0;
     double VT = 10.0;
@@ -73,33 +73,22 @@ typedef struct pcnn_parameters {
     double B = 0.1;
 
     bool FAST_LINKING = false;
-} pcnn_parameters;
+};
 
 
-typedef std::vector<std::size_t>      pcnn_ensemble;
-typedef std::vector<double>           pcnn_stimulus;
-typedef std::vector<std::size_t>      pcnn_time_signal;
+using pcnn_ensemble = std::vector<std::size_t>;
+using pcnn_stimulus = std::vector<double>;
+using pcnn_time_signal = std::vector<std::size_t>;
 
-typedef struct pcnn_network_state {
+
+struct pcnn_network_state {
 public:
     std::vector<double> m_output;
     double              m_time;
 
-public:
-  inline size_t size(void) const { return m_output.size(); }
-
-  inline pcnn_network_state & operator=(const pcnn_network_state & other) {
-      if (this != &other) {
-          m_output.resize(other.size());
-          std::copy(other.m_output.cbegin(), other.m_output.cend(), m_output.begin());
-
-          m_time = other.m_time;
-      }
-
-      return *this;
-  }
-
-} pcnn_network_state;
+public: 
+    std::size_t size(void) const;
+};
 
 
 class pcnn_dynamic : public dynamic_data<pcnn_network_state> {
@@ -151,11 +140,11 @@ public:
 
     pcnn(const size_t p_size, const connection_t p_structure, const pcnn_parameters & p_parameters);
 
-    pcnn(const size_t num_osc, 
-         const connection_t connection_type,
-         const size_t height,
-         const size_t width,
-         const pcnn_parameters & parameters);
+    pcnn(const size_t p_size,
+         const connection_t p_structure,
+         const size_t p_height,
+         const size_t p_width,
+         const pcnn_parameters & p_parameters);
 
     virtual ~pcnn(void);
 

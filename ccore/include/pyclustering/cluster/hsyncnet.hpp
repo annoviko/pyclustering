@@ -33,7 +33,7 @@ namespace pyclustering {
 namespace clst {
 
 
-typedef std::vector<unsigned int>           hsyncnet_cluster;
+typedef std::vector<std::size_t>            hsyncnet_cluster;
 typedef ensemble_data<hsyncnet_cluster>     hsyncnet_cluster_data;
 typedef syncnet_analyser                    hsyncnet_analyser;
 

@@ -517,15 +517,6 @@ void hhn_dynamic_reader::extract_state(std::istringstream & p_stream, basic_neur
 
 
 
-const std::size_t hhn_network::POSITION_MEMBRAN_POTENTIAL       = 0;
-
-const std::size_t hhn_network::POSITION_ACTIVE_COND_SODIUM      = 1;
-
-const std::size_t hhn_network::POSITION_INACTIVE_COND_SODIUM    = 2;
-
-const std::size_t hhn_network::POSITION_ACTIVE_COND_POTASSIUM   = 3;
-
-
 hhn_network::hhn_network(const std::size_t p_size, const hnn_parameters & p_parameters) :
     m_peripheral(p_size),
     m_central(2),

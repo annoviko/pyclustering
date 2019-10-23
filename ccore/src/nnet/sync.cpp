@@ -119,7 +119,7 @@ double sync_ordering::calculate_local_sync_order_parameter(const std::shared_ptr
             exp_amount += std::exp( -std::abs( phase_neighbor - phase ) );
         }
 
-        number_neighbors += neighbors.size();
+        number_neighbors += static_cast<double>(neighbors.size());
     }
 
     if (number_neighbors == 0.0) {
@@ -183,7 +183,7 @@ void sync_network::initialize(const std::size_t size, const double weight_factor
             oscillator_context.phase = phase_distribution(generator);
             break;
         case initial_type::EQUIPARTITION:
-            oscillator_context.phase = (pi / size * index);
+            oscillator_context.phase = pi / static_cast<double>(size) * static_cast<double>(index);
             break;
         default:
             throw std::runtime_error("Unknown type of initialization");
@@ -226,7 +226,7 @@ double sync_network::phase_kuramoto(const double t, const double teta, const std
         phase += std::sin(m_oscillators[index_neighbor].phase - teta);
     }
 
-    phase = m_oscillators[index].frequency + (phase * weight / size());
+    phase = m_oscillators[index].frequency + (phase * weight / static_cast<double>(size()));
     return phase;
 }
 
@@ -384,7 +384,7 @@ void sync_dynamic::allocate_sync_ensembles(const double tolerance, const size_t 
 
     sync_dynamic::const_iterator last_state_dynamic = cbegin() + iteration;
 
-    for (unsigned int i = 1; i < oscillators(); i++) {
+    for (std::size_t i = 1; i < oscillators(); i++) {
         bool cluster_allocated = false;
 
         for (auto & cluster : ensembles) {

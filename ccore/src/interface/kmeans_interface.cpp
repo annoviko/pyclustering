@@ -31,7 +31,7 @@ using namespace pyclustering::utils::metric;
 
 
 pyclustering_package * kmeans_algorithm(const pyclustering_package * const p_sample, 
-                                        const pyclustering_package * const p_initial_centers, 
+                                        const pyclustering_package * const p_initial_centers,
                                         const double p_tolerance, 
                                         const std::size_t p_itermax,
                                         const bool p_observe,

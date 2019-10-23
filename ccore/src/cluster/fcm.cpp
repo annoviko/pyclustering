@@ -160,8 +160,9 @@ void fcm::update_point_membership(const std::size_t p_index) {
 void fcm::extract_clusters(cluster_sequence & p_clusters) {
     m_ptr_result->clusters() = cluster_sequence(m_ptr_result->centers().size());
     for (std::size_t i = 0; i < m_ptr_data->size(); i++) {
-        auto iter = std::max_element(m_ptr_result->membership().at(i).begin(), m_ptr_result->membership().at(i).end());
-        std::size_t index_cluster = iter - m_ptr_result->membership().at(i).begin();
+        const auto & membership = m_ptr_result->membership().at(i);
+        auto iter = std::max_element(membership.begin(), membership.end());
+        std::size_t index_cluster = iter - membership.begin();
 
         m_ptr_result->clusters().at(index_cluster).push_back(i);
     }

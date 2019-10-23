@@ -36,7 +36,7 @@ namespace pyclustering {
 namespace clst {
 
 
-using syncnet_cluster       = std::vector<unsigned int>;
+using syncnet_cluster       = std::vector<std::size_t>;
 using syncnet_cluster_data  = ensemble_data<syncnet_cluster>;
 
 

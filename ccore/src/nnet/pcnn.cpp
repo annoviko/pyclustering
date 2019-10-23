@@ -35,7 +35,12 @@ namespace pyclustering {
 namespace nnet {
 
 
-const size_t pcnn::MAXIMUM_MATRIX_REPRESENTATION_SIZE = 4096;
+const std::size_t pcnn::MAXIMUM_MATRIX_REPRESENTATION_SIZE = 4096;
+
+
+std::size_t pcnn_network_state::size(void) const {
+    return m_output.size();
+}
 
 
 pcnn::pcnn(void) : m_oscillators(0), m_connection(), m_params() { }
@@ -209,7 +214,7 @@ pcnn_dynamic::pcnn_dynamic() { }
 pcnn_dynamic::~pcnn_dynamic() { }
 
 
-void pcnn_dynamic::allocate_sync_ensembles(ensemble_data<pcnn_ensemble> & ensembles) const {
+void pcnn_dynamic::allocate_sync_ensembles(ensemble_data<pcnn_ensemble> & sync_ensembles) const {
     std::unordered_set<std::size_t> traverse_oscillators;
     traverse_oscillators.reserve(oscillators());
 
@@ -227,13 +232,13 @@ void pcnn_dynamic::allocate_sync_ensembles(ensemble_data<pcnn_ensemble> & ensemb
         }
 
         if (!ensemble.empty()) {
-            ensembles.push_back(ensemble);
+            sync_ensembles.push_back(ensemble);
         }
     }
 }
 
 
-void pcnn_dynamic::allocate_spike_ensembles(ensemble_data<pcnn_ensemble> & ensembles) const {
+void pcnn_dynamic::allocate_spike_ensembles(ensemble_data<pcnn_ensemble> & spike_ensembles) const {
     for (const_iterator iter_state = cbegin(); iter_state != cend(); ++iter_state) {
         pcnn_ensemble ensemble;
         const pcnn_network_state & state_network = (*iter_state);
@@ -245,7 +250,7 @@ void pcnn_dynamic::allocate_spike_ensembles(ensemble_data<pcnn_ensemble> & ensem
         }
 
         if (!ensemble.empty()) {
-            ensembles.push_back(ensemble);
+            spike_ensembles.push_back(ensemble);
         }
     }
 }

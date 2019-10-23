@@ -41,18 +41,21 @@ bsas::bsas(const std::size_t p_amount,
 void bsas::process(const dataset & p_data, cluster_data & p_result) {
     m_result_ptr = (bsas_data *) &p_result;
 
-    m_result_ptr->clusters().push_back({ 0 });
-    m_result_ptr->representatives().push_back( p_data[0] );
+    cluster_sequence & clusters = m_result_ptr->clusters();
+    representative_sequence & representatives = m_result_ptr->representatives();
+
+    clusters.push_back({ 0 });
+    representatives.push_back( p_data[0] );
 
     for (std::size_t i = 1; i < p_data.size(); i++) {
         auto nearest = find_nearest_cluster(p_data[i]);
 
-        if ( (nearest.m_distance > m_threshold) && (m_result_ptr->clusters().size() < m_amount) ) {
-            m_result_ptr->representatives().push_back(p_data[i]);
-            m_result_ptr->clusters().push_back({ i });
+        if ( (nearest.m_distance > m_threshold) && (clusters.size() < m_amount) ) {
+            representatives.push_back(p_data[i]);
+            clusters.push_back({ i });
         }
         else {
-            m_result_ptr->clusters()[nearest.m_index].push_back(i);
+            clusters[nearest.m_index].push_back(i);
             update_representative(nearest.m_index, p_data[i]);
         }
     }

@@ -76,7 +76,7 @@ void hsyncnet::process(const double order, const solve_type solver, const bool c
 
     double radius = average_neighbor_distance(oscillator_locations, number_neighbors);
     
-    std::size_t increase_step = (std::size_t) round(oscillator_locations->size() * m_increase_persent);
+    std::size_t increase_step = static_cast<std::size_t>(round(oscillator_locations->size() * static_cast<std::size_t>(m_increase_persent)));
     if (increase_step < 1) {
         increase_step = DEFAULT_INCREASE_STEP;
     }

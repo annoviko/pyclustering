@@ -61,7 +61,7 @@ enum kmeans_package_indexer {
  *
  */
 extern "C" DECLARATION pyclustering_package * kmeans_algorithm(const pyclustering_package * const p_sample,
-                                                               const pyclustering_package * const p_centers,
+                                                               const pyclustering_package * const p_initial_centers,
                                                                const double p_tolerance,
                                                                const std::size_t p_itermax,
                                                                const bool p_observe,
