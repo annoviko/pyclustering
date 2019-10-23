@@ -115,9 +115,7 @@ run_build_ccore_job() {
     #install requirement for the job
     print_info "Install requirement for CCORE building."
 
-    sudo apt-get install -qq g++-5
-    sudo apt-get install -qq g++-5-multilib
-    sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-5 50
+    sudo apt-get install -qq g++-multilib
 
     # show info
     g++ --version
@@ -163,10 +161,6 @@ run_ut_ccore_job() {
     print_info "- Run CCORE library unit-tests."
 
     # install requirements for the job
-    sudo apt-get install -qq g++-5
-    sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-5 50
-    sudo update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-5 50
-
     sudo apt-get install python
     sudo -H pip install cpp-coveralls==0.3.12
 
@@ -191,10 +185,7 @@ run_valgrind_ccore_job() {
     print_info "- Shock memory leakage detection by valgrind."
 
     # install requirements for the job
-    sudo apt-get install -qq g++-5
-    sudo apt-get install -qq g++-5-multilib
     sudo apt-get install -qq valgrind
-    sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-5 50
 
     # build and run unit-test project under valgrind to check memory leakage
     cd ccore/
@@ -213,10 +204,6 @@ run_test_pyclustering_job() {
     # install requirements for the job
     install_miniconda x64
     pip install coveralls
-
-    sudo apt-get install -qq g++-5
-    sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-5 50
-    sudo update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-5 50
 
     # set path to the tested library
     PYTHONPATH=`pwd`
@@ -241,10 +228,7 @@ run_integration_test_job() {
     # install requirements for the job
     install_miniconda $PLATFORM_TARGET
 
-    sudo apt-get install -qq g++-5 gcc-5
-    sudo apt-get install -qq g++-5-multilib gcc-5-multilib
-    sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-5 50
-    sudo update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-5 50
+    sudo apt-get install -qq g++-multilib
 
     # build ccore library
     build_ccore $PLATFORM_TARGET

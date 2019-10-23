@@ -1,4 +1,4 @@
-dist: trusty
+dist: bionic
 language: generic
 
 os:
@@ -10,8 +10,8 @@ addons:
     sources:
     - ubuntu-toolchain-r-test
     packages:
-    - g++-5
-    - gcc-5
+    - g++
+    - gcc
     - python3
 
 
