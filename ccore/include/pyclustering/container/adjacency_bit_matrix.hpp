@@ -44,7 +44,7 @@ namespace container {
 */
 class adjacency_bit_matrix : public adjacency_collection {
 private:
-    typedef std::vector<std::vector<size_t>>      adjacency_bit_matrix_container;
+    using adjacency_bit_matrix_container = std::vector<std::vector<size_t>>;
 
 
 protected:
@@ -84,7 +84,7 @@ public:
     * @param[in]  node_amount: number of nodes whose connections are described in matrix.
     *
     */
-    adjacency_bit_matrix(const size_t node_amount);
+    explicit adjacency_bit_matrix(const std::size_t node_amount);
 
     /**
     *
@@ -105,7 +105,7 @@ public:
     * @brief   Returns amount of nodes in adjacency collection.
     *
     */
-    virtual size_t size(void) const;
+    virtual size_t size(void) const override;
 
     /**
     *
@@ -118,7 +118,7 @@ public:
     *                          the node defined by the first argument 'node_index1'.
     *
     */
-    virtual void set_connection(const size_t node_index1, const size_t node_index2);
+    virtual void set_connection(const size_t node_index1, const size_t node_index2) override;
 
     /**
     *
@@ -131,7 +131,7 @@ public:
     *              the node defined by the first argument 'node_index1'.
     *
     */
-    virtual void erase_connection(const size_t node_index1, const size_t node_index2);
+    virtual void erase_connection(const size_t node_index1, const size_t node_index2) override;
 
     /**
     *
@@ -145,7 +145,7 @@ public:
     * @return  'true' - connection between the nodes exists, 'false' - connection does not exist.
     *
     */
-    virtual bool has_connection(const size_t node_index1, const size_t node_index2) const;
+    virtual bool has_connection(const size_t node_index1, const size_t node_index2) const override;
 
     /**
     *
@@ -157,14 +157,14 @@ public:
     * @param[out] node_neighbors: vector of indexes of neighbors of specified node.
     *
     */
-    virtual void get_neighbors(const size_t node_index, std::vector<size_t> & node_neighbors) const;
+    virtual void get_neighbors(const size_t node_index, std::vector<size_t> & node_neighbors) const override;
 
     /**
     *
     * @brief   Clear content of adjacency matrix.
     *
     */
-    virtual void clear(void);
+    virtual void clear(void) override;
 
 private:
     /**

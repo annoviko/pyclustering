@@ -44,14 +44,14 @@ public:
 public:
     dynamic_data(void) = default;
 
-    dynamic_data(const std::size_t p_size) :
-            std::vector<DynamicType>(p_size),
-            m_oscillators(0)
+    explicit dynamic_data(const std::size_t p_size) :
+        std::vector<DynamicType>(p_size),
+        m_oscillators(0)
     { }
 
     dynamic_data(const std::size_t p_size, const DynamicType & p_value) :
-            std::vector<DynamicType>(p_size, p_value),
-            m_oscillators(0)
+        std::vector<DynamicType>(p_size, p_value),
+        m_oscillators(0)
     { }
 
     dynamic_data(const dynamic_data & p_dynamic) = default;

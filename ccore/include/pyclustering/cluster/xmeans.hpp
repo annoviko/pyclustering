@@ -103,17 +103,15 @@ private:
 
     void improve_region_structure(const cluster & p_cluster, const point & p_center, dataset & p_allocated_centers) const;
 
-    double search_optimal_parameters(cluster_sequence & clusters, dataset & centers, const index_sequence & available_indexes) const;
+    double search_optimal_parameters(cluster_sequence & improved_clusters, dataset & improved_centers, const index_sequence & available_indexes) const;
 
-    double improve_parameters(cluster_sequence & clusters, dataset & centers, const index_sequence & available_indexes) const;
+    double improve_parameters(cluster_sequence & improved_clusters, dataset & improved_centers, const index_sequence & available_indexes) const;
 
-    double splitting_criterion(const cluster_sequence & clusters, const dataset & centers) const;
+    double splitting_criterion(const cluster_sequence & analysed_clusters, const dataset & analysed_centers) const;
 
-    double bayesian_information_criterion(const cluster_sequence & clusters, const dataset & centers) const;
+    double bayesian_information_criterion(const cluster_sequence & analysed_clusters, const dataset & analysed_centers) const;
 
     double minimum_noiseless_description_length(const cluster_sequence & clusters, const dataset & centers) const;
-
-    void erase_empty_clusters(cluster_sequence & p_clusters);
 };
 
 

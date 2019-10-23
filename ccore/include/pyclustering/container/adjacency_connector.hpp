@@ -75,7 +75,7 @@ std::ostream & operator<<(std::ostream & p_stream, const connection_t & p_struct
 template <typename TypeCollection = adjacency_collection>
 class adjacency_connector {
 protected:
-    typedef std::function<void(const size_t, const size_t, TypeCollection &)>  connector_controller;
+    using connector_controller = std::function<void(const std::size_t, const std::size_t, TypeCollection &)>;
 
 
 protected:
@@ -83,16 +83,15 @@ protected:
 
 
 public:
-    /**
-    *
-    * @brief   Default constructor of connector.
-    *
+    /*
+   
+    @brief   Default constructor of connector.
+    
     */
-    adjacency_connector(void) {
-        m_connector = [](const size_t index1, const size_t index2, TypeCollection & collection) { 
-            collection.set_connection(index1, index2); 
-        };
-    }
+    adjacency_connector(void) : m_connector([](const size_t index1, const size_t index2, TypeCollection & collection) {
+        collection.set_connection(index1, index2);
+    })
+    { }
 
 public:
     /**
@@ -357,7 +356,7 @@ public:
 template <typename TypeCollection>
 class adjacency_weight_connector : public adjacency_connector<TypeCollection> {
 public:
-    typedef std::function<double(void)>     adjacency_weight_initializer;
+    using adjacency_weight_initializer = std::function<double(void)>;
 
 
 protected:
@@ -386,7 +385,7 @@ public:
     * @param[in] initializer: initializer that is used for setting value of each weight connection.
     *
     */
-    adjacency_weight_connector(const adjacency_weight_initializer & initializer) {
+    explicit adjacency_weight_connector(const adjacency_weight_initializer & initializer) {
         if (initializer) {
             m_initializer = initializer; /* [this](const size_t index1, const size_t index2, TypeCollection & collection) {
                 collection.set_connection_weight(index1, index2, initializer());

@@ -43,18 +43,17 @@ const std::size_t kmeans_plus_plus::INVALID_INDEX = std::numeric_limits<std::siz
 
 kmeans_plus_plus::kmeans_plus_plus(const std::size_t p_amount, const std::size_t p_candidates) noexcept :
         m_amount(p_amount),
-        m_candidates(p_candidates)
-{
-    m_dist_func = [](const point &p1, const point &p2) {
-        return euclidean_distance_square(p1, p2);
-    };
-}
+        m_candidates(p_candidates),
+        m_dist_func([](const point &p1, const point &p2) {
+            return euclidean_distance_square(p1, p2);
+        })
+{ }
 
 
-kmeans_plus_plus::kmeans_plus_plus(const std::size_t p_amount, const std::size_t p_candidates, const metric & p_functor) noexcept :
+kmeans_plus_plus::kmeans_plus_plus(const std::size_t p_amount, const std::size_t p_candidates, const metric & p_metric) noexcept :
         m_amount(p_amount),
         m_candidates(p_candidates),
-        m_dist_func(p_functor)
+        m_dist_func(p_metric)
 { }
 
 

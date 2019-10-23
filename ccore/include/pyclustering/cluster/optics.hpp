@@ -199,7 +199,7 @@ private:
 
     double get_core_distance(const neighbors_collection & p_neighbors) const;
 
-    void update_order_seed(const optics_descriptor & p_object, const neighbors_collection & neighbors, std::multiset<optics_descriptor *, optics_pointer_descriptor_less> & order_seed);
+    void update_order_seed(const optics_descriptor & p_object, const neighbors_collection & p_neighbors, std::multiset<optics_descriptor *, optics_pointer_descriptor_less> & order_seed);
 
     void calculate_ordering(void);
 

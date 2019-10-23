@@ -56,7 +56,7 @@ public:
 
     hsyncnet(std::vector<std::vector<double> > * input_data,
         const std::size_t cluster_number,
-        const initial_type initial_phasesconst,
+        const initial_type initial_phases,
         const std::size_t initial_neighbors,
         const double increase_persent);
 

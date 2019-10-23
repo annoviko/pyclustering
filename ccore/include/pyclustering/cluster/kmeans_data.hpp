@@ -69,7 +69,7 @@ public:
     * @param[in] p_iteration_observe: if 'true' then cluster and centers changes on each iteration are collected.
     *
     */
-    kmeans_data(const bool p_iteration_observe);
+    explicit kmeans_data(const bool p_iteration_observe);
 
     /**
     *

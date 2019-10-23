@@ -117,8 +117,6 @@ public:
     virtual void process(const dataset & p_data, cluster_data & p_result) override;
 
 private:
-    std::size_t get_amount_candidates(const dataset & p_data) const;
-
     void search_optimal_parameters(const dataset & p_data, const std::size_t p_amount, cluster_sequence & p_clusters, dataset & p_centers) const;
 
     void statistical_optimization(void);
@@ -127,9 +125,11 @@ private:
 
     void split_and_search_optimal(const cluster & p_cluster, dataset & p_centers) const;
 
-    projection calculate_projection(const dataset & p_data, const point & p_vector) const;
+    static bool is_null_hypothesis(const dataset & p_data, const point & p_center1, const point & p_center2);
 
-    bool is_null_hypothesis(const dataset & p_data, const point & p_center1, const point & p_center2) const;
+    static std::size_t get_amount_candidates(const dataset & p_data);
+
+    static projection calculate_projection(const dataset & p_data, const point & p_vector);
 };
 
 

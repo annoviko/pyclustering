@@ -44,10 +44,10 @@ const double kmedians::DEFAULT_TOLERANCE        = 0.001;
 const std::size_t kmedians::DEFAULT_ITERMAX     = 50;
 
 
-kmedians::kmedians(const dataset & initial_medians, const double tolerance, const std::size_t p_max_iter, const distance_metric<point> & p_metric) :
-    m_tolerance(tolerance),
+kmedians::kmedians(const dataset & p_initial_medians, const double p_tolerance, const std::size_t p_max_iter, const distance_metric<point> & p_metric) :
+    m_tolerance(p_tolerance),
     m_max_iter(p_max_iter),
-    m_initial_medians(initial_medians),
+    m_initial_medians(p_initial_medians),
     m_ptr_result(nullptr),
     m_ptr_data(nullptr),
     m_metric(p_metric)

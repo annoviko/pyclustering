@@ -109,8 +109,7 @@ pyclustering_package * som_get_awards(const void * pointer) {
 pyclustering_package * som_get_neighbors(const void * pointer) {
     pyclustering_package * package = nullptr;
 
-    std::vector<std::vector<size_t> > neighbors;
-    ((som *) pointer)->allocate_neighbors(neighbors);
+    const som_neighbor_sequence & neighbors = ((som *) pointer)->get_neighbors();
     if (!neighbors.empty()) {
         package = create_package(&neighbors);
     }

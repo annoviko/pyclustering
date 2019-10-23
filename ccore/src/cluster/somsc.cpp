@@ -37,14 +37,14 @@ somsc::somsc(const std::size_t p_amount_clusters, const std::size_t p_epoch) :
 { }
 
 
-void somsc::process(const dataset & data, cluster_data & output_result) {
-    output_result = somsc_data();
+void somsc::process(const dataset & p_data, cluster_data & p_result) {
+    p_result = somsc_data();
 
     som_parameters params;
     som som_map(1, m_amount_clusters, som_conn_type::SOM_GRID_FOUR, params);
-    som_map.train(data, m_epoch, true);
+    som_map.train(p_data, m_epoch, true);
 
-    som_map.allocate_capture_objects((som_gain_sequence &) output_result.clusters());
+    p_result.clusters() = som_map.get_capture_objects();
 }
 
 

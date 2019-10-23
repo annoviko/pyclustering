@@ -71,7 +71,7 @@ public:
      * @param[in] p_amount: amount of centers that should initialized.
      *
      */
-    random_center_initializer(const std::size_t p_amount);
+    explicit random_center_initializer(const std::size_t p_amount);
 
     /**
      *

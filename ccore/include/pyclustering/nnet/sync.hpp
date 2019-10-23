@@ -80,7 +80,7 @@ public:
 
     sync_network_state(sync_network_state && p_other) = default;
 
-    sync_network_state(const std::size_t size) :
+    explicit sync_network_state(const std::size_t size) :
         m_phase(size, 0.0), m_time(0.0) { }
 
     sync_network_state(const double time, const std::vector<double> & phases) :

@@ -125,7 +125,7 @@ public:
     virtual void process(const dataset & p_data, const index_sequence & p_indexes, cluster_data & p_result);
 
 private:
-    void update_clusters(const dataset & centers, cluster_sequence & clusters);
+    void update_clusters(const dataset & p_centers, cluster_sequence & p_clusters);
 
     double update_centers(const cluster_sequence & clusters, dataset & centers);
 
@@ -145,19 +145,19 @@ private:
 
     /**
     *
+    * @brief    Calculates total within-cluster errors that is based on distance metric.
+    *
+    */
+    void calculate_total_wce(void);
+
+    /**
+    *
     * @brief    Erases clusters that do not have any points.
     *
     * @param[in|out] p_clusters: clusters that should be analyzed and modified.
     *
     */
-    void erase_empty_clusters(cluster_sequence & p_clusters);
-
-    /**
-    *
-    * @brief    Calculates total within-cluster errors that is based on distance metric.
-    *
-    */
-    void calculate_total_wce(void);
+    static void erase_empty_clusters(cluster_sequence & p_clusters);
 };
 
 

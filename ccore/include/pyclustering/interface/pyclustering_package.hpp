@@ -55,7 +55,7 @@ public:
 public:
     pyclustering_package(void) = default;
 
-    pyclustering_package(const pyclustering_data_t package_type);
+    explicit pyclustering_package(const pyclustering_data_t package_type);
 
     ~pyclustering_package(void);
 
@@ -130,7 +130,7 @@ pyclustering_data_t get_package_type(void) {
     else if (std::is_same<TypeValue, long>::value) {
         type_package = pyclustering_data_t::PYCLUSTERING_TYPE_LONG;
     }
-    else if (std::is_same<TypeValue, size_t>::value) {
+    else if (std::is_same<TypeValue, std::size_t>::value) {
         type_package = pyclustering_data_t::PYCLUSTERING_TYPE_SIZE_T;
     }
 

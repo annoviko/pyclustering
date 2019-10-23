@@ -85,11 +85,6 @@ void gmeans::process(const dataset & p_data, cluster_data & p_result) {
 }
 
 
-std::size_t gmeans::get_amount_candidates(const dataset & p_data) const {
-    return (p_data.size() > DEFAULT_CANDIDATES) ? DEFAULT_CANDIDATES : p_data.size();
-}
-
-
 void gmeans::search_optimal_parameters(const dataset & p_data, const std::size_t p_amount, cluster_sequence & p_clusters, dataset & p_centers) const {
     double           best_wce = std::numeric_limits<double>::infinity();
     cluster_sequence best_clusters = { };
@@ -169,7 +164,7 @@ void gmeans::split_and_search_optimal(const cluster & p_cluster, dataset & p_cen
 }
 
 
-bool gmeans::is_null_hypothesis(const dataset & p_data, const point & p_center1, const point & p_center2) const {
+bool gmeans::is_null_hypothesis(const dataset & p_data, const point & p_center1, const point & p_center2) {
     point v = subtract(p_center1, p_center2);
     projection sample = calculate_projection(p_data, v);
 
@@ -180,7 +175,12 @@ bool gmeans::is_null_hypothesis(const dataset & p_data, const point & p_center1,
 }
 
 
-gmeans::projection gmeans::calculate_projection(const dataset & p_data, const point & p_vector) const {
+std::size_t gmeans::get_amount_candidates(const dataset & p_data) {
+    return (p_data.size() > DEFAULT_CANDIDATES) ? DEFAULT_CANDIDATES : p_data.size();
+}
+
+
+gmeans::projection gmeans::calculate_projection(const dataset & p_data, const point & p_vector) {
     double square_norm = sum(multiply(p_vector, p_vector));
     return divide(sum(multiply(p_data, p_vector), 1), square_norm);
 }

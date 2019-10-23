@@ -49,7 +49,7 @@ namespace container {
 */
 class adjacency_weight_list : public adjacency_weight_collection {
 private:
-    typedef std::vector<std::unordered_map<size_t, double>>     adjacency_list_container;
+    using adjacency_list_container = std::vector<std::unordered_map<size_t, double>>;
 
 
 protected:
@@ -89,7 +89,7 @@ public:
     * @param[in]  node_amount: number of nodes whose connections are described in matrix.
     *
     */
-    adjacency_weight_list(const size_t node_amount);
+    explicit adjacency_weight_list(const size_t node_amount);
 
     /**
     *
@@ -121,7 +121,7 @@ public:
     * @brief   Returns amount of nodes in the adjacency collection.
     *
     */
-    virtual size_t size(void) const;
+    virtual size_t size(void) const override;
 
     /**
     *
@@ -134,7 +134,7 @@ public:
     *                          the node defined by the first argument 'node_index1'.
     *
     */
-    virtual void set_connection(const size_t node_index1, const size_t node_index2);
+    virtual void set_connection(const size_t node_index1, const size_t node_index2) override;
 
     /**
     *
@@ -147,7 +147,7 @@ public:
     *              the node defined by the first argument 'node_index1'.
     *
     */
-    virtual void erase_connection(const size_t node_index1, const size_t node_index2);
+    virtual void erase_connection(const size_t node_index1, const size_t node_index2) override;
 
     /**
     *
@@ -161,7 +161,7 @@ public:
     * @return  'true' - connection between the nodes exists, 'false' - connection does not exist.
     *
     */
-    virtual bool has_connection(const size_t node_index1, const size_t node_index2) const;
+    virtual bool has_connection(const size_t node_index1, const size_t node_index2) const override;
 
     /**
     *
@@ -173,7 +173,7 @@ public:
     * @param[out] node_neighbors: vector of indexes of neighbors of specified node.
     *
     */
-    virtual void get_neighbors(const size_t node_index, std::vector<size_t> & node_neighbors) const;
+    virtual void get_neighbors(const size_t node_index, std::vector<size_t> & node_neighbors) const override;
 
     /**
     *
@@ -188,7 +188,7 @@ public:
     * @param[in]  weight: new value of weight of connection between the nodes.
     *
     */
-    virtual void set_connection_weight(const size_t node_index1, const size_t node_index2, const double weight);
+    virtual void set_connection_weight(const size_t node_index1, const size_t node_index2, const double weight) override;
 
     /**
     *
@@ -204,14 +204,14 @@ public:
     * @return  Weight of one-way connection between specified nodes.
     *
     */
-    virtual double get_connection_weight(const size_t node_index1, const size_t node_index2) const;
+    virtual double get_connection_weight(const size_t node_index1, const size_t node_index2) const override;
 
     /**
     *
     * @brief   Clear content of adjacency matrix.
     *
     */
-    virtual void clear(void);
+    virtual void clear(void) override;
 
 public:
     adjacency_weight_list & operator=(const adjacency_weight_list & another_collection);

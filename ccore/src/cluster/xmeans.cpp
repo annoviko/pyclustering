@@ -301,15 +301,6 @@ double xmeans::minimum_noiseless_description_length(const cluster_sequence & clu
 }
 
 
-void xmeans::erase_empty_clusters(cluster_sequence & p_clusters) {
-    for (size_t index_cluster = p_clusters.size() - 1; index_cluster != (size_t) -1; index_cluster--) {
-        if (p_clusters[index_cluster].empty()) {
-            p_clusters.erase(p_clusters.begin() + index_cluster);
-        }
-    }
-}
-
-
 }
 
 }

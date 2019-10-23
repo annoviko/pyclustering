@@ -78,7 +78,7 @@ public:
     * @param[in] threshold: defines degree of normalization that influences on choice of clusters for merging during processing.
     *
     */
-    rock(const double radius, const size_t number_clusters, const double threshold);
+    rock(const double radius, const std::size_t number_clusters, const double threshold);
 
     /**
     *
@@ -96,7 +96,7 @@ public:
     * @param[out] p_result: clustering result of an input data.
     *
     */
-    virtual void process(const dataset & p_data, cluster_data & p_result);
+    virtual void process(const dataset & p_data, cluster_data & p_result) override;
 
 private:
     /**

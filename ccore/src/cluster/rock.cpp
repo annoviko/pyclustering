@@ -46,11 +46,11 @@ rock::rock(void) :
 { }
 
 
-rock::rock(const double radius, const size_t num_clusters, const double threshold) :
+rock::rock(const double radius, const std::size_t number_clusters, const double threshold) :
     m_adjacency_matrix(adjacency_matrix()),
     m_radius(radius * radius),
     m_degree_normalization(1.0 + 2.0 * ( (1.0 - threshold) / (1.0 + threshold) )),
-    m_number_clusters(num_clusters)
+    m_number_clusters(number_clusters)
 { }
 
 

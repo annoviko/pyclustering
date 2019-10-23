@@ -108,7 +108,7 @@ public:
     * @param[out] p_result: clustering result of an input data.
     *
     */
-    void process(const dataset & data, cluster_data & output_result);
+    void process(const dataset & data, cluster_data & output_result) override;
 
 private:
     /**
@@ -119,7 +119,7 @@ private:
     * @param[out] clusters: updated clusters in line with the specified medians.
     *
     */
-    void update_clusters(const dataset & medians, cluster_sequence & clusters);
+    void update_clusters(const dataset & p_medians, cluster_sequence & p_clusters);
 
     /**
     *
@@ -159,7 +159,7 @@ private:
     * @param[in|out] p_clusters: clusters that should be analyzed and modified.
     *
     */
-    void erase_empty_clusters(cluster_sequence & p_clusters);
+    static void erase_empty_clusters(cluster_sequence & p_clusters);
 };
 
 

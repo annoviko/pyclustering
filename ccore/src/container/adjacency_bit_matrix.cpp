@@ -35,10 +35,10 @@ const size_t adjacency_bit_matrix::DEFAULT_EXISTANCE_CONNECTION_VALUE = 0x01;
 const size_t adjacency_bit_matrix::DEFAULT_NON_EXISTANCE_CONNECTION_VALUE = 0x00;
 
 
-adjacency_bit_matrix::adjacency_bit_matrix(const size_t node_amount) { 
-    m_adjacency = adjacency_bit_matrix_container(node_amount, std::vector<size_t>(node_amount, 0));
-    m_size = node_amount;
-}
+adjacency_bit_matrix::adjacency_bit_matrix(const size_t node_amount) :
+    m_adjacency(node_amount, std::vector<size_t>(node_amount, 0)),
+    m_size(node_amount)
+{ }
 
 
 adjacency_bit_matrix::~adjacency_bit_matrix(void) { }

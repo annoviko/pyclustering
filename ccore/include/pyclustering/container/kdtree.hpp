@@ -75,7 +75,7 @@ private:
     * @return  Return the smallest node in specified subtree in line with discriminator.
     *
     */
-    kdnode::ptr find_minimal_node(const kdnode::ptr & p_cur_node, const std::size_t p_discriminator);
+    static kdnode::ptr find_minimal_node(const kdnode::ptr & p_cur_node, const std::size_t p_discriminator);
 
     /**
     *
@@ -88,7 +88,7 @@ private:
     * @return  Return the smallest node in specified subtree in line with discriminator.
     *
     */
-    kdnode::ptr find_node_by_rule(const std::vector<double> & p_point, const kdnode::ptr & p_cur_node, const search_node_rule & p_rule) const;
+    static kdnode::ptr find_node_by_rule(const std::vector<double> & p_point, const kdnode::ptr & p_cur_node, const search_node_rule & p_rule);
 
 public:
     kdtree(void) = default;
@@ -116,7 +116,7 @@ public:
     *
     * @brief   Remove point with specified coordinates.
     *
-    * @param[in] point: coordinates that describe node in tree.
+    * @param[in] p_point: coordinates that describe node in tree.
     *
     */
     void remove(const std::vector<double> & p_point);
@@ -177,7 +177,7 @@ public:
     * @return  Pointer to found node in tree.
     *
     */
-    kdnode::ptr find_node(const std::vector<double> & p_point, const kdnode::ptr & p_cur_node) const;
+    static kdnode::ptr find_node(const std::vector<double> & p_point, const kdnode::ptr & p_cur_node);
 
     /**
     *
@@ -197,7 +197,7 @@ public:
     * @return  Returns pointer to root of the tree.
     *
     */
-    kdnode::ptr get_root(void);
+    kdnode::ptr get_root(void) const;
 
     /**
     *

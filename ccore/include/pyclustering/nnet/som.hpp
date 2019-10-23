@@ -227,33 +227,11 @@ public:
 
     /**
     *
-    * @brief  Returns neurons weights.
-    *
-    * param[out] weights: neuron weights.
-    *
-    */
-    inline void allocate_weights(dataset & weights) {
-        weights = m_weights;
-    }
-
-    /**
-    *
     * @return  Constant reference to neurons weights for read-only purposes.
     *
     */
     inline const dataset & get_weights(void) const {
         return m_weights;
-    }
-
-    /**
-    *
-    * @brief  Returns sequence of captured objects by each neuron during training.
-    *
-    * param[out] objects: captured objects by each neuron.
-    *
-    */
-    inline void allocate_capture_objects(som_gain_sequence & objects) {
-        objects = m_capture_objects;
     }
 
     /**
@@ -267,17 +245,6 @@ public:
 
     /**
     *
-    * @brief  Returns neighbors of each neuron.
-    *
-    * param[out] neighbors: neighbor indexes of each neuron.
-    *
-    */
-    inline void allocate_neighbors(som_neighbor_sequence & neighbors) {
-        neighbors = m_neighbors;
-    }
-
-    /**
-    *
     * @return  Constant reference to neighbors of each neuron for read-only purposes.
     *
     */
@@ -287,22 +254,20 @@ public:
 
     /**
     *
-    * @brief  Returns amount of captured objects by each neuron during training.
-    *
-    * param[out] awards: amount of captured objects by each neuron.
-    *
-    */
-    inline void allocate_awards(som_award_sequence & awards) {
-        awards = m_awards;
-    }
-
-    /**
-    *
     * @return  Constant reference to amount of captured objects by each neuron during training for read-only purposes.
     *
     */
     inline const som_award_sequence & get_awards(void) const {
        return m_awards;
+    }
+
+    /**
+    *
+    * @return  Reference to amount of captured objects by each neuron during training.
+    *
+    */
+    inline som_award_sequence & get_awards(void) {
+        return m_awards;
     }
 
 private:
