@@ -231,13 +231,14 @@ public:
 
         create_none_connections(output_adjacency_collection);
 
-      for (int index = 0; index < (int) output_adjacency_collection.size(); index++) {
-            const int upper_index = index - (int) width;
-            const int lower_index = index + (int) width;
+        const int signed_width = static_cast<int>(width);
+        for (int index = 0; index < static_cast<int>(output_adjacency_collection.size()); index++) {
+            const int upper_index = index - signed_width;
+            const int lower_index = index + signed_width;
             const int left_index = index - 1;
             const int right_index = index + 1;
 
-            const int node_row_index = (int) std::ceil(index / width);
+            const int node_row_index = (int) std::ceil(index / signed_width);
             if (upper_index >= 0) {
                 m_connector(index, upper_index, output_adjacency_collection);
             }
@@ -246,11 +247,11 @@ public:
                 m_connector(index, lower_index, output_adjacency_collection);
             }
 
-            if ((left_index >= 0) && (std::ceil(left_index / width) == node_row_index)) {
+            if ((left_index >= 0) && (std::ceil(left_index / signed_width) == node_row_index)) {
                 m_connector(index, left_index, output_adjacency_collection);
             }
 
-            if ((right_index < (int) output_adjacency_collection.size()) && (std::ceil(right_index / width) == node_row_index)) {
+            if ((right_index < (int) output_adjacency_collection.size()) && (std::ceil(right_index / signed_width) == node_row_index)) {
                 m_connector(index, right_index, output_adjacency_collection);
             }
         }

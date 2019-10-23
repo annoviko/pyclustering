@@ -103,17 +103,6 @@ void adjacency_bit_matrix::update_connection(const size_t node_index1, const siz
 }
 
 
-
-adjacency_bit_matrix & adjacency_bit_matrix::operator=(const adjacency_bit_matrix & another_matrix) {
-    if (this != &another_matrix) {
-        m_adjacency = another_matrix.m_adjacency;
-        m_size = another_matrix.m_size;
-    }
-
-    return *this;
-}
-
-
 adjacency_bit_matrix & adjacency_bit_matrix::operator=(adjacency_bit_matrix && another_matrix) {
     if (this != &another_matrix) {
         m_adjacency = std::move(another_matrix.m_adjacency);
@@ -124,6 +113,7 @@ adjacency_bit_matrix & adjacency_bit_matrix::operator=(adjacency_bit_matrix && a
 
     return *this;
 }
+
 
 }
 

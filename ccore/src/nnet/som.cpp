@@ -456,7 +456,7 @@ void som::load(const dataset & p_weights, const som_award_sequence & p_awards, c
 
     if (!p_awards.empty()) {
         if (p_awards.size() != m_size) {
-            throw std::invalid_argument("Provided amount of capture objects by each neuron (size '" + std::to_string(p_capture_objects.size()) + 
+            throw std::invalid_argument("Provided amount of capture objects by each neuron (size '" + std::to_string(p_awards.size()) +
               "') for loading does not correspond to network size '" + std::to_string(m_size) + "'.");
         }
 

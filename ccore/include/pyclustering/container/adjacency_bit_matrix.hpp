@@ -187,7 +187,7 @@ public:
     * @param[in] p_other: another adjacency collection.
     *
     */
-    adjacency_bit_matrix & operator=(const adjacency_bit_matrix & another_matrix);
+    adjacency_bit_matrix & operator=(const adjacency_bit_matrix & another_matrix) = default;
 
     /**
     *

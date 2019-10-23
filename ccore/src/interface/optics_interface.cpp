@@ -54,9 +54,10 @@ pyclustering_package * optics_algorithm(const pyclustering_package * const p_sam
     /* Pack OPTICS objects to pyclustering packages */
     const auto & objects = output_result.optics_objects();
 
-    pyclustering_package * package_object_indexes = create_package<std::size_t>(objects.size());
-    pyclustering_package * package_core_distance = create_package<double>(objects.size());
-    pyclustering_package * package_reachability_distance = create_package<double>(objects.size());
+    std::size_t package_size = objects.size();
+    pyclustering_package * package_object_indexes = create_package<std::size_t>(package_size);
+    pyclustering_package * package_core_distance = create_package<double>(package_size);
+    pyclustering_package * package_reachability_distance = create_package<double>(package_size);
 
     for (std::size_t i = 0; i < objects.size(); i++) {
         ((std::size_t *) package_object_indexes->data)[i] = objects[i].m_index;

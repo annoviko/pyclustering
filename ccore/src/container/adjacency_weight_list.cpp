@@ -101,24 +101,6 @@ void adjacency_weight_list::clear(void) {
 }
 
 
-adjacency_weight_list & adjacency_weight_list::operator=(const adjacency_weight_list & another_collection) {
-    if (this != &another_collection) {
-        m_adjacency = another_collection.m_adjacency;
-    }
-
-    return *this;
-}
-
-
-adjacency_weight_list & adjacency_weight_list::operator=(adjacency_weight_list && another_collection) {
-    if (this != &another_collection) {
-        m_adjacency = std::move(another_collection.m_adjacency);
-    }
-
-    return *this;
-}
-
-
 }
 
 }

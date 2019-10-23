@@ -175,7 +175,7 @@ pyclustering_package * create_package(const TypeContainer * const data) {
     if (package) {
         std::size_t index = 0;
         for (auto iter = std::begin(*data); iter != std::end(*data); iter++, index++) {
-            ( (contaner_data_t *) package->data)[index] = *iter;
+            static_cast<contaner_data_t *>(package->data)[index] = *iter;
         }
     }
 

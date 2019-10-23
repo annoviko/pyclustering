@@ -214,9 +214,9 @@ public:
     virtual void clear(void) override;
 
 public:
-    adjacency_weight_list & operator=(const adjacency_weight_list & another_collection);
+    adjacency_weight_list & operator=(const adjacency_weight_list & another_collection) = default;
 
-    adjacency_weight_list & operator=(adjacency_weight_list && another_collection);
+    adjacency_weight_list & operator=(adjacency_weight_list && another_collection) = default;
 };
 
 

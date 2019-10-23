@@ -37,7 +37,7 @@ namespace linalg {
 
 static sequence action_for_each_component(const sequence & a, 
                                           const sequence & b,
-                                          std::function<double(double, double)> && func)
+                                          const std::function<double(double, double)> && func)
 {
     if (a.size() != b.size()) {
         throw std::invalid_argument("Both vectors should have the same size.");
@@ -53,7 +53,7 @@ static sequence action_for_each_component(const sequence & a,
 
 static sequence action_for_each_component(const sequence & a, 
                                           const double b,
-                                          std::function<double(double, double)> && func)
+                                          const std::function<double(double, double)> && func)
 {
     sequence result(a.size(), 0.0);
     for (std::size_t i = 0; i < result.size(); i++) {

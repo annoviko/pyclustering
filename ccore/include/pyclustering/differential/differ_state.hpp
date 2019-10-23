@@ -34,7 +34,7 @@ namespace pyclustering {
 namespace differential {
 
 
-template <class state_type>
+template <class state_type, class allocator = std::allocator<state_type>>
 class differ_state {
 public:
     typedef state_type                          value_type;
@@ -52,7 +52,7 @@ public:
 
     differ_state(const size_t size, const state_type value) : m_variable_state(std::vector<state_type>(size, value)) { }
 
-    differ_state(const std::initializer_list<state_type> & value) : m_variable_state(std::vector<state_type>(value)) { }
+    differ_state(const std::initializer_list<state_type> & value, const allocator & alloc = allocator()) : m_variable_state(std::vector<state_type>(value, alloc)) { }
 
     differ_state(const differ_state & instance) : m_variable_state(instance.m_variable_state) { }
 
@@ -61,81 +61,81 @@ public:
     ~differ_state(void) { }
 
 public:
-    inline void insert(iterator position, const value_type & value) {
+    void insert(iterator position, const value_type & value) {
         m_variable_state.insert(position, value);
     }
 
-    inline void push_back(const value_type & value) {
+    void push_back(const value_type & value) {
         m_variable_state.push_back(value);
     }
 
-    inline void pop_back(void) {
+    void pop_back(void) {
         m_variable_state.pop_back();
     }
 
-    inline iterator begin(void) {
+    iterator begin(void) {
         return m_variable_state.begin();
     }
 
-    inline iterator end(void) {
+    iterator end(void) {
         return m_variable_state.end();
     }
 
-    inline const_iterator cbegin(void) const {
+    const_iterator cbegin(void) const {
         return m_variable_state.begin();
     }
 
-    inline const_iterator cend(void) const {
+    const_iterator cend(void) const {
         return m_variable_state.end();
     }
 
-    inline reverse_iterator rbegin(void) {
+    reverse_iterator rbegin(void) {
         return m_variable_state.rbegin();
     }
 
-    inline reverse_iterator rend(void) {
+    reverse_iterator rend(void) {
         return m_variable_state.rend();
     }
 
-    inline const_reverse_iterator crbegin(void) const {
+    const_reverse_iterator crbegin(void) const {
         return m_variable_state.crbegin();
     }
 
-    inline const_reverse_iterator crend(void) const {
+    const_reverse_iterator crend(void) const {
         return m_variable_state.crend();
     }
 
-    inline void reserve(size_t size) {
+    void reserve(size_t size) {
         m_variable_state.reserve(size);
     }
 
-    inline void resize(size_t size) {
+    void resize(size_t size) {
         m_variable_state.resize(size);
     }
 
-    inline void clear(void) {
+    void clear(void) {
         m_variable_state.clear();
     }
 
-    inline bool empty(void) const {
+    bool empty(void) const {
         return m_variable_state.empty();
     }
 
-    inline size_t size(void) const {
+    std::size_t size(void) const {
         return m_variable_state.size();
     }
 
 public:
-    inline value_type & operator[](size_t index) {
+    value_type & operator[](std::size_t index) {
         return m_variable_state[index];
     }
 
-    inline const value_type & operator[](size_t index) const {
+    const value_type & operator[](std::size_t index) const {
         return m_variable_state[index];
     }
 
     /* Comparison */
-    inline bool operator==(const differ_state & rhs) const {
+    bool operator==(const differ_state & rhs) const {
         bool result = true;
         if (this->size() != rhs.size()) {
             result = false;
@@ -151,21 +151,15 @@ public:
         return result;
     }
 
-    inline bool operator!=(const differ_state & rhs) const {
+    bool operator!=(const differ_state & rhs) const {
         return !(*this == rhs);
     }
 
-    /* Assignment */
-    inline differ_state & operator=(const differ_state & rhs) {
-        if (this != &rhs) {
-            m_variable_state.resize(rhs.size());
-            std::copy(rhs.cbegin(), rhs.cend(), m_variable_state.begin());
-        }
+    differ_state & operator=(const differ_state & rhs) = default;
 
-        return *this;
-    }
+    differ_state & operator=(differ_state && rhs) = default;
 
-    inline differ_state & operator+=(const double & rhs) {
+    differ_state & operator+=(const double & rhs) {
         for (size_t i = 0; i < size(); i++) {
             (*this)[i] += rhs;
         }
@@ -173,7 +167,7 @@ public:
         return *this;
     }
 
-    inline differ_state & operator+=(const differ_state & rhs) {
+    differ_state & operator+=(const differ_state & rhs) {
         if (this->size() != rhs.size()) {
             throw std::runtime_error("Differetial states should consist of the same number of variables");
         }
@@ -185,7 +179,7 @@ public:
         return *this;
     }
 
-    inline differ_state & operator-=(const double & rhs) {
+    differ_state & operator-=(const double & rhs) {
         for (size_t i = 0; i < size(); i++) {
             (*this)[i] -= rhs;
         }
@@ -193,7 +187,7 @@ public:
         return *this;
     }
 
-    inline differ_state & operator-=(const differ_state & rhs) {
+    differ_state & operator-=(const differ_state & rhs) {
         if (this->size() != rhs.size()) {
             throw std::runtime_error("Differetial states should consist of the same number of variables");
         }
@@ -205,7 +199,7 @@ public:
         return *this;
     }
 
-    inline differ_state & operator*=(const double & rhs) {
+    differ_state & operator*=(const double & rhs) {
         for (size_t i = 0; i < size(); i++) {
             (*this)[i] *= rhs;
         }
@@ -213,7 +207,7 @@ public:
         return *this;
     }
 
-    inline differ_state & operator*=(const differ_state & rhs) {
+    differ_state & operator*=(const differ_state & rhs) {
         if (this->size() != rhs.size()) {
             throw std::runtime_error("Differetial states should consist of the same number of variables");
         }
@@ -225,7 +219,7 @@ public:
         return *this;
     }
 
-    inline differ_state & operator/=(const double & rhs) {
+    differ_state & operator/=(const double & rhs) {
         for (size_t i = 0; i < size(); i++) {
             (*this)[i] /= rhs;
         }
@@ -233,7 +227,7 @@ public:
         return *this;
     }
 
-    inline differ_state & operator/=(const differ_state & rhs) {
+    differ_state & operator/=(const differ_state & rhs) {
         if (this->size() != rhs.size()) {
             throw std::runtime_error("Differetial states should consist of the same number of variables");
         }
@@ -246,15 +240,15 @@ public:
     }
 
     /* Arithmetic */
-    inline differ_state operator+() const {
+    differ_state operator+() const {
         return this;
     }
 
-    inline differ_state operator-() const {
+    differ_state operator-() const {
         return 0 - *this;
     }
 
-    inline friend differ_state operator+(const differ_state & lhs, const double rhs) {
+    friend differ_state operator+(const differ_state & lhs, const double rhs) {
         differ_state result(lhs.size());
         for (std::size_t i = 0; i < result.size(); i++) {
             result[i] = lhs[i] + rhs;
@@ -263,11 +257,11 @@ public:
         return result;
     }
 
-    inline friend differ_state operator+(const double lhs, const differ_state & rhs) {
+    friend differ_state operator+(const double lhs, const differ_state & rhs) {
         return rhs + lhs;
     }
 
-    inline differ_state operator+(const differ_state & rhs) const {
+    differ_state operator+(const differ_state & rhs) const {
         if (this->size() != rhs.size()) {
             throw std::runtime_error("Differetial states should consist of the same number of variables");
         }
@@ -280,7 +274,7 @@ public:
         return result;
     }
 
-    inline friend differ_state operator-(const differ_state & lhs, const double rhs) {
+    friend differ_state operator-(const differ_state & lhs, const double rhs) {
         differ_state result(lhs.size());
         for (std::size_t i = 0; i < result.size(); i++) {
             result[i] = lhs[i] - rhs;
@@ -289,7 +283,7 @@ public:
         return result;
     }
 
-    inline friend differ_state operator-(const double lhs, const differ_state & rhs) {
+    friend differ_state operator-(const double lhs, const differ_state & rhs) {
         differ_state result(rhs.size());
         for (std::size_t i = 0; i < result.size(); i++) {
             result[i] = lhs - rhs[i];
@@ -298,7 +292,7 @@ public:
         return result;
     }
 
-    inline differ_state operator-(const differ_state & rhs) const {
+    differ_state operator-(const differ_state & rhs) const {
         if (this->size() != rhs.size()) {
             throw std::runtime_error("Differetial states should consist of the same number of variables");
         }
@@ -311,7 +305,7 @@ public:
         return result;
     }
 
-    inline friend differ_state operator/(const differ_state & lhs, const double rhs) {
+    friend differ_state operator/(const differ_state & lhs, const double rhs) {
         differ_state result(lhs.size());
         for (std::size_t i = 0; i < result.size(); i++) {
             result[i] = lhs[i] / rhs;
@@ -320,7 +314,7 @@ public:
         return result;
     }
 
-    inline friend differ_state operator/(const double lhs, const differ_state & rhs) {
+    friend differ_state operator/(const double lhs, const differ_state & rhs) {
         differ_state result(rhs.size());
         for (std::size_t i = 0; i < result.size(); i++) {
             result[i] = lhs / rhs[i];
@@ -329,7 +323,7 @@ public:
         return result;
     }
 
-    inline friend differ_state operator*(const differ_state & lhs, const double rhs) {
+    friend differ_state operator*(const differ_state & lhs, const double rhs) {
         differ_state result(lhs.size());
         for (std::size_t i = 0; i < result.size(); i++) {
             result[i] = lhs[i] * rhs;
@@ -338,7 +332,7 @@ public:
         return result;
     }
 
-    inline friend differ_state operator*(const double lhs, const differ_state & rhs) {
+    friend differ_state operator*(const double lhs, const differ_state & rhs) {
         return rhs * lhs;
     }
 

@@ -84,7 +84,7 @@ public:
     * @param[in]  node_amount: number of nodes whose connections are described in matrix.
     *
     */
-    adjacency_matrix(const size_t node_amount);
+    explicit adjacency_matrix(const size_t node_amount);
 
     /**
     *

@@ -101,7 +101,8 @@ DEPENDENCIES = $(OBJECTS:.o=.d)
 # Targets
 .PHONY: cppcheck
 cppcheck:
-	cppcheck --error-exitcode=1 --inconclusive --enable=warning,style,performance,information,portability -I $(INCLUDE_DIRECTORY) $(SOURCES_DIRECTORY)
+	cppcheck --version
+	cppcheck --error-exitcode=1 --std=c++14 --inconclusive --enable=warning,style,performance,information,portability -I $(INCLUDE_DIRECTORY) $(SOURCES_DIRECTORY)
 
 
 .PHONY: ccore
