@@ -54,7 +54,7 @@ protected:
     distance_metric<point>          m_metric;
 
 public:
-    bsas(void) = default;
+    bsas() = default;
 
     bsas(const std::size_t p_amount,
          const double p_threshold,

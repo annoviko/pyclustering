@@ -50,7 +50,7 @@ private:
     std::size_t         m_start;
 
 public:
-    ttsas(void) = default;
+    ttsas() = default;
 
     ttsas(const double p_threshold1,
           const double p_threshold2,

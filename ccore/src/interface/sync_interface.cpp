@@ -40,7 +40,7 @@ std::size_t sync_get_size(const void * pointer_network) {
 
 
 void sync_destroy_network(const void * pointer_network) {
-    if (pointer_network != NULL) {
+    if (pointer_network != nullptr) {
         delete (sync_network *) pointer_network;
     }
 }

@@ -83,8 +83,7 @@ void hhn_simulate(const void * p_network_pointer,
     hhn_network * network = (hhn_network *) p_network_pointer;
     hhn_dynamic * dynamic = (hhn_dynamic *) p_output_dynamic;
 
-    const pyclustering_package * const package_stimulus = (const pyclustering_package * const) p_stimulus;
-    hhn_stimulus stimulus_vector((double *) package_stimulus->data, ((double *) package_stimulus->data) + package_stimulus->size);
+    hhn_stimulus stimulus_vector((double *)p_stimulus->data, ((double *)p_stimulus->data) + p_stimulus->size);
 
     network->simulate(p_steps, p_time, (solve_type) p_solver, stimulus_vector, *dynamic);
 }

@@ -59,7 +59,7 @@ public:
     * @brief    Default constructor that creates empty clustering data.
     *
     */
-    cure_data(void) = default;
+    cure_data() = default;
 
     /**
     *
@@ -84,7 +84,7 @@ public:
     * @brief    Default destructor that destroys clustering data.
     *
     */
-    virtual ~cure_data(void) = default;
+    virtual ~cure_data() = default;
 
 public:
     /**
@@ -99,14 +99,14 @@ public:
     * @return   Shared pointer to representative points of each cluster.
     *
     */
-    representor_sequence & representors(void) { return m_representative_sequence; }
+    representor_sequence & representors() { return m_representative_sequence; }
 
     /**
     *
     * @brief    Returns constant reference to representative points of each cluster.
     *
     */
-    const representor_sequence & representors(void) const { return m_representative_sequence; }
+    const representor_sequence & representors() const { return m_representative_sequence; }
 
     /**
     *
@@ -119,14 +119,14 @@ public:
     * @return   Shared pointer to mean point of each cluster.
     *
     */
-    dataset & means(void) { return m_mean_sequence; }
+    dataset & means() { return m_mean_sequence; }
 
     /**
     *
     * @brief    Returns constant reference to mean point of each cluster.
     *
     */
-    const dataset & means(void) const { return m_mean_sequence; }
+    const dataset & means() const { return m_mean_sequence; }
 };
 
 

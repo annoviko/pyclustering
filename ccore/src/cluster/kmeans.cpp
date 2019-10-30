@@ -189,8 +189,8 @@ double kmeans::update_center(const cluster & p_cluster, point & p_center) {
     }
 
     /* average for each dimension */
-    for (size_t dimension = 0; dimension < total.size(); dimension++) {
-        total[dimension] = total[dimension] / p_cluster.size();
+    for (auto & dimension : total) {
+        dimension /= p_cluster.size();
     }
 
     const double change = m_metric(p_center, total);
@@ -200,7 +200,7 @@ double kmeans::update_center(const cluster & p_cluster, point & p_center) {
 }
 
 
-void kmeans::calculate_total_wce(void) {
+void kmeans::calculate_total_wce() {
     double & wce = m_ptr_result->wce();
     for (std::size_t i = 0; i < m_ptr_result->clusters().size(); i++) {
         const auto & current_cluster = m_ptr_result->clusters().at(i);

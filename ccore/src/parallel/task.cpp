@@ -36,12 +36,12 @@ task::task(const proc & p_task) :
 }
 
 
-void task::set_ready(void) {
+void task::set_ready() {
     m_ready.unlock();
 }
 
 
-void task::wait_ready(void) const {
+void task::wait_ready() const {
     m_ready.lock();
 }
 

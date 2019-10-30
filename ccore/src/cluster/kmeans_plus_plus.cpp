@@ -142,13 +142,13 @@ void kmeans_plus_plus::store_temporal_params(const dataset & p_data, const index
 }
 
 
-void kmeans_plus_plus::free_temporal_params(void) const {
+void kmeans_plus_plus::free_temporal_params() const {
     m_data_ptr      = nullptr;
     m_indexes_ptr   = nullptr;
 }
 
 
-kmeans_plus_plus::center_description kmeans_plus_plus::get_first_center(void) const {
+kmeans_plus_plus::center_description kmeans_plus_plus::get_first_center() const {
     std::size_t length = m_indexes_ptr->empty() ? m_data_ptr->size() : m_indexes_ptr->size();
 
     std::random_device random_device;
@@ -165,7 +165,7 @@ kmeans_plus_plus::center_description kmeans_plus_plus::get_first_center(void) co
 }
 
 
-kmeans_plus_plus::center_description kmeans_plus_plus::get_next_center(void) const
+kmeans_plus_plus::center_description kmeans_plus_plus::get_next_center() const
 {
     std::vector<double> distances;
     calculate_shortest_distances(distances);

@@ -48,13 +48,13 @@ private:
     dataset       m_membership  = { };
 
 public:
-    dataset & centers(void) { return m_centers; }
+    dataset & centers() { return m_centers; }
 
-    const dataset & centers(void) const { return m_centers; };
+    const dataset & centers() const { return m_centers; };
 
-    dataset & membership(void) { return m_membership; }
+    dataset & membership() { return m_membership; }
 
-    const dataset & membership(void) const { return m_membership; };
+    const dataset & membership() const { return m_membership; };
 };
 
 

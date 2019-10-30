@@ -62,7 +62,7 @@ public:
      * @brief Default constructor to create random center initializer.
      *
      */
-    random_center_initializer(void) = default;
+    random_center_initializer() = default;
 
     /**
      *
@@ -92,7 +92,7 @@ public:
      * @brief Default destructor to destroy random center initializer.
      *
      */
-    ~random_center_initializer(void) = default;
+    ~random_center_initializer() = default;
 
 public:
     /**

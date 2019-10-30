@@ -48,7 +48,7 @@ private:
     std::thread             m_executor;
 
 public:
-    thread_executor(void) = default;
+    thread_executor() = default;
 
     explicit thread_executor(const task_getter & p_getter);
 
@@ -56,13 +56,13 @@ public:
 
     thread_executor(thread_executor && p_other) = delete;
 
-    ~thread_executor(void) = default;
+    ~thread_executor() = default;
 
 public:
-    void stop(void);
+    void stop();
 
 private:
-    void run(void);
+    void run();
 };
 
 

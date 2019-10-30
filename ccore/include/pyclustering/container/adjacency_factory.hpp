@@ -105,7 +105,7 @@ public:
     static std::shared_ptr<adjacency_weight_collection> create_collection(const size_t amount_nodes, 
                                                                           const adjacency_weight_t storing_type = adjacency_weight_t::ADJACENCY_MATRIX, 
                                                                           const connection_t structure_type = connection_t::CONNECTION_NONE, 
-                                                                          const std::function<double(void)> & weight_value_generator = nullptr);
+                                                                          const std::function<double()> & weight_value_generator = nullptr);
 };
 
 

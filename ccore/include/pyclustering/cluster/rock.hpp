@@ -67,7 +67,7 @@ public:
     * @brief    Default constructor of clustering algorithm.
     *
     */
-    rock(void);
+    rock();
 
     /**
     *
@@ -85,7 +85,7 @@ public:
     * @brief    Default destructor of the algorithm.
     *
     */
-    virtual ~rock(void);
+    virtual ~rock() = default;
 
 public:
     /**
@@ -113,7 +113,7 @@ private:
     * @brief    Finds two clusters that are most suitable candidates for merging and than merges them.
     *
     */
-    bool merge_cluster(void);
+    bool merge_cluster();
 
     /**
     *

@@ -56,7 +56,7 @@ private:
     distance_metric<point>    m_metric    = distance_metric_factory<point>::euclidean_square();
 
 public:
-    silhouette(void) = default;
+    silhouette() = default;
 
     explicit silhouette(const distance_metric<point> & p_metric);
 
@@ -64,7 +64,7 @@ public:
 
     silhouette(silhouette && p_other) = default;
 
-    ~silhouette(void) = default;
+    ~silhouette() = default;
 
 public:
     void process(const dataset & p_data, const cluster_sequence & p_clusters, silhouette_data & p_result);

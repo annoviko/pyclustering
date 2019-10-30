@@ -46,7 +46,7 @@ namespace nnet {
 const size_t legion_network::MAXIMUM_MATRIX_REPRESENTATION_SIZE = 4096;
 
 
-std::size_t legion_network_state::size(void) const {
+std::size_t legion_network_state::size() const {
     return m_output.size();
 }
 

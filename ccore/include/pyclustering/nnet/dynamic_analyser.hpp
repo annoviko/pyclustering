@@ -49,7 +49,7 @@ private:
     std::size_t    m_end            = 0;
 
 public:
-    spike(void) = default;
+    spike() = default;
 
     spike(const std::size_t p_begin, const std::size_t p_end);
 
@@ -58,11 +58,11 @@ public:
     spike(spike && p_other) = default;
 
 public:
-    std::size_t get_start(void) const;
+    std::size_t get_start() const;
 
-    std::size_t get_duration(void) const;
+    std::size_t get_duration() const;
 
-    std::size_t get_stop(void) const;
+    std::size_t get_stop() const;
 
     bool compare(const spike & p_other, const double p_tolerance) const;
 };
@@ -83,7 +83,7 @@ private:
     double                    m_tolerance     = DEFAULT_TOLERANCE;
 
 public:
-    dynamic_analyser(void) = default;
+    dynamic_analyser() = default;
 
     dynamic_analyser(const double p_threshold, const double p_tolerance = DEFAULT_TOLERANCE, const std::size_t p_spikes = DEFAULT_AMOUNT_SPIKES);
 

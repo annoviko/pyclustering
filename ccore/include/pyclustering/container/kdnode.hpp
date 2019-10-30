@@ -58,7 +58,7 @@ private:
     std::size_t m_discriminator = 0;
 
 public:
-    kdnode(void) = default;
+    kdnode() = default;
 
     kdnode(const std::vector<double> & p_data, void * p_payload, const kdnode::ptr & p_left, const kdnode::ptr & p_right, const kdnode::ptr & p_parent, const std::size_t p_desc);
 
@@ -66,7 +66,7 @@ public:
 
     kdnode(kdnode && p_other) = default;
 
-    virtual ~kdnode(void) = default;
+    virtual ~kdnode() = default;
 
 private:
     void set_left(const kdnode::ptr & p_node);
@@ -78,25 +78,25 @@ private:
     void set_discriminator(const std::size_t disc);
 
 public:
-    kdnode::ptr get_left(void) const;
+    kdnode::ptr get_left() const;
 
-    kdnode::ptr get_right(void) const;
+    kdnode::ptr get_right() const;
 
-    kdnode::ptr get_parent(void) const;
+    kdnode::ptr get_parent() const;
 
-    void * get_payload(void);
+    void * get_payload();
 
-    const std::vector<double> & get_data(void) const;
+    const std::vector<double> & get_data() const;
 
-    std::vector<double> & get_data(void);
+    std::vector<double> & get_data();
 
-    double get_value(void) const;
+    double get_value() const;
 
     double get_value(const std::size_t p_descr) const;
 
-    std::size_t get_discriminator(void) const;
+    std::size_t get_discriminator() const;
 
-    std::size_t get_dimension(void) const;
+    std::size_t get_dimension() const;
 
     void get_children(std::vector<kdnode::ptr> & p_children);
 };

@@ -72,7 +72,7 @@ extern "C" DECLARATION void * legion_simulate(const void * p_network_pointer,
                                               const double p_time, 
                                               const unsigned int p_solver, 
                                               const bool p_collect_dynamic, 
-                                              const void * const p_stimulus);
+                                              const pyclustering_package * const p_stimulus);
 
 /**
  *

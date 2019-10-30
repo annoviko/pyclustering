@@ -44,7 +44,7 @@ public:
     * @brief    Default constructor of the analyser.
     *
     */
-    ordering_analyser(void) = default;
+    ordering_analyser() = default;
 
     /**
     *
@@ -65,7 +65,7 @@ public:
     * @brief    Default destructor.
     *
     */
-    ~ordering_analyser(void) = default;
+    ~ordering_analyser() = default;
 
 public:
     /**

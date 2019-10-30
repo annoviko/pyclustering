@@ -36,11 +36,11 @@ coordinate_iterator::coordinate_iterator(const std::size_t p_dimension, const st
     m_coordinate(p_dimension, std::size_t(0))
 { }
 
-const clique_block_location & coordinate_iterator::get_coordinate(void) const {
+const clique_block_location & coordinate_iterator::get_coordinate() const noexcept {
     return m_coordinate;
 }
 
-clique_block_location & coordinate_iterator::get_coordinate(void) {
+clique_block_location & coordinate_iterator::get_coordinate() noexcept {
     return m_coordinate;
 }
 
@@ -130,12 +130,12 @@ void clique::get_neighbors(const clique_block & p_block, std::list<clique_block 
 }
 
 
-void clique::create_grid(void) {
+void clique::create_grid() {
     clique::data_info info;
     get_data_info(info);
 
     const std::size_t dimension = m_data_ptr->at(0).size();
-    const std::size_t amount_blocks = static_cast<std::size_t>(std::pow(m_intervals, dimension));
+    const auto amount_blocks = static_cast<std::size_t>(std::pow(m_intervals, dimension));
 
     auto & blocks = m_result_ptr->blocks();
     blocks.reserve(amount_blocks);
@@ -205,9 +205,9 @@ void clique::get_data_info(clique::data_info & p_info) const {
     const std::size_t dimension = p_info.m_min_corner.size();
     const dataset & data = *m_data_ptr;
 
-    for (std::size_t index_point = 0; index_point < data.size(); ++index_point) {
+    for (const auto & data_point : data) {
         for (std::size_t index_dimension = 0; index_dimension < dimension; ++index_dimension) {
-            const double coordinate = data[index_point][index_dimension];
+            const double coordinate = data_point[index_dimension];
             if (coordinate > p_info.m_max_corner[index_dimension]) {
                 p_info.m_max_corner[index_dimension] = coordinate;
             }

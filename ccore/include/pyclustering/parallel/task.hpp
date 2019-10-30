@@ -46,7 +46,7 @@ public:
     friend thread_executor;
 
 public:
-    using proc      = std::function<void(void)>;
+    using proc      = std::function<void()>;
     using ptr       = std::shared_ptr<task>;
     using id        = std::size_t;
 
@@ -55,7 +55,7 @@ private:
     mutable spinlock    m_ready;
 
 public:
-    task(void) = default;
+    task() = default;
 
     explicit task(const proc & p_task);
 
@@ -63,13 +63,13 @@ public:
 
     task(task && p_other) = default;
 
-    ~task(void) = default;
+    ~task() = default;
 
 private:
-    void set_ready(void);
+    void set_ready();
 
 public:
-    void wait_ready(void) const;
+    void wait_ready() const;
 
 public:
     void operator()();

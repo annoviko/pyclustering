@@ -50,7 +50,7 @@ public:
     * @brief    Default constructor that creates empty clustering data.
     *
     */
-    dbscan_data(void) = default;
+    dbscan_data() = default;
 
     /**
     *
@@ -75,7 +75,7 @@ public:
     * @brief    Default destructor that destroys clustering data.
     *
     */
-    virtual ~dbscan_data(void) = default;
+    virtual ~dbscan_data() = default;
 
 public:
     /**
@@ -83,14 +83,14 @@ public:
     * @brief    Returns reference to noise.
     *
     */
-    clst::noise & noise(void) { return m_noise; }
+    clst::noise & noise() { return m_noise; }
 
     /**
     *
     * @brief    Returns constant reference to noise.
     *
     */
-    const clst::noise & noise(void) const { return m_noise; }
+    const clst::noise & noise() const { return m_noise; }
 };
 
 

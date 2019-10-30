@@ -46,7 +46,7 @@ namespace pyclustering {
 namespace nnet {
 
 
-typedef struct sync_oscillator {
+struct sync_oscillator {
     double phase;
     double frequency;
 
@@ -54,7 +54,7 @@ typedef struct sync_oscillator {
         phase(0.0),
         frequency(0.0)
     { }
-} sync_oscillator;
+};
 
 
 using sync_ensemble = std::vector<std::size_t>;
@@ -68,13 +68,13 @@ using sync_corr_matrix = std::vector<sync_corr_row>;
  * @brief   Oscillatory network state where oscillator phases and corresponding time-point are stored.
  *
  */
-typedef struct sync_network_state {
+struct sync_network_state {
 public:
     std::vector<double>     m_phase = { };
     double                  m_time = 0.0;
 
 public:
-    sync_network_state(void) = default;
+    sync_network_state() = default;
 
     sync_network_state(const sync_network_state & p_other) = default;
 
@@ -90,13 +90,13 @@ public:
         m_phase(initializer), m_time(time) { }
 
 public:
-    inline std::size_t size(void) const { return m_phase.size(); }
+    inline std::size_t size() const { return m_phase.size(); }
 
 public:
     sync_network_state & operator=(const sync_network_state & other) = default;
 
     sync_network_state & operator=(sync_network_state && other) = default;
-} sync_network_state;
+};
 
 
 /**
@@ -114,14 +114,14 @@ public:
      * @brief   Default constructor is forbidden.
      *
      */
-    sync_ordering(void) = delete;
+    sync_ordering() = delete;
 
     /**
      *
      * @brief   Default destructor is forbidden.
      *
      */
-    ~sync_ordering(void) = delete;
+    ~sync_ordering() = delete;
 
 public:
     /**
@@ -208,7 +208,7 @@ public:
      * @brief   Default destructor.
      *
      */
-	virtual ~sync_dynamic(void);
+    virtual ~sync_dynamic() = default;
 
 public:
     /**
@@ -361,7 +361,7 @@ public:
      * @brief   Default destructor.
      *
      */
-    virtual ~sync_network(void);
+    virtual ~sync_network();
 
 
 public:
@@ -372,7 +372,7 @@ public:
      * @return  Return level of global synchronization in the network.
      *
      */
-    virtual double sync_order(void) const;
+    virtual double sync_order() const;
 
     /**
      *
@@ -381,7 +381,7 @@ public:
      * @return  Return level of local (partial) synchronization in the network.
      *
      */
-    virtual double sync_local_order(void) const;
+    virtual double sync_local_order() const;
 
     /**
      *
@@ -437,14 +437,14 @@ public:
      * @brief   Returns size of the oscillatory network that is defined by amount of oscillators.
      *
      */
-    inline std::size_t size(void) const { return m_oscillators.size(); }
+    inline std::size_t size() const { return m_oscillators.size(); }
 
     /**
      *
      * @brief   Returns connections represented by chosen adjacency collection.
      *
      */
-    inline std::shared_ptr<adjacency_collection> connections(void) const { return m_connections; }
+    inline std::shared_ptr<adjacency_collection> connections() const { return m_connections; }
 
 protected:
     /**

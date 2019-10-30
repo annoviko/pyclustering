@@ -38,7 +38,7 @@ thread_executor::thread_executor(const task_getter & p_getter) :
 { }
 
 
-void thread_executor::run(void) {
+void thread_executor::run() {
     while(!m_stop) {
         task::ptr task = nullptr;
         m_getter(task);
@@ -54,7 +54,7 @@ void thread_executor::run(void) {
 }
 
 
-void thread_executor::stop(void) {
+void thread_executor::stop() {
     m_stop = true;
 
     if (m_executor.joinable()) {

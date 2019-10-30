@@ -53,11 +53,11 @@ public:
     void            * data    = nullptr;
 
 public:
-    pyclustering_package(void) = default;
+    pyclustering_package() = default;
 
     explicit pyclustering_package(const pyclustering_data_t package_type);
 
-    ~pyclustering_package(void);
+    ~pyclustering_package();
 
 public:
     template <class TypeValue>
@@ -113,11 +113,12 @@ pyclustering_package * create_package_container(const std::size_t p_size);
 
 
 template <class TypeValue>
-pyclustering_data_t get_package_type(void) {
+pyclustering_data_t get_package_type() {
     pyclustering_data_t type_package = PYCLUSTERING_TYPE_UNDEFINED;
     if (std::is_same<TypeValue, int>::value) {
         type_package = pyclustering_data_t::PYCLUSTERING_TYPE_INT;
     }
+    // cppcheck-suppress multiCondition ; 'int' and 'unsigned int' are not the same.
     else if (std::is_same<TypeValue, unsigned int>::value) {
         type_package = pyclustering_data_t::PYCLUSTERING_TYPE_UNSIGNED_INT;
     }
@@ -130,6 +131,7 @@ pyclustering_data_t get_package_type(void) {
     else if (std::is_same<TypeValue, long>::value) {
         type_package = pyclustering_data_t::PYCLUSTERING_TYPE_LONG;
     }
+    // cppcheck-suppress multiCondition ; 'std::size_t' and 'long' are not the same for x64.
     else if (std::is_same<TypeValue, std::size_t>::value) {
         type_package = pyclustering_data_t::PYCLUSTERING_TYPE_SIZE_T;
     }

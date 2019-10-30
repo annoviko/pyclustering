@@ -50,7 +50,7 @@ struct pcnn_oscillator {
     double linking;
     double threshold;
 
-    pcnn_oscillator(void) :
+    pcnn_oscillator() :
         output(0.0),
         feeding(0.0),
         linking(0.0),
@@ -87,15 +87,15 @@ public:
     double              m_time;
 
 public: 
-    std::size_t size(void) const;
+    std::size_t size() const;
 };
 
 
 class pcnn_dynamic : public dynamic_data<pcnn_network_state> {
 public:
-    pcnn_dynamic(void);
+    pcnn_dynamic();
 
-    ~pcnn_dynamic(void);
+    ~pcnn_dynamic();
 
 public:
     void allocate_sync_ensembles(ensemble_data<pcnn_ensemble> & sync_ensembles) const;
@@ -136,7 +136,7 @@ private:
 
 
 public:
-    pcnn(void);
+    pcnn();
 
     pcnn(const size_t p_size, const connection_t p_structure, const pcnn_parameters & p_parameters);
 
@@ -146,13 +146,13 @@ public:
          const size_t p_width,
          const pcnn_parameters & p_parameters);
 
-    virtual ~pcnn(void);
+    virtual ~pcnn() = default;
 
 
 public:
     void simulate(const std::size_t steps, const pcnn_stimulus & stimulus, pcnn_dynamic & output_dynamic);
 
-    inline size_t size(void) const { return m_oscillators.size(); }
+    inline size_t size() const { return m_oscillators.size(); }
 
 
 private:

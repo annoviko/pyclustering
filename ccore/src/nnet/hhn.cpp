@@ -38,18 +38,18 @@ namespace pyclustering {
 namespace nnet {
 
 
-hhn_dynamic::hhn_dynamic(void) {
+hhn_dynamic::hhn_dynamic() {
     initialize_collection(*m_peripheral_dynamic);
     initialize_collection(*m_central_dynamic);
 }
 
 
-std::size_t hhn_dynamic::size_dynamic(void) const {
+std::size_t hhn_dynamic::size_dynamic() const {
     return m_size_dynamic;
 }
 
 
-std::size_t hhn_dynamic::size_network(void) const {
+std::size_t hhn_dynamic::size_network() const {
     return m_size_network;
 }
 
@@ -62,7 +62,7 @@ void hhn_dynamic::enable(const hhn_dynamic::collect p_state) {
 }
 
 
-void hhn_dynamic::enable_all(void) {
+void hhn_dynamic::enable_all() {
     for (auto & collection : m_enable) {
         collection.second = true;
     }
@@ -79,7 +79,7 @@ void hhn_dynamic::disable(const hhn_dynamic::collect p_state) {
 }
 
 
-void hhn_dynamic::disable_all(void) {
+void hhn_dynamic::disable_all() {
     for (auto & collection : m_enable) {
         collection.second = false;
     }
@@ -158,7 +158,7 @@ hhn_dynamic::evolution_dynamic & hhn_dynamic::get_peripheral_dynamic(const hhn_d
 }
 
 
-hhn_dynamic::network_dynamic_ptr hhn_dynamic::get_peripheral_dynamic(void) const {
+hhn_dynamic::network_dynamic_ptr hhn_dynamic::get_peripheral_dynamic() const {
     return m_peripheral_dynamic;
 }
 
@@ -168,12 +168,12 @@ hhn_dynamic::evolution_dynamic & hhn_dynamic::get_central_dynamic(const hhn_dyna
 }
 
 
-hhn_dynamic::network_dynamic_ptr hhn_dynamic::get_central_dynamic(void) const {
+hhn_dynamic::network_dynamic_ptr hhn_dynamic::get_central_dynamic() const {
     return m_central_dynamic;
 }
 
 
-hhn_dynamic::value_dynamic_ptr hhn_dynamic::get_time(void) const {
+hhn_dynamic::value_dynamic_ptr hhn_dynamic::get_time() const {
     return m_time;
 }
 
@@ -366,7 +366,7 @@ hhn_dynamic_reader::hhn_dynamic_reader(const std::string & p_filename) :
 { }
 
 
-hhn_dynamic_reader::~hhn_dynamic_reader(void) {
+hhn_dynamic_reader::~hhn_dynamic_reader() {
     if (m_file_stream.is_open()) {
         m_file_stream.close();
     }
@@ -385,7 +385,7 @@ void hhn_dynamic_reader::read(hhn_dynamic & p_dynamic) {
 }
 
 
-void hhn_dynamic_reader::parse_size_header(void) {
+void hhn_dynamic_reader::parse_size_header() {
     std::string line;
     std::size_t dynamic_size, dynamic_network;
 
@@ -415,7 +415,7 @@ void hhn_dynamic_reader::extract_size_header(const std::string & p_line, std::si
 }
 
 
-void hhn_dynamic_reader::parse_enable_header(void) {
+void hhn_dynamic_reader::parse_enable_header() {
     std::string line;
 
     std::getline(m_file_stream, line);
@@ -437,7 +437,7 @@ void hhn_dynamic_reader::extract_enable_header(const std::string & p_line, std::
 }
 
 
-void hhn_dynamic_reader::parse_dynamic(void) {
+void hhn_dynamic_reader::parse_dynamic() {
     for (std::string line; std::getline(m_file_stream, line); ) {
         double time = -1;
         std::vector<hhn_oscillator>     peripheral = { };
@@ -550,7 +550,7 @@ void hhn_network::simulate(const std::size_t p_steps, const double p_time, const
 }
 
 
-std::size_t hhn_network::size(void) const {
+std::size_t hhn_network::size() const {
     return m_peripheral.size();
 }
 
@@ -763,7 +763,7 @@ double hhn_network::alpha_function(const double p_time, const double p_alfa, con
 }
 
 
-void hhn_network::initialize_current(void) {
+void hhn_network::initialize_current() {
     update_peripheral_current();
 
     m_central[0].m_Iext = m_params.m_Icn1;
@@ -771,7 +771,7 @@ void hhn_network::initialize_current(void) {
 }
 
 
-void hhn_network::update_peripheral_current(void) {
+void hhn_network::update_peripheral_current() {
     for (std::size_t index = 0; index < m_peripheral.size(); index++) {
         m_peripheral[index].m_Iext = peripheral_external_current(index);
     }

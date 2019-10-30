@@ -62,7 +62,7 @@ public:
     * @brief   Default constructor of cure cluster.
     *
     */
-    cure_cluster(void);
+    cure_cluster();
 
     /**
     *
@@ -76,7 +76,7 @@ public:
     * @brief   Default destructor.
     *
     */
-    ~cure_cluster(void);
+    ~cure_cluster();
 
     /**
     *
@@ -214,7 +214,7 @@ public:
     * @brief   Default constructor of cure queue (always keeps sorted state).
     *
     */
-    cure_queue(void);
+    cure_queue();
 
     /**
     *
@@ -239,7 +239,7 @@ public:
     * @brief   Default destructor.
     *
     */
-    ~cure_queue(void);
+    ~cure_queue();
 
     /**
     *
@@ -258,35 +258,35 @@ public:
     * @brief   Returns iterator to the first CURE cluster.
     *
     */
-    inline iterator begin(void) { return queue->begin(); }
+    inline iterator begin() { return queue->begin(); }
 
     /**
     *
     * @brief   Returns constant iterator to the first CURE cluster.
     *
     */
-    inline const_iterator begin(void) const { return queue->begin(); };
+    inline const_iterator begin() const { return queue->begin(); };
 
     /**
     *
     * @brief   Returns iterator to the end of CURE cluster collection (not a last element).
     *
     */
-    inline iterator end(void) { return queue->end(); }
+    inline iterator end() { return queue->end(); }
 
     /**
     *
     * @brief   Returns constant iterator to the end of CURE cluster collection (not a last element).
     *
     */
-    inline const_iterator end(void) const { return queue->end(); }
+    inline const_iterator end() const { return queue->end(); }
 
     /**
     *
     * @brief   Returns amount of CURE clusters in the queue.
     *
     */
-    inline size_t size(void) const { return queue->size(); }
+    inline size_t size() const { return queue->size(); }
 
 public:
     /**
@@ -311,11 +311,11 @@ public:
     relocation_info(const cure_queue::iterator & cluster_iterator, cure_cluster * closest_cluster, const double closest_distance);
 
 public:
-    cure_queue::iterator get_cluster_iterator(void) const;
+    cure_queue::iterator get_cluster_iterator() const;
 
-    double get_closest_distance(void) const;
+    double get_closest_distance() const;
 
-    cure_cluster * get_closest_cluster(void);
+    cure_cluster * get_closest_cluster();
 };
 
 
@@ -343,7 +343,7 @@ public:
     * @brief   Default constructor.
     *
     */
-    cure(void) = default;
+    cure() = default;
 
     /**
     *
@@ -361,7 +361,7 @@ public:
     * @brief   Default destructor.
     *
     */
-    virtual ~cure(void);
+    virtual ~cure();
 
 public:
     /**

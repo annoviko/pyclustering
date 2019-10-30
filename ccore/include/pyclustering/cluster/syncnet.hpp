@@ -49,9 +49,9 @@ using syncnet_cluster_data  = ensemble_data<syncnet_cluster>;
 */
 class syncnet_analyser: public sync_dynamic {
 public:
-    syncnet_analyser(void) = default;
+    syncnet_analyser() = default;
 
-    virtual ~syncnet_analyser(void) = default;
+    virtual ~syncnet_analyser() = default;
 
 public:
     void allocate_clusters(const double eps, syncnet_cluster_data & data);
@@ -100,7 +100,7 @@ public:
     @brief   Default destructor.
     
     */
-    virtual ~syncnet(void);
+    virtual ~syncnet();
 
     /*
     

@@ -38,7 +38,7 @@ namespace pyclustering {
 namespace clst {
 
 
-rock::rock(void) :
+rock::rock() :
     m_adjacency_matrix(adjacency_matrix()),
     m_radius(0.0),
     m_degree_normalization(0.0),
@@ -52,9 +52,6 @@ rock::rock(const double radius, const std::size_t number_clusters, const double 
     m_degree_normalization(1.0 + 2.0 * ( (1.0 - threshold) / (1.0 + threshold) )),
     m_number_clusters(number_clusters)
 { }
-
-
-rock::~rock(void) { }
 
 
 void rock::process(const dataset & p_data, cluster_data & p_result) {
@@ -91,7 +88,7 @@ void rock::create_adjacency_matrix(const dataset & p_data) {
 }
 
 
-bool rock::merge_cluster(void) {
+bool rock::merge_cluster() {
     auto cluster1 = m_clusters.end();
     auto cluster2 = m_clusters.end();
 

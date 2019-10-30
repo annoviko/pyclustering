@@ -33,7 +33,7 @@
  * @returns Returns const char pointer to text library description.
  *
  */
-extern "C" DECLARATION void * get_interface_description(void);
+extern "C" DECLARATION void * get_interface_description();
 
 
 /**
@@ -43,4 +43,4 @@ extern "C" DECLARATION void * get_interface_description(void);
  * @returns Returns const char pointer to version of the library interface.
  *
  */
-extern "C" DECLARATION void * get_interface_version(void);
+extern "C" DECLARATION void * get_interface_version();

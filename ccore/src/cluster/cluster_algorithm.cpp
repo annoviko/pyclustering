@@ -29,7 +29,7 @@ namespace pyclustering {
 namespace clst {
 
 
-cluster_algorithm::~cluster_algorithm(void) { }
+cluster_algorithm::~cluster_algorithm() { }
 
 
 }

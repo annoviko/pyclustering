@@ -63,9 +63,6 @@ hsyncnet::hsyncnet(std::vector<std::vector<double> > * input_data,
 { }
 
 
-hsyncnet::~hsyncnet() { }
-
-
 void hsyncnet::process(const double order, const solve_type solver, const bool collect_dynamic, hsyncnet_analyser & analyser) {
     std::size_t number_neighbors = m_initial_neighbors;
     std::size_t current_number_clusters = m_oscillators.size();

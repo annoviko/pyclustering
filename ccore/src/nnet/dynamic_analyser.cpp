@@ -50,17 +50,17 @@ spike::spike(const std::size_t p_begin, const std::size_t p_end) {
 }
 
 
-std::size_t spike::get_start(void) const {
+std::size_t spike::get_start() const {
     return m_begin;
 }
 
 
-std::size_t spike::get_duration(void) const {
+std::size_t spike::get_duration() const {
     return m_duration;
 }
 
 
-std::size_t spike::get_stop(void) const {
+std::size_t spike::get_stop() const {
     return m_end;
 }
 

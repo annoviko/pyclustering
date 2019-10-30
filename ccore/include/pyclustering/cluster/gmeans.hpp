@@ -77,7 +77,7 @@ public:
     * @brief    Default constructor of clustering algorithm.
     *
     */
-    gmeans(void) = default;
+    gmeans() = default;
 
     /**
     *
@@ -101,7 +101,7 @@ public:
     * @brief    Default destructor of the algorithm.
     *
     */
-    virtual ~gmeans(void) = default;
+    virtual ~gmeans() = default;
 
 public:
     /**
@@ -119,9 +119,9 @@ public:
 private:
     void search_optimal_parameters(const dataset & p_data, const std::size_t p_amount, cluster_sequence & p_clusters, dataset & p_centers) const;
 
-    void statistical_optimization(void);
+    void statistical_optimization();
 
-    void perform_clustering(void);
+    void perform_clustering();
 
     void split_and_search_optimal(const cluster & p_cluster, dataset & p_centers) const;
 

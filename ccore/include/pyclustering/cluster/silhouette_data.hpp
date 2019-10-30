@@ -17,9 +17,9 @@ private:
     silhouette_sequence m_scores;
 
 public:
-   const silhouette_sequence & get_score(void) const { return m_scores; }
+   const silhouette_sequence & get_score() const { return m_scores; }
 
-    silhouette_sequence & get_score(void) { return m_scores; }
+    silhouette_sequence & get_score() { return m_scores; }
 };
 
 

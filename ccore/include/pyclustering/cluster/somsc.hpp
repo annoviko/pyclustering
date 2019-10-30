@@ -47,7 +47,7 @@ public:
      * @brief Default constructor to create algorithm instance.
      *
      */
-    somsc(void) = default;
+    somsc() = default;
 
     /**
      *
@@ -78,7 +78,7 @@ public:
      * @brief Default destructor to destroy algorithm instance.
      *
      */
-    virtual ~somsc(void) = default;
+    virtual ~somsc() = default;
 
 public:
     /**

@@ -38,12 +38,12 @@ namespace nnet {
 const std::size_t pcnn::MAXIMUM_MATRIX_REPRESENTATION_SIZE = 4096;
 
 
-std::size_t pcnn_network_state::size(void) const {
+std::size_t pcnn_network_state::size() const {
     return m_output.size();
 }
 
 
-pcnn::pcnn(void) : m_oscillators(0), m_connection(), m_params() { }
+pcnn::pcnn() : m_oscillators(0), m_connection(), m_params() { }
 
 
 pcnn::pcnn(const size_t p_size, const connection_t p_structure, const pcnn_parameters & p_parameters) {
@@ -54,9 +54,6 @@ pcnn::pcnn(const size_t p_size, const connection_t p_structure, const pcnn_param
 pcnn::pcnn(const size_t p_size, const connection_t p_structure, const size_t p_height, const size_t p_width, const pcnn_parameters & p_parameters) {
     initilize(p_size, p_structure, p_height, p_width, p_parameters);
 }
-
-
-pcnn::~pcnn() { }
 
 
 void pcnn::simulate(const std::size_t steps, const pcnn_stimulus & stimulus, pcnn_dynamic & output_dynamic) {

@@ -84,7 +84,7 @@ public:
     * @brief    Default constructor of clustering algorithm.
     *
     */
-    kmedoids(void) = default;
+    kmedoids() = default;
 
     /**
     *
@@ -108,7 +108,7 @@ public:
     * @brief    Default destructor of the algorithm.
     *
     */
-    virtual ~kmedoids(void);
+    virtual ~kmedoids();
 
 public:
     /**
@@ -138,7 +138,7 @@ private:
     * @brief    Updates clusters in line with current medoids.
     *
     */
-    void update_clusters(void);
+    void update_clusters();
 
     /**
     *

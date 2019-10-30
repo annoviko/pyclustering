@@ -45,8 +45,9 @@ pyclustering_package * kmeans_algorithm(const pyclustering_package * const p_sam
     distance_metric<pyclustering::point> * metric = ((distance_metric<pyclustering::point> *) p_metric);
     distance_metric<pyclustering::point> default_metric = distance_metric_factory<pyclustering::point>::euclidean_square();
 
-    if (!metric)
+    if (!metric) {
         metric = &default_metric;
+    }
 
     pyclustering::clst::kmeans algorithm(centers, p_tolerance, p_itermax, *metric);
 

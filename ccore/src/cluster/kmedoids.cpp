@@ -57,7 +57,7 @@ kmedoids::kmedoids(const medoid_sequence & p_initial_medoids,
 { }
 
 
-kmedoids::~kmedoids(void) { }
+kmedoids::~kmedoids() { }
 
 
 void kmedoids::process(const dataset & p_data, cluster_data & p_result) {
@@ -90,7 +90,7 @@ void kmedoids::process(const dataset & p_data, const kmedoids_data_t p_type, clu
 }
 
 
-void kmedoids::update_clusters(void) {
+void kmedoids::update_clusters() {
     cluster_sequence & clusters = m_result_ptr->clusters();
     medoid_sequence & medoids = m_result_ptr->medoids();
 

@@ -47,7 +47,7 @@ public:
     * @brief    Default destructor that destroy object.
     *
     */
-    virtual ~cluster_algorithm(void);
+    virtual ~cluster_algorithm();
 
 public:
     /**

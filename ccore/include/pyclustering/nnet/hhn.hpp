@@ -160,28 +160,28 @@ private:
 
 
 public:
-    hhn_dynamic(void);
+    hhn_dynamic();
 
-    ~hhn_dynamic(void) = default;
+    ~hhn_dynamic() = default;
 
 public:
-    std::size_t size_dynamic(void) const;
+    std::size_t size_dynamic() const;
 
-    std::size_t size_network(void) const;
+    std::size_t size_network() const;
 
     void enable(const hhn_dynamic::collect p_state);
 
     template <class ContainerType>
     void enable(const ContainerType & p_types);
 
-    void enable_all(void);
+    void enable_all();
 
     void disable(const hhn_dynamic::collect p_state);
 
     template <class ContainerType>
     void disable(const ContainerType & p_types);
 
-    void disable_all(void);
+    void disable_all();
 
     void get_enabled(std::set<hhn_dynamic::collect> & p_enabled) const;
 
@@ -193,11 +193,11 @@ public:
 
     evolution_dynamic & get_peripheral_dynamic(const hhn_dynamic::collect & p_type);
 
-    network_dynamic_ptr get_peripheral_dynamic(void) const;
+    network_dynamic_ptr get_peripheral_dynamic() const;
 
-    network_dynamic_ptr get_central_dynamic(void) const;
+    network_dynamic_ptr get_central_dynamic() const;
 
-    value_dynamic_ptr get_time(void) const;
+    value_dynamic_ptr get_time() const;
 
     evolution_dynamic & get_central_dynamic(const hhn_dynamic::collect & p_type);
 
@@ -211,8 +211,6 @@ private:
 
     void reserve_collection(const hhn_dynamic::collect p_state, const std::size_t p_size);
 
-    void reserve_dynamic_collection(const hhn_dynamic::collect p_state, const std::size_t p_size, network_dynamic & p_dynamic);
-
     void store_membrane_potential(const std::vector<hhn_oscillator> & p_peripheral, const std::vector<central_element> & p_central);
 
     void store_active_cond_sodium(const std::vector<hhn_oscillator> & p_peripheral, const std::vector<central_element> & p_central);
@@ -220,6 +218,8 @@ private:
     void store_inactive_cond_sodium(const std::vector<hhn_oscillator> & p_peripheral, const std::vector<central_element> & p_central);
 
     void store_active_cond_potassium(const std::vector<hhn_oscillator> & p_peripheral, const std::vector<central_element> & p_central);
+
+    static void reserve_dynamic_collection(const hhn_dynamic::collect p_state, const std::size_t p_size, network_dynamic & p_dynamic);
 
     static void initialize_collection(network_dynamic & p_dynamic);
 
@@ -257,21 +257,21 @@ private:
     std::size_t                         m_size_network  = 0;
 
 public:
-    hhn_dynamic_reader(void) = default;
+    hhn_dynamic_reader() = default;
 
     explicit hhn_dynamic_reader(const std::string & p_filename);
 
-    ~hhn_dynamic_reader(void);
+    ~hhn_dynamic_reader();
 
 public:
     void read(hhn_dynamic & p_dynamic);
 
 private:
-    void parse_size_header(void);
+    void parse_size_header();
 
-    void parse_enable_header(void);
+    void parse_enable_header();
 
-    void parse_dynamic(void);
+    void parse_dynamic();
 
     void extract_dynamic(const std::string & p_line, double & p_time, std::vector<hhn_oscillator> & p_peripheral, std::vector<central_element> & p_central);
 
@@ -312,12 +312,12 @@ private:
     hnn_parameters                m_params;
 
 public:
-    hhn_network(void) = default;
+    hhn_network() = default;
 
     hhn_network(const std::size_t      p_size,
                 const hnn_parameters & p_parameters);
 
-    ~hhn_network(void) = default;
+    ~hhn_network() = default;
 
 public:
     void simulate(const std::size_t         p_steps,
@@ -326,7 +326,7 @@ public:
                   const hhn_stimulus &      p_stimulus,
                   hhn_dynamic &             p_output_dynamic);
 
-    std::size_t size(void) const;
+    std::size_t size() const;
 
 private:
     void store_dynamic(const double p_time, hhn_dynamic & p_dynamic);
@@ -347,9 +347,9 @@ private:
 
     double central_first_synaptic_current(const double p_time, const double p_membrane) const;
 
-    void initialize_current(void);
+    void initialize_current();
 
-    void update_peripheral_current(void);
+    void update_peripheral_current();
 
     void assign_neuron_states(const double p_time, const double p_step, const hhn_states & p_next_peripheral, const hhn_states & p_next_central);
 

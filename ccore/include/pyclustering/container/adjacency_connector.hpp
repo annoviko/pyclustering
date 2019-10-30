@@ -88,7 +88,7 @@ public:
     @brief   Default constructor of connector.
     
     */
-    adjacency_connector(void) : m_connector([](const size_t index1, const size_t index2, TypeCollection & collection) {
+    adjacency_connector() : m_connector([](const size_t index1, const size_t index2, TypeCollection & collection) {
         collection.set_connection(index1, index2);
     })
     { }
@@ -357,7 +357,7 @@ public:
 template <typename TypeCollection>
 class adjacency_weight_connector : public adjacency_connector<TypeCollection> {
 public:
-    using adjacency_weight_initializer = std::function<double(void)>;
+    using adjacency_weight_initializer = std::function<double()>;
 
 
 protected:
@@ -372,7 +372,7 @@ public:
     *          method 'set_connection()'.
     *
     */
-    adjacency_weight_connector(void) { }
+    adjacency_weight_connector() { }
 
     /**
     *

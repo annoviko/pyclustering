@@ -53,7 +53,7 @@ public:
      * @brief Default constructor to create optics object descriptor.
      *
      */
-    optics_descriptor(void) = default;
+    optics_descriptor() = default;
 
     /**
      *
@@ -86,7 +86,7 @@ public:
      * @brief Default destructor to destroy optics object descriptor.
      *
      */
-    ~optics_descriptor(void) = default;
+    ~optics_descriptor() = default;
 
 public:
     /**
@@ -94,7 +94,7 @@ public:
      * @brief Clears core and reachability distances and processing flag (at the same time index is not reseted).
      *
      */
-    void clear(void);
+    void clear();
 };
 
 

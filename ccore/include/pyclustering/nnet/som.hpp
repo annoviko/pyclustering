@@ -86,13 +86,13 @@ struct som_parameters {
     double adaptation_threshold   = 0.01;
 
 public:
-    som_parameters(void) = default;
+    som_parameters() = default;
 
     som_parameters(som_parameters && p_other) = default;
 
     som_parameters(const som_parameters & p_other) = default;
 
-    ~som_parameters(void) = default;
+    ~som_parameters() = default;
 
 public:
     som_parameters & operator=(const som_parameters & p_other);
@@ -168,7 +168,7 @@ public:
      * @brief   Default destructor.
      *
      */
-    ~som(void);
+    ~som();
 
 public:
     /**
@@ -216,21 +216,21 @@ public:
      * @return  Returns number of winner at the last step of learning process.
      *
      */
-    std::size_t get_winner_number(void) const;
+    std::size_t get_winner_number() const;
 
     /**
      *
      * @return  Returns size of self-organized map (number of neurons).
      *
      */
-    inline size_t get_size(void) const { return m_size; }
+    inline size_t get_size() const { return m_size; }
 
     /**
     *
     * @return  Constant reference to neurons weights for read-only purposes.
     *
     */
-    inline const dataset & get_weights(void) const {
+    inline const dataset & get_weights() const {
         return m_weights;
     }
 
@@ -239,7 +239,7 @@ public:
     * @return  Constant reference to sequence of captured objects by each neuron during training for read-only purposes.
     *
     */
-    inline const som_gain_sequence & get_capture_objects(void) const {
+    inline const som_gain_sequence & get_capture_objects() const {
         return m_capture_objects;
     }
 
@@ -248,7 +248,7 @@ public:
     * @return  Constant reference to neighbors of each neuron for read-only purposes.
     *
     */
-    inline const som_neighbor_sequence & get_neighbors(void) const {
+    inline const som_neighbor_sequence & get_neighbors() const {
         return m_neighbors;
     }
 
@@ -257,7 +257,7 @@ public:
     * @return  Constant reference to amount of captured objects by each neuron during training for read-only purposes.
     *
     */
-    inline const som_award_sequence & get_awards(void) const {
+    inline const som_award_sequence & get_awards() const {
        return m_awards;
     }
 
@@ -266,7 +266,7 @@ public:
     * @return  Reference to amount of captured objects by each neuron during training.
     *
     */
-    inline som_award_sequence & get_awards(void) {
+    inline som_award_sequence & get_awards() {
         return m_awards;
     }
 
@@ -322,7 +322,7 @@ private:
      * @return  Returns value that represents maximum changes of weight after adaptation process.
      *
      */
-    double calculate_maximal_adaptation(void) const;
+    double calculate_maximal_adaptation() const;
 
     /**
     *

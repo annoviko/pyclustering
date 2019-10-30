@@ -46,7 +46,7 @@ public:
     typedef typename differ_variables::const_reverse_iterator   const_reverse_iterator;
 
 public:
-    differ_state(void) : m_variable_state(std::vector<state_type>()) { }
+    differ_state() : m_variable_state(std::vector<state_type>()) { }
 
     explicit differ_state(const size_t size) : m_variable_state(std::vector<state_type>(size)) { }
 
@@ -58,7 +58,7 @@ public:
 
     differ_state(const differ_state && instance) : m_variable_state(std::move(instance.m_variable_state)) { }
 
-    ~differ_state(void) { }
+    ~differ_state() { }
 
 public:
     void insert(iterator position, const value_type & value) {
@@ -69,39 +69,39 @@ public:
         m_variable_state.push_back(value);
     }
 
-    void pop_back(void) {
+    void pop_back() {
         m_variable_state.pop_back();
     }
 
-    iterator begin(void) {
+    iterator begin() {
         return m_variable_state.begin();
     }
 
-    iterator end(void) {
+    iterator end() {
         return m_variable_state.end();
     }
 
-    const_iterator cbegin(void) const {
+    const_iterator cbegin() const {
         return m_variable_state.begin();
     }
 
-    const_iterator cend(void) const {
+    const_iterator cend() const {
         return m_variable_state.end();
     }
 
-    reverse_iterator rbegin(void) {
+    reverse_iterator rbegin() {
         return m_variable_state.rbegin();
     }
 
-    reverse_iterator rend(void) {
+    reverse_iterator rend() {
         return m_variable_state.rend();
     }
 
-    const_reverse_iterator crbegin(void) const {
+    const_reverse_iterator crbegin() const {
         return m_variable_state.crbegin();
     }
 
-    const_reverse_iterator crend(void) const {
+    const_reverse_iterator crend() const {
         return m_variable_state.crend();
     }
 
@@ -113,15 +113,15 @@ public:
         m_variable_state.resize(size);
     }
 
-    void clear(void) {
+    void clear() {
         m_variable_state.clear();
     }
 
-    bool empty(void) const {
+    bool empty() const {
         return m_variable_state.empty();
     }
 
-    std::size_t size(void) const {
+    std::size_t size() const {
         return m_variable_state.size();
     }
 

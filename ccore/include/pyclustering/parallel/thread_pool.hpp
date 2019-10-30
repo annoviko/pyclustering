@@ -60,7 +60,7 @@ private:
     bool                            m_stop = false;
 
 public:
-    thread_pool(void);
+    thread_pool();
 
     explicit thread_pool(const std::size_t p_size);
 
@@ -68,14 +68,14 @@ public:
 
     thread_pool(thread_pool && p_pool) = delete;
 
-    ~thread_pool(void);
+    ~thread_pool();
 
 public:
     task::ptr add_task(const task::proc & p_raw_task);
 
     task::ptr add_task_if_free(const task::proc & p_raw_task);
 
-    std::size_t size(void) const;
+    std::size_t size() const;
 
 private:
     void initialize(const std::size_t p_size);

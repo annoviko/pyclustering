@@ -58,20 +58,20 @@ public:
     double              m_time      = 0.0;
 
 public:
-    legion_network_state(void) = default;
+    legion_network_state() = default;
 
     explicit legion_network_state(const std::size_t size) : m_output(size, 0.0), m_inhibitor(0.0), m_time(0.0) { }
 
 public:
-    std::size_t size(void) const;
+    std::size_t size() const;
 };
 
 
 class legion_dynamic : public dynamic_data<legion_network_state> {
 public:
-    legion_dynamic(void) { }
+    legion_dynamic() { }
 
-    virtual ~legion_dynamic(void) { }
+    virtual ~legion_dynamic() { }
 };
 
 
@@ -106,7 +106,7 @@ struct legion_oscillator {
     double m_buffer_coupling_term;
     double m_noise;
 
-    legion_oscillator(void) : 
+    legion_oscillator() : 
         m_excitatory(0.0),
         m_inhibitory(0.0),
         m_potential(0.0),
@@ -143,7 +143,7 @@ private:
 
 
 public:
-    legion_network(void) = default;
+    legion_network() = default;
 
     legion_network(const size_t num_osc, 
         const connection_t connection_type,
@@ -155,13 +155,13 @@ public:
         const size_t width,
         const legion_parameters & params);
 
-    virtual ~legion_network(void);
+    virtual ~legion_network();
 
 
 public:
     void simulate(const unsigned int steps, const double time, const solve_type solver, const bool collect_dynamic, const legion_stimulus & stimulus, legion_dynamic & output_dynamic);
 
-    inline size_t size(void) const { return m_oscillators.size(); }
+    inline size_t size() const { return m_oscillators.size(); }
 
 
 private:

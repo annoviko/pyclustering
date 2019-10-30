@@ -64,9 +64,6 @@ xmeans::xmeans(const dataset & p_initial_centers, const std::size_t p_kmax, cons
 { }
 
 
-xmeans::~xmeans(void) { }
-
-
 void xmeans::process(const dataset & data, cluster_data & output_result) {
     m_ptr_data = &data;
 
@@ -144,8 +141,7 @@ void xmeans::improve_structure() {
     dataset allocated_centers = { };
     std::size_t amount_free_centers = m_maximum_clusters - clusters.size();
 
-    for (std::size_t index_cluster = 0; index_cluster < region_allocated_centers.size(); index_cluster++) {
-        dataset & centers = region_allocated_centers[index_cluster];
+    for (const auto & centers : region_allocated_centers) {
         if ( (centers.size() > 1) && (amount_free_centers > 0) ) {
             /* separate cluster */
             allocated_centers.push_back(centers[0]);

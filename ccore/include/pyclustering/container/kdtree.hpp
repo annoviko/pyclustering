@@ -91,13 +91,13 @@ private:
     static kdnode::ptr find_node_by_rule(const std::vector<double> & p_point, const kdnode::ptr & p_cur_node, const search_node_rule & p_rule);
 
 public:
-    kdtree(void) = default;
+    kdtree() = default;
 
     kdtree(const kdtree & p_other) = default;
 
     kdtree(kdtree && p_other) = default;
 
-    virtual ~kdtree(void) = default;
+    virtual ~kdtree() = default;
 
 public:
     /**
@@ -197,7 +197,7 @@ public:
     * @return  Returns pointer to root of the tree.
     *
     */
-    kdnode::ptr get_root(void) const;
+    kdnode::ptr get_root() const;
 
     /**
     *
@@ -206,7 +206,7 @@ public:
     * @return  Returns amount of nodes in KD-tree.
     *
     */
-    std::size_t get_size(void) const;
+    std::size_t get_size() const;
 
 public:
     kdtree & operator=(const kdtree & p_other);
@@ -247,7 +247,7 @@ public:
     * @brief   Default constructor. Search will not be performed until it's initialized.
     *
     */
-    kdtree_searcher(void) = default;
+    kdtree_searcher() = default;
 
     /**
     *
@@ -265,7 +265,7 @@ public:
     * @brief   Default destructor.
     *
     */
-    ~kdtree_searcher(void) = default;
+    ~kdtree_searcher() = default;
 
 public:
     /**
@@ -288,7 +288,7 @@ public:
     * @return  Return pointer to the nearest node in kd tree that satisfy the request.
     *
     */
-    kdnode::ptr find_nearest_node(void) const;
+    kdnode::ptr find_nearest_node() const;
 
     /**
     *
@@ -316,7 +316,7 @@ private:
     * @brief   Clear internal temporary structures.
     *
     */
-    void clear(void) const;
+    void clear() const;
 
     /**
     *

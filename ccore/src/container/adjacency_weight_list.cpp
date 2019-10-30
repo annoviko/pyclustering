@@ -35,10 +35,10 @@ const double adjacency_weight_list::DEFAULT_NON_EXISTANCE_CONNECTION_VALUE = 0.0
 adjacency_weight_list::adjacency_weight_list(const size_t node_amount) : m_adjacency(node_amount) { }
 
 
-adjacency_weight_list::~adjacency_weight_list(void) { }
+adjacency_weight_list::~adjacency_weight_list() { }
 
 
-size_t adjacency_weight_list::size(void) const { return m_adjacency.size(); }
+size_t adjacency_weight_list::size() const { return m_adjacency.size(); }
 
 
 void adjacency_weight_list::set_connection(const size_t node_index1, const size_t node_index2) {
@@ -96,7 +96,7 @@ double adjacency_weight_list::get_connection_weight(const size_t node_index1, co
 }
 
 
-void adjacency_weight_list::clear(void) {
+void adjacency_weight_list::clear() {
     m_adjacency.clear();
 }
 

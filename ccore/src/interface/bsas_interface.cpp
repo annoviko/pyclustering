@@ -40,8 +40,9 @@ pyclustering_package * bsas_algorithm(const pyclustering_package * const p_sampl
     distance_metric<point> * metric = ((distance_metric<point> *) p_metric);
     distance_metric<point> default_metric = distance_metric_factory<point>::euclidean_square();
 
-    if (!metric)
+    if (!metric) {
         metric = &default_metric;
+    }
 
     pyclustering::clst::bsas algorithm(p_amount, p_threshold, *metric);
 

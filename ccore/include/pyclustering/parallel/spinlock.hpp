@@ -37,16 +37,16 @@ private:
     std::atomic_flag    m_lock = ATOMIC_FLAG_INIT;
 
 public:
-    spinlock(void) = default;
+    spinlock() = default;
 
-    ~spinlock(void) = default;
+    ~spinlock() = default;
 
 public:
-    bool try_lock(void);
+    bool try_lock();
 
-    void lock(void);
+    void lock();
 
-    void unlock(void);
+    void unlock();
 };
 
 

@@ -296,12 +296,12 @@ std::size_t kdtree::traverse(const kdnode::ptr & p_node) {
 }
 
 
-kdnode::ptr kdtree::get_root(void) const {
+kdnode::ptr kdtree::get_root() const {
     return m_root;
 }
 
 
-std::size_t kdtree::get_size(void) const {
+std::size_t kdtree::get_size() const {
     return m_size;
 }
 
@@ -424,7 +424,7 @@ kdnode::ptr kdtree_searcher::find_nearest_node() const {
 }
 
 
-void kdtree_searcher::clear(void) const {
+void kdtree_searcher::clear() const {
     m_nodes_distance    = { };
     m_nearest_nodes     = { };
     m_nearest_points    = { };

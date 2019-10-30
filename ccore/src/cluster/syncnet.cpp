@@ -134,7 +134,7 @@ double syncnet::phase_kuramoto(const double t, const double teta, const std::vec
     double phase = 0;
 
     /* Avoid a lot of checking of this condition in the loop */
-    if (distance_conn_weights != NULL) {
+    if (distance_conn_weights != nullptr) {
         for (std::size_t k = 0; k < size(); k++) {
             if (m_connections->has_connection(index, k)) {
                 phase += (*distance_conn_weights)[index][k] * std::sin( m_oscillators[k].phase - teta );

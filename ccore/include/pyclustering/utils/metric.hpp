@@ -272,7 +272,7 @@ protected:
     distance_functor<TypeContainer> m_functor = nullptr;
 
 public:
-    distance_metric(void) = default;
+    distance_metric() = default;
 
     explicit distance_metric(const distance_functor<TypeContainer> & p_functor) : m_functor(p_functor) { }
 
@@ -280,7 +280,7 @@ public:
 
     distance_metric(distance_metric && p_other) = default;
 
-    virtual ~distance_metric(void) = default;
+    virtual ~distance_metric() = default;
 
 public:
    /**
@@ -320,7 +320,7 @@ public:
 template <typename TypeContainer>
 class euclidean_distance_metric : public distance_metric<TypeContainer> {
 public:
-    euclidean_distance_metric(void) :
+    euclidean_distance_metric() :
         distance_metric<TypeContainer>(std::bind(euclidean_distance<TypeContainer>, std::placeholders::_1, std::placeholders::_2))
     { }
 };
@@ -334,7 +334,7 @@ public:
 template <typename TypeContainer>
 class euclidean_distance_square_metric : public distance_metric<TypeContainer> {
 public:
-    euclidean_distance_square_metric(void) :
+    euclidean_distance_square_metric() :
         distance_metric<TypeContainer>(std::bind(euclidean_distance_square<TypeContainer>, std::placeholders::_1, std::placeholders::_2))
     { }
 };
@@ -348,7 +348,7 @@ public:
 template <typename TypeContainer>
 class manhattan_distance_metric : public distance_metric<TypeContainer> {
 public:
-    manhattan_distance_metric(void) :
+    manhattan_distance_metric() :
         distance_metric<TypeContainer>(std::bind(manhattan_distance<TypeContainer>, std::placeholders::_1, std::placeholders::_2))
     { }
 };
@@ -362,7 +362,7 @@ public:
 template <typename TypeContainer>
 class chebyshev_distance_metric : public distance_metric<TypeContainer> {
 public:
-    chebyshev_distance_metric(void) :
+    chebyshev_distance_metric() :
         distance_metric<TypeContainer>(std::bind(chebyshev_distance<TypeContainer>, std::placeholders::_1, std::placeholders::_2))
     { }
 };
@@ -397,7 +397,7 @@ public:
 template <typename TypeContainer>
 class canberra_distance_metric : public distance_metric<TypeContainer> {
 public:
-    canberra_distance_metric(void) :
+    canberra_distance_metric() :
         distance_metric<TypeContainer>(std::bind(canberra_distance<TypeContainer>, std::placeholders::_1, std::placeholders::_2))
     { }
 };
@@ -411,7 +411,7 @@ public:
 template <typename TypeContainer>
 class chi_square_distance_metric : public distance_metric<TypeContainer> {
 public:
-    chi_square_distance_metric(void) :
+    chi_square_distance_metric() :
         distance_metric<TypeContainer>(std::bind(chi_square_distance<TypeContainer>, std::placeholders::_1, std::placeholders::_2))
     { }
 };
@@ -453,7 +453,7 @@ public:
    * @return  Euclidean distance metric.
    *
    */
-    static distance_metric<TypeContainer> euclidean(void) {
+    static distance_metric<TypeContainer> euclidean() {
         return euclidean_distance_metric<TypeContainer>();
     }
 
@@ -464,7 +464,7 @@ public:
    * @return  Square Euclidean distance metric
    *
    */
-    static distance_metric<TypeContainer> euclidean_square(void) {
+    static distance_metric<TypeContainer> euclidean_square() {
         return euclidean_distance_square_metric<TypeContainer>();
     }
 
@@ -475,7 +475,7 @@ public:
    * @return  Manhattan distance metric.
    *
    */
-    static distance_metric<TypeContainer> manhattan(void) {
+    static distance_metric<TypeContainer> manhattan() {
         return manhattan_distance_metric<TypeContainer>();
     }
 
@@ -486,7 +486,7 @@ public:
    * @return  Chebyshev distance metric.
    *
    */
-    static distance_metric<TypeContainer> chebyshev(void) {
+    static distance_metric<TypeContainer> chebyshev() {
         return chebyshev_distance_metric<TypeContainer>();
     }
 
@@ -510,7 +510,7 @@ public:
    * @return  Canberra distance metric.
    *
    */
-    static distance_metric<TypeContainer> canberra(void) {
+    static distance_metric<TypeContainer> canberra() {
         return canberra_distance_metric<TypeContainer>();
     }
 
@@ -521,7 +521,7 @@ public:
    * @return  Chi square distance metric.
    *
    */
-    static distance_metric<TypeContainer> chi_square(void) {
+    static distance_metric<TypeContainer> chi_square() {
         return chi_square_distance_metric<TypeContainer>();
     }
 

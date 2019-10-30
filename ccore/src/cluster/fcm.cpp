@@ -78,14 +78,14 @@ void fcm::process(const dataset & p_data, cluster_data & p_result) {
 }
 
 
-void fcm::verify(void) const {
+void fcm::verify() const {
     if (m_ptr_data->at(0).size() != m_initial_centers[0].size()) {
         throw std::invalid_argument("Dimension of the input data and dimension of the initial cluster centers must be the same.");
     }
 }
 
 
-double fcm::update_centers(void) {
+double fcm::update_centers() {
     const std::size_t amount_centers = m_ptr_result->centers().size();
 
     std::vector<double> changes(amount_centers, 0.0);
@@ -123,7 +123,7 @@ double fcm::update_center(const std::size_t p_index) {
 }
 
 
-void fcm::update_membership(void) {
+void fcm::update_membership() {
     const std::size_t data_size = m_ptr_result->membership().size();
 
     parallel_for(std::size_t(0), data_size, [this](std::size_t p_index) {

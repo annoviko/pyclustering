@@ -60,7 +60,7 @@ public:
     * @details  In case of default constructor clusters and centers are not stored on each clustering iteration.
     *
     */
-    kmeans_data(void) = default;
+    kmeans_data() = default;
 
     /**
     *
@@ -94,7 +94,7 @@ public:
     * @brief    Default destructor that destroys clustering data.
     *
     */
-    virtual ~kmeans_data(void) = default;
+    virtual ~kmeans_data() = default;
 
 public:
     /**
@@ -102,35 +102,35 @@ public:
     * @brief    Returns reference to centers that correspond to allocated clusters.
     *
     */
-    dataset & centers(void) { return m_centers; }
+    dataset & centers() { return m_centers; }
 
     /**
     *
     * @brief    Returns constant reference to centers that correspond to allocated clusters.
     *
     */
-    const dataset & centers(void) const { return m_centers; };
+    const dataset & centers() const { return m_centers; };
 
     /**
     *
     * @brief    Returns 'true' if clusters and centers are collected during process of clustering.
     *
     */
-    bool is_observed(void) const { return m_observed; }
+    bool is_observed() const { return m_observed; }
 
     /**
     *
     * @brief    Returns total within-cluster errors.
     *
     */
-    double & wce(void) { return m_wce; }
+    double & wce() { return m_wce; }
 
     /**
     *
     * @brief    Returns constant total within-cluster errors.
     *
     */
-    const double & wce(void) const { return m_wce; }
+    const double & wce() const { return m_wce; }
 
     /**
     *
@@ -138,7 +138,7 @@ public:
     * @details  The evolution does not contain initial centers.
     *
     */
-    std::vector<dataset> & evolution_centers(void) { return m_evolution_centers; }
+    std::vector<dataset> & evolution_centers() { return m_evolution_centers; }
 
     /**
     *
@@ -146,21 +146,21 @@ public:
     * @details  The evolution does not contain initial centers.
     *
     */
-    const std::vector<dataset> & evolution_centers(void) const { return m_evolution_centers; }
+    const std::vector<dataset> & evolution_centers() const { return m_evolution_centers; }
 
     /**
     *
     * @brief    Returns reference to evolution of clusters.
     *
     */
-    std::vector<cluster_sequence> & evolution_clusters(void) { return m_evolution_clusters; }
+    std::vector<cluster_sequence> & evolution_clusters() { return m_evolution_clusters; }
 
     /**
     *
     * @brief    Returns constant reference to evolution of clusters.
     *
     */
-    const std::vector<cluster_sequence> & evolution_clusters(void) const { return m_evolution_clusters; }
+    const std::vector<cluster_sequence> & evolution_clusters() const { return m_evolution_clusters; }
 };
 
 

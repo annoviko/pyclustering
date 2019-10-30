@@ -44,7 +44,7 @@ bool clique_spatial_block::contains(const point & p_point) const {
     return true;
 }
 
-const point & clique_spatial_block::get_max_corner(void) const {
+const point & clique_spatial_block::get_max_corner() const {
     return m_max_corner;
 }
 
@@ -52,7 +52,7 @@ void clique_spatial_block::move_max_corner(point && p_corner) {
     m_max_corner = std::move(p_corner);
 }
 
-const point & clique_spatial_block::get_min_corner(void) const {
+const point & clique_spatial_block::get_min_corner() const {
     return m_min_corner;
 }
 
@@ -82,19 +82,19 @@ const clique_block_location & clique_block::get_logical_location() const {
     return m_logical_location;
 }
 
-const clique_spatial_block & clique_block::get_spatial_block(void) const {
+const clique_spatial_block & clique_block::get_spatial_block() const {
     return m_spatial_location;
 }
 
-const clique_block::content & clique_block::get_points(void) const {
+const clique_block::content & clique_block::get_points() const {
     return m_points;
 }
 
-bool clique_block::is_visited(void) const {
+bool clique_block::is_visited() const {
     return m_visited;
 }
 
-void clique_block::touch(void) {
+void clique_block::touch() {
     m_visited = true;
 }
 

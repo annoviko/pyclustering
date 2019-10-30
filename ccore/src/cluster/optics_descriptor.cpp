@@ -42,7 +42,7 @@ optics_descriptor::optics_descriptor(const std::size_t p_index, const double p_c
 { }
 
 
-void optics_descriptor::clear(void) {
+void optics_descriptor::clear() {
     m_core_distance = optics_descriptor::NONE_DISTANCE;
     m_reachability_distance = optics_descriptor::NONE_DISTANCE;
     m_processed = false;

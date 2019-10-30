@@ -53,26 +53,26 @@ private:
     const dataset   * m_ptr_data            = nullptr;      /* used only during processing */
 
 public:
-    fcm(void) = default;
+    fcm() = default;
 
     fcm(const dataset & p_initial_centers, 
         const double p_m = DEFAULT_HYPER_PARAMETER,
         const double p_tolerance = DEFAULT_TOLERANCE,
         const std::size_t p_itermax = DEFAULT_ITERMAX);
     
-    ~fcm(void) = default;
+    ~fcm() = default;
 
 public:
     void process(const dataset & p_data, cluster_data & p_result);
 
 private:
-    void verify(void) const;
+    void verify() const;
 
-    double update_centers(void);
+    double update_centers();
 
     double update_center(const std::size_t p_index);
 
-    void update_membership(void);
+    void update_membership();
 
     void update_point_membership(const std::size_t p_index);
 

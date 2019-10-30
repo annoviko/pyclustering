@@ -493,7 +493,7 @@ double som::calculate_maximal_adaptation() const {
 }
 
 
-std::size_t som::get_winner_number(void) const {
+std::size_t som::get_winner_number() const {
     std::size_t winner_number = 0;
     for (std::size_t i = 0; i < m_size; i++) {
         if (m_awards[i] > 0) {

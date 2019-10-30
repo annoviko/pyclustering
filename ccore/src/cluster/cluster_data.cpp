@@ -28,13 +28,13 @@ namespace pyclustering {
 namespace clst {
 
 
-cluster_sequence & cluster_data::clusters(void) { return m_clusters; }
+cluster_sequence & cluster_data::clusters() { return m_clusters; }
 
 
-const cluster_sequence & cluster_data::clusters(void) const { return m_clusters; }
+const cluster_sequence & cluster_data::clusters() const { return m_clusters; }
 
 
-size_t cluster_data::size(void) const { return m_clusters.size(); }
+size_t cluster_data::size() const { return m_clusters.size(); }
 
 
 cluster & cluster_data::operator[](const size_t p_index) { return m_clusters[p_index]; }

@@ -96,7 +96,7 @@ public:
      * @brief Default constructor to create initializer algorithm K-Means++.
      *
      */
-    kmeans_plus_plus(void) = default;
+    kmeans_plus_plus() = default;
 
     /**
     *
@@ -147,7 +147,7 @@ public:
      * @brief Default destructor to destroy initializer algorithm K-Means++.
      *
      */
-    ~kmeans_plus_plus(void) = default;
+    ~kmeans_plus_plus() = default;
 
 public:
     /**
@@ -225,7 +225,7 @@ private:
     * @brief    Reset (fill by nullptr) temporal points.
     *
     */
-    void free_temporal_params(void) const;
+    void free_temporal_params() const;
 
     /**
     *
@@ -234,7 +234,7 @@ private:
     * @return   The first initialized center.
     *
     */
-    center_description get_first_center(void) const;
+    center_description get_first_center() const;
 
     /**
     *
@@ -243,7 +243,7 @@ private:
     * @return   The next initialized center.
     *
     */
-    center_description get_next_center(void) const;
+    center_description get_next_center() const;
 
     /**
     *

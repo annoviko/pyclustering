@@ -81,14 +81,14 @@ void optics::process(const dataset & p_data, const optics_data_t p_type, cluster
 }
 
 
-void optics::calculate_cluster_result(void) {
+void optics::calculate_cluster_result() {
     initialize();
     allocate_clusters();
     calculate_ordering();
 }
 
 
-void optics::initialize(void) {
+void optics::initialize() {
     if (m_type == optics_data_t::POINTS) {
         create_kdtree();
     }
@@ -113,7 +113,7 @@ void optics::initialize(void) {
 }
 
 
-void optics::allocate_clusters(void) {
+void optics::allocate_clusters() {
     for (auto & optics_object : *m_optics_objects) {
         if (!optics_object.m_processed) {
             expand_cluster_order(optics_object);
@@ -192,7 +192,7 @@ void optics::update_order_seed(const optics_descriptor & p_object, const neighbo
 }
 
 
-void optics::extract_clusters(void) {
+void optics::extract_clusters() {
     cluster_sequence & clusters = m_result_ptr->clusters();
     clst::noise & noise = m_result_ptr->noise();
 
@@ -269,7 +269,7 @@ double optics::get_core_distance(const neighbors_collection & p_neighbors) const
 }
 
 
-void optics::calculate_ordering(void) {
+void optics::calculate_ordering() {
     if (!m_result_ptr->cluster_ordering().empty()) { return; }
 
     ordering & ordering = m_result_ptr->cluster_ordering();
@@ -286,7 +286,7 @@ void optics::calculate_ordering(void) {
 }
 
 
-void optics::create_kdtree(void) {
+void optics::create_kdtree() {
     m_kdtree = container::kdtree();
 
     for (std::size_t index = 0; index < m_data_ptr->size(); index++) {

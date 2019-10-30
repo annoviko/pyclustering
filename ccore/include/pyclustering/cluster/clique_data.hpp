@@ -41,13 +41,13 @@ private:
     clst::noise             m_noise;
 
 public:
-    const clique_block_sequence & blocks(void) const { return m_blocks; }
+    const clique_block_sequence & blocks() const { return m_blocks; }
 
-    clique_block_sequence & blocks(void) { return m_blocks; }
+    clique_block_sequence & blocks() { return m_blocks; }
 
-    const clst::noise & noise(void) const { return m_noise; }
+    const clst::noise & noise() const { return m_noise; }
 
-    clst::noise & noise(void) { return m_noise; }
+    clst::noise & noise() { return m_noise; }
 };
 
 

@@ -59,37 +59,37 @@ void kdnode::set_discriminator(const std::size_t disc) {
 }
 
 
-kdnode::ptr kdnode::get_left(void) const {
+kdnode::ptr kdnode::get_left() const {
     return m_left;
 }
 
 
-kdnode::ptr kdnode::get_right(void) const {
+kdnode::ptr kdnode::get_right() const {
     return m_right;
 }
 
 
-kdnode::ptr kdnode::get_parent(void) const {
+kdnode::ptr kdnode::get_parent() const {
     return m_parent.lock();
 }
 
 
-void * kdnode::get_payload(void) {
+void * kdnode::get_payload() {
     return m_payload;
 }
 
 
-const std::vector<double> & kdnode::get_data(void) const {
+const std::vector<double> & kdnode::get_data() const {
     return m_data;
 }
 
 
-std::vector<double> & kdnode::get_data(void) {
+std::vector<double> & kdnode::get_data() {
     return m_data;
 }
 
 
-double kdnode::get_value(void) const {
+double kdnode::get_value() const {
     return m_data[m_discriminator];
 }
 
@@ -99,12 +99,12 @@ double kdnode::get_value(const std::size_t p_descr) const {
 }
 
 
-std::size_t kdnode::get_discriminator(void) const {
+std::size_t kdnode::get_discriminator() const {
     return m_discriminator;
 }
 
 
-std::size_t kdnode::get_dimension(void) const {
+std::size_t kdnode::get_dimension() const {
     return m_data.size();
 }
 

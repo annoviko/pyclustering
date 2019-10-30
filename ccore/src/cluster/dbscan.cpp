@@ -61,7 +61,7 @@ void dbscan::process(const dataset & p_data, const dbscan_data_t p_type, cluster
     m_result_ptr = (dbscan_data *) &p_result;
 
     for (size_t i = 0; i < m_data_ptr->size(); i++) {
-        if (m_visited[i] == true) {
+        if (m_visited[i]) {
             continue;
         }
 
@@ -71,7 +71,7 @@ void dbscan::process(const dataset & p_data, const dbscan_data_t p_type, cluster
         cluster allocated_cluster;
         expand_cluster(i, allocated_cluster);
 
-        if (allocated_cluster.empty() != true) {
+        if (!allocated_cluster.empty()) {
             m_result_ptr->clusters().emplace_back(std::move(allocated_cluster));
         }
     }
@@ -98,7 +98,7 @@ void dbscan::expand_cluster(const std::size_t p_index, cluster & allocated_clust
         for (std::size_t k = 0; k < index_matrix_neighbors.size(); k++) {
             std::size_t index_neighbor = index_matrix_neighbors[k];
 
-            if (m_visited[index_neighbor] != true) {
+            if (!m_visited[index_neighbor]) {
                 m_visited[index_neighbor] = true;
 
                 /* check for neighbors of the current neighbor - maybe it's noise */
@@ -118,7 +118,7 @@ void dbscan::expand_cluster(const std::size_t p_index, cluster & allocated_clust
                 }
             }
 
-            if (m_belong[index_neighbor] != true) {
+            if (!m_belong[index_neighbor]) {
                 allocated_cluster.push_back(index_neighbor);
                 m_belong[index_neighbor] = true;
             }

@@ -41,10 +41,10 @@ adjacency_bit_matrix::adjacency_bit_matrix(const size_t node_amount) :
 { }
 
 
-adjacency_bit_matrix::~adjacency_bit_matrix(void) { }
+adjacency_bit_matrix::~adjacency_bit_matrix() { }
 
 
-size_t adjacency_bit_matrix::size(void) const { return m_size; }
+size_t adjacency_bit_matrix::size() const { return m_size; }
 
 
 void adjacency_bit_matrix::set_connection(const size_t node_index1, const size_t node_index2) {
@@ -78,7 +78,7 @@ void adjacency_bit_matrix::get_neighbors(const size_t node_index, std::vector<si
 }
 
 
-void adjacency_bit_matrix::clear(void) {
+void adjacency_bit_matrix::clear() {
     m_adjacency.clear();
     m_size = 0;
 }

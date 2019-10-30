@@ -35,10 +35,10 @@ const double adjacency_matrix::DEFAULT_NON_EXISTANCE_CONNECTION_VALUE = 0.0;
 adjacency_matrix::adjacency_matrix(const size_t node_amount) : m_adjacency(node_amount, std::vector<double>(node_amount, DEFAULT_NON_EXISTANCE_CONNECTION_VALUE)) { }
 
 
-adjacency_matrix::~adjacency_matrix(void) { }
+adjacency_matrix::~adjacency_matrix() { }
 
 
-size_t adjacency_matrix::size(void) const { return m_adjacency.size(); }
+size_t adjacency_matrix::size() const { return m_adjacency.size(); }
 
 
 void adjacency_matrix::set_connection(const size_t node_index1, const size_t node_index2) {
@@ -78,7 +78,7 @@ double adjacency_matrix::get_connection_weight(const size_t node_index1, const s
 }
 
 
-void adjacency_matrix::clear(void) {
+void adjacency_matrix::clear() {
     m_adjacency.clear();
 }
 

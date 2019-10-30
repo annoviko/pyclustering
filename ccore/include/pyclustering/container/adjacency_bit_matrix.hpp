@@ -57,7 +57,7 @@ public:
     * @brief   Default destructor without arguments is forbiden.
     *
     */
-    adjacency_bit_matrix(void) = delete;
+    adjacency_bit_matrix() = delete;
 
     /**
     *
@@ -91,7 +91,7 @@ public:
     * @brief   Default destructor.
     *
     */
-    virtual ~adjacency_bit_matrix(void);
+    virtual ~adjacency_bit_matrix();
 
 
 private:
@@ -105,7 +105,7 @@ public:
     * @brief   Returns amount of nodes in adjacency collection.
     *
     */
-    virtual size_t size(void) const override;
+    virtual size_t size() const override;
 
     /**
     *
@@ -164,7 +164,7 @@ public:
     * @brief   Clear content of adjacency matrix.
     *
     */
-    virtual void clear(void) override;
+    virtual void clear() override;
 
 private:
     /**

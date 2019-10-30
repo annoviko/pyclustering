@@ -41,17 +41,17 @@ private:
     silhouette_score_sequence m_scores = { };
 
 public:
-    const std::size_t get_amount(void) const { return m_amount; }
+    const std::size_t get_amount() const { return m_amount; }
 
     void set_amount(const std::size_t p_amount) { m_amount = p_amount; }
 
-    const double get_score(void) const { return m_score; }
+    const double get_score() const { return m_score; }
 
     void set_score(const double p_score) { m_score = p_score; }
 
-    const silhouette_score_sequence & scores(void) const { return m_scores; }
+    const silhouette_score_sequence & scores() const { return m_scores; }
 
-    silhouette_score_sequence & scores(void) { return m_scores; }
+    silhouette_score_sequence & scores() { return m_scores; }
 };
 
 

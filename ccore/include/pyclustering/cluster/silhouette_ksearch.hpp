@@ -37,7 +37,7 @@ public:
     using ptr = std::shared_ptr<silhouette_ksearch_allocator>;
 
 public:
-    virtual ~silhouette_ksearch_allocator(void) = default;
+    virtual ~silhouette_ksearch_allocator() = default;
 
 public:
     virtual void allocate(const std::size_t p_amount, const dataset & p_data, cluster_sequence & p_clusters) = 0;
@@ -67,7 +67,7 @@ private:
     silhouette_ksearch_allocator::ptr m_allocator = std::make_shared<kmeans_allocator>();
 
 public:
-    silhouette_ksearch(void) = default;
+    silhouette_ksearch() = default;
 
     silhouette_ksearch(const std::size_t p_kmin, const std::size_t p_kmax, const silhouette_ksearch_allocator::ptr & p_allocator = std::make_shared<kmeans_allocator>());
 
@@ -75,7 +75,7 @@ public:
 
     silhouette_ksearch(silhouette_ksearch && p_other) = default;
 
-    ~silhouette_ksearch(void) = default;
+    ~silhouette_ksearch() = default;
 
 public:
     void process(const dataset & p_data, silhouette_ksearch_data & p_result);

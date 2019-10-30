@@ -72,7 +72,7 @@ public:
     * @brief    Default constructor of clustering algorithm.
     *
     */
-    kmeans(void) = default;
+    kmeans() = default;
 
     /**
     *
@@ -96,7 +96,7 @@ public:
     * @brief    Default destructor of the algorithm.
     *
     */
-    virtual ~kmeans(void) = default;
+    virtual ~kmeans() = default;
 
 public:
     /**
@@ -148,7 +148,7 @@ private:
     * @brief    Calculates total within-cluster errors that is based on distance metric.
     *
     */
-    void calculate_total_wce(void);
+    void calculate_total_wce();
 
     /**
     *

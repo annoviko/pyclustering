@@ -56,7 +56,7 @@ public:
     * @brief    Default constructor that creates empty clustering data.
     *
     */
-    optics_data(void) = default;
+    optics_data() = default;
 
     /**
     *
@@ -81,7 +81,7 @@ public:
     * @brief    Default destructor that destroys clustering data..
     *
     */
-    virtual ~optics_data(void) = default;
+    virtual ~optics_data() = default;
 
 public:
     /**
@@ -89,28 +89,28 @@ public:
     * @brief    Returns reference to cluster-ordering that represents density-based clustering structure.
     *
     */
-    ordering & cluster_ordering(void) { return m_ordering; }
+    ordering & cluster_ordering() { return m_ordering; }
 
     /**
     *
     * @brief    Returns const reference to cluster-ordering that represents density-based clustering structure.
     *
     */
-    const ordering & cluster_ordering(void) const { return m_ordering; }
+    const ordering & cluster_ordering() const { return m_ordering; }
 
     /**
     *
     * @brief    Returns reference to optics objects that corresponds to points from input dataspace.
     *
     */
-    optics_object_sequence & optics_objects(void) { return m_optics_objects; }
+    optics_object_sequence & optics_objects() { return m_optics_objects; }
 
     /**
     *
     * @brief    Returns const reference to optics objects that corresponds to points from input dataspace.
     *
     */
-    const optics_object_sequence & optics_objects(void) const { return m_optics_objects; }
+    const optics_object_sequence & optics_objects() const { return m_optics_objects; }
 
     /**
     *
@@ -119,7 +119,7 @@ public:
     *           allocate specified amount of clusters.
     *
     */
-    double get_radius(void) const { return m_radius; }
+    double get_radius() const { return m_radius; }
 
     /**
     *

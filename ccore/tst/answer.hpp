@@ -39,15 +39,15 @@ private:
     cluster          m_noise;
 
 public:
-    const cluster_sequence & clusters(void) const { return m_clusters; }
+    const cluster_sequence & clusters() const { return m_clusters; }
 
-    cluster_sequence & clusters(void) { return m_clusters; }
+    cluster_sequence & clusters() { return m_clusters; }
 
-    const length_sequence & cluster_lengths(void) const { return m_cluster_lengths; }
+    const length_sequence & cluster_lengths() const { return m_cluster_lengths; }
 
-    length_sequence & cluster_lengths(void) { return m_cluster_lengths; }
+    length_sequence & cluster_lengths() { return m_cluster_lengths; }
 
-    const cluster & noise(void) const { return m_noise; }
+    const cluster & noise() const { return m_noise; }
 
-    cluster & noise(void) { return m_noise; }
+    cluster & noise() { return m_noise; }
 };

@@ -32,7 +32,7 @@ pyclustering_package::pyclustering_package(const pyclustering_data_t package_typ
 { }
 
 
-pyclustering_package::~pyclustering_package(void) {
+pyclustering_package::~pyclustering_package() {
     if (type != (unsigned int) pyclustering_data_t::PYCLUSTERING_TYPE_LIST) {
         switch(type) {
             case pyclustering_data_t::PYCLUSTERING_TYPE_INT:

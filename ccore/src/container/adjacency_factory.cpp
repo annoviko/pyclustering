@@ -61,7 +61,7 @@ std::shared_ptr<adjacency_collection> adjacency_unweight_factory::create_collect
 }
 
 
-std::shared_ptr<adjacency_weight_collection> adjacency_weight_factory::create_collection(const size_t amount_nodes, const adjacency_weight_t storing_type, const connection_t structure_type, const std::function<double(void)> & weight_value_generator) {
+std::shared_ptr<adjacency_weight_collection> adjacency_weight_factory::create_collection(const size_t amount_nodes, const adjacency_weight_t storing_type, const connection_t structure_type, const std::function<double()> & weight_value_generator) {
     adjacency_weight_collection * collection = nullptr;
 
     switch(storing_type) {

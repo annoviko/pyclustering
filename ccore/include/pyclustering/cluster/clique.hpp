@@ -44,8 +44,8 @@ public:
     coordinate_iterator(const std::size_t p_dimension, const std::size_t p_edge);
 
 public:
-    const clique_block_location & get_coordinate(void) const;
-    clique_block_location & get_coordinate(void);
+    const clique_block_location & get_coordinate() const noexcept;
+    clique_block_location & get_coordinate() noexcept;
 
 public:
     coordinate_iterator & operator++();
@@ -79,7 +79,7 @@ public:
     virtual void process(const dataset & p_data, cluster_data & p_result) override;
 
 private:
-    void create_grid(void);
+    void create_grid();
 
     void expand_cluster(clique_block & p_block);
 

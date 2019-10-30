@@ -113,7 +113,7 @@ void gmeans::search_optimal_parameters(const dataset & p_data, const std::size_t
 }
 
 
-void gmeans::statistical_optimization(void) {
+void gmeans::statistical_optimization() {
     dataset centers;
     for (std::size_t i = 0; i < m_ptr_result->clusters().size(); i++) {
         dataset new_centers;
@@ -132,7 +132,7 @@ void gmeans::statistical_optimization(void) {
 }
 
 
-void gmeans::perform_clustering(void) {
+void gmeans::perform_clustering() {
     kmeans_data result;
     kmeans(m_ptr_result->centers(), m_tolerance).process(*m_ptr_data, result);
 

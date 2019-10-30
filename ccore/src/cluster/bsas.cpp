@@ -78,7 +78,7 @@ bsas::nearest_cluster bsas::find_nearest_cluster(const point & p_point) const {
 
 
 void bsas::update_representative(const std::size_t p_index, const point & p_point) {
-    double len = (double) m_result_ptr->clusters().size();
+    auto len = static_cast<double>(m_result_ptr->clusters().size());
     auto & rep = m_result_ptr->representatives()[p_index];
 
     for (std::size_t dim = 0; dim < rep.size(); dim++) {

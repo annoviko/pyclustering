@@ -44,10 +44,9 @@ void * legion_simulate( const void * p_network_pointer,
                         const double p_time,
                         const unsigned int p_solver,
                         const bool p_collect_dynamic,
-                        const void * const p_stimulus )
+                        const pyclustering_package * const p_stimulus)
 {
-  const pyclustering_package * const package_stimulus = (const pyclustering_package * const) p_stimulus;
-  legion_stimulus stimulus_vector((double *) package_stimulus->data, ((double *) package_stimulus->data) + package_stimulus->size);
+  legion_stimulus stimulus_vector((double *)p_stimulus->data, ((double *)p_stimulus->data) + p_stimulus->size);
 
   legion_dynamic * dynamic = new legion_dynamic();
   ((legion_network *) p_network_pointer)->simulate(p_steps, p_time, (solve_type) p_solver, p_collect_dynamic, stimulus_vector, (*dynamic));

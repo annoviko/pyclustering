@@ -41,7 +41,7 @@ typedef sync_dynamic                        syncpr_dynamic;
 
 class syncpr_invalid_pattern : public std::runtime_error {
 public:
-    syncpr_invalid_pattern(void);
+    syncpr_invalid_pattern();
 
     explicit syncpr_invalid_pattern(const std::string & description);
 };
@@ -68,7 +68,7 @@ public:
            const double increase_strength1,
            const double increase_strength2);
 
-    virtual ~syncpr(void);
+    virtual ~syncpr() = default;
 
 public:
     void train(const std::vector<syncpr_pattern> & patterns);

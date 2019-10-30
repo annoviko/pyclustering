@@ -61,7 +61,7 @@ public:
     * @brief   Default destructor.
     *
     */
-    adjacency_list(void);
+    adjacency_list();
 
     /**
     *
@@ -95,7 +95,7 @@ public:
     * @brief   Default destructor.
     *
     */
-    virtual ~adjacency_list(void);
+    virtual ~adjacency_list();
 
 
 public:
@@ -104,7 +104,7 @@ public:
     * @brief   Returns amount of nodes in adjacency collection.
     *
     */
-    virtual size_t size(void) const override;
+    virtual size_t size() const override;
 
     /**
     *
@@ -167,7 +167,7 @@ public:
     * @brief   Clear content of adjacency matrix.
     *
     */
-    virtual void clear(void) override;
+    virtual void clear() override;
 
 public:
     adjacency_list & operator=(const adjacency_list & another_collection);

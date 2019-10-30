@@ -43,7 +43,7 @@ public:
     * @brief   Default destructor.
     *
     */
-    virtual ~adjacency_collection(void) { }
+    virtual ~adjacency_collection() { }
 
 public:
     /**
@@ -51,7 +51,7 @@ public:
     * @brief   Returns amount of nodes in the adjacency collection.
     *
     */
-    virtual size_t size(void) const = 0;
+    virtual size_t size() const = 0;
 
     /**
     *
@@ -102,7 +102,7 @@ public:
     * @brief   Clear content of adjacency matrix.
     *
     */
-    virtual void clear(void) = 0;
+    virtual void clear() = 0;
 };
 
 

@@ -53,7 +53,7 @@ public:
     * @brief    Default constructor that creates empty clustering data.
     *
     */
-    kmedoids_data(void) = default;
+    kmedoids_data() = default;
 
     /**
     *
@@ -78,7 +78,7 @@ public:
     * @brief    Default destructor that destroys clustering data.
     *
     */
-    virtual ~kmedoids_data(void) = default;
+    virtual ~kmedoids_data() = default;
 
 public:
     /**
@@ -86,14 +86,14 @@ public:
     * @brief    Returns medoids that corresponds to allocated clusters.
     *
     */
-    medoid_sequence & medoids(void) { return m_medoids; }
+    medoid_sequence & medoids() { return m_medoids; }
 
     /**
     *
     * @brief    Returns medoids that corresponds to allocated clusters.
     *
     */
-    const medoid_sequence & medoids(void) const { return m_medoids; }
+    const medoid_sequence & medoids() const { return m_medoids; }
 };
 
 

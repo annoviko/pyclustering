@@ -57,7 +57,7 @@ public:
     * @brief   Default destructor without arguments is forbiden.
     *
     */
-    adjacency_matrix(void) = default;
+    adjacency_matrix() = default;
 
     /**
     *
@@ -91,7 +91,7 @@ public:
     * @brief   Default destructor.
     *
     */
-    virtual ~adjacency_matrix(void);
+    virtual ~adjacency_matrix();
 
 
 private:
@@ -116,7 +116,7 @@ public:
     * @brief   Returns amount of nodes in the adjacency collection.
     *
     */
-    virtual std::size_t size(void) const override;
+    virtual std::size_t size() const override;
 
     /**
     *
@@ -208,7 +208,7 @@ public:
     * @brief   Clear content of adjacency matrix.
     *
     */
-    virtual void clear(void) override;
+    virtual void clear() override;
 
 public:
     adjacency_matrix & operator=(const adjacency_matrix & another_collection);

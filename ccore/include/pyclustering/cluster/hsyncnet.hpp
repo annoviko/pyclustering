@@ -60,7 +60,7 @@ public:
         const std::size_t initial_neighbors,
         const double increase_persent);
 
-    virtual ~hsyncnet(void);
+    virtual ~hsyncnet() = default;
 
 public:
     virtual void process(const double order, const solve_type solver, const bool collect_dynamic, hsyncnet_analyser & analyser) override;

@@ -52,7 +52,7 @@ public:
     * @brief    Default constructor that creates empty clustering data.
     *
     */
-    kmedians_data(void) = default;
+    kmedians_data() = default;
 
     /**
     *
@@ -77,7 +77,7 @@ public:
     * @brief    Default destructor that destroys clustering data.
     *
     */
-    virtual ~kmedians_data(void) = default;
+    virtual ~kmedians_data() = default;
 
 public:
     /**
@@ -85,14 +85,14 @@ public:
     * @brief    Returns reference to medians that correspond to allocated clusters.
     *
     */
-    dataset & medians(void) { return m_medians; }
+    dataset & medians() { return m_medians; }
 
     /**
     *
     * @brief    Returns constant reference to medians that correspond to allocated clusters.
     *
     */
-    const dataset & medians(void) const { return m_medians; }
+    const dataset & medians() const { return m_medians; }
 };
 
 

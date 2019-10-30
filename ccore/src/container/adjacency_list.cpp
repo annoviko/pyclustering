@@ -31,7 +31,7 @@ namespace pyclustering {
 namespace container {
 
 
-adjacency_list::adjacency_list(void) :
+adjacency_list::adjacency_list() :
         m_adjacency(adjacency_list_container())
 { }
 
@@ -41,10 +41,10 @@ adjacency_list::adjacency_list(const size_t node_amount) :
 { }
 
 
-adjacency_list::~adjacency_list(void) { }
+adjacency_list::~adjacency_list() { }
 
 
-size_t adjacency_list::size(void) const { return m_adjacency.size(); }
+size_t adjacency_list::size() const { return m_adjacency.size(); }
 
 
 void adjacency_list::set_connection(const size_t node_index1, const size_t node_index2) {
@@ -73,7 +73,7 @@ void adjacency_list::get_neighbors(const size_t node_index, std::vector<size_t> 
 }
 
 
-void adjacency_list::clear(void) {
+void adjacency_list::clear() {
     m_adjacency.clear();
 }
 

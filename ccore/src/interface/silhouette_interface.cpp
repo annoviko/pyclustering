@@ -55,8 +55,9 @@ pyclustering_package * silhouette_algorithm(
     distance_metric<pyclustering::point> * metric = ((distance_metric<pyclustering::point> *) p_metric);
     distance_metric<pyclustering::point> default_metric = distance_metric_factory<pyclustering::point>::euclidean_square();
 
-    if (!metric)
+    if (!metric) {
         metric = &default_metric;
+    }
 
     pyclustering::clst::silhouette_data result;
     pyclustering::clst::silhouette(*metric).process(data, clusters, static_cast<pyclustering::clst::silhouette_data_t>(p_data_type), result);

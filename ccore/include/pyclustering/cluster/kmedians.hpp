@@ -73,7 +73,7 @@ public:
     * @brief    Default constructor of clustering algorithm.
     *
     */
-    kmedians(void) = default;
+    kmedians() = default;
 
     /**
     *
@@ -97,7 +97,7 @@ public:
     * @brief    Default destructor of the algorithm.
     *
     */
-    virtual ~kmedians(void) = default;
+    virtual ~kmedians() = default;
 
 public:
     /**

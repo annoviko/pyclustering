@@ -39,7 +39,7 @@ namespace clst {
 
 class mbsas : public bsas {
 public:
-    mbsas(void) = default;
+    mbsas() = default;
 
     mbsas(const std::size_t p_amount,
           const double p_threshold,

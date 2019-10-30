@@ -37,7 +37,7 @@ const std::size_t   thread_pool::DEFAULT_POOL_SIZE =
         (std::thread::hardware_concurrency() > 1) ? std::thread::hardware_concurrency() : DEFAULT_AMOUNT_THREADS;
 
 
-thread_pool::thread_pool(void) {
+thread_pool::thread_pool() {
     initialize(DEFAULT_POOL_SIZE);
 }
 
@@ -47,7 +47,7 @@ thread_pool::thread_pool(const std::size_t p_size) {
 }
 
 
-thread_pool::~thread_pool(void) {
+thread_pool::~thread_pool() {
     {
         std::lock_guard<std::mutex> lock_common(m_common_mutex);
         m_stop = true;
@@ -97,7 +97,7 @@ task::ptr thread_pool::add_task_if_free(const task::proc & p_raw_task) {
 }
 
 
-std::size_t thread_pool::size(void) const {
+std::size_t thread_pool::size() const {
     return m_pool.size();
 }
 
@@ -133,8 +133,9 @@ void thread_pool::get_task(task::ptr & p_task) {
         p_task = m_queue.front();
         m_queue.pop_front();
 
-        if (m_reserve == m_free)
+        if (m_reserve == m_free) {
             m_reserve--;
+        }
 
         m_free--;
     }

@@ -73,7 +73,7 @@ public:
     * @brief    Default constructor of clustering algorithm.
     *
     */
-    dbscan(void) = default;
+    dbscan() = default;
 
     /**
     *
@@ -92,7 +92,7 @@ public:
     * @brief    Default destructor of the algorithm.
     *
     */
-    virtual ~dbscan(void) = default;
+    virtual ~dbscan() = default;
 
 public:
     /**

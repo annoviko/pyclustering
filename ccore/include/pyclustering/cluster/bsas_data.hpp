@@ -49,13 +49,13 @@ private:
     representative_sequence m_representatives = { };
 
 public:
-    bsas_data(void) = default;
+    bsas_data() = default;
 
     bsas_data(const bsas_data & p_other) = default;
 
     bsas_data(bsas_data && p_other) = default;
 
-    virtual ~bsas_data(void) = default;
+    virtual ~bsas_data() = default;
 
 public:
     /**
@@ -63,9 +63,9 @@ public:
     * @brief    Returns representatives that corresponds to allocated clusters.
     *
     */
-    representative_sequence & representatives(void) { return m_representatives; }
+    representative_sequence & representatives() { return m_representatives; }
 
-    const representative_sequence & representatives(void) const { return m_representatives; }
+    const representative_sequence & representatives() const { return m_representatives; }
 };
 
 

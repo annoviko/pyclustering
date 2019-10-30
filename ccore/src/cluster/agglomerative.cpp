@@ -34,7 +34,7 @@ namespace pyclustering {
 namespace clst {
 
 
-agglomerative::agglomerative(void) :
+agglomerative::agglomerative() :
     m_number_clusters(1),
     m_similarity(type_link::SINGLE_LINK),
     m_centers(0),
@@ -50,9 +50,6 @@ agglomerative::agglomerative(const size_t number_clusters, const type_link link)
     m_ptr_clusters(nullptr),
     m_ptr_data(nullptr)
 { }
-
-
-agglomerative::~agglomerative(void) { }
 
 
 void agglomerative::process(const dataset & data, cluster_data & result) {
@@ -82,7 +79,7 @@ void agglomerative::process(const dataset & data, cluster_data & result) {
 }
 
 
-void agglomerative::merge_similar_clusters(void) {
+void agglomerative::merge_similar_clusters() {
     switch(m_similarity) {
         case type_link::SINGLE_LINK:
             merge_by_signle_link();
@@ -102,7 +99,7 @@ void agglomerative::merge_similar_clusters(void) {
 }
 
 
-void agglomerative::merge_by_average_link(void) {
+void agglomerative::merge_by_average_link() {
     double minimum_average_distance = std::numeric_limits<double>::max();
 
     const std::vector<point> & data = *m_ptr_data;
@@ -136,7 +133,7 @@ void agglomerative::merge_by_average_link(void) {
 }
 
 
-void agglomerative::merge_by_centroid_link(void) {
+void agglomerative::merge_by_centroid_link() {
     double minimum_average_distance = std::numeric_limits<double>::max();
 
     size_t index_cluster1 = 0;
@@ -162,7 +159,7 @@ void agglomerative::merge_by_centroid_link(void) {
 }
 
 
-void agglomerative::merge_by_complete_link(void) {
+void agglomerative::merge_by_complete_link() {
     double minimum_complete_distance = std::numeric_limits<double>::max();
 
     size_t index1 = 0;
@@ -197,7 +194,7 @@ void agglomerative::merge_by_complete_link(void) {
 }
 
 
-void agglomerative::merge_by_signle_link(void) {
+void agglomerative::merge_by_signle_link() {
     double minimum_single_distance = std::numeric_limits<double>::max();
 
     size_t index1 = 0;

@@ -31,18 +31,18 @@ namespace pyclustering {
 namespace parallel {
 
 
-bool spinlock::try_lock(void) {
+bool spinlock::try_lock() {
     return !m_lock.test_and_set(std::memory_order_acquire);
 }
 
-void spinlock::lock(void) {
+void spinlock::lock() {
     for(std::size_t i = 0; !try_lock(); i++) {
         if (i % 100)
           std::this_thread::yield();
     }
 }
 
-void spinlock::unlock(void) {
+void spinlock::unlock() {
     m_lock.clear(std::memory_order_release);
 }
 

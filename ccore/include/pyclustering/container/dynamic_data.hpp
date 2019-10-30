@@ -42,7 +42,7 @@ public:
     std::size_t   m_oscillators = 0;
 
 public:
-    dynamic_data(void) = default;
+    dynamic_data() = default;
 
     explicit dynamic_data(const std::size_t p_size) :
         std::vector<DynamicType>(p_size),
@@ -58,7 +58,7 @@ public:
 
     dynamic_data(dynamic_data && p_dynamic) = default;
 
-    virtual ~dynamic_data(void) = default;
+    virtual ~dynamic_data() = default;
 
 public:
     void push_back(const DynamicType & p_value) {
@@ -76,12 +76,12 @@ public:
         m_oscillators = p_oscillators;
     }
 
-    void clear(void) {
+    void clear() {
         std::vector<DynamicType>::clear();
         m_oscillators = 0;
     }
 
-    std::size_t oscillators(void) const {
+    std::size_t oscillators() const {
         return m_oscillators;
     }
 

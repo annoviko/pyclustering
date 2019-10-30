@@ -55,7 +55,7 @@ public:
     * @details  In case of default constructor clusters and centers are not stored on each clustering iteration.
     *
     */
-    gmeans_data(void) = default;
+    gmeans_data() = default;
 
     /**
     *
@@ -80,7 +80,7 @@ public:
     * @brief    Default destructor that destroys clustering data.
     *
     */
-    virtual ~gmeans_data(void) = default;
+    virtual ~gmeans_data() = default;
 
 public:
     /**
@@ -88,28 +88,28 @@ public:
     * @brief    Returns reference to centers that correspond to allocated clusters.
     *
     */
-    dataset & centers(void) { return m_centers; }
+    dataset & centers() { return m_centers; }
 
     /**
     *
     * @brief    Returns constant reference to centers that correspond to allocated clusters.
     *
     */
-    const dataset & centers(void) const { return m_centers; };
+    const dataset & centers() const { return m_centers; };
 
     /**
     *
     * @brief    Returns total within-cluster errors.
     *
     */
-    double & wce(void) { return m_wce; }
+    double & wce() { return m_wce; }
 
     /**
     *
     * @brief    Returns constant total within-cluster errors.
     *
     */
-    const double & wce(void) const { return m_wce; }
+    const double & wce() const { return m_wce; }
 };
 
 

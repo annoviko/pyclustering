@@ -39,7 +39,7 @@ namespace pyclustering {
 namespace clst {
 
 
-cure_cluster::cure_cluster(void) : mean(nullptr), closest(nullptr), distance_closest(0) {
+cure_cluster::cure_cluster() : mean(nullptr), closest(nullptr), distance_closest(0) {
     points = new std::vector< std::vector<double> * >();
     rep = new std::vector< std::vector<double> * >();
 }
@@ -97,7 +97,7 @@ bool cure_cluster_comparator::operator()(const cure_cluster * const obj1, const 
 
 
 
-cure_queue::cure_queue(void) {
+cure_queue::cure_queue() {
     queue = new std::multiset<cure_cluster *, cure_cluster_comparator>();
     tree = new kdtree();
 }
@@ -271,7 +271,7 @@ void cure_queue::merge(cure_cluster * cluster1, cure_cluster * cluster2, const s
 
     std::list<relocation_info> relocation_request;
 
-    if (queue->size() > 0) {
+    if (!queue->empty()) {
         merged_cluster->closest = *(queue->begin());
         merged_cluster->distance_closest = get_distance(merged_cluster, merged_cluster->closest);
 
@@ -312,14 +312,14 @@ void cure_queue::merge(cure_cluster * cluster1, cure_cluster * cluster2, const s
                     }
 
                     if (nearest_cluster == nullptr) {
-                        relocation_request.push_back({ iterator_cluster, merged_cluster, distance });
+                        relocation_request.emplace_back(iterator_cluster, merged_cluster, distance);
                     }
                     else {
-                        relocation_request.push_back({ iterator_cluster, nearest_cluster, nearest_distance });
+                        relocation_request.emplace_back(iterator_cluster, nearest_cluster, nearest_distance);
                     }
                 }
                 else {
-                    relocation_request.push_back({ iterator_cluster, merged_cluster, distance });
+                    relocation_request.emplace_back(iterator_cluster, merged_cluster, distance);
                 }
             }
         }
@@ -385,17 +385,17 @@ relocation_info::relocation_info(const cure_queue::iterator & cluster_iterator, 
 { }
 
 
-cure_queue::iterator relocation_info::get_cluster_iterator(void) const {
+cure_queue::iterator relocation_info::get_cluster_iterator() const {
     return m_cluster_iterator; 
 }
 
 
-cure_cluster * relocation_info::get_closest_cluster(void) {
+cure_cluster * relocation_info::get_closest_cluster() {
     return m_closest_cluster;
 }
 
 
-double relocation_info::get_closest_distance(void) const {
+double relocation_info::get_closest_distance() const {
     return m_closest_distance;
 }
 

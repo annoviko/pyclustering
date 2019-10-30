@@ -57,7 +57,7 @@ public:
     * @brief    Default constructor that creates empty clustering data.
     *
     */
-    cluster_data(void) = default;
+    cluster_data() = default;
 
     /**
     *
@@ -82,7 +82,7 @@ public:
     * @brief    Default destructor that destroy clustering data.
     *
     */
-    virtual ~cluster_data(void) = default;
+    virtual ~cluster_data() = default;
 
 public:
     /**
@@ -90,21 +90,21 @@ public:
     * @brief    Returns reference to clusters.
     *
     */
-    cluster_sequence & clusters(void);
+    cluster_sequence & clusters();
 
     /**
     *
     * @brief    Returns constant reference to clusters.
     *
     */
-    const cluster_sequence & clusters(void) const;
+    const cluster_sequence & clusters() const;
 
     /**
     *
     * @brief    Returns amount of clusters that is stored.
     *
     */
-    size_t size(void) const;
+    size_t size() const;
 
 public:
     /**

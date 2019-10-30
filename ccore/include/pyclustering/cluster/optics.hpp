@@ -111,7 +111,7 @@ public:
      * @brief Default constructor to create algorithm instance.
      *
      */
-    optics(void) = default;
+    optics() = default;
 
     /**
      *
@@ -155,7 +155,7 @@ public:
      * @brief Default destructor to destroy algorithm instance.
      *
      */
-    virtual ~optics(void) = default;
+    virtual ~optics() = default;
 
 public:
     /**
@@ -183,13 +183,13 @@ public:
     virtual void process(const dataset & p_data, const optics_data_t p_type, cluster_data & p_result);
 
 private:
-    void initialize(void);
+    void initialize();
 
-    void allocate_clusters(void);
+    void allocate_clusters();
 
     void expand_cluster_order(optics_descriptor & p_object);
 
-    void extract_clusters(void);
+    void extract_clusters();
 
     void get_neighbors(const std::size_t p_index, neighbors_collection & p_neighbors);
 
@@ -201,11 +201,11 @@ private:
 
     void update_order_seed(const optics_descriptor & p_object, const neighbors_collection & p_neighbors, std::multiset<optics_descriptor *, optics_pointer_descriptor_less> & order_seed);
 
-    void calculate_ordering(void);
+    void calculate_ordering();
 
-    void calculate_cluster_result(void);
+    void calculate_cluster_result();
 
-    void create_kdtree(void);
+    void create_kdtree();
 };
 
 

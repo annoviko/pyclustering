@@ -55,7 +55,7 @@ private:
     elbow_data    * m_result    = nullptr;      /* temporary pointer to output result   */
 
 public:
-    elbow(void) = default;
+    elbow() = default;
 
     elbow(const std::size_t p_kmin, const std::size_t p_kmax) : m_kmin(p_kmin), m_kmax(p_kmax) { verify(); }
 
@@ -63,7 +63,7 @@ public:
 
     elbow(elbow && p_other) = default;
 
-    ~elbow(void) = default;
+    ~elbow() = default;
 
 public:
     void process(const dataset & p_data, elbow_data & p_result) {
@@ -109,13 +109,13 @@ private:
         m_result->get_wce().at(p_amount - m_kmin) = result.wce();
     }
 
-    void verify(void) {
+    void verify() {
         if (m_kmax < 3 + m_kmin) {
             throw std::invalid_argument("Amount of K '" + std::to_string(m_kmax - m_kmin) + "' is too small for analysis.");
         }
     }
 
-    void calculate_elbows(void) {
+    void calculate_elbows() {
         const wce_sequence & wce = m_result->get_wce();
 
         const double x0 = 0.0;
@@ -138,7 +138,7 @@ private:
         }
     }
 
-    std::size_t find_optimal_kvalue(void) {
+    std::size_t find_optimal_kvalue() {
         auto optimal_elbow_iter = std::max_element(m_elbow.cbegin(), m_elbow.cend());
         return std::distance(m_elbow.cbegin(), optimal_elbow_iter) + 1 + m_kmin;
     }

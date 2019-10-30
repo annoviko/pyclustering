@@ -85,7 +85,7 @@ public:
     * @brief    Default destructor of the algorithm.
     *
     */
-    virtual ~xmeans(void);
+    virtual ~xmeans() = default;
 
 public:
     /**
@@ -99,7 +99,7 @@ public:
     virtual void process(const dataset & data, cluster_data & output_result) override;
 
 private:
-    void improve_structure(void);
+    void improve_structure();
 
     void improve_region_structure(const cluster & p_cluster, const point & p_center, dataset & p_allocated_centers) const;
 

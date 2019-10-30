@@ -40,18 +40,18 @@ private:
     wce_sequence          m_wce     = { };
 
 public:
-    elbow_data(void) = default;
+    elbow_data() = default;
 
-    ~elbow_data(void) = default;
+    ~elbow_data() = default;
 
 public:
-    const wce_sequence & get_wce(void) const { return m_wce; }
+    const wce_sequence & get_wce() const { return m_wce; }
 
-    wce_sequence & get_wce(void) { return m_wce; }
+    wce_sequence & get_wce() { return m_wce; }
 
     void set_amount(const std::size_t p_amount) { m_amount = p_amount; }
 
-    std::size_t get_amount(void) const { return m_amount; }
+    std::size_t get_amount() const { return m_amount; }
 };
 
 

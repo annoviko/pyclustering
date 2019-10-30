@@ -75,7 +75,7 @@ public:
     * @brief    Default constructor of clustering algorithm.
     *
     */
-    agglomerative(void);
+    agglomerative();
 
     /**
     *
@@ -93,7 +93,7 @@ public:
     * @brief    Default destructor of the algorithm.
     *
     */
-    ~agglomerative(void);
+    ~agglomerative() = default;
 
 public:
     /**
@@ -112,35 +112,35 @@ private:
     * @brief    Merges the most similar clusters in line with link type.
     *
     */
-    void merge_similar_clusters(void);
+    void merge_similar_clusters();
 
     /**
     *
     * @brief    Merges the most similar clusters in line with average link type.
     *
     */
-    void merge_by_average_link(void);
+    void merge_by_average_link();
 
     /**
     *
     * @brief    Merges the most similar clusters in line with centroid link type.
     *
     */
-    void merge_by_centroid_link(void);
+    void merge_by_centroid_link();
 
     /**
     *
     * @brief    Merges the most similar clusters in line with complete link type.
     *
     */
-    void merge_by_complete_link(void);
+    void merge_by_complete_link();
 
     /**
     *
     * @brief    Merges the most similar clusters in line with single link type.
     *
     */
-    void merge_by_signle_link(void);
+    void merge_by_signle_link();
 
     /**
     *

@@ -40,7 +40,7 @@ namespace pyclustering {
 namespace nnet {
 
 
-syncpr_invalid_pattern::syncpr_invalid_pattern(void) :
+syncpr_invalid_pattern::syncpr_invalid_pattern() :
 runtime_error("invalid pattern is used") { }
 
 
@@ -78,19 +78,16 @@ syncpr::syncpr(const unsigned int num_osc,
 }
 
 
-syncpr::~syncpr() { }
-
-
 void syncpr::train(const std::vector<syncpr_pattern> & patterns) {
     for (auto & pattern : patterns) {
         validate_pattern(pattern);
     }
 
-    for (size_t i = 0; i < size(); i++) {
-        for (size_t j = i + 1; j < size(); j++) {
+    for (std::size_t i = 0; i < size(); i++) {
+        for (std::size_t j = i + 1; j < size(); j++) {
 
             /* go through via all patterns */
-            for (size_t p = 0; p < patterns.size(); p++) {
+            for (std::size_t p = 0; p < patterns.size(); p++) {
                 double value1 = patterns[p][i];
                 double value2 = patterns[p][j];
 

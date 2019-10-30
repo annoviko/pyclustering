@@ -141,7 +141,7 @@ sync_network::sync_network(const size_t size, const double weight_factor,  const
 }
 
 
-sync_network::~sync_network(void) { }
+sync_network::~sync_network() { }
 
 
 void sync_network::initialize(const std::size_t size, const double weight_factor, const double frequency_factor, const connection_t connection_type, const std::size_t height, const std::size_t width, const initial_type initial_phases) {
@@ -194,12 +194,12 @@ void sync_network::initialize(const std::size_t size, const double weight_factor
 }
 
 
-double sync_network::sync_order(void) const {
+double sync_network::sync_order() const {
     return sync_ordering::calculate_sync_order(m_oscillators);
 }
 
 
-double sync_network::sync_local_order(void) const {
+double sync_network::sync_local_order() const {
     return sync_ordering::calculate_local_sync_order(m_connections, m_oscillators);
 }
 
@@ -257,7 +257,7 @@ void sync_network::simulate_dynamic(const double order, const double step, const
 
     double current_order = sync_local_order();
 
-    double integration_step = step / 10;
+    double integration_step = step / 10.0;
 
     for (double time_counter = step; current_order < order; time_counter += step) {
         calculate_phases(solver, time_counter, step, integration_step);
@@ -368,9 +368,6 @@ double sync_network::phase_normalization(const double teta) const {
 
 
 
-sync_dynamic::~sync_dynamic(void) { }
-
-
 void sync_dynamic::allocate_sync_ensembles(const double tolerance, const size_t iteration, ensemble_data<sync_ensemble> & ensembles) const {
     ensembles.clear();
 
@@ -429,7 +426,7 @@ void sync_dynamic::allocate_correlation_matrix(sync_corr_matrix & p_matrix) cons
 
 
 void sync_dynamic::allocate_correlation_matrix(const size_t p_iteration, sync_corr_matrix & p_matrix) const {
-    if ( (size() == 0) || (p_iteration >= size()) ) {
+    if ( (empty()) || (p_iteration >= size()) ) {
         return;
     }
 
