@@ -52,5 +52,6 @@ jobs:
     env: TITLE="Build CCORE (MacOS) and intergration testing."
     script: ./ci/travis-ci.sh BUILD_TEST_CCORE_MACOS
   - stage: build and test
+    dist: trusty
     env: TITLE="Build documentation."
     script: ./ci/travis-ci.sh DOCUMENTATION
