@@ -73,8 +73,8 @@ function job_ut_windows_ccore() {
     
     Write-Host "[CI Job] Building of CCORE unit-test project for WINDOWS platform: SUCCESS." -ForegroundColor Green;
     
-    cd ccore\Release;
-    .\utcore.exe;
+    cd ccore\tst;
+    & $env:PYTHON_INTERPRETER ut-runner.py
     if ($LastExitCode -ne 0) {
         Write-Error -Message "[CI Job] Unit-testing CCORE library for WINDOWS platform: FAILURE." -Category InvalidResult;
         $env:TESTING_RESULT = $env:RESULT_FAILURE;
