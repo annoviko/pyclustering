@@ -114,7 +114,7 @@ utdbg:
 
 .PHONY: utrun
 utrun:
-	cd tst/ && ./utcore.exe
+	cd tst/ && python3 ut-runner.py
 
 
 .PHONY: utclean
