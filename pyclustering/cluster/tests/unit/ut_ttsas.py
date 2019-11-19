@@ -84,8 +84,3 @@ class ttsas_unit_tests(unittest.TestCase):
     def testTheSamePoints2(self):
         ttsas_test.clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 1.0, 2.0, [10, 20], False);
         ttsas_test.clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 10.0, 20.0, [30], False);
-
-
-
-if __name__ == "__main__":
-    unittest.main()

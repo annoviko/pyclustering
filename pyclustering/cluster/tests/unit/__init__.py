@@ -102,7 +102,3 @@ class clustering_unit_tests(suite_holder):
         unit_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_ttsas_unit_tests))
         unit_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_visualizer_unit_tests))
         unit_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_xmeans_unit_tests))
-
-
-if __name__ == "__main__":
-    clustering_unit_tests().run()

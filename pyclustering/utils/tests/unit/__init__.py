@@ -31,10 +31,10 @@ matplotlib.use('Agg')
 
 from pyclustering.tests.suite_holder import suite_holder
 
-from pyclustering.utils.tests.unit                   import ut_dimension    as dimension_unit_tests
-from pyclustering.utils.tests.unit                   import ut_metric       as metric_unit_tests
-from pyclustering.utils.tests.unit                   import ut_sampling     as sampling_unit_tests
-from pyclustering.utils.tests.unit                   import ut_utils        as utils_general_unit_tests
+from pyclustering.utils.tests.unit import ut_dimension as dimension_unit_tests
+from pyclustering.utils.tests.unit import ut_metric as metric_unit_tests
+from pyclustering.utils.tests.unit import ut_sampling as sampling_unit_tests
+from pyclustering.utils.tests.unit import ut_utils as utils_general_unit_tests
 
 
 class utils_unit_tests(suite_holder):
@@ -49,7 +49,3 @@ class utils_unit_tests(suite_holder):
         utils_suite.addTests(unittest.TestLoader().loadTestsFromModule(metric_unit_tests))
         utils_suite.addTests(unittest.TestLoader().loadTestsFromModule(sampling_unit_tests))
         utils_suite.addTests(unittest.TestLoader().loadTestsFromModule(utils_general_unit_tests))
-
-
-if __name__ == "__main__":
-    utils_unit_tests().run()

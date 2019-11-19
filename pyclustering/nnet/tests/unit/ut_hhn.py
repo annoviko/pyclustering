@@ -38,7 +38,3 @@ class HhnUnitTest(unittest.TestCase):
 
     def testPartialSync(self):
         HhnTestTemplates.templateSyncEnsembleAllocation([25, 25, 50, 50], None, 800, 200, [[0, 1], [2, 3]], False);
-
-
-if __name__ == "__main__":
-    unittest.main();

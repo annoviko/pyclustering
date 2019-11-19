@@ -219,7 +219,3 @@ class Test(unittest.TestCase):
             visualizer.append_cluster_attribute(0, cluster_index, [ means[cluster_index] ], 'o');
         
         visualizer.show();
-
-
-if __name__ == "__main__":
-    unittest.main();

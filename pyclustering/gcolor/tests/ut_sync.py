@@ -110,7 +110,3 @@ class Test(unittest.TestCase):
         
     def testOdeIntSolutionGraphFull2(self):
         self.templateTestColoringNegativeConnections(GRAPH_SIMPLE_SAMPLES.GRAPH_FULL2, solve_type.RK4);
-
-
-if __name__ == "__main__":
-    unittest.main();

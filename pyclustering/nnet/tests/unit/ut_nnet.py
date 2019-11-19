@@ -348,7 +348,3 @@ class NnetUnitTest(unittest.TestCase):
         self.templateAssertRaises(10, type_conn = conn_type.GRID_EIGHT, height = 1, width = 2);
         self.templateAssertRaises(10, type_conn = conn_type.GRID_EIGHT, height = 1, width = 1);
         self.templateAssertRaises(10, type_conn = conn_type.GRID_EIGHT, height = 0, width = 0);
-
-
-if __name__ == "__main__":
-    unittest.main();

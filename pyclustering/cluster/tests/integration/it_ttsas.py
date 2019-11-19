@@ -91,7 +91,3 @@ class ttsas_integration_tests(unittest.TestCase):
     @remove_library
     def testProcessingWhenLibraryCoreCorrupted(self):
         ttsas_test.clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1.0, 2.0, [5, 5], True);
-
-
-if __name__ == "__main__":
-    unittest.main();

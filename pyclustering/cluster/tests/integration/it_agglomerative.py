@@ -141,7 +141,3 @@ class AgglomerativeIntegrationTest(unittest.TestCase):
     @corrupt_library
     def testProcessingWhenLibraryCoreCorrupted(self):
         AgglomerativeTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, type_link.AVERAGE_LINK, [5, 5], True);
-
-
-if __name__ == "__main__":
-    unittest.main();

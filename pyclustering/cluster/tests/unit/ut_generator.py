@@ -91,8 +91,3 @@ class generator_unit_tests(unittest.TestCase):
         data = data_generator(3, 1, [5, 10, 15], [[0.0], [-5.0], [5.0]]).generate()
         assertion.eq(30, len(data))
         self.assert_distribution(data, [5, 10, 15], [[0.0], [-5.0], [5.0]], [1.0, 1.0, 1.0])
-
-
-
-if __name__ == "__main__":
-    unittest.main()

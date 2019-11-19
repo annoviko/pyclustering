@@ -24,11 +24,11 @@
 """
 
 
-import unittest;
+import unittest
 
-from pyclustering.nnet.tests.hhn_templates import HhnTestTemplates;
+from pyclustering.nnet.tests.hhn_templates import HhnTestTemplates
 
-from pyclustering.core.tests import remove_library;
+from pyclustering.core.tests import remove_library
 
 
 class HhnIntegrationTest(unittest.TestCase):

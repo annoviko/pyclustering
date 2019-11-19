@@ -181,8 +181,3 @@ class SomIntegrationTest(unittest.TestCase):
     @remove_library
     def testProcessingWhenLibraryCoreCorrupted(self):
         SomTestTemplates.templateTestAwardNeurons(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, 2, 100, [5, 5], False, True)
-
-
-if __name__ == "__main__":
-    unittest.main()
-    

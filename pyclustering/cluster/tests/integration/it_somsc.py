@@ -93,7 +93,3 @@ class SomscIntegrationTest(unittest.TestCase):
     @remove_library
     def testProcessingWhenLibraryCoreCorrupted(self):
         SyncnetTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, [5, 5], True);
-
-
-if __name__ == "__main__":
-    unittest.main();

@@ -70,7 +70,3 @@ class RockIntegrationTest(unittest.TestCase):
     @remove_library
     def testProcessingWhenLibraryCoreCorrupted(self):
         RockTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, 2, 0.5, [5, 5], True);
-
-
-if __name__ == "__main__":
-    unittest.main();

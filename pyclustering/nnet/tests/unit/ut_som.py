@@ -187,7 +187,3 @@ class SomUnitTest(unittest.TestCase):
 
     def testSimulateCheckWinnerHoneycombStoreLoad(self):
         SomTestTemplates.templateTestSimulate(type_conn.honeycomb, False, store_load=True)
-
-
-if __name__ == "__main__":
-    unittest.main()

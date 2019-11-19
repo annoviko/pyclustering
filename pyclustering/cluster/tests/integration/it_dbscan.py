@@ -120,6 +120,3 @@ class DbscanIntegrationTest(unittest.TestCase):
     def testProcessingWhenLibraryCoreCorrupted(self):
         DbscanTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 0.4, 2, [5, 5], True)
 
-
-if __name__ == "__main__":
-    unittest.main()

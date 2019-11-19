@@ -35,8 +35,24 @@ class suite_holder:
     def get_suite(self):
         return self.__suite
 
-    def run(self):
-        return unittest.TextTestRunner(stream = sys.stdout, verbosity = 2).run(self.__suite)
+    def run(self, rerun=1):
+        print(self.__suite)
+        result = unittest.TextTestRunner(stream=sys.stdout, verbosity=3).run(self.__suite)
+        if result.wasSuccessful() is True:
+            return result
+
+        for attempt in range(rerun):
+            print("\n======================================================================")
+            print("Rerun failed tests (attempt: %d)." % (attempt + 1))
+            print("----------------------------------------------------------------------")
+
+            failure_suite = unittest.TestSuite()
+            for failure in result.failures:
+                failure_suite.addTest(failure[0])
+
+            result = unittest.TextTestRunner(stream=sys.stdout, verbosity=3).run(failure_suite)
+
+        return result
 
     @staticmethod
     def fill_suite(test_suite):

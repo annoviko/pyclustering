@@ -101,7 +101,3 @@ class CureIntegrationTest(unittest.TestCase):
     @remove_library
     def testProcessingWhenLibraryCoreCorrupted(self):
         CureTestTemplates.template_cluster_allocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [5, 5], 2, 5, 0.5, True)
-
-
-if __name__ == "__main__":
-    unittest.main()

@@ -111,7 +111,3 @@ class SyncprIntegrationTest(unittest.TestCase):
     @remove_library
     def testProcessingWhenLibraryCoreCorrupted(self):
         SyncprTestTemplates.templateOutputDynamic(solve_type.FAST, True);
-
-
-if __name__ == "__main__":
-    unittest.main();

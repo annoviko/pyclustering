@@ -170,7 +170,3 @@ class clique_unit_test(unittest.TestCase):
         assertion.eq(2, len(neighbors))
         assertion.true([0, 1] in neighbors)
         assertion.true([1, 0] in neighbors)
-
-
-if __name__ == "__main__":
-    unittest.main()

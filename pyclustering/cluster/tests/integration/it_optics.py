@@ -125,7 +125,3 @@ class OpticsIntegrationTest(unittest.TestCase):
     @remove_library
     def testProcessingWhenLibraryCoreCorrupted(self):
         OpticsTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 0.4, 2, None, [5, 5], True)
-
-
-if __name__ == "__main__":
-    unittest.main()

@@ -109,7 +109,3 @@ class PcnnUnitTest(unittest.TestCase):
     def testVisualizerNoFailure(self):
         stimulus = [ 5, 5, 5, 5, 10, 10, 10, 10, 15, 15, 15, 15, 20, 20, 20, 20 ]
         PcnnTestTemplates.visualize(16, 20, conn_type.ALL_TO_ALL, conn_represent.MATRIX, stimulus, 4, 4, False)
-
-
-if __name__ == "__main__":
-    unittest.main()

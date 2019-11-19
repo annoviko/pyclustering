@@ -24,21 +24,16 @@
 """
 
 
-import unittest;
-from pyclustering.tests.suite_holder import suite_holder;
+from pyclustering.tests.suite_holder import suite_holder
 
-from pyclustering.container.tests.unit          import container_unit_tests;
+from pyclustering.container.tests.unit import container_unit_tests
 
 
 class container_tests(suite_holder):
     def __init__(self):
-        super().__init__();
-        container_unit_tests.fill_suite(self.get_suite());
+        super().__init__()
+        container_unit_tests.fill_suite(self.get_suite())
 
     @staticmethod
     def fill_suite(container_suite):
-        container_unit_tests.fill_suite(container_suite);
-
-
-if __name__ == "__main__":
-    container_tests().run();
+        container_unit_tests.fill_suite(container_suite)

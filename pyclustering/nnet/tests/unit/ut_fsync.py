@@ -162,7 +162,3 @@ class FsyncUnitTest(unittest.TestCase):
         output_dynamic_2 = oscillatory_network_2.simulate(50, 10, True);
 
         fsync_visualizer.show_output_dynamics([output_dynamic_1, output_dynamic_2]);
-
-
-if __name__ == "__main__":
-    unittest.main();

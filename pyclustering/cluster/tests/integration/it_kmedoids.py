@@ -196,7 +196,3 @@ class KmedoidsIntegrationTest(unittest.TestCase):
 
     def testItermax10Simple02(self):
         kmedoids_test_template.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [3, 12, 20], [10, 5, 8], True, itermax=10)
-
-
-if __name__ == "__main__":
-    unittest.main()

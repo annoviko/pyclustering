@@ -198,7 +198,3 @@ class AgglomerativeUnitTests(unittest.TestCase):
     def test_incorrect_amount_clusters(self):
         self.assertRaises(ValueError, agglomerative, [[0], [1], [2]], -1)
         self.assertRaises(ValueError, agglomerative, [[0], [1], [2]], 0)
-
-
-if __name__ == "__main__":
-    unittest.main()

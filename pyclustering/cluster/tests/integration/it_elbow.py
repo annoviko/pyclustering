@@ -82,7 +82,3 @@ class elbow_integration_test(unittest.TestCase):
 
     def test_elbow_tetra(self):
         elbow_test_template.calculate_elbow(FCPS_SAMPLES.SAMPLE_TETRA, None, 1, 25, True)
-
-
-if __name__ == "__main__":
-    unittest.main()

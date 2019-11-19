@@ -94,7 +94,3 @@ class PcnnIntegrationTest(unittest.TestCase):
     @remove_library
     def testProcessingWhenLibraryCoreCorrupted(self):
         PcnnTestTemplates.templateDynamicLength(10, 20, conn_type.NONE, None, [0] * 10, True);
-
-
-if __name__ == "__main__":
-    unittest.main();

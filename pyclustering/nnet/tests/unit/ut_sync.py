@@ -217,7 +217,3 @@ class SyncUnitTest(unittest.TestCase):
 
     def testVisualizerNoFailures(self):
         SyncTestTemplates.templateVisualizerNoFailures(5, 10, False);
-
-
-if __name__ == "__main__":
-    unittest.main();

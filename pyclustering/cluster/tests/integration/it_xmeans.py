@@ -258,7 +258,3 @@ class XmeansIntegrationTest(unittest.TestCase):
     def testProcessingWhenLibraryCoreCorrupted(self):
         XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5],
                                                       splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, True)
-
-
-if __name__ == "__main__":
-    unittest.main()

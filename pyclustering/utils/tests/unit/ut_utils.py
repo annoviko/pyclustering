@@ -211,6 +211,3 @@ class Test(unittest.TestCase):
         data = [ [0], [2], [4] ];
         matrix = utils.calculate_distance_matrix(data);
         assert matrix == [ [0.0, 2.0, 4.0], [2.0, 0.0, 2.0], [4.0, 2.0, 0.0] ];
-
-if __name__ == "__main__":
-    unittest.main();

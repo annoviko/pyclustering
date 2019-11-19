@@ -93,7 +93,3 @@ class mbsas_integration_test(unittest.TestCase):
     @remove_library
     def testProcessingWhenLibraryCoreCorrupted(self):
         mbsas_test_template.clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, 1.0, [5, 5], True);
-
-
-if __name__ == "__main__":
-    unittest.main();

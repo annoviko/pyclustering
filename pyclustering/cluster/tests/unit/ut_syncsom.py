@@ -130,7 +130,3 @@ class SyncsomUnitTest(unittest.TestCase):
         
         network.show_som_layer();
         network.show_sync_layer();
-
-
-if __name__ == "__main__":
-    unittest.main();

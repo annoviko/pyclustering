@@ -134,8 +134,3 @@ class clique_integration_test(unittest.TestCase):
     @remove_library
     def test_processing_when_library_core_corrupted(self):
         clique_test_template.clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 8, 0, [5, 5], 0, True)
-
-
-
-if __name__ == "__main__":
-    unittest.main()

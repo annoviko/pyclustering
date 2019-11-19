@@ -126,7 +126,3 @@ class SyncprUnitTest(unittest.TestCase):
 
     def testLocalSyncOrder(self):
         SyncprTestTemplates.templateLocalSyncOrder(False);
-
-
-if __name__ == "__main__":
-    unittest.main();

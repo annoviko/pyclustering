@@ -423,7 +423,3 @@ class CftreeUnitTest(unittest.TestCase):
 
     def testLeafNodeAndEntriesAmount_16_4(self):
         self.templateLeafNodeAndEntriesAmount(16, 4);
-
-
-if __name__ == "__main__":
-    unittest.main();

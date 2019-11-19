@@ -45,7 +45,3 @@ class clustering_tests(suite_holder):
     def fill_suite(cluster_suite):
         clustering_integration_tests.fill_suite(cluster_suite)
         clustering_unit_tests.fill_suite(cluster_suite)
-
-
-if __name__ == "__main__":
-    clustering_tests().run()

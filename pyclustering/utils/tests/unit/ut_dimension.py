@@ -38,7 +38,3 @@ class DimensionUnitTest(unittest.TestCase):
         
         info = dimension_info([[1, 2], [3, 4]]);
         assert 2 == info.get_dimensions();
-
-
-if __name__ == "__main__":
-    unittest.main();

@@ -100,7 +100,3 @@ class SyncIntegrationTest(unittest.TestCase):
     @remove_library
     def testProcessingWhenLibraryCoreCorrupted(self):
         SyncTestTemplates.templateSimulateTest(10, 1, solve_type.FAST, ccore_flag = True);
-
-
-if __name__ == "__main__":
-    unittest.main();

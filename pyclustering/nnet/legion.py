@@ -326,28 +326,28 @@ class legion_network(network):
         
         """
         
-        if (self._stimulus is None):
+        if self._stimulus is None:
             raise NameError("Stimulus should initialed before creation of the dynamic connections in the network.");
         
         self._dynamic_coupling = [ [0] * self._num_osc for i in range(self._num_osc)];
         
         for i in range(self._num_osc):
-            neighbors = self.get_neighbors(i);
+            neighbors = self.get_neighbors(i)
             
-            if ( (len(neighbors) > 0) and (self._stimulus[i] > 0) ):
-                number_stimulated_neighbors = 0.0;
+            if (len(neighbors) > 0) and (self._stimulus[i] > 0):
+                number_stimulated_neighbors = 0.0
                 for j in neighbors:
-                    if (self._stimulus[j] > 0):
-                        number_stimulated_neighbors += 1.0;
+                    if self._stimulus[j] > 0:
+                        number_stimulated_neighbors += 1.0
                 
                 if (number_stimulated_neighbors > 0):
-                    dynamic_weight = self._params.Wt / number_stimulated_neighbors;
+                    dynamic_weight = self._params.Wt / number_stimulated_neighbors
                     
                     for j in neighbors:
-                        self._dynamic_coupling[i][j] = dynamic_weight;
+                        self._dynamic_coupling[i][j] = dynamic_weight
     
     
-    def simulate(self, steps, time, stimulus, solution = solve_type.RK4, collect_dynamic = True):
+    def simulate(self, steps, time, stimulus, solution=solve_type.RK4, collect_dynamic=True):
         """!
         @brief Performs static simulation of LEGION oscillatory network.
         
@@ -363,51 +363,51 @@ class legion_network(network):
         
         """
         
-        if (self.__ccore_legion_pointer is not None):
-            pointer_dynamic = wrapper.legion_simulate(self.__ccore_legion_pointer, steps, time, solution, collect_dynamic, stimulus);
-            return legion_dynamic(None, None, None, pointer_dynamic);
+        if self.__ccore_legion_pointer is not None:
+            pointer_dynamic = wrapper.legion_simulate(self.__ccore_legion_pointer, steps, time, solution, collect_dynamic, stimulus)
+            return legion_dynamic(None, None, None, pointer_dynamic)
         
         # Check solver before simulation
-        if (solution == solve_type.FAST):
-            raise NameError("Solver FAST is not support due to low accuracy that leads to huge error.");
+        if solution == solve_type.FAST:
+            raise NameError("Solver FAST is not support due to low accuracy that leads to huge error.")
         
-        elif (solution == solve_type.RKF45):
-            raise NameError("Solver RKF45 is not support in python version. RKF45 is supported in CCORE implementation.");
+        elif solution == solve_type.RKF45:
+            raise NameError("Solver RKF45 is not support in python version. RKF45 is supported in CCORE implementation.")
         
         # set stimulus
-        self.__create_stimulus(stimulus);
+        self.__create_stimulus(stimulus)
             
         # calculate dynamic weights
-        self.__create_dynamic_connections();
+        self.__create_dynamic_connections()
         
-        dyn_exc = None;
-        dyn_time = None;
-        dyn_ginh = None;
+        dyn_exc = None
+        dyn_time = None
+        dyn_ginh = None
         
         # Store only excitatory of the oscillator
-        if (collect_dynamic == True):
-            dyn_exc = [];
-            dyn_time = [];
-            dyn_ginh = [];
+        if collect_dynamic is True:
+            dyn_exc = []
+            dyn_time = []
+            dyn_ginh = []
             
-        step = time / steps;
-        int_step = step / 10.0;
+        step = time / steps
+        int_step = step / 10.0
         
         for t in numpy.arange(step, time + step, step):
             # update states of oscillators
-            self._calculate_states(solution, t, step, int_step);
+            self._calculate_states(solution, t, step, int_step)
             
             # update states of oscillators
-            if (collect_dynamic == True):
-                dyn_exc.append(self._excitatory);
-                dyn_time.append(t);
-                dyn_ginh.append(self._global_inhibitor);
+            if collect_dynamic is True:
+                dyn_exc.append(self._excitatory)
+                dyn_time.append(t)
+                dyn_ginh.append(self._global_inhibitor)
             else:
-                dyn_exc = self._excitatory;
-                dyn_time = t;
-                dyn_ginh = self._global_inhibitor;
+                dyn_exc = self._excitatory
+                dyn_time = t
+                dyn_ginh = self._global_inhibitor
         
-        return legion_dynamic(dyn_exc, dyn_ginh, dyn_time); 
+        return legion_dynamic(dyn_exc, dyn_ginh, dyn_time);
     
     
     def _calculate_states(self, solution, t, step, int_step):

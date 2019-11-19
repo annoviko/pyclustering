@@ -122,7 +122,3 @@ class LegionUnitTest(unittest.TestCase):
 
     def testOutputDynamicInformation(self):
         LegionTestTemplates.templateOutputDynamicInformation([1, 0, 1], legion_parameters(), conn_type.LIST_BIDIR, 100, 100, False);
-
-
-if __name__ == "__main__":
-    unittest.main();

@@ -156,7 +156,3 @@ class bang_unit_test(unittest.TestCase):
 
     def test_incorrect_amount_threshold(self):
         self.assertRaises(ValueError, bang, [[0], [1], [2]], 2, amount_threshold=-1)
-
-
-if __name__ == "__main__":
-    unittest.main()

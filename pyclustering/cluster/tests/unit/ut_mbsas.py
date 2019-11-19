@@ -86,8 +86,3 @@ class mbsas_unit_test(unittest.TestCase):
     def testTheSamePoints2(self):
         mbsas_test_template.clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 3, 1.0, [10, 20], False);
         mbsas_test_template.clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 3, 10.0, [30], False);
-
-
-
-if __name__ == "__main__":
-    unittest.main();

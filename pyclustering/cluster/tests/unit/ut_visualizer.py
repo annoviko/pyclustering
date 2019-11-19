@@ -97,7 +97,3 @@ class visualizer_unit_tests(unittest.TestCase):
 
     def test_multidim_simple08_by_steps(self):
         self.template_visualize_adding_step_by_step(SIMPLE_SAMPLES.SAMPLE_SIMPLE8, SIMPLE_ANSWERS.ANSWER_SIMPLE8)
-
-
-if __name__ == "__main__":
-    unittest.main()

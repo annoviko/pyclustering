@@ -44,7 +44,3 @@ class nnet_tests(suite_holder):
     def fill_suite(nnet_suite):
         nnet_integration_tests.fill_suite(nnet_suite)
         nnet_unit_tests.fill_suite(nnet_suite)
-
-
-if __name__ == "__main__":
-    nnet_tests().run()

@@ -82,7 +82,3 @@ class Test(unittest.TestCase):
         self.templateTestColoring(GRAPH_SIMPLE_SAMPLES.GRAPH_ONE_LINE);
         self.templateTestColoring(GRAPH_SIMPLE_SAMPLES.GRAPH_SIMPLE1);
         self.templateTestColoring(GRAPH_SIMPLE_SAMPLES.GRAPH_TWO_CROSSROADS);
-
-
-if __name__ == "__main__":
-    unittest.main();

@@ -163,8 +163,3 @@ class cloud_unit_test(unittest.TestCase):
         self.assertTrue(self.__disk_client.delete(folder_name))
         os.remove(file_name1)
         os.remove(file_name2)
-
-
-
-if __name__ == "__main__":
-    unittest.main()

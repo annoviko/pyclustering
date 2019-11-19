@@ -70,7 +70,3 @@ class HsyncnetIntegrationTest(unittest.TestCase):
     @remove_library
     def testProcessingWhenLibraryCoreCorrupted(self):
         HsyncnetTestTemplates.templateClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, [5, 5], solve_type.FAST, 5, 0.3, False, True);
-
-
-if __name__ == "__main__":
-    unittest.main();

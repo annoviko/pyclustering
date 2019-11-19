@@ -195,7 +195,7 @@ class cnn_visualizer:
         
         """
         
-        draw_dynamics(cnn_output_dynamic.time, cnn_output_dynamic.output, x_title = "t", y_title = "x")
+        draw_dynamics(cnn_output_dynamic.time, cnn_output_dynamic.output, x_title="t", y_title="x")
     
     
     @staticmethod
@@ -210,10 +210,10 @@ class cnn_visualizer:
         @see show_observation_matrix
         
         """
-        
+
         network_dynamic = numpy.array(cnn_output_dynamic.output)
         
-        plt.imshow(network_dynamic.T, cmap = plt.get_cmap('gray'), interpolation='None', vmin = 0.0, vmax = 1.0)
+        plt.imshow(network_dynamic.T, cmap=plt.get_cmap('gray'), interpolation='None', vmin=0.0, vmax=1.0)
         plt.show()
     
     

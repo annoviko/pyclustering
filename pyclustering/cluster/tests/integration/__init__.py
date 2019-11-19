@@ -80,7 +80,3 @@ class clustering_integration_tests(suite_holder):
         integration_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_syncnet_integration_tests))
         integration_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_ttsas_integration_tests))
         integration_cluster_suite.addTests(unittest.TestLoader().loadTestsFromModule(cluster_xmeans_integration_tests))
-
-
-if __name__ == "__main__":
-    clustering_integration_tests().run()

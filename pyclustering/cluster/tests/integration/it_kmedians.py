@@ -147,7 +147,3 @@ class KmediansIntegrationTest(unittest.TestCase):
 
     def testItermax10Simple02ByCore(self):
         KmediansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [[3.5, 4.8], [6.9, 7], [7.5, 0.5]], [10, 5, 8], True, itermax=10)
-
-
-if __name__ == "__main__":
-    unittest.main()

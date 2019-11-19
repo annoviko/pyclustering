@@ -31,7 +31,7 @@ import matplotlib
 matplotlib.use('Agg')
 
 
-from pyclustering.core.tests            import package_tests as core_package_unit_tests
+from pyclustering.core.tests import ut_package as core_package_unit_tests
 
 import os
 
@@ -103,7 +103,3 @@ class core_tests(suite_holder):
     @staticmethod
     def fill_suite(core_suite):
         core_suite.addTests(unittest.TestLoader().loadTestsFromModule(core_package_unit_tests))
-
-
-if __name__ == "__main__":
-    core_tests().run()

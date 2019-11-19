@@ -413,7 +413,3 @@ class KDTreeUnitTest(unittest.TestCase):
 
     def testTheSameDataSearchAndRemove5NumPy(self):
         self.templateTheSameDataSearchAndRemove(numpy.array([ [2] ]), [ None ]);
-
-
-if __name__ == "__main__":
-    unittest.main();

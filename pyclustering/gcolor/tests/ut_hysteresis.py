@@ -70,7 +70,3 @@ class Test(unittest.TestCase):
     
     def testColoringTwoCrossroads(self):
         self.templateTestColoring(GRAPH_SIMPLE_SAMPLES.GRAPH_TWO_CROSSROADS, 1.2, 1.8, 1500, 15);
-
-
-if __name__ == "__main__":
-    unittest.main();

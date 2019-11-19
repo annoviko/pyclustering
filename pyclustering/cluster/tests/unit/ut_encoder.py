@@ -218,7 +218,3 @@ class Test(unittest.TestCase):
         representor.set_encoding(type_encoding.CLUSTER_OBJECT_LIST_SEPARATION);
         assert 2 == len(representor.get_clusters());
         assert [ [[5.1, 5.2], [5.2, 5.1], [5.4, 5.2], [5.1, 5.0]], [[8.1, 8.0], [8.4, 8.2], [8.3, 8.4], [8.5, 8.5]] ] == representor.get_clusters();
-
-
-if __name__ == "__main__":
-    unittest.main();

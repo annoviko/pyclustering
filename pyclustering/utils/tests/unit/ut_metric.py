@@ -129,7 +129,3 @@ class MetricUnitTest(unittest.TestCase):
         assertion.eq(0.0, metric.gower_distance_numpy(numpy.array([-1.0, -1.0]), numpy.array([-1.0, -1.0]), numpy.array([0.0, 0.0])))
         assertion.eq(1.0, metric.gower_distance([-2.0, -2.0], [-3.0, -3.0], [1.0, 1.0]))
         assertion.eq(1.0, metric.gower_distance_numpy(numpy.array([-2.0, -2.0]), numpy.array([-3.0, -3.0]), numpy.array([1.0, 1.0])))
-
-
-if __name__ == "__main__":
-    unittest.main()

@@ -151,7 +151,3 @@ class BirchUnitTest(unittest.TestCase):
 
     def test_incorrect_entry_size_limit(self):
         self.assertRaises(ValueError, birch, [[0], [1], [2]], 1, entry_size_limit=-0.1)
-
-
-if __name__ == "__main__":
-    unittest.main()

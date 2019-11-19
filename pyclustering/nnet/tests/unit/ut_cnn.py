@@ -24,17 +24,17 @@
 """
 
 
-import unittest;
+import unittest
 
 # Generate images without having a window appear.
-import matplotlib;
-matplotlib.use('Agg');
+import matplotlib
+matplotlib.use('Agg')
 
-from pyclustering.nnet.cnn import type_conn, cnn_network, cnn_visualizer;
+from pyclustering.nnet.cnn import type_conn, cnn_network, cnn_visualizer
 
-from pyclustering.samples.definitions import SIMPLE_SAMPLES;
+from pyclustering.samples.definitions import SIMPLE_SAMPLES
 
-from pyclustering.utils import read_sample;
+from pyclustering.utils import read_sample
 
 
 class CnnUnitTest(unittest.TestCase):
@@ -123,7 +123,3 @@ class CnnUnitTest(unittest.TestCase):
         cnn_visualizer.show_dynamic_matrix(output_dynamic);
         cnn_visualizer.show_observation_matrix(output_dynamic);
         cnn_visualizer.show_output_dynamic(output_dynamic);
-
-
-if __name__ == "__main__":
-    unittest.main();

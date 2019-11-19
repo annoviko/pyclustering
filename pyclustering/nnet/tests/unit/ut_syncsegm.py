@@ -59,6 +59,3 @@ class SyncsegmUnitTest(unittest.TestCase):
 
     def testVisualizeSimple18NoFailure(self):
         SyncsegmTestTemplates.templateSyncsegmSegmentation(IMAGE_SIMPLE_SAMPLES.IMAGE_SIMPLE18, 225, 1, 0, 2, 3, False, False);
-
-if __name__ == "__main__":
-    unittest.main();

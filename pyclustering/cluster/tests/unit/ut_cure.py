@@ -128,7 +128,3 @@ class CureUnitTest(unittest.TestCase):
 
     def test_argument_empty_data(self):
         CureTestTemplates.exception(ValueError, [], 3, 5, 0.3, False)
-
-
-if __name__ == "__main__":
-    unittest.main()

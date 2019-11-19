@@ -23,8 +23,8 @@
 
 """
 
-from pyclustering.core.wrapper import *;
-from pyclustering.core.pyclustering_package import pyclustering_package, package_extractor, package_builder;
+from pyclustering.core.wrapper import *
+from pyclustering.core.pyclustering_package import pyclustering_package, package_extractor, package_builder
 
 
 class c_legion_parameters(Structure):
@@ -89,7 +89,7 @@ def legion_simulate(legion_network_pointer, steps, time, solver, collect_dynamic
     c_stimulus = package_builder(stimulus, c_double).create();
     
     ccore.legion_simulate.restype = POINTER(c_void_p);
-    return ccore.legion_simulate(legion_network_pointer, c_uint(steps), c_double(time), c_uint(solver), c_uint(collect_dynamic), c_stimulus);
+    return ccore.legion_simulate(legion_network_pointer, c_uint(steps), c_double(time), c_uint(solver), c_bool(collect_dynamic), c_stimulus);
 
 
 def legion_get_size(legion_network_pointer):
