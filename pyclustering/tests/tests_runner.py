@@ -42,7 +42,7 @@ class pyclustering_integration_tests(suite_holder):
 
     @staticmethod
     def fill_suite(integration_suite):
-        integration_suite.addTests(unittest.TestLoader().discover("..", "it_*.py"))
+        integration_suite.addTests(unittest.TestLoader().discover(".", "it_*.py"))
 
 
 class pyclustering_unit_tests(suite_holder):
@@ -52,7 +52,7 @@ class pyclustering_unit_tests(suite_holder):
 
     @staticmethod
     def fill_suite(unit_suite):
-        unit_suite.addTests(unittest.TestLoader().discover("..", "ut_*.py"))
+        unit_suite.addTests(unittest.TestLoader().discover(".", "ut_*.py"))
 
 
 class pyclustering_tests(suite_holder):
