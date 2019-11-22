@@ -22,6 +22,7 @@
 # Tools
 RM = rm -rf
 MKDIR = mkdir -p
+AR = ar rcs
 
 
 # C++ standard depending on operating system
@@ -71,9 +72,14 @@ CFLAGS = -O2 -MMD -MP -std=$(CPLUS_STANDARD) $(CFLAG_PIC) $(CFLAG_PLATFORM) $(WA
 LFLAGS = -shared $(LFLAG_PLATFORM)
 
 
-# Executable library file
-EXECUTABLE_DIRECTORY = ../pyclustering/core/$(PLATFORM)/$(OSNAME)
-EXECUTABLE = $(EXECUTABLE_DIRECTORY)/ccore.so
+# Shared library file
+SHARED_LIB_DIRECTORY = ../pyclustering/core/$(PLATFORM)/$(OSNAME)
+SHARED_LIB = $(SHARED_LIB_DIRECTORY)/ccore.so
+
+
+# Static library file
+STATIC_LIB_DIRECTORY = .
+STATIC_LIB = libpyclustering.a
 
 
 # Project sources
@@ -90,7 +96,7 @@ INCLUDES = -I$(INCLUDE_DIRECTORY)
 
 # Project objects
 OBJECTS_DIRECTORY = obj/ccore/$(PLATFORM)
-OBJECTS_DIRECTORIES = $(addprefix $(OBJECTS_DIRECTORY)/, $(MODULES)) $(EXECUTABLE_DIRECTORY)
+OBJECTS_DIRECTORIES = $(addprefix $(OBJECTS_DIRECTORY)/, $(MODULES)) $(SHARED_LIB_DIRECTORY)
 OBJECTS = $(patsubst $(SOURCES_DIRECTORY)/%.cpp, $(OBJECTS_DIRECTORY)/%.o, $(SOURCES))
 
 
@@ -106,7 +112,11 @@ cppcheck:
 
 
 .PHONY: ccore
-ccore: mkdirs $(EXECUTABLE)
+ccore: mkdirs $(SHARED_LIB)
+
+
+.PHONY: ccore_static
+ccore_static: mkdirs $(STATIC_LIB)
 
 
 .PHONY: mkdirs
@@ -115,12 +125,16 @@ mkdirs: $(OBJECTS_DIRECTORIES)
 
 .PHONY:
 clean:
-	$(RM) $(OBJECTS_DIRECTORY) $(EXECUTABLE)
+	$(RM) $(OBJECTS_DIRECTORY) $(SHARED_LIB) $(STATIC_LIB)
 
 
 # Build targets
-$(EXECUTABLE): $(OBJECTS)
+$(SHARED_LIB): $(OBJECTS)
 	$(LD) $(LFLAGS) $^ -o $@
+
+
+$(STATIC_LIB): $(OBJECTS)
+	$(AR) $@ $^
 
 
 $(OBJECTS_DIRECTORIES):
