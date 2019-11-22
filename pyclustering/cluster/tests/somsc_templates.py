@@ -24,42 +24,53 @@
 """
 
 
-from pyclustering.cluster.somsc import somsc;
+import numpy
+import unittest
 
-from pyclustering.utils import read_sample;
+from pyclustering.cluster.somsc import somsc
 
-from random import random;
+from pyclustering.utils import read_sample
+
+from random import random
 
 
-class SyncnetTestTemplates:
-    @staticmethod
-    def templateLengthProcessData(path_to_file, amount_clusters, expected_cluster_length, ccore):
-        sample = read_sample(path_to_file);
+class SyncnetTestTemplates(unittest.TestCase):
+    def templateLengthProcessData(self, path_to_file, amount_clusters, expected_cluster_length, ccore):
+        sample = read_sample(path_to_file)
         
-        somsc_instance = somsc(sample, amount_clusters, 100, ccore);
-        somsc_instance.process();
+        somsc_instance = somsc(sample, amount_clusters, 100, ccore)
+        somsc_instance.process()
         
-        clusters = somsc_instance.get_clusters();
+        clusters = somsc_instance.get_clusters()
 
-        obtained_cluster_sizes = [len(cluster) for cluster in clusters];
-        assert len(sample) == sum(obtained_cluster_sizes);
+        obtained_cluster_sizes = [len(cluster) for cluster in clusters]
+        self.assertEqual(len(sample), sum(obtained_cluster_sizes))
         
-        if (expected_cluster_length != None):
-            obtained_cluster_sizes.sort();
-            expected_cluster_length.sort();
-            if (obtained_cluster_sizes != expected_cluster_length):
-                print 
-            assert obtained_cluster_sizes == expected_cluster_length;
+        if expected_cluster_length is not None:
+            obtained_cluster_sizes.sort()
+            expected_cluster_length.sort()
+            self.assertEqual(obtained_cluster_sizes,expected_cluster_length)
 
 
-    @staticmethod
-    def templateClusterAllocationOneDimensionData(ccore_flag):
-        input_data = [ [random()] for i in range(10) ] + [ [random() + 3] for i in range(10) ] + [ [random() + 5] for i in range(10) ] + [ [random() + 8] for i in range(10) ];
+    def templateClusterAllocationOneDimensionData(self, ccore_flag):
+        input_data = [[random()] for i in range(10)] + [[random() + 3] for i in range(10)] + \
+                     [[random() + 5] for i in range(10)] + [[random() + 8] for i in range(10)]
 
-        somsc_instance = somsc(input_data, 4, 100, ccore_flag);
-        somsc_instance.process();
-        clusters = somsc_instance.get_clusters();
+        somsc_instance = somsc(input_data, 4, 100, ccore_flag)
+        somsc_instance.process()
+        clusters = somsc_instance.get_clusters()
 
-        assert len(clusters) == 4;
+        self.assertEqual(len(clusters), 4)
         for cluster in clusters:
-            assert len(cluster) == 10;
+            self.assertEqual(len(cluster), 10)
+
+
+    def predict(self, path_to_file, amount_clusters, points, expected_closest_clusters, ccore):
+        sample = read_sample(path_to_file)
+
+        somsc_instance = somsc(sample, amount_clusters, 100, ccore)
+        somsc_instance.process()
+
+        closest_clusters = somsc_instance.predict(points)
+        self.assertEqual(len(expected_closest_clusters), len(closest_clusters))
+        self.assertTrue(numpy.array_equal(numpy.array(expected_closest_clusters), closest_clusters))

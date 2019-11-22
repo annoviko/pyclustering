@@ -22,14 +22,6 @@ Linux, Windows and MacOS operating systems.
 **PyClustering Wiki**: https://github.com/annoviko/pyclustering/wiki
 
 
-Similar Projects
-================
-
-scikit-learn_: machine learning library for the Python. It features various classification, regression and clustering algorithms.
-
-ELKI_: data mining software written in Java. The focus of ELKI is research in algorithms, with an emphasis on
-unsupervised methods in cluster analysis and outlier detection.
-
 
 Dependencies
 ============

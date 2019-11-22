@@ -101,6 +101,25 @@ class somsc:
         return self
 
 
+    def predict(self, points):
+        """!
+        @brief Calculates the closest cluster to each point.
+
+        @param[in] points (array_like): Points for which closest clusters are calculated.
+
+        @return (list) List of closest clusters for each point. Each cluster is denoted by index. Return empty
+                 collection if 'process()' method was not called.
+
+        """
+
+        result = []
+        for point in points:
+            index_cluster = self.__network.simulate(point)
+            result.append(index_cluster)
+
+        return result
+
+
     def get_clusters(self):
         """!
         @brief Returns list of allocated clusters, each cluster contains indexes of objects in list of data.
