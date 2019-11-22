@@ -94,12 +94,18 @@ build_ccore() {
     
     if [ "$1" == "x64" ]; then
         make ccore_x64 > >(tee -a stdout.log) 2> >(tee -a stderr.log >&2)
-        check_error_log_file stderr.log "Building CCORE (x64): FAILURE."
+        check_error_log_file stderr.log "Building shared pyclustering (x86_64): FAILURE."
+
+        make ccore_x64_static > >(tee -a stdout.log) 2> >(tee -a stderr.log >&2)
+        check_error_log_file stderr.log "Building static pyclustering (x86_64): FAILURE."
     elif [ "$1" == "x86" ]; then
         make ccore_x86 > >(tee -a stdout.log) 2> >(tee -a stderr.log >&2)
-        check_error_log_file stderr.log "Building CCORE (x86): FAILURE."
+        check_error_log_file stderr.log "Building shared pyclustering (x86): FAILURE."
+
+        make ccore_x86_static > >(tee -a stdout.log) 2> >(tee -a stderr.log >&2)
+        check_error_log_file stderr.log "Building static pyclustering (x86): FAILURE."
     else
-        print_error "Unknown CCORE platform is specified."
+        print_error "Unknown platform is specified to build pyclustering library."
         exit 1
     fi
 
@@ -109,8 +115,10 @@ build_ccore() {
 
 run_build_ccore_job() {
     print_info "CCORE (C++ code building):"
-    print_info "- Build CCORE library for x64 platform."
-    print_info "- Build CCORE library for x86 platform."
+    print_info "- Build shared pyclustering library for x86_64 platform."
+    print_info "- Build static pyclustering library for x86_64 platform."
+    print_info "- Build shared pyclustering library for x86 platform."
+    print_info "- Build static pyclustering library for x86 platform."
 
     #install requirement for the job
     print_info "Install requirement for CCORE building."
