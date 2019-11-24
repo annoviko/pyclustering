@@ -21,6 +21,7 @@ GENERAL CHANGES:
 - Introduced new targets to build static libraries on Linux/MacOS platforms.
   See: https://github.com/annoviko/pyclustering/issues/556
 
+
 CORRECTED MAJOR BUGS:
 - Incorrect search procedure of farthest nodes in CF-tree (pyclustering.container.cftree).
   See: https://github.com/annoviko/pyclustering/issues/551
@@ -59,6 +60,7 @@ GENERAL CHANGES:
 
 - Introduced `get_total_wce` method for `xmeans` algorithm to find WCE (pyclustering.cluster.xmeans).
   See: https://github.com/annoviko/pyclustering/issues/508
+
 
 CORRECTED MAJOR BUGS:
 - Incorrect center initialization in K-Means++ when candidates are not farthest (pyclustering.cluster.center_initializer).

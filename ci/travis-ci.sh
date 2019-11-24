@@ -210,7 +210,7 @@ run_test_pyclustering_job() {
     print_info "- Measure code coverage for python code."
 
     # install requirements for the job
-    install_miniconda x64
+    install_miniconda 64-bit
     pip install coveralls
 
     # set path to the tested library
@@ -348,10 +348,10 @@ install_miniconda() {
     print_info "Start downloading process of Miniconda."
     
     PLATFORM_TARGET=$1
-    if [ "$PLATFORM_TARGET" == "x64" ]; then
+    if [ "$PLATFORM_TARGET" == "64-bit" ]; then
         print_info "Download Miniconda for platform '$PLATFORM_TARGET'."
         wget https://repo.continuum.io/miniconda/Miniconda3-4.6.14-Linux-x86_64.sh -O miniconda.sh
-    elif [ "$PLATFORM_TARGET" == "x86" ]; then
+    elif [ "$PLATFORM_TARGET" == "32-bit" ]; then
         print_info "Download Miniconda for platform '$PLATFORM_TARGET'"
         wget https://repo.continuum.io/miniconda/Miniconda3-4.5.12-Linux-x86.sh -O miniconda.sh
     else
