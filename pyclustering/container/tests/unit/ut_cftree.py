@@ -54,12 +54,12 @@ class CftreeUnitTest(unittest.TestCase):
         assert (diameter - tolerance < entry.get_diameter()) and (entry.get_diameter() < diameter + tolerance);
            
     def testCfClusterRepresentationOneDimension2(self):
-        cluster = [ [0.1], [0.2], [0.5], [0.4], [0.6] ];
-        self.templateCfClusterRepresentation(cluster, 0.36, 0.18547, 0.29326, 0.0001);
+        cluster = [[0.1], [0.2], [0.5], [0.4], [0.6]]
+        self.templateCfClusterRepresentation(cluster, 0.36, 0.18547, 0.29326, 0.0001)
        
     def testCfClusterRepresentationTwoDimension(self):
-        cluster = [ [0.1, 0.1], [0.2, 0.2], [0.5, 0.5], [0.4, 0.4], [0.6, 0.6] ];
-        self.templateCfClusterRepresentation(cluster, [0.36, 0.36], 0.26230, 0.41473, 0.0001);
+        cluster = [[0.1, 0.1], [0.2, 0.2], [0.5, 0.5], [0.4, 0.4], [0.6, 0.6]]
+        self.templateCfClusterRepresentation(cluster, [0.36, 0.36], 0.26230, 0.41473, 0.0001)
        
        
     def templateCfEntryValueDistance(self, cluster1, cluster2, value, tolerance, type_measurment):

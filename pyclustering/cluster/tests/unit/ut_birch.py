@@ -40,7 +40,9 @@ from random import random
 
 
 class BirchUnitTest(unittest.TestCase):
-    def templateClusterAllocation(self, path, cluster_sizes, number_clusters, branching_factor = 5, max_node_entries = 5, initial_diameter = 0.1, type_measurement = measurement_type.CENTROID_EUCLIDEAN_DISTANCE, entry_size_limit = 200, diameter_multiplier = 1.5):
+    def templateClusterAllocation(self, path, cluster_sizes, number_clusters, branching_factor=5, max_node_entries=5,
+                                  initial_diameter=0.1, type_measurement=measurement_type.CENTROID_EUCLIDEAN_DISTANCE,
+                                  entry_size_limit=200, diameter_multiplier=1.5):
         sample = read_sample(path)
         
         birch_instance = birch(sample, number_clusters, branching_factor, max_node_entries, initial_diameter, type_measurement, entry_size_limit, diameter_multiplier)
@@ -114,7 +116,10 @@ class BirchUnitTest(unittest.TestCase):
         self.templateClusterAllocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE7, [10, 10], 2)
 
     def testClusterAllocationSampleSimple8(self):
-        self.templateClusterAllocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE8, [15, 30, 20, 80], 4, max_node_entries=2)
+        self.templateClusterAllocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE8, [15, 30, 20, 80], 4)
+
+    # def testClusterAllocationOneDimensionSimilar(self):
+    #     self.templateClusterAllocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, [10, 20], 2)
 
     def templateClusterAllocationOneDimensionData(self, branching_factor=5, max_node_entries=10, initial_diameter=1.0, type_measurement=measurement_type.CENTROID_EUCLIDEAN_DISTANCE, entry_size_limit=20):
         input_data = [[random()] for _ in range(10)] + [[random() + 4] for _ in range(10)] + [[random() + 8] for _ in range(10)] + [[random() + 12] for _ in range(10)]

@@ -319,7 +319,7 @@ class cfentry:
             diameter_part = self.square_sum * self.number_points - 2.0 * sum(list_math_multiplication(self.linear_sum, self.linear_sum)) + self.square_sum * self.number_points
         else:
             diameter_part = self.square_sum * self.number_points - 2.0 * self.linear_sum * self.linear_sum + self.square_sum * self.number_points
-            
+
         self.__diameter = (diameter_part / (self.number_points * (self.number_points - 1))) ** 0.5
         return self.__diameter
     
@@ -562,7 +562,7 @@ class non_leaf_node(cfnode):
                     farthest_node1 = candidate1
                     farthest_node2 = candidate2
         
-                    return [farthest_node1, farthest_node2]
+        return [farthest_node1, farthest_node2]
     
     
     def get_nearest_successors(self, type_measurement):
@@ -1007,24 +1007,24 @@ class cftree:
         
         """
         
-        node_amount_updation = False;
+        node_amount_updation = False
         
         # Try to absorb by the entity
-        index_nearest_entry = search_node.get_nearest_index_entry(entry, self.__type_measurement);
-        merged_entry = search_node.entries[index_nearest_entry] + entry;
+        index_nearest_entry = search_node.get_nearest_index_entry(entry, self.__type_measurement)
+        merged_entry = search_node.entries[index_nearest_entry] + entry
         
         # Otherwise try to add new entry
-        if (merged_entry.get_diameter() > self.__threshold):
+        if merged_entry.get_diameter() > self.__threshold:
             # If it's not exceeded append entity and update feature of the leaf node.
-            search_node.insert_entry(entry);
+            search_node.insert_entry(entry)
             
             # Otherwise current node should be splitted
-            if (len(search_node.entries) > self.__max_entries):
-                self.__split_procedure(search_node);
-                node_amount_updation = True;
+            if len(search_node.entries) > self.__max_entries:
+                self.__split_procedure(search_node)
+                node_amount_updation = True
             
             # Update statistics
-            self.__amount_entries += 1;
+            self.__amount_entries += 1
             
         else:
             search_node.entries[index_nearest_entry] = merged_entry;

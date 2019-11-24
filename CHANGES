@@ -21,6 +21,10 @@ GENERAL CHANGES:
 - Introduced new targets to build static libraries on Linux/MacOS platforms.
   See: https://github.com/annoviko/pyclustering/issues/556
 
+CORRECTED MAJOR BUGS:
+- Incorrect search procedure of farthest nodes in CF-tree (pyclustering.container.cftree).
+  See: https://github.com/annoviko/pyclustering/issues/551
+
 
 ------------------------------------------------------------------------
 
