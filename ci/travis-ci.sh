@@ -463,10 +463,10 @@ case $1 in
         run_test_pyclustering_job ;;
 
     IT_CCORE_X86)
-        run_integration_test_job x86 ;;
+        run_integration_test_job 32-bit ;;
 
     IT_CCORE_X64)
-        run_integration_test_job x64 ;;
+        run_integration_test_job 64-bit ;;
 
     BUILD_TEST_CCORE_MACOS)
         run_build_test_ccore_macos_job ;;

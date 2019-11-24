@@ -90,7 +90,7 @@ function job_build_cygwin_ccore() {
     Write-Host "[CI Job] CCORE building using GCC on Cygwin platform." -ForegroundColor Green;
 
     & $env:CYGWIN_PATH -lc "cygcheck -dc cygwin";
-    & $env:CYGWIN_PATH -lc "cd '$env:APPVEYOR_BUILD_FOLDER'; cd ccore; make ccore_x64";
+    & $env:CYGWIN_PATH -lc "cd '$env:APPVEYOR_BUILD_FOLDER'; cd ccore; make ccore_64bit";
     if ($LastExitCode -ne 0) {
         Write-Error -Message "[CI Job] Building CCORE library for CYGWIN platform: FAILURE." -Category InvalidResult;
         $env:TESTING_RESULT = $env:RESULT_FAILURE;
