@@ -36,9 +36,9 @@ PATH_PYCLUSTERING_CCORE_LIBRARY = None
 
 core_architecture = None
 if platform.architecture()[0] == "64bit":
-    core_architecture = "x64"
+    core_architecture = "64-bit"
 else:
-    core_architecture = "x86"
+    core_architecture = "32-bit"
 
 
 if (_platform == "linux") or (_platform == "linux2"):

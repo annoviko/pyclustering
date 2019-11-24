@@ -323,16 +323,16 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(SolutionDir)/include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
-    <OutDir>..\..\pyclustering\core\x86\win</OutDir>
+    <OutDir>..\..\pyclustering\core\32-bit\win</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>..\..\pyclustering\core\x64\win\</OutDir>
+    <OutDir>..\..\pyclustering\core\64-bit\win\</OutDir>
     <IncludePath>$(SolutionDir)/include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>..\..\pyclustering\core\x86\win\</OutDir>
+    <OutDir>..\..\pyclustering\core\32-bit\win\</OutDir>
     <IncludePath>$(SolutionDir)/include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release Static Library|Win32'">
@@ -349,7 +349,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>..\..\pyclustering\core\x64\win\</OutDir>
+    <OutDir>..\..\pyclustering\core\64-bit\win\</OutDir>
     <IncludePath>$(SolutionDir)/include;$(IncludePath)</IncludePath>
     <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64</LibraryPath>
   </PropertyGroup>

@@ -19,11 +19,8 @@
 #
 
 
-CCORE_X64_BINARY_FOLDER=pyclustering/core/x64/linux
-CCORE_X64_BINARY_PATH=$CCORE_X64_BINARY_FOLDER/ccore.so
-
-CCORE_X86_BINARY_FOLDER=pyclustering/core/x86/linux
-CCORE_X86_BINARY_PATH=$CCORE_X86_BINARY_FOLDER/ccore.so
+CCORE_64BIT_BINARY_FOLDER=pyclustering/core/64-bit/linux
+CCORE_32BIT_BINARY_FOLDER=pyclustering/core/32-bit/linux
 
 DOXYGEN_FILTER=( "warning: Unexpected new line character" )
 
@@ -133,11 +130,11 @@ run_build_ccore_job() {
     build_ccore 64-bit
     build_ccore 32-bit
 
-    print_info "Upload ccore x64 binary."
-    upload_binary x64 linux
+    print_info "Upload ccore 64-bit binary."
+    upload_binary 64-bit linux
     
-    print_info "Upload ccore x86 binary."
-    upload_binary x86 linux
+    print_info "Upload ccore 32-bit binary."
+    upload_binary 32-bit linux
 }
 
 
@@ -266,7 +263,7 @@ run_build_test_ccore_macos_job() {
     python3 pyclustering/tests/tests_runner.py --integration
 
     # upload binaries to cloud
-    upload_binary x64 macos
+    upload_binary 64-bit macos
 }
 
 
@@ -320,19 +317,19 @@ run_deploy_job() {
 
 
     print_info "Prepare binary folder"
-    [ ! -d $CCORE_X64_BINARY_FOLDER ] && mkdir $CCORE_X64_BINARY_FOLDER
-    [ ! -d $CCORE_X86_BINARY_FOLDER ] && mkdir $CCORE_X86_BINARY_FOLDER
+    [ ! -d $CCORE_64BIT_BINARY_FOLDER ] && mkdir $CCORE_64BIT_BINARY_FOLDER
+    [ ! -d $CCORE_32BIT_BINARY_FOLDER ] && mkdir $CCORE_32BIT_BINARY_FOLDER
 
-    download_binary x64
-    download_binary x86
+    download_binary 64-bit
+    download_binary 32-bit
 
     print_info "Add changes for commit"
-    echo "linux ccore $PLATFORM_TARGET build version: '$TRAVIS_BUILD_NUMBER'" > $CCORE_X64_BINARY_FOLDER/.linux.info
-    echo "linux ccore $PLATFORM_TARGET build version: '$TRAVIS_BUILD_NUMBER'" > $CCORE_X86_BINARY_FOLDER/.linux.info
-    git add $CCORE_X64_BINARY_FOLDER/.linux.info
-    git add $CCORE_X86_BINARY_FOLDER/.linux.info
-    git add $CCORE_X64_BINARY_FOLDER/ccore.so 
-    git add $CCORE_X86_BINARY_FOLDER/ccore.so
+    echo "linux ccore $PLATFORM_TARGET build version: '$TRAVIS_BUILD_NUMBER'" > $CCORE_64BIT_BINARY_FOLDER/.linux.info
+    echo "linux ccore $PLATFORM_TARGET build version: '$TRAVIS_BUILD_NUMBER'" > $CCORE_32BIT_BINARY_FOLDER/.linux.info
+    git add $CCORE_64BIT_BINARY_FOLDER/.linux.info
+    git add $CCORE_32BIT_BINARY_FOLDER/.linux.info
+    git add $CCORE_64BIT_BINARY_FOLDER/ccore.so
+    git add $CCORE_32BIT_BINARY_FOLDER/ccore.so
 
 
     print_info "Display status and changes"

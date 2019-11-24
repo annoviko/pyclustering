@@ -28,9 +28,9 @@ Dependencies
 
 **Required packages**: scipy, matplotlib, numpy, Pillow
 
-**Python version**: >=3.5 (32, 64-bit)
+**Python version**: >=3.5 (32-bit, 64-bit)
 
-**C++ version**: >= 14 (32, 64-bit)
+**C++ version**: >= 14 (32-bit, 64-bit)
 
 
 
@@ -75,11 +75,10 @@ Manual installation using GCC:
     $ git clone https://github.com/annoviko/pyclustering.git .
 
     # compile CCORE library (core of the pyclustering library)
-    # you can specify platform (32-bit: 'ccore_x86', 64-bit: 'ccore_x64')
+    # you can specify platform (32-bit: 'ccore_32bit', 64-bit: 'ccore_64bit')
     $ cd ccore/
-    $ make ccore_x64    # compile CCORE for 64-bit
-    # make ccore_x86    # compile CCORE for 32-bit
-    # make ccore        # compile CCORE for both platforms if you do not know which is required
+    $ make ccore_64bit    # compile CCORE for 64-bit
+    # make ccore_32bit    # compile CCORE for 32-bit
 
     # return to parent folder of the pyclustering library
     cd ../

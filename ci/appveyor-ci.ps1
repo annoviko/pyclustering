@@ -19,8 +19,8 @@
 #
 
 
-$env:CCORE_X64_BINARY_PATH = "pyclustering\core\x64\win\ccore.dll"
-$env:CCORE_X86_BINARY_PATH = "pyclustering\core\x86\win\ccore.dll"
+$env:CCORE_64BIT_BINARY_PATH = "pyclustering\core\64-bit\win\ccore.dll"
+$env:CCORE_32BIT_BINARY_PATH = "pyclustering\core\32-bit\win\ccore.dll"
 
 $env:RESULT_SUCCESS = "Success";
 $env:RESULT_FAILURE = "Failure";
@@ -54,8 +54,8 @@ function job_build_windows_ccore($platform_version) {
         Exit 1;
     }
 
-    upload_binary x86 $env:CCORE_X86_BINARY_PATH;
-    upload_binary x64 $env:CCORE_X64_BINARY_PATH;
+    upload_binary 32-bit $env:CCORE_32BIT_BINARY_PATH;
+    upload_binary 64-bit $env:CCORE_64BIT_BINARY_PATH;
 
     Write-Host "Building CCORE library for WINDOWS platform: SUCCESS." -ForegroundColor Green;
 }
@@ -134,10 +134,10 @@ function job_pyclustering_windows($platform_version) {
 
     $binary_path = "";
     if ($platform_version -eq "x86") {
-        $binary_path = $env:CCORE_X86_BINARY_PATH
+        $binary_path = $env:CCORE_32BIT_BINARY_PATH
     }
     elseif ($platform_version -eq "x64") {
-        $binary_path = $env:CCORE_X64_BINARY_PATH
+        $binary_path = $env:CCORE_64BIT_BINARY_PATH
     }
 
     download_binary $platform_version $binary_path
@@ -188,21 +188,21 @@ function job_deploy() {
 
 
     Write-Host "[DEPLOY]: Prepare binary folder" -ForegroundColor Green;
-    mkdir pyclustering\core\x64\win;
+    mkdir pyclustering\core\64-bit\win;
 
-    download_binary x86 $env:CCORE_X86_BINARY_PATH;
-    download_binary x64 $env:CCORE_X64_BINARY_PATH;
+    download_binary 32-bit $env:CCORE_32BIT_BINARY_PATH;
+    download_binary 64-bit $env:CCORE_64BIT_BINARY_PATH;
 
     Write-Host "[DEPLOY]: Add changes for commit" -ForegroundColor Green;
 
-    Write-Host "windows ccore x32 build version: '$env:APPVEYOR_BUILD_NUMBER'" > pyclustering\core\x86\win\.win.info;
-    Write-Host "windows ccore x64 build version: '$env:APPVEYOR_BUILD_NUMBER'" > pyclustering\core\x64\win\.win.info;
+    Write-Host "windows ccore 32-bit build version: '$env:APPVEYOR_BUILD_NUMBER'" > pyclustering\core\32-bit\win\.win.info;
+    Write-Host "windows ccore 64-bit build version: '$env:APPVEYOR_BUILD_NUMBER'" > pyclustering\core\64-bit\win\.win.info;
     
-    git.exe add pyclustering\core\x86\win\.win.info;
-    git.exe add pyclustering\core\x86\win\ccore.dll;
+    git.exe add pyclustering\core\32-bit\win\.win.info;
+    git.exe add pyclustering\core\32-bit\win\ccore.dll;
 
-    git.exe add pyclustering\core\x64\win\.win.info;
-    git.exe add pyclustering\core\x64\win\ccore.dll;
+    git.exe add pyclustering\core\64-bit\win\.win.info;
+    git.exe add pyclustering\core\64-bit\win\ccore.dll;
 
     Write-Host "[DEPLOY]: Display status and changes" -ForegroundColor Green;
     git.exe status;

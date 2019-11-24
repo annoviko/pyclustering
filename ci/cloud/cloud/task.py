@@ -65,8 +65,8 @@ class task:
             if action_params['os'] not in ['windows', 'linux', 'macos']:
                 raise ValueError("ERROR: Unsupported operating system '%s' (available: 'linux', 'windows')." % action_params['os'])
 
-            if action_params['platform'] not in ['x64', 'x86']:
-                raise ValueError("ERROR: Unsupported platform '%s' (available: 'x86', 'x64')." % action_params['platform'])
+            if action_params['platform'] not in ['32-bit', '64-bit']:
+                raise ValueError("ERROR: Unsupported platform '%s' (available: '32-bit', '64-bit')." % action_params['platform'])
 
 
         elif self.__action == 'get_third_party':
@@ -83,8 +83,8 @@ class task:
             if action_params['os'] not in ['windows', 'linux', 'macos']:
                 raise ValueError("ERROR: Unsupported operating system '%s' (available: 'linux', 'windows')." % action_params['os'])
 
-            if action_params['platform'] not in ['x64', 'x86']:
-                raise ValueError("ERROR: Unsupported platform '%s' (available: 'x86', 'x64')." % action_params['platform'])
+            if action_params['platform'] not in ['32-bit', '64-bit']:
+                raise ValueError("ERROR: Unsupported platform '%s' (available: '32-bit', '64-bit')." % action_params['platform'])
 
 
         elif self.__action in ['-h', '--help', 'help']:

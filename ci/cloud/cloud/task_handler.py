@@ -224,9 +224,9 @@ class task_handler:
         print(" download <from> <to>                    - download file or folder from remote path on cloud to local machine.")
         print(" rm <path>                               - remove file or folder on cloud.")
         print(" mkdir <path>                            - create folder on cloud.")
-        print(" get_third_party <os> <platform> <to>    - download third party from cloud for specific system (linux, windows, macos) and platform (x64, x86)\n"
+        print(" get_third_party <os> <platform> <to>    - download third party from cloud for specific system (linux, windows, macos) and platform (32-bit, 64-bit)\n"
               "                                           to specific folder on local machine.")
-        print(" get_bin <branch> <os> <platform>        - download latest binary file for particular branch, system (linux, windows, macos) and platform (x64, x86).")
+        print(" get_bin <branch> <os> <platform>        - download latest binary file for particular branch, system (linux, windows, macos) and platform (32-bit, 64-bit).")
         print("")
         print("Example:")
-        print(" python3 ci/cloud $CLOUD_TOKEN get_third_party windows x64")
+        print(" python3 ci/cloud $CLOUD_TOKEN get_third_party windows 64-bit")

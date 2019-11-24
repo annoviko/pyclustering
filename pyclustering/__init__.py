@@ -101,8 +101,8 @@ The library can be compiled and manually installed on Linux or MacOS machine whe
     # extract content of the pyclustering library...
     # compile CCORE library (core of the pyclustering library).
     cd pyclustering/ccore
-    make ccore_x64 # if platform is x86_64 (64-bit)
-    # make ccore_x86 # if platform is x86 (32-bit)
+    make ccore_64bit # if platform is 64-bit
+    # make ccore_32bit # if platform is 32-bit
     
     # return to parent folder of the pyclustering library
     cd ../
