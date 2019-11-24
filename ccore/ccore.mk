@@ -54,12 +54,15 @@ endif
 
 
 # Target flag depending on platform
-ifeq ($(PLATFORM), x86)
+ifeq ($(PLATFORM), 32-bit)
 	CFLAG_PLATFORM = -m32
 	LFLAG_PLATFORM = -m32
-else
+else ifeq($(PLATFORM), 64-bit)
 	CFLAG_PLATFORM = -m64
 	LFLAG_PLATFORM = -m64
+else
+	CFLAG_PLATFORM = 
+	LFLAG_PLATFORM = 
 endif
 
 

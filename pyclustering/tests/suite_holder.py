@@ -25,6 +25,7 @@
 
 
 import sys
+import time
 import unittest
 
 
@@ -35,13 +36,15 @@ class suite_holder:
     def get_suite(self):
         return self.__suite
 
-    def run(self, rerun=1):
+    def run(self, rerun=2):
         print(self.__suite)
         result = unittest.TextTestRunner(stream=sys.stdout, verbosity=3).run(self.__suite)
         if result.wasSuccessful() is True:
             return result
 
         for attempt in range(rerun):
+            time.sleep(1)   # sleep 1 second to change current time for random seed.
+
             print("\n======================================================================")
             print("Rerun failed tests (attempt: %d)." % (attempt + 1))
             print("----------------------------------------------------------------------")

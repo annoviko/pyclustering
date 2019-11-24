@@ -39,69 +39,68 @@ MKFLAG = -j$(NCORES) -f
 
 default:
 	@echo "List of targets:"
-	@echo "ccore_x64         - to build release shared pyclustering library (platform x86_64)."
-	@echo "ccore_x64_static  - to build release static pyclustering library (platform x86_64)."
-	@echo "ccore_x64_clean   - to clean build files of pyclustering library (platform x86_64)."
-	@echo "ccore_x86         - to build release shared pyclustering library (platform x86)."
-	@echo "ccore_x86_static  - to build release static pyclustering library (platform x86)."
-	@echo "ccore_x86_clean   - to clean build files of pyclustering library (platform x86)."
-	@echo "ccore             - to build all releases of shared pyclustering library."
-	@echo "ccore_clean       - to clean all build files of pyclustering library."
+	@echo "ccore_64bit        - to build release shared pyclustering library (64-bit platform)."
+	@echo "ccore_64bit_static - to build release static pyclustering library (64-bit platform)."
+	@echo "ccore_64bit_clean  - to clean build files of pyclustering library (64-bit platform)."
+	@echo "ccore_32bit        - to build release shared pyclustering library (32-bit platform)."
+	@echo "ccore_32bit_static - to build release static pyclustering library (32-bit platform)."
+	@echo "ccore_32bit_clean  - to clean build files of pyclustering library (32-bit platform)."
+	@echo "ccore              - to build release shared pyclustering library using default compiler."
+	@echo "ccore_clean        - to clean all build files of pyclustering library."
 	@echo " "
-	@echo "cppcheck          - to perform static analysis of source code."
-	@echo "clang             - to perform compilation and static analysis using clang compiler."
+	@echo "cppcheck           - to perform static analysis of source code."
+	@echo "clang              - to perform compilation and static analysis using clang compiler."
 	@echo " "
-	@echo "ut                - to build release unit-tests for pyclustering library."
-	@echo "utdbg             - to build debug unit-tests for pyclustering library."
-	@echo "utrun             - to run unit-tests of pyclustering library."
-	@echo "utclean           - to clean build files of unit-tests of pyclustering library."
+	@echo "ut                 - to build release unit-tests for pyclustering library."
+	@echo "utdbg              - to build debug unit-tests for pyclustering library."
+	@echo "utrun              - to run unit-tests of pyclustering library."
+	@echo "utclean            - to clean build files of unit-tests of pyclustering library."
 	@echo " "
-	@echo "valgrind          - to build and run unit-tests for memory leak checking of pyclustering library."
-	@echo "valgrind_shock    - to build and run shock scope of unit-tests for memory leak checking of pyclustering library."
+	@echo "valgrind           - to build and run unit-tests for memory leak checking of pyclustering library."
+	@echo "valgrind_shock     - to build and run shock scope of unit-tests for memory leak checking of pyclustering library."
 	@echo " "
-	@echo "clean             - to clean everything."
+	@echo "clean              - to clean everything."
 
 
-.PHONY: ccore_x64
-ccore_x64:
-	$(MAKE) $(MKFLAG) ccore.mk ccore PLATFORM="x64"
+.PHONY: ccore_64bit
+ccore_64bit:
+	$(MAKE) $(MKFLAG) ccore.mk ccore PLATFORM="64-bit"
 
 
-.PHONY: ccore_x64_static
-ccore_x64_static:
-	$(MAKE) $(MKFLAG) ccore.mk ccore_static PLATFORM="x64"
+.PHONY: ccore_64bit_static
+ccore_64bit_static:
+	$(MAKE) $(MKFLAG) ccore.mk ccore_static PLATFORM="64-bit"
 
 
-.PHONY: ccore_x64_clean
-ccore_x64_clean:
-	$(MAKE) $(MKFLAG) ccore.mk clean PLATFORM="x64"
+.PHONY: ccore_64bit_clean
+ccore_64bit_clean:
+	$(MAKE) $(MKFLAG) ccore.mk clean PLATFORM="64-bit"
 
 
-.PHONY: ccore_x86
-ccore_x86:
-	$(MAKE) $(MKFLAG) ccore.mk ccore PLATFORM="x86"
+.PHONY: ccore_32bit
+ccore_32bit:
+	$(MAKE) $(MKFLAG) ccore.mk ccore PLATFORM="32-bit"
 
 
-.PHONY: ccore_x86_static
-ccore_x86_static:
-	$(MAKE) $(MKFLAG) ccore.mk ccore_static PLATFORM="x86"
+.PHONY: ccore_32bit_static
+ccore_32bit_static:
+	$(MAKE) $(MKFLAG) ccore.mk ccore_static PLATFORM="32-bit"
 
 
-.PHONY: ccore_x86_clean
-ccore_x86_clean:
-	$(MAKE) $(MKFLAG) ccore.mk clean PLATFORM="x86"
+.PHONY: ccore_32bit_clean
+ccore_32bit_clean:
+	$(MAKE) $(MKFLAG) ccore.mk clean PLATFORM="32-bit"
 
 
 .PHONY: ccore
 ccore:
-	$(MAKE) $(MKFLAG) ccore.mk ccore PLATFORM="x64"
-	$(MAKE) $(MKFLAG) ccore.mk ccore PLATFORM="x86"
+	$(MAKE) $(MKFLAG) ccore.mk ccore
 
 
 .PHONY: ccore_clean
 ccore_clean:
-	$(MAKE) $(MKFLAG) ccore.mk clean PLATFORM="x64"
-	$(MAKE) $(MKFLAG) ccore.mk clean PLATFORM="x86"
+	$(MAKE) $(MKFLAG) ccore.mk clean PLATFORM="64-bit"
+	$(MAKE) $(MKFLAG) ccore.mk clean PLATFORM="32-bit"
 
 
 .PHONY: cppcheck
@@ -111,7 +110,7 @@ cppcheck:
 
 .PHONY: clang
 clang:
-	$(MAKE) $(MKFLAG) ccore.mk ccore PLATFORM="x64" COMPILER="clang"
+	$(MAKE) $(MKFLAG) ccore.mk ccore PLATFORM="64-bit" COMPILER="clang"
 
 
 .PHONY: ut
@@ -148,7 +147,6 @@ valgrind_shock:
 
 .PHONY: clean
 clean:
-	$(MAKE) $(MKFLAG) ccore.mk clean PLATFORM="x64"
-	$(MAKE) $(MKFLAG) ccore.mk clean PLATFORM="x86"
+	$(MAKE) $(MKFLAG) ccore.mk clean PLATFORM="64-bit"
+	$(MAKE) $(MKFLAG) ccore.mk clean PLATFORM="32-bit"
 	$(MAKE) $(MKFLAG) utcore.mk clean
-

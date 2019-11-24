@@ -92,18 +92,18 @@ build_ccore() {
     [ -f stderr.log ] && rm stderr.log
     [ -f stdout.log ] && rm stdout.log
     
-    if [ "$1" == "x64" ]; then
-        make ccore_x64 > >(tee -a stdout.log) 2> >(tee -a stderr.log >&2)
-        check_error_log_file stderr.log "Building shared pyclustering (x86_64): FAILURE."
+    if [ "$1" == "64-bit" ]; then
+        make ccore_64bit > >(tee -a stdout.log) 2> >(tee -a stderr.log >&2)
+        check_error_log_file stderr.log "Building shared pyclustering (64-bit): FAILURE."
 
-        make ccore_x64_static > >(tee -a stdout.log) 2> >(tee -a stderr.log >&2)
-        check_error_log_file stderr.log "Building static pyclustering (x86_64): FAILURE."
-    elif [ "$1" == "x86" ]; then
-        make ccore_x86 > >(tee -a stdout.log) 2> >(tee -a stderr.log >&2)
-        check_error_log_file stderr.log "Building shared pyclustering (x86): FAILURE."
+        make ccore_64bit_static > >(tee -a stdout.log) 2> >(tee -a stderr.log >&2)
+        check_error_log_file stderr.log "Building static pyclustering (64-bit): FAILURE."
+    elif [ "$1" == "32-bit" ]; then
+        make ccore_32bit > >(tee -a stdout.log) 2> >(tee -a stderr.log >&2)
+        check_error_log_file stderr.log "Building shared pyclustering (32-bit): FAILURE."
 
-        make ccore_x86_static > >(tee -a stdout.log) 2> >(tee -a stderr.log >&2)
-        check_error_log_file stderr.log "Building static pyclustering (x86): FAILURE."
+        make ccore_32bit_static > >(tee -a stdout.log) 2> >(tee -a stderr.log >&2)
+        check_error_log_file stderr.log "Building static pyclustering (32-bit): FAILURE."
     else
         print_error "Unknown platform is specified to build pyclustering library."
         exit 1
@@ -115,10 +115,10 @@ build_ccore() {
 
 run_build_ccore_job() {
     print_info "CCORE (C++ code building):"
-    print_info "- Build shared pyclustering library for x86_64 platform."
-    print_info "- Build static pyclustering library for x86_64 platform."
-    print_info "- Build shared pyclustering library for x86 platform."
-    print_info "- Build static pyclustering library for x86 platform."
+    print_info "- Build shared pyclustering library for 64-bit platform."
+    print_info "- Build static pyclustering library for 64-bit platform."
+    print_info "- Build shared pyclustering library for 32-bit platform."
+    print_info "- Build static pyclustering library for 32-bit platform."
 
     #install requirement for the job
     print_info "Install requirement for CCORE building."
@@ -130,8 +130,8 @@ run_build_ccore_job() {
     gcc --version
 
     # build ccore library
-    build_ccore x64
-    build_ccore x86
+    build_ccore 64-bit
+    build_ccore 32-bit
 
     print_info "Upload ccore x64 binary."
     upload_binary x64 linux
@@ -218,7 +218,7 @@ run_test_pyclustering_job() {
     export PYTHONPATH=${PYTHONPATH}
 
     # build ccore library
-    build_ccore x64
+    build_ccore 64-bit
 
     # run unit and integration tests and obtain coverage results
     coverage run --source=pyclustering --omit='pyclustering/*/tests/*,pyclustering/*/examples/*,pyclustering/tests/*' pyclustering/tests/tests_runner.py
@@ -257,7 +257,7 @@ run_build_test_ccore_macos_job() {
     export PYTHONPATH=${PYTHONPATH}
 
     # build ccore library
-    build_ccore x64
+    build_ccore 64-bit
 
     # install corresponding packages
     pip3 install numpy matplotlib scipy Pillow
