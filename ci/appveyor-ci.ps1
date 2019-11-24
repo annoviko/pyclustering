@@ -132,15 +132,12 @@ function job_pyclustering_windows($platform_version) {
 
     Write-Host "[CI Job] Download built binary for platform '$platform_version'." -ForegroundColor Green;
 
-    $binary_path = "";
     if ($platform_version -eq "x86") {
-        $binary_path = $env:CCORE_32BIT_BINARY_PATH
+        download_binary 32-bit $env:CCORE_32BIT_BINARY_PATH
     }
     elseif ($platform_version -eq "x64") {
-        $binary_path = $env:CCORE_64BIT_BINARY_PATH
+        download_binary 64-bit $env:CCORE_64BIT_BINARY_PATH
     }
-
-    download_binary $platform_version $binary_path
 
     Write-Host "[CI Job] Starting integration testing using interpreter '$env:PYTHON_INTERPRETER'." -ForegroundColor Green;
     
