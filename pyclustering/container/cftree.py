@@ -24,13 +24,14 @@
 
 """
 
+import numpy
+
 from copy import copy
 
 from pyclustering.cluster import cluster_visualizer
 
 from pyclustering.utils import euclidean_distance_square
 from pyclustering.utils import manhattan_distance
-from pyclustering.utils import list_math_addition, list_math_subtraction, list_math_multiplication
 from pyclustering.utils import linear_sum, square_sum
 
 from enum import IntEnum
@@ -131,7 +132,7 @@ class cfentry:
         """
         
         self.__number_points = number_points
-        self.__linear_sum = linear_sum
+        self.__linear_sum = numpy.array(linear_sum)
         self.__square_sum = square_sum
         
         self.__centroid = None
@@ -174,7 +175,7 @@ class cfentry:
         """
         
         number_points = self.number_points + entry.number_points
-        result_linear_sum = list_math_addition(self.linear_sum, entry.linear_sum)
+        result_linear_sum = numpy.add(self.linear_sum, entry.linear_sum)
         result_square_sum = self.square_sum + entry.square_sum
         
         return cfentry(number_points, result_linear_sum, result_square_sum)
@@ -192,7 +193,7 @@ class cfentry:
         """
                 
         number_points = self.number_points - entry.number_points
-        result_linear_sum = list_math_subtraction(self.linear_sum, entry.linear_sum)
+        result_linear_sum = numpy.subtract(self.linear_sum, entry.linear_sum)
         result_square_sum = self.square_sum - entry.square_sum
         
         if (number_points < 0) or (result_square_sum < 0):
@@ -262,17 +263,14 @@ class cfentry:
         @brief Calculates centroid of cluster that is represented by the entry. 
         @details It's calculated once when it's requested after the last changes.
         
-        @return (list) Centroid of cluster that is represented by the entry.
+        @return (array_like) Centroid of cluster that is represented by the entry.
         
         """
         
         if self.__centroid is not None:
             return self.__centroid
-        
-        self.__centroid = [0] * len(self.linear_sum)
-        for index_dimension in range(0, len(self.linear_sum)):
-            self.__centroid[index_dimension] = self.linear_sum[index_dimension] / self.number_points
-        
+
+        self.__centroid = numpy.divide(self.linear_sum, self.number_points)
         return self.__centroid
     
     
@@ -291,13 +289,9 @@ class cfentry:
         centroid = self.get_centroid()
         
         radius_part_1 = self.square_sum
-        
-        if type(centroid) == list:
-            radius_part_2 = 2.0 * sum(list_math_multiplication(self.linear_sum, centroid))
-            radius_part_3 = self.number_points * sum(list_math_multiplication(centroid, centroid))
-        else:
-            radius_part_2 = 2.0 * self.linear_sum * centroid
-            radius_part_3 = self.number_points * centroid * centroid
+
+        radius_part_2 = 2.0 * numpy.dot(self.linear_sum, centroid)
+        radius_part_3 = self.number_points * numpy.dot(centroid, centroid)
         
         self.__radius = ((1.0 / self.number_points) * (radius_part_1 - radius_part_2 + radius_part_3)) ** 0.5
         return self.__radius
@@ -315,12 +309,13 @@ class cfentry:
         if self.__diameter is not None:
             return self.__diameter
 
-        if type(self.linear_sum) == list:
-            diameter_part = self.square_sum * self.number_points - 2.0 * sum(list_math_multiplication(self.linear_sum, self.linear_sum)) + self.square_sum * self.number_points
-        else:
-            diameter_part = self.square_sum * self.number_points - 2.0 * self.linear_sum * self.linear_sum + self.square_sum * self.number_points
+        diameter_part = self.square_sum * self.number_points - 2.0 * numpy.dot(self.linear_sum, self.linear_sum) + self.square_sum * self.number_points
 
-        self.__diameter = (diameter_part / (self.number_points * (self.number_points - 1))) ** 0.5
+        if diameter_part < 0.000000001:
+            self.__diameter = 0.0
+        else:
+            self.__diameter = (diameter_part / (self.number_points * (self.number_points - 1))) ** 0.5
+
         return self.__diameter
     
         
@@ -334,8 +329,8 @@ class cfentry:
         
         """
         
-        linear_part_distance = sum(list_math_multiplication(self.linear_sum, entry.linear_sum))
-        
+        linear_part_distance = numpy.dot(self.linear_sum, entry.linear_sum)
+
         return ((entry.number_points * self.square_sum - 2.0 * linear_part_distance + self.number_points * entry.square_sum) / (self.number_points * entry.number_points)) ** 0.5
     
     
@@ -349,10 +344,10 @@ class cfentry:
         
         """
         
-        linear_part_first = list_math_addition(self.linear_sum, entry.linear_sum)
+        linear_part_first = numpy.add(self.linear_sum, entry.linear_sum)
         linear_part_second = linear_part_first
         
-        linear_part_distance = sum(list_math_multiplication(linear_part_first, linear_part_second))
+        linear_part_distance = numpy.dot(linear_part_first, linear_part_second)
         
         general_part_distance = 2.0 * (self.number_points + entry.number_points) * (self.square_sum + entry.square_sum) - 2.0 * linear_part_distance
         
@@ -369,15 +364,15 @@ class cfentry:
         
         """
                 
-        linear_part_12 = list_math_addition(self.linear_sum, entry.linear_sum)
+        linear_part_12 = numpy.add(self.linear_sum, entry.linear_sum)
         variance_part_first = (self.square_sum + entry.square_sum) - \
-            2.0 * sum(list_math_multiplication(linear_part_12, linear_part_12)) / (self.number_points + entry.number_points) + \
-            (self.number_points + entry.number_points) * sum(list_math_multiplication(linear_part_12, linear_part_12)) / (self.number_points + entry.number_points)**2.0
+            2.0 * numpy.dot(linear_part_12, linear_part_12) / (self.number_points + entry.number_points) + \
+            (self.number_points + entry.number_points) * numpy.dot(linear_part_12, linear_part_12) / (self.number_points + entry.number_points)**2.0
         
-        linear_part_11 = sum(list_math_multiplication(self.linear_sum, self.linear_sum))
+        linear_part_11 = numpy.dot(self.linear_sum, self.linear_sum)
         variance_part_second = -(self.square_sum - (2.0 * linear_part_11 / self.number_points) + (linear_part_11 / self.number_points))
         
-        linear_part_22 = sum(list_math_multiplication(entry.linear_sum, entry.linear_sum))
+        linear_part_22 = numpy.dot(entry.linear_sum, entry.linear_sum)
         variance_part_third = -(entry.square_sum - (2.0 / entry.number_points) * linear_part_22 + entry.number_points * (1.0 / entry.number_points ** 2.0) * linear_part_22)
 
         return variance_part_first + variance_part_second + variance_part_third
@@ -882,11 +877,11 @@ class cftree:
         
         """
         
-        level_nodes = [];
-        if (level < self.__height):
-            level_nodes = self.__recursive_get_level_nodes(level, self.__root);
+        level_nodes = []
+        if level < self.__height:
+            level_nodes = self.__recursive_get_level_nodes(level, self.__root)
         
-        return level_nodes;
+        return level_nodes
     
     
     def __recursive_get_level_nodes(self, level, node):
@@ -900,15 +895,15 @@ class cftree:
         
         """
         
-        level_nodes = [];
-        if (level is 0):
-            level_nodes.append(node);
+        level_nodes = []
+        if level is 0:
+            level_nodes.append(node)
         
         else:
             for sucessor in node.successors:
-                level_nodes += self.__recursive_get_level_nodes(level - 1, sucessor);
+                level_nodes += self.__recursive_get_level_nodes(level - 1, sucessor)
         
-        return level_nodes;
+        return level_nodes
     
     
     def insert_cluster(self, cluster):
@@ -920,8 +915,8 @@ class cftree:
         
         """
         
-        entry = cfentry(len(cluster), linear_sum(cluster), square_sum(cluster));
-        self.insert(entry);
+        entry = cfentry(len(cluster), linear_sum(cluster), square_sum(cluster))
+        self.insert(entry)
     
     
     def insert(self, entry):

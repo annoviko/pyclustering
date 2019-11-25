@@ -23,33 +23,33 @@
 
 """
 
-import unittest;
+import unittest
 
-import numpy;
+import numpy
 
-import math;
+import math
 
-from random import random;
+from random import random
 
-from pyclustering.container.cftree import cfentry, cftree;
-from pyclustering.container.cftree import measurement_type;
+from pyclustering.container.cftree import cfentry, cftree
+from pyclustering.container.cftree import measurement_type
 
-from pyclustering.utils import linear_sum, square_sum;
-from pyclustering.utils import euclidean_distance_square, manhattan_distance, average_inter_cluster_distance, average_intra_cluster_distance, variance_increase_distance;
+from pyclustering.utils import linear_sum, square_sum
+from pyclustering.utils import euclidean_distance_square, manhattan_distance, average_inter_cluster_distance, average_intra_cluster_distance, variance_increase_distance
 
 
 class CftreeUnitTest(unittest.TestCase):
     def templateCfClusterRepresentation(self, cluster, centroid, radius, diameter, tolerance):
-        entry = cfentry(len(cluster), linear_sum(cluster), square_sum(cluster));
+        entry = cfentry(len(cluster), linear_sum(cluster), square_sum(cluster))
            
-        assertion_centroid = centroid;
-        if (type(centroid) != list):
-            assertion_centroid = [ centroid ];
+        assertion_centroid = centroid
+        if type(centroid) != list:
+            assertion_centroid = [centroid]
            
-        if (type(centroid) == list):
+        if type(centroid) == list:
             for dimension in range(0, len(assertion_centroid)):
                 assert (assertion_centroid[dimension] - tolerance < ( entry.get_centroid() )[dimension]) and (( entry.get_centroid() )[dimension] < assertion_centroid[dimension] + tolerance);
-           
+
         assert (radius - tolerance < entry.get_radius()) and (entry.get_radius() < radius + tolerance);
         assert (diameter - tolerance < entry.get_diameter()) and (entry.get_diameter() < diameter + tolerance);
            
