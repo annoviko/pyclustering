@@ -23,8 +23,11 @@ GENERAL CHANGES:
 
 
 CORRECTED MAJOR BUGS:
-- Incorrect search procedure of farthest nodes in CF-tree (pyclustering.container.cftree).
+- Bug with incorrect search procedure of farthest nodes in CF-tree (pyclustering.container.cftree).
   See: https://github.com/annoviko/pyclustering/issues/551
+
+- Bug with crash during clustering with the same points in case of BIRCH (pyclustering.cluster.birch).
+  See: https://github.com/annoviko/pyclustering/issues/561
 
 
 ------------------------------------------------------------------------
@@ -63,7 +66,7 @@ GENERAL CHANGES:
 
 
 CORRECTED MAJOR BUGS:
-- Incorrect center initialization in K-Means++ when candidates are not farthest (pyclustering.cluster.center_initializer).
+- Bug with incorrect center initialization in K-Means++ when candidates are not farthest (pyclustering.cluster.center_initializer).
   See: https://github.com/annoviko/pyclustering/issues/549
 
 
