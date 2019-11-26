@@ -365,7 +365,7 @@ class cluster_visualizer:
     
     """
 
-    def __init__(self, number_canvases = 1, size_row = 1, titles = None):
+    def __init__(self, number_canvases=1, size_row=1, titles=None):
         """!
         @brief Constructor of cluster visualizer.
         
@@ -504,7 +504,7 @@ class cluster_visualizer:
         self.__canvas_clusters[index_canvas][index_cluster].attributes.append(added_attribute_cluster_descriptor)
     
     
-    def append_clusters(self, clusters, data = None, canvas = 0, marker = '.', markersize = None):
+    def append_clusters(self, clusters, data=None, canvas=0, marker='.', markersize=None):
         """!
         @brief Appends list of cluster to canvas for drawing.
         

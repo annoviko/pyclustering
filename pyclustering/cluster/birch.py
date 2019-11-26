@@ -27,6 +27,7 @@
 
 from pyclustering.utils import linear_sum, square_sum
 
+from pyclustering.cluster.agglomerative import agglomerative, type_link
 from pyclustering.cluster.encoder import type_encoding
 
 from pyclustering.container.cftree import cftree, cfentry, measurement_type
@@ -63,9 +64,9 @@ class birch:
     
     """
     
-    def __init__(self, data, number_clusters, branching_factor=5, max_node_entries=5, initial_diameter=0.1,
+    def __init__(self, data, number_clusters, branching_factor=50, max_node_entries=200, initial_diameter=0.5,
                  type_measurement=measurement_type.CENTROID_EUCLIDEAN_DISTANCE,
-                 entry_size_limit=200,
+                 entry_size_limit=500,
                  diameter_multiplier=1.5,
                  ccore=True):
         """!
@@ -115,19 +116,17 @@ class birch:
         self.__insert_data()
         self.__extract_features()
 
-        # in line with specification modify hierarchical algorithm should be used for further clustering
-        current_number_clusters = len(self.__features)
-        
-        while current_number_clusters > self.__number_clusters:
-            indexes = self.__find_nearest_cluster_features()
-            
-            self.__features[indexes[0]] += self.__features[indexes[1]]
-            self.__features.pop(indexes[1])
-            
-            current_number_clusters = len(self.__features)
-            
-        # decode data
-        self.__decode_data()
+        cf_data = [feature.get_centroid() for feature in self.__features]
+
+        algorithm = agglomerative(cf_data, self.__number_clusters, type_link.SINGLE_LINK).process()
+        cf_clusters = algorithm.get_clusters()
+
+        self.__clusters = [[] for _ in range(len(cf_clusters))]
+        for index_cluster in range(len(cf_clusters)):
+            for index_feature in cf_clusters[index_cluster]:
+                feature = self.__features[index_feature]
+                self.__clusters[index_cluster] += feature.indexes
+
         return self
     
     
@@ -192,25 +191,10 @@ class birch:
 
         else:
             # copy all leaf clustering features
-            for node in self.__tree.leafes:
-                self.__features.append(node.feature)
-    
-    
-    def __decode_data(self):
-        """!
-        @brief Decodes data from CF-tree features.
-        
-        """
-        
-        self.__clusters = [[] for _ in range(self.__number_clusters)]
-        self.__noise = []
-        
-        for index_point in range(0, len(self.__pointer_data)):
-            (_, cluster_index) = self.__get_nearest_feature(self.__pointer_data[index_point], self.__features)
-            
-            self.__clusters[cluster_index].append(index_point)
-    
-    
+            for leaf_node in self.__tree.leafes:
+                self.__features += leaf_node.entries
+
+
     def __insert_data(self):
         """!
         @brief Inserts input data to the tree.
@@ -221,12 +205,10 @@ class birch:
         
         for index_point in range(0, len(self.__pointer_data)):
             point = self.__pointer_data[index_point]
-            self.__tree.insert_cluster([point])
+            self.__tree.insert_point(point, index_point)
             
             if self.__tree.amount_entries > self.__entry_size_limit:
                 self.__tree = self.__rebuild_tree(index_point)
-        
-        #self.__tree.show_feature_destibution(self.__pointer_data);
     
     
     def __rebuild_tree(self, index_point):
@@ -254,8 +236,8 @@ class birch:
             
             for index_point in range(0, index_point + 1):
                 point = self.__pointer_data[index_point]
-                tree.insert_cluster([point])
-            
+                tree.insert_point(point, index_point)
+
                 if tree.amount_entries > self.__entry_size_limit:
                     increased_diameter *= self.__diameter_multiplier
                     continue
@@ -264,55 +246,3 @@ class birch:
             rebuild_result = True
         
         return tree
-    
-    
-    def __find_nearest_cluster_features(self):
-        """!
-        @brief Find pair of nearest CF entries.
-        
-        @return (list) List of two nearest enties that are represented by list [index_point1, index_point2].
-        
-        """
-        
-        minimum_distance = float("Inf")
-        index1 = 0
-        index2 = 0
-        
-        for index_candidate1 in range(0, len(self.__features)):
-            feature1 = self.__features[index_candidate1]
-            for index_candidate2 in range(index_candidate1 + 1, len(self.__features)):
-                feature2 = self.__features[index_candidate2]
-                
-                distance = feature1.get_distance(feature2, self.__measurement_type)
-                if distance < minimum_distance:
-                    minimum_distance = distance
-                    
-                    index1 = index_candidate1
-                    index2 = index_candidate2
-        
-        return [index1, index2]
-    
-    
-    def __get_nearest_feature(self, point, feature_collection):
-        """!
-        @brief Find nearest entry for specified point.
-        
-        @param[in] point (list): Pointer to point from input dataset.
-        @param[in] feature_collection (list): Feature collection that is used for obtaining nearest feature for the specified point.
-        
-        @return (double, uint) Tuple of distance to nearest entry to the specified point and index of that entry.
-        
-        """
-        
-        minimum_distance = float("Inf")
-        index_nearest_feature = -1
-        
-        for index_entry in range(0, len(feature_collection)):
-            point_entry = cfentry(1, linear_sum([ point ]), square_sum([point]))
-            
-            distance = feature_collection[index_entry].get_distance(point_entry, self.__measurement_type)
-            if distance < minimum_distance:
-                minimum_distance = distance
-                index_nearest_feature = index_entry
-                
-        return minimum_distance, index_nearest_feature

@@ -23,6 +23,9 @@ GENERAL CHANGES:
 
 
 CORRECTED MAJOR BUGS:
+- Bug with incorrect BIRCH clustering due incorrect leaf analysis (pyclustering.cluster.birch).
+  See: https://github.com/annoviko/pyclustering/issues/563
+
 - Bug with incorrect search procedure of farthest nodes in CF-tree (pyclustering.container.cftree).
   See: https://github.com/annoviko/pyclustering/issues/551
 

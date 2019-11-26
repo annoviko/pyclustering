@@ -23,33 +23,43 @@
 
 """
 
-from pyclustering.cluster import cluster_visualizer;
-from pyclustering.cluster.birch import birch;
+from pyclustering.cluster import cluster_visualizer
+from pyclustering.cluster.birch import birch
+from sklearn.cluster import Birch
 
-from pyclustering.container.cftree import measurement_type;
+from pyclustering.container.cftree import measurement_type
 
-from pyclustering.utils import read_sample;
-from pyclustering.utils import timedcall;
+from pyclustering.utils import read_sample
 
-from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
+from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES
 
 
-def template_clustering(number_clusters, path, branching_factor = 5, max_node_entries = 5, initial_diameter = 0.0, type_measurement = measurement_type.AVERAGE_INTER_CLUSTER_DISTANCE, entry_size_limit = 200, diameter_multiplier = 1.5, show_result = True):
-    sample = read_sample(path);
+def template_clustering(number_clusters, path, branching_factor=5, max_node_entries=100, initial_diameter=0.5, type_measurement=measurement_type.CENTROID_EUCLIDEAN_DISTANCE, entry_size_limit=200, diameter_multiplier=1.5, show_result=True):
+    print("Sample: ", path)
 
-    birch_instance = birch(sample, number_clusters, branching_factor, max_node_entries, initial_diameter, type_measurement, entry_size_limit, diameter_multiplier);
-    (ticks, result) = timedcall(birch_instance.process);
+    sample = read_sample(path)
 
-    print("Sample: ", path, "\t\tExecution time: ", ticks, "\n");
+    birch_instance = birch(sample, number_clusters, 50, 200, 0.5, measurement_type.CENTROID_EUCLIDEAN_DISTANCE, 1000, 1.0)
+    birch_instance.process()
+    clusters = birch_instance.get_clusters()
 
-    clusters = birch_instance.get_clusters();
+    brc = Birch(branching_factor=50, n_clusters=number_clusters, threshold=0.5, compute_labels=True)
+    brc.fit(sample)
+
+    sk_clusters = brc.predict(sample)
+    amount_clusters = max(sk_clusters) + 1
+    sk_conv_clusters = [[] for i in range(amount_clusters)]
+    for index_point in range(len(sk_clusters)):
+        index_cluster = sk_clusters[index_point]
+        sk_conv_clusters[index_cluster].append(index_point)
+
+    if show_result is True:
+        visualizer = cluster_visualizer(2, 2, titles=["pyclustering", "scikit-learn"])
+        visualizer.append_clusters(clusters, sample, 0)
+        visualizer.append_clusters(sk_conv_clusters, sample, 1)
+        visualizer.show()
     
-    if (show_result is True):
-        visualizer = cluster_visualizer();
-        visualizer.append_clusters(clusters, sample);
-        visualizer.show();
-    
-    return (sample, clusters);
+    return sample, clusters
 
 
 def cluster_sample1():
@@ -87,83 +97,83 @@ def cluster_target():
     template_clustering(6, FCPS_SAMPLES.SAMPLE_TARGET, 50, 100, 0.5, measurement_type.VARIANCE_INCREASE_DISTANCE, 200)  # interesting - sliced cake.
 
 def cluster_two_diamonds():
-    template_clustering(2, FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS);
+    template_clustering(2, FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS)
 
 def cluster_wing_nut():
-    template_clustering(2, FCPS_SAMPLES.SAMPLE_WING_NUT);
-    template_clustering(2, FCPS_SAMPLES.SAMPLE_WING_NUT, 5, 5, 0.1, measurement_type.CENTROID_EUCLIDEAN_DISTANCE, 800);     # not correct, but almost good result
+    template_clustering(2, FCPS_SAMPLES.SAMPLE_WING_NUT)
+    template_clustering(2, FCPS_SAMPLES.SAMPLE_WING_NUT, 5, 5, 0.1, measurement_type.CENTROID_EUCLIDEAN_DISTANCE, 800)     # not correct, but almost good result
 
 def cluster_chainlink():
-    template_clustering(2, FCPS_SAMPLES.SAMPLE_CHAINLINK);
+    template_clustering(2, FCPS_SAMPLES.SAMPLE_CHAINLINK)
 
 def cluster_hepta():
-    template_clustering(7, FCPS_SAMPLES.SAMPLE_HEPTA); 
+    template_clustering(7, FCPS_SAMPLES.SAMPLE_HEPTA)
 
 def cluster_tetra():
-    template_clustering(4, FCPS_SAMPLES.SAMPLE_TETRA);    
+    template_clustering(4, FCPS_SAMPLES.SAMPLE_TETRA)
 
 def cluster_engy_time():
-    template_clustering(2, FCPS_SAMPLES.SAMPLE_ENGY_TIME);  # one cluster is allocated
-    template_clustering(2, FCPS_SAMPLES.SAMPLE_ENGY_TIME, 10, 10, 0.05, measurement_type.VARIANCE_INCREASE_DISTANCE, 500);  # good result
+    template_clustering(2, FCPS_SAMPLES.SAMPLE_ENGY_TIME)  # one cluster is allocated
+    template_clustering(2, FCPS_SAMPLES.SAMPLE_ENGY_TIME, 10, 10, 0.05, measurement_type.VARIANCE_INCREASE_DISTANCE, 500)  # good result
 
 
-def experiment_execution_time(ccore = False):
-    template_clustering(2, SIMPLE_SAMPLES.SAMPLE_SIMPLE1);
-    template_clustering(3, SIMPLE_SAMPLES.SAMPLE_SIMPLE2);
-    template_clustering(4, SIMPLE_SAMPLES.SAMPLE_SIMPLE3);
-    template_clustering(5, SIMPLE_SAMPLES.SAMPLE_SIMPLE4);
-    template_clustering(4, SIMPLE_SAMPLES.SAMPLE_SIMPLE5);
-    template_clustering(2, SIMPLE_SAMPLES.SAMPLE_ELONGATE);
-    template_clustering(3, FCPS_SAMPLES.SAMPLE_LSUN);
-    template_clustering(6, FCPS_SAMPLES.SAMPLE_TARGET);
-    template_clustering(2, FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS);
-    template_clustering(2, FCPS_SAMPLES.SAMPLE_WING_NUT);
-    template_clustering(2, FCPS_SAMPLES.SAMPLE_CHAINLINK);
-    template_clustering(7, FCPS_SAMPLES.SAMPLE_HEPTA);
-    template_clustering(4, FCPS_SAMPLES.SAMPLE_TETRA);
-    template_clustering(2, FCPS_SAMPLES.SAMPLE_ATOM);
+def experiment_execution_time(ccore=False):
+    template_clustering(2, SIMPLE_SAMPLES.SAMPLE_SIMPLE1)
+    template_clustering(3, SIMPLE_SAMPLES.SAMPLE_SIMPLE2)
+    template_clustering(4, SIMPLE_SAMPLES.SAMPLE_SIMPLE3)
+    template_clustering(5, SIMPLE_SAMPLES.SAMPLE_SIMPLE4)
+    template_clustering(4, SIMPLE_SAMPLES.SAMPLE_SIMPLE5)
+    template_clustering(2, SIMPLE_SAMPLES.SAMPLE_ELONGATE)
+    template_clustering(3, FCPS_SAMPLES.SAMPLE_LSUN)
+    template_clustering(6, FCPS_SAMPLES.SAMPLE_TARGET)
+    template_clustering(2, FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS)
+    template_clustering(2, FCPS_SAMPLES.SAMPLE_WING_NUT)
+    template_clustering(2, FCPS_SAMPLES.SAMPLE_CHAINLINK)
+    template_clustering(7, FCPS_SAMPLES.SAMPLE_HEPTA)
+    template_clustering(4, FCPS_SAMPLES.SAMPLE_TETRA)
+    template_clustering(2, FCPS_SAMPLES.SAMPLE_ATOM)
 
 
 def display_fcps_clustering_results():
-    (lsun, lsun_clusters, _) = template_clustering(3, FCPS_SAMPLES.SAMPLE_LSUN, show_result = False);
-    (target, target_clusters, _) = template_clustering(6, FCPS_SAMPLES.SAMPLE_TARGET, show_result = False);
-    (two_diamonds, two_diamonds_clusters, _) = template_clustering(2, FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, show_result = False);
-    (wing_nut, wing_nut_clusters, _) = template_clustering(2, FCPS_SAMPLES.SAMPLE_WING_NUT, show_result = False);
-    (chainlink, chainlink_clusters, _) = template_clustering(2, FCPS_SAMPLES.SAMPLE_CHAINLINK, show_result = False);
-    (hepta, hepta_clusters, _) = template_clustering(7, FCPS_SAMPLES.SAMPLE_HEPTA, show_result = False);
-    (tetra, tetra_clusters, _) = template_clustering(4, FCPS_SAMPLES.SAMPLE_TETRA, show_result = False);
-    (atom, atom_clusters, _) = template_clustering(2, FCPS_SAMPLES.SAMPLE_ATOM, show_result = False);
+    (lsun, lsun_clusters, _) = template_clustering(3, FCPS_SAMPLES.SAMPLE_LSUN, show_result=False)
+    (target, target_clusters, _) = template_clustering(6, FCPS_SAMPLES.SAMPLE_TARGET, show_result=False)
+    (two_diamonds, two_diamonds_clusters, _) = template_clustering(2, FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, show_result=False)
+    (wing_nut, wing_nut_clusters, _) = template_clustering(2, FCPS_SAMPLES.SAMPLE_WING_NUT, show_result=False)
+    (chainlink, chainlink_clusters, _) = template_clustering(2, FCPS_SAMPLES.SAMPLE_CHAINLINK, show_result=False)
+    (hepta, hepta_clusters, _) = template_clustering(7, FCPS_SAMPLES.SAMPLE_HEPTA, show_result=False)
+    (tetra, tetra_clusters, _) = template_clustering(4, FCPS_SAMPLES.SAMPLE_TETRA, show_result=False)
+    (atom, atom_clusters, _) = template_clustering(2, FCPS_SAMPLES.SAMPLE_ATOM, show_result=False)
     
-    visualizer = cluster_visualizer(8, 4);
-    visualizer.append_clusters(lsun_clusters, lsun, 0);
-    visualizer.append_clusters(target_clusters, target, 1);
-    visualizer.append_clusters(two_diamonds_clusters, two_diamonds, 2);
-    visualizer.append_clusters(wing_nut_clusters, wing_nut, 3);
-    visualizer.append_clusters(chainlink_clusters, chainlink, 4);
-    visualizer.append_clusters(hepta_clusters, hepta, 5);
-    visualizer.append_clusters(tetra_clusters, tetra, 6);
-    visualizer.append_clusters(atom_clusters, atom, 7);
-    visualizer.show();
+    visualizer = cluster_visualizer(8, 4)
+    visualizer.append_clusters(lsun_clusters, lsun, 0)
+    visualizer.append_clusters(target_clusters, target, 1)
+    visualizer.append_clusters(two_diamonds_clusters, two_diamonds, 2)
+    visualizer.append_clusters(wing_nut_clusters, wing_nut, 3)
+    visualizer.append_clusters(chainlink_clusters, chainlink, 4)
+    visualizer.append_clusters(hepta_clusters, hepta, 5)
+    visualizer.append_clusters(tetra_clusters, tetra, 6)
+    visualizer.append_clusters(atom_clusters, atom, 7)
+    visualizer.show()
 
 
-cluster_sample1();
-cluster_sample2();
-cluster_sample3();
-cluster_sample4();
-cluster_sample5();
-cluster_sample7();
-cluster_sample8();
-cluster_elongate();
-cluster_lsun();
-cluster_target();
-cluster_two_diamonds();
-cluster_wing_nut();
-cluster_chainlink();
-cluster_hepta();
-cluster_tetra();
-cluster_engy_time();
+# cluster_sample1()
+# cluster_sample2()
+# cluster_sample3()
+# cluster_sample4()
+# cluster_sample5()
+# cluster_sample7()
+# cluster_sample8()
+# cluster_elongate()
+cluster_lsun()
+# cluster_target()
+# cluster_two_diamonds()
+# cluster_wing_nut()
+# cluster_chainlink()
+# cluster_hepta()
+# cluster_tetra()
+# cluster_engy_time()
  
  
-experiment_execution_time(True);    # C++ code + Python env.
+experiment_execution_time(True)    # C++ code + Python env.
 
-display_fcps_clustering_results();
+display_fcps_clustering_results()
