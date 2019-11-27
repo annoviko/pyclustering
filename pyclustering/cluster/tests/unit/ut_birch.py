@@ -28,20 +28,21 @@ import unittest
 import matplotlib
 matplotlib.use('Agg')
 
-from pyclustering.samples.definitions import SIMPLE_SAMPLES
+from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES
 
 from pyclustering.utils import read_sample
 
 from pyclustering.container.cftree import measurement_type
 
+from pyclustering.cluster.encoder import type_encoding
 from pyclustering.cluster.birch import birch
 
 from random import random
 
 
 class BirchUnitTest(unittest.TestCase):
-    def templateClusterAllocation(self, path, cluster_sizes, number_clusters, branching_factor=5, max_node_entries=5,
-                                  initial_diameter=0.1, type_measurement=measurement_type.CENTROID_EUCLIDEAN_DISTANCE,
+    def templateClusterAllocation(self, path, cluster_sizes, number_clusters, branching_factor=50, max_node_entries=100,
+                                  initial_diameter=0.5, type_measurement=measurement_type.CENTROID_EUCLIDEAN_DISTANCE,
                                   entry_size_limit=200, diameter_multiplier=1.5):
         sample = read_sample(path)
         
@@ -49,6 +50,7 @@ class BirchUnitTest(unittest.TestCase):
         birch_instance.process()
         
         clusters = birch_instance.get_clusters()
+        self.assertEqual(birch_instance.get_cluster_encoding(), type_encoding.CLUSTER_INDEX_LIST_SEPARATION)
 
         obtained_cluster_sizes = [len(cluster) for cluster in clusters]
         
@@ -133,13 +135,26 @@ class BirchUnitTest(unittest.TestCase):
     def testClusterAllocationZeroColumn(self):
         self.templateClusterAllocation(SIMPLE_SAMPLES.SAMPLE_SIMPLE13, [5, 5], 2)
 
+    def testClusterAllocationLsun(self):
+        self.templateClusterAllocation(FCPS_SAMPLES.SAMPLE_LSUN, [100, 101, 202], 3)
+
+    def testClusterAllocationTarget(self):
+        self.templateClusterAllocation(FCPS_SAMPLES.SAMPLE_TARGET, [3, 3, 3, 3, 363, 395], 6)
+
+    def testClusterAllocationLsunTreeRebuilt(self):
+        self.templateClusterAllocation(FCPS_SAMPLES.SAMPLE_LSUN, [100, 101, 202], 3,
+                                       branching_factor=200, entry_size_limit=20)
+
+    def testClusterAllocationHepta(self):
+        self.templateClusterAllocation(FCPS_SAMPLES.SAMPLE_HEPTA, [30, 30, 30, 30, 30, 30, 32], 7)
+
     def templateClusterAllocationOneDimensionData(self, branching_factor=5, max_node_entries=10, initial_diameter=1.0, type_measurement=measurement_type.CENTROID_EUCLIDEAN_DISTANCE, entry_size_limit=20):
         input_data = [[random()] for _ in range(10)] + [[random() + 4] for _ in range(10)] + [[random() + 8] for _ in range(10)] + [[random() + 12] for _ in range(10)]
-         
+
         birch_instance = birch(input_data, 4, branching_factor, max_node_entries, initial_diameter, type_measurement, entry_size_limit)
         birch_instance.process()
         clusters = birch_instance.get_clusters()
-         
+
         assert len(clusters) == 4
         for cluster in clusters:
             assert len(cluster) == 10

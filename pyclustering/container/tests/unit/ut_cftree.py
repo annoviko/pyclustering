@@ -64,7 +64,12 @@ class CftreeUnitTest(unittest.TestCase):
 
     def testGetNearestEntry(self):
         sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1)
-        tree = cftree(10, 100, 0.2)
+        tree = cftree(10, 100, 0.2, measurement_type.CENTROID_EUCLIDEAN_DISTANCE)
+
+        self.assertEqual(10, tree.branch_factor)
+        self.assertEqual(100, tree.max_entries)
+        self.assertEqual(0.2, tree.threshold)
+        self.assertEqual(measurement_type.CENTROID_EUCLIDEAN_DISTANCE, tree.type_measurement)
 
         for index_point in range(len(sample)):
             tree.insert_point(sample[index_point])

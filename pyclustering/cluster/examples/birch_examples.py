@@ -78,19 +78,18 @@ def cluster_elongate():
 
 def cluster_lsun():
     template_clustering(3, FCPS_SAMPLES.SAMPLE_LSUN)
-    template_clustering(3, FCPS_SAMPLES.SAMPLE_LSUN, 5, 5, 0.2, measurement_type.CENTROID_MANHATTAN_DISTANCE, 200)  # not correct, but almost good result
+
+def cluster_lsun_rebuilt():
+    template_clustering(3, FCPS_SAMPLES.SAMPLE_LSUN, entry_size_limit=20, diameter_multiplier=1.5)
 
 def cluster_target():
     template_clustering(6, FCPS_SAMPLES.SAMPLE_TARGET)
-    template_clustering(6, FCPS_SAMPLES.SAMPLE_TARGET, 5, 10, 0.5, measurement_type.CENTROID_MANHATTAN_DISTANCE, 200)  # interesting - sliced cake.
-    template_clustering(6, FCPS_SAMPLES.SAMPLE_TARGET, 50, 100, 0.5, measurement_type.VARIANCE_INCREASE_DISTANCE, 200)  # interesting - sliced cake.
 
 def cluster_two_diamonds():
     template_clustering(2, FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS)
 
 def cluster_wing_nut():
     template_clustering(2, FCPS_SAMPLES.SAMPLE_WING_NUT)
-    template_clustering(2, FCPS_SAMPLES.SAMPLE_WING_NUT, 5, 5, 0.1, measurement_type.CENTROID_EUCLIDEAN_DISTANCE, 800)     # not correct, but almost good result
 
 def cluster_chainlink():
     template_clustering(2, FCPS_SAMPLES.SAMPLE_CHAINLINK)
@@ -102,8 +101,7 @@ def cluster_tetra():
     template_clustering(4, FCPS_SAMPLES.SAMPLE_TETRA)
 
 def cluster_engy_time():
-    template_clustering(2, FCPS_SAMPLES.SAMPLE_ENGY_TIME)  # one cluster is allocated
-    template_clustering(2, FCPS_SAMPLES.SAMPLE_ENGY_TIME, 10, 10, 0.05, measurement_type.VARIANCE_INCREASE_DISTANCE, 500)  # good result
+    template_clustering(2, FCPS_SAMPLES.SAMPLE_ENGY_TIME)
 
 
 def experiment_execution_time(ccore=False):
@@ -124,14 +122,14 @@ def experiment_execution_time(ccore=False):
 
 
 def display_fcps_clustering_results():
-    (lsun, lsun_clusters, _) = template_clustering(3, FCPS_SAMPLES.SAMPLE_LSUN, show_result=False)
-    (target, target_clusters, _) = template_clustering(6, FCPS_SAMPLES.SAMPLE_TARGET, show_result=False)
-    (two_diamonds, two_diamonds_clusters, _) = template_clustering(2, FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, show_result=False)
-    (wing_nut, wing_nut_clusters, _) = template_clustering(2, FCPS_SAMPLES.SAMPLE_WING_NUT, show_result=False)
-    (chainlink, chainlink_clusters, _) = template_clustering(2, FCPS_SAMPLES.SAMPLE_CHAINLINK, show_result=False)
-    (hepta, hepta_clusters, _) = template_clustering(7, FCPS_SAMPLES.SAMPLE_HEPTA, show_result=False)
-    (tetra, tetra_clusters, _) = template_clustering(4, FCPS_SAMPLES.SAMPLE_TETRA, show_result=False)
-    (atom, atom_clusters, _) = template_clustering(2, FCPS_SAMPLES.SAMPLE_ATOM, show_result=False)
+    (lsun, lsun_clusters) = template_clustering(3, FCPS_SAMPLES.SAMPLE_LSUN, show_result=False)
+    (target, target_clusters) = template_clustering(6, FCPS_SAMPLES.SAMPLE_TARGET, show_result=False)
+    (two_diamonds, two_diamonds_clusters) = template_clustering(2, FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS, show_result=False)
+    (wing_nut, wing_nut_clusters) = template_clustering(2, FCPS_SAMPLES.SAMPLE_WING_NUT, show_result=False)
+    (chainlink, chainlink_clusters) = template_clustering(2, FCPS_SAMPLES.SAMPLE_CHAINLINK, show_result=False)
+    (hepta, hepta_clusters) = template_clustering(7, FCPS_SAMPLES.SAMPLE_HEPTA, show_result=False)
+    (tetra, tetra_clusters) = template_clustering(4, FCPS_SAMPLES.SAMPLE_TETRA, show_result=False)
+    (atom, atom_clusters) = template_clustering(2, FCPS_SAMPLES.SAMPLE_ATOM, show_result=False)
     
     visualizer = cluster_visualizer(8, 4)
     visualizer.append_clusters(lsun_clusters, lsun, 0)
@@ -154,6 +152,7 @@ cluster_sample7()
 cluster_sample8()
 cluster_elongate()
 cluster_lsun()
+cluster_lsun_rebuilt()
 cluster_target()
 cluster_two_diamonds()
 cluster_wing_nut()
@@ -161,8 +160,7 @@ cluster_chainlink()
 cluster_hepta()
 cluster_tetra()
 cluster_engy_time()
- 
- 
+
 experiment_execution_time(True)    # C++ code + Python env.
 
 display_fcps_clustering_results()

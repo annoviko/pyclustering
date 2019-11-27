@@ -63,7 +63,7 @@ class birch:
     
     """
     
-    def __init__(self, data, number_clusters, branching_factor=50, max_node_entries=200, initial_diameter=0.5,
+    def __init__(self, data, number_clusters, branching_factor=50, max_node_entries=200, diameter=0.5,
                  type_measurement=measurement_type.CENTROID_EUCLIDEAN_DISTANCE,
                  entry_size_limit=500,
                  diameter_multiplier=1.5,
@@ -75,7 +75,7 @@ class birch:
         @param[in] number_clusters (uint): Number of clusters that should be allocated.
         @param[in] branching_factor (uint): Maximum number of successor that might be contained by each non-leaf node in CF-Tree.
         @param[in] max_node_entries (uint): Maximum number of entries that might be contained by each leaf node in CF-Tree.
-        @param[in] initial_diameter (double): Initial diameter that used for CF-Tree construction, it can be increase if entry_size_limit is exceeded.
+        @param[in] diameter (double): Initial diameter that used for CF-Tree construction, it can be increase if entry_size_limit is exceeded.
         @param[in] type_measurement (measurement_type): Type measurement used for calculation distance metrics.
         @param[in] entry_size_limit (uint): Maximum number of entries that can be stored in CF-Tree, if it is exceeded during creation then diameter is increased and CF-Tree is rebuilt.
         @param[in] diameter_multiplier (double): Multiplier that is used for increasing diameter when entry_size_limit is exceeded.
@@ -96,7 +96,7 @@ class birch:
         self.__verify_arguments()
 
         self.__features = None
-        self.__tree = cftree(branching_factor, max_node_entries, initial_diameter, type_measurement)
+        self.__tree = cftree(branching_factor, max_node_entries, diameter, type_measurement)
         
         self.__clusters = []
         self.__noise = []
@@ -223,7 +223,7 @@ class birch:
         @return (cftree) Rebuilt tree with encoded points till specified point from input data space.
         
         """
-        
+
         rebuild_result = False
         increased_diameter = self.__tree.threshold * self.__diameter_multiplier
         
