@@ -5,7 +5,6 @@ CHANGE NOTES FOR 0.9.3 (STARTED Oct 10, 2019), (RELEASED: -)
 ------------------------------------------------------------------------
 
 GENERAL CHANGES:
-
 - Introduced `predict` method for SOMSC algorithm to find closest clusters for specified points (pyclustering.cluster.somsc).
   See: https://github.com/annoviko/pyclustering/issues/546
 

@@ -24,11 +24,10 @@
 
 """
 
-
-from pyclustering.utils import linear_sum, square_sum
+import numpy
 
 from pyclustering.cluster.agglomerative import agglomerative, type_link
-from pyclustering.cluster.encoder import type_encoding
+from pyclustering.cluster.encoder import cluster_encoder, type_encoding
 
 from pyclustering.container.cftree import cftree, measurement_type
 
@@ -121,15 +120,19 @@ class birch:
         algorithm = agglomerative(cf_data, self.__number_clusters, type_link.SINGLE_LINK).process()
         cf_clusters = algorithm.get_clusters()
 
+        cf_labels = cluster_encoder(type_encoding.CLUSTER_INDEX_LIST_SEPARATION, cf_clusters, cf_data).\
+            set_encoding(type_encoding.CLUSTER_INDEX_LABELING).get_clusters()
+
         self.__clusters = [[] for _ in range(len(cf_clusters))]
-        for index_cluster in range(len(cf_clusters)):
-            for index_feature in cf_clusters[index_cluster]:
-                feature = self.__features[index_feature]
-                self.__clusters[index_cluster] += feature.indexes
+        for index_point in range(len(self.__pointer_data)):
+            index_cf_entry = numpy.argmin(numpy.sum(numpy.square(
+                numpy.subtract(cf_data, self.__pointer_data[index_point])), axis=1))
+            index_cluster = cf_labels[index_cf_entry]
+            self.__clusters[index_cluster].append(index_point)
 
         return self
-    
-    
+
+
     def get_clusters(self):
         """!
         @brief Returns list of allocated clusters, each cluster contains indexes of objects in list of data.

@@ -25,7 +25,6 @@
 
 from pyclustering.cluster import cluster_visualizer
 from pyclustering.cluster.birch import birch
-from sklearn.cluster import Birch
 
 from pyclustering.container.cftree import measurement_type
 
@@ -34,29 +33,19 @@ from pyclustering.utils import read_sample
 from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES
 
 
-def template_clustering(number_clusters, path, branching_factor=5, max_node_entries=100, initial_diameter=0.5, type_measurement=measurement_type.CENTROID_EUCLIDEAN_DISTANCE, entry_size_limit=200, diameter_multiplier=1.5, show_result=True):
+def template_clustering(number_clusters, path, branching_factor=50, max_node_entries=100, initial_diameter=0.5, type_measurement=measurement_type.CENTROID_EUCLIDEAN_DISTANCE, entry_size_limit=200, diameter_multiplier=1.5, show_result=True):
     print("Sample: ", path)
 
     sample = read_sample(path)
 
-    birch_instance = birch(sample, number_clusters, 50, 200, 0.5, measurement_type.CENTROID_EUCLIDEAN_DISTANCE, 1000, 1.0)
+    birch_instance = birch(sample, number_clusters, branching_factor, max_node_entries, initial_diameter,
+                           type_measurement, entry_size_limit, diameter_multiplier)
     birch_instance.process()
     clusters = birch_instance.get_clusters()
 
-    brc = Birch(branching_factor=50, n_clusters=number_clusters, threshold=0.5, compute_labels=True)
-    brc.fit(sample)
-
-    sk_clusters = brc.predict(sample)
-    amount_clusters = max(sk_clusters) + 1
-    sk_conv_clusters = [[] for i in range(amount_clusters)]
-    for index_point in range(len(sk_clusters)):
-        index_cluster = sk_clusters[index_point]
-        sk_conv_clusters[index_cluster].append(index_point)
-
     if show_result is True:
-        visualizer = cluster_visualizer(2, 2, titles=["pyclustering", "scikit-learn"])
-        visualizer.append_clusters(clusters, sample, 0)
-        visualizer.append_clusters(sk_conv_clusters, sample, 1)
+        visualizer = cluster_visualizer()
+        visualizer.append_clusters(clusters, sample)
         visualizer.show()
     
     return sample, clusters

@@ -24,7 +24,7 @@
 """
 
 
-from enum import IntEnum;
+from enum import IntEnum
 
 
 class type_encoding(IntEnum):
@@ -34,13 +34,13 @@ class type_encoding(IntEnum):
     """
     
     ## Results are represented by list of indexes and belonging to the cluster is defined by cluster index and element's position corresponds to object's position in input data, for example [0, 0, 1, 1, 1, 0].
-    CLUSTER_INDEX_LABELING = 0;
+    CLUSTER_INDEX_LABELING = 0
     
     ## Results are represented by list of lists, where each list consists of object indexes, for example [ [0, 1, 2], [3, 4, 5], [6, 7] ].
-    CLUSTER_INDEX_LIST_SEPARATION = 1;
+    CLUSTER_INDEX_LIST_SEPARATION = 1
     
     ## Results are represented by list of lists, where each list consists of objects, for example [ [obj1, obj2], [obj3, obj4, obj5], [obj6, obj7] ].
-    CLUSTER_OBJECT_LIST_SEPARATION = 2;
+    CLUSTER_OBJECT_LIST_SEPARATION = 2
 
 
 class cluster_encoder:
@@ -81,9 +81,9 @@ class cluster_encoder:
         
         """
     
-        self.__type_representation = encoding;
-        self.__clusters = clusters;
-        self.__data = data;
+        self.__type_representation = encoding
+        self.__clusters = clusters
+        self.__data = data
 
 
     @property
@@ -92,7 +92,7 @@ class cluster_encoder:
         @brief Returns current cluster representation.
         
         """
-        return self.__type_representation;
+        return self.__type_representation
 
 
     def get_clusters(self):
@@ -100,7 +100,7 @@ class cluster_encoder:
         @brief Returns clusters representation.
         
         """
-        return self.__clusters;
+        return self.__clusters
 
 
     def get_data(self):
@@ -108,7 +108,7 @@ class cluster_encoder:
         @brief Returns data that corresponds to clusters.
         
         """
-        return self.__data;
+        return self.__data
 
 
     def set_encoding(self, encoding):
@@ -116,47 +116,50 @@ class cluster_encoder:
         @brief Change clusters encoding to specified type (index list, object list, labeling).
         
         @param[in] encoding (type_encoding): New type of clusters representation.
-        
+
+        @return (cluster_encoder) Return itself.
+
         """
         
         if(encoding == self.__type_representation):
-            return;
+            return
         
         if (self.__type_representation == type_encoding.CLUSTER_INDEX_LABELING):
             if (encoding == type_encoding.CLUSTER_INDEX_LIST_SEPARATION):
-                self.__clusters = self.__convert_label_to_index();
+                self.__clusters = self.__convert_label_to_index()
             
             else:
-                self.__clusters = self.__convert_label_to_object();
+                self.__clusters = self.__convert_label_to_object()
         
         elif (self.__type_representation == type_encoding.CLUSTER_INDEX_LIST_SEPARATION):
             if (encoding == type_encoding.CLUSTER_INDEX_LABELING):
-                self.__clusters = self.__convert_index_to_label();
+                self.__clusters = self.__convert_index_to_label()
             
             else:
-                self.__clusters = self.__convert_index_to_object();
+                self.__clusters = self.__convert_index_to_object()
         
         else:
             if (encoding == type_encoding.CLUSTER_INDEX_LABELING):
-                self.__clusters = self.__convert_object_to_label();
+                self.__clusters = self.__convert_object_to_label()
             
             else:
-                self.__clusters = self.__convert_object_to_index();
+                self.__clusters = self.__convert_object_to_index()
         
-        self.__type_representation = encoding;
+        self.__type_representation = encoding
+        return self
 
 
     def __convert_index_to_label(self):
-        clusters = [0] * len(self.__data);
-        index_cluster = 0;
+        clusters = [0] * len(self.__data)
+        index_cluster = 0
         
         for cluster in self.__clusters:
             for index_object in cluster:
-                clusters[index_object] = index_cluster;
+                clusters[index_object] = index_cluster
         
-            index_cluster += 1;
+            index_cluster += 1
         
-        return clusters;
+        return clusters
 
 
     def __convert_index_to_object(self):

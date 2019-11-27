@@ -460,3 +460,6 @@ class CftreeUnitTest(unittest.TestCase):
         self.templateCorrectEntryDiameter(FCPS_SAMPLES.SAMPLE_LSUN, 200, 0.01)
         self.templateCorrectEntryDiameter(FCPS_SAMPLES.SAMPLE_LSUN, 200, 0.1)
         self.templateCorrectEntryDiameter(FCPS_SAMPLES.SAMPLE_LSUN, 200, 1.0)
+
+    def testCorrectEntryDiameterTarget(self):
+        self.templateCorrectEntryDiameter(FCPS_SAMPLES.SAMPLE_TARGET, 200, 0.5)
