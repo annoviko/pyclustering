@@ -208,7 +208,7 @@ class birch:
         
         for index_point in range(0, len(self.__pointer_data)):
             point = self.__pointer_data[index_point]
-            self.__tree.insert_point(point, index_point)
+            self.__tree.insert_point(point)
             
             if self.__tree.amount_entries > self.__entry_size_limit:
                 self.__tree = self.__rebuild_tree(index_point)
@@ -239,7 +239,7 @@ class birch:
             
             for index_point in range(0, index_point + 1):
                 point = self.__pointer_data[index_point]
-                tree.insert_point(point, index_point)
+                tree.insert_point(point)
 
                 if tree.amount_entries > self.__entry_size_limit:
                     increased_diameter *= self.__diameter_multiplier

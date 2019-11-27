@@ -118,32 +118,20 @@ class cfentry:
         """
         return self.__square_sum
 
-    @property
-    def indexes(self):
-        """!
-        @brief Returns index of each point that is encoded by the CF feature.
 
-        @return (set) Index of each point that is encoded by the CF feature.
-
-        """
-        return self.__indexes
-
-
-    def __init__(self, number_points, linear_sum, square_sum, indexes):
+    def __init__(self, number_points, linear_sum, square_sum):
         """!
         @brief CF-entry constructor.
         
         @param[in] number_points (uint): Number of objects that is represented by the entry.
         @param[in] linear_sum (list): Linear sum of values that represent objects in each dimension.
         @param[in] square_sum (double): Square sum of values that represent objects.
-        @param[in] indexes (list): Indexes that corresponds to inserted points.
         
         """
         
         self.__number_points = number_points
         self.__linear_sum = numpy.array(linear_sum)
         self.__square_sum = square_sum
-        self.__indexes = indexes
         
         self.__centroid = None
         self.__radius = None
@@ -155,7 +143,7 @@ class cfentry:
         @returns (cfentry) Makes copy of the CF-entry instance.
         
         """
-        return cfentry(self.__number_points, self.__linear_sum, self.__square_sum, self.__indexes)
+        return cfentry(self.__number_points, self.__linear_sum, self.__square_sum)
 
 
     def __repr__(self):
@@ -188,9 +176,8 @@ class cfentry:
         number_points = self.number_points + entry.number_points
         result_linear_sum = numpy.add(self.linear_sum, entry.linear_sum)
         result_square_sum = self.square_sum + entry.square_sum
-        indexes = self.indexes + entry.indexes
         
-        return cfentry(number_points, result_linear_sum, result_square_sum, indexes)
+        return cfentry(number_points, result_linear_sum, result_square_sum)
 
 
     def __eq__(self, entry):
@@ -873,16 +860,15 @@ class cftree:
         return level_nodes
 
 
-    def insert_point(self, point, index_point):
+    def insert_point(self, point):
         """!
         @brief Insert point that is represented by list of coordinates.
 
         @param[in] point (list): Point represented by list of coordinates that should be inserted to CF tree.
-        @param[in] index_point (uint): Index of inserted point.
 
         """
 
-        entry = cfentry(len([point]), linear_sum([point]), square_sum([point]), [index_point])
+        entry = cfentry(len([point]), linear_sum([point]), square_sum([point]))
         self.insert(entry)
     
     

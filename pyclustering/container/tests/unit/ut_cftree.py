@@ -40,7 +40,7 @@ from pyclustering.utils import euclidean_distance_square, manhattan_distance, av
 
 class CftreeUnitTest(unittest.TestCase):
     def templateCfClusterRepresentation(self, cluster, centroid, radius, diameter, tolerance):
-        entry = cfentry(len(cluster), linear_sum(cluster), square_sum(cluster), [])
+        entry = cfentry(len(cluster), linear_sum(cluster), square_sum(cluster))
            
         assertion_centroid = centroid
         if type(centroid) != list:
@@ -67,10 +67,10 @@ class CftreeUnitTest(unittest.TestCase):
         tree = cftree(10, 100, 0.2)
 
         for index_point in range(len(sample)):
-            tree.insert_point(sample[index_point], index_point)
+            tree.insert_point(sample[index_point])
 
         cluster = [[0.1, 0.1], [0.2, 0.2]]
-        entry = cfentry(len(cluster), linear_sum(cluster), square_sum(cluster), [10, 11])
+        entry = cfentry(len(cluster), linear_sum(cluster), square_sum(cluster))
 
         leaf = tree.find_nearest_leaf(entry)
         found_entry = leaf.get_nearest_entry(entry, measurement_type.CENTROID_EUCLIDEAN_DISTANCE)
@@ -80,8 +80,8 @@ class CftreeUnitTest(unittest.TestCase):
 
 
     def templateCfEntryValueDistance(self, cluster1, cluster2, value, tolerance, type_measurment):
-        entry1 = cfentry(len(cluster1), linear_sum(cluster1), square_sum(cluster1), [])
-        entry2 = cfentry(len(cluster2), linear_sum(cluster2), square_sum(cluster2), [])
+        entry1 = cfentry(len(cluster1), linear_sum(cluster1), square_sum(cluster1))
+        entry2 = cfentry(len(cluster2), linear_sum(cluster2), square_sum(cluster2))
            
         distance = entry1.get_distance(entry2, type_measurment)
         assert ((value - tolerance < distance) and (value + tolerance > distance))
@@ -102,13 +102,13 @@ class CftreeUnitTest(unittest.TestCase):
     def testCfEntryIncrease(self):
         cluster = [[0.1, 0.1], [0.2, 0.2], [0.5, 0.5], [0.4, 0.4], [0.6, 0.6]]
            
-        entry1 = cfentry(len(cluster), linear_sum(cluster), square_sum(cluster), [])
+        entry1 = cfentry(len(cluster), linear_sum(cluster), square_sum(cluster))
         entry2 = entry1 + entry1
            
-        assert cfentry(10, [3.6, 3.6], 3.28, []) == entry2
+        assert cfentry(10, [3.6, 3.6], 3.28) == entry2
            
         entry2 = entry2 + entry2
-        assert cfentry(20, [7.2, 7.2], 6.56, []) == entry2
+        assert cfentry(20, [7.2, 7.2], 6.56) == entry2
 
 
     def templateCfEntryDistance(self, type_measurement):
@@ -116,9 +116,9 @@ class CftreeUnitTest(unittest.TestCase):
         cluster2 = [[0.4, 0.4], [0.4, 0.5], [0.5, 0.4], [0.5, 0.5]]
         cluster3 = [[0.9, 0.9], [0.9, 1.0], [1.0, 0.9], [1.0, 1.0]]
            
-        entry1 = cfentry(len(cluster1), linear_sum(cluster1), square_sum(cluster1), [])
-        entry2 = cfentry(len(cluster2), linear_sum(cluster2), square_sum(cluster2), [])
-        entry3 = cfentry(len(cluster3), linear_sum(cluster3), square_sum(cluster3), [])
+        entry1 = cfentry(len(cluster1), linear_sum(cluster1), square_sum(cluster1))
+        entry2 = cfentry(len(cluster2), linear_sum(cluster2), square_sum(cluster2))
+        entry3 = cfentry(len(cluster3), linear_sum(cluster3), square_sum(cluster3))
            
         distance12 = entry1.get_distance(entry2, type_measurement)
         distance23 = entry2.get_distance(entry3, type_measurement)
@@ -144,8 +144,8 @@ class CftreeUnitTest(unittest.TestCase):
     
     
     def templateDistanceCalculation(self, cluster1, cluster2, type_measurement):
-        entry1 = cfentry(len(cluster1), linear_sum(cluster1), square_sum(cluster1), [0])
-        entry2 = cfentry(len(cluster2), linear_sum(cluster2), square_sum(cluster2), [0])
+        entry1 = cfentry(len(cluster1), linear_sum(cluster1), square_sum(cluster1))
+        entry2 = cfentry(len(cluster2), linear_sum(cluster2), square_sum(cluster2))
         
         # check that the same distance from 1 to 2 and from 2 to 1.
         distance12 = entry1.get_distance(entry2, type_measurement)
@@ -194,7 +194,7 @@ class CftreeUnitTest(unittest.TestCase):
 
     def testCfTreeCreationWithOneEntry(self):
         tree = cftree(2, 1, 1.0)
-        entry = cfentry(5, [0.0, 0.1], 0.05, [0])
+        entry = cfentry(5, [0.0, 0.1], 0.05)
            
         tree.insert(entry)
            
@@ -212,7 +212,7 @@ class CftreeUnitTest(unittest.TestCase):
            
         for cluster in clusters:
             for point in cluster:
-                tree.insert_point(point, [])
+                tree.insert_point(point)
            
         assert tree.height >= 4
         self.assertEqual(tree.amount_entries, 100)
@@ -225,7 +225,7 @@ class CftreeUnitTest(unittest.TestCase):
            
         for index_cluster in range(0, len(clusters)):
             for point in clusters[index_cluster]:
-                tree.insert_point(point, [])
+                tree.insert_point(point)
                
             result_searching = False
             for leaf in tree.leafes:
@@ -252,11 +252,11 @@ class CftreeUnitTest(unittest.TestCase):
           
     def testCfTreeEntryAbsorbing(self):
         tree = cftree(2, 1, 10000.0)
-        absorbing_entry = cfentry(0, [0.0, 0.0], 0.0, [])
+        absorbing_entry = cfentry(0, [0.0, 0.0], 0.0)
           
         for offset in range(0, 10):
             cluster = [[random() + offset, random() + offset] for i in range(10)]
-            entry = cfentry(len(cluster), linear_sum(cluster), square_sum(cluster), [])
+            entry = cfentry(len(cluster), linear_sum(cluster), square_sum(cluster))
 
             absorbing_entry += entry
 
@@ -276,7 +276,7 @@ class CftreeUnitTest(unittest.TestCase):
         for index_point in range(0, number_points):
             point = [index_point for i in range(0, dimension)]
              
-            tree.insert_point(point, index_point)
+            tree.insert_point(point)
              
             number_points = 0
             for leaf in tree.leafes:
@@ -331,7 +331,7 @@ class CftreeUnitTest(unittest.TestCase):
          
         for index_point in range(0, number_points):
             point = [index_point]
-            tree.insert_point(point, index_point)
+            tree.insert_point(point)
         
         assert math.floor(math.log(number_points, branching_factor)) <= tree.height;
     
@@ -357,7 +357,7 @@ class CftreeUnitTest(unittest.TestCase):
          
         for index_point in range(0, number_points):
             point = [index_point]
-            tree.insert_point(point, index_point)
+            tree.insert_point(point)
         
         total_node_amount = 0
         for level in range(0, tree.height):
@@ -394,7 +394,7 @@ class CftreeUnitTest(unittest.TestCase):
         current_size = 0
         for index_point in range(0, number_points):
             point = [index_point]
-            tree.insert_point(point, index_point)
+            tree.insert_point(point)
             
             current_size += 1
             
@@ -424,7 +424,7 @@ class CftreeUnitTest(unittest.TestCase):
         sample = read_sample(sample_path)
         tree = cftree(branching_factor, 100, diameter)
         for index_point in range(len(sample)):
-            tree.insert_point(sample[index_point], index_point)
+            tree.insert_point(sample[index_point])
 
         leaf_nodes = tree.leafes
         for node in leaf_nodes:
