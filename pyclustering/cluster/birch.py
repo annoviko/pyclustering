@@ -30,7 +30,7 @@ from pyclustering.utils import linear_sum, square_sum
 from pyclustering.cluster.agglomerative import agglomerative, type_link
 from pyclustering.cluster.encoder import type_encoding
 
-from pyclustering.container.cftree import cftree, cfentry, measurement_type
+from pyclustering.container.cftree import cftree, measurement_type
 
 
 class birch:

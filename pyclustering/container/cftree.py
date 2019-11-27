@@ -491,22 +491,8 @@ class non_leaf_node(cfnode):
         self.successors.append(successor)
         
         successor.parent = self
-    
-    
-    def remove_successor(self, successor):
-        """!
-        @brief Remove successor from the node.
-        
-        @param[in] successor (cfnode): Successor for removing.
-        
-        """
-        
-        self.feature -= successor.feature
-        self.successors.append(successor)
-        
-        successor.parent = self
-    
-    
+
+
     def merge(self, node):
         """!
         @brief Merge non-leaf node to the current.
@@ -645,20 +631,8 @@ class leaf_node(cfnode):
 
         self.feature += entry
         self.entries.append(entry)
-        
-    
-    def remove_entry(self, entry):
-        """!
-        @brief Remove clustering feature from the leaf node.
-        
-        @param[in] entry (cfentry): Clustering feature.
-        
-        """
 
-        self.feature -= entry
-        self.entries.remove(entry)
-    
-    
+
     def merge(self, node):
         """!
         @brief Merge leaf node to the current.
@@ -672,8 +646,8 @@ class leaf_node(cfnode):
         # Move entries from merged node
         for entry in node.entries:
             self.entries.append(entry)
-            
-    
+
+
     def get_farthest_entries(self, type_measurement):
         """!
         @brief Find pair of farthest entries of the node.
@@ -701,8 +675,8 @@ class leaf_node(cfnode):
                     farthest_entity2 = candidate2
         
         return [farthest_entity1, farthest_entity2]
-    
-    
+
+
     def get_nearest_index_entry(self, entry, type_measurement):
         """!
         @brief Find nearest index of nearest entry of node for the specified entry.
@@ -715,16 +689,17 @@ class leaf_node(cfnode):
         """
         
         minimum_distance = float('Inf')
-        nearest_index = 0
+        nearest_index = -1
         
         for candidate_index in range(0, len(self.entries)):
             candidate_distance = self.entries[candidate_index].get_distance(entry, type_measurement)
             if candidate_distance < minimum_distance:
+                minimum_distance = candidate_distance
                 nearest_index = candidate_index
         
         return nearest_index
-    
-    
+
+
     def get_nearest_entry(self, entry, type_measurement):
         """!
         @brief Find nearest entry of node for the specified entry.
@@ -737,7 +712,7 @@ class leaf_node(cfnode):
         """
         
         min_key = lambda cur_entity: cur_entity.get_distance(entry, type_measurement)
-        return min(self.__entries, key=min_key)
+        return min(self.entries, key=min_key)
 
 
 class cftree:
@@ -902,7 +877,8 @@ class cftree:
         """!
         @brief Insert point that is represented by list of coordinates.
 
-        @param[in] point (list): Point that should be inserted to CF tree.
+        @param[in] point (list): Point represented by list of coordinates that should be inserted to CF tree.
+        @param[in] index_point (uint): Index of inserted point.
 
         """
 

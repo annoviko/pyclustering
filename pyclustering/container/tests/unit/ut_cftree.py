@@ -60,8 +60,25 @@ class CftreeUnitTest(unittest.TestCase):
     def testCfClusterRepresentationTwoDimension(self):
         cluster = [[0.1, 0.1], [0.2, 0.2], [0.5, 0.5], [0.4, 0.4], [0.6, 0.6]]
         self.templateCfClusterRepresentation(cluster, [0.36, 0.36], 0.26230, 0.41473, 5)
-       
-       
+
+
+    def testGetNearestEntry(self):
+        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1)
+        tree = cftree(10, 100, 0.2)
+
+        for index_point in range(len(sample)):
+            tree.insert_point(sample[index_point], index_point)
+
+        cluster = [[0.1, 0.1], [0.2, 0.2]]
+        entry = cfentry(len(cluster), linear_sum(cluster), square_sum(cluster), [10, 11])
+
+        leaf = tree.find_nearest_leaf(entry)
+        found_entry = leaf.get_nearest_entry(entry, measurement_type.CENTROID_EUCLIDEAN_DISTANCE)
+        found_index_entry = leaf.get_nearest_index_entry(entry, measurement_type.CENTROID_EUCLIDEAN_DISTANCE)
+
+        self.assertEqual(leaf.entries[found_index_entry], found_entry)
+
+
     def templateCfEntryValueDistance(self, cluster1, cluster2, value, tolerance, type_measurment):
         entry1 = cfentry(len(cluster1), linear_sum(cluster1), square_sum(cluster1), [])
         entry2 = cfentry(len(cluster2), linear_sum(cluster2), square_sum(cluster2), [])
