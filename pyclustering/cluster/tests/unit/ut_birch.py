@@ -50,7 +50,14 @@ class BirchUnitTest(unittest.TestCase):
         birch_instance.process()
         
         clusters = birch_instance.get_clusters()
+        cf_clusters = birch_instance.get_cf_cluster()
+        cf_entries = birch_instance.get_cf_entries()
+
         self.assertEqual(birch_instance.get_cluster_encoding(), type_encoding.CLUSTER_INDEX_LIST_SEPARATION)
+        self.assertEqual(number_clusters, len(clusters))
+        self.assertEqual(number_clusters, len(cf_clusters))
+        self.assertGreater(len(cf_entries), 0)
+        self.assertLessEqual(len(cf_entries), entry_size_limit)
 
         obtained_cluster_sizes = [len(cluster) for cluster in clusters]
         
