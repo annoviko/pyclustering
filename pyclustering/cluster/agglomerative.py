@@ -42,17 +42,17 @@ class type_link(IntEnum):
     
     """
 
-    ## The nearest objects in clusters is considered as a link.
-    SINGLE_LINK = 0;
+    ## Distance between the two nearest objects in clusters is considered as a link, so-called SLINK method (the single-link clustering method).
+    SINGLE_LINK = 0
     
-    ## The farthest objects in clusters is considered as a link.
-    COMPLETE_LINK = 1;
+    ## Distance between the farthest objects in clusters is considered as a link, so-called CLINK method (the complete-link clustering method).
+    COMPLETE_LINK = 1
     
     ## Average distance between objects in clusters is considered as a link.
-    AVERAGE_LINK = 2;
+    AVERAGE_LINK = 2
     
     ## Distance between centers of clusters is considered as a link.
-    CENTROID_LINK = 3;
+    CENTROID_LINK = 3
 
 
 class agglomerative:

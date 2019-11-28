@@ -1,6 +1,6 @@
 """!
 
-@brief Cluster analysis algorithm: BIRCH
+@brief BIRCH (Balanced Iterative Reducing and Clustering using Hierarchies) cluster analysis algorithm.
 @details Implementation based on paper @cite article::birch::1.
          
 @authors Andrei Novikov (pyclustering@yandex.ru)
@@ -34,11 +34,18 @@ from pyclustering.container.cftree import cftree, measurement_type
 
 class birch:
     """!
-    @brief Class represents clustering algorithm BIRCH.
-    
+    @brief Class represents the clustering algorithm BIRCH (Balanced Iterative Reducing and Clustering using
+            Hierarchies).
+
+    @details BIRCH is suitable for large databases. The algorithm incrementally and dynamically clusters
+              incoming multi-dimensional metric data points using the concepts of Clustering Feature and CF tree.
+              A Clustering Feature is a triple summarizing the information that is maintained about a cluster.
+              The Clustering Feature vector is defined as a triple:
+              \f[CF=\left ( N, \overrightarrow{LS}, SS \right )\f]
+
     Example how to extract clusters from 'OldFaithful' sample using BIRCH algorithm:
     @code
-        from pyclustering.cluster.birch import birch, measurement_type
+        from pyclustering.cluster.birch import birch
         from pyclustering.cluster import cluster_visualizer
         from pyclustering.utils import read_sample
         from pyclustering.samples.definitions import FAMOUS_SAMPLES
@@ -47,7 +54,7 @@ class birch:
         sample = read_sample(FAMOUS_SAMPLES.SAMPLE_OLD_FAITHFUL)
 
         # Create BIRCH algorithm
-        birch_instance = birch(sample, 2)
+        birch_instance = birch(sample, 2, diameter=3.0)
 
         # Cluster analysis
         birch_instance.process()
@@ -60,7 +67,46 @@ class birch:
         visualizer.append_clusters(clusters, sample)
         visualizer.show()
     @endcode
-    
+
+    Here is the clustering result produced by BIRCH algorithm:
+    @image html birch_clustering_old_faithful.png "Fig. 1. BIRCH clustering - sample 'OldFaithful'."
+
+    Methods 'get_cf_entries' and 'get_cf_clusters' can be used to obtain information how does an input data is
+    encoded. Here is an example how the encoding information can be extracted and visualized:
+    @code
+        from pyclustering.cluster.birch import birch
+        from pyclustering.cluster import cluster_visualizer
+        from pyclustering.utils import read_sample
+        from pyclustering.samples.definitions import FCPS_SAMPLES
+
+        # Sample 'Lsun' for cluster analysis (represented by list of points)
+        sample = read_sample(FCPS_SAMPLES.SAMPLE_LSUN)
+
+        # Create BIRCH algorithm
+        birch_instance = birch(sample, 3, diameter=0.5)
+
+        # Cluster analysis
+        birch_instance.process()
+
+        # Obtain results of clustering
+        clusters = birch_instance.get_clusters()
+
+        # Obtain information how does the 'Lsun' sample is encoded in the CF-tree.
+        cf_entries = birch_instance.get_cf_entries()
+        cf_clusters = birch_instance.get_cf_cluster()
+
+        cf_centroids = [entry.get_centroid() for entry in cf_entries]
+
+        # Visualize allocated clusters
+        visualizer = cluster_visualizer(2, 2, titles=["Encoded data by CF-entries", "Data clusters"])
+        visualizer.append_clusters(cf_clusters, cf_centroids, canvas=0)
+        visualizer.append_clusters(clusters, sample, canvas=1)
+        visualizer.show()
+    @endcode
+
+    Here is the clustering result produced by BIRCH algorithm:
+    @image html birch_cf_encoding_lsun.png "Fig. 2. CF-tree encoding and BIRCH clustering of 'Lsun' sample."
+
     """
     
     def __init__(self, data, number_clusters, branching_factor=50, max_node_entries=200, diameter=0.5,
@@ -71,18 +117,17 @@ class birch:
         """!
         @brief Constructor of clustering algorithm BIRCH.
         
-        @param[in] data (list): Input data presented as list of points (objects), where each point should be represented by list or tuple.
-        @param[in] number_clusters (uint): Number of clusters that should be allocated.
+        @param[in] data (list): An input data represented as a list of points (objects) where each point is be represented by list of coordinates.
+        @param[in] number_clusters (uint): Amount of clusters that should be allocated.
         @param[in] branching_factor (uint): Maximum number of successor that might be contained by each non-leaf node in CF-Tree.
         @param[in] max_node_entries (uint): Maximum number of entries that might be contained by each leaf node in CF-Tree.
-        @param[in] diameter (double): Initial diameter that used for CF-Tree construction, it can be increase if entry_size_limit is exceeded.
+        @param[in] diameter (double): CF-entry diameter that used for CF-Tree construction, it might be increase if 'entry_size_limit' is exceeded.
         @param[in] type_measurement (measurement_type): Type measurement used for calculation distance metrics.
-        @param[in] entry_size_limit (uint): Maximum number of entries that can be stored in CF-Tree, if it is exceeded during creation then diameter is increased and CF-Tree is rebuilt.
-        @param[in] diameter_multiplier (double): Multiplier that is used for increasing diameter when entry_size_limit is exceeded.
-        @param[in] ccore (bool): If True than CCORE (C++ part of the library) will be used for solving the problem.
-        
-        @remark Despite eight arguments only the first two is mandatory, others can be ommitted. In this case default values are used for instance creation.
-        
+        @param[in] entry_size_limit (uint): Maximum number of entries that can be stored in CF-Tree, if it is exceeded
+                    during creation then the 'diameter' is increased and CF-Tree is rebuilt.
+        @param[in] diameter_multiplier (double): Multiplier that is used for increasing diameter when 'entry_size_limit' is exceeded.
+        @param[in] ccore (bool): If True than C++ part of the library is used for processing.
+
         """
         
         self.__pointer_data = data
@@ -99,7 +144,7 @@ class birch:
         self.__tree = cftree(branching_factor, max_node_entries, diameter, type_measurement)
         
         self.__clusters = []
-        self.__noise = []
+        self.__cf_clusters = []
 
 
     def process(self):
@@ -118,12 +163,12 @@ class birch:
         cf_data = [feature.get_centroid() for feature in self.__features]
 
         algorithm = agglomerative(cf_data, self.__number_clusters, type_link.SINGLE_LINK).process()
-        cf_clusters = algorithm.get_clusters()
+        self.__cf_clusters = algorithm.get_clusters()
 
-        cf_labels = cluster_encoder(type_encoding.CLUSTER_INDEX_LIST_SEPARATION, cf_clusters, cf_data).\
+        cf_labels = cluster_encoder(type_encoding.CLUSTER_INDEX_LIST_SEPARATION, self.__cf_clusters, cf_data).\
             set_encoding(type_encoding.CLUSTER_INDEX_LABELING).get_clusters()
 
-        self.__clusters = [[] for _ in range(len(cf_clusters))]
+        self.__clusters = [[] for _ in range(len(self.__cf_clusters))]
         for index_point in range(len(self.__pointer_data)):
             index_cf_entry = numpy.argmin(numpy.sum(numpy.square(
                 numpy.subtract(cf_data, self.__pointer_data[index_point])), axis=1))
@@ -135,18 +180,41 @@ class birch:
 
     def get_clusters(self):
         """!
-        @brief Returns list of allocated clusters, each cluster contains indexes of objects in list of data.
-        
-        @remark Allocated noise can be returned only after data processing (use method process() before). Otherwise empty list is returned.
-        
+        @brief Returns list of allocated clusters, each cluster is represented by a list of indexes where each index
+                corresponds to a point in an input dataset.
+
         @return (list) List of allocated clusters.
         
         @see process()
-        @see get_noise()
         
         """
         
         return self.__clusters
+
+
+    def get_cf_entries(self):
+        """!
+        @brief Returns CF-entries that encodes an input dataset.
+
+        @return (list) CF-entries that encodes an input dataset.
+
+        @see get_cf_cluster
+
+        """
+        return self.__features
+
+
+    def get_cf_cluster(self):
+        """!
+        @brief Returns list of allocated CF-entry clusters where each cluster is represented by indexes (each index
+                corresponds to CF-entry).
+
+        @return (list) List of allocated CF-entry clusters.
+
+        @see get_cf_entries
+
+        """
+        return self.__cf_clusters
 
 
     def get_cluster_encoding(self):

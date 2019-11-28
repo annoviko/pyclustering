@@ -19,22 +19,22 @@
 @endcond
 """
 
-from pyclustering.cluster import cluster_visualizer;
-from pyclustering.cluster.agglomerative import agglomerative, type_link;
+from pyclustering.cluster import cluster_visualizer
+from pyclustering.cluster.agglomerative import agglomerative, type_link
 
-from pyclustering.utils import read_sample;
-from pyclustering.utils import timedcall;
+from pyclustering.utils import read_sample
+from pyclustering.utils import timedcall
 
-from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES;
+from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES
 
 
 def template_clustering(number_clusters, path, links):
-    sample = read_sample(path);
+    sample = read_sample(path)
     
-    clusters_centroid_link = None;
-    clusters_single_link = None;
-    clusters_complete_link = None;
-    clusters_average_link = None;
+    clusters_centroid_link = None
+    clusters_single_link = None
+    clusters_complete_link = None
+    clusters_average_link = None
     
     visualizer = cluster_visualizer(len(links), len(links));
     index_canvas = 0;

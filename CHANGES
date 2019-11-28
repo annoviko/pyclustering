@@ -5,6 +5,9 @@ CHANGE NOTES FOR 0.9.3 (STARTED Oct 10, 2019), (RELEASED: -)
 ------------------------------------------------------------------------
 
 GENERAL CHANGES:
+- Introduced `get_cf_clusters` method for BIRCH algorithm to get clustered CF-entries (pyclustering.cluster.birch).
+  See: https://github.com/annoviko/pyclustering/issues/569
+
 - Introduced `predict` method for SOMSC algorithm to find closest clusters for specified points (pyclustering.cluster.somsc).
   See: https://github.com/annoviko/pyclustering/issues/546
 

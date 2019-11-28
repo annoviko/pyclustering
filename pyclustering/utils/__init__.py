@@ -1188,16 +1188,16 @@ def square_sum(list_vector):
     
     """
     
-    square_sum = 0.0;
-    list_representation = (type(list_vector[0]) == list);
+    square_sum = 0.0
+    list_representation = (type(list_vector[0]) == list)
         
     for index_element in range(0, len(list_vector)):
-        if (list_representation is True):
-            square_sum += sum(list_math_multiplication(list_vector[index_element], list_vector[index_element]));
+        if list_representation is True:
+            square_sum += sum(list_math_multiplication(list_vector[index_element], list_vector[index_element]))
         else:
-            square_sum += list_vector[index_element] * list_vector[index_element];
+            square_sum += list_vector[index_element] * list_vector[index_element]
          
-    return square_sum;
+    return square_sum
 
     
 def list_math_subtraction(a, b):
