@@ -875,7 +875,7 @@ class cftree:
         """
                 
         if self.__root is None:
-            node = leaf_node(entry, None, [entry], None)
+            node = leaf_node(entry, None, [entry])
             
             self.__root = node
             self.__leafes.append(node)
