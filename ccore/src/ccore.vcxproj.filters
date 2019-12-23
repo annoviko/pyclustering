@@ -298,9 +298,6 @@
     <ClCompile Include="utils\stats.cpp">
       <Filter>Source Files\utils</Filter>
     </ClCompile>
-    <ClCompile Include="container\cftree.cpp">
-      <Filter>Source Files\container</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\pyclustering\cluster\agglomerative.hpp">
@@ -635,9 +632,6 @@
     </ClInclude>
     <ClInclude Include="..\include\pyclustering\definitions.hpp">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\pyclustering\container\cftree.hpp">
-      <Filter>Header Files\container</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
