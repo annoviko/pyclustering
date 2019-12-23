@@ -362,13 +362,12 @@ class cfnode:
     
     """
     
-    def __init__(self, feature, parent, payload):
+    def __init__(self, feature, parent):
         """!
         @brief Constructor of abstract CF node.
         
         @param[in] feature (cfentry): Clustering feature of the created node.
         @param[in] parent (cfnode): Parent of the created node.
-        @param[in] payload (*): Data that is stored by the node.
         
         """
         
@@ -380,9 +379,6 @@ class cfnode:
         
         ## Type node (leaf or non-leaf).
         self.type = cfnode_type.CFNODE_DUMMY
-        
-        ## Payload of node where user data can be stored.
-        self.payload = payload
     
     
     def __repr__(self):
@@ -431,7 +427,7 @@ class non_leaf_node(cfnode):
         return self.__successors
     
     
-    def __init__(self, feature, parent, successors, payload):
+    def __init__(self, feature, parent, successors):
         """!
         @brief Create CF Non-leaf node.
         
@@ -442,7 +438,7 @@ class non_leaf_node(cfnode):
         
         """
                 
-        super().__init__(feature, parent, payload)
+        super().__init__(feature, parent)
         
         ## Node type in CF tree that is CFNODE_NONLEAF for non leaf node.
         self.type = cfnode_type.CFNODE_NONLEAF
@@ -568,18 +564,17 @@ class leaf_node(cfnode):
         return self.__entries
     
     
-    def __init__(self, feature, parent, entries, payload):
+    def __init__(self, feature, parent, entries):
         """!
         @brief Create CF Leaf node.
         
         @param[in] feature (cfentry): Clustering feature of the created node.
         @param[in] parent (non_leaf_node): Parent of the created node.
         @param[in] entries (list): List of entries of the node.
-        @param[in] payload (*): Data that is stored by the node.
         
         """
         
-        super().__init__(feature, parent, payload)
+        super().__init__(feature, parent)
         
         ## Node type in CF tree that is CFNODE_LEAF for leaf node.
         self.type = cfnode_type.CFNODE_LEAF
@@ -1008,7 +1003,7 @@ class cftree:
             
             # Check if it's aleady root then new root should be created (height is increased in this case).
             if search_node is self.__root:
-                self.__root = non_leaf_node(search_node.feature, None, [search_node], None)
+                self.__root = non_leaf_node(search_node.feature, None, [search_node])
                 search_node.parent = self.__root
                 
                 # Update statistics
@@ -1070,7 +1065,7 @@ class cftree:
         
         """
         if split_node is self.__root:
-            self.__root = non_leaf_node(split_node.feature, None, [ split_node ], None)
+            self.__root = non_leaf_node(split_node.feature, None, [ split_node ])
             split_node.parent = self.__root
             
             # Update statistics
@@ -1106,8 +1101,8 @@ class cftree:
         [farthest_node1, farthest_node2] = node.get_farthest_successors(self.__type_measurement)
         
         # create new non-leaf nodes
-        new_node1 = non_leaf_node(farthest_node1.feature, node.parent, [farthest_node1], None)
-        new_node2 = non_leaf_node(farthest_node2.feature, node.parent, [farthest_node2], None)
+        new_node1 = non_leaf_node(farthest_node1.feature, node.parent, [farthest_node1])
+        new_node2 = non_leaf_node(farthest_node2.feature, node.parent, [farthest_node2])
         
         farthest_node1.parent = new_node1
         farthest_node2.parent = new_node2
@@ -1142,8 +1137,8 @@ class cftree:
         [farthest_entity1, farthest_entity2] = node.get_farthest_entries(self.__type_measurement)
                     
         # create new nodes
-        new_node1 = leaf_node(farthest_entity1, node.parent, [farthest_entity1], None)
-        new_node2 = leaf_node(farthest_entity2, node.parent, [farthest_entity2], None)
+        new_node1 = leaf_node(farthest_entity1, node.parent, [farthest_entity1])
+        new_node2 = leaf_node(farthest_entity2, node.parent, [farthest_entity2])
         
         # re-insert other entries
         for entity in node.entries:
