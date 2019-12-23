@@ -15,7 +15,7 @@ Linux, Windows and MacOS operating systems.
 
 **E-Mail**: pyclustering@yandex.ru
 
-**Documentation**: https://pyclustering.github.io/docs/0.9.2/html/index.html
+**Documentation**: https://pyclustering.github.io/docs/0.9.3/html/index.html
 
 **Homepage**: https://pyclustering.github.io/
 
@@ -109,13 +109,13 @@ PyClustering Status
 ===================
 
 +----------------------+------------------------------+------------------------------------+--------------------------------+
-| Branch               | master                       | 0.9.dev                            | 0.9.2.rel                      |
+| Branch               | master                       | 0.9.dev                            | 0.9.3.rel                      |
 +======================+==============================+====================================+================================+
-| Build (Linux, MacOS) | |Build Status Linux MacOS|   | |Build Status Linux MacOS 0.9.dev| | |Build Status Linux 0.9.2.rel| |
+| Build (Linux, MacOS) | |Build Status Linux MacOS|   | |Build Status Linux MacOS 0.9.dev| | |Build Status Linux 0.9.3.rel| |
 +----------------------+------------------------------+------------------------------------+--------------------------------+
-| Build (Win)          | |Build Status Win|           | |Build Status Win 0.9.dev|         | |Build Status Win 0.9.2.rel|   |
+| Build (Win)          | |Build Status Win|           | |Build Status Win 0.9.dev|         | |Build Status Win 0.9.3.rel|   |
 +----------------------+------------------------------+------------------------------------+--------------------------------+
-| Code Coverage        | |Coverage Status|            | |Coverage Status 0.9.dev|          | |Coverage Status 0.9.2.rel|    |
+| Code Coverage        | |Coverage Status|            | |Coverage Status 0.9.dev|          | |Coverage Status 0.9.3.rel|    |
 +----------------------+------------------------------+------------------------------------+--------------------------------+
 
 
@@ -465,12 +465,12 @@ Illustrations
    :target: https://ci.appveyor.com/project/annoviko/pyclustering/branch/0.9.dev
 .. |Coverage Status 0.9.dev| image:: https://coveralls.io/repos/github/annoviko/pyclustering/badge.svg?branch=0.9.dev&ts=1
    :target: https://coveralls.io/github/annoviko/pyclustering?branch=0.9.dev
-.. |Build Status Linux 0.9.2.rel| image:: https://travis-ci.org/annoviko/pyclustering.svg?branch=0.9.2.rel
+.. |Build Status Linux 0.9.3.rel| image:: https://travis-ci.org/annoviko/pyclustering.svg?branch=0.9.3.rel
    :target: https://travis-ci.org/annoviko/pyclustering
-.. |Build Status Win 0.9.2.rel| image:: https://ci.appveyor.com/api/projects/status/4uly2exfp49emwn0/branch/0.9.2.rel?svg=true
-   :target: https://ci.appveyor.com/project/annoviko/pyclustering/branch/0.9.2.rel
-.. |Coverage Status 0.9.2.rel| image:: https://coveralls.io/repos/github/annoviko/pyclustering/badge.svg?branch=0.9.2.rel&ts=1
-   :target: https://coveralls.io/github/annoviko/pyclustering?branch=0.9.2.rel
+.. |Build Status Win 0.9.3.rel| image:: https://ci.appveyor.com/api/projects/status/4uly2exfp49emwn0/branch/0.9.3.rel?svg=true
+   :target: https://ci.appveyor.com/project/annoviko/pyclustering/branch/0.9.3.rel
+.. |Coverage Status 0.9.3.rel| image:: https://coveralls.io/repos/github/annoviko/pyclustering/badge.svg?branch=0.9.3.rel&ts=1
+   :target: https://coveralls.io/github/annoviko/pyclustering?branch=0.9.3.rel
 .. |Download Counter| image:: https://pepy.tech/badge/pyclustering
    :target: https://pepy.tech/project/pyclustering
 .. |JOSS| image:: http://joss.theoj.org/papers/10.21105/joss.01230/status.svg

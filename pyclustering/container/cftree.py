@@ -434,7 +434,6 @@ class non_leaf_node(cfnode):
         @param[in] feature (cfentry): Clustering feature of the created node.
         @param[in] parent (non_leaf_node): Parent of the created node.
         @param[in] successors (list): List of successors of the node.
-        @param[in] payload (*): Data that is stored by the node.
         
         """
                 

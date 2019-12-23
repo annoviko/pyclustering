@@ -38,14 +38,14 @@ def load_readme():
 setup(
       name='pyclustering',
       packages=find_packages(),
-      version='0.9.2',
+      version='0.9.3',
       description='pyclustring is a python data mining library',
       long_description=load_readme(),
       url='https://github.com/annoviko/pyclustering',
       project_urls={
                      'Homepage': 'https://pyclustering.github.io/',
                      'Repository': 'https://github.com/annoviko/pyclustering',
-                     'Documentation': 'https://pyclustering.github.io/docs/0.9.2/html/index.html',
+                     'Documentation': 'https://pyclustering.github.io/docs/0.9.3/html/index.html',
                      'Bug Tracker': 'https://github.com/annoviko/pyclustering/issues'
                    },
       license='GNU Public License',
