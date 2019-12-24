@@ -42,6 +42,9 @@ class suite_holder:
         if result.wasSuccessful() is True:
             return result
 
+        if len(result.errors) > 0:
+            return result   # no need to restart in case of errors
+
         for attempt in range(rerun):
             time.sleep(1)   # sleep 1 second to change current time for random seed.
 
@@ -54,6 +57,8 @@ class suite_holder:
                 failure_suite.addTest(failure[0])
 
             result = unittest.TextTestRunner(stream=sys.stdout, verbosity=3).run(failure_suite)
+            if result.wasSuccessful() is True:
+                return result
 
         return result
 
