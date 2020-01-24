@@ -141,7 +141,7 @@ function job_pyclustering_windows($platform_version) {
 
     Write-Host "[CI Job] Starting integration testing using interpreter '$env:PYTHON_INTERPRETER'." -ForegroundColor Green;
     
-    & $env:PYTHON_INTERPRETER pyclustering\tests\tests_runner.py --integration
+    & $env:PYTHON_INTERPRETER pyclustering\tests\__main__.py --integration
     if ($LastExitCode -ne 0) {
         Write-Error -Message "[CI Job] Integration testing pyclustering <-> ccore for WINDOWS platform: FAILURE." -Category InvalidResult;
         $env:TESTING_RESULT = $env:RESULT_FAILURE;

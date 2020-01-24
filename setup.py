@@ -78,7 +78,12 @@ setup(
       install_requires=['scipy', 'matplotlib', 'numpy', 'Pillow'],
       python_requires='>=3.5',
       package_data={
-                      'pyclustering.samples': ['samples/famous/*.data', 'samples/famous/*.answer', 'samples/fcps/*.data', 'samples/fcps/*.answer', 'samples/simple/*.data', 'samples/simple/*.answer', 'graphs/*.grpr', 'images/*.png', 'images/digits/*.png'],
+                      'pyclustering.samples': ['samples/famous/*.*',
+                                               'samples/fcps/*.*',
+                                               'samples/simple/*.*',
+                                               'graphs/*.*',
+                                               'images/*.*',
+                                               'images/digits/*.*'],
                       'pyclustering.core': ['64-bit/linux/ccore.so', '32-bit/linux/ccore.so',
                                             '64-bit/win/ccore.dll', '32-bit/win/ccore.dll',
                                             '64-bit/macos/ccore.so'],

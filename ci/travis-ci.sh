@@ -218,7 +218,7 @@ run_test_pyclustering_job() {
     build_ccore 64-bit
 
     # run unit and integration tests and obtain coverage results
-    coverage run --source=pyclustering --omit='pyclustering/*/tests/*,pyclustering/*/examples/*,pyclustering/tests/*' pyclustering/tests/tests_runner.py
+    coverage run --source=pyclustering --omit='pyclustering/*/tests/*,pyclustering/*/examples/*,pyclustering/tests/*' pyclustering/tests/__main__.py
     coveralls
 }
 
@@ -239,7 +239,7 @@ run_integration_test_job() {
     build_ccore $PLATFORM_TARGET
 
     # run integration tests
-    python pyclustering/tests/tests_runner.py --integration
+    python pyclustering/tests/__main__.py --integration
 }
 
 
@@ -260,7 +260,7 @@ run_build_test_ccore_macos_job() {
     pip3 install numpy matplotlib scipy Pillow
 
     # run integration tests
-    python3 pyclustering/tests/tests_runner.py --integration
+    python3 pyclustering/tests/__main__.py --integration
 
     # upload binaries to cloud
     upload_binary 64-bit macos
@@ -295,10 +295,20 @@ run_doxygen_job() {
 }
 
 
-run_install_job() {
+run_pypi_install_job() {
     print_info "Install (installer testing)."
     print_info "- Install pyclustering library from pypi."
     print_info "- Run tests for the library."
+
+    PYPI_SOURCE=$1
+
+    if [[ $PYPI_SOURCE == "testpypi" ]]; then
+        pip3 install --extra-index-url https://testpypi.python.org/pypi pyclustering
+    else
+        pip3 install pyclustering
+    fi
+
+    python3 -m pyclustering.tests
 }
 
 
@@ -478,8 +488,11 @@ case $1 in
     DOCUMENTATION)
         run_doxygen_job ;;
 
-    INSTALL)
-        run_install_job ;;
+    PYPI_INSTALL)
+        run_pypi_install_job ;;
+
+    TESTPYPI_INSTALL)
+        run_pypi_install_job testpypi ;;
 
     DEPLOY)
         run_deploy_job ;;

@@ -51,8 +51,10 @@ jobs:
       name: "Build documentation."
       dist: trusty
       env: JOB_ID=DOCUMENTATION
-    - if: type = api OR env(JOB_ID) = INSTALL
-      name: "Run installer and tests."
+    - if: type = api OR env(JOB_ID) = PYPI_INSTALL
+      name: "Run PyPi installer and run tests."
+    - if: type = api OR env(JOB_ID) = TESTPYPI_INSTALL
+      name: "Run TestPyPi install and run tests."
 
 script: ./ci/travis-ci.sh $JOB_ID
 
