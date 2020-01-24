@@ -27,22 +27,28 @@ env:
 
 
 jobs:
-  if: type = push OR type = pull_request
     include:
-    - name: "Build C/C++ part (Linux)."
+    - if: type = push OR type = pull_request
+      name: "Build C/C++ part (Linux)."
       env: JOB_ID=BUILD_CCORE
-    - name: "Run C/C++ static code analyser."
+    - if: type = push OR type = pull_request
+      name: "Run C/C++ static code analyser."
       env: JOB_ID=ANALYSE_CCORE
-    - name: "Run unit-tests for C/C++ part."
+    - if: type = push OR type = pull_request
+      name: "Run unit-tests for C/C++ part."
       env: JOB_ID=UT_CCORE
-    - name: "Run memory leak analyser (valgrind) for C/C++ part."
+    - if: type = push OR type = pull_request
+      name: "Run memory leak analyser (valgrind) for C/C++ part."
       env: JOB_ID=VALGRIND_CCORE
-    - name: "PyClustering unit and integration testing."
+    - if: type = push OR type = pull_request
+      name: "PyClustering unit and integration testing."
       env: JOB_ID=TEST_PYCLUSTERING
-    - name: "Build C/C++ part (MacOS) and intergration testing."
+    - if: type = push OR type = pull_request
+      name: "Build C/C++ part (MacOS) and intergration testing."
       os: osx
       env: JOB_ID=BUILD_TEST_CCORE_MACOS
-    - name: "Build documentation."
+    - if: type = push OR type = pull_request
+      name: "Build documentation."
       dist: trusty
       env: JOB_ID="DOCUMENTATION
 
