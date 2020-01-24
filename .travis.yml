@@ -25,33 +25,26 @@ env:
     - secure: "MlG1NaREINYp2vPAyOZNpN3KsbczdJwAdpzHmHmPNfxG14eEZSbEeLmVNfZm9rfOE12IKUsfQn0tLEfpQJA5AAuDr5pG+0HuWC9Kx4VZUQID+H5V9t5C3KxfPl4ESfEnsKbXWOAqnyhL+G7KqUhHLt7KCxk3/UCC//whum9SjrpjBQqx19fb48k8ylqN5Etwk3VtHPlKEHiD3FErfsLXp/F87ZDTGenl/GYFFFajHZT9SXWxOavoaeJRsP+f3vbKC6Sd/tsKyuJ9i9bQV91EOEf1QhInfNBCVoFZpGt1nAQglcnbpj7hvsWeI1ajm/GNUYIddDhwPWaibgBnu3Kw2AiKxHZKHsFu3uQ0aN8TjPGvFH9xrcCkwP/x66KIR01VQjeVvp8MPtttZm4PZChWnD8ydBooYCVTh78rIlm4LCOpKXVWSKBYFBRhecS1bxwQFtlHIiQzuJbFMVLJNMkknNeikIdMlHOSsioOU63bjH/maL0vtfIhuqCAAe1MA/KI/C9+mqTZUqDhOwSs91zkhwxyW+FZCRDlKr8LVREJnP0Tecn45Jr2yXGPTOWGPf912J5GEb2ttTy3Q/HYKyBIcfDv7NAijNQjjVuwxYpH9evQceoTaR/hmpxMYp5NiTKGSZjB1lNdMXYAzpIx+j3QGB1PHplOzYv5spTrTMncNuA="
 
 
-stages:
-- build and test
-- deploy
-
 
 jobs:
-  include:
-  - stage: build and test
-    env: TITLE="Build CCORE (Linux)."
-    script: ./ci/travis-ci.sh BUILD_CCORE
-  - state: build and test
-    env: TITLE="Run C/C++ static code analyser."
-    script: ./ci/travis-ci.sh ANALYSE_CCORE
-  - stage: build and test
-    env: TITLE="Run unit-tests for CCORE."
-    script: ./ci/travis-ci.sh UT_CCORE
-  - stage: build and test
-    env: TITLE="Run memory leak analyser (valgrind) for CCORE."
-    script: ./ci/travis-ci.sh VALGRIND_CCORE
-  - stage: build and test
-    env: TITLE="PyClustering unit and integration testing."
-    script: ./ci/travis-ci.sh TEST_PYCLUSTERING
-  - stage: build and test
-    os: osx
-    env: TITLE="Build CCORE (MacOS) and intergration testing."
-    script: ./ci/travis-ci.sh BUILD_TEST_CCORE_MACOS
-  - stage: build and test
-    dist: trusty
-    env: TITLE="Build documentation."
-    script: ./ci/travis-ci.sh DOCUMENTATION
+  if: type = push OR type = pull_request
+    include:
+    - name: "Build C/C++ part (Linux)."
+      env: JOB_ID=BUILD_CCORE
+    - name: "Run C/C++ static code analyser."
+      env: JOB_ID=ANALYSE_CCORE
+    - name: "Run unit-tests for C/C++ part."
+      env: JOB_ID=UT_CCORE
+    - name: "Run memory leak analyser (valgrind) for C/C++ part."
+      env: JOB_ID=VALGRIND_CCORE
+    - name: "PyClustering unit and integration testing."
+      env: JOB_ID=TEST_PYCLUSTERING
+    - name: "Build C/C++ part (MacOS) and intergration testing."
+      os: osx
+      env: JOB_ID=BUILD_TEST_CCORE_MACOS
+    - name: "Build documentation."
+      dist: trusty
+      env: JOB_ID="DOCUMENTATION
+
+script: ./ci/travis-ci.sh $JOB_ID
+

@@ -295,6 +295,13 @@ run_doxygen_job() {
 }
 
 
+run_install_job() {
+    print_info "Install (installer testing)."
+    print_info "- Install pyclustering library from pypi."
+    print_info "- Run tests for the library."
+}
+
+
 run_deploy_job() {
     print_info "Deploy (upload linux binary file to github)"
     if [[ $TRAVIS_COMMIT_MESSAGE != *"[publish]"* ]]; then
@@ -470,6 +477,9 @@ case $1 in
 
     DOCUMENTATION)
         run_doxygen_job ;;
+
+    INSTALL)
+        run_install_job ;;
 
     DEPLOY)
         run_deploy_job ;;
