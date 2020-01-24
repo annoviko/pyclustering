@@ -50,7 +50,9 @@ jobs:
     - if: type = push OR type = pull_request
       name: "Build documentation."
       dist: trusty
-      env: JOB_ID="DOCUMENTATION
+      env: JOB_ID=DOCUMENTATION
+    - if: type = api OR env(JOB_ID) = INSTALL
+      name: "Run installer and tests."
 
 script: ./ci/travis-ci.sh $JOB_ID
 
