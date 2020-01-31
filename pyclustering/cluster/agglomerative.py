@@ -25,15 +25,15 @@
 """
 
 
-from enum import IntEnum;
+from enum import IntEnum
 
-from pyclustering.cluster.encoder import type_encoding;
+from pyclustering.cluster.encoder import type_encoding
 
-from pyclustering.utils import euclidean_distance_square;
+from pyclustering.utils import euclidean_distance_square
 
 from pyclustering.core.wrapper import ccore_library
 
-import pyclustering.core.agglomerative_wrapper as wrapper;
+import pyclustering.core.agglomerative_wrapper as wrapper
 
 
 class type_link(IntEnum):
@@ -58,7 +58,7 @@ class type_link(IntEnum):
 class agglomerative:
     """!
     @brief Class represents agglomerative algorithm for cluster analysis.
-    @details Agglomerative algorithm considers each data point (object) as a separate cluster at the beggining and
+    @details Agglomerative algorithm considers each data point (object) as a separate cluster at the beginning and
               step by step finds the best pair of clusters for merge until required amount of clusters is obtained.
     
     Example of agglomerative algorithm where centroid link is used:

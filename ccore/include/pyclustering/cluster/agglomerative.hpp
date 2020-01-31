@@ -1,23 +1,24 @@
-/**
-*
-* @authors Andrei Novikov (pyclustering@yandex.ru)
-* @date 2014-2020
-* @copyright GNU Public License
-*
-* GNU_PUBLIC_LICENSE
-*   pyclustering is free software: you can redistribute it and/or modify
-*   it under the terms of the GNU General Public License as published by
-*   the Free Software Foundation, either version 3 of the License, or
-*   (at your option) any later version.
-*
-*   pyclustering is distributed in the hope that it will be useful,
-*   but WITHOUT ANY WARRANTY; without even the implied warranty of
-*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*   GNU General Public License for more details.
-*
-*   You should have received a copy of the GNU General Public License
-*   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*
+/*!
+
+@authors Andrei Novikov (pyclustering@yandex.ru)
+@date 2014-2020
+@copyright GNU Public License
+
+@cond GNU_PUBLIC_LICENSE
+    pyclustering is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    pyclustering is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+@endcond
+
 */
 
 #pragma once
@@ -34,29 +35,69 @@ namespace pyclustering {
 namespace clst {
 
 
+/*!
+
+@brief  A storage where Agglometative clustering results are stored.
+
+*/
 using agglomerative_data = cluster_data;
 
 
-/**
-*
-* @brief    Types of links that are used for connecting clusters.
-*
-*/
-enum class type_link {
-    SINGLE_LINK     = 0,
-    COMPLETE_LINK   = 1,
-    AVERAGE_LINK    = 2,
-    CENTROID_LINK   = 3
-};
+/*!
 
+@class    agglomerative agglomerative.hpp pyclustering/cluster/agglomerative.hpp
 
-/**
-*
-* @brief    Agglomerative algorithm implementation that is used bottom up approach for clustering.
-* @details  The algorithm related to hierarchical class.
-*
+@brief    Agglomerative algorithm implementation that is used bottom up approach for clustering.
+@details  Agglomerative algorithm considers each data point (object) as a separate cluster at the beginning and
+          step by step finds the best pair of clusters for merge until required amount of clusters is obtained.
+
+Example of agglomerative algorithm where centroid link 'CENTROID_LINK' is used for clustering sample 'Simple01':
+@code
+    // Read an input data 'Simple01' from text file.
+    dataset data = read_data("Simple01.txt");
+
+    // Create storage where the result is going to be stored.
+    agglomerative_data result;
+
+    // Create the algorithm and process the input data using centroid link.
+    agglomerative(2, agglomerative::type_link::CENTROID_LINK).process(data, result);
+
+    // Display allocated clusters.
+    for (auto group : result.clusters()) {
+        std::cout << "[ ";
+        for (auto index : group) { std::cout << index << " "; }
+        std::cout << "]";
+    }
+@endcode
+
+Example of 'Lsun' clustering by the algorithm where single link method is more suitable due to elongated clusters:
+@code
+    dataset data = read_data("Lsun.txt");
+
+    agglomerative_data result;
+    agglomerative(2, agglomerative::type_link::SINGLE_LINK).process(data, result);
+@endcode
+
+There is an illustration how various methods affect the clustering result:
+@image html agglomerative_lsun_clustering_single_link.png
+
+Implementation based on paper @cite book::algorithms_for_clustering_data.
+
 */
 class agglomerative {
+public:
+    /*!
+
+    @brief  Defines methods (how to define closest clusters) for Agglomerative clustering.
+
+    */
+    enum class type_link {
+        SINGLE_LINK   = 0,  /**< Distance between the two nearest objects in clusters is considered as a link, so-called SLINK method (the single-link clustering method). */
+        COMPLETE_LINK = 1,  /**< Distance between the farthest objects in clusters is considered as a link, so-called CLINK method (the complete-link clustering method). */
+        AVERAGE_LINK  = 2,  /**< Average distance between objects in clusters is considered as a link. */
+        CENTROID_LINK = 3   /**< Distance between centers of clusters is considered as a link. */
+    };
+
 private:
     size_t                  m_number_clusters;
 
@@ -69,85 +110,85 @@ private:
     const dataset           * m_ptr_data;
 
 public:
-    /**
-    *
-    * @brief    Default constructor of clustering algorithm.
-    *
+    /*!
+    
+    @brief    Default constructor of the clustering algorithm.
+    
     */
     agglomerative();
 
-    /**
-    *
-    * @brief    Constructor of clustering algorithm where algorithm parameters for processing are
-    *           specified.
-    *
-    * @param[in] number_clusters: amount of clusters that should be allocated.
-    * @param[in] link: type of linking clustering during processing.
-    *
+    /*!
+    
+    @brief    Constructor of clustering algorithm where algorithm parameters for processing are
+              specified.
+    
+    @param[in] number_clusters: amount of clusters that should be allocated.
+    @param[in] link: type of the linking method for clustering.
+    
     */
     agglomerative(const size_t number_clusters, const type_link link);
 
-    /**
-    *
-    * @brief    Default destructor of the algorithm.
-    *
+    /*!
+    
+    @brief    Default destructor of the algorithm.
+    
     */
     ~agglomerative() = default;
 
 public:
-    /**
-    *
-    * @brief    Performs cluster analysis of an input data.
-    *
-    * @param[in]  p_data: input data for cluster analysis.
-    * @param[out] p_result: clustering result of an input data.
-    *
+    /*!
+    
+    @brief    Performs cluster analysis of an input data.
+    
+    @param[in]  p_data: an input data that should be clusted.
+    @param[out] p_result: agglomerative clustering result of an input data.
+    
     */
      void process(const dataset & data, agglomerative_data & result);
 
 private:
-    /**
-    *
-    * @brief    Merges the most similar clusters in line with link type.
-    *
+    /*!
+    
+    @brief    Merges the most similar clusters in line with link type.
+    
     */
     void merge_similar_clusters();
 
-    /**
-    *
-    * @brief    Merges the most similar clusters in line with average link type.
-    *
+    /*!
+    
+    @brief    Merges the most similar clusters in line with average link type.
+    
     */
     void merge_by_average_link();
 
-    /**
-    *
-    * @brief    Merges the most similar clusters in line with centroid link type.
-    *
+    /*!
+    
+    @brief    Merges the most similar clusters in line with centroid link type.
+    
     */
     void merge_by_centroid_link();
 
-    /**
-    *
-    * @brief    Merges the most similar clusters in line with complete link type.
-    *
+    /*!
+    
+    @brief    Merges the most similar clusters in line with complete link type.
+    
     */
     void merge_by_complete_link();
 
-    /**
-    *
-    * @brief    Merges the most similar clusters in line with single link type.
-    *
+    /*!
+    
+    @brief    Merges the most similar clusters in line with single link type.
+    
     */
     void merge_by_signle_link();
 
-    /**
-    *
-    * @brief    Calculates new center.
-    *
-    * @param[in] cluster: cluster whose center should be calculated.
-    * @param[out] center: coordinates of the cluster center.
-    *
+    /*!
+    
+    @brief    Calculates new center.
+    
+    @param[in] cluster: cluster whose center should be calculated.
+    @param[out] center: coordinates of the cluster center.
+    
     */
     void calculate_center(const cluster & cluster, point & center) const;
 };
