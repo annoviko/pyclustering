@@ -3,7 +3,7 @@
 @brief Core module provides access to CCORE library (part of this project).
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
-@date 2014-2019
+@date 2014-2020
 @copyright GNU Public License
 
 @cond GNU_PUBLIC_LICENSE

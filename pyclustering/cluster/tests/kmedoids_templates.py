@@ -3,7 +3,7 @@
 @brief Test templates for K-Medoids clustering module.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
-@date 2014-2019
+@date 2014-2020
 @copyright GNU Public License
 
 @cond GNU_PUBLIC_LICENSE
