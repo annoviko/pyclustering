@@ -278,9 +278,6 @@
     <ClCompile Include="..\src\cluster\clique_block.cpp">
       <Filter>Tested Code\cluster</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\cluster\cluster_algorithm.cpp">
-      <Filter>Tested Code\cluster</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\cluster\cluster_data.cpp">
       <Filter>Tested Code\cluster</Filter>
     </ClCompile>

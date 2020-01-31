@@ -1,7 +1,7 @@
 /**
 *
 * @authors Andrei Novikov (pyclustering@yandex.ru)
-* @date 2014-2019
+* @date 2014-2020
 * @copyright GNU Public License
 *
 * GNU_PUBLIC_LICENSE

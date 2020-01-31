@@ -1,7 +1,7 @@
 /**
 *
 * @authors Andrei Novikov (pyclustering@yandex.ru)
-* @date 2014-2019
+* @date 2014-2020
 * @copyright GNU Public License
 *
 * GNU_PUBLIC_LICENSE
@@ -30,7 +30,6 @@
 
 #include <pyclustering/container/kdtree.hpp>
 
-#include <pyclustering/cluster/cluster_algorithm.hpp>
 #include <pyclustering/cluster/cure_data.hpp>
 
 
@@ -325,7 +324,7 @@ public:
 * @brief   CURE algorithm.
 *
 */
-class cure : public cluster_algorithm {
+class cure {
 private:
     cure_queue * queue;
 
@@ -372,7 +371,7 @@ public:
     * @param[out] p_result: clustering result of an input data.
     *
     */
-    virtual void process(const dataset & p_data, cluster_data & p_result) override;
+    void process(const dataset & p_data, cure_data & p_result);
 };
 
 

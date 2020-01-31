@@ -1,7 +1,7 @@
 /**
 *
 * @authors Andrei Novikov (pyclustering@yandex.ru)
-* @date 2014-2019
+* @date 2014-2020
 * @copyright GNU Public License
 *
 * GNU_PUBLIC_LICENSE
@@ -24,7 +24,6 @@
 #pragma once
 
 
-#include <pyclustering/cluster/cluster_algorithm.hpp>
 #include <pyclustering/cluster/somsc_data.hpp>
 
 #include <pyclustering/nnet/som.hpp>
@@ -35,7 +34,7 @@ namespace pyclustering {
 namespace clst {
 
 
-class somsc : public cluster_algorithm {
+class somsc {
 private:
     std::size_t         m_amount_clusters   = 0;
 
@@ -78,7 +77,7 @@ public:
      * @brief Default destructor to destroy algorithm instance.
      *
      */
-    virtual ~somsc() = default;
+    ~somsc() = default;
 
 public:
     /**
@@ -89,7 +88,7 @@ public:
     * @param[out] p_result: clustering result of an input data (consists of allocated clusters).
     *
     */
-    virtual void process(const dataset & p_data, cluster_data & p_result) override;
+    void process(const dataset & p_data, somsc_data & p_result);
 };
 
 

@@ -1,7 +1,7 @@
 /**
 *
 * @authors Andrei Novikov (pyclustering@yandex.ru)
-* @date 2014-2019
+* @date 2014-2020
 * @copyright GNU Public License
 *
 * GNU_PUBLIC_LICENSE
@@ -28,7 +28,6 @@
 
 #include <pyclustering/container/kdtree.hpp>
 
-#include <pyclustering/cluster/cluster_algorithm.hpp>
 #include <pyclustering/cluster/dbscan_data.hpp>
 
 
@@ -103,7 +102,7 @@ public:
     * @param[out] p_result: clustering result of an input data.
     *
     */
-    virtual void process(const dataset & p_data, cluster_data & p_result);
+    void process(const dataset & p_data, dbscan_data & p_result);
 
     /**
     *
@@ -114,7 +113,7 @@ public:
     * @param[out] p_result: clustering result of an input data.
     *
     */
-    virtual void process(const dataset & p_data, const dbscan_data_t p_type, cluster_data & p_result);
+    void process(const dataset & p_data, const dbscan_data_t p_type, dbscan_data & p_result);
 
 private:
     /**

@@ -1,7 +1,7 @@
 /**
 *
 * @authors Andrei Novikov (pyclustering@yandex.ru)
-* @date 2014-2019
+* @date 2014-2020
 * @copyright GNU Public License
 *
 * GNU_PUBLIC_LICENSE
@@ -37,9 +37,7 @@ somsc::somsc(const std::size_t p_amount_clusters, const std::size_t p_epoch) :
 { }
 
 
-void somsc::process(const dataset & p_data, cluster_data & p_result) {
-    p_result = somsc_data();
-
+void somsc::process(const dataset & p_data, somsc_data & p_result) {
     som_parameters params;
     som som_map(1, m_amount_clusters, som_conn_type::SOM_GRID_FOUR, params);
     som_map.train(p_data, m_epoch, true);

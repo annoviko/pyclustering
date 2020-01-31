@@ -1,7 +1,7 @@
 /**
 *
 * @authors Andrei Novikov (pyclustering@yandex.ru)
-* @date 2014-2019
+* @date 2014-2020
 * @copyright GNU Public License
 *
 * GNU_PUBLIC_LICENSE
@@ -27,7 +27,6 @@
 #include <mutex>
 #include <vector>
 
-#include <pyclustering/cluster/cluster_algorithm.hpp>
 #include <pyclustering/cluster/xmeans_data.hpp>
 
 
@@ -42,7 +41,7 @@ enum class splitting_type {
 };
 
 
-class xmeans : public cluster_algorithm {
+class xmeans {
 private:
     const static double             DEFAULT_SPLIT_DIFFERENCE;
 
@@ -85,7 +84,7 @@ public:
     * @brief    Default destructor of the algorithm.
     *
     */
-    virtual ~xmeans() = default;
+    ~xmeans() = default;
 
 public:
     /**
@@ -96,7 +95,7 @@ public:
     * @param[out] p_result: clustering result of an input data.
     *
     */
-    virtual void process(const dataset & data, cluster_data & output_result) override;
+    void process(const dataset & data, xmeans_data & output_result);
 
 private:
     void improve_structure();

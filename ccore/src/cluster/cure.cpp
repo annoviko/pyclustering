@@ -1,7 +1,7 @@
 /**
 *
 * @authors Andrei Novikov (pyclustering@yandex.ru)
-* @date 2014-2019
+* @date 2014-2020
 * @copyright GNU Public License
 *
 * GNU_PUBLIC_LICENSE
@@ -415,7 +415,7 @@ cure::~cure() {
 }
 
 
-void cure::process(const dataset & p_data, cluster_data & p_result) {
+void cure::process(const dataset & p_data, cure_data & p_result) {
     delete queue;
 
     queue = new cure_queue(&p_data);
@@ -432,8 +432,7 @@ void cure::process(const dataset & p_data, cluster_data & p_result) {
         allocated_clusters = queue->size();
     }
 
-    p_result = cure_data();
-    cure_data & result = (cure_data &) p_result;
+    cure_data & result = p_result;
 
     /* prepare standard representation of clusters */
     cluster_sequence & clusters = result.clusters();
@@ -457,8 +456,6 @@ void cure::process(const dataset & p_data, cluster_data & p_result) {
 
         result.means().push_back((*(*cure_cluster)->mean));
     }
-
-    p_result = result;
 
     delete queue;
     queue = nullptr;

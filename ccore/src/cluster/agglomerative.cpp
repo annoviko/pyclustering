@@ -1,7 +1,7 @@
 /**
 *
 * @authors Andrei Novikov (pyclustering@yandex.ru)
-* @date 2014-2019
+* @date 2014-2020
 * @copyright GNU Public License
 *
 * GNU_PUBLIC_LICENSE
@@ -52,7 +52,7 @@ agglomerative::agglomerative(const size_t number_clusters, const type_link link)
 { }
 
 
-void agglomerative::process(const dataset & data, cluster_data & result) {
+void agglomerative::process(const dataset & data, agglomerative_data & result) {
     m_ptr_data = &data;
     m_ptr_clusters = &result.clusters();
 

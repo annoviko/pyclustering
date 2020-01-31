@@ -1,7 +1,7 @@
 /**
 *
 * @authors Andrei Novikov (pyclustering@yandex.ru)
-* @date 2014-2019
+* @date 2014-2020
 * @copyright GNU Public License
 *
 * GNU_PUBLIC_LICENSE
@@ -26,7 +26,6 @@
 #include <mutex>
 #include <vector>
 
-#include <pyclustering/cluster/cluster_algorithm.hpp>
 #include <pyclustering/cluster/gmeans_data.hpp>
 
 #include <pyclustering/utils/metric.hpp>
@@ -49,7 +48,7 @@ namespace clst {
 *            assigned to each center.
 *
 */
-class gmeans : public cluster_algorithm {
+class gmeans {
 private:
     using projection = std::vector<double>;
 
@@ -101,7 +100,7 @@ public:
     * @brief    Default destructor of the algorithm.
     *
     */
-    virtual ~gmeans() = default;
+    ~gmeans() = default;
 
 public:
     /**
@@ -114,7 +113,7 @@ public:
     *                 processing.
     *
     */
-    virtual void process(const dataset & p_data, cluster_data & p_result) override;
+    void process(const dataset & p_data, gmeans_data & p_result);
 
 private:
     void search_optimal_parameters(const dataset & p_data, const std::size_t p_amount, cluster_sequence & p_clusters, dataset & p_centers) const;

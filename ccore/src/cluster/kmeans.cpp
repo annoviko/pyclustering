@@ -1,7 +1,7 @@
 /**
 *
 * @authors Andrei Novikov (pyclustering@yandex.ru)
-* @date 2014-2019
+* @date 2014-2020
 * @copyright GNU Public License
 *
 * GNU_PUBLIC_LICENSE
@@ -55,16 +55,16 @@ kmeans::kmeans(const dataset & p_initial_centers, const double p_tolerance, cons
 { }
 
 
-void kmeans::process(const dataset & p_data, cluster_data & p_result) {
+void kmeans::process(const dataset & p_data, kmeans_data & p_result) {
     process(p_data, { }, p_result);
 }
 
 
-void kmeans::process(const dataset & p_data, const index_sequence & p_indexes, cluster_data & p_result) {
+void kmeans::process(const dataset & p_data, const index_sequence & p_indexes, kmeans_data & p_result) {
     m_ptr_data = &p_data;
     m_ptr_indexes = &p_indexes;
 
-    m_ptr_result = (kmeans_data *) &p_result;
+    m_ptr_result = &p_result;
 
     if (p_data[0].size() != m_initial_centers[0].size()) {
         throw std::invalid_argument("Dimension of the input data and dimension of the initial cluster centers must be the same.");

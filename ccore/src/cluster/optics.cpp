@@ -1,7 +1,7 @@
 /**
 *
 * @authors Andrei Novikov (pyclustering@yandex.ru)
-* @date 2014-2019
+* @date 2014-2020
 * @copyright GNU Public License
 *
 * GNU_PUBLIC_LICENSE
@@ -53,14 +53,14 @@ optics::optics(const double p_radius, const std::size_t p_neighbors, const std::
 }
 
 
-void optics::process(const dataset & p_data, cluster_data & p_result) {
+void optics::process(const dataset & p_data, optics_data & p_result) {
     process(p_data, optics_data_t::POINTS, p_result);
 }
 
 
-void optics::process(const dataset & p_data, const optics_data_t p_type, cluster_data & p_result) {
+void optics::process(const dataset & p_data, const optics_data_t p_type, optics_data & p_result) {
     m_data_ptr    = &p_data;
-    m_result_ptr  = (optics_data *) &p_result;
+    m_result_ptr  = &p_result;
     m_type        = p_type;
 
     calculate_cluster_result();

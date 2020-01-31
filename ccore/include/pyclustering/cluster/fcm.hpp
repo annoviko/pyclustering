@@ -1,7 +1,7 @@
 /**
 *
 * @authors Andrei Novikov (pyclustering@yandex.ru)
-* @date 2014-2019
+* @date 2014-2020
 * @copyright GNU Public License
 *
 * GNU_PUBLIC_LICENSE
@@ -63,7 +63,7 @@ public:
     ~fcm() = default;
 
 public:
-    void process(const dataset & p_data, cluster_data & p_result);
+    void process(const dataset & p_data, fcm_data & p_result);
 
 private:
     void verify() const;

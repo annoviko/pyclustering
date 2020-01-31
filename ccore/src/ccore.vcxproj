@@ -39,7 +39,6 @@
     <ClCompile Include="cluster\bsas.cpp" />
     <ClCompile Include="cluster\clique.cpp" />
     <ClCompile Include="cluster\clique_block.cpp" />
-    <ClCompile Include="cluster\cluster_algorithm.cpp" />
     <ClCompile Include="cluster\cluster_data.cpp" />
     <ClCompile Include="cluster\cure.cpp" />
     <ClCompile Include="cluster\dbscan.cpp" />
@@ -126,7 +125,6 @@
     <ClInclude Include="..\include\pyclustering\cluster\clique.hpp" />
     <ClInclude Include="..\include\pyclustering\cluster\clique_block.hpp" />
     <ClInclude Include="..\include\pyclustering\cluster\clique_data.hpp" />
-    <ClInclude Include="..\include\pyclustering\cluster\cluster_algorithm.hpp" />
     <ClInclude Include="..\include\pyclustering\cluster\cluster_data.hpp" />
     <ClInclude Include="..\include\pyclustering\cluster\cure.hpp" />
     <ClInclude Include="..\include\pyclustering\cluster\cure_data.hpp" />

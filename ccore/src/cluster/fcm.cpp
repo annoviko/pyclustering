@@ -1,7 +1,7 @@
 /**
 *
 * @authors Andrei Novikov (pyclustering@yandex.ru)
-* @date 2014-2019
+* @date 2014-2020
 * @copyright GNU Public License
 *
 * GNU_PUBLIC_LICENSE
@@ -57,9 +57,9 @@ fcm::fcm(const dataset & p_initial_centers, const double p_m, const double p_tol
 }
 
 
-void fcm::process(const dataset & p_data, cluster_data & p_result) {
+void fcm::process(const dataset & p_data, fcm_data & p_result) {
     m_ptr_data = &p_data;
-    m_ptr_result = (fcm_data *) &p_result;
+    m_ptr_result = &p_result;
     
     m_ptr_result->centers().assign(m_initial_centers.begin(), m_initial_centers.end());
 

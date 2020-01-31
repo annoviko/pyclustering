@@ -1,7 +1,7 @@
 /**
 *
 * @authors Andrei Novikov (pyclustering@yandex.ru)
-* @date 2014-2019
+* @date 2014-2020
 * @copyright GNU Public License
 *
 * GNU_PUBLIC_LICENSE
@@ -60,12 +60,12 @@ kmedoids::kmedoids(const medoid_sequence & p_initial_medoids,
 kmedoids::~kmedoids() { }
 
 
-void kmedoids::process(const dataset & p_data, cluster_data & p_result) {
+void kmedoids::process(const dataset & p_data, kmedoids_data & p_result) {
     process(p_data, kmedoids_data_t::POINTS, p_result);
 }
 
 
-void kmedoids::process(const dataset & p_data, const kmedoids_data_t p_type, cluster_data & p_result) {
+void kmedoids::process(const dataset & p_data, const kmedoids_data_t p_type, kmedoids_data & p_result) {
     m_data_ptr = &p_data;
     m_result_ptr = (kmedoids_data *) &p_result;
     m_calculator = create_distance_calculator(p_type);

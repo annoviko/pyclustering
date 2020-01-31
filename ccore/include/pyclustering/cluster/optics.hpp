@@ -1,7 +1,7 @@
 /**
 *
 * @authors Andrei Novikov (pyclustering@yandex.ru)
-* @date 2014-2019
+* @date 2014-2020
 * @copyright GNU Public License
 *
 * GNU_PUBLIC_LICENSE
@@ -30,7 +30,6 @@
 
 #include <pyclustering/container/kdtree.hpp>
 
-#include <pyclustering/cluster/cluster_algorithm.hpp>
 #include <pyclustering/cluster/optics_data.hpp>
 #include <pyclustering/cluster/optics_descriptor.hpp>
 
@@ -60,7 +59,7 @@ enum class optics_data_t {
  *          bigger than real - because it will be calculated by the algorithms.
  *
  */
-class optics : public cluster_algorithm  {
+class optics {
 public:
     static const double       NONE_DISTANCE;
     static const std::size_t  INVALID_INDEX;
@@ -155,7 +154,7 @@ public:
      * @brief Default destructor to destroy algorithm instance.
      *
      */
-    virtual ~optics() = default;
+    ~optics() = default;
 
 public:
     /**
@@ -167,7 +166,7 @@ public:
     *              cluster-ordering, noise and proper connectivity radius).
     *
     */
-    virtual void process(const dataset & p_data, cluster_data & p_result) override;
+    void process(const dataset & p_data, optics_data & p_result);
 
     /**
     *
@@ -180,7 +179,7 @@ public:
     *              cluster-ordering, noise and proper connectivity radius).
     *
     */
-    virtual void process(const dataset & p_data, const optics_data_t p_type, cluster_data & p_result);
+    void process(const dataset & p_data, const optics_data_t p_type, optics_data & p_result);
 
 private:
     void initialize();

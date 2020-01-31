@@ -1,7 +1,7 @@
 /**
 *
 * @authors Andrei Novikov (pyclustering@yandex.ru)
-* @date 2014-2019
+* @date 2014-2020
 * @copyright GNU Public License
 *
 * GNU_PUBLIC_LICENSE
@@ -23,7 +23,6 @@
 #pragma once
 
 #include <pyclustering/cluster/clique_data.hpp>
-#include <pyclustering/cluster/cluster_algorithm.hpp>
 
 #include <list>
 #include <unordered_map>
@@ -52,7 +51,7 @@ public:
 };
 
 
-class clique : public cluster_algorithm {
+class clique {
 private:
     struct data_info {
         point m_min_corner;
@@ -76,7 +75,7 @@ public:
     clique(const std::size_t p_intervals, const std::size_t p_threshold);
 
 public:
-    virtual void process(const dataset & p_data, cluster_data & p_result) override;
+    void process(const dataset & p_data, clique_data & p_result);
 
 private:
     void create_grid();

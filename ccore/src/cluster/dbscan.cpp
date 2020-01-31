@@ -1,7 +1,7 @@
 /**
 *
 * @authors Andrei Novikov (pyclustering@yandex.ru)
-* @date 2014-2019
+* @date 2014-2020
 * @copyright GNU Public License
 *
 * GNU_PUBLIC_LICENSE
@@ -42,12 +42,12 @@ dbscan::dbscan(const double p_radius_connectivity, const size_t p_minimum_neighb
 { }
 
 
-void dbscan::process(const dataset & p_data, cluster_data & p_result) {
+void dbscan::process(const dataset & p_data, dbscan_data & p_result) {
     process(p_data, dbscan_data_t::POINTS, p_result);
 }
 
 
-void dbscan::process(const dataset & p_data, const dbscan_data_t p_type, cluster_data & p_result) {
+void dbscan::process(const dataset & p_data, const dbscan_data_t p_type, dbscan_data & p_result) {
     m_data_ptr  = &p_data;
     m_type      = p_type;
 
@@ -58,7 +58,7 @@ void dbscan::process(const dataset & p_data, const dbscan_data_t p_type, cluster
     m_visited = std::vector<bool>(m_data_ptr->size(), false);
     m_belong = m_visited;
 
-    m_result_ptr = (dbscan_data *) &p_result;
+    m_result_ptr = &p_result;
 
     for (size_t i = 0; i < m_data_ptr->size(); i++) {
         if (m_visited[i]) {

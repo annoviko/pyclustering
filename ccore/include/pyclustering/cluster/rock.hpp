@@ -1,7 +1,7 @@
 /**
 *
 * @authors Andrei Novikov (pyclustering@yandex.ru)
-* @date 2014-2019
+* @date 2014-2020
 * @copyright GNU Public License
 *
 * GNU_PUBLIC_LICENSE
@@ -26,9 +26,8 @@
 #include <vector>
 #include <list>
 
+#include <pyclustering/cluster/cluster_data.hpp>
 #include <pyclustering/container/adjacency_matrix.hpp>
-
-#include <pyclustering/cluster/cluster_algorithm.hpp>
 
 #include <pyclustering/definitions.hpp>
 
@@ -44,7 +43,7 @@ namespace clst {
 using rock_data = cluster_data;
 
 
-class rock : public cluster_algorithm {
+class rock {
 private:
     /* for optimization list representation is of clusters is used and than
      * it is moved to output result */
@@ -85,7 +84,7 @@ public:
     * @brief    Default destructor of the algorithm.
     *
     */
-    virtual ~rock() = default;
+    ~rock() = default;
 
 public:
     /**
@@ -96,7 +95,7 @@ public:
     * @param[out] p_result: clustering result of an input data.
     *
     */
-    virtual void process(const dataset & p_data, cluster_data & p_result) override;
+    void process(const dataset & p_data, rock_data & p_result);
 
 private:
     /**

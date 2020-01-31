@@ -1,7 +1,7 @@
 /**
 *
 * @authors Andrei Novikov (pyclustering@yandex.ru)
-* @date 2014-2019
+* @date 2014-2020
 * @copyright GNU Public License
 *
 * GNU_PUBLIC_LICENSE
@@ -66,9 +66,9 @@ clique::clique(const std::size_t p_intervals, const std::size_t p_threshold) :
 { }
 
 
-void clique::process(const dataset & p_data, cluster_data & p_result) {
+void clique::process(const dataset & p_data, clique_data & p_result) {
     m_data_ptr   = &p_data;
-    m_result_ptr = dynamic_cast<clique_data *>(&p_result);
+    m_result_ptr = &p_result;
 
     create_grid();
 

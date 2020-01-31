@@ -1,7 +1,7 @@
 /**
 *
 * @authors Andrei Novikov (pyclustering@yandex.ru)
-* @date 2014-2019
+* @date 2014-2020
 * @copyright GNU Public License
 *
 * GNU_PUBLIC_LICENSE
@@ -38,8 +38,8 @@ bsas::bsas(const std::size_t p_amount,
 { }
 
 
-void bsas::process(const dataset & p_data, cluster_data & p_result) {
-    m_result_ptr = (bsas_data *) &p_result;
+void bsas::process(const dataset & p_data, bsas_data & p_result) {
+    m_result_ptr = &p_result;
 
     cluster_sequence & clusters = m_result_ptr->clusters();
     representative_sequence & representatives = m_result_ptr->representatives();

@@ -1,7 +1,7 @@
 /**
 *
 * @authors Andrei Novikov (pyclustering@yandex.ru)
-* @date 2014-2019
+* @date 2014-2020
 * @copyright GNU Public License
 *
 * GNU_PUBLIC_LICENSE
@@ -54,9 +54,9 @@ kmedians::kmedians(const dataset & p_initial_medians, const double p_tolerance, 
 { }
 
 
-void kmedians::process(const dataset & data, cluster_data & output_result) {
+void kmedians::process(const dataset & data, kmedians_data & output_result) {
     m_ptr_data = &data;
-    m_ptr_result = (kmedians_data *) &output_result;
+    m_ptr_result = &output_result;
 
     if (data[0].size() != m_initial_medians[0].size()) {
         throw std::invalid_argument("kmedians: dimension of the input data and dimension of the initial medians must be equal.");

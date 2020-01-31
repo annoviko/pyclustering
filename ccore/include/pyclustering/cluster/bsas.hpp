@@ -1,7 +1,7 @@
 /**
 *
 * @authors Andrei Novikov (pyclustering@yandex.ru)
-* @date 2014-2019
+* @date 2014-2020
 * @copyright GNU Public License
 *
 * GNU_PUBLIC_LICENSE
@@ -23,7 +23,6 @@
 #pragma once
 
 
-#include <pyclustering/cluster/cluster_algorithm.hpp>
 #include <pyclustering/cluster/bsas_data.hpp>
 
 #include <pyclustering/utils/metric.hpp>
@@ -37,7 +36,7 @@ namespace pyclustering {
 namespace clst {
 
 
-class bsas : public cluster_algorithm {
+class bsas {
 protected:
     struct nearest_cluster {
         std::size_t   m_index       = (std::size_t) -1;
@@ -69,7 +68,7 @@ public:
     * @param[out] p_result: clustering result of an input data.
     *
     */
-    virtual void process(const dataset & p_data, cluster_data & p_result) override;
+    virtual void process(const dataset & p_data, bsas_data & p_result);
 
 protected:
     nearest_cluster find_nearest_cluster(const point & p_point) const;

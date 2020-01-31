@@ -354,7 +354,6 @@
     <ClCompile Include="..\src\cluster\bsas.cpp" />
     <ClCompile Include="..\src\cluster\clique.cpp" />
     <ClCompile Include="..\src\cluster\clique_block.cpp" />
-    <ClCompile Include="..\src\cluster\cluster_algorithm.cpp" />
     <ClCompile Include="..\src\cluster\cluster_data.cpp" />
     <ClCompile Include="..\src\cluster\cure.cpp" />
     <ClCompile Include="..\src\cluster\dbscan.cpp" />

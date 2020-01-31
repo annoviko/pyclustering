@@ -1,7 +1,7 @@
 /**
 *
 * @authors Andrei Novikov (pyclustering@yandex.ru)
-* @date 2014-2019
+* @date 2014-2020
 * @copyright GNU Public License
 *
 * GNU_PUBLIC_LICENSE
@@ -31,7 +31,7 @@ pyclustering_package * agglomerative_algorithm(const pyclustering_package * cons
     pyclustering::dataset data;
     p_sample->extract(data);
 
-    pyclustering::clst::cluster_data result;
+    pyclustering::clst::agglomerative_data result;
     algorithm.process(data, result);
 
     pyclustering_package * package = create_package(&result.clusters());

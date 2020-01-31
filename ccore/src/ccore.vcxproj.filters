@@ -91,9 +91,6 @@
     <ClCompile Include="cluster\clique_block.cpp">
       <Filter>Source Files\cluster</Filter>
     </ClCompile>
-    <ClCompile Include="cluster\cluster_algorithm.cpp">
-      <Filter>Source Files\cluster</Filter>
-    </ClCompile>
     <ClCompile Include="cluster\cluster_data.cpp">
       <Filter>Source Files\cluster</Filter>
     </ClCompile>
@@ -319,9 +316,6 @@
       <Filter>Header Files\cluster</Filter>
     </ClInclude>
     <ClInclude Include="..\include\pyclustering\cluster\clique_data.hpp">
-      <Filter>Header Files\cluster</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\pyclustering\cluster\cluster_algorithm.hpp">
       <Filter>Header Files\cluster</Filter>
     </ClInclude>
     <ClInclude Include="..\include\pyclustering\cluster\cluster_data.hpp">

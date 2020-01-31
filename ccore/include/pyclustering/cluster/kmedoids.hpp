@@ -1,7 +1,7 @@
 /**
 *
 * @authors Andrei Novikov (pyclustering@yandex.ru)
-* @date 2014-2019
+* @date 2014-2020
 * @copyright GNU Public License
 *
 * GNU_PUBLIC_LICENSE
@@ -25,7 +25,6 @@
 
 #include <memory>
 
-#include <pyclustering/cluster/cluster_algorithm.hpp>
 #include <pyclustering/cluster/kmedoids_data.hpp>
 
 #include <pyclustering/utils/metric.hpp>
@@ -51,7 +50,7 @@ enum class kmedoids_data_t {
 * @details  The algorithm related to partitional class when input data is divided into groups.
 *
 */
-class kmedoids : public cluster_algorithm {
+class kmedoids {
 public:
     static const double      DEFAULT_TOLERANCE;
 
@@ -108,7 +107,7 @@ public:
     * @brief    Default destructor of the algorithm.
     *
     */
-    virtual ~kmedoids();
+    ~kmedoids();
 
 public:
     /**
@@ -119,7 +118,7 @@ public:
     * @param[out] p_result: clustering result of an input data.
     *
     */
-    virtual void process(const dataset & p_data, cluster_data & p_result) override;
+    void process(const dataset & p_data, kmedoids_data & p_result);
 
     /**
     *
@@ -130,7 +129,7 @@ public:
     * @param[out] p_result: clustering result of an input data.
     *
     */
-    virtual void process(const dataset & p_data, const kmedoids_data_t p_type, cluster_data & p_result);
+    void process(const dataset & p_data, const kmedoids_data_t p_type, kmedoids_data & p_result);
 
 private:
     /**

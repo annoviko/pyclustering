@@ -1,7 +1,7 @@
 /**
 *
 * @authors Andrei Novikov (pyclustering@yandex.ru)
-* @date 2014-2019
+* @date 2014-2020
 * @copyright GNU Public License
 *
 * GNU_PUBLIC_LICENSE
@@ -64,11 +64,9 @@ xmeans::xmeans(const dataset & p_initial_centers, const std::size_t p_kmax, cons
 { }
 
 
-void xmeans::process(const dataset & data, cluster_data & output_result) {
+void xmeans::process(const dataset & data, xmeans_data & output_result) {
     m_ptr_data = &data;
-
-    output_result = xmeans_data();
-    m_ptr_result = (xmeans_data *)&output_result;
+    m_ptr_result = &output_result;
 
     m_ptr_result->centers() = m_initial_centers;
     dataset & centers = m_ptr_result->centers();

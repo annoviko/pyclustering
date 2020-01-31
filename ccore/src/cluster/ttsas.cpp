@@ -1,7 +1,7 @@
 /**
 *
 * @authors Andrei Novikov (pyclustering@yandex.ru)
-* @date 2014-2019
+* @date 2014-2020
 * @copyright GNU Public License
 *
 * GNU_PUBLIC_LICENSE
@@ -40,7 +40,7 @@ ttsas::ttsas(const double p_threshold1,
 { }
 
 
-void ttsas::process(const dataset & p_data, cluster_data & p_result) {
+void ttsas::process(const dataset & p_data, ttsas_data & p_result) {
     m_result_ptr = (ttsas_data *) &p_result;
     m_data_ptr = (dataset *) &p_data;
 

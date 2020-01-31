@@ -1,7 +1,7 @@
 /**
 *
 * @authors Andrei Novikov (pyclustering@yandex.ru)
-* @date 2014-2019
+* @date 2014-2020
 * @copyright GNU Public License
 *
 * GNU_PUBLIC_LICENSE
@@ -26,7 +26,6 @@
 #include <mutex>
 #include <vector>
 
-#include <pyclustering/cluster/cluster_algorithm.hpp>
 #include <pyclustering/cluster/kmeans_data.hpp>
 
 #include <pyclustering/utils/metric.hpp>
@@ -45,7 +44,7 @@ namespace clst {
 * @details  The algorithm related to partitional class when input data is divided into groups.
 *
 */
-class kmeans : public cluster_algorithm {
+class kmeans {
 public:
     const static double             DEFAULT_TOLERANCE;
 
@@ -96,7 +95,7 @@ public:
     * @brief    Default destructor of the algorithm.
     *
     */
-    virtual ~kmeans() = default;
+    ~kmeans() = default;
 
 public:
     /**
@@ -109,7 +108,7 @@ public:
     *                 processing.
     *
     */
-    virtual void process(const dataset & p_data, cluster_data & p_result) override;
+    void process(const dataset & p_data, kmeans_data & p_result);
 
     /**
     *
@@ -122,7 +121,7 @@ public:
     *                 processing.
     *
     */
-    virtual void process(const dataset & p_data, const index_sequence & p_indexes, cluster_data & p_result);
+    void process(const dataset & p_data, const index_sequence & p_indexes, kmeans_data & p_result);
 
 private:
     void update_clusters(const dataset & p_centers, cluster_sequence & p_clusters);

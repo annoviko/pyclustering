@@ -1,7 +1,7 @@
 /**
 *
 * @authors Andrei Novikov (pyclustering@yandex.ru)
-* @date 2014-2019
+* @date 2014-2020
 * @copyright GNU Public License
 *
 * GNU_PUBLIC_LICENSE
@@ -30,7 +30,7 @@
 #include <gtest/gtest.h>
 
 #include <pyclustering/cluster/cluster_data.hpp>
-#include <pyclustering/cluster/cluster_algorithm.hpp>
+#include <pyclustering/definitions.hpp>
 
 
 using namespace pyclustering;

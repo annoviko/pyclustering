@@ -1,7 +1,7 @@
 /**
 *
 * @authors Andrei Novikov (pyclustering@yandex.ru)
-* @date 2014-2019
+* @date 2014-2020
 * @copyright GNU Public License
 *
 * GNU_PUBLIC_LICENSE
@@ -25,7 +25,6 @@
 
 #include <memory>
 
-#include <pyclustering/cluster/cluster_algorithm.hpp>
 #include <pyclustering/cluster/kmedians_data.hpp>
 
 #include <pyclustering/utils/metric.hpp>
@@ -45,7 +44,7 @@ namespace clst {
 * @details  The algorithm related to partitional class when input data is divided into groups.
 *
 */
-class kmedians : public cluster_algorithm {
+class kmedians {
 public:
     const static double         DEFAULT_TOLERANCE;
 
@@ -97,7 +96,7 @@ public:
     * @brief    Default destructor of the algorithm.
     *
     */
-    virtual ~kmedians() = default;
+    ~kmedians() = default;
 
 public:
     /**
@@ -108,7 +107,7 @@ public:
     * @param[out] p_result: clustering result of an input data.
     *
     */
-    void process(const dataset & data, cluster_data & output_result) override;
+    void process(const dataset & data, kmedians_data & output_result);
 
 private:
     /**

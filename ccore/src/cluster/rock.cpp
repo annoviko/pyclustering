@@ -1,7 +1,7 @@
 /**
 *
 * @authors Andrei Novikov (pyclustering@yandex.ru)
-* @date 2014-2019
+* @date 2014-2020
 * @copyright GNU Public License
 *
 * GNU_PUBLIC_LICENSE
@@ -54,7 +54,7 @@ rock::rock(const double radius, const std::size_t number_clusters, const double 
 { }
 
 
-void rock::process(const dataset & p_data, cluster_data & p_result) {
+void rock::process(const dataset & p_data, rock_data & p_result) {
     create_adjacency_matrix(p_data);
 
     /* initialize first version of clusters */
@@ -65,7 +65,6 @@ void rock::process(const dataset & p_data, cluster_data & p_result) {
     while( (m_number_clusters < m_clusters.size()) && (merge_cluster()) ) { }
 
     /* copy results to the output result (it much more optimal to store in list representation for ROCK algorithm) */
-    p_result = rock_data();
     p_result.clusters().insert(p_result.clusters().begin(), m_clusters.begin(), m_clusters.end());
 
     m_clusters.clear();         /* no need it anymore - clear to save memory */

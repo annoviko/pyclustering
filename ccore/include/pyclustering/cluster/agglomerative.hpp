@@ -1,7 +1,7 @@
 /**
 *
 * @authors Andrei Novikov (pyclustering@yandex.ru)
-* @date 2014-2019
+* @date 2014-2020
 * @copyright GNU Public License
 *
 * GNU_PUBLIC_LICENSE
@@ -25,8 +25,7 @@
 
 #include <vector>
 
-#include <pyclustering/cluster/cluster_algorithm.hpp>
-
+#include <pyclustering/cluster/cluster_data.hpp>
 #include <pyclustering/definitions.hpp>
 
 
@@ -57,7 +56,7 @@ enum class type_link {
 * @details  The algorithm related to hierarchical class.
 *
 */
-class agglomerative : public cluster_algorithm {
+class agglomerative {
 private:
     size_t                  m_number_clusters;
 
@@ -104,7 +103,7 @@ public:
     * @param[out] p_result: clustering result of an input data.
     *
     */
-     void process(const dataset & data, cluster_data & result) override;
+     void process(const dataset & data, agglomerative_data & result);
 
 private:
     /**

@@ -1,7 +1,7 @@
 /**
 *
 * @authors Andrei Novikov (pyclustering@yandex.ru)
-* @date 2014-2019
+* @date 2014-2020
 * @copyright GNU Public License
 *
 * GNU_PUBLIC_LICENSE
@@ -62,9 +62,9 @@ gmeans::gmeans(const std::size_t p_k_initial, const double p_tolerance, const st
 { }
 
 
-void gmeans::process(const dataset & p_data, cluster_data & p_result) {
+void gmeans::process(const dataset & p_data, gmeans_data & p_result) {
     m_ptr_data = &p_data;
-    m_ptr_result = dynamic_cast<gmeans_data *>(&p_result);
+    m_ptr_result = &p_result;
 
     if (!m_ptr_result) {
         throw std::invalid_argument("Invalid result storage is specified: impossible to cast to 'gmeans_data'.");
