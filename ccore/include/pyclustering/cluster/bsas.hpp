@@ -54,24 +54,31 @@ Clustering results of this algorithm depends on objects order in input data.
 
 Example of cluster analysis using BSAS algorithm:
 @code
-    dataset data = read_data("Simple02.txt");
+    using namespace pyclustering;
+    using namespace pyclustering::clst;
 
-    // Algorithm configuration: amount of clusters to allocate and threshold of dissimilarity.
-    const std::size_t amount_clusters = 3;
-    const double threshold = 1.0;
+    int main() {
+        dataset data = read_data("Simple02.txt");
 
-    // Create and run BSAS algorithm.
-    bsas_data result;
-    bsas(amount_clusters, threshold).process(data, result);
+        // Algorithm configuration: amount of clusters to allocate and threshold of dissimilarity.
+        const std::size_t amount_clusters = 3;
+        const double threshold = 1.0;
 
-    // Extract clustering results: clusters and representative points.
-    const cluster_sequence & clusters = result.clusters();
-    const representative_sequence & representatives = result.representatives();
+        // Create and run BSAS algorithm.
+        bsas_data result;
+        bsas(amount_clusters, threshold).process(data, result);
 
-    // Display allocated clusters.
-    for (const auto group : clusters) {
-        for (const auto index : group) { std::cout << index << " "; }
-        std::cout << std::endl;
+        // Extract clustering results: clusters and representative points.
+        const cluster_sequence & clusters = result.clusters();
+        const representative_sequence & representatives = result.representatives();
+
+        // Display allocated clusters.
+        for (const auto group : clusters) {
+            for (const auto index : group) { std::cout << index << " "; }
+            std::cout << std::endl;
+        }
+
+        return 0;
     }
 @endcode
 

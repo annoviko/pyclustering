@@ -102,7 +102,7 @@ public:
 
     /**
     *
-    * @brief    Returns amount of clusters that is stored.
+    * @brief    Returns amount of clusters.
     *
     */
     size_t size() const;

@@ -53,20 +53,27 @@ using agglomerative_data = cluster_data;
 
 Example of agglomerative algorithm where centroid link 'CENTROID_LINK' is used for clustering sample 'Simple01':
 @code
-    // Read an input data 'Simple01' from text file.
-    dataset data = read_data("Simple01.txt");
+    using namespace pyclustering;
+    using namespace pyclustering::clst;
 
-    // Create storage where the result is going to be stored.
-    agglomerative_data result;
+    int main() {
+        // Read an input data 'Simple01' from text file.
+        dataset data = read_data("Simple01.txt");
 
-    // Create the algorithm and process the input data using centroid link.
-    agglomerative(2, agglomerative::type_link::CENTROID_LINK).process(data, result);
+        // Create storage where the result is going to be stored.
+        agglomerative_data result;
 
-    // Display allocated clusters.
-    for (auto group : result.clusters()) {
-        std::cout << "[ ";
-        for (auto index : group) { std::cout << index << " "; }
-        std::cout << "]";
+        // Create the algorithm and process the input data using centroid link.
+        agglomerative(2, agglomerative::type_link::CENTROID_LINK).process(data, result);
+
+        // Display allocated clusters.
+        for (auto group : result.clusters()) {
+            std::cout << "[ ";
+            for (auto index : group) { std::cout << index << " "; }
+            std::cout << "]";
+        }
+
+        return 0;
     }
 @endcode
 

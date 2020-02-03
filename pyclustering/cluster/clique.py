@@ -492,7 +492,7 @@ class clique:
         @brief Create CLIQUE clustering algorithm.
 
         @param[in] data (list): Input data (list of points) that should be clustered.
-        @param[in] amount_intervals (uint): Amount of intervals in each dimension that defines amount of CLIQUE block
+        @param[in] amount_intervals (uint): Amount of intervals in each dimension that defines amount of CLIQUE blocks
                     as \f[N_{blocks} = intervals^{dimensions}\f].
         @param[in] density_threshold (uint): Minimum number of points that should contain CLIQUE block to consider its
                     points as non-outliers.
