@@ -97,19 +97,24 @@ Implementation based on paper @cite book::pattern_recognition::2009.
 */
 class bsas {
 protected:
+    /*!
+
+    @brief    Description of the nearest cluster to a point that is described by cluster index and distance from the cluster to the specified point.
+
+    */
     struct nearest_cluster {
-        std::size_t   m_index       = (std::size_t) -1;
-        double        m_distance    = std::numeric_limits<double>::max();
+        std::size_t   m_index       = (std::size_t) -1;                     /**< Cluster index. */
+        double        m_distance    = std::numeric_limits<double>::max();   /**< Distance between the cluster and a specific point. */
     };
 
 protected:
-    bsas_data       * m_result_ptr  = nullptr; /* temporary pointer to clustering result that is used only during processing */
+    bsas_data       * m_result_ptr  = nullptr;  /**< Temporary pointer to clustering result that is used only during processing. */
 
-    double          m_threshold     = 0.0;
+    double          m_threshold     = 0.0;      /**< Threshold of dissimilarity (maximum distance) between points. */
 
-    std::size_t     m_amount        = 0;
+    std::size_t     m_amount        = 0;        /**< Amount of clusters that should be allocated. */
 
-    distance_metric<point>          m_metric;
+    distance_metric<point>          m_metric;   /**< Metric for distance calculation between points. */
 
 public:
     /*!
@@ -144,8 +149,25 @@ public:
     virtual void process(const dataset & p_data, bsas_data & p_result);
 
 protected:
+    /*!
+
+    @brief    Find nearest cluster to the specified point.
+
+    @param[in] p_point: point for which nearest cluster is searched.
+
+    @return   Description of nearest cluster that is defined by cluster index and distance to the point.
+
+    */
     nearest_cluster find_nearest_cluster(const point & p_point) const;
 
+    /*!
+
+    @brief    Update cluster representative in line with new cluster size and added point to it.
+
+    @param[in] p_index: index of cluster whose representative should be updated.
+    @param[in] p_point: new point that was added to cluster.
+
+    */
     void update_representative(const std::size_t p_index, const point & p_point);
 };
 

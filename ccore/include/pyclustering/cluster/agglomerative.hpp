@@ -151,7 +151,7 @@ public:
     @param[out] p_result: agglomerative clustering result of an input data.
     
     */
-     void process(const dataset & data, agglomerative_data & result);
+     void process(const dataset & p_data, agglomerative_data & p_result);
 
 private:
     /*!
