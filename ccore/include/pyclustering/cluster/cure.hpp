@@ -361,15 +361,15 @@ Implementation based on paper @cite article::cure::1.
 */
 class cure {
 private:
-    cure_queue * queue          = nullptr;
+    cure_queue * queue;
 
-    std::size_t number_points   = 0;
+    std::size_t number_points;
 
-    std::size_t number_clusters = 0;
+    std::size_t number_clusters;
 
-    double compression          = 0.0;
+    double compression;
 
-    const dataset   * data      = nullptr;
+    const dataset   * data;
 
 public:
     /*!

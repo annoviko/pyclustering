@@ -45,6 +45,8 @@ using clique_block_location = std::vector<std::size_t>;
 
 /*!
 
+@class    clique_spatial_block clique_block.hpp pyclustering/cluster/clique_block.hpp
+
 @brief    Geometrical description of CLIQUE block in a data space.
 @details  Provides services related to spatial functionality.
 
@@ -121,6 +123,8 @@ public:
 
 
 /*!
+
+@class    clique_block clique_block.hpp pyclustering/cluster/clique_block.hpp
 
 @brief  Defines CLIQUE block that contains information about its logical location and spatial location in a data space and
          set points that are covered by that block.

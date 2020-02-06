@@ -43,6 +43,8 @@ using clique_block_sequence = std::vector<clique_block>;
 
 /*!
 
+@class  clique_data clique_data.hpp pyclustering/cluster/clique_data.hpp
+
 @brief  A storage where CLIQUE clustering results are stored.
 
 */

@@ -41,6 +41,8 @@ using representative_sequence_ptr = std::shared_ptr<representative_sequence>;
 
 /*!
 
+@class    bsas_data bsas_data.hpp pyclustering/cluster/bsas_data.hpp
+
 @brief    Clustering results of BSAS algorithm that consists of information about allocated
           clusters and their representatives (points).
 

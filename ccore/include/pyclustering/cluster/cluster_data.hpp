@@ -43,10 +43,12 @@ using cluster_sequence = std::vector<cluster>;
 using cluster_sequence_ptr = std::shared_ptr<cluster_sequence>;
 
 
-/**
-*
-* @brief    Represents result of cluster analysis.
-*
+/*!
+
+@class    cluster_data cluster_data.hpp pyclustering/cluster/cluster_data.hpp
+
+@brief    Represents result of cluster analysis.
+
 */
 class cluster_data {
 protected:
