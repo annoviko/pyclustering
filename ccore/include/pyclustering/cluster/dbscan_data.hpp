@@ -35,61 +35,63 @@ namespace pyclustering {
 namespace clst {
 
 
-/**
-*
-* @brief    Clustering results of DBSCAM algorithm that consists of information about allocated
-*           clusters and noise (points that are not related to any cluster).
-*
+/*!
+
+@class    dbscan_data dbscan_data.hpp pyclustering/cluster/dbscan_data.hpp
+
+@brief    Clustering results of DBSCAM algorithm that consists of information about allocated
+           clusters and noise (points that are not related to any cluster).
+
 */
 class dbscan_data : public cluster_data {
 private:
     clst::noise       m_noise;
 
 public:
-    /**
-    *
-    * @brief    Default constructor that creates empty clustering data.
-    *
+    /*!
+    
+    @brief    Default constructor that creates empty clustering data.
+    
     */
     dbscan_data() = default;
 
-    /**
-    *
-    * @brief    Copy constructor that creates clustering data that is the same to specified.
-    *
-    * @param[in] p_other: another clustering data.
-    *
+    /*!
+    
+    @brief    Copy constructor of DBSCAN clustering data.
+    
+    @param[in] p_other: another DBSCAN clustering data.
+    
     */
     dbscan_data(const dbscan_data & p_other) = default;
 
-    /**
-    *
-    * @brief    Move constructor that creates clustering data from another by moving data.
-    *
-    * @param[in] p_other: another clustering data.
-    *
+    /*!
+    
+    @brief    Move constructor of DBSCAN clustering data.
+    
+    @param[in] p_other: another clustering data.
+    
     */
     dbscan_data(dbscan_data && p_other) = default;
 
-    /**
-    *
-    * @brief    Default destructor that destroys clustering data.
-    *
+    /*!
+    
+    @brief    Default destructor that destroys DBSCAN clustering data.
+    
     */
     virtual ~dbscan_data() = default;
 
 public:
-    /**
-    *
-    * @brief    Returns reference to noise.
-    *
+    /*!
+    
+    @brief    Returns reference to outliers represented by indexes.
+    
     */
     clst::noise & noise() { return m_noise; }
 
-    /**
-    *
-    * @brief    Returns constant reference to noise.
-    *
+    /*!
+    
+    @brief    Returns constant reference to outliers represented by indexes.
+    
     */
     const clst::noise & noise() const { return m_noise; }
 };

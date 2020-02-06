@@ -437,7 +437,7 @@ class coordinate_iterator:
 class clique:
     """!
     @brief Class implements CLIQUE grid based clustering algorithm.
-    @details CLIQUE automatically finnds subspaces with high-density clusters. It produces identical results
+    @details CLIQUE automatically finds subspaces with high-density clusters. It produces identical results
               irrespective of the order in which the input records are presented and it does not presume any canonical
               distribution for input data @cite article::clique::1.
 

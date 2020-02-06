@@ -90,7 +90,7 @@ public:
 @class      clique clique.hpp pyclustering/cluster/clique.hpp
 
 @brief      Class implements CLIQUE grid based clustering algorithm.
-@details    CLIQUE automatically finnds subspaces with high-density clusters. It produces identical results
+@details    CLIQUE automatically finds subspaces with high-density clusters. It produces identical results
              irrespective of the order in which the input records are presented and it does not presume any canonical
              distribution for input data @cite article::clique::1.
 
@@ -147,7 +147,7 @@ Here is one of the example how to implement read function to get input data:
             data.push_back(coordinates);
         }
 
-        file.clear();
+        file.close();
         return data;
     }
 @endcode

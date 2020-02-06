@@ -44,6 +44,125 @@ namespace pyclustering {
 namespace clst {
 
 
+/*!
+
+@class    elbow elbow.hpp pyclustering/cluster/elbow.hpp
+
+@brief    The elbow is a heuristic method to find the appropriate number of clusters in a dataset.
+@details  The elbow is a heuristic method of interpretation and validation of consistency within cluster analysis designed to help find the appropriate 
+           number of clusters in a dataset. Elbow method performs clustering using K-Means algorithm for each K and estimate clustering results using
+           sum of square erros. By default K-Means++ algorithm is used to calculate initial centers that are used by K-Means algorithm.
+
+The Elbow is determined by max distance from each point (x, y) to segment from kmin-point (x0, y0) to kmax-point (x1, y1),
+where 'x' is K (amount of clusters), and 'y' is within-cluster error. Following expression is used to calculate Elbow
+length:
+\f[Elbow_{k} = \frac{\left ( y_{0} - y_{1} \right )x_{k} + \left ( x_{1} - x_{0} \right )y_{k} + \left ( x_{0}y_{1} - x_{1}y_{0} \right )}{\sqrt{\left ( x_{1} - x_{0} \right )^{2} + \left ( y_{1} - y_{0} \right )^{2}}}\f]
+
+Usage example of Elbow method for cluster analysis:
+@code
+    #include <pyclustering/cluster/elbow.hpp>
+    #include <pyclustering/cluster/kmeans.hpp>
+    #include <pyclustering/cluster/kmeans_plus_plus.hpp>
+
+    #include <fstream>
+    #include <iostream>
+
+    using namespace pyclustering;
+    using namespace pyclustering::clst;
+
+    int main() {
+        // Read two-dimensional input data 'Simple03'.
+        dataset data = read_data("Simple03.txt");   // See an example of the implementation below.
+
+        // Prepare methods's parameters.
+        const std::size_t kmin = 1;   // minimum amount of clusters that should be considered
+        const std::size_t kmax = 10;  // maximum amount of clusters
+
+        // Create Elbow method for processing.
+        elbow<> elbow_instance = elbow<>(kmin, kmax);
+
+        // Run Elbow method to get optimal amount of clusters.
+        elbow_data result;
+        elbow_instance.process(data, result);
+
+        // Obtain results.
+        const std::size_t amount_clusters = result.get_amount();
+        const wce_sequence & wce = result.get_wce();    // total within-cluster errors for each K.
+
+        // Perform cluster analysis using K-Means algorithm.
+        // Prepare initial centers before running K-Means algorithm.
+        dataset initial_centers;
+        kmeans_plus_plus(amount_clusters, 5).initialize(data, initial_centers);
+
+        // Create K-Means algorithm and run it.
+        kmeans_data clustering_result;
+        kmeans(initial_centers).process(data, clustering_result);
+
+        // Obtain clustering results.
+        const cluster_sequence & clusters = clustering_result.clusters();
+        const dataset & centers = clustering_result.centers();
+
+        // Print results to console.
+        for (std::size_t i = 0; i < clusters.size(); i++) {
+            std::cout << "Cluster #" << i + 1 << " with center at ( ";
+
+            const point & center = centers[i];
+            for (const auto coordinate : center) {
+                std::cout << coordinate << " ";
+            }
+
+            std::cout << " ): ";
+
+            const cluster & group = clusters[i];
+            for (const auto index : group) {
+                std::cout << index << " ";
+            }
+
+            std::cout << std::endl;
+        }
+
+        return 0;
+    }
+@endcode
+
+Here is an example how to read input data from simple text file:
+@code
+    dataset read_data(const std::string & filename) {
+        dataset data;
+        std::ifstream file(filename);
+        std::string line;
+
+        while (std::getline(file, line)) {
+            std::stringstream stream(line);
+            point coordinates;
+            double value = 0.0;
+
+            while (stream >> value) { coordinates.push_back(value); }
+            data.push_back(coordinates);
+        }
+
+        file.close();
+        return data;
+    }
+@endcode
+
+By default Elbow uses K-Means++ initializer to calculate initial centers for K-Means algorithm, it can be changed
+using argument 'initializer':
+@code
+    // Prepare methods's parameters.
+    const std::size_t kmin = 1;   // minimum amount of clusters that should be considered
+    const std::size_t kmax = 10;  // maximum amount of clusters
+
+    // Create and run Elbow method to get optimal amount of clusters using random center initializer.
+    elbow_data result;
+    elbow<random_center_initializer>(kmin, kmax).process(data, result);
+@endcode
+
+@image html elbow_example_simple_03.png "Elbows analysis with further K-Means clustering."
+
+Implementation based on paper @cite article::cluster::elbow::1.
+
+*/
 template <class TypeInitializer = kmeans_plus_plus>
 class elbow {
 private:
@@ -56,17 +175,53 @@ private:
     elbow_data    * m_result    = nullptr;      /* temporary pointer to output result   */
 
 public:
+    /*!
+    
+    @brief  Default constructor of Elbow method.
+    
+    */
     elbow() = default;
 
+    /*!
+    
+    @brief  Elbow method constructor with parameters of the method.
+    
+    @param[in] p_kmin: minimum amount of clusters that should be considered.
+    @param[in] p_kmax: maximum amount of clusters that should be considered.
+
+    */
     elbow(const std::size_t p_kmin, const std::size_t p_kmax) : m_kmin(p_kmin), m_kmax(p_kmax) { verify(); }
 
+    /*!
+
+    @brief  Copy constructor of Elbow method.
+
+    */
     elbow(const elbow & p_other) = default;
 
+    /*!
+
+    @brief  Move constructor of Elbow method.
+
+    */
     elbow(elbow && p_other) = default;
 
+    /*!
+
+    @brief  Destructor of Elbow method.
+
+    */
     ~elbow() = default;
 
 public:
+    /*!
+
+    @brief    Performs cluster analysis of an input data.
+
+    @param[in]  p_data: an input data that should be clusted.
+    @param[out] p_result: elbow input data processing result.
+
+    */
     void process(const dataset & p_data, elbow_data & p_result) {
         if (p_data.size() < m_kmax) {
             throw std::invalid_argument("K max value '" + std::to_string(m_kmax) 

@@ -37,9 +37,10 @@ import pyclustering.core.elbow_wrapper as wrapper
 class elbow:
     """!
     @brief Class represents Elbow method that is used to find out appropriate amount of clusters in a dataset.
-    @details Elbow method performs clustering using K-Means algorithm for each K and estimate clustering results using
-              sum of square erros. By default K-Means++ algorithm is used to calculate initial centers that are used by
-              K-Means algorithm.
+    @details The elbow is a heuristic method of interpretation and validation of consistency within cluster analysis
+              designed to help find the appropriate number of clusters in a dataset.Elbow method performs clustering
+              using K-Means algorithm for each K and estimate clustering results using sum of square erros. By default
+              K-Means++ algorithm is used to calculate initial centers that are used by K-Means algorithm.
 
     The Elbow is determined by max distance from each point (x, y) to segment from kmin-point (x0, y0) to kmax-point (x1, y1),
     where 'x' is K (amount of clusters), and 'y' is within-cluster error. Following expression is used to calculate Elbow

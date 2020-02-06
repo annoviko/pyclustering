@@ -37,17 +37,26 @@ namespace pyclustering {
 namespace clst {
 
 
+/*!
+
+@brief Defines types that are used for input data representation.
+
+*/
 enum class dbscan_data_t {
-    POINTS,
-    DISTANCE_MATRIX
+    POINTS,             /**< Data is represented by a container of points. */
+    DISTANCE_MATRIX     /**< Data is represented by a distance matrix between points. */
 };
 
 
-/**
-*
-* @brief    Represents DBSCAN clustering algorithm for cluster analysis.
-* @details  The algorithm related to density-based class.
-*
+/*!
+
+@class    dbscan dbscan.hpp pyclustering/cluster/dbscan.hpp
+
+@brief    Represents DBSCAN clustering algorithm for cluster analysis.
+@details  The algorithm related to density-based class.
+
+Implementation based on paper @cite inproceedings::dbscan::1.
+
 */
 class dbscan {
 private:
@@ -68,62 +77,62 @@ private:
     container::kdtree   m_kdtree          = container::kdtree();
 
 public:
-    /**
-    *
-    * @brief    Default constructor of clustering algorithm.
-    *
+    /*!
+    
+    @brief    Default constructor of clustering algorithm.
+    
     */
     dbscan() = default;
 
-    /**
-    *
-    * @brief    Constructor of clustering algorithm where algorithm parameters for processing are
-    *           specified.
-    *
-    * @param[in] p_radius_connectivity: connectivity radius between objects.
-    * @param[in] p_minimum_neighbors: minimum amount of shared neighbors that is require to connect
-    *             two object (if distance between them is less than connectivity radius).
-    *
+    /*!
+    
+    @brief    Constructor of clustering algorithm where algorithm parameters for processing are
+               specified.
+    
+    @param[in] p_radius_connectivity: connectivity radius between objects.
+    @param[in] p_minimum_neighbors: minimum amount of shared neighbors that is require to connect
+                two object (if distance between them is less than connectivity radius).
+    
     */
     dbscan(const double p_radius_connectivity, const size_t p_minimum_neighbors);
 
-    /**
-    *
-    * @brief    Default destructor of the algorithm.
-    *
+    /*!
+    
+    @brief    Default destructor of the algorithm.
+    
     */
-    virtual ~dbscan() = default;
+    ~dbscan() = default;
 
 public:
-    /**
-    *
-    * @brief    Performs cluster analysis of an input data.
-    *
-    * @param[in]  p_data: input data (points) for cluster analysis.
-    * @param[out] p_result: clustering result of an input data.
-    *
+    /*!
+    
+    @brief    Performs cluster analysis of an input data.
+    
+    @param[in]  p_data: input data (points) for cluster analysis.
+    @param[out] p_result: clustering result of an input data.
+    
     */
     void process(const dataset & p_data, dbscan_data & p_result);
 
-    /**
-    *
-    * @brief    Performs cluster analysis of an input data of specific type.
-    *
-    * @param[in]  p_data: input data for cluster analysis.
-    * @param[in]  p_type: type of an input data that should be processed.
-    * @param[out] p_result: clustering result of an input data.
-    *
+    /*!
+    
+    @brief    Performs cluster analysis of an input data of specific type.
+    
+    @param[in]  p_data: input data for cluster analysis.
+    @param[in]  p_type: type of an input data that should be clustered.
+    @param[out] p_result: clustering result of an input data.
+    
     */
     void process(const dataset & p_data, const dbscan_data_t p_type, dbscan_data & p_result);
 
 private:
-    /**
-    *
-    * @brief    Obtains neighbors of the specified node (data object).
-    *
-    * @param[in]  p_index: index of the node (data object).
-    * @param[out] p_neighbors: neighbor indexes of the specified node (data object).
-    *
+    /*!
+    
+    @brief    Obtains neighbors of the specified node (data object).
+    
+    @param[in]  p_index: index of the node (data object).
+    @param[out] p_neighbors: neighbor indexes of the specified node (data object).
+    
     */
     void get_neighbors(const size_t p_index, std::vector<size_t> & p_neighbors);
 

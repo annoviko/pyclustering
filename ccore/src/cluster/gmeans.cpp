@@ -46,6 +46,8 @@ namespace pyclustering {
 namespace clst {
 
 
+const std::size_t        gmeans::DEFAULT_AMOUNT_CENTERS = 1;
+
 const double             gmeans::DEFAULT_TOLERANCE      = 0.001;
 
 const std::size_t        gmeans::DEFAULT_REPEAT         = 3;

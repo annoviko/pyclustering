@@ -44,7 +44,9 @@ namespace clst {
 
 /*!
 
-@brief   Cure cluster description.
+@class   cure_cluster cure.hpp pyclustering/cluster/cure.hpp
+
+@brief   CURE cluster description.
 
 */
 struct cure_cluster {
@@ -113,6 +115,8 @@ public:
 
 /*!
 
+@class   cure_cluster_comparator cure.hpp pyclustering/cluster/cure.hpp
+
 @brief   CURE cluster comparator using closest distance.
 
 */
@@ -135,6 +139,8 @@ public:
 
 
 /*!
+
+@class   cure_queue cure.hpp pyclustering/cluster/cure.hpp
 
 @brief   Cure sorted queue of cure clusters. Sorting is defined by distances between clusters.
           First element is always occupied by cluster whose distance to the neighbor cluster
@@ -324,6 +330,13 @@ public:
 
 
 
+/*!
+
+@class  relocation_info cure.hpp pyclustering/cluster/cure.hpp
+
+@brief  Defines relocation request for specific cluster in CURE queue.
+
+*/
 class relocation_info {
 private:
     cure_queue::iterator m_cluster_iterator;
@@ -331,13 +344,43 @@ private:
     double m_closest_distance;
 
 public:
+    /*!
+    
+    @brief  Constructor for relocation request.
+
+    @param[in] cluster_iterator: iterator that points to the cluster in the queue.
+    @param[in] closest_cluster: new closest cluster for the cluster that should be relocated.
+    @param[in] closest_distance: distance to the closest cluster.
+    
+    */
     relocation_info(const cure_queue::iterator & cluster_iterator, cure_cluster * closest_cluster, const double closest_distance);
 
 public:
+    /*!
+    
+    @brief  Returns iterator to cluster in CURE queue.
+
+    @return Iterator to cluster in CURE queue that should be relocated.
+
+    */
     cure_queue::iterator get_cluster_iterator() const;
 
+    /*!
+
+    @brief  Returns distance to the closest cluster.
+
+    @return Distance to the closest cluster.
+
+    */
     double get_closest_distance() const;
 
+    /*!
+
+    @brief  Returns pointer to the closest cluster.
+
+    @return Pointer to the closest cluster.
+
+    */
     cure_cluster * get_closest_cluster();
 };
 
