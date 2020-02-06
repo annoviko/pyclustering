@@ -1,23 +1,24 @@
-/**
-*
-* @authors Andrei Novikov (pyclustering@yandex.ru)
-* @date 2014-2020
-* @copyright GNU Public License
-*
-* GNU_PUBLIC_LICENSE
-*   pyclustering is free software: you can redistribute it and/or modify
-*   it under the terms of the GNU General Public License as published by
-*   the Free Software Foundation, either version 3 of the License, or
-*   (at your option) any later version.
-*
-*   pyclustering is distributed in the hope that it will be useful,
-*   but WITHOUT ANY WARRANTY; without even the implied warranty of
-*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*   GNU General Public License for more details.
-*
-*   You should have received a copy of the GNU General Public License
-*   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*
+/*!
+
+@authors Andrei Novikov (pyclustering@yandex.ru)
+@date 2014-2020
+@copyright GNU Public License
+
+@cond GNU_PUBLIC_LICENSE
+    pyclustering is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    pyclustering is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+@endcond
+
 */
 
 #pragma once
@@ -33,33 +34,74 @@
 #include <pyclustering/definitions.hpp>
 
 
+/*!
+
+@brief  Enumerates types that are supported by pyclustering package.
+
+@see    pyclustering_package
+
+*/
 enum pyclustering_data_t {
-    PYCLUSTERING_TYPE_INT               = 0,
-    PYCLUSTERING_TYPE_UNSIGNED_INT      = 1,
-    PYCLUSTERING_TYPE_FLOAT             = 2,
-    PYCLUSTERING_TYPE_DOUBLE            = 3,
-    PYCLUSTERING_TYPE_LONG              = 4,
-    PYCLUSTERING_TYPE_RESERVED          = 5,
-    PYCLUSTERING_TYPE_LIST              = 6,
-    PYCLUSTERING_TYPE_SIZE_T            = 7,
-    PYCLUSTERING_TYPE_UNDEFINED         = 8,
+    PYCLUSTERING_TYPE_INT               = 0,    /**< Represents basic `int` type. */
+    PYCLUSTERING_TYPE_UNSIGNED_INT      = 1,    /**< Represents basic `unsigned int` type. */
+    PYCLUSTERING_TYPE_FLOAT             = 2,    /**< Represents basic `float` type. */
+    PYCLUSTERING_TYPE_DOUBLE            = 3,    /**< Represents basic `double` type. */
+    PYCLUSTERING_TYPE_LONG              = 4,    /**< Represents basic `long` type. */
+    PYCLUSTERING_TYPE_RESERVED          = 5,    /**< The code is not used, but reserved for future purposes. */
+    PYCLUSTERING_TYPE_LIST              = 6,    /**< Represents `pyclustering_package` type. */
+    PYCLUSTERING_TYPE_SIZE_T            = 7,    /**< Represents basic `std::size_t` type. */
+    PYCLUSTERING_TYPE_UNDEFINED         = 8,    /**< Indicates incorrect type. */
 };
 
 
+/*!
+
+@brief  Container that is used as data storage to communicate with the Python implementation of the library.
+@details The package uses dynamic memory allocation and user of the package is responsible for the deallocation to avoid memory leakage.
+
+*/
 struct pyclustering_package {
 public:
-    std::size_t     size      = 0;
-    unsigned int    type      = (unsigned int) PYCLUSTERING_TYPE_UNDEFINED;
-    void            * data    = nullptr;
+    std::size_t     size      = 0;          /**< Amount of elements that are contained by the package. */
+    unsigned int    type      = static_cast<unsigned int>(PYCLUSTERING_TYPE_UNDEFINED); /**< Type of elements that are contained by the package. */
+    void            * data    = nullptr;    /**< Pointer to elements that are contained by the package. */
 
 public:
+    /*!
+    
+    @brief  Default constructor of the package.
+
+    */
     pyclustering_package() = default;
 
+    /*!
+
+    @brief  Constructor of the package that contains elements with specific type.
+
+    @param[in] package_type: type of elements that are contained by the package.
+
+    */
     explicit pyclustering_package(const pyclustering_data_t package_type);
 
+    /*!
+
+    @brief  Destructor of the package.
+
+    */
     ~pyclustering_package();
 
 public:
+    /*!
+    
+    @brief  Returns reference to package element at the specified position like in case of array or vector.
+
+    @param[in] index: index of an element in the package.
+
+    @return Reference to the element in the package.
+
+    @throw  `std::out_of_range` if the package does not have element with index `index`.
+
+    */
     template <class TypeValue>
     auto & at(const std::size_t index) const {
         if (size <= index) {
@@ -69,6 +111,18 @@ public:
         return ((TypeValue *) data)[index];
     }
 
+    /*!
+
+    @brief  Returns reference to package element at the specified position like in case of two-dimensional array or vector.
+
+    @param[in] index_row: row index in the package where required element is located.
+    @param[in] index_column: column index in the package where required element is located.
+
+    @return Reference to the element in the package.
+
+    @throw  `std::out_of_range` if the package does not have row with index `index_row` or does not have column with index `index_column`.
+
+    */
     template <class TypeValue>
     auto & at(const std::size_t index_row, const std::size_t index_column) const {
         if (size <= index_row) {
@@ -79,13 +133,27 @@ public:
         return ((TypeValue *) package->data)[index_column];
     }
 
+    /*!
 
+    @brief   Extract content of the package to standard container.
+    @details Extraction is a copying procedure.
+
+    @param[in] container: container that is used as a destination for the extraction procedure.
+
+    */
     template <class TypeValue>
     void extract(std::vector<TypeValue> & container) const {
         extract(container, this);
     }
 
+    /*!
 
+    @brief   Extract content of the package to standard container.
+    @details Extraction is a copying procedure.
+
+    @param[in] container: container that is used as a destination for the extraction procedure.
+
+    */
     template <class TypeValue>
     void extract(std::vector<std::vector<TypeValue>> & container) const {
         if (type != PYCLUSTERING_TYPE_LIST) {
@@ -100,6 +168,14 @@ public:
     }
 
 private:
+    /*!
+
+    @brief   Extract content of the package to standard container from specific pyclustering package.
+
+    @param[in] container: container that is used as a destination for the extraction procedure.
+    @param[in] package: package that is used as a source for the extraction procedure.
+
+    */
     template <class TypeValue>
     void extract(std::vector<TypeValue> & container, const pyclustering_package * const package) const {
         for (std::size_t i = 0; i < package->size; i++) {
@@ -109,9 +185,27 @@ private:
 };
 
 
+/*!
+
+@brief   Create pyclustering package with specified size that defines amount of elements that are going to be
+          stored in the package.
+
+@param[in] p_size: package size that defines amount of elements.
+
+@return  Pointer to created pyclustering package.
+
+*/
 pyclustering_package * create_package_container(const std::size_t p_size);
 
 
+/*!
+
+@brief   Returns data type of the pyclustering package.
+@details If the template parameter of the function contains unsupported data type then `PYCLUSTERING_TYPE_UNDEFINED` is returned.
+
+@return  Data type of the pyclustering package.
+
+*/
 template <class TypeValue>
 pyclustering_data_t get_package_type() {
     pyclustering_data_t type_package = PYCLUSTERING_TYPE_UNDEFINED;
@@ -140,6 +234,15 @@ pyclustering_data_t get_package_type() {
 }
 
 
+/*!
+
+@brief   Create pyclustering package with specified size and data type.
+
+@param[in] p_size: package size that defines amount of elements.
+
+@return  Pointer to created pyclustering package.
+
+*/
 template <class TypeValue>
 pyclustering_package * create_package(const std::size_t p_size) {
     pyclustering_data_t type_package = get_package_type<TypeValue>();
@@ -156,6 +259,16 @@ pyclustering_package * create_package(const std::size_t p_size) {
 }
 
 
+/*!
+
+@brief   Create pyclustering package with specified size, data type and default value for each elements in the package.
+
+@param[in] p_size: package size that defines amount of elements.
+@param[in] p_value: default value for each element in the package.
+
+@return  Pointer to created pyclustering package.
+
+*/
 template <class TypeValue>
 pyclustering_package * create_package(const std::size_t p_size, const TypeValue & p_value) {
     pyclustering_package * package = create_package<TypeValue>(p_size);
@@ -169,6 +282,16 @@ pyclustering_package * create_package(const std::size_t p_size, const TypeValue 
 }
 
 
+/*!
+
+@brief   Create pyclustering package using container that supports `std::begin`, `std::end` functions and incremental iterators.
+@details All data from the container will be copied to the package.
+
+@param[in] data: container that is used to create pyclustering container.
+
+@return  Pointer to created pyclustering package.
+
+*/
 template <class TypeContainer>
 pyclustering_package * create_package(const TypeContainer * const data) {
     using contaner_data_t = typename TypeContainer::value_type;
@@ -185,6 +308,16 @@ pyclustering_package * create_package(const TypeContainer * const data) {
 }
 
 
+/*!
+
+@brief   Create pyclustering package using pointer to a two-dimensional vector container.
+@details All data from the container will be copied to the package.
+
+@param[in] data: container that is used to create pyclustering container.
+
+@return  Pointer to created pyclustering package.
+
+*/
 template <class TypeObject>
 pyclustering_package * create_package(const std::vector< std::vector<TypeObject> > * const data) {
     pyclustering_package * package = new pyclustering_package(pyclustering_data_t::PYCLUSTERING_TYPE_LIST);
@@ -200,6 +333,16 @@ pyclustering_package * create_package(const std::vector< std::vector<TypeObject>
 }
 
 
+/*!
+
+@brief   Create pyclustering package using pointer to a two-dimensional vector container that uses pointers for internal elements.
+@details All data from the container will be copied to the package.
+
+@param[in] data: container that is used to create pyclustering container.
+
+@return  Pointer to created pyclustering package.
+
+*/
 template <class TypeObject>
 pyclustering_package * create_package(const std::vector< std::vector<TypeObject> * > * const data) {
    pyclustering_package * package = new pyclustering_package(pyclustering_data_t::PYCLUSTERING_TYPE_LIST);

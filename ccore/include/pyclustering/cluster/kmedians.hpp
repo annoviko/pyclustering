@@ -136,7 +136,7 @@ private:
     *
     * @brief    Updates medians in line with current clusters.
     *
-    * @param[in|out] clusters: clusters that are sorted and used for updating medians.
+    * @param[in,out] clusters: clusters that are sorted and used for updating medians.
     * @param[out] medians: updated medians in line with the specified clusters.
     *
     */
@@ -146,7 +146,7 @@ private:
     *
     * @brief    Calculate median for particular cluster.
     *
-    * @param[in|out] current_cluster: cluster that is sorted and used for updating medians.
+    * @param[in,out] current_cluster: cluster that is sorted and used for updating medians.
     * @param[out] median: calculate median for particular cluster.
     *
     */
@@ -156,7 +156,7 @@ private:
     *
     * @brief    Erases clusters that do not have any points.
     *
-    * @param[in|out] p_clusters: clusters that should be analyzed and modified.
+    * @param[in,out] p_clusters: clusters that should be analyzed and modified.
     *
     */
     static void erase_empty_clusters(cluster_sequence & p_clusters);

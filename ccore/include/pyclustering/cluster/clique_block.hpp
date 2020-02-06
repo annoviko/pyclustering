@@ -142,23 +142,85 @@ private:
     bool                      m_visited = false;
 
 public:
+    /*!
+    
+    @brief  CLIQUE block constructor.
+
+    @param[in] p_location: logical location of the block in CLIQUE grid.
+    @param[in] p_block: spatial location in data space.
+
+    */
     clique_block(const clique_block_location & p_location, const clique_spatial_block & p_block);
 
+    /*!
+
+    @brief  CLIQUE block constructor that construct object by moving input arguments.
+
+    @param[in] p_location: logical location of the block in CLIQUE grid.
+    @param[in] p_block: spatial location in data space.
+
+    */
     clique_block(clique_block_location && p_location, clique_spatial_block && p_block);
 
 public:
+    /*!
+    
+    @return  Returns logical location of the block in CLIQUE grid.
+    
+    */
     const clique_block_location & get_logical_location() const;
 
+    /*!
+
+    @return  Returns spatial location of the block in data space.
+
+    */
     const clique_spatial_block & get_spatial_block() const;
 
+    /*!
+
+    @return  Returns points that are belong to the block.
+
+    */
     const clique_block::content & get_points() const;
 
+    /*!
+    
+    @return  Returns `true` if the block has been already visited (processed) by CLIQUE algorithm.
+    
+    */
     bool is_visited() const;
 
+    /*!
+    
+    @brief  Mark the block as visited (processed) by CLIQUE algorithm.
+    
+    */
     void touch();
 
+    /*!
+
+    @brief  Finds points that belong to this block using availability map to reduce computational complexity by
+             checking whether the point belongs to the block.
+
+    @details Algorithm complexity of this method is O(n).
+
+    @param[in] p_data: data where points are represented as coordinates.
+    @param[in,out] p_availability: contains boolean values that denote whether point is already belong
+                    to another CLIQUE block. Points that are captured by the current block in this
+                    method are also marked as captured.
+
+    */
     void capture_points(const dataset & p_data, std::vector<bool> & p_availability);
 
+    /*!
+    
+    @brief  Forms list of logical location of each neighbor for this particular CLIQUE block.
+
+    @param[in] p_edge: amount of intervals in each dimension that is used for clustering process.
+    @param[in] p_neighbors: logical location of each neighbor for the CLIQUE block.
+
+    */
     void get_location_neighbors(const std::size_t p_edge, std::vector<clique_block_location> & p_neighbors) const;
 };
 

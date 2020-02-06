@@ -109,7 +109,7 @@ public:
     * @brief    Performs cluster analysis of an input data.
     *
     * @param[in]     p_data: input data for cluster analysis.
-    * @param[in|out] p_result: clustering result of an input data, it is also considered as an input argument to
+    * @param[in,out] p_result: clustering result of an input data, it is also considered as an input argument to
     *                 where observer parameter can be set to collect changes of clusters and centers on each step of
     *                 processing.
     *

@@ -518,7 +518,7 @@ protected:
      * @param[in] int_step: step differentiation that is used for solving differential equation (can 
      *             be ignored in case of solvers when integration step is defined by solver itself).
      * @param[in] index: index of the particular oscillator whose phase should be calculated.
-     * @param[in|out] p_next_phases: container where new oscillator phases from the range are placed.
+     * @param[in,out] p_next_phases: container where new oscillator phases from the range are placed.
      *
      */
     virtual void calculate_phase(

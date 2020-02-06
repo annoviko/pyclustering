@@ -104,7 +104,7 @@ public:
     * @brief    Performs cluster analysis of an input data.
     *
     * @param[in]     p_data: input data for cluster analysis.
-    * @param[in|out] p_result: clustering result of an input data, it is also considered as an input argument to
+    * @param[in,out] p_result: clustering result of an input data, it is also considered as an input argument to
     *                 where observer parameter can be set to collect changes of clusters and centers on each step of
     *                 processing.
     *
@@ -117,7 +117,7 @@ public:
     *
     * @param[in]     p_data: input data for cluster analysis.
     * @param[in]     p_indexes: specify indexes of objects in 'p_data' that should be used during clustering process.
-    * @param[in|out] p_result: clustering result of an input data, it is also considered as an input argument to
+    * @param[in,out] p_result: clustering result of an input data, it is also considered as an input argument to
     *                 where observer parameter can be set to collect changes of clusters and centers on each step of
     *                 processing.
     *
@@ -136,7 +136,7 @@ private:
     * @brief    Calculate new center for specified cluster.
     *
     * @param[in] p_cluster: cluster whose center should be calculated.
-    * @param[in|out] p_center: cluster's center that should calculated.
+    * @param[in,out] p_center: cluster's center that should calculated.
     *
     * @return Difference between old and new cluster's center.
     *
@@ -154,7 +154,7 @@ private:
     *
     * @brief    Erases clusters that do not have any points.
     *
-    * @param[in|out] p_clusters: clusters that should be analyzed and modified.
+    * @param[in,out] p_clusters: clusters that should be analyzed and modified.
     *
     */
     static void erase_empty_clusters(cluster_sequence & p_clusters);

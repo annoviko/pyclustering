@@ -52,21 +52,21 @@ agglomerative::agglomerative(const size_t number_clusters, const type_link link)
 { }
 
 
-void agglomerative::process(const dataset & data, agglomerative_data & result) {
-    m_ptr_data = &data;
-    m_ptr_clusters = &result.clusters();
+void agglomerative::process(const dataset & p_data, agglomerative_data & p_result) {
+    m_ptr_data = &p_data;
+    m_ptr_clusters = &p_result.clusters();
 
     m_centers.clear();
     m_ptr_clusters->clear();
 
-    size_t current_number_clusters = data.size();
+    size_t current_number_clusters = p_data.size();
 
     m_centers.resize(current_number_clusters);
     m_ptr_clusters->resize(current_number_clusters);
 
-    std::copy(data.begin(), data.end(), m_centers.begin());
+    std::copy(p_data.begin(), p_data.end(), m_centers.begin());
 
-    for (size_t i = 0; i < data.size(); i++) {
+    for (size_t i = 0; i < p_data.size(); i++) {
         (*m_ptr_clusters)[i].push_back(i);
     }
 

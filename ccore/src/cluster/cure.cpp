@@ -39,13 +39,20 @@ namespace pyclustering {
 namespace clst {
 
 
-cure_cluster::cure_cluster() : mean(nullptr), closest(nullptr), distance_closest(0) {
+cure_cluster::cure_cluster() : 
+    mean(nullptr), 
+    closest(nullptr), 
+    distance_closest(0) 
+{
     points = new std::vector< std::vector<double> * >();
     rep = new std::vector< std::vector<double> * >();
 }
 
 
-cure_cluster::cure_cluster(std::vector<double> * point) : closest(nullptr), distance_closest(0) {
+cure_cluster::cure_cluster(std::vector<double> * point) : 
+    closest(nullptr), 
+    distance_closest(0) 
+{
     mean = new std::vector<double>(*point);
 
     points = new std::vector< std::vector<double> * >(1, point);    /* use user data points */
