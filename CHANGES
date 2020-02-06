@@ -1,5 +1,22 @@
 ------------------------------------------------------------------------
 
+CHANGE NOTES FOR 0.10.0 (STARTED Jan 24, 2020), (RELEASED: Dev -)
+
+------------------------------------------------------------------------
+
+GENERAL CHANGES:
+- Updated interface of each clustering algorithm in C/C++ pyclustering `cluster_data` is substituted by concrete classes (ccore.clst).
+  See: https://github.com/annoviko/pyclustering/issues/577
+
+
+CORRECTED MAJOR BUGS:
+
+- Memory leakage in the interface between python and C++ pyclustering library in case of CURE algorithm usage (ccore).
+  See: https://github.com/annoviko/pyclustering/issues/581
+
+
+------------------------------------------------------------------------
+
 CHANGE NOTES FOR 0.9.3.1 (STARTED Dev 23, 2019), (RELEASED: Dev 23, 2019)
 
 ------------------------------------------------------------------------

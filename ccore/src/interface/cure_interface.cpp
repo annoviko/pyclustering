@@ -39,7 +39,7 @@ void * cure_algorithm(const pyclustering_package * const sample, const size_t nu
 
 
 void cure_data_destroy(void * pointer_cure_data) {
-    delete (pyclustering::clst::cure *) pointer_cure_data;
+    delete (pyclustering::clst::cure_data *) pointer_cure_data;
 }
 
 
