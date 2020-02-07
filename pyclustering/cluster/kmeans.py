@@ -284,7 +284,7 @@ class kmeans:
 
     Implementation based on the paper @cite inproceedings::kmeans::1.
 
-    @image html kmeans_example_clustering.png "K-Means clustering results. At the left - 'Simple03.data' sample, at the right - 'Lsun.data' sample."
+    @image html kmeans_example_clustering.png "Fig. 1. K-Means clustering results. At the left - 'Simple03.data' sample, at the right - 'Lsun.data' sample."
 
     Example #1 - Clustering using K-Means++ for center initialization:
     @code

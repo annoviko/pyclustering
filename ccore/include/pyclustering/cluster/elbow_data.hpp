@@ -44,7 +44,7 @@ using wce_sequence      = std::vector<double>;
 
 @class  elbow_data elbow_data.hpp pyclustering/cluster/elbow_data.hpp
 
-@brief  Elbow analysis results that container information about optimal amount of clusters and
+@brief  Elbow analysis result that contain information about optimal amount of clusters and
          total within cluster errors (WCE) for each K-value.
 
 */

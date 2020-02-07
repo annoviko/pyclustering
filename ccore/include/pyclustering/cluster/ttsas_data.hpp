@@ -35,6 +35,11 @@ namespace pyclustering {
 namespace clst {
 
 
+/*!
+
+@brief  A storage where TTSAS clustering results are stored.
+
+*/
 using ttsas_data = bsas_data;
 
 

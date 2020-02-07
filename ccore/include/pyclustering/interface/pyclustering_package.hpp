@@ -56,6 +56,8 @@ enum pyclustering_data_t {
 
 /*!
 
+@class  pyclustering_package pyclustering_package.hpp pyclustering/interface/pyclustering_package.hpp
+
 @brief  Container that is used as data storage to communicate with the Python implementation of the library.
 @details The package uses dynamic memory allocation and user of the package is responsible for the deallocation to avoid memory leakage.
 

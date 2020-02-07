@@ -63,19 +63,79 @@ class silhouette:
         from pyclustering.utils import read_sample
 
         # Read data 'SampleSimple3' from Simple Sample collection.
-        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE3);
+        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE3)
 
         # Prepare initial centers
-        centers = kmeans_plusplus_initializer(sample, 4).initialize();
+        centers = kmeans_plusplus_initializer(sample, 4).initialize()
 
         # Perform cluster analysis
-        kmeans_instance = kmeans(sample, centers);
-        kmeans_instance.process();
-        clusters = kmeans_instance.get_clusters();
+        kmeans_instance = kmeans(sample, centers)
+        kmeans_instance.process()
+        clusters = kmeans_instance.get_clusters()
 
         # Calculate Silhouette score
         score = silhouette(sample, clusters).process().get_score()
     @endcode
+
+    Let's perform clustering of the same sample by K-Means algorithm using different `K` values (2, 4, 6 and 8) and
+    estimate clustering results using Silhouette method.
+    @code
+        from pyclustering.cluster.kmeans import kmeans
+        from pyclustering.cluster.center_initializer import kmeans_plusplus_initializer
+        from pyclustering.cluster.silhouette import silhouette
+
+        from pyclustering.samples.definitions import SIMPLE_SAMPLES
+        from pyclustering.utils import read_sample
+
+        import matplotlib.pyplot as plt
+
+        def get_score(sample, amount_clusters):
+            # Prepare initial centers for K-Means algorithm.
+            centers = kmeans_plusplus_initializer(sample, amount_clusters).initialize()
+
+            # Perform cluster analysis.
+            kmeans_instance = kmeans(sample, centers)
+            kmeans_instance.process()
+            clusters = kmeans_instance.get_clusters()
+
+            # Calculate Silhouette score.
+            return silhouette(sample, clusters).process().get_score()
+
+        def draw_score(figure, position, title, score):
+            ax = figure.add_subplot(position)
+            ax.bar(range(0, len(score)), score, width=0.7)
+            ax.set_title(title)
+            ax.set_xlim(0, len(score))
+            ax.set_xticklabels([])
+            ax.grid()
+
+        # Read data 'SampleSimple3' from Simple Sample collection.
+        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE3)
+
+        # Perform cluster analysis and estimation by Silhouette.
+        score_2 = get_score(sample, 2)  # K = 2 (amount of clusters).
+        score_4 = get_score(sample, 4)  # K = 4 - optimal.
+        score_6 = get_score(sample, 6)  # K = 6.
+        score_8 = get_score(sample, 8)  # K = 8.
+
+        # Visualize results.
+        figure = plt.figure()
+
+        # Visualize each result separately.
+        draw_score(figure, 221, 'K = 2', score_2)
+        draw_score(figure, 222, 'K = 4 (optimal)', score_4)
+        draw_score(figure, 223, 'K = 6', score_6)
+        draw_score(figure, 224, 'K = 8', score_8)
+
+        # Show a plot with visualized results.
+        plt.show()
+    @endcode
+
+    There is visualized results that were done by Silhouette method. `K = 4` is the optimal amount of clusters in line
+    with Silhouette method because the score for each point is close to `1.0` and the average score for `K = 4` is
+    biggest value among others `K`.
+
+    @image html silhouette_score_for_various_K.png "Fig. 1. Silhouette scores for various K."
 
     @see kmeans, kmedoids, kmedians, xmeans, elbow
 
