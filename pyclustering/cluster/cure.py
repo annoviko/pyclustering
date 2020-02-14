@@ -501,7 +501,7 @@ class cure:
             self.__queue[i].distance = minimal_distance
         
         # sort clusters
-        self.__queue.sort(key = lambda x: x.distance, reverse = False)
+        self.__queue.sort(key=lambda x: x.distance, reverse = False)
     
 
     def __create_kdtree(self):
@@ -511,11 +511,16 @@ class cure:
         @return (kdtree) k-d tree that consist of representative points of CURE clusters.
         
         """
-        
-        self.__tree = kdtree()
+
+        representatives, payloads = [], []
         for current_cluster in self.__queue:
             for representative_point in current_cluster.rep:
-                self.__tree.insert(representative_point, current_cluster)
+                representatives.append(representative_point)
+                payloads.append(current_cluster)
+
+        # initialize it using constructor to have balanced tree at the beginning to ensure the highest performance
+        # when we have the biggest amount of nodes in the tree.
+        self.__tree = kdtree(representatives, payloads)
 
 
     def __cluster_distance(self, cluster1, cluster2):
@@ -532,8 +537,7 @@ class cure:
         distance = float('inf')
         for i in range(0, len(cluster1.rep)):
             for k in range(0, len(cluster2.rep)):
-                dist = euclidean_distance_square(cluster1.rep[i], cluster2.rep[k]);   # Fast mode
-                #dist = euclidean_distance(cluster1.rep[i], cluster2.rep[k])        # Slow mode
+                dist = euclidean_distance_square(cluster1.rep[i], cluster2.rep[k])   # Fast mode
                 if dist < distance:
                     distance = dist
                     

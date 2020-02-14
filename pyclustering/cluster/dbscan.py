@@ -25,7 +25,7 @@
 """
 
 
-from pyclustering.container.kdtree import kdtree
+from pyclustering.container.kdtree import kdtree_balanced
 
 from pyclustering.cluster.encoder import type_encoding
 
@@ -125,7 +125,7 @@ class dbscan:
             
         else:
             if self.__data_type == 'points':
-                self.__kdtree = kdtree(self.__pointer_data, range(len(self.__pointer_data)))
+                self.__kdtree = kdtree_balanced(self.__pointer_data, range(len(self.__pointer_data)))
 
             for i in range(0, len(self.__pointer_data)):
                 if self.__visited[i] is False:

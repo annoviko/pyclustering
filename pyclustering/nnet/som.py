@@ -875,7 +875,7 @@ class som:
         plt.show()
 
 
-    def show_network(self, awards = False, belongs = False, coupling = True, dataset = True, marker_type = 'o'):
+    def show_network(self, awards=False, belongs=False, coupling=True, dataset=True, marker_type='o'):
         """!
         @brief Shows neurons in the dimension of data.
         
@@ -908,13 +908,13 @@ class som:
         if (self._data is not None) and (dataset is True):
             for x in self._data:
                 if dimension == 1:
-                    axes.plot(x[0], 0.0, 'b|', ms = 30)
+                    axes.plot(x[0], 0.0, 'b|', ms=30)
                     
                 elif dimension == 2:
                     axes.plot(x[0], x[1], 'b.')
                     
                 elif dimension == 3:
-                    axes.scatter(x[0], x[1], x[2], c = 'b', marker = '.')
+                    axes.scatter(x[0], x[1], x[2], c='b', marker='.')
         
         # Show neurons
         for index in range(self._size):
@@ -927,14 +927,14 @@ class som:
                 
                 if awards:
                     location = '{0}'.format(self._award[index])
-                    axes.text(self._weights[index][0], 0.0, location, color='black', fontsize = 10)
+                    axes.text(self._weights[index][0], 0.0, location, color='black', fontsize=10)
             
                 if belongs and self._data is not None:
                     location = '{0}'.format(index)
-                    axes.text(self._weights[index][0], 0.0, location, color='black', fontsize = 12)
+                    axes.text(self._weights[index][0], 0.0, location, color='black', fontsize=12)
                     for k in range(len(self._capture_objects[index])):
                         point = self._data[self._capture_objects[index][k]]
-                        axes.text(point[0], 0.0, location, color='blue', fontsize = 10)
+                        axes.text(point[0], 0.0, location, color='blue', fontsize=10)
             
             if dimension == 2:
                 axes.plot(self._weights[index][0], self._weights[index][1], color + marker_type)
@@ -958,7 +958,8 @@ class som:
                                       'g', linewidth=0.5)
             
             elif dimension == 3:
-                axes.scatter(self._weights[index][0], self._weights[index][1], self._weights[index][2], c=color, marker=marker_type)
+                axes.scatter(self._weights[index][0], self._weights[index][1], self._weights[index][2], c=color,
+                             marker=marker_type)
                 
                 if (self._conn_type != type_conn.func_neighbor) and (coupling != False):
                     for neighbor in self._neighbors[index]:

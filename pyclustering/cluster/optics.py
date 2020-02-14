@@ -34,7 +34,7 @@ except Exception as error_instance:
     warnings.warn("Impossible to import matplotlib (please, install 'matplotlib'), pyclustering's visualization "
                   "functionality is not available (details: '%s')." % str(error_instance))
 
-from pyclustering.container.kdtree import kdtree
+from pyclustering.container.kdtree import kdtree_balanced
 
 from pyclustering.cluster.encoder import type_encoding
 
@@ -485,7 +485,7 @@ class optics:
         """
 
         if self.__data_type == 'points':
-            self.__kdtree = kdtree(self.__sample_pointer, range(len(self.__sample_pointer)))
+            self.__kdtree = kdtree_balanced(self.__sample_pointer, range(len(self.__sample_pointer)))
 
         self.__allocate_clusters()
 
@@ -746,7 +746,7 @@ class optics:
                 else:
                     if reachable_distance < self.__optics_objects[index_neighbor].reachability_distance:
                         self.__optics_objects[index_neighbor].reachability_distance = reachable_distance
-                        order_seed.sort(key = lambda obj: obj.reachability_distance)
+                        order_seed.sort(key=lambda obj: obj.reachability_distance)
 
 
     def __neighbor_indexes_points(self, optic_object):

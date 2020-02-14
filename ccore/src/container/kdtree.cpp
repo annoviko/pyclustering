@@ -251,9 +251,9 @@ kdnode::ptr kdtree::find_node_by_rule(const std::vector<double> & p_point, const
 
     while(true) {
         if (*cur_node <= p_point) {
-            if (p_rule(cur_node)) {
-                req_node = cur_node;
-                break;
+            /* no need to check each node, only when it may satisfy the condition */
+            if (p_rule(cur_node)) {     /* compare point with point in the current node */
+                return cur_node;
             }
 
             if (cur_node->get_right() != nullptr) {

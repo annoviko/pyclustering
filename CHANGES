@@ -5,6 +5,9 @@ CHANGE NOTES FOR 0.10.0 (STARTED Jan 24, 2020), (RELEASED: Dev -)
 ------------------------------------------------------------------------
 
 GENERAL CHANGES:
+- Implemented KD-tree graphical visualizer `kdtree_visualizer` for KD-trees with 2-dimensional data (pyclustering.container.kdtree).
+  See: https://github.com/annoviko/pyclustering/issues/586
+
 - Updated interface of each clustering algorithm in C/C++ pyclustering `cluster_data` is substituted by concrete classes (ccore.clst).
   See: https://github.com/annoviko/pyclustering/issues/577
 
