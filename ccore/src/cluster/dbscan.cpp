@@ -26,6 +26,8 @@
 #include <string>
 #include <unordered_set>
 
+#include <pyclustering/container/kdtree_searcher.hpp>
+
 
 namespace pyclustering {
 
@@ -167,9 +169,12 @@ void dbscan::get_neighbors_from_distance_matrix(const size_t p_index, std::vecto
 
 
 void dbscan::create_kdtree(const dataset & p_data) {
+    std::vector<void *> payload(p_data.size());
     for (std::size_t index = 0; index < p_data.size(); index++) {
-        m_kdtree.insert(p_data[index], (void *) index);
+        payload[index] = (void *)index;
     }
+
+    m_kdtree = container::kdtree_balanced(p_data, payload);
 }
 
 

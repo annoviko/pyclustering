@@ -28,7 +28,7 @@
 #include <set>
 #include <tuple>
 
-#include <pyclustering/container/kdtree.hpp>
+#include <pyclustering/container/kdtree_balanced.hpp>
 
 #include <pyclustering/cluster/optics_data.hpp>
 #include <pyclustering/cluster/optics_descriptor.hpp>
@@ -100,11 +100,11 @@ private:
 
     optics_data_t       m_type              = optics_data_t::POINTS;
 
-    container::kdtree   m_kdtree            = container::kdtree();
+    container::kdtree_balanced      m_kdtree            = container::kdtree_balanced();
 
-    optics_object_sequence *            m_optics_objects    = nullptr;
+    optics_object_sequence *        m_optics_objects    = nullptr;
 
-    std::list<optics_descriptor *>      m_ordered_database  = { };
+    std::list<optics_descriptor *>  m_ordered_database  = { };
 
 public:
     /*!

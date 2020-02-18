@@ -70,6 +70,8 @@
     <ClCompile Include="container\adjacency_weight_list.cpp" />
     <ClCompile Include="container\kdnode.cpp" />
     <ClCompile Include="container\kdtree.cpp" />
+    <ClCompile Include="container\kdtree_balanced.cpp" />
+    <ClCompile Include="container\kdtree_searcher.cpp" />
     <ClCompile Include="differential\differ_factor.cpp" />
     <ClCompile Include="interface\agglomerative_interface.cpp" />
     <ClCompile Include="interface\bsas_interface.cpp" />
@@ -174,6 +176,8 @@
     <ClInclude Include="..\include\pyclustering\container\ensemble_data.hpp" />
     <ClInclude Include="..\include\pyclustering\container\kdnode.hpp" />
     <ClInclude Include="..\include\pyclustering\container\kdtree.hpp" />
+    <ClInclude Include="..\include\pyclustering\container\kdtree_balanced.hpp" />
+    <ClInclude Include="..\include\pyclustering\container\kdtree_searcher.hpp" />
     <ClInclude Include="..\include\pyclustering\definitions.hpp" />
     <ClInclude Include="..\include\pyclustering\differential\differ_factor.hpp" />
     <ClInclude Include="..\include\pyclustering\differential\differ_state.hpp" />

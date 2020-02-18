@@ -385,6 +385,8 @@
     <ClCompile Include="..\src\container\adjacency_weight_list.cpp" />
     <ClCompile Include="..\src\container\kdnode.cpp" />
     <ClCompile Include="..\src\container\kdtree.cpp" />
+    <ClCompile Include="..\src\container\kdtree_balanced.cpp" />
+    <ClCompile Include="..\src\container\kdtree_searcher.cpp" />
     <ClCompile Include="..\src\differential\differ_factor.cpp" />
     <ClCompile Include="..\src\interface\agglomerative_interface.cpp" />
     <ClCompile Include="..\src\interface\bsas_interface.cpp" />

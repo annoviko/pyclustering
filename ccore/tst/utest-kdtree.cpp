@@ -1,23 +1,24 @@
-/**
-*
-* @authors Andrei Novikov (pyclustering@yandex.ru)
-* @date 2014-2020
-* @copyright GNU Public License
-*
-* GNU_PUBLIC_LICENSE
-*   pyclustering is free software: you can redistribute it and/or modify
-*   it under the terms of the GNU General Public License as published by
-*   the Free Software Foundation, either version 3 of the License, or
-*   (at your option) any later version.
-*
-*   pyclustering is distributed in the hope that it will be useful,
-*   but WITHOUT ANY WARRANTY; without even the implied warranty of
-*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*   GNU General Public License for more details.
-*
-*   You should have received a copy of the GNU General Public License
-*   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*
+/*!
+
+@authors Andrei Novikov (pyclustering@yandex.ru)
+@date 2014-2020
+@copyright GNU Public License
+
+@cond GNU_PUBLIC_LICENSE
+    pyclustering is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    pyclustering is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+@endcond
+
 */
 
 
@@ -26,6 +27,7 @@
 #include "samples.hpp"
 
 #include <pyclustering/container/kdtree.hpp>
+#include <pyclustering/container/kdtree_searcher.hpp>
 
 #include <pyclustering/utils/metric.hpp>
 
@@ -49,6 +51,59 @@ protected:
         tree = kdtree();
         for (auto & point : points) {
             tree.insert(point);
+        }
+    }
+
+    virtual void TemplateTestBalancedFind(const dataset & p_data) {
+        std::vector<void *> payload;
+        for (std::size_t i = 0; i < p_data.size(); i++) {
+            payload.push_back((void *)i);
+        }
+
+        tree = kdtree(p_data, payload);
+
+        ASSERT_NE(nullptr, tree.get_root());
+        ASSERT_EQ(p_data.size(), tree.get_size());
+
+        for (std::size_t i = 0; i < p_data.size(); i++) {
+            kdnode::ptr node = tree.find_node(p_data[i], payload[i]);
+
+            ASSERT_NE(nullptr, node);
+            ASSERT_EQ(p_data[i], node->get_data());
+            ASSERT_EQ(payload[i], node->get_payload());
+        }
+    }
+
+    virtual void TemplateTestBalancedSearch(const dataset & p_data, const double p_radius_search = 10.0) {
+        std::vector<void *> payload;
+        for (std::size_t i = 0; i < p_data.size(); i++) {
+            payload.push_back((void *) i);
+        }
+
+        tree = kdtree(p_data, payload);
+
+        ASSERT_NE(nullptr, tree.get_root());
+        ASSERT_EQ(p_data.size(), tree.get_size());
+
+        for (std::size_t i = 0; i < p_data.size(); i++) {
+            searcher = kdtree_searcher(p_data[i], tree.get_root(), p_radius_search);
+            
+            FindNearestNode(p_data, i);         /* Find the nearest node */
+            FindNearestNeighbors(p_data, i);    /* Find the nearest neighbors */
+
+            /* Find nearest using user-specific rule to store result */
+            std::vector<std::size_t> index_points;
+            kdtree_searcher::rule_store rule = [&i, &index_points](const kdnode::ptr node, const double distance)
+            {
+                if (i != (std::size_t) node->get_payload()) {
+                    index_points.push_back((std::size_t) node->get_payload());
+                }
+            };
+
+            searcher.find_nearest(rule);
+
+            ASSERT_EQ(tree.get_size() - 1, index_points.size());
+            ASSERT_TRUE(std::find(index_points.begin(), index_points.end(), i) == index_points.end());
         }
     }
 
@@ -207,7 +262,9 @@ TEST_F(utest_kdtree, insert_remove_node) {
         std::vector<double> & point = test_sample_point_vector[index];
         char * payload = (char *) &(test_sample_payload[index]);
 
+        ASSERT_EQ(tree.get_size(), index);
         tree.insert(point, payload);
+        ASSERT_EQ(tree.get_size(), index + 1);
 
         kdnode::ptr node = tree.find_node(point);
         ASSERT_NE(nullptr, node.get());
@@ -231,6 +288,8 @@ TEST_F(utest_kdtree, insert_remove_node) {
             ASSERT_EQ(&test_sample_payload[next_index], node->get_payload());
         }
     }
+
+    ASSERT_EQ(tree.get_size(), 0);
 }
 
 
@@ -266,9 +325,21 @@ TEST_F(utest_kdtree, insert_search_remove_simple_01) {
 }
 
 
+TEST_F(utest_kdtree, insert_search_simple_01) {
+    auto sample = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01);
+    TemplateTestBalancedSearch(*sample);
+}
+
+
 TEST_F(utest_kdtree, insert_search_remove_simple_02) {
     auto sample = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02);
     TemplateTestInsertSearchRemove(*sample);
+}
+
+
+TEST_F(utest_kdtree, insert_search_simple_02) {
+    auto sample = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02);
+    TemplateTestBalancedSearch(*sample);
 }
 
 
@@ -278,9 +349,21 @@ TEST_F(utest_kdtree, insert_search_remove_simple_03) {
 }
 
 
+TEST_F(utest_kdtree, insert_search_simple_03) {
+    auto sample = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_03);
+    TemplateTestBalancedSearch(*sample);
+}
+
+
 TEST_F(utest_kdtree, insert_search_remove_simple_04) {
     auto sample = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_04);
     TemplateTestInsertSearchRemove(*sample);
+}
+
+
+TEST_F(utest_kdtree, insert_search_simple_04) {
+    auto sample = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_04);
+    TemplateTestBalancedSearch(*sample);
 }
 
 
@@ -290,15 +373,33 @@ TEST_F(utest_kdtree, insert_search_remove_simple_05) {
 }
 
 
+TEST_F(utest_kdtree, insert_search_simple_05) {
+    auto sample = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_05);
+    TemplateTestBalancedSearch(*sample);
+}
+
+
 TEST_F(utest_kdtree, insert_search_remove_simple_06) {
     auto sample = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_06);
     TemplateTestInsertSearchRemove(*sample);
 }
 
 
+TEST_F(utest_kdtree, insert_search_simple_06) {
+    auto sample = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_06);
+    TemplateTestBalancedSearch(*sample);
+}
+
+
 TEST_F(utest_kdtree, insert_search_remove_simple_07) {
     auto sample = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_07);
     TemplateTestInsertSearchRemove(*sample);
+}
+
+
+TEST_F(utest_kdtree, insert_search_simple_07) {
+    auto sample = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_07);
+    TemplateTestBalancedSearch(*sample);
 }
 
 
@@ -309,11 +410,26 @@ TEST_F(utest_kdtree, insert_search_remove_simple_08) {
 }
 
 
+TEST_F(utest_kdtree, insert_search_simple_08) {
+    auto sample = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_08);
+    const double search_radius = farthest_distance(*sample, distance_metric_factory<point>::euclidean());
+    TemplateTestBalancedSearch(*sample, search_radius);
+}
+
+
 TEST_F(utest_kdtree, insert_search_remove_simple_10) {
     auto sample = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_10);
     const double search_radius = farthest_distance(*sample, distance_metric_factory<point>::euclidean());
     TemplateTestInsertSearchRemove(*sample, search_radius);
 }
+
+
+TEST_F(utest_kdtree, insert_search_simple_10) {
+    auto sample = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_10);
+    const double search_radius = farthest_distance(*sample, distance_metric_factory<point>::euclidean());
+    TemplateTestBalancedSearch(*sample, search_radius);
+}
+
 
 
 TEST_F(utest_kdtree, insert_search_remove_hepta) {
@@ -413,4 +529,76 @@ TEST_F(utest_kdtree, insert_search_remove_with_payload_identical_simple_12) {
     std::iota(payloads.begin(), payloads.end(), 0);
 
     TemplateInsertFindRemoveByCoordinatesAndPayload(*data, payloads);
+}
+
+
+TEST_F(utest_kdtree, balanced_tree_find_simple_01) {
+    auto data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01);
+    TemplateTestBalancedFind(*data);
+}
+
+
+TEST_F(utest_kdtree, balanced_tree_find_simple_02) {
+    auto data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02);
+    TemplateTestBalancedFind(*data);
+}
+
+
+TEST_F(utest_kdtree, balanced_tree_find_simple_03) {
+    auto data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_03);
+    TemplateTestBalancedFind(*data);
+}
+
+
+TEST_F(utest_kdtree, balanced_tree_find_simple_04) {
+    auto data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_04);
+    TemplateTestBalancedFind(*data);
+}
+
+
+TEST_F(utest_kdtree, balanced_tree_find_simple_05) {
+    auto data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_05);
+    TemplateTestBalancedFind(*data);
+}
+
+
+TEST_F(utest_kdtree, balanced_tree_find_simple_06) {
+    auto data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_06);
+    TemplateTestBalancedFind(*data);
+}
+
+
+TEST_F(utest_kdtree, balanced_tree_find_simple_07) {
+    auto data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_07);
+    TemplateTestBalancedFind(*data);
+}
+
+
+TEST_F(utest_kdtree, balanced_tree_find_simple_08) {
+    auto data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_08);
+    TemplateTestBalancedFind(*data);
+}
+
+
+TEST_F(utest_kdtree, balanced_tree_find_simple_09) {
+    auto data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_09);
+    TemplateTestBalancedFind(*data);
+}
+
+
+TEST_F(utest_kdtree, balanced_tree_find_simple_10) {
+    auto data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_10);
+    TemplateTestBalancedFind(*data);
+}
+
+
+TEST_F(utest_kdtree, balanced_tree_find_simple_11) {
+    auto data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_11);
+    TemplateTestBalancedFind(*data);
+}
+
+
+TEST_F(utest_kdtree, balanced_tree_find_simple_12) {
+    auto data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_12);
+    TemplateTestBalancedFind(*data);
 }

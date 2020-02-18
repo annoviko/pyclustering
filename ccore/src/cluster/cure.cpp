@@ -20,12 +20,13 @@
 *
 */
 
+#include <pyclustering/cluster/cure.hpp>
 
 #include <limits>
 #include <set>
 #include <iostream>
 
-#include <pyclustering/cluster/cure.hpp>
+#include <pyclustering/container/kdtree_searcher.hpp>
 
 #include <pyclustering/utils/metric.hpp>
 
@@ -114,13 +115,20 @@ cure_queue::cure_queue(const std::vector< std::vector<double> > * data) {
     queue = new std::multiset<cure_cluster *, cure_cluster_comparator>();
     create_queue(data);
 
-    tree = new kdtree();
+    std::vector<point> points;
+    std::vector<void *> payloads;
+
+    points.reserve(data->size());
+    payloads.reserve(data->size());
 
     for (auto cluster : *queue) {
         for (auto point : *(cluster->rep)) {
-            tree->insert(*point, cluster);
+            points.push_back(*point);
+            payloads.push_back((void *) cluster);
         }
     }
+
+    tree = new kdtree(points, payloads);
 }
 
 

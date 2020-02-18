@@ -1,23 +1,24 @@
-/**
-*
-* @authors Andrei Novikov (pyclustering@yandex.ru)
-* @date 2014-2020
-* @copyright GNU Public License
-*
-* GNU_PUBLIC_LICENSE
-*   pyclustering is free software: you can redistribute it and/or modify
-*   it under the terms of the GNU General Public License as published by
-*   the Free Software Foundation, either version 3 of the License, or
-*   (at your option) any later version.
-*
-*   pyclustering is distributed in the hope that it will be useful,
-*   but WITHOUT ANY WARRANTY; without even the implied warranty of
-*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*   GNU General Public License for more details.
-*
-*   You should have received a copy of the GNU General Public License
-*   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*
+/*!
+
+@authors Andrei Novikov (pyclustering@yandex.ru)
+@date 2014-2020
+@copyright GNU Public License
+
+@cond GNU_PUBLIC_LICENSE
+    pyclustering is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    pyclustering is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+@endcond
+
 */
 
 
@@ -54,6 +55,16 @@ void kdnode::set_parent(const kdnode::ptr & p_node) {
 }
 
 
+void kdnode::set_data(const point & p_data) {
+    m_data = p_data;
+}
+
+
+void kdnode::set_payload(void * p_payload) {
+    m_payload = p_payload;
+}
+
+
 void kdnode::set_discriminator(const std::size_t disc) {
     m_discriminator = disc;
 }
@@ -74,8 +85,36 @@ kdnode::ptr kdnode::get_parent() const {
 }
 
 
-void * kdnode::get_payload() {
+void * kdnode::get_payload() const {
     return m_payload;
+}
+
+
+kdnode::ptr kdnode::find_node(const point & p_point) {
+    search_node_rule rule = [&p_point](const kdnode & p_node) { 
+        return p_point == p_node.get_data();
+    };
+    return find_node(p_point, rule);
+}
+
+
+kdnode::ptr kdnode::find_node(const point & p_point, const search_node_rule & p_rule) {
+    kdnode::ptr cur_node = shared_from_this();
+
+    while (cur_node != nullptr) {
+        if (*cur_node <= p_point) {
+            if (p_rule(*cur_node)) {    /* Less or equal - check if equal. */
+                return cur_node;
+            }
+
+            cur_node = cur_node->get_right();
+        }
+        else {
+            cur_node = cur_node->get_left();
+        }
+    }
+
+    return nullptr;
 }
 
 

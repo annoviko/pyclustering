@@ -39,4 +39,4 @@ pyclustering_package * agglomerative_algorithm(const pyclustering_package * cons
     pyclustering_package * package = create_package(&result.clusters());
 
     return package;
-}
+} 

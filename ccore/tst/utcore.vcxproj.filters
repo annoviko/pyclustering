@@ -509,6 +509,12 @@
     <ClCompile Include="..\src\utils\stats.cpp">
       <Filter>Tested Code\utils</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\container\kdtree_searcher.cpp">
+      <Filter>Tested Code\container</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\container\kdtree_balanced.cpp">
+      <Filter>Tested Code\container</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="samples.hpp">

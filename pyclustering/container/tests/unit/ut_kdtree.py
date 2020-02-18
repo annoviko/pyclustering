@@ -48,6 +48,7 @@ class KDTreeUnitTest(unittest.TestCase):
             self.assertIsNotNone(node)
             self.assertEqual(node.payload, payload[index])
             self.assertEqual(node.data, array[index])
+            self.assertGreater(len(str(node)), 1)
 
 
     def testKDTreeCreateWithPayload01(self):
@@ -250,6 +251,10 @@ class KDTreeUnitTest(unittest.TestCase):
         
         tree = kdtree()
         for index in range(len(array)):
+            removed_node = tree.remove(array[index])
+            self.assertIsNone(removed_node, "The point '%s' shouldn't be found in the tree - it wasn't added yet." %
+                              str(array[index]))
+
             node = tree.insert(array[index], payload[index])
             self.assertIsNotNone(node)
             self.assertEqual(node.data, array[index])
@@ -257,7 +262,7 @@ class KDTreeUnitTest(unittest.TestCase):
         length = len(array)
         for index in range(0, length):
             node = tree.remove(array[index])
-            assert len(tree) == length - index - 1;
+            assert len(tree) == length - index - 1
             
             if index + 1 < length:    # When root is removed then None will be returned
                 assert node is not None
@@ -381,6 +386,11 @@ class KDTreeUnitTest(unittest.TestCase):
             node = tree.find_nearest_dist_node(point, 0.0)
             self.assertIsNotNone(node)
             self.assertIs(node.data, point)
+
+            distance_and_node = tree.find_nearest_dist_node(point, 0.0, True)
+            self.assertIsNotNone(distance_and_node)
+            self.assertIs(distance_and_node[1].data, point)
+            self.assertEqual(distance_and_node[0], 0.0)
 
 
     def testSearchNearestNodeInSampleSimple01(self):
@@ -579,7 +589,10 @@ class KDTreeUnitTest(unittest.TestCase):
 
 
     def templateTreeVisualization(self, path, **kwargs):
-        sample = read_sample(path)
+        sample = None
+        if path is not None:
+            sample = read_sample(path)
+
         exception = kwargs.get('exception', None)
 
         if exception is not None:
@@ -588,6 +601,9 @@ class KDTreeUnitTest(unittest.TestCase):
         else:
             kdtree_visualizer(kdtree(sample)).visualize()
             kdtree_visualizer(kdtree_balanced(sample)).visualize()
+
+    def testVisualizeNoData(self):
+        self.templateTreeVisualization(None, exception=ValueError)
 
     def testVisualizeSampleSimple01(self):
         self.templateTreeVisualization(SIMPLE_SAMPLES.SAMPLE_SIMPLE1)

@@ -342,8 +342,14 @@ class kmedians:
         if len(self.__pointer_data) == 0:
             raise ValueError("Input data is empty (size: '%d')." % len(self.__pointer_data))
 
+        if not hasattr(self.__pointer_data[0], "__getitem__"):
+            raise TypeError("Input data element does not have attribute '__getitem__'.")
+
         if len(self.__medians) == 0:
-            raise ValueError("Initial medians are empty (size: '%d')." % len(self.__pointer_data))
+            raise ValueError("Initial medians are empty (size: '%d')." % len(self.__medians))
+
+        if not hasattr(self.__medians[0], "__getitem__"):
+            raise TypeError("Initial medians element does not have attribute '__getitem__'.")
 
         if self.__tolerance < 0:
             raise ValueError("Tolerance (current value: '%d') should be greater or equal to 0." %
@@ -351,4 +357,4 @@ class kmedians:
 
         if self.__itermax < 0:
             raise ValueError("Maximum iterations (current value: '%d') should be greater or equal to 0." %
-                             self.__tolerance)
+                             self.__itermax)

@@ -295,6 +295,12 @@
     <ClCompile Include="utils\stats.cpp">
       <Filter>Source Files\utils</Filter>
     </ClCompile>
+    <ClCompile Include="container\kdtree_searcher.cpp">
+      <Filter>Source Files\container</Filter>
+    </ClCompile>
+    <ClCompile Include="container\kdtree_balanced.cpp">
+      <Filter>Source Files\container</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\pyclustering\cluster\agglomerative.hpp">
@@ -626,6 +632,12 @@
     </ClInclude>
     <ClInclude Include="..\include\pyclustering\definitions.hpp">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\pyclustering\container\kdtree_searcher.hpp">
+      <Filter>Header Files\container</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\pyclustering\container\kdtree_balanced.hpp">
+      <Filter>Header Files\container</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

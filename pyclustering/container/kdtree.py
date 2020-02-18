@@ -356,6 +356,7 @@ class kdtree_balanced:
 
         # Elements could be the same around the median, but all elements that are >= to the current should
         # be at the right side.
+        # TODO: optimize by binary search - no need to use O(n)
         while median - 1 >= 0 and \
                 nodes[median].data[discriminator] == nodes[median - 1].data[discriminator]:
             median -= 1

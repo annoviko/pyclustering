@@ -27,7 +27,7 @@
 #include <cmath>
 #include <algorithm>
 
-#include <pyclustering/container/kdtree.hpp>
+#include <pyclustering/container/kdtree_balanced.hpp>
 
 #include <pyclustering/cluster/dbscan_data.hpp>
 
@@ -60,21 +60,21 @@ Implementation based on paper @cite inproceedings::dbscan::1.
 */
 class dbscan {
 private:
-    const dataset       * m_data_ptr      = nullptr;       /* temporary pointer to input data that is used only during processing */
+    const dataset *            m_data_ptr      = nullptr;  /* temporary pointer to input data that is used only during processing */
 
-    dbscan_data         * m_result_ptr    = nullptr;       /* temporary pointer to clustering result that is used only during processing */
+    dbscan_data *              m_result_ptr    = nullptr;  /* temporary pointer to clustering result that is used only during processing */
 
-    std::vector<bool>   m_visited         = { };
+    std::vector<bool>          m_visited         = { };
 
-    std::vector<bool>   m_belong          = { };
+    std::vector<bool>          m_belong          = { };
 
-    double              m_initial_radius  = 0.0;    /* original radius that was specified by user */
+    double                     m_initial_radius  = 0.0;    /* original radius that was specified by user */
 
-    size_t              m_neighbors       = 0;
+    size_t                     m_neighbors       = 0;
 
-    dbscan_data_t       m_type            = dbscan_data_t::POINTS;
+    dbscan_data_t              m_type            = dbscan_data_t::POINTS;
 
-    container::kdtree   m_kdtree          = container::kdtree();
+    container::kdtree_balanced m_kdtree = container::kdtree_balanced();
 
 public:
     /*!

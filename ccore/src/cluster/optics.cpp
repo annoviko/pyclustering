@@ -29,6 +29,8 @@
 #include <map>
 #include <string>
 
+#include <pyclustering/container/kdtree_searcher.hpp>
+
 
 namespace pyclustering {
 
@@ -287,11 +289,12 @@ void optics::calculate_ordering() {
 
 
 void optics::create_kdtree() {
-    m_kdtree = container::kdtree();
-
+    std::vector<void *> payload(m_data_ptr->size());
     for (std::size_t index = 0; index < m_data_ptr->size(); index++) {
-        m_kdtree.insert((*m_data_ptr)[index], (void *) index);
+        payload[index] = (void *)index;
     }
+
+    m_kdtree = container::kdtree_balanced(*m_data_ptr, payload);
 }
 
 
