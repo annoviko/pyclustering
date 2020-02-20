@@ -48,7 +48,7 @@ kdtree_balanced::kdtree_balanced(const dataset & p_data, const std::vector<void 
 }
 
 
-kdnode::ptr kdtree_balanced::create_tree(std::vector<kdnode::ptr>::iterator & p_begin, std::vector<kdnode::ptr>::iterator & p_end, const kdnode::ptr & p_parent, const std::size_t p_depth) {
+kdnode::ptr kdtree_balanced::create_tree(std::vector<kdnode::ptr>::iterator p_begin, std::vector<kdnode::ptr>::iterator p_end, const kdnode::ptr & p_parent, const std::size_t p_depth) {
     const int length = static_cast<int>(std::distance(p_begin, p_end));
     if (length == 0) {
         return nullptr;

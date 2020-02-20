@@ -164,8 +164,8 @@ protected:
 
     */
     kdnode::ptr create_tree(
-        std::vector<kdnode::ptr>::iterator & p_begin, 
-        std::vector<kdnode::ptr>::iterator & p_end,
+        std::vector<kdnode::ptr>::iterator p_begin, 
+        std::vector<kdnode::ptr>::iterator p_end,
         const kdnode::ptr & p_parent, const std::size_t p_depth);
 
 public:
