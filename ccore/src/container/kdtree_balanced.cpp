@@ -22,8 +22,12 @@
 */
 
 #include <pyclustering/container/kdtree_balanced.hpp>
+#include <pyclustering/utils/algorithm.hpp>
 
 #include <algorithm>
+
+
+using namespace pyclustering::utils::algorithm;
 
 
 namespace pyclustering {
@@ -31,7 +35,7 @@ namespace pyclustering {
 namespace container {
 
 
-kdtree_balanced::kdtree_balanced(const dataset & p_data, const std::vector<void *> p_payloads) {
+kdtree_balanced::kdtree_balanced(const dataset & p_data, const std::vector<void *> & p_payloads) {
     if (p_data.empty()) { return; }
 
     std::vector<kdnode::ptr> nodes(p_data.size());
@@ -55,19 +59,17 @@ kdnode::ptr kdtree_balanced::create_tree(std::vector<kdnode::ptr>::iterator p_be
     }
 
     const std::size_t discriminator = p_depth % m_dimension;
-    int median = length / 2;
+    const int median = length / 2;
 
     std::sort(p_begin, p_end, [discriminator](const kdnode::ptr & p1, const kdnode::ptr & p2) {
         return p1->get_data()[discriminator] < p2->get_data()[discriminator];
     });
 
-   // TODO: optimize by binary search - no need to use O(n) search algorithm
-    auto median_iter = p_begin + median;
-    while ((median - 1 >= 0) && 
-        ((*(median_iter - 1))->get_data()[discriminator] == (*median_iter)->get_data()[discriminator])) {
-        median_iter--;
-        median--;
-    }
+    auto median_iter = find_left_element(p_begin, p_begin + median + 1, 
+        [discriminator](const kdnode::ptr & p1, const kdnode::ptr & p2) {
+            return p1->get_data()[discriminator] < p2->get_data()[discriminator];
+        }
+    );
 
     kdnode::ptr new_node = *median_iter;
     new_node->set_parent(p_parent);

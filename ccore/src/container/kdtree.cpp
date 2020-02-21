@@ -32,7 +32,7 @@ namespace pyclustering {
 namespace container {
 
 
-kdtree::kdtree(const dataset & p_data, const std::vector<void *> p_payloads) :
+kdtree::kdtree(const dataset & p_data, const std::vector<void *> & p_payloads) :
     kdtree_balanced(p_data, p_payloads)
 { }
 

@@ -289,7 +289,7 @@ TEST_F(utest_kdtree, insert_remove_node) {
         }
     }
 
-    ASSERT_EQ(tree.get_size(), 0);
+    ASSERT_EQ(tree.get_size(), static_cast<std::size_t>(0));
 }
 
 

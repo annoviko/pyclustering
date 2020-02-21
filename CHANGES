@@ -5,10 +5,22 @@ CHANGE NOTES FOR 0.10.0 (STARTED Jan 24, 2020), (RELEASED: Dev -)
 ------------------------------------------------------------------------
 
 GENERAL CHANGES:
-- Implemented KD-tree graphical visualizer `kdtree_visualizer` for KD-trees with 2-dimensional data (pyclustering.container.kdtree).
+- Optimization of CURE algorithm using balanced KD-tree (Python: `pyclustering.cluster.cure`; C++: `pyclustering::clst::cure`).
+  See: https://github.com/annoviko/pyclustering/issues/589
+
+- Optimization of OPTICS algorithm using balanced KD-tree (Python: `pyclustering.cluster.optics`; C++: `pyclustering::clst::optics`).
+  See: https://github.com/annoviko/pyclustering/issues/588
+
+- Optimization of DBSCAN algorithm using balanced KD-tree (Python: `pyclustering.cluster.dbscan`; C++: `pyclustering::clst::dbscan`).
+  See: https://github.com/annoviko/pyclustering/issues/587
+
+- Implemented new optimized balanced KD-tree `kdtree_balanced` (Python: `pyclustering.cluster.kdtree`; C++: `pyclustering::container::kdtree_balanced`).
+  See: https://github.com/annoviko/pyclustering/issues/379
+
+- Implemented KD-tree graphical visualizer `kdtree_visualizer` for KD-trees with 2-dimensional data (Python: `pyclustering.container.kdtree`).
   See: https://github.com/annoviko/pyclustering/issues/586
 
-- Updated interface of each clustering algorithm in C/C++ pyclustering `cluster_data` is substituted by concrete classes (ccore.clst).
+- Updated interface of each clustering algorithm in C/C++ pyclustering `cluster_data` is substituted by concrete classes (C++ `pyclustering::clst`).
   See: https://github.com/annoviko/pyclustering/issues/577
 
 

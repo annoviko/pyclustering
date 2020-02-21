@@ -48,13 +48,60 @@ namespace container {
 
 There is an example how to create KD-tree:
 @code
-    TODO:
+    #include <vector>
+    #include <iostream>
+
+    #include <pyclustering/container/kdtree_balanced.hpp>
+    #include <pyclustering/container/kdtree_searcher.hpp>
+
+    using namespace pyclustering;
+    using namespace pyclustering::container;
+
+    int main() {
+        // Points that should be stored in KD-tree.
+        dataset coord = { { 30, 59 },{ 5, 51 },{ 4, 52 },{ 12, 41 },{ 12, 45 } };
+
+        // Lets create payload that is associated with each point.
+        std::vector<void *> payload = { "St-Petersburg", "Eindhoven", "Amsterdam", "Rome", "Venice" };
+
+        // Create balanced KD-tree.
+        kdtree_balanced tree(coord, payload);
+
+        // Check each city in the tree.
+        for (const auto & p : coord) {
+            auto node = tree.find_node(p);
+            std::cout << p[0] << ", " << p[1] << ": "
+                << (char *)node->get_payload() << std::endl;
+        }
+
+        // Find closest cities to Eindhoven in distance 10.
+        kdtree_searcher searcher({ 5, 51 }, tree.get_root(), 10);
+
+        std::cout << "The closest city to Eindhoven is "
+            << (char *)searcher.find_nearest_node()->get_payload() << std::endl;
+
+        // Cities to which from Eidhoven less than 10.
+        std::vector<double> distances;
+        std::vector<kdnode::ptr> nodes;
+
+        searcher.find_nearest_nodes(distances, nodes);
+
+        std::cout << "Cities to which distance is less or equal to 10:" << std::endl;
+        for (std::size_t i = 0; i < nodes.size(); i++) {
+            std::cout << distances[i] << ": "
+                << (char *)nodes[i]->get_payload() << std::endl;
+        }
+
+        return 0;
+    }
 @endcode
 
 There is an illustration of balanced KD-tree above that has been done by python version of pyclustering library.
 @image html kd_tree_balanced_lsun.png "Fig. 1. Balanced KD-tree for sample 'Lsun'."
 
 Implementation based on paper @cite book::the_design_and_analysis.
+
+@see kdtree
 
 */
 class kdtree_balanced {
@@ -81,7 +128,7 @@ public:
     @param[in] p_payloads: payload for each point in `p_data`.
 
     */
-    kdtree_balanced(const dataset & p_data, const std::vector<void *> p_payloads = { });
+    kdtree_balanced(const dataset & p_data, const std::vector<void *> & p_payloads = { });
 
     /*!
 

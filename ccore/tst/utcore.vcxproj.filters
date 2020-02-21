@@ -515,6 +515,9 @@
     <ClCompile Include="..\src\container\kdtree_balanced.cpp">
       <Filter>Tested Code\container</Filter>
     </ClCompile>
+    <ClCompile Include="utest-utils-algorithm.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="samples.hpp">

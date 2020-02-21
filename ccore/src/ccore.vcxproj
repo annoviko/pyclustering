@@ -227,6 +227,7 @@
     <ClInclude Include="..\include\pyclustering\parallel\task.hpp" />
     <ClInclude Include="..\include\pyclustering\parallel\thread_executor.hpp" />
     <ClInclude Include="..\include\pyclustering\parallel\thread_pool.hpp" />
+    <ClInclude Include="..\include\pyclustering\utils\algorithm.hpp" />
     <ClInclude Include="..\include\pyclustering\utils\linalg.hpp" />
     <ClInclude Include="..\include\pyclustering\utils\math.hpp" />
     <ClInclude Include="..\include\pyclustering\utils\metric.hpp" />

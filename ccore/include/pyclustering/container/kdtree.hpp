@@ -71,7 +71,7 @@ private:
 public:
     kdtree() = default;
 
-    kdtree(const dataset & p_data, const std::vector<void *> p_payloads = {});
+    kdtree(const dataset & p_data, const std::vector<void *> & p_payloads = {});
 
     kdtree(const kdtree & p_other) = default;
 
