@@ -34,7 +34,7 @@ except Exception as error_instance:
     warnings.warn("Impossible to import matplotlib (please, install 'matplotlib'), pyclustering's visualization "
                   "functionality is not available (details: '%s')." % str(error_instance))
 
-from pyclustering.utils import euclidean_distance_square
+from pyclustering.utils import euclidean_distance_square, find_left_element
 
 
 class kdtree_visualizer:
@@ -357,9 +357,10 @@ class kdtree_balanced:
         # Elements could be the same around the median, but all elements that are >= to the current should
         # be at the right side.
         # TODO: optimize by binary search - no need to use O(n)
-        while median - 1 >= 0 and \
-                nodes[median].data[discriminator] == nodes[median - 1].data[discriminator]:
-            median -= 1
+        median = find_left_element(nodes, median, lambda n1, n2: n1.data[discriminator] < n2.data[discriminator])
+        # while median - 1 >= 0 and \
+        #         nodes[median].data[discriminator] == nodes[median - 1].data[discriminator]:
+        #     median -= 1
 
         new_node = nodes[median]
         new_node.disc = discriminator

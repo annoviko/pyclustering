@@ -1083,72 +1083,107 @@ def draw_image_mask_segments(source, clusters, hide_axes = True):
     @param[in] hide_axes (bool): If True then axes will not be displayed.
     
     """
-    if (len(clusters) == 0):
+    if len(clusters) == 0:
         print("Warning: Nothing to draw - list of clusters is empty.")
-        return;
+        return
         
-    image_source = Image.open(source);
-    image_size = image_source.size;
+    image_source = Image.open(source)
+    image_size = image_source.size
     
     # Calculate edge for confortable representation.
-    number_clusters = len(clusters) + 1; # show with the source image
+    number_clusters = len(clusters) + 1  # show with the source image
     
-    number_cols = int(numpy.ceil(number_clusters ** 0.5));
-    number_rows = int(numpy.ceil(number_clusters / number_cols));
-    
+    number_cols = int(numpy.ceil(number_clusters ** 0.5))
+    number_rows = int(numpy.ceil(number_clusters / number_cols))
 
-    real_index = 0, 0;
-    double_indexer = True;
-    if ( (number_cols == 1) or (number_rows == 1) ):
-        real_index = 0;
-        double_indexer = False;
+    real_index = 0, 0
+    double_indexer = True
+    if (number_cols == 1) or (number_rows == 1):
+        real_index = 0
+        double_indexer = False
     
-    (fig, axarr) = plt.subplots(number_rows, number_cols);
-    plt.setp([ax for ax in axarr], visible = False);
+    (fig, axarr) = plt.subplots(number_rows, number_cols)
+    plt.setp([ax for ax in axarr], visible=False)
     
-    axarr[real_index].imshow(image_source, interpolation = 'none');
-    plt.setp(axarr[real_index], visible = True);
+    axarr[real_index].imshow(image_source, interpolation='none')
+    plt.setp(axarr[real_index], visible=True)
     
-    if (hide_axes is True):
-        axarr[real_index].xaxis.set_ticklabels([]);
-        axarr[real_index].yaxis.set_ticklabels([]);
-        axarr[real_index].xaxis.set_ticks_position('none');
-        axarr[real_index].yaxis.set_ticks_position('none');
+    if hide_axes is True:
+        axarr[real_index].xaxis.set_ticklabels([])
+        axarr[real_index].yaxis.set_ticklabels([])
+        axarr[real_index].xaxis.set_ticks_position('none')
+        axarr[real_index].yaxis.set_ticks_position('none')
             
-    if (double_indexer is True):
-        real_index = 0, 1;
+    if double_indexer is True:
+        real_index = 0, 1
     else:
-        real_index += 1;
+        real_index += 1
     
     for cluster in clusters:
-        stage_cluster = [(255, 255, 255)] * (image_size[0] * image_size[1]);
+        stage_cluster = [(255, 255, 255)] * (image_size[0] * image_size[1])
         for index in cluster:
-            stage_cluster[index] = (0, 0, 0);
+            stage_cluster[index] = (0, 0, 0)
           
-        stage = array(stage_cluster, numpy.uint8);
-        stage = numpy.reshape(stage, (image_size[1], image_size[0]) + ((3),)); # ((3),) it's size of RGB - third dimension.
+        stage = array(stage_cluster, numpy.uint8)
+        stage = numpy.reshape(stage, (image_size[1], image_size[0]) + ((3),)) # ((3),) it's size of RGB - 3rd dimension.
         
-        image_cluster = Image.fromarray(stage, 'RGB');
+        image_cluster = Image.fromarray(stage, 'RGB')
         
-        axarr[real_index].imshow(image_cluster, interpolation = 'none');
-        plt.setp(axarr[real_index], visible = True);
+        axarr[real_index].imshow(image_cluster, interpolation = 'none')
+        plt.setp(axarr[real_index], visible = True)
         
-        if (hide_axes is True):
-            axarr[real_index].xaxis.set_ticklabels([]);
-            axarr[real_index].yaxis.set_ticklabels([]);
+        if hide_axes is True:
+            axarr[real_index].xaxis.set_ticklabels([])
+            axarr[real_index].yaxis.set_ticklabels([])
             
-            axarr[real_index].xaxis.set_ticks_position('none');
-            axarr[real_index].yaxis.set_ticks_position('none');
+            axarr[real_index].xaxis.set_ticks_position('none')
+            axarr[real_index].yaxis.set_ticks_position('none')
         
-        if (double_indexer is True):
-            real_index = real_index[0], real_index[1] + 1;
-            if (real_index[1] >= number_cols):
-                real_index = real_index[0] + 1, 0; 
+        if double_indexer is True:
+            real_index = real_index[0], real_index[1] + 1
+            if real_index[1] >= number_cols:
+                real_index = real_index[0] + 1, 0
         else:
-            real_index += 1;
+            real_index += 1
 
-            
-    plt.show();
+    plt.show()
+
+
+def find_left_element(sorted_data, right, comparator):
+    """!
+    @brief Returns the element's index at the left side from the right border with the same value as the
+            last element in the range `sorted_data`.
+
+    @details The element at the right is considered as target to search. `sorted_data` must
+              be sorted collection. The complexity of the algorithm is `O(log(n))`. The
+              algorithm is based on the binary search algorithm.
+
+    @param[in] sorted_data: input data to find the element.
+    @param[in] right: the index of the right element from that search is started.
+    @param[in] comparator: comparison function object which returns `True` if the first argument
+                is less than the second.
+
+    @return The element's index at the left side from the right border with the same value as the
+             last element in the range `sorted_data`.
+
+    """
+    if len(sorted_data) == 0:
+        raise ValueError("Input data is empty.")
+
+    left = 0
+    middle = (right - left) // 2
+    target = sorted_data[right]
+
+    while left < right:
+        if comparator(sorted_data[middle], target):
+            left = middle + 1
+        else:
+            right = middle
+
+        offset = (right - left) // 2
+        middle = left + offset
+
+    return left
 
 
 def linear_sum(list_vector):
@@ -1169,7 +1204,7 @@ def linear_sum(list_vector):
         linear_sum = [0] * dimension
         
     for index_element in range(0, len(list_vector)):
-        if (list_representation is True):
+        if list_representation is True:
             for index_dimension in range(0, dimension):
                 linear_sum[index_dimension] += list_vector[index_element][index_dimension]
         else:
@@ -1211,7 +1246,7 @@ def list_math_subtraction(a, b):
     @return (list) Results of subtraction of two lists.
     
     """
-    return [a[i] - b[i] for i in range(len(a))];
+    return [a[i] - b[i] for i in range(len(a))]
 
 
 def list_math_substraction_number(a, b):
@@ -1225,7 +1260,7 @@ def list_math_substraction_number(a, b):
     @return (list) Results of subtraction between list and number.
     
     """        
-    return [a[i] - b for i in range(len(a))];  
+    return [a[i] - b for i in range(len(a))]
 
 
 def list_math_addition(a, b):
@@ -1239,7 +1274,7 @@ def list_math_addition(a, b):
     @return (list) Results of addtion of two lists.
     
     """    
-    return [a[i] + b[i] for i in range(len(a))];
+    return [a[i] + b[i] for i in range(len(a))]
 
 
 def list_math_addition_number(a, b):
@@ -1253,7 +1288,7 @@ def list_math_addition_number(a, b):
     @return (list) Result of addtion of two lists.
     
     """    
-    return [a[i] + b for i in range(len(a))];
+    return [a[i] + b for i in range(len(a))]
 
 
 def list_math_division_number(a, b):
@@ -1267,7 +1302,7 @@ def list_math_division_number(a, b):
     @return (list) Result of division between list and number.
     
     """    
-    return [a[i] / b for i in range(len(a))];
+    return [a[i] / b for i in range(len(a))]
 
 
 def list_math_division(a, b):
@@ -1281,7 +1316,7 @@ def list_math_division(a, b):
     @return (list) Result of division of two lists.
     
     """    
-    return [a[i] / b[i] for i in range(len(a))];
+    return [a[i] / b[i] for i in range(len(a))]
 
 
 def list_math_multiplication_number(a, b):
@@ -1295,7 +1330,7 @@ def list_math_multiplication_number(a, b):
     @return (list) Result of division between list and number.
     
     """    
-    return [a[i] * b for i in range(len(a))];
+    return [a[i] * b for i in range(len(a))]
 
 
 def list_math_multiplication(a, b):
@@ -1309,4 +1344,4 @@ def list_math_multiplication(a, b):
     @return (list) Result of multiplication of elements in two lists.
     
     """        
-    return [a[i] * b[i] for i in range(len(a))];
+    return [a[i] * b[i] for i in range(len(a))]
