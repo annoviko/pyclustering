@@ -30,11 +30,11 @@ namespace utils {
 namespace math {
 
 
-/**
- *
- * @brief   Mathematical constant pi.
- *
- */
+/*!
+
+@brief   Mathematical constant pi.
+
+*/
 const double pi = 3.14159265358979323846;
 
 

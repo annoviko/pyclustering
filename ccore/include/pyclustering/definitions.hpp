@@ -47,17 +47,58 @@
 namespace pyclustering {
 
 
+/*!
+
+@brief   Defines a patten that consists of features that describe this pattern.
+
+*/
 using pattern           = std::vector<double>;
+
+/*!
+
+@brief   Defines shared pointer to pattern container.
+
+*/
 using pattern_ptr       = std::shared_ptr<pattern>;
 
+/*!
+
+@brief   Defines point that represents a container with coordinates.
+
+*/
 using point             = std::vector<double>;
+
+/*!
+
+@brief   Defines shared pointer to point container.
+
+*/
 using point_ptr         = std::shared_ptr<point>;
 
+/*!
+
+@brief   Defines dataset that represents a container with points.
+
+*/
 using dataset           = std::vector<point>;
+
+/*!
+
+@brief   Defines shared pointer to dataset container.
+
+*/
 using dataset_ptr       = std::shared_ptr<dataset>;
 
 
+/*!
 
+@brief   Converts an input scalar value to string representation.
+
+@param[in] p_value: scalar value that should be represented by string.
+
+@return  String representation of a scalar value.
+
+*/
 template<typename Type, 
     typename std::enable_if<
         std::is_scalar<Type>::value
@@ -68,6 +109,15 @@ std::string to_string(const Type & p_value) {
 }
 
 
+/*!
+
+@brief   Converts a container to string representation.
+
+@param[in] p_container: container that should be represented by string.
+
+@return  String representation of a container.
+
+*/
 template<typename TypeContainer, 
     typename std::enable_if<
         std::is_same<TypeContainer,

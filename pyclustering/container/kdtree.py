@@ -197,10 +197,10 @@ class node:
 
         @param[in] data (list): Data point that is presented as list of coordinates.
         @param[in] payload (any): Payload of node (pointer to essence that is attached to this node).
-        @param[in] left (node): Node of KD-Tree that is represented left successor.
-        @param[in] right (node): Node of KD-Tree that is represented right successor.
+        @param[in] left (node): Node of KD-Tree that represents left successor.
+        @param[in] right (node): Node of KD-Tree that represents right successor.
         @param[in] disc (uint): Index of dimension of that node.
-        @param[in] parent (node): Node of KD-Tree that is represented parent.
+        @param[in] parent (node): Node of KD-Tree that represents parent.
 
         """
 
