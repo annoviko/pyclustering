@@ -606,6 +606,7 @@ class kmeans:
                 changes = self.__metric(self.__centers, updated_centers)
             else:
                 changes = [self.__metric(center, updated_center) for center, updated_center in zip(self.__centers, updated_centers)]
+
             maximum_change = numpy.max(changes)
 
         return maximum_change

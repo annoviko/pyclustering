@@ -26,6 +26,9 @@ GENERAL CHANGES:
 
 CORRECTED MAJOR BUGS:
 
+- Bug with incorrect converting Index List and Object List to Labeling when clusters do not contains one or more points from an input data (Python `pyclustering.cluster.encoder`).
+  See: https://github.com/annoviko/pyclustering/issues/596
+
 - Bug with an exception in case of using user-defined metric for K-Means algorithm (Python `pyclustering.cluster.kmeans`).
   See: https://github.com/annoviko/pyclustering/pull/600
 
