@@ -25,6 +25,7 @@
 
 
 import unittest
+import numpy
 
 import matplotlib
 matplotlib.use('Agg')
@@ -36,6 +37,7 @@ from pyclustering.samples.definitions import SIMPLE_SAMPLES
 
 from pyclustering.core.tests import remove_library
 
+from pyclustering.utils import read_sample
 from pyclustering.utils.metric import distance_metric, type_metric
 
 
@@ -74,6 +76,12 @@ class KmeansIntegrationTest(unittest.TestCase):
         metric = distance_metric(type_metric.USER_DEFINED, func=distance_metric(type_metric.EUCLIDEAN))
         KmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], True, metric=metric)
 
+    def testClusterAllocationSampleSimple1UserDefinedNumPyByCore(self):
+        data = numpy.array(read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1))
+        centers = numpy.array([[3.7, 5.5], [6.7, 7.5]])
+        metric = distance_metric(type_metric.USER_DEFINED, func=distance_metric(type_metric.EUCLIDEAN))
+        KmeansTestTemplates.templateLengthProcessData(data, centers, [5, 5], True, metric=metric)
+
     def testClusterAllocationSampleSimple1Canberra(self):
         metric = distance_metric(type_metric.CANBERRA)
         KmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], True, metric=metric)
@@ -87,6 +95,16 @@ class KmeansIntegrationTest(unittest.TestCase):
 
     def testClusterOneAllocationSampleSimple2ByCore(self):
         KmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [[0.5, 0.2]], [23], True)
+
+    def testClusterAllocationSampleSimple2UserDefinedByCore(self):
+        metric = distance_metric(type_metric.USER_DEFINED, func=distance_metric(type_metric.EUCLIDEAN))
+        KmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [[3.5, 4.8], [6.9, 7], [7.5, 0.5]], [10, 5, 8], True, metric=metric)
+
+    def testClusterAllocationSampleSimple2UserDefinedNumPyByCore(self):
+        data = numpy.array(read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE2))
+        centers = numpy.array([[3.5, 4.8], [6.9, 7], [7.5, 0.5]])
+        metric = distance_metric(type_metric.USER_DEFINED, func=distance_metric(type_metric.EUCLIDEAN))
+        KmeansTestTemplates.templateLengthProcessData(data, centers, [10, 5, 8], True, metric=metric)
 
     def testClusterAllocationSampleSimple3ByCore(self):
         KmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [[0.2, 0.1], [4.0, 1.0], [2.0, 2.0], [2.3, 3.9]], [10, 10, 10, 30], True)

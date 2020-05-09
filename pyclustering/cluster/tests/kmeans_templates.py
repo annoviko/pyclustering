@@ -39,8 +39,11 @@ import numpy
 
 class KmeansTestTemplates:
     @staticmethod
-    def templateLengthProcessData(path_to_file, start_centers, expected_cluster_length, ccore, **kwargs):
-        sample = read_sample(path_to_file)
+    def templateLengthProcessData(data, start_centers, expected_cluster_length, ccore, **kwargs):
+        if isinstance(data, str):
+            sample = read_sample(data)
+        else:
+            sample = data
 
         metric = kwargs.get('metric', distance_metric(type_metric.EUCLIDEAN_SQUARE))
         itermax = kwargs.get('itermax', 200)

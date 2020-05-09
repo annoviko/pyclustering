@@ -28,36 +28,40 @@ $env:RESULT_FAILURE = "Failure";
 
 
 function build_ccore_library($platform_version) {
-    Write-Host "[CI Job] Building CCORE library for WINDOWS platform ($platform_version)." -ForegroundColor Green;
+    Write-Host "[CI] Build C++ pyclustering library for Windows platform ($platform_version)." -ForegroundColor Green;
 
     msbuild ccore\ccore.sln /t:ccore:Rebuild /p:configuration=Release /p:platform=$platform_version;
 
     if ($LastExitCode -ne 0) {
-        Write-Error -Message "Building CCORE library for WINDOWS platform ($platform_version): FAILURE." -Category InvalidResult;
+        Write-Error -Message "[CI] Build process for C++ pyclustering library for Windows ($platform_version) is failed." -Category InvalidResult;
         $env:TESTING_RESULT = $env:RESULT_FAILURE;
         Exit 1;
     }
 
-    Write-Host "[CI Job] Building CCORE library for WINDOWS platform ($platform_version): SUCCESS." -ForegroundColor Green;
+    Write-Host "[CI] C++ pyclustering library for WINDOWS platform ($platform_version) is successfully built." -ForegroundColor Green;
 }
 
 
 
 function job_build_windows_ccore($platform_version) {
-    Write-Host "[CI Job] CCORE building using Visual Studio on Windows platform." -ForegroundColor Green;
+    Write-Host "[CI] Build C++ pyclustering library." -ForegroundColor Green;
 
     build_ccore_library x86;
     build_ccore_library x64;
 
+    Write-Host "[CI] C++ pyclustering library is successfully built for Windows." -ForegroundColor Green;
+
     if ($env:APPVEYOR_PULL_REQUEST_NUMBER) {
-        Write-Host -Message "[CI Job] Builds uploading is disabled for Pull Requests." -ForegroundColor Green;
-        Exit 1;
+        Write-Host -Message "[CI] Binaries are not uploaded in case of Pull Requests." -ForegroundColor Green;
+        Exit 0;
     }
+
+    Write-Host "[CI] Upload C++ pyclustering library binaries to the cloud." -ForegroundColor Green;
 
     upload_binary 32-bit $env:CCORE_32BIT_BINARY_PATH;
     upload_binary 64-bit $env:CCORE_64BIT_BINARY_PATH;
 
-    Write-Host "Building CCORE library for WINDOWS platform: SUCCESS." -ForegroundColor Green;
+    Write-Host "[CI] Binaries are sucessfully uploaded." -ForegroundColor Green;
 }
 
 

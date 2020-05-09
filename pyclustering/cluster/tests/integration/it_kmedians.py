@@ -25,6 +25,7 @@
 
 
 import unittest
+import numpy
 
 import matplotlib
 matplotlib.use('Agg')
@@ -36,6 +37,7 @@ from pyclustering.samples.definitions import SIMPLE_SAMPLES
 
 from pyclustering.core.tests import remove_library
 
+from pyclustering.utils import read_sample
 from pyclustering.utils.metric import type_metric, distance_metric
 
 
@@ -87,6 +89,18 @@ class KmediansIntegrationTest(unittest.TestCase):
 
     def testClusterOneAllocationSampleSimple5Core(self):
         KmediansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [[0.0, 0.0]], [60], True)
+
+    def testClusterAllocationSample1NumpyArrayUserDefined(self):
+        metric = distance_metric(type_metric.USER_DEFINED, func=distance_metric(type_metric.EUCLIDEAN))
+        input_data = numpy.array(read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1))
+        initial_centers = numpy.array([[3.7, 5.5], [6.7, 7.5]])
+        KmediansTestTemplates.templateLengthProcessData(input_data, initial_centers, [5, 5], True, metric=metric)
+
+    def testClusterAllocationSample2NumpyArrayUserDefined(self):
+        metric = distance_metric(type_metric.USER_DEFINED, func=distance_metric(type_metric.EUCLIDEAN_SQUARE))
+        input_data = numpy.array(read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE2))
+        initial_centers = numpy.array([[3.5, 4.8], [6.9, 7], [7.5, 0.5]])
+        KmediansTestTemplates.templateLengthProcessData(input_data, initial_centers, [10, 5, 8], True, metric=metric)
 
     def testClusterAllocationSample1WrongInitialNumberCenters1Core(self):
         KmediansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[2.8, 9.5], [3.5, 6.6], [1.3, 4.0]], None, True)

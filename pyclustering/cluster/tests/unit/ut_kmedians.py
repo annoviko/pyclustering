@@ -25,7 +25,7 @@
 
 
 import unittest
-import random
+import numpy
 
 # Generate images without having a window appear.
 import matplotlib
@@ -37,6 +37,7 @@ from pyclustering.cluster.kmedians import kmedians
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES
 
+from pyclustering.utils import read_sample
 from pyclustering.utils.metric import type_metric, distance_metric
 
 
@@ -67,6 +68,18 @@ class KmediansUnitTest(unittest.TestCase):
     def testClusterAllocationSampleSimple1UserDefined(self):
         metric = distance_metric(type_metric.USER_DEFINED, func=distance_metric(type_metric.EUCLIDEAN))
         KmediansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], False, metric=metric)
+
+    def testClusterAllocationSample1NumpyArrayUserDefined(self):
+        metric = distance_metric(type_metric.USER_DEFINED, func=distance_metric(type_metric.EUCLIDEAN))
+        input_data = numpy.array(read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1))
+        initial_centers = numpy.array([[3.7, 5.5], [6.7, 7.5]])
+        KmediansTestTemplates.templateLengthProcessData(input_data, initial_centers, [5, 5], False, metric=metric)
+
+    def testClusterAllocationSample2NumpyArrayUserDefined(self):
+        metric = distance_metric(type_metric.USER_DEFINED, func=distance_metric(type_metric.EUCLIDEAN_SQUARE))
+        input_data = numpy.array(read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE2))
+        initial_centers = numpy.array([[3.5, 4.8], [6.9, 7], [7.5, 0.5]])
+        KmediansTestTemplates.templateLengthProcessData(input_data, initial_centers, [10, 5, 8], False, metric=metric)
 
     def testClusterOneAllocationSampleSimple1(self):
         KmediansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[1.0, 2.5]], [10], False)
