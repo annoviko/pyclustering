@@ -602,7 +602,10 @@ class kmeans:
             maximum_change = float('inf')
 
         else:
-            changes = self.__metric(self.__centers, updated_centers)
+            if self.__metric.get_type() != type_metric.USER_DEFINED:
+                changes = self.__metric(self.__centers, updated_centers)
+            else:
+                changes = [self.__metric(center, updated_center) for center, updated_center in zip(self.__centers, updated_centers)]
             maximum_change = numpy.max(changes)
 
         return maximum_change
