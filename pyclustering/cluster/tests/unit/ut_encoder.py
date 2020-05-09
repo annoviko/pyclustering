@@ -240,7 +240,7 @@ class Test(unittest.TestCase):
                 self.assertEqual(expected[i], actual[i])
 
     def testObjectListToLabelsMissedPoint(self):
-        clusters = [[[5.1, 5.2], [5.2, 5.1]], [[8.1, 8.0], [8.4, 8.2]]]    # the last point is missed
+        clusters = [[[5.1, 5.2], [5.2, 5.1]], [[8.1, 8.0], [8.4, 8.2]]]
         data = [[5.1, 5.2], [5.2, 5.1], [14.1, 76.0], [8.1, 8.0], [8.4, 8.2]]
 
         encoder = cluster_encoder(type_encoding.CLUSTER_OBJECT_LIST_SEPARATION, clusters, data)
@@ -256,3 +256,23 @@ class Test(unittest.TestCase):
                 self.assertTrue(math.isnan(actual[i]))
             else:
                 self.assertEqual(expected[i], actual[i])
+
+    def testLabelsToIndexListAndObjectListMissedPoint(self):
+        clusters = [0, 0, float('NaN'), 1, 1]
+        data = [[5.1, 5.2], [5.2, 5.1], [14.1, 76.0], [8.1, 8.0], [8.4, 8.2]]
+
+        encoder = cluster_encoder(type_encoding.CLUSTER_INDEX_LABELING, clusters, data)
+        encoder.set_encoding(type_encoding.CLUSTER_INDEX_LIST_SEPARATION)
+        expected = [[0, 1], [3, 4]]
+        actual = encoder.get_clusters()
+
+        self.assertEqual(len(expected), len(actual))
+        self.assertEqual(expected, actual)
+
+        encoder = cluster_encoder(type_encoding.CLUSTER_INDEX_LABELING, clusters, data)
+        encoder.set_encoding(type_encoding.CLUSTER_OBJECT_LIST_SEPARATION)
+        expected = [[[5.1, 5.2], [5.2, 5.1]], [[8.1, 8.0], [8.4, 8.2]]]
+        actual = encoder.get_clusters()
+
+        self.assertEqual(len(expected), len(actual))
+        self.assertEqual(expected, actual)

@@ -23,6 +23,7 @@
 
 """
 
+import math
 
 from enum import IntEnum
 
@@ -226,7 +227,6 @@ class cluster_encoder:
         
         for cluster in self.__clusters:
             for data_object in cluster:
-                index_object = -1
                 hashable_data_object = str(data_object)
                 if hashable_data_object in positions:
                     index_object = self.__data.index(data_object, positions[hashable_data_object] + 1)
@@ -243,12 +243,11 @@ class cluster_encoder:
 
     def __convert_object_to_index(self):
         positions = dict()
-        clusters = [ [] for _ in range(len(self.__clusters)) ]
+        clusters = [[] for _ in range(len(self.__clusters))]
         for index_cluster in range(len(self.__clusters)):
             for data_object in self.__clusters[index_cluster]:
-                index_object = -1
                 hashable_data_object = str(data_object)
-                if (hashable_data_object in positions):
+                if hashable_data_object in positions:
                     index_object = self.__data.index(data_object, positions[hashable_data_object] + 1)
                 else:
                     index_object = self.__data.index(data_object)
@@ -260,20 +259,22 @@ class cluster_encoder:
 
 
     def __convert_label_to_index(self):
-        clusters = [ [] for _ in range(max(self.__clusters) + 1) ]
+        clusters = [[] for _ in range(max(self.__clusters) + 1)]
         
         for index_object in range(len(self.__data)):
             index_cluster = self.__clusters[index_object]
-            clusters[index_cluster].append(index_object)
+            if not math.isnan(index_cluster):
+                clusters[index_cluster].append(index_object)
         
         return clusters
-    
-    
+
+
     def __convert_label_to_object(self):
-        clusters = [ [] for _ in range(max(self.__clusters) + 1) ]
+        clusters = [[] for _ in range(max(self.__clusters) + 1)]
         
         for index_object in range(len(self.__data)):
             index_cluster = self.__clusters[index_object]
-            clusters[index_cluster].append(self.__data[index_object])
+            if not math.isnan(index_cluster):
+                clusters[index_cluster].append(self.__data[index_object])
         
         return clusters
