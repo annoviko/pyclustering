@@ -25,6 +25,7 @@
 
 
 import unittest
+import math
 import numpy
 
 # Generate images without having a window appear.
@@ -92,10 +93,20 @@ class KmeansUnitTest(unittest.TestCase):
         metric = distance_metric(type_metric.USER_DEFINED, func=distance_metric(type_metric.EUCLIDEAN))
         KmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], False, metric=metric)
 
-    def testClusterAllocationSampleSimple1UserDefinedNumPy(self):
+    def testClusterAllocationSampleSimple1UserDefined1NumPy(self):
         data = numpy.array(read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1))
         centers = numpy.array([[3.7, 5.5], [6.7, 7.5]])
         metric = distance_metric(type_metric.USER_DEFINED, func=distance_metric(type_metric.EUCLIDEAN))
+        KmeansTestTemplates.templateLengthProcessData(data, centers, [5, 5], False, metric=metric)
+
+    def testClusterAllocationSampleSimple1UserDefined2NumPy(self):
+        data = numpy.array(read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1))
+        centers = numpy.array([[3.7, 5.5], [6.7, 7.5]])
+
+        def simple_2d_euclidean_distance(point_a, point_b):
+            return math.sqrt((point_a[0] - point_b[0]) ** 2 + (point_a[1] - point_b[1]) ** 2)
+
+        metric = distance_metric(type_metric.USER_DEFINED, func=simple_2d_euclidean_distance)
         KmeansTestTemplates.templateLengthProcessData(data, centers, [5, 5], False, metric=metric)
 
     def testClusterAllocationSampleSimple1Canberra(self):

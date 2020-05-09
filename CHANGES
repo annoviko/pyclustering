@@ -26,7 +26,10 @@ GENERAL CHANGES:
 
 CORRECTED MAJOR BUGS:
 
-- Memory leakage in the interface between python and C++ pyclustering library in case of CURE algorithm usage (ccore).
+- Bug with an exception in case of using user-defined metric for K-Means algorithm (Python `pyclustering.cluster.kmeans`).
+  See: https://github.com/annoviko/pyclustering/pull/600
+
+- Memory leakage in the interface between python and C++ pyclustering library in case of CURE algorithm usage (C++ `pyclustering`).
   See: https://github.com/annoviko/pyclustering/issues/581
 
 
