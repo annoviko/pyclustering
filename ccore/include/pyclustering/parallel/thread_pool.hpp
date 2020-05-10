@@ -1,23 +1,24 @@
-/**
-*
-* @authors Andrei Novikov (pyclustering@yandex.ru)
-* @date 2014-2020
-* @copyright GNU Public License
-*
-* GNU_PUBLIC_LICENSE
-*   pyclustering is free software: you can redistribute it and/or modify
-*   it under the terms of the GNU General Public License as published by
-*   the Free Software Foundation, either version 3 of the License, or
-*   (at your option) any later version.
-*
-*   pyclustering is distributed in the hope that it will be useful,
-*   but WITHOUT ANY WARRANTY; without even the implied warranty of
-*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*   GNU General Public License for more details.
-*
-*   You should have received a copy of the GNU General Public License
-*   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*
+/*!
+
+@authors Andrei Novikov (pyclustering@yandex.ru)
+@date 2014-2020
+@copyright GNU Public License
+
+@cond GNU_PUBLIC_LICENSE
+    pyclustering is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    pyclustering is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+@endcond
+
 */
 
 
@@ -35,8 +36,20 @@ namespace pyclustering {
 namespace parallel {
 
 
+/*!
+
+@class      thread_pool thread_pool.hpp pyclustering/parallel/thread_pool.hpp
+
+@brief      Thread pool provides service to execute client tasks asynchronously in parallel way.
+
+*/
 class thread_pool {
 public:
+    /*!
+    
+    @brief  Defines shared pointer of the thread pool.
+    
+    */
     using ptr              = std::shared_ptr<thread_pool>;
 
 private:
@@ -44,7 +57,7 @@ private:
 
 public:
     static const std::size_t        DEFAULT_AMOUNT_THREADS;     /**< Default amount of threads. */
-    static const std::size_t        DEFAULT_POOL_SIZE;
+    static const std::size_t        DEFAULT_POOL_SIZE;          /**< Default size of the thread pool. */
 
 private:
     thread_container                m_pool  = { };
@@ -60,21 +73,73 @@ private:
     bool                            m_stop = false;
 
 public:
+    /*!
+
+    @brief  Default constructor of the thread pool.
+
+    */
     thread_pool();
 
+    /*!
+
+    @brief  Constructor of the thread pool where specific size of the pool is specified.
+
+    @param[in] p_size: amount of threads in the pool that are going to be used for processing.
+
+    */
     explicit thread_pool(const std::size_t p_size);
 
+    /*!
+
+    @brief  Default copy constructor of the thread pool.
+
+    */
     thread_pool(const thread_pool & p_pool) = delete;
 
+    /*!
+
+    @brief  Default move constructor of the thread pool.
+
+    */
     thread_pool(thread_pool && p_pool) = delete;
 
+    /*!
+
+    @brief  Default destructor of the thread pool.
+
+    */
     ~thread_pool();
 
 public:
+    /*!
+
+    @brief  Add new task for execution to the current thread pool.
+
+    @param[in] p_raw_task: task with signature `void()` that should be executed.
+
+    @return Shared pointer to the task that is going to be executed.
+
+    */
     task::ptr add_task(const task::proc & p_raw_task);
 
+    /*!
+
+    @brief  Add new task for execution to the current thread pool if there is enough capacity to serve it without delay.
+
+    @param[in] p_raw_task: task with signature `void()` that should be executed.
+
+    @return Shared pointer to the task that is going to be executed if there is enough capacity, otherwise `nullptr`.
+
+    */
     task::ptr add_task_if_free(const task::proc & p_raw_task);
 
+    /*!
+
+    @brief  Returns amount of tasks in the current thread pool.
+
+    @return Amount of tasks in the current thread pool.
+
+    */
     std::size_t size() const;
 
 private:

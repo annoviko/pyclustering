@@ -27,7 +27,7 @@
 #include <pyclustering/cluster/agglomerative.hpp>
 
 
-pyclustering_package * agglomerative_algorithm(const pyclustering_package * const p_sample, const size_t p_number_clusters, const size_t p_link) {
+pyclustering_package * agglomerative_algorithm(const pyclustering_package * const p_sample, const std::size_t p_number_clusters, const std::size_t p_link) {
     pyclustering::clst::agglomerative algorithm(p_number_clusters, (pyclustering::clst::agglomerative::type_link) p_link);
 
     pyclustering::dataset data;

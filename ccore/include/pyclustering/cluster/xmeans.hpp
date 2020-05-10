@@ -35,12 +35,27 @@ namespace pyclustering {
 namespace clst {
 
 
+/*!
+
+@brief  Defines splitting types for clusters that are used by X-Means algorithm.
+
+*/
 enum class splitting_type {
-    BAYESIAN_INFORMATION_CRITERION = 0,
-    MINIMUM_NOISELESS_DESCRIPTION_LENGTH = 1,
+    BAYESIAN_INFORMATION_CRITERION = 0,         /**< Bayesian information criterion (BIC) to approximate the correct number of clusters. */
+    MINIMUM_NOISELESS_DESCRIPTION_LENGTH = 1,   /**< Minimum noiseless description length (MNDL) to approximate the correct number of clusters. */
 };
 
 
+/*!
+
+@class      xmeans xmeans.hpp pyclustering/cluster/xmeans.hpp
+
+@brief      Class represents clustering algorithm X-Means.
+@details    X-means clustering method starts with the assumption of having a minimum number of clusters,
+             and then dynamically increases them. X-means uses specified splitting criterion to control
+             the process of splitting clusters. Method K-Means++ can be used for calculation of initial centers.
+
+*/
 class xmeans {
 private:
     const static double             DEFAULT_SPLIT_DIFFERENCE;
@@ -63,39 +78,39 @@ private:
     std::size_t       m_repeat              = 1;
 
 public:
-    /**
-    *
-    * @brief    Constructor of clustering algorithm where algorithm parameters for processing are
-    *           specified.
-    *
-    * @param[in] p_initial_centers: initial centers that are used for processing.
-    * @param[in] p_kmax: maximum number of clusters that can be allocated.
-    * @param[in] p_tolerance: stop condition in following way: when maximum value of distance change of
-    *             cluster centers is less than tolerance than algorithm will stop processing.
-    * @param[in] p_criterion: splitting criterion that is used for making descision about cluster splitting.
-    * @param[in] p_repeat: how many times K-Means should be run to improve parameters (by default is 1), 
-    *             with larger 'repeat' values suggesting higher probability of finding global optimum.
-    *
+    /*!
+    
+    @brief    Constructor of clustering algorithm where algorithm parameters for processing are
+               specified.
+    
+    @param[in] p_initial_centers: initial centers that are used for processing.
+    @param[in] p_kmax: maximum number of clusters that can be allocated.
+    @param[in] p_tolerance: stop condition in following way: when maximum value of distance change of
+                cluster centers is less than tolerance than algorithm will stop processing.
+    @param[in] p_criterion: splitting criterion that is used for making descision about cluster splitting.
+    @param[in] p_repeat: how many times K-Means should be run to improve parameters (by default is 1), 
+                with larger 'repeat' values suggesting higher probability of finding global optimum.
+    
     */
     xmeans(const dataset & p_initial_centers, const std::size_t p_kmax, const double p_tolerance, const splitting_type p_criterion, const std::size_t p_repeat = 1);
 
-    /**
-    *
-    * @brief    Default destructor of the algorithm.
-    *
+    /*!
+    
+    @brief    Default destructor of the algorithm.
+    
     */
     ~xmeans() = default;
 
 public:
-    /**
-    *
-    * @brief    Performs cluster analysis of an input data.
-    *
-    * @param[in]  p_data: input data for cluster analysis.
-    * @param[out] p_result: clustering result of an input data.
-    *
+    /*!
+    
+    @brief    Performs cluster analysis of an input data.
+    
+    @param[in]  p_data: input data for cluster analysis.
+    @param[out] p_result: clustering result of an input data.
+    
     */
-    void process(const dataset & data, xmeans_data & output_result);
+    void process(const dataset & p_data, xmeans_data & p_result);
 
 private:
     void improve_structure();

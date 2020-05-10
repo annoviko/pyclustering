@@ -1,23 +1,24 @@
-/**
-*
-* @authors Andrei Novikov (pyclustering@yandex.ru)
-* @date 2014-2020
-* @copyright GNU Public License
-*
-* GNU_PUBLIC_LICENSE
-*   pyclustering is free software: you can redistribute it and/or modify
-*   it under the terms of the GNU General Public License as published by
-*   the Free Software Foundation, either version 3 of the License, or
-*   (at your option) any later version.
-*
-*   pyclustering is distributed in the hope that it will be useful,
-*   but WITHOUT ANY WARRANTY; without even the implied warranty of
-*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*   GNU General Public License for more details.
-*
-*   You should have received a copy of the GNU General Public License
-*   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*
+/*!
+
+@authors Andrei Novikov (pyclustering@yandex.ru)
+@date 2014-2020
+@copyright GNU Public License
+
+@cond GNU_PUBLIC_LICENSE
+    pyclustering is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    pyclustering is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+@endcond
+
 */
 
 
@@ -30,13 +31,6 @@
 #include <vector>
 
 #include <pyclustering/parallel/spinlock.hpp>
-
-
-/* Available options: 
-    1. PARALLEL_IMPLEMENTATION_ASYNC_POOL - own parallel implementation based on std::async pool
-    2. PARALLEL_IMPLEMENTATION_NONE       - parallel implementation is not used
-    3. PARALLEL_IMPLEMENTATION_PPL        - parallel PPL implementation (windows system only)
-    4. PARALLEL_IMPLEMENTATION_OPENMP     - parallel OpenMP implementation */
 
 
 #if defined(WIN32) || (_WIN32) || (_WIN64)
@@ -63,6 +57,23 @@ static std::vector<std::future<void>> FUTURE_STORAGE(AMOUNT_THREADS);
 static std::vector<spinlock> FUTURE_LOCKS(AMOUNT_THREADS);
 
 
+/*!
+
+@brief Parallelizes for-loop using all available cores.
+@details `parallel_for` uses PPL in case of Windows operating system and own implemention that is based
+          on pure C++ functionality for concurency such as `std::future` and `std::async`.
+
+Advanced uses might use one of the define to use specific implementation of the `parallel_for` loop:
+1. PARALLEL_IMPLEMENTATION_ASYNC_POOL - own parallel implementation based on `std::async` pool.
+2. PARALLEL_IMPLEMENTATION_NONE       - parallel implementation is not used.
+3. PARALLEL_IMPLEMENTATION_PPL        - parallel PPL implementation (windows system only).
+4. PARALLEL_IMPLEMENTATION_OPENMP     - parallel OpenMP implementation.
+
+@param[in] p_start: initial value for the loop.
+@param[in] p_end: final value of the loop - calculations are performed until current counter value is less than final value `i < p_end`.
+@param[in] p_task: body of the loop that defines actions that should be done on each iteration.
+
+*/
 template <typename TypeIndex, typename TypeAction>
 void parallel_for(const TypeIndex p_start, const TypeIndex p_end, const TypeAction & p_task) {
 #if defined(PARALLEL_IMPLEMENTATION_ASYNC_POOL)
@@ -122,6 +133,23 @@ void parallel_for(const TypeIndex p_start, const TypeIndex p_end, const TypeActi
 }
 
 
+/*!
+
+@brief Parallelizes for-each-loop using all available cores.
+@details `parallel_each` uses PPL in case of Windows operating system and own implemention that is based
+          on pure C++ functionality for concurency such as `std::future` and `std::async`.
+
+Advanced uses might use one of the define to use specific implementation of the `parallel_for_each` loop:
+1. PARALLEL_IMPLEMENTATION_ASYNC_POOL - own parallel implementation based on `std::async` pool.
+2. PARALLEL_IMPLEMENTATION_NONE       - parallel implementation is not used.
+3. PARALLEL_IMPLEMENTATION_PPL        - parallel PPL implementation (windows system only).
+4. PARALLEL_IMPLEMENTATION_OPENMP     - parallel OpenMP implementation.
+
+@param[in] p_begin: initial iterator from that the loop starts.
+@param[in] p_end: end iterator that defines when the loop should stop `iter != p_end`.
+@param[in] p_task: body of the loop that defines actions that should be done for each element.
+
+*/
 template <typename TypeIter, typename TypeAction>
 void parallel_for_each(const TypeIter p_begin, const TypeIter p_end, const TypeAction & p_task) {
 #if defined(PARALLEL_IMPLEMENTATION_ASYNC_POOL)
@@ -177,6 +205,16 @@ void parallel_for_each(const TypeIter p_begin, const TypeIter p_end, const TypeA
 }
 
 
+/*!
+
+@brief Parallelizes for-each-loop using all available cores.
+@details `parallel_each` uses PPL in case of Windows operating system and own implemention that is based
+          on pure C++ functionality for concurency such as `std::future` and `std::async`.
+
+@param[in] p_container: iterable container that should be processed.
+@param[in] p_task: body of the loop that defines actions that should be done for each element.
+
+*/
 template <typename TypeContainer, typename TypeAction>
 void parallel_for_each(const TypeContainer & p_container, const TypeAction & p_task) {
     parallel_for_each(std::begin(p_container), std::end(p_container), p_task);
