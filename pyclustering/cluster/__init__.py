@@ -73,7 +73,6 @@ class canvas_cluster_descr:
         self.attributes = []
 
 
-
 class cluster_visualizer_multidim:
     """!
     @brief Visualizer for cluster in multi-dimensional data.
@@ -172,12 +171,13 @@ class cluster_visualizer_multidim:
             self.append_cluster(cluster, data, marker, markersize)
 
 
-    def show(self, pair_filter=None, **kwargs):
+    def save(self, filename, **kwargs):
         """!
-        @brief Shows clusters (visualize) in multi-dimensional space.
 
-        @param[in] pair_filter (list): List of coordinate pairs that should be displayed. This argument is used as a filter.
-        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'visible_axis' 'visible_labels', 'visible_grid', 'row_size').
+        @brief Saves figure to the specified file.
+
+        @param[in] filename (string): File where the visualized clusters should be stored.
+        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'visible_axis' 'visible_labels', 'visible_grid', 'row_size', 'show').
 
         <b>Keyword Args:</b><br>
             - visible_axis (bool): Defines visibility of axes on each canvas, if True - axes are visible.
@@ -187,6 +187,36 @@ class cluster_visualizer_multidim:
             - visible_grid (bool): Defines visibility of grid on each canvas, if True - grid is displayed.
                By default grid of each canvas is displayed.
             - max_row_size (uint): Maximum number of canvases on one row.
+
+        """
+
+        if len(filename) == 0:
+            raise ValueError("Impossible to save visualization to file: empty file path is specified.")
+
+        self.show(None,
+                  visible_axis=kwargs.get('visible_axis', False),
+                  visible_labels=kwargs.get('visible_labels', True),
+                  visible_grid=kwargs.get('visible_grid', True),
+                  max_row_size=kwargs.get('max_row_size', 4))
+        plt.savefig(filename)
+
+
+    def show(self, pair_filter=None, **kwargs):
+        """!
+        @brief Shows clusters (visualize) in multi-dimensional space.
+
+        @param[in] pair_filter (list): List of coordinate pairs that should be displayed. This argument is used as a filter.
+        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'visible_axis' 'visible_labels', 'visible_grid', 'row_size', 'show').
+
+        <b>Keyword Args:</b><br>
+            - visible_axis (bool): Defines visibility of axes on each canvas, if True - axes are visible.
+               By default axis of each canvas are not displayed.
+            - visible_labels (bool): Defines visibility of labels on each canvas, if True - labels is displayed.
+               By default labels of each canvas are displayed.
+            - visible_grid (bool): Defines visibility of grid on each canvas, if True - grid is displayed.
+               By default grid of each canvas is displayed.
+            - max_row_size (uint): Maximum number of canvases on one row. By default the maximum value is 4.
+            - show (bool): If True - then displays visualized clusters. By default is `True`.
 
         """
 
@@ -215,7 +245,8 @@ class cluster_visualizer_multidim:
         for cluster_descr in self.__clusters:
             self.__draw_canvas_cluster(axis_storage, cluster_descr, pairs)
 
-        plt.show()
+        if kwargs.get('show', True):
+            plt.show()
 
 
     def __create_grid_spec(self, amount_axis, max_row_size):
@@ -543,6 +574,44 @@ class cluster_visualizer:
         return self.__canvas_clusters[index_canvas][index_cluster].color
 
 
+    def save(self, filename, **kwargs):
+        """!
+
+        @brief Saves figure to the specified file.
+
+        @param[in] filename (string): File where the visualized clusters should be stored.
+        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'invisible_axis', 'visible_grid').
+
+        <b>Keyword Args:</b><br>
+            - invisible_axis (bool): Defines visibility of axes on each canvas, if `True` - axes are invisible.
+                                      By default axis are invisible.
+            - visible_grid (bool): Defines visibility of grid on each canvas, if `True` - grid is displayed.
+                                    By default grid of each canvas is displayed.
+
+        There is an example how to save visualized clusters to the PNG file without showing them on a screen:
+        @code
+            from pyclustering.cluster import cluster_visualizer
+
+            data = [[1.1], [1.7], [3.7], [5.3], [2.5], [-1.5], [-0.9], [6.3], [6.5], [8.1]]
+            clusters = [[0, 1, 2, 4, 5, 6], [3, 7, 8, 9]]
+
+            visualizer = cluster_visualizer()
+            visualizer.append_clusters(clusters, data)
+            visualizer.save("1-dimensional-clustering.png")
+        @endcode
+
+        """
+
+        if len(filename) == 0:
+            raise ValueError("Impossible to save visualization to file: empty file path is specified.")
+
+        invisible_axis = kwargs.get('invisible_axis', True)
+        visible_grid = kwargs.get('visible_grid', True)
+
+        self.show(None, invisible_axis, visible_grid, False)
+        plt.savefig(filename)
+
+
     def show(self, figure=None, invisible_axis=True, visible_grid=True, display=True, shift=None):
         """!
         @brief Shows clusters (visualize).
@@ -611,7 +680,7 @@ class cluster_visualizer:
         
         if display is True:
             plt.show()
-        
+
         return cluster_figure
 
 

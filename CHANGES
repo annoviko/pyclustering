@@ -5,6 +5,9 @@ CHANGE NOTES FOR 0.10.0 (STARTED Jan 24, 2020), (RELEASED: Dev -)
 ------------------------------------------------------------------------
 
 GENERAL CHANGES:
+- Implemented method `save()` for `cluster_visualizer` and `cluster_visualizer_multidim` to save visualization to file (Python: `pyclustering.cluster`).
+  See: https://github.com/annoviko/pyclustering/issues/601
+
 - Optimization of CURE algorithm using balanced KD-tree (Python: `pyclustering.cluster.cure`; C++: `pyclustering::clst::cure`).
   See: https://github.com/annoviko/pyclustering/issues/589
 

@@ -27,12 +27,13 @@
 
 
 import unittest
+import os
 
 # Generate images without having a window appear.
 import matplotlib
 matplotlib.use('Agg')
 
-from pyclustering.cluster import cluster_visualizer_multidim
+from pyclustering.cluster import cluster_visualizer, cluster_visualizer_multidim
 
 from pyclustering.samples import answer_reader
 from pyclustering.samples.definitions import SIMPLE_SAMPLES, SIMPLE_ANSWERS, FAMOUS_SAMPLES, FAMOUS_ANSWERS
@@ -97,3 +98,26 @@ class visualizer_unit_tests(unittest.TestCase):
 
     def test_multidim_simple08_by_steps(self):
         self.template_visualize_adding_step_by_step(SIMPLE_SAMPLES.SAMPLE_SIMPLE8, SIMPLE_ANSWERS.ANSWER_SIMPLE8)
+
+    def template_save_to_file(self, visualizer_type, filename="ut-test-image.png"):
+        data = [[1.1], [1.7], [3.7], [5.3], [2.5], [-1.5], [-0.9], [6.3], [6.5], [8.1]]
+        clusters = [[0, 1, 2, 4, 5, 6], [3, 7, 8, 9]]
+
+        visualizer = visualizer_type()
+        visualizer.append_clusters(clusters, data)
+        visualizer.save(filename)
+
+        self.assertTrue(os.path.exists(filename))
+        os.remove(filename)
+
+    def test_visualizer_save(self):
+        self.template_save_to_file(cluster_visualizer)
+
+    def test_visualizer_save_no_filename(self):
+        self.assertRaises(ValueError, self.template_save_to_file, cluster_visualizer, "")
+
+    def test_visualizer_multidim_save(self):
+        self.template_save_to_file(cluster_visualizer_multidim)
+
+    def test_visualizer_multidim_save_no_filename(self):
+        self.assertRaises(ValueError, self.template_save_to_file, cluster_visualizer_multidim, "")
