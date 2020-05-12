@@ -1,23 +1,24 @@
-/**
-*
-* @authors Andrei Novikov (pyclustering@yandex.ru)
-* @date 2014-2020
-* @copyright GNU Public License
-*
-* GNU_PUBLIC_LICENSE
-*   pyclustering is free software: you can redistribute it and/or modify
-*   it under the terms of the GNU General Public License as published by
-*   the Free Software Foundation, either version 3 of the License, or
-*   (at your option) any later version.
-*
-*   pyclustering is distributed in the hope that it will be useful,
-*   but WITHOUT ANY WARRANTY; without even the implied warranty of
-*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*   GNU General Public License for more details.
-*
-*   You should have received a copy of the GNU General Public License
-*   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*
+/*!
+
+@authors Andrei Novikov (pyclustering@yandex.ru)
+@date 2014-2020
+@copyright GNU Public License
+
+@cond GNU_PUBLIC_LICENSE
+    pyclustering is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    pyclustering is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+@endcond
+
 */
 
 #pragma once
@@ -556,22 +557,22 @@ protected:
     virtual void set_equation(equation<double> & solver);
 
 private:
-    /**
-    *
-    * @brief   Initializer of the oscillatory network SYNC based on Kuramoto model.
-    *
-    * @param[in] size: number of oscillators in the network.
-    * @param[in] weight_factor: coupling strength of the links between oscillators.
-    * @param[in] frequency_factor: multiplier of internal frequency of the oscillators.
-    * @param[in] connection_type: type of connection between oscillators in the network.
-    * @param[in] height: number of oscillators in column of the network, this argument is
-    *            used only for network with grid structure (GRID_FOUR, GRID_EIGHT), for other types
-    *            this argument is ignored.
-    * @param[in] width: number of oscillotors in row of the network, this argument is used
-    *            only for network with grid structure (GRID_FOUR, GRID_EIGHT), for other types this
-    *            argument is ignored.
-    * @param[in] initial_phases: type of initialization of initial phases of oscillators.
-    *
+    /*!
+    
+    @brief   Initializer of the oscillatory network SYNC based on Kuramoto model.
+    
+    @param[in] size: number of oscillators in the network.
+    @param[in] weight_factor: coupling strength of the links between oscillators.
+    @param[in] frequency_factor: multiplier of internal frequency of the oscillators.
+    @param[in] connection_type: type of connection between oscillators in the network.
+    @param[in] height: number of oscillators in column of the network, this argument is
+               used only for network with grid structure (GRID_FOUR, GRID_EIGHT), for other types
+               this argument is ignored.
+    @param[in] width: number of oscillotors in row of the network, this argument is used
+               only for network with grid structure (GRID_FOUR, GRID_EIGHT), for other types this
+               argument is ignored.
+    @param[in] initial_phases: type of initialization of initial phases of oscillators.
+    
     */
     void initialize(
         const size_t size,
