@@ -422,7 +422,9 @@ def manhattan_distance_numpy(object1, object2):
 
 def chebyshev_distance(point1, point2):
     """!
-    @brief Calculate Chebyshev distance between between two vectors.
+    @brief Calculate Chebyshev distance (maximum metric) between between two vectors.
+    @details Chebyshev distance is a metric defined on a vector space where the distance between two vectors is the
+              greatest of their differences along any coordinate dimension.
 
     \f[
     dist(a, b) = \max_{}i\left (\left | a_{i} - b_{i} \right |\right );

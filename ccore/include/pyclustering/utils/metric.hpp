@@ -368,6 +368,8 @@ public:
 
 @brief   Euclidean distance metric calculator between two points.
 
+\f[dist(a, b) = \sqrt{ \sum_{i=0}^{N}(a_{i} - b_{i})^{2} };\f]
+
 */
 template <typename TypeContainer>
 class euclidean_distance_metric : public distance_metric<TypeContainer> {
@@ -388,6 +390,8 @@ public:
 @class   euclidean_distance_square_metric metric.hpp pyclustering/utils/metric.hpp
 
 @brief   Square Euclidean distance metric calculator between two points.
+
+\f[dist(a, b) = \sum_{i=0}^{N}(a_{i} - b_{i})^{2};\f]
 
 */
 template <typename TypeContainer>
@@ -410,6 +414,8 @@ public:
 
 @brief   Manhattan distance metric calculator between two points.
 
+\f[dist(a, b) = \sum_{i=0}^{N}\left | a_{i} - b_{i} \right |;\f]
+
 */
 template <typename TypeContainer>
 class manhattan_distance_metric : public distance_metric<TypeContainer> {
@@ -431,6 +437,11 @@ public:
 
 @brief   Chebyshev distance metric calculator between two points.
 
+@details Chebyshev distance is a metric defined on a vector space where the distance between two vectors is the
+          greatest of their differences along any coordinate dimension.
+
+\f[dist(a, b) = \max_{}i\left (\left | a_{i} - b_{i} \right |\right );\f]
+
 */
 template <typename TypeContainer>
 class chebyshev_distance_metric : public distance_metric<TypeContainer> {
@@ -451,6 +462,8 @@ public:
 @class   minkowski_distance_metric metric.hpp pyclustering/utils/metric.hpp
 
 @brief   Minkowski distance metric calculator between two points.
+
+\f[dist(a, b) = \sqrt[p]{ \sum_{i=0}^{N}\left(a_{i} - b_{i}\right)^{p} };\f]
 
 */
 template <typename TypeContainer>
@@ -475,6 +488,8 @@ public:
 
 @brief   Canberra distance metric calculator between two points.
 
+\f[dist(a, b) = \sum_{i=0}^{N}\frac{\left | a_{i} - b_{i} \right |}{\left | a_{i} \right | + \left | b_{i} \right |};\f]
+
 */
 template <typename TypeContainer>
 class canberra_distance_metric : public distance_metric<TypeContainer> {
@@ -496,6 +511,8 @@ public:
 
 @brief   Chi square distance metric calculator between two points.
 
+\f[dist(a, b) = \sum_{i=0}^{N}\frac{\left ( a_{i} - b_{i} \right )^{2}}{\left | a_{i} \right | + \left | b_{i} \right |};\f]
+
 */
 template <typename TypeContainer>
 class chi_square_distance_metric : public distance_metric<TypeContainer> {
@@ -516,6 +533,17 @@ public:
 @class   gower_distance_metric metric.hpp pyclustering/utils/metric.hpp
 
 @brief   Gower distance metric calculator between two points.
+@details Implementation is based on the paper @cite article::utils::metric::gower. Gower distance is calculate
+using following formula:
+\f[
+dist\left ( a, b \right )=\frac{1}{p}\sum_{i=0}^{p}\frac{\left | a_{i} - b_{i} \right |}{R_{i}},
+\f]
+
+where \f$R_{i}\f$ is a max range for ith dimension. \f$R\f$ is defined in line following formula:
+
+\f[
+R=max\left ( X \right )-min\left ( X \right )
+\f]
 
 */
 template <typename TypeContainer>
