@@ -89,7 +89,7 @@ class random_center_initializer:
         @param[in] return_index (bool): If True then returns index of point from input data instead of point itself.
         
         """
-        random_index_point = random.randint(0, len(self.__data[0]))
+        random_index_point = random.randint(0, len(self.__data))
         if random_index_point not in self.__available_indexes:
             random_index_point = self.__available_indexes.pop()
         else:
