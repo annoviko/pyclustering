@@ -29,6 +29,9 @@ GENERAL CHANGES:
 
 CORRECTED MAJOR BUGS:
 
+- Bug with a random distribution in the random center initializer (Python: `pyclustering.cluster.center_initializer`).
+  See: https://github.com/annoviko/pyclustering/issues/573
+
 - Bug with incorrect converting Index List and Object List to Labeling when clusters do not contains one or more points from an input data (Python `pyclustering.cluster.encoder`).
   See: https://github.com/annoviko/pyclustering/issues/596
 
