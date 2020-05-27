@@ -274,7 +274,7 @@ class som:
         
         self._learn_rate = 0.0
 
-        self._seed = kwargs.get('random_state', None)
+        self._random_state = kwargs.get('random_state', None)
 
         self.__ccore_som_pointer = None
 
@@ -426,14 +426,14 @@ class som:
         
         step_x = dim_info.get_center()[0]
         if self._rows > 1: step_x = dim_info.get_width()[0] / (self._rows - 1);
-        
+
         step_y = 0.0
         if dim_info.get_dimensions() > 1:
             step_y = dim_info.get_center()[1]
             if self._cols > 1: step_y = dim_info.get_width()[1] / (self._cols - 1);
-                      
+
         # generate weights (topological coordinates)
-        random.seed(self._seed)
+        random.seed(self._random_state)
         
         # Uniform grid.
         if init_type == type_init.uniform_grid:
@@ -989,6 +989,7 @@ class som:
                              'neighbors': self._neighbors,
                              'local_radius': self._local_radius,
                              'learn_rate': self._learn_rate,
+                             'random_state': self._random_state,
                              'params': self._params,
                              'location': self._location,
                              'weights': self._weights,
@@ -1011,6 +1012,7 @@ class som:
         self._neighbors = state_dump['neighbors']
         self._local_radius = state_dump['local_radius']
         self._learn_rate = state_dump['learn_rate']
+        self._random_state = state_dump['random_state']
         self._params = state_dump['params']
         self._neighbors = None
 

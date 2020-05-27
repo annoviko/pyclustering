@@ -24,9 +24,9 @@
 """
 
 
-import unittest;
+import unittest
 
-from pyclustering.nnet.tests.hhn_templates import HhnTestTemplates;
+from pyclustering.nnet.tests.hhn_templates import HhnTestTemplates
 
 
 class HhnUnitTest(unittest.TestCase):
