@@ -1,23 +1,24 @@
-/**
-*
-* @authors Andrei Novikov (pyclustering@yandex.ru)
-* @date 2014-2020
-* @copyright GNU Public License
-*
-* GNU_PUBLIC_LICENSE
-*   pyclustering is free software: you can redistribute it and/or modify
-*   it under the terms of the GNU General Public License as published by
-*   the Free Software Foundation, either version 3 of the License, or
-*   (at your option) any later version.
-*
-*   pyclustering is distributed in the hope that it will be useful,
-*   but WITHOUT ANY WARRANTY; without even the implied warranty of
-*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*   GNU General Public License for more details.
-*
-*   You should have received a copy of the GNU General Public License
-*   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*
+/*!
+
+@authors Andrei Novikov (pyclustering@yandex.ru)
+@date 2014-2020
+@copyright GNU Public License
+
+@cond GNU_PUBLIC_LICENSE
+    pyclustering is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    pyclustering is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+@endcond
+
 */
 
 #include <algorithm>
@@ -46,6 +47,8 @@ namespace pyclustering {
 namespace clst {
 
 
+const long long          gmeans::IGNORE_KMAX            = -1;
+
 const std::size_t        gmeans::DEFAULT_AMOUNT_CENTERS = 1;
 
 const double             gmeans::DEFAULT_TOLERANCE      = 0.001;
@@ -55,10 +58,11 @@ const std::size_t        gmeans::DEFAULT_REPEAT         = 3;
 const std::size_t        gmeans::DEFAULT_CANDIDATES     = 3;
 
 
-gmeans::gmeans(const std::size_t p_k_initial, const double p_tolerance, const std::size_t p_repeat) :
+gmeans::gmeans(const std::size_t p_k_initial, const double p_tolerance, const std::size_t p_repeat, const long long p_kmax) :
     m_amount(p_k_initial),
     m_tolerance(p_tolerance),
     m_repeat(p_repeat),
+    m_kmax(p_kmax),
     m_ptr_result(nullptr),
     m_ptr_data(nullptr)
 { }
@@ -74,7 +78,7 @@ void gmeans::process(const dataset & p_data, gmeans_data & p_result) {
 
     search_optimal_parameters(p_data, m_amount, m_ptr_result->clusters(), m_ptr_result->centers());
 
-    while(true) {
+    while(is_run_condition()) {
         std::size_t current_amount_clusters = m_ptr_result->clusters().size();
         statistical_optimization();
 
@@ -84,6 +88,15 @@ void gmeans::process(const dataset & p_data, gmeans_data & p_result) {
 
         perform_clustering();
     }
+}
+
+
+bool gmeans::is_run_condition() const {
+    if ((m_kmax != IGNORE_KMAX) && (m_ptr_result->clusters().size() >= static_cast<std::size_t>(m_kmax))) {
+        return false;
+    }
+
+    return true;
 }
 
 

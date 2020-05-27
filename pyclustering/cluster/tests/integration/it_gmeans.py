@@ -38,11 +38,32 @@ class gmeans_integration_test(unittest.TestCase):
     def test_clustering_sample_01(self):
         gmeans_test_template().clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, SIMPLE_ANSWERS.ANSWER_SIMPLE1, 1, True)
 
+    def test_clustering_sample_01_kmax_correct(self):
+        gmeans_test_template().clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, SIMPLE_ANSWERS.ANSWER_SIMPLE1, 1, True, k_max=2)
+
+    def test_clustering_sample_01_kmax_1(self):
+        gmeans_test_template().clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [10], 1, True, k_max=1)
+
+    def test_clustering_sample_01_kmax_10(self):
+        gmeans_test_template().clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, SIMPLE_ANSWERS.ANSWER_SIMPLE1, 1, True, k_max=10)
+
     def test_clustering_sample_02(self):
         gmeans_test_template().clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, SIMPLE_ANSWERS.ANSWER_SIMPLE2, 1, True)
 
+    def test_clustering_sample_02_kmax_correct(self):
+        gmeans_test_template().clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, SIMPLE_ANSWERS.ANSWER_SIMPLE2, 1, True, k_max=3)
+
+    def test_clustering_sample_02_kmax_1(self):
+        gmeans_test_template().clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [23], 1, True, k_max=1)
+
+    def test_clustering_sample_02_kmax_2(self):
+        gmeans_test_template().clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [8, 15], 1, True, k_max=2)
+
     def test_clustering_sample_03(self):
         gmeans_test_template().clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, SIMPLE_ANSWERS.ANSWER_SIMPLE3, 1, True)
+
+    def test_clustering_sample_03_kmax_1(self):
+        gmeans_test_template().clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [60], 1, True, k_max=1)
 
     def test_clustering_sample_05(self):
         gmeans_test_template().clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, SIMPLE_ANSWERS.ANSWER_SIMPLE5, 1, True)

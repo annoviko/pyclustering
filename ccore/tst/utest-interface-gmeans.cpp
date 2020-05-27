@@ -43,7 +43,7 @@ TEST(utest_interface_gmeans, kmedoids_api) {
 
     distance_metric<point> metric = distance_metric_factory<point>::euclidean_square();
 
-    pyclustering_package * gmeans_result = gmeans_algorithm(sample.get(), 2, 0.001, 5);
+    pyclustering_package * gmeans_result = gmeans_algorithm(sample.get(), 2, 0.001, 5, -1);
     ASSERT_NE(nullptr, gmeans_result);
 
     ASSERT_EQ(gmeans_result->size, GMEANS_PACKAGE_SIZE);

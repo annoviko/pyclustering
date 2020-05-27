@@ -57,11 +57,32 @@ class gmeans_unit_test(unittest.TestCase):
     def test_clustering_sample_01(self):
         gmeans_test_template().clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, SIMPLE_ANSWERS.ANSWER_SIMPLE1, 1, False)
 
+    def test_clustering_sample_01_kmax_correct(self):
+        gmeans_test_template().clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, SIMPLE_ANSWERS.ANSWER_SIMPLE1, 1, False, k_max=2)
+
+    def test_clustering_sample_01_kmax_1(self):
+        gmeans_test_template().clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [10], 1, False, k_max=1)
+
+    def test_clustering_sample_01_kmax_10(self):
+        gmeans_test_template().clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, SIMPLE_ANSWERS.ANSWER_SIMPLE1, 1, False, k_max=10)
+
     def test_clustering_sample_02(self):
         gmeans_test_template().clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, SIMPLE_ANSWERS.ANSWER_SIMPLE2, 1, False)
 
+    def test_clustering_sample_02_kmax_correct(self):
+        gmeans_test_template().clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, SIMPLE_ANSWERS.ANSWER_SIMPLE2, 1, False, k_max=3)
+
+    def test_clustering_sample_02_kmax_1(self):
+        gmeans_test_template().clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [23], 1, False, k_max=1)
+
+    def test_clustering_sample_02_kmax_2(self):
+        gmeans_test_template().clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [8, 15], 1, False, k_max=2)
+
     def test_clustering_sample_03(self):
         gmeans_test_template().clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, SIMPLE_ANSWERS.ANSWER_SIMPLE3, 1, False)
+
+    def test_clustering_sample_03_kmax_1(self):
+        gmeans_test_template().clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [60], 1, False, k_max=1)
 
     def test_clustering_sample_05(self):
         gmeans_test_template().clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, SIMPLE_ANSWERS.ANSWER_SIMPLE5, 1, False)
@@ -103,6 +124,15 @@ class gmeans_unit_test(unittest.TestCase):
 
     def test_incorrect_repeat(self):
         self.assertRaises(ValueError, gmeans, [[0], [1], [2]], 3, False, tolerance=1, repeat=0)
+
+    def test_incorrect_kmax_zero(self):
+        self.assertRaises(ValueError, gmeans, [[0], [1], [2]], 3, False, tolerance=1, repeat=0, kmax=0)
+
+    def test_incorrect_kmax_negative(self):
+        self.assertRaises(ValueError, gmeans, [[0], [1], [2]], 3, False, tolerance=1, repeat=0, kmax=-2)
+
+    def test_kmax_less_than_kinit(self):
+        self.assertRaises(ValueError, gmeans, [[0], [1], [2]], 3, False, tolerance=1, repeat=0, kmax=2)
 
     def test_predict_without_process(self):
         self.assertEqual([], gmeans([[0], [1]]).predict([0]))

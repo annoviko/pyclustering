@@ -104,13 +104,16 @@ class gmeans:
         @param[in] k_init (uint): Initial amount of centers (by default started search from 1).
         @param[in] ccore (bool): Defines whether CCORE library (C/C++ part of the library) should be used instead of
                     Python code.
-        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'tolerance', 'repeat').
+        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'tolerance', 'repeat', 'k_max').
 
         <b>Keyword Args:</b><br>
             - tolerance (double): tolerance (double): Stop condition for each K-Means iteration: if maximum value of
                change of centers of clusters is less than tolerance than algorithm will stop processing.
             - repeat (unit): How many times K-Means should be run to improve parameters (by default is 3).
                With larger 'repeat' values suggesting higher probability of finding global optimum.
+            - k_max (uint): Maximum amount of cluster that might be allocated. The argument is considered as a stop
+               condition. When the maximum amount is reached then algorithm stops processing. By default the maximum
+               amount of clusters is not restricted (`k_max` is -1).
 
         """
         self.__data = data
@@ -123,6 +126,7 @@ class gmeans:
 
         self.__tolerance = kwargs.get('tolerance', 0.025)
         self.__repeat = kwargs.get('repeat', 3)
+        self.__k_max = kwargs.get('k_max', -1)
 
         if self.__ccore is True:
             self.__ccore = ccore_library.workable()
@@ -151,7 +155,7 @@ class gmeans:
         @brief Performs cluster analysis using CCORE (C/C++ part of pyclustering library).
 
         """
-        self.__clusters, self.__centers, self.__total_wce = gmeans_wrapper(self.__data, self.__k_init, self.__tolerance, self.__repeat)
+        self.__clusters, self.__centers, self.__total_wce = gmeans_wrapper(self.__data, self.__k_init, self.__tolerance, self.__repeat, self.__k_max)
         return self
 
 
@@ -161,11 +165,12 @@ class gmeans:
 
         """
         self.__clusters, self.__centers, _ = self._search_optimal_parameters(self.__data, self.__k_init)
-        while True:
+
+        while self._run_condition():
             current_amount_clusters = len(self.__clusters)
             self._statistical_optimization()
 
-            if current_amount_clusters == len(self.__centers):
+            if current_amount_clusters == len(self.__centers):  # amount of centers the same - no need to continue.
                 break
 
             self._perform_clustering()
@@ -356,6 +361,19 @@ class gmeans:
         self.__total_wce = solver.get_total_wce()
 
 
+    def _run_condition(self):
+        """!
+        @brief Defines whether the algorithm should continue processing or should stop.
+
+        @return `True` if the algorithm should continue processing, otherwise returns `False`
+
+        """
+        if (self.__k_max > 0) and (len(self.__clusters) >= self.__k_max):
+            return False
+
+        return True
+
+
     def _verify_arguments(self):
         """!
         @brief Verify input parameters for the algorithm and throw exception in case of incorrectness.
@@ -374,3 +392,10 @@ class gmeans:
         if self.__repeat <= 0:
             raise ValueError("Amount of attempt to find optimal parameters should be greater than 0 "
                              "(current value: '%d')." % self.__repeat)
+
+        if (self.__k_max != -1) and (self.__k_max <= 0):
+            raise ValueError("Maximum amount of cluster that might be allocated should be greater than 0 or -1 if "
+                             "the algorithm should be restricted in searching optimal number of clusters.")
+
+        if (self.__k_max != -1) and (self.__k_max < self.__k_init):
+            raise ValueError("Initial amount of clusters should be less than the maximum amount 'k_max'.")

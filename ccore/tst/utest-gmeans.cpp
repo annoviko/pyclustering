@@ -1,23 +1,24 @@
-/**
-*
-* @authors Andrei Novikov (pyclustering@yandex.ru)
-* @date 2014-2020
-* @copyright GNU Public License
-*
-* GNU_PUBLIC_LICENSE
-*   pyclustering is free software: you can redistribute it and/or modify
-*   it under the terms of the GNU General Public License as published by
-*   the Free Software Foundation, either version 3 of the License, or
-*   (at your option) any later version.
-*
-*   pyclustering is distributed in the hope that it will be useful,
-*   but WITHOUT ANY WARRANTY; without even the implied warranty of
-*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*   GNU General Public License for more details.
-*
-*   You should have received a copy of the GNU General Public License
-*   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*
+/*!
+
+@authors Andrei Novikov (pyclustering@yandex.ru)
+@date 2014-2020
+@copyright GNU Public License
+
+@cond GNU_PUBLIC_LICENSE
+    pyclustering is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    pyclustering is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+@endcond
+
 */
 
 
@@ -39,12 +40,13 @@ static void
 template_gmeans_clustering(
     const dataset_ptr & p_data,
     const std::size_t p_k_init,
-    const answer & p_answer)
+    const answer & p_answer,
+    const long long p_kmax = gmeans::IGNORE_KMAX)
 {
     const std::size_t attempts = 10;
     for (std::size_t i = 0; i < attempts; i++) {
         gmeans_data output_result;
-        gmeans(1, gmeans::DEFAULT_TOLERANCE, 3).process(*p_data, output_result);
+        gmeans(1, gmeans::DEFAULT_TOLERANCE, 3, p_kmax).process(*p_data, output_result);
 
         auto expected_cluster_lengths = p_answer.cluster_lengths();
         auto expected_clusters = p_answer.clusters();
@@ -81,14 +83,100 @@ template_gmeans_clustering(
 }
 
 
+static void
+template_gmeans_clustering(
+    const dataset_ptr & p_data,
+    const std::size_t p_k_init,
+    const std::vector<std::size_t> & p_expected_cluster_lengths,
+    const long long p_kmax = gmeans::IGNORE_KMAX)
+{
+    const std::size_t attempts = 10;
+    for (std::size_t i = 0; i < attempts; i++) {
+        gmeans_data output_result;
+        gmeans(1, gmeans::DEFAULT_TOLERANCE, 3, p_kmax).process(*p_data, output_result);
+
+        auto clusters = output_result.clusters();
+        auto centers = output_result.centers();
+        std::vector<std::size_t> actual_cluster_lengths;
+        std::set<std::size_t> unique;
+
+        for (const auto & item : clusters) {
+            actual_cluster_lengths.push_back(item.size());
+            unique.insert(item.begin(), item.end());
+        }
+
+        std::sort(actual_cluster_lengths.begin(), actual_cluster_lengths.end());
+
+        if (p_expected_cluster_lengths.size() != clusters.size()) { continue; }
+        if (p_expected_cluster_lengths.size() != centers.size()) { continue; }
+        if (p_data->size() != unique.size()) { continue; }
+        if (p_expected_cluster_lengths != actual_cluster_lengths) { continue; }
+
+        if (clusters.size() > 1) {
+            if (output_result.wce() <= 0.0) { continue; }
+        }
+        else {
+            if (output_result.wce() < 0.0) { continue; }
+        }
+
+        return;
+    }
+
+    FAIL();
+}
+
+
 TEST(utest_gmeans, simple01) {
     template_gmeans_clustering(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), 1, 
                                answer_reader::read(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01));
 }
 
+TEST(utest_gmeans, simple01_kmax_1) {
+    std::vector<std::size_t> expected_length = { 10 };
+    template_gmeans_clustering(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), 1,
+        expected_length, 1);
+}
+
+TEST(utest_gmeans, simple01_kmax_2) {
+    template_gmeans_clustering(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), 1,
+        answer_reader::read(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), 2);
+}
+
+TEST(utest_gmeans, simple01_kmax_10) {
+    template_gmeans_clustering(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), 1,
+        answer_reader::read(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), 10);
+}
+
 TEST(utest_gmeans, simple02) {
     template_gmeans_clustering(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02), 1, 
-                               answer_reader::read(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02));
+        answer_reader::read(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02));
+}
+
+TEST(utest_gmeans, simple02_kmax_1) {
+    std::vector<std::size_t> expected_length = { 23 };
+    template_gmeans_clustering(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02), 1,
+        expected_length, 1);
+}
+
+TEST(utest_gmeans, simple02_kmax_2) {
+    std::vector<std::size_t> expected_length = { 8, 15 };
+    template_gmeans_clustering(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02), 1,
+        expected_length, 2);
+}
+
+TEST(utest_gmeans, simple02_kmax_3) {
+    template_gmeans_clustering(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02), 1,
+        answer_reader::read(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02), 3);
+}
+
+TEST(utest_gmeans, simple02_kmax_4) {
+    template_gmeans_clustering(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02), 1,
+        answer_reader::read(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02), 4);
+}
+
+TEST(utest_gmeans, simple02_kmax_10) {
+    template_gmeans_clustering(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02), 1,
+        answer_reader::read(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02), 10);
 }
 
 TEST(utest_gmeans, simple03) {

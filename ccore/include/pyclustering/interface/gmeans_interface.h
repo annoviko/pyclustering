@@ -1,25 +1,25 @@
-/**
-*
-* @authors Andrei Novikov (pyclustering@yandex.ru)
-* @date 2014-2020
-* @copyright GNU Public License
-*
-* GNU_PUBLIC_LICENSE
-*   pyclustering is free software: you can redistribute it and/or modify
-*   it under the terms of the GNU General Public License as published by
-*   the Free Software Foundation, either version 3 of the License, or
-*   (at your option) any later version.
-*
-*   pyclustering is distributed in the hope that it will be useful,
-*   but WITHOUT ANY WARRANTY; without even the implied warranty of
-*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*   GNU General Public License for more details.
-*
-*   You should have received a copy of the GNU General Public License
-*   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*
-*/
+/*!
 
+@authors Andrei Novikov (pyclustering@yandex.ru)
+@date 2014-2020
+@copyright GNU Public License
+
+@cond GNU_PUBLIC_LICENSE
+    pyclustering is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    pyclustering is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+@endcond
+
+*/
 #pragma once
 
 
@@ -52,6 +52,9 @@ enum gmeans_package_indexer {
  * @param[in] p_tolerance: stop condition - when changes of medians are less then tolerance value.
  * @param[in] p_repeat: how many times K-Means should be run to improve parameters, with larger 'repeat' 
  *             values suggesting higher probability of finding global optimum.
+ * @param[in] p_kmax: maximum amount of cluster that might be allocated. The argument is considered as a stop
+               condition. When the maximum amount is reached then algorithm stops processing. By default the maximum
+               amount of clusters is not restricted (`k_max` is -1).
  *
  * @return  Returns result of clustering - array of allocated clusters.
  *
@@ -59,4 +62,5 @@ enum gmeans_package_indexer {
 extern "C" DECLARATION pyclustering_package * gmeans_algorithm(const pyclustering_package * const p_sample, 
                                                                const std::size_t p_amount, 
                                                                const double p_tolerance,
-                                                               const std::size_t p_repeat);
+                                                               const std::size_t p_repeat,
+                                                               const long long p_kmax);

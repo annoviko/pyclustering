@@ -36,18 +36,21 @@ from pyclustering.utils import read_sample
 
 
 class gmeans_test_template(unittest.TestCase):
-    def clustering(self, sample_path, answer_path, amount, ccore):
+    def clustering(self, sample_path, answer, amount, ccore, **kwargs):
         attempts = 10
 
         failures = ""
 
-        for _ in range(attempts):
-            data = read_sample(sample_path)
+        k_max = kwargs.get('k_max', -1)
+        data = read_sample(sample_path)
 
-            gmeans_instance = gmeans(data, amount, ccore).process()
-
-            reader = answer_reader(answer_path)
+        expected_length_clusters = answer
+        if isinstance(answer, str):
+            reader = answer_reader(answer)
             expected_length_clusters = sorted(reader.get_cluster_lengths())
+
+        for _ in range(attempts):
+            gmeans_instance = gmeans(data, amount, ccore, k_max=k_max).process()
 
             clusters = gmeans_instance.get_clusters()
             centers = gmeans_instance.get_centers()
