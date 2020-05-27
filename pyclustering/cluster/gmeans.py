@@ -104,7 +104,7 @@ class gmeans:
         @param[in] k_init (uint): Initial amount of centers (by default started search from 1).
         @param[in] ccore (bool): Defines whether CCORE library (C/C++ part of the library) should be used instead of
                     Python code.
-        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'tolerance', 'repeat', 'k_max').
+        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: `tolerance`, `repeat`, `k_max`, `random_state`).
 
         <b>Keyword Args:</b><br>
             - tolerance (double): tolerance (double): Stop condition for each K-Means iteration: if maximum value of
@@ -114,6 +114,7 @@ class gmeans:
             - k_max (uint): Maximum amount of cluster that might be allocated. The argument is considered as a stop
                condition. When the maximum amount is reached then algorithm stops processing. By default the maximum
                amount of clusters is not restricted (`k_max` is -1).
+            - random_state (int): Seed for random state (by default is `None`, current system time is used).
 
         """
         self.__data = data
@@ -127,6 +128,7 @@ class gmeans:
         self.__tolerance = kwargs.get('tolerance', 0.025)
         self.__repeat = kwargs.get('repeat', 3)
         self.__k_max = kwargs.get('k_max', -1)
+        self.__random_state = kwargs.get('random_state', None)
 
         if self.__ccore is True:
             self.__ccore = ccore_library.workable()
@@ -333,7 +335,7 @@ class gmeans:
         """
         best_wce, best_clusters, best_centers = float('+inf'), [], []
         for _ in range(self.__repeat):
-            initial_centers = kmeans_plusplus_initializer(data, amount).initialize()
+            initial_centers = kmeans_plusplus_initializer(data, amount, random_state=self.__random_state).initialize()
             solver = kmeans(data, initial_centers, tolerance=self.__tolerance, ccore=False).process()
 
             candidate_wce = solver.get_total_wce()

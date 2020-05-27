@@ -101,7 +101,7 @@ class ema_init_type(IntEnum):
 
 class ema_initializer():
     """!
-    @brief Provides servies for preparing initial means and covariances for Expectation-Maximization algorithm.
+    @brief Provides services for preparing initial means and covariances for Expectation-Maximization algorithm.
     @details Initialization strategy is defined by enumerator 'ema_init_type': random initialization and 
               kmeans with kmeans++ initialization. Here an example of initialization using kmeans strategy:
     
@@ -181,8 +181,8 @@ class ema_initializer():
         covariances = []
         for initial_cluster in initial_clusters:
             if len(initial_cluster) > 1:
-                cluster_sample = [ self.__sample[index_point] for index_point in initial_cluster ]
-                covariances.append(numpy.cov(cluster_sample, rowvar = False))
+                cluster_sample = [self.__sample[index_point] for index_point in initial_cluster]
+                covariances.append(numpy.cov(cluster_sample, rowvar=False))
             else:
                 dimension = len(self.__sample[0])
                 covariances.append(numpy.zeros((dimension, dimension)) + random.random() / 10.0)
@@ -223,10 +223,10 @@ class ema_initializer():
         for initial_cluster in initial_clusters:
             if len(initial_cluster) > 1:
                 cluster_sample = [ self.__sample[index_point] for index_point in initial_cluster ]
-                covariances.append(numpy.cov(cluster_sample, rowvar = False))
+                covariances.append(numpy.cov(cluster_sample, rowvar=False))
             else:
                 dimension = len(self.__sample[0])
-                covariances.append(numpy.zeros((dimension, dimension))  + random.random() / 10.0)
+                covariances.append(numpy.zeros((dimension, dimension)) + random.random() / 10.0)
         
         return means, covariances
 

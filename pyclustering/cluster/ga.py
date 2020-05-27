@@ -377,7 +377,8 @@ class genetic_algorithm:
         @param[in] count_clusters (uint): Amount of clusters that should be allocated in the data.
         @param[in] chromosome_count (uint): Amount of chromosomes in each population.
         @param[in] population_count (uint): Amount of populations.
-        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'count_mutation_gens', 'coeff_mutation_count', 'select_coeff', 'crossover_rate', 'observer').
+        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'count_mutation_gens',
+                    'coeff_mutation_count', 'select_coeff', 'crossover_rate', 'observer', 'random_state').
 
         <b>Keyword Args:</b><br>
             - count_mutation_gens (uint): Amount of genes in chromosome that is mutated on each step.
@@ -387,11 +388,12 @@ class genetic_algorithm:
                math.exp(1 + fitness(chromosome) * select_coeff).
             - crossover_rate (float): Crossover rate.
             - observer (ga_observer): Observer that is used for collecting information of about clustering process on each step.
+            - random_state (int): Seed for random state (by default is `None`, current system time is used).
 
         """
         
         # Initialize random
-        np.random.seed()
+        np.random.seed(kwargs.get('random_state', None))
 
         # Clustering data
         self._data = np.array(data)

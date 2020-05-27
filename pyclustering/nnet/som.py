@@ -241,7 +241,7 @@ class som:
         return self._capture_objects
 
 
-    def __init__(self, rows, cols, conn_type = type_conn.grid_eight, parameters = None, ccore = True):
+    def __init__(self, rows, cols, conn_type = type_conn.grid_eight, parameters=None, ccore=True, **kwargs):
         """!
         @brief Constructor of self-organized map.
         
@@ -250,7 +250,11 @@ class som:
         @param[in] conn_type (type_conn): Type of connection between oscillators in the network (grid four, grid eight, honeycomb, function neighbour).
         @param[in] parameters (som_parameters): Other specific parameters.
         @param[in] ccore (bool): If True simulation is performed by CCORE library (C++ implementation of pyclustering).
-        
+        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: `random_state`).
+
+        <b>Keyword Args:</b><br>
+            - random_state (int): Seed for random state (by default is `None`, current system time is used).
+
         """
         
         # some of these parameters are required despite core implementation, for example, for network demonstration.
@@ -269,7 +273,9 @@ class som:
         self._local_radius = 0.0
         
         self._learn_rate = 0.0
-        
+
+        self._seed = kwargs.get('random_state', None)
+
         self.__ccore_som_pointer = None
 
         if parameters is not None:
@@ -427,7 +433,7 @@ class som:
             if self._cols > 1: step_y = dim_info.get_width()[1] / (self._cols - 1);
                       
         # generate weights (topological coordinates)
-        random.seed()
+        random.seed(self._seed)
         
         # Uniform grid.
         if init_type == type_init.uniform_grid:

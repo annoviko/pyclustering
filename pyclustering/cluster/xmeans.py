@@ -136,21 +136,23 @@ class xmeans:
         @param[in] tolerance (double): Stop condition for each iteration: if maximum value of change of centers of clusters is less than tolerance than algorithm will stop processing.
         @param[in] criterion (splitting_type): Type of splitting creation.
         @param[in] ccore (bool): Defines should be CCORE (C++ pyclustering library) used instead of Python code or not.
-        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'repeat').
+        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: `repeat`, `random_state`).
 
         <b>Keyword Args:</b><br>
             - repeat (unit): How many times K-Means should be run to improve parameters (by default is 1).
                With larger 'repeat' values suggesting higher probability of finding global optimum.
+            - random_state (int): Seed for random state (by default is `None`, current system time is used).
 
         """
         
         self.__pointer_data = data
         self.__clusters = []
+        self.__random_state = kwargs.get('random_state', None)
         
         if initial_centers is not None:
             self.__centers = initial_centers[:]
         else:
-            self.__centers = kmeans_plusplus_initializer(data, 2).initialize()
+            self.__centers = kmeans_plusplus_initializer(data, 2, random_state=self.__random_state).initialize()
         
         self.__kmax = kmax
         self.__tolerance = tolerance
@@ -339,7 +341,7 @@ class xmeans:
             if len(local_data) < candidates:
                 candidates = len(local_data)
 
-            local_centers = kmeans_plusplus_initializer(local_data, 2, candidates).initialize()
+            local_centers = kmeans_plusplus_initializer(local_data, 2, candidates, random_state=self.__random_state).initialize()
 
             kmeans_instance = kmeans(local_data, local_centers, tolerance=self.__tolerance, ccore=False)
             kmeans_instance.process()

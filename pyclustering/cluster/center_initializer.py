@@ -39,18 +39,24 @@ class random_center_initializer:
     
     """
 
-    def __init__(self, data, amount_centers):
+    def __init__(self, data, amount_centers, **kwargs):
         """!
         @brief Creates instance of random center initializer.
         
         @param[in] data (list): List of points where each point is represented by list of coordinates.
         @param[in] amount_centers (unit): Amount of centers that should be initialized.
-        
+        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'random_state').
+
+        <b>Keyword Args:</b><br>
+            - random_state (int): Seed for random state (by default is `None`, current system time is used).
+
         """
         
         self.__data = data
         self.__amount = amount_centers
         self.__available_indexes = set(list(range(len(self.__data))))
+
+        random.seed(kwargs.get('random_state', None))
 
         if self.__amount <= 0:
             raise ValueError("Amount of cluster centers should be at least 1.")
@@ -170,7 +176,7 @@ class kmeans_plusplus_initializer:
     FARTHEST_CENTER_CANDIDATE = "farthest"
 
 
-    def __init__(self, data, amount_centers, amount_candidates=None):
+    def __init__(self, data, amount_centers, amount_candidates=None, **kwargs):
         """!
         @brief Creates K-Means++ center initializer instance.
         
@@ -179,6 +185,10 @@ class kmeans_plusplus_initializer:
         @param[in] amount_candidates (uint): Amount of candidates that is considered as a center, if the farthest points
                     (with the highest probability) should be considered as centers then special constant should be used
                     'FARTHEST_CENTER_CANDIDATE'.
+        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'random_state').
+
+        <b>Keyword Args:</b><br>
+            - random_state (int): Seed for random state (by default is `None`, current system time is used).
 
         @see FARTHEST_CENTER_CANDIDATE
 
@@ -197,7 +207,7 @@ class kmeans_plusplus_initializer:
 
         self.__check_parameters()
 
-        random.seed()
+        random.seed(kwargs.get('random_state', None))
 
 
     def __check_parameters(self):
