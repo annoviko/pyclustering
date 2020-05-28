@@ -184,7 +184,7 @@ class kmeans_plusplus_initializer:
         @param[in] amount_centers (uint): Amount of centers that should be initialized.
         @param[in] amount_candidates (uint): Amount of candidates that is considered as a center, if the farthest points
                     (with the highest probability) should be considered as centers then special constant should be used
-                    'FARTHEST_CENTER_CANDIDATE'.
+                    'FARTHEST_CENTER_CANDIDATE'. By default the amount of candidates is 3.
         @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'random_state').
 
         <b>Keyword Args:</b><br>

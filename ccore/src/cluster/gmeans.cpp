@@ -47,22 +47,23 @@ namespace pyclustering {
 namespace clst {
 
 
-const long long          gmeans::IGNORE_KMAX            = -1;
+const long long          gmeans::IGNORE_KMAX                = -1;
 
-const std::size_t        gmeans::DEFAULT_AMOUNT_CENTERS = 1;
+const std::size_t        gmeans::DEFAULT_AMOUNT_CENTERS     = 1;
 
-const double             gmeans::DEFAULT_TOLERANCE      = 0.001;
+const double             gmeans::DEFAULT_TOLERANCE          = 0.001;
 
-const std::size_t        gmeans::DEFAULT_REPEAT         = 3;
+const std::size_t        gmeans::DEFAULT_REPEAT             = 3;
 
-const std::size_t        gmeans::DEFAULT_CANDIDATES     = 3;
+const std::size_t        gmeans::DEFAULT_CANDIDATES         = 3;
 
 
-gmeans::gmeans(const std::size_t p_k_initial, const double p_tolerance, const std::size_t p_repeat, const long long p_kmax) :
+gmeans::gmeans(const std::size_t p_k_initial, const double p_tolerance, const std::size_t p_repeat, const long long p_kmax, const long long p_random_state) :
     m_amount(p_k_initial),
     m_tolerance(p_tolerance),
     m_repeat(p_repeat),
     m_kmax(p_kmax),
+    m_random_state(p_random_state),
     m_ptr_result(nullptr),
     m_ptr_data(nullptr)
 { }
@@ -107,7 +108,7 @@ void gmeans::search_optimal_parameters(const dataset & p_data, const std::size_t
 
     for (std::size_t i = 0; i < m_repeat; i++) {
         dataset initial_centers;
-        kmeans_plus_plus(p_amount, get_amount_candidates(p_data)).initialize(p_data, initial_centers);
+        kmeans_plus_plus(p_amount, get_amount_candidates(p_data), m_random_state).initialize(p_data, initial_centers);
 
         kmeans_data result;
         kmeans(initial_centers, m_tolerance).process(p_data, result);
@@ -130,16 +131,18 @@ void gmeans::search_optimal_parameters(const dataset & p_data, const std::size_t
 
 void gmeans::statistical_optimization() {
     dataset centers;
+    long long potential_amount_clusters = static_cast<long long>(m_ptr_result->clusters().size());
     for (std::size_t i = 0; i < m_ptr_result->clusters().size(); i++) {
         dataset new_centers;
         split_and_search_optimal(m_ptr_result->clusters().at(i), new_centers);
         
-        if (new_centers.empty()) {
+        if (new_centers.empty() || ((m_kmax != IGNORE_KMAX) && (potential_amount_clusters >= m_kmax))) {
             centers.push_back(std::move(m_ptr_result->centers().at(i)));
         }
         else {
             centers.push_back(std::move(new_centers[0]));
             centers.push_back(std::move(new_centers[1]));
+            potential_amount_clusters++;
         }
     }
 

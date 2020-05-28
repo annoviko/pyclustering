@@ -28,7 +28,6 @@
 #include <exception>
 #include <limits>
 #include <numeric>
-#include <random>
 #include <string>
 
 
@@ -41,20 +40,38 @@ const std::size_t kmeans_plus_plus::FARTHEST_CENTER_CANDIDATE = std::numeric_lim
 const std::size_t kmeans_plus_plus::INVALID_INDEX = std::numeric_limits<std::size_t>::max();
 
 
-kmeans_plus_plus::kmeans_plus_plus(const std::size_t p_amount, const std::size_t p_candidates) noexcept :
+kmeans_plus_plus::kmeans_plus_plus(const std::size_t p_amount, const std::size_t p_candidates, const long long p_random_state) noexcept :
         m_amount(p_amount),
         m_candidates(p_candidates),
         m_dist_func([](const point &p1, const point &p2) {
             return euclidean_distance_square(p1, p2);
-        })
-{ }
+        }),
+        m_random_state(p_random_state),
+        m_generator(std::random_device()())
+{
+    initialize_random_generator();
+}
 
 
-kmeans_plus_plus::kmeans_plus_plus(const std::size_t p_amount, const std::size_t p_candidates, const metric & p_metric) noexcept :
+kmeans_plus_plus::kmeans_plus_plus(const std::size_t p_amount, const std::size_t p_candidates, const metric & p_metric, const long long p_random_state) noexcept :
         m_amount(p_amount),
         m_candidates(p_candidates),
-        m_dist_func(p_metric)
-{ }
+        m_dist_func(p_metric),
+        m_random_state(p_random_state),
+        m_generator(std::random_device()())
+{
+    initialize_random_generator();
+}
+
+
+void kmeans_plus_plus::initialize_random_generator() {
+    if (m_random_state == RANDOM_STATE_CURRENT_TIME) {
+        m_generator.seed(static_cast<unsigned int>(std::chrono::system_clock::now().time_since_epoch().count()));
+    }
+    else {
+        m_generator.seed(static_cast<unsigned int>(m_random_state));
+    }
+}
 
 
 void kmeans_plus_plus::initialize(const dataset & p_data, dataset & p_centers) const {
@@ -151,14 +168,9 @@ void kmeans_plus_plus::free_temporal_params() const {
 kmeans_plus_plus::center_description kmeans_plus_plus::get_first_center() const {
     std::size_t length = m_indexes_ptr->empty() ? m_data_ptr->size() : m_indexes_ptr->size();
 
-    std::random_device random_device;
-
-    std::mt19937 generator(random_device());
-    generator.seed(static_cast<unsigned int>(std::chrono::system_clock::now().time_since_epoch().count()));
-
     std::uniform_int_distribution<std::size_t> distribution(0, length - 1);
 
-    std::size_t index = distribution(generator);
+    std::size_t index = distribution(m_generator);
     const auto & center = m_indexes_ptr->empty() ? (*m_data_ptr)[index] : (*m_data_ptr)[ (*m_indexes_ptr)[index] ];
 
     return std::make_tuple(center, index);
@@ -238,15 +250,12 @@ void kmeans_plus_plus::calculate_probabilities(const std::vector<double> & p_dis
 
 
 std::size_t kmeans_plus_plus::get_probable_center(const std::vector<double> & p_distances, const std::vector<double> & p_probabilities) const {
-    std::default_random_engine generator;
-    generator.seed(static_cast<unsigned int>(std::chrono::system_clock::now().time_since_epoch().count()));
-
     std::uniform_real_distribution<double> distribution(0.0, 1.0);
 
     std::size_t best_index_candidate = 0;
     for (std::size_t i = 0; i < m_candidates; i++) {
         std::size_t current_index_candidate = kmeans_plus_plus::INVALID_INDEX;
-        double candidate_probability = distribution(generator);
+        double candidate_probability = distribution(m_generator);
         for (std::size_t j = 0; j < p_probabilities.size(); j++) {
             if (candidate_probability < p_probabilities[j]) {
                 current_index_candidate = j;

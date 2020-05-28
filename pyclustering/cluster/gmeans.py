@@ -32,6 +32,7 @@ from pyclustering.core.gmeans_wrapper import gmeans as gmeans_wrapper
 from pyclustering.core.wrapper import ccore_library
 
 from pyclustering.cluster.center_initializer import kmeans_plusplus_initializer
+from pyclustering.cluster.encoder import type_encoding
 from pyclustering.cluster.kmeans import kmeans
 from pyclustering.utils import distance_metric, type_metric
 
@@ -74,8 +75,8 @@ class gmeans:
         visualizer.show()
     @endcode
 
-    Example #2. Sometimes G-Means may found local optimum. 'repeat' value can be used to increase probability to
-    find global optimum. Argument 'repeat' defines how many times K-Means clustering with K-Means++
+    Example #2. Sometimes G-Means may found local optimum. `repeat` value can be used to increase probability to
+    find global optimum. Argument `repeat` defines how many times K-Means clustering with K-Means++
     initialization should be run to find optimal clusters.
     @code
         # Read sample 'Tetra' from file.
@@ -91,6 +92,31 @@ class gmeans:
         visualizer = cluster_visualizer()
         visualizer.append_clusters(clusters, sample)
         visualizer.show()
+    @endcode
+
+    In case of requirement to have labels instead of default `CLUSTER_INDEX_LIST_SEPARATION`:
+    @code
+        from pyclustering.cluster.gmeans import gmeans
+        from pyclustering.cluster.encoder import type_encoding, cluster_encoder
+        from pyclustering.samples.definitions import SIMPLE_SAMPLES
+        from pyclustering.utils import read_sample
+
+        data = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1)
+
+        gmeans_instance = gmeans(data).process()
+        clusters = gmeans_instance.get_clusters()
+
+        # Change cluster representation from default to labeling.
+        encoder = cluster_encoder(type_encoding.CLUSTER_INDEX_LIST_SEPARATION, clusters, data)
+        encoder.set_encoding(type_encoding.CLUSTER_INDEX_LABELING)
+        labels = encoder.get_clusters()
+
+        print(labels)   # Display labels
+    @endcode
+
+    There is an output of the code above:
+    @code
+        [0, 0, 0, 0, 0, 1, 1, 1, 1, 1]
     @endcode
 
     """
@@ -125,7 +151,7 @@ class gmeans:
         self.__total_wce = 0.0
         self.__ccore = ccore
 
-        self.__tolerance = kwargs.get('tolerance', 0.025)
+        self.__tolerance = kwargs.get('tolerance', 0.001)
         self.__repeat = kwargs.get('repeat', 3)
         self.__k_max = kwargs.get('k_max', -1)
         self.__random_state = kwargs.get('random_state', None)
@@ -157,7 +183,7 @@ class gmeans:
         @brief Performs cluster analysis using CCORE (C/C++ part of pyclustering library).
 
         """
-        self.__clusters, self.__centers, self.__total_wce = gmeans_wrapper(self.__data, self.__k_init, self.__tolerance, self.__repeat, self.__k_max)
+        self.__clusters, self.__centers, self.__total_wce = gmeans_wrapper(self.__data, self.__k_init, self.__tolerance, self.__repeat, self.__k_max, self.__random_state)
         return self
 
 
@@ -243,18 +269,33 @@ class gmeans:
         return self.__total_wce
 
 
+    def get_cluster_encoding(self):
+        """!
+        @brief Returns clustering result representation type that indicate how clusters are encoded.
+
+        @return (type_encoding) Clustering result representation.
+
+        @see get_clusters()
+
+        """
+
+        return type_encoding.CLUSTER_INDEX_LIST_SEPARATION
+
+
     def _statistical_optimization(self):
         """!
         @brief Try to split cluster into two to find optimal amount of clusters.
 
         """
         centers = []
+        potential_amount_clusters = len(self.__clusters)
         for index in range(len(self.__clusters)):
             new_centers = self._split_and_search_optimal(self.__clusters[index])
-            if new_centers is None:
+            if (new_centers is None) or ((self.__k_max != -1) and (potential_amount_clusters >= self.__k_max)):
                 centers.append(self.__centers[index])
             else:
                 centers += new_centers
+                potential_amount_clusters += 1
 
         self.__centers = centers
 

@@ -106,15 +106,15 @@ private:
     using projection = std::vector<double>;
 
 public:
-    const static long long          IGNORE_KMAX;            /**< Defines value that indicates to the G-Means algorithm to ignore K maximum value. */
+    const static long long          IGNORE_KMAX;                /**< Defines value that means to ignore K maximum value. */
 
-    const static std::size_t        DEFAULT_AMOUNT_CENTERS; /**< Defaule value of amount of initial K - the value from that search is started. */
+    const static std::size_t        DEFAULT_AMOUNT_CENTERS;     /**< Defaule value of amount of initial K - the value from that the search procedure is started. */
 
-    const static double             DEFAULT_TOLERANCE;      /**< Default value of the tolerance stop condition: if maximum value of change of centers of clusters is less than tolerance then algorithm stops processing. */
+    const static double             DEFAULT_TOLERANCE;          /**< Default value of the tolerance (stop condition): if the maximum value of cluster changes is less than tolerance then the algorithm stops processing. */
 
-    const static std::size_t        DEFAULT_REPEAT;         /**< Default value that defines how many times K-Means should be run to improve parameters. */
+    const static std::size_t        DEFAULT_REPEAT;             /**< Default value that defines how many times K-Means should be run to improve parameters. */
 
-    const static std::size_t        DEFAULT_CANDIDATES;     /**< Default value of amount of candidates to consider by K-Means++ to initialize initial centers for K-Means on each iteration. */
+    const static std::size_t        DEFAULT_CANDIDATES;         /**< Default value of amount of candidates to consider by K-Means++ to initialize initial centers for K-Means on each iteration. */
 
 private:
     std::size_t             m_amount                = DEFAULT_AMOUNT_CENTERS;
@@ -124,6 +124,8 @@ private:
     std::size_t             m_repeat                = DEFAULT_REPEAT;
 
     long long               m_kmax                  = IGNORE_KMAX;
+
+    long long               m_random_state          = RANDOM_STATE_CURRENT_TIME;
 
     gmeans_data             * m_ptr_result          = nullptr;      /* temporary pointer to output result */
 
@@ -149,13 +151,15 @@ public:
                 with larger 'repeat' values suggesting higher probability of finding global optimum.
     @param[in] p_kmax: maximum amount of cluster that might be allocated. The argument is considered as a stop
                 condition. When the maximum amount is reached then algorithm stops processing. By default the maximum
-                amount of clusters is not restricted (`k_max` is -1).
+                amount of clusters is not restricted (`k_max` is `IGNORE_KMAX`).
+    @param[in] p_random_state: seed for random state (by default is `RANDOM_STATE_CURRENT_TIME`, current system time is used).
     
     */
     gmeans(const std::size_t p_k_initial, 
            const double p_tolerance = DEFAULT_TOLERANCE,
            const std::size_t p_repeat = DEFAULT_REPEAT,
-           const long long p_kmax = IGNORE_KMAX);
+           const long long p_kmax = IGNORE_KMAX,
+           const long long p_random_state = RANDOM_STATE_CURRENT_TIME);
 
     /*!
     

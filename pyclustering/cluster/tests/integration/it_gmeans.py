@@ -31,7 +31,7 @@ matplotlib.use('Agg')
 
 from pyclustering.cluster.tests.gmeans_templates import gmeans_test_template
 
-from pyclustering.samples.definitions import SIMPLE_SAMPLES, SIMPLE_ANSWERS
+from pyclustering.samples.definitions import SIMPLE_SAMPLES, SIMPLE_ANSWERS, FCPS_SAMPLES
 
 
 class gmeans_integration_test(unittest.TestCase):
@@ -91,3 +91,33 @@ class gmeans_integration_test(unittest.TestCase):
 
     def test_clustering_sample_13(self):
         gmeans_test_template().clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE13, SIMPLE_ANSWERS.ANSWER_SIMPLE13, 1, True)
+
+    def test_clustering_hepta_kmax_01(self):
+        gmeans_test_template().clustering(FCPS_SAMPLES.SAMPLE_HEPTA, 1, 1, True, k_max=1, random_state=1)
+
+    def test_clustering_hepta_kmax_02(self):
+        gmeans_test_template().clustering(FCPS_SAMPLES.SAMPLE_HEPTA, 2, 1, True, k_max=2, random_state=1)
+
+    def test_clustering_hepta_kmax_03(self):
+        gmeans_test_template().clustering(FCPS_SAMPLES.SAMPLE_HEPTA, 3, 1, True, k_max=3, random_state=1)
+
+    def test_clustering_hepta_kmax_04(self):
+        gmeans_test_template().clustering(FCPS_SAMPLES.SAMPLE_HEPTA, 4, 1, True, k_max=4, random_state=1)
+
+    def test_clustering_hepta_kmax_05(self):
+        gmeans_test_template().clustering(FCPS_SAMPLES.SAMPLE_HEPTA, 5, 1, True, k_max=5, random_state=1)
+
+    def test_clustering_hepta_kmax_06(self):
+        gmeans_test_template().clustering(FCPS_SAMPLES.SAMPLE_HEPTA, 6, 1, True, k_max=6, random_state=1)
+
+    def test_clustering_hepta_kmax_07(self):
+        gmeans_test_template().clustering(FCPS_SAMPLES.SAMPLE_HEPTA, 7, 1, True, k_max=7, random_state=1)
+
+    def test_clustering_hepta_kmax_08(self):
+        gmeans_test_template().clustering(FCPS_SAMPLES.SAMPLE_HEPTA, 7, 1, True, k_max=8, random_state=1)
+
+    def test_clustering_hepta_kmax_09(self):
+        gmeans_test_template().clustering(FCPS_SAMPLES.SAMPLE_HEPTA, 7, 1, True, k_max=9, random_state=1)
+
+    def test_clustering_hepta_kmax_10(self):
+        gmeans_test_template().clustering(FCPS_SAMPLES.SAMPLE_HEPTA, 7, 1, True, k_max=10, random_state=1)

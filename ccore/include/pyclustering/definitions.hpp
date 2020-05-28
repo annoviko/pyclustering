@@ -49,6 +49,9 @@
 namespace pyclustering {
 
 
+constexpr long long RANDOM_STATE_CURRENT_TIME = -1;     /**< Defines value of the random state that indicates to the algorithm to use current system time as a seed for random functionality. */
+
+
 /*!
 
 @brief   Defines a patten that consists of features that describe this pattern.

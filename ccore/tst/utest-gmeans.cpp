@@ -126,6 +126,45 @@ template_gmeans_clustering(
 }
 
 
+static void
+template_gmeans_clustering(
+    const dataset_ptr & p_data,
+    const std::size_t p_k_init,
+    const std::size_t & p_expected_amount_clusters,
+    const long long p_kmax = gmeans::IGNORE_KMAX,
+    const long long p_random_state = RANDOM_STATE_CURRENT_TIME)
+{
+    const std::size_t attempts = 10;
+    for (std::size_t i = 0; i < attempts; i++) {
+        gmeans_data output_result;
+        gmeans(1, gmeans::DEFAULT_TOLERANCE, 3, p_kmax, p_random_state).process(*p_data, output_result);
+
+        auto clusters = output_result.clusters();
+        auto centers = output_result.centers();
+        std::set<std::size_t> unique;
+
+        for (const auto & item : clusters) {
+            unique.insert(item.begin(), item.end());
+        }
+
+        if (p_expected_amount_clusters != clusters.size()) { continue; }
+        if (p_expected_amount_clusters != centers.size()) { continue; }
+        if (p_data->size() != unique.size()) { continue; }
+
+        if (clusters.size() > 1) {
+            if (output_result.wce() <= 0.0) { continue; }
+        }
+        else {
+            if (output_result.wce() < 0.0) { continue; }
+        }
+
+        return;
+    }
+
+    FAIL();
+}
+
+
 TEST(utest_gmeans, simple01) {
     template_gmeans_clustering(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01), 1, 
                                answer_reader::read(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01));
@@ -227,4 +266,44 @@ TEST(utest_gmeans, simple12) {
 TEST(utest_gmeans, simple13) {
     template_gmeans_clustering(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_13), 1, 
                                answer_reader::read(SAMPLE_SIMPLE::SAMPLE_SIMPLE_13));
+}
+
+TEST(utest_gmeans, hepta_kmax_01) {
+    template_gmeans_clustering(fcps_sample_factory::create_sample(FCPS_SAMPLE::HEPTA), 1, 1, 1, 1);
+}
+
+TEST(utest_gmeans, hepta_kmax_02) {
+    template_gmeans_clustering(fcps_sample_factory::create_sample(FCPS_SAMPLE::HEPTA), 1, 2, 2, 1);
+}
+
+TEST(utest_gmeans, hepta_kmax_03) {
+    template_gmeans_clustering(fcps_sample_factory::create_sample(FCPS_SAMPLE::HEPTA), 1, 3, 3, 1);
+}
+
+TEST(utest_gmeans, hepta_kmax_04) {
+    template_gmeans_clustering(fcps_sample_factory::create_sample(FCPS_SAMPLE::HEPTA), 1, 4, 4, 1);
+}
+
+TEST(utest_gmeans, hepta_kmax_05) {
+    template_gmeans_clustering(fcps_sample_factory::create_sample(FCPS_SAMPLE::HEPTA), 1, 5, 5, 1);
+}
+
+TEST(utest_gmeans, hepta_kmax_06) {
+    template_gmeans_clustering(fcps_sample_factory::create_sample(FCPS_SAMPLE::HEPTA), 1, 6, 6, 1);
+}
+
+TEST(utest_gmeans, hepta_kmax_07) {
+    template_gmeans_clustering(fcps_sample_factory::create_sample(FCPS_SAMPLE::HEPTA), 1, 7, 7, 1);
+}
+
+TEST(utest_gmeans, hepta_kmax_08) {
+    template_gmeans_clustering(fcps_sample_factory::create_sample(FCPS_SAMPLE::HEPTA), 1, 7, 8, 1);
+}
+
+TEST(utest_gmeans, hepta_kmax_09) {
+    template_gmeans_clustering(fcps_sample_factory::create_sample(FCPS_SAMPLE::HEPTA), 1, 7, 9, 1);
+}
+
+TEST(utest_gmeans, hepta_kmax_10) {
+    template_gmeans_clustering(fcps_sample_factory::create_sample(FCPS_SAMPLE::HEPTA), 1, 7, 10, 1);
 }

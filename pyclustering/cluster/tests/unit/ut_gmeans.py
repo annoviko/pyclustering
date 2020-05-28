@@ -35,7 +35,7 @@ from pyclustering.cluster.tests.gmeans_templates import gmeans_test_template
 from pyclustering.cluster.gmeans import gmeans
 from pyclustering.utils import read_sample, distance_metric, type_metric
 
-from pyclustering.samples.definitions import SIMPLE_SAMPLES, SIMPLE_ANSWERS
+from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES, SIMPLE_ANSWERS
 
 
 class testable_gmeans(gmeans):
@@ -79,10 +79,10 @@ class gmeans_unit_test(unittest.TestCase):
         gmeans_test_template().clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [8, 15], 1, False, k_max=2)
 
     def test_clustering_sample_03(self):
-        gmeans_test_template().clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, SIMPLE_ANSWERS.ANSWER_SIMPLE3, 1, False)
+        gmeans_test_template().clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, SIMPLE_ANSWERS.ANSWER_SIMPLE3, 1, False, random_state=1000)
 
     def test_clustering_sample_03_kmax_1(self):
-        gmeans_test_template().clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [60], 1, False, k_max=1)
+        gmeans_test_template().clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [60], 1, False, k_max=1, random_state=1000)
 
     def test_clustering_sample_05(self):
         gmeans_test_template().clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, SIMPLE_ANSWERS.ANSWER_SIMPLE5, 1, False)
@@ -110,6 +110,36 @@ class gmeans_unit_test(unittest.TestCase):
 
     def test_clustering_sample_13(self):
         gmeans_test_template().clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE13, SIMPLE_ANSWERS.ANSWER_SIMPLE13, 1, False)
+
+    def test_clustering_hepta_kmax_01(self):
+        gmeans_test_template().clustering(FCPS_SAMPLES.SAMPLE_HEPTA, 1, 1, False, k_max=1)
+
+    def test_clustering_hepta_kmax_02(self):
+        gmeans_test_template().clustering(FCPS_SAMPLES.SAMPLE_HEPTA, 2, 1, False, k_max=2, random_state=1000)
+
+    def test_clustering_hepta_kmax_03(self):
+        gmeans_test_template().clustering(FCPS_SAMPLES.SAMPLE_HEPTA, 3, 1, False, k_max=3, random_state=1000)
+
+    def test_clustering_hepta_kmax_04(self):
+        gmeans_test_template().clustering(FCPS_SAMPLES.SAMPLE_HEPTA, 4, 1, False, k_max=4, random_state=1000)
+
+    def test_clustering_hepta_kmax_05(self):
+        gmeans_test_template().clustering(FCPS_SAMPLES.SAMPLE_HEPTA, 5, 1, False, k_max=5, random_state=1000)
+
+    def test_clustering_hepta_kmax_06(self):
+        gmeans_test_template().clustering(FCPS_SAMPLES.SAMPLE_HEPTA, 6, 1, False, k_max=6, random_state=1000)
+
+    def test_clustering_hepta_kmax_07(self):
+        gmeans_test_template().clustering(FCPS_SAMPLES.SAMPLE_HEPTA, 7, 1, False, k_max=7, random_state=1000)
+
+    def test_clustering_hepta_kmax_08(self):
+        gmeans_test_template().clustering(FCPS_SAMPLES.SAMPLE_HEPTA, 7, 1, False, k_max=8, random_state=1000)
+
+    def test_clustering_hepta_kmax_09(self):
+        gmeans_test_template().clustering(FCPS_SAMPLES.SAMPLE_HEPTA, 7, 1, False, k_max=9, random_state=1000)
+
+    def test_clustering_hepta_kmax_10(self):
+        gmeans_test_template().clustering(FCPS_SAMPLES.SAMPLE_HEPTA, 7, 1, False, k_max=10, random_state=1000)
 
 
     def test_incorrect_data(self):

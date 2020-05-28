@@ -25,6 +25,7 @@
 #pragma once
 
 
+#include <random>
 #include <unordered_set>
 
 #include <pyclustering/definitions.hpp>
@@ -80,9 +81,11 @@ private:
     using store_result = std::function<void(center_description &)>;
 
 private:
-    std::size_t         m_amount        = 0;
-    std::size_t         m_candidates    = 0;
-    metric              m_dist_func;
+    std::size_t             m_amount        = 0;
+    std::size_t             m_candidates    = 0;
+    metric                  m_dist_func;
+    long long               m_random_state  = RANDOM_STATE_CURRENT_TIME;
+    mutable std::mt19937    m_generator;
 
     /* temporal members that are used only during initialization */
     mutable dataset const *           m_data_ptr      = nullptr;
@@ -107,11 +110,12 @@ public:
     * @param[in] p_candidates: amount of candidates that are considered to find the best center, if
     *             the farthest candidate is required (with highest probability) than static constant
     *             FARTHEST_CENTER_CANDIDATE can be specified.
+    * @param[in] p_random_state: seed for random state (by default is `RANDOM_STATE_CURRENT_TIME`, current system time is used).
     *
     * @see FARTHEST_CENTER_CANDIDATE
     *
     */
-    kmeans_plus_plus(const std::size_t p_amount, const std::size_t p_candidates = 1) noexcept;
+    kmeans_plus_plus(const std::size_t p_amount, const std::size_t p_candidates = 1, const long long p_random_state = RANDOM_STATE_CURRENT_TIME) noexcept;
 
     /**
     *
@@ -123,11 +127,12 @@ public:
     *             the farthest candidate is required (with highest probability) than static constant
     *             FARTHEST_CENTER_CANDIDATE can be specified.
     * @param[in] p_metric: metric for distance calculation between points.
+    * @param[in] p_random_state: seed for random state (by default is `RANDOM_STATE_CURRENT_TIME`, current system time is used).
     *
     * @see FARTHEST_CENTER_CANDIDATE
     *
     */
-    kmeans_plus_plus(const std::size_t p_amount, const std::size_t p_candidates, const metric & p_metric) noexcept;
+    kmeans_plus_plus(const std::size_t p_amount, const std::size_t p_candidates, const metric & p_metric, const long long p_random_state = RANDOM_STATE_CURRENT_TIME) noexcept;
 
     /**
      *
@@ -185,6 +190,13 @@ public:
     void initialize(const dataset & p_data, index_sequence & p_center_indexes) const;
 
 private:
+    /**
+    *
+    * @brief    Assigns seed to the random generator that is used by the algorithm.
+    *
+    */
+    void initialize_random_generator();
+
     /**
     *
     * @brief    Performs center initialization process in line algorithm configuration.
