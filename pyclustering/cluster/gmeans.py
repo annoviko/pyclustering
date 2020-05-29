@@ -75,9 +75,9 @@ class gmeans:
         visualizer.show()
     @endcode
 
-    Example #2. Sometimes G-Means may found local optimum. `repeat` value can be used to increase probability to
+    Example #2. Sometimes G-Means might find local optimum. `repeat` value can be used to increase probability to
     find global optimum. Argument `repeat` defines how many times K-Means clustering with K-Means++
-    initialization should be run to find optimal clusters.
+    initialization should be run in order to find optimal clusters.
     @code
         # Read sample 'Tetra' from file.
         sample = read_sample(FCPS_SAMPLES.SAMPLE_TETRA)
@@ -94,7 +94,7 @@ class gmeans:
         visualizer.show()
     @endcode
 
-    In case of requirement to have labels instead of default `CLUSTER_INDEX_LIST_SEPARATION`:
+    In case of requirement to have labels instead of default representation of clustering results `CLUSTER_INDEX_LIST_SEPARATION`:
     @code
         from pyclustering.cluster.gmeans import gmeans
         from pyclustering.cluster.encoder import type_encoding, cluster_encoder

@@ -191,5 +191,5 @@ cluster_wingnut()
 cluster_atom()
 cluster_engytime()
 
-display_simple_clustering_results()
-display_fcps_clustering_results()
+# display_simple_clustering_results()
+# display_fcps_clustering_results()

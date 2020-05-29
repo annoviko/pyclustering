@@ -45,14 +45,14 @@ enum gmeans_package_indexer {
 /*!
 
 @brief   Clustering algorithm G-Means returns allocated clusters.
-@details Caller should destroy returned result in 'pyclustering_package'.
+@details Caller should destroy returned result in `pyclustering_package`.
 
 @param[in] p_sample: input data for clustering.
 @param[in] p_amount: initial amount of centers.
-@param[in] p_tolerance: stop condition - when changes of medians are less then tolerance value.
-@param[in] p_repeat: how many times K-Means should be run to improve parameters, with larger 'repeat' 
+@param[in] p_tolerance: stop condition that stops the algorithm's processing when changes of medians are less than tolerance value.
+@param[in] p_repeat: how many times K-Means should be run to improve parameters, with larger `repeat` 
             values suggesting higher probability of finding global optimum.
-@param[in] p_kmax: maximum amount of cluster that might be allocated. The argument is considered as a stop
+@param[in] p_kmax: maximum amount of clusters that might be allocated. The argument is considered as a stop
             condition. When the maximum amount is reached then algorithm stops processing. By default the maximum
             amount of clusters is not restricted (`k_max` is -1).
 @param[in] p_random_state: seed for random state (by default is `None`, current system time is used).

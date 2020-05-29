@@ -59,7 +59,7 @@ TEST(utest_interface_gmeans, hepta_kmax_08) {
     ASSERT_NE(nullptr, gmeans_result);
 
     std::size_t amount_clusters = ((pyclustering_package **)gmeans_result->data)[GMEANS_PACKAGE_INDEX_CLUSTERS]->size;
-    ASSERT_EQ(7, amount_clusters);
+    ASSERT_EQ(7ul, amount_clusters);
 
     free_pyclustering_package(gmeans_result);
 }

@@ -146,10 +146,10 @@ public:
     
     @param[in] p_k_initial: initial amount of centers.
     @param[in] p_tolerance: stop condition in following way: when maximum value of distance change of
-                cluster centers is less than tolerance than algorithm will stop processing.
+                cluster centers is less than tolerance then algorithm stops processing.
     @param[in] p_repeat: how many times K-Means should be run to improve parameters (by default is 3),
-                with larger 'repeat' values suggesting higher probability of finding global optimum.
-    @param[in] p_kmax: maximum amount of cluster that might be allocated. The argument is considered as a stop
+                with larger `repeat` values suggesting higher probability of finding global optimum.
+    @param[in] p_kmax: maximum amount of clusters that might be allocated. The argument is considered as a stop
                 condition. When the maximum amount is reached then algorithm stops processing. By default the maximum
                 amount of clusters is not restricted (`k_max` is `IGNORE_KMAX`).
     @param[in] p_random_state: seed for random state (by default is `RANDOM_STATE_CURRENT_TIME`, current system time is used).
