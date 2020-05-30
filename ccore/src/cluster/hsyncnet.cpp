@@ -41,7 +41,7 @@ const double        hsyncnet::DEFAULT_TIME_STEP         = 1.0;
 const std::size_t   hsyncnet::DEFAULT_INCREASE_STEP     = 1;
 
 
-hsyncnet::hsyncnet(std::vector<std::vector<double> > * input_data, const std::size_t cluster_number, const initial_type initial_phases) :
+hsyncnet::hsyncnet(dataset * input_data, const std::size_t cluster_number, const initial_type initial_phases) :
     syncnet(input_data, 0, false, initial_phases),
     m_number_clusters(cluster_number),
     m_initial_neighbors(3),
@@ -49,7 +49,7 @@ hsyncnet::hsyncnet(std::vector<std::vector<double> > * input_data, const std::si
     m_time(0.0)
 { }
 
-hsyncnet::hsyncnet(std::vector<std::vector<double> > * input_data, 
+hsyncnet::hsyncnet(dataset * input_data,
     const std::size_t cluster_number, 
     const initial_type initial_phases, 
     const std::size_t initial_neighbors, 

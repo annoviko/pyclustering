@@ -1,23 +1,24 @@
-/**
-*
-* @authors Andrei Novikov (pyclustering@yandex.ru)
-* @date 2014-2020
-* @copyright GNU Public License
-*
-* GNU_PUBLIC_LICENSE
-*   pyclustering is free software: you can redistribute it and/or modify
-*   it under the terms of the GNU General Public License as published by
-*   the Free Software Foundation, either version 3 of the License, or
-*   (at your option) any later version.
-*
-*   pyclustering is distributed in the hope that it will be useful,
-*   but WITHOUT ANY WARRANTY; without even the implied warranty of
-*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*   GNU General Public License for more details.
-*
-*   You should have received a copy of the GNU General Public License
-*   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*
+/*!
+
+@authors Andrei Novikov (pyclustering@yandex.ru)
+@date 2014-2020
+@copyright GNU Public License
+
+@cond GNU_PUBLIC_LICENSE
+    pyclustering is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    pyclustering is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+@endcond
+
 */
 
 #pragma once
@@ -146,9 +147,9 @@ public:
      *
      * @brief   Constructor of self-organized map.
      *
-     * @param[in] rows: number of neurons in the column (number of rows).
-     * @param[in] cols: number of neurons in the row (number of columns).
-     * @param[in] conn_type: type of connection between oscillators in the network.
+     * @param[in] num_rows: number of neurons in the column (number of rows).
+     * @param[in] num_cols: number of neurons in the row (number of columns).
+     * @param[in] type_conn: type of connection between oscillators in the network.
      * @param[in] parameters: others parameters of the network.
      *
      */

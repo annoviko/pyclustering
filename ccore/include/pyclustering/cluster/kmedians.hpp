@@ -47,9 +47,9 @@ namespace clst {
 */
 class kmedians {
 public:
-    const static double         DEFAULT_TOLERANCE;
+    const static double         DEFAULT_TOLERANCE;  /**< Default value of the tolerance stop condition: if maximum value of change of centers of clusters is less than tolerance then algorithm stops processing. */
 
-    const static std::size_t    DEFAULT_ITERMAX;
+    const static std::size_t    DEFAULT_ITERMAX;    /**< Default value of the step stop condition - maximum number of iterations that is used for clustering process. */
 
 private:
     const static double         THRESHOLD_CHANGE;
@@ -105,18 +105,18 @@ public:
     * @brief    Performs cluster analysis of an input data.
     *
     * @param[in]  p_data: input data for cluster analysis.
-    * @param[out] p_result: clustering result of an input data.
+    * @param[out] p_output_result: clustering result of an input data.
     *
     */
-    void process(const dataset & data, kmedians_data & output_result);
+    void process(const dataset & p_data, kmedians_data & p_output_result);
 
 private:
     /**
     *
     * @brief    Updates clusters in line with current medians.
     *
-    * @param[in] medians: medians that are used for updating clusters.
-    * @param[out] clusters: updated clusters in line with the specified medians.
+    * @param[in] p_medians: medians that are used for updating clusters.
+    * @param[out] p_clusters: updated clusters in line with the specified medians.
     *
     */
     void update_clusters(const dataset & p_medians, cluster_sequence & p_clusters);

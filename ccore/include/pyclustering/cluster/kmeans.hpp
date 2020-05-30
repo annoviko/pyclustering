@@ -41,7 +41,7 @@ namespace clst {
 
 /*!
 
-@class    kmeans kmeans.hpp pyclustering/interface/kmeans.hpp
+@class    kmeans kmeans.hpp pyclustering/cluster/kmeans.hpp
 
 @brief    Represents K-Means clustering algorithm for cluster analysis.
 @details  The algorithm related to partitional class when input data is divided into groups.

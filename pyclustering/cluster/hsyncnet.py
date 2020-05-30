@@ -75,8 +75,8 @@ class hsyncnet(syncnet):
         @param[in] source_data (list): Input data set defines structure of the network.
         @param[in] number_clusters (uint): Number of clusters that should be allocated.
         @param[in] osc_initial_phases (initial_type): Type of initialization of initial values of phases of oscillators.
-        @param[in] initial_neighbors (uint): Defines initial radius connectivity by calculation average distance to connect specify number of oscillators.
-        @param[in] increase_persent (double): Percent of increasing of radius connectivity on each step (input values in range (0.0; 1.0) correspond to (0%; 100%)).
+        @param[in] initial_neighbors (uint): Defines initial connectivity-radius by average distance to connect specified amount of oscillators (points).
+        @param[in] increase_persent (double): Percent of increasing of radius connectivity on each iteration (input values in range (0.0; 1.0) correspond to (0%; 100%)).
         @param[in] ccore (bool): If True than DLL CCORE (C++ solution) will be used for solving.
         
         """

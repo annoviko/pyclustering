@@ -41,7 +41,9 @@ using syncnet_cluster       = std::vector<std::size_t>;
 using syncnet_cluster_data  = ensemble_data<syncnet_cluster>;
 
 
-/*
+/*!
+
+@class   syncnet_analyser syncnet.hpp pyclustering/cluster/syncnet.hpp
 
 @brief   Analyser for syncnet - oscillatory neural network based on Kuramoto model for cluster analysis.
 
@@ -50,16 +52,37 @@ using syncnet_cluster_data  = ensemble_data<syncnet_cluster>;
 */
 class syncnet_analyser: public sync_dynamic {
 public:
+    /*!
+    
+    @brief  Default constructor of the output dynamic of Sync network.
+    
+    */
     syncnet_analyser() = default;
 
+    /*!
+
+    @brief  Default destructor of the output dynamic of Sync network.
+
+    */
     virtual ~syncnet_analyser() = default;
 
 public:
+    /*!
+
+    @brief      Performs analysis of the output dynamic in order to obtain clusters.
+    @details    Allocated clusters are placed to output argument `data`.
+
+    @param[in]  eps: tolerance that defines the maximum difference between phases of oscillators that belong to one cluster.
+    @param[out] data: allocated clusters during the analysis of the output dynamic.
+
+    */
     void allocate_clusters(const double eps, syncnet_cluster_data & data);
 };
 
 
-/*
+/*!
+
+@class   syncnet syncnet.hpp pyclustering/cluster/syncnet.hpp
 
 @brief   Oscillatory neural network based on Kuramoto model for cluster analysis.
 
@@ -68,12 +91,11 @@ public:
  */
 class syncnet: public sync_network {
 protected:
-    std::vector<std::vector<double> >    * oscillator_locations;
-    std::vector<std::vector<double> >    * distance_conn_weights;
-    double                                connection_weight;
+    std::vector<std::vector<double> >    * oscillator_locations;    /**< Spatial location of each oscillator. */
+    std::vector<std::vector<double> >    * distance_conn_weights;   /**< Weight of each connection in the network. */
 
 public:
-    /*
+    /*!
     
     @brief   Contructor of the adapted oscillatory network SYNC for cluster analysis.
     
@@ -87,7 +109,7 @@ public:
     */
     syncnet(std::vector<std::vector<double> > * input_data, const double connectivity_radius, const bool enable_conn_weight, const initial_type initial_phases);
 
-    /*
+    /*!
     
     @brief   Copy-contructor of the sync-net algorithm is forbidden.
     
@@ -103,19 +125,19 @@ public:
     */
     virtual ~syncnet();
 
-    /*
+    /*!
     
-    @brief Network is trained via achievement sync state between the oscillators using the radius of coupling.
+    @brief Performs cluster analysis by the network simulation.
     
-    @param[in]  order: order of synchronization that is used as indication for stopping processing.
-    @param[in]  solver: specified type of solving diff. equation. 
+    @param[in]  order: order of synchronization that is used as indication for stopping processing, the `order` value should be in range `(0, 1)`.
+    @param[in]  solver: specified type of solving diff. equation.
     @param[in]  collect_dynamic: specified requirement to collect whole dynamic of the network.
     @param[out] analyser: analyser of sync results of clustering.
     
     */
     virtual void process(const double order, const solve_type solver, const bool collect_dynamic, syncnet_analyser & analyser);
 
-    /*
+    /*!
     
     @brief   Overrided method for calculation of oscillator phase.
     
@@ -131,7 +153,7 @@ public:
     virtual void phase_kuramoto_equation(const double t, const differ_state<double> & inputs, const differ_extra<void *> & argv, differ_state<double> & outputs) const override;
 
 public:
-    /*
+    /*!
     
     @brief   Assignment operator for the sync-net algorithm is forbidden.
     
@@ -141,7 +163,7 @@ public:
     syncnet & operator=(const syncnet & p_other) = delete;
 
 protected:
-    /*
+    /*!
     
     @brief   Create connections between oscillators in line with input radius of connectivity.
     

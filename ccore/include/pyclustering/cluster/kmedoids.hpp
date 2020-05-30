@@ -53,9 +53,9 @@ enum class kmedoids_data_t {
 */
 class kmedoids {
 public:
-    static const double      DEFAULT_TOLERANCE;
+    static const double      DEFAULT_TOLERANCE;     /**< Default value of the tolerance stop condition: if maximum value of change of centers of clusters is less than tolerance then algorithm stops processing. */
 
-    static const std::size_t DEFAULT_ITERMAX;
+    static const std::size_t DEFAULT_ITERMAX;       /**< Default value of the step stop condition - maximum number of iterations that is used for clustering process. */
 
 private:
     static const std::size_t OBJECT_ALREADY_CONTAINED;

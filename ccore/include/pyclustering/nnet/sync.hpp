@@ -47,14 +47,16 @@ namespace pyclustering {
 namespace nnet {
 
 
-struct sync_oscillator {
-    double phase;
-    double frequency;
+/*!
 
-    sync_oscillator() :
-        phase(0.0),
-        frequency(0.0)
-    { }
+@class   sync_oscillator sync.hpp pyclustering/nnet/sync.hpp
+
+@brief   Describes an oscillator state in Sync oscillatory network.
+
+*/
+struct sync_oscillator {
+    double phase = 0.0;       /**< Phase of the current oscillator in range (0, 2*pi). */
+    double frequency = 0.0;   /**< Frequeney of the current oscillator. */
 };
 
 
@@ -66,41 +68,108 @@ using sync_corr_matrix = std::vector<sync_corr_row>;
 
 /**
  *
+ * @class   sync_network_state sync.hpp pyclustering/nnet/sync.hpp
+ *
  * @brief   Oscillatory network state where oscillator phases and corresponding time-point are stored.
  *
  */
 struct sync_network_state {
 public:
-    std::vector<double>     m_phase = { };
-    double                  m_time = 0.0;
+    std::vector<double>     m_phase = { };  /**< Container where phase of each oscillator is stored in time `m_time`. */
+    double                  m_time = 0.0;   /**< Time point when oscillator phases were stored. */
 
 public:
+    /*!
+
+    @brief  Default constructor of the oscillatory network state.
+
+    */
     sync_network_state() = default;
 
+    /*!
+
+    @brief  Default copy constructor of the oscillatory network state.
+
+    @param[in] p_other: another network state that should be copied to the current.
+
+    */
     sync_network_state(const sync_network_state & p_other) = default;
 
+    /*!
+
+    @brief  Default move constructor of the oscillatory network state.
+
+    @param[in] p_other: another network state that should be moved to the current.
+
+    */
     sync_network_state(sync_network_state && p_other) = default;
 
+    /*!
+
+    @brief  Constructor of the oscillatory network state.
+
+    @param[in] size: creates the network state for the network with size `size`.
+
+    */
     explicit sync_network_state(const std::size_t size) :
         m_phase(size, 0.0), m_time(0.0) { }
 
+    /*!
+
+    @brief  Constructor of the oscillatory network state.
+
+    @param[in] time: time point when the network state were stored.
+    @param[in] phases: oscillator phases that defined the network state in time `time`.
+
+    */
     sync_network_state(const double time, const std::vector<double> & phases) :
         m_phase(phases), m_time(time) { }
 
+    /*!
+
+    @brief  Constructor of the oscillatory network state.
+
+    @param[in] time: time point when the network state were stored.
+    @param[in] initializer: oscillator phases that defined the network state in time `time`.
+
+    */
     sync_network_state(const double time, const std::initializer_list<double> & initializer) :
         m_phase(initializer), m_time(time) { }
 
 public:
+    /*!
+
+    @brief  Returns amount of oscillators in the current state.
+
+    @return Amount of oscillators in the current state.
+
+    */
     inline std::size_t size() const { return m_phase.size(); }
 
 public:
-    sync_network_state & operator=(const sync_network_state & other) = default;
+    /*!
 
-    sync_network_state & operator=(sync_network_state && other) = default;
+    @brief  Default copy operator of the oscillatory network state.
+
+    @param[in] p_other: another network state that should be copied to the current.
+
+    */
+    sync_network_state & operator=(const sync_network_state & p_other) = default;
+
+    /*!
+
+    @brief  Default move operator of the oscillatory network state.
+
+    @param[in] p_other: another network state that should be moved to the current.
+
+    */
+    sync_network_state & operator=(sync_network_state && p_other) = default;
 };
 
 
 /**
+ *
+ * @class   sync_ordering sync.hpp pyclustering/nnet/sync.hpp
  *
  * @brief   Provides methods related to calculation of ordering parameters.
  *
@@ -199,6 +268,8 @@ private:
 
 /**
  *
+ * @class   sync_dynamic sync.hpp pyclustering/nnet/sync.hpp
+ *
  * @brief   Output dynamic of the oscillatory network 'sync' based on Kuramoto model.
  *
  */
@@ -292,6 +363,8 @@ public:
 
 /**
  *
+ * @class   sync_network sync.hpp pyclustering/nnet/sync.hpp
+ *
  * @brief   Oscillatory neural network based on Kuramoto model with phase oscillator.
  *
  */
@@ -303,13 +376,11 @@ private:
     using iterator = std::vector<sync_oscillator>::iterator;
 
 protected:
-    std::vector<sync_oscillator> m_oscillators;
+    std::vector<sync_oscillator> m_oscillators;     /**< State of each oscillator of the network. */
 
-    std::shared_ptr<adjacency_collection> m_connections;
+    std::shared_ptr<adjacency_collection> m_connections;    /**< Connections between oscillators in the network. */
 
-    double weight;
-
-    bool m_parallel_processing      = false;
+    double weight;                                  /**< Coupling strength of the links between oscillators. */
 
 private:
     equation<double>  m_equation;
