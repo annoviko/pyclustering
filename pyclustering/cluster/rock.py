@@ -36,7 +36,7 @@ import pyclustering.core.rock_wrapper as wrapper
 
 class rock:
     """!
-    @brief Class represents clustering algorithm ROCK.
+    @brief The class represents clustering algorithm ROCK.
 
     Example:
     @code

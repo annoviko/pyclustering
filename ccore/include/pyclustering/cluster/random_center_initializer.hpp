@@ -43,6 +43,13 @@ namespace pyclustering {
 namespace clst {
 
 
+/*!
+
+@class   random_center_initializer random_center_initializer.hpp pyclustering/cluster/random_center_initializer.hpp
+
+@brief   Random center initializer is for generation specified amount of random of centers for specified data.
+
+*/
 class random_center_initializer : public center_initializer {
 private:
     /**

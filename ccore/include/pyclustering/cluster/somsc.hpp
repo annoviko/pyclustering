@@ -35,6 +35,16 @@ namespace pyclustering {
 namespace clst {
 
 
+/*!
+
+@class   somsc somsc.hpp pyclustering/cluster/somsc.hpp
+
+@brief   The class represents a simple clustering algorithm based on the self-organized feature map.
+@details This algorithm uses amount of clusters that should be allocated as a size of SOM map. Captured 
+           objects by neurons are considered as clusters. The algorithm is designed to process data with Gaussian 
+           distribution that has spherical forms.
+
+*/
 class somsc {
 private:
     std::size_t         m_amount_clusters   = 0;

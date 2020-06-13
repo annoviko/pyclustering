@@ -43,7 +43,14 @@ namespace clst {
 
 using rock_data = cluster_data;
 
+/*!
 
+@class   rock rock.hpp pyclustering/cluster/rock.hpp
+
+@brief   The class represents a clustering algorithm ROCK.
+@details Implementation of the algorithm is based on the paper @cite inproceedings::rock::1.
+
+*/
 class rock {
 private:
     /* for optimization list representation is of clusters is used and than

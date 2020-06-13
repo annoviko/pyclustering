@@ -36,9 +36,10 @@ from pyclustering.nnet.som import type_conn
 
 class somsc:
     """!
-    @brief Class represents simple clustering algorithm based on self-organized feature map. 
-    @details This algorithm uses amount of clusters that should be allocated as a size of SOM map. Captured objects by neurons are clusters.
-             Algorithm is able to process data with Gaussian distribution that has spherical forms.
+    @brief   Class represents a simple clustering algorithm based on the self-organized feature map.
+    @details This algorithm uses amount of clusters that should be allocated as a size of SOM map. Captured
+               objects by neurons are considered as clusters. The algorithm is designed to process data with Gaussian
+               distribution that has spherical forms.
     
     Example:
     @code

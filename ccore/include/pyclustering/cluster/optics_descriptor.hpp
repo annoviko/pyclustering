@@ -33,20 +33,22 @@ namespace pyclustering {
 namespace clst {
 
 
-/**
- *
- * @brief Object description that used by OPTICS algorithm for cluster analysis.
- *
- */
+/*!
+
+@class   optics_descriptor optics_descriptor.hpp pyclustering/cluster/optics_descriptor.hpp
+
+@brief   Object description that used by OPTICS algorithm for cluster analysis.
+
+*/
 struct optics_descriptor {
 public:
-    static const double NONE_DISTANCE;
+    static const double NONE_DISTANCE;              /**< Denotes if a distance value is not defined. */
 
 public:
-    std::size_t     m_index = -1;
-    double          m_core_distance = 0;
-    double          m_reachability_distance = 0;
-    bool            m_processed = false;
+    std::size_t     m_index = -1;                   /**< Index of the object in the data set. */
+    double          m_core_distance = 0;            /**< Core distance that is minimum distance to specified number of neighbors. */
+    double          m_reachability_distance = 0;    /**< Reachability distance to this object. */
+    bool            m_processed = false;            /**< Defines the object is processed -`true` if is current object has been already processed. */
 
 public:
     /**
@@ -110,10 +112,10 @@ struct optics_pointer_descriptor_less {
      *
      * @brief Compare two OPTICS object using following rule: p_object1 < p_object2.
      *
-     * @param[in] p_object1: left operand to compare.
-     * @param[in] p_object2: right operand to compare.
+     * @param[in] p_object1: the left operand to compare.
+     * @param[in] p_object2: the right operand to compare.
      *
-     * @return 'true' if left operand is less than right operand.
+     * @return `true` if left operand is less than right operand.
      *
      */
     bool operator()(const optics_descriptor * p_object1, const optics_descriptor * p_object2) const;

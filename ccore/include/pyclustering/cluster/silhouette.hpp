@@ -175,6 +175,7 @@ public:
     @brief    Performs analysis of an input data in order to calculate score for each point where input data is represented by points.
 
     @param[in]  p_data: input data (points) for analysis.
+    @param[in]  p_clusters: clusters that have been obtained after cluster analysis.
     @param[out] p_result: silhouette input data processing result.
 
     */
@@ -185,6 +186,7 @@ public:
     @brief    Performs analysis of an input data in order to calculate score for each point.
 
     @param[in]  p_data: input data for analysis.
+    @param[in]  p_clusters: clusters that have been obtained after cluster analysis.
     @param[in]  p_type: data type of input sample `p_data` that is processed by the method (`POINTS`, `DISTANCE_MATRIX`).
     @param[out] p_result: silhouette input data processing result.
 

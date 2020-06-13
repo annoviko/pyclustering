@@ -148,7 +148,7 @@ class silhouette:
         @param[in] data (array_like): Input data that was used for cluster analysis and that is presented as list of
                     points or distance matrix (defined by parameter 'data_type', by default data is considered as a list
                     of points).
-        @param[in] clusters (list): Cluster that have been obtained after cluster analysis.
+        @param[in] clusters (list): Clusters that have been obtained after cluster analysis.
         @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'metric').
 
         <b>Keyword Args:</b><br>
@@ -433,9 +433,9 @@ class silhouette_ksearch:
         @brief Initialize Silhouette search algorithm to find out optimal amount of clusters.
 
         @param[in] data (array_like): Input data that is used for searching optimal amount of clusters.
-        @param[in] kmin (uint): Amount of clusters from which search is performed. Should be equal or greater than 2.
-        @param[in] kmax (uint): Amount of clusters to which search is performed. Should be equal or less than amount of
-                    points in input data.
+        @param[in] kmin (uint): Minimum amount of clusters that might be allocated. Should be equal or greater than 2.
+        @param[in] kmax (uint): Maximum amount of clusters that might be allocated. Should be equal or less than amount
+                    of points in input data.
         @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'algorithm').
 
         <b>Keyword Args:</b><br>
