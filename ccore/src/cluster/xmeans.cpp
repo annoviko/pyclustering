@@ -25,7 +25,6 @@
 
 #include <cmath>
 #include <future>
-#include <iostream>
 #include <limits>
 #include <numeric>
 
@@ -54,14 +53,15 @@ const double             xmeans::DEFAULT_SPLIT_DIFFERENCE                = 0.001
 const std::size_t        xmeans::AMOUNT_CENTER_CANDIDATES                = 5;
 
 
-xmeans::xmeans(const dataset & p_initial_centers, const std::size_t p_kmax, const double p_tolerance, const splitting_type p_criterion, std::size_t p_repeat) :
+xmeans::xmeans(const dataset & p_initial_centers, const std::size_t p_kmax, const double p_tolerance, const splitting_type p_criterion, std::size_t p_repeat, const long long p_random_state) :
     m_initial_centers(p_initial_centers),
     m_ptr_result(nullptr),
     m_ptr_data(nullptr),
     m_maximum_clusters(p_kmax),
     m_tolerance(p_tolerance * p_tolerance),
     m_criterion(p_criterion),
-    m_repeat(p_repeat)
+    m_repeat(p_repeat),
+    m_random_state(p_random_state)
 { }
 
 
@@ -109,7 +109,7 @@ double xmeans::search_optimal_parameters(cluster_sequence & improved_clusters, d
         /* initialize initial center using k-means++ */
         dataset candidate_centers;
         const std::size_t candidates = available_indexes.size() < AMOUNT_CENTER_CANDIDATES ?  available_indexes.size() : AMOUNT_CENTER_CANDIDATES;
-        kmeans_plus_plus(2U, candidates).initialize(*m_ptr_data, available_indexes, candidate_centers);
+        kmeans_plus_plus(2U, candidates, m_random_state).initialize(*m_ptr_data, available_indexes, candidate_centers);
 
         /* perform cluster analysis and update optimum if results became better */
         cluster_sequence candidate_clusters;

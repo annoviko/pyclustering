@@ -183,6 +183,11 @@ class XmeansIntegrationTest(unittest.TestCase):
         XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE8, [[3.0], [6.0]], [15, 30, 20, 80],
                                                       splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, True)
 
+    def testBicClusterAllocationSampleSimple8WrongAmountCentersRandomStateByCore(self):
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE8, [[3.0], [6.0]], [15, 30, 20, 80],
+                                                      splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, True,
+                                                      random_state=1000)
+
     def testBicClusterAllocationSampleSimple9ByCore(self):
         XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, [[3.0], [6.0]], [10, 20],
                                                       splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, True)

@@ -193,7 +193,7 @@ class xmeans:
 
         """
 
-        result = wrapper.xmeans(self.__pointer_data, self.__centers, self.__kmax, self.__tolerance, self.__criterion, self.__repeat)
+        result = wrapper.xmeans(self.__pointer_data, self.__centers, self.__kmax, self.__tolerance, self.__criterion, self.__repeat, self.__random_state)
         self.__clusters = result[0]
         self.__centers = result[1]
         self.__total_wce = result[2][0]

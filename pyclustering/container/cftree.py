@@ -844,7 +844,7 @@ class cftree:
         """
         
         level_nodes = []
-        if level is 0:
+        if level == 0:
             level_nodes.append(node)
         
         else:

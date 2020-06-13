@@ -73,15 +73,16 @@ private:
 
     double            m_tolerance;
 
-    splitting_type    m_criterion;
+    splitting_type    m_criterion           = splitting_type::BAYESIAN_INFORMATION_CRITERION;
 
     std::size_t       m_repeat              = 1;
+
+    long long         m_random_state        = RANDOM_STATE_CURRENT_TIME;
 
 public:
     /*!
     
-    @brief    Constructor of clustering algorithm where algorithm parameters for processing are
-               specified.
+    @brief    Constructor of X-Means clustering algorithm.
     
     @param[in] p_initial_centers: initial centers that are used for processing.
     @param[in] p_kmax: maximum number of clusters that can be allocated.
@@ -90,9 +91,15 @@ public:
     @param[in] p_criterion: splitting criterion that is used for making descision about cluster splitting.
     @param[in] p_repeat: how many times K-Means should be run to improve parameters (by default is 1), 
                 with larger 'repeat' values suggesting higher probability of finding global optimum.
+    @param[in] p_random_state: seed for random state (by default is `RANDOM_STATE_CURRENT_TIME`, current system time is used).
     
     */
-    xmeans(const dataset & p_initial_centers, const std::size_t p_kmax, const double p_tolerance, const splitting_type p_criterion, const std::size_t p_repeat = 1);
+    xmeans(const dataset & p_initial_centers, 
+           const std::size_t p_kmax, 
+           const double p_tolerance, 
+           const splitting_type p_criterion, 
+           const std::size_t p_repeat = 1, 
+           const long long p_random_state = RANDOM_STATE_CURRENT_TIME);
 
     /*!
     

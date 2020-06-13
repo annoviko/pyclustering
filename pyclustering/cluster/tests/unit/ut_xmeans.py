@@ -145,6 +145,9 @@ class XmeansUnitTest(unittest.TestCase):
     def testBicClusterAllocationSampleSimple8WrongAmountCenters(self):
         XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE8, [[3.0], [6.0]], [15, 30, 20, 80], splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, False)
 
+    def testBicClusterAllocationSampleSimple8WrongAmountCentersRandomState(self):
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE8, [[3.0], [6.0]], [15, 30, 20, 80], splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, False, random_state=1000)
+
     def testBicClusterAllocationSampleSimple9(self):
         XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, [[3.0], [6.0]], [10, 20], splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, False)
 

@@ -50,8 +50,8 @@ class fsync_dynamic:
         
         """
 
-        self.__amplitude = amplitude;
-        self.__time = time;
+        self.__amplitude = amplitude
+        self.__time = time
 
 
     @property
@@ -61,7 +61,7 @@ class fsync_dynamic:
         
         """
 
-        return self.__amplitude;
+        return self.__amplitude
 
 
     @property
@@ -71,7 +71,7 @@ class fsync_dynamic:
         
         """
 
-        return self.__time;
+        return self.__time
 
 
     def __len__(self):
@@ -80,7 +80,7 @@ class fsync_dynamic:
         
         """
         
-        return len(self.__amplitude);
+        return len(self.__amplitude)
 
 
     def __getitem__(self, index):
@@ -88,17 +88,17 @@ class fsync_dynamic:
         @brief Indexing of the dynamic.
         
         """
-        if (index is 0):
-            return self.__time;
+        if index == 0:
+            return self.__time
         
-        elif (index is 1):
-            return self.__amplitude;
+        elif index == 1:
+            return self.__amplitude
         
         else:
-            raise NameError('Out of range ' + index + ': only indexes 0 and 1 are supported.');
+            raise NameError('Out of range ' + index + ': only indexes 0 and 1 are supported.')
 
 
-    def allocate_sync_ensembles(self, tolerance = 0.1):
+    def allocate_sync_ensembles(self, tolerance=0.1):
         """!
         @brief Allocate clusters in line with ensembles of synchronous oscillators where each synchronous ensemble corresponds to only one cluster.
         
@@ -108,7 +108,7 @@ class fsync_dynamic:
         
         """
         
-        return pyclustering.utils.allocate_sync_ensembles(self.__amplitude, tolerance, 0.0);
+        return pyclustering.utils.allocate_sync_ensembles(self.__amplitude, tolerance, 0.0)
 
 
     def extract_number_oscillations(self, index, amplitude_threshold):

@@ -174,7 +174,7 @@ class clarans:
             for index in range(len(medoids)):
                 dist = euclidean_distance_square(self.__pointer_data[index_point], self.__pointer_data[medoids[index]])
                  
-                if (dist < dist_optim) or (index is 0):
+                if (dist < dist_optim) or (index == 0):
                     index_optim = index
                     dist_optim = dist
 

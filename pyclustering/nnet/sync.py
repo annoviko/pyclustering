@@ -181,14 +181,14 @@ class sync_dynamic:
         @brief Indexing of the dynamic.
         
         """
-        if (index is 0):
-            return self.time;
+        if index == 0:
+            return self.time
         
-        elif (index is 1):
-            return self.output;
+        elif index == 1:
+            return self.output
         
         else:
-            raise NameError('Out of range ' + index + ': only indexes 0 and 1 are supported.');
+            raise NameError('Out of range ' + index + ': only indexes 0 and 1 are supported.')
 
 
     def allocate_sync_ensembles(self, tolerance = 0.01, indexes = None, iteration = None):

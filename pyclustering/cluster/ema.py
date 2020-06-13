@@ -169,7 +169,7 @@ class ema_initializer():
             for index in range(len(centers)):
                 dist = euclidean_distance_square(self.__sample[index_point], centers[index])
                  
-                if (dist < dist_optim) or (index is 0):
+                if (dist < dist_optim) or (index == 0):
                     index_optim, dist_optim = index, dist
              
             clusters[index_optim].append(index_point)
