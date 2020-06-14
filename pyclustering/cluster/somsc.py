@@ -28,9 +28,9 @@
 """
 
 
+from pyclustering.core.wrapper import ccore_library
 from pyclustering.cluster.encoder import type_encoding
-
-from pyclustering.nnet.som import som
+from pyclustering.nnet.som import som, som_parameters
 from pyclustering.nnet.som import type_conn
 
 
@@ -66,7 +66,7 @@ class somsc:
     
     """
     
-    def __init__(self, data, amount_clusters, epouch=100, ccore=True):
+    def __init__(self, data, amount_clusters, epouch=100, ccore=True, **kwargs):
         """!
         @brief Creates SOM-SC (Self Organized Map for Simple Clustering) algorithm for clustering analysis.
         
@@ -74,31 +74,43 @@ class somsc:
         @param[in] amount_clusters (uint): Amount of clusters that should be allocated.
         @param[in] epouch (uint): Number of epochs for training of SOM.
         @param[in] ccore (bool): If it is True then CCORE implementation will be used for clustering analysis.
-        
+        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: `random_state`).
+
+        <b>Keyword Args:</b><br>
+            - random_state (int): Seed for random state (by default is `None`, current system time is used).
+
         """
         
         self.__data_pointer = data
         self.__amount_clusters = amount_clusters
         self.__epouch = epouch
         self.__ccore = ccore
+        self.__random_state = kwargs.get('random_state', None)
         
         self.__network = None
+
+        if self.__ccore is True:
+            self.__ccore = ccore_library.workable()
 
         self.__verify_arguments()
 
 
     def process(self):
         """!
-        @brief Performs cluster analysis by competition between neurons of SOM.
+        @brief Performs cluster analysis by competition between neurons in self-organized map.
         
         @return (somsc) Returns itself (SOM Simple Clustering instance).
         
         @see get_clusters()
         
         """
-        
-        self.__network = som(1, self.__amount_clusters, type_conn.grid_four, None, self.__ccore)
+
+        params = som_parameters()
+        params.random_state = self.__random_state
+
+        self.__network = som(1, self.__amount_clusters, type_conn.grid_four, params, self.__ccore)
         self.__network.train(self.__data_pointer, self.__epouch, True)
+
         return self
 
 

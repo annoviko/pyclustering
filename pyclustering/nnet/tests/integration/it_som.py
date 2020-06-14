@@ -177,6 +177,42 @@ class SomIntegrationTest(unittest.TestCase):
     def testSimulateCheckWinnerHoneycombByCoreStoreLoad(self):
         SomTestTemplates.templateTestSimulate(type_conn.honeycomb, True, store_load=True)
 
+    def testNetwork2x2RandomState5ByCore(self):
+        SomTestTemplates.random_state(2, 2, type_conn.honeycomb, 5, True)
+
+    def testNetwork2x2RandomState5FuncNeighborByCore(self):
+        SomTestTemplates.random_state(2, 2, type_conn.func_neighbor, 5, True)
+
+    def testNetwork2x2RandomState10ByCore(self):
+        SomTestTemplates.random_state(2, 2, type_conn.honeycomb, 10, True)
+
+    def testNetwork2x2RandomState10FuncNeighborByCore(self):
+        SomTestTemplates.random_state(2, 2, type_conn.func_neighbor, 10, True)
+
+    def testNetwork2x3RandomState5ByCore(self):
+        SomTestTemplates.random_state(2, 3, type_conn.honeycomb, 5, True)
+
+    def testNetwork2x3RandomState10ByCore(self):
+        SomTestTemplates.random_state(2, 3, type_conn.honeycomb, 10, True)
+
+    def testNetwork1x8RandomState5ByCore(self):
+        SomTestTemplates.random_state(1, 8, type_conn.honeycomb, 5, True)
+
+    def testNetwork1x8RandomState10ByCore(self):
+        SomTestTemplates.random_state(1, 8, type_conn.honeycomb, 10, True)
+
+    def testNetwork1x8GridFourByCore(self):
+        SomTestTemplates.random_state(1, 8, type_conn.grid_four, 5, True)
+        SomTestTemplates.random_state(8, 1, type_conn.grid_four, 5, True)
+
+    def testNetwork1x8GridEightByCore(self):
+        SomTestTemplates.random_state(1, 8, type_conn.grid_eight, 5, True)
+        SomTestTemplates.random_state(8, 1, type_conn.grid_eight, 5, True)
+
+    def testNetwork1x8FuncNeughborByCore(self):
+        SomTestTemplates.random_state(1, 8, type_conn.func_neighbor, 5, True)
+        SomTestTemplates.random_state(8, 1, type_conn.func_neighbor, 5, True)
+
 
     @remove_library
     def testProcessingWhenLibraryCoreCorrupted(self):

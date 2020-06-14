@@ -130,17 +130,17 @@ class xmeans:
         @brief Constructor of clustering algorithm X-Means.
         
         @param[in] data (list): Input data that is presented as list of points (objects), each point should be represented by list or tuple.
-        @param[in] initial_centers (list): Initial coordinates of centers of clusters that are represented by list: [center1, center2, ...], 
+        @param[in] initial_centers (list): Initial coordinates of centers of clusters that are represented by list: `[center1, center2, ...]`,
                     if it is not specified then X-Means starts from the random center.
         @param[in] kmax (uint): Maximum number of clusters that can be allocated.
         @param[in] tolerance (double): Stop condition for each iteration: if maximum value of change of centers of clusters is less than tolerance than algorithm will stop processing.
         @param[in] criterion (splitting_type): Type of splitting creation.
-        @param[in] ccore (bool): Defines should be CCORE (C++ pyclustering library) used instead of Python code or not.
+        @param[in] ccore (bool): Defines if C++ pyclustering library should be used instead of Python implementation.
         @param[in] **kwargs: Arbitrary keyword arguments (available arguments: `repeat`, `random_state`).
 
         <b>Keyword Args:</b><br>
-            - repeat (unit): How many times K-Means should be run to improve parameters (by default is 1).
-               With larger 'repeat' values suggesting higher probability of finding global optimum.
+            - repeat (unit): How many times K-Means should be run to improve parameters (by default is `1`).
+               With larger `repeat` values suggesting higher probability of finding global optimum.
             - random_state (int): Seed for random state (by default is `None`, current system time is used).
 
         """

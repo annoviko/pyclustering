@@ -1,23 +1,24 @@
-/**
-*
-* @authors Andrei Novikov (pyclustering@yandex.ru)
-* @date 2014-2020
-* @copyright GNU Public License
-*
-* GNU_PUBLIC_LICENSE
-*   pyclustering is free software: you can redistribute it and/or modify
-*   it under the terms of the GNU General Public License as published by
-*   the Free Software Foundation, either version 3 of the License, or
-*   (at your option) any later version.
-*
-*   pyclustering is distributed in the hope that it will be useful,
-*   but WITHOUT ANY WARRANTY; without even the implied warranty of
-*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*   GNU General Public License for more details.
-*
-*   You should have received a copy of the GNU General Public License
-*   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*
+/*!
+
+@authors Andrei Novikov (pyclustering@yandex.ru)
+@date 2014-2020
+@copyright GNU Public License
+
+@cond GNU_PUBLIC_LICENSE
+    pyclustering is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    pyclustering is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+@endcond
+
 */
 
 
@@ -342,4 +343,64 @@ TEST(utest_som, simulate_honeycomb_without_autostop) {
 
 TEST(utest_som, simulate_honeycomb_without_autostop_reload) {
     template_simulate_check_winners(som_conn_type::SOM_HONEYCOMB, false, true);
+}
+
+
+static void template_random_state(const std::size_t rows, const std::size_t cols, const som_conn_type conn_type, const std::size_t random_state, const bool autostop) {
+    som_parameters params;
+    params.random_state = random_state;
+
+    dataset_ptr sample_simple_01 = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01);
+
+    som som_1(rows, cols, conn_type, params);
+    std::size_t steps_1 = som_1.train(*sample_simple_01.get(), 100, autostop);
+
+    som som_2(rows, cols, conn_type, params);
+    std::size_t steps_2 = som_2.train(*sample_simple_01.get(), 100, autostop);
+
+    ASSERT_EQ(steps_1, steps_2);
+    ASSERT_EQ(som_1.get_awards(), som_2.get_awards());
+    ASSERT_EQ(som_1.get_weights(), som_2.get_weights());
+    ASSERT_EQ(som_1.get_capture_objects(), som_2.get_capture_objects());
+    ASSERT_EQ(som_1.get_winner_number(), som_2.get_winner_number());
+}
+
+TEST(utest_som, random_state_neighbor_2x2_rnd_1) {
+    template_random_state(2, 2, som_conn_type::SOM_FUNC_NEIGHBOR, 1, false);
+}
+
+TEST(utest_som, random_state_neighbor_2x2_rnd_2) {
+    template_random_state(2, 2, som_conn_type::SOM_FUNC_NEIGHBOR, 2, false);
+}
+
+TEST(utest_som, random_state_neighbor_2x2_rnd_3) {
+    template_random_state(2, 2, som_conn_type::SOM_FUNC_NEIGHBOR, 3, false);
+}
+
+TEST(utest_som, random_state_neighbor_2x4_rnd_2) {
+    template_random_state(2, 4, som_conn_type::SOM_FUNC_NEIGHBOR, 2, false);
+}
+
+TEST(utest_som, random_state_four_grid) {
+    template_random_state(2, 4, som_conn_type::SOM_GRID_FOUR, 2, false);
+}
+
+TEST(utest_som, random_state_eight_grid) {
+    template_random_state(2, 4, som_conn_type::SOM_GRID_EIGHT, 2, false);
+}
+
+TEST(utest_som, random_state_honeycomb_grid) {
+    template_random_state(2, 4, som_conn_type::SOM_HONEYCOMB, 2, false);
+}
+
+TEST(utest_som, random_state_autostop_rnd_1) {
+    template_random_state(2, 2, som_conn_type::SOM_FUNC_NEIGHBOR, 1, true);
+}
+
+TEST(utest_som, random_state_autostop_rnd_2) {
+    template_random_state(2, 2, som_conn_type::SOM_FUNC_NEIGHBOR, 2, true);
+}
+
+TEST(utest_som, random_state_autostop_rnd_5) {
+    template_random_state(2, 2, som_conn_type::SOM_FUNC_NEIGHBOR, 5, true);
 }

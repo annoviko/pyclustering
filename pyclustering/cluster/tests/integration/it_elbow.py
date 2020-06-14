@@ -82,3 +82,12 @@ class elbow_integration_test(unittest.TestCase):
 
     def test_elbow_tetra(self):
         elbow_test_template.calculate_elbow(FCPS_SAMPLES.SAMPLE_TETRA, None, 1, 25, True)
+
+    def test_elbow_random_state(self):
+        elbow_test_template.random_state_fixed(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, 10, True, random_state=5)
+
+    def test_elbow_random_state_random_initializer(self):
+        elbow_test_template.random_state_fixed(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, 10, True, random_state=5, initializer=random_center_initializer)
+
+    def test_elbow_random_state_continuous(self):
+        elbow_test_template.random_state_fixed(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, 10, True, random_state=5, repeat=10)

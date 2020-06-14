@@ -43,11 +43,11 @@ class SomTestTemplates:
         types = [type_conn.func_neighbor, type_conn.grid_eight, type_conn.grid_four, type_conn.honeycomb]
         sample = read_sample(file)
          
-        if (parameters is None):
+        if parameters is None:
             parameters = som_parameters()
          
-        for stucture in types:
-            network = som(rows, cols, stucture, parameters, ccore = ccore_flag)
+        for structure in types:
+            network = som(rows, cols, structure, parameters, ccore=ccore_flag)
             if store_load:
                 dump_network = pickle.dumps(network)
                 network = pickle.loads(dump_network)
@@ -58,7 +58,7 @@ class SomTestTemplates:
             assert winners == len(expected_result)
             
             if sorted(network.awards) != expected_result:
-                network.show_network(awards = True)
+                network.show_network(awards=True)
                 assert sorted(network.awards) == expected_result
              
             total_capture_points = 0
@@ -76,7 +76,7 @@ class SomTestTemplates:
         sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE3)
                 
         for stucture in types:
-            network = som(5, 5, stucture, ccore = ccore_flag)
+            network = som(5, 5, stucture, ccore=ccore_flag)
             network.train(sample, 100)
                     
             assert sum(network.awards) == 60
@@ -99,7 +99,7 @@ class SomTestTemplates:
 
         sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1)
         
-        network = som(1, 2, connections, ccore = ccore_flag)
+        network = som(1, 2, connections, ccore=ccore_flag)
         network.train(sample, 100)
 
         if store_load:
@@ -116,3 +116,21 @@ class SomTestTemplates:
                 assert expected_winners[0] == index_winner
             else:
                 assert expected_winners[1] == index_winner
+
+    @staticmethod
+    def random_state(rows, cols, connections, random_state, ccore_flag):
+        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1)
+
+        params = som_parameters()
+        params.random_state = random_state
+
+        network_1 = som(rows, cols, connections, ccore=ccore_flag)
+        steps_1 = network_1.train(sample, 100, True)
+
+        network_2 = som(rows, cols, connections, ccore=ccore_flag)
+        steps_2 = network_2.train(sample, 100, True)
+
+        assert steps_1 == steps_2
+        assert network_1.weights == network_2.weights
+        assert network_1.capture_objects == network_2.capture_objects
+        assert network_1.awards == network_2.awards

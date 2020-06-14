@@ -25,6 +25,7 @@
 #pragma once
 
 
+#include <random>
 #include <unordered_set>
 
 #include <pyclustering/definitions.hpp>
@@ -62,6 +63,10 @@ private:
 private:
     std::size_t             m_amount            = 0;
 
+    long long               m_random_state      = RANDOM_STATE_CURRENT_TIME;
+
+    mutable std::mt19937    m_generator;
+
     mutable index_storage   m_available_indexes = { };
 
 public:
@@ -77,9 +82,10 @@ public:
      * @brief    Constructor of center initializer algorithm K-Means++.
      *
      * @param[in] p_amount: amount of centers that should initialized.
+     * @param[in] p_random_state: seed for random state (by default is `RANDOM_STATE_CURRENT_TIME`, current system time is used).
      *
      */
-    explicit random_center_initializer(const std::size_t p_amount);
+    explicit random_center_initializer(const std::size_t p_amount, const long long p_random_state);
 
     /**
      *
@@ -136,6 +142,13 @@ private:
     *
     */
     void create_center(const dataset & p_data, dataset & p_centers) const;
+
+    /**
+    *
+    * @brief    Assigns seed to the random generator that is used by the algorithm.
+    *
+    */
+    void initialize_random_generator();
 };
 
 

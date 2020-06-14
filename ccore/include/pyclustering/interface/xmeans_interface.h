@@ -51,9 +51,9 @@ enum xmeans_package_indexer {
 @param[in] p_kmax: maximum number of clusters that can be allocated.
 @param[in] p_tolerance: stop condition for local parameter improvement.
 @param[in] p_criterion: cluster splitting criterion.
-@param[in] p_repeat: how many times K-Means should be run to improve parameters (by default is 1), 
+@param[in] p_repeat: how many times K-Means should be run to improve parameters (by default is `1`), 
             with larger 'repeat' values suggesting higher probability of finding global optimum.
-@param[in] p_random_state: seed for random state (by default is `None`, current system time is used).
+@param[in] p_random_state: seed for random state (by default is `RANDOM_STATE_CURRENT_TIME`, current system time is used).
 
 @return  Returns result of clustering - array of allocated clusters in the pyclustering package.
 

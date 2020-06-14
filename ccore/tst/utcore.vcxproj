@@ -322,6 +322,7 @@
     <ClCompile Include="utest-parallel_for.cpp" />
     <ClCompile Include="utest-pcnn.cpp" />
     <ClCompile Include="utest-pyclustering.cpp" />
+    <ClCompile Include="utest-random_center_initializer.cpp" />
     <ClCompile Include="utest-rock.cpp" />
     <ClCompile Include="utest-silhouette.cpp" />
     <ClCompile Include="utest-silhouette_ksearch.cpp" />

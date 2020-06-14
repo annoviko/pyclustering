@@ -23,28 +23,38 @@
 
 """
 
-from ctypes import Structure, c_uint, c_size_t, c_double, c_void_p, pointer, POINTER
+from ctypes import Structure, c_longlong, c_uint, c_size_t, c_double, c_void_p, pointer, POINTER
 
 from pyclustering.core.wrapper import ccore_library
 from pyclustering.core.pyclustering_package import pyclustering_package, package_builder, package_extractor
 
 
 class c_som_parameters(Structure):
-    "Description of SOM parameters in memory"
-    " - unsigned int init_type"
-    " - double init_radius"
-    " - double init_learn_rate"
-    " - double adaptation_threshold"
+    """!
+    @brief Description of SOM parameters in memory.
+    @details The following memory mapping is used in order to store the structure:
+    @code
+        struct som_params {
+            unsigned int init_type;
+            double init_radius;
+            double init_learn_rate;
+            double adaptation_threshold;
+            long long random_state;
+        };
+    @endcode
+
+    """
     
     _fields_ = [("init_type", c_uint),
                 ("init_radius", c_double),
                 ("init_learn_rate", c_double),
-                ("adaptation_threshold", c_double)]
+                ("adaptation_threshold", c_double),
+                ("random_state", c_longlong)]
 
 
 def som_create(rows, cols, conn_type, parameters):
     """!
-    @brief Create of self-organized map using CCORE pyclustering library.
+    @brief Create of self-organized map using C++ pyclustering library.
     
     @param[in] rows (uint): Number of neurons in the column (number of rows).
     @param[in] cols (uint): Number of neurons in the row (number of columns).
@@ -63,6 +73,7 @@ def som_create(rows, cols, conn_type, parameters):
     c_params.init_radius = parameters.init_radius
     c_params.init_learn_rate = parameters.init_learn_rate
     c_params.adaptation_threshold = parameters.adaptation_threshold
+    c_params.random_state = parameters.random_state or -1
     
     ccore.som_create.restype = POINTER(c_void_p)
     som_pointer = ccore.som_create(c_uint(rows), c_uint(cols), c_uint(conn_type), pointer(c_params))

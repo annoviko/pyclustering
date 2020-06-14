@@ -518,6 +518,9 @@
     <ClCompile Include="utest-utils-algorithm.cpp">
       <Filter>Unit Tests</Filter>
     </ClCompile>
+    <ClCompile Include="utest-random_center_initializer.cpp">
+      <Filter>Unit Tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="samples.hpp">

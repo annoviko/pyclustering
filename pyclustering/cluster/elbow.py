@@ -99,15 +99,17 @@ class elbow:
         @param[in] data (array_like): Input data that is presented as array of points (objects), each point should be represented by array_like data structure.
         @param[in] kmin (int): Minimum amount of clusters that should be considered.
         @param[in] kmax (int): Maximum amount of clusters that should be considered.
-        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'ccore', 'initializer').
+        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: `ccore`, `initializer`, `random_state`).
 
         <b>Keyword Args:</b><br>
-            - ccore (bool): If True then CCORE (C++ implementation of pyclustering library) is used (by default True).
+            - ccore (bool): If `True` then C++ implementation of pyclustering library is used (by default `True`).
             - initializer (callable): Center initializer that is used by K-Means algorithm (by default K-Means++).
+            - random_state (int): Seed for random state (by default is `None`, current system time is used).
 
         """
 
         self.__initializer = kwargs.get('initializer', kmeans_plusplus_initializer)
+        self.__random_state = kwargs.get('random_state', None)
 
         self.__ccore = kwargs.get('ccore', True) or \
                        isinstance(self.__initializer, kmeans_plusplus_initializer) or \
@@ -154,7 +156,7 @@ class elbow:
         else:
             initializer = wrapper.elbow_center_initializer.RANDOM
 
-        result = wrapper.elbow(self.__data, self.__kmin, self.__kmax, initializer)
+        result = wrapper.elbow(self.__data, self.__kmin, self.__kmax, initializer, self.__random_state)
 
         self.__kvalue = result[0]
         self.__wce = result[1]
@@ -166,8 +168,8 @@ class elbow:
 
         """
         for amount in range(self.__kmin, self.__kmax):
-            centers = self.__initializer(self.__data, amount).initialize()
-            instance = kmeans(self.__data, centers, ccore=True)
+            centers = self.__initializer(self.__data, amount, random_state=self.__random_state).initialize()
+            instance = kmeans(self.__data, centers, ccore=False)
             instance.process()
 
             self.__wce.append(instance.get_total_wce())

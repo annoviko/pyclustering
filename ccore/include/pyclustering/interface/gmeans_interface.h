@@ -55,7 +55,7 @@ enum gmeans_package_indexer {
 @param[in] p_kmax: maximum amount of clusters that might be allocated. The argument is considered as a stop
             condition. When the maximum amount is reached then algorithm stops processing. By default the maximum
             amount of clusters is not restricted (`k_max` is -1).
-@param[in] p_random_state: seed for random state (by default is `None`, current system time is used).
+@param[in] p_random_state: seed for random state (by default is `RANDOM_STATE_CURRENT_TIME`, current system time is used).
 
 @return  Returns result of clustering - array of allocated clusters.
 

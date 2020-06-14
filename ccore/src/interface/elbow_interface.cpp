@@ -26,15 +26,17 @@
 
 pyclustering_package * elbow_method_ikpp(const pyclustering_package * const p_sample, 
                                          const std::size_t p_kmin, 
-                                         const std::size_t p_kmax)
+                                         const std::size_t p_kmax,
+                                         const long long p_random_state)
 {
-    return elbow_method<pyclustering::clst::kmeans_plus_plus>(p_sample, p_kmin, p_kmax);
+    return elbow_method<pyclustering::clst::kmeans_plus_plus>(p_sample, p_kmin, p_kmax, p_random_state);
 }
 
 
 pyclustering_package * elbow_method_irnd(const pyclustering_package * const p_sample, 
                                          const std::size_t p_kmin, 
-                                         const std::size_t p_kmax)
+                                         const std::size_t p_kmax,
+                                         const long long p_random_state)
 {
-    return elbow_method<pyclustering::clst::random_center_initializer>(p_sample, p_kmin, p_kmax);
+    return elbow_method<pyclustering::clst::random_center_initializer>(p_sample, p_kmin, p_kmax, p_random_state);
 }

@@ -1,23 +1,24 @@
-/**
-*
-* @authors Andrei Novikov (pyclustering@yandex.ru)
-* @date 2014-2020
-* @copyright GNU Public License
-*
-* GNU_PUBLIC_LICENSE
-*   pyclustering is free software: you can redistribute it and/or modify
-*   it under the terms of the GNU General Public License as published by
-*   the Free Software Foundation, either version 3 of the License, or
-*   (at your option) any later version.
-*
-*   pyclustering is distributed in the hope that it will be useful,
-*   but WITHOUT ANY WARRANTY; without even the implied warranty of
-*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*   GNU General Public License for more details.
-*
-*   You should have received a copy of the GNU General Public License
-*   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*
+/*!
+
+@authors Andrei Novikov (pyclustering@yandex.ru)
+@date 2014-2020
+@copyright GNU Public License
+
+@cond GNU_PUBLIC_LICENSE
+    pyclustering is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    pyclustering is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+@endcond
+
 */
 
 #include <pyclustering/nnet/som.hpp>
@@ -45,6 +46,7 @@ som_parameters & som_parameters::operator=(const som_parameters & p_other) {
         init_radius = p_other.init_radius;
         init_learn_rate = p_other.init_learn_rate;
         adaptation_threshold = p_other.adaptation_threshold;
+        random_state = p_other.random_state;
     }
 
     return *this;
@@ -235,19 +237,27 @@ void som::create_initial_weights(const som_init_type type) {
     double step_y = 0.0;
     if (dimension > 1) {
         step_y = center_value_dimension[1];
-        if (m_cols > 1) { step_y = width_value_dimension[1] / (m_cols - 1.0); }
+        if (m_cols > 1) { 
+            step_y = width_value_dimension[1] / (m_cols - 1.0); 
+        }
     }
 
-    if (m_rows > 1) { step_x = width_value_dimension[0] / (m_rows - 1.0); }
+    if (m_rows > 1) { 
+        step_x = width_value_dimension[0] / (m_rows - 1.0); 
+    }
 
     /* generate weights (topological coordinates) */
     std::random_device device;
     std::default_random_engine generator(device());
 
-    generator.seed(static_cast<unsigned int>(std::chrono::system_clock::now().time_since_epoch().count()));
+    if (m_params.random_state == RANDOM_STATE_CURRENT_TIME) {
+        generator.seed(static_cast<unsigned int>(std::chrono::system_clock::now().time_since_epoch().count()));
+    }
+    else {
+        generator.seed(static_cast<unsigned int>(m_params.random_state));
+    }
 
     switch (type) {
-        /* Feature SOM 0002: Uniform grid. */
         case som_init_type::SOM_UNIFORM_GRID: {
             for (size_t i = 0; i < m_size; i++) {
                 std::vector<double> & neuron_location = m_location[i];
@@ -398,7 +408,6 @@ size_t som::train(const dataset & input_data, const size_t num_epochs, bool auto
         m_local_radius = std::pow( ( m_params.init_radius * std::exp(-( (double) epouch / (double) m_epouchs)) ), 2);
         m_learn_rate = m_params.init_learn_rate * std::exp(-( (double) epouch / (double) m_epouchs));
 
-        /* Feature SOM 0003: Clear statistics */
         if (autostop == true) {
             for (size_t i = 0; i < m_size; i++) {
                 m_awards[i] = 0;
@@ -420,7 +429,6 @@ size_t som::train(const dataset & input_data, const size_t num_epochs, bool auto
             }
         }
 
-        /* Feature SOM 0003: Check requirement of stopping */
         if (autostop == true) {
             double maximal_adaptation = calculate_maximal_adaptation();
             if (maximal_adaptation < m_params.adaptation_threshold) {

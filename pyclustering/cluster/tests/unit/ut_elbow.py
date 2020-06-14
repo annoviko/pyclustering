@@ -78,6 +78,15 @@ class elbow_unit_test(unittest.TestCase):
     def test_elbow_three_dimensional_simple_11(self):
         elbow_test_template.calculate_elbow(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, SIMPLE_ANSWERS.ANSWER_SIMPLE11, 1, 10, False)
 
+    def test_elbow_random_state(self):
+        elbow_test_template.random_state_fixed(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, 10, False, random_state=5)
+
+    def test_elbow_random_state_random_initializer(self):
+        elbow_test_template.random_state_fixed(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, 10, False, random_state=5, initializer=random_center_initializer)
+
+    def test_elbow_random_state_continuous(self):
+        elbow_test_template.random_state_fixed(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, 10, False, random_state=5, repeat=10)
+
 
     def test_incorrect_data(self):
         self.assertRaises(ValueError, elbow, [], 1, 5)

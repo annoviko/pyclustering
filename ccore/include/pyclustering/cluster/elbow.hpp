@@ -166,13 +166,14 @@ Implementation based on paper @cite article::cluster::elbow::1.
 template <class TypeInitializer = kmeans_plus_plus>
 class elbow {
 private:
-    std::size_t   m_kmin      = 0;
-    std::size_t   m_kmax      = 0;
+    std::size_t   m_kmin         = 0;
+    std::size_t   m_kmax         = 0;
+    long long     m_random_state = RANDOM_STATE_CURRENT_TIME;
 
-    std::vector<double> m_elbow = { };
+    std::vector<double> m_elbow  = { };
 
-    const dataset * m_data      = nullptr;
-    elbow_data    * m_result    = nullptr;      /* temporary pointer to output result   */
+    const dataset * m_data       = nullptr;
+    elbow_data    * m_result     = nullptr;      /* temporary pointer to output result   */
 
 public:
     /*!
@@ -188,9 +189,16 @@ public:
     
     @param[in] p_kmin: minimum amount of clusters that should be considered.
     @param[in] p_kmax: maximum amount of clusters that should be considered.
+    @param[in] p_random_state: seed for random state (by default is `RANDOM_STATE_CURRENT_TIME`, current system time is used).
 
     */
-    elbow(const std::size_t p_kmin, const std::size_t p_kmax) : m_kmin(p_kmin), m_kmax(p_kmax) { verify(); }
+    elbow(const std::size_t p_kmin, const std::size_t p_kmax, const long long p_random_state = RANDOM_STATE_CURRENT_TIME) :
+        m_kmin(p_kmin), 
+        m_kmax(p_kmax),
+        m_random_state(p_random_state)
+    {
+        verify(); 
+    }
 
     /*!
 
@@ -244,19 +252,19 @@ public:
 private:
     template<class CenterInitializer = TypeInitializer>
     typename std::enable_if<std::is_same<CenterInitializer, kmeans_plus_plus>::value, void>::type
-    static prepare_centers(const std::size_t p_amount, const dataset & p_data, dataset & p_initial_centers) {
-        kmeans_plus_plus(p_amount, kmeans_plus_plus::FARTHEST_CENTER_CANDIDATE).initialize(p_data, p_initial_centers);
+    static prepare_centers(const std::size_t p_amount, const dataset & p_data, const long long p_random_state, dataset & p_initial_centers) {
+        kmeans_plus_plus(p_amount, kmeans_plus_plus::FARTHEST_CENTER_CANDIDATE, p_random_state).initialize(p_data, p_initial_centers);
     }
 
     template<class CenterInitializer = TypeInitializer>
     typename std::enable_if<!std::is_same<CenterInitializer, kmeans_plus_plus>::value, void>::type
-    static prepare_centers(const std::size_t p_amount, const dataset & p_data, dataset & p_initial_centers) {
-        TypeInitializer(p_amount).initialize(p_data, p_initial_centers);
+    static prepare_centers(const std::size_t p_amount, const dataset & p_data, const long long p_random_state, dataset & p_initial_centers) {
+        TypeInitializer(p_amount, p_random_state).initialize(p_data, p_initial_centers);
     }
 
     void calculate_wce(const std::size_t p_amount) {
         dataset initial_centers;
-        prepare_centers(p_amount, *m_data, initial_centers);
+        prepare_centers(p_amount, *m_data, m_random_state, initial_centers);
 
         kmeans_data result;
         kmeans instance(initial_centers, kmeans::DEFAULT_TOLERANCE);

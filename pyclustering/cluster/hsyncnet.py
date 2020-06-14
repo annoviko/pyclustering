@@ -24,7 +24,6 @@
 
 """
 
-
 import pyclustering.core.hsyncnet_wrapper as wrapper
 
 from pyclustering.core.wrapper import ccore_library
@@ -66,7 +65,7 @@ class hsyncnet(syncnet):
         draw_clusters(sample, clusters)
     @endcode
     """
-    
+
     def __init__(self, source_data, number_clusters, osc_initial_phases=initial_type.RANDOM_GAUSSIAN,
                  initial_neighbors=3, increase_persent=0.15, ccore=True):
         """!
@@ -80,34 +79,34 @@ class hsyncnet(syncnet):
         @param[in] ccore (bool): If True than DLL CCORE (C++ solution) will be used for solving.
         
         """
-        
+
         self.__ccore_network_pointer = None
-        
+
         if initial_neighbors >= len(source_data):
             initial_neighbors = len(source_data) - 1
 
         if (ccore is True) and ccore_library.workable():
-            self.__ccore_network_pointer = wrapper.hsyncnet_create_network(source_data, number_clusters, osc_initial_phases, initial_neighbors, increase_persent)
-        else: 
+            self.__ccore_network_pointer = wrapper.hsyncnet_create_network(source_data, number_clusters,
+                                                                           osc_initial_phases, initial_neighbors,
+                                                                           increase_persent)
+        else:
             super().__init__(source_data, 0, initial_phases=osc_initial_phases, ccore=False)
-            
+
             self.__initial_neighbors = initial_neighbors
             self.__increase_persent = increase_persent
             self._number_clusters = number_clusters
-    
-    
+
     def __del__(self):
         """!
         @brief Destructor of oscillatory network HSyncNet.
         
         """
-        
+
         if self.__ccore_network_pointer is not None:
             wrapper.hsyncnet_destroy_network(self.__ccore_network_pointer)
             self.__ccore_network_pointer = None
-            
-            
-    def process(self, order = 0.998, solution = solve_type.FAST, collect_dynamic = False):
+
+    def process(self, order=0.998, solution=solve_type.FAST, collect_dynamic=False):
         """!
         @brief Performs clustering of input data set in line with input parameters.
         
@@ -120,51 +119,49 @@ class hsyncnet(syncnet):
         @see get_clusters()
         
         """
-        
+
         if self.__ccore_network_pointer is not None:
             analyser = wrapper.hsyncnet_process(self.__ccore_network_pointer, order, solution, collect_dynamic)
             return syncnet_analyser(None, None, analyser)
-        
+
         number_neighbors = self.__initial_neighbors
         current_number_clusters = float('inf')
-        
+
         dyn_phase = []
         dyn_time = []
-        
+
         radius = average_neighbor_distance(self._osc_loc, number_neighbors)
-        
+
         increase_step = int(len(self._osc_loc) * self.__increase_persent)
         if increase_step < 1:
             increase_step = 1
-        
-        
+
         analyser = None
         while current_number_clusters > self._number_clusters:
             self._create_connections(radius)
-        
+
             analyser = self.simulate_dynamic(order, solution, collect_dynamic)
-            if collect_dynamic == True:
+            if collect_dynamic:
                 if len(dyn_phase) == 0:
                     self.__store_dynamic(dyn_phase, dyn_time, analyser, True)
-                
+
                 self.__store_dynamic(dyn_phase, dyn_time, analyser, False)
-            
+
             clusters = analyser.allocate_sync_ensembles(0.05)
-            
+
             # Get current number of allocated clusters
             current_number_clusters = len(clusters)
-            
+
             # Increase number of neighbors that should be used
             number_neighbors += increase_step
-            
+
             # Update connectivity radius and check if average function can be used anymore
             radius = self.__calculate_radius(number_neighbors, radius)
-        
-        if (collect_dynamic != True):
-            self.__store_dynamic(dyn_phase, dyn_time, analyser, False)
-        
-        return syncnet_analyser(dyn_phase, dyn_time, None)
 
+        if not collect_dynamic:
+            self.__store_dynamic(dyn_phase, dyn_time, analyser, False)
+
+        return syncnet_analyser(dyn_phase, dyn_time, None)
 
     def __calculate_radius(self, number_neighbors, radius):
         """!
@@ -176,28 +173,27 @@ class hsyncnet(syncnet):
         @return New connectivity radius.
         
         """
-        
-        if (number_neighbors >= len(self._osc_loc)):
-            return radius * self.__increase_persent + radius;
-        
-        return average_neighbor_distance(self._osc_loc, number_neighbors);
 
+        if number_neighbors >= len(self._osc_loc):
+            return radius * self.__increase_persent + radius
+
+        return average_neighbor_distance(self._osc_loc, number_neighbors)
 
     def __store_dynamic(self, dyn_phase, dyn_time, analyser, begin_state):
         """!
         @brief Store specified state of Sync network to hSync.
-        
+
         @param[in] dyn_phase (list): Output dynamic of hSync where state should be stored.
         @param[in] dyn_time (list): Time points that correspond to output dynamic where new time point should be stored.
         @param[in] analyser (syncnet_analyser): Sync analyser where Sync states are stored.
         @param[in] begin_state (bool): If True the first state of Sync network is stored, otherwise the last state is stored.
-        
+
         """
-        
-        if (begin_state is True):
-            dyn_time.append(0);
-            dyn_phase.append(analyser.output[0]);
-        
+
+        if begin_state is True:
+            dyn_time.append(0)
+            dyn_phase.append(analyser.output[0])
+
         else:
-            dyn_phase.append(analyser.output[len(analyser.output) - 1]);
-            dyn_time.append(len(dyn_time));
+            dyn_phase.append(analyser.output[len(analyser.output) - 1])
+            dyn_time.append(len(dyn_time))

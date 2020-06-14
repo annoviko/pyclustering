@@ -35,10 +35,12 @@ namespace pyclustering {
 namespace nnet {
 
 
-/**
-*
-* @brief   Connection structures that can be established in self-organized feature map.
-*
+/*!
+
+@class   som_conn_type som.hpp pyclustering/nnet/som.hpp
+
+@brief   Connection structures that can be established between neurons in self-organized feature map.
+
 */
 enum class som_conn_type {
     /*!< Each node is connected with four neighbors: left, upper, right and lower. */
@@ -75,27 +77,57 @@ enum class som_init_type {
 };
 
 
-/**
-*
-* @brief   Parameters of self-organized feature map.
-*
+/*!
+
+@class   som_parameters som.hpp pyclustering/nnet/som.hpp
+
+@brief   Parameters of self-organized feature map.
+
 */
 struct som_parameters {
-    som_init_type init_type       = som_init_type::SOM_UNIFORM_GRID;
-    double init_radius            = 0.0;
-    double init_learn_rate        = 0.1;
-    double adaptation_threshold   = 0.01;
+    som_init_type init_type       = som_init_type::SOM_UNIFORM_GRID;    /**< Defines an initialization way for neuron weights (random, random in center of the input data, random distributed in data, ditributed in line with uniform grid). */
+    double init_radius            = 0.0;                                /**< Initial radius. If the initial radius is not specified (equals to `0.0`) then it will be calculated by SOM. */
+    double init_learn_rate        = 0.1;                                /**< Rate of learning. */
+    double adaptation_threshold   = 0.01;                               /**< Condition that defines when the learining process should be stopped. It is used when the autostop mode is on. */
+    long long random_state        = RANDOM_STATE_CURRENT_TIME;          /**< Seed for random state (by default is `RANDOM_STATE_CURRENT_TIME`, current system time is used). */
 
 public:
+    /*!
+    
+    @brief Default constructor of SOM parameters.
+    
+    */
     som_parameters() = default;
 
+    /*!
+
+    @brief Default move constructor of SOM parameters.
+
+    */
     som_parameters(som_parameters && p_other) = default;
 
+    /*!
+
+    @brief Default copy constructor of SOM parameters.
+
+    */
     som_parameters(const som_parameters & p_other) = default;
 
+    /*!
+
+    @brief Default destructor of SOM parameters.
+
+    */
     ~som_parameters() = default;
 
 public:
+    /*!
+
+    @brief    Set parameters by copy it from another object.
+
+    @param[in] p_other: another SOM parameters.
+
+    */
     som_parameters & operator=(const som_parameters & p_other);
 };
 
@@ -107,11 +139,13 @@ using som_gain_sequence     = std::vector<std::vector<size_t> >;
 using som_neighbor_sequence = std::vector<std::vector<size_t> >;
 
 
-/**
- *
- * @brief   Self-Orzanized Feature Map based on Kohonen desription of SOM.
- *
- */
+/*!
+
+@class   som som.hpp pyclustering/nnet/som.hpp
+
+@brief   Self-Orzanized Feature Map based on Kohonen desription of SOM.
+
+*/
 class som {
 private:
     /* network description */
