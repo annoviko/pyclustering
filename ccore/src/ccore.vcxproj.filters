@@ -301,6 +301,9 @@
     <ClCompile Include="container\kdtree_balanced.cpp">
       <Filter>Source Files\container</Filter>
     </ClCompile>
+    <ClCompile Include="cluster\silhouette_ksearch_data.cpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\pyclustering\cluster\agglomerative.hpp">

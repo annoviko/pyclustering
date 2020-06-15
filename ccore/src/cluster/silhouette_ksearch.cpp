@@ -1,24 +1,26 @@
-/**
-*
-* @authors Andrei Novikov (pyclustering@yandex.ru)
-* @date 2014-2020
-* @copyright GNU Public License
-*
-* GNU_PUBLIC_LICENSE
-*   pyclustering is free software: you can redistribute it and/or modify
-*   it under the terms of the GNU General Public License as published by
-*   the Free Software Foundation, either version 3 of the License, or
-*   (at your option) any later version.
-*
-*   pyclustering is distributed in the hope that it will be useful,
-*   but WITHOUT ANY WARRANTY; without even the implied warranty of
-*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*   GNU General Public License for more details.
-*
-*   You should have received a copy of the GNU General Public License
-*   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*
+/*!
+
+@authors Andrei Novikov (pyclustering@yandex.ru)
+@date 2014-2020
+@copyright GNU Public License
+
+@cond GNU_PUBLIC_LICENSE
+    pyclustering is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    pyclustering is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+@endcond
+
 */
+
 
 #include <pyclustering/cluster/silhouette_ksearch.hpp>
 
@@ -37,8 +39,13 @@ namespace clst {
 
 
 void kmeans_allocator::allocate(const std::size_t p_amount, const dataset & p_data, cluster_sequence & p_clusters) {
+    allocate(p_amount, p_data, RANDOM_STATE_CURRENT_TIME, p_clusters);
+}
+
+
+void kmeans_allocator::allocate(const std::size_t p_amount, const dataset & p_data, const long long p_random_state, cluster_sequence & p_clusters) {
     dataset initial_centers;
-    kmeans_plus_plus(p_amount).initialize(p_data, initial_centers);
+    kmeans_plus_plus(p_amount, 1, p_random_state).initialize(p_data, initial_centers);
 
     kmeans_data result;
     kmeans(initial_centers).process(p_data, result);
@@ -48,8 +55,13 @@ void kmeans_allocator::allocate(const std::size_t p_amount, const dataset & p_da
 
 
 void kmedians_allocator::allocate(const std::size_t p_amount, const dataset & p_data, cluster_sequence & p_clusters) {
+    allocate(p_amount, p_data, RANDOM_STATE_CURRENT_TIME, p_clusters);
+}
+
+
+void kmedians_allocator::allocate(const std::size_t p_amount, const dataset & p_data, const long long p_random_state, cluster_sequence & p_clusters) {
     dataset initial_medians;
-    kmeans_plus_plus(p_amount).initialize(p_data, initial_medians);
+    kmeans_plus_plus(p_amount, 1, p_random_state).initialize(p_data, initial_medians);
 
     kmedians_data result;
     kmedians(initial_medians).process(p_data, result);
@@ -59,8 +71,13 @@ void kmedians_allocator::allocate(const std::size_t p_amount, const dataset & p_
 
 
 void kmedoids_allocator::allocate(const std::size_t p_amount, const dataset & p_data, cluster_sequence & p_clusters) {
+    allocate(p_amount, p_data, RANDOM_STATE_CURRENT_TIME, p_clusters);
+}
+
+
+void kmedoids_allocator::allocate(const std::size_t p_amount, const dataset & p_data, const long long p_random_state, cluster_sequence & p_clusters) {
     medoid_sequence initial_medoids;
-    kmeans_plus_plus(p_amount).initialize(p_data, initial_medoids);
+    kmeans_plus_plus(p_amount, 1, p_random_state).initialize(p_data, initial_medoids);
 
     kmedoids_data result;
     kmedoids(initial_medoids).process(p_data, result);
@@ -70,10 +87,11 @@ void kmedoids_allocator::allocate(const std::size_t p_amount, const dataset & p_
 
 
 
-silhouette_ksearch::silhouette_ksearch(const std::size_t p_kmin, const std::size_t p_kmax, const silhouette_ksearch_allocator::ptr & p_allocator) :
+silhouette_ksearch::silhouette_ksearch(const std::size_t p_kmin, const std::size_t p_kmax, const silhouette_ksearch_allocator::ptr & p_allocator, const long long p_random_state) :
     m_kmin(p_kmin),
     m_kmax(p_kmax),
-    m_allocator(p_allocator)
+    m_allocator(p_allocator),
+    m_random_state(p_random_state)
 {
     if (m_kmin <= 1) {
         throw std::invalid_argument("K min value '" + std::to_string(m_kmin) + 
@@ -92,7 +110,7 @@ void silhouette_ksearch::process(const dataset & p_data, silhouette_ksearch_data
 
     for (std::size_t k = m_kmin; k < m_kmax; k++) {
         cluster_sequence clusters;
-        m_allocator->allocate(k, p_data, clusters);
+        m_allocator->allocate(k, p_data, m_random_state, clusters);
 
         if (clusters.size() != k) {
             p_result.scores().push_back(std::nan("1"));

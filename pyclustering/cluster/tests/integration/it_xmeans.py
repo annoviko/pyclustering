@@ -97,7 +97,8 @@ class XmeansIntegrationTest(unittest.TestCase):
 
     def testBicWrongStartClusterAllocationSampleSimple2ByCore(self):
         XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [[3.5, 4.8], [6.9, 7]], [10, 5, 8],
-                                                      splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, True)
+                                                      splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, True,
+                                                      random_state=1000)
 
     def testMndlClusterAllocationSampleSimple2ByCore(self):
         XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [[3.5, 4.8], [6.9, 7], [7.5, 0.5]], [10, 5, 8],
@@ -226,38 +227,57 @@ class XmeansIntegrationTest(unittest.TestCase):
         assert len(xmeans_instance.get_clusters()) == 2
 
 
-    def testKmax05Amount5Offset02Initial01(self):
+    def testKmax05Amount5Offset02Initial01ByCore(self):
         XmeansTestTemplates.templateMaxAllocatedClusters(True, 10, 5, 2, 1, 5)
 
-    def testKmax05Amount5Offset02Initial02(self):
+    def testKmax05Amount5Offset02Initial02ByCore(self):
         XmeansTestTemplates.templateMaxAllocatedClusters(True, 10, 5, 2, 2, 5)
 
-    def testKmax05Amount10Offset02Initial03(self):
+    def testKmax05Amount10Offset02Initial03ByCore(self):
         XmeansTestTemplates.templateMaxAllocatedClusters(True, 10, 10, 2, 3, 5)
 
-    def testKmax05Amount10Offset02Initial04(self):
+    def testKmax05Amount10Offset02Initial04ByCore(self):
         XmeansTestTemplates.templateMaxAllocatedClusters(True, 10, 10, 2, 4, 5)
 
-    def testKmax05Amount10Offset02Initial05(self):
+    def testKmax05Amount10Offset02Initial05ByCore(self):
         XmeansTestTemplates.templateMaxAllocatedClusters(True, 10, 10, 2, 5, 5)
 
-    def testKmax05Amount20Offset02Initial05(self):
+    def testKmax05Amount20Offset02Initial05ByCore(self):
         XmeansTestTemplates.templateMaxAllocatedClusters(True, 20, 10, 2, 5, 5)
 
-    def testKmax05Amount01Offset01Initial04(self):
+    def testKmax05Amount01Offset01Initial04ByCore(self):
         XmeansTestTemplates.templateMaxAllocatedClusters(True, 1, 1000, 1, 4, 5)
 
-    def testPredictOnePoint(self):
+    def testPredictOnePointByCore(self):
         centers = [[0.2, 0.1], [4.0, 1.0], [2.0, 2.0], [2.3, 3.9]]
         XmeansTestTemplates.templatePredict(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, centers, [[0.3, 0.2]], 4, [0], True)
         XmeansTestTemplates.templatePredict(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, centers, [[4.1, 1.1]], 4, [1], True)
         XmeansTestTemplates.templatePredict(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, centers, [[2.1, 1.9]], 4, [2], True)
         XmeansTestTemplates.templatePredict(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, centers, [[2.1, 4.1]], 4, [3], True)
 
-    def testPredictTwoPoints(self):
+    def testPredictTwoPointsByCore(self):
         centers = [[0.2, 0.1], [4.0, 1.0], [2.0, 2.0], [2.3, 3.9]]
         XmeansTestTemplates.templatePredict(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, centers, [[0.3, 0.2], [2.1, 1.9]], 4, [0, 2], True)
         XmeansTestTemplates.templatePredict(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, centers, [[2.1, 4.1], [2.1, 1.9]], 4, [3, 2], True)
+
+
+    def test_random_state_1_by_core(self):
+        XmeansTestTemplates.random_state(False, 2, 10, 1)
+
+    def test_random_state_2_by_core(self):
+        XmeansTestTemplates.random_state(False, 2, 10, 2)
+
+    def test_random_state_4_by_core(self):
+        XmeansTestTemplates.random_state(False, 2, 10, 4)
+
+    def test_random_state_32_by_core(self):
+        XmeansTestTemplates.random_state(False, 2, 10, 32)
+
+    def test_random_state_1024_by_core(self):
+        XmeansTestTemplates.random_state(False, 2, 10, 1024)
+
+    def test_random_state_65536_by_core(self):
+        XmeansTestTemplates.random_state(False, 2, 10, 65536)
 
     @remove_library
     def testProcessingWhenLibraryCoreCorrupted(self):

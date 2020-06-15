@@ -66,18 +66,18 @@ class order_estimator:
         @see calculate_order_parameter()
         
         """
-        
-        exp_amount = 0.0;
-        average_phase = 0.0;
+
+        exp_amount = 0.0
+        average_phase = 0.0
 
         for phase in oscillator_phases:
-            exp_amount += math.expm1( abs(1j * phase) );
-            average_phase += phase;
-        
-        exp_amount /= len(oscillator_phases);
-        average_phase = math.expm1( abs(1j * (average_phase / len(oscillator_phases))) );
-        
-        return abs(average_phase) / abs(exp_amount);
+            exp_amount += math.expm1(abs(1j * phase))
+            average_phase += phase
+
+        exp_amount /= len(oscillator_phases)
+        average_phase = math.expm1(abs(1j * (average_phase / len(oscillator_phases))))
+
+        return abs(average_phase) / abs(exp_amount)
 
 
     @staticmethod
@@ -93,20 +93,20 @@ class order_estimator:
         @return (double) Level of local synchronization (local order parameter).
         
         """
-        
-        exp_amount = 0.0;
-        num_neigh = 0.0;
-        
+
+        exp_amount = 0.0
+        num_neigh = 0.0
+
         for i in range(0, len(oscillatory_network), 1):
             for j in range(0, len(oscillatory_network), 1):
-                if (oscillatory_network.has_connection(i, j) == True):
-                    exp_amount += math.exp(-abs(oscillator_phases[j] - oscillator_phases[i]));
-                    num_neigh += 1.0;
-        
-        if (num_neigh == 0):
-            num_neigh = 1.0;
-        
-        return exp_amount / num_neigh;
+                if oscillatory_network.has_connection(i, j) is True:
+                    exp_amount += math.exp(-abs(oscillator_phases[j] - oscillator_phases[i]))
+                    num_neigh += 1.0
+
+        if num_neigh == 0:
+            num_neigh = 1.0
+
+        return exp_amount / num_neigh
 
 
 
@@ -115,32 +115,32 @@ class sync_dynamic:
     @brief Represents output dynamic of Sync.
     
     """
-    
+
     @property
     def output(self):
         """!
         @brief (list) Returns output dynamic of the Sync network (phase coordinates of each oscillator in the network) during simulation.
         
         """
-        if ( (self._ccore_sync_dynamic_pointer is not None) and ( (self._dynamic is None) or (len(self._dynamic) == 0) ) ):
-            self._dynamic = wrapper.sync_dynamic_get_output(self._ccore_sync_dynamic_pointer);
-        
-        return self._dynamic;
-    
-    
+        if (self._ccore_sync_dynamic_pointer is not None) and ((self._dynamic is None) or (len(self._dynamic) == 0)):
+            self._dynamic = wrapper.sync_dynamic_get_output(self._ccore_sync_dynamic_pointer)
+
+        return self._dynamic
+
+
     @property
     def time(self):
         """!
         @brief (list) Returns sampling times when dynamic is measured during simulation.
         
         """
-        if ( (self._ccore_sync_dynamic_pointer is not None) and ( (self._time is None) or (len(self._time) == 0) ) ):
-            self._time = wrapper.sync_dynamic_get_time(self._ccore_sync_dynamic_pointer);
-        
-        return self._time;
-    
-    
-    def __init__(self, phase, time, ccore = None):
+        if (self._ccore_sync_dynamic_pointer is not None) and ((self._time is None) or (len(self._time) == 0)):
+            self._time = wrapper.sync_dynamic_get_time(self._ccore_sync_dynamic_pointer)
+
+        return self._time
+
+
+    def __init__(self, phase, time, ccore=None):
         """!
         @brief Constructor of Sync dynamic.
         
@@ -149,21 +149,21 @@ class sync_dynamic:
         @param[in] ccore (ctypes.pointer): Pointer to CCORE sync_dynamic instance in memory.
         
         """
-        
-        self._dynamic = phase;
-        self._time = time;
-        self._ccore_sync_dynamic_pointer = ccore;
-    
-    
+
+        self._dynamic = phase
+        self._time = time
+        self._ccore_sync_dynamic_pointer = ccore
+
+
     def __del__(self):
         """!
         @brief Default destructor of Sync dynamic.
         
         """
-        if (self._ccore_sync_dynamic_pointer is not None):
-            wrapper.sync_dynamic_destroy(self._ccore_sync_dynamic_pointer);
-    
-    
+        if self._ccore_sync_dynamic_pointer is not None:
+            wrapper.sync_dynamic_destroy(self._ccore_sync_dynamic_pointer)
+
+
     def __len__(self):
         """!
         @brief Returns number of simulation steps that are stored in dynamic.
@@ -171,11 +171,11 @@ class sync_dynamic:
         
         """
         if (self._ccore_sync_dynamic_pointer is not None):
-            return wrapper.sync_dynamic_get_size(self._ccore_sync_dynamic_pointer);
-        
-        return len(self._dynamic);
-    
-    
+            return wrapper.sync_dynamic_get_size(self._ccore_sync_dynamic_pointer)
+
+        return len(self._dynamic)
+
+
     def __getitem__(self, index):
         """!
         @brief Indexing of the dynamic.
@@ -183,10 +183,10 @@ class sync_dynamic:
         """
         if index == 0:
             return self.time
-        
+
         elif index == 1:
             return self.output
-        
+
         else:
             raise NameError('Out of range ' + index + ': only indexes 0 and 1 are supported.')
 
@@ -199,62 +199,62 @@ class sync_dynamic:
         @param[in] indexes (list): List of real object indexes and it should be equal to amount of oscillators (in case of 'None' - indexes are in range [0; amount_oscillators]).
         @param[in] iteration (uint): Iteration of simulation that should be used for allocation.
         
-        @return (list) Grours (lists) of indexes of synchronous oscillators.
+        @return (list) Groups (lists) of indexes of synchronous oscillators.
                 For example [ [index_osc1, index_osc3], [index_osc2], [index_osc4, index_osc5] ].
         
         """
-        
-        if (self._ccore_sync_dynamic_pointer is not None):
-            ensembles = wrapper.sync_dynamic_allocate_sync_ensembles(self._ccore_sync_dynamic_pointer, tolerance, iteration);
-            
-            if (indexes is not None):
+
+        if self._ccore_sync_dynamic_pointer is not None:
+            ensembles = wrapper.sync_dynamic_allocate_sync_ensembles(self._ccore_sync_dynamic_pointer, tolerance, iteration)
+
+            if indexes is not None:
                 for ensemble in ensembles:
                     for index in range(len(ensemble)):
-                        ensemble[index] = indexes[ ensemble[index] ];
-                
-            return ensembles;
-        
-        if ( (self._dynamic is None) or (len(self._dynamic) == 0) ):
-            return [];
-        
-        number_oscillators = len(self._dynamic[0]);
-        last_state = None;
-        
-        if (iteration is None):
-            last_state = self._dynamic[len(self._dynamic) - 1];
+                        ensemble[index] = indexes[ensemble[index]]
+
+            return ensembles
+
+        if (self._dynamic is None) or (len(self._dynamic) == 0):
+            return []
+
+        number_oscillators = len(self._dynamic[0])
+        last_state = None
+
+        if iteration is None:
+            last_state = self._dynamic[len(self._dynamic) - 1]
         else:
-            last_state = self._dynamic[iteration];
-        
-        clusters = [];
-        if (number_oscillators > 0):
-            clusters.append([0]);
-        
+            last_state = self._dynamic[iteration]
+
+        clusters = []
+        if number_oscillators > 0:
+            clusters.append([0])
+
         for i in range(1, number_oscillators, 1):
-            cluster_allocated = False;
+            cluster_allocated = False
             for cluster in clusters:
                 for neuron_index in cluster:
-                    last_state_shifted = abs(last_state[i] - 2 * pi);
-                    
+                    last_state_shifted = abs(last_state[i] - 2 * pi)
+
                     if ( ( (last_state[i] < (last_state[neuron_index] + tolerance)) and (last_state[i] > (last_state[neuron_index] - tolerance)) ) or
                          ( (last_state_shifted < (last_state[neuron_index] + tolerance)) and (last_state_shifted > (last_state[neuron_index] - tolerance)) ) ):
-                        cluster_allocated = True;
-                        
-                        real_index = i;
-                        if (indexes is not None):
-                            real_index = indexes[i];
-                        
-                        cluster.append(real_index);
-                        break;
-                
-                if (cluster_allocated == True):
-                    break;
-            
-            if (cluster_allocated == False):
-                clusters.append([i]);
-        
-        return clusters;
-    
-    
+                        cluster_allocated = True
+
+                        real_index = i
+                        if indexes is not None:
+                            real_index = indexes[i]
+
+                        cluster.append(real_index)
+                        break
+
+                if cluster_allocated is True:
+                    break
+
+            if cluster_allocated is False:
+                clusters.append([i])
+
+        return clusters
+
+
     def allocate_phase_matrix(self, grid_width = None, grid_height = None, iteration = None):
         """!
         @brief Returns 2D matrix of phase values of oscillators at the specified iteration of simulation.
@@ -270,35 +270,34 @@ class sync_dynamic:
         @return (list) Phase value matrix of oscillators with size [number_oscillators x number_oscillators].
         
         """
-        
-        output_dynamic = self.output;
-        
-        if ( (output_dynamic is None) or (len(output_dynamic) == 0) ):
-            return [];
-        
-        current_dynamic = output_dynamic[len(output_dynamic) - 1];
-        if (iteration is not None):
-            current_dynamic = output_dynamic[iteration];
-        
-        width_matrix = grid_width;
-        height_matrix = grid_height;
-        number_oscillators = len(current_dynamic);
-        if ( (width_matrix is None) or (height_matrix is None) ):
-            width_matrix = int(math.ceil(math.sqrt(number_oscillators)));
-            height_matrix = width_matrix;
+
+        output_dynamic = self.output
+
+        if (output_dynamic is None) or (len(output_dynamic) == 0):
+            return []
+
+        current_dynamic = output_dynamic[len(output_dynamic) - 1]
+        if iteration is not None:
+            current_dynamic = output_dynamic[iteration]
+
+        width_matrix = grid_width
+        height_matrix = grid_height
+        number_oscillators = len(current_dynamic)
+        if (width_matrix is None) or (height_matrix is None):
+            width_matrix = int(math.ceil(math.sqrt(number_oscillators)))
+            height_matrix = width_matrix
 
         if (number_oscillators != width_matrix * height_matrix):
             raise NameError("Impossible to allocate phase matrix with specified sizes, amout of neurons should be equal to grid_width * grid_height.");
-        
-        
-        phase_matrix = [ [ 0.0 for i in range(width_matrix) ] for j in range(height_matrix) ];
+
+        phase_matrix = [[0.0 for _ in range(width_matrix)] for _ in range(height_matrix)]
         for i in range(height_matrix):
             for j in range(width_matrix):
-                phase_matrix[i][j] = current_dynamic[j + i * width_matrix];
-        
-        return phase_matrix;
-    
-    
+                phase_matrix[i][j] = current_dynamic[j + i * width_matrix]
+
+        return phase_matrix
+
+
     def allocate_correlation_matrix(self, iteration = None):
         """!
         @brief Allocate correlation matrix between oscillators at the specified step of simulation.
@@ -309,33 +308,33 @@ class sync_dynamic:
         @return (list) Correlation matrix between oscillators with size [number_oscillators x number_oscillators].
         
         """
-        
-        if (self._ccore_sync_dynamic_pointer is not None):
-            return wrapper.sync_dynamic_allocate_correlation_matrix(self._ccore_sync_dynamic_pointer, iteration);
-        
-        if ( (self._dynamic is None) or (len(self._dynamic) == 0) ):
-            return [];
-        
-        dynamic = self._dynamic;
-        current_dynamic = dynamic[len(dynamic) - 1];
-        
-        if (iteration is not None):
-            current_dynamic = dynamic[iteration];
-        
-        number_oscillators = len(dynamic[0]);
-        affinity_matrix = [ [ 0.0 for i in range(number_oscillators) ] for j in range(number_oscillators) ];
-        
+
+        if self._ccore_sync_dynamic_pointer is not None:
+            return wrapper.sync_dynamic_allocate_correlation_matrix(self._ccore_sync_dynamic_pointer, iteration)
+
+        if (self._dynamic is None) or (len(self._dynamic) == 0):
+            return []
+
+        dynamic = self._dynamic
+        current_dynamic = dynamic[len(dynamic) - 1]
+
+        if iteration is not None:
+            current_dynamic = dynamic[iteration]
+
+        number_oscillators = len(dynamic[0])
+        affinity_matrix = [[0.0 for i in range(number_oscillators)] for j in range(number_oscillators)]
+
         for i in range(number_oscillators):
             for j in range(number_oscillators):
-                phase1 = current_dynamic[i];
-                phase2 = current_dynamic[j];
-                
-                affinity_matrix[i][j] = abs(math.sin(phase1 - phase2));
-                
-        return affinity_matrix;
+                phase1 = current_dynamic[i]
+                phase2 = current_dynamic[j]
+
+                affinity_matrix[i][j] = abs(math.sin(phase1 - phase2))
+
+        return affinity_matrix
 
 
-    def calculate_order_parameter(self, start_iteration = None, stop_iteration = None):
+    def calculate_order_parameter(self, start_iteration=None, stop_iteration=None):
         """!
         @brief Calculates level of global synchorization (order parameter).
         @details This parameter is tend 1.0 when the oscillatory network close to global synchronization and it tend to 0.0 when 
@@ -365,17 +364,17 @@ class sync_dynamic:
         @see order_estimator
         
         """
-        
-        (start_iteration, stop_iteration) = self.__get_start_stop_iterations(start_iteration, stop_iteration);
-        
-        if (self._ccore_sync_dynamic_pointer is not None):
-            return wrapper.sync_dynamic_calculate_order(self._ccore_sync_dynamic_pointer, start_iteration, stop_iteration);
-        
-        sequence_order = [];
+
+        (start_iteration, stop_iteration) = self.__get_start_stop_iterations(start_iteration, stop_iteration)
+
+        if self._ccore_sync_dynamic_pointer is not None:
+            return wrapper.sync_dynamic_calculate_order(self._ccore_sync_dynamic_pointer, start_iteration, stop_iteration)
+
+        sequence_order = []
         for index in range(start_iteration, stop_iteration):
-            sequence_order.append(order_estimator.calculate_sync_order(self.output[index]));
-        
-        return sequence_order;
+            sequence_order.append(order_estimator.calculate_sync_order(self.output[index]))
+
+        return sequence_order
 
 
     def calculate_local_order_parameter(self, oscillatory_network, start_iteration = None, stop_iteration = None):
@@ -397,17 +396,17 @@ class sync_dynamic:
         
         """
 
-        (start_iteration, stop_iteration) = self.__get_start_stop_iterations(start_iteration, stop_iteration);
-        
-        if (self._ccore_sync_dynamic_pointer is not None):
-            network_pointer = oscillatory_network._ccore_network_pointer;
-            return wrapper.sync_dynamic_calculate_local_order(self._ccore_sync_dynamic_pointer, network_pointer, start_iteration, stop_iteration);
-        
-        sequence_local_order = [];
+        (start_iteration, stop_iteration) = self.__get_start_stop_iterations(start_iteration, stop_iteration)
+
+        if self._ccore_sync_dynamic_pointer is not None:
+            network_pointer = oscillatory_network._ccore_network_pointer
+            return wrapper.sync_dynamic_calculate_local_order(self._ccore_sync_dynamic_pointer, network_pointer, start_iteration, stop_iteration)
+
+        sequence_local_order = []
         for index in range(start_iteration, stop_iteration):
-            sequence_local_order.append(order_estimator.calculate_local_sync_order(self.output[index], oscillatory_network));
-        
-        return sequence_local_order;
+            sequence_local_order.append(order_estimator.calculate_local_sync_order(self.output[index], oscillatory_network))
+
+        return sequence_local_order
 
 
     def __get_start_stop_iterations(self, start_iteration, stop_iteration):
@@ -420,13 +419,13 @@ class sync_dynamic:
         @return (tuple) New the first iteration and the last.
         
         """
-        if (start_iteration is None):
-            start_iteration = len(self) - 1;
-        
-        if (stop_iteration is None):
-            stop_iteration = start_iteration + 1;
-        
-        return (start_iteration, stop_iteration);
+        if start_iteration is None:
+            start_iteration = len(self) - 1
+
+        if stop_iteration is None:
+            stop_iteration = start_iteration + 1
+
+        return start_iteration, stop_iteration
 
 
 
@@ -446,10 +445,10 @@ class sync_visualizer:
         @see show_output_dynamics
         
         """
-        
-        draw_dynamics(sync_output_dynamic.time, sync_output_dynamic.output, x_title = "t", y_title = "phase", y_lim = [0, 2 * 3.14]);
-    
-    
+
+        draw_dynamics(sync_output_dynamic.time, sync_output_dynamic.output, x_title="t", y_title="phase", y_lim=[0, 2 * 3.14])
+
+
     @staticmethod
     def show_output_dynamics(sync_output_dynamics):
         """!
@@ -461,30 +460,31 @@ class sync_visualizer:
         @see show_output_dynamic
         
         """
-        
-        draw_dynamics_set(sync_output_dynamics, "t", "phase", None, [0, 2 * 3.14], False, False);
-    
-    
+
+        draw_dynamics_set(sync_output_dynamics, "t", "phase", None, [0, 2 * 3.14], False, False)
+
+
     @staticmethod
-    def show_correlation_matrix(sync_output_dynamic, iteration = None):
+    def show_correlation_matrix(sync_output_dynamic, iteration=None):
         """!
         @brief Shows correlation matrix between oscillators at the specified iteration.
         
         @param[in] sync_output_dynamic (sync_dynamic): Output dynamic of the Sync network.
-        @param[in] iteration (uint): Number of interation of simulation for which correlation matrix should be allocated.
-                                      If iternation number is not specified, the last step of simulation is used for the matrix allocation.
+        @param[in] iteration (uint): Number of iteration of simulation for which correlation matrix should be
+                    allocated. If iteration number is not specified, the last step of simulation is used for the matrix
+                    allocation.
         
         """
-        
-        _ = plt.figure();
-        correlation_matrix = sync_output_dynamic.allocate_correlation_matrix(iteration);
-        
-        plt.imshow(correlation_matrix, cmap = plt.get_cmap('cool'), interpolation='kaiser', vmin = 0.0, vmax = 1.0); 
-        plt.show();
+
+        _ = plt.figure()
+        correlation_matrix = sync_output_dynamic.allocate_correlation_matrix(iteration)
+
+        plt.imshow(correlation_matrix, cmap = plt.get_cmap('cool'), interpolation='kaiser', vmin=0.0, vmax=1.0)
+        plt.show()
 
 
     @staticmethod
-    def show_phase_matrix(sync_output_dynamic, grid_width = None, grid_height = None, iteration = None):
+    def show_phase_matrix(sync_output_dynamic, grid_width=None, grid_height=None, iteration=None):
         """!
         @brief Shows 2D matrix of phase values of oscillators at the specified iteration.
         @details User should ensure correct matrix sizes in line with following expression grid_width x grid_height that should be equal to 
@@ -498,16 +498,16 @@ class sync_visualizer:
                     If iternation number is not specified, the last step of simulation is used for the matrix allocation.
         
         """
-        
-        _ = plt.figure();
-        phase_matrix = sync_output_dynamic.allocate_phase_matrix(grid_width, grid_height, iteration);
-        
-        plt.imshow(phase_matrix, cmap = plt.get_cmap('jet'), interpolation='kaiser', vmin = 0.0, vmax = 2.0 * math.pi); 
-        plt.show();
+
+        _ = plt.figure()
+        phase_matrix = sync_output_dynamic.allocate_phase_matrix(grid_width, grid_height, iteration)
+
+        plt.imshow(phase_matrix, cmap = plt.get_cmap('jet'), interpolation='kaiser', vmin=0.0, vmax=2.0 * math.pi)
+        plt.show()
 
 
     @staticmethod
-    def show_order_parameter(sync_output_dynamic, start_iteration = None, stop_iteration = None):
+    def show_order_parameter(sync_output_dynamic, start_iteration=None, stop_iteration=None):
         """!
         @brief Shows evolution of order parameter (level of global synchronization in the network).
         
@@ -516,19 +516,19 @@ class sync_visualizer:
         @param[in] stop_iteration (uint): The last iteration that is used for calculation, if 'None' then the last is used.
         
         """
-        
-        (start_iteration, stop_iteration) = sync_visualizer.__get_start_stop_iterations(sync_output_dynamic, start_iteration, stop_iteration);
-        
-        order_parameter = sync_output_dynamic.calculate_order_parameter(start_iteration, stop_iteration);
-        axis = plt.subplot(111);
-        plt.plot(sync_output_dynamic.time[start_iteration:stop_iteration], order_parameter, 'b-', linewidth = 2.0);
-        set_ax_param(axis, "t", "R (order parameter)", None, [0.0, 1.05]);
-        
-        plt.show();
+
+        (start_iteration, stop_iteration) = sync_visualizer.__get_start_stop_iterations(sync_output_dynamic, start_iteration, stop_iteration)
+
+        order_parameter = sync_output_dynamic.calculate_order_parameter(start_iteration, stop_iteration)
+        axis = plt.subplot(111)
+        plt.plot(sync_output_dynamic.time[start_iteration:stop_iteration], order_parameter, 'b-', linewidth=2.0)
+        set_ax_param(axis, "t", "R (order parameter)", None, [0.0, 1.05])
+
+        plt.show()
 
 
     @staticmethod
-    def show_local_order_parameter(sync_output_dynamic, oscillatory_network, start_iteration = None, stop_iteration = None):
+    def show_local_order_parameter(sync_output_dynamic, oscillatory_network, start_iteration=None, stop_iteration=None):
         """!
         @brief Shows evolution of local order parameter (level of local synchronization in the network).
         
@@ -538,14 +538,14 @@ class sync_visualizer:
         @param[in] stop_iteration (uint): The last iteration that is used for calculation, if 'None' then the last is used.
         
         """
-        (start_iteration, stop_iteration) = sync_visualizer.__get_start_stop_iterations(sync_output_dynamic, start_iteration, stop_iteration);
-        
-        order_parameter = sync_output_dynamic.calculate_local_order_parameter(oscillatory_network, start_iteration, stop_iteration);
-        axis = plt.subplot(111);
-        plt.plot(sync_output_dynamic.time[start_iteration:stop_iteration], order_parameter, 'b-', linewidth = 2.0);
-        set_ax_param(axis, "t", "R (local order parameter)", None, [0.0, 1.05]);
-        
-        plt.show();
+        (start_iteration, stop_iteration) = sync_visualizer.__get_start_stop_iterations(sync_output_dynamic, start_iteration, stop_iteration)
+
+        order_parameter = sync_output_dynamic.calculate_local_order_parameter(oscillatory_network, start_iteration, stop_iteration)
+        axis = plt.subplot(111)
+        plt.plot(sync_output_dynamic.time[start_iteration:stop_iteration], order_parameter, 'b-', linewidth=2.0)
+        set_ax_param(axis, "t", "R (local order parameter)", None, [0.0, 1.05])
+
+        plt.show()
 
 
     @staticmethod
@@ -558,27 +558,27 @@ class sync_visualizer:
         @param[in] save_movie (string): If it is specified then animation will be stored to file that is specified in this parameter.
         
         """
-        
-        figure = plt.figure();
-        
-        dynamic = sync_output_dynamic.output[0];
-        artist, = plt.polar(dynamic, [1.0] * len(dynamic), 'o', color = 'blue');
-        
+
+        figure = plt.figure()
+
+        dynamic = sync_output_dynamic.output[0]
+        artist, = plt.polar(dynamic, [1.0] * len(dynamic), 'o', color='blue')
+
         def init_frame():
-            return [ artist ];
-        
+            return [artist]
+
         def frame_generation(index_dynamic):
-            dynamic = sync_output_dynamic.output[index_dynamic];
-            artist.set_data(dynamic, [1.0] * len(dynamic));
-            
-            return [ artist ];
-        
+            dynamic = sync_output_dynamic.output[index_dynamic]
+            artist.set_data(dynamic, [1.0] * len(dynamic))
+
+            return [artist]
+
         phase_animation = animation.FuncAnimation(figure, frame_generation, len(sync_output_dynamic), interval = animation_velocity, init_func = init_frame, repeat_delay = 5000);
 
-        if (save_movie is not None):
-            phase_animation.save(save_movie, writer = 'ffmpeg', fps = 15, bitrate = 1500);
+        if save_movie is not None:
+            phase_animation.save(save_movie, writer='ffmpeg', fps=15, bitrate=1500)
         else:
-            plt.show();
+            plt.show()
 
 
     @staticmethod
@@ -592,31 +592,31 @@ class sync_visualizer:
         @param[in] save_movie (string): If it is specified then animation will be stored to file that is specified in this parameter.
         
         """
-        
+
         figure = plt.figure()
-        
+
         correlation_matrix = sync_output_dynamic.allocate_correlation_matrix(0)
         artist = plt.imshow(correlation_matrix, cmap = plt.get_cmap(colormap), interpolation='kaiser', vmin = 0.0, vmax = 1.0)
-        
-        def init_frame(): 
+
+        def init_frame():
             return [ artist ]
-        
+
         def frame_generation(index_dynamic):
             correlation_matrix = sync_output_dynamic.allocate_correlation_matrix(index_dynamic)
             artist.set_data(correlation_matrix)
-            
-            return [ artist ]
+
+            return [artist]
 
         correlation_animation = animation.FuncAnimation(figure, frame_generation, len(sync_output_dynamic), init_func = init_frame, interval = animation_velocity , repeat_delay = 1000, blit = True)
-        
-        if (save_movie is not None):
-            correlation_animation.save(save_movie, writer = 'ffmpeg', fps = 15, bitrate = 1500)
+
+        if save_movie is not None:
+            correlation_animation.save(save_movie, writer='ffmpeg', fps=15, bitrate=1500)
         else:
             plt.show()
 
 
     @staticmethod
-    def animate_phase_matrix(sync_output_dynamic, grid_width = None, grid_height = None, animation_velocity = 75, colormap = 'jet', save_movie = None):
+    def animate_phase_matrix(sync_output_dynamic, grid_width=None, grid_height=None, animation_velocity=75, colormap='jet', save_movie=None):
         """!
         @brief Shows animation of phase matrix between oscillators during simulation on 2D stage.
         @details If grid_width or grid_height are not specified than phase matrix size will by calculated automatically by square root.
@@ -629,28 +629,28 @@ class sync_visualizer:
         @param[in] save_movie (string): If it is specified then animation will be stored to file that is specified in this parameter.
         
         """
-        
-        figure = plt.figure();
-        
-        def init_frame(): 
-            return frame_generation(0);
-        
+
+        figure = plt.figure()
+
+        def init_frame():
+            return frame_generation(0)
+
         def frame_generation(index_dynamic):
-            figure.clf();
-            axis = figure.add_subplot(111);
-            
-            phase_matrix = sync_output_dynamic.allocate_phase_matrix(grid_width, grid_height, index_dynamic);
-            axis.imshow(phase_matrix, cmap = plt.get_cmap(colormap), interpolation='kaiser', vmin = 0.0, vmax = 2.0 * math.pi);
-            artist = figure.gca();
-            
-            return [ artist ];
+            figure.clf()
+            axis = figure.add_subplot(111)
+
+            phase_matrix = sync_output_dynamic.allocate_phase_matrix(grid_width, grid_height, index_dynamic)
+            axis.imshow(phase_matrix, cmap=plt.get_cmap(colormap), interpolation='kaiser', vmin=0.0, vmax=2.0 * math.pi)
+            artist = figure.gca()
+
+            return [artist]
 
         phase_animation = animation.FuncAnimation(figure, frame_generation, len(sync_output_dynamic), init_func = init_frame, interval = animation_velocity , repeat_delay = 1000);
-        
-        if (save_movie is not None):
-            phase_animation.save(save_movie, writer = 'ffmpeg', fps = 15, bitrate = 1500);
+
+        if save_movie is not None:
+            phase_animation.save(save_movie, writer='ffmpeg', fps=15, bitrate=1500)
         else:
-            plt.show();
+            plt.show()
 
 
     @staticmethod
@@ -665,17 +665,17 @@ class sync_visualizer:
         @return (tuple) New values of start and stop iterations.
         
         """
-        if (start_iteration is None):
-            start_iteration = 0;
-        
-        if (stop_iteration is None):
-            stop_iteration = len(sync_output_dynamic);
-        
-        return (start_iteration, stop_iteration);
+        if start_iteration is None:
+            start_iteration = 0
+
+        if stop_iteration is None:
+            stop_iteration = len(sync_output_dynamic)
+
+        return start_iteration, stop_iteration
 
 
     @staticmethod
-    def animate(sync_output_dynamic, title = None, save_movie = None):
+    def animate(sync_output_dynamic, title=None, save_movie=None):
         """!
         @brief Shows animation of phase coordinates and animation of correlation matrix together for the Sync dynamic output on the same figure.
         
@@ -684,38 +684,38 @@ class sync_visualizer:
         @param[in] save_movie (string): If it is specified then animation will be stored to file that is specified in this parameter.
         
         """
-        
-        dynamic = sync_output_dynamic.output[0];
-        correlation_matrix = sync_output_dynamic.allocate_correlation_matrix(0);
-        
-        figure = plt.figure(1);
-        if (title is not None):
+
+        dynamic = sync_output_dynamic.output[0]
+        correlation_matrix = sync_output_dynamic.allocate_correlation_matrix(0)
+
+        figure = plt.figure(1)
+        if title is not None:
             figure.suptitle(title, fontsize = 26, fontweight = 'bold')
-        
-        ax1 = figure.add_subplot(121, projection='polar');
-        ax2 = figure.add_subplot(122);
-        
-        artist1, = ax1.plot(dynamic, [1.0] * len(dynamic), marker = 'o', color = 'blue', ls = '');
-        artist2 = ax2.imshow(correlation_matrix, cmap = plt.get_cmap('Accent'), interpolation='kaiser');
-        
+
+        ax1 = figure.add_subplot(121, projection='polar')
+        ax2 = figure.add_subplot(122)
+
+        artist1, = ax1.plot(dynamic, [1.0] * len(dynamic), marker='o', color='blue', ls='')
+        artist2 = ax2.imshow(correlation_matrix, cmap = plt.get_cmap('Accent'), interpolation='kaiser')
+
         def init_frame():
-            return [ artist1, artist2 ];
+            return [artist1, artist2]
 
         def frame_generation(index_dynamic):
-            dynamic = sync_output_dynamic.output[index_dynamic];
-            artist1.set_data(dynamic, [1.0] * len(dynamic));
-            
-            correlation_matrix = sync_output_dynamic.allocate_correlation_matrix(index_dynamic);
-            artist2.set_data(correlation_matrix);
-            
-            return [ artist1, artist2 ];
-        
-        dynamic_animation = animation.FuncAnimation(figure, frame_generation, len(sync_output_dynamic), interval = 75, init_func = init_frame, repeat_delay = 5000);
-        
-        if (save_movie is not None):
-            dynamic_animation.save(save_movie, writer = 'ffmpeg', fps = 15, bitrate = 1500);
+            dynamic = sync_output_dynamic.output[index_dynamic]
+            artist1.set_data(dynamic, [1.0] * len(dynamic))
+
+            correlation_matrix = sync_output_dynamic.allocate_correlation_matrix(index_dynamic)
+            artist2.set_data(correlation_matrix)
+
+            return [artist1, artist2]
+
+        dynamic_animation = animation.FuncAnimation(figure, frame_generation, len(sync_output_dynamic), interval=75, init_func=init_frame, repeat_delay=5000)
+
+        if save_movie is not None:
+            dynamic_animation.save(save_movie, writer='ffmpeg', fps=15, bitrate=1500)
         else:
-            plt.show();
+            plt.show()
 
 
 
@@ -740,30 +740,30 @@ class sync_network(network):
         @param[in] ccore (bool): If True simulation is performed by CCORE library (C++ implementation of pyclustering).
         
         """
-        
+
         self._ccore_network_pointer = None;      # Pointer to CCORE Sync implementation of the network.
-        
+
         if ( (ccore is True) and ccore_library.workable() ):
             self._ccore_network_pointer = wrapper.sync_create_network(num_osc, weight, frequency, type_conn, initial_phases);
             self._num_osc = num_osc;
             self._conn_represent = conn_represent.MATRIX;
-        
-        else:   
+
+        else:
             super().__init__(num_osc, type_conn, representation);
-            
+
             self._weight = weight;
-            
+
             self._phases = list();
             self._freq = list();
-            
+
             random.seed();
             for index in range(0, num_osc, 1):
                 if (initial_phases == initial_type.RANDOM_GAUSSIAN):
                     self._phases.append(random.random() * 2 * pi);
-                
+
                 elif (initial_phases == initial_type.EQUIPARTITION):
                     self._phases.append( pi / num_osc * index);
-                
+
                 self._freq.append(random.random() * frequency);
 
 
@@ -772,7 +772,7 @@ class sync_network(network):
         @brief Destructor of oscillatory network is based on Kuramoto model.
         
         """
-        
+
         if (self._ccore_network_pointer is not None):
             wrapper.sync_destroy_network(self._ccore_network_pointer);
             self._ccore_network_pointer = None;
@@ -804,10 +804,10 @@ class sync_network(network):
         @see sync_local_order()
         
         """
-        
+
         if (self._ccore_network_pointer is not None):
             return wrapper.sync_order(self._ccore_network_pointer);
-        
+
         return order_estimator.calculate_sync_order(self._phases);
 
 
@@ -820,10 +820,10 @@ class sync_network(network):
         @see sync_order()
         
         """
-        
+
         if (self._ccore_network_pointer is not None):
             return wrapper.sync_local_order(self._ccore_network_pointer);
-        
+
         return order_estimator.calculate_local_sync_order(self._phases, self);
 
 
@@ -838,13 +838,13 @@ class sync_network(network):
         @return (double) New phase for specified oscillator (don't assign here).
         
         """
-        
+
         index = argv;
         phase = 0;
         for k in range(0, self._num_osc):
             if (self.has_connection(index, k) == True):
                 phase += math.sin(self._phases[k] - teta);
-            
+
         return ( self._freq[index] + (phase * self._weight / self._num_osc) );
 
 
@@ -864,7 +864,7 @@ class sync_network(network):
         @see simulate_static()
         
         """
-        
+
         return self.simulate_static(steps, time, solution, collect_dynamic);
 
 
@@ -886,47 +886,47 @@ class sync_network(network):
         @see simulate_static()
         
         """
-        
+
         if (self._ccore_network_pointer is not None):
             ccore_instance_dynamic = wrapper.sync_simulate_dynamic(self._ccore_network_pointer, order, solution, collect_dynamic, step, int_step, threshold_changes);
             return sync_dynamic(None, None, ccore_instance_dynamic);
-        
+
         # For statistics and integration
         time_counter = 0;
-        
+
         # Prevent infinite loop. It's possible when required state cannot be reached.
         previous_order = 0;
         current_order = self.sync_local_order();
-        
+
         # If requested input dynamics
         dyn_phase = [];
         dyn_time = [];
         if (collect_dynamic == True):
             dyn_phase.append(self._phases);
             dyn_time.append(0);
-        
+
         # Execute until sync state will be reached
         while (current_order < order):
             # update states of oscillators
             self._phases = self._calculate_phases(solution, time_counter, step, int_step);
-            
+
             # update time
             time_counter += step;
-            
+
             # if requested input dynamic
             if (collect_dynamic == True):
                 dyn_phase.append(self._phases);
                 dyn_time.append(time_counter);
-                
+
             # update orders
             previous_order = current_order;
             current_order = self.sync_local_order();
-            
+
             # hang prevention
             if (abs(current_order - previous_order) < threshold_changes):
                 # print("Warning: sync_network::simulate_dynamic - simulation is aborted due to low level of convergence rate (order = " + str(current_order) + ").");
                 break;
-            
+
         if (collect_dynamic != True):
             dyn_phase.append(self._phases);
             dyn_time.append(time_counter);
@@ -951,34 +951,34 @@ class sync_network(network):
         @see simulate_dynamic()
         
         """
-        
+
         if (self._ccore_network_pointer is not None):
             ccore_instance_dynamic = wrapper.sync_simulate_static(self._ccore_network_pointer, steps, time, solution, collect_dynamic);
             return sync_dynamic(None, None, ccore_instance_dynamic);
-        
+
         dyn_phase = [];
         dyn_time = [];
-        
+
         if (collect_dynamic == True):
             dyn_phase.append(self._phases);
             dyn_time.append(0);
-        
+
         step = time / steps;
         int_step = step / 10.0;
-        
+
         for t in numpy.arange(step, time + step, step):
             # update states of oscillators
             self._phases = self._calculate_phases(solution, t, step, int_step);
-            
+
             # update states of oscillators
             if (collect_dynamic == True):
                 dyn_phase.append(self._phases);
                 dyn_time.append(t);
-        
+
         if (collect_dynamic != True):
             dyn_phase.append(self._phases);
             dyn_time.append(time);
-                        
+
         output_sync_dynamic = sync_dynamic(dyn_phase, dyn_time);
         return output_sync_dynamic;
 
@@ -995,21 +995,21 @@ class sync_network(network):
         @return (list) New states (phases) for oscillators.
         
         """
-        
+
         next_phases = [0.0] * self._num_osc;    # new oscillator _phases
-        
+
         for index in range (0, self._num_osc, 1):
             if (solution == solve_type.FAST):
                 result = self._phases[index] + self._phase_kuramoto(self._phases[index], 0, index);
                 next_phases[index] = self._phase_normalization(result);
-                
+
             elif ( (solution == solve_type.RK4) or (solution == solve_type.RKF45) ):
                 result = odeint(self._phase_kuramoto, self._phases[index], numpy.arange(t - step, t, int_step), (index , ));
                 next_phases[index] = self._phase_normalization(result[len(result) - 1][0]);
-            
+
             else:
                 raise NameError("Solver '" + str(solution) + "' is not supported");
-        
+
         return next_phases;
 
 
@@ -1029,7 +1029,7 @@ class sync_network(network):
                 norm_teta -= 2.0 * pi;
             else:
                 norm_teta += 2.0 * pi;
-        
+
         return norm_teta;
 
 
@@ -1042,10 +1042,10 @@ class sync_network(network):
         @return (list) Indexes of neighbors of the specified oscillator.
         
         """
-        
+
         if ( (self._ccore_network_pointer is not None) and (self._osc_conn is None) ):
             self._osc_conn = wrapper.sync_connectivity_matrix(self._ccore_network_pointer);
-            
+
         return super().get_neighbors(index);
 
 
@@ -1057,8 +1057,8 @@ class sync_network(network):
         @param[in] j (uint): index of an oscillator in the network.
         
         """
-        
+
         if ( (self._ccore_network_pointer is not None) and (self._osc_conn is None) ):
             self._osc_conn = wrapper.sync_connectivity_matrix(self._ccore_network_pointer);
-        
+
         return super().has_connection(i, j);

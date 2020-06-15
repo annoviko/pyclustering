@@ -521,6 +521,9 @@
     <ClCompile Include="utest-random_center_initializer.cpp">
       <Filter>Unit Tests</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\cluster\silhouette_ksearch_data.cpp">
+      <Filter>Tested Code\cluster</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="samples.hpp">

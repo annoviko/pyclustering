@@ -203,6 +203,7 @@
     <ClCompile Include="..\src\cluster\rock.cpp" />
     <ClCompile Include="..\src\cluster\silhouette.cpp" />
     <ClCompile Include="..\src\cluster\silhouette_ksearch.cpp" />
+    <ClCompile Include="..\src\cluster\silhouette_ksearch_data.cpp" />
     <ClCompile Include="..\src\cluster\somsc.cpp" />
     <ClCompile Include="..\src\cluster\syncnet.cpp" />
     <ClCompile Include="..\src\cluster\ttsas.cpp" />

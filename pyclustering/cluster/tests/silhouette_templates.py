@@ -23,10 +23,12 @@
 
 """
 
+import math
 
 from pyclustering.cluster.silhouette import silhouette, silhouette_ksearch
 
 from pyclustering.samples import answer_reader
+from pyclustering.samples.definitions import SIMPLE_SAMPLES
 
 from pyclustering.tests.assertion import assertion
 
@@ -93,3 +95,27 @@ class silhouette_test_template:
             break
 
         assertion.true(testing_result)
+
+
+    @staticmethod
+    def random_state(kmin, kmax, algorithm, random_state, ccore_flag):
+        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE4)
+
+        ksearch_instance_1 = silhouette_ksearch(sample, kmin, kmax, algorithm=algorithm, random_state=random_state,
+                                                ccore=ccore_flag).process()
+
+        ksearch_instance_2 = silhouette_ksearch(sample, kmin, kmax, algorithm=algorithm, random_state=random_state,
+                                                ccore=ccore_flag).process()
+
+        assertion.eq(ksearch_instance_1.get_amount(), ksearch_instance_2.get_amount())
+        assertion.eq(ksearch_instance_1.get_score(), ksearch_instance_2.get_score())
+        assertion.eq(len(ksearch_instance_1.get_scores()), len(ksearch_instance_2.get_scores()))
+
+        scores1 = ksearch_instance_1.get_scores()
+        scores2 = ksearch_instance_2.get_scores()
+        for key in scores1:
+            key = int(key)
+            if math.isnan(scores1[key]) and math.isnan(scores2[key]):
+                continue
+            else:
+                assertion.eq(scores1[key], scores2[key])

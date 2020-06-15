@@ -95,6 +95,9 @@ class gmeans_integration_test(unittest.TestCase):
     def test_clustering_hepta_kmax_01(self):
         gmeans_test_template().clustering(FCPS_SAMPLES.SAMPLE_HEPTA, 1, 1, True, k_max=1, random_state=1)
 
+    def test_clustering_hepta_kmax_01_rnd_1024(self):
+        gmeans_test_template().clustering(FCPS_SAMPLES.SAMPLE_HEPTA, 1, 1, True, k_max=1, random_state=1024)
+
     def test_clustering_hepta_kmax_02(self):
         gmeans_test_template().clustering(FCPS_SAMPLES.SAMPLE_HEPTA, 2, 1, True, k_max=2, random_state=1)
 

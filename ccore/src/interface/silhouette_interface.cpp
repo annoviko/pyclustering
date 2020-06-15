@@ -70,7 +70,8 @@ pyclustering_package * silhouette_ksearch_algorithm(
     const pyclustering_package * const p_sample,
     const std::size_t p_kmin,
     const std::size_t p_kmax,
-    const std::size_t p_algorithm)
+    const std::size_t p_algorithm,
+    const long long p_random_state)
 {
     pyclustering::dataset data;
     p_sample->extract(data);
@@ -78,7 +79,7 @@ pyclustering_package * silhouette_ksearch_algorithm(
     auto allocator = get_silhouette_ksearch_allocator(static_cast<silhouette_ksearch_type>(p_algorithm));
 
     pyclustering::clst::silhouette_ksearch_data result;
-    pyclustering::clst::silhouette_ksearch(p_kmin, p_kmax, allocator).process(data, result);
+    pyclustering::clst::silhouette_ksearch(p_kmin, p_kmax, allocator, p_random_state).process(data, result);
 
     pyclustering_package * package = new pyclustering_package(pyclustering_data_t::PYCLUSTERING_TYPE_LIST);
     package->size = SILHOUETTE_KSEARCH_PACKAGE_SIZE;

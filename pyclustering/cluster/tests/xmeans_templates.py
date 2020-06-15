@@ -28,7 +28,7 @@ import random
 
 from pyclustering.cluster.xmeans import xmeans, splitting_type
 from pyclustering.cluster.center_initializer import random_center_initializer
-
+from pyclustering.samples.definitions import SIMPLE_SAMPLES
 from pyclustering.utils import read_sample, distance_metric, type_metric
 
 from pyclustering.tests.assertion import assertion
@@ -126,3 +126,16 @@ class XmeansTestTemplates:
         assertion.ge(kmax, len(clusters))
         assertion.ge(kmax, len(centers))
         assertion.eq(len(clusters), len(centers))
+
+
+    @staticmethod
+    def random_state(ccore_flag, kinitial, kmax, random_state):
+        data = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE5)
+
+        initial_centers = random_center_initializer(data, kinitial, random_state=random_state).initialize()
+        xmeans_instance1 = xmeans(data, initial_centers, kmax, ccore=ccore_flag, random_state=random_state).process()
+        xmeans_instance2 = xmeans(data, initial_centers, kmax, ccore=ccore_flag, random_state=random_state).process()
+
+        assertion.eq(xmeans_instance1.get_total_wce(), xmeans_instance2.get_total_wce())
+        assertion.eq(xmeans_instance1.get_centers(), xmeans_instance2.get_centers())
+        assertion.eq(xmeans_instance1.get_clusters(), xmeans_instance2.get_clusters())

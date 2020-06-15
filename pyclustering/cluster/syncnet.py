@@ -112,7 +112,7 @@ class syncnet_visualizer(sync_visualizer):
     """
     
     @staticmethod
-    def animate_cluster_allocation(dataset, analyser, animation_velocity = 75, tolerance = 0.1, save_movie = None, title = None):
+    def animate_cluster_allocation(dataset, analyser, animation_velocity=75, tolerance=0.1, save_movie=None, title=None):
         """!
         @brief Shows animation of output dynamic (output of each oscillator) during simulation on a circle from [0; 2pi].
         
@@ -143,20 +143,22 @@ class syncnet_visualizer(sync_visualizer):
             visualizer = cluster_visualizer(size_row = 2)
             visualizer.append_clusters(clusters, dataset)
             
-            artist1, = ax1.plot(dynamic, [1.0] * len(dynamic), marker = 'o', color = 'blue', ls = '')
+            artist1, = ax1.plot(dynamic, [1.0] * len(dynamic), marker='o', color='blue', ls='')
             
             visualizer.show(figure, display = False)
             artist2 = figure.gca()
             
             return [ artist1, artist2 ]
         
-        cluster_animation = animation.FuncAnimation(figure, frame_generation, len(analyser), interval = animation_velocity, init_func = init_frame, repeat_delay = 5000);
+        cluster_animation = animation.\
+            FuncAnimation(figure, frame_generation, len(analyser), interval=animation_velocity, init_func=init_frame,
+                          repeat_delay=5000)
 
         if save_movie is not None:
 #             plt.rcParams['animation.ffmpeg_path'] = 'D:\\Program Files\\ffmpeg-3.3.1-win64-static\\bin\\ffmpeg.exe';
 #             ffmpeg_writer = animation.FFMpegWriter(fps = 15);
 #             cluster_animation.save(save_movie, writer = ffmpeg_writer);
-            cluster_animation.save(save_movie, writer = 'ffmpeg', fps = 15, bitrate = 1500)
+            cluster_animation.save(save_movie, writer='ffmpeg', fps=15, bitrate=1500)
         else:
             plt.show()
 

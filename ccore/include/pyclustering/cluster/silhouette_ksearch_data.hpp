@@ -56,7 +56,7 @@ public:
     @return Optimal amount of clusters.
     
     */
-    const std::size_t get_amount() const { return m_amount; }
+    const std::size_t get_amount() const;
 
     /*!
 
@@ -65,7 +65,7 @@ public:
     @param[in] p_amount: optimal amount of clusters.
 
     */
-    void set_amount(const std::size_t p_amount) { m_amount = p_amount; }
+    void set_amount(const std::size_t p_amount);
 
     /*!
     
@@ -74,7 +74,7 @@ public:
     @return Optimal amount of clusters that has been found during the analysis.
 
     */
-    const double get_score() const { return m_score; }
+    const double get_score() const;
 
     /*!
 
@@ -83,7 +83,7 @@ public:
     @param[in] p_score: optimal amount of clusters that has been found during the analysis.
 
     */
-    void set_score(const double p_score) { m_score = p_score; }
+    void set_score(const double p_score);
 
     /*!
     
@@ -92,7 +92,7 @@ public:
     @return Constant reference to silhouette score for each K value (amount of clusters).
     
     */
-    const silhouette_score_sequence & scores() const { return m_scores; }
+    const silhouette_score_sequence & scores() const;
 
     /*!
 
@@ -101,7 +101,19 @@ public:
     @return Reference to silhouette score for each K value (amount of clusters).
 
     */
-    silhouette_score_sequence & scores() { return m_scores; }
+    silhouette_score_sequence & scores();
+
+public:
+    /*!
+
+    @brief    Compares Silhouette K-search results.
+
+    @param[in] p_other: another Silhouette K-search result that is used for comparison.
+
+    @return  Returns true if both objects are the same.
+
+    */
+    bool operator==(const silhouette_ksearch_data & p_other) const;
 };
 
 

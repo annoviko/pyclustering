@@ -6,6 +6,9 @@ CHANGE NOTES FOR 0.10.0 (STARTED Jan 24, 2020), (RELEASED: Dev -)
 
 GENERAL CHANGES:
 
+- Introduced parameter `random_seed` for algorithms/models that use random functionality: `kmeans++`, `random_center_initializer`, `ga`, `gmeans`, `xmeans`, `som`, `somsc`, `elbow`, `silhouette_ksearch` (Python: `pyclustering.cluster`; C++: `pyclustering.clst`).
+  See: https://github.com/annoviko/pyclustering/issues/578
+
 - Introduced parameter `k_max` to G-Means algorithm to use it as an optional stop condition for the algorithm (Python: `pyclustering.cluster.gmeans`; C++: `pyclustering::clst::gmeans`).
   See: https://github.com/annoviko/pyclustering/issues/602
 
@@ -32,6 +35,9 @@ GENERAL CHANGES:
 
 
 CORRECTED MAJOR BUGS:
+
+- Bug with wrong data type for `scores` in Silhouette K-search algorithm in case of using C++ (Python: `pyclustering.cluster.silhouette`).
+  See: https://github.com/annoviko/pyclustering/issues/606
 
 - Bug with a random distribution in the random center initializer (Python: `pyclustering.cluster.center_initializer`).
   See: https://github.com/annoviko/pyclustering/issues/573

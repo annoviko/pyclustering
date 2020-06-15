@@ -74,6 +74,18 @@ public:
 
     */
     virtual void allocate(const std::size_t p_amount, const dataset & p_data, cluster_sequence & p_clusters) = 0;
+
+    /*!
+
+    @brief Performs cluster analysis in order to allocate specified amount of cluster from an input data.
+
+    @param[in]  p_amount: amount of clusters that should be allocated.
+    @param[in]  p_data: input data for cluster analysis.
+    @param[in]  p_random_state: seed for random state (value `RANDOM_STATE_CURRENT_TIME` means the current system time is going to used as a seed).
+    @param[out] p_clusters: container where result (allocated clusters) is placed.
+
+    */
+    virtual void allocate(const std::size_t p_amount, const dataset & p_data, const long long p_random_state, cluster_sequence & p_clusters) = 0;
 };
 
 
@@ -96,6 +108,18 @@ public:
 
     */
     virtual void allocate(const std::size_t p_amount, const dataset & p_data, cluster_sequence & p_clusters) override;
+
+    /*!
+
+    @brief Performs cluster analysis using K-Means algorithm.
+
+    @param[in]  p_amount: amount of clusters that should be allocated.
+    @param[in]  p_data: input data for cluster analysis.
+    @param[in]  p_random_state: seed for random state (value `RANDOM_STATE_CURRENT_TIME` means the current system time is going to used as a seed).
+    @param[out] p_clusters: container where result (allocated clusters) is placed.
+
+    */
+    virtual void allocate(const std::size_t p_amount, const dataset & p_data, const long long p_random_state, cluster_sequence & p_clusters) override;
 };
 
 
@@ -118,6 +142,18 @@ public:
 
     */
     virtual void allocate(const std::size_t p_amount, const dataset & p_data, cluster_sequence & p_clusters) override;
+
+    /*!
+
+    @brief Performs cluster analysis using K-Medians algorithm.
+
+    @param[in]  p_amount: amount of clusters that should be allocated.
+    @param[in]  p_data: input data for cluster analysis.
+    @param[in]  p_random_state: seed for random state (value `RANDOM_STATE_CURRENT_TIME` means the current system time is going to used as a seed).
+    @param[out] p_clusters: container where result (allocated clusters) is placed.
+
+    */
+    virtual void allocate(const std::size_t p_amount, const dataset & p_data, const long long p_random_state, cluster_sequence & p_clusters) override;
 };
 
 
@@ -140,6 +176,18 @@ public:
 
     */
     virtual void allocate(const std::size_t p_amount, const dataset & p_data, cluster_sequence & p_clusters) override;
+
+    /*!
+
+    @brief Performs cluster analysis using K-Medoids algorithm.
+
+    @param[in]  p_amount: amount of clusters that should be allocated.
+    @param[in]  p_data: input data for cluster analysis.
+    @param[in]  p_random_state: seed for random state (value `RANDOM_STATE_CURRENT_TIME` means the current system time is going to used as a seed).
+    @param[out] p_clusters: container where result (allocated clusters) is placed.
+
+    */
+    virtual void allocate(const std::size_t p_amount, const dataset & p_data, const long long p_random_state, cluster_sequence & p_clusters) override;
 };
 
 
@@ -156,6 +204,7 @@ private:
     std::size_t m_kmin;
     std::size_t m_kmax;
     silhouette_ksearch_allocator::ptr m_allocator = std::make_shared<kmeans_allocator>();
+    long long m_random_state;
 
 public:
     /*!
@@ -172,9 +221,10 @@ public:
     @param[in] p_kmin: minimum amount of clusters that might be allocated.
     @param[in] p_kmax: maximum amount of clusters that might be allocated.
     @param[in] p_allocator: strategy that is used to allocate clusters or in other words, to perform cluster analysis.
+    @param[in] p_random_state: seed for random state (by default is `RANDOM_STATE_CURRENT_TIME`, current system time is used).
 
     */
-    silhouette_ksearch(const std::size_t p_kmin, const std::size_t p_kmax, const silhouette_ksearch_allocator::ptr & p_allocator = std::make_shared<kmeans_allocator>());
+    silhouette_ksearch(const std::size_t p_kmin, const std::size_t p_kmax, const silhouette_ksearch_allocator::ptr & p_allocator = std::make_shared<kmeans_allocator>(), const long long p_random_state = RANDOM_STATE_CURRENT_TIME);
 
     /*!
 

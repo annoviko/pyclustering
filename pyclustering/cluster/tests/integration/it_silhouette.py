@@ -162,3 +162,54 @@ class silhouette_integration_tests(unittest.TestCase):
     def test_distance_matrix_sample07(self):
         silhouette_test_template.correct_processing_data_types(SIMPLE_SAMPLES.SAMPLE_SIMPLE7,
                                                                SIMPLE_ANSWERS.ANSWER_SIMPLE7, True)
+
+    def test_random_state_1_kmeans(self):
+        silhouette_test_template.random_state(2, 10, silhouette_ksearch_type.KMEANS, 1, True)
+
+    def test_random_state_2_kmeans(self):
+        silhouette_test_template.random_state(2, 10, silhouette_ksearch_type.KMEANS, 2, True)
+
+    def test_random_state_4_kmeans(self):
+        silhouette_test_template.random_state(2, 10, silhouette_ksearch_type.KMEANS, 4, True)
+
+    def test_random_state_8_kmeans(self):
+        silhouette_test_template.random_state(2, 10, silhouette_ksearch_type.KMEANS, 8, True)
+
+    def test_random_state_16_kmeans(self):
+        silhouette_test_template.random_state(2, 10, silhouette_ksearch_type.KMEANS, 16, True)
+
+    def test_random_state_128_kmeans(self):
+        silhouette_test_template.random_state(2, 10, silhouette_ksearch_type.KMEANS, 128, True)
+
+    def test_random_state_1024_kmeans(self):
+        silhouette_test_template.random_state(2, 10, silhouette_ksearch_type.KMEANS, 1024, True)
+
+    def test_random_state_1_kmedians(self):
+        silhouette_test_template.random_state(2, 10, silhouette_ksearch_type.KMEDIANS, 1, True)
+
+    def test_random_state_2_kmedians(self):
+        silhouette_test_template.random_state(2, 10, silhouette_ksearch_type.KMEDIANS, 2, True)
+
+    def test_random_state_4_kmedians(self):
+        silhouette_test_template.random_state(2, 10, silhouette_ksearch_type.KMEDIANS, 4, True)
+
+    def test_random_state_128_kmedians(self):
+        silhouette_test_template.random_state(2, 10, silhouette_ksearch_type.KMEDIANS, 128, True)
+
+    def test_random_state_1024_kmedians(self):
+        silhouette_test_template.random_state(2, 10, silhouette_ksearch_type.KMEDIANS, 1024, True)
+
+    def test_random_state_1_kmedoids(self):
+        silhouette_test_template.random_state(2, 10, silhouette_ksearch_type.KMEDOIDS, 1, True)
+
+    def test_random_state_2_kmedoids(self):
+        silhouette_test_template.random_state(2, 10, silhouette_ksearch_type.KMEDIANS, 2, True)
+
+    def test_random_state_4_kmedoids(self):
+        silhouette_test_template.random_state(2, 10, silhouette_ksearch_type.KMEDIANS, 4, True)
+
+    def test_random_state_128_kmedoids(self):
+        silhouette_test_template.random_state(2, 10, silhouette_ksearch_type.KMEDIANS, 128, True)
+
+    def test_random_state_1024_kmedoids(self):
+        silhouette_test_template.random_state(2, 10, silhouette_ksearch_type.KMEDIANS, 1024, True)

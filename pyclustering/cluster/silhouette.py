@@ -433,10 +433,10 @@ class silhouette_ksearch:
         @brief Initialize Silhouette search algorithm to find out optimal amount of clusters.
 
         @param[in] data (array_like): Input data that is used for searching optimal amount of clusters.
-        @param[in] kmin (uint): Minimum amount of clusters that might be allocated. Should be equal or greater than 2.
+        @param[in] kmin (uint): Minimum amount of clusters that might be allocated. Should be equal or greater than `2`.
         @param[in] kmax (uint): Maximum amount of clusters that might be allocated. Should be equal or less than amount
                     of points in input data.
-        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'algorithm').
+        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: `algorithm`, `random_state`).
 
         <b>Keyword Args:</b><br>
             - algorithm (silhouette_ksearch_type): Defines algorithm that is used for searching optimal number of
@@ -449,6 +449,7 @@ class silhouette_ksearch:
         self.__kmax = kmax
 
         self.__algorithm = kwargs.get('algorithm', silhouette_ksearch_type.KMEANS)
+        self.__random_state = kwargs.get('random_state', None)
         self.__return_index = self.__algorithm == silhouette_ksearch_type.KMEDOIDS
 
         self.__amount = -1
@@ -484,11 +485,15 @@ class silhouette_ksearch:
         @brief Performs processing using CCORE (C/C++ part of pyclustering library).
 
         """
-        results = wrapper.silhoeutte_ksearch(self.__data, self.__kmin, self.__kmax, self.__algorithm)
+        results = wrapper.silhoeutte_ksearch(self.__data, self.__kmin, self.__kmax, self.__algorithm, self.__random_state)
 
         self.__amount = results[0]
         self.__score = results[1]
-        self.__scores = results[2]
+
+        scores_list = results[2]
+        self.__scores = {}
+        for i in range(len(scores_list)):
+            self.__scores[self.__kmin + i] = scores_list[i]
 
 
     def __process_by_python(self):
@@ -558,7 +563,7 @@ class silhouette_ksearch:
         @return (array_like) Allocated clusters.
 
         """
-        initial_values = kmeans_plusplus_initializer(self.__data, k).initialize(return_index=self.__return_index)
+        initial_values = kmeans_plusplus_initializer(self.__data, k, random_state=self.__random_state).initialize(return_index=self.__return_index)
         algorithm_type = self.__algorithm.get_type()
         return algorithm_type(self.__data, initial_values).process().get_clusters()
 

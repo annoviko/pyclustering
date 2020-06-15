@@ -218,6 +218,25 @@ class XmeansUnitTest(unittest.TestCase):
         XmeansTestTemplates.templatePredict(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, centers, [[2.1, 4.1], [2.1, 1.9]], 4, [3, 2], False)
 
 
+    def test_random_state_1(self):
+        XmeansTestTemplates.random_state(False, 2, 10, 1)
+
+    def test_random_state_2(self):
+        XmeansTestTemplates.random_state(False, 2, 10, 2)
+
+    def test_random_state_4(self):
+        XmeansTestTemplates.random_state(False, 2, 10, 4)
+
+    def test_random_state_32(self):
+        XmeansTestTemplates.random_state(False, 2, 10, 32)
+
+    def test_random_state_1024(self):
+        XmeansTestTemplates.random_state(False, 2, 10, 1024)
+
+    def test_random_state_65536(self):
+        XmeansTestTemplates.random_state(False, 2, 10, 65536)
+
+
     def test_incorrect_data(self):
         self.assertRaises(ValueError, xmeans, [])
 

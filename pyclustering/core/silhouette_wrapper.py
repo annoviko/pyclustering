@@ -24,7 +24,7 @@
 """
 
 
-from ctypes import c_double, c_size_t, POINTER
+from ctypes import c_double, c_longlong, c_size_t, POINTER
 
 from pyclustering.core.converter import convert_data_type
 from pyclustering.core.wrapper import ccore_library
@@ -52,12 +52,13 @@ def silhoeutte(sample, clusters, pointer_metric, data_type):
     return result
 
 
-def silhoeutte_ksearch(sample, kmin, kmax, allocator):
+def silhoeutte_ksearch(sample, kmin, kmax, allocator, random_state):
+    random_state = random_state or -1
     pointer_data = package_builder(sample, c_double).create()
 
     ccore = ccore_library.get()
     ccore.silhouette_ksearch_algorithm.restype = POINTER(pyclustering_package)
-    package = ccore.silhouette_ksearch_algorithm(pointer_data, c_size_t(kmin), c_size_t(kmax), c_size_t(allocator))
+    package = ccore.silhouette_ksearch_algorithm(pointer_data, c_size_t(kmin), c_size_t(kmax), c_size_t(allocator), c_longlong(random_state))
 
     results = package_extractor(package).extract()
     ccore.free_pyclustering_package(package)

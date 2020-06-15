@@ -77,3 +77,10 @@ class assertion:
     def false(argument1):
         if argument1:
             raise AssertionError("Expected: 'False', Actual: '" + str(argument1) + "'")
+
+    @staticmethod
+    def fail(message=None):
+        if message is None:
+            raise AssertionError("Failure")
+        else:
+            raise AssertionError("Failure: '" + message + "'")

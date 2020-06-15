@@ -58,6 +58,7 @@
     <ClCompile Include="cluster\rock.cpp" />
     <ClCompile Include="cluster\silhouette.cpp" />
     <ClCompile Include="cluster\silhouette_ksearch.cpp" />
+    <ClCompile Include="cluster\silhouette_ksearch_data.cpp" />
     <ClCompile Include="cluster\somsc.cpp" />
     <ClCompile Include="cluster\syncnet.cpp" />
     <ClCompile Include="cluster\ttsas.cpp" />

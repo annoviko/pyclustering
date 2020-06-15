@@ -68,7 +68,7 @@ TEST(utest_interface_silhouette, silhouette_ksearch) {
     dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_01);
     std::shared_ptr<pyclustering_package> sample = pack(*data);
 
-    pyclustering_package * result = silhouette_ksearch_algorithm(sample.get(), 2, 5, 0);
+    pyclustering_package * result = silhouette_ksearch_algorithm(sample.get(), 2, 5, 0, -1);
 
     ASSERT_EQ((std::size_t) SILHOUETTE_KSEARCH_PACKAGE_SIZE, result->size);
 

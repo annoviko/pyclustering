@@ -1,23 +1,24 @@
-/**
-*
-* @authors Andrei Novikov (pyclustering@yandex.ru)
-* @date 2014-2020
-* @copyright GNU Public License
-*
-* GNU_PUBLIC_LICENSE
-*   pyclustering is free software: you can redistribute it and/or modify
-*   it under the terms of the GNU General Public License as published by
-*   the Free Software Foundation, either version 3 of the License, or
-*   (at your option) any later version.
-*
-*   pyclustering is distributed in the hope that it will be useful,
-*   but WITHOUT ANY WARRANTY; without even the implied warranty of
-*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*   GNU General Public License for more details.
-*
-*   You should have received a copy of the GNU General Public License
-*   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*
+/*!
+
+@authors Andrei Novikov (pyclustering@yandex.ru)
+@date 2014-2020
+@copyright GNU Public License
+
+@cond GNU_PUBLIC_LICENSE
+    pyclustering is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    pyclustering is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+@endcond
+
 */
 
 
@@ -143,4 +144,69 @@ TEST(utest_silhouette_ksearch, correct_ksearch_simple12) {
 TEST(utest_silhouette_ksearch, correct_ksearch_simple13) {
     template_correct_ksearch(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_13), answer_reader::read(SAMPLE_SIMPLE::SAMPLE_SIMPLE_13),
         2, 10, std::make_shared<kmeans_allocator>());
+}
+
+
+static void template_random_state(
+    const std::size_t p_kmin,
+    const std::size_t p_kmax,
+    const silhouette_ksearch_allocator::ptr & p_allocator = std::make_shared<kmeans_allocator>(),
+    const long long p_random_state = RANDOM_STATE_CURRENT_TIME)
+{
+    dataset_ptr data = simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_04);
+
+    silhouette_ksearch_data result_1, result_2;
+    silhouette_ksearch(p_kmin, p_kmax, p_allocator, p_random_state).process(*data, result_1);
+    silhouette_ksearch(p_kmin, p_kmax, p_allocator, p_random_state).process(*data, result_2);
+
+    ASSERT_EQ(result_1, result_2);
+}
+
+
+TEST(utest_silhouette_ksearch, random_state_1_kmeans) {
+    template_random_state(2, 10, std::make_shared<kmeans_allocator>(), 1);
+}
+
+TEST(utest_silhouette_ksearch, random_state_2_kmeans) {
+    template_random_state(2, 10, std::make_shared<kmeans_allocator>(), 2);
+}
+
+TEST(utest_silhouette_ksearch, random_state_500_kmeans) {
+    template_random_state(2, 10, std::make_shared<kmeans_allocator>(), 500);
+}
+
+TEST(utest_silhouette_ksearch, random_state_10000_kmeans) {
+    template_random_state(2, 10, std::make_shared<kmeans_allocator>(), 10000);
+}
+
+TEST(utest_silhouette_ksearch, random_state_1_kmedians) {
+    template_random_state(2, 10, std::make_shared<kmedians_allocator>(), 1);
+}
+
+TEST(utest_silhouette_ksearch, random_state_2_kmedians) {
+    template_random_state(2, 10, std::make_shared<kmedians_allocator>(), 2);
+}
+
+TEST(utest_silhouette_ksearch, random_state_500_kmedians) {
+    template_random_state(2, 10, std::make_shared<kmedians_allocator>(), 500);
+}
+
+TEST(utest_silhouette_ksearch, random_state_10000_kmedians) {
+    template_random_state(2, 10, std::make_shared<kmedians_allocator>(), 10000);
+}
+
+TEST(utest_silhouette_ksearch, random_state_1_kmedoids) {
+    template_random_state(2, 10, std::make_shared<kmedoids_allocator>(), 1);
+}
+
+TEST(utest_silhouette_ksearch, random_state_2_kmedoids) {
+    template_random_state(2, 10, std::make_shared<kmedoids_allocator>(), 2);
+}
+
+TEST(utest_silhouette_ksearch, random_state_500_kmedoids) {
+    template_random_state(2, 10, std::make_shared<kmedoids_allocator>(), 500);
+}
+
+TEST(utest_silhouette_ksearch, random_state_10000_kmedoids) {
+    template_random_state(2, 10, std::make_shared<kmedoids_allocator>(), 10000);
 }
