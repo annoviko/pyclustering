@@ -6,7 +6,10 @@ CHANGE NOTES FOR 0.10.0 (STARTED Jan 24, 2020), (RELEASED: Dev -)
 
 GENERAL CHANGES:
 
-- Introduced parameter `random_seed` for algorithms/models that use random functionality: `kmeans++`, `random_center_initializer`, `ga`, `gmeans`, `xmeans`, `som`, `somsc`, `elbow`, `silhouette_ksearch` (Python: `pyclustering.cluster`; C++: `pyclustering.clst`).
+- Supported command `test` for `setup.py` script (Python: `pyclustering`).
+  See: https://github.com/annoviko/pyclustering/issues/607
+
+- Introduced parameter `random_seed` for algorithms/models to control the seed of the random functionality: `kmeans++`, `random_center_initializer`, `ga`, `gmeans`, `xmeans`, `som`, `somsc`, `elbow`, `silhouette_ksearch` (Python: `pyclustering.cluster`; C++: `pyclustering.clst`).
   See: https://github.com/annoviko/pyclustering/issues/578
 
 - Introduced parameter `k_max` to G-Means algorithm to use it as an optional stop condition for the algorithm (Python: `pyclustering.cluster.gmeans`; C++: `pyclustering::clst::gmeans`).

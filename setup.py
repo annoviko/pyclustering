@@ -24,6 +24,9 @@ import os
 
 from setuptools import setup
 from setuptools import find_packages
+from setuptools.command.test import test as command
+
+from pyclustering.tests.tests_runner import tests_runner
 
 
 def load_readme():
@@ -33,6 +36,11 @@ def load_readme():
             return file_descr.read()
 
     return "pyclustering is a python data mining library (cluster-analysis, graph coloring, oscillatory networks)"
+
+
+class setup_tests_runner(command):
+    def run_tests(self):
+        tests_runner.run()
 
 
 setup(
@@ -90,4 +98,6 @@ setup(
                    },
 
       data_files=[('', ['LICENSE', 'CHANGES', 'README.rst', 'PKG-INFO.rst'])],
+
+      cmdclass={'test': setup_tests_runner}
     )
