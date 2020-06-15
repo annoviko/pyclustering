@@ -72,7 +72,7 @@ bool silhouette_ksearch_data::operator==(const silhouette_ksearch_data & p_other
     }
 
     for (std::size_t i = 0; i < m_scores.size(); i++) {
-        if (isnan(m_scores[i]) && isnan(p_other.m_scores[i])) {
+        if (std::isnan(m_scores[i]) && std::isnan(p_other.m_scores[i])) {
             continue;
         }
         else if (m_scores[i] == p_other.m_scores[i]) {
