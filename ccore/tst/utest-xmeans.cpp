@@ -43,9 +43,10 @@ void template_length_process_data(const std::shared_ptr<dataset> & data,
                                   const unsigned int kmax,
                                   const std::vector<unsigned int> & expected_cluster_length,
                                   const splitting_type criterion,
-                                  const double expected_wce = WCE_CHECK_DISABLED)
+                                  const double expected_wce = WCE_CHECK_DISABLED,
+                                  const long long random_state = RANDOM_STATE_CURRENT_TIME)
 {
-    xmeans solver(start_centers, kmax, 0.0001, criterion);
+    xmeans solver(start_centers, kmax, 0.0001, criterion, 1, random_state);
 
     xmeans_data output_result;
     solver.process(*data.get(), output_result);
@@ -117,7 +118,7 @@ TEST(utest_xmeans, allocation_mndl_sample_simple_02) {
 TEST(utest_xmeans, allocation_wrong_initial_bic_sample_simple_02) {
     dataset start_centers = { {3.5, 4.8}, {6.9, 7.0} };
     std::vector<unsigned int> expected_clusters_length = {10, 5, 8};
-    template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02), start_centers, 20, expected_clusters_length, splitting_type::BAYESIAN_INFORMATION_CRITERION);
+    template_length_process_data(simple_sample_factory::create_sample(SAMPLE_SIMPLE::SAMPLE_SIMPLE_02), start_centers, 20, expected_clusters_length, splitting_type::BAYESIAN_INFORMATION_CRITERION, WCE_CHECK_DISABLED, 1000);
 }
 
 
