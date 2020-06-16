@@ -602,9 +602,9 @@ def timedcall(executable_function, *args):
     
     """
     
-    time_start = time.clock();
+    time_start = time.perf_counter();
     result = executable_function(*args);
-    time_end = time.clock();
+    time_end = time.perf_counter();
     
     return (time_end - time_start, result);
 
