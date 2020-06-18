@@ -1,6 +1,9 @@
-# C++ PyClustering Library
+C++ PyClustering Library   {#mainpage}
+========================
 
-## Introduction
+[TOC]
+
+# Introduction
 
 C++ pyclustering is an open source library for data mining that is written in C++. The general aim of the project is to provide C++ developers an ability to use cluster analysis algorithms and other tools including bio-inspired algorithms that are based on oscillatory neural networks. Most of the algorithms and models are presented by parallel implementations that help to maximize the performance.
 
@@ -9,7 +12,7 @@ The quality of the library is ensured by more than 3500+ unit and integration te
 
 The C++ pyclustering library is distributed as a source code and can be easily built using makefile or MS Visual Studio. The library can be built as a dynamic library or as a static library.
 
-## Functionality of the Library
+# Functionality of the Library
 
 There are two general namespaces where functionality focuses:
 
@@ -41,14 +44,14 @@ Following general algorithms are implemented in clustering namespace `pyclusteri
 
 Following general oscillatory network models are implemented in `pyclustering::nnet`:
 
-- Oscillatory network based on Hodgkin-Huxley model (pyclustering::nnet::hhn);
-- LEGION: Local Excitatory Global Inhibitory Oscillatory Network (pyclustering::nnet::legion);
+- Oscillatory network based on Hodgkin-Huxley model (pyclustering::nnet::hhn_network);
+- LEGION: Local Excitatory Global Inhibitory Oscillatory Network (pyclustering::nnet::legion_network);
 - PCNN: Pulse-Coupled Neural Network (pyclustering::nnet::pcnn);
 - SOM: Self-Organized Map (pyclustering::nnet::som);
-- Sync: Oscillatory Network based on Kuramoto model (pyclustering::nnet::sync);
+- Sync: Oscillatory Network based on Kuramoto model (pyclustering::nnet::sync_network);
 - SyncPR: Oscillatory Network based on Kuramoto model for pattern recognition (pyclustering::nnet::syncpr);
 
-## Linux – How to Build the Library
+# Linux – How to Build the Library
 
 1. Download Release source files from: https://github.com/annoviko/pyclustering/releases
 2. Extract the archive.
@@ -62,7 +65,7 @@ $ cd pyclustering/ccore
    * `make ccore_64bit_statis` - to build static library.
    * `make` - to print all available targets.
 
-## MacOS – How to Build the Library
+# MacOS – How to Build the Library
 
 1. Download Release source files from: https://github.com/annoviko/pyclustering/releases
 2. Extract the archive.
@@ -77,7 +80,8 @@ $ cd pyclustering/ccore
    * `make` - to print all available targets.
 
 
-## Windows – How to Build the Library
+# Windows – How to Build the Library
+
 1. Download Release source files from: https://github.com/annoviko/pyclustering/releases
 2. Extract the archive.
 3. Navigate to `pyclustering/ccore`.
@@ -86,7 +90,7 @@ $ cd pyclustering/ccore
    * `Release` - to build dynamic library.
    * `Release Static Library` - to build static library.
 
-## Cite the Library
+# Cite the Library
 
 If you are using pyclustering library in a scientific paper, please, cite the library:
 
@@ -108,3 +112,4 @@ BibTeX entry:
     journal     = {Journal of Open Source Software}
 }
 ```
+
