@@ -125,11 +125,13 @@ def rgb2gray(image_rgb_array):
     
     """
     
-    image_gray_array = [0.0] * len(image_rgb_array);
+    image_gray_array = [0.0] * len(image_rgb_array)
     for index in range(0, len(image_rgb_array), 1):
-        image_gray_array[index] = float(image_rgb_array[index][0]) * 0.2989 + float(image_rgb_array[index][1]) * 0.5870 + float(image_rgb_array[index][2]) * 0.1140;
+        image_gray_array[index] = float(image_rgb_array[index][0]) * 0.2989 \
+                                  + float(image_rgb_array[index][1]) * 0.5870 \
+                                  + float(image_rgb_array[index][2]) * 0.1140
     
-    return image_gray_array;
+    return image_gray_array
 
 
 def stretch_pattern(image_source):
@@ -141,20 +143,20 @@ def stretch_pattern(image_source):
     @return (list, Image) Stretched image as gray colored matrix and source image.
     
     """
-    wsize, hsize = image_source.size;
+    wsize, hsize = image_source.size
     
     # Crop digit exactly
-    (ws, hs, we, he) = gray_pattern_borders(image_source);
-    image_source = image_source.crop((ws, hs, we, he));
+    (ws, hs, we, he) = gray_pattern_borders(image_source)
+    image_source = image_source.crop((ws, hs, we, he))
     
     # Stretch it to initial sizes
-    image_source = image_source.resize((wsize, hsize), Image.ANTIALIAS);
+    image_source = image_source.resize((wsize, hsize), Image.ANTIALIAS)
     
     # Transform image to simple array
-    data = [pixel for pixel in image_source.getdata()];
-    image_pattern = rgb2gray(data);
+    data = [pixel for pixel in image_source.getdata()]
+    image_pattern = rgb2gray(data)
     
-    return (image_pattern, image_source);
+    return image_pattern, image_source
 
 
 def gray_pattern_borders(image):
@@ -167,36 +169,36 @@ def gray_pattern_borders(image):
     
     """
     
-    width, height = image.size;
+    width, height = image.size
     
-    width_start = width;
-    width_end = 0;
-    height_start = height;
-    height_end = 0;
+    width_start = width
+    width_end = 0
+    height_start = height
+    height_end = 0
     
-    row, col = 0, 0;
+    row, col = 0, 0
     for pixel in image.getdata():
-        value = float(pixel[0]) * 0.2989 + float(pixel[1]) * 0.5870 + float(pixel[2]) * 0.1140;
+        value = float(pixel[0]) * 0.2989 + float(pixel[1]) * 0.5870 + float(pixel[2]) * 0.1140
         
-        if (value < 128):
-            if (width_end < col): 
-                width_end = col;
+        if value < 128:
+            if width_end < col:
+                width_end = col
             
-            if (height_end < row):
-                height_end = row;
+            if height_end < row:
+                height_end = row
         
-            if (width_start > col):
-                width_start = col;
+            if width_start > col:
+                width_start = col
             
-            if (height_start > row):
-                height_start = row;
+            if height_start > row:
+                height_start = row
         
-        col += 1;
-        if (col >= width):
-            col = 0;
-            row += 1;
+        col += 1
+        if col >= width:
+            col = 0
+            row += 1
 
-    return (width_start, height_start, width_end + 1, height_end + 1);
+    return width_start, height_start, width_end + 1, height_end + 1
 
 
 def average_neighbor_distance(points, num_neigh):
@@ -211,24 +213,25 @@ def average_neighbor_distance(points, num_neigh):
     """
     
     if num_neigh > len(points) - 1:
-        raise NameError('Impossible to calculate average distance to neighbors when number of object is less than number of neighbors.');
+        raise NameError('Impossible to calculate average distance to neighbors '
+                        'when number of object is less than number of neighbors.')
     
-    dist_matrix = [ [ 0.0 for i in range(len(points)) ] for j in range(len(points)) ];
+    dist_matrix = [[0.0 for i in range(len(points))] for _ in range(len(points))]
     for i in range(0, len(points), 1):
         for j in range(i + 1, len(points), 1):
-            distance = euclidean_distance(points[i], points[j]);
-            dist_matrix[i][j] = distance;
-            dist_matrix[j][i] = distance;
+            distance = euclidean_distance(points[i], points[j])
+            dist_matrix[i][j] = distance
+            dist_matrix[j][i] = distance
             
-        dist_matrix[i] = sorted(dist_matrix[i]);
+        dist_matrix[i] = sorted(dist_matrix[i])
 
-    total_distance = 0;
+    total_distance = 0
     for i in range(0, len(points), 1):
         # start from 0 - first element is distance to itself.
         for j in range(0, num_neigh, 1):
-            total_distance += dist_matrix[i][j + 1];
+            total_distance += dist_matrix[i][j + 1]
             
-    return ( total_distance / (num_neigh * len(points)) );
+    return total_distance / (num_neigh * len(points))
 
 
 def medoid(data, indexes=None, **kwargs):
@@ -591,22 +594,23 @@ def heaviside(value):
     return 0.0;
 
 
-def timedcall(executable_function, *args):
+def timedcall(executable_function, *args, **kwargs):
     """!
     @brief Executes specified method or function with measuring of execution time.
     
-    @param[in] executable_function (pointer): Pointer to function or method.
-    @param[in] args (*): Arguments of called function or method.
+    @param[in] executable_function (pointer): Pointer to a function or method that should be called.
+    @param[in] *args: Arguments of the called function or method.
+    @param[in] **kwargs:  Arbitrary keyword arguments of the called function or method.
     
     @return (tuple) Execution time and result of execution of function or method (execution_time, result_execution).
     
     """
     
-    time_start = time.clock();
-    result = executable_function(*args);
-    time_end = time.clock();
+    time_start = time.perf_counter()
+    result = executable_function(*args, **kwargs)
+    time_end = time.perf_counter()
     
-    return (time_end - time_start, result);
+    return time_end - time_start, result
 
 
 def extract_number_oscillations(osc_dyn, index = 0, amplitude_threshold = 1.0):
