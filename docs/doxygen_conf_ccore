@@ -45,6 +45,7 @@ INLINE_GROUPED_CLASSES = NO
 INLINE_SIMPLE_STRUCTS  = NO
 TYPEDEF_HIDES_STRUCT   = NO
 LOOKUP_CACHE_SIZE      = 0
+TOC_INCLUDE_HEADINGS   = 10
 #---------------------------------------------------------------------------
 # Build related configuration options
 #---------------------------------------------------------------------------
