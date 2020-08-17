@@ -1,4 +1,4 @@
-|Build Status Linux MacOS| |Build Status Win| |Coverage Status| |Documentation| |PyPi| |Download Counter| |JOSS|
+|Build Status Linux MacOS| |Build Status Win| |Coverage Status| |PyPi| |Download Counter| |JOSS|
 
 PyClustering
 ============
@@ -9,7 +9,7 @@ Python and C++ implementations (via CCORE library) of each algorithm or
 model. CCORE library is a part of pyclustering and supported only for
 Linux, Windows and MacOS operating systems.
 
-**Version**: 0.9.3.1
+**Version**: 0.10.0
 
 **License**: GNU General Public License
 
@@ -108,15 +108,15 @@ In case of any questions, proposals or bugs related to the pyclustering please c
 PyClustering Status
 ===================
 
-+----------------------+------------------------------+------------------------------------+--------------------------------+
-| Branch               | master                       | 0.9.dev                            | 0.9.3.rel                      |
-+======================+==============================+====================================+================================+
-| Build (Linux, MacOS) | |Build Status Linux MacOS|   | |Build Status Linux MacOS 0.9.dev| | |Build Status Linux 0.9.3.rel| |
-+----------------------+------------------------------+------------------------------------+--------------------------------+
-| Build (Win)          | |Build Status Win|           | |Build Status Win 0.9.dev|         | |Build Status Win 0.9.3.rel|   |
-+----------------------+------------------------------+------------------------------------+--------------------------------+
-| Code Coverage        | |Coverage Status|            | |Coverage Status 0.9.dev|          | |Coverage Status 0.9.3.rel|    |
-+----------------------+------------------------------+------------------------------------+--------------------------------+
++----------------------+------------------------------+------------------------------------+---------------------------------+
+| Branch               | master                       | 0.9.dev                            | 0.10.0.rel                      |
++======================+==============================+====================================+=================================+
+| Build (Linux, MacOS) | |Build Status Linux MacOS|   | |Build Status Linux MacOS 0.9.dev| | |Build Status Linux 0.10.0.rel| |
++----------------------+------------------------------+------------------------------------+---------------------------------+
+| Build (Win)          | |Build Status Win|           | |Build Status Win 0.9.dev|         | |Build Status Win 0.10.0.rel|   |
++----------------------+------------------------------+------------------------------------+---------------------------------+
+| Code Coverage        | |Coverage Status|            | |Coverage Status 0.9.dev|          | |Coverage Status 0.10.0.rel|    |
++----------------------+------------------------------+------------------------------------+---------------------------------+
 
 
 
@@ -444,17 +444,12 @@ Illustrations
 
 
 
-.. _scikit-learn: https://scikit-learn.org/stable/
-.. _ELKI: https://elki-project.github.io/
-
 .. |Build Status Linux MacOS| image:: https://travis-ci.org/annoviko/pyclustering.svg?branch=master
    :target: https://travis-ci.org/annoviko/pyclustering
 .. |Build Status Win| image:: https://ci.appveyor.com/api/projects/status/4uly2exfp49emwn0/branch/master?svg=true
    :target: https://ci.appveyor.com/project/annoviko/pyclustering/branch/master
 .. |Coverage Status| image:: https://coveralls.io/repos/github/annoviko/pyclustering/badge.svg?branch=master&ts=1
    :target: https://coveralls.io/github/annoviko/pyclustering?branch=master
-.. |Documentation| image:: https://codedocs.xyz/annoviko/pyclustering.svg
-   :target: https://codedocs.xyz/annoviko/pyclustering/
 .. |DOI| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.1491324.svg
    :target: https://doi.org/10.5281/zenodo.1491324
 .. |PyPi| image:: https://badge.fury.io/py/pyclustering.svg
@@ -465,12 +460,12 @@ Illustrations
    :target: https://ci.appveyor.com/project/annoviko/pyclustering/branch/0.9.dev
 .. |Coverage Status 0.9.dev| image:: https://coveralls.io/repos/github/annoviko/pyclustering/badge.svg?branch=0.9.dev&ts=1
    :target: https://coveralls.io/github/annoviko/pyclustering?branch=0.9.dev
-.. |Build Status Linux 0.9.3.rel| image:: https://travis-ci.org/annoviko/pyclustering.svg?branch=0.9.3.rel
+.. |Build Status Linux 0.10.0.rel| image:: https://travis-ci.org/annoviko/pyclustering.svg?branch=0.10.0.rel
    :target: https://travis-ci.org/annoviko/pyclustering
-.. |Build Status Win 0.9.3.rel| image:: https://ci.appveyor.com/api/projects/status/4uly2exfp49emwn0/branch/0.9.3.rel?svg=true
-   :target: https://ci.appveyor.com/project/annoviko/pyclustering/branch/0.9.3.rel
-.. |Coverage Status 0.9.3.rel| image:: https://coveralls.io/repos/github/annoviko/pyclustering/badge.svg?branch=0.9.3.rel&ts=1
-   :target: https://coveralls.io/github/annoviko/pyclustering?branch=0.9.3.rel
+.. |Build Status Win 0.10.0.rel| image:: https://ci.appveyor.com/api/projects/status/4uly2exfp49emwn0/branch/0.10.0.rel?svg=true
+   :target: https://ci.appveyor.com/project/annoviko/pyclustering/branch/0.10.0.rel
+.. |Coverage Status 0.10.0.rel| image:: https://coveralls.io/repos/github/annoviko/pyclustering/badge.svg?branch=0.10.0.rel&ts=1
+   :target: https://coveralls.io/github/annoviko/pyclustering?branch=0.10.0.rel
 .. |Download Counter| image:: https://pepy.tech/badge/pyclustering
    :target: https://pepy.tech/project/pyclustering
 .. |JOSS| image:: http://joss.theoj.org/papers/10.21105/joss.01230/status.svg
