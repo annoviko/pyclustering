@@ -15,7 +15,7 @@ Linux, Windows and MacOS operating systems.
 
 **E-Mail**: pyclustering@yandex.ru
 
-**Documentation**: https://pyclustering.github.io/docs/0.9.3/html/index.html
+**Documentation**: https://pyclustering.github.io/docs/0.10.0/html/
 
 **Homepage**: https://pyclustering.github.io/
 
