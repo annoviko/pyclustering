@@ -46,14 +46,14 @@ class setup_tests_runner(command):
 setup(
       name='pyclustering',
       packages=find_packages(),
-      version='0.9.3.1',
+      version='0.10.0',
       description='pyclustring is a python data mining library',
       long_description=load_readme(),
       url='https://github.com/annoviko/pyclustering',
       project_urls={
                      'Homepage': 'https://pyclustering.github.io/',
                      'Repository': 'https://github.com/annoviko/pyclustering',
-                     'Documentation': 'https://pyclustering.github.io/docs/0.9.3/html/index.html',
+                     'Documentation': 'https://pyclustering.github.io/docs/0.10.0/html/index.html',
                      'Bug Tracker': 'https://github.com/annoviko/pyclustering/issues'
                    },
       license='GNU Public License',
