@@ -9,7 +9,7 @@ Python and C++ implementations (via CCORE library) of each algorithm or
 model. CCORE library is a part of pyclustering and supported only for
 Linux, Windows and MacOS operating systems.
 
-**Version**: 0.10.0
+**Version**: 0.10.0.1
 
 **License**: GNU General Public License
 

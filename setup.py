@@ -46,7 +46,7 @@ class setup_tests_runner(command):
 setup(
       name='pyclustering',
       packages=find_packages(),
-      version='0.10.0',
+      version='0.10.0.1',
       description='pyclustring is a python data mining library',
       long_description=load_readme(),
       url='https://github.com/annoviko/pyclustering',
