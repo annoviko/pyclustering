@@ -479,15 +479,17 @@ class kmeans:
 
     def get_centers(self):
         """!
-        @brief Returns centers of allocated clusters represented by array_like container that is similar to container
-                that was used for initial centers.
+        @brief Returns list of centers of allocated clusters.
         
         @see process()
         @see get_clusters()
         
         """
 
-        return self.__centers
+        if isinstance(self.__centers, list):
+            return self.__centers
+
+        return self.__centers.tolist()
 
 
     def get_total_wce(self):
