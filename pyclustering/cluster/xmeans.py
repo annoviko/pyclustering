@@ -1,7 +1,7 @@
 """!
 
 @brief Cluster analysis algorithm: X-Means
-@details Implementation based on paper @cite article::xmeans::1.
+@details Implementation based on papers @cite article::xmeans::1, @cite article::xmeans::mndl
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2020
@@ -129,28 +129,31 @@ class xmeans:
         """!
         @brief Constructor of clustering algorithm X-Means.
         
-        @param[in] data (list): Input data that is presented as list of points (objects), each point should be represented by list or tuple.
+        @param[in] data (array_like): Input data that is presented as list of points (objects), each point should be represented by list or tuple.
         @param[in] initial_centers (list): Initial coordinates of centers of clusters that are represented by list: `[center1, center2, ...]`,
                     if it is not specified then X-Means starts from the random center.
         @param[in] kmax (uint): Maximum number of clusters that can be allocated.
         @param[in] tolerance (double): Stop condition for each iteration: if maximum value of change of centers of clusters is less than tolerance than algorithm will stop processing.
         @param[in] criterion (splitting_type): Type of splitting creation.
         @param[in] ccore (bool): Defines if C++ pyclustering library should be used instead of Python implementation.
-        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: `repeat`, `random_state`).
+        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: `repeat`, `random_state`, `metric`).
 
         <b>Keyword Args:</b><br>
             - repeat (unit): How many times K-Means should be run to improve parameters (by default is `1`).
                With larger `repeat` values suggesting higher probability of finding global optimum.
             - random_state (int): Seed for random state (by default is `None`, current system time is used).
+            - metric (distance_metric): Metric that is used for distance calculation between two points (by default
+               euclidean square distance).
 
         """
         
-        self.__pointer_data = data
+        self.__pointer_data = numpy.array(data)
         self.__clusters = []
         self.__random_state = kwargs.get('random_state', None)
+        self.__metric = kwargs.get('metric', distance_metric(type_metric.EUCLIDEAN_SQUARE))
         
         if initial_centers is not None:
-            self.__centers = initial_centers[:]
+            self.__centers = numpy.array(initial_centers)
         else:
             self.__centers = kmeans_plusplus_initializer(data, 2, random_state=self.__random_state).initialize()
         
@@ -258,11 +261,13 @@ class xmeans:
         if len(self.__clusters) == 0:
             return []
 
-        metric = distance_metric(type_metric.EUCLIDEAN_SQUARE, numpy_usage=True)
+        self.__metric.enable_numpy_usage()
 
         differences = numpy.zeros((len(nppoints), len(self.__centers)))
         for index_point in range(len(nppoints)):
-            differences[index_point] = metric(nppoints[index_point], self.__centers)
+            differences[index_point] = self.__metric(nppoints[index_point], self.__centers)
+
+        self.__metric.disable_numpy_usage()
 
         return numpy.argmin(differences, axis=1)
 
@@ -343,7 +348,7 @@ class xmeans:
 
             local_centers = kmeans_plusplus_initializer(local_data, 2, candidates, random_state=self.__random_state).initialize()
 
-            kmeans_instance = kmeans(local_data, local_centers, tolerance=self.__tolerance, ccore=False)
+            kmeans_instance = kmeans(local_data, local_centers, tolerance=self.__tolerance, ccore=False, metric=self.__metric)
             kmeans_instance.process()
 
             local_wce = kmeans_instance.get_total_wce()
@@ -378,7 +383,7 @@ class xmeans:
         if centers is None:
             clusters, local_centers, local_wce = self.__search_optimial_parameters(local_data)
         else:
-            kmeans_instance = kmeans(local_data, local_centers, tolerance=self.__tolerance, ccore=False).process()
+            kmeans_instance = kmeans(local_data, local_centers, tolerance=self.__tolerance, ccore=False, metric=self.__metric).process()
 
             local_wce = kmeans_instance.get_total_wce()
             local_centers = kmeans_instance.get_centers()
@@ -440,12 +445,14 @@ class xmeans:
                 
                 # Reallocate number of centers (clusters) in line with scores
                 if self.__criterion == splitting_type.BAYESIAN_INFORMATION_CRITERION:
-                    if parent_scores < child_scores: split_require = True
+                    if parent_scores < child_scores:
+                        split_require = True
                     
                 elif self.__criterion == splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH:
                     # If its score for the split structure with two children is smaller than that for the parent structure, 
                     # then representing the data samples with two clusters is more accurate in comparison to a single parent cluster.
-                    if parent_scores > child_scores: split_require = True;
+                    if parent_scores > child_scores:
+                        split_require = True
                 
                 if (split_require is True) and (amount_free_centers > 0):
                     allocated_centers.append(parent_child_centers[0])
@@ -482,7 +489,7 @@ class xmeans:
             return self.__minimum_noiseless_description_length(clusters, centers)
 
         else:
-            assert 0;
+            assert 0
 
 
     def __minimum_noiseless_description_length(self, clusters, centers):
@@ -505,9 +512,10 @@ class xmeans:
         K = len(clusters)
         N = 0.0
 
-        sigma_sqrt = 0.0
+        sigma_square = 0.0
         
         alpha = 0.9
+        alpha_square = alpha * alpha
         betta = 0.9
         
         for index_cluster in range(0, len(clusters), 1):
@@ -517,22 +525,21 @@ class xmeans:
             
             Wi = 0.0
             for index_object in clusters[index_cluster]:
-                # euclidean_distance_square should be used in line with paper, but in this case results are
-                # very poor, therefore square root is used to improved.
-                Wi += euclidean_distance(self.__pointer_data[index_object], centers[index_cluster])
+                Wi += self.__metric(self.__pointer_data[index_object], centers[index_cluster])
             
-            sigma_sqrt += Wi
+            sigma_square += Wi
             W += Wi / Ni
             N += Ni
         
         if N - K > 0:
-            sigma_sqrt /= (N - K)
-            sigma = sigma_sqrt ** 0.5
+            sigma_square /= (N - K)
+            sigma = sigma_square ** 0.5
             
-            Kw = (1.0 - K / N) * sigma_sqrt
-            Ks = ( 2.0 * alpha * sigma / (N ** 0.5) ) * ( (alpha ** 2.0) * sigma_sqrt / N + W - Kw / 2.0 ) ** 0.5
-            
-            scores = sigma_sqrt * (2 * K)**0.5 * ((2 * K)**0.5 + betta) / N + W - sigma_sqrt + Ks + 2 * alpha**0.5 * sigma_sqrt / N
+            Kw = (1.0 - K / N) * sigma_square
+            Ksa = (2.0 * alpha * sigma / (N ** 0.5)) * (alpha_square * sigma_square / N + W - Kw / 2.0) ** 0.5
+            UQa = W - Kw + 2 * alpha_square * sigma_square / N + Ksa
+
+            scores = alpha_square * K / N + UQa + sigma_square * betta * ((2.0 * K) ** 0.5) / N
         
         return scores
 
@@ -561,7 +568,7 @@ class xmeans:
           
         for index_cluster in range(0, len(clusters), 1):
             for index_object in clusters[index_cluster]:
-                sigma_sqrt += euclidean_distance_square(self.__pointer_data[index_object], centers[index_cluster])
+                sigma_sqrt += self.__metric(self.__pointer_data[index_object], centers[index_cluster])
 
             N += len(clusters[index_cluster])
       

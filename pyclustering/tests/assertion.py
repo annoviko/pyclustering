@@ -23,11 +23,17 @@
 
 """
 
+import numpy
+
 
 class assertion:
     @staticmethod
     def eq(argument1, argument2):
-        if not (argument1 == argument2):
+        if isinstance(argument1, numpy.ndarray) or isinstance(argument2, numpy.ndarray):
+            if not (argument1 == argument2).all():
+                raise AssertionError("Expected: '" + str(argument1) + "', Actual: '" + str(argument2) + "'")
+
+        elif not (argument1 == argument2):
             raise AssertionError("Expected: '" + str(argument1) + "', Actual: '" + str(argument2) + "'")
 
 

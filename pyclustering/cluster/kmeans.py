@@ -25,6 +25,7 @@
 """
 
 
+import copy
 import numpy
 import warnings
 
@@ -356,7 +357,7 @@ class kmeans:
         self.__total_wce = 0.0
 
         self.__observer = kwargs.get('observer', None)
-        self.__metric = kwargs.get('metric', distance_metric(type_metric.EUCLIDEAN_SQUARE))
+        self.__metric = copy.copy(kwargs.get('metric', distance_metric(type_metric.EUCLIDEAN_SQUARE)))
         self.__itermax = kwargs.get('itermax', 100)
 
         if self.__metric.get_type() != type_metric.USER_DEFINED:
@@ -478,17 +479,15 @@ class kmeans:
 
     def get_centers(self):
         """!
-        @brief Returns list of centers of allocated clusters.
+        @brief Returns centers of allocated clusters represented by array_like container that is similar to container
+                that was used for initial centers.
         
         @see process()
         @see get_clusters()
         
         """
 
-        if isinstance(self.__centers, list):
-            return self.__centers
-        
-        return self.__centers.tolist()
+        return self.__centers
 
 
     def get_total_wce(self):
