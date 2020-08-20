@@ -35,11 +35,12 @@ from pyclustering.cluster.encoder import type_encoding
 from pyclustering.cluster.kmeans import kmeans
 from pyclustering.cluster.center_initializer import kmeans_plusplus_initializer
 
+from pyclustering.core.metric_wrapper import metric_wrapper
 from pyclustering.core.wrapper import ccore_library
 
 import pyclustering.core.xmeans_wrapper as wrapper
 
-from pyclustering.utils import euclidean_distance_square, euclidean_distance, distance_metric, type_metric
+from pyclustering.utils import distance_metric, type_metric
 
 
 class splitting_type(IntEnum):
@@ -62,7 +63,7 @@ class splitting_type(IntEnum):
     ## \f[\hat{\sigma}^2 = \frac{1}{N - K}\sum\limits_{j}\sum\limits_{i}||x_{ij} - \hat{C}_j||^2\f]
     BAYESIAN_INFORMATION_CRITERION = 0
     
-    ## Minimum noiseless description length (MNDL) to approximate the correct number of clusters.
+    ## Minimum noiseless description length (MNDL) to approximate the correct number of clusters @cite article::xmeans::mndl.
     ## Beheshti's formula is used to calculate upper bound:
     ## \f[Z = \frac{\sigma^2 \sqrt{2K} }{N}(\sqrt{2K} + \beta) + W - \sigma^2 + \frac{2\alpha\sigma}{\sqrt{N}}\sqrt{\frac{\alpha^2\sigma^2}{N} + W - \left(1 - \frac{K}{N}\right)\frac{\sigma^2}{2}} + \frac{2\alpha^2\sigma^2}{N}\f]
     ##
@@ -136,7 +137,7 @@ class xmeans:
         @param[in] tolerance (double): Stop condition for each iteration: if maximum value of change of centers of clusters is less than tolerance than algorithm will stop processing.
         @param[in] criterion (splitting_type): Type of splitting creation.
         @param[in] ccore (bool): Defines if C++ pyclustering library should be used instead of Python implementation.
-        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: `repeat`, `random_state`, `metric`).
+        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: `repeat`, `random_state`, `metric`, `alpha`, `beta`).
 
         <b>Keyword Args:</b><br>
             - repeat (unit): How many times K-Means should be run to improve parameters (by default is `1`).
@@ -144,6 +145,10 @@ class xmeans:
             - random_state (int): Seed for random state (by default is `None`, current system time is used).
             - metric (distance_metric): Metric that is used for distance calculation between two points (by default
                euclidean square distance).
+            - alpha (double): Parameter distributed [0.0, 1.0] for alpha probabilistic bound \f$\Q\left(\alpha\right)\f$.
+               The parameter is used only in case of MNDL splitting criteria, in all other cases this value is ignored.
+            - beta (double): Parameter distributed [0.0, 1.0] for beta probabilistic bound \f$\Q\left(\beta\right)\f$.
+               The parameter is used only in case of MNDL splitting criteria, in all other cases this value is ignored.
 
         """
         
@@ -162,9 +167,11 @@ class xmeans:
         self.__criterion = criterion
         self.__total_wce = 0.0
         self.__repeat = kwargs.get('repeat', 1)
+        self.__alpha = kwargs.get('alpha', 0.9)
+        self.__beta = kwargs.get('beta', 0.9)
          
-        self.__ccore = ccore
-        if self.__ccore:
+        self.__ccore = ccore and self.__metric.get_type() != type_metric.USER_DEFINED
+        if self.__ccore is True:
             self.__ccore = ccore_library.workable()
 
         self.__verify_arguments()
@@ -196,7 +203,12 @@ class xmeans:
 
         """
 
-        result = wrapper.xmeans(self.__pointer_data, self.__centers, self.__kmax, self.__tolerance, self.__criterion, self.__repeat, self.__random_state)
+        ccore_metric = metric_wrapper.create_instance(self.__metric)
+
+        result = wrapper.xmeans(self.__pointer_data, self.__centers, self.__kmax, self.__tolerance, self.__criterion,
+                                self.__alpha, self.__beta, self.__repeat, self.__random_state,
+                                ccore_metric.get_pointer())
+
         self.__clusters = result[0]
         self.__centers = result[1]
         self.__total_wce = result[2][0]
@@ -506,7 +518,7 @@ class xmeans:
         
         """
         
-        scores = float('inf')
+        score = float('inf')
         
         W = 0.0
         K = len(clusters)
@@ -514,10 +526,10 @@ class xmeans:
 
         sigma_square = 0.0
         
-        alpha = 0.9
+        alpha = self.__alpha
         alpha_square = alpha * alpha
-        betta = 0.9
-        
+        beta = self.__beta
+
         for index_cluster in range(0, len(clusters), 1):
             Ni = len(clusters[index_cluster])
             if Ni == 0:
@@ -537,11 +549,11 @@ class xmeans:
             
             Kw = (1.0 - K / N) * sigma_square
             Ksa = (2.0 * alpha * sigma / (N ** 0.5)) * (alpha_square * sigma_square / N + W - Kw / 2.0) ** 0.5
-            UQa = W - Kw + 2 * alpha_square * sigma_square / N + Ksa
+            UQa = W - Kw + 2.0 * alpha_square * sigma_square / N + Ksa
 
-            scores = alpha_square * K / N + UQa + sigma_square * betta * ((2.0 * K) ** 0.5) / N
+            score = sigma_square * K / N + UQa + sigma_square * beta * ((2.0 * K) ** 0.5) / N
         
-        return scores
+        return score
 
 
     def __bayesian_information_criterion(self, clusters, centers):
@@ -613,3 +625,11 @@ class xmeans:
         if self.__repeat <= 0:
             raise ValueError("Repeat (current value: '%d') should be greater than 0." %
                              self.__repeat)
+
+        if self.__alpha < 0.0 or self.__alpha > 1.0:
+            raise ValueError("Parameter for the probabilistic bound Q(alpha) should in the following range [0, 1] "
+                             "(current value: '%f')." % self.__alpha)
+
+        if self.__beta < 0.0 or self.__beta > 1.0:
+            raise ValueError("Parameter for the probabilistic bound Q(beta) should in the following range [0, 1] "
+                             "(current value: '%f')." % self.__beta)

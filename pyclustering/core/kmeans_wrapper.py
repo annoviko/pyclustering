@@ -37,7 +37,8 @@ def kmeans(sample, centers, tolerance, itermax, observe, metric_pointer):
     ccore = ccore_library.get()
     
     ccore.kmeans_algorithm.restype = POINTER(pyclustering_package)
-    package = ccore.kmeans_algorithm(pointer_data, pointer_centers, c_double(tolerance), c_size_t(itermax), c_bool(observe), metric_pointer)
+    package = ccore.kmeans_algorithm(pointer_data, pointer_centers, c_double(tolerance), c_size_t(itermax),
+                                     c_bool(observe), metric_pointer)
     
     result = package_extractor(package).extract()
     ccore.free_pyclustering_package(package)

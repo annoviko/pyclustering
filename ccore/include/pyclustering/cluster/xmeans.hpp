@@ -62,12 +62,20 @@ private:
 
     const static std::size_t        AMOUNT_CENTER_CANDIDATES;
 
+    const static double             DEFAULT_MNDL_ALPHA_PROBABILISTIC_VALUE;
+
+    const static double             DEFAULT_MNDL_BETA_PROBABILISTIC_VALUE;
+
 private:
     dataset           m_initial_centers;
 
     xmeans_data       * m_ptr_result        = nullptr;   /* temporary pointer to output result */
 
     const dataset     * m_ptr_data          = nullptr;     /* used only during processing */
+
+    double            m_alpha               = DEFAULT_MNDL_ALPHA_PROBABILISTIC_VALUE;
+
+    double            m_beta                = DEFAULT_MNDL_BETA_PROBABILISTIC_VALUE;
 
     std::size_t       m_maximum_clusters;
 
@@ -118,6 +126,26 @@ public:
     
     */
     void process(const dataset & p_data, xmeans_data & p_result);
+
+    /*!
+
+    @brief    Set alpha based probabilistic bound \f$\Q\left(\alpha\right)\f$ that is distributed from [0, 1].
+    @details  The alpha probabilistic bound is used only in case of MNDL splitting criteria, in all other cases this value is ignored.
+
+    @param[in]  p_alpha: value distributed [0.0, 1.0] for alpha probabilistic bound \f$\Q\left(\alpha\right)\f$.
+
+    */
+    void set_mndl_alpha_bound(const double p_alpha);
+
+    /*!
+
+    @brief    Set beta based probabilistic bound \f$\Q\left(\beta\right)\f$ that is distributed from [0, 1].
+    @details  The beta probabilistic bound is used only in case of MNDL splitting criteria, in all other cases this value is ignored.
+
+    @param[in]  p_alpha: value distributed [0.0, 1.0] for beta probabilistic bound \f$\Q\left(\beta\right)\f$.
+
+    */
+    void set_mndl_beta_bound(const double p_beta);
 
 private:
     void improve_structure();

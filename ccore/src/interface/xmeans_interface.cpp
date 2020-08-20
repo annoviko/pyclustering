@@ -25,20 +25,37 @@
 
 #include <pyclustering/cluster/xmeans.hpp>
 
+#include <pyclustering/utils/metric.hpp>
+
+
+using namespace pyclustering::utils::metric;
+
 
 pyclustering_package * xmeans_algorithm(const pyclustering_package * const p_sample,
                                         const pyclustering_package * const p_centers,
                                         const std::size_t p_kmax,
                                         const double p_tolerance,
                                         const unsigned int p_criterion,
+                                        const double p_alpha,
+                                        const double p_beta,
                                         const std::size_t p_repeat,
-                                        const long long p_random_state)
+                                        const long long p_random_state,
+                                        const void * const p_metric)
 {
     pyclustering::dataset data, centers;
     p_sample->extract(data);
     p_centers->extract(centers);
 
+    distance_metric<pyclustering::point> * metric = ((distance_metric<pyclustering::point> *) p_metric);
+    distance_metric<pyclustering::point> default_metric = distance_metric_factory<pyclustering::point>::euclidean_square();
+
+    if (!metric) {
+        metric = &default_metric;
+    }
+
     pyclustering::clst::xmeans solver(centers, p_kmax, p_tolerance, (pyclustering::clst::splitting_type) p_criterion, p_repeat, p_random_state);
+    solver.set_mndl_alpha_bound(p_alpha);
+    solver.set_mndl_beta_bound(p_beta);
 
     pyclustering::clst::xmeans_data output_result;
     solver.process(data, output_result);

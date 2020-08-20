@@ -77,15 +77,16 @@ class XmeansIntegrationTest(unittest.TestCase):
 
     def testMndlClusterAllocationSampleSimple1ByCore(self):
         XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5],
-                                                      splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH, 20, True)
+                                                      splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH, 20, True,
+                                                      alpha=0.1, beta=0.1)
 
     def testMndlSampleSimple1WithoutInitialCentersByCore(self):
         XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, None, [5, 5],
-                                                      splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH, 20, True)
+                                                      splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH, 20, True, alpha=0.1, beta=0.1)
 
     def testMndlWrongStartClusterAllocationSampleSimple1ByCore(self):
         XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5]], [5, 5],
-                                                      splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH, 20, True)
+                                                      splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH, 20, True, alpha=0.1, beta=0.1)
 
     def testBicClusterAllocationSampleSimple2ByCore(self):
         XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [[3.5, 4.8], [6.9, 7], [7.5, 0.5]], [10, 5, 8],
@@ -102,11 +103,13 @@ class XmeansIntegrationTest(unittest.TestCase):
 
     def testMndlClusterAllocationSampleSimple2ByCore(self):
         XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [[3.5, 4.8], [6.9, 7], [7.5, 0.5]], [10, 5, 8],
-                                                      splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH, 20, True)
+                                                      splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH, 20, True,
+                                                      alpha=0.1, beta=0.1)
 
     def testMndlWrongStartClusterAllocationSampleSimple2ByCore(self):
         XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [[3.5, 4.8], [6.9, 7]], [10, 5, 8],
-                                                      splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH, 20, True)
+                                                      splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH, 20, True,
+                                                      alpha=0.1, beta=0.1, random_state=1000)
 
     def testBicClusterAllocationSampleSimple3ByCore(self):
         XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [[0.2, 0.1], [4.0, 1.0], [2.0, 2.0], [2.3, 3.9]], [10, 10, 10, 30],
@@ -122,11 +125,11 @@ class XmeansIntegrationTest(unittest.TestCase):
 
     def testBicWrongStartClusterAllocationSampleSimple3ByCore(self):
         XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [[0.2, 0.1], [4.0, 1.0], [5.9, 5.9]], [10, 10, 10, 30],
-                                                      splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, True, random_state=10)
+                                                      splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, True, random_state=10, alpha=0.2, beta=0.2)
 
     def testMndlClusterAllocationSampleSimple3ByCore(self):
         XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, [[0.2, 0.1], [4.0, 1.0], [2.0, 2.0], [2.3, 3.9]], [10, 10, 10, 30],
-                                                      splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH, 20, True)
+                                                      splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH, 20, True, alpha=0.2, beta=0.2)
 
     def testBicClusterAllocationSampleSimple4ByCore(self):
         XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, [[1.5, 0.0], [1.5, 2.0], [1.5, 4.0], [1.5, 6.0], [1.5, 8.0]], [15, 15, 15, 15, 15],
@@ -134,7 +137,7 @@ class XmeansIntegrationTest(unittest.TestCase):
 
     def testBicWrongStartClusterAllocationSampleSimple4ByCore(self):
         XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, [[1.5, 0.0], [1.5, 2.0], [1.5, 4.0], [1.5, 6.0]], [15, 15, 15, 15, 15],
-                                                      splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, True)
+                                                      splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, True, random_state=1000)
 
     def testBicClusterAllocationMaxLessRealSampleSimple4ByCore(self):
         XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, [[1.5, 4.0]], None,
@@ -143,6 +146,12 @@ class XmeansIntegrationTest(unittest.TestCase):
     def testMndlClusterAllocationSampleSimple4ByCore(self):
         XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, [[1.5, 0.0], [1.5, 2.0], [1.5, 4.0], [1.5, 6.0], [1.5, 8.0]], [15, 15, 15, 15, 15],
                                                       splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH, 20, True)
+
+    def testMndlWrongStartClusterAllocationSampleSimple4ByCore(self):
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, [[1.5, 0.0], [1.5, 2.0], [1.5, 4.0], [1.5, 6.0]], [15, 15, 15, 15, 15], splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH, 20, True)
+
+    def testMndlClusterAllocationMaxLessRealSampleSimple4ByCore(self):
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, [[1.5, 4.0]], None, splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH, 2, True)
 
     def testBicClusterAllocationSampleSimple5ByCore(self):
         XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [[0.0, 1.0], [0.0, 0.0], [1.0, 1.0], [1.0, 0.0]], [15, 15, 15, 15],
@@ -168,6 +177,12 @@ class XmeansIntegrationTest(unittest.TestCase):
         XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE6, None, [20, 21],
                                                       splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, True)
 
+    def testMndlClusterAllocationSampleSimple6ByCore(self):
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE6, [[3.5, 3.5], [3.7, 3.7]], [20, 21], splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH, 20, True)
+
+    def testMndlClusterAllocationSampleSimple6WithoutInitialByCore(self):
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE6, None, [20, 21], splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH, 20, True)
+
     def testBicClusterAllocationSampleSimple7ByCore(self):
         XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE7, [[1], [2]], [10, 10],
                                                       splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, True)
@@ -175,6 +190,12 @@ class XmeansIntegrationTest(unittest.TestCase):
     def testBicClusterAllocationSampleSimple7WithoutInitialByCore(self):
         XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE7, None, [10, 10],
                                                       splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, True)
+
+    def testMndlClusterAllocationSampleSimple7ByCore(self):
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE7, [[1], [2]], [10, 10], splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH, 20, True, alpha=0.01, beta=0.01)
+
+    def testMndlClusterAllocationSampleSimple7WithoutInitialByCore(self):
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE7, None, [10, 10], splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH, 20, True, alpha=0.01, beta=0.01)
 
     def testBicClusterAllocationSampleSimple8ByCore(self):
         XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE8, [[-2.0], [3.0], [6.0], [12.0]], [15, 30, 20, 80],
@@ -188,6 +209,15 @@ class XmeansIntegrationTest(unittest.TestCase):
         XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE8, [[3.0], [6.0]], [15, 30, 20, 80],
                                                       splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, True,
                                                       random_state=1000)
+
+    def testMndlClusterAllocationSampleSimple8WrongAmountCenters(self):
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE8, [[3.0], [6.0]], [15, 30, 20, 80], splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH, 20, True, alpha=0.2, beta=0.2)
+
+    def testBicClusterAllocationSampleSimple8WrongAmountCentersRandomState(self):
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE8, [[3.0], [6.0]], [15, 30, 20, 80], splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, True, random_state=1000)
+
+    def testMndlClusterAllocationSampleSimple8WrongAmountCentersRandomState(self):
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE8, [[3.0], [6.0]], [15, 30, 20, 80], splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, True, random_state=1000)
 
     def testBicClusterAllocationSampleSimple9ByCore(self):
         XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, [[3.0], [6.0]], [10, 20],

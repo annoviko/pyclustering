@@ -64,7 +64,7 @@ class XmeansTestTemplates:
         assertion.eq(expected_wce, wce)
 
         if expected_cluster_length is not None:
-            assertion.eq(len(centers), len(expected_cluster_length))
+            assertion.eq(len(expected_cluster_length), len(centers))
 
             obtained_cluster_sizes.sort()
             expected_cluster_length.sort()

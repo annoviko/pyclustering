@@ -4,9 +4,15 @@ CHANGE NOTES FOR 0.10.1 (STARTED Aug 17, 2020), (RELEASED: -)
 
 ------------------------------------------------------------------------
 
+CORRECTED MAJOR BUGS:
+
+- Introduced `alpha` and `beta` probabilistic bounds for MNDL splitting criteria for X-Means algorithm (Python: `pyclustering.cluster.xmeans`; C++: `pyclustering.clst.xmeans`).
+  See: https://github.com/annoviko/pyclustering/issues/624
+
 GENERAL CHANGES:
 
--
+- Corrected MNDL splitting criteria for X-Means algorithm (Python: `pyclustering.cluster.xmeans`; C++: `pyclustering.clst.xmeans`).
+  See: https://github.com/annoviko/pyclustering/issues/623
 
 
 ------------------------------------------------------------------------
