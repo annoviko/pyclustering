@@ -186,9 +186,9 @@ class xmeans:
             - random_state (int): Seed for random state (by default is `None`, current system time is used).
             - metric (distance_metric): Metric that is used for distance calculation between two points (by default
                euclidean square distance).
-            - alpha (double): Parameter distributed [0.0, 1.0] for alpha probabilistic bound \f$\Q\left(\alpha\right)\f$.
+            - alpha (double): Parameter distributed [0.0, 1.0] for alpha probabilistic bound \f$Q\left(\alpha\right)\f$.
                The parameter is used only in case of MNDL splitting criterion, in all other cases this value is ignored.
-            - beta (double): Parameter distributed [0.0, 1.0] for beta probabilistic bound \f$\Q\left(\beta\right)\f$.
+            - beta (double): Parameter distributed [0.0, 1.0] for beta probabilistic bound \f$Q\left(\beta\right)\f$.
                The parameter is used only in case of MNDL splitting criterion, in all other cases this value is ignored.
 
         """

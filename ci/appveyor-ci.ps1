@@ -368,6 +368,11 @@ if ($env:APPVEYOR_REPO_COMMIT_MESSAGE -Match "\[build-only-osx\]") {
     Exit 0;
 }
 
+if ($env:APPVEYOR_REPO_COMMIT_MESSAGE -Match "\[build-only-docs\]") {
+    Write-Host "Option '[build-only-osx]' is detected, sources will not be built, checked, verified and published." -ForegroundColor Green;
+    Exit 0;
+}
+
 switch ($env:CI_JOB) {
     "BUILD_WINDOWS_CCORE" {
         job_build_windows_ccore;
