@@ -4,12 +4,25 @@ CHANGE NOTES FOR 0.10.1 (STARTED Aug 17, 2020), (RELEASED: -)
 
 ------------------------------------------------------------------------
 
-CORRECTED MAJOR BUGS:
+GENERAL CHANGES:
+
+- Introduced `metric` parameter for X-Means algorithm to use custom metric for clustering (Python: `pyclustering.cluster.xmeans`; C++ `pyclustering.clst.xmeans`).
+  See: https://github.com/annoviko/pyclustering/issues/619
 
 - Introduced `alpha` and `beta` probabilistic bounds for MNDL splitting criteria for X-Means algorithm (Python: `pyclustering.cluster.xmeans`; C++: `pyclustering.clst.xmeans`).
   See: https://github.com/annoviko/pyclustering/issues/624
 
-GENERAL CHANGES:
+
+CORRECTED MAJOR BUGS:
+
+- Corrected bug with Euclidean distance when numpy is used (Python: `pyclustering.utils.metric`).
+  See: https://github.com/annoviko/pyclustering/issues/625
+
+- Corrected bug with Minkowski distance when numpy is used (Python: `pyclustering.utils.metric`).
+  See: https://github.com/annoviko/pyclustering/issues/626
+
+- Corrected bug with Gower distance when numpy calculation is used and data shape is bigger than 1 (Python: `pyclustering.utils.metric`).
+  See: https://github.com/annoviko/pyclustering/issues/627
 
 - Corrected MNDL splitting criteria for X-Means algorithm (Python: `pyclustering.cluster.xmeans`; C++: `pyclustering.clst.xmeans`).
   See: https://github.com/annoviko/pyclustering/issues/623
