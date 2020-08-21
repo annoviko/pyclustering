@@ -29,6 +29,11 @@
 
 #include <pyclustering/cluster/xmeans_data.hpp>
 
+#include <pyclustering/utils/metric.hpp>
+
+
+using namespace pyclustering::utils::metric;
+
 
 namespace pyclustering {
 
@@ -58,34 +63,41 @@ enum class splitting_type {
 */
 class xmeans {
 private:
-    const static double             DEFAULT_SPLIT_DIFFERENCE;
-
     const static std::size_t        AMOUNT_CENTER_CANDIDATES;
 
-    const static double             DEFAULT_MNDL_ALPHA_PROBABILISTIC_VALUE;
+    const static double             DEFAULT_SPLIT_DIFFERENCE;
 
-    const static double             DEFAULT_MNDL_BETA_PROBABILISTIC_VALUE;
+public:
+    const static double             DEFAULT_TOLERANCE;              /**< Default value of the tolerance stop condition: if maximum value of change of centers of clusters is less than tolerance then algorithm stops processing. */
+
+    const static splitting_type     DEFAULT_SPLITTING_TYPE;         /**< Default splitting criteria that is used by the X-Means algorithm. */
+
+    const static double             DEFAULT_MNDL_ALPHA_PROBABILISTIC_VALUE;     /**< Default MNDL alpha probabilistic value. */
+
+    const static double             DEFAULT_MNDL_BETA_PROBABILISTIC_VALUE;      /**< Default MNDL beta probabilistic value. */
 
 private:
-    dataset           m_initial_centers;
+    dataset                 m_initial_centers;
 
-    xmeans_data       * m_ptr_result        = nullptr;   /* temporary pointer to output result */
+    xmeans_data             * m_ptr_result        = nullptr;   /* temporary pointer to output result */
 
-    const dataset     * m_ptr_data          = nullptr;     /* used only during processing */
+    const dataset           * m_ptr_data          = nullptr;     /* used only during processing */
 
-    double            m_alpha               = DEFAULT_MNDL_ALPHA_PROBABILISTIC_VALUE;
+    double                  m_alpha               = DEFAULT_MNDL_ALPHA_PROBABILISTIC_VALUE;
 
-    double            m_beta                = DEFAULT_MNDL_BETA_PROBABILISTIC_VALUE;
+    double                  m_beta                = DEFAULT_MNDL_BETA_PROBABILISTIC_VALUE;
 
-    std::size_t       m_maximum_clusters;
+    std::size_t             m_maximum_clusters;
 
-    double            m_tolerance;
+    double                  m_tolerance           = DEFAULT_TOLERANCE;
 
-    splitting_type    m_criterion           = splitting_type::BAYESIAN_INFORMATION_CRITERION;
+    splitting_type          m_criterion           = splitting_type::BAYESIAN_INFORMATION_CRITERION;
 
-    std::size_t       m_repeat              = 1;
+    std::size_t             m_repeat              = 1;
 
-    long long         m_random_state        = RANDOM_STATE_CURRENT_TIME;
+    long long               m_random_state        = RANDOM_STATE_CURRENT_TIME;
+
+    distance_metric<point>  m_metric;
 
 public:
     /*!
@@ -96,18 +108,20 @@ public:
     @param[in] p_kmax: maximum number of clusters that can be allocated.
     @param[in] p_tolerance: stop condition in following way: when maximum value of distance change of
                 cluster centers is less than tolerance than algorithm will stop processing.
-    @param[in] p_criterion: splitting criterion that is used for making descision about cluster splitting.
+    @param[in] p_criterion: splitting criterion that is used for making descision about cluster splitting (by default `splitting_type::BAYESIAN_INFORMATION_CRITERION`).
     @param[in] p_repeat: how many times K-Means should be run to improve parameters (by default is 1), 
                 with larger 'repeat' values suggesting higher probability of finding global optimum.
     @param[in] p_random_state: seed for random state (by default is `RANDOM_STATE_CURRENT_TIME`, current system time is used).
+    @param[in] p_metric: distance metric calculator for two points (by default is Euclidean Square metric).
     
     */
     xmeans(const dataset & p_initial_centers, 
            const std::size_t p_kmax, 
-           const double p_tolerance, 
-           const splitting_type p_criterion, 
+           const double p_tolerance = DEFAULT_TOLERANCE, 
+           const splitting_type p_criterion = DEFAULT_SPLITTING_TYPE,
            const std::size_t p_repeat = 1, 
-           const long long p_random_state = RANDOM_STATE_CURRENT_TIME);
+           const long long p_random_state = RANDOM_STATE_CURRENT_TIME,
+           const distance_metric<point> & p_metric = distance_metric_factory<point>::euclidean_square());
 
     /*!
     

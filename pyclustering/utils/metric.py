@@ -343,7 +343,10 @@ def euclidean_distance_numpy(object1, object2):
     @return (double) Euclidean distance between two objects.
 
     """
-    return numpy.sum(numpy.sqrt(numpy.square(object1 - object2)), axis=1).T
+    if len(object1.shape) > 1 or len(object2.shape) > 1:
+        return numpy.sqrt(numpy.sum(numpy.square(object1 - object2), axis=1))
+    else:
+        return numpy.sqrt(numpy.sum(numpy.square(object1 - object2)))
 
 
 def euclidean_distance_square(point1, point2):
@@ -379,7 +382,10 @@ def euclidean_distance_square_numpy(object1, object2):
     @return (double) Square Euclidean distance between two objects.
 
     """
-    return numpy.sum(numpy.square(object1 - object2), axis=1).T
+    if len(object1.shape) > 1 or len(object2.shape) > 1:
+        return numpy.sum(numpy.square(object1 - object2), axis=1).T
+    else:
+        return numpy.sum(numpy.square(object1 - object2))
 
 
 def manhattan_distance(point1, point2):
@@ -417,7 +423,10 @@ def manhattan_distance_numpy(object1, object2):
     @return (double) Manhattan distance between two objects.
 
     """
-    return numpy.sum(numpy.absolute(object1 - object2), axis=1).T
+    if len(object1.shape) > 1 or len(object2.shape) > 1:
+        return numpy.sum(numpy.absolute(object1 - object2), axis=1).T
+    else:
+        return numpy.sum(numpy.absolute(object1 - object2))
 
 
 def chebyshev_distance(point1, point2):
@@ -457,7 +466,10 @@ def chebyshev_distance_numpy(object1, object2):
     @return (double) Chebyshev distance between two objects.
 
     """
-    return numpy.max(numpy.absolute(object1 - object2), axis=1).T
+    if len(object1.shape) > 1 or len(object2.shape) > 1:
+        return numpy.max(numpy.absolute(object1 - object2), axis=1).T
+    else:
+        return numpy.max(numpy.absolute(object1 - object2))
 
 
 def minkowski_distance(point1, point2, degree=2):
@@ -495,7 +507,10 @@ def minkowski_distance_numpy(object1, object2, degree=2):
     @return (double) Minkowski distance between two object.
 
     """
-    return numpy.sum(numpy.power(numpy.power(object1 - object2, degree), 1/degree), axis=1).T
+    if len(object1.shape) > 1 or len(object2.shape) > 1:
+        return numpy.power(numpy.sum(numpy.power(object1 - object2, degree), axis=1), 1/degree)
+    else:
+        return numpy.power(numpy.sum(numpy.power(object1 - object2, degree)), 1 / degree)
 
 
 def canberra_distance(point1, point2):
@@ -630,6 +645,6 @@ def gower_distance_numpy(point1, point2, max_range):
         result = numpy.divide(numpy.abs(point1 - point2), max_range)
 
     if len(result.shape) > 1:
-        return numpy.sum(numpy.nan_to_num(result), axis=1).T / len(point1)
+        return numpy.sum(numpy.nan_to_num(result), axis=1).T / len(result[0])
     else:
         return numpy.sum(numpy.nan_to_num(result)) / len(point1)

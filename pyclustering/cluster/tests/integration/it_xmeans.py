@@ -36,6 +36,8 @@ from pyclustering.cluster.xmeans import xmeans, splitting_type
 from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES
 
 from pyclustering.core.tests import remove_library
+from pyclustering.utils import read_sample
+from pyclustering.utils.metric import distance_metric, type_metric
 
 
 class XmeansIntegrationTest(unittest.TestCase):
@@ -87,6 +89,78 @@ class XmeansIntegrationTest(unittest.TestCase):
     def testMndlWrongStartClusterAllocationSampleSimple1ByCore(self):
         XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5]], [5, 5],
                                                       splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH, 20, True, alpha=0.1, beta=0.1)
+
+    def testBicClusterAllocationSampleSimple1EuclideanByCore(self):
+        metric = distance_metric(type_metric.EUCLIDEAN)
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, True, metric=metric)
+
+    def testBicClusterAllocationSampleSimple1EuclideanSquareByCore(self):
+        metric = distance_metric(type_metric.EUCLIDEAN_SQUARE)
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, True, metric=metric)
+
+    def testBicClusterAllocationSampleSimple1MetricManhattanByCore(self):
+        metric = distance_metric(type_metric.MANHATTAN)
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, True, metric=metric)
+
+    def testBicClusterAllocationSampleSimple1MetricChebyshevByCore(self):
+        metric = distance_metric(type_metric.CHEBYSHEV)
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, True, metric=metric)
+
+    def testBicClusterAllocationSampleSimple1MetricMinkowski2ByCore(self):
+        metric = distance_metric(type_metric.MINKOWSKI, degree=2)
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, True, metric=metric)
+
+    def testBicClusterAllocationSampleSimple1MetricMinkowski4ByCore(self):
+        metric = distance_metric(type_metric.MINKOWSKI, degree=4)
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, True, metric=metric)
+
+    def testBicClusterAllocationSampleSimple1MetricCanberraByCore(self):
+        metric = distance_metric(type_metric.CANBERRA)
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, True, metric=metric)
+
+    def testBicClusterAllocationSampleSimple1MetricChiSquareByCore(self):
+        metric = distance_metric(type_metric.CHI_SQUARE)
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, True, metric=metric)
+
+    def testBicClusterAllocationSampleSimple1MetricGowerByCore(self):
+        metric = distance_metric(type_metric.GOWER, data=read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1))
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, True, metric=metric)
+
+    def testMndlClusterAllocationSampleSimple1MetricEuclideanByCore(self):
+        metric = distance_metric(type_metric.EUCLIDEAN)
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH, 20, True, metric=metric)
+
+    def testMndlClusterAllocationSampleSimple1MetricEuclideanSquareByCore(self):
+        metric = distance_metric(type_metric.EUCLIDEAN_SQUARE)
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH, 20, True, metric=metric, alpha=0.1, beta=0.1)
+
+    def testMndlClusterAllocationSampleSimple1MetricManhattanByCore(self):
+        metric = distance_metric(type_metric.MANHATTAN)
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH, 20, True, metric=metric)
+
+    def testMndlClusterAllocationSampleSimple1MetricChebyshevByCore(self):
+        metric = distance_metric(type_metric.CHEBYSHEV)
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH, 20, True, metric=metric)
+
+    def testMndlClusterAllocationSampleSimple1MetricMinkowski2ByCore(self):
+        metric = distance_metric(type_metric.MINKOWSKI, degree=2)
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH, 20, True, metric=metric)
+
+    def testMndlClusterAllocationSampleSimple1MetricMinkowski4ByCore(self):
+        metric = distance_metric(type_metric.MINKOWSKI, degree=4)
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH, 20, True, metric=metric)
+
+    def testMndlClusterAllocationSampleSimple1MetricCanberraByCore(self):
+        metric = distance_metric(type_metric.CANBERRA)
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH, 20, True, metric=metric)
+
+    def testMndlClusterAllocationSampleSimple1MetricChiSquareByCore(self):
+        metric = distance_metric(type_metric.CHI_SQUARE)
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH, 20, True, metric=metric, alpha=0.1, beta=0.1, random_state=1000)
+
+    def testMndlClusterAllocationSampleSimple1MetricGowerByCore(self):
+        metric = distance_metric(type_metric.GOWER, data=read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1))
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH, 20, True, metric=metric)
 
     def testBicClusterAllocationSampleSimple2ByCore(self):
         XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [[3.5, 4.8], [6.9, 7], [7.5, 0.5]], [10, 5, 8],
@@ -292,22 +366,22 @@ class XmeansIntegrationTest(unittest.TestCase):
 
 
     def test_random_state_1_by_core(self):
-        XmeansTestTemplates.random_state(False, 2, 10, 1)
+        XmeansTestTemplates.random_state(True, 2, 10, 1)
 
     def test_random_state_2_by_core(self):
-        XmeansTestTemplates.random_state(False, 2, 10, 2)
+        XmeansTestTemplates.random_state(True, 2, 10, 2)
 
     def test_random_state_4_by_core(self):
-        XmeansTestTemplates.random_state(False, 2, 10, 4)
+        XmeansTestTemplates.random_state(True, 2, 10, 4)
 
     def test_random_state_32_by_core(self):
-        XmeansTestTemplates.random_state(False, 2, 10, 32)
+        XmeansTestTemplates.random_state(True, 2, 10, 32)
 
     def test_random_state_1024_by_core(self):
-        XmeansTestTemplates.random_state(False, 2, 10, 1024)
+        XmeansTestTemplates.random_state(True, 2, 10, 1024)
 
     def test_random_state_65536_by_core(self):
-        XmeansTestTemplates.random_state(False, 2, 10, 65536)
+        XmeansTestTemplates.random_state(True, 2, 10, 65536)
 
     @remove_library
     def testProcessingWhenLibraryCoreCorrupted(self):

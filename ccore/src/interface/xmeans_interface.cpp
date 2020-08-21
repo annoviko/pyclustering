@@ -53,7 +53,7 @@ pyclustering_package * xmeans_algorithm(const pyclustering_package * const p_sam
         metric = &default_metric;
     }
 
-    pyclustering::clst::xmeans solver(centers, p_kmax, p_tolerance, (pyclustering::clst::splitting_type) p_criterion, p_repeat, p_random_state);
+    pyclustering::clst::xmeans solver(centers, p_kmax, p_tolerance, (pyclustering::clst::splitting_type) p_criterion, p_repeat, p_random_state, *metric);
     solver.set_mndl_alpha_bound(p_alpha);
     solver.set_mndl_beta_bound(p_beta);
 

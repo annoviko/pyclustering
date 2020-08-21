@@ -61,6 +61,13 @@ class KmeansTestTemplates:
             assertion.eq(0.0, wce)
             return
 
+        expected_wce = 0.0
+        for index_cluster in range(len(clusters)):
+            for index_point in clusters[index_cluster]:
+                expected_wce += metric(sample[index_point], centers[index_cluster])
+
+        assertion.eq(expected_wce, wce)
+
         obtained_cluster_sizes = [len(cluster) for cluster in clusters]
         assertion.eq(len(sample), sum(obtained_cluster_sizes))
         

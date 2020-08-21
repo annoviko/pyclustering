@@ -25,10 +25,10 @@
 """
 
 
+import copy
 import numpy
 
 from enum import IntEnum
-
 from math import log
 
 from pyclustering.cluster.encoder import type_encoding
@@ -121,12 +121,53 @@ class xmeans:
 
     Visualization of clustering results that were obtained using code above and where X-Means algorithm allocates four clusters.
     @image html xmeans_clustering_simple3.png "Fig. 1. X-Means clustering results (data 'Simple3')."
-    
+
+    By default X-Means clustering algorithm uses Bayesian Information Criterion (BIC) to approximate the correct number
+    of clusters. There is an example where another criterion Minimum Noiseless Description Length (MNDL) is used in order
+    to find optimal amount of clusters:
+    @code
+        from pyclustering.cluster import cluster_visualizer
+        from pyclustering.cluster.xmeans import xmeans, splitting_type
+        from pyclustering.cluster.center_initializer import kmeans_plusplus_initializer
+        from pyclustering.utils import read_sample
+        from pyclustering.samples.definitions import FCPS_SAMPLES
+
+        # Read sample 'Target'.
+        sample = read_sample(FCPS_SAMPLES.SAMPLE_TARGET)
+
+        # Prepare initial centers - amount of initial centers defines amount of clusters from which X-Means will start analysis.
+        random_seed = 1000
+        amount_initial_centers = 3
+        initial_centers = kmeans_plusplus_initializer(sample, amount_initial_centers, random_state=random_seed).initialize()
+
+        # Create instance of X-Means algorithm with MNDL splitting criterion.
+        xmeans_mndl = xmeans(sample, initial_centers, 20, splitting_type=splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH, random_state=random_seed)
+        xmeans_mndl.process()
+
+        # Extract X-Means MNDL clustering results.
+        mndl_clusters = xmeans_mndl.get_clusters()
+
+        # Visualize clustering results.
+        visualizer = cluster_visualizer(titles=['X-Means with MNDL criterion'])
+        visualizer.append_clusters(mndl_clusters, sample)
+        visualizer.show()
+    @endcode
+
+    @image html xmeans_clustering_mndl_target.png "Fig. 2. X-Means MNDL clustering results (data 'Target')."
+
+    As in many others algorithms, it is possible to specify metric that should be used for cluster analysis, for
+    example, Chebyshev distance metric:
+    @code
+        # Create instance of X-Means algorithm with Chebyshev distance metric.
+        chebyshev_metric = distance_metric(type_metric.CHEBYSHEV)
+        xmeans_instance = xmeans(sample, initial_centers, max_clusters_amount, metric=chebyshev_metric).process()
+    @endcode
+
     @see center_initializer
-    
+
     """
     
-    def __init__(self, data, initial_centers=None, kmax=20, tolerance=0.025, criterion=splitting_type.BAYESIAN_INFORMATION_CRITERION, ccore=True, **kwargs):
+    def __init__(self, data, initial_centers=None, kmax=20, tolerance=0.001, criterion=splitting_type.BAYESIAN_INFORMATION_CRITERION, ccore=True, **kwargs):
         """!
         @brief Constructor of clustering algorithm X-Means.
         
@@ -135,7 +176,7 @@ class xmeans:
                     if it is not specified then X-Means starts from the random center.
         @param[in] kmax (uint): Maximum number of clusters that can be allocated.
         @param[in] tolerance (double): Stop condition for each iteration: if maximum value of change of centers of clusters is less than tolerance than algorithm will stop processing.
-        @param[in] criterion (splitting_type): Type of splitting creation.
+        @param[in] criterion (splitting_type): Type of splitting creation (by default `splitting_type.BAYESIAN_INFORMATION_CRITERION`).
         @param[in] ccore (bool): Defines if C++ pyclustering library should be used instead of Python implementation.
         @param[in] **kwargs: Arbitrary keyword arguments (available arguments: `repeat`, `random_state`, `metric`, `alpha`, `beta`).
 
@@ -146,16 +187,16 @@ class xmeans:
             - metric (distance_metric): Metric that is used for distance calculation between two points (by default
                euclidean square distance).
             - alpha (double): Parameter distributed [0.0, 1.0] for alpha probabilistic bound \f$\Q\left(\alpha\right)\f$.
-               The parameter is used only in case of MNDL splitting criteria, in all other cases this value is ignored.
+               The parameter is used only in case of MNDL splitting criterion, in all other cases this value is ignored.
             - beta (double): Parameter distributed [0.0, 1.0] for beta probabilistic bound \f$\Q\left(\beta\right)\f$.
-               The parameter is used only in case of MNDL splitting criteria, in all other cases this value is ignored.
+               The parameter is used only in case of MNDL splitting criterion, in all other cases this value is ignored.
 
         """
         
         self.__pointer_data = numpy.array(data)
         self.__clusters = []
         self.__random_state = kwargs.get('random_state', None)
-        self.__metric = kwargs.get('metric', distance_metric(type_metric.EUCLIDEAN_SQUARE))
+        self.__metric = copy.copy(kwargs.get('metric', distance_metric(type_metric.EUCLIDEAN_SQUARE)))
         
         if initial_centers is not None:
             self.__centers = numpy.array(initial_centers)
@@ -169,7 +210,7 @@ class xmeans:
         self.__repeat = kwargs.get('repeat', 1)
         self.__alpha = kwargs.get('alpha', 0.9)
         self.__beta = kwargs.get('beta', 0.9)
-         
+
         self.__ccore = ccore and self.__metric.get_type() != type_metric.USER_DEFINED
         if self.__ccore is True:
             self.__ccore = ccore_library.workable()
@@ -275,9 +316,10 @@ class xmeans:
 
         self.__metric.enable_numpy_usage()
 
-        differences = numpy.zeros((len(nppoints), len(self.__centers)))
+        npcenters = numpy.array(self.__centers)
+        differences = numpy.zeros((len(nppoints), len(npcenters)))
         for index_point in range(len(nppoints)):
-            differences[index_point] = self.__metric(nppoints[index_point], self.__centers)
+            differences[index_point] = self.__metric(nppoints[index_point], npcenters)
 
         self.__metric.disable_numpy_usage()
 
@@ -487,8 +529,9 @@ class xmeans:
         @param[in] clusters (list): Clusters for which splitting criterion should be calculated.
         @param[in] centers (list): Centers of the clusters.
         
-        @return (double) Returns splitting criterion. High value of splitting cretion means that current structure is much better.
-        
+        @return (double) Returns splitting criterion. High value of splitting criterion means that current structure is
+                 much better.
+
         @see __bayesian_information_criterion(clusters, centers)
         @see __minimum_noiseless_description_length(clusters, centers)
         

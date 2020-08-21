@@ -35,6 +35,9 @@ from pyclustering.cluster.xmeans import xmeans, splitting_type
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES
 
+from pyclustering.utils import read_sample
+from pyclustering.utils.metric import distance_metric, type_metric
+
 
 class XmeansUnitTest(unittest.TestCase):
     def testBicClusterAllocationSampleSimple1(self):
@@ -54,6 +57,78 @@ class XmeansUnitTest(unittest.TestCase):
 
     def testBicSampleSimple1MaxLessRealRepeat(self):
         XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5]], None, splitting_type.BAYESIAN_INFORMATION_CRITERION, 1, False, repeat=5)
+
+    def testBicClusterAllocationSampleSimple1MetricEuclidean(self):
+        metric = distance_metric(type_metric.EUCLIDEAN)
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, False, metric=metric)
+
+    def testBicClusterAllocationSampleSimple1MetricEuclideanSquare(self):
+        metric = distance_metric(type_metric.EUCLIDEAN_SQUARE)
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, False, metric=metric)
+
+    def testBicClusterAllocationSampleSimple1MetricManhattan(self):
+        metric = distance_metric(type_metric.MANHATTAN)
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, False, metric=metric)
+
+    def testBicClusterAllocationSampleSimple1MetricChebyshev(self):
+        metric = distance_metric(type_metric.CHEBYSHEV)
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, False, metric=metric)
+
+    def testBicClusterAllocationSampleSimple1MetricMinkowski2(self):
+        metric = distance_metric(type_metric.MINKOWSKI, degree=2)
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, False, metric=metric)
+
+    def testBicClusterAllocationSampleSimple1MetricMinkowski4(self):
+        metric = distance_metric(type_metric.MINKOWSKI, degree=4)
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, False, metric=metric)
+
+    def testBicClusterAllocationSampleSimple1MetricCanberra(self):
+        metric = distance_metric(type_metric.CANBERRA)
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, False, metric=metric)
+
+    def testBicClusterAllocationSampleSimple1MetricChiSquare(self):
+        metric = distance_metric(type_metric.CHI_SQUARE)
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, False, metric=metric)
+
+    def testBicClusterAllocationSampleSimple1MetricGower(self):
+        metric = distance_metric(type_metric.GOWER, data=read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1))
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, False, metric=metric)
+
+    def testMndlClusterAllocationSampleSimple1MetricEuclidean(self):
+        metric = distance_metric(type_metric.EUCLIDEAN)
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH, 20, False, metric=metric)
+
+    def testMndlClusterAllocationSampleSimple1MetricEuclideanSquare(self):
+        metric = distance_metric(type_metric.EUCLIDEAN_SQUARE)
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH, 20, False, metric=metric, alpha=0.1, beta=0.1)
+
+    def testMndlClusterAllocationSampleSimple1MetricManhattan(self):
+        metric = distance_metric(type_metric.MANHATTAN)
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH, 20, False, metric=metric)
+
+    def testMndlClusterAllocationSampleSimple1MetricChebyshev(self):
+        metric = distance_metric(type_metric.CHEBYSHEV)
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH, 20, False, metric=metric)
+
+    def testMndlClusterAllocationSampleSimple1MetricMinkowski2(self):
+        metric = distance_metric(type_metric.MINKOWSKI, degree=2)
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH, 20, False, metric=metric)
+
+    def testMndlClusterAllocationSampleSimple1MetricMinkowski4(self):
+        metric = distance_metric(type_metric.MINKOWSKI, degree=4)
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH, 20, False, metric=metric)
+
+    def testMndlClusterAllocationSampleSimple1MetricCanberra(self):
+        metric = distance_metric(type_metric.CANBERRA)
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH, 20, False, metric=metric)
+
+    def testMndlClusterAllocationSampleSimple1MetricChiSquare(self):
+        metric = distance_metric(type_metric.CHI_SQUARE)
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH, 20, False, metric=metric, alpha=0.1, beta=0.1, random_state=1000)
+
+    def testMndlClusterAllocationSampleSimple1MetricGower(self):
+        metric = distance_metric(type_metric.GOWER, data=read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1))
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH, 20, False, metric=metric)
 
     def testBicWrongStartClusterAllocationSampleSimple1(self):
         XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5]], [5, 5], splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, False)
@@ -131,10 +206,10 @@ class XmeansUnitTest(unittest.TestCase):
         XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [[0.0, 1.0], [0.0, 0.0]], [15, 15, 15, 15], splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, False)
 
     def testMndlClusterAllocationSampleSimple5(self):
-        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [[0.0, 1.0], [0.0, 0.0], [1.0, 1.0], [1.0, 0.0]], [15, 15, 15, 15], splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH, 20, False)
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [[0.0, 1.0], [0.0, 0.0], [1.0, 1.0], [1.0, 0.0]], [15, 15, 15, 15], splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH, 20, False, random_state=1000)
 
     def testMndlWrongStartClusterAllocationSampleSimple5(self):
-        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [[0.0, 1.0], [0.0, 0.0]], [15, 15, 15, 15], splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH, 20, False)
+        XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [[0.0, 1.0], [0.0, 0.0]], [15, 15, 15, 15], splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH, 20, False, random_state=1000)
 
     def testBicClusterAllocationSampleSimple6(self):
         XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE6, [[3.5, 3.5], [3.7, 3.7]], [20, 21], splitting_type.BAYESIAN_INFORMATION_CRITERION, 20, False)
