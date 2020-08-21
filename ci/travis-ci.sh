@@ -287,7 +287,8 @@ run_doxygen_job() {
 
     print_info "Generate documentation."
     doxygen --version
-    doxygen docs/doxygen_conf_pyclustering > /dev/null 2> $report_file
+    doxygen docs/doxygen_conf_pyclustering
+    #doxygen docs/doxygen_conf_pyclustering > /dev/null 2> $report_file
 
     filter_content $report_file $report_file_filtered
     check_error_log_file $report_file_filtered "Building doxygen documentation: FAILURE."
@@ -453,9 +454,18 @@ fi
 
 if [[ $TRAVIS_COMMIT_MESSAGE == *"[build-only-osx]"* ]]; then
     if [[ $1 == BUILD_TEST_CCORE_MACOS ]]; then
-        print_info "Option '[build-only-osx]' is detected, mac os build will be started."
+        print_info "Option '[build-only-osx]' is detected, MAC OS build will be started."
     else
-        print_info "Option '[build-only-osx]' is detected, sources will not be built, checked, verified and published."
+        print_info "Option '[build-only-osx]' is detected, job '$1' is going to be skipped."
+        exit 0
+    fi
+fi
+
+if [[ $TRAVIS_COMMIT_MESSAGE == *"[build-only-docs]"* ]]; then
+    if [[ $1 == DOCUMENTATION ]]; then
+        print_info "Option '[build-only-docs]' is detected, documentation build will be started."
+    else
+        print_info "Option '[build-only-docs]' is detected, job '$1' is going to be skipped."
         exit 0
     fi
 fi
