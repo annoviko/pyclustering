@@ -53,9 +53,13 @@ class MetricUnitTest(unittest.TestCase):
 
     def testEuclideanDistance(self):
         assertion.eq(0.0, metric.euclidean_distance([0], [0]))
+        assertion.eq(0.0, metric.euclidean_distance_numpy(numpy.array([0]), numpy.array([0])))
         assertion.eq(1.0, metric.euclidean_distance([0.0, 1.0], [0.0, 0.0]))
+        assertion.eq(1.0, metric.euclidean_distance_numpy(numpy.array([0.0, 1.0]), numpy.array([0.0, 0.0])))
         assertion.eq(2.0, metric.euclidean_distance([3.0, 3.0], [5.0, 3.0]))
+        assertion.eq(2.0, metric.euclidean_distance_numpy(numpy.array([3.0, 3.0]), numpy.array([5.0, 3.0])))
         assertion.eq(2.0, metric.euclidean_distance([-3.0, -3.0], [-5.0, -3.0]))
+        assertion.eq(2.0, metric.euclidean_distance_numpy(numpy.array([-3.0, -3.0]), numpy.array([-5.0, -3.0])))
 
 
     def testEuclideanDistanceSquare(self):
@@ -129,3 +133,33 @@ class MetricUnitTest(unittest.TestCase):
         assertion.eq(0.0, metric.gower_distance_numpy(numpy.array([-1.0, -1.0]), numpy.array([-1.0, -1.0]), numpy.array([0.0, 0.0])))
         assertion.eq(1.0, metric.gower_distance([-2.0, -2.0], [-3.0, -3.0], [1.0, 1.0]))
         assertion.eq(1.0, metric.gower_distance_numpy(numpy.array([-2.0, -2.0]), numpy.array([-3.0, -3.0]), numpy.array([1.0, 1.0])))
+
+
+    def testGowerDistanceIntegrity(self):
+        a, b = [1.2, 3.4], [1.0, 2.2]
+        npa, npb = numpy.array(a), numpy.array(b)
+
+        gower = metric.distance_metric(metric.type_metric.GOWER, data=[a, b], numpy_usage=False)
+        gower_numpy = metric.distance_metric(metric.type_metric.GOWER, data=numpy.array([a, b]), numpy_usage=True)
+        assertion.eq(gower(a, b), gower_numpy(npa, npb))
+
+
+    def testCommonAndNumPyMetricsTwoDimension(self):
+        a = [1.2, 3.4]
+        b = [5.4, -7.1]
+        npa = numpy.array(a)
+        npb = numpy.array(b)
+
+        assertion.eq(metric.euclidean_distance(a, b), metric.euclidean_distance_numpy(npa, npb))
+        assertion.eq(metric.euclidean_distance_square(a, b), metric.euclidean_distance_square_numpy(npa, npb))
+        assertion.eq(metric.manhattan_distance(a, b), metric.manhattan_distance_numpy(npa, npb))
+        assertion.eq(metric.chebyshev_distance(a, b), metric.chebyshev_distance_numpy(npa, npb))
+        assertion.eq(metric.minkowski_distance(a, b, 2), metric.minkowski_distance_numpy(npa, npb, 2))
+        assertion.eq(metric.minkowski_distance(a, b, 4), metric.minkowski_distance_numpy(npa, npb, 4))
+        assertion.eq(metric.canberra_distance(a, b), metric.canberra_distance_numpy(npa, npb))
+        assertion.eq(metric.chi_square_distance(a, b), metric.chi_square_distance_numpy(npa, npb))
+        assertion.eq(metric.chi_square_distance(a, b), metric.chi_square_distance_numpy(npa, npb))
+
+        gower = metric.distance_metric(metric.type_metric.GOWER, data=[a, b], numpy_usage=False)
+        gower_numpy = metric.distance_metric(metric.type_metric.GOWER, data=[a, b], numpy_usage=True)
+        assertion.eq(gower(a, b), gower_numpy(npa, npb))

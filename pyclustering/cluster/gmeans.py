@@ -222,9 +222,10 @@ class gmeans:
 
         metric = distance_metric(type_metric.EUCLIDEAN_SQUARE, numpy_usage=True)
 
-        differences = numpy.zeros((len(nppoints), len(self.__centers)))
+        npcenters = numpy.array(self.__centers)
+        differences = numpy.zeros((len(nppoints), len(npcenters)))
         for index_point in range(len(nppoints)):
-            differences[index_point] = metric(nppoints[index_point], self.__centers)
+            differences[index_point] = metric(nppoints[index_point], npcenters)
 
         return numpy.argmin(differences, axis=1)
 

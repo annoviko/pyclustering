@@ -25,6 +25,7 @@
 """
 
 
+import copy
 import numpy
 import warnings
 
@@ -356,14 +357,14 @@ class kmeans:
         self.__total_wce = 0.0
 
         self.__observer = kwargs.get('observer', None)
-        self.__metric = kwargs.get('metric', distance_metric(type_metric.EUCLIDEAN_SQUARE))
+        self.__metric = copy.copy(kwargs.get('metric', distance_metric(type_metric.EUCLIDEAN_SQUARE)))
         self.__itermax = kwargs.get('itermax', 100)
 
         if self.__metric.get_type() != type_metric.USER_DEFINED:
             self.__metric.enable_numpy_usage()
         else:
             self.__metric.disable_numpy_usage()
-        
+
         self.__ccore = ccore and self.__metric.get_type() != type_metric.USER_DEFINED
         if self.__ccore is True:
             self.__ccore = ccore_library.workable()
@@ -400,7 +401,9 @@ class kmeans:
         """
         ccore_metric = metric_wrapper.create_instance(self.__metric)
 
-        results = wrapper.kmeans(self.__pointer_data, self.__centers, self.__tolerance, self.__itermax, (self.__observer is not None), ccore_metric.get_pointer())
+        results = wrapper.kmeans(self.__pointer_data, self.__centers, self.__tolerance, self.__itermax,
+                                 (self.__observer is not None), ccore_metric.get_pointer())
+
         self.__clusters = results[0]
         self.__centers = results[1]
 
@@ -459,7 +462,7 @@ class kmeans:
             if self.__metric.get_type() != type_metric.USER_DEFINED:
                 differences[index_point] = self.__metric(nppoints[index_point], self.__centers)
             else:
-                differences[index_point] = [ self.__metric(nppoints[index_point], center) for center in self.__centers ]
+                differences[index_point] = [self.__metric(nppoints[index_point], center) for center in self.__centers]
 
         return numpy.argmin(differences, axis=1)
 
@@ -487,7 +490,7 @@ class kmeans:
 
         if isinstance(self.__centers, list):
             return self.__centers
-        
+
         return self.__centers.tolist()
 
 
@@ -567,7 +570,7 @@ class kmeans:
 
         dataset_differences = self.__calculate_dataset_difference(len(self.__clusters))
 
-        self.__total_wce = 0
+        self.__total_wce = 0.0
         for index_cluster in range(len(self.__clusters)):
             for index_point in self.__clusters[index_cluster]:
                 self.__total_wce += dataset_differences[index_cluster][index_point]
@@ -583,8 +586,8 @@ class kmeans:
             if self.__metric.get_type() != type_metric.USER_DEFINED:
                 dataset_differences[index_center] = self.__metric(self.__pointer_data, self.__centers[index_center])
             else:
-                dataset_differences[index_center] = [ self.__metric(point, self.__centers[index_center])
-                                                      for point in self.__pointer_data ]
+                dataset_differences[index_center] = [self.__metric(point, self.__centers[index_center])
+                                                     for point in self.__pointer_data]
 
         return dataset_differences
 

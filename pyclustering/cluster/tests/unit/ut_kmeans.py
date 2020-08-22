@@ -73,6 +73,10 @@ class KmeansUnitTest(unittest.TestCase):
         metric = distance_metric(type_metric.MINKOWSKI, degree=4)
         KmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], False, metric=metric)
 
+    def testClusterAllocationSampleSimple1Gower(self):
+        metric = distance_metric(type_metric.GOWER, data=read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1))
+        KmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], False, metric=metric)
+
     def testClusterAllocationSampleSimple1UserDefined1(self):
         metric = distance_metric(type_metric.USER_DEFINED, func=distance_metric(type_metric.EUCLIDEAN))
         KmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [[3.7, 5.5], [6.7, 7.5]], [5, 5], False, metric=metric)
@@ -255,6 +259,60 @@ class KmeansUnitTest(unittest.TestCase):
         centers = [[0.2, 0.1], [4.0, 1.0], [2.0, 2.0], [2.3, 3.9]]
         to_predict = [[0.3, 0.2], [4.1, 1.1], [3.9, 1.1], [2.1, 1.9], [2.1, 4.1]]
         KmeansTestTemplates.templatePredict(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, centers, to_predict, [0, 1, 1, 2, 3], False)
+
+    def testPredictFivePointsEuclideanDistance(self):
+        centers = [[0.2, 0.1], [4.0, 1.0], [2.0, 2.0], [2.3, 3.9]]
+        to_predict = [[0.3, 0.2], [4.1, 1.1], [3.9, 1.1], [2.1, 1.9], [2.1, 4.1]]
+        metric = distance_metric(type_metric.EUCLIDEAN)
+        KmeansTestTemplates.templatePredict(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, centers, to_predict, [0, 1, 1, 2, 3], False, metric=metric)
+
+    def testPredictFivePointsEuclideanSquareDistance(self):
+        centers = [[0.2, 0.1], [4.0, 1.0], [2.0, 2.0], [2.3, 3.9]]
+        to_predict = [[0.3, 0.2], [4.1, 1.1], [3.9, 1.1], [2.1, 1.9], [2.1, 4.1]]
+        metric = distance_metric(type_metric.EUCLIDEAN_SQUARE)
+        KmeansTestTemplates.templatePredict(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, centers, to_predict, [0, 1, 1, 2, 3], False, metric=metric)
+
+    def testPredictFivePointsManhattanDistance(self):
+        centers = [[0.2, 0.1], [4.0, 1.0], [2.0, 2.0], [2.3, 3.9]]
+        to_predict = [[0.3, 0.2], [4.1, 1.1], [3.9, 1.1], [2.1, 1.9], [2.1, 4.1]]
+        metric = distance_metric(type_metric.MANHATTAN)
+        KmeansTestTemplates.templatePredict(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, centers, to_predict, [0, 1, 1, 2, 3], False, metric=metric)
+
+    def testPredictFivePointsChebyshevDistance(self):
+        centers = [[0.2, 0.1], [4.0, 1.0], [2.0, 2.0], [2.3, 3.9]]
+        to_predict = [[0.3, 0.2], [4.1, 1.1], [3.9, 1.1], [2.1, 1.9], [2.1, 4.1]]
+        metric = distance_metric(type_metric.CHEBYSHEV)
+        KmeansTestTemplates.templatePredict(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, centers, to_predict, [0, 1, 1, 2, 3], False, metric=metric)
+
+    def testPredictFivePointsMinkowski2Distance(self):
+        centers = [[0.2, 0.1], [4.0, 1.0], [2.0, 2.0], [2.3, 3.9]]
+        to_predict = [[0.3, 0.2], [4.1, 1.1], [3.9, 1.1], [2.1, 1.9], [2.1, 4.1]]
+        metric = distance_metric(type_metric.MINKOWSKI, degree=2)
+        KmeansTestTemplates.templatePredict(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, centers, to_predict, [0, 1, 1, 2, 3], False, metric=metric)
+
+    def testPredictFivePointsMinkowski4Distance(self):
+        centers = [[0.2, 0.1], [4.0, 1.0], [2.0, 2.0], [2.3, 3.9]]
+        to_predict = [[0.3, 0.2], [4.1, 1.1], [3.9, 1.1], [2.1, 1.9], [2.1, 4.1]]
+        metric = distance_metric(type_metric.MINKOWSKI, degree=4)
+        KmeansTestTemplates.templatePredict(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, centers, to_predict, [0, 1, 1, 2, 3], False, metric=metric)
+
+    def testPredictFivePointsCanberraDistance(self):
+        centers = [[0.2, 0.1], [4.0, 1.0], [2.0, 2.0], [2.3, 3.9]]
+        to_predict = [[0.3, 0.2], [4.1, 1.1], [3.9, 1.1], [2.1, 1.9], [2.1, 4.1]]
+        metric = distance_metric(type_metric.CANBERRA)
+        KmeansTestTemplates.templatePredict(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, centers, to_predict, [0, 1, 1, 2, 3], False, metric=metric)
+
+    def testPredictFivePointsChiSquareDistance(self):
+        centers = [[0.2, 0.1], [4.0, 1.0], [2.0, 2.0], [2.3, 3.9]]
+        to_predict = [[0.3, 0.2], [4.1, 1.1], [3.9, 1.1], [2.1, 1.9], [2.1, 4.1]]
+        metric = distance_metric(type_metric.CHI_SQUARE)
+        KmeansTestTemplates.templatePredict(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, centers, to_predict, [0, 1, 1, 2, 3], False, metric=metric)
+
+    def testPredictFivePointsGowerDistance(self):
+        centers = [[0.2, 0.1], [4.0, 1.0], [2.0, 2.0], [2.3, 3.9]]
+        to_predict = [[0.3, 0.2], [4.1, 1.1], [3.9, 1.1], [2.1, 1.9], [2.1, 4.1]]
+        metric = distance_metric(type_metric.GOWER, data=centers+to_predict)
+        KmeansTestTemplates.templatePredict(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, centers, to_predict, [0, 1, 1, 2, 3], False, metric=metric)
 
     def testPredictFivePointsUserMetric(self):
         centers = [[0.2, 0.1], [4.0, 1.0], [2.0, 2.0], [2.3, 3.9]]

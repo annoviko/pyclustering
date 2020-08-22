@@ -555,13 +555,14 @@ class cluster_visualizer:
         """!
         @brief Set title for specified canvas.
         
-        @param[in] text (string): Title for canvas.
-        @param[in] canvas (uint): Index of canvas where title should be displayed.
+        @param[in] text (string): Title for the canvas.
+        @param[in] canvas (uint): Index of the canvas where title should be displayed.
 
         """
         
         if canvas > self.__number_canvases:
-            raise NameError('Canvas does ' + canvas + ' not exists.')
+            raise ValueError("Canvas with index '%d' does not exists (total amount of canvases: '%d')." %
+                             canvas, self.__number_canvases)
         
         self.__canvas_titles[canvas] = text
 
@@ -670,7 +671,7 @@ class cluster_visualizer:
                 ax.xaxis.set_ticklabels([])
                 ax.yaxis.set_ticklabels([])
                 
-                if (dimension == 3):
+                if dimension == 3:
                     ax.zaxis.set_ticklabels([])
             
             if self.__canvas_titles[index_canvas] is not None:

@@ -56,7 +56,7 @@ class XmeansTestTemplates:
         assertion.le(len(centers), kmax)
 
         expected_wce = 0.0
-        metric = distance_metric(type_metric.EUCLIDEAN_SQUARE)
+        metric = kwargs.get('metric', distance_metric(type_metric.EUCLIDEAN_SQUARE))
         for index_cluster in range(len(clusters)):
             for index_point in clusters[index_cluster]:
                 expected_wce += metric(sample[index_point], centers[index_cluster])
@@ -64,7 +64,7 @@ class XmeansTestTemplates:
         assertion.eq(expected_wce, wce)
 
         if expected_cluster_length is not None:
-            assertion.eq(len(centers), len(expected_cluster_length))
+            assertion.eq(len(expected_cluster_length), len(centers))
 
             obtained_cluster_sizes.sort()
             expected_cluster_length.sort()

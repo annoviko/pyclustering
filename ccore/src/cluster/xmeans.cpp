@@ -48,20 +48,29 @@ namespace pyclustering {
 namespace clst {
 
 
+const std::size_t        xmeans::AMOUNT_CENTER_CANDIDATES = 5;
+
 const double             xmeans::DEFAULT_SPLIT_DIFFERENCE                = 0.001;
 
-const std::size_t        xmeans::AMOUNT_CENTER_CANDIDATES                = 5;
+const double             xmeans::DEFAULT_TOLERANCE                       = 0.001;
+
+const splitting_type     xmeans::DEFAULT_SPLITTING_TYPE                  = splitting_type::BAYESIAN_INFORMATION_CRITERION;
+
+const double             xmeans::DEFAULT_MNDL_ALPHA_PROBABILISTIC_VALUE  = 0.9;
+
+const double             xmeans::DEFAULT_MNDL_BETA_PROBABILISTIC_VALUE   = 0.9;
 
 
-xmeans::xmeans(const dataset & p_initial_centers, const std::size_t p_kmax, const double p_tolerance, const splitting_type p_criterion, std::size_t p_repeat, const long long p_random_state) :
+xmeans::xmeans(const dataset & p_initial_centers, const std::size_t p_kmax, const double p_tolerance, const splitting_type p_criterion, std::size_t p_repeat, const long long p_random_state, const distance_metric<point> & p_metric) :
     m_initial_centers(p_initial_centers),
     m_ptr_result(nullptr),
     m_ptr_data(nullptr),
     m_maximum_clusters(p_kmax),
-    m_tolerance(p_tolerance * p_tolerance),
+    m_tolerance(p_tolerance),
     m_criterion(p_criterion),
     m_repeat(p_repeat),
-    m_random_state(p_random_state)
+    m_random_state(p_random_state),
+    m_metric(p_metric)
 { }
 
 
@@ -91,9 +100,27 @@ void xmeans::process(const dataset & p_data, xmeans_data & p_result) {
 }
 
 
+void xmeans::set_mndl_alpha_bound(const double p_alpha) {
+    if ((p_alpha > 1.0) || (p_alpha < 0)) {
+        throw std::invalid_argument("Parameter for the probabilistic bound Q(alpha) should in the following range [0, 1] (current value: '" + std::to_string(p_alpha) + "').");
+    }
+
+    m_alpha = p_alpha;
+}
+
+
+void xmeans::set_mndl_beta_bound(const double p_beta) {
+    if ((p_beta > 1.0) || (p_beta < 0)) {
+        throw std::invalid_argument("Parameter for the probabilistic bound Q(beta) should in the following range [0, 1] (current value: '" + std::to_string(p_beta) + "').");
+    }
+
+    m_beta = p_beta;
+}
+
+
 double xmeans::improve_parameters(cluster_sequence & improved_clusters, dataset & improved_centers, const index_sequence & available_indexes) const {
     kmeans_data result;
-    kmeans(improved_centers, m_tolerance).process((*m_ptr_data), available_indexes, result);
+    kmeans(improved_centers, m_tolerance, kmeans::DEFAULT_ITERMAX, m_metric).process((*m_ptr_data), available_indexes, result);
 
     improved_centers = result.centers();
     improved_clusters = result.clusters();
@@ -225,7 +252,7 @@ double xmeans::bayesian_information_criterion(const cluster_sequence & analysed_
 
     for (std::size_t index_cluster = 0; index_cluster < analysed_clusters.size(); index_cluster++) {
         for (auto & index_object : analysed_clusters[index_cluster]) {
-            sigma += euclidean_distance_square( (*m_ptr_data)[index_object], analysed_centers[index_cluster] );
+            sigma += m_metric((*m_ptr_data)[index_object], analysed_centers[index_cluster]);
         }
 
         N += analysed_clusters[index_cluster].size();
@@ -259,7 +286,7 @@ double xmeans::minimum_noiseless_description_length(const cluster_sequence & clu
     double K = (double) clusters.size();
     double N = 0.0;
 
-    double sigma_sqrt = 0.0;
+    double sigma_square = 0.0;
 
     for (std::size_t index_cluster = 0; index_cluster < clusters.size(); index_cluster++) {
         if (clusters[index_cluster].empty()) {
@@ -269,27 +296,27 @@ double xmeans::minimum_noiseless_description_length(const cluster_sequence & clu
         double Ni = (double) clusters[index_cluster].size();
         double Wi = 0.0;
         for (auto & index_object : clusters[index_cluster]) {
-            /* euclidean_distance_square should be used in line with paper, but in this case results are
-             * very poor, therefore square root is used to improved. */
-            Wi += euclidean_distance((*m_ptr_data)[index_object], centers[index_cluster]);
+            Wi += m_metric((*m_ptr_data)[index_object], centers[index_cluster]);
         }
 
-        sigma_sqrt += Wi;
+        sigma_square += Wi;
         W += Wi / Ni;
         N += Ni;
     }
 
     if (N - K > 0) {
-        const double alpha = 0.9;
-        const double betta = 0.9;
+        const double alpha = m_alpha;
+        const double alpha_square = alpha * alpha;
+        const double beta = m_beta;
 
-        sigma_sqrt /= (N - K);
-        double sigma = std::sqrt(sigma_sqrt);
+        sigma_square /= (N - K);
+        const double sigma = std::sqrt(sigma_square);
 
-        double Kw = (1.0 - K / N) * sigma_sqrt;
-        double Ks = ( 2.0 * alpha * sigma / std::sqrt(N) ) * std::sqrt( (std::pow(alpha, 2)) * sigma_sqrt / N + W - Kw / 2.0 );
+        const double Kw = (1.0 - K / N) * sigma_square;
+        const double Ks = (2.0 * alpha * sigma / std::sqrt(N)) * std::sqrt(alpha_square * sigma_square / N + W - Kw / 2.0);
+        const double UQa = W - Kw + (2.0 * alpha_square * sigma_square) / N + Ks;
 
-        score = sigma_sqrt * std::sqrt(2 * K) * (std::sqrt(2 * K) + betta) / N + W - sigma_sqrt + Ks + 2 * std::sqrt(alpha) * sigma_sqrt / N;
+        score = sigma_square * K / N + UQa + sigma_square * beta * std::sqrt(2.0 * K) / N;
     }
 
     return score;
