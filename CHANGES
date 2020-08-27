@@ -15,6 +15,15 @@ GENERAL CHANGES:
 
 CORRECTED MAJOR BUGS:
 
+- Corrected implementation of K-Medians (PAM) algorithm that is aligned with original algorithm (Python: `pyclustering.cluster.kmedoids`; C++: `pyclustering.clst.kmedoids`).
+  See: https://github.com/annoviko/pyclustering/issues/503
+
+- Corrected literature references that were for K-Medians (PAM) implementation (Python: `pyclustering.cluster.kmedoids`).
+  See: https://github.com/annoviko/pyclustering/pull/572
+
+- Corrected bug when K-Medoids updates input parameter `initial_medoids` that were provided to the algorithm (Python: `pyclustering.cluster.kmedoids`).
+  See: https://github.com/annoviko/pyclustering/issues/630
+
 - Corrected bug with Euclidean distance when numpy is used (Python: `pyclustering.utils.metric`).
   See: https://github.com/annoviko/pyclustering/issues/625
 
