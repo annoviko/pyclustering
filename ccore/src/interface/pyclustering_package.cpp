@@ -59,6 +59,14 @@ pyclustering_package::~pyclustering_package() {
                 delete [] (size_t *) data;
                 break;
 
+            case pyclustering_data_t::PYCLUSTERING_TYPE_CHAR:
+                delete[] (char *) data;
+                break;
+
+            case pyclustering_data_t::PYCLUSTERING_TYPE_WCHAR_T:
+                delete[] (wchar_t *) data;
+                break;
+
             default:
                 /* Memory Leak */
                 break;

@@ -1,23 +1,24 @@
-/**
-*
-* @authors Andrei Novikov (pyclustering@yandex.ru)
-* @date 2014-2020
-* @copyright GNU Public License
-*
-* GNU_PUBLIC_LICENSE
-*   pyclustering is free software: you can redistribute it and/or modify
-*   it under the terms of the GNU General Public License as published by
-*   the Free Software Foundation, either version 3 of the License, or
-*   (at your option) any later version.
-*
-*   pyclustering is distributed in the hope that it will be useful,
-*   but WITHOUT ANY WARRANTY; without even the implied warranty of
-*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*   GNU General Public License for more details.
-*
-*   You should have received a copy of the GNU General Public License
-*   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*
+/*!
+
+@authors Andrei Novikov (pyclustering@yandex.ru)
+@date 2014-2020
+@copyright GNU Public License
+
+@cond GNU_PUBLIC_LICENSE
+    pyclustering is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    pyclustering is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+@endcond
+
 */
 
 
@@ -92,6 +93,50 @@ TEST(utest_pyclustering, package_pointer_list) {
     container.push_back(new std::vector<int>({ 1, 2, 3, 4, 5}));
     template_pyclustering_package(container);
     delete container[0];
+}
+
+
+TEST(utest_pyclustering, package_char_message) {
+    const char * message = "message char";
+    std::shared_ptr<pyclustering_package> package = std::shared_ptr<pyclustering_package>(create_package(message));
+
+    ASSERT_NE(nullptr, package);
+    ASSERT_EQ(std::strlen(message) + 1, package->size);
+    ASSERT_EQ(PYCLUSTERING_TYPE_CHAR, package->type);
+    ASSERT_STREQ(message, (const char *)package->data);
+}
+
+
+TEST(utest_pyclustering, package_wchar_message) {
+    const wchar_t * message = L"message wchar_t";
+    std::shared_ptr<pyclustering_package> package = std::shared_ptr<pyclustering_package>(create_package(message));
+
+    ASSERT_NE(nullptr, package);
+    ASSERT_EQ(std::wcslen(message) + 1, package->size);
+    ASSERT_EQ(PYCLUSTERING_TYPE_WCHAR_T, package->type);
+    ASSERT_EQ(0, std::wcscmp(message, (const wchar_t *)package->data));
+}
+
+
+TEST(utest_pyclustering, package_string_message) {
+    std::string message = "message string";
+    std::shared_ptr<pyclustering_package> package = std::shared_ptr<pyclustering_package>(create_package(message));
+
+    ASSERT_NE(nullptr, package);
+    ASSERT_EQ(message.size() + 1, package->size);
+    ASSERT_EQ(PYCLUSTERING_TYPE_CHAR, package->type);
+    ASSERT_STREQ(message.c_str(), (const char *)package->data);
+}
+
+
+TEST(utest_pyclustering, package_wstring_message) {
+    std::wstring message = L"message wstring";
+    std::shared_ptr<pyclustering_package> package = std::shared_ptr<pyclustering_package>(create_package(message));
+
+    ASSERT_NE(nullptr, package);
+    ASSERT_EQ(message.size() + 1, package->size);
+    ASSERT_EQ(PYCLUSTERING_TYPE_WCHAR_T, package->type);
+    ASSERT_EQ(0, std::wcscmp(message.c_str(), (const wchar_t *)package->data));
 }
 
 

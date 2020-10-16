@@ -234,6 +234,7 @@
     <ClInclude Include="..\include\pyclustering\utils\metric.hpp" />
     <ClInclude Include="..\include\pyclustering\utils\random.hpp" />
     <ClInclude Include="..\include\pyclustering\utils\stats.hpp" />
+    <ClInclude Include="..\include\pyclustering\utils\traits.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{DBEBB335-D398-45F8-899A-503AFC64ACFE}</ProjectGuid>
