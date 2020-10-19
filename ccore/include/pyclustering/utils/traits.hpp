@@ -69,6 +69,48 @@ struct is_string : std::integral_constant<bool,
 > { };
 
 
+/*!
+
+@brief   Checks whether `Type` is a container and its elements type is fundamental.
+@details Provides the member constant value which is equal to `true`, if `TypeContainer` is the
+          has `value_type`, `size_type`, `const_iterator`, `cbegin()`, `cend()`. Otherwise, value is equal to `false`.
+
+@tparam Type: a type to check.
+
+*/
+template <typename, typename = std::void_t<>>
+struct is_container_with_fundamental_content : std::false_type { };
+
+
+/*!
+
+@brief   Checks whether `Type` is a container and its elements type is fundamental.
+@details Provides the member constant value which is equal to `true`, if `TypeContainer` is the
+          has `value_type`, `size_type`, `const_iterator`, `cbegin()`, `cend()`. Otherwise, value is equal to `false`.
+
+@tparam Type: a type to check.
+
+*/
+template <typename Type>
+struct is_container_with_fundamental_content <
+    Type, std::void_t<
+        typename Type::value_type,
+        typename Type::size_type,
+        typename Type::const_iterator,
+        decltype(std::declval<Type>().cbegin()),
+        decltype(std::declval<Type>().cend())
+    >
+> : std::is_fundamental<typename Type::value_type> { };
+
+
+template <typename Type>
+using remove_cvp = std::remove_cv<typename std::remove_pointer<Type>::type>;
+
+
+template <typename Type>
+using remove_cvp_t = typename remove_cvp<Type>::type;
+
+
 }
 
 }

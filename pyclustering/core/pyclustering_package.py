@@ -44,9 +44,9 @@ class pyclustering_package(Structure):
             }
     """
     
-    _fields_ = [ ("size", c_size_t),
-                 ("type", c_uint),
-                 ("data", POINTER(c_void_p)) ]
+    _fields_ = [("size", c_size_t),
+                ("type", c_uint),
+                ("data", POINTER(c_void_p))]
 
 
 
@@ -56,38 +56,41 @@ class pyclustering_type_data:
     
     """
     
-    PYCLUSTERING_TYPE_INT               = 0x00
-    PYCLUSTERING_TYPE_UNSIGNED_INT      = 0x01
-    PYCLUSTERING_TYPE_FLOAT             = 0x02
-    PYCLUSTERING_TYPE_DOUBLE            = 0x03
-    PYCLUSTERING_TYPE_LONG              = 0x04
-    PYCLUSTERING_TYPE_UNSIGNED_LONG     = 0x05
-    PYCLUSTERING_TYPE_LIST              = 0x06
-    PYCLUSTERING_TYPE_SIZE_T            = 0x07
-    PYCLUSTERING_TYPE_UNDEFINED         = 0x08
+    PYCLUSTERING_TYPE_INT = 0
+    PYCLUSTERING_TYPE_UNSIGNED_INT = 1
+    PYCLUSTERING_TYPE_FLOAT = 2
+    PYCLUSTERING_TYPE_DOUBLE = 3
+    PYCLUSTERING_TYPE_LONG = 4
+    PYCLUSTERING_TYPE_CHAR = 5
+    PYCLUSTERING_TYPE_LIST = 6
+    PYCLUSTERING_TYPE_SIZE_T = 7
+    PYCLUSTERING_TYPE_WCHAR_T = 8
+    PYCLUSTERING_TYPE_UNDEFINED = 9
 
     __CTYPE_PYCLUSTERING_MAP = { 
-        c_int                           : PYCLUSTERING_TYPE_INT,
-        c_uint                          : PYCLUSTERING_TYPE_UNSIGNED_INT,
-        c_float                         : PYCLUSTERING_TYPE_FLOAT,
-        c_double                        : PYCLUSTERING_TYPE_DOUBLE,
-        c_long                          : PYCLUSTERING_TYPE_LONG,
-        c_ulong                         : PYCLUSTERING_TYPE_UNSIGNED_LONG,
-        POINTER(pyclustering_package)   : PYCLUSTERING_TYPE_LIST,
-        c_size_t                        : PYCLUSTERING_TYPE_SIZE_T,
-        None                            : PYCLUSTERING_TYPE_UNDEFINED
+        c_int: PYCLUSTERING_TYPE_INT,
+        c_uint: PYCLUSTERING_TYPE_UNSIGNED_INT,
+        c_float: PYCLUSTERING_TYPE_FLOAT,
+        c_double: PYCLUSTERING_TYPE_DOUBLE,
+        c_long: PYCLUSTERING_TYPE_LONG,
+        c_char: PYCLUSTERING_TYPE_CHAR,
+        POINTER(pyclustering_package): PYCLUSTERING_TYPE_LIST,
+        c_size_t: PYCLUSTERING_TYPE_SIZE_T,
+        c_wchar: PYCLUSTERING_TYPE_WCHAR_T,
+        None: PYCLUSTERING_TYPE_UNDEFINED
     }
 
     __PYCLUSTERING_CTYPE_MAP = {
-        PYCLUSTERING_TYPE_INT             : c_int,
-        PYCLUSTERING_TYPE_UNSIGNED_INT    : c_uint,
-        PYCLUSTERING_TYPE_FLOAT           : c_float,
-        PYCLUSTERING_TYPE_DOUBLE          : c_double,
-        PYCLUSTERING_TYPE_LONG            : c_long,
-        PYCLUSTERING_TYPE_UNSIGNED_LONG   : c_ulong,
-        PYCLUSTERING_TYPE_LIST            : POINTER(pyclustering_package),
-        PYCLUSTERING_TYPE_SIZE_T          : c_size_t,
-        PYCLUSTERING_TYPE_UNDEFINED       : None
+        PYCLUSTERING_TYPE_INT: c_int,
+        PYCLUSTERING_TYPE_UNSIGNED_INT: c_uint,
+        PYCLUSTERING_TYPE_FLOAT: c_float,
+        PYCLUSTERING_TYPE_DOUBLE: c_double,
+        PYCLUSTERING_TYPE_LONG: c_long,
+        PYCLUSTERING_TYPE_CHAR: c_char,
+        PYCLUSTERING_TYPE_LIST: POINTER(pyclustering_package),
+        PYCLUSTERING_TYPE_SIZE_T: c_size_t,
+        PYCLUSTERING_TYPE_WCHAR_T: c_wchar,
+        PYCLUSTERING_TYPE_UNDEFINED: None
     }
 
     @staticmethod
@@ -267,15 +270,21 @@ class package_extractor:
     
     
     def __unpack_data(self, pointer_package, pointer_data, type_package):
-        result = []
+        if (type_package == pyclustering_type_data.PYCLUSTERING_TYPE_CHAR) or (
+                type_package == pyclustering_type_data.PYCLUSTERING_TYPE_WCHAR_T):
+            result = str()
+            append_element = lambda string, symbol: string + symbol
+        else:
+            result = []
+            append_element = lambda container, item: container.append(item)
         
         for index in range(0, pointer_package[0].size):
             if type_package == pyclustering_type_data.PYCLUSTERING_TYPE_LIST:
                 pointer_package = cast(pointer_data[index], (POINTER(pyclustering_package)))
-                result.append(self.__extract_data(pointer_package))
-            
+                append_element(result, self.__extract_data(pointer_package))
+
             else:
-                result.append(pointer_data[index])
+                append_element(result, pointer_data[index])
         
         return result
 

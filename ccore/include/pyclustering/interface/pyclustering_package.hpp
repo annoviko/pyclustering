@@ -294,7 +294,7 @@ pyclustering_package * create_package(const std::size_t p_size, const TypeValue 
 
 /*!
 
-@brief   Create pyclustering package using container that supports `std::begin`, `std::end` functions and incremental iterators.
+@brief   Create pyclustering package using pointer to one-dimensional container that supports `std::begin`, `std::end` functions and incremental iterators.
 @details All data from the container will be copied to the package.
 
 @param[in] data: a pointer to container that is used to create pyclustering container.
@@ -307,8 +307,10 @@ pyclustering_package * create_package(const std::size_t p_size, const TypeValue 
 template <typename TypeContainer,
     typename std::enable_if<
         std::is_pointer<TypeContainer>::value &&
-        !pyclustering::utils::traits::is_raw_string<TypeContainer>::value &&
-        !pyclustering::utils::traits::is_string<TypeContainer>::value
+        !pyclustering::utils::traits::is_string<TypeContainer>::value &&
+        pyclustering::utils::traits::is_container_with_fundamental_content<
+            typename pyclustering::utils::traits::remove_cvp_t<TypeContainer>
+        >::value
     >::type* = nullptr
 >
 pyclustering_package * create_package(TypeContainer data) {
@@ -339,7 +341,7 @@ pyclustering_package * create_package(TypeContainer data) {
 @return  Pointer to created pyclustering package.
 
 */
-template <class TypeObject>
+template <typename TypeObject>
 pyclustering_package * create_package(const std::vector< std::vector<TypeObject> > * const data) {
     pyclustering_package * package = new pyclustering_package(pyclustering_data_t::PYCLUSTERING_TYPE_LIST);
 
@@ -366,7 +368,7 @@ pyclustering_package * create_package(const std::vector< std::vector<TypeObject>
 @return  Pointer to created pyclustering package.
 
 */
-template <class TypeObject>
+template <typename TypeObject>
 pyclustering_package * create_package(const std::vector< std::vector<TypeObject> * > * const data) {
    pyclustering_package * package = new pyclustering_package(pyclustering_data_t::PYCLUSTERING_TYPE_LIST);
 
