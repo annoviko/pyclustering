@@ -315,7 +315,7 @@ template <typename TypeContainer,
 >
 pyclustering_package * create_package(TypeContainer data) {
     using container_t = typename std::remove_pointer<TypeContainer>::type;
-    using contaner_data_t = container_t::value_type;
+    using contaner_data_t = typename container_t::value_type;
 
     pyclustering_package * package = create_package<contaner_data_t>(data->size());
     if (package) {

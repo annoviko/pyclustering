@@ -49,6 +49,9 @@ def clique(sample, intervals, threshold):
     results = package_extractor(package).extract()
     ccore.free_pyclustering_package(package)
 
+    if isinstance(results, bytes):
+        return results.decode('utf-8')
+
     return (results[clique_package_indexer.CLIQUE_PACKAGE_INDEX_CLUSTERS],
             results[clique_package_indexer.CLIQUE_PACKAGE_INDEX_NOISE],
             results[clique_package_indexer.CLIQUE_PACKAGE_INDEX_LOGICAL_LOCATION],

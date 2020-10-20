@@ -26,6 +26,13 @@
 #include <pyclustering/cluster/clique.hpp>
 
 
+
+constexpr const char * CLIQUE_NOT_ENOUGH_MEMORY = "There is not enough memory to perform cluster analysis using CLIQUE algorithm. "
+    "CLIQUE algorithm might not be suitable in case of high dimension data because CLIQUE is a grid-based algorithm and "
+    "the amount of CLIQUE blocks (cells) is defined as '[amount_intervals]^[amount_dimensions]'.";
+
+
+
 pyclustering_package * clique_algorithm(const pyclustering_package * const p_sample, const std::size_t p_intervals, const std::size_t p_threshold) try {
     pyclustering::dataset input_dataset;
     p_sample->extract(input_dataset);
@@ -60,6 +67,9 @@ pyclustering_package * clique_algorithm(const pyclustering_package * const p_sam
     }
 
     return package;
+}
+catch (std::bad_alloc &) {
+    return create_package(CLIQUE_NOT_ENOUGH_MEMORY);
 }
 catch (std::exception & p_exception) {
     return create_package(p_exception.what());

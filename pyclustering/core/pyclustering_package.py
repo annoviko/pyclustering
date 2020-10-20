@@ -115,12 +115,18 @@ class package_builder:
     @brief Package builder provides service to create 'pyclustering_package' from data that is stored in 'list' container.
 
     """
-    def __init__(self, dataset, c_data_type):
+    def __init__(self, dataset, c_data_type=None):
         """!
         @brief Initialize package builder object by dataset.
+        @details String data is packed as it is without encoding. If string encoding is required then it should be
+                  provided already encoded, for example in case of `utf-8`:
+        @code
+            encoded_string = "String to pack".encode('utf-8')
+            pyclustering_package = package_builder(encoded_string)
+        @endcode
         
         @param[in] dataset (list): Data that should be packed in 'pyclustering_package'.
-        @param[in] c_data_type (ctype.type): If specified than specified data type is used for data storing in package. 
+        @param[in] c_data_type (ctype.type): Data C-type that is used to store data in the package.
         
         """
         self.__dataset = dataset
@@ -150,7 +156,10 @@ class package_builder:
 
     def __create_package(self, dataset):
         dataset_package = pyclustering_package()
-        
+
+        if isinstance(dataset, str):
+            return self.__create_package_string(dataset_package, dataset)
+
         if isinstance(dataset, numpy.matrix):
             return self.__create_package_numpy_matrix(dataset_package, dataset)
         
@@ -235,6 +244,13 @@ class package_builder:
         return pointer(dataset_package)
 
 
+    def __create_package_string(self, dataset_package, string_utf8):
+        dataset_package.size = len(string_utf8)
+        dataset_package.type = pyclustering_type_data.PYCLUSTERING_TYPE_CHAR
+        dataset_package.data = cast(string_utf8, POINTER(c_void_p))
+        return pointer(dataset_package)
+
+
 
 class package_extractor:
     """!
@@ -270,13 +286,15 @@ class package_extractor:
     
     
     def __unpack_data(self, pointer_package, pointer_data, type_package):
-        if (type_package == pyclustering_type_data.PYCLUSTERING_TYPE_CHAR) or (
-                type_package == pyclustering_type_data.PYCLUSTERING_TYPE_WCHAR_T):
-            result = str()
-            append_element = lambda string, symbol: string + symbol
-        else:
-            result = []
-            append_element = lambda container, item: container.append(item)
+        if type_package == pyclustering_type_data.PYCLUSTERING_TYPE_CHAR:
+            pointer_string = cast(pointer_data, c_char_p)
+            return pointer_string.value
+
+        elif type_package == pyclustering_type_data.PYCLUSTERING_TYPE_WCHAR_T:
+            raise NotImplementedError("Data type 'wchar_t' is not supported.")
+
+        result = []
+        append_element = lambda container, item: container.append(item)
         
         for index in range(0, pointer_package[0].size):
             if type_package == pyclustering_type_data.PYCLUSTERING_TYPE_LIST:
@@ -290,10 +308,11 @@ class package_extractor:
 
 
     def __unpack_pointer_data(self, pointer_package):
-        type_package = pointer_package[0].type
+        current_package = pointer_package[0]
+        type_package = current_package.type
         
-        if pointer_package[0].size == 0:
+        if current_package.size == 0:
             return []
-        
-        pointer_data = cast(pointer_package[0].data, POINTER(pyclustering_type_data.get_ctype(type_package)))
+
+        pointer_data = cast(current_package.data, POINTER(pyclustering_type_data.get_ctype(type_package)))
         return self.__unpack_data(pointer_package, pointer_data, type_package)

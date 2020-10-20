@@ -38,6 +38,15 @@ namespace traits {
 
 /*!
 
+@brief   Utility metafunction that maps a sequence of any types to the type `void`.
+
+*/
+template<class...>
+using void_t = void;
+
+
+/*!
+
 @brief   Checks whether `TypeRawString` is a raw-string type. 
 @details Provides the member constant value which is equal to `true`, if `TypeRawString` is the 
           type `char *`, `wchar_t *`, including any cv-qualified variants. Otherwise, value is equal to `false`.
@@ -78,7 +87,7 @@ struct is_string : std::integral_constant<bool,
 @tparam Type: a type to check.
 
 */
-template <typename, typename = std::void_t<>>
+template <typename, typename = void_t<>>
 struct is_container_with_fundamental_content : std::false_type { };
 
 
@@ -93,7 +102,7 @@ struct is_container_with_fundamental_content : std::false_type { };
 */
 template <typename Type>
 struct is_container_with_fundamental_content <
-    Type, std::void_t<
+    Type, void_t<
         typename Type::value_type,
         typename Type::size_type,
         typename Type::const_iterator,
@@ -103,10 +112,24 @@ struct is_container_with_fundamental_content <
 > : std::is_fundamental<typename Type::value_type> { };
 
 
+/*!
+
+@brief   Removes pointer, `const`, `volatile` from type `Type` if there are have a place in the type.
+
+@tparam Type: a type to update.
+
+*/
 template <typename Type>
 using remove_cvp = std::remove_cv<typename std::remove_pointer<Type>::type>;
 
 
+/*!
+
+@brief   Helper type that removes pointer, `const`, `volatile` from type `Type` if there are have a place in the type.
+
+@tparam Type: a type to update.
+
+*/
 template <typename Type>
 using remove_cvp_t = typename remove_cvp<Type>::type;
 
