@@ -48,16 +48,16 @@ enum clique_package_indexer {
 
 /*!
 
-@brief   Clustering algorithm CLIQUE returns allocated clusters.
+@brief   Performs cluster analysis of an input data using CLIQUE algorithm.
 @details Caller should destroy returned clustering data using 'cure_data_destroy' when
           it is not required anymore.
 
 @param[in] p_sample: input data for clustering.
 @param[in] p_intervals: amount of intervals in each dimension that defines amount of CLIQUE blocks.
-@param[in] p_threshold: minimum number of objects that should be contained by non-noise block.
+@param[in] p_threshold: minimum number of objects that should be contained by non-outlier CLIQUE block.
 
-@return  Returns pointer to cure data - clustering result that can be used for obtaining
-          allocated clusters, representative points and means of each cluster.
+@return  Returns pointer to CLIQUE data - clustering result that can be used to obtain allocated clusters, outliers, 
+          logical locations, points captured by each block, min and max spatial corners.
 
 */
 extern "C" DECLARATION pyclustering_package * clique_algorithm(const pyclustering_package * const p_sample, const std::size_t p_intervals, const std::size_t p_threshold);

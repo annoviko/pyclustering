@@ -26,7 +26,6 @@
 
 
 import itertools
-import warnings
 
 from pyclustering.cluster import cluster_visualizer
 from pyclustering.cluster.encoder import type_encoding
@@ -43,6 +42,7 @@ try:
     import matplotlib.patches as patches
     import matplotlib.animation as animation
 except Exception as error_instance:
+    import warnings
     warnings.warn("Impossible to import matplotlib (please, install 'matplotlib'), pyclustering's visualization "
                   "functionality is not available (details: '%s')." % str(error_instance))
 

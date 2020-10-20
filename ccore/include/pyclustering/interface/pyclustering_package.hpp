@@ -294,7 +294,7 @@ pyclustering_package * create_package(const std::size_t p_size, const TypeValue 
 
 /*!
 
-@brief   Create pyclustering package using pointer to one-dimensional container that supports `std::begin`, `std::end` functions and incremental iterators.
+@brief   Create pyclustering package using pointer to one-dimensional container with fundamental data and that container supports `std::begin`, `std::end` methods and incremental iterators.
 @details All data from the container will be copied to the package.
 
 @param[in] data: a pointer to container that is used to create pyclustering container.
@@ -385,10 +385,10 @@ pyclustering_package * create_package(const std::vector< std::vector<TypeObject>
 
 /*!
 
-@brief   Create pyclustering package using raw string line value such as `char *`, `wchar_t *` including any cv-qualified variants.
+@brief   Create pyclustering package using raw string such as `char *`, `wchar_t *` including any cv-qualified variants.
 @details All data from the raw string will be copied to the package.
 
-@param[in] p_message: string line that is used to create pyclustering container.
+@param[in] p_message: string line that is used to create pyclustering package.
 
 @tparam TypeRawString: a character type that is used by the string line.
 

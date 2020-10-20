@@ -109,8 +109,30 @@ TEST(utest_pyclustering, package_char_message) {
 }
 
 
+TEST(utest_pyclustering, package_empty_char_message) {
+    const char * message = "";
+    std::shared_ptr<pyclustering_package> package = std::shared_ptr<pyclustering_package>(create_package(message));
+
+    ASSERT_NE(nullptr, package);
+    ASSERT_EQ(std::strlen(message) + 1, package->size);
+    ASSERT_EQ(PYCLUSTERING_TYPE_CHAR, package->type);
+    ASSERT_STREQ(message, (const char *)package->data);
+}
+
+
 TEST(utest_pyclustering, package_wchar_message) {
     const wchar_t * message = L"message wchar_t";
+    std::shared_ptr<pyclustering_package> package = std::shared_ptr<pyclustering_package>(create_package(message));
+
+    ASSERT_NE(nullptr, package);
+    ASSERT_EQ(std::wcslen(message) + 1, package->size);
+    ASSERT_EQ(PYCLUSTERING_TYPE_WCHAR_T, package->type);
+    ASSERT_EQ(0, std::wcscmp(message, (const wchar_t *)package->data));
+}
+
+
+TEST(utest_pyclustering, package_empty_wchar_message) {
+    const wchar_t * message = L"";
     std::shared_ptr<pyclustering_package> package = std::shared_ptr<pyclustering_package>(create_package(message));
 
     ASSERT_NE(nullptr, package);
@@ -131,8 +153,30 @@ TEST(utest_pyclustering, package_string_message) {
 }
 
 
+TEST(utest_pyclustering, package_empty_string_message) {
+    std::string message = "";
+    std::shared_ptr<pyclustering_package> package = std::shared_ptr<pyclustering_package>(create_package(message));
+
+    ASSERT_NE(nullptr, package);
+    ASSERT_EQ(message.size() + 1, package->size);
+    ASSERT_EQ(PYCLUSTERING_TYPE_CHAR, package->type);
+    ASSERT_STREQ(message.c_str(), (const char *)package->data);
+}
+
+
 TEST(utest_pyclustering, package_wstring_message) {
     std::wstring message = L"message wstring";
+    std::shared_ptr<pyclustering_package> package = std::shared_ptr<pyclustering_package>(create_package(message));
+
+    ASSERT_NE(nullptr, package);
+    ASSERT_EQ(message.size() + 1, package->size);
+    ASSERT_EQ(PYCLUSTERING_TYPE_WCHAR_T, package->type);
+    ASSERT_EQ(0, std::wcscmp(message.c_str(), (const wchar_t *)package->data));
+}
+
+
+TEST(utest_pyclustering, package_empty_wstring_message) {
+    std::wstring message = L"";
     std::shared_ptr<pyclustering_package> package = std::shared_ptr<pyclustering_package>(create_package(message));
 
     ASSERT_NE(nullptr, package);

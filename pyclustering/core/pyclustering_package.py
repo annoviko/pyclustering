@@ -126,7 +126,7 @@ class package_builder:
         @endcode
         
         @param[in] dataset (list): Data that should be packed in 'pyclustering_package'.
-        @param[in] c_data_type (ctype.type): Data C-type that is used to store data in the package.
+        @param[in] c_data_type (ctype.type): C-type data that is used to store data in the package.
         
         """
         self.__dataset = dataset
@@ -244,10 +244,10 @@ class package_builder:
         return pointer(dataset_package)
 
 
-    def __create_package_string(self, dataset_package, string_utf8):
-        dataset_package.size = len(string_utf8)
+    def __create_package_string(self, dataset_package, string_value):
+        dataset_package.size = len(string_value)
         dataset_package.type = pyclustering_type_data.PYCLUSTERING_TYPE_CHAR
-        dataset_package.data = cast(string_utf8, POINTER(c_void_p))
+        dataset_package.data = cast(string_value, POINTER(c_void_p))
         return pointer(dataset_package)
 
 

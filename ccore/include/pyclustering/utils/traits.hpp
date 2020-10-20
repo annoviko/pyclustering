@@ -114,7 +114,7 @@ struct is_container_with_fundamental_content <
 
 /*!
 
-@brief   Removes pointer, `const`, `volatile` from type `Type` if there are have a place in the type.
+@brief   Removes pointer, `const`, `volatile` from type `Type` if they have a place in the type.
 
 @tparam Type: a type to update.
 
@@ -125,7 +125,7 @@ using remove_cvp = std::remove_cv<typename std::remove_pointer<Type>::type>;
 
 /*!
 
-@brief   Helper type that removes pointer, `const`, `volatile` from type `Type` if there are have a place in the type.
+@brief   Helper type that removes pointer, `const`, `volatile` from type `Type` if they have a place in the type.
 
 @tparam Type: a type to update.
 
