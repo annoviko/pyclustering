@@ -26,6 +26,8 @@
 
 #include <pyclustering/interface/pyclustering_package.hpp>
 
+#include <cstring>
+#include <memory>
 #include <vector>
 
 
