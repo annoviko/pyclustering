@@ -1,23 +1,24 @@
-/**
-*
-* @authors Andrei Novikov (pyclustering@yandex.ru)
-* @date 2014-2020
-* @copyright GNU Public License
-*
-* GNU_PUBLIC_LICENSE
-*   pyclustering is free software: you can redistribute it and/or modify
-*   it under the terms of the GNU General Public License as published by
-*   the Free Software Foundation, either version 3 of the License, or
-*   (at your option) any later version.
-*
-*   pyclustering is distributed in the hope that it will be useful,
-*   but WITHOUT ANY WARRANTY; without even the implied warranty of
-*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*   GNU General Public License for more details.
-*
-*   You should have received a copy of the GNU General Public License
-*   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*
+/*!
+
+@authors Andrei Novikov (pyclustering@yandex.ru)
+@date 2014-2020
+@copyright GNU Public License
+
+@cond GNU_PUBLIC_LICENSE
+    pyclustering is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    pyclustering is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+@endcond
+
 */
 
 #include <pyclustering/interface/clique_interface.h>
@@ -25,7 +26,14 @@
 #include <pyclustering/cluster/clique.hpp>
 
 
-pyclustering_package * clique_algorithm(const pyclustering_package * const p_sample, const std::size_t p_intervals, const std::size_t p_threshold) {
+
+constexpr const char * CLIQUE_NOT_ENOUGH_MEMORY = "There is not enough memory to perform cluster analysis using CLIQUE algorithm. "
+    "CLIQUE algorithm might not be suitable in case of high dimension data because CLIQUE is a grid-based algorithm and "
+    "the amount of CLIQUE blocks (cells) is defined as '[amount_intervals]^[amount_dimensions]'.";
+
+
+
+pyclustering_package * clique_algorithm(const pyclustering_package * const p_sample, const std::size_t p_intervals, const std::size_t p_threshold) try {
     pyclustering::dataset input_dataset;
     p_sample->extract(input_dataset);
 
@@ -59,4 +67,10 @@ pyclustering_package * clique_algorithm(const pyclustering_package * const p_sam
     }
 
     return package;
+}
+catch (std::bad_alloc &) {
+    return create_package(CLIQUE_NOT_ENOUGH_MEMORY);
+}
+catch (std::exception & p_exception) {
+    return create_package(p_exception.what());
 }

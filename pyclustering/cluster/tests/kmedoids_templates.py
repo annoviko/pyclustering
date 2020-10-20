@@ -32,6 +32,8 @@ from pyclustering.tests.assertion import assertion
 from pyclustering.cluster.kmedoids import kmedoids
 from pyclustering.cluster.center_initializer import kmeans_plusplus_initializer
 
+from pyclustering.samples import answer_reader
+
 from pyclustering.utils import read_sample, calculate_distance_matrix
 from pyclustering.utils.metric import distance_metric, type_metric
 
@@ -71,7 +73,7 @@ class kmedoids_test_template:
             if initialize_medoids is not None:
                 initial_medoids = kmeans_plusplus_initializer(sample, initialize_medoids).initialize(return_index=True)
 
-            kmedoids_instance = kmedoids(input_data, initial_medoids, 0.001, ccore_flag, metric=metric, data_type=data_type, itermax=itermax)
+            kmedoids_instance = kmedoids(input_data, initial_medoids, 0.001, ccore=ccore_flag, metric=metric, data_type=data_type, itermax=itermax)
             kmedoids_instance.process()
 
             clusters = kmedoids_instance.get_clusters()
@@ -105,9 +107,9 @@ class kmedoids_test_template:
 
     @staticmethod
     def templateClusterAllocationOneDimensionData(ccore_flag):
-        input_data = [[random()] for i in range(10)] + [ [random() + 3] for i in range(10) ] + [ [random() + 5] for i in range(10) ] + [ [random() + 8] for i in range(10) ]
-         
-        kmedoids_instance = kmedoids(input_data, [ 5, 15, 25, 35 ], 0.025, ccore_flag)
+        input_data = [[random()] for _ in range(10)] + [[random() + 3] for _ in range(10)] + [[random() + 5] for _ in range(10)] + [[random() + 8] for _ in range(10)]
+
+        kmedoids_instance = kmedoids(input_data, [5, 15, 25, 35], 0.025, ccore_flag)
         kmedoids_instance.process()
         clusters = kmedoids_instance.get_clusters()
          
@@ -122,12 +124,12 @@ class kmedoids_test_template:
             initial_medoids = []
             for _ in range(amount_clusters):
                 index_point = randint(0, len(data) - 1)
-                while (index_point in initial_medoids):
+                while index_point in initial_medoids:
                     index_point = randint(0, len(data) - 1)
                 
                 initial_medoids.append(index_point)
-            
-        kmedoids_instance = kmedoids(data, initial_medoids, 0.025, ccore = ccore_flag)
+        
+        kmedoids_instance = kmedoids(data, initial_medoids, 0.025, ccore=ccore_flag)
         kmedoids_instance.process()
         clusters = kmedoids_instance.get_clusters()
         
@@ -136,13 +138,13 @@ class kmedoids_test_template:
         for cluster in clusters:
             amount_objects += len(cluster)
         
-        assertion.eq(amount_objects, len(data))
+        assertion.eq(len(data), amount_objects)
 
 
     @staticmethod
-    def templateClusterAllocationTheSameObjects(number_objects, number_clusters, ccore_flag = False):
+    def templateClusterAllocationTheSameObjects(number_objects, number_clusters, ccore_flag=False):
         value = random()
-        input_data = [ [value] ] * number_objects
+        input_data = [[value]] * number_objects
         
         initial_medoids = []
         step = int(math.floor(number_objects / number_clusters))
@@ -183,3 +185,47 @@ class kmedoids_test_template:
         closest_clusters = kmedoids_instance.predict(points)
         assertion.eq(len(expected_closest_clusters), len(closest_clusters))
         assertion.true(numpy.array_equal(numpy.array(expected_closest_clusters), closest_clusters))
+
+
+    @staticmethod
+    def clustering_with_answer(data_file, answer_file, ccore, **kwargs):
+        data = read_sample(data_file)
+        reader = answer_reader(answer_file)
+
+        amount_medoids = len(reader.get_clusters())
+
+        initial_medoids = kmeans_plusplus_initializer(data, amount_medoids, **kwargs).initialize(return_index=True)
+        kmedoids_instance = kmedoids(data, initial_medoids, 0.001, ccore, **kwargs)
+
+        kmedoids_instance.process()
+
+        clusters = kmedoids_instance.get_clusters()
+        medoids = kmedoids_instance.get_medoids()
+
+        expected_length_clusters = sorted(reader.get_cluster_lengths())
+
+        assertion.eq(len(expected_length_clusters), len(medoids))
+        assertion.eq(len(data), sum([len(cluster) for cluster in clusters]))
+        assertion.eq(sum(expected_length_clusters), sum([len(cluster) for cluster in clusters]))
+
+        unique_medoids = set()
+        for medoid in medoids:
+            assertion.false(medoid in unique_medoids, message="Medoids '%s' is not unique (actual medoids: '%s')" % (str(medoid), str(unique_medoids)))
+            unique_medoids.add(medoid)
+
+        unique_points = set()
+        for cluster in clusters:
+            for point in cluster:
+                assertion.false(point in unique_points, message="Point '%s' is already assigned to one of the clusters." % str(point))
+                unique_points.add(point)
+
+        assertion.eq(expected_length_clusters, sorted([len(cluster) for cluster in clusters]))
+
+        expected_clusters = reader.get_clusters()
+        for actual_cluster in clusters:
+            cluster_found = False
+            for expected_cluster in expected_clusters:
+                if actual_cluster == expected_cluster:
+                    cluster_found = True
+
+            assertion.true(cluster_found, message="Actual cluster '%s' is not found among expected." % str(actual_cluster))

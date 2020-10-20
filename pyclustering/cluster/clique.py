@@ -601,13 +601,16 @@ class clique:
                 user's target platform is supported.
 
         """
-        (self.__clusters, self.__noise, block_logical_locations, block_max_corners, block_min_corners, block_points) = \
-            wrapper.clique(self.__data, self.__amount_intervals, self.__density_threshold)
+        result = wrapper.clique(self.__data, self.__amount_intervals, self.__density_threshold)
+        if isinstance(result, str):
+            raise RuntimeError("Error has been detected. " + result)
+
+        (self.__clusters, self.__noise, block_logical_locations, max_corners, min_corners, block_points) = result
 
         amount_cells = len(block_logical_locations)
         for i in range(amount_cells):
             self.__cells.append(clique_block(block_logical_locations[i],
-                                             spatial_block(block_max_corners[i], block_min_corners[i]),
+                                             spatial_block(max_corners[i], min_corners[i]),
                                              block_points[i],
                                              True))
 

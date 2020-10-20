@@ -236,7 +236,7 @@ def average_neighbor_distance(points, num_neigh):
 
 def medoid(data, indexes=None, **kwargs):
     """!
-    @brief Calculate medoid for input points using Euclidean distance.
+    @brief Calculate medoid for input points.
     
     @param[in] data (list): Set of points for that median should be calculated.
     @param[in] indexes (list): Indexes of input set of points that will be taken into account during median calculation.

@@ -80,9 +80,15 @@ class assertion:
             raise AssertionError(error_message)
 
     @staticmethod
-    def false(argument1):
+    def false(argument1, **kwargs):
+        message = kwargs.get('message', None)
+
+        error_message = "Expected: 'False', Actual: '%s'" % str(argument1)
+        if message:
+            error_message = "%s, Info: '%s'" % (error_message, message)
+
         if argument1:
-            raise AssertionError("Expected: 'False', Actual: '" + str(argument1) + "'")
+            raise AssertionError(error_message)
 
     @staticmethod
     def fail(message=None):
@@ -90,3 +96,15 @@ class assertion:
             raise AssertionError("Failure")
         else:
             raise AssertionError("Failure: '" + message + "'")
+
+    @staticmethod
+    def exception(expected_exception, callable_object, *args, **kwargs):
+        try:
+            callable_object(*args, **kwargs)
+        except expected_exception:
+            return
+        except Exception as actual_exception:
+            raise AssertionError("Expected: '%s', Actual: '%s'" %
+                                 (expected_exception.__name__, actual_exception.__class__.__name__))
+
+        raise AssertionError("Expected: '%s', Actual: 'None'" % expected_exception.__name__)

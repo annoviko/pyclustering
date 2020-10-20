@@ -1,7 +1,7 @@
 """!
 
 @brief Cluster analysis algorithm: K-Medoids.
-@details Implementation based on papers @cite book::algorithms_for_clustering_data, @cite book::finding_groups_in_data.
+@details Implementation based on paper @cite inproceedings::cluster::kmedoids::1.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2020
@@ -40,14 +40,15 @@ from pyclustering.core.metric_wrapper import metric_wrapper
 
 class kmedoids:
     """!
-    @brief Class represents clustering algorithm K-Medoids.
-    @details The algorithm is less sensitive to outliers tham K-Means. The principle difference between K-Medoids and K-Medians is that
-             K-Medoids uses existed points from input data space as medoids, but median in K-Medians can be unreal object (not from
-             input data space).
-    
-    Clustering example:
+    @brief Class represents clustering algorithm K-Medoids (PAM algorithm).
+    @details PAM is a partitioning clustering algorithm that uses the medoids instead of centers like in case of K-Means
+              algorithm. Medoid is an object with the smallest dissimilarity to all others in the cluster. PAM algorithm
+              complexity is \f$O\left ( k\left ( n-k \right )^{2} \right )\f$.
+
+    There is an example where PAM algorithm is used to cluster 'TwoDiamonds' data:
     @code
         from pyclustering.cluster.kmedoids import kmedoids
+        from pyclustering.cluster.center_initializer import kmeans_plusplus_initializer
         from pyclustering.cluster import cluster_visualizer
         from pyclustering.utils import read_sample
         from pyclustering.samples.definitions import FCPS_SAMPLES
@@ -55,24 +56,29 @@ class kmedoids:
         # Load list of points for cluster analysis.
         sample = read_sample(FCPS_SAMPLES.SAMPLE_TWO_DIAMONDS)
 
-        # Set random initial medoids.
-        initial_medoids = [1, 500]
+        # Initialize initial medoids using K-Means++ algorithm
+        initial_medoids = kmeans_plusplus_initializer(sample, 2).initialize(return_index=True)
 
-        # Create instance of K-Medoids algorithm.
+        # Create instance of K-Medoids (PAM) algorithm.
         kmedoids_instance = kmedoids(sample, initial_medoids)
 
         # Run cluster analysis and obtain results.
         kmedoids_instance.process()
         clusters = kmedoids_instance.get_clusters()
+        medoids = kmedoids_instance.get_medoids()
 
-        # Show allocated clusters.
-        print(clusters)
+        # Print allocated clusters.
+        print("Clusters:", clusters)
 
-        # Display clusters.
+        # Display clustering results.
         visualizer = cluster_visualizer()
         visualizer.append_clusters(clusters, sample)
+        visualizer.append_cluster(initial_medoids, sample, markersize=12, marker='*', color='gray')
+        visualizer.append_cluster(medoids, sample, markersize=14, marker='*', color='black')
         visualizer.show()
     @endcode
+
+    @image html pam_clustering_two_diamonds.png "Fig. 1. K-Medoids (PAM) clustering results 'TwoDiamonds'."
 
     Metric for calculation distance between points can be specified by parameter additional 'metric':
     @code
@@ -106,7 +112,7 @@ class kmedoids:
     """
     
     
-    def __init__(self, data, initial_index_medoids, tolerance=0.001, ccore=True, **kwargs):
+    def __init__(self, data, initial_index_medoids, tolerance=0.0001, ccore=True, **kwargs):
         """!
         @brief Constructor of clustering algorithm K-Medoids.
         
@@ -124,7 +130,10 @@ class kmedoids:
         """
         self.__pointer_data = data
         self.__clusters = []
-        self.__medoid_indexes = initial_index_medoids
+        self.__labels = [-1] * len(data)
+        self.__medoid_indexes = initial_index_medoids[:]
+        self.__distance_first_medoid = [float('inf')] * len(data)
+        self.__distance_second_medoid = [float('inf')] * len(data)
         self.__tolerance = tolerance
 
         self.__metric = kwargs.get('metric', distance_metric(type_metric.EUCLIDEAN_SQUARE))
@@ -159,15 +168,22 @@ class kmedoids:
         
         else:
             changes = float('inf')
+            previous_deviation, current_deviation = float('inf'), float('inf')
+
             iterations = 0
 
-            while changes > self.__tolerance and iterations < self.__itermax:
-                self.__clusters = self.__update_clusters()
-                update_medoid_indexes = self.__update_medoids()
+            if self.__itermax > 0:
+                current_deviation = self.__update_clusters()
 
-                changes = max([self.__distance_calculator(self.__medoid_indexes[index], update_medoid_indexes[index]) for index in range(len(update_medoid_indexes))])
+            while (changes > self.__tolerance) and (iterations < self.__itermax):
+                swap_cost = self.__swap_medoids()
 
-                self.__medoid_indexes = update_medoid_indexes
+                if swap_cost != float('inf'):
+                    previous_deviation = current_deviation
+                    current_deviation = self.__update_clusters()
+                    changes = previous_deviation - current_deviation
+                else:
+                    return self
 
                 iterations += 1
 
@@ -212,10 +228,10 @@ class kmedoids:
         if len(self.__clusters) == 0:
             return []
 
-        medoids = [ self.__pointer_data[index] for index in self.__medoid_indexes ]
+        medoids = [self.__pointer_data[index] for index in self.__medoid_indexes]
         differences = numpy.zeros((len(points), len(medoids)))
         for index_point in range(len(points)):
-            differences[index_point] = [ self.__metric(points[index_point], center) for center in medoids ]
+            differences[index_point] = [self.__metric(points[index_point], center) for center in medoids]
 
         return numpy.argmin(differences, axis=1)
 
@@ -299,45 +315,89 @@ class kmedoids:
 
     def __update_clusters(self):
         """!
-        @brief Calculate distance to each point from the each cluster. 
+        @brief Calculate distance to each point from the each cluster.
         @details Nearest points are captured by according clusters and as a result clusters are updated.
-        
-        @return (list) updated clusters as list of clusters where each cluster contains indexes of objects from data.
-        
-        """
-        
-        clusters = [[self.__medoid_indexes[i]] for i in range(len(self.__medoid_indexes))]
-        for index_point in range(len(self.__pointer_data)):
-            if index_point in self.__medoid_indexes:
-                continue
 
+        @return (double) Total deviation (distance from each point to its closest medoid).
+
+        """
+
+        total_deviation = 0.0
+        self.__clusters = [[] for i in range(len(self.__medoid_indexes))]
+        for index_point in range(len(self.__pointer_data)):
             index_optim = -1
-            dist_optim = float('Inf')
+            dist_optim_first = float('Inf')
+            dist_optim_second = float('Inf')
             
             for index in range(len(self.__medoid_indexes)):
                 dist = self.__distance_calculator(index_point, self.__medoid_indexes[index])
                 
-                if dist < dist_optim:
+                if dist < dist_optim_first:
+                    dist_optim_second = dist_optim_first
                     index_optim = index
-                    dist_optim = dist
-            
-            clusters[index_optim].append(index_point)
-        
-        return clusters
-    
-    
-    def __update_medoids(self):
+                    dist_optim_first = dist
+                elif dist < dist_optim_second:
+                    dist_optim_second = dist
+
+            total_deviation += dist_optim_first
+            self.__clusters[index_optim].append(index_point)
+            self.__labels[index_point] = index_optim
+
+            self.__distance_first_medoid[index_point] = dist_optim_first
+            self.__distance_second_medoid[index_point] = dist_optim_second
+
+        return total_deviation
+
+
+    def __swap_medoids(self):
         """!
-        @brief Find medoids of clusters in line with contained objects.
-        
-        @return (list) list of medoids for current number of clusters.
-        
+        @brief Swap medoids in order to find the best medoids.
+
+        @return (list) List of new medoids.
+
         """
 
-        medoid_indexes = [-1] * len(self.__clusters)
-        
-        for index in range(len(self.__clusters)):
-            medoid_index = medoid(self.__pointer_data, self.__clusters[index], metric=self.__metric, data_type=self.__data_type)
-            medoid_indexes[index] = medoid_index
-             
-        return medoid_indexes
+        optimal_swap_cost = float('inf')
+        optimal_index_cluster = None
+        optimal_index_medoid = None
+
+        for index_cluster in range(len(self.__clusters)):
+            for candidate_medoid_index in range(len(self.__pointer_data)):
+                if (candidate_medoid_index in self.__medoid_indexes) or (self.__distance_first_medoid[candidate_medoid_index] == 0.0):
+                    continue
+
+                swap_cost = self.__calculate_swap_cost(candidate_medoid_index, index_cluster)
+                if swap_cost < optimal_swap_cost:
+                    optimal_swap_cost = swap_cost
+                    optimal_index_cluster = index_cluster
+                    optimal_index_medoid = candidate_medoid_index
+
+        if optimal_index_cluster is not None:
+            self.__medoid_indexes[optimal_index_cluster] = optimal_index_medoid
+
+        return optimal_swap_cost
+
+
+    def __calculate_swap_cost(self, index_candidate, cluster_index):
+        """!
+        @brief Calculates cost to swap `index_candidate` with the current medoid in `cluster_index`.
+
+        @param[in] index_candidate (uint): index point that is considered as a medoid candidate.
+        @param[in] cluster_index (uint): index of a cluster where the current medoid is used for calculation.
+
+        @return (double) Evaluation to swap medoids.
+
+        """
+        cost = 0.0
+
+        for index_point in range(len(self.__pointer_data)):
+            if index_point == index_candidate:
+                continue
+
+            candidate_distance = self.__distance_calculator(index_point, index_candidate)
+            if self.__labels[index_point] == cluster_index:
+                cost += min(candidate_distance, self.__distance_second_medoid[index_point]) - self.__distance_first_medoid[index_point]
+            elif candidate_distance < self.__distance_first_medoid[index_point]:
+                cost += candidate_distance - self.__distance_first_medoid[index_point]
+
+        return cost - self.__distance_first_medoid[index_candidate]

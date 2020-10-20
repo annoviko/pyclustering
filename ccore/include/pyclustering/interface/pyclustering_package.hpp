@@ -32,6 +32,7 @@
 #include <vector>
 
 #include <pyclustering/definitions.hpp>
+#include <pyclustering/utils/traits.hpp>
 
 
 /*!
@@ -47,10 +48,11 @@ enum pyclustering_data_t {
     PYCLUSTERING_TYPE_FLOAT             = 2,    /**< Represents basic `float` type. */
     PYCLUSTERING_TYPE_DOUBLE            = 3,    /**< Represents basic `double` type. */
     PYCLUSTERING_TYPE_LONG              = 4,    /**< Represents basic `long` type. */
-    PYCLUSTERING_TYPE_RESERVED          = 5,    /**< The code is not used, but reserved for future purposes. */
+    PYCLUSTERING_TYPE_CHAR              = 5,    /**< Represents basic `char` type. */
     PYCLUSTERING_TYPE_LIST              = 6,    /**< Represents `pyclustering_package` type. */
     PYCLUSTERING_TYPE_SIZE_T            = 7,    /**< Represents basic `std::size_t` type. */
-    PYCLUSTERING_TYPE_UNDEFINED         = 8,    /**< Indicates incorrect type. */
+    PYCLUSTERING_TYPE_WCHAR_T           = 8,    /**< Represents basic `wchar_t` type. */
+    PYCLUSTERING_TYPE_UNDEFINED         = 9     /**< Indicates incorrect type. */
 };
 
 
@@ -227,6 +229,12 @@ pyclustering_data_t get_package_type() {
     else if (std::is_same<TypeValue, long>::value) {
         type_package = pyclustering_data_t::PYCLUSTERING_TYPE_LONG;
     }
+    else if (std::is_same<TypeValue, char>::value) {
+        type_package = pyclustering_data_t::PYCLUSTERING_TYPE_CHAR;
+    }
+    else if (std::is_same<TypeValue, wchar_t>::value) {
+        type_package = pyclustering_data_t::PYCLUSTERING_TYPE_WCHAR_T;
+    }
     // cppcheck-suppress multiCondition ; 'std::size_t' and 'long' are not the same for x64.
     else if (std::is_same<TypeValue, std::size_t>::value) {
         type_package = pyclustering_data_t::PYCLUSTERING_TYPE_SIZE_T;
@@ -247,7 +255,7 @@ pyclustering_data_t get_package_type() {
 */
 template <class TypeValue>
 pyclustering_package * create_package(const std::size_t p_size) {
-    pyclustering_data_t type_package = get_package_type<TypeValue>();
+    const pyclustering_data_t type_package = get_package_type<TypeValue>();
     if (type_package == pyclustering_data_t::PYCLUSTERING_TYPE_UNDEFINED) {
         return nullptr;
     }
@@ -286,17 +294,28 @@ pyclustering_package * create_package(const std::size_t p_size, const TypeValue 
 
 /*!
 
-@brief   Create pyclustering package using container that supports `std::begin`, `std::end` functions and incremental iterators.
+@brief   Create pyclustering package using pointer to one-dimensional container with fundamental data and that container supports `std::begin`, `std::end` methods and incremental iterators.
 @details All data from the container will be copied to the package.
 
-@param[in] data: container that is used to create pyclustering container.
+@param[in] data: a pointer to container that is used to create pyclustering container.
+
+@tparam TypeContainer: a pointer type to a container.
 
 @return  Pointer to created pyclustering package.
 
 */
-template <class TypeContainer>
-pyclustering_package * create_package(const TypeContainer * const data) {
-    using contaner_data_t = typename TypeContainer::value_type;
+template <typename TypeContainer,
+    typename std::enable_if<
+        std::is_pointer<TypeContainer>::value &&
+        !pyclustering::utils::traits::is_string<TypeContainer>::value &&
+        pyclustering::utils::traits::is_container_with_fundamental_content<
+            typename pyclustering::utils::traits::remove_cvp_t<TypeContainer>
+        >::value
+    >::type* = nullptr
+>
+pyclustering_package * create_package(TypeContainer data) {
+    using container_t = typename std::remove_pointer<TypeContainer>::type;
+    using contaner_data_t = typename container_t::value_type;
 
     pyclustering_package * package = create_package<contaner_data_t>(data->size());
     if (package) {
@@ -317,10 +336,12 @@ pyclustering_package * create_package(const TypeContainer * const data) {
 
 @param[in] data: container that is used to create pyclustering container.
 
+@tparam TypeObject: an object type that is used by the container.
+
 @return  Pointer to created pyclustering package.
 
 */
-template <class TypeObject>
+template <typename TypeObject>
 pyclustering_package * create_package(const std::vector< std::vector<TypeObject> > * const data) {
     pyclustering_package * package = new pyclustering_package(pyclustering_data_t::PYCLUSTERING_TYPE_LIST);
 
@@ -342,10 +363,12 @@ pyclustering_package * create_package(const std::vector< std::vector<TypeObject>
 
 @param[in] data: container that is used to create pyclustering container.
 
+@tparam TypeObject: an object type that is used by the container.
+
 @return  Pointer to created pyclustering package.
 
 */
-template <class TypeObject>
+template <typename TypeObject>
 pyclustering_package * create_package(const std::vector< std::vector<TypeObject> * > * const data) {
    pyclustering_package * package = new pyclustering_package(pyclustering_data_t::PYCLUSTERING_TYPE_LIST);
 
@@ -357,4 +380,58 @@ pyclustering_package * create_package(const std::vector< std::vector<TypeObject>
    }
 
    return package;
+}
+
+
+/*!
+
+@brief   Create pyclustering package using raw string such as `char *`, `wchar_t *` including any cv-qualified variants.
+@details All data from the raw string will be copied to the package.
+
+@param[in] p_message: string line that is used to create pyclustering package.
+
+@tparam TypeRawString: a character type that is used by the string line.
+
+@return  Pointer to created pyclustering package.
+
+*/
+template <typename TypeRawString, 
+    typename std::enable_if<
+        pyclustering::utils::traits::is_raw_string<TypeRawString>::value
+    >::type* = nullptr
+>
+pyclustering_package * create_package(TypeRawString p_message) {
+    using element_string_t = typename std::remove_cv<typename std::remove_pointer<TypeRawString>::type>::type;
+
+    const std::size_t length = std::char_traits<element_string_t>::length(p_message);
+    pyclustering_package * package = create_package<element_string_t>(length + 1);
+
+    if (package) {
+        std::char_traits<element_string_t>::copy(static_cast<element_string_t *>(package->data), p_message, length);
+        static_cast<element_string_t *>(package->data)[package->size - 1] = static_cast<element_string_t>(0);
+    }
+
+    return package;
+}
+
+
+/*!
+
+@brief   Create pyclustering package using standard string line such as `std::string`, `std::wstring` including any cv-qualified variants.
+@details All data from the raw string will be copied to the package.
+
+@param[in] p_message: string line that is used to create pyclustering container.
+
+@tparam TypeString: a string type that is used to create pyclustering container.
+
+@return  Pointer to created pyclustering package.
+
+*/
+template <typename TypeString,
+    typename std::enable_if<
+        pyclustering::utils::traits::is_string<TypeString>::value
+    >::type* = nullptr
+>
+pyclustering_package * create_package(TypeString & p_message) {
+    return create_package(p_message.c_str());
 }

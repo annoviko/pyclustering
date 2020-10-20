@@ -29,11 +29,14 @@ import unittest
 import matplotlib
 matplotlib.use('Agg')
 
+from pyclustering.cluster.clique import clique
 from pyclustering.cluster.tests.clique_templates import clique_test_template
 
 from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES
 
 from pyclustering.core.tests import remove_library
+
+from pyclustering.tests.assertion import assertion
 
 
 class clique_integration_test(unittest.TestCase):
@@ -130,6 +133,11 @@ class clique_integration_test(unittest.TestCase):
 
     def test_visualize_no_failure_three_dimensional_by_core(self):
         clique_test_template.visualize(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, 3, 0, True)
+
+    def test_high_dimension_data_failure(self):
+        data = [[0, 1, 2, 1, 3, 4, 5, 1, 2, 3, 3, 1, 3], [0, 1, 0, 1, 3, 8, 5, 5, 3, 3, 3, 0, 0]]
+        clique_instance = clique(data, 15, 0)
+        assertion.exception(RuntimeError, clique_instance.process)
 
     @remove_library
     def test_processing_when_library_core_corrupted(self):

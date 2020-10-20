@@ -645,5 +645,8 @@
     <ClInclude Include="..\include\pyclustering\utils\algorithm.hpp">
       <Filter>Header Files\utils</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\pyclustering\utils\traits.hpp">
+      <Filter>Header Files\utils</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

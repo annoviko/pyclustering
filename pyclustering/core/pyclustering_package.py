@@ -44,9 +44,9 @@ class pyclustering_package(Structure):
             }
     """
     
-    _fields_ = [ ("size", c_size_t),
-                 ("type", c_uint),
-                 ("data", POINTER(c_void_p)) ]
+    _fields_ = [("size", c_size_t),
+                ("type", c_uint),
+                ("data", POINTER(c_void_p))]
 
 
 
@@ -56,38 +56,41 @@ class pyclustering_type_data:
     
     """
     
-    PYCLUSTERING_TYPE_INT               = 0x00
-    PYCLUSTERING_TYPE_UNSIGNED_INT      = 0x01
-    PYCLUSTERING_TYPE_FLOAT             = 0x02
-    PYCLUSTERING_TYPE_DOUBLE            = 0x03
-    PYCLUSTERING_TYPE_LONG              = 0x04
-    PYCLUSTERING_TYPE_UNSIGNED_LONG     = 0x05
-    PYCLUSTERING_TYPE_LIST              = 0x06
-    PYCLUSTERING_TYPE_SIZE_T            = 0x07
-    PYCLUSTERING_TYPE_UNDEFINED         = 0x08
+    PYCLUSTERING_TYPE_INT = 0
+    PYCLUSTERING_TYPE_UNSIGNED_INT = 1
+    PYCLUSTERING_TYPE_FLOAT = 2
+    PYCLUSTERING_TYPE_DOUBLE = 3
+    PYCLUSTERING_TYPE_LONG = 4
+    PYCLUSTERING_TYPE_CHAR = 5
+    PYCLUSTERING_TYPE_LIST = 6
+    PYCLUSTERING_TYPE_SIZE_T = 7
+    PYCLUSTERING_TYPE_WCHAR_T = 8
+    PYCLUSTERING_TYPE_UNDEFINED = 9
 
     __CTYPE_PYCLUSTERING_MAP = { 
-        c_int                           : PYCLUSTERING_TYPE_INT,
-        c_uint                          : PYCLUSTERING_TYPE_UNSIGNED_INT,
-        c_float                         : PYCLUSTERING_TYPE_FLOAT,
-        c_double                        : PYCLUSTERING_TYPE_DOUBLE,
-        c_long                          : PYCLUSTERING_TYPE_LONG,
-        c_ulong                         : PYCLUSTERING_TYPE_UNSIGNED_LONG,
-        POINTER(pyclustering_package)   : PYCLUSTERING_TYPE_LIST,
-        c_size_t                        : PYCLUSTERING_TYPE_SIZE_T,
-        None                            : PYCLUSTERING_TYPE_UNDEFINED
+        c_int: PYCLUSTERING_TYPE_INT,
+        c_uint: PYCLUSTERING_TYPE_UNSIGNED_INT,
+        c_float: PYCLUSTERING_TYPE_FLOAT,
+        c_double: PYCLUSTERING_TYPE_DOUBLE,
+        c_long: PYCLUSTERING_TYPE_LONG,
+        c_char: PYCLUSTERING_TYPE_CHAR,
+        POINTER(pyclustering_package): PYCLUSTERING_TYPE_LIST,
+        c_size_t: PYCLUSTERING_TYPE_SIZE_T,
+        c_wchar: PYCLUSTERING_TYPE_WCHAR_T,
+        None: PYCLUSTERING_TYPE_UNDEFINED
     }
 
     __PYCLUSTERING_CTYPE_MAP = {
-        PYCLUSTERING_TYPE_INT             : c_int,
-        PYCLUSTERING_TYPE_UNSIGNED_INT    : c_uint,
-        PYCLUSTERING_TYPE_FLOAT           : c_float,
-        PYCLUSTERING_TYPE_DOUBLE          : c_double,
-        PYCLUSTERING_TYPE_LONG            : c_long,
-        PYCLUSTERING_TYPE_UNSIGNED_LONG   : c_ulong,
-        PYCLUSTERING_TYPE_LIST            : POINTER(pyclustering_package),
-        PYCLUSTERING_TYPE_SIZE_T          : c_size_t,
-        PYCLUSTERING_TYPE_UNDEFINED       : None
+        PYCLUSTERING_TYPE_INT: c_int,
+        PYCLUSTERING_TYPE_UNSIGNED_INT: c_uint,
+        PYCLUSTERING_TYPE_FLOAT: c_float,
+        PYCLUSTERING_TYPE_DOUBLE: c_double,
+        PYCLUSTERING_TYPE_LONG: c_long,
+        PYCLUSTERING_TYPE_CHAR: c_char,
+        PYCLUSTERING_TYPE_LIST: POINTER(pyclustering_package),
+        PYCLUSTERING_TYPE_SIZE_T: c_size_t,
+        PYCLUSTERING_TYPE_WCHAR_T: c_wchar,
+        PYCLUSTERING_TYPE_UNDEFINED: None
     }
 
     @staticmethod
@@ -112,12 +115,18 @@ class package_builder:
     @brief Package builder provides service to create 'pyclustering_package' from data that is stored in 'list' container.
 
     """
-    def __init__(self, dataset, c_data_type):
+    def __init__(self, dataset, c_data_type=None):
         """!
         @brief Initialize package builder object by dataset.
+        @details String data is packed as it is without encoding. If string encoding is required then it should be
+                  provided already encoded, for example in case of `utf-8`:
+        @code
+            encoded_string = "String to pack".encode('utf-8')
+            pyclustering_package = package_builder(encoded_string)
+        @endcode
         
         @param[in] dataset (list): Data that should be packed in 'pyclustering_package'.
-        @param[in] c_data_type (ctype.type): If specified than specified data type is used for data storing in package. 
+        @param[in] c_data_type (ctype.type): C-type data that is used to store data in the package.
         
         """
         self.__dataset = dataset
@@ -147,7 +156,10 @@ class package_builder:
 
     def __create_package(self, dataset):
         dataset_package = pyclustering_package()
-        
+
+        if isinstance(dataset, str):
+            return self.__create_package_string(dataset_package, dataset)
+
         if isinstance(dataset, numpy.matrix):
             return self.__create_package_numpy_matrix(dataset_package, dataset)
         
@@ -232,6 +244,13 @@ class package_builder:
         return pointer(dataset_package)
 
 
+    def __create_package_string(self, dataset_package, string_value):
+        dataset_package.size = len(string_value)
+        dataset_package.type = pyclustering_type_data.PYCLUSTERING_TYPE_CHAR
+        dataset_package.data = cast(string_value, POINTER(c_void_p))
+        return pointer(dataset_package)
+
+
 
 class package_extractor:
     """!
@@ -267,24 +286,33 @@ class package_extractor:
     
     
     def __unpack_data(self, pointer_package, pointer_data, type_package):
+        if type_package == pyclustering_type_data.PYCLUSTERING_TYPE_CHAR:
+            pointer_string = cast(pointer_data, c_char_p)
+            return pointer_string.value
+
+        elif type_package == pyclustering_type_data.PYCLUSTERING_TYPE_WCHAR_T:
+            raise NotImplementedError("Data type 'wchar_t' is not supported.")
+
         result = []
+        append_element = lambda container, item: container.append(item)
         
         for index in range(0, pointer_package[0].size):
             if type_package == pyclustering_type_data.PYCLUSTERING_TYPE_LIST:
                 pointer_package = cast(pointer_data[index], (POINTER(pyclustering_package)))
-                result.append(self.__extract_data(pointer_package))
-            
+                append_element(result, self.__extract_data(pointer_package))
+
             else:
-                result.append(pointer_data[index])
+                append_element(result, pointer_data[index])
         
         return result
 
 
     def __unpack_pointer_data(self, pointer_package):
-        type_package = pointer_package[0].type
+        current_package = pointer_package[0]
+        type_package = current_package.type
         
-        if pointer_package[0].size == 0:
+        if current_package.size == 0:
             return []
-        
-        pointer_data = cast(pointer_package[0].data, POINTER(pyclustering_type_data.get_ctype(type_package)))
+
+        pointer_data = cast(current_package.data, POINTER(pyclustering_type_data.get_ctype(type_package)))
         return self.__unpack_data(pointer_package, pointer_data, type_package)

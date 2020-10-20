@@ -6,6 +6,10 @@ CHANGE NOTES FOR 0.10.1 (STARTED Aug 17, 2020), (RELEASED: -)
 
 GENERAL CHANGES:
 
+- C++ pyclustering CLIQUE interface returns human-readable errors (Python: `pyclustering.cluster.clique`).
+  See: https://github.com/annoviko/pyclustering/issues/635
+  See: https://github.com/annoviko/pyclustering/issues/634
+
 - Introduced `metric` parameter for X-Means algorithm to use custom metric for clustering (Python: `pyclustering.cluster.xmeans`; C++ `pyclustering.clst.xmeans`).
   See: https://github.com/annoviko/pyclustering/issues/619
 
@@ -14,6 +18,15 @@ GENERAL CHANGES:
 
 
 CORRECTED MAJOR BUGS:
+
+- Corrected implementation of K-Medians (PAM) algorithm that is aligned with original algorithm (Python: `pyclustering.cluster.kmedoids`; C++: `pyclustering.clst.kmedoids`).
+  See: https://github.com/annoviko/pyclustering/issues/503
+
+- Corrected literature references that were for K-Medians (PAM) implementation (Python: `pyclustering.cluster.kmedoids`).
+  See: https://github.com/annoviko/pyclustering/pull/572
+
+- Corrected bug when K-Medoids updates input parameter `initial_medoids` that were provided to the algorithm (Python: `pyclustering.cluster.kmedoids`).
+  See: https://github.com/annoviko/pyclustering/issues/630
 
 - Corrected bug with Euclidean distance when numpy is used (Python: `pyclustering.utils.metric`).
   See: https://github.com/annoviko/pyclustering/issues/625
