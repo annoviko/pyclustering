@@ -71,29 +71,45 @@ Advanced uses might use one of the define to use specific implementation of the 
 
 @param[in] p_start: initial value for the loop.
 @param[in] p_end: final value of the loop - calculations are performed until current counter value is less than final value `i < p_end`.
+@param[in] p_step: step that is used to iterate over the loop.
 @param[in] p_task: body of the loop that defines actions that should be done on each iteration.
 
 */
 template <typename TypeIndex, typename TypeAction>
-void parallel_for(const TypeIndex p_start, const TypeIndex p_end, const TypeAction & p_task) {
+void parallel_for(const TypeIndex p_start, const TypeIndex p_end, const TypeIndex p_step, const TypeAction & p_task) {
 #if defined(PARALLEL_IMPLEMENTATION_ASYNC_POOL)
-    const TypeIndex step = (p_end - p_start) / (AMOUNT_THREADS + 1);
+    const TypeIndex interval_length = (p_end > p_start) ? (p_end - p_start) : (p_start - p_end);
+
+    TypeIndex interval_step = (interval_length / p_step) / (static_cast<TypeIndex>(AMOUNT_THREADS) + 1);
+    if ((p_step > TypeIndex(0) && interval_step < p_step) || 
+        (p_step < TypeIndex(0) && interval_length > p_step)) {
+        interval_step = p_step;
+    }
+
+    TypeIndex amount_threads = (p_end - p_start) / interval_step;   /* amount of data might be less than amount of threads. */
+    if (amount_threads > static_cast<TypeIndex>(AMOUNT_THREADS)) {
+        amount_threads = static_cast<TypeIndex>(AMOUNT_THREADS);
+    }
+    else if (amount_threads > 0) {
+        amount_threads--;   /* current thread is also considered. */
+    }
+
     TypeIndex current_start = p_start;
-    TypeIndex current_end = p_start + step;
+    TypeIndex current_end = p_start + interval_step;
 
     std::vector<std::size_t> captured_feature;
 
-    for (std::size_t i = 0; i < AMOUNT_THREADS; ++i) {
-        const auto async_task = [&p_task, current_start, current_end](){
-            for (TypeIndex i = current_start; i < current_end; ++i) {
+    for (std::size_t i = 0; i < amount_threads; ++i) {
+        const auto async_task = [&p_task, current_start, current_end, p_step](){
+            for (TypeIndex i = current_start; i < current_end; i += p_step) {
                 p_task(i);
             }
         };
 
         std::size_t free_index = (std::size_t) -1;
-        for (std::size_t i = 0; i < AMOUNT_THREADS; i++) {
-            if (FUTURE_LOCKS[i].try_lock()) {
-                free_index = i;
+        for (std::size_t j = 0; j < AMOUNT_THREADS; ++j) {
+            if (FUTURE_LOCKS[j].try_lock()) {
+                free_index = j;
                 break;
             }
         }
@@ -107,10 +123,10 @@ void parallel_for(const TypeIndex p_start, const TypeIndex p_end, const TypeActi
         }
 
         current_start = current_end;
-        current_end += step;
+        current_end += interval_step;
     }
 
-    for (TypeIndex i = current_start; i < p_end; ++i) {
+    for (TypeIndex i = current_start; i < p_end; i += p_step) {
         p_task(i);
     }
 
@@ -119,17 +135,40 @@ void parallel_for(const TypeIndex p_start, const TypeIndex p_end, const TypeActi
         FUTURE_LOCKS[index_feature].unlock();
     }
 #elif defined(PARALLEL_IMPLEMENTATION_PPL)
-    concurrency::parallel_for(p_start, p_end, p_task);
+    concurrency::parallel_for(p_start, p_end, p_step, p_task);
 #elif defined(PARALLEL_IMPLEMENTATION_OPENMP)
     #pragma omp parallel for
-    for (TypeIndex i = p_start; i < p_end, i++) {
+    for (TypeIndex i = p_start; i < p_end, i += p_step) {
         p_task(i);
     }
 #else
-    for (std::size_t i = p_start; i < p_end; i++) {
+    for (std::size_t i = p_start; i < p_end; i += p_step) {
         p_task(i);
     }
 #endif
+}
+
+
+/*!
+
+@brief Parallelizes for-loop using all available cores.
+@details `parallel_for` uses PPL in case of Windows operating system and own implemention that is based
+on pure C++ functionality for concurency such as `std::future` and `std::async`.
+
+Advanced uses might use one of the define to use specific implementation of the `parallel_for` loop:
+1. PARALLEL_IMPLEMENTATION_ASYNC_POOL - own parallel implementation based on `std::async` pool.
+2. PARALLEL_IMPLEMENTATION_NONE       - parallel implementation is not used.
+3. PARALLEL_IMPLEMENTATION_PPL        - parallel PPL implementation (windows system only).
+4. PARALLEL_IMPLEMENTATION_OPENMP     - parallel OpenMP implementation.
+
+@param[in] p_start: initial value for the loop.
+@param[in] p_end: final value of the loop - calculations are performed until current counter value is less than final value `i < p_end`.
+@param[in] p_task: body of the loop that defines actions that should be done on each iteration.
+
+*/
+template <typename TypeIndex, typename TypeAction>
+void parallel_for(const TypeIndex p_start, const TypeIndex p_end, const TypeAction & p_task) {
+    parallel_for(p_start, p_end, std::size_t(1), p_task);
 }
 
 
