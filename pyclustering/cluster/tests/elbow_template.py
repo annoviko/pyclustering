@@ -39,6 +39,7 @@ class elbow_test_template:
     def calculate_elbow(path_to_data, path_to_answer, kmin, kmax, ccore, **kwargs):
         repeat = 15  # Elbow method randomly chooses initial centers therefore we need to repeat test if it fails.
         testing_result = False
+        kstep = kwargs.get('kstep', 1)
 
         sample = read_sample(path_to_data)
 
@@ -57,7 +58,7 @@ class elbow_test_template:
 
             assertion.gt(actual_elbow, kmin)
             assertion.lt(actual_elbow, kmax)
-            assertion.eq(len(actual_wce), kmax - kmin)
+            assertion.eq(len(actual_wce), (kmax - kmin) / kstep + 1)
             assertion.lt(actual_wce[-1], actual_wce[0] + 0.0000001)
 
             if (answer is not None) and (actual_elbow != len(answer.get_clusters())):
@@ -76,6 +77,7 @@ class elbow_test_template:
     @staticmethod
     def random_state_fixed(path_to_data, kmin, kmax, ccore, **kwargs):
         repeat = kwargs.get('repeat', 1)
+        kstep = kwargs.get('kstep', 1)
 
         for _ in range(repeat):
             sample = read_sample(path_to_data)
@@ -84,9 +86,13 @@ class elbow_test_template:
             elbow_1 = elbow_instance.get_amount()
             wce_1 = elbow_instance.get_wce()
 
+            assertion.eq(len(wce_1), (kmax - kmin) / kstep + 1)
+
             elbow_instance = elbow(sample, kmin, kmax, ccore=ccore, **kwargs).process()
             elbow_2 = elbow_instance.get_amount()
             wce_2 = elbow_instance.get_wce()
+
+            assertion.eq(len(wce_2), (kmax - kmin) / kstep + 1)
 
             assertion.eq(elbow_1, elbow_2)
             assertion.eq(wce_1, wce_2)

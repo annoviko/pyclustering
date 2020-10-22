@@ -54,7 +54,7 @@ void elbow_template(const dataset_ptr p_data,
 
     ASSERT_GT(result.get_amount(), p_kmin);
     ASSERT_LT(result.get_amount(), p_kmax);
-    ASSERT_EQ(result.get_wce().size(), p_kmax - p_kmin);
+    ASSERT_EQ(result.get_wce().size(), p_kmax - p_kmin + 1);
     ASSERT_GT(result.get_wce().front(), result.get_wce().back());
 
     std::size_t upper_limit = p_amount_clusters + 1;

@@ -99,17 +99,19 @@ class elbow:
         @param[in] data (array_like): Input data that is presented as array of points (objects), each point should be represented by array_like data structure.
         @param[in] kmin (int): Minimum amount of clusters that should be considered.
         @param[in] kmax (int): Maximum amount of clusters that should be considered.
-        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: `ccore`, `initializer`, `random_state`).
+        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: `ccore`, `initializer`, `random_state`, `kstep`).
 
         <b>Keyword Args:</b><br>
             - ccore (bool): If `True` then C++ implementation of pyclustering library is used (by default `True`).
             - initializer (callable): Center initializer that is used by K-Means algorithm (by default K-Means++).
             - random_state (int): Seed for random state (by default is `None`, current system time is used).
+            - kstep (int): Search step in the interval [kmin, kmax] (by default is `1`).
 
         """
 
         self.__initializer = kwargs.get('initializer', kmeans_plusplus_initializer)
         self.__random_state = kwargs.get('random_state', None)
+        self.__kstep = kwargs.get('kstep', 1)
 
         self.__ccore = kwargs.get('ccore', True) or \
                        isinstance(self.__initializer, kmeans_plusplus_initializer) or \
@@ -156,7 +158,7 @@ class elbow:
         else:
             initializer = wrapper.elbow_center_initializer.RANDOM
 
-        result = wrapper.elbow(self.__data, self.__kmin, self.__kmax, initializer, self.__random_state)
+        result = wrapper.elbow(self.__data, self.__kmin, self.__kmax, initializer, self.__random_state, self.__kstep)
 
         self.__kvalue = result[0]
         self.__wce = result[1]
@@ -167,7 +169,7 @@ class elbow:
         @brief Performs processing using python implementation.
 
         """
-        for amount in range(self.__kmin, self.__kmax):
+        for amount in range(self.__kmin, self.__kmax + 1, self.__kstep):
             centers = self.__initializer(self.__data, amount, random_state=self.__random_state).initialize()
             instance = kmeans(self.__data, centers, ccore=False)
             instance.process()
@@ -188,7 +190,8 @@ class elbow:
 
     def get_wce(self):
         """!
-        @brief Returns list of total within cluster errors for each K-value (kmin, kmin + 1, ..., kmax - 1).
+        @brief Returns list of total within cluster errors for each K-value, for example, in case of `kstep = 1`:
+               (kmin, kmin + 1, ..., kmax).
 
         """
 
@@ -235,9 +238,17 @@ class elbow:
         if self.__kmin < 1:
             raise ValueError("K min value (current value '%d') should be greater or equal to 1." % self.__kmin)
 
-        if self.__kmax - self.__kmin < 3:
+        if self.__kstep < 1:
+            raise ValueError("K step value (current value '%d') should be greater or equal to 1." % self.__kstep)
+
+        if self.__kmax - self.__kmin + 1 < 3:
             raise ValueError("Amount of K (" + str(self.__kmax - self.__kmin) + ") is too small for analysis. "
                              "It is require to have at least three K to build elbow.")
+
+        steps_to_process = math.floor((self.__kmax - self.__kmin) / self.__kstep) + 1
+        if steps_to_process < 3:
+            raise ValueError("The search step is too high '%d' for analysis (amount of K for analysis is '%d'). "
+                             "It is require to have at least three K to build elbow." % (self.__kstep, steps_to_process))
 
         if len(self.__data) < self.__kmax:
             raise ValueError("K max value '%d' is greater than amount of points in data '%d'." %

@@ -42,17 +42,17 @@ class elbow_center_initializer(IntEnum):
     RANDOM = 1
 
 
-def elbow(sample, kmin, kmax, initializer, random_state):
+def elbow(sample, kmin, kmax, initializer, random_state, kstep):
     random_state = random_state or -1
     pointer_data = package_builder(sample, c_double).create()
 
     ccore = ccore_library.get()
     if initializer == elbow_center_initializer.KMEANS_PLUS_PLUS:
         ccore.elbow_method_ikpp.restype = POINTER(pyclustering_package)
-        package = ccore.elbow_method_ikpp(pointer_data, c_size_t(kmin), c_size_t(kmax), c_longlong(random_state))
+        package = ccore.elbow_method_ikpp(pointer_data, c_size_t(kmin), c_size_t(kmax), c_size_t(kstep), c_longlong(random_state))
     elif initializer == elbow_center_initializer.RANDOM:
         ccore.elbow_method_irnd.restype = POINTER(pyclustering_package)
-        package = ccore.elbow_method_irnd(pointer_data, c_size_t(kmin), c_size_t(kmax), c_longlong(random_state))
+        package = ccore.elbow_method_irnd(pointer_data, c_size_t(kmin), c_size_t(kmax), c_size_t(kstep), c_longlong(random_state))
     else:
         raise ValueError("Not supported type of center initializer '" + str(initializer) + "'.")
 

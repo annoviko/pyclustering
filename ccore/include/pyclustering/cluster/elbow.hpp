@@ -168,6 +168,8 @@ class elbow {
 private:
     std::size_t   m_kmin         = 0;
     std::size_t   m_kmax         = 0;
+    std::size_t   m_kstep        = 0;
+    std::size_t   m_kamount      = 0;
     long long     m_random_state = RANDOM_STATE_CURRENT_TIME;
 
     std::vector<double> m_elbow  = { };
@@ -193,11 +195,27 @@ public:
 
     */
     elbow(const std::size_t p_kmin, const std::size_t p_kmax, const long long p_random_state = RANDOM_STATE_CURRENT_TIME) :
-        m_kmin(p_kmin), 
+        elbow(p_kmin, p_kmax, 1, p_random_state)
+    { }
+
+    /*!
+
+    @brief  Elbow method constructor with parameters of the method.
+
+    @param[in] p_kmin: minimum amount of clusters that should be considered.
+    @param[in] p_kmax: maximum amount of clusters that should be considered.
+    @param[in] p_kstep: search step in the interval [kmin, kmax].
+    @param[in] p_random_state: seed for random state (by default is `RANDOM_STATE_CURRENT_TIME`, current system time is used).
+
+    */
+    elbow(const std::size_t p_kmin, const std::size_t p_kmax, const std::size_t p_kstep, const long long p_random_state = RANDOM_STATE_CURRENT_TIME) :
+        m_kmin(p_kmin),
         m_kmax(p_kmax),
+        m_kstep(p_kstep),
+        m_kamount((m_kmax - m_kmin) / m_kstep + 1),
         m_random_state(p_random_state)
     {
-        verify(); 
+        verify();
     }
 
     /*!
@@ -239,9 +257,9 @@ public:
         m_data   = &p_data;
         m_result = &p_result;
 
-        m_result->get_wce().resize(m_kmax - m_kmin);
+        m_result->get_wce().resize(m_kamount);
 
-        parallel_for(m_kmin, m_kmax, [this](const std::size_t p_index){
+        parallel_for(m_kmin, m_kmax + 1, [this](const std::size_t p_index){
             calculate_wce(p_index);
         });
 
@@ -274,8 +292,16 @@ private:
     }
 
     void verify() {
+        if (m_kmax < m_kmin) {
+            throw std::invalid_argument("K max value '" + std::to_string(m_kmax) + "' should be greater than K min value '" + std::to_string(m_kmin) + "'.");
+        }
+
         if (m_kmax < 3 + m_kmin) {
             throw std::invalid_argument("Amount of K '" + std::to_string(m_kmax - m_kmin) + "' is too small for analysis.");
+        }
+
+        if (m_kamount < 3) {
+            throw std::invalid_argument("The search step is too high '" + std::to_string(m_kstep) + "' for analysis (amount of K for analysis is '" + std::to_string(m_kamount) + "').");
         }
     }
 
