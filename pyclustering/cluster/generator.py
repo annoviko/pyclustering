@@ -24,7 +24,7 @@
 """
 
 
-import collections
+import collections.abc
 import random
 
 
@@ -52,11 +52,11 @@ class data_generator:
         self.__dimension = dimension
 
         self.__cluster_sizes = cluster_sizes
-        if not isinstance(self.__cluster_sizes, collections.Iterable):
+        if not isinstance(self.__cluster_sizes, collections.abc.Iterable):
             self.__cluster_sizes = [self.__cluster_sizes] * amount_clusters
 
         self.__cluster_width = cluster_width
-        if not isinstance(self.__cluster_width, collections.Iterable):
+        if not isinstance(self.__cluster_width, collections.abc.Iterable):
             self.__cluster_width = [self.__cluster_width] * amount_clusters
 
         self.__cluster_centers = cluster_centers
