@@ -241,7 +241,7 @@ class XmeansIntegrationTest(unittest.TestCase):
 
     def testMndlWrongStartClusterAllocationSampleSimple5ByCore(self):
         XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, [[0.0, 1.0], [0.0, 0.0]], [15, 15, 15, 15],
-                                                      splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH, 20, True)
+                                                      splitting_type.MINIMUM_NOISELESS_DESCRIPTION_LENGTH, 20, True, random_state=1000)
 
     def testBicClusterAllocationSampleSimple6ByCore(self):
         XmeansTestTemplates.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE6, [[3.5, 3.5], [3.7, 3.7]], [20, 21],

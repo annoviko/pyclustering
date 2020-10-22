@@ -39,17 +39,26 @@ namespace pyclustering {
 namespace clst {
 
 
+/*!
+
+@brief    Defines data representation (point, distance matrix) that is used for processing by K-Medoids algorithm.
+
+*/
 enum class kmedoids_data_t {
     POINTS,
     DISTANCE_MATRIX
 };
 
 
-/**
-*
-* @brief    Represents K-Medoids clustering algorithm for cluster analysis.
-* @details  The algorithm related to partitional class when input data is divided into groups.
-*
+/*!
+
+@brief    Represents K-Medoids clustering algorithm (PAM algorithm) for cluster analysis.
+@details  PAM is a partitioning clustering algorithm that uses the medoids instead of centers like in case of K-Means
+           algorithm. Medoid is an object with the smallest dissimilarity to all others in the cluster. PAM algorithm
+           complexity is \f$O\left ( k\left ( n-k \right )^{2} \right )\f$.
+
+          Implementation based on paper @cite inproceedings::cluster::kmedoids::1.
+
 */
 class kmedoids {
 public:
@@ -60,13 +69,27 @@ public:
 private:
     static const std::size_t OBJECT_ALREADY_CONTAINED;
 
+    static const std::size_t INVALID_INDEX;
+
+    static const double      NOTHING_TO_SWAP;
+
 private:
     using distance_calculator = std::function<double(const std::size_t, const std::size_t)>;
 
-private:
-    const dataset                   * m_data_ptr      = nullptr;   /* temporary pointer to input data that is used only during processing */
+    struct appropriate_cluster {
+    public:
+        appropriate_cluster() = default;
+        appropriate_cluster(const std::size_t p_index, const double p_distance);
 
-    kmedoids_data                   * m_result_ptr    = nullptr; /* temporary pointer to clustering result that is used only during processing */
+    public:
+        std::size_t m_index                 = INVALID_INDEX;
+        double      m_distance_to_medoid    = -1.0;
+    };
+
+private:
+    const dataset                   * m_data_ptr      = nullptr;    /* temporary pointer to input data that is used only during processing */
+
+    kmedoids_data                   * m_result_ptr    = nullptr;    /* temporary pointer to clustering result that is used only during processing */
 
     medoid_sequence                 m_initial_medoids = { };
 
@@ -74,126 +97,122 @@ private:
 
     std::size_t                     m_itermax         = DEFAULT_ITERMAX;
 
+    index_sequence                  m_labels;
+
+    std::vector<double>             m_distance_first_medoid;
+
+    std::vector<double>             m_distance_second_medoid;
+
     distance_metric<point>          m_metric;
 
     distance_calculator             m_calculator;
 
 public:
-    /**
-    *
-    * @brief    Default constructor of clustering algorithm.
-    *
+    /*!
+    
+    @brief    Default constructor of clustering algorithm.
+    
     */
     kmedoids() = default;
 
-    /**
-    *
-    * @brief    Constructor of clustering algorithm where algorithm parameters for processing are
-    *           specified.
-    *
-    * @param[in] p_initial_medoids: initial medoids that are used for processing.
-    * @param[in] p_tolerance: stop condition in following way: when maximum value of distance change of
-    *             medoids of clusters is less than tolerance than algorithm will stop processing.
-    * @param[in] p_itermax: maximum amount of iterations (by default kmedoids::DEFAULT_ITERMAX).
-    * @param[in] p_metric: distance metric calculator for two points.
-    *
+    /*!
+    
+    @brief    Constructor of clustering algorithm where algorithm parameters for processing are
+               specified.
+    
+    @param[in] p_initial_medoids: initial medoids that are used for processing.
+    @param[in] p_tolerance: stop condition in following way: when maximum value of distance change of
+                medoids of clusters is less than tolerance than algorithm will stop processing.
+    @param[in] p_itermax: maximum amount of iterations (by default kmedoids::DEFAULT_ITERMAX).
+    @param[in] p_metric: distance metric calculator for two points.
+    
     */
     kmedoids(const medoid_sequence & p_initial_medoids,
              const double p_tolerance = DEFAULT_TOLERANCE,
              const std::size_t p_itermax = DEFAULT_ITERMAX,
              const distance_metric<point> & p_metric = distance_metric_factory<point>::euclidean_square());
 
-    /**
-    *
-    * @brief    Default destructor of the algorithm.
-    *
+    /*!
+    
+    @brief    Default destructor of the algorithm.
+    
     */
     ~kmedoids();
 
 public:
-    /**
-    *
-    * @brief    Performs cluster analysis of an input data.
-    *
-    * @param[in]  p_data: input data for cluster analysis.
-    * @param[out] p_result: clustering result of an input data.
-    *
+    /*!
+    
+    @brief    Performs cluster analysis of an input data.
+    
+    @param[in]  p_data: input data for cluster analysis.
+    @param[out] p_result: clustering result of an input data.
+    
     */
     void process(const dataset & p_data, kmedoids_data & p_result);
 
-    /**
-    *
-    * @brief    Performs cluster analysis of an input data.
-    *
-    * @param[in]  p_data: input data for cluster analysis.
-    * @param[in]  p_type: data type (points or distance matrix).
-    * @param[out] p_result: clustering result of an input data.
-    *
+    /*!
+    
+    @brief    Performs cluster analysis of an input data.
+    
+    @param[in]  p_data: input data for cluster analysis.
+    @param[in]  p_type: data type (points or distance matrix).
+    @param[out] p_result: clustering result of an input data.
+    
     */
     void process(const dataset & p_data, const kmedoids_data_t p_type, kmedoids_data & p_result);
 
 private:
-    /**
-    *
-    * @brief    Updates clusters in line with current medoids.
-    *
+    /*!
+    
+    @brief    Updates clusters in line with current medoids.
+    
     */
-    void update_clusters();
+    double update_clusters();
 
-    /**
-    *
-    * @brief    Calculates medoids in line with current clusters.
-    *
-    * @param[out] p_medoids: calculated medoids for current clusters.
-    *
-    */
-    void calculate_medoids(cluster & p_medoids);
+    /*!
+    
+    @brief    Creates distance calcultor in line with data type and distance metric metric.
+    
+    @param[in] p_type: data type (points or distance matrix).
+    
+    @return   Distance calculator.
 
-    /**
-    *
-    * @brief    Calculates medoid for specified cluster.
-    *
-    * @param[in] p_cluster: cluster that is used for medoid calculation.
-    *
-    * @return   Medoid (index point) of specified cluster.
-    *
-    */
-    size_t calculate_cluster_medoid(const cluster & p_cluster) const;
-
-    /**
-    *
-    * @brief    Calculates maximum difference in data allocation between previous medoids and specified.
-    *
-    * @param[in] p_medoids: medoids that should be used for difference calculation.
-    *
-    * @return   Maximum difference between current medoids and specified.
-    *
-    */
-    double calculate_changes(const medoid_sequence & p_medoids) const;
-
-    /**
-    *
-    * @brief    Creates distance calcultor in line with data type and distance metric metric.
-    *
-    * @param[in] p_type: data type (points or distance matrix).
-    *
-    * @return   Distance calculator.
-    *
     */
     distance_calculator create_distance_calculator(const kmedoids_data_t p_type);
 
-    /**
-    *
-    * @brief    Find appropriate cluster for the particular point.
-    *
-    * @param[in] p_index: Index of point that should be placed to cluster.
-    * @param[in] p_medoids: Medoids that corresponds to clusters.
-    *
-    * @return   Index of cluster that is appropriate for the particular point. If point is a medoid
-    *           then OBJECT_ALREADY_CONTAINED value is returned.
-    *
+    /*!
+    
+    @brief    Find appropriate cluster for the particular point.
+    
+    @param[in] p_index: Index of point that should be placed to cluster.
+    @param[in] p_medoids: Medoids that corresponds to clusters.
+    
+    @return   Index of cluster that is appropriate for the particular point and distance from this point to correspoding medoid. 
+               If point is a medoid then OBJECT_ALREADY_CONTAINED value is returned.
+    
     */
-    std::size_t find_appropriate_cluster(const std::size_t p_index, medoid_sequence & p_medoids);
+    appropriate_cluster find_appropriate_cluster(const std::size_t p_index, medoid_sequence & p_medoids);
+
+    /*!
+    
+    @brief  Swap existed medoid with non-medoid points in order to find the most optimal medoid.
+
+    @return Cost that is needed to swap medoid and non-medoid point.
+    
+    */
+    double swap_medoids();
+
+    /*!
+    
+    @brief  Calculates cost to swap `p_index_candidate` with the current medoid `p_index_cluster`.
+
+    @param[in] p_index_candidate: index point that is considered as a medoid candidate.
+    @param[in] p_index_cluster: index of a cluster where the current medoid is used for calculation.
+
+    @return Cost that is needed to swap medoids.
+    
+    */
+    double calculate_swap_cost(const std::size_t p_index_candidate, const std::size_t p_index_cluster) const;
 };
 
 

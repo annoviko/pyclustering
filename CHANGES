@@ -6,6 +6,9 @@ CHANGE NOTES FOR 0.10.1 (STARTED Aug 17, 2020), (RELEASED: -)
 
 GENERAL CHANGES:
 
+- Optimized python implementation of K-Medoids algorithm (Python: `pyclustering.cluster.kmedoids`).
+  See: https://github.com/annoviko/pyclustering/issues/526
+
 - C++ pyclustering CLIQUE interface returns human-readable errors (Python: `pyclustering.cluster.clique`).
   See: https://github.com/annoviko/pyclustering/issues/635
   See: https://github.com/annoviko/pyclustering/issues/634

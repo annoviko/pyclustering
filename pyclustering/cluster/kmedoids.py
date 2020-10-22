@@ -351,9 +351,9 @@ class kmedoids:
 
     def __swap_medoids(self):
         """!
-        @brief Swap medoids in order to find the best medoids.
+        @brief Swap existed medoid with non-medoid points in order to find the most optimal medoid.
 
-        @return (list) List of new medoids.
+        @return (double) Cost that is needed to swap two medoids.
 
         """
 
@@ -380,12 +380,12 @@ class kmedoids:
 
     def __calculate_swap_cost(self, index_candidate, cluster_index):
         """!
-        @brief Calculates cost to swap `index_candidate` with the current medoid in `cluster_index`.
+        @brief Calculates cost to swap `index_candidate` with the current medoid `cluster_index`.
 
-        @param[in] index_candidate (uint): index point that is considered as a medoid candidate.
-        @param[in] cluster_index (uint): index of a cluster where the current medoid is used for calculation.
+        @param[in] index_candidate (uint): Index point that is considered as a medoid candidate.
+        @param[in] cluster_index (uint): Index of a cluster where the current medoid is used for calculation.
 
-        @return (double) Evaluation to swap medoids.
+        @return (double) Cost that is needed to swap medoids.
 
         """
         cost = 0.0
