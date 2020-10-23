@@ -72,28 +72,12 @@ Advanced uses might use one of the define to use specific implementation of the 
 @param[in] p_end: final value of the loop - calculations are performed until current counter value is less than final value `i < p_end`.
 @param[in] p_step: step that is used to iterate over the loop.
 @param[in] p_task: body of the loop that defines actions that should be done on each iteration.
+@param[in] p_threads: amount of threads that are going to be used for processing (by default efficient amount of threads).
 
 */
 template <typename TypeIndex, typename TypeAction>
-void parallel_for(const TypeIndex p_start, const TypeIndex p_end, const TypeIndex p_step, const TypeAction & p_task) {
+void parallel_for(const TypeIndex p_start, const TypeIndex p_end, const TypeIndex p_step, const TypeAction & p_task, const std::size_t p_threads = AMOUNT_THREADS) {
 #if defined(PARALLEL_IMPLEMENTATION_ASYNC_POOL)
-#if defined(NEGATIVE_STEPS)
-    const TypeIndex interval_length = (p_end > p_start) ? (p_end - p_start) : (p_start - p_end);
-
-    TypeIndex interval_step = (interval_length / p_step) / (static_cast<TypeIndex>(AMOUNT_THREADS) + 1);
-    if ((p_step > TypeIndex(0) && interval_step < p_step) || 
-        (p_step < TypeIndex(0) && interval_length > p_step)) {
-        interval_step = p_step;
-    }
-
-    std::size_t amount_threads = static_cast<std::size_t>(interval_length / interval_step);   /* amount of data might be less than amount of threads. */
-    if (amount_threads > AMOUNT_THREADS) {
-        amount_threads = AMOUNT_THREADS;
-    }
-    else if (amount_threads > 0) {
-        amount_threads--;   /* current thread is also considered. */
-    }
-#else
     /*
 
     Microsoft `concurrency::parallel_for` implementation does not support negative step. The cite from the documentation about `concurrency::parallel_for`.
@@ -103,38 +87,40 @@ void parallel_for(const TypeIndex p_start, const TypeIndex p_end, const TypeInde
 
     */
 
-    const TypeIndex interval_length = p_end - p_start;
+    const TypeIndex interval_length = p_end - p_start;  /* Full interval to process */
 
-    TypeIndex interval_step = (interval_length / p_step) / (static_cast<TypeIndex>(AMOUNT_THREADS) + 1);
-    if (interval_step < p_step)  {
-        interval_step = p_step;
+    TypeIndex interval_thread_length = interval_length / p_step / static_cast<TypeIndex>(p_threads);    /* How many iterations should be performed by each thread */
+    if (interval_thread_length < p_step)  {
+        /* There is not enough work to load all threads - lets set minimum iteration step as a interval for thread. */
+        interval_thread_length = p_step;
     }
-
-    std::size_t amount_threads = static_cast<std::size_t>(interval_length / interval_step);
-    if (amount_threads > AMOUNT_THREADS) {
-        amount_threads = AMOUNT_THREADS;
-    }
-    else if (amount_threads > 0) {
-        amount_threads--;   /* current thread is also considered. */
-    }
-#endif
 
     TypeIndex current_start = p_start;
-    TypeIndex current_end = p_start + interval_step;
+    TypeIndex current_end = p_start + interval_thread_length;
 
-    std::vector<std::future<void>> future_storage(amount_threads);
+    std::vector<std::future<void>> future_storage;
+    future_storage.reserve(p_threads);
 
-    for (std::size_t i = 0; i < amount_threads; ++i) {
+    /* 
+    
+    It is possible that there are not enough work for all threads, lets check that we are not out of range.
+    In order to control it lets use the following expression: current_end < end - it should less because we
+    have to load the current thread as well.
+
+    */
+    for (std::size_t i = 0; (i < static_cast<TypeIndex>(p_threads) - 1) && (current_end < p_end); ++i) {
         const auto async_task = [&p_task, current_start, current_end, p_step](){
             for (TypeIndex i = current_start; i < current_end; i += p_step) {
                 p_task(i);
             }
         };
 
-        future_storage[i] = std::async(std::launch::async, async_task);
+        /* There was an optimization for nested 'parallel_for' loops, but the maximum depth in the current library is 2.
+           If the optimization is needed - get it from repository (versions that are <= 0.10.0.1). */
+        future_storage.push_back(std::async(std::launch::async, async_task));
 
         current_start = current_end;
-        current_end += interval_step;
+        current_end += interval_thread_length;
     }
 
     for (TypeIndex i = current_start; i < p_end; i += p_step) {
@@ -145,6 +131,7 @@ void parallel_for(const TypeIndex p_start, const TypeIndex p_end, const TypeInde
         feature.get();
     }
 #elif defined(PARALLEL_IMPLEMENTATION_PPL)
+    (void) p_threads;
     concurrency::parallel_for(p_start, p_end, p_step, p_task);
 #elif defined(PARALLEL_IMPLEMENTATION_OPENMP)
     #pragma omp parallel for
@@ -197,17 +184,18 @@ Advanced uses might use one of the define to use specific implementation of the 
 @param[in] p_begin: initial iterator from that the loop starts.
 @param[in] p_end: end iterator that defines when the loop should stop `iter != p_end`.
 @param[in] p_task: body of the loop that defines actions that should be done for each element.
+@param[in] p_threads: amount of threads that are going to be used for processing (by default efficient amount of threads).
 
 */
 template <typename TypeIter, typename TypeAction>
-void parallel_for_each(const TypeIter p_begin, const TypeIter p_end, const TypeAction & p_task) {
+void parallel_for_each(const TypeIter p_begin, const TypeIter p_end, const TypeAction & p_task, const std::size_t p_threads = AMOUNT_THREADS) {
 #if defined(PARALLEL_IMPLEMENTATION_ASYNC_POOL)
     const std::size_t interval_length = std::distance(p_begin, p_end);
-    const std::size_t step = std::max(interval_length / (AMOUNT_THREADS + 1), std::size_t(1));
+    const std::size_t step = std::max(interval_length / p_threads, std::size_t(1));
 
     std::size_t amount_threads = static_cast<std::size_t>(interval_length / step);
-    if (amount_threads > AMOUNT_THREADS) {
-        amount_threads = AMOUNT_THREADS;
+    if (amount_threads > p_threads) {
+        amount_threads = p_threads;
     }
     else if (amount_threads > 0) {
         amount_threads--;   /* current thread is also considered. */
@@ -239,6 +227,7 @@ void parallel_for_each(const TypeIter p_begin, const TypeIter p_end, const TypeA
         feature.get();
     }
 #elif defined(PARALLEL_IMPLEMENTATION_PPL)
+    (void) p_threads;
     concurrency::parallel_for_each(p_begin, p_end, p_task);
 #else
     for (auto iter = p_begin; iter != p_end; ++iter) {
