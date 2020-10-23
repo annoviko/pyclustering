@@ -158,7 +158,7 @@ class elbow:
         else:
             initializer = wrapper.elbow_center_initializer.RANDOM
 
-        result = wrapper.elbow(self.__data, self.__kmin, self.__kmax, initializer, self.__random_state, self.__kstep)
+        result = wrapper.elbow(self.__data, self.__kmin, self.__kmax, self.__kstep, initializer, self.__random_state)
 
         self.__kvalue = result[0]
         self.__wce = result[1]
@@ -224,7 +224,7 @@ class elbow:
 
         """
         optimal_elbow_value = max(self.__elbows)
-        self.__kvalue = self.__elbows.index(optimal_elbow_value) + 1 + self.__kmin
+        self.__kvalue = (self.__elbows.index(optimal_elbow_value) + 1) * self.__kstep + self.__kmin
 
 
     def __verify_arguments(self):

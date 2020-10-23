@@ -220,3 +220,5 @@ ensembles are expected after simulation.
 @endcode
 
 """
+
+__version__ = '0.10.dev'

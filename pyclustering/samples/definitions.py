@@ -40,23 +40,24 @@ class SIMPLE_SAMPLES:
     """
 
     ## Simple Sample collection path.
-    COLLECTION_PATH         = DEFAULT_SAMPLE_PATH + "simple" + os.sep
+    COLLECTION_PATH = DEFAULT_SAMPLE_PATH + "simple" + os.sep
 
-    SAMPLE_SIMPLE1          = COLLECTION_PATH + "Simple01.data"
-    SAMPLE_SIMPLE2          = COLLECTION_PATH + "Simple02.data"
-    SAMPLE_SIMPLE3          = COLLECTION_PATH + "Simple03.data"
-    SAMPLE_SIMPLE4          = COLLECTION_PATH + "Simple04.data"
-    SAMPLE_SIMPLE5          = COLLECTION_PATH + "Simple05.data"
-    SAMPLE_SIMPLE6          = COLLECTION_PATH + "Simple06.data"
-    SAMPLE_SIMPLE7          = COLLECTION_PATH + "Simple07.data"
-    SAMPLE_SIMPLE8          = COLLECTION_PATH + "Simple08.data"
-    SAMPLE_SIMPLE9          = COLLECTION_PATH + "Simple09.data"
-    SAMPLE_SIMPLE10         = COLLECTION_PATH + "Simple10.data"
-    SAMPLE_SIMPLE11         = COLLECTION_PATH + "Simple11.data"
-    SAMPLE_SIMPLE12         = COLLECTION_PATH + "Simple12.data"
-    SAMPLE_SIMPLE13         = COLLECTION_PATH + "Simple13.data"
-    SAMPLE_SIMPLE14         = COLLECTION_PATH + "Simple14.data"
-    SAMPLE_ELONGATE         = COLLECTION_PATH + "Elongate.data"
+    SAMPLE_SIMPLE1 = COLLECTION_PATH + "Simple01.data"
+    SAMPLE_SIMPLE2 = COLLECTION_PATH + "Simple02.data"
+    SAMPLE_SIMPLE3 = COLLECTION_PATH + "Simple03.data"
+    SAMPLE_SIMPLE4 = COLLECTION_PATH + "Simple04.data"
+    SAMPLE_SIMPLE5 = COLLECTION_PATH + "Simple05.data"
+    SAMPLE_SIMPLE6 = COLLECTION_PATH + "Simple06.data"
+    SAMPLE_SIMPLE7 = COLLECTION_PATH + "Simple07.data"
+    SAMPLE_SIMPLE8 = COLLECTION_PATH + "Simple08.data"
+    SAMPLE_SIMPLE9 = COLLECTION_PATH + "Simple09.data"
+    SAMPLE_SIMPLE10 = COLLECTION_PATH + "Simple10.data"
+    SAMPLE_SIMPLE11 = COLLECTION_PATH + "Simple11.data"
+    SAMPLE_SIMPLE12 = COLLECTION_PATH + "Simple12.data"
+    SAMPLE_SIMPLE13 = COLLECTION_PATH + "Simple13.data"
+    SAMPLE_SIMPLE14 = COLLECTION_PATH + "Simple14.data"
+    SAMPLE_SIMPLE15 = COLLECTION_PATH + "Simple15.data"
+    SAMPLE_ELONGATE = COLLECTION_PATH + "Elongate.data"
 
 
 class SIMPLE_ANSWERS:
@@ -83,6 +84,7 @@ class SIMPLE_ANSWERS:
     ANSWER_SIMPLE12 = COLLECTION_PATH + "Simple12.answer"
     ANSWER_SIMPLE13 = COLLECTION_PATH + "Simple13.answer"
     ANSWER_SIMPLE14 = COLLECTION_PATH + "Simple14.answer"
+    ANSWER_SIMPLE15 = COLLECTION_PATH + "Simple15.answer"
     ANSWER_ELONGATE = COLLECTION_PATH + "Elongate.answer"
 
 
@@ -96,18 +98,18 @@ class FCPS_SAMPLES:
     
     """
 
-    COLLECTION_PATH         = DEFAULT_SAMPLE_PATH + "fcps" + os.sep
+    COLLECTION_PATH = DEFAULT_SAMPLE_PATH + "fcps" + os.sep
 
-    SAMPLE_ATOM             = COLLECTION_PATH + "Atom.data"
-    SAMPLE_CHAINLINK        = COLLECTION_PATH + "Chainlink.data"
-    SAMPLE_ENGY_TIME        = COLLECTION_PATH + "EngyTime.data"
-    SAMPLE_GOLF_BALL        = COLLECTION_PATH + "GolfBall.data"
-    SAMPLE_HEPTA            = COLLECTION_PATH + "Hepta.data"
-    SAMPLE_LSUN             = COLLECTION_PATH + "Lsun.data"
-    SAMPLE_TARGET           = COLLECTION_PATH + "Target.data"
-    SAMPLE_TETRA            = COLLECTION_PATH + "Tetra.data"
-    SAMPLE_TWO_DIAMONDS     = COLLECTION_PATH + "TwoDiamonds.data"
-    SAMPLE_WING_NUT         = COLLECTION_PATH + "WingNut.data"
+    SAMPLE_ATOM = COLLECTION_PATH + "Atom.data"
+    SAMPLE_CHAINLINK = COLLECTION_PATH + "Chainlink.data"
+    SAMPLE_ENGY_TIME = COLLECTION_PATH + "EngyTime.data"
+    SAMPLE_GOLF_BALL = COLLECTION_PATH + "GolfBall.data"
+    SAMPLE_HEPTA = COLLECTION_PATH + "Hepta.data"
+    SAMPLE_LSUN = COLLECTION_PATH + "Lsun.data"
+    SAMPLE_TARGET = COLLECTION_PATH + "Target.data"
+    SAMPLE_TETRA = COLLECTION_PATH + "Tetra.data"
+    SAMPLE_TWO_DIAMONDS = COLLECTION_PATH + "TwoDiamonds.data"
+    SAMPLE_WING_NUT = COLLECTION_PATH + "WingNut.data"
 
 
 class FAMOUS_SAMPLES:
@@ -116,10 +118,10 @@ class FAMOUS_SAMPLES:
     
     """
 
-    COLLECTION_PATH         = DEFAULT_SAMPLE_PATH + "famous" + os.sep
+    COLLECTION_PATH = DEFAULT_SAMPLE_PATH + "famous" + os.sep
 
-    SAMPLE_OLD_FAITHFUL     = COLLECTION_PATH + "OldFaithful.data"
-    SAMPLE_IRIS             = COLLECTION_PATH + "Iris.data"
+    SAMPLE_OLD_FAITHFUL = COLLECTION_PATH + "OldFaithful.data"
+    SAMPLE_IRIS = COLLECTION_PATH + "Iris.data"
 
 
 class FAMOUS_ANSWERS:
@@ -130,9 +132,9 @@ class FAMOUS_ANSWERS:
 
     """
 
-    COLLECTION_PATH         = DEFAULT_SAMPLE_PATH + "famous" + os.sep
+    COLLECTION_PATH = DEFAULT_SAMPLE_PATH + "famous" + os.sep
 
-    ANSWER_IRIS             = COLLECTION_PATH + "Iris.answer"
+    ANSWER_IRIS = COLLECTION_PATH + "Iris.answer"
 
 
 class GRAPH_SIMPLE_SAMPLES:

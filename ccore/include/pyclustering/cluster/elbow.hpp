@@ -191,11 +191,10 @@ public:
     
     @param[in] p_kmin: minimum amount of clusters that should be considered.
     @param[in] p_kmax: maximum amount of clusters that should be considered.
-    @param[in] p_random_state: seed for random state (by default is `RANDOM_STATE_CURRENT_TIME`, current system time is used).
 
     */
-    elbow(const std::size_t p_kmin, const std::size_t p_kmax, const long long p_random_state = RANDOM_STATE_CURRENT_TIME) :
-        elbow(p_kmin, p_kmax, 1, p_random_state)
+    elbow(const std::size_t p_kmin, const std::size_t p_kmax) :
+        elbow(p_kmin, p_kmax, 1, RANDOM_STATE_CURRENT_TIME)
     { }
 
     /*!
@@ -205,10 +204,23 @@ public:
     @param[in] p_kmin: minimum amount of clusters that should be considered.
     @param[in] p_kmax: maximum amount of clusters that should be considered.
     @param[in] p_kstep: search step in the interval [kmin, kmax].
-    @param[in] p_random_state: seed for random state (by default is `RANDOM_STATE_CURRENT_TIME`, current system time is used).
 
     */
-    elbow(const std::size_t p_kmin, const std::size_t p_kmax, const std::size_t p_kstep, const long long p_random_state = RANDOM_STATE_CURRENT_TIME) :
+    elbow(const std::size_t p_kmin, const std::size_t p_kmax, const std::size_t p_kstep) :
+        elbow(p_kmin, p_kmax, p_kstep, RANDOM_STATE_CURRENT_TIME)
+    { }
+
+    /*!
+
+    @brief  Elbow method constructor with parameters of the method.
+
+    @param[in] p_kmin: minimum amount of clusters that should be considered.
+    @param[in] p_kmax: maximum amount of clusters that should be considered.
+    @param[in] p_kstep: search step in the interval [kmin, kmax].
+    @param[in] p_random_state: seed for random state.
+
+    */
+    elbow(const std::size_t p_kmin, const std::size_t p_kmax, const std::size_t p_kstep, const long long p_random_state) :
         m_kmin(p_kmin),
         m_kmax(p_kmax),
         m_kstep(p_kstep),
@@ -259,7 +271,7 @@ public:
 
         m_result->get_wce().resize(m_kamount);
 
-        parallel_for(m_kmin, m_kmax + 1, [this](const std::size_t p_index){
+        parallel_for(m_kmin, m_kmax + 1, m_kstep, [this](const std::size_t p_index){
             calculate_wce(p_index);
         });
 
@@ -280,23 +292,27 @@ private:
         TypeInitializer(p_amount, p_random_state).initialize(p_data, p_initial_centers);
     }
 
-    void calculate_wce(const std::size_t p_amount) {
+    void calculate_wce(const std::size_t p_kvalue) {
         dataset initial_centers;
-        prepare_centers(p_amount, *m_data, m_random_state, initial_centers);
+        prepare_centers(p_kvalue, *m_data, m_random_state, initial_centers);
 
         kmeans_data result;
         kmeans instance(initial_centers, kmeans::DEFAULT_TOLERANCE);
         instance.process(*m_data, result);
 
-        m_result->get_wce().at(p_amount - m_kmin) = result.wce();
+        m_result->get_wce().at((p_kvalue - m_kmin) / m_kstep) = result.wce();
     }
 
     void verify() {
-        if (m_kmax < m_kmin) {
+        if (m_kmin < 1) {
+            throw std::invalid_argument("K min value '" + std::to_string(m_kmin) + "' should be greater or equal to 0.");
+        }
+
+        if (m_kmax <= m_kmin) {
             throw std::invalid_argument("K max value '" + std::to_string(m_kmax) + "' should be greater than K min value '" + std::to_string(m_kmin) + "'.");
         }
 
-        if (m_kmax < 3 + m_kmin) {
+        if (m_kmax + 1 < 3 + m_kmin) {
             throw std::invalid_argument("Amount of K '" + std::to_string(m_kmax - m_kmin) + "' is too small for analysis.");
         }
 
@@ -330,7 +346,7 @@ private:
 
     std::size_t find_optimal_kvalue() {
         auto optimal_elbow_iter = std::max_element(m_elbow.cbegin(), m_elbow.cend());
-        return std::distance(m_elbow.cbegin(), optimal_elbow_iter) + 1 + m_kmin;
+        return (std::distance(m_elbow.cbegin(), optimal_elbow_iter) + 1) * m_kstep + m_kmin;
     }
 };
 

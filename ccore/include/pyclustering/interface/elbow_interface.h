@@ -71,7 +71,7 @@ pyclustering_package * elbow_method(const pyclustering_package * const p_sample,
     p_sample->extract(input_dataset);
 
     pyclustering::clst::elbow_data result;
-    pyclustering::clst::elbow<type_initializer> solver(p_kmin, p_kmax, p_random_state);
+    pyclustering::clst::elbow<type_initializer> solver(p_kmin, p_kmax, p_kstep, p_random_state);
     solver.process(input_dataset, result);
 
     pyclustering_package * package = new pyclustering_package(pyclustering_data_t::PYCLUSTERING_TYPE_LIST);

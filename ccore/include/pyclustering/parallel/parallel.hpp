@@ -78,6 +78,7 @@ Advanced uses might use one of the define to use specific implementation of the 
 template <typename TypeIndex, typename TypeAction>
 void parallel_for(const TypeIndex p_start, const TypeIndex p_end, const TypeIndex p_step, const TypeAction & p_task) {
 #if defined(PARALLEL_IMPLEMENTATION_ASYNC_POOL)
+#if defined(NEGATIVE_STEPS)
     const TypeIndex interval_length = (p_end > p_start) ? (p_end - p_start) : (p_start - p_end);
 
     TypeIndex interval_step = (interval_length / p_step) / (static_cast<TypeIndex>(AMOUNT_THREADS) + 1);
@@ -86,13 +87,38 @@ void parallel_for(const TypeIndex p_start, const TypeIndex p_end, const TypeInde
         interval_step = p_step;
     }
 
-    TypeIndex amount_threads = (p_end - p_start) / interval_step;   /* amount of data might be less than amount of threads. */
-    if (amount_threads > static_cast<TypeIndex>(AMOUNT_THREADS)) {
-        amount_threads = static_cast<TypeIndex>(AMOUNT_THREADS);
+    std::size_t amount_threads = static_cast<std::size_t>(interval_length / interval_step);   /* amount of data might be less than amount of threads. */
+    if (amount_threads > AMOUNT_THREADS) {
+        amount_threads = AMOUNT_THREADS;
     }
     else if (amount_threads > 0) {
         amount_threads--;   /* current thread is also considered. */
     }
+#else
+    /*
+
+    Microsoft `concurrency::parallel_for` implementation does not support negative step. The cite from the documentation about `concurrency::parallel_for`.
+    The loop iteration must be forward. The parallel_for algorithm throws an exception of type std::invalid_argument if the _Step parameter is less than 1.
+
+    Therefore let's support the same behavior.
+
+    */
+
+    const TypeIndex interval_length = p_end - p_start;
+
+    TypeIndex interval_step = (interval_length / p_step) / (static_cast<TypeIndex>(AMOUNT_THREADS) + 1);
+    if (interval_step < p_step)  {
+        interval_step = p_step;
+    }
+
+    std::size_t amount_threads = static_cast<std::size_t>(interval_length / interval_step);
+    if (amount_threads > AMOUNT_THREADS) {
+        amount_threads = AMOUNT_THREADS;
+    }
+    else if (amount_threads > 0) {
+        amount_threads--;   /* current thread is also considered. */
+    }
+#endif
 
     TypeIndex current_start = p_start;
     TypeIndex current_end = p_start + interval_step;

@@ -42,7 +42,7 @@ class elbow_center_initializer(IntEnum):
     RANDOM = 1
 
 
-def elbow(sample, kmin, kmax, initializer, random_state, kstep):
+def elbow(sample, kmin, kmax, kstep, initializer, random_state):
     random_state = random_state or -1
     pointer_data = package_builder(sample, c_double).create()
 
@@ -58,6 +58,9 @@ def elbow(sample, kmin, kmax, initializer, random_state, kstep):
 
     results = package_extractor(package).extract()
     ccore.free_pyclustering_package(package)
+
+    if isinstance(results, bytes):
+        raise RuntimeError(results.decode('utf-8'))
 
     return (results[elbow_package_indexer.ELBOW_PACKAGE_INDEX_AMOUNT][0],
             results[elbow_package_indexer.ELBOW_PACKAGE_INDEX_WCE])
