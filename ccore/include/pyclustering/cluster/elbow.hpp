@@ -305,7 +305,7 @@ private:
 
     void verify() {
         if (m_kmin < 1) {
-            throw std::invalid_argument("K min value '" + std::to_string(m_kmin) + "' should be greater or equal to 0.");
+            throw std::invalid_argument("K min value '" + std::to_string(m_kmin) + "' should be greater than 0.");
         }
 
         if (m_kmax <= m_kmin) {

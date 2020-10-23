@@ -33,8 +33,7 @@
 
 
 #if defined(WIN32) || (_WIN32) || (_WIN64)
-/* #define PARALLEL_IMPLEMENTATION_PPL */
-#define PARALLEL_IMPLEMENTATION_ASYNC_POOL
+#define PARALLEL_IMPLEMENTATION_ASYNC_POOL  /* 'PARALLEL_IMPLEMENTATION_ASYNC_POOL' demostrates more efficiency than 'PARALLEL_IMPLEMENTATION_PPL' in scope of the pyclustering library. */
 #else
 #define PARALLEL_IMPLEMENTATION_ASYNC_POOL
 #endif
@@ -51,7 +50,7 @@ namespace parallel {
 
 
 /* Pool of threads is used to prevent overhead in case of nested loop */
-static const std::size_t AMOUNT_HARDWARE_THREADS = std::thread::hardware_concurrency() * 2;
+static const std::size_t AMOUNT_HARDWARE_THREADS = std::thread::hardware_concurrency();
 static const std::size_t AMOUNT_THREADS = (AMOUNT_HARDWARE_THREADS > 1) ? (AMOUNT_HARDWARE_THREADS - 1) : 0;
 
 
@@ -68,10 +67,10 @@ Advanced uses might use one of the define to use specific implementation of the 
 4. PARALLEL_IMPLEMENTATION_OPENMP     - parallel OpenMP implementation.
 
 @param[in] p_start: initial value for the loop.
-@param[in] p_end: final value of the loop - calculations are performed until current counter value is less than final value `i < p_end`.
+@param[in] p_end: final value of the loop - calculations are performed until the current counter value is less than the final value `i < p_end`.
 @param[in] p_step: step that is used to iterate over the loop.
 @param[in] p_task: body of the loop that defines actions that should be done on each iteration.
-@param[in] p_threads: amount of threads that are going to be used for processing (by default efficient amount of threads).
+@param[in] p_threads: amount of threads that are going to be used for processing (by default the efficient amount of threads).
 
 */
 template <typename TypeIndex, typename TypeAction>
@@ -212,13 +211,23 @@ Advanced uses might use one of the define to use specific implementation of the 
 @param[in] p_begin: initial iterator from that the loop starts.
 @param[in] p_end: end iterator that defines when the loop should stop `iter != p_end`.
 @param[in] p_task: body of the loop that defines actions that should be done for each element.
-@param[in] p_threads: amount of threads that are going to be used for processing (by default efficient amount of threads).
+@param[in] p_threads: amount of threads that are going to be used for processing (by default the efficient amount of threads).
 
 */
 template <typename TypeIter, typename TypeAction>
 void parallel_for_each(const TypeIter p_begin, const TypeIter p_end, const TypeAction & p_task, const std::size_t p_threads = AMOUNT_THREADS) {
 #if defined(PARALLEL_IMPLEMENTATION_ASYNC_POOL)
     const std::size_t interval_length = std::distance(p_begin, p_end);
+
+    if (interval_length == 0) {
+        return;
+    }
+
+    if (interval_length == 1) {
+        p_task(*p_begin);
+        return;
+    }
+
     const std::size_t step = std::max(interval_length / p_threads, std::size_t(1));
 
     std::size_t amount_threads = static_cast<std::size_t>(interval_length / step);

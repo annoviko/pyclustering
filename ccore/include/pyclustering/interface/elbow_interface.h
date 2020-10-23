@@ -35,7 +35,7 @@
 
 /*!
 
-@brief   Elbow result is returned by pyclustering_package that consist sub-packages and this enumerator provides
+@brief   Elbow result is returned by `pyclustering_package` that consists sub-packages and this enumerator provides
           named indexes for sub-packages.
 
 */
@@ -48,10 +48,10 @@ enum elbow_package_indexer {
 
 /*!
 
-@brief   Performs data analysis using Elbow method using center initializer that is specified by template.
+@brief   Performs data analysis using Elbow method and a center initializer that is specified by template.
 @details Caller should destroy returned result by 'free_pyclustering_package'.
 
-@param[in] p_sample: input data for clustering.
+@param[in] p_sample: input data for analysis.
 @param[in] p_kmin: minimum amount of clusters that should be considered.
 @param[in] p_kmax: maximum amount of clusters that should be considered.
 @param[in] p_kstep: search step in the interval [kmin, kmax].
@@ -88,10 +88,10 @@ pyclustering_package * elbow_method(const pyclustering_package * const p_sample,
 
 /*!
 
-@brief   Performs data analysis using Elbow method with K-Means++ center initialization to found out proper amount of clusters.
+@brief   Performs data analysis using Elbow method and K-Means++ center initialization to found out proper amount of clusters.
 @details Caller should destroy returned result by 'free_pyclustering_package'.
 
-@param[in] p_sample: input data for clustering.
+@param[in] p_sample: input data for analysis.
 @param[in] p_kmin: minimum amount of clusters that should be considered.
 @param[in] p_kmax: maximum amount of clusters that should be considered.
 @param[in] p_kstep: search step in the interval [kmin, kmax].
@@ -109,14 +109,14 @@ extern "C" DECLARATION pyclustering_package * elbow_method_ikpp(const pyclusteri
 
 /*!
 
-@brief   Performs data analysis using Elbow method with random center initialization to found out proper amount of clusters.
+@brief   Performs data analysis using Elbow method and random center initialization to found out proper amount of clusters.
 @details Caller should destroy returned result by 'free_pyclustering_package'.
 
-@param[in] p_sample: input data for clustering.
+@param[in] p_sample: input data for analysis.
 @param[in] p_kmin: minimum amount of clusters that should be considered.
 @param[in] p_kmax: maximum amount of clusters that should be considered.
 @param[in] p_kstep: search step in the interval [kmin, kmax].
-@param[in] p_random_state: seed for random state (by default is `RANDOM_STATE_CURRENT_TIME`, current system time is used).
+@param[in] p_random_state: seed for random state.
 
 @return  Returns Elbow's analysis results as a pyclustering package [ [ amount of clusters ], [ within cluster errors (wce) ] ].
 
