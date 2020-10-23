@@ -221,4 +221,5 @@ ensembles are expected after simulation.
 
 """
 
+## The current version of pyclustering library.
 __version__ = '0.10.dev'

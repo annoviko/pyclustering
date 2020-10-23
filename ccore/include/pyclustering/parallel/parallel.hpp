@@ -25,6 +25,7 @@
 #pragma once
 
 
+#include <algorithm>
 #include <cstddef>
 #include <functional>
 #include <future>
@@ -53,8 +54,6 @@ namespace parallel {
 /* Pool of threads is used to prevent overhead in case of nested loop */
 static const std::size_t AMOUNT_HARDWARE_THREADS = std::thread::hardware_concurrency();
 static const std::size_t AMOUNT_THREADS = (AMOUNT_HARDWARE_THREADS > 1) ? (AMOUNT_HARDWARE_THREADS - 1) : 0;
-static std::vector<std::future<void>> FUTURE_STORAGE(AMOUNT_THREADS);
-static std::vector<spinlock> FUTURE_LOCKS(AMOUNT_THREADS);
 
 
 /*!
@@ -123,7 +122,7 @@ void parallel_for(const TypeIndex p_start, const TypeIndex p_end, const TypeInde
     TypeIndex current_start = p_start;
     TypeIndex current_end = p_start + interval_step;
 
-    std::vector<std::size_t> captured_feature;
+    std::vector<std::future<void>> future_storage(amount_threads);
 
     for (std::size_t i = 0; i < amount_threads; ++i) {
         const auto async_task = [&p_task, current_start, current_end, p_step](){
@@ -132,21 +131,7 @@ void parallel_for(const TypeIndex p_start, const TypeIndex p_end, const TypeInde
             }
         };
 
-        std::size_t free_index = (std::size_t) -1;
-        for (std::size_t j = 0; j < AMOUNT_THREADS; ++j) {
-            if (FUTURE_LOCKS[j].try_lock()) {
-                free_index = j;
-                break;
-            }
-        }
-
-        if (free_index != (std::size_t) -1) {
-            FUTURE_STORAGE[free_index] = std::async(std::launch::async, async_task);
-            captured_feature.push_back(free_index);
-        }
-        else {
-            async_task();
-        }
+        future_storage[i] = std::async(std::launch::async, async_task);
 
         current_start = current_end;
         current_end += interval_step;
@@ -156,9 +141,8 @@ void parallel_for(const TypeIndex p_start, const TypeIndex p_end, const TypeInde
         p_task(i);
     }
 
-    for (auto index_feature : captured_feature) {
-        FUTURE_STORAGE[index_feature].get();
-        FUTURE_LOCKS[index_feature].unlock();
+    for (auto & feature : future_storage) {
+        feature.get();
     }
 #elif defined(PARALLEL_IMPLEMENTATION_PPL)
     concurrency::parallel_for(p_start, p_end, p_step, p_task);
@@ -218,35 +202,30 @@ Advanced uses might use one of the define to use specific implementation of the 
 template <typename TypeIter, typename TypeAction>
 void parallel_for_each(const TypeIter p_begin, const TypeIter p_end, const TypeAction & p_task) {
 #if defined(PARALLEL_IMPLEMENTATION_ASYNC_POOL)
-    const std::size_t step = std::distance(p_begin, p_end) / (AMOUNT_THREADS + 1);
+    const std::size_t interval_length = std::distance(p_begin, p_end);
+    const std::size_t step = std::max(interval_length / (AMOUNT_THREADS + 1), std::size_t(1));
+
+    std::size_t amount_threads = static_cast<std::size_t>(interval_length / step);
+    if (amount_threads > AMOUNT_THREADS) {
+        amount_threads = AMOUNT_THREADS;
+    }
+    else if (amount_threads > 0) {
+        amount_threads--;   /* current thread is also considered. */
+    }
 
     auto current_start = p_begin;
     auto current_end = p_begin + step;
 
-    std::vector<std::size_t> captured_feature;
+    std::vector<std::future<void>> future_storage(amount_threads);
 
-    for (std::size_t i = 0; i < AMOUNT_THREADS; ++i) {
+    for (std::size_t i = 0; i < amount_threads; ++i) {
         auto async_task = [&p_task, current_start, current_end](){
             for (auto iter = current_start; iter != current_end; ++iter) {
                 p_task(*iter);
             }
         };
 
-        std::size_t free_index = (std::size_t) -1;
-        for (std::size_t i = 0; i < AMOUNT_THREADS; i++) {
-            if (FUTURE_LOCKS[i].try_lock()) {
-                free_index = i;
-                break;
-            }
-        }
-
-        if (free_index != (std::size_t) -1) {
-            FUTURE_STORAGE[free_index] = std::async(std::launch::async, async_task);
-            captured_feature.push_back(free_index);
-        }
-        else {
-            async_task();
-        }
+        future_storage[i] = std::async(std::launch::async, async_task);
 
         current_start = current_end;
         current_end += step;
@@ -256,9 +235,8 @@ void parallel_for_each(const TypeIter p_begin, const TypeIter p_end, const TypeA
         p_task(*iter);
     }
 
-    for (auto index_feature : captured_feature) {
-        FUTURE_STORAGE[index_feature].get();
-        FUTURE_LOCKS[index_feature].unlock();
+    for (auto & feature : future_storage) {
+        feature.get();
     }
 #elif defined(PARALLEL_IMPLEMENTATION_PPL)
     concurrency::parallel_for_each(p_begin, p_end, p_task);

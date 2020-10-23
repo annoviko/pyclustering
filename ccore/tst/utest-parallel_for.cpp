@@ -129,3 +129,76 @@ TEST(utest_parallel_for, square_100_elements_step_increase) {
         template_parallel_square(100, i);
     }
 }
+
+
+static void template_parallel_for_sum(const std::size_t p_length) {
+    std::vector<double> values(p_length);
+    std::iota(values.begin(), values.end(), 0);
+
+    parallel_for(std::size_t(0), p_length, [&values](const std::size_t p_index) {
+        values[p_index] = values[p_index] + values[p_index];
+    });
+
+    for (std::size_t i = 0; i < p_length; i++) {
+        ASSERT_EQ(i + i, values[i]);
+    }
+}
+
+TEST(utest_parallel_for, sum_1000000_elements) {
+    template_parallel_for_sum(1000000);
+}
+
+
+
+static void template_parallel_foreach_square(const std::size_t p_length) {
+    std::vector<double> values(p_length);
+    std::iota(values.begin(), values.end(), 0);
+
+    parallel_for_each(std::begin(values), std::end(values), [](double & value) {
+        value = value * value;
+    });
+
+    for (std::size_t i = 0; i < p_length; i++) {
+        ASSERT_EQ(i * i, values[i]);
+    }
+}
+
+TEST(utest_parallel_for_each, square_1_element) {
+    template_parallel_foreach_square(1);
+}
+
+
+TEST(utest_parallel_for_each, square_3_element) {
+    template_parallel_foreach_square(3);
+}
+
+
+TEST(utest_parallel_for_each, square_10_elements) {
+    template_parallel_foreach_square(10);
+}
+
+TEST(utest_parallel_for_each, square_100_elements) {
+    template_parallel_foreach_square(100);
+}
+
+TEST(utest_parallel_for_each, square_1000_elements) {
+    template_parallel_foreach_square(1000);
+}
+
+
+static void template_parallel_foreach_sum(const std::size_t p_length) {
+    std::vector<double> values(p_length);
+    std::iota(values.begin(), values.end(), 0);
+
+    parallel_for_each(std::begin(values), std::end(values), [](double & value) {
+        value = value + value;
+    });
+
+    for (std::size_t i = 0; i < p_length; i++) {
+        ASSERT_EQ(i + i, values[i]);
+    }
+}
+
+TEST(utest_parallel_for_each, sum_1000000_elements) {
+    template_parallel_foreach_sum(1000000);
+}
