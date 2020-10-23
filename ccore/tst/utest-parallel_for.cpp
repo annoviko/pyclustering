@@ -113,6 +113,14 @@ TEST(utest_parallel_for, square_20_elements_step_2_thread_1) {
 }
 
 
+TEST(utest_parallel_for, square_20_elements_step_2_thread_increase) {
+    for (std::size_t i = 1; i < 16; i++) {
+        template_parallel_square(20, 2, i);
+    }
+}
+
+
+
 TEST(utest_parallel_for, square_20_elements_step_3) {
     template_parallel_square(20, 3);
 }
@@ -153,8 +161,25 @@ TEST(utest_parallel_for, square_100_elements_step_3_thread_1) {
 }
 
 
+TEST(utest_parallel_for, square_100_elements_step_3_thread_2) {
+    template_parallel_square(100, 3, 2);
+}
+
+
+TEST(utest_parallel_for, square_100_elements_step_3_thread_increase) {
+    for (std::size_t i = 1; i < 16; i++) {
+        template_parallel_square(100, 3, i);
+    }
+}
+
+
 TEST(utest_parallel_for, square_100_elements_step_5) {
     template_parallel_square(100, 5);
+}
+
+
+TEST(utest_parallel_for, square_100_elements_step_5_thread_2) {
+    template_parallel_square(100, 5, 2);
 }
 
 
@@ -278,7 +303,7 @@ static void template_parallel_foreach_sum(const std::size_t p_length, const std:
     std::vector<double> values(p_length);
     std::iota(values.begin(), values.end(), 0);
 
-    if (p_thread == -1) {
+    if (p_thread == static_cast<std::size_t>(-1)) {
         parallel_for_each(std::begin(values), std::end(values), [](double & value) {
             value = value + value;
         });
