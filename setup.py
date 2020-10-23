@@ -21,6 +21,7 @@
 
 
 import os
+import pyclustering
 
 from setuptools import setup
 from setuptools import find_packages
@@ -46,7 +47,7 @@ class setup_tests_runner(command):
 setup(
       name='pyclustering',
       packages=find_packages(),
-      version='0.10.1',
+      version=pyclustering.__version__,
       description='pyclustring is a python data mining library',
       long_description=load_readme(),
       url='https://github.com/annoviko/pyclustering',

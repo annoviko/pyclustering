@@ -6,6 +6,18 @@ CHANGE NOTES FOR 0.10.1 (STARTED Aug 17, 2020), (RELEASED: -)
 
 GENERAL CHANGES:
 
+- Optimized windows implementation `parallel_for` and `parallel_for_each` by using `pyclustering::parallel` instead of `PPL` that affects all algorithms which use these functions (C++: `pyclustering::parallel`).
+  See: https://github.com/annoviko/pyclustering/issues/642
+
+- Optimized `parallel_for` algorithm for short cycles that affects all algorithms which use `parallel_for` (C++: `pyclustering::parallel`).
+  See: https://github.com/annoviko/pyclustering/issues/642
+
+- Introduced `kstep` parameter for `elbow` algorithm to use custom K search steps (Python: `pyclustering.cluster.elbow`, C++: `pyclustering::cluster::elbow`).
+  See: https://github.com/annoviko/pyclustering/issues/489
+
+- Introduced `p_step` parameter for `parallel_for` function (C++: `pyclustering::parallel`).
+  See: https://github.com/annoviko/pyclustering/issues/640
+
 - Optimized python implementation of K-Medoids algorithm (Python: `pyclustering.cluster.kmedoids`).
   See: https://github.com/annoviko/pyclustering/issues/526
 
@@ -13,16 +25,19 @@ GENERAL CHANGES:
   See: https://github.com/annoviko/pyclustering/issues/635
   See: https://github.com/annoviko/pyclustering/issues/634
 
-- Introduced `metric` parameter for X-Means algorithm to use custom metric for clustering (Python: `pyclustering.cluster.xmeans`; C++ `pyclustering.clst.xmeans`).
+- Introduced `metric` parameter for X-Means algorithm to use custom metric for clustering (Python: `pyclustering.cluster.xmeans`; C++ `pyclustering::clst::xmeans`).
   See: https://github.com/annoviko/pyclustering/issues/619
 
-- Introduced `alpha` and `beta` probabilistic bounds for MNDL splitting criteria for X-Means algorithm (Python: `pyclustering.cluster.xmeans`; C++: `pyclustering.clst.xmeans`).
+- Introduced `alpha` and `beta` probabilistic bounds for MNDL splitting criteria for X-Means algorithm (Python: `pyclustering.cluster.xmeans`; C++: `pyclustering::clst::xmeans`).
   See: https://github.com/annoviko/pyclustering/issues/624
 
 
 CORRECTED MAJOR BUGS:
 
-- Corrected implementation of K-Medians (PAM) algorithm that is aligned with original algorithm (Python: `pyclustering.cluster.kmedoids`; C++: `pyclustering.clst.kmedoids`).
+- Corrected bug with Elbow algorithm where `kmax` is not used to calculate `K` (Python: `pyclustering.cluster.elbow`; C++: `pyclustering::clst::elbow`).
+  See: https://github.com/annoviko/pyclustering/issues/639
+
+- Corrected implementation of K-Medians (PAM) algorithm that is aligned with original algorithm (Python: `pyclustering.cluster.kmedoids`; C++: `pyclustering::clst::kmedoids`).
   See: https://github.com/annoviko/pyclustering/issues/503
 
 - Corrected literature references that were for K-Medians (PAM) implementation (Python: `pyclustering.cluster.kmedoids`).
@@ -40,7 +55,7 @@ CORRECTED MAJOR BUGS:
 - Corrected bug with Gower distance when numpy calculation is used and data shape is bigger than 1 (Python: `pyclustering.utils.metric`).
   See: https://github.com/annoviko/pyclustering/issues/627
 
-- Corrected MNDL splitting criteria for X-Means algorithm (Python: `pyclustering.cluster.xmeans`; C++: `pyclustering.clst.xmeans`).
+- Corrected MNDL splitting criteria for X-Means algorithm (Python: `pyclustering.cluster.xmeans`; C++: `pyclustering::clst::xmeans`).
   See: https://github.com/annoviko/pyclustering/issues/623
 
 

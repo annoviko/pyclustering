@@ -111,6 +111,9 @@ class gmeans_unit_test(unittest.TestCase):
     def test_clustering_sample_13(self):
         gmeans_test_template().clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE13, SIMPLE_ANSWERS.ANSWER_SIMPLE13, 1, False)
 
+    def test_clustering_sample_15(self):
+        gmeans_test_template().clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE15, SIMPLE_ANSWERS.ANSWER_SIMPLE15, 1, False, random_state=1200)
+
     def test_clustering_hepta_kmax_01(self):
         gmeans_test_template().clustering(FCPS_SAMPLES.SAMPLE_HEPTA, 1, 1, False, k_max=1)
 

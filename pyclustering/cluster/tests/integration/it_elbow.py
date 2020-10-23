@@ -41,11 +41,29 @@ class elbow_integration_test(unittest.TestCase):
     def test_elbow_simple_01(self):
         elbow_test_template.calculate_elbow(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, SIMPLE_ANSWERS.ANSWER_SIMPLE1, 1, 10, True)
 
+    def test_elbow_simple_01_step_2(self):
+        elbow_test_template.calculate_elbow(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 3, 1, 10, True, kstep=2)
+
+    def test_elbow_simple_01_step_3(self):
+        elbow_test_template.calculate_elbow(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 4, 1, 10, True, kstep=3)
+
+    def test_elbow_simple_01_step_4(self):
+        elbow_test_template.calculate_elbow(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 5, 1, 10, True, kstep=4)
+
     def test_elbow_simple_01_random_initializer(self):
         elbow_test_template.calculate_elbow(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, SIMPLE_ANSWERS.ANSWER_SIMPLE1, 1, 10, True, initializer=random_center_initializer)
 
     def test_elbow_simple_02(self):
         elbow_test_template.calculate_elbow(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, SIMPLE_ANSWERS.ANSWER_SIMPLE2, 1, 10, True)
+
+    def test_elbow_simple_02_step_2(self):
+        elbow_test_template.calculate_elbow(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, SIMPLE_ANSWERS.ANSWER_SIMPLE2, 1, 10, True, kstep=2)
+
+    def test_elbow_simple_02_step_3(self):
+        elbow_test_template.calculate_elbow(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, None, 1, 10, True, kstep=3)
+
+    def test_elbow_simple_02_step_4(self):
+        elbow_test_template.calculate_elbow(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, None, 1, 10, True, kstep=4)
 
     def test_elbow_simple_02_random_initializer(self):
         elbow_test_template.calculate_elbow(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, SIMPLE_ANSWERS.ANSWER_SIMPLE2, 1, 10, True, initializer=random_center_initializer)

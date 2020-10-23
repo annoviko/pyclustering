@@ -602,8 +602,6 @@ class clique:
 
         """
         result = wrapper.clique(self.__data, self.__amount_intervals, self.__density_threshold)
-        if isinstance(result, str):
-            raise RuntimeError("Error has been detected. " + result)
 
         (self.__clusters, self.__noise, block_logical_locations, max_corners, min_corners, block_points) = result
 

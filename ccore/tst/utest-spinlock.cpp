@@ -34,8 +34,8 @@ using namespace pyclustering::parallel;
 
 
 TEST(utest_spinlock, count_value) {
-    const std::size_t amount_count = 1000;
-    const std::size_t amount_tasks = 1000;
+    const std::size_t amount_count = 100000;
+    const std::size_t amount_tasks = 50;
 
     std::vector<std::thread> pool;
 

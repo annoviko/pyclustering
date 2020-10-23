@@ -136,13 +136,13 @@ utclean:
 .PHONE: valgrind
 valgrind:
 	$(MAKE) $(MKFLAG) utcore.mk ut CONFIG="valgrind"
-	cd tst/ && valgrind --leak-check=full --leak-check=yes --error-exitcode=1 ./utcore.exe
+	cd tst/ && valgrind --leak-check=full --leak-check=yes --max-threads=1000 --error-exitcode=1 ./utcore.exe
 
 
 .PHONE: valgrind_shock
 valgrind_shock:
 	$(MAKE) $(MKFLAG) utcore.mk ut CONFIG="valgrind" BUILD_VERSION="valgrind_shock"
-	cd tst/ && valgrind --leak-check=full --leak-check=yes --error-exitcode=1 ./utcore.exe
+	cd tst/ && valgrind --leak-check=full --leak-check=yes --max-threads=1000 --error-exitcode=1 ./utcore.exe
 
 
 .PHONY: clean

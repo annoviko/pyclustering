@@ -199,6 +199,7 @@ TEST(utest_silhouette_ksearch, random_state_1_kmedoids) {
     template_random_state(2, 10, std::make_shared<kmedoids_allocator>(), 1);
 }
 
+#ifndef VALGRIND_ANALYSIS_SHOCK
 TEST(utest_silhouette_ksearch, random_state_2_kmedoids) {
     template_random_state(2, 10, std::make_shared<kmedoids_allocator>(), 2);
 }
@@ -210,3 +211,4 @@ TEST(utest_silhouette_ksearch, random_state_500_kmedoids) {
 TEST(utest_silhouette_ksearch, random_state_10000_kmedoids) {
     template_random_state(2, 10, std::make_shared<kmedoids_allocator>(), 10000);
 }
+#endif
