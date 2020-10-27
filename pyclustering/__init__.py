@@ -228,4 +228,4 @@ import pathlib
 __version__ = '0.10.dev'
 
 ## The current root directory of pyclustering library.
-__PYCLUSTERING_ROOT_DIRECTORY__ = pathlib.Path(__file__).parent
+__PYCLUSTERING_ROOT_DIRECTORY__ = str(pathlib.Path(__file__).parent)
