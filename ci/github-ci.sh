@@ -39,6 +39,12 @@ run_pypi_install_job() {
 
     sudo apt-get install -qq python3-setuptools
 
+    print_info "Download requirements for 'pyclustering'."
+
+    pip3 install numpy matplotlib scipy Pillow
+
+    print_info "Run testing of PiPy installer."
+
     PYPI_SOURCE=$1
 
     if [[ $PYPI_SOURCE == "testpypi" ]]; then
