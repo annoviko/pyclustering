@@ -53,9 +53,17 @@ run_pypi_install_job() {
         pip3 install pyclustering
     fi
 
+    print_info "Navigate to the system root directory to run tests for installed version"
+
+    cd /
+
     print_info "Run tests for 'pyclustering' package."
 
     python3 -m pyclustering.tests
+
+    print_info "Navigate to the repository folder."
+
+    cd -
 }
 
 
