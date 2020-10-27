@@ -27,7 +27,7 @@
 
 from ctypes import *
 
-import collections
+import collections.abc
 import numpy
 
 
@@ -144,7 +144,7 @@ class package_builder:
 
 
     def __is_container_type(self, value):
-        return isinstance(value, collections.Iterable)
+        return isinstance(value, collections.abc.Iterable)
 
 
     def __get_type(self, pyclustering_data_type):
