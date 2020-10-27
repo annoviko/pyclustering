@@ -481,12 +481,6 @@ case $1 in
     DOCUMENTATION)
         run_doxygen_job ;;
 
-    PYPI_INSTALL)
-        run_pypi_install_job ;;
-
-    TESTPYPI_INSTALL)
-        run_pypi_install_job testpypi ;;
-
     DEPLOY)
         run_deploy_job ;;
 

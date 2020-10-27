@@ -54,3 +54,11 @@ set -x
 case $1 in
     PYPI_INSTALLER)
         run_pypi_install_job ;;
+
+    TEST_PYPI_INSTALLER)
+        run_pypi_install_job testpypi ;;
+
+    *)
+        print_error "Unknown target is specified: '$1'"
+        exit 1 ;;
+esac
