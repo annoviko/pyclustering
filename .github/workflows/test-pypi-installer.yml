@@ -1,0 +1,11 @@
+name: Test PyPi Installer
+
+on: [workflow_dispatch]
+
+jobs:
+  test-pypi:
+    name: Test PyPi Installer
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run a multi-line script
+        run: ./scripts/moveFiles.sh
