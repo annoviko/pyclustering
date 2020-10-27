@@ -41,9 +41,9 @@ run_pypi_install_job() {
 
     print_info "Download requirements for 'pyclustering'."
 
-    pip3 install numpy matplotlib scipy Pillow
+    pip3 install numpy matplotlib scipy Pillow wheel
 
-    print_info "Run testing of PiPy installer."
+    print_info "Install 'pyclustering' from PyPi."
 
     PYPI_SOURCE=$1
 
@@ -52,6 +52,8 @@ run_pypi_install_job() {
     else
         pip3 install pyclustering
     fi
+
+    print_info "Run tests for 'pyclustering' package."
 
     python3 -m pyclustering.tests
 }
