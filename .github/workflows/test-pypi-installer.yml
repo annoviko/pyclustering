@@ -7,5 +7,9 @@ jobs:
     name: Test PyPi Installer
     runs-on: ubuntu-latest
     steps:
+      - name: Clone repository
+        uses: actions/checkout@v1
+      - name: Set rights to run CI script
+        run: chmod u+x ci/github-ci.sh
       - name: Run a multi-line script
         run: ./ci/github-ci.sh PYPI_INSTALLER
