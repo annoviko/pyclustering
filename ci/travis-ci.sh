@@ -3,7 +3,7 @@
 # @date 2014-2020
 # @copyright GNU Public License
 #
-# GNU_PUBLIC_LICENSE
+# @cond GNU_PUBLIC_LICENSE
 #   pyclustering is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
 #   the Free Software Foundation, either version 3 of the License, or
@@ -16,6 +16,7 @@
 #
 #   You should have received a copy of the GNU General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# @endcond
 #
 
 
@@ -292,23 +293,6 @@ run_doxygen_job() {
     filter_content $report_file $report_file_filtered
     check_error_log_file $report_file_filtered "Building doxygen documentation: FAILURE."
     print_info "Building doxygen documentation: SUCCESS."
-}
-
-
-run_pypi_install_job() {
-    print_info "Install (installer testing)."
-    print_info "- Install pyclustering library from pypi."
-    print_info "- Run tests for the library."
-
-    PYPI_SOURCE=$1
-
-    if [[ $PYPI_SOURCE == "testpypi" ]]; then
-        pip3 install --extra-index-url https://testpypi.python.org/pypi pyclustering
-    else
-        pip3 install pyclustering
-    fi
-
-    python3 -m pyclustering.tests
 }
 
 
