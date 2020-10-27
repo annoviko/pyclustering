@@ -35,6 +35,10 @@ run_pypi_install_job() {
     print_info "- Install pyclustering library from pypi."
     print_info "- Run tests for the library."
 
+    print_info "Install 'setuptools' for pip3."
+
+    sudo apt-get install -qq python3-setuptools
+
     PYPI_SOURCE=$1
 
     if [[ $PYPI_SOURCE == "testpypi" ]]; then
