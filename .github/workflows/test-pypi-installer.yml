@@ -8,4 +8,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Run a multi-line script
-        run: ./scripts/moveFiles.sh
+        run: ./ci/github-ci.sh PYPI_INSTALLER
