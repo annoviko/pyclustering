@@ -221,5 +221,11 @@ ensembles are expected after simulation.
 
 """
 
+import pathlib
+
+
 ## The current version of pyclustering library.
 __version__ = '0.10.dev'
+
+## The current root directory of pyclustering library.
+__PYCLUSTERING_ROOT_DIRECTORY__ = pathlib.Path(__file__).parent

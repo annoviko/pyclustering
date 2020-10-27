@@ -31,8 +31,8 @@ print_info() {
 
 
 run_pypi_install_job() {
-    print_info "Install (installer testing)."
-    print_info "- Install pyclustering library from pypi."
+    print_info "PyPi Installer Testing."
+    print_info "- Download and install the library using pip3."
     print_info "- Run tests for the library."
 
     print_info "Install 'setuptools' for pip3."

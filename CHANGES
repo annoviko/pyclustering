@@ -34,6 +34,9 @@ GENERAL CHANGES:
 
 CORRECTED MAJOR BUGS:
 
+- Corrected bug with a command `python3 -m pyclustering.tests` that was using the current folder to find tests to run (Python: `pyclustering`).
+  See: https://github.com/annoviko/pyclustering/issues/648
+
 - Corrected bug with Elbow algorithm where `kmax` is not used to calculate `K` (Python: `pyclustering.cluster.elbow`; C++: `pyclustering::clst::elbow`).
   See: https://github.com/annoviko/pyclustering/issues/639
 
