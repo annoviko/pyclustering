@@ -26,13 +26,8 @@
 
 import math
 import random
-import warnings
 
-try:
-    import matplotlib.pyplot as plt
-except Exception as error_instance:
-    warnings.warn("Impossible to import matplotlib (please, install 'matplotlib'), pyclustering's visualization "
-                  "functionality is not available (details: '%s')." % str(error_instance))
+import matplotlib.pyplot as plt
 
 import pyclustering.core.som_wrapper as wrapper
 

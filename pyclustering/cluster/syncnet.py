@@ -25,14 +25,9 @@
 """
 
 import math
-import warnings
 
-try:
-    import matplotlib.pyplot as plt
-    import matplotlib.animation as animation
-except Exception as error_instance:
-    warnings.warn("Impossible to import matplotlib (please, install 'matplotlib'), pyclustering's visualization "
-                  "functionality is not available (details: '%s')." % str(error_instance))
+import matplotlib.pyplot as plt
+import matplotlib.animation as animation
 
 from pyclustering.cluster.encoder import type_encoding
 from pyclustering.cluster import cluster_visualizer

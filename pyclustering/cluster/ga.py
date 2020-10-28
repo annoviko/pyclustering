@@ -26,14 +26,9 @@
 
 
 import numpy
-import warnings
 
-try:
-    import matplotlib.pyplot as plt
-    import matplotlib.animation as animation
-except Exception as error_instance:
-    warnings.warn("Impossible to import matplotlib (please, install 'matplotlib'), pyclustering's visualization "
-                  "functionality is not available (details: '%s')." % str(error_instance))
+import matplotlib.pyplot as plt
+import matplotlib.animation as animation
 
 from pyclustering.cluster import cluster_visualizer
 from pyclustering.cluster.ga_maths import ga_math

@@ -34,17 +34,10 @@ from pyclustering.core.wrapper import ccore_library
 
 import pyclustering.core.clique_wrapper as wrapper
 
-
-try:
-    import matplotlib
-    import matplotlib.gridspec as gridspec
-    import matplotlib.pyplot as plt
-    import matplotlib.patches as patches
-    import matplotlib.animation as animation
-except Exception as error_instance:
-    import warnings
-    warnings.warn("Impossible to import matplotlib (please, install 'matplotlib'), pyclustering's visualization "
-                  "functionality is not available (details: '%s')." % str(error_instance))
+import matplotlib
+import matplotlib.gridspec as gridspec
+import matplotlib.pyplot as plt
+import matplotlib.patches as patches
 
 
 class clique_visualizer:

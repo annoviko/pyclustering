@@ -37,11 +37,7 @@ run_pypi_install_job() {
 
     print_info "Install 'setuptools' for pip3."
 
-    sudo apt-get install -qq python3-setuptools
-
-    print_info "Download requirements for 'pyclustering'."
-
-    pip3 install numpy matplotlib scipy Pillow wheel
+    sudo apt-get install -qq python3-pip
 
     print_info "Install 'pyclustering' from PyPi."
 

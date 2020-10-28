@@ -27,8 +27,6 @@ from setuptools import setup
 from setuptools import find_packages
 from setuptools.command.test import test as command
 
-from pyclustering.tests.tests_runner import tests_runner
-
 
 def load_readme():
     readme_file = 'PKG-INFO.rst'
@@ -41,6 +39,7 @@ def load_readme():
 
 class setup_tests_runner(command):
     def run_tests(self):
+        from pyclustering.tests.tests_runner import tests_runner
         tests_runner.run()
 
 
@@ -84,8 +83,8 @@ setup(
       author='Andrei Novikov',
       author_email='pyclustering@yandex.ru',
 
-      install_requires=['scipy', 'matplotlib', 'numpy', 'Pillow'],
-      python_requires='>=3.5',
+      install_requires=['scipy>=1.1.0', 'matplotlib>=3.0.0', 'numpy>=1.15.2', 'Pillow>=5.2.0'],
+      python_requires='>=3.6',
       package_data={
                       'pyclustering.samples': ['samples/famous/*.*',
                                                'samples/fcps/*.*',
