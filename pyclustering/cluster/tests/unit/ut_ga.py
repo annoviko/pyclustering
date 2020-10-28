@@ -25,6 +25,7 @@
 
 import unittest
 import inspect
+import numpy
 
 # Generate images without having a window appear.
 import matplotlib
@@ -38,30 +39,14 @@ from pyclustering.utils import read_sample
 
 
 class GeneticAlgorithmClusteringUnitTest(unittest.TestCase):
-
-    # Count attempt to reach best result
-    attempts = 3
-
     def runGeneticAlgorithm(self, test_case_name, data, count_chromosomes, count_clusters, count_populations,
                             count_mutations_gen, result_should_be):
 
-        # Result
-        best_ff = float('inf')
-
-        # Several attempts for randomize algorithm
-        for _attempt in range(GeneticAlgorithmClusteringUnitTest.attempts):
-
-            _, best_ff, = genetic_algorithm(data=data,
-                                            count_clusters=count_clusters,
-                                            chromosome_count=count_chromosomes,
-                                            population_count=count_populations,
-                                            count_mutation_gens=count_mutations_gen).process()
-
-            # Check result for attempt
-            if best_ff == result_should_be:
-                if _attempt > 0:
-                    print('Test case :', test_case_name, ' success with attempts : ', _attempt + 1)
-                break
+        _, best_ff, = genetic_algorithm(data=data,
+                                        count_clusters=count_clusters,
+                                        chromosome_count=count_chromosomes,
+                                        population_count=count_populations,
+                                        count_mutation_gens=count_mutations_gen, random_state=1000).process()
 
         # Check result
         self.assertEqual(best_ff, result_should_be)
@@ -120,153 +105,150 @@ class GeneticAlgorithmClusteringUnitTest(unittest.TestCase):
                                  result_should_be=24.0)
 
 
-    def templateDataClustering(self, sample_path,
-                                     amount_clusters,
-                                     chromosome_count,
-                                     population_count,
-                                     count_mutation_gens,
-                                     coeff_mutation_count,
-                                     expected_clusters_sizes):
-        testing_result = False
-        
-        for _ in range(3):
-            sample = read_sample(sample_path)
-            
-            ga_instance = genetic_algorithm(sample, amount_clusters, chromosome_count, population_count,
-                                            count_mutations_gen=count_mutation_gens,
-                                            coeff_mutation_count=coeff_mutation_count)
-            
-            ga_instance.process()
-            clusters = ga_instance.get_clusters()
-            
-            obtained_cluster_sizes = [len(cluster) for cluster in clusters]
-            if len(sample) != sum(obtained_cluster_sizes):
-                continue
-            
-            if expected_clusters_sizes is not None:
-                obtained_cluster_sizes.sort()
-                expected_clusters_sizes.sort()
-                if obtained_cluster_sizes != expected_clusters_sizes:
-                    continue
-            
-            testing_result = True
-            break
-        
-        assert testing_result is True
-    
-    
+    def templateDataClustering(self,
+                               sample_path,
+                               amount_clusters,
+                               chromosome_count,
+                               population_count,
+                               count_mutation_gens,
+                               coeff_mutation_count,
+                               expected_clusters_sizes,
+                               **kwargs):
+
+        scale_points = kwargs.get('scale_points', None)
+
+        sample = numpy.array(read_sample(sample_path))
+        if scale_points is not None:
+            sample = sample * scale_points
+
+        ga_instance = genetic_algorithm(sample, amount_clusters, chromosome_count, population_count,
+                                        count_mutations_gen=count_mutation_gens,
+                                        coeff_mutation_count=coeff_mutation_count,
+                                        **kwargs)
+
+        ga_instance.process()
+        clusters = ga_instance.get_clusters()
+
+        obtained_cluster_sizes = [len(cluster) for cluster in clusters]
+        self.assertEqual(len(sample), sum(obtained_cluster_sizes))
+
+        if expected_clusters_sizes is not None:
+            obtained_cluster_sizes.sort()
+            expected_clusters_sizes.sort()
+
+            self.assertEqual(obtained_cluster_sizes, expected_clusters_sizes)
+
+
     def testClusteringTwoDimensionalData(self):
-        self.templateDataClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, 20, 30, 2, 0.25, [5, 5])
+        self.templateDataClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, 20, 20, 2, 0.25, [5, 5], random_state=1000)
 
     def testClusteringTwoDimensionalDataWrongAllocation(self):
-        self.templateDataClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, 20, 30, 2, 0.25, [10])
+        self.templateDataClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 1, 20, 20, 2, 0.25, [10], random_state=1000)
+
+    def testClusteringNonNormalizedValues(self):
+        self.assertRaises(ValueError, self.templateDataClustering, SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, 20, 20, 2, 0.25, [5, 5], random_state=1000, scale_points=1000)
+
+    def testClusteringSimple02(self):
+        self.templateDataClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, 3, 20, 40, 2, 0.25, [5, 8, 10], random_state=1000)
+
+    def testClusteringSimple09(self):
+        self.templateDataClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, 2, 20, 20, 2, 0.25, [10, 20], random_state=1000)
 
     def testClusteringOneDimensionalData(self):
-        self.templateDataClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE7, 2, 20, 30, 2, 0.25, [10, 10])
+        self.templateDataClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE7, 2, 20, 20, 2, 0.25, [10, 10], random_state=1000)
 
     def testClusteringOneDimensionalDataWrongAllocation(self):
-        self.templateDataClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE7, 1, 20, 30, 2, 0.25, [20])
+        self.templateDataClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE7, 1, 20, 20, 2, 0.25, [20], random_state=1000)
 
     def testClusteringThreeDimensionalData(self):
-        self.templateDataClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, 2, 20, 30, 2, 0.25, [10, 10])
+        self.templateDataClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, 2, 20, 20, 2, 0.25, [10, 10], random_state=1000)
 
     def testClusteringThreeDimensionalDataWrongAllocation(self):
-        self.templateDataClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, 1, 20, 30, 2, 0.25, [20])
+        self.templateDataClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, 1, 20, 20, 2, 0.25, [20], random_state=1000)
 
     def testTwoClustersTotallySimilarObjects(self):
-        self.templateDataClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 2, 20, 30, 2, 0.25, None)
+        self.templateDataClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 2, 20, 20, 2, 0.25, None, random_state=1000)
 
     def testFiveClustersTotallySimilarObjects(self):
-        self.templateDataClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 5, 20, 30, 2, 0.25, None)
+        self.templateDataClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 5, 20, 20, 2, 0.25, None, random_state=1000)
 
     def testTenClustersTotallySimilarObjects(self):
-        self.templateDataClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 10, 20, 30, 2, 0.25, None)
+        self.templateDataClustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, 10, 20, 20, 2, 0.25, None, random_state=1000)
 
 
-    def templateTestObserverCollecting(self, amount_clusters, iterations, global_optimum, local_optimum, average):
-        testing_result = False
-        
-        observer_instance = None
-        sample = None
-        
-        for _ in range(3):
-            observer_instance = ga_observer(global_optimum, local_optimum, average)
-            
-            assert len(observer_instance) == 0
-            
-            sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1)
-            
-            ga_instance = genetic_algorithm(sample, amount_clusters, 20, iterations, count_mutation_gens=2,
-                                            coeff_mutation_count=0.25, observer=observer_instance)
-            ga_instance.process()
-            
-            assert observer_instance == ga_instance.get_observer()
-            
-            expected_length = 0
-            if (global_optimum is True):
-                expected_length = iterations + 1
-                assert expected_length == len(observer_instance)
-            
-            assert expected_length == len(observer_instance.get_global_best()['chromosome']);
-            assert expected_length == len(observer_instance.get_global_best()['fitness_function']);
+    def templateTestObserverCollecting(self, amount_clusters, iterations, global_optimum, local_optimum, average, **kwargs):
+        observer_instance = ga_observer(global_optimum, local_optimum, average)
 
-            expected_length = 0
-            if (local_optimum is True):
-                expected_length = iterations + 1
-                assert expected_length == len(observer_instance);
-            
-            assert expected_length == len(observer_instance.get_population_best()['chromosome']);
-            assert expected_length == len(observer_instance.get_population_best()['fitness_function']);
-            
-            expected_length = 0
-            if (average is True):
-                expected_length = iterations + 1
-                assert expected_length == len(observer_instance);
-            
-            assert expected_length == len(observer_instance.get_mean_fitness_function());
-            
-            if (global_optimum is True):
-                clusters = ga_math.get_clusters_representation(observer_instance.get_global_best()['chromosome'][-1])
-                if amount_clusters != len(clusters):
-                    continue
-            
-            testing_result = True
-            break
-        
-        assert testing_result == True
+        self.assertEqual(0, len(observer_instance))
+
+        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE1)
+
+        ga_instance = genetic_algorithm(sample, amount_clusters, 20, iterations, count_mutation_gens=2,
+                                        coeff_mutation_count=0.25, observer=observer_instance, **kwargs)
+        ga_instance.process()
+
+        self.assertEqual(observer_instance, ga_instance.get_observer())
+
+        expected_length = 0
+        if global_optimum is True:
+            expected_length = iterations + 1
+            self.assertEqual(expected_length, len(observer_instance))
+
+        self.assertEqual(expected_length, len(observer_instance.get_global_best()['chromosome']))
+        self.assertEqual(expected_length, len(observer_instance.get_global_best()['fitness_function']))
+
+        expected_length = 0
+        if local_optimum is True:
+            expected_length = iterations + 1
+            self.assertEqual(expected_length, len(observer_instance))
+
+        self.assertEqual(expected_length, len(observer_instance.get_population_best()['chromosome']))
+        self.assertEqual(expected_length, len(observer_instance.get_population_best()['fitness_function']))
+
+        expected_length = 0
+        if average is True:
+            expected_length = iterations + 1
+            self.assertEqual(expected_length, len(observer_instance))
+
+        self.assertEqual(expected_length, len(observer_instance.get_mean_fitness_function()))
+
+        if global_optimum is True:
+            clusters = ga_math.get_clusters_representation(observer_instance.get_global_best()['chromosome'][-1])
+            self.assertEqual(amount_clusters, len(clusters))
+
         return sample, observer_instance
 
 
     def testObserveGlobalOptimum(self):
-        self.templateTestObserverCollecting(2, 10, True, False, False)
+        self.templateTestObserverCollecting(2, 10, True, False, False, random_state=1000)
 
     def testObserveLocalOptimum(self):
-        self.templateTestObserverCollecting(2, 11, False, True, False)
+        self.templateTestObserverCollecting(2, 11, False, True, False, random_state=1000)
 
     def testObserveAverage(self):
-        self.templateTestObserverCollecting(2, 12, False, False, True)
+        self.templateTestObserverCollecting(2, 12, False, False, True, random_state=1000)
 
     def testObserveAllParameters(self):
-        self.templateTestObserverCollecting(2, 9, True, True, True)
+        self.templateTestObserverCollecting(2, 9, True, True, True, random_state=1000)
 
     def testObserveNoCollecting(self):
-        self.templateTestObserverCollecting(2, 9, False, False, False)
+        self.templateTestObserverCollecting(2, 9, False, False, False, random_state=1000)
 
     def testObserveParameterCombinations(self):
-        self.templateTestObserverCollecting(3, 10, True, True, False)
-        self.templateTestObserverCollecting(4, 10, True, False, True)
-        self.templateTestObserverCollecting(1, 10, False, True, True)
+        self.templateTestObserverCollecting(3, 10, True, True, False, random_state=1000)
+        self.templateTestObserverCollecting(4, 10, True, False, True, random_state=1000)
+        self.templateTestObserverCollecting(1, 10, False, True, True, random_state=1000)
 
 
     def testNoFailureVisualizationApi(self):
-        sample, observer = self.templateTestObserverCollecting(2, 10, True, True, True)
+        sample, observer = self.templateTestObserverCollecting(2, 10, True, True, True, random_state=1000)
         
         ga_visualizer.show_evolution(observer)
         ga_visualizer.show_clusters(sample, observer)
         ga_visualizer.animate_cluster_allocation(sample, observer)
 
     def testNoFailureShowEvolution(self):
-        _, observer = self.templateTestObserverCollecting(2, 10, True, True, True)
+        _, observer = self.templateTestObserverCollecting(2, 10, True, True, True, random_state=1000)
         
         ga_visualizer.show_evolution(observer, 2, 5)
         ga_visualizer.show_evolution(observer, 2, len(observer))
@@ -278,7 +260,8 @@ class GeneticAlgorithmClusteringUnitTest(unittest.TestCase):
         ga_instance = genetic_algorithm(sample, 2, 20, 20, count_mutation_gens=2,
                                         coeff_mutation_count=0.25, observer=None)
         ga_instance.process()
-        assert None is ga_instance.get_observer()
+
+        self.assertIsNone(ga_instance.get_observer())
 
 
     def test_incorrect_data(self):

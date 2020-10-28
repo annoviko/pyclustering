@@ -6,6 +6,9 @@ CHANGE NOTES FOR 0.10.1 (STARTED Aug 17, 2020), (RELEASED: -)
 
 GENERAL CHANGES:
 
+- Introduced human-readable error for genetic clustering algorithm in case of non-normalized data (Python: `pyclustering::cluster::ga`).
+  See: https://github.com/annoviko/pyclustering/issues/597
+
 - Optimized windows implementation `parallel_for` and `parallel_for_each` by using `pyclustering::parallel` instead of `PPL` that affects all algorithms which use these functions (C++: `pyclustering::parallel`).
   See: https://github.com/annoviko/pyclustering/issues/642
 

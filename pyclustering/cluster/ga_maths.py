@@ -101,16 +101,20 @@ class ga_math:
         """
 
         if len(fitness) == 0:
-            raise AttributeError("Has no any fitness functions.")
+            raise AttributeError("Fitness functions are empty.")
 
         # Get 1/fitness function
         inv_fitness = np.zeros(len(fitness))
 
         #
         for _idx in range(len(inv_fitness)):
+            fitness_value = fitness[_idx]
+            if fitness_value != 0.0:
+                if np.isinf(fitness_value):
+                    raise ValueError("Impossible to calculate the probability of getting reproduced. "
+                                     "Make sure that input data for clustering is normalized between [0, 1].")
 
-            if fitness[_idx] != 0.0:
-                inv_fitness[_idx] = 1.0 / fitness[_idx]
+                inv_fitness[_idx] = 1.0 / fitness_value
             else:
                 inv_fitness[_idx] = 0.0
 
@@ -140,7 +144,7 @@ class ga_math:
         """
 
         # Start from the last elem
-        back_idx = - 1
+        back_idx = -1
 
         # All values equal to the last elem should be set to 1
         last_val = probabilities[back_idx]
@@ -172,10 +176,6 @@ class ga_math:
             if random_num < probabilities[_idx]:
                 res_idx = _idx
                 break
-
-        if res_idx is None:
-            print('Probabilities : ', probabilities)
-            raise AttributeError("'probabilities' should contain 1 as the end of last segment(s)")
 
         return res_idx
 

@@ -3,7 +3,7 @@
 @brief Cluster analysis algorithm: Genetic clustering algorithm (GA).
 @details Implementation based on papers @cite article::ga::1, @cite article::ga::2.
 
-@authors Andrei Novikov, Aleksey Kukushkin (pyclustering@yandex.ru)
+@authors Aleksey Kukushkin, Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2020
 @copyright GNU Public License
 
@@ -25,8 +25,7 @@
 """
 
 
-import numpy as np
-import math
+import numpy
 import warnings
 
 try:
@@ -127,7 +126,7 @@ class ga_observer:
         if not self._need_mean_ff:
             return
 
-        self._mean_ff_result.append(np.mean(fitness_functions))
+        self._mean_ff_result.append(numpy.mean(fitness_functions))
 
 
     def get_global_best(self):
@@ -202,7 +201,7 @@ class ga_visualizer:
     """
     
     @staticmethod
-    def show_evolution(observer, start_iteration = 0, stop_iteration=None, ax=None, display=True):
+    def show_evolution(observer, start_iteration=0, stop_iteration=None, ax=None, display=True):
         """!
         @brief Displays evolution of fitness function for the best chromosome, for the current best chromosome and
                 average value among all chromosomes.
@@ -370,22 +369,22 @@ class genetic_algorithm:
 
     def __init__(self, data, count_clusters, chromosome_count, population_count, **kwargs):
         """!
-        @brief Initialize genetic clustering algorithm for cluster analysis.
+        @brief Initialize genetic clustering algorithm.
         
         @param[in] data (numpy.array|list): Input data for clustering that is represented by two dimensional array
                     where each row is a point, for example, [[0.0, 2.1], [0.1, 2.0], [-0.2, 2.4]].
-        @param[in] count_clusters (uint): Amount of clusters that should be allocated in the data.
-        @param[in] chromosome_count (uint): Amount of chromosomes in each population.
-        @param[in] population_count (uint): Amount of populations.
-        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'count_mutation_gens',
-                    'coeff_mutation_count', 'select_coeff', 'crossover_rate', 'observer', 'random_state').
+        @param[in] count_clusters (uint): The amount of clusters that should be allocated in the data.
+        @param[in] chromosome_count (uint): The amount of chromosomes in each population.
+        @param[in] population_count (uint): The amount of populations that essentially defines the amount of iterations.
+        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: `count_mutation_gens`,
+                    `coeff_mutation_count`, `select_coeff`, `crossover_rate`, `observer`, `random_state`).
 
         <b>Keyword Args:</b><br>
             - count_mutation_gens (uint): Amount of genes in chromosome that is mutated on each step.
             - coeff_mutation_count (float): Percent of chromosomes for mutation, distributed in range (0, 1] and
-               thus amount of chromosomes is defined as follows: 'chromosome_count' * 'coeff_mutation_count'.
+               thus amount of chromosomes is defined as follows: `chromosome_count` * `coeff_mutation_count`
             - select_coeff (float): Exponential coefficient for selection procedure that is used as follows:
-               math.exp(1 + fitness(chromosome) * select_coeff).
+               `math.exp(1 + fitness(chromosome) * select_coeff)`.
             - crossover_rate (float): Crossover rate.
             - observer (ga_observer): Observer that is used for collecting information of about clustering process on each step.
             - random_state (int): Seed for random state (by default is `None`, current system time is used).
@@ -393,10 +392,10 @@ class genetic_algorithm:
         """
         
         # Initialize random
-        np.random.seed(kwargs.get('random_state', None))
+        numpy.random.seed(kwargs.get('random_state', None))
 
         # Clustering data
-        self._data = np.array(data)
+        self._data = numpy.array(data)
 
         # Count clusters
         self._count_clusters = count_clusters
@@ -519,15 +518,13 @@ class genetic_algorithm:
 
         # Calc fitness functions
         fitness = genetic_algorithm._calc_fitness_function(centres, data, chromosomes)
-
-        for _idx in range(len(fitness)):
-            fitness[_idx] = math.exp(1 + fitness[_idx] * select_coeff)
+        fitness = numpy.exp(1.0 + fitness * select_coeff)
 
         # Calc probability vector
         probabilities = ga_math.calc_probability_vector(fitness)
 
         # Select P chromosomes with probabilities
-        new_chromosomes = np.zeros(chromosomes.shape, dtype=np.int)
+        new_chromosomes = numpy.zeros(chromosomes.shape, dtype=numpy.int)
 
         # Selecting
         for _idx in range(len(chromosomes)):
@@ -544,10 +541,10 @@ class genetic_algorithm:
         """
 
         # Get pairs to Crossover
-        pairs_to_crossover = np.array(range(len(chromosomes)))
+        pairs_to_crossover = numpy.array(range(len(chromosomes)))
 
         # Set random pairs
-        np.random.shuffle(pairs_to_crossover)
+        numpy.random.shuffle(pairs_to_crossover)
 
         # Index offset ( pairs_to_crossover split into 2 parts : [V1, V2, .. | P1, P2, ...] crossover between V<->P)
         offset_in_pair = int(len(pairs_to_crossover) / 2)
@@ -575,8 +572,8 @@ class genetic_algorithm:
         count_gens = len(chromosomes[0])
 
         # Get random chromosomes for mutation
-        random_idx_chromosomes = np.array(range(len(chromosomes)))
-        np.random.shuffle(random_idx_chromosomes)
+        random_idx_chromosomes = numpy.array(range(len(chromosomes)))
+        numpy.random.shuffle(random_idx_chromosomes)
 
         #
         for _idx_chromosome in range(int(len(random_idx_chromosomes) * coeff_mutation_count)):
@@ -585,10 +582,10 @@ class genetic_algorithm:
             for _ in range(count_gen_for_mutation):
 
                 # Get random gen
-                gen_num = np.random.randint(count_gens)
+                gen_num = numpy.random.randint(count_gens)
 
                 # Set random cluster
-                chromosomes[random_idx_chromosomes[_idx_chromosome]][gen_num] = np.random.randint(count_clusters)
+                chromosomes[random_idx_chromosomes[_idx_chromosome]][gen_num] = numpy.random.randint(count_clusters)
 
 
     @staticmethod
@@ -619,13 +616,13 @@ class genetic_algorithm:
         """
 
         # Initialize mask
-        mask = np.zeros(mask_length)
+        mask = numpy.zeros(mask_length)
 
         # Set a half of array to 1
         mask[:int(int(mask_length) / 2)] = 1
 
         # Random shuffle
-        np.random.shuffle(mask)
+        numpy.random.shuffle(mask)
 
         return mask
 
@@ -641,7 +638,7 @@ class genetic_algorithm:
         
         """
 
-        population = np.random.randint(count_clusters, size=(chromosome_count, count_data))
+        population = numpy.random.randint(count_clusters, size=(chromosome_count, count_data))
 
         return population
 
@@ -690,20 +687,20 @@ class genetic_algorithm:
         count_chromosome = len(chromosomes)
 
         # Initialize fitness function values
-        fitness_function = np.zeros(count_chromosome)
+        fitness_function = numpy.zeros(count_chromosome)
 
         # Calc fitness function for each chromosome
         for _idx_chromosome in range(count_chromosome):
 
             # Get centers for a selected chromosome
-            centres_data = np.zeros(data.shape)
+            centres_data = numpy.zeros(data.shape)
 
             # Fill data centres
             for _idx in range(len(data)):
                 centres_data[_idx] = centres[_idx_chromosome][chromosomes[_idx_chromosome][_idx]]
 
             # Get City Block distance for a chromosome
-            fitness_function[_idx_chromosome] += np.sum(abs(data - centres_data))
+            fitness_function[_idx_chromosome] += numpy.sum(abs(data - centres_data))
 
         return fitness_function
 
