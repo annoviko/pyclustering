@@ -31,7 +31,7 @@ $env:RESULT_FAILURE = "Failure";
 function build_ccore_library($platform_version) {
     Write-Host "[CI] Build C++ pyclustering library for Windows platform ($platform_version)." -ForegroundColor Green;
 
-    msbuild ccore\ccore.sln /t:ccore:Rebuild /p:configuration=Release /p:platform=$platform_version;
+    msbuild ccore\ccore.sln /t:ccore:Rebuild /p:configuration="Release Shared Library" /p:platform=$platform_version;
 
     if ($LastExitCode -ne 0) {
         Write-Error -Message "[CI] Build process for C++ pyclustering library for Windows ($platform_version) is failed." -Category InvalidResult;
@@ -70,7 +70,7 @@ function job_build_windows_ccore($platform_version) {
 function job_ut_windows_ccore() {
     Write-Host "[CI Job] CCORE unit-test building and running using Visual Studio on Windows platform." -ForegroundColor Green;
 
-    msbuild ccore\ccore.sln /t:utcore:Rebuild /p:configuration=Release;
+    msbuild ccore\ccore.sln /t:utcore:Rebuild /p:configuration="Release Static Library";
     if ($LastExitCode -ne 0) {
         Write-Error -Message "[CI Job] Building of CCORE unit-test project for WINDOWS platform: FAILURE." -Category InvalidResult;
         Exit 1;

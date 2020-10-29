@@ -1,20 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
-    <ProjectConfiguration Include="Debug|Win32">
-      <Configuration>Debug</Configuration>
+    <ProjectConfiguration Include="Debug Static Library|Win32">
+      <Configuration>Debug Static Library</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="Debug|x64">
-      <Configuration>Debug</Configuration>
+    <ProjectConfiguration Include="Debug Static Library|x64">
+      <Configuration>Debug Static Library</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="Release|Win32">
-      <Configuration>Release</Configuration>
+    <ProjectConfiguration Include="Release Static Library|Win32">
+      <Configuration>Release Static Library</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="Release|x64">
-      <Configuration>Release</Configuration>
+    <ProjectConfiguration Include="Release Static Library|x64">
+      <Configuration>Release Static Library</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
@@ -23,28 +23,29 @@
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>utcore</RootNamespace>
     <ProjectName>utcore</ProjectName>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug Static Library|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug Static Library|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release Static Library|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release Static Library|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
@@ -54,37 +55,41 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug Static Library|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug Static Library|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release Static Library|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release Static Library|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug Static Library|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(SolutionDir)/include;$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug Static Library|x64'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(SolutionDir)/include;$(IncludePath)</IncludePath>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)/include;$(IncludePath)</IncludePath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release Static Library|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(SolutionDir)/include;$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release Static Library|x64'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(SolutionDir)/include;$(IncludePath)</IncludePath>
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug Static Library|Win32'">
     <ClCompile>
       <PrecompiledHeader>
       </PrecompiledHeader>
@@ -97,14 +102,14 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(OutDir)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>pyclustering.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy $(TargetPath) $(SolutionDir)tst\</Command>
+      <Command>copy "$(TargetPath)" $(SolutionDir)tst\</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug Static Library|x64'">
     <ClCompile>
       <PrecompiledHeader>
       </PrecompiledHeader>
@@ -118,14 +123,14 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(OutDir)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>pyclustering.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy $(TargetPath) $(SolutionDir)tst\</Command>
+      <Command>copy "$(TargetPath)" $(SolutionDir)tst\</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release Static Library|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <PrecompiledHeader>
@@ -145,14 +150,14 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(OutDir)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>pyclustering.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy $(TargetPath) $(SolutionDir)tst\</Command>
+      <Command>copy "$(TargetPath)" $(SolutionDir)tst\</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release Static Library|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <PrecompiledHeader>
@@ -172,99 +177,15 @@
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(OutDir)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>pyclustering.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy $(TargetPath) $(SolutionDir)tst\</Command>
+      <Command>copy "$(TargetPath)" $(SolutionDir)tst\</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\external\include\gtest\gtest-all.cpp" />
-    <ClCompile Include="..\src\cluster\agglomerative.cpp" />
-    <ClCompile Include="..\src\cluster\bsas.cpp" />
-    <ClCompile Include="..\src\cluster\clique.cpp" />
-    <ClCompile Include="..\src\cluster\clique_block.cpp" />
-    <ClCompile Include="..\src\cluster\cluster_data.cpp" />
-    <ClCompile Include="..\src\cluster\cure.cpp" />
-    <ClCompile Include="..\src\cluster\dbscan.cpp" />
-    <ClCompile Include="..\src\cluster\fcm.cpp" />
-    <ClCompile Include="..\src\cluster\gmeans.cpp" />
-    <ClCompile Include="..\src\cluster\hsyncnet.cpp" />
-    <ClCompile Include="..\src\cluster\kmeans.cpp" />
-    <ClCompile Include="..\src\cluster\kmeans_data.cpp" />
-    <ClCompile Include="..\src\cluster\kmeans_plus_plus.cpp" />
-    <ClCompile Include="..\src\cluster\kmedians.cpp" />
-    <ClCompile Include="..\src\cluster\kmedoids.cpp" />
-    <ClCompile Include="..\src\cluster\mbsas.cpp" />
-    <ClCompile Include="..\src\cluster\optics.cpp" />
-    <ClCompile Include="..\src\cluster\optics_descriptor.cpp" />
-    <ClCompile Include="..\src\cluster\ordering_analyser.cpp" />
-    <ClCompile Include="..\src\cluster\random_center_initializer.cpp" />
-    <ClCompile Include="..\src\cluster\rock.cpp" />
-    <ClCompile Include="..\src\cluster\silhouette.cpp" />
-    <ClCompile Include="..\src\cluster\silhouette_ksearch.cpp" />
-    <ClCompile Include="..\src\cluster\silhouette_ksearch_data.cpp" />
-    <ClCompile Include="..\src\cluster\somsc.cpp" />
-    <ClCompile Include="..\src\cluster\syncnet.cpp" />
-    <ClCompile Include="..\src\cluster\ttsas.cpp" />
-    <ClCompile Include="..\src\cluster\xmeans.cpp" />
-    <ClCompile Include="..\src\container\adjacency_bit_matrix.cpp" />
-    <ClCompile Include="..\src\container\adjacency_connector.cpp" />
-    <ClCompile Include="..\src\container\adjacency_factory.cpp" />
-    <ClCompile Include="..\src\container\adjacency_list.cpp" />
-    <ClCompile Include="..\src\container\adjacency_matrix.cpp" />
-    <ClCompile Include="..\src\container\adjacency_weight_list.cpp" />
-    <ClCompile Include="..\src\container\kdnode.cpp" />
-    <ClCompile Include="..\src\container\kdtree.cpp" />
-    <ClCompile Include="..\src\container\kdtree_balanced.cpp" />
-    <ClCompile Include="..\src\container\kdtree_searcher.cpp" />
-    <ClCompile Include="..\src\differential\differ_factor.cpp" />
-    <ClCompile Include="..\src\interface\agglomerative_interface.cpp" />
-    <ClCompile Include="..\src\interface\bsas_interface.cpp" />
-    <ClCompile Include="..\src\interface\clique_interface.cpp" />
-    <ClCompile Include="..\src\interface\cure_interface.cpp" />
-    <ClCompile Include="..\src\interface\dbscan_interface.cpp" />
-    <ClCompile Include="..\src\interface\elbow_interface.cpp" />
-    <ClCompile Include="..\src\interface\fcm_interface.cpp" />
-    <ClCompile Include="..\src\interface\gmeans_interface.cpp" />
-    <ClCompile Include="..\src\interface\hhn_interface.cpp" />
-    <ClCompile Include="..\src\interface\hsyncnet_interface.cpp" />
-    <ClCompile Include="..\src\interface\interface_property.cpp" />
-    <ClCompile Include="..\src\interface\kmeans_interface.cpp" />
-    <ClCompile Include="..\src\interface\kmedians_interface.cpp" />
-    <ClCompile Include="..\src\interface\kmedoids_interface.cpp" />
-    <ClCompile Include="..\src\interface\legion_interface.cpp" />
-    <ClCompile Include="..\src\interface\mbsas_interface.cpp" />
-    <ClCompile Include="..\src\interface\metric_interface.cpp" />
-    <ClCompile Include="..\src\interface\optics_interface.cpp" />
-    <ClCompile Include="..\src\interface\pcnn_interface.cpp" />
-    <ClCompile Include="..\src\interface\pyclustering_interface.cpp" />
-    <ClCompile Include="..\src\interface\pyclustering_package.cpp" />
-    <ClCompile Include="..\src\interface\rock_interface.cpp" />
-    <ClCompile Include="..\src\interface\silhouette_interface.cpp" />
-    <ClCompile Include="..\src\interface\som_interface.cpp" />
-    <ClCompile Include="..\src\interface\syncnet_interface.cpp" />
-    <ClCompile Include="..\src\interface\syncpr_interface.cpp" />
-    <ClCompile Include="..\src\interface\sync_interface.cpp" />
-    <ClCompile Include="..\src\interface\ttsas_interface.cpp" />
-    <ClCompile Include="..\src\interface\xmeans_interface.cpp" />
-    <ClCompile Include="..\src\nnet\dynamic_analyser.cpp" />
-    <ClCompile Include="..\src\nnet\hhn.cpp" />
-    <ClCompile Include="..\src\nnet\legion.cpp" />
-    <ClCompile Include="..\src\nnet\pcnn.cpp" />
-    <ClCompile Include="..\src\nnet\som.cpp" />
-    <ClCompile Include="..\src\nnet\sync.cpp" />
-    <ClCompile Include="..\src\nnet\syncpr.cpp" />
-    <ClCompile Include="..\src\parallel\spinlock.cpp" />
-    <ClCompile Include="..\src\parallel\task.cpp" />
-    <ClCompile Include="..\src\parallel\thread_executor.cpp" />
-    <ClCompile Include="..\src\parallel\thread_pool.cpp" />
-    <ClCompile Include="..\src\utils\linalg.cpp" />
-    <ClCompile Include="..\src\utils\math.cpp" />
-    <ClCompile Include="..\src\utils\metric.cpp" />
-    <ClCompile Include="..\src\utils\random.cpp" />
-    <ClCompile Include="..\src\utils\stats.cpp" />
     <ClCompile Include="answer_reader.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="utest-clique.cpp" />
