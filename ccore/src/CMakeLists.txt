@@ -36,13 +36,11 @@ file(GLOB_RECURSE PYCLUSTERING_SOURCES "*.cpp")
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
 
-# Executable
-if (BUILD_STATIC_LIB)
-    add_library(pyclustering STATIC ${PYCLUSTERING_SOURCES})
-elseif(BUILD_SHARED_LIB)
-    add_compile_definitions(EXPORT_PYCLUSTERING_INTERFACE)
-    add_library(pyclustering SHARED ${PYCLUSTERING_SOURCES})
-else()
-    add_compile_definitions(EXPORT_PYCLUSTERING_INTERFACE)
-    add_library(pyclustering SHARED ${PYCLUSTERING_SOURCES})
-endif()
+# Build targets
+add_library(pyclustering_static STATIC ${PYCLUSTERING_SOURCES})
+
+add_library(pyclustering_shared SHARED ${PYCLUSTERING_SOURCES})
+target_compile_definitions(pyclustering_shared PUBLIC EXPORT_PYCLUSTERING_INTERFACE)
+
+add_library(pyclustering SHARED ${PYCLUSTERING_SOURCES})
+target_compile_definitions(pyclustering PUBLIC EXPORT_PYCLUSTERING_INTERFACE)

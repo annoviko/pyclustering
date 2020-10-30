@@ -40,10 +40,10 @@
 #elif defined (WIN32) || (_WIN32) || (_WIN64)
     #if defined(EXPORT_PYCLUSTERING_INTERFACE)
         #define DECLARATION __declspec(dllexport)
-    #elif defined(BUILDING_UT_PROJECT)
-        #define DECLARATION
-    #else
+    #elif defined(IMPORT_PYCLUSTERING_INTERFACE)
         #define DECLARATION __declspec(dllimport)
+    #else
+        #define DECLARATION
     #endif
 #else
     #error Unsupported platform
