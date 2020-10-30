@@ -3,7 +3,7 @@
 # @date 2014-2020
 # @copyright GNU Public License
 #
-# GNU_PUBLIC_LICENSE
+# @cond GNU_PUBLIC_LICENSE
 #   pyclustering is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
 #   the Free Software Foundation, either version 3 of the License, or
@@ -16,6 +16,7 @@
 #
 #   You should have received a copy of the GNU General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# @endcond
 #
 
 
@@ -68,13 +69,12 @@ else
 endif
 
 
+# Definitions
+DEFINITION_FLAGS =
+
+
 # Warnings
 WARNING_FLAGS = -Wall -Wpedantic
-
-
-# Toolchain arguments
-CFLAGS = -O2 -MMD -MP -std=$(CPLUS_STANDARD) $(CFLAG_PIC) $(CFLAG_PLATFORM) $(WARNING_FLAGS)
-LFLAGS = -shared $(LFLAG_PLATFORM)
 
 
 # Shared library file
@@ -99,8 +99,14 @@ SOURCES = $(foreach SUBDIR, $(SOURCES_DIRECTORIES), $(wildcard $(SUBDIR)/*.cpp))
 INCLUDES = -I$(INCLUDE_DIRECTORY)
 
 
+# Toolchain arguments
+CFLAGS = -O2 -MMD -MP -std=$(CPLUS_STANDARD) $(CFLAG_PIC) $(CFLAG_PLATFORM) $(WARNING_FLAGS) $(DEFINITION_FLAGS)
+LFLAGS = -shared $(LFLAG_PLATFORM)
+
+
 # Project objects
-OBJECTS_DIRECTORY = obj/ccore/$(PLATFORM)
+OBJECTS_ROOT = obj
+OBJECTS_DIRECTORY = $(OBJECTS_ROOT)/ccore/$(PLATFORM)
 OBJECTS_DIRECTORIES = $(addprefix $(OBJECTS_DIRECTORY)/, $(MODULES)) $(SHARED_LIB_DIRECTORY)
 OBJECTS = $(patsubst $(SOURCES_DIRECTORY)/%.cpp, $(OBJECTS_DIRECTORY)/%.o, $(SOURCES))
 
@@ -117,7 +123,12 @@ cppcheck:
 
 
 .PHONY: ccore
-ccore: mkdirs $(SHARED_LIB)
+ccore: shared_library_definitions mkdirs $(SHARED_LIB)
+
+
+.PHONY: shared_library_definitions
+shared_library_definitions:
+	$(eval DEFINITION_FLAGS := -DEXPORT_PYCLUSTERING_INTERFACE)
 
 
 .PHONY: ccore_static
@@ -126,6 +137,10 @@ ccore_static: mkdirs $(STATIC_LIB)
 
 .PHONY: mkdirs
 mkdirs: $(OBJECTS_DIRECTORIES)
+
+
+$(OBJECTS_DIRECTORIES):
+	$(MKDIR) $@
 
 
 .PHONY:
@@ -142,22 +157,9 @@ $(STATIC_LIB): $(OBJECTS)
 	$(AR) $@ $^
 
 
-$(OBJECTS_DIRECTORIES):
-	$(MKDIR) $@
-
-
-vpath %.cpp $(SOURCES_DIRECTORIES)
-
-
-define make-objects
-$1/%.o: %.cpp
-	$(CC) $(CFLAGS) $(INCLUDES) $$< -o $$@
-endef
-
-
-$(foreach OBJDIR, $(OBJECTS_DIRECTORIES), $(eval $(call make-objects, $(OBJDIR))))
+$(OBJECTS_DIRECTORY)/%.o: $(SOURCES_DIRECTORY)/%.cpp
+	$(CC) $(CFLAGS) $(INCLUDES) $< -o $@
 
 
 # Include dependencies
 -include $(DEPENDENCIES)
-

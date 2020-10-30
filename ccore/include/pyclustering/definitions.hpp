@@ -32,9 +32,13 @@
 
 
 #if (defined (__GNUC__) && defined(__unix__)) || defined(__APPLE__)
-    #define DECLARATION __attribute__ ((__visibility__("default")))
+    #if defined(EXPORT_PYCLUSTERING_INTERFACE)
+        #define DECLARATION __attribute__ ((__visibility__("default")))
+    #else
+        #define DECLARATION
+    #endif
 #elif defined (WIN32) || (_WIN32) || (_WIN64)
-    #if defined(BUILDING_LIBRARY)
+    #if defined(EXPORT_PYCLUSTERING_INTERFACE)
         #define DECLARATION __declspec(dllexport)
     #elif defined(BUILDING_UT_PROJECT)
         #define DECLARATION
