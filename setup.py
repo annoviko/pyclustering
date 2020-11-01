@@ -92,9 +92,9 @@ setup(
                                                'graphs/*.*',
                                                'images/*.*',
                                                'images/digits/*.*'],
-                      'pyclustering.core': ['64-bit/linux/ccore.so', '32-bit/linux/ccore.so',
-                                            '64-bit/win/ccore.dll', '32-bit/win/ccore.dll',
-                                            '64-bit/macos/ccore.so'],
+                      'pyclustering.core': ['64-bit/linux/pyclustering.so', '32-bit/linux/pyclustering.so',
+                                            '64-bit/win/pyclustering.dll', '32-bit/win/pyclustering.dll',
+                                            '64-bit/macos/pyclustering.so'],
                    },
 
       data_files=[('', ['LICENSE', 'CHANGES', 'README.rst', 'PKG-INFO.rst'])],

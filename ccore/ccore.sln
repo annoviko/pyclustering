@@ -10,6 +10,18 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "utcore", "tst\utcore.vcxpro
 		{DBEBB335-D398-45F8-899A-503AFC64ACFE} = {DBEBB335-D398-45F8-899A-503AFC64ACFE}
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "bvt", "bvt", "{841E66D7-A748-48AC-A655-7CB192224B69}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bvt-shared", "bvt\bvt-shared.vcxproj", "{37F48C17-2C61-4E7F-A5AC-D90E69FE30FF}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DBEBB335-D398-45F8-899A-503AFC64ACFE} = {DBEBB335-D398-45F8-899A-503AFC64ACFE}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bvt-static", "bvt\bvt-static.vcxproj", "{13F064A6-46EF-4123-B2C0-C83FED3ABBBB}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DBEBB335-D398-45F8-899A-503AFC64ACFE} = {DBEBB335-D398-45F8-899A-503AFC64ACFE}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug Shared Library|x64 = Debug Shared Library|x64
@@ -54,8 +66,44 @@ Global
 		{8075CCCA-4283-485B-9D76-80AFE5987A3A}.Release Static Library|x64.Build.0 = Release Static Library|x64
 		{8075CCCA-4283-485B-9D76-80AFE5987A3A}.Release Static Library|x86.ActiveCfg = Release Static Library|Win32
 		{8075CCCA-4283-485B-9D76-80AFE5987A3A}.Release Static Library|x86.Build.0 = Release Static Library|Win32
+		{37F48C17-2C61-4E7F-A5AC-D90E69FE30FF}.Debug Shared Library|x64.ActiveCfg = Release Shared Library|x64
+		{37F48C17-2C61-4E7F-A5AC-D90E69FE30FF}.Debug Shared Library|x64.Build.0 = Release Shared Library|x64
+		{37F48C17-2C61-4E7F-A5AC-D90E69FE30FF}.Debug Shared Library|x86.ActiveCfg = Release Shared Library|Win32
+		{37F48C17-2C61-4E7F-A5AC-D90E69FE30FF}.Debug Shared Library|x86.Build.0 = Release Shared Library|Win32
+		{37F48C17-2C61-4E7F-A5AC-D90E69FE30FF}.Debug Static Library|x64.ActiveCfg = Release Shared Library|x64
+		{37F48C17-2C61-4E7F-A5AC-D90E69FE30FF}.Debug Static Library|x64.Build.0 = Release Shared Library|x64
+		{37F48C17-2C61-4E7F-A5AC-D90E69FE30FF}.Debug Static Library|x86.ActiveCfg = Release Shared Library|Win32
+		{37F48C17-2C61-4E7F-A5AC-D90E69FE30FF}.Debug Static Library|x86.Build.0 = Release Shared Library|Win32
+		{37F48C17-2C61-4E7F-A5AC-D90E69FE30FF}.Release Shared Library|x64.ActiveCfg = Release Shared Library|x64
+		{37F48C17-2C61-4E7F-A5AC-D90E69FE30FF}.Release Shared Library|x64.Build.0 = Release Shared Library|x64
+		{37F48C17-2C61-4E7F-A5AC-D90E69FE30FF}.Release Shared Library|x86.ActiveCfg = Release Shared Library|Win32
+		{37F48C17-2C61-4E7F-A5AC-D90E69FE30FF}.Release Shared Library|x86.Build.0 = Release Shared Library|Win32
+		{37F48C17-2C61-4E7F-A5AC-D90E69FE30FF}.Release Static Library|x64.ActiveCfg = Release Shared Library|x64
+		{37F48C17-2C61-4E7F-A5AC-D90E69FE30FF}.Release Static Library|x64.Build.0 = Release Shared Library|x64
+		{37F48C17-2C61-4E7F-A5AC-D90E69FE30FF}.Release Static Library|x86.ActiveCfg = Release Shared Library|Win32
+		{37F48C17-2C61-4E7F-A5AC-D90E69FE30FF}.Release Static Library|x86.Build.0 = Release Shared Library|Win32
+		{13F064A6-46EF-4123-B2C0-C83FED3ABBBB}.Debug Shared Library|x64.ActiveCfg = Release Static Library|x64
+		{13F064A6-46EF-4123-B2C0-C83FED3ABBBB}.Debug Shared Library|x64.Build.0 = Release Static Library|x64
+		{13F064A6-46EF-4123-B2C0-C83FED3ABBBB}.Debug Shared Library|x86.ActiveCfg = Release Static Library|Win32
+		{13F064A6-46EF-4123-B2C0-C83FED3ABBBB}.Debug Shared Library|x86.Build.0 = Release Static Library|Win32
+		{13F064A6-46EF-4123-B2C0-C83FED3ABBBB}.Debug Static Library|x64.ActiveCfg = Release Static Library|x64
+		{13F064A6-46EF-4123-B2C0-C83FED3ABBBB}.Debug Static Library|x64.Build.0 = Release Static Library|x64
+		{13F064A6-46EF-4123-B2C0-C83FED3ABBBB}.Debug Static Library|x86.ActiveCfg = Release Static Library|Win32
+		{13F064A6-46EF-4123-B2C0-C83FED3ABBBB}.Debug Static Library|x86.Build.0 = Release Static Library|Win32
+		{13F064A6-46EF-4123-B2C0-C83FED3ABBBB}.Release Shared Library|x64.ActiveCfg = Release Static Library|x64
+		{13F064A6-46EF-4123-B2C0-C83FED3ABBBB}.Release Shared Library|x64.Build.0 = Release Static Library|x64
+		{13F064A6-46EF-4123-B2C0-C83FED3ABBBB}.Release Shared Library|x86.ActiveCfg = Release Static Library|Win32
+		{13F064A6-46EF-4123-B2C0-C83FED3ABBBB}.Release Shared Library|x86.Build.0 = Release Static Library|Win32
+		{13F064A6-46EF-4123-B2C0-C83FED3ABBBB}.Release Static Library|x64.ActiveCfg = Release Static Library|x64
+		{13F064A6-46EF-4123-B2C0-C83FED3ABBBB}.Release Static Library|x64.Build.0 = Release Static Library|x64
+		{13F064A6-46EF-4123-B2C0-C83FED3ABBBB}.Release Static Library|x86.ActiveCfg = Release Static Library|Win32
+		{13F064A6-46EF-4123-B2C0-C83FED3ABBBB}.Release Static Library|x86.Build.0 = Release Static Library|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{37F48C17-2C61-4E7F-A5AC-D90E69FE30FF} = {841E66D7-A748-48AC-A655-7CB192224B69}
+		{13F064A6-46EF-4123-B2C0-C83FED3ABBBB} = {841E66D7-A748-48AC-A655-7CB192224B69}
 	EndGlobalSection
 EndGlobal

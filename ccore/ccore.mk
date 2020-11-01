@@ -79,7 +79,7 @@ WARNING_FLAGS = -Wall -Wpedantic
 
 # Shared library file
 SHARED_LIB_DIRECTORY = ../pyclustering/core/$(PLATFORM)/$(OSNAME)
-SHARED_LIB = $(SHARED_LIB_DIRECTORY)/ccore.so
+SHARED_LIB = $(SHARED_LIB_DIRECTORY)/pyclustering.so
 
 
 # Static library file

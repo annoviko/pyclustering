@@ -20,8 +20,8 @@
 #
 
 
-$env:CCORE_64BIT_BINARY_PATH = "pyclustering\core\64-bit\win\ccore.dll"
-$env:CCORE_32BIT_BINARY_PATH = "pyclustering\core\32-bit\win\ccore.dll"
+$env:CCORE_64BIT_BINARY_PATH = "pyclustering\core\64-bit\win\pyclustering.dll"
+$env:CCORE_32BIT_BINARY_PATH = "pyclustering\core\32-bit\win\pyclustering.dll"
 
 $env:RESULT_SUCCESS = "Success";
 $env:RESULT_FAILURE = "Failure";
@@ -201,10 +201,10 @@ function job_deploy() {
     Write-Host "windows ccore 64-bit build version: '$env:APPVEYOR_BUILD_NUMBER'" > pyclustering\core\64-bit\win\.win.info;
     
     git.exe add pyclustering\core\32-bit\win\.win.info;
-    git.exe add pyclustering\core\32-bit\win\ccore.dll;
+    git.exe add pyclustering\core\32-bit\win\pyclustering.dll;
 
     git.exe add pyclustering\core\64-bit\win\.win.info;
-    git.exe add pyclustering\core\64-bit\win\ccore.dll;
+    git.exe add pyclustering\core\64-bit\win\pyclustering.dll;
 
     Write-Host "[DEPLOY]: Display status and changes" -ForegroundColor Green;
     git.exe status;
@@ -327,7 +327,7 @@ function download_binary($platform_version, $binary_path) {
     # Obtain link for download
     $env:BUILD_FOLDER = "windows";
     $env:BINARY_FOLDER = $env:APPVEYOR_BUILD_NUMBER;
-    $env:BINARY_FILEPATH = "/$env:APPVEYOR_REPO_BRANCH/$env:BUILD_FOLDER/$platform_version/$env:BINARY_FOLDER/ccore.dll";
+    $env:BINARY_FILEPATH = "/$env:APPVEYOR_REPO_BRANCH/$env:BUILD_FOLDER/$platform_version/$env:BINARY_FOLDER/pyclustering.dll";
 
     & $env:PYTHON ci/cloud $env:YANDEX_DISK_TOKEN download $env:BINARY_FILEPATH $binary_path
     if ($LastExitCode -ne 0) {
@@ -352,7 +352,7 @@ function upload_binary($platform_version, $binary_path) {
     & $env:PYTHON ci/cloud $env:YANDEX_DISK_TOKEN mkdir "/$env:APPVEYOR_REPO_BRANCH/$env:BUILD_FOLDER/$platform_version/$env:BINARY_FOLDER"
 
     # Upload binary file
-    $env:BINARY_FILEPATH = "/$env:APPVEYOR_REPO_BRANCH/$env:BUILD_FOLDER/$platform_version/$env:BINARY_FOLDER/ccore.dll";
+    $env:BINARY_FILEPATH = "/$env:APPVEYOR_REPO_BRANCH/$env:BUILD_FOLDER/$platform_version/$env:BINARY_FOLDER/pyclustering.dll";
 
     & $env:PYTHON ci/cloud $env:YANDEX_DISK_TOKEN upload $binary_path $env:BINARY_FILEPATH
 }

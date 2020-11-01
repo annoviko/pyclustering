@@ -329,8 +329,8 @@ run_deploy_job() {
     echo "linux ccore $PLATFORM_TARGET build version: '$TRAVIS_BUILD_NUMBER'" > $CCORE_32BIT_BINARY_FOLDER/.linux.info
     git add $CCORE_64BIT_BINARY_FOLDER/.linux.info
     git add $CCORE_32BIT_BINARY_FOLDER/.linux.info
-    git add $CCORE_64BIT_BINARY_FOLDER/ccore.so
-    git add $CCORE_32BIT_BINARY_FOLDER/ccore.so
+    git add $CCORE_64BIT_BINARY_FOLDER/pyclustering.so
+    git add $CCORE_32BIT_BINARY_FOLDER/pyclustering.so
 
 
     print_info "Display status and changes"
@@ -387,7 +387,7 @@ upload_binary() {
     BUILD_OS=$2
     BINARY_FOLDER=$TRAVIS_BUILD_NUMBER
 
-    LOCAL_BINARY_PATH=pyclustering/core/$BUILD_PLATFORM/$BUILD_OS/ccore.so
+    LOCAL_BINARY_PATH=pyclustering/core/$BUILD_PLATFORM/$BUILD_OS/pyclustering.so
 
     # Create folder for uploaded binary file
     python3 ci/cloud $YANDEX_DISK_TOKEN mkdir /$TRAVIS_BRANCH
@@ -396,7 +396,7 @@ upload_binary() {
     python3 ci/cloud $YANDEX_DISK_TOKEN mkdir /$TRAVIS_BRANCH/$BUILD_OS/$BUILD_PLATFORM/$BINARY_FOLDER
 
     # Upload binary file
-    REMOTE_BINARY_FILEPATH=/$TRAVIS_BRANCH/$BUILD_OS/$BUILD_PLATFORM/$BINARY_FOLDER/ccore.so
+    REMOTE_BINARY_FILEPATH=/$TRAVIS_BRANCH/$BUILD_OS/$BUILD_PLATFORM/$BINARY_FOLDER/pyclustering.so
 
     python3 ci/cloud $YANDEX_DISK_TOKEN upload $LOCAL_BINARY_PATH $REMOTE_BINARY_FILEPATH
 }
@@ -413,11 +413,11 @@ download_binary() {
     BUILD_PLATFORM=$1
     BUILD_OS=$2
     
-    LOCAL_BINARY_PATH=pyclustering/core/$BUILD_PLATFORM/$BUILD_OS/ccore.so
+    LOCAL_BINARY_PATH=pyclustering/core/$BUILD_PLATFORM/$BUILD_OS/pyclustering.so
 
     # Download binary file
     BINARY_FOLDER=$TRAVIS_BUILD_NUMBER
-    BINARY_FILEPATH=/$TRAVIS_BRANCH/$BUILD_OS/$BUILD_PLATFORM/$BINARY_FOLDER/ccore.so
+    BINARY_FILEPATH=/$TRAVIS_BRANCH/$BUILD_OS/$BUILD_PLATFORM/$BINARY_FOLDER/pyclustering.so
 
     python3 ci/cloud $YANDEX_DISK_TOKEN download $BINARY_FILEPATH $LOCAL_BINARY_PATH
     
