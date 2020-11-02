@@ -46,7 +46,7 @@ function build_ccore_library($platform_version, $configuration) {
 function build_verification_test_ccore_library($platform, $configuration) {
     Write-Host "[CI] Run build verification test for C++ pyclustering library ('$configuration', '$platform')." -ForegroundColor Green;
 
-    if (($configuration -ne "Release Shared Library") -or ($configuration -ne "Release Static Library")) {
+    if (($configuration -ne "Release Shared Library") -and ($configuration -ne "Release Static Library")) {
         Write-Error -Message "[CI] Unknown configuration '$configuration' is specified for the build verification test." -Category InvalidResult;
         $env:TESTING_RESULT = $env:RESULT_FAILURE;
         Exit 1;
