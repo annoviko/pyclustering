@@ -28,13 +28,13 @@ $env:RESULT_FAILURE = "Failure";
 
 
 
-function build_ccore_library($platform_version) {
-    Write-Host "[CI] Build C++ pyclustering library for Windows platform ($platform_version)." -ForegroundColor Green;
+function build_ccore_library($platform_version, $configuration) {
+    Write-Host "[CI] Build C++ pyclustering library '$configuration' for Windows platform ($platform_version)." -ForegroundColor Green;
 
-    msbuild ccore\ccore.sln /t:ccore:Rebuild /p:configuration="Release Shared Library" /p:platform=$platform_version;
+    msbuild ccore\ccore.sln /t:ccore:Rebuild /p:configuration=$configuration /p:platform=$platform_version;
 
     if ($LastExitCode -ne 0) {
-        Write-Error -Message "[CI] Build process for C++ pyclustering library for Windows ($platform_version) is failed." -Category InvalidResult;
+        Write-Error -Message "[CI] Build process for C++ pyclustering library '$configuration' for Windows ($platform_version) is failed." -Category InvalidResult;
         $env:TESTING_RESULT = $env:RESULT_FAILURE;
         Exit 1;
     }
@@ -43,14 +43,45 @@ function build_ccore_library($platform_version) {
 }
 
 
+function build_verification_test_ccore_library($platform, $configuration) {
+    Write-Host "[CI] Run build verification test for C++ pyclustering library ('$configuration', '$platform')." -ForegroundColor Green;
+
+    if (($configuration -ne "Release Shared Library") -or ($configuration -ne "Release Static Library")) {
+        Write-Error -Message "[CI] Unknown configuration '$configuration' is specified for the build verification test." -Category InvalidResult;
+        $env:TESTING_RESULT = $env:RESULT_FAILURE;
+        Exit 1;
+    }
+
+    msbuild ccore\ccore.sln /t:bvt-shared:Rebuild /p:configuration=$configuration /p:platform=$platform
+
+    if ($LastExitCode -ne 0) {
+        Write-Error -Message "[CI] Build process for shared C++ pyclustering library smoke test is failed." -Category InvalidResult;
+        $env:TESTING_RESULT = $env:RESULT_FAILURE;
+        Exit 1;
+    }
+
+    $smoke_test = "ccore\x64\$configuration";
+
+    & $smoke_test
+    if ($LastExitCode -ne 0)
+    {
+        Write-Error -Message "[CI] The build verification test for '$configuration' failed with code '$LastExitCode'.";
+        $env:TESTING_RESULT = $env:RESULT_FAILURE;
+        Exit 1;
+    }
+}
+
 
 function job_build_windows_ccore($platform_version) {
     Write-Host "[CI] Build C++ pyclustering library." -ForegroundColor Green;
 
-    build_ccore_library x86;
-    build_ccore_library x64;
+    build_ccore_library x86 "Release Shared Library";
+    build_ccore_library x64 "Release Shared Library";
 
     Write-Host "[CI] C++ pyclustering library is successfully built for Windows." -ForegroundColor Green;
+
+    build_verification_test_ccore_library x64 "Release Shared Library"
+    build_verification_test_ccore_library x64 "Release Static Library"
 
     if ($env:APPVEYOR_PULL_REQUEST_NUMBER) {
         Write-Host -Message "[CI] Binaries are not uploaded in case of Pull Requests." -ForegroundColor Green;
@@ -77,7 +108,7 @@ function job_ut_windows_ccore() {
     }
     
     Write-Host "[CI Job] Building of CCORE unit-test project for WINDOWS platform: SUCCESS." -ForegroundColor Green;
-    
+
     cd ccore\tst;
     & $env:PYTHON_INTERPRETER ut-runner.py
     if ($LastExitCode -ne 0) {
@@ -85,7 +116,8 @@ function job_ut_windows_ccore() {
         $env:TESTING_RESULT = $env:RESULT_FAILURE;
         Exit 1;
     }
-    
+    cd ..\..\;
+
     Write-Host "[CI Job] Unit-testing CCORE library for WINDOWS platform: SUCCESS." -ForegroundColor Green;
 }
 
