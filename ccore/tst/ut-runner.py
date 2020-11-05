@@ -1,3 +1,4 @@
+import argparse
 import enum
 import logging
 import os.path
@@ -77,5 +78,11 @@ class Runner:
         return failures
 
 
+parser = argparse.ArgumentParser()
+parser.add_argument('-e', '--executable', required=True, type=str, help='Execution object to run.')
+arguments = parser.parse_args()
+
+executable = arguments.executable
+
 logging.basicConfig(level=logging.INFO)
-Runner("./utcore.exe").run()
+Runner("./" + arguments.executable).run()

@@ -1,0 +1,313 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{4B72A338-F4CC-4CBB-89B0-B31DF3C076C2}</ProjectGuid>
+    <RootNamespace>pyclusteringstatic</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <TargetName>$(ProjectName)</TargetName>
+    <TargetExt>.lib</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <TargetName>$(ProjectName)</TargetName>
+    <TargetExt>.lib</TargetExt>
+    <IntDir>$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <TargetName>$(ProjectName)</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <TargetName>$(ProjectName)</TargetName>
+    <IntDir>$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(SolutionDir)include</AdditionalIncludeDirectories>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <MinimalRebuild>false</MinimalRebuild>
+      <OpenMPSupport>false</OpenMPSupport>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Lib>
+      <TreatLibWarningAsErrors>true</TreatLibWarningAsErrors>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(SolutionDir)include</AdditionalIncludeDirectories>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <MinimalRebuild>false</MinimalRebuild>
+      <OpenMPSupport>false</OpenMPSupport>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Lib>
+      <TreatLibWarningAsErrors>true</TreatLibWarningAsErrors>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <OpenMPSupport>false</OpenMPSupport>
+      <AdditionalIncludeDirectories>$(SolutionDir)include</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <Lib>
+      <TreatLibWarningAsErrors>true</TreatLibWarningAsErrors>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <OpenMPSupport>false</OpenMPSupport>
+      <AdditionalIncludeDirectories>$(SolutionDir)include</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <Lib>
+      <TreatLibWarningAsErrors>true</TreatLibWarningAsErrors>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="cluster\agglomerative.cpp" />
+    <ClCompile Include="cluster\bsas.cpp" />
+    <ClCompile Include="cluster\clique.cpp" />
+    <ClCompile Include="cluster\clique_block.cpp" />
+    <ClCompile Include="cluster\cluster_data.cpp" />
+    <ClCompile Include="cluster\cure.cpp" />
+    <ClCompile Include="cluster\dbscan.cpp" />
+    <ClCompile Include="cluster\fcm.cpp" />
+    <ClCompile Include="cluster\gmeans.cpp" />
+    <ClCompile Include="cluster\hsyncnet.cpp" />
+    <ClCompile Include="cluster\kmeans.cpp" />
+    <ClCompile Include="cluster\kmeans_data.cpp" />
+    <ClCompile Include="cluster\kmeans_plus_plus.cpp" />
+    <ClCompile Include="cluster\kmedians.cpp" />
+    <ClCompile Include="cluster\kmedoids.cpp" />
+    <ClCompile Include="cluster\mbsas.cpp" />
+    <ClCompile Include="cluster\optics.cpp" />
+    <ClCompile Include="cluster\optics_descriptor.cpp" />
+    <ClCompile Include="cluster\ordering_analyser.cpp" />
+    <ClCompile Include="cluster\random_center_initializer.cpp" />
+    <ClCompile Include="cluster\rock.cpp" />
+    <ClCompile Include="cluster\silhouette.cpp" />
+    <ClCompile Include="cluster\silhouette_ksearch.cpp" />
+    <ClCompile Include="cluster\silhouette_ksearch_data.cpp" />
+    <ClCompile Include="cluster\somsc.cpp" />
+    <ClCompile Include="cluster\syncnet.cpp" />
+    <ClCompile Include="cluster\ttsas.cpp" />
+    <ClCompile Include="cluster\xmeans.cpp" />
+    <ClCompile Include="container\adjacency_bit_matrix.cpp" />
+    <ClCompile Include="container\adjacency_connector.cpp" />
+    <ClCompile Include="container\adjacency_factory.cpp" />
+    <ClCompile Include="container\adjacency_list.cpp" />
+    <ClCompile Include="container\adjacency_matrix.cpp" />
+    <ClCompile Include="container\adjacency_weight_list.cpp" />
+    <ClCompile Include="container\kdnode.cpp" />
+    <ClCompile Include="container\kdtree.cpp" />
+    <ClCompile Include="container\kdtree_balanced.cpp" />
+    <ClCompile Include="container\kdtree_searcher.cpp" />
+    <ClCompile Include="differential\differ_factor.cpp" />
+    <ClCompile Include="nnet\dynamic_analyser.cpp" />
+    <ClCompile Include="nnet\hhn.cpp" />
+    <ClCompile Include="nnet\legion.cpp" />
+    <ClCompile Include="nnet\pcnn.cpp" />
+    <ClCompile Include="nnet\som.cpp" />
+    <ClCompile Include="nnet\sync.cpp" />
+    <ClCompile Include="nnet\syncpr.cpp" />
+    <ClCompile Include="parallel\spinlock.cpp" />
+    <ClCompile Include="parallel\task.cpp" />
+    <ClCompile Include="parallel\thread_executor.cpp" />
+    <ClCompile Include="parallel\thread_pool.cpp" />
+    <ClCompile Include="utils\linalg.cpp" />
+    <ClCompile Include="utils\math.cpp" />
+    <ClCompile Include="utils\metric.cpp" />
+    <ClCompile Include="utils\random.cpp" />
+    <ClCompile Include="utils\stats.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\pyclustering\cluster\agglomerative.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\bsas.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\bsas_data.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\center_initializer.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\clique.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\clique_block.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\clique_data.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\cluster_data.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\cure.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\cure_data.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\dbscan.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\dbscan_data.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\elbow.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\elbow_data.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\fcm.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\fcm_data.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\gmeans.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\gmeans_data.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\hsyncnet.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\kmeans.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\kmeans_data.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\kmeans_plus_plus.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\kmedians.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\kmedians_data.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\kmedoids.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\kmedoids_data.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\mbsas.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\mbsas_data.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\optics.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\optics_data.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\optics_descriptor.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\ordering_analyser.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\random_center_initializer.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\rock.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\silhouette.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\silhouette_data.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\silhouette_ksearch.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\silhouette_ksearch_data.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\somsc.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\somsc_data.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\syncnet.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\ttsas.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\ttsas_data.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\xmeans.hpp" />
+    <ClInclude Include="..\include\pyclustering\cluster\xmeans_data.hpp" />
+    <ClInclude Include="..\include\pyclustering\container\adjacency.hpp" />
+    <ClInclude Include="..\include\pyclustering\container\adjacency_bit_matrix.hpp" />
+    <ClInclude Include="..\include\pyclustering\container\adjacency_connector.hpp" />
+    <ClInclude Include="..\include\pyclustering\container\adjacency_factory.hpp" />
+    <ClInclude Include="..\include\pyclustering\container\adjacency_list.hpp" />
+    <ClInclude Include="..\include\pyclustering\container\adjacency_matrix.hpp" />
+    <ClInclude Include="..\include\pyclustering\container\adjacency_weight_list.hpp" />
+    <ClInclude Include="..\include\pyclustering\container\dynamic_data.hpp" />
+    <ClInclude Include="..\include\pyclustering\container\ensemble_data.hpp" />
+    <ClInclude Include="..\include\pyclustering\container\kdnode.hpp" />
+    <ClInclude Include="..\include\pyclustering\container\kdtree.hpp" />
+    <ClInclude Include="..\include\pyclustering\container\kdtree_balanced.hpp" />
+    <ClInclude Include="..\include\pyclustering\container\kdtree_searcher.hpp" />
+    <ClInclude Include="..\include\pyclustering\differential\differ_factor.hpp" />
+    <ClInclude Include="..\include\pyclustering\differential\differ_state.hpp" />
+    <ClInclude Include="..\include\pyclustering\differential\equation.hpp" />
+    <ClInclude Include="..\include\pyclustering\differential\runge_kutta_4.hpp" />
+    <ClInclude Include="..\include\pyclustering\differential\runge_kutta_fehlberg_45.hpp" />
+    <ClInclude Include="..\include\pyclustering\differential\solve_type.hpp" />
+    <ClInclude Include="..\include\pyclustering\nnet\dynamic_analyser.hpp" />
+    <ClInclude Include="..\include\pyclustering\nnet\hhn.hpp" />
+    <ClInclude Include="..\include\pyclustering\nnet\legion.hpp" />
+    <ClInclude Include="..\include\pyclustering\nnet\network.hpp" />
+    <ClInclude Include="..\include\pyclustering\nnet\pcnn.hpp" />
+    <ClInclude Include="..\include\pyclustering\nnet\som.hpp" />
+    <ClInclude Include="..\include\pyclustering\nnet\sync.hpp" />
+    <ClInclude Include="..\include\pyclustering\nnet\syncpr.hpp" />
+    <ClInclude Include="..\include\pyclustering\parallel\parallel.hpp" />
+    <ClInclude Include="..\include\pyclustering\parallel\spinlock.hpp" />
+    <ClInclude Include="..\include\pyclustering\parallel\task.hpp" />
+    <ClInclude Include="..\include\pyclustering\parallel\thread_executor.hpp" />
+    <ClInclude Include="..\include\pyclustering\parallel\thread_pool.hpp" />
+    <ClInclude Include="..\include\pyclustering\utils\algorithm.hpp" />
+    <ClInclude Include="..\include\pyclustering\utils\linalg.hpp" />
+    <ClInclude Include="..\include\pyclustering\utils\math.hpp" />
+    <ClInclude Include="..\include\pyclustering\utils\metric.hpp" />
+    <ClInclude Include="..\include\pyclustering\utils\random.hpp" />
+    <ClInclude Include="..\include\pyclustering\utils\stats.hpp" />
+    <ClInclude Include="..\include\pyclustering\utils\traits.hpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
