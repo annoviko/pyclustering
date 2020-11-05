@@ -126,7 +126,7 @@ utdbg:
 
 .PHONY: utrun
 utrun:
-	cd tst/ && python3 ut-runner.py
+	cd tst/ && python3 ut-runner.py -e utcore
 
 
 .PHONY: utclean
@@ -137,13 +137,13 @@ utclean:
 .PHONE: valgrind
 valgrind:
 	$(MAKE) $(MKFLAG) utcore.mk ut CONFIG="valgrind"
-	cd tst/ && valgrind --leak-check=full --leak-check=yes --max-threads=1000 --error-exitcode=1 ./utcore.exe
+	cd tst/ && valgrind --leak-check=full --leak-check=yes --max-threads=1000 --error-exitcode=1 ./utcore
 
 
 .PHONE: valgrind_shock
 valgrind_shock:
 	$(MAKE) $(MKFLAG) utcore.mk ut CONFIG="valgrind" BUILD_VERSION="valgrind_shock"
-	cd tst/ && valgrind --leak-check=full --leak-check=yes --max-threads=1000 --error-exitcode=1 ./utcore.exe
+	cd tst/ && valgrind --leak-check=full --leak-check=yes --max-threads=1000 --error-exitcode=1 ./utcore
 
 
 .PHONY: clean

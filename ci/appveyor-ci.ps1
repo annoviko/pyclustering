@@ -36,7 +36,6 @@ function build_ccore_library($target, $platform, $configuration) {
     if ($LastExitCode -ne 0) {
         Write-Error -Message "[CI] Build process for C++ pyclustering library (target: '$target') '$configuration' for Windows ($platform) is failed." -Category InvalidResult;
         $env:TESTING_RESULT = $env:RESULT_FAILURE;
-        Exit 1;
     }
 
     Write-Host "[CI] C++ pyclustering library (target: '$target') '$configuration' for WINDOWS platform ($platform) is successfully built." -ForegroundColor Green;

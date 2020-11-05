@@ -63,7 +63,7 @@ endif
 
 # Output name of executable file
 EXECUTABLE_DIRECTORY = tst
-EXECUTABLE = $(EXECUTABLE_DIRECTORY)/utcore.exe
+EXECUTABLE = $(EXECUTABLE_DIRECTORY)/utcore
 
 
 # Environment
