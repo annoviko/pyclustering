@@ -87,13 +87,13 @@ function ut_ccore_library($target, $platform, $configuration) {
 function job_build_windows_ccore($platform_version) {
     Write-Host "[CI] Build C++ pyclustering library." -ForegroundColor Green;
 
-    build_ccore_library pyclustering.shared x86 "Release";
-    build_ccore_library pyclustering.shared x64 "Release";
+    build_ccore_library pyclustering-shared x86 "Release";
+    build_ccore_library pyclustering-shared x64 "Release";
 
     Write-Host "[CI] C++ pyclustering library is successfully built for Windows." -ForegroundColor Green;
 
-    bvt_ccore_library bvt.shared x64 "Release"
-    bvt_ccore_library bvt.static x64 "Release"
+    bvt_ccore_library bvt-shared x64 "Release"
+    bvt_ccore_library bvt-static x64 "Release"
 
     if ($env:APPVEYOR_PULL_REQUEST_NUMBER) {
         Write-Host -Message "[CI] Binaries are not uploaded in case of Pull Requests." -ForegroundColor Green;
@@ -112,8 +112,8 @@ function job_build_windows_ccore($platform_version) {
 function job_ut_windows_ccore() {
     Write-Host "[CI] Build and run unit-tests for C++ pyclustering library." -ForegroundColor Green;
 
-    ut_ccore_library ut.static x64 "Release"
-    ut_ccore_library ut.shared x64 "Release"
+    ut_ccore_library ut-static x64 "Release"
+    ut_ccore_library ut-shared x64 "Release"
 
     Write-Host "[CI] Build and run unit-tests for C++ pyclustering library: SUCCESS." -ForegroundColor Green;
 }

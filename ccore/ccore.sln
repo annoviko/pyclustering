@@ -5,32 +5,32 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "bvt", "bvt", "{841E66D7-A748-48AC-A655-7CB192224B69}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pyclustering.shared", "src\pyclustering.shared.vcxproj", "{A1F1A829-2678-40A6-AF79-87E58AC4BADB}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pyclustering-shared", "src\pyclustering-shared.vcxproj", "{A1F1A829-2678-40A6-AF79-87E58AC4BADB}"
 	ProjectSection(ProjectDependencies) = postProject
 		{4B72A338-F4CC-4CBB-89B0-B31DF3C076C2} = {4B72A338-F4CC-4CBB-89B0-B31DF3C076C2}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pyclustering.static", "src\pyclustering.static.vcxproj", "{4B72A338-F4CC-4CBB-89B0-B31DF3C076C2}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pyclustering-static", "src\pyclustering-static.vcxproj", "{4B72A338-F4CC-4CBB-89B0-B31DF3C076C2}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bvt.shared", "bvt\bvt.shared.vcxproj", "{B7248E9B-CB31-41E9-8192-06808C5AD767}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bvt-shared", "bvt\bvt-shared.vcxproj", "{B7248E9B-CB31-41E9-8192-06808C5AD767}"
 	ProjectSection(ProjectDependencies) = postProject
 		{A1F1A829-2678-40A6-AF79-87E58AC4BADB} = {A1F1A829-2678-40A6-AF79-87E58AC4BADB}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bvt.static", "bvt\bvt.static.vcxproj", "{21030D67-1950-4CDF-82DC-1B6876B98F72}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bvt-static", "bvt\bvt-static.vcxproj", "{21030D67-1950-4CDF-82DC-1B6876B98F72}"
 	ProjectSection(ProjectDependencies) = postProject
 		{4B72A338-F4CC-4CBB-89B0-B31DF3C076C2} = {4B72A338-F4CC-4CBB-89B0-B31DF3C076C2}
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ut", "ut", "{8C0E02D2-E81F-4B49-90DF-998DF86A3574}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ut.shared", "tst\ut.shared.vcxproj", "{5658C777-AC3B-4FF3-B009-DF9C9DB035A4}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ut-shared", "tst\ut-shared.vcxproj", "{5658C777-AC3B-4FF3-B009-DF9C9DB035A4}"
 	ProjectSection(ProjectDependencies) = postProject
 		{A1F1A829-2678-40A6-AF79-87E58AC4BADB} = {A1F1A829-2678-40A6-AF79-87E58AC4BADB}
 		{40A75591-4C3C-466F-BCED-6CFEDABD4938} = {40A75591-4C3C-466F-BCED-6CFEDABD4938}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ut.static", "tst\ut.static.vcxproj", "{5ADB0D1D-CE04-4FC8-9C5A-116CA3694D00}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ut-static", "tst\ut-static.vcxproj", "{5ADB0D1D-CE04-4FC8-9C5A-116CA3694D00}"
 	ProjectSection(ProjectDependencies) = postProject
 		{4B72A338-F4CC-4CBB-89B0-B31DF3C076C2} = {4B72A338-F4CC-4CBB-89B0-B31DF3C076C2}
 		{40A75591-4C3C-466F-BCED-6CFEDABD4938} = {40A75591-4C3C-466F-BCED-6CFEDABD4938}
