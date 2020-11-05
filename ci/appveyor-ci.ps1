@@ -29,9 +29,9 @@ $env:RESULT_FAILURE = "Failure";
 
 
 function build_ccore_library($target, $platform, $configuration) {
-    Write-Host "[CI] Build C++ pyclustering library (target: '$target') '$configuration' for Windows platform ($platform)." -ForegroundColor Green;
+    Write-Host "[CI] Build C++ pyclustering library (target: '$target') '$configuration' for Windows platform '$platform'." -ForegroundColor Green;
 
-    msbuild ccore\ccore.sln /t:$target:Rebuild /p:configuration=$configuration /p:platform=$platform;
+    msbuild ccore\ccore.sln /t:$target /p:configuration=$configuration /p:platform=$platform;
 
     if ($LastExitCode -ne 0) {
         Write-Error -Message "[CI] Build process for C++ pyclustering library (target: '$target') '$configuration' for Windows ($platform) is failed." -Category InvalidResult;
@@ -46,7 +46,7 @@ function build_ccore_library($target, $platform, $configuration) {
 function bvt_ccore_library($target, $platform, $configuration) {
     Write-Host "[CI] Run BVT for C++ pyclustering library '$target' ('$configuration', '$platform')." -ForegroundColor Green;
 
-    msbuild ccore\ccore.sln /t:$target:Rebuild /p:configuration=$configuration /p:platform=$platform
+    msbuild ccore\ccore.sln /t:$target /p:configuration=$configuration /p:platform=$platform
 
     if ($LastExitCode -ne 0) {
         Write-Error -Message "[CI] Build process for C++ pyclustering library BVT '$target' is failed." -Category InvalidResult;
@@ -67,7 +67,7 @@ function bvt_ccore_library($target, $platform, $configuration) {
 function ut_ccore_library($target, $platform, $configuration) {
     Write-Host "[CI] Run UT for C++ pyclustering library '$target' ('$configuration', '$platform')." -ForegroundColor Green;
 
-    msbuild ccore\ccore.sln /t:$target:Rebuild /p:configuration=$configuration /p:platform=$platform
+    msbuild ccore\ccore.sln /t:$target /p:configuration=$configuration /p:platform=$platform
 
     if ($LastExitCode -ne 0) {
         Write-Error -Message "[CI] Build process for C++ pyclustering library UT '$target' is failed." -Category InvalidResult;
