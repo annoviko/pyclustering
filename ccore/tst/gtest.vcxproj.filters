@@ -6,7 +6,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\external\src\gtest-all.cpp">
+    <ClCompile Include="..\external\src\gtest\gtest-all.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
