@@ -23,6 +23,7 @@
 
 """
 
+import pickle
 
 from random import random, shuffle
 
@@ -31,6 +32,7 @@ from pyclustering.cluster.dbscan import dbscan
 
 from pyclustering.tests.assertion import assertion
 
+from pyclustering.samples.definitions import SIMPLE_SAMPLES
 from pyclustering.samples import answer_reader
 
 
@@ -179,3 +181,26 @@ class DbscanTestTemplates:
         assertion.eq(len(sample), sum([len(cluster) for cluster in clusters]) + len(noise))
         assertion.eq(sum(expected_length_clusters), sum([len(cluster) for cluster in clusters]))
         assertion.eq(expected_length_clusters, sorted([len(cluster) for cluster in clusters]))
+
+
+    @staticmethod
+    def pickle_dump_load(ccore):
+        sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE3)
+        dbscan_instance = dbscan(sample, 0.7, 3, ccore)
+        dbscan_instance.process()
+
+        expected_clusters = dbscan_instance.get_clusters()
+        expected_noise = dbscan_instance.get_noise()
+        expected_encoding = dbscan_instance.get_cluster_encoding()
+
+        dbscan_dump_file = open('test_dbscan_file.pkl', 'wb')
+        pickle.dump(dbscan_instance, dbscan_dump_file)
+        dbscan_dump_file.close()
+
+        dbscan_dump_file = open('test_dbscan_file.pkl', 'rb')
+        dbscan_instance = pickle.load(dbscan_dump_file)
+        dbscan_dump_file.close()
+
+        assertion.eq(expected_clusters, dbscan_instance.get_clusters())
+        assertion.eq(expected_noise, dbscan_instance.get_noise())
+        assertion.eq(expected_encoding, dbscan_instance.get_cluster_encoding())

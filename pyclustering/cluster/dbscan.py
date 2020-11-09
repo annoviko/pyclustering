@@ -39,9 +39,9 @@ class dbscan:
     @brief Class represents clustering algorithm DBSCAN.
     @details This DBSCAN algorithm is KD-tree optimized.
              
-             CCORE option can be used to use the pyclustering core - C/C++ shared library for processing that significantly increases performance.
+             By default C/C++ pyclustering library is used for processing that significantly increases performance.
     
-    Example:
+    Clustering example where DBSCAN algorithm is used to process `Chainlink` data from `FCPS` collection:
     @code
         from pyclustering.cluster.dbscan import dbscan
         from pyclustering.cluster import cluster_visualizer
@@ -92,21 +92,44 @@ class dbscan:
         self.__sqrt_eps = eps * eps
         self.__neighbors = neighbors
 
-        self.__visited = [False] * len(self.__pointer_data)
-        self.__belong = [False] * len(self.__pointer_data)
+        self.__visited = None
+        self.__belong = None
 
         self.__data_type = kwargs.get('data_type', 'points')
 
         self.__clusters = []
         self.__noise = []
 
-        self.__neighbor_searcher = self.__create_neighbor_searcher(self.__data_type)
+        self.__neighbor_searcher = None
 
-        self.__ccore = ccore
-        if self.__ccore:
-            self.__ccore = ccore_library.workable()
+        self.__initialize_ccore_state(ccore)
 
         self.__verify_arguments()
+
+
+    def __getstate__(self):
+        """!
+        @brief Returns current state of the algorithm.
+        @details It does not return internal temporal variables that are not visible for a user.
+
+        @return (tuple) Current state of the algorithm.
+
+        """
+        return (self.__pointer_data, self.__eps, self.__sqrt_eps, self.__neighbors, self.__visited, self.__belong,
+                self.__data_type, self.__clusters, self.__noise, self.__ccore)
+
+
+    def __setstate__(self, state):
+        """!
+        @brief Set current state of the algorithm.
+        @details Set state method checks if C++ pyclustering is available for the current platform, as a result `ccore`
+                  state might be different if state is moved between platforms.
+
+        """
+        self.__pointer_data, self.__eps, self.__sqrt_eps, self.__neighbors, self.__visited, self.__belong, \
+        self.__data_type, self.__clusters, self.__noise, self.__ccore = state
+
+        self.__initialize_ccore_state(True)
 
 
     def process(self):
@@ -126,6 +149,11 @@ class dbscan:
         else:
             if self.__data_type == 'points':
                 self.__kdtree = kdtree_balanced(self.__pointer_data, range(len(self.__pointer_data)))
+
+            self.__visited = [False] * len(self.__pointer_data)
+            self.__belong = [False] * len(self.__pointer_data)
+
+            self.__neighbor_searcher = self.__create_neighbor_searcher(self.__data_type)
 
             for i in range(0, len(self.__pointer_data)):
                 if self.__visited[i] is False:
@@ -272,3 +300,17 @@ class dbscan:
         distances = self.__pointer_data[index_point]
         return [index_neighbor for index_neighbor in range(len(distances))
                 if ((distances[index_neighbor] <= self.__eps) and (index_neighbor != index_point))]
+
+
+    def __initialize_ccore_state(self, ccore):
+        """!
+        @brief Initializes C++ pyclustering state.
+        @details Check if it is requested and if it is available for the current platform. These information is used to
+                  set status of C++ pyclustering library.
+
+        @param[in] ccore (bool):
+
+        """
+        self.__ccore = ccore
+        if self.__ccore:
+            self.__ccore = ccore_library.workable()

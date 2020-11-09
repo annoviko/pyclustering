@@ -115,6 +115,8 @@ class DbscanIntegrationTest(unittest.TestCase):
                                                           random_order=True,
                                                           repeat=20)
 
+    def test_pickle_dump_load(self):
+        DbscanTestTemplates.pickle_dump_load(True)
 
     @remove_library
     def testProcessingWhenLibraryCoreCorrupted(self):
