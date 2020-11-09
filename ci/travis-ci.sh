@@ -23,6 +23,8 @@
 CCORE_64BIT_BINARY_FOLDER=pyclustering/core/64-bit/linux
 CCORE_32BIT_BINARY_FOLDER=pyclustering/core/32-bit/linux
 
+CCORE_BINARY_NAME=libpyclustering.so
+
 DOXYGEN_FILTER=( "warning: Unexpected new line character" )
 
 
@@ -329,8 +331,8 @@ run_deploy_job() {
     echo "linux ccore $PLATFORM_TARGET build version: '$TRAVIS_BUILD_NUMBER'" > $CCORE_32BIT_BINARY_FOLDER/.linux.info
     git add $CCORE_64BIT_BINARY_FOLDER/.linux.info
     git add $CCORE_32BIT_BINARY_FOLDER/.linux.info
-    git add $CCORE_64BIT_BINARY_FOLDER/pyclustering.so
-    git add $CCORE_32BIT_BINARY_FOLDER/pyclustering.so
+    git add $CCORE_64BIT_BINARY_FOLDER/$CCORE_BINARY_NAME
+    git add $CCORE_32BIT_BINARY_FOLDER/$CCORE_BINARY_NAME
 
 
     print_info "Display status and changes"
@@ -387,7 +389,7 @@ upload_binary() {
     BUILD_OS=$2
     BINARY_FOLDER=$TRAVIS_BUILD_NUMBER
 
-    LOCAL_BINARY_PATH=pyclustering/core/$BUILD_PLATFORM/$BUILD_OS/pyclustering.so
+    LOCAL_BINARY_PATH=pyclustering/core/$BUILD_PLATFORM/$BUILD_OS/$CCORE_BINARY_NAME
 
     # Create folder for uploaded binary file
     python3 ci/cloud $YANDEX_DISK_TOKEN mkdir /$TRAVIS_BRANCH
@@ -396,7 +398,7 @@ upload_binary() {
     python3 ci/cloud $YANDEX_DISK_TOKEN mkdir /$TRAVIS_BRANCH/$BUILD_OS/$BUILD_PLATFORM/$BINARY_FOLDER
 
     # Upload binary file
-    REMOTE_BINARY_FILEPATH=/$TRAVIS_BRANCH/$BUILD_OS/$BUILD_PLATFORM/$BINARY_FOLDER/pyclustering.so
+    REMOTE_BINARY_FILEPATH=/$TRAVIS_BRANCH/$BUILD_OS/$BUILD_PLATFORM/$BINARY_FOLDER/$CCORE_BINARY_NAME
 
     python3 ci/cloud $YANDEX_DISK_TOKEN upload $LOCAL_BINARY_PATH $REMOTE_BINARY_FILEPATH
 }
@@ -413,11 +415,11 @@ download_binary() {
     BUILD_PLATFORM=$1
     BUILD_OS=$2
     
-    LOCAL_BINARY_PATH=pyclustering/core/$BUILD_PLATFORM/$BUILD_OS/pyclustering.so
+    LOCAL_BINARY_PATH=pyclustering/core/$BUILD_PLATFORM/$BUILD_OS/$CCORE_BINARY_NAME
 
     # Download binary file
     BINARY_FOLDER=$TRAVIS_BUILD_NUMBER
-    BINARY_FILEPATH=/$TRAVIS_BRANCH/$BUILD_OS/$BUILD_PLATFORM/$BINARY_FOLDER/pyclustering.so
+    BINARY_FILEPATH=/$TRAVIS_BRANCH/$BUILD_OS/$BUILD_PLATFORM/$BINARY_FOLDER/$CCORE_BINARY_NAME
 
     python3 ci/cloud $YANDEX_DISK_TOKEN download $BINARY_FILEPATH $LOCAL_BINARY_PATH
     

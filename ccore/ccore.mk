@@ -63,8 +63,9 @@ else
 		CFLAG_PLATFORM = -m64
 		LFLAG_PLATFORM = -m64
 	else
-		CFLAG_PLATFORM = 
-		LFLAG_PLATFORM = 
+		PLATFORM = 64-bit
+		CFLAG_PLATFORM = -m64
+		LFLAG_PLATFORM = -m64
 	endif
 endif
 
@@ -78,8 +79,9 @@ WARNING_FLAGS = -Wall -Wpedantic
 
 
 # Shared library file
-SHARED_LIB_DIRECTORY = ../pyclustering/core/$(PLATFORM)/$(OSNAME)
-SHARED_LIB = $(SHARED_LIB_DIRECTORY)/pyclustering.so
+SHARED_LIB_DEPLOY_DIRECTORY = ../pyclustering/core/$(PLATFORM)/$(OSNAME)
+SHARED_LIB_DIRECTORY = .
+SHARED_LIB = $(SHARED_LIB_DIRECTORY)/libpyclustering.so
 
 
 # Static library file
@@ -123,7 +125,7 @@ cppcheck:
 
 
 .PHONY: ccore
-ccore: shared_library_definitions mkdirs $(SHARED_LIB)
+ccore: shared_library_definitions mkdirs $(SHARED_LIB) deploy
 
 
 .PHONY: shared_library_definitions
@@ -138,6 +140,10 @@ ccore_static: mkdirs $(STATIC_LIB)
 .PHONY: mkdirs
 mkdirs: $(OBJECTS_DIRECTORIES)
 
+.PHONY: deploy
+deploy: $(SHARED_LIB)
+	echo "Copy C++ shared library to Python pyclustering."
+	cp $(SHARED_LIB) $(SHARED_LIB_DEPLOY_DIRECTORY)
 
 $(OBJECTS_DIRECTORIES):
 	$(MKDIR) $@

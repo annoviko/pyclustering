@@ -37,10 +37,11 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 
 
 # Build targets
-add_library(pyclustering_static STATIC ${PYCLUSTERING_SOURCES})
+add_library(pyclustering-static STATIC ${PYCLUSTERING_SOURCES})
 
-add_library(pyclustering_shared SHARED ${PYCLUSTERING_SOURCES})
-target_compile_definitions(pyclustering_shared PUBLIC EXPORT_PYCLUSTERING_INTERFACE)
+add_library(pyclustering-shared SHARED ${PYCLUSTERING_SOURCES})
+target_compile_definitions(pyclustering-shared PUBLIC EXPORT_PYCLUSTERING_INTERFACE)
+set_target_properties(pyclustering-shared PROPERTIES OUTPUT_NAME "pyclustering")
 
 add_library(pyclustering SHARED ${PYCLUSTERING_SOURCES})
 target_compile_definitions(pyclustering PUBLIC EXPORT_PYCLUSTERING_INTERFACE)

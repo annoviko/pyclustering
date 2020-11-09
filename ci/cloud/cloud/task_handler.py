@@ -117,6 +117,7 @@ class task_handler:
 
 
     def __get_bin(self, branch, osys, platform):
+        dict_prefix = {"macos": "lib", "linux": "lib", "windows": ""}
         dict_extension = {"macos": "so", "linux": "so", "windows": "dll"}
         dict_os = {"macos": "macos", "linux": "linux", "windows": "win"}
 
@@ -132,10 +133,10 @@ class task_handler:
         sorted_builds = sorted(builds)
         latest_build = sorted_builds[-1]
 
-        remote_path_binary = "%s/%s/ccore.%s" % (remote_path_builds, latest_build, dict_extension[osys])
+        remote_path_binary = "%s/%s/%spyclustering.%s" % (remote_path_builds, latest_build, dict_prefix[osys], dict_extension[osys])
 
         script_path = os.path.dirname(os.path.realpath(__file__))
-        local_path_binary = "%s/../../../pyclustering/core/%s/%s/ccore.%s" % (script_path, platform, dict_os[osys], dict_extension[osys])
+        local_path_binary = "%s/../../../pyclustering/core/%s/%s/%spyclustering.%s" % (script_path, platform, dict_os[osys], dict_prefix[osys], dict_extension[osys])
         local_path_binary = os.path.realpath(local_path_binary)
 
         self.__download(remote_path_binary, local_path_binary)
