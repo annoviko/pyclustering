@@ -30,6 +30,18 @@ print_info() {
 }
 
 
+check_failure() {
+    if [ $? -ne 0 ] ; then
+        if [ -z $1 ] ; then
+            print_error $1
+        else
+            print_error "Failure exit code is detected."
+        fi
+        exit 1
+    fi
+}
+
+
 run_pypi_install_job() {
     print_info "PyPi Installer Testing."
     print_info "- Download and install the library using pip3."

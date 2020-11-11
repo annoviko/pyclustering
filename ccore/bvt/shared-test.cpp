@@ -56,28 +56,28 @@
 
 
 const std::unordered_map<int, std::string> EXIT_CODE_DESCRIPTION = {
-	{ SUCCESS, "Build verification test for C++ pyclustering shared library is successfully passed." },
-	{ FAILURE_IMPOSSIBLE_TO_LOAD_LIBRARY, "Error: Impossible to load C++ pyclustering shared library." },
-	{ FAILURE_IMPOSSIBLE_TO_LOAD_FUNCTION, "Error: Impossible to load function from C++ pyclustering shared library." },
-        { FAILURE_IMPOSSIBLE_TO_CHECK_VERSION, "Error: Impossible to check version of C++ pyclustering shared library." },
-        { FAILURE_IMPOSSIBLE_TO_CHECK_DESCRIPTION, "Error: Impossible to check description of C++ pyclustering shared library." },
-	{ FAILURE_INCORRECT_VERSION, "Error: C++ pyclustering library contains wrong version." },
-	{ FAILURE_INCORRECT_DESCRIPTION, "Error: C++ pyclustering library contains wrong description." }
+    { SUCCESS, "Build verification test for C++ pyclustering shared library is successfully passed." },
+    { FAILURE_IMPOSSIBLE_TO_LOAD_LIBRARY, "Error: Impossible to load C++ pyclustering shared library." },
+    { FAILURE_IMPOSSIBLE_TO_LOAD_FUNCTION, "Error: Impossible to load function from C++ pyclustering shared library." },
+    { FAILURE_IMPOSSIBLE_TO_CHECK_VERSION, "Error: Impossible to check version of C++ pyclustering shared library." },
+    { FAILURE_IMPOSSIBLE_TO_CHECK_DESCRIPTION, "Error: Impossible to check description of C++ pyclustering shared library." },
+    { FAILURE_INCORRECT_VERSION, "Error: C++ pyclustering library contains wrong version." },
+    { FAILURE_INCORRECT_DESCRIPTION, "Error: C++ pyclustering library contains wrong description." }
 };
 
 
 void exit_with_code(const int p_code) {
-	const auto iter = EXIT_CODE_DESCRIPTION.find(p_code);
-	if (iter != EXIT_CODE_DESCRIPTION.cend()) {
-		if (p_code != SUCCESS) {
-			std::cerr << iter->second << std::endl;
-		}
-		else {
-			std::cout << iter->second << std::endl;
-		}
-	}
+    const auto iter = EXIT_CODE_DESCRIPTION.find(p_code);
+    if (iter != EXIT_CODE_DESCRIPTION.cend()) {
+        if (p_code != SUCCESS) {
+            std::cerr << iter->second << std::endl;
+        }
+        else {
+            std::cout << iter->second << std::endl;
+        }
+    }
 
-	std::exit(p_code);
+    std::exit(p_code);
 }
 
 
