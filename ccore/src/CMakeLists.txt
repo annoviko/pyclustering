@@ -27,6 +27,8 @@ cmake_minimum_required(VERSION 3.10)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+# Required packages
+find_package(Threads REQUIRED)
 
 # Sources
 file(GLOB_RECURSE PYCLUSTERING_SOURCES "*.cpp")
@@ -38,10 +40,13 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 
 # Build targets
 add_library(pyclustering-static STATIC ${PYCLUSTERING_SOURCES})
+target_link_libraries(pyclustering-static Threads::Threads)
 
 add_library(pyclustering-shared SHARED ${PYCLUSTERING_SOURCES})
 target_compile_definitions(pyclustering-shared PUBLIC EXPORT_PYCLUSTERING_INTERFACE)
+target_link_libraries(pyclustering-shared Threads::Threads)
 set_target_properties(pyclustering-shared PROPERTIES OUTPUT_NAME "pyclustering")
 
 add_library(pyclustering SHARED ${PYCLUSTERING_SOURCES})
 target_compile_definitions(pyclustering PUBLIC EXPORT_PYCLUSTERING_INTERFACE)
+target_link_libraries(pyclustering Threads::Threads)

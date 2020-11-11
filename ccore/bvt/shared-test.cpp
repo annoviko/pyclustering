@@ -41,7 +41,9 @@
 
 #include <algorithm>
 #include <cstring>
+#include <iostream>
 #include <string>
+#include <unordered_map>
 
 
 #define SUCCESS                                      0
@@ -53,9 +55,35 @@
 #define FAILURE_INCORRECT_DESCRIPTION                6
 
 
+const std::unordered_map<int, std::string> EXIT_CODE_DESCRIPTION = {
+	{ SUCCESS, "Build verification test for C++ pyclustering shared library is successfully passed." },
+	{ FAILURE_IMPOSSIBLE_TO_LOAD_LIBRARY, "Error: Impossible to load C++ pyclustering shared library." },
+	{ FAILURE_IMPOSSIBLE_TO_LOAD_FUNCTION, "Error: Impossible to load function from C++ pyclustering shared library." },
+        { FAILURE_IMPOSSIBLE_TO_CHECK_VERSION, "Error: Impossible to check version of C++ pyclustering shared library." },
+        { FAILURE_IMPOSSIBLE_TO_CHECK_DESCRIPTION, "Error: Impossible to check description of C++ pyclustering shared library." },
+	{ FAILURE_INCORRECT_VERSION, "Error: C++ pyclustering library contains wrong version." },
+	{ FAILURE_INCORRECT_DESCRIPTION, "Error: C++ pyclustering library contains wrong description." }
+};
+
+
+void exit_with_code(const int p_code) {
+	const auto iter = EXIT_CODE_DESCRIPTION.find(p_code);
+	if (iter != EXIT_CODE_DESCRIPTION.cend()) {
+		if (p_code != SUCCESS) {
+			std::cerr << iter->second << std::endl;
+		}
+		else {
+			std::cout << iter->second << std::endl;
+		}
+	}
+
+	std::exit(p_code);
+}
+
+
 void * load_pyclustering(void) {
 #if (defined (__GNUC__) && defined(__unix__)) || defined(__APPLE__)
-    return dlopen("libpyclustering.so", RTLD_LAZY);
+    return dlopen("./libpyclustering.so", RTLD_LAZY);
 #elif defined (WIN32) || (_WIN32) || (_WIN64)
     return LoadLibrary("pyclustering.dll");
 #else
@@ -79,7 +107,7 @@ using interface_vers_func_t = void * (void);
 
 interface_desc_func_t * get_interface_desc_func(void * library) {
 #if (defined (__GNUC__) && defined(__unix__)) || defined(__APPLE__)
-    return (interface_desc_func_t *) dlsym(library, "get_interface_version");
+    return (interface_desc_func_t *) dlsym(library, "get_interface_description");
 #elif defined (WIN32) || (_WIN32) || (_WIN64)
     return (interface_desc_func_t *) GetProcAddress((HMODULE) library, "get_interface_description");
 #endif
@@ -98,39 +126,39 @@ interface_vers_func_t * get_interface_vers_func(void * library) {
 int main() {
     void * library = load_pyclustering();
     if (!library) {
-        return FAILURE_IMPOSSIBLE_TO_LOAD_LIBRARY;
+        exit_with_code(FAILURE_IMPOSSIBLE_TO_LOAD_LIBRARY);
     }
 
     interface_vers_func_t * get_version = get_interface_vers_func(library);
     if (!get_version) {
-        return FAILURE_IMPOSSIBLE_TO_LOAD_FUNCTION;
+        exit_with_code(FAILURE_IMPOSSIBLE_TO_LOAD_FUNCTION);
     }
 
     interface_desc_func_t * get_description = get_interface_desc_func(library);
     if (!get_description) {
-        return FAILURE_IMPOSSIBLE_TO_LOAD_FUNCTION;
+        exit_with_code(FAILURE_IMPOSSIBLE_TO_LOAD_FUNCTION);
     }
 
     const char * version = (const char *)get_version();
     if (!version) {
-        return FAILURE_IMPOSSIBLE_TO_CHECK_VERSION;
+        exit_with_code(FAILURE_IMPOSSIBLE_TO_CHECK_VERSION);
     }
 
     if (strlen(version) == 0) {
-        return FAILURE_INCORRECT_VERSION;
+        exit_with_code(FAILURE_INCORRECT_VERSION);
     }
 
     const char * description = (const char *)get_description();
     if (!description) {
-        return FAILURE_IMPOSSIBLE_TO_CHECK_DESCRIPTION;
+        exit_with_code(FAILURE_IMPOSSIBLE_TO_CHECK_DESCRIPTION);
     }
 
     std::string description_as_string(description);
     if (description_as_string.find("pyclustering") == std::string::npos) {
-        return FAILURE_INCORRECT_DESCRIPTION;
+        exit_with_code(FAILURE_INCORRECT_DESCRIPTION);
     }
 
     close_pyclustering(library);
 
-    return SUCCESS;
+    exit_with_code(SUCCESS);
 }

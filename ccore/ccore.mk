@@ -100,10 +100,12 @@ SOURCES = $(foreach SUBDIR, $(SOURCES_DIRECTORIES), $(wildcard $(SUBDIR)/*.cpp))
 
 INCLUDES = -I$(INCLUDE_DIRECTORY)
 
+LIBRARIES =
+
 
 # Toolchain arguments
-CFLAGS = -O2 -MMD -MP -std=$(CPLUS_STANDARD) $(CFLAG_PIC) $(CFLAG_PLATFORM) $(WARNING_FLAGS) $(DEFINITION_FLAGS)
-LFLAGS = -shared $(LFLAG_PLATFORM)
+CFLAGS = -O2 -MMD -MP -pthread -std=$(CPLUS_STANDARD) $(CFLAG_PIC) $(CFLAG_PLATFORM) $(WARNING_FLAGS) $(DEFINITION_FLAGS)
+LFLAGS = -shared -pthread $(LFLAG_PLATFORM) $(LIBRARIES)
 
 
 # Project objects
@@ -164,7 +166,7 @@ $(STATIC_LIB): $(OBJECTS)
 
 
 $(OBJECTS_DIRECTORY)/%.o: $(SOURCES_DIRECTORY)/%.cpp
-	$(CC) $(CFLAGS) $(INCLUDES) $< -o $@
+	$(CC) $(CFLAGS) $(INCLUDES) $(LIBRARIES) $< -o $@
 
 
 # Include dependencies
