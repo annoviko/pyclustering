@@ -37,3 +37,7 @@ target_link_libraries(bvt-static PUBLIC pyclustering-static)
 # Build target - build verify test for shared library
 add_executable(bvt-shared shared-test.cpp)
 add_dependencies(bvt-shared pyclustering-shared)
+
+if(CMAKE_DL_LIBS)
+    target_link_libraries(bvt-shared ${CMAKE_DL_LIBS})
+endif()
