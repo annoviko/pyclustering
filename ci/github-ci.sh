@@ -95,11 +95,11 @@ run_cmake_pyclustering_build() {
 
     print_info "Build C++ pyclustering shared library and build verification test for it."
 
-    make bvt-shared
+    make -j8 bvt-shared
 
     print_info "Build C++ pyclustering static library and build verification test for it."
 
-    make bvt-static
+    make -j8 bvt-static
 
     print_info "Run build verification test for the C++ pyclustering shared library."
     ./bvt-shared
@@ -123,7 +123,7 @@ case $1 in
     PYPI_INSTALLER)
         run_pypi_install_job ;;
 
-    TEST_PYPI_INSTALLER)
+    TESTPYPI_INSTALLER)
         run_pypi_install_job testpypi ;;
 
     TEST_CMAKE_PYCLUSTERING_BUILD)
