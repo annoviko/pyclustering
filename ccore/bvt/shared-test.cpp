@@ -45,19 +45,21 @@
 
 
 #define SUCCESS                                      0
-#define FAILURE_IMPOSSIBLE_TO_LOAD_LIBRARY          -1
-#define FAILURE_IMPOSSIBLE_TO_LOAD_FUNCTION         -2
-#define FAILURE_IMPOSSIBLE_TO_CHECK_VERSION         -3
-#define FAILURE_IMPOSSIBLE_TO_CHECK_DESCRIPTION     -4
-#define FAILURE_INCORRECT_VERSION                   -5
-#define FAILURE_INCORRECT_DESCRIPTION               -6
+#define FAILURE_IMPOSSIBLE_TO_LOAD_LIBRARY           1
+#define FAILURE_IMPOSSIBLE_TO_LOAD_FUNCTION          2
+#define FAILURE_IMPOSSIBLE_TO_CHECK_VERSION          3
+#define FAILURE_IMPOSSIBLE_TO_CHECK_DESCRIPTION      4
+#define FAILURE_INCORRECT_VERSION                    5
+#define FAILURE_INCORRECT_DESCRIPTION                6
 
 
 void * load_pyclustering(void) {
 #if (defined (__GNUC__) && defined(__unix__)) || defined(__APPLE__)
-    return dlopen("pyclustering.so", RTLD_LAZY);
+    return dlopen("libpyclustering.so", RTLD_LAZY);
 #elif defined (WIN32) || (_WIN32) || (_WIN64)
     return LoadLibrary("pyclustering.dll");
+#else
+    #error Unsupported platform
 #endif
 }
 

@@ -6,6 +6,12 @@ CHANGE NOTES FOR 0.10.1 (STARTED Aug 17, 2020), (RELEASED: -)
 
 GENERAL CHANGES:
 
+- C++ pyclustering can be built using CMake.
+  See: https://github.com/annoviko/pyclustering/issues/603
+
+- Supported dumping and loading for DBSCAN algorithm via `pickle` (Python: `pyclustering.cluster.dbscan`).
+  See: https://github.com/annoviko/pyclustering/issues/650
+
 - Package installer resolves all required dependencies automatically.
   See: https://github.com/annoviko/pyclustering/issues/647
 

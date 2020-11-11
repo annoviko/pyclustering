@@ -19,18 +19,18 @@
 # @endcond
 #
 
+
 cmake_minimum_required(VERSION 3.10)
 
+# C++ standard
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-project(pyclustering VERSION 0.10.1 LANGUAGES CXX)
+# Source for google test framework
+file(GLOB_RECURSE GTEST_SOURCES src/gtest "*.cpp")
 
+# Headers
+include_directories(include)
 
-file(MAKE_DIRECTORY build)
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/build)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/build)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/build)
-
-add_subdirectory(bvt)
-add_subdirectory(external)
-add_subdirectory(src)
-add_subdirectory(tst)
+# Build targets
+add_library(gtest STATIC ${GTEST_SOURCES})

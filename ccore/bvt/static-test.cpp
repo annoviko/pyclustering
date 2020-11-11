@@ -26,7 +26,7 @@
 
 
 #define SUCCESS                                      0
-#define FAILURE_INCORRECT_RESULT                    -1
+#define FAILURE_INCORRECT_RESULT                     1
 
 
 int main() {
