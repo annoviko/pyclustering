@@ -55,7 +55,7 @@ Cluster analysis algorithms and methods (module pyclustering.cluster):
 - K-Means (pyclustering.cluster.kmeans);
 - K-Means++ (pyclustering.cluster.center_initializer);
 - K-Medians (pyclustering.cluster.kmedians);
-- K-Medoids (pyclustering.cluster.kmedoids);
+- K-Medoids (PAM) (pyclustering.cluster.kmedoids);
 - MBSAS (pyclustering.cluster.mbsas);
 - OPTICS (pyclustering.cluster.optics);
 - ROCK (pyclustering.cluster.rock);
@@ -90,30 +90,97 @@ Containers (module pyclustering.container):
 Utils (pyclustering.utils) that can be used for analysis, visualization, etc.
 
 
-@section install_sec Installation
-The simplest way to install pyclustering library is to use pip:
+@section section_install Installation
+The simplest way to install pyclustering library is to use `pip`:
 @code{.sh}
     pip3 install pyclustering
 @endcode
 
-The library can be compiled and manually installed on Linux or MacOS machine wherever you want:
+The library can be built and installed manually. pyclustering's python code delegates computations to pyclustering C++
+code that is represented by C++ pyclustering library: `pyclustering.dll` in case of Windows and `libpyclustering.so` in
+case of Linux and MacOS. There are three general ways to build C++ pyclustering:
+1. @ref subsection_build_makefile
+2. @ref subsection_build_cmake
+3. @ref subsection_build_msvc
+
+@subsection subsection_build_makefile Build PyClustering Using Makefile
+
+1. Clone pyclustering library from the official repository:
 @code{.sh}
-    # extract content of the pyclustering library...
-    # compile CCORE library (core of the pyclustering library).
-    cd pyclustering/ccore
-    make ccore_64bit # if platform is 64-bit
-    # make ccore_32bit # if platform is 32-bit
-    
-    # return to parent folder of the pyclustering library
-    cd ../
-    
-    # add current folder to python path
-    PYTHONPATH=`pwd`
-    export PYTHONPATH=${PYTHONPATH}
+    mkdir pyclustering
+    cd pyclustering
+    git clone https://github.com/annoviko/pyclustering.git .
 @endcode
 
+2. The Makefile is located in `ccore` folder. Navigate to that folder:
+@code{.sh}
+    cd ccore
+@endcode
 
-@section cite_sec Cite the Library
+3. The Makefile uses GCC to build pyclustering library. Make sure that your GCC compiler supports C++14. Build pyclustering
+ library for corresponding platform:
+@code{.sh}
+    make ccore_64bit    # build the library for 64-bit operating system.
+    # make ccore_32bit    # build the library for 32-bit operating system.
+@endcode
+
+4. Install pyclustering library:
+@code{.sh}
+    cd ../  # Return back to pyclustering's root folder when setup.py is located.
+    python3 setup.py install
+@endcode
+
+@subsection subsection_build_cmake Build PyClustering Using CMake
+
+1. Clone pyclustering library from the official repository:
+@code{.sh}
+    mkdir pyclustering
+    cd pyclustering
+    git clone https://github.com/annoviko/pyclustering.git .
+@endcode
+
+2. Navigate to C++ pyclustering sources and create build folder:
+@code{.sh}
+    cd ccore
+    mkdir build
+@endcode
+
+3. Generate makefiles using CMake:
+@code{.sh}
+    cmake ..
+@endcode
+
+4. Build pyclustering library using generated makefile (it automatically detects platform):
+@code{.sh}
+    make pyclustering
+@endcode
+
+5. Install pyclustering library:
+@code{.sh}
+    cd ../  # Return back to pyclustering's root folder when setup.py is located.
+    python3 setup.py install
+@endcode
+
+@subsection subsection_build_msvc Build pyclustering using MSVC
+
+1. Clone pyclustering library from the official repository:
+@code{.sh}
+    mkdir pyclustering
+    cd pyclustering
+    git clone https://github.com/annoviko/pyclustering.git .
+@endcode
+
+2. Navigate to `pyclustering/ccore`.
+
+3. Open MSVC project `ccore.sln`.
+
+4. Choose the following `Release` configuration and corresponding platform (`x64` or `x86`).
+
+5. Build `pyclustering-shared` project.
+
+@image html pyclustering_build_msvc.png
+
+@section section_cite Cite the Library
 
 If you are using pyclustering library in a scientific paper, please, cite the library:
 
@@ -139,6 +206,10 @@ BibTeX entry:
 
 
 @section example_sec Examples
+
+This section contains few examples in order to demonstrate the interface of the library. The documentation contains
+examples for every algorithm/method/model/etc. More examples of a functionality can be found on a corresponding page of
+the function in this documentation.
 
 The library provides intuitive and friendly interface. Here is an example how to perform cluster analysis using BIRCH
 algorithm:

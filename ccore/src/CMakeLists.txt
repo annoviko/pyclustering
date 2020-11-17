@@ -50,3 +50,24 @@ set_target_properties(pyclustering-shared PROPERTIES OUTPUT_NAME "pyclustering")
 add_library(pyclustering SHARED ${PYCLUSTERING_SOURCES})
 target_compile_definitions(pyclustering PUBLIC EXPORT_PYCLUSTERING_INTERFACE)
 target_link_libraries(pyclustering Threads::Threads)
+
+if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+    set(PYCLUSTERING_BINARY_DIR "pyclustering/core/64-bit")
+elseif(CMAKE_SIZEOF_VOID_P EQUAL 4)
+    set(PYCLUSTERING_BINARY_DIR "pyclustering/core/32-bit")
+endif()
+
+if (UNIX)
+    string(CONCAT PYCLUSTERING_BINARY_DIR ${PYCLUSTERING_BINARY_DIR} "/linux")
+elseif (WIN32)
+    string(CONCAT PYCLUSTERING_BINARY_DIR ${PYCLUSTERING_BINARY_DIR} "/win")
+elseif (APPLE)
+    string(CONCAT PYCLUSTERING_BINARY_DIR ${PYCLUSTERING_BINARY_DIR} "/macos")
+endif()
+
+string(CONCAT PYCLUSTERING_BINARY_DIR "${PROJECT_SOURCE_DIR}/../" ${PYCLUSTERING_BINARY_DIR})
+
+add_custom_command(TARGET pyclustering-shared POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:pyclustering-shared> ${PYCLUSTERING_BINARY_DIR}
+    COMMENT "Copying pyclustering binary to the package '${PYCLUSTERING_BINARY_DIR}'."
+)
