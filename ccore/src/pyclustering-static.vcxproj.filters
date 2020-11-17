@@ -1,84 +1,50 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{27a9777f-d548-4f76-8529-960e00c5c612}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Source Files\container">
-      <UniqueIdentifier>{b049935d-18a9-46a2-8d26-e7a0c66e121f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\nnet">
-      <UniqueIdentifier>{749e2e3a-5a11-4f48-93bf-20968207d439}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\differential">
-      <UniqueIdentifier>{3f3cff3c-f601-4c65-b7ac-a1b129961edf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\interface">
-      <UniqueIdentifier>{5a874dd2-576d-4bcf-b7d4-6a05ffc32138}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\parallel">
-      <UniqueIdentifier>{365c5d13-b65a-4bc5-bdfe-63b4ecd03660}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\utils">
-      <UniqueIdentifier>{348cf7ab-8c40-440d-ab36-cf1a431c5990}</UniqueIdentifier>
+      <UniqueIdentifier>{656fa00d-a810-4249-a2dc-91dcaa506ae0}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\cluster">
-      <UniqueIdentifier>{6bc3791c-798d-4bd4-bbf2-881ca9dc1b7c}</UniqueIdentifier>
+      <UniqueIdentifier>{e74ddeed-208b-4af4-a99e-05b5c5d6c1f8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{5c82754f-e3d3-441c-b073-64632c0c58d7}</UniqueIdentifier>
+    <Filter Include="Source Files\container">
+      <UniqueIdentifier>{24cdfa26-f5f7-4e13-8d67-04ed66b2b202}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\differential">
+      <UniqueIdentifier>{d9188b45-3da8-41bc-a0d1-3a9f8d7f0f5a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\parallel">
+      <UniqueIdentifier>{d6976e8c-8206-4a67-bc3a-55497f9923bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\utils">
+      <UniqueIdentifier>{78477d0b-3b49-4c9e-961f-d6cd1b332287}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\nnet">
+      <UniqueIdentifier>{4ab057bd-88f1-4c2d-a98c-8663c1896b70}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\cluster">
-      <UniqueIdentifier>{e86bd867-c3a9-44b6-80bc-76e14df6f56d}</UniqueIdentifier>
+      <UniqueIdentifier>{40dcd61f-59ff-429a-91d1-1d9417b63c21}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\container">
-      <UniqueIdentifier>{c297bd6e-d93d-4ae2-a4a7-9e15722ce1a9}</UniqueIdentifier>
+      <UniqueIdentifier>{44d0df1f-3fd6-40ac-bbc1-8976c39fe667}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\differential">
-      <UniqueIdentifier>{fe26475c-06a3-4881-bc27-353124bcfeee}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\interface">
-      <UniqueIdentifier>{5e475696-1ea9-4410-bc73-fda5505b7b20}</UniqueIdentifier>
+      <UniqueIdentifier>{e12524b6-94f0-46ae-b811-560dc99f31dc}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\nnet">
-      <UniqueIdentifier>{85db3375-537d-484e-90ac-fccccbfd70a9}</UniqueIdentifier>
+      <UniqueIdentifier>{bf9c6ade-57a9-4254-b21b-61213fec0e47}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\parallel">
-      <UniqueIdentifier>{9447ecd9-9074-4644-8243-834b456b6637}</UniqueIdentifier>
+      <UniqueIdentifier>{9f76cd55-ba93-4801-9312-19f3eb8009b6}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\utils">
-      <UniqueIdentifier>{54502723-8a68-4e0c-b69b-b707d2fa9286}</UniqueIdentifier>
+      <UniqueIdentifier>{3822bba0-e57c-4699-976f-0a319bcee35f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="container\adjacency_bit_matrix.cpp">
-      <Filter>Source Files\container</Filter>
-    </ClCompile>
-    <ClCompile Include="container\adjacency_connector.cpp">
-      <Filter>Source Files\container</Filter>
-    </ClCompile>
-    <ClCompile Include="container\adjacency_factory.cpp">
-      <Filter>Source Files\container</Filter>
-    </ClCompile>
-    <ClCompile Include="container\adjacency_list.cpp">
-      <Filter>Source Files\container</Filter>
-    </ClCompile>
-    <ClCompile Include="container\adjacency_matrix.cpp">
-      <Filter>Source Files\container</Filter>
-    </ClCompile>
-    <ClCompile Include="container\adjacency_weight_list.cpp">
-      <Filter>Source Files\container</Filter>
-    </ClCompile>
-    <ClCompile Include="container\kdtree.cpp">
-      <Filter>Source Files\container</Filter>
-    </ClCompile>
-    <ClCompile Include="differential\differ_factor.cpp">
-      <Filter>Source Files\differential</Filter>
-    </ClCompile>
-    <ClCompile Include="container\kdnode.cpp">
-      <Filter>Source Files\container</Filter>
-    </ClCompile>
     <ClCompile Include="cluster\agglomerative.cpp">
       <Filter>Source Files\cluster</Filter>
     </ClCompile>
@@ -148,6 +114,9 @@
     <ClCompile Include="cluster\silhouette_ksearch.cpp">
       <Filter>Source Files\cluster</Filter>
     </ClCompile>
+    <ClCompile Include="cluster\silhouette_ksearch_data.cpp">
+      <Filter>Source Files\cluster</Filter>
+    </ClCompile>
     <ClCompile Include="cluster\somsc.cpp">
       <Filter>Source Files\cluster</Filter>
     </ClCompile>
@@ -160,92 +129,38 @@
     <ClCompile Include="cluster\xmeans.cpp">
       <Filter>Source Files\cluster</Filter>
     </ClCompile>
-    <ClCompile Include="interface\agglomerative_interface.cpp">
-      <Filter>Source Files\interface</Filter>
+    <ClCompile Include="container\adjacency_bit_matrix.cpp">
+      <Filter>Source Files\container</Filter>
     </ClCompile>
-    <ClCompile Include="interface\bsas_interface.cpp">
-      <Filter>Source Files\interface</Filter>
+    <ClCompile Include="container\adjacency_connector.cpp">
+      <Filter>Source Files\container</Filter>
     </ClCompile>
-    <ClCompile Include="interface\clique_interface.cpp">
-      <Filter>Source Files\interface</Filter>
+    <ClCompile Include="container\adjacency_factory.cpp">
+      <Filter>Source Files\container</Filter>
     </ClCompile>
-    <ClCompile Include="interface\cure_interface.cpp">
-      <Filter>Source Files\interface</Filter>
+    <ClCompile Include="container\adjacency_list.cpp">
+      <Filter>Source Files\container</Filter>
     </ClCompile>
-    <ClCompile Include="interface\dbscan_interface.cpp">
-      <Filter>Source Files\interface</Filter>
+    <ClCompile Include="container\adjacency_matrix.cpp">
+      <Filter>Source Files\container</Filter>
     </ClCompile>
-    <ClCompile Include="interface\elbow_interface.cpp">
-      <Filter>Source Files\interface</Filter>
+    <ClCompile Include="container\adjacency_weight_list.cpp">
+      <Filter>Source Files\container</Filter>
     </ClCompile>
-    <ClCompile Include="interface\fcm_interface.cpp">
-      <Filter>Source Files\interface</Filter>
+    <ClCompile Include="container\kdnode.cpp">
+      <Filter>Source Files\container</Filter>
     </ClCompile>
-    <ClCompile Include="interface\gmeans_interface.cpp">
-      <Filter>Source Files\interface</Filter>
+    <ClCompile Include="container\kdtree.cpp">
+      <Filter>Source Files\container</Filter>
     </ClCompile>
-    <ClCompile Include="interface\hhn_interface.cpp">
-      <Filter>Source Files\interface</Filter>
+    <ClCompile Include="container\kdtree_balanced.cpp">
+      <Filter>Source Files\container</Filter>
     </ClCompile>
-    <ClCompile Include="interface\hsyncnet_interface.cpp">
-      <Filter>Source Files\interface</Filter>
+    <ClCompile Include="container\kdtree_searcher.cpp">
+      <Filter>Source Files\container</Filter>
     </ClCompile>
-    <ClCompile Include="interface\interface_property.cpp">
-      <Filter>Source Files\interface</Filter>
-    </ClCompile>
-    <ClCompile Include="interface\kmeans_interface.cpp">
-      <Filter>Source Files\interface</Filter>
-    </ClCompile>
-    <ClCompile Include="interface\kmedians_interface.cpp">
-      <Filter>Source Files\interface</Filter>
-    </ClCompile>
-    <ClCompile Include="interface\kmedoids_interface.cpp">
-      <Filter>Source Files\interface</Filter>
-    </ClCompile>
-    <ClCompile Include="interface\legion_interface.cpp">
-      <Filter>Source Files\interface</Filter>
-    </ClCompile>
-    <ClCompile Include="interface\mbsas_interface.cpp">
-      <Filter>Source Files\interface</Filter>
-    </ClCompile>
-    <ClCompile Include="interface\metric_interface.cpp">
-      <Filter>Source Files\interface</Filter>
-    </ClCompile>
-    <ClCompile Include="interface\optics_interface.cpp">
-      <Filter>Source Files\interface</Filter>
-    </ClCompile>
-    <ClCompile Include="interface\pcnn_interface.cpp">
-      <Filter>Source Files\interface</Filter>
-    </ClCompile>
-    <ClCompile Include="interface\pyclustering_interface.cpp">
-      <Filter>Source Files\interface</Filter>
-    </ClCompile>
-    <ClCompile Include="interface\pyclustering_package.cpp">
-      <Filter>Source Files\interface</Filter>
-    </ClCompile>
-    <ClCompile Include="interface\rock_interface.cpp">
-      <Filter>Source Files\interface</Filter>
-    </ClCompile>
-    <ClCompile Include="interface\silhouette_interface.cpp">
-      <Filter>Source Files\interface</Filter>
-    </ClCompile>
-    <ClCompile Include="interface\som_interface.cpp">
-      <Filter>Source Files\interface</Filter>
-    </ClCompile>
-    <ClCompile Include="interface\sync_interface.cpp">
-      <Filter>Source Files\interface</Filter>
-    </ClCompile>
-    <ClCompile Include="interface\syncnet_interface.cpp">
-      <Filter>Source Files\interface</Filter>
-    </ClCompile>
-    <ClCompile Include="interface\syncpr_interface.cpp">
-      <Filter>Source Files\interface</Filter>
-    </ClCompile>
-    <ClCompile Include="interface\ttsas_interface.cpp">
-      <Filter>Source Files\interface</Filter>
-    </ClCompile>
-    <ClCompile Include="interface\xmeans_interface.cpp">
-      <Filter>Source Files\interface</Filter>
+    <ClCompile Include="differential\differ_factor.cpp">
+      <Filter>Source Files\differential</Filter>
     </ClCompile>
     <ClCompile Include="nnet\dynamic_analyser.cpp">
       <Filter>Source Files\nnet</Filter>
@@ -294,15 +209,6 @@
     </ClCompile>
     <ClCompile Include="utils\stats.cpp">
       <Filter>Source Files\utils</Filter>
-    </ClCompile>
-    <ClCompile Include="container\kdtree_searcher.cpp">
-      <Filter>Source Files\container</Filter>
-    </ClCompile>
-    <ClCompile Include="container\kdtree_balanced.cpp">
-      <Filter>Source Files\container</Filter>
-    </ClCompile>
-    <ClCompile Include="cluster\silhouette_ksearch_data.cpp">
-      <Filter>Source Files\cluster</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -474,6 +380,12 @@
     <ClInclude Include="..\include\pyclustering\container\kdtree.hpp">
       <Filter>Header Files\container</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\pyclustering\container\kdtree_balanced.hpp">
+      <Filter>Header Files\container</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\pyclustering\container\kdtree_searcher.hpp">
+      <Filter>Header Files\container</Filter>
+    </ClInclude>
     <ClInclude Include="..\include\pyclustering\differential\differ_factor.hpp">
       <Filter>Header Files\differential</Filter>
     </ClInclude>
@@ -492,92 +404,8 @@
     <ClInclude Include="..\include\pyclustering\differential\solve_type.hpp">
       <Filter>Header Files\differential</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\pyclustering\interface\agglomerative_interface.h">
-      <Filter>Header Files\interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\pyclustering\interface\bsas_interface.h">
-      <Filter>Header Files\interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\pyclustering\interface\clique_interface.h">
-      <Filter>Header Files\interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\pyclustering\interface\cure_interface.h">
-      <Filter>Header Files\interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\pyclustering\interface\dbscan_interface.h">
-      <Filter>Header Files\interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\pyclustering\interface\elbow_interface.h">
-      <Filter>Header Files\interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\pyclustering\interface\fcm_interface.h">
-      <Filter>Header Files\interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\pyclustering\interface\gmeans_interface.h">
-      <Filter>Header Files\interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\pyclustering\interface\hhn_interface.h">
-      <Filter>Header Files\interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\pyclustering\interface\hsyncnet_interface.h">
-      <Filter>Header Files\interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\pyclustering\interface\interface_property.h">
-      <Filter>Header Files\interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\pyclustering\interface\kmeans_interface.h">
-      <Filter>Header Files\interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\pyclustering\interface\kmedians_interface.h">
-      <Filter>Header Files\interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\pyclustering\interface\kmedoids_interface.h">
-      <Filter>Header Files\interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\pyclustering\interface\legion_interface.h">
-      <Filter>Header Files\interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\pyclustering\interface\mbsas_interface.h">
-      <Filter>Header Files\interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\pyclustering\interface\metric_interface.h">
-      <Filter>Header Files\interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\pyclustering\interface\optics_interface.h">
-      <Filter>Header Files\interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\pyclustering\interface\pcnn_interface.h">
-      <Filter>Header Files\interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\pyclustering\interface\pyclustering_interface.h">
-      <Filter>Header Files\interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\pyclustering\interface\pyclustering_package.hpp">
-      <Filter>Header Files\interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\pyclustering\interface\rock_interface.h">
-      <Filter>Header Files\interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\pyclustering\interface\silhouette_interface.h">
-      <Filter>Header Files\interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\pyclustering\interface\som_interface.h">
-      <Filter>Header Files\interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\pyclustering\interface\sync_interface.h">
-      <Filter>Header Files\interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\pyclustering\interface\syncnet_interface.h">
-      <Filter>Header Files\interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\pyclustering\interface\syncpr_interface.h">
-      <Filter>Header Files\interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\pyclustering\interface\ttsas_interface.h">
-      <Filter>Header Files\interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\pyclustering\interface\xmeans_interface.h">
-      <Filter>Header Files\interface</Filter>
+    <ClInclude Include="..\include\pyclustering\utils\algorithm.hpp">
+      <Filter>Header Files\utils</Filter>
     </ClInclude>
     <ClInclude Include="..\include\pyclustering\utils\linalg.hpp">
       <Filter>Header Files\utils</Filter>
@@ -592,6 +420,9 @@
       <Filter>Header Files\utils</Filter>
     </ClInclude>
     <ClInclude Include="..\include\pyclustering\utils\stats.hpp">
+      <Filter>Header Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\pyclustering\utils\traits.hpp">
       <Filter>Header Files\utils</Filter>
     </ClInclude>
     <ClInclude Include="..\include\pyclustering\parallel\parallel.hpp">
@@ -632,21 +463,6 @@
     </ClInclude>
     <ClInclude Include="..\include\pyclustering\nnet\syncpr.hpp">
       <Filter>Header Files\nnet</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\pyclustering\definitions.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\pyclustering\container\kdtree_searcher.hpp">
-      <Filter>Header Files\container</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\pyclustering\container\kdtree_balanced.hpp">
-      <Filter>Header Files\container</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\pyclustering\utils\algorithm.hpp">
-      <Filter>Header Files\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\pyclustering\utils\traits.hpp">
-      <Filter>Header Files\utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

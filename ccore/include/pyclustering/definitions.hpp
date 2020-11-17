@@ -32,14 +32,16 @@
 
 
 #if (defined (__GNUC__) && defined(__unix__)) || defined(__APPLE__)
-    #define DECLARATION __attribute__ ((__visibility__("default")))
-#elif defined (WIN32) || (_WIN32) || (_WIN64)
-    #if defined(BUILDING_LIBRARY)
-        #define DECLARATION __declspec(dllexport)
-    #elif defined(BUILDING_UT_PROJECT)
-        #define DECLARATION
+    #if defined(EXPORT_PYCLUSTERING_INTERFACE)
+        #define DECLARATION __attribute__ ((__visibility__("default")))
     #else
-        #define DECLARATION __declspec(dllimport)
+        #define DECLARATION
+    #endif
+#elif defined (WIN32) || (_WIN32) || (_WIN64)
+    #if defined(EXPORT_PYCLUSTERING_INTERFACE)
+        #define DECLARATION __declspec(dllexport)
+    #else
+        #define DECLARATION
     #endif
 #else
     #error Unsupported platform

@@ -27,16 +27,10 @@
 import math
 import numpy
 import random
-import warnings
 
-try:
-    import matplotlib.pyplot as plt
-
-    from matplotlib import rcParams
-    from matplotlib.font_manager import FontProperties
-except Exception as error_instance:
-    warnings.warn("Impossible to import matplotlib (please, install 'matplotlib'), pyclustering's visualization "
-                  "functionality is not available (details: '%s')." % str(error_instance))
+import matplotlib.pyplot as plt
+from matplotlib import rcParams
+from matplotlib.font_manager import FontProperties
 
 from enum import IntEnum
 

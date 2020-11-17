@@ -25,22 +25,13 @@
 
 import time
 import numpy
-import warnings
+
 
 from numpy import array
+from PIL import Image
 
-try:
-    from PIL import Image
-except Exception as error_instance:
-    warnings.warn("Impossible to import PIL (please, install 'PIL'), pyclustering's visualization "
-                  "functionality is partially not available (details: '%s')." % str(error_instance))
-
-try:
-    import matplotlib.pyplot as plt
-    from mpl_toolkits.mplot3d import Axes3D
-except Exception as error_instance:
-    warnings.warn("Impossible to import matplotlib (please, install 'matplotlib'), pyclustering's visualization "
-                  "functionality is not available (details: '%s')." % str(error_instance))
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 
 from sys import platform as _platform
 

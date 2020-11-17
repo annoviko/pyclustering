@@ -3,7 +3,7 @@
 # @date 2014-2020
 # @copyright GNU Public License
 #
-# GNU_PUBLIC_LICENSE
+# @cond GNU_PUBLIC_LICENSE
 #   pyclustering is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
 #   the Free Software Foundation, either version 3 of the License, or
@@ -16,6 +16,7 @@
 #
 #   You should have received a copy of the GNU General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# @endcond
 #
 
 
@@ -62,7 +63,7 @@ endif
 
 # Output name of executable file
 EXECUTABLE_DIRECTORY = tst
-EXECUTABLE = $(EXECUTABLE_DIRECTORY)/utcore.exe
+EXECUTABLE = $(EXECUTABLE_DIRECTORY)/utcore
 
 
 # Environment
@@ -71,6 +72,7 @@ INCLUDE_DIRECTORY = $(PROJECT_DIRECTORY)/include/
 SOURCES_DIRECTORY = src
 UTEST_DIRECTORY = tst
 EXTERNAL_INCLUDE_DIRECTORY = external/include
+EXTERNAL_SOURCES_DIRECTORY = external/src
 
 
 # Project sources
@@ -80,7 +82,7 @@ GTEST_MODULES = gtest
 
 SOURCES_DIRECTORIES = $(addprefix $(SOURCES_DIRECTORY)/, $(SOURCES_MODULES))
 SOURCES_DIRECTORIES += $(addprefix $(UTEST_DIRECTORY)/, $(UTEST_MODULES))
-SOURCES_DIRECTORIES += $(addprefix $(EXTERNAL_INCLUDE_DIRECTORY)/, $(GTEST_MODULES))
+SOURCES_DIRECTORIES += $(addprefix $(EXTERNAL_SOURCES_DIRECTORY)/, $(GTEST_MODULES))
 
 SOURCES = $(foreach SUBDIR, $(SOURCES_DIRECTORIES), $(wildcard $(SUBDIR)/*.cpp))
 
@@ -92,7 +94,7 @@ OBJECTS_DIRECTORY = obj/ut
 
 OBJECTS_DIRECTORIES = $(addprefix $(OBJECTS_DIRECTORY)/$(SOURCES_DIRECTORY)/, $(SOURCES_MODULES))
 OBJECTS_DIRECTORIES += $(addprefix $(OBJECTS_DIRECTORY)/$(UTEST_DIRECTORY)/, $(UTEST_MODULES))
-OBJECTS_DIRECTORIES += $(addprefix $(OBJECTS_DIRECTORY)/$(EXTERNAL_INCLUDE_DIRECTORY)/, $(GTEST_MODULES))
+OBJECTS_DIRECTORIES += $(addprefix $(OBJECTS_DIRECTORY)/$(EXTERNAL_SOURCES_DIRECTORY)/, $(GTEST_MODULES))
 
 OBJECTS = $(patsubst %.cpp, $(OBJECTS_DIRECTORY)/%.o, $(SOURCES)) 
 

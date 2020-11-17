@@ -27,7 +27,6 @@
 
 import numpy
 import random
-import warnings
 
 from pyclustering.cluster import cluster_visualizer
 from pyclustering.cluster.center_initializer import kmeans_plusplus_initializer
@@ -37,13 +36,10 @@ from pyclustering.utils import pi, calculate_ellipse_description, euclidean_dist
 
 from enum import IntEnum
 
-try:
-    import matplotlib.pyplot as plt
-    import matplotlib.animation as animation
-    from matplotlib import patches
-except Exception as error_instance:
-    warnings.warn("Impossible to import matplotlib (please, install 'matplotlib'), pyclustering's visualization "
-                  "functionality is not available (details: '%s')." % str(error_instance))
+import matplotlib.pyplot as plt
+import matplotlib.animation as animation
+from matplotlib import patches
+
 
 def gaussian(data, mean, covariance):
     """!

@@ -161,6 +161,10 @@ class DbscsanUnitTest(unittest.TestCase):
         DbscanTestTemplates.templateClusterAllocationOneDimensionDistanceMatrix(False)
 
 
+    def test_pickle_dump_load(self):
+        DbscanTestTemplates.pickle_dump_load(False)
+
+
     def test_incorrect_data(self):
         self.assertRaises(ValueError, dbscan, [], 0.1, 1)
 

@@ -20,37 +20,79 @@
 #
 
 
-$env:CCORE_64BIT_BINARY_PATH = "pyclustering\core\64-bit\win\ccore.dll"
-$env:CCORE_32BIT_BINARY_PATH = "pyclustering\core\32-bit\win\ccore.dll"
+$env:CCORE_64BIT_BINARY_PATH = "pyclustering\core\64-bit\win\pyclustering.dll"
+$env:CCORE_32BIT_BINARY_PATH = "pyclustering\core\32-bit\win\pyclustering.dll"
 
 $env:RESULT_SUCCESS = "Success";
 $env:RESULT_FAILURE = "Failure";
 
 
 
-function build_ccore_library($platform_version) {
-    Write-Host "[CI] Build C++ pyclustering library for Windows platform ($platform_version)." -ForegroundColor Green;
+function build_ccore_library($target, $platform, $configuration) {
+    Write-Host "[CI] Build C++ pyclustering library (target: '$target') '$configuration' for Windows platform '$platform'." -ForegroundColor Green;
 
-    msbuild ccore\ccore.sln /t:ccore:Rebuild /p:configuration=Release /p:platform=$platform_version;
+    msbuild ccore\ccore.sln /t:$target /p:configuration=$configuration /p:platform=$platform;
 
     if ($LastExitCode -ne 0) {
-        Write-Error -Message "[CI] Build process for C++ pyclustering library for Windows ($platform_version) is failed." -Category InvalidResult;
+        Write-Error -Message "[CI] Build process for C++ pyclustering library (target: '$target') '$configuration' for Windows ($platform) is failed." -Category InvalidResult;
         $env:TESTING_RESULT = $env:RESULT_FAILURE;
+    }
+
+    Write-Host "[CI] C++ pyclustering library (target: '$target') '$configuration' for WINDOWS platform ($platform) is successfully built." -ForegroundColor Green;
+}
+
+
+function bvt_ccore_library($target, $platform, $configuration) {
+    Write-Host "[CI] Run BVT for C++ pyclustering library '$target' ('$configuration', '$platform')." -ForegroundColor Green;
+
+    msbuild ccore\ccore.sln /t:$target /p:configuration=$configuration /p:platform=$platform
+
+    if ($LastExitCode -ne 0) {
+        Write-Error -Message "[CI] Build process for C++ pyclustering library BVT '$target' is failed." -Category InvalidResult;
         Exit 1;
     }
 
-    Write-Host "[CI] C++ pyclustering library for WINDOWS platform ($platform_version) is successfully built." -ForegroundColor Green;
+    $smoke_test = "ccore\x64\$target.exe";
+
+    & $smoke_test
+    if ($LastExitCode -ne 0)
+    {
+        Write-Error -Message "[CI] The BVT for '$target' failed with code '$LastExitCode'.";
+        Exit 1;
+    }
 }
 
+
+function ut_ccore_library($target, $platform, $configuration) {
+    Write-Host "[CI] Run UT for C++ pyclustering library '$target' ('$configuration', '$platform')." -ForegroundColor Green;
+
+    msbuild ccore\ccore.sln /t:$target /p:configuration=$configuration /p:platform=$platform
+
+    if ($LastExitCode -ne 0) {
+        Write-Error -Message "[CI] Build process for C++ pyclustering library UT '$target' is failed." -Category InvalidResult;
+        Exit 1;
+    }
+
+    cd ccore\tst;
+    & $env:PYTHON_INTERPRETER ut-runner.py $target.exe
+    if ($LastExitCode -ne 0) {
+        Write-Error -Message "[CI] The UT for '$target' failed with code '$LastExitCode'.";
+        Exit 1;
+    }
+    cd ..\..\;
+}
 
 
 function job_build_windows_ccore($platform_version) {
     Write-Host "[CI] Build C++ pyclustering library." -ForegroundColor Green;
 
-    build_ccore_library x86;
-    build_ccore_library x64;
+    build_ccore_library pyclustering-shared x86 "Release";
+    build_ccore_library pyclustering-shared x64 "Release";
 
     Write-Host "[CI] C++ pyclustering library is successfully built for Windows." -ForegroundColor Green;
+
+    bvt_ccore_library bvt\bvt-shared x64 "Release"
+    bvt_ccore_library bvt\bvt-static x64 "Release"
 
     if ($env:APPVEYOR_PULL_REQUEST_NUMBER) {
         Write-Host -Message "[CI] Binaries are not uploaded in case of Pull Requests." -ForegroundColor Green;
@@ -66,76 +108,45 @@ function job_build_windows_ccore($platform_version) {
 }
 
 
-
 function job_ut_windows_ccore() {
-    Write-Host "[CI Job] CCORE unit-test building and running using Visual Studio on Windows platform." -ForegroundColor Green;
+    Write-Host "[CI] Build and run unit-tests for C++ pyclustering library." -ForegroundColor Green;
 
-    msbuild ccore\ccore.sln /t:utcore:Rebuild /p:configuration=Release;
-    if ($LastExitCode -ne 0) {
-        Write-Error -Message "[CI Job] Building of CCORE unit-test project for WINDOWS platform: FAILURE." -Category InvalidResult;
-        Exit 1;
-    }
-    
-    Write-Host "[CI Job] Building of CCORE unit-test project for WINDOWS platform: SUCCESS." -ForegroundColor Green;
-    
-    cd ccore\tst;
-    & $env:PYTHON_INTERPRETER ut-runner.py
-    if ($LastExitCode -ne 0) {
-        Write-Error -Message "[CI Job] Unit-testing CCORE library for WINDOWS platform: FAILURE." -Category InvalidResult;
-        $env:TESTING_RESULT = $env:RESULT_FAILURE;
-        Exit 1;
-    }
-    
-    Write-Host "[CI Job] Unit-testing CCORE library for WINDOWS platform: SUCCESS." -ForegroundColor Green;
+    ut_ccore_library ut\ut-static x64 "Release"
+    ut_ccore_library ut\ut-shared x64 "Release"
+
+    Write-Host "[CI] Build and run unit-tests for C++ pyclustering library: SUCCESS." -ForegroundColor Green;
 }
 
 
-
 function job_build_cygwin_ccore() {
-    Write-Host "[CI Job] CCORE building using GCC on Cygwin platform." -ForegroundColor Green;
+    Write-Host "[CI] C++ pyclustering library build for Cygwin." -ForegroundColor Green;
 
     & $env:CYGWIN_PATH -lc "cygcheck -dc cygwin";
     & $env:CYGWIN_PATH -lc "cd '$env:APPVEYOR_BUILD_FOLDER'; cd ccore; make ccore_64bit";
     if ($LastExitCode -ne 0) {
-        Write-Error -Message "[CI Job] Building CCORE library for CYGWIN platform: FAILURE." -Category InvalidResult;
+        Write-Error -Message "[CI] C++ pyclustering library build for Cygwin: FAILURE." -Category InvalidResult;
         $env:TESTING_RESULT = $env:RESULT_FAILURE;
         Exit 1;
     }
     
-    Write-Host "[CI Job] Building CCORE library for CYGWIN platform: SUCCESS." -ForegroundColor Green;
+    Write-Host "[CI] C++ pyclustering library build for Cygwin: SUCCESS." -ForegroundColor Green;
 }
-
-
-
-function job_ut_cygwin_ccore() {
-    Write-Host "[CI Job] CCORE unit-test building and running using Visual Studio on Windows platform." -ForegroundColor Green;
-    
-    & $env:CYGWIN_PATH -lc "cd '$env:APPVEYOR_BUILD_FOLDER'; cd ccore; make ut; make utrun";
-    if ($LastExitCode -ne 0) {
-        Write-Error -Message "Unit-testing CCORE library for WINDOWS platform: FAILURE." -Category InvalidResult;
-        $env:TESTING_RESULT = $env:RESULT_FAILURE;
-        Exit 1;
-    }
-    
-    Write-Host "Unit-testing CCORE library for CYGWIN platform: SUCCESS." -ForegroundColor Green;
-}
-
 
 
 function job_pyclustering_windows($platform_version) {
-    Write-Host "[CI Job] Testing interaction between pyclustering and CCORE on Windows platform $platform_version." -ForegroundColor Green;
+    Write-Host "[CI] Testing interaction between pyclustering and CCORE on Windows platform $platform_version." -ForegroundColor Green;
 
     if ($env:APPVEYOR_PULL_REQUEST_NUMBER) {
-        Write-Host -Message "[CI Job] Integration tests are disabled for Pull Requests." -ForegroundColor Green;
+        Write-Host -Message "[CI] Integration tests are disabled for Pull Requests." -ForegroundColor Green;
         exit 0
     }
 
     install_miniconda $platform_version;
 
-    Write-Host "[CI Job] Set path '$env:APPVEYOR_BUILD_FOLDER' to tested pyclustering library." -ForegroundColor Green;
+    Write-Host "[CI] Set path '$env:APPVEYOR_BUILD_FOLDER' to tested pyclustering library." -ForegroundColor Green;
     $env:PYTHONPATH = "$env:APPVEYOR_BUILD_FOLDER;$env:PYTHONPATH";
 
-    Write-Host "[CI Job] Download built binary for platform '$platform_version'." -ForegroundColor Green;
+    Write-Host "[CI] Download built binary for platform '$platform_version'." -ForegroundColor Green;
 
     if ($platform_version -eq "x86") {
         download_binary 32-bit $env:CCORE_32BIT_BINARY_PATH
@@ -144,7 +155,7 @@ function job_pyclustering_windows($platform_version) {
         download_binary 64-bit $env:CCORE_64BIT_BINARY_PATH
     }
 
-    Write-Host "[CI Job] Starting integration testing using interpreter '$env:PYTHON_INTERPRETER'." -ForegroundColor Green;
+    Write-Host "[CI] Starting integration testing using interpreter '$env:PYTHON_INTERPRETER'." -ForegroundColor Green;
     
     & $env:PYTHON_INTERPRETER pyclustering\tests\__main__.py --integration
     if ($LastExitCode -ne 0) {
@@ -153,72 +164,12 @@ function job_pyclustering_windows($platform_version) {
         exit 1;
     }
     
-    Write-Host "[CI Job] Integration testing pyclustering <-> ccore for WINDOWS platform: SUCCESS." -ForegroundColor Green;;
+    Write-Host "[CI] Integration testing pyclustering <-> ccore for WINDOWS platform: SUCCESS." -ForegroundColor Green;;
 }
-
-
-
-function job_pyclustering_cygwin() {
-    Write-Host "[CI Job] Testing interaction between pyclustering and CCORE on Cygwin platform." -ForegroundColor Yellow;
-    Write-Host "[CI Job] Job is not ready yet." -ForegroundColor Yellow;
-}
-
-
-
-function job_deploy() {
-    Write-Host "[DEPLOY]: Deploy (upload windows binary file to github)";
-    if ($env:APPVEYOR_REPO_COMMIT_MESSAGE -NotMatch "\[publish\]") {
-        Write-Host "[DEPLOY]: Binary files will not be published to github repository (keyword '[publish]' is not specified)." -ForegroundColor Green;
-        Exit 0;
-    }
-    
-    if ($env:TESTING_RESULT -ne $env:RESULT_SUCCESS) {
-        Write-Host "[DEPLOY]: One of the build/testing job is failed - cancel deployment." -ForegroundColor Green;
-        Exit 0;
-    }
-
-    git.exe config --global credential.helper store
-    Add-Content "$env:USERPROFILE\.git-credentials" "https://$($env:GITHUB_TOKEN):x-oauth-basic@github.com`n"
-
-    git.exe config --global user.email "pyclustering@yandex.ru";
-    git.exe config --global user.name "AppVeyor";
-
-    Write-Host "[DEPLOY]: Prepare copy for pushing (reset, checkout, pull)" -ForegroundColor Green;
-    git.exe reset --hard;
-    git.exe checkout $env:APPVEYOR_REPO_BRANCH;
-    git.exe pull;
-
-
-    Write-Host "[DEPLOY]: Prepare binary folder" -ForegroundColor Green;
-    mkdir pyclustering\core\64-bit\win;
-
-    download_binary 32-bit $env:CCORE_32BIT_BINARY_PATH;
-    download_binary 64-bit $env:CCORE_64BIT_BINARY_PATH;
-
-    Write-Host "[DEPLOY]: Add changes for commit" -ForegroundColor Green;
-
-    Write-Host "windows ccore 32-bit build version: '$env:APPVEYOR_BUILD_NUMBER'" > pyclustering\core\32-bit\win\.win.info;
-    Write-Host "windows ccore 64-bit build version: '$env:APPVEYOR_BUILD_NUMBER'" > pyclustering\core\64-bit\win\.win.info;
-    
-    git.exe add pyclustering\core\32-bit\win\.win.info;
-    git.exe add pyclustering\core\32-bit\win\ccore.dll;
-
-    git.exe add pyclustering\core\64-bit\win\.win.info;
-    git.exe add pyclustering\core\64-bit\win\ccore.dll;
-
-    Write-Host "[DEPLOY]: Display status and changes" -ForegroundColor Green;
-    git.exe status;
-
-
-    Write-Host "[DEPLOY]: Push changes to github repository" -ForegroundColor Green;
-    git.exe commit -m "[appveyor][ci skip] push new ccore version '$env:APPVEYOR_BUILD_NUMBER'";
-    git.exe push;
-}
-
 
 
 function download_miniconda($platform_version) {
-    Write-Host "[CI Job] Download Miniconda." -ForegroundColor Green;
+    Write-Host "[CI] Download Miniconda." -ForegroundColor Green;
     
     $webclient = New-Object System.Net.WebClient;
     
@@ -230,7 +181,7 @@ function download_miniconda($platform_version) {
         $filename = "Miniconda3-4.3.27-Windows-x86_64.exe";
     }
     else {
-        Write-Error -Message "[CI Job] Unknown platform of Miniconda is specified '$platform_version'." -Category InvalidArgument;
+        Write-Error -Message "[CI] Unknown platform of Miniconda is specified '$platform_version'." -Category InvalidArgument;
         Exit 1;
     }
     
@@ -239,7 +190,7 @@ function download_miniconda($platform_version) {
     $url = "https://repo.continuum.io/miniconda/" + $filename;
 
 
-    Write-Host "[CI Job] Start downloading process from link '$url' to '$filepath'." -ForegroundColor Green;
+    Write-Host "[CI] Start downloading process from link '$url' to '$filepath'." -ForegroundColor Green;
 
     $retry_attempts = 3
     for($i = 0; $i -lt $retry_attempts; $i++){
@@ -253,15 +204,15 @@ function download_miniconda($platform_version) {
     }
     
     if (Test-Path $filepath) {
-        Write-Host "[CI Job] Installation file has been download to '$filepath'." -ForegroundColor Green;
+        Write-Host "[CI] Installation file has been download to '$filepath'." -ForegroundColor Green;
     }
     else {
-        Write-Error -Message  "[CI Job] Miniconda has not been downloaded." -Category ResourceUnavailable;
+        Write-Error -Message  "[CI] Miniconda has not been downloaded." -Category ResourceUnavailable;
         Exit 1;
     }
     
     
-    Write-Host "[CI Job] Start installing process using '$filepath'." -ForegroundColor Green;
+    Write-Host "[CI] Start installing process using '$filepath'." -ForegroundColor Green;
     
     $env:MINICONDA_PATH = "C:\Specific-Miniconda";
     $args = "/InstallationType=AllUsers /S /AddToPath=1 /RegisterPython=1 /D=$env:MINICONDA_PATH";
@@ -269,25 +220,23 @@ function download_miniconda($platform_version) {
     Start-Process -FilePath $filepath -ArgumentList $args -Wait -Passthru;
     
     if (Test-Path $env:MINICONDA_PATH) {
-        Write-Host "[CI Job] Miniconda has been successfully installed to '$env:MINICONDA_PATH'." -ForegroundColor Green;
+        Write-Host "[CI] Miniconda has been successfully installed to '$env:MINICONDA_PATH'." -ForegroundColor Green;
         
         Remove-Item $filepath;
     }
     else {
-        Write-Host "[CI Job] Miniconda has not been installed." -ForegroundColor Green;
+        Write-Host "[CI] Miniconda has not been installed." -ForegroundColor Green;
         Exit 1;
     }
 
-    
-    
-    Write-Host "[CI Job] Set miniconda to PATH variable." -ForegroundColor Green;
+
+    Write-Host "[CI] Set miniconda to PATH variable." -ForegroundColor Green;
     $env:PATH = "$env:PATH;$env:MINICONDA_PATH\Scripts";
 }
 
 
-
 function install_miniconda($platform_version) {
-    Write-Host "[CI Job] Starting process of installation of miniconda." -ForegroundColor Green;
+    Write-Host "[CI] Starting process of installation of miniconda." -ForegroundColor Green;
     
     download_miniconda $platform_version;
     
@@ -301,7 +250,7 @@ function install_miniconda($platform_version) {
     # Download pillow from the channel because of troubles on default channel.
     # conda install --channel conda-forge pillow=5.2.0;
 
-    Write-Host "[CI Job] Activating environment for powershell manually (activate does not work)." -ForegroundColor Green;
+    Write-Host "[CI] Activating environment for powershell manually (activate does not work)." -ForegroundColor Green;
     activate test-environment;
     
     $env:PYTHON_INTERPRETER = "$env:MINICONDA_PATH\envs\test-environment\python.exe";
@@ -312,35 +261,33 @@ function install_miniconda($platform_version) {
     $env:PATH = "$env:MINICONDA_PATH\envs\test-environment\Library\bin;$env:PATH";
 
 
-    Write-Host "[CI Job] Miniconda environment information after installation of miniconda:" -ForegroundColor Green;
+    Write-Host "[CI] Miniconda environment information after installation of miniconda:" -ForegroundColor Green;
     conda info -a;
 
-    Write-Host "[CI Job] Python interpreter information after installation of miniconda:" -ForegroundColor Green;
+    Write-Host "[CI] Python interpreter information after installation of miniconda:" -ForegroundColor Green;
     & $env:PYTHON_INTERPRETER --version;
 }
 
 
-
 function download_binary($platform_version, $binary_path) {
-    Write-Host "[CI Job]: Download binary file" -ForegroundColor Green;
+    Write-Host "[CI]: Download binary file" -ForegroundColor Green;
 
     # Obtain link for download
     $env:BUILD_FOLDER = "windows";
     $env:BINARY_FOLDER = $env:APPVEYOR_BUILD_NUMBER;
-    $env:BINARY_FILEPATH = "/$env:APPVEYOR_REPO_BRANCH/$env:BUILD_FOLDER/$platform_version/$env:BINARY_FOLDER/ccore.dll";
+    $env:BINARY_FILEPATH = "/$env:APPVEYOR_REPO_BRANCH/$env:BUILD_FOLDER/$platform_version/$env:BINARY_FOLDER/pyclustering.dll";
 
     & $env:PYTHON ci/cloud $env:YANDEX_DISK_TOKEN download $env:BINARY_FILEPATH $binary_path
     if ($LastExitCode -ne 0) {
-        Write-Error -Message "[CI Job] Impossible to download CCORE binary (platform '$platform_version') to '$binary_path'." -Category InvalidResult;
+        Write-Error -Message "[CI] Impossible to download C++ pyclustering binary (platform '$platform_version') to '$binary_path'." -Category InvalidResult;
         $env:TESTING_RESULT = $env:RESULT_FAILURE;
         exit 1;
     }
 }
 
 
-
 function upload_binary($platform_version, $binary_path) {
-    Write-Host "[CI Job]: Upload binary files (platform: '$platform_version', binary: '$binary_path') to storage." -ForegroundColor Green;
+    Write-Host "[CI]: Upload binary files (platform: '$platform_version', binary: '$binary_path') to the storage." -ForegroundColor Green;
 
     $env:BUILD_FOLDER = "windows";
     $env:BINARY_FOLDER = $env:APPVEYOR_BUILD_NUMBER;
@@ -352,11 +299,10 @@ function upload_binary($platform_version, $binary_path) {
     & $env:PYTHON ci/cloud $env:YANDEX_DISK_TOKEN mkdir "/$env:APPVEYOR_REPO_BRANCH/$env:BUILD_FOLDER/$platform_version/$env:BINARY_FOLDER"
 
     # Upload binary file
-    $env:BINARY_FILEPATH = "/$env:APPVEYOR_REPO_BRANCH/$env:BUILD_FOLDER/$platform_version/$env:BINARY_FOLDER/ccore.dll";
+    $env:BINARY_FILEPATH = "/$env:APPVEYOR_REPO_BRANCH/$env:BUILD_FOLDER/$platform_version/$env:BINARY_FOLDER/pyclustering.dll";
 
     & $env:PYTHON ci/cloud $env:YANDEX_DISK_TOKEN upload $binary_path $env:BINARY_FILEPATH
 }
-
 
 
 if ($env:APPVEYOR_REPO_COMMIT_MESSAGE -Match "\[no-build\]") {
@@ -364,15 +310,18 @@ if ($env:APPVEYOR_REPO_COMMIT_MESSAGE -Match "\[no-build\]") {
     Exit 0;
 }
 
+
 if ($env:APPVEYOR_REPO_COMMIT_MESSAGE -Match "\[build-only-osx\]") {
     Write-Host "Option '[build-only-osx]' is detected, sources will not be built, checked, verified and published." -ForegroundColor Green;
     Exit 0;
 }
 
+
 if ($env:APPVEYOR_REPO_COMMIT_MESSAGE -Match "\[build-only-docs\]") {
     Write-Host "Option '[build-only-docs]' is detected, sources will not be built, checked, verified and published." -ForegroundColor Green;
     Exit 0;
 }
+
 
 switch ($env:CI_JOB) {
     "BUILD_WINDOWS_CCORE" {
@@ -387,10 +336,6 @@ switch ($env:CI_JOB) {
         job_build_cygwin_ccore;
         break;
     }
-    "UT_CYGWIN_CCORE" {
-        job_ut_cygwin_ccore;
-        break;
-    }
     "PYCLUSTERING_WINDOWS_X64" {
         job_pyclustering_windows x64;
         break; 
@@ -399,16 +344,8 @@ switch ($env:CI_JOB) {
         job_pyclustering_windows x86;
         break;
     }
-    "PYCLUSTERING_CYGWIN" {
-        job_pyclustering_cygwin;
-        break;
-    }
-    "DEPLOY" {
-        job_deploy;
-        break;
-    }
     default {
-        echo "[CI Job] Unknown target '$CI_JOB'";
+        Write-Error -Message "[CI] Unknown target is specified '$CI_JOB'"  -Category InvalidArgument;
         exit 1;
     }
 }

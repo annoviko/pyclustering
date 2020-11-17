@@ -3,7 +3,7 @@
 # @date 2014-2020
 # @copyright GNU Public License
 #
-# GNU_PUBLIC_LICENSE
+# @cond GNU_PUBLIC_LICENSE
 #   pyclustering is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
 #   the Free Software Foundation, either version 3 of the License, or
@@ -16,6 +16,7 @@
 #
 #   You should have received a copy of the GNU General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# @endcond
 #
 
 
@@ -125,7 +126,7 @@ utdbg:
 
 .PHONY: utrun
 utrun:
-	cd tst/ && python3 ut-runner.py
+	cd tst/ && python3 ut-runner.py -e utcore
 
 
 .PHONY: utclean
@@ -136,17 +137,18 @@ utclean:
 .PHONE: valgrind
 valgrind:
 	$(MAKE) $(MKFLAG) utcore.mk ut CONFIG="valgrind"
-	cd tst/ && valgrind --leak-check=full --leak-check=yes --max-threads=1000 --error-exitcode=1 ./utcore.exe
+	cd tst/ && valgrind --leak-check=full --leak-check=yes --max-threads=1000 --error-exitcode=1 ./utcore
 
 
 .PHONE: valgrind_shock
 valgrind_shock:
 	$(MAKE) $(MKFLAG) utcore.mk ut CONFIG="valgrind" BUILD_VERSION="valgrind_shock"
-	cd tst/ && valgrind --leak-check=full --leak-check=yes --max-threads=1000 --error-exitcode=1 ./utcore.exe
+	cd tst/ && valgrind --leak-check=full --leak-check=yes --max-threads=1000 --error-exitcode=1 ./utcore
 
 
 .PHONY: clean
 clean:
+	$(MAKE) $(MKFLAG) ccore.mk clean
 	$(MAKE) $(MKFLAG) ccore.mk clean PLATFORM="64-bit"
 	$(MAKE) $(MKFLAG) ccore.mk clean PLATFORM="32-bit"
 	$(MAKE) $(MKFLAG) utcore.mk clean

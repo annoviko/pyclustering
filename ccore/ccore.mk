@@ -3,7 +3,7 @@
 # @date 2014-2020
 # @copyright GNU Public License
 #
-# GNU_PUBLIC_LICENSE
+# @cond GNU_PUBLIC_LICENSE
 #   pyclustering is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
 #   the Free Software Foundation, either version 3 of the License, or
@@ -16,6 +16,7 @@
 #
 #   You should have received a copy of the GNU General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# @endcond
 #
 
 
@@ -62,24 +63,25 @@ else
 		CFLAG_PLATFORM = -m64
 		LFLAG_PLATFORM = -m64
 	else
-		CFLAG_PLATFORM = 
-		LFLAG_PLATFORM = 
+		PLATFORM = 64-bit
+		CFLAG_PLATFORM = -m64
+		LFLAG_PLATFORM = -m64
 	endif
 endif
+
+
+# Definitions
+DEFINITION_FLAGS =
 
 
 # Warnings
 WARNING_FLAGS = -Wall -Wpedantic
 
 
-# Toolchain arguments
-CFLAGS = -O2 -MMD -MP -std=$(CPLUS_STANDARD) $(CFLAG_PIC) $(CFLAG_PLATFORM) $(WARNING_FLAGS)
-LFLAGS = -shared $(LFLAG_PLATFORM)
-
-
 # Shared library file
-SHARED_LIB_DIRECTORY = ../pyclustering/core/$(PLATFORM)/$(OSNAME)
-SHARED_LIB = $(SHARED_LIB_DIRECTORY)/ccore.so
+SHARED_LIB_DEPLOY_DIRECTORY = ../pyclustering/core/$(PLATFORM)/$(OSNAME)
+SHARED_LIB_DIRECTORY = .
+SHARED_LIB = $(SHARED_LIB_DIRECTORY)/libpyclustering.so
 
 
 # Static library file
@@ -98,9 +100,17 @@ SOURCES = $(foreach SUBDIR, $(SOURCES_DIRECTORIES), $(wildcard $(SUBDIR)/*.cpp))
 
 INCLUDES = -I$(INCLUDE_DIRECTORY)
 
+LIBRARIES =
+
+
+# Toolchain arguments
+CFLAGS = -O2 -MMD -MP -pthread -std=$(CPLUS_STANDARD) $(CFLAG_PIC) $(CFLAG_PLATFORM) $(WARNING_FLAGS) $(DEFINITION_FLAGS)
+LFLAGS = -shared -pthread $(LFLAG_PLATFORM) $(LIBRARIES)
+
 
 # Project objects
-OBJECTS_DIRECTORY = obj/ccore/$(PLATFORM)
+OBJECTS_ROOT = obj
+OBJECTS_DIRECTORY = $(OBJECTS_ROOT)/ccore/$(PLATFORM)
 OBJECTS_DIRECTORIES = $(addprefix $(OBJECTS_DIRECTORY)/, $(MODULES)) $(SHARED_LIB_DIRECTORY)
 OBJECTS = $(patsubst $(SOURCES_DIRECTORY)/%.cpp, $(OBJECTS_DIRECTORY)/%.o, $(SOURCES))
 
@@ -117,7 +127,12 @@ cppcheck:
 
 
 .PHONY: ccore
-ccore: mkdirs $(SHARED_LIB)
+ccore: shared_library_definitions mkdirs $(SHARED_LIB) deploy
+
+
+.PHONY: shared_library_definitions
+shared_library_definitions:
+	$(eval DEFINITION_FLAGS := -DEXPORT_PYCLUSTERING_INTERFACE)
 
 
 .PHONY: ccore_static
@@ -126,6 +141,14 @@ ccore_static: mkdirs $(STATIC_LIB)
 
 .PHONY: mkdirs
 mkdirs: $(OBJECTS_DIRECTORIES)
+
+.PHONY: deploy
+deploy: $(SHARED_LIB)
+	echo "Copy C++ shared library to Python pyclustering."
+	cp $(SHARED_LIB) $(SHARED_LIB_DEPLOY_DIRECTORY)
+
+$(OBJECTS_DIRECTORIES):
+	$(MKDIR) $@
 
 
 .PHONY:
@@ -142,22 +165,9 @@ $(STATIC_LIB): $(OBJECTS)
 	$(AR) $@ $^
 
 
-$(OBJECTS_DIRECTORIES):
-	$(MKDIR) $@
-
-
-vpath %.cpp $(SOURCES_DIRECTORIES)
-
-
-define make-objects
-$1/%.o: %.cpp
-	$(CC) $(CFLAGS) $(INCLUDES) $$< -o $$@
-endef
-
-
-$(foreach OBJDIR, $(OBJECTS_DIRECTORIES), $(eval $(call make-objects, $(OBJDIR))))
+$(OBJECTS_DIRECTORY)/%.o: $(SOURCES_DIRECTORY)/%.cpp
+	$(CC) $(CFLAGS) $(INCLUDES) $(LIBRARIES) $< -o $@
 
 
 # Include dependencies
 -include $(DEPENDENCIES)
-

@@ -42,13 +42,13 @@ else:
 
 
 if (_platform == "linux") or (_platform == "linux2"):
-    PATH_PYCLUSTERING_CCORE_LIBRARY = core.__path__[0] + os.sep + core_architecture + os.sep + "linux" + os.sep + "ccore.so"
+    PATH_PYCLUSTERING_CCORE_LIBRARY = core.__path__[0] + os.sep + core_architecture + os.sep + "linux" + os.sep + "libpyclustering.so"
 
 elif _platform == "darwin":
-    PATH_PYCLUSTERING_CCORE_LIBRARY = core.__path__[0] + os.sep + core_architecture + os.sep + "macos" + os.sep + "ccore.so"
+    PATH_PYCLUSTERING_CCORE_LIBRARY = core.__path__[0] + os.sep + core_architecture + os.sep + "macos" + os.sep + "libpyclustering.so"
 
 elif _platform == "win32":
-    PATH_PYCLUSTERING_CCORE_LIBRARY = core.__path__[0] + os.sep + core_architecture + os.sep + "win" + os.sep + "ccore.dll"
+    PATH_PYCLUSTERING_CCORE_LIBRARY = core.__path__[0] + os.sep + core_architecture + os.sep + "win" + os.sep + "pyclustering.dll"
 
 elif _platform == "cygwin":
-    PATH_PYCLUSTERING_CCORE_LIBRARY = core.__path__[0] + os.sep + core_architecture + os.sep + "win" + os.sep + "ccore.so"
+    PATH_PYCLUSTERING_CCORE_LIBRARY = core.__path__[0] + os.sep + core_architecture + os.sep + "win" + os.sep + "libpyclustering.so"

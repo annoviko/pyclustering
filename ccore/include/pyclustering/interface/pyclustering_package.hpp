@@ -64,7 +64,7 @@ enum pyclustering_data_t {
 @details The package uses dynamic memory allocation and user of the package is responsible for the deallocation to avoid memory leakage.
 
 */
-struct pyclustering_package {
+struct DECLARATION pyclustering_package {
 public:
     std::size_t     size      = 0;          /**< Amount of elements that are contained by the package. */
     unsigned int    type      = static_cast<unsigned int>(PYCLUSTERING_TYPE_UNDEFINED); /**< Type of elements that are contained by the package. */

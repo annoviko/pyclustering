@@ -27,27 +27,18 @@
 import math
 import cmath
 import numpy
-import warnings
 
-from pyclustering.nnet          import solve_type, initial_type, conn_type,conn_represent
-from pyclustering.nnet.sync     import sync_network, sync_dynamic, sync_visualizer
+from pyclustering.nnet import solve_type, initial_type, conn_type,conn_represent
+from pyclustering.nnet.sync import sync_network, sync_dynamic, sync_visualizer
 
 import pyclustering.core.syncpr_wrapper as wrapper
 
 from pyclustering.core.wrapper import ccore_library
 
-try:
-    from PIL import Image
-except Exception as error_instance:
-    warnings.warn("Impossible to import PIL (please, install 'PIL'), pyclustering's visualization "
-                  "functionality is partially not available (details: '%s')." % str(error_instance))
+from PIL import Image
 
-try:
-    import matplotlib.pyplot as plt
-    import matplotlib.animation as animation
-except Exception as error_instance:
-    warnings.warn("Impossible to import matplotlib (please, install 'matplotlib'), pyclustering's visualization "
-                  "functionality is not available (details: '%s')." % str(error_instance))
+import matplotlib.pyplot as plt
+import matplotlib.animation as animation
 
 
 class syncpr_dynamic(sync_dynamic):
