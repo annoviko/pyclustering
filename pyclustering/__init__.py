@@ -5,29 +5,16 @@
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2020
-@copyright GNU Public License
+@license BSD-3-Clause
 
-@cond GNU_PUBLIC_LICENSE
-    PyClustering is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-    
-    PyClustering is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-    
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-@endcond
+
 
 @mainpage PyClustering library
 
 @section intro_sec Introduction
 PyClustering is an open source data mining library written in Python and C++ that provides a wide range of clustering
 algorithms and methods, including bio-inspired oscillatory networks. PyClustering is mostly focused on cluster analysis
-to make it more accessible and understandable for users. The library is distributed under GNU Public License and
+to make it more accessible and understandable for users. The library is distributed under the 3-Clause BSD License and
 provides a comprehensive interface that makes it easy to use in every project.
 
 By default, the C++ part of the library is used for processing in order to achieve maximum performance. This is
