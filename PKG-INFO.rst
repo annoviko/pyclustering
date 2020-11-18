@@ -5,13 +5,14 @@ PyClustering
 
 **pyclustering** is a Python, C++ data mining library (clustering
 algorithm, oscillatory networks, neural networks). The library provides
-Python and C++ implementations (via CCORE library) of each algorithm or
-model. CCORE library is a part of pyclustering and supported for
+Python and C++ implementations (C++ pyclustering library) of each algorithm or
+model. C++ pyclustering library is a part of pyclustering and supported for
 Linux, Windows and MacOS operating systems.
 
 Official repository: https://github.com/annoviko/pyclustering/
 
 Documentation: https://pyclustering.github.io/docs/0.10.0/html/
+
 
 Dependencies
 ============
@@ -22,11 +23,12 @@ Dependencies
 
 **C++ version**: >= 14 (32-bit, 64-bit)
 
+
 Performance
 ===========
 
 Each algorithm is implemented using Python and C/C++ language, if your platform is not supported then Python
-implementation is used, otherwise C/C++. Implementation can be chosen by **ccore** flag (by default it is always
+implementation is used, otherwise C/C++. Implementation can be chosen by `ccore` flag (by default it is always
 'True' and it means that C/C++ is used), for example:
 
 .. code:: python
@@ -40,6 +42,7 @@ implementation is used, otherwise C/C++. Implementation can be chosen by **ccore
     # Switch off core - Python is used
     xmeans_instance_3 = xmeans(data_points, start_centers, 20, ccore=False);
 
+
 Installation
 ============
 
@@ -49,7 +52,7 @@ Installation using pip3 tool:
 
     $ pip3 install pyclustering
 
-Manual installation from official repository using GCC:
+Manual installation from official repository using Makefile:
 
 .. code:: bash
 
@@ -65,20 +68,56 @@ Manual installation from official repository using GCC:
     # $ make ccore_32bit    # build for 32-bit OS
 
     # return to parent folder of the pyclustering library
-    cd ../
+    $ cd ../
 
-    # add current folder to python path
-    PYTHONPATH=`pwd`
-    export PYTHONPATH=${PYTHONPATH}
+    # install pyclustering library
+    $ python3 setup.py install
 
-Manual installation using Visual Studio:
+    # optionally - test the library
+    $ python3 setup.py test
+
+Manual installation using CMake:
+
+.. code:: bash
+
+    # get sources of the pyclustering library, for example, from repository
+    $ mkdir pyclustering
+    $ cd pyclustering/
+    $ git clone https://github.com/annoviko/pyclustering.git .
+
+    # generate build files.
+    $ mkdir build
+    $ cmake ..
+
+    # build pyclustering-shared target depending on what was generated (Makefile or MSVC solution)
+    # if Makefile has been generated then
+    $ make pyclustering-shared
+
+    # return to parent folder of the pyclustering library
+    $ cd ../
+
+    # install pyclustering library
+    $ python3 setup.py install
+
+    # optionally - test the library
+    $ python3 setup.py test
+
+Manual installation using Microsoft Visual Studio solution:
 
 1. Clone repository from: https://github.com/annoviko/pyclustering.git
-2. Open folder pyclustering/ccore
-3. Open Visual Studio project ccore.sln
-4. Select solution platform: 'x86' or 'x64'
-5. Build 'ccore' project.
-6. Add pyclustering folder to python path.
+2. Open folder `pyclustering/ccore`
+3. Open Visual Studio project `ccore.sln`
+4. Select solution platform: `x86` or `x64`
+5. Build `pyclustering-shared` project.
+6. Add pyclustering folder to python path or install it using setup.py
+
+.. code:: bash
+
+    # install pyclustering library
+    $ python3 setup.py install
+
+    # optionally - test the library
+    $ python3 setup.py test
 
 
 Proposals, Questions, Bugs
