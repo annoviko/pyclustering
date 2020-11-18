@@ -4,7 +4,7 @@
 
 @authors Andrei Novikov, Aleksey Kukushkin (pyclustering@yandex.ru)
 @date 2014-2020
-@license BSD-3-Clause
+@copyright BSD-3-Clause
 
 """
 

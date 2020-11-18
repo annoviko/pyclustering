@@ -4,7 +4,7 @@ Unit-tests for metric functions.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2020
-@license BSD-3-Clause
+@copyright BSD-3-Clause
 
 """
 
