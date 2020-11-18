@@ -11,7 +11,7 @@ Linux, Windows and MacOS operating systems.
 
 **Version**: 0.10.dev
 
-**License**: GNU General Public License
+**License**: The 3-Clause BSD License
 
 **E-Mail**: pyclustering@yandex.ru
 

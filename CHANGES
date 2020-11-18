@@ -6,6 +6,9 @@ CHANGE NOTES FOR 0.10.1 (STARTED Aug 17, 2020), (RELEASED: -)
 
 GENERAL CHANGES:
 
+- The library is distributed under `BSD-3-Clause` library.
+  See: https://github.com/annoviko/pyclustering/issues/517
+
 - C++ pyclustering can be built using CMake.
   See: https://github.com/annoviko/pyclustering/issues/603
 
