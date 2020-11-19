@@ -484,8 +484,8 @@ Illustrations
    :target: https://ci.appveyor.com/project/annoviko/pyclustering/branch/master
 .. |Coverage Status| image:: https://coveralls.io/repos/github/annoviko/pyclustering/badge.svg?branch=master&ts=1
    :target: https://coveralls.io/github/annoviko/pyclustering?branch=master
-.. |DOI| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.1491324.svg
-   :target: https://doi.org/10.5281/zenodo.1491324
+.. |DOI| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.4280556.svg
+   :target: https://doi.org/10.5281/zenodo.4280556
 .. |PyPi| image:: https://badge.fury.io/py/pyclustering.svg
    :target: https://badge.fury.io/py/pyclustering
 .. |Build Status Linux MacOS 0.10.dev| image:: https://travis-ci.org/annoviko/pyclustering.svg?branch=0.10.dev
