@@ -11,7 +11,7 @@ Linux, Windows and MacOS operating systems.
 
 Official repository: https://github.com/annoviko/pyclustering/
 
-Documentation: https://pyclustering.github.io/docs/0.10.0/html/
+Documentation: https://pyclustering.github.io/docs/0.10.1/html/
 
 
 Dependencies
@@ -19,7 +19,7 @@ Dependencies
 
 **Required packages**: scipy, matplotlib, numpy, Pillow
 
-**Python version**: >=3.5 (32-bit, 64-bit)
+**Python version**: >=3.6 (32-bit, 64-bit)
 
 **C++ version**: >= 14 (32-bit, 64-bit)
 
