@@ -5,17 +5,17 @@ PyClustering
 
 **pyclustering** is a Python, C++ data mining library (clustering
 algorithm, oscillatory networks, neural networks). The library provides
-Python and C++ implementations (via CCORE library) of each algorithm or
-model. CCORE library is a part of pyclustering and supported only for
+Python and C++ implementations (C++ pyclustering library) of each algorithm or
+model. C++ pyclustering library is a part of pyclustering and supported for
 Linux, Windows and MacOS operating systems.
 
-**Version**: 0.10.dev
+**Version**: 0.10.1
 
 **License**: The 3-Clause BSD License
 
 **E-Mail**: pyclustering@yandex.ru
 
-**Documentation**: https://pyclustering.github.io/docs/0.10.0/html/
+**Documentation**: https://pyclustering.github.io/docs/0.10.1/html/
 
 **Homepage**: https://pyclustering.github.io/
 
@@ -28,7 +28,7 @@ Dependencies
 
 **Required packages**: scipy, matplotlib, numpy, Pillow
 
-**Python version**: >=3.5 (32-bit, 64-bit)
+**Python version**: >=3.6 (32-bit, 64-bit)
 
 **C++ version**: >= 14 (32-bit, 64-bit)
 
@@ -37,22 +37,20 @@ Dependencies
 Performance
 ===========
 
-Each algorithm is implemented using Python and C/C++ language, if your platform is not supported then the Python
-implementation is used, otherwise C/C++. The implementation can be chosen by **ccore** flag (by default it is always
-'True' and it means that the C/C++ implementation is used), for example:
+Each algorithm is implemented using Python and C/C++ language, if your platform is not supported then Python
+implementation is used, otherwise C/C++. Implementation can be chosen by `ccore` flag (by default it is always
+'True' and it means that C/C++ is used), for example:
 
 .. code:: python
 
-    # As by default - C/C++ is used
+    # As by default - C/C++ part of the library is used
     xmeans_instance_1 = xmeans(data_points, start_centers, 20, ccore=True);
 
-    # The same - C/C++ is used by default
+    # The same - C/C++ part of the library is used by default
     xmeans_instance_2 = xmeans(data_points, start_centers, 20);
 
     # Switch off core - Python is used
     xmeans_instance_3 = xmeans(data_points, start_centers, 20, ccore=False);
-
-**ccore** option runs ccore shared library (core of the pyclustering library). The core is maintained for Linux, Windows and MacOS.
 
 
 
@@ -65,7 +63,7 @@ Installation using pip3 tool:
 
     $ pip3 install pyclustering
 
-Manual installation using GCC:
+Manual installation from official repository using Makefile:
 
 .. code:: bash
 
@@ -74,27 +72,63 @@ Manual installation using GCC:
     $ cd pyclustering/
     $ git clone https://github.com/annoviko/pyclustering.git .
 
-    # compile CCORE library (core of the pyclustering library)
-    # you can specify platform (32-bit: 'ccore_32bit', 64-bit: 'ccore_64bit')
+    # compile CCORE library (core of the pyclustering library).
     $ cd ccore/
-    $ make ccore_64bit    # compile CCORE for 64-bit
-    # make ccore_32bit    # compile CCORE for 32-bit
+    $ make ccore_64bit      # build for 64-bit OS
+
+    # $ make ccore_32bit    # build for 32-bit OS
 
     # return to parent folder of the pyclustering library
-    cd ../
+    $ cd ../
 
-    # add current folder to python path
-    PYTHONPATH=`pwd`
-    export PYTHONPATH=${PYTHONPATH}
+    # install pyclustering library
+    $ python3 setup.py install
 
-Manual installation using Visual Studio:
+    # optionally - test the library
+    $ python3 setup.py test
+
+Manual installation using CMake:
+
+.. code:: bash
+
+    # get sources of the pyclustering library, for example, from repository
+    $ mkdir pyclustering
+    $ cd pyclustering/
+    $ git clone https://github.com/annoviko/pyclustering.git .
+
+    # generate build files.
+    $ mkdir build
+    $ cmake ..
+
+    # build pyclustering-shared target depending on what was generated (Makefile or MSVC solution)
+    # if Makefile has been generated then
+    $ make pyclustering-shared
+
+    # return to parent folder of the pyclustering library
+    $ cd ../
+
+    # install pyclustering library
+    $ python3 setup.py install
+
+    # optionally - test the library
+    $ python3 setup.py test
+
+Manual installation using Microsoft Visual Studio solution:
 
 1. Clone repository from: https://github.com/annoviko/pyclustering.git
-2. Open folder pyclustering/ccore
-3. Open Visual Studio project ccore.sln
-4. Select solution platform: 'x86' or 'x64'
-5. Build 'ccore' project.
-6. Add pyclustering folder to python path.
+2. Open folder `pyclustering/ccore`
+3. Open Visual Studio project `ccore.sln`
+4. Select solution platform: `x86` or `x64`
+5. Build `pyclustering-shared` project.
+6. Add pyclustering folder to python path or install it using setup.py
+
+.. code:: bash
+
+    # install pyclustering library
+    $ python3 setup.py install
+
+    # optionally - test the library
+    $ python3 setup.py test
 
 
 
@@ -109,13 +143,13 @@ PyClustering Status
 ===================
 
 +----------------------+------------------------------+-------------------------------------+---------------------------------+
-| Branch               | master                       | 0.10.dev                            | 0.10.0.rel                      |
+| Branch               | master                       | 0.10.dev                            | 0.10.1.rel                      |
 +======================+==============================+=====================================+=================================+
-| Build (Linux, MacOS) | |Build Status Linux MacOS|   | |Build Status Linux MacOS 0.10.dev| | |Build Status Linux 0.10.0.rel| |
+| Build (Linux, MacOS) | |Build Status Linux MacOS|   | |Build Status Linux MacOS 0.10.dev| | |Build Status Linux 0.10.1.rel| |
 +----------------------+------------------------------+-------------------------------------+---------------------------------+
-| Build (Win)          | |Build Status Win|           | |Build Status Win 0.10.dev|         | |Build Status Win 0.10.0.rel|   |
+| Build (Win)          | |Build Status Win|           | |Build Status Win 0.10.dev|         | |Build Status Win 0.10.1.rel|   |
 +----------------------+------------------------------+-------------------------------------+---------------------------------+
-| Code Coverage        | |Coverage Status|            | |Coverage Status 0.10.dev|          | |Coverage Status 0.10.0.rel|    |
+| Code Coverage        | |Coverage Status|            | |Coverage Status 0.10.dev|          | |Coverage Status 0.10.1.rel|    |
 +----------------------+------------------------------+-------------------------------------+---------------------------------+
 
 
@@ -450,8 +484,8 @@ Illustrations
    :target: https://ci.appveyor.com/project/annoviko/pyclustering/branch/master
 .. |Coverage Status| image:: https://coveralls.io/repos/github/annoviko/pyclustering/badge.svg?branch=master&ts=1
    :target: https://coveralls.io/github/annoviko/pyclustering?branch=master
-.. |DOI| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.1491324.svg
-   :target: https://doi.org/10.5281/zenodo.1491324
+.. |DOI| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.4280556.svg
+   :target: https://doi.org/10.5281/zenodo.4280556
 .. |PyPi| image:: https://badge.fury.io/py/pyclustering.svg
    :target: https://badge.fury.io/py/pyclustering
 .. |Build Status Linux MacOS 0.10.dev| image:: https://travis-ci.org/annoviko/pyclustering.svg?branch=0.10.dev
@@ -460,12 +494,12 @@ Illustrations
    :target: https://ci.appveyor.com/project/annoviko/pyclustering/branch/0.9.dev
 .. |Coverage Status 0.10.dev| image:: https://coveralls.io/repos/github/annoviko/pyclustering/badge.svg?branch=0.10.dev&ts=1
    :target: https://coveralls.io/github/annoviko/pyclustering?branch=0.9.dev
-.. |Build Status Linux 0.10.0.rel| image:: https://travis-ci.org/annoviko/pyclustering.svg?branch=0.10.0.rel
+.. |Build Status Linux 0.10.1.rel| image:: https://travis-ci.org/annoviko/pyclustering.svg?branch=0.10.1.rel
    :target: https://travis-ci.org/annoviko/pyclustering
-.. |Build Status Win 0.10.0.rel| image:: https://ci.appveyor.com/api/projects/status/4uly2exfp49emwn0/branch/0.10.0.rel?svg=true
-   :target: https://ci.appveyor.com/project/annoviko/pyclustering/branch/0.10.0.rel
-.. |Coverage Status 0.10.0.rel| image:: https://coveralls.io/repos/github/annoviko/pyclustering/badge.svg?branch=0.10.0.rel&ts=1
-   :target: https://coveralls.io/github/annoviko/pyclustering?branch=0.10.0.rel
+.. |Build Status Win 0.10.1.rel| image:: https://ci.appveyor.com/api/projects/status/4uly2exfp49emwn0/branch/0.10.1.rel?svg=true
+   :target: https://ci.appveyor.com/project/annoviko/pyclustering/branch/0.10.1.rel
+.. |Coverage Status 0.10.1.rel| image:: https://coveralls.io/repos/github/annoviko/pyclustering/badge.svg?branch=0.10.1.rel&ts=1
+   :target: https://coveralls.io/github/annoviko/pyclustering?branch=0.10.1.rel
 .. |Download Counter| image:: https://pepy.tech/badge/pyclustering
    :target: https://pepy.tech/project/pyclustering
 .. |JOSS| image:: http://joss.theoj.org/papers/10.21105/joss.01230/status.svg
