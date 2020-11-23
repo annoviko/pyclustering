@@ -56,15 +56,18 @@ class canvas_cluster_descr:
 class cluster_visualizer_multidim:
     """!
     @brief Visualizer for cluster in multi-dimensional data.
-    @details This cluster visualizer is useful for clusters in data whose dimension is greater than 3. The
-              multidimensional visualizer helps to overcome 'cluster_visualizer' shortcoming - ability to display
-              clusters in 1D, 2D or 3D dimensional data space.
+    @details Multi-dimensional cluster visualizer is useful data whose dimension is greater than three, but it
+              is able to visualize data with any dimensions. The multidimensional visualizer helps to overcome
+              'cluster_visualizer' shortcoming - an ability to display clusters in 1D, 2D or 3D dimensional data
+              space only.
 
-        Example of clustering results visualization where 'Iris' is used:
+        Example of clustering results visualization where `Iris` is used:
         @code
             from pyclustering.utils import read_sample
             from pyclustering.samples.definitions import FAMOUS_SAMPLES
             from pyclustering.cluster import cluster_visualizer_multidim
+            from pyclustering.cluster.center_initializer import kmeans_plusplus_initializer
+            from pyclustering.cluster.xmeans import xmeans
 
             # load 4D data sample 'Iris'
             sample_4d = read_sample(FAMOUS_SAMPLES.SAMPLE_IRIS)
@@ -83,10 +86,10 @@ class cluster_visualizer_multidim:
             visualizer.show(max_row_size=3)
         @endcode
 
-        Visualized clustering results of 'Iris' data (multi-dimensional data):
+        Visualized clustering results of `Iris` data (multi-dimensional data):
         @image html xmeans_clustering_famous_iris.png "Fig. 1. X-Means clustering results (data 'Iris')."
 
-        Sometimes no need to display results in all dimensions. Parameter 'filter' can be used to display only
+        Sometimes no need to display results in all dimensions. Parameter `filter` can be used to display only
         interesting coordinate pairs. Here is an example of visualization of pair coordinates (x0, x1) and (x0, x2) for
         previous clustering results:
         @code
@@ -97,6 +100,45 @@ class cluster_visualizer_multidim:
 
         Visualized results of specified coordinate pairs:
         @image html xmeans_clustering_famous_iris_filtered.png "Fig. 2. X-Means clustering results (x0, x1) and (x0, x2) (data 'Iris')."
+
+        The multi-dimensional visualizer can be used to display clusters in 1-, 2- and 3-dimensional data similar to
+        `cluster_visualizer`. `cluster_visualizer_multidim` uses three plots to display 3-dimensional data:
+        `(x0, x1)`, `(x0, x2)` and `(x1, x2)`. There is an example:
+        @code
+            from pyclustering.utils import read_sample
+            from pyclustering.samples.definitions import FCPS_SAMPLES
+            from pyclustering.cluster import cluster_visualizer_multidim
+            from pyclustering.cluster.gmeans import gmeans
+
+            # load 3-dimensional data sample 'Hepta'
+            sample_3d = read_sample(FCPS_SAMPLES.SAMPLE_HEPTA)
+
+            # performs cluster analysis using G-Means algorithm
+            gmeans_instance = gmeans(sample_3d).process().get_clusters()
+
+            # visualize obtained clusters in 3-dimensional space (x0, x1), (x0, x2), (x1, x2):
+            visualizer = cluster_visualizer_multidim()
+            visualizer.append_clusters(clusters, sample_3d)
+            visualizer.show(max_row_size=3)
+        @endcode
+
+        Visualized clustering results of `Hepta` data (3-dimensional data):
+        @image html gmeans_hepta_multidim_visualizer.png "Fig. 3. G-Means clustering results (3-dimensional data 'Hepta')."
+
+        Example with 2-dimensional data `Lsun`:
+        @code
+            # load 2-dimensional data sample 'Lsun'
+            sample_2d = read_sample(FCPS_SAMPLES.SAMPLE_LSUN)
+            clusters = gmeans(sample_2d).process().get_clusters()
+
+            # visualize obtained clusters in 2-dimensional space (x0, x1):
+            visualizer = cluster_visualizer_multidim()
+            visualizer.append_clusters(clusters, sample_2d)
+            visualizer.show()
+        @endcode
+
+        Visualized clustering results of `Lsun` (2-dimensional data):
+        @image html gmeans_lsun_multidim_visualizer.png "Fig. 4. G-Means clustering results (2-dimensional data 'Lsun')."
 
     """
 
@@ -111,7 +153,7 @@ class cluster_visualizer_multidim:
         self.__grid_spec = None
 
 
-    def append_cluster(self, cluster, data = None, marker = '.', markersize = None, color = None):
+    def append_cluster(self, cluster, data=None, marker='.', markersize=None, color=None):
         """!
         @brief Appends cluster for visualization.
 
@@ -369,11 +411,34 @@ class cluster_visualizer_multidim:
 
 class cluster_visualizer:
     """!
-    @brief Common visualizer of clusters on 1D, 2D or 3D surface.
-    @details Use 'cluster_visualizer_multidim' visualizer in case of data dimension is greater than 3.
+    @brief Common cluster visualizer for 1-, 2- and 3-dimensional data.
+    @details `cluster_visualizer_multidim` visualizer can be used to display clusters in N-dimensional data.
+
+    The general difference between `cluster_visualizer` and `cluster_visualizer_multidim` is a way of representation
+    of 3-dimensional data. In case of `cluster_visualizer` 3-dimensional data is displayed in 3-dimensional plot with
+    `x0`, `x1` and `x2` axis. In case of `cluster_visualizer_multidim` it displayed on three 2-dimensional plots:
+    `(x0, x1)`, `(x0, x2)` and `(x1, x2)`.
+
+    There is an example where sample `Atom` is used for clustering and displayed by `cluster_visualizer`:
+    @code
+        from pyclustering.utils import read_sample
+        from pyclustering.samples.definitions import FCPS_SAMPLES
+        from pyclustering.cluster import cluster_visualizer
+        from pyclustering.cluster.dbscan import dbscan
+
+        sample = read_sample(FCPS_SAMPLES.SAMPLE_ATOM)
+        clusters = dbscan(sample, 15, 3).process().get_clusters()
+
+        visualizer = cluster_visualizer()
+        visualizer.append_clusters(clusters, sample)
+        visualizer.show()
+    @endcode
+
+    Visualized clustering results of `Atom` data:
+    @image html dbscan_atom_visualizer.png "Fig. 1. DBSCAN clustering results (3-dimensional data 'Atom')."
 
     @see cluster_visualizer_multidim
-    
+
     """
 
     def __init__(self, number_canvases=1, size_row=1, titles=None):
@@ -475,8 +540,8 @@ class cluster_visualizer:
                 raise ValueError("Only clusters with the same dimension of objects can be displayed on canvas.")
 
         if (dimension < 1) or (dimension > 3):
-            raise ValueError("Only objects with size dimension 1 (1D plot), 2 (2D plot) or 3 (3D plot) "
-                             "can be displayed. For multi-dimensional data use 'cluster_visualizer_multidim'.")
+            raise ValueError("Only 1-, 2- and 3-dimensional data can be displayed. Please, use "
+                             "'cluster_visualizer_multidim' for visualization.")
         
         if markersize is None:
             if (dimension == 1) or (dimension == 2):
@@ -487,7 +552,7 @@ class cluster_visualizer:
         return len(self.__canvas_clusters[canvas]) - 1
     
     
-    def append_cluster_attribute(self, index_canvas, index_cluster, data, marker = None, markersize = None):
+    def append_cluster_attribute(self, index_canvas, index_cluster, data, marker=None, markersize=None):
         """!
         @brief Append cluster attribure for cluster on specific canvas.
         @details Attribute it is data that is visualized for specific cluster using its color, marker and markersize if last two is not specified.
@@ -531,7 +596,7 @@ class cluster_visualizer:
             self.append_cluster(cluster, data, canvas, marker, markersize)
     
     
-    def set_canvas_title(self, text, canvas = 0):
+    def set_canvas_title(self, text, canvas=0):
         """!
         @brief Set title for specified canvas.
         
@@ -686,18 +751,18 @@ class cluster_visualizer:
         for item in cluster:
             if dimension == 1:
                 if data is None:
-                    ax.plot(item[0], 0.0, color = color, marker = marker, markersize = markersize)
+                    ax.plot(item[0], 0.0, color=color, marker=marker, markersize=markersize)
                 else:
-                    ax.plot(data[item][0], 0.0, color = color, marker = marker, markersize = markersize)
+                    ax.plot(data[item][0], 0.0, color=color, marker=marker, markersize=markersize)
 
             elif dimension == 2:
                 if data is None:
-                    ax.plot(item[0], item[1], color = color, marker = marker, markersize = markersize)
+                    ax.plot(item[0], item[1], color=color, marker=marker, markersize=markersize)
                 else:
-                    ax.plot(data[item][0], data[item][1], color = color, marker = marker, markersize = markersize)
+                    ax.plot(data[item][0], data[item][1], color=color, marker=marker, markersize=markersize)
         
             elif dimension == 3:
                 if data is None:
-                    ax.scatter(item[0], item[1], item[2], c = color, marker = marker, s = markersize)
+                    ax.scatter(item[0], item[1], item[2], c=color, marker=marker, s=markersize)
                 else:
-                    ax.scatter(data[item][0], data[item][1], data[item][2], c = color, marker = marker, s = markersize)
+                    ax.scatter(data[item][0], data[item][1], data[item][2], c=color, marker=marker, s=markersize)

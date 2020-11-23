@@ -53,6 +53,10 @@ Cluster analysis algorithms and methods (module pyclustering.cluster):
 - TTSAS (pyclustering.cluster.ttsas);
 - X-Means (pyclustering.cluster.xmeans);
 
+Common cluster visualizers, except particular specific visualizers that might be found in corresponding modules:
+- Common cluster visualizer (pyclustering.cluster.cluster_visualizer);
+- Multi-dimensional cluster visualizer (pyclustering.cluster.cluster_visualizer_multidim);
+
 Oscillatory and neural network models (module pyclustering.nnet):
 - Oscillatory network based on Hodgkin-Huxley model (pyclustering.nnet.hhn);
 - fSync: Oscillatory Network based on Landau-Stuart equation and Kuramoto model (pyclustering.nnet.fsync);
@@ -72,7 +76,6 @@ Graph coloring algorithms (module pyclustering.gcolor):
 Containers (module pyclustering.container):
 - CF-Tree (pyclustering.container.cftree);
 - KD-Tree (pyclustering.container.kdtree);
-
 
 Utils (pyclustering.utils) that can be used for analysis, visualization, etc.
 
