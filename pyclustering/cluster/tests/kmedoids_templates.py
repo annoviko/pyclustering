@@ -82,6 +82,7 @@ class kmedoids_test_template:
             if expected_cluster_length is not None:
                 obtained_cluster_sizes.sort()
                 expected_cluster_length.sort()
+                print(obtained_cluster_sizes, expected_cluster_length)
                 if obtained_cluster_sizes != expected_cluster_length:
                     continue
 

@@ -30,6 +30,9 @@ class KmedoidsIntegrationTest(unittest.TestCase):
     def testClusterAllocationSampleSimple1ByCore(self):
         kmedoids_test_template.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], True)
 
+    def testClusterAllocationSampleSimple1WrongInitials1ByCore(self):
+        kmedoids_test_template.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [1, 2, 3, 4], [2, 2, 3, 3], True)
+
     def testClusterAllocationSampleSimple1DistanceMatrixByCore(self):
         kmedoids_test_template.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, [2, 9], [5, 5], True, data_type='distance_matrix')
 

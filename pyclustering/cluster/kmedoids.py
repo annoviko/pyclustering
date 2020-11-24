@@ -168,7 +168,7 @@ class kmedoids:
                     current_deviation = self.__update_clusters()
                     changes = previous_deviation - current_deviation
                 else:
-                    return self
+                    break
 
                 iterations += 1
 

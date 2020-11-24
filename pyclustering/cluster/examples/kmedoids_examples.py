@@ -17,14 +17,15 @@ from pyclustering.utils import read_sample
 from pyclustering.utils import timedcall, distance_metric, type_metric
 
 
-def template_clustering(start_medoids, path, tolerance=0.25, show=True):
+def template_clustering(start_medoids, path, tolerance=0.25, show=True, ccore=True):
     sample = read_sample(path)
 
     metric = distance_metric(type_metric.EUCLIDEAN_SQUARE, data=sample)
-    kmedoids_instance = kmedoids(sample, start_medoids, tolerance, metric=metric)
+    kmedoids_instance = kmedoids(sample, start_medoids, tolerance, metric=metric, ccore=ccore)
     (ticks, result) = timedcall(kmedoids_instance.process)
     
     clusters = kmedoids_instance.get_clusters()
+    print(clusters)
     medoids = kmedoids_instance.get_medoids()
     print("Sample: ", path, "\t\tExecution time: ", ticks, "\n")
 
@@ -40,7 +41,7 @@ def template_clustering(start_medoids, path, tolerance=0.25, show=True):
 
 def cluster_sample1():
     template_clustering([2, 9], SIMPLE_SAMPLES.SAMPLE_SIMPLE1)
-    
+
 def cluster_sample2():
     template_clustering([3, 12, 20], SIMPLE_SAMPLES.SAMPLE_SIMPLE2)
     
