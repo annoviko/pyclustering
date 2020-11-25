@@ -13,15 +13,21 @@ from pyclustering.samples.definitions import SIMPLE_SAMPLES, FCPS_SAMPLES
 from pyclustering.cluster import cluster_visualizer
 from pyclustering.cluster.kmedoids import kmedoids
 
-from pyclustering.utils import read_sample
+from pyclustering.utils import read_sample, calculate_distance_matrix
 from pyclustering.utils import timedcall, distance_metric, type_metric
 
 
-def template_clustering(start_medoids, path, tolerance=0.25, show=True, ccore=True):
-    sample = read_sample(path)
+def template_clustering(start_medoids, path, tolerance=0.25, show=True, **kwargs):
+    ccore = kwargs.get('ccore', True)
+    data_type = kwargs.get('data_type', 'points')
+
+    original_data = read_sample(path)
+    sample = original_data
+    if data_type == 'distance_matrix':
+        sample = calculate_distance_matrix(sample)
 
     metric = distance_metric(type_metric.EUCLIDEAN_SQUARE, data=sample)
-    kmedoids_instance = kmedoids(sample, start_medoids, tolerance, metric=metric, ccore=ccore)
+    kmedoids_instance = kmedoids(sample, start_medoids, tolerance, metric=metric, ccore=ccore, data_type=data_type)
     (ticks, result) = timedcall(kmedoids_instance.process)
     
     clusters = kmedoids_instance.get_clusters()
@@ -31,12 +37,12 @@ def template_clustering(start_medoids, path, tolerance=0.25, show=True, ccore=Tr
 
     if show is True:
         visualizer = cluster_visualizer(1)
-        visualizer.append_clusters(clusters, sample, 0)
-        visualizer.append_cluster([sample[index] for index in start_medoids], marker='*', markersize=15)
-        visualizer.append_cluster(medoids, data=sample, marker='*', markersize=15)
+        visualizer.append_clusters(clusters, original_data, 0)
+        visualizer.append_cluster([original_data[index] for index in start_medoids], marker='*', markersize=15)
+        visualizer.append_cluster(medoids, data=original_data, marker='*', markersize=15)
         visualizer.show()
     
-    return sample, clusters
+    return original_data, clusters
 
 
 def cluster_sample1():
@@ -58,7 +64,8 @@ def cluster_elongate():
     template_clustering([8, 56], SIMPLE_SAMPLES.SAMPLE_ELONGATE)
 
 def cluster_lsun():
-    template_clustering([10, 275, 385], FCPS_SAMPLES.SAMPLE_LSUN)
+    #template_clustering([10, 275, 385], FCPS_SAMPLES.SAMPLE_LSUN)
+    template_clustering([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], FCPS_SAMPLES.SAMPLE_LSUN, data_type='distance_matrix')
 
 def cluster_target():
     template_clustering([10, 160, 310, 460, 560, 700], FCPS_SAMPLES.SAMPLE_TARGET)

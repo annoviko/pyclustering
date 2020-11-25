@@ -234,21 +234,24 @@ class KmedoidsUnitTest(unittest.TestCase):
         kmedoids_test_template.templateAllocateRequestedClusterAmount(sample, 25, None, False)
         kmedoids_test_template.templateAllocateRequestedClusterAmount(sample, 40, None, False)
 
-    def testAllocatedRequestedClustersWithTheSamePoints(self):
+
+    def testAllocatedRequestedClustersWithTheSamePoints1(self):
         # Bug issue #366 - Kmedoids returns incorrect number of clusters.
         sample = [[0.0, 0.0], [0.1, 0.1], [0.0, 0.0], [0.1, 0.2]]
-        kmedoids_test_template.templateAllocateRequestedClusterAmount(sample, 4, None, False)
+        kmedoids_test_template.templateAllocateRequestedClusterAmount(sample, 3, None, False)
         kmedoids_test_template.templateAllocateRequestedClusterAmount(sample, 3, None, False)
         kmedoids_test_template.templateAllocateRequestedClusterAmount(sample, 2, None, False)
         kmedoids_test_template.templateAllocateRequestedClusterAmount(sample, 1, None, False)
 
+    def testAllocatedRequestedClustersWithTheSamePoints2(self):
+        sample = [[0.23, 0.2], [-0.1, 0.1], [0.0, 0.9], [0.1, -0.2], [0.8, 0.1], [-0.1, 0.1], [-0.4, -0.2], [0.0, 0.9]]
+        answers = [1, 2, 3, 4, 5, 6, 6, 6]
+        for expected_amount in answers:
+            kmedoids_test_template.templateAllocateRequestedClusterAmount(sample, expected_amount, None, False)
 
     def testAllocatedRequestedClustersWithTotallyTheSamePoints(self):
         # Bug issue #366 - Kmedoids returns incorrect number of clusters.
         sample = [[0.0, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0]]
-        kmedoids_test_template.templateAllocateRequestedClusterAmount(sample, 4, None, False)
-        kmedoids_test_template.templateAllocateRequestedClusterAmount(sample, 3, None, False)
-        kmedoids_test_template.templateAllocateRequestedClusterAmount(sample, 2, None, False)
         kmedoids_test_template.templateAllocateRequestedClusterAmount(sample, 1, None, False)
 
 
@@ -265,44 +268,83 @@ class KmedoidsUnitTest(unittest.TestCase):
         kmedoids_test_template.templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, [3, 12, 20], [10, 5, 8], False, itermax=10)
 
 
-    def testSimple01Answer(self):
+    def testSimple01AnswerByCore(self):
         kmedoids_test_template.clustering_with_answer(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, SIMPLE_ANSWERS.ANSWER_SIMPLE1, False, random_state=1000)
 
-    def testSimple02Answer(self):
+    def testSimple01AnswerDistanceMatrixByCore(self):
+        kmedoids_test_template.clustering_with_answer(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, SIMPLE_ANSWERS.ANSWER_SIMPLE1, False, random_state=1000, data_type='distance_matrix')
+
+    def testSimple02AnswerByCore(self):
         kmedoids_test_template.clustering_with_answer(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, SIMPLE_ANSWERS.ANSWER_SIMPLE2, False, random_state=1000)
 
-    def testSimple03Answer(self):
+    def testSimple02AnswerDistanceMatrixByCore(self):
+        kmedoids_test_template.clustering_with_answer(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, SIMPLE_ANSWERS.ANSWER_SIMPLE2, False, random_state=1000, data_type='distance_matrix')
+
+    def testSimple03AnswerByCore(self):
         kmedoids_test_template.clustering_with_answer(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, SIMPLE_ANSWERS.ANSWER_SIMPLE3, False, random_state=1000)
 
-    def testSimple04Answer(self):
+    def testSimple03AnswerDistanceMatrixByCore(self):
+        kmedoids_test_template.clustering_with_answer(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, SIMPLE_ANSWERS.ANSWER_SIMPLE3, False, random_state=1000, data_type='distance_matrix')
+
+    def testSimple04AnswerByCore(self):
         kmedoids_test_template.clustering_with_answer(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, SIMPLE_ANSWERS.ANSWER_SIMPLE4, False, random_state=1000)
 
-    def testSimple05Answer(self):
+    def testSimple04AnswerDistanceMatrixByCore(self):
+        kmedoids_test_template.clustering_with_answer(SIMPLE_SAMPLES.SAMPLE_SIMPLE4, SIMPLE_ANSWERS.ANSWER_SIMPLE4, False, random_state=1000, data_type='distance_matrix')
+
+    def testSimple05AnswerByCore(self):
         kmedoids_test_template.clustering_with_answer(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, SIMPLE_ANSWERS.ANSWER_SIMPLE5, False, random_state=1000)
 
-    def testSimple06Answer(self):
+    def testSimple05AnswerDistanceMatrixByCore(self):
+        kmedoids_test_template.clustering_with_answer(SIMPLE_SAMPLES.SAMPLE_SIMPLE5, SIMPLE_ANSWERS.ANSWER_SIMPLE5, False, random_state=1000, data_type='distance_matrix')
+
+    def testSimple06AnswerByCore(self):
         kmedoids_test_template.clustering_with_answer(SIMPLE_SAMPLES.SAMPLE_SIMPLE6, SIMPLE_ANSWERS.ANSWER_SIMPLE6, False, random_state=1000)
 
-    def testSimple07Answer(self):
+    def testSimple06AnswerDistanceMatrixByCore(self):
+        kmedoids_test_template.clustering_with_answer(SIMPLE_SAMPLES.SAMPLE_SIMPLE6, SIMPLE_ANSWERS.ANSWER_SIMPLE6, False, random_state=1000, data_type='distance_matrix')
+
+    def testSimple07AnswerByCore(self):
         kmedoids_test_template.clustering_with_answer(SIMPLE_SAMPLES.SAMPLE_SIMPLE7, SIMPLE_ANSWERS.ANSWER_SIMPLE7, False, random_state=1000)
 
-    def testSimple08Answer(self):
+    def testSimple07AnswerDistanceMatrixByCore(self):
+        kmedoids_test_template.clustering_with_answer(SIMPLE_SAMPLES.SAMPLE_SIMPLE7, SIMPLE_ANSWERS.ANSWER_SIMPLE7, False, random_state=1000, data_type='distance_matrix')
+
+    def testSimple08AnswerByCore(self):
         kmedoids_test_template.clustering_with_answer(SIMPLE_SAMPLES.SAMPLE_SIMPLE8, SIMPLE_ANSWERS.ANSWER_SIMPLE8, False, random_state=1000)
 
-    def testSimple09Answer(self):
+    def testSimple08AnswerDistanceMatrixByCore(self):
+        kmedoids_test_template.clustering_with_answer(SIMPLE_SAMPLES.SAMPLE_SIMPLE8, SIMPLE_ANSWERS.ANSWER_SIMPLE8, False, random_state=1000, data_type='distance_matrix')
+
+    def testSimple09AnswerByCore(self):
         kmedoids_test_template.clustering_with_answer(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, SIMPLE_ANSWERS.ANSWER_SIMPLE9, False, random_state=1000)
 
-    def testSimple10Answer(self):
+    def testSimple09AnswerDistanceMatrixByCore(self):
+        kmedoids_test_template.clustering_with_answer(SIMPLE_SAMPLES.SAMPLE_SIMPLE9, SIMPLE_ANSWERS.ANSWER_SIMPLE9, False, random_state=1000, data_type='distance_matrix')
+
+    def testSimple10AnswerByCore(self):
         kmedoids_test_template.clustering_with_answer(SIMPLE_SAMPLES.SAMPLE_SIMPLE10, SIMPLE_ANSWERS.ANSWER_SIMPLE10, False, random_state=1000)
 
-    def testSimple11Answer(self):
+    def testSimple10AnswerDistanceMatrixByCore(self):
+        kmedoids_test_template.clustering_with_answer(SIMPLE_SAMPLES.SAMPLE_SIMPLE10, SIMPLE_ANSWERS.ANSWER_SIMPLE10, False, random_state=1000, data_type='distance_matrix')
+
+    def testSimple11AnswerByCore(self):
         kmedoids_test_template.clustering_with_answer(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, SIMPLE_ANSWERS.ANSWER_SIMPLE11, False, random_state=1000)
 
-    def testSimple12Answer(self):
+    def testSimple11AnswerDistanceMatrixByCore(self):
+        kmedoids_test_template.clustering_with_answer(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, SIMPLE_ANSWERS.ANSWER_SIMPLE11, False, random_state=1000, data_type='distance_matrix')
+
+    def testSimple12AnswerByCore(self):
         kmedoids_test_template.clustering_with_answer(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, SIMPLE_ANSWERS.ANSWER_SIMPLE12, False, random_state=1000)
 
-    def testSimple13Answer(self):
+    def testSimple12AnswerDistanceMatrixByCore(self):
+        kmedoids_test_template.clustering_with_answer(SIMPLE_SAMPLES.SAMPLE_SIMPLE12, SIMPLE_ANSWERS.ANSWER_SIMPLE12, False, random_state=1000, data_type='distance_matrix')
+
+    def testSimple13AnswerByCore(self):
         kmedoids_test_template.clustering_with_answer(SIMPLE_SAMPLES.SAMPLE_SIMPLE13, SIMPLE_ANSWERS.ANSWER_SIMPLE13, False, random_state=1000)
+
+    def testSimple13AnswerDistanceMatrixByCore(self):
+        kmedoids_test_template.clustering_with_answer(SIMPLE_SAMPLES.SAMPLE_SIMPLE13, SIMPLE_ANSWERS.ANSWER_SIMPLE13, False, random_state=1000, data_type='distance_matrix')
 
 
     def test_incorrect_data(self):

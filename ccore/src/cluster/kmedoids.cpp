@@ -95,6 +95,8 @@ void kmedoids::process(const dataset & p_data, const kmedoids_data_t p_type, kme
         }
     }
 
+    erase_empty_clusters();
+
     m_data_ptr = nullptr;
     m_result_ptr = nullptr;
 }
@@ -219,6 +221,19 @@ double kmedoids::calculate_swap_cost(const std::size_t p_index_candidate, const 
     }
 
     return cost - m_distance_first_medoid[p_index_candidate];
+}
+
+
+void kmedoids::erase_empty_clusters() {
+    auto & clusters = m_result_ptr->clusters();
+    auto & medoids = m_result_ptr->medoids();
+
+    for (std::size_t index_cluster = clusters.size() - 1; index_cluster != static_cast<std::size_t>(-1); index_cluster--) {
+        if (clusters[index_cluster].empty()) {
+            clusters.erase(clusters.begin() + index_cluster);
+            medoids.erase(medoids.begin() + index_cluster);
+        }
+    }
 }
 
 

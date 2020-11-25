@@ -199,6 +199,15 @@ private:
     
     */
     double calculate_swap_cost(const std::size_t p_index_candidate, const std::size_t p_index_cluster) const;
+
+    /*!
+
+    @brief      Erase empty clusters and their medoids.
+    @details    Data might have identical points and a lot of identical points and as a result medoids might correspond
+                  to points that are totally identical.
+
+    */
+    void erase_empty_clusters();
 };
 
 

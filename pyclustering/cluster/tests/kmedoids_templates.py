@@ -79,6 +79,10 @@ class kmedoids_test_template:
             if len(sample) != sum(obtained_cluster_sizes):
                 continue
 
+            for cluster in clusters:
+                if len(cluster) == 0:
+                    continue
+
             if expected_cluster_length is not None:
                 obtained_cluster_sizes.sort()
                 expected_cluster_length.sort()
@@ -143,10 +147,10 @@ class kmedoids_test_template:
 
         assertion.eq(len(clusters), len(medoids))
         assertion.eq(len(set(medoids)), len(medoids))
-        
+
         object_mark = [False] * number_objects
         allocated_number_objects = 0
-        
+
         for cluster in clusters:
             for index_object in cluster: 
                 assertion.eq(False, object_mark[index_object])    # one object can be in only one cluster.
@@ -174,7 +178,15 @@ class kmedoids_test_template:
 
     @staticmethod
     def clustering_with_answer(data_file, answer_file, ccore, **kwargs):
-        data = read_sample(data_file)
+        data_type = kwargs.get('data_type', 'points')
+        metric = kwargs.get('metric', distance_metric(type_metric.EUCLIDEAN))
+
+        original_data = read_sample(data_file)
+        data = original_data
+
+        if data_type == 'distance_matrix':
+            data = calculate_distance_matrix(original_data, metric)
+
         reader = answer_reader(answer_file)
 
         amount_medoids = len(reader.get_clusters())
