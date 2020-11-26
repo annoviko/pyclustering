@@ -34,9 +34,10 @@ const std::size_t        kmedoids::INVALID_INDEX             = std::numeric_limi
 const double             kmedoids::NOTHING_TO_SWAP           = std::numeric_limits<double>::max();
 
 
-kmedoids::appropriate_cluster::appropriate_cluster(const std::size_t p_index, const double p_distance) :
+kmedoids::appropriate_cluster::appropriate_cluster(const std::size_t p_index, const double p_distance_first_medoid, const double p_distance_second_medoid) :
     m_index(p_index),
-    m_distance_to_medoid(p_distance)
+    m_distance_to_first_medoid(p_distance_first_medoid),
+    m_distance_to_second_medoid(p_distance_second_medoid)
 { }
 
 
@@ -94,6 +95,8 @@ void kmedoids::process(const dataset & p_data, const kmedoids_data_t p_type, kme
         }
     }
 
+    erase_empty_clusters();
+
     m_data_ptr = nullptr;
     m_result_ptr = nullptr;
 }
@@ -115,8 +118,13 @@ double kmedoids::update_clusters() {
     for (std::size_t index_point = 0; index_point < m_data_ptr->size(); index_point++) {
         const std::size_t index_optim = cluster_markers[index_point].m_index;
 
+        total_deviation += cluster_markers[index_point].m_distance_to_first_medoid;
+
+        m_labels[index_point] = index_optim;
         clusters[index_optim].push_back(index_point);
-        total_deviation += cluster_markers[index_point].m_distance_to_medoid;
+
+        m_distance_first_medoid[index_point] = cluster_markers[index_point].m_distance_to_first_medoid;
+        m_distance_second_medoid[index_point] = cluster_markers[index_point].m_distance_to_second_medoid;
     }
 
     return total_deviation;
@@ -160,7 +168,7 @@ kmedoids::appropriate_cluster kmedoids::find_appropriate_cluster(const std::size
         }
     }
 
-    return kmedoids::appropriate_cluster(index_optim, dist_optim_first);
+    return kmedoids::appropriate_cluster(index_optim, dist_optim_first, dist_optim_second);
 }
 
 
@@ -213,6 +221,19 @@ double kmedoids::calculate_swap_cost(const std::size_t p_index_candidate, const 
     }
 
     return cost - m_distance_first_medoid[p_index_candidate];
+}
+
+
+void kmedoids::erase_empty_clusters() {
+    auto & clusters = m_result_ptr->clusters();
+    auto & medoids = m_result_ptr->medoids();
+
+    for (std::size_t index_cluster = clusters.size() - 1; index_cluster != static_cast<std::size_t>(-1); index_cluster--) {
+        if (clusters[index_cluster].empty()) {
+            clusters.erase(clusters.begin() + index_cluster);
+            medoids.erase(medoids.begin() + index_cluster);
+        }
+    }
 }
 
 

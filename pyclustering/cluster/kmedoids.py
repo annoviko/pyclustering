@@ -105,11 +105,11 @@ class kmedoids:
         @param[in] initial_index_medoids (list): Indexes of intial medoids (indexes of points in input data).
         @param[in] tolerance (double): Stop condition: if maximum value of distance change of medoids of clusters is less than tolerance than algorithm will stop processing.
         @param[in] ccore (bool): If specified than CCORE library (C++ pyclustering library) is used for clustering instead of Python code.
-        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: 'metric', 'data_type', 'itermax').
+        @param[in] **kwargs: Arbitrary keyword arguments (available arguments: `metric`, `data_type`, `itermax`).
 
         <b>Keyword Args:</b><br>
             - metric (distance_metric): Metric that is used for distance calculation between two points.
-            - data_type (string): Data type of input sample 'data' that is processed by the algorithm ('points', 'distance_matrix').
+            - data_type (string): Data type of input sample `data` that is processed by the algorithm (`points`, `distance_matrix`).
             - itermax (uint): Maximum number of iteration for cluster analysis.
 
         """
@@ -168,9 +168,11 @@ class kmedoids:
                     current_deviation = self.__update_clusters()
                     changes = previous_deviation - current_deviation
                 else:
-                    return self
+                    break
 
                 iterations += 1
+
+            self.__erase_empty_clusters()
 
         return self
 
@@ -316,7 +318,7 @@ class kmedoids:
             
             for index in range(len(self.__medoid_indexes)):
                 dist = self.__distance_calculator(index_point, self.__medoid_indexes[index])
-                
+
                 if dist < dist_optim_first:
                     dist_optim_second = dist_optim_first
                     index_optim = index
@@ -386,3 +388,36 @@ class kmedoids:
                 cost += candidate_distance - self.__distance_first_medoid[index_point]
 
         return cost - self.__distance_first_medoid[index_candidate]
+
+
+    def __erase_empty_clusters(self):
+        """!
+        @brief Erase empty clusters and their medoids.
+        @details Data might have identical points and a lot of identical points and as a result medoids might correspond
+                  to points that are totally identical.
+
+        """
+
+        erase_required = False
+
+        # Before processing check if there are empty clusters
+        for cluster in self.__clusters:
+            if len(cluster) == 0:
+                erase_required = True
+                break
+
+        if erase_required is False:
+            return
+
+        none_empty_clusters = []
+        none_empty_medoids = []
+
+        for index in range(len(self.__clusters)):
+            if len(self.__clusters[index]) == 0:
+                continue
+
+            none_empty_clusters.append(self.__clusters[index])
+            none_empty_medoids.append(self.__medoid_indexes[index])
+
+        self.__clusters = none_empty_clusters
+        self.__medoid_indexes = none_empty_medoids

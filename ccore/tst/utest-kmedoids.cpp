@@ -41,7 +41,8 @@ template_kmedoids_length_process_data(const dataset_ptr p_data,
         return;
     }
 
-    ASSERT_EQ(p_start_medoids.size(), actual_clusters.size());
+    ASSERT_LE(medoids.size(), p_start_medoids.size());
+    ASSERT_EQ(medoids.size(), actual_clusters.size());
     ASSERT_CLUSTER_SIZES(data, actual_clusters, p_expected_cluster_length);
 }
 

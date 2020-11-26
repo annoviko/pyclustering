@@ -64,11 +64,12 @@ private:
     struct appropriate_cluster {
     public:
         appropriate_cluster() = default;
-        appropriate_cluster(const std::size_t p_index, const double p_distance);
+        appropriate_cluster(const std::size_t p_index, const double p_distance_first_medoid, const double p_distance_second_medoid);
 
     public:
-        std::size_t m_index                 = INVALID_INDEX;
-        double      m_distance_to_medoid    = -1.0;
+        std::size_t m_index                       = INVALID_INDEX;
+        double      m_distance_to_first_medoid    = -1.0;
+        double      m_distance_to_second_medoid   = -1.0;
     };
 
 private:
@@ -198,6 +199,15 @@ private:
     
     */
     double calculate_swap_cost(const std::size_t p_index_candidate, const std::size_t p_index_cluster) const;
+
+    /*!
+
+    @brief      Erase empty clusters and their medoids.
+    @details    Data might have identical points and a lot of identical points and as a result medoids might correspond
+                  to points that are totally identical.
+
+    */
+    void erase_empty_clusters();
 };
 
 
