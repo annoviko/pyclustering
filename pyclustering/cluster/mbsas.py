@@ -95,24 +95,24 @@ class mbsas(bsas):
 
 
     def __prcess_by_python(self):
-        self._clusters.append([0]);
-        self._representatives.append(self._data[0]);
+        self._clusters.append([0])
+        self._representatives.append(self._data[0])
 
-        skipped_objects = [];
+        skipped_objects = []
 
         for i in range(1, len(self._data)):
-            point = self._data[i];
-            index_cluster, distance = self._find_nearest_cluster(point);
+            point = self._data[i]
+            index_cluster, distance = self._find_nearest_cluster(point)
 
             if (distance > self._threshold) and (len(self._clusters) < self._amount):
-                self._representatives.append(point);
-                self._clusters.append([i]);
+                self._representatives.append(point)
+                self._clusters.append([i])
             else:
-                skipped_objects.append(i);
+                skipped_objects.append(i)
 
         for i in skipped_objects:
-            point = self._data[i];
-            index_cluster, _ = self._find_nearest_cluster(point);
+            point = self._data[i]
+            index_cluster, _ = self._find_nearest_cluster(point)
 
-            self._clusters[index_cluster].append(i);
-            self._update_representative(index_cluster, point);
+            self._clusters[index_cluster].append(i)
+            self._update_representative(index_cluster, point)

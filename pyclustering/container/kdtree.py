@@ -86,6 +86,7 @@ class kdtree_visualizer:
         ax.set_xlim(min[0], max[0])
         ax.set_ylim(min[1], max[1])
         plt.show()
+        plt.close(figure)
 
     def __draw_node(self, ax, node, min, max):
         self.__draw_split_line(ax, node, min, max)

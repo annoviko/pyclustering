@@ -454,6 +454,7 @@ class cnn_network:
                 
         plt.grid()
         plt.show()
+        plt.close(fig)
     
     
     def __create_surface(self, dimension):
@@ -480,4 +481,4 @@ class cnn_network:
         surface_font.set_name('Arial')
         surface_font.set_size('12')
         
-        return (fig, axes)
+        return fig, axes

@@ -155,6 +155,15 @@ class cluster_visualizer_multidim:
         self.__grid_spec = None
 
 
+    def __del__(self):
+        """!
+        @brief Close matplotlib figure that was used for visualization.
+
+        """
+        if self.__figure is not None:
+            plt.close(self.__figure)
+
+
     def append_cluster(self, cluster, data=None, marker='.', markersize=None, color=None):
         """!
         @brief Appends cluster for visualization.
@@ -247,7 +256,11 @@ class cluster_visualizer_multidim:
         if not len(self.__clusters) > 0:
             raise ValueError("There is no non-empty clusters for visualization.")
 
-        cluster_data = self.__clusters[0].data or self.__clusters[0].cluster
+        if self.__clusters[0].data is not None:
+            cluster_data = self.__clusters[0].data
+        else:
+            cluster_data = self.__clusters[0].cluster
+
         dimension = len(cluster_data[0])
 
         acceptable_pairs = pair_filter or []
@@ -660,9 +673,22 @@ class cluster_visualizer:
         plt.savefig(filename)
 
 
+    @staticmethod
+    def close(figure):
+        """!
+        @brief Closes figure object that was used or allocated by the visualizer.
+
+        @param[in] figure (figure): Figure object that was used or allocated by the visualizer.
+
+        """
+        plt.close(figure)
+
+
     def show(self, figure=None, invisible_axis=True, visible_grid=True, display=True, shift=None):
         """!
-        @brief Shows clusters (visualize).
+        @brief Shows clusters (visualize) on created or existed figure.
+        @details The class is not responsible figures that used for visualization, they should be closed using
+                  `close()` method of this visualizer.
         
         @param[in] figure (fig): Defines requirement to use specified figure, if None - new figure is created for drawing clusters.
         @param[in] invisible_axis (bool): Defines visibility of axes on each canvas, if True - axes are invisible.
@@ -688,7 +714,7 @@ class cluster_visualizer:
             cluster_figure = plt.figure()
         
         maximum_cols = self.__size_row
-        maximum_rows = math.ceil( (self.__number_canvases + canvas_shift) / maximum_cols)
+        maximum_rows = math.ceil((self.__number_canvases + canvas_shift) / maximum_cols)
         
         grid_spec = gridspec.GridSpec(maximum_rows, maximum_cols)
 

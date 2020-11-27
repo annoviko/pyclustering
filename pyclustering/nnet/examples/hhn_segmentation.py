@@ -125,7 +125,7 @@ def animate_segmentation(dyn_time, dyn_peripheral, image, delay_mask=100, step=5
     iterations = range(1, len(dyn_peripheral), step)
     segmentation_animation = animation.FuncAnimation(figure, frame_generation, iterations, init_func=None, interval = 1, repeat_delay = 3000)
     
-    if (not movie_file):
+    if movie_file is not None:
         segmentation_animation.save(movie_file, writer = 'ffmpeg', fps = 20, bitrate = 3000)
     else:
         plt.show()

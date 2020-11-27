@@ -228,16 +228,23 @@ class GeneticAlgorithmClusteringUnitTest(unittest.TestCase):
     def testNoFailureVisualizationApi(self):
         sample, observer = self.templateTestObserverCollecting(2, 10, True, True, True, random_state=1000)
         
-        ga_visualizer.show_evolution(observer)
+        figure, _ = ga_visualizer.show_evolution(observer)
+        ga_visualizer.close(figure)
+
         ga_visualizer.show_clusters(sample, observer)
         ga_visualizer.animate_cluster_allocation(sample, observer)
 
     def testNoFailureShowEvolution(self):
         _, observer = self.templateTestObserverCollecting(2, 10, True, True, True, random_state=1000)
         
-        ga_visualizer.show_evolution(observer, 2, 5)
-        ga_visualizer.show_evolution(observer, 2, len(observer))
-        ga_visualizer.show_evolution(observer, 2, len(observer), display=False)
+        figure, _ = ga_visualizer.show_evolution(observer, 2, 5)
+        ga_visualizer.close(figure)
+
+        figure, _ = ga_visualizer.show_evolution(observer, 2, len(observer))
+        ga_visualizer.close(figure)
+
+        figure, _ = ga_visualizer.show_evolution(observer, 2, len(observer), display=False)
+        ga_visualizer.close(figure)
 
 
     def testNoneObserver(self):

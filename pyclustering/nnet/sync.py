@@ -456,11 +456,12 @@ class sync_visualizer:
         
         """
 
-        _ = plt.figure()
+        figure = plt.figure()
         correlation_matrix = sync_output_dynamic.allocate_correlation_matrix(iteration)
 
         plt.imshow(correlation_matrix, cmap = plt.get_cmap('cool'), interpolation='kaiser', vmin=0.0, vmax=1.0)
         plt.show()
+        plt.close(figure)
 
 
     @staticmethod
@@ -479,11 +480,12 @@ class sync_visualizer:
         
         """
 
-        _ = plt.figure()
+        figure = plt.figure()
         phase_matrix = sync_output_dynamic.allocate_phase_matrix(grid_width, grid_height, iteration)
 
-        plt.imshow(phase_matrix, cmap = plt.get_cmap('jet'), interpolation='kaiser', vmin=0.0, vmax=2.0 * math.pi)
+        plt.imshow(phase_matrix, cmap=plt.get_cmap('jet'), interpolation='kaiser', vmin=0.0, vmax=2.0 * math.pi)
         plt.show()
+        plt.close(figure)
 
 
     @staticmethod
@@ -560,6 +562,8 @@ class sync_visualizer:
         else:
             plt.show()
 
+        plt.close(figure)
+
 
     @staticmethod
     def animate_correlation_matrix(sync_output_dynamic, animation_velocity = 75, colormap = 'cool', save_movie = None):
@@ -593,6 +597,8 @@ class sync_visualizer:
             correlation_animation.save(save_movie, writer='ffmpeg', fps=15, bitrate=1500)
         else:
             plt.show()
+
+        plt.close(figure)
 
 
     @staticmethod
@@ -631,6 +637,8 @@ class sync_visualizer:
             phase_animation.save(save_movie, writer='ffmpeg', fps=15, bitrate=1500)
         else:
             plt.show()
+
+        plt.close(figure)
 
 
     @staticmethod
@@ -697,6 +705,7 @@ class sync_visualizer:
         else:
             plt.show()
 
+        plt.close(figure)
 
 
 class sync_network(network):

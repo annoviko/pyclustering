@@ -11,7 +11,7 @@
 
 
 const char * INTERFACE_DESCRIPTION  = "pyclustering library is a C/C++ part of python pyclustering library";
-const char * INTERFACE_VERSION      = "0.10.1.2";
+const char * INTERFACE_VERSION      = "0.11.0";
 
 
 void * get_interface_description() {

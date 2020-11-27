@@ -842,6 +842,7 @@ class som:
 
         plt.title("Winner Matrix")
         plt.show()
+        plt.close(fig)
 
     def show_network(self, awards=False, belongs=False, coupling=True, dataset=True, marker_type='o'):
         """!
@@ -942,6 +943,7 @@ class som:
         plt.title("Network Structure")
         plt.grid()
         plt.show()
+        plt.close(fig)
 
     def __get_dump_from_python(self, ccore_usage):
         return {'ccore': ccore_usage,

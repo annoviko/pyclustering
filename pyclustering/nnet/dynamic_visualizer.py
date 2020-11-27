@@ -36,22 +36,22 @@ class canvas_descr:
         """
 
         ## Title for X axis.
-        self.x_title  = x_title;
+        self.x_title  = x_title
 
         ## Title for Y axis.
-        self.y_title  = y_title;
+        self.y_title  = y_title
 
         ## Borders of X axis.
-        self.x_lim    = x_lim;
+        self.x_lim    = x_lim
 
         ## Borders of Y axis.
-        self.y_lim    = y_lim;
+        self.y_lim    = y_lim
 
         ## Defines whether X label should be displayed.
-        self.x_labels = x_labels;
+        self.x_labels = x_labels
 
         ## Defines whether Y label should be displayed.
-        self.y_labels = y_labels;
+        self.y_labels = y_labels
 
 
 class dynamic_descr:
@@ -78,19 +78,19 @@ class dynamic_descr:
         """
 
         ## Index of canvas where (or from which) dynamic should be displayed.
-        self.canvas     = canvas;
+        self.canvas     = canvas
 
         ## Time points.
-        self.time       = time;
+        self.time       = time
 
         ## Dynamic or dynamics.
-        self.dynamics   = dynamics;
+        self.dynamics   = dynamics
 
         ## Defines how dynamic(s) should be displayed.
-        self.separate   = self.__get_canonical_separate(separate);
+        self.separate   = self.__get_canonical_separate(separate)
 
         ## Color of dynamic.
-        self.color      = color;
+        self.color      = color
 
 
     def get_axis_index(self, index_dynamic):
@@ -102,7 +102,7 @@ class dynamic_descr:
         @return (uint) Index of canvas.
 
         """
-        return self.separate[index_dynamic];
+        return self.separate[index_dynamic]
 
 
     def __get_canonical_separate(self, input_separate):
@@ -117,28 +117,28 @@ class dynamic_descr:
 
         """
         if (isinstance(input_separate, list)):
-            separate = [0] * len(self.dynamics[0]);
+            separate = [0] * len(self.dynamics[0])
             for canvas_index in range(len(input_separate)):
-                dynamic_indexes = input_separate[canvas_index];
+                dynamic_indexes = input_separate[canvas_index]
                 for dynamic_index in dynamic_indexes:
-                    separate[dynamic_index] = canvas_index;
+                    separate[dynamic_index] = canvas_index
             
-            return separate;
+            return separate
         
-        elif (input_separate is False):
-            if (isinstance(self.dynamics[0], list) is True):
-                return [ self.canvas ] * len(self.dynamics[0]);
+        elif input_separate is False:
+            if isinstance(self.dynamics[0], list) is True:
+                return [self.canvas] * len(self.dynamics[0])
             else:
-                return [ self.canvas ];
+                return [self.canvas]
         
-        elif (input_separate is True):
-            if (isinstance(self.dynamics[0], list) is True):
-                return range(self.canvas, self.canvas + len(self.dynamics[0]));
+        elif input_separate is True:
+            if isinstance(self.dynamics[0], list) is True:
+                return range(self.canvas, self.canvas + len(self.dynamics[0]))
             else:
-                return [ self.canvas ];
+                return [self.canvas]
 
         else:
-            raise Exception("Incorrect type of argument 'separate' '%s'." % type(input_separate));
+            raise Exception("Incorrect type of argument 'separate' '%s'." % type(input_separate))
 
 
 class dynamic_visualizer:
@@ -166,9 +166,9 @@ class dynamic_visualizer:
         @param[in] y_labels (bool): If True then labels of Y axis are displayed.
 
         """
-        self.__size = canvas;
-        self.__canvases = [ canvas_descr(x_title, y_title, x_lim, y_lim, x_labels, y_labels) for _ in range(canvas) ];
-        self.__dynamic_storage = [];
+        self.__size = canvas
+        self.__canvases = [canvas_descr(x_title, y_title, x_lim, y_lim, x_labels, y_labels) for _ in range(canvas)]
+        self.__dynamic_storage = []
 
 
     def set_canvas_properties(self, canvas, x_title=None, y_title=None, x_lim=None, y_lim=None, x_labels=True, y_labels=True):
@@ -186,7 +186,7 @@ class dynamic_visualizer:
         @param[in] y_labels (bool): If True then labels of Y axis are displayed.
 
         """
-        self.__canvases[canvas] = canvas_descr(x_title, y_title, x_lim, y_lim, x_labels, y_labels);
+        self.__canvases[canvas] = canvas_descr(x_title, y_title, x_lim, y_lim, x_labels, y_labels)
 
 
     def append_dynamic(self, t, dynamic, canvas=0, color='blue'):
@@ -199,9 +199,9 @@ class dynamic_visualizer:
         @param[in] color (string): Color that is used for drawing dynamic on the canvas.
 
         """
-        description = dynamic_descr(canvas, t, dynamic, False, color);
-        self.__dynamic_storage.append(description);
-        self.__update_canvas_xlim(description.time, description.separate);
+        description = dynamic_descr(canvas, t, dynamic, False, color)
+        self.__dynamic_storage.append(description)
+        self.__update_canvas_xlim(description.time, description.separate)
 
 
     def append_dynamics(self, t, dynamics, canvas=0, separate=False, color='blue'):
@@ -219,86 +219,103 @@ class dynamic_visualizer:
         @param[in] color (string): Color that is used to display output dynamic(s).
 
         """
-        description = dynamic_descr(canvas, t, dynamics, separate, color);
-        self.__dynamic_storage.append(description);
-        self.__update_canvas_xlim(description.time, description.separate);
+        description = dynamic_descr(canvas, t, dynamics, separate, color)
+        self.__dynamic_storage.append(description)
+        self.__update_canvas_xlim(description.time, description.separate)
+
+
+    @staticmethod
+    def close(figure):
+        """!
+        @brief Closes figure object that was used or allocated by the visualizer.
+
+        @param[in] figure (figure): Figure object that was used or allocated by the visualizer.
+
+        """
+        plt.close(figure)
 
 
     def show(self, axis=None, display=True):
         """!
-        @brief Draw and show output dynamics.
+        @brief Draw and show output dynamics on created or existed figure.
+        @details Created figure should be closed by `close()` method of this visualizer.
 
         @param[in] axis (axis): If is not 'None' then user specified axis is used to display output dynamic.
         @param[in] display (bool): Whether output dynamic should be displayed or not, if not, then user
                     should call 'plt.show()' by himself.
 
+        @return (figure) Created figure if `axis` was not provided, otherwise returns `None`.
+
         """
+
+        figure = None
+        if axis is not None:
+            (figure, axis) = plt.subplots(self.__size, 1)
         
-        if (not axis):
-            (_, axis) = plt.subplots(self.__size, 1);
-        
-        self.__format_canvases(axis);
+        self.__format_canvases(axis)
         
         for dynamic in self.__dynamic_storage:
-            self.__display_dynamic(axis, dynamic);
+            self.__display_dynamic(axis, dynamic)
         
-        if (display):
-            plt.show();
+        if display is True:
+            plt.show()
+
+        return figure
 
 
     def __display_dynamic(self, axis, dyn_descr):
-        if (isinstance(dyn_descr.dynamics[0], list) is True):
-            self.__display_multiple_dynamic(axis, dyn_descr);
+        if isinstance(dyn_descr.dynamics[0], list) is True:
+            self.__display_multiple_dynamic(axis, dyn_descr)
         
         else:
-            self.__display_single_dynamic(axis, dyn_descr);
+            self.__display_single_dynamic(axis, dyn_descr)
 
 
     def __display_multiple_dynamic(self, axis, dyn_descr):
-        num_items = len(dyn_descr.dynamics[0]);
+        num_items = len(dyn_descr.dynamics[0])
         for index in range(0, num_items, 1):
-            y = [item[index] for item in dyn_descr.dynamics];
+            y = [item[index] for item in dyn_descr.dynamics]
             
-            axis_index = dyn_descr.get_axis_index(index);
-            ax = self.__get_axis(axis, axis_index);
+            axis_index = dyn_descr.get_axis_index(index)
+            ax = self.__get_axis(axis, axis_index)
             
-            ax.plot(dyn_descr.time, y, 'b-', linewidth = 0.5);
+            ax.plot(dyn_descr.time, y, 'b-', linewidth=0.5)
 
 
     def __display_single_dynamic(self, axis, dyn_descr):
-        ax = self.__get_axis(axis, dyn_descr.canvas);
-        ax.plot(dyn_descr.time, dyn_descr.dynamics, 'b-', linewidth = 0.5);
+        ax = self.__get_axis(axis, dyn_descr.canvas)
+        ax.plot(dyn_descr.time, dyn_descr.dynamics, 'b-', linewidth=0.5)
 
 
     def __format_canvases(self, axis):
         for index in range(self.__size):
-            canvas = self.__canvases[index];
+            canvas = self.__canvases[index]
             
-            ax = self.__get_axis(axis, index);
-            set_ax_param(ax, canvas.x_title, canvas.y_title, canvas.x_lim, canvas.y_lim, canvas.x_labels, canvas.y_labels, True);
+            ax = self.__get_axis(axis, index)
+            set_ax_param(ax, canvas.x_title, canvas.y_title, canvas.x_lim, canvas.y_lim, canvas.x_labels, canvas.y_labels, True)
             
-            if ( (len(self.__canvases) > 1) and (index != len(self.__canvases) - 1) ):
-                ax.get_xaxis().set_visible(False);
+            if (len(self.__canvases) > 1) and (index != len(self.__canvases) - 1):
+                ax.get_xaxis().set_visible(False)
 
 
     def __update_canvas_xlim(self, t, separate):
         for index in separate:
-            self.__update_single_canvas_xlim(index, t);
+            self.__update_single_canvas_xlim(index, t)
 
 
     def __update_single_canvas_xlim(self, canvas_index, t):
-        dynamic_xlim = [0, t[len(t) - 1]];
-        if ( (self.__canvases[canvas_index].x_lim is None) or (self.__canvases[canvas_index].x_lim < dynamic_xlim) ):
-            self.__canvases[canvas_index].x_lim = dynamic_xlim;
+        dynamic_xlim = [0, t[len(t) - 1]]
+        if (self.__canvases[canvas_index].x_lim is None) or (self.__canvases[canvas_index].x_lim < dynamic_xlim):
+            self.__canvases[canvas_index].x_lim = dynamic_xlim
 
 
     def __get_axis(self, axis, index):
-        if (index >= len(self.__canvases)):
+        if index >= len(self.__canvases):
             raise Exception("Impossible to get axis with index '%d' - total number of canvases '%d'."
-                            % index, len(self.__canvases));
+                            % index, len(self.__canvases))
         
-        ax = axis;
-        if (self.__size > 1):
-            ax = axis[index];
+        ax = axis
+        if self.__size > 1:
+            ax = axis[index]
         
-        return ax;
+        return ax

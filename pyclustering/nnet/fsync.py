@@ -129,7 +129,7 @@ class fsync_visualizer:
         
         """
         
-        pyclustering.utils.draw_dynamics(fsync_output_dynamic.time, fsync_output_dynamic.output, x_title = "t", y_title = "amplitude");
+        pyclustering.utils.draw_dynamics(fsync_output_dynamic.time, fsync_output_dynamic.output, x_title="t", y_title="amplitude")
 
 
     @staticmethod
@@ -144,7 +144,7 @@ class fsync_visualizer:
         
         """
         
-        pyclustering.utils.draw_dynamics_set(fsync_output_dynamics, "t", "amplitude", None, None, False, False);
+        pyclustering.utils.draw_dynamics_set(fsync_output_dynamics, "t", "amplitude", None, None, False, False)
 
 
 

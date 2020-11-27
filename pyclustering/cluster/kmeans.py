@@ -124,6 +124,7 @@ class kmeans_visualizer:
     def show_clusters(sample, clusters, centers, initial_centers = None, **kwargs):
         """!
         @brief Display K-Means clustering results.
+        @details Allocated figure by this method should be closed using `close()` method of this visualizer.
         
         @param[in] sample (list): Dataset that was used for clustering.
         @param[in] clusters (array_like): Clusters that were allocated by the algorithm.
@@ -159,6 +160,17 @@ class kmeans_visualizer:
             plt.show()
 
         return figure
+
+
+    @staticmethod
+    def close(figure):
+        """!
+        @brief Closes figure object that was used or allocated by the visualizer.
+
+        @param[in] figure (figure): Figure object that was used or allocated by the visualizer.
+
+        """
+        plt.close(figure)
 
 
     @staticmethod
@@ -246,6 +258,8 @@ class kmeans_visualizer:
             cluster_animation.save(save_movie, writer='ffmpeg', fps=movie_fps, bitrate=3000)
         else:
             plt.show()
+
+        plt.close(figure)
 
 
 

@@ -289,6 +289,7 @@ class pcnn_visualizer:
         
         im_ani = animation.ArtistAnimation(figure, spike_animation, interval=75, repeat_delay=3000, blit=True)
         plt.show()
+        plt.close(figure)
 
 
 class pcnn_network(network):

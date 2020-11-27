@@ -125,10 +125,10 @@ class syncnet_visualizer(sync_visualizer):
             
             artist1, = ax1.plot(dynamic, [1.0] * len(dynamic), marker='o', color='blue', ls='')
             
-            visualizer.show(figure, display = False)
+            visualizer.show(figure, display=False)
             artist2 = figure.gca()
             
-            return [ artist1, artist2 ]
+            return [artist1, artist2]
         
         cluster_animation = animation.\
             FuncAnimation(figure, frame_generation, len(analyser), interval=animation_velocity, init_func=init_frame,
@@ -141,6 +141,8 @@ class syncnet_visualizer(sync_visualizer):
             cluster_animation.save(save_movie, writer='ffmpeg', fps=15, bitrate=1500)
         else:
             plt.show()
+
+        plt.close(figure)
 
 
 class syncnet(sync_network):
@@ -391,3 +393,4 @@ class syncnet(sync_network):
 
         plt.grid()
         plt.show()
+        plt.close(fig)

@@ -64,6 +64,7 @@ class clique_visualizer:
             clique_visualizer.__draw_two_dimension_data(ax, data, pairs[index])
 
         plt.show()
+        plt.close(figure)
 
 
     @staticmethod

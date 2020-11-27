@@ -30,6 +30,7 @@ class bsas_visualizer:
     def show_clusters(sample, clusters, representatives, **kwargs):
         """!
         @brief Display BSAS clustering results.
+        @details Allocated figure by this method should be closed using `close()` method of this visualizer.
 
         @param[in] sample (list): Dataset that was used for clustering.
         @param[in] clusters (array_like): Clusters that were allocated by the algorithm.
@@ -243,7 +244,7 @@ class bsas:
         rep = self._representatives[index_cluster]
 
         for dimension in range(len(rep)):
-            rep[dimension] = ( (length - 1) * rep[dimension] + point[dimension] ) / length
+            rep[dimension] = ((length - 1) * rep[dimension] + point[dimension]) / length
 
 
     def _verify_arguments(self):
