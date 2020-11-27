@@ -1,8 +1,7 @@
 """!
 
 @brief Collection of center initializers for algorithm that uses initial centers, for example, for K-Means or X-Means.
-@details Implementation based on paper @cite article::kmeans++::1.
-         
+
 @authors Andrei Novikov, Aleksey Kukushkin (pyclustering@yandex.ru)
 @date 2014-2020
 @copyright BSD-3-Clause
@@ -153,7 +152,9 @@ class kmeans_plusplus_initializer:
         kmeans_instance.process()
         clusters = kmeans_instance.get_clusters()
     @endcode
-    
+
+    Implementation based on paper @cite article::kmeans++::1.
+
     """
 
 

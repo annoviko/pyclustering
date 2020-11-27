@@ -16,7 +16,6 @@ from numpy import array
 from PIL import Image
 
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
 
 from sys import platform as _platform
 
@@ -27,26 +26,46 @@ from pyclustering.utils.metric import distance_metric, type_metric
 pi = 3.1415926535
 
 
-def read_sample(filename):
+def read_sample(filename, return_type='list'):
     """!
     @brief Returns data sample from simple text file.
     @details This function should be used for text file with following format:
     @code
-    point_1_coord_1 point_1_coord_2 ... point_1_coord_n
-    point_2_coord_1 point_2_coord_2 ... point_2_coord_n
-    ... ...
+        point_1_coord_1 point_1_coord_2 ... point_1_coord_n
+        point_2_coord_1 point_2_coord_2 ... point_2_coord_n
+        ... ...
     @endcode
-    
+
+    As an example there is a 3-dimensional data that contains four points:
+    @code
+        0.1 0.4 0.1
+        0.5 0.6 0.7
+        2.3 2.1 2.9
+        1.9 2.5 2.0
+    @endcode
+
+    In case of this example the following container is going to be produced:
+    @code
+        [[0.1, 0.4, 0.1], [0.5, 0.6, 0.7], [2.3, 2.1, 2.9], [1.9, 2.5, 2.0]]
+    @endcode
+
     @param[in] filename (string): Path to file with data.
+    @param[in] return_type (string): Defines return type of the data (`list` or `numpy`).
     
-    @return (list) Points where each point represented by list of coordinates.
+    @return (array_like) Points where each point represented by coordinates.
     
     """
     
     file = open(filename, 'r')
 
-    sample = [[float(val) for val in line.split()] for line in file if len(line.strip()) > 0]
-    
+    if return_type == 'list':
+        sample = [[float(val) for val in line.split()] for line in file if len(line.strip()) > 0]
+    elif return_type == 'numpy':
+        sample = numpy.array([numpy.array([float(val) for val in line.split()])
+                              for line in file if len(line.strip()) > 0])
+    else:
+        raise ValueError("Incorrect 'return_type' is specified '%s'." % return_type)
+
     file.close()
     return sample
 

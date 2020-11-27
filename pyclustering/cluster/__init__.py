@@ -14,6 +14,8 @@ import math
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 
+from mpl_toolkits.mplot3d import Axes3D
+
 from pyclustering.utils.color import color as color_list
 
 
@@ -27,8 +29,8 @@ class canvas_cluster_descr:
         """!
         @brief Constructor of cluster representation on the canvas.
         
-        @param[in] cluster (list): Single cluster that consists of objects or indexes from data.
-        @param[in] data (list): Objects that should be displayed, can be None if clusters consist of objects instead of indexes.
+        @param[in] cluster (array_like): Single cluster that consists of objects or indexes from data.
+        @param[in] data (array_like): Objects that should be displayed, can be None if clusters consist of objects instead of indexes.
         @param[in] marker (string): Type of marker that is used for drawing objects.
         @param[in] markersize (uint): Size of marker that is used for drawing objects.
         @param[in] color (string): Color of the marker that is used for drawing objects.
@@ -65,6 +67,8 @@ class cluster_visualizer_multidim:
             from pyclustering.utils import read_sample
             from pyclustering.samples.definitions import FAMOUS_SAMPLES
             from pyclustering.cluster import cluster_visualizer_multidim
+            from pyclustering.cluster.center_initializer import kmeans_plusplus_initializer
+            from pyclustering.cluster.xmeans import xmeans
 
             # load 4D data sample 'Iris'
             sample_4d = read_sample(FAMOUS_SAMPLES.SAMPLE_IRIS)
@@ -115,8 +119,8 @@ class cluster_visualizer_multidim:
         """!
         @brief Appends cluster for visualization.
 
-        @param[in] cluster (list): cluster that may consist of indexes of objects from the data or object itself.
-        @param[in] data (list): If defines that each element of cluster is considered as a index of object from the data.
+        @param[in] cluster (array_like): cluster that may consist of indexes of objects from the data or object itself.
+        @param[in] data (array_like): If defines that each element of cluster is considered as a index of object from the data.
         @param[in] marker (string): Marker that is used for displaying objects from cluster on the canvas.
         @param[in] markersize (uint): Size of marker.
         @param[in] color (string): Color of marker.
@@ -140,8 +144,8 @@ class cluster_visualizer_multidim:
         """!
         @brief Appends list of cluster for visualization.
 
-        @param[in] clusters (list): List of clusters where each cluster may consist of indexes of objects from the data or object itself.
-        @param[in] data (list): If defines that each element of cluster is considered as a index of object from the data.
+        @param[in] clusters (array_like): List of clusters where each cluster may consist of indexes of objects from the data or object itself.
+        @param[in] data (array_like): If defines that each element of cluster is considered as a index of object from the data.
         @param[in] marker (string): Marker that is used for displaying objects from clusters on the canvas.
         @param[in] markersize (uint): Size of marker.
 
@@ -203,7 +207,11 @@ class cluster_visualizer_multidim:
         if not len(self.__clusters) > 0:
             raise ValueError("There is no non-empty clusters for visualization.")
 
-        cluster_data = self.__clusters[0].data or self.__clusters[0].cluster
+        if self.__clusters[0].data is not None:
+            cluster_data = self.__clusters[0].data
+        else:
+            cluster_data = self.__clusters[0].cluster
+
         dimension = len(cluster_data[0])
 
         acceptable_pairs = pair_filter or []
@@ -332,7 +340,7 @@ class cluster_visualizer_multidim:
 
         @param[in] ax (axis): Matplotlib axis that is used to display chunk of cluster point.
         @param[in] pair (list): Coordinate of the point that should be displayed.
-        @param[in] item (list): Data point or index of data point.
+        @param[in] item (array_like): Data point or index of data point.
         @param[in] cluster_descr (canvas_cluster_descr): Cluster description whose point is visualized.
 
         """
@@ -353,7 +361,7 @@ class cluster_visualizer_multidim:
         @brief Draw cluster point in one dimensional data space..
 
         @param[in] ax (axis): Matplotlib axis that is used to display chunk of cluster point.
-        @param[in] item (list): Data point or index of data point.
+        @param[in] item (array_like): Data point or index of data point.
         @param[in] cluster_descr (canvas_cluster_descr): Cluster description whose point is visualized.
 
         """
@@ -436,8 +444,8 @@ class cluster_visualizer:
         """!
         @brief Appends cluster to canvas for drawing.
         
-        @param[in] cluster (list): cluster that may consist of indexes of objects from the data or object itself.
-        @param[in] data (list): If defines that each element of cluster is considered as a index of object from the data.
+        @param[in] cluster (array_like): cluster that may consist of indexes of objects from the data or object itself.
+        @param[in] data (array_like): If defines that each element of cluster is considered as a index of object from the data.
         @param[in] canvas (uint): Number of canvas that should be used for displaying cluster.
         @param[in] marker (string): Marker that is used for displaying objects from cluster on the canvas.
         @param[in] markersize (uint): Size of marker.
@@ -494,7 +502,7 @@ class cluster_visualizer:
         
         @param[in] index_canvas (uint): Index canvas where cluster is located.
         @param[in] index_cluster (uint): Index cluster whose attribute should be added.
-        @param[in] data (list): List of points (data) that represents attribute.
+        @param[in] data (array_like): List of points (data) that represents attribute.
         @param[in] marker (string): Marker that is used for displaying objects from cluster on the canvas.
         @param[in] markersize (uint): Size of marker.
 
@@ -519,8 +527,8 @@ class cluster_visualizer:
         """!
         @brief Appends list of cluster to canvas for drawing.
         
-        @param[in] clusters (list): List of clusters where each cluster may consist of indexes of objects from the data or object itself.
-        @param[in] data (list): If defines that each element of cluster is considered as a index of object from the data.
+        @param[in] clusters (array_like): List of clusters where each cluster may consist of indexes of objects from the data or object itself.
+        @param[in] data (array_like): If defines that each element of cluster is considered as a index of object from the data.
         @param[in] canvas (uint): Number of canvas that should be used for displaying clusters.
         @param[in] marker (string): Marker that is used for displaying objects from clusters on the canvas.
         @param[in] markersize (uint): Size of marker.
@@ -621,7 +629,7 @@ class cluster_visualizer:
             cluster_figure = plt.figure()
         
         maximum_cols = self.__size_row
-        maximum_rows = math.ceil( (self.__number_canvases + canvas_shift) / maximum_cols)
+        maximum_rows = math.ceil((self.__number_canvases + canvas_shift) / maximum_cols)
         
         grid_spec = gridspec.GridSpec(maximum_rows, maximum_cols)
 
@@ -631,12 +639,14 @@ class cluster_visualizer:
                 continue
         
             dimension = self.__canvas_dimensions[index_canvas]
-            
-            #ax = axes[real_index];
+
             if (dimension == 1) or (dimension == 2):
                 ax = cluster_figure.add_subplot(grid_spec[index_canvas + canvas_shift])
-            else:
+            elif dimension == 3:
                 ax = cluster_figure.add_subplot(grid_spec[index_canvas + canvas_shift], projection='3d')
+            else:
+                raise ValueError("The visualizer supports only 1-, 2- and 3-dimensional data. "
+                                 "For multi-dimensional data use 'cluster_visualizer_multidim'.")
             
             if len(canvas_data) == 0:
                 plt.setp(ax, visible=False)
@@ -686,18 +696,18 @@ class cluster_visualizer:
         for item in cluster:
             if dimension == 1:
                 if data is None:
-                    ax.plot(item[0], 0.0, color = color, marker = marker, markersize = markersize)
+                    ax.plot(item[0], 0.0, color=color, marker=marker, markersize=markersize)
                 else:
-                    ax.plot(data[item][0], 0.0, color = color, marker = marker, markersize = markersize)
+                    ax.plot(data[item][0], 0.0, color=color, marker=marker, markersize=markersize)
 
             elif dimension == 2:
                 if data is None:
-                    ax.plot(item[0], item[1], color = color, marker = marker, markersize = markersize)
+                    ax.plot(item[0], item[1], color=color, marker=marker, markersize=markersize)
                 else:
-                    ax.plot(data[item][0], data[item][1], color = color, marker = marker, markersize = markersize)
+                    ax.plot(data[item][0], data[item][1], color=color, marker=marker, markersize=markersize)
         
             elif dimension == 3:
                 if data is None:
-                    ax.scatter(item[0], item[1], item[2], c = color, marker = marker, s = markersize)
+                    ax.scatter(item[0], item[1], item[2], c=color, marker=marker, s=markersize)
                 else:
-                    ax.scatter(data[item][0], data[item][1], data[item][2], c = color, marker = marker, s = markersize)
+                    ax.scatter(data[item][0], data[item][1], data[item][2], c=color, marker=marker, s=markersize)

@@ -1,7 +1,6 @@
 """!
 
 @brief Cluster analysis algorithm: K-Medoids.
-@details Implementation based on paper @cite inproceedings::cluster::kmedoids::1.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2020
@@ -93,6 +92,8 @@ class kmedoids:
         clusters = kmedoids_instance.get_clusters()
         medoids = kmedoids_instance.get_medoids()
     @endcode
+
+    Implementation based on paper @cite inproceedings::cluster::kmedoids::1.
 
     """
     
