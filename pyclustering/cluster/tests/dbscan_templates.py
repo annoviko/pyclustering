@@ -10,6 +10,7 @@
 
 import os
 import pickle
+import tempfile
 
 from random import random, shuffle
 
@@ -171,7 +172,7 @@ class DbscanTestTemplates:
 
     @staticmethod
     def pickle_dump_load(ccore):
-        dump_file_name = 'test_dbscan_file.pkl'
+        dump_file_name = tempfile.gettempdir() + os.sep + 'test_dbscan_file.pkl'
 
         sample = read_sample(SIMPLE_SAMPLES.SAMPLE_SIMPLE3)
         dbscan_instance = dbscan(sample, 0.7, 3, ccore)

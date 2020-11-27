@@ -14,6 +14,8 @@ import math
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 
+from mpl_toolkits.mplot3d import Axes3D
+
 from pyclustering.utils.color import color as color_list
 
 
@@ -27,8 +29,8 @@ class canvas_cluster_descr:
         """!
         @brief Constructor of cluster representation on the canvas.
         
-        @param[in] cluster (list): Single cluster that consists of objects or indexes from data.
-        @param[in] data (list): Objects that should be displayed, can be None if clusters consist of objects instead of indexes.
+        @param[in] cluster (array_like): Single cluster that consists of objects or indexes from data.
+        @param[in] data (array_like): Objects that should be displayed, can be None if clusters consist of objects instead of indexes.
         @param[in] marker (string): Type of marker that is used for drawing objects.
         @param[in] markersize (uint): Size of marker that is used for drawing objects.
         @param[in] color (string): Color of the marker that is used for drawing objects.
@@ -157,8 +159,8 @@ class cluster_visualizer_multidim:
         """!
         @brief Appends cluster for visualization.
 
-        @param[in] cluster (list): cluster that may consist of indexes of objects from the data or object itself.
-        @param[in] data (list): If defines that each element of cluster is considered as a index of object from the data.
+        @param[in] cluster (array_like): cluster that may consist of indexes of objects from the data or object itself.
+        @param[in] data (array_like): If defines that each element of cluster is considered as a index of object from the data.
         @param[in] marker (string): Marker that is used for displaying objects from cluster on the canvas.
         @param[in] markersize (uint): Size of marker.
         @param[in] color (string): Color of marker.
@@ -182,8 +184,8 @@ class cluster_visualizer_multidim:
         """!
         @brief Appends list of cluster for visualization.
 
-        @param[in] clusters (list): List of clusters where each cluster may consist of indexes of objects from the data or object itself.
-        @param[in] data (list): If defines that each element of cluster is considered as a index of object from the data.
+        @param[in] clusters (array_like): List of clusters where each cluster may consist of indexes of objects from the data or object itself.
+        @param[in] data (array_like): If defines that each element of cluster is considered as a index of object from the data.
         @param[in] marker (string): Marker that is used for displaying objects from clusters on the canvas.
         @param[in] markersize (uint): Size of marker.
 
@@ -374,7 +376,7 @@ class cluster_visualizer_multidim:
 
         @param[in] ax (axis): Matplotlib axis that is used to display chunk of cluster point.
         @param[in] pair (list): Coordinate of the point that should be displayed.
-        @param[in] item (list): Data point or index of data point.
+        @param[in] item (array_like): Data point or index of data point.
         @param[in] cluster_descr (canvas_cluster_descr): Cluster description whose point is visualized.
 
         """
@@ -395,7 +397,7 @@ class cluster_visualizer_multidim:
         @brief Draw cluster point in one dimensional data space..
 
         @param[in] ax (axis): Matplotlib axis that is used to display chunk of cluster point.
-        @param[in] item (list): Data point or index of data point.
+        @param[in] item (array_like): Data point or index of data point.
         @param[in] cluster_descr (canvas_cluster_descr): Cluster description whose point is visualized.
 
         """
@@ -501,8 +503,8 @@ class cluster_visualizer:
         """!
         @brief Appends cluster to canvas for drawing.
         
-        @param[in] cluster (list): cluster that may consist of indexes of objects from the data or object itself.
-        @param[in] data (list): If defines that each element of cluster is considered as a index of object from the data.
+        @param[in] cluster (array_like): cluster that may consist of indexes of objects from the data or object itself.
+        @param[in] data (array_like): If defines that each element of cluster is considered as a index of object from the data.
         @param[in] canvas (uint): Number of canvas that should be used for displaying cluster.
         @param[in] marker (string): Marker that is used for displaying objects from cluster on the canvas.
         @param[in] markersize (uint): Size of marker.
@@ -559,7 +561,7 @@ class cluster_visualizer:
         
         @param[in] index_canvas (uint): Index canvas where cluster is located.
         @param[in] index_cluster (uint): Index cluster whose attribute should be added.
-        @param[in] data (list): List of points (data) that represents attribute.
+        @param[in] data (array_like): List of points (data) that represents attribute.
         @param[in] marker (string): Marker that is used for displaying objects from cluster on the canvas.
         @param[in] markersize (uint): Size of marker.
 
@@ -584,8 +586,8 @@ class cluster_visualizer:
         """!
         @brief Appends list of cluster to canvas for drawing.
         
-        @param[in] clusters (list): List of clusters where each cluster may consist of indexes of objects from the data or object itself.
-        @param[in] data (list): If defines that each element of cluster is considered as a index of object from the data.
+        @param[in] clusters (array_like): List of clusters where each cluster may consist of indexes of objects from the data or object itself.
+        @param[in] data (array_like): If defines that each element of cluster is considered as a index of object from the data.
         @param[in] canvas (uint): Number of canvas that should be used for displaying clusters.
         @param[in] marker (string): Marker that is used for displaying objects from clusters on the canvas.
         @param[in] markersize (uint): Size of marker.

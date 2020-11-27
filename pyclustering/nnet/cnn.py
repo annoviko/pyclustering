@@ -16,6 +16,7 @@ import random
 import matplotlib.pyplot as plt
 from matplotlib import rcParams
 from matplotlib.font_manager import FontProperties
+from mpl_toolkits.mplot3d import Axes3D
 
 from enum import IntEnum
 

@@ -13,6 +13,7 @@
 
 import unittest
 import os
+import tempfile
 
 # Generate images without having a window appear.
 import matplotlib
@@ -119,6 +120,8 @@ class visualizer_unit_tests(unittest.TestCase):
         self.template_visualize_adding_step_by_step(SIMPLE_SAMPLES.SAMPLE_SIMPLE8, SIMPLE_ANSWERS.ANSWER_SIMPLE8, return_type='numpy')
 
     def template_save_to_file(self, visualizer_type, filename="ut-test-image.png"):
+        filename = tempfile.gettempdir() + os.sep + filename
+
         data = [[1.1], [1.7], [3.7], [5.3], [2.5], [-1.5], [-0.9], [6.3], [6.5], [8.1]]
         clusters = [[0, 1, 2, 4, 5, 6], [3, 7, 8, 9]]
 
