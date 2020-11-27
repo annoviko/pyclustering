@@ -1,7 +1,6 @@
 """!
 
 @brief The module contains K-Means algorithm and other related services.
-@details Implementation based on paper @cite inproceedings::kmeans::1.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2020
@@ -306,6 +305,8 @@ class kmeans:
         kmeans_instance.process()
         clusters = kmeans_instance.get_clusters()
     @endcode
+
+    Implementation based on paper @cite inproceedings::kmeans::1.
 
     @see center_initializer
     

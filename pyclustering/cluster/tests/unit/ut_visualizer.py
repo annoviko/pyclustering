@@ -28,7 +28,9 @@ from pyclustering.utils import read_sample
 
 class visualizer_unit_tests(unittest.TestCase):
     def template_visualize(self, path_sample, path_answer, filter=None, **kwargs):
-        data = read_sample(path_sample)
+        return_type = kwargs.get('return_type', 'list')
+
+        data = read_sample(path_sample, return_type=return_type)
         clusters = answer_reader(path_answer).get_clusters()
 
         visualizer = cluster_visualizer_multidim()
@@ -37,7 +39,9 @@ class visualizer_unit_tests(unittest.TestCase):
 
 
     def template_visualize_adding_step_by_step(self, path_sample, path_answer, filter=None, **kwargs):
-        data = read_sample(path_sample)
+        return_type = kwargs.get('return_type', 'list')
+
+        data = read_sample(path_sample, return_type=return_type)
         clusters = answer_reader(path_answer).get_clusters()
 
         visualizer = cluster_visualizer_multidim()
@@ -50,26 +54,50 @@ class visualizer_unit_tests(unittest.TestCase):
     def test_multidim_one_dimension_simple07(self):
         self.template_visualize(SIMPLE_SAMPLES.SAMPLE_SIMPLE7, SIMPLE_ANSWERS.ANSWER_SIMPLE7)
 
+    def test_multidim_one_dimension_simple07_numpy(self):
+        self.template_visualize(SIMPLE_SAMPLES.SAMPLE_SIMPLE7, SIMPLE_ANSWERS.ANSWER_SIMPLE7, return_type='numpy')
+
     def test_multidim_one_dimension_simple08(self):
         self.template_visualize(SIMPLE_SAMPLES.SAMPLE_SIMPLE8, SIMPLE_ANSWERS.ANSWER_SIMPLE8)
+
+    def test_multidim_one_dimension_simple08_numpy(self):
+        self.template_visualize(SIMPLE_SAMPLES.SAMPLE_SIMPLE8, SIMPLE_ANSWERS.ANSWER_SIMPLE8, return_type='numpy')
 
     def test_multidim_two_dimension_simple01(self):
         self.template_visualize(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, SIMPLE_ANSWERS.ANSWER_SIMPLE1)
 
+    def test_multidim_two_dimension_simple01_numpy(self):
+        self.template_visualize(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, SIMPLE_ANSWERS.ANSWER_SIMPLE1, return_type='numpy')
+
     def test_multidim_two_dimension_simple02(self):
         self.template_visualize(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, SIMPLE_ANSWERS.ANSWER_SIMPLE2)
+
+    def test_multidim_two_dimension_simple02_numpy(self):
+        self.template_visualize(SIMPLE_SAMPLES.SAMPLE_SIMPLE2, SIMPLE_ANSWERS.ANSWER_SIMPLE2, return_type='numpy')
 
     def test_multidim_two_dimension_simple03(self):
         self.template_visualize(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, SIMPLE_ANSWERS.ANSWER_SIMPLE3)
 
+    def test_multidim_two_dimension_simple03_numpy(self):
+        self.template_visualize(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, SIMPLE_ANSWERS.ANSWER_SIMPLE3, return_type='numpy')
+
     def test_multidim_three_dimension_simple11(self):
         self.template_visualize(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, SIMPLE_ANSWERS.ANSWER_SIMPLE11)
+
+    def test_multidim_three_dimension_simple11_numpy(self):
+        self.template_visualize(SIMPLE_SAMPLES.SAMPLE_SIMPLE11, SIMPLE_ANSWERS.ANSWER_SIMPLE11, return_type='numpy')
 
     def test_multidim_four_dimension_iris(self):
         self.template_visualize(FAMOUS_SAMPLES.SAMPLE_IRIS, FAMOUS_ANSWERS.ANSWER_IRIS)
 
+    def test_multidim_four_dimension_iris_numpy(self):
+        self.template_visualize(FAMOUS_SAMPLES.SAMPLE_IRIS, FAMOUS_ANSWERS.ANSWER_IRIS, return_type='numpy')
+
     def test_multidim_four_dimension_one_column(self):
         self.template_visualize(FAMOUS_SAMPLES.SAMPLE_IRIS, FAMOUS_ANSWERS.ANSWER_IRIS, max_row_size=1)
+
+    def test_multidim_four_dimension_one_column_numpy(self):
+        self.template_visualize(FAMOUS_SAMPLES.SAMPLE_IRIS, FAMOUS_ANSWERS.ANSWER_IRIS, max_row_size=1, return_type='numpy')
 
     def test_multidim_non_default_settings(self):
         self.template_visualize(FAMOUS_SAMPLES.SAMPLE_IRIS, FAMOUS_ANSWERS.ANSWER_IRIS,
@@ -81,8 +109,14 @@ class visualizer_unit_tests(unittest.TestCase):
     def test_multidim_simple07_by_steps(self):
         self.template_visualize_adding_step_by_step(SIMPLE_SAMPLES.SAMPLE_SIMPLE7, SIMPLE_ANSWERS.ANSWER_SIMPLE7)
 
+    def test_multidim_simple07_by_steps_numpy(self):
+        self.template_visualize_adding_step_by_step(SIMPLE_SAMPLES.SAMPLE_SIMPLE7, SIMPLE_ANSWERS.ANSWER_SIMPLE7, return_type='numpy')
+
     def test_multidim_simple08_by_steps(self):
         self.template_visualize_adding_step_by_step(SIMPLE_SAMPLES.SAMPLE_SIMPLE8, SIMPLE_ANSWERS.ANSWER_SIMPLE8)
+
+    def test_multidim_simple08_by_steps_numpy(self):
+        self.template_visualize_adding_step_by_step(SIMPLE_SAMPLES.SAMPLE_SIMPLE8, SIMPLE_ANSWERS.ANSWER_SIMPLE8, return_type='numpy')
 
     def template_save_to_file(self, visualizer_type, filename="ut-test-image.png"):
         data = [[1.1], [1.7], [3.7], [5.3], [2.5], [-1.5], [-0.9], [6.3], [6.5], [8.1]]

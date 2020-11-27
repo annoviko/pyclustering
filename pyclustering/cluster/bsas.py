@@ -1,7 +1,6 @@
 """!
 
 @brief Cluster analysis algorithm: BSAS (Basic Sequential Algorithmic Scheme).
-@details Implementation based on paper @cite book::pattern_recognition::2009.
 
 @authors Andrei Novikov (pyclustering@yandex.ru)
 @date 2014-2020
@@ -97,6 +96,8 @@ class bsas:
         # Display results.
         bsas_visualizer.show_clusters(sample, clusters, representatives)
     @endcode
+
+    Implementation based on paper @cite book::pattern_recognition::2009.
 
     @see pyclustering.cluster.mbsas, pyclustering.cluster.ttsas
 
