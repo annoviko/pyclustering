@@ -502,11 +502,12 @@ class sync_visualizer:
         (start_iteration, stop_iteration) = sync_visualizer.__get_start_stop_iterations(sync_output_dynamic, start_iteration, stop_iteration)
 
         order_parameter = sync_output_dynamic.calculate_order_parameter(start_iteration, stop_iteration)
-        axis = plt.subplot(111)
-        plt.plot(sync_output_dynamic.time[start_iteration:stop_iteration], order_parameter, 'b-', linewidth=2.0)
+        figure, axis = plt.subplots(1, 1)
+        axis.plot(sync_output_dynamic.time[start_iteration:stop_iteration], order_parameter, 'b-', linewidth=2.0)
         set_ax_param(axis, "t", "R (order parameter)", None, [0.0, 1.05])
 
         plt.show()
+        plt.close(figure)
 
 
     @staticmethod
@@ -523,11 +524,12 @@ class sync_visualizer:
         (start_iteration, stop_iteration) = sync_visualizer.__get_start_stop_iterations(sync_output_dynamic, start_iteration, stop_iteration)
 
         order_parameter = sync_output_dynamic.calculate_local_order_parameter(oscillatory_network, start_iteration, stop_iteration)
-        axis = plt.subplot(111)
-        plt.plot(sync_output_dynamic.time[start_iteration:stop_iteration], order_parameter, 'b-', linewidth=2.0)
+        figure, axis = plt.subplots(1, 1)
+        axis.plot(sync_output_dynamic.time[start_iteration:stop_iteration], order_parameter, 'b-', linewidth=2.0)
         set_ax_param(axis, "t", "R (local order parameter)", None, [0.0, 1.05])
 
         plt.show()
+        plt.close(figure)
 
 
     @staticmethod

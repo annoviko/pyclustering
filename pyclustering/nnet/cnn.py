@@ -192,9 +192,12 @@ class cnn_visualizer:
         """
 
         network_dynamic = numpy.array(cnn_output_dynamic.output)
-        
-        plt.imshow(network_dynamic.T, cmap=plt.get_cmap('gray'), interpolation='None', vmin=0.0, vmax=1.0)
+
+        figure, axes = plt.subplots(1)
+
+        axes.imshow(network_dynamic.T, cmap=plt.get_cmap('gray'), aspect='auto', interpolation='None', vmin=0.0, vmax=1.0)
         plt.show()
+        plt.close(figure)
     
     
     @staticmethod
@@ -211,8 +214,12 @@ class cnn_visualizer:
         """
         
         observation_matrix = numpy.array(cnn_output_dynamic.allocate_observation_matrix())
-        plt.imshow(observation_matrix.T, cmap = plt.get_cmap('gray'), interpolation='None', vmin = 0.0, vmax = 1.0)
+
+        figure, axes = plt.subplots(1)
+
+        axes.imshow(observation_matrix.T, cmap=plt.get_cmap('gray'), aspect='auto', interpolation='None', vmin=0.0, vmax=1.0)
         plt.show()
+        plt.close(figure)
 
 
 class cnn_network:

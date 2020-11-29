@@ -15,6 +15,9 @@ GENERAL CHANGES:
 
 CORRECTED MAJOR BUGS:
 
+- Corrected failures in CNN visualizer methods `show_dynamic_matrix()` and `show_observation_matrix()` in case of matplotlib `3.3.3` (Python: `pyclustering.nnet.cnn`).
+  See: https://github.com/annoviko/pyclustering/issues/663 
+
 - Corrected memory leakage for visualizers that do not return figure where information was displayed (Python: `pyclustering`).
   See: https://github.com/annoviko/pyclustering/issues/662
 
