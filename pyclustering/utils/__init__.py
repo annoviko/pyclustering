@@ -859,7 +859,7 @@ def draw_dynamics(t, dyn, x_title=None, y_title=None, x_lim=None, y_lim=None, x_
     @param[in] x_labels (bool): If `True` then it shows X-labels.
     @param[in] y_labels (bool): If `True` then it shows Y-labels.
     @param[in] separate (list): Lists of oscillators that should be displayed on separate plots. If `None` then all oscillators are going to be displayed on the same plot. By default is `None`.
-    @param[in] axes (ax): If specified then the axis will be used for drawing and plot will not be shown.
+    @param[in] axis (ax): If specified then the axis will be used for drawing and plot will not be shown.
     
     @return (figure, Axis) Figure and axis where dynamic of each oscillator is presented. Figure is `None` if `axis`
                             value that is not `None` is provided to the fuction.
