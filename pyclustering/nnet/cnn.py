@@ -175,7 +175,8 @@ class cnn_visualizer:
         
         """
         
-        draw_dynamics(cnn_output_dynamic.time, cnn_output_dynamic.output, x_title="t", y_title="x")
+        figure, _ = draw_dynamics(cnn_output_dynamic.time, cnn_output_dynamic.output, x_title="t", y_title="x")
+        plt.close(figure)
     
     
     @staticmethod

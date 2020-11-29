@@ -10,7 +10,6 @@
 """
 
 import itertools
-import warnings
 
 import matplotlib
 import matplotlib.gridspec as gridspec

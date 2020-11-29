@@ -94,6 +94,9 @@ class SomscIntegrationTest(unittest.TestCase):
         SyncnetTestTemplates().predict(SIMPLE_SAMPLES.SAMPLE_SIMPLE3, 4, to_predict, [0, 1, 1, 2, 3], True)
 
 
+    def testProcessingWhenLibraryCoreRemoved(self):
+        self.runRemovedLibraryCoreTest()
+
     @remove_library
-    def testProcessingWhenLibraryCoreCorrupted(self):
+    def runRemovedLibraryCoreTest(self):
         SyncnetTestTemplates().templateLengthProcessData(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, [5, 5], True)

@@ -76,6 +76,9 @@ class PcnnIntegrationTest(unittest.TestCase):
         PcnnTestTemplates.visualize(16, 20, conn_type.ALL_TO_ALL, conn_represent.MATRIX, stimulus, 4, 4, True);
 
 
+    def testProcessingWhenLibraryCoreRemoved(self):
+        self.runRemovedLibraryCoreTest()
+
     @remove_library
-    def testProcessingWhenLibraryCoreCorrupted(self):
-        PcnnTestTemplates.templateDynamicLength(10, 20, conn_type.NONE, None, [0] * 10, True);
+    def runRemovedLibraryCoreTest(self):
+        PcnnTestTemplates.templateDynamicLength(10, 20, conn_type.NONE, None, [0] * 10, True)

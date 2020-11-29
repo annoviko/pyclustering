@@ -9,17 +9,17 @@
 """
 
 
-import unittest;
+import unittest
 
-import matplotlib;
-matplotlib.use('Agg');
+import matplotlib
+matplotlib.use('Agg')
 
-from pyclustering.cluster.tests.agglomerative_templates import AgglomerativeTestTemplates;
-from pyclustering.cluster.agglomerative import agglomerative, type_link;
+from pyclustering.cluster.tests.agglomerative_templates import AgglomerativeTestTemplates
+from pyclustering.cluster.agglomerative import agglomerative, type_link
 
-from pyclustering.samples.definitions import SIMPLE_SAMPLES;
+from pyclustering.samples.definitions import SIMPLE_SAMPLES
 
-from pyclustering.core.tests import remove_library, corrupt_library;
+from pyclustering.core.tests import remove_library, corrupt_library
 
 
 class AgglomerativeIntegrationTest(unittest.TestCase):
@@ -119,10 +119,16 @@ class AgglomerativeIntegrationTest(unittest.TestCase):
         agglomerative_instance.process();
         assert len(agglomerative_instance.get_clusters()) == 2;
 
-    @remove_library
     def testProcessingWhenLibraryCoreRemoved(self):
-        AgglomerativeTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, type_link.AVERAGE_LINK, [5, 5], True);
+        self.runRemovedLibraryCoreTest()
+
+    @remove_library
+    def runRemovedLibraryCoreTest(self):
+        AgglomerativeTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, type_link.AVERAGE_LINK, [5, 5], True)
+
+    def testProcessingWhenLibraryCoreCorrupted(self):
+        self.runCorruptedLibraryCoreTest()
 
     @corrupt_library
-    def testProcessingWhenLibraryCoreCorrupted(self):
-        AgglomerativeTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, type_link.AVERAGE_LINK, [5, 5], True);
+    def runCorruptedLibraryCoreTest(self):
+        AgglomerativeTestTemplates.templateClusteringResults(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 2, type_link.AVERAGE_LINK, [5, 5], True)

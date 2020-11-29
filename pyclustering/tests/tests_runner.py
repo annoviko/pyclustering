@@ -12,6 +12,7 @@
 import enum
 import sys
 import unittest
+import warnings
 
 # Generate images without having a window appear.
 import matplotlib
@@ -63,6 +64,8 @@ class tests_runner:
     def run():
         result = None
         return_code = exit_code.success
+
+        warnings.filterwarnings('ignore', 'Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.')
 
         if len(sys.argv) == 1:
             result = pyclustering_tests().run()

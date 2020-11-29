@@ -124,6 +124,10 @@ class clique_integration_test(unittest.TestCase):
         clique_instance = clique(data, 15, 0)
         assertion.exception(RuntimeError, clique_instance.process)
 
+
+    def test_processing_when_library_core_removed(self):
+        self.run_removed_library_core_test()
+
     @remove_library
-    def test_processing_when_library_core_corrupted(self):
+    def run_removed_library_core_test(self):
         clique_test_template.clustering(SIMPLE_SAMPLES.SAMPLE_SIMPLE1, 8, 0, [5, 5], 0, True)

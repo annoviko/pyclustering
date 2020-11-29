@@ -11,6 +11,8 @@
 
 import numpy
 
+import matplotlib.pyplot as plt
+
 from scipy.integrate import odeint
 
 from pyclustering.nnet import *
@@ -131,7 +133,8 @@ class hysteresis_visualizer:
         
         """
         
-        draw_dynamics(hysteresis_output_dynamic.time, hysteresis_output_dynamic.output, x_title = "Time", y_title = "x(t)");
+        figure, _ = draw_dynamics(hysteresis_output_dynamic.time, hysteresis_output_dynamic.output, x_title="Time", y_title="x(t)")
+        plt.close(figure)
 
 
 class hysteresis_network(network):

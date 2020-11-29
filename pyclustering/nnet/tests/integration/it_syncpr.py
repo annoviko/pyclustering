@@ -93,6 +93,9 @@ class SyncprIntegrationTest(unittest.TestCase):
         SyncprTestTemplates.templateLocalSyncOrder(True);
 
 
+    def testProcessingWhenLibraryCoreRemoved(self):
+        self.runRemovedLibraryCoreTest()
+
     @remove_library
-    def testProcessingWhenLibraryCoreCorrupted(self):
-        SyncprTestTemplates.templateOutputDynamic(solve_type.FAST, True);
+    def runRemovedLibraryCoreTest(self):
+        SyncprTestTemplates.templateOutputDynamic(solve_type.FAST, True)

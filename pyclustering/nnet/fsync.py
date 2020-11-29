@@ -10,6 +10,7 @@
 """
 
 
+import matplotlib.pyplot
 import numpy
 import random
 import pyclustering.utils
@@ -129,7 +130,8 @@ class fsync_visualizer:
         
         """
         
-        pyclustering.utils.draw_dynamics(fsync_output_dynamic.time, fsync_output_dynamic.output, x_title="t", y_title="amplitude")
+        figure, _ = pyclustering.utils.draw_dynamics(fsync_output_dynamic.time, fsync_output_dynamic.output, x_title="t", y_title="amplitude")
+        matplotlib.pyplot.close(figure)
 
 
     @staticmethod

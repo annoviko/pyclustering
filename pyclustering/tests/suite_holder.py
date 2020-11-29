@@ -22,8 +22,7 @@ class suite_holder:
         return self.__suite
 
     def run(self, rerun=2):
-        print(self.__suite)
-        result = unittest.TextTestRunner(stream=sys.stdout, verbosity=3).run(self.__suite)
+        result = unittest.TextTestRunner(stream=sys.stdout, verbosity=1).run(self.__suite)
         if result.wasSuccessful() is True:
             return result
 
@@ -49,4 +48,4 @@ class suite_holder:
 
     @staticmethod
     def fill_suite(test_suite):
-        pass;
+        pass
